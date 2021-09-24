@@ -2,94 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07B70417916
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Sep 2021 18:49:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A20064179EF
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Sep 2021 19:40:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244986AbhIXQue (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Sep 2021 12:50:34 -0400
-Received: from mail-ot1-f41.google.com ([209.85.210.41]:34532 "EHLO
-        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238886AbhIXQud (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Sep 2021 12:50:33 -0400
-Received: by mail-ot1-f41.google.com with SMTP id g62-20020a9d2dc4000000b0054752cfbc59so8247882otb.1;
-        Fri, 24 Sep 2021 09:48:59 -0700 (PDT)
+        id S241912AbhIXRlw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Sep 2021 13:41:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54414 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344411AbhIXRlu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Sep 2021 13:41:50 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E651BC061613
+        for <linux-pm@vger.kernel.org>; Fri, 24 Sep 2021 10:40:16 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id d6so29617381wrc.11
+        for <linux-pm@vger.kernel.org>; Fri, 24 Sep 2021 10:40:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=WXBiZ3lMd+Z19YrZpfewJmi1/8g+N72a9+ebtf2jcDg=;
+        b=LvrnJcFSd9hDrLwHldZaicIeKrQtvXXEBr6QeH67LPmIeIAN4+hK/2DBybrTKrfDPJ
+         KzuV7SSlASa8CPpbNbU2fAnkjCsfTtvebmIHhiwqWnyHHGh3s8mrSeCC66G93zLtp8N3
+         T3u6SHf69JN2ciSx6CqIrWEoCq6IxqDszPrBY0Houqij28xPRiOxKpmMhFFcali13URz
+         Woa7UuAIjwvL1S/OHuvzd5Q8oNk5t44jurI7oTepjMAkQpCYv6Qw5b4NPB4TISbPNuA+
+         ZdTrcchShfRKivD/8IA9dAEjGoh/F/++8YDfA0SUmIKLWhKyuAys5wMZ3WfmWrKnP8dM
+         3QLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5K4cABxcVWxR6DLYWr2e4RPFZO80BE4h3PW/K8t1Eik=;
-        b=1YOrA2FEtYT/iWo3VifghQfHCnTk2ZXGDxrC4rfmY3GVreSVYBNeMz5E4qNBI0UzFe
-         bnMucILKrrBcim6zHwcvCDfbHe+3TeHewVQvR9Eyr5RbFEXUjsBkMNge39+z0I9aqZ9/
-         MZlSwTD1Lb1dtCOlZmr25g69rIaSvK5Rob914cLfsHK6r8otPrrljyzTZx7hiR1mzZ3c
-         lqSdbkgPWGSvrRxg3NP22ieFjUU0L+aAAEx/gxPGIyWET2lWirGkXqwIT0vCHaTk1b0G
-         rF3gUShk5QrQOVQ2lL4mk5EpnRwEpWHmHbYIiid+zOjtWTjDe38N8igDEE1IQEPFa35X
-         Vjlw==
-X-Gm-Message-State: AOAM533ZQ8mgTkyIslLM2kQjmxVoXBSMDHqK818yp6ipfXNfZSo5l0nf
-        BQjIP3epuaSA4B/CBI7y4ZAbjrvGSFCMQdGqotY=
-X-Google-Smtp-Source: ABdhPJxrwy3alQD5Z51/akbAkmwWUKeFBOnntyzt8Jj20eqcLlVwTAeCwqUve5VwvLkJzWnzkj780IEQAogdhKCb9b8=
-X-Received: by 2002:a05:6830:165a:: with SMTP id h26mr5158915otr.301.1632502139499;
- Fri, 24 Sep 2021 09:48:59 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=WXBiZ3lMd+Z19YrZpfewJmi1/8g+N72a9+ebtf2jcDg=;
+        b=uvJU3B86r9IRn6Kq4zywe8AwJeBb6frewxG9S9WHxYVHDrOAZHlE6OlQyCxP+peQYR
+         DdnrbqfpE4YVbiQE/vucUuTgXydGf3xSKlFB4w4FvOk+i5zVb6ap3fFd4JGH+tJe+k2g
+         CDoQIvKRrlMwFizxXTIecsLYHP6Fef2XgILp0FN9WugO3M/BRheJxOXd+LbBjFs1pjrm
+         fE5HaL1UwRIx3dnW5Q3/rNmbh9dYKI7QDfkpaQX4sYKH5X051gvsS2nRZTAT3mj2Nfjq
+         WRpaaWDNRILOgqXD4j4ZyRajr9CgPmBRbmbfdE+TqE3g5LtoIF5VaHxDqDLAu/Q9MN8E
+         nt4Q==
+X-Gm-Message-State: AOAM530n4LUvDcLb+ljPeGu9HcFaL9WRRjzXS60DP74NUyc4VzLfw7n1
+        buSg1fBuxRqmQXusYlVO9zDo3Q==
+X-Google-Smtp-Source: ABdhPJwvJ9hZyMAnm4LbVQbSMEuvCTVUCudQxClPjacvYBdlFGLm1xL/c8EyrseEits29Blc6bjYEA==
+X-Received: by 2002:a1c:4c13:: with SMTP id z19mr3408702wmf.154.1632505214618;
+        Fri, 24 Sep 2021 10:40:14 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:fc07:a338:ccc1:8b6? ([2a01:e34:ed2f:f020:fc07:a338:ccc1:8b6])
+        by smtp.googlemail.com with ESMTPSA id z13sm9956503wrs.90.2021.09.24.10.40.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Sep 2021 10:40:13 -0700 (PDT)
+Subject: Re: [PATCH v2 1/2] thermal: int340x: do not set a wrong tcc offset on
+ resume
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Antoine Tenart <atenart@kernel.org>, rui.zhang@intel.com,
+        amitk@kernel.org
+Cc:     linux-pm@vger.kernel.org, stable@vger.kernel.org
+References: <20210909085613.5577-1-atenart@kernel.org>
+ <20210909085613.5577-2-atenart@kernel.org>
+ <46d6d30201e11422f57bd79691133dc0491bd4c5.camel@linux.intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <03ba2e41-6ae6-d4ee-ace5-055ac40c1128@linaro.org>
+Date:   Fri, 24 Sep 2021 19:40:13 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-References: <20210924061205.5523-1-deepak.sharma@amd.com>
-In-Reply-To: <20210924061205.5523-1-deepak.sharma@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 24 Sep 2021 18:48:48 +0200
-Message-ID: <CAJZ5v0iS+TnkoqCxLa92Na=By53PXY-qW=k4utr_84KYaw+sVQ@mail.gmail.com>
-Subject: Re: [RESEND PATCH] x86: ACPI: cstate: Optimize C3 entry on AMD CPUs
-To:     Deepak Sharma <deepak.sharma@amd.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <46d6d30201e11422f57bd79691133dc0491bd4c5.camel@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Sep 24, 2021 at 8:12 AM Deepak Sharma <deepak.sharma@amd.com> wrote:
->
-> All Zen or newer CPU which support C3 shares cache. Its not necessary to
-> flush the caches in software before entering C3. This will cause drop in
-> performance for the cores which share some caches. ARB_DIS is not used
-> with current AMD C state implementation. So set related flags correctly.
->
-> Signed-off-by: Deepak Sharma <deepak.sharma@amd.com>
+On 24/09/2021 18:27, Srinivas Pandruvada wrote:
+> Hi Daniel,
+> 
+> This patch is important. Can we send for 5.15 rc release?
+> 
+> I see the previous version of this patch is applied to linux-next.
+> But this series is better as it splits into two patches. The first one
+> can be easily backported and will fix the problem. The second one is an
+> improvement.
 
-I'm planning to take this one unless the x86 maintainers have concerns, thanks.
+Yes, it is in the pipe.
 
-> ---
->  arch/x86/kernel/acpi/cstate.c | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
->
-> diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
-> index 7de599eba7f0..7945eae5b315 100644
-> --- a/arch/x86/kernel/acpi/cstate.c
-> +++ b/arch/x86/kernel/acpi/cstate.c
-> @@ -79,6 +79,21 @@ void acpi_processor_power_init_bm_check(struct acpi_processor_flags *flags,
->                  */
->                 flags->bm_control = 0;
->         }
-> +       if (c->x86_vendor == X86_VENDOR_AMD && c->x86 >= 0x17) {
-> +               /*
-> +                * For all AMD Zen or newer CPUs that support C3, caches
-> +                * should not be flushed by software while entering C3
-> +                * type state. Set bm->check to 1 so that kernel doesn't
-> +                * need to execute cache flush operation.
-> +                */
-> +               flags->bm_check = 1;
-> +               /*
-> +                * In current AMD C state implementation ARB_DIS is no longer
-> +                * used. So set bm_control to zero to indicate ARB_DIS is not
-> +                * required while entering C3 type state.
-> +                */
-> +               flags->bm_control = 0;
-> +       }
->  }
->  EXPORT_SYMBOL(acpi_processor_power_init_bm_check);
->
-> --
-> 2.25.1
->
+I've applied the patch 1/2 to the fixes branch and the patch 2/2 will
+land in the next branch as soon as the next -rc is released with the fix
+and merged to the next branch.
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
