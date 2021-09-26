@@ -2,40 +2,39 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1221B4187CB
+	by mail.lfdr.de (Postfix) with ESMTP id CA0434187CD
 	for <lists+linux-pm@lfdr.de>; Sun, 26 Sep 2021 11:07:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231218AbhIZJJ0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 26 Sep 2021 05:09:26 -0400
-Received: from mail-dm3nam07on2060.outbound.protection.outlook.com ([40.107.95.60]:18144
-        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
+        id S230257AbhIZJJ1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 26 Sep 2021 05:09:27 -0400
+Received: from mail-dm6nam10on2084.outbound.protection.outlook.com ([40.107.93.84]:53440
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231338AbhIZJJO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 26 Sep 2021 05:09:14 -0400
+        id S231341AbhIZJJQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 26 Sep 2021 05:09:16 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VOsB44y4dlT8jYs46IudKBU3vSTtBOSt2iYfK/I8+aM/fkONcOu23A7Wfl74aYG6Ev9+/bAqYb9pVB2+spjlPupd+FI1NNXNHxC7c3UQfVFfR6WMYVTaqCJt9jkYrEeNZ4aHuwgeaEVuu9Uxl/AJ6czIoW/yQugD7011FvMYVKln7U4BWWYWsoBU5D6tnbusYBf45Oqj2FbEvyPMbssdmsXqQlhmwkcpGTNftGB02KfKrwfss/7RLsrkCuMNDiSJ2zdXDlpjdRh+2zXEXLKaGF081GaYJuI/b64u2BV0o/tpsb1RrbyGzK/zqWb5JHKTdVFSsrV9HjqAggt8bkh3HA==
+ b=VTyXs3kCJqAsL/0E5vpFb/Ys4TuCWSpIFG5olEXsiUkQhPAE37TYs1rnaI+8mtU9S5Vk1Em9xJ+Ll8JGa75Gfs7vUpHumOro6tysH0VGxvZn5L7MjmeQg50a9lAmZIX2yr0uKcIwX704oXyA/KemMsMIihF5ww6yB3K1YwSWFgRkVDgUCKkaw5TvZHwo18DZV3bpDMVEqvGiqOSggICgL2bY7myUIx1HVRq8kqYAJk/DiaeDbBppwYujXi/h+dUB3tOJTuNFzhlfIHs27K9V/XCs07OCzz6kxd8wFttWNIqiCURJjHy+UBNvD2LiZQrxj4bH8WKP8VLFYWOmsCulmg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=B7HRs1xNArk6gq2g93nxmeApASDnCzNJL7fA6dhPCgU=;
- b=Oi4CBr3AHwhNjEUltvUCdArwHQZSGnSvNsCfbZf1KPTdb133hWX5OEMlo8pc5HrQRzIQkASs2wzjvSkbcuqhxBw89snTLQLwghvzzLz6tKS7RA4QlxxgoPk/+eN0eyhRrOnGY8t/8+66U224ZqM/HiUgqhqTdid+qJu1AZJXEfYTToqVkLxTo4G0inYglEmGXteehoGbgXK0TPCqvyT+OPlMA8x+e5f+B1EpTMoHwOcUwWis/Hk9KzSogJME4lop7Og+L0qnN922mtW0bGeKXGrtRygqCtGH0TOdHgkytG1Avp86K9KUGT0CrOCr9TLRnJ1fp8GXCsaIBvVMIeDHWQ==
+ bh=lSywZx4vw32meAi3dYF7s96ag/rhILm887/ADuiSWyA=;
+ b=A9Eniv8pjcx1hKe8J4k4zozyCaRHVV8ky7AziAatfO6scNZAOSP0xqsRvxW/+Nr+fq2JF4yqMT5SJIzs7LU0N/nENHHKSXtvQuTOsYfsSulBqScMXt8Jiiqxh8TXowI+Zg2LqGRJig3GeH0pB/P/eou2crNd9HOce1x7rFaXXQj/3zipJOB1AgZCtckY/nBJjKE/HQpukLkvDjWqVp5yVztQ+uULvpTdu9ejc/FTzzlHsVXIxxty8SDXPMRMU3vPZNOBR3VC/4ZLvjP16Ff4M8CSQT4BE1+pNc8WGbA2vAL84ghXzY2cs2d9BCBuiy5MjH11JW67ZdmHXG/XV5DppQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=B7HRs1xNArk6gq2g93nxmeApASDnCzNJL7fA6dhPCgU=;
- b=4FiXi+mWDwEiUuuOHtipyGuayEDVDfwHcBbz+Ob3qPvN+HVg+80GN05lfd7SzjpeCCpI5AM0GErCodVjKC1CEk35KxtN0RtlIasDuyPsHXp8odm/MXO1ITlpxanGIeYBD3ZnbQ/MEJ6lu6u8x5hcxaRyMIGYSCx2vm8FEuAq1GQ=
-Received: from MWHPR10CA0053.namprd10.prod.outlook.com (2603:10b6:300:2c::15)
- by BY5PR12MB4886.namprd12.prod.outlook.com (2603:10b6:a03:1c5::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.14; Sun, 26 Sep
- 2021 09:07:35 +0000
-Received: from CO1NAM11FT050.eop-nam11.prod.protection.outlook.com
- (2603:10b6:300:2c:cafe::34) by MWHPR10CA0053.outlook.office365.com
- (2603:10b6:300:2c::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.13 via Frontend
- Transport; Sun, 26 Sep 2021 09:07:35 +0000
+ bh=lSywZx4vw32meAi3dYF7s96ag/rhILm887/ADuiSWyA=;
+ b=2PEPI3E1v+v4iyWsIbxGAgz6M0lwJHADcYNPPGgC2esNJz+qQG4Q7OZE779ue33r/12YjXUGNTWYEInaua5MUDwiozKkwqXwfNZF3KPLl+H9bruwnegSoTXVYpuK0m+dHk0GCC72z6dC6/5c57zPQZQ7FfPIfXdnAhD0y33IWq4=
+Received: from MW2PR2101CA0018.namprd21.prod.outlook.com (2603:10b6:302:1::31)
+ by DM5PR12MB1577.namprd12.prod.outlook.com (2603:10b6:4:f::22) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4544.15; Sun, 26 Sep 2021 09:07:38 +0000
+Received: from CO1NAM11FT031.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:302:1:cafe::17) by MW2PR2101CA0018.outlook.office365.com
+ (2603:10b6:302:1::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4587.1 via Frontend
+ Transport; Sun, 26 Sep 2021 09:07:37 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; intel.com; dkim=none (message not signed)
  header.d=none;intel.com; dmarc=pass action=none header.from=amd.com;
@@ -43,13 +42,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT050.mail.protection.outlook.com (10.13.174.79) with Microsoft SMTP
+ CO1NAM11FT031.mail.protection.outlook.com (10.13.174.118) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4544.13 via Frontend Transport; Sun, 26 Sep 2021 09:07:34 +0000
+ 15.20.4544.13 via Frontend Transport; Sun, 26 Sep 2021 09:07:37 +0000
 Received: from hr-amd.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.8; Sun, 26 Sep
- 2021 04:07:28 -0500
+ 2021 04:07:32 -0500
 From:   Huang Rui <ray.huang@amd.com>
 To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
@@ -65,9 +64,9 @@ CC:     Deepak Sharma <deepak.sharma@amd.com>,
         Xiaojian Du <Xiaojian.Du@amd.com>,
         <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
         Huang Rui <ray.huang@amd.com>
-Subject: [PATCH v2 18/21] cpupower: enable boost state support for amd-pstate module
-Date:   Sun, 26 Sep 2021 17:06:02 +0800
-Message-ID: <20210926090605.3556134-19-ray.huang@amd.com>
+Subject: [PATCH v2 19/21] cpupower: move print_speed function into misc helper
+Date:   Sun, 26 Sep 2021 17:06:03 +0800
+Message-ID: <20210926090605.3556134-20-ray.huang@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210926090605.3556134-1-ray.huang@amd.com>
 References: <20210926090605.3556134-1-ray.huang@amd.com>
@@ -79,117 +78,227 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f92ed48e-a2c3-490f-4c06-08d980cd146c
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4886:
-X-Microsoft-Antispam-PRVS: <BY5PR12MB4886C26555EB3C1013FD3EACECA69@BY5PR12MB4886.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
+X-MS-Office365-Filtering-Correlation-Id: 0d651f7a-1ead-4454-3471-08d980cd1606
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1577:
+X-Microsoft-Antispam-PRVS: <DM5PR12MB1577C9EC7D0BF7602C314A4EECA69@DM5PR12MB1577.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4125;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mQsQzuXXyEtzX8jPSxPmpW1msqnstYtEmKBvHgfYnXTJDW3RXphIf13MGywJI3L+ndtGrj7C5DGPzxBoUUNeBpzD/7nffipeGxljM08vPnofrlvcG7dQSfKkCLBciRv8xzrbO5TMeqZ9NyDgcCET5DEIj4JEYo5KrYYxqVUBLcPAjgM0u9G2Iy06+xR5KRL651nTJwk/5NitZi3F50c9bmVO10KZoH963dWci/JM6V7+gyWR8HAGPAFiNm94j0IThtxJQQ+DA8Dw3j9NvmE4DB5ojxmx+ipNazjcF7jrEgzRjLXLRRR2Nog4aWgXOXOLCcSeG0BPsOGzsPGY5Igl+COPkr6iRqZBQNkDI31hnR+SCAY5XM2wjjUZ0LmPL0DeESUovdN99TZ+0xTIZZ1CoBqTZS8/Gf2xWl8v7ciZzGgbaLTZuWpLLKuHY5hoE89UKIl6ChD7itXorL0zV9F+tlXkRuwjyNFy8Lbw4POtTgU0BeFCc9A+SoLKt9T4230rE/F/wRjKVs+4er8pLceJ8gyI2ouY4nx8G9z7qGV5jh60g2nEes3XSm4ANgEbI7ygn0Ue7K7q9D3LJ/jljmNznydksJkEXpYlNer6AQKm/lw/RrBW+3G/q83BdUGnqNyMwRpi0ss0361+gC1oCSwTirIp9b3/d1ylpHYnWVxlfD/Rcip8Oe8Cl1seDWiAvKeJ2sQXk57hHS6i79j6qwAPZPR6OjdCHWCP10ZYJ9mXp4M=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(2616005)(86362001)(110136005)(1076003)(316002)(16526019)(6666004)(336012)(26005)(70586007)(508600001)(70206006)(54906003)(186003)(36860700001)(7696005)(36756003)(5660300002)(81166007)(8936002)(356005)(83380400001)(2906002)(4326008)(47076005)(8676002)(82310400003)(426003)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: ZoqcKcU79m3AYS46yBXhtQ+TmtFTOs4TgHfbFBHSF7B9McXaLUc2FLA2Juayb7skFbdB/2YXbpuTfJfbQIcGImSStoQ0Uwq55bNjm+lcIr1TBbgAp+0as4btZdO/GwSw+AI1n4P5F0hnYs/rv6KN3oizws32VFVyvgPzkufscbFOBzmG+D/CGSfbNwKmobsufX4ui9LGH2V3lQAh69tH2fiXaJlU3g6K/HwFaxijwhAWq2+1fn1l0R55YS1jkpnZp0GlQaNnVc2pJwCVr9BzDTp5qHfmQ4F7kWjGM8TkOm3hAfC9POqh/hMAvU3gCR7WsfneY607Jp6MeBfu1kgWO/CrO1pQtwbjueAi60FZ8l12hggh2ulmBrWyxxAIdtfUiQBhLgPrdYuf6215EjLGJ/Q8fLO3GoF5jUZ6kF9xjVyG956VKuC6PX/0OoNJWPu2C6FURAEDIy6EAiTDmglqA9PqME2nGWuetGJlP2kdaJQLM82xHtF1Lk6giKBDjb3Iido7YUAtoqh12rDmdUrIHXyvZxDW7uG6BMD5TQBW7gUrqVRE3c0ONGh0hy7HudKTiiN+8teyoPn4vljWlP3HFhbAWmygB9lDSlwq2GX4jATorxsYG/AUW71GGEuEgW9XFrhEqxu2xW1TGUjn5PdBh8pdYqK4fyOOa724DQNJ7BzmlzWOl1k2jvA48ICcM22sF2AlGhuQXsPYLRkTrSAKymyc4wBC8NipfuxUTdqDIxY=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(8936002)(316002)(6666004)(2616005)(70586007)(8676002)(7696005)(36756003)(36860700001)(54906003)(110136005)(82310400003)(336012)(426003)(70206006)(81166007)(47076005)(86362001)(4326008)(508600001)(26005)(356005)(2906002)(83380400001)(5660300002)(1076003)(186003)(16526019)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Sep 2021 09:07:34.7309
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Sep 2021 09:07:37.4233
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f92ed48e-a2c3-490f-4c06-08d980cd146c
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0d651f7a-1ead-4454-3471-08d980cd1606
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT050.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT031.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4886
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1577
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The legacy ACPI hardware P-States function has 3 P-States on ACPI table,
-the CPU frequency only can be switched between the 3 P-States. While the
-processor supports the boost state, it will have another boost state
-that the frequency can be higher than P0 state, and the state can be
-decoded by the function of decode_pstates() and read by
-amd_pci_get_num_boost_states().
-
-However, the new AMD P-States function is different than legacy ACPI
-hardware P-State on AMD processors. That has a finer grain frequency
-range between the highest and lowest frequency. And boost frequency is
-actually the frequency which is mapped on highest performance ratio. The
-similiar previous P0 frequency is mapped on nominal performance ratio.
-If the highest performance on the processor is higher than nominal
-performance, then we think the current processor supports the boost
-state. And it uses amd_pstate_boost_init() to initialize boost for AMD
-P-States function.
+The print_speed can be as a common function, and expose it into misc
+helper header. Then it can be used on other helper files as well.
 
 Signed-off-by: Huang Rui <ray.huang@amd.com>
 ---
- tools/power/cpupower/utils/helpers/amd.c     | 18 ++++++++++++++++++
- tools/power/cpupower/utils/helpers/helpers.h |  5 +++++
- tools/power/cpupower/utils/helpers/misc.c    |  2 ++
- 3 files changed, 25 insertions(+)
+ tools/power/cpupower/utils/cpufreq-info.c    | 59 ++++----------------
+ tools/power/cpupower/utils/helpers/helpers.h |  1 +
+ tools/power/cpupower/utils/helpers/misc.c    | 42 ++++++++++++++
+ 3 files changed, 54 insertions(+), 48 deletions(-)
 
-diff --git a/tools/power/cpupower/utils/helpers/amd.c b/tools/power/cpupower/utils/helpers/amd.c
-index b953277215c0..de68c14574c0 100644
---- a/tools/power/cpupower/utils/helpers/amd.c
-+++ b/tools/power/cpupower/utils/helpers/amd.c
-@@ -184,5 +184,23 @@ static unsigned long amd_pstate_get_data(unsigned int cpu,
- 						  MAX_AMD_PSTATE_VALUE_READ_FILES);
+diff --git a/tools/power/cpupower/utils/cpufreq-info.c b/tools/power/cpupower/utils/cpufreq-info.c
+index f9895e31ff5a..b429454bf3ae 100644
+--- a/tools/power/cpupower/utils/cpufreq-info.c
++++ b/tools/power/cpupower/utils/cpufreq-info.c
+@@ -84,43 +84,6 @@ static void proc_cpufreq_output(void)
  }
  
-+void amd_pstate_boost_init(unsigned int cpu, int *support, int *active)
-+{
-+	unsigned long highest_perf, nominal_perf, cpuinfo_min,
-+		      cpuinfo_max, amd_pstate_max;
-+
-+	highest_perf = amd_pstate_get_data(cpu, AMD_PSTATE_HIGHEST_PERF);
-+	nominal_perf = amd_pstate_get_data(cpu, AMD_PSTATE_NOMINAL_PERF);
-+
-+	*support = highest_perf > nominal_perf ? 1 : 0;
-+	if (!(*support))
-+		return;
-+
-+	cpufreq_get_hardware_limits(cpu, &cpuinfo_min, &cpuinfo_max);
-+	amd_pstate_max = amd_pstate_get_data(cpu, AMD_PSTATE_MAX_FREQ);
-+
-+	*active = cpuinfo_max == amd_pstate_max ? 1 : 0;
-+}
-+
- /* AMD P-States Helper Functions ***************/
- #endif /* defined(__i386__) || defined(__x86_64__) */
+ static int no_rounding;
+-static void print_speed(unsigned long speed)
+-{
+-	unsigned long tmp;
+-
+-	if (no_rounding) {
+-		if (speed > 1000000)
+-			printf("%u.%06u GHz", ((unsigned int) speed/1000000),
+-				((unsigned int) speed%1000000));
+-		else if (speed > 1000)
+-			printf("%u.%03u MHz", ((unsigned int) speed/1000),
+-				(unsigned int) (speed%1000));
+-		else
+-			printf("%lu kHz", speed);
+-	} else {
+-		if (speed > 1000000) {
+-			tmp = speed%10000;
+-			if (tmp >= 5000)
+-				speed += 10000;
+-			printf("%u.%02u GHz", ((unsigned int) speed/1000000),
+-				((unsigned int) (speed%1000000)/10000));
+-		} else if (speed > 100000) {
+-			tmp = speed%1000;
+-			if (tmp >= 500)
+-				speed += 1000;
+-			printf("%u MHz", ((unsigned int) speed/1000));
+-		} else if (speed > 1000) {
+-			tmp = speed%100;
+-			if (tmp >= 50)
+-				speed += 100;
+-			printf("%u.%01u MHz", ((unsigned int) speed/1000),
+-				((unsigned int) (speed%1000)/100));
+-		}
+-	}
+-
+-	return;
+-}
+-
+ static void print_duration(unsigned long duration)
+ {
+ 	unsigned long tmp;
+@@ -254,11 +217,11 @@ static int get_boost_mode(unsigned int cpu)
+ 	if (freqs) {
+ 		printf(_("  boost frequency steps: "));
+ 		while (freqs->next) {
+-			print_speed(freqs->frequency);
++			print_speed(freqs->frequency, no_rounding);
+ 			printf(", ");
+ 			freqs = freqs->next;
+ 		}
+-		print_speed(freqs->frequency);
++		print_speed(freqs->frequency, no_rounding);
+ 		printf("\n");
+ 		cpufreq_put_available_frequencies(freqs);
+ 	}
+@@ -277,7 +240,7 @@ static int get_freq_kernel(unsigned int cpu, unsigned int human)
+ 		return -EINVAL;
+ 	}
+ 	if (human) {
+-		print_speed(freq);
++		print_speed(freq, no_rounding);
+ 	} else
+ 		printf("%lu", freq);
+ 	printf(_(" (asserted by call to kernel)\n"));
+@@ -296,7 +259,7 @@ static int get_freq_hardware(unsigned int cpu, unsigned int human)
+ 		return -EINVAL;
+ 	}
+ 	if (human) {
+-		print_speed(freq);
++		print_speed(freq, no_rounding);
+ 	} else
+ 		printf("%lu", freq);
+ 	printf(_(" (asserted by call to hardware)\n"));
+@@ -316,9 +279,9 @@ static int get_hardware_limits(unsigned int cpu, unsigned int human)
+ 
+ 	if (human) {
+ 		printf(_("  hardware limits: "));
+-		print_speed(min);
++		print_speed(min, no_rounding);
+ 		printf(" - ");
+-		print_speed(max);
++		print_speed(max, no_rounding);
+ 		printf("\n");
+ 	} else {
+ 		printf("%lu %lu\n", min, max);
+@@ -350,9 +313,9 @@ static int get_policy(unsigned int cpu)
+ 		return -EINVAL;
+ 	}
+ 	printf(_("  current policy: frequency should be within "));
+-	print_speed(policy->min);
++	print_speed(policy->min, no_rounding);
+ 	printf(_(" and "));
+-	print_speed(policy->max);
++	print_speed(policy->max, no_rounding);
+ 
+ 	printf(".\n                  ");
+ 	printf(_("The governor \"%s\" may decide which speed to use\n"
+@@ -436,7 +399,7 @@ static int get_freq_stats(unsigned int cpu, unsigned int human)
+ 	struct cpufreq_stats *stats = cpufreq_get_stats(cpu, &total_time);
+ 	while (stats) {
+ 		if (human) {
+-			print_speed(stats->frequency);
++			print_speed(stats->frequency, no_rounding);
+ 			printf(":%.2f%%",
+ 				(100.0 * stats->time_in_state) / total_time);
+ 		} else
+@@ -486,11 +449,11 @@ static void debug_output_one(unsigned int cpu)
+ 	if (freqs) {
+ 		printf(_("  available frequency steps:  "));
+ 		while (freqs->next) {
+-			print_speed(freqs->frequency);
++			print_speed(freqs->frequency, no_rounding);
+ 			printf(", ");
+ 			freqs = freqs->next;
+ 		}
+-		print_speed(freqs->frequency);
++		print_speed(freqs->frequency, no_rounding);
+ 		printf("\n");
+ 		cpufreq_put_available_frequencies(freqs);
+ 	}
 diff --git a/tools/power/cpupower/utils/helpers/helpers.h b/tools/power/cpupower/utils/helpers/helpers.h
-index ae96efac759f..976c142ecfa0 100644
+index 976c142ecfa0..0b0f6a55354e 100644
 --- a/tools/power/cpupower/utils/helpers/helpers.h
 +++ b/tools/power/cpupower/utils/helpers/helpers.h
-@@ -139,6 +139,8 @@ extern int cpufreq_has_boost_support(unsigned int cpu, int *support,
+@@ -199,5 +199,6 @@ extern struct bitmask *offline_cpus;
+ void get_cpustate(void);
+ void print_online_cpus(void);
+ void print_offline_cpus(void);
++void print_speed(unsigned long speed, int no_rounding);
  
- /* AMD P-States stuff **************************/
- extern unsigned long cpupower_amd_pstate_enabled(void);
-+extern void amd_pstate_boost_init(unsigned int cpu,
-+				  int *support, int *active);
- 
- /* AMD P-States stuff **************************/
- 
-@@ -176,6 +178,9 @@ static inline int cpufreq_has_boost_support(unsigned int cpu, int *support,
- 
- static inline unsigned long cpupower_amd_pstate_enabled(void)
- { return 0; }
-+static void amd_pstate_boost_init(unsigned int cpu,
-+				  int *support, int *active)
-+{ return; }
- 
- /* cpuid and cpuinfo helpers  **************************/
- 
+ #endif /* __CPUPOWERUTILS_HELPERS__ */
 diff --git a/tools/power/cpupower/utils/helpers/misc.c b/tools/power/cpupower/utils/helpers/misc.c
-index 39ff154ea9cf..99d1dc8917d0 100644
+index 99d1dc8917d0..730f670ab90d 100644
 --- a/tools/power/cpupower/utils/helpers/misc.c
 +++ b/tools/power/cpupower/utils/helpers/misc.c
-@@ -39,6 +39,8 @@ int cpufreq_has_boost_support(unsigned int cpu, int *support, int *active,
- 			if (ret)
- 				return ret;
- 		}
-+	} else if (cpupower_cpu_info.caps & CPUPOWER_CAP_AMD_PSTATE) {
-+		amd_pstate_boost_init(cpu, support, active);
- 	} else if (cpupower_cpu_info.caps & CPUPOWER_CAP_INTEL_IDA)
- 		*support = *active = 1;
- 	return 0;
+@@ -166,3 +166,45 @@ void print_offline_cpus(void)
+ 		printf(_("cpupower set operation was not performed on them\n"));
+ 	}
+ }
++
++/*
++ * print_speed
++ *
++ * Print the exact CPU frequency with appropriate unit
++ */
++void print_speed(unsigned long speed, int no_rounding)
++{
++	unsigned long tmp;
++
++	if (no_rounding) {
++		if (speed > 1000000)
++			printf("%u.%06u GHz", ((unsigned int) speed/1000000),
++				((unsigned int) speed%1000000));
++		else if (speed > 1000)
++			printf("%u.%03u MHz", ((unsigned int) speed/1000),
++				(unsigned int) (speed%1000));
++		else
++			printf("%lu kHz", speed);
++	} else {
++		if (speed > 1000000) {
++			tmp = speed%10000;
++			if (tmp >= 5000)
++				speed += 10000;
++			printf("%u.%02u GHz", ((unsigned int) speed/1000000),
++				((unsigned int) (speed%1000000)/10000));
++		} else if (speed > 100000) {
++			tmp = speed%1000;
++			if (tmp >= 500)
++				speed += 1000;
++			printf("%u MHz", ((unsigned int) speed/1000));
++		} else if (speed > 1000) {
++			tmp = speed%100;
++			if (tmp >= 50)
++				speed += 100;
++			printf("%u.%01u MHz", ((unsigned int) speed/1000),
++				((unsigned int) (speed%1000)/100));
++		}
++	}
++
++	return;
++}
 -- 
 2.25.1
 
