@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B0FD418918
+	by mail.lfdr.de (Postfix) with ESMTP id 3C98E418917
 	for <lists+linux-pm@lfdr.de>; Sun, 26 Sep 2021 15:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231767AbhIZNoT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 26 Sep 2021 09:44:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38684 "EHLO
+        id S231766AbhIZNoS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 26 Sep 2021 09:44:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231770AbhIZNoR (ORCPT
+        with ESMTP id S231771AbhIZNoR (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Sun, 26 Sep 2021 09:44:17 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C502C061575
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA0DC061714
         for <linux-pm@vger.kernel.org>; Sun, 26 Sep 2021 06:42:41 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id y28so63511127lfb.0
+Received: by mail-lf1-x131.google.com with SMTP id e15so64045427lfr.10
         for <linux-pm@vger.kernel.org>; Sun, 26 Sep 2021 06:42:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rlWdpxs06o6BKntUmFuTyMgh8/xRKIkF0pvChWN0UpU=;
-        b=u7fCHwagnurRz0JEcjetSix9eW39ilQu3Ks+mQPl52alU4ohHjcsIsMJUjQf/4fHE1
-         VC39tBM4ZKTKh6HSwdP/UVrA00BDmnKt/2dAVzqpx+9JxcF/XAcieYdty6weMFUWruix
-         8ghqmaM0jn3bMqWZUa0K5n3TKBC+xwRcfmkQgurfxViNzrq/uUhHXaOQdbYv02uo4G0V
-         a3GBgrs4ze6kmY16NTV3JipD3j3cCdsJNe6PSjd1rT+AJoSsZqXeukMcHyl+i19hdMLW
-         5qXUxw2nDHf0iQt88Zk+sD2bDR7nBnoW8bH/1hLSuF2x/dsT4vb4DFZUfdtcahiNmeN0
-         WMYw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=xzDC9qRKPuHBxoHAYxSycUOQsa5mrl7rHF0tbAdAykE=;
+        b=yVd2pVKoUcjEDqDGsqcCyIBOGdZYT4zmoNp4opOXfdveEjNWW7SRuiRjFseu3W63AT
+         z2I1TM4ZnWyg0cq104VNRh+tLPlHbI37XEdccMhTy9BshoFF8+8udxImsCYBmZLp6qhM
+         AdvGjb68ZmFXGfdaMp98AX2fl+AIfIg/4/erKvFLu1EtS3X3IW1MggGR9X27GfkHDEar
+         vkAvPjy8Pfx/vYAIDMI1g96Gy44I79rl3RTj5GKekclp8HhJ5JXOXPu1a0peLX/WoTui
+         gOrEYgXBkk600vsPwo6iVyVcaVR6k4zF1BscJELNCoyjrp92ZDZvTbkLJTeVl4/osSPr
+         kidw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rlWdpxs06o6BKntUmFuTyMgh8/xRKIkF0pvChWN0UpU=;
-        b=U+DBtHqXO84ZoZ4Vr5n14mGsYaH9DBVekVGFK80UptShWP9V7NEH989PdIc/zbI7jr
-         ch/Z59JnqgoHKm+kgHbZR7RS6ODJgpSl7k0+5yod639pTR2Ym3JqPl6Z3mPas7cEhqSX
-         +eiJVYPRYrJMJA/Aw7O67ZUU0OBMGd/D0lSNCyTV0B/69acCK3lDfSri63rFJfKvS3ZF
-         dtXohthE+T+gaf4BWaokv2LHpYzwP0Ihd6ek+J1cqyLKSUFFrX9S1A17Jaff1/8h6f9q
-         h4t2VyjFUSPe+1CPsePONvJC5veGXBmtL3iJ2muIo5lDfdPc49+YMk9WuQjsg7qmqK4N
-         Gs9g==
-X-Gm-Message-State: AOAM531hn7MeLl0rEofR4vyUzRYBSTa7hJdE3bz05kvdaadZ8M4cr0Ri
-        JTmH0lJyS0spd8SciEX+aXlh/g==
-X-Google-Smtp-Source: ABdhPJwbzm8S7/kiV9y3Y/+ilaG2LYbxDhV+9Gx+pMuDM9bcue1mpUONPtr6uHJaf0h04v7lZNvQyw==
-X-Received: by 2002:a2e:974b:: with SMTP id f11mr22475591ljj.385.1632663758814;
-        Sun, 26 Sep 2021 06:42:38 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=xzDC9qRKPuHBxoHAYxSycUOQsa5mrl7rHF0tbAdAykE=;
+        b=mW10IT4gLpfo9q/R/AqMe7xIsJ6Ft8kmqhDY5PJWgAXgfwoZIkOr7YjfOIeboHyQSR
+         ZWzxLhRdP/8yzH5hhvHdJWbyCCSOTiysznLo3vpoBBwiEKhbnCPqNyc5DixdO4z0XEjv
+         eVFYl7Ziiz1NShlCHC8LRSf0eQ+W/ZDzynq7hZDCnwI4PmbeqMadWo8xK3Li89q3/WeF
+         TBtyqwGL784GUZZLB/N9+YJmzEwpSJ7TuAEBAJcCPCojWNoCZ5H9Of9/AvbYCmpXvV9+
+         J6PE/FHQqeyBc/0uGwQ194ASCIgk+LJgRqh5gYY0jEHVhZpOahUwgaT1vDzpK3Yc2aMM
+         Ku9Q==
+X-Gm-Message-State: AOAM530D1ByPqCs80dUQCD4IeaKMYE+jGJyz8g2EgA0a8Ckf3/B6K2qk
+        +RT/kigqUQ51/c780kilVf3DUg==
+X-Google-Smtp-Source: ABdhPJyP1YMmfWYK7vCu1VlXDYTMXzxEhwkLjcgHZlPUl/tbhhS6kNv9FjXhQXp2hrbg2GCL153nxg==
+X-Received: by 2002:a2e:82c4:: with SMTP id n4mr23643833ljh.283.1632663759604;
+        Sun, 26 Sep 2021 06:42:39 -0700 (PDT)
 Received: from umbar.lan ([37.153.55.125])
         by smtp.gmail.com with ESMTPSA id k21sm1787925lji.81.2021.09.26.06.42.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Sep 2021 06:42:38 -0700 (PDT)
+        Sun, 26 Sep 2021 06:42:39 -0700 (PDT)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     Amit Kucheria <amitk@kernel.org>,
         Thara Gopinath <thara.gopinath@linaro.org>,
@@ -55,88 +55,74 @@ To:     Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: [PATCH v2 1/2] thermal: qcom: tsens: remove data indirection in the debugfs
-Date:   Sun, 26 Sep 2021 16:42:36 +0300
-Message-Id: <20210926134237.23863-1-dmitry.baryshkov@linaro.org>
+Subject: [PATCH v2 2/2] thermal: qcom: tsens: fix VER_0 support
+Date:   Sun, 26 Sep 2021 16:42:37 +0300
+Message-Id: <20210926134237.23863-2-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210926134237.23863-1-dmitry.baryshkov@linaro.org>
+References: <20210926134237.23863-1-dmitry.baryshkov@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There is no reason to pass platform device to debugfs just to get the
-tsens_priv from it. Not to mention that for TSENS_V0 the platform device
-(gcc) might have other device data. Pass the tsens_priv data to debugfs
-callbacks directly.
+For VER_0 tsens shares the device with the clock controller, but
+nevertheless it does not use syscon for these registers. Drop
+syscon_node_to_regmap() and acquire the regmap on our own.
 
+apq8064 has tsens as a part of gcc device tree node, ipq8064 puts tsens
+node as a child node of gcc. Thus check whether tsens resource can be
+fetched either from the device itself or from it's parent.
+
+Fixes: 53e2a20e4c41 ("thermal/drivers/tsens: Add VER_0 tsens version")
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- drivers/thermal/qcom/tsens.c | 17 +++++++----------
- 1 file changed, 7 insertions(+), 10 deletions(-)
+ drivers/thermal/qcom/tsens.c | 21 ++++++++++-----------
+ 1 file changed, 10 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-index 4c7ebd1d3f9c..6aeea74c1bb0 100644
+index 6aeea74c1bb0..bc0c86a54fe7 100644
 --- a/drivers/thermal/qcom/tsens.c
 +++ b/drivers/thermal/qcom/tsens.c
-@@ -657,8 +657,7 @@ int get_temp_common(const struct tsens_sensor *s, int *temp)
- #ifdef CONFIG_DEBUG_FS
- static int dbg_sensors_show(struct seq_file *s, void *data)
- {
--	struct platform_device *pdev = s->private;
--	struct tsens_priv *priv = platform_get_drvdata(pdev);
-+	struct tsens_priv *priv = s->private;
- 	int i;
+@@ -12,7 +12,6 @@
+ #include <linux/of.h>
+ #include <linux/of_address.h>
+ #include <linux/of_platform.h>
+-#include <linux/mfd/syscon.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm.h>
+ #include <linux/regmap.h>
+@@ -773,19 +772,19 @@ int __init init_common(struct tsens_priv *priv)
+ 	if (tsens_version(priv) >= VER_0_1) {
+ 		res = platform_get_resource(op, IORESOURCE_MEM, 0);
+ 		tm_base = devm_ioremap_resource(dev, res);
+-		if (IS_ERR(tm_base)) {
+-			ret = PTR_ERR(tm_base);
+-			goto err_put_device;
+-		}
+-
+-		priv->tm_map = devm_regmap_init_mmio(dev, tm_base, &tsens_config);
+-	} else { /* VER_0 share the same gcc regs using a syscon */
+-		struct device *parent = priv->dev->parent;
++	} else { /* VER_0 share the same gcc regs. It can be either the same device, or parent */
++		res = platform_get_resource(op, IORESOURCE_MEM, 0);
++		if (!res && dev_is_platform(priv->dev->parent))
++			res = platform_get_resource(to_platform_device(priv->dev->parent), IORESOURCE_MEM, 0);
++		tm_base = devm_ioremap(dev, res->start, resource_size(res));
++	}
  
- 	seq_printf(s, "max: %2d\nnum: %2d\n\n",
-@@ -675,8 +674,7 @@ static int dbg_sensors_show(struct seq_file *s, void *data)
+-		if (parent)
+-			priv->tm_map = syscon_node_to_regmap(parent->of_node);
++	if (IS_ERR(tm_base)) {
++		ret = PTR_ERR(tm_base);
++		goto err_put_device;
+ 	}
  
- static int dbg_version_show(struct seq_file *s, void *data)
- {
--	struct platform_device *pdev = s->private;
--	struct tsens_priv *priv = platform_get_drvdata(pdev);
-+	struct tsens_priv *priv = s->private;
- 	u32 maj_ver, min_ver, step_ver;
- 	int ret;
- 
-@@ -701,9 +699,8 @@ static int dbg_version_show(struct seq_file *s, void *data)
- DEFINE_SHOW_ATTRIBUTE(dbg_version);
- DEFINE_SHOW_ATTRIBUTE(dbg_sensors);
- 
--static void tsens_debug_init(struct platform_device *pdev)
-+static void tsens_debug_init(struct platform_device *pdev, struct tsens_priv *priv)
- {
--	struct tsens_priv *priv = platform_get_drvdata(pdev);
- 	struct dentry *root, *file;
- 
- 	root = debugfs_lookup("tsens", NULL);
-@@ -715,14 +712,14 @@ static void tsens_debug_init(struct platform_device *pdev)
- 	file = debugfs_lookup("version", priv->debug_root);
- 	if (!file)
- 		debugfs_create_file("version", 0444, priv->debug_root,
--				    pdev, &dbg_version_fops);
-+				    priv, &dbg_version_fops);
- 
- 	/* A directory for each instance of the TSENS IP */
- 	priv->debug = debugfs_create_dir(dev_name(&pdev->dev), priv->debug_root);
--	debugfs_create_file("sensors", 0444, priv->debug, pdev, &dbg_sensors_fops);
-+	debugfs_create_file("sensors", 0444, priv->debug, priv, &dbg_sensors_fops);
- }
- #else
--static inline void tsens_debug_init(struct platform_device *pdev) {}
-+static inline void tsens_debug_init(struct platform_device *pdev, struct tsens_priv *priv) {}
- #endif
- 
- static const struct regmap_config tsens_config = {
-@@ -918,7 +915,7 @@ int __init init_common(struct tsens_priv *priv)
- 	if (tsens_version(priv) >= VER_0_1)
- 		tsens_enable_irq(priv);
- 
--	tsens_debug_init(op);
-+	tsens_debug_init(op, priv);
- 
- err_put_device:
- 	put_device(&op->dev);
++	priv->tm_map = devm_regmap_init_mmio(dev, tm_base, &tsens_config);
+ 	if (IS_ERR_OR_NULL(priv->tm_map)) {
+ 		if (!priv->tm_map)
+ 			ret = -ENODEV;
 -- 
 2.30.2
 
