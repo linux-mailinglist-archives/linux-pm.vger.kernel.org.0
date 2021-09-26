@@ -2,66 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF1484189DF
-	for <lists+linux-pm@lfdr.de>; Sun, 26 Sep 2021 17:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48C1B418A62
+	for <lists+linux-pm@lfdr.de>; Sun, 26 Sep 2021 19:57:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232288AbhIZPOu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 26 Sep 2021 11:14:50 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:51892 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232304AbhIZPOi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 26 Sep 2021 11:14:38 -0400
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1632669180;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nuDlguqpot4ZhS9yQ8I8Yqw/c7AtPbUCp7ngPng0guU=;
-        b=HfO01BhrvO7lPS9kSKQQ5bI4q7VhL8EusBWYjtl7qhJCWuulJsIkBfBeHETvlAJsL24QwT
-        /aMABSZ1n28NUwlMnTrl2gpH7z0i32nl7fG+ex4Q4Jf2LFZujYvQMLjUjQwTjh2MT/cGeJ
-        U6HDVO4R0z3qI2turX62dIA/BbW41SGUy2VMJmzW7TyJZD67vgLA4vFdDCAJwbmjtSrf0y
-        lIlMj0VQLdyIltx1SeDubHS1Tvygi0Gst9YKPByAeKbMP9mEbJmwS1mrZuyR6cOAVNX1Rs
-        vMHXOyX3p7z9Nk+YVGg5vYume8rav2yewx9C+TRswNBeWwVmS1l5C4qwm6vhhQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1632669180;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nuDlguqpot4ZhS9yQ8I8Yqw/c7AtPbUCp7ngPng0guU=;
-        b=X3opelUiwLdtCZxtQvA7LKjR0zadR/za4sUoO8ZI2N/sgPlJ47o5bOcYWx3sf+8PQr/+8l
-        j0xVwXj6bqMcqhBw==
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Deepak Sharma <deepak.sharma@amd.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [RESEND PATCH] x86: ACPI: cstate: Optimize C3 entry on AMD CPUs
-In-Reply-To: <CAJZ5v0iS+TnkoqCxLa92Na=By53PXY-qW=k4utr_84KYaw+sVQ@mail.gmail.com>
-References: <20210924061205.5523-1-deepak.sharma@amd.com>
- <CAJZ5v0iS+TnkoqCxLa92Na=By53PXY-qW=k4utr_84KYaw+sVQ@mail.gmail.com>
-Date:   Sun, 26 Sep 2021 17:12:59 +0200
-Message-ID: <87wnn3bcas.ffs@tglx>
+        id S229576AbhIZR7C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 26 Sep 2021 13:59:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38078 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229571AbhIZR7C (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 26 Sep 2021 13:59:02 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5217BC061575
+        for <linux-pm@vger.kernel.org>; Sun, 26 Sep 2021 10:57:25 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id x20so357721wrg.10
+        for <linux-pm@vger.kernel.org>; Sun, 26 Sep 2021 10:57:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=iBY804phrZguMBrW+AtI34S4xk8baTszOfWKGmoDKLQ=;
+        b=pBnfAlQ2CZIfD8ubwcN381NEh1dBbSQs32Xnyg5NkKGV3L+qg1qvmqkFSHE75IsrBW
+         kSAb78TnTaHITpIIuC/6Nq2ygeZLDr2RCep76haNyZKz1/KmDqkDHoWylNZ6Wh7WkGcJ
+         boOaBJF0p73BjpcduMXhDGDxtWx4uEDN0R3hi3vsyp0oQ2ibIaTXI+UCDoBtA1FMSEtE
+         gkyzBg3EjcnUSBbOtpwAV6n+GpOObpzz/jwZgvNX7u37CfwKyp7Ab3Q+LdQ7nqVSkCMd
+         09COLPEJIKBbFyWBvjbtodbgtzbKJIIV25SGHI6F+6BhrV3vj+S3Kll6O6mroi6OqYLe
+         yFIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=iBY804phrZguMBrW+AtI34S4xk8baTszOfWKGmoDKLQ=;
+        b=YagS8XjxmL8WH3bv9NJAYi8qfJvyPVX4YFS5seXyAooeo39QO+/yrOT/SMK8izk43q
+         HxA5TZ/I53vS1HV2AQvG+rw8dLJj7RBJub25+GO9R7lDoQYKX9hvL77rIwHSl1qacq3a
+         uYiTKs2DF3TRaXp1TOOs2Wfg/aYDv9/nHeVG8eUF96N60JukTEd2EZ+GQ517Y2eG5yI2
+         2yekNSEMrOmRTso73yQ+3xTqreFp3PGz/if8j+d6D/5/2EgGQ8iFb3VXJt1TvI9iUhM6
+         pFzukyuEpm9sVJ5kyldVTZaOwgIBVtBo8w7TwkRev1MSmt1FJgUEd0PcQ5LJN9hcyc66
+         S7aA==
+X-Gm-Message-State: AOAM530m9ahLCkmU9zJkLXxk8Tgy5IGghu4okOAUT4xefhLiSEvpTMyl
+        4Pb5RQR3hC0LCgIGxJPs7eZuFg==
+X-Google-Smtp-Source: ABdhPJyxW2u5jGF2mMA8R1UimD/q9n67CFCef6uE3BCnu/PZyjKKw3kP2ICsjtKee6WauRtEQNDKkQ==
+X-Received: by 2002:a5d:464c:: with SMTP id j12mr2241491wrs.261.1632679043351;
+        Sun, 26 Sep 2021 10:57:23 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:b8ba:f606:a9ed:a3b? ([2a01:e34:ed2f:f020:b8ba:f606:a9ed:a3b])
+        by smtp.googlemail.com with ESMTPSA id 8sm7263293wmj.18.2021.09.26.10.57.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Sep 2021 10:57:22 -0700 (PDT)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Ansuel Smith <ansuelsmth@gmail.com>,
+        Antoine Tenart <antoine.tenart@bootlin.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [GIT PULL] thermal for v5.15-rc3
+Message-ID: <15f013d8-d746-6034-bbe7-dc86cd8fbdf1@linaro.org>
+Date:   Sun, 26 Sep 2021 19:57:19 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Sep 24 2021 at 18:48, Rafael J. Wysocki wrote:
 
-> On Fri, Sep 24, 2021 at 8:12 AM Deepak Sharma <deepak.sharma@amd.com> wrote:
->>
->> All Zen or newer CPU which support C3 shares cache. Its not necessary to
->> flush the caches in software before entering C3. This will cause drop in
->> performance for the cores which share some caches. ARB_DIS is not used
->> with current AMD C state implementation. So set related flags correctly.
->>
->> Signed-off-by: Deepak Sharma <deepak.sharma@amd.com>
->
-> I'm planning to take this one unless the x86 maintainers have concerns, thanks.
+Hi Linus,
 
-Acked-by: Thomas Gleixner <tglx@linutronix.de>
+The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
+
+  Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
+
+are available in the Git repository at:
+
+
+ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
+tags/thermal-v5.15-rc3
+
+for you to fetch changes up to cf96921876dcee4d6ac07b9de470368a075ba9ad:
+
+  thermal/drivers/tsens: Fix wrong check for tzd in irq handlers
+(2021-09-21 15:17:11 +0200)
+
+----------------------------------------------------------------
+- Fix thermal shutdown after a suspend/resume due to a wrong TCC value
+  restored on Intel platform (Antoine Tenart)
+
+- Fix potential buffer overflow when building the list of
+  policies. The buffer size is not updated after writing to it (Dan
+  Carpenter)
+
+- Fix wrong check against IS_ERR instead of NULL (Ansuel Smith)
+
+----------------------------------------------------------------
+Ansuel Smith (1):
+      thermal/drivers/tsens: Fix wrong check for tzd in irq handlers
+
+Antoine Tenart (1):
+      thermal/drivers/int340x: Do not set a wrong tcc offset on resume
+
+Dan Carpenter (1):
+      thermal/core: Potential buffer overflow in
+thermal_build_list_of_policies()
+
+ drivers/thermal/intel/int340x_thermal/processor_thermal_device.c | 5 +++--
+ drivers/thermal/qcom/tsens.c                                     | 4 ++--
+ drivers/thermal/thermal_core.c                                   | 7
++++----
+ 3 files changed, 8 insertions(+), 8 deletions(-)
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
