@@ -2,176 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8F10418CD6
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Sep 2021 00:45:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2F91418EF0
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Sep 2021 08:17:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232482AbhIZWr3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 26 Sep 2021 18:47:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43374 "EHLO
+        id S232311AbhI0GSx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Sep 2021 02:18:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232791AbhIZWqX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 26 Sep 2021 18:46:23 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363BFC06120A;
-        Sun, 26 Sep 2021 15:43:09 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id u18so67079931lfd.12;
-        Sun, 26 Sep 2021 15:43:09 -0700 (PDT)
+        with ESMTP id S232283AbhI0GSv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Sep 2021 02:18:51 -0400
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F5E2C061570
+        for <linux-pm@vger.kernel.org>; Sun, 26 Sep 2021 23:17:14 -0700 (PDT)
+Received: by mail-ed1-x543.google.com with SMTP id ba1so6653136edb.4
+        for <linux-pm@vger.kernel.org>; Sun, 26 Sep 2021 23:17:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=GkvxncHOY8DvHcvIZZ5ALhHomt+6uxaaFq6TQ6h+fMg=;
-        b=jVXoHlkHdIjsVQbhBj5b7uMh0ngrZd3PCHAddv4luagdEL6TKWeTpMQ+IO9TpBGwmy
-         OqQvnHuhgLV8SPGruk2d2EWD2vLnFE6Msgsn8BnapdN1stWZsEp4K6n+wsNoGJuD0IER
-         eY1LWvYENJqu2w8Z1eaDg5FloKTQR23sqI/yIxiBXAEfWx6ht/gAsrwPGcMdDDIih4IR
-         53Ke9Er+8K9h9BnEbwMKEj5fUz2VmOPrLqNBce5GdSlqhm/mW++3r8QPVHLtgOE4u7BK
-         mJd/qvmMNcdv6sNu8qxdNxkVxRx3ckDmC/TAeTmeShn6ADPvWSzoAPgxv8bX54iOtcSJ
-         NYfQ==
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=GE6cCY/0hnI+CqkRsz34r3mZcz58ATQdIipjSK1xhAQ=;
+        b=X5/Uk3vLi0FPv5g8ZDqvYRgZmXAX0fx4zntr0U0UK6ao4CRsmPlFXore8lJkUhzMRx
+         EBN0XSrnb6WeHMfPIoFK63HIvb8j/dkAoXyWdEWTszjXk7b4c8on2HQMMNDBDVwBix7F
+         gfJLNdz/nQkF78yjSF3G6zb5AWK8x/3VyedX15vKprKOf50zOGhiyhku5MbiwWdmiEhU
+         mKDc53eO5434pXr2Nk4c33KMPRRLLbeFx3n/NTE6B9HOVu3LIy9j6iiJ7vC9CGF3mkMY
+         usiPt/BWjeyCsgq2jjSp7ASveSbiUEmweNQHFCb+jFgk4C9QVTOU7Iv4KSiwmghX5+oK
+         d2oQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=GkvxncHOY8DvHcvIZZ5ALhHomt+6uxaaFq6TQ6h+fMg=;
-        b=EZQTT6XuLc+0BwNaiY6QpCivzcWSsn1YcgyyjjpzhaNCCLcycCwvfHEsbS21MlAw+/
-         n9ygQzKcA349ExRBddmAcJvBV78JR+qs9NHj1grldMXDnCEFHyh0VWvq2abF01tsNzoo
-         iwYAh3oLwbqeCsxcpFqFgJR4uX798r20dzYWOE6Ol97RX68R297q5tnuUNEoUFUNqRV9
-         wB5398yoJaGsWm7SY/FqnayzrJ6330DIDhfX3HMxuyhfAY9f07QVeRJus16wnjp3t+BB
-         bqLGLxAQJXYZs+gmlny3zv0hoJGdsII9CbNiIbB8YRyh95Pxgn0G/UE7gTYkN/9D8hus
-         cCNQ==
-X-Gm-Message-State: AOAM533fUD4iL6mdGTLt2MolEd4i4sGKECgV6Jh9ApC0zQdoIb/AU6oa
-        0KLrnX5Mi19G5+ZHIntESD8=
-X-Google-Smtp-Source: ABdhPJzzD+Lqvq/0PXVYaK4xhRvgqBKhRcQUDKM/Bv8HOzifMLktWJTzFJ714BHPdsdFrCQQ0Hod7g==
-X-Received: by 2002:a05:651c:1549:: with SMTP id y9mr10261640ljp.105.1632696187659;
-        Sun, 26 Sep 2021 15:43:07 -0700 (PDT)
-Received: from localhost.localdomain (46-138-80-108.dynamic.spd-mgts.ru. [46.138.80.108])
-        by smtp.gmail.com with ESMTPSA id m10sm1408899lfr.272.2021.09.26.15.43.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Sep 2021 15:43:07 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>
-Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
-        linux-mmc@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        David Heidelberg <david@ixit.cz>
-Subject: [PATCH v13 35/35] ARM: tegra20/30: Disable unused host1x hardware
-Date:   Mon, 27 Sep 2021 01:40:58 +0300
-Message-Id: <20210926224058.1252-36-digetx@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210926224058.1252-1-digetx@gmail.com>
-References: <20210926224058.1252-1-digetx@gmail.com>
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=GE6cCY/0hnI+CqkRsz34r3mZcz58ATQdIipjSK1xhAQ=;
+        b=8Mmp3mEcDryRZie0P6ZB/tGEVW7LmvKQiAecYP6BYRf1d6pKeq/piZTLmUEhLsXKwR
+         gzSuOl7pYA5sqCZVf6LXA+EYg5Mfjz2y3FHYNbdnmhSwvme0d28d5ky3qLWRAgbbGOPR
+         XeTE+U3AIQlH2yeW1oCBw2RlUCmsPJ6E9SC1NdjA9H1gCmynQPN2KUArG/0xrbNqzFyQ
+         nRk1OGAoJ9elkVlkFknTgUT2wSy2KNH6l3dGeKg50KbpGO+GVu+b1CwLkBA7/WgiRVDo
+         /1b0EuvF2ZBEIFTLB3CQHVtAgSASVaEcPQOh1LG8ZMiE8sfunE4mCMHS2DylDESPMQ4o
+         Ku3Q==
+X-Gm-Message-State: AOAM5327YH2LZYTm5+Jvl8gXgDpE3CpeqVwfFWFEeQm+KT85S0uixXtm
+        7UD6IJ0fsLs1eDZ2GurZPZog0+ac6iFh6dWiW74=
+X-Google-Smtp-Source: ABdhPJwNkVQryS30m7achG5kkKWXSUfmhh3jiemXiiOFkbCKZu/uz9r2u9qqq8L0KIlG2WkTYt9zNx5pBAph+/K4Ygc=
+X-Received: by 2002:a50:bf48:: with SMTP id g8mr20947588edk.10.1632723432678;
+ Sun, 26 Sep 2021 23:17:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Sender: nicole.mmm19611@gmail.com
+Received: by 2002:a50:204c:0:0:0:0:0 with HTTP; Sun, 26 Sep 2021 23:17:12
+ -0700 (PDT)
+From:   "dr.Abrar Zebadiyah" <mrssuzaramaling661@gmail.com>
+Date:   Sun, 26 Sep 2021 23:17:12 -0700
+X-Google-Sender-Auth: sgdFXrr0pNftTvrcY_JN0-Gtqe0
+Message-ID: <CAOg38vs57kb3rOvJq-hjCed40v-d4eJ+zcX8ORQUGv5dTuyntw@mail.gmail.com>
+Subject: HELLO
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-MPE, VI, EPP and ISP were never used and we don't have drivers for them.
-Since these modules are enabled by default in a device-tree, a device is
-created for them, blocking voltage scaling because there is no driver to
-bind, and thus, state of PMC driver is never synced. Disable them.
-
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- arch/arm/boot/dts/tegra20.dtsi | 4 ++++
- arch/arm/boot/dts/tegra30.dtsi | 8 ++++++++
- 2 files changed, 12 insertions(+)
-
-diff --git a/arch/arm/boot/dts/tegra20.dtsi b/arch/arm/boot/dts/tegra20.dtsi
-index eb6e5518fb5f..05788c9cddc1 100644
---- a/arch/arm/boot/dts/tegra20.dtsi
-+++ b/arch/arm/boot/dts/tegra20.dtsi
-@@ -59,6 +59,7 @@ mpe@54040000 {
- 			reset-names = "mpe";
- 			operating-points-v2 = <&mpe_dvfs_opp_table>;
- 			power-domains = <&pd_mpe>;
-+			status = "disabled";
- 		};
- 
- 		vi@54080000 {
-@@ -70,6 +71,7 @@ vi@54080000 {
- 			reset-names = "vi";
- 			operating-points-v2 = <&vi_dvfs_opp_table>;
- 			power-domains = <&pd_venc>;
-+			status = "disabled";
- 		};
- 
- 		epp@540c0000 {
-@@ -81,6 +83,7 @@ epp@540c0000 {
- 			reset-names = "epp";
- 			operating-points-v2 = <&epp_dvfs_opp_table>;
- 			power-domains = <&pd_core>;
-+			status = "disabled";
- 		};
- 
- 		isp@54100000 {
-@@ -91,6 +94,7 @@ isp@54100000 {
- 			resets = <&tegra_car 23>;
- 			reset-names = "isp";
- 			power-domains = <&pd_venc>;
-+			status = "disabled";
- 		};
- 
- 		gr2d@54140000 {
-diff --git a/arch/arm/boot/dts/tegra30.dtsi b/arch/arm/boot/dts/tegra30.dtsi
-index 09cb1ab75312..f9613384a487 100644
---- a/arch/arm/boot/dts/tegra30.dtsi
-+++ b/arch/arm/boot/dts/tegra30.dtsi
-@@ -145,6 +145,8 @@ mpe@54040000 {
- 			power-domains = <&pd_mpe>;
- 
- 			iommus = <&mc TEGRA_SWGROUP_MPE>;
-+
-+			status = "disabled";
- 		};
- 
- 		vi@54080000 {
-@@ -158,6 +160,8 @@ vi@54080000 {
- 			power-domains = <&pd_venc>;
- 
- 			iommus = <&mc TEGRA_SWGROUP_VI>;
-+
-+			status = "disabled";
- 		};
- 
- 		epp@540c0000 {
-@@ -171,6 +175,8 @@ epp@540c0000 {
- 			power-domains = <&pd_heg>;
- 
- 			iommus = <&mc TEGRA_SWGROUP_EPP>;
-+
-+			status = "disabled";
- 		};
- 
- 		isp@54100000 {
-@@ -183,6 +189,8 @@ isp@54100000 {
- 			power-domains = <&pd_venc>;
- 
- 			iommus = <&mc TEGRA_SWGROUP_ISP>;
-+
-+			status = "disabled";
- 		};
- 
- 		gr2d@54140000 {
 -- 
-2.32.0
+My Dear Friend.
 
+How are you and your family Today? I hope all is well, and I am happy
+to share this transaction with you ,but you must keep everything as
+secret and very confidential.
+
+I have a very lucrative business transaction which requires your
+utmost discretion. Please understand that you and me, are to work as
+one team to inherit this fund, hence I am your insider in the bank as
+the transaction commence. I advise you to feel free with me for all is
+going to be well with us. This business is 100% risk free.
+
+Though, I know it would come to you at uttermost surprise unbelief
+because it is virtually impossible to know who is trustworthy and who
+to believed I am dr.Abrar Zebadiyah sum of $10.5 million is lying in
+our bank without claim i want you to help me to claim and receive it
+to your account in your country for our benefit.
+
+I am aware of the unsafe nature of the internet, and was compelled to
+use this medium due to the nature of this project.I have access to
+every vital information that can be used to transfer this huge amount
+of money, which may culminate into the investment of the said funds
+into your account or any lucrative company in your country.
+
+If you will like to assist me as a partner then indicate your
+interest, after which we shall both discuss the modalities and the
+sharing percentage. Upon receipt of your reply on your expression of
+interest, I will give you full details on how the business will be
+executed. I am open for negotiation,
+
+Thanks for your anticipated cooperation.Note you might receive this
+message in your inbox or spam folder, depends on your web host or
+server network
+
+Contact my private email only if you are interested (drabrarzebadiyah@gmail.com)
+
+Compliment of the day,
+Regards,
+
+dr.Abrar Zebadiyah
