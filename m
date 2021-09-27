@@ -2,218 +2,218 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8BDC419515
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Sep 2021 15:29:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11751419578
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Sep 2021 15:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234058AbhI0Na5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Sep 2021 09:30:57 -0400
-Received: from mail-bn8nam08on2075.outbound.protection.outlook.com ([40.107.100.75]:15456
-        "EHLO NAM04-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234269AbhI0Naz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 27 Sep 2021 09:30:55 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X8VR69H2RndX2HqZhhJoSbOfIU/1pnF3BXnA3xYMzx/On8lr6bFaNBxVYlD8hEA2Uk/PT+8RPsetTCA6DisP57U+86x7ym3U7OjzUMkbjPfEe8yCi9iJXJoV0YSVBXQqIzQzGKr5o15KczTSojZUzkZD8VUc1zI/87V9UEeAnv+oMolWzmjFjDgOkwlWKV/KHQaHTW03/lm8lJp8VKM5Tuvk2ut9QHhvKFo/yQwuh/oaaJMEOnwKgAJBf5GS3sGVsVdMJth02ggLPQ9Ounj8q3WePWLpFaWuD2ckQ6XQmzm8W570bso6iwX94/7fxh8ORmKtPqwSa9c+O3khM0pwDw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=d3BooQVoF7hyEAhMIwEzE6WOQRR1DgX0+Yy1kdEbYXk=;
- b=DLyMw+/ZgdqowU2Y0122ci99RAXNd/eF5G4YZ6GbsC7ZuYaIBp/SoLD9WAgYgCD8jvKWzOxzf+7f91gL6Kr3NYZC5hEITF6FHbLvrQr1FHSqRFZDUi5noTCLw0kUj57v65oLAAFb07gJ7UAjUTU6R0kMwcRR+rXjcbBJbrgX3b8BYgpkxDk895ERGdA3XsE3gaWPxFnn8lFZgUPK4atos1XmjFEfdlFFH9Hf5EgV3RK+zMmtTBsqwD6CropZ6qsdQMkmk1JGKPF/BzsD64jQnwoHSaQs4G1WwEw5CFoP34AGP0CIzHn57q/HmLPn83ltZCCTyrSKT5m0sdB2Gn6ZRg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=d3BooQVoF7hyEAhMIwEzE6WOQRR1DgX0+Yy1kdEbYXk=;
- b=E1xXjJBVYjfiET77S2PSWe1yBsIqqVViGqrCWx8HVriWaJfDkIzdwiE+OdlVmT68MlMhcMFz6CuxjV0fh/U4ev3ycNpBx1wtXwuJrsuO8Mtmv2cOOsUg1DgUNRs0p2PMA75BOY5Xr1hUxfwWmSAhWEY3LW3RGpWHtgghfgYhu4l5STtuBe7lELMRKgD7+NS2TrScKXgZBC5/qf6XW45w5Y0C2nQlNt4w4fhJKUUVN3fRF0vSKiRTJ91RKXN7SLdXZ4/yleeo9CdbPuHTO/RZkO81Mz1C2DzpYN+jxkIMXuO4cQMpNALbuxQ1XGiWqzUxM5n3QkK0IIWRWqSfyI6nsw==
-Received: from BN9PR12MB5381.namprd12.prod.outlook.com (2603:10b6:408:102::24)
- by BN9PR12MB5115.namprd12.prod.outlook.com (2603:10b6:408:118::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.13; Mon, 27 Sep
- 2021 13:29:16 +0000
-Received: from BN9PR12MB5381.namprd12.prod.outlook.com
- ([fe80::f00b:b206:d819:d8c8]) by BN9PR12MB5381.namprd12.prod.outlook.com
- ([fe80::f00b:b206:d819:d8c8%6]) with mapi id 15.20.4544.021; Mon, 27 Sep 2021
- 13:29:16 +0000
-From:   Vadim Pasternak <vadimp@nvidia.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        id S234633AbhI0N5f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Sep 2021 09:57:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49426 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234589AbhI0N5e (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Sep 2021 09:57:34 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C8BFC061575
+        for <linux-pm@vger.kernel.org>; Mon, 27 Sep 2021 06:55:56 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id d6so51966945wrc.11
+        for <linux-pm@vger.kernel.org>; Mon, 27 Sep 2021 06:55:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=wFqhaSMzancWCnAnbexHDip4+ntsr4/iV9d3TVQRJvI=;
+        b=itEmT4l+CEgWrclpdIM1tX/D2SZWQ920Lre+JttJ/lsrc5BRYUAzIy6M1k94wG4RZE
+         wgpR2ErpvfHWY1xpkDpwF/yDcJIwEcrU8owgXUc2kHOI0GIBc6V1+hpOmuAyVnfmUOK6
+         IvwQv4+5TqghFStytYz0pF2pN5tqkmA37+FZbOhgLY4JuLngGt7QkwpF8I+voDqIKUdm
+         4twX56W69XWH2kYMzt2W9mtCSJl0ycyMLslZf7M2YcTR4s1cxLRomIB3FS/3AXiDPkas
+         WrIxSrOST2KXfwbH66ohnq5+K5857VzP7/D6a/zhF08HX0PAgf0o2Jn0cj3DvfWEkzuT
+         Dfjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=wFqhaSMzancWCnAnbexHDip4+ntsr4/iV9d3TVQRJvI=;
+        b=VV8S2m6QkFjom+ODs5SGXXnCjUXVraDHkYohq6dybzM1WsKvUs20Ep3qcz7BNcF//O
+         0BJgi3Lhlj5mzZDM8URCTUTSpXusZcDvNAHEkn8Lb7lWcswhgZx3+Z6VYMx5XkY+kE57
+         MeFgMZEtw+oC5Uz7PmnyH9msjKc/FWDqSLfTIZ64IrBl7Ia+V1G3gDRNTRT11Uvy7iYp
+         PhCIvNSFq2T1IMShS5ZLKmqrOou4hJV2yygyNaPjGiUGFU22iUvv4pfTBjT4+0DH/gkd
+         pw481mnyJvuDHoRHZc+lcXdH07yUB6SpHsRb3SPNC9Vr7D2fMWXghm3REeHR9xwEJEKD
+         nSXg==
+X-Gm-Message-State: AOAM531G4JQo6CCADeOiV3emwwpf6xwzqz/mLL0ZDsSDruaD4DIo4pIW
+        4nx3zv5WobFWlhVCrjW/aZ0dIMuZMCcisw==
+X-Google-Smtp-Source: ABdhPJywok0qsqJCLjQhDp8WiJKVCzvNiasTBBAav9to7bsi2A96vs3/9kac3XV/HR0WjVVcZCNJ/Q==
+X-Received: by 2002:a5d:64ab:: with SMTP id m11mr27858252wrp.343.1632750954898;
+        Mon, 27 Sep 2021 06:55:54 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:34f3:60a8:c3cc:641b? ([2a01:e34:ed2f:f020:34f3:60a8:c3cc:641b])
+        by smtp.googlemail.com with ESMTPSA id l124sm20869477wml.8.2021.09.27.06.55.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Sep 2021 06:55:54 -0700 (PDT)
+Subject: Re: [PATCH thermal 1/1] thermal/core: Skip cooling device statistics
+ update for configuration operation
+To:     Vadim Pasternak <vadimp@nvidia.com>,
         "rui.zhang@intel.com" <rui.zhang@intel.com>
-CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
         Ido Schimmel <idosch@nvidia.com>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: RE: [PATCH thermal 1/1] thermal/core: Skip cooling device statistics
- update for configuration operation
-Thread-Topic: [PATCH thermal 1/1] thermal/core: Skip cooling device statistics
- update for configuration operation
-Thread-Index: AQHXs3kevJMEwZhGMUKgbo4kJZyA0Ku3sZiAgAAEPBCAABqMgIAAAb+A
-Date:   Mon, 27 Sep 2021 13:29:16 +0000
-Message-ID: <BN9PR12MB5381EADD601B87E4F2C60EBFAFA79@BN9PR12MB5381.namprd12.prod.outlook.com>
 References: <20210927082421.2358851-1-vadimp@nvidia.com>
  <9aca37cb-1629-5c67-1895-1fdc45c0244e@linaro.org>
  <BN9PR12MB53814545BAE8C5A45E81220FAFA79@BN9PR12MB5381.namprd12.prod.outlook.com>
  <942558b3-e884-a907-0cc6-5eddf07c358a@linaro.org>
-In-Reply-To: <942558b3-e884-a907-0cc6-5eddf07c358a@linaro.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: linaro.org; dkim=none (message not signed)
- header.d=none;linaro.org; dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3e801459-e903-43a8-93a2-08d981bacdc3
-x-ms-traffictypediagnostic: BN9PR12MB5115:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BN9PR12MB5115A6D468B1514C07200FD4AFA79@BN9PR12MB5115.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: AG4J3q7cl7EpYcDzy58UKPObHEtIqvbyQ5omaQCNknsC+NksrbL9PdBTuMuEbphP10BYSC0XG1lgWyJMX9G7rPysCFbAGWeh1gkufEInsSqV0WG3/nBbeVcsNw4dOcOiBMyDdkR0Hu1MG/YlirKUQn9L7A8Ya7vuw97vxUUhas9e6c55wQWElwcb2rrBNxYtCM1k3EKwmZb2XZ95H9QXeKGRmNj55mXCytnSRss4UvMn1aHZ0d0RkYQWN/YfEBc6HQnh0QBQ9OtcaYrB0cIt/aUuIMjJmibkE6CEx4EERKgp7KJyzPCjLre4KQRcgIACP1pwCQv55idTtaucRZgUV8W5edm3Z/JZwopO7m65WLHLGGE2FR9O8nFdZML0Pyj4RUnULosl3GKCglqd9ywHtzbg+8UR4qDAfTZwF8j0idSECrDkR3wqq+gt/7EXAdgBCAlHnM3AyUDmqZ4mPyg+YMQZfN8lukQTYIDzzRF1yEKAzlM+eIUWouK54szNxbwvOumE6uTV5wYe0t2+XrrLVof9Uv6y/3QBoZLWL8AetQBZTrNp09VJ1YOaYJUXvej4B0ks+DGfd0a4gC/ug54qywKIcPpZyKX3udMbIwfIoTdPe5/u0hF8eLEB4ojxLBzRcTJzzywGB2C8VJ93kPZvAzorP3fwg1TOaCPd/BIgs55rwCb2H2QK5Y6rSgTaZAI2Or/v1pC5lNPRt/usuofkthqhM7v33HoyKJ7MLu/u4VUW2Wlz6nH5OG8/D3wgS8+RgzSbXZUVKNkrG4ttiVaEp6sjDFbKeX8gZqlarFlOGRwcimNTAdFv076bZrMZ+KECq+vHctdV8ittw5brFFQVeg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5381.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(55016002)(2906002)(8936002)(38100700002)(83380400001)(8676002)(86362001)(122000001)(33656002)(71200400001)(38070700005)(9686003)(66446008)(66946007)(64756008)(4326008)(508600001)(7696005)(66556008)(15650500001)(66476007)(186003)(110136005)(53546011)(54906003)(76116006)(26005)(316002)(6506007)(52536014)(5660300002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eHFvK1V0Smg4S2ppcStnTVA0b1lTbkZHQm9ZczdyMVdDNFZuMy9aS25lakZW?=
- =?utf-8?B?NHcrWC9KUHg3MnRPaktuUVVnNFhzbWloRGlRRm1oSUMxWk9lazBQbUw5ejhq?=
- =?utf-8?B?WTBSeUdSSGRmMTBvTW5NWjY1VFJzQW9KV3VFQm9XNDlTRWZMWkZVVkFPRVJH?=
- =?utf-8?B?ajZURUVhWDJrNksyMDlDNGU5WExVc3BzTnFEVGVpOWpPVDI0YW0waE5QT0ZU?=
- =?utf-8?B?Q0I0aElKQWVlcmpQYW9KQ0xkWEE0RWtTdU1pZGNZN05YL09LQTJZWGUyWGJW?=
- =?utf-8?B?V3VxVERtNll5dUNWUkJVaUhRWk14MkZIR09VZUVkOE8vN2t5V2RqcGdUM0Vp?=
- =?utf-8?B?QWhFSlAySnNVMTZzd21JdW51TkZjSnF4R3FVM0Z2MEgxcW9ocGZWc0lVRzJp?=
- =?utf-8?B?NUJ0OU1EdVlPMVRJdnRSMnJ4UTlVdHBNaWJKbWZ1ZFJTSzVtcXkra0xieWh4?=
- =?utf-8?B?VlVvc3k3R0g4d0ErMmkySzdNTnJ1VW1GaWRoeGxwc0NwdE1wMmJobVkwelha?=
- =?utf-8?B?TWpsaFB6alBqa05mekswVG51disvRmFVM0I2d2JtalQ4WERxMUhjK0t0dDdm?=
- =?utf-8?B?WGFtb1Nia1Q1WHhVdWI1bGp0ODVTNUhGZlluRmpEZ1F2RFcyS1h3UUNuZElx?=
- =?utf-8?B?bnNlbW1IZnBYNUlYbzdtbFkyQTRYWVV2OUphSEI2aXNOWjUvMEI0VFh6VzZZ?=
- =?utf-8?B?a3ZJVitzODkwQkY3d1FTS3hmak5oZW4ybmdrQnd5bUlvb0V3SU5aRDR4WXRy?=
- =?utf-8?B?SE9kMDZXLzR5SElEdnVvemVnMDYxSklpMEFMOXI0bk1hNncrMm11MzNiRi9s?=
- =?utf-8?B?RzFHRUVWZlhQaEVRaXFudGc3QlhVMnU1L0dIM0MrM2oxaHBVYzU5UDBYMUtH?=
- =?utf-8?B?bnI3QUlaNXB6MXh0REtGWDNZSmpSbzl2cCtpT055STFoTDU5UnpKaGpvWWxK?=
- =?utf-8?B?Y0pick5oWE96bjJpaWFxYnYzY0MwbVhUWml4RC82M2VWNGhuVjFPbE9ZK3N3?=
- =?utf-8?B?Z1BvQ0ZqN1loOVJoODcvQ2VIbGNtY0dWSXN3b1Y1Z1h3M3lESHI2UXBQcllq?=
- =?utf-8?B?MWk3a0VUWG9SL3FrL2hOVkMxYzVmTTlwUFYzajUyeFBWeExyUUQzVmlmanN5?=
- =?utf-8?B?VG1sckgraks1bk00NGp6NExtdmVMdkFSWTFaMFFOM3g5Mm03NXpNNzFKbDU1?=
- =?utf-8?B?MGhLODBjWGhOU3Z3ZWxCUzlJSTZadlNsTEJlRGkrbmFmeDIvejgwcStXUG5Z?=
- =?utf-8?B?ZzFZcnpXQUFScDlmRkhYT3Yyc21LU01DVmJnQmlmL1JTRVVqSTdRaEJOSG9X?=
- =?utf-8?B?NEY1ODM3MmdqaG5BV2x6TndRcWNzRVdseWxZWEc5NmNxK1pVSEd4cEFCS3Z5?=
- =?utf-8?B?K3V2bktFN1gyRXh1VTA4d0M2blNLa1VrSGhvRXdKcm9MOW1iQS9WRzVWS0Jw?=
- =?utf-8?B?NUFsTmxNQ2RsZHBIaDlobFJucUpPallBRlUwQ0pteWozVXNMRUJvYmFTYnAz?=
- =?utf-8?B?S202Q09aRHZRMk45N3R4R1Mya3ZoUUU1bi81K3VENmZNMFdPci9iQnh5Qmpi?=
- =?utf-8?B?TFI3RjZiYjRXOWluY280dEhFOSt4QUdwK1VYejNjUjhVZUxlNkRaTE9mREha?=
- =?utf-8?B?ZkVvK25rY3VHL2dyWkxGU1FUcnU5cTZHR0F6UFVSbkZoQUJCb01qU1REWUJS?=
- =?utf-8?B?OXFZSHZjMU4ycGRuc0d3M2RnN3ExWEhQZnFkZG5NZmhyVlozbmQ2Q2NHTU1y?=
- =?utf-8?Q?grQfljYFAHovudCQBNUEVcsP2opOup2UMNphcEO?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ <BN9PR12MB5381EADD601B87E4F2C60EBFAFA79@BN9PR12MB5381.namprd12.prod.outlook.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <d87227b8-57b9-fdb9-bb87-f01c6d0e23cc@linaro.org>
+Date:   Mon, 27 Sep 2021 15:55:53 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5381.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3e801459-e903-43a8-93a2-08d981bacdc3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Sep 2021 13:29:16.5125
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 69hXfUKE+mvSURyvtv6axcdGhuKoItHd9Z99kGYFDJ548tJc0d3RBiJr+lZGTxEKqlyuY7ZqwxcdiSJQuVC8jg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5115
+In-Reply-To: <BN9PR12MB5381EADD601B87E4F2C60EBFAFA79@BN9PR12MB5381.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogRGFuaWVsIExlemNhbm8g
-PGRhbmllbC5sZXpjYW5vQGxpbmFyby5vcmc+DQo+IFNlbnQ6IE1vbmRheSwgU2VwdGVtYmVyIDI3
-LCAyMDIxIDM6MzIgUE0NCj4gVG86IFZhZGltIFBhc3Rlcm5hayA8dmFkaW1wQG52aWRpYS5jb20+
-OyBydWkuemhhbmdAaW50ZWwuY29tDQo+IENjOiBsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmc7IElk
-byBTY2hpbW1lbCA8aWRvc2NoQG52aWRpYS5jb20+OyBSYWZhZWwgSi4NCj4gV3lzb2NraSA8cmp3
-QHJqd3lzb2NraS5uZXQ+DQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggdGhlcm1hbCAxLzFdIHRoZXJt
-YWwvY29yZTogU2tpcCBjb29saW5nIGRldmljZSBzdGF0aXN0aWNzDQo+IHVwZGF0ZSBmb3IgY29u
-ZmlndXJhdGlvbiBvcGVyYXRpb24NCj4gDQo+IA0KPiANCj4gDQo+IE9uIDI3LzA5LzIwMjEgMTM6
-MjIsIFZhZGltIFBhc3Rlcm5hayB3cm90ZToNCj4gPiBIaSBEYW5pZWwsDQo+ID4NCj4gPiBUaGFu
-ayB5b3UgZm9yIHF1aWNrIHJlcGx5Lg0KPiA+DQo+ID4+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0t
-LS0tDQo+ID4+IEZyb206IERhbmllbCBMZXpjYW5vIDxkYW5pZWwubGV6Y2Fub0BsaW5hcm8ub3Jn
-Pg0KPiA+PiBTZW50OiBNb25kYXksIFNlcHRlbWJlciAyNywgMjAyMSAxOjQyIFBNDQo+ID4+IFRv
-OiBWYWRpbSBQYXN0ZXJuYWsgPHZhZGltcEBudmlkaWEuY29tPjsgcnVpLnpoYW5nQGludGVsLmNv
-bQ0KPiA+PiBDYzogPWlkb3NjaEBudmlkaWEuY29tOyBsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmcN
-Cj4gPj4gU3ViamVjdDogUmU6IFtQQVRDSCB0aGVybWFsIDEvMV0gdGhlcm1hbC9jb3JlOiBTa2lw
-IGNvb2xpbmcgZGV2aWNlDQo+ID4+IHN0YXRpc3RpY3MgdXBkYXRlIGZvciBjb25maWd1cmF0aW9u
-IG9wZXJhdGlvbg0KPiA+Pg0KPiA+Pg0KPiA+PiBIaSBWYWRpbSwNCj4gPj4NCj4gPj4NCj4gPj4g
-T24gMjcvMDkvMjAyMSAxMDoyNCwgVmFkaW0gUGFzdGVybmFrIHdyb3RlOg0KPiA+Pj4gVGhlIHRo
-ZXJtYWwgc3Vic3lzdGVtIG1haW50YWlucyBhIHRyYW5zaXRpb24gdGFibGUgYmV0d2VlbiBzdGF0
-ZXMNCj4gPj4+IHRoYXQgaXMgYWxsb2NhdGVkIGFjY29yZGluZyB0byB0aGUgbWF4aW11bSBzdGF0
-ZSBzdXBwb3J0ZWQgYnkgdGhlDQo+ID4+PiBjb29saW5nIGRldmljZS4NCj4gPj4+DQo+ID4+PiBX
-aGVuIHRoZSB0YWJsZSBuZWVkcyB0byBiZSB1cGRhdGVkLCB0aGUgdGhlcm1hbCBzdWJzeXN0ZW0g
-ZG9lcyBub3QNCj4gPj4+IHZhbGlkYXRlIHRoYXQgdGhlIG5ldyBzdGF0ZSBkb2VzIG5vdCBleGNl
-ZWQgdGhlIG1heGltdW0gc3RhdGUsDQo+ID4+PiBsZWFkaW5nIHRvIG91dC1vZi1ib3VuZHMgbWVt
-b3J5IGFjY2Vzc2VzIFsxXS4NCj4gPj4NCj4gPj4gQWN0dWFsbHksIHRoZXJtYWxfY29vbGluZ19k
-ZXZpY2Vfc3RhdHNfdXBkYXRlKCkgaXMgY2FsbGVkIGlmIHRoZQ0KPiA+PiBzZXRfY3VyX3N0YXRl
-IGlzIHN1Y2Nlc3NmdWwuDQo+ID4+DQo+ID4+IFdpdGggYSBzdGF0ZSBncmVhdGVyIHRoYW4gdGhl
-IG1heCBzdGF0ZSwgdGhlIHNldF9jdXJfc3RhdGUgc2hvdWxkDQo+ID4+IGZhaWwgYW5kDQo+ID4+
-IHRoZXJtYWxfY29vbGluZ19kZXZpY2Vfc3RhdHNfdXBkYXRlKCkgaXMgbm90IGNhbGxlZC4NCj4g
-Pj4NCj4gPj4gUGVyaGFwcyB0aGUgcHJvYmxlbSBpcyBpbiBtbHhzd190aGVybWFsX3NldF9jdXJf
-c3RhdGUoKSA/DQo+ID4NCj4gPiAibWx4c3ciIHRoZXJtYWwgZHJpdmVycyBoYXMgYWRkaXRpb25h
-bCB1c2Ugb2YgJ3N5c2ZzJyAnY3VyX3N0YXRlJyBmb3INCj4gPiBjb25maWd1cmF0aW9uIHB1cnBv
-c2UgdG8gbGltaXQgbWluaW11bSBmYW4gc3BlZWQuDQo+ID4gRmFuIHNwZWVkIG1pbmltdW0gaXMg
-ZW5mb3JjZWQgYnkgc2V0dGluZyAnY3VyX3N0YXRlJyB3aXRoIHZhbHVlDQo+ID4gZXhjZWVkaW5n
-IGFjdHVhbCBmYW4gc3BlZWQgbWF4aW11bS4NCj4gDQo+IFllcywgYW5kIHRoYXQgaXMgdGhlIHBy
-b2JsZW0gYmVjYXVzZSB0aGUgZHJpdmVyIGlzIGRvaW5nIHdlaXJkIHRoaW5ncyB3aXRoIHRoZQ0K
-PiBjb29saW5nIGRldmljZSBzdGF0ZSByZXN1bHRpbmcgaW4gYW4gYWJ1c2Ugb2YgdGhlIHN5c2Zz
-IEFQSSBhbmQgY29uZmxpY3Rpbmcgd2l0aA0KPiB0aGUgdGhlcm1hbCBpbnRlcm5hbHMuDQo+IA0K
-PiANCj4gPiBUaGlzIGZlYXR1cmUgcHJvdmlkZXMgYWJpbGl0eSB0byBsaW1pdCBmYW4gc3BlZWQg
-YWNjb3JkaW5nIHRvIHNvbWUNCj4gPiBzeXN0ZW0gd2lzZSBjb25zaWRlcmF0aW9ucywgbGlrZSBh
-YnNlbmNlIG9mIHNvbWUgcmVwbGFjZWFibGUgdW5pdHMgb3INCj4gPiBoaWdoIHN5c3RlbSBhbWJp
-ZW50IHRlbXBlcmF0dXJlLCBvciBzb21lIG90aGVyIGZhY3RvcnMgd2hpY2gNCj4gPiBpbmRpcmVj
-dGx5IGltcGFjdHMgc3lzdGVtIGFpcmZsb3cuDQo+IA0KPiBJcyB0aGF0IGEgc3RhdGljIHRoZXJt
-YWwgcHJvZmlsZSBkZXBlbmRpbmcgb24gdGhlIHBsYXRmb3JtIHNldCBieSB1c2Vyc3BhY2Ugb3IN
-Cj4gc29tZXRoaW5nIHdoaWNoIGNhbiBiZSBjaGFuZ2VkIGR5bmFtaWNhbGx5IGF0IHJ1bnRpbWUg
-dmlhIGVnLiBhIGRhZW1vbiA/DQoNClllcywgdGhpcyBpcyBzb21lIHByb2ZpbGVzL3J1bGVzLCB3
-aGljaCBhcmUgc3lzdGVtIHNwZWNpZmljIGFuZCBhY2NvcmRpbmcgdG8gdGhlc2UNCnJ1bGVzIHVz
-ZXJzcGFjZSBjYW4gbGltaXQgZmFuIHNwZWVkLiBMaWtlLCBmb3IgZXhhbXBsZToNCi0gaWYgb25l
-IG9mIHBvd2VyIHN1cHBsaWVzIGlzIHJlbW92ZWQsIHN5c3RlbSBmYW4gc2hvdWxkIGJlIGVuZm9y
-Y2VkIHRvIGZ1bGwNCiAgc3BlZWQsIGJlY2F1c2UgaXQgbWFrZXMgYSBob2xlIGluIGEgYm94LCBh
-bmQgaXQgaGFzIGhhcmQgaW1wYWN0IG9uIGFpcmZsb3cuDQotIElmIHBvcnQgc2lkZSBhbWJpZW50
-IHRlbXBlcmF0dXJlIHJlYWNoZXMgc29tZSB0aHJlc2hvbGQgWDEsIGZhbiBzcGVlZCBzaG91bGQN
-CiAgYmUgbGltaXRlZCBieSBZMSUsIFgyIC0gWTIlLCBldGNldGVyYS4NCi0gaWYgdGVtcGVyYXR1
-cmUgZmF1bHQgaXMgZGV0ZWN0ZWQgZm9yIGFueSBvcHRpY2FsIHRyYW5zY2VpdmVycyAtIHNvbWUg
-bGltaXQgaXMNCiAgcmVxdWlyZWQuIA0KDQo+IA0KPiA+IEZvciBleGFtcGxlLCBpZiBjb29saW5n
-IGRldmljZXMgb3BlcmF0ZXMgYXQgY29vbGluZyBsZXZlbHMgZnJvbSAxIHRvDQo+ID4gMTANCj4g
-PiAoMSBmb3IgMTAlIGZhbiBzcGVlZCwgMTAgZm9yIDEwMCUgZmFuIHNwZWVkKSwgY29vbGluZyBk
-ZXZpY2UgbWluaW1hbA0KPiA+IHNwZWVkIGNhbiBiZSBsaW1pdGVkIGJ5IHNldHRpbmcgJ2N1cl9z
-dGF0ZScgYXR0cmlidXRlIHRocm91Z2ggJ3N5c2ZzJw0KPiA+IHRvIHRoZSB2YWx1ZXMgZnJvbSAn
-bWF4X3N0YXRlJyArIDEgdG8gJ21heF9zdGF0ZSAqIDInIChmcm9tIDExIHRvIDIwKS4NCj4gPiBG
-b2xsb3dpbmcgdGhpcyBleGFtcGxlIGlmIHZhbHVlIGlzIHNldCB0byAxNCAoNDAlKSBjb29saW5n
-IGxldmVscw0KPiA+IHZlY3RvciB3aWxsIGJlIHNldCB0byA0LCA0LCA0LCA0LCA0LCA1LCA2LCA3
-LCA4LCA5LCAxMCBmb3Igc2V0dGluZw0KPiA+IGRldmljZSBzcGVlZCBjb29saW5nIHN0YXRlcyBy
-ZXNwZWN0aXZlbHkgaW4gNDAsIDQwLCA0MCwgNDAsIDQwLCA1MCwNCj4gPiA2MC4gNzAsIDgwLCA5
-MCwNCj4gPiAxMDAgcGVyY2VudC4gQW5kIGl0IGxpbWl0cyBjb29saW5nIGRldmljZSB0byBvcGVy
-YXRlIG9ubHkgYXQgNDAlIHNwZWVkDQo+ID4gYW5kIGFib3ZlLg0KPiA+DQo+ID4gTWF5YmUgaXQg
-d291bGQgYmUgd29ydGggYWRkaW5nIGVhcmxpZXIgc29tZSBkZWRpY2F0ZWQgJ2N1cl9zdGF0ZV9s
-aW1pdCcNCj4gPiBhdHRyaWJ1dGUgZm9yIHRoaXMgZmVhdHVyZSwgYnV0IGl0IHdhcyBub3QgZG9u
-ZS4NCj4gPg0KPiA+IFdlIGhhdmUgYW5vdGhlciBkcml2ZXIgcmVxdWlyZWQgdGhpcyBmZWF0dXJl
-IGFuZCBvbmUgbmV3IHdlIGFyZQ0KPiA+IGRldmVsb3Bpbmcgbm93LCB3aGljaCByZXF1aXJlIGZh
-biBtaW5pbSBzcGVlZCBsaW1pdCBhcyB3ZWxsLg0KPiANCj4gVGhlIHVzZSBjYXNlIGlzIHZhbGlk
-IGJ1dCBJIHRoaW5rIHRoZSBhcHByb2FjaCBpcyB3cm9uZy4gUHJvYmFibHkgdGhlIHNpbXBsZXN0
-DQo+IHRoaW5nIHRvIGRvIGlzIHRvIHNldCBhIGxvdyB0cmlwIHBvaW50IHdpdGggYSBtaW5pbWFs
-IGZhbiBzcGVlZC4NCg0KRm9yICJ0cmlwX3BvaW50XzBfdGVtcCIgdGhlcmUgaXMgdGhlIGJlbG93
-IGRlZmluaXRpb246DQoJewkvKiBJbiByYW5nZSAtIDAtNDAlIFBXTSAqLw0KCQkudHlwZQkJPSBU
-SEVSTUFMX1RSSVBfQUNUSVZFLA0KCQkudGVtcAkJPSBNTFhTV19USEVSTUFMX0FTSUNfVEVNUF9O
-T1JNLA0KCQkuaHlzdAkJPSBNTFhTV19USEVSTUFMX0hZU1RFUkVTSVNfVEVNUCwNCgkJLm1pbl9z
-dGF0ZQk9IDAsDQoJCS5tYXhfc3RhdGUJPSAoNCAqIE1MWFNXX1RIRVJNQUxfTUFYX1NUQVRFKSAv
-IDEwLCAoNDAlKQ0KCX0sDQpGb3IgInRyaXBfcG9pbnRfMV90ZW1wIjoNCgl7DQoJCS8qIEluIHJh
-bmdlIC0gNDAtMTAwJSBQV00gKi8NCgkJLnR5cGUJCT0gVEhFUk1BTF9UUklQX0FDVElWRSwNCgkJ
-LnRlbXAJCT0gTUxYU1dfVEhFUk1BTF9BU0lDX1RFTVBfSElHSCwNCgkJLmh5c3QJCT0gTUxYU1df
-VEhFUk1BTF9IWVNURVJFU0lTX1RFTVAsDQoJCS5taW5fc3RhdGUJPSAoNCAqIE1MWFNXX1RIRVJN
-QUxfTUFYX1NUQVRFKSAvIDEwLCAoMTAwJSkNCgkJLm1heF9zdGF0ZQk9IE1MWFNXX1RIRVJNQUxf
-TUFYX1NUQVRFLA0KCX0sDQoNClRvIGxpbWl0IGNvb2xpbmcgZGV2aWNlIGJ5IGYuZSA3MCUsIEkg
-c2hvdWxkIGNoYW5nZSBkeW5hbWljYWxseSAnbWluX3N0YXRlJyBhbmQgJ21heF9zdGF0ZScNCmZv
-ciBib3RoIHRyaXBzIHRvICg3MCUsIDcwJSkgYW5kICg3MCUsIDEwMCUpLiBJIGFtIG5vdCBzdXJl
-IEkgY2FuIGRvIGl0Pw0KDQpBbmQgd2UgaGF2ZSBtYW55IGN1c3RvbWVycywgdXNpbmcgdGhpcyB1
-c2VyIHNwYWNlIGludGVyZmFjZSwgaXQgd291bGQgYmUgbm90IHNvIGdvb2QgdG8NCmNoYW5nZSBp
-dC4NCg0KSSB1bmRlcnN0YW5kIGl0IGlzIHBvc3NpYmxlIHRvIGhhbmRsZSB0aGlzIGlzc3VlIGlu
-c2lkZSBkcml2ZXIncyBzZXRfY3VyX3N0YXQoKSBjYWxsYmFjayBieQ0KcmV0dXJuaW5nIHBvc2l0
-aXZlIHZhbHVlIGZvciBjb25maWd1cmF0aW9uIHJlcXVlc3QuDQpCdXQgbWF5YmUgdGhpcyBmZWF0
-dXJlIGNvdWxkIHlvdSB1c2VmdWwgZm9yIG90aGVyIGRldmVsb3BlcnMgYW5kIGl0IGNvdWxkIGJl
-IHNvbWUgY29tbW9uDQppbnRlcmZhY2UgdG8gc3VwcG9ydCBpdD8gDQoNCj4gDQo+IA0KPiAtLQ0K
-PiA8aHR0cDovL3d3dy5saW5hcm8ub3JnLz4gTGluYXJvLm9yZyDilIIgT3BlbiBzb3VyY2Ugc29m
-dHdhcmUgZm9yIEFSTSBTb0NzDQo+IA0KPiBGb2xsb3cgTGluYXJvOiAgPGh0dHA6Ly93d3cuZmFj
-ZWJvb2suY29tL3BhZ2VzL0xpbmFybz4gRmFjZWJvb2sgfA0KPiA8aHR0cDovL3R3aXR0ZXIuY29t
-LyMhL2xpbmFyb29yZz4gVHdpdHRlciB8IDxodHRwOi8vd3d3LmxpbmFyby5vcmcvbGluYXJvLQ0K
-PiBibG9nLz4gQmxvZw0K
+On 27/09/2021 15:29, Vadim Pasternak wrote:
+> 
+> 
+>> -----Original Message-----
+>> From: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> Sent: Monday, September 27, 2021 3:32 PM
+>> To: Vadim Pasternak <vadimp@nvidia.com>; rui.zhang@intel.com
+>> Cc: linux-pm@vger.kernel.org; Ido Schimmel <idosch@nvidia.com>; Rafael J.
+>> Wysocki <rjw@rjwysocki.net>
+>> Subject: Re: [PATCH thermal 1/1] thermal/core: Skip cooling device statistics
+>> update for configuration operation
+>>
+>>
+>>
+>>
+>> On 27/09/2021 13:22, Vadim Pasternak wrote:
+>>> Hi Daniel,
+>>>
+>>> Thank you for quick reply.
+>>>
+>>>> -----Original Message-----
+>>>> From: Daniel Lezcano <daniel.lezcano@linaro.org>
+>>>> Sent: Monday, September 27, 2021 1:42 PM
+>>>> To: Vadim Pasternak <vadimp@nvidia.com>; rui.zhang@intel.com
+>>>> Cc: =idosch@nvidia.com; linux-pm@vger.kernel.org
+>>>> Subject: Re: [PATCH thermal 1/1] thermal/core: Skip cooling device
+>>>> statistics update for configuration operation
+>>>>
+>>>>
+>>>> Hi Vadim,
+>>>>
+>>>>
+>>>> On 27/09/2021 10:24, Vadim Pasternak wrote:
+>>>>> The thermal subsystem maintains a transition table between states
+>>>>> that is allocated according to the maximum state supported by the
+>>>>> cooling device.
+>>>>>
+>>>>> When the table needs to be updated, the thermal subsystem does not
+>>>>> validate that the new state does not exceed the maximum state,
+>>>>> leading to out-of-bounds memory accesses [1].
+>>>>
+>>>> Actually, thermal_cooling_device_stats_update() is called if the
+>>>> set_cur_state is successful.
+>>>>
+>>>> With a state greater than the max state, the set_cur_state should
+>>>> fail and
+>>>> thermal_cooling_device_stats_update() is not called.
+>>>>
+>>>> Perhaps the problem is in mlxsw_thermal_set_cur_state() ?
+>>>
+>>> "mlxsw" thermal drivers has additional use of 'sysfs' 'cur_state' for
+>>> configuration purpose to limit minimum fan speed.
+>>> Fan speed minimum is enforced by setting 'cur_state' with value
+>>> exceeding actual fan speed maximum.
+>>
+>> Yes, and that is the problem because the driver is doing weird things with the
+>> cooling device state resulting in an abuse of the sysfs API and conflicting with
+>> the thermal internals.
+>>
+>>
+>>> This feature provides ability to limit fan speed according to some
+>>> system wise considerations, like absence of some replaceable units or
+>>> high system ambient temperature, or some other factors which
+>>> indirectly impacts system airflow.
+>>
+>> Is that a static thermal profile depending on the platform set by userspace or
+>> something which can be changed dynamically at runtime via eg. a daemon ?
+> 
+> Yes, this is some profiles/rules, which are system specific and according to these
+> rules userspace can limit fan speed. Like, for example:
+> - if one of power supplies is removed, system fan should be enforced to full
+>   speed, because it makes a hole in a box, and it has hard impact on airflow.
+> - If port side ambient temperature reaches some threshold X1, fan speed should
+>   be limited by Y1%, X2 - Y2%, etcetera.
+> - if temperature fault is detected for any optical transceivers - some limit is
+>   required. 
+
+I see, thanks for the information.
+
+>>> For example, if cooling devices operates at cooling levels from 1 to
+>>> 10
+>>> (1 for 10% fan speed, 10 for 100% fan speed), cooling device minimal
+>>> speed can be limited by setting 'cur_state' attribute through 'sysfs'
+>>> to the values from 'max_state' + 1 to 'max_state * 2' (from 11 to 20).
+>>> Following this example if value is set to 14 (40%) cooling levels
+>>> vector will be set to 4, 4, 4, 4, 4, 5, 6, 7, 8, 9, 10 for setting
+>>> device speed cooling states respectively in 40, 40, 40, 40, 40, 50,
+>>> 60. 70, 80, 90,
+>>> 100 percent. And it limits cooling device to operate only at 40% speed
+>>> and above.
+>>>
+>>> Maybe it would be worth adding earlier some dedicated 'cur_state_limit'
+>>> attribute for this feature, but it was not done.
+>>>
+>>> We have another driver required this feature and one new we are
+>>> developing now, which require fan minim speed limit as well.
+>>
+>> The use case is valid but I think the approach is wrong. Probably the simplest
+>> thing to do is to set a low trip point with a minimal fan speed.
+> 
+> For "trip_point_0_temp" there is the below definition:
+> 	{	/* In range - 0-40% PWM */
+> 		.type		= THERMAL_TRIP_ACTIVE,
+> 		.temp		= MLXSW_THERMAL_ASIC_TEMP_NORM,
+> 		.hyst		= MLXSW_THERMAL_HYSTERESIS_TEMP,
+> 		.min_state	= 0,
+> 		.max_state	= (4 * MLXSW_THERMAL_MAX_STATE) / 10, (40%)
+> 	},
+> For "trip_point_1_temp":
+> 	{
+> 		/* In range - 40-100% PWM */
+> 		.type		= THERMAL_TRIP_ACTIVE,
+> 		.temp		= MLXSW_THERMAL_ASIC_TEMP_HIGH,
+> 		.hyst		= MLXSW_THERMAL_HYSTERESIS_TEMP,
+> 		.min_state	= (4 * MLXSW_THERMAL_MAX_STATE) / 10, (100%)
+> 		.max_state	= MLXSW_THERMAL_MAX_STATE,
+> 	},
+> 
+> To limit cooling device by f.e 70%, I should change dynamically 'min_state' and 'max_state'
+> for both trips to (70%, 70%) and (70%, 100%). I am not sure I can do it?
+> 
+> And we have many customers, using this user space interface, it would be not so good to
+> change it.
+
+The issue is the driver is wrong here. The change you referred in the
+past should have not been merged. I note there is no thermal maintainer
+blessing in the tags.
+
+> I understand it is possible to handle this issue inside driver's set_cur_stat() callback by
+> returning positive value for configuration request.
+> But maybe this feature could you useful for other developers and it could be some common
+> interface to support it? 
+
+I suggest to revert a421ce088ac8 and switch to hwmon to set the fan
+speed. At the first glance, it is already supported by the mlx driver, no ?
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
