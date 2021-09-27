@@ -2,107 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73905419454
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Sep 2021 14:34:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D156419469
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Sep 2021 14:39:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234210AbhI0Mfv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Sep 2021 08:35:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58732 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234360AbhI0Mfv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Sep 2021 08:35:51 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2DCFC061575;
-        Mon, 27 Sep 2021 05:34:13 -0700 (PDT)
+        id S234347AbhI0MlB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Sep 2021 08:41:01 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:52572 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234333AbhI0Mk6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Sep 2021 08:40:58 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id CB3791F42246
+        with ESMTPSA id B4AC31F42764
 Received: by earth.universe (Postfix, from userid 1000)
-        id 5CE603C0CA8; Mon, 27 Sep 2021 14:34:09 +0200 (CEST)
-Date:   Mon, 27 Sep 2021 14:34:09 +0200
+        id A3E1B3C0CA8; Mon, 27 Sep 2021 14:39:17 +0200 (CEST)
+Date:   Mon, 27 Sep 2021 14:39:17 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, linux-pm@vger.kernel.org
-Subject: Re: [patch 06/11] power: reset: ltc2952: Use hrtimer_forward_now()
-Message-ID: <20210927123409.sl2ekpr3kcfqydar@earth.universe>
-References: <20210923153311.225307347@linutronix.de>
- <20210923153339.746654947@linutronix.de>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     linux-pm@vger.kernel.org, Bastien Nocera <hadess@hadess.net>
+Subject: Re: [PATCH v4] docs: ABI: sysfs-class-power: Documented cycle_count
+ property
+Message-ID: <20210927123917.lm5wborwlh2uhbzi@earth.universe>
+References: <20210916125321.10823-1-hdegoede@redhat.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nvjiw4ieghtx42oh"
+        protocol="application/pgp-signature"; boundary="isiby32j46dul4cu"
 Content-Disposition: inline
-In-Reply-To: <20210923153339.746654947@linutronix.de>
+In-Reply-To: <20210916125321.10823-1-hdegoede@redhat.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---nvjiw4ieghtx42oh
+--isiby32j46dul4cu
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Thu, Sep 23, 2021 at 06:04:28PM +0200, Thomas Gleixner wrote:
-> hrtimer_forward_now() provides the same functionality as the open coded
-> hrtimer_forward() invocation. Prepares for removal of hrtimer_forward()
-> from the public interfaces.
+On Thu, Sep 16, 2021 at 02:53:21PM +0200, Hans de Goede wrote:
+> Commit c955fe8e0bdd ("POWER: Add support for cycle_count") added a
+> POWER_SUPPLY_PROP_CYCLE_COUNT "cycle_count" property to the set of
+> standard power-supply properties, but this was never documented,
+> document it now.
 >=20
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: linux-pm@vger.kernel.org
+> Link: https://gitlab.freedesktop.org/upower/upower/-/issues/152
+> Reported-by: Bastien Nocera <hadess@hadess.net>
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> ---
+> Changes in v4:
+> - Document that some drivers, such as e.g. the often used
+>   drivers/acpi/battery.c driver may return 0 when cycle_count information
+>   is not available
+>=20
+> Changes in v3 (aka the really really typo free version)
+> - Fix typo in "cycle_count" in Subject
+>=20
+> Changes in v2:
+> - s/Possitive/Positive/
 > ---
 
-Thanks, queued to power-supply's for-next branch.
+Thanks, queued.
 
 -- Sebastian
 
->  drivers/power/reset/ltc2952-poweroff.c |    4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+>  Documentation/ABI/testing/sysfs-class-power | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
 >=20
-> --- a/drivers/power/reset/ltc2952-poweroff.c
-> +++ b/drivers/power/reset/ltc2952-poweroff.c
-> @@ -94,7 +94,6 @@ static struct ltc2952_poweroff *ltc2952_
->   */
->  static enum hrtimer_restart ltc2952_poweroff_timer_wde(struct hrtimer *t=
-imer)
->  {
-> -	ktime_t now;
->  	int state;
->  	struct ltc2952_poweroff *data =3D to_ltc2952(timer, timer_wde);
+> diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/=
+ABI/testing/sysfs-class-power
+> index ca830c6cd809..f7904efc4cfa 100644
+> --- a/Documentation/ABI/testing/sysfs-class-power
+> +++ b/Documentation/ABI/testing/sysfs-class-power
+> @@ -480,6 +480,19 @@ Description:
 > =20
-> @@ -104,8 +103,7 @@ static enum hrtimer_restart ltc2952_powe
->  	state =3D gpiod_get_value(data->gpio_watchdog);
->  	gpiod_set_value(data->gpio_watchdog, !state);
+>  		Valid values: Represented in microvolts
 > =20
-> -	now =3D hrtimer_cb_get_time(timer);
-> -	hrtimer_forward(timer, now, data->wde_interval);
-> +	hrtimer_forward_now(timer, data->wde_interval);
+> +What:		/sys/class/power_supply/<supply_name>/cycle_count
+> +Date:		January 2010
+> +Contact:	linux-pm@vger.kernel.org
+> +Description:
+> +		Reports the number of full charge + discharge cycles the
+> +		battery has undergone.
+> +
+> +		Access: Read
+> +
+> +		Valid values:
+> +			Integer > 0: representing full cycles
+> +			Integer =3D 0: cycle_count info is not available
+> +
+>  **USB Properties**
 > =20
->  	return HRTIMER_RESTART;
->  }
+>  What:		/sys/class/power_supply/<supply_name>/input_current_limit
+> --=20
+> 2.31.1
 >=20
 
---nvjiw4ieghtx42oh
+--isiby32j46dul4cu
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmFRukEACgkQ2O7X88g7
-+pqKFQ//T4fOnN3EQe4f7Pg4w++SqPoGhfrzFJUeAln5V4TpFHdHZGq4s7t6kZaK
-GOXOBCyzGZ6jJEH5YRce4tdW3+01yIj4GBL1RmkM28AgFOfGEtqSmlsMSMOBn9xp
-+q6CbOqWw5ZbbKPi3O9mbE5vcLKHR4tCpBxqDIbwG8FxHLuuKD2iUQ3MBoyU0ueW
-fgO7dT1Y761yYtUg6/K50NhpjR/K5nendVqNkyBvy69h5ItqLGA8etK9oovMUaTj
-7wHWiAq+S1uNCHN72DKJiXWh4CcssK1REPdGKF+c/Zpl74Cos6PYSFVgstfbdqbR
-k7KugJPeZllc3gGiXLp5vre3bNKoahO2sNqNkDdFP84QGmEhl2dt222d89WbH/XB
-0xw15rF4tFwFlXCwI60R5Fz4R+4FQhz3KWbQ3PZzTP5SD0LyMfTVn2sPtA9+FHlL
-iGeutAwscHBSahlMwXP9BsfUwd5mFOV971ElszTuzLtdrOIXLtBHW0df6OBYi+1I
-pUn4+D/KBTr7Y1rxrP95FPXoUwgxyqDly7pMhSUa/RiqB9um1MzLVbayF8hiE3lt
-ASDwrGsWkOsgkeCPIen3H8ObaXO+d4ddnyeY2qAqgnj2GQg8F0ob6Dbg9WjBxump
-kD7qNZioaB4CaOTypmfdr/AmVQIeS61vUmudIL1Pqt8piudrsqM=
-=g6vN
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmFRu3UACgkQ2O7X88g7
++ppOUQ//QOFgB01rZYQJdyg1It0L5oEXpZCaBw1xh6ejLofW5hqoObkT9ez6yNHu
+tXRdRyqE1qAy4FQeMPzR6xS7vpbhzjMHYXM4I8zYUGj0HQBqLY6XxpVTtkez66HY
+VT3sLxUnqcTC4QfPkHERaGzmz3dyt2gOU+1j1EZpAssrhIxDK1plOhjQqK//mmV0
+a5jCAtW/2NdZ5lTJKcDobv+/v+BiEPqfDXYbTMsmf9lNmJP6574s9sDIC2+T7zMF
+OjqWdQFWQ0vVaZRQR2/3TsWj5Guv5IzGHg7dV4pq/BYEj+AfeYx3kgisXQvrZwGc
+h7R55Vs1lhbL0FyMo1o2VgQwFf4MdBLUzbNgCE67G64huV6PAJgIPj7JCMc6BnIF
+9UqjeqS7U/MJTaNOY3vyxl570jjjAbcOdV3x0xH5vB3Wo2fe7jnOaPiXGwKB0P9T
+/tC+13c5NhL9SSUwyBX3P61nIamPLNh9DNWX1tKVOAozGtmUFxjA2NOdWm2fvEVI
+niDiGB4pyqtZOeWR/SwLvAXxrUyFRFdmKU+dCJ6uC8ofr5NfACH0ABMcqFa3rN54
+4Fc4AX9W6w9X6BKW7VBjqAgtN4junqY2NyanF5LCTm7gQUxpY0/ZcKTD+6LL5HqF
+xhOltcRCy2LbGOBP+gKVeK1joAOwNGuk2np+HCPgtde0lwZaRs8=
+=eU8L
 -----END PGP SIGNATURE-----
 
---nvjiw4ieghtx42oh--
+--isiby32j46dul4cu--
