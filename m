@@ -2,27 +2,27 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F87E41A7C2
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Sep 2021 07:58:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE5BE41A816
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Sep 2021 07:59:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239395AbhI1F7a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Sep 2021 01:59:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48756 "EHLO mail.kernel.org"
+        id S239700AbhI1GBO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Sep 2021 02:01:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49570 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239170AbhI1F6i (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 28 Sep 2021 01:58:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8DD2B61352;
-        Tue, 28 Sep 2021 05:56:33 +0000 (UTC)
+        id S239415AbhI1F7c (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 28 Sep 2021 01:59:32 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C16766127A;
+        Tue, 28 Sep 2021 05:56:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632808593;
-        bh=9tzfcVt12E3AJYpIaInQ2Tfai7WKL1gsFLA5d12jAmc=;
+        s=k20201202; t=1632808619;
+        bh=Hv6zhBgHG460Lq2ZwpA4zetkrNeCBkz0ebL3kw8dHp4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PE4gipqDEtu9QqPy4t/zJKFD8uxyBquiFLI19bYrzQaBoqbZG3NmOD/V4X++JEYzc
-         AqhouiL8SGHKHobSmi/gDgjYxRp434euSQQCZMOSG8padygIwW7aEBXg32FRAk6ikR
-         fI8KcybKjtiwNgayEiViTkLBXdAbJEI6vh4Q7hOC1GOxn19VHkVMVwsfJOlqJB4cTN
-         094g7JbiLwEW2yrGgqKqgU19bGNhczO6dbKbR7ig08JSdMUTB3/scrDaFVRaSLZqgB
-         K9BPdW8Vx7U16jUcxG7xU4sJ9DKHSgvl8iIOWxAYDZuuiox3mY0kd0DGWtR1Kgwcfq
-         RTL0uwRK6TTIA==
+        b=PgrxY7k3UanllSA3fu353MrXCk+JSbR6DnkvgJtpvRapN9oXMiOZB9R+gUwXIoBnT
+         MOe89h1oMA9fOoUv2fWydVyuooF1I7wp6NjHtuooMeHEF9RspVze0Bo55DY3Nthnvk
+         I/UxFe4H6SVklumcSNR1dV/06WW7qesjXWobbEpwGHXUukl2WlzQLTliCco/Hbd7Ji
+         sIMTXPy3NiUq0Z5aNnxrzLNtfurOF/pFvKzinMGKMAOUovCPgfSWmdZZoPoLSOzqLq
+         /INStys1S0PmHu3C/IAt5n10XxqQvKbO3ZeTi355vRxIPSWh4fnnFRhPWrNqccRzDg
+         tFV/w4Hoq6BXQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
@@ -32,12 +32,12 @@ Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
         bjorn.andersson@linaro.org, amitk@kernel.org,
         thara.gopinath@linaro.org, rui.zhang@intel.com,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.14 32/40] thermal/drivers/tsens: Fix wrong check for tzd in irq handlers
-Date:   Tue, 28 Sep 2021 01:55:16 -0400
-Message-Id: <20210928055524.172051-32-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 19/23] thermal/drivers/tsens: Fix wrong check for tzd in irq handlers
+Date:   Tue, 28 Sep 2021 01:56:40 -0400
+Message-Id: <20210928055645.172544-19-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210928055524.172051-1-sashal@kernel.org>
-References: <20210928055524.172051-1-sashal@kernel.org>
+In-Reply-To: <20210928055645.172544-1-sashal@kernel.org>
+References: <20210928055645.172544-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -66,10 +66,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-index 4c7ebd1d3f9c..b1162e566a70 100644
+index 3c4c0516e58a..cb4f4b522446 100644
 --- a/drivers/thermal/qcom/tsens.c
 +++ b/drivers/thermal/qcom/tsens.c
-@@ -417,7 +417,7 @@ static irqreturn_t tsens_critical_irq_thread(int irq, void *data)
+@@ -415,7 +415,7 @@ static irqreturn_t tsens_critical_irq_thread(int irq, void *data)
  		const struct tsens_sensor *s = &priv->sensor[i];
  		u32 hw_id = s->hw_id;
  
@@ -78,7 +78,7 @@ index 4c7ebd1d3f9c..b1162e566a70 100644
  			continue;
  		if (!tsens_threshold_violated(priv, hw_id, &d))
  			continue;
-@@ -467,7 +467,7 @@ static irqreturn_t tsens_irq_thread(int irq, void *data)
+@@ -465,7 +465,7 @@ static irqreturn_t tsens_irq_thread(int irq, void *data)
  		const struct tsens_sensor *s = &priv->sensor[i];
  		u32 hw_id = s->hw_id;
  
