@@ -2,152 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 899DF41B1E5
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Sep 2021 16:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D88941B255
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Sep 2021 16:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240172AbhI1OSw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Sep 2021 10:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49812 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233878AbhI1OSw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Sep 2021 10:18:52 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7841C06161C
-        for <linux-pm@vger.kernel.org>; Tue, 28 Sep 2021 07:17:12 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id s75so4825924pgs.5
-        for <linux-pm@vger.kernel.org>; Tue, 28 Sep 2021 07:17:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=L+Ec6xPwpf765+2Y5GDEoovwvrMfYFq4Kod84AziMeY=;
-        b=6dH5KS4f1asQicsTDBU8Z8eLqTOoymsSdVvUzXF1hqbsBsXJlVvd53JvSNqHUm4F0Z
-         TiKoLx/y4wwe6SelGqfVLGVWIvhncXhD3qc6ckegFQX/4GvhB5Go4SUFeAFaVqRm0YJN
-         WmpXGmR5PAFl7nlfTXnCGBDyoblxFyDmQdjw8/43EshJgaB1OnW8IpamKxUuaGJfPNag
-         djEcpxbtt/QIOB8cB/ZqGmCpzVt4W+ikEQJgBe6D2TRqESsrHSdExLXgZfgyR6fsuD5F
-         OFAyoflprPef23G3hst1pUVuAQPz65WajYGr/ND69tAVO170liJf9UDCNuMxxbNocJ/g
-         G21g==
+        id S241334AbhI1Ord (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Sep 2021 10:47:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:48275 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241322AbhI1Orc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Sep 2021 10:47:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1632840352;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=UXVxRzoO+stk1jCVHn72msXq/bQWSgfleFnZZjGNuf0=;
+        b=CIqr/JwgkjATBiRPNlvxkizfNf1hnu8ffA8vd+4c5vMBPUtKIzHDLxhEs+4x8UC45JKYka
+        cqCXrx0UnmGJ2u/sNmvoCA96kFnY0sjLd/kWQgIaZRGcmO/EJwjgnmSaTA/bv3LhPskiG6
+        g+NDQJaJduCZUc5hEG8rfy6J7b0qmH0=
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
+ [209.85.210.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-344--ILS5L1rNleRGOjNc9ZdFg-1; Tue, 28 Sep 2021 10:45:50 -0400
+X-MC-Unique: -ILS5L1rNleRGOjNc9ZdFg-1
+Received: by mail-ot1-f70.google.com with SMTP id o12-20020a9d410c000000b00547056f6644so21213036ote.20
+        for <linux-pm@vger.kernel.org>; Tue, 28 Sep 2021 07:45:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=L+Ec6xPwpf765+2Y5GDEoovwvrMfYFq4Kod84AziMeY=;
-        b=uQCmvLzeD8NC9IpIPxO0NlN1ocv6Ngam+AelTwzyYIrXq/ZbfFOBcX4PJf98LVBD4g
-         JKrakoge7xSesbCtK9G4TtmZbkoHmCz8dKDRG5Gjwxu039Q11ergfk0087aUmVYHVuSh
-         eJqzbrES7gW7M3kuq9j42R6xGZVrNdGAp+cGU/NyXyoMlZiS50mZfLPw2VcxsSILHyGW
-         cmIZdmW4VqSvm6xkwDFHrkilj4gzWg3sYO0ptR8uZWYuTzcYJSECv1OMhBHTCBIraEyc
-         ddaDcYsxU3CNvRcei0ISljCx7fUsXocakZaVokT3ejdUROUmvtWGPCaIJ6iGoM5E0Zab
-         QRjQ==
-X-Gm-Message-State: AOAM530s1w8LLB3RkznbVXSH2sB0F//sDzoJ/bRyMxroxa1ISYAuqg3J
-        i98e82/Wifcdbec/ZHMwkM8VuSVV7bi3uxDj
-X-Google-Smtp-Source: ABdhPJyRHHOoTFYxPT9LkU68nCSksCTT5xBzC71u+Ai4qMuNV5XJNf0fNmFxIlSGu7WG0DsCLSBgPw==
-X-Received: by 2002:a62:8801:0:b0:43e:390:295f with SMTP id l1-20020a628801000000b0043e0390295fmr5606591pfd.57.1632838632394;
-        Tue, 28 Sep 2021 07:17:12 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id i27sm20704559pfq.184.2021.09.28.07.17.11
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UXVxRzoO+stk1jCVHn72msXq/bQWSgfleFnZZjGNuf0=;
+        b=rXj/3/X4/5LaIHoHVSagGVAyqDJVZD86Ah4qMrrx0YHPzHAmC2oTF+KXRLAdp7d9ac
+         Da1IBXxO5n+fd1UBNr7LYIVriTRj2c6Mf8RlWdb2v3KKttbrdzJb0iCFp4OQEBA75rL2
+         7oM4uXFT0ipUObEO6RggnTHFRoFUwhut3zHVFB7CorVRRgTg3yToQatqt457So2C5gQi
+         nv6HwZYFbrKmamEZy8gqSp0BaPaDUrG0aYXcR5kemV/ghVBZ2gtgsCSHNw3L4u7RfvaG
+         hN8aKa2EOCmy+WiDkGuenFaGBDeCzYfv88EdopMfLl/+mc2/7B+xcTxXR9C6ijY22z0S
+         F0aA==
+X-Gm-Message-State: AOAM531if8VHRS0ttnsX94AQgdcSOVsslwYpElItLswFWDDInorSqhVQ
+        kaftbUuEbkyuIdkKTJR6wZzJyGy3aRJ0hRJLIieiN+SmDxirxvYH2BtyDT6/4N0yTgGhgdEouf9
+        ucTf6gtgJ8LszJVgcHKY=
+X-Received: by 2002:a05:6808:f:: with SMTP id u15mr3979708oic.86.1632840350276;
+        Tue, 28 Sep 2021 07:45:50 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxT5M0vZ9fvSxavrXKTrGoMLFoK8XR6Fl2E8vuT+l+KtGGJmMkl0jhm0bne/f0nQklxY0IE3g==
+X-Received: by 2002:a05:6808:f:: with SMTP id u15mr3979695oic.86.1632840350113;
+        Tue, 28 Sep 2021 07:45:50 -0700 (PDT)
+Received: from localhost.localdomain.com (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id j4sm4524081oia.56.2021.09.28.07.45.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Sep 2021 07:17:12 -0700 (PDT)
-Message-ID: <615323e8.1c69fb81.16187.2e51@mx.google.com>
-Date:   Tue, 28 Sep 2021 07:17:12 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 28 Sep 2021 07:45:49 -0700 (PDT)
+From:   trix@redhat.com
+To:     sre@kernel.org, mka@chromium.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] power: supply: core: move psy_has_property()
+Date:   Tue, 28 Sep 2021 07:40:46 -0700
+Message-Id: <20210928144046.272926-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.15-rc3-18-g7c86bb8dfc1b
-X-Kernelci-Report-Type: build
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 1 warning (v5.15-rc3-18-g7c86bb8dfc1b)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.15-rc3-18-g7c=
-86bb8dfc1b)
+From: Tom Rix <trix@redhat.com>
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-15-rc3-18-g7c86bb8dfc1b/
+A ranconfig produces this error
+power_supply_core.c:1137:6: error: implicit declaration
+  of function 'psy_has_property'
+ 1137 |  if (psy_has_property(desc, POWER_SUPPLY_PROP_USB_TYPE) &&
 
-Tree: pm
-Branch: testing
-Git Describe: v5.15-rc3-18-g7c86bb8dfc1b
-Git Commit: 7c86bb8dfc1ba1e8f6fef352555cf21a37ea2bc3
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
+psy_has_property() compiling is conditional on THERMAL.  It is used
+in __power_supply_register() to check a non thermal property.
+So move psy_has_property() out of the THERMAL conditional.
 
-Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-8): 1 warning
-
-riscv:
-
-x86_64:
-
-
-Warnings summary:
-
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
+Fixes: 9ba533eb99bb ("power: supply: core: Add psy_has_property()")
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
-For more info write to <info@kernelci.org>
+ drivers/power/supply/power_supply_core.c | 32 ++++++++++++------------
+ 1 file changed, 16 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+index 75575ea45f21dd..fc12a4f407f431 100644
+--- a/drivers/power/supply/power_supply_core.c
++++ b/drivers/power/supply/power_supply_core.c
+@@ -951,6 +951,22 @@ void power_supply_unreg_notifier(struct notifier_block *nb)
+ }
+ EXPORT_SYMBOL_GPL(power_supply_unreg_notifier);
+ 
++static bool psy_has_property(const struct power_supply_desc *psy_desc,
++			     enum power_supply_property psp)
++{
++	bool found = false;
++	int i;
++
++	for (i = 0; i < psy_desc->num_properties; i++) {
++		if (psy_desc->properties[i] == psp) {
++			found = true;
++			break;
++		}
++	}
++
++	return found;
++}
++
+ #ifdef CONFIG_THERMAL
+ static int power_supply_read_temp(struct thermal_zone_device *tzd,
+ 		int *temp)
+@@ -975,22 +991,6 @@ static struct thermal_zone_device_ops psy_tzd_ops = {
+ 	.get_temp = power_supply_read_temp,
+ };
+ 
+-static bool psy_has_property(const struct power_supply_desc *psy_desc,
+-			     enum power_supply_property psp)
+-{
+-	bool found = false;
+-	int i;
+-
+-	for (i = 0; i < psy_desc->num_properties; i++) {
+-		if (psy_desc->properties[i] == psp) {
+-			found = true;
+-			break;
+-		}
+-	}
+-
+-	return found;
+-}
+-
+ static int psy_register_thermal(struct power_supply *psy)
+ {
+ 	int ret;
+-- 
+2.26.3
+
