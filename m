@@ -2,98 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5F5B41B766
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Sep 2021 21:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E739741B82C
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Sep 2021 22:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242377AbhI1TUb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Sep 2021 15:20:31 -0400
-Received: from h03mx16.reliablemail.org ([173.236.90.20]:41373 "EHLO
-        h03mx16.reliablemail.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242253AbhI1TU3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Sep 2021 15:20:29 -0400
-X-Halon-Out: e72c9685-2090-11ec-a67c-00163c72d6d3
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=grimler.se;
-        s=default; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=6gdqqI/giyhAYUrbUwjWsKNav3qRv+eFiZ0eQNMhlhI=; b=Rro2Q17P19gqh2Cii+Ba2zrHdP
-        SorXS9mEu2REKZ5+XsX1MDg2il+YUBf0k3K7WonrbeVHfxhgNKgTHbDXrvLeirg5v8Q0FD5HhmYXk
-        rF7N53XX5s5/erFDmSCmE2ujtmOHzGTFfonCfPubfddnQRLDXvqSmbk2YaXw6wjIRa/UgAKeY9peb
-        nv2i21fyL5aCagO2vXD4iz2/itmjF2WCnbUI7LZe7BukTZ4hTkoTpzKmA5uq2OWxfcsB9OV2QTnve
-        Nm2ZD6ot6CYLU3A/cEEQ+r/8cuY848GDESnvQ+cvrk2/256XFpX3Q4ZncACt9sAiWaMIl/42qz0Q9
-        wiEY8zKg==;
-Date:   Tue, 28 Sep 2021 21:18:44 +0200
-From:   Henrik Grimler <henrik@grimler.se>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     sre@kernel.org, linux-pm@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, wolfgit@wiedmeyer.de
-Subject: Re: [PATCH 1/1] power: supply: max17042_battery: use VFSOC for
- capacity when no rsns
-Message-ID: <YVNqlIIAJNil5MFL@grimlerstat.localdomain>
-References: <20210919200735.142862-1-henrik@grimler.se>
- <20210919200735.142862-2-henrik@grimler.se>
- <febc15c6-8a40-cc0c-d98c-bbefc9cc953d@canonical.com>
+        id S242720AbhI1UNL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Sep 2021 16:13:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47650 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242702AbhI1UNG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Sep 2021 16:13:06 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA88DC06174E;
+        Tue, 28 Sep 2021 13:11:26 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id b15so1002592lfe.7;
+        Tue, 28 Sep 2021 13:11:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:subject:to:cc:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=dwkX337TFgvRCTKSZKyXnwJ7aBWtkckS2fkSGygsoPM=;
+        b=LpSrHmS/g55thZZsWlc9LqEsQDcVeNBD+8feeAhfGaY5kf0Ls/aH1DGZw3wPk/gYgb
+         pN7OGp83Jami/P+sHB6E1GHNOvmY0XM5VKuSnq3iuq4IsdnNe3pQ/UXxQf3p7FAwOYPW
+         uJVOIF4H/SEOdx4qwuc6mj6uCVkMelYM9ruJmiuawgJMSizTYClPLn5FRrCnFj1G9D0t
+         Vx7fxvIqVd1Uc3dHJIVSaBexgQFtEscMJri1GL2DDSr1LEE6z9TB+cK03AFXI5W76PQI
+         iF/kZXjFi0aFr2RinSK8PCnooEfLUUHiuPgw/jWzoO0TZGjMxN108fww+UvMAwp795bX
+         ZWOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:subject:to:cc:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=dwkX337TFgvRCTKSZKyXnwJ7aBWtkckS2fkSGygsoPM=;
+        b=au6UBckHcjw3WdeoBAzqrxnQri4JGTHe9dM6p7DKFydofi4fM8V+RvUQaf6TfKrxWz
+         K/jdYmJ2DVaDM8685kD3drgpkp1Mr7cI1B+QAX1Nast0yQrPVm7Biq6WRWzl0akxEcYz
+         MdnUi4ZgwlZgGi95FnDtdswHrcRwJaRcEa0ETLrOlMCQtXL8x1WzJ6mR2HHsj9t2JWyY
+         pl6CZhGap1S+4WtTT0LEPCNzr13j0g35j6XC9uKxWgFctwsDYzbnmZPP3tJMpx3hA/kD
+         1AOxT9u6yIdguOoQ4XSyGzJ/FgK4Yq375OjbLl9VC6Cah2vL8o3UMRz0jCuLT6A7TeNy
+         3yFw==
+X-Gm-Message-State: AOAM531LK14LhzxjhkiDa4h67j66CTOg3qtGxT2EEn/7Ql42c7PFrnBy
+        UnLKuZceT2EYe9l7KmVBA8SIAX3ToVc=
+X-Google-Smtp-Source: ABdhPJx/8xu/CO+zN4ujsJ2sY19t9g9l6MgzZBJxBlqbQXSGmTnhKHEBakBYour3NGGlbklwScn8ww==
+X-Received: by 2002:a2e:b4ac:: with SMTP id q12mr1917432ljm.221.1632859885281;
+        Tue, 28 Sep 2021 13:11:25 -0700 (PDT)
+Received: from [192.168.1.4] ([185.205.48.180])
+        by smtp.gmail.com with ESMTPSA id l11sm2974lfg.39.2021.09.28.13.11.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Sep 2021 13:11:24 -0700 (PDT)
+From:   =?UTF-8?Q?Nicol=c3=b2_Piazzalunga?= <nicolopiazzalunga@gmail.com>
+Subject: [RFC] add standardized attributes for force_discharge and
+ inhibit_charge
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        Thomas Koch <linrunner@gmx.net>,
+        "smclt30p@gmail.com" <smclt30p@gmail.com>
+Message-ID: <21569a89-8303-8573-05fb-c2fec29983d1@gmail.com>
+Date:   Tue, 28 Sep 2021 22:11:23 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <febc15c6-8a40-cc0c-d98c-bbefc9cc953d@canonical.com>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cpsrv07.misshosting.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - grimler.se
-X-Get-Message-Sender-Via: cpsrv07.misshosting.com: authenticated_id: henrik@grimler.se
-X-Authenticated-Sender: cpsrv07.misshosting.com: henrik@grimler.se
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 28, 2021 at 11:22:15AM +0200, Krzysztof Kozlowski wrote:
-> On 19/09/2021 22:07, Henrik Grimler wrote:
-> > On Galaxy S3 (i9300/i9305), which has the max17047 fuel gauge and no
-> > current sense resistor (rsns), the RepSOC register does not provide an
-> > accurate state of charge value. The reported value is wrong, and does
-> > not change over time. VFSOC however, which uses the voltage fuel gauge
-> > to determine the state of charge, always shows an accurate value.
-> > 
-> > At least one max170xx driver, found in Asus' Z00D kernel [1], chooses
-> > how to get the capacity based on if current sense is available or not.
-> > Lets change the mainline driver to match the Asus Z00D driver's
-> > behaviour and thereby fix so that correct state of charge values are
-> > obtained on Galaxy S3.
-> > 
-> > [1] https://github.com/LineageOS/android_kernel_asus_Z00D/blob/c7ab0e3ec5b5/drivers/power/max17042_battery.c#L1103-L1105
-> > 
-> > Suggested-by: Wolfgang Wiedmeyer <wolfgit@wiedmeyer.de>
-> > Signed-off-by: Henrik Grimler <henrik@grimler.se>
-> > ---
-> >  drivers/power/supply/max17042_battery.c | 5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
-> > 
-> 
-> After explanation and double-checking of driver this makes sense. The
-> driver already uses VFSoc for alerts (MiscCFG register) if
-> !enable_current_sense.
-> 
-> Fixes: 359ab9f5b154 ("power_supply: Add MAX17042 Fuel Gauge Driver")
-> Cc: <stable@vger.kernel.org>
-> 
-> These could be added when applying but maybe Sebastian wants a v2 with it?
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Hi Sebastian,
 
-I can send a v2 with updated commit message to mention that we already
-use VFSOC for the alert on this device, and sneak in a patch to fix a
-typo in Iavg_empty parameter.
+this is a proposal to introduce separate and standardized attributes
+for force_discharge and inhibit_charge of a battery.
+These are simpler than using status from a user-space perspective,
+as discussed on the platform-driver-x86 mail list.
 
-> Best regards,
-> Krzysztof
+Regards,
+Nicolò
 
-Best regards,
-Henrik Grimler
+---
+ Documentation/ABI/testing/sysfs-class-power | 27 +++++++++++++++++++++
+ drivers/power/supply/power_supply_sysfs.c   |  2 ++
+ include/linux/power_supply.h                |  2 ++
+ 3 files changed, 31 insertions(+)
+
+diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
+index ca830c6cd809..2c5f48f49273 100644
+--- a/Documentation/ABI/testing/sysfs-class-power
++++ b/Documentation/ABI/testing/sysfs-class-power
+@@ -455,6 +455,33 @@ Description:
+ 			      "Unknown", "Charging", "Discharging",
+ 			      "Not charging", "Full"
+ 
++What:		/sys/class/power_supply/<supply_name>/force_discharge
++Date:		September 2021
++Contact:	linux-pm@vger.kernel.org
++Description:
++		Represents the forced discharging status of the battery.
++
++		Access: Read, Write
++
++		Valid values:
++			== ====================================
++			0: Force discharge while AC is attached
++			1: Terminate forced discharging
++
++What:		/sys/class/power_supply/<supply_name>/inhibit_charge
++Date:		September 2021
++Contact:	linux-pm@vger.kernel.org
++Description:
++		Represents the presence of a manual override over the threshold
++		attributes of the battery, thus inhibiting battery charge.
++
++		Access: Read, Write
++
++		Valid values:
++			== ======================
++			1: Stop charging
++			0: Terminate the override
++
+ What:		/sys/class/power_supply/<supply_name>/technology
+ Date:		May 2007
+ Contact:	linux-pm@vger.kernel.org
+diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+index c3d7cbcd4fad..6e7303935810 100644
+--- a/drivers/power/supply/power_supply_sysfs.c
++++ b/drivers/power/supply/power_supply_sysfs.c
+@@ -136,6 +136,8 @@ static const char * const POWER_SUPPLY_SCOPE_TEXT[] = {
+ static struct power_supply_attr power_supply_attrs[] = {
+ 	/* Properties of type `int' */
+ 	POWER_SUPPLY_ENUM_ATTR(STATUS),
++	POWER_SUPPLY_ENUM_ATTR(FORCE_DISCHARGE),
++	POWER_SUPPLY_ENUM_ATTR(INHIBIT_CHARGE),
+ 	POWER_SUPPLY_ENUM_ATTR(CHARGE_TYPE),
+ 	POWER_SUPPLY_ENUM_ATTR(HEALTH),
+ 	POWER_SUPPLY_ATTR(PRESENT),
+diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+index 9ca1f120a211..4340fe65df4d 100644
+--- a/include/linux/power_supply.h
++++ b/include/linux/power_supply.h
+@@ -96,6 +96,8 @@ enum {
+ enum power_supply_property {
+ 	/* Properties of type `int' */
+ 	POWER_SUPPLY_PROP_STATUS = 0,
++	POWER_SUPPLY_PROP_FORCE_DISCHARGE,
++	POWER_SUPPLY_PROP_INHIBIT_CHARGE,
+ 	POWER_SUPPLY_PROP_CHARGE_TYPE,
+ 	POWER_SUPPLY_PROP_HEALTH,
+ 	POWER_SUPPLY_PROP_PRESENT,
+-- 
+2.33.0
