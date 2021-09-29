@@ -2,40 +2,41 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EC6D41CBB8
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Sep 2021 20:21:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A079441CB98
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Sep 2021 20:15:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343518AbhI2SW6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Sep 2021 14:22:58 -0400
-Received: from h02mx15.reliablemail.org ([185.76.66.168]:42779 "EHLO
-        h02mx15.reliablemail.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343727AbhI2SW6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Sep 2021 14:22:58 -0400
-X-Halon-Out: 2fdeebfa-2151-11ec-930f-f5be715b97e5
+        id S232318AbhI2SRR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Sep 2021 14:17:17 -0400
+Received: from h04mx15.reliablemail.org ([185.76.67.208]:28607 "EHLO
+        h04mx15.reliablemail.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344347AbhI2SRR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Sep 2021 14:17:17 -0400
+X-Halon-Out: 3c7786dd-2151-11ec-a232-556aad082471
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=grimler.se;
-        s=default; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
-        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        s=default; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
         List-Post:List-Owner:List-Archive;
-        bh=JDCzG/NIZpsyCZN5FF/XKbBBvpMH6WE/le82sQnlqHg=; b=tevEXB9OJcHUm79hQldt/+qPOH
-        wSgouYbV7OMTgVLCsCLnLdbbX+fzAsWVo7wgP7dRWARg2RRsmgwkQsNtRhwPJxCiKxr9xAOZsybT2
-        +jJ2OsImryccVQSHJZ9JKFIaU9YI8YN5lR3by/afRJ0fMPrbxQYEDJNeckrk4N1DFION+DDZsy3p9
-        lb56lW8UyEJxryTEtx8SXt0pNYHGnYKlHwCCyUY0CVYBNDIdd3AkHGf2/qIpnXS8uZt8U31tkYr22
-        aKt/Y87uhVZ5aAgbe9FJmR9udqBiFKyGpp4fV2eDdLuPnKY+QJDGmhJDj18tDq9Q7zBUgntbFVyPR
-        Giw0yJCg==;
+        bh=KIjLywngr8bdrLt5titQeuOYT+bdxPvm9Rv5zh+DvWM=; b=jgEVo5ipGp1OGZM2sHglnTJSFe
+        M/Gu77biam8hVIvCykin9gq3cokCAJYrGfxQQE62YmoJLcHVtfDFT0RBFJhzvgZd0MIuRID/TYrbC
+        OHIa+/16ogy5FwZeZ4h+00vmu12mfzqzC3SgTCFSJ2+nqiFzzHFoBEAB7CjePC68B+nOW51XmN46w
+        lzQd3ANbnSqcDt4ecG341KbggNF6CYoR/ork4/D4D58EmUeGJ83iN1KJAlJjKVmOyCeQsImaq0AE4
+        ffNeSLC4nIcOsDhFSE4SeIL4U3Rj5EqiMxGJ61bZ5WJPu20wDm6iNqT0JAtb2CH0lsiMQwQeyI+t1
+        PmKu73AQ==;
 From:   Henrik Grimler <henrik@grimler.se>
 To:     sre@kernel.org, m.szyprowski@samsung.com,
         krzysztof.kozlowski@canonical.com, sebastian.krzyszkowiak@puri.sm,
         hdegoede@redhat.com, linux-pm@vger.kernel.org,
         linux-samsung-soc@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht
-Cc:     Henrik Grimler <henrik@grimler.se>, stable@vger.kernel.org,
-        Wolfgang Wiedmeyer <wolfgit@wiedmeyer.de>
-Subject: [PATCH v2 1/2] power: supply: max17042_battery: use VFSOC for capacity when no rsns
-Date:   Wed, 29 Sep 2021 20:14:17 +0200
-Message-Id: <20210929181418.4221-1-henrik@grimler.se>
+Cc:     Henrik Grimler <henrik@grimler.se>
+Subject: [PATCH v2 2/2] power: supply: max17042_battery: fix typo in MAX17042_IAvg_empty
+Date:   Wed, 29 Sep 2021 20:14:18 +0200
+Message-Id: <20210929181418.4221-2-henrik@grimler.se>
 X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20210929181418.4221-1-henrik@grimler.se>
+References: <20210929181418.4221-1-henrik@grimler.se>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -52,47 +53,49 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Galaxy S3 (i9300/i9305), which has the max17047 fuel gauge and no
-current sense resistor (rsns), the RepSOC register does not provide an
-accurate state of charge value. The reported value is wrong, and does
-not change over time. VFSOC however, which uses the voltage fuel gauge
-to determine the state of charge, always shows an accurate value.
+Datasheet gives the name IAvg_empty, not LAvg_empty.
 
-For devices without current sense, VFSOC is already used for the
-soc-alert (0x0003 is written to MiscCFG register), so with this change
-the source of the alert and the PROP_CAPACITY value match.
-
-Fixes: 359ab9f5b154 ("power_supply: Add MAX17042 Fuel Gauge Driver")
-Cc: <stable@vger.kernel.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Suggested-by: Wolfgang Wiedmeyer <wolfgit@wiedmeyer.de>
 Signed-off-by: Henrik Grimler <henrik@grimler.se>
 ---
-Changes in v2:
-Re-write commit message to highlight that VFSOC is already used for
-alert, after Krzysztof's comments
----
- drivers/power/supply/max17042_battery.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/power/supply/max17042_battery.c | 2 +-
+ include/linux/power/max17042_battery.h  | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
-index 8dffae76b6a3..5809ba997093 100644
+index 5809ba997093..32f331480487 100644
 --- a/drivers/power/supply/max17042_battery.c
 +++ b/drivers/power/supply/max17042_battery.c
-@@ -313,7 +313,10 @@ static int max17042_get_property(struct power_supply *psy,
- 		val->intval = data * 625 / 8;
- 		break;
- 	case POWER_SUPPLY_PROP_CAPACITY:
--		ret = regmap_read(map, MAX17042_RepSOC, &data);
-+		if (chip->pdata->enable_current_sense)
-+			ret = regmap_read(map, MAX17042_RepSOC, &data);
-+		else
-+			ret = regmap_read(map, MAX17042_VFSOC, &data);
- 		if (ret < 0)
- 			return ret;
+@@ -786,7 +786,7 @@ static inline void max17042_override_por_values(struct max17042_chip *chip)
+ 	if ((chip->chip_type == MAXIM_DEVICE_TYPE_MAX17042) ||
+ 	    (chip->chip_type == MAXIM_DEVICE_TYPE_MAX17047) ||
+ 	    (chip->chip_type == MAXIM_DEVICE_TYPE_MAX17050)) {
+-		max17042_override_por(map, MAX17042_LAvg_empty, config->lavg_empty);
++		max17042_override_por(map, MAX17042_IAvg_empty, config->iavg_empty);
+ 		max17042_override_por(map, MAX17042_TempNom, config->temp_nom);
+ 		max17042_override_por(map, MAX17042_TempLim, config->temp_lim);
+ 		max17042_override_por(map, MAX17042_FCTC, config->fctc);
+diff --git a/include/linux/power/max17042_battery.h b/include/linux/power/max17042_battery.h
+index dd24756a8af7..c417abd2ab70 100644
+--- a/include/linux/power/max17042_battery.h
++++ b/include/linux/power/max17042_battery.h
+@@ -78,7 +78,7 @@ enum max17042_register {
+ 	MAX17042_T_empty	= 0x34,
  
-
-base-commit: 5816b3e6577eaa676ceb00a848f0fd65fe2adc29
+ 	MAX17042_FullCAP0       = 0x35,
+-	MAX17042_LAvg_empty	= 0x36,
++	MAX17042_IAvg_empty	= 0x36,
+ 	MAX17042_FCTC		= 0x37,
+ 	MAX17042_RCOMP0		= 0x38,
+ 	MAX17042_TempCo		= 0x39,
+@@ -221,7 +221,7 @@ struct max17042_config_data {
+ 	u16	fullcap;	/* 0x10 */
+ 	u16	fullcapnom;	/* 0x23 */
+ 	u16	socempty;	/* 0x33 */
+-	u16	lavg_empty;	/* 0x36 */
++	u16	iavg_empty;	/* 0x36 */
+ 	u16	dqacc;		/* 0x45 */
+ 	u16	dpacc;		/* 0x46 */
+ 	u16	qrtbl00;	/* 0x12 */
 -- 
 2.33.0
 
