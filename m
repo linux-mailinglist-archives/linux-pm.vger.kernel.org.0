@@ -2,78 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 826FA41C9FE
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Sep 2021 18:22:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EC6D41CBB8
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Sep 2021 20:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344020AbhI2QYG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Sep 2021 12:24:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42156 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245575AbhI2QYG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Sep 2021 12:24:06 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB76C06161C;
-        Wed, 29 Sep 2021 09:22:25 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id i25so13112720lfg.6;
-        Wed, 29 Sep 2021 09:22:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=CcWRHT628g8uLLrXHcaoMAVejqE4eYmkHN2oa1pbhm8=;
-        b=OtcTySMa5bM6txuOtQ6WAclsYjcJ5p3+2QB9ao3AQEkUrT1SekyoveZvxQdcrKWz05
-         1wU0uLX+fBUDneV4YZGPp+783zPJSsxb81m8dLY9Pd5Eske33EK6UxZOQ9M2IudDwuqk
-         HhED0FTxqkK1qSbVuue9dEwzMo7lKYj93NVLP2qf3alSUKGVkEiywhtWsv5Rk3Oyie6n
-         tQSTF7DW/VfihFvd1nljtfXLwOgm1f6tSqxbkpZrGo8nMNCkbsZuYfdDZOGHTfL0k3Bu
-         dbgho6tGJjwUwyjHiLU/p3RrS1p8cFJS2T/4mu7hWUaaS/u/gw0InSC8RuXjClxYWyDD
-         xfUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=CcWRHT628g8uLLrXHcaoMAVejqE4eYmkHN2oa1pbhm8=;
-        b=e/eJ30u32gN7r9C1PpnJcpHOh9nKV2QUhCsbdSwl2hq2B5Sz+n4q1sw4XHxXKsnw1m
-         MnCBI3q+iNZFb0k8NqqqOMPrY/cnNVJFLGoqo7E2uHhHwaq1GB5KKt19HsHy69Cmp7lA
-         Rz/zfgzAFFYU40qcQu6W7/VcHKqURGtWg154bAtSnY/koml5Y0dUJq2YHqpTJqKFEsER
-         vs/7d8kUVn9z2sPgOxsPF1tK1Pl9Cmm4OokHEpTI0L13D75NaLkHhEDRuwHHE1nQYMqs
-         cYDCdJ4O24CPRrfjtdv5y2xXXbDjs/a7p9XhzvNmiBIpvLCi+T6KcbOIcFykm0OIo6XR
-         rCdw==
-X-Gm-Message-State: AOAM533fOhTh0qYOrQc35Ta+fjivy4xNV1EnJ/BPl9KahYauF7mlwNOQ
-        38CDwf8/mx0IXgdBMu7bhE+uj/MuVGw=
-X-Google-Smtp-Source: ABdhPJwT9hESx5WAv7KuHP3/jNKV9R4zJ7va3JfHYmxp1yM5pwdEgVGj8jpRsvLeJr5APP0T4jQHkA==
-X-Received: by 2002:a2e:6f1d:: with SMTP id k29mr777666ljc.209.1632932542411;
-        Wed, 29 Sep 2021 09:22:22 -0700 (PDT)
-Received: from [130.238.84.122] (emp-84-122.eduroam.uu.se. [130.238.84.122])
-        by smtp.gmail.com with ESMTPSA id l13sm36937lfk.211.2021.09.29.09.22.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Sep 2021 09:22:21 -0700 (PDT)
-Subject: Re: [RFC] add standardized attributes for force_discharge and
- inhibit_charge
-From:   =?UTF-8?Q?Nicol=c3=b2_Piazzalunga?= <nicolopiazzalunga@gmail.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     linux-pm@vger.kernel.org,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        Thomas Koch <linrunner@gmx.net>,
-        "smclt30p@gmail.com" <smclt30p@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>
-References: <21569a89-8303-8573-05fb-c2fec29983d1@gmail.com>
-Message-ID: <57e605d8-e59e-1c58-78ee-7248e97b9e90@gmail.com>
-Date:   Wed, 29 Sep 2021 18:22:20 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S1343518AbhI2SW6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Sep 2021 14:22:58 -0400
+Received: from h02mx15.reliablemail.org ([185.76.66.168]:42779 "EHLO
+        h02mx15.reliablemail.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343727AbhI2SW6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Sep 2021 14:22:58 -0400
+X-Halon-Out: 2fdeebfa-2151-11ec-930f-f5be715b97e5
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=grimler.se;
+        s=default; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=JDCzG/NIZpsyCZN5FF/XKbBBvpMH6WE/le82sQnlqHg=; b=tevEXB9OJcHUm79hQldt/+qPOH
+        wSgouYbV7OMTgVLCsCLnLdbbX+fzAsWVo7wgP7dRWARg2RRsmgwkQsNtRhwPJxCiKxr9xAOZsybT2
+        +jJ2OsImryccVQSHJZ9JKFIaU9YI8YN5lR3by/afRJ0fMPrbxQYEDJNeckrk4N1DFION+DDZsy3p9
+        lb56lW8UyEJxryTEtx8SXt0pNYHGnYKlHwCCyUY0CVYBNDIdd3AkHGf2/qIpnXS8uZt8U31tkYr22
+        aKt/Y87uhVZ5aAgbe9FJmR9udqBiFKyGpp4fV2eDdLuPnKY+QJDGmhJDj18tDq9Q7zBUgntbFVyPR
+        Giw0yJCg==;
+From:   Henrik Grimler <henrik@grimler.se>
+To:     sre@kernel.org, m.szyprowski@samsung.com,
+        krzysztof.kozlowski@canonical.com, sebastian.krzyszkowiak@puri.sm,
+        hdegoede@redhat.com, linux-pm@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Cc:     Henrik Grimler <henrik@grimler.se>, stable@vger.kernel.org,
+        Wolfgang Wiedmeyer <wolfgit@wiedmeyer.de>
+Subject: [PATCH v2 1/2] power: supply: max17042_battery: use VFSOC for capacity when no rsns
+Date:   Wed, 29 Sep 2021 20:14:17 +0200
+Message-Id: <20210929181418.4221-1-henrik@grimler.se>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-In-Reply-To: <21569a89-8303-8573-05fb-c2fec29983d1@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpsrv07.misshosting.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - grimler.se
+X-Get-Message-Sender-Via: cpsrv07.misshosting.com: authenticated_id: henrik@grimler.se
+X-Authenticated-Sender: cpsrv07.misshosting.com: henrik@grimler.se
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Hans,
+On Galaxy S3 (i9300/i9305), which has the max17047 fuel gauge and no
+current sense resistor (rsns), the RepSOC register does not provide an
+accurate state of charge value. The reported value is wrong, and does
+not change over time. VFSOC however, which uses the voltage fuel gauge
+to determine the state of charge, always shows an accurate value.
 
-you are right, I swapped 1 and 0 there of course, my mistake.
+For devices without current sense, VFSOC is already used for the
+soc-alert (0x0003 is written to MiscCFG register), so with this change
+the source of the alert and the PROP_CAPACITY value match.
 
-Nicolò
+Fixes: 359ab9f5b154 ("power_supply: Add MAX17042 Fuel Gauge Driver")
+Cc: <stable@vger.kernel.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Suggested-by: Wolfgang Wiedmeyer <wolfgit@wiedmeyer.de>
+Signed-off-by: Henrik Grimler <henrik@grimler.se>
+---
+Changes in v2:
+Re-write commit message to highlight that VFSOC is already used for
+alert, after Krzysztof's comments
+---
+ drivers/power/supply/max17042_battery.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
+index 8dffae76b6a3..5809ba997093 100644
+--- a/drivers/power/supply/max17042_battery.c
++++ b/drivers/power/supply/max17042_battery.c
+@@ -313,7 +313,10 @@ static int max17042_get_property(struct power_supply *psy,
+ 		val->intval = data * 625 / 8;
+ 		break;
+ 	case POWER_SUPPLY_PROP_CAPACITY:
+-		ret = regmap_read(map, MAX17042_RepSOC, &data);
++		if (chip->pdata->enable_current_sense)
++			ret = regmap_read(map, MAX17042_RepSOC, &data);
++		else
++			ret = regmap_read(map, MAX17042_VFSOC, &data);
+ 		if (ret < 0)
+ 			return ret;
+ 
+
+base-commit: 5816b3e6577eaa676ceb00a848f0fd65fe2adc29
+-- 
+2.33.0
+
