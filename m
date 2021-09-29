@@ -2,44 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56CBA41BE58
+	by mail.lfdr.de (Postfix) with ESMTP id CD35B41BE5A
 	for <lists+linux-pm@lfdr.de>; Wed, 29 Sep 2021 06:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243997AbhI2Eok (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Sep 2021 00:44:40 -0400
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:39379 "EHLO
+        id S234322AbhI2Eol (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Sep 2021 00:44:41 -0400
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:46255 "EHLO
         new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243885AbhI2Eoi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Sep 2021 00:44:38 -0400
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 175A2580DC4;
+        by vger.kernel.org with ESMTP id S243992AbhI2Eoj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Sep 2021 00:44:39 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id C0880580DCA;
         Wed, 29 Sep 2021 00:42:58 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Wed, 29 Sep 2021 00:42:58 -0400
+  by compute6.internal (MEProxy); Wed, 29 Sep 2021 00:42:58 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm3; bh=nBAwb14NmcBdr
-        AqnC9W+le998BEqA3ENpSMZEhHDV8s=; b=XwY8yDnGMrZu2/GE4s1VOatuLG925
-        E9Qxi9T6/X1OO3MTcL1Dlo/I7z++vNarJnSEGmdf/aPf6c6Jyj3YVrriL+Gl8AWS
-        Ul4OFTKo0ySUQ4T2Fren8iEX/AZH6okvsC8mw2wkIa/T4viinkNV4JreEMX57H8v
-        s2ZPU+C2RUUIGYEeojAiClPhG9Bfe5eb/O9GjpOXuybDeM+x/Vnh2vctIPTKv9Zm
-        Jv/Y5bgSbQ1BTmd3Ka/q5nkoLxTUgsDJGCvDiF4+Rzfs5G2+1AUOzgDBOE3ziV3K
-        BGkO8uhh3UZQ32S/3K8nN+5cQiE4HRCM8fd5Ocd+rkEG7yxpiQLBc2S2Q==
+        :mime-version:content-transfer-encoding; s=fm3; bh=H92gfwIVzRY+x
+        Fr/42obeioOfnah5ra1k8IBJ11GR04=; b=O1Q9kaJRG8Sq/CANgvn3+5zOcJLqP
+        9HFsTcqkq9F1+AzZ23N6cu0IQgY3tZesh9HlDkfFoWkC0P0Oxyettxdy37GL5KZP
+        CcFbeCqbj2Qs8Vw6PvXipu685l7bQAcXPzCDH+m6gxgskrzEinbacsVLNlw9GEJH
+        XSdp5+gkPJN6onzC1QEnLlwx6GCid4JG4ccsBm8MTgkJQ7tGy/T7nvgPLntniEj2
+        VYY6lqKxDin92zIvt/M0U9QVuG2e+6TXlxaCEuu3FIrJPA3TfNr0i4wBjLfKQpPm
+        tAb2i3++kxds6xqZUqt56v1Hz6Xmxxxm1aCWGZq+A6dRf/KA8Iy85yAxQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
         :in-reply-to:message-id:mime-version:references:subject:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; bh=nBAwb14NmcBdrAqnC9W+le998BEqA3ENpSMZEhHDV8s=; b=Hjm8Gjra
-        pFnFYHk8xStLnM0jSsqqPsvYcICjpnuWdvvcrQtozJ/dEqIsQ9gb9ah3cN2khXxE
-        ykVJ40PhAs5vrhAEtsraFXZEhFgyUDq+tyNyaH1QTs+yuQVZPHIaslJiUS5RL5M7
-        AgwocBOdVOxr5QisAEyN9L9tJAdpQ+tl40rT1Whj+Kuhc9W7uFHLxMlrKp1/og3p
-        g4/PP7pN93qJbN2mxDPn0ZpNgVvka/p2tR5oA3cpy0fSLtuIiIUjb9y3M3L+cnd0
-        1Sy8X3eAfdPKWKESqHb0Dync+du/9u+vILusp7cMOHRkCpNwexJXh6flcJscuZJ6
-        aFULWOvk/OnCQw==
-X-ME-Sender: <xms:0e5TYeXQOfvL7PFhNQAT6iUFABSV79E6L3jdr2Rn0wo_Lt9hTKwwKw>
-    <xme:0e5TYanLXVr0x9fqE_sOvFrSzCnjQH9SkXTFtW7Zdx_S2PB291RsSo34UCsVYI2Qd
-    DNWGKnYDNZGTksWEA>
-X-ME-Received: <xmr:0e5TYSblFQTvx_abZW0Ltf5ecRg_zHfVLtyeYrwQ12HSt49kh-RsjJNEEmembPdVQb6KYiyhbiy9maia_lYq6C0HbWuQj1dP2jaMXC0XEVGdGno6hNERfwtAEStekgf1o9i1eg>
+        fm3; bh=H92gfwIVzRY+xFr/42obeioOfnah5ra1k8IBJ11GR04=; b=ez1u0+uL
+        R+QOSiPSMTPDA1LTHgU5xe2kReydCd43K3Dxe5RzZzGwP/Ya4/rhjXtSvPHvSkQH
+        NAsEzRwHiOjORjAAGi8/wvhnwaIqn95QsjKi6ziaHYLX0uEByGv515Bi0riBhIGU
+        z5VThEMOugoBKYNCHedUroFR2y3nVwtdFqvLAe8lZzwCkj/utNDumUefWYRoQnRQ
+        sAFyZ5p9g4dJbkWYsVEY1AYFL0CpRn1TDUqoIrVc+fMeJ5fi20jBXLUlbTdnfdLd
+        5krup7xuVhbioRaYZX4OLxYQl2U9pWIsTEkSX5lYPU5c8c8pQYLwmrHZIVBmt4RV
+        xm64RP4TTl2doA==
+X-ME-Sender: <xms:0u5TYWlk5lgsX4SdJPL1zFsjsI3dNYRRMf4_AxADcLNLI0GReUTNbw>
+    <xme:0u5TYd0yEb91v5OcT7orAAf28vl47F8iKSHZrAdAjvk7GwJFAk6MTSyPbgeJXppPI
+    FLzhKOn0m7blgjf_A>
+X-ME-Received: <xmr:0u5TYUqOIU_8ROaFnVroiCtOBkkb-A1ziegoySck__hxSNk3H4yGiVUUBoOUmPf_W9UuWyGRVdxKjptOm5RWYWvrBD8qZw_jrhZjiaO4qGyqdsIWDyKJvyXJrlh65BHa9UQyEg>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudekuddgkeegucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
@@ -48,12 +48,12 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudekuddgkeegucetufdoteggod
     frrghtthgvrhhnpeduhfejfedvhffgfeehtefghfeiiefgfeehgfdvvdevfeegjeehjedv
     gfejheeuieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
     hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:0e5TYVUhHuGGpqV3aTmHdJ-KZjqfiKC7Elfzt2VlNUBB01V_daQySA>
-    <xmx:0e5TYYlTZphbrgXK9OrtqdmrSVFMR8PJ3pRmYIsjQkxZmbxD8i5VAw>
-    <xmx:0e5TYadD0SPCDaYRnjzXwvfERkm2dz2uLfd5fbATDp4t6pcJf14x4w>
-    <xmx:0u5TYWm025yeGv60lCD4mISNWRzgF-PcJwmU6UUXpjcQJhMAsP1V6g>
+X-ME-Proxy: <xmx:0u5TYal9O3RyQP4lB50Kbp_CukMPIIaWP4dMxjCj_0xI4M1Y0U5NNg>
+    <xmx:0u5TYU0bSpJqXCRFIO_Xj9zVepfqkoNXqhf8FJMs1Bk9yDnJjiNNow>
+    <xmx:0u5TYRtq909FzMxUDbL1cuAPWLonPYZOY5cmgkmAwA8neMMGrGfQzw>
+    <xmx:0u5TYf2OwE5dpFJXkp0ekUw9z71kXAPPct80pgZZRUVw1uYTNNxmQQ>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 29 Sep 2021 00:42:57 -0400 (EDT)
+ 29 Sep 2021 00:42:58 -0400 (EDT)
 From:   Samuel Holland <samuel@sholland.org>
 To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
@@ -67,9 +67,9 @@ Cc:     Michael Turquette <mturquette@baylibre.com>,
         linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
         Samuel Holland <samuel@sholland.org>
-Subject: [PATCH 02/10] PM / devfreq: Do not require devices to have OPPs
-Date:   Tue, 28 Sep 2021 23:42:46 -0500
-Message-Id: <20210929044254.38301-3-samuel@sholland.org>
+Subject: [PATCH 03/10] PM / devfreq: Drop code for descending freq_table
+Date:   Tue, 28 Sep 2021 23:42:47 -0500
+Message-Id: <20210929044254.38301-4-samuel@sholland.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210929044254.38301-1-samuel@sholland.org>
 References: <20210929044254.38301-1-samuel@sholland.org>
@@ -79,88 +79,44 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Since commit ea572f816032 ("PM / devfreq: Change return type of
-devfreq_set_freq_table()"), all devfreq devices are required to have a
-valid freq_table. If freq_table is not provided by the driver, it will
-be filled in by set_freq_table() from the OPPs; if that fails,
-devfreq_add_device() will return an error.
+Since commit 416b46a2627a ("PM / devfreq: Show the all available
+frequencies"), freq_table's documentation requires it to be sorted in
+ascending order. That commit modified available_frequencies_show() to
+assume that order. This is also the order used by all existing drivers
+and by set_freq_table().
 
-However, since commit ab8f58ad72c4 ("PM / devfreq: Set min/max_freq when
-adding the devfreq device"), devfreq devices are _also_ required to have
-an OPP table, even if they provide freq_table. devfreq_add_device()
-requires dev_pm_opp_find_freq_ceil() and dev_pm_opp_find_freq_floor() to
-return successfully, specifically to initialize scaling_min/max_freq.
+However, there is still some code left over for compatibility with a
+freq_table sorted descending. To avoid confusion, let's remove it.
 
-Not all drivers need an OPP table. For example, a driver where all
-frequencies are determined dynamically could work by filling out only
-freq_table. But with the current code it must call dev_pm_opp_add() on
-every freq_table entry to probe successfully.
-
-The offending properties, scaling_min/max_freq, are only necessary if a
-device has OPPs; if no OPPs exist at all, OPPs cannot be dynamically
-enabled or disabled, so those values have no effect. Thus it is trivial
-to restore support for devices with freq_table only and not OPPs -- move
-those initializations behind the check for a valid OPP table.
-
-Since get_freq_range() uses scaling_max_freq in a min() expression, it
-must be initialized to the maximum possible value. scaling_min_freq is
-initialized as well for consistency.
-
-Fixes: ab8f58ad72c4 ("PM / devfreq: Set min/max_freq when adding the devfreq device")
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
- drivers/devfreq/devfreq.c | 36 ++++++++++++++++++++----------------
- 1 file changed, 20 insertions(+), 16 deletions(-)
+ drivers/devfreq/devfreq.c | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-index 7a8b022ba456..426e31e6c448 100644
+index 426e31e6c448..f5d27f5285db 100644
 --- a/drivers/devfreq/devfreq.c
 +++ b/drivers/devfreq/devfreq.c
-@@ -835,24 +835,28 @@ struct devfreq *devfreq_add_device(struct device *dev,
- 		mutex_lock(&devfreq->lock);
- 	}
+@@ -130,16 +130,10 @@ static void get_freq_range(struct devfreq *devfreq,
  
--	devfreq->scaling_min_freq = find_available_min_freq(devfreq);
--	if (!devfreq->scaling_min_freq) {
--		mutex_unlock(&devfreq->lock);
--		err = -EINVAL;
--		goto err_dev;
+ 	/*
+ 	 * Initialize minimum/maximum frequency from freq table.
+-	 * The devfreq drivers can initialize this in either ascending or
+-	 * descending order and devfreq core supports both.
++	 * The devfreq drivers should initialize this in ascending order.
+ 	 */
+-	if (freq_table[0] < freq_table[devfreq->profile->max_state - 1]) {
+-		*min_freq = freq_table[0];
+-		*max_freq = freq_table[devfreq->profile->max_state - 1];
+-	} else {
+-		*min_freq = freq_table[devfreq->profile->max_state - 1];
+-		*max_freq = freq_table[0];
 -	}
--
--	devfreq->scaling_max_freq = find_available_max_freq(devfreq);
--	if (!devfreq->scaling_max_freq) {
--		mutex_unlock(&devfreq->lock);
--		err = -EINVAL;
--		goto err_dev;
--	}
--
--	devfreq->suspend_freq = dev_pm_opp_get_suspend_opp_freq(dev);
- 	devfreq->opp_table = dev_pm_opp_get_opp_table(dev);
--	if (IS_ERR(devfreq->opp_table))
-+	if (IS_ERR(devfreq->opp_table)) {
- 		devfreq->opp_table = NULL;
-+		devfreq->scaling_min_freq = 0;
-+		devfreq->scaling_max_freq = ULONG_MAX;
-+	} else {
-+		devfreq->scaling_min_freq = find_available_min_freq(devfreq);
-+		if (!devfreq->scaling_min_freq) {
-+			mutex_unlock(&devfreq->lock);
-+			err = -EINVAL;
-+			goto err_dev;
-+		}
-+
-+		devfreq->scaling_max_freq = find_available_max_freq(devfreq);
-+		if (!devfreq->scaling_max_freq) {
-+			mutex_unlock(&devfreq->lock);
-+			err = -EINVAL;
-+			goto err_dev;
-+		}
-+
-+		devfreq->suspend_freq = dev_pm_opp_get_suspend_opp_freq(dev);
-+	}
++	*min_freq = freq_table[0];
++	*max_freq = freq_table[devfreq->profile->max_state - 1];
  
- 	atomic_set(&devfreq->suspend_count, 0);
- 
+ 	/* Apply constraints from PM QoS */
+ 	qos_min_freq = dev_pm_qos_read_value(devfreq->dev.parent,
 -- 
 2.31.1
 
