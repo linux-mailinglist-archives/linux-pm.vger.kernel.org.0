@@ -2,57 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2305941BE54
+	by mail.lfdr.de (Postfix) with ESMTP id B6DD441BE56
 	for <lists+linux-pm@lfdr.de>; Wed, 29 Sep 2021 06:43:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234807AbhI2Eoi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S243907AbhI2Eoi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Wed, 29 Sep 2021 00:44:38 -0400
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:36619 "EHLO
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:50399 "EHLO
         new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229452AbhI2Eoh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Sep 2021 00:44:37 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 8DE53580B80;
-        Wed, 29 Sep 2021 00:42:56 -0400 (EDT)
+        by vger.kernel.org with ESMTP id S234322AbhI2Eoi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Sep 2021 00:44:38 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 487FC580DBB;
+        Wed, 29 Sep 2021 00:42:57 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Wed, 29 Sep 2021 00:42:56 -0400
+  by compute4.internal (MEProxy); Wed, 29 Sep 2021 00:42:57 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=fm3; bh=qs7rOkinBPHpqLW6M5nctLByUA
-        e3O8t6z/LIIxVOeT0=; b=BZo0nvQBMEZY2FhpSC+3qwC3o8M8Ih6AFsHZp10rbI
-        fdzF+vOInI3kiawzF0xd1lg0gMKKpaGoGItV9XnZAuIIn3tk7jYy66thxHFs7WUZ
-        Ka3hgIB++X0U4KQ5YorXU0s77Bb8q+tr0Q3Z9J/kfv354YBDSMrGMFCJCmi5Qb7e
-        6jqMzaNtDFtH7j2UPgPVtp9U7/ZxFPld3MKjSR0q0C0YKjBo/mjXwiwHk6fENSGO
-        k9EiAThDYODKgYK8gdsh/OU+FzRREh/Z/2vrGe8/rar4qY9WgdU1VmiJmhmwoFro
-        saMbm/ZRfSMr6wbE5ErUdZ9kwl3Y0cLT3ffZNAaZuluQ==
+        from:to:cc:subject:date:message-id:in-reply-to:references
+        :mime-version:content-transfer-encoding; s=fm3; bh=ALZ+89RMWvaZz
+        rA1f7LpbYBKk681jYZFRU0J8EDdz70=; b=aHOjpZKk7ni97VKtrRLtFFZ1iwGIB
+        TMsK+fc3B68/7XiuJEksS+ihr0aNky5WGq69mSCxkXvLLCfAEHvoYD8OG+xHwxxu
+        MnoWI2lDuQSHi0vWwoiq75uDr4G2HHQcFl9wcIf4IV9QrTyiVQgaeBMiULjhZ+Cc
+        LOxlecqpNeVqbj8F8ymmlm64uhnmLbv1r3XaC2r5IcGw2CZCpWP9LbPRQoWXZzXt
+        KrTCBVNnl/NPhpjwR4j9iQ8Qp9BVmo4jNnvvtfCq5s1RL4zcs2KO0/qxb4IjJNxR
+        Bq8zhihG8vEkwXzajg97ZE+uXz5Havo+pkcRuupzTKy+TU03wZyudCceQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=qs7rOkinBPHpqLW6M
-        5nctLByUAe3O8t6z/LIIxVOeT0=; b=bXM4T2TL4EziCSFpBz82vTbxmaDuWxk83
-        IOlYaghKYUqbeMVa62bPfbNrd1Xzvj4j83mItyrE9RFhhwRsWO1aN78GJ4bO6Y8m
-        wFBhcLLz1YGWc3Q+Ds6kN+zAuuUiTPK8SlufLtf8yVvH37nHpfHnhEjVXRq6GKKw
-        jhz582ubWfjzAkfsfmcwBKjH57ZNL1GtkebrlZv3mE6nADEQuKmKS5WUAVBYQ+pB
-        n9FWQ72t0ssVxt7G7imXHFDPbm0CChlDVGiI0OdDIncMkWJ4LSeTucNjlxXcyl/3
-        Z1MibOy02LeaestPqrw/nFFWRuca2zHtUyXJ+ABL4cqptI9Sd4lOQ==
-X-ME-Sender: <xms:z-5TYQgFyAXG3ROp4qQnEmSlZK1GM2u86wOpMk7QWjRZtfc1R9Nn8g>
-    <xme:z-5TYZBwBQbGQFoPS99gdlR-NK3BdI_y0EgkgxabJMmyZRTDNMUpWkJG8bM_FDr_x
-    3EgVylAnnGnSlRLvQ>
-X-ME-Received: <xmr:z-5TYYGlkg9zTFoYcSwAe8ZXs353FvM8lB_rW0DBYl3tPcXVWhZqqrQHvBBkSzHoyfLVqVXJlT92pwM4OTZkl_ZXAmgcnb4UKAWnHhHM2RGfmci742X0vI9eU41eQbTtuwHX2g>
+        :in-reply-to:message-id:mime-version:references:subject:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; bh=ALZ+89RMWvaZzrA1f7LpbYBKk681jYZFRU0J8EDdz70=; b=C6BDVr2i
+        pB1eDRrcoLpIh7k9Ln4kEIWtdGCxsMLREz8kkBw9IOBwwzjWuJXpUrWKyzL7hkVK
+        0uth7rQKW8/O1Zh2/F3eleeVZbKje96cph8nA3T/VUMfi7E8j/zG+v8Y4t2m2PKF
+        t/nnMRNxreTl6hga08MvCqUW3hN95YqsVJCNql5nWfw+F+W236Keao+e7aPZMkxj
+        68maWWp4wm3F6StaFq0NszG6CXV+KuyuRjQFLcriyTvwO0bzLWGlklMWSwhENFBP
+        jy8vp1z2oHI56xlfNrkekGH9o3Qwvqv922xH+MvyWChFCFJELdyIP/SKbjwXvBHZ
+        BLMaR2zvjOoZBQ==
+X-ME-Sender: <xms:0e5TYZHLNcFtKLfxlCZiwixM4gPi7bNQ65ItvndcZN2pu5h3j5R--Q>
+    <xme:0e5TYeUObkhAMkQOcmRPtO99-mh2tiiXTbHKMPMoxXYIQABLhawsj35oN8806_rgG
+    RXSd_TNoM8OEEYKKg>
+X-ME-Received: <xmr:0e5TYbJtugA1G-liCglqU1kEA62SXlLmtEtPWFyDoqazpCn2wyZa7ZLBu8mSGQSuWAmOzkbGZGPJvbGXvhlrkrUTcAo3nGWa3k6QDZsbSiFRsxiLR-ceDMJlhq8MUe7YRXmSAw>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudekuddgkeegucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgvlhcu
-    jfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtffrrg
-    htthgvrhhnpeeiteekhfehuddugfeltddufeejjeefgeevheekueffhffhjeekheeiffdt
-    vedtveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:z-5TYRTK8ReBOmu_ex1QYi6GUCL_FuMHN5Dds77zQIqoegk6G-g1Rw>
-    <xmx:z-5TYdzGNEy6R5LVyKw2WtHczO20KXlsZfvF_81mKOFNEk0tDQjC9A>
-    <xmx:z-5TYf7v2HiznDzWxqbEHyZsozCzi01EvlMavLFTHVxmAeZ-fBtQxA>
-    <xmx:0O5TYdiTGWxcKumawvrH54CQiMFIp0cdTw6LjP6iQxskWjNbZarujw>
+    cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgv
+    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
+    frrghtthgvrhhnpeduhfejfedvhffgfeehtefghfeiiefgfeehgfdvvdevfeegjeehjedv
+    gfejheeuieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:0e5TYfEM6o75NUErOvLp7vrkb4cydjArZ4DJXntZ0KJtuVutQFjA0g>
+    <xmx:0e5TYfXMt0ll6YFvCukJ2ncOulCR5OxWWGakwxCnqjB9WLaFZI0V0A>
+    <xmx:0e5TYaP-KG7nikGsQNWzZe8qP-V0WZUwjf8nwt7wcT7DiGTmNlBPmw>
+    <xmx:0e5TYcVMypkcMUc2PAF1ZHhV0DxFUAdcbe1w4Y_3QXFedwSg0rzjfA>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 29 Sep 2021 00:42:55 -0400 (EDT)
+ 29 Sep 2021 00:42:56 -0400 (EDT)
 From:   Samuel Holland <samuel@sholland.org>
 To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
@@ -66,70 +67,45 @@ Cc:     Michael Turquette <mturquette@baylibre.com>,
         linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
         Samuel Holland <samuel@sholland.org>
-Subject: [PATCH 00/10] DRAM devfreq support for Allwinner A64/H5
-Date:   Tue, 28 Sep 2021 23:42:44 -0500
-Message-Id: <20210929044254.38301-1-samuel@sholland.org>
+Subject: [PATCH 01/10] PM / devfreq: strengthen check for freq_table
+Date:   Tue, 28 Sep 2021 23:42:45 -0500
+Message-Id: <20210929044254.38301-2-samuel@sholland.org>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210929044254.38301-1-samuel@sholland.org>
+References: <20210929044254.38301-1-samuel@sholland.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This series adds a new devfreq driver for the MBUS/DRAM controller in
-some Allwinner SoCs, and enables it for the A64 and H5.
+Since commit ea572f816032 ("PM / devfreq: Change return type of
+devfreq_set_freq_table()"), all devfreq devices are expected to have a
+valid freq_table. The devfreq core unconditionally dereferences
+freq_table in the sysfs code and in get_freq_range().
 
-The first four patches make some improvements to the devfreq core to
-support drivers without any OPPs in the DT. They could be merged
-independently. (Since this driver controls only a divider, and can only
-slow down the DRAM clock, it works with most any base DRAM frequency.)
+Therefore, we need to ensure that freq_table is both non-null and
+non-empty (length is > 0). If either check fails, replace the table
+using set_freq_table() or return the error.
 
-Then the binding and DTs are updated in patches 5-9. The MBUS nodes
-already existed, but were not bound to any driver before; they were only
-used for their dma-ranges property.
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
+ drivers/devfreq/devfreq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Finally, the driver is added in patch 10.
-
-I am not 100% sure the best way to handle DRAM register access -- as a
-separate reg property, a separate node, or simply enlarging the MBUS
-register range. While the DRAM controller is a separate IP block, the
-MBUS hardware has the ability to double-buffer certain DRAM controller
-registers, and the hardware MDFS process writes to some DRAM controller
-registers as well. So they are rather tightly integrated.
-
-Like the patch 10 description says, this driver could support additional
-SoCs: at least A33, A83T, and H3. I can send follow-up patches for
-these, but I cannot test A33 or A83T.
-
-Samuel Holland (10):
-  PM / devfreq: strengthen check for freq_table
-  PM / devfreq: Do not require devices to have OPPs
-  PM / devfreq: Drop code for descending freq_table
-  PM / devfreq: Add a recommended frequency helper
-  dt-bindings: clock: sunxi: Export CLK_DRAM for devfreq
-  dt-bindings: arm: sunxi: Expand MBUS binding
-  dt-bindings: arm: sunxi: Add H5 MBUS compatible
-  ARM: dts: sunxi: h3/h5: Update MBUS node
-  arm64: dts: allwinner: a64: Update MBUS node
-  PM / devfreq: Add a driver for the sun8i/sun50i MBUS
-
- .../arm/sunxi/allwinner,sun4i-a10-mbus.yaml   |  77 ++-
- arch/arm/boot/dts/sun8i-h3.dtsi               |   4 +
- arch/arm/boot/dts/sunxi-h3-h5.dtsi            |  11 +-
- arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi |  10 +-
- arch/arm64/boot/dts/allwinner/sun50i-h5.dtsi  |   4 +
- drivers/clk/sunxi-ng/ccu-sun50i-a64.h         |   2 -
- drivers/clk/sunxi-ng/ccu-sun8i-h3.h           |   2 -
- drivers/devfreq/Kconfig                       |   8 +
- drivers/devfreq/Makefile                      |   1 +
- drivers/devfreq/devfreq.c                     |  77 ++-
- drivers/devfreq/sun8i-a33-mbus.c              | 482 ++++++++++++++++++
- include/dt-bindings/clock/sun50i-a64-ccu.h    |   2 +-
- include/dt-bindings/clock/sun8i-h3-ccu.h      |   2 +-
- include/linux/devfreq.h                       |   2 +
- 14 files changed, 644 insertions(+), 40 deletions(-)
- create mode 100644 drivers/devfreq/sun8i-a33-mbus.c
-
+diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+index 28f3e0ba6cdd..7a8b022ba456 100644
+--- a/drivers/devfreq/devfreq.c
++++ b/drivers/devfreq/devfreq.c
+@@ -827,7 +827,7 @@ struct devfreq *devfreq_add_device(struct device *dev,
+ 		goto err_dev;
+ 	}
+ 
+-	if (!devfreq->profile->max_state && !devfreq->profile->freq_table) {
++	if (!devfreq->profile->max_state || !devfreq->profile->freq_table) {
+ 		mutex_unlock(&devfreq->lock);
+ 		err = set_freq_table(devfreq);
+ 		if (err < 0)
 -- 
 2.31.1
 
