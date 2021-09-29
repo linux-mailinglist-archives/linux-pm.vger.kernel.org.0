@@ -2,58 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9848F41BE5C
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Sep 2021 06:43:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48C1F41BE5E
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Sep 2021 06:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244089AbhI2Eom (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Sep 2021 00:44:42 -0400
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:39379 "EHLO
+        id S244117AbhI2Eon (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Sep 2021 00:44:43 -0400
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:46255 "EHLO
         new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243996AbhI2Eok (ORCPT
+        by vger.kernel.org with ESMTP id S244007AbhI2Eok (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Sep 2021 00:44:40 -0400
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 765FB580DCC;
-        Wed, 29 Sep 2021 00:42:59 -0400 (EDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 2BF33580DDC;
+        Wed, 29 Sep 2021 00:43:00 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Wed, 29 Sep 2021 00:42:59 -0400
+  by compute6.internal (MEProxy); Wed, 29 Sep 2021 00:43:00 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm3; bh=WoIva3nZ/OvlI
-        FuKcUaObQyBgwdR2tNV2TTl4sUUNog=; b=S2C8vuFAYoR2BbXNgEq2fwZlLmD4m
-        FmS1y3sN1Y5x3e1jtDXqzjFqVOYUvmkUpRfgVn4ebRLMK/4dNrITKyBzxYleLmWZ
-        IMWcNJXdsJ6vBjuMytf6lg0YZlxcrnW1ix51DjaJwnCpSgAVRdrpx37jplmGxeEr
-        eFRHVEar3PZemg177qeW1vixvTMnUlDFTHxgjFF+5upyEYu+EUPP4rYLm9+RANHs
-        JcyI/ivhyAKNRaFfJhliTtOeAUCDAIGFRVs5UuIHJ4N6rmIe4cN8hgsUV7RdU234
-        XA81FgDXU5YKRQFlCw8Sqs6HEOf9+TWaS7QxLv+8kI08fQRIHSYcn5Oxg==
+        :mime-version:content-transfer-encoding; s=fm3; bh=RPTx2E3/dPvDB
+        zeSLOXZzTgLrgyxEOS9XlZaR7l0qTk=; b=NevG6tn+zFbzzZgiitMs3HO5pTpg1
+        YIRCTHiNzP8x/HxNLUehFB55CU3P3ITzq6Z5L5HDmfOmhM6mfZMannqvTVJwtViv
+        s8XDFL9PuUdzL3jqNTWuxupUs5MWHUIZsLtooK+ZUrPKv+Yc9xJZ0btWBJSr9Z97
+        IHfV7lzYvyFfZ+UsaCZYIpblK5PfPQKc+uaRlRQNe1oC/JZpWdMZR9n8+7djmIpc
+        Z5nyMYTCm/A4JUZcuBJjDEqFwGolTtasVFBfiNLji5tPj6NqA1kau7J7my3wK0b0
+        OLpAaI54ctENxQl1NVIxiBmge+XzTRe8wX7Fhcj1UBhmU0qEJ2y1oAXsA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
         :in-reply-to:message-id:mime-version:references:subject:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; bh=WoIva3nZ/OvlIFuKcUaObQyBgwdR2tNV2TTl4sUUNog=; b=qv+hYIi+
-        /G0Z6cuudD85y+InDX6ojari7YLfKQQXv82OmU2NIAo1M8tak9X+704oYXlbuf9r
-        /EkfJQsNE15Q+56vgp0UQhKJYssDAkHJWOq3WzfFftMZ3VCqVaXpginHzDiIHyW1
-        8jE5kdAXQO7W971Pn7mBpR5v97T29wyCp2kb/kevHnPktyK824er6MCUIePNZZiv
-        zZOhqE+PmCzhexPPQHMytI+zB9kdkuuaH8o+w3pfd8siDTvaFe6FHvxNFBIQvUYy
-        NF9Ru8MTMum281w/psAbTDcUH/hMaPBzHs1pnkT7EOrsYgDmzpRTsa8Ln4m/IguU
-        Ddpj8vXkjQXFzg==
-X-ME-Sender: <xms:0-5TYcE96cRbvD9GLjq7_IMjwe8KR_9z3DD5VmCkGakZAXZX7F3zYg>
-    <xme:0-5TYVXNrPhos_Fmg6KTz55XrPptkNfb8qAyggJH961h61DuZ3PLI53fQT-y5p6dX
-    2dXMqoqhty3AMa9nw>
-X-ME-Received: <xmr:0-5TYWIjyhng54xuk3qSNEdhzvMrQSX40QASWk2Zgs-sm0GrAg_XkTr3UOUvC4EFCVM7ed1cfV9j05D3jK0T0ZlX_B0KbwiAGUDObbp97Ye_pn9I6gfJ6Tb_8HxzDDhpPfJBMQ>
+        fm3; bh=RPTx2E3/dPvDBzeSLOXZzTgLrgyxEOS9XlZaR7l0qTk=; b=ahax2TnM
+        0DbB2G6bsV/dSceacz87i69rnYfkyWATVb5KZITpTIeRiHEO+mf3dsZ0uKjeUefL
+        XTVdmMctawS2/UFNfB6BCyiXTZR9Yh6xgUD68W/YEEdhW9Pnt/Fp5eNR8ZsXbry4
+        XoVNR//vUICdfBwJuLVX9mkRM8GX8gPNLzireJHVZrQBMIIEdxrBUMtAoBrdXB0A
+        70OTsnuBPgqX+u3NwpuHltVnx8MaTImgy7gvju7QqokkZsg+ZishhQ5DHuNy2YdN
+        A+9cfWmEwhgrgcL8hinGwoNV0LQleyLsCw/NjvWCtJe6SGgk2rjH+IsuT+9aoqce
+        KCm7+Pt3Pr9IYw==
+X-ME-Sender: <xms:1O5TYd26-9dC0AM2lELdpTd1ngPnR_U-FZsTmyOI1GsvFGHVqsSP6A>
+    <xme:1O5TYUE6w1FBcbIcMqlCcUsROPLPaMo4-hMCPLq20xsCmGmHoOTxn11UfjQOWiwoI
+    SLrDyhjRxfM2OIVxg>
+X-ME-Received: <xmr:1O5TYd6Lwj8qjS-5_aBXkgwCquOwGpWzQ20hBNnH5OyF-yew17aJKNpiakt6TVu19g0dzUA-iiVeZcoKPZxqYh8qr2kKvIoisayzbDILZDeUaXxqQvobUYMpTvEoco7Lo5a7QQ>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudekuddgkeegucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgv
     lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
     frrghtthgvrhhnpeduhfejfedvhffgfeehtefghfeiiefgfeehgfdvvdevfeegjeehjedv
-    gfejheeuieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    gfejheeuieenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhroh
     hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:0-5TYeGIFnZygPmWwMyngwGa_We-neaHzr801lPIc-PSd2sKxOletQ>
-    <xmx:0-5TYSUyQhAncF6G2cvFYG0ni1dMMrKHn5X_lAYaWolbeUUS7-2c9Q>
-    <xmx:0-5TYRM0PzaA4FUX8hDvLjTKQXaeh7gTLr3w43nPA3HfpvmuAK7W_w>
-    <xmx:0-5TYbUz5fj2sfLJWGUReUnNGmtyIY_tybAh8DF8ahh-lSg_sSritw>
+X-ME-Proxy: <xmx:1O5TYa1tCqlMKOPlAzTJJlW8rQKnTVlG8z0UPJoy6naaHjPYMSuXAA>
+    <xmx:1O5TYQHlubWCnoFvPde0BtsxnHue1zlK-227OP2g9tXrLgLO9uqy2g>
+    <xmx:1O5TYb8DuN_zmQbJSMWBRJdb3S6oWIhsBEV6l_g0uaBDTQgZj23mhg>
+    <xmx:1O5TYUGUw6XzFQioAuGJ2xJ4ld9I1SX2AvnK1LwnPKHg7oppfP_YLg>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 29 Sep 2021 00:42:58 -0400 (EDT)
+ 29 Sep 2021 00:42:59 -0400 (EDT)
 From:   Samuel Holland <samuel@sholland.org>
 To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
@@ -67,9 +67,9 @@ Cc:     Michael Turquette <mturquette@baylibre.com>,
         linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
         Samuel Holland <samuel@sholland.org>
-Subject: [PATCH 04/10] PM / devfreq: Add a recommended frequency helper
-Date:   Tue, 28 Sep 2021 23:42:48 -0500
-Message-Id: <20210929044254.38301-5-samuel@sholland.org>
+Subject: [PATCH 05/10] dt-bindings: clock: sunxi: Export CLK_DRAM for devfreq
+Date:   Tue, 28 Sep 2021 23:42:49 -0500
+Message-Id: <20210929044254.38301-6-samuel@sholland.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210929044254.38301-1-samuel@sholland.org>
 References: <20210929044254.38301-1-samuel@sholland.org>
@@ -79,71 +79,71 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This helper peforms the same function as devfreq_recommended_opp().
-However, it works on devices without OPPs by iterating over freq_table.
-Since freq_table is assumed to be sorted in ascending order, the
-algorithm is relatively simple.
+The MBUS node needs to reference the CLK_DRAM clock, as the MBUS
+hardware implements memory dynamic frequency scaling using this clock.
 
-Devices with OPPs should continue using devfreq_recommended_opp(), as
-that function respects disabled OPPs.
+Export this clock for SoCs which will be getting a devfreq driver.
 
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
- drivers/devfreq/devfreq.c | 27 +++++++++++++++++++++++++++
- include/linux/devfreq.h   |  2 ++
- 2 files changed, 29 insertions(+)
+ drivers/clk/sunxi-ng/ccu-sun50i-a64.h      | 2 --
+ drivers/clk/sunxi-ng/ccu-sun8i-h3.h        | 2 --
+ include/dt-bindings/clock/sun50i-a64-ccu.h | 2 +-
+ include/dt-bindings/clock/sun8i-h3-ccu.h   | 2 +-
+ 4 files changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-index f5d27f5285db..fd46792297ad 100644
---- a/drivers/devfreq/devfreq.c
-+++ b/drivers/devfreq/devfreq.c
-@@ -1984,6 +1984,33 @@ subsys_initcall(devfreq_init);
-  * OPP framework.
-  */
+diff --git a/drivers/clk/sunxi-ng/ccu-sun50i-a64.h b/drivers/clk/sunxi-ng/ccu-sun50i-a64.h
+index 54d1f96f4b68..a8c11c0b4e06 100644
+--- a/drivers/clk/sunxi-ng/ccu-sun50i-a64.h
++++ b/drivers/clk/sunxi-ng/ccu-sun50i-a64.h
+@@ -51,8 +51,6 @@
  
-+/**
-+ * devfreq_recommended_freq() - Helper function to get the proper frequency from
-+ *			        freq_table for the value given to target callback.
-+ * @devfreq:	The devfreq device.
-+ * @freq:	The frequency given to target function.
-+ * @flags:	Flags handed from devfreq framework.
-+ */
-+void devfreq_recommended_freq(struct devfreq *devfreq,
-+			      unsigned long *freq, u32 flags)
-+{
-+	const unsigned long *min = devfreq->profile->freq_table;
-+	const unsigned long *max = min + devfreq->profile->max_state - 1;
-+	const unsigned long *f;
-+
-+	if (flags & DEVFREQ_FLAG_LEAST_UPPER_BOUND) {
-+		/* Find the first item lower than freq, or else min. */
-+		for (f = max; f > min && *f > *freq; --f)
-+			;
-+	} else {
-+		/* Find the first item higher than freq, or else max. */
-+		for (f = min; f < max && *f < *freq; ++f)
-+			;
-+	}
-+	*freq = *f;
-+}
-+EXPORT_SYMBOL(devfreq_recommended_freq);
-+
- /**
-  * devfreq_recommended_opp() - Helper function to get proper OPP for the
-  *			     freq value given to target callback.
-diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-index 142474b4af96..4d324fea8a78 100644
---- a/include/linux/devfreq.h
-+++ b/include/linux/devfreq.h
-@@ -239,6 +239,8 @@ void devfreq_resume(void);
- int update_devfreq(struct devfreq *devfreq);
+ #define CLK_USB_OHCI1_12M		92
  
- /* Helper functions for devfreq user device driver with OPP. */
-+void devfreq_recommended_freq(struct devfreq *devfreq,
-+			      unsigned long *freq, u32 flags);
- struct dev_pm_opp *devfreq_recommended_opp(struct device *dev,
- 				unsigned long *freq, u32 flags);
- int devfreq_register_opp_notifier(struct device *dev,
+-#define CLK_DRAM			94
+-
+ /* All the DRAM gates are exported */
+ 
+ /* And the DSI and GPU module clock is exported */
+diff --git a/drivers/clk/sunxi-ng/ccu-sun8i-h3.h b/drivers/clk/sunxi-ng/ccu-sun8i-h3.h
+index d8c38447e11b..e13f3c4b57d0 100644
+--- a/drivers/clk/sunxi-ng/ccu-sun8i-h3.h
++++ b/drivers/clk/sunxi-ng/ccu-sun8i-h3.h
+@@ -42,8 +42,6 @@
+ 
+ /* The first bunch of module clocks are exported */
+ 
+-#define CLK_DRAM		96
+-
+ /* All the DRAM gates are exported */
+ 
+ /* Some more module clocks are exported */
+diff --git a/include/dt-bindings/clock/sun50i-a64-ccu.h b/include/dt-bindings/clock/sun50i-a64-ccu.h
+index 318eb15c414c..175892189e9d 100644
+--- a/include/dt-bindings/clock/sun50i-a64-ccu.h
++++ b/include/dt-bindings/clock/sun50i-a64-ccu.h
+@@ -113,7 +113,7 @@
+ #define CLK_USB_OHCI0		91
+ 
+ #define CLK_USB_OHCI1		93
+-
++#define CLK_DRAM		94
+ #define CLK_DRAM_VE		95
+ #define CLK_DRAM_CSI		96
+ #define CLK_DRAM_DEINTERLACE	97
+diff --git a/include/dt-bindings/clock/sun8i-h3-ccu.h b/include/dt-bindings/clock/sun8i-h3-ccu.h
+index 30d2d15373a2..5d4ada2c22e6 100644
+--- a/include/dt-bindings/clock/sun8i-h3-ccu.h
++++ b/include/dt-bindings/clock/sun8i-h3-ccu.h
+@@ -126,7 +126,7 @@
+ #define CLK_USB_OHCI1		93
+ #define CLK_USB_OHCI2		94
+ #define CLK_USB_OHCI3		95
+-
++#define CLK_DRAM		96
+ #define CLK_DRAM_VE		97
+ #define CLK_DRAM_CSI		98
+ #define CLK_DRAM_DEINTERLACE	99
 -- 
 2.31.1
 
