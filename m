@@ -2,109 +2,254 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5348A41C2C0
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Sep 2021 12:32:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4427B41C36A
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Sep 2021 13:25:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245409AbhI2KeG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Sep 2021 06:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44856 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245324AbhI2KeF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Sep 2021 06:34:05 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695B8C06174E
-        for <linux-pm@vger.kernel.org>; Wed, 29 Sep 2021 03:32:24 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id i23so3429857wrb.2
-        for <linux-pm@vger.kernel.org>; Wed, 29 Sep 2021 03:32:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=B8SE4Qs07Uj8vFUKjSYmRnx/7zYgPDRQFm1myf4KWAI=;
-        b=nf5GiGAKzev1xN1vrud4xGU9j2XxjHGOIiV+9E1hL+YkANLeMX2wCYudAl4Qm7okDJ
-         eIP25dvJdgjvtqmAVA1avQSm1pGX7C5xLJ/K1rjBNpLz1fbaDWncW+odv2O3CWAndCvV
-         sZM2zXpIcLhqoyEbqaSKbqW+E6ORSS6SfZSfh21rBqG8aT7/CbBkCBGAyk48gU+9Oac3
-         yGAWBvKQOgOKhNWz3yu4DKsIq0qlKjkhyxajrNnUKa7D2MrTkmayKnseyA5b43WREpYl
-         C2Xsu0vQuv/jNu3iFAQclqmOpLhbyw6s0YxBm/9KL1zf0Zu18sPMok1IupIlQ0U80bw1
-         NdMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=B8SE4Qs07Uj8vFUKjSYmRnx/7zYgPDRQFm1myf4KWAI=;
-        b=5M802C9NRU8cl75/SJPGJO4b6jN643m2RPyWDlLrlmxCNsoGXEii+A8uXeiKKQpPaY
-         /eG5dTiMBGcStDsJ2KEcNVCrzUFv5NmpTEwhkXwgVU6NhybvH0z0AQ6du7ifg0+dj+vS
-         Hj+bnY/jQOpAYShLnqXSxoDzXKjWlBS0ebGA44aAE8m0W7bBUt3Dcugp7g/Zg6mgf/Qi
-         W+Xf8kQ5IhsH3mp+TlGki9M81AbNdl2bsg7HZRMZxWnKsScWJtYx1glpNtaxrGm09Z2t
-         krJ1AMVhbzX4auGHkyzMBxdACY0yFMAseCjs08FR545A8vffYHaJJ48FEvy6tD9qM4mX
-         2PjA==
-X-Gm-Message-State: AOAM533arAtqn1tOSt8hsdc4dMg9rlfV4Eh+Gwjmgvs3WnO1L7KcOdpi
-        NnbfePb8r3WTXSe+fTrRLYa2NA==
-X-Google-Smtp-Source: ABdhPJy3+m/OgwLuTvKCUes1YQGjkq06sRokD0MvaXBPUIOtxk4VJvcEiUYehspd34ToAcvRq9X8ZA==
-X-Received: by 2002:a5d:5255:: with SMTP id k21mr5926487wrc.421.1632911542769;
-        Wed, 29 Sep 2021 03:32:22 -0700 (PDT)
-Received: from [192.168.0.46] ([82.142.20.44])
-        by smtp.googlemail.com with ESMTPSA id k17sm1857232wrq.7.2021.09.29.03.32.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Sep 2021 03:32:22 -0700 (PDT)
-Subject: Re: [PATCH v1 5/6] cpuidle: tegra: Enable compile testing
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20210912202907.28471-1-digetx@gmail.com>
- <20210912202907.28471-6-digetx@gmail.com>
- <8610c371-b670-8336-07b9-3ea673d3c5bc@gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <d86a8449-71ce-eb03-f93d-39dec10c034d@linaro.org>
-Date:   Wed, 29 Sep 2021 12:32:21 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S245048AbhI2L1S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Sep 2021 07:27:18 -0400
+Received: from mga07.intel.com ([134.134.136.100]:25410 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244528AbhI2L1S (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 29 Sep 2021 07:27:18 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10121"; a="288575338"
+X-IronPort-AV: E=Sophos;i="5.85,332,1624345200"; 
+   d="scan'208";a="288575338"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2021 04:25:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,332,1624345200"; 
+   d="scan'208";a="538779189"
+Received: from lkp-server02.sh.intel.com (HELO f7acefbbae94) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 29 Sep 2021 04:25:26 -0700
+Received: from kbuild by f7acefbbae94 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mVXiH-0002UW-MM; Wed, 29 Sep 2021 11:25:25 +0000
+Date:   Wed, 29 Sep 2021 19:24:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS WITH WARNING
+ 5264d800ffd532b515f32ad3a3439b5611438157
+Message-ID: <61544cf4.M13BfTeVAKOd9SWQ%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <8610c371-b670-8336-07b9-3ea673d3c5bc@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 27/09/2021 18:33, Dmitry Osipenko wrote:
-> 12.09.2021 23:29, Dmitry Osipenko пишет:
->> Enable compile testing of tegra-cpuidle driver.
->>
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->> ---
->>  drivers/cpuidle/Kconfig.arm | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/cpuidle/Kconfig.arm b/drivers/cpuidle/Kconfig.arm
->> index 334f83e56120..599286fc0b08 100644
->> --- a/drivers/cpuidle/Kconfig.arm
->> +++ b/drivers/cpuidle/Kconfig.arm
->> @@ -99,7 +99,7 @@ config ARM_MVEBU_V7_CPUIDLE
->>  
->>  config ARM_TEGRA_CPUIDLE
->>  	bool "CPU Idle Driver for NVIDIA Tegra SoCs"
->> -	depends on ARCH_TEGRA && !ARM64
->> +	depends on (ARCH_TEGRA || COMPILE_TEST) && !ARM64 && MMU
->>  	select ARCH_NEEDS_CPU_IDLE_COUPLED if SMP
->>  	select ARM_CPU_SUSPEND
->>  	help
->>
-> 
-> Daniel / Rafael, could you please ack this patch to allow Thierry to
-> take this whole series via the Tegra tree?
-> 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 5264d800ffd532b515f32ad3a3439b5611438157  Merge branch 'pm-pci' into linux-next
 
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Warning reports:
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+https://lore.kernel.org/linux-pm/202109291232.WuE3FUSQ-lkp@intel.com
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Warning in current branch:
+
+drivers/pci/pci-acpi.c:1125:12: warning: 'adev' is used uninitialized [-Wuninitialized]
+drivers/pci/pci-acpi.c:1127:12: warning: 'adev' is used uninitialized [-Wuninitialized]
+
+Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- ia64-defconfig
+|   `-- drivers-pci-pci-acpi.c:warning:adev-is-used-uninitialized
+`-- ia64-randconfig-r031-20210928
+    `-- drivers-pci-pci-acpi.c:warning:adev-is-used-uninitialized
+
+elapsed time: 739m
+
+configs tested: 180
+configs skipped: 3
+
+gcc tested configs:
+arm                              allyesconfig
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20210928
+i386                 randconfig-c001-20210929
+i386                 randconfig-c001-20210927
+arm                       imx_v6_v7_defconfig
+powerpc                 mpc832x_mds_defconfig
+powerpc                      bamboo_defconfig
+mips                    maltaup_xpa_defconfig
+arm                          ep93xx_defconfig
+powerpc                    amigaone_defconfig
+powerpc                     ksi8560_defconfig
+powerpc                    sam440ep_defconfig
+sh                          rsk7203_defconfig
+powerpc                       ebony_defconfig
+mips                            ar7_defconfig
+xtensa                    smp_lx200_defconfig
+arm                          iop32x_defconfig
+powerpc                 mpc8560_ads_defconfig
+m68k                            mac_defconfig
+powerpc                 mpc837x_mds_defconfig
+powerpc                 mpc85xx_cds_defconfig
+sh                         ap325rxa_defconfig
+powerpc                      mgcoge_defconfig
+riscv                            allyesconfig
+mips                       lemote2f_defconfig
+sh                        sh7757lcr_defconfig
+sh                               alldefconfig
+nios2                         10m50_defconfig
+powerpc                      arches_defconfig
+mips                     decstation_defconfig
+arm                         s5pv210_defconfig
+sh                  sh7785lcr_32bit_defconfig
+powerpc                     skiroot_defconfig
+sh                           se7722_defconfig
+arm                            pleb_defconfig
+arm                     am200epdkit_defconfig
+mips                      maltasmvp_defconfig
+powerpc                 mpc837x_rdb_defconfig
+nds32                            alldefconfig
+mips                           jazz_defconfig
+arm                       netwinder_defconfig
+arm                  colibri_pxa270_defconfig
+mips                      maltaaprp_defconfig
+arm                       imx_v4_v5_defconfig
+powerpc                     tqm8541_defconfig
+powerpc                 linkstation_defconfig
+sh                        sh7763rdp_defconfig
+arm                           sama7_defconfig
+powerpc                     tqm8560_defconfig
+nds32                               defconfig
+powerpc                      ep88xc_defconfig
+m68k                          atari_defconfig
+mips                           ip32_defconfig
+arc                        nsimosci_defconfig
+arm                         bcm2835_defconfig
+powerpc                     ep8248e_defconfig
+m68k                       bvme6000_defconfig
+sh                           se7721_defconfig
+mips                     loongson1c_defconfig
+mips                         mpc30x_defconfig
+riscv             nommu_k210_sdcard_defconfig
+arc                        nsim_700_defconfig
+arm                           tegra_defconfig
+riscv                            alldefconfig
+sparc64                             defconfig
+arm                            hisi_defconfig
+powerpc                     kilauea_defconfig
+arm                        keystone_defconfig
+arm                        mvebu_v7_defconfig
+mips                            gpr_defconfig
+mips                   sb1250_swarm_defconfig
+arm                        spear6xx_defconfig
+m68k                        mvme16x_defconfig
+sparc                       sparc32_defconfig
+arm                            mmp2_defconfig
+arm                         assabet_defconfig
+sh                           sh2007_defconfig
+arm                          ixp4xx_defconfig
+sh                          urquell_defconfig
+mips                           ip27_defconfig
+mips                      fuloong2e_defconfig
+sh                          r7780mp_defconfig
+m68k                        m5272c3_defconfig
+sh                             shx3_defconfig
+microblaze                      mmu_defconfig
+sh                           se7751_defconfig
+powerpc                     tqm5200_defconfig
+sh                          sdk7780_defconfig
+arm                             ezx_defconfig
+x86_64               randconfig-c001-20210928
+arm                  randconfig-c002-20210928
+x86_64               randconfig-c001-20210929
+arm                  randconfig-c002-20210929
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+nios2                            allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+xtensa                           allyesconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                             allyesconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a014-20210928
+x86_64               randconfig-a011-20210928
+x86_64               randconfig-a013-20210928
+x86_64               randconfig-a012-20210928
+x86_64               randconfig-a015-20210928
+x86_64               randconfig-a016-20210928
+i386                 randconfig-a014-20210928
+i386                 randconfig-a013-20210928
+i386                 randconfig-a016-20210928
+i386                 randconfig-a011-20210928
+i386                 randconfig-a015-20210928
+i386                 randconfig-a012-20210928
+arc                  randconfig-r043-20210928
+riscv                randconfig-r042-20210928
+s390                 randconfig-r044-20210928
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+clang tested configs:
+powerpc              randconfig-c003-20210927
+x86_64               randconfig-c007-20210927
+mips                 randconfig-c004-20210927
+arm                  randconfig-c002-20210927
+riscv                randconfig-c006-20210927
+s390                 randconfig-c005-20210927
+i386                 randconfig-c001-20210927
+x86_64               randconfig-a002-20210928
+x86_64               randconfig-a005-20210928
+x86_64               randconfig-a001-20210928
+x86_64               randconfig-a006-20210928
+x86_64               randconfig-a003-20210928
+x86_64               randconfig-a004-20210928
+i386                 randconfig-a001-20210928
+i386                 randconfig-a005-20210928
+i386                 randconfig-a002-20210928
+i386                 randconfig-a006-20210928
+i386                 randconfig-a004-20210928
+i386                 randconfig-a003-20210928
+hexagon              randconfig-r045-20210928
+hexagon              randconfig-r041-20210928
+hexagon              randconfig-r045-20210929
+riscv                randconfig-r042-20210929
+hexagon              randconfig-r041-20210929
+s390                 randconfig-r044-20210929
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
