@@ -2,151 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FA0B41D4B1
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Sep 2021 09:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2D4D41D4E8
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Sep 2021 09:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348808AbhI3Hsg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Sep 2021 03:48:36 -0400
-Received: from mga12.intel.com ([192.55.52.136]:12165 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348793AbhI3Hsg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 30 Sep 2021 03:48:36 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10122"; a="204611573"
-X-IronPort-AV: E=Sophos;i="5.85,335,1624345200"; 
-   d="scan'208";a="204611573"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2021 00:46:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,335,1624345200"; 
-   d="scan'208";a="708903292"
-Received: from lkp-server02.sh.intel.com (HELO f7acefbbae94) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 30 Sep 2021 00:46:49 -0700
-Received: from kbuild by f7acefbbae94 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mVqmG-00040n-VF; Thu, 30 Sep 2021 07:46:48 +0000
-Date:   Thu, 30 Sep 2021 15:45:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- fb49d3272e86255e33a132a455cd965e578f9a8e
-Message-ID: <61556b2f.g2wS+B5xyte8V6MS%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1348793AbhI3IAd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Sep 2021 04:00:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56800 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348701AbhI3IAd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Sep 2021 04:00:33 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177B7C06161C
+        for <linux-pm@vger.kernel.org>; Thu, 30 Sep 2021 00:58:50 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id s20so6442750ioa.4
+        for <linux-pm@vger.kernel.org>; Thu, 30 Sep 2021 00:58:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=kfDlQBVSqf07hAXhTAUKnH/OI2lCXLrpWHu75WLFvTA=;
+        b=BN2r9KCsiTHABZYxMKEi6uJAuuYtVovNQVmPfRFjDnJh/h8yIXJ7VBgBoKaslnuMqG
+         acPxORut2GBAr1COV7abybytzbbEvU+r2kixJgMXqSrU3LUVISpMScYlkfqe5PJjoRLm
+         DJ1ksOq/BE0gVpEK/zVpOlNxYdBM6a6YcrQCyHQHUSjUDmPxHqwOjuTnzz4WuPKVZGSa
+         HKlACQTBzxIcFkrn0s86GvAIpmxsOjFSms4SZZRJ+Wpxi11Q57Q/hTHgWetKNt27qLP2
+         WxzYj2Zw6GCWYfvpuG83uIYN9JleXmq05I/S2D3Ea5mlVzgOIlfA6MDU/uqqAK3jC8gO
+         Ap9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=kfDlQBVSqf07hAXhTAUKnH/OI2lCXLrpWHu75WLFvTA=;
+        b=hspVZs2wAN36K2uG7bQHP//TkJLBtW8B+i4XfRLcUk5tXzqA4tWrcjfywG5MX/AE73
+         gFMs9Cp+SwBYxUrIkwUblDq25RoLZvIFD58hvsH1+oZOvGgJzI6XoraNgn0R3+cq3xEJ
+         3nrQH1SezcgEZz0EkkPZTXMbizutFtVaIBx6zkJvWwuk0i+cIgFmJ470WIVHmrceLfpi
+         n1xcldzL4Rh1Jj9FOv9aldX9v/roMsk9C4M4NBJ6F+G/GjiX3upquRp1f7HMxRDfCImT
+         zswNeHAOI4loMHSpSMpgVUFY2mjB5khY1Lfsf2bUzAaUAkjIaEjBc/FDgD9NRp04tntD
+         SDDA==
+X-Gm-Message-State: AOAM530d1UyxDrHPGuboUgaXzHGCmV8lF7HO/C6bzIMlplwMKU9dzS85
+        hrFTBMwrWrRdSO0fHZlQaYceSW9mo9nBiAuUrtA=
+X-Google-Smtp-Source: ABdhPJzUEf+cnGPTlNNwvJEf8Aw0C9Lm01k8OE2dFnTU44GznXekNNzejHRrFmvggguh794n3Ku3nRYeZEflRNgSgfE=
+X-Received: by 2002:a05:6602:20d3:: with SMTP id 19mr3001038ioz.86.1632988729990;
+ Thu, 30 Sep 2021 00:58:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a6b:b281:0:0:0:0:0 with HTTP; Thu, 30 Sep 2021 00:58:49
+ -0700 (PDT)
+Reply-To: justinseydou@gmail.com
+From:   Justin Seydou <felixfernando.6500@gmail.com>
+Date:   Thu, 30 Sep 2021 08:58:49 +0100
+Message-ID: <CAA6riO1gS0nN9rH-mdPCwzBeD9Xx0Z5RBpi1SDFUXs75yDkoNQ@mail.gmail.com>
+Subject: =?UTF-8?B?15TXptei15QvUHJvcG9zYWw=?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: fb49d3272e86255e33a132a455cd965e578f9a8e  Merge branch 'acpica' into bleeding-edge
-
-elapsed time: 731m
-
-configs tested: 92
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20210929
-powerpc                    sam440ep_defconfig
-arm                         axm55xx_defconfig
-sh                           se7343_defconfig
-arm                         nhk8815_defconfig
-powerpc                 mpc836x_rdk_defconfig
-powerpc                 mpc8272_ads_defconfig
-mips                      malta_kvm_defconfig
-mips                       capcella_defconfig
-arm                     am200epdkit_defconfig
-x86_64               randconfig-c001-20210929
-arm                  randconfig-c002-20210929
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a002-20210929
-x86_64               randconfig-a005-20210929
-x86_64               randconfig-a001-20210929
-x86_64               randconfig-a006-20210929
-x86_64               randconfig-a003-20210929
-x86_64               randconfig-a004-20210929
-i386                 randconfig-a001-20210929
-i386                 randconfig-a005-20210929
-i386                 randconfig-a002-20210929
-i386                 randconfig-a006-20210929
-i386                 randconfig-a004-20210929
-i386                 randconfig-a003-20210929
-arc                  randconfig-r043-20210929
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a014-20210929
-x86_64               randconfig-a011-20210929
-x86_64               randconfig-a013-20210929
-x86_64               randconfig-a015-20210929
-x86_64               randconfig-a012-20210929
-x86_64               randconfig-a016-20210929
-i386                 randconfig-a014-20210929
-i386                 randconfig-a013-20210929
-i386                 randconfig-a016-20210929
-i386                 randconfig-a011-20210929
-i386                 randconfig-a015-20210929
-i386                 randconfig-a012-20210929
-hexagon              randconfig-r045-20210929
-riscv                randconfig-r042-20210929
-hexagon              randconfig-r041-20210929
-s390                 randconfig-r044-20210929
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+15fXkdeoINeZ16fXqCwNCg0K15DXoNeZINeb15XXqteRINeb15PXmSDXnNeU15XXk9eZ16Ig4oCL
+4oCL15zXmiDXotecINeU16bXoteUINei16HXp9eZ16og16nXmdepINec15kg15HXlCDXlNeZ15nX
+qteZINeo15XXpteUINec15jXpNecINeQ15nXqteaLg0K157Xk9eV15HXqCDXkdeX157Xmdep15nX
+nSDXnteZ15zXmdeV158g15PXldec16guINeU15nXlCDXodee15XXmiDXldeR15jXldeXINep15TX
+m9ecINeX15XXp9eZINeV15zXnNeQINeh15nXm9eV16DXmdedLg0K15DXoNeQINem15nXmdefINeQ
+16og15TXqtei16DXmdeZ16DXldeq15ouDQoNCtee15nXmden15wg16jXkNeX15nXky4NCg0KDQpE
+ZWFyIGZyaWVuZCwNCg0KSSB3cml0ZSB0byBpbmZvcm0geW91IGFib3V0IGEgYnVzaW5lc3MgcHJv
+cG9zYWwgSSBoYXZlIHdoaWNoIEkgd291bGQNCmxpa2UgdG8gaGFuZGxlIHdpdGggeW91Lg0KRmlm
+dHkgbWlsbGlvbiBkb2xsYXJzIGlzIGludm9sdmVkLiBCZSByZXN0IGFzc3VyZWQgdGhhdCBldmVy
+eXRoaW5nIGlzDQpsZWdhbCBhbmQgcmlzayBmcmVlLg0KS2luZGx5IGluZGljYXRlIHlvdXIgaW50
+ZXJlc3QuDQoNCk1pY2hhZWwgUmFjaGlkLg0K
