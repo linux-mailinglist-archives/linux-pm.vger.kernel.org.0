@@ -2,139 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E89E41D8EC
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Sep 2021 13:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA61641D902
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Sep 2021 13:42:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350453AbhI3LjX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Sep 2021 07:39:23 -0400
-Received: from wnew4-smtp.messagingengine.com ([64.147.123.18]:54573 "EHLO
-        wnew4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1350447AbhI3LjW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Sep 2021 07:39:22 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id 3CC412B00428;
-        Thu, 30 Sep 2021 07:37:39 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Thu, 30 Sep 2021 07:37:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        to:cc:references:from:subject:message-id:date:mime-version
-        :in-reply-to:content-type:content-transfer-encoding; s=fm3; bh=F
-        TKJqnUNdam3eXYcxKVwRSUv7R/MUB8dw+EeZb2yffI=; b=lZrejGtO9mHZIlKQR
-        8OC8F82Zjqs37lcpH1jGd9ppXkzv5qH9en10GS3OWsYPEytqOmoa3+b1IEDQ1xRq
-        /SsUwEYZ4g6rVlchuybxJK2dXv80WZA9ethatvW9yo1RBpaFbA82CIhKYbRHpHTV
-        AXOvxD/polWDrTn7cDHM0i4qEhbsOU7NPfsQtmR9wKnIlMP7Ym5O95+kyrRsWjc8
-        o6Y8+h0rfW4C9WHChuVMciBxQAgwsTb9PEFRcmtGYmFJ/Gg2GovD4osiLHie0OIR
-        pRb6cUTnpk3dqnHVyxP5kVhCP32pcwVf9FhXwLRcixvNusvomdsCwuCHE9DmPaDo
-        VRo5Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; bh=FTKJqnUNdam3eXYcxKVwRSUv7R/MUB8dw+EeZb2yf
-        fI=; b=Cp3BiCJd9Si8nSF+L96RumPEjY5qCVwvtwq9CdPm9WRds+9qtTI0ERMGZ
-        j1Culz447InBI6CP05DY3qoF+nElBjiUtP6tSo0YR5sqPbPzICcRasc9KQLkLQuk
-        XRxnV+N6rjjnFTq+oXQFzgAjGNrqAsoOTOMb3ttJedKFv29o65Nl8pKH59Hlh8bQ
-        yDSyXAhSwTLTVjUvkZQPtUhsoQgsGfpbyljfsrBCGWRfKKJTz1BAJqoAW5UGW8/S
-        DawHkwxq1B1Dnuj/kgAeCpPkej0Zpz3XahFJI31AOKL8ZWfqGIJhrsvV6zuEncPq
-        GtuYSEp9tsTmXGcVYksTtgkAOONKQ==
-X-ME-Sender: <xms:gqFVYeWpq4we2qYbs17TlY2CXJLq4qISoSzBnNAhj0pFehaSkHudTQ>
-    <xme:gqFVYakwzZznoCRiHCDpykZwBEo8OF3TAUedUCAw02l_k5ZkWoy5ZAjcH_is6kRHC
-    8JGlDClJLNr0uDV7A>
-X-ME-Received: <xmr:gqFVYSbmQX52drvwkxfnuI-Z2VSyWQdcLx_OIhP6vfNb5pqBADVtzWLJ_BWPU_9Kv0OedUdyLrbQ2phZTx-OSpgN7eeyh6SzIBWLNe2qFYu1cDFFN3Bu-JbPBg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudekgedggeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepvfhfhffukffffgggjggtgfesthekredttdefjeenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepvddttdejieduudfgffevteekffegffeguddtgfefkeduvedukeff
-    hedtfeevuedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:gqFVYVWOwFqu1wlzzxWfBkncu9fJlmRlw91zm2PCpwbzNtpVIpMW7Q>
-    <xmx:gqFVYYm8fMw4_WQz9zCnx8EnI-dRw5ABRhk6HO1LhXrUTQ4zrMHxaw>
-    <xmx:gqFVYaf4sT9c4yl6PXsufCPQ9K-VMjJWqsmJzUuFGOTtNTURDVOh7A>
-    <xmx:gqFVYT9l8kaFitT5Sm2I2qjMAAaGbZMRwyrVJKDjPWNVBpl66L15p9wURJQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 30 Sep 2021 07:37:37 -0400 (EDT)
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-References: <20210929044254.38301-1-samuel@sholland.org>
- <CGME20210929044301epcas1p4d69083b46ca38d610981db6f01cfe9e4@epcas1p4.samsung.com>
- <20210929044254.38301-3-samuel@sholland.org>
- <114afa7e-6218-6b1f-f87e-84690f10029c@samsung.com>
-From:   Samuel Holland <samuel@sholland.org>
-Subject: Re: [PATCH 02/10] PM / devfreq: Do not require devices to have OPPs
-Message-ID: <d0a2c36b-4019-2f52-13f0-be76db5a48ec@sholland.org>
-Date:   Thu, 30 Sep 2021 06:37:37 -0500
-User-Agent: Mozilla/5.0 (X11; Linux ppc64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.2
+        id S1350523AbhI3Ln7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Sep 2021 07:43:59 -0400
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:34782
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1350512AbhI3Ln6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Sep 2021 07:43:58 -0400
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com [209.85.167.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 091C5401A9
+        for <linux-pm@vger.kernel.org>; Thu, 30 Sep 2021 11:42:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1633002134;
+        bh=LiA1TOvesLNd2L6kNyPnkczuXXBnqvVYAhAbqt4uCJY=;
+        h=Subject:To:References:From:Message-ID:Date:MIME-Version:
+         In-Reply-To:Content-Type;
+        b=HoEd+3EpfTM9rFOJhb3CL8e0RESGHAZG1T3tlBjoGyNy784DO2D80Ekk7vcencQiO
+         MDCdfi0PQHnM5uc13+9OVcMHZYbxiASgRdMpMfzEOAqOgz69ifVgYh9wj2s8HMXi3B
+         mhmTR5SpEEalcBstsUT4Q1tUhNfdLVscQ7ix1T92hHLvJhNG8h5w/SEvr5qdlNp0/O
+         UypldF5L7y91uZdpVZw5u/8+OHZeGUhOGwb47dLDRuI7vFxQ+Fb5dJ+25889iIug2M
+         8fbzqc2UpgvNHb3QW4gCoZzMMp4RBCSUJTGXrukuEZuQpSpHTDBWvhwPlxzrtXbZVE
+         +8hihoD2aZRYQ==
+Received: by mail-lf1-f72.google.com with SMTP id z9-20020a0565120c0900b003fce36c1f74so5350276lfu.9
+        for <linux-pm@vger.kernel.org>; Thu, 30 Sep 2021 04:42:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=LiA1TOvesLNd2L6kNyPnkczuXXBnqvVYAhAbqt4uCJY=;
+        b=CQUoVpdLjzszsw8EJY+Q3dZXP9hmLyHBQKYpBXPf1gclA+uAjgUHGBOGjzVHXLUWSl
+         ru/P4HrFQNIp8fAr50yYAjPtkpnVDj+mC19ANHn3quuEJnetV/VSJQNk2lUZYhrSwpyb
+         ordqqnwiLrAy8+qxidx4uCvocFV2NMRQlJrxKNACZMpyysCeq56aS+sm0+ltAnx5Btay
+         9mQYiL7YDE/NVpMBPtttR1DmeNnl8zjSEPaLbPHKYibTjU8+98pvDZJnOd4oMv6VaWsP
+         TTraQVmnE9W2rEKHVTmeeOzoINfYZSZEGQaRv8Gyg1zqpV3bQbFxHEm9a6yV9hy5PmKL
+         rQsw==
+X-Gm-Message-State: AOAM531ojaNvdceb8FGVHfpNjw0SwahMmy77+lSTubXHRsYzFbJuEN4m
+        NU4I4R1+qsNWcJOZbtQKx35wc0GWnt3fgLLIV5lcn/CREfqDLChsakbvmR8IlekXkAHBlDNsBIV
+        yp4ns34OiGATTjgelc+NQ0YoJbSmgLgLst8Yv
+X-Received: by 2002:a05:651c:12c6:: with SMTP id 6mr5292188lje.256.1633002133392;
+        Thu, 30 Sep 2021 04:42:13 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxJ9VPROzXrnhFDEqZM3+5XH+VvEwc4uc1+UgeDBBsaFfWTg0qHNO338pvCpvOv2QinrtD8cA==
+X-Received: by 2002:a05:651c:12c6:: with SMTP id 6mr5292168lje.256.1633002133221;
+        Thu, 30 Sep 2021 04:42:13 -0700 (PDT)
+Received: from [192.168.0.197] ([193.178.187.25])
+        by smtp.gmail.com with ESMTPSA id z3sm379628lfe.50.2021.09.30.04.42.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Sep 2021 04:42:12 -0700 (PDT)
+Subject: Re: [PATCH v2 2/2] power: supply: max17042_battery: fix typo in
+ MAX17042_IAvg_empty
+To:     Henrik Grimler <henrik@grimler.se>, sre@kernel.org,
+        m.szyprowski@samsung.com, sebastian.krzyszkowiak@puri.sm,
+        hdegoede@redhat.com, linux-pm@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <20210929181418.4221-1-henrik@grimler.se>
+ <20210929181418.4221-2-henrik@grimler.se>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Message-ID: <7c8c781a-a80f-a9d2-2959-254da4844b21@canonical.com>
+Date:   Thu, 30 Sep 2021 13:42:11 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <114afa7e-6218-6b1f-f87e-84690f10029c@samsung.com>
+In-Reply-To: <20210929181418.4221-2-henrik@grimler.se>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 9/29/21 11:19 PM, Chanwoo Choi wrote:
-> Hi Samuel,
+On 29/09/2021 20:14, Henrik Grimler wrote:
+> Datasheet gives the name IAvg_empty, not LAvg_empty.
 > 
+> Signed-off-by: Henrik Grimler <henrik@grimler.se>
+> ---
+>  drivers/power/supply/max17042_battery.c | 2 +-
+>  include/linux/power/max17042_battery.h  | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> On 9/29/21 1:42 PM, Samuel Holland wrote:
->> Since commit ea572f816032 ("PM / devfreq: Change return type of
->> devfreq_set_freq_table()"), all devfreq devices are required to have a
->> valid freq_table. If freq_table is not provided by the driver, it will
->> be filled in by set_freq_table() from the OPPs; if that fails,
->> devfreq_add_device() will return an error.
->>
->> However, since commit ab8f58ad72c4 ("PM / devfreq: Set min/max_freq when
->> adding the devfreq device"), devfreq devices are _also_ required to have
->> an OPP table, even if they provide freq_table. devfreq_add_device()
->> requires dev_pm_opp_find_freq_ceil() and dev_pm_opp_find_freq_floor() to
->> return successfully, specifically to initialize scaling_min/max_freq.
->>
->> Not all drivers need an OPP table. For example, a driver where all
->> frequencies are determined dynamically could work by filling out only
->> freq_table. But with the current code it must call dev_pm_opp_add() on
->> every freq_table entry to probe successfully.
-> 
-> As you commented, if device has no opp table, it should call dev_pm_opp_add().
-> The devfreq have to use OPP for controlling the frequency/regulator.
-> 
-> Actually, I want that all devfreq driver uses the OPP as default way.
 
-The current code/documentation implies that an OPP table is intended to
-be optional. For example:
 
- * struct devfreq - Device devfreq structure
-...
- * @opp_table:  Reference to OPP table of dev.parent, if one exists.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-So this should be updated if an OPP table is no longer optional.
 
-> Are there any reason why don't use the OPP table?
-
-dev_pm_opp_add() takes a voltage, and assumes the existence of some
-voltage regulator, but there is none involved here. The only way to have
-an OPP table without regulators is to use a static table in the
-devicetree. But that also doesn't make much sense, because the OPPs
-aren't actually customizable; they are integer dividers from a fixed
-base clock. And adding a fixed OPP table to each board would be a lot of
-work to replace a trivial loop in the driver. So it seems to be the
-wrong abstraction.
-
-Using an OPP table adds extra complexity (memory allocations, error
-cases), just to duplicate the list of frequencies that already has to
-exist in freq_table. And the driver works fine without any of that.
-
-Regards,
-Samuel
+Best regards,
+Krzysztof
