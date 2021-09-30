@@ -2,150 +2,167 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBDE541DF41
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Sep 2021 18:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45F7441E404
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Oct 2021 00:38:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352201AbhI3QmM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Sep 2021 12:42:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39208 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352187AbhI3QmI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Sep 2021 12:42:08 -0400
-Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16BEAC06176D
-        for <linux-pm@vger.kernel.org>; Thu, 30 Sep 2021 09:40:26 -0700 (PDT)
-Received: by mail-vs1-xe41.google.com with SMTP id 188so8203558vsv.0
-        for <linux-pm@vger.kernel.org>; Thu, 30 Sep 2021 09:40:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/T9drlD1s9vO6lHEMs4LJzmDo2MKXEHBXvFYaWoQWpk=;
-        b=klL1UpLzD7wQhT+u4Gn3f98ZGPXdICD/gL8aAAN3e+d2ures71JEqMSnQmwTk2Wgi/
-         WbiQz8V3Pd9DQnsXUXVmKMZTYSeJoI4aTZi3A3rC2I87tBGp6VzNWBHFGYupGX9dcC8J
-         ct2Z0RY+GAagSAGNV9wYqTgtAvu+9PiewwPIWRaqjwm/gFpSgZmVUgbq3SkcynleIpCD
-         u98CTx+bDvOYjxGAiym43LtwMxcfKO+QE9Rm5HJY6vNmINq79x2j9GM/HszD8nrib3Hk
-         P3Q8ESrESAbxxKnC7KMyUcaPs0A1zKoaDMaObd6P0VQIJ8jJrV10hlpQA3OhybL7pEug
-         kRhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/T9drlD1s9vO6lHEMs4LJzmDo2MKXEHBXvFYaWoQWpk=;
-        b=ffICSxtWh85N/2A2uyyrdxKdefeJNJEu1hOg988hSpazx5Ezv9zs9WAba5EfPx6XYT
-         uuyrZksSSXUr6SHcYjDAcB2W8gKMBe1IBo0n1RpXONZGYMgYm6Dsqvtht9+YC+SbNvDo
-         BfRf2M+QCz/j9A+32L6SOcz/iCyIdfmO5n1fLk5rbLRAq5zictdpJd05x3QggVcUdoHy
-         esMtJ+7GIwR7RUM138drb6vyFQQlj6Csdrv/wEloPosqfSY3rad1pyWad5ANr4zAjA7s
-         dV4+bM7mjRFqhWO+ZU+aTVb+zbRw8Sl8HnuMMTjYK3sKVqDLB39UpjibbPvCnPNn5oj5
-         V3Xg==
-X-Gm-Message-State: AOAM5301iXhL0Ww/JNJIw8G1RKbb1MUgOT8VMMAN2CyFrqSB3FmbpUbJ
-        Df9U3blZXYj9Dzua/0jD9e8XauWwWuLzVmp5nOs=
-X-Google-Smtp-Source: ABdhPJyxr33xWZ+IWjzPH6BWLVx+LS1XFdQsH+Wd5qTKdzTcC5YzVlOcqQyIsNFnPLybj9m0QYGO//SHZ5Mm0RLXYfg=
-X-Received: by 2002:a05:6102:192:: with SMTP id r18mr303425vsq.0.1633020025172;
- Thu, 30 Sep 2021 09:40:25 -0700 (PDT)
+        id S1343652AbhI3Wjl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Sep 2021 18:39:41 -0400
+Received: from mga03.intel.com ([134.134.136.65]:21549 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229759AbhI3Wjl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 30 Sep 2021 18:39:41 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10123"; a="225381543"
+X-IronPort-AV: E=Sophos;i="5.85,336,1624345200"; 
+   d="scan'208";a="225381543"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2021 15:37:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,336,1624345200"; 
+   d="scan'208";a="480142041"
+Received: from lkp-server01.sh.intel.com (HELO 72c3bd3cf19c) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 30 Sep 2021 15:37:56 -0700
+Received: from kbuild by 72c3bd3cf19c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mW4gd-0000Uy-JY; Thu, 30 Sep 2021 22:37:55 +0000
+Date:   Fri, 01 Oct 2021 06:36:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 28f08c3dc673d5c3f83fda3af11eab85d82842af
+Message-ID: <61563c0b./8hPbqmWX5n06sF1%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Received: by 2002:a59:ab2e:0:b0:22d:7f44:603a with HTTP; Thu, 30 Sep 2021
- 09:40:24 -0700 (PDT)
-Reply-To: irenezakari24@gmail.com
-From:   Irene zakari <irenezakari88@gmail.com>
-Date:   Thu, 30 Sep 2021 09:40:24 -0700
-Message-ID: <CAFT8PFFGaFTfLE3SCRKPmvOGX18=YvW0WYHX7S8c7zgtYtFeaQ@mail.gmail.com>
-Subject: PLEASE I NEED YOUR HELP
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello   ..
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 28f08c3dc673d5c3f83fda3af11eab85d82842af  Merge branch 'acpica' into bleeding-edge
 
-How do you do over there? I hope you are doing well?
+elapsed time: 739m
 
-My name is Irene. (24 years), i am single, from Gambia, the only child
-of late Eng. Bernard Bakary Zakaria. the Director of Bajam Enterprise
-(Building Construction Company in The Gambia) also the CEO of Bernard
-Import and Export (GAMBIA).
+configs tested: 106
+configs skipped: 4
 
-As a matter of fact my mother died when i was barely 4 years old
-according to my late father and because of the type of love he had for
-my mother made him to remain UN-married till he left the ghost..
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-So after the death of my father as a result of assassinate, his brother (My
-Uncle) who is the purchasing and marketing sale manager of my late
-fathers company named (Mr. James Tokunbo Oriade Zakaria) wanted to
-convert all the properties and resources of my late father into his
-which i quarreled with him and it made him to lay his anger on me to
-the extent of hiring an assassins to kill me but to God be the glory i
-succeeded by making a way to Burkina faso for my dear life.
-Honestly i do live a fearful life even here in Burkina faso because of
-those Assassins coming after me .
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20210930
+mips                           ip27_defconfig
+arm                       cns3420vb_defconfig
+arm                        realview_defconfig
+sparc                       sparc32_defconfig
+sh                              ul2_defconfig
+arm                           stm32_defconfig
+m68k                          sun3x_defconfig
+powerpc                         wii_defconfig
+powerpc                 canyonlands_defconfig
+powerpc                 mpc837x_mds_defconfig
+m68k                           sun3_defconfig
+ia64                             alldefconfig
+powerpc                 mpc8315_rdb_defconfig
+arm                      footbridge_defconfig
+powerpc                     sequoia_defconfig
+powerpc                     taishan_defconfig
+mips                          ath79_defconfig
+sh                          lboxre2_defconfig
+arm                  randconfig-c002-20210930
+x86_64               randconfig-c001-20210930
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a003-20210930
+i386                 randconfig-a001-20210930
+i386                 randconfig-a004-20210930
+i386                 randconfig-a002-20210930
+i386                 randconfig-a006-20210930
+i386                 randconfig-a005-20210930
+x86_64               randconfig-a004-20210930
+x86_64               randconfig-a001-20210930
+x86_64               randconfig-a002-20210930
+x86_64               randconfig-a005-20210930
+x86_64               randconfig-a006-20210930
+x86_64               randconfig-a003-20210930
+arc                  randconfig-r043-20210930
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
 
-I would want to live and study in your country for my better future.
-because my father same blood brother wanted to force me into undecided
-marriage, just for me to leave my father home and went and live with
-another man I never know as he want to occupied all my father home
-and maybe to sold it as my father no longer alive, I'm the only child
-daughter my father born, '' but he don't know that i am not
-interesting in any of my father properties or early marriage for now,
-because i still have future to think about and to focus on my studies
-first as i was doing my first year in the University before the death
-of my father.
+clang tested configs:
+i386                 randconfig-c001-20210930
+arm                  randconfig-c002-20210930
+powerpc              randconfig-c003-20210930
+mips                 randconfig-c004-20210930
+s390                 randconfig-c005-20210930
+riscv                randconfig-c006-20210930
+x86_64               randconfig-c007-20210930
+x86_64               randconfig-a015-20210930
+x86_64               randconfig-a011-20210930
+x86_64               randconfig-a012-20210930
+x86_64               randconfig-a013-20210930
+x86_64               randconfig-a016-20210930
+x86_64               randconfig-a014-20210930
+i386                 randconfig-a014-20210930
+i386                 randconfig-a013-20210930
+i386                 randconfig-a011-20210930
+i386                 randconfig-a015-20210930
+i386                 randconfig-a016-20210930
+i386                 randconfig-a012-20210930
+riscv                randconfig-r042-20210930
+hexagon              randconfig-r041-20210930
+s390                 randconfig-r044-20210930
+hexagon              randconfig-r045-20210930
 
-Actually what I want to discuss with you is about my personal issue
-concern funds my late father deposited in a bank outside my country,
-worth $4.5 million united state dollars. i need your assistance to
-receive and invest this funds in your country.
-
-Please help me, I am sincere to you and I want to be member of your
-family as well if you wouldn't mind to accept me and lead me to better
-future in your country.
-
-All the documents the bank issue to my father during time of deposit
-is with me now.
-I already notify the bank on phone about the death of my father and
-they are surprise for the news and accept that my father is their good
-customer.
-I will be happy if this money can be invested in any business of your
-choice and it will be under your control till i finished my education,
-also I'm assuring you good relationship and I am ready to discuss the
-amount of money to give you from this money for your help.
-
-Therefore, I shall give you the bank contact and other necessary
-information in my next email if you will only promise me that you will
-not/never betray and disclosed this matter to anybody, because, this
-money is the only hope i have for survival on earth since I have lost
-my parents.
-
-Moreover I have the FUND PLACEMENT CERTIFICATE and the DEATH
-CERTIFICATE here with me, but before I give you further information, i
-will like to know your full data
-
-1. Full Name: ........................
-2. Address: ..................
-3. Nationality: ........... Sex................
-4. Age:........... Date of Birth:................
-5. Occupation:...................
-.....
-6. Phone: ........... Fax:.........................
-7. State of Origin: .......Country:..............
-8. Occupation:...................
-................
-9. Marital status........... E-mail address's: ............
-10. Scan copy of your ID card or Driving License/Photo:............
-DECLARATION:
-
-so that i will be fully sure that i am not trusting the wrong person.
-and it will also give me the mind to send you the bank contact for you
-to communicate with them for more verification about this money. and
-to know you more better.
-
-Meanwhile, you can reach me through my pastor,his name is Pastor Paul
-any time you call, tell him that you want to speak with me because
-right now i am living in the church here in Burkina faso and i don't
-want to stay here any longer,
-send for me to speak with you his phone number is this(+226 75213646)
-
-I will stop here and i will be waiting for your reply and feel free
-ask any thing you want to know about me.
-Please help me, I would be highly appreciated
-Have nice day.
-From Irene
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
