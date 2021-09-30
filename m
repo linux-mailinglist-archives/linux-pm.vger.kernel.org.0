@@ -2,149 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FB5D41D812
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Sep 2021 12:50:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A0F841D85A
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Sep 2021 13:06:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350095AbhI3KwH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Sep 2021 06:52:07 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:60148 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350127AbhI3KwG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Sep 2021 06:52:06 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 111741F44AD2
-Received: by earth.universe (Postfix, from userid 1000)
-        id 9E77A3C0CA8; Thu, 30 Sep 2021 12:50:19 +0200 (CEST)
-Date:   Thu, 30 Sep 2021 12:50:19 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>, SeongJae Park <sj@kernel.org>
-Subject: Re: [PATCH] power: supply: core: Move psy_has_property() to fix build
-Message-ID: <20210930105019.h7jhfjr5hkmzhh6e@earth.universe>
-References: <7b35a74f2c2ad19c8dc1ca60c59e48a14288677f.1632830348.git.geert+renesas@glider.be>
- <YVSOCZZiSjMX5Ul7@google.com>
+        id S1350317AbhI3LHR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Sep 2021 07:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43798 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350306AbhI3LHH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Sep 2021 07:07:07 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DE8C06176A;
+        Thu, 30 Sep 2021 04:05:25 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id b26so20760344edt.0;
+        Thu, 30 Sep 2021 04:05:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sSpzj10NGw5X39ToW4lUkS6X+YqxdosdM3EBUsNMyqE=;
+        b=LPlqikM6FebZsUtylYpczSVr+YHzTDbcal/pi6IWk07MZKbRU9C5YLjIxL/17xcGnV
+         NzmQ50PXQiIENZtzaL7KooG4GeCMHaujZLuu1LLbmtnZXZNqIcBS8xUtdH33GpRBAtHH
+         Vn6nzrq0HstuoBkQO6BaxWTkBCsEvxbtgmU+Ul0S+mI9OTSJiw9fotL81VHgkbHgUgnF
+         2mK9CGS8fgQD9kM7voI3LWd0Z+iiW+QgDmq1SlKjuqYriq4yloLW2EkfvenucR3YJle6
+         YtLyjQAO8h5BedNWD2vnHyLzkv6nKNbKup74M7/INJDA54wedVNiJsBKgmq8SJzpglBI
+         SdpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sSpzj10NGw5X39ToW4lUkS6X+YqxdosdM3EBUsNMyqE=;
+        b=PRgfZE2GVyyhTnxJ8Ipx1vtI2Ei26UcOILZ9BOuS2NcA3USVxUEFfUs2xQcOZecYLQ
+         P7FlOSoH6HrQDYxRvnuD/eUxy6sPHnYvSpWl42mPA9iZJKH/25OHz3uhLiVXL/smVPwD
+         zAixL9Y7vVjqT0K3usT+RqO4xEEbvyHiTj+H/gyHgxuf+5PMwTocXilKAUXFESwNv1wP
+         RNHP5k1JIvtwL3J7r3oicSE6OIWiT5NgZl1AhzhvkWWxgQJmny6MC0W/cKbnBjG+3XqG
+         lDYt4pb7HBJIHXicWg2ihu/k9sObSzz6omEaHhZD8s2dEEJhL5bz5BlsLCasPFUBFXDI
+         mdiQ==
+X-Gm-Message-State: AOAM530Fj4sZPPun6ysUBti5U6PHpoh/L4rG/Vwr1Y3aVnsUux581GFi
+        Zaw0EBEpZ+SApv+fA1+ftsI=
+X-Google-Smtp-Source: ABdhPJz8KFn48cKcsMX/5FRkZiP6w85uVojtvApZQzdqqfzyK4K6D+Wg1oWR9meEf8ZSCfh08OwqUQ==
+X-Received: by 2002:a50:d989:: with SMTP id w9mr6590475edj.99.1632999923922;
+        Thu, 30 Sep 2021 04:05:23 -0700 (PDT)
+Received: from debian.home (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id i2sm1305158edv.7.2021.09.30.04.05.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Sep 2021 04:05:23 -0700 (PDT)
+From:   Johan Jonker <jbx6244@gmail.com>
+To:     heiko@sntech.de
+Cc:     robh+dt@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        amitk@kernel.org, p.zabel@pengutronix.de, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/4] dt-bindings: thermal: allow more resets for tsadc node in rockchip-thermal.yaml
+Date:   Thu, 30 Sep 2021 13:05:14 +0200
+Message-Id: <20210930110517.14323-1-jbx6244@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zfv6tookm75yhkib"
-Content-Disposition: inline
-In-Reply-To: <YVSOCZZiSjMX5Ul7@google.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+The tsadc node in rk356x.dtsi has more resets defined then currently
+allowed by rockchip-thermal.yaml, so fix that in the documentation.
+The driver now uses the devm_reset_control_array_get() function,
+so reset-names is no longer required, but keep it for legacy reasons.
 
---zfv6tookm75yhkib
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+---
 
-Hi,
+Changed V2:
+  Remove deprecated
+---
+ .../devicetree/bindings/thermal/rockchip-thermal.yaml      | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-On Wed, Sep 29, 2021 at 09:02:17AM -0700, Matthias Kaehlcke wrote:
-> On Tue, Sep 28, 2021 at 02:00:19PM +0200, Geert Uytterhoeven wrote:
-> > If CONFIG_THERMAL=3Dn:
-> >=20
-> >     drivers/power/supply/power_supply_core.c: In function =E2=80=98__po=
-wer_supply_register=E2=80=99:
-> >     drivers/power/supply/power_supply_core.c:1137:6: error: implicit de=
-claration of function =E2=80=98psy_has_property=E2=80=99 [-Werror=3Dimplici=
-t-function-declaration]
-> >      1137 |  if (psy_has_property(desc, POWER_SUPPLY_PROP_USB_TYPE) &&
-> > 	  |      ^~~~~~~~~~~~~~~~
-> >=20
-> > Fix this by moving psy_has_property() outside the section protected by
-> > CONFIG_THERMAL.
-> >=20
-> > Fixes: 9ba533eb99bb2acf ("power: supply: core: Add psy_has_property()")
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > ---
+diff --git a/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml b/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml
+index b96ea277b..3c074706e 100644
+--- a/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml
++++ b/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml
+@@ -37,11 +37,15 @@ properties:
+       - const: apb_pclk
+ 
+   resets:
+-    maxItems: 1
++    minItems: 1
++    maxItems: 3
+ 
+   reset-names:
++    minItems: 1
+     items:
+       - const: tsadc-apb
++      - const: tsadc
++      - const: tsadc-phy
+ 
+   "#thermal-sensor-cells":
+     const: 1
+@@ -71,7 +75,6 @@ required:
+   - clocks
+   - clock-names
+   - resets
+-  - reset-names
+   - "#thermal-sensor-cells"
+ 
+ additionalProperties: false
+-- 
+2.20.1
 
-Thanks, queued.
-
--- Sebastian
-
-> >  drivers/power/supply/power_supply_core.c | 32 ++++++++++++------------
-> >  1 file changed, 16 insertions(+), 16 deletions(-)
-> >=20
-> > diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/s=
-upply/power_supply_core.c
-> > index 75575ea45f21ddc7..fc12a4f407f431a6 100644
-> > --- a/drivers/power/supply/power_supply_core.c
-> > +++ b/drivers/power/supply/power_supply_core.c
-> > @@ -951,6 +951,22 @@ void power_supply_unreg_notifier(struct notifier_b=
-lock *nb)
-> >  }
-> >  EXPORT_SYMBOL_GPL(power_supply_unreg_notifier);
-> > =20
-> > +static bool psy_has_property(const struct power_supply_desc *psy_desc,
-> > +			     enum power_supply_property psp)
-> > +{
-> > +	bool found =3D false;
-> > +	int i;
-> > +
-> > +	for (i =3D 0; i < psy_desc->num_properties; i++) {
-> > +		if (psy_desc->properties[i] =3D=3D psp) {
-> > +			found =3D true;
-> > +			break;
-> > +		}
-> > +	}
-> > +
-> > +	return found;
-> > +}
-> > +
-> >  #ifdef CONFIG_THERMAL
-> >  static int power_supply_read_temp(struct thermal_zone_device *tzd,
-> >  		int *temp)
-> > @@ -975,22 +991,6 @@ static struct thermal_zone_device_ops psy_tzd_ops =
-=3D {
-> >  	.get_temp =3D power_supply_read_temp,
-> >  };
-> > =20
-> > -static bool psy_has_property(const struct power_supply_desc *psy_desc,
-> > -			     enum power_supply_property psp)
-> > -{
-> > -	bool found =3D false;
-> > -	int i;
-> > -
-> > -	for (i =3D 0; i < psy_desc->num_properties; i++) {
-> > -		if (psy_desc->properties[i] =3D=3D psp) {
-> > -			found =3D true;
-> > -			break;
-> > -		}
-> > -	}
-> > -
-> > -	return found;
-> > -}
-> > -
-> >  static int psy_register_thermal(struct power_supply *psy)
-> >  {
-> >  	int ret;
->=20
-> Thanks for the fix!
->=20
-> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-
---zfv6tookm75yhkib
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmFVlmQACgkQ2O7X88g7
-+pp5+Q/7BHTkk5ug8j0lEOXPCT3yz+z8fDcNqfQOiwpw8eqB4sF+xTynMJ9jp9gF
-dhkrIBKaaOOlkz79W6s/YZ8lzZv913+cr8cfsBE8M2p/4d9zTqZaDv7D6ImrF3CY
-Ru+/uWNQqULuzn2+Yjnf3IdEyTw5BIidXT+ae7rY2Y5i0a+bHpIpMQ20RAZvmy/v
-6LMhQp1ZcT8DTxqICBzJLJCX88db7FTH8GSEq64YLfavjaYKOW3gvq9+wVAPwG71
-gdv9DvmNq681BoSpMoSV8Dm0HaDTmTZK8EFfohkpKdp9amc2fU/vhF1IceEMS+W5
-yyqVGRTNimKbmX8xlUNTwfTrKpS/5t8UCBzIshXl+KPTnEwBNBFbi4fed1g2N+76
-CF+PJIY1S/lx+ZZ+ajrFwFt8IdFHT433mO12MiJBzMU+IzoLEf/fNrR1G0z5FSrG
-UxZwOCkTduUNY8rrZcOcpO1Emtr1YCcKTGfhzOK8b5vOJFU95ng57Y3yhJihL1HV
-Hdb7f3Em42mvZK6X9CYZLUR6b5SmmkGzAtLUad8C8uqYyh6hd9ttp7FRgWF+lRHe
-RQPfsE2u2IAm+e+RHWqgIP/eaBF3SXzOENyEz9iIwzySrdGOzRiQzZtLvkkaZqPr
-ONCGTP0IBzjtcPyJdCizupSORkwxbwSKUC9HWaX+N3YcRDk9/Bo=
-=Zayd
------END PGP SIGNATURE-----
-
---zfv6tookm75yhkib--
