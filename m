@@ -2,142 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FCBC41EDC7
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Oct 2021 14:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0004E41EDD3
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Oct 2021 14:51:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353148AbhJAMuC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Oct 2021 08:50:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58582 "EHLO
+        id S1353342AbhJAMwt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Oct 2021 08:52:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbhJAMuB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Oct 2021 08:50:01 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 936DCC061775
-        for <linux-pm@vger.kernel.org>; Fri,  1 Oct 2021 05:48:17 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id l13so8777922qtv.3
-        for <linux-pm@vger.kernel.org>; Fri, 01 Oct 2021 05:48:17 -0700 (PDT)
+        with ESMTP id S1353510AbhJAMwr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Oct 2021 08:52:47 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D925C0613E3
+        for <linux-pm@vger.kernel.org>; Fri,  1 Oct 2021 05:51:03 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id y23so3771510lfj.7
+        for <linux-pm@vger.kernel.org>; Fri, 01 Oct 2021 05:51:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=C8V2pc5LCezKMlPjmG0dHcIOoWZt1S3YATNfepJ+v0g=;
-        b=TNd1ZtBD2OKA52FPYnN6UzEoLOTtNah9xEAzbT55QnUM76mFj7+vlBA11AWoEgz2m6
-         q4yFAZZAqEprNNDlACxn1r9mDeoj79Q/eJbflp6cSi5rn5onsJiyHfKBnAxzclCHC6Ho
-         O6t4vqGUMLOks2sHnZ3lR1ktiiWnjo1+soIg/xzuo0YivpLt599Aof3B5N7ktU0eZAjD
-         IiufPDJutwKph7s8rppx6JRquWfMYnUkalDt8ruNWZITNn97OrNX+Na4Jv0/EUFDG6+s
-         6u3U5/2bjWaqL0kD5IrIMsLnWVUGIW89qGyWkulogOVtfAndy0ICqNiPreykXeMxvSZl
-         G8/Q==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=U3g3FVHcAfq2CjS/tDBEgPrTjvgAlik1UmRsepWrO/M=;
+        b=AzjhIKsGc5F00nF8gT49XgOerH2kylziofl1fTWdcLRpswV4wNz8DKK5xJ7On0pP/7
+         FUfZ1Wgbt1/fuaxVdMYCvvgTtIGVXfv0UoK33+IzBB+zOi+jh2jn6j2wyaLjswS/IOzw
+         SQjTg3BAouTPEqyD9JFdD9cYzi69CQhCoGH5fKvFHMMepL7XM0KGl/OrspTiy4mR9WhP
+         foe5FrlQSoXx4OG2RW+Mn3fWJuth6XGpzQJ4ILLPGQ/0+fTYG3YwXfmnYk9SirlbmFbB
+         VWqNGRy6BMbC7o4y9fE4zK6CBmWtNh3bv3/HT2LLpsFmdOSr7meyX9U8IJw0f7EYsu6v
+         RPYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=C8V2pc5LCezKMlPjmG0dHcIOoWZt1S3YATNfepJ+v0g=;
-        b=2vwxDQgrvial1iWweWajY3JZLAfa0DbndDGvZ/Ann6n9ZExx0eZYxbejxYKscdUqSC
-         ZDbDopNVAAb4T13SJan2P+qJt3If7ervxosDUONl4GZGZPcFYYFfmA4rr5ATfCEkt7eG
-         U/42x+aHU5D0LZrraM1FMNlqJk1WoSbjcsM3JroyCRhnDzjBODN5XR6p0mS5Js6jpxQT
-         A20zluPJ5hzdwjvYQk2XN/ERUSuJqecDMJDdObMRVxbKYmDVGmr9+1UsSGUvHNT+EDux
-         r+xe1Yx46mv+WsWJNmpA8fHwbHZU1YTyYKlMgj8GZhYVIBuZzr69a/vjzux6H7eMCrNJ
-         UuCA==
-X-Gm-Message-State: AOAM530oNw1NWCDiV/Nfs16wcghpb4DfzAm1zWhNS1MYZ0XRACFhOzip
-        H/glbVjqJlm6Q8FoVNOVu4bIzQ==
-X-Google-Smtp-Source: ABdhPJxuvb/SYZ+d67IrjFIEIIK/r05HU07/8Qb6sLEYoThGPL8o6tAg4exSSAaJ/N9DXrYvV4cx5Q==
-X-Received: by 2002:ac8:5905:: with SMTP id 5mr12587198qty.391.1633092496743;
-        Fri, 01 Oct 2021 05:48:16 -0700 (PDT)
-Received: from [192.168.1.93] (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
-        by smtp.gmail.com with ESMTPSA id a2sm2894435qkk.53.2021.10.01.05.48.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Oct 2021 05:48:16 -0700 (PDT)
-Subject: Re: [PATCH v2 2/2] thermal: qcom: tsens: fix VER_0 support
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20210926134237.23863-1-dmitry.baryshkov@linaro.org>
- <20210926134237.23863-2-dmitry.baryshkov@linaro.org>
-From:   Thara Gopinath <thara.gopinath@linaro.org>
-Message-ID: <5b878548-caa8-b8ea-055f-f13524d4ce73@linaro.org>
-Date:   Fri, 1 Oct 2021 08:48:15 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=U3g3FVHcAfq2CjS/tDBEgPrTjvgAlik1UmRsepWrO/M=;
+        b=HeF19x/+WyJbh504UvgQ3/dttcMOXVntKtGq1AmHMeHKQ3lJZfPo1QqKb6u+HeJT0R
+         xoB7uSdl/c3uxino9bSbPXIKpfzh+KXRmQuKjd7UhcH2ekzivCuBketwkCJGVinB6faN
+         Z/iUxM8L7a5LuYEwwDBEAU6imlc+dLZK75NmvGt5NcQb05+ULjuSLKo76jZge5q+SAvm
+         nkZGD0tk/GbmSFrBpxHjTDxySfusPxTOsNgA1YjXk4mOORBQtMYmml5OrGtt01HHO5js
+         E1KOKRBBZ+uGJmRWt2vtLvk40hrTCKNn/1K1Sel2vp7ZdAbx/hK1Eiij7vSJ07ydlQrw
+         CXDw==
+X-Gm-Message-State: AOAM533QgfmlwKjUQ9UzyP1XP83mcBF3om5z7SONJumCP/auTuJ3J/BI
+        lKriT9GnUV6GYqjntwKgdUdGyXKstI2BUVAZfIpmsA==
+X-Google-Smtp-Source: ABdhPJwqqw8e12Oj8Mbs+ZBogohxgciqSKBUNXiyR2zo3nKqwCJ61Gsrw5pb7r1VVcKkZcvnXQuH+1x0Dzep9YUsgPg=
+X-Received: by 2002:a19:5f4b:: with SMTP id a11mr5158365lfj.373.1633092661107;
+ Fri, 01 Oct 2021 05:51:01 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210926134237.23863-2-dmitry.baryshkov@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210926224058.1252-1-digetx@gmail.com> <20210926224058.1252-3-digetx@gmail.com>
+In-Reply-To: <20210926224058.1252-3-digetx@gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 1 Oct 2021 14:50:25 +0200
+Message-ID: <CAPDyKFrtE75Tf-vefM0isj52PJ5_v525AjqU2TMUpc4__rYLhA@mail.gmail.com>
+Subject: Re: [PATCH v13 02/35] soc/tegra: Add devm_tegra_core_dev_init_opp_table_common()
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Viresh Kumar <vireshk@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        David Heidelberg <david@ixit.cz>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 9/26/21 9:42 AM, Dmitry Baryshkov wrote:
-> For VER_0 tsens shares the device with the clock controller, but
-> nevertheless it does not use syscon for these registers. Drop
-> syscon_node_to_regmap() and acquire the regmap on our own.
-> 
-> apq8064 has tsens as a part of gcc device tree node, ipq8064 puts tsens
-> node as a child node of gcc. Thus check whether tsens resource can be
-> fetched either from the device itself or from it's parent.
-> 
-> Fixes: 53e2a20e4c41 ("thermal/drivers/tsens: Add VER_0 tsens version")
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
-Acked-by: Thara Gopinath <thara.gopinath@linaro.org>
-
--- 
-Warm Regards
-Thara (She/Her/Hers)
-
+On Mon, 27 Sept 2021 at 00:42, Dmitry Osipenko <digetx@gmail.com> wrote:
+>
+> Only couple drivers need to get the -ENODEV error code and majority of
+> drivers need to explicitly initialize the performance state. Add new
+> common helper which sets up OPP table for these drivers.
+>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
->   drivers/thermal/qcom/tsens.c | 21 ++++++++++-----------
->   1 file changed, 10 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-> index 6aeea74c1bb0..bc0c86a54fe7 100644
-> --- a/drivers/thermal/qcom/tsens.c
-> +++ b/drivers/thermal/qcom/tsens.c
-> @@ -12,7 +12,6 @@
->   #include <linux/of.h>
->   #include <linux/of_address.h>
->   #include <linux/of_platform.h>
-> -#include <linux/mfd/syscon.h>
->   #include <linux/platform_device.h>
->   #include <linux/pm.h>
->   #include <linux/regmap.h>
-> @@ -773,19 +772,19 @@ int __init init_common(struct tsens_priv *priv)
->   	if (tsens_version(priv) >= VER_0_1) {
->   		res = platform_get_resource(op, IORESOURCE_MEM, 0);
->   		tm_base = devm_ioremap_resource(dev, res);
-> -		if (IS_ERR(tm_base)) {
-> -			ret = PTR_ERR(tm_base);
-> -			goto err_put_device;
-> -		}
-> -
-> -		priv->tm_map = devm_regmap_init_mmio(dev, tm_base, &tsens_config);
-> -	} else { /* VER_0 share the same gcc regs using a syscon */
-> -		struct device *parent = priv->dev->parent;
-> +	} else { /* VER_0 share the same gcc regs. It can be either the same device, or parent */
-> +		res = platform_get_resource(op, IORESOURCE_MEM, 0);
-> +		if (!res && dev_is_platform(priv->dev->parent))
-> +			res = platform_get_resource(to_platform_device(priv->dev->parent), IORESOURCE_MEM, 0);
-> +		tm_base = devm_ioremap(dev, res->start, resource_size(res));
-> +	}
->   
-> -		if (parent)
-> -			priv->tm_map = syscon_node_to_regmap(parent->of_node);
-> +	if (IS_ERR(tm_base)) {
-> +		ret = PTR_ERR(tm_base);
-> +		goto err_put_device;
->   	}
->   
-> +	priv->tm_map = devm_regmap_init_mmio(dev, tm_base, &tsens_config);
->   	if (IS_ERR_OR_NULL(priv->tm_map)) {
->   		if (!priv->tm_map)
->   			ret = -ENODEV;
-> 
+>  include/soc/tegra/common.h | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+>
+> diff --git a/include/soc/tegra/common.h b/include/soc/tegra/common.h
+> index af41ad80ec21..5b4a042f60fb 100644
+> --- a/include/soc/tegra/common.h
+> +++ b/include/soc/tegra/common.h
+> @@ -39,4 +39,28 @@ devm_tegra_core_dev_init_opp_table(struct device *dev,
+>  }
+>  #endif
+>
+> +/*
+> + * This function should be invoked with the enabled runtime PM of the device
+> + * in order to initialize performance state properly. Most of Tegra devices
+> + * are assumed to be suspended at a probe time and GENPD require RPM to be
+> + * enabled to set up the rpm-resume state, otherwise device is active and
+> + * performance state is applied immediately. Note that it will initialize
+> + * OPP bandwidth if it's wired in a device-tree for this device, which is
+> + * undesirable for a suspended device.
+> + */
+> +static inline int
+> +devm_tegra_core_dev_init_opp_table_common(struct device *dev)
+> +{
+> +       struct tegra_core_opp_params opp_params = {};
+> +       int err;
+> +
+> +       opp_params.init_state = true;
+> +
+> +       err = devm_tegra_core_dev_init_opp_table(dev, &opp_params);
+> +       if (err != -ENODEV)
+> +               return err;
+> +
+> +       return 0;
+> +}
 
+Just want to share a few thoughts around these functions.
 
+So, I assume it's fine to call
+devm_tegra_core_dev_init_opp_table_common() or
+devm_tegra_core_dev_init_opp_table() from consumer drivers during
+->probe(), as long as those drivers are tegra specific, which I assume
+all are in the series!?
+
+My point is, a cross SoC consumer driver that needs to initiate OPP
+tables can get rather messy, if it would need to make one specific
+function call per SoC.
+
+That said, I hope we can tackle this as a separate/future problem, so
+the series can get merged as is.
+
+> +
+>  #endif /* __SOC_TEGRA_COMMON_H__ */
+> --
+> 2.32.0
+>
+
+Kind regards
+Uffe
