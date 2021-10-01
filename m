@@ -2,71 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4DCB41EC09
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Oct 2021 13:34:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B8A341ECE0
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Oct 2021 14:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353981AbhJALg1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Oct 2021 07:36:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41092 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353964AbhJALg0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Oct 2021 07:36:26 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465B9C061775
-        for <linux-pm@vger.kernel.org>; Fri,  1 Oct 2021 04:34:42 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id dj4so34623671edb.5
-        for <linux-pm@vger.kernel.org>; Fri, 01 Oct 2021 04:34:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=5L/E4eErsLvrvRSyjenHMn1XgR3BfAibYkaUBTxnmho=;
-        b=UOLbJNv/PHcWOU6Z4rzzgus9xotes2ecLAW3m0Y6kDPTOjFVwFz4/NRCuiUc/AjV39
-         70shoNLlGtW2zJKiJK8gWF1ZVghHqNU0FYvYoPopWEQ+fHy4PMJvg/rPa7XOjHzx5+I8
-         Xe7YeiWNQ2x44H4dPlVOE6Ah0lUroynwj/qWhWvYMyQ5kBZOuJhQVhc3aP+Fl6qaCTTC
-         uMrRxUPJ3wsFo+uvtThbmIiq0+6yFUOE4prZ7QcU8rJP7m7ajkacKs1kWI1OpkOo3grw
-         EL6Sbr67jUVUBegOHPesQ5yrtjLicwMzSf4ZTlJn80mKLZXzPrStel0YHAEyxcF5xL+2
-         tHhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=5L/E4eErsLvrvRSyjenHMn1XgR3BfAibYkaUBTxnmho=;
-        b=FkF36x8ZqNq56MYwedTgfw/664tm8EW4g/jdyF5JlRR9duL9wPABM8V29cZtP5q54U
-         1g09+RZg5KAGyDLQY/pvJWkdh29SzX6d7NP89CYKNqblU7uvadinXDwwyYlZpeRa3of9
-         7B6UpQvmrf5cABIGTuhH5jT+/ESTurDe66b05mPobCQMt46DZEYa5zDmX1U9Qm7aWICt
-         xKLeS8MsI9FBrs8041iIyr8nWehslU2vd4W+634Cq01Sg41C3nCTFVid3TEFUzCVPzk9
-         uxBd3OWxRe4OVsr/zRMIRJFpaM0v0I52fTzXUyoHiqIeZLPVfXgvAl4BCwYdmLcfQPTs
-         NWyA==
-X-Gm-Message-State: AOAM5302hd76f11ufEms/1Un0/62LUgTROlIUDVp16g736j1/UHOBY20
-        e6f1p2uBheRbLccMvyxHpHzmlTWhw7WCI5yDTTs=
-X-Google-Smtp-Source: ABdhPJzk33LSFp+PeISm+eJBQbbjD4Um0GnvAV/blvchXzlEurQQitZPK5UL59BP+L6PnQP4Ag8ozt5qB2PABb7m0KY=
-X-Received: by 2002:a17:906:1749:: with SMTP id d9mr5442671eje.178.1633088080796;
- Fri, 01 Oct 2021 04:34:40 -0700 (PDT)
+        id S231321AbhJAMGg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Oct 2021 08:06:36 -0400
+Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:47056
+        "EHLO smtp-relay-canonical-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231263AbhJAMGf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Oct 2021 08:06:35 -0400
+Received: from localhost (1.general.cking.uk.vpn [10.172.193.212])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id E487E4030C;
+        Fri,  1 Oct 2021 12:04:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1633089890;
+        bh=5fW1zbFX9A+lWTjDceGHH/kyiO5490vMTq5bgwnRlDE=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type;
+        b=LNgCHl6STFmq8gzscybaEkOEZ6mqkxCypEqJuj7bi509k+QXiO6uxCHbRMm+5PGEE
+         Tk18nrjC30MkOU1uTxQjCngAxLOcX0sQSGQJOE85nWOdgtSv7v6Kl0Du/LWkICYVLj
+         jmjYevQqu1RbXu07ZLxw4VnZQHDl874Q3WJJm8In5h+UdZeSKlwueEgEmcVCSORQaf
+         vzYGmx87TbLpO9xHn/9Z2SG9bau6oZHavtwb3tRV1JhIDvzLLmUd362ce8jo9X4zSF
+         SgNloDsv7Kq9FXHmz1sO9oPzIEgS4w2zJZ31ntSdvuFEQ8KzY7ZUMPpPAMhtN1xvNc
+         ytkDOURi+bgRg==
+From:   Colin King <colin.king@canonical.com>
+To:     Sebastian Reichel <sre@kernel.org>, patches@opensource.cirrus.com,
+        linux-pm@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] power: supply: wm831x_power: fix spelling mistake on function name
+Date:   Fri,  1 Oct 2021 13:04:49 +0100
+Message-Id: <20211001120449.17914-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Received: by 2002:a17:906:724a:0:0:0:0 with HTTP; Fri, 1 Oct 2021 04:34:39
- -0700 (PDT)
-Reply-To: joymat52@gmail.com
-From:   Joyce Thomas <tjoyc1234@gmail.com>
-Date:   Fri, 1 Oct 2021 04:34:39 -0700
-Message-ID: <CAF-RpUgaUkMbj2QzyBnkOuwEe=PmUv5qivCYUGKtEUkg1Z6r2w@mail.gmail.com>
-Subject: ATTN:
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Dear
-My Name is Mr. Joyce Thomas. Contact me for more information on the
-transfer of ($7.9 million dollars) left by my late client from your
-Country. I want to present you as a business partner and next of kin
-of the fund. I will give you the details of this transaction, as soon
-as I hear from you. I need the information below:
-Full Name:
-Address:
-Occupation:
-Age:
-Personal Email:
-Personal Telephone:
-Best Regards,
-Mr.Joyce  Thomas
+From: Colin Ian King <colin.king@canonical.com>
+
+There is a spelling mistake in the name wm831x_battey_apply_config,
+fix it.
+
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+---
+ drivers/power/supply/wm831x_power.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/power/supply/wm831x_power.c b/drivers/power/supply/wm831x_power.c
+index 4cd2dd870039..82e31066c746 100644
+--- a/drivers/power/supply/wm831x_power.c
++++ b/drivers/power/supply/wm831x_power.c
+@@ -234,7 +234,7 @@ static struct chg_map chg_times[] = {
+ 	{ 510, 15 << WM831X_CHG_TIME_SHIFT },
+ };
+ 
+-static void wm831x_battey_apply_config(struct wm831x *wm831x,
++static void wm831x_battery_apply_config(struct wm831x *wm831x,
+ 				       struct chg_map *map, int count, int val,
+ 				       int *reg, const char *name,
+ 				       const char *units)
+@@ -281,24 +281,24 @@ static void wm831x_config_battery(struct wm831x *wm831x)
+ 	if (pdata->fast_enable)
+ 		reg1 |= WM831X_CHG_FAST;
+ 
+-	wm831x_battey_apply_config(wm831x, trickle_ilims,
++	wm831x_battery_apply_config(wm831x, trickle_ilims,
+ 				   ARRAY_SIZE(trickle_ilims),
+ 				   pdata->trickle_ilim, &reg2,
+ 				   "trickle charge current limit", "mA");
+ 
+-	wm831x_battey_apply_config(wm831x, vsels, ARRAY_SIZE(vsels),
++	wm831x_battery_apply_config(wm831x, vsels, ARRAY_SIZE(vsels),
+ 				   pdata->vsel, &reg2,
+ 				   "target voltage", "mV");
+ 
+-	wm831x_battey_apply_config(wm831x, fast_ilims, ARRAY_SIZE(fast_ilims),
++	wm831x_battery_apply_config(wm831x, fast_ilims, ARRAY_SIZE(fast_ilims),
+ 				   pdata->fast_ilim, &reg2,
+ 				   "fast charge current limit", "mA");
+ 
+-	wm831x_battey_apply_config(wm831x, eoc_iterms, ARRAY_SIZE(eoc_iterms),
++	wm831x_battery_apply_config(wm831x, eoc_iterms, ARRAY_SIZE(eoc_iterms),
+ 				   pdata->eoc_iterm, &reg1,
+ 				   "end of charge current threshold", "mA");
+ 
+-	wm831x_battey_apply_config(wm831x, chg_times, ARRAY_SIZE(chg_times),
++	wm831x_battery_apply_config(wm831x, chg_times, ARRAY_SIZE(chg_times),
+ 				   pdata->timeout, &reg2,
+ 				   "charger timeout", "min");
+ 
+-- 
+2.32.0
+
