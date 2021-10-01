@@ -2,119 +2,161 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FCB441EA42
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Oct 2021 11:59:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A6C741EAEF
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Oct 2021 12:28:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353186AbhJAKBT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Oct 2021 06:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46928 "EHLO
+        id S238619AbhJAKaH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Oct 2021 06:30:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353305AbhJAKBS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Oct 2021 06:01:18 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42893C06177D
-        for <linux-pm@vger.kernel.org>; Fri,  1 Oct 2021 02:59:34 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id j10-20020a1c230a000000b0030d523b6693so203174wmj.2
-        for <linux-pm@vger.kernel.org>; Fri, 01 Oct 2021 02:59:34 -0700 (PDT)
+        with ESMTP id S230476AbhJAKaG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Oct 2021 06:30:06 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C73C061775
+        for <linux-pm@vger.kernel.org>; Fri,  1 Oct 2021 03:28:22 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id j13so8453366qtq.6
+        for <linux-pm@vger.kernel.org>; Fri, 01 Oct 2021 03:28:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=9/WkdH8I7SISzvTO/uk8FQH2z0Yov9Zen7PU8kYoFrw=;
-        b=XvQYWbMekWZruC/HQviHqLjEZuqUfLbgm1kGfL05MdF2KoqpnMSquZ+kQboYsZMdLp
-         /geT4zR5XiHy8pRWAtv7G8A3WSxllM1SoxW/aaZsgj3GBV/A5iuFj2L+VcdeFul0XBLI
-         NtO1dE3qCWcruJtYbgykdKCvtPhs9Gghy+sOyX6esI2BAaecWT5I+AtVTxmed6qztWXv
-         WR3js4UdnbkILCje8eiTC1kEyiazfwVZN9bd4JUWlyO5VwOCUHyibuP93OhGkr72bO3g
-         KyehkzWJunTTzJHRxXfpC4kE0STjPSKydH35xpL3PZcRH2NeJt4WCHhEE9EHzhctvHtz
-         r9mg==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=+gRi93ICIYhobVAL5GEzt+moQ65uKWUqaq2BoT5lL84=;
+        b=i6XxsNIjWOUkSCaIuZ4Zpn4QRlKAsZY6wrojfJixi2mdRYfvXW2S3ySfjkwRZzuii3
+         dkYwYiQiYIvcx0gcRShdbLMo956liqG0jtek6n3uYNmJ4pQXMz7Elpscp8xRHuxpQljs
+         EzloI2RMkkSIbTVRRm1bQEUZ8ps5+2A8VNPbc2FltxKqoGN1JLOhDKe2v8TIHTfkicSu
+         gvou5gDJRUoVfSen3sBWiSaJZJxVH6K4gRJyuZCEBGo7a8/Y7wI6tjdSGtEofGVuK8PB
+         k3pQdAZiAD8YMdDaMHoeSyWTgqCvIbBlmwa3mJUv2UasLJd9NBg+i86fIAhIsxTsXFxC
+         cIuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=9/WkdH8I7SISzvTO/uk8FQH2z0Yov9Zen7PU8kYoFrw=;
-        b=JzBsfL6S4yuXOccdvmqQ5T4AVgZGMbO5n7vZrquyn+hALFgZgcB05GZjloqoG9RfSb
-         eNHayf3Zl2qY2M0+54GYJxQ2X2BYjTEPMeI/kIinuA+EYoPu/ctbLG3/Fs2jXdhT4mIw
-         N0Lj40rNfIWAKIcBBwvwa3TdjmgHthuNX6ndNw50sTp7f+LSwZgHOhyhotaz48ajLy2b
-         dSk98PkNWEeRVKgLuQiSsPb3JTWQ3vHc8Pf3MznNIwYtpdMHyox/RKsXAMWRVtaMII2v
-         AYB9PXxDFBn3c1LvHIo4RHogAb9/g7VsDrXqVbTqNY69+QgjF6TCyPWDbK3cmo0b+s4f
-         ukFw==
-X-Gm-Message-State: AOAM530UXc2/QlUWAMN2pANZNeTNggqoTtJeItc1SSTjcfMcggKpPiFB
-        2mQZM8GIAq1jOQCN7vcYXTyMSU5nlB8Zdxt0lho=
-X-Google-Smtp-Source: ABdhPJz/GtMIg9yDrWN+JEpm6yQkCHqwaNUP3urbdWGP0kbQqlQKS2qp/BCrYnJX8COxOO8RMfY+htgvKst9YU/sVss=
-X-Received: by 2002:a1c:2c3:: with SMTP id 186mr3634204wmc.114.1633082372750;
- Fri, 01 Oct 2021 02:59:32 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=+gRi93ICIYhobVAL5GEzt+moQ65uKWUqaq2BoT5lL84=;
+        b=T57IZ8lJdtXA4IicLSNnFJ65WMWBH86f7B8/YU17I8EVlfXQ7lKe1lLPgTLB+RQcwi
+         4tgDhigHLlvFTV32RW/MNggWE9F7bZe6Rt2aKX5Q6QxpQRuaRTJvWoG+bSEZwokcWbXQ
+         QWNBZaR6nTutLdYEcpiXvdEW3FQdgT4sOK0zqpQC8lUaqtDB6bmn7Mr37/qDKxnH5wjg
+         SMGBLJO1MjMHXJB0QAMGSgRY1uwgRItlUCRPIfUJRKVVfbw4886ia/8GtrAmZ1y/qvT8
+         679gigt38tTGU+uDnfqsTH9dpNdVdDTlsIVHMFGOd+ObV90v4Zam0zklq6dOiCTmJd61
+         Oz2w==
+X-Gm-Message-State: AOAM530nhD8q1n9BxA05UTdLH91F756iuQAsNU+hIRu+hy1uPwHYbAaM
+        JO3r8Gv2Hh8aN0RJVDfeBhbQhA==
+X-Google-Smtp-Source: ABdhPJyzhD8jytJih98e2GqEKbvygKymH8WSueCcMGsR3JKrq+HelSvIV0F8NBfVoiVTK39m/CXQog==
+X-Received: by 2002:a05:622a:295:: with SMTP id z21mr12248464qtw.125.1633084101399;
+        Fri, 01 Oct 2021 03:28:21 -0700 (PDT)
+Received: from [192.168.1.93] (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
+        by smtp.gmail.com with ESMTPSA id i18sm3353134qtx.60.2021.10.01.03.28.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Oct 2021 03:28:20 -0700 (PDT)
+Subject: Re: [PATCH v2 1/2] thermal: qcom: tsens: remove data indirection in
+ the debugfs
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20210926134237.23863-1-dmitry.baryshkov@linaro.org>
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+Message-ID: <973f7fd6-3d35-205b-5405-d9daa3510a4e@linaro.org>
+Date:   Fri, 1 Oct 2021 06:28:19 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Received: by 2002:adf:80d0:0:0:0:0:0 with HTTP; Fri, 1 Oct 2021 02:59:32 -0700 (PDT)
-Reply-To: mussaomra2017@gmail.com
-From:   Omra Musa <kabore.mustafer01@gmail.com>
-Date:   Fri, 1 Oct 2021 09:59:32 +0000
-Message-ID: <CAKxFkV1UhU_TQM=sJUQOjKfkMdntrnaDtLeWA0C8sbTd8hHd3Q@mail.gmail.com>
-Subject: I NEED YOUR URGENT RESPOND.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210926134237.23863-1-dmitry.baryshkov@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From Mr Omra Musa
-Bank Of Africa (B.O.A)
-Burkina Faso Ouagadougou
+Hi Dimitry,
 
-My Dear Friend,
+Thanks for the patch
 
-Please I want you to read this letter very carefully and I must
-apologize for barging this message into your mail box without any
-formal introduction due to the urgency and confidential of this issue
-and I know that this message will come to you as a surprise. Please
-this is not a joke and I will not like you to joke with it.
+On 9/26/21 9:42 AM, Dmitry Baryshkov wrote:
+> There is no reason to pass platform device to debugfs just to get the
+> tsens_priv from it. Not to mention that for TSENS_V0 the platform device
+> (gcc) might have other device data. Pass the tsens_priv data to debugfs
+> callbacks directly.
+> 
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>   drivers/thermal/qcom/tsens.c | 17 +++++++----------
+>   1 file changed, 7 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+> index 4c7ebd1d3f9c..6aeea74c1bb0 100644
+> --- a/drivers/thermal/qcom/tsens.c
+> +++ b/drivers/thermal/qcom/tsens.c
+> @@ -657,8 +657,7 @@ int get_temp_common(const struct tsens_sensor *s, int *temp)
+>   #ifdef CONFIG_DEBUG_FS
+>   static int dbg_sensors_show(struct seq_file *s, void *data)
+>   {
+> -	struct platform_device *pdev = s->private;
+> -	struct tsens_priv *priv = platform_get_drvdata(pdev);
+> +	struct tsens_priv *priv = s->private;
+>   	int i;
+>   
+>   	seq_printf(s, "max: %2d\nnum: %2d\n\n",
+> @@ -675,8 +674,7 @@ static int dbg_sensors_show(struct seq_file *s, void *data)
+>   
+>   static int dbg_version_show(struct seq_file *s, void *data)
+>   {
+> -	struct platform_device *pdev = s->private;
+> -	struct tsens_priv *priv = platform_get_drvdata(pdev);
+> +	struct tsens_priv *priv = s->private;
+>   	u32 maj_ver, min_ver, step_ver;
+>   	int ret;
+>   
+> @@ -701,9 +699,8 @@ static int dbg_version_show(struct seq_file *s, void *data)
+>   DEFINE_SHOW_ATTRIBUTE(dbg_version);
+>   DEFINE_SHOW_ATTRIBUTE(dbg_sensors);
+>   
+> -static void tsens_debug_init(struct platform_device *pdev)
+> +static void tsens_debug_init(struct platform_device *pdev, struct tsens_priv *priv)
 
-I am Mr Omra Musa Manager in Bank Of Africa (B.O.A) Ouagadougou,
-Burkina Faso. I Hoped that you will not expose or betray this trust
-and confident that I am about to establish with you for the mutual
-benefit of you and I. This fund was deposited in our bank by Mr.
-Kattan Azmal from Jordan who died in a plane crash in 2000 Tbm 700
-aircraft on 31st July with his wife and the whole crew on board.
+You anyways have to pass pdev here, as it is used for referencing dev 
+name below. So drop sending tsens_priv as well. You can get it via 
+platform_get_drvdata as in the original code. I am okay with the change 
+in using priv instead of pdev as private pointer in the fops.
 
-I need your urgent assistance in transferring the sum of ($15) million
-USD into your account within 14 working banking days. This money has
-been deposited for years in our Bank without claim due to the owner of
-this fund died along with his entire family in an air crash since July
-31st 2000.
+>   {
+> -	struct tsens_priv *priv = platform_get_drvdata(pdev);
+>   	struct dentry *root, *file;
+>   
+>   	root = debugfs_lookup("tsens", NULL);
+> @@ -715,14 +712,14 @@ static void tsens_debug_init(struct platform_device *pdev)
+>   	file = debugfs_lookup("version", priv->debug_root);
+>   	if (!file)
+>   		debugfs_create_file("version", 0444, priv->debug_root,
+> -				    pdev, &dbg_version_fops);
+> +				    priv, &dbg_version_fops);
+>   
+>   	/* A directory for each instance of the TSENS IP */
+>   	priv->debug = debugfs_create_dir(dev_name(&pdev->dev), priv->debug_root);
+> -	debugfs_create_file("sensors", 0444, priv->debug, pdev, &dbg_sensors_fops);
+> +	debugfs_create_file("sensors", 0444, priv->debug, priv, &dbg_sensors_fops);
+>   }
+>   #else
+> -static inline void tsens_debug_init(struct platform_device *pdev) {}
+> +static inline void tsens_debug_init(struct platform_device *pdev, struct tsens_priv *priv) {}
+>   #endif
+>   
+>   static const struct regmap_config tsens_config = {
+> @@ -918,7 +915,7 @@ int __init init_common(struct tsens_priv *priv)
+>   	if (tsens_version(priv) >= VER_0_1)
+>   		tsens_enable_irq(priv);
+>   
+> -	tsens_debug_init(op);
+> +	tsens_debug_init(op, priv);
+>   
+>   err_put_device:
+>   	put_device(&op->dev);
+> 
 
-The reason why i contacted you is that after the bank audit in 24th of
-November, we found out that this fund has remained unclaimed since the
-death of the deceased costumer.
-
-I want our bank to release this fund to you as the nearest person to
-our deceased customer while i come over to your country to share this
-fund with you as soon as you confirm this fund into your account and
-ask me to come over. I don't want the money to go into our Bank
-treasure as an abandoned fund. So this is the reason why i contacted
-you so that our bank will release this money to you as the next of kin
-to the deceased customer. Please I would like you to keep this
-proposal as a top secret and delete it if you are not interesting.
-
-Upon the receipt of your reply and indication of your capability, i
-will give you full details on how the business will be executed and
-also note that you will have 50% of the above mentioned sum if you
-agree to handle this business with me while 50% be for me, Because i
-don't want anyone here in our bank to know my involvement until you
-confirm this fund into your account and ask me to come over for the
-sharing as I indicated.
-
-I am looking forward to hear from you immediately for further information
-
-THE REQUESTED INFORMATIONS BELOW
-==================================
-1. FULL NAME..............
-2. TELEPHONE NUMBERS/MOBILE/FAX.......
-3. YOUR AGE......
-4. YOUR SEX.........
-5. YOUR OCCUPATION........
-6. YOUR COUNTRY AND CITY......
-7. YOUR HOME ADDRESS........
-8. MARITAL STATUS............
-
-Sincerely,
-Mr Omra Musa
-
-You can reply to my private email address at mussaomra2017@gmail.com
+-- 
+Warm Regards
+Thara (She/Her/Hers)
