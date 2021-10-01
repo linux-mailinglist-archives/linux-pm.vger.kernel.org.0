@@ -2,169 +2,221 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77EDC41F76F
-	for <lists+linux-pm@lfdr.de>; Sat,  2 Oct 2021 00:33:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A433F41F7B0
+	for <lists+linux-pm@lfdr.de>; Sat,  2 Oct 2021 00:46:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355900AbhJAWfT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Oct 2021 18:35:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53134 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355824AbhJAWfR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Oct 2021 18:35:17 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4173C0613E3
-        for <linux-pm@vger.kernel.org>; Fri,  1 Oct 2021 15:33:32 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id q127-20020a1ca785000000b0030cb71ea4d1so7713264wme.1
-        for <linux-pm@vger.kernel.org>; Fri, 01 Oct 2021 15:33:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8nDTUff3NWAShPXkSJUHpdXF/tre0swCngGs+0ldBuo=;
-        b=iTFcfgD9k1Ew/Q3d85rswksP5KXCDig/JMG7z4OhD2EquHZpCoQt7WZ1Ks7iAxlx5F
-         j79zOLzzrSFIu3t5mp3BdYb8xK+ue+VQpYMOng91ymPADIOBDQXsYPTrI+Y8Pp8Ddl3z
-         VStEoSKYKklC02gxEXkv2MM+BBemjoiJHqs0CPbPJq/xooJxLlrm6IaCkzaW9U0bInzq
-         ssdNVwWQQrjFwmBfEXg3Q4QVKTRZvE6SqrE19ONi7tNV0Uq2cvwjt8FESqH/Y2ij2+56
-         Cw+mRWRH+K+isrtp97UodjIvbXVjfs5bke++3w26zh5lK1BoDhVuHpNnxoSRP5I+eSuS
-         5kCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8nDTUff3NWAShPXkSJUHpdXF/tre0swCngGs+0ldBuo=;
-        b=F8+82JcoC4scKamYWkgnnuJ+/hRfnI2g2nUGlA7rEezrL/2Cjvbzu3zTEAKcQdxTx4
-         8ocu72e15k1xdg/Iv61BDITTSjUmr8GUba9X7mGERMY3SBNQmzRhxtj4Kv4b9Kbha82K
-         pqyHCvDfUDXaZJa5to2k73paxNk4k67SPJNKyi6yEjHHZEnl2EHGVXARgazcVc0iE1RM
-         /YVQqcr9b15znMrud8+Hfla13bGwj+X19MxB7IBAYO7opc7LiAM8mGeIBAt8fra3mx0J
-         qzJPG/4Wt6FBLjgCqFqpwzbP2hND32JYpiw8VsmdhY5FF+k3Ib8nhSFLhSnl+4Byuw2n
-         V7HQ==
-X-Gm-Message-State: AOAM532zJ26osfQF9Q6Cs89vagf3+LGPStIH/PazhSe3mWOf3UZjzHdz
-        M8HCpIdr3PD9MAIxoTSqce4XXQ==
-X-Google-Smtp-Source: ABdhPJzh1k5pcEzW+6hASRwgn1OJytpkdGERs5wRyy/ZUXwRtlPchpG7YDA1eNuK2SyZAzEIk0QR1A==
-X-Received: by 2002:a05:600c:a45:: with SMTP id c5mr6979189wmq.79.1633127611224;
-        Fri, 01 Oct 2021 15:33:31 -0700 (PDT)
-Received: from localhost.localdomain ([82.142.20.44])
-        by smtp.gmail.com with ESMTPSA id 8sm6921066wmo.47.2021.10.01.15.33.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Oct 2021 15:33:30 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     rafael@kernel.org
-Cc:     srinivas.pandruvada@linux.intel.com, daniel.lezcano@linaro.org,
-        rui.zhang@intel.com, rkumbako@quicinc.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, Amit Kucheria <amitk@kernel.org>
-Subject: [PATCH RESEND] thermal/drivers/netlink: Add the temperature when crossing a trip point
-Date:   Sat,  2 Oct 2021 00:33:23 +0200
-Message-Id: <20211001223323.1836640-1-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1356162AbhJAWsV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Oct 2021 18:48:21 -0400
+Received: from mga17.intel.com ([192.55.52.151]:38097 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1356211AbhJAWr5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 1 Oct 2021 18:47:57 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10124"; a="205756678"
+X-IronPort-AV: E=Sophos;i="5.85,340,1624345200"; 
+   d="scan'208";a="205756678"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2021 15:44:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,340,1624345200"; 
+   d="scan'208";a="565344027"
+Received: from chang-linux-3.sc.intel.com ([172.25.66.175])
+  by fmsmga002.fm.intel.com with ESMTP; 01 Oct 2021 15:44:20 -0700
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+To:     bp@suse.de, luto@kernel.org, tglx@linutronix.de, mingo@kernel.org,
+        x86@kernel.org
+Cc:     len.brown@intel.com, lenb@kernel.org, dave.hansen@intel.com,
+        thiago.macieira@intel.com, jing2.liu@intel.com,
+        ravi.v.shankar@intel.com, linux-kernel@vger.kernel.org,
+        chang.seok.bae@intel.com, linux-pm@vger.kernel.org
+Subject: [PATCH v11 26/29] intel_idle/amx: Add SPR support with XTILEDATA capability
+Date:   Fri,  1 Oct 2021 15:37:25 -0700
+Message-Id: <20211001223728.9309-27-chang.seok.bae@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20211001223728.9309-1-chang.seok.bae@intel.com>
+References: <20211001223728.9309-1-chang.seok.bae@intel.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The slope of the temperature increase or decrease can be high and when
-the temperature crosses the trip point, there could be a significant
-difference between the trip temperature and the measured temperatures.
+Add a custom Sapphire Rapids (SPR) C-state table to intel_idle driver. The
+parameters in this table are preferred over those supplied by ACPI.
 
-That forces the userspace to read the temperature back right after
-receiving a trip violation notification.
+SPR supports AMX, and so this custom table uses idle entry points that know
+how to initialize AMX TMM state, if necessary.
 
-In order to be efficient, give the temperature which resulted in the
-trip violation.
+This guarantees that AMX TMM state will never be the cause of hardware
+C-state demotion from C6 to C1E. Under some conditions this may result in
+improved power savings, and thus higher available turbo frequency budget.
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+[ Based on patch by Artem Bityutskiy <artem.bityutskiy@linux.intel.com>. ]
+
+Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+Reviewed-by: Len Brown <len.brown@intel.com>
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Cc: x86@kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
 ---
- drivers/thermal/thermal_core.c    |  6 ++++--
- drivers/thermal/thermal_netlink.c | 11 ++++++-----
- drivers/thermal/thermal_netlink.h |  8 ++++----
- 3 files changed, 14 insertions(+), 11 deletions(-)
+Changes from v9:
+* Add a comment to use tile_release() after preempt_disable(). (Dave
+  Hansen)
+* Use cpu_feature_enabled() instead of boot_cpu_has(). (Borislav Petkov)
+* Add a Suggested-by tag.
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 51374f4e1cca..9e243d9f929e 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -375,10 +375,12 @@ static void handle_thermal_trip(struct thermal_zone_device *tz, int trip)
- 	if (tz->last_temperature != THERMAL_TEMP_INVALID) {
- 		if (tz->last_temperature < trip_temp &&
- 		    tz->temperature >= trip_temp)
--			thermal_notify_tz_trip_up(tz->id, trip);
-+			thermal_notify_tz_trip_up(tz->id, trip,
-+						  tz->temperature);
- 		if (tz->last_temperature >= trip_temp &&
- 		    tz->temperature < (trip_temp - hyst))
--			thermal_notify_tz_trip_down(tz->id, trip);
-+			thermal_notify_tz_trip_down(tz->id, trip,
-+						    tz->temperature);
- 	}
- 
- 	if (type == THERMAL_TRIP_CRITICAL || type == THERMAL_TRIP_HOT)
-diff --git a/drivers/thermal/thermal_netlink.c b/drivers/thermal/thermal_netlink.c
-index 1234dbe95895..a16dd4d5d710 100644
---- a/drivers/thermal/thermal_netlink.c
-+++ b/drivers/thermal/thermal_netlink.c
-@@ -121,7 +121,8 @@ static int thermal_genl_event_tz(struct param *p)
- static int thermal_genl_event_tz_trip_up(struct param *p)
- {
- 	if (nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_ID, p->tz_id) ||
--	    nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_TRIP_ID, p->trip_id))
-+	    nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_TRIP_ID, p->trip_id) ||
-+	    nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_TEMP, p->temp))
- 		return -EMSGSIZE;
- 
- 	return 0;
-@@ -285,16 +286,16 @@ int thermal_notify_tz_disable(int tz_id)
- 	return thermal_genl_send_event(THERMAL_GENL_EVENT_TZ_DISABLE, &p);
- }
- 
--int thermal_notify_tz_trip_down(int tz_id, int trip_id)
-+int thermal_notify_tz_trip_down(int tz_id, int trip_id, int temp)
- {
--	struct param p = { .tz_id = tz_id, .trip_id = trip_id };
-+	struct param p = { .tz_id = tz_id, .trip_id = trip_id, .temp = temp };
- 
- 	return thermal_genl_send_event(THERMAL_GENL_EVENT_TZ_TRIP_DOWN, &p);
- }
- 
--int thermal_notify_tz_trip_up(int tz_id, int trip_id)
-+int thermal_notify_tz_trip_up(int tz_id, int trip_id, int temp)
- {
--	struct param p = { .tz_id = tz_id, .trip_id = trip_id };
-+	struct param p = { .tz_id = tz_id, .trip_id = trip_id, .temp = temp };
- 
- 	return thermal_genl_send_event(THERMAL_GENL_EVENT_TZ_TRIP_UP, &p);
- }
-diff --git a/drivers/thermal/thermal_netlink.h b/drivers/thermal/thermal_netlink.h
-index 828d1dddfa98..e554f76291f4 100644
---- a/drivers/thermal/thermal_netlink.h
-+++ b/drivers/thermal/thermal_netlink.h
-@@ -11,8 +11,8 @@ int thermal_notify_tz_create(int tz_id, const char *name);
- int thermal_notify_tz_delete(int tz_id);
- int thermal_notify_tz_enable(int tz_id);
- int thermal_notify_tz_disable(int tz_id);
--int thermal_notify_tz_trip_down(int tz_id, int id);
--int thermal_notify_tz_trip_up(int tz_id, int id);
-+int thermal_notify_tz_trip_down(int tz_id, int id, int temp);
-+int thermal_notify_tz_trip_up(int tz_id, int id, int temp);
- int thermal_notify_tz_trip_delete(int tz_id, int id);
- int thermal_notify_tz_trip_add(int tz_id, int id, int type,
- 			       int temp, int hyst);
-@@ -49,12 +49,12 @@ static inline int thermal_notify_tz_disable(int tz_id)
+Changes from v6:
+* Update the changelog and function description. (Rafael J. Wysocki)
+
+Changes from v5:
+* Moved the code to intel_idle. (Peter Zijlstra)
+* Fixed to deactivate fpregs. (Andy Lutomirski and Dave Hansen)
+* Updated the code comment. (Dave Hansen)
+
+Changes from v4:
+* Added as a new patch. (Thomas Gleixner)
+---
+ arch/x86/include/asm/special_insns.h |  6 ++
+ drivers/idle/intel_idle.c            | 82 ++++++++++++++++++++++++++++
+ 2 files changed, 88 insertions(+)
+
+diff --git a/arch/x86/include/asm/special_insns.h b/arch/x86/include/asm/special_insns.h
+index 68c257a3de0d..e105c27c2951 100644
+--- a/arch/x86/include/asm/special_insns.h
++++ b/arch/x86/include/asm/special_insns.h
+@@ -294,6 +294,12 @@ static inline int enqcmds(void __iomem *dst, const void *src)
  	return 0;
  }
  
--static inline int thermal_notify_tz_trip_down(int tz_id, int id)
-+static inline int thermal_notify_tz_trip_down(int tz_id, int id, int temp)
- {
++static inline void tile_release(void)
++{
++	/* Instruction opcode for TILERELEASE; supported in binutils >= 2.36. */
++	asm volatile(".byte 0xc4, 0xe2, 0x78, 0x49, 0xc0");
++}
++
+ #endif /* __KERNEL__ */
+ 
+ #endif /* _ASM_X86_SPECIAL_INSNS_H */
+diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+index e6c543b5ee1d..72b72fa0e072 100644
+--- a/drivers/idle/intel_idle.c
++++ b/drivers/idle/intel_idle.c
+@@ -54,6 +54,8 @@
+ #include <asm/intel-family.h>
+ #include <asm/mwait.h>
+ #include <asm/msr.h>
++#include <asm/fpu/internal.h>
++#include <asm/special_insns.h>
+ 
+ #define INTEL_IDLE_VERSION "0.5.1"
+ 
+@@ -155,6 +157,58 @@ static __cpuidle int intel_idle_s2idle(struct cpuidle_device *dev,
  	return 0;
  }
  
--static inline int thermal_notify_tz_trip_up(int tz_id, int id)
-+static inline int thermal_notify_tz_trip_up(int tz_id, int id, int temp)
- {
- 	return 0;
- }
++/**
++ * idle_tile - Initialize TILE registers in INIT-state
++ *
++ * Leaving state in the dirty TILE registers may prevent the processor from
++ * entering lower-power idle states. Use TILERELEASE to initialize the
++ * state. Destroying fpregs state is safe after the fpstate update.
++ *
++ * WARNING: It should be called after preemption is disabled; otherwise,
++ * reschedule is possible with the destroyed state.
++ */
++static inline void idle_tile(void)
++{
++	if (cpu_feature_enabled(X86_FEATURE_XGETBV1) && (xgetbv(1) & XFEATURE_MASK_XTILE)) {
++		tile_release();
++		fpregs_deactivate(&current->thread.fpu);
++	}
++}
++
++/**
++ * intel_idle_tile - Ask the processor to enter the given idle state.
++ * @dev: cpuidle device of the target CPU.
++ * @drv: cpuidle driver (assumed to point to intel_idle_driver).
++ * @index: Target idle state index.
++ *
++ * Ensure TILE registers in INIT-state before using intel_idle() to
++ * enter the idle state.
++ */
++static __cpuidle int intel_idle_tile(struct cpuidle_device *dev,
++				     struct cpuidle_driver *drv, int index)
++{
++	idle_tile();
++
++	return intel_idle(dev, drv, index);
++}
++
++/**
++ * intel_idle_s2idle_tile - Ask the processor to enter the given idle state.
++ * @dev: cpuidle device of the target CPU.
++ * @drv: cpuidle driver (assumed to point to intel_idle_driver).
++ * @index: Target idle state index.
++ *
++ * Ensure TILE registers in INIT-state before using intel_idle_s2idle() to
++ * enter the idle state.
++ */
++static __cpuidle int intel_idle_s2idle_tile(struct cpuidle_device *dev,
++					    struct cpuidle_driver *drv, int index)
++{
++	idle_tile();
++
++	return intel_idle_s2idle(dev, drv, index);
++}
++
+ /*
+  * States are indexed by the cstate number,
+  * which is also the index into the MWAIT hint array.
+@@ -752,6 +806,27 @@ static struct cpuidle_state icx_cstates[] __initdata = {
+ 		.enter = NULL }
+ };
+ 
++static struct cpuidle_state spr_cstates[] __initdata = {
++	{
++		.name = "C1",
++		.desc = "MWAIT 0x00",
++		.flags = MWAIT2flg(0x00),
++		.exit_latency = 1,
++		.target_residency = 1,
++		.enter = &intel_idle,
++		.enter_s2idle = intel_idle_s2idle, },
++	{
++		.name = "C6",
++		.desc = "MWAIT 0x20",
++		.flags = MWAIT2flg(0x20) | CPUIDLE_FLAG_TLB_FLUSHED,
++		.exit_latency = 128,
++		.target_residency = 384,
++		.enter = &intel_idle_tile,
++		.enter_s2idle = intel_idle_s2idle_tile, },
++	{
++		.enter = NULL }
++};
++
+ static struct cpuidle_state atom_cstates[] __initdata = {
+ 	{
+ 		.name = "C1E",
+@@ -1095,6 +1170,12 @@ static const struct idle_cpu idle_cpu_icx __initconst = {
+ 	.use_acpi = true,
+ };
+ 
++static const struct idle_cpu idle_cpu_spr __initconst = {
++	.state_table = spr_cstates,
++	.disable_promotion_to_c1e = true,
++	.use_acpi = true,
++};
++
+ static const struct idle_cpu idle_cpu_avn __initconst = {
+ 	.state_table = avn_cstates,
+ 	.disable_promotion_to_c1e = true,
+@@ -1157,6 +1238,7 @@ static const struct x86_cpu_id intel_idle_ids[] __initconst = {
+ 	X86_MATCH_INTEL_FAM6_MODEL(SKYLAKE_X,		&idle_cpu_skx),
+ 	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X,		&idle_cpu_icx),
+ 	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D,		&idle_cpu_icx),
++	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,	&idle_cpu_spr),
+ 	X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNL,	&idle_cpu_knl),
+ 	X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNM,	&idle_cpu_knl),
+ 	X86_MATCH_INTEL_FAM6_MODEL(ATOM_GOLDMONT,	&idle_cpu_bxt),
 -- 
-2.25.1
+2.17.1
 
