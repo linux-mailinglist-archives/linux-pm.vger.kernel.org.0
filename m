@@ -2,161 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A6C741EAEF
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Oct 2021 12:28:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1080241EAF1
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Oct 2021 12:30:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238619AbhJAKaH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Oct 2021 06:30:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53718 "EHLO
+        id S229982AbhJAKcI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Oct 2021 06:32:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230476AbhJAKaG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Oct 2021 06:30:06 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C73C061775
-        for <linux-pm@vger.kernel.org>; Fri,  1 Oct 2021 03:28:22 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id j13so8453366qtq.6
-        for <linux-pm@vger.kernel.org>; Fri, 01 Oct 2021 03:28:22 -0700 (PDT)
+        with ESMTP id S230476AbhJAKcI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Oct 2021 06:32:08 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28BB3C061775
+        for <linux-pm@vger.kernel.org>; Fri,  1 Oct 2021 03:30:24 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id x20so14691847wrg.10
+        for <linux-pm@vger.kernel.org>; Fri, 01 Oct 2021 03:30:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=+gRi93ICIYhobVAL5GEzt+moQ65uKWUqaq2BoT5lL84=;
-        b=i6XxsNIjWOUkSCaIuZ4Zpn4QRlKAsZY6wrojfJixi2mdRYfvXW2S3ySfjkwRZzuii3
-         dkYwYiQiYIvcx0gcRShdbLMo956liqG0jtek6n3uYNmJ4pQXMz7Elpscp8xRHuxpQljs
-         EzloI2RMkkSIbTVRRm1bQEUZ8ps5+2A8VNPbc2FltxKqoGN1JLOhDKe2v8TIHTfkicSu
-         gvou5gDJRUoVfSen3sBWiSaJZJxVH6K4gRJyuZCEBGo7a8/Y7wI6tjdSGtEofGVuK8PB
-         k3pQdAZiAD8YMdDaMHoeSyWTgqCvIbBlmwa3mJUv2UasLJd9NBg+i86fIAhIsxTsXFxC
-         cIuA==
+        bh=qhH1uVfrvA2WMKNAisYCIIjOhTu11VObwXrq+F6JWoY=;
+        b=P6JEFsTFLGREaNWoZ7tQZKnuYYLQggrHSOfLMUJD+RMfmeiVwS9Ov/agP0Bwhvs4jP
+         ViHW1kW2zb8smbPMeQaMBQ1TQoHg8u/hWvE6K3zgtj7useUCfQHjxz75xepIWXflXQBu
+         D9y8oLc8dFONkCwNM/aEE2TiJM4d2uMWCHv7vfE2tF60mMCSD4AbtV9RhZROJdwSgkgs
+         7t7VlA8ReW/F8hCfrxqgMr+n4I45ZzRCvV5bIttS0hxWOpQxVqmxo2+/hVUdb75dJAOD
+         frjrKuQbkRKfhGAeXp/MXeP/HY3l6HyPweyuoclDvq+IblRKbNaXdQEimHLn3VcbufED
+         92Xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=+gRi93ICIYhobVAL5GEzt+moQ65uKWUqaq2BoT5lL84=;
-        b=T57IZ8lJdtXA4IicLSNnFJ65WMWBH86f7B8/YU17I8EVlfXQ7lKe1lLPgTLB+RQcwi
-         4tgDhigHLlvFTV32RW/MNggWE9F7bZe6Rt2aKX5Q6QxpQRuaRTJvWoG+bSEZwokcWbXQ
-         QWNBZaR6nTutLdYEcpiXvdEW3FQdgT4sOK0zqpQC8lUaqtDB6bmn7Mr37/qDKxnH5wjg
-         SMGBLJO1MjMHXJB0QAMGSgRY1uwgRItlUCRPIfUJRKVVfbw4886ia/8GtrAmZ1y/qvT8
-         679gigt38tTGU+uDnfqsTH9dpNdVdDTlsIVHMFGOd+ObV90v4Zam0zklq6dOiCTmJd61
-         Oz2w==
-X-Gm-Message-State: AOAM530nhD8q1n9BxA05UTdLH91F756iuQAsNU+hIRu+hy1uPwHYbAaM
-        JO3r8Gv2Hh8aN0RJVDfeBhbQhA==
-X-Google-Smtp-Source: ABdhPJyzhD8jytJih98e2GqEKbvygKymH8WSueCcMGsR3JKrq+HelSvIV0F8NBfVoiVTK39m/CXQog==
-X-Received: by 2002:a05:622a:295:: with SMTP id z21mr12248464qtw.125.1633084101399;
-        Fri, 01 Oct 2021 03:28:21 -0700 (PDT)
-Received: from [192.168.1.93] (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
-        by smtp.gmail.com with ESMTPSA id i18sm3353134qtx.60.2021.10.01.03.28.19
+        bh=qhH1uVfrvA2WMKNAisYCIIjOhTu11VObwXrq+F6JWoY=;
+        b=vuDGMevqWiW7U+LJTp35pfJOLstYU5Jl9by83Zqoypd9If3Bm1sEri72137cB1m/hJ
+         4B+7NFQ6Ruo9bk14iMrk7VwrBUARb05N4E0h1bfXk3652MbmJXgglczi+8K+CzDB19u/
+         gqcf/XDnp1gYOj1BMYV1mzLLs3zXwDvaBWbXvAfPvcz+ugoZoR4Ggmqixs3uwsAUjqfH
+         K+Je5F+fSQ5ZyFewvAXZ3ji/wR19+ZG4thEbGFx9v5sCto5Gdcuwaf1mwZlbeH1JpIV6
+         5XB91m6WJTOtN5d+dBedh05zlgCArDS+DiihK90qaQtxyrHdMWip881CWLxqOLxmn1Qi
+         Mjaw==
+X-Gm-Message-State: AOAM5317dXLqfR0rvZ2EtVElQXg6bfwx3Zhj7WU7lNl9gkK2Fay/PN2+
+        5e+eq+b1lu8pUSLDC4QgVF604+BI0Bw4oQ==
+X-Google-Smtp-Source: ABdhPJwxL3qiDUm00jRN9entmpu9ZMZJ1j7if6JeWZ2AIBUzK+gvXLSC0Oo4boqTjshMAa8Mx+iBOQ==
+X-Received: by 2002:a5d:544c:: with SMTP id w12mr11612586wrv.398.1633084222508;
+        Fri, 01 Oct 2021 03:30:22 -0700 (PDT)
+Received: from [192.168.0.46] ([82.142.20.44])
+        by smtp.googlemail.com with ESMTPSA id o19sm5698172wrg.60.2021.10.01.03.30.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Oct 2021 03:28:20 -0700 (PDT)
-Subject: Re: [PATCH v2 1/2] thermal: qcom: tsens: remove data indirection in
- the debugfs
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20210926134237.23863-1-dmitry.baryshkov@linaro.org>
-From:   Thara Gopinath <thara.gopinath@linaro.org>
-Message-ID: <973f7fd6-3d35-205b-5405-d9daa3510a4e@linaro.org>
-Date:   Fri, 1 Oct 2021 06:28:19 -0400
+        Fri, 01 Oct 2021 03:30:21 -0700 (PDT)
+Subject: Re: [RFD] Remove the userspace governor and the cooling device set
+ state sysfs entry
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>
+References: <d46b5007-428b-5f31-52d9-a964cc60ad92@linaro.org>
+ <39728f24-7781-543c-ad28-fd1c7552d96a@arm.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <2b8300b2-4678-3e3c-71e3-6d276b99eb07@linaro.org>
+Date:   Fri, 1 Oct 2021 12:30:20 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <20210926134237.23863-1-dmitry.baryshkov@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <39728f24-7781-543c-ad28-fd1c7552d96a@arm.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Dimitry,
 
-Thanks for the patch
+Hi Lukasz,
 
-On 9/26/21 9:42 AM, Dmitry Baryshkov wrote:
-> There is no reason to pass platform device to debugfs just to get the
-> tsens_priv from it. Not to mention that for TSENS_V0 the platform device
-> (gcc) might have other device data. Pass the tsens_priv data to debugfs
-> callbacks directly.
+On 30/09/2021 12:10, Lukasz Luba wrote:
+> Hi Daniel,
 > 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
->   drivers/thermal/qcom/tsens.c | 17 +++++++----------
->   1 file changed, 7 insertions(+), 10 deletions(-)
+> On 9/22/21 10:59 AM, Daniel Lezcano wrote:
+>>
+>> Hi,
+>>
+>> the userspace governor is sending temperature when polling is active and
+>> trip point crossed events. Nothing else.
+>>
+>> In the other side, the cooling device have their cooling device
+>> set_cur_state read-writable all the time.
+>>
+>> The thermal framework is wrongly used by userspace as a power capping
+>> framework by acting on the cooling device opaque state. This one then
+>> competes with the in-kernel governor decision.
+>>
+>> As the new netlink thermal notification is able to provide the same
+>> information than the userspace governor.
+>>
+>> I propose to remove the userspace governor and the cur_state entry in
+>> the sysfs exported file.
+>>
+>> The DTPM framework is the right framework to do power capping and
+>> moreover it deals with the aggregation via the dev pm qos.
+>>
+>> Does it make sense ?
 > 
-> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-> index 4c7ebd1d3f9c..6aeea74c1bb0 100644
-> --- a/drivers/thermal/qcom/tsens.c
-> +++ b/drivers/thermal/qcom/tsens.c
-> @@ -657,8 +657,7 @@ int get_temp_common(const struct tsens_sensor *s, int *temp)
->   #ifdef CONFIG_DEBUG_FS
->   static int dbg_sensors_show(struct seq_file *s, void *data)
->   {
-> -	struct platform_device *pdev = s->private;
-> -	struct tsens_priv *priv = platform_get_drvdata(pdev);
-> +	struct tsens_priv *priv = s->private;
->   	int i;
->   
->   	seq_printf(s, "max: %2d\nnum: %2d\n\n",
-> @@ -675,8 +674,7 @@ static int dbg_sensors_show(struct seq_file *s, void *data)
->   
->   static int dbg_version_show(struct seq_file *s, void *data)
->   {
-> -	struct platform_device *pdev = s->private;
-> -	struct tsens_priv *priv = platform_get_drvdata(pdev);
-> +	struct tsens_priv *priv = s->private;
->   	u32 maj_ver, min_ver, step_ver;
->   	int ret;
->   
-> @@ -701,9 +699,8 @@ static int dbg_version_show(struct seq_file *s, void *data)
->   DEFINE_SHOW_ATTRIBUTE(dbg_version);
->   DEFINE_SHOW_ATTRIBUTE(dbg_sensors);
->   
-> -static void tsens_debug_init(struct platform_device *pdev)
-> +static void tsens_debug_init(struct platform_device *pdev, struct tsens_priv *priv)
+> It sounds that we should be OK with the information from netlink.
+> I don't see objections. We can also extend the netlink packet when
+> needed. I'm fine with removing the user-space governor.
 
-You anyways have to pass pdev here, as it is used for referencing dev 
-name below. So drop sending tsens_priv as well. You can get it via 
-platform_get_drvdata as in the original code. I am okay with the change 
-in using priv instead of pdev as private pointer in the fops.
+thank you for your answer. I'll propose a patch with a warn when the
+userspace governor is registered in order to let know people the
+governor is deprecated.
 
->   {
-> -	struct tsens_priv *priv = platform_get_drvdata(pdev);
->   	struct dentry *root, *file;
->   
->   	root = debugfs_lookup("tsens", NULL);
-> @@ -715,14 +712,14 @@ static void tsens_debug_init(struct platform_device *pdev)
->   	file = debugfs_lookup("version", priv->debug_root);
->   	if (!file)
->   		debugfs_create_file("version", 0444, priv->debug_root,
-> -				    pdev, &dbg_version_fops);
-> +				    priv, &dbg_version_fops);
->   
->   	/* A directory for each instance of the TSENS IP */
->   	priv->debug = debugfs_create_dir(dev_name(&pdev->dev), priv->debug_root);
-> -	debugfs_create_file("sensors", 0444, priv->debug, pdev, &dbg_sensors_fops);
-> +	debugfs_create_file("sensors", 0444, priv->debug, priv, &dbg_sensors_fops);
->   }
->   #else
-> -static inline void tsens_debug_init(struct platform_device *pdev) {}
-> +static inline void tsens_debug_init(struct platform_device *pdev, struct tsens_priv *priv) {}
->   #endif
->   
->   static const struct regmap_config tsens_config = {
-> @@ -918,7 +915,7 @@ int __init init_common(struct tsens_priv *priv)
->   	if (tsens_version(priv) >= VER_0_1)
->   		tsens_enable_irq(priv);
->   
-> -	tsens_debug_init(op);
-> +	tsens_debug_init(op, priv);
->   
->   err_put_device:
->   	put_device(&op->dev);
-> 
+Probably, it would make sense to emit a warning also when the cooling
+device state is set from userspace.
+
+For the next release, we should be able to drop the userspace governor
+and make the cooling device state read-only.
+
+Does it make sense ?
+
 
 -- 
-Warm Regards
-Thara (She/Her/Hers)
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
