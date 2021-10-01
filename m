@@ -2,107 +2,163 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AE1541F56C
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Oct 2021 21:04:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4153441F59A
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Oct 2021 21:15:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbhJATGb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Oct 2021 15:06:31 -0400
-Received: from mail-oi1-f174.google.com ([209.85.167.174]:35397 "EHLO
-        mail-oi1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbhJATGb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Oct 2021 15:06:31 -0400
-Received: by mail-oi1-f174.google.com with SMTP id n64so12670585oih.2;
-        Fri, 01 Oct 2021 12:04:46 -0700 (PDT)
+        id S231934AbhJATRR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Oct 2021 15:17:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36494 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231897AbhJATRR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Oct 2021 15:17:17 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CBDEC061775;
+        Fri,  1 Oct 2021 12:15:32 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id g41so42283748lfv.1;
+        Fri, 01 Oct 2021 12:15:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=niNmxAk0ssHAm3Elvv3RJuw0kSncCioQpK+Dv1hLMfQ=;
+        b=ompAaqfUP2nwflwfZymbIWdbQcFcOFoC+2uqB/pw0Y1WeA0ZFgZBrXXroc1D9iZE/3
+         r+IPUa14hP8aLxdvlyxUGLG/sRpD1eVdY6HINGphhODSA8qi/WKmBF/Y4qJmjtqG9i5c
+         QteCTEwJ3FXZQIQOvZg/gr4YarMpWJqOQByuYB3PUiBYUJEXrfcuahtdb4hIBH9fyTNN
+         mNv1yfewQHiWqoHrX0awqEd0Tl6wD/YvrU5uk1BErj6tECORNnLLUEEmHb+sWMY3uVV3
+         Di3gYCH1EFMU7aOskMvk2sJ93QZxwOrUh/JeZf7kFffGHX478Gg8fj5Vh9nZ5d15M/9/
+         cQ9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6kWvsqS9wtvwiaERR1Va8UItEXxGSeZlzApY0N8G3rE=;
-        b=q94lhcFZLqGuzJpezvCiw8fS3mZssVIacMfRks9iZu7EhlaV52myfGaJEJs8wenHms
-         yAhIjtjL4GVWAyPQE67iMQXelm7eDT+C2urNhqWJ0Do+XzlU2C6hdvAkyH+62CbtBYDD
-         XwEFKTGQCuAFk+NcL5X+cMqyOC4f4mLLtESgfwZB/g1J4rtCNz3eBdSw8B//aLiK//It
-         ka5YWFMf7O3GJtT6n6T2GHyAkT9fxSi5KYGa72f3GKaxnemH+YUu6rV9rtfjxzgZ0frl
-         /X2QJIX9Ttjj2c/U+yOBOLwcqvDzFBVoPc58rD4VKaUO2EQxlNoaYreowNnY4aJHA2PS
-         XMBA==
-X-Gm-Message-State: AOAM533zK3hZnCHlG35ggnsJFBTZ78cliHEkPZk4+18koq6eNvkSYBk4
-        paf3r5MvsTdJzCq7+T2YfvdF0dZjbjkdJyPizC8=
-X-Google-Smtp-Source: ABdhPJwkJ1z1pZjMxWjmM/JFqZfk81xzq1QVWsHMICaYKew+bU3RpBJyonPfV4yRXS3vbFfo9JHBvc+qP2NyUlBFBLk=
-X-Received: by 2002:a05:6808:1816:: with SMTP id bh22mr4979269oib.69.1633115086415;
- Fri, 01 Oct 2021 12:04:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210928164217.950960-1-srinivas.pandruvada@linux.intel.com>
- <CAJZ5v0jzbm5xnFSceQNmZjDQ0eU=i_f_WnDcoa05rEQ083mDkg@mail.gmail.com> <5b5f8adcf441494c5e17b9fb47dc42f345c737f2.camel@linux.intel.com>
-In-Reply-To: <5b5f8adcf441494c5e17b9fb47dc42f345c737f2.camel@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 1 Oct 2021 21:04:35 +0200
-Message-ID: <CAJZ5v0iVMfz2joKiWK05FLpDyQTQj4RFAoE9Mc_RHbaUA1qRvw@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Process HWP Guaranteed change notification
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=niNmxAk0ssHAm3Elvv3RJuw0kSncCioQpK+Dv1hLMfQ=;
+        b=jgiltYdEn9VV6EpxeD3Cc9Ww0mRwmqcceWht5OiYSwz2br8hlK+/uiFnDGiVpx+bEg
+         bbmUrJO7YWE6BSyyDCkBn5uovhjOuiN1v0GYhTDOONcGrH7ZD4Rp0LZdwPJra9BY2bAj
+         tF8trH6Ut8GDSRJ+Uf/TES9vHatzHZRGCEgH7RVo/kiPLt+u7J15hD3esmma2BOCoWSo
+         Kura87ogU+bWGoqJxeqixAOcMowu25ZSt8y9saAknWf8vwq9nYYv9kkvykoffv9U6nDf
+         RlqZn8NKHcIw2jb+eRroFsfDiPEnt76oOeXA3AXucTjZ32GPFDrtaeSx15TWAms83L3R
+         uk+w==
+X-Gm-Message-State: AOAM531yEm8Wt7gzw65anzwhic/CpnA5wvmhYwNH4rdhLFTSNZrCwmfq
+        d92qTPMYHjolrwHJbqjny6o=
+X-Google-Smtp-Source: ABdhPJy3ghoTNAi0Jb2SiS3hsWYw15h3Vk93zN4ib7q8hKhDd5DWUUMwX4Q7U3/o0nn9oofd85xS+Q==
+X-Received: by 2002:a2e:4e11:: with SMTP id c17mr13093513ljb.19.1633115730771;
+        Fri, 01 Oct 2021 12:15:30 -0700 (PDT)
+Received: from [192.168.2.145] (79-139-163-198.dynamic.spd-mgts.ru. [79.139.163.198])
+        by smtp.googlemail.com with ESMTPSA id d6sm820684lfi.137.2021.10.01.12.15.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Oct 2021 12:15:30 -0700 (PDT)
+Subject: Re: [PATCH v13 02/35] soc/tegra: Add
+ devm_tegra_core_dev_init_opp_table_common()
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Nishanth Menon <nm@ti.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>, pablomh@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        David Heidelberg <david@ixit.cz>
+References: <20210926224058.1252-1-digetx@gmail.com>
+ <20210926224058.1252-3-digetx@gmail.com>
+ <CAPDyKFrtE75Tf-vefM0isj52PJ5_v525AjqU2TMUpc4__rYLhA@mail.gmail.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <ab874e0c-903a-fc3b-d33b-54a7a9f0e109@gmail.com>
+Date:   Fri, 1 Oct 2021 22:15:29 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+MIME-Version: 1.0
+In-Reply-To: <CAPDyKFrtE75Tf-vefM0isj52PJ5_v525AjqU2TMUpc4__rYLhA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 1, 2021 at 9:01 PM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> On Fri, 2021-10-01 at 20:52 +0200, Rafael J. Wysocki wrote:
-> > On Tue, Sep 28, 2021 at 6:42 PM Srinivas Pandruvada
-> > <srinivas.pandruvada@linux.intel.com> wrote:
-> > >
-> > > It is possible that HWP guaranteed ratio is changed in response to
-> > > change in power and thermal limits. For example when Intel Speed
-> > > Select
-> > > performance profile is changed or there is change in TDP, hardware
-> > > can
-> > > send notifications. It is possible that the guaranteed ratio is
-> > > increased. This creates an issue when turbo is disabled, as the old
-> > > limits set in MSR_HWP_REQUEST are still lower and hardware will
-> > > clip
-> > > to older limits.
-> > >
-> > > This change enables HWP interrupt and process HWP interrupts. When
-> > > guaranteed is changed, calls cpufreq_update_policy() so that driver
-> > > callbacks are called to update to new HWP limits. This callback
-> > > is called from a delayed workqueue of 10ms to avoid frequent
-> > > updates.
-> > >
-> > > Although the scope of IA32_HWP_INTERRUPT is per logical cpu, on
-> > > some
-> > > plaforms interrupt is generated on all CPUs. This is particularly a
-> > > problem during initialization, when the driver didn't allocated
-> > > data for other CPUs. So this change uses a cpumask of enabled CPUs
-> > > and
-> > > process interrupts on those CPUs only.
-> > >
-> > > When the cpufreq offline() or suspend()callback is called, HWP
-> > > interrupt
-> > > is disabled on those CPUs and also cancels any pending work item.
-> > >
-> > > Spin lock is used to protect data and processing shared with
-> > > interrupt
-> > > handler. Here READ_ONCE(), WRITE_ONCE() macros are used to
-> > > designate
-> > > shared data, even though spin lock act as an optmization barrier
-> > > here.
-> > >
-> > > Signed-off-by: Srinivas Pandruvada <
-> > > srinivas.pandruvada@linux.intel.com>
-> > > ---
-> > > This patch is a replacement from the patch submitted to 5.15 and
-> > > later
-> > > reverted.
-> >
-> > Applied as 5.16 material, thanks!
-> I got email that pablo (pablomh@gmail.com) tested this. So he can added
-> Tested-by also pointed out typo in "optmization".
-> Shall I send a patch with this change?
+01.10.2021 15:50, Ulf Hansson пишет:
+> On Mon, 27 Sept 2021 at 00:42, Dmitry Osipenko <digetx@gmail.com> wrote:
+>>
+>> Only couple drivers need to get the -ENODEV error code and majority of
+>> drivers need to explicitly initialize the performance state. Add new
+>> common helper which sets up OPP table for these drivers.
+>>
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>> ---
+>>  include/soc/tegra/common.h | 24 ++++++++++++++++++++++++
+>>  1 file changed, 24 insertions(+)
+>>
+>> diff --git a/include/soc/tegra/common.h b/include/soc/tegra/common.h
+>> index af41ad80ec21..5b4a042f60fb 100644
+>> --- a/include/soc/tegra/common.h
+>> +++ b/include/soc/tegra/common.h
+>> @@ -39,4 +39,28 @@ devm_tegra_core_dev_init_opp_table(struct device *dev,
+>>  }
+>>  #endif
+>>
+>> +/*
+>> + * This function should be invoked with the enabled runtime PM of the device
+>> + * in order to initialize performance state properly. Most of Tegra devices
+>> + * are assumed to be suspended at a probe time and GENPD require RPM to be
+>> + * enabled to set up the rpm-resume state, otherwise device is active and
+>> + * performance state is applied immediately. Note that it will initialize
+>> + * OPP bandwidth if it's wired in a device-tree for this device, which is
+>> + * undesirable for a suspended device.
+>> + */
+>> +static inline int
+>> +devm_tegra_core_dev_init_opp_table_common(struct device *dev)
+>> +{
+>> +       struct tegra_core_opp_params opp_params = {};
+>> +       int err;
+>> +
+>> +       opp_params.init_state = true;
+>> +
+>> +       err = devm_tegra_core_dev_init_opp_table(dev, &opp_params);
+>> +       if (err != -ENODEV)
+>> +               return err;
+>> +
+>> +       return 0;
+>> +}
+> 
+> Just want to share a few thoughts around these functions.
+> 
+> So, I assume it's fine to call
+> devm_tegra_core_dev_init_opp_table_common() or
+> devm_tegra_core_dev_init_opp_table() from consumer drivers during
+> ->probe(), as long as those drivers are tegra specific, which I assume
+> all are in the series!?
 
-No need, I will update the commit in the tree.
+That is correct, all drivers are tegra-specific in this series. External
+devices are attached to the internal SoC devices and this series is
+about the SoC power management.
+
+> My point is, a cross SoC consumer driver that needs to initiate OPP
+> tables can get rather messy, if it would need to make one specific
+> function call per SoC.
+> 
+> That said, I hope we can tackle this as a separate/future problem, so
+> the series can get merged as is.
+
+Yes, as we already have seen, it's not an easy problem to make PD core
+to handle it in a generic way. If there will be a similar demand from
+other SoCs, then we may try to solve that problem again.
