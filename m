@@ -2,297 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D3C741EE7F
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Oct 2021 15:25:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E17E041EE86
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Oct 2021 15:27:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231535AbhJAN0x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Oct 2021 09:26:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38914 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231437AbhJAN0s (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Oct 2021 09:26:48 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25015C0613E2
-        for <linux-pm@vger.kernel.org>; Fri,  1 Oct 2021 06:25:00 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id z24so38843835lfu.13
-        for <linux-pm@vger.kernel.org>; Fri, 01 Oct 2021 06:25:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ce1L2tN5HKfi3fvHHadmQ3q2m1uy07zcuZbE6aqO/w8=;
-        b=powMYwV2MjTTSNc/t+dTNLdv1N7EGIPyjZGEPVcI3gY1sc7M027cz1jk10A8Akvayt
-         xjVreVrw3OhYWDozi4k1FD15Y/REv1+kRr+cjUF2h0j1veF2W18YSPZ0Q5Yr4sHeIvE2
-         xbMkeHo9U1tEXk06Mw9Kuy4lgLyOxpZSHnK0HBd2vSzL2VjpwHt/hOcHFKIy7B6LJi7A
-         uoB+oX4ib19bvdTB1CDwwSKijlssZrKUF/Rsk7l+ZYlLV+xqUcOhO1E9Y9gSeqjAwXK/
-         ooBHqYOXpxuJ8myCcf7rUgQtf3FwOKbuwTsCqu62SbjlUC9B1vASEJMY0Aqy8D3WeZyF
-         q1kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ce1L2tN5HKfi3fvHHadmQ3q2m1uy07zcuZbE6aqO/w8=;
-        b=ML1MLcfx8KYLJ9DTmoA//1rjbq+YR23Fy+GzoFSOXE0FomNOCPg9mOxkGv2VZJdttm
-         TCDBhMJ4dUVWVdqUeRdIZKmSEhHQkhf+ZYw165CMBkTuRbON+9P7GoAhK5SKDDMT7VvA
-         Nn9nmqa3CyH1IYY6zXLPMzrFBvOQccjeABSYRfcz+1010Bs/+PmrWUECeV4BpkHdCFma
-         HL7PuwFouESGPDgoYAKGRh4xSRLG4cMCWePasNpRLOd6gMR5j/kZuUEtJFfUat47FtdD
-         YoDfY42sO1AW+9OGmsspQSRFqTMLQxZChxUVtaWAf+QBaMpFinAMJqyg1a74joNTpuQ+
-         ktDg==
-X-Gm-Message-State: AOAM532sgVtXtCVMksxK4g5Z9uDWs/WDs/zYGJnmJm97d8gTPcWwU+de
-        sqqdg0PUiAH4LAkgpQWK/0A1xonbXnB0uyf/UVnvjA==
-X-Google-Smtp-Source: ABdhPJx3j8rYzIefonx7fnLDHN6Ws0loCtwYPf/Gwf8OXRLpCYIkD4HnMnNV/rnmavNwT0BrQF7QYu3k62ifmvyYjCU=
-X-Received: by 2002:a19:5f4b:: with SMTP id a11mr5339726lfj.373.1633094698289;
- Fri, 01 Oct 2021 06:24:58 -0700 (PDT)
+        id S231495AbhJAN3M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Oct 2021 09:29:12 -0400
+Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:6536 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231700AbhJAN1X (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Oct 2021 09:27:23 -0400
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 191CQQAR025627;
+        Fri, 1 Oct 2021 08:25:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=BlIHIqtr1k2ONbmVBbvNuwbDQJ1cE8q8zaHeDBEFRFo=;
+ b=FHDDKo3FUPyj7uA1rJz5c30+pi3G80Jn8fVbeNu92AHTMLmE8epU9GQcWAU37SqJM+ZZ
+ u9bVy8NQeXag71tpA0t+2YuYqLdEak/jR2y56FSLwQGWIku7iHbqlqhDvTDFK8f3TXny
+ f2ubYP8U7stOn1njsBnhgjfpHoGcOyyf99TOKxC7iZe2M0KI/s3iZyyKI/y7dLtiD2xP
+ 1DYcxGdtxkB7r5XA/5DXby0ENE5rGPkStecYWH6Jpl05d2z9w8mkeGnSNCgpiefoWAUd
+ MW9CIxmRW1Kj05HEUNYu8eaVQbBUjsoWVzP/IITRq5cr2kTS8cujQjx3Jk+elrD7/MEs Qg== 
+Received: from ediex02.ad.cirrus.com ([87.246.76.36])
+        by mx0a-001ae601.pphosted.com with ESMTP id 3bdmfw0xgf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 01 Oct 2021 08:25:36 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.12; Fri, 1 Oct
+ 2021 14:25:34 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2242.12 via Frontend
+ Transport; Fri, 1 Oct 2021 14:25:34 +0100
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 0A84411AF;
+        Fri,  1 Oct 2021 13:25:34 +0000 (UTC)
+Date:   Fri, 1 Oct 2021 13:25:34 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Colin King <colin.king@canonical.com>
+CC:     Sebastian Reichel <sre@kernel.org>,
+        <patches@opensource.cirrus.com>, <linux-pm@vger.kernel.org>,
+        <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] power: supply: wm831x_power: fix spelling mistake on
+ function name
+Message-ID: <20211001132534.GJ9223@ediswmail.ad.cirrus.com>
+References: <20211001120449.17914-1-colin.king@canonical.com>
 MIME-Version: 1.0
-References: <20210926224058.1252-1-digetx@gmail.com> <20210926224058.1252-10-digetx@gmail.com>
-In-Reply-To: <20210926224058.1252-10-digetx@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 1 Oct 2021 15:24:21 +0200
-Message-ID: <CAPDyKFqqQvKusZ2gzHh69LNrncvi9_o04_xFKDpAkDbS-8Zecg@mail.gmail.com>
-Subject: Re: [PATCH v13 09/35] gpu: host1x: Add runtime PM and OPP support
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        David Heidelberg <david@ixit.cz>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20211001120449.17914-1-colin.king@canonical.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: SrR3VPjBzT9Twp7qjYXrEV6izYoaaOCR
+X-Proofpoint-ORIG-GUID: SrR3VPjBzT9Twp7qjYXrEV6izYoaaOCR
+X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 27 Sept 2021 at 00:42, Dmitry Osipenko <digetx@gmail.com> wrote:
->
-> Add runtime PM and OPP support to the Host1x driver. For the starter we
-> will keep host1x always-on because dynamic power management require a major
-> refactoring of the driver code since lot's of code paths are missing the
-> RPM handling and we're going to remove some of these paths in the future.
->
-> Tested-by: Peter Geis <pgwipeout@gmail.com> # Ouya T30
-> Tested-by: Paul Fertser <fercerpav@gmail.com> # PAZ00 T20
-> Tested-by: Nicolas Chauvet <kwizart@gmail.com> # PAZ00 T20 and TK1 T124
-> Tested-by: Matt Merhar <mattmerhar@protonmail.com> # Ouya T30
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+On Fri, Oct 01, 2021 at 01:04:49PM +0100, Colin King wrote:
+> From: Colin Ian King <colin.king@canonical.com>
+> 
+> There is a spelling mistake in the name wm831x_battey_apply_config,
+> fix it.
+> 
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
 > ---
 
-[...]
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-> --- a/drivers/gpu/host1x/dev.c
-> +++ b/drivers/gpu/host1x/dev.c
-> @@ -6,14 +6,18 @@
->   */
->
->  #include <linux/clk.h>
-> +#include <linux/delay.h>
->  #include <linux/dma-mapping.h>
->  #include <linux/io.h>
->  #include <linux/list.h>
->  #include <linux/module.h>
->  #include <linux/of_device.h>
->  #include <linux/of.h>
-> +#include <linux/pm_runtime.h>
->  #include <linux/slab.h>
->
-> +#include <soc/tegra/common.h>
-> +
->  #define CREATE_TRACE_POINTS
->  #include <trace/events/host1x.h>
->  #undef CREATE_TRACE_POINTS
-> @@ -190,6 +194,9 @@ static void host1x_setup_sid_table(struct host1x *host)
->         const struct host1x_info *info = host->info;
->         unsigned int i;
->
-> +       if (!info->has_hypervisor)
-> +               return;
-> +
->         for (i = 0; i < info->num_sid_entries; i++) {
->                 const struct host1x_sid_entry *entry = &info->sid_table[i];
->
-> @@ -347,6 +354,27 @@ static void host1x_iommu_exit(struct host1x *host)
->         }
->  }
->
-> +static int host1x_get_resets(struct host1x *host)
-> +{
-> +       int err;
-> +
-> +       host->resets[0].id = "mc";
-> +       host->resets[1].id = "host1x";
-> +       host->nresets = ARRAY_SIZE(host->resets);
-> +
-> +       err = devm_reset_control_bulk_get_optional_exclusive_released(
-> +                               host->dev, host->nresets, host->resets);
-> +       if (err) {
-> +               dev_err(host->dev, "failed to get reset: %d\n", err);
-> +               return err;
-> +       }
-> +
-> +       if (WARN_ON(!host->resets[1].rstc))
-> +               return -ENOENT;
-> +
-> +       return 0;
-> +}
-> +
->  static int host1x_probe(struct platform_device *pdev)
->  {
->         struct host1x *host;
-> @@ -423,12 +451,9 @@ static int host1x_probe(struct platform_device *pdev)
->                 return err;
->         }
->
-> -       host->rst = devm_reset_control_get(&pdev->dev, "host1x");
-> -       if (IS_ERR(host->rst)) {
-> -               err = PTR_ERR(host->rst);
-> -               dev_err(&pdev->dev, "failed to get reset: %d\n", err);
-> +       err = host1x_get_resets(host);
-> +       if (err)
->                 return err;
-> -       }
->
->         err = host1x_iommu_init(host);
->         if (err < 0) {
-> @@ -443,22 +468,10 @@ static int host1x_probe(struct platform_device *pdev)
->                 goto iommu_exit;
->         }
->
-> -       err = clk_prepare_enable(host->clk);
-> -       if (err < 0) {
-> -               dev_err(&pdev->dev, "failed to enable clock\n");
-> -               goto free_channels;
-> -       }
-> -
-> -       err = reset_control_deassert(host->rst);
-> -       if (err < 0) {
-> -               dev_err(&pdev->dev, "failed to deassert reset: %d\n", err);
-> -               goto unprepare_disable;
-> -       }
-> -
->         err = host1x_syncpt_init(host);
->         if (err) {
->                 dev_err(&pdev->dev, "failed to initialize syncpts\n");
-> -               goto reset_assert;
-> +               goto free_channels;
->         }
->
->         err = host1x_intr_init(host, syncpt_irq);
-> @@ -467,10 +480,18 @@ static int host1x_probe(struct platform_device *pdev)
->                 goto deinit_syncpt;
->         }
->
-> -       host1x_debug_init(host);
-> +       pm_runtime_enable(&pdev->dev);
-> +
-> +       err = devm_tegra_core_dev_init_opp_table_common(&pdev->dev);
-> +       if (err)
-> +               goto pm_disable;
->
-> -       if (host->info->has_hypervisor)
-> -               host1x_setup_sid_table(host);
-> +       /* the driver's code isn't ready yet for the dynamic RPM */
-> +       err = pm_runtime_resume_and_get(&pdev->dev);
-> +       if (err)
-> +               goto pm_disable;
-> +
-> +       host1x_debug_init(host);
->
->         err = host1x_register(host);
->         if (err < 0)
-> @@ -486,13 +507,14 @@ static int host1x_probe(struct platform_device *pdev)
->         host1x_unregister(host);
->  deinit_debugfs:
->         host1x_debug_deinit(host);
-> +
-> +       pm_runtime_put(&pdev->dev);
-
-pm_runtime_put() is asynchronous, so it may not actually succeed to
-trigger the ->runtime_suspend() callback to be invoked. Thus, this
-could end up that we leave clocks prepared/enabled when ->probe()
-fails, for example.
-
-I guess pm_runtime_put_sync_suspend() is slightly better.
-
-Another option is to call pm_runtime_force_suspend(), but then you
-must skip the call pm_runtime_disable() afterwards, as that has
-already been done inside that function.
-
-> +pm_disable:
-> +       pm_runtime_disable(&pdev->dev);
-> +
->         host1x_intr_deinit(host);
->  deinit_syncpt:
->         host1x_syncpt_deinit(host);
-> -reset_assert:
-> -       reset_control_assert(host->rst);
-> -unprepare_disable:
-> -       clk_disable_unprepare(host->clk);
->  free_channels:
->         host1x_channel_list_free(&host->channel_list);
->  iommu_exit:
-> @@ -507,19 +529,94 @@ static int host1x_remove(struct platform_device *pdev)
->
->         host1x_unregister(host);
->         host1x_debug_deinit(host);
-> +
-> +       pm_runtime_put(&pdev->dev);
-
-Similar comment as in ->probe().
-
-> +       pm_runtime_disable(&pdev->dev);
-> +
->         host1x_intr_deinit(host);
->         host1x_syncpt_deinit(host);
-> -       reset_control_assert(host->rst);
-> -       clk_disable_unprepare(host->clk);
->         host1x_iommu_exit(host);
->
->         return 0;
->  }
->
-> +
-> +       host1x_setup_sid_table(host);
-> +       host1x_syncpt_restore(host);
-> +       host1x_intr_start(host);
-> +
-> +       return 0;
-> +
-> +disable_clk:
-> +       clk_disable_unprepare(host->clk);
-> +release_reset:
-> +       reset_control_bulk_release(host->nresets, host->resets);
-> +
-> +       return err;
-> +}
-> +
-> +static const struct dev_pm_ops host1x_pm = {
-> +       SET_RUNTIME_PM_OPS(host1x_runtime_suspend, host1x_runtime_resume,
-> +                          NULL)
-> +       /* TODO: add system suspend-resume once driver will be ready for that */
-> +};
-
-[...]
-
-Kind regards
-Uffe
+Thanks,
+Charles
