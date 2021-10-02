@@ -2,83 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B66E41FB63
-	for <lists+linux-pm@lfdr.de>; Sat,  2 Oct 2021 14:02:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12E3441FCC0
+	for <lists+linux-pm@lfdr.de>; Sat,  2 Oct 2021 17:35:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232953AbhJBMEG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 2 Oct 2021 08:04:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60578 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232936AbhJBMEG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 2 Oct 2021 08:04:06 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5BEFC0613EE
-        for <linux-pm@vger.kernel.org>; Sat,  2 Oct 2021 05:02:20 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id p80so14688888iod.10
-        for <linux-pm@vger.kernel.org>; Sat, 02 Oct 2021 05:02:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=nsZbpm1YBoHMpWTnzHLuE/zYZ0yg4jBiKD5Q7oCTPBE=;
-        b=iyEBzcDh9nP1PeLfcLE3pZKPEbSZYlNJtG653y4A86xr3J1faktwZUDFMjqeFWC4C3
-         pF3DV4+WL5MsKoy2amNMy+K7hDBtQvfj1qv/5Vza7exMgEb2nSnZspfYYcaKQwauvIfR
-         eaDtNiNgszpeb9Scnrd/vQBPlttKLeWDRGTlI5+aZdzLdO1cqyEKk75QVrkmtR8QWe1/
-         3RLpjHt6B0vXzlo7fVwZ8drnq7AmrqY7JNdV+87jeT56inImTbQDyh3GgJPbNvZ3t8aE
-         dRoxyA7ZuZnwr1vP4QKaq11tUGQgjFG78UGyuxOrlrUwN0mpFkKvX3YcdEez5H49cH5q
-         DG6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=nsZbpm1YBoHMpWTnzHLuE/zYZ0yg4jBiKD5Q7oCTPBE=;
-        b=V7CzeT3U6EIEysLG6YvcANno0ZXOAoE2nsHwwY2kxPAZVoH7+Aovag4feQiatyCw3S
-         uhT2J7uifx4thycI/5xg4gHBa8KDJtokZsUi0xjZflCWgKs+vELOH96kqoYOOlRHTwLg
-         k3fhWy0oquIrfU2UYeda4Q9w8ByQhc26qtPq4ibFBZ9+nxgJouQYme1ZEHC1SywJz7Zm
-         /ppijzMaabsBXW3w9R+s9M+gtLXBWvmOku3zePWgXFJE4MbQjztoDDBuR19Ca6WPNZuk
-         o6aZF4qGArHY+wKEFIz+fy5Hh9bpH4wc/D7BiyqojZIGPKlHmAEgUwxOjsl29c4EDUKh
-         uR0A==
-X-Gm-Message-State: AOAM530clRr9ylt6+lqtpoPnboN9fIV4YHrW6ds/lI8qyhSfutrLCmVQ
-        A5E47VdtFBWi7WJTj7yiigL4Od5KUtKI+ssEwgo=
-X-Google-Smtp-Source: ABdhPJyC9vEfIVIZ0piprG1qmWZzMdIHfp+9a9LJrm7oG79+zeu4afF3nEZRNwO4iftaiuEc0899zzSIm+Z44BWVOkI=
-X-Received: by 2002:a5d:9613:: with SMTP id w19mr2276285iol.144.1633176140158;
- Sat, 02 Oct 2021 05:02:20 -0700 (PDT)
+        id S233445AbhJBPhH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 2 Oct 2021 11:37:07 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:56830 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233537AbhJBPgy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 2 Oct 2021 11:36:54 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 3C0661F43FC0
+Received: by earth.universe (Postfix, from userid 1000)
+        id F22923C0CA8; Sat,  2 Oct 2021 17:35:04 +0200 (CEST)
+Date:   Sat, 2 Oct 2021 17:35:04 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     Colin King <colin.king@canonical.com>,
+        patches@opensource.cirrus.com, linux-pm@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] power: supply: wm831x_power: fix spelling mistake on
+ function name
+Message-ID: <20211002153504.244kdj7vkurcuzg7@earth.universe>
+References: <20211001120449.17914-1-colin.king@canonical.com>
+ <20211001132534.GJ9223@ediswmail.ad.cirrus.com>
 MIME-Version: 1.0
-Received: by 2002:a4f:f90d:0:0:0:0:0 with HTTP; Sat, 2 Oct 2021 05:02:19 -0700 (PDT)
-Reply-To: unitednnation0@gmail.com
-From:   "U.n" <wadebaye33@gmail.com>
-Date:   Sat, 2 Oct 2021 00:02:19 -1200
-Message-ID: <CACE0T5XMqZGDn0LuVHJd2BMTQMXPyHA=xtbBVkc63R=7gJr72g@mail.gmail.com>
-Subject: Attention
-To:     unitednnation0@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pjryjpadlfjb4xau"
+Content-Disposition: inline
+In-Reply-To: <20211001132534.GJ9223@ediswmail.ad.cirrus.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---=20
 
+--pjryjpadlfjb4xau
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Attention Sir/Madam
-This is the United Nation (UN). We the United Nations (UN) Globally
-has approved (US$2.500,000)( two Million Five hundred thousand
-dollars) compensation as part of our responsibilities for humanitarian
-Aid for fighting against CoronaVirus and you are among the lucky ones.
+Hi,
 
+On Fri, Oct 01, 2021 at 01:25:34PM +0000, Charles Keepax wrote:
+> On Fri, Oct 01, 2021 at 01:04:49PM +0100, Colin King wrote:
+> > From: Colin Ian King <colin.king@canonical.com>
+> >=20
+> > There is a spelling mistake in the name wm831x_battey_apply_config,
+> > fix it.
+> >=20
+> > Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> > ---
+>=20
+> Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-This compensation is for the most affected countries, communities and
-families across the global. Your funds were deposited with Bank in USA
-to transfer your funds to you via Internet Banking. You have to send
-your full details as state below:with this email Address
-  ( unitednnation0@gmail.com )
-Your full names:
-Address:
-Telephone:
-Occupation:
+Thanks, queued.
 
+-- Sebastian
 
+--pjryjpadlfjb4xau
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Yours Sincerely
-Mr. Ant=C3=B3nio Guterres
-United Nations (UN).
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmFYfCIACgkQ2O7X88g7
++pqFug//SCffn3nc+/n4Q7PPL99PrQXAlxTHIrSYatkXgJRSJIh831p3sYAxjbJz
+ilOrw7mmX6DDJMr/7JtnBOaGaOk/iFIiqt7Oim26cgikiL4OUDuo8jpqIWe8Inr0
+OefTzxlcjLadO6MnydBcmB3CGqTY8cLfvVXcEmFf3V2YY4d1fvttf7HGVi6N8mTJ
+Kuv9bKGEy5NfLoZgwopolSeVu1g8AQM//GrqVysmX6Z2+C6df5b9ik1agyekBCJl
+tOByOf7uigNP69KeeWHJliJyYrPsLHJRzj8OnS6wAaV6q0hc3p7EIc4YPhrBRQsD
+XMCy4wkAbOTX7HQ58ADL+BZjsmziwioj2Ea1o1OdWd9hhFz4EpuQBtevT1VNZ2Oe
+JHfm6H8b+V0JX6DAiV0M+Oa5ZjN0B4exnhKfnQQPeZt3pAsxJpi6GuDhHvsZiqAv
+tYUcBNwLi3du3b3rKZAiqlKVO9zkVnTqAhRsHJWjvdJYgRkZRPRP2uiy62hxvZYf
+Qc+qmcJICtoE1lQgpNpj0HGH6D+E6/wW/8Z+VnFQzB4FZ28rFTA9qmQ0Iyo4iCQP
+Yo2j3FZpQi40h5q97ak1WGuqjALTpbqkoHVPN0u/VM4z7f/JfEiqj56I0xo6laOL
+thf8NvK5ZRCm4RJAWOUViV1FbY5LRNIxkFP5gkaj/UK49Vq0Gic=
+=O7Ze
+-----END PGP SIGNATURE-----
+
+--pjryjpadlfjb4xau--
