@@ -2,134 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 264DA41FCE2
-	for <lists+linux-pm@lfdr.de>; Sat,  2 Oct 2021 17:53:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82D0B41FCEC
+	for <lists+linux-pm@lfdr.de>; Sat,  2 Oct 2021 18:03:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233534AbhJBPz3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 2 Oct 2021 11:55:29 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:56986 "EHLO
+        id S233470AbhJBQFL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 2 Oct 2021 12:05:11 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:57036 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233438AbhJBPz2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 2 Oct 2021 11:55:28 -0400
+        with ESMTP id S232575AbhJBQFK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 2 Oct 2021 12:05:10 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id D13321F411C6
+        with ESMTPSA id BB6DF1F4418A
 Received: by earth.universe (Postfix, from userid 1000)
-        id D4F533C0CA8; Sat,  2 Oct 2021 17:53:39 +0200 (CEST)
-Date:   Sat, 2 Oct 2021 17:53:39 +0200
+        id 7764F3C0CA8; Sat,  2 Oct 2021 18:03:20 +0200 (CEST)
+Date:   Sat, 2 Oct 2021 18:03:20 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Henrik Grimler <henrik@grimler.se>, m.szyprowski@samsung.com,
-        krzysztof.kozlowski@canonical.com, sebastian.krzyszkowiak@puri.sm,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, stable@vger.kernel.org,
-        Wolfgang Wiedmeyer <wolfgit@wiedmeyer.de>
-Subject: Re: [PATCH v2 1/2] power: supply: max17042_battery: use VFSOC for
- capacity when no rsns
-Message-ID: <20211002155339.u33vym7gp5kchwrz@earth.universe>
-References: <20210929181418.4221-1-henrik@grimler.se>
- <be608922-ef03-da35-c65c-575f301b596b@redhat.com>
+To:     Tang Bin <tangbin@cmss.chinamobile.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] power: supply: cpcap-battery: use
+ device_get_match_data() to simplify code
+Message-ID: <20211002160320.24clt5v2nevynuco@earth.universe>
+References: <20210928020623.21192-1-tangbin@cmss.chinamobile.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7egjpavqn5hc2qqd"
+        protocol="application/pgp-signature"; boundary="p5fpuwijhyki46dm"
 Content-Disposition: inline
-In-Reply-To: <be608922-ef03-da35-c65c-575f301b596b@redhat.com>
+In-Reply-To: <20210928020623.21192-1-tangbin@cmss.chinamobile.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---7egjpavqn5hc2qqd
+--p5fpuwijhyki46dm
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Wed, Sep 29, 2021 at 09:43:25PM +0200, Hans de Goede wrote:
-> On 9/29/21 8:14 PM, Henrik Grimler wrote:
-> > On Galaxy S3 (i9300/i9305), which has the max17047 fuel gauge and no
-> > current sense resistor (rsns), the RepSOC register does not provide an
-> > accurate state of charge value. The reported value is wrong, and does
-> > not change over time. VFSOC however, which uses the voltage fuel gauge
-> > to determine the state of charge, always shows an accurate value.
-> >=20
-> > For devices without current sense, VFSOC is already used for the
-> > soc-alert (0x0003 is written to MiscCFG register), so with this change
-> > the source of the alert and the PROP_CAPACITY value match.
-> >=20
-> > Fixes: 359ab9f5b154 ("power_supply: Add MAX17042 Fuel Gauge Driver")
-> > Cc: <stable@vger.kernel.org>
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> > Suggested-by: Wolfgang Wiedmeyer <wolfgit@wiedmeyer.de>
-> > Signed-off-by: Henrik Grimler <henrik@grimler.se>
-> > ---
-> > Changes in v2:
-> > Re-write commit message to highlight that VFSOC is already used for
-> > alert, after Krzysztof's comments
+On Tue, Sep 28, 2021 at 10:06:23AM +0800, Tang Bin wrote:
+> In the function cpcap_battery_probe(), the driver only needs the
+> data object, so use device_get_match_data() instead, to make the
+> code cleaner.
 >=20
-> Thanks, both patches looks good to me:
->=20
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
->=20
-> for the series.
+> Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
+> ---
 
-Thanks, both queued.
+Thanks, queued.
 
 -- Sebastian
 
+> Changes from v1
+>  - change the title and commit message.
+>  - change the code to use other api to make code simple.
+> ---
+>  drivers/power/supply/cpcap-battery.c | 15 ++++-----------
+>  1 file changed, 4 insertions(+), 11 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/cpcap-battery.c b/drivers/power/supply/=
+cpcap-battery.c
+> index 8d62d4241..18e3ff0e1 100644
+> --- a/drivers/power/supply/cpcap-battery.c
+> +++ b/drivers/power/supply/cpcap-battery.c
+> @@ -1026,20 +1026,13 @@ static const struct power_supply_desc cpcap_charg=
+er_battery_desc =3D {
+>  static int cpcap_battery_probe(struct platform_device *pdev)
+>  {
+>  	struct cpcap_battery_ddata *ddata;
+> -	const struct of_device_id *match;
+>  	struct power_supply_config psy_cfg =3D {};
+>  	int error;
+> +	const struct cpcap_battery_config *cfg;
+> =20
+> -	match =3D of_match_device(of_match_ptr(cpcap_battery_id_table),
+> -				&pdev->dev);
+> -	if (!match)
+> -		return -EINVAL;
+> -
+> -	if (!match->data) {
+> -		dev_err(&pdev->dev, "no configuration data found\n");
+> -
+> +	cfg =3D device_get_match_data(&pdev->dev);
+> +	if (!cfg)
+>  		return -ENODEV;
+> -	}
+> =20
+>  	ddata =3D devm_kzalloc(&pdev->dev, sizeof(*ddata), GFP_KERNEL);
+>  	if (!ddata)
+> @@ -1047,7 +1040,7 @@ static int cpcap_battery_probe(struct platform_devi=
+ce *pdev)
+> =20
+>  	INIT_LIST_HEAD(&ddata->irq_list);
+>  	ddata->dev =3D &pdev->dev;
+> -	memcpy(&ddata->config, match->data, sizeof(ddata->config));
+> +	memcpy(&ddata->config, cfg, sizeof(ddata->config));
+> =20
+>  	ddata->reg =3D dev_get_regmap(ddata->dev->parent, NULL);
+>  	if (!ddata->reg)
+> --=20
+> 2.20.1.windows.1
 >=20
 >=20
-> Regards,
->=20
-> Hans
->=20
->=20
-> > ---
-> >  drivers/power/supply/max17042_battery.c | 5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/su=
-pply/max17042_battery.c
-> > index 8dffae76b6a3..5809ba997093 100644
-> > --- a/drivers/power/supply/max17042_battery.c
-> > +++ b/drivers/power/supply/max17042_battery.c
-> > @@ -313,7 +313,10 @@ static int max17042_get_property(struct power_supp=
-ly *psy,
-> >  		val->intval =3D data * 625 / 8;
-> >  		break;
-> >  	case POWER_SUPPLY_PROP_CAPACITY:
-> > -		ret =3D regmap_read(map, MAX17042_RepSOC, &data);
-> > +		if (chip->pdata->enable_current_sense)
-> > +			ret =3D regmap_read(map, MAX17042_RepSOC, &data);
-> > +		else
-> > +			ret =3D regmap_read(map, MAX17042_VFSOC, &data);
-> >  		if (ret < 0)
-> >  			return ret;
-> > =20
-> >=20
-> > base-commit: 5816b3e6577eaa676ceb00a848f0fd65fe2adc29
-> >=20
 >=20
 
---7egjpavqn5hc2qqd
+--p5fpuwijhyki46dm
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmFYgIMACgkQ2O7X88g7
-+poQLg/8CXVaO8gho0G+JicSoNEXEmdF+noJAB/DYjGgXihZVXKvvJQpP/fjLt7z
-28rm2NaWrV02OlWK0Rpx1ZIkCU1CPJjnnLUwxMEyKICyjJPH8p61nEYRKYSVDtN6
-Y9c9isOFNVcHUU8Sg14E+1xr9PImplWmvSTLEODb9DqJ8fBwtrO5JRJ54F3lOUkB
-Hqzv7hKYjbslAOnT/rVn3CcMhliT7xCp+GUU22sEwsUlX9P0aBHuHZPkBouTpflD
-r4y9Z6HvW3WGGSdulTvYBkPQWWYeXSrFv37pi/I65cn0GJH3hw5uUUSkQM6Mxg1u
-tRj3N5DtAR6FDGfqOSSjWhciY6N5NOs1dwAwpNnFWoX6ZQHpF3KNRt9HX1BBS37a
-TGPBHU/a66b12XiMQoALHceVRupYNJ1wqvMhkNiSfiL/mczCTS0mAZeWqyfvL9EP
-aqCHHe50hSoO/dJU5KyZW3EtCkcHUMmP4+LLR8QkZHFZdz7Zg4pcXbsmZoPZZ6eN
-9VuQDDf16VLk3fGird4gxuEoL4OhZHbMKkDdhXnfHTYG2wHmI83eanIHtOjQKazA
-zAXlFMiUy42llxw/beB/NR97/phZ9XAf2i2URrxOG1DqbpxRBbdb6XpO5qenaoox
-Cb3RUHYF4x6ZDSj/ySZnMJABlS6RzN6UAf4avYycKku0cZG4bTg=
-=HT6D
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmFYgsgACgkQ2O7X88g7
++pqV+A/+IWRbLr8ueUYq5cmxH1A/cnfQhibQuHCWDfQ7mZDld82vBzvi7xQ4MciH
+x5goyvXWZLX3ZB336fEoqZAwi7ve1PxB5s4NCFG08+adh4hxi+//yd+DslImSsbt
+oE3srIc3AiFArJ853omaUZp3hh4C0FmuXJP867LlMz+I4TUoDumF4wdBaVm+bwtQ
+tHPA7TrRl4wcgLI+p6BklVhIBDnZAnBMV2ypUiaJZLMLGLrnJ7XJ2jTWbPTrIqLf
+KEeHpJ1Rx4q3CR7FtgdpS7Haj01+9GoLd7IFCT5yQQsM83vCMxTpOxK0icCiK/e+
+dI9l/hHfvJoTqoB1WLUG37oSS6A+suta0+ebkL0Xne0IaZSrAJgKtt6jgFtmiGWX
+i1tdNgpAQ1hsB8nwvkFGseL8tE9JGJFZEBFrUQIihBAynuOnqg1bGMcBJeWK7ppF
+UWWdko6Y7yDWQeCTQQfKqbY+oDxFJOJ4C3+L7o9T8SDRchAvh/fN3UpaGTrytkQx
+7FmtuQ0u/FSu5x3vvab9zjtEJO9gyNxDBEZl7C2wTkE/erS9GaTJ33+4OR0dT674
+Wnle0DZWfTGLwF3wiLCJOJYrFr3438b7RpmhseIoHIB/h+cgI69kYoede4w+Jjo6
+bTn7dyFgHYrGDaCajGQbttOEF5nxcBp76fAsVF/JaVv9vrOi4L4=
+=lVLE
 -----END PGP SIGNATURE-----
 
---7egjpavqn5hc2qqd--
+--p5fpuwijhyki46dm--
