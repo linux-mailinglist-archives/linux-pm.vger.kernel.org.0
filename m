@@ -2,112 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DADA41FCC7
-	for <lists+linux-pm@lfdr.de>; Sat,  2 Oct 2021 17:44:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D6C541FCDE
+	for <lists+linux-pm@lfdr.de>; Sat,  2 Oct 2021 17:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233413AbhJBPqN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 2 Oct 2021 11:46:13 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:56952 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233351AbhJBPqN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 2 Oct 2021 11:46:13 -0400
+        id S233500AbhJBPyW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 2 Oct 2021 11:54:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54980 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233438AbhJBPyW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 2 Oct 2021 11:54:22 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4568EC0613EC;
+        Sat,  2 Oct 2021 08:52:36 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 6708D1F4415C
+        with ESMTPSA id 6D0931F411C6
 Received: by earth.universe (Postfix, from userid 1000)
-        id B2A2D3C0CA8; Sat,  2 Oct 2021 17:44:23 +0200 (CEST)
-Date:   Sat, 2 Oct 2021 17:44:23 +0200
+        id 348223C0CA8; Sat,  2 Oct 2021 17:52:31 +0200 (CEST)
+Date:   Sat, 2 Oct 2021 17:52:31 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        ludovic.desroches@microchip.com, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Cristian Birsan <cristian.birsan@microchip.com>
-Subject: Re: [PATCH] power: reset: at91-reset: check properly the return
- value of devm_of_iomap
-Message-ID: <20211002154423.7nqf4cjdhwt3o7yr@earth.universe>
-References: <20210930100928.2211599-1-claudiu.beznea@microchip.com>
+To:     David Heidelberg <david@ixit.cz>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: power: supply: max17040: switch to
+ unevaluatedProperties
+Message-ID: <20211002155231.esfpwvirwjkhhij4@earth.universe>
+References: <20210929160605.74831-1-david@ixit.cz>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ffz6vw2dlpygm7sh"
+        protocol="application/pgp-signature"; boundary="ab4zly5rdnua3eyf"
 Content-Disposition: inline
-In-Reply-To: <20210930100928.2211599-1-claudiu.beznea@microchip.com>
+In-Reply-To: <20210929160605.74831-1-david@ixit.cz>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---ffz6vw2dlpygm7sh
+--ab4zly5rdnua3eyf
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Thu, Sep 30, 2021 at 01:09:28PM +0300, Claudiu Beznea wrote:
-> devm_of_iomap() returns error code or valid pointer. Check its return
-> value with IS_ERR().
+On Wed, Sep 29, 2021 at 06:06:05PM +0200, David Heidelberg wrote:
+> Required for validation of power-supplies from power-supply.yaml.
 >=20
-> Fixes: bd3127733f2c ("power: reset: at91-reset: use devm_of_iomap")
-> Reported-by: Cristian Birsan <cristian.birsan@microchip.com>
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> Signed-off-by: David Heidelberg <david@ixit.cz>
 > ---
 
 Thanks, queued.
 
 -- Sebastian
 
->  drivers/power/reset/at91-reset.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  .../devicetree/bindings/power/supply/maxim,max17040.yaml        | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >=20
-> diff --git a/drivers/power/reset/at91-reset.c b/drivers/power/reset/at91-=
-reset.c
-> index 026649409135..64def79d557a 100644
-> --- a/drivers/power/reset/at91-reset.c
-> +++ b/drivers/power/reset/at91-reset.c
-> @@ -193,7 +193,7 @@ static int __init at91_reset_probe(struct platform_de=
-vice *pdev)
->  		return -ENOMEM;
+> diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max1704=
+0.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max17040.yaml
+> index f792d06db413..ffb344987a7b 100644
+> --- a/Documentation/devicetree/bindings/power/supply/maxim,max17040.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/maxim,max17040.yaml
+> @@ -62,7 +62,7 @@ required:
+>    - compatible
+>    - reg
 > =20
->  	reset->rstc_base =3D devm_of_iomap(&pdev->dev, pdev->dev.of_node, 0, NU=
-LL);
-> -	if (!reset->rstc_base) {
-> +	if (IS_ERR(reset->rstc_base)) {
->  		dev_err(&pdev->dev, "Could not map reset controller address\n");
->  		return -ENODEV;
->  	}
-> @@ -203,7 +203,7 @@ static int __init at91_reset_probe(struct platform_de=
-vice *pdev)
->  		for_each_matching_node_and_match(np, at91_ramc_of_match, &match) {
->  			reset->ramc_lpr =3D (u32)match->data;
->  			reset->ramc_base[idx] =3D devm_of_iomap(&pdev->dev, np, 0, NULL);
-> -			if (!reset->ramc_base[idx]) {
-> +			if (IS_ERR(reset->ramc_base[idx])) {
->  				dev_err(&pdev->dev, "Could not map ram controller address\n");
->  				of_node_put(np);
->  				return -ENODEV;
+> -additionalProperties: false
+> +unevaluatedProperties: false
+> =20
+>  examples:
+>    - |
 > --=20
-> 2.25.1
+> 2.33.0
 >=20
 
---ffz6vw2dlpygm7sh
+--ab4zly5rdnua3eyf
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmFYflcACgkQ2O7X88g7
-+pqFtg/+IXbgVjqPjIw5vj8d+o4PgFs7s9hbs0C+ZR/fnAMKFMG3gMowDqbMlRCk
-19hkfItGXVVSHdPzPVFq2sSNNxjs5zKTUXwNHdAagKNOvy4+715igKswVZin4o24
-Hv3GnchI6Uwh8K0dDYWT1Bvw/PXMKNLLaD4FJ9fH1OthKiSnel7+9222iGXo3/be
-0OHGJFrIM9B+73XWsYiGD9Kh0yijsleGXr90GhT8S7vXyzUKwCGaT9DR/2YWvI7P
-GF/W4QOUIpBXMIJMNSh8jaSddQUQ2er4Alncb7DrjKaflGFn9Rah8tF9I5+U1s4q
-zHEoDY14rykovzx6Hi5Z3o1au2g4pG9mWh6i1cd/ld0V4wIBl/+7+mpHODEEB8vF
-Osi3q/Se+x84IG2IxUVZbCSlYFEIgfvvMWbxhZYllJ+kMaxH7OgXm9ehuxt2LtDT
-nAPLEvAOj5rE9qW3v8TkLFl1DYGlisIRkPTCAEXdOs6NBFUssA9W+Bu5ASByWEhn
-1L91kL+PbMJ3lzv7AHxnu7K2z0dTSCXesH8nUDLMstglGHhPcEp+/CHq/kUY11P0
-LWdC1lpsAQsG8MgBATrwlywq7M26aBHnEduPDOYf6duRuvsUU3zHab9iF0d88npc
-4fsB7ww2Xbuc3woBGZrBX91yBK6Vsx7Kquq5aF8MVbp8CWg7wwc=
-=B3aB
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmFYgD8ACgkQ2O7X88g7
++pppyw/+Pr45fsL2424436n0/uBMv7viJDetLGP4IpWijlWCA4MgFBndngjRjyK3
+5dzfsjd7+JarWzyCSeA1L8FrAb/H9sl+LLUoLAF0CtFxV0lHluW3R1ND+0hv0ubZ
+dQXQ7Hx24csnXM7ONVyljhEQI/w4XwB2eHN4D0+vyFwVGEUHHSSFH/cqEhtABerU
+OODcgs1ZC+42y/XwYF9EsLYMkRNsQqWYBcLSi2OZg1c1QST1TSJ7pakKGqmGzyZc
+PvcQDTe8uInveS7Sm7aArMgLRoCY81F33ykMz2BFDvCT4SetQittn0NLgiglXDFd
+9DeRa4Q1k83pSwQKols7TRa4Z3T8LZkcHXxGVEQFgMSNsS8WwAhHd2SlsW8S20KL
+Zfg0GC/Fx0o9BwyJa9j+CoZ6WeLa83IIpvVwPPln/WqSeV6F7HUDz9tAF/RDbo3K
+luTzAxy4a5IECm36LnrgQ8ydEC42VQGII1gkjHMDmbUmD3HlCiVyCsCh/Ayjgq0d
+DPyKXjV0zdPWAHXgV3CgGkZpgpVEwknyQLgVnd2/7uq5zc/n8ZexVjJxIG+UjXux
+6puN1CpIJl+l/WSlg+5HZIdVwnFgiqLpwvqjhA5OjFpn206Zl1sUWedqfLPoEK88
+Db7FDGuysN6ncIa1Ta9Dfb1uwoF3yF8jiRSMH7PbkjdKYu73EBc=
+=j8W1
 -----END PGP SIGNATURE-----
 
---ffz6vw2dlpygm7sh--
+--ab4zly5rdnua3eyf--
