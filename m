@@ -2,145 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F59141FE16
-	for <lists+linux-pm@lfdr.de>; Sat,  2 Oct 2021 22:44:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F264201A6
+	for <lists+linux-pm@lfdr.de>; Sun,  3 Oct 2021 15:15:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234010AbhJBUqh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 2 Oct 2021 16:46:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34092 "EHLO
+        id S230287AbhJCNRV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 3 Oct 2021 09:17:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233975AbhJBUqg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 2 Oct 2021 16:46:36 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 357FBC061714;
-        Sat,  2 Oct 2021 13:44:50 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id j5so48530857lfg.8;
-        Sat, 02 Oct 2021 13:44:50 -0700 (PDT)
+        with ESMTP id S230207AbhJCNRU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 3 Oct 2021 09:17:20 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB8FC061781
+        for <linux-pm@vger.kernel.org>; Sun,  3 Oct 2021 06:15:32 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id qe4-20020a17090b4f8400b0019f663cfcd1so6299568pjb.1
+        for <linux-pm@vger.kernel.org>; Sun, 03 Oct 2021 06:15:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=T5NA95fXjewFVQZ7RXmQGjvZaYL3KLG4ILjTuHYXm9E=;
-        b=VInxURP7xctDXfL0Dl1Z5iIuI8Z57STPldPnyJ+NEoakoMviQJJZLMTDvRJajSYeUA
-         L6hAx+33fXvlxHQdSLAb2swwYgCSXcm4IHTOs4QNGPXy0n+3kc1PaSRsPOeccYBdBeZd
-         i/GVKW6ch0QjgR5Al9izKnsKjtkLP9b6WFxxbgQj5xOtMJ+SSJ3vI3nxrqadHVRi/RnA
-         W6QxtWyfIbdShJzgMDhIpqfX5qzkmNQXHlvgGM11cFUopWEMKunpWxyqUcwKJKYvFAG5
-         +vztm6uVxmXOzcI8Wt5yVr3CSoQmJa2Le0PpZjwLrPdDyp4eM6GhDyuSByQAckD1zOgW
-         c3ug==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=RNJERDOIDcil3yoF2ADjmROEOLO4j0hGtz7GlVopmOU=;
+        b=Ku31O49TKxGkgrtjjyrnP6eeJJCWPNI+/7eaCBwDN79KwMqoVIp92RH6OzNTTW6MKA
+         qWoB9NkzEsnyeOVQB2gJFk6nTSeFMxtXJAeU52Ao5NDkUcD6bbkusDRnJoo9P0HpjUhL
+         HqdabfC7ZJ4ARM/5YbDJEMLbx6898uKl8kHkN+tNSBf/E3P0KAPuzvD+tvS2zPxnWKbt
+         2hgT3WrlgIhcaL2V/PCsuOeM1gNbGbAx0ZZGNXL2EK3m/Ro6ANBIzVCa6YbeH/yeVIZA
+         cJiiTAXT8VZUfO/yP9TkkGeWmiDSKvR6JMLlV45+SVYhXpTx6zWrWRHvHv6Z6XANCm0Y
+         8s8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=T5NA95fXjewFVQZ7RXmQGjvZaYL3KLG4ILjTuHYXm9E=;
-        b=o+AkgwIXTGmhQJOReVcp/TKkZzv7PXYcfMekTaitKUtIJwq9Jx49Ek3A6rzLNWnGDw
-         P14BK/n3ooXkpVEH9nCyL8FXZYN7ZEwDQcX/HwTKjBIRyMgJudlk3iv1sfciLtZTSdOR
-         vwOpvOwVQIenigGsvIM5EuTWq+4BDfs+q6YQF1gWnaCKscYOjk/MGgW3xBNn8ZhUdVCZ
-         7xYmRwRBj20i5ZIDmJzuKM5BziIPaasu+aA7E2ExtPF5uOYuwbOaw7T/wguPP+RgSZQ4
-         IMKvmtAHcPJB8dSJI9T5/DLw2qkb2FpwIt50gSksOXa8MP0ZwlDi4BPe4g+NLYlyBgjd
-         yb5A==
-X-Gm-Message-State: AOAM5320QoRG2UTT3/F5jVU3Ku5BPR/cGcwERvAogi3KnHxkjgIS1xsP
-        utURybmrqidGKVMJdilKdqs=
-X-Google-Smtp-Source: ABdhPJzClEAya5hcn4TqFZQoHIn0mpgv86q3zG4rhbGd/Hwr0saEHFeEJIpz6XM0cCQNRVK631z4Mw==
-X-Received: by 2002:a2e:80cd:: with SMTP id r13mr5454584ljg.415.1633207488462;
-        Sat, 02 Oct 2021 13:44:48 -0700 (PDT)
-Received: from [192.168.2.145] (94-29-52-238.dynamic.spd-mgts.ru. [94.29.52.238])
-        by smtp.googlemail.com with ESMTPSA id v27sm1233535lfp.0.2021.10.02.13.44.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Oct 2021 13:44:47 -0700 (PDT)
-Subject: Re: [PATCH v13 06/35] clk: tegra: Support runtime PM and power domain
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        David Heidelberg <david@ixit.cz>
-References: <20210926224058.1252-1-digetx@gmail.com>
- <20210926224058.1252-7-digetx@gmail.com>
- <CAPDyKFq+LS4Jr1GyC-a-tGWPzGH0JxfJ9wKY=uQEBGYm952azw@mail.gmail.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <24101cd6-d3f5-1e74-db39-145ecd30418b@gmail.com>
-Date:   Sat, 2 Oct 2021 23:44:46 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=RNJERDOIDcil3yoF2ADjmROEOLO4j0hGtz7GlVopmOU=;
+        b=5j0mQaGPaUN/7d2OLO+kbhEk7N0nwnjHn2DrzppBiiHTuFmJjRocpbw45gb2dj1gHO
+         qooLiYQ+xkYatikRzwBY0oFo3HOTHfpHonVNBmR513kIsO6Wjd7Aa0FZHebul3/nuKyb
+         /2m8xuS9Ca7ZEpAJ6HDHjKadpF4pjfbsBAjTRfLwri0VHbzRpxT3aKWTuRgzUEj3IxVj
+         Alywl1xg+Ooo3YVV7nv9oCA7FuN0PE4ku3vy+kmBCj0WSQ6gShPwPwuwHcmvThmHCntN
+         ER3v19jqceHCytUyESdDuGkbrQQ0qVvGjULYUux8x+Ou2cg2ZhiOCgBHHS8edKc1P9TD
+         Dq0w==
+X-Gm-Message-State: AOAM532JY3znx+tjtue9ai04FZARZxKgu5k4wjVldq4BqokDqrkTes44
+        0gxLDU6IcYmu/TUQXRSHcKDZRLv4HOTFNacWP90=
+X-Google-Smtp-Source: ABdhPJw5EKdQxe1lMEfHk1VwrCXRklAI65YOay7OOBvD0+QO6RQeDMbHrnesvdJ17xopo9+2ff/uxm6m6KYep0cQI98=
+X-Received: by 2002:a17:90b:4a90:: with SMTP id lp16mr7724012pjb.25.1633266932137;
+ Sun, 03 Oct 2021 06:15:32 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAPDyKFq+LS4Jr1GyC-a-tGWPzGH0JxfJ9wKY=uQEBGYm952azw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6a10:83c2:0:0:0:0 with HTTP; Sun, 3 Oct 2021 06:15:31
+ -0700 (PDT)
+Reply-To: drrhamabenson16@gmail.com
+From:   Dr Rhama Benson <drrhamabenson2016@gmail.com>
+Date:   Sun, 3 Oct 2021 06:15:31 -0700
+Message-ID: <CAJPyHHY-xuZ8NJ2rya-EN=6CLQcuEGP+DNJPUvfUvasLrGkPZw@mail.gmail.com>
+Subject: Contact me back immediately.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-01.10.2021 15:32, Ulf Hansson пишет:
->> +static __maybe_unused int tegra_clock_pm_suspend(struct device *dev)
->> +{
->> +       struct tegra_clk_device *clk_dev = dev_get_drvdata(dev);
->> +
->> +       /*
->> +        * Power management of the clock is entangled with the Tegra PMC
->> +        * GENPD because PMC driver enables/disables clocks for toggling
->> +        * of the PD's on/off state.
->> +        *
->> +        * The PMC GENPD is resumed in NOIRQ phase, before RPM of the clocks
->> +        * becomes available, hence PMC can't use clocks at the early resume
->> +        * phase if RPM is involved. For example when 3d clock is enabled,
->> +        * it may enable the parent PLL clock that needs to be RPM-resumed.
->> +        *
->> +        * Secondly, the PLL clocks may be enabled by the low level suspend
->> +        * code, so we need to assume that PLL is in enabled state during
->> +        * suspend.
->> +        *
->> +        * We will keep PLLs and system clock resumed during suspend time.
->> +        * All PLLs on all SoCs are low power and system clock is always-on,
->> +        * so practically not much is changed here.
->> +        */
->> +
->> +       return clk_prepare(clk_dev->hw->clk);
-> I am trying to understand, more exactly, what you intend to achieve
-> with the clk_prepare() here. It looks a bit weird, to me. Can you try
-> to elaborate a bit more on the use case?
+My Dear Friend.
 
-The Tegra GENPD driver enable/disable clocks when domain is turned on.
-This can't be done during early system resume, when domains are getting
-turned on by the drivers core, because when clock is enabled, it's
-getting prepared (RPM-resumed) and this preparation fails because
-performance state of the clock goes up and it doesn't work during the
-early resume time since I2C, which applies the state to hardware, is
-suspended and can't work at that early time.
+How are you and your family today? I hope all is well, I'm happy to
+share this transaction with you. I have a very lucrative business
+transaction which requires your utmost discretion. Please understand
+that you and me are to work as one team to inherit this fund, hence I
+am your insider in the bank as the transaction commence. I will direct
+you how to claim and get the fund without any problem I also advise
+you to feel free because its 100% legal and risk free.
 
-Secondly, Tegra has arch-specific low level assembly which touches
-clocks during last phase of system suspend and in the beginning of
-resume. Hence, clocks should stay prepared during suspend just because
-technically clock should be prepared before it can be enabled.
+Though, I know it would come to you at uttermost surprise and unbelief
+because its internet contact and it's virtually impossible to know who
+is trustworthy and who to believed but don't be afraid you will not
+regret of dealing with me, I want you to help me to claim and receive
+the fund to your account in your country where it will share between
+me and you for our own benefit.
 
-> Is this rather about making sure that the clock's corresponding PM
-> domain stays powered on during system suspend? In that case, I think
-> there may be an alternative option....
-> 
+I am aware of the unsafe nature of the internet and was compelled to
+use this medium due to the nature of this project. I have access to
+every vital information that can be used to transfer the fund, which
+may culminate into the investment of the said funds into your account
+or any lucrative company in your country.
 
-This is not about domain staying powered on, this is about keeping the
-performance state of the domain high during suspend.
+If you will like to assist me as a partner then kindly indicate your
+interest, after which we shall both discuss the modalities and the
+sharing percentage. Upon receipt of your reply on your expression of
+interest, I will give you full details on how the business will be
+executed. I am open for negotiation,
+
+Thanks for your anticipated cooperation. Note you might receive this
+message in your inbox or spam folder, depends on your web host or
+server network. Contact me through this
+email(drrhamabenson16@gmail.com)
+
+Name....
+Age.......
+Country......
+Telephone Number......
+
+Compliment of the day,
+Regards,
+Dr. Rhama.
