@@ -2,90 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C630420618
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Oct 2021 08:58:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 424A1420654
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Oct 2021 09:01:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232917AbhJDHA3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Oct 2021 03:00:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57824 "EHLO
+        id S232862AbhJDHDk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Oct 2021 03:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232655AbhJDHA3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Oct 2021 03:00:29 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC916C061745
-        for <linux-pm@vger.kernel.org>; Sun,  3 Oct 2021 23:58:40 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id pf6-20020a17090b1d8600b0019fa884ab85so2833692pjb.5
-        for <linux-pm@vger.kernel.org>; Sun, 03 Oct 2021 23:58:40 -0700 (PDT)
+        with ESMTP id S232241AbhJDHDg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Oct 2021 03:03:36 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB10C061746
+        for <linux-pm@vger.kernel.org>; Mon,  4 Oct 2021 00:01:48 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id r201so9716742pgr.4
+        for <linux-pm@vger.kernel.org>; Mon, 04 Oct 2021 00:01:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=7NQLC0CBpzZQKLFn2CPvxGDT2PispmvfZ9mt7LCx8S8=;
-        b=Q5lozMPfGyLnq8Ai11eVCshTt5a6HMdyat3eZQVrjDX9SMe9oG2EGPxgBBTgJ5qO9o
-         N/j0Ilrbm2dTYwe/VB93l8dhQeeh1yxmYt4p6CtdUS1rBBQvY7Sp/9ZJ4FGwSyqmYr60
-         I4373XXYJfHaEuNfgXk7JW8nsH4PBQUFN2N5UTYMv2zlJ90NHKthZe3yYDbi0nwIToVq
-         Z2kAASGfcS7YxGUqo6bQkD38OpsaeujCQQJXeG33kBpWUJFjZ55o9NpAZpFlIvQ+Wa1m
-         dhovIWOEwwujjSFL+gh1snubCZMVIMdmHKZqh7lsxTrK/uc1ZmIQR6jikJtVAZfzIgku
-         8j3A==
+        bh=Zosd0K9+Pr0UnKUkcxuf4vbfDDIKWorpLv6c8v1wXp8=;
+        b=EgouGwLh3fT8/lKAaNHvybA9iCHEzUwWbJOJ/KZOWVa0/ByZwTAZsVJtB3PAWdL370
+         3afvfpf2fh3gz+TW4TShMAhPhDs/s6pwPFRaAf906vCBlrtmVcDF2AGd+u50ZPo9TQQj
+         38x9HiM3dh/6t19B9tELTVF8K+bEpJZk8bGhHqDMtan5oJaltnyUs/z6pt36HcEcI+LN
+         a0b7y4l65d3/jLl53An9KKMc9/U2w7XDRYLv0NoQXSL0DFhxkQBVJJ05AUflDLCQItPg
+         GTtwIUhVCyxvr86BxjqKTod7QfnRXtMe86A94NTI+R+kGS34QhtpHY90FoxcSQ8JtlbO
+         HnQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=7NQLC0CBpzZQKLFn2CPvxGDT2PispmvfZ9mt7LCx8S8=;
-        b=yiTKn6Mu1K26lQNo34UlahykbwkYHme6qoIE/1j3NNs48CtXDnOyXcBoH03TF+2Vkq
-         HYqzIS3ip0+QagK7jK9r6CERyATFqQHoP0JfNqOBBV7ZYgxvQ4n9rZ4axz/CqJmECia9
-         TVgdWq5a6XXh333WmudffyVrxIeI3ymwEVMlMT3YuboMnQ9E+O5sVnD697RfSYUyOBx3
-         I5CvrtgJ8UkBBTjowwELzImWeyeldduUe2dpmR7dR04dP2WIcLjV9wj1bCvfDvigYIjR
-         WitfvfBayw7nWleqjD+MzPKh8QAO+KMyjQxXaDPuBn3SKpRkoJ6qy+an5w6SPfmA+Z+W
-         0nnw==
-X-Gm-Message-State: AOAM530jY0DepWtUSjuT6oVQy4vCnMvOk1UUjrCDhtFfnsjvZSFSoGmi
-        8cBT2pkntdrzS24U/jORLmvqb0GzdHc/bA==
-X-Google-Smtp-Source: ABdhPJzk9QfzO3wNBh8AzygDT3L+GhgGCcTyNWzVv0y7ygMcryg2CKHlzsdMyZ+52INja1eTFBaQfw==
-X-Received: by 2002:a17:902:eccf:b0:13e:b002:d8bd with SMTP id a15-20020a170902eccf00b0013eb002d8bdmr6838260plh.48.1633330720209;
-        Sun, 03 Oct 2021 23:58:40 -0700 (PDT)
+        bh=Zosd0K9+Pr0UnKUkcxuf4vbfDDIKWorpLv6c8v1wXp8=;
+        b=3CFVTFdlh5krX00EQSd24ISokGgZOFGah1KJ/gVDjQAzgeuxNPqaLvoPynXbkNUu3d
+         Y9DnmHRuqroxUAagIcmVBptuZcP9LpHvt1Gk1m56pXfTUoiSX2qF1AJtNAp7e/zK5iqM
+         8FUUY/plQxtHIou40lf2lZjPdPItBiJPkhQZPSuhC9X9eBTvV7ZLHnT/jkxyueFXlODu
+         J72hTmRnbqvLFI4skfxIRTkh7PocXY76K/uzOTDtkli48dIrRMWYHNmZ7oCM+XFqVwuo
+         sqagAN2zagDADuK4XGu6UBs7UHXUd+cNKewZfXiu5HLpNqIsFnrSLOWz16LMNFz/Ynjk
+         QeWA==
+X-Gm-Message-State: AOAM532JN+dp2YML6MUi9vgbNUHX9hoZXnfe0mPAdEzUpBnelAisE/Mi
+        MvtUCf0wkaajJb+WjcVEXWXokok9EOfGTg==
+X-Google-Smtp-Source: ABdhPJy5BzjgSp5dOVO2Q/8r2By2JGyoZJca5CF8hCTYjl4Tc3ffPkLFEpGg6Jgs0xx9pahYhJu9zg==
+X-Received: by 2002:a63:4743:: with SMTP id w3mr3446051pgk.245.1633330908122;
+        Mon, 04 Oct 2021 00:01:48 -0700 (PDT)
 Received: from localhost ([122.171.247.18])
-        by smtp.gmail.com with ESMTPSA id t8sm8696202pgv.35.2021.10.03.23.58.38
+        by smtp.gmail.com with ESMTPSA id i5sm1417791pfk.170.2021.10.04.00.01.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Oct 2021 23:58:39 -0700 (PDT)
-Date:   Mon, 4 Oct 2021 12:28:37 +0530
+        Mon, 04 Oct 2021 00:01:47 -0700 (PDT)
+Date:   Mon, 4 Oct 2021 12:31:45 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Han Wang <zjuwanghan@outlook.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] cpufreq: remove useless INIT_LIST_HEAD()
-Message-ID: <20211004065837.nmymvhowjz3zuilu@vireshk-i7>
-References: <MN2PR10MB40938AC3AE715AD1E6B9A008C1FC9@MN2PR10MB4093.namprd10.prod.outlook.com>
+To:     Mikko Perttunen <mperttunen@nvidia.com>
+Cc:     rafael@kernel.org, thierry.reding@gmail.com, jonathanh@nvidia.com,
+        krzysztof.kozlowski@canonical.com, lorenzo.pieralisi@arm.com,
+        robh@kernel.org, kw@linux.com, p.zabel@pengutronix.de,
+        rui.zhang@intel.com, daniel.lezcano@linaro.org, amitk@kernel.org,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH 4/5] cpufreq: tegra186/tegra194: Handle errors in BPMP
+ response
+Message-ID: <20211004070145.pp3rafkinffk2pyh@vireshk-i7>
+References: <20210915085517.1669675-1-mperttunen@nvidia.com>
+ <20210915085517.1669675-4-mperttunen@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <MN2PR10MB40938AC3AE715AD1E6B9A008C1FC9@MN2PR10MB4093.namprd10.prod.outlook.com>
+In-Reply-To: <20210915085517.1669675-4-mperttunen@nvidia.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15-08-21, 21:07, Han Wang wrote:
-> list cpu_data_list has been inited staticly through LIST_HEAD,
-> so there's no need to call another INIT_LIST_HEAD. Simply remove
-> it from cppc_cpufreq_init.
+On 15-09-21, 11:55, Mikko Perttunen wrote:
+> The return value from tegra_bpmp_transfer indicates the success or
+> failure of the IPC transaction with BPMP. If the transaction
+> succeeded, we also need to check the actual command's result code.
+> Add code to do this.
 > 
-> Signed-off-by: Han Wang <zjuwanghan@outlook.com>
+> While at it, explicitly handle missing CPU clusters, which can
+> occur on floorswept chips. This worked before as well, but
+> possibly only by accident.
+> 
+> Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
 > ---
->  drivers/cpufreq/cppc_cpufreq.c | 2 --
->  1 file changed, 2 deletions(-)
+>  drivers/cpufreq/tegra186-cpufreq.c | 4 ++++
+>  drivers/cpufreq/tegra194-cpufreq.c | 8 +++++++-
+>  2 files changed, 11 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> index d4c27022b..db1719626 100644
-> --- a/drivers/cpufreq/cppc_cpufreq.c
-> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> @@ -741,8 +741,6 @@ static int __init cppc_cpufreq_init(void)
->  	if ((acpi_disabled) || !acpi_cpc_valid())
->  		return -ENODEV;
+> diff --git a/drivers/cpufreq/tegra186-cpufreq.c b/drivers/cpufreq/tegra186-cpufreq.c
+> index 5d1943e787b0..6c88827f4e62 100644
+> --- a/drivers/cpufreq/tegra186-cpufreq.c
+> +++ b/drivers/cpufreq/tegra186-cpufreq.c
+> @@ -159,6 +159,10 @@ static struct cpufreq_frequency_table *init_vhint_table(
+>  		table = ERR_PTR(err);
+>  		goto free;
+>  	}
+> +	if (msg.rx.ret) {
+> +		table = ERR_PTR(-EINVAL);
+> +		goto free;
+> +	}
 >  
-> -	INIT_LIST_HEAD(&cpu_data_list);
-> -
->  	cppc_check_hisi_workaround();
->  	cppc_freq_invariance_init();
+>  	for (i = data->vfloor; i <= data->vceil; i++) {
+>  		u16 ndiv = data->ndiv[i];
+> diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra194-cpufreq.c
+> index a9620e4489ae..ac381db25dbe 100644
+> --- a/drivers/cpufreq/tegra194-cpufreq.c
+> +++ b/drivers/cpufreq/tegra194-cpufreq.c
+> @@ -242,7 +242,7 @@ static int tegra194_cpufreq_init(struct cpufreq_policy *policy)
+>  
+>  	smp_call_function_single(policy->cpu, get_cpu_cluster, &cl, true);
+>  
+> -	if (cl >= data->num_clusters)
+> +	if (cl >= data->num_clusters || !data->tables[cl])
+>  		return -EINVAL;
+>  
+>  	/* set same policy for all cpus in a cluster */
+> @@ -310,6 +310,12 @@ init_freq_table(struct platform_device *pdev, struct tegra_bpmp *bpmp,
+>  	err = tegra_bpmp_transfer(bpmp, &msg);
+>  	if (err)
+>  		return ERR_PTR(err);
+> +	if (msg.rx.ret == -BPMP_EINVAL) {
+> +		/* Cluster not available */
+> +		return NULL;
+> +	}
+> +	if (msg.rx.ret)
+> +		return ERR_PTR(-EINVAL);
+>  
+>  	/*
+>  	 * Make sure frequency table step is a multiple of mdiv to match
 
 Applied. Thanks.
 
