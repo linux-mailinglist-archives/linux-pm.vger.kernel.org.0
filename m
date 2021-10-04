@@ -2,44 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D4324204A9
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Oct 2021 03:27:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 409544204AB
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Oct 2021 03:27:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232124AbhJDB3d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 3 Oct 2021 21:29:33 -0400
-Received: from wnew3-smtp.messagingengine.com ([64.147.123.17]:37615 "EHLO
+        id S232123AbhJDB3g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 3 Oct 2021 21:29:36 -0400
+Received: from wnew3-smtp.messagingengine.com ([64.147.123.17]:48611 "EHLO
         wnew3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232123AbhJDB3c (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 3 Oct 2021 21:29:32 -0400
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id 93F452B0131A;
-        Sun,  3 Oct 2021 21:27:43 -0400 (EDT)
+        by vger.kernel.org with ESMTP id S232128AbhJDB3f (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 3 Oct 2021 21:29:35 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.west.internal (Postfix) with ESMTP id 28B702B01318;
+        Sun,  3 Oct 2021 21:27:46 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Sun, 03 Oct 2021 21:27:44 -0400
+  by compute4.internal (MEProxy); Sun, 03 Oct 2021 21:27:47 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm3; bh=K3ztzcGIJRQA2
-        i14m+NN5p4mb3bayApw/5zcCVEE87c=; b=E2icTyS3WcsTltpWkzopB35ArJL7h
-        3sqrYi0/6CYeyIayp35p4jnrfyuXO798gPLP8bR5jvEihwPj8CoIS0Ar79yWv8c7
-        ynoa+4SXtdC2kwftH7n/FEDeea4PIuYInKWn4GjKxlk0wyF6BZ+IulDz49l9KX7m
-        EvlUfBX5EV5BLlesvlLDwo/ja80dm1L1rpY1z2zYFBRTTOiCfKGHIdNH2Uoej8lN
-        GaCxCuDD06OpBnoYDoFBNvARHvMtf2c2uNhZ9mPi96x42Wzk9KEWUyhX6mjdSOD3
-        FtHKZ4p1MsQykeNl6nQS+CJ9/D3l9+1O8TLczdGY86M7+dYy/hHhzguxw==
+        :mime-version:content-transfer-encoding; s=fm3; bh=hZHcadP8uZUPD
+        wPmY5Mih70odkWsmmJQlVj53pfEXK0=; b=BEt/bYpyA8CkKM+zDMHNkTGIgREag
+        H7eo8/D06rMT83H3hIU9hhH3Z3fSokqxgA8h8DVhxGIka77gj2LpdEX5ZjpxXgxa
+        zY/Hr+J0N5vDjdZOqdKDnhyh8nRqBb/YIbWhjmDl1l+bcmuNTj/KGHOGdraBDAPJ
+        eRiMffr+T4un67u7ZXoruDcagH1iq8OZlgo1o2rygVct7h57CS4CadQ9xfKxZXgh
+        Mi054+ep0cDH3s500Xt1tqHHOrefMkL6NLh5r32yoVXIcO/O8E7TWKw7qRFizfl0
+        T2PRjYK7n+lBJS8a+mPWae58hdbBaygpBmdjg2AyEI9gUBaXGLBfzbs/Q==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
         :in-reply-to:message-id:mime-version:references:subject:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=K3ztzcGIJRQA2i14m+NN5p4mb3bayApw/5zcCVEE87c=; b=Xxbh9ZUT
-        u76ocYZZ8vRKR/oNxSV8v6gB96eld1/qE+N0A8s9Gu59mb2Dr4EzRNvqNxgmD7t+
-        YX0ZI847eeUgy6aq37wGTff8o3ssF3woFu/I6zUS5BjhJnVvNrOlokt8IQnhPl7p
-        TXu5QtOJxoXMO6uxLrV99CS/VVDZgZyjK8q9al72zbfBH/wA4IteNYjsawn7LjOB
-        SFlhvchFa+DUkrCuH3ReUTRhndQ1W2BzJVp0I6mrONW5saNvyx5nJYeFBpsQAtlv
-        nimay0TtQB4ZEb/6q0j9tGMO4/gpDjrinUXqjLnI5Q8Cl28x05ejtewNlMWnVvz7
-        56MHQtbWTdLOBQ==
-X-ME-Sender: <xms:j1haYbKa1qKoDVxQj_QZIRHQP4yiknD4V4hMYS2nnxrkXn_z7GT9Hw>
-    <xme:j1haYfLlaWROBoIH3LcCk4zQVKkK4d9H7x7NciUacYRWwMwpeEOOnZw1K3x7lmpLh
-    llT82wOeJLJQS_agg>
-X-ME-Received: <xmr:j1haYTusJrQS0RAm3nsm4FA87pOdvIqR4Rd72MpcKB_v28mj_nY1ZJV0AK0nJloNY3SfwLmegnddheUgqzOp-pM4Qz4fVkTKyyCR8ziG3BxqcOdOylRHCYllrr3YzLhut1IjHg>
+        fm1; bh=hZHcadP8uZUPDwPmY5Mih70odkWsmmJQlVj53pfEXK0=; b=TU1nCYue
+        Fy91uvuMBhoDDbPXmsP6NgNp+oxdnTTrUypZThEHPpsnd4n70VzobShaUE5SWpMs
+        MqHzPG37bkVWTa01s5dDKOtdT4SeXxp5k0cJFro05iPYEfOvCvPhAV6ebLV04k/n
+        IFye0LDu10dnn6xk+Ow9G9LGQ6S7XTY5EYcG+RKpP/9oeWfwAzujx5HRiYOA/lLK
+        9HH/gjZfibsYtG2Q3+N82CqWq1jiTNfcQRR7677Gu/DhItqlMRF5MhmZ1p+Ex4tW
+        lBRYtRNZf/IyGn2YjeLEdECbBOVpL3mDDbZMhDjP5j3c/0CYnQN8VrZMnxovwV6q
+        Xz8AsiB3cff/FQ==
+X-ME-Sender: <xms:kVhaYZKuEvx3nI1UYBmhlJ7NeyQOEHPRE3338TVkbaxnOLt-DmpGVQ>
+    <xme:kVhaYVKcWe8nQl3mRbiiNlUFKidy3qYBTp3Am_vY0Fyu0I1Vvb-9fk52lobkg4Ro5
+    ccUrF8qqLAaS9_Xcw>
+X-ME-Received: <xmr:kVhaYRuTkZr9Obp47hfmQVS6wNuIBVNUpJd3bEXF74ZwT-zM_6KZ6QPFS6ttY36O6wth472ZIAXIy3ooiQzESYkH0FF0RSDQiFLQB9A-HKcOAt2i0xyAaph6_lwzD08V8Hh1Fg>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudeluddggeehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
@@ -48,12 +48,12 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudeluddggeehucetufdoteggod
     frrghtthgvrhhnpeduhfejfedvhffgfeehtefghfeiiefgfeehgfdvvdevfeegjeehjedv
     gfejheeuieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
     hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:j1haYUbDe6jakbJKCtr1-_SuCZ2FecDtz9PRQ20n5V0nBQhJ8G9AJA>
-    <xmx:j1haYSbN7uKrd5aal3X01PLXh8ANMok2KSpH86L7-Tm2Bph1xUPVgw>
-    <xmx:j1haYYAZ7L88v33fiY-hj5jlq517zQTxt2bXtc0gUMJrKAdb098MCg>
-    <xmx:j1haYarmdz2NTmVBRqmuoxACEcRhXn5oF4wEx8MQzeabyOQ4ZOfo-hOZA54>
+X-ME-Proxy: <xmx:kVhaYaZQ7eXbTsD-bZqlZCMTK8dcNvd8SatD_64sakljeBi_HeqPBQ>
+    <xmx:kVhaYQY_zKXGSvHaUyfzepabXzGhh-5eegFEqIzBNvgpovdfNvwGVA>
+    <xmx:kVhaYeDVBOcoV3HGIbaXZ3iNEqPstjobAX-9GH7F40yern3LNtTEjQ>
+    <xmx:kVhaYQqCwAtvaMMqYFf5_h9QqZmyGnsPOpwYGDP_PbkgRmdOMwjRZ6bnX2M>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 3 Oct 2021 21:27:42 -0400 (EDT)
+ 3 Oct 2021 21:27:44 -0400 (EDT)
 From:   Samuel Holland <samuel@sholland.org>
 To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
@@ -67,9 +67,9 @@ Cc:     Michael Turquette <mturquette@baylibre.com>,
         linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
         Samuel Holland <samuel@sholland.org>
-Subject: [PATCH v2 1/6] dt-bindings: clock: sunxi: Export CLK_DRAM for devfreq
-Date:   Sun,  3 Oct 2021 20:27:34 -0500
-Message-Id: <20211004012739.39053-2-samuel@sholland.org>
+Subject: [PATCH v2 2/6] dt-bindings: arm: sunxi: Expand MBUS binding
+Date:   Sun,  3 Oct 2021 20:27:35 -0500
+Message-Id: <20211004012739.39053-3-samuel@sholland.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20211004012739.39053-1-samuel@sholland.org>
 References: <20211004012739.39053-1-samuel@sholland.org>
@@ -79,71 +79,129 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The MBUS node needs to reference the CLK_DRAM clock, as the MBUS
-hardware implements memory dynamic frequency scaling using this clock.
+The MBUS provides more than address translation and bandwidth control.
+It also provides a PMU to measure bandwidth usage by certain masters,
+and it provides notification via IRQ when they are active or idle.
 
-Export this clock for SoCs which will be getting a devfreq driver.
+The MBUS is also tightly integrated with the DRAM controller to provide
+a Memory Dynamic Frequency Scaling (MDFS) feature. In view of this, the
+MBUS binding needs to represent the hardware resources needed for MDFS,
+which include the clocks and MMIO range of the adjacent DRAM controller.
+
+Add the additional resources for the H3 and A64 compatibles, and a new
+example showing how they are used.
 
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
- drivers/clk/sunxi-ng/ccu-sun50i-a64.h      | 2 --
- drivers/clk/sunxi-ng/ccu-sun8i-h3.h        | 2 --
- include/dt-bindings/clock/sun50i-a64-ccu.h | 2 +-
- include/dt-bindings/clock/sun8i-h3-ccu.h   | 2 +-
- 4 files changed, 2 insertions(+), 6 deletions(-)
+ .../arm/sunxi/allwinner,sun4i-a10-mbus.yaml   | 75 ++++++++++++++++++-
+ 1 file changed, 72 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/clk/sunxi-ng/ccu-sun50i-a64.h b/drivers/clk/sunxi-ng/ccu-sun50i-a64.h
-index 54d1f96f4b68..a8c11c0b4e06 100644
---- a/drivers/clk/sunxi-ng/ccu-sun50i-a64.h
-+++ b/drivers/clk/sunxi-ng/ccu-sun50i-a64.h
-@@ -51,8 +51,6 @@
+diff --git a/Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-mbus.yaml b/Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-mbus.yaml
+index e713a6fe4cf7..c1fb404d2fb3 100644
+--- a/Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-mbus.yaml
++++ b/Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-mbus.yaml
+@@ -33,10 +33,33 @@ properties:
+       - allwinner,sun50i-a64-mbus
  
- #define CLK_USB_OHCI1_12M		92
+   reg:
+-    maxItems: 1
++    minItems: 1
++    items:
++      - description: MBUS interconnect/bandwidth/PMU registers
++      - description: DRAM controller/PHY registers
++
++  reg-names:
++    items:
++      - const: "mbus"
++      - const: "dram"
  
--#define CLK_DRAM			94
--
- /* All the DRAM gates are exported */
+   clocks:
++    minItems: 1
++    items:
++      - description: MBUS interconnect module clock
++      - description: DRAM controller/PHY module clock
++      - description: Register bus clock, shared by MBUS and DRAM
++
++  clock-names:
++    items:
++      - const: "mbus"
++      - const: "dram"
++      - const: "bus"
++
++  interrupts:
+     maxItems: 1
++    description:
++      MBUS PMU activity interrupt.
  
- /* And the DSI and GPU module clock is exported */
-diff --git a/drivers/clk/sunxi-ng/ccu-sun8i-h3.h b/drivers/clk/sunxi-ng/ccu-sun8i-h3.h
-index d8c38447e11b..e13f3c4b57d0 100644
---- a/drivers/clk/sunxi-ng/ccu-sun8i-h3.h
-+++ b/drivers/clk/sunxi-ng/ccu-sun8i-h3.h
-@@ -42,8 +42,6 @@
+   dma-ranges:
+     description:
+@@ -53,13 +76,42 @@ required:
+   - clocks
+   - dma-ranges
  
- /* The first bunch of module clocks are exported */
++if:
++  properties:
++    compatible:
++      contains:
++        enum:
++          - allwinner,sun8i-h3-mbus
++          - allwinner,sun50i-a64-mbus
++
++then:
++  properties:
++    reg:
++      minItems: 2
++
++    clocks:
++      minItems: 3
++
++  required:
++    - reg-names
++    - clock-names
++
++else:
++  properties:
++    reg:
++      maxItems: 1
++
++    clocks:
++      maxItems: 1
++
+ additionalProperties: false
  
--#define CLK_DRAM		96
--
- /* All the DRAM gates are exported */
+ examples:
+   - |
+-    #include <dt-bindings/clock/sun5i-ccu.h>
++    #include <dt-bindings/clock/sun50i-a64-ccu.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
  
- /* Some more module clocks are exported */
-diff --git a/include/dt-bindings/clock/sun50i-a64-ccu.h b/include/dt-bindings/clock/sun50i-a64-ccu.h
-index 318eb15c414c..175892189e9d 100644
---- a/include/dt-bindings/clock/sun50i-a64-ccu.h
-+++ b/include/dt-bindings/clock/sun50i-a64-ccu.h
-@@ -113,7 +113,7 @@
- #define CLK_USB_OHCI0		91
+-    mbus: dram-controller@1c01000 {
++    dram-controller@1c01000 {
+         compatible = "allwinner,sun5i-a13-mbus";
+         reg = <0x01c01000 0x1000>;
+         clocks = <&ccu CLK_MBUS>;
+@@ -69,4 +121,21 @@ examples:
+         #interconnect-cells = <1>;
+     };
  
- #define CLK_USB_OHCI1		93
--
-+#define CLK_DRAM		94
- #define CLK_DRAM_VE		95
- #define CLK_DRAM_CSI		96
- #define CLK_DRAM_DEINTERLACE	97
-diff --git a/include/dt-bindings/clock/sun8i-h3-ccu.h b/include/dt-bindings/clock/sun8i-h3-ccu.h
-index 30d2d15373a2..5d4ada2c22e6 100644
---- a/include/dt-bindings/clock/sun8i-h3-ccu.h
-+++ b/include/dt-bindings/clock/sun8i-h3-ccu.h
-@@ -126,7 +126,7 @@
- #define CLK_USB_OHCI1		93
- #define CLK_USB_OHCI2		94
- #define CLK_USB_OHCI3		95
--
-+#define CLK_DRAM		96
- #define CLK_DRAM_VE		97
- #define CLK_DRAM_CSI		98
- #define CLK_DRAM_DEINTERLACE	99
++  - |
++    dram-controller@1c62000 {
++        compatible = "allwinner,sun50i-a64-mbus";
++        reg = <0x01c62000 0x1000>,
++              <0x01c63000 0x1000>;
++        reg-names = "mbus", "dram";
++        clocks = <&ccu CLK_MBUS>,
++                 <&ccu CLK_DRAM>,
++                 <&ccu CLK_BUS_DRAM>;
++        clock-names = "mbus", "dram", "bus";
++        interrupts = <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>;
++        #address-cells = <1>;
++        #size-cells = <1>;
++        dma-ranges = <0x00000000 0x40000000 0xc0000000>;
++        #interconnect-cells = <1>;
++    };
++
+ ...
 -- 
 2.32.0
 
