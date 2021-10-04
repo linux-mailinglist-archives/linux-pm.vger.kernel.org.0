@@ -2,131 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10371420AE5
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Oct 2021 14:29:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1021420AF6
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Oct 2021 14:37:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231765AbhJDMbY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Oct 2021 08:31:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51672 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230418AbhJDMbY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 4 Oct 2021 08:31:24 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4658C611F0;
-        Mon,  4 Oct 2021 12:29:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633350575;
-        bh=oCtFEAWJjcmkfj0mvzoc76dWPQAtKadeKfZmqR7yG7s=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=R6+m6Ki6TkjdwXplaCn73CUz0UuAzkoWgK1bd2l1kLbodSO2a4cuUiaWZXODRFMIQ
-         CrfKYwrrMsnaTdcAr2UD4ONa4ycJE3SnNJl/dyKkcGA5DJcPmx7QP3Sml3A6P35dwR
-         t5I1xqRdeXf4IFs7fdt6+GlcWuQ9e8rQIMQzfyxGGBF2MaxakTTBXh+pZgdVfgQpda
-         8XeJohdTS/Azuu5MpMnyv+/ziKaax8ZmAjclhxXMbFCB3FdJ9j9faZ6cLcGNb36i+a
-         MTlxi+CYIes9mTE3T/T0UOAMXG8hkdBJAFHf2pinkn15S1MVKOFdW2R6GsgKqp81Bo
-         t/ePLz+jBLaUg==
-Message-ID: <bc2e5c1a-be92-d9c2-08ca-52f4901c7c22@kernel.org>
-Date:   Mon, 4 Oct 2021 15:29:31 +0300
+        id S233098AbhJDMjL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Oct 2021 08:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51108 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229486AbhJDMjL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Oct 2021 08:39:11 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84109C061745
+        for <linux-pm@vger.kernel.org>; Mon,  4 Oct 2021 05:37:22 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id b16so15655152qtt.7
+        for <linux-pm@vger.kernel.org>; Mon, 04 Oct 2021 05:37:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jGP8TVCyTNKC8lYp46gRsaBQwXm6B5JGGuNtiC4p2to=;
+        b=xg7b0UuDwntcgtEAt/AHqlb+K0LE+HZmn1Oqe4wj9ZTl8ACrCiVaPxulOPo7qzXjdH
+         nctGwYnj9vWCI0hSXGYlRTI2GBcOla4sXRzmQUrYYb83H+Kr9FEmWL25y+y/LpgouP+f
+         4rgbquxjLzD84AEaX1HQOsVh4t0JsK/OEae805W4QrbMfzNN9s+WepJf8ouualMpJ94t
+         Q1yY6y81WM5PhMn/gTBbVfYvddoAkDKrdQzuflsINtSuQEfAqZtyKQRuGIIGrqI2jYGq
+         YLtMXXawXGIuJjicJmhByzqJB7ZDpXguKFQ42ASwc2AWuPq3lHn/p9p6hDtxb8wk/Upb
+         OxnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jGP8TVCyTNKC8lYp46gRsaBQwXm6B5JGGuNtiC4p2to=;
+        b=5lVQv/Iq+A6dqPKwI+Qs1bf2c6izkM4K0wB48LBtS1mPORZKhtZbv8JfgAYiWTrprt
+         99N0L5ORnHZeSj1E1BAuwXr7jg+67t0lOQP6APs2H4r+NuJ/+iqP870fi1/v1lqvVt3n
+         20vh5MxMz0QFLOdfFHAJVCuedubPNP76Re6yVufPdff8KB/4P4W8ksoBVLn7wgHE/Wdd
+         N+7QJy6Mv4uZ1AUlA/iktfGV6H497W84EkhZHBJjuwy4fTKG1bRThFMmvlLQ7c8DMsZC
+         wPAhKO54T6ziZtZVubv+G15DklGdiL4GLZSjtJAX7EQzbZEAolb2fRb2ZVqrukPYROJG
+         Q4qA==
+X-Gm-Message-State: AOAM532qApKOwNvFFVhLjP13FvUFeCeMrwME/ZEhRFshaHMf7C1INSw9
+        B9wRLGm3CS6JMaSPVzsNzeHz6qvpWRvg1pfFcmk+Zw==
+X-Google-Smtp-Source: ABdhPJyZdhtbVrhLrPMBAYTp9LsJkvO2y3XEFNx9DpQIGB9Wr40AxahoMxXtorTA5kV8paCC1Yd9yueJDIKEbs3eXOk=
+X-Received: by 2002:ac8:6690:: with SMTP id d16mr12938010qtp.285.1633351041516;
+ Mon, 04 Oct 2021 05:37:21 -0700 (PDT)
 MIME-Version: 1.0
-Subject: Re: [PATCH] interconnect: qcom: Fix endianness in an intermediate
- storage
-Content-Language: en-US
-To:     Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+References: <20210903232421.1384199-1-dmitry.baryshkov@linaro.org>
+ <36128ee3-0dad-dbdb-ca66-0d0e45aa0b9d@linaro.org> <2fe2f8bd-c487-e859-54e1-28e6cb0fdece@kernel.org>
+In-Reply-To: <2fe2f8bd-c487-e859-54e1-28e6cb0fdece@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Mon, 4 Oct 2021 15:37:10 +0300
+Message-ID: <CAA8EJpoozRQ4iq4x8Xnp3rT3=f9svfosi=3PNPOoG=QS-VYLRA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/11] interconnect: merge AP-owned support into icc-rpm
+To:     Georgi Djakov <djakov@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20210930122254.8899-1-vladimir.zapolskiy@linaro.org>
-From:   Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <20210930122254.8899-1-vladimir.zapolskiy@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
+        <linux-arm-msm@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Vladimir,
+On Mon, 4 Oct 2021 at 14:56, Georgi Djakov <djakov@kernel.org> wrote:
+>
+> On 25.09.21 22:40, Dmitry Baryshkov wrote:
+> > On 04/09/2021 02:24, Dmitry Baryshkov wrote:
+> >> This patch series merges support for AP-owned and bus QoS from SDM660
+> >> into common code (icc-rpm.c). MSM8916 and MSM8939 support code is
+> >> extended to support these features. As I was touching these drivers, per
+> >> Bjorn's suggestion expand DEFINE_QNODE macros (which makes adding
+> >> QoS support much easier to review).
+> >>
+> >> Dependencies:
+> >>   -
+> >> https://lore.kernel.org/linux-arm-msm/20210902054915.28689-1-shawn.guo@linaro.org/
+> >>
+> >>   -
+> >> https://lore.kernel.org/linux-arm-msm/20210823014003.31391-1-shawn.guo@linaro.org/
+> >>
+> >>   -
+> >> https://lore.kernel.org/linux-arm-msm/20210824043435.23190-1-shawn.guo@linaro.org/
+> >>
+> >>
+> >> Changes since v1:
+> >>   - Rebase on top a2noc clocks support patch.
+> >>   - Expand DEFINE_QNODE
+> >>   - Simplify struct qcom_icc_node by moving links to separate array
+> >
+> > Georgi, since all dependencies were pulled in by you, I wanted to
+> > remind/ask: do you intend to pull this patchset for 5.16?
+>
+> Hi Dmitry,
+> Yes, that's the plan. I just responded with a few minor comments/fixes
+> to some of the patches. I can just fix them before applying, if you are
+> fine with these.
 
-Thanks for working on this!
+Yes, I'm fine with your fixes. Please use them and apply the patchset.
+Thank you!
 
-On 30.09.21 15:22, Vladimir Zapolskiy wrote:
-> A minor issue is reported by sparse:
-> 
-> bcm-voter.c:72:77: warning: restricted __le16 degrades to integer
-> bcm-voter.c:76:78: warning: restricted __le16 degrades to integer
-> bcm-voter.c:82:66: warning: incorrect type in argument 2 (different base types)
-> bcm-voter.c:82:66:    expected unsigned int [usertype] base
-> bcm-voter.c:82:66:    got restricted __le32 [usertype] unit
-> bcm-voter.c:85:66: warning: incorrect type in argument 2 (different base types)
-> bcm-voter.c:85:66:    expected unsigned int [usertype] base
-> bcm-voter.c:85:66:    got restricted __le32 [usertype] unit
-> 
-> icc-rpmh.c:165:28: warning: incorrect type in assignment (different base types)
-> icc-rpmh.c:165:28:    expected restricted __le32 [usertype] unit
-> icc-rpmh.c:165:28:    got unsigned int [usertype]
-> icc-rpmh.c:166:29: warning: incorrect type in assignment (different base types)
-> icc-rpmh.c:166:29:    expected restricted __le16 [usertype] width
-> icc-rpmh.c:166:29:    got unsigned short [usertype]
-> 
-> The change is intended to be non-functional, only the stored data of
-> 'struct bcm_db' is changed and build time warnings from above are gone.
+>
+> Thanks again to all the people involved with this patchset!
+>
+> Thanks,
+> Georgi
+>
+> >
+> >>
+> >> ----------------------------------------------------------------
+> >> Dmitry Baryshkov (11):
+> >>        interconnect: icc-rpm: move bus clocks handling into qnoc_probe
+> >>        interconnect: sdm660: expand DEFINE_QNODE macros
+> >>        interconnect: sdm660: drop default/unused values
+> >>        interconnect: sdm660: merge common code into icc-rpm
+> >>        interconnect: icc-rpm: add support for QoS reg offset
+> >>        interconnect: msm8916: expand DEFINE_QNODE macros
+> >>        interconnect: msm8916: add support for AP-owned nodes
+> >>        interconnect: msm8939: expand DEFINE_QNODE macros
+> >>        interconnect: msm8939: add support for AP-owned nodes
+> >>        interconnect: qcs404: expand DEFINE_QNODE macros
+> >>        interconnect: qcom: drop DEFINE_QNODE macro
+> >>
+> >>   drivers/interconnect/qcom/icc-rpm.c |  263 ++++-
+> >>   drivers/interconnect/qcom/icc-rpm.h |   56 +-
+> >>   drivers/interconnect/qcom/msm8916.c | 1214 ++++++++++++++++++++--
+> >>   drivers/interconnect/qcom/msm8939.c | 1283 +++++++++++++++++++++--
+> >>   drivers/interconnect/qcom/qcs404.c  |  967 +++++++++++++++--
+> >>   drivers/interconnect/qcom/sdm660.c  | 1940
+> >> ++++++++++++++++++++++++-----------
+> >>   6 files changed, 4815 insertions(+), 908 deletions(-)
+> >>
+> >>
+> >
+> >
+>
 
-Nice! But with your patch i see another sparse warning. Could you fix
-it too, please?
 
-bcm-voter.c:117:21: warning: restricted __le32 degrades to integer
-bcm-voter.c:117:21: warning: restricted __le32 degrades to integer
-
-Thanks,
-Georgi
-
-> 
-> Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-> ---
->   drivers/interconnect/qcom/bcm-voter.c | 8 ++++----
->   drivers/interconnect/qcom/icc-rpmh.c  | 4 ++--
->   2 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/interconnect/qcom/bcm-voter.c b/drivers/interconnect/qcom/bcm-voter.c
-> index 8f385f9c2dd3..976938a84bd1 100644
-> --- a/drivers/interconnect/qcom/bcm-voter.c
-> +++ b/drivers/interconnect/qcom/bcm-voter.c
-> @@ -69,20 +69,20 @@ static void bcm_aggregate(struct qcom_icc_bcm *bcm)
->   	for (bucket = 0; bucket < QCOM_ICC_NUM_BUCKETS; bucket++) {
->   		for (i = 0; i < bcm->num_nodes; i++) {
->   			node = bcm->nodes[i];
-> -			temp = bcm_div(node->sum_avg[bucket] * bcm->aux_data.width,
-> +			temp = bcm_div(node->sum_avg[bucket] * le16_to_cpu(bcm->aux_data.width),
->   				       node->buswidth * node->channels);
->   			agg_avg[bucket] = max(agg_avg[bucket], temp);
->   
-> -			temp = bcm_div(node->max_peak[bucket] * bcm->aux_data.width,
-> +			temp = bcm_div(node->max_peak[bucket] * le16_to_cpu(bcm->aux_data.width),
->   				       node->buswidth);
->   			agg_peak[bucket] = max(agg_peak[bucket], temp);
->   		}
->   
->   		temp = agg_avg[bucket] * bcm->vote_scale;
-> -		bcm->vote_x[bucket] = bcm_div(temp, bcm->aux_data.unit);
-> +		bcm->vote_x[bucket] = bcm_div(temp, le32_to_cpu(bcm->aux_data.unit));
->   
->   		temp = agg_peak[bucket] * bcm->vote_scale;
-> -		bcm->vote_y[bucket] = bcm_div(temp, bcm->aux_data.unit);
-> +		bcm->vote_y[bucket] = bcm_div(temp, le32_to_cpu(bcm->aux_data.unit));
->   	}
->   
->   	if (bcm->keepalive && bcm->vote_x[QCOM_ICC_BUCKET_AMC] == 0 &&
-> diff --git a/drivers/interconnect/qcom/icc-rpmh.c b/drivers/interconnect/qcom/icc-rpmh.c
-> index 3eb7936d2cf6..e8533027ce38 100644
-> --- a/drivers/interconnect/qcom/icc-rpmh.c
-> +++ b/drivers/interconnect/qcom/icc-rpmh.c
-> @@ -162,8 +162,8 @@ int qcom_icc_bcm_init(struct qcom_icc_bcm *bcm, struct device *dev)
->   		return -EINVAL;
->   	}
->   
-> -	bcm->aux_data.unit = le32_to_cpu(data->unit);
-> -	bcm->aux_data.width = le16_to_cpu(data->width);
-> +	bcm->aux_data.unit = data->unit;
-> +	bcm->aux_data.width = data->width;
->   	bcm->aux_data.vcd = data->vcd;
->   	bcm->aux_data.reserved = data->reserved;
->   	INIT_LIST_HEAD(&bcm->list);
-> 
-
+-- 
+With best wishes
+Dmitry
