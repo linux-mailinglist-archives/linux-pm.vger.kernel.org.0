@@ -2,106 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E4F4421205
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Oct 2021 16:52:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 551F94212A6
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Oct 2021 17:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235288AbhJDOyi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Oct 2021 10:54:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55232 "EHLO
+        id S234712AbhJDPaO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Oct 2021 11:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234608AbhJDOyi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Oct 2021 10:54:38 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5727C061749;
-        Mon,  4 Oct 2021 07:52:48 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id e15so72801906lfr.10;
-        Mon, 04 Oct 2021 07:52:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=e9mEC7vyz6aYS5ipxJsTFX2kQTkmdkM9KeZtG855BT0=;
-        b=j0Ur3IU22Dtc5kFnP/nXkoktbxHcZFHOAKKskIoJgXkwGHYXbbkyALnAz04dfcCoVV
-         0Mi+yf7x6bLdauQEAwTnqbWC6yASn3DvUmQzjLsswUxGTTKJ6s/CRmffsVicfj4H/JdQ
-         c/LIIg0L7rv8lHs1sW2K5rZwgSx57ZXcHyto17YWq5qqGR+KdrUM8a/vBIQevrz7MKqt
-         4+fAAMP0uH9K8IRIrKtcrYu5d1hJt2gQAndx84DW2UalqWNKhO6AnDeKmZJUWZRpcZPy
-         CmjMAchXyeOg4QY//26g7aMb6W3U/7YeGFmXOquN7S/42F7Yuv5Wu7Qw7InfGjWugPr7
-         q3/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=e9mEC7vyz6aYS5ipxJsTFX2kQTkmdkM9KeZtG855BT0=;
-        b=i4FOD3fZwEezdBUfN0ibfgTJ8bBbIkAGRvpk6bnVxVD/jD6xaHkpPLWblD5dUTA+FN
-         xwnrb6cpktDfgsOJD7Z5NERbkC9ww5+MyuGnsg2HQ8KIjLd2G1yRTE2kR4R2aYhBARFP
-         7YJ9e/gjVT07bv7KzONujK/NvIL1OyachS6GD/Y2L5sEUYGzwcZvcwc2GR6dsTQptgRf
-         C//fUStXeY3Ufp/Fr4R7r1feYRNHMpIIlFJAxlPEMs4EegXfmRQHMUTiEVeti98JFixw
-         eMGZiKBw+sR90a7JmXSCm1P/+VIVC7PO7L00zZkOmgBPMJsDygKER/rrAVzJwqHVoKdZ
-         vN3A==
-X-Gm-Message-State: AOAM5326A24VhUpnlyO4l8r+dzkw2KfbwBEIgBbWc9ROTtdICTxxKtu2
-        E3uku8UKjseBYCt/yHAVPrE=
-X-Google-Smtp-Source: ABdhPJwZpF/pb309DarSmG6340t8JrbcT7IOPdU/tSH1oTe/CJm/C7yaYY6kTpK2zLUPD04MKNAKqg==
-X-Received: by 2002:a2e:5450:: with SMTP id y16mr16673360ljd.21.1633359167035;
-        Mon, 04 Oct 2021 07:52:47 -0700 (PDT)
-Received: from [192.168.2.145] (79-139-163-57.dynamic.spd-mgts.ru. [79.139.163.57])
-        by smtp.googlemail.com with ESMTPSA id o19sm1632148lfg.68.2021.10.04.07.52.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Oct 2021 07:52:46 -0700 (PDT)
-Subject: Re: [PATCH v13 00/35] NVIDIA Tegra power management patches for 5.16
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
-        linux-mmc@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        David Heidelberg <david@ixit.cz>
-References: <20210926224058.1252-1-digetx@gmail.com>
- <20211004091129.fhlfhsddzk5fakuj@vireshk-i7>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <80e0e5a9-7987-a334-7a2b-a7b09b591414@gmail.com>
-Date:   Mon, 4 Oct 2021 17:52:45 +0300
+        with ESMTP id S233469AbhJDPaO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Oct 2021 11:30:14 -0400
+Received: from bombadil.infradead.org (unknown [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43462C061745;
+        Mon,  4 Oct 2021 08:28:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=s7NZ7E3PI4Zsi+Hk9Jgv2Mz0SRxrTaSZ+M7CVvLomVU=; b=It0zxgyKd+0NBpQv4BLdI65mV1
+        2Gs5Jz/qiIVNKX3J2SQTIMLdOiYY4t5FtfW/v49IexG2s7Rea+jK39G2FTn8VtYW985N21W8odFQ+
+        1dTWWBb7uBmH88jPcHf+W8zj3SgQ/JmKP8C7z5w4N1u6iAXBfmx4gIhG35sIkILIkVFBEn4o9IQNN
+        TF/zocH396jjjvrE39l3dQN6t0y83liFwQrXg4q6fFtD+X9gIxv/bEPOmmKi96qwXy0rIKQHekPEd
+        j2IdoydVOYOSrAruB4luX0isKTRx/iOxvDNr347Ol5Rwyi3p7zRtc5PT7/0ZfHuipzJQ/JPJCXQaw
+        YFFMs4oA==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mXPtA-006u0w-4p; Mon, 04 Oct 2021 15:28:24 +0000
+Subject: Re: [PATCH 2/2] power: supply: max77976: add Maxim MAX77976 charger
+ driver
+To:     Luca Ceresoli <luca@lucaceresoli.net>, linux-pm@vger.kernel.org
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211004130732.950512-1-luca@lucaceresoli.net>
+ <20211004130732.950512-2-luca@lucaceresoli.net>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <a6ea9a21-e9df-b596-eb80-4df4b8d8115e@infradead.org>
+Date:   Mon, 4 Oct 2021 08:28:22 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <20211004091129.fhlfhsddzk5fakuj@vireshk-i7>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20211004130732.950512-2-luca@lucaceresoli.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-04.10.2021 12:11, Viresh Kumar пишет:
-> On 27-09-21, 01:40, Dmitry Osipenko wrote:
->> This series adds runtime PM support to Tegra drivers and enables core
->> voltage scaling for Tegra20/30 SoCs, resolving overheating troubles.
->>
->> All patches in this series are interdependent and should go via Tegra tree.
-> 
-> So you don't need any OPP changes anymore ? I just came back from
-> vacation, don't know what you guys discussed in between :)
-> 
+On 10/4/21 6:07 AM, Luca Ceresoli wrote:
+> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+> index ad93b3550d6d..622d690c883a 100644
+> --- a/drivers/power/supply/Kconfig
+> +++ b/drivers/power/supply/Kconfig
+> @@ -557,6 +557,17 @@ config CHARGER_MAX77693
+>   	help
+>   	  Say Y to enable support for the Maxim MAX77693 battery charger.
+>   
+> +config CHARGER_MAX77976
+> +	tristate "Maxim MAX77976 battery charger driver"
+> +	depends on REGMAP_I2C
+> +	help
+> +	  The Maxim MAX77976 is a 19 Vin, 5.5A 1-Cell Li+ Battery Charger
+> +	  USB OTG support. It has an I2C interface for configuration.
+> +
+> +	  Say Y to enable support for the Maxim MAX77976 battery charger.
+> +	  This driver can also be built as a module. If so, the module will be
+> +	  called max77976_charger.
 
-We discussed it and decided that we don't need more OPP/domain core
-changes. It's already good enough for the starter and making it all
-absolutely ideal doesn't worth the effort for now.
+REGMAP_I2C is not a user-settable config option, so drivers should not
+"depend on" it. This should be more like:
+
+	depends on I2C
+	select REGMAP_I2C
+
+-- 
+~Randy
