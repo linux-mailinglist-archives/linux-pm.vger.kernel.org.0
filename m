@@ -2,156 +2,192 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E67421891
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Oct 2021 22:41:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A67834218D3
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Oct 2021 22:56:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236722AbhJDUm6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Oct 2021 16:42:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53574 "EHLO
+        id S229486AbhJDU6l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Oct 2021 16:58:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234781AbhJDUm6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Oct 2021 16:42:58 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F21AC061745;
-        Mon,  4 Oct 2021 13:41:08 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id i24so27357227lfj.13;
-        Mon, 04 Oct 2021 13:41:08 -0700 (PDT)
+        with ESMTP id S233111AbhJDU6N (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Oct 2021 16:58:13 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7854C06174E
+        for <linux-pm@vger.kernel.org>; Mon,  4 Oct 2021 13:56:23 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id x9so7037221qtv.0
+        for <linux-pm@vger.kernel.org>; Mon, 04 Oct 2021 13:56:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=DTnf8eIYyTQrJG9ptKGfHykXnms5M5UwHTkWE902OpY=;
-        b=EibEwA9aFwdr1rEgVN6jaFywzdYRyr37aiv7MJd/JCCLvfKu09dl3AOH08ooPOpEMD
-         pnROaMjDgSrkmAdTG3upyfYpaTLQKKCYTPY39N3s8ABN1V1lkzLLF2tLizvj89uSY0hZ
-         VoiBHw0liQEPSPe0dQOAt5k8dKQb48dMEnwnXGKfrPZPMNlG66TAfdNyQqd55NcnIvHI
-         +G4YM/eKG5o74z8ORGQVZfYagky9IopnaFwwqdvAHW6prlIA7ghCCLkoiw9/fApkb9aY
-         pV1PnoJQU7u+eSYft9JASxjKi0I4e37ha78uW6Lhf/8jFUD29GvPedXilaN+yOd4TK0a
-         2Nvg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1eQiWMZ4lymZhXSohlx4RiHi1Znkn0XwFspzyAQ+6Iw=;
+        b=yAj0KI/Q4RAtOOwCLsC+i6W48grzLyHT6dYmBvRQ80kX4+c6EJhAiV63SRn7d7PMCp
+         IomeYeocu716ENOjAmxvDgQwOYqr+OmL5Mf3fm8h9RlXpNfecoRWuiloIIV9hzPQfA/Q
+         t6LdNbGcfFB0Sfn/SF7S+dbscHu1phxbLpYSE907d54wt7MbORsLhRkoZ527iRDjP1Mg
+         QVZlPS+BJvEO9b3jyje9Lnu2yF9F02ne+U/1skn8S+jyeVmFo0I5XW0IM8coNfwwTjOX
+         Tx0j8OJ2Mx3fqYk66PX2Hbr5UDe30WRM12n1GR6gpejN2iW83OpVHuQ/D1KxC7v8jXIt
+         QVdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=DTnf8eIYyTQrJG9ptKGfHykXnms5M5UwHTkWE902OpY=;
-        b=MlOLmugXo1Gb84b1L9sIIF0V82stqhIgbiIcuRoJxdemM6Yqmmd7VJ8MGVDdMXHgl2
-         oKyOuUsruhbONWvwkh5FC3wR8vKUzwJ2AHkXscUO1KltU2OpitKMsvGHkVR3R1S/fXkB
-         7lohtzT+ErbZa3laFBrndVmCg30D1FqMpQ97Ycnc+OkC/JYTELwhh+bqDNJWgeJO3qe4
-         ODxRaKjDmCaSFESZ5eaJY1KYezd7JOoEGjyTJPM8MGJ3bpheDoxNjt52T9+IJuOWsZnb
-         IehHM25LvA8LypXWpMFhDlZmC+uiOmPCyRDqVYz37xXKNvjc0rSWrkMamw1qFX9Ur9qx
-         gF6w==
-X-Gm-Message-State: AOAM530iivV9Wfmv6Bz1vSbf4c075b5GTTd7oI29ASpwGYePApNTTD/M
-        NIFg+PoyYd8ji+AG09lHFVY52PQZaYI=
-X-Google-Smtp-Source: ABdhPJyYZWZoJYPQgCVFMWdiV7hO6uIH+Nr2GqSjeAvpZlHkQzzjEIDQxN83FkYL0aOQLPiSl10+lg==
-X-Received: by 2002:a2e:92d5:: with SMTP id k21mr18201457ljh.83.1633380065416;
-        Mon, 04 Oct 2021 13:41:05 -0700 (PDT)
-Received: from [192.168.2.145] (79-139-163-57.dynamic.spd-mgts.ru. [79.139.163.57])
-        by smtp.googlemail.com with ESMTPSA id j27sm110347lfp.261.2021.10.04.13.41.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Oct 2021 13:41:05 -0700 (PDT)
-Subject: Re: [PATCH v1 4/6] clk: tegra: Add stubs needed for compile testing
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210912202907.28471-1-digetx@gmail.com>
- <20210912202907.28471-5-digetx@gmail.com> <YVtXJVeK2qdy8E1q@orome.fritz.box>
- <YVtd67B0Ac+ChBEA@orome.fritz.box>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <fe54d967-4fd0-5129-2d15-b1271490306a@gmail.com>
-Date:   Mon, 4 Oct 2021 23:41:04 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1eQiWMZ4lymZhXSohlx4RiHi1Znkn0XwFspzyAQ+6Iw=;
+        b=RoiUSoKR8AdkgUW4WUFNQpIX/EZw5sp2TcF5seLY9+ZeIeZriassyxfPlTaGX88Ymx
+         qsnWHAi9vtrMC5x1uglGRGzuAkMsdmo26WFiQqrktLMLqADFDTPcejg8zd8nq9ZUnjYy
+         hy3+Xa/e4+O+fq5JN6kHIcF3yrRlU5wK01wVLDFc5vWMte0Jcb1w2PMLRxLu1307NxY1
+         FnSCaw01GOckS3J75h/3BnuwvhYfC/N9QnVbMIeh1L27+JLDxcCSmUI0uSRxDDd7EvkR
+         raqUft1z9doNOjxWeMNzpd0pqikWLCqNQfjytCho6kunfKtK8JQxlykxB5M88i4rNvN7
+         4SwA==
+X-Gm-Message-State: AOAM5311xZhBXEPAiUbUQME6mqeyQa1JkN6gB9dDQfImBkkfcGDZ9wHa
+        DzS/fw648xo9oE6bcEnq/tUvTBud8FGm1RnuTKX3/A==
+X-Google-Smtp-Source: ABdhPJzTTTgb2VURiv0i9cfBWf1L2Z4r4TEETUlviwbAf6zzaXeUYI6x+ysMDBZNIHCcQYpLwm0LwzHbahxq5Onevlo=
+X-Received: by 2002:ac8:1011:: with SMTP id z17mr15928369qti.388.1633380982877;
+ Mon, 04 Oct 2021 13:56:22 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YVtd67B0Ac+ChBEA@orome.fritz.box>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20210923212311.2877048-1-bjorn.andersson@linaro.org>
+ <20210923212311.2877048-5-bjorn.andersson@linaro.org> <YVSzJZ8G43CLml3L@google.com>
+ <YVtg3lcR1HMqVdAJ@ripper>
+In-Reply-To: <YVtg3lcR1HMqVdAJ@ripper>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Mon, 4 Oct 2021 23:56:11 +0300
+Message-ID: <CAA8EJprYij6pWD1A17yr1+5-n5fKPW=YDA_-2+f8h6JnEh4myw@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] arm64: dts: qcom: sdm845: mtp: Add vadc channels
+ and thermal zones
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
+        <linux-arm-msm@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-04.10.2021 23:02, Thierry Reding пишет:
-> On Mon, Oct 04, 2021 at 09:33:57PM +0200, Thierry Reding wrote:
->> On Sun, Sep 12, 2021 at 11:29:05PM +0300, Dmitry Osipenko wrote:
->>> Add stubs needed for compile-testing of tegra-cpuidle driver.
->>>
->>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->>> ---
->>>  include/linux/clk/tegra.h | 4 ++++
->>>  1 file changed, 4 insertions(+)
->>>
->>> diff --git a/include/linux/clk/tegra.h b/include/linux/clk/tegra.h
->>> index d128ad1570aa..9bd06d8a5436 100644
->>> --- a/include/linux/clk/tegra.h
->>> +++ b/include/linux/clk/tegra.h
->>> @@ -42,7 +42,11 @@ struct tegra_cpu_car_ops {
->>>  #endif
->>>  };
->>>  
->>> +#ifdef CONFIG_ARCH_TEGRA
->>>  extern struct tegra_cpu_car_ops *tegra_cpu_car_ops;
->>> +#else
->>> +static struct tegra_cpu_car_ops *tegra_cpu_car_ops __maybe_unused;
->>> +#endif
->>
->> Ugh... this one seems a bit over the top, to be honest. The only place
->> where this seems to be used is in arch/arm/mach-tegra/pm.c, but that
->> already uses one of the stubs from include/linux/clk/tegra.h, so I'm
->> wondering if we can't define that latter stub in a way to make it
->> unnecessary to declare this bogus pointer.
->>
->> I'll play around with this a little bit.
-> 
-> The below does the trick for me as well:
-> 
-> --- >8 ---
-> diff --git a/include/linux/clk/tegra.h b/include/linux/clk/tegra.h
-> index d128ad1570aa..d261db7e6060 100644
-> --- a/include/linux/clk/tegra.h
-> +++ b/include/linux/clk/tegra.h
-> @@ -42,6 +42,7 @@ struct tegra_cpu_car_ops {
->  #endif
->  };
-> 
-> +#ifdef CONFIG_ARCH_TEGRA
->  extern struct tegra_cpu_car_ops *tegra_cpu_car_ops;
-> 
->  static inline void tegra_wait_cpu_in_reset(u32 cpu)
-> @@ -83,6 +84,27 @@ static inline void tegra_disable_cpu_clock(u32 cpu)
-> 
->  	tegra_cpu_car_ops->disable_clock(cpu);
->  }
-> +#else
-> +static inline void tegra_wait_cpu_in_reset(u32 cpu)
-> +{
-> +}
-> +
-> +static inline void tegra_put_cpu_in_reset(u32 cpu)
-> +{
-> +}
-> +
-> +static inline void tegra_cpu_out_of_reset(u32 cpu)
-> +{
-> +}
-> +
-> +static inline void tegra_enable_cpu_clock(u32 cpu)
-> +{
-> +}
-> +
-> +static inline void tegra_disable_cpu_clock(u32 cpu)
-> +{
-> +}
-> +#endif
-> 
->  #ifdef CONFIG_PM_SLEEP
->  static inline bool tegra_cpu_rail_off_ready(void)
-> --- >8 ---
-> 
-> Do you mind if I replace your version with that? I think that's a little
-> bit cleaner because it should be easier for the compiler to completely
-> compile it out.
+On Mon, 4 Oct 2021 at 23:13, Bjorn Andersson <bjorn.andersson@linaro.org> wrote:
+>
+> On Wed 29 Sep 11:40 PDT 2021, Matthias Kaehlcke wrote:
+>
+> > On Thu, Sep 23, 2021 at 02:23:11PM -0700, Bjorn Andersson wrote:
+> > > Downstream defines four ADC channels related to thermal sensors external
+> > > to the PM8998 and two channels for internal voltage measurements.
+> > >
+> > > Add these to the upstream SDM845 MTP, describe the thermal monitor
+> > > channels and add thermal_zones for these.
+> > >
+> > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > > ---
+> > >
+> > > In addition to the iio channels exposed by v1, Daniel wanted thermal_zones...
+> > >
+> > > Changes since v1:
+> > > - Enable the pm8998_adc_tm and describe the ADC channels
+> > > - Add thermal-zones for the new channels
+> > >
+> > >  arch/arm64/boot/dts/qcom/sdm845-mtp.dts | 128 ++++++++++++++++++++++++
+> > >  1 file changed, 128 insertions(+)
+> > >
+> > > diff --git a/arch/arm64/boot/dts/qcom/sdm845-mtp.dts b/arch/arm64/boot/dts/qcom/sdm845-mtp.dts
+> [..]
+> > > +&pm8998_adc {
+> > > +   adc-chan@4c {
+> > > +           reg = <ADC5_XO_THERM_100K_PU>;
+> > > +           label = "xo_therm";
+> > > +   };
+> > > +
+> > > +   adc-chan@4d {
+> > > +           reg = <ADC5_AMUX_THM1_100K_PU>;
+> > > +           label = "msm_therm";
+> > > +   };
+> > > +
+> > > +   adc-chan@4f {
+> > > +           reg = <ADC5_AMUX_THM3_100K_PU>;
+> > > +           label = "pa_therm1";
+> > > +   };
+> > > +
+> > > +   adc-chan@51 {
+> > > +           reg = <ADC5_AMUX_THM5_100K_PU>;
+> > > +           label = "quiet_therm";
+> > > +   };
+> > > +
+> > > +   adc-chan@83 {
+> > > +           reg = <ADC5_VPH_PWR>;
+> > > +           label = "vph_pwr";
+> > > +   };
+> > > +
+> > > +   adc-chan@85 {
+> > > +           reg = <ADC5_VCOIN>;
+> > > +           label = "vcoin";
+> > > +   };
+> > > +};
+> > > +
+> > > +&pm8998_adc_tm {
+> > > +   status = "okay";
+> > > +
+> > > +   xo-thermistor@1 {
+> > > +           reg = <1>;
+> > > +           io-channels = <&pm8998_adc ADC5_XO_THERM_100K_PU>;
+> > > +           qcom,ratiometric;
+> > > +           qcom,hw-settle-time-us = <200>;
+> > > +   };
+> > > +
+> > > +   msm-thermistor@2 {
+> > > +           reg = <2>;
+> > > +           io-channels = <&pm8998_adc ADC5_AMUX_THM1_100K_PU>;
+> > > +           qcom,ratiometric;
+> > > +           qcom,hw-settle-time-us = <200>;
+> > > +   };
+> > > +
+> > > +   pa-thermistor@3 {
+> > > +           reg = <3>;
+> > > +           io-channels = <&pm8998_adc ADC5_AMUX_THM3_100K_PU>;
+> > > +           qcom,ratiometric;
+> > > +           qcom,hw-settle-time-us = <200>;
+> > > +   };
+> > > +
+> > > +   quiet-thermistor@4 {
+> > > +           reg = <4>;
+> > > +           io-channels = <&pm8998_adc ADC5_AMUX_THM5_100K_PU>;
+> > > +           qcom,ratiometric;
+> > > +           qcom,hw-settle-time-us = <200>;
+> > > +   };
+> > > +};
+> > > +
+> >
+> > The example in the 'qcom,spmi-adc-tm5' binding specifies 'qcom,ratiometric'
+> > and 'qcom,hw-settle-time-us' for both the ADC and the thermal monitor, so do
+> > several board files (e.g. sm8250-mtp.dts and qrb5165-rb5.dts). This apparent
+> > redundancy bothered me earlier, it's not really clear to me whether it's
+> > needed/recommended or not. Do you happen to have any insights on this?
+>
+> Hmm, you're right and I missed this in defining my channels. I've not
+> looked at this detail, just got reasonable readings from my thermal
+> zones and was happy about that.
+>
+> Dmitry, do you have any further insights why these properties are
+> supposed to be duplicated between the adc channel and the thermal zones?
 
-I don't mind, please choose what you prefer more. This was one of the
-first variants of this patch, it adds more lines and it won't be
-compiled with ARCH_TEGRA=n and COMPILE_TEST=n anyways.
+Because both ADC channel and thermal zone registers should be
+programmed accordingly.
+
+One not-so-perfect approach would be to use io-channels property to
+locate the adc's adc-chan node and to parse it. However this way
+thermal driver would have to know the exact structure of adc's device
+tree nodes.
+Another (even worse) solution would be to introduce qcom-specific API
+to query these properties from the IIO channel.
+
+Selecting between these two options I decided to follow the downstream
+path and just to duplicate these few properties.
+
+-- 
+With best wishes
+Dmitry
