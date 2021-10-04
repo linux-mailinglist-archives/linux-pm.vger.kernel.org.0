@@ -2,43 +2,43 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C19E4204A3
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Oct 2021 03:27:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7B964204A6
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Oct 2021 03:27:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232056AbhJDB3I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 3 Oct 2021 21:29:08 -0400
-Received: from wnew3-smtp.messagingengine.com ([64.147.123.17]:55119 "EHLO
+        id S231970AbhJDB3a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 3 Oct 2021 21:29:30 -0400
+Received: from wnew3-smtp.messagingengine.com ([64.147.123.17]:53345 "EHLO
         wnew3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231935AbhJDB3H (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 3 Oct 2021 21:29:07 -0400
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
-        by mailnew.west.internal (Postfix) with ESMTP id 47CC42B01318;
-        Sun,  3 Oct 2021 21:27:18 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Sun, 03 Oct 2021 21:27:19 -0400
+        by vger.kernel.org with ESMTP id S231935AbhJDB3a (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 3 Oct 2021 21:29:30 -0400
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id 5631E2B01318;
+        Sun,  3 Oct 2021 21:27:41 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Sun, 03 Oct 2021 21:27:42 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         from:to:cc:subject:date:message-id:mime-version
         :content-transfer-encoding; s=fm3; bh=HdSTkWjTFUo6RFWfKSuzPaUvO9
-        DhW7mD54XQttsAuQo=; b=C4uEPvofM0N2qvyNjQdIB6L2vv8y/u8GHPXyVR6mpF
-        YXwVIKXof90Me/gtZPHt6BJGeDKjBHFmT8rzj7+UIb1wTLj+/bxMxaADcLC1Z7OK
-        G46wOlaZxxgB5RZfQ1/V7iSRAYHKMg7fJ3Z9+/R6uRdC7D+9zq24/x+AglbBft+W
-        TmNEznO4pIVk+68tj51Yro0l3JP6KOIR6Hz4KRwg1wS5yU+LVygLt7u2smK4XmCP
-        k36icDWHsI/HqP9pzagb88aT7TGflhhYX3GiTIyesCCDtmiNU3AxZFkbsv+VJDxd
-        cM2xKaBoR5i4y5LthMaI7023ueWnUEglVSmzj5vaJAGQ==
+        DhW7mD54XQttsAuQo=; b=EihmDYib3vvy0NlGOt2bP+b4O5o6ETorkH+AHsK9KU
+        qtdzDzRog9aM5MPhiA9Im+aOOag4Ccop0NXGDvVxQEeRk7Yej7jDOLTRqioLhJnN
+        HmBU1DF15jvbGzbRaxJAIK6c+e48IFiB7FpX+Z6oVztWv4Du6W4iy68s1+HG4ihF
+        gjEdHaMRVLwl9a6CHHL6Hm+LTVLmiw330xuunuXLE/p0VhOaXv+1BgMEqFXUmz+V
+        BrhaXwg0empa/KBTos0BP/pRu6b02H4AjtK2B5u4cFRyUpb68+aY25RvppGNjRqe
+        jEgUS0DUY/pVhKFhW7LJJ+zPYeJnfw+BwJGCI+vZFwjg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
         :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
         :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=HdSTkWjTFUo6RFWfK
-        SuzPaUvO9DhW7mD54XQttsAuQo=; b=HH1tmBGljnseQVrvMh6EDd1Dj90fH5o+j
-        sva+YVHrlUBwln/czzoPe2RGZYCCP/gbdQ+d7IrR16p05ed01UmIJEkwqB7bbllm
-        FfF7K1S1cZ2PoR4I9nO6TCbFWJfVALMmraFxmu0kN0zmV41VxqQMTlBM66wtVley
-        iAd6Y/zF1EeJuXeTdhImQZlMvg5VhhI4RBrEJhn/Gq748X375Bs19zGTWM0blx84
-        +YPyQrkQCV2GxgP3idKrGi7Yrgl8zd/uZqOoNN/nmUwy5W25Rrt69vN7cgmysFQm
-        lttz9I7rEdahPjcyx3jSo8QKtrDAMmmhLURHSSPMM+SJzBTJceezg==
-X-ME-Sender: <xms:dFhaYf82svvOvIsBDlffp4uB2H2ycS0QxLa8OGwXKSzAHfMHu7SLxg>
-    <xme:dFhaYbugVGU7QGJ_QQOkZK_Up-OIpFTSFNQyblWxpFThtNur91nMSbdsYpnnv5sf_
-    XervYAe_J8FvDcHqA>
-X-ME-Received: <xmr:dFhaYdDJNHs2N8HCPHVBfHmD9rZVVdvGo3VG-SsJESxQEIS5FL0OoivgPvtGj1LP0PIUWEP20LBit865WimHU7WKtgQ-I7BTj_R5gtKqa0Lb__3TfVyXasQwjDyo_YMuGFesTw>
+        SuzPaUvO9DhW7mD54XQttsAuQo=; b=ZYuil6dNYYFK5fiUDNdmXlZZwMdiOcZh5
+        pC6mhFAnbRJMMhYYPkhKQSyq2RUAJphAshZ0QpIxYp5ABtKE0K8ti1gTYhCu1fW9
+        +OSenETXwZgjuPWRHo2Z9yTtkInFT+IQcTTPS522yBqurXndvuseHVb9p8n1ece8
+        HWCeARejUw+E+2rx3qggN/WVK4pTUJrlzsDfYsKP/hxos87FDhOx5eITGz+mMxVQ
+        V6GUGz4kCfMgVNmYGjBV7lSKDOQZmkan4cW98r+5WFPtG/9SIutmRpZ+Ng3ITq6d
+        UzLM777Hc8wf2kG3zXVMqzBf38DVbmUgNFYqJHZtS8XNgVXUpaN3g==
+X-ME-Sender: <xms:jFhaYYphPU6q1eCYfGQfTMfnp3cWWivYEW4D7WCuReqTcaxZN3r6Pw>
+    <xme:jFhaYeqf8lSyZaw_JQxG1FrFKdtrlBkpgkkz7uiPi_kIR3SPy-dM0aUQLReuhL8J_
+    iX7xbx0fBVBEKQi7g>
+X-ME-Received: <xmr:jFhaYdOqEnbDoDzd5fzg58mRgHlG7c20H-8Igqy_a2deQSLS7tl75oRh1MYUoDcd8lnHOFfWBw4wc6h2ruKNjzNUgrVrRMVrzSzCX_-3-yFwg-tylfoyNz8MkFAe6ddi1oD_Mw>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudeluddggeehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
@@ -47,12 +47,12 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudeluddggeehucetufdoteggod
     htthgvrhhnpeeiteekhfehuddugfeltddufeejjeefgeevheekueffhffhjeekheeiffdt
     vedtveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
     hsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:dFhaYbc5bpMfDzpUw1TnsNBZB2r5xXASF4Km6J_-76lPOq8l63hhOA>
-    <xmx:dFhaYUPBwPC7OJgSxiqIsxv11Pu_HsUdWZVTU_2GSaar8piQw80dlw>
-    <xmx:dFhaYdkXX3SO4NcnUpbHs6sQqe5EIzz4ymeQ_hUxNyhxi1d2j50_zg>
-    <xmx:dVhaYWvVcVBFhI7gXLpfnCsuyuPX7LfXYe7NlDIIwKKWLiQzpVj7rPjR8IM>
+X-ME-Proxy: <xmx:jFhaYf6508RgTH2HnXhsJp_hGRpjbtUnW6axs0T2N840WXpY69jTiw>
+    <xmx:jFhaYX4prP2rPIln-tqCgnaJBQIhP48tnx04gN2GTZbg9HTu0h0JHg>
+    <xmx:jFhaYfh6o7S5gggjRzdMCURpnC9DOs-mYYg8g8Egw-T5UpUWKDcacQ>
+    <xmx:jFhaYeKOnGGNY5azfLaVwM7JA2rDJLcSHfdaIc--O6TdEaOEUCtrAL_HbV0>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 3 Oct 2021 21:27:16 -0400 (EDT)
+ 3 Oct 2021 21:27:40 -0400 (EDT)
 From:   Samuel Holland <samuel@sholland.org>
 To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
@@ -67,8 +67,8 @@ Cc:     Michael Turquette <mturquette@baylibre.com>,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
         Samuel Holland <samuel@sholland.org>
 Subject: [PATCH v2 0/6] DRAM devfreq support for Allwinner A64/H5
-Date:   Sun,  3 Oct 2021 20:27:09 -0500
-Message-Id: <20211004012715.38986-1-samuel@sholland.org>
+Date:   Sun,  3 Oct 2021 20:27:33 -0500
+Message-Id: <20211004012739.39053-1-samuel@sholland.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
