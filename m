@@ -2,94 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA82542078E
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Oct 2021 10:47:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E33E4207B2
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Oct 2021 10:59:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbhJDItT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Oct 2021 04:49:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54494 "EHLO
+        id S231355AbhJDJBo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Oct 2021 05:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbhJDItT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Oct 2021 04:49:19 -0400
-Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762C4C0613EC
-        for <linux-pm@vger.kernel.org>; Mon,  4 Oct 2021 01:47:30 -0700 (PDT)
-Received: by mail-yb1-xb41.google.com with SMTP id r1so35821996ybo.10
-        for <linux-pm@vger.kernel.org>; Mon, 04 Oct 2021 01:47:30 -0700 (PDT)
+        with ESMTP id S231347AbhJDJBn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Oct 2021 05:01:43 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1419FC0613EC
+        for <linux-pm@vger.kernel.org>; Mon,  4 Oct 2021 01:59:55 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id r201so9960638pgr.4
+        for <linux-pm@vger.kernel.org>; Mon, 04 Oct 2021 01:59:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/jfyDf2uGQ0G4PkhWSUViq4lngXtqzf19oHYgswwn6Y=;
-        b=ZhNjpXps1iaEVkmEi+Dwi9/nQUeNUCX+Mvij14snth8JJVp1c24CCuMAoXGHgF9An/
-         5Lt2Y5QZX8NRykdSdrOwh4Q2wPfDU3vhYYHbyaXX6UHszpUDG4P2O/rxiUFlkgNcRCn0
-         bYoLe1/MiRNM+gS5LeAVLy7BzhreG5VwilMzctgAAm3v3fsomdHEKWiLthFXtPyM8hUk
-         +cvtoFmFvfyQBWTl43dNiokFk1fuxssufn6+m/N+34kzK3dqPrgjt6lyN6CWbeqkn0Lt
-         8CAwTAcVIkfPke/cn+w7daNml1CGOo1QQQ6Ckt6MkatRtkF8nblxNnD8ZKpl+8TjcoAy
-         3GVw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=xctOnjrfnqdPEoa3tip3/LlkAqa1IsoEyPkzXNFOgl4=;
+        b=vD0cU/s1vm+3nN3lc+qpbOlY1NZ1fr0ctroE7oqMauOwCiUPyYuFmJq2iHdj2yHSx9
+         EiHX3gnukAK5oNEdfYHdgNjabX0okaUXHKZV0xiX2RaGT2lLxg1fYfi//6zJGwUdt+SY
+         6BOCQO3a9i70wemWlftieZo7eGP2Wr3PQ1ffejuZ3hT7lGtrevzshVjLoXv7AcKUJpli
+         CGZSFFeFtfihedDziaakSFO46idMianbhp9G9y+bwfSdj8uOL7ppMkYEu7t8FlVnmkTn
+         P36E16bLWmXY5v5vwxtlsKffKjhKBwedcJx4nIH4iyzzaXuacMz9J59SzoxdFULOmpYF
+         QDMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/jfyDf2uGQ0G4PkhWSUViq4lngXtqzf19oHYgswwn6Y=;
-        b=UxFFn559vZ2EbF1pEf5hNL6QkspXc8zQCHJua2NOZf9oMaE+nlor1iXQgFkkd5RYhF
-         ZGNgkvyAIePJHPcuQQeva5eLMXUO2fDJiJFeHRfdrbTiSKmNwdZFLBHsRBwuQZJJcCap
-         qJazEIP1NitZv8vMh5/wimhdxO50Ptr7fWFbxrKrhWwWLuOJyaZwUlVcsSN3uaWJMA4s
-         I+2HBAtKteJa1ABJSIoRpJfpv8gijCW0IrfojkOksT71JhCveXcBpymhaBtOmU1QFZga
-         Av0Z5qHyNnADG0I2sBuIgjj94Pn4ANLqeru0D3xiWujPEFKiLE8tAt2WKTofAHVWIAqI
-         R6bg==
-X-Gm-Message-State: AOAM5307sEose75CNkBqhptidYsq9BjMAhprrDrOFodXbxkHwqvP6v1/
-        ngTx2+ME/QYDWY+73Jw4HUAdyzz6f1xVZFnUIww=
-X-Google-Smtp-Source: ABdhPJwJHk5FMtxIpEOscXs+sKwqKgA5Hsl9GA0U7h/1xxdxA9kj+6EYaO70RafRkvPhAQwpTR0Vs5jtiI3mlk13kiI=
-X-Received: by 2002:a25:ed0d:: with SMTP id k13mr13497050ybh.191.1633337249273;
- Mon, 04 Oct 2021 01:47:29 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=xctOnjrfnqdPEoa3tip3/LlkAqa1IsoEyPkzXNFOgl4=;
+        b=hPVJUEJ4ZSQWmidmK03ZQY+l1fy9wv3+mdihbWyfAJ5hF8s1QoTeS8O5BnIB5b+2Ck
+         8bp+QqIX2A5agsfLalxF6tmEqLgUeij1Qm8s+qxKkgWQ7AiIaWoRPT5r9xlqiYvOCsPH
+         kDmP5/aqlndmga8K6uuvipRFzKrJHboDmnJNFmB7uuD4gp/LuJHfknbwBAkcbjB606BP
+         x5wWb8NZkZLEs9F24A2Tz4XgZs1TKzGuJxQOx9CLLxUVgD6S1I1nYV+avUrELyi41XXi
+         XT8IC6JBL6a1EkNvd1y26t7Xc7cc36U9/83xdTCZ3op+CDbPLdG6HGrGnEnx+a05VFOY
+         pgMw==
+X-Gm-Message-State: AOAM533GII3Kczwhcln5gL8aRIm1J9awtHOohToYhqe/Ncma9jfPGEpz
+        Yq8IYn8Y6OdkMpFFeBlKqVYylQ==
+X-Google-Smtp-Source: ABdhPJwSNvRu3CTp59vBuvr4RaMFcbMupvPQgnOOoX2hPpfzNEnqMHeDbG4cz+HBTly8u85sYIveag==
+X-Received: by 2002:a63:a03:: with SMTP id 3mr9931268pgk.326.1633337994442;
+        Mon, 04 Oct 2021 01:59:54 -0700 (PDT)
+Received: from localhost ([122.171.247.18])
+        by smtp.gmail.com with ESMTPSA id d24sm13622896pgv.52.2021.10.04.01.59.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Oct 2021 01:59:53 -0700 (PDT)
+Date:   Mon, 4 Oct 2021 14:29:52 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     rafael@kernel.org, robh+dt@kernel.org, bjorn.andersson@linaro.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH] dt-bindings: cpufreq: cpufreq-qcom-hw: Convert to YAML
+ bindings
+Message-ID: <20211004085952.3k7efa3lxlll3ivy@vireshk-i7>
+References: <20211004044317.34809-1-manivannan.sadhasivam@linaro.org>
+ <20211004070531.sexvnqmnkoe4j6a2@vireshk-i7>
+ <20211004072222.GE16442@workstation>
 MIME-Version: 1.0
-Received: by 2002:a05:7108:3370:0:0:0:0 with HTTP; Mon, 4 Oct 2021 01:47:28
- -0700 (PDT)
-Reply-To: shawnhayden424@gmail.com
-From:   Shawn Hayden <shawnhayden424@gmail.com>
-Date:   Mon, 4 Oct 2021 09:47:28 +0100
-Message-ID: <CAFrwAPLY=FEzorq=AXXgO_yH6gmfA=ogBKC0CS56PJ2P70uj2g@mail.gmail.com>
-Subject: LOANS AND INVESTMENT
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211004072222.GE16442@workstation>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dear Sir,
+On 04-10-21, 12:52, Manivannan Sadhasivam wrote:
+> On Mon, Oct 04, 2021 at 12:35:31PM +0530, Viresh Kumar wrote:
+> > On 04-10-21, 10:13, Manivannan Sadhasivam wrote:
+> > > Convert Qualcomm cpufreq devicetree binding to YAML.
+> > > 
+> > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> > > Reviewed-by: Rob Herring <robh@kernel.org>
+> > 
+> > I am not sure if Rob ever gave this.
+> > 
+> 
+> I'm not fooling you :)
+> https://patchwork.kernel.org/project/linux-pm/patch/20210701105730.322718-5-angelogioacchino.delregno@somainline.org/#24312445
 
-Aseel Islamic finance PJSC is private joint stock company that was
-established in 2006 and has built a leading market position for itself
-in the UAE's Islamic finance market which specializes in loan finance
-and investment activities in real estate, hospitality, industrial &
-sustainable technologies, strategic financial investments, specialized
-education, healthcare services, agriculture, manufacturing,
-mining,energy and additional environmentally sustainable projects.
+I did read that email but somehow missed the RBY :)
 
-My name is Mr. Ibn Ahmad Mustafa . Do you have projects that require
-funding? We have finance available for your projects with over 2
-trillion private and corporate investment portfolios.  Aseel Islamic
-finance PJSC is looking for equity partners, entrepreneur, fund
-raisers and portfolio managers who will pay up to 4.5% interest and/or
-part equity position with a 5 to 10 year hold. In 2030, we plan on
-acquiring up to 2 trillion in high-quality, low risk assets and
-investments to capitalize on the current market cycle.
-
-Aseel Islamic finance PJSC is acting as a lender and the fund will be
-disbursed on a clear interest rate of 3.5% annually to the equity
-partners and entrepreneurs for their investment projects. We also give
-a 2% commission to brokers, who bring project owners for finance or
-other opportunities.
-
-For further details, kindly send us your business plans or project summary.
-
-Regards,
-
-
-Mr. Ibn Ahmad Mustafa
-International Business Coordinator
-Aseel Islamic Finance PJSC
-Al Mankhool, Dubai C2 Tower,
-Ground floor,P.O 94669 Dubai, UAE
-Abu Dhabi - United Arab Emirates
-Email : ahmadmustafa.7800@gmail.com
+-- 
+viresh
