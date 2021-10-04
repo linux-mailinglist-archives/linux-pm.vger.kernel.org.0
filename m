@@ -2,129 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88E53420830
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Oct 2021 11:25:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 243C242094A
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Oct 2021 12:24:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbhJDJ1B (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Oct 2021 05:27:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35006 "EHLO
+        id S230418AbhJDK0N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Oct 2021 06:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbhJDJ1A (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Oct 2021 05:27:00 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F40FC061745
-        for <linux-pm@vger.kernel.org>; Mon,  4 Oct 2021 02:25:12 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id d13-20020a17090ad3cd00b0019e746f7bd4so3477543pjw.0
-        for <linux-pm@vger.kernel.org>; Mon, 04 Oct 2021 02:25:12 -0700 (PDT)
+        with ESMTP id S230405AbhJDK0N (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Oct 2021 06:26:13 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE72C061746
+        for <linux-pm@vger.kernel.org>; Mon,  4 Oct 2021 03:24:24 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id s24so13052149wmh.4
+        for <linux-pm@vger.kernel.org>; Mon, 04 Oct 2021 03:24:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=fcQsXr7X6789brlUNea0yLwgERc7QKWwEUY0K/Hgp1U=;
-        b=FrtA7bBeW72k7cYxcKLEzIH+9iixj3QGnG6/XV47ZXymLKNmpJmIM/3ec4KWniUYyE
-         tz34SsnqzWTL4ec4oJGve35+lKEvCFVYEnGCcqr4x9Q9TLl7d5WlRw/XSu3f/lwh2kG2
-         B3ikWS2IXRSkvRIyAgofPlkoJ8FuypqL9hLwX/hDwPShzRWP2HJBhiSDAjp5yCrtIZsF
-         DTvOOPSy7Cd8k5qf+h8uoIobQSBSj2uXU8lKv/EFJYnRiETFVm/OLjLBUnfHOJW+I13v
-         lv/J54TpG86r1gLhpf1ChAgLF7p2SdnnuNnfzQTYbV2114kVac1rUedhlyyNZ7cKXorB
-         F34w==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=qhMvue8MY09TlNhIY5O7l8PD+1ElyHRcW1aqF7WPAas=;
+        b=BEjN7xJ7aKe7IcVE8EAFasILY2HSxM1bvEYN3LzfUxM4lWH0ryxDghWKgTQoNr8C1M
+         dWB1K3KkMKtuN7nkyDiaL2zIzsfLApBMRDDKx0dYOGN5cEd9D30p7LazHlXI1QB6TWs7
+         drOdWux3ZxlXoalW8eMKWqxfeneFUZlyl7lnBjXuciVkMVkzlPs5OvcXy9lioFLNioY+
+         Ruz5Frc/yRTbqbUEtutMVin2B50ES7Yb3Zu4d83siGkQ05A/6EWrQG9FyedkScr0xES2
+         /APmM9KNnYegiUFfNBb5EDoquHfbXdh6BrWii8xs7sRJwAlgL15oCo251BxsZI3lB+IQ
+         OK7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=fcQsXr7X6789brlUNea0yLwgERc7QKWwEUY0K/Hgp1U=;
-        b=y3oN6WCsoXm9c2RfKDuz7QeOoLy5ZhKz5+IDb+XAnNtJUXQrgHwJjlJ5nCbnIJAaCZ
-         hLghjPaLZ7O/1JswSdisdILQIKaUvq9hFdUBRrYTzsHL1GkqvaQekjmHXwetZpptxH6k
-         0uDX9d7hIs8LiBx+1SaKFJZqbVrxsXR4g61FxhllkdOt41v4Rl0P1SGtU73UP5tIae/t
-         HE7AAPNJH9iH0Ptqmm989sqaKMNFQlUk/XSO5Vxt6PsgzswSquzUISl38rqTHjjcY3it
-         CKANPFjsQ90Pj8REDMB5pW6X4Ou2Y13c5hXTi5ed1Z8fail0qvUqvDxuiSBCcT3taiCM
-         6LbQ==
-X-Gm-Message-State: AOAM532o47Qc5cCV/yVJFPyQ67J6zdo9cCk+XqxQrHc7fWGEXiuO1IvA
-        1IGvKBKLoOaF8fBc9BA5UV0rVA==
-X-Google-Smtp-Source: ABdhPJzi45v2R3NYQ18aQo6Pcw81MgGcWsNPMMK7jaFcGX+QNHDfilsYf59InLIY4riv7XL7wCrTtw==
-X-Received: by 2002:a17:902:904b:b0:13d:c33b:294f with SMTP id w11-20020a170902904b00b0013dc33b294fmr23365261plz.35.1633339511573;
-        Mon, 04 Oct 2021 02:25:11 -0700 (PDT)
-Received: from localhost ([122.171.247.18])
-        by smtp.gmail.com with ESMTPSA id d67sm4747510pga.67.2021.10.04.02.25.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Oct 2021 02:25:10 -0700 (PDT)
-Date:   Mon, 4 Oct 2021 14:55:08 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Vincent Donnefort <vincent.donnefort@arm.com>
-Cc:     rjw@rjwysocki.net, vincent.guittot@linaro.org, qperret@google.com,
-        linux-pm@vger.kernel.org, ionela.voinescu@arm.com,
-        lukasz.luba@arm.com, dietmar.eggemann@arm.com, mka@chromium.org
-Subject: Re: [PATCH v7 0/9] Inefficient OPPs
-Message-ID: <20211004092508.tokhwodfa73terif@vireshk-i7>
-References: <1631109930-290049-1-git-send-email-vincent.donnefort@arm.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=qhMvue8MY09TlNhIY5O7l8PD+1ElyHRcW1aqF7WPAas=;
+        b=e33nHhAiRMuNwf68BwQA6/aRMGjm6kdOrD7ekR/1gZp4kDy19v/bautOfhNlvZ0aP0
+         wpKUfmIfZ7Bxaa/ruKNh7Fj6Et0wAzjUmbM5tQmE81xIEEctV5VI0qKlW2hH8WWt2qxu
+         OlbxtA1UjYH+0Q78/9Bec0leNlYXME96I2jG30QDK4YAy6kjN20zMZ9sIbUcstbk7IEf
+         sluaUxNm+8TmcvvoiCPMZiFiZtAWIoTNqC6BNEx+FE2b4kRM8ynQ8aGbN56RuPEwJCgv
+         krcDmet4M8qOr0KUVHi81elRmJOAtgyttP1lktg+yz/OoowoDB9tvp+AhqLH9or0JROq
+         Fu0g==
+X-Gm-Message-State: AOAM530b/pffaCSk8ydl7hAh7x84QXDnZkKaeXGJXmpLZNgTeuZ8oBF9
+        px3dsJ49df15RdQePr73AGujfg==
+X-Google-Smtp-Source: ABdhPJy7t/11I9x8pk5RAGuUz5/1RojADbVOJ366thVf9D6fKyfuGfH/AgNUXQjEsHaLloI6+yxZGQ==
+X-Received: by 2002:a1c:14b:: with SMTP id 72mr2524159wmb.188.1633343063146;
+        Mon, 04 Oct 2021 03:24:23 -0700 (PDT)
+Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id 2sm721952wmf.30.2021.10.04.03.24.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Oct 2021 03:24:22 -0700 (PDT)
+Subject: Re: [PATCH v2 0/2] Add a generic virtual thermal sensor
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rui.zhang@intel.com,
+        amitk@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ben.tseng@mediatek.com, khilman@baylibre.com, mka@chromium.org
+References: <20210917072732.611140-1-abailon@baylibre.com>
+ <bd347d14-0b42-f9ed-bf15-080c929e1cb7@linaro.org>
+ <7cddcdb7-4efd-bfdb-3d86-f5862ea0b7fe@baylibre.com>
+ <8a9e5f13-6253-2d0d-35a8-789090af4521@linaro.org>
+ <c395abad-598b-c06a-9252-c8e62c977188@baylibre.com>
+ <794e62ea-d867-3827-de5f-24ddc86c3524@linaro.org>
+From:   Alexandre Bailon <abailon@baylibre.com>
+Message-ID: <4446577e-c7fa-daeb-e0fe-8a530633ef5d@baylibre.com>
+Date:   Mon, 4 Oct 2021 12:24:21 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1631109930-290049-1-git-send-email-vincent.donnefort@arm.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <794e62ea-d867-3827-de5f-24ddc86c3524@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08-09-21, 15:05, Vincent Donnefort wrote:
-> Hi all,
-> 
-> Here's the new version for the inefficient OPPs. This patch-set is based on the
-> following series from Viresh:
-> 
->   [PATCH V3 0/9] Add callback to register with energy model
->   https://lore.kernel.org/linux-arm-msm/cover.1628742634.git.viresh.kumar@linaro.org/
-> 
-> The main change in this version is the re-introduction of CPUFREQ_RELATION_E,
-> as a relation flag. When set, all relations will try to resolve a frequency
-> across efficient frequencies only.
-> 
-> A bit of context:
-> 
-> We (Power team in Arm) are working with an experimental kernel for the
-> Google's Pixel4 to evaluate and improve the current mainline performance
-> and energy consumption on a real life device with Android.
-> 
-> The SD855 SoC found in this phone has several OPPs that are inefficient.
-> I.e. despite a lower frequency, they have a greater cost. (That cost being
-> fmax * OPP power / OPP freq). This issue is twofold. First of course,
-> running a specific workload at an inefficient OPP is counterproductive
-> since it wastes wasting energy. But also, inefficient OPPs make a
-> performance domain less appealing for task placement than it really is.
-> 
-> We evaluated the change presented here by running 30 iterations of Android
-> PCMark "Work 2.0 Performance". While we did not see any statistically
-> significant performance impact, this change allowed to drastically improve
-> the idle time residency.
-> 
-> 
->                            |   Running   |  WFI [1]  |    Idle   |
->    ------------------------+-------------+-----------+-----------+
->    Little cluster (4 CPUs) |    -0.35%   |   +0.35%  |   +0.79%  |
->    ------------------------+-------------+-----------+-----------+
->    Medium cluster (3 CPUs) |    -6.3%    |    -18%   |    +12%   |
->    ------------------------+-------------+-----------+-----------+
->    Big cluster    (1 CPU)  |    -6.4%    |    -6.5%  |    +2.8%  |
->    ------------------------+-------------+-----------+-----------+
-> 
-> On the SD855, the inefficient OPPs are found on the little cluster. By
-> removing them from the Energy Model, we make the most efficient CPUs more
-> appealing for task placement, helping to reduce the running time for the
-> medium and big CPUs. Increasing idle time is crucial for this platform due
-> to the substantial energy cost differences among the clusters. Also,
-> despite not appearing in the statistics (the idle driver used here doesn't
-> report it), we can speculate that we also improve the cluster idle time.
-> 
-> [1] WFI: Wait for interrupt.
-> 
-> Changelog since v6:
->   - Bring back CPUFREQ_RELATION_E as a relation flag.
->   - Make the policy min/max hard limits.
->   - Remove the "efficient" member from the freq_table that was pointing to the
->     next efficient frequency.
 
-Had a quick look, LGTM.
+On 9/22/21 10:10 AM, Daniel Lezcano wrote:
+> On 20/09/2021 15:12, Alexandre Bailon wrote:
+>> On 9/17/21 4:03 PM, Daniel Lezcano wrote:
+>>> On 17/09/2021 15:33, Alexandre Bailon wrote:
+>>>> Hi Daniel,
+>>>>
+>>>> On 9/17/21 2:41 PM, Daniel Lezcano wrote:
+>>>>> On 17/09/2021 09:27, Alexandre Bailon wrote:
+>>>>>> This series add a virtual thermal sensor.
+>>>>>> It could be used to get a temperature using some thermal sensors.
+>>>>>> Currently, the supported operations are max, min and avg.
+>>>>>> The virtual sensor could be easily extended to support others
+>>>>>> operations.
+>>>>>>
+>>>>>> Note:
+>>>>>> Currently, thermal drivers must explicitly register their sensors to
+>>>>>> make them
+>>>>>> available to the virtual sensor.
+>>>>>> This doesn't seem a good solution to me and I think it would be
+>>>>>> preferable to
+>>>>>> update the framework to register the list of each available sensors.
+>>>>> Why must the drivers do that ?
+>>>> Because there are no central place where thermal sensor are registered.
+>>>> The only other way I found was to update thermal_of.c,
+>>>> to register the thermal sensors and make them available later to the
+>>>> virtual thermal sensor.
+>>>>
+>>>> To work, the virtual thermal need to get the sensor_data the ops from
+>>>> the thermal sensor.
+>>>> And as far I know, this is only registered in thermal_of.c, in the
+>>>> thermal zone data
+>>>> but I can't access it directly from the virtual thermal sensor.
+>>>>
+>>>> How would you do it ?
+>>> Via the phandles when registering the virtual sensor ?
+>> As far I know, we can't get the ops or the sensor_data from the phandle
+>> of a thermal sensor.
+>> The closest solution I found so far would be to aggregate the thermal
+>> zones instead of thermal sensors.
+>> thermal_zone_device has the data needed and a thermal zone could be find
+>> easily using its name.
+> Yeah, the concept of the thermal zone and the sensor are very close.
+>
+> There is the function in thermal_core.h:
+>
+>   -> for_each_thermal_zone()
+>
+> You should be able for each 'slave' sensor, do a lookup to find the
+> corresponding thermal_zone_device_ops.
+>
+>> But, using a thermal_zone_device, I don't see how to handle module
+>> unloading.
+> I think try_module_get() / module_put() are adequate for this situation
+> as it is done on an external module and we can not rely on the exported
+> symbols.
+I don't see how it would be possible to use these functions.
+The thermal zone doesn't have the data required to use it.
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Maybe a more easier way is to use the thermal_zone_device mutex.
+If I get a lock before to use the thermal_zone_device ops, I have the 
+guaranty that module won't be unloaded.
 
--- 
-viresh
+When a "thermal of sensor" is unloaded, it calls 
+thermal_zone_of_sensor_unregister which takes a lock before
+update ops.
+
+Thanks,
+Alexandre
+
+>
