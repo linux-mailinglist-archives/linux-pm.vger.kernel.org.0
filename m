@@ -2,167 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC7894207F7
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Oct 2021 11:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88E53420830
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Oct 2021 11:25:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231847AbhJDJNt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Oct 2021 05:13:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60284 "EHLO
+        id S229505AbhJDJ1B (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Oct 2021 05:27:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231853AbhJDJNt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Oct 2021 05:13:49 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62026C0613EC
-        for <linux-pm@vger.kernel.org>; Mon,  4 Oct 2021 02:12:00 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 133so15933004pgb.1
-        for <linux-pm@vger.kernel.org>; Mon, 04 Oct 2021 02:12:00 -0700 (PDT)
+        with ESMTP id S229478AbhJDJ1A (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Oct 2021 05:27:00 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F40FC061745
+        for <linux-pm@vger.kernel.org>; Mon,  4 Oct 2021 02:25:12 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id d13-20020a17090ad3cd00b0019e746f7bd4so3477543pjw.0
+        for <linux-pm@vger.kernel.org>; Mon, 04 Oct 2021 02:25:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=p/zt6Ihrdo7Rv/qMfG//6nHW1vz4Z3xHHD5M5I4jbOQ=;
-        b=oEtv2Uyiaed2bmjIbuF/vB0QG9ocT4iPqv/zNYk4oCpeZ3YHAbxSLDzHY++HcFaeBW
-         UmfNPQHY0UjD4ITXwNi3bpvEPUmYZANyXj8kPQ+yd9YpDZh/EuZJUYXqrJXbMXIgqOHs
-         MOJwMYfTXWFXJFNMIvr0ESA5Rgotq1aXgXjBbgqndwCbKQdFUtx7/X+2FB67HXqo4EUM
-         D0fejXbVrkt/jYQXA55NgdwmIRTOYC7jUSKdWhSNcqkUjvK4R8DENenI50eKlclRv3jJ
-         zXCfmfV9tYeO303doLc9HPBs6G9mR7PD5vkndfNd5uijzfIEbNOfEC5aAEDG3D3j3LiK
-         Gg1w==
+        bh=fcQsXr7X6789brlUNea0yLwgERc7QKWwEUY0K/Hgp1U=;
+        b=FrtA7bBeW72k7cYxcKLEzIH+9iixj3QGnG6/XV47ZXymLKNmpJmIM/3ec4KWniUYyE
+         tz34SsnqzWTL4ec4oJGve35+lKEvCFVYEnGCcqr4x9Q9TLl7d5WlRw/XSu3f/lwh2kG2
+         B3ikWS2IXRSkvRIyAgofPlkoJ8FuypqL9hLwX/hDwPShzRWP2HJBhiSDAjp5yCrtIZsF
+         DTvOOPSy7Cd8k5qf+h8uoIobQSBSj2uXU8lKv/EFJYnRiETFVm/OLjLBUnfHOJW+I13v
+         lv/J54TpG86r1gLhpf1ChAgLF7p2SdnnuNnfzQTYbV2114kVac1rUedhlyyNZ7cKXorB
+         F34w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=p/zt6Ihrdo7Rv/qMfG//6nHW1vz4Z3xHHD5M5I4jbOQ=;
-        b=MGfDhcVSDIf1xym805MS23Dxqaec51+bZjtVLoMdZtICVWh3WS5HdMV+d5VFT8+/SK
-         iTPSF8odorT7ostq1Djm5pItyKwpWInjJnn8rGjy1sOuXJ+lFVh8af9ODdfXagpMqi8c
-         SNG0W+HokjNgaLJGh4AnsGPDWoLDSZnGiHiqYvWsl+5ekIozqC3r2l6YEtcS/wgBq4Bc
-         G2y2cFXZQtR2d98943m6ju737n9bene1Nuoc5jDW8YbqvCbKDl46JKOeRaSGiIXDA7QQ
-         8s+tUaoxp+WGLZ3zCmLMlhlVukUWDf2lIfhq4RRYihRdxJq1oovOmNaKXMm7P+3TFYwL
-         Fm2w==
-X-Gm-Message-State: AOAM530H4IsuvuIYIicv8I+x4l5jDD4uJRT/Jfgd7GjM7caSfmX7nOIr
-        2gNma3FzitugvvmJGhBGjTcYRQ==
-X-Google-Smtp-Source: ABdhPJy0W8ugEcJOIW4QoiueG/Yc3HmOK62CHjUdLDNNiCUoCf91AnhaDt2fgr98vS9LG2/AQVVStQ==
-X-Received: by 2002:a62:1610:0:b0:447:53fa:a27 with SMTP id 16-20020a621610000000b0044753fa0a27mr24163749pfw.39.1633338719957;
-        Mon, 04 Oct 2021 02:11:59 -0700 (PDT)
+        bh=fcQsXr7X6789brlUNea0yLwgERc7QKWwEUY0K/Hgp1U=;
+        b=y3oN6WCsoXm9c2RfKDuz7QeOoLy5ZhKz5+IDb+XAnNtJUXQrgHwJjlJ5nCbnIJAaCZ
+         hLghjPaLZ7O/1JswSdisdILQIKaUvq9hFdUBRrYTzsHL1GkqvaQekjmHXwetZpptxH6k
+         0uDX9d7hIs8LiBx+1SaKFJZqbVrxsXR4g61FxhllkdOt41v4Rl0P1SGtU73UP5tIae/t
+         HE7AAPNJH9iH0Ptqmm989sqaKMNFQlUk/XSO5Vxt6PsgzswSquzUISl38rqTHjjcY3it
+         CKANPFjsQ90Pj8REDMB5pW6X4Ou2Y13c5hXTi5ed1Z8fail0qvUqvDxuiSBCcT3taiCM
+         6LbQ==
+X-Gm-Message-State: AOAM532o47Qc5cCV/yVJFPyQ67J6zdo9cCk+XqxQrHc7fWGEXiuO1IvA
+        1IGvKBKLoOaF8fBc9BA5UV0rVA==
+X-Google-Smtp-Source: ABdhPJzi45v2R3NYQ18aQo6Pcw81MgGcWsNPMMK7jaFcGX+QNHDfilsYf59InLIY4riv7XL7wCrTtw==
+X-Received: by 2002:a17:902:904b:b0:13d:c33b:294f with SMTP id w11-20020a170902904b00b0013dc33b294fmr23365261plz.35.1633339511573;
+        Mon, 04 Oct 2021 02:25:11 -0700 (PDT)
 Received: from localhost ([122.171.247.18])
-        by smtp.gmail.com with ESMTPSA id o2sm14351598pja.7.2021.10.04.02.11.59
+        by smtp.gmail.com with ESMTPSA id d67sm4747510pga.67.2021.10.04.02.25.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Oct 2021 02:11:59 -0700 (PDT)
-Date:   Mon, 4 Oct 2021 14:41:57 +0530
+        Mon, 04 Oct 2021 02:25:10 -0700 (PDT)
+Date:   Mon, 4 Oct 2021 14:55:08 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
-        linux-mmc@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        David Heidelberg <david@ixit.cz>
-Subject: Re: [PATCH v13 01/35] opp: Change type of
- dev_pm_opp_attach_genpd(names) argument
-Message-ID: <20211004091157.uidbtrhpsl264xjs@vireshk-i7>
-References: <20210926224058.1252-1-digetx@gmail.com>
- <20210926224058.1252-2-digetx@gmail.com>
+To:     Vincent Donnefort <vincent.donnefort@arm.com>
+Cc:     rjw@rjwysocki.net, vincent.guittot@linaro.org, qperret@google.com,
+        linux-pm@vger.kernel.org, ionela.voinescu@arm.com,
+        lukasz.luba@arm.com, dietmar.eggemann@arm.com, mka@chromium.org
+Subject: Re: [PATCH v7 0/9] Inefficient OPPs
+Message-ID: <20211004092508.tokhwodfa73terif@vireshk-i7>
+References: <1631109930-290049-1-git-send-email-vincent.donnefort@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210926224058.1252-2-digetx@gmail.com>
+In-Reply-To: <1631109930-290049-1-git-send-email-vincent.donnefort@arm.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 27-09-21, 01:40, Dmitry Osipenko wrote:
-> Elements of the 'names' array are not changed by the code, constify them
-> for consistency.
+On 08-09-21, 15:05, Vincent Donnefort wrote:
+> Hi all,
 > 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/opp/core.c     | 6 +++---
->  include/linux/pm_opp.h | 8 ++++----
->  2 files changed, 7 insertions(+), 7 deletions(-)
+> Here's the new version for the inefficient OPPs. This patch-set is based on the
+> following series from Viresh:
 > 
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index 04b4691a8aac..3057beabd370 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -2348,12 +2348,12 @@ static void _opp_detach_genpd(struct opp_table *opp_table)
->   * "required-opps" are added in DT.
->   */
->  struct opp_table *dev_pm_opp_attach_genpd(struct device *dev,
-> -		const char **names, struct device ***virt_devs)
-> +		const char * const *names, struct device ***virt_devs)
->  {
->  	struct opp_table *opp_table;
->  	struct device *virt_dev;
->  	int index = 0, ret = -EINVAL;
-> -	const char **name = names;
-> +	const char * const *name = names;
->  
->  	opp_table = _add_opp_table(dev, false);
->  	if (IS_ERR(opp_table))
-> @@ -2457,7 +2457,7 @@ static void devm_pm_opp_detach_genpd(void *data)
->   *
->   * Return: 0 on success and errorno otherwise.
->   */
-> -int devm_pm_opp_attach_genpd(struct device *dev, const char **names,
-> +int devm_pm_opp_attach_genpd(struct device *dev, const char * const *names,
->  			     struct device ***virt_devs)
->  {
->  	struct opp_table *opp_table;
-> diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
-> index a95d6fdd20b6..879c138c7b8e 100644
-> --- a/include/linux/pm_opp.h
-> +++ b/include/linux/pm_opp.h
-> @@ -156,9 +156,9 @@ int devm_pm_opp_set_clkname(struct device *dev, const char *name);
->  struct opp_table *dev_pm_opp_register_set_opp_helper(struct device *dev, int (*set_opp)(struct dev_pm_set_opp_data *data));
->  void dev_pm_opp_unregister_set_opp_helper(struct opp_table *opp_table);
->  int devm_pm_opp_register_set_opp_helper(struct device *dev, int (*set_opp)(struct dev_pm_set_opp_data *data));
-> -struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char **names, struct device ***virt_devs);
-> +struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char * const *names, struct device ***virt_devs);
->  void dev_pm_opp_detach_genpd(struct opp_table *opp_table);
-> -int devm_pm_opp_attach_genpd(struct device *dev, const char **names, struct device ***virt_devs);
-> +int devm_pm_opp_attach_genpd(struct device *dev, const char * const *names, struct device ***virt_devs);
->  struct dev_pm_opp *dev_pm_opp_xlate_required_opp(struct opp_table *src_table, struct opp_table *dst_table, struct dev_pm_opp *src_opp);
->  int dev_pm_opp_xlate_performance_state(struct opp_table *src_table, struct opp_table *dst_table, unsigned int pstate);
->  int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq);
-> @@ -376,7 +376,7 @@ static inline int devm_pm_opp_set_clkname(struct device *dev, const char *name)
->  	return -EOPNOTSUPP;
->  }
->  
-> -static inline struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char **names, struct device ***virt_devs)
-> +static inline struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char * const *names, struct device ***virt_devs)
->  {
->  	return ERR_PTR(-EOPNOTSUPP);
->  }
-> @@ -384,7 +384,7 @@ static inline struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, cons
->  static inline void dev_pm_opp_detach_genpd(struct opp_table *opp_table) {}
->  
->  static inline int devm_pm_opp_attach_genpd(struct device *dev,
-> -					   const char **names,
-> +					   const char * const *names,
->  					   struct device ***virt_devs)
->  {
->  	return -EOPNOTSUPP;
+>   [PATCH V3 0/9] Add callback to register with energy model
+>   https://lore.kernel.org/linux-arm-msm/cover.1628742634.git.viresh.kumar@linaro.org/
+> 
+> The main change in this version is the re-introduction of CPUFREQ_RELATION_E,
+> as a relation flag. When set, all relations will try to resolve a frequency
+> across efficient frequencies only.
+> 
+> A bit of context:
+> 
+> We (Power team in Arm) are working with an experimental kernel for the
+> Google's Pixel4 to evaluate and improve the current mainline performance
+> and energy consumption on a real life device with Android.
+> 
+> The SD855 SoC found in this phone has several OPPs that are inefficient.
+> I.e. despite a lower frequency, they have a greater cost. (That cost being
+> fmax * OPP power / OPP freq). This issue is twofold. First of course,
+> running a specific workload at an inefficient OPP is counterproductive
+> since it wastes wasting energy. But also, inefficient OPPs make a
+> performance domain less appealing for task placement than it really is.
+> 
+> We evaluated the change presented here by running 30 iterations of Android
+> PCMark "Work 2.0 Performance". While we did not see any statistically
+> significant performance impact, this change allowed to drastically improve
+> the idle time residency.
+> 
+> 
+>                            |   Running   |  WFI [1]  |    Idle   |
+>    ------------------------+-------------+-----------+-----------+
+>    Little cluster (4 CPUs) |    -0.35%   |   +0.35%  |   +0.79%  |
+>    ------------------------+-------------+-----------+-----------+
+>    Medium cluster (3 CPUs) |    -6.3%    |    -18%   |    +12%   |
+>    ------------------------+-------------+-----------+-----------+
+>    Big cluster    (1 CPU)  |    -6.4%    |    -6.5%  |    +2.8%  |
+>    ------------------------+-------------+-----------+-----------+
+> 
+> On the SD855, the inefficient OPPs are found on the little cluster. By
+> removing them from the Energy Model, we make the most efficient CPUs more
+> appealing for task placement, helping to reduce the running time for the
+> medium and big CPUs. Increasing idle time is crucial for this platform due
+> to the substantial energy cost differences among the clusters. Also,
+> despite not appearing in the statistics (the idle driver used here doesn't
+> report it), we can speculate that we also improve the cluster idle time.
+> 
+> [1] WFI: Wait for interrupt.
+> 
+> Changelog since v6:
+>   - Bring back CPUFREQ_RELATION_E as a relation flag.
+>   - Make the policy min/max hard limits.
+>   - Remove the "efficient" member from the freq_table that was pointing to the
+>     next efficient frequency.
 
-Applied. Thanks.
+Had a quick look, LGTM.
+
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
 -- 
 viresh
