@@ -2,87 +2,167 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02B63422B72
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Oct 2021 16:47:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C54EC422C3F
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Oct 2021 17:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235166AbhJEOtg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Oct 2021 10:49:36 -0400
-Received: from mail-ot1-f50.google.com ([209.85.210.50]:38544 "EHLO
-        mail-ot1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233705AbhJEOtf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Oct 2021 10:49:35 -0400
-Received: by mail-ot1-f50.google.com with SMTP id c6-20020a9d2786000000b005471981d559so26105379otb.5;
-        Tue, 05 Oct 2021 07:47:45 -0700 (PDT)
+        id S235754AbhJEPWv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Oct 2021 11:22:51 -0400
+Received: from mail-oo1-f49.google.com ([209.85.161.49]:44697 "EHLO
+        mail-oo1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235743AbhJEPWv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Oct 2021 11:22:51 -0400
+Received: by mail-oo1-f49.google.com with SMTP id e16-20020a4ad250000000b002b5e1f1bc78so6510769oos.11;
+        Tue, 05 Oct 2021 08:21:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=4nYP50RnEwXOBEfqaBjPyWNKlAUJcU1dr1Q7oO/S2m4=;
-        b=6bzBM3mZybrPvXlIH97vjaaG4YqL6+gSmmOlug7pl0dng4NkQ20D11LXxXd3S46dIS
-         /YOiqRzeclOT7QzMBs0fbcbhq2KbMGHuBEPIhRpCndBOH9reR8CCjDa8vMOwGnf3M7uh
-         DxgcBSkHCA86Dt8YqAL56JD6WGz5SHZ7zrceRCgtaHxTRch+QEMDbDVcmsyel7bkv91J
-         9lNLzWXdIgWgRrr7yX8C5tki5y2aHZK4g9Po+c5GQE/QMVNQOhYlYmirsbc0HfH8o06z
-         9aA5yEuFA76dvbnsy0ASWj2y1nQcceRX5uv6bK5SiVRsPFfk3y2xZsP/l78TuIjeTDae
-         C8Ug==
-X-Gm-Message-State: AOAM531JszNBeZLHEINdUXutv4vPKTh8PP5cOWt4Cp9Va0agfnUK1b4O
-        Gl6LaqjbB1g69N+fwaes7vwmwq7JOSwlBRxToEY=
-X-Google-Smtp-Source: ABdhPJyo1TtZkR9LWtCpd4ymU8HXD06ALO7VmmnTz/q8hRWsq/HXWKw2OUPmKpBCp6BMulu0BuAWTNZP+EFvBXdNvcs=
-X-Received: by 2002:a05:6830:2784:: with SMTP id x4mr14795102otu.86.1633445264743;
- Tue, 05 Oct 2021 07:47:44 -0700 (PDT)
+        bh=1SQZI9IBqKFsTuTJMiu0Zhaccp541Qn8MR+8yauPlhA=;
+        b=z7zC97mQqbLUgJ2P02j79Y83xq26wYgcFRZMCBpF4GMBUBxQR0/yG9L77yg1QTEbsj
+         +f4KUS6qfbhXbrO/d/63HhLAvUd1nwEZIS7JX3SVUyPs2aMEQazDGLtJIMEuLKtXKBzg
+         lE/VF81zJzKPeHYExV8hL1gyit0NM+ojNL87o/i3UEPtvfGlUbrEZkyTUT+/hmN1oQV4
+         iGJeJvMA1IvaCkDdpeYFwpZMw6t3VyvPkeOrSERkJt9gDKI9rj8C2NgcODSAqU2wONrc
+         iC6kxHH/jRkEvM/bAfD36B8ZYZGOhok+ru4Z2jQFyShcmI1CipRYd2QRWLI5419QphNo
+         B2hw==
+X-Gm-Message-State: AOAM532fjJnHewJ1pzT7ajy6XZ0lxUfRdreziA44pNgeHr109R0GAVvk
+        XnCuzcSt97vKYjbIdFIHaJFH2W1JfwMsnWPPN10=
+X-Google-Smtp-Source: ABdhPJz3o1zdtTqn2dRO6CD59AnsSHBZi3lWDbFWsKT7A5voSXt4yIFP8MWAC6YW3xqWPqco4B579RslsyAXRyAsyBI=
+X-Received: by 2002:a05:6820:17a:: with SMTP id k26mr13990963ood.37.1633447260320;
+ Tue, 05 Oct 2021 08:21:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210930122803.GC10068@kili>
-In-Reply-To: <20210930122803.GC10068@kili>
+References: <20211001223323.1836640-1-daniel.lezcano@linaro.org>
+In-Reply-To: <20211001223323.1836640-1-daniel.lezcano@linaro.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 5 Oct 2021 16:47:33 +0200
-Message-ID: <CAJZ5v0j3-o9L6q3YZFszSCKU3=yvoEWE7cbhahq1qSxu+z553w@mail.gmail.com>
-Subject: Re: [PATCH] thermal: int340x: delete bogus length check
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Zhang Rui <rui.zhang@intel.com>, Takashi Iwai <tiwai@suse.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
+Date:   Tue, 5 Oct 2021 17:20:49 +0200
+Message-ID: <CAJZ5v0hcHq2WJ6UkdDbHynnQYv4MukCWXob_rH=Sa=aYDrr7Cw@mail.gmail.com>
+Subject: Re: [PATCH RESEND] thermal/drivers/netlink: Add the temperature when
+ crossing a trip point
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
+        "Zhang, Rui" <rui.zhang@intel.com>, rkumbako@quicinc.com,
         Linux PM <linux-pm@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Amit Kucheria <amitk@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Sep 30, 2021 at 2:28 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+On Sat, Oct 2, 2021 at 12:33 AM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
 >
-> This check has a signedness bug and does not work.  If "length" is
-> larger than "PAGE_SIZE" then "PAGE_SIZE - length" is not negative
-> but instead it is a large unsigned value.  Fortunately, Takashi Iwai
-> changed this code to use scnprint() instead of snprintf() so now
-> "length" is never larger than "PAGE_SIZE - 1" and the check can be
-> removed.
+> The slope of the temperature increase or decrease can be high and when
+> the temperature crosses the trip point, there could be a significant
+> difference between the trip temperature and the measured temperatures.
 >
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> That forces the userspace to read the temperature back right after
+> receiving a trip violation notification.
+>
+> In order to be efficient, give the temperature which resulted in the
+> trip violation.
+>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+
+This looks fine to me too.
+
 > ---
->  drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
+>  drivers/thermal/thermal_core.c    |  6 ++++--
+>  drivers/thermal/thermal_netlink.c | 11 ++++++-----
+>  drivers/thermal/thermal_netlink.h |  8 ++++----
+>  3 files changed, 14 insertions(+), 11 deletions(-)
 >
-> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> index 19926beeb3b7..8502b7d8df89 100644
-> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> @@ -129,11 +129,10 @@ static ssize_t available_uuids_show(struct device *dev,
->
->         for (i = 0; i < INT3400_THERMAL_MAXIMUM_UUID; i++) {
->                 if (priv->uuid_bitmap & (1 << i))
-> -                       if (PAGE_SIZE - length > 0)
-> -                               length += scnprintf(&buf[length],
-> -                                                  PAGE_SIZE - length,
-> -                                                  "%s\n",
-> -                                                  int3400_thermal_uuids[i]);
-> +                       length += scnprintf(&buf[length],
-> +                                           PAGE_SIZE - length,
-> +                                           "%s\n",
-> +                                           int3400_thermal_uuids[i]);
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index 51374f4e1cca..9e243d9f929e 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -375,10 +375,12 @@ static void handle_thermal_trip(struct thermal_zone_device *tz, int trip)
+>         if (tz->last_temperature != THERMAL_TEMP_INVALID) {
+>                 if (tz->last_temperature < trip_temp &&
+>                     tz->temperature >= trip_temp)
+> -                       thermal_notify_tz_trip_up(tz->id, trip);
+> +                       thermal_notify_tz_trip_up(tz->id, trip,
+> +                                                 tz->temperature);
+>                 if (tz->last_temperature >= trip_temp &&
+>                     tz->temperature < (trip_temp - hyst))
+> -                       thermal_notify_tz_trip_down(tz->id, trip);
+> +                       thermal_notify_tz_trip_down(tz->id, trip,
+> +                                                   tz->temperature);
+
+While at it, I'm not sure if all of the additional line breaks due to
+the line length limit are really necessary.  The code would be easier
+to follow without them IMV.
+
 >         }
 >
->         return length;
+>         if (type == THERMAL_TRIP_CRITICAL || type == THERMAL_TRIP_HOT)
+> diff --git a/drivers/thermal/thermal_netlink.c b/drivers/thermal/thermal_netlink.c
+> index 1234dbe95895..a16dd4d5d710 100644
+> --- a/drivers/thermal/thermal_netlink.c
+> +++ b/drivers/thermal/thermal_netlink.c
+> @@ -121,7 +121,8 @@ static int thermal_genl_event_tz(struct param *p)
+>  static int thermal_genl_event_tz_trip_up(struct param *p)
+>  {
+>         if (nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_ID, p->tz_id) ||
+> -           nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_TRIP_ID, p->trip_id))
+> +           nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_TRIP_ID, p->trip_id) ||
+> +           nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_TEMP, p->temp))
+>                 return -EMSGSIZE;
+>
+>         return 0;
+> @@ -285,16 +286,16 @@ int thermal_notify_tz_disable(int tz_id)
+>         return thermal_genl_send_event(THERMAL_GENL_EVENT_TZ_DISABLE, &p);
+>  }
+>
+> -int thermal_notify_tz_trip_down(int tz_id, int trip_id)
+> +int thermal_notify_tz_trip_down(int tz_id, int trip_id, int temp)
+>  {
+> -       struct param p = { .tz_id = tz_id, .trip_id = trip_id };
+> +       struct param p = { .tz_id = tz_id, .trip_id = trip_id, .temp = temp };
+>
+>         return thermal_genl_send_event(THERMAL_GENL_EVENT_TZ_TRIP_DOWN, &p);
+>  }
+>
+> -int thermal_notify_tz_trip_up(int tz_id, int trip_id)
+> +int thermal_notify_tz_trip_up(int tz_id, int trip_id, int temp)
+>  {
+> -       struct param p = { .tz_id = tz_id, .trip_id = trip_id };
+> +       struct param p = { .tz_id = tz_id, .trip_id = trip_id, .temp = temp };
+>
+>         return thermal_genl_send_event(THERMAL_GENL_EVENT_TZ_TRIP_UP, &p);
+>  }
+> diff --git a/drivers/thermal/thermal_netlink.h b/drivers/thermal/thermal_netlink.h
+> index 828d1dddfa98..e554f76291f4 100644
+> --- a/drivers/thermal/thermal_netlink.h
+> +++ b/drivers/thermal/thermal_netlink.h
+> @@ -11,8 +11,8 @@ int thermal_notify_tz_create(int tz_id, const char *name);
+>  int thermal_notify_tz_delete(int tz_id);
+>  int thermal_notify_tz_enable(int tz_id);
+>  int thermal_notify_tz_disable(int tz_id);
+> -int thermal_notify_tz_trip_down(int tz_id, int id);
+> -int thermal_notify_tz_trip_up(int tz_id, int id);
+> +int thermal_notify_tz_trip_down(int tz_id, int id, int temp);
+> +int thermal_notify_tz_trip_up(int tz_id, int id, int temp);
+>  int thermal_notify_tz_trip_delete(int tz_id, int id);
+>  int thermal_notify_tz_trip_add(int tz_id, int id, int type,
+>                                int temp, int hyst);
+> @@ -49,12 +49,12 @@ static inline int thermal_notify_tz_disable(int tz_id)
+>         return 0;
+>  }
+>
+> -static inline int thermal_notify_tz_trip_down(int tz_id, int id)
+> +static inline int thermal_notify_tz_trip_down(int tz_id, int id, int temp)
+>  {
+>         return 0;
+>  }
+>
+> -static inline int thermal_notify_tz_trip_up(int tz_id, int id)
+> +static inline int thermal_notify_tz_trip_up(int tz_id, int id, int temp)
+>  {
+>         return 0;
+>  }
 > --
-
-Applied as 5.16 material, thanks!
+> 2.25.1
+>
