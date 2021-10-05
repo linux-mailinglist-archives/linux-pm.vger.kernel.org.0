@@ -2,79 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99A82422B22
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Oct 2021 16:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C114D422B49
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Oct 2021 16:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233705AbhJEOi0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Oct 2021 10:38:26 -0400
-Received: from mail-oi1-f170.google.com ([209.85.167.170]:37721 "EHLO
-        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234355AbhJEOi0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Oct 2021 10:38:26 -0400
-Received: by mail-oi1-f170.google.com with SMTP id w206so26494884oiw.4;
-        Tue, 05 Oct 2021 07:36:35 -0700 (PDT)
+        id S234084AbhJEOoI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Oct 2021 10:44:08 -0400
+Received: from mail-oi1-f177.google.com ([209.85.167.177]:43923 "EHLO
+        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233705AbhJEOoH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Oct 2021 10:44:07 -0400
+Received: by mail-oi1-f177.google.com with SMTP id o4so2583766oia.10;
+        Tue, 05 Oct 2021 07:42:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=o00KyEWco01TxEwUad/z3+tPtEbuVbgl1TjuLeOWTEc=;
-        b=cty5ds51cJJPznQu9I4M/OXEJarrSlvfmxcuzuOrIxbjeyX73MyIgqAX0RbO/idd9s
-         M95vnX8lP9TaFjoCwhmIXLIEykgnlHzxdIPfAhtEZOqROMfB5yr7yJmdICae0f5U0Xgl
-         xgpciNeyoFjH4ZOsWVaynwGlhXZIaGwRc1bRmwzZPU21nfKcDMbxDW/Flx+zQ1h5pGm7
-         DZaJ9Oi+dL3LDe9r0roUxNd+kVF2Gt5/y+gXnT2siD41K04PBavEE3nN+J90IYjZ9ppr
-         KfQtlK78cy0/4IbAP4dTUh4Btmnk5AVCwc3sJXKw9ZpXrYXO1g6pNgpg6QNvLzQfpV6E
-         dt5Q==
-X-Gm-Message-State: AOAM533YbZQj88K1p4yQUxh/NcgpGslzZZYbj5JBJ3H4gSnPjSg7+jMD
-        LUTUfdAv9mEz22wIqVEphYz+LXHlLEm2TRQDbFM+VvTO
-X-Google-Smtp-Source: ABdhPJxmUGMzQy4xaQJ4D/xcXxOXnvsl5XECKNhmq04hZZl4UcsycnbNHlsnnLY+S9MrIwuSYtExY4Bml9oda3xKH0c=
-X-Received: by 2002:a05:6808:178c:: with SMTP id bg12mr2934456oib.157.1633444595315;
- Tue, 05 Oct 2021 07:36:35 -0700 (PDT)
+        bh=eZwLpL3VR1cDxPTIuLWceDkViaFbLKix0Hx3TUG7elc=;
+        b=SU3ofwoQli/UBW8PwznNzXTHtUtlVI4P8/WZCpJpEqcK8RL01sekP7dwCQR+MDjHND
+         /KpyGNU3I99K4La/USw4iDmhCctIoSsEVdLraq5QhBeS8SwHv8f96yGAZZnuBXdUvQUH
+         +vlcuund9X/mgXJEGjDCdN5JufBizxDDuHkP5Ic2NOZR87VJJdo0QN02oBFoi59IjqSx
+         aBr6LLlGZ+awJO717qiEOcdWmlUk6m/vaiZrPKdXAQk84yHrAS7exsX4mGQ/CTA4Yygd
+         DD1Hrz1vJ3mM2PzdeUgFUnZryf+sa/THKDigJ9mkuVaOjm0zbUTXVne5HY6FFolUIa90
+         YkFg==
+X-Gm-Message-State: AOAM532ui/9KjAR90Tumk/5CGV7I4KSIobrsGDcdebbd7+h8e6ZTkENt
+        cH+RhUAzsivjmxAAgXIq2RoqRyz/Tt7M8FENxoI=
+X-Google-Smtp-Source: ABdhPJwBSQTruG4tXHdQMFKRNdq9o7SvD0P5bn3E9E1CZEYOchSGi2uTsPDGXPY9h9SA95cqB2Yd2ha3bikKX6rl05E=
+X-Received: by 2002:a05:6808:1816:: with SMTP id bh22mr2786784oib.69.1633444936747;
+ Tue, 05 Oct 2021 07:42:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210920203849.32136-1-rikard.falkeborn@gmail.com>
-In-Reply-To: <20210920203849.32136-1-rikard.falkeborn@gmail.com>
+References: <f7513027ae9242643b5ddb6ed48a3aeca1b0f2a8.1632640557.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <f7513027ae9242643b5ddb6ed48a3aeca1b0f2a8.1632640557.git.christophe.jaillet@wanadoo.fr>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 5 Oct 2021 16:36:24 +0200
-Message-ID: <CAJZ5v0jrXbuyQez1rX7-9CEjazTFp32SSH60Tx5Oqf+D2Czv5Q@mail.gmail.com>
-Subject: Re: [PATCH] thermal: thermal_mmio: Constify static struct thermal_mmio_ops
-To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Talel Shenhar <talel@amazon.com>, Zhang Rui <rui.zhang@intel.com>,
+Date:   Tue, 5 Oct 2021 16:42:05 +0200
+Message-ID: <CAJZ5v0hSRn2Au5phOHnoR3SMtA0B-H_tn+dskHSZEfHt1g9G_g@mail.gmail.com>
+Subject: Re: [PATCH] thermal: intel_powerclamp: Use bitmap_zalloc/bitmap_free
+ when applicable
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     "Zhang, Rui" <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Amit Kucheria <amitk@kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 21, 2021 at 3:55 AM Rikard Falkeborn
-<rikard.falkeborn@gmail.com> wrote:
+On Sun, Sep 26, 2021 at 9:17 AM Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
 >
-> The only usage of thermal_mmio_ops is to pass its address to
-> devm_thermal_zone_of_sensor_register(), which has a pointer to const
-> struct thermal_zone_of_device_ops as argument. Make it const to allow
-> the compiler to put it in read-only memory.
+> 'cpu_clamping_mask' is a bitmap. So use 'bitmap_zalloc()' and
+> 'bitmap_free()' to simplify code, improve the semantic of the code and
+> avoid some open-coded arithmetic in allocator arguments.
 >
-> Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 > ---
->  drivers/thermal/thermal_mmio.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/thermal/intel/intel_powerclamp.c | 8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
 >
-> diff --git a/drivers/thermal/thermal_mmio.c b/drivers/thermal/thermal_mmio.c
-> index ded1dd0d4ef7..360b0dfdc3b0 100644
-> --- a/drivers/thermal/thermal_mmio.c
-> +++ b/drivers/thermal/thermal_mmio.c
-> @@ -34,7 +34,7 @@ static int thermal_mmio_get_temperature(void *private, int *temp)
->         return 0;
+> diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
+> index a5b58ea89cc6..9b68489a2356 100644
+> --- a/drivers/thermal/intel/intel_powerclamp.c
+> +++ b/drivers/thermal/intel/intel_powerclamp.c
+> @@ -705,10 +705,8 @@ static enum cpuhp_state hp_state;
+>  static int __init powerclamp_init(void)
+>  {
+>         int retval;
+> -       int bitmap_size;
+>
+> -       bitmap_size = BITS_TO_LONGS(num_possible_cpus()) * sizeof(long);
+> -       cpu_clamping_mask = kzalloc(bitmap_size, GFP_KERNEL);
+> +       cpu_clamping_mask = bitmap_zalloc(num_possible_cpus(), GFP_KERNEL);
+>         if (!cpu_clamping_mask)
+>                 return -ENOMEM;
+>
+> @@ -753,7 +751,7 @@ static int __init powerclamp_init(void)
+>  exit_unregister:
+>         cpuhp_remove_state_nocalls(hp_state);
+>  exit_free:
+> -       kfree(cpu_clamping_mask);
+> +       bitmap_free(cpu_clamping_mask);
+>         return retval;
 >  }
+>  module_init(powerclamp_init);
+> @@ -764,7 +762,7 @@ static void __exit powerclamp_exit(void)
+>         cpuhp_remove_state_nocalls(hp_state);
+>         free_percpu(worker_data);
+>         thermal_cooling_device_unregister(cooling_dev);
+> -       kfree(cpu_clamping_mask);
+> +       bitmap_free(cpu_clamping_mask);
 >
-> -static struct thermal_zone_of_device_ops thermal_mmio_ops = {
-> +static const struct thermal_zone_of_device_ops thermal_mmio_ops = {
->         .get_temp = thermal_mmio_get_temperature,
->  };
->
+>         cancel_delayed_work_sync(&poll_pkg_cstate_work);
+>         debugfs_remove_recursive(debug_dir);
 > --
 
-I'm not sure what happened to this patch.
-
-Daniel, are you going to pick it up?
+Applied as 5.16 material, thanks!
