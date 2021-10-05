@@ -2,96 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06828421D6A
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Oct 2021 06:25:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 499AC421DA5
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Oct 2021 06:46:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbhJEE1X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Oct 2021 00:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45334 "EHLO
+        id S231594AbhJEEsV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Oct 2021 00:48:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbhJEE1V (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Oct 2021 00:27:21 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53AB9C061745
-        for <linux-pm@vger.kernel.org>; Mon,  4 Oct 2021 21:25:31 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id y5so1406409pll.3
-        for <linux-pm@vger.kernel.org>; Mon, 04 Oct 2021 21:25:31 -0700 (PDT)
+        with ESMTP id S229812AbhJEEsU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Oct 2021 00:48:20 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B835EC061745
+        for <linux-pm@vger.kernel.org>; Mon,  4 Oct 2021 21:46:30 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id s11so18621778pgr.11
+        for <linux-pm@vger.kernel.org>; Mon, 04 Oct 2021 21:46:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=cJ4r8bXgEb5jKjVNnDvod4XPSiNRHdxIF6FJQ8qHJbE=;
-        b=ztI9W9MEhRnIlg53CngDGMzbJG+2l/nTMF+hjvCOAvw8aGY0Z7J86Epfnlc5aSqBNF
-         ymQlgrtpZxIkNtjCP/RLIiI+Ff7IO+WTD1n7yCeTu21undHEPz7eZ/7zb0epqQ0mpj3d
-         W8/NDiqqv16f+vP07vGXAgOgc+2T7ZiHMjNTayD23v/qTk1dI5Tgl1l+AP/gUPXqypk4
-         zaixj0E9CFZQqSxOkfVQBfc9R6yxv+J+3syE2DCxBwq5K2I/eVZR1DOePbJToET/VYgx
-         /6J4Rec+wAq3uKzsBBIk/XTAA8Jr+/HtcVjGbXrtP2ula1rvjzHR/qMqYug2T/XSkTv7
-         cfhg==
+        bh=oU0y/L1Kv7h8rjDf7ezD8KvTWO00EJ3BiI+ZclBMT+w=;
+        b=pRO4hYs7dy8DnFLkzsum1hayDKhtSmwJ0KwVN49yNiKOTVcDCqgL6Nym+QWQ6KKGIk
+         u0Qm1EhsfiI10jUTsTm//HiUtUjPTywNgnnbPFQ1tbXidYSXeuIaOliknF/ksiDu0YM9
+         8hfwIKq2Y86O0Tr5RccWvDaM8rfVK6wD0Q2ZlPbxBbkPG+pW3FL7cN4+JdFH1E5l2e50
+         uqVTAMlaZWEUHkLtsAnYLgXsXA44W3xV7UdHN+cmH0chEH3MPPuQ2IfIGy/Z3vyOslPu
+         SspaBL6ccG4F+0nd7B8TJIVKrkF0cXXN/WCgqLdQwJU9x9QyuqYadxUYh2Qu8Nu7y1yP
+         eONA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=cJ4r8bXgEb5jKjVNnDvod4XPSiNRHdxIF6FJQ8qHJbE=;
-        b=giUhInknvO4SLQRq3mfxNoGHVqSD0u3eYTDPLvEHYj+lSNfCtiG7cOD0HqL20wf17J
-         YNXQFngggLqk4dWWDHStOO3e4+3mbHLSyCG/nKIsZqzocDw1QlkZrpH6ez66dsP490Vm
-         vjJbPutCZkJSPIW5ljAv8+XenECULhom+OJU8K/qPfX1SqUy7ivdUEBM8j1KAm6+H7nM
-         To3COE5HauRoUmq/zAzoAM5TYVq6NOhQs+YC8+5KVNfTFzlAYSUyYlwgYpAKLT0qRIGo
-         rxZyXqeDuVJmoiUWDUhASbBvIQMu7DN8J5w415N3U8x0Z7+eFLTIdjeTghTvaJ3MBLuT
-         oASw==
-X-Gm-Message-State: AOAM53204JFvR8d7TJQO18cIlFtz4qTmweAUh9TfliarXYhZoJ8IKrXy
-        CWTcuba2498310tk9/VamdjeDA==
-X-Google-Smtp-Source: ABdhPJwU0v+nT2RDODXfs6zoCAuNaRXJikpcU8BiZ8Yw0UkMCT/BK0v/kgJClwGqtBNo90wdJ4/JVg==
-X-Received: by 2002:a17:90a:d3cb:: with SMTP id d11mr1192295pjw.109.1633407930894;
-        Mon, 04 Oct 2021 21:25:30 -0700 (PDT)
-Received: from localhost ([122.171.247.18])
-        by smtp.gmail.com with ESMTPSA id e6sm296214pfm.212.2021.10.04.21.25.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Oct 2021 21:25:30 -0700 (PDT)
-Date:   Tue, 5 Oct 2021 09:55:26 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] Make probe() of Tegra devfreq driver completely
- resource-managed
-Message-ID: <20211005042526.mklgm4yzeiu6s7jv@vireshk-i7>
-References: <20210920172249.28206-1-digetx@gmail.com>
+        bh=oU0y/L1Kv7h8rjDf7ezD8KvTWO00EJ3BiI+ZclBMT+w=;
+        b=G/0D/PK0up4nMrLN7XROUB1Cryp7FC5P+zVIVxAeFHAab1g7gRTyKqFUptJCrcxWk/
+         JSXK+MR1gV+q8UeEac/LLDPF0xcf7WEf5ouNT7GHSiYeFQNVrWffMSb2F5f38QHKzzDD
+         Ow4u544WQm45u4zYSNc2SpA5HeHe4WBOG8keMCMLLxno7/xNPISQ13sbxHfFL2aGyPTW
+         8U1jhDPx+GRuN8iHbmE/cV6fTuZPta3L06YPtMRrBXVnJARuy4nWt1kZ82LBlJ5JfhaA
+         ePBV7gri70+Blf7m8lVBJGGj/y7rErbcvlTnEYxRA2Bv5wBcbjeGwyVGOpHVai1wM6hQ
+         zOCQ==
+X-Gm-Message-State: AOAM5317cBpRDWQW1ulq8s7rCwx9MM3QeC+s7mZOSI3V9uFVMYFe3zFi
+        bYqgO9tXNLTPHdeq+BV2O1gi
+X-Google-Smtp-Source: ABdhPJxhXUmFhJYMG650PXT4U5Cg8sHpINcD7y5trS4JlMzsEZwxtjoLOtzNO02sROfoinqm3g6TTA==
+X-Received: by 2002:a63:b707:: with SMTP id t7mr13893203pgf.55.1633409190133;
+        Mon, 04 Oct 2021 21:46:30 -0700 (PDT)
+Received: from workstation ([120.138.13.79])
+        by smtp.gmail.com with ESMTPSA id z33sm15305980pga.20.2021.10.04.21.46.24
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 04 Oct 2021 21:46:28 -0700 (PDT)
+Date:   Tue, 5 Oct 2021 10:16:23 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     rafael@kernel.org, robh+dt@kernel.org, bjorn.andersson@linaro.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH] dt-bindings: cpufreq: cpufreq-qcom-hw: Convert to YAML
+ bindings
+Message-ID: <20211005044623.GA4195@workstation>
+References: <20211004044317.34809-1-manivannan.sadhasivam@linaro.org>
+ <20211005042300.ix46h3ceu7aiwrg7@vireshk-i7>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210920172249.28206-1-digetx@gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20211005042300.ix46h3ceu7aiwrg7@vireshk-i7>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20-09-21, 20:22, Dmitry Osipenko wrote:
-> This series adds new resource-managed helpers and makes Tegra devfreq
-> driver to use them, improving the driver's error-handling code.
+On Tue, Oct 05, 2021 at 09:53:00AM +0530, Viresh Kumar wrote:
+> On 04-10-21, 10:13, Manivannan Sadhasivam wrote:
+> > Convert Qualcomm cpufreq devicetree binding to YAML.
+> > 
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
 > 
-> Changelog:
-> 
-> v2: - Added WARN_ON() to devm_devfreq_remove_governor() and moved
->       devm_devfreq_add_governor() as was requested by Chanwoo Choi.
-> 
->     - Added ack from Chanwoo Choi to the "Check whether clk_round_rate()
->       returns zero rate" patch.
-> 
-> Dmitry Osipenko (4):
->   opp: Add more resource-managed variants of dev_pm_opp_of_add_table()
->   PM / devfreq: Add devm_devfreq_add_governor()
->   PM / devfreq: tegra30: Use resource-managed helpers
->   PM / devfreq: tegra30: Check whether clk_round_rate() returns zero
->     rate
+> I hope you will be resending this after fixing the DT warnings ?
 
-Applied. Thanks.
+Yes, but I'm not sure why I can't reproduce the warnings locally. I did
+upgrade dtschema package and installed yamllint.
 
--- 
-viresh
+Anyway, will remove "maxItems" property as reported by the bot.
+
+Thanks,
+Mani
+
+> 
+> -- 
+> viresh
