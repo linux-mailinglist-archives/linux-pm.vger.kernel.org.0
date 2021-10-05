@@ -2,121 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEDCD4233A9
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Oct 2021 00:43:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 425FE4233C0
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Oct 2021 00:46:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236697AbhJEWpP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Oct 2021 18:45:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48286 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbhJEWpO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Oct 2021 18:45:14 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54390C061749;
-        Tue,  5 Oct 2021 15:43:23 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id t9so2291296lfd.1;
-        Tue, 05 Oct 2021 15:43:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=QG+ghKl7BYypZZjDut6dTGHyiOgVAsyM1BWUZUWMu5U=;
-        b=Hd/Hgnl41abY2ut8awTV9Znfi0+mLbBx9rjGKMvBmv1GvhO4shIY8zKBANOfUfey6t
-         f5Ia/T7DT6465kZqrrXQThtz+C/Dyv3WwmTVE2S1/knhHJ2ZkcQGMJbpA7lJW8S92LV6
-         d4sMrDbdjRQ26EUeegNXhFT6soeFLf+BrXj5mPF3K+E6tl1/jGMbmKZnQ0VlaBRfoOWR
-         LuKoByxkOGkGhSjkSGOlHwyrskSGBdkV8ouXlaDVeZDQXkFs5OsF+2lgPEibKvUXARwq
-         QkljhBPkuFryLkM004napUFJxFdOqOTZNrXbWHEUeRQ3+onIjoSJKZ6XnhXG+LemKrOd
-         A8Qw==
+        id S236810AbhJEWrz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Oct 2021 18:47:55 -0400
+Received: from mail-ot1-f52.google.com ([209.85.210.52]:43901 "EHLO
+        mail-ot1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230113AbhJEWry (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Oct 2021 18:47:54 -0400
+Received: by mail-ot1-f52.google.com with SMTP id x33-20020a9d37a4000000b0054733a85462so788134otb.10;
+        Tue, 05 Oct 2021 15:46:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=QG+ghKl7BYypZZjDut6dTGHyiOgVAsyM1BWUZUWMu5U=;
-        b=NKI6DzBBUj47SPHJaqj6L5uQHerhcCXQksJx4tDOH1zx+N1pv6NrMPzSbhiWv/yU5S
-         ZBYvK4WRoqZMlzzoztwywNi9hKE98gSfUXHBh3cpC7kjObydvS8Ea27tfA1lqGmvLVqr
-         mLWkdz/E+hfvRyAjoDBGPDOGhznyeoBn7eVLTAVK7oG0IX4fvvhbdjWz5xn9Ro/lOM5J
-         n/ZGXsKtPa0go78f/essm4XLKivJ7a/5cm3MkZnRQrFpqsa9XzeSuXpPps32NFeitH6d
-         xQvmc1I64tLtG99RgnhjGenIJM6Rz/FNcAc1vpx5rRgUPrtKvauMNcjsHKak4D49bdVG
-         xYhA==
-X-Gm-Message-State: AOAM530T77ZomtnnPADz4neUXMxhHuafoXQrozcjqjl0Z5ZcBz3AbtXw
-        0Pulf/vqDXRs9tEHv214GuQ=
-X-Google-Smtp-Source: ABdhPJxfNs4Gfg7N3fvFBrC2l/U9ZmVjgRHnpJ3ajA7WdQF4gcWUZ5S7J4URL5OZbbHW8d5K2gyE2g==
-X-Received: by 2002:a2e:743:: with SMTP id i3mr24366437ljd.250.1633473801726;
-        Tue, 05 Oct 2021 15:43:21 -0700 (PDT)
-Received: from [192.168.2.145] (79-139-163-57.dynamic.spd-mgts.ru. [79.139.163.57])
-        by smtp.googlemail.com with ESMTPSA id q30sm2086817lfb.108.2021.10.05.15.43.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Oct 2021 15:43:21 -0700 (PDT)
-Subject: Re: [PATCH v13 06/35] clk: tegra: Support runtime PM and power domain
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        David Heidelberg <david@ixit.cz>
-References: <20210926224058.1252-1-digetx@gmail.com>
- <20210926224058.1252-7-digetx@gmail.com>
- <CAPDyKFq+LS4Jr1GyC-a-tGWPzGH0JxfJ9wKY=uQEBGYm952azw@mail.gmail.com>
- <24101cd6-d3f5-1e74-db39-145ecd30418b@gmail.com>
- <CAPDyKFreK7976PJL-1zySoza_yXM7rMQ64aODWUZ+U3L-uCa0w@mail.gmail.com>
- <4bdba8a2-4b9b-ed7d-e6ca-9218d8200a85@gmail.com>
-Message-ID: <74a47158-e2e4-5fd0-3f37-0b50d4ead4d9@gmail.com>
-Date:   Wed, 6 Oct 2021 01:43:20 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <4bdba8a2-4b9b-ed7d-e6ca-9218d8200a85@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=rXuuVcqlOPGRQ8KPZYAGmcmEqaRdABG3AyDsI/H0JEo=;
+        b=5M97xTMxwA2Hk+SvV7hrgGEpsSeX+QbhQEm4pI4dXQdmZjkrHhb48cwOgvrbMljcN5
+         mT6w9CHc1L4nqy2I2BHxHHMsRPfJwfSDLpQVVaZzw0H3xh9t7bxozlp48tC6AjNukiW8
+         go1tv3ekdPSW9vpqSGfoiS8ZJwp2RTjpvMsa6eZTS16JnnCGKwd25AhtzeN0Z8tpRQVW
+         /gLyPpU7hHFwXx32+jWtEBAQgDEeWJG83+7X98+m4+PeLSZEPAQBuDkamia3JFW04aBm
+         MQSDtmnAzBP3ZHPu3S0b74YQirxEdzf3HQG6j9c0xZhmESmXsaXpOoQ+UChrIkrzR49+
+         75+w==
+X-Gm-Message-State: AOAM531hoKhBHOZ4l1OgT75hV7T6i95li3l+u6VQG3clR4Qp1dJFYWtQ
+        rldwlE1BZM/7LdnYr2Ddcg==
+X-Google-Smtp-Source: ABdhPJxu1yHXCK7JsFPVWCnV3YwQqmVgBcxLJQObQXFkUx2eUkxTxDAYsMRWCskB3IZu70rdOx5wmA==
+X-Received: by 2002:a9d:72d5:: with SMTP id d21mr17442035otk.181.1633473963274;
+        Tue, 05 Oct 2021 15:46:03 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id i127sm3627476oia.43.2021.10.05.15.46.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Oct 2021 15:46:02 -0700 (PDT)
+Received: (nullmailer pid 106785 invoked by uid 1000);
+        Tue, 05 Oct 2021 22:45:59 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Mark Kettenis <mark.kettenis@xs4all.nl>,
+        linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Marc Zyngier <maz@kernel.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-samsung-soc@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>
+In-Reply-To: <20211005155923.173399-2-marcan@marcan.st>
+References: <20211005155923.173399-1-marcan@marcan.st> <20211005155923.173399-2-marcan@marcan.st>
+Subject: Re: [PATCH 1/7] dt-bindings: arm: apple: Add apple,pmgr binding
+Date:   Tue, 05 Oct 2021 17:45:59 -0500
+Message-Id: <1633473959.420655.106783.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-06.10.2021 01:19, Dmitry Osipenko пишет:
-...
-> I reproduced the OFF problem by removing the clk prepare/unprepare from
-> the suspend/resume of the clk driver and making some extra changes to
-> clock tree topology and etc to trigger the problem on Nexus 7.
+On Wed, 06 Oct 2021 00:59:17 +0900, Hector Martin wrote:
+> The PMGR block in Apple Silicon SoCs is responsible for SoC power
+> management. There are two PMGRs in T8103, with different register
+> layouts but compatible registers. In order to support this as well
+> as future SoC generations with backwards-compatible registers, we
+> declare these blocks as syscons and bind to individual registers
+> in child nodes. Each register controls one SoC device.
 > 
-> tegra-pmc 7000e400.pmc: failed to turn off PM domain heg: -13
+> The respective apple compatibles are defined in case device-specific
+> quirks are necessary in the future, but currently these nodes are
+> expected to be bound by the generic syscon driver.
 > 
-> It happens from genpd_suspend_noirq() -> tegra_genpd_power_off() -> clk
-> -> GENPD -> I2C -> runtime-pm.
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+>  .../bindings/arm/apple/apple,pmgr.yaml        | 74 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 75 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/apple/apple,pmgr.yaml
 > 
-> -13 is EACCES, it comes from the runtime PM of I2C device. RPM is
-> prohibited/disabled during late (NOIRQ) suspend by the drivers core.
 
-My bad, I double-checked and it's not I2C RPM that is failing now, but
-the clock's RPM [1], which is also unavailable during NOIRQ.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-[1]
-https://elixir.free-electrons.com/linux/v5.15-rc4/source/drivers/clk/clk.c#L116
+yamllint warnings/errors:
 
-Previously it was I2C RPM that was failing in a similar way, but code
-changed a tad since that time.
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/arm/apple/apple,pmgr.example.dts:30.40-35.15: ERROR (duplicate_node_names): /example-0/soc/power-management@23b700000: Duplicate node name
+ERROR: Input tree has errors, aborting (use -f to force output)
+make[1]: *** [scripts/Makefile.lib:385: Documentation/devicetree/bindings/arm/apple/apple,pmgr.example.dt.yaml] Error 2
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1441: dt_binding_check] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/1536742
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
