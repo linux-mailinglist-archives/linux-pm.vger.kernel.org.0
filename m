@@ -2,87 +2,161 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08BCC4230FB
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Oct 2021 21:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B52642316D
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Oct 2021 22:16:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235828AbhJETvJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Oct 2021 15:51:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35766 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235745AbhJETvH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Oct 2021 15:51:07 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52CFEC061749
-        for <linux-pm@vger.kernel.org>; Tue,  5 Oct 2021 12:49:16 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id m3so679253lfu.2
-        for <linux-pm@vger.kernel.org>; Tue, 05 Oct 2021 12:49:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hSuSoFxOGCn2dKc1HCjcYz8H8NJV0h0NOInNBU1gpMA=;
-        b=r5wtOsIeugQcbSyjEU/905zrWR2yTnrfd3lG/w4v8yln/ZETnNb15iirXrqb21Q/SO
-         TEkfrPxqqAWodYR8/iZ0w+09qmRwPy7SPYIbNrIieEdDujUiMOG0kyqZv85hzLj98DXH
-         y2issgbN9WDO+jaoPuyZ2Bw995Nwtlvn7qQs+2QC1QtjPEruZLJ6h1NVwg90mo0swtGl
-         Gqtzl3zB1FwcLxIZqLbQa28WNWcdigta1v0d0BTNgYIo4l82y7hJdMvDVTwuYpWgugRB
-         q5IGQRWZ6oYxSo7vVocD3QCq5TzZLWiRn/S2Ud82TfBBpk/5ZtIb4oG/hk30EUA43SXm
-         xwnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hSuSoFxOGCn2dKc1HCjcYz8H8NJV0h0NOInNBU1gpMA=;
-        b=FhwZR5VFocl8Q6PMI1I+QSy0lxUrpQ+tp7El2OjR2V2iCOPFOsDVdInz5Kplb4YTxA
-         OReuisy2wZtKlUlErABp/N1ae+6bGeOQaQpev6HbC7HhrD5wa9GsZgGHRmv7PQZ8vCmF
-         kRI8/NKtv5umGAjR24PWJSEOLbdtAbxoxrtv9eijIHOil6zqHKoq60kU8xeqIgPsoSMN
-         TtI9dUi9/2AXoHNVvA1SLnXd7IHAKa/UDdeZ6xEcn0+La74jXrpjw+TGnJ75MsNws/aW
-         ITPHQ02I7AY1rLvEhIvQCbNgd7ljtKPR2G09gruEbA0tk1sN4A0zTm4iGis5yfgh+ntE
-         XfAw==
-X-Gm-Message-State: AOAM531rWWuvP/LgqFxLvsoJ0uO7GVzFRx2QfkeGx7cAQXFmRtFe2JEJ
-        gTosU+5hcLQFzwRJwlcu/x4P6h5Yu5oMxskuTh7Tlg==
-X-Google-Smtp-Source: ABdhPJykTThNIeCyH9BpbVcn03w3Un13AqDopS7RhmmTGPabmxfsRDhqrRXTaLxBykgm3tcdjFmpnL7g7PfeGoPlFYI=
-X-Received: by 2002:a2e:7f05:: with SMTP id a5mr23623339ljd.261.1633463354742;
- Tue, 05 Oct 2021 12:49:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211005155923.173399-1-marcan@marcan.st> <20211005155923.173399-4-marcan@marcan.st>
- <CACRpkdanbovvXXLAGGZEEiKXXrNnW+8p1sCONQYWmAjVi-m-9A@mail.gmail.com> <3bad7bc3-30ac-851f-57a3-7781dfa23521@marcan.st>
-In-Reply-To: <3bad7bc3-30ac-851f-57a3-7781dfa23521@marcan.st>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 5 Oct 2021 21:49:03 +0200
-Message-ID: <CACRpkdaZ5p1P1S6j5cphVB8dC6JZT+nc9VMdy7qTmT2EFExqng@mail.gmail.com>
-Subject: Re: [PATCH 3/7] soc: apple: Add driver for Apple PMGR power state controls
+        id S230033AbhJEUSD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Oct 2021 16:18:03 -0400
+Received: from sibelius.xs4all.nl ([83.163.83.176]:62841 "EHLO
+        sibelius.xs4all.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230012AbhJEUSD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Oct 2021 16:18:03 -0400
+X-Greylist: delayed 398 seconds by postgrey-1.27 at vger.kernel.org; Tue, 05 Oct 2021 16:18:02 EDT
+Received: from localhost (bloch.sibelius.xs4all.nl [local])
+        by bloch.sibelius.xs4all.nl (OpenSMTPD) with ESMTPA id 27f01c06;
+        Tue, 5 Oct 2021 22:09:30 +0200 (CEST)
+Date:   Tue, 5 Oct 2021 22:09:30 +0200 (CEST)
+From:   Mark Kettenis <mark.kettenis@xs4all.nl>
 To:     Hector Martin <marcan@marcan.st>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     linux-arm-kernel@lists.infradead.org, marcan@marcan.st,
+        maz@kernel.org, robh+dt@kernel.org, arnd@kernel.org,
+        linus.walleij@linaro.org, alyssa@rosenzweig.io, krzk@kernel.org,
+        gregkh@linuxfoundation.org, p.zabel@pengutronix.de,
+        rafael@kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org
+In-Reply-To: <20211005155923.173399-2-marcan@marcan.st> (message from Hector
+        Martin on Wed, 6 Oct 2021 00:59:17 +0900)
+Subject: Re: [PATCH 1/7] dt-bindings: arm: apple: Add apple,pmgr binding
+References: <20211005155923.173399-1-marcan@marcan.st> <20211005155923.173399-2-marcan@marcan.st>
+Message-ID: <d3ca3bac0bdb5ad1@bloch.sibelius.xs4all.nl>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 5, 2021 at 6:15 PM Hector Martin <marcan@marcan.st> wrote:
+> From: Hector Martin <marcan@marcan.st>
+> Date: Wed,  6 Oct 2021 00:59:17 +0900
+> 
+> The PMGR block in Apple Silicon SoCs is responsible for SoC power
+> management. There are two PMGRs in T8103, with different register
+> layouts but compatible registers. In order to support this as well
+> as future SoC generations with backwards-compatible registers, we
+> declare these blocks as syscons and bind to individual registers
+> in child nodes. Each register controls one SoC device.
+> 
+> The respective apple compatibles are defined in case device-specific
+> quirks are necessary in the future, but currently these nodes are
+> expected to be bound by the generic syscon driver.
+> 
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+>  .../bindings/arm/apple/apple,pmgr.yaml        | 74 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 75 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/apple/apple,pmgr.yaml
 
-> We already broke tradition with the "apple," DT compatible prefix (used
-> to be AAPL for the PowerPC Macs), and these chips aren't even just used
-> in Macs (e.g. the iPad, which in theory people would be able to run
-> Linux on if someone figures out a jailbreak), so perhaps it's time for
-> another break here?
+This works for U-Boot and OpenBSD.
 
-Yeah fair enough. It's probably more intuitive under drivers/soc anyway.
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Reviewed-by: Mark Kettenis <kettenis@openbsd.org>.
 
-Yours,
-Linus Walleij
+> diff --git a/Documentation/devicetree/bindings/arm/apple/apple,pmgr.yaml b/Documentation/devicetree/bindings/arm/apple/apple,pmgr.yaml
+> new file mode 100644
+> index 000000000000..0304164e4140
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/apple/apple,pmgr.yaml
+> @@ -0,0 +1,74 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/apple/apple,pmgr.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Apple SoC Power Manager (PMGR)
+> +
+> +maintainers:
+> +  - Hector Martin <marcan@marcan.st>
+> +
+> +description: |
+> +  Apple SoCs include a PMGR block responsible for power management,
+> +  which can control various clocks, resets, power states, and
+> +  performance features. This node represents the PMGR as a syscon,
+> +  with sub-nodes representing individual features.
+> +
+> +  Apple SoCs may have a secondary "mini-PMGR"; it is represented
+> +  separately in the device tree, but works the same way.
+> +
+> +select:
+> +  properties:
+> +    compatible:
+> +      contains:
+> +        enum:
+> +          - apple,t8103-pmgr
+> +          - apple,t8103-minipmgr
+> +          - apple,pmgr
+> +
+> +  required:
+> +    - compatible
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: "^power-management@[0-9a-f]+$"
+> +
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - apple,t8103-pmgr
+> +          - apple,t8103-minipmgr
+> +      - const: apple,pmgr
+> +      - const: syscon
+> +      - const: simple-mfd
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: true
+> +
+> +examples:
+> +  - |
+> +    soc {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        power-management@23b700000 {
+> +            compatible = "apple,t8103-pmgr", "apple,pmgr", "syscon", "simple-mfd";
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +            reg = <0x2 0x3b700000 0x0 0x14000>;
+> +        };
+> +
+> +        power-management@23b700000 {
+> +            compatible = "apple,t8103-minipmgr", "apple,pmgr", "syscon", "simple-mfd";
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +            reg = <0x2 0x3d280000 0x0 0xc000>;
+> +        };
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index abdcbcfef73d..d25598842d15 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -1719,6 +1719,7 @@ B:	https://github.com/AsahiLinux/linux/issues
+>  C:	irc://irc.oftc.net/asahi-dev
+>  T:	git https://github.com/AsahiLinux/linux.git
+>  F:	Documentation/devicetree/bindings/arm/apple.yaml
+> +F:	Documentation/devicetree/bindings/arm/apple/*
+>  F:	Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
+>  F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
+>  F:	arch/arm64/boot/dts/apple/
+> -- 
+> 2.33.0
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> 
