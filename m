@@ -2,124 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DE90421DB6
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Oct 2021 06:51:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90497421DBC
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Oct 2021 06:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231752AbhJEExr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Oct 2021 00:53:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51264 "EHLO
+        id S230403AbhJEE4q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Oct 2021 00:56:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231739AbhJEExq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Oct 2021 00:53:46 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74960C06174E
-        for <linux-pm@vger.kernel.org>; Mon,  4 Oct 2021 21:51:56 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id w11so1422144plz.13
-        for <linux-pm@vger.kernel.org>; Mon, 04 Oct 2021 21:51:56 -0700 (PDT)
+        with ESMTP id S229812AbhJEE4p (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Oct 2021 00:56:45 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1973FC061745;
+        Mon,  4 Oct 2021 21:54:56 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id v11so6057195pgb.8;
+        Mon, 04 Oct 2021 21:54:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=kxVX01zuZBUirai+6B2SoPW2CcwR7nx7sC9W6AGzh80=;
-        b=FDxjPWLHmD+ysuPDGN5rV1T1RisFrf+gKFZ1DefEurFe4WUBwMptd9Skz5j5TVfodP
-         +VJk7KLuG1fEbOpa9leAJiB/x9xB/mtq+nZraW50TPfko2n5hja+tajEY1Me11wqijEI
-         +rS7WtIeET4qMfZa2SUmk1mrIFnXlhsD2LCeuWNCxJ5BAWTu0QY4Ol1at8ptlpGoLW9t
-         Ckp5YNH9UXKpVYXlezaCra9To4TmUT8ELdf71lSJAZ/KJ2bAb2Wtk/R2UkVf/rN5KBG4
-         NAdII8dCKVR27UojQVi7FH2k51ZQyTsGfULV50rpGlWr9t5WsZVysj+RIi3VBLJ87XI5
-         4HaA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/9KVS503ubd0o0fKwUpqCErKIOfbGbeMs1zB/nt5caU=;
+        b=A5krXoDt/X5DXz9f45jF//bjWC5nPtk+g0xzZ3sYmElgKnFoGdqNV7rX3ctIXQR6fg
+         IfIUAsVHf1lrsy7jFAcJ4LHR2W4ImUREn94vpfN2ZpFf/xB0TNQhUHoDQitdalAgGf3u
+         JM/rd5XvASAdminE7aZl2Unpi5n2L76OzmCGgc19JJ3+YsBbd0KTxXJUWtTYzU6d0soP
+         6uVwiad8569ATbK0YIw4IQd8BSZWFE1ni34adZvklvSnjajmbyTFjq3ZsTulhZDGEmLE
+         Dg1yEs9VkDY2M+mfbO2y2L8pkdeL7ZFEI0SNbmjZttOykXlZ83ugLTnaRy/LDmrcaSpf
+         5qSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=kxVX01zuZBUirai+6B2SoPW2CcwR7nx7sC9W6AGzh80=;
-        b=bd6tY+WfPFuqCJCFk7gjzJFqnCqNsuYJEumBXUU2h8h0z1RPVTeSq9M08n8k1D/6TY
-         YY+r2yapJcy1ACGtlhtRjPNUlwCbHzP2MttmjI9wmPm4N0yqDGZmAg9bRRGY7ZWbUQqP
-         VmM6/hTIjxTWUrZ2yiefKGozlCWU+yYt4Wyaf//D3icMSIAESTe4ZlHQNK8/MeSAmP0+
-         KjJhWo+chrR1etuCWrj2LPdeSLhe8UxfTuqMQcNqHJt6piuZTMBgib4dEXYF0igvTzuf
-         TfWGqDS3D1uthpVUuX6j3i9qIyTLv8euad00F8crA537Pw5c9zczy0euDM2w5GrB6b+U
-         Cq6w==
-X-Gm-Message-State: AOAM5306WY4veA9G3mbnlKmuTCiQSv/zG+AbSXCYr9A7s8KC8WbjTraS
-        oZ2pPtqezLGpWuoTDXbU0LdO
-X-Google-Smtp-Source: ABdhPJyF8IV3fNnaMskmP23kUjDD9683cDHaAVdrho93/FUHhfnPDaFKyxL91l6eQ0xOL6HWpeuMZA==
-X-Received: by 2002:a17:90a:4207:: with SMTP id o7mr1297339pjg.192.1633409515689;
-        Mon, 04 Oct 2021 21:51:55 -0700 (PDT)
-Received: from workstation ([120.138.13.79])
-        by smtp.gmail.com with ESMTPSA id x35sm5006826pfh.52.2021.10.04.21.51.52
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 04 Oct 2021 21:51:55 -0700 (PDT)
-Date:   Tue, 5 Oct 2021 10:21:51 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, rafael@kernel.org,
-        robh+dt@kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH] dt-bindings: cpufreq: cpufreq-qcom-hw: Convert to YAML
- bindings
-Message-ID: <20211005045151.GB4195@workstation>
-References: <20211004044317.34809-1-manivannan.sadhasivam@linaro.org>
- <20211004070531.sexvnqmnkoe4j6a2@vireshk-i7>
- <20211004072222.GE16442@workstation>
- <YVszd2UMw9F5LqWC@ripper>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/9KVS503ubd0o0fKwUpqCErKIOfbGbeMs1zB/nt5caU=;
+        b=3ihdmF3BtskNVOqlGAwDhcHruagQimtOE5ES4x1n6za+a6PyyEOWqt/toZMjz85rf2
+         x1TIYTwNO0b8dcGnt5tuJAlwdgBIbctvQJzNFtwtTHhALy4hplLBHfet0TqazhcrZ3l0
+         sdfUv2LDjv0c3PbWeBXjLg8zZL2GsjFc4jnoENcN/CxmIdFZliryuHoOFh8oAdhSB24o
+         dBHIjW71NAcWc9TSUlDUURRH7c94gq1t++trdelBIxsT+YzlEYN6WHjtHa16HUupXl0+
+         Krfe9Dkpfs5OMZUjpJsGJ26mPMSl07bBxZP6xkEdQ6l36fyvXVwU9OZdLHTARQhVDx9V
+         7Slg==
+X-Gm-Message-State: AOAM530xCC+Lcy29r/MU8PCd1IuuTDtw+/0kBQFaPVe1lhPk878i5y/h
+        6zflW1it9MERF18kWYRxIt8g7XeSv7DdZQ==
+X-Google-Smtp-Source: ABdhPJz8dDLGVGvzq1j53YZ5bhKCCiBSVC0+h4vCERy5/CAXXjlNYYraKcOYKfF5LlrGtCDAaSN2lg==
+X-Received: by 2002:a63:205:: with SMTP id 5mr14249449pgc.433.1633409695309;
+        Mon, 04 Oct 2021 21:54:55 -0700 (PDT)
+Received: from unconquered.home.aehallh.com (24-113-252-168.wavecable.com. [24.113.252.168])
+        by smtp.gmail.com with ESMTPSA id q18sm19554786pfj.46.2021.10.04.21.54.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Oct 2021 21:54:54 -0700 (PDT)
+From:   "Zephaniah E. Loss-Cutler-Hull" <zephaniah@gmail.com>
+To:     linux-pm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        "Zephaniah E. Loss-Cutler-Hull" <zephaniah@gmail.com>
+Subject: [PATCH 1/2] tools/power turbostat: Allow -e for all names.
+Date:   Mon,  4 Oct 2021 21:54:38 -0700
+Message-Id: <20211005045439.1430114-1-zephaniah@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YVszd2UMw9F5LqWC@ripper>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Oct 04, 2021 at 10:01:43AM -0700, Bjorn Andersson wrote:
-> On Mon 04 Oct 00:22 PDT 2021, Manivannan Sadhasivam wrote:
-> 
-> > On Mon, Oct 04, 2021 at 12:35:31PM +0530, Viresh Kumar wrote:
-> > > On 04-10-21, 10:13, Manivannan Sadhasivam wrote:
-> > > > Convert Qualcomm cpufreq devicetree binding to YAML.
-> > > > 
-> > > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > > > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-> > > > Reviewed-by: Rob Herring <robh@kernel.org>
-> > > 
-> > > I am not sure if Rob ever gave this.
-> > > 
-> > 
-> > I'm not fooling you :)
-> > https://patchwork.kernel.org/project/linux-pm/patch/20210701105730.322718-5-angelogioacchino.delregno@somainline.org/#24312445
-> > 
-> > > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > > 
-> > > Why double signed off ?
-> > > 
-> > 
-> > Ah, it came while I applied the patch from Angelo's series. If you want
-> > I can send a new version removing one or you can do that while applying.
-> > 
-> 
-> If you wrote the patch, then Angelo handled it, then you handled it
-> again the double S-o-b captures that nicely.
-> 
-> Looking it from the other angle, if you remove the first S-o-b, then you
-> forgot to signed it off when you authored the original patch and if you
-> skip the last S-o-b then you didn't adequately sign off the final
-> result.
-> 
+Currently, there are a number of variables which are displayed by
+default, enabled with -e all, and listed by --list, but which you can
+not give to --enable/-e.
 
-Makes sense! I'll leave it as it is.
+So you can enable CPU0c1 (in the bic array), but you can't enable C1 or
+C1% (not in the bic array, but exists in sysfs).
 
-Thanks,
-Mani
+This runs counter to both the documentation and user expectations, and
+it's just not very user friendly.
 
-> Regards,
-> Bjorn
-> 
-> > Let me know.
-> > 
-> > Thanks,
-> > Mani
-> > 
-> > > -- 
-> > > viresh
+As such, the mechanism used by --hide has been duplicated, and is now
+also used by --enable, so we can handle unknown names gracefully.
+
+Note: One impact of this is that truly unknown fields given to --enable
+will no longer generate errors, they will be silently ignored, as --hide
+does.
+
+Signed-off-by: Zephaniah E. Loss-Cutler-Hull <zephaniah@gmail.com>
+---
+ tools/power/x86/turbostat/turbostat.c | 49 +++++++++++++++++++--------
+ 1 file changed, 35 insertions(+), 14 deletions(-)
+
+diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+index 47d3ba895d6d..f5d634ee5fee 100644
+--- a/tools/power/x86/turbostat/turbostat.c
++++ b/tools/power/x86/turbostat/turbostat.c
+@@ -686,7 +686,9 @@ unsigned long long bic_present = BIC_USEC | BIC_TOD | BIC_sysfs | BIC_APIC | BIC
+ #define BIC_IS_ENABLED(COUNTER_BIT) (bic_enabled & COUNTER_BIT)
+ 
+ #define MAX_DEFERRED 16
++char *deferred_add_names[MAX_DEFERRED];
+ char *deferred_skip_names[MAX_DEFERRED];
++int deferred_add_index;
+ int deferred_skip_index;
+ 
+ /*
+@@ -775,17 +777,23 @@ unsigned long long bic_lookup(char *name_list, enum show_hide_mode mode)
+ 		}
+ 		if (i == MAX_BIC) {
+ 			if (mode == SHOW_LIST) {
+-				fprintf(stderr, "Invalid counter name: %s\n", name_list);
+-				exit(-1);
+-			}
+-			deferred_skip_names[deferred_skip_index++] = name_list;
+-			if (debug)
+-				fprintf(stderr, "deferred \"%s\"\n", name_list);
+-			if (deferred_skip_index >= MAX_DEFERRED) {
+-				fprintf(stderr, "More than max %d un-recognized --skip options '%s'\n",
+-					MAX_DEFERRED, name_list);
+-				help();
+-				exit(1);
++				deferred_add_names[deferred_add_index++] = name_list;
++				if (deferred_add_index >= MAX_DEFERRED) {
++					fprintf(stderr, "More than max %d un-recognized --add options '%s'\n",
++							MAX_DEFERRED, name_list);
++					help();
++					exit(1);
++				}
++			} else {
++				deferred_skip_names[deferred_skip_index++] = name_list;
++				if (debug)
++					fprintf(stderr, "deferred \"%s\"\n", name_list);
++				if (deferred_skip_index >= MAX_DEFERRED) {
++					fprintf(stderr, "More than max %d un-recognized --skip options '%s'\n",
++							MAX_DEFERRED, name_list);
++					help();
++					exit(1);
++				}
+ 			}
+ 		}
+ 
+@@ -6138,6 +6146,16 @@ void parse_add_command(char *add_command)
+ 	}
+ }
+ 
++int is_deferred_add(char *name)
++{
++	int i;
++
++	for (i = 0; i < deferred_add_index; ++i)
++		if (!strcmp(name, deferred_add_names[i]))
++			return 1;
++	return 0;
++}
++
+ int is_deferred_skip(char *name)
+ {
+ 	int i;
+@@ -6156,9 +6174,6 @@ void probe_sysfs(void)
+ 	int state;
+ 	char *sp;
+ 
+-	if (!DO_BIC(BIC_sysfs))
+-		return;
+-
+ 	for (state = 10; state >= 0; --state) {
+ 
+ 		sprintf(path, "/sys/devices/system/cpu/cpu%d/cpuidle/state%d/name", base_cpu, state);
+@@ -6181,6 +6196,9 @@ void probe_sysfs(void)
+ 
+ 		sprintf(path, "cpuidle/state%d/time", state);
+ 
++		if (!DO_BIC(BIC_sysfs) && !is_deferred_add(name_buf))
++			continue;
++
+ 		if (is_deferred_skip(name_buf))
+ 			continue;
+ 
+@@ -6206,6 +6224,9 @@ void probe_sysfs(void)
+ 
+ 		sprintf(path, "cpuidle/state%d/usage", state);
+ 
++		if (!DO_BIC(BIC_sysfs) && !is_deferred_add(name_buf))
++			continue;
++
+ 		if (is_deferred_skip(name_buf))
+ 			continue;
+ 
+-- 
+2.33.0
+
