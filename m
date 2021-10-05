@@ -2,117 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41A33422F9D
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Oct 2021 20:05:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3DB2423095
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Oct 2021 21:11:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232861AbhJESHk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Oct 2021 14:07:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40354 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbhJESHk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Oct 2021 14:07:40 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED58C061749
-        for <linux-pm@vger.kernel.org>; Tue,  5 Oct 2021 11:05:49 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id 187so201004pfc.10
-        for <linux-pm@vger.kernel.org>; Tue, 05 Oct 2021 11:05:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=jaQ9FboIDtxXBghWjGnkTtPHcEHeWQSEYBtsCG3gkOY=;
-        b=f6FgrjnQjPlKfvniZjcpG9zfSX/58v3jcaCM54+noX81fOm25KFfYxb2/jmW5bom3U
-         TdtM+fIW6BQqc0Sq9+Uq8HmGq0d1Ye/8qz7MKPJ4tFEAH+ICPpLwAErBhkUPtPI/yGhd
-         CKkFGgu/X7IUuThXuHUpCxVcAzf6XfApea+GKPkq5VUh+FwC1qJB/uRHIWtVW1WYa3rp
-         l0gC0w9TcYus0pAOEw+dGZrXBQYDDU7CXMP5cJEVvSaR3mTdqhHdkrwT7+J2gyl6eVi/
-         euLtzpeUfJfB1KBayc9AY4ruDdbBO5GTNinCl6x9qwupg1KkC19XzxqLKgiQI+eKqt3w
-         yFTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=jaQ9FboIDtxXBghWjGnkTtPHcEHeWQSEYBtsCG3gkOY=;
-        b=G3Lx/8EMKeGufRO6TnnHBD8F2oIHGQ9PX7oC9A/CIiHEOxExkoeFTHDuxh0eAONMkn
-         2UaeUxTZOVUIOPnMR2ktUGPcRyJxxtv7Jc61S/WV1BrR7aQUF4JLx5A51npyFQZeyM9h
-         0szV3+c0iFmKT/nT10CotA3WFglDrAyqqdRWirCygq5rtw/h6nOXrSDwTfswHXQxeS4B
-         L7CKXWMMXbMwqRIgVYPoEnR7Vgfnhd2teJzytiTvJ7HdI5MeP61LFf9aaycpbCa9K41G
-         +hIX6woq1VkFAskYduKxKdBow3zOJ9Xnd4fe6uaI0aekyvb5OVlJp89Q13bCQ2oGt+NS
-         yDVA==
-X-Gm-Message-State: AOAM530eCxXYIjOMry6g81TGZgoOu0/9b6j6E5BTTxO6FRdtVv8aVAHL
-        JxGLNjowrK+aGpBbjFd9woq8mg==
-X-Google-Smtp-Source: ABdhPJy66oXJK6ksStRVEe5FIaiJ4x9yCOgWKHXVY1dovBq1GenlIfnj1BaM+T3lBBJ23IPP1tBo0Q==
-X-Received: by 2002:a05:6a00:188b:b0:44c:70a8:cf4 with SMTP id x11-20020a056a00188b00b0044c70a80cf4mr8499387pfh.85.1633457148952;
-        Tue, 05 Oct 2021 11:05:48 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id v22sm18507692pff.93.2021.10.05.11.05.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Oct 2021 11:05:48 -0700 (PDT)
-Message-ID: <615c93fc.1c69fb81.1a07e.8e9e@mx.google.com>
-Date:   Tue, 05 Oct 2021 11:05:48 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S229758AbhJETN3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Oct 2021 15:13:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57646 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229662AbhJETN3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 5 Oct 2021 15:13:29 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2FD3A6101B;
+        Tue,  5 Oct 2021 19:11:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1633461098;
+        bh=HRq9rIj1GmCl025MZY7neLlt7VXXCBDwJ3b80PIqi2Y=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=CCaxwhI6ecMlE4jwtKYVcgoN6gNOSfLZTzbDUvXOUcnDy0AZa6YrT44eYgrLBe8I+
+         yx6RV07nRCyjsnWtvO5bNIuxsWf/pMR6II6XDSog+GuXcpNrBKhJEVVENxlXehphPb
+         7ksZmPUehRRJbR4DNSz8jIuUhBmmXnIDZko4a9+7j/Vg8OY0cIYHDD0QnfQJnXL1+x
+         WpBS/JbWbjcuKRjBhU3TaLTP/5v4QeLuKOByJTBRkwNPg3d1m1iVj4NgGBYvmWDg46
+         4jFbBfXSiJGIL0oNwBUjaOCycdFAdKC1H8ISkJTweCizjt1iCjAsc5mIIa3R8N54gZ
+         89Jof1lT5n56g==
+Message-ID: <0a7af294-095e-cac4-e20a-296de7bd59cb@kernel.org>
+Date:   Tue, 5 Oct 2021 22:11:31 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.15-rc4-24-g8e0efc215fb1
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-Subject: pm/testing sleep: 4 runs, 1 regressions (v5.15-rc4-24-g8e0efc215fb1)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Subject: Re: [PATCH AUTOSEL 5.14 06/40] dt-bindings: interconnect: sdm660: Add
+ missing a2noc qos clocks
+Content-Language: en-US
+To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Cc:     Shawn Guo <shawn.guo@linaro.org>, Rob Herring <robh@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>, agross@kernel.org,
+        bjorn.andersson@linaro.org, robh+dt@kernel.org, kholk11@gmail.com,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20211005135020.214291-1-sashal@kernel.org>
+ <20211005135020.214291-6-sashal@kernel.org>
+From:   Georgi Djakov <djakov@kernel.org>
+In-Reply-To: <20211005135020.214291-6-sashal@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 4 runs, 1 regressions (v5.15-rc4-24-g8e0efc215fb1)
+Hi Sasha,
 
-Regressions Summary
--------------------
+On 5.10.21 16:49, Sasha Levin wrote:
+> From: Shawn Guo <shawn.guo@linaro.org>
+> 
+> [ Upstream commit cf49e366020396ad83845c1c3bdbaa3c1406f5ce ]
+> 
+> It adds the missing a2noc clocks required for QoS registers programming
+> per downstream kernel[1].
+> 
+> [1] https://source.codeaurora.org/quic/la/kernel/msm-4.4/tree/arch/arm/boot/dts/qcom/sdm660-bus.dtsi?h=LA.UM.8.2.r1-04800-sdm660.0#n43
+> 
+> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Acked-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> Link: https://lore.kernel.org/r/20210824043435.23190-2-shawn.guo@linaro.org
+> Signed-off-by: Georgi Djakov <djakov@kernel.org>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
+There is no benefit to backport these changes, as devices that
+needed them, would not boot on v5.14 anyways. So please drop these:
 
+[PATCH AUTOSEL 5.14 06/40] dt-bindings: interconnect: sdm660: Add 
+missing a2noc qos clocks
+[PATCH AUTOSEL 5.14 07/40] interconnect: qcom: sdm660: Add missing a2noc 
+qos clocks
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.15-rc=
-4-24-g8e0efc215fb1/plan/sleep/
-
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.15-rc4-24-g8e0efc215fb1
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      8e0efc215fb15481ac2c12c7e11ce2d7d2803691 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/615c86ffb819bb819899a2da
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.15-rc4-24-g8e0ef=
-c215fb1/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.15-rc4-24-g8e0ef=
-c215fb1/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2021=
-0913.0/arm64/rootfs.cpio.gz =
-
-
-
-  * sleep.login: https://kernelci.org/test/case/id/615c86ffb819bb819899a2db
-        failing since 411 days (last pass: v5.8-107-gb72b3ea38c81, first fa=
-il: v5.9-rc1-4-g1f08d51cd57f) =
-
- =20
+Thanks,
+Georgi
