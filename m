@@ -2,212 +2,252 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7A6A42335D
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Oct 2021 00:19:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFEA642336A
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Oct 2021 00:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236585AbhJEWVd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Oct 2021 18:21:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42830 "EHLO
+        id S236805AbhJEWW6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Oct 2021 18:22:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbhJEWVc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Oct 2021 18:21:32 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71EB7C061749;
-        Tue,  5 Oct 2021 15:19:41 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id u18so1904112lfd.12;
-        Tue, 05 Oct 2021 15:19:41 -0700 (PDT)
+        with ESMTP id S236793AbhJEWW5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Oct 2021 18:22:57 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ECA5C06174E
+        for <linux-pm@vger.kernel.org>; Tue,  5 Oct 2021 15:21:06 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id x8so684535qvp.1
+        for <linux-pm@vger.kernel.org>; Tue, 05 Oct 2021 15:21:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=cm3t0jHYi60ikbjIFrElH5F3+z5ZebZ+trrzKBFfgQI=;
-        b=qTAIEXIVB1/IgtvGdtrN/gmvUv6mTJMWYvN+by7UBNwUQz1edq9ynn5KZ4VakUYvgO
-         zdJ521ZSZKHguY4o7B00h080n6+hpVFgPtipWPhr7vdfUedARgQ4xE4HH2lbru46MeqC
-         A5BXLTY8VINH/AMBjZEF/K2gSikuRXhSI2fF9O8ZK3khdgYy8AFAvm2l22TZw2+cK0Up
-         VqGWxTT463F7ck5TyDg0STieTJ5C+qvpbnUQ5kqq4ulMywcZp+kTXt8lcdefcaH+dgKu
-         zq6l/FilsorGHNG/QzimfNCPZRYUNo7SlGD/xBo5UydUfU+gcPwF7E7ckKKrvoh9klYt
-         Rvdw==
+        bh=xHu5SUa0KvSYg3r+SFZDDB6DZ4/1EXbWcPW3NE3eBV8=;
+        b=mGLTs7eKVP2Mm3xWUXlknMwhSa++0+cb4Px74ojuoliqTl/wkZCOKltUHsuZn6aCLV
+         1KSnuHn3IaxmCsEa4oDDE2pQkp/gOPVngmhjr7Daoc0vOP5qLR1b1owvq+OO2i3xbxBp
+         g8YadytIdhE+bYkHtWf7paQIVUCwPLr+tJkdOVQnsU4otUosdnWEqS9aPTSe2Q1w/pU3
+         7wglGjGVFDU+o+TEZPRY9iHNXG1olifTlNPmHqVmttNlHt67pqaD3P1ug53dXGn1NTuP
+         b5WLfVSa8GXDzHBTYqvWHKuX/LEKLYYtAPG3yv11JwC9fMz//jAcpKIsKJ6w8zcPaOU3
+         VnzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=cm3t0jHYi60ikbjIFrElH5F3+z5ZebZ+trrzKBFfgQI=;
-        b=6hhnqyt2XuRgMYLBNC2nV0yG8PsZANtBv+Y+ujv3fVytDqGArizH5YtwnLATxAsUJt
-         OkqBwMbf78zRVcV/+qsOokjE5H3F1aeZGzVtXS+pSe1PoQtFgIESne4ZTE+qLvuM/537
-         Z289c3Z5jopFyyvmvlAzPZe7dkLyna195R2rycn/fFg9FLjF3bN4evkWrl88Ub2T4QNt
-         KA7sENlEZpFF5OvfJWwhjFl/nDzpJ0kMWoys51uuzC5BuPDzs6oSojwX9QtzgH0eBTO0
-         BDoETraINfqc+1dWTIr2Ii28Uuje+EDoIRhyd1noX9fHWJWCZRzdWE9KvHyAMbmhrUnb
-         ZzFA==
-X-Gm-Message-State: AOAM533jef9d3xmw1Rrve3XH/J5Rejztw9KP0UV1G8UZAUuJ+QLFjqbi
-        eYdIGCVA+23UkRg6+MwsUe8=
-X-Google-Smtp-Source: ABdhPJx7DQPDGWTTKyBBQ7on8Zoc9EHE4rfD8+/mmsH+2cs2olWIZx3pD3Yp7kL6x0TZhEN3swGrdg==
-X-Received: by 2002:a2e:5cc6:: with SMTP id q189mr24035068ljb.82.1633472379484;
-        Tue, 05 Oct 2021 15:19:39 -0700 (PDT)
-Received: from [192.168.2.145] (79-139-163-57.dynamic.spd-mgts.ru. [79.139.163.57])
-        by smtp.googlemail.com with ESMTPSA id d19sm2088024lfv.74.2021.10.05.15.19.38
+        bh=xHu5SUa0KvSYg3r+SFZDDB6DZ4/1EXbWcPW3NE3eBV8=;
+        b=B9FTJ3GWKSO6AuMhmfanG2Cw2x81cgWnCzH05WlhfYl1HNXkNZYV0fq7iXjvkr4zfB
+         WbsAbKKjPVtmvbgkQP3zEsa5RJmZiQUHvlZEP8emaWngeCOJqLgD4p7Hs0/XSgZDYqbO
+         XfZ8B1zFnF1q586hGKUCqgZ8ThrV8sCQaxI4yaliJB0cdthaGryAa8gFwyRZKoGODkIO
+         3tpawAoYoGbZ3BsPB708ArF1OABfzY/v1TTTU2wkyD7pXEcNKdLr7t9wMi621XiPhBp6
+         P0QJ+hcxBCTecAcNNoAK0nTPNIoKW4c9FMKL+Ceksbb9dlu02AnsJRbsJ5NG0BGGEucz
+         vnog==
+X-Gm-Message-State: AOAM531MC/gxU+1IQOfUD5vXa2gGu7Cl+xJTw/QJDTJmDN3VCW/7CWbj
+        OtgU3GrpJBL5nonvYAx+BAlpGg==
+X-Google-Smtp-Source: ABdhPJzjAupsXhXHKMOteyIzCV8vgaSi6fiq3olLstOYpJpR1Adq/ORdBRgP1XeVPmd6GrIqkPv8hw==
+X-Received: by 2002:ad4:4664:: with SMTP id z4mr30100135qvv.16.1633472465623;
+        Tue, 05 Oct 2021 15:21:05 -0700 (PDT)
+Received: from [192.168.1.93] (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
+        by smtp.gmail.com with ESMTPSA id b17sm11257816qte.97.2021.10.05.15.21.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Oct 2021 15:19:39 -0700 (PDT)
-Subject: Re: [PATCH v13 06/35] clk: tegra: Support runtime PM and power domain
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
+        Tue, 05 Oct 2021 15:21:05 -0700 (PDT)
+Subject: Re: [PATCH v2 4/4] arm64: dts: qcom: sdm845: mtp: Add vadc channels
+ and thermal zones
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
+        <linux-arm-msm@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        David Heidelberg <david@ixit.cz>
-References: <20210926224058.1252-1-digetx@gmail.com>
- <20210926224058.1252-7-digetx@gmail.com>
- <CAPDyKFq+LS4Jr1GyC-a-tGWPzGH0JxfJ9wKY=uQEBGYm952azw@mail.gmail.com>
- <24101cd6-d3f5-1e74-db39-145ecd30418b@gmail.com>
- <CAPDyKFreK7976PJL-1zySoza_yXM7rMQ64aODWUZ+U3L-uCa0w@mail.gmail.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <4bdba8a2-4b9b-ed7d-e6ca-9218d8200a85@gmail.com>
-Date:   Wed, 6 Oct 2021 01:19:37 +0300
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20210923212311.2877048-1-bjorn.andersson@linaro.org>
+ <20210923212311.2877048-5-bjorn.andersson@linaro.org>
+ <YVSzJZ8G43CLml3L@google.com> <YVtg3lcR1HMqVdAJ@ripper>
+ <CAA8EJprYij6pWD1A17yr1+5-n5fKPW=YDA_-2+f8h6JnEh4myw@mail.gmail.com>
+ <f136fbb0-be3e-aee8-7a68-1d16148c80ff@linaro.org> <YVzJDU5ROmrI2rQb@ripper>
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+Message-ID: <cb0d97b1-81c7-2d5b-45d3-00dd09815ddd@linaro.org>
+Date:   Tue, 5 Oct 2021 18:21:04 -0400
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <CAPDyKFreK7976PJL-1zySoza_yXM7rMQ64aODWUZ+U3L-uCa0w@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <YVzJDU5ROmrI2rQb@ripper>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-05.10.2021 16:10, Ulf Hansson пишет:
-> On Sat, 2 Oct 2021 at 22:44, Dmitry Osipenko <digetx@gmail.com> wrote:
+
+
+On 10/5/21 5:52 PM, Bjorn Andersson wrote:
+> On Tue 05 Oct 13:30 PDT 2021, Thara Gopinath wrote:
+> 
 >>
->> 01.10.2021 15:32, Ulf Hansson пишет:
->>>> +static __maybe_unused int tegra_clock_pm_suspend(struct device *dev)
->>>> +{
->>>> +       struct tegra_clk_device *clk_dev = dev_get_drvdata(dev);
->>>> +
->>>> +       /*
->>>> +        * Power management of the clock is entangled with the Tegra PMC
->>>> +        * GENPD because PMC driver enables/disables clocks for toggling
->>>> +        * of the PD's on/off state.
->>>> +        *
->>>> +        * The PMC GENPD is resumed in NOIRQ phase, before RPM of the clocks
->>>> +        * becomes available, hence PMC can't use clocks at the early resume
->>>> +        * phase if RPM is involved. For example when 3d clock is enabled,
->>>> +        * it may enable the parent PLL clock that needs to be RPM-resumed.
->>>> +        *
->>>> +        * Secondly, the PLL clocks may be enabled by the low level suspend
->>>> +        * code, so we need to assume that PLL is in enabled state during
->>>> +        * suspend.
->>>> +        *
->>>> +        * We will keep PLLs and system clock resumed during suspend time.
->>>> +        * All PLLs on all SoCs are low power and system clock is always-on,
->>>> +        * so practically not much is changed here.
->>>> +        */
->>>> +
->>>> +       return clk_prepare(clk_dev->hw->clk);
->>> I am trying to understand, more exactly, what you intend to achieve
->>> with the clk_prepare() here. It looks a bit weird, to me. Can you try
->>> to elaborate a bit more on the use case?
 >>
->> The Tegra GENPD driver enable/disable clocks when domain is turned on.
-> 
-> Okay. I noticed that in tegra_genpd_power_on(). And the same clocks
-> are enabled/disabled also in tegra_genpd_power_off(), when powering
-> off the PM domain.
-> 
-> So I guess the problem kind of exists for tegra_genpd_power_off() too?
-
-Both OFF/ON are affected by the same problem. If domain was already
-turned OFF before genpd_suspend_noirq(), then the OFF problem isn't visible.
-
-I reproduced the OFF problem by removing the clk prepare/unprepare from
-the suspend/resume of the clk driver and making some extra changes to
-clock tree topology and etc to trigger the problem on Nexus 7.
-
-tegra-pmc 7000e400.pmc: failed to turn off PM domain heg: -13
-
-I happens from genpd_suspend_noirq() -> tegra_genpd_power_off() -> clk
--> GENPD -> I2C -> runtime-pm.
-
--13 is EACCES, it comes from the runtime PM of I2C device. RPM is
-prohibited/disabled during late (NOIRQ) suspend by the drivers core.
-
->> This can't be done during early system resume, when domains are getting
->> turned on by the drivers core, because when clock is enabled, it's
->> getting prepared (RPM-resumed) and this preparation fails because
->> performance state of the clock goes up and it doesn't work during the
->> early resume time since I2C, which applies the state to hardware, is
->> suspended and can't work at that early time.
-> 
-> This sounds complicated and I still don't quite follow all of it, sorry.
-> 
-> So, tegra_genpd_power_on() gets called from genpd_resume_noirq(), when
-> the first device of the attached devices to genpd gets resumed. And
-> vice versa for tegra_genpd_power_off() and genpd_suspend_noirq().
-> 
-> Are you saying that trying to enable/disable clocks from
-> tegra_genpd_power_on|off() in these paths doesn't work, because it
-> would also require the performance state to be changed, which would
-> fail because the I2C bus/driver is suspended?
-
-Yes, but it's actually not I2C bus/driver that is suspended, it's
-runtime PM that is unavailable during NOIRQ. The I2C driver itself is
-suspended after domains are turned OFF and resumed before they are
-enabled. It's just runtime PM API that is unavailable. I'm wondering if
-this could be changed.
-
-I'm also wondering if we could add some 'was_enabled' flag to GENPDs,
-setting it by genpd_suspend_noirq() for the enabled domains, and then
-powering-on GENPDs from genpd_resume_noirq() only if they were in the
-enabled state during genpd_suspend_noirq() time. It actually puzzled me
-for a quite long time why GENPD core enables domains unconditionally
-during early resume. This should solve a part of the problem and it
-makes suspend/resume a bit safer because there is a smaller chance to
-crash hardware during suspend, at least it's easier to debug.
-
->> Secondly, Tegra has arch-specific low level assembly which touches
->> clocks during last phase of system suspend and in the beginning of
->> resume. Hence, clocks should stay prepared during suspend just because
->> technically clock should be prepared before it can be enabled.
-> 
-> So the low level code is gating and ungating the clock behind the back
-> of the clock driver then? Why is that done like that, more exactly?
-
-I revisited that code again, and it shouldn't touch the clocks.
-I changed that code to not toggle the clocks [1] sometime ago, but
-forgot about it.
-
-[1] https://git.kernel.org/linus/680ae4452
-
->>> Is this rather about making sure that the clock's corresponding PM
->>> domain stays powered on during system suspend? In that case, I think
->>> there may be an alternative option....
+>> On 10/4/21 4:56 PM, Dmitry Baryshkov wrote:
+>>> On Mon, 4 Oct 2021 at 23:13, Bjorn Andersson <bjorn.andersson@linaro.org> wrote:
+>>>>
+>>>> On Wed 29 Sep 11:40 PDT 2021, Matthias Kaehlcke wrote:
+>>>>
+>>>>> On Thu, Sep 23, 2021 at 02:23:11PM -0700, Bjorn Andersson wrote:
+>>>>>> Downstream defines four ADC channels related to thermal sensors external
+>>>>>> to the PM8998 and two channels for internal voltage measurements.
+>>>>>>
+>>>>>> Add these to the upstream SDM845 MTP, describe the thermal monitor
+>>>>>> channels and add thermal_zones for these.
+>>>>>>
+>>>>>> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+>>>>>> ---
+>>>>>>
+>>>>>> In addition to the iio channels exposed by v1, Daniel wanted thermal_zones...
+>>>>>>
+>>>>>> Changes since v1:
+>>>>>> - Enable the pm8998_adc_tm and describe the ADC channels
+>>>>>> - Add thermal-zones for the new channels
+>>>>>>
+>>>>>>    arch/arm64/boot/dts/qcom/sdm845-mtp.dts | 128 ++++++++++++++++++++++++
+>>>>>>    1 file changed, 128 insertions(+)
+>>>>>>
+>>>>>> diff --git a/arch/arm64/boot/dts/qcom/sdm845-mtp.dts b/arch/arm64/boot/dts/qcom/sdm845-mtp.dts
+>>>> [..]
+>>>>>> +&pm8998_adc {
+>>>>>> +   adc-chan@4c {
+>>>>>> +           reg = <ADC5_XO_THERM_100K_PU>;
+>>>>>> +           label = "xo_therm";
+>>>>>> +   };
+>>>>>> +
+>>>>>> +   adc-chan@4d {
+>>>>>> +           reg = <ADC5_AMUX_THM1_100K_PU>;
+>>>>>> +           label = "msm_therm";
+>>>>>> +   };
+>>>>>> +
+>>>>>> +   adc-chan@4f {
+>>>>>> +           reg = <ADC5_AMUX_THM3_100K_PU>;
+>>>>>> +           label = "pa_therm1";
+>>>>>> +   };
+>>>>>> +
+>>>>>> +   adc-chan@51 {
+>>>>>> +           reg = <ADC5_AMUX_THM5_100K_PU>;
+>>>>>> +           label = "quiet_therm";
+>>>>>> +   };
+>>>>>> +
+>>>>>> +   adc-chan@83 {
+>>>>>> +           reg = <ADC5_VPH_PWR>;
+>>>>>> +           label = "vph_pwr";
+>>>>>> +   };
+>>>>>> +
+>>>>>> +   adc-chan@85 {
+>>>>>> +           reg = <ADC5_VCOIN>;
+>>>>>> +           label = "vcoin";
+>>>>>> +   };
+>>>>>> +};
+>>>>>> +
+>>>>>> +&pm8998_adc_tm {
+>>>>>> +   status = "okay";
+>>>>>> +
+>>>>>> +   xo-thermistor@1 {
+>>>>>> +           reg = <1>;
+>>>>>> +           io-channels = <&pm8998_adc ADC5_XO_THERM_100K_PU>;
+>>>>>> +           qcom,ratiometric;
+>>>>>> +           qcom,hw-settle-time-us = <200>;
+>>>>>> +   };
+>>>>>> +
+>>>>>> +   msm-thermistor@2 {
+>>>>>> +           reg = <2>;
+>>>>>> +           io-channels = <&pm8998_adc ADC5_AMUX_THM1_100K_PU>;
+>>>>>> +           qcom,ratiometric;
+>>>>>> +           qcom,hw-settle-time-us = <200>;
+>>>>>> +   };
+>>>>>> +
+>>>>>> +   pa-thermistor@3 {
+>>>>>> +           reg = <3>;
+>>>>>> +           io-channels = <&pm8998_adc ADC5_AMUX_THM3_100K_PU>;
+>>>>>> +           qcom,ratiometric;
+>>>>>> +           qcom,hw-settle-time-us = <200>;
+>>>>>> +   };
+>>>>>> +
+>>>>>> +   quiet-thermistor@4 {
+>>>>>> +           reg = <4>;
+>>>>>> +           io-channels = <&pm8998_adc ADC5_AMUX_THM5_100K_PU>;
+>>>>>> +           qcom,ratiometric;
+>>>>>> +           qcom,hw-settle-time-us = <200>;
+>>>>>> +   };
+>>>>>> +};
+>>>>>> +
+>>>>>
+>>>>> The example in the 'qcom,spmi-adc-tm5' binding specifies 'qcom,ratiometric'
+>>>>> and 'qcom,hw-settle-time-us' for both the ADC and the thermal monitor, so do
+>>>>> several board files (e.g. sm8250-mtp.dts and qrb5165-rb5.dts). This apparent
+>>>>> redundancy bothered me earlier, it's not really clear to me whether it's
+>>>>> needed/recommended or not. Do you happen to have any insights on this?
+>>>>
+>>>> Hmm, you're right and I missed this in defining my channels. I've not
+>>>> looked at this detail, just got reasonable readings from my thermal
+>>>> zones and was happy about that.
+>>>>
+>>>> Dmitry, do you have any further insights why these properties are
+>>>> supposed to be duplicated between the adc channel and the thermal zones?
 >>>
+>>> Because both ADC channel and thermal zone registers should be
+>>> programmed accordingly.
+>>>
+>>> One not-so-perfect approach would be to use io-channels property to
+>>> locate the adc's adc-chan node and to parse it. However this way
+>>> thermal driver would have to know the exact structure of adc's device
+>>> tree nodes.
+>>> Another (even worse) solution would be to introduce qcom-specific API
+>>> to query these properties from the IIO channel.
+>>>
+>>> Selecting between these two options I decided to follow the downstream
+>>> path and just to duplicate these few properties.
 >>
->> This is not about domain staying powered on, this is about keeping the
->> performance state of the domain high during suspend.
+>> I know I am joining late to this party, since v3 is out. But before I send
+>> my acked-by, wanted to check/state a few things.
+>> To me, the not-so-perfect approach that you mention here is actually not so
+>> bad, considering the thermal sensor driver already is aware of internals of
+>> the adc device. The duplicating of node is kind of confusing.
+>> Also did you explore using one of _channel_write apis in iio framework to
+>> move all the writes into the adc device instead of thermal sensor driver ?
+>>
 > 
-> Right, so the PM domain managed in tegra_genpd_power_on|off() can
-> still be powered on/off, as long as the clock remains ungated?
+> To me the TM hardware block seems to just duplicate some parts of the
+> ADC block. Without understanding why the two would need to be configured
+> in sync, I don't think we should tie them together further.
 
-Not ungated, but prepared.
+You are right. It is duplicating most of the ADC parts except for 
+temperature read for which it calls into the adc device. And I don't see 
+any interface from the ADC driver that can be used to do the 
+configuration TM needs. Hence the question, have we ever explored this 
+path ?
+
+
+> 
+> In particular, I get the same readings with or without configuring the
+> ADC channels, does this perhaps imply that the TM configuration is used
+> to configure the ADC during it's reads (i.e. we don't need to define the
+> ADC channels after all), or is this just a coincidence?
+
+Maybe because of what we do in adc_tm5_init ?
+
+If needed, we should be able to duplicate the read in the TM as well and 
+get rid of ADC channels , right ? I don't like this half configuration 
+in TM and half in ADC device unless there is a reason behind this.
+
+> 
+> There are other things in the PMIC, using the ADC seemingly without you
+> having to explicitly configure the ADC and there's definitely things
+> pointing to the ADC being "timeshared" between various users.
+> 
+> Regards,
+> Bjorn
+> 
+
+-- 
+Warm Regards
+Thara (She/Her/Hers)
