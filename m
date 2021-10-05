@@ -2,103 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10C13422873
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Oct 2021 15:50:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 189BC422B17
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Oct 2021 16:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235403AbhJENwe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Oct 2021 09:52:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58942 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235277AbhJENwZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 5 Oct 2021 09:52:25 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A381C615E4;
-        Tue,  5 Oct 2021 13:50:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633441834;
-        bh=nBNq1iiRCmYgxsysgE+AMrKeqVOvgcTNU2C7rZIx78k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aiZRIElkbpd2aYpmO/apATAfS6RI2IeybVJerOhkHfh4G3E0oC1yUQDvFx0Dho4Ek
-         QB4X7sOPrSr07ReIwtUmDfEk+tPA6ljtVMbLCcdVelymWV/HXx7RBGiM6rWAvDUDnz
-         WBJU69j+XWb+HaKiEpOBWGIkJHNacRY9IusbrRtdWMuVz+CyJBLRJA5IsNmtHfgIA7
-         zt+mwJCyWJ2WqpD4Dgz6/M8e2mVpjIOCChhh5JFvSncNPpkxlezYw2bCBxuLrOW1p/
-         b24VnggDSUaU+16dIruQiXB9m95GWVJZ+c/P2wOkAj3b/eHdBWh/uufkiYxICpMStN
-         aKhEcbb8PPYfg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Shawn Guo <shawn.guo@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, agross@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.14 07/40] interconnect: qcom: sdm660: Add missing a2noc qos clocks
-Date:   Tue,  5 Oct 2021 09:49:46 -0400
-Message-Id: <20211005135020.214291-7-sashal@kernel.org>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211005135020.214291-1-sashal@kernel.org>
-References: <20211005135020.214291-1-sashal@kernel.org>
+        id S234355AbhJEOgY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Oct 2021 10:36:24 -0400
+Received: from mail-oo1-f53.google.com ([209.85.161.53]:36395 "EHLO
+        mail-oo1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234084AbhJEOgY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Oct 2021 10:36:24 -0400
+Received: by mail-oo1-f53.google.com with SMTP id e19-20020a4a7353000000b002b5a2c0d2b8so6476514oof.3
+        for <linux-pm@vger.kernel.org>; Tue, 05 Oct 2021 07:34:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=75DuAniA5Nj8XcPFApJLWKorrKOQHgCdN2R+n/W0yes=;
+        b=kdzasEuVCGiBC58JcIW+FhCiedkYGOGL1/Cm8CjfOq3dbhriXdYHlvYYim/pubB4Lg
+         x4VMB0YUJSsevgPdPtx4vPBODz/RJrem0t8nwnVMuvJ0Hi2MM1bDK0KDcMI5kPiukYHw
+         OzsQ6cCMxbZ78V4WWO3kZzlqCCotxEQLlGLcFlfsGABY73/76klcUee1sBVu2PxyKTDp
+         RMrkAjL8sX5s5yE0/63vlj7xWMCOHQkXIN3E7BcxufFxDRUUxfXGYDE3LgzBXS9cjsUb
+         4ZRE1vZudnK9A8b1hULdhKvnowoEHJtdJPiw4H7yW6IfcbyyDODOueqfPY/RpKGr2B4q
+         ETRg==
+X-Gm-Message-State: AOAM530Y95Oz2KqnbFmW7nRsyp5P/GZu0ehnKqVBrJTCh28BG8rcCV24
+        peLcPIH/7kIcuzQ/3Xg3u3eLE10k13+XhM0Pivo=
+X-Google-Smtp-Source: ABdhPJxKSUl1ANkzjo6LiJkxZbewuxg2UHlqSPxInwe8supD2sfdqrNDKv91MpgTk2V4tlrhjDfgUFDC6KjAnNHTzEg=
+X-Received: by 2002:a4a:7655:: with SMTP id w21mr169248ooe.30.1633444473193;
+ Tue, 05 Oct 2021 07:34:33 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+References: <1631109930-290049-1-git-send-email-vincent.donnefort@arm.com> <20211004092508.tokhwodfa73terif@vireshk-i7>
+In-Reply-To: <20211004092508.tokhwodfa73terif@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 5 Oct 2021 16:34:22 +0200
+Message-ID: <CAJZ5v0g1S2+rXH7pZpZhG3ShZc1r5jpS=ham7BM3j6c0OncLaw@mail.gmail.com>
+Subject: Re: [PATCH v7 0/9] Inefficient OPPs
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Vincent Donnefort <vincent.donnefort@arm.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Quentin Perret <qperret@google.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Matthias Kaehlcke <mka@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Shawn Guo <shawn.guo@linaro.org>
+On Mon, Oct 4, 2021 at 11:25 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 08-09-21, 15:05, Vincent Donnefort wrote:
+> > Hi all,
+> >
+> > Here's the new version for the inefficient OPPs. This patch-set is based on the
+> > following series from Viresh:
+> >
+> >   [PATCH V3 0/9] Add callback to register with energy model
+> >   https://lore.kernel.org/linux-arm-msm/cover.1628742634.git.viresh.kumar@linaro.org/
+> >
+> > The main change in this version is the re-introduction of CPUFREQ_RELATION_E,
+> > as a relation flag. When set, all relations will try to resolve a frequency
+> > across efficient frequencies only.
+> >
+> > A bit of context:
+> >
+> > We (Power team in Arm) are working with an experimental kernel for the
+> > Google's Pixel4 to evaluate and improve the current mainline performance
+> > and energy consumption on a real life device with Android.
+> >
+> > The SD855 SoC found in this phone has several OPPs that are inefficient.
+> > I.e. despite a lower frequency, they have a greater cost. (That cost being
+> > fmax * OPP power / OPP freq). This issue is twofold. First of course,
+> > running a specific workload at an inefficient OPP is counterproductive
+> > since it wastes wasting energy. But also, inefficient OPPs make a
+> > performance domain less appealing for task placement than it really is.
+> >
+> > We evaluated the change presented here by running 30 iterations of Android
+> > PCMark "Work 2.0 Performance". While we did not see any statistically
+> > significant performance impact, this change allowed to drastically improve
+> > the idle time residency.
+> >
+> >
+> >                            |   Running   |  WFI [1]  |    Idle   |
+> >    ------------------------+-------------+-----------+-----------+
+> >    Little cluster (4 CPUs) |    -0.35%   |   +0.35%  |   +0.79%  |
+> >    ------------------------+-------------+-----------+-----------+
+> >    Medium cluster (3 CPUs) |    -6.3%    |    -18%   |    +12%   |
+> >    ------------------------+-------------+-----------+-----------+
+> >    Big cluster    (1 CPU)  |    -6.4%    |    -6.5%  |    +2.8%  |
+> >    ------------------------+-------------+-----------+-----------+
+> >
+> > On the SD855, the inefficient OPPs are found on the little cluster. By
+> > removing them from the Energy Model, we make the most efficient CPUs more
+> > appealing for task placement, helping to reduce the running time for the
+> > medium and big CPUs. Increasing idle time is crucial for this platform due
+> > to the substantial energy cost differences among the clusters. Also,
+> > despite not appearing in the statistics (the idle driver used here doesn't
+> > report it), we can speculate that we also improve the cluster idle time.
+> >
+> > [1] WFI: Wait for interrupt.
+> >
+> > Changelog since v6:
+> >   - Bring back CPUFREQ_RELATION_E as a relation flag.
+> >   - Make the policy min/max hard limits.
+> >   - Remove the "efficient" member from the freq_table that was pointing to the
+> >     next efficient frequency.
+>
+> Had a quick look, LGTM.
+>
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-[ Upstream commit 13404ac8882f5225af07545215f4975a564c3740 ]
-
-It adds the missing a2noc clocks required for QoS registers programming
-per downstream kernel[1].  Otherwise, qcom_icc_noc_set_qos_priority()
-call on mas_ufs or mas_usb_hs node will simply result in a hardware hang
-on SDM660 SoC.
-
-[1] https://source.codeaurora.org/quic/la/kernel/msm-4.4/tree/arch/arm/boot/dts/qcom/sdm660-bus.dtsi?h=LA.UM.8.2.r1-04800-sdm660.0#n43
-
-Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
-Tested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-Link: https://lore.kernel.org/r/20210824043435.23190-3-shawn.guo@linaro.org
-Signed-off-by: Georgi Djakov <djakov@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/interconnect/qcom/sdm660.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
-
-diff --git a/drivers/interconnect/qcom/sdm660.c b/drivers/interconnect/qcom/sdm660.c
-index 632dbdd21915..4b2b8c8bac2a 100644
---- a/drivers/interconnect/qcom/sdm660.c
-+++ b/drivers/interconnect/qcom/sdm660.c
-@@ -173,6 +173,16 @@ static const struct clk_bulk_data bus_mm_clocks[] = {
- 	{ .id = "iface" },
- };
- 
-+static const struct clk_bulk_data bus_a2noc_clocks[] = {
-+	{ .id = "bus" },
-+	{ .id = "bus_a" },
-+	{ .id = "ipa" },
-+	{ .id = "ufs_axi" },
-+	{ .id = "aggre2_ufs_axi" },
-+	{ .id = "aggre2_usb3_axi" },
-+	{ .id = "cfg_noc_usb2_axi" },
-+};
-+
- /**
-  * struct qcom_icc_provider - Qualcomm specific interconnect provider
-  * @provider: generic interconnect provider
-@@ -810,6 +820,10 @@ static int qnoc_probe(struct platform_device *pdev)
- 		qp->bus_clks = devm_kmemdup(dev, bus_mm_clocks,
- 					    sizeof(bus_mm_clocks), GFP_KERNEL);
- 		qp->num_clks = ARRAY_SIZE(bus_mm_clocks);
-+	} else if (of_device_is_compatible(dev->of_node, "qcom,sdm660-a2noc")) {
-+		qp->bus_clks = devm_kmemdup(dev, bus_a2noc_clocks,
-+					    sizeof(bus_a2noc_clocks), GFP_KERNEL);
-+		qp->num_clks = ARRAY_SIZE(bus_a2noc_clocks);
- 	} else {
- 		if (of_device_is_compatible(dev->of_node, "qcom,sdm660-bimc"))
- 			qp->is_bimc_node = true;
--- 
-2.33.0
-
+All patches in the series applied as 5.16 material, thanks!
