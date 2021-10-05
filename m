@@ -2,215 +2,212 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 448F842333E
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Oct 2021 00:09:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7A6A42335D
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Oct 2021 00:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231304AbhJEWLe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Oct 2021 18:11:34 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:46465 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbhJEWLc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Oct 2021 18:11:32 -0400
+        id S236585AbhJEWVd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Oct 2021 18:21:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42830 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230477AbhJEWVc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Oct 2021 18:21:32 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71EB7C061749;
+        Tue,  5 Oct 2021 15:19:41 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id u18so1904112lfd.12;
+        Tue, 05 Oct 2021 15:19:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1633471781; x=1665007781;
-  h=subject:from:to:cc:references:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=zBChwbKdDGyJZU9xC/GNu6BVvU1QLad7EtrmHk6KWEU=;
-  b=LejXa83SGeKAcwD+SZMkPB2vaGRKpAVlTS5rCxXRWlTK+5L3HaNUSCcN
-   kRq7o9DihdYmVFkntlKJ3qMyWcPMuL+weI1Pfct9AtK08CK9kqWsYb9nk
-   2Qs0mi5mz3Pvo/4GtE6GK3zrewD74aHBHnkTVBB6RPJ+32+/3ih2COeFR
-   0=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 05 Oct 2021 15:09:41 -0700
-X-QCInternal: smtphost
-Received: from nalasex01a.na.qualcomm.com ([10.47.209.196])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2021 15:09:40 -0700
-Received: from [10.47.233.232] (10.49.16.6) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7; Tue, 5 Oct 2021
- 15:09:39 -0700
-Subject: Re: [PATCH v2] thermal: Fix a NULL pointer dereference
-From:   Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        David Collins <quic_collinsd@quicinc.com>,
-        Manaf Meethalavalappu Pallikunhi <manafm@codeaurora.org>,
-        Ram Chandrasekar <rkumbako@codeaurora.org>,
-        <stable@vger.kernel.org>
-References: <1631041289-11804-1-git-send-email-quic_subbaram@quicinc.com>
- <55999619-22c7-63fd-7006-f91f144e4a60@linaro.org>
- <7930989e-baf1-04f4-59ad-d65122149b9b@quicinc.com>
-Message-ID: <f869ea55-f071-f971-282e-31878a0f0b68@quicinc.com>
-Date:   Tue, 5 Oct 2021 15:09:39 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=cm3t0jHYi60ikbjIFrElH5F3+z5ZebZ+trrzKBFfgQI=;
+        b=qTAIEXIVB1/IgtvGdtrN/gmvUv6mTJMWYvN+by7UBNwUQz1edq9ynn5KZ4VakUYvgO
+         zdJ521ZSZKHguY4o7B00h080n6+hpVFgPtipWPhr7vdfUedARgQ4xE4HH2lbru46MeqC
+         A5BXLTY8VINH/AMBjZEF/K2gSikuRXhSI2fF9O8ZK3khdgYy8AFAvm2l22TZw2+cK0Up
+         VqGWxTT463F7ck5TyDg0STieTJ5C+qvpbnUQ5kqq4ulMywcZp+kTXt8lcdefcaH+dgKu
+         zq6l/FilsorGHNG/QzimfNCPZRYUNo7SlGD/xBo5UydUfU+gcPwF7E7ckKKrvoh9klYt
+         Rvdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=cm3t0jHYi60ikbjIFrElH5F3+z5ZebZ+trrzKBFfgQI=;
+        b=6hhnqyt2XuRgMYLBNC2nV0yG8PsZANtBv+Y+ujv3fVytDqGArizH5YtwnLATxAsUJt
+         OkqBwMbf78zRVcV/+qsOokjE5H3F1aeZGzVtXS+pSe1PoQtFgIESne4ZTE+qLvuM/537
+         Z289c3Z5jopFyyvmvlAzPZe7dkLyna195R2rycn/fFg9FLjF3bN4evkWrl88Ub2T4QNt
+         KA7sENlEZpFF5OvfJWwhjFl/nDzpJ0kMWoys51uuzC5BuPDzs6oSojwX9QtzgH0eBTO0
+         BDoETraINfqc+1dWTIr2Ii28Uuje+EDoIRhyd1noX9fHWJWCZRzdWE9KvHyAMbmhrUnb
+         ZzFA==
+X-Gm-Message-State: AOAM533jef9d3xmw1Rrve3XH/J5Rejztw9KP0UV1G8UZAUuJ+QLFjqbi
+        eYdIGCVA+23UkRg6+MwsUe8=
+X-Google-Smtp-Source: ABdhPJx7DQPDGWTTKyBBQ7on8Zoc9EHE4rfD8+/mmsH+2cs2olWIZx3pD3Yp7kL6x0TZhEN3swGrdg==
+X-Received: by 2002:a2e:5cc6:: with SMTP id q189mr24035068ljb.82.1633472379484;
+        Tue, 05 Oct 2021 15:19:39 -0700 (PDT)
+Received: from [192.168.2.145] (79-139-163-57.dynamic.spd-mgts.ru. [79.139.163.57])
+        by smtp.googlemail.com with ESMTPSA id d19sm2088024lfv.74.2021.10.05.15.19.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Oct 2021 15:19:39 -0700 (PDT)
+Subject: Re: [PATCH v13 06/35] clk: tegra: Support runtime PM and power domain
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Nishanth Menon <nm@ti.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        David Heidelberg <david@ixit.cz>
+References: <20210926224058.1252-1-digetx@gmail.com>
+ <20210926224058.1252-7-digetx@gmail.com>
+ <CAPDyKFq+LS4Jr1GyC-a-tGWPzGH0JxfJ9wKY=uQEBGYm952azw@mail.gmail.com>
+ <24101cd6-d3f5-1e74-db39-145ecd30418b@gmail.com>
+ <CAPDyKFreK7976PJL-1zySoza_yXM7rMQ64aODWUZ+U3L-uCa0w@mail.gmail.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <4bdba8a2-4b9b-ed7d-e6ca-9218d8200a85@gmail.com>
+Date:   Wed, 6 Oct 2021 01:19:37 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <7930989e-baf1-04f4-59ad-d65122149b9b@quicinc.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <CAPDyKFreK7976PJL-1zySoza_yXM7rMQ64aODWUZ+U3L-uCa0w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 9/17/21 1:06 PM, Subbaraman Narayanamurthy wrote:
-> On 9/17/21 2:31 AM, Daniel Lezcano wrote:
->> On 07/09/2021 21:01, Subbaraman Narayanamurthy wrote:
->>> of_parse_thermal_zones() parses the thermal-zones node and registers a
->>> thermal_zone device for each subnode. However, if a thermal zone is
->>> consuming a thermal sensor and that thermal sensor device hasn't probed
->>> yet, an attempt to set trip_point_*_temp for that thermal zone device
->>> can cause a NULL pointer dereference. Fix it.
->>>
->>>  console:/sys/class/thermal/thermal_zone87 # echo 120000 > trip_point_0_temp
->>>  ...
->>>  Unable to handle kernel NULL pointer dereference at virtual address 0000000000000020
->>>  ...
->>>  Call trace:
->>>   of_thermal_set_trip_temp+0x40/0xc4
->>>   trip_point_temp_store+0xc0/0x1dc
->>>   dev_attr_store+0x38/0x88
->>>   sysfs_kf_write+0x64/0xc0
->>>   kernfs_fop_write_iter+0x108/0x1d0
->>>   vfs_write+0x2f4/0x368
->>>   ksys_write+0x7c/0xec
->>>   __arm64_sys_write+0x20/0x30
->>>   el0_svc_common.llvm.7279915941325364641+0xbc/0x1bc
->>>   do_el0_svc+0x28/0xa0
->>>   el0_svc+0x14/0x24
->>>   el0_sync_handler+0x88/0xec
->>>   el0_sync+0x1c0/0x200
->>>
->>> While at it, fix the possible NULL pointer dereference in other
->>> functions as well: of_thermal_get_temp(), of_thermal_set_emul_temp(),
->>> of_thermal_get_trend().
->>>
->>> Cc: stable@vger.kernel.org
->>> Suggested-by: David Collins <quic_collinsd@quicinc.com>
->>> Signed-off-by: Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
->>> ---
->>> Changes for v2:
->>> - Added checks in of_thermal_get_temp(), of_thermal_set_emul_temp(), of_thermal_get_trend().
->>>
->>>  drivers/thermal/thermal_of.c | 9 ++++++---
->>>  1 file changed, 6 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
->>> index 6379f26..9233f7e 100644
->>> --- a/drivers/thermal/thermal_of.c
->>> +++ b/drivers/thermal/thermal_of.c
->>> @@ -89,7 +89,7 @@ static int of_thermal_get_temp(struct thermal_zone_device *tz,
->>>  {
->>>  	struct __thermal_zone *data = tz->devdata;
->>>  
->>> -	if (!data->ops->get_temp)
->>> +	if (!data->ops || !data->ops->get_temp)
->> comment (1)
+05.10.2021 16:10, Ulf Hansson пишет:
+> On Sat, 2 Oct 2021 at 22:44, Dmitry Osipenko <digetx@gmail.com> wrote:
 >>
->> AFAICT, if data->ops != NULL then data->ops->get_temp is also != NULL
->> because of the code allocating/freeing the ops structure.
+>> 01.10.2021 15:32, Ulf Hansson пишет:
+>>>> +static __maybe_unused int tegra_clock_pm_suspend(struct device *dev)
+>>>> +{
+>>>> +       struct tegra_clk_device *clk_dev = dev_get_drvdata(dev);
+>>>> +
+>>>> +       /*
+>>>> +        * Power management of the clock is entangled with the Tegra PMC
+>>>> +        * GENPD because PMC driver enables/disables clocks for toggling
+>>>> +        * of the PD's on/off state.
+>>>> +        *
+>>>> +        * The PMC GENPD is resumed in NOIRQ phase, before RPM of the clocks
+>>>> +        * becomes available, hence PMC can't use clocks at the early resume
+>>>> +        * phase if RPM is involved. For example when 3d clock is enabled,
+>>>> +        * it may enable the parent PLL clock that needs to be RPM-resumed.
+>>>> +        *
+>>>> +        * Secondly, the PLL clocks may be enabled by the low level suspend
+>>>> +        * code, so we need to assume that PLL is in enabled state during
+>>>> +        * suspend.
+>>>> +        *
+>>>> +        * We will keep PLLs and system clock resumed during suspend time.
+>>>> +        * All PLLs on all SoCs are low power and system clock is always-on,
+>>>> +        * so practically not much is changed here.
+>>>> +        */
+>>>> +
+>>>> +       return clk_prepare(clk_dev->hw->clk);
+>>> I am trying to understand, more exactly, what you intend to achieve
+>>> with the clk_prepare() here. It looks a bit weird, to me. Can you try
+>>> to elaborate a bit more on the use case?
 >>
->> The tests can be replaced by (!data->ops), no ?
-> Thanks Daniel for reviewing the patch.
->
-> I agree that even if a sensor module is unregistered, that would call
-> "thermal_zone_of_sensor_unregister" which would eventually set NULL on
-> get_temp() and get_trend() and "tzd->ops" as well.
->
-> However, of_thermal_get_temp() is trying to call "data->ops->get_temp"
-> which comes from a sensor driver when it registers. There is no
-> guarantee that it would be non-NULL right?
->
-> Thinking of which, I think having both checks would be valid.
+>> The Tegra GENPD driver enable/disable clocks when domain is turned on.
+> 
+> Okay. I noticed that in tegra_genpd_power_on(). And the same clocks
+> are enabled/disabled also in tegra_genpd_power_off(), when powering
+> off the PM domain.
+> 
+> So I guess the problem kind of exists for tegra_genpd_power_off() too?
 
-Hi Daniel,
-Do you still have any concerns with this change?
+Both OFF/ON are affected by the same problem. If domain was already
+turned OFF before genpd_suspend_noirq(), then the OFF problem isn't visible.
 
-Thanks,
-Subbaraman
+I reproduced the OFF problem by removing the clk prepare/unprepare from
+the suspend/resume of the clk driver and making some extra changes to
+clock tree topology and etc to trigger the problem on Nexus 7.
 
->>>  		return -EINVAL;
->>>  
->>>  	return data->ops->get_temp(data->sensor_data, temp);
->>> @@ -186,6 +186,9 @@ static int of_thermal_set_emul_temp(struct thermal_zone_device *tz,
->>>  {
->>>  	struct __thermal_zone *data = tz->devdata;
->>>  
->>> +	if (!data->ops || !data->ops->set_emul_temp)
->>> +		return -EINVAL;
->>> +
->> comment (2)
->>
->> The test looks pointless here (I mean both of them).
->>
->> If of_thermal_set_emul_temp() is called it is because the callback was
->> set in thermal_zone_of_add_sensor().
->>
->> This one does:
->>
->> 	tz->ops = ops;
->>
->> and
->> 	if (ops->set_emul_temp)
->>                 tzd->ops->set_emul_temp = of_thermal_set_emul_temp;
->>
->> If I'm not wrong if we are called, then data->ops &&
->> data->ops->set_emul_temp is always true, right ?
->>
-> I've not exercised this condition yet. However, the original problem
-> we've observed was when thermal HAL was trying to set trip thresholds
-> on a thermal zone device for which the sensor device is not probed yet.
-> This had happened randomly because of vendor modules taking time to be
-> loaded and probed. I don't know if there would be any userspace entity
-> that can try to set emulated temperature for a thermal zone even before
-> a sensor device is probed.
->
-> Without a sensor driver probed, "tz->ops" would not have a valid pointer
-> right? So, I think checking for "data->ops" should be good.
->
-> Another possibility is, a sensor might not have "set_emul_temp" callback.
-> So checking for "ops->set_emul_temp" should be still valid.
->
->>>  	return data->ops->set_emul_temp(data->sensor_data, temp);
->>>  }
->>>  
->>> @@ -194,7 +197,7 @@ static int of_thermal_get_trend(struct thermal_zone_device *tz, int trip,
->>>  {
->>>  	struct __thermal_zone *data = tz->devdata;
->>>  
->>> -	if (!data->ops->get_trend)
->>> +	if (!data->ops || !data->ops->get_trend)
->>>  		return -EINVAL;
->> Same comment as (1)
-> of_thermal_get_trend() is trying to call "data->ops->get_trend" which
-> comes from a sensor driver when it registers. From what I can see,
-> there are lot of drivers which don't pass "get_trend" in their ops.
-> So there is no guarantee that it would be non-NULL right?
->
-> Thinking of which, I think having both checks would be valid.
->
->>>  	return data->ops->get_trend(data->sensor_data, trip, trend);
->>> @@ -301,7 +304,7 @@ static int of_thermal_set_trip_temp(struct thermal_zone_device *tz, int trip,
->>>  	if (trip >= data->ntrips || trip < 0)
->>>  		return -EDOM;
->>>  
->>> -	if (data->ops->set_trip_temp) {
->>> +	if (data->ops && data->ops->set_trip_temp) {
->> Same comment as (2)
-> Without a sensor driver probed, "tz->ops" would not have a valid pointer right?
-> So, I think checking for "data->ops" should be good. Another possibility is, a
-> sensor device might not have "set_trip_temp" callback but just "set_trips".
->
-> So checking for "data->ops->set_trip_temp" might be still valid.
->
->>>  		int ret;
->>>  
->>>  		ret = data->ops->set_trip_temp(data->sensor_data, trip, temp);
+tegra-pmc 7000e400.pmc: failed to turn off PM domain heg: -13
+
+I happens from genpd_suspend_noirq() -> tegra_genpd_power_off() -> clk
+-> GENPD -> I2C -> runtime-pm.
+
+-13 is EACCES, it comes from the runtime PM of I2C device. RPM is
+prohibited/disabled during late (NOIRQ) suspend by the drivers core.
+
+>> This can't be done during early system resume, when domains are getting
+>> turned on by the drivers core, because when clock is enabled, it's
+>> getting prepared (RPM-resumed) and this preparation fails because
+>> performance state of the clock goes up and it doesn't work during the
+>> early resume time since I2C, which applies the state to hardware, is
+>> suspended and can't work at that early time.
+> 
+> This sounds complicated and I still don't quite follow all of it, sorry.
+> 
+> So, tegra_genpd_power_on() gets called from genpd_resume_noirq(), when
+> the first device of the attached devices to genpd gets resumed. And
+> vice versa for tegra_genpd_power_off() and genpd_suspend_noirq().
+> 
+> Are you saying that trying to enable/disable clocks from
+> tegra_genpd_power_on|off() in these paths doesn't work, because it
+> would also require the performance state to be changed, which would
+> fail because the I2C bus/driver is suspended?
+
+Yes, but it's actually not I2C bus/driver that is suspended, it's
+runtime PM that is unavailable during NOIRQ. The I2C driver itself is
+suspended after domains are turned OFF and resumed before they are
+enabled. It's just runtime PM API that is unavailable. I'm wondering if
+this could be changed.
+
+I'm also wondering if we could add some 'was_enabled' flag to GENPDs,
+setting it by genpd_suspend_noirq() for the enabled domains, and then
+powering-on GENPDs from genpd_resume_noirq() only if they were in the
+enabled state during genpd_suspend_noirq() time. It actually puzzled me
+for a quite long time why GENPD core enables domains unconditionally
+during early resume. This should solve a part of the problem and it
+makes suspend/resume a bit safer because there is a smaller chance to
+crash hardware during suspend, at least it's easier to debug.
+
+>> Secondly, Tegra has arch-specific low level assembly which touches
+>> clocks during last phase of system suspend and in the beginning of
+>> resume. Hence, clocks should stay prepared during suspend just because
+>> technically clock should be prepared before it can be enabled.
+> 
+> So the low level code is gating and ungating the clock behind the back
+> of the clock driver then? Why is that done like that, more exactly?
+
+I revisited that code again, and it shouldn't touch the clocks.
+I changed that code to not toggle the clocks [1] sometime ago, but
+forgot about it.
+
+[1] https://git.kernel.org/linus/680ae4452
+
+>>> Is this rather about making sure that the clock's corresponding PM
+>>> domain stays powered on during system suspend? In that case, I think
+>>> there may be an alternative option....
 >>>
+>>
+>> This is not about domain staying powered on, this is about keeping the
+>> performance state of the domain high during suspend.
+> 
+> Right, so the PM domain managed in tegra_genpd_power_on|off() can
+> still be powered on/off, as long as the clock remains ungated?
 
+Not ungated, but prepared.
