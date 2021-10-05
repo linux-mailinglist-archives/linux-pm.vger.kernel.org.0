@@ -2,147 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EB18422EE8
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Oct 2021 19:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C00EA422EEF
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Oct 2021 19:17:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236749AbhJERSH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Oct 2021 13:18:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57318 "EHLO
+        id S234459AbhJERTF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Oct 2021 13:19:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236636AbhJERSF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Oct 2021 13:18:05 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D97E5C061749;
-        Tue,  5 Oct 2021 10:16:14 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id u18so89541742lfd.12;
-        Tue, 05 Oct 2021 10:16:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=v4VMlYai/5OJD6I0jXVUBp7T7QQDEKF1EDfzlyrXPNg=;
-        b=W2HYfURkJzDMqxvMvdLnaSxyL8uT7r1csfbSZPSbXORQw+cwWFtMynJRUEG4LiQrHQ
-         y3v5acYIRN1Eb0FbSRLCSIRtUZRGATp/wXu0GpAF7MIKkyEe30yYqs44aRZ5hx7PQUf8
-         KTIq6kvEdh07WxUJ9lahyZFbc91AomDi579Y3/gpCjlzb6mopUwQ7ho2PCW0cuccDWMY
-         /i99LFk5tTWbSOuutGf0fRJHd37tPZRn46J6NSoa+sUFqOvBAVR+EQT9iPI/71vRNDUs
-         E1DUIcTLGVE0YH8x38A9SKJivF5TQbdR1jagf785PZye81GIeWabHB+XUJ5q/1UXW+WG
-         AQEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=v4VMlYai/5OJD6I0jXVUBp7T7QQDEKF1EDfzlyrXPNg=;
-        b=DuF4QpkjwFbd4dwlYAhig4rmQJm8ielyZnZ9Ys+SAdiAecq64Ir6wFBUuPbV4j1M+n
-         l8WZxK7bHDsWhMoefwJ8ThuVZM6f2HxW6SJP+kANUWoH6YuK7xvfuAofdrEp+uPjbDQt
-         e2JlK9dJNKr5t7emnh1CplDlaTY+g0h+lGvquMTkLSNTGGSaona6zhrrvCtDWTpQeoF8
-         QNlx7oJuIC2y+Kr52lLRm+BSzcT2/n3hzqhc/wxoPLMLqcZ4IiNofE3rn4A0ThxHZhb+
-         hwVsNNjbCj25/cAMYZBmkAeSgI+512ATeaK867OLdlENIY7XmKIqAT9NIGCr+lslVwWu
-         6dlQ==
-X-Gm-Message-State: AOAM530Y30SpHEqmWsHTtTGfeSHetiuNcwwgRNU1PxSomh39kkYnrjs/
-        4rL44LG/rgUyZvo76ZOMgsQ=
-X-Google-Smtp-Source: ABdhPJzFxn+EEvAfXINlDGqbDWfWJzkpl0QRwm+Z1jKxlyPCyoz5MyhKfZrnAr2zjaXtazuDCKJIlw==
-X-Received: by 2002:a05:6512:10d0:: with SMTP id k16mr4573650lfg.530.1633454173285;
-        Tue, 05 Oct 2021 10:16:13 -0700 (PDT)
-Received: from [192.168.2.145] (79-139-163-57.dynamic.spd-mgts.ru. [79.139.163.57])
-        by smtp.googlemail.com with ESMTPSA id o12sm2013505lft.254.2021.10.05.10.16.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Oct 2021 10:16:12 -0700 (PDT)
-Subject: Re: [PATCH v13 13/35] drm/tegra: gr2d: Support generic power domain
- and runtime PM
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
+        with ESMTP id S234938AbhJERTE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Oct 2021 13:19:04 -0400
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9BB2C061749;
+        Tue,  5 Oct 2021 10:17:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=Content-Transfer-Encoding:Content-Type:
+        References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-ID
+        :Content-Description; bh=Wew2RwQRuWp0xOeGxUW+24Kcrt1I9ESupnkXfF0tLJI=; b=mzR+
+        Zvm7wpsXbDkkyMjsVY5N4dLp5BgzeOtDzj8W7ekrljcUJ1ad5z3huW8PYY5sI4QPf9os1kduGsDp5
+        GCQYmJ8wy0whJpWleW5/6GW13utc314F92nVorAe96+Kunz/4midC58uZl1RC4YrtDmErWco+4P1I
+        Wmm3L9h1cno3WZBBCNKQXs5sd9KJq73SG8CXMH8IyJWLlrW1FP5LDfIHiDa8hyOHRWoGWJdWru8Pd
+        MTtYCfN7w7PLdtDLFCk0vurY2Ou7oAXfW4sgSAyRMP8WapIbK1GZWk8T5L+z2P2L7Q4x++pn21YND
+        YdxqhayTxX8R26+NTBhSzH82ViamPg==;
+Received: from [81.174.171.191] (helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <john@metanate.com>)
+        id 1mXo3v-0002f8-K4; Tue, 05 Oct 2021 18:17:07 +0100
+Date:   Tue, 5 Oct 2021 18:17:06 +0100
+From:   John Keeping <john@metanate.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     linux-rt-users@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        David Heidelberg <david@ixit.cz>
-References: <20210926224058.1252-1-digetx@gmail.com>
- <20210926224058.1252-14-digetx@gmail.com>
- <CAPDyKFpzhv1UxjM0q5AWHVxTWC_cCO_Kg_6exO0o_=EoVvjo+w@mail.gmail.com>
- <aad7a508-7fb5-3418-f902-def80c365094@gmail.com>
- <CAPDyKFppSuP6FfaBaGn3o+8WvTT=vJ8XMzZ47WPQ1JKiUYyEpw@mail.gmail.com>
- <8d75436d-864a-7ce0-ba53-daa8b663035a@gmail.com>
- <CAPDyKFpqs5gUcym4q+GuiJy13eXqjEnx-eFdUT4bQpcfPAOEYw@mail.gmail.com>
- <f5b5e06a-71ed-1250-f0ad-692062e00e01@gmail.com>
- <CAPDyKFpWzLdKr0bYX4VYwNpPuJNEs=weEpNpDH6zfv9e8SaxJQ@mail.gmail.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <65f5ea6a-5d04-57cc-f4e4-bf29f22af7f0@gmail.com>
-Date:   Tue, 5 Oct 2021 20:16:11 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH RT] PM: runtime: avoid retry loops on RT
+Message-ID: <20211005181706.66102578.john@metanate.com>
+In-Reply-To: <CAJZ5v0gPwUQzGBa2VDeC3xAF9zJVm486BC0eue10-urJ8Xz+iw@mail.gmail.com>
+References: <20211005155427.1591196-1-john@metanate.com>
+        <CAJZ5v0gPwUQzGBa2VDeC3xAF9zJVm486BC0eue10-urJ8Xz+iw@mail.gmail.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <CAPDyKFpWzLdKr0bYX4VYwNpPuJNEs=weEpNpDH6zfv9e8SaxJQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-Authenticated: YES
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-...
->> It's not a problem to change this patchset. The problem is that if
->> you'll grep mainline for 'pm_runtime_disable', you will find that there
->> are a lot of drivers in a potential trouble.
-> 
-> Let's start by fixing this patchset, please - then we can consider
-> what to do with the other cases separately.
+On Tue, 5 Oct 2021 18:38:27 +0200
+"Rafael J. Wysocki" <rafael@kernel.org> wrote:
 
-Yeah, should be better to discuss it separately.
+> On Tue, Oct 5, 2021 at 6:14 PM John Keeping <john@metanate.com> wrote:
+> >
+> > With PREEMPT_RT spin_unlock() is identical to spin_unlock_irq() so there
+> > is no reason to have a special case using the former.  Furthermore,
+> > spin_unlock() enables preemption meaning that a task in RESUMING or
+> > SUSPENDING state may be preempted by a higher priority task running
+> > pm_runtime_get_sync() leading to a livelock.
+> >
+> > Use the non-irq_safe path for all waiting so that the waiting task will
+> > block.
+> >
+> > Note that this changes only the waiting behaviour of irq_safe, other
+> > uses are left unchanged so that the parent device always remains active
+> > in the same way as !RT.
+> >
+> > Signed-off-by: John Keeping <john@metanate.com>  
+> 
+> So basically, the idea is that the irq_safe flag should have no effect
+> when CONFIG_PREEMPT_RT is set, right?
+> 
+> Wouldn't it be cleaner to make it not present at all in that case?
 
-...
->>  void __pm_runtime_disable(struct device *dev, bool check_resume)
->>  {
->> +       flush_work(&dev->power.work);
->> +
-> 
-> What about the latency this may introduce? I am not sure that is
-> acceptable here!?
+Yes, just replacing pm_runtime_irq_safe() with an empty function would
+also fix it, but I'm not sure if that will have unexpected effects from
+the parent device suspending/resuming, especially in terms of latency
+for handling interrupts.
 
-I'm not aware about any code which relies on the original 'cancelling'
-behaviour, perhaps Rafael should have more insight.
+> > ---
+> >  drivers/base/power/runtime.c | 9 +++++----
+> >  1 file changed, 5 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+> > index 96972d5f6ef3..5e0d349fab4e 100644
+> > --- a/drivers/base/power/runtime.c
+> > +++ b/drivers/base/power/runtime.c
+> > @@ -347,8 +347,9 @@ static int __rpm_callback(int (*cb)(struct device *), struct device *dev)
+> >  {
+> >         int retval = 0, idx;
+> >         bool use_links = dev->power.links_count > 0;
+> > +       bool irq_safe = dev->power.irq_safe && !IS_ENABLED(CONFIG_PREEMPT_RT);
+> >
+> > -       if (dev->power.irq_safe) {
+> > +       if (irq_safe) {
+> >                 spin_unlock(&dev->power.lock);
+> >         } else {
+> >                 spin_unlock_irq(&dev->power.lock);
+> > @@ -376,7 +377,7 @@ static int __rpm_callback(int (*cb)(struct device *), struct device *dev)
+> >         if (cb)
+> >                 retval = cb(dev);
+> >
+> > -       if (dev->power.irq_safe) {
+> > +       if (irq_safe) {
+> >                 spin_lock(&dev->power.lock);
+> >         } else {
+> >                 /*
+> > @@ -596,7 +597,7 @@ static int rpm_suspend(struct device *dev, int rpmflags)
+> >                         goto out;
+> >                 }
+> >
+> > -               if (dev->power.irq_safe) {
+> > +               if (dev->power.irq_safe && !IS_ENABLED(CONFIG_PREEMPT_RT)) {
+> >                         spin_unlock(&dev->power.lock);
+> >
+> >                         cpu_relax();
+> > @@ -777,7 +778,7 @@ static int rpm_resume(struct device *dev, int rpmflags)
+> >                         goto out;
+> >                 }
+> >
+> > -               if (dev->power.irq_safe) {
+> > +               if (dev->power.irq_safe && !IS_ENABLED(CONFIG_PREEMPT_RT)) {
+> >                         spin_unlock(&dev->power.lock);
+> >
+> >                         cpu_relax();
+> > --
+> > 2.33.0
+> >  
 
-...
->> The sysfs rpm-forbid is a separate problem and it's less troublesome
->> since it requires root privileges. It's also not something that
->> userspace touches casually. For now I don't know what could be done
->> about it.
-> 
-> As I said, the common method to address this problem is to run the
-> following sequence:
-> 
-> pm_runtime_get_sync()
-> "power off the device"
-> pm_runtime_disable()
-> pm_runtime_put_noidle()
-> 
-> This works even if user space, via sysfs, has triggered a call to
-> pm_runtime_forbid(). Or doesn't it?
-> 
-> If you don't like it, pm_runtime_force_suspend() should work too, at
-> least for your cases, I believe.
-
-I'll update the patches, thank you.
