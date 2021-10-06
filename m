@@ -2,150 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67D124242A8
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Oct 2021 18:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A4AA4242BD
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Oct 2021 18:33:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235957AbhJFQae (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Oct 2021 12:30:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37678 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239412AbhJFQab (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Oct 2021 12:30:31 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4598C061765;
-        Wed,  6 Oct 2021 09:28:38 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 882471F44D20
-Received: by earth.universe (Postfix, from userid 1000)
-        id E96623C0CA8; Wed,  6 Oct 2021 18:28:34 +0200 (CEST)
-Date:   Wed, 6 Oct 2021 18:28:34 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@weissschuh.net>,
-        =?utf-8?Q?Nicol=C3=B2?= Piazzalunga <nicolopiazzalunga@gmail.com>,
-        linux-pm@vger.kernel.org,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        Thomas Koch <linrunner@gmx.net>,
-        "smclt30p@gmail.com" <smclt30p@gmail.com>
-Subject: Re: [RFC] add standardized attributes for force_discharge and
- inhibit_charge
-Message-ID: <20211006162834.ujxfcn7jjrdl4kjx@earth.universe>
-References: <21569a89-8303-8573-05fb-c2fec29983d1@gmail.com>
- <77e39b3e-fa51-54fe-1898-4f43895ac2c6@redhat.com>
- <20211005162352.emaoveimhkp5uzfw@earth.universe>
- <06fa7a23-4dec-cba9-4e00-c00cf0bf9337@redhat.com>
- <20211005220630.zurfqyva44idnplu@earth.universe>
- <8cbf7671-d9ee-6bfc-d8fd-d360ccb2c595@redhat.com>
- <f2e99c38-2e2f-4777-8318-fb4dae6e8bf1@t-8ch.de>
- <04693bb2-9fd1-59fa-4c21-99848e8aa4c4@redhat.com>
+        id S231528AbhJFQfh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Oct 2021 12:35:37 -0400
+Received: from mail-oi1-f182.google.com ([209.85.167.182]:37545 "EHLO
+        mail-oi1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231175AbhJFQfh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Oct 2021 12:35:37 -0400
+Received: by mail-oi1-f182.google.com with SMTP id w206so4814214oiw.4;
+        Wed, 06 Oct 2021 09:33:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1j54Hi+9SvvzYGXgri/LfJoVt95gHrji9h1JTTlfc8s=;
+        b=M9CHYGE06Jari8MkqyipDI6K7KYl/ZRhwL7a8l3bAkfhAVNq7xVZJU1Uui6TWag6/7
+         I1QMrzojKfg1XRxk9LU4MULpTAcW6VjHf/ejFf9hpgdegNmAU5FtEGGAuKBjKkToPthX
+         YUWkrYY5tXc5P3KQ+uMYI3+LJw5hhqrL4qRNWD69qwg7bPB2GA9VLG3s3nkXMOqq4j7z
+         n0ZSdhmrJl9zyCztXcdBSfz42YpFuAI44JlVZlgZplxIQiDOxCU/VY9SoZEOLWGoix8a
+         BZww3/cPr5qGnvQ0voUxlgWtzNznkE7A7wGCEy0TT2Qy9yWgDW4lzK9HovP6ETS67Zfx
+         JLfQ==
+X-Gm-Message-State: AOAM533TbA5HzRmMHqrz5tn89ztLHnbRcQ/adj/VbarYUdivwfD9wY7m
+        mnSMwyDPw3s6vS5JhhjdqFxYNGyClN175HYNW90=
+X-Google-Smtp-Source: ABdhPJyaLmK0B69/hQ8esizcD0gT2ybEV86tgEHX/mOV9UzZvkZYkmgeEhLicEB//8w30lt7CiTv9YSyORGC69fSj0E=
+X-Received: by 2002:aca:6009:: with SMTP id u9mr8226144oib.71.1633538024876;
+ Wed, 06 Oct 2021 09:33:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uis4nyvfw5i2c7cy"
-Content-Disposition: inline
-In-Reply-To: <04693bb2-9fd1-59fa-4c21-99848e8aa4c4@redhat.com>
+References: <1633537640-15800-1-git-send-email-mojha@codeaurora.org>
+In-Reply-To: <1633537640-15800-1-git-send-email-mojha@codeaurora.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 6 Oct 2021 18:33:34 +0200
+Message-ID: <CAJZ5v0iee_7fnrQsxBTg9A+GOtUqsK8c5RcEbYzQE=gd-Z3bRQ@mail.gmail.com>
+Subject: Re: [PATCH] PM / suspend: Abort suspend if somebody holds wakelock
+To:     Mukesh Ojha <mojha@codeaurora.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
---uis4nyvfw5i2c7cy
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Wed, Oct 06, 2021 at 05:27:22PM +0200, Hans de Goede wrote:
-> On 10/6/21 4:49 PM, Thomas Wei=DFschuh wrote:
-> > On 2021-10-06T10:10+0200, Hans de Goede wrote:
-> >> On 10/6/21 12:06 AM, Sebastian Reichel wrote:
-> >>> On Tue, Oct 05, 2021 at 08:01:12PM +0200, Hans de Goede wrote:
-> >>>> Right, force-discharge automatically implies charging is
-> >>>> being inhibited, so putting this in one file makes sense.
-> >>>>
-> >>>> Any suggestion for the name of the file?
-> >>>
-> >>> Maybe like this?
-> >>>
-> >>> ---------------------------------------------------------------------
-> >>> What: /sys/class/power_supply/<supply_name>/charge_behaviour
-> >>> Date: October 2021
-> >>> Contact: linux-pm@vger.kernel.org
-> >>> Description:
-> >>>  Configure battery behaviour when a charger is being connected.
-> >>>
-> >>>  Access: Read, Write
-> >>>
-> >>>  Valid values:
-> >>>
-> >>>  0: auto / no override
-> >>>     When charger is connected battery should be charged
-> >>>  1: force idle
-> >>>     When charger is connected the battery should neither be charged
-> >>>     nor discharged.
-> >>>  2: force discharge
-> >>>     When charger is connected the battery should be discharged
-> >>>     anyways.
-> >>> ---------------------------------------------------------------------
-> >>
-> >> That looks good to me. Although I just realized that some hw may
-> >> only support 1. or 2. maybe explicitly document this and that
-> >> EOPNOTSUPP will be reported when the value is not supported
-> >> (vs EINVAL for plain invalid values) ?
-> >=20
-> > Would that not force a userspace applications to offer all possibilitie=
-s to
-> > the user only to tell them that it's not supported?
-> > If the driver knows what is supported and what not it should make this
-> > discoverable without actually performing the operation.
-> >=20
-> > Maybe something along the lines of /sys/power/mem_sleep.
->=20
-> Good point, but something like /sys/power/mem_sleep works
-> very differently then how all the other power_supply properties work.
-
-Actually we already use this format in power-supply for USB
-types, implemented in power_supply_show_usb_type().
-
-> In general if something is supported or not on a psy class
-> device is communicated by the presence / absence of attributes.
+On Wed, Oct 6, 2021 at 6:27 PM Mukesh Ojha <mojha@codeaurora.org> wrote:
 >
-> So I think we should move back to having 2 separate attributes
-> for this after all; and group the 2 together in the doc and
-> document that enabling (setting to 1) one of force_charge /
-> inhibit_charge automatically clears the setting of the other.
->=20
-> Then the availability of the features can simply be probed
-> by checking for the presence of the property files.
+> There could be a scenario, where request_firmware() call results in
+> user land process trying to load firmwares into memory and
+> parallely one miscellaneous process is trying to invoke manual
+> suspend and due to which user mode helper gets disabled during
+> freezing of processes and that aborts loading of firmware even
+> though request_firmware() thread has taken wakelock.
+>
+> Although, we are checking for any wakeup event inside
+> try_to_freeze_tasks() but that could be too late for the
+> above scenario.
+>
+> Let's add a check before freezing/disable user land process in
+> suspend path.
 
-If it's two files, then somebody needs to come up with proper=20
-names. Things like 'force_discharge' look sensible in this context,
-but on a system with two batteries (like some Thinkpads have) it
-is easy to confuse with "I want to discharge this battery before
-the other one (while no AC is connected)".
+If a laptop lid is closed and the system is expected to suspend, it
+must suspend.
 
--- Sebastian
+This takes precedence over the loading of firmware.  Sorry.
 
---uis4nyvfw5i2c7cy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmFdzq4ACgkQ2O7X88g7
-+pqPDxAAjKz/S74Q8ycLaWU2x9Z+jC8akx7/vbFdHMR18hK5W+yyJUZlO5U94856
-AQwtJD0KU2vJmUxoaZyG+BVlt0l55Jd3xNnYX3rqjWvVxbBMPCd7FHxvbCFKwhvh
-rKcVlWwUbCX9L/w9c5BUxX4X1gPOEdfhScoiTqdjlF3H4c5Dw1g3x2jQ3Kcr9ayP
-UruFqrCgWLC6oQaiccX2E+4iJtNgjudyIXy+y53T32SjIZIaBnsCjPc1jvbWi1bz
-ZadbCjij7w4VlA/VfIqIxmNvnK8aJPIukJvXbCFjbBFa85/aX5GsFzdbbj9N9tYx
-ZhJ3DOnArxxTkjnGaDv25yGRts7BirYRgb7fLwnSGrutFpGX8/mt26W5jSeZZOCJ
-U6cpiPce0sKP7ihNoKhc9cYXbETHEFN1jMmtGZvmHpFexF9oxO77lgFWzN/fmeKX
-PiTu2Dk4R6N8EShw57jA3c3GFsfziAY0qAgrzshixBsk4iOrXJrAzT+ANkMUQ0Ic
-SStuly/JtQYwHq9mKpeV2mufV2vLtEX1PfDUzK4v+vkmGGwGmeHeBtELqD1G4I52
-EZWqBOd9zKjRT3Wg/n3JrfIQGr9pr1BuQ/MzjMrL8R+3lcnnOw5WY14DuH6obA9f
-F4BC0FZ1nS2e6JzlPkyjTZqlu3D8/UqXrl5V5n3nJ3qbAyF/wbo=
-=I/Qa
------END PGP SIGNATURE-----
-
---uis4nyvfw5i2c7cy--
+> Signed-off-by: Mukesh Ojha <mojha@codeaurora.org>
+> ---
+>  kernel/power/process.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/kernel/power/process.c b/kernel/power/process.c
+> index 37401c9..3e0d3d6 100644
+> --- a/kernel/power/process.c
+> +++ b/kernel/power/process.c
+> @@ -124,6 +124,9 @@ int freeze_processes(void)
+>  {
+>         int error;
+>
+> +       if (pm_wakeup_pending())
+> +               return -EBUSY;
+> +
+>         error = __usermodehelper_disable(UMH_FREEZING);
+>         if (error)
+>                 return error;
+> --
+> Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center,
+> Inc. is a member of the Code Aurora Forum, a Linux Foundation Collaborative Project
+>
