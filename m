@@ -2,132 +2,210 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11FC9423DF8
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Oct 2021 14:44:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F3C1423E6F
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Oct 2021 15:11:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238460AbhJFMqW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Oct 2021 08:46:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41298 "EHLO
+        id S238474AbhJFNN3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Oct 2021 09:13:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238471AbhJFMqV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Oct 2021 08:46:21 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7B6C061749
-        for <linux-pm@vger.kernel.org>; Wed,  6 Oct 2021 05:44:29 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id i24so9457439lfj.13
-        for <linux-pm@vger.kernel.org>; Wed, 06 Oct 2021 05:44:29 -0700 (PDT)
+        with ESMTP id S231528AbhJFNN2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Oct 2021 09:13:28 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96CB1C061749
+        for <linux-pm@vger.kernel.org>; Wed,  6 Oct 2021 06:11:36 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id j5so10253360lfg.8
+        for <linux-pm@vger.kernel.org>; Wed, 06 Oct 2021 06:11:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ZKqaWxUs3sgD4tdQBsKfjQHFZ50A1AY57zWO3HzEaz0=;
-        b=p7O7r3g85OL9vVkRCa3Pfl3C5X1Jfj9eXjPMKWVLsEhkWogxYEcClklxYGVWQq8A2P
-         lEHLpYxRHgQW4uXVDoPHoUArsfuteRAt1b6CIA3FJ+EjNOe5zUT+AAgMFYGSzljSZ6TO
-         KoFs69gM6EHycwixuzD1lK9+dV8Me5UuqmZ9rtY57gAwYRrE057gkoCf0Uoi9LCBgyR9
-         7atsGho2QXhE+dDu8BmXr5Ur/SWTeiQD4sTYuNaaOKKOVXapsZOBOVO1z6VNsE4WUUbL
-         lGzoNXh0xJAquXu3k8a0vYJYpOb6yc9cyGw4+SDPKUnM/cHV804+EyEdWXyu6r4B41NO
-         0G0w==
+         :cc;
+        bh=mI7xxwj+mBUooKpJkWS2Vk+yUURNXRcCn/QPZmJzSqg=;
+        b=uCtda1JSEXExVjMHnUmKdQ3BIdH/nb6dx+16B2rJDTOTZ5L+dl9pwjI6McHaDVs76T
+         r1HkEACDjrLpNOmu14fvl+hUkN9q6wOBhJ0BTAAtXuMJaz/TFQtFcFzd5E4+z8175ja+
+         Nt2gYmOP5PvihienZx6bgrpNTgupaskzZLSWzuEVkCpLsCdQXg9vGZww5gS8J4xinCB5
+         WO1IY02bURGqitQC6AYQn0pzgdJF5PA4fsyaKm8yQBtmbAWTiNWWUIvHkmYHmZWqUGuk
+         cWPvvWxhbtG6QAvG70+OmH/hNgGUTGMFhs+zIRWrkkywsfGMqoL1520a7BNo0Jkq55Fe
+         0Wpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ZKqaWxUs3sgD4tdQBsKfjQHFZ50A1AY57zWO3HzEaz0=;
-        b=buTh/5q9Fg+DBqZkbNKVJlQx1CDzVupCXdnnUtVs4FSDVdDt4N8OzRQBV/P52NoBIC
-         0Z1Q+jnJdPoZaIH30Z2o1ffXeS6twQJr+UCcj3MdhgXvWTVOT4Fo5lzzIH9GYEP8VQIX
-         qw8eoG9aaPAKhBv2EzlU/ki3QccU411lOWoSJjucKHjeE5YkQ7wKbgprjPgDSxAP4oih
-         63ituJ+nMc0BMhrmIP5GBY3D+MU5qjgIBdOjdRb870eQn+GBgbRm2uM1hy79WmrgjyK3
-         gk5x8Qjyv/WsrkVAM4oemFnSqKulznkI+fX+EdfNRjslykfqE1Fq78F+zWFkKUJ2oF2N
-         zp6A==
-X-Gm-Message-State: AOAM532xUxLta4MqtWIapXetx3MixZ8HbbhIRBFGtYC2XwG4bfnH1WTS
-        E6VfELPBHydHi7TyxtmuOBG517pUAI+9hDZ14ZCYJw==
-X-Google-Smtp-Source: ABdhPJyXxeHpfLtxmaaabzboN40a7mbS25hsa4pgTQ9RD1C7UcaYr5BpIOQmIiI1EQ4OQX0iO/sLUK+eeOQGXFL/ZtE=
-X-Received: by 2002:ac2:4157:: with SMTP id c23mr9458293lfi.184.1633524257867;
- Wed, 06 Oct 2021 05:44:17 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=mI7xxwj+mBUooKpJkWS2Vk+yUURNXRcCn/QPZmJzSqg=;
+        b=7QCRI3MjRIF80sBP0onsuOPrJvU7dXW+BQkVm2z4+W4sQOmbD7NmRyADZtdfaeA/2A
+         RkOzzli5XVin4rOIgzwHf6+G5EyifbtSCcWYx0QSwfS9rkI1GtLNSIqig+DKfqpkSALW
+         6CPqkrt6SEFaKfNdJ0jKuTXTm6ktxcqFN/BF4BHepzTnT/SyifvvNJ3E3zHMrREYABJ9
+         UQ5GqCp+5pRc/3IwS98Z0qcBOz2GJ702wMJDMYdpebZDHy/jDKZkDWlwMsQbBBT0aU5M
+         G+XJuGkQ9pTvRi2SBUygT94uR1lz/ISOagwpxV33xORvQK1zxNPyMjiiSbmMMRRhBbNQ
+         41Yg==
+X-Gm-Message-State: AOAM5319t6pIbM5trtSSOE888G+DPKK/Ov8ViQlmWG6zKBg4iyduxzPy
+        vDnvkJJHpxhCumW2YkDPot4hQxln072cWtHw+QZFGw==
+X-Google-Smtp-Source: ABdhPJzLsdUjkwax4R9lmdaqTnoEmLJtzqFAoWzDO17wLjWLkX2JgyidZHNPcZ9xW1+o+067OuauRSi68xT/6d2Ci0I=
+X-Received: by 2002:a19:5f4b:: with SMTP id a11mr9618060lfj.373.1633525892201;
+ Wed, 06 Oct 2021 06:11:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210926224058.1252-1-digetx@gmail.com> <20210926224058.1252-7-digetx@gmail.com>
- <CAPDyKFq+LS4Jr1GyC-a-tGWPzGH0JxfJ9wKY=uQEBGYm952azw@mail.gmail.com>
- <24101cd6-d3f5-1e74-db39-145ecd30418b@gmail.com> <CAPDyKFreK7976PJL-1zySoza_yXM7rMQ64aODWUZ+U3L-uCa0w@mail.gmail.com>
- <4bdba8a2-4b9b-ed7d-e6ca-9218d8200a85@gmail.com> <74a47158-e2e4-5fd0-3f37-0b50d4ead4d9@gmail.com>
-In-Reply-To: <74a47158-e2e4-5fd0-3f37-0b50d4ead4d9@gmail.com>
+References: <20210929144451.113334-1-ulf.hansson@linaro.org>
+ <20210929144451.113334-2-ulf.hansson@linaro.org> <07e6821c-c221-e90d-c977-4d6b55c1ab8d@codeaurora.org>
+In-Reply-To: <07e6821c-c221-e90d-c977-4d6b55c1ab8d@codeaurora.org>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 6 Oct 2021 14:43:41 +0200
-Message-ID: <CAPDyKFr2-f1wM+6jF9vWJ-Nq80Zg1Z3qFP6saULOrBi1270HGw@mail.gmail.com>
-Subject: Re: [PATCH v13 06/35] clk: tegra: Support runtime PM and power domain
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
+Date:   Wed, 6 Oct 2021 15:10:55 +0200
+Message-ID: <CAPDyKFpJqnoG5HGwGoMvBBXBCBt=eTqMcdX_A29eY05LLgLi3w@mail.gmail.com>
+Subject: Re: [PATCH 1/2] cpuidle: Avoid calls to cpuidle_resume|pause() for s2idle
+To:     Maulik Shah <mkshah@codeaurora.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        David Heidelberg <david@ixit.cz>
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Len Brown <len.brown@intel.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Srinivas Rao L <lsrao@codeaurora.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 6 Oct 2021 at 00:43, Dmitry Osipenko <digetx@gmail.com> wrote:
+On Wed, 6 Oct 2021 at 12:22, Maulik Shah <mkshah@codeaurora.org> wrote:
 >
-> 06.10.2021 01:19, Dmitry Osipenko =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> ...
-> > I reproduced the OFF problem by removing the clk prepare/unprepare from
-> > the suspend/resume of the clk driver and making some extra changes to
-> > clock tree topology and etc to trigger the problem on Nexus 7.
+> Hi,
+>
+> On 9/29/2021 8:14 PM, Ulf Hansson wrote:
+> > In s2idle_enter(), cpuidle_resume|pause() are invoked to re-allow calls to
+> > the cpuidle callbacks during s2idle operations. This is needed because
+> > cpuidle is paused in-between in dpm_suspend_noirq() and dpm_resume_noirq().
 > >
-> > tegra-pmc 7000e400.pmc: failed to turn off PM domain heg: -13
+> > However, calling cpuidle_resume|pause() from s2idle_enter() looks a bit
+> > superfluous, as it also causes all CPUs to be waken up when the first CPU
+> > wakes up from s2idle.
+>
+> Thanks for the patch. This can be good optimization to avoid waking up
+> all CPUs always.
+>
 > >
-> > It happens from genpd_suspend_noirq() -> tegra_genpd_power_off() -> clk
-> > -> GENPD -> I2C -> runtime-pm.
+> > Therefore, let's drop the calls to cpuidle_resume|pause() from
+> > s2idle_enter(). To make this work, let's also adopt the path in the
+> > cpuidle_idle_call() to allow cpuidle callbacks to be invoked for s2idle,
+> > even if cpuidle has been paused.
 > >
-> > -13 is EACCES, it comes from the runtime PM of I2C device. RPM is
-> > prohibited/disabled during late (NOIRQ) suspend by the drivers core.
+> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > ---
+> >   drivers/cpuidle/cpuidle.c |  7 ++++++-
+> >   include/linux/cpuidle.h   |  2 ++
+> >   kernel/power/suspend.c    |  2 --
+> >   kernel/sched/idle.c       | 40 ++++++++++++++++++++++-----------------
+> >   4 files changed, 31 insertions(+), 20 deletions(-)
+> >
+> > diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+> > index ef2ea1b12cd8..c76747e497e7 100644
+> > --- a/drivers/cpuidle/cpuidle.c
+> > +++ b/drivers/cpuidle/cpuidle.c
+> > @@ -49,7 +49,12 @@ void disable_cpuidle(void)
+> >   bool cpuidle_not_available(struct cpuidle_driver *drv,
+> >                          struct cpuidle_device *dev)
+> >   {
+> > -     return off || !initialized || !drv || !dev || !dev->enabled;
+> > +     return off || !drv || !dev || !dev->enabled;
+> > +}
+> > +
+> > +bool cpuidle_paused(void)
+> > +{
+> > +     return !initialized;
+> >   }
+> >
+> >   /**
+> > diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
+> > index fce476275e16..51698b385ab5 100644
+> > --- a/include/linux/cpuidle.h
+> > +++ b/include/linux/cpuidle.h
+> > @@ -165,6 +165,7 @@ extern void cpuidle_pause_and_lock(void);
+> >   extern void cpuidle_resume_and_unlock(void);
+> >   extern void cpuidle_pause(void);
+> >   extern void cpuidle_resume(void);
+> > +extern bool cpuidle_paused(void);
+> >   extern int cpuidle_enable_device(struct cpuidle_device *dev);
+> >   extern void cpuidle_disable_device(struct cpuidle_device *dev);
+> >   extern int cpuidle_play_dead(void);
+> > @@ -204,6 +205,7 @@ static inline void cpuidle_pause_and_lock(void) { }
+> >   static inline void cpuidle_resume_and_unlock(void) { }
+> >   static inline void cpuidle_pause(void) { }
+> >   static inline void cpuidle_resume(void) { }
+> > +static inline bool cpuidle_paused(void) {return true; }
+> >   static inline int cpuidle_enable_device(struct cpuidle_device *dev)
+> >   {return -ENODEV; }
+> >   static inline void cpuidle_disable_device(struct cpuidle_device *dev) { }
+> > diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+> > index eb75f394a059..388a5de4836e 100644
+> > --- a/kernel/power/suspend.c
+> > +++ b/kernel/power/suspend.c
+> > @@ -97,7 +97,6 @@ static void s2idle_enter(void)
+> >       raw_spin_unlock_irq(&s2idle_lock);
+> >
+> >       cpus_read_lock();
+> > -     cpuidle_resume();
+> >
+> >       /* Push all the CPUs into the idle loop. */
+> >       wake_up_all_idle_cpus();
 >
-> My bad, I double-checked and it's not I2C RPM that is failing now, but
-> the clock's RPM [1], which is also unavailable during NOIRQ.
+> wake_up_all_idle_cpus() will still cause all CPUs to be woken up when
+> first cpu wakes up.
+>
+> say for example,
+> 1. device goes to s2idle suspend.
+> 2. one CPU wakes up to handle irq (irq is not a wake irq but left
+> enabled at GIC because of IRQF_NOSUSPEND flag) so such irq will not
+> break suspend.
+> 3. The cpu handles the irq.
+> 4. same cpu don't break s2idle_loop() and goes to s2idle_enter() where
+> it wakes up all existing idle cpus due to wake_up_all_idle_cpus()
+> 5. all of CPUs again enter s2idle.
+>
+> to avoid waking up all CPUs in above case, something like below snip may
+> help (i have not tested yet),
+>
+> when CPUs are in s2idle_loop(),
+>
+> 1. set the s2idle state to enter.
+> 2. wake up all cpus from shallow state, so that they can re-enter
+> deepest state.
+> 3. Forever loop until a break with some wake irq.
+> 4. clear the s2idle state.
+> 5. wake up all cpus from deepest state so that they can now stay in
+> shallow state/running state.
+>
+> void s2idle_loop(void)
+> {
+>
+> +       s2idle_state = S2IDLE_STATE_ENTER;
+> +       /* Push all the CPUs to enter deepest available state */
+> +       wake_up_all_idle_cpus();
+>          for (;;) {
+>                  if (s2idle_ops && s2idle_ops->wake) {
+>                          if (s2idle_ops->wake())
+>                                 ..
+>                  s2idle_enter();
+>          }
+> +       s2idle_state = S2IDLE_STATE_NONE;
+> +       /* Push all the CPUs to enter default_idle() from this point */
+> +       wake_up_all_idle_cpus();
+> }
 
-Yes, that sounds reasonable.
+Overall, I follow your reasoning above and I think it makes sense to
+me, but maybe Rafael has some concerns about it.
 
-You would then need a similar patch for the tegra clock driver as I
-suggested for tegra I2C driver. That should solve the problem, I
-think.
+Even if the above code needs some polishing, the logic seems
+reasonable to me. I suggest you post a patch, based on top of my small
+series, so we can discuss your suggested improvements separately. Or
+just tell me, if you would like me to do it.
 
 >
-> [1]
-> https://elixir.free-electrons.com/linux/v5.15-rc4/source/drivers/clk/clk.=
-c#L116
->
-> Previously it was I2C RPM that was failing in a similar way, but code
-> changed a tad since that time.
+> Thanks,
+> Maulik
 
-Alright. In any case, as long as the devices gets suspended in the
-correct order, I think it should be fine to cook a patch along the
-lines of what I suggest for the I2C driver as well.
+Thanks for reviewing!
 
-It should work, I think. Although, maybe you want to avoid runtime
-resuming the I2C device, unless it's the device belonging to the PMIC
-interface, if there is a way to distinguish that for the driver.
+[...]
 
 Kind regards
 Uffe
