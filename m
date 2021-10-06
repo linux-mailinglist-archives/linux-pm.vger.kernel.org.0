@@ -2,329 +2,185 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE49A4249FC
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Oct 2021 00:42:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6295424A79
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Oct 2021 01:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233378AbhJFWog (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Oct 2021 18:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39722 "EHLO
+        id S231792AbhJFXX3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Oct 2021 19:23:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233236AbhJFWof (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Oct 2021 18:44:35 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05447C061746
-        for <linux-pm@vger.kernel.org>; Wed,  6 Oct 2021 15:42:43 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id x27so16654090lfu.5
-        for <linux-pm@vger.kernel.org>; Wed, 06 Oct 2021 15:42:42 -0700 (PDT)
+        with ESMTP id S229809AbhJFXX3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Oct 2021 19:23:29 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0962CC061746;
+        Wed,  6 Oct 2021 16:21:36 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id u18so16621926lfd.12;
+        Wed, 06 Oct 2021 16:21:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=/1xXQ7biViM7VYMIiajvvcNfznDeF3gC+OJ0VfX5MSM=;
-        b=L0KNNkiUBUvyAp5aAgreYsp+YwxPIBMkfw8RztG0AJP+dzLBdZZHZCydm+TyNyXjOF
-         6AFzQD05l6bd8ygWclpwkjg401Y2XbS1Hiea1QLoRR5beIMBVaurnAPllJlowvpLuNSW
-         c2S2+JzGRVSlGgYDBdd0NsE2oLzbNROKgcJwWjAWV5klMLr9AqkIOox33/Mj81fMiNlZ
-         30jJcKwMtNNJQ6zn3wYbLnnS1AtmPZFB7jCFiKEb7azT+qL9BfpxjpktGqha0kCRRPHQ
-         i2eZFmr4CVIa7Je01D8rZTYlPL5U+36p68L5MBpKP3bSzZkgMCLrCSQGZApByUcPX+0p
-         8/IA==
+        d=gmail.com; s=20210112;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=a/ql+r46Ame/CsYV0fgunPq11GmpNhDml+WxJj5qjlw=;
+        b=JKm7LKBrYq3LrZ9P4TjFV0xnEVV5oFhCjO8jq6QK7r2sFfCeLaVeWur8vvLPj+bcOK
+         3ijaiGyLljSMAfPZa/VEYRjgPnOewdTfLJQxCvN+JoRDS0HLgzZ/q74pg+AjPcazOz5n
+         Ojaq8PwZPy62kphplYEz4vipCog/VV6Km3G5D02Il8G/wXPvM3NBBGINMv+/vd2EsRW/
+         ycYWRLlWm7GUP5avwqaptqbxeuw3LLjZMY0lQri8idx3TDLJaVfHQvWlFwviTkzmJ6Bh
+         ZAj2Z9AxhyKDP0C7wPQxPxv1LVpnFliUedydnUalNZFKZFx7963POwxq1miRructAR4w
+         QIgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/1xXQ7biViM7VYMIiajvvcNfznDeF3gC+OJ0VfX5MSM=;
-        b=RLpTYEMsX5O9FiBmwDZ1RNLto5ObjWNM0q/kqLdQzYQ29Re68ZJJ8/BZtvsDOLv+81
-         7yrGFksEWCcIV2cnCw0m5Cxnyej8fnrvHQRixuCYS09E6Wp6c5q419/Wzsx7/5DKxPxf
-         ptP41J9yT4C4t31iVPyfGHNPj8M8ZM7rqtfcCN78hTYvvzxZvDOXI68bL2VjhkO8ZeDj
-         drO/veCuWHNJh8lB232/HeAHnczOv9NEIUHsvoJ6oarFJ7lCuRgvZ9TvcBC/jisU9cEz
-         k8vinW5NbpoPnjY4WZEyHV1IRJzGKhxJjm/9cTaruzUrC4yT/BW77CmXYQOEuFG6axI3
-         XpPg==
-X-Gm-Message-State: AOAM530lQVWCTUbpNiC1oPan72T+1av+iqJPkszJanaFFQ/gAdz/Of0w
-        9N0DUEF1dyA/eTgOYjsXUdMIcA==
-X-Google-Smtp-Source: ABdhPJw3MoampPu2CzIYimy0hmgQzlCvjiJo9eTMXEstjyIzV/dlnWsdOd6j8SQMFBz0Whs13gJ7wg==
-X-Received: by 2002:a2e:80d9:: with SMTP id r25mr839218ljg.104.1633560160876;
-        Wed, 06 Oct 2021 15:42:40 -0700 (PDT)
-Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id g7sm2368103lfc.123.2021.10.06.15.42.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Oct 2021 15:42:40 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Marcus Cooper <codekipper@gmail.com>
-Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 3/3] ARM: dts: ux500: Switch battery nodes to standard
-Date:   Thu,  7 Oct 2021 00:40:08 +0200
-Message-Id: <20211006224008.394191-3-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211006224008.394191-1-linus.walleij@linaro.org>
-References: <20211006224008.394191-1-linus.walleij@linaro.org>
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=a/ql+r46Ame/CsYV0fgunPq11GmpNhDml+WxJj5qjlw=;
+        b=EBwP1BVeDqljgyEpGZ7McX+6MlY4MUSKMMfczvA0rSMoZR5X1YYPRQfbLFGSS4xLe2
+         fgbjU1lG2qtYkRmvMD0zSpeCFuEiXtONKodU5p6BD/c7W6YOez8h5SxZ048dZ0aEKBHB
+         9UPimE5lcm/yjMJCzpmFZcI2HAS2pMWiQ+8fxc5ZEbapDom73e61exCBmMoBhhfOb2aO
+         nqUiZo74y+cV/fDQ5Q2Jk2YiVFbYvmrf9MBY2ds158DA6bWz1hjtF4mkEB/gdQ9E2prU
+         2H2pzCvMegz5ritUhNhrrKYNE9UvvQrNmjN/QE9jo2BT6MenNEn8DyUgljgx13erxBAX
+         Q/bA==
+X-Gm-Message-State: AOAM530rnz+zWu91sWjdFfBi6VHyI1C4iQBTnepx4kBiIufJftrGR5kC
+        UToaIVHa9G9tBiCTrxZC20A=
+X-Google-Smtp-Source: ABdhPJw1nzydLMDqpraN/PkeCiCqMRjExYJnqaQOWQLneLDJ9G5wjD+HFXU5hLbNfgyv+WR4nF9vzQ==
+X-Received: by 2002:a2e:8858:: with SMTP id z24mr902852ljj.203.1633562494365;
+        Wed, 06 Oct 2021 16:21:34 -0700 (PDT)
+Received: from [192.168.2.145] (79-139-163-57.dynamic.spd-mgts.ru. [79.139.163.57])
+        by smtp.googlemail.com with ESMTPSA id 9sm2377459ljo.78.2021.10.06.16.21.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Oct 2021 16:21:34 -0700 (PDT)
+Subject: Re: [PATCH v13 06/35] clk: tegra: Support runtime PM and power domain
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Nishanth Menon <nm@ti.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        David Heidelberg <david@ixit.cz>
+References: <20210926224058.1252-1-digetx@gmail.com>
+ <20210926224058.1252-7-digetx@gmail.com>
+ <CAPDyKFq+LS4Jr1GyC-a-tGWPzGH0JxfJ9wKY=uQEBGYm952azw@mail.gmail.com>
+ <24101cd6-d3f5-1e74-db39-145ecd30418b@gmail.com>
+ <CAPDyKFreK7976PJL-1zySoza_yXM7rMQ64aODWUZ+U3L-uCa0w@mail.gmail.com>
+ <4bdba8a2-4b9b-ed7d-e6ca-9218d8200a85@gmail.com>
+ <74a47158-e2e4-5fd0-3f37-0b50d4ead4d9@gmail.com>
+ <CAPDyKFr2-f1wM+6jF9vWJ-Nq80Zg1Z3qFP6saULOrBi1270HGw@mail.gmail.com>
+ <b06bf794-b8b3-417b-58ef-4d815ca86c95@gmail.com>
+ <4c7b1a4c-c136-3650-8f77-9f98caa506f7@gmail.com>
+Message-ID: <2dd6bffc-9817-f4b1-0b92-f82f22fcf79a@gmail.com>
+Date:   Thu, 7 Oct 2021 02:21:32 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
+In-Reply-To: <4c7b1a4c-c136-3650-8f77-9f98caa506f7@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This force-converts the per-device battery node into the standard
-properties using "simple-battery" for the HREF machines and the
-corresponding Samsung battery for the mobile phones.
+07.10.2021 01:01, Dmitry Osipenko пишет:
+> 07.10.2021 00:14, Dmitry Osipenko пишет:
+>> 06.10.2021 15:43, Ulf Hansson пишет:
+>>> On Wed, 6 Oct 2021 at 00:43, Dmitry Osipenko <digetx@gmail.com> wrote:
+>>>>
+>>>> 06.10.2021 01:19, Dmitry Osipenko пишет:
+>>>> ...
+>>>>> I reproduced the OFF problem by removing the clk prepare/unprepare from
+>>>>> the suspend/resume of the clk driver and making some extra changes to
+>>>>> clock tree topology and etc to trigger the problem on Nexus 7.
+>>>>>
+>>>>> tegra-pmc 7000e400.pmc: failed to turn off PM domain heg: -13
+>>>>>
+>>>>> It happens from genpd_suspend_noirq() -> tegra_genpd_power_off() -> clk
+>>>>> -> GENPD -> I2C -> runtime-pm.
+>>>>>
+>>>>> -13 is EACCES, it comes from the runtime PM of I2C device. RPM is
+>>>>> prohibited/disabled during late (NOIRQ) suspend by the drivers core.
+>>>>
+>>>> My bad, I double-checked and it's not I2C RPM that is failing now, but
+>>>> the clock's RPM [1], which is also unavailable during NOIRQ.
+>>>
+>>> Yes, that sounds reasonable.
+>>>
+>>> You would then need a similar patch for the tegra clock driver as I
+>>> suggested for tegra I2C driver. That should solve the problem, I
+>>> think.
+>>>
+>>>>
+>>>> [1]
+>>>> https://elixir.free-electrons.com/linux/v5.15-rc4/source/drivers/clk/clk.c#L116
+>>>>
+>>>> Previously it was I2C RPM that was failing in a similar way, but code
+>>>> changed a tad since that time.
+>>>
+>>> Alright. In any case, as long as the devices gets suspended in the
+>>> correct order, I think it should be fine to cook a patch along the
+>>> lines of what I suggest for the I2C driver as well.
+>>>
+>>> It should work, I think. Although, maybe you want to avoid runtime
+>>> resuming the I2C device, unless it's the device belonging to the PMIC
+>>> interface, if there is a way to distinguish that for the driver.
+>>
+>> Ulf, thank you very much for the suggestions! I was thinking about this
+>> all once again and concluded that the simplest variant will be to just
+>> remove the suspend ops from the clk driver since neither of PLLs require
+>> high voltage. We now have voltage bumped to a nominal level during
+>> suspend by Tegra's regulator-coupler driver and it's much higher than
+>> voltage needed by PLLs. So the problem I was trying to work around
+>> doesn't really exist anymore.
+> 
+> I hurried a bit with the conclusion, keep forgetting that I need to
+> change the clock tree in order to test it all properly :/ It's not fixed
+> yet.
+> 
 
-This is fine to do since the battery data in the DTS files has never
-been deployed or used. In commit a1149ae97554
-"ARM: ux500: Disable Power Supply and Battery Management by default"
-it was turned off and has not been switched back on since. In
-the meantime standardized bindings for batteries have appeared
-making the old AB8500 battery bindings obsolete.
+Please let me iterate once again. The problem we currently have is that
+clock may be enabled during NOIRQ time. In order to enable clock, it
+needs to be prepared. In order to prepare clock, the clock's device
+needs to be runtime-resumed. The runtime PM is unavailable at the NOIRQ
+time.
 
-The battery node which is now in the middle of an included file
-is obviously a per-device piece of information so push this down
-to each board. The HREF machines all have the same battery and can
-share a single node in the HREF dtsi file.
+To solve this problem we need to prepare clock beforehand.
 
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-Sebastian: I will merge this patch to the Ux500 tree when/if you
-merge the two other patches, so all is fixed up in linux-next and
-in the merge window.
----
- arch/arm/boot/dts/ste-ab8500.dtsi              | 13 ++++---------
- arch/arm/boot/dts/ste-ab8505.dtsi              | 13 ++++---------
- arch/arm/boot/dts/ste-href.dtsi                |  6 ++++++
- arch/arm/boot/dts/ste-snowball.dts             |  6 ++++++
- arch/arm/boot/dts/ste-ux500-samsung-codina.dts |  4 ++++
- arch/arm/boot/dts/ste-ux500-samsung-gavini.dts |  4 ++++
- arch/arm/boot/dts/ste-ux500-samsung-golden.dts |  4 ++++
- arch/arm/boot/dts/ste-ux500-samsung-janice.dts |  4 ++++
- arch/arm/boot/dts/ste-ux500-samsung-kyle.dts   |  4 ++++
- arch/arm/boot/dts/ste-ux500-samsung-skomer.dts |  4 ++++
- 10 files changed, 44 insertions(+), 18 deletions(-)
+The clock will stay prepared during suspend, but this is not a problem
+since all the clocks we care about don't require high voltage and
+voltage is guaranteed to be bumped high during suspend by Tegra's
+regulator-coupler driver anyways.
 
-diff --git a/arch/arm/boot/dts/ste-ab8500.dtsi b/arch/arm/boot/dts/ste-ab8500.dtsi
-index 9baf927f9b95..2cf19386a525 100644
---- a/arch/arm/boot/dts/ste-ab8500.dtsi
-+++ b/arch/arm/boot/dts/ste-ab8500.dtsi
-@@ -129,11 +129,6 @@ ab8500_temp {
- 					io-channel-names = "aux1", "aux2";
- 				};
- 
--				ab8500_battery: ab8500_battery {
--					stericsson,battery-type = "LIPO";
--					thermistor-on-batctrl;
--				};
--
- 				ab8500_fg {
- 					compatible = "stericsson,ab8500-fg";
- 					interrupts = <24 IRQ_TYPE_LEVEL_HIGH>,
-@@ -146,7 +141,7 @@ ab8500_fg {
- 							  "LOW_BAT_F",
- 							  "CC_INT_CALIB",
- 							  "CCEOC";
--					battery = <&ab8500_battery>;
-+					monitored-battery = <&battery>;
- 					io-channels = <&gpadc 0x08>;
- 					io-channel-names = "main_bat_v";
- 				};
-@@ -163,7 +158,7 @@ ab8500_btemp {
- 							  "BTEMP_HIGH",
- 							  "BTEMP_LOW_MEDIUM",
- 							  "BTEMP_MEDIUM_HIGH";
--					battery = <&ab8500_battery>;
-+					monitored-battery = <&battery>;
- 					io-channels = <&gpadc 0x02>,
- 						      <&gpadc 0x01>;
- 					io-channel-names = "btemp_ball",
-@@ -200,7 +195,7 @@ ab8500_charger {
- 							  "VBUS_OVV",
- 							  "CH_WD_EXP",
- 							  "VBUS_CH_DROP_END";
--					battery		= <&ab8500_battery>;
-+					monitored-battery = <&battery>;
- 					vddadc-supply	= <&ab8500_ldo_tvout_reg>;
- 					io-channels = <&gpadc 0x03>,
- 						      <&gpadc 0x0a>,
-@@ -214,7 +209,7 @@ ab8500_charger {
- 
- 				ab8500_chargalg {
- 					compatible	= "stericsson,ab8500-chargalg";
--					battery		= <&ab8500_battery>;
-+					monitored-battery	= <&battery>;
- 				};
- 
- 				ab8500_usb: ab8500_usb {
-diff --git a/arch/arm/boot/dts/ste-ab8505.dtsi b/arch/arm/boot/dts/ste-ab8505.dtsi
-index 8d018701a680..e98335e9d1cb 100644
---- a/arch/arm/boot/dts/ste-ab8505.dtsi
-+++ b/arch/arm/boot/dts/ste-ab8505.dtsi
-@@ -92,11 +92,6 @@ usb_id: channel@e {
- 					};
- 				};
- 
--				ab8500_battery: ab8500_battery {
--					stericsson,battery-type = "LIPO";
--					thermistor-on-batctrl;
--				};
--
- 				ab8500_fg {
- 					status = "disabled";
- 					compatible = "stericsson,ab8500-fg";
-@@ -110,7 +105,7 @@ ab8500_fg {
- 							  "LOW_BAT_F",
- 							  "CC_INT_CALIB",
- 							  "CCEOC";
--					battery = <&ab8500_battery>;
-+					monitored-battery = <&battery>;
- 					io-channels = <&gpadc 0x08>;
- 					io-channel-names = "main_bat_v";
- 				};
-@@ -128,7 +123,7 @@ ab8500_btemp {
- 							  "BTEMP_HIGH",
- 							  "BTEMP_LOW_MEDIUM",
- 							  "BTEMP_MEDIUM_HIGH";
--					battery = <&ab8500_battery>;
-+					monitored-battery = <&battery>;
- 					io-channels = <&gpadc 0x02>,
- 						      <&gpadc 0x01>;
- 					io-channel-names = "btemp_ball",
-@@ -166,7 +161,7 @@ ab8500_charger {
- 							  "VBUS_OVV",
- 							  "CH_WD_EXP",
- 							  "VBUS_CH_DROP_END";
--					battery = <&ab8500_battery>;
-+					monitored-battery = <&battery>;
- 					vddadc-supply = <&ab8500_ldo_adc_reg>;
- 					io-channels = <&gpadc 0x09>,
- 						      <&gpadc 0x0b>;
-@@ -177,7 +172,7 @@ ab8500_charger {
- 				ab8500_chargalg {
- 					status = "disabled";
- 					compatible = "stericsson,ab8500-chargalg";
--					battery = <&ab8500_battery>;
-+					monitored-battery = <&battery>;
- 				};
- 
- 				ab8500_usb: ab8500_usb {
-diff --git a/arch/arm/boot/dts/ste-href.dtsi b/arch/arm/boot/dts/ste-href.dtsi
-index 961f2c7274ce..718752a0248e 100644
---- a/arch/arm/boot/dts/ste-href.dtsi
-+++ b/arch/arm/boot/dts/ste-href.dtsi
-@@ -13,6 +13,12 @@ memory {
- 		reg = <0x00000000 0x20000000>;
- 	};
- 
-+	battery: battery {
-+		compatible = "simple-battery";
-+		battery-type = "lithium-ion-polymer";
-+		thermistor-on-batctrl;
-+	};
-+
- 	soc {
- 		uart@80120000 {
- 			pinctrl-names = "default", "sleep";
-diff --git a/arch/arm/boot/dts/ste-snowball.dts b/arch/arm/boot/dts/ste-snowball.dts
-index 934fc788fe1d..fb719c8a8eb2 100644
---- a/arch/arm/boot/dts/ste-snowball.dts
-+++ b/arch/arm/boot/dts/ste-snowball.dts
-@@ -17,6 +17,12 @@ memory {
- 		reg = <0x00000000 0x20000000>;
- 	};
- 
-+	battery: battery {
-+		compatible = "simple-battery";
-+		battery-type = "lithium-ion-polymer";
-+		thermistor-on-batctrl;
-+	};
-+
- 	en_3v3_reg: en_3v3 {
- 		compatible = "regulator-fixed";
- 		regulator-name = "en-3v3-fixed-supply";
-diff --git a/arch/arm/boot/dts/ste-ux500-samsung-codina.dts b/arch/arm/boot/dts/ste-ux500-samsung-codina.dts
-index 952606e607ed..fbd60065542d 100644
---- a/arch/arm/boot/dts/ste-ux500-samsung-codina.dts
-+++ b/arch/arm/boot/dts/ste-ux500-samsung-codina.dts
-@@ -43,6 +43,10 @@ chosen {
- 		stdout-path = &serial2;
- 	};
- 
-+	battery: battery {
-+		compatible = "samsung,eb425161lu";
-+	};
-+
- 	/* TI TXS0206 level translator for 2.9 V */
- 	sd_level_translator: regulator-gpio {
- 		compatible = "regulator-fixed";
-diff --git a/arch/arm/boot/dts/ste-ux500-samsung-gavini.dts b/arch/arm/boot/dts/ste-ux500-samsung-gavini.dts
-index fabc390ccb0c..47bbf5ab267f 100644
---- a/arch/arm/boot/dts/ste-ux500-samsung-gavini.dts
-+++ b/arch/arm/boot/dts/ste-ux500-samsung-gavini.dts
-@@ -20,6 +20,10 @@ chosen {
- 		stdout-path = &serial2;
- 	};
- 
-+	battery: battery {
-+		compatible = "samsung,eb585157lu";
-+	};
-+
- 	/* TI TXS0206 level translator for 2.9 V */
- 	sd_level_translator: regulator-gpio {
- 		compatible = "regulator-fixed";
-diff --git a/arch/arm/boot/dts/ste-ux500-samsung-golden.dts b/arch/arm/boot/dts/ste-ux500-samsung-golden.dts
-index ee6379ab688c..fc4c5166d85b 100644
---- a/arch/arm/boot/dts/ste-ux500-samsung-golden.dts
-+++ b/arch/arm/boot/dts/ste-ux500-samsung-golden.dts
-@@ -25,6 +25,10 @@ chosen {
- 		stdout-path = &serial2;
- 	};
- 
-+	battery: battery {
-+		compatible = "samsung,eb-l1m7flu";
-+	};
-+
- 	i2c-gpio-0 {
- 		compatible = "i2c-gpio";
- 		sda-gpios = <&gpio2 14 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
-diff --git a/arch/arm/boot/dts/ste-ux500-samsung-janice.dts b/arch/arm/boot/dts/ste-ux500-samsung-janice.dts
-index f14cf316a70a..2c914c58f8ba 100644
---- a/arch/arm/boot/dts/ste-ux500-samsung-janice.dts
-+++ b/arch/arm/boot/dts/ste-ux500-samsung-janice.dts
-@@ -20,6 +20,10 @@ chosen {
- 		stdout-path = &serial2;
- 	};
- 
-+	battery: battery {
-+		compatible = "samsung,eb535151vu";
-+	};
-+
- 	/* External LDO for eMMC LDO VMEM_3V3 controlled by GPIO6 */
- 	ldo_3v3_reg: regulator-gpio-ldo-3v3 {
- 		compatible = "regulator-fixed";
-diff --git a/arch/arm/boot/dts/ste-ux500-samsung-kyle.dts b/arch/arm/boot/dts/ste-ux500-samsung-kyle.dts
-index 3b825666d302..9ec3f85b1a18 100644
---- a/arch/arm/boot/dts/ste-ux500-samsung-kyle.dts
-+++ b/arch/arm/boot/dts/ste-ux500-samsung-kyle.dts
-@@ -24,6 +24,10 @@ chosen {
- 		stdout-path = &serial2;
- 	};
- 
-+	battery: battery {
-+		compatible = "samsung,eb425161la";
-+	};
-+
- 	/* TI TXS0206 level translator for 2.9 V */
- 	sd_level_translator: regulator-gpio {
- 		compatible = "regulator-fixed";
-diff --git a/arch/arm/boot/dts/ste-ux500-samsung-skomer.dts b/arch/arm/boot/dts/ste-ux500-samsung-skomer.dts
-index 264f3e9b5fce..37020127f6e7 100644
---- a/arch/arm/boot/dts/ste-ux500-samsung-skomer.dts
-+++ b/arch/arm/boot/dts/ste-ux500-samsung-skomer.dts
-@@ -20,6 +20,10 @@ chosen {
- 		stdout-path = &serial2;
- 	};
- 
-+	battery: battery {
-+		compatible = "samsung,eb485159lu";
-+	};
-+
- 	/* TI TXS0206 level translator for 2.9 V */
- 	sd_level_translator: regulator-gpio {
- 		compatible = "regulator-fixed";
--- 
-2.31.1
+So everything we need to do is to keep clocks prepared. There are two
+options how to do that:
 
+[1] this patch which explicitly prepares clocks using clk API.
+
+[2] Use runtime PM API, like this:
+
+static const struct dev_pm_ops tegra_clock_pm = {
+	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_resume_and_get, pm_runtime_put)
+};
+
+Ulf, are you now okay with the current variant [1] of the patch or you
+prefer the second [2] option more?
