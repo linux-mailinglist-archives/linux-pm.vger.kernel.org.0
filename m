@@ -2,226 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 956BE4249F3
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Oct 2021 00:42:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D94C64249FB
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Oct 2021 00:42:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbhJFWoF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Oct 2021 18:44:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39580 "EHLO
+        id S230236AbhJFWof (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Oct 2021 18:44:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbhJFWoF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Oct 2021 18:44:05 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57324C061753
-        for <linux-pm@vger.kernel.org>; Wed,  6 Oct 2021 15:42:12 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id x27so16570331lfa.9
-        for <linux-pm@vger.kernel.org>; Wed, 06 Oct 2021 15:42:12 -0700 (PDT)
+        with ESMTP id S233378AbhJFWoe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Oct 2021 18:44:34 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6CBC061746
+        for <linux-pm@vger.kernel.org>; Wed,  6 Oct 2021 15:42:41 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id y26so16794948lfa.11
+        for <linux-pm@vger.kernel.org>; Wed, 06 Oct 2021 15:42:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=62PC80q5pJoCzR+LNs8TxRHYFiyjGthoCs9x+r0DkUA=;
-        b=GgrkRnbW8Q5ZotcasaI9VCTfqYGnoXiHII/t76naehUQnvTVEzS4BFBB0fOb04ra3O
-         c7aC71vJ/REHenYaUdYb5nJMFrxd/fjo29AUmhnbJ6kxqN+TApldt4lsfI3aChTldnSm
-         a26tllNkoy2h29reQDur06M9eCBer9VBoLvPVsWkUlXqdYKExpPwU2PMqzCkrqzqQeRI
-         Hrvnctbx0fugjTla3BTPuFoWdqJwYYZhg0cwmAro4sDtlbCbb/7Tkb6til1MdOam6POK
-         nryLonkWn5tTr15QFDxSJo6RcSdP/mfxHsRrp//L8moGmzhsLyP0rQFT8Ah5f6eZWhlW
-         ZGig==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=w74AS8bsnQBpuPJtXKLsNk6KYmEVqK2eVVFusa1JBP4=;
+        b=UB0sVHc98SgQxmoowCS/iRCeO8WO6MRXYF1U0P68CbWbbz7CUnWacOqRdRwoq29V8A
+         y9ZsPGGwzPBsIuvd+/JKiKyzpcKOchR8U3dvs02vI05oPYc7Fud9rBmwv3hJpRejUNfH
+         BaPhOGo51VdmJxrrLJXQSGOkfwdSZKX5cXh5FSwdjlUOtThTAKUIpU3bWQkORxmcqCvv
+         Y5DNCaTsj/tb44R1UUSfFr+mQKgWu/FzttgFGie295lv5vfa8NyCEX65njIkEt/kLh2w
+         BumcIKzLqLdtl2sGE2HeopE4Lx495rHKoHYnJw0sDD8NkEU+kuzjThcYNpTxO1LKAbBJ
+         At0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=62PC80q5pJoCzR+LNs8TxRHYFiyjGthoCs9x+r0DkUA=;
-        b=ZMDR1LPw4bpdZBbqPAtP2jVuVDEB03OL89KzPSHPsxjmEBoUORCLK77RTQsBaRcc3T
-         WIzCoPc85kxNI7l8tt8JAe3pQXd6DfvY1cccd9N++k4Iv8redSlH5Uw1JpwpMgFuMq0y
-         q7nZQzDLnEn1bLDIKoy1FSc3qlZDyInRtoFNchTd9zYtO4s8EJv+evnNUzMeCoaIgP0c
-         1mngD0kmuPWOSScdlRlpkDhCR+EDN5gAXJ2VQS3qKpQ2df2Agg2ub1ejKz9JgOPgbGOQ
-         B7DpP1i9994T5ocMrGVot1ByptEYHPvrP15/d6K0ZL2peYy6nPxUSVGGq06xZYWvCa4S
-         f4NQ==
-X-Gm-Message-State: AOAM532C+DoVzXl5cM9GCGat7RZJjc4g/wdli2ZARX2I1bN2L8dSqaje
-        8ZQ28CEq0fVkq295kQ0NUFv1KQ==
-X-Google-Smtp-Source: ABdhPJzmQ0pNmcJ1ovhyeq6ltuwqHAfFppU3uE++6xImt4zxISI3xsKtZ/UbH44FV0t53Vbh4aHcsQ==
-X-Received: by 2002:a2e:b888:: with SMTP id r8mr709717ljp.147.1633560130582;
-        Wed, 06 Oct 2021 15:42:10 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=w74AS8bsnQBpuPJtXKLsNk6KYmEVqK2eVVFusa1JBP4=;
+        b=45fekhDLTFJ8o83h3NR8G2t8l1SVgAhMlIxY2AnppiDMKKoSqZ5NDy5AobSS7zoVtL
+         0BU0yXWxJZg3fT9eXzyIEMYqt7e4f1jIakwnFxcVuH12TKIy1gk9d5twWraIGy1Aubkd
+         TrmWDJa3Smv2YqlASSVhqTSaAlDmpfd5Z1jZr4cEgR4r+dbF+C5L7TgrF4uq78os2Ez9
+         DSBcDK9d4gSeNSZh4X8gG1Vow3Eoh08sjVYWNsAQ/xKmeyFXA0JFiUkHNkTCyWhqhzCd
+         agCzKjkupgkq5nclUcmBNIztB4GCd2YxydE4fTWzRVqQzQenuZ780PVzwLAyPjt5v9Hs
+         1A6Q==
+X-Gm-Message-State: AOAM532nvXNJC6TtvfQf2UwNMypqcCGaxpe4ULLkA4X+laCEccuvA0Nv
+        BdVwhxP2P4vqFwX7uZBS8tzXqmBPbFWQ4g==
+X-Google-Smtp-Source: ABdhPJyna9uGfd/nPlWr/xg5wILA52+JFyIJaH4n88bGDLjvRqaOGC5zJ1loeCg1K8AZbEgkRqUxFw==
+X-Received: by 2002:a05:6512:3ed:: with SMTP id n13mr670775lfq.282.1633560159592;
+        Wed, 06 Oct 2021 15:42:39 -0700 (PDT)
 Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id g7sm2368103lfc.123.2021.10.06.15.42.10
+        by smtp.gmail.com with ESMTPSA id g7sm2368103lfc.123.2021.10.06.15.42.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Oct 2021 15:42:10 -0700 (PDT)
+        Wed, 06 Oct 2021 15:42:39 -0700 (PDT)
 From:   Linus Walleij <linus.walleij@linaro.org>
 To:     Sebastian Reichel <sre@kernel.org>,
         Marcus Cooper <codekipper@gmail.com>
-Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        devicetree@vger.kernel.org
-Subject: [PATCH 1/3] dt-bindings: power: supply: ab8500: Standard monitored-battery
-Date:   Thu,  7 Oct 2021 00:40:06 +0200
-Message-Id: <20211006224008.394191-1-linus.walleij@linaro.org>
+Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 2/3] power: supply: ab8500_bmdata: Use standard phandle
+Date:   Thu,  7 Oct 2021 00:40:07 +0200
+Message-Id: <20211006224008.394191-2-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20211006224008.394191-1-linus.walleij@linaro.org>
+References: <20211006224008.394191-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Make monitored-battery the standard phandle to the battery we monitor
-for the AB8500 charger components. We make the old "battery" phandle
-deprecated, and the new one required so we detect and fix all users to
-use the standard phandle name.
+Look up the battery using the "monitored-battery" phandle
+as is nowadays a standard DT binding. The actual bindings
+for these charger elements are not upstream so let's sort
+out this mess by conforming to the standard.
 
-Cc: devicetree@vger.kernel.org
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- .../bindings/power/supply/stericsson,ab8500-btemp.yaml | 10 +++++++---
- .../power/supply/stericsson,ab8500-chargalg.yaml       | 10 +++++++---
- .../power/supply/stericsson,ab8500-charger.yaml        | 10 +++++++---
- .../bindings/power/supply/stericsson,ab8500-fg.yaml    | 10 +++++++---
- 4 files changed, 28 insertions(+), 12 deletions(-)
+ChangeLog v1->v2:
+- Rebase on v5.13-rc1
+---
+ drivers/power/supply/ab8500_bmdata.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/power/supply/stericsson,ab8500-btemp.yaml b/Documentation/devicetree/bindings/power/supply/stericsson,ab8500-btemp.yaml
-index 2f57aa5a5f4e..4b8a00cec39c 100644
---- a/Documentation/devicetree/bindings/power/supply/stericsson,ab8500-btemp.yaml
-+++ b/Documentation/devicetree/bindings/power/supply/stericsson,ab8500-btemp.yaml
-@@ -17,10 +17,14 @@ properties:
-   compatible:
-     const: stericsson,ab8500-btemp
+diff --git a/drivers/power/supply/ab8500_bmdata.c b/drivers/power/supply/ab8500_bmdata.c
+index 6f5fb794042c..bfc1245d7912 100644
+--- a/drivers/power/supply/ab8500_bmdata.c
++++ b/drivers/power/supply/ab8500_bmdata.c
+@@ -497,8 +497,7 @@ int ab8500_bm_of_probe(struct device *dev,
+ 	const char *btech;
+ 	int i;
  
--  battery:
-+  monitored-battery:
-     $ref: /schemas/types.yaml#/definitions/phandle
-     description: phandle to battery node
- 
-+  battery:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    deprecated: true
-+
-   interrupts:
-     maxItems: 5
- 
-@@ -42,7 +46,7 @@ properties:
- 
- required:
-   - compatible
--  - battery
-+  - monitored-battery
-   - interrupts
-   - interrupt-names
-   - io-channels
-@@ -56,7 +60,7 @@ examples:
-     pmic {
-       battery-temperature {
-         compatible = "stericsson,ab8500-btemp";
--        battery = <&ab8500_battery>;
-+        monitored-battery = <&battery>;
-         interrupts = <20 IRQ_TYPE_LEVEL_HIGH>,
-                      <80 IRQ_TYPE_LEVEL_HIGH>,
-                      <83 IRQ_TYPE_LEVEL_HIGH>,
-diff --git a/Documentation/devicetree/bindings/power/supply/stericsson,ab8500-chargalg.yaml b/Documentation/devicetree/bindings/power/supply/stericsson,ab8500-chargalg.yaml
-index 0897231c2f6e..6799224f7fb4 100644
---- a/Documentation/devicetree/bindings/power/supply/stericsson,ab8500-chargalg.yaml
-+++ b/Documentation/devicetree/bindings/power/supply/stericsson,ab8500-chargalg.yaml
-@@ -17,13 +17,17 @@ properties:
-   compatible:
-     const: stericsson,ab8500-chargalg
- 
--  battery:
-+  monitored-battery:
-     $ref: /schemas/types.yaml#/definitions/phandle
-     description: phandle to battery node
- 
-+  battery:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    deprecated: true
-+
- required:
-   - compatible
--  - battery
-+  - monitored-battery
- 
- additionalProperties: false
- 
-@@ -32,6 +36,6 @@ examples:
-     pmic {
-       charging-algorithm {
-         compatible = "stericsson,ab8500-chargalg";
--        battery = <&ab8500_battery>;
-+        monitored-battery = <&ab8500_battery>;
-       };
-     };
-diff --git a/Documentation/devicetree/bindings/power/supply/stericsson,ab8500-charger.yaml b/Documentation/devicetree/bindings/power/supply/stericsson,ab8500-charger.yaml
-index e13305afea69..9518eb7289d0 100644
---- a/Documentation/devicetree/bindings/power/supply/stericsson,ab8500-charger.yaml
-+++ b/Documentation/devicetree/bindings/power/supply/stericsson,ab8500-charger.yaml
-@@ -17,10 +17,14 @@ properties:
-   compatible:
-     const: stericsson,ab8500-charger
- 
--  battery:
-+  monitored-battery:
-     $ref: /schemas/types.yaml#/definitions/phandle
-     description: phandle to battery node
- 
-+  battery:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    deprecated: true
-+
-   vddadc-supply:
-     description: Supply for USB and Main charger
- 
-@@ -66,7 +70,7 @@ properties:
- 
- required:
-   - compatible
--  - battery
-+  - monitored-battery
-   - vddadc-supply
-   - interrupts
-   - interrupt-names
-@@ -81,7 +85,7 @@ examples:
-     pmic {
-       charger {
-         compatible = "stericsson,ab8500-charger";
--        battery = <&ab8500_battery>;
-+        monitored-battery = <&battery>;
-         vddadc-supply = <&ab8500_ldo_tvout_reg>;
-         interrupts = <10 IRQ_TYPE_LEVEL_HIGH>,
-                      <11 IRQ_TYPE_LEVEL_HIGH>,
-diff --git a/Documentation/devicetree/bindings/power/supply/stericsson,ab8500-fg.yaml b/Documentation/devicetree/bindings/power/supply/stericsson,ab8500-fg.yaml
-index db342e5ac0d1..54ac42a9d354 100644
---- a/Documentation/devicetree/bindings/power/supply/stericsson,ab8500-fg.yaml
-+++ b/Documentation/devicetree/bindings/power/supply/stericsson,ab8500-fg.yaml
-@@ -17,10 +17,14 @@ properties:
-   compatible:
-     const: stericsson,ab8500-fg
- 
--  battery:
-+  monitored-battery:
-     $ref: /schemas/types.yaml#/definitions/phandle
-     description: phandle to battery node
- 
-+  battery:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    deprecated: true
-+
-   interrupts:
-     maxItems: 5
- 
-@@ -41,7 +45,7 @@ properties:
- 
- required:
-   - compatible
--  - battery
-+  - monitored-battery
-   - interrupts
-   - interrupt-names
-   - io-channels
-@@ -55,7 +59,7 @@ examples:
-     pmic {
-       fuel-gauge {
-         compatible = "stericsson,ab8500-fg";
--        battery = <&ab8500_battery>;
-+        monitored-battery = <&battery>;
-         interrupts = <24 IRQ_TYPE_LEVEL_HIGH>,
-                      <8 IRQ_TYPE_LEVEL_HIGH>,
-                      <28 IRQ_TYPE_LEVEL_HIGH>,
+-	/* get phandle to 'battery-info' node */
+-	battery_node = of_parse_phandle(np, "battery", 0);
++	battery_node = of_parse_phandle(np, "monitored-battery", 0);
+ 	if (!battery_node) {
+ 		dev_err(dev, "battery node or reference missing\n");
+ 		return -EINVAL;
 -- 
 2.31.1
 
