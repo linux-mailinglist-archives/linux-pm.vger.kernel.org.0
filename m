@@ -2,82 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ECB1424107
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Oct 2021 17:13:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC8FD424118
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Oct 2021 17:17:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238994AbhJFPPK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Oct 2021 11:15:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53548 "EHLO mail.kernel.org"
+        id S238501AbhJFPTa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Oct 2021 11:19:30 -0400
+Received: from marcansoft.com ([212.63.210.85]:52834 "EHLO mail.marcansoft.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239249AbhJFPO2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 6 Oct 2021 11:14:28 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A132760F6D;
-        Wed,  6 Oct 2021 15:12:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633533155;
-        bh=n66tkchc4XioC797+ZaRTmljx8w2JSrZg0u+2YT9yP4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tj2i74+kSScWGUPwg9XGfcPcwA6u1sN0NaosnVHyjb801WCcn/99Xirx+Z/Tgcf4V
-         yvQ3eOyeUPaZxshaDJRMQCqEP/TOoyvsHlSqRypyg0YlqDi5YPny49/+sfb8CHLSDQ
-         ifXfnwQgz5vHZymPdlTty2JbOnP36utoKW+7pORuuQdm6awk7QazBP+6thcF47n1RS
-         Dhk/ytiL6Xw1SMyDWN14tBeqdpzysERZ9BlCTdCFUdlRKgq6XXey8gJ71OnTxPqe/+
-         ttABcuz21nRK+Y8MJKdyeUzahGdJrwXcdXQEooPPvHmcUZYkjnRAKvZcmYCyIrrJAy
-         /Jvqa4USrsDfQ==
-Date:   Wed, 6 Oct 2021 11:12:34 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Georgi Djakov <djakov@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>, agross@kernel.org,
-        bjorn.andersson@linaro.org, robh+dt@kernel.org, kholk11@gmail.com,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.14 06/40] dt-bindings: interconnect: sdm660:
- Add missing a2noc qos clocks
-Message-ID: <YV284nZX4BoE+TYj@sashalap>
-References: <20211005135020.214291-1-sashal@kernel.org>
- <20211005135020.214291-6-sashal@kernel.org>
- <0a7af294-095e-cac4-e20a-296de7bd59cb@kernel.org>
+        id S231874AbhJFPT3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 6 Oct 2021 11:19:29 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id AC02B3FA5E;
+        Wed,  6 Oct 2021 15:17:27 +0000 (UTC)
+Subject: Re: [PATCH 1/7] dt-bindings: arm: apple: Add apple,pmgr binding
+To:     Rob Herring <robh@kernel.org>
+Cc:     Mark Kettenis <mark.kettenis@xs4all.nl>,
+        linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Marc Zyngier <maz@kernel.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-samsung-soc@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>
+References: <20211005155923.173399-1-marcan@marcan.st>
+ <20211005155923.173399-2-marcan@marcan.st>
+ <1633473959.420655.106783.nullmailer@robh.at.kernel.org>
+From:   Hector Martin <marcan@marcan.st>
+Message-ID: <a80d8bbd-0e71-af81-b3c2-b2e8e5efed63@marcan.st>
+Date:   Thu, 7 Oct 2021 00:17:25 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <0a7af294-095e-cac4-e20a-296de7bd59cb@kernel.org>
+In-Reply-To: <1633473959.420655.106783.nullmailer@robh.at.kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: es-ES
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 05, 2021 at 10:11:31PM +0300, Georgi Djakov wrote:
->Hi Sasha,
->
->On 5.10.21 16:49, Sasha Levin wrote:
->>From: Shawn Guo <shawn.guo@linaro.org>
->>
->>[ Upstream commit cf49e366020396ad83845c1c3bdbaa3c1406f5ce ]
->>
->>It adds the missing a2noc clocks required for QoS registers programming
->>per downstream kernel[1].
->>
->>[1] https://source.codeaurora.org/quic/la/kernel/msm-4.4/tree/arch/arm/boot/dts/qcom/sdm660-bus.dtsi?h=LA.UM.8.2.r1-04800-sdm660.0#n43
->>
->>Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
->>Reviewed-by: Rob Herring <robh@kernel.org>
->>Acked-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
->>Link: https://lore.kernel.org/r/20210824043435.23190-2-shawn.guo@linaro.org
->>Signed-off-by: Georgi Djakov <djakov@kernel.org>
->>Signed-off-by: Sasha Levin <sashal@kernel.org>
->
->There is no benefit to backport these changes, as devices that
->needed them, would not boot on v5.14 anyways. So please drop these:
->
->[PATCH AUTOSEL 5.14 06/40] dt-bindings: interconnect: sdm660: Add 
->missing a2noc qos clocks
->[PATCH AUTOSEL 5.14 07/40] interconnect: qcom: sdm660: Add missing 
->a2noc qos clocks
+On 06/10/2021 07.45, Rob Herring wrote:
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> 
+> yamllint warnings/errors:
+> 
+> dtschema/dtc warnings/errors:
+> Documentation/devicetree/bindings/arm/apple/apple,pmgr.example.dts:30.40-35.15: ERROR (duplicate_node_names): /example-0/soc/power-management@23b700000: Duplicate node name
+> ERROR: Input tree has errors, aborting (use -f to force output)
+> make[1]: *** [scripts/Makefile.lib:385: Documentation/devicetree/bindings/arm/apple/apple,pmgr.example.dt.yaml] Error 2
+> make[1]: *** Waiting for unfinished jobs....
+> make: *** [Makefile:1441: dt_binding_check] Error 2
 
-I'll drop it, thanks!
+Argh, sorry about that. I ran the check before adding the mini-pmgr node 
+to the example right before sending out the series, and of course I 
+screwed it up. It'll be fixed and double checked for v2.
 
 -- 
-Thanks,
-Sasha
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub
