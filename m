@@ -2,202 +2,286 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD344423D9E
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Oct 2021 14:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C93F9423DDC
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Oct 2021 14:39:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238238AbhJFMWl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Oct 2021 08:22:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35864 "EHLO
+        id S238379AbhJFMlH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Oct 2021 08:41:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238105AbhJFMWk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Oct 2021 08:22:40 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26FE4C061753
-        for <linux-pm@vger.kernel.org>; Wed,  6 Oct 2021 05:20:48 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id v17so8224883wrv.9
-        for <linux-pm@vger.kernel.org>; Wed, 06 Oct 2021 05:20:48 -0700 (PDT)
+        with ESMTP id S238416AbhJFMlG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Oct 2021 08:41:06 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE7B8C061755
+        for <linux-pm@vger.kernel.org>; Wed,  6 Oct 2021 05:39:14 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id x27so9897404lfu.5
+        for <linux-pm@vger.kernel.org>; Wed, 06 Oct 2021 05:39:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Tu1xtgEkYty/PIegA82o+6LZkpUw1A+ZXk3x5u90I1k=;
-        b=LLkpZ7uo3KRMksQIVfJneZVtINq6roEAmndjT3u0BQPu7Us1sKOyan0xM2SlLAtEjC
-         L5ErMwdYyZVMhapuiMM8H5LbgBFOBmwRaFmpHJ1aK9m14jokvwJq6DnqOWZqyxeTTZK6
-         TFnljEXO6dqIfhwJBuigISBVpBFHzxWtlZVDQiOissGFMl0ANQ5HoYk+0HVbg1ChS1XV
-         t9kfc0kcS19gZ6yTu4Qnqpk5LLfZ5dPzeOk0XDq5LT5XGPpWaYuIZWiIWq4vbVp637ng
-         AAkZ6/aPvGhgNHbhyCVu+KuI5UQUUc4jlkWGsK9Usgv2zB7lA2crfzWFtXLYl5mD1LTp
-         ipEg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=pt+Sx1i9oC8cMVf+wV0+G1/1GyaW/f/U+87KiyoFd/E=;
+        b=xMf9icJn0dugjBCs5EETJwxewMPK+UjZJs0KYkQ+tEswLY8Y3dBB9eTNHx1P1I74NS
+         uUI5ilQPq4HQIhfoBn10OmK0TYfUpJUGARspsbdoXLABNOzo+QHCEBYNQqtp8KkfHt5y
+         5rgwO4l1nEO/qkIK43xyczyY9zOTefr2lTBwMo3yoVkLR70uqjlAQwkhytRA6fQvBCmo
+         38mmmmGjJXtf94GAftHcVeOr9+ASGdyzPc89mvgsEeg3ssJr7d0NZzeAChud6hgWLQ0x
+         CaiyTsOATrGgHO8lc2Hzh8roRCTRT7QTYzscdKXQfmhYcgY68+9elxMF8yXF5L53e23A
+         iVFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Tu1xtgEkYty/PIegA82o+6LZkpUw1A+ZXk3x5u90I1k=;
-        b=YIS0Jaa2GlB/SbF3jc4ABgew2XiWaoMLFnZ1gMPWcpb4NdGz3yXjB1VqiOBIBQs6Ex
-         4NU2/lF2iS4ryt4Ouh3nAYmb0G8iak6NlYBI/wm9raxkDWqaCy+JTkVMpl35OoLC5Gm/
-         aFZEGi/W5DVvdKSzz2cxDl1TsmdM2kdgV4VIoK8BTdWESxxXsZkdEn1g1gFY2m7TXint
-         vPn0303wNYIgrbNf2GJ9KwWvTHYvQH3AZ1Pm3vH+ktAFDdQ0GKwjCNcEFjz0O7fKFH40
-         5VyaMJRBaZX3njZUxlj3Zd/6H8hWFzsHDFwxtGHDYa91LfNiVPQUVMWxBd475o7H6gEk
-         U4nw==
-X-Gm-Message-State: AOAM5328wPgDat9XYPJUnKJ2gvwLEA13YgPgi0QKvf+bu23c9yU4iLZ/
-        dmjdxw5MQIPzsaekXCMkh6lF5w==
-X-Google-Smtp-Source: ABdhPJwJegLLCtMVaJCfMDU2HhL4qWXk5XJO3dVZmr5hru0RW/Kow+iRwJ9XRWN/VAm3r2/YcLPq0w==
-X-Received: by 2002:a1c:9d50:: with SMTP id g77mr9356331wme.58.1633522846559;
-        Wed, 06 Oct 2021 05:20:46 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:278:1f59:2992:87fe? ([2a01:e34:ed2f:f020:278:1f59:2992:87fe])
-        by smtp.googlemail.com with ESMTPSA id b15sm24606394wru.9.2021.10.06.05.20.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Oct 2021 05:20:45 -0700 (PDT)
-Subject: Re: [PATCH RESEND] thermal/drivers/netlink: Add the temperature when
- crossing a trip point
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Zhang, Rui" <rui.zhang@intel.com>, rkumbako@quicinc.com,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Amit Kucheria <amitk@kernel.org>
-References: <20211001223323.1836640-1-daniel.lezcano@linaro.org>
- <CAJZ5v0hcHq2WJ6UkdDbHynnQYv4MukCWXob_rH=Sa=aYDrr7Cw@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <dfbdfdab-8817-3792-9361-b238dc256219@linaro.org>
-Date:   Wed, 6 Oct 2021 14:20:44 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=pt+Sx1i9oC8cMVf+wV0+G1/1GyaW/f/U+87KiyoFd/E=;
+        b=Bk7AL1+We8CBeZVrNZVNGbnQ/p/RU5LC/r17LqCIJVQjOu8v43zcoCoNAuijXV6ccV
+         352z89BRZegcfeI1GyoJ5rG6+2uNJUXZYjg/CjkLtmOkVtz4qg6+lcCi7AKg47QcZWB+
+         U4vOeeCxgz+Y7KoAhFciR/QdGVidMCT3Y6NuKGifAtm4tkXt31SNnQf2FJFYC1Zf/s5x
+         dTtPVxiizWFsqlCAbPd0kmDm8GqshIaB6WUdXS8AhYUfXgqOQsCMv1ZVsbrr0ZHlDV9M
+         /ewtVpqlLBhsnAxJTjeYjJEpTxiNPC+/hvZqTsF5sLb//ORjUh8siwRsfeBqqdbpwWIz
+         CSbA==
+X-Gm-Message-State: AOAM530bTcx8EnBRq84AaDl4eK8XrQvqAbzV/RU3y/Tc4VoFC8VaZYZK
+        QyslIykFvaj9B7qQ3A25zZnuHDh7wGaxzqsVSpGU4Q==
+X-Google-Smtp-Source: ABdhPJwaJVEKqlVek7TGUDap3J+eg+aVlfc7HMdVbc1X8zMSF/wwjX+qoHICL3q8G6NLzKZ0rQnEZO321GxsAccQSGs=
+X-Received: by 2002:a05:651c:20b:: with SMTP id y11mr29225280ljn.463.1633523952478;
+ Wed, 06 Oct 2021 05:39:12 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAJZ5v0hcHq2WJ6UkdDbHynnQYv4MukCWXob_rH=Sa=aYDrr7Cw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20210926224058.1252-1-digetx@gmail.com> <20210926224058.1252-7-digetx@gmail.com>
+ <CAPDyKFq+LS4Jr1GyC-a-tGWPzGH0JxfJ9wKY=uQEBGYm952azw@mail.gmail.com>
+ <24101cd6-d3f5-1e74-db39-145ecd30418b@gmail.com> <CAPDyKFreK7976PJL-1zySoza_yXM7rMQ64aODWUZ+U3L-uCa0w@mail.gmail.com>
+ <4bdba8a2-4b9b-ed7d-e6ca-9218d8200a85@gmail.com>
+In-Reply-To: <4bdba8a2-4b9b-ed7d-e6ca-9218d8200a85@gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 6 Oct 2021 14:38:35 +0200
+Message-ID: <CAPDyKFq_-HGPRNiNDmnEbuah0mUYoRUWVs1SvbQ6VNMMwEcXjA@mail.gmail.com>
+Subject: Re: [PATCH v13 06/35] clk: tegra: Support runtime PM and power domain
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        David Heidelberg <david@ixit.cz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05/10/2021 17:20, Rafael J. Wysocki wrote:
-> On Sat, Oct 2, 2021 at 12:33 AM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
->>
->> The slope of the temperature increase or decrease can be high and when
->> the temperature crosses the trip point, there could be a significant
->> difference between the trip temperature and the measured temperatures.
->>
->> That forces the userspace to read the temperature back right after
->> receiving a trip violation notification.
->>
->> In order to be efficient, give the temperature which resulted in the
->> trip violation.
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->> Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> 
-> This looks fine to me too.
-> 
->> ---
->>  drivers/thermal/thermal_core.c    |  6 ++++--
->>  drivers/thermal/thermal_netlink.c | 11 ++++++-----
->>  drivers/thermal/thermal_netlink.h |  8 ++++----
->>  3 files changed, 14 insertions(+), 11 deletions(-)
->>
->> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
->> index 51374f4e1cca..9e243d9f929e 100644
->> --- a/drivers/thermal/thermal_core.c
->> +++ b/drivers/thermal/thermal_core.c
->> @@ -375,10 +375,12 @@ static void handle_thermal_trip(struct thermal_zone_device *tz, int trip)
->>         if (tz->last_temperature != THERMAL_TEMP_INVALID) {
->>                 if (tz->last_temperature < trip_temp &&
->>                     tz->temperature >= trip_temp)
->> -                       thermal_notify_tz_trip_up(tz->id, trip);
->> +                       thermal_notify_tz_trip_up(tz->id, trip,
->> +                                                 tz->temperature);
->>                 if (tz->last_temperature >= trip_temp &&
->>                     tz->temperature < (trip_temp - hyst))
->> -                       thermal_notify_tz_trip_down(tz->id, trip);
->> +                       thermal_notify_tz_trip_down(tz->id, trip,
->> +                                                   tz->temperature);
-> 
-> While at it, I'm not sure if all of the additional line breaks due to
-> the line length limit are really necessary.  The code would be easier
-> to follow without them IMV.
+On Wed, 6 Oct 2021 at 00:19, Dmitry Osipenko <digetx@gmail.com> wrote:
+>
+> 05.10.2021 16:10, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> > On Sat, 2 Oct 2021 at 22:44, Dmitry Osipenko <digetx@gmail.com> wrote:
+> >>
+> >> 01.10.2021 15:32, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> >>>> +static __maybe_unused int tegra_clock_pm_suspend(struct device *dev=
+)
+> >>>> +{
+> >>>> +       struct tegra_clk_device *clk_dev =3D dev_get_drvdata(dev);
+> >>>> +
+> >>>> +       /*
+> >>>> +        * Power management of the clock is entangled with the Tegra=
+ PMC
+> >>>> +        * GENPD because PMC driver enables/disables clocks for togg=
+ling
+> >>>> +        * of the PD's on/off state.
+> >>>> +        *
+> >>>> +        * The PMC GENPD is resumed in NOIRQ phase, before RPM of th=
+e clocks
+> >>>> +        * becomes available, hence PMC can't use clocks at the earl=
+y resume
+> >>>> +        * phase if RPM is involved. For example when 3d clock is en=
+abled,
+> >>>> +        * it may enable the parent PLL clock that needs to be RPM-r=
+esumed.
+> >>>> +        *
+> >>>> +        * Secondly, the PLL clocks may be enabled by the low level =
+suspend
+> >>>> +        * code, so we need to assume that PLL is in enabled state d=
+uring
+> >>>> +        * suspend.
+> >>>> +        *
+> >>>> +        * We will keep PLLs and system clock resumed during suspend=
+ time.
+> >>>> +        * All PLLs on all SoCs are low power and system clock is al=
+ways-on,
+> >>>> +        * so practically not much is changed here.
+> >>>> +        */
+> >>>> +
+> >>>> +       return clk_prepare(clk_dev->hw->clk);
+> >>> I am trying to understand, more exactly, what you intend to achieve
+> >>> with the clk_prepare() here. It looks a bit weird, to me. Can you try
+> >>> to elaborate a bit more on the use case?
+> >>
+> >> The Tegra GENPD driver enable/disable clocks when domain is turned on.
+> >
+> > Okay. I noticed that in tegra_genpd_power_on(). And the same clocks
+> > are enabled/disabled also in tegra_genpd_power_off(), when powering
+> > off the PM domain.
+> >
+> > So I guess the problem kind of exists for tegra_genpd_power_off() too?
+>
+> Both OFF/ON are affected by the same problem. If domain was already
+> turned OFF before genpd_suspend_noirq(), then the OFF problem isn't visib=
+le.
+>
+> I reproduced the OFF problem by removing the clk prepare/unprepare from
+> the suspend/resume of the clk driver and making some extra changes to
+> clock tree topology and etc to trigger the problem on Nexus 7.
+>
+> tegra-pmc 7000e400.pmc: failed to turn off PM domain heg: -13
+>
+> I happens from genpd_suspend_noirq() -> tegra_genpd_power_off() -> clk
+> -> GENPD -> I2C -> runtime-pm.
+>
+> -13 is EACCES, it comes from the runtime PM of I2C device. RPM is
+> prohibited/disabled during late (NOIRQ) suspend by the drivers core.
 
-Ok let me write another patch to wrap those into a single function and
-reduce the indentation.
+Thanks for the clarification!
 
->>         }
->>
->>         if (type == THERMAL_TRIP_CRITICAL || type == THERMAL_TRIP_HOT)
->> diff --git a/drivers/thermal/thermal_netlink.c b/drivers/thermal/thermal_netlink.c
->> index 1234dbe95895..a16dd4d5d710 100644
->> --- a/drivers/thermal/thermal_netlink.c
->> +++ b/drivers/thermal/thermal_netlink.c
->> @@ -121,7 +121,8 @@ static int thermal_genl_event_tz(struct param *p)
->>  static int thermal_genl_event_tz_trip_up(struct param *p)
->>  {
->>         if (nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_ID, p->tz_id) ||
->> -           nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_TRIP_ID, p->trip_id))
->> +           nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_TRIP_ID, p->trip_id) ||
->> +           nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_TEMP, p->temp))
->>                 return -EMSGSIZE;
->>
->>         return 0;
->> @@ -285,16 +286,16 @@ int thermal_notify_tz_disable(int tz_id)
->>         return thermal_genl_send_event(THERMAL_GENL_EVENT_TZ_DISABLE, &p);
->>  }
->>
->> -int thermal_notify_tz_trip_down(int tz_id, int trip_id)
->> +int thermal_notify_tz_trip_down(int tz_id, int trip_id, int temp)
->>  {
->> -       struct param p = { .tz_id = tz_id, .trip_id = trip_id };
->> +       struct param p = { .tz_id = tz_id, .trip_id = trip_id, .temp = temp };
->>
->>         return thermal_genl_send_event(THERMAL_GENL_EVENT_TZ_TRIP_DOWN, &p);
->>  }
->>
->> -int thermal_notify_tz_trip_up(int tz_id, int trip_id)
->> +int thermal_notify_tz_trip_up(int tz_id, int trip_id, int temp)
->>  {
->> -       struct param p = { .tz_id = tz_id, .trip_id = trip_id };
->> +       struct param p = { .tz_id = tz_id, .trip_id = trip_id, .temp = temp };
->>
->>         return thermal_genl_send_event(THERMAL_GENL_EVENT_TZ_TRIP_UP, &p);
->>  }
->> diff --git a/drivers/thermal/thermal_netlink.h b/drivers/thermal/thermal_netlink.h
->> index 828d1dddfa98..e554f76291f4 100644
->> --- a/drivers/thermal/thermal_netlink.h
->> +++ b/drivers/thermal/thermal_netlink.h
->> @@ -11,8 +11,8 @@ int thermal_notify_tz_create(int tz_id, const char *name);
->>  int thermal_notify_tz_delete(int tz_id);
->>  int thermal_notify_tz_enable(int tz_id);
->>  int thermal_notify_tz_disable(int tz_id);
->> -int thermal_notify_tz_trip_down(int tz_id, int id);
->> -int thermal_notify_tz_trip_up(int tz_id, int id);
->> +int thermal_notify_tz_trip_down(int tz_id, int id, int temp);
->> +int thermal_notify_tz_trip_up(int tz_id, int id, int temp);
->>  int thermal_notify_tz_trip_delete(int tz_id, int id);
->>  int thermal_notify_tz_trip_add(int tz_id, int id, int type,
->>                                int temp, int hyst);
->> @@ -49,12 +49,12 @@ static inline int thermal_notify_tz_disable(int tz_id)
->>         return 0;
->>  }
->>
->> -static inline int thermal_notify_tz_trip_down(int tz_id, int id)
->> +static inline int thermal_notify_tz_trip_down(int tz_id, int id, int temp)
->>  {
->>         return 0;
->>  }
->>
->> -static inline int thermal_notify_tz_trip_up(int tz_id, int id)
->> +static inline int thermal_notify_tz_trip_up(int tz_id, int id, int temp)
->>  {
->>         return 0;
->>  }
->> --
->> 2.25.1
->>
+>
+> >> This can't be done during early system resume, when domains are gettin=
+g
+> >> turned on by the drivers core, because when clock is enabled, it's
+> >> getting prepared (RPM-resumed) and this preparation fails because
+> >> performance state of the clock goes up and it doesn't work during the
+> >> early resume time since I2C, which applies the state to hardware, is
+> >> suspended and can't work at that early time.
+> >
+> > This sounds complicated and I still don't quite follow all of it, sorry=
+.
+> >
+> > So, tegra_genpd_power_on() gets called from genpd_resume_noirq(), when
+> > the first device of the attached devices to genpd gets resumed. And
+> > vice versa for tegra_genpd_power_off() and genpd_suspend_noirq().
+> >
+> > Are you saying that trying to enable/disable clocks from
+> > tegra_genpd_power_on|off() in these paths doesn't work, because it
+> > would also require the performance state to be changed, which would
+> > fail because the I2C bus/driver is suspended?
+>
+> Yes, but it's actually not I2C bus/driver that is suspended, it's
+> runtime PM that is unavailable during NOIRQ. The I2C driver itself is
+> suspended after domains are turned OFF and resumed before they are
+> enabled. It's just runtime PM API that is unavailable. I'm wondering if
+> this could be changed.
 
+In principle what you ask for, is if we can avoid calling
+__pm_runtime_disable() in __device_suspend_late() (and vice versa in
+device_resume_early()).
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+I think the short answer is no, at least from a generic point of view.
+Maybe we can figure out a way to allow this on a per device basis, as
+an opt-in solution. I am not sure what Rafael would think about this,
+let's see.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Another option to address the problem is already available to use for
+these kinds of cases. This would be to add also a pair of
+->suspend|resume() callbacks to I2C driver. Along the lines of the
+below.
+
+diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.=
+c
+index c883044715f3..589bf872ab25 100644
+--- a/drivers/i2c/busses/i2c-tegra.c
++++ b/drivers/i2c/busses/i2c-tegra.c
+@@ -1918,6 +1918,7 @@ static int __maybe_unused
+tegra_i2c_resume(struct device *dev)
+ }
+
+ static const struct dev_pm_ops tegra_i2c_pm =3D {
++       SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_put_noidle, pm_runtime_get_sync)
+        SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(tegra_i2c_suspend, tegra_i2c_resume)
+        SET_RUNTIME_PM_OPS(tegra_i2c_runtime_suspend, tegra_i2c_runtime_res=
+ume,
+                           NULL)
+
+In this way, the device would already be runtime resumed, if there is
+call to pm_runtime_get_sync() from the clock framework due to the
+clk_prepare|unprepare() being called. If that also turns out to happen
+*after* runtime PM has been disabled for the device, the call to
+pm_runtime_get_sync() would still succeed (returning 1, see
+rpm_resume()), rather than a negative error code.
+
+Yes, we may end up runtime resuming the device during system suspend,
+even if it turns out not to be needed. Although, that doesn't seem to
+be the case for the Tegra I2C driver, right?
+
+>
+> I'm also wondering if we could add some 'was_enabled' flag to GENPDs,
+> setting it by genpd_suspend_noirq() for the enabled domains, and then
+> powering-on GENPDs from genpd_resume_noirq() only if they were in the
+> enabled state during genpd_suspend_noirq() time. It actually puzzled me
+> for a quite long time why GENPD core enables domains unconditionally
+> during early resume. This should solve a part of the problem and it
+> makes suspend/resume a bit safer because there is a smaller chance to
+> crash hardware during suspend, at least it's easier to debug.
+
+Just because the PM domain was already off at genpd_suspend_noirq(),
+doesn't mean that it can stay powered off at genpd_resume_noirq(). At
+least as is today.
+
+The main reason why genpd_resume_noirq() powers on the PM domain, is
+because it's not possible for the consumer drivers to rely on runtime
+PM to do it (because runtime PM has been disabled by the PM core).
+
+>
+> >> Secondly, Tegra has arch-specific low level assembly which touches
+> >> clocks during last phase of system suspend and in the beginning of
+> >> resume. Hence, clocks should stay prepared during suspend just because
+> >> technically clock should be prepared before it can be enabled.
+> >
+> > So the low level code is gating and ungating the clock behind the back
+> > of the clock driver then? Why is that done like that, more exactly?
+>
+> I revisited that code again, and it shouldn't touch the clocks.
+> I changed that code to not toggle the clocks [1] sometime ago, but
+> forgot about it.
+>
+> [1] https://git.kernel.org/linus/680ae4452
+>
+> >>> Is this rather about making sure that the clock's corresponding PM
+> >>> domain stays powered on during system suspend? In that case, I think
+> >>> there may be an alternative option....
+> >>>
+> >>
+> >> This is not about domain staying powered on, this is about keeping the
+> >> performance state of the domain high during suspend.
+> >
+> > Right, so the PM domain managed in tegra_genpd_power_on|off() can
+> > still be powered on/off, as long as the clock remains ungated?
+>
+> Not ungated, but prepared.
+
+Okay, thanks for clarifying!
+
+In summary, it sounds like you should be able to fix this problem in
+the I2C driver as I suggested above. If that works, that seems much
+better.
+
+Moreover, it would leave the clocks gated/unprepared when the system
+is fully suspended, which I guess is better from an energy point of
+view?
+
+Kind regards
+Uffe
