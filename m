@@ -2,227 +2,153 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7634742391A
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Oct 2021 09:44:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 889FD423955
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Oct 2021 10:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237531AbhJFHpw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Oct 2021 03:45:52 -0400
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:36074
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230013AbhJFHpw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Oct 2021 03:45:52 -0400
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com [209.85.167.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id B98CE3FFDA
-        for <linux-pm@vger.kernel.org>; Wed,  6 Oct 2021 07:43:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1633506239;
-        bh=p3TdwP/PribmlQ1v0NHBlYo0hol6MEpHmLnfLowf3MQ=;
-        h=To:Cc:References:From:Subject:Message-ID:Date:MIME-Version:
-         In-Reply-To:Content-Type;
-        b=nLR4AQjbm3GB4Al+SXIxdPPH4ZghPvcnqXt5c7MlspmtJR1O6BDRxqKqUASOJJq+7
-         MBDBrXgd8UdmjzoQab73sSoah1G1+LlB5cybNTKzXaC7wAy+SCg688X74+1mZ9s0yy
-         eviOFzF9yxAbozNLTVlmC7xwov5uwFF2Ce3nC6UXDTkgcZJ8593wSS7VKaal0u2BpK
-         niN2oKAjOm748RwVPyWNItYB8n795Vk6fMWG+OKedmp6rYo2AkW/u2zJHXH3j/aHFf
-         B2f87ZX0zrT9V09bMxCE1w18RaM9KZCkKNbSlQ6HI9+LX1/OC/nFycpf09WD+UEatR
-         u0b2uVNQ8O6eQ==
-Received: by mail-lf1-f69.google.com with SMTP id i1-20020ac25221000000b003fd5769ca3bso150194lfl.2
-        for <linux-pm@vger.kernel.org>; Wed, 06 Oct 2021 00:43:59 -0700 (PDT)
+        id S237592AbhJFIEq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Oct 2021 04:04:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60492 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237558AbhJFIEq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Oct 2021 04:04:46 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E5AC061749;
+        Wed,  6 Oct 2021 01:02:54 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id oa4so887151pjb.2;
+        Wed, 06 Oct 2021 01:02:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=UbqTIpTFQS7aAGr3YM/8R5iSEHNaOAPGOgI0IFoknDk=;
+        b=nKvwT6TPuRmOi2jKSnxpR7Hq5mIikmjHGB1au4acUDsayxsQQtSnc7j2EaLEGXaD0K
+         LVdf9DFERU+oPFd2DZpTszwqsNrLnfIRg1YdpzTczeLYIYnTUM57NADWEWdOyyPZXV2o
+         9K8bpChPL3RxfdUq5I9iUHPokB8P43cAVmWGEIMRfabkIC7fbDtoSzFQpnEFuvKKtyUU
+         CxEfmGu1DDgUZDZ8iWGrMZDijNDCFcablv4WfybdgJ0cOXFh8yWPBhrcCcMChatdEZsA
+         IhblRH68jEQdCrnkfHSJLS7jM8ChUZ+r54ydeOtU7hfNAtI7w23DkB8CQ68XF6JnAgtM
+         MTQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=p3TdwP/PribmlQ1v0NHBlYo0hol6MEpHmLnfLowf3MQ=;
-        b=J5z7P05mW53weVzZVvUD/RLrtyTYcN4ifJmUbbr9HBr6o9v1HIa9WNWbaa+GLgvn2l
-         nfl/veIL7fwO6IN7TQ+/KCUkjhIHqDV//x1UWVyMV/ag8n5wKxQ9uYuKX9sJgJDSxcN5
-         IVvLm8tXQe5KSthQDzx1aT4bIGAyG2AwZxFMTxsZ8n7lY00H4dp19ziKicyX+UjQepQ5
-         JIUqNJ8oH4hsp+cYG5lE3g7AtZZkcMjenO0zmLfHV7NgvmFT7pU0ijQxfP3GdAvg1SIO
-         5YotHIQePXX5Ihm+cwC0pqziWkmsZb3sh5UYt2LXEzzboYIhqRxR6GoZtZT2MZ8vYKWj
-         xrFw==
-X-Gm-Message-State: AOAM533go7fEaIVMh1wMTlockOUz2t+MZrIhU0FAspBGcBFbJRkJnqbm
-        QmQSdqJaUKP80bA4wQToSH2AVOZM/yU4FwGIZ/0K/qnFod6we2y6W4MFvyPeQF0ce0hExYFmZmN
-        mexqnyTSadKq+y81IAQmntV4ghm1mphv9jaYs
-X-Received: by 2002:a2e:9d8e:: with SMTP id c14mr7537010ljj.207.1633506238938;
-        Wed, 06 Oct 2021 00:43:58 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwShXMII/bxjqdcgdiJRadaRbz/YAHRW3hisKs3N8yKBLAl3qc5SWHESVOxB866fsSGC6z0AA==
-X-Received: by 2002:a2e:9d8e:: with SMTP id c14mr7536987ljj.207.1633506238757;
-        Wed, 06 Oct 2021 00:43:58 -0700 (PDT)
-Received: from [192.168.0.20] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id g14sm2187143lfb.205.2021.10.06.00.43.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Oct 2021 00:43:58 -0700 (PDT)
-To:     Hector Martin <marcan@marcan.st>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Marc Zyngier <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-serial@vger.kernel.org
-References: <20211005155923.173399-1-marcan@marcan.st>
- <20211005155923.173399-7-marcan@marcan.st>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: Re: [PATCH 6/7] tty: serial: samsung_tty: Support runtime PM
-Message-ID: <77ae3bb1-6da5-3ec6-de33-5e5f661b6145@canonical.com>
-Date:   Wed, 6 Oct 2021 09:43:57 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=UbqTIpTFQS7aAGr3YM/8R5iSEHNaOAPGOgI0IFoknDk=;
+        b=wAmkMrBV16RvkddhLqBC4JzeZiCLscEH7rl6pS2UCK/t+LJBhwr0TsVG87qntyV6S0
+         KFVrdA9ofadw5IS1DrCtkFt8Vq/KGD9n5oMJj53kRpjKXUPqZP/8IoYLT765/BfcHEeh
+         TpDNibOQWEaisGCtUzAf60kN7peunszGVAY/WMdKzysnHxErrLbq0fJuUhF1bTlWlz+C
+         AiwR4m4/lUyN8wXrh4Gvl9XEcmC43VLsLY/WoGx8XqIfGQHOeaIyIIiOrU/266plCLs8
+         6f5T7YtDsfw0aWCa3mUO4hXiCWxTJMTzQVcruJDLtAcRWDiUuNzLjxIYiVXqr7WwU2CK
+         XzhQ==
+X-Gm-Message-State: AOAM53343Dyxgztnl2IOXILmNLuiJliCZRIS1dtmdN0MAJCjCcZAEba1
+        3lUtM7gAJVWJ6uIy2Cpeyup7xMU84+p3YmAO/A==
+X-Google-Smtp-Source: ABdhPJwCZ1GZ36oC4PELmX4vJo6A0wL93AlBqlanAcU/f0tZbT41QjfmmpZvIQvS0nxCyATYROzMSyDfB5F54uvpaXs=
+X-Received: by 2002:a17:90a:a78f:: with SMTP id f15mr9402337pjq.106.1633507374011;
+ Wed, 06 Oct 2021 01:02:54 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20211005155923.173399-7-marcan@marcan.st>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+From:   Hao Sun <sunhao.th@gmail.com>
+Date:   Wed, 6 Oct 2021 16:02:43 +0800
+Message-ID: <CACkBjsbe1=WzLQQvQ4zpjqwr=Yx20U7MWeMPMaK8RZ0t3+vTyg@mail.gmail.com>
+Subject: BUG: unable to handle kernel NULL pointer dereference in __pm_runtime_resume
+To:     Greg KH <gregkh@linuxfoundation.org>, len.brown@intel.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     linux-pm@vger.kernel.org, pavel@ucw.cz, rafael@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05/10/2021 17:59, Hector Martin wrote:
-> This allows idle UART devices to be suspended using the standard
-> runtime-PM framework. The logic is modeled after stm32-usart.
-> 
-> Signed-off-by: Hector Martin <marcan@marcan.st>
-> ---
->  drivers/tty/serial/samsung_tty.c | 88 ++++++++++++++++++++------------
->  1 file changed, 54 insertions(+), 34 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
-> index e2f49863e9c2..d68e3341adc6 100644
-> --- a/drivers/tty/serial/samsung_tty.c
-> +++ b/drivers/tty/serial/samsung_tty.c
-> @@ -40,6 +40,7 @@
->  #include <linux/clk.h>
->  #include <linux/cpufreq.h>
->  #include <linux/of.h>
-> +#include <linux/pm_runtime.h>
->  #include <asm/irq.h>
->  
->  /* UART name and device definitions */
-> @@ -1381,31 +1382,49 @@ static void exynos_usi_init(struct uart_port *port)
->  
->  /* power power management control */
->  
-> -static void s3c24xx_serial_pm(struct uart_port *port, unsigned int level,
-> -			      unsigned int old)
-> +static int __maybe_unused s3c24xx_serial_runtime_suspend(struct device *dev)
->  {
-> +	struct uart_port *port = dev_get_drvdata(dev);
->  	struct s3c24xx_uart_port *ourport = to_ourport(port);
->  	int timeout = 10000;
->  
-> -	ourport->pm_level = level;
-> +	while (--timeout && !s3c24xx_serial_txempty_nofifo(port))
-> +		udelay(100);
->  
-> -	switch (level) {
-> -	case 3:
-> -		while (--timeout && !s3c24xx_serial_txempty_nofifo(port))
-> -			udelay(100);
-> +	if (!IS_ERR(ourport->baudclk))
-> +		clk_disable_unprepare(ourport->baudclk);
->  
-> -		if (!IS_ERR(ourport->baudclk))
-> -			clk_disable_unprepare(ourport->baudclk);
-> +	clk_disable_unprepare(ourport->clk);
-> +	return 0;
-> +};
->  
-> -		clk_disable_unprepare(ourport->clk);
-> -		break;
-> +static int __maybe_unused s3c24xx_serial_runtime_resume(struct device *dev)
-> +{
-> +	struct uart_port *port = dev_get_drvdata(dev);
-> +	struct s3c24xx_uart_port *ourport = to_ourport(port);
->  
-> -	case 0:
-> -		clk_prepare_enable(ourport->clk);
-> +	clk_prepare_enable(ourport->clk);
->  
-> -		if (!IS_ERR(ourport->baudclk))
-> -			clk_prepare_enable(ourport->baudclk);
-> +	if (!IS_ERR(ourport->baudclk))
-> +		clk_prepare_enable(ourport->baudclk);
-> +	return 0;
-> +};
-> +
-> +static void s3c24xx_serial_pm(struct uart_port *port, unsigned int level,
-> +			      unsigned int old)
-> +{
-> +	struct s3c24xx_uart_port *ourport = to_ourport(port);
-> +
-> +	ourport->pm_level = level;
->  
-> +	switch (level) {
-> +	case UART_PM_STATE_OFF:
-> +		pm_runtime_mark_last_busy(port->dev);
-> +		pm_runtime_put_sync(port->dev);
-> +		break;
-> +
-> +	case UART_PM_STATE_ON:
-> +		pm_runtime_get_sync(port->dev);
->  		exynos_usi_init(port);
->  		break;
->  	default:
-> @@ -2282,18 +2301,15 @@ static int s3c24xx_serial_probe(struct platform_device *pdev)
->  		}
->  	}
->  
-> +	pm_runtime_get_noresume(&pdev->dev);
-> +	pm_runtime_set_active(&pdev->dev);
-> +	pm_runtime_enable(&pdev->dev);
-> +
+Hello,
 
-You need to cleanup in error paths (put/disable).
+When using Healer to fuzz the latest Linux kernel, the following crash
+was triggered.
 
->  	dev_dbg(&pdev->dev, "%s: adding port\n", __func__);
->  	uart_add_one_port(&s3c24xx_uart_drv, &ourport->port);
->  	platform_set_drvdata(pdev, &ourport->port);
->  
-> -	/*
-> -	 * Deactivate the clock enabled in s3c24xx_serial_init_port here,
-> -	 * so that a potential re-enablement through the pm-callback overlaps
-> -	 * and keeps the clock enabled in this case.
-> -	 */
-> -	clk_disable_unprepare(ourport->clk);
-> -	if (!IS_ERR(ourport->baudclk))
-> -		clk_disable_unprepare(ourport->baudclk);
-> +	pm_runtime_put_sync(&pdev->dev);
->  
->  	ret = s3c24xx_serial_cpufreq_register(ourport);
->  	if (ret < 0)
-> @@ -2309,8 +2325,14 @@ static int s3c24xx_serial_remove(struct platform_device *dev)
->  	struct uart_port *port = s3c24xx_dev_to_port(&dev->dev);
->  
->  	if (port) {
-> +		pm_runtime_get_sync(&dev->dev);
+HEAD commit: 0513e464f900 Merge tag 'perf-tools-fixes-for-v5.15-2021-09-27'
+git tree: upstream
+console output:
+https://drive.google.com/file/d/1Dry825YkZ476I9qhMmrNcptbV66nxxJ0/view?usp=sharing
+kernel config: https://drive.google.com/file/d/1Jqhc4DpCVE8X7d-XBdQnrMoQzifTG5ho/view?usp=sharing
+Similar report:
+https://syzkaller.appspot.com/bug?id=1bc76a5779300075e3466a0e2abcd753df212779
 
-1. You need to check return status.
-2. Why do you need to resume the device here?
+Sorry, I don't have a reproducer for this crash, hope the symbolized
+report can help.
+If you fix this issue, please add the following tag to the commit:
+Reported-by: Hao Sun <sunhao.th@gmail.com>
 
-> +
->  		s3c24xx_serial_cpufreq_deregister(to_ourport(port));
->  		uart_remove_one_port(&s3c24xx_uart_drv, port);
-> +
-> +		pm_runtime_disable(&dev->dev);
-
-Why disabling it only if port!=NULL? Can remove() be called if
-platform_set_drvdata() was not?
-
-> +		pm_runtime_set_suspended(&dev->dev);
-> +		pm_runtime_put_noidle(&dev->dev);
->  	}
->  
->  	uart_unregister_driver(&s3c24xx_uart_drv);
-> @@ -2319,8 +2341,8 @@ static int s3c24xx_serial_remove(struct platform_device *dev)
->  }
->  
-
-Best regards,
-Krzysztof
+Bluetooth: : Invalid header checksum
+BUG: kernel NULL pointer dereference, address: 0000000000000388
+#PF: supervisor write access in kernel mode
+#PF: error_code(0x0002) - not-present page
+PGD 18801067 P4D 18801067 PUD 18802067 PMD 0
+Oops: 0002 [#1] PREEMPT SMP
+CPU: 3 PID: 769 Comm: kworker/u10:3 Not tainted 5.15.0-rc3+ #21
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+rel-1.12.0-59-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
+Workqueue: events_unbound flush_to_ldisc
+RIP: 0010:arch_atomic_inc arch/x86/include/asm/atomic.h:95 [inline]
+RIP: 0010:atomic_inc include/linux/atomic/atomic-instrumented.h:182 [inline]
+RIP: 0010:__pm_runtime_resume+0x34/0xa0 drivers/base/power/runtime.c:1105
+Code: fb e8 90 dc d4 fe 40 f6 c5 01 75 0e e8 85 dc d4 fe f6 83 91 03
+00 00 04 74 4e e8 77 dc d4 fe 40 f6 c5 04 74 0c e8 6c dc d4 fe <f0> ff
+83 88 03 00 00 e8 60 dc d4 fe 4c 8d a3 e8 01 00 00 4c 89 e7
+RSP: 0018:ffffc90002807cf8 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff8881007b2280 RSI: ffffffff8262b4f4 RDI: 0000000000000000
+RBP: 0000000000000005 R08: 0000000000082a20 R09: 00000000ffffffff
+R10: ffffffff8369c890 R11: 0000000000000005 R12: ffff88811220802e
+R13: ffff88811220b800 R14: ffff88811083f000 R15: 0000000000000040
+FS:  0000000000000000(0000) GS:ffff88813dd00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000388 CR3: 0000000018800000 CR4: 0000000000750ee0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+PKRU: 55555554
+Call Trace:
+ pm_runtime_get include/linux/pm_runtime.h:374 [inline]
+ h5_recv+0x9e/0x260 drivers/bluetooth/hci_h5.c:590
+ hci_uart_tty_receive+0xfc/0x370 drivers/bluetooth/hci_ldisc.c:613
+ tty_ldisc_receive_buf+0x89/0x90 drivers/tty/tty_buffer.c:475
+ tty_port_default_receive_buf+0x50/0x80 drivers/tty/tty_port.c:39
+ receive_buf drivers/tty/tty_buffer.c:491 [inline]
+ flush_to_ldisc+0xda/0x130 drivers/tty/tty_buffer.c:543
+ process_one_work+0x359/0x850 kernel/workqueue.c:2297
+ worker_thread+0x41/0x4d0 kernel/workqueue.c:2444
+ kthread+0x178/0x1b0 kernel/kthread.c:319
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+Modules linked in:
+Dumping ftrace buffer:
+   (ftrace buffer empty)
+CR2: 0000000000000388
+---[ end trace f71af1d10b9bdcd8 ]---
+RIP: 0010:arch_atomic_inc arch/x86/include/asm/atomic.h:95 [inline]
+RIP: 0010:atomic_inc include/linux/atomic/atomic-instrumented.h:182 [inline]
+RIP: 0010:__pm_runtime_resume+0x34/0xa0 drivers/base/power/runtime.c:1105
+Code: fb e8 90 dc d4 fe 40 f6 c5 01 75 0e e8 85 dc d4 fe f6 83 91 03
+00 00 04 74 4e e8 77 dc d4 fe 40 f6 c5 04 74 0c e8 6c dc d4 fe <f0> ff
+83 88 03 00 00 e8 60 dc d4 fe 4c 8d a3 e8 01 00 00 4c 89 e7
+RSP: 0018:ffffc90002807cf8 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff8881007b2280 RSI: ffffffff8262b4f4 RDI: 0000000000000000
+RBP: 0000000000000005 R08: 0000000000082a20 R09: 00000000ffffffff
+R10: ffffffff8369c890 R11: 0000000000000005 R12: ffff88811220802e
+R13: ffff88811220b800 R14: ffff88811083f000 R15: 0000000000000040
+FS:  0000000000000000(0000) GS:ffff88813dd00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000388 CR3: 0000000018800000 CR4: 0000000000750ee0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+PKRU: 55555554
+----------------
+Code disassembly (best guess):
+   0: fb                    sti
+   1: e8 90 dc d4 fe        callq  0xfed4dc96
+   6: 40 f6 c5 01          test   $0x1,%bpl
+   a: 75 0e                jne    0x1a
+   c: e8 85 dc d4 fe        callq  0xfed4dc96
+  11: f6 83 91 03 00 00 04 testb  $0x4,0x391(%rbx)
+  18: 74 4e                je     0x68
+  1a: e8 77 dc d4 fe        callq  0xfed4dc96
+  1f: 40 f6 c5 04          test   $0x4,%bpl
+  23: 74 0c                je     0x31
+  25: e8 6c dc d4 fe        callq  0xfed4dc96
+* 2a: f0 ff 83 88 03 00 00 lock incl 0x388(%rbx) <-- trapping instruction
+  31: e8 60 dc d4 fe        callq  0xfed4dc96
+  36: 4c 8d a3 e8 01 00 00 lea    0x1e8(%rbx),%r12
+  3d: 4c 89 e7              mov    %r12,%rdi
