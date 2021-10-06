@@ -2,69 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53EDF423BFD
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Oct 2021 13:08:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD344423D9E
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Oct 2021 14:20:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238101AbhJFLKV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Oct 2021 07:10:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46818 "EHLO
+        id S238238AbhJFMWl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Oct 2021 08:22:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237836AbhJFLKU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Oct 2021 07:10:20 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8EDC06174E
-        for <linux-pm@vger.kernel.org>; Wed,  6 Oct 2021 04:08:28 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id u18so7668361wrg.5
-        for <linux-pm@vger.kernel.org>; Wed, 06 Oct 2021 04:08:27 -0700 (PDT)
+        with ESMTP id S238105AbhJFMWk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Oct 2021 08:22:40 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26FE4C061753
+        for <linux-pm@vger.kernel.org>; Wed,  6 Oct 2021 05:20:48 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id v17so8224883wrv.9
+        for <linux-pm@vger.kernel.org>; Wed, 06 Oct 2021 05:20:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=NPYO1x8t8q66IiDTyVlrAaxm7/2JWwiYPINC/gUajk0=;
-        b=teGOKFdDhDsSTSXzlKK/3F6rCmpFIHzypmyst45m2zsOMJvdqVwxTBuWIpItl00H9B
-         YdNO9ZlryPCTJ+LAB4/bOYdPAzARCQmx5BEYYbk1xsVHSy84eL9lW6PoLTzJhC6G/ylZ
-         fStW2ibbzcM69WecqB69/rlps535APGOs+loGZeZoOvJ1qInElCX2tVpMZEOS2Fdn8X/
-         5nDlEtdHaC0HwT1hmF4sWLznBxPkafMSE96WIWxWkIKK08cvN15zfVxQkh9LyT/RF+Qr
-         8u0cJNnX8pVEoTfLTBHoCg6KNeXPh+9a/bCmB1Xs8mRH+xFPReNqrJcbEX6qFrrwksp5
-         39lw==
+        bh=Tu1xtgEkYty/PIegA82o+6LZkpUw1A+ZXk3x5u90I1k=;
+        b=LLkpZ7uo3KRMksQIVfJneZVtINq6roEAmndjT3u0BQPu7Us1sKOyan0xM2SlLAtEjC
+         L5ErMwdYyZVMhapuiMM8H5LbgBFOBmwRaFmpHJ1aK9m14jokvwJq6DnqOWZqyxeTTZK6
+         TFnljEXO6dqIfhwJBuigISBVpBFHzxWtlZVDQiOissGFMl0ANQ5HoYk+0HVbg1ChS1XV
+         t9kfc0kcS19gZ6yTu4Qnqpk5LLfZ5dPzeOk0XDq5LT5XGPpWaYuIZWiIWq4vbVp637ng
+         AAkZ6/aPvGhgNHbhyCVu+KuI5UQUUc4jlkWGsK9Usgv2zB7lA2crfzWFtXLYl5mD1LTp
+         ipEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=NPYO1x8t8q66IiDTyVlrAaxm7/2JWwiYPINC/gUajk0=;
-        b=SIZygTNaYAcGjd8LpSYv+gw0Ug+3Mj9wp3/j72w0ZuD/P4DtMnKFAQQMX1fu+zgziy
-         UAiLfRxmmeYs3GKcn/Ztvad6ZfpRS9ijxX3wToipzNfBXTQb/ZbBdxKHsheAVL44C1VI
-         ew9/y0kjr++ypuJC0oNLRCfxlpZRa2bNBkUmGBJzkXK4e1IuVklMNDZtbBPPSwbc1uQh
-         9pN1bvCMOKvDCQJq+uz1FMsVi+r9xkyuyqzJBcG1A6c49lWwJStWgekmEDkU9FChAQM5
-         6jpWuHLugiJMfEwaVJ7ajngimbg3n9gHPrk7Hp4TBjr2ssc23w+DyyVSadsDwriEUSI/
-         MIig==
-X-Gm-Message-State: AOAM531jAfAzFE0FPL+Oiyb5uTRxKqMR/NpwEH/kVB70eomz+XI9SRT1
-        0HjULrly9hTi1xMnA7fY/yZKuXZ70ZEupw==
-X-Google-Smtp-Source: ABdhPJzN31a8fb3hArFNzP0zK4gXJkh4yXbULm107s+BMWZSrv4Tlus6Q1F6cUhoA54qewVUya/IyA==
-X-Received: by 2002:a1c:4e0f:: with SMTP id g15mr9142233wmh.74.1633518496285;
-        Wed, 06 Oct 2021 04:08:16 -0700 (PDT)
+        bh=Tu1xtgEkYty/PIegA82o+6LZkpUw1A+ZXk3x5u90I1k=;
+        b=YIS0Jaa2GlB/SbF3jc4ABgew2XiWaoMLFnZ1gMPWcpb4NdGz3yXjB1VqiOBIBQs6Ex
+         4NU2/lF2iS4ryt4Ouh3nAYmb0G8iak6NlYBI/wm9raxkDWqaCy+JTkVMpl35OoLC5Gm/
+         aFZEGi/W5DVvdKSzz2cxDl1TsmdM2kdgV4VIoK8BTdWESxxXsZkdEn1g1gFY2m7TXint
+         vPn0303wNYIgrbNf2GJ9KwWvTHYvQH3AZ1Pm3vH+ktAFDdQ0GKwjCNcEFjz0O7fKFH40
+         5VyaMJRBaZX3njZUxlj3Zd/6H8hWFzsHDFwxtGHDYa91LfNiVPQUVMWxBd475o7H6gEk
+         U4nw==
+X-Gm-Message-State: AOAM5328wPgDat9XYPJUnKJ2gvwLEA13YgPgi0QKvf+bu23c9yU4iLZ/
+        dmjdxw5MQIPzsaekXCMkh6lF5w==
+X-Google-Smtp-Source: ABdhPJwJegLLCtMVaJCfMDU2HhL4qWXk5XJO3dVZmr5hru0RW/Kow+iRwJ9XRWN/VAm3r2/YcLPq0w==
+X-Received: by 2002:a1c:9d50:: with SMTP id g77mr9356331wme.58.1633522846559;
+        Wed, 06 Oct 2021 05:20:46 -0700 (PDT)
 Received: from ?IPv6:2a01:e34:ed2f:f020:278:1f59:2992:87fe? ([2a01:e34:ed2f:f020:278:1f59:2992:87fe])
-        by smtp.googlemail.com with ESMTPSA id r9sm20587793wru.2.2021.10.06.04.08.14
+        by smtp.googlemail.com with ESMTPSA id b15sm24606394wru.9.2021.10.06.05.20.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Oct 2021 04:08:15 -0700 (PDT)
-Subject: Re: [PATCH v2] thermal: Fix a NULL pointer dereference
-To:     Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
-        Zhang Rui <rui.zhang@intel.com>,
+        Wed, 06 Oct 2021 05:20:45 -0700 (PDT)
+Subject: Re: [PATCH RESEND] thermal/drivers/netlink: Add the temperature when
+ crossing a trip point
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Zhang, Rui" <rui.zhang@intel.com>, rkumbako@quicinc.com,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
         Amit Kucheria <amitk@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Collins <quic_collinsd@quicinc.com>,
-        Manaf Meethalavalappu Pallikunhi <manafm@codeaurora.org>,
-        Ram Chandrasekar <rkumbako@codeaurora.org>,
-        stable@vger.kernel.org
-References: <1631041289-11804-1-git-send-email-quic_subbaram@quicinc.com>
+References: <20211001223323.1836640-1-daniel.lezcano@linaro.org>
+ <CAJZ5v0hcHq2WJ6UkdDbHynnQYv4MukCWXob_rH=Sa=aYDrr7Cw@mail.gmail.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <003252f2-510f-e9ea-0032-6034f26aad11@linaro.org>
-Date:   Wed, 6 Oct 2021 13:08:14 +0200
+Message-ID: <dfbdfdab-8817-3792-9361-b238dc256219@linaro.org>
+Date:   Wed, 6 Oct 2021 14:20:44 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <1631041289-11804-1-git-send-email-quic_subbaram@quicinc.com>
+In-Reply-To: <CAJZ5v0hcHq2WJ6UkdDbHynnQYv4MukCWXob_rH=Sa=aYDrr7Cw@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -72,95 +73,126 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07/09/2021 21:01, Subbaraman Narayanamurthy wrote:
-> of_parse_thermal_zones() parses the thermal-zones node and registers a
-> thermal_zone device for each subnode. However, if a thermal zone is
-> consuming a thermal sensor and that thermal sensor device hasn't probed
-> yet, an attempt to set trip_point_*_temp for that thermal zone device
-> can cause a NULL pointer dereference. Fix it.
+On 05/10/2021 17:20, Rafael J. Wysocki wrote:
+> On Sat, Oct 2, 2021 at 12:33 AM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+>>
+>> The slope of the temperature increase or decrease can be high and when
+>> the temperature crosses the trip point, there could be a significant
+>> difference between the trip temperature and the measured temperatures.
+>>
+>> That forces the userspace to read the temperature back right after
+>> receiving a trip violation notification.
+>>
+>> In order to be efficient, give the temperature which resulted in the
+>> trip violation.
+>>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 > 
->  console:/sys/class/thermal/thermal_zone87 # echo 120000 > trip_point_0_temp
->  ...
->  Unable to handle kernel NULL pointer dereference at virtual address 0000000000000020
+> This looks fine to me too.
+> 
+>> ---
+>>  drivers/thermal/thermal_core.c    |  6 ++++--
+>>  drivers/thermal/thermal_netlink.c | 11 ++++++-----
+>>  drivers/thermal/thermal_netlink.h |  8 ++++----
+>>  3 files changed, 14 insertions(+), 11 deletions(-)
+>>
+>> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+>> index 51374f4e1cca..9e243d9f929e 100644
+>> --- a/drivers/thermal/thermal_core.c
+>> +++ b/drivers/thermal/thermal_core.c
+>> @@ -375,10 +375,12 @@ static void handle_thermal_trip(struct thermal_zone_device *tz, int trip)
+>>         if (tz->last_temperature != THERMAL_TEMP_INVALID) {
+>>                 if (tz->last_temperature < trip_temp &&
+>>                     tz->temperature >= trip_temp)
+>> -                       thermal_notify_tz_trip_up(tz->id, trip);
+>> +                       thermal_notify_tz_trip_up(tz->id, trip,
+>> +                                                 tz->temperature);
+>>                 if (tz->last_temperature >= trip_temp &&
+>>                     tz->temperature < (trip_temp - hyst))
+>> -                       thermal_notify_tz_trip_down(tz->id, trip);
+>> +                       thermal_notify_tz_trip_down(tz->id, trip,
+>> +                                                   tz->temperature);
+> 
+> While at it, I'm not sure if all of the additional line breaks due to
+> the line length limit are really necessary.  The code would be easier
+> to follow without them IMV.
 
-I'm still not convinced by the changes.
+Ok let me write another patch to wrap those into a single function and
+reduce the indentation.
 
-Could please tell the commit-id where this is happening and give the
-procedure to reproduce the bug ?
-
-
->  ...
->  Call trace:
->   of_thermal_set_trip_temp+0x40/0xc4
->   trip_point_temp_store+0xc0/0x1dc
->   dev_attr_store+0x38/0x88
->   sysfs_kf_write+0x64/0xc0
->   kernfs_fop_write_iter+0x108/0x1d0
->   vfs_write+0x2f4/0x368
->   ksys_write+0x7c/0xec
->   __arm64_sys_write+0x20/0x30
->   el0_svc_common.llvm.7279915941325364641+0xbc/0x1bc
->   do_el0_svc+0x28/0xa0
->   el0_svc+0x14/0x24
->   el0_sync_handler+0x88/0xec
->   el0_sync+0x1c0/0x200
-> 
-> While at it, fix the possible NULL pointer dereference in other
-> functions as well: of_thermal_get_temp(), of_thermal_set_emul_temp(),
-> of_thermal_get_trend().
-> 
-> Cc: stable@vger.kernel.org
-> Suggested-by: David Collins <quic_collinsd@quicinc.com>
-> Signed-off-by: Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
-> ---
-> Changes for v2:
-> - Added checks in of_thermal_get_temp(), of_thermal_set_emul_temp(), of_thermal_get_trend().
-> 
->  drivers/thermal/thermal_of.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-> index 6379f26..9233f7e 100644
-> --- a/drivers/thermal/thermal_of.c
-> +++ b/drivers/thermal/thermal_of.c
-> @@ -89,7 +89,7 @@ static int of_thermal_get_temp(struct thermal_zone_device *tz,
->  {
->  	struct __thermal_zone *data = tz->devdata;
->  
-> -	if (!data->ops->get_temp)
-> +	if (!data->ops || !data->ops->get_temp)
->  		return -EINVAL;
->  
->  	return data->ops->get_temp(data->sensor_data, temp);
-> @@ -186,6 +186,9 @@ static int of_thermal_set_emul_temp(struct thermal_zone_device *tz,
->  {
->  	struct __thermal_zone *data = tz->devdata;
->  
-> +	if (!data->ops || !data->ops->set_emul_temp)
-> +		return -EINVAL;
-> +
->  	return data->ops->set_emul_temp(data->sensor_data, temp);
->  }
->  
-> @@ -194,7 +197,7 @@ static int of_thermal_get_trend(struct thermal_zone_device *tz, int trip,
->  {
->  	struct __thermal_zone *data = tz->devdata;
->  
-> -	if (!data->ops->get_trend)
-> +	if (!data->ops || !data->ops->get_trend)
->  		return -EINVAL;
->  
->  	return data->ops->get_trend(data->sensor_data, trip, trend);
-> @@ -301,7 +304,7 @@ static int of_thermal_set_trip_temp(struct thermal_zone_device *tz, int trip,
->  	if (trip >= data->ntrips || trip < 0)
->  		return -EDOM;
->  
-> -	if (data->ops->set_trip_temp) {
-> +	if (data->ops && data->ops->set_trip_temp) {
->  		int ret;
->  
->  		ret = data->ops->set_trip_temp(data->sensor_data, trip, temp);
-> 
+>>         }
+>>
+>>         if (type == THERMAL_TRIP_CRITICAL || type == THERMAL_TRIP_HOT)
+>> diff --git a/drivers/thermal/thermal_netlink.c b/drivers/thermal/thermal_netlink.c
+>> index 1234dbe95895..a16dd4d5d710 100644
+>> --- a/drivers/thermal/thermal_netlink.c
+>> +++ b/drivers/thermal/thermal_netlink.c
+>> @@ -121,7 +121,8 @@ static int thermal_genl_event_tz(struct param *p)
+>>  static int thermal_genl_event_tz_trip_up(struct param *p)
+>>  {
+>>         if (nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_ID, p->tz_id) ||
+>> -           nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_TRIP_ID, p->trip_id))
+>> +           nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_TRIP_ID, p->trip_id) ||
+>> +           nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_TEMP, p->temp))
+>>                 return -EMSGSIZE;
+>>
+>>         return 0;
+>> @@ -285,16 +286,16 @@ int thermal_notify_tz_disable(int tz_id)
+>>         return thermal_genl_send_event(THERMAL_GENL_EVENT_TZ_DISABLE, &p);
+>>  }
+>>
+>> -int thermal_notify_tz_trip_down(int tz_id, int trip_id)
+>> +int thermal_notify_tz_trip_down(int tz_id, int trip_id, int temp)
+>>  {
+>> -       struct param p = { .tz_id = tz_id, .trip_id = trip_id };
+>> +       struct param p = { .tz_id = tz_id, .trip_id = trip_id, .temp = temp };
+>>
+>>         return thermal_genl_send_event(THERMAL_GENL_EVENT_TZ_TRIP_DOWN, &p);
+>>  }
+>>
+>> -int thermal_notify_tz_trip_up(int tz_id, int trip_id)
+>> +int thermal_notify_tz_trip_up(int tz_id, int trip_id, int temp)
+>>  {
+>> -       struct param p = { .tz_id = tz_id, .trip_id = trip_id };
+>> +       struct param p = { .tz_id = tz_id, .trip_id = trip_id, .temp = temp };
+>>
+>>         return thermal_genl_send_event(THERMAL_GENL_EVENT_TZ_TRIP_UP, &p);
+>>  }
+>> diff --git a/drivers/thermal/thermal_netlink.h b/drivers/thermal/thermal_netlink.h
+>> index 828d1dddfa98..e554f76291f4 100644
+>> --- a/drivers/thermal/thermal_netlink.h
+>> +++ b/drivers/thermal/thermal_netlink.h
+>> @@ -11,8 +11,8 @@ int thermal_notify_tz_create(int tz_id, const char *name);
+>>  int thermal_notify_tz_delete(int tz_id);
+>>  int thermal_notify_tz_enable(int tz_id);
+>>  int thermal_notify_tz_disable(int tz_id);
+>> -int thermal_notify_tz_trip_down(int tz_id, int id);
+>> -int thermal_notify_tz_trip_up(int tz_id, int id);
+>> +int thermal_notify_tz_trip_down(int tz_id, int id, int temp);
+>> +int thermal_notify_tz_trip_up(int tz_id, int id, int temp);
+>>  int thermal_notify_tz_trip_delete(int tz_id, int id);
+>>  int thermal_notify_tz_trip_add(int tz_id, int id, int type,
+>>                                int temp, int hyst);
+>> @@ -49,12 +49,12 @@ static inline int thermal_notify_tz_disable(int tz_id)
+>>         return 0;
+>>  }
+>>
+>> -static inline int thermal_notify_tz_trip_down(int tz_id, int id)
+>> +static inline int thermal_notify_tz_trip_down(int tz_id, int id, int temp)
+>>  {
+>>         return 0;
+>>  }
+>>
+>> -static inline int thermal_notify_tz_trip_up(int tz_id, int id)
+>> +static inline int thermal_notify_tz_trip_up(int tz_id, int id, int temp)
+>>  {
+>>         return 0;
+>>  }
+>> --
+>> 2.25.1
+>>
 
 
 -- 
