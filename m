@@ -2,177 +2,236 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6EF8424521
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Oct 2021 19:48:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27E72424582
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Oct 2021 20:00:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231175AbhJFRuD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Oct 2021 13:50:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:60819 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229835AbhJFRuB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Oct 2021 13:50:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1633542481;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6j4+Xt6RpIbX4FowUUGkrRWBkKZagwkWSmArQSXoKdA=;
-        b=CTwVAOxhuDwowoUuBDiITBAknUmKoBLQt/zSxn6pw11roM/QCtJ9ZBtucwvZkyccreHXNJ
-        LOHrmmCL5dEFfA+PwSPNk/XVFhCHtzVbClxNnPsRMt8N+YCmOcUT85m2E8C+ayFuoT4E7m
-        aYcJEjWKDTbArBi6WRTgm2Ed9yPptuk=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-150-StcqdgJZOy6lUC4zSXnTZw-1; Wed, 06 Oct 2021 13:48:00 -0400
-X-MC-Unique: StcqdgJZOy6lUC4zSXnTZw-1
-Received: by mail-ed1-f70.google.com with SMTP id w6-20020a50d786000000b003dabc563406so3321858edi.17
-        for <linux-pm@vger.kernel.org>; Wed, 06 Oct 2021 10:48:00 -0700 (PDT)
+        id S229633AbhJFSCs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Oct 2021 14:02:48 -0400
+Received: from mail-ot1-f52.google.com ([209.85.210.52]:39746 "EHLO
+        mail-ot1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231175AbhJFSCs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Oct 2021 14:02:48 -0400
+Received: by mail-ot1-f52.google.com with SMTP id j11-20020a9d190b000000b00546fac94456so4153002ota.6;
+        Wed, 06 Oct 2021 11:00:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=6j4+Xt6RpIbX4FowUUGkrRWBkKZagwkWSmArQSXoKdA=;
-        b=UC+ZwMEkwjhkcA81qqvedbM3lGJm/eT4iHLLZcU+IDvGc5xkVsHoqnCPGUYfRyd0Yr
-         YX2DSZOKzadDhZH5Os0ZWE3ntM8BSJFJ0n0ZmldmitfS25ooiXxQZSaa/+N7kJeNIExh
-         fsV9zB8YYp7iQ5qij/daH2WnEFkRek2U0712SoQwBsOBzGXtfcNJI0gdNgOe5I7kCef1
-         ciXEUaltQtYu3eHrZGFDRzEHC3oRhgjgwDU171KXSpuAkR2zgU1w+7VrO5nppNchj2d1
-         LmGEEwyxZBI03itSMQwg2iP2q7igSl9ZNIdtYEd+FRZzs6DetMCoJ9Bt8JK1KPfJNQru
-         ks7w==
-X-Gm-Message-State: AOAM532D1LBW4jnsyijA4eeObqzzzg6tX/H5jdpZAWpRKro/25WuxEQv
-        ooNoj0TjG4yQYnHPAhpqnsXd05Sho4OnxT5hdLajMkxbWKs0zXC6ik/IEoezyOMSJbSRaBVOpjn
-        mgeG2IP9P+pvE11LhU9s=
-X-Received: by 2002:a50:9d85:: with SMTP id w5mr36624320ede.268.1633542478948;
-        Wed, 06 Oct 2021 10:47:58 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwATAdTz3nytwMI5gTjXzrrWW+VAEE83Mq4iiRAF2QQu2kZs8Tzpe+h4aHhKNu9r1mVDpWyXg==
-X-Received: by 2002:a50:9d85:: with SMTP id w5mr36624294ede.268.1633542478755;
-        Wed, 06 Oct 2021 10:47:58 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id p10sm4750427ejf.45.2021.10.06.10.47.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Oct 2021 10:47:43 -0700 (PDT)
-Subject: Re: [RFC] add standardized attributes for force_discharge and
- inhibit_charge
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <thomas@weissschuh.net>,
-        =?UTF-8?Q?Nicol=c3=b2_Piazzalunga?= <nicolopiazzalunga@gmail.com>,
-        linux-pm@vger.kernel.org,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        Thomas Koch <linrunner@gmx.net>,
-        "smclt30p@gmail.com" <smclt30p@gmail.com>
-References: <21569a89-8303-8573-05fb-c2fec29983d1@gmail.com>
- <77e39b3e-fa51-54fe-1898-4f43895ac2c6@redhat.com>
- <20211005162352.emaoveimhkp5uzfw@earth.universe>
- <06fa7a23-4dec-cba9-4e00-c00cf0bf9337@redhat.com>
- <20211005220630.zurfqyva44idnplu@earth.universe>
- <8cbf7671-d9ee-6bfc-d8fd-d360ccb2c595@redhat.com>
- <f2e99c38-2e2f-4777-8318-fb4dae6e8bf1@t-8ch.de>
- <04693bb2-9fd1-59fa-4c21-99848e8aa4c4@redhat.com>
- <20211006162834.ujxfcn7jjrdl4kjx@earth.universe>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <9ec694b7-48a9-5d86-0970-daefdf204712@redhat.com>
-Date:   Wed, 6 Oct 2021 19:47:39 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EE0FJa1Rw2KQ5S6rS9XSqP8497Oo681sIsTxRPsfdFg=;
+        b=pgFG0LDbE8xQ2WAqvbzVJhE3wGPCa0RZuXFYzzvQVNXUlcYWi284kfgEM1Qt/BbrTJ
+         RNKSbLMGRdmsYByBLh35MzA2fJJxvfsY7czgotIt+dcb/CBKBzgQFKgzs+I761wMmzpd
+         ndbFtRp83WXUJQE/auSaBG3xCUblb+nmzyJ6i7wMw2ub/Vfp9l+bHNXI69jDFdJvCEUF
+         AjyuhZW9g71VboPZYvP+bQ/2sZflB6+/r8fPtWIjhmTaT9t/oWomLlPYoyIjL9Jq3Vat
+         R8PfGO6AGISA7W1sKNQu6eA033bV2zWN9vbg/6rIbgflSaG+EJEdNoAnXQ+YZjtz9EOu
+         /DHw==
+X-Gm-Message-State: AOAM5319UD0gd7q331u9Hu1YdcGDtk01d9HdOyI1kkEqHEXfykeN21s7
+        0ApcX6/5cyMNmURvHQn+QHPZ1icbYlL3oM6qoDo=
+X-Google-Smtp-Source: ABdhPJwUirZ5+QXJUYOAB8e53AcHe23MOWIxLc0pxWDcCR8prMx0xSN9oYz8EzFDSM1sw6M7UOsELTJ5iWiOnfN7LdQ=
+X-Received: by 2002:a05:6830:165a:: with SMTP id h26mr60013otr.301.1633543255488;
+ Wed, 06 Oct 2021 11:00:55 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20211006162834.ujxfcn7jjrdl4kjx@earth.universe>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20210917072732.611140-1-abailon@baylibre.com> <bd347d14-0b42-f9ed-bf15-080c929e1cb7@linaro.org>
+ <7cddcdb7-4efd-bfdb-3d86-f5862ea0b7fe@baylibre.com> <8a9e5f13-6253-2d0d-35a8-789090af4521@linaro.org>
+ <c395abad-598b-c06a-9252-c8e62c977188@baylibre.com> <794e62ea-d867-3827-de5f-24ddc86c3524@linaro.org>
+ <4446577e-c7fa-daeb-e0fe-8a530633ef5d@baylibre.com> <d24ce6ec-eced-4e16-eb59-7c87f596ccca@linaro.org>
+ <CAJZ5v0iJCS+nRcnHXiprtJsBf6Q4=k4TFcUV2ma_GiK=MttFug@mail.gmail.com> <03aeb132-bc0c-93f7-c7db-8575a665d2a7@linaro.org>
+In-Reply-To: <03aeb132-bc0c-93f7-c7db-8575a665d2a7@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 6 Oct 2021 20:00:44 +0200
+Message-ID: <CAJZ5v0gVgw4qT9jmfr8U+t0j3JdmAAuVFf785NHozQxuKr56MA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] Add a generic virtual thermal sensor
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ben.tseng@mediatek.com, Kevin Hilman <khilman@baylibre.com>,
+        Matthias Kaehlcke <mka@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On Wed, Oct 6, 2021 at 6:06 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>
+> On 05/10/2021 18:45, Rafael J. Wysocki wrote:
+> > On Mon, Oct 4, 2021 at 3:42 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+> >>
+> >> On 04/10/2021 12:24, Alexandre Bailon wrote:
+> >>>
+> >>> On 9/22/21 10:10 AM, Daniel Lezcano wrote:
+> >>>> On 20/09/2021 15:12, Alexandre Bailon wrote:
+> >>>>> On 9/17/21 4:03 PM, Daniel Lezcano wrote:
+> >>>>>> On 17/09/2021 15:33, Alexandre Bailon wrote:
+> >>>>>>> Hi Daniel,
+> >>>>>>>
+> >>>>>>> On 9/17/21 2:41 PM, Daniel Lezcano wrote:
+> >>>>>>>> On 17/09/2021 09:27, Alexandre Bailon wrote:
+> >>>>>>>>> This series add a virtual thermal sensor.
+> >>>>>>>>> It could be used to get a temperature using some thermal sensors.
+> >>>>>>>>> Currently, the supported operations are max, min and avg.
+> >>>>>>>>> The virtual sensor could be easily extended to support others
+> >>>>>>>>> operations.
+> >>>>>>>>>
+> >>>>>>>>> Note:
+> >>>>>>>>> Currently, thermal drivers must explicitly register their sensors to
+> >>>>>>>>> make them
+> >>>>>>>>> available to the virtual sensor.
+> >>>>>>>>> This doesn't seem a good solution to me and I think it would be
+> >>>>>>>>> preferable to
+> >>>>>>>>> update the framework to register the list of each available sensors.
+> >>>>>>>> Why must the drivers do that ?
+> >>>>>>> Because there are no central place where thermal sensor are
+> >>>>>>> registered.
+> >>>>>>> The only other way I found was to update thermal_of.c,
+> >>>>>>> to register the thermal sensors and make them available later to the
+> >>>>>>> virtual thermal sensor.
+> >>>>>>>
+> >>>>>>> To work, the virtual thermal need to get the sensor_data the ops from
+> >>>>>>> the thermal sensor.
+> >>>>>>> And as far I know, this is only registered in thermal_of.c, in the
+> >>>>>>> thermal zone data
+> >>>>>>> but I can't access it directly from the virtual thermal sensor.
+> >>>>>>>
+> >>>>>>> How would you do it ?
+> >>>>>> Via the phandles when registering the virtual sensor ?
+> >>>>> As far I know, we can't get the ops or the sensor_data from the phandle
+> >>>>> of a thermal sensor.
+> >>>>> The closest solution I found so far would be to aggregate the thermal
+> >>>>> zones instead of thermal sensors.
+> >>>>> thermal_zone_device has the data needed and a thermal zone could be find
+> >>>>> easily using its name.
+> >>>> Yeah, the concept of the thermal zone and the sensor are very close.
+> >>>>
+> >>>> There is the function in thermal_core.h:
+> >>>>
+> >>>>   -> for_each_thermal_zone()
+> >>>>
+> >>>> You should be able for each 'slave' sensor, do a lookup to find the
+> >>>> corresponding thermal_zone_device_ops.
+> >>>>
+> >>>>> But, using a thermal_zone_device, I don't see how to handle module
+> >>>>> unloading.
+> >>>> I think try_module_get() / module_put() are adequate for this situation
+> >>>> as it is done on an external module and we can not rely on the exported
+> >>>> symbols.
+> >>> I don't see how it would be possible to use these functions.
+> >>> The thermal zone doesn't have the data required to use it.
+> >>
+> >> Actually I was able to crash the kernel by doing:
+> >>
+> >> console 1:
+> >>
+> >> while $(true); do insmod <module> && rmmod <module>; done
+> >>
+> >> console 2:
+> >>
+> >> while $(true); cat /sys/class/thermal/thermal_zone0/temp; done
+> >>
+> >> So there is something wrong already in the thermal framework.
+> >
+> > Hmmm.
+> >
+> >> IMO, the first thing would be to fix this critical issue by getting the
+> >> sensor module refcount when the thermal zone is enabled and dropping it
+> >> when it is disabled.
+> >>
+> >> With that fixed, perhaps it will possible to get the device associated
+> >> with the sensor and then try_module_get(dev->driver->owner)
+> >>
+> >>> Maybe a more easier way is to use the thermal_zone_device mutex.
+> >>> If I get a lock before to use the thermal_zone_device ops, I have the
+> >>> guaranty that module won't be unloaded.
+> >
+> > That would be my approach too.
+>
+> The mutex is private to the thermal core. The virtual sensor should not
+> touch it :/
+>
+> Perhaps, it can work with a private spin_lock with a try_spinlock() ?
 
-On 10/6/21 6:28 PM, Sebastian Reichel wrote:
-> Hi,
-> 
-> On Wed, Oct 06, 2021 at 05:27:22PM +0200, Hans de Goede wrote:
->> On 10/6/21 4:49 PM, Thomas Weißschuh wrote:
->>> On 2021-10-06T10:10+0200, Hans de Goede wrote:
->>>> On 10/6/21 12:06 AM, Sebastian Reichel wrote:
->>>>> On Tue, Oct 05, 2021 at 08:01:12PM +0200, Hans de Goede wrote:
->>>>>> Right, force-discharge automatically implies charging is
->>>>>> being inhibited, so putting this in one file makes sense.
->>>>>>
->>>>>> Any suggestion for the name of the file?
->>>>>
->>>>> Maybe like this?
->>>>>
->>>>> ---------------------------------------------------------------------
->>>>> What: /sys/class/power_supply/<supply_name>/charge_behaviour
->>>>> Date: October 2021
->>>>> Contact: linux-pm@vger.kernel.org
->>>>> Description:
->>>>>  Configure battery behaviour when a charger is being connected.
->>>>>
->>>>>  Access: Read, Write
->>>>>
->>>>>  Valid values:
->>>>>
->>>>>  0: auto / no override
->>>>>     When charger is connected battery should be charged
->>>>>  1: force idle
->>>>>     When charger is connected the battery should neither be charged
->>>>>     nor discharged.
->>>>>  2: force discharge
->>>>>     When charger is connected the battery should be discharged
->>>>>     anyways.
->>>>> ---------------------------------------------------------------------
->>>>
->>>> That looks good to me. Although I just realized that some hw may
->>>> only support 1. or 2. maybe explicitly document this and that
->>>> EOPNOTSUPP will be reported when the value is not supported
->>>> (vs EINVAL for plain invalid values) ?
->>>
->>> Would that not force a userspace applications to offer all possibilities to
->>> the user only to tell them that it's not supported?
->>> If the driver knows what is supported and what not it should make this
->>> discoverable without actually performing the operation.
->>>
->>> Maybe something along the lines of /sys/power/mem_sleep.
->>
->> Good point, but something like /sys/power/mem_sleep works
->> very differently then how all the other power_supply properties work.
-> 
-> Actually we already use this format in power-supply for USB
-> types, implemented in power_supply_show_usb_type().
-> 
->> In general if something is supported or not on a psy class
->> device is communicated by the presence / absence of attributes.
->>
->> So I think we should move back to having 2 separate attributes
->> for this after all; and group the 2 together in the doc and
->> document that enabling (setting to 1) one of force_charge /
->> inhibit_charge automatically clears the setting of the other.
->>
->> Then the availability of the features can simply be probed
->> by checking for the presence of the property files.
-> 
-> If it's two files, then somebody needs to come up with proper 
-> names. Things like 'force_discharge' look sensible in this context,
-> but on a system with two batteries (like some Thinkpads have) it
-> is easy to confuse with "I want to discharge this battery before
-> the other one (while no AC is connected)".
+IIUC this is a case when module A refers to some memory in module B
+and if the latter goes away, an access to that memory from the former
+is a use-after-free, so it is not sufficient to use a local spinlock.
 
-Ah I did not realize there was already some (read-only) precedence
-for this in the psy subsystem.
+This can be avoided by having a lock and a flag such that the flag is
+set under the lock by module B when making the memory in question
+available and cleared under the lock when freeing that memory.  Then,
+module A needs to check the flag under the lock on every access to
+that memory.  Also, the lock and the flag must be accessible all the
+time to both modules (ie. must not go away along with any of them if
+they don't depend on each other).
 
-Since there is precedence for this using
-/sys/class/power_supply/<supply_name>/charge_behaviour
+> >>> When a "thermal of sensor" is unloaded, it calls
+> >>> thermal_zone_of_sensor_unregister which takes a lock before
+> >>> update ops.
+> >>
+> >> I'm not sure to understand. The goal is to have the refcount on the
+> >> modules to be incremented when the virtual sensor is using them.
+> >
+> > IMO the goal is to prevent the code from crashing when modules get
+> > unloaded.  I'm not really sure if refcounts alone are sufficient for
+> > that.
+>
+> The problem is in the loop:
+>
+> +static int virtual_thermal_sensor_get_temp(void *data, int *temperature)
+> +{
+> +       struct virtual_thermal_sensor *sensor = data;
+> +       int max_temp = INT_MIN;
+> +       int temp;
+> +       int i;
+> +
+> +       for (i = 0; i < sensor->count; i++) {
+> +               struct thermal_sensor_data *hw_sensor;
+> +
+> +               hw_sensor = &sensor->sensors[i];
+> +               if (!hw_sensor->ops)
+> +                       return -ENODEV;
+> +
+> +               hw_sensor->ops->get_temp(hw_sensor->sensor_data, &temp);
+> +               max_temp = sensor->aggr_temp(max_temp, temp);
+> +       }
+> +
+> +       *temperature = max_temp;
+> +
+> +       return 0;
+> +}
+>
+> If one of the sensor is unloaded when get_temp is called,
+> hw_sensor->ops->get_temp will crash.
 
-with an example contents of say:
+Right.
 
-[auto] inhibit-charge force-discharge
+Dereferencing hw_sensor itself is not safe in this loop if the module
+holding the memory pointed to by it may go away.
 
-Works for me and having 1 file instead of 2 is better then
-because this clearly encapsulates that inhibit-charge and
-force-discharge are mutually exclusive.
+However, presumably, the hw_sensor object needs to be registered with
+the core in order to be used here and unregistered when it goes away,
+so it looks like this loop could use a wrapper like
+thermal_get_sensor_temp(hw_sensor, &temp) which would return a
+negative error code if the sensor in question went away.
 
-Regards,
+Of course, that would require the core to check the list of available
+sensors every time, but that may be implemented efficiently with the
+help of an xarray, for example.
 
-Hans
+> So the proposal is virtual_sensor_add_sensor() does try_get_module()
+> and virtual_sensor_remove_sensor() does put_module().
+>
+> The ref on the 'slave' modules will be release only if the virtual
+> sensor is unregistered.
+>
+> So until, the virtual sensor is unregistered, the 'slaves' modules can
+> not be unloaded.
+>
+> That is what we find with eg. the wifi modules.
 
+Yes, but that's a bit cumbersome from the sysadmin perspective IMO,
+especially when one wants to unload one of the modules and doesn't
+know exactly what other modules hold references to it.
 
+IIUC ref_module() might be nicer, but it is still more convenient if
+the modules can just go away independently.
