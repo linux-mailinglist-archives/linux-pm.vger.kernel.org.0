@@ -2,119 +2,277 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78E22423ABD
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Oct 2021 11:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F420423B66
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Oct 2021 12:22:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237758AbhJFJoG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Oct 2021 05:44:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55212 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231240AbhJFJoG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Oct 2021 05:44:06 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F22E6C061753
-        for <linux-pm@vger.kernel.org>; Wed,  6 Oct 2021 02:42:13 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id m22so7010282wrb.0
-        for <linux-pm@vger.kernel.org>; Wed, 06 Oct 2021 02:42:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ZN2MGTKW8HS5ful8I8NJEsDZCFiU186A9rqdS7aIXn0=;
-        b=aX4LKQ2mCR9pIs+VsiyRlRqklx+TafioQgirniEBfBI/JSeubXTaWEh4DKZetKSphI
-         PRv4GV/N0oIuCsV06yFwB4BcQlv//CjyNMn2wqwEiyyFxQtyKN/GO6Ngv8zcxAQjwUxz
-         hyE4pg1lpwPaM+e8IbsMXcP/xow0jHffxg+NhPZI/oO4fY62UfM2m8Iog0Alb3wwGh1s
-         SJlSfSQQMysu72ZMxJCIuMsKsmwWY63sS4HH1/LlQ7bFC1QiOtT0lmuR4SUHBtRNkdLQ
-         EbTb1jB8Tn8QLuUmnQiWC9y9pTnCeD/rL0e7ml+lEbIsQEWuyL2QnzyLWk+swY8D9vOc
-         3moQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ZN2MGTKW8HS5ful8I8NJEsDZCFiU186A9rqdS7aIXn0=;
-        b=s0kbQ7H8wQR5x4XrUBHIsip4hbMkJ7EJEQM5DMjamqYzkqVcPHSIwJdk2LCVH5ROG4
-         DBtcqhM6h4wgUApyZXahdiTmB6VkrvBNYUvF6ztjf2w2ozXZ4AozaxtVOUdpNCM5SDVz
-         o+OYRZcoGiWZ434/bMV09/gHO7mtZF+fki7JUKag305n7NZyAz83I22neO9gPajb5MfX
-         PxIJ9DlvwQh6pJwJODZH4OU4K+tUo3PojXytLMD47mn7fpaoHF8gv+UxSyQiIq2Q7giU
-         0k8kilgnflfDGPJwd/yeT3CYYGoG8p5Z2UlNzU28Q1yxixrhOwwW9wV6UFn/n95EcHc1
-         vYCw==
-X-Gm-Message-State: AOAM5316q2DxYilruY37MfHgl8S6RpWivG2WtiFnng1zQkXA8Z/ZF3Ik
-        +CpIJdXVGxN1roUDpxPY06tbyVYnR2i6Ww==
-X-Google-Smtp-Source: ABdhPJxXQJc1Bdq+Nu4tptxWSt8BkN3eyd1QmAMdLyZZu5Vl+ysI5y6ywWn3umjR7VmLyXBdmGXHvA==
-X-Received: by 2002:a05:600c:35d2:: with SMTP id r18mr8656025wmq.97.1633513332280;
-        Wed, 06 Oct 2021 02:42:12 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:278:1f59:2992:87fe? ([2a01:e34:ed2f:f020:278:1f59:2992:87fe])
-        by smtp.googlemail.com with ESMTPSA id r205sm967005wma.3.2021.10.06.02.42.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Oct 2021 02:42:11 -0700 (PDT)
-Subject: Re: [PATCH 1/4] dt-bindings: thermal: k3-j72xx: Add VTM bindings
- documentation
-To:     Rob Herring <robh+dt@kernel.org>, Keerthy <j-keerthy@ti.com>
-Cc:     devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Tero Kristo <kristo@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>
-References: <20211004112550.27546-1-j-keerthy@ti.com>
- <20211004112550.27546-2-j-keerthy@ti.com>
- <1633436798.497006.3226792.nullmailer@robh.at.kernel.org>
- <CAL_JsqKLuE+RhH+T4UKecMhRjbm69rwA1a2+FjrnMPKUf13J6A@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <edb3e75a-1092-7e90-40d0-225dd4d4764c@linaro.org>
-Date:   Wed, 6 Oct 2021 11:42:10 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S237846AbhJFKYK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Oct 2021 06:24:10 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:55590 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229824AbhJFKYJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Oct 2021 06:24:09 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1633515737; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=MW3nFYrTI99YklII5kEMzaQv4cQ84XOAnQJk6NTuoNA=; b=t4WgDk3UjVMdzC1auPXIe7+TpbvclVU1COpg6+0AJzAwmLhnf6quoAEtYIlZSI2Y5Br79juE
+ Ao+zTNri8t38XVkdek9iSf5PytvxIf5z9B0ostQufEdWgYa8L7vg0pZ9FiveRa3060apzvC4
+ ijNADwZINJAhUVTg3QhMSZDrXaw=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
+ 615d78d87ae92c7fc98a2172 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 06 Oct 2021 10:22:16
+ GMT
+Sender: mkshah=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id ED2F8C43618; Wed,  6 Oct 2021 10:22:15 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-4.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [192.168.29.129] (unknown [49.36.85.177])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: mkshah)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id E58F3C4338F;
+        Wed,  6 Oct 2021 10:22:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org E58F3C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Subject: Re: [PATCH 1/2] cpuidle: Avoid calls to cpuidle_resume|pause() for
+ s2idle
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Len Brown <len.brown@intel.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Srinivas Rao L <lsrao@codeaurora.org>
+References: <20210929144451.113334-1-ulf.hansson@linaro.org>
+ <20210929144451.113334-2-ulf.hansson@linaro.org>
+From:   Maulik Shah <mkshah@codeaurora.org>
+Message-ID: <07e6821c-c221-e90d-c977-4d6b55c1ab8d@codeaurora.org>
+Date:   Wed, 6 Oct 2021 15:52:08 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <CAL_JsqKLuE+RhH+T4UKecMhRjbm69rwA1a2+FjrnMPKUf13J6A@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210929144451.113334-2-ulf.hansson@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi,
 
-Keerthy,
-
-did you receive this answer ?
-
-
-On 05/10/2021 15:05, Rob Herring wrote:
-> On Tue, Oct 5, 2021 at 7:26 AM Rob Herring <robh@kernel.org> wrote:
->>
->> On Mon, 04 Oct 2021 16:55:47 +0530, Keerthy wrote:
->>> Add VTM bindings documentation. In the Voltage Thermal
->>> Management Module(VTM), K3 J72XX supplies a voltage
->>> reference and a temperature sensor feature that are gathered in the band
->>> gap voltage and temperature sensor (VBGAPTS) module. The band
->>> gap provides current and voltage reference for its internal
->>> circuits and other analog IP blocks. The analog-to-digital
->>> converter (ADC) produces an output value that is proportional
->>> to the silicon temperature.
->>>
->>> Signed-off-by: Keerthy <j-keerthy@ti.com>
->>> ---
->>>  .../bindings/thermal/ti,j72xx-thermal.yaml    | 58 +++++++++++++++++++
->>>  1 file changed, 58 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
->>>
->>
->> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
->> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+On 9/29/2021 8:14 PM, Ulf Hansson wrote:
+> In s2idle_enter(), cpuidle_resume|pause() are invoked to re-allow calls to
+> the cpuidle callbacks during s2idle operations. This is needed because
+> cpuidle is paused in-between in dpm_suspend_noirq() and dpm_resume_noirq().
 > 
-> Woot, TI has blacklisted me:
-> 
-> The response from the remote server was:
-> 553 Sorry, your email address has been blacklisted. Please contact
-> Texas Instruments Inc to have yourself removed.
-> 
+> However, calling cpuidle_resume|pause() from s2idle_enter() looks a bit
+> superfluous, as it also causes all CPUs to be waken up when the first CPU
+> wakes up from s2idle.
 
+Thanks for the patch. This can be good optimization to avoid waking up 
+all CPUs always.
+
+> 
+> Therefore, let's drop the calls to cpuidle_resume|pause() from
+> s2idle_enter(). To make this work, let's also adopt the path in the
+> cpuidle_idle_call() to allow cpuidle callbacks to be invoked for s2idle,
+> even if cpuidle has been paused.
+> 
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> ---
+>   drivers/cpuidle/cpuidle.c |  7 ++++++-
+>   include/linux/cpuidle.h   |  2 ++
+>   kernel/power/suspend.c    |  2 --
+>   kernel/sched/idle.c       | 40 ++++++++++++++++++++++-----------------
+>   4 files changed, 31 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+> index ef2ea1b12cd8..c76747e497e7 100644
+> --- a/drivers/cpuidle/cpuidle.c
+> +++ b/drivers/cpuidle/cpuidle.c
+> @@ -49,7 +49,12 @@ void disable_cpuidle(void)
+>   bool cpuidle_not_available(struct cpuidle_driver *drv,
+>   			   struct cpuidle_device *dev)
+>   {
+> -	return off || !initialized || !drv || !dev || !dev->enabled;
+> +	return off || !drv || !dev || !dev->enabled;
+> +}
+> +
+> +bool cpuidle_paused(void)
+> +{
+> +	return !initialized;
+>   }
+>   
+>   /**
+> diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
+> index fce476275e16..51698b385ab5 100644
+> --- a/include/linux/cpuidle.h
+> +++ b/include/linux/cpuidle.h
+> @@ -165,6 +165,7 @@ extern void cpuidle_pause_and_lock(void);
+>   extern void cpuidle_resume_and_unlock(void);
+>   extern void cpuidle_pause(void);
+>   extern void cpuidle_resume(void);
+> +extern bool cpuidle_paused(void);
+>   extern int cpuidle_enable_device(struct cpuidle_device *dev);
+>   extern void cpuidle_disable_device(struct cpuidle_device *dev);
+>   extern int cpuidle_play_dead(void);
+> @@ -204,6 +205,7 @@ static inline void cpuidle_pause_and_lock(void) { }
+>   static inline void cpuidle_resume_and_unlock(void) { }
+>   static inline void cpuidle_pause(void) { }
+>   static inline void cpuidle_resume(void) { }
+> +static inline bool cpuidle_paused(void) {return true; }
+>   static inline int cpuidle_enable_device(struct cpuidle_device *dev)
+>   {return -ENODEV; }
+>   static inline void cpuidle_disable_device(struct cpuidle_device *dev) { }
+> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+> index eb75f394a059..388a5de4836e 100644
+> --- a/kernel/power/suspend.c
+> +++ b/kernel/power/suspend.c
+> @@ -97,7 +97,6 @@ static void s2idle_enter(void)
+>   	raw_spin_unlock_irq(&s2idle_lock);
+>   
+>   	cpus_read_lock();
+> -	cpuidle_resume();
+>   
+>   	/* Push all the CPUs into the idle loop. */
+>   	wake_up_all_idle_cpus();
+
+wake_up_all_idle_cpus() will still cause all CPUs to be woken up when 
+first cpu wakes up.
+
+say for example,
+1. device goes to s2idle suspend.
+2. one CPU wakes up to handle irq (irq is not a wake irq but left 
+enabled at GIC because of IRQF_NOSUSPEND flag) so such irq will not 
+break suspend.
+3. The cpu handles the irq.
+4. same cpu don't break s2idle_loop() and goes to s2idle_enter() where 
+it wakes up all existing idle cpus due to wake_up_all_idle_cpus()
+5. all of CPUs again enter s2idle.
+
+to avoid waking up all CPUs in above case, something like below snip may 
+help (i have not tested yet),
+
+when CPUs are in s2idle_loop(),
+
+1. set the s2idle state to enter.
+2. wake up all cpus from shallow state, so that they can re-enter 
+deepest state.
+3. Forever loop until a break with some wake irq.
+4. clear the s2idle state.
+5. wake up all cpus from deepest state so that they can now stay in 
+shallow state/running state.
+
+void s2idle_loop(void)
+{
+
++       s2idle_state = S2IDLE_STATE_ENTER;
++       /* Push all the CPUs to enter deepest available state */
++       wake_up_all_idle_cpus();
+         for (;;) {
+                 if (s2idle_ops && s2idle_ops->wake) {
+                         if (s2idle_ops->wake())
+				..
+                 s2idle_enter();
+         }
++       s2idle_state = S2IDLE_STATE_NONE;
++       /* Push all the CPUs to enter default_idle() from this point */
++       wake_up_all_idle_cpus();
+}
+
+Thanks,
+Maulik
+
+
+> @@ -105,7 +104,6 @@ static void s2idle_enter(void)
+>   	swait_event_exclusive(s2idle_wait_head,
+>   		    s2idle_state == S2IDLE_STATE_WAKE);
+>   
+> -	cpuidle_pause();
+>   	cpus_read_unlock();
+>   
+>   	raw_spin_lock_irq(&s2idle_lock);
+> diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
+> index d17b0a5ce6ac..3bc3a2c46731 100644
+> --- a/kernel/sched/idle.c
+> +++ b/kernel/sched/idle.c
+> @@ -158,6 +158,17 @@ static int call_cpuidle(struct cpuidle_driver *drv, struct cpuidle_device *dev,
+>   	return cpuidle_enter(drv, dev, next_state);
+>   }
+>   
+> +static void cpuidle_deepest_state(struct cpuidle_driver *drv,
+> +				  struct cpuidle_device *dev,
+> +				  u64 max_latency_ns)
+> +{
+> +	int next_state;
+> +
+> +	tick_nohz_idle_stop_tick();
+> +	next_state = cpuidle_find_deepest_state(drv, dev, max_latency_ns);
+> +	call_cpuidle(drv, dev, next_state);
+> +}
+> +
+>   /**
+>    * cpuidle_idle_call - the main idle function
+>    *
+> @@ -189,6 +200,7 @@ static void cpuidle_idle_call(void)
+>   	 */
+>   
+>   	if (cpuidle_not_available(drv, dev)) {
+> +default_idle:
+>   		tick_nohz_idle_stop_tick();
+>   
+>   		default_idle_call();
+> @@ -204,25 +216,19 @@ static void cpuidle_idle_call(void)
+>   	 * timekeeping to prevent timer interrupts from kicking us out of idle
+>   	 * until a proper wakeup interrupt happens.
+>   	 */
+> +	if (idle_should_enter_s2idle()) {
+> +		entered_state = call_cpuidle_s2idle(drv, dev);
+> +                if (entered_state <= 0)
+> +			cpuidle_deepest_state(drv, dev, U64_MAX);
+> +		goto exit_idle;
+> +	}
+>   
+> -	if (idle_should_enter_s2idle() || dev->forced_idle_latency_limit_ns) {
+> -		u64 max_latency_ns;
+> -
+> -		if (idle_should_enter_s2idle()) {
+> -
+> -			entered_state = call_cpuidle_s2idle(drv, dev);
+> -			if (entered_state > 0)
+> -				goto exit_idle;
+> -
+> -			max_latency_ns = U64_MAX;
+> -		} else {
+> -			max_latency_ns = dev->forced_idle_latency_limit_ns;
+> -		}
+> -
+> -		tick_nohz_idle_stop_tick();
+> +	if (cpuidle_paused())
+> +		goto default_idle;
+>   
+> -		next_state = cpuidle_find_deepest_state(drv, dev, max_latency_ns);
+> -		call_cpuidle(drv, dev, next_state);
+> +	if (dev->forced_idle_latency_limit_ns) {
+> +		cpuidle_deepest_state(drv, dev,
+> +				      dev->forced_idle_latency_limit_ns);
+>   	} else {
+>   		bool stop_tick = true;
+>   
+> 
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a 
+member of Code Aurora Forum, hosted by The Linux Foundation
