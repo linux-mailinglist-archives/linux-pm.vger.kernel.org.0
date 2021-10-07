@@ -2,149 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E57AE425DCC
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Oct 2021 22:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FEAE425E86
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Oct 2021 23:19:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241064AbhJGUsT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Oct 2021 16:48:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60888 "EHLO
+        id S234621AbhJGVVJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Oct 2021 17:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241394AbhJGUsS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Oct 2021 16:48:18 -0400
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDEC4C061764
-        for <linux-pm@vger.kernel.org>; Thu,  7 Oct 2021 13:46:23 -0700 (PDT)
-Received: by mail-ot1-x335.google.com with SMTP id g15-20020a9d128f000000b0054e3d55dd81so3950466otg.12
-        for <linux-pm@vger.kernel.org>; Thu, 07 Oct 2021 13:46:23 -0700 (PDT)
+        with ESMTP id S234065AbhJGVVJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Oct 2021 17:21:09 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43BDBC061570
+        for <linux-pm@vger.kernel.org>; Thu,  7 Oct 2021 14:19:13 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id n2so4722652plk.12
+        for <linux-pm@vger.kernel.org>; Thu, 07 Oct 2021 14:19:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=AzPcN97cKsNPALhXpMD11mH7HEQFoOQxmRwJj4GT2BE=;
-        b=VKE1L+LNJEY5RERAvLjjCsaH/jdKjoku3gHwtdboexhAsqiGhsrBthGb5Bevr2KL0+
-         jYu0WOqYVJd76tRyLHu5v0RDHRXhT3UI5ixFqKcrvx4m/ZZosj+JGaDDjHY7+j87pVvj
-         p0DVEPcEZ8ZyFwHVBRvaQza8MAbygGXJtdr9M=
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=KixwJ9LOPu1ph9bL2gX/WFMglwp8fxr3VUm04GIPuGg=;
+        b=jZL9vwU+kw4euWHX1Z60nlk7eOhOTvKrcntdPdZmWZ3McPkZVJXbhd4hi6EZFk09i8
+         0qyX/0uEsGMQkqAmxivpgDo4FElEn8iAelIRIS8MchSa66+EutHO2E0sRYnaz5Np11Ts
+         st1fcHSdcbrV6cJgeWOg4hB986ei+rpbumQ4S/hNc01iSqqCVRWf1q0EPpFcz3ImG9gt
+         W2/e630tEp+eb/nfiSk2+qvbxUXknPgRVZt75TKlr98XC/xaqEbsye/pXmo0BePODeAT
+         h9ELZzhQHsuU+0xYcKG4BIEH3O0Sxuj7VdCt7sardoEacV936O0oLVYBMN+6GNuAUAqy
+         cL4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=AzPcN97cKsNPALhXpMD11mH7HEQFoOQxmRwJj4GT2BE=;
-        b=QMGKVn0jjXutKWXF3+qG4If/3AAnq8UEUMI9dRa1nM0dbPO+/+vVYuhrAhJ9apgVCY
-         P7r2Dk2psEUgal24XgXs8+77VHOYOSdQslqWUQBmX8HXR+KOwdUn1zFJgMJlT9iFnfKL
-         8nv5acdnk+QfmjTLln75LRxyi2uJMjhuIlW90h8c+qzSIw04OCCaiHP1AYBymCDxaYVS
-         N1uE/vaMFtHCQ0HAB1PyWr+u9Ft6JJB1nUyuJVYTp+2dTRo4gTM4FTldy6Y0S063ShnX
-         D+vSgGigPmANS5gp61zGKDHzCYO44HM+sbYraxhyFGRN6QwxMF7OzCWeBEUMSkiZggfb
-         c61A==
-X-Gm-Message-State: AOAM531GCafn5KWgRjNNum/UR08yWSSXsh6hTPrig5PEF+kIB+9pBA8P
-        79wY9wX4I8ZXef3HFsGgE81ak6ORcdEpn/2XOaxAog==
-X-Google-Smtp-Source: ABdhPJweLV2SqPIqB/I4y9UNqm9St3+8NImkU0IzW6xIcGeoqaYzaiZnETNJ/uKVGt4qTegoVLXLut8mi4j1L8pdWt0=
-X-Received: by 2002:a05:6830:1c2e:: with SMTP id f14mr5293990ote.159.1633639583170;
- Thu, 07 Oct 2021 13:46:23 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 7 Oct 2021 16:46:22 -0400
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=KixwJ9LOPu1ph9bL2gX/WFMglwp8fxr3VUm04GIPuGg=;
+        b=k5vf2qLBSvTwFiKr765QD3V1J5vheaas0I4nx4u+XuqoxthtSJzkSobR+pPG1XqGl3
+         J+ef/fBkwUPWoxX6ckt86+NZVwVBIbEEDKWZgpq0zW478f+MrvgZLjh78HPXT4ZDV5gG
+         ETM584pPkX6N4Efdd9iP1PuBe+qViJKVoRW6UBP0Ci+c7xXmtELFxL8MhFTVuKQTP8e2
+         ANrmifpkM8ZCj52VGH8FAJA0CcmUC3M98c66Lo2Hqcq4Bca7zFkNGnMnECBpk9O4Uz30
+         yTc1/H+MwMepBDJKzbjZiKkHIw7ZWGURfxDOyVFqZMLaVchuT2l0qQrVwUe2r+roWLpF
+         YNpw==
+X-Gm-Message-State: AOAM531o1678EI9XufJSNnM+WGvs6wG9CVgZJgGxo/TFFwKTu4nQqcIs
+        iLaXMDdmEOYv/4QMytXH6dM/sg==
+X-Google-Smtp-Source: ABdhPJxiOxb6/Oa8UA4qvCGHmEF0nYYNDpDPNCkE/BrLDAFxQmLd7vJUIJrjLtokt+rOh2FVGPxWFA==
+X-Received: by 2002:a17:902:e9cc:b0:13e:8b79:6216 with SMTP id 12-20020a170902e9cc00b0013e8b796216mr6125405plk.74.1633641552719;
+        Thu, 07 Oct 2021 14:19:12 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id n66sm346356pfd.21.2021.10.07.14.19.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Oct 2021 14:19:12 -0700 (PDT)
+Message-ID: <615f6450.1c69fb81.9a58f.17fb@mx.google.com>
+Date:   Thu, 07 Oct 2021 14:19:12 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <5d3f4343-da38-04b4-fdb9-cb2dd4983db2@gmail.com>
-References: <20211006193819.2654854-1-swboyd@chromium.org> <5d3f4343-da38-04b4-fdb9-cb2dd4983db2@gmail.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.9.1
-Date:   Thu, 7 Oct 2021 16:46:22 -0400
-Message-ID: <CAE-0n50s_cOLA0xRa8mmUS2Nawd5X7WiQE3PvOLHu+i=hE3Eow@mail.gmail.com>
-Subject: Re: [PATCH v2 00/34] component: Make into an aggregate bus
-To:     Andrzej Hajda <andrzej.hajda@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Chen Feng <puck.chen@hisilicon.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Emma Anholt <emma@anholt.net>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        Inki Dae <inki.dae@samsung.com>,
-        James Qian Wang <james.qian.wang@arm.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Joerg Roedel <joro@8bytes.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Joonyoung Shim <jy0922.shim@samsung.com>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-fbdev@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-pm@vger.kernel.org, Liviu Dudau <liviu.dudau@arm.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        Sandy Huang <hjc@rock-chips.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Tian Tao <tiantao6@hisilicon.com>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Xinliang Liu <xinliang.liu@linaro.org>,
-        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
-        Yong Wu <yong.wu@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.15-rc4-42-g574167bf7ed8
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 1 warning (v5.15-rc4-42-g574167bf7ed8)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Andrzej Hajda (2021-10-07 03:16:27)
-> Hi Stephen,
->
-> On 06.10.2021 21:37, Stephen Boyd wrote:
-> > This series is from discussion we had on reordering the device lists for
-> > drm shutdown paths[1]. I've introduced an 'aggregate' bus that we put
-> > the aggregate device onto and then we probe the aggregate device once
-> > all the components are probed and call component_add(). The probe/remove
-> > hooks are where the bind/unbind calls go, and then a shutdown hook is
-> > added that can be used to shutdown the drm display pipeline at the right
-> > time.
-> >
-> > This works for me on my sc7180 board. I no longer get a warning from i2c
-> > at shutdown that we're trying to make an i2c transaction after the i2c
-> > bus has been shutdown. There's more work to do on the msm drm driver to
-> > extract component device resources like clks, regulators, etc. out of
-> > the component bind function into the driver probe but I wanted to move
-> > everything over now in other component drivers before tackling that
-> > problem.
->
->
-> As I understand you have DSI host with i2c-controlled DSI bridge. And
-> there is an issue that bridge is shutdown before msmdrm. Your solution
-> is to 'adjust' device order on pm list.
-> I had similar issue and solved it locally by adding notification from
-> DSI bridge to DSI host that is has to be removed: mipi_dsi_detach, this
-> notification escalates in DSI host to component_del and this allow to
-> react properly.
->
-> Advantages:
-> - it is local (only involves DSI host and DSI device),
-> - it does not depend on PM internals,
-> - it can be used in other scenarios as well - unbinding DSI device driver
->
-> Disadvantage:
-> - It is DSI specific (but this is your case), I have advertised some
-> time ago more general approach [1][2].
->
-> [1]: https://static.sched.com/hosted_files/osseu18/0f/deferred_problem.pdf
-> [2]: https://lwn.net/Articles/625454/
->
+pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.15-rc4-42-g57=
+4167bf7ed8)
 
-I think these are all points for or against using the component code in
-general? Maybe you can send patches that you think can solve the problem
-I'm experiencing and we can review them on the list.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+15-rc4-42-g574167bf7ed8/
+
+Tree: pm
+Branch: testing
+Git Describe: v5.15-rc4-42-g574167bf7ed8
+Git Commit: 574167bf7ed8e12be9710fc84442c5e23775f75d
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-8): 1 warning
+
+riscv:
+
+x86_64:
+
+
+Warnings summary:
+
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
