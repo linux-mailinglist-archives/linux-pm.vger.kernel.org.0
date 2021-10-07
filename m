@@ -2,40 +2,40 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A318B425737
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Oct 2021 17:56:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A792B42581F
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Oct 2021 18:38:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232604AbhJGP6G (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Oct 2021 11:58:06 -0400
-Received: from mail-ot1-f42.google.com ([209.85.210.42]:42866 "EHLO
-        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231976AbhJGP6F (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Oct 2021 11:58:05 -0400
-Received: by mail-ot1-f42.google.com with SMTP id c26-20020a056830349a00b0054d96d25c1eso7999073otu.9;
-        Thu, 07 Oct 2021 08:56:11 -0700 (PDT)
+        id S242739AbhJGQk3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Oct 2021 12:40:29 -0400
+Received: from mail-oo1-f45.google.com ([209.85.161.45]:39482 "EHLO
+        mail-oo1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242741AbhJGQk2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Oct 2021 12:40:28 -0400
+Received: by mail-oo1-f45.google.com with SMTP id w6-20020a4aa446000000b002b5795cca03so2063183ool.6;
+        Thu, 07 Oct 2021 09:38:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=5OXMrp5FyIuGqUJUx0BNhDntXX+kbhXmR7QX+EAQfvs=;
-        b=iMp80WTm8tjGKXRtNwel0pHAV1FzR80oNeX8qWp41WYxaRd0YHC+MW5FIwRslr+zjM
-         PwWQwST4E8dpD0yF5p3NQFaqtDviAEXKhRFHIZa5E+MeaKfsE8LMp2eEu3yCb2igXTkm
-         IJ8P5liQrxhs1iEDN92Gb8ICGiLl0sxXasVzWNYM2LfXP0fTPH9KWDTQV8rl+nYqyUJH
-         E9N3pwxe6DQyl4z1mbbhyxJsFEf6ZWi/g91pyQLW4HhO0kXJ/FCR1jUdMHJm3aesg6Ng
-         fd1reKrVDeHq8Z02igkGVxijLpHwM0JqapqV5kc5W7iXS7mGGU50LmKuamg1Bj/M7M6P
-         o9mQ==
-X-Gm-Message-State: AOAM533wFxxnYV9Q5VnkrNvMepT0ihU4OBwoKo858wPelncn5KLidroh
-        dhJcCubY4tUn9P06f7iQp/Cqrn5XYgvRv2HVspJTAH71eKE=
-X-Google-Smtp-Source: ABdhPJzrk/NSEGD6vKwLAZi+PM1OCgh+TcfbBV2PcCsvcfkxO1KfQFfKQS5rA30W3LhPgSl0w2upTBNn8t0uuz25lbM=
-X-Received: by 2002:a9d:3783:: with SMTP id x3mr4323292otb.16.1633622171438;
- Thu, 07 Oct 2021 08:56:11 -0700 (PDT)
+        bh=TjMmO2IxAOZIC3m03JaHCGs++YE7N3juOkB6T+6+wp4=;
+        b=xAQDYEdPla7w92tteRj6bm1BGkVQeT9DmgfiOg/MAyUpMDFsemo/wCf9srq/75zR0Z
+         5Lwe85oK/SNakyF3otPDrRFE9MW71tTOc0aii/E67+oFNcsvjeDP50HGSTLimACpM1Yx
+         TO62Z9IZ0MuQrVShYkBWkSsINdqgs7Am9vTOFbqiNLAGx3sU2IHCI4uBusQxo4U8JuDe
+         8prQwta+9hQbzP7z/PNwD/adM61Ww0AH9Phi72tky8C0efbrr1sSWuHQ17miK1MWnEwU
+         3BeoIMmqcbZjC3+scV0NSed442NxVBXKp95NFdnrCSTdvo8XGBR5mREJpMfR8Hzcmhou
+         n7iw==
+X-Gm-Message-State: AOAM531ImQpN0tGcgqUj/eQHcZlfSkRvj4M6NBpVrVkoVdBYsnLvp4kO
+        CihNwraooBvRMqoE/YOkc7izkQCrAJrvg3MUh3s=
+X-Google-Smtp-Source: ABdhPJxDxECnTmSq8NTUKBHaaEYRGx/1hNhf627Mcbne7oGVk8BJefmwbgL2nTWBv6XJ/3AQUcAa4fN0wJadLc2cqvM=
+X-Received: by 2002:a4a:a9ce:: with SMTP id h14mr4062989oon.89.1633624713833;
+ Thu, 07 Oct 2021 09:38:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210906190454.114751-1-abailon@baylibre.com> <20210906190454.114751-2-abailon@baylibre.com>
-In-Reply-To: <20210906190454.114751-2-abailon@baylibre.com>
+References: <20210917072732.611140-1-abailon@baylibre.com> <20210917072732.611140-3-abailon@baylibre.com>
+In-Reply-To: <20210917072732.611140-3-abailon@baylibre.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 7 Oct 2021 17:56:00 +0200
-Message-ID: <CAJZ5v0j3c+YdpmBLQq6t3=7pTEy8AC_a0sMbZGSb=rZ7nJZXeg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: Add bindings for the virtual thermal sensor
+Date:   Thu, 7 Oct 2021 18:38:22 +0200
+Message-ID: <CAJZ5v0hzS-bquhW_wbsd81EpJYx5RHxeXkamdZ+MBs4oczDw1A@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] thermal: add a virtual sensor to aggregate temperatures
 To:     Alexandre Bailon <abailon@baylibre.com>
 Cc:     "Zhang, Rui" <rui.zhang@intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -43,155 +43,551 @@ Cc:     "Zhang, Rui" <rui.zhang@intel.com>,
         Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         ben.tseng@mediatek.com, Kevin Hilman <khilman@baylibre.com>,
-        gpain@baylibre.com
+        Matthias Kaehlcke <mka@chromium.org>,
+        kernel test robot <lkp@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Sep 6, 2021 at 9:05 PM Alexandre Bailon <abailon@baylibre.com> wrote:
+On Fri, Sep 17, 2021 at 9:25 AM Alexandre Bailon <abailon@baylibre.com> wrote:
 >
-> This adds the device tree bidings for the virtual thermal sensor.
+> This adds a virtual thermal sensor that reads temperature from
 
-I'm not sure what "the virtual thermal sensor" is.
+This should be "virtual sensor driver" I suppose.
 
-I'm guessing that you mean "DT bindings for the DT-based virtual
-sensor driver introduced by a subsequent patch" or something like
-this.
+> hardware sensor and return an aggregated temperature.
 
-I also guess that the purpose is to allow the platform designer to
-tell the kernel that some sensors need to be aggregated in order to
-get useful information from them and how to aggregate them.  Otherwise
-it would be hard to say why the aggregation needed to take place in
-the kernel.
+"returns"
 
-Moreover, the aggregation functions supported by this series are
-somewhat simple and I'm not sure if they are really sufficient in
-practice.
+Also wrapping it around a single hardware sensor makes a little sense
+AFAICS, so I guess you mean "multiple hardware sensors" here.
 
-> The virtual sensor could be used to a temperature computed from
-> many thermal sensors.
+> Currently, this supports three operations:
+> the minimum, maximum and average temperature.
+
+They are aggregation functions rather than "operations"
+
 >
+> Reported-by: kernel test robot <lkp@intel.com>
+
+This is new code, so what does it fix?
+
 > Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
-
-Admittedly, I'm not a DT bindings expert, so if I say something
-blatantly silly below, sorry about that.
-
 > ---
->  .../thermal/virtual,thermal-sensor.yaml       | 67 +++++++++++++++++++
->  include/dt-bindings/thermal/virtual-sensor.h  | 15 +++++
->  2 files changed, 82 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/virtual,thermal-sensor.yaml
->  create mode 100644 include/dt-bindings/thermal/virtual-sensor.h
+>  drivers/thermal/Kconfig                  |   8 +
+>  drivers/thermal/Makefile                 |   1 +
+>  drivers/thermal/virtual-thermal-sensor.h |  54 ++++
+>  drivers/thermal/virtual_thermal_sensor.c | 350 +++++++++++++++++++++++
+>  4 files changed, 413 insertions(+)
+>  create mode 100644 drivers/thermal/virtual-thermal-sensor.h
+>  create mode 100644 drivers/thermal/virtual_thermal_sensor.c
 >
-> diff --git a/Documentation/devicetree/bindings/thermal/virtual,thermal-sensor.yaml b/Documentation/devicetree/bindings/thermal/virtual,thermal-sensor.yaml
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index d7f44deab5b1d..20bc93c48f5b1 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -228,6 +228,14 @@ config THERMAL_MMIO
+>           register or shared memory, is a potential candidate to work with this
+>           driver.
+>
+> +config VIRTUAL_THERMAL
+> +       tristate "Virtual thermal sensor driver"
+
+This should be "DT-based virtual thermal sensor driver" I think.
+
+> +       depends on THERMAL_OF || COMPILE_TEST
+> +       help
+> +         This option enables the generic thermal sensor aggregator.
+
+"generic DT-based"
+
+> +         This driver creates a thermal sensor that reads the hardware sensors
+
+s/the/multiple/
+
+> +         and aggregate the temperature.
+
+"aggregates their output"
+
+> +
+>  config HISI_THERMAL
+>         tristate "Hisilicon thermal driver"
+>         depends on ARCH_HISI || COMPILE_TEST
+> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> index 82fc3e616e54b..8bf55973059c5 100644
+> --- a/drivers/thermal/Makefile
+> +++ b/drivers/thermal/Makefile
+> @@ -60,3 +60,4 @@ obj-$(CONFIG_UNIPHIER_THERMAL)        += uniphier_thermal.o
+>  obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
+>  obj-$(CONFIG_SPRD_THERMAL)     += sprd_thermal.o
+>  obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)   += khadas_mcu_fan.o
+> +obj-$(CONFIG_VIRTUAL_THERMAL) += virtual_thermal_sensor.o
+> diff --git a/drivers/thermal/virtual-thermal-sensor.h b/drivers/thermal/virtual-thermal-sensor.h
 > new file mode 100644
-> index 0000000000000..848b5912c79f1
+> index 0000000000000..3bbf7c324dddc
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/virtual,thermal-sensor.yaml
-> @@ -0,0 +1,67 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright 2021 BayLibre
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/thermal-sensor.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Virtual thermal sensor binding
-> +
-> +description: |
-> +  The virtual thermal sensor devices provide temperature sensing capabilities
-> +  based on hardware thermal sensors. Basically, this could be used to get the
-> +  maximum, minimum or average temperature of the hardware thermal sensors.
-> +properties:
-> +  "#thermal-sensor-cells":
-
-It isn't clear to me why this is needed.  If the "thermal-sensors"
-property is required anyway, I'm not sure why it's still necessary to
-have another one to find out whether there is just one sensor or more
-of them.
-
-> +    description:
-> +      Used to uniquely identify a thermal sensor instance within an IC. Will be
-> +      0 on sensor nodes with only a single sensor and at least 1 on nodes
-> +      containing several internal sensors.
-> +    enum: [0, 1]
-> +
-> +  type:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      Used to select the operations to perform on the sensors to get the virtual
-> +      sensor temperature.
-> +    enum:
-> +      - VIRTUAL_SENSOR_MIN
-> +      - VIRTUAL_SENSOR_MAX
-> +      - VIRTUAL_SENSOR_AVG
-> +
-> +  thermal-sensors:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    description:
-> +      The thermal sensor phandle and sensor specifier used to monitor this
-> +      thermal zone.
-> +
-> +required:
-> +  - "#thermal-sensor-cells"
-> +  - type
-> +  - thermal-sensors
-> +
-> +additionalProperties: true
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/thermal/thermal.h>
-> +    #include <dt-bindings/thermal/virtual-sensor.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/clock/mt8192-clk.h>
-> +
-> +    lvts: lvts@1100b000 {
-> +        compatible = "mediatek,mt6873-lvts";
-> +        reg = <0x1100b000 0x1000>;
-> +        clocks = <&infracfg CLK_INFRA_THERM>;
-> +        clock-names = "lvts_clk";
-> +        #thermal-sensor-cells = <0>;
-> +        interrupts = <GIC_SPI 147 IRQ_TYPE_LEVEL_HIGH>;
-> +    };
-> +
-> +    soc_max_sensor: soc_max_sensor {
-> +      compatible = "virtual,thermal-sensor";
-
-Where/how is the above defined?
-
-> +      #thermal-sensor-cells = <1>;
-> +      type = <VIRTUAL_SENSOR_MAX>;
-> +      thermal-sensors = <&lvts 0>, <&lvts 1>;
-> +    };
-> +...
-> diff --git a/include/dt-bindings/thermal/virtual-sensor.h b/include/dt-bindings/thermal/virtual-sensor.h
-> new file mode 100644
-> index 0000000000000..b3e4032f6f62b
-> --- /dev/null
-> +++ b/include/dt-bindings/thermal/virtual-sensor.h
-> @@ -0,0 +1,15 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +++ b/drivers/thermal/virtual-thermal-sensor.h
+> @@ -0,0 +1,54 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
 > +/*
-> + * This header provides constants for virtual thermal sensor bindings.
-> + *
-> + * Copyright (C) 2021 BayLibre
+> + * Copyright (c) 2021 BayLibre
 > + */
 > +
-> +#ifndef _DT_BINDINGS_THERMAL_VIRTUAL_SENSOR_H
-> +#define _DT_BINDINGS_THERMAL_VIRTUAL_SENSOR_H
+> +#ifndef __THERMAL_VIRTUAL_SENSOR_H__
+> +#define __THERMAL_VIRTUAL_SENSOR_H__
+> +
+> +#include <linux/device.h>
+> +#include <linux/thermal.h>
+> +
+> +struct virtual_thermal_sensor;
+> +struct thermal_sensor_data;
+> +
+> +#if IS_ENABLED(CONFIG_VIRTUAL_THERMAL)
+> +struct thermal_sensor_data *
+> +thermal_virtual_sensor_register(struct device *dev, int sensor_id, void *data,
+> +                               const struct thermal_zone_of_device_ops *ops);
+> +void thermal_virtual_sensor_unregister(struct device *dev,
+> +                                      struct thermal_sensor_data *sensor_data);
+> +struct thermal_sensor_data *
+> +devm_thermal_virtual_sensor_register(struct device *dev, int sensor_id, void *data,
+> +                                    const struct thermal_zone_of_device_ops *ops);
+> +
+> +void devm_thermal_virtual_sensor_unregister(struct device *dev,
+> +                                           struct virtual_thermal_sensor *sensor);
+> +#else
+> +static inline struct thermal_sensor_data *
+> +thermal_virtual_sensor_register(struct device *dev, int sensor_id, void *data,
+> +                               const struct thermal_zone_of_device_ops *ops)
+> +{
+> +       return ERR_PTR(-ENODEV);
+> +}
+> +
+> +void thermal_virtual_sensor_unregister(struct device *dev,
+> +                                      struct thermal_sensor_data *sensor_data)
+> +{
+> +}
+> +
+> +static inline struct thermal_sensor_data *
+> +devm_thermal_virtual_sensor_register(struct device *dev, int sensor_id, void *data,
+> +                                    const struct thermal_zone_of_device_ops *ops)
+> +{
+> +       return ERR_PTR(-ENODEV);
+> +}
+> +
+> +static inline
+> +void devm_thermal_virtual_sensor_unregister(struct device *dev,
+> +                                           struct virtual_thermal_sensor *sensor)
+> +{
+> +}
+> +#endif
+> +
+> +#endif /* __THERMAL_VIRTUAL_SENSOR_H__ */
+> diff --git a/drivers/thermal/virtual_thermal_sensor.c b/drivers/thermal/virtual_thermal_sensor.c
+> new file mode 100644
+> index 0000000000000..234563af6643e
+> --- /dev/null
+> +++ b/drivers/thermal/virtual_thermal_sensor.c
+> @@ -0,0 +1,350 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2021 BayLibre
+
+Please add information on what's in this file to the preamble.
+
+> + */
+> +
+> +#include <linux/err.h>
+> +#include <linux/export.h>
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/slab.h>
+> +#include <linux/thermal.h>
+> +#include <linux/types.h>
+> +#include <linux/string.h>
+> +
+> +#include <dt-bindings/thermal/virtual-sensor.h>
+> +
+> +#include "virtual-thermal-sensor.h"
+> +
+> +struct thermal_sensor_data {
+> +       struct list_head node;
+> +
+> +       /* sensor interface */
+> +       int id;
+> +       void *sensor_data;
+> +       const struct thermal_zone_of_device_ops *ops;
+> +};
+> +
+> +struct virtual_thermal_sensor {
+> +       int count;
+> +       struct thermal_sensor_data *sensors;
+> +       struct thermal_zone_device *tzd;
+> +       int (*aggr_temp)(int temp1, int temp2);
+> +
+> +       struct list_head node;
+> +};
+> +
+> +static LIST_HEAD(thermal_sensors);
+> +static LIST_HEAD(virtual_sensors);
+
+These lists don't seem to be protected against concurrent access and
+they should be.
+
+> +
+> +static int max_temp(int temp1, int temp2)
+> +{
+> +       return max(temp1, temp2);
+> +}
+> +
+> +static int min_temp(int temp1, int temp2)
+> +{
+> +       return min(temp1, temp2);
+> +}
+> +
+> +static int avg_temp(int temp1, int temp2)
+> +{
+> +       return ((temp1) / 2) + ((temp2) / 2) + (((temp1) % 2 + (temp2) % 2) / 2);
+
+There are a few redundant parens here.
+
+And why not
+
+return (temp1 + temp2) / 2;
+
+> +}
+> +
+> +static int virtual_thermal_sensor_get_temp(void *data, int *temperature)
+> +{
+> +       struct virtual_thermal_sensor *sensor = data;
+> +       int max_temp = INT_MIN;
+> +       int temp;
+> +       int i;
 > +
 
-It would be better to use an enum type here.
+Some synchronization (eg. locking) should be added to this.  It is racy as is.
 
-> +#define VIRTUAL_SENSOR_MIN 0
-> +#define VIRTUAL_SENSOR_MAX 1
-> +#define VIRTUAL_SENSOR_AVG 2
-
-Also note that the _MIN and _MAX symbols may be confused as limits, so
-it may be better to call them _MIN_VAL and _MAX_VAL, respectively.
-
+> +       for (i = 0; i < sensor->count; i++) {
+> +               struct thermal_sensor_data *hw_sensor;
 > +
-> +#endif /* _DT_BINDINGS_THERMAL_VIRTUAL_SENSOR_H */
+> +               hw_sensor = &sensor->sensors[i];
+> +               if (!hw_sensor->ops)
+> +                       return -ENODEV;
+> +
+> +               hw_sensor->ops->get_temp(hw_sensor->sensor_data, &temp);
+> +               max_temp = sensor->aggr_temp(max_temp, temp);
+> +       }
+> +
+> +       *temperature = max_temp;
+> +
+> +       return 0;
+> +}
+> +
+> +static const struct thermal_zone_of_device_ops virtual_thermal_sensor_ops = {
+> +       .get_temp = virtual_thermal_sensor_get_temp,
+> +};
+> +
+> +static int virtual_sensor_add_sensor(struct virtual_thermal_sensor *sensor,
+> +                                    struct of_phandle_args args,
+> +                                    int index)
+> +{
+> +       struct thermal_sensor_data *sensor_data;
+> +       int id;
+> +
+> +       list_for_each_entry(sensor_data, &thermal_sensors, node) {
+> +               id = args.args_count ? args.args[0] : 0;
+> +               if (sensor_data->id == id) {
+> +                       memcpy(&sensor->sensors[index], sensor_data,
+> +                               sizeof(*sensor_data));
+
+The data object being copied includes pointers, so I wouldn't copy
+them like this.  Especially the ops one annotated as const.
+
+> +                       return 0;
+> +               }
+> +       }
+> +
+> +       return -ENODEV;
+> +}
+> +
+> +static int virtual_thermal_sensor_probe(struct platform_device *pdev)
+> +{
+> +       struct virtual_thermal_sensor *sensor;
+> +       struct device *dev = &pdev->dev;
+> +       struct of_phandle_args args;
+> +       u32 type;
+> +       int ret;
+> +       int i;
+> +
+> +       sensor = devm_kzalloc(dev, sizeof(*sensor), GFP_KERNEL);
+> +       if (!sensor)
+> +               return -ENOMEM;
+> +
+> +       sensor->count = of_count_phandle_with_args(dev->of_node,
+> +                                                  "thermal-sensors",
+> +                                                  "#thermal-sensor-cells");
+> +       if (sensor->count <= 0)
+> +               return -EINVAL;
+> +
+> +       sensor->sensors = devm_kmalloc_array(dev, sensor->count,
+> +                                            sizeof(*sensor->sensors),
+> +                                            GFP_KERNEL);
+> +       if (!sensor->sensors)
+> +               return -ENOMEM;
+> +
+> +       for (i = 0; i < sensor->count; i++) {
+> +               ret = of_parse_phandle_with_args(dev->of_node,
+> +                                                "thermal-sensors",
+> +                                                "#thermal-sensor-cells",
+> +                                                i,
+> +                                                &args);
+> +               if (ret)
+> +                       return ret;
+> +
+> +               ret = virtual_sensor_add_sensor(sensor, args, i);
+> +               if (ret)
+> +                       return ret;
+> +       }
+> +
+> +       ret = of_property_read_u32(dev->of_node, "aggregation-function", &type);
+> +       if (ret)
+> +               return ret;
+> +
+> +       switch (type) {
+> +       case VIRTUAL_THERMAL_SENSOR_MAX:
+> +               sensor->aggr_temp = max_temp;
+> +               break;
+> +       case VIRTUAL_THERMAL_SENSOR_MIN:
+> +               sensor->aggr_temp = min_temp;
+> +               break;
+> +       case VIRTUAL_THERMAL_SENSOR_AVG:
+> +               sensor->aggr_temp = avg_temp;
+> +               break;
+> +       default:
+> +               return -EINVAL;
+> +       }
+> +
+> +       sensor->tzd = devm_thermal_zone_of_sensor_register(dev, 0, sensor,
+> +                                                          &virtual_thermal_sensor_ops);
+> +       if (IS_ERR(sensor->tzd))
+> +               return PTR_ERR(sensor->tzd);
+> +
+> +       platform_set_drvdata(pdev, sensor);
+> +       list_add(&sensor->node, &virtual_sensors);
+> +
+> +       return 0;
+> +}
+> +
+> +static int virtual_thermal_sensor_remove(struct platform_device *pdev)
+> +{
+> +       struct virtual_thermal_sensor *sensor;
+> +
+> +       sensor = platform_get_drvdata(pdev);
+> +       list_del(&sensor->node);
+> +
+> +       return 0;
+> +}
+> +
+> +static const struct of_device_id virtual_thermal_sensor_of_match[] = {
+> +       {
+> +               .compatible = "virtual,thermal-sensor",
+> +       },
+> +       {
+> +       },
+> +};
+> +MODULE_DEVICE_TABLE(of, virtual_thermal_sensor_of_match);
+> +
+> +static struct platform_driver virtual_thermal_sensor = {
+> +       .probe = virtual_thermal_sensor_probe,
+> +       .remove = virtual_thermal_sensor_remove,
+> +       .driver = {
+> +               .name = "virtual-thermal-sensor",
+> +               .of_match_table = virtual_thermal_sensor_of_match,
+> +       },
+> +};
+> +
+> +/**
+> + * thermal_virtual_sensor_register - registers a sensor that could be a virtual
+> + * sensor
+> + * @dev: a valid struct device pointer of a sensor device. Must contain
+> + *       a valid .of_node, for the sensor node.
+> + * @sensor_id: a sensor identifier, in case the sensor IP has more
+> + *             than one sensor
+> + * @data: a private pointer (owned by the caller) that will be passed
+> + *        back, when a temperature reading is needed.
+> + * @ops: struct thermal_zone_of_device_ops *. Must contain at least .get_temp.
+> + *
+> + * This function will register a thermal sensor to make it available for later
+> + * usage by a virtual sensor.
+
+So who's expected to be calling it?
+
+> + *
+> + * The thermal zone temperature is provided by the @get_temp function
+> + * pointer. When called, it will have the private pointer @data back.
+
+It is unclear what you mean here.  I think you are describing a return
+mechanism, but as is it is hard to follow.
+
+> + *
+> + * Return: On success returns a valid struct thermal_zone_device,
+
+That doesn't seem to be the case.  It returns an address returned by
+devm_kzalloc() and the memory at that address is expected to be a
+thermal_sensor_data object.
+
+> + * otherwise, it returns a corresponding ERR_PTR(). Caller must
+> + * check the return value with help of IS_ERR() helper.
+> + */
+> +struct thermal_sensor_data *thermal_virtual_sensor_register(
+> +       struct device *dev, int sensor_id, void *data,
+> +       const struct thermal_zone_of_device_ops *ops)
+> +{
+> +       struct thermal_sensor_data *sensor_data;
+> +
+> +       sensor_data = devm_kzalloc(dev, sizeof(*sensor_data), GFP_KERNEL);
+> +       if (!sensor_data)
+> +               return ERR_PTR(-ENOMEM);
+> +
+> +       sensor_data->id = sensor_id;
+> +       sensor_data->sensor_data = data;
+> +       sensor_data->ops = ops;
+> +
+> +       list_add(&sensor_data->node, &thermal_sensors);
+> +
+> +       return sensor_data;
+
+Overall, this is non-modular code squeezed into a module.
+
+If this module goes away and whoever called it wants to unregister the
+sensor, they will crash, so to a minimum it should do a
+try_module_get() on the module containing it.
+
+> +}
+> +EXPORT_SYMBOL_GPL(thermal_virtual_sensor_register);
+> +
+> +/**
+> + * thermal_virtual_sensor_unregister - unregisters a sensor
+> + * @dev: a valid struct device pointer of a sensor device.
+> + * @sensor_data: a pointer to struct thermal_sensor_data to unregister.
+> + *
+> + * This function removes the sensor from the list of available thermal sensors.
+> + * If the sensor is in use, then the next call to .get_temp will return -ENODEV.
+> + */
+> +void thermal_virtual_sensor_unregister(struct device *dev,
+> +                                      struct thermal_sensor_data *sensor_data)
+> +{
+> +       struct thermal_sensor_data *sd;
+> +       struct virtual_thermal_sensor *sensor;
+> +       int i;
+> +
+
+All of the code in this function is obviously racy.
+
+> +       list_del(&sensor_data->node);
+> +
+> +       list_for_each_entry(sensor, &virtual_sensors, node) {
+> +               for (i = 0; i < sensor->count; i++) {
+> +                       sd = &sensor->sensors[i];
+> +                       if (sd->id == sensor_data->id &&
+> +                               sd->sensor_data == sensor_data->sensor_data) {
+> +                               sd->ops = NULL;
+> +                       }
+
+The inner braces are not necessary.
+
+> +               }
+> +       }
+
+And again, this code requires the module to be protected from
+unloading until the last instance of
+thermal_virtual_sensor_unregister() has returned.
+
+> +}
+> +EXPORT_SYMBOL_GPL(thermal_virtual_sensor_unregister);
+> +
+> +static void devm_thermal_virtual_sensor_release(struct device *dev, void *res)
+> +{
+> +       thermal_virtual_sensor_unregister(dev,
+> +                                         *(struct thermal_sensor_data **)res);
+> +}
+> +
+> +static int devm_thermal_virtual_sensor_match(struct device *dev, void *res,
+> +                                            void *data)
+> +{
+> +       struct thermal_sensor_data **r = res;
+> +
+> +       if (WARN_ON(!r || !*r))
+> +               return 0;
+> +
+> +       return *r == data;
+> +}
+> +
+> +/**
+> + * devm_thermal_virtual_sensor_register - Resource managed version of
+> + *                             thermal_virtual_sensor_register()
+> + * @dev: a valid struct device pointer of a sensor device. Must contain
+> + *       a valid .of_node, for the sensor node.
+> + * @sensor_id: a sensor identifier, in case the sensor IP has more
+> + *            than one sensor
+> + * @data: a private pointer (owned by the caller) that will be passed
+> + *       back, when a temperature reading is needed.
+> + * @ops: struct thermal_zone_of_device_ops *. Must contain at least .get_temp.
+> + *
+> + * Refer thermal_zone_of_sensor_register() for more details.
+> + *
+> + * Return: On success returns a valid struct virtual_sensor_data,
+> + * otherwise, it returns a corresponding ERR_PTR(). Caller must
+> + * check the return value with help of IS_ERR() helper.
+> + * Registered virtual_sensor_data device will automatically be
+> + * released when device is unbound.
+> + */
+> +struct thermal_sensor_data *devm_thermal_virtual_sensor_register(
+> +       struct device *dev, int sensor_id,
+> +       void *data, const struct thermal_zone_of_device_ops *ops)
+> +{
+> +       struct thermal_sensor_data **ptr, *sensor_data;
+> +
+> +       ptr = devres_alloc(devm_thermal_virtual_sensor_release, sizeof(*ptr),
+> +                          GFP_KERNEL);
+> +       if (!ptr)
+> +               return ERR_PTR(-ENOMEM);
+> +
+> +       sensor_data = thermal_virtual_sensor_register(dev, sensor_id, data, ops);
+> +       if (IS_ERR(sensor_data)) {
+> +               devres_free(ptr);
+> +               return sensor_data;
+> +       }
+> +
+> +       *ptr = sensor_data;
+> +       devres_add(dev, ptr);
+> +
+> +       return sensor_data;
+> +}
+> +EXPORT_SYMBOL_GPL(devm_thermal_virtual_sensor_register);
+> +
+> +/**
+> + * devm_thermal_virtual_sensor_unregister - Resource managed version of
+> + *                             thermal_virtual_sensor_unregister().
+> + * @dev: Device for which resource was allocated.
+> + * @sensor: a pointer to struct thermal_zone_device where the sensor is registered.
+> + *
+> + * This function removes the sensor from the list of sensors registered with
+> + * devm_thermal_virtual_sensor_register() API.
+> + * Normally this function will not need to be called and the resource
+> + * management code will ensure that the resource is freed.
+> + */
+> +void devm_thermal_virtual_sensor_unregister(struct device *dev,
+> +                                           struct virtual_thermal_sensor *sensor)
+> +{
+> +       WARN_ON(devres_release(dev, devm_thermal_virtual_sensor_release,
+> +                              devm_thermal_virtual_sensor_match, sensor));
+> +}
+> +EXPORT_SYMBOL_GPL(devm_thermal_virtual_sensor_unregister);
+> +
+> +module_platform_driver(virtual_thermal_sensor);
+> +MODULE_AUTHOR("Alexandre Bailon <abailon@baylibre.com>");
+> +MODULE_DESCRIPTION("Virtual thermal sensor");
+> +MODULE_LICENSE("GPL v2");
 > --
