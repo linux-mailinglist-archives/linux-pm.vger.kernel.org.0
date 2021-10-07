@@ -2,54 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4A52425837
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Oct 2021 18:43:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1736A42594E
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Oct 2021 19:22:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242751AbhJGQo5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Oct 2021 12:44:57 -0400
-Received: from foss.arm.com ([217.140.110.172]:37086 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242714AbhJGQo4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 7 Oct 2021 12:44:56 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 74A201FB;
-        Thu,  7 Oct 2021 09:43:02 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.57.72.231])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A64A43F766;
-        Thu,  7 Oct 2021 09:43:01 -0700 (PDT)
-From:   Vincent Donnefort <vincent.donnefort@arm.com>
-To:     rjw@rjwysocki.net, viresh.kumar@linaro.org
-Cc:     linux-pm@vger.kernel.org, hector.yuan@mediatek.com,
-        Vincent Donnefort <vincent.donnefort@arm.com>
-Subject: [PATCH] cpufreq: mediatek-hw: Fix cpufreq_table_find_index_dl call
-Date:   Thu,  7 Oct 2021 17:42:18 +0100
-Message-Id: <20211007164218.169942-1-vincent.donnefort@arm.com>
-X-Mailer: git-send-email 2.25.1
+        id S241411AbhJGRYu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Oct 2021 13:24:50 -0400
+Received: from mail-ot1-f42.google.com ([209.85.210.42]:35417 "EHLO
+        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241253AbhJGRYt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Oct 2021 13:24:49 -0400
+Received: by mail-ot1-f42.google.com with SMTP id 77-20020a9d0ed3000000b00546e10e6699so8431491otj.2
+        for <linux-pm@vger.kernel.org>; Thu, 07 Oct 2021 10:22:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=24H2bYEHJlPd44bZdsg325NW2L0CaxiP3otZVJAiHAU=;
+        b=tGXCfCyiuW6lc1fDImgAa5jbfjZFrdV3JWFe8QLFKZ6ae1Hy90V32I5YoSjMPQfMkj
+         +E/WuB/fTafQfyM8yyGa3ov7FIY0n6w6EnrjPjd1ge+dIIMjjI76kAcpPPTJZrfMQOJl
+         wpu+t7u8I9QxrGohMky/GsChKRBDt4xRxHAMQRUjroae4Ts307clhmkc9CQ82U3rQCoB
+         YlPhFA/i30H7KNE8JABbuLH8pe72XTSJqWt8jKfFRcEMKxNX/TDG2sOkoJvEEphqEp8O
+         joUQuFWiAbDAlBoKyFdGNRUfn2iEk+klLfoC01nTfC5CemT2YRdfB+QV5pUUvZGuIpjs
+         Q3hQ==
+X-Gm-Message-State: AOAM530T4ph1NQoPA3syVNjF2C8Rto0cHnNPXsz6N9i7Ne9V9x+1Ujkk
+        isoH+t7mgONQsD+RFFmCuU/SU6k4IJh5wKxsonE=
+X-Google-Smtp-Source: ABdhPJyoSgshohga70QPc/8EHLZ3Ci8+c/gYzOV1qeV00eUigLjIKXuiTAwbD/smHDJYvkCJdGZBdLTBsCVktN0LnXI=
+X-Received: by 2002:a9d:3783:: with SMTP id x3mr4726417otb.16.1633627375719;
+ Thu, 07 Oct 2021 10:22:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211007164218.169942-1-vincent.donnefort@arm.com>
+In-Reply-To: <20211007164218.169942-1-vincent.donnefort@arm.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 7 Oct 2021 19:22:44 +0200
+Message-ID: <CAJZ5v0hnraazygV23peOKJeaWtyaD2BHtNA21Q_HqmKnZ453Rw@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: mediatek-hw: Fix cpufreq_table_find_index_dl call
+To:     Vincent Donnefort <vincent.donnefort@arm.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>, hector.yuan@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The new cpufreq table flag RELATION_E introduced a new "efficient"
-parameter for the cpufreq_table_find*() functions.
+On Thu, Oct 7, 2021 at 6:43 PM Vincent Donnefort
+<vincent.donnefort@arm.com> wrote:
+>
+> The new cpufreq table flag RELATION_E introduced a new "efficient"
+> parameter for the cpufreq_table_find*() functions.
+>
+> Fixes: 1f39fa0dccff (cpufreq: Introducing CPUFREQ_RELATION_E)
+> Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
+>
+> diff --git a/drivers/cpufreq/mediatek-cpufreq-hw.c b/drivers/cpufreq/mediatek-cpufreq-hw.c
+> index 0cf18dd46b92..8ddbd0c5ce37 100644
+> --- a/drivers/cpufreq/mediatek-cpufreq-hw.c
+> +++ b/drivers/cpufreq/mediatek-cpufreq-hw.c
+> @@ -109,7 +109,7 @@ static unsigned int mtk_cpufreq_hw_fast_switch(struct cpufreq_policy *policy,
+>         struct mtk_cpufreq_data *data = policy->driver_data;
+>         unsigned int index;
+>
+> -       index = cpufreq_table_find_index_dl(policy, target_freq);
+> +       index = cpufreq_table_find_index_dl(policy, target_freq, false);
+>
+>         writel_relaxed(index, data->reg_bases[REG_FREQ_PERF_STATE]);
+>
+> --
 
-Fixes: 1f39fa0dccff (cpufreq: Introducing CPUFREQ_RELATION_E)
-Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
-
-diff --git a/drivers/cpufreq/mediatek-cpufreq-hw.c b/drivers/cpufreq/mediatek-cpufreq-hw.c
-index 0cf18dd46b92..8ddbd0c5ce37 100644
---- a/drivers/cpufreq/mediatek-cpufreq-hw.c
-+++ b/drivers/cpufreq/mediatek-cpufreq-hw.c
-@@ -109,7 +109,7 @@ static unsigned int mtk_cpufreq_hw_fast_switch(struct cpufreq_policy *policy,
- 	struct mtk_cpufreq_data *data = policy->driver_data;
- 	unsigned int index;
- 
--	index = cpufreq_table_find_index_dl(policy, target_freq);
-+	index = cpufreq_table_find_index_dl(policy, target_freq, false);
- 
- 	writel_relaxed(index, data->reg_bases[REG_FREQ_PERF_STATE]);
- 
--- 
-2.25.1
-
+Applied, thanks!
