@@ -2,21 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C38EF424EA5
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Oct 2021 10:08:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9740424EA8
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Oct 2021 10:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240594AbhJGIJw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Oct 2021 04:09:52 -0400
-Received: from foss.arm.com ([217.140.110.172]:35578 "EHLO foss.arm.com"
+        id S240610AbhJGIJz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Oct 2021 04:09:55 -0400
+Received: from foss.arm.com ([217.140.110.172]:35602 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240574AbhJGIJt (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 7 Oct 2021 04:09:49 -0400
+        id S240573AbhJGIJw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 7 Oct 2021 04:09:52 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8E5DD1FB;
-        Thu,  7 Oct 2021 01:07:55 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C6C82113E;
+        Thu,  7 Oct 2021 01:07:58 -0700 (PDT)
 Received: from e123648.arm.com (unknown [10.57.18.236])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 9D47B3F766;
-        Thu,  7 Oct 2021 01:07:52 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D36D53F766;
+        Thu,  7 Oct 2021 01:07:55 -0700 (PDT)
 From:   Lukasz Luba <lukasz.luba@arm.com>
 To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 Cc:     linux-arm-kernel@lists.infradead.org,
@@ -27,9 +27,9 @@ Cc:     linux-arm-kernel@lists.infradead.org,
         daniel.lezcano@linaro.org, amit.kachhap@gmail.com,
         thara.gopinath@linaro.org, bjorn.andersson@linaro.org,
         agross@kernel.org
-Subject: [PATCH 4/5] cpufreq: qcom-cpufreq-hw: Use new thermal pressure update function
-Date:   Thu,  7 Oct 2021 09:07:28 +0100
-Message-Id: <20211007080729.8262-5-lukasz.luba@arm.com>
+Subject: [PATCH 5/5] arch_topology: Remove unused topology_set_thermal_pressure() and related
+Date:   Thu,  7 Oct 2021 09:07:29 +0100
+Message-Id: <20211007080729.8262-6-lukasz.luba@arm.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211007080729.8262-1-lukasz.luba@arm.com>
 References: <20211007080729.8262-1-lukasz.luba@arm.com>
@@ -37,53 +37,131 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Thermal pressure provides a new API, which allows to use CPU frequency
-as an argument. That removes the need of local conversion to capacity.
-Use this new API and remove old local conversion code.
+There is no need of this function (and related) since code has been
+converted to use the new arch_thermal_pressure_update() API. The old
+code can be removed.
 
 Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 ---
- drivers/cpufreq/qcom-cpufreq-hw.c | 15 +++++----------
- 1 file changed, 5 insertions(+), 10 deletions(-)
+ arch/arm/include/asm/topology.h   |  1 -
+ arch/arm64/include/asm/topology.h |  1 -
+ drivers/base/arch_topology.c      | 17 +++++------------
+ include/linux/arch_topology.h     |  3 ---
+ include/linux/sched/topology.h    |  7 -------
+ init/Kconfig                      |  2 +-
+ 6 files changed, 6 insertions(+), 25 deletions(-)
 
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index 0138b2ec406d..bf7871c2a4c9 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -275,10 +275,10 @@ static unsigned int qcom_lmh_get_throttle_freq(struct qcom_cpufreq_data *data)
+diff --git a/arch/arm/include/asm/topology.h b/arch/arm/include/asm/topology.h
+index aee6c456c085..5e51fdcfcbd4 100644
+--- a/arch/arm/include/asm/topology.h
++++ b/arch/arm/include/asm/topology.h
+@@ -23,7 +23,6 @@
  
- static void qcom_lmh_dcvs_notify(struct qcom_cpufreq_data *data)
+ /* Replace task scheduler's default thermal pressure API */
+ #define arch_scale_thermal_pressure topology_get_thermal_pressure
+-#define arch_set_thermal_pressure   topology_set_thermal_pressure
+ #define arch_thermal_pressure_update	topology_thermal_pressure_update
+ 
+ #else
+diff --git a/arch/arm64/include/asm/topology.h b/arch/arm64/include/asm/topology.h
+index c997015402bc..92cd1288906f 100644
+--- a/arch/arm64/include/asm/topology.h
++++ b/arch/arm64/include/asm/topology.h
+@@ -32,7 +32,6 @@ void update_freq_counters_refs(void);
+ 
+ /* Replace task scheduler's default thermal pressure API */
+ #define arch_scale_thermal_pressure topology_get_thermal_pressure
+-#define arch_set_thermal_pressure   topology_set_thermal_pressure
+ #define arch_thermal_pressure_update	topology_thermal_pressure_update
+ 
+ #include <asm-generic/topology.h>
+diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+index ad31513d0104..84f093146ea5 100644
+--- a/drivers/base/arch_topology.c
++++ b/drivers/base/arch_topology.c
+@@ -159,16 +159,6 @@ void topology_set_cpu_scale(unsigned int cpu, unsigned long capacity)
+ 
+ DEFINE_PER_CPU(unsigned long, thermal_pressure);
+ 
+-void topology_set_thermal_pressure(const struct cpumask *cpus,
+-			       unsigned long th_pressure)
+-{
+-	int cpu;
+-
+-	for_each_cpu(cpu, cpus)
+-		WRITE_ONCE(per_cpu(thermal_pressure, cpu), th_pressure);
+-}
+-EXPORT_SYMBOL_GPL(topology_set_thermal_pressure);
+-
+ /**
+  * topology_thermal_pressure_update() - Update thermal pressure for CPUs
+  * @cpus	: The related CPUs which capacity has been reduced
+@@ -184,7 +174,7 @@ EXPORT_SYMBOL_GPL(topology_set_thermal_pressure);
+ void topology_thermal_pressure_update(const struct cpumask *cpus,
+ 				      unsigned long capped_freq)
  {
--	unsigned long max_capacity, capacity, freq_hz, throttled_freq;
- 	struct cpufreq_policy *policy = data->policy;
- 	int cpu = cpumask_first(policy->cpus);
- 	struct device *dev = get_cpu_device(cpu);
-+	unsigned long freq_hz, throttled_freq;
- 	struct dev_pm_opp *opp;
- 	unsigned int freq;
+-	unsigned long max_capacity, capacity;
++	unsigned long max_capacity, capacity, th_pressure;
+ 	int cpu;
  
-@@ -295,17 +295,12 @@ static void qcom_lmh_dcvs_notify(struct qcom_cpufreq_data *data)
+ 	if (!cpus)
+@@ -199,7 +189,10 @@ void topology_thermal_pressure_update(const struct cpumask *cpus,
+ 	capacity = capped_freq * max_capacity;
+ 	capacity /= per_cpu(freq_factor, cpu);
  
- 	throttled_freq = freq_hz / HZ_PER_KHZ;
+-	arch_set_thermal_pressure(cpus, max_capacity - capacity);
++	th_pressure = max_capacity - capacity;
++
++	for_each_cpu(cpu, cpus)
++		WRITE_ONCE(per_cpu(thermal_pressure, cpu), th_pressure);
+ }
+ EXPORT_SYMBOL_GPL(topology_thermal_pressure_update);
  
--	/* Update thermal pressure */
+diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
+index 9e183621a59b..9b95e5b29ee9 100644
+--- a/include/linux/arch_topology.h
++++ b/include/linux/arch_topology.h
+@@ -56,9 +56,6 @@ static inline unsigned long topology_get_thermal_pressure(int cpu)
+ 	return per_cpu(thermal_pressure, cpu);
+ }
+ 
+-void topology_set_thermal_pressure(const struct cpumask *cpus,
+-				   unsigned long th_pressure);
 -
--	max_capacity = arch_scale_cpu_capacity(cpu);
--	capacity = mult_frac(max_capacity, throttled_freq, policy->cpuinfo.max_freq);
+ void topology_thermal_pressure_update(const struct cpumask *cpus,
+ 				      unsigned long capped_freq);
+ 
+diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
+index 990d14814427..f31da5454baa 100644
+--- a/include/linux/sched/topology.h
++++ b/include/linux/sched/topology.h
+@@ -259,13 +259,6 @@ unsigned long arch_scale_thermal_pressure(int cpu)
+ }
+ #endif
+ 
+-#ifndef arch_set_thermal_pressure
+-static __always_inline
+-void arch_set_thermal_pressure(const struct cpumask *cpus,
+-			       unsigned long th_pressure)
+-{ }
+-#endif
 -
- 	/* Don't pass boost capacity to scheduler */
--	if (capacity > max_capacity)
--		capacity = max_capacity;
-+	if (throttled_freq > policy->cpuinfo.max_freq)
-+		throttled_freq = policy->cpuinfo.max_freq;
+ #ifndef arch_thermal_pressure_update
+ static __always_inline
+ void arch_thermal_pressure_update(const struct cpumask *cpus,
+diff --git a/init/Kconfig b/init/Kconfig
+index f494e405c156..334c302e588f 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -559,7 +559,7 @@ config SCHED_THERMAL_PRESSURE
+ 	  i.e. put less load on throttled CPUs than on non/less throttled ones.
  
--	arch_set_thermal_pressure(policy->related_cpus,
--				  max_capacity - capacity);
-+	/* Update thermal pressure */
-+	arch_thermal_pressure_update(policy->related_cpus, throttled_freq);
+ 	  This requires the architecture to implement
+-	  arch_set_thermal_pressure() and arch_scale_thermal_pressure().
++	  arch_thermal_pressure_update() and arch_scale_thermal_pressure().
  
- 	/*
- 	 * In the unlikely case policy is unregistered do not enable
+ config BSD_PROCESS_ACCT
+ 	bool "BSD Process Accounting"
 -- 
 2.17.1
 
