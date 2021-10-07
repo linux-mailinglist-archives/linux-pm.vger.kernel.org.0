@@ -2,59 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12F664253BC
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Oct 2021 15:10:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDCAF4253D3
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Oct 2021 15:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241164AbhJGNMo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Oct 2021 09:12:44 -0400
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:35780
+        id S241341AbhJGNOu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Oct 2021 09:14:50 -0400
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:35878
         "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241118AbhJGNMh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Oct 2021 09:12:37 -0400
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com [209.85.221.71])
+        by vger.kernel.org with ESMTP id S241340AbhJGNOr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Oct 2021 09:14:47 -0400
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com [209.85.221.72])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 8CC8C3FFD9
-        for <linux-pm@vger.kernel.org>; Thu,  7 Oct 2021 13:10:43 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 225C43FFDE
+        for <linux-pm@vger.kernel.org>; Thu,  7 Oct 2021 13:12:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1633612243;
-        bh=JhSvZ4bZ9XDCLRxn5WXaBJyzQncLRhcDh11CxYaApWU=;
+        s=20210705; t=1633612373;
+        bh=iirK3i9WG+HMUrskVNYjHF1PRpxBdgd8IKVUip8gjUQ=;
         h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
          In-Reply-To:Content-Type;
-        b=SQRww+CWPi/Q2poXGMn6psrMEj+mkI4ulRfIKaTDI/o4eRN+80ZrPrMGCf5L1+HFJ
-         iPfifVGNDcCAusIJAFWrcCi1E6KhQcYoeAfbYW3OYnHy+eaipA173pWYSzlu3Xm3CQ
-         GfIDX4iWcEtlyo+LyV/SoslxUoJqJu/KEK7PNd+A9hQHbyZgGeJRxkuj81Q8reK13n
-         c05FMx6GsCJl+GifABM41Eruy9YrkEfssnIb+BFChN1xfyrSbtapu5LXl3+tlCTY7M
-         7ntnP0VIShhej0fU8IyLuZlDj7sH/m/lBduBe6vhZGa1YJ/qYWQC+FsefDakNaADYd
-         hjvA72BltRGvA==
-Received: by mail-wr1-f71.google.com with SMTP id r21-20020adfa155000000b001608162e16dso4637706wrr.15
-        for <linux-pm@vger.kernel.org>; Thu, 07 Oct 2021 06:10:43 -0700 (PDT)
+        b=UzN7h64Id7SHnxwBiLhjP5D9qD3+3i5DPAyiKndQPadyaA84P6kLZ3dvOu9aW8BIp
+         YjrwummcSVlZ0mE7Hw8kcgnJtXrVxP745ShPJ6sERP2DOmu1Ch7r4jglRXogA8StXZ
+         thJZdmzoTVZoFW/qpA/5nWuUatIFLxD71hh4PoSN3IX1aHrrBNSVpujXrN0QskAH0h
+         AMS7aXXhPrZ51zudiCTil9Sdu91v0aQs+y5oMXeEgxwNCrWAh/wMq4MoTQaYSMU6jD
+         IanjnqdxT1UVCPj0V26/j6M6nxsV2ZCu4aZO+w48bwMbq1RI2FHh/4wCFjSzz7e33h
+         fdZQbiqERP08g==
+Received: by mail-wr1-f72.google.com with SMTP id d13-20020adf9b8d000000b00160a94c235aso4664525wrc.2
+        for <linux-pm@vger.kernel.org>; Thu, 07 Oct 2021 06:12:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=JhSvZ4bZ9XDCLRxn5WXaBJyzQncLRhcDh11CxYaApWU=;
-        b=ckJtCT/WeSgx92w6lR+3eoeV6IrZKwDM83aP/FbVGDtxnYW0WsXGMDwWEOXOoH6ybb
-         heF0WyH2noUSY4v61RvPwWX/C1MSp1mhWWLbA8EMUkBsN9Ygm8cHyGIuIp813N17s6Hm
-         qwSkrVNQyNFUu4GFecK0lR7D5tJwmzSpTazlEVl7s9L6uwXQWxf4LiGNGmW19+umcIyQ
-         4t5YFSEB0ipxC6LTgS8vQA0IN1EiJhDB8w/DWDf6Z86tfPNX37dQpvsbFvKq5UCmSqwc
-         aTo20enDQOgugPeJJFLLMTt8iP7DzRqyeM2LJlz5vH3vYfbSHDC4vAxe01Z24dqLNWNm
-         MjzA==
-X-Gm-Message-State: AOAM5337RUNUwOT51y6BzqaOTHXAYaa+G5hguBfQ+wxSf76QlpQ833+Q
-        leqID+Xlxw7QT/j8c8iY+OfnbKQE9mPjcm61eAZb4ydM6onzNyl19rZXfPssYiHR59dPxa5Ok7W
-        Sd3cKIEO+6bzOgaXaeI2PMXufOr856fVMPb6T
-X-Received: by 2002:a1c:ac86:: with SMTP id v128mr4569215wme.3.1633612241796;
-        Thu, 07 Oct 2021 06:10:41 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzLwRYPKIpB+6rBu8rzxazPdAbZRZWVT14g4gFsnMg69geQZ9M20oFRASa/T2iiTTB4yzVtpw==
-X-Received: by 2002:a1c:ac86:: with SMTP id v128mr4568961wme.3.1633612239499;
-        Thu, 07 Oct 2021 06:10:39 -0700 (PDT)
+        bh=iirK3i9WG+HMUrskVNYjHF1PRpxBdgd8IKVUip8gjUQ=;
+        b=kcbyJiSijwxQxj0YXPTo9qlG5SrK1yd5R8zoQFIw90/PLWIhpqVkk+tmvTSb3COVlB
+         jFix+j2ZDnTiZFjGX+H6yNBVi41w66HdLu/rRJILNZbROzVmVgZ2Dc5tuM5zWzjC1Hl1
+         n1hZMWm3rly//MC3dJIwzwRMSAIWdPCWnLn7zHsHBEyYPuEULCLsmtrlKFBOHOVPHU+P
+         /2mQwJxVtQ1HYkCUxw+LilU+YFufPXZ4/LgoK3JfnBlnEM7pd1nfAfrj+/qIdBt1HyRh
+         +Am073HZ7Ewc6b7jlFuh5djEGeI5AP4v6TcNY/3tItzV7Y1dCt0nfEjEwl3LPQ9iMR13
+         O7Lw==
+X-Gm-Message-State: AOAM530RqjEMiSD89bnYDy/GL7WweF2x/l8FGKvxd9utko43rwRkiUZ3
+        2WXI0VBmSpBW8LYGjg7JvA+yqab12mtwEKK4N7cwKb1IiAok+Xtd5Px9PCKA5p+8+HmwiEI0Ixo
+        lIP3gQgBPx1EYtD9rriES+qJl5f/NhTtNgtEr
+X-Received: by 2002:adf:e8d2:: with SMTP id k18mr5360894wrn.219.1633612372787;
+        Thu, 07 Oct 2021 06:12:52 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw3hpfP4OSaat1L3xt+PSv3NTONOShlxrR7nAUJcdNm/g+TtJbmwx0s/MXDAzkDO+Y0ZGjeDw==
+X-Received: by 2002:adf:e8d2:: with SMTP id k18mr5360863wrn.219.1633612372674;
+        Thu, 07 Oct 2021 06:12:52 -0700 (PDT)
 Received: from [192.168.1.115] (xdsl-188-155-186-13.adslplus.ch. [188.155.186.13])
-        by smtp.gmail.com with ESMTPSA id v16sm2571457wrq.39.2021.10.07.06.10.37
+        by smtp.gmail.com with ESMTPSA id p13sm5355062wma.22.2021.10.07.06.12.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Oct 2021 06:10:39 -0700 (PDT)
-Subject: Re: [PATCH 1/7] dt-bindings: arm: apple: Add apple,pmgr binding
+        Thu, 07 Oct 2021 06:12:51 -0700 (PDT)
+Subject: Re: [PATCH 2/7] dt-bindings: power: Add apple,pmgr-pwrstate binding
 To:     Hector Martin <marcan@marcan.st>,
         linux-arm-kernel@lists.infradead.org
 Cc:     Marc Zyngier <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>,
@@ -69,16 +69,16 @@ Cc:     Marc Zyngier <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         linux-serial@vger.kernel.org
 References: <20211005155923.173399-1-marcan@marcan.st>
- <20211005155923.173399-2-marcan@marcan.st>
- <18818eff-87d7-6a53-a4fd-7f3cbf625a0e@canonical.com>
- <57991dac-196e-a76d-831a-d4ac166bfe29@marcan.st>
+ <20211005155923.173399-3-marcan@marcan.st>
+ <b5b3fcb4-077b-d33d-03cc-ac0611cb56a1@canonical.com>
+ <5b89aed0-f9b7-fdba-16d8-a8bd9e2d7437@marcan.st>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <a5d52d94-4d42-6842-a40f-db25d2581929@canonical.com>
-Date:   Thu, 7 Oct 2021 15:10:37 +0200
+Message-ID: <6e92a8d3-798a-267a-d24e-6b9ff0c3c645@canonical.com>
+Date:   Thu, 7 Oct 2021 15:12:50 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <57991dac-196e-a76d-831a-d4ac166bfe29@marcan.st>
+In-Reply-To: <5b89aed0-f9b7-fdba-16d8-a8bd9e2d7437@marcan.st>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -86,39 +86,44 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 06/10/2021 17:26, Hector Martin wrote:
-> On 06/10/2021 15.56, Krzysztof Kozlowski wrote:
->>> diff --git a/Documentation/devicetree/bindings/arm/apple/apple,pmgr.yaml b/Documentation/devicetree/bindings/arm/apple/apple,pmgr.yaml
->>> new file mode 100644
->>> index 000000000000..0304164e4140
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/arm/apple/apple,pmgr.yaml
->>> @@ -0,0 +1,74 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/arm/apple/apple,pmgr.yaml#
+On 06/10/2021 17:59, Hector Martin wrote:
+> On 06/10/2021 16.05, Krzysztof Kozlowski wrote:
+>>> +  IP cores belonging to a power domain should contain a
+>>> +  "power-domains" property that is a phandle for the
+>>> +  power domain node representing the domain.
 >>
->> Please don't store all Apple-related bindings in bindings/arm/apple, but
->> instead group per device type like in most of other bindings. In this
->> case - this looks like something close to power domain controller, so it
->> should be in bindings/power/
+>> Skip this last paragraph - it is obvious in usage of power domains.
+>> Specific bindings should not duplicate generic knowledge.
 > 
-> This is a controller that, right now, is only used to instantiate device 
-> power management controls, but the controller itself is just a generic 
-> syscon device. Depending on the register range, it could conceivably 
-> encompass other register types (e.g. clock selects) within it, though 
-> I'm not sure I want to do that right now. Apple calls several of these 
-> different register sets as a whole a "PMGR". So I'm not sure if it 
-> really qualifies as "just" a power domain controller. If we want to 
-> restrict this to the power state portion of PMGR, then it might make 
-> sense to call it something more specific...
+> Ack, I'll drop it.
 > 
-> See arm/rockchip/pmu.yaml for the setup this is modeled after.
+>>> +properties:
+>>> +  $nodename:
+>>> +    pattern: "^power-controller@[0-9a-f]+$"
+>>
+>> Usually we call nodes as power-domain.
 > 
+> I had it as that originally, but these aren't power domains. These are 
+> power management domains (they can clock *and* power gate separately, 
+> where supported) plus also do reset management. So I wasn't sure if it 
+> was really fair calling them "power-domain" at that point.
 
-Makes sense now and actually few other designs including Samsung Exynos
-have it as well.
+OK, thanks for explanation.
+
+> 
+>>> +  power-domains:
+>>> +    description:
+>>> +      Reference to parent power domains. A domain may have multiple parents,
+>>> +      and all will be powered up when it is powered.
+>>
+>> How many items?
+> 
+> One or more (if there are none the property should not exist). I guess 
+> that should be encoded.
+
+Probably this should not go without any constraints. Are you sure it
+could have more than one? It would mean more than one parent.
+
 
 
 Best regards,
