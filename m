@@ -2,113 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6171C424DFE
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Oct 2021 09:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EFBA424E97
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Oct 2021 10:07:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240343AbhJGHVY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Oct 2021 03:21:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41254 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240340AbhJGHVX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Oct 2021 03:21:23 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0187FC061746;
-        Thu,  7 Oct 2021 00:19:30 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id x7so18677872edd.6;
-        Thu, 07 Oct 2021 00:19:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=S6PW5fQZS6d4075owqkmplnQGMnVP81b2PiAGptmN6U=;
-        b=osbogCzjdSShZcIpnm0FcSSkmScvYv4ctjczNQpiNbPqN80mxmsttJzCeUcgLvSgbh
-         dqMG4JgD5NJVVPqbMZLz8OTSrOiWCiY8fkw+U1Qo+gmGU0gGFaQ8ElqQH0eFqugQF+Ms
-         30h9D5u2gNZQ/kCeKh6SnG948pvHjvYq73qfLn4hIlU8Ge17ki+GYe3yPxDdgrE9TzuG
-         2KFtqAL6jbYq6OZfOpaOp247drl3WoD1emL/Oe8lkfvtm8rGILg8aezUw1b/c8Xh2qBb
-         +z2mokAzue18FO+NfRPTGR1UnosluN+ZwRout4rCwF2tgiwtwzHVzYGBWYBtZkSqfyYO
-         iYMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=S6PW5fQZS6d4075owqkmplnQGMnVP81b2PiAGptmN6U=;
-        b=kpM/E1qvGGoRJShGXwmFOTgwUEsHeE03Qp7MeZcIW0DhmfUE48lzbb4lNWnuE7i8in
-         elSBEv7XjfrOWeQ3SGjjMo+Kn8V33vgkYYCS48EO81PaSmGOFktGtJU/yaCoQ3DN4w1S
-         cHU2CVIgj54TfdqIx29Krk4jGHI2armlzHJxwkKCoBBYIjOheBSREFH+pFmZEoaT3N8F
-         9UfcgZpHnrFiFbkoa1qMjAa8xbueosZcwiHbgjz94IBujylAOGFPX2hSIX5rjk9wm810
-         kM5Qe1yBLux2Lk/q2kHtIhVb8VAe56VQ34syV4oZuR00XMNjjLEv1k4onB8Ds5Z1/xOS
-         kzJQ==
-X-Gm-Message-State: AOAM531EBGFiiWr5IVR5C83WXco82HHxEcJfxpBE7VTq/JTJVolCWtAW
-        UzIFEuCVdo7p82e2AfRcC/4W2O7HpumhXtcyfBA=
-X-Google-Smtp-Source: ABdhPJxKOQk3/Mj7n3WwroXrqciMwty7VThQ0QiOEZ3kvboTK/bb8KS84oE9n1FuEkpRsSdm20X64eJL47k6dcMazjs=
-X-Received: by 2002:a17:907:7601:: with SMTP id jx1mr3628884ejc.69.1633591168573;
- Thu, 07 Oct 2021 00:19:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211007060253.17049-1-digetx@gmail.com>
-In-Reply-To: <20211007060253.17049-1-digetx@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 7 Oct 2021 10:18:52 +0300
-Message-ID: <CAHp75VeHC5M-Rv+wvJQEvmtfX0k7fP6uremGHFMnd8kEqPnBpw@mail.gmail.com>
-Subject: Re: [PATCH v1 0/6] Introduce power off call chain API
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S240484AbhJGIJg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Oct 2021 04:09:36 -0400
+Received: from foss.arm.com ([217.140.110.172]:35496 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236997AbhJGIJg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 7 Oct 2021 04:09:36 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A97851FB;
+        Thu,  7 Oct 2021 01:07:42 -0700 (PDT)
+Received: from e123648.arm.com (unknown [10.57.18.236])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B94D73F766;
+        Thu,  7 Oct 2021 01:07:39 -0700 (PDT)
+From:   Lukasz Luba <lukasz.luba@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, lukasz.luba@arm.com,
+        sudeep.holla@arm.com, will@kernel.org, catalin.marinas@arm.com,
+        linux@armlinux.org.uk, gregkh@linuxfoundation.org,
+        rafael@kernel.org, viresh.kumar@linaro.org, amitk@kernel.org,
+        daniel.lezcano@linaro.org, amit.kachhap@gmail.com,
+        thara.gopinath@linaro.org, bjorn.andersson@linaro.org,
+        agross@kernel.org
+Subject: [PATCH 0/5] Refactor thermal pressure update to avoid code duplication
+Date:   Thu,  7 Oct 2021 09:07:24 +0100
+Message-Id: <20211007080729.8262-1-lukasz.luba@arm.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 7, 2021 at 9:05 AM Dmitry Osipenko <digetx@gmail.com> wrote:
->
-> Introduce power off call chain API that is inspired by the restart API.
-> It allows to have multiple power off handlers invoked along the chain
+Hi all,
 
-allows multiple
+This patch set aims to refactor the thermal pressure update
+code. There are already two clients which do similar thing:
+convert the capped frequency value into the capacity of
+affected CPU and call the 'set' function to store the
+reduced capacity into the per-cpu variable.
+There might be more than two of these users. In near future
+it will be scmi-cpufreq driver, which receives notification
+from FW about reduced frequency due to thermal. Other vendors
+might follow. Let's avoid code duplication and potential
+conversion bugs. Move the conversion code into the arch_topology.c
+where the capacity calculation setup code and thermal pressure sit.
 
-> until system is powered off. For the starter this series converts couple
+Apart from that $subject patches, there is one patch (3/5) which fixes
+issue in qcom-cpufreq-hw.c when the thermal pressure is not
+updated for offline CPUs. It's similar fix that has been merged
+recently for cpufreq_cooling.c:
+2ad8ccc17d1e4270cf65a3f2
 
-the system
-a couple
+Regards,
+Lukasz Luba
 
-> NVIDIA Tegra drivers to the new API. Existing pm_power_off() method
-> stays around and may be removed once all users will adopt the new API.
+Lukasz Luba (5):
+  arch_topology: Introduce thermal pressure update function
+  thermal: cpufreq_cooling: Use new thermal pressure update function
+  cpufreq: qcom-cpufreq-hw: Update offline CPUs per-cpu thermal pressure
+  cpufreq: qcom-cpufreq-hw: Use new thermal pressure update function
+  arch_topology: Remove unused topology_set_thermal_pressure() and
+    related
 
-users adopt
-
->
-> There were couple attempts in the past to add power off API from
-
-a couple
-
-> Guenter Roeck and Thierry Reding, but they were never completed. This
-> is a somewhat simplified version which doesn't try to convert whole kernel
-> to the new API at once, but solves immediate practical problem that we
-
-problems
-
-> have on Nexus 7 Android tablet where device needs to chain power off
-
-tablets where the device
-
-> methods.
-
-Immediate question here is how do you see the plan of spreading this.
-I.o.w. can you put an explanation that you have checked, let's say
->80% current users, and they may be converted like [example
-placeholder] without any special tricks?
+ arch/arm/include/asm/topology.h   |  2 +-
+ arch/arm64/include/asm/topology.h |  2 +-
+ drivers/base/arch_topology.c      | 35 +++++++++++++++++++++++++++----
+ drivers/cpufreq/qcom-cpufreq-hw.c | 14 +++++--------
+ drivers/thermal/cpufreq_cooling.c |  6 +-----
+ include/linux/arch_topology.h     |  4 ++--
+ include/linux/sched/topology.h    |  6 +++---
+ init/Kconfig                      |  2 +-
+ 8 files changed, 45 insertions(+), 26 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.17.1
+
