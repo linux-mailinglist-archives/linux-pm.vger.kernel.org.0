@@ -2,125 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E584F425975
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Oct 2021 19:29:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D4D425981
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Oct 2021 19:31:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242175AbhJGRbN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Oct 2021 13:31:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42942 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235301AbhJGRbN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Oct 2021 13:31:13 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00020C061570;
-        Thu,  7 Oct 2021 10:29:18 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id x7so25121818edd.6;
-        Thu, 07 Oct 2021 10:29:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hYLvmWFA5adKzLqY8vh9rsTQj1QLK0NjY6Bw35bbszk=;
-        b=ZxU/kKXF7cyEIXZI9nPCJqFh8bFK61q/s4Xpg3CwLpqPocUeSV2ge0BsFLjYKIQ90g
-         SpaiktjcqpUS/FkUxJ/Grbc5CJSMvdWuw42INjaoPWPa17iK0rpQ0hLGr6NAuzubczu4
-         eYJ4SUMiyBLNUwwMMQNI9PG28LNtu5g+IuibXsd5SrRu0m7/hJvzPtT27H8GZnWJqFF+
-         2bsrvxdZlR65/ZpeFtp6UzHJvaEvFfmAxS2VWgQ0cB8bx2WLbE7kzT9AOd8fn1W5Elde
-         SpuCXjfOzRVMQJV/+9C3rf4s8T5cuKtnc1tTFyrtvCkmIbDcA5ANRXGgy9R6IDWprIex
-         jy8g==
+        id S242565AbhJGRc4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Oct 2021 13:32:56 -0400
+Received: from mail-oi1-f171.google.com ([209.85.167.171]:37501 "EHLO
+        mail-oi1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233734AbhJGRc4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Oct 2021 13:32:56 -0400
+Received: by mail-oi1-f171.google.com with SMTP id o83so2554411oif.4;
+        Thu, 07 Oct 2021 10:31:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hYLvmWFA5adKzLqY8vh9rsTQj1QLK0NjY6Bw35bbszk=;
-        b=xqrzGu1I70Az7yyibs4cxErKQaolhOSce7Xk5ATogJM7/38wE2V+YTSlyT57d3WI/f
-         6j8PAxVZScZoNef0Cpnp1plp/h7B739Wv3wT57rYH5PMnVHxeKy5O+Q34y/VlBsUim5U
-         99EfdWoYxNCNJZ4BZV1Cd0oot8+hRwPVa/L0p4ykM0tAZ/ZxhbnXRRESj0jFhbiYghi4
-         fXJJLgmCkww8dpLE+ab7HrVY2M6JaPRXhojFI/ySMUA+PWHRIbDnrp9xQxGPzNs7Crya
-         sLifFW8qFYu06qYTjJeU2VmRv84VKZlCXDcStBM9D144VLUOjuEP3qWHFQbYrZnYpXLL
-         tIWg==
-X-Gm-Message-State: AOAM532Vv7SUfZoCyQowOzz3nXMipfDzAuiL9ozMFNgEgZ2kyjf8Vaw8
-        pwavSPHydKaG3K84iPqK5QTBsLswDHk=
-X-Google-Smtp-Source: ABdhPJxMEDMaeFqCL9p94v6LFA50CgO6F7/U7k5UrDG275Hca+Re167GlxvIKzQniCJ9+OL0sWiNXA==
-X-Received: by 2002:a17:906:1e51:: with SMTP id i17mr7221216ejj.528.1633627756962;
-        Thu, 07 Oct 2021 10:29:16 -0700 (PDT)
-Received: from Ansuel-xps.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.googlemail.com with ESMTPSA id g23sm35316edt.1.2021.10.07.10.29.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Oct 2021 10:29:16 -0700 (PDT)
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ansuel Smith <ansuelsmth@gmail.com>
-Subject: [RESEND PATCH v3] drivers: thermal: tsens: add timeout to get_temp_tsens_valid
-Date:   Thu,  7 Oct 2021 19:28:59 +0200
-Message-Id: <20211007172859.583-1-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.32.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uoOCJc/OhL1VGTaVAt2b5BnE1dyTODrBWIacv8WKckE=;
+        b=HLHpyzZ6tNkgpBEEZfVGewQxDzyXuEY8TVTPWVadbRfeMio7BRFXxtXdjNymvLv7Di
+         D9GU3VditXTS0Pr4RJSW3W9HEd99NBrgCOt6hBCyT3j64CodtmyyNABvkpUC2B32iXt9
+         DGa9PcMEB+D8Ewps8gK1x4gIgScj5jVWQPJZX31rp6fytS/nasX3K/jgPnMwLPDq/4II
+         j5eg/C+nmSffW+4qk0Y4GM+TPy1P3jUhg4EgKFVT/+mk80WLRTRWcJ0SD8aIj2aUJezC
+         IMltJEV/oFp7C2Xo19MtZ13uKXeu+nzIRsqNpeO1gnkKzPtuZtsPrKXhkHZpDEncWrkS
+         eYsQ==
+X-Gm-Message-State: AOAM530oYSZg8bOJWI+73RInAAGMo0Yxz+miohTxl8Vk7ntGoARBhqys
+        rWtqKxTKNc2CJ3R2V2fXodmmZpV5HZ6Q0arWC+JsN8hM
+X-Google-Smtp-Source: ABdhPJxmEJ1idd3/RB9cDqXJQoZPrBgqsPf63OwxW2T8mQSGPWgWmUQN/OaSKAS6S6GTQWoHfDDkrH6thKA1FO/RrXc=
+X-Received: by 2002:a05:6808:1520:: with SMTP id u32mr4144304oiw.154.1633627860250;
+ Thu, 07 Oct 2021 10:31:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <864dd17a1bff58770b1c1dc0b430bd26b6d7fa01.1633595141.git.mchehab+huawei@kernel.org>
+ <CAJZ5v0hj1jZtZ-cD_4jy94cjMbyix-=QcN2Qn9pkW7H1kn16LQ@mail.gmail.com> <581a7222-0a01-6292-5b14-ca0e4690bc67@linaro.org>
+In-Reply-To: <581a7222-0a01-6292-5b14-ca0e4690bc67@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 7 Oct 2021 19:30:49 +0200
+Message-ID: <CAJZ5v0g1bFdZsyTQYtUbFMRs_GDqRWCg=RnMnLx4kN1JWEW6Cw@mail.gmail.com>
+Subject: Re: [PATCH v2] thermal: Move ABI documentation do Documentation/ABI
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The function can loop and lock the system if for whatever reason the bit
-for the target sensor is NEVER valid. This is the case if a sensor is
-disabled by the factory and the valid bit is never reported as actually
-valid. Add a timeout check and exit if a timeout occurs. As this is
-a very rare condition, handle the timeout only if the first read fails.
-While at it also rework the function to improve readability and convert
-to poll_timeout generic macro.
+On Thu, Oct 7, 2021 at 6:42 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>
+> On 07/10/2021 18:39, Rafael J. Wysocki wrote:
+> > On Thu, Oct 7, 2021 at 10:25 AM Mauro Carvalho Chehab
+> > <mchehab+huawei@kernel.org> wrote:
+> >>
+> >> The thermal ABI is described, together with the internal
+> >> development details at:
+> >>
+> >>         Documentation/driver-api/thermal/sysfs-api.rst
+> >>
+> >> Move the sysfs API description to Documentation/ABI,
+> >> ensuring that scripts/get_abi.pl will properly parse it.
+> >>
+> >> While here, also update MAINTAINERS for it to point to
+> >> the documentation.
+> >>
+> >> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> >
+> > There is a typo in the subject, but I can fix it up.
+> >
+> > Daniel, would you mind if I applied this?
+>
+> Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
----
- drivers/thermal/qcom/tsens.c | 29 ++++++++++++++---------------
- 1 file changed, 14 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-index b1162e566a70..99a8d9f3e03c 100644
---- a/drivers/thermal/qcom/tsens.c
-+++ b/drivers/thermal/qcom/tsens.c
-@@ -603,22 +603,21 @@ int get_temp_tsens_valid(const struct tsens_sensor *s, int *temp)
- 	int ret;
- 
- 	/* VER_0 doesn't have VALID bit */
--	if (tsens_version(priv) >= VER_0_1) {
--		ret = regmap_field_read(priv->rf[valid_idx], &valid);
--		if (ret)
--			return ret;
--		while (!valid) {
--			/* Valid bit is 0 for 6 AHB clock cycles.
--			 * At 19.2MHz, 1 AHB clock is ~60ns.
--			 * We should enter this loop very, very rarely.
--			 */
--			ndelay(400);
--			ret = regmap_field_read(priv->rf[valid_idx], &valid);
--			if (ret)
--				return ret;
--		}
--	}
-+	if (tsens_version(priv) == VER_0)
-+		goto get_temp;
-+
-+	/* Valid bit is 0 for 6 AHB clock cycles.
-+	 * At 19.2MHz, 1 AHB clock is ~60ns.
-+	 * We should enter this loop very, very rarely.
-+	 * Wait 1 us since it's the min of poll_timeout macro.
-+	 * Old value was 400 ns.
-+	 */
-+	ret = regmap_field_read_poll_timeout(priv->rf[valid_idx], valid,
-+					     valid, 1, 20 * USEC_PER_MSEC);
-+	if (ret)
-+		return ret;
- 
-+get_temp:
- 	/* Valid bit is set, OK to read the temperature */
- 	*temp = tsens_hw_to_mC(s, temp_idx);
- 
--- 
-2.32.0
-
+Applied as 5.16 material, thanks!
