@@ -2,58 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E35A94251AF
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Oct 2021 13:05:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEAE84251F5
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Oct 2021 13:26:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232791AbhJGLHE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Oct 2021 07:07:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36560 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240743AbhJGLHC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Oct 2021 07:07:02 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD385C061760
-        for <linux-pm@vger.kernel.org>; Thu,  7 Oct 2021 04:05:08 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id h2so12386009ybi.13
-        for <linux-pm@vger.kernel.org>; Thu, 07 Oct 2021 04:05:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=yl79lOcWxFMFA8BCGecYiE6dwIHNzfeqenv4Qbz9ZyM=;
-        b=myikagGian9Kr8yyBq6Ddk6tSc8LlkDep7tq782nM5SKblHR9GAAzB8v6pa2wB8O4G
-         6KYORaSetAm7HjQvUwPEyyEvbZSwZzqNmzw9whro/GvgGCBkhXHF6+BhR4q7YSGLVrPO
-         V/o2mV2nBdzHOHyUWZjQLjTq270JpYQGVebGz7D7TnyKhzySpft2Xxt0bQpwuH6Cs9wU
-         pen1RykpUlNiGQqPc1dZUmV8FCfe0EvAPhpWJFSyp47M7EeSh1nVYFH3/2dfdZ0KDCF/
-         xbR/KbqFOj4444xLXDxRScn1UBDGoBJiTpPOupuNcqTqXk8SWl9pAP3xXG5j2OUxf7hn
-         W5ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=yl79lOcWxFMFA8BCGecYiE6dwIHNzfeqenv4Qbz9ZyM=;
-        b=UqrZvjSm6mKMrOlmadzrkqpPCB1ota51/JP0gne2RbZHZURg1Lpedo8gOrc9D/kQ3L
-         WtYGMT11KL1G8vllDGnIiICj1ULg/U7ScRPqmCTHo+4jHKNYfqDS9JBCdfOBlbgATu5P
-         FTDsurWB8lE7qqXt3hbGoeWr3UptRNDZYV0OzWdtFPKpEwObW1buRA7IuwX9+KyNKbvc
-         FnYXD8yb7ADV/PN2VwD34U/OW41EW7KMlXBg8GB6Pea6iNrTjo5KAdhIBbRzW88RYvAi
-         QnojRpye4BCY3hLorlgjRd4ODVbIeGreWHEy35keBKf4CzY96KL9XjHK4F/qUcMlYd7o
-         7enw==
-X-Gm-Message-State: AOAM531oq2XWttY6Nwg7lgfGbFwIjS7IeK7ZY6pcZi0UpC8eWdYCRJvX
-        uF7+PNx2zmpIVbkBT1V6Hm9kBlzmFY5asl9q1rA=
-X-Google-Smtp-Source: ABdhPJzyBy24UuU+8rqO9tJ1iSyJfdys2h4jCVMsdCPuL194y4MAamXMdM/LXyWpWUrcZvHtnutkKGs7Z9ERvwqx2HE=
-X-Received: by 2002:a25:cc1:: with SMTP id 184mr3830965ybm.363.1633604707934;
- Thu, 07 Oct 2021 04:05:07 -0700 (PDT)
+        id S240939AbhJGL2b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Oct 2021 07:28:31 -0400
+Received: from foss.arm.com ([217.140.110.172]:47106 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230087AbhJGL2b (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 7 Oct 2021 07:28:31 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 703246D;
+        Thu,  7 Oct 2021 04:26:37 -0700 (PDT)
+Received: from e120877-lin.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 895713F66F;
+        Thu,  7 Oct 2021 04:26:36 -0700 (PDT)
+Date:   Thu, 7 Oct 2021 12:26:15 +0100
+From:   Vincent Donnefort <vincent.donnefort@arm.com>
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-acpi@vger.kernel.org,
+        devel@acpica.org, linux-pm@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: Re: [rafael-pm:bleeding-edge 47/54]
+ drivers/cpufreq/mediatek-cpufreq-hw.c:112:17: error: too few arguments to
+ function 'cpufreq_table_find_index_dl'
+Message-ID: <20211007112614.GA101488@e120877-lin.cambridge.arm.com>
+References: <202110071853.ds7uW9eM-lkp@intel.com>
 MIME-Version: 1.0
-Received: by 2002:a81:30ca:0:0:0:0:0 with HTTP; Thu, 7 Oct 2021 04:05:07 -0700 (PDT)
-Reply-To: mrsvaldezannem@gmail.com
-From:   valdez anne <koukourasisi@gmail.com>
-Date:   Thu, 7 Oct 2021 11:05:07 +0000
-Message-ID: <CALg=kHHSDSm42271uYnTrE7Kmna0v3oSoE1876Nr+SAv4KgwVA@mail.gmail.com>
-Subject: hi
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202110071853.ds7uW9eM-lkp@intel.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-_Can you reply to my previous email, do I need your reply? I am
-Waiting for reading from you.
+
+On Thu, Oct 07, 2021 at 06:35:55PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+> head:   6cb3f7cfca6963de4f486c4bd99fdefa56f75870
+> commit: 1f39fa0dccff71d4788089b5e617229b19166867 [47/54] cpufreq: Introducing CPUFREQ_RELATION_E
+> config: arm-buildonly-randconfig-r001-20211007 (attached as .config)
+> compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=1f39fa0dccff71d4788089b5e617229b19166867
+>         git remote add rafael-pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+>         git fetch --no-tags rafael-pm bleeding-edge
+>         git checkout 1f39fa0dccff71d4788089b5e617229b19166867
+>         # save the attached .config to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/cpufreq/
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    drivers/cpufreq/mediatek-cpufreq-hw.c: In function 'mtk_cpufreq_hw_fast_switch':
+> >> drivers/cpufreq/mediatek-cpufreq-hw.c:112:17: error: too few arguments to function 'cpufreq_table_find_index_dl'
+>      112 |         index = cpufreq_table_find_index_dl(policy, target_freq);
+>          |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    In file included from drivers/cpufreq/mediatek-cpufreq-hw.c:7:
+>    include/linux/cpufreq.h:814:19: note: declared here
+>      814 | static inline int cpufreq_table_find_index_dl(struct cpufreq_policy *policy,
+>          |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>
+
+Rafael,
+
+The issue is this patch
+
+  cpufreq: Introducing CPUFREQ_RELATION_E
+
+How would you like to proceed? Do you want a v8 patch-set with the fix or just
+that patch updated?
+
+[...]
