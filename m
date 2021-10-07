@@ -2,134 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C892425CEC
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Oct 2021 22:07:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E57AE425DCC
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Oct 2021 22:46:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241309AbhJGUJM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Oct 2021 16:09:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52030 "EHLO
+        id S241064AbhJGUsT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Oct 2021 16:48:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbhJGUJL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Oct 2021 16:09:11 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90141C061755
-        for <linux-pm@vger.kernel.org>; Thu,  7 Oct 2021 13:07:17 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id o204so2432264oih.13
-        for <linux-pm@vger.kernel.org>; Thu, 07 Oct 2021 13:07:17 -0700 (PDT)
+        with ESMTP id S241394AbhJGUsS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Oct 2021 16:48:18 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDEC4C061764
+        for <linux-pm@vger.kernel.org>; Thu,  7 Oct 2021 13:46:23 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id g15-20020a9d128f000000b0054e3d55dd81so3950466otg.12
+        for <linux-pm@vger.kernel.org>; Thu, 07 Oct 2021 13:46:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FFdR5Q8dgTLESN1Y4gNMob3whbKhRrjkjEmOmQ6y9yQ=;
-        b=aX7Admelts4w34rqAbdl/SbF4t8Z67F8SAXPtFtaijXHf4rJx1NusmvOd2KPijxVah
-         AKLOdbtFlBTf+2lvoyZXVo74ssS0WgZHhK3gwlsyNEkuoFDlC+g/+uIHaaOolEVA2r/w
-         S4ZKu5DWg3rY5VXN983RhELO+szcRn7HNmRL5G7tKYtzGEeOr1wgMyRV24oMWLJhlU0a
-         /S03IyLnxjYn9eDNXWZAqazdU9rqQ9m6/e4v8xm85uUwsE1ojvMPFazbwgY3ttxnKgnY
-         AnIJnhKuLgCSlQHKC+Mw34SMrYSU7ErUufVzCMRzH6Mc53JCgl+l6OYVcnqylGdI0BO2
-         /wsQ==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=AzPcN97cKsNPALhXpMD11mH7HEQFoOQxmRwJj4GT2BE=;
+        b=VKE1L+LNJEY5RERAvLjjCsaH/jdKjoku3gHwtdboexhAsqiGhsrBthGb5Bevr2KL0+
+         jYu0WOqYVJd76tRyLHu5v0RDHRXhT3UI5ixFqKcrvx4m/ZZosj+JGaDDjHY7+j87pVvj
+         p0DVEPcEZ8ZyFwHVBRvaQza8MAbygGXJtdr9M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FFdR5Q8dgTLESN1Y4gNMob3whbKhRrjkjEmOmQ6y9yQ=;
-        b=rOcebo1f10vge9O6DDFFQzU0tRDw2+RK9IjUYmMivuNy0Tpendl2Ovop1EUuQY/Vks
-         BMi8CV318bYfaHWoQTwyBwPkENVCTVEQB9MzZpudS0LYTkkYQJkYk8lZbPgQa+ddwC5F
-         jm9hSiSGRVuoDGamNxs6MvZco4nGnsaxequrkPWQMhKlwHcDF3in1r8JdiZRXvFcZq1v
-         /HbK83/uDsQXDzxfy7lJhfeS2AzqanxfrY9YddJd309eIpY/nSGra3KsLkYPaw0EOUic
-         V8bAy8N81sMejcdRe5s7BBL8iiLcCB++OE1IGDXNqJbvgvRXn3lFxrjFh8JF0xfKzFnV
-         WTrQ==
-X-Gm-Message-State: AOAM53349Mjg0ox3YfT232oV4tbufxAX2WTBhbTKwSsf23GI8OnAeqF3
-        FZ7UryEDTsQKnO5yDdy/n41cvA==
-X-Google-Smtp-Source: ABdhPJx7H7wjQ1XMkdMLSYMQSnlDHjAaVETulRelH3QWqNk4dhNy4p2yg4mORba1D+SfMGWMldVNkA==
-X-Received: by 2002:aca:bd02:: with SMTP id n2mr13066786oif.113.1633637236885;
-        Thu, 07 Oct 2021 13:07:16 -0700 (PDT)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id f10sm76209otl.57.2021.10.07.13.07.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Oct 2021 13:07:16 -0700 (PDT)
-Date:   Thu, 7 Oct 2021 13:08:56 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>, Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH v3] drivers: thermal: tsens: add timeout to
- get_temp_tsens_valid
-Message-ID: <YV9T2Bq16Z6SdBDM@ripper>
-References: <20211007172859.583-1-ansuelsmth@gmail.com>
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=AzPcN97cKsNPALhXpMD11mH7HEQFoOQxmRwJj4GT2BE=;
+        b=QMGKVn0jjXutKWXF3+qG4If/3AAnq8UEUMI9dRa1nM0dbPO+/+vVYuhrAhJ9apgVCY
+         P7r2Dk2psEUgal24XgXs8+77VHOYOSdQslqWUQBmX8HXR+KOwdUn1zFJgMJlT9iFnfKL
+         8nv5acdnk+QfmjTLln75LRxyi2uJMjhuIlW90h8c+qzSIw04OCCaiHP1AYBymCDxaYVS
+         N1uE/vaMFtHCQ0HAB1PyWr+u9Ft6JJB1nUyuJVYTp+2dTRo4gTM4FTldy6Y0S063ShnX
+         D+vSgGigPmANS5gp61zGKDHzCYO44HM+sbYraxhyFGRN6QwxMF7OzCWeBEUMSkiZggfb
+         c61A==
+X-Gm-Message-State: AOAM531GCafn5KWgRjNNum/UR08yWSSXsh6hTPrig5PEF+kIB+9pBA8P
+        79wY9wX4I8ZXef3HFsGgE81ak6ORcdEpn/2XOaxAog==
+X-Google-Smtp-Source: ABdhPJweLV2SqPIqB/I4y9UNqm9St3+8NImkU0IzW6xIcGeoqaYzaiZnETNJ/uKVGt4qTegoVLXLut8mi4j1L8pdWt0=
+X-Received: by 2002:a05:6830:1c2e:: with SMTP id f14mr5293990ote.159.1633639583170;
+ Thu, 07 Oct 2021 13:46:23 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 7 Oct 2021 16:46:22 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211007172859.583-1-ansuelsmth@gmail.com>
+In-Reply-To: <5d3f4343-da38-04b4-fdb9-cb2dd4983db2@gmail.com>
+References: <20211006193819.2654854-1-swboyd@chromium.org> <5d3f4343-da38-04b4-fdb9-cb2dd4983db2@gmail.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.9.1
+Date:   Thu, 7 Oct 2021 16:46:22 -0400
+Message-ID: <CAE-0n50s_cOLA0xRa8mmUS2Nawd5X7WiQE3PvOLHu+i=hE3Eow@mail.gmail.com>
+Subject: Re: [PATCH v2 00/34] component: Make into an aggregate bus
+To:     Andrzej Hajda <andrzej.hajda@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Chen Feng <puck.chen@hisilicon.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Emma Anholt <emma@anholt.net>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        Inki Dae <inki.dae@samsung.com>,
+        James Qian Wang <james.qian.wang@arm.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Joerg Roedel <joro@8bytes.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Joonyoung Shim <jy0922.shim@samsung.com>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-fbdev@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-pm@vger.kernel.org, Liviu Dudau <liviu.dudau@arm.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Russell King <rmk+kernel@arm.linux.org.uk>,
+        Sandy Huang <hjc@rock-chips.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Tian Tao <tiantao6@hisilicon.com>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Xinliang Liu <xinliang.liu@linaro.org>,
+        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
+        Yong Wu <yong.wu@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu 07 Oct 10:28 PDT 2021, Ansuel Smith wrote:
+Quoting Andrzej Hajda (2021-10-07 03:16:27)
+> Hi Stephen,
+>
+> On 06.10.2021 21:37, Stephen Boyd wrote:
+> > This series is from discussion we had on reordering the device lists for
+> > drm shutdown paths[1]. I've introduced an 'aggregate' bus that we put
+> > the aggregate device onto and then we probe the aggregate device once
+> > all the components are probed and call component_add(). The probe/remove
+> > hooks are where the bind/unbind calls go, and then a shutdown hook is
+> > added that can be used to shutdown the drm display pipeline at the right
+> > time.
+> >
+> > This works for me on my sc7180 board. I no longer get a warning from i2c
+> > at shutdown that we're trying to make an i2c transaction after the i2c
+> > bus has been shutdown. There's more work to do on the msm drm driver to
+> > extract component device resources like clks, regulators, etc. out of
+> > the component bind function into the driver probe but I wanted to move
+> > everything over now in other component drivers before tackling that
+> > problem.
+>
+>
+> As I understand you have DSI host with i2c-controlled DSI bridge. And
+> there is an issue that bridge is shutdown before msmdrm. Your solution
+> is to 'adjust' device order on pm list.
+> I had similar issue and solved it locally by adding notification from
+> DSI bridge to DSI host that is has to be removed: mipi_dsi_detach, this
+> notification escalates in DSI host to component_del and this allow to
+> react properly.
+>
+> Advantages:
+> - it is local (only involves DSI host and DSI device),
+> - it does not depend on PM internals,
+> - it can be used in other scenarios as well - unbinding DSI device driver
+>
+> Disadvantage:
+> - It is DSI specific (but this is your case), I have advertised some
+> time ago more general approach [1][2].
+>
+> [1]: https://static.sched.com/hosted_files/osseu18/0f/deferred_problem.pdf
+> [2]: https://lwn.net/Articles/625454/
+>
 
-> The function can loop and lock the system if for whatever reason the bit
-> for the target sensor is NEVER valid. This is the case if a sensor is
-> disabled by the factory and the valid bit is never reported as actually
-> valid. Add a timeout check and exit if a timeout occurs. As this is
-> a very rare condition, handle the timeout only if the first read fails.
-> While at it also rework the function to improve readability and convert
-> to poll_timeout generic macro.
-> 
-
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
-Regards,
-Bjorn
-
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> ---
->  drivers/thermal/qcom/tsens.c | 29 ++++++++++++++---------------
->  1 file changed, 14 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-> index b1162e566a70..99a8d9f3e03c 100644
-> --- a/drivers/thermal/qcom/tsens.c
-> +++ b/drivers/thermal/qcom/tsens.c
-> @@ -603,22 +603,21 @@ int get_temp_tsens_valid(const struct tsens_sensor *s, int *temp)
->  	int ret;
->  
->  	/* VER_0 doesn't have VALID bit */
-> -	if (tsens_version(priv) >= VER_0_1) {
-> -		ret = regmap_field_read(priv->rf[valid_idx], &valid);
-> -		if (ret)
-> -			return ret;
-> -		while (!valid) {
-> -			/* Valid bit is 0 for 6 AHB clock cycles.
-> -			 * At 19.2MHz, 1 AHB clock is ~60ns.
-> -			 * We should enter this loop very, very rarely.
-> -			 */
-> -			ndelay(400);
-> -			ret = regmap_field_read(priv->rf[valid_idx], &valid);
-> -			if (ret)
-> -				return ret;
-> -		}
-> -	}
-> +	if (tsens_version(priv) == VER_0)
-> +		goto get_temp;
-> +
-> +	/* Valid bit is 0 for 6 AHB clock cycles.
-> +	 * At 19.2MHz, 1 AHB clock is ~60ns.
-> +	 * We should enter this loop very, very rarely.
-> +	 * Wait 1 us since it's the min of poll_timeout macro.
-> +	 * Old value was 400 ns.
-> +	 */
-> +	ret = regmap_field_read_poll_timeout(priv->rf[valid_idx], valid,
-> +					     valid, 1, 20 * USEC_PER_MSEC);
-> +	if (ret)
-> +		return ret;
->  
-> +get_temp:
->  	/* Valid bit is set, OK to read the temperature */
->  	*temp = tsens_hw_to_mC(s, temp_idx);
->  
-> -- 
-> 2.32.0
-> 
+I think these are all points for or against using the component code in
+general? Maybe you can send patches that you think can solve the problem
+I'm experiencing and we can review them on the list.
