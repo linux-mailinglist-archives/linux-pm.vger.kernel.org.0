@@ -2,117 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C58B2425FC1
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Oct 2021 00:18:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35668425FF2
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Oct 2021 00:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231825AbhJGWTz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Oct 2021 18:19:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53694 "EHLO
+        id S241436AbhJGWed (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Oct 2021 18:34:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231613AbhJGWTy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Oct 2021 18:19:54 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC83C061570
-        for <linux-pm@vger.kernel.org>; Thu,  7 Oct 2021 15:17:59 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id k23so6062225pji.0
-        for <linux-pm@vger.kernel.org>; Thu, 07 Oct 2021 15:17:59 -0700 (PDT)
+        with ESMTP id S230120AbhJGWed (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Oct 2021 18:34:33 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4279CC061570
+        for <linux-pm@vger.kernel.org>; Thu,  7 Oct 2021 15:32:39 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id e16so7851324qts.4
+        for <linux-pm@vger.kernel.org>; Thu, 07 Oct 2021 15:32:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=NXxGx4J34fk66THJ2ruvmOmIoG8yXsxNkV12r4Oa2D0=;
-        b=HaPtZ+UkhBNfPP8fWwsUIFWDYrN6mDvNvbJ951hrse4CVeUsalIGdnRfzYBl7z+VHa
-         uVmy7rcmXlD7+DQ8p9jJclZulyaooGjx37a8SNXIf0tr6yX2f6YWeCPkP95MLJP/scIx
-         f9N9zqlu7M7kFbUiirdt7ksaNmucWBdgR1snT29f4S0o8+tM6MP2XSnfqqESJ9zN2Vwo
-         hSucNMElJ/Jribjffpid5kAVW3hvnhEnyPmIJW+/f58otdC2qRo4SXybDvOjVlfnmupg
-         WcDBl3SIoVf2VL9b97lyOB7O4M1NNHEs6JSdh9cEM2lFJYKKl0y10SN6hHmiW30+IUjB
-         9AFw==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bPosGXG6aj5fiHXiB91n2H+d3yhrMgyk6caA7rCYuVE=;
+        b=TyzCOLeOsNH+ATbCv+mObEZBqB2Q+42LxF3uXOIU4JqOxFv0Suf1hxARW3mECKJGbk
+         6W72juLLE8mx0B8j0TBIaZ70diDCJy7C1/EwOenCENtB5NKYV4Zt3tTGu6I9cXLJd6yw
+         tgDL6K6e0bH6GRVNl69irNRt4P+TW75No5eE0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=NXxGx4J34fk66THJ2ruvmOmIoG8yXsxNkV12r4Oa2D0=;
-        b=RLnj62O7GE4CsjoK7uyZUJyYCnPSMa6ymvk9xCEdgTN8FcK5F/8LpWdIRQw9nqvBHD
-         lASOoyYyon44u6gOUaJv6MdXIueTjPc4rjYBzQd1ksrqOYG8hYQZiOVH2gpelZcm3a3J
-         BbL7vUvUGaddOLH1LX/PFPtHPz8z0Pp1GD2RV6AT94+rqcroBNizPArYeyeGEaSTVmu8
-         tCmVrot4kHcVRQibtWDRjeeYtU8mJzY/cquMTNoHAPJWS6zvhWQAyVReHucuP3wcDbfG
-         KfnQQiHCHz1grunPr/fr4ShZfVWbdBQsMvR2puQ2Lv9mChO4//OnIuE/dTQlLYu+71VO
-         B7kg==
-X-Gm-Message-State: AOAM531O7+Bs3OkAQotJCU0jirEiw1KwktsFM96h36JXL6qs6P2cQv8A
-        2X1C/HzW9Bdhus/vJuT8xQfocw==
-X-Google-Smtp-Source: ABdhPJxaQDa9tmwEed4QdWnfiUj3enIcE0Gp6Aqme79isNpuN1feKiA6GJBEUEDDVfg7bRaUsZo8fw==
-X-Received: by 2002:a17:902:930c:b0:13e:42b4:9149 with SMTP id bc12-20020a170902930c00b0013e42b49149mr6064386plb.86.1633645078997;
-        Thu, 07 Oct 2021 15:17:58 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id 1sm371935pfm.163.2021.10.07.15.17.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Oct 2021 15:17:58 -0700 (PDT)
-Message-ID: <615f7216.1c69fb81.99f98.1a88@mx.google.com>
-Date:   Thu, 07 Oct 2021 15:17:58 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bPosGXG6aj5fiHXiB91n2H+d3yhrMgyk6caA7rCYuVE=;
+        b=KL08tdUk5C00gDVBL3JMq5V/GJsW8TX73APCfkOxY85/2N7sQjuur1DUP8pH4nj670
+         aN1M7r9Ac5KrI0IcAO0GZ4PTaI0b9v+CMGjuVOFWojqKmcQe6p5Xyz2sOyLPMjYyXtcQ
+         vd4tY9np56h7ugzW0ZJlgliF1sYpzoHIC/ObP8x+eK7j4pZvJip/6p8s/+5Iknioa+3f
+         bjUxJYgxwPO0F/tPBTiirs+VEx4KWSvBLP6hoasDZ2CPLEuJ32X9Rf0FcoJyms4PJVce
+         7+ZV9H83nRt7chz1wXzAoK4lFnbetHjmIOSZ9S0noHV1rOASnwqH/b9Vjwg/5bYvX1zS
+         sgyA==
+X-Gm-Message-State: AOAM531lA3vdeyeqtx+UtcXkxxQCYb+x7AwAwHroPhaSNJqZR/Gd8ywF
+        ddq9TegNoYX79Tkem+eDi/8lC3bM3AvP5bigug2CI9yT3v5jNQ==
+X-Google-Smtp-Source: ABdhPJxtMWrNq05xIwSXYzJOaS9tLcGh48Df1ypUB9oB6RjXV44VM0Ys6C+Vs5hx7Kz9jJbv7p9rXESJopZRntEsEdI=
+X-Received: by 2002:ac8:4347:: with SMTP id a7mr8044529qtn.169.1633645958484;
+ Thu, 07 Oct 2021 15:32:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.15-rc4-42-g574167bf7ed8
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-Subject: pm/testing sleep: 4 runs, 1 regressions (v5.15-rc4-42-g574167bf7ed8)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <20210902213500.3795948-1-pmalani@chromium.org>
+ <20210902213500.3795948-3-pmalani@chromium.org> <YT9SYMAnOCTWGi5P@kuha.fi.intel.com>
+ <DB9PR10MB4652B4A6A2A2157018307AE380D99@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+ <YUB16up3JDwi3HfI@kuha.fi.intel.com> <YULwz8NsoA3+vrhA@google.com>
+ <YUMbGp0aemx1HCHv@kuha.fi.intel.com> <DB9PR10MB46525E6CA4C6BB101059D93C80DC9@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+ <YUm5sdbceMcDTvYj@kuha.fi.intel.com> <DB9PR10MB46524E3817FB4D836CDC13E180A49@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+In-Reply-To: <DB9PR10MB46524E3817FB4D836CDC13E180A49@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Thu, 7 Oct 2021 15:32:27 -0700
+Message-ID: <CACeCKaem93dbJ11qOG=a+MkJhSrp0Nx-UAPG00Q-5WwMriJD0A@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/3] power: supply: Add support for PDOs props
+To:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Benson Leung <bleung@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "bleung@chromium.org" <bleung@chromium.org>,
+        "badhri@google.com" <badhri@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 4 runs, 1 regressions (v5.15-rc4-42-g574167bf7ed8)
+Hi folks,
 
-Regressions Summary
--------------------
+Thanks for the comments and discussion on this RFC series.
 
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
+On Fri, Sep 24, 2021 at 8:38 AM Adam Thomson
+<Adam.Thomson.Opensource@diasemi.com> wrote:
+>
+> On 21 September 2021 11:54, Heikki Krogerus wrote:
+>
+> > If we can leave the decision about the selection to TCPM, that would
+> > be great! I'm not against that at all. As I said, I have not though
+> > through the control aspect. Right now I'm mostly concerned about how
+> > we expose the information to the user. The only reason why I have
+> > considered the control part at all is because how ever we decide to
+> > expose the information to the user, it has to work with control as
+> > well.
+>
+> Well part of the discussion has to be about the role that the user plays in
+> the control. What does and doesn't need to be controlled further up the stack,
+> and what will be taken care of by, for example, TCPM? Surely that dictates to
+> some degree what and how we expose all of this? Right now we have a simple means
+> to read and control voltages and currents through a PSY class, without the need
+> for the user to know any details of what a PDO/APDO is. Do we continue with
+> abstracting away to the user or instead let the user decipher this itself and
+> decide? Am just trying to understand the needs going forward.
+>
+> > The final PSYs and the supply chains they create as well as the
+> > individual properties I'm more than happy to talk about, but having a
+> > separate object for the smallest thing that we can see (PDO) is the
+> > right thing to do here IMO. Trying to concatenate things into single
+> > objects especially in sysfs, despite how nice it always would seem,
+> > has taken me to the brink of disaster in the past far too many times.
+> >
+> > In this case we don't need to take the risk of having to duplicated
+> > information or in worst case deprecate something that is also exposed
+> > to the sysfs in the future.
+> >
+> > So the question is not why should we registers every individual PDO
+> > separately. The question is, why shouldn't we do that? And saying that
+> > it's "heavyweight" I'm afraid is not good enough. :-)
+>
+> That was my initial feeling on the suggestion based on the idea of a PSY per PDO
+> and I still don't feel that fits as your creating a whole class of resources
+> to expose something that's pretty small. To me the PSY represents the source as
+> whole, and the PDOs are simply options/configurations for that source. If we're
+> needing to expose PDOs then I don't disagree with separating them out
+> individually and I certainly wouldn't want that all concatenated as one
+> property. However I think something like dynamically generated properties
+> might be a nicer solution to expose each PDO, or even groups of properties if
+> you wanted to split PDOs even further into constituent parts to the user.
 
+To downscope this issue for the time being, one of our immediate goals
+is to expose the PDOs
+to userspace for metrics reporting and potentially for some power
+policy control through other
+channels (like Chrome OS Embedded Controller).
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.15-rc=
-4-42-g574167bf7ed8/plan/sleep/
+Would it be acceptable to revise this series to drop the power supply
+support for now (since I don't yet
+see a consensus on how to implement it for the partner), and just add
+sysfs nodes for each PDO ?
+This would be akin to how it's being done for identity VDOs right now.
 
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.15-rc4-42-g574167bf7ed8
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      574167bf7ed8e12be9710fc84442c5e23775f75d =
+So we would have :
 
+/sys/class/typec/<port>-partner/source_pdos/pdo{1-13}
 
+and
 
-Test Regressions
----------------- =
+/sys/class/typec/<port>-partner/sink_pdos/pdo{1-13}
 
+and similarly for the port device.
 
+If we want to add additional parsing of the  Fixed Supply PDO into
+individual properties for the partner/port,
+those can of course be added later.
 
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 1          =
+WDYT?
 
-
-  Details:     https://kernelci.org/test/plan/id/615f660d62d1ad622699a338
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.15-rc4-42-g57416=
-7bf7ed8/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.15-rc4-42-g57416=
-7bf7ed8/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2021=
-0913.0/arm64/rootfs.cpio.gz =
-
-
-
-  * sleep.login: https://kernelci.org/test/case/id/615f660d62d1ad622699a339
-        failing since 414 days (last pass: v5.8-107-gb72b3ea38c81, first fa=
-il: v5.9-rc1-4-g1f08d51cd57f) =
-
- =20
+Thanks,
