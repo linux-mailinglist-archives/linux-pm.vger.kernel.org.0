@@ -2,199 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02AB04265D5
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Oct 2021 10:22:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F03DD4265FF
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Oct 2021 10:34:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233920AbhJHIYN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Oct 2021 04:24:13 -0400
-Received: from uho.ysoft.cz ([81.19.3.130]:46633 "EHLO uho.ysoft.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229853AbhJHIYJ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 8 Oct 2021 04:24:09 -0400
-X-Greylist: delayed 482 seconds by postgrey-1.27 at vger.kernel.org; Fri, 08 Oct 2021 04:24:08 EDT
-Received: from vokac-Latitude-7410.ysoft.local (unknown [10.0.30.12])
-        by uho.ysoft.cz (Postfix) with ESMTP id ECF18A0476;
-        Fri,  8 Oct 2021 10:14:06 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ysoft.com;
-        s=20160406-ysoft-com; t=1633680847;
-        bh=qw2VKvhxkkddHr4x1O/5STvAL5zyVtYEtbsNsc3vo8M=;
-        h=From:To:Cc:Subject:Date:From;
-        b=WtjqWVdmLRCsTAUKy7z1FzcyZs69BEz9VGC1gY5LhhCbkg4LcwUY1/wZ0JuLcWRuI
-         RuBp1tAmcCGtCtK3eMFPgMNvGQuvC9qQHPD07GnXBWYvJVmAzle8+Irs2moQBeCO1a
-         5wIm6YfunyMhWSGMk5FUvktnBRyltNJinft6VCW4=
-From:   =?UTF-8?q?Michal=20Vok=C3=A1=C4=8D?= <michal.vokac@ysoft.com>
-To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        linux-pm@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>
-Cc:     Amit Kucheria <amitk@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Petr=20Bene=C5=A1?= <petr.benes@ysoft.com>,
-        petrben@gmail.com, stable@vger.kernel.org,
-        =?UTF-8?q?Michal=20Vok=C3=A1=C4=8D?= <michal.vokac@ysoft.com>
-Subject: [PATCH] thermal: imx: Fix temperature measurements on i.MX6 after alarm
-Date:   Fri,  8 Oct 2021 10:11:37 +0200
-Message-Id: <20211008081137.1948848-1-michal.vokac@ysoft.com>
-X-Mailer: git-send-email 2.25.1
+        id S230107AbhJHIgT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Oct 2021 04:36:19 -0400
+Received: from sonic310-57.consmr.mail.ir2.yahoo.com ([77.238.177.30]:43810
+        "EHLO sonic310-57.consmr.mail.ir2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229873AbhJHIgS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Oct 2021 04:36:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1633682062; bh=BCd3Lyhi9nz8WKEHyoHKp/1s3/i0XMMiqJGFJaxEjbU=; h=From:To:Cc:Subject:Date:References:From:Subject:Reply-To; b=iypJUNHKZOXj2OGBtoXXCGX3AHY0i8Mby789Ig3F7zg4Or3HD0s0lnLaRp3xtW15nv/ed41yr5Ic29MaVr0CS1w3yxfOiA9VXPHRd7SSieKphBmH+Gzvfp2jki+Vcjoi4C3LdjgLiT1+Uf8LTM/OkyCkk20FvmnhLET+aEd1PwQYz3MAvtvicsPD2RlnoVgWyg0QHp5LOWJaoWIBovK2s/g24QoM/0Mb5fdRgvhnP4tk/YzGxOZ5ureYqcODImvK91vdexGBdgh14BWezLMVnKf4XESl5dvIiKJSizROzkFLkcnzw9ENyPOHDbsvgFuSfrRt0T4kx9+Ga18oqGriuA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1633682062; bh=PHl9uFurtdMX5KTHfoFdkf2+EhPaFyGOi9hjz7L2Uym=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=fP0+LvdaWO0ntjXUEsWf4nYagm8+yd1gGLIErylkZazzVWkKwCHkSEHGG3FSUo8xVYGK5kEhaLfecEZo7wxpOIten/23l1yWKqz+l6lM39JlK/sfdafmXTy/b28+rIgwO9wtkkCTaDdKIfm/yvuII9xdChmwKla6CvlzVcT5QahFCBi+rE6PkKXsUBnshpIxLgNthKYjkeXcXcFkmdoSqoMXfz7HUc2wwub2Jr0rbcKb+/1W8hkO6VJO+Scm4oFVpqnVZpOyhAYaYBWXeQ92PsY3CHVp72HauToXKNttaSevDy8KU00mwDynOppBKwS2EzYiE53KPwcXATANqPUgmQ==
+X-YMail-OSG: HqUTsXYVM1nfSU.YwDc0mifVz_T6y68dcr2ylZyNwvdsgU.MhmWWcey4oXZSfRk
+ DPFVFiAc5Pc7J0iN4Oc4HGMW7mxKMFAmvMbtp0vWCgQfNmaj_JRrcGz1zIOOcJc_BWFqwcQioDOy
+ RBAW37_eKxktRP52bBvV3Ycek3xxBNaHf4Fw.6cMgWwoKLHJ5aK2PFABNcEL2NchLHiDUtlFIIrz
+ x_ZV0n5Q_sSAhkFUBZZ.H2nbV1Br_BVqvvb6AQf0kOaGF7x9OBLu3_V.LtAh8OQVh.i2fvYmVGea
+ cGjSeftzWtS7XPf7KLTgvO4v64zK3hgPfmTUt0xVq8dbLXddpbI5yVQEwagNf60kbhVDvo5n9I4w
+ I_vOWV1qKmBF5nsqXph6zioSuxgXWSjDHMp5vK_njy.hVsS4YowCQd9y86Y3GctfzbMY0LfXS7ZT
+ 0qw3KE08mCHysDY8AemLhg0geaXnuIh6sosCNl7sNwLKBsgnhApuzxAZSdsj8E60ZUxO8fwbuKYJ
+ maq03EK6_rVaXel6M8ODoKcD6MxgsUK9LwXf.mQuUyIIqY50ekgRxwqA2u7NmsoZy2v_y1HScrIY
+ pAmRqTbLsTmwwMSoIPPDRATSDg8vEU6lEN5JlfsGNBZUT5FnLb0mvBDZSVTAY8f28h0xYxFgp_Rw
+ C8i3OYdYA7AB5PCC8NicUr2YkHHjlicyK7OyCeekBRYxAwjBGv_EhPySZzpCg9REbF8todNIfAKG
+ _ypLxUczZZjJ6L0xQKM5ZHa9QcGtryMFEJs22xlE1Fs2e7_Py5_UhNtuzQi9ifMNX6ZGEux4B2A1
+ 8HaUi.FHfk7IFon3c.gKafEstkVPe5KAk94mPBPbnLKcXNlbAFUUQsmgAlE0lEsT39BbYXQsxxih
+ lKUNVYRz7Txnwz0Cc45GFjnW3LMx_PKkhT42_NyCUlKsB942ZPzv13pJLBU5FKO1iKa_6IXDzGvz
+ VxZeVLZFYmYZjcHXca5YhAPfW7i6nSyW13d1wzDBroCyKXYsorckEIwSboTpSpQsxVwUV0pFFgV3
+ YbxDMqiOgjGuQCN_ZxKLPhmfyIwpEpybJy6vvrk0ZGRfTDYwKwZ5njGZJtbEK2tD_xB6uuNOwSbK
+ RSgqAZBxkQQQSKEbVSp5NkZtfmqUs29y3J1ZuT7ORw.pfdgeYDVqjp1yNLFVn0RytW5k7_mqxTCd
+ WL.VSLMNtoIfPvBFydtLWzA_LucSUevmMmCoMzBmnwto59KGu8EcdIvzieB_O6Pm0wYUkskB9cla
+ BCGfP9UmMyeiJjtMbn3c4PQGBtyCYgUklDBQ..AyG9VCqKJwKYmTG51JB7Abe1LRudawgLtrbBMo
+ yHrsINiLZ0TPCmdzrM1uR5Kqov5YoePBGk1ltm_mgDjcseTjtbmzR.7UYwpx7qCRrPczkTwC7bOV
+ DF_IiLNXFygF37kxxn_j.Y9F9l9MSEUhHmMwobwcO5OH7oPERJYSzzYmJx.Qufi1TOWJChrw.Mub
+ YSoLQnoXpxVVYtVqVuJ4kGRVs_AjGUvAOCbRdod_FS0H9dD4FvKQ5MzJvshKOBqHQJc2JKOXhjlU
+ ZEHON69C.53NE_aHfVpNK6n51CsZR6ky.1OfiLqom6yamegeYSQJIGfvXbf6aeb2BBbTerb1VKew
+ 6oDQ27GBJkggK2fAevRNKDVDJtDCCmyjRro8l4anzCtm8vTH4Yg.VpVLyE9scxwgHkD57IpN_D9P
+ xO01ZQv.8b1zfHvfD9IKhRfiY34M8KPaaf9Srhs32j_pht.E3tCCsOoYZ4gBFllzkppgAcf5pdjf
+ KJBJYuZE5tW.m5UuGNcdSkMFqDV59BVx62AhXB4u6LaCxq0QqOCJLHa2ha7WZdBc4xUSQSs6H07l
+ BGS3TAZkGdpH6CNEdVrM.eGB328k519g3IhnD.JwBU2JuKIe22fwW8WW9ISscK_CcGKFL_hz7iyu
+ NBnWW4GRQVPpP64ekbN5YR1tq4sqG32vPNgPvEq4dyPwd6a3rp5bFjXELCheH_1OdHca36p45qrU
+ fcp1iw.vdW_t82Tw_Zy1.rl.5Isqt.NmJ9_Cz_xQedXbnUPnqp82k.VP_530RcRXPiFczCZa9a4R
+ xqN5oBPs8S5tHlI1GyzP2xo.I6nmPxp5lkkEoYBWx84_PylPQqfuWS7klBwu3a.NyCY0Ws2k5jXj
+ h.QIy64R2XDndW0SzLejP_btP4pT62rCazhb5E39rj7kK9iin71XZvKpNTchY.2h1jwZgQNea8o6
+ qcxhdPFssxhSEQissDyP8X13myA6ShecddKZfK21D2JbNkcGqGu1Ymfrj1vlm1gBSPPKXjNrftPB
+ o1.m6jaUTNKI_vGc-
+X-Sonic-MF: <jahau@rocketmail.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ir2.yahoo.com with HTTP; Fri, 8 Oct 2021 08:34:22 +0000
+Received: by kubenode505.mail-prod1.omega.ir2.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID 88d24ee1868ddca6937b5b04335a75fe;
+          Fri, 08 Oct 2021 08:34:21 +0000 (UTC)
+From:   Jakob Hauser <jahau@rocketmail.com>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Beomho Seo <beomho.seo@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Jakob Hauser <jahau@rocketmail.com>
+Subject: [PATCH] =?UTF-8?q?power:=20supply:=20rt5033=5Fbattery:=20Change?= =?UTF-8?q?=20voltage=20values=20to=20=C2=B5V?=
+Date:   Fri,  8 Oct 2021 10:32:45 +0200
+Message-Id: <20211008083245.2884-1-jahau@rocketmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+References: <20211008083245.2884-1-jahau.ref@rocketmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Petr Beneš <petr.benes@ysoft.com>
+Currently the rt5033_battery driver provides voltage values in mV. It
+should be µV as stated in Documentation/power/power_supply_class.rst.
 
-SoC temperature readout may not work after thermal alarm fires interrupt.
-This harms userspace as well as CPU cooling device.
-
-Two issues with the logic involved. First, there is no protection against
-concurent measurements, hence one can switch the sensor off while
-the other one tries to read temperature later. Second, the interrupt path
-usually fails. At the end the sensor is powered off and thermal IRQ is
-disabled. One has to reenable the thermal zone by the sysfs interface.
-
-Most of troubles come from commit d92ed2c9d3ff ("thermal: imx: Use
-driver's local data to decide whether to run a measurement")
-
-It uses data->irq_enabled as the "local data". Indeed, its value is
-related to the state of the sensor loosely under normal operation and,
-frankly, gets unleashed when the thermal interrupt arrives.
-
-Current patch adds the "local data" (new member sensor_on in
-imx_thermal_data) and sets its value in controlled manner.
-
-Fixes: d92ed2c9d3ff ("thermal: imx: Use driver's local data to decide whether to run a measurement")
-Cc: petrben@gmail.com
-Cc: stable@vger.kernel.org
-Signed-off-by: Petr Beneš <petr.benes@ysoft.com>
-Signed-off-by: Michal Vokáč <michal.vokac@ysoft.com>
+Fixes: b847dd96e659 ("power: rt5033_battery: Add RT5033 Fuel gauge device driver")
+Cc: Beomho Seo <beomho.seo@samsung.com>
+Cc: Chanwoo Choi <cw00.choi@samsung.com>
+Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
 ---
- drivers/thermal/imx_thermal.c | 30 ++++++++++++++++++++++++++----
- 1 file changed, 26 insertions(+), 4 deletions(-)
+ drivers/power/supply/rt5033_battery.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
-index 2c7473d86a59..df5658e21828 100644
---- a/drivers/thermal/imx_thermal.c
-+++ b/drivers/thermal/imx_thermal.c
-@@ -209,6 +209,8 @@ struct imx_thermal_data {
- 	struct clk *thermal_clk;
- 	const struct thermal_soc_data *socdata;
- 	const char *temp_grade;
-+	struct mutex sensor_lock;
-+	bool sensor_on;
- };
+diff --git a/drivers/power/supply/rt5033_battery.c b/drivers/power/supply/rt5033_battery.c
+index 9ad0afe83d1b..7a23c70f4879 100644
+--- a/drivers/power/supply/rt5033_battery.c
++++ b/drivers/power/supply/rt5033_battery.c
+@@ -60,7 +60,7 @@ static int rt5033_battery_get_watt_prop(struct i2c_client *client,
+ 	regmap_read(battery->regmap, regh, &msb);
+ 	regmap_read(battery->regmap, regl, &lsb);
  
- static void imx_set_panic_temp(struct imx_thermal_data *data,
-@@ -252,11 +254,12 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
- 	const struct thermal_soc_data *soc_data = data->socdata;
- 	struct regmap *map = data->tempmon;
- 	unsigned int n_meas;
--	bool wait, run_measurement;
-+	bool wait;
- 	u32 val;
+-	ret = ((msb << 4) + (lsb >> 4)) * 1250 / 1000;
++	ret = ((msb << 4) + (lsb >> 4)) * 1250;
  
--	run_measurement = !data->irq_enabled;
--	if (!run_measurement) {
-+	mutex_lock(&data->sensor_lock);
-+
-+	if (data->sensor_on) {
- 		/* Check if a measurement is currently in progress */
- 		regmap_read(map, soc_data->temp_data, &val);
- 		wait = !(val & soc_data->temp_valid_mask);
-@@ -283,13 +286,15 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
- 
- 	regmap_read(map, soc_data->temp_data, &val);
- 
--	if (run_measurement) {
-+	if (!data->sensor_on) {
- 		regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
- 			     soc_data->measure_temp_mask);
- 		regmap_write(map, soc_data->sensor_ctrl + REG_SET,
- 			     soc_data->power_down_mask);
- 	}
- 
-+	mutex_unlock(&data->sensor_lock);
-+
- 	if ((val & soc_data->temp_valid_mask) == 0) {
- 		dev_dbg(&tz->device, "temp measurement never finished\n");
- 		return -EAGAIN;
-@@ -339,20 +344,26 @@ static int imx_change_mode(struct thermal_zone_device *tz,
- 	const struct thermal_soc_data *soc_data = data->socdata;
- 
- 	if (mode == THERMAL_DEVICE_ENABLED) {
-+		mutex_lock(&data->sensor_lock);
- 		regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
- 			     soc_data->power_down_mask);
- 		regmap_write(map, soc_data->sensor_ctrl + REG_SET,
- 			     soc_data->measure_temp_mask);
-+		data->sensor_on = true;
-+		mutex_unlock(&data->sensor_lock);
- 
- 		if (!data->irq_enabled) {
- 			data->irq_enabled = true;
- 			enable_irq(data->irq);
- 		}
- 	} else {
-+		mutex_lock(&data->sensor_lock);
- 		regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
- 			     soc_data->measure_temp_mask);
- 		regmap_write(map, soc_data->sensor_ctrl + REG_SET,
- 			     soc_data->power_down_mask);
-+		data->sensor_on = false;
-+		mutex_unlock(&data->sensor_lock);
- 
- 		if (data->irq_enabled) {
- 			disable_irq(data->irq);
-@@ -728,6 +739,8 @@ static int imx_thermal_probe(struct platform_device *pdev)
- 	}
- 
- 	/* Make sure sensor is in known good state for measurements */
-+	mutex_init(&data->sensor_lock);
-+	mutex_lock(&data->sensor_lock);
- 	regmap_write(map, data->socdata->sensor_ctrl + REG_CLR,
- 		     data->socdata->power_down_mask);
- 	regmap_write(map, data->socdata->sensor_ctrl + REG_CLR,
-@@ -739,6 +752,8 @@ static int imx_thermal_probe(struct platform_device *pdev)
- 			IMX6_MISC0_REFTOP_SELBIASOFF);
- 	regmap_write(map, data->socdata->sensor_ctrl + REG_SET,
- 		     data->socdata->power_down_mask);
-+	data->sensor_on = false;
-+	mutex_unlock(&data->sensor_lock);
- 
- 	ret = imx_thermal_register_legacy_cooling(data);
- 	if (ret)
-@@ -796,10 +811,13 @@ static int imx_thermal_probe(struct platform_device *pdev)
- 	if (data->socdata->version == TEMPMON_IMX6SX)
- 		imx_set_panic_temp(data, data->temp_critical);
- 
-+	mutex_lock(&data->sensor_lock);
- 	regmap_write(map, data->socdata->sensor_ctrl + REG_CLR,
- 		     data->socdata->power_down_mask);
- 	regmap_write(map, data->socdata->sensor_ctrl + REG_SET,
- 		     data->socdata->measure_temp_mask);
-+	data->sensor_on = true;
-+	mutex_unlock(&data->sensor_lock);
- 
- 	data->irq_enabled = true;
- 	ret = thermal_zone_device_enable(data->tz);
-@@ -832,8 +850,12 @@ static int imx_thermal_remove(struct platform_device *pdev)
- 	struct regmap *map = data->tempmon;
- 
- 	/* Disable measurements */
-+	mutex_lock(&data->sensor_lock);
- 	regmap_write(map, data->socdata->sensor_ctrl + REG_SET,
- 		     data->socdata->power_down_mask);
-+	data->sensor_on = false;
-+	mutex_unlock(&data->sensor_lock);
-+
- 	if (!IS_ERR(data->thermal_clk))
- 		clk_disable_unprepare(data->thermal_clk);
- 
+ 	return ret;
+ }
 -- 
-2.25.1
+2.33.0
 
