@@ -2,95 +2,165 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BC17426659
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Oct 2021 11:11:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5994B426879
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Oct 2021 13:10:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbhJHJNW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Oct 2021 05:13:22 -0400
-Received: from sonic310-57.consmr.mail.ir2.yahoo.com ([77.238.177.30]:44165
-        "EHLO sonic310-57.consmr.mail.ir2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229853AbhJHJNV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Oct 2021 05:13:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1633684286; bh=j/C/7EcWI4/xBTeDjvQxRyW1xFKFia5pRimR/ZbRAoA=; h=From:To:Cc:Subject:Date:References:From:Subject:Reply-To; b=dcKEorEFo6vieBSs/ZYJ35WNCPRgQ5AtYcBEonnQZQQSSWyXooge1t7Wp8KvM2LX5fhPrjrvh0cCNkHnoOHU6lUQ+ghTq7zu3b4CDtLNd8od7tUnxlUzo0IAqM9DQ0bsgO397WiMVOe2BVUkmhVsLczonyEHtlfC1VOUnm01on44/oHIlQfG3HNh2uYjt7kvhIit19ydQzk4lXhbSSgbITdcewLTJL7+d/f1FxVpDLU4K9FpUx1+dVAQysDgj4TYXcDTHXdHdD7cARUaS2ZLIBJGMfuw4NZG1PBBFAEd+2WrdToc1MqO2CND32pkaeqiaL8rm9ge5GGMBTMj3IupSw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1633684286; bh=+MH+BZEc/GPJYRqWr4oRwSN3IuXWKqBLtevDzdq6jM0=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=UcVH8VSol5IKlK2m3Or6IU1kXslYYJloWEdnTu4KzkxQCyJjWxKhkq++Cg+qN5v875wImALd/rSb1SewhHlvSwoAagS9nYqAULou+tE/IYwHHpThKxwRU7VzYV/7lyIHkxOgvN8ljbAGxLHukeAp71jeM3E/jf/exOMRvhkpDzUp1KIsu3P7i115kvouSgzKGbLIvGlwystSOqeK7IztJA7kmCYOtzI5vU6Z9iLBPXVN1nxqmJ3+TqZZswrFwjE8uGfvpO747pM7TpHouybWWxIjhZedNhEfitcwOTHh/ATJQDnw05TcoIJQIvy6lIJpxjhcxWS1/RB0cdq5Qv1Tpw==
-X-YMail-OSG: IcQvx0MVM1lAzujugsPaSUCNocCu.5CfBoJ_Q_eMFDPwGb31ZJcF9ZzX3Wnqfhr
- Gkv.tucEPYHzkRa1V4geIc6G5u8vZ6rATlWP4unLeNh37GAEidm1jn8Nxx3rGmXGFcgXYrL3jDNW
- iHbav1tJ81rVtH1eG3ln.9.m0nuFvaAFeWUBk.8TK93GJ1x8r0jv1iYZeC5wL8yyiICMHWnsaP7i
- hz.SwnVRABfKaNti34T0W9hVQc5LVVXSzERXms1H5We5f9_rAY0grKIkssalFo6yWjl5TzDNgdQ7
- tXTDMq7Jo1tUSjJtxgNKd6149qSaGeGRF0Ey2KCg1.WdKUUQenoCqthufq.Uy1jGt86vB71ujFF9
- 5CVlXlG9G7kaRjcLeOijUJjDmuYqEd5gVVFumo0rDKWi8kh4xOPWPH2ZAWlAvfPSNbquoaBHaBtA
- hWkrppKIHVv0j9NC26I6YQ.3SIevzr0jAUeWQ7RHCDjOMl4fi5g0ZDHBuQRwgkTwuUFBCKVyyoCJ
- QIobecNTym5q9tYliWuhGQqOeHQbxsFXdEBWCXFaXnWm9DdH6a_1D123NJmlfLdt55Ewc5m5g8S8
- 5ZcNhmk.U17.V7U4re5EYIJwOSy0dUFQCCvxr6Y8MRgo6qQekIu9ts8aNJet.kahw2YvZE6x.QBx
- kL.oc01Fgt_prGPgE6IbIlmJiQsez.7p7jytzF2qquoJ35RI_SFGe_v8w4pVN4TzWe3TTLz9LuLN
- _zmmb.znp63yIV1nvdf8QSupdsYybUgVvuVd0a2hA_qG1OJBxzAZY3pCSWw52ytwWQq.xzB0ruMj
- zKqjlVgyeva1SpzTIfsaUh29.x2cZv.EHV_ADRRQCQt8DA36aAdZ1P3rOEpoJE0F0t5h4rDW5ADV
- UP3WFvOSkU.p3oQfV.xY4YLl37jXTV1_GgK5RLDToLWjvUjI.buaZAFLHHlI59Y6uMWWClJ8SSn_
- 9lKnBtMwzS4T2COvydLE27uEBoqlVAHCHVx7O.2TDCHgPmJbdRtUhdT3GNaFKTkCbsLkxqeuQ7TG
- GQCvLo2UIk_bL6cwyPgRpxj0jViD6_Pfk.qG8lSn9tUOYw7ZR5bbHYD2bzc76p2GzUUdkYTEayoa
- mQW39cDgyViXFMrLw2sbYW1sQn9hQQgE1Q9ZUKZJvs1yjyh0bvV9mjwHCErF.d0KO6rRO3OHdg.C
- H7FA2_qSAPGLs7LHoJMQ3aoPGpWIgwTPy13UozWawyrjE3JTp4o8wJyYk_M8nf9BNsf9jEZog4Ko
- dRkaP_l3LfR6ihibS.Jp2VWqPddxDbSukYQMD0f.m9v70PCc1WQI7hyS532JiEZxghVNmTpxJP.B
- ZVKkQXqKmviIpCPTQo4XZXWGZBonNGPtDPkJdLPpVVpPUjHbJyLXzZ5yuKb2hZFeRMC39GJKI3RZ
- lt99mXHRdIx7eZv.1Zkwd7JiAtOyEH_xBOJ1mrZSyWqk1LwQ60TJ7sDm6qtj8XIJdS1M9ExwPSAo
- GZDN8R948WNE0VWVdLJqFd0JlNYEy9_z2tGCNYUWbe3DQHxmxSnXgojNDhrOBEfEZt05nJoafjnq
- r_rivU7tHggbcu5wTGAWwIbTT7mqVWgVhpQZx60OFZof3msXWaT7LySB552BiQe9iiwmfQ6ZUHOR
- xxoiYQvRbL09csXiypQdkdPZAMrbgG8Oir3Nl.rQ1GigO0qy8dwPWGCTjBHZeqS5niRDSvInQsAN
- bDIPEOU3sryY.I3_Gno4230Unj26CbvGCDx5h0f_sAS7HatdFpxrN2lD6Ojn0xGSvTq34zwwTSST
- vY4RQinWtBZE03S6nwn5TENvInqjNUKmlMWawTsiwl6eqQvdRhlRbxQCWctVgNgMSpsLO8XhesOb
- lbe0e_ZXtBEioUo6Uf_dsI3SsfycSltMdBvXIh0kZWrncptJNGwmQS.Alf3AJD7.NoI0knd9QCl6
- 2hznEQOv.egTlgUVUu4k4DhLDKAvtu17r3AehPdV6sinVcplPq6Z.nwCE3XLH6iYPaOk2kOdL0Gv
- OdQZzANAjGJdimnyjGt9IICq_OUQ8nWPCP5XgGtUlJsno2Ulra4EReZLeUCRAM9cjKkwXnIIaClH
- BM.f1Z0CAHpHCXCWP.JQmxyctCtUe.6nTiCIMjtNmRBBXkIR7m4L_unH4YTgv8qol22wdcqH5iMG
- Dmah3F5Y3Yd6JlBFeFUEoF3jD4NjN8W5nHWJoLG1V0_x3.SKKcF1iXXVBTiRS_Vlb0rf8vnLUgFB
- K0jm_p2ohj9Zm.2th9LG7Jfq.3P.jTQ7brMLUjB7jhlueLZvOhRZFMBMGibWw2uFx6UrKBuSupO4
- xlwm7dsBKGAepZiht
-X-Sonic-MF: <jahau@rocketmail.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ir2.yahoo.com with HTTP; Fri, 8 Oct 2021 09:11:26 +0000
-Received: by kubenode508.mail-prod1.omega.ir2.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID 43536220324474b9ed9f3288f91e3cfb;
-          Fri, 08 Oct 2021 09:11:25 +0000 (UTC)
-From:   Jakob Hauser <jahau@rocketmail.com>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     linux-pm@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        Beomho Seo <beomho.seo@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Jakob Hauser <jahau@rocketmail.com>
-Subject: [RESEND PATCH] power: supply: rt5033_battery: Change voltage values to uV
-Date:   Fri,  8 Oct 2021 11:05:43 +0200
-Message-Id: <20211008090542.3893-1-jahau@rocketmail.com>
-X-Mailer: git-send-email 2.33.0
+        id S240065AbhJHLL5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Oct 2021 07:11:57 -0400
+Received: from mga14.intel.com ([192.55.52.115]:64772 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232629AbhJHLL4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 8 Oct 2021 07:11:56 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10130"; a="226772890"
+X-IronPort-AV: E=Sophos;i="5.85,357,1624345200"; 
+   d="scan'208";a="226772890"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2021 04:09:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,357,1624345200"; 
+   d="scan'208";a="624701232"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 08 Oct 2021 04:09:55 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 08 Oct 2021 14:09:55 +0300
+Date:   Fri, 8 Oct 2021 14:09:55 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Benson Leung <bleung@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "bleung@chromium.org" <bleung@chromium.org>,
+        "badhri@google.com" <badhri@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [RFC PATCH 2/3] power: supply: Add support for PDOs props
+Message-ID: <YWAnA1mc5CrlEs7H@kuha.fi.intel.com>
+References: <20210902213500.3795948-3-pmalani@chromium.org>
+ <YT9SYMAnOCTWGi5P@kuha.fi.intel.com>
+ <DB9PR10MB4652B4A6A2A2157018307AE380D99@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+ <YUB16up3JDwi3HfI@kuha.fi.intel.com>
+ <YULwz8NsoA3+vrhA@google.com>
+ <YUMbGp0aemx1HCHv@kuha.fi.intel.com>
+ <DB9PR10MB46525E6CA4C6BB101059D93C80DC9@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+ <YUm5sdbceMcDTvYj@kuha.fi.intel.com>
+ <DB9PR10MB46524E3817FB4D836CDC13E180A49@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+ <CACeCKaem93dbJ11qOG=a+MkJhSrp0Nx-UAPG00Q-5WwMriJD0A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-References: <20211008090542.3893-1-jahau.ref@rocketmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACeCKaem93dbJ11qOG=a+MkJhSrp0Nx-UAPG00Q-5WwMriJD0A@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently the rt5033_battery driver provides voltage values in mV. It
-should be uV as stated in Documentation/power/power_supply_class.rst.
+On Thu, Oct 07, 2021 at 03:32:27PM -0700, Prashant Malani wrote:
+> Hi folks,
+> 
+> Thanks for the comments and discussion on this RFC series.
+> 
+> On Fri, Sep 24, 2021 at 8:38 AM Adam Thomson
+> <Adam.Thomson.Opensource@diasemi.com> wrote:
+> >
+> > On 21 September 2021 11:54, Heikki Krogerus wrote:
+> >
+> > > If we can leave the decision about the selection to TCPM, that would
+> > > be great! I'm not against that at all. As I said, I have not though
+> > > through the control aspect. Right now I'm mostly concerned about how
+> > > we expose the information to the user. The only reason why I have
+> > > considered the control part at all is because how ever we decide to
+> > > expose the information to the user, it has to work with control as
+> > > well.
+> >
+> > Well part of the discussion has to be about the role that the user plays in
+> > the control. What does and doesn't need to be controlled further up the stack,
+> > and what will be taken care of by, for example, TCPM? Surely that dictates to
+> > some degree what and how we expose all of this? Right now we have a simple means
+> > to read and control voltages and currents through a PSY class, without the need
+> > for the user to know any details of what a PDO/APDO is. Do we continue with
+> > abstracting away to the user or instead let the user decipher this itself and
+> > decide? Am just trying to understand the needs going forward.
+> >
+> > > The final PSYs and the supply chains they create as well as the
+> > > individual properties I'm more than happy to talk about, but having a
+> > > separate object for the smallest thing that we can see (PDO) is the
+> > > right thing to do here IMO. Trying to concatenate things into single
+> > > objects especially in sysfs, despite how nice it always would seem,
+> > > has taken me to the brink of disaster in the past far too many times.
+> > >
+> > > In this case we don't need to take the risk of having to duplicated
+> > > information or in worst case deprecate something that is also exposed
+> > > to the sysfs in the future.
+> > >
+> > > So the question is not why should we registers every individual PDO
+> > > separately. The question is, why shouldn't we do that? And saying that
+> > > it's "heavyweight" I'm afraid is not good enough. :-)
+> >
+> > That was my initial feeling on the suggestion based on the idea of a PSY per PDO
+> > and I still don't feel that fits as your creating a whole class of resources
+> > to expose something that's pretty small. To me the PSY represents the source as
+> > whole, and the PDOs are simply options/configurations for that source. If we're
+> > needing to expose PDOs then I don't disagree with separating them out
+> > individually and I certainly wouldn't want that all concatenated as one
+> > property. However I think something like dynamically generated properties
+> > might be a nicer solution to expose each PDO, or even groups of properties if
+> > you wanted to split PDOs even further into constituent parts to the user.
+> 
+> To downscope this issue for the time being, one of our immediate goals
+> is to expose the PDOs
+> to userspace for metrics reporting and potentially for some power
+> policy control through other
+> channels (like Chrome OS Embedded Controller).
+> 
+> Would it be acceptable to revise this series to drop the power supply
+> support for now (since I don't yet
+> see a consensus on how to implement it for the partner), and just add
+> sysfs nodes for each PDO ?
+> This would be akin to how it's being done for identity VDOs right now.
+> 
+> So we would have :
+> 
+> /sys/class/typec/<port>-partner/source_pdos/pdo{1-13}
+> 
+> and
+> 
+> /sys/class/typec/<port>-partner/sink_pdos/pdo{1-13}
+> 
+> and similarly for the port device.
+> 
+> If we want to add additional parsing of the  Fixed Supply PDO into
+> individual properties for the partner/port,
+> those can of course be added later.
+> 
+> WDYT?
 
-Fixes: b847dd96e659 ("power: rt5033_battery: Add RT5033 Fuel gauge device driver")
-Cc: Beomho Seo <beomho.seo@samsung.com>
-Cc: Chanwoo Choi <cw00.choi@samsung.com>
-Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
----
-Replaced special character greek my by u because of encoding issues in e-mail.
+I don't think we should use sysfs to expose and control any of these
+objects. It does not really matter under which subsystem we are
+working. Sysfs is just the wrong interface for this kind of data.
 
- drivers/power/supply/rt5033_battery.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I'm now preparing a proof-of-concept patches where I create character
+device for every USB PD capable device (port, plug and partner). The
+idea is that we could use those char devices to tap into the USB PD
+protocol directly. Right now I'm thinking the nodes would look like
+this (with the first Type-C port):
 
-diff --git a/drivers/power/supply/rt5033_battery.c b/drivers/power/supply/rt5033_battery.c
-index 9ad0afe83d1b..7a23c70f4879 100644
---- a/drivers/power/supply/rt5033_battery.c
-+++ b/drivers/power/supply/rt5033_battery.c
-@@ -60,7 +60,7 @@ static int rt5033_battery_get_watt_prop(struct i2c_client *client,
- 	regmap_read(battery->regmap, regh, &msb);
- 	regmap_read(battery->regmap, regl, &lsb);
- 
--	ret = ((msb << 4) + (lsb >> 4)) * 1250 / 1000;
-+	ret = ((msb << 4) + (lsb >> 4)) * 1250;
- 
- 	return ret;
- }
+        /dev/pd0/port
+        /dev/pd0/plug0 - you only get this node with full featured cables
+        /dev/pd0/plug1 - ditto
+        /dev/pd0/partner - and this is here only if you are connected
+
+So in this case you would use those char devices to send the actual
+Get_Source_Cap and Get_Sink_Cap messages to get the PDOs.
+
+The problem is that it's not going to be possible to always support
+every type of command. For example with UCSI we are pretty much
+limited to the capability control messages. But I still think this is
+the right way to do this.
+
+Let me know what you think.
+
+thanks,
+
 -- 
-2.33.0
+heikki
