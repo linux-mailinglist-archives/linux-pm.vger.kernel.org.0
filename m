@@ -2,165 +2,228 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5994B426879
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Oct 2021 13:10:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8DCC427193
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Oct 2021 21:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240065AbhJHLL5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Oct 2021 07:11:57 -0400
-Received: from mga14.intel.com ([192.55.52.115]:64772 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232629AbhJHLL4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 8 Oct 2021 07:11:56 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10130"; a="226772890"
-X-IronPort-AV: E=Sophos;i="5.85,357,1624345200"; 
-   d="scan'208";a="226772890"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2021 04:09:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,357,1624345200"; 
-   d="scan'208";a="624701232"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 08 Oct 2021 04:09:55 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 08 Oct 2021 14:09:55 +0300
-Date:   Fri, 8 Oct 2021 14:09:55 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Benson Leung <bleung@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "bleung@chromium.org" <bleung@chromium.org>,
-        "badhri@google.com" <badhri@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [RFC PATCH 2/3] power: supply: Add support for PDOs props
-Message-ID: <YWAnA1mc5CrlEs7H@kuha.fi.intel.com>
-References: <20210902213500.3795948-3-pmalani@chromium.org>
- <YT9SYMAnOCTWGi5P@kuha.fi.intel.com>
- <DB9PR10MB4652B4A6A2A2157018307AE380D99@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
- <YUB16up3JDwi3HfI@kuha.fi.intel.com>
- <YULwz8NsoA3+vrhA@google.com>
- <YUMbGp0aemx1HCHv@kuha.fi.intel.com>
- <DB9PR10MB46525E6CA4C6BB101059D93C80DC9@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
- <YUm5sdbceMcDTvYj@kuha.fi.intel.com>
- <DB9PR10MB46524E3817FB4D836CDC13E180A49@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
- <CACeCKaem93dbJ11qOG=a+MkJhSrp0Nx-UAPG00Q-5WwMriJD0A@mail.gmail.com>
+        id S241371AbhJHTw5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Oct 2021 15:52:57 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:54320 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231408AbhJHTw5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Oct 2021 15:52:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1633722662; x=1665258662;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=TfJzDczDAE0HOweQRmNVvT5eqdVnnTs5zABgaUQ6+n0=;
+  b=EXUSgP0vieUa32aj8Jqmo2cZSlSGHLiQC8xnqOkdAt2lc/UMtf/aLWbg
+   52IKBjd6pf9LCILCoVA8DX9G/HpXLWwH8UgiswZ8np3EaRePiDlg1Pz4s
+   W0aDg9EM4WGCl1gN6zYDJFvEf1aToUybFdtP8qUVjc3lFxpUXp3MRyEre
+   U=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 08 Oct 2021 12:51:01 -0700
+X-QCInternal: smtphost
+Received: from nalasex01a.na.qualcomm.com ([10.47.209.196])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2021 12:51:00 -0700
+Received: from [10.47.233.232] (10.49.16.6) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.7; Fri, 8 Oct 2021
+ 12:51:00 -0700
+Subject: Re: [PATCH v2] thermal: Fix a NULL pointer dereference
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        David Collins <quic_collinsd@quicinc.com>,
+        Manaf Meethalavalappu Pallikunhi <manafm@codeaurora.org>,
+        Ram Chandrasekar <rkumbako@codeaurora.org>,
+        <stable@vger.kernel.org>
+References: <1631041289-11804-1-git-send-email-quic_subbaram@quicinc.com>
+ <003252f2-510f-e9ea-0032-6034f26aad11@linaro.org>
+From:   Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
+Message-ID: <16af9946-b662-0bbf-206f-278b7ef98123@quicinc.com>
+Date:   Fri, 8 Oct 2021 12:50:59 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACeCKaem93dbJ11qOG=a+MkJhSrp0Nx-UAPG00Q-5WwMriJD0A@mail.gmail.com>
+In-Reply-To: <003252f2-510f-e9ea-0032-6034f26aad11@linaro.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 07, 2021 at 03:32:27PM -0700, Prashant Malani wrote:
-> Hi folks,
-> 
-> Thanks for the comments and discussion on this RFC series.
-> 
-> On Fri, Sep 24, 2021 at 8:38 AM Adam Thomson
-> <Adam.Thomson.Opensource@diasemi.com> wrote:
-> >
-> > On 21 September 2021 11:54, Heikki Krogerus wrote:
-> >
-> > > If we can leave the decision about the selection to TCPM, that would
-> > > be great! I'm not against that at all. As I said, I have not though
-> > > through the control aspect. Right now I'm mostly concerned about how
-> > > we expose the information to the user. The only reason why I have
-> > > considered the control part at all is because how ever we decide to
-> > > expose the information to the user, it has to work with control as
-> > > well.
-> >
-> > Well part of the discussion has to be about the role that the user plays in
-> > the control. What does and doesn't need to be controlled further up the stack,
-> > and what will be taken care of by, for example, TCPM? Surely that dictates to
-> > some degree what and how we expose all of this? Right now we have a simple means
-> > to read and control voltages and currents through a PSY class, without the need
-> > for the user to know any details of what a PDO/APDO is. Do we continue with
-> > abstracting away to the user or instead let the user decipher this itself and
-> > decide? Am just trying to understand the needs going forward.
-> >
-> > > The final PSYs and the supply chains they create as well as the
-> > > individual properties I'm more than happy to talk about, but having a
-> > > separate object for the smallest thing that we can see (PDO) is the
-> > > right thing to do here IMO. Trying to concatenate things into single
-> > > objects especially in sysfs, despite how nice it always would seem,
-> > > has taken me to the brink of disaster in the past far too many times.
-> > >
-> > > In this case we don't need to take the risk of having to duplicated
-> > > information or in worst case deprecate something that is also exposed
-> > > to the sysfs in the future.
-> > >
-> > > So the question is not why should we registers every individual PDO
-> > > separately. The question is, why shouldn't we do that? And saying that
-> > > it's "heavyweight" I'm afraid is not good enough. :-)
-> >
-> > That was my initial feeling on the suggestion based on the idea of a PSY per PDO
-> > and I still don't feel that fits as your creating a whole class of resources
-> > to expose something that's pretty small. To me the PSY represents the source as
-> > whole, and the PDOs are simply options/configurations for that source. If we're
-> > needing to expose PDOs then I don't disagree with separating them out
-> > individually and I certainly wouldn't want that all concatenated as one
-> > property. However I think something like dynamically generated properties
-> > might be a nicer solution to expose each PDO, or even groups of properties if
-> > you wanted to split PDOs even further into constituent parts to the user.
-> 
-> To downscope this issue for the time being, one of our immediate goals
-> is to expose the PDOs
-> to userspace for metrics reporting and potentially for some power
-> policy control through other
-> channels (like Chrome OS Embedded Controller).
-> 
-> Would it be acceptable to revise this series to drop the power supply
-> support for now (since I don't yet
-> see a consensus on how to implement it for the partner), and just add
-> sysfs nodes for each PDO ?
-> This would be akin to how it's being done for identity VDOs right now.
-> 
-> So we would have :
-> 
-> /sys/class/typec/<port>-partner/source_pdos/pdo{1-13}
-> 
-> and
-> 
-> /sys/class/typec/<port>-partner/sink_pdos/pdo{1-13}
-> 
-> and similarly for the port device.
-> 
-> If we want to add additional parsing of the  Fixed Supply PDO into
-> individual properties for the partner/port,
-> those can of course be added later.
-> 
-> WDYT?
+On 10/6/21 4:08 AM, Daniel Lezcano wrote:
+> On 07/09/2021 21:01, Subbaraman Narayanamurthy wrote:
+>> of_parse_thermal_zones() parses the thermal-zones node and registers a
+>> thermal_zone device for each subnode. However, if a thermal zone is
+>> consuming a thermal sensor and that thermal sensor device hasn't probed
+>> yet, an attempt to set trip_point_*_temp for that thermal zone device
+>> can cause a NULL pointer dereference. Fix it.
+>>
+>>  console:/sys/class/thermal/thermal_zone87 # echo 120000 > trip_point_0_temp
+>>  ...
+>>  Unable to handle kernel NULL pointer dereference at virtual address 0000000000000020
+> I'm still not convinced by the changes.
+>
+> Could please tell the commit-id where this is happening and give the
+> procedure to reproduce the bug ?
+>
 
-I don't think we should use sysfs to expose and control any of these
-objects. It does not really matter under which subsystem we are
-working. Sysfs is just the wrong interface for this kind of data.
+Here is the commit id where this problem was reported.
+https://android.googlesource.com/kernel/common/+/997d24a932a9b6e2040f39a8dd76e873e6519a1c
 
-I'm now preparing a proof-of-concept patches where I create character
-device for every USB PD capable device (port, plug and partner). The
-idea is that we could use those char devices to tap into the USB PD
-protocol directly. Right now I'm thinking the nodes would look like
-this (with the first Type-C port):
+BTW, this problem was not 100% reproducible but seems to be a race condition when vendor modules are loaded and thermal HAL or userspace thermal SW is attempting to set trip points on one of the thermal zones and that sensor driver supplying that thermal zone have not completed probing.
 
-        /dev/pd0/port
-        /dev/pd0/plug0 - you only get this node with full featured cables
-        /dev/pd0/plug1 - ditto
-        /dev/pd0/partner - and this is here only if you are connected
+I was able to reproduce the problem manually by disabling the pmk8350_adc_tm device in device tree which supplies to some thermal zone devices (e.g. xo-therm below).
 
-So in this case you would use those char devices to send the actual
-Get_Source_Cap and Get_Sink_Cap messages to get the PDOs.
+pmk8350_adc_tm: adc_tm@3400 {                                  
+    compatible = "qcom,adc-tm7";                           
+    reg = <0x3400>;                                        
+    interrupts = <0x0 0x34 0x0 IRQ_TYPE_EDGE_RISING>;         
+    interrupt-names = "threshold";                         
+    #address-cells = <1>;                                  
+    #size-cells = <0>;                                     
+    #thermal-sensor-cells = <1>;                           
+    status = "disabled"; /* This is what I've added to simulate the problem */                                  
+};
 
-The problem is that it's not going to be possible to always support
-every type of command. For example with UCSI we are pretty much
-limited to the capability control messages. But I still think this is
-the right way to do this.
+&thermal_zones {
+...
+        xo-therm {                                                             
+                polling-delay-passive = <0>;                                   
+                polling-delay = <0>;                                           
+                thermal-sensors = <&pmk8350_adc_tm PMK8350_ADC7_AMUX_THM1_100K_PU>;
+                trips {
+                    ...
+                };
+};
 
-Let me know what you think.
+With this and reverting my change (which got picked up in internal tree), I can see this.
 
-thanks,
+/sys/class/thermal # cat thermal_zone87/type                                   
+xo-therm
+                                                                       
+/sys/class/thermal # cd thermal_zone87                                         
+/sys/devices/virtual/thermal/thermal_zone87 # ls                               
+available_policies  cdev5_trip_point  mode               trip_point_4_hyst        
+cdev0               cdev5_weight      offset             trip_point_4_temp        
+cdev0_trip_point    cdev6             policy             trip_point_4_type        
+cdev0_weight        cdev6_trip_point  power              trip_point_5_hyst        
+cdev1               cdev6_weight      slope              trip_point_5_temp        
+cdev10              cdev7             subsystem          trip_point_5_type        
+cdev10_trip_point   cdev7_trip_point  sustainable_power  trip_point_6_hyst        
+cdev10_weight       cdev7_weight      temp               trip_point_6_temp        
+cdev1_trip_point    cdev8             trip_point_0_hyst  trip_point_6_type        
+cdev1_weight        cdev8_trip_point  trip_point_0_temp  trip_point_7_hyst        
+cdev2               cdev8_weight      trip_point_0_type  trip_point_7_temp        
+cdev2_trip_point    cdev9             trip_point_1_hyst  trip_point_7_type        
+cdev2_weight        cdev9_trip_point  trip_point_1_temp  trip_point_8_hyst        
+cdev3               cdev9_weight      trip_point_1_type  trip_point_8_temp        
+cdev3_trip_point    emul_temp         trip_point_2_hyst  trip_point_8_type        
+cdev3_weight        integral_cutoff   trip_point_2_temp  type                  
+cdev4               k_d               trip_point_2_type  uevent                
+cdev4_trip_point    k_i               trip_point_3_hyst                        
+cdev4_weight        k_po              trip_point_3_temp                        
+cdev5               k_pu              trip_point_3_type
+                        
+/sys/devices/virtual/thermal/thermal_zone87 # cat trip_point_0_temp            
+125000                                                                         
 
--- 
-heikki
+/sys/devices/virtual/thermal/thermal_zone87 # echo 120000 > trip_point_0_temp  
+[  184.290964][  T211] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000020
+[  184.300896][  T211] Mem abort info:                                         
+[  184.304486][  T211]   ESR = 0x96000006                                      
+[  184.308348][  T211]   EC = 0x25: DABT (current EL), IL = 32 bits            
+[  184.314531][  T211]   SET = 0, FnV = 0                                      
+[  184.318384][  T211]   EA = 0, S1PTW = 0                                     
+[  184.322323][  T211] Data abort info:                                        
+[  184.325993][  T211]   ISV = 0, ISS = 0x00000006                             
+[  184.330655][  T211]   CM = 0, WnR = 0                                       
+[  184.334425][  T211] user pgtable: 4k pages, 39-bit VAs, pgdp=000000081a7a2000
+[  184.341750][  T211] [0000000000000020] pgd=000000081a7a7003, p4d=000000081a7a7003, pud=000000081a7a7003, pmd=0000000000000000
+[  184.353359][  T211] Internal error: Oops: 96000006 [#1] PREEMPT SMP         
+[  184.359797][  T211] Dumping ftrace buffer:                                  
+[  184.364001][  T211]    (ftrace buffer empty)
+
+Hope this helps.
+
+>>  ...
+>>  Call trace:
+>>   of_thermal_set_trip_temp+0x40/0xc4
+>>   trip_point_temp_store+0xc0/0x1dc
+>>   dev_attr_store+0x38/0x88
+>>   sysfs_kf_write+0x64/0xc0
+>>   kernfs_fop_write_iter+0x108/0x1d0
+>>   vfs_write+0x2f4/0x368
+>>   ksys_write+0x7c/0xec
+>>   __arm64_sys_write+0x20/0x30
+>>   el0_svc_common.llvm.7279915941325364641+0xbc/0x1bc
+>>   do_el0_svc+0x28/0xa0
+>>   el0_svc+0x14/0x24
+>>   el0_sync_handler+0x88/0xec
+>>   el0_sync+0x1c0/0x200
+>>
+>> While at it, fix the possible NULL pointer dereference in other
+>> functions as well: of_thermal_get_temp(), of_thermal_set_emul_temp(),
+>> of_thermal_get_trend().
+>>
+>> Cc: stable@vger.kernel.org
+>> Suggested-by: David Collins <quic_collinsd@quicinc.com>
+>> Signed-off-by: Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
+>> ---
+>> Changes for v2:
+>> - Added checks in of_thermal_get_temp(), of_thermal_set_emul_temp(), of_thermal_get_trend().
+>>
+>>  drivers/thermal/thermal_of.c | 9 ++++++---
+>>  1 file changed, 6 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+>> index 6379f26..9233f7e 100644
+>> --- a/drivers/thermal/thermal_of.c
+>> +++ b/drivers/thermal/thermal_of.c
+>> @@ -89,7 +89,7 @@ static int of_thermal_get_temp(struct thermal_zone_device *tz,
+>>  {
+>>  	struct __thermal_zone *data = tz->devdata;
+>>  
+>> -	if (!data->ops->get_temp)
+>> +	if (!data->ops || !data->ops->get_temp)
+>>  		return -EINVAL;
+>>  
+>>  	return data->ops->get_temp(data->sensor_data, temp);
+>> @@ -186,6 +186,9 @@ static int of_thermal_set_emul_temp(struct thermal_zone_device *tz,
+>>  {
+>>  	struct __thermal_zone *data = tz->devdata;
+>>  
+>> +	if (!data->ops || !data->ops->set_emul_temp)
+>> +		return -EINVAL;
+>> +
+>>  	return data->ops->set_emul_temp(data->sensor_data, temp);
+>>  }
+>>  
+>> @@ -194,7 +197,7 @@ static int of_thermal_get_trend(struct thermal_zone_device *tz, int trip,
+>>  {
+>>  	struct __thermal_zone *data = tz->devdata;
+>>  
+>> -	if (!data->ops->get_trend)
+>> +	if (!data->ops || !data->ops->get_trend)
+>>  		return -EINVAL;
+>>  
+>>  	return data->ops->get_trend(data->sensor_data, trip, trend);
+>> @@ -301,7 +304,7 @@ static int of_thermal_set_trip_temp(struct thermal_zone_device *tz, int trip,
+>>  	if (trip >= data->ntrips || trip < 0)
+>>  		return -EDOM;
+>>  
+>> -	if (data->ops->set_trip_temp) {
+>> +	if (data->ops && data->ops->set_trip_temp) {
+>>  		int ret;
+>>  
+>>  		ret = data->ops->set_trip_temp(data->sensor_data, trip, temp);
+>>
+>
+
