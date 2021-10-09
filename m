@@ -2,145 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C55B427AC9
-	for <lists+linux-pm@lfdr.de>; Sat,  9 Oct 2021 16:22:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0CE0427AD3
+	for <lists+linux-pm@lfdr.de>; Sat,  9 Oct 2021 16:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233604AbhJIOYP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 9 Oct 2021 10:24:15 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:55750 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233093AbhJIOYO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 9 Oct 2021 10:24:14 -0400
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 3.0.0)
- id d3d322a473f577f6; Sat, 9 Oct 2021 16:22:16 +0200
-Received: from kreacher.localnet (89-77-51-84.dynamic.chello.pl [89.77.51.84])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 5020B66A6C1;
-        Sat,  9 Oct 2021 16:22:15 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH] ACPI: scan: Release PM resources blocked by unused objects
-Date:   Sat, 09 Oct 2021 16:22:09 +0200
-Message-ID: <5507158.DvuYhMxLoT@kreacher>
+        id S233159AbhJIObT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 9 Oct 2021 10:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59070 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229929AbhJIObT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 9 Oct 2021 10:31:19 -0400
+Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2EEC061570;
+        Sat,  9 Oct 2021 07:29:22 -0700 (PDT)
+Received: by mail-vk1-xa2b.google.com with SMTP id x207so5441738vke.2;
+        Sat, 09 Oct 2021 07:29:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sx2lHz5mXP4bcDT2BgwdB//veu66amkB+JijBT7hsOA=;
+        b=B9JP9C3ga+6gzWGfzDBuGqyRy8gwfpFJpFcLzIQoDTL7vsiw4PSC9Ixja7tJkL3pzc
+         Y6JPOkiaeZBzFgpvVa462FFSChn3/wy9AGVyIWqQ0lEKundCdnE+gvbgUfeSyJVMVAmE
+         juV+XdbcqfMmrN1BiZ9qj174O9riVbWoatSlopjLzUBg9EJE9W457gQi6qh7QB27nyDX
+         mXJ8iDZ/AkfIS+pu2Nza7A/SAHsPuDcBW6AIyrKLSvgmmgFPwDetAF01SBoymYTypg8l
+         cd2XH8xqacrNkpI/O93BnmMFTbWXIuNOu9QnyJtoLb6iOvBRo3s69F7HbXG5ZYVJ/vCw
+         Gp3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sx2lHz5mXP4bcDT2BgwdB//veu66amkB+JijBT7hsOA=;
+        b=B92XY9PqnWurs8cwBTcf2cfvhAjQomExNDC0UUYdWJCSUWLtyGM6XnFJDEybQ5HY6w
+         T0cHWymv+MsRyj/Gd51lnAI6poE1rseBEC5hIAem3kISJPPBxzDqeiYqsXCMAf6H04v2
+         ykEgjjCidCW/ZJBkXMXisXsarZhalzoBWF4iGKw3q+bGmkAupR9x/pbodbNQXJlz2iJk
+         Z8Gnm5qfZFoas6TYO8OL/dC1meJLMzSd6qxnrzu4qrYEsj4WcsEEmvj+G0pe4fN6EVTr
+         MI4Qj9Emvw4im9ReIWJGpgwAEFvzKWv2MDaqk9JhNP/sMO72c7u6ZH1gKqfRDEhfrZZq
+         iuYQ==
+X-Gm-Message-State: AOAM530F1lgbU5iUTWew3biUKWxtQV1M8uewFAYqcXMDw7uq69nvrPfY
+        0ksqVL+NVrWhPJIaigEqaVCGYyGz4ccbBldK2eQ=
+X-Google-Smtp-Source: ABdhPJxT3cIcGEL97+SdND5QDF9fYcKsFCcVZjI0cOaamtZL47rFrh7Xc5BOzF/5AR5KBTa3k7kvXb1ZAYSwp2sCfrY=
+X-Received: by 2002:a1f:b417:: with SMTP id d23mr14139390vkf.8.1633789761095;
+ Sat, 09 Oct 2021 07:29:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+References: <20211009115031.18392-1-alistair@alistair23.me> <20211009115031.18392-13-alistair@alistair23.me>
+In-Reply-To: <20211009115031.18392-13-alistair@alistair23.me>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Sat, 9 Oct 2021 11:29:10 -0300
+Message-ID: <CAOMZO5DK+YSx6iQABFbgR=EKLutRc486GEUeH0o0fYRotmQmXg@mail.gmail.com>
+Subject: Re: [PATCH v12 09/10] ARM: imx_v6_v7_defconfig: Enable backlight
+ class devices
+To:     Alistair Francis <alistair@alistair23.me>
+Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>, amitk@kernel.org,
+        "rui.zhang" <rui.zhang@intel.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Alistair Francis <alistair23@gmail.com>,
+        linux-hwmon@vger.kernel.org,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 89.77.51.84
-X-CLIENT-HOSTNAME: 89-77-51-84.dynamic.chello.pl
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvtddrvddtvddgjeegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvvefgteeuteehkeduuedvudetleevffdtffdtjeejueekffetieekgfeigfehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeekledrjeejrdehuddrkeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepkeelrdejjedrhedurdekgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehmrghrihhordhlihhmohhntghivghllhhosegrmhgurdgtohhmpdhrtghpthhtoheplhhinhhugidqphgtihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthho
- pehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Hi Alistair,
 
-On some systems the ACPI namespace contains device objects that are
-not used in certain configurations of the system.  If they start off
-in the D0 power state configuration, they will stay in it until the
-system reboots, because of the lack of any mechanism possibly causing
-their configuration to change.  If that happens, they may prevent
-some power resources from being turned off or generally they may
-prevent the platform from getting into the deepest low-power states
-thus causing some energy to be wasted.
+On Sat, Oct 9, 2021 at 8:52 AM Alistair Francis <alistair@alistair23.me> wrote:
+>
+> The BACKLIGHT_CLASS_DEVICE config is required for the already enabled
+> DRM_SIMPLE_PANEL to work so let's enable BACKLIGHT_CLASS_DEVICE.
+>
+> This allows the mxsfb probe to complete successfully on the reMarkable
+> 2.
+>
+> Signed-off-by: Alistair Francis <alistair@alistair23.me>
 
-Address this issue by changing the configuration of unused ACPI
-device objects to the D3cold power state one after carrying out
-the ACPI-based enumeration of devices.
-
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=214091
-Link: https://lore.kernel.org/linux-acpi/20211007205126.11769-1-mario.limonciello@amd.com/
-Reported-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-
-Mario,
-
-I've changed acpi_dev_turn_off_if_unused() to check pnp.type.hardware_id
-instead of pnp.type.bus_address, because on some systems there are objects
-with both _ADR and _HID (which is against the spec) and the former is bogus.
-
-Please test this one, even though for PCI devices there should be no difference.
-
-Thanks!
-
----
- drivers/acpi/glue.c     |   25 +++++++++++++++++++++++++
- drivers/acpi/internal.h |    1 +
- drivers/acpi/scan.c     |    6 ++++++
- 3 files changed, 32 insertions(+)
-
-Index: linux-pm/drivers/acpi/scan.c
-===================================================================
---- linux-pm.orig/drivers/acpi/scan.c
-+++ linux-pm/drivers/acpi/scan.c
-@@ -2559,6 +2559,12 @@ int __init acpi_scan_init(void)
- 		}
- 	}
- 
-+	/*
-+	 * Make sure that power management resources are not blocked by ACPI
-+	 * device objects with no users.
-+	 */
-+	bus_for_each_dev(&acpi_bus_type, NULL, NULL, acpi_dev_turn_off_if_unused);
-+
- 	acpi_turn_off_unused_power_resources();
- 
- 	acpi_scan_initialized = true;
-Index: linux-pm/drivers/acpi/glue.c
-===================================================================
---- linux-pm.orig/drivers/acpi/glue.c
-+++ linux-pm/drivers/acpi/glue.c
-@@ -350,3 +350,28 @@ void acpi_device_notify_remove(struct de
- 
- 	acpi_unbind_one(dev);
- }
-+
-+int acpi_dev_turn_off_if_unused(struct device *dev, void *not_used)
-+{
-+	struct acpi_device *adev = to_acpi_device(dev);
-+
-+	/*
-+	 * Skip device objects with device IDs, because they may be in use even
-+	 * if they are not companions of any physical device objects.
-+	 */
-+	if (adev->pnp.type.hardware_id)
-+		return 0;
-+
-+	mutex_lock(&adev->physical_node_lock);
-+
-+	/*
-+	 * Device objects without device IDs are not in use if they have no
-+	 * corresponding physical device objects.
-+	 */
-+	if (list_empty(&adev->physical_node_list))
-+		acpi_device_set_power(adev, ACPI_STATE_D3_COLD);
-+
-+	mutex_unlock(&adev->physical_node_lock);
-+
-+	return 0;
-+}
-Index: linux-pm/drivers/acpi/internal.h
-===================================================================
---- linux-pm.orig/drivers/acpi/internal.h
-+++ linux-pm/drivers/acpi/internal.h
-@@ -117,6 +117,7 @@ bool acpi_device_is_battery(struct acpi_
- bool acpi_device_is_first_physical_node(struct acpi_device *adev,
- 					const struct device *dev);
- int acpi_bus_register_early_device(int type);
-+int acpi_dev_turn_off_if_unused(struct device *dev, void *not_used);
- 
- /* --------------------------------------------------------------------------
-                      Device Matching and Notification
-
-
-
+With the commit below applied,  CONFIG_BACKLIGHT_CLASS_DEVICE is
+automatically selected:
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/arch/arm/configs/imx_v6_v7_defconfig?h=next-20211008&id=c54467482ffd407a4404c990697f432bfcb6cdc4
