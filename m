@@ -2,250 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67C04427AB1
-	for <lists+linux-pm@lfdr.de>; Sat,  9 Oct 2021 15:49:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C55B427AC9
+	for <lists+linux-pm@lfdr.de>; Sat,  9 Oct 2021 16:22:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233425AbhJINvv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 9 Oct 2021 09:51:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50554 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233146AbhJINvv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 9 Oct 2021 09:51:51 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5148FC061570;
-        Sat,  9 Oct 2021 06:49:54 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id s24so17573475oij.8;
-        Sat, 09 Oct 2021 06:49:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=v4f1Dq1UZFrwC53WbB/LwX1tkRuqMOrAVxvYfHHHznU=;
-        b=NcumLnaPS0HfVdLULaJg4kg3S25H3iNqrFgwh1EbzEq+eiq1Ibwce1jBZVdIffQGos
-         NpUCyWt3h03m033XfipC7Y/UNa6ridVVXlrV/TwkWw7pncbcBnnN/yDGW29fPjEhGaTp
-         ttseTc02rzQXoS38BZgsLR8DB6CyUjm+b1r0tt6rIP5F+7F19jZGVyjG+C+aoqROwWkm
-         S5iNN/JMhwzcpkwNFx2l3dKEW0CiZSKpApVU0WYIWmy0tsI+mKFRvShHwvZQOcwjW1W9
-         EK2hEzL2YgxA0I/kSEndUPuJ43xbYZi/rb2vfeM+bnVRGvDlNboa/YaIOdTCn/Y6bIYM
-         NqZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=v4f1Dq1UZFrwC53WbB/LwX1tkRuqMOrAVxvYfHHHznU=;
-        b=k+VnxMOdmuCIWhDut+8g2+A/dNBhUrySY85SeVQZejLYcvOyXF3kzJGGaVsNUo0ZXT
-         tAj5NUANhyJrXpfJuHduPxYmTvZf/+/h/UiIRHPGv5XLSDhzWPb6ihrH5s6wnSgyeAaS
-         5L9xHJ0IRIYQr9NVgBrdeJpAZuHsat4fyiCDLAj1ldJVtoFEaJ6y4ec5O7dsV0csPMqo
-         qyO3g+phwsJCGk2dBRq/2/RvgGt0Ln8MfalZwMtFDnl4aBrhz086J9ZXsUY72J1VEaZr
-         grsyCGMlA9Ns5C8OMd9yBwtkzCHv45hPSZslNG2lxIic1WPPKHy2scytkZXh8+5t/uUl
-         inzw==
-X-Gm-Message-State: AOAM5318FYyOUB7KmrQ4h+7IZmVQL6Dee+gZcF0zAeuJQYeU6AXJ2ck/
-        gvE0MeLaSEKX0r7FLUiYk0AYp0HwO+E=
-X-Google-Smtp-Source: ABdhPJyLEaIhw9EBKK0KncqOw2ryqg+OcWM2QM1LMqppbweKSoQ+ZNhq9hFQvvE+/OtBpGmgcpzHqw==
-X-Received: by 2002:aca:a858:: with SMTP id r85mr10280570oie.9.1633787393283;
-        Sat, 09 Oct 2021 06:49:53 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e10sm529150oig.11.2021.10.09.06.49.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 09 Oct 2021 06:49:52 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-To:     Alistair Francis <alistair@alistair23.me>, lee.jones@linaro.org,
-        robh+dt@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
-        kernel@pengutronix.de
-Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, linux-imx@nxp.com,
-        amitk@kernel.org, rui.zhang@intel.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alistair23@gmail.com,
-        linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org
-References: <20211009115031.18392-1-alistair@alistair23.me>
- <20211009115031.18392-10-alistair@alistair23.me>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v12 06/10] hwmon: sy7636a: Add temperature driver for
- sy7636a
-Message-ID: <0ac0f13e-12eb-2272-3d4b-480dc6b54ee1@roeck-us.net>
-Date:   Sat, 9 Oct 2021 06:49:50 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S233604AbhJIOYP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 9 Oct 2021 10:24:15 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:55750 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233093AbhJIOYO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 9 Oct 2021 10:24:14 -0400
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 3.0.0)
+ id d3d322a473f577f6; Sat, 9 Oct 2021 16:22:16 +0200
+Received: from kreacher.localnet (89-77-51-84.dynamic.chello.pl [89.77.51.84])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 5020B66A6C1;
+        Sat,  9 Oct 2021 16:22:15 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH] ACPI: scan: Release PM resources blocked by unused objects
+Date:   Sat, 09 Oct 2021 16:22:09 +0200
+Message-ID: <5507158.DvuYhMxLoT@kreacher>
 MIME-Version: 1.0
-In-Reply-To: <20211009115031.18392-10-alistair@alistair23.me>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 89.77.51.84
+X-CLIENT-HOSTNAME: 89-77-51-84.dynamic.chello.pl
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvtddrvddtvddgjeegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvvefgteeuteehkeduuedvudetleevffdtffdtjeejueekffetieekgfeigfehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeekledrjeejrdehuddrkeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepkeelrdejjedrhedurdekgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehmrghrihhordhlihhmohhntghivghllhhosegrmhgurdgtohhmpdhrtghpthhtoheplhhinhhugidqphgtihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthho
+ pehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/9/21 4:50 AM, Alistair Francis wrote:
-> This is a multi-function device to interface with the sy7636a
-> EPD PMIC chip from Silergy.
-> 
-> Signed-off-by: Alistair Francis <alistair@alistair23.me>
-> ---
->   arch/arm/configs/imx_v6_v7_defconfig |  1 +
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-That should be a separate patch.
+On some systems the ACPI namespace contains device objects that are
+not used in certain configurations of the system.  If they start off
+in the D0 power state configuration, they will stay in it until the
+system reboots, because of the lack of any mechanism possibly causing
+their configuration to change.  If that happens, they may prevent
+some power resources from being turned off or generally they may
+prevent the platform from getting into the deepest low-power states
+thus causing some energy to be wasted.
 
->   drivers/hwmon/Kconfig                | 10 ++++
->   drivers/hwmon/Makefile               |  1 +
->   drivers/hwmon/sy7636a-hwmon.c        | 77 ++++++++++++++++++++++++++++
+Address this issue by changing the configuration of unused ACPI
+device objects to the D3cold power state one after carrying out
+the ACPI-based enumeration of devices.
 
-Documentation/hwmon/sy7636a-hwmon is missing.
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=214091
+Link: https://lore.kernel.org/linux-acpi/20211007205126.11769-1-mario.limonciello@amd.com/
+Reported-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
 
->   4 files changed, 89 insertions(+)
->   create mode 100644 drivers/hwmon/sy7636a-hwmon.c
-> 
-> diff --git a/arch/arm/configs/imx_v6_v7_defconfig b/arch/arm/configs/imx_v6_v7_defconfig
-> index 8a54a4d0181a..b87adf823e44 100644
-> --- a/arch/arm/configs/imx_v6_v7_defconfig
-> +++ b/arch/arm/configs/imx_v6_v7_defconfig
-> @@ -228,6 +228,7 @@ CONFIG_RN5T618_POWER=m
->   CONFIG_SENSORS_MC13783_ADC=y
->   CONFIG_SENSORS_GPIO_FAN=y
->   CONFIG_SENSORS_IIO_HWMON=y
-> +CONFIG_SENSORS_SY7636A=y
->   CONFIG_THERMAL_STATISTICS=y
->   CONFIG_THERMAL_WRITABLE_TRIPS=y
->   CONFIG_CPU_THERMAL=y
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index c4578e8f34bb..59f358293202 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1651,6 +1651,16 @@ config SENSORS_SIS5595
->   	  This driver can also be built as a module. If so, the module
->   	  will be called sis5595.
->   
-> +config SENSORS_SY7636A
-> +	tristate "Silergy SY7636A"
-> +	depends on I2C
+Mario,
 
-That is an arbitrary dependency. The driver doesn't use I2C.
+I've changed acpi_dev_turn_off_if_unused() to check pnp.type.hardware_id
+instead of pnp.type.bus_address, because on some systems there are objects
+with both _ADR and _HID (which is against the spec) and the former is bogus.
 
-> +	help
-> +	  If you say yes here you get support for the thermistor readout of
-> +	  the Silergy SY7636A PMIC.
-> +
-> +	  This driver can also be built as a module.  If so, the module
-> +	  will be called sy7636a-hwmon.
-> +
->   config SENSORS_DME1737
->   	tristate "SMSC DME1737, SCH311x and compatibles"
->   	depends on I2C && !PPC
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index 162940270661..1355ffdb1481 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -181,6 +181,7 @@ obj-$(CONFIG_SENSORS_SMSC47M1)	+= smsc47m1.o
->   obj-$(CONFIG_SENSORS_SMSC47M192)+= smsc47m192.o
->   obj-$(CONFIG_SENSORS_SPARX5)	+= sparx5-temp.o
->   obj-$(CONFIG_SENSORS_STTS751)	+= stts751.o
-> +obj-$(CONFIG_SENSORS_SY7636A)	+= sy7636a-hwmon.o
->   obj-$(CONFIG_SENSORS_AMC6821)	+= amc6821.o
->   obj-$(CONFIG_SENSORS_TC74)	+= tc74.o
->   obj-$(CONFIG_SENSORS_THMC50)	+= thmc50.o
-> diff --git a/drivers/hwmon/sy7636a-hwmon.c b/drivers/hwmon/sy7636a-hwmon.c
-> new file mode 100644
-> index 000000000000..e0204278339b
-> --- /dev/null
-> +++ b/drivers/hwmon/sy7636a-hwmon.c
-> @@ -0,0 +1,77 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Functions to access SY3686A power management chip temperature
-> + *
-> + * Copyright (C) 2019 reMarkable AS - http://www.remarkable.com/
-> + *
-> + * Authors: Lars Ivar Miljeteig <lars.ivar.miljeteig@remarkable.com>
-> + *          Alistair Francis <alistair@alistair23.me>
-> + */
-> +
-> +#include <linux/module.h>
-> +#include <linux/init.h>
-> +#include <linux/slab.h>
-> +#include <linux/jiffies.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/hwmon-sysfs.h>
-> +#include <linux/err.h>
-> +#include <linux/sysfs.h>
-> +#include <linux/platform_device.h>
-> +
-> +#include <linux/mfd/sy7636a.h>
-> +
-Alphabetic include file order please, and drop the includes which
-are not needed (I don't see a need for slab.h or jiffies.h).
+Please test this one, even though for PCI devices there should be no difference.
 
-On the other side, the include of regmap.h is missing.
+Thanks!
 
-> +static ssize_t show_temp(struct device *dev,
-> +	struct device_attribute *attr, char *buf)
+---
+ drivers/acpi/glue.c     |   25 +++++++++++++++++++++++++
+ drivers/acpi/internal.h |    1 +
+ drivers/acpi/scan.c     |    6 ++++++
+ 3 files changed, 32 insertions(+)
 
-If you use continuation lines, please align with "(".
+Index: linux-pm/drivers/acpi/scan.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/scan.c
++++ linux-pm/drivers/acpi/scan.c
+@@ -2559,6 +2559,12 @@ int __init acpi_scan_init(void)
+ 		}
+ 	}
+ 
++	/*
++	 * Make sure that power management resources are not blocked by ACPI
++	 * device objects with no users.
++	 */
++	bus_for_each_dev(&acpi_bus_type, NULL, NULL, acpi_dev_turn_off_if_unused);
++
+ 	acpi_turn_off_unused_power_resources();
+ 
+ 	acpi_scan_initialized = true;
+Index: linux-pm/drivers/acpi/glue.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/glue.c
++++ linux-pm/drivers/acpi/glue.c
+@@ -350,3 +350,28 @@ void acpi_device_notify_remove(struct de
+ 
+ 	acpi_unbind_one(dev);
+ }
++
++int acpi_dev_turn_off_if_unused(struct device *dev, void *not_used)
++{
++	struct acpi_device *adev = to_acpi_device(dev);
++
++	/*
++	 * Skip device objects with device IDs, because they may be in use even
++	 * if they are not companions of any physical device objects.
++	 */
++	if (adev->pnp.type.hardware_id)
++		return 0;
++
++	mutex_lock(&adev->physical_node_lock);
++
++	/*
++	 * Device objects without device IDs are not in use if they have no
++	 * corresponding physical device objects.
++	 */
++	if (list_empty(&adev->physical_node_list))
++		acpi_device_set_power(adev, ACPI_STATE_D3_COLD);
++
++	mutex_unlock(&adev->physical_node_lock);
++
++	return 0;
++}
+Index: linux-pm/drivers/acpi/internal.h
+===================================================================
+--- linux-pm.orig/drivers/acpi/internal.h
++++ linux-pm/drivers/acpi/internal.h
+@@ -117,6 +117,7 @@ bool acpi_device_is_battery(struct acpi_
+ bool acpi_device_is_first_physical_node(struct acpi_device *adev,
+ 					const struct device *dev);
+ int acpi_bus_register_early_device(int type);
++int acpi_dev_turn_off_if_unused(struct device *dev, void *not_used);
+ 
+ /* --------------------------------------------------------------------------
+                      Device Matching and Notification
 
-> +{
-> +	unsigned int reg_val;
-> +	struct regmap *regmap = dev_get_drvdata(dev);
-> +	int ret;
-> +
-> +	ret = regmap_read(regmap,
-> +			SY7636A_REG_TERMISTOR_READOUT, &reg_val);
 
-Line length limit is now 100, so this continuation line should not be needed.
-
-> +	if (ret)
-> +		return ret;
-> +
-> +	return snprintf(buf, PAGE_SIZE, "%d\n", reg_val);
-> +}
-> +
-> +static SENSOR_DEVICE_ATTR(temp0, 0444, show_temp, NULL, 0);
-> +
-> +static struct attribute *sy7636a_attrs[] = {
-> +	&sensor_dev_attr_temp0.dev_attr.attr,
-
-FWIW, there is no "temp0" in the hwmon ABI. Temperature sensor
-numbering starts with 1. Not that it matters,
-devm_hwmon_device_register_with_info() creates attributes internally.
-
-> +	NULL
-> +};
-> +
-> +ATTRIBUTE_GROUPS(sy7636a);
-> +
-> +static int sy7636a_sensor_probe(struct platform_device *pdev)
-> +{
-> +	struct regmap *regmap = dev_get_regmap(pdev->dev.parent, NULL);
-> +	struct device *hwmon_dev;
-> +	int err;
-> +
-> +	if (!regmap)
-> +		return -EPROBE_DEFER;
-> +
-> +	hwmon_dev = devm_hwmon_device_register_with_groups(&pdev->dev,
-> +			"sy7636a_temperature", regmap, sy7636a_groups);
-> +
-
-Please use devm_hwmon_device_register_with_info().
-
-> +	if (IS_ERR(hwmon_dev)) {
-> +		err = PTR_ERR(hwmon_dev);
-> +		dev_err(&pdev->dev, "Unable to register hwmon device, returned %d", err);
-
-I dislike driver noise, but if it is retained please add "\n".
-
-> +		return err;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static struct platform_driver sy7636a_sensor_driver = {
-> +	.probe = sy7636a_sensor_probe,
-> +	.driver = {
-> +		.name = "sy7636a-temperature",
-> +	},
-> +};
-> +module_platform_driver(sy7636a_sensor_driver);
-> +
-> +MODULE_DESCRIPTION("SY7636A sensor driver");
-> +MODULE_LICENSE("GPL");
-> 
 
