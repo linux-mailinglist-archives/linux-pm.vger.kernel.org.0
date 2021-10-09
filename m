@@ -2,108 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF060427AE7
-	for <lists+linux-pm@lfdr.de>; Sat,  9 Oct 2021 16:47:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 246FC427B66
+	for <lists+linux-pm@lfdr.de>; Sat,  9 Oct 2021 17:40:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233799AbhJIOtA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 9 Oct 2021 10:49:00 -0400
-Received: from mail-oi1-f177.google.com ([209.85.167.177]:41690 "EHLO
-        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233789AbhJIOtA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 9 Oct 2021 10:49:00 -0400
-Received: by mail-oi1-f177.google.com with SMTP id s24so17721987oij.8;
-        Sat, 09 Oct 2021 07:47:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=C+x39jmHq8RQg6vmuJTMtrdvhN5piCFzTvf7qxI80EA=;
-        b=1zdkZhPeF1FmegjE/1uTBKwwMuZFsGu8KCCpjJZwPGsJ+MEkIvOr3po1xwXuqZKkTX
-         Fs8JcDfNAbzEs3iUQtlOuEdmSDK6BnVBRbYoxDt4pX+jm78oveAIIZshrIePlXR6V3qu
-         BD3lDLh2sX8fGcfsrCdDf0r+2PO7W+QtLaH1Ad5hdOSAZwblY5vsbzb9mkaqEq0XdnCu
-         O5RcUMg7UGVLlvahB+sG+den39yEJpR4hF2zABUQjnonNd8h/0g51qbmx2riEFshHr5r
-         AJDIWq6cJby4v6wZPzhdnl5E4OwOtHhYJ5WGGH4F7KyRbnB72MQ9cwvaFmxpmdVMSJYS
-         CkAw==
-X-Gm-Message-State: AOAM533nBqJfP0KnfYKeWNyTYVOyr1R650bz9PZZyebB6VvmSRjj4b64
-        m+qJuCqdKvsZ6jkyy8mLRR6mkEy+p0I1wGrn7CI=
-X-Google-Smtp-Source: ABdhPJyaFl2215JVJWW+4ziX4BEq+UioTRjdmQapZd/+6YkUwOyPpmnt0zT6bbCc3QIHZNIVpZzjIP6D1cgEGe3IoyI=
-X-Received: by 2002:aca:5c5:: with SMTP id 188mr5863261oif.154.1633790823222;
- Sat, 09 Oct 2021 07:47:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210917072732.611140-1-abailon@baylibre.com> <20210917072732.611140-3-abailon@baylibre.com>
- <CAJZ5v0hzS-bquhW_wbsd81EpJYx5RHxeXkamdZ+MBs4oczDw1A@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hzS-bquhW_wbsd81EpJYx5RHxeXkamdZ+MBs4oczDw1A@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sat, 9 Oct 2021 16:46:52 +0200
-Message-ID: <CAJZ5v0gTJSzPXimxwK6RUZfE-XJAPD0OcpdbchXxZ5hN=C_Euw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] thermal: add a virtual sensor to aggregate temperatures
-To:     Alexandre Bailon <abailon@baylibre.com>
-Cc:     "Zhang, Rui" <rui.zhang@intel.com>,
+        id S234728AbhJIPlx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 9 Oct 2021 11:41:53 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:65280 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234664AbhJIPlw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 9 Oct 2021 11:41:52 -0400
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 3.0.0)
+ id b9030ac8620afd0a; Sat, 9 Oct 2021 17:39:54 +0200
+Received: from kreacher.localnet (89-77-51-84.dynamic.chello.pl [89.77.51.84])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id D1AFB661ECD;
+        Sat,  9 Oct 2021 17:39:52 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ben.tseng@mediatek.com, Kevin Hilman <khilman@baylibre.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        kernel test robot <lkp@intel.com>
+        linux-pm@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Maulik Shah <mkshah@codeaurora.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Len Brown <len.brown@intel.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] cpuidle: Avoid calls to cpuidle_resume|pause() for s2idle
+Date:   Sat, 09 Oct 2021 17:39:52 +0200
+Message-ID: <4692163.31r3eYUQgx@kreacher>
+In-Reply-To: <20210929144451.113334-2-ulf.hansson@linaro.org>
+References: <20210929144451.113334-1-ulf.hansson@linaro.org> <20210929144451.113334-2-ulf.hansson@linaro.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 89.77.51.84
+X-CLIENT-HOSTNAME: 89-77-51-84.dynamic.chello.pl
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvtddrudeljedgleelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvjeelgffhiedukedtleekkedvudfggefhgfegjefgueekjeelvefggfdvledutdenucfkphepkeelrdejjedrhedurdekgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeekledrjeejrdehuddrkeegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuhhlfhdrhhgrnhhsshhonheslhhinhgrrhhordhorhhgpdhrtghpthhtohepmhhkshhhrghhsegtohguvggruhhrohhrrgdrohhrghdprhgtphhtthho
+ pehpvghtvghriiesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehvihhntggvnhhtrdhguhhithhtohhtsehlihhnrghrohdrohhrghdprhgtphhtthhopehlvghnrdgsrhhofihnsehinhhtvghlrdgtohhmpdhrtghpthhtohepsghjohhrnhdrrghnuggvrhhsshhonheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=12 Fuz1=12 Fuz2=12
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 7, 2021 at 6:38 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+On Wednesday, September 29, 2021 4:44:50 PM CEST Ulf Hansson wrote:
+> In s2idle_enter(), cpuidle_resume|pause() are invoked to re-allow calls to
+> the cpuidle callbacks during s2idle operations. This is needed because
+> cpuidle is paused in-between in dpm_suspend_noirq() and dpm_resume_noirq().
 
-[cut]
+Well, in fact, doing that last thing for s2idle is pointless, because cpuidle
+is going to be resumed eventually anyway in that case and the breakage expected
+to be prevented by the pausing will still occur.
 
-> > +static int virtual_thermal_sensor_probe(struct platform_device *pdev)
-> > +{
-> > +       struct virtual_thermal_sensor *sensor;
-> > +       struct device *dev = &pdev->dev;
-> > +       struct of_phandle_args args;
-> > +       u32 type;
-> > +       int ret;
-> > +       int i;
-> > +
-> > +       sensor = devm_kzalloc(dev, sizeof(*sensor), GFP_KERNEL);
-> > +       if (!sensor)
-> > +               return -ENOMEM;
-> > +
-> > +       sensor->count = of_count_phandle_with_args(dev->of_node,
-> > +                                                  "thermal-sensors",
-> > +                                                  "#thermal-sensor-cells");
-> > +       if (sensor->count <= 0)
-> > +               return -EINVAL;
-> > +
-> > +       sensor->sensors = devm_kmalloc_array(dev, sensor->count,
-> > +                                            sizeof(*sensor->sensors),
-> > +                                            GFP_KERNEL);
-> > +       if (!sensor->sensors)
-> > +               return -ENOMEM;
-> > +
-> > +       for (i = 0; i < sensor->count; i++) {
-> > +               ret = of_parse_phandle_with_args(dev->of_node,
-> > +                                                "thermal-sensors",
-> > +                                                "#thermal-sensor-cells",
-> > +                                                i,
-> > +                                                &args);
-> > +               if (ret)
-> > +                       return ret;
-> > +
-> > +               ret = virtual_sensor_add_sensor(sensor, args, i);
-> > +               if (ret)
-> > +                       return ret;
+So I would rather do something like the patch below (untested).
 
-One more issue that escaped me earlier is that if the hardware sensor
-being looked for is not there in the thermal_sensors list at this
-point (say because it has not been added to it yet by whoever is
-expected to do that), the above will return -ENODEV and all probe will
-fail without a way to retry.
+---
+ drivers/base/power/main.c |   11 ++++++-----
+ kernel/power/suspend.c    |    8 ++++++--
+ 2 files changed, 12 insertions(+), 7 deletions(-)
 
-It would be better to return -EPROBE_DEFER from here IIUC.
+Index: linux-pm/drivers/base/power/main.c
+===================================================================
+--- linux-pm.orig/drivers/base/power/main.c
++++ linux-pm/drivers/base/power/main.c
+@@ -747,8 +747,6 @@ void dpm_resume_noirq(pm_message_t state
+ 
+ 	resume_device_irqs();
+ 	device_wakeup_disarm_wake_irqs();
+-
+-	cpuidle_resume();
+ }
+ 
+ /**
+@@ -881,6 +879,7 @@ void dpm_resume_early(pm_message_t state
+ void dpm_resume_start(pm_message_t state)
+ {
+ 	dpm_resume_noirq(state);
++	cpuidle_resume();
+ 	dpm_resume_early(state);
+ }
+ EXPORT_SYMBOL_GPL(dpm_resume_start);
+@@ -1336,8 +1335,6 @@ int dpm_suspend_noirq(pm_message_t state
+ {
+ 	int ret;
+ 
+-	cpuidle_pause();
+-
+ 	device_wakeup_arm_wake_irqs();
+ 	suspend_device_irqs();
+ 
+@@ -1521,9 +1518,13 @@ int dpm_suspend_end(pm_message_t state)
+ 	if (error)
+ 		goto out;
+ 
++	cpuidle_pause();
++
+ 	error = dpm_suspend_noirq(state);
+-	if (error)
++	if (error) {
++		cpuidle_resume();
+ 		dpm_resume_early(resume_event(state));
++	}
+ 
+ out:
+ 	dpm_show_time(starttime, state, error, "end");
+Index: linux-pm/kernel/power/suspend.c
+===================================================================
+--- linux-pm.orig/kernel/power/suspend.c
++++ linux-pm/kernel/power/suspend.c
+@@ -97,7 +97,6 @@ static void s2idle_enter(void)
+ 	raw_spin_unlock_irq(&s2idle_lock);
+ 
+ 	cpus_read_lock();
+-	cpuidle_resume();
+ 
+ 	/* Push all the CPUs into the idle loop. */
+ 	wake_up_all_idle_cpus();
+@@ -105,7 +104,6 @@ static void s2idle_enter(void)
+ 	swait_event_exclusive(s2idle_wait_head,
+ 		    s2idle_state == S2IDLE_STATE_WAKE);
+ 
+-	cpuidle_pause();
+ 	cpus_read_unlock();
+ 
+ 	raw_spin_lock_irq(&s2idle_lock);
+@@ -405,6 +403,9 @@ static int suspend_enter(suspend_state_t
+ 	if (error)
+ 		goto Devices_early_resume;
+ 
++	if (state != PM_SUSPEND_TO_IDLE)
++		cpuidle_pause();
++
+ 	error = dpm_suspend_noirq(PMSG_SUSPEND);
+ 	if (error) {
+ 		pr_err("noirq suspend of devices failed\n");
+@@ -459,6 +460,9 @@ static int suspend_enter(suspend_state_t
+ 	dpm_resume_noirq(PMSG_RESUME);
+ 
+  Platform_early_resume:
++	if (state != PM_SUSPEND_TO_IDLE)
++		cpuidle_resume();
++
+ 	platform_resume_early(state);
+ 
+  Devices_early_resume:
 
-However, this still wouldn't address a more general issue that if the
-hardware sensor gets unregistered and then registered again (eg. by
-unloading and reloading a module managing it), it will not be added
-back to the corresponding virtual sensor's data set.  This should not
-be very hard to address and it would take care of the above
-initialization ordering issue automatically.
+
+
