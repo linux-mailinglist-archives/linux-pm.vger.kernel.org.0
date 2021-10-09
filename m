@@ -2,88 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0CE0427AD3
-	for <lists+linux-pm@lfdr.de>; Sat,  9 Oct 2021 16:29:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF060427AE7
+	for <lists+linux-pm@lfdr.de>; Sat,  9 Oct 2021 16:47:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233159AbhJIObT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 9 Oct 2021 10:31:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59070 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbhJIObT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 9 Oct 2021 10:31:19 -0400
-Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2EEC061570;
-        Sat,  9 Oct 2021 07:29:22 -0700 (PDT)
-Received: by mail-vk1-xa2b.google.com with SMTP id x207so5441738vke.2;
-        Sat, 09 Oct 2021 07:29:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sx2lHz5mXP4bcDT2BgwdB//veu66amkB+JijBT7hsOA=;
-        b=B9JP9C3ga+6gzWGfzDBuGqyRy8gwfpFJpFcLzIQoDTL7vsiw4PSC9Ixja7tJkL3pzc
-         Y6JPOkiaeZBzFgpvVa462FFSChn3/wy9AGVyIWqQ0lEKundCdnE+gvbgUfeSyJVMVAmE
-         juV+XdbcqfMmrN1BiZ9qj174O9riVbWoatSlopjLzUBg9EJE9W457gQi6qh7QB27nyDX
-         mXJ8iDZ/AkfIS+pu2Nza7A/SAHsPuDcBW6AIyrKLSvgmmgFPwDetAF01SBoymYTypg8l
-         cd2XH8xqacrNkpI/O93BnmMFTbWXIuNOu9QnyJtoLb6iOvBRo3s69F7HbXG5ZYVJ/vCw
-         Gp3A==
+        id S233799AbhJIOtA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 9 Oct 2021 10:49:00 -0400
+Received: from mail-oi1-f177.google.com ([209.85.167.177]:41690 "EHLO
+        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233789AbhJIOtA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 9 Oct 2021 10:49:00 -0400
+Received: by mail-oi1-f177.google.com with SMTP id s24so17721987oij.8;
+        Sat, 09 Oct 2021 07:47:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=sx2lHz5mXP4bcDT2BgwdB//veu66amkB+JijBT7hsOA=;
-        b=B92XY9PqnWurs8cwBTcf2cfvhAjQomExNDC0UUYdWJCSUWLtyGM6XnFJDEybQ5HY6w
-         T0cHWymv+MsRyj/Gd51lnAI6poE1rseBEC5hIAem3kISJPPBxzDqeiYqsXCMAf6H04v2
-         ykEgjjCidCW/ZJBkXMXisXsarZhalzoBWF4iGKw3q+bGmkAupR9x/pbodbNQXJlz2iJk
-         Z8Gnm5qfZFoas6TYO8OL/dC1meJLMzSd6qxnrzu4qrYEsj4WcsEEmvj+G0pe4fN6EVTr
-         MI4Qj9Emvw4im9ReIWJGpgwAEFvzKWv2MDaqk9JhNP/sMO72c7u6ZH1gKqfRDEhfrZZq
-         iuYQ==
-X-Gm-Message-State: AOAM530F1lgbU5iUTWew3biUKWxtQV1M8uewFAYqcXMDw7uq69nvrPfY
-        0ksqVL+NVrWhPJIaigEqaVCGYyGz4ccbBldK2eQ=
-X-Google-Smtp-Source: ABdhPJxT3cIcGEL97+SdND5QDF9fYcKsFCcVZjI0cOaamtZL47rFrh7Xc5BOzF/5AR5KBTa3k7kvXb1ZAYSwp2sCfrY=
-X-Received: by 2002:a1f:b417:: with SMTP id d23mr14139390vkf.8.1633789761095;
- Sat, 09 Oct 2021 07:29:21 -0700 (PDT)
+        bh=C+x39jmHq8RQg6vmuJTMtrdvhN5piCFzTvf7qxI80EA=;
+        b=1zdkZhPeF1FmegjE/1uTBKwwMuZFsGu8KCCpjJZwPGsJ+MEkIvOr3po1xwXuqZKkTX
+         Fs8JcDfNAbzEs3iUQtlOuEdmSDK6BnVBRbYoxDt4pX+jm78oveAIIZshrIePlXR6V3qu
+         BD3lDLh2sX8fGcfsrCdDf0r+2PO7W+QtLaH1Ad5hdOSAZwblY5vsbzb9mkaqEq0XdnCu
+         O5RcUMg7UGVLlvahB+sG+den39yEJpR4hF2zABUQjnonNd8h/0g51qbmx2riEFshHr5r
+         AJDIWq6cJby4v6wZPzhdnl5E4OwOtHhYJ5WGGH4F7KyRbnB72MQ9cwvaFmxpmdVMSJYS
+         CkAw==
+X-Gm-Message-State: AOAM533nBqJfP0KnfYKeWNyTYVOyr1R650bz9PZZyebB6VvmSRjj4b64
+        m+qJuCqdKvsZ6jkyy8mLRR6mkEy+p0I1wGrn7CI=
+X-Google-Smtp-Source: ABdhPJyaFl2215JVJWW+4ziX4BEq+UioTRjdmQapZd/+6YkUwOyPpmnt0zT6bbCc3QIHZNIVpZzjIP6D1cgEGe3IoyI=
+X-Received: by 2002:aca:5c5:: with SMTP id 188mr5863261oif.154.1633790823222;
+ Sat, 09 Oct 2021 07:47:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211009115031.18392-1-alistair@alistair23.me> <20211009115031.18392-13-alistair@alistair23.me>
-In-Reply-To: <20211009115031.18392-13-alistair@alistair23.me>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Sat, 9 Oct 2021 11:29:10 -0300
-Message-ID: <CAOMZO5DK+YSx6iQABFbgR=EKLutRc486GEUeH0o0fYRotmQmXg@mail.gmail.com>
-Subject: Re: [PATCH v12 09/10] ARM: imx_v6_v7_defconfig: Enable backlight
- class devices
-To:     Alistair Francis <alistair@alistair23.me>
-Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>, amitk@kernel.org,
-        "rui.zhang" <rui.zhang@intel.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Alistair Francis <alistair23@gmail.com>,
-        linux-hwmon@vger.kernel.org,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>, linux-pm@vger.kernel.org
+References: <20210917072732.611140-1-abailon@baylibre.com> <20210917072732.611140-3-abailon@baylibre.com>
+ <CAJZ5v0hzS-bquhW_wbsd81EpJYx5RHxeXkamdZ+MBs4oczDw1A@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hzS-bquhW_wbsd81EpJYx5RHxeXkamdZ+MBs4oczDw1A@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sat, 9 Oct 2021 16:46:52 +0200
+Message-ID: <CAJZ5v0gTJSzPXimxwK6RUZfE-XJAPD0OcpdbchXxZ5hN=C_Euw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] thermal: add a virtual sensor to aggregate temperatures
+To:     Alexandre Bailon <abailon@baylibre.com>
+Cc:     "Zhang, Rui" <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ben.tseng@mediatek.com, Kevin Hilman <khilman@baylibre.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        kernel test robot <lkp@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Alistair,
+On Thu, Oct 7, 2021 at 6:38 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
 
-On Sat, Oct 9, 2021 at 8:52 AM Alistair Francis <alistair@alistair23.me> wrote:
->
-> The BACKLIGHT_CLASS_DEVICE config is required for the already enabled
-> DRM_SIMPLE_PANEL to work so let's enable BACKLIGHT_CLASS_DEVICE.
->
-> This allows the mxsfb probe to complete successfully on the reMarkable
-> 2.
->
-> Signed-off-by: Alistair Francis <alistair@alistair23.me>
+[cut]
 
-With the commit below applied,  CONFIG_BACKLIGHT_CLASS_DEVICE is
-automatically selected:
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/arch/arm/configs/imx_v6_v7_defconfig?h=next-20211008&id=c54467482ffd407a4404c990697f432bfcb6cdc4
+> > +static int virtual_thermal_sensor_probe(struct platform_device *pdev)
+> > +{
+> > +       struct virtual_thermal_sensor *sensor;
+> > +       struct device *dev = &pdev->dev;
+> > +       struct of_phandle_args args;
+> > +       u32 type;
+> > +       int ret;
+> > +       int i;
+> > +
+> > +       sensor = devm_kzalloc(dev, sizeof(*sensor), GFP_KERNEL);
+> > +       if (!sensor)
+> > +               return -ENOMEM;
+> > +
+> > +       sensor->count = of_count_phandle_with_args(dev->of_node,
+> > +                                                  "thermal-sensors",
+> > +                                                  "#thermal-sensor-cells");
+> > +       if (sensor->count <= 0)
+> > +               return -EINVAL;
+> > +
+> > +       sensor->sensors = devm_kmalloc_array(dev, sensor->count,
+> > +                                            sizeof(*sensor->sensors),
+> > +                                            GFP_KERNEL);
+> > +       if (!sensor->sensors)
+> > +               return -ENOMEM;
+> > +
+> > +       for (i = 0; i < sensor->count; i++) {
+> > +               ret = of_parse_phandle_with_args(dev->of_node,
+> > +                                                "thermal-sensors",
+> > +                                                "#thermal-sensor-cells",
+> > +                                                i,
+> > +                                                &args);
+> > +               if (ret)
+> > +                       return ret;
+> > +
+> > +               ret = virtual_sensor_add_sensor(sensor, args, i);
+> > +               if (ret)
+> > +                       return ret;
+
+One more issue that escaped me earlier is that if the hardware sensor
+being looked for is not there in the thermal_sensors list at this
+point (say because it has not been added to it yet by whoever is
+expected to do that), the above will return -ENODEV and all probe will
+fail without a way to retry.
+
+It would be better to return -EPROBE_DEFER from here IIUC.
+
+However, this still wouldn't address a more general issue that if the
+hardware sensor gets unregistered and then registered again (eg. by
+unloading and reloading a module managing it), it will not be added
+back to the corresponding virtual sensor's data set.  This should not
+be very hard to address and it would take care of the above
+initialization ordering issue automatically.
