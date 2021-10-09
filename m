@@ -2,44 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 584E94279C6
-	for <lists+linux-pm@lfdr.de>; Sat,  9 Oct 2021 13:51:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F6714279CA
+	for <lists+linux-pm@lfdr.de>; Sat,  9 Oct 2021 13:52:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244782AbhJILxk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 9 Oct 2021 07:53:40 -0400
-Received: from new3-smtp.messagingengine.com ([66.111.4.229]:40177 "EHLO
+        id S244898AbhJILxs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 9 Oct 2021 07:53:48 -0400
+Received: from new3-smtp.messagingengine.com ([66.111.4.229]:43545 "EHLO
         new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244824AbhJILxi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 9 Oct 2021 07:53:38 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 26A09580542;
-        Sat,  9 Oct 2021 07:51:41 -0400 (EDT)
+        by vger.kernel.org with ESMTP id S244820AbhJILxn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 9 Oct 2021 07:53:43 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 643AE58055A;
+        Sat,  9 Oct 2021 07:51:46 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Sat, 09 Oct 2021 07:51:41 -0400
+  by compute4.internal (MEProxy); Sat, 09 Oct 2021 07:51:46 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
          h=from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm2; bh=SfTCPrBXtXpiG
-        gTbdqeWVHIPqy46+Y5IyiDSgZKSQDY=; b=1rQCWKJEot/fFQgxw8gLyO0NTmfsB
-        vgCatKYCV5LKay5Jt9tIouF0BspSZ7gBH67QdQFE/yptY/aibyPML8tq511KpYBA
-        GAOkgh/cBGs8MmluBHrRjoj45c6AZHT/+WCfjNeyX2ZPC8w+NykYcoow7f0mXRnU
-        ROX3ZXZ+w3dR5VPG+j2UuOzOQdjBhFwoBc/+jRK6Bh+nGwVvuA++hHYq+yePxubO
-        NriVOPnHDzCinZkIgbGSq7Ydr4vYnLTiwefe1h+UejjycUfvurzV8CVvlLyJfXMv
-        CABGNKLCOdQ8nhGeBmg2oLt0kvgyOoFBJLOukca+ZcfPihhbgVYEQlo4Q==
+        :mime-version:content-transfer-encoding; s=fm2; bh=XiqTZKl1McPns
+        kC+dsf8QVzxlqYLoghf8xc3andbQlc=; b=qRFtx2kR06CVDRGF+zN8ihSZfCIjW
+        YuSf37CnflE31Q+lNI2bPmCQpjkKKjej6zER92QOvJp82OA4d22Jyu1R1UeiSOEx
+        SAv1niYx+SCPP6Q1IymldzRRLcYNLIV0T+1o+YEk4L0OzKOuVZRDrFJLfO96gHrK
+        I7nP2+5Op52LfmQI4+H67gjE6CQffSKlQ5oy+38pt1qJIBISakED2dJWXLgOkIfn
+        2ueH2gGnT0uwyof7JU2/pnXndgiyNK3jwTv3PSHoc3P/kmnloCZDUAYBh6iUXJKD
+        //+5hmZPCqvb6HJ+x1hqVG8geiXnjf3b7E1XTwMDP7phuH1soOdmrI4uw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
         :in-reply-to:message-id:mime-version:references:subject:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=SfTCPrBXtXpiGgTbdqeWVHIPqy46+Y5IyiDSgZKSQDY=; b=Ncp64Xvw
-        yB9DxDHQSvT3CdHMCRT2BjlYaYGOgmZyZZapB7Jb+2qiakNoKDF51dXI1IZizswZ
-        KFvdq0sp0P/dLsyf92L5o25rWYn4Z+14ahv3Tftnp53XBKR6qCfu1hM3ewNoExvm
-        S9nUB/AOREIVrV5Dlx6PWFXD78KaqEOyJJHrWVAdQKj7b6dBxp+kydi3EEO99hnX
-        g141xRJPu900J65Itor/x7cuUlQnATeL1I9bhidIUOHgGWemo2g6unfNRjzLfp6X
-        DLFRZzk3KheqkExoMKuyrX2hnS9dZLEOcdU4vGD58tvzkfYailz+o8PovjXObRt9
-        JVcZtBv6R1Zh/w==
-X-ME-Sender: <xms:TYJhYR96C16uCFEXLjcbGufWTs5M0xMVqzzhh6251r5JxSgGikYPJQ>
-    <xme:TYJhYVv1JBlfc8P2szYa4M90UBF6xhJOsFjnsD8-jPe3-3ke5f5zcRMCsMuzwy-fd
-    qWrLjbR0Y4-gWMv_YE>
-X-ME-Received: <xmr:TYJhYfCRcPqWaz99of9hQytBk8FAfUWul-uyJKB7TCieD3TMUzaYH02gi9pi4sj6R6gYUnFQd0HHdwwiAZUqO0Myx4uZtysT94s>
+        fm1; bh=XiqTZKl1McPnskC+dsf8QVzxlqYLoghf8xc3andbQlc=; b=MCZu76iT
+        StWrmP0VJoW7XiwAsIo0zlFjgqZlHu31p1pl2zQDURXcSzoIta/hdFm+girT32Yn
+        kPvq9kB/UjNejbKsPm6MbYZZChQe1r14o+Eaqm4snbPq+A7Ph7MAnPo3Vg3xi/E+
+        KxHfiE40T9Q37kRugnMabhBRQ5gHjDcFTkRTf4Te2rdWn9EBQrHJzdhyLjQuYIpq
+        xQ7xJoNLfYaYytu7dF106zuMtSEa9sI/Ej7R9I8Z6DWxz/l46ryGT7+2O8sZzE6g
+        yqArghXjsLoCd0P4CSGjsyg6UcXUS5WC5OspxtpgRx4E0vt0ZrKvGig25sogyp5i
+        if7bartooPycZw==
+X-ME-Sender: <xms:UoJhYb6Qska9IVRA_NldwhbQFGM60mq-dnRI0pXxXjCLIVLF7T5Dmw>
+    <xme:UoJhYQ5xMAPVqbUKrUrvF_POhqKcWc2SboWg9gnzu0jbK0r871NHtnb2-ixvTfyya
+    Z5TCDyvd0jf7x2sboc>
+X-ME-Received: <xmr:UoJhYScPezUxpCZJ65Rc818ndpb22RDJ1kEPX0cdOx__kTPiPZt9kCQf3CMqCP5FGKqrdQyqAaEYpF9SqVwBYXv4bQLViQcsglo>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvddtvddggeegucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucenucfjughrpefhvffufffkofgjfhgggfestdekre
@@ -48,12 +48,12 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvddtvddggeegucetufdoteggod
     eggeeugfehueevudegvdetjeeviedugedvtdekffekhedtteduhfenucevlhhushhtvghr
     ufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhishhtrghirhesrghlih
     hsthgrihhrvdefrdhmvg
-X-ME-Proxy: <xmx:TYJhYVcvL7NNeoTNEU5wQDtopvGb-MrPcGrAd-5ivCyWvhBBifTBmQ>
-    <xmx:TYJhYWMWFwJpcrkXsLmwFLhqUA683OF_daqb-361h893mKM6Q5Qxiw>
-    <xmx:TYJhYXkWHKAl6UGHYtgradU-hkOjZSXDUmXnqBnmTBam1i6im8TrDg>
-    <xmx:TYJhYTss32j3BVsj_AKCj5PNLo0RkFKd5j1oBFt2OoGXZ8sTwRFbAg>
+X-ME-Proxy: <xmx:UoJhYcLp2WOG6OAMKwvXwqDJ0DAuTXRVdndJx-Z5ZUm0B9xE9y0IDw>
+    <xmx:UoJhYfKX6ELPvKDW5NH12POk0qWX9kyO0reyyvVU6clIGBZ78b-psg>
+    <xmx:UoJhYVy6iuW87IkeOT19aJNdGSum0nwgSn--CbGjZS0T3c1DUwCrLA>
+    <xmx:UoJhYQ42byASWot994gYxH4BZyFaNmfeLbVrYbaJWE9IH4JR2Qd_hA>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 9 Oct 2021 07:51:36 -0400 (EDT)
+ 9 Oct 2021 07:51:41 -0400 (EDT)
 From:   Alistair Francis <alistair@alistair23.me>
 To:     lee.jones@linaro.org, robh+dt@kernel.org, lgirdwood@gmail.com,
         broonie@kernel.org, kernel@pengutronix.de
@@ -62,9 +62,9 @@ Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, linux-imx@nxp.com,
         linux-kernel@vger.kernel.org, alistair23@gmail.com,
         linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-pm@vger.kernel.org, Alistair Francis <alistair@alistair23.me>
-Subject: [PATCH v12 07/10] ARM: imx_v6_v7_defconfig: Enable silergy,sy7636a
-Date:   Sat,  9 Oct 2021 21:50:29 +1000
-Message-Id: <20211009115031.18392-11-alistair@alistair23.me>
+Subject: [PATCH v12 08/10] ARM: dts: imx7d: remarkable2: Enable silergy,sy7636a
+Date:   Sat,  9 Oct 2021 21:50:30 +1000
+Message-Id: <20211009115031.18392-12-alistair@alistair23.me>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211009115031.18392-1-alistair@alistair23.me>
 References: <20211009115031.18392-1-alistair@alistair23.me>
@@ -74,42 +74,80 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Enable the silergy,sy7636a and silergy,sy7636a-regulator for the
+Enable the silergy,sy7636a and silergy,sy7636a-regulator on the
 reMarkable2.
 
 Signed-off-by: Alistair Francis <alistair@alistair23.me>
 ---
- arch/arm/configs/imx_v6_v7_defconfig | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/arm/boot/dts/imx7d-remarkable2.dts | 41 +++++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-diff --git a/arch/arm/configs/imx_v6_v7_defconfig b/arch/arm/configs/imx_v6_v7_defconfig
-index b87adf823e44..507ab17cfcd8 100644
---- a/arch/arm/configs/imx_v6_v7_defconfig
-+++ b/arch/arm/configs/imx_v6_v7_defconfig
-@@ -233,6 +233,7 @@ CONFIG_THERMAL_STATISTICS=y
- CONFIG_THERMAL_WRITABLE_TRIPS=y
- CONFIG_CPU_THERMAL=y
- CONFIG_IMX_THERMAL=y
-+CONFIG_SY7636A_THERMAL=y
- CONFIG_WATCHDOG=y
- CONFIG_DA9062_WATCHDOG=y
- CONFIG_DA9063_WATCHDOG=m
-@@ -248,6 +249,7 @@ CONFIG_MFD_RN5T618=y
- CONFIG_MFD_STMPE=y
- CONFIG_REGULATOR=y
- CONFIG_REGULATOR_FIXED_VOLTAGE=y
-+CONFIG_MFD_SIMPLE_MFD_I2C=y
- CONFIG_REGULATOR_ANATOP=y
- CONFIG_REGULATOR_DA9052=y
- CONFIG_REGULATOR_DA9062=y
-@@ -258,6 +260,7 @@ CONFIG_REGULATOR_MC13783=y
- CONFIG_REGULATOR_MC13892=y
- CONFIG_REGULATOR_PFUZE100=y
- CONFIG_REGULATOR_RN5T618=y
-+CONFIG_REGULATOR_SY7636A=y
- CONFIG_RC_CORE=y
- CONFIG_RC_DEVICES=y
- CONFIG_IR_GPIO_CIR=y
+diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
+index 2099784d6515..1b49c26816cd 100644
+--- a/arch/arm/boot/dts/imx7d-remarkable2.dts
++++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
+@@ -87,6 +87,33 @@ wacom_digitizer: digitizer@9 {
+ 	};
+ };
+ 
++&i2c4 {
++	clock-frequency = <100000>;
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&pinctrl_i2c4>;
++	pinctrl-1 = <&pinctrl_i2c4>;
++	status = "okay";
++
++	epd_pmic: sy7636a@62 {
++		compatible = "silergy,sy7636a";
++		reg = <0x62>;
++		status = "okay";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_epdpmic>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		#thermal-sensor-cells = <0>;
++
++		epd-pwr-good-gpios = <&gpio6 21 GPIO_ACTIVE_HIGH>;
++		regulators {
++			reg_epdpmic: vcom {
++				regulator-name = "vcom";
++				regulator-boot-on;
++			};
++		};
++	};
++};
++
+ &snvs_pwrkey {
+ 	status = "okay";
+ };
+@@ -180,6 +207,13 @@ MX7D_PAD_SAI1_TX_BCLK__GPIO6_IO13	0x14
+ 		>;
+ 	};
+ 
++	pinctrl_epdpmic: epdpmicgrp {
++		fsl,pins = <
++			MX7D_PAD_SAI2_RX_DATA__GPIO6_IO21 0x00000074
++			MX7D_PAD_ENET1_RGMII_TXC__GPIO7_IO11 0x00000014
++		>;
++	};
++
+ 	pinctrl_i2c1: i2c1grp {
+ 		fsl,pins = <
+ 			MX7D_PAD_I2C1_SDA__I2C1_SDA		0x4000007f
+@@ -187,6 +221,13 @@ MX7D_PAD_I2C1_SCL__I2C1_SCL		0x4000007f
+ 		>;
+ 	};
+ 
++	pinctrl_i2c4: i2c4grp {
++		fsl,pins = <
++			MX7D_PAD_I2C4_SDA__I2C4_SDA		0x4000007f
++			MX7D_PAD_I2C4_SCL__I2C4_SCL		0x4000007f
++		>;
++	};
++
+ 	pinctrl_uart1: uart1grp {
+ 		fsl,pins = <
+ 			MX7D_PAD_UART1_TX_DATA__UART1_DCE_TX	0x79
 -- 
 2.31.1
 
