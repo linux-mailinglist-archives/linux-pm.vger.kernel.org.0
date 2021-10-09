@@ -2,188 +2,250 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 329E34279E4
-	for <lists+linux-pm@lfdr.de>; Sat,  9 Oct 2021 13:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67C04427AB1
+	for <lists+linux-pm@lfdr.de>; Sat,  9 Oct 2021 15:49:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244869AbhJIL7l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 9 Oct 2021 07:59:41 -0400
-Received: from new3-smtp.messagingengine.com ([66.111.4.229]:40625 "EHLO
-        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244876AbhJIL7k (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 9 Oct 2021 07:59:40 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 5D135580A0F;
-        Sat,  9 Oct 2021 07:57:43 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Sat, 09 Oct 2021 07:57:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
-         h=from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=fm2; bh=ReThg5ZGo1o5jqJWFdVfwe8Jjp
-        jq33hX/M+b6dnDGuI=; b=sLu8nNcMGanwtLsII36vPFgM7F1DQUUc3hir2+g0kI
-        8pvqGepmuBp4DQZgq5CZCfZH8N1DugVcO23eeGtMc2yOn2y9QCZFEIz96aJM55CB
-        WNEmXkOV9woHWGhxEyImfWTa4Z1dCponu+zbx9GCxA1SLYsgoEscrTXI6c5b43Bj
-        MohTtixF3IALd/Z96srurcWGaU5AcrkLWIcgUk0SIVkbvs/fg2KujcFsWlEsyaZQ
-        A6Xz9H5H/DO+miuL2LjDu/J32hFGcu2i092FSwEAmqMbXBp7HnDb4lYxnjbhs/D7
-        frcmhqkHSBg5BC57B+bDHKMrNWGop1mLCp/eAsyhER2Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=ReThg5ZGo1o5jqJWF
-        dVfwe8Jjpjq33hX/M+b6dnDGuI=; b=QN8Ys11dYxzubZmJ4Mx4gQG5+owDcHO+v
-        pTSIsdRMeCP554ZY42w1zv3RDDkakSGKkihQkjscGGIahzXCGYyZ42z541tG+6K4
-        rRyF3mrMEVPIPEtOf36sk2KYkHjsyhUvAPy2M8AkR6byobnfuwilqE6AzgoMfjFl
-        awv8QqQ/7UHTlUogYcrlFWoZdjZC5Zh0WQ4MuLFelkUtugJDd8SYtmraNyczLNVx
-        tDW3fwCGbAyRa754W3XxUDxNNwjcr1FOJ6Q92B8gfUa6/ck4tMWILGlK4HzZ3ATw
-        uhICvhKBwRGbXKWi+wRustcFbyX1ZAN9EEtPHoQU+YYypDHHiJG7Q==
-X-ME-Sender: <xms:toNhYdicV8n4lLW8tGEalp39mIFk0bksJNDOau4vZJn66a2hIEHIfA>
-    <xme:toNhYSD0TaDGj8qMcpw8FWxnt4w0w1H7nPwswHvuSJwwDURSFv5FUMDqH-O5Jwi1Z
-    3QJRLLBaDJOT4UbtG4>
-X-ME-Received: <xmr:toNhYdEJZg8n95H46iH-mNKe4CCxWrutW_Y4iAZ1h35oOiAu1t3akdZBb6KgDkKSa6ZV0BsxF1h6xh8CzggeB4fdumdR_06CyFY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvddtvddggeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvffufffkofgggfestdekredtre
-    dttdenucfhrhhomheptehlihhsthgrihhrucfhrhgrnhgtihhsuceorghlihhsthgrihhr
-    segrlhhishhtrghirhdvfedrmhgvqeenucggtffrrghtthgvrhhnpeejleeihfdvtefgtd
-    ethfdtgefftdeiffefjeeiffefveeuleejheejvefhffeukeenucevlhhushhtvghrufhi
-    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhishhtrghirhesrghlihhsth
-    grihhrvdefrdhmvg
-X-ME-Proxy: <xmx:toNhYSRg08r8fAusxsZW03nB_AYqzwu_5qU8HnPVkh8Ahwp0A7lWFQ>
-    <xmx:toNhYawL1FmycW0lo9H9lx7DfvACYdN2n0FdZPPBuxx-CObqPfKyQg>
-    <xmx:toNhYY4cPC3n4sY25WfCfM5xfsOnWskjNauRrHi0Mibdq2uwyEMALw>
-    <xmx:t4NhYeDBkiq5tk8D9L9H4nx6mXMEDeyq8Ffx90yqnft_t5vrYIEPmw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 9 Oct 2021 07:57:36 -0400 (EDT)
-From:   Alistair Francis <alistair@alistair23.me>
-To:     lee.jones@linaro.org, robh+dt@kernel.org, lgirdwood@gmail.com,
-        broonie@kernel.org, kernel@pengutronix.de
+        id S233425AbhJINvv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 9 Oct 2021 09:51:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50554 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233146AbhJINvv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 9 Oct 2021 09:51:51 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5148FC061570;
+        Sat,  9 Oct 2021 06:49:54 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id s24so17573475oij.8;
+        Sat, 09 Oct 2021 06:49:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:to:cc:references:from:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=v4f1Dq1UZFrwC53WbB/LwX1tkRuqMOrAVxvYfHHHznU=;
+        b=NcumLnaPS0HfVdLULaJg4kg3S25H3iNqrFgwh1EbzEq+eiq1Ibwce1jBZVdIffQGos
+         NpUCyWt3h03m033XfipC7Y/UNa6ridVVXlrV/TwkWw7pncbcBnnN/yDGW29fPjEhGaTp
+         ttseTc02rzQXoS38BZgsLR8DB6CyUjm+b1r0tt6rIP5F+7F19jZGVyjG+C+aoqROwWkm
+         S5iNN/JMhwzcpkwNFx2l3dKEW0CiZSKpApVU0WYIWmy0tsI+mKFRvShHwvZQOcwjW1W9
+         EK2hEzL2YgxA0I/kSEndUPuJ43xbYZi/rb2vfeM+bnVRGvDlNboa/YaIOdTCn/Y6bIYM
+         NqZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=v4f1Dq1UZFrwC53WbB/LwX1tkRuqMOrAVxvYfHHHznU=;
+        b=k+VnxMOdmuCIWhDut+8g2+A/dNBhUrySY85SeVQZejLYcvOyXF3kzJGGaVsNUo0ZXT
+         tAj5NUANhyJrXpfJuHduPxYmTvZf/+/h/UiIRHPGv5XLSDhzWPb6ihrH5s6wnSgyeAaS
+         5L9xHJ0IRIYQr9NVgBrdeJpAZuHsat4fyiCDLAj1ldJVtoFEaJ6y4ec5O7dsV0csPMqo
+         qyO3g+phwsJCGk2dBRq/2/RvgGt0Ln8MfalZwMtFDnl4aBrhz086J9ZXsUY72J1VEaZr
+         grsyCGMlA9Ns5C8OMd9yBwtkzCHv45hPSZslNG2lxIic1WPPKHy2scytkZXh8+5t/uUl
+         inzw==
+X-Gm-Message-State: AOAM5318FYyOUB7KmrQ4h+7IZmVQL6Dee+gZcF0zAeuJQYeU6AXJ2ck/
+        gvE0MeLaSEKX0r7FLUiYk0AYp0HwO+E=
+X-Google-Smtp-Source: ABdhPJyLEaIhw9EBKK0KncqOw2ryqg+OcWM2QM1LMqppbweKSoQ+ZNhq9hFQvvE+/OtBpGmgcpzHqw==
+X-Received: by 2002:aca:a858:: with SMTP id r85mr10280570oie.9.1633787393283;
+        Sat, 09 Oct 2021 06:49:53 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e10sm529150oig.11.2021.10.09.06.49.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 09 Oct 2021 06:49:52 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+To:     Alistair Francis <alistair@alistair23.me>, lee.jones@linaro.org,
+        robh+dt@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
+        kernel@pengutronix.de
 Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, linux-imx@nxp.com,
         amitk@kernel.org, rui.zhang@intel.com, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, alistair23@gmail.com,
         linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, Alistair Francis <alistair@alistair23.me>
-Subject: [PATCH v12 10/10] ARM: dts: imx7d: remarkable2: Enable lcdif
-Date:   Sat,  9 Oct 2021 21:57:32 +1000
-Message-Id: <20211009115732.19102-1-alistair@alistair23.me>
-X-Mailer: git-send-email 2.31.1
+        linux-pm@vger.kernel.org
+References: <20211009115031.18392-1-alistair@alistair23.me>
+ <20211009115031.18392-10-alistair@alistair23.me>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v12 06/10] hwmon: sy7636a: Add temperature driver for
+ sy7636a
+Message-ID: <0ac0f13e-12eb-2272-3d4b-480dc6b54ee1@roeck-us.net>
+Date:   Sat, 9 Oct 2021 06:49:50 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
+In-Reply-To: <20211009115031.18392-10-alistair@alistair23.me>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Connect the dispaly on the reMarkable2.
+On 10/9/21 4:50 AM, Alistair Francis wrote:
+> This is a multi-function device to interface with the sy7636a
+> EPD PMIC chip from Silergy.
+> 
+> Signed-off-by: Alistair Francis <alistair@alistair23.me>
+> ---
+>   arch/arm/configs/imx_v6_v7_defconfig |  1 +
 
-Signed-off-by: Alistair Francis <alistair@alistair23.me>
----
- arch/arm/boot/dts/imx7d-remarkable2.dts | 74 +++++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
+That should be a separate patch.
 
-diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
-index 1b49c26816cd..5f32c216c3fd 100644
---- a/arch/arm/boot/dts/imx7d-remarkable2.dts
-+++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
-@@ -47,6 +47,16 @@ reg_digitizer: regulator-digitizer {
- 		startup-delay-us = <100000>; /* 100 ms */
- 	};
- 
-+	reg_sdoe: regulator-sdoe {
-+		compatible = "regulator-fixed";
-+		regulator-name = "SDOE";
-+		pinctrl-names = "default", "sleep";
-+		pinctrl-0 = <&pinctrl_sdoe_reg>;
-+		pinctrl-1 = <&pinctrl_sdoe_reg>;
-+		gpio = <&gpio3 27 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+	};
-+
- 	wifi_pwrseq: wifi_pwrseq {
- 		compatible = "mmc-pwrseq-simple";
- 		pinctrl-names = "default";
-@@ -55,6 +65,16 @@ wifi_pwrseq: wifi_pwrseq {
- 		clocks = <&clks IMX7D_CLKO2_ROOT_DIV>;
- 		clock-names = "ext_clock";
- 	};
-+
-+	panel {
-+		compatible = "eink,vb3300-kca";
-+
-+		port {
-+			panel_in: endpoint {
-+				remote-endpoint = <&display_out>;
-+			};
-+		};
-+	};
- };
- 
- &clks {
-@@ -114,6 +134,20 @@ reg_epdpmic: vcom {
- 	};
- };
- 
-+&lcdif {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_lcdif>;
-+	lcd-supply = <&reg_epdpmic>;
-+	lcd2-supply = <&reg_sdoe>;
-+	status = "okay";
-+
-+	port {
-+		display_out: endpoint {
-+			remote-endpoint = <&panel_in>;
-+		};
-+	};
-+};
-+
- &snvs_pwrkey {
- 	status = "okay";
- };
-@@ -228,6 +262,46 @@ MX7D_PAD_I2C4_SCL__I2C4_SCL		0x4000007f
- 		>;
- 	};
- 
-+	pinctrl_lcdif: lcdifgrp {
-+		fsl,pins = <
-+			MX7D_PAD_LCD_DATA00__LCD_DATA0		0x79
-+			MX7D_PAD_LCD_DATA01__LCD_DATA1		0x79
-+			MX7D_PAD_LCD_DATA02__LCD_DATA2		0x79
-+			MX7D_PAD_LCD_DATA03__LCD_DATA3		0x79
-+			MX7D_PAD_LCD_DATA04__LCD_DATA4		0x79
-+			MX7D_PAD_LCD_DATA05__LCD_DATA5		0x79
-+			MX7D_PAD_LCD_DATA06__LCD_DATA6		0x79
-+			MX7D_PAD_LCD_DATA07__LCD_DATA7		0x79
-+			MX7D_PAD_LCD_DATA08__LCD_DATA8		0x79
-+			MX7D_PAD_LCD_DATA09__LCD_DATA9		0x79
-+			MX7D_PAD_LCD_DATA10__LCD_DATA10		0x79
-+			MX7D_PAD_LCD_DATA11__LCD_DATA11		0x79
-+			MX7D_PAD_LCD_DATA12__LCD_DATA12		0x79
-+			MX7D_PAD_LCD_DATA13__LCD_DATA13		0x79
-+			MX7D_PAD_LCD_DATA14__LCD_DATA14		0x79
-+			MX7D_PAD_LCD_DATA15__LCD_DATA15		0x79
-+
-+			MX7D_PAD_LCD_DATA17__LCD_DATA17		0x79
-+			MX7D_PAD_LCD_DATA18__LCD_DATA18		0x79
-+			MX7D_PAD_LCD_DATA19__LCD_DATA19		0x79
-+			MX7D_PAD_LCD_DATA20__LCD_DATA20		0x79
-+			MX7D_PAD_LCD_DATA21__LCD_DATA21		0x79
-+
-+			MX7D_PAD_LCD_DATA23__LCD_DATA23		0x79
-+			MX7D_PAD_LCD_CLK__LCD_CLK		0x79
-+			MX7D_PAD_LCD_ENABLE__LCD_ENABLE		0x79
-+			MX7D_PAD_LCD_VSYNC__LCD_VSYNC		0x79
-+			MX7D_PAD_LCD_HSYNC__LCD_HSYNC		0x79
-+			MX7D_PAD_LCD_RESET__LCD_RESET		0x79
-+		>;
-+	};
-+
-+	pinctrl_sdoe_reg: sdoereggrp {
-+		fsl,pins = <
-+			MX7D_PAD_LCD_DATA22__GPIO3_IO27		0x74
-+		>;
-+	};
-+
- 	pinctrl_uart1: uart1grp {
- 		fsl,pins = <
- 			MX7D_PAD_UART1_TX_DATA__UART1_DCE_TX	0x79
--- 
-2.31.1
+>   drivers/hwmon/Kconfig                | 10 ++++
+>   drivers/hwmon/Makefile               |  1 +
+>   drivers/hwmon/sy7636a-hwmon.c        | 77 ++++++++++++++++++++++++++++
+
+Documentation/hwmon/sy7636a-hwmon is missing.
+
+>   4 files changed, 89 insertions(+)
+>   create mode 100644 drivers/hwmon/sy7636a-hwmon.c
+> 
+> diff --git a/arch/arm/configs/imx_v6_v7_defconfig b/arch/arm/configs/imx_v6_v7_defconfig
+> index 8a54a4d0181a..b87adf823e44 100644
+> --- a/arch/arm/configs/imx_v6_v7_defconfig
+> +++ b/arch/arm/configs/imx_v6_v7_defconfig
+> @@ -228,6 +228,7 @@ CONFIG_RN5T618_POWER=m
+>   CONFIG_SENSORS_MC13783_ADC=y
+>   CONFIG_SENSORS_GPIO_FAN=y
+>   CONFIG_SENSORS_IIO_HWMON=y
+> +CONFIG_SENSORS_SY7636A=y
+>   CONFIG_THERMAL_STATISTICS=y
+>   CONFIG_THERMAL_WRITABLE_TRIPS=y
+>   CONFIG_CPU_THERMAL=y
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index c4578e8f34bb..59f358293202 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -1651,6 +1651,16 @@ config SENSORS_SIS5595
+>   	  This driver can also be built as a module. If so, the module
+>   	  will be called sis5595.
+>   
+> +config SENSORS_SY7636A
+> +	tristate "Silergy SY7636A"
+> +	depends on I2C
+
+That is an arbitrary dependency. The driver doesn't use I2C.
+
+> +	help
+> +	  If you say yes here you get support for the thermistor readout of
+> +	  the Silergy SY7636A PMIC.
+> +
+> +	  This driver can also be built as a module.  If so, the module
+> +	  will be called sy7636a-hwmon.
+> +
+>   config SENSORS_DME1737
+>   	tristate "SMSC DME1737, SCH311x and compatibles"
+>   	depends on I2C && !PPC
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index 162940270661..1355ffdb1481 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -181,6 +181,7 @@ obj-$(CONFIG_SENSORS_SMSC47M1)	+= smsc47m1.o
+>   obj-$(CONFIG_SENSORS_SMSC47M192)+= smsc47m192.o
+>   obj-$(CONFIG_SENSORS_SPARX5)	+= sparx5-temp.o
+>   obj-$(CONFIG_SENSORS_STTS751)	+= stts751.o
+> +obj-$(CONFIG_SENSORS_SY7636A)	+= sy7636a-hwmon.o
+>   obj-$(CONFIG_SENSORS_AMC6821)	+= amc6821.o
+>   obj-$(CONFIG_SENSORS_TC74)	+= tc74.o
+>   obj-$(CONFIG_SENSORS_THMC50)	+= thmc50.o
+> diff --git a/drivers/hwmon/sy7636a-hwmon.c b/drivers/hwmon/sy7636a-hwmon.c
+> new file mode 100644
+> index 000000000000..e0204278339b
+> --- /dev/null
+> +++ b/drivers/hwmon/sy7636a-hwmon.c
+> @@ -0,0 +1,77 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Functions to access SY3686A power management chip temperature
+> + *
+> + * Copyright (C) 2019 reMarkable AS - http://www.remarkable.com/
+> + *
+> + * Authors: Lars Ivar Miljeteig <lars.ivar.miljeteig@remarkable.com>
+> + *          Alistair Francis <alistair@alistair23.me>
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/init.h>
+> +#include <linux/slab.h>
+> +#include <linux/jiffies.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/hwmon-sysfs.h>
+> +#include <linux/err.h>
+> +#include <linux/sysfs.h>
+> +#include <linux/platform_device.h>
+> +
+> +#include <linux/mfd/sy7636a.h>
+> +
+Alphabetic include file order please, and drop the includes which
+are not needed (I don't see a need for slab.h or jiffies.h).
+
+On the other side, the include of regmap.h is missing.
+
+> +static ssize_t show_temp(struct device *dev,
+> +	struct device_attribute *attr, char *buf)
+
+If you use continuation lines, please align with "(".
+
+> +{
+> +	unsigned int reg_val;
+> +	struct regmap *regmap = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	ret = regmap_read(regmap,
+> +			SY7636A_REG_TERMISTOR_READOUT, &reg_val);
+
+Line length limit is now 100, so this continuation line should not be needed.
+
+> +	if (ret)
+> +		return ret;
+> +
+> +	return snprintf(buf, PAGE_SIZE, "%d\n", reg_val);
+> +}
+> +
+> +static SENSOR_DEVICE_ATTR(temp0, 0444, show_temp, NULL, 0);
+> +
+> +static struct attribute *sy7636a_attrs[] = {
+> +	&sensor_dev_attr_temp0.dev_attr.attr,
+
+FWIW, there is no "temp0" in the hwmon ABI. Temperature sensor
+numbering starts with 1. Not that it matters,
+devm_hwmon_device_register_with_info() creates attributes internally.
+
+> +	NULL
+> +};
+> +
+> +ATTRIBUTE_GROUPS(sy7636a);
+> +
+> +static int sy7636a_sensor_probe(struct platform_device *pdev)
+> +{
+> +	struct regmap *regmap = dev_get_regmap(pdev->dev.parent, NULL);
+> +	struct device *hwmon_dev;
+> +	int err;
+> +
+> +	if (!regmap)
+> +		return -EPROBE_DEFER;
+> +
+> +	hwmon_dev = devm_hwmon_device_register_with_groups(&pdev->dev,
+> +			"sy7636a_temperature", regmap, sy7636a_groups);
+> +
+
+Please use devm_hwmon_device_register_with_info().
+
+> +	if (IS_ERR(hwmon_dev)) {
+> +		err = PTR_ERR(hwmon_dev);
+> +		dev_err(&pdev->dev, "Unable to register hwmon device, returned %d", err);
+
+I dislike driver noise, but if it is retained please add "\n".
+
+> +		return err;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static struct platform_driver sy7636a_sensor_driver = {
+> +	.probe = sy7636a_sensor_probe,
+> +	.driver = {
+> +		.name = "sy7636a-temperature",
+> +	},
+> +};
+> +module_platform_driver(sy7636a_sensor_driver);
+> +
+> +MODULE_DESCRIPTION("SY7636A sensor driver");
+> +MODULE_LICENSE("GPL");
+> 
 
