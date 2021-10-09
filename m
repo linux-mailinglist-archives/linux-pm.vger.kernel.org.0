@@ -2,186 +2,174 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 274CB427B70
-	for <lists+linux-pm@lfdr.de>; Sat,  9 Oct 2021 17:42:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48384427C0A
+	for <lists+linux-pm@lfdr.de>; Sat,  9 Oct 2021 18:33:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234428AbhJIPoy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 9 Oct 2021 11:44:54 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:61308 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234290AbhJIPox (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 9 Oct 2021 11:44:53 -0400
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 3.0.0)
- id 5a75a4ada7a1e827; Sat, 9 Oct 2021 17:42:55 +0200
-Received: from kreacher.localnet (89-77-51-84.dynamic.chello.pl [89.77.51.84])
+        id S231152AbhJIQfu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 9 Oct 2021 12:35:50 -0400
+Received: from ixit.cz ([94.230.151.217]:42386 "EHLO ixit.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229587AbhJIQfu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 9 Oct 2021 12:35:50 -0400
+Received: from localhost.localdomain (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 3D480661ECD;
-        Sat,  9 Oct 2021 17:42:54 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Maulik Shah <mkshah@codeaurora.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Len Brown <len.brown@intel.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Srinivas Rao L <lsrao@codeaurora.org>
-Subject: Re: [PATCH 1/2] cpuidle: Avoid calls to cpuidle_resume|pause() for s2idle
-Date:   Sat, 09 Oct 2021 17:42:53 +0200
-Message-ID: <4665489.GXAFRqVoOG@kreacher>
-In-Reply-To: <CAPDyKFpJqnoG5HGwGoMvBBXBCBt=eTqMcdX_A29eY05LLgLi3w@mail.gmail.com>
-References: <20210929144451.113334-1-ulf.hansson@linaro.org> <07e6821c-c221-e90d-c977-4d6b55c1ab8d@codeaurora.org> <CAPDyKFpJqnoG5HGwGoMvBBXBCBt=eTqMcdX_A29eY05LLgLi3w@mail.gmail.com>
+        by ixit.cz (Postfix) with ESMTPSA id 5D14820064;
+        Sat,  9 Oct 2021 18:33:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1633797231;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=VG0XiF7oaA2a7ZkmNQfV1Wi+icaIuRu9C91JRKV71Fs=;
+        b=R2wx0ccZ26o/LhT82tyvvIwzmTzBhtcndZBdQj8WsN43Yu2DE3IwHNe4Vkg3OwDOKb/z8G
+        eoqBsQKm/X0FN6CldQnXjLBaO+jb9y5MLABU2lqqGkV44e90c1+/NpjfVhfWFBVaTP8qIc
+        Vex0pmD7IutmfEvWdjcHeUh3IRHvP/I=
+From:   David Heidelberg <david@ixit.cz>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ~okias/devicetree@lists.sr.ht,
+        David Heidelberg <david@ixit.cz>
+Subject: [PATCH] dt-bindings: power: reset: gpio-poweroff: Convert txt bindings to yaml
+Date:   Sat,  9 Oct 2021 18:32:26 +0200
+Message-Id: <20211009163226.45564-1-david@ixit.cz>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 89.77.51.84
-X-CLIENT-HOSTNAME: 89-77-51-84.dynamic.chello.pl
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvtddrudeljedguddtfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdejlefghfeiudektdelkeekvddugfeghffggeejgfeukeejleevgffgvdeluddtnecukfhppeekledrjeejrdehuddrkeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepkeelrdejjedrhedurdekgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehmkhhshhgrhhestghouggvrghurhhorhgrrdhorhhgpdhrtghpthhtohepuhhlfhdrhhgrnhhsshhonheslhhinhgrrhhordhorhhgpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthht
- ohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpdhrtghpthhtohepvhhinhgtvghnthdrghhuihhtthhotheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhgvnhdrsghrohifnhesihhnthgvlhdrtghomhdprhgtphhtthhopegsjhhorhhnrdgrnhguvghrshhsohhnsehlihhnrghrohdrohhrghdprhgtphhtthhopehlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlshhrrghosegtohguvggruhhrohhrrgdrohhrgh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=12 Fuz1=12 Fuz2=12
+Content-Transfer-Encoding: 8bit
+X-Spam: Yes
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wednesday, October 6, 2021 3:10:55 PM CEST Ulf Hansson wrote:
-> On Wed, 6 Oct 2021 at 12:22, Maulik Shah <mkshah@codeaurora.org> wrote:
-> >
-> > Hi,
-> >
-> > On 9/29/2021 8:14 PM, Ulf Hansson wrote:
-> > > In s2idle_enter(), cpuidle_resume|pause() are invoked to re-allow calls to
-> > > the cpuidle callbacks during s2idle operations. This is needed because
-> > > cpuidle is paused in-between in dpm_suspend_noirq() and dpm_resume_noirq().
-> > >
-> > > However, calling cpuidle_resume|pause() from s2idle_enter() looks a bit
-> > > superfluous, as it also causes all CPUs to be waken up when the first CPU
-> > > wakes up from s2idle.
-> >
-> > Thanks for the patch. This can be good optimization to avoid waking up
-> > all CPUs always.
-> >
-> > >
-> > > Therefore, let's drop the calls to cpuidle_resume|pause() from
-> > > s2idle_enter(). To make this work, let's also adopt the path in the
-> > > cpuidle_idle_call() to allow cpuidle callbacks to be invoked for s2idle,
-> > > even if cpuidle has been paused.
-> > >
-> > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > > ---
-> > >   drivers/cpuidle/cpuidle.c |  7 ++++++-
-> > >   include/linux/cpuidle.h   |  2 ++
-> > >   kernel/power/suspend.c    |  2 --
-> > >   kernel/sched/idle.c       | 40 ++++++++++++++++++++++-----------------
-> > >   4 files changed, 31 insertions(+), 20 deletions(-)
-> > >
-> > > diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
-> > > index ef2ea1b12cd8..c76747e497e7 100644
-> > > --- a/drivers/cpuidle/cpuidle.c
-> > > +++ b/drivers/cpuidle/cpuidle.c
-> > > @@ -49,7 +49,12 @@ void disable_cpuidle(void)
-> > >   bool cpuidle_not_available(struct cpuidle_driver *drv,
-> > >                          struct cpuidle_device *dev)
-> > >   {
-> > > -     return off || !initialized || !drv || !dev || !dev->enabled;
-> > > +     return off || !drv || !dev || !dev->enabled;
-> > > +}
-> > > +
-> > > +bool cpuidle_paused(void)
-> > > +{
-> > > +     return !initialized;
-> > >   }
-> > >
-> > >   /**
-> > > diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
-> > > index fce476275e16..51698b385ab5 100644
-> > > --- a/include/linux/cpuidle.h
-> > > +++ b/include/linux/cpuidle.h
-> > > @@ -165,6 +165,7 @@ extern void cpuidle_pause_and_lock(void);
-> > >   extern void cpuidle_resume_and_unlock(void);
-> > >   extern void cpuidle_pause(void);
-> > >   extern void cpuidle_resume(void);
-> > > +extern bool cpuidle_paused(void);
-> > >   extern int cpuidle_enable_device(struct cpuidle_device *dev);
-> > >   extern void cpuidle_disable_device(struct cpuidle_device *dev);
-> > >   extern int cpuidle_play_dead(void);
-> > > @@ -204,6 +205,7 @@ static inline void cpuidle_pause_and_lock(void) { }
-> > >   static inline void cpuidle_resume_and_unlock(void) { }
-> > >   static inline void cpuidle_pause(void) { }
-> > >   static inline void cpuidle_resume(void) { }
-> > > +static inline bool cpuidle_paused(void) {return true; }
-> > >   static inline int cpuidle_enable_device(struct cpuidle_device *dev)
-> > >   {return -ENODEV; }
-> > >   static inline void cpuidle_disable_device(struct cpuidle_device *dev) { }
-> > > diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-> > > index eb75f394a059..388a5de4836e 100644
-> > > --- a/kernel/power/suspend.c
-> > > +++ b/kernel/power/suspend.c
-> > > @@ -97,7 +97,6 @@ static void s2idle_enter(void)
-> > >       raw_spin_unlock_irq(&s2idle_lock);
-> > >
-> > >       cpus_read_lock();
-> > > -     cpuidle_resume();
-> > >
-> > >       /* Push all the CPUs into the idle loop. */
-> > >       wake_up_all_idle_cpus();
-> >
-> > wake_up_all_idle_cpus() will still cause all CPUs to be woken up when
-> > first cpu wakes up.
-> >
-> > say for example,
-> > 1. device goes to s2idle suspend.
-> > 2. one CPU wakes up to handle irq (irq is not a wake irq but left
-> > enabled at GIC because of IRQF_NOSUSPEND flag) so such irq will not
-> > break suspend.
-> > 3. The cpu handles the irq.
-> > 4. same cpu don't break s2idle_loop() and goes to s2idle_enter() where
-> > it wakes up all existing idle cpus due to wake_up_all_idle_cpus()
-> > 5. all of CPUs again enter s2idle.
-> >
-> > to avoid waking up all CPUs in above case, something like below snip may
-> > help (i have not tested yet),
-> >
-> > when CPUs are in s2idle_loop(),
-> >
-> > 1. set the s2idle state to enter.
-> > 2. wake up all cpus from shallow state, so that they can re-enter
-> > deepest state.
-> > 3. Forever loop until a break with some wake irq.
-> > 4. clear the s2idle state.
-> > 5. wake up all cpus from deepest state so that they can now stay in
-> > shallow state/running state.
-> >
-> > void s2idle_loop(void)
-> > {
-> >
-> > +       s2idle_state = S2IDLE_STATE_ENTER;
-> > +       /* Push all the CPUs to enter deepest available state */
-> > +       wake_up_all_idle_cpus();
-> >          for (;;) {
-> >                  if (s2idle_ops && s2idle_ops->wake) {
-> >                          if (s2idle_ops->wake())
+Convert power-off action connected to the GPIO documentation to the YAML syntax.
 
-So generally you don't know what will break loose in the ->wake() callback
-and so you don't know what idle states the CPUs will end up in before
-s2idle_enter().
+Signed-off-by: David Heidelberg <david@ixit.cz>
+---
+ .../bindings/power/reset/gpio-poweroff.txt    | 41 ------------
+ .../bindings/power/reset/gpio-poweroff.yaml   | 64 +++++++++++++++++++
+ 2 files changed, 64 insertions(+), 41 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/power/reset/gpio-poweroff.txt
+ create mode 100644 Documentation/devicetree/bindings/power/reset/gpio-poweroff.yaml
 
-You could optimize for the case when ->wake() is not present, though.
-
-> >                                 ..
-> >                  s2idle_enter();
-> >          }
-> > +       s2idle_state = S2IDLE_STATE_NONE;
-> > +       /* Push all the CPUs to enter default_idle() from this point */
-> > +       wake_up_all_idle_cpus();
-> > }
-
-
+diff --git a/Documentation/devicetree/bindings/power/reset/gpio-poweroff.txt b/Documentation/devicetree/bindings/power/reset/gpio-poweroff.txt
+deleted file mode 100644
+index 3e56c1b34a4c..000000000000
+--- a/Documentation/devicetree/bindings/power/reset/gpio-poweroff.txt
++++ /dev/null
+@@ -1,41 +0,0 @@
+-Driver a GPIO line that can be used to turn the power off.
+-
+-The driver supports both level triggered and edge triggered power off.
+-At driver load time, the driver will request the given gpio line and
+-install a handler to power off the system. If the optional properties
+-'input' is not found, the GPIO line will be driven in the inactive
+-state. Otherwise its configured as an input.
+-
+-When the power-off handler is called, the gpio is configured as an
+-output, and drive active, so triggering a level triggered power off
+-condition. This will also cause an inactive->active edge condition, so
+-triggering positive edge triggered power off. After a delay of 100ms,
+-the GPIO is set to inactive, thus causing an active->inactive edge,
+-triggering negative edge triggered power off. After another 100ms
+-delay the GPIO is driver active again. If the power is still on and
+-the CPU still running after a 3000ms delay, a WARN_ON(1) is emitted.
+-
+-Required properties:
+-- compatible : should be "gpio-poweroff".
+-- gpios : The GPIO to set high/low, see "gpios property" in
+-  Documentation/devicetree/bindings/gpio/gpio.txt. If the pin should be
+-  low to power down the board set it to "Active Low", otherwise set
+-  gpio to "Active High".
+-
+-Optional properties:
+-- input : Initially configure the GPIO line as an input. Only reconfigure
+-  it to an output when the power-off handler is called. If this optional
+-  property is not specified, the GPIO is initialized as an output in its
+-  inactive state.
+-- active-delay-ms: Delay (default 100) to wait after driving gpio active
+-- inactive-delay-ms: Delay (default 100) to wait after driving gpio inactive
+-- timeout-ms: Time to wait before asserting a WARN_ON(1). If nothing is
+-              specified, 3000 ms is used.
+-
+-Examples:
+-
+-gpio-poweroff {
+-	compatible = "gpio-poweroff";
+-	gpios = <&gpio 4 0>;
+-	timeout-ms = <3000>;
+-};
+diff --git a/Documentation/devicetree/bindings/power/reset/gpio-poweroff.yaml b/Documentation/devicetree/bindings/power/reset/gpio-poweroff.yaml
+new file mode 100644
+index 000000000000..50ae0cec6493
+--- /dev/null
++++ b/Documentation/devicetree/bindings/power/reset/gpio-poweroff.yaml
+@@ -0,0 +1,64 @@
++# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/power/reset/gpio-poweroff.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Driver a GPIO line that can be used to turn the power off
++
++maintainers:
++  - Sebastian Reichel <sre@kernel.org>
++
++description:
++  The driver supports both level triggered and edge triggered power off.
++  At driver load time, the driver will request the given gpio line and
++  install a handler to power off the system. If the optional properties
++  'input' is not found, the GPIO line will be driven in the inactive
++  state. Otherwise its configured as an input.
++
++  When the power-off handler is called, the gpio is configured as an
++  output, and drive active, so triggering a level triggered power off
++  condition. This will also cause an inactive->active edge condition, so
++  triggering positive edge triggered power off. After a delay of 100ms,
++  the GPIO is set to inactive, thus causing an active->inactive edge,
++  triggering negative edge triggered power off. After another 100ms
++  delay the GPIO is driver active again. If the power is still on and
++  the CPU still running after a 3000ms delay, a WARN_ON(1) is emitted.
++
++properties:
++  compatible:
++    const: gpio-poweroff
++
++  gpios: true
++
++  input:
++    description: |
++      Initially configure the GPIO line as an input. Only reconfigure
++      it to an output when the power-off handler is called. If this optional
++      property is not specified, the GPIO is initialized as an output in its inactive state.
++
++  active-delay-ms:
++    default: 100
++    description: Delay to wait after driving gpio active
++
++  inactive-delay-ms:
++    default: 100
++    description: Delay to wait after driving gpio inactive
++
++  timeout-ms:
++    default: 3000
++    description: Time to wait before asserting a WARN_ON(1).
++
++required:
++  - compatible
++  - gpios
++
++additionalProperties: false
++
++examples:
++  - |
++    gpio-poweroff {
++        compatible = "gpio-poweroff";
++        gpios = <&gpio 4 0>;
++        timeout-ms = <3000>;
++    };
+-- 
+2.33.0
 
