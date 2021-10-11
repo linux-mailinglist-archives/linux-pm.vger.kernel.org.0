@@ -2,51 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E44C42862A
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Oct 2021 07:17:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97E4E428638
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Oct 2021 07:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232473AbhJKFT2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Oct 2021 01:19:28 -0400
-Received: from marcansoft.com ([212.63.210.85]:56662 "EHLO mail.marcansoft.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231966AbhJKFT1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 11 Oct 2021 01:19:27 -0400
+        id S231560AbhJKFeh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Oct 2021 01:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33396 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230341AbhJKFeg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Oct 2021 01:34:36 -0400
+Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F179CC061570;
+        Sun, 10 Oct 2021 22:32:36 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 215C3425D6;
-        Mon, 11 Oct 2021 05:17:21 +0000 (UTC)
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@kernel.org>,
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 398A7424EC;
+        Mon, 11 Oct 2021 05:32:30 +0000 (UTC)
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Marc Zyngier <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Arnd Bergmann <arnd@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
         Alyssa Rosenzweig <alyssa@rosenzweig.io>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mark Kettenis <mark.kettenis@xs4all.nl>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        devicetree@vger.kernel.org,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-serial@vger.kernel.org
 References: <20211005155923.173399-1-marcan@marcan.st>
- <20211005155923.173399-3-marcan@marcan.st>
- <CAL_JsqJenHAOw4gApzGpuj-8nZjkYhmBg0qBj-DV+CEJ7zXuVw@mail.gmail.com>
- <f95f6d61-8809-e668-0458-453a8dfbe641@marcan.st>
- <b5b25e17-d98b-d447-f917-4d728f52a6ff@marcan.st>
- <CAJKOXPfp7oMJ+moizqgXyS7LbPajY-_vbXFX6+5PFrcpUFy2nA@mail.gmail.com>
+ <20211005155923.173399-7-marcan@marcan.st>
+ <77ae3bb1-6da5-3ec6-de33-5e5f661b6145@canonical.com>
 From:   Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH 2/7] dt-bindings: power: Add apple,pmgr-pwrstate binding
-Message-ID: <2a1aaec7-25e6-f779-fd18-23378537bbd2@marcan.st>
-Date:   Mon, 11 Oct 2021 14:17:19 +0900
+Subject: Re: [PATCH 6/7] tty: serial: samsung_tty: Support runtime PM
+Message-ID: <46109820-904b-4e87-5134-7d045dbbe57e@marcan.st>
+Date:   Mon, 11 Oct 2021 14:32:29 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <CAJKOXPfp7oMJ+moizqgXyS7LbPajY-_vbXFX6+5PFrcpUFy2nA@mail.gmail.com>
+In-Reply-To: <77ae3bb1-6da5-3ec6-de33-5e5f661b6145@canonical.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: es-ES
 Content-Transfer-Encoding: 8bit
@@ -54,73 +52,41 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08/10/2021 16.50, Krzysztof Kozlowski wrote:
-> On Wed, 6 Oct 2021 at 17:56, Hector Martin <marcan@marcan.st> wrote:
->> Addendum: just found some prior art for this. See power/pd-samsung.yaml,
->> which is another single-PD binding (though in that case they put them in
->> the SoC node directly, not under a syscon).
+On 06/10/2021 16.43, Krzysztof Kozlowski wrote:
+> On 05/10/2021 17:59, Hector Martin wrote:
+>> +	pm_runtime_get_noresume(&pdev->dev);
+>> +	pm_runtime_set_active(&pdev->dev);
+>> +	pm_runtime_enable(&pdev->dev);
+>> +
 > 
-> Maybe the design is actually similar. In the Exynos there is a entire
-> subblock managing power - called Power Management Unit (PMU). It
-> controls most of power-related parts, except clock gating. For example
-> it covers registers related to entering deep-sleep modes or power
-> domains. However we split this into two:
-> 1. Actual PMU driver which controls system-level power (and provides
-> syscon for other drivers needing to poke its registers... eh, life).
-> 2. Power domain driver which binds multiple devices to a small address
-> spaces (three registers) inside PMU address space.
+> You need to cleanup in error paths (put/disable).
+
+There are none though, this function always returns success past this point.
+
+>>   	if (port) {
+>> +		pm_runtime_get_sync(&dev->dev);
 > 
-> The address spaces above overlap, so the (1) PMU driver takes for
-> example 1004_0000 - 1004_5000 and power domain devices bind to e.g.
-> 1004_4000, 1004_4020, 1004_4040.
+> 1. You need to check return status.
+> 2. Why do you need to resume the device here?
 
-It's similar, except Apple tends to group registers into uniform arrays, 
-sometimes with gaps. They definitely do some ugly overlap stuff in their 
-devicetree/OS which we'll try to avoid (e.g. the audio driver directly 
-poking clock select registers...).
+As Rafael mentioned, this is basically disabling PM so the device is 
+enabled when not bound (which seems to be expected behavior). Not sure 
+what I'd do if the resume fails... this is the remove path after all, 
+it's not like we're doing anything else with the device at this point.
 
-Here's an incomplete memory map of the PMGR-related stuff in this SoC:
+>> +
+>>   		s3c24xx_serial_cpufreq_deregister(to_ourport(port));
+>>   		uart_remove_one_port(&s3c24xx_uart_drv, port);
+>> +
+>> +		pm_runtime_disable(&dev->dev);
+> 
+> Why disabling it only if port!=NULL? Can remove() be called if
+> platform_set_drvdata() was not?
 
-2_3b00_0000:  Clocking
-      0_0000:   PLLs
-      4_0000:   Clock selects / dividers
-         000:    86 selects x 32bit (device clocks)
-         200:    8 selects x 32bit (aux clocks)
-         280:    2 selects x 32bit
-      4_4000:   NCOs (used for audio) (5 x one 16KiB page each)
-2_3b70_0000:  PMGR
-      0_0000:   Pwr-state registers
-        0000:    10 controls x 64bit  (CPUs)
-        0100:    143 controls x 64bit (general devices)
-        0c00:    2 controls x 64bit   (SEP)
-        4000:    13 controls x 64bit  (ISP)
-        8000:    5 controls x 64bit   (VENC)
-        c000:    7 controls x 64bit   (ANE)
-      1_0000:    10 controls x 64bit  (DISP0)
-      1_c000:   Power gates
-          10:    74 power gates (24 bytes each?)
-      3_4100:   Performance counters? (16 bytes each, big array)
-      5_4000:   Secondary CPU spin-up controls
-
-I believe the weird groupings into page-sized areas have to do with 
-security, so they can map only those ranges to certain coprocessors and 
-the like via the IOMMUs.
-
-There is also a MiniPMGR that uses the same register formats, but 
-different counts/offsets, at 2_3d28_0000 (this one stays up in sleep 
-mode, AIUI)
-
-So I think we won't need any overlaps, since e.g. the whole 00000-14000 
-subrange is all power state controls, so a driver doing system-level 
-stuff wouldn't have to care about those. Those would just be bound by 
-the syscon in this patchset. I chose to use a syscon to avoid having raw 
-ioremaps for each domain instance, since each one of those eats up a 
-whole page of mapping AIUI (and shows up in /proc/iomem individually).
-
-One question is whether if we need to poke at power gates directly 
-(which isn't clear right now), we should have a separate top-level 
-pmgr-pwrgate syscon as a parent, or just instantiate power gate subnodes 
-under the same pmgr syscon at 1c000.
+Good question, I'm not entirely sure why these code paths have a check 
+for NULL there. They were already there, do you happen to know why? To 
+me it sounds like remove would only be called if probe succeeds, at 
+which point drvdata should always be set.
 
 -- 
 Hector Martin (marcan@marcan.st)
