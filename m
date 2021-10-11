@@ -2,25 +2,22 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E7734294E7
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Oct 2021 18:57:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91FC34294EA
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Oct 2021 18:57:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232836AbhJKQ7n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Oct 2021 12:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51026 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232802AbhJKQ7m (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Oct 2021 12:59:42 -0400
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E8EC061570;
-        Mon, 11 Oct 2021 09:57:41 -0700 (PDT)
+        id S232865AbhJKQ7v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Oct 2021 12:59:51 -0400
+Received: from marcansoft.com ([212.63.210.85]:56578 "EHLO mail.marcansoft.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232884AbhJKQ7t (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 11 Oct 2021 12:59:49 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: hector@marcansoft.com)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 510E642446;
-        Mon, 11 Oct 2021 16:57:35 +0000 (UTC)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id F3A2042462;
+        Mon, 11 Oct 2021 16:57:40 +0000 (UTC)
 From:   Hector Martin <marcan@marcan.st>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Hector Martin <marcan@marcan.st>,
@@ -38,9 +35,9 @@ Cc:     Hector Martin <marcan@marcan.st>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 2/9] dt-bindings: memory-controller: Add apple,mcc binding
-Date:   Tue, 12 Oct 2021 01:57:00 +0900
-Message-Id: <20211011165707.138157-3-marcan@marcan.st>
+Subject: [RFC PATCH 3/9] dt-bindings: clock: Add apple,cluster-clk binding
+Date:   Tue, 12 Oct 2021 01:57:01 +0900
+Message-Id: <20211011165707.138157-4-marcan@marcan.st>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211011165707.138157-1-marcan@marcan.st>
 References: <20211011165707.138157-1-marcan@marcan.st>
@@ -50,80 +47,104 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This device represents the memory controller in Apple SoCs, and is
-chiefly in charge of adjusting performance characteristics according to
-system demand.
+This device represents the CPU performance state switching mechanism as
+a clock controller, to be used with the standard cpufreq-dt
+infrastructure.
 
 Signed-off-by: Hector Martin <marcan@marcan.st>
 ---
- .../memory-controllers/apple,mcc.yaml         | 80 +++++++++++++++++++
- .../opp/apple,mcc-operating-points.yaml       | 62 ++++++++++++++
- 2 files changed, 142 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/memory-controllers/apple,mcc.yaml
- create mode 100644 Documentation/devicetree/bindings/opp/apple,mcc-operating-points.yaml
+ .../bindings/clock/apple,cluster-clk.yaml     | 115 ++++++++++++++++++
+ 1 file changed, 115 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/apple,cluster-clk.yaml
 
-diff --git a/Documentation/devicetree/bindings/memory-controllers/apple,mcc.yaml b/Documentation/devicetree/bindings/memory-controllers/apple,mcc.yaml
+diff --git a/Documentation/devicetree/bindings/clock/apple,cluster-clk.yaml b/Documentation/devicetree/bindings/clock/apple,cluster-clk.yaml
 new file mode 100644
-index 000000000000..0774f10e65ed
+index 000000000000..9a8b863dadc0
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/memory-controllers/apple,mcc.yaml
-@@ -0,0 +1,80 @@
++++ b/Documentation/devicetree/bindings/clock/apple,cluster-clk.yaml
+@@ -0,0 +1,115 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/memory-controllers/apple,mcc.yaml#
++$id: http://devicetree.org/schemas/clock/apple,cluster-clk.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Apple SoC MCC memory controller performance controls
++title: CPU cluster frequency scaling for Apple SoCs
 +
 +maintainers:
 +  - Hector Martin <marcan@marcan.st>
 +
 +description: |
-+  Apple SoCs contain a multichannel memory controller that can have its
-+  configuration changed to adjust to changing performance requirements from
-+  the rest of the SoC. This node represents the controller and provides a
-+  power domain provider that downstream devices can use to adjust the memory
-+  controller performance level.
++  Apple SoCs control CPU cluster frequencies by using a performance state
++  index. This node represents the feature as a clock controller, and uses
++  a reference to the CPU OPP table to translate clock frequencies into
++  performance states. This allows the CPUs to use the standard cpufreq-dt
++  mechanism for frequency scaling.
 +
 +properties:
 +  compatible:
 +    items:
 +      - enum:
-+          - apple,t8103-mcc
-+      - const: apple,mcc
++          - apple,t8103-cluster-clk
++      - const: apple,cluster-clk
 +
 +  reg:
 +    maxItems: 1
 +
-+  "#power-domain-cells":
++  '#clock-cells':
 +    const: 0
 +
 +  operating-points-v2:
 +    $ref: /schemas/types.yaml#/definitions/phandle-array
 +    description:
-+      A reference to the OPP table describing the memory controller performance
-+      levels. Each OPP node should contain an `apple,memory-perf-config`
-+      property that contains the configuration values for that performance
-+      level.
++      A reference to the OPP table used for the CPU cluster controlled by this
++      device instance. The table should contain an `opp-level` property for
++      every OPP, which represents the p-state index used by the hardware to
++      represent this performance level.
 +
-+  apple,num-channels:
-+    $ref: /schemas/types.yaml#/definitions/uint32
++      OPPs may also have a `required-opps` property (see power-domains).
++
++  power-domains:
++    maxItems: 1
 +    description:
-+      The number of memory channels in use.
++      An optional reference to a power domain provider that links its
++      performance state to the CPU cluster performance state. This is typically
++      a memory controller. If set, the `required-opps` property in the CPU
++      frequency OPP nodes will be used to change the performance state of this
++      provider state in tandem with CPU frequency changes.
 +
 +required:
 +  - compatible
 +  - reg
-+  - "#power-domain-cells"
++  - '#clock-cells'
 +  - operating-points-v2
-+  - apple,num-channels
 +
 +additionalProperties: false
 +
++
 +examples:
-+  # See clock/apple,cluster-clock.yaml for an example of downstream usage.
 +  - |
++    pcluster_opp: opp-table-1 {
++        compatible = "operating-points-v2";
++        opp-shared;
++
++        opp01 {
++            opp-hz = /bits/ 64 <600000000>;
++            opp-microvolt = <781000>;
++            opp-level = <1>;
++            clock-latency-ns = <8000>;
++            required-opps = <&mcc_lowperf>;
++        };
++        /* intermediate p-states omitted */
++        opp15 {
++            opp-hz = /bits/ 64 <3204000000>;
++            opp-microvolt = <1081000>;
++            opp-level = <15>;
++            clock-latency-ns = <56000>;
++            required-opps = <&mcc_highperf>;
++        };
++    };
++
 +    mcc_opp: opp-table-2 {
 +        compatible = "operating-points-v2";
 +
@@ -136,6 +157,7 @@ index 000000000000..0774f10e65ed
 +            apple,memory-perf-config = <0x133 0x55555340>;
 +        };
 +    };
++
 +    soc {
 +        #address-cells = <2>;
 +        #size-cells = <2>;
@@ -147,73 +169,13 @@ index 000000000000..0774f10e65ed
 +            operating-points-v2 = <&mcc_opp>;
 +            apple,num-channels = <8>;
 +        };
-+    };
-diff --git a/Documentation/devicetree/bindings/opp/apple,mcc-operating-points.yaml b/Documentation/devicetree/bindings/opp/apple,mcc-operating-points.yaml
-new file mode 100644
-index 000000000000..babf27841bb7
---- /dev/null
-+++ b/Documentation/devicetree/bindings/opp/apple,mcc-operating-points.yaml
-@@ -0,0 +1,62 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/opp/apple,mcc-operating-points.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Apple SoC memory controller OPP bindings
-+
-+maintainers:
-+  - Hector Martin <marcan@marcan.st>
-+
-+description: |
-+  Apple SoCs can have their memory controller performance adjusted depending on
-+  system requirements. These performance states are represented by specific
-+  memory controller register values. The apple-mcc driver uses these values
-+  to change the MCC performance.
-+
-+allOf:
-+  - $ref: opp-v2-base.yaml#
-+
-+properties:
-+  compatible:
-+    const: apple,mcc-operating-points
-+
-+required:
-+  - compatible
-+
-+patternProperties:
-+  "opp[0-9]+":
-+    type: object
-+
-+    properties:
-+      opp-level: true
-+      apple,memory-perf-config:
-+        $ref: /schemas/types.yaml#/definitions/uint32-array
-+        description: |
-+          A pair of register values used to configure this performance state.
-+        minItems: 2
-+        maxItems: 2
-+
-+    required:
-+      - opp-level
-+      - apple,memory-perf-config
-+
-+    unevaluatedProperties: false
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    mcc_opp: opp-table-2 {
-+        compatible = "operating-points-v2";
-+
-+        mcc_lowperf: opp0 {
-+            opp-level = <0>;
-+            apple,memory-perf-config = <0x813057f 0x1800180>;
-+        };
-+        mcc_highperf: opp1 {
-+            opp-level = <1>;
-+            apple,memory-perf-config = <0x133 0x55555340>;
++        clk_pcluster: clock-controller@211e20000 {
++            compatible = "apple,t8103-cluster-clk", "apple,cluster-clk";
++            #clock-cells = <0>;
++            reg = <0x2 0x11e20000 0x0 0x4000>;
++            operating-points-v2 = <&pcluster_opp>;
++            power-domains = <&mcc>;
 +        };
 +    };
 -- 
