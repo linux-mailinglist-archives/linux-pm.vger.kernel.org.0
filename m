@@ -2,131 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86B38428E22
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Oct 2021 15:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55EEC4294E1
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Oct 2021 18:57:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237052AbhJKNid (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Oct 2021 09:38:33 -0400
-Received: from mail-ot1-f51.google.com ([209.85.210.51]:40923 "EHLO
-        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237044AbhJKNi2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Oct 2021 09:38:28 -0400
-Received: by mail-ot1-f51.google.com with SMTP id s18-20020a0568301e1200b0054e77a16651so4959403otr.7;
-        Mon, 11 Oct 2021 06:36:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=1pi40TIcKotkV6rxOevddDOHbAMj+lS14ZHs3z6ayJg=;
-        b=kiiPY7O38mybeHFGGcJ0uKsgVxFeXUMFEMPlDXV7SMc6PnLkDAurNK6DoNtspSZhnJ
-         Wozllfwp9tm5RwYrh9pGVOD8rsJJ6zYKx9erAijfzj0xh/allqKSxbV9KDHQBqi6in0/
-         0ZEK7x71C47NclOeZp5p2Kc1wfGqXAcTXs8Xnz7i4YF6rJEre2DkqvGaOZqnoBYFtvZP
-         AR3bdoYz8lDRnBhT79T4JOaQ78Vu1/xJsFPy8D9rGS4v6Dj1743xEA4DVLHUwYtTE0o5
-         WE12U07DmibX5BvYXO5Y1zaVVNJfRrl3k8an9Gm+EpM4HN6r/Q2GUyvgk1WZnTuIjOk6
-         zRvQ==
-X-Gm-Message-State: AOAM531aIzkZ/b0nYhR0ZECBmSCd2hRsHnjvN4m1VGXx8FrcijgvPAdK
-        Rmy0MtWt7rgeG9Chx3QEDQ==
-X-Google-Smtp-Source: ABdhPJwCnGSJxyh6fwYssOa8zYwCnn8BcBhPCI+XeOvGYCYE8QJxZ2s1XOnwdrLFg8s4OhTg7uI/aw==
-X-Received: by 2002:a05:6830:3486:: with SMTP id c6mr20994134otu.101.1633959384440;
-        Mon, 11 Oct 2021 06:36:24 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id l9sm45795oie.15.2021.10.11.06.36.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Oct 2021 06:36:23 -0700 (PDT)
-Received: (nullmailer pid 504942 invoked by uid 1000);
-        Mon, 11 Oct 2021 13:36:18 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Anup Patel <anup.patel@wdc.com>
-Cc:     Albert Ou <aou@eecs.berkeley.edu>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, Atish Patra <atish.patra@wdc.com>,
-        linux-kernel@vger.kernel.org,
-        Sandeep Tripathy <milun.tripathy@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Liush <liush@allwinnertech.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
+        id S232306AbhJKQ7c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Oct 2021 12:59:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50968 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231646AbhJKQ7b (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Oct 2021 12:59:31 -0400
+Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B71AC061570;
+        Mon, 11 Oct 2021 09:57:31 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: hector@marcansoft.com)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id EFDA84206F;
+        Mon, 11 Oct 2021 16:57:23 +0000 (UTC)
+From:   Hector Martin <marcan@marcan.st>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Hector Martin <marcan@marcan.st>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>, Marc Zyngier <maz@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org
-In-Reply-To: <20211011081820.1135261-8-anup.patel@wdc.com>
-References: <20211011081820.1135261-1-anup.patel@wdc.com> <20211011081820.1135261-8-anup.patel@wdc.com>
-Subject: Re: [PATCH v8 7/8] dt-bindings: Add common bindings for ARM and RISC-V idle states
-Date:   Mon, 11 Oct 2021 08:36:18 -0500
-Message-Id: <1633959378.228904.504941.nullmailer@robh.at.kernel.org>
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH 0/9] Apple SoC CPU P-state switching
+Date:   Tue, 12 Oct 2021 01:56:58 +0900
+Message-Id: <20211011165707.138157-1-marcan@marcan.st>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 11 Oct 2021 13:48:19 +0530, Anup Patel wrote:
-> The RISC-V CPU idle states will be described in under the
-> /cpus/idle-states DT node in the same way as ARM CPU idle
-> states.
-> 
-> This patch adds common bindings documentation for both ARM
-> and RISC-V idle states.
-> 
-> Signed-off-by: Anup Patel <anup.patel@wdc.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
->  .../bindings/arm/msm/qcom,idle-state.txt      |   2 +-
->  .../devicetree/bindings/arm/psci.yaml         |   2 +-
->  .../bindings/{arm => cpu}/idle-states.yaml    | 228 ++++++++++++++++--
->  .../devicetree/bindings/riscv/cpus.yaml       |   6 +
->  4 files changed, 219 insertions(+), 19 deletions(-)
->  rename Documentation/devicetree/bindings/{arm => cpu}/idle-states.yaml (74%)
-> 
+Hi folks, here's a first attempt at cpufreq support for the Apple M1.
+I'd appreciate any feedback on this approach.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+The hardware in these SoCs is very simple: you just poke a single
+register to change the performance state of a CPU cluster. There's
+some init required on older firmware versions, but we're going to
+say that's the bootloader's responsibility. This keeps the driver
+nice and simple and generic and likely to work on future SoCs too.
 
-yamllint warnings/errors:
+However, there's a catch: the memory controller config should also be
+modified when higher clock states are engaged on the P-cores, to
+get optimal performance.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpu/idle-states.yaml: patternProperties:^(cpu|cluster)-:properties:compatible:oneOf: [{'const': 'arm,idle-state'}, {'const': 'riscv,idle-state'}] should not be valid under {'items': {'propertyNames': {'const': 'const'}, 'required': ['const']}}
-	hint: Use 'enum' rather than 'oneOf' + 'const' entries
-	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpu/idle-states.yaml: ignoring, error in schema: patternProperties: ^(cpu|cluster)-: properties: compatible: oneOf
-warning: no schema found in file: ./Documentation/devicetree/bindings/cpu/idle-states.yaml
-Documentation/devicetree/bindings/arm/psci.example.dt.yaml:0:0: /example-3/cpus/idle-states/cpu-power-down: failed to match any schema with compatible: ['arm,idle-state']
-Documentation/devicetree/bindings/cpu/idle-states.example.dt.yaml:0:0: /example-0/cpus/idle-states/cpu-retention-0-0: failed to match any schema with compatible: ['arm,idle-state']
-Documentation/devicetree/bindings/cpu/idle-states.example.dt.yaml:0:0: /example-0/cpus/idle-states/cluster-retention-0: failed to match any schema with compatible: ['arm,idle-state']
-Documentation/devicetree/bindings/cpu/idle-states.example.dt.yaml:0:0: /example-0/cpus/idle-states/cpu-sleep-0-0: failed to match any schema with compatible: ['arm,idle-state']
-Documentation/devicetree/bindings/cpu/idle-states.example.dt.yaml:0:0: /example-0/cpus/idle-states/cluster-sleep-0: failed to match any schema with compatible: ['arm,idle-state']
-Documentation/devicetree/bindings/cpu/idle-states.example.dt.yaml:0:0: /example-0/cpus/idle-states/cpu-retention-1-0: failed to match any schema with compatible: ['arm,idle-state']
-Documentation/devicetree/bindings/cpu/idle-states.example.dt.yaml:0:0: /example-0/cpus/idle-states/cluster-retention-1: failed to match any schema with compatible: ['arm,idle-state']
-Documentation/devicetree/bindings/cpu/idle-states.example.dt.yaml:0:0: /example-0/cpus/idle-states/cpu-sleep-1-0: failed to match any schema with compatible: ['arm,idle-state']
-Documentation/devicetree/bindings/cpu/idle-states.example.dt.yaml:0:0: /example-0/cpus/idle-states/cluster-sleep-1: failed to match any schema with compatible: ['arm,idle-state']
-Documentation/devicetree/bindings/cpu/idle-states.example.dt.yaml:0:0: /example-1/cpus/idle-states/cpu-sleep-0-0: failed to match any schema with compatible: ['arm,idle-state']
-Documentation/devicetree/bindings/cpu/idle-states.example.dt.yaml:0:0: /example-1/cpus/idle-states/cluster-sleep-0: failed to match any schema with compatible: ['arm,idle-state']
-Documentation/devicetree/bindings/cpu/idle-states.example.dt.yaml:0:0: /example-1/cpus/idle-states/cpu-sleep-1-0: failed to match any schema with compatible: ['arm,idle-state']
-Documentation/devicetree/bindings/cpu/idle-states.example.dt.yaml:0:0: /example-1/cpus/idle-states/cluster-sleep-1: failed to match any schema with compatible: ['arm,idle-state']
-Documentation/devicetree/bindings/cpu/idle-states.example.dt.yaml:0:0: /example-2/cpus/idle-states/cpu-retentive-0-0: failed to match any schema with compatible: ['riscv,idle-state']
-Documentation/devicetree/bindings/cpu/idle-states.example.dt.yaml:0:0: /example-2/cpus/idle-states/cpu-nonretentive-0-0: failed to match any schema with compatible: ['riscv,idle-state']
-Documentation/devicetree/bindings/cpu/idle-states.example.dt.yaml:0:0: /example-2/cpus/idle-states/cluster-retentive-0: failed to match any schema with compatible: ['riscv,idle-state']
-Documentation/devicetree/bindings/cpu/idle-states.example.dt.yaml:0:0: /example-2/cpus/idle-states/cluster-nonretentive-0: failed to match any schema with compatible: ['riscv,idle-state']
-Documentation/devicetree/bindings/cpu/idle-states.example.dt.yaml:0:0: /example-2/cpus/idle-states/cpu-retentive-1-0: failed to match any schema with compatible: ['riscv,idle-state']
-Documentation/devicetree/bindings/cpu/idle-states.example.dt.yaml:0:0: /example-2/cpus/idle-states/cpu-nonretentive-1-0: failed to match any schema with compatible: ['riscv,idle-state']
-Documentation/devicetree/bindings/cpu/idle-states.example.dt.yaml:0:0: /example-2/cpus/idle-states/cluster-retentive-1: failed to match any schema with compatible: ['riscv,idle-state']
-Documentation/devicetree/bindings/cpu/idle-states.example.dt.yaml:0:0: /example-2/cpus/idle-states/cluster-nonretentive-1: failed to match any schema with compatible: ['riscv,idle-state']
+This series implements this using two drivers, on top of the existing
+cpufreq-dt infrastructure. The cpu clock driver represents the p-state
+switching as if it were a standard clock driver, so it can work with
+cpufreq-dt. To do this, it also needs access to the OPP table, so it can
+map the incoming clock frequences back to P-State index numbers, so that
+is present in the binding. This might be a bit strange, since the same
+OPP table is referenced by the CPUs themselves, and by the clocks driver
+that provides the actual switching for them...
 
-doc reference errors (make refcheckdocs):
+The memory controller stuff is implemented as a genpd provider that
+exposes two performance states that the CPU OPP tables can depend on.
+Unfortunately, the cpufreq path doesn't work properly for this, since
+the CPUs aren't typical devices participating in runtime-pm. So instead
+I opted to put that logic in the clock driver, which means it gets a
+power-domains reference to the memory controller. This required a hack
+to the OPP core so that it wouldn't complain about the missing parent
+domain when evaluating the OPPs in the context of the CPUs...
 
-See https://patchwork.ozlabs.org/patch/1539173
+The actual memory controller config is two magic numbers per performance
+state. I'd love to find out what they do, but this seems unlikely
+without docs or a deep memory performance analysis expedition... so I
+think we're going to have to settle for this way, at least for now. If
+things become better understood in the future, we can modify the binding
+and keep the driver backwards-compatible with old DTs at least.
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+I did benchmark the CPU p-state switching, so the latency numbers there
+have been experimentally measured. The CPU capacity numbers are also
+based on real benchmarks (oddly enough, Dhrystone was a big outlier
+here that was not representative of everything else, so we didn't use
+it).
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+Patches:
+ #1:   MAINTAINERS updates, split out so this can go through the SoC
+       tree so we can spare all the subsystem maintainers the merge
+       conflicts, since we have a bunch of other changes here going on
+       in parallel.
+ #2-3: DT bindings
+ #4:   The aforementioned hack for the OPP core
+ #5:   Add of_genpd_add_provider_simple_noclk()
+ #6:   Memory controller driver
+ #7:   CPU p-state clock driver
+ #8:   Add some deps for ARCH_APPLE
+ #9:   DT updates (for asahi-soc tree)
 
-pip3 install dtschema --upgrade
+Hector Martin (9):
+  MAINTAINERS: apple: Add apple-mcc and clk-apple-cluster paths
+  dt-bindings: memory-controller: Add apple,mcc binding
+  dt-bindings: clock: Add apple,cluster-clk binding
+  opp: core: Don't warn if required OPP device does not exist
+  PM: domains: Add of_genpd_add_provider_simple_noclk()
+  memory: apple: Add apple-mcc driver to manage MCC perf in Apple SoCs
+  clk: apple: Add clk-apple-cluster driver to manage CPU p-states
+  arm64: apple: Select MEMORY and APPLE_MCC
+  arm64: apple: Add CPU frequency scaling support for t8103
 
-Please check and re-submit.
+ .../bindings/clock/apple,cluster-clk.yaml     | 115 ++++++++
+ .../memory-controllers/apple,mcc.yaml         |  80 ++++++
+ .../opp/apple,mcc-operating-points.yaml       |  62 +++++
+ MAINTAINERS                                   |   5 +
+ arch/arm64/Kconfig.platforms                  |   2 +
+ arch/arm64/boot/dts/apple/t8103.dtsi          | 255 +++++++++++++++++-
+ drivers/base/power/domain.c                   |  39 ++-
+ drivers/clk/Kconfig                           |   9 +
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/clk-apple-cluster.c               | 184 +++++++++++++
+ drivers/memory/Kconfig                        |   9 +
+ drivers/memory/Makefile                       |   1 +
+ drivers/memory/apple-mcc.c                    | 130 +++++++++
+ drivers/opp/core.c                            |   5 +-
+ include/linux/pm_domain.h                     |   8 +
+ 15 files changed, 887 insertions(+), 18 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/apple,cluster-clk.yaml
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/apple,mcc.yaml
+ create mode 100644 Documentation/devicetree/bindings/opp/apple,mcc-operating-points.yaml
+ create mode 100644 drivers/clk/clk-apple-cluster.c
+ create mode 100644 drivers/memory/apple-mcc.c
+
+-- 
+2.33.0
 
