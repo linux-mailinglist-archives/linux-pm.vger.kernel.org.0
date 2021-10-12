@@ -2,59 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCFE042A05B
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Oct 2021 10:51:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF06242A0E4
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Oct 2021 11:19:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235390AbhJLIxW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Oct 2021 04:53:22 -0400
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:40834
+        id S235537AbhJLJVT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Oct 2021 05:21:19 -0400
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:41692
         "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234998AbhJLIxP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Oct 2021 04:53:15 -0400
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com [209.85.167.69])
+        by vger.kernel.org with ESMTP id S235462AbhJLJVT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Oct 2021 05:21:19 -0400
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com [209.85.167.72])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 0226840015
-        for <linux-pm@vger.kernel.org>; Tue, 12 Oct 2021 08:51:12 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id DC94A40018
+        for <linux-pm@vger.kernel.org>; Tue, 12 Oct 2021 09:19:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1634028672;
-        bh=T8ZOZOr5Y4GlENUxX/f29gdurL3ZGpNumPUv/2Px4/g=;
-        h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+        s=20210705; t=1634030356;
+        bh=r5y5/vVnc4K5UB1TBSz+7rG5tu9PmtPkhFbjFAsJwpg=;
+        h=To:Cc:References:From:Subject:Message-ID:Date:MIME-Version:
          In-Reply-To:Content-Type;
-        b=gnXXXVijaqXvQJFih4dE1eDBYUrOGdDVaa4Hg1XcddHYLDIiD6awSrwCsCgj+I3xF
-         kQJLGVnT83ACgcAdL5PAX7pcrM2X1NkagqS7yZaKww0pjDjqtMUEaf8kRBoDsoGti0
-         g42StT0QFz7lqq0gTqW7QhYiDc6cG2nqvpJCqGOk47p1db7+bIgwsy4q+/BkJ1muR8
-         05R9gzdO7ylhTVwpUf9DIC5XqAifnNjAAX8T+wq88nC/sBm06nqDjfOmsIRlmFORR4
-         hWSx5L6TofaXbJ+bEHqRHgbx7edgRnieIphhwljcVAxzK6+WIJg47RKUXOhelPdnzz
-         o5Ays3xqvdd+g==
-Received: by mail-lf1-f69.google.com with SMTP id v2-20020ac25582000000b003fd1c161a31so14541722lfg.15
-        for <linux-pm@vger.kernel.org>; Tue, 12 Oct 2021 01:51:11 -0700 (PDT)
+        b=cwImSNq/tDdvmlpRvEiglE/iHCoz4pjnemv5hXDztHO6Orvx+iBICiIFk/FqJNLtX
+         cWLuZwG2bZbrNnBBTR7QFNheDDF72P0kbPxKGsPasrmBo3luZADAmViL18Q4XXqtdD
+         U3a0SqR22Rt+RHXVBL6GSSPaJsPI+mwtNZGFvmk647ygramO1644z7AgEIJmRWNGGE
+         iuprmq3QPRX+ixOi3lRMWIKbELbAAOiQRTo6QQFN0BIh4BbcNhIOCo0d3b4RogKI/C
+         wxlhZBQd2vthfLqoHtGCY7ziPApxBNunQ7cVZGhE4xGa/BqzH5smAuRVz3g6D8pegD
+         VnaUYAMiiC+kQ==
+Received: by mail-lf1-f72.google.com with SMTP id c6-20020a05651200c600b003fc6d39efa4so14709769lfp.12
+        for <linux-pm@vger.kernel.org>; Tue, 12 Oct 2021 02:19:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=T8ZOZOr5Y4GlENUxX/f29gdurL3ZGpNumPUv/2Px4/g=;
-        b=T/10ZHcYz8WzKoej5C18eKxuLD55XtXBKPitfI9BBYqWBf0BlQrjjGbwMNkm3LQ/hh
-         honI2LxLen3nEIcgWA4x2NNxC4L7OGsgbVVfBNzBOetONXtK/6PELcjC7VAgj0Tkl4n+
-         XETUmiDNjl7e4/jiN9kHNPhKSVosEP02D69AImwTcyRGjdI7qUmobVAXtLGUQf5HMpi2
-         RVf2FKCM4+qsLgUPAeGCK+uDCfJl+B7q9E0H3IkXB9FPWeHik3Et3p9nwEONpeohUTKe
-         mJPNJcQWqlBnwnDTAVe2CpQYAiqz0L+orLUIYLVdohXhj0G+Rqvs+iQ4uaS8jF4q7q1n
-         iAIw==
-X-Gm-Message-State: AOAM531x7D+Ul9VtgvmKdETfx0JDh4QRw3WZfX12vYxt1Wv4c5TkqmSn
-        BUG/qD5y4YkJu8poK78PyPOcqjsYY7AVnuVvncp8EfLVA7WOvS9hyHVOZGPrVmLf8PVEWUh2Njv
-        gYzszLjAC0HFiJKHdMbtmtw4Sj0Jke5gtSMHh
-X-Received: by 2002:ac2:51cd:: with SMTP id u13mr3993650lfm.200.1634028671233;
-        Tue, 12 Oct 2021 01:51:11 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJztoea6HkNHM9Wjs5q7o+UVJ+H5Botof8Mx0a9li4apYYpZeNNCRerrFp6ZBW53kj/fYfSWfg==
-X-Received: by 2002:ac2:51cd:: with SMTP id u13mr3993612lfm.200.1634028670990;
-        Tue, 12 Oct 2021 01:51:10 -0700 (PDT)
+        bh=r5y5/vVnc4K5UB1TBSz+7rG5tu9PmtPkhFbjFAsJwpg=;
+        b=JTQ2uPLW7DvFoRIOxtSo0gPCvlxDim158xDMmesa/Ra3oRw8CgInvp3gw58DJq+9GV
+         6eunmwYA+6Pa8DbZfNnFAihb4vLjbM1NShvPsBspMrt1rUnGr+dHTfK85EioAX18+m0J
+         KdmWuaMlhxoMKDUSF8MZCnmC1llq9IUeOJoMM6qag+ahvm+3dlZUiVrfV98xuEtzGnaV
+         4cpyh1piaglavsVGjoOpVE0vO2/y/mLJiXrQYdPDiaq+AQwWlcw1Uukgl/I1rA31nj+T
+         CrQFhkoXex6y4WmMfK8QXlZBSU7kyCvK7x1dzK3bql/RNGXqY0AwEklKUJN10cCPU9Bs
+         fEsg==
+X-Gm-Message-State: AOAM531U31vZvdC9gET74BhjRzr4fcYzpLOC3agbULcNWE3GGzCZ8oku
+        WFE9ZEEnAMZWPkz+qpOdMdNFJa4BzPN0jujEgUBOcLEr19qCdorHjLW1CBqsnYBQivs3TEj03Il
+        Rn0JUZ9BcbI4CLyaPe9mRS3cmqNPjV0a1H0xv
+X-Received: by 2002:ac2:4c48:: with SMTP id o8mr27115423lfk.286.1634030356154;
+        Tue, 12 Oct 2021 02:19:16 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzq4pSLuFbcE7Kzfui9ayq9HU6yRKFDzy2Lesl+hVFgdjVy7SmfrAycDlAL4d25TBxgXwLBng==
+X-Received: by 2002:ac2:4c48:: with SMTP id o8mr27115394lfk.286.1634030355941;
+        Tue, 12 Oct 2021 02:19:15 -0700 (PDT)
 Received: from [192.168.0.20] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id c3sm344820lfr.187.2021.10.12.01.51.10
+        by smtp.gmail.com with ESMTPSA id s3sm567364lfs.175.2021.10.12.02.19.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Oct 2021 01:51:10 -0700 (PDT)
-Subject: Re: [RFC PATCH 3/9] dt-bindings: clock: Add apple,cluster-clk binding
+        Tue, 12 Oct 2021 02:19:15 -0700 (PDT)
 To:     Hector Martin <marcan@marcan.st>,
         linux-arm-kernel@lists.infradead.org
 Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
@@ -71,159 +70,227 @@ Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
         linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20211011165707.138157-1-marcan@marcan.st>
- <20211011165707.138157-4-marcan@marcan.st>
+ <20211011165707.138157-7-marcan@marcan.st>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <0fe602f6-3adc-dfac-beee-2854b01cec5c@canonical.com>
-Date:   Tue, 12 Oct 2021 10:51:09 +0200
+Subject: Re: [RFC PATCH 6/9] memory: apple: Add apple-mcc driver to manage MCC
+ perf in Apple SoCs
+Message-ID: <a9f6898d-bd76-b94e-52fc-98e9da1a04bd@canonical.com>
+Date:   Tue, 12 Oct 2021 11:19:14 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <20211011165707.138157-4-marcan@marcan.st>
+In-Reply-To: <20211011165707.138157-7-marcan@marcan.st>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 11/10/2021 18:57, Hector Martin wrote:
-> This device represents the CPU performance state switching mechanism as
-> a clock controller, to be used with the standard cpufreq-dt
-> infrastructure.
+> This driver binds to the memory controller hardware in Apple SoCs such
+> as the Apple M1, and provides a power domain that downstream devices can
+> use to change the performance state of the memory controller.
 > 
 > Signed-off-by: Hector Martin <marcan@marcan.st>
 > ---
->  .../bindings/clock/apple,cluster-clk.yaml     | 115 ++++++++++++++++++
->  1 file changed, 115 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/apple,cluster-clk.yaml
+>  drivers/memory/Kconfig     |   9 +++
+>  drivers/memory/Makefile    |   1 +
+>  drivers/memory/apple-mcc.c | 130 +++++++++++++++++++++++++++++++++++++
+>  3 files changed, 140 insertions(+)
+>  create mode 100644 drivers/memory/apple-mcc.c
 > 
-> diff --git a/Documentation/devicetree/bindings/clock/apple,cluster-clk.yaml b/Documentation/devicetree/bindings/clock/apple,cluster-clk.yaml
+> diff --git a/drivers/memory/Kconfig b/drivers/memory/Kconfig
+> index 72c0df129d5c..48ef3d563a1c 100644
+> --- a/drivers/memory/Kconfig
+> +++ b/drivers/memory/Kconfig
+> @@ -30,6 +30,15 @@ config ARM_PL172_MPMC
+>  	  If you have an embedded system with an AMBA bus and a PL172
+>  	  controller, say Y or M here.
+>  
+> +config APPLE_MCC
+> +	tristate "Apple SoC MCC driver"
+> +	default y if ARCH_APPLE
+> +	select PM_GENERIC_DOMAINS
+> +	depends on ARCH_APPLE || COMPILE_TEST
+> +	help
+> +	  This driver manages performance tuning for the memory controller in
+> +	  Apple SoCs, such as the Apple M1.
+> +
+>  config ATMEL_SDRAMC
+>  	bool "Atmel (Multi-port DDR-)SDRAM Controller"
+>  	default y if ARCH_AT91
+> diff --git a/drivers/memory/Makefile b/drivers/memory/Makefile
+> index bc7663ed1c25..947840cbd2d4 100644
+> --- a/drivers/memory/Makefile
+> +++ b/drivers/memory/Makefile
+> @@ -8,6 +8,7 @@ ifeq ($(CONFIG_DDR),y)
+>  obj-$(CONFIG_OF)		+= of_memory.o
+>  endif
+>  obj-$(CONFIG_ARM_PL172_MPMC)	+= pl172.o
+> +obj-$(CONFIG_APPLE_MCC)		+= apple-mcc.o
+>  obj-$(CONFIG_ATMEL_SDRAMC)	+= atmel-sdramc.o
+>  obj-$(CONFIG_ATMEL_EBI)		+= atmel-ebi.o
+>  obj-$(CONFIG_BRCMSTB_DPFE)	+= brcmstb_dpfe.o
+> diff --git a/drivers/memory/apple-mcc.c b/drivers/memory/apple-mcc.c
 > new file mode 100644
-> index 000000000000..9a8b863dadc0
+> index 000000000000..55959f034b9a
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/apple,cluster-clk.yaml
-> @@ -0,0 +1,115 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/apple,cluster-clk.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: CPU cluster frequency scaling for Apple SoCs
-> +
-> +maintainers:
-> +  - Hector Martin <marcan@marcan.st>
-> +
-> +description: |
-> +  Apple SoCs control CPU cluster frequencies by using a performance state
-> +  index. This node represents the feature as a clock controller, and uses
-> +  a reference to the CPU OPP table to translate clock frequencies into
-> +  performance states. This allows the CPUs to use the standard cpufreq-dt
-> +  mechanism for frequency scaling.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - apple,t8103-cluster-clk
-> +      - const: apple,cluster-clk
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  '#clock-cells':
-> +    const: 0
-> +
-> +  operating-points-v2:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    description:
-> +      A reference to the OPP table used for the CPU cluster controlled by this
-> +      device instance. The table should contain an `opp-level` property for
-> +      every OPP, which represents the p-state index used by the hardware to
-> +      represent this performance level.
-> +
-> +      OPPs may also have a `required-opps` property (see power-domains).
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +    description:
-> +      An optional reference to a power domain provider that links its
-> +      performance state to the CPU cluster performance state. This is typically
-> +      a memory controller. If set, the `required-opps` property in the CPU
-> +      frequency OPP nodes will be used to change the performance state of this
-> +      provider state in tandem with CPU frequency changes.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - '#clock-cells'
-> +  - operating-points-v2
-> +
-> +additionalProperties: false
-> +
-> +
+> +++ b/drivers/memory/apple-mcc.c
+> @@ -0,0 +1,130 @@
+> +// SPDX-License-Identifier: GPL-2.0-only OR MIT
+> +/*
+> + * Apple SoC MCC memory controller performance control driver
+> + *
+> + * Copyright The Asahi Linux Contributors
 
-One line break.
+Copyright date?
 
-> +examples:
-> +  - |
-> +    pcluster_opp: opp-table-1 {
-> +        compatible = "operating-points-v2";
-> +        opp-shared;
+> + */
 > +
-> +        opp01 {
-> +            opp-hz = /bits/ 64 <600000000>;
-> +            opp-microvolt = <781000>;
-> +            opp-level = <1>;
-> +            clock-latency-ns = <8000>;
-> +            required-opps = <&mcc_lowperf>;
-> +        };
-> +        /* intermediate p-states omitted */
-> +        opp15 {
-> +            opp-hz = /bits/ 64 <3204000000>;
-> +            opp-microvolt = <1081000>;
-> +            opp-level = <15>;
-> +            clock-latency-ns = <56000>;
-> +            required-opps = <&mcc_highperf>;
-> +        };
-> +    };
+> +#include <linux/delay.h>
+> +#include <linux/err.h>
+> +#include <linux/io.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pm_domain.h>
+> +#include <linux/pm_opp.h>
 > +
-> +    mcc_opp: opp-table-2 {
-> +        compatible = "operating-points-v2";
+> +#define APPLE_MCC_PERF_CONFIG1  0xdc4
+> +#define APPLE_MCC_PERF_CONFIG2  0xdbc
+> +#define APPLE_MCC_CHANNEL(x)	((x) * 0x40000)
+> +
+> +struct apple_mcc {
+> +	struct device *dev;
+> +	struct generic_pm_domain genpd;
+> +	void __iomem *reg_base;
+> +	u32 num_channels;
+> +};
+> +
+> +#define to_apple_mcc(_genpd) container_of(_genpd, struct apple_mcc, genpd)
+> +
+> +static int apple_mcc_set_performance_state(struct generic_pm_domain *genpd, unsigned int state)
+> +{
+> +	struct apple_mcc *mcc = to_apple_mcc(genpd);
+> +	struct dev_pm_opp *opp;
+> +	struct device_node *np;
+> +	u32 perf_config[2];
+> +	unsigned int i;
+> +
+> +	dev_dbg(mcc->dev, "switching to perf state %d\n", state);
+> +
+> +	opp = dev_pm_opp_find_level_exact(&mcc->genpd.dev, state);
+> +	if (IS_ERR(opp))
+> +		return PTR_ERR(opp);
+> +
+> +	np = dev_pm_opp_get_of_node(opp);
+> +	if (of_property_read_u32_array(np, "apple,memory-perf-config",
+> +		perf_config, ARRAY_SIZE(perf_config))) {
+> +		dev_err(mcc->dev, "missing apple,memory-perf-config property");
+> +		of_node_put(np);
+> +		return -EINVAL;
+> +	}
+> +	of_node_put(np);
+> +
+> +	for (i = 0; i < mcc->num_channels; i++) {
+> +		writel_relaxed(perf_config[0],
+> +			       mcc->reg_base + APPLE_MCC_CHANNEL(i) + APPLE_MCC_PERF_CONFIG1);
+> +		writel_relaxed(perf_config[1],
+> +			       mcc->reg_base + APPLE_MCC_CHANNEL(i) + APPLE_MCC_PERF_CONFIG2);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static unsigned int apple_mcc_opp_to_performance_state(struct generic_pm_domain *genpd,
+> +						       struct dev_pm_opp *opp)
+> +{
+> +	return dev_pm_opp_get_level(opp);
+> +}
+> +
+> +static int apple_mcc_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct device_node *node = dev->of_node;
 
-Wrong compatible.
+By convention mostly we call the variable "np".
+
+> +	struct apple_mcc *mcc;
+> +	int ret;
+> +
+> +	mcc = devm_kzalloc(dev, sizeof(*mcc), GFP_KERNEL);
+> +	if (!mcc)
+> +		return -ENOMEM;
+> +
+> +	mcc->reg_base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(mcc->reg_base))
+> +		return PTR_ERR(mcc->reg_base);
+> +
+> +	if (of_property_read_u32(node, "apple,num-channels", &mcc->num_channels)) {
+
+Don't you have a limit of supported channels? It cannot be any uint32...
+
+> +		dev_err(dev, "missing apple,num-channels property\n");
+
+Use almost everywhere dev_err_probe - less code and you get error msg
+printed.
+
+> +		return -ENOENT;
+> +	}
+> +
+> +	mcc->dev = dev;
+> +	mcc->genpd.name = "apple-mcc-perf";
+> +	mcc->genpd.opp_to_performance_state = apple_mcc_opp_to_performance_state;
+> +	mcc->genpd.set_performance_state = apple_mcc_set_performance_state;
+> +
+> +	ret = pm_genpd_init(&mcc->genpd, NULL, false);
+> +	if (ret < 0) {
+> +		dev_err(dev, "pm_genpd_init failed\n");
+> +		return ret;
+> +	}
+> +
+> +	ret = of_genpd_add_provider_simple_noclk(node, &mcc->genpd);
+> +	if (ret < 0) {
+> +		dev_err(dev, "of_genpd_add_provider_simple failed\n");
+> +		return ret;
+> +	}
+> +
+> +	dev_info(dev, "Apple MCC performance driver initialized\n");
+
+Please skip it, or at least make it a dev_dbg, you don't print any
+valuable information here.
 
 > +
-> +        mcc_lowperf: opp0 {
-> +            opp-level = <0>;
-> +            apple,memory-perf-config = <0x813057f 0x1800180>;
-> +        };
-> +        mcc_highperf: opp1 {
-> +            opp-level = <1>;
-> +            apple,memory-perf-config = <0x133 0x55555340>;
-> +        };
-> +    };
+> +	return 0;
+> +}
 > +
-> +    soc {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
+> +static const struct of_device_id apple_mcc_of_match[] = {
+> +	{ .compatible = "apple,mcc" },
+> +	{}
+> +};
 > +
-> +        mcc: memory-controller@200200000 {
-> +            compatible = "apple,t8103-mcc", "apple,mcc";
-> +            #power-domain-cells = <0>;
-> +            reg = <0x2 0x200000 0x0 0x200000>;
-> +            operating-points-v2 = <&mcc_opp>;
-> +            apple,num-channels = <8>;
-> +        };
+> +MODULE_DEVICE_TABLE(of, apple_mcc_of_match);
 > +
-> +        clk_pcluster: clock-controller@211e20000 {
-> +            compatible = "apple,t8103-cluster-clk", "apple,cluster-clk";
-> +            #clock-cells = <0>;
-> +            reg = <0x2 0x11e20000 0x0 0x4000>;
-> +            operating-points-v2 = <&pcluster_opp>;
-> +            power-domains = <&mcc>;
-> +        };
-> +    };
+> +static struct platform_driver apple_mcc_driver = {
+> +	.probe = apple_mcc_probe,
+> +	.driver = {
+> +		.name = "apple-mcc",
+> +		.of_match_table = apple_mcc_of_match,
+> +	},
+> +};
+
+module_platform_driver() goes here.
+
+> +
+> +MODULE_AUTHOR("Hector Martin <marcan@marcan.st>");
+> +MODULE_DESCRIPTION("MCC memory controller performance tuning driver for Apple SoCs");
+> +MODULE_LICENSE("GPL v2");
+
+I think this will be "Dual MIT/GPL", based on your SPDX.
+
+> +
+> +module_platform_driver(apple_mcc_driver);
 > 
 
 
