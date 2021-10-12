@@ -2,60 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7088C42A04C
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Oct 2021 10:48:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCFE042A05B
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Oct 2021 10:51:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234998AbhJLIuT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Oct 2021 04:50:19 -0400
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:54820
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234870AbhJLIuR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Oct 2021 04:50:17 -0400
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com [209.85.167.71])
+        id S235390AbhJLIxW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Oct 2021 04:53:22 -0400
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:40834
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234998AbhJLIxP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Oct 2021 04:53:15 -0400
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com [209.85.167.69])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 476183FFEF
-        for <linux-pm@vger.kernel.org>; Tue, 12 Oct 2021 08:48:15 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 0226840015
+        for <linux-pm@vger.kernel.org>; Tue, 12 Oct 2021 08:51:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1634028495;
-        bh=/bLYqEWiuu93v2dUYStYjMMSSjdwzn3CWIi0Is9xJUs=;
+        s=20210705; t=1634028672;
+        bh=T8ZOZOr5Y4GlENUxX/f29gdurL3ZGpNumPUv/2Px4/g=;
         h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
          In-Reply-To:Content-Type;
-        b=oyxGPQzswBCJEnFBHOiXYbhTiU69N8i9+CFfDb0pEsC8jm2NIbFzYl/Orvsalu1Uj
-         Q6ManNSz915YEQiZdOE2x8XDCIuvlYhtD7q9VExwmM1wlm2346MN/yrQNU1ZZgrt0I
-         80v1CYOeO9tS3AqFNijdwfaK3UR4wfyiStAXvDXVL31XN7CPuUE8gPwMeKDt/bbFd+
-         pq1xK7ni2jSdlQbV6imrYOoR5CTQpYI6JMlzAvceCYbbBCQgZ1BFRaaCcaHoeM40M7
-         5UpQSjplHY5LL6o7x2lxxFQuqZyw0DXZyELSnYFL+/341QOoPIUd6mxEhk0WGMTiXE
-         LspTs9gRm4+lg==
-Received: by mail-lf1-f71.google.com with SMTP id f17-20020a0565123b1100b003fda40b659aso321419lfv.23
-        for <linux-pm@vger.kernel.org>; Tue, 12 Oct 2021 01:48:15 -0700 (PDT)
+        b=gnXXXVijaqXvQJFih4dE1eDBYUrOGdDVaa4Hg1XcddHYLDIiD6awSrwCsCgj+I3xF
+         kQJLGVnT83ACgcAdL5PAX7pcrM2X1NkagqS7yZaKww0pjDjqtMUEaf8kRBoDsoGti0
+         g42StT0QFz7lqq0gTqW7QhYiDc6cG2nqvpJCqGOk47p1db7+bIgwsy4q+/BkJ1muR8
+         05R9gzdO7ylhTVwpUf9DIC5XqAifnNjAAX8T+wq88nC/sBm06nqDjfOmsIRlmFORR4
+         hWSx5L6TofaXbJ+bEHqRHgbx7edgRnieIphhwljcVAxzK6+WIJg47RKUXOhelPdnzz
+         o5Ays3xqvdd+g==
+Received: by mail-lf1-f69.google.com with SMTP id v2-20020ac25582000000b003fd1c161a31so14541722lfg.15
+        for <linux-pm@vger.kernel.org>; Tue, 12 Oct 2021 01:51:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=/bLYqEWiuu93v2dUYStYjMMSSjdwzn3CWIi0Is9xJUs=;
-        b=5qnaLwfS/3gfai3vWCTvd8SjCL+lUOR+pl0m4vLlka6OIw5oi/v4pMDeeT0HgzstZW
-         KIMMIvZ9AMJ+TNLl6h8aFkClzAx2ZCALIe8UzJ0ljLS+0thbLpTTZL5BYl+7G8KnhiuS
-         NV0DBwn4YSq6L25Y6fReobGzh1b6LbydvWQ3/NXsOITfLQ1FLUKqJSZwdlVTey3dy8FR
-         i5yg6EBzHfAG9HpeA/v6QSN0eLwk9A8IKWBqqliqT9vx5xKIQmAWXR4Pj93lNnpOTVez
-         ne+u1keHhN7hjjxUaa8BXD/j6jGd1YIj7hEbr46aKUrfADoZ6FT+T6QaDj6uKm7kyJpD
-         TAdw==
-X-Gm-Message-State: AOAM530TScui/cAXRB/z3sKLwWG7cCb5nmIwYgr3IAK8Xa1z+X1/Keoy
-        PFsAF4KfIn8aNT08jIMyQ4WKovkBXQ9Da8DtiqE3REN3EgwxTT1BXTpSohzGqo9UgGFQNlIsRno
-        7/eLIGSMEff/HL3TcmkbqRUAdLQTo5TENvN9j
-X-Received: by 2002:a2e:bd02:: with SMTP id n2mr29708329ljq.412.1634028494380;
-        Tue, 12 Oct 2021 01:48:14 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz/KrA+FVuHKQaPlIEozCQYVijMCeVw0Gj89uGifpd5rxNy42hNDpCiwoLy0Hg/ZwsEICaIzw==
-X-Received: by 2002:a2e:bd02:: with SMTP id n2mr29708314ljq.412.1634028494178;
-        Tue, 12 Oct 2021 01:48:14 -0700 (PDT)
+        bh=T8ZOZOr5Y4GlENUxX/f29gdurL3ZGpNumPUv/2Px4/g=;
+        b=T/10ZHcYz8WzKoej5C18eKxuLD55XtXBKPitfI9BBYqWBf0BlQrjjGbwMNkm3LQ/hh
+         honI2LxLen3nEIcgWA4x2NNxC4L7OGsgbVVfBNzBOetONXtK/6PELcjC7VAgj0Tkl4n+
+         XETUmiDNjl7e4/jiN9kHNPhKSVosEP02D69AImwTcyRGjdI7qUmobVAXtLGUQf5HMpi2
+         RVf2FKCM4+qsLgUPAeGCK+uDCfJl+B7q9E0H3IkXB9FPWeHik3Et3p9nwEONpeohUTKe
+         mJPNJcQWqlBnwnDTAVe2CpQYAiqz0L+orLUIYLVdohXhj0G+Rqvs+iQ4uaS8jF4q7q1n
+         iAIw==
+X-Gm-Message-State: AOAM531x7D+Ul9VtgvmKdETfx0JDh4QRw3WZfX12vYxt1Wv4c5TkqmSn
+        BUG/qD5y4YkJu8poK78PyPOcqjsYY7AVnuVvncp8EfLVA7WOvS9hyHVOZGPrVmLf8PVEWUh2Njv
+        gYzszLjAC0HFiJKHdMbtmtw4Sj0Jke5gtSMHh
+X-Received: by 2002:ac2:51cd:: with SMTP id u13mr3993650lfm.200.1634028671233;
+        Tue, 12 Oct 2021 01:51:11 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJztoea6HkNHM9Wjs5q7o+UVJ+H5Botof8Mx0a9li4apYYpZeNNCRerrFp6ZBW53kj/fYfSWfg==
+X-Received: by 2002:ac2:51cd:: with SMTP id u13mr3993612lfm.200.1634028670990;
+        Tue, 12 Oct 2021 01:51:10 -0700 (PDT)
 Received: from [192.168.0.20] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id h23sm651216ljl.35.2021.10.12.01.48.13
+        by smtp.gmail.com with ESMTPSA id c3sm344820lfr.187.2021.10.12.01.51.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Oct 2021 01:48:13 -0700 (PDT)
-Subject: Re: [RFC PATCH 2/9] dt-bindings: memory-controller: Add apple,mcc
- binding
+        Tue, 12 Oct 2021 01:51:10 -0700 (PDT)
+Subject: Re: [RFC PATCH 3/9] dt-bindings: clock: Add apple,cluster-clk binding
 To:     Hector Martin <marcan@marcan.st>,
         linux-arm-kernel@lists.infradead.org
 Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
@@ -72,14 +71,14 @@ Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
         linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20211011165707.138157-1-marcan@marcan.st>
- <20211011165707.138157-3-marcan@marcan.st>
+ <20211011165707.138157-4-marcan@marcan.st>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <6999f3f4-338c-f1ba-2360-40fa50ecd45d@canonical.com>
-Date:   Tue, 12 Oct 2021 10:48:12 +0200
+Message-ID: <0fe602f6-3adc-dfac-beee-2854b01cec5c@canonical.com>
+Date:   Tue, 12 Oct 2021 10:51:09 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <20211011165707.138157-3-marcan@marcan.st>
+In-Reply-To: <20211011165707.138157-4-marcan@marcan.st>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -88,84 +87,111 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 11/10/2021 18:57, Hector Martin wrote:
-> This device represents the memory controller in Apple SoCs, and is
-> chiefly in charge of adjusting performance characteristics according to
-> system demand.
+> This device represents the CPU performance state switching mechanism as
+> a clock controller, to be used with the standard cpufreq-dt
+> infrastructure.
 > 
 > Signed-off-by: Hector Martin <marcan@marcan.st>
 > ---
->  .../memory-controllers/apple,mcc.yaml         | 80 +++++++++++++++++++
->  .../opp/apple,mcc-operating-points.yaml       | 62 ++++++++++++++
->  2 files changed, 142 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/memory-controllers/apple,mcc.yaml
->  create mode 100644 Documentation/devicetree/bindings/opp/apple,mcc-operating-points.yaml
+>  .../bindings/clock/apple,cluster-clk.yaml     | 115 ++++++++++++++++++
+>  1 file changed, 115 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/apple,cluster-clk.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/memory-controllers/apple,mcc.yaml b/Documentation/devicetree/bindings/memory-controllers/apple,mcc.yaml
+> diff --git a/Documentation/devicetree/bindings/clock/apple,cluster-clk.yaml b/Documentation/devicetree/bindings/clock/apple,cluster-clk.yaml
 > new file mode 100644
-> index 000000000000..0774f10e65ed
+> index 000000000000..9a8b863dadc0
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/memory-controllers/apple,mcc.yaml
-> @@ -0,0 +1,80 @@
+> +++ b/Documentation/devicetree/bindings/clock/apple,cluster-clk.yaml
+> @@ -0,0 +1,115 @@
 > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/memory-controllers/apple,mcc.yaml#
+> +$id: http://devicetree.org/schemas/clock/apple,cluster-clk.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: Apple SoC MCC memory controller performance controls
+> +title: CPU cluster frequency scaling for Apple SoCs
 > +
 > +maintainers:
 > +  - Hector Martin <marcan@marcan.st>
 > +
 > +description: |
-> +  Apple SoCs contain a multichannel memory controller that can have its
-> +  configuration changed to adjust to changing performance requirements from
-> +  the rest of the SoC. This node represents the controller and provides a
-> +  power domain provider that downstream devices can use to adjust the memory
-> +  controller performance level.
+> +  Apple SoCs control CPU cluster frequencies by using a performance state
+> +  index. This node represents the feature as a clock controller, and uses
+> +  a reference to the CPU OPP table to translate clock frequencies into
+> +  performance states. This allows the CPUs to use the standard cpufreq-dt
+> +  mechanism for frequency scaling.
 > +
 > +properties:
 > +  compatible:
 > +    items:
 > +      - enum:
-> +          - apple,t8103-mcc
-> +      - const: apple,mcc
+> +          - apple,t8103-cluster-clk
+> +      - const: apple,cluster-clk
 > +
 > +  reg:
 > +    maxItems: 1
 > +
-> +  "#power-domain-cells":
+> +  '#clock-cells':
 > +    const: 0
 > +
 > +  operating-points-v2:
 > +    $ref: /schemas/types.yaml#/definitions/phandle-array
 > +    description:
-> +      A reference to the OPP table describing the memory controller performance
-> +      levels. Each OPP node should contain an `apple,memory-perf-config`
-> +      property that contains the configuration values for that performance
-> +      level.
+> +      A reference to the OPP table used for the CPU cluster controlled by this
+> +      device instance. The table should contain an `opp-level` property for
+> +      every OPP, which represents the p-state index used by the hardware to
+> +      represent this performance level.
 > +
-> +  apple,num-channels:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +      OPPs may also have a `required-opps` property (see power-domains).
+> +
+> +  power-domains:
+> +    maxItems: 1
 > +    description:
-> +      The number of memory channels in use.
+> +      An optional reference to a power domain provider that links its
+> +      performance state to the CPU cluster performance state. This is typically
+> +      a memory controller. If set, the `required-opps` property in the CPU
+> +      frequency OPP nodes will be used to change the performance state of this
+> +      provider state in tandem with CPU frequency changes.
 > +
 > +required:
 > +  - compatible
 > +  - reg
-> +  - "#power-domain-cells"
+> +  - '#clock-cells'
 > +  - operating-points-v2
-> +  - apple,num-channels
 > +
 > +additionalProperties: false
 > +
+> +
+
+One line break.
+
 > +examples:
-> +  # See clock/apple,cluster-clock.yaml for an example of downstream usage.
 > +  - |
+> +    pcluster_opp: opp-table-1 {
+> +        compatible = "operating-points-v2";
+> +        opp-shared;
+> +
+> +        opp01 {
+> +            opp-hz = /bits/ 64 <600000000>;
+> +            opp-microvolt = <781000>;
+> +            opp-level = <1>;
+> +            clock-latency-ns = <8000>;
+> +            required-opps = <&mcc_lowperf>;
+> +        };
+> +        /* intermediate p-states omitted */
+> +        opp15 {
+> +            opp-hz = /bits/ 64 <3204000000>;
+> +            opp-microvolt = <1081000>;
+> +            opp-level = <15>;
+> +            clock-latency-ns = <56000>;
+> +            required-opps = <&mcc_highperf>;
+> +        };
+> +    };
+> +
 > +    mcc_opp: opp-table-2 {
 > +        compatible = "operating-points-v2";
 
-apple,mcc-operating-points?
+Wrong compatible.
 
 > +
 > +        mcc_lowperf: opp0 {
@@ -177,6 +203,7 @@ apple,mcc-operating-points?
 > +            apple,memory-perf-config = <0x133 0x55555340>;
 > +        };
 > +    };
+> +
 > +    soc {
 > +        #address-cells = <2>;
 > +        #size-cells = <2>;
@@ -188,79 +215,13 @@ apple,mcc-operating-points?
 > +            operating-points-v2 = <&mcc_opp>;
 > +            apple,num-channels = <8>;
 > +        };
-> +    };
-> diff --git a/Documentation/devicetree/bindings/opp/apple,mcc-operating-points.yaml b/Documentation/devicetree/bindings/opp/apple,mcc-operating-points.yaml
-> new file mode 100644
-> index 000000000000..babf27841bb7
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/opp/apple,mcc-operating-points.yaml
-> @@ -0,0 +1,62 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/opp/apple,mcc-operating-points.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: Apple SoC memory controller OPP bindings
-> +
-> +maintainers:
-> +  - Hector Martin <marcan@marcan.st>
-> +
-> +description: |
-> +  Apple SoCs can have their memory controller performance adjusted depending on
-> +  system requirements. These performance states are represented by specific
-> +  memory controller register values. The apple-mcc driver uses these values
-> +  to change the MCC performance.
-> +
-> +allOf:
-> +  - $ref: opp-v2-base.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: apple,mcc-operating-points
-> +
-> +required:
-> +  - compatible
-> +
-> +patternProperties:
-> +  "opp[0-9]+":
-> +    type: object
-> +
-> +    properties:
-> +      opp-level: true
-
-You don't need to mention it.
-
-> +      apple,memory-perf-config:
-> +        $ref: /schemas/types.yaml#/definitions/uint32-array
-> +        description: |
-> +          A pair of register values used to configure this performance state.
-> +        minItems: 2
-> +        maxItems: 2
-> +
-> +    required:
-> +      - opp-level
-> +      - apple,memory-perf-config
-> +
-> +    unevaluatedProperties: false
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    mcc_opp: opp-table-2 {
-> +        compatible = "operating-points-v2";
-
-Different compatible.
-
-> +
-> +        mcc_lowperf: opp0 {
-> +            opp-level = <0>;
-> +            apple,memory-perf-config = <0x813057f 0x1800180>;
-> +        };
-> +        mcc_highperf: opp1 {
-> +            opp-level = <1>;
-> +            apple,memory-perf-config = <0x133 0x55555340>;
+> +        clk_pcluster: clock-controller@211e20000 {
+> +            compatible = "apple,t8103-cluster-clk", "apple,cluster-clk";
+> +            #clock-cells = <0>;
+> +            reg = <0x2 0x11e20000 0x0 0x4000>;
+> +            operating-points-v2 = <&pcluster_opp>;
+> +            power-domains = <&mcc>;
 > +        };
 > +    };
 > 
