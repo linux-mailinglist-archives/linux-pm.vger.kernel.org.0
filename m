@@ -2,118 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C97E42A898
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Oct 2021 17:40:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB34342A903
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Oct 2021 18:01:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237577AbhJLPmu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Oct 2021 11:42:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47812 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237515AbhJLPmk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Oct 2021 11:42:40 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2037DC061749;
-        Tue, 12 Oct 2021 08:40:39 -0700 (PDT)
+        id S232936AbhJLQDk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Oct 2021 12:03:40 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:55042 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232848AbhJLQDj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Oct 2021 12:03:39 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id D17CC1F417F8
+        with ESMTPSA id D1D361F43D5D
 Received: by earth.universe (Postfix, from userid 1000)
-        id 629A43C0CA8; Tue, 12 Oct 2021 17:40:36 +0200 (CEST)
-Date:   Tue, 12 Oct 2021 17:40:36 +0200
+        id 2A7FC3C0CA8; Tue, 12 Oct 2021 18:01:35 +0200 (CEST)
+Date:   Tue, 12 Oct 2021 18:01:35 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Iskren Chernev <iskren.chernev@gmail.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Matheus Castello <matheus@castello.eng.br>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@puri.sm
-Subject: Re: [PATCH 1/2] MAINTAINERS: power: supply: max17042: add entry with
- reviewers
-Message-ID: <20211012154036.hyaabb6okzcgdlyw@earth.universe>
-References: <20210924115619.52927-1-krzysztof.kozlowski@canonical.com>
- <4803957.ieAp1BVO2D@pliszka>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Dirk Brandewie <dirk.brandewie@gmail.com>, kernel@puri.sm,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] power: supply: max17042_battery: Clear status
+ bits in interrupt handler
+Message-ID: <20211012160135.ldmhwkpmijkziuob@earth.universe>
+References: <20210914121806.1301131-1-sebastian.krzyszkowiak@puri.sm>
+ <11303414.9r73sBlGM0@pliszka>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xhbccxcdgg4mxxpl"
+        protocol="application/pgp-signature"; boundary="xvqbm6c6fc54g2fj"
 Content-Disposition: inline
-In-Reply-To: <4803957.ieAp1BVO2D@pliszka>
+In-Reply-To: <11303414.9r73sBlGM0@pliszka>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---xhbccxcdgg4mxxpl
+--xvqbm6c6fc54g2fj
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Sat, Sep 25, 2021 at 02:31:44PM +0200, Sebastian Krzyszkowiak wrote:
-> On pi=C4=85tek, 24 wrze=C5=9Bnia 2021 13:56:18 CEST Krzysztof Kozlowski w=
-rote:
-> > The Maxim max17042 fuel gauge driver supports several devices used on
-> > multiple different boards - both devicetree and ACPI based.  The driver
-> > is incomplete and has few known issues.  Fixing these might break other
-> > platforms so mention recent contributors who can provide feedback.  This
-> > way most of interested parties might help reviewing the patches.
+On Mon, Oct 11, 2021 at 05:32:30AM +0200, Sebastian Krzyszkowiak wrote:
+> On wtorek, 14 wrze=C5=9Bnia 2021 14:18:05 CEST Sebastian Krzyszkowiak wro=
+te:
+> > The gauge requires us to clear the status bits manually for some alerts
+> > to be properly dismissed. Previously the IRQ was configured to react on=
+ly
+> > on falling edge, which wasn't technically correct (the ALRT line is act=
+ive
+> > low), but it had a happy side-effect of preventing interrupt storms
+> > on uncleared alerts from happening.
 > >=20
-> > Cc: Hans de Goede <hdegoede@redhat.com>
-> > Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-> > Cc: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> > Fixes: 7fbf6b731bca ("power: supply: max17042: Do not enforce (incorrec=
+t)
+> > interrupt trigger type") Cc: <stable@vger.kernel.org>
+> > Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
 > > ---
-> >  MAINTAINERS | 10 ++++++++++
-> >  1 file changed, 10 insertions(+)
+> > v2: added a comment on why it clears all alert bits
+> > ---
+> >  drivers/power/supply/max17042_battery.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
 > >=20
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 329d3a0a9fdb..da9d5383af04 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -11429,6 +11429,16 @@ S:	Maintained
-> >  F:	Documentation/devicetree/bindings/iio/proximity/
-> maxbotix,mb1232.yaml
-> >  F:	drivers/iio/proximity/mb1232.c
+> > diff --git a/drivers/power/supply/max17042_battery.c
+> > b/drivers/power/supply/max17042_battery.c index 8dffae76b6a3..da78ffe6a=
+3ec
+> > 100644
+> > --- a/drivers/power/supply/max17042_battery.c
+> > +++ b/drivers/power/supply/max17042_battery.c
+> > @@ -876,6 +876,10 @@ static irqreturn_t max17042_thread_handler(int id,=
+ void
+> > *dev) max17042_set_soc_threshold(chip, 1);
+> >  	}
 > >=20
-> > +MAXIM MAX17042 FAMILY FUEL GAUGE DRIVERS
-> > +R:	Hans de Goede <hdegoede@redhat.com>
-> > +R:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> > +R:	Marek Szyprowski <m.szyprowski@samsung.com>
-> > +R:	Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+> > +	/* we implicitly handle all alerts via power_supply_changed */
+> > +	regmap_clear_bits(chip->regmap, MAX17042_STATUS,
+> > +			  0xFFFF & ~(STATUS_POR_BIT |=20
+> STATUS_BST_BIT));
+> > +
+> >  	power_supply_changed(chip->battery);
+> >  	return IRQ_HANDLED;
+> >  }
 >=20
-> I think it may be worth adding:
->=20
-> +R:	Purism Kernel Team <kernel@puri.sm>
->=20
-> In any case:
->=20
-> Reviewed-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+> Ping? Seems this didn't get applied yet.
 
-Thanks, I queued both patches with the Purism Kernel Team added for
-MAX17042.
+Thanks, both queued now.
 
 -- Sebastian
 
---xhbccxcdgg4mxxpl
+--xvqbm6c6fc54g2fj
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmFlrHQACgkQ2O7X88g7
-+poRkw/+Mj5EPHQWa3zLPFmetZ9uwwHBoh9GjLW56m8qFf3n+PxtV5Mpso2w+rMx
-gndUO7jro2+TdKjflLhV8/zKHeuxI3ft1A+BfpaUmGOuI2N12CYBWBMzrlq7EWaK
-ckFXOjZ0pLC71qkU2Ewp1hhEbmOLiD/hzJNBSjcfESsH5Ikwq1djqD/o0LwigDkO
-jmLCqCVAsh8HNR14Eo1ahQRbrh/RkBeRt/prk0z7Duwkyf3bq2jFxVRm8VvSEFEO
-jnqpPz43QZb46kr2xZ9xqF6tRBBH3vl7KWNERPgat6MCtY/yRfdcLR94ORfUynjg
-D+TyoaiHMCecPG//8j7t1bUsXwJM86h21Eo37p1y4FLZDBWB6k5yaPKpyayOe6A6
-6nqM1MU/b4XAt16pT6WShQ4MtkScJhIfmfv9yksB6kvhbKaEiBhua0LCgy7tPuOb
-L85OJSPLMAGbYW1wl9M5BBKPdOJ0Mx359eUlVvyaWxWrmOron+VVlgS5iR+pQmBE
-rdxqcsTOEcmmZm10kr841mCfNShhTlMnXwZVFONTEANCYdHkCr+Qghr1l2xaP+/Y
-GxdRDnfpsItbHdUhfL+MEpnozYoVnCu1rgdOva5mHr8nmlCe+ylJc6/7+mnhhTmf
-+6b0pmV/EcqwVQSQWHHHHG2DiViWoVZ3m7ZuelF89q4w2szns94=
-=nF7O
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmFlsVoACgkQ2O7X88g7
++pqAdhAAkmAkbekB6xd9dau2QCUIctjPFmP9zA+Zi4l2ZWEaq1pGVmfj2uHyOxkp
+R3kmp8oNIp24nW5LQWUYM/57HLKVLitr8wumuEZFGtW8pStex7T5UM/MhExLtwgU
+qoNmwX06TpToZQ7PYBPwko0CYtK8cXK2c0WwNe1fQ9ncaPZKBZYXdXggIKDpsg2q
+52B8JZ2JbQ0GvQ8ebtEg/DxlrhtEs67TCfZ0Z8bW+vA5xpuKOUf+MIo6sx2VtWk/
+P9vUVwMjU/VjsczJ5khI+WP1EEF74x2AAfX3iL82GCNvZQUqHJ9RrrRw2VT5onOl
+Sbytk4dYLLfX+8KJFd7PAHMqeWZhnUIgH+u9d2YnVpG1XXhU+lRvpoVfpiD9y1l6
+giJ/stBoicQ61iCwDfFN9sp8bRckWIFnTdpGw3AV3nzG4oTn/BaYmNrFMEKK/jwa
+/wFAYKegT4YTEDhxV48rwQ6zCJcq7uj8fjGbmoHmIE4/zoqptJhhbZgVDnsnL6N+
+Q7vCKL8PHJc8wyj8UmytfTtumRiRY+kYQKPbMA8O4byFeEqGub0GG0g1fNg+Gktv
+4BcZgfRSTCluAigfdYmtch1mQGz1eIiIx2qWrSI6YhCljhqXMkU421bSLGqYJgRk
+eihtlnivCkmT2dG6TOS8ZWXEtSqdqvx0f1sAEC7K+YACc2qKtpg=
+=qE2g
 -----END PGP SIGNATURE-----
 
---xhbccxcdgg4mxxpl--
+--xvqbm6c6fc54g2fj--
