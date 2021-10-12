@@ -2,67 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED8CA42A5AE
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Oct 2021 15:27:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F37A42A665
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Oct 2021 15:48:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236574AbhJLN35 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Oct 2021 09:29:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53424 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236368AbhJLN35 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 12 Oct 2021 09:29:57 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2AD8B60EB6;
-        Tue, 12 Oct 2021 13:27:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1634045275;
-        bh=ZFiJ6UcV5HwXuat8mqBIVOr429AuPEOWFSQ/txgPsRw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2BQwIUah65fQnGFT5tXduy8nfkUaDmCR5mwtZLWokn0kG9PPo3PcB7SrUPLKtMomh
-         /N178Hs30/LL1+vepEMPf6oogNlbrpf4Ci8O1z4eOzHECZpzvC3wj8HQzR1FwFMcBA
-         nVVByNk6LF+/INMm6+uwM51dG/nBN2HMWAnkQ810=
-Date:   Tue, 12 Oct 2021 15:27:53 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>
-Cc:     linux-pm@vger.kernel.org, rafael@kernel.org, khilman@kernel.org,
-        ulf.hansson@linaro.org, pavel@ucw.cz
-Subject: Re: [PATCH] PM: domains: using dev_err_probe() to simplify error
- handling
-Message-ID: <YWWNWawA857Y0TW2@kroah.com>
-References: <YWWIw1hAQAYjjrfK@fedora>
+        id S236993AbhJLNuW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Oct 2021 09:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50190 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236678AbhJLNuV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Oct 2021 09:50:21 -0400
+Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989EEC061570;
+        Tue, 12 Oct 2021 06:48:19 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 7D39F426A2;
+        Tue, 12 Oct 2021 13:48:12 +0000 (UTC)
+Subject: Re: [RFC PATCH 3/9] dt-bindings: clock: Add apple,cluster-clk binding
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+References: <20211011165707.138157-1-marcan@marcan.st>
+ <20211011165707.138157-4-marcan@marcan.st>
+ <0fe602f6-3adc-dfac-beee-2854b01cec5c@canonical.com>
+ <20211012093529.pzzfo44ikq5oc6cl@vireshk-i7>
+ <D0DE08FE-562E-4A48-BCA0-9094DAFCA564@marcan.st>
+ <20211012094302.3cownyzr4phxwifs@vireshk-i7>
+ <64584F8C-D49F-41B5-9658-CF8A25186E67@marcan.st>
+ <20211012095735.mhh2lzu52ohtotl6@vireshk-i7>
+Cc:     Hector Martin <marcan@marcan.st>,
+        linux-arm-kernel@lists.infradead.org,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>, Marc Zyngier <maz@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+From:   Hector Martin <marcan@marcan.st>
+Message-ID: <0168a91d-0e7d-41df-8a65-bc739fc50498@marcan.st>
+Date:   Tue, 12 Oct 2021 22:48:09 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YWWIw1hAQAYjjrfK@fedora>
+In-Reply-To: <20211012095735.mhh2lzu52ohtotl6@vireshk-i7>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: es-ES
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 12, 2021 at 10:08:19AM -0300, Maíra Canal wrote:
-> Replacing dev_err() for dev_err_probe() in order to reduce code size and
-> uniform error handling.
+On 12/10/2021 18.57, Viresh Kumar wrote:
+> I didn't realize earlier that we have moved out of lists :)
+
+Whoops, sorry, I was on mobile and must've hit the wrong reply button! 
+My apologies.
+
+> On 12-10-21, 18:54, Hector Martin "marcan" wrote:
+>> Typically cpufreq-dt is used with clock drivers that directly take
+>> the clock frequency and do whatever voodoo is necessary to set it
+>> for the CPU. But here, the hardware just wants to know the index,
+>> and does everything itself. So we need to encode that somewhere, to
+>> avoid hardcoding it in the clock driver.
+>>
+>> In general, based on how these SoCs are designed, we're trying to
+>> avoid having tables of volatile information in the drivers, and
+>> instead keep everything in the DT. This means we have a good chance
+>> that these drivers will continue to work with future SoC
+>> generations, since Apple doesn't change register definitions
+>> randomly most of the time.
 > 
-> Signed-off-by: Maíra Canal <maira.canal@usp.br>
-> ---
->  drivers/base/power/domain.c | 17 ++++++-----------
->  1 file changed, 6 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index 5db704f02e71..e7701b79494a 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -2249,10 +2249,8 @@ int of_genpd_add_provider_simple(struct device_node *np,
->  	if (genpd->set_performance_state) {
->  		ret = dev_pm_opp_of_add_table(&genpd->dev);
->  		if (ret) {
-> -			if (ret != -EPROBE_DEFER)
-> -				dev_err(&genpd->dev, "Failed to add OPP table: %d\n",
-> +			return dev_err_probe(&genpd->dev, ret, "Failed to add OPP table: %d\n",
->  					ret);
+> Yeah I get that and it is actually better this way. I just wanted to
+> point out that we didn't think of it this way earlier :)
 
-But this isn't a probe function of a driver, shouldn't that be the only
-place you use dev_err_probe()?
+Yeah, makes sense. Seems to work fine :)
 
-thanks,
 
-greg k-h
+-- 
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub
