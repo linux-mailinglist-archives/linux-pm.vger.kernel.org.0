@@ -2,56 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9B4A42A127
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Oct 2021 11:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 361EA42A137
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Oct 2021 11:35:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235697AbhJLJe4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Oct 2021 05:34:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48050 "EHLO
+        id S235720AbhJLJhe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Oct 2021 05:37:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232657AbhJLJe4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Oct 2021 05:34:56 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0803C061745
-        for <linux-pm@vger.kernel.org>; Tue, 12 Oct 2021 02:32:54 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id ls18-20020a17090b351200b001a00250584aso1437054pjb.4
-        for <linux-pm@vger.kernel.org>; Tue, 12 Oct 2021 02:32:54 -0700 (PDT)
+        with ESMTP id S235727AbhJLJhe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Oct 2021 05:37:34 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB08FC061745
+        for <linux-pm@vger.kernel.org>; Tue, 12 Oct 2021 02:35:32 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id g9so2737412plo.12
+        for <linux-pm@vger.kernel.org>; Tue, 12 Oct 2021 02:35:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=OjzfOb2gtN1u8obAgrzFiLQ684Vop1WYpdfozFIYNbM=;
-        b=aUN79haGLdilQZbwQ2763BN39KvkoPsE3h3yb2F3g02IhvUbd7+UHpmgDRsPwdvqhg
-         qq86Y7m3+RnD8SsrhKuJzfveNRvA/JMub5MMabigbZcHAd3lQTt+YqD2WCkiac3sGIg8
-         ivybUQxgrQ1NSYey8R0pYNdpFe/O11GXl2iR87zlJs5Bjw3HPD+5rcn/1u4q5p39WYEq
-         6pa8YxzzKCfPlUmjHEiqbLaF+mY+hpZHgNCXf+2QAIC1xaDoKQohWb9eNSlKpJUrNwkN
-         0YpOPypoEJJpeVteY/FStkieAKSrKGeKix9ijK5oRzo3pfBNjsy0aOLP8ZKvzMiIqFDE
-         eZpQ==
+        bh=o1k8Z+wdh4QOPkQnS+F7/9QuIX0JH9DSlOiSZOGiLJ0=;
+        b=JPI1N3b7+PMvCr14EefM11K1KWWL9gaM68fMQB7IOAiZNObXnUiboTUHWlnYJDNW4Q
+         mAL5untW+5tZk/Drg861zZnJ9H4YHfyVpz6p6D8S9xoKxTdQVHUTycAjL9cKWw8J1PiX
+         cinbdgMKzCE4rX5LNwEYerT8da3aVSR2j4wjuDJVPrWYQfsUMfLgK1JDGIjjGZftmbR4
+         NfkMIKuopr20cjROoPqyebI1ELIut1t1FrnCNI1rm0SN4UeT0GFxPEmu6D3Mb6gc/vpf
+         NvU9Ikd8PH7/TCmv20xvT7bPLqqXs259HgnHrkCC0K33EmuDKKIWryZ0FLbBfB/rBqNc
+         UMfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=OjzfOb2gtN1u8obAgrzFiLQ684Vop1WYpdfozFIYNbM=;
-        b=inDrYxFSUJPqBRjWwF1xUMxADO1iaqRT2tCHh2HY7Tjym4n2R7B6JEbaXagxpw2rzm
-         Qdv14cRMKfUhEhguPpgAksrGC0ewolmqOndO1uW7lI6W2MJ4zWZ6hnYtqgPIusLvNFcB
-         SUY3TEocNlSSm5s+2LXQ9qeVK33av50cIC3wC6sCWNQI84pVUxgyNJBETqrXXv38D57Y
-         HRke7lSY75i7KAV+vl8qvTmTxLVxtwUZbd7KeWlV4LDr2Bxu/2CUq5b+vvU2Z/Zvn+dM
-         YYq+G7L1KdAKH06aylg0H41Wa3Q2shz4XJNTxKxH5IWiPIPpJPrgt2jfr+wZP/x2RYn0
-         Ui6A==
-X-Gm-Message-State: AOAM530brP1V3VOUSy9uMkqqz49PcAEGWuuwjqMMz1eAx63SBFQV7aLF
-        8nb7Z1QVlu5n6S/dEyI9LbiFKQ==
-X-Google-Smtp-Source: ABdhPJxEZXuRSwmLWd10BJsQLAh/3HgVQI8IjFeMRwsWoABKdg5QGkMx8QfnuDas3MxWQHqNt9oYMA==
-X-Received: by 2002:a17:90b:4d87:: with SMTP id oj7mr4748844pjb.107.1634031174331;
-        Tue, 12 Oct 2021 02:32:54 -0700 (PDT)
+        bh=o1k8Z+wdh4QOPkQnS+F7/9QuIX0JH9DSlOiSZOGiLJ0=;
+        b=iGUqq2P59kGUKr0I/7LG6Iut67rqu20hB/trQXwb48nspb+qh2bHRa+iIgCtXySkko
+         iqkJNn5SgGbrJw/JntI25HZtoQiGohaSxz9ZdtP9I2xEtx/MWJf/7ATT/iS9kQ6NNayL
+         D5qhuliT7abaKt6FS5oYILv+Xr4SJ5LXEcpdDuklwM3Z2BiT4/vOjyGt2OHYpgJ/KUhP
+         p2wAr++6f+FkCN7aj1loyFRs8JrqQbRw5f0rSnSlqos3axBpz0hE38kTc2Ruwgu+dJuq
+         sTOUHj0kbNznQJY+jhETxtDvpfblG+64XOw8T+OmL6ymKivYqOqViTSTh+E6rdCfqqDR
+         FkMQ==
+X-Gm-Message-State: AOAM533vK495Id3tku6EtCnTrD8RiuqFEJfp4rp+uWtcM33PTGCid98+
+        f7SZJIz7dro+vAE4ddYjnTSM/A==
+X-Google-Smtp-Source: ABdhPJwmjNVx5j57L4zEiPRXtEe8aH/7F8Q9b0NO96Wmfmn8nm+42QOAA5HdzvgpsdPfHkHGSn5kpQ==
+X-Received: by 2002:a17:902:8494:b0:13b:9365:6f12 with SMTP id c20-20020a170902849400b0013b93656f12mr28929229plo.19.1634031332258;
+        Tue, 12 Oct 2021 02:35:32 -0700 (PDT)
 Received: from localhost ([106.201.113.61])
-        by smtp.gmail.com with ESMTPSA id x13sm10611652pge.37.2021.10.12.02.32.53
+        by smtp.gmail.com with ESMTPSA id e15sm10067916pfc.134.2021.10.12.02.35.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Oct 2021 02:32:53 -0700 (PDT)
-Date:   Tue, 12 Oct 2021 15:02:52 +0530
+        Tue, 12 Oct 2021 02:35:31 -0700 (PDT)
+Date:   Tue, 12 Oct 2021 15:05:29 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Hector Martin \"marcan\"" <marcan@marcan.st>
-Cc:     Sibi Sankar <sibis@codeaurora.org>,
-        Saravana Kannan <saravanak@google.com>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Hector Martin <marcan@marcan.st>,
         linux-arm-kernel@lists.infradead.org,
         Alyssa Rosenzweig <alyssa@rosenzweig.io>,
         Sven Peter <sven@svenpeter.dev>, Marc Zyngier <maz@kernel.org>,
@@ -59,7 +58,6 @@ Cc:     Sibi Sankar <sibis@codeaurora.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -67,33 +65,44 @@ Cc:     Sibi Sankar <sibis@codeaurora.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 4/9] opp: core: Don't warn if required OPP device
- does not exist
-Message-ID: <20211012093252.hb6rlcpxv5bmk7n3@vireshk-i7>
+Subject: Re: [RFC PATCH 3/9] dt-bindings: clock: Add apple,cluster-clk binding
+Message-ID: <20211012093529.pzzfo44ikq5oc6cl@vireshk-i7>
 References: <20211011165707.138157-1-marcan@marcan.st>
- <20211011165707.138157-5-marcan@marcan.st>
- <20211012032144.2ltlpat7orrsyr6k@vireshk-i7>
- <b7cd51ec-38e5-11d8-5193-1170c9d60ac9@marcan.st>
- <20211012055143.xmkbvhbnolspgjin@vireshk-i7>
- <caf16a6c-f127-7f27-ed17-0522d9f1fb9e@marcan.st>
- <20211012092603.lkmhhjoo5v67wh44@vireshk-i7>
- <049FC437-EC38-4FE5-891E-5E25960892CF@marcan.st>
+ <20211011165707.138157-4-marcan@marcan.st>
+ <0fe602f6-3adc-dfac-beee-2854b01cec5c@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <049FC437-EC38-4FE5-891E-5E25960892CF@marcan.st>
+In-Reply-To: <0fe602f6-3adc-dfac-beee-2854b01cec5c@canonical.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12-10-21, 18:31, Hector Martin "marcan" wrote:
-> That doesn't work, though, because the CPUs aren't normal devices
-> with runtime-pm. That was the first thing I tried :).
+Apart from what Krzysztof already said:
 
-What's the exact problem with runtime PM here ?
+On 12-10-21, 10:51, Krzysztof Kozlowski wrote:
+> On 11/10/2021 18:57, Hector Martin wrote:
+> > +    pcluster_opp: opp-table-1 {
+> > +        compatible = "operating-points-v2";
+> > +        opp-shared;
+> > +
+> > +        opp01 {
+> > +            opp-hz = /bits/ 64 <600000000>;
+> > +            opp-microvolt = <781000>;
+> > +            opp-level = <1>;
 
-> If you think this *should* be made to work instead then I can try that.
+The opp-level thing wasn't designed to work this way, though it may
+work just fine. It was designed as a unique key for power-domains,
+which don't have opp-hz. The OPP core currently looks at 3 different
+values, which can act as a unique key to identify the OPP. clk-rate,
+bandwidth and level.
+
+I think this is the first platform which has both hz and level in the
+CPUs OPP table. What exactly is level in this case ?
+
+Again, it may work fine, I just don't know where it may end up
+breaking :)
 
 -- 
 viresh
