@@ -2,187 +2,187 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03C6B42A193
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Oct 2021 12:00:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7130E42A282
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Oct 2021 12:42:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235994AbhJLKC0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Oct 2021 06:02:26 -0400
-Received: from esa2.hgst.iphmx.com ([68.232.143.124]:17377 "EHLO
-        esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235894AbhJLKCP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Oct 2021 06:02:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1634032813; x=1665568813;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=k2hvQcTUKX+6sxrV25IFhR4qKjXN2bgw7X/NopnJJ14=;
-  b=MLP4J3C3KYEW+WSjDQ2WDClTtz1NxsJFQx1Zm7xFt4LU76t4vtGWuKv7
-   6+Ghdi2dKeMOHBRY5SkHTxyLnI0CjUCXF+BuyJE25/9J0ZSX5cXr7Eb7D
-   ZY+NGEHBJYeYFqDfCVK+QvYP+AQPv/qtIz+tfsWhpcZEjzjxpRu+B+ygx
-   1Dp4s5sGLjxv2Fepw75ysV4twL5DUicsZUIqQSYIF71KVk1sEpKQAguds
-   4+ELm8tOBRjlBdtqc0+lK4ZNf8IyQeAUt8cgc2PugZbPILVY+409MPHbK
-   nVuPe19RuNaWMzmp5v9hS6eqCo6jB/woPW/yTYclZdPwzZNMSA1w3rDv3
-   g==;
-X-IronPort-AV: E=Sophos;i="5.85,367,1624291200"; 
-   d="scan'208";a="286442665"
-Received: from mail-bn7nam10lp2101.outbound.protection.outlook.com (HELO NAM10-BN7-obe.outbound.protection.outlook.com) ([104.47.70.101])
-  by ob1.hgst.iphmx.com with ESMTP; 12 Oct 2021 18:00:09 +0800
+        id S236057AbhJLKoQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Oct 2021 06:44:16 -0400
+Received: from mail-eopbgr60053.outbound.protection.outlook.com ([40.107.6.53]:44033
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S235981AbhJLKoO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 12 Oct 2021 06:44:14 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nRH3sHiUrFPRaF0bYzzb5pSxaLLiou8liNedcYjJs3ONtNoWEv20VuXubPN5w2aYB1bAA8XIPO3ybo6EhJLcbTD7V2l+wWXibiZYcvhvwaqJn1vKw/thZxH/3/eiWEpuSHpyF0oqVxFVtlxy5UqUiCT3YSZCTCpl5hnwebFdVHrot/pbNqWduBYSHku1R1P0+whRfFkwIL7s3J8seN7R0Cr6PtrBJajKlbmjSdPl3yNsMraYGwCMd0q7maPhN60BTzUjuiaOHchzWtAARSTEhbVPKplijYJMjpnuOdJ/25IF3j7zCWwsKs1ClHMtLmYOFW3+ZbbkaDBk9fMNRk+SDg==
+ b=NbElXqdoeJjNcQTOJc41lOgshkra6T3SwicMqywfDNiT8pzylp0itIP1OODh5u2xnqe9fZlZ9olM6AzXxeI4n2+VUJTvZ0lzKpN0Uyy7VUdPj6bOxKW6HrYzr98WebmrDOLYA/c5DEF9Pg6SMiWeH+turgWHKOFy6G/9ZZZAJc6WnZ3tZaJgt+kZRDqDg1ucpRR3INRyj9QiHEm/AzCkVjGbXdWUjJe0Gtppfl1klbWb2RMWphkpIbW8ue3PvYcsd5b0uBlpSWTm3TySqjLGUL3hsJnsEK7YuNEH+ySR9FPbkrSxTdzdQJU9ftkIjMmohhIC6miOYTPC0f4XLKsAjA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kMsvanvwx35NMK9rrt2tW3ybr10Mh+Cf85ZllWDq76k=;
- b=LQMuEWxAcww6cY+k8sLjdbWNxhUpTDDzg5ankARpYhBaqJ1i/VwEQX7a9HFMAtPYiBjpAOa4PnTkMH9AKLu4JGYszPjFQsAMXSxSPYvYlITaH/gggQuXsMjgBaLSw2ovRHZlp9vN1IiWYlmlMAuo21iih+4iXxb6h4nolkb5Nt/chSen3aclLsD1XbzFYwSHXph4aewfLBhlNS4quVjq+bBGr2+c+l0gqx4ay1wMQPQ1pNouylpNnITI0LQYgcKnWfjv5z765oqFgvIs1LrW+tAtpvlPrlozkWHHR8xX5PdK9vfLFZ4ZfAoWITFJtdwxrPxWfoqGL1jB2xsP2V8UJQ==
+ bh=rV/jueGf4i/UzAJrTwYr7gsCgVIF0rTUkFErzDhLiOM=;
+ b=fE5/g3HaDZVE1u0Ti7KMjmhDL+LJCyUalp6gjDF0Ah34rF0heJvCHEedK+Pkiwe2VWDVRNvlqMMUERLTSQvHaII08R3iQkuM7CIKe5g+7W6lpLI/+EC16ypZ6geO/xAyLZUSUMcUgz0+xMMM2XgQBZaGSY2sB6zCyFMJkpH6xuSlU15q9isktdZGx6EGm7Dr261g3a+3erTbqkaVrvLxPD2uJqfV3lhS1ECpGG44HMtLE54AomszT19MRthBrtzBpswFVMPxXBtqVLwaT94eIuTDVawmtd0MaDudyN+ANPhtbIIR+BVJ/zgOc/lwlj1Abgx71jv84PaZTb15tYr1Lg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
+ smtp.mailfrom=diasemi.com; dmarc=pass action=none header.from=diasemi.com;
+ dkim=pass header.d=diasemi.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ d=dialogsemiconductor.onmicrosoft.com;
+ s=selector1-dialogsemiconductor-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kMsvanvwx35NMK9rrt2tW3ybr10Mh+Cf85ZllWDq76k=;
- b=hskOsAf235oanO+9suIZmvaHlfPcCRJfTK0dzGk3lthoD89PRNROlmIK7T1E4JfDHRJGAjxphfg3svZeggwj4RqwcQ0XVdAMpu5kcPiewPwZqci1dyxUJO3CGwtiBWAcAjUxxYcW2PJnHhpu6UDq+eawj+VtFiuXJC07Z/mhUKo=
-Authentication-Results: dabbelt.com; dkim=none (message not signed)
- header.d=none;dabbelt.com; dmarc=none action=none header.from=wdc.com;
-Received: from CO6PR04MB7812.namprd04.prod.outlook.com (2603:10b6:303:138::6)
- by CO6PR04MB8361.namprd04.prod.outlook.com (2603:10b6:303:140::7) with
+ bh=rV/jueGf4i/UzAJrTwYr7gsCgVIF0rTUkFErzDhLiOM=;
+ b=rtPDCws6V2nrukLOdjeeiTXZ9sk7nMQe35VZccCCyJXMEej0jiBcgxbtA5F5puXsVsA/xGgaHh/JCQj696Pmf3PFUZesbdCK+S2gRvoH/2A1tw7tIJsgBmySSG9J/FYmiJhwBEQVqsHj5yaWhAeAxs/WjWk23yu24mZGaA3Q2nU=
+Received: from DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:255::23)
+ by DB8PR10MB3737.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:119::9) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4587.20; Tue, 12 Oct
- 2021 10:00:07 +0000
-Received: from CO6PR04MB7812.namprd04.prod.outlook.com
- ([fe80::8100:4308:5b21:8d97]) by CO6PR04MB7812.namprd04.prod.outlook.com
- ([fe80::8100:4308:5b21:8d97%9]) with mapi id 15.20.4587.026; Tue, 12 Oct 2021
- 10:00:07 +0000
-From:   Anup Patel <anup.patel@wdc.com>
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>
-Cc:     Sandeep Tripathy <milun.tripathy@gmail.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Liush <liush@allwinnertech.com>,
-        Anup Patel <anup@brainfault.org>, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Anup Patel <anup.patel@wdc.com>
-Subject: [PATCH v9 8/8] RISC-V: Enable RISC-V SBI CPU Idle driver for QEMU virt machine
-Date:   Tue, 12 Oct 2021 15:28:57 +0530
-Message-Id: <20211012095857.1314214-9-anup.patel@wdc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211012095857.1314214-1-anup.patel@wdc.com>
-References: <20211012095857.1314214-1-anup.patel@wdc.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MAXPR01CA0106.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a00:5d::24) To CO6PR04MB7812.namprd04.prod.outlook.com
- (2603:10b6:303:138::6)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4587.19; Tue, 12 Oct
+ 2021 10:42:06 +0000
+Received: from DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::dc0f:9e52:6dbb:1144]) by DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::dc0f:9e52:6dbb:1144%6]) with mapi id 15.20.4587.026; Tue, 12 Oct 2021
+ 10:42:06 +0000
+From:   Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Prashant Malani <pmalani@chromium.org>
+CC:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Benson Leung <bleung@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "bleung@chromium.org" <bleung@chromium.org>,
+        "badhri@google.com" <badhri@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: RE: [RFC PATCH 2/3] power: supply: Add support for PDOs props
+Thread-Topic: [RFC PATCH 2/3] power: supply: Add support for PDOs props
+Thread-Index: AQHXoEKRtU4w32eDxEeY6U4KQGzJs6uiBmsAgAAaumCAAUDQAIAC9NuAgAAyawCAAD1scIAHpq+AgAUCZYCAFOYpgIAA06KAgAZBMiA=
+Date:   Tue, 12 Oct 2021 10:42:06 +0000
+Message-ID: <DB9PR10MB4652F5AC42208209BE8BBC5180B69@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+References: <20210902213500.3795948-3-pmalani@chromium.org>
+ <YT9SYMAnOCTWGi5P@kuha.fi.intel.com>
+ <DB9PR10MB4652B4A6A2A2157018307AE380D99@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+ <YUB16up3JDwi3HfI@kuha.fi.intel.com> <YULwz8NsoA3+vrhA@google.com>
+ <YUMbGp0aemx1HCHv@kuha.fi.intel.com>
+ <DB9PR10MB46525E6CA4C6BB101059D93C80DC9@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+ <YUm5sdbceMcDTvYj@kuha.fi.intel.com>
+ <DB9PR10MB46524E3817FB4D836CDC13E180A49@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+ <CACeCKaem93dbJ11qOG=a+MkJhSrp0Nx-UAPG00Q-5WwMriJD0A@mail.gmail.com>
+ <YWAnA1mc5CrlEs7H@kuha.fi.intel.com>
+In-Reply-To: <YWAnA1mc5CrlEs7H@kuha.fi.intel.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: linux.intel.com; dkim=none (message not signed)
+ header.d=none;linux.intel.com; dmarc=none action=none
+ header.from=diasemi.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: ee247a69-151d-40fb-9b13-08d98d6cef78
+x-ms-traffictypediagnostic: DB8PR10MB3737:
+x-ms-exchange-sharedmailbox-routingagent-processed: True
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DB8PR10MB373751A518B746CE688CCED0A7B69@DB8PR10MB3737.EURPRD10.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: aaB6L9aRV+UZ2IS8QvQw7ANTLAw3KAO+Gg69PxvnEQs6vBPkTafIWjtaLZMOEGOOyc1VEm/sHOOmAyPbyVb2DQJF3n0Y3Po058aR+a39maerdjxW5aakfynSMqEThmfnI7v5JYV7LbPdumGEbWbahc7SkIa9TDsS4P18SnVohjj4q80Ch+7pK/f8NhP+r2hfb/4uWNq1D2MS//Ts00m883FlzkKPkZYsWQiPaDo1OYvbiYLe+KwoEfVjvP61bNbB4B+CcCjvE4XGyPYHTpr4+U7Rh8C1Au9ZpbhNGw8POU3GRsskE+weqfRu5g3ZKD5+XHh7uzDiZxeyX+GwdPg+SrSlk6b6ufoHtlgFpeobHSqF3nlo7dKC2yxYoCPGuELBU4fOM/EfR11qvYw3xtmJ16RdrVceE5vEW2lcucssodW4PSksCb88kdfN2QaakLCvQryybyjvX23r69RFZ2BegNFRLys2aEhLzR2XPRJ72TT0SothF7xA/iTkjxAXtMPs3dZXcRlnYMDkMXpiUp2WAsWwdT08dl3IQMLquVgMmuj5ZQ7vZLab8PtBBxciATUt3dCI8UAgTqreQnkljuPDMft0VAF6ykHbWZNcOJQsG1aDKh8qTOhkcprLKsjM4ztzzHKVVaDL5IeFjCID2EOT+jeLqxtnzdvBBykJVSbEvi1XuNsKqPC1y8b5hUWGc3AJspP8KT2qRWJI98u9VWndmw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(5660300002)(26005)(186003)(54906003)(4326008)(7416002)(122000001)(38100700002)(110136005)(33656002)(316002)(86362001)(55016002)(2906002)(71200400001)(6506007)(53546011)(8936002)(52536014)(66476007)(66446008)(7696005)(66946007)(83380400001)(8676002)(38070700005)(66556008)(76116006)(64756008)(9686003)(508600001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?JsWRcFLtJoBLFnILB0GVmpzODTSxfaKzQnu5FusP6E5YmFhH5o2Fsq1x6EFn?=
+ =?us-ascii?Q?Pxp7gxFq8oI7i/2VQmnwsgGIUHzrq32+PToUFiTqBoRzMZJZF9sKiQHpgxMr?=
+ =?us-ascii?Q?i/cvubRt3pCrPKJkWXR8jw6fxNwS4bZFCTiNZcrs7p3ZeCCTjTlLwhYkd7b3?=
+ =?us-ascii?Q?FKB/eC0K7UPQTU51SSehrdGja2ZOOyCVg8KPjl3W7abC3PE6//fO6QMZ5Hqi?=
+ =?us-ascii?Q?ubSqHpKc/TGS+ViRsT7kILtuT5m2RSlgKVtB00/VF5TOeaDcPenOzPTklSN/?=
+ =?us-ascii?Q?vlm2+TjP6xWfNHY30p/FIh4hJ6eL0Y4OR5MJB0pCvJmkPbEJu8x18nhhF39E?=
+ =?us-ascii?Q?A8SEkAJ139t/PQvM30aM6M9I1aYSGgkp1TGBwMY0yNYubHJK6A/S3lHr4J2f?=
+ =?us-ascii?Q?FCAkNOTuddNsKIXuVvseq+6TFmuIo58TGieE0yATYHSFnHSjPFm8RyJm2Lr1?=
+ =?us-ascii?Q?JrTNuQqf9xfEXjL2ldVdSfc1qfb83WnBfTrS1mZtZgtIxGwnOGdYIkeaJc6u?=
+ =?us-ascii?Q?BzsgKzNKFlMQouPKosHQU9PxSkR3hEgiScayQCf+0A8yih/KXixfMLo9e2r5?=
+ =?us-ascii?Q?v/nFNxQqx8PJIVWQ2hojzn8bJknbuUbGIw0AMD2Q5GLCXYggWoRO0NQ6bHTd?=
+ =?us-ascii?Q?dB9KTR+wXOhCVifhjeiOpbJqLNrMFGdVSOXzKgQeOGPuRTGBlaQstSWUP4Mc?=
+ =?us-ascii?Q?OFywmXG2i+xh82KunCxrmFnYOOFscGofHN/bv2BY0dcmZFoeex1vxNVZypYz?=
+ =?us-ascii?Q?ZmoiAM8aSvI35E1YpE8p7uDOwj0xbrtTTsDGzqSxGhGPVKJJgea4cwmR94sH?=
+ =?us-ascii?Q?S1yO6A/7sn4v4AS5jgRZ0rLzzpVvawNBwCgLiVRpc8+yqhXCB0bqdNEZILuA?=
+ =?us-ascii?Q?0ljSETvQhYxagUe0aZKMT18bYThnFlPNIgIXxmxuyw6lHpEDgsJbcnDUrEWG?=
+ =?us-ascii?Q?YZMNOFDmTu0epvsFJ6z6Z9GQRD3fP1dwoSOV1SQUV6+Ch88h68xLXz5w2rz6?=
+ =?us-ascii?Q?OJIWyRSmHR40bTX+2K7/GMZhvirF5hmOEoNNkYGwSGj54EeeFAb71BwYUzlQ?=
+ =?us-ascii?Q?Jce/HNqor0EYAtglH0IVU/25nM1h0OLmere96dYqE3GwmH7k/mOVvJTX5D89?=
+ =?us-ascii?Q?zUgzj0IE7xMmY6n0NaUQYoQdQf9e1xL8anwZHG+hqgwmTyyJUjaIXEnm3YeQ?=
+ =?us-ascii?Q?vuB4oFSBoAR1Yt6OQp6TuYYG7wScxaYzCZfYPBdjWm9dobF0cbaUvDDadVNr?=
+ =?us-ascii?Q?3CiYmmVEv0DhuT+uTZLyTnFCq5n/gQE3+Uj8tgGVs3Peom75wo8FHbElxHpE?=
+ =?us-ascii?Q?qdjnqn9Bbc/capskUMC+2M4z?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Received: from wdc.com (122.179.114.63) by MAXPR01CA0106.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:5d::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4587.24 via Frontend Transport; Tue, 12 Oct 2021 10:00:02 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7b719446-7cd0-4839-4a70-08d98d671220
-X-MS-TrafficTypeDiagnostic: CO6PR04MB8361:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <CO6PR04MB836119DBA3302A4EB03684AA8DB69@CO6PR04MB8361.namprd04.prod.outlook.com>
-WDCIPOUTBOUND: EOP-TRUE
-X-MS-Oob-TLC-OOBClassifiers: OLM:849;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: q/22UmI1PxU2Adf55wvZHU5I6qVnJeI7ufCosXTCbGJoImETRvg6FOMJbAemo+6DTftGct+wM9zlBhLm2BkG6y2fve6SW0b86QXvRI62IRyRb8itwEo1bhzyfQpof45PF5r5GiBaEg/Kjj1ObLCiZIvElzH1V+HMnX+IBhrvYVGfvRfbDoFCNTBJIFJfBPwYU/58cFaD6pCKRzk2gyDueTj55EtLfjov1GQKga0rDC2C9j02Z8HKy0JOlzHs4uOafqouRHXaI/5U7rMsW8XN0PfmU+5F2gpIb+6PNtKMEGvQ5gLuTIfxpAOKjEMcaTAZmboNjt63l41HYglvgDD9fAc/+RGtxVrx+7+LAr141te1rvYD0/0VzxdAmkhy+QGsXWIuFQA7TNbUEO0upvwTNhVdwKibOX+Wg6BcMU7ZqVxZsbziNJyinpx70X+xE1GzRkoIVUMW6oeqPQzXGnrMbkTYhrzgKoOCk4Etm4OIdlSvNzIgpvfGLhnppBXzH9+hsVXtQS4jRiSBXbEHeMzcUd94nWUfcPhN07mEd0FxovRRs03Zowz5r13i+PjucV06YfSeDJK7IqEMoI47Ad72JW0iUkWvUFfb7Ubb/rhThhndR02vKYOM6DCDSZqedWlJOKFuzMa6+NWr1kVFasxUkCk/08qYoXx6wHXZd8K1dKy6QG8sdTiBmQ+irrkamCDakUFuEca0rlVtKvc0TfcJGw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR04MB7812.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(1076003)(54906003)(7696005)(8886007)(6666004)(110136005)(4326008)(66946007)(86362001)(38350700002)(66556008)(38100700002)(66476007)(2906002)(316002)(55016002)(5660300002)(52116002)(508600001)(8936002)(26005)(186003)(956004)(2616005)(7416002)(44832011)(8676002)(36756003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?QrBUirihCl7td+RXBu6YGKS11mea95aUUvCfc22yvfYBcpShr5oVI/Ob7fQm?=
- =?us-ascii?Q?G+SPwzXPVgj+oOSNBohr4tKa7hYPhfJbYAB8G7qXQRFop2BEnOVvJOWUgwRV?=
- =?us-ascii?Q?oFobsU+udqkGw0qFigp4h0lssGQbO5Ssh0AEfQQlF7kMPO2ibx2M6cPoUTdE?=
- =?us-ascii?Q?ogxsoOQ37YfgxBMinhpsRHq00hazwmmc4ylXqD0WkmdojQmmNTyw03/KZ+vA?=
- =?us-ascii?Q?1GoEB5jzKJ1KmF6OTgqayvxqmmveBEMfBGcRRF2uMb3b61cWkvAsXYuJQP7l?=
- =?us-ascii?Q?sSLCOVfc+swkfYtu3LfcpeZMzy64xMXmWyfxVWwOvG2F98vC1nRvUFoVKE0i?=
- =?us-ascii?Q?f9z/IcQFsgiWhbndshdkMePPswKICFSquQsgzvE1QvXF6mJtwqOaE8eIutiD?=
- =?us-ascii?Q?frjXrJBoAAkGuy2MwzxnqV0zGFGQkaBA39mV+NnFtEEZlL/TmWTD5eRLcxXz?=
- =?us-ascii?Q?/tzzktRrK5xwi4G4XpGyYL+lL60P4UlETrpdWGfkQsOaV4vCfR4PeT3nPDkd?=
- =?us-ascii?Q?gEFDhFT9N8/sAHOnJed4InSBDwykAA+gLvVO+mKGiQPF5YrKXLd0nzw0DRni?=
- =?us-ascii?Q?IFKoS+hOXqiOUxiSwZce04WivDgvDhx5mEVwaJVT+ynGkr9HN8TlMff9UWcR?=
- =?us-ascii?Q?4ZIg/8Pr7mwESf4NRzfkej5jw4UpOCkTixSer/trIJrFccgHBITMhRXdJCtR?=
- =?us-ascii?Q?bneN22JcSUmfN+eki53pFa5if009eExusrR19nEXtiL4YR+H0ZymdKaHA563?=
- =?us-ascii?Q?K0jgR3QQ2gBbgbP1Mz9Bzfbsj9hYY9exz1WFYIOOjSKXokwLgZRBj14HHWxN?=
- =?us-ascii?Q?HtYBwb78lOecHxxaC9vIrWd5LgCYvfvAPJTnLscmJ5Yz8TU79uDyJEwOSkys?=
- =?us-ascii?Q?2/6aNDWz7b/+tho2ErqKBmhfzvZsMjEf4px9wLZGzr+boYYSqk8J6hX7gOq1?=
- =?us-ascii?Q?Ncrfh5QO2hPTaAGbz0W/oUXiPPUTo4Slw3Fxtklr5apXPoW2sDexSH+Fe8VR?=
- =?us-ascii?Q?1bEnJv7gu0mV31DD50l1+OQLsR+r2Usb1HcEfycsGeJob2IQw9ZG/KtGFunP?=
- =?us-ascii?Q?Cl0hrM7EgMt6J54dTTYhKA5FB2bC4vuonkOpfkd6h/qLwIZxRxV+S3eDRYB4?=
- =?us-ascii?Q?V+WLvMt6VTAkgLqAXbdVGr95x5qoJdeYvxDxkBZIC7bRXq6aWhfhIzE4+tLn?=
- =?us-ascii?Q?lBXZjCZpP51h7IJol8h0DKSdME1c9I0H+tpf/tdYsgVuez02L5SA0KUlwl/x?=
- =?us-ascii?Q?1puDyHVHcM6uHj8B+CSOowLj7KSOXsPnc2WgQ8vFKhWLlS2yR4qRUrw6W4vx?=
- =?us-ascii?Q?JrmhxfWF8RWq8BDaA3m+R7TZ?=
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7b719446-7cd0-4839-4a70-08d98d671220
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR04MB7812.namprd04.prod.outlook.com
+X-OriginatorOrg: diasemi.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Oct 2021 10:00:07.6054
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: ee247a69-151d-40fb-9b13-08d98d6cef78
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Oct 2021 10:42:06.2651
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mY5/TIWk7wPKrpanW4IJm06hhMvnlu5SkGuoXtVcJSurWuckGrS3UIa0fd3HYNfq9wQ96idILCWfj06qZMgW9Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR04MB8361
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 511e3c0e-ee96-486e-a2ec-e272ffa37b7c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Qc7VEWQQnyE/o1UbK32gbxGEkO7NtHFa6LgbSPx4JFPX7kAPqeAESUS5Px0Nb7uUl6/H2YA3facBo/Th/3AmYrk4Z/Mj6iT1cD5L/YH3uwM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR10MB3737
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-We enable RISC-V SBI CPU Idle driver for QEMU virt machine to test
-SBI HSM Supend on QEMU.
+On 08 October 2021 12:10, Heikki Krogerus wrote:
 
-Signed-off-by: Anup Patel <anup.patel@wdc.com>
----
- arch/riscv/Kconfig.socs           | 3 +++
- arch/riscv/configs/defconfig      | 1 +
- arch/riscv/configs/rv32_defconfig | 1 +
- 3 files changed, 5 insertions(+)
+> > To downscope this issue for the time being, one of our immediate goals
+> > is to expose the PDOs
+> > to userspace for metrics reporting and potentially for some power
+> > policy control through other
+> > channels (like Chrome OS Embedded Controller).
+> >
+> > Would it be acceptable to revise this series to drop the power supply
+> > support for now (since I don't yet
+> > see a consensus on how to implement it for the partner), and just add
+> > sysfs nodes for each PDO ?
+> > This would be akin to how it's being done for identity VDOs right now.
+> >
+> > So we would have :
+> >
+> > /sys/class/typec/<port>-partner/source_pdos/pdo{1-13}
+> >
+> > and
+> >
+> > /sys/class/typec/<port>-partner/sink_pdos/pdo{1-13}
+> >
+> > and similarly for the port device.
+> >
+> > If we want to add additional parsing of the  Fixed Supply PDO into
+> > individual properties for the partner/port,
+> > those can of course be added later.
+> >
+> > WDYT?
+>=20
+> I don't think we should use sysfs to expose and control any of these
+> objects. It does not really matter under which subsystem we are
+> working. Sysfs is just the wrong interface for this kind of data.
+>=20
+> I'm now preparing a proof-of-concept patches where I create character
+> device for every USB PD capable device (port, plug and partner). The
+> idea is that we could use those char devices to tap into the USB PD
+> protocol directly. Right now I'm thinking the nodes would look like
+> this (with the first Type-C port):
+>=20
+>         /dev/pd0/port
+>         /dev/pd0/plug0 - you only get this node with full featured cables
+>         /dev/pd0/plug1 - ditto
+>         /dev/pd0/partner - and this is here only if you are connected
+>=20
+> So in this case you would use those char devices to send the actual
+> Get_Source_Cap and Get_Sink_Cap messages to get the PDOs.
+>=20
+> The problem is that it's not going to be possible to always support
+> every type of command. For example with UCSI we are pretty much
+> limited to the capability control messages. But I still think this is
+> the right way to do this.
+>=20
+> Let me know what you think.
 
-diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
-index 30676ebb16eb..56bafc3dad4c 100644
---- a/arch/riscv/Kconfig.socs
-+++ b/arch/riscv/Kconfig.socs
-@@ -28,6 +28,9 @@ config SOC_VIRT
- 	select GOLDFISH
- 	select RTC_DRV_GOLDFISH if RTC_CLASS
- 	select SIFIVE_PLIC
-+	select PM_GENERIC_DOMAINS if PM
-+	select PM_GENERIC_DOMAINS_OF if PM && OF
-+	select RISCV_SBI_CPUIDLE if CPU_IDLE
- 	help
- 	  This enables support for QEMU Virt Machine.
- 
-diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
-index 9851ba671e90..5ae71fa92c28 100644
---- a/arch/riscv/configs/defconfig
-+++ b/arch/riscv/configs/defconfig
-@@ -20,6 +20,7 @@ CONFIG_SOC_SIFIVE=y
- CONFIG_SOC_VIRT=y
- CONFIG_SMP=y
- CONFIG_HOTPLUG_CPU=y
-+CONFIG_PM=y
- CONFIG_CPU_IDLE=y
- CONFIG_JUMP_LABEL=y
- CONFIG_MODULES=y
-diff --git a/arch/riscv/configs/rv32_defconfig b/arch/riscv/configs/rv32_defconfig
-index 725ca3332900..31b5ca04939f 100644
---- a/arch/riscv/configs/rv32_defconfig
-+++ b/arch/riscv/configs/rv32_defconfig
-@@ -20,6 +20,7 @@ CONFIG_SOC_VIRT=y
- CONFIG_ARCH_RV32I=y
- CONFIG_SMP=y
- CONFIG_HOTPLUG_CPU=y
-+CONFIG_PM=y
- CONFIG_CPU_IDLE=y
- CONFIG_JUMP_LABEL=y
- CONFIG_MODULES=y
--- 
-2.25.1
-
+My two pence worth; this feels like a more appropriate mechanism to access =
+that
+data. Look forward to seeing the POC.
