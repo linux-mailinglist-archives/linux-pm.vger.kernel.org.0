@@ -2,113 +2,216 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1939142BF37
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Oct 2021 13:49:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B73C42BF9C
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Oct 2021 14:14:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232029AbhJMLv0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Oct 2021 07:51:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:56708 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231137AbhJMLv0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Oct 2021 07:51:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1634125763;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eJjX6iP5jQlCHxnRLEuZ4AA4AtdWwT375BFtLCNF4AE=;
-        b=e5jIR4kDoT4367YZZI5v7kP5Z42SN3jVzr6Q0EkWAvAXQOWFJ6LBxC5qF5k33sAWhp79kQ
-        sdKWON22ql3bs8C6PHvi3rhY9pnMwriGNiTmpTAJFCPUUU8puTkPME1pky6UFjgniffcLv
-        evOAoHTZOjEb5FLEyktk1vw6eRyI9Ds=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-201-PJEdT4R7OlqHVVqgfdh6Kg-1; Wed, 13 Oct 2021 07:49:21 -0400
-X-MC-Unique: PJEdT4R7OlqHVVqgfdh6Kg-1
-Received: by mail-ed1-f70.google.com with SMTP id t18-20020a056402021200b003db9e6b0e57so1969753edv.10
-        for <linux-pm@vger.kernel.org>; Wed, 13 Oct 2021 04:49:21 -0700 (PDT)
+        id S232784AbhJMMQu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Oct 2021 08:16:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46128 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232573AbhJMMQq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Oct 2021 08:16:46 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0BBC06174E
+        for <linux-pm@vger.kernel.org>; Wed, 13 Oct 2021 05:14:42 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id o20so7702362wro.3
+        for <linux-pm@vger.kernel.org>; Wed, 13 Oct 2021 05:14:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dMRaftnF9U+W3ku1B/GD71FJ+aEgoWgdI3sg+irCBSU=;
+        b=MhciuyvSk02sHng4PyOacoSMmXkEirv4ROaG/YFOPm3C/PGs4IaqJa0KzfxdG/7GZy
+         j0erLuzznKPfPq1SooRZKFK4Ph0eeQeU9mpXHHT+jpz7xE3bhD8wZpm0IH5MWOlJV1Vs
+         JSjS/+eukQ+3NvBveep9Rvje8X5OHCWQU9oNk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=eJjX6iP5jQlCHxnRLEuZ4AA4AtdWwT375BFtLCNF4AE=;
-        b=kO4G86ptB6mJisyKLp5iJXf8/VyHqE0duhxtUKe6jkaayfvzxSjCMk+UQloGDGUVv2
-         +oNOh0oBEztbLyCrVqh41ab8xvaJUwRn2y31v6HkVZkYnUvTcDLd0D75Ff3MYgfxE5V/
-         CCooQWsnD1vmAPBRa4g/crC7DFlY7cuACmhNFygXijfuxpLIH0dACfnypm5f7NCpiHsb
-         raYetX9aceTcMWP0phK/d/mP4FUh8QSWzciXrK7thbJaH5+3aGJhVl9eylZzY6dZc3lj
-         jPN6CTrD6aI9Tnmzb8LgEAWT4hDgBmJt9fWEurT2zPWi0836ldK08GEilZ1kkM9lbARX
-         FnTg==
-X-Gm-Message-State: AOAM5327Se0WtuMcpSItQ3do289JSwt/h6/DLFMOgS6aphFocWto/g0q
-        vcfXAPiUwjJvkN7+/4ElclOIIyqRH3qH7cnTh5s2Y2TXhUUVZQV5LKBQcD7VmsOGtyxQy5ksBcU
-        qQpX7oXRPQFd/Tan/fZw=
-X-Received: by 2002:a17:906:7ac9:: with SMTP id k9mr18502112ejo.411.1634125760829;
-        Wed, 13 Oct 2021 04:49:20 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwZvpsePPQnw9IhyB+5gS1lX/EreOcYLH7NI6W+AjHXoDk1vgsss7IWIJ/DRWo5XsSsfEGzFg==
-X-Received: by 2002:a17:906:7ac9:: with SMTP id k9mr18502094ejo.411.1634125760635;
-        Wed, 13 Oct 2021 04:49:20 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id ke24sm6427207ejc.73.2021.10.13.04.49.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Oct 2021 04:49:20 -0700 (PDT)
-Subject: Re: [PATCH -next] power: supply: axp288_charger: Fix missing
- mutex_init()
-To:     Wei Yongjun <weiyongjun1@huawei.com>, Kate Hsuan <hpa@redhat.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=dMRaftnF9U+W3ku1B/GD71FJ+aEgoWgdI3sg+irCBSU=;
+        b=H2/9eNCsult4/TwJ+IztHAdtEhiyYaAUYJ9kgDkmLAIuCsW5r1BejcVx2kxT+zk86q
+         1xYVG+vFGWoFO9J0Pwixm8avE55wjZZ1hzDnLjQmNUgEVCstnj0EizLiX4kHR0c8Cw9O
+         45pY7tcqqfAwffLZrQinRxCkMD0bmWEeo20tToVhSb0mOvxiGA+TAHoNKwDnqCkO6kZV
+         VmvCx32ki6IYyAoMZ3pWgHYDZ/sNwo7hdItjjpSeM5BsRIFZoh4UwL0d7drvEJ20l+Iu
+         /79yDhqsoAactmfL5jYFsDAGnHXWJGx8r9ZJI4P38qnvfTXMFZ/35M48FUCOf6jlVapn
+         uShQ==
+X-Gm-Message-State: AOAM5305+Tm5bFQHNSIRSO1tZSvw1XYC0RpXS2UDkrvjVdl6DwxbbcWx
+        1wjM2GX6mMMs12A8gFXHexjFEA==
+X-Google-Smtp-Source: ABdhPJwjQFtFTLxMhkElGP+tQ3IDjeuJllYWlfjQHSU4ZkxQZ996sxB4SGM/CwV1ziLNNbEonMsSKw==
+X-Received: by 2002:a05:600c:4ba9:: with SMTP id e41mr12535688wmp.70.1634127281038;
+        Wed, 13 Oct 2021 05:14:41 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id q16sm13619647wru.39.2021.10.13.05.14.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Oct 2021 05:14:40 -0700 (PDT)
+Date:   Wed, 13 Oct 2021 14:14:37 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Andrzej Hajda <andrzej.hajda@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Chen Feng <puck.chen@hisilicon.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Emma Anholt <emma@anholt.net>,
+        Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+        Inki Dae <inki.dae@samsung.com>,
+        James Qian Wang <james.qian.wang@arm.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Joerg Roedel <joro@8bytes.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Joonyoung Shim <jy0922.shim@samsung.com>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-fbdev@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-pm@vger.kernel.org, Liviu Dudau <liviu.dudau@arm.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Russell King <rmk+kernel@arm.linux.org.uk>,
+        Sandy Huang <hjc@rock-chips.com>,
+        Saravana Kannan <saravanak@google.com>,
         Sebastian Reichel <sre@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>
-Cc:     linux-pm@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Hulk Robot <hulkci@huawei.com>
-References: <20211013093115.2841167-1-weiyongjun1@huawei.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <d3690325-9d55-607b-cf51-048f634ef7b5@redhat.com>
-Date:   Wed, 13 Oct 2021 13:49:19 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Tian Tao <tiantao6@hisilicon.com>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Xinliang Liu <xinliang.liu@linaro.org>,
+        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
+        Yong Wu <yong.wu@mediatek.com>
+Subject: Re: [PATCH v2 00/34] component: Make into an aggregate bus
+Message-ID: <YWbNrfxQ0IqV7vsO@phenom.ffwll.local>
+Mail-Followup-To: Stephen Boyd <swboyd@chromium.org>,
+        Andrzej Hajda <andrzej.hajda@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Chen Feng <puck.chen@hisilicon.com>, Chen-Yu Tsai <wens@csie.org>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Emma Anholt <emma@anholt.net>,
+        Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+        Inki Dae <inki.dae@samsung.com>,
+        James Qian Wang <james.qian.wang@arm.com>,
+        Jaroslav Kysela <perex@perex.cz>, Joerg Roedel <joro@8bytes.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Joonyoung Shim <jy0922.shim@samsung.com>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-fbdev@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-pm@vger.kernel.org, Liviu Dudau <liviu.dudau@arm.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>, Maxime Ripard <mripard@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Russell King <rmk+kernel@arm.linux.org.uk>,
+        Sandy Huang <hjc@rock-chips.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Takashi Iwai <tiwai@suse.com>, Tian Tao <tiantao6@hisilicon.com>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Tomi Valkeinen <tomba@kernel.org>, Will Deacon <will@kernel.org>,
+        Xinliang Liu <xinliang.liu@linaro.org>,
+        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
+        Yong Wu <yong.wu@mediatek.com>
+References: <20211006193819.2654854-1-swboyd@chromium.org>
+ <5d3f4343-da38-04b4-fdb9-cb2dd4983db2@gmail.com>
+ <CAE-0n50s_cOLA0xRa8mmUS2Nawd5X7WiQE3PvOLHu+i=hE3Eow@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20211013093115.2841167-1-weiyongjun1@huawei.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAE-0n50s_cOLA0xRa8mmUS2Nawd5X7WiQE3PvOLHu+i=hE3Eow@mail.gmail.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
-
-On 10/13/21 11:31 AM, Wei Yongjun wrote:
-> The driver allocates the mutex but not initialize it.
-> Use mutex_init() on it to initialize it correctly.
+On Thu, Oct 07, 2021 at 04:46:22PM -0400, Stephen Boyd wrote:
+> Quoting Andrzej Hajda (2021-10-07 03:16:27)
+> > Hi Stephen,
+> >
+> > On 06.10.2021 21:37, Stephen Boyd wrote:
+> > > This series is from discussion we had on reordering the device lists for
+> > > drm shutdown paths[1]. I've introduced an 'aggregate' bus that we put
+> > > the aggregate device onto and then we probe the aggregate device once
+> > > all the components are probed and call component_add(). The probe/remove
+> > > hooks are where the bind/unbind calls go, and then a shutdown hook is
+> > > added that can be used to shutdown the drm display pipeline at the right
+> > > time.
+> > >
+> > > This works for me on my sc7180 board. I no longer get a warning from i2c
+> > > at shutdown that we're trying to make an i2c transaction after the i2c
+> > > bus has been shutdown. There's more work to do on the msm drm driver to
+> > > extract component device resources like clks, regulators, etc. out of
+> > > the component bind function into the driver probe but I wanted to move
+> > > everything over now in other component drivers before tackling that
+> > > problem.
+> >
+> >
+> > As I understand you have DSI host with i2c-controlled DSI bridge. And
+> > there is an issue that bridge is shutdown before msmdrm. Your solution
+> > is to 'adjust' device order on pm list.
+> > I had similar issue and solved it locally by adding notification from
+> > DSI bridge to DSI host that is has to be removed: mipi_dsi_detach, this
+> > notification escalates in DSI host to component_del and this allow to
+> > react properly.
+> >
+> > Advantages:
+> > - it is local (only involves DSI host and DSI device),
+> > - it does not depend on PM internals,
+> > - it can be used in other scenarios as well - unbinding DSI device driver
+> >
+> > Disadvantage:
+> > - It is DSI specific (but this is your case), I have advertised some
+> > time ago more general approach [1][2].
+> >
+> > [1]: https://static.sched.com/hosted_files/osseu18/0f/deferred_problem.pdf
+> > [2]: https://lwn.net/Articles/625454/
+> >
 > 
-> Fixes: ed229454856e ("power: supply: axp288-charger: Optimize register reading method")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+> I think these are all points for or against using the component code in
+> general? Maybe you can send patches that you think can solve the problem
+> I'm experiencing and we can review them on the list.
 
-Thanks, patch looks good to me
-(I should have catched this myself during review...) :
+Yeah I think this is entirely orthogonal. If you use component, then
+component should provide a way to handle this.
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+If you use something else, like drm_bridge or dsi or whatever, then that
+part should provide a solution to stage stuff correctly and handle all the
+ordering.
 
-Regards,
-
-Hans
-
-
-
-> ---
->  drivers/power/supply/axp288_charger.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/power/supply/axp288_charger.c b/drivers/power/supply/axp288_charger.c
-> index fd4983c98fd9..9987b1731e38 100644
-> --- a/drivers/power/supply/axp288_charger.c
-> +++ b/drivers/power/supply/axp288_charger.c
-> @@ -865,6 +865,7 @@ static int axp288_charger_probe(struct platform_device *pdev)
->  	if (!info)
->  		return -ENOMEM;
->  
-> +	mutex_init(&info->lock);
->  	info->pdev = pdev;
->  	info->regmap = axp20x->regmap;
->  	info->regmap_irqc = axp20x->regmap_irqc;
-> 
-
+Now there's a bunch of drivers which mix up component with bridge use and
+hilarity ensues, but since there's no real effort to fix that I think it's
+toally fine to just improve component.c meanwhile.
+-Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
