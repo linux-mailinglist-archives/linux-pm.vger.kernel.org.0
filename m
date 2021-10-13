@@ -2,206 +2,172 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F8EB42C639
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Oct 2021 18:23:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 020CC42C647
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Oct 2021 18:25:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbhJMQZS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Oct 2021 12:25:18 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:36888 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbhJMQZR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Oct 2021 12:25:17 -0400
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 8110C21988;
-        Wed, 13 Oct 2021 16:23:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1634142193; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3nPcIplaoGvH31gOQ95S7B2c3INXp/ouUNVo+cSmQx8=;
-        b=YMHHVl3cr9EtLo3Nl3VOlIpw+GV/qA4dYUKR+YzSnn89ZfYx2mTpx/21mgLb+t6sE68Fkl
-        xQz3kh6Xp5XeP7FC+X9+yVK+XIYgUoX6mNJC2oMCStQL0iA/e1/2bRrqA6T6WvX5jQpY++
-        M7B5exJenS+0t3/bhL0YFioeWAV2Doc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1634142193;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3nPcIplaoGvH31gOQ95S7B2c3INXp/ouUNVo+cSmQx8=;
-        b=VTInzAx92ZYzhW3mm5ZlW5exFihn41Xe/qGB5WjLhqY0eBd8ZawXqMxYS81nqgUDcEAicl
-        746VMzFqYOMd9jBw==
-Received: from [10.163.29.78] (unknown [10.163.29.78])
-        by relay2.suse.de (Postfix) with ESMTP id 103DBA3B89;
-        Wed, 13 Oct 2021 16:23:13 +0000 (UTC)
-Message-ID: <85664630200925cd75fba523adf5e78e295a3945.camel@suse.cz>
-Subject: Re: [PATCH v2 21/21] Documentation: amd-pstate: add amd-pstate
- driver introduction
-From:   Giovanni Gherdovich <ggherdovich@suse.cz>
-To:     Huang Rui <ray.huang@amd.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Borislav Petkov <bp@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>, linux-pm@vger.kernel.org
-Cc:     Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org
-Date:   Wed, 13 Oct 2021 18:23:11 +0200
-In-Reply-To: <20210926090605.3556134-22-ray.huang@amd.com>
-References: <20210926090605.3556134-1-ray.huang@amd.com>
-         <20210926090605.3556134-22-ray.huang@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        id S230527AbhJMQ1C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Oct 2021 12:27:02 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:38902 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229941AbhJMQ1C (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Oct 2021 12:27:02 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id F2D4C1F43B79
+Received: by earth.universe (Postfix, from userid 1000)
+        id 339733C0CA8; Wed, 13 Oct 2021 18:24:55 +0200 (CEST)
+Date:   Wed, 13 Oct 2021 18:24:55 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-pm@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Russell King <rmk+kernel@arm.linux.org.uk>,
+        Saravana Kannan <saravanak@google.com>
+Subject: Re: [PATCH v2 28/34] power: supply: ab8500: Migrate to aggregate
+ driver
+Message-ID: <20211013162455.2srbgmxw6dgoplzo@earth.universe>
+References: <20211006193819.2654854-1-swboyd@chromium.org>
+ <20211006193819.2654854-29-swboyd@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5zizh2cyz6jxazcg"
+Content-Disposition: inline
+In-Reply-To: <20211006193819.2654854-29-swboyd@chromium.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 2021-09-26 at 17:06 +0800, Huang Rui wrote:
-> Introduce the amd-pstate driver design and implementation.
-> 
-> Signed-off-by: Huang Rui <ray.huang@amd.com>
+
+--5zizh2cyz6jxazcg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+[+cc Linus Walleij (I guess we should add a MAINTAINERS entry for
+the ab8500* power-supply drivers)]
+
+On Wed, Oct 06, 2021 at 12:38:13PM -0700, Stephen Boyd wrote:
+> Use an aggregate driver instead of component ops so that we can get
+> proper driver probe ordering of the aggregate device with respect to all
+> the component devices that make up the aggregate device.
+>=20
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: <linux-pm@vger.kernel.org>
+> Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Rob Clark <robdclark@gmail.com>
+> Cc: Russell King <rmk+kernel@arm.linux.org.uk>
+> Cc: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 > ---
->  Documentation/admin-guide/pm/amd_pstate.rst   | 377 ++++++++++++++++++
->
 
-[... snip ...]
+Acked-by: Sebastian Reichel <sre@kernel.org>
 
-> +
-> +AMD CPPC Performance Capability
-> +--------------------------------
-> +
-> +Highest Performance (RO)
-> +.........................
-> +
-> +It is the absolute maximum performance an individual processor may reach,
-> +assuming ideal conditions. This performance level may not be sustainable
-> +for long durations and may only be achievable if other platform components
-> +are in a specific state; for example, it may require other processors be in
-> +an idle state. This would be equivalent to the highest frequencies
-> +supported by the processor.
-> +
-> +Nominal (Guaranteed) Performance (RO)
-> +......................................
-> +
-> +It is the maximum sustained performance level of the processor, assuming
-> +ideal operating conditions. In absence of an external constraint (power,
-> +thermal, etc.) this is the performance level the processor is expected to
-> +be able to maintain continuously. All cores/processors are expected to be
-> +able to sustain their nominal performance state simultaneously.
-> +
-> +Lowest non-linear Performance (RO)
-> +...................................
-> +
-> +It is the lowest performance level at which nonlinear power savings are
-> +achieved, for example, due to the combined effects of voltage and frequency
-> +scaling. Above this threshold, lower performance levels should be generally
-> +more energy efficient than higher performance levels. This register
-> +effectively conveys the most efficient performance level to ``amd-pstate``.
-> +
-> +Lowest Performance (RO)
-> +........................
-> +
-> +It is the absolute lowest performance level of the processor. Selecting a
-> +performance level lower than the lowest nonlinear performance level may
-> +cause an efficiency penalty but should reduce the instantaneous power
-> +consumption of the processor.
-> +
+-- Sebastian
 
-Those above are the CPPC capabilities. All good so far. They're Read Only, and
-for each capability you have a file in sysfs. It makes sense to describe them
-in this Documentation folder ("admin-guide"). But the following section...
+>  drivers/power/supply/ab8500_charger.c | 22 +++++++++++++---------
+>  1 file changed, 13 insertions(+), 9 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/ab8500_charger.c b/drivers/power/supply=
+/ab8500_charger.c
+> index 15eadaf46f14..52d4105e28f2 100644
+> --- a/drivers/power/supply/ab8500_charger.c
+> +++ b/drivers/power/supply/ab8500_charger.c
+> @@ -3312,8 +3312,9 @@ static const struct power_supply_desc ab8500_usb_ch=
+g_desc =3D {
+>  	.get_property	=3D ab8500_charger_usb_get_property,
+>  };
+> =20
+> -static int ab8500_charger_bind(struct device *dev)
+> +static int ab8500_charger_bind(struct aggregate_device *adev)
+>  {
+> +	struct device *dev =3D adev->parent;
+>  	struct ab8500_charger *di =3D dev_get_drvdata(dev);
+>  	int ch_stat;
+>  	int ret;
+> @@ -3354,8 +3355,9 @@ static int ab8500_charger_bind(struct device *dev)
+>  	return 0;
+>  }
+> =20
+> -static void ab8500_charger_unbind(struct device *dev)
+> +static void ab8500_charger_unbind(struct aggregate_device *adev)
+>  {
+> +	struct device *dev =3D adev->parent;
+>  	struct ab8500_charger *di =3D dev_get_drvdata(dev);
+>  	int ret;
+> =20
+> @@ -3380,9 +3382,13 @@ static void ab8500_charger_unbind(struct device *d=
+ev)
+>  	component_unbind_all(dev, di);
+>  }
+> =20
+> -static const struct component_master_ops ab8500_charger_comp_ops =3D {
+> -	.bind =3D ab8500_charger_bind,
+> -	.unbind =3D ab8500_charger_unbind,
+> +static struct aggregate_driver ab8500_charger_aggregate_driver =3D {
+> +	.probe =3D ab8500_charger_bind,
+> +	.remove =3D ab8500_charger_unbind,
+> +	.driver =3D {
+> +		.name =3D "ab8500_charger_agg",
+> +		.owner =3D THIS_MODULE,
+> +	},
+>  };
+> =20
+>  static struct platform_driver *const ab8500_charger_component_drivers[] =
+=3D {
+> @@ -3663,9 +3669,7 @@ static int ab8500_charger_probe(struct platform_dev=
+ice *pdev)
+>  	}
+> =20
+> =20
+> -	ret =3D component_master_add_with_match(&pdev->dev,
+> -					      &ab8500_charger_comp_ops,
+> -					      match);
+> +	ret =3D component_aggregate_register(&pdev->dev, &ab8500_charger_aggreg=
+ate_driver, match);
+>  	if (ret) {
+>  		dev_err(dev, "failed to add component master\n");
+>  		goto free_notifier;
+> @@ -3688,7 +3692,7 @@ static int ab8500_charger_remove(struct platform_de=
+vice *pdev)
+>  {
+>  	struct ab8500_charger *di =3D platform_get_drvdata(pdev);
+> =20
+> -	component_master_del(&pdev->dev, &ab8500_charger_comp_ops);
+> +	component_aggregate_unregister(&pdev->dev, &ab8500_charger_aggregate_dr=
+iver);
+> =20
+>  	usb_unregister_notifier(di->usb_phy, &di->nb);
+>  	usb_put_phy(di->usb_phy);
+> --=20
+> https://chromeos.dev
+>=20
 
-> +AMD CPPC Performance Control
-> +------------------------------
-> +
-> +``amd-pstate`` passes performance goals through these registers. The
-> +register drives the behavior of the desired performance target.
-> +
-> +Minimum requested performance (RW)
-> +...................................
-> +
-> +``amd-pstate`` specifies the minimum allowed performance level.
-> +
-> +Maximum requested performance (RW)
-> +...................................
-> +
-> +``amd-pstate`` specifies a limit the maximum performance that is expected
-> +to be supplied by the hardware.
-> +
-> +Desired performance target (RW)
-> +...................................
-> +
-> +``amd-pstate`` specifies a desired target in the CPPC performance scale as
-> +a relative number. This can be expressed as percentage of nominal
-> +performance (infrastructure max). Below the nominal sustained performance
-> +level, desired performance expresses the average performance level of the
-> +processor subject to hardware. Above the nominal performance level,
-> +processor must provide at least nominal performance requested and go higher
-> +if current operating conditions allow.
-> +
-> +Energy Performance Preference (EPP) (RW)
-> +.........................................
-> +
-> +Provides a hint to the hardware if software wants to bias toward performance
-> +(0x0) or energy efficiency (0xff).
+--5zizh2cyz6jxazcg
+Content-Type: application/pgp-signature; name="signature.asc"
 
-The section above describes the CPPC "performance controls". They're marked
-"Read/Write", but you don't expose them to the user via sysfs, am I right?
+-----BEGIN PGP SIGNATURE-----
 
-Do I understand correctly that with this driver, the AMD System Management
-Unit (SMU -- is it the right name?) is *not* working in autonomous mode, but
-is almost entirely under the OS control?
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmFnCFcACgkQ2O7X88g7
++poL0g/9HRcH5yucLIwM0Y2DrOctm8HymvKJoN7B93ea2cEtO6LZKjyEhlOl5vtp
+75+K607L5FgwhV/GFgrbfZxK3vdQw5CN0srVtZRpXVB05EURul1GLGKlPQEKW1kY
+cOzqPLZx6lJtO80OnDuClJSI+uP5MpwRZzXRdjCm63BR3/+rVHM1NY8LY7SCLM9v
+Edr812kResYp7WkbtYLwy5z/ddCebtE+t+3Cv31Ber6MVbhHHuM0igQ24FiEVQI8
+SIUXFKMMAv1n7eRfWRMJf84ZBOzC7yFxFo4ZwC/saCiePvttjiE64KlG5TLcNjTA
+tPd/FWHeM6YVCU+YJ1vqfvh1tW69XpGFxv90eAX+nMIo0znaZir5pykGfDKCP1zL
+3uVSiz+KnGdCNwljg8MEBXd2E742pLSwnnr/Sckyk6O4zDbTBul7pTSY6NIy2dZW
++4ahnTtc0qq62+RH1wfbLHsVu04WTxZTMFbpTlQI7EGQsVMzGdx/TAwqbb1cVxjS
+9hiZsgvXoP4C58VGLC/3DHcjzEm+O1U/emJRwo3MZ8M0K1bQY36bj3NWnIpDAgY+
+hf/FkBbjSesZtBqG81wT85DA/rcDc+8qoEGVTnCt7jQrdyDqmQvKtioZLEhGtB/P
+BZOx9e+yo8JHDUlGSwPCZSvl3Uk9jBNIjstThsEjuZU6U+lcx1Q=
+=A2IV
+-----END PGP SIGNATURE-----
 
-By "autonomous mode" I mean: you run a workload, the driver doesn't select any
-desired frequency, and the SMU does its thing and selects the CPU clock freq
-on its own. That's not what's happing here, AFAIU. I tried using amd-pstate
-using the "userspace" governor (very useful for testing ;), and set
-frequencies like
-
-  echo 1200000 > /sys/devices/system/cpu/cpufreq/policy11/scaling_setspeed
-
-and then, whatever the load on CPU#11, "cpupower monitor" would show me a
-constant clock of ~1.2GHz.
-
-Don't get me wrong, this is a very good driver! I'm super happy that the
-kernel can finally see all the P-States, instead of just 3.
-
-I'm just trying to clarify that we're using CPPC with autonomous selection
-disabled, so I don't think the documentation in admin-guide should describe
-features like the R/W "performance controls" that don't make sense in this
-context. Especially the "Energy Performance Preference (EPP)", that you would
-use to tell the SMU "do what you want, just push a little on the performance
-side".
-
-I can see that the driver, internally, is sending "lowest nonlinear" as
-minimum perf, 255 as maximum perf, and whatever the governor wants as desired
-perf. It just isn't exposed in sysfs so there isn't much point in documenting
-that.
-
-> [...]
-> Full MSR Support
-> -----------------
-> 
-> Some new Zen3 processors such as Cezanne provide the MSR registers directly
-> while the :c:macro:`X86_FEATURE_AMD_CPPC_EXT` CPU feature flag is set.
-> ``amd-pstate`` can handle the MSR register to implement the fast switch
-> function in ``CPUFreq`` that can shrink latency of frequency control on the
-> interrupt context.
-
-A-ha! Cezanne. I have an EPYC Milan, so that's probably why I can't get the
-"Full MSR Support". I'll test the "Shared Memory Support" then, and report my
-data.
-
-
-Thanks!
-Giovanni
-
+--5zizh2cyz6jxazcg--
