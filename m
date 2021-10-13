@@ -2,187 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 787B642C162
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Oct 2021 15:27:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C24A942C170
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Oct 2021 15:33:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbhJMN3V convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 13 Oct 2021 09:29:21 -0400
-Received: from mail-ua1-f41.google.com ([209.85.222.41]:36520 "EHLO
-        mail-ua1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232528AbhJMN3U (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Oct 2021 09:29:20 -0400
-Received: by mail-ua1-f41.google.com with SMTP id g13so4475254uaj.3;
-        Wed, 13 Oct 2021 06:27:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=/CNqjYylJrKWKcPRGnOfpIoJdWTb6vOhLBg4h/E8o8o=;
-        b=CB5SUBS0vlBmAx5fwfWs0Q+UCkPv8vv/mtLjkJG9RgQorov+qnLcGvcjzrAZDRp117
-         fAX2CXoZS5Qx726UiMQSkzTDgxpFDIzGZ0Sh6pnPL7CvFd4lTk0fviIaNSheKoiYy5Dk
-         C/eixMaUSM77+TmwnZ2ONUthXTuTfmUiOq/t3gNltyepTquPNCjlXMh+jb9p3AgZ1FuY
-         roa/Oi+KPRye1iN3L03zf3w7v5BD6FAepxNy0y1XvWVVN4PPBwp66QFbCCjuZVZCXNzh
-         d1WrO0ZxehNpbpYfsgQquL5pvj4VKmxsG5Ibg0uFcMou9OfGeeNGoNL+U/hagG9V+Xo1
-         0mVA==
-X-Gm-Message-State: AOAM531f7jvOQE08moYfvU3vxZN5O91FZzVwkg38hWu080yHHUrebFSI
-        /SWhY9xwLrGciSncGGSrypeHlYDp4aPFNjyorSY=
-X-Google-Smtp-Source: ABdhPJx+EdvYep8kGp87ymb5T0vvYxd7kfXkkiiy3iL/dD8ZlxapNaxtL3rXJwnyi+jJ3MRu4dOoEBtPEaIJqh/6gi8=
-X-Received: by 2002:ab0:538a:: with SMTP id k10mr29804439uaa.14.1634131636954;
- Wed, 13 Oct 2021 06:27:16 -0700 (PDT)
+        id S234555AbhJMNfV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Oct 2021 09:35:21 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:37116 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229535AbhJMNfU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Oct 2021 09:35:20 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 914831F445DD
+Received: by earth.universe (Postfix, from userid 1000)
+        id E68DE3C0CA8; Wed, 13 Oct 2021 15:33:13 +0200 (CEST)
+Date:   Wed, 13 Oct 2021 15:33:13 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Wei Yongjun <weiyongjun1@huawei.com>, Kate Hsuan <hpa@redhat.com>,
+        Chen-Yu Tsai <wens@csie.org>, linux-pm@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, Hulk Robot <hulkci@huawei.com>
+Subject: Re: [PATCH -next] power: supply: axp288_charger: Fix missing
+ mutex_init()
+Message-ID: <20211013133313.hao3uvvi65tufgy7@earth.universe>
+References: <20211013093115.2841167-1-weiyongjun1@huawei.com>
+ <d3690325-9d55-607b-cf51-048f634ef7b5@redhat.com>
 MIME-Version: 1.0
-References: <20211011225802.11497-1-niklas.soderlund+renesas@ragnatech.se> <20211011225802.11497-3-niklas.soderlund+renesas@ragnatech.se>
-In-Reply-To: <20211011225802.11497-3-niklas.soderlund+renesas@ragnatech.se>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 13 Oct 2021 15:27:05 +0200
-Message-ID: <CAMuHMdXXBtoQ78=ePkw4ja3Lh7YoPhd4XZAaGX79Huz3Khw51g@mail.gmail.com>
-Subject: Re: [PATCH 2/2] thermal: rcar_gen3_thermal: Read calibration from hardware
-To:     =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-Cc:     Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="da2hjslt5ssl5lky"
+Content-Disposition: inline
+In-Reply-To: <d3690325-9d55-607b-cf51-048f634ef7b5@redhat.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Niklas,
 
-On Tue, Oct 12, 2021 at 12:58 AM Niklas Söderlund
-<niklas.soderlund+renesas@ragnatech.se> wrote:
-> In production hardware the calibration values used to convert register
-> values to temperatures can be read from hardware. While pre-production
-> hardware still depends on pseudo values hard-coded in the driver.
->
-> Add support for reading out calibration values from hardware if it's
-> fused. The presence of fused calibration is indicated in the THSCP
-> register.
->
-> Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-> ---
-> * Changes since RFT
-> - Keep thcodes array static.
+--da2hjslt5ssl5lky
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for the update!
+Hi,
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+On Wed, Oct 13, 2021 at 01:49:19PM +0200, Hans de Goede wrote:
+> On 10/13/21 11:31 AM, Wei Yongjun wrote:
+> > The driver allocates the mutex but not initialize it.
+> > Use mutex_init() on it to initialize it correctly.
+> >=20
+> > Fixes: ed229454856e ("power: supply: axp288-charger: Optimize register =
+reading method")
+> > Reported-by: Hulk Robot <hulkci@huawei.com>
+> > Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+>=20
+> Thanks, patch looks good to me
+> (I should have catched this myself during review...) :
+>=20
+> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
-A few minor bike sheddings^W^Wnits below...
+Thanks, queued.
 
-> --- a/drivers/thermal/rcar_gen3_thermal.c
-> +++ b/drivers/thermal/rcar_gen3_thermal.c
+-- Sebastian
 
-> @@ -245,6 +252,64 @@ static const struct soc_device_attribute r8a7795es1[] = {
->         { /* sentinel */ }
->  };
->
-> +static bool rcar_gen3_thermal_update_fuses(struct rcar_gen3_thermal_priv *priv)
+> > ---
+> >  drivers/power/supply/axp288_charger.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >=20
+> > diff --git a/drivers/power/supply/axp288_charger.c b/drivers/power/supp=
+ly/axp288_charger.c
+> > index fd4983c98fd9..9987b1731e38 100644
+> > --- a/drivers/power/supply/axp288_charger.c
+> > +++ b/drivers/power/supply/axp288_charger.c
+> > @@ -865,6 +865,7 @@ static int axp288_charger_probe(struct platform_dev=
+ice *pdev)
+> >  	if (!info)
+> >  		return -ENOMEM;
+> > =20
+> > +	mutex_init(&info->lock);
+> >  	info->pdev =3D pdev;
+> >  	info->regmap =3D axp20x->regmap;
+> >  	info->regmap_irqc =3D axp20x->regmap_irqc;
+> >=20
+>=20
 
-This doesn't sound like a good name to me, as the function does not
-update the fuses, but reads their values.
+--da2hjslt5ssl5lky
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> +{
-> +       unsigned int i;
-> +       u32 thscp;
-> +
-> +       /* Default THCODE values in case FUSEs are not set. */
-> +       static const int thcodes[TSC_MAX_NUM][3] = {
-> +               { 3397, 2800, 2221 },
-> +               { 3393, 2795, 2216 },
-> +               { 3389, 2805, 2237 },
-> +               { 3415, 2694, 2195 },
-> +               { 3356, 2724, 2244 },
-> +       };
+-----BEGIN PGP SIGNATURE-----
 
-Given this is used only inside the if statement below, perhaps it
-should be moved there?
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmFm4A4ACgkQ2O7X88g7
++pov7w//aHCvOeO3CsuC5GVCwcPl+gLAEZmUgpHaBojLoq5uFPXjScJSIeAaNmwg
+werUUBa5TMwijjxRJ5vh+X5FNGCwnLxVgUxxujpQXRbX/Hb/Sx9IJRkdxY84XjGr
+mCcrORwXnAhKjgfgOvjLHebu5Igh9Oc+2PlIwg27k9mw1+DrOdDFqtc3cfLmANJk
+rW2dvpVrcgN7QMMPfjT8BCOFA0q/xawTTd6ESUMhQN0GcOldBCvVdfq++sodoLGx
+QrdM2TSuu9zIMYl544XqVKck/9UJ0u28jsyikWdfFQldB0vJ1Ab03nrG36XWuKUw
+s/Mx2R+I5Bt8a0Ot/wQIw8hf2IVIxPEY0wjbRmgSRF8u8/a5I2sm3LyIh1BQjBkp
+y70sI9LzxHRvYBe0ZxJvajQcjVIR3DtJh32uDX809CilYifMwHZkxhB04BMwfuhJ
+eQ0GlyKHKbgUzHqYUjaujJEzY+cKKNYFwIhnKaUoYn5VKwMHu3TQKvPWNfmB6D2c
+E+2gTaVjvroKmQxz1+ysVxPzB7BDATY40hixE9dVONzeRCxugTodDPlcpWkFPiXO
+Nb9VWIOep1f7cZLsHP7qFmSkZ6unjymsM4wJhDxk9qJnO2xhoVFWnB0ZfLqECKyH
+3S+JfDJ5gZ2gca4TKl2kdBqaQrNKouCHhEE9nbSgxzvIY6OzPRE=
+=d6j4
+-----END PGP SIGNATURE-----
 
-> +
-> +       /* If fuses are not set, fallback to pseudo values. */
-> +       thscp = rcar_gen3_thermal_read(priv->tscs[0], REG_GEN3_THSCP);
-> +       if ((thscp & THSCP_COR_PARA_VLD) != THSCP_COR_PARA_VLD) {
-> +               priv->ptat[0] = 2631;
-> +               priv->ptat[1] = 1509;
-> +               priv->ptat[2] = 435;
-> +
-> +               for (i = 0; i < priv->num_tscs; i++) {
-> +                       struct rcar_gen3_thermal_tsc *tsc = priv->tscs[i];
-> +
-> +                       tsc->thcode[0] = thcodes[i][0];
-> +                       tsc->thcode[1] = thcodes[i][1];
-> +                       tsc->thcode[2] = thcodes[i][2];
-> +               }
-> +
-> +               return false;
-> +       }
-> +
-> +       /*
-> +        * Set the pseudo calibration points with fused values.
-> +        * PTAT is shared between all TSCs but only fused for the first
-> +        * TSC while THCODEs are fused for each TSC.
-> +        */
-> +       priv->ptat[0] = rcar_gen3_thermal_read(priv->tscs[0], REG_GEN3_PTAT1) &
-> +               GEN3_FUSE_MASK;
-> +       priv->ptat[1] = rcar_gen3_thermal_read(priv->tscs[0], REG_GEN3_PTAT2) &
-> +               GEN3_FUSE_MASK;
-> +       priv->ptat[2] = rcar_gen3_thermal_read(priv->tscs[0], REG_GEN3_PTAT3) &
-> +               GEN3_FUSE_MASK;
-> +
-> +       for (i = 0; i < priv->num_tscs; i++) {
-> +               struct rcar_gen3_thermal_tsc *tsc = priv->tscs[i];
-> +
-> +               tsc->thcode[0] = rcar_gen3_thermal_read(tsc, REG_GEN3_THCODE1) &
-> +                       GEN3_FUSE_MASK;
-> +               tsc->thcode[1] = rcar_gen3_thermal_read(tsc, REG_GEN3_THCODE2) &
-> +                       GEN3_FUSE_MASK;
-> +               tsc->thcode[2] = rcar_gen3_thermal_read(tsc, REG_GEN3_THCODE3) &
-> +                       GEN3_FUSE_MASK;
-> +       }
-> +
-> +       return true;
-> +}
-> +
->  static void rcar_gen3_thermal_init_r8a7795es1(struct rcar_gen3_thermal_tsc *tsc)
->  {
->         rcar_gen3_thermal_write(tsc, REG_GEN3_CTSR,  CTSR_THBGR);
-
-> @@ -442,11 +493,16 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
->                         goto error_unregister;
->                 }
->
-> -               tsc->thcode[0] = thcodes[i][0];
-> -               tsc->thcode[1] = thcodes[i][1];
-> -               tsc->thcode[2] = thcodes[i][2];
-> -
->                 priv->tscs[i] = tsc;
-> +       }
-> +
-> +       priv->num_tscs = i;
-> +
-> +       if (rcar_gen3_thermal_update_fuses(priv))
-> +               dev_info(dev, "Using fused calibration values\n");
-
-Despite our lack of test hardware having programmed fuses, using the
-values from the fuses should be the normal situation, right?
-So perhaps print a message when falling back to the default values
-instead?
-
-> +
-> +       for (i = 0; i < priv->num_tscs; i++) {
-> +               struct rcar_gen3_thermal_tsc *tsc = priv->tscs[i];
->
->                 zone = devm_thermal_zone_of_sensor_register(dev, i, tsc,
->                                                             &rcar_gen3_tz_of_ops);
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--da2hjslt5ssl5lky--
