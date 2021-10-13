@@ -2,216 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B73C42BF9C
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Oct 2021 14:14:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F6742BF82
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Oct 2021 14:06:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232784AbhJMMQu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Oct 2021 08:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46128 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232573AbhJMMQq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Oct 2021 08:16:46 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0BBC06174E
-        for <linux-pm@vger.kernel.org>; Wed, 13 Oct 2021 05:14:42 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id o20so7702362wro.3
-        for <linux-pm@vger.kernel.org>; Wed, 13 Oct 2021 05:14:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dMRaftnF9U+W3ku1B/GD71FJ+aEgoWgdI3sg+irCBSU=;
-        b=MhciuyvSk02sHng4PyOacoSMmXkEirv4ROaG/YFOPm3C/PGs4IaqJa0KzfxdG/7GZy
-         j0erLuzznKPfPq1SooRZKFK4Ph0eeQeU9mpXHHT+jpz7xE3bhD8wZpm0IH5MWOlJV1Vs
-         JSjS/+eukQ+3NvBveep9Rvje8X5OHCWQU9oNk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=dMRaftnF9U+W3ku1B/GD71FJ+aEgoWgdI3sg+irCBSU=;
-        b=H2/9eNCsult4/TwJ+IztHAdtEhiyYaAUYJ9kgDkmLAIuCsW5r1BejcVx2kxT+zk86q
-         1xYVG+vFGWoFO9J0Pwixm8avE55wjZZ1hzDnLjQmNUgEVCstnj0EizLiX4kHR0c8Cw9O
-         45pY7tcqqfAwffLZrQinRxCkMD0bmWEeo20tToVhSb0mOvxiGA+TAHoNKwDnqCkO6kZV
-         VmvCx32ki6IYyAoMZ3pWgHYDZ/sNwo7hdItjjpSeM5BsRIFZoh4UwL0d7drvEJ20l+Iu
-         /79yDhqsoAactmfL5jYFsDAGnHXWJGx8r9ZJI4P38qnvfTXMFZ/35M48FUCOf6jlVapn
-         uShQ==
-X-Gm-Message-State: AOAM5305+Tm5bFQHNSIRSO1tZSvw1XYC0RpXS2UDkrvjVdl6DwxbbcWx
-        1wjM2GX6mMMs12A8gFXHexjFEA==
-X-Google-Smtp-Source: ABdhPJwjQFtFTLxMhkElGP+tQ3IDjeuJllYWlfjQHSU4ZkxQZ996sxB4SGM/CwV1ziLNNbEonMsSKw==
-X-Received: by 2002:a05:600c:4ba9:: with SMTP id e41mr12535688wmp.70.1634127281038;
-        Wed, 13 Oct 2021 05:14:41 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id q16sm13619647wru.39.2021.10.13.05.14.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Oct 2021 05:14:40 -0700 (PDT)
-Date:   Wed, 13 Oct 2021 14:14:37 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Andrzej Hajda <andrzej.hajda@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Chen Feng <puck.chen@hisilicon.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Emma Anholt <emma@anholt.net>,
-        Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
-        Inki Dae <inki.dae@samsung.com>,
-        James Qian Wang <james.qian.wang@arm.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Joerg Roedel <joro@8bytes.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Joonyoung Shim <jy0922.shim@samsung.com>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-fbdev@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-pm@vger.kernel.org, Liviu Dudau <liviu.dudau@arm.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        Sandy Huang <hjc@rock-chips.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Tian Tao <tiantao6@hisilicon.com>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Xinliang Liu <xinliang.liu@linaro.org>,
-        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
-        Yong Wu <yong.wu@mediatek.com>
-Subject: Re: [PATCH v2 00/34] component: Make into an aggregate bus
-Message-ID: <YWbNrfxQ0IqV7vsO@phenom.ffwll.local>
-Mail-Followup-To: Stephen Boyd <swboyd@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Chen Feng <puck.chen@hisilicon.com>, Chen-Yu Tsai <wens@csie.org>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Emma Anholt <emma@anholt.net>,
-        Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
-        Inki Dae <inki.dae@samsung.com>,
-        James Qian Wang <james.qian.wang@arm.com>,
-        Jaroslav Kysela <perex@perex.cz>, Joerg Roedel <joro@8bytes.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Joonyoung Shim <jy0922.shim@samsung.com>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-fbdev@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-pm@vger.kernel.org, Liviu Dudau <liviu.dudau@arm.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>, Maxime Ripard <mripard@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        Sandy Huang <hjc@rock-chips.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Takashi Iwai <tiwai@suse.com>, Tian Tao <tiantao6@hisilicon.com>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        Tomi Valkeinen <tomba@kernel.org>, Will Deacon <will@kernel.org>,
-        Xinliang Liu <xinliang.liu@linaro.org>,
-        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
-        Yong Wu <yong.wu@mediatek.com>
-References: <20211006193819.2654854-1-swboyd@chromium.org>
- <5d3f4343-da38-04b4-fdb9-cb2dd4983db2@gmail.com>
- <CAE-0n50s_cOLA0xRa8mmUS2Nawd5X7WiQE3PvOLHu+i=hE3Eow@mail.gmail.com>
+        id S229580AbhJMMIk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Oct 2021 08:08:40 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:14345 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229653AbhJMMIj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Oct 2021 08:08:39 -0400
+Received: from dggeme754-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4HTrjh1Dqhz90C4;
+        Wed, 13 Oct 2021 20:01:44 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by dggeme754-chm.china.huawei.com
+ (10.3.19.100) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.8; Wed, 13
+ Oct 2021 20:06:34 +0800
+From:   Ye Bin <yebin10@huawei.com>
+To:     <rafael@kernel.org>, <len.brown@intel.com>, <pavel@ucw.cz>,
+        <linux-pm@vger.kernel.org>
+CC:     <tytso@mit.edu>, <linux-kernel@vger.kernel.org>, <jack@suse.cz>,
+        Ye Bin <yebin10@huawei.com>
+Subject: [PATCH -next] PM: hibernate: Get block device exclusively when do swsusp_check
+Date:   Wed, 13 Oct 2021 20:19:14 +0800
+Message-ID: <20211013121914.3146812-1-yebin10@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAE-0n50s_cOLA0xRa8mmUS2Nawd5X7WiQE3PvOLHu+i=hE3Eow@mail.gmail.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggeme754-chm.china.huawei.com (10.3.19.100)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 07, 2021 at 04:46:22PM -0400, Stephen Boyd wrote:
-> Quoting Andrzej Hajda (2021-10-07 03:16:27)
-> > Hi Stephen,
-> >
-> > On 06.10.2021 21:37, Stephen Boyd wrote:
-> > > This series is from discussion we had on reordering the device lists for
-> > > drm shutdown paths[1]. I've introduced an 'aggregate' bus that we put
-> > > the aggregate device onto and then we probe the aggregate device once
-> > > all the components are probed and call component_add(). The probe/remove
-> > > hooks are where the bind/unbind calls go, and then a shutdown hook is
-> > > added that can be used to shutdown the drm display pipeline at the right
-> > > time.
-> > >
-> > > This works for me on my sc7180 board. I no longer get a warning from i2c
-> > > at shutdown that we're trying to make an i2c transaction after the i2c
-> > > bus has been shutdown. There's more work to do on the msm drm driver to
-> > > extract component device resources like clks, regulators, etc. out of
-> > > the component bind function into the driver probe but I wanted to move
-> > > everything over now in other component drivers before tackling that
-> > > problem.
-> >
-> >
-> > As I understand you have DSI host with i2c-controlled DSI bridge. And
-> > there is an issue that bridge is shutdown before msmdrm. Your solution
-> > is to 'adjust' device order on pm list.
-> > I had similar issue and solved it locally by adding notification from
-> > DSI bridge to DSI host that is has to be removed: mipi_dsi_detach, this
-> > notification escalates in DSI host to component_del and this allow to
-> > react properly.
-> >
-> > Advantages:
-> > - it is local (only involves DSI host and DSI device),
-> > - it does not depend on PM internals,
-> > - it can be used in other scenarios as well - unbinding DSI device driver
-> >
-> > Disadvantage:
-> > - It is DSI specific (but this is your case), I have advertised some
-> > time ago more general approach [1][2].
-> >
-> > [1]: https://static.sched.com/hosted_files/osseu18/0f/deferred_problem.pdf
-> > [2]: https://lwn.net/Articles/625454/
-> >
-> 
-> I think these are all points for or against using the component code in
-> general? Maybe you can send patches that you think can solve the problem
-> I'm experiencing and we can review them on the list.
+We got follow issue:
+[   89.266592] ------------[ cut here ]------------
+[   89.267427] kernel BUG at fs/buffer.c:3020!
+[   89.268264] invalid opcode: 0000 [#1] SMP KASAN PTI
+[   89.269116] CPU: 7 PID: 1750 Comm: kmmpd-loop0 Not tainted 5.10.0-862.14.0.6.x86_64-08610-gc932cda3cef4-dirty #20
+[   89.273169] RIP: 0010:submit_bh_wbc.isra.0+0x538/0x6d0
+[   89.277157] RSP: 0018:ffff888105ddfd08 EFLAGS: 00010246
+[   89.278093] RAX: 0000000000000005 RBX: ffff888124231498 RCX: ffffffffb2772612
+[   89.279332] RDX: 1ffff11024846293 RSI: 0000000000000008 RDI: ffff888124231498
+[   89.280591] RBP: ffff8881248cc000 R08: 0000000000000001 R09: ffffed1024846294
+[   89.281851] R10: ffff88812423149f R11: ffffed1024846293 R12: 0000000000003800
+[   89.283095] R13: 0000000000000001 R14: 0000000000000000 R15: ffff8881161f7000
+[   89.284342] FS:  0000000000000000(0000) GS:ffff88839b5c0000(0000) knlGS:0000000000000000
+[   89.285711] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   89.286701] CR2: 00007f166ebc01a0 CR3: 0000000435c0e000 CR4: 00000000000006e0
+[   89.287919] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[   89.289138] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[   89.290368] Call Trace:
+[   89.290842]  write_mmp_block+0x2ca/0x510
+[   89.292218]  kmmpd+0x433/0x9a0
+[   89.294902]  kthread+0x2dd/0x3e0
+[   89.296268]  ret_from_fork+0x22/0x30
+[   89.296906] Modules linked in:
 
-Yeah I think this is entirely orthogonal. If you use component, then
-component should provide a way to handle this.
+We can reproduce this issue as follow:
+1. mkfs.ext4 -O mmp  /dev/sda -b 1024
+2. mount /dev/sda /home/test
+3. echo "/dev/sda" > /sys/power/resume
+4. wait a moment we will get exception
 
-If you use something else, like drm_bridge or dsi or whatever, then that
-part should provide a solution to stage stuff correctly and handle all the
-ordering.
+The sequence of issue is as follows:
+       Thread1                       Thread2
+mount /dev/sda /home/test
+get s_mmp_bh  --> has mapped flag
+start kmmpd thread
+				echo "/dev/sda" > /sys/power/resume
+				  resume_store
+				    software_resume
+				      swsusp_check
+				        set_blocksize
+					  truncate_inode_pages_range
+					    truncate_cleanup_page
+					      block_invalidatepage
+					        discard_buffer --> clean mapped flag
+write_mmp_block
+  submit_bh
+    submit_bh_wbc
+      BUG_ON(!buffer_mapped(bh)) --> trigger bug_on
 
-Now there's a bunch of drivers which mix up component with bridge use and
-hilarity ensues, but since there's no real effort to fix that I think it's
-toally fine to just improve component.c meanwhile.
--Daniel
+To solve this issue, get block device exclusively when do swsusp_check.
+
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+---
+ kernel/power/swap.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/power/swap.c b/kernel/power/swap.c
+index 9ec418955556..26c0bd2a50da 100644
+--- a/kernel/power/swap.c
++++ b/kernel/power/swap.c
+@@ -1521,9 +1521,10 @@ int swsusp_read(unsigned int *flags_p)
+ int swsusp_check(void)
+ {
+ 	int error;
++	void *holder;
+ 
+ 	hib_resume_bdev = blkdev_get_by_dev(swsusp_resume_device,
+-					    FMODE_READ, NULL);
++					    FMODE_READ | FMODE_EXCL, &holder);
+ 	if (!IS_ERR(hib_resume_bdev)) {
+ 		set_blocksize(hib_resume_bdev, PAGE_SIZE);
+ 		clear_page(swsusp_header);
+@@ -1545,7 +1546,7 @@ int swsusp_check(void)
+ 
+ put:
+ 		if (error)
+-			blkdev_put(hib_resume_bdev, FMODE_READ);
++			blkdev_put(hib_resume_bdev, FMODE_READ | FMODE_EXCL);
+ 		else
+ 			pr_debug("Image signature found, resuming\n");
+ 	} else {
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.31.1
+
