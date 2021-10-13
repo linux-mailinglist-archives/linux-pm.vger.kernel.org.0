@@ -2,113 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0183642C84B
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Oct 2021 20:03:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88CD042CB76
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Oct 2021 22:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbhJMSFt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Oct 2021 14:05:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44032 "EHLO
+        id S230038AbhJMUvN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Oct 2021 16:51:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbhJMSFs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Oct 2021 14:05:48 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C80DC061570;
-        Wed, 13 Oct 2021 11:03:45 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 151381F44750
-Received: by earth.universe (Postfix, from userid 1000)
-        id 51AFB3C0CA8; Wed, 13 Oct 2021 20:03:40 +0200 (CEST)
-Date:   Wed, 13 Oct 2021 20:03:40 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Ramona Alexandra Nechita <ramona.nechita@analog.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] power: supply: Specify variations of MAX8903
-Message-ID: <20211013180340.hm6kyu45xo3hjofx@earth.universe>
-References: <20210915110340.17411-1-ramona.nechita@analog.com>
+        with ESMTP id S230017AbhJMUvL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Oct 2021 16:51:11 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A100C061749;
+        Wed, 13 Oct 2021 13:49:07 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id y26so17339537lfa.11;
+        Wed, 13 Oct 2021 13:49:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=HYOHGxf2r6rYeOUDd6Yc620BvdGiAPSc5bWMT6QlQfI=;
+        b=DZlMgnMbolCpO3CS7e36G9Q9EbeQwtLsgWDaj2Tqn94OPUqOYas4ZsbnnPvyOcCmpS
+         AB6ioepXDuA/R8K5Ahwy+VDCa3J9jus1mQXvzQ00zpc0i88IPfK4cVtzVLb4NYN3x+VW
+         s0keCoeQ0WrbkBMwriPSBSc8tKAOSs2jv4itxdPvVtjwcS0SfuNU2JshN4HY0yKGgHgR
+         huIdV/YfL01wogWi7V0t+MeTEPUsxNb8UgPz0NnqVeQgET+nTgs1ezc1KZidzuxhFoxN
+         o/bkmYKlP2ztZDAsvY3T6PNesoT5NksPdFX4sqGFVzO6RVwf4onUHNcqS0Hs4IMa5uzz
+         xgfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=HYOHGxf2r6rYeOUDd6Yc620BvdGiAPSc5bWMT6QlQfI=;
+        b=30KlRl/NDmJGaAguFdYNU3hLHp6PQEnfQf/gGb/dlwaC3G6bXasZyNsdqh1UtoWLqf
+         WByzSxsv1vjIjJTnrSob2wnp7QZalxIDmfiKQeTD+4ib/EcDVIiVRAGA21KwfnRxYBCS
+         CxAQLhovBdOl4YLCKm+p7lSeFq1UGb3bGlxNlYb4MiZ/If3qGd2dFnAly5V+4bOwLk0s
+         zPTtDDGjfkW2ZBjvW9kyPf7ht1da4jVeyIJ41yUWMwU8/l3FITc8MFOh9WlokW5EI2Qd
+         4yJJpP7MY8sldhy4sYguRjauwAPL0jJielXjMCreEK+SpPBYiq00cVsgfIUqSFUyvlVi
+         cmAA==
+X-Gm-Message-State: AOAM532E/GjHIOzRtHJcoVF9sXIXxcbUoWFXRjBHLrqs4XVQlOvOqeEa
+        jC9zH5tWAf1dBYZBXO01FLA/ty3Rfsw=
+X-Google-Smtp-Source: ABdhPJy8c7eUvo1G6CLigC0dGKZ1+WPSJX5yuDQsyq9W1CY+Z2D9y06lq5MdpNVghANUK2+WLIhSSQ==
+X-Received: by 2002:a2e:a274:: with SMTP id k20mr1699804ljm.479.1634158145709;
+        Wed, 13 Oct 2021 13:49:05 -0700 (PDT)
+Received: from [192.168.2.145] (94-29-10-181.dynamic.spd-mgts.ru. [94.29.10.181])
+        by smtp.googlemail.com with ESMTPSA id c14sm60499ljj.32.2021.10.13.13.49.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Oct 2021 13:49:05 -0700 (PDT)
+Subject: Re: [PATCH] cpuidle: tegra: add ARCH_SUSPEND_POSSIBLE dependency
+To:     Arnd Bergmann <arnd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thierry Reding <treding@nvidia.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        He Ying <heying24@huawei.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211013160125.772873-1-arnd@kernel.org>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <7b4c1c31-3ef6-db9b-dc98-8a6f7a3d6243@gmail.com>
+Date:   Wed, 13 Oct 2021 23:49:04 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="loq3b2vznypewfyg"
-Content-Disposition: inline
-In-Reply-To: <20210915110340.17411-1-ramona.nechita@analog.com>
+In-Reply-To: <20211013160125.772873-1-arnd@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
---loq3b2vznypewfyg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Wed, Sep 15, 2021 at 02:03:40PM +0300, Ramona Alexandra Nechita wrote:
-> MAX8903 has multiple variations (A-E/G/H/J/N/Y).
-> Specified them in the Kconfig and in the file comment.
->=20
-> Signed-off-by: Ramona Alexandra Nechita <ramona.nechita@analog.com>
+13.10.2021 19:01, Arnd Bergmann пишет:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Some StrongARM processors don't support suspend, which leads
+> to a build failure with the tegra cpuidle driver:
+> 
+> WARNING: unmet direct dependencies detected for ARM_CPU_SUSPEND
+>   Depends on [n]: ARCH_SUSPEND_POSSIBLE [=n]
+>   Selected by [y]:
+>   - ARM_TEGRA_CPUIDLE [=y] && CPU_IDLE [=y] && (ARM [=y] || ARM64) && (ARCH_TEGRA [=n] || COMPILE_TEST [=y]) && !ARM64 && MMU [=y]
+> 
+> arch/arm/kernel/sleep.o: in function `__cpu_suspend':
+> (.text+0x68): undefined reference to `cpu_sa110_suspend_size'
+> 
+> Add an explicit dependency to make randconfig builds avoid
+> this combination.
+> 
+> Fixes: faae6c9f2e68 ("cpuidle: tegra: Enable compile testing")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
-
-why? I would expect people to identify this as the correct driver
-without this list and it's definetly not grepable.
-
--- Sebastian
-
->  drivers/power/supply/Kconfig           | 2 +-
->  drivers/power/supply/max8903_charger.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-> index c84a7b1caeb6..cca779480b1c 100644
-> --- a/drivers/power/supply/Kconfig
-> +++ b/drivers/power/supply/Kconfig
-> @@ -442,7 +442,7 @@ config CHARGER_ISP1704
->  	  ISP1707/ISP1704 USB transceivers.
-> =20
->  config CHARGER_MAX8903
-> -	tristate "MAX8903 Battery DC-DC Charger for USB and Adapter Power"
-> +	tristate "MAX8903A/B/C/D/E/G/H/J/N/Y Battery DC-DC Charger for USB and =
-Adapter Power"
+>  drivers/cpuidle/Kconfig.arm | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/cpuidle/Kconfig.arm b/drivers/cpuidle/Kconfig.arm
+> index 2cc3c208a180..af97992eaa82 100644
+> --- a/drivers/cpuidle/Kconfig.arm
+> +++ b/drivers/cpuidle/Kconfig.arm
+> @@ -100,6 +100,7 @@ config ARM_MVEBU_V7_CPUIDLE
+>  config ARM_TEGRA_CPUIDLE
+>  	bool "CPU Idle Driver for NVIDIA Tegra SoCs"
+>  	depends on (ARCH_TEGRA || COMPILE_TEST) && !ARM64 && MMU
+> +	depends on ARCH_SUSPEND_POSSIBLE
+>  	select ARCH_NEEDS_CPU_IDLE_COUPLED if SMP
+>  	select ARM_CPU_SUSPEND
 >  	help
->  	  Say Y to enable support for the MAX8903 DC-DC charger and sysfs.
->  	  The driver supports controlling charger-enable and current-limit
-> diff --git a/drivers/power/supply/max8903_charger.c b/drivers/power/suppl=
-y/max8903_charger.c
-> index 0bd39b0cc257..4e5c669e6607 100644
-> --- a/drivers/power/supply/max8903_charger.c
-> +++ b/drivers/power/supply/max8903_charger.c
-> @@ -1,6 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0-or-later
->  /*
-> - * max8903_charger.c - Maxim 8903 USB/Adapter Charger Driver
-> + * max8903_charger.c - Maxim 8903A/B/C/D/E/G/H/J/N/Y USB/Adapter Charger=
- Driver
->   *
->   * Copyright (C) 2011 Samsung Electronics
->   * MyungJoo Ham <myungjoo.ham@samsung.com>
-> --=20
-> 2.25.1
->=20
+> 
 
---loq3b2vznypewfyg
-Content-Type: application/pgp-signature; name="signature.asc"
+Arnd, thank you for the patch!
 
------BEGIN PGP SIGNATURE-----
+Apparently ARM_QCOM_SPM_CPUIDLE doesn't have that problem visible
+because it selects QCOM_SPM, which depends on ARCH_QCOM, and thus
+ARCH_QCOM should be auto-selected(?). I'm curious whether this needs to
+be corrected, otherwise (ARCH_QCOM || COMPILE_TEST) doesn't make much
+sense for that driver. And then it will need the same Kconfig fix as well.
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmFnH3cACgkQ2O7X88g7
-+ppraxAAmBHpPrSMWVjrKINz4Q7A7H0HE8jknIDyv+rzZfR9E12Ohru36WTgevp3
-HVbhic2D8TTeXbPCPt7X8ouhhYyHYm0a2kl0yCY8AYvIUi9oP9zvGQqyQhfaU1sB
-miawyT2vro5j8m4lttsATleUyOGtnPg7ITT4iH413zxnrYPrgY7y+plmDcw2s+Cq
-cjSrA/jtuxX0OeG9PG1CFuam+fZMIgEbicBUP5eAkwG6W+N2aa1sI2ZaZeYMbSnB
-inXXUbgVGvtYEYvsHyYQscCWMaZmemIrrygr6ROhy1rV3Nj6qpAF3lerwin8vqPV
-Szy5uN2ZNyRSzhsSTr12QRchtVJwEofVYqL6I8rNRL087397nD5gLFQ16reMSgr5
-XG/Df3+PrpfxPgEzVOzB18SpBw0WFUnRCCClDD+fnfGzBcdLE/9fajp/7SZ6Wp+k
-UJ4PKoCzTpgaB0AnTVuQsgLqqEtGZRQQUthqD6nWegakM0xzg7ApcJuoMpyLcTRr
-11ce5HpYtSIZjhKTGAvQTeyIUSlXcjXYSfiWLs9Jdq2Ip4kdds4TC1Zc417TWw4M
-moUorDk569s1IwZUrlMsczt4j+2JuQ1y84Xc/ISg9+aUlw5tgLzcP/XsXTD9YJb4
-KbEkL6S/bSH5t41qycF4xJ5Eo5oHJVKVGXfN4myP/6nNxxZ+qc8=
-=R4LM
------END PGP SIGNATURE-----
-
---loq3b2vznypewfyg--
+I assume this problem wasn't caught by regular kernel build bots because
+they don't test randconfig, don't they?
