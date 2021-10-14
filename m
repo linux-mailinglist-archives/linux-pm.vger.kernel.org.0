@@ -2,248 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE7B942D73E
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Oct 2021 12:39:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99DE742D796
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Oct 2021 13:00:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbhJNKlE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Oct 2021 06:41:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbhJNKlE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Oct 2021 06:41:04 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566ADC06174E
-        for <linux-pm@vger.kernel.org>; Thu, 14 Oct 2021 03:38:59 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id m22so18151225wrb.0
-        for <linux-pm@vger.kernel.org>; Thu, 14 Oct 2021 03:38:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=JNQ7unH4p4GdzAmfmmLNFZaa88jcFz4jGRQ3QMWXmys=;
-        b=X+nzPW2LmuNF1vhvZeCIkvFlygn6hXzs4j5UQPxmy++/MmYN48Y3D245dZlAtKEFmt
-         7+ohu76X0KS62dTIUrbHqon0+r0hc2woDpB8waSGa0iUKQsAJqENa0adicL6cdPNIDdU
-         eXt+aL2Pmb2xLj9yLGl+RHuqfCA/3RyQix83YCoh7K+23mZRb9fBMPXJGBzbKuo3PKS+
-         h/rqWVI7G5S2HPTBFrWGc2TcZtUPtpvpQ7LbA3CnZbOdwIfPSOC6n2kU3S9TjPQorcQk
-         Qqvsz7sXVTBybVWyYMXcH2QWywAruJDLuqUod9hY9biBlG8usoa2014Wx1ckoZT4Z705
-         sXLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=JNQ7unH4p4GdzAmfmmLNFZaa88jcFz4jGRQ3QMWXmys=;
-        b=qdpRdmGqHbfGQ4xYkIHrSMs2kea2BRc/gkqnSnrs3AEHAlRSFJuog9Uk55PcUFwPYW
-         x2zJ8ZA9FLUV58KadOvN4gH1kkkBDsvkNeAltxM6lDekUlQ9H8e6gHEFyLqrkMVL6qFT
-         CjbJNQM4RQwlqldWTJfHzvnxa4P8VxIW1QZUHTWd5WazhLjq/MzLA1Tpmwf5PBIxC9zk
-         wui1jqbpWydVNEvxeS2WOOyzVTuKjjQra8oofYVJinkc7l+90uwhCQZkML8iIJA+UWcN
-         Iq/7NUmX/35G1Lcdab6HrzGxwW+KewLXFPlKuTufNsDpGo/GJsba2NU+NhxQChS/2V94
-         Kflg==
-X-Gm-Message-State: AOAM531PGd0Vq/69oDgTePqhjFUMmCyyiAoeG+xrsQ986XZSwWhOkjp5
-        G6SApmERJD8wmPMW1gnKQxK9hQ==
-X-Google-Smtp-Source: ABdhPJxFMvv4aXFUEoE22MmikRgoJYR38KUuaS7BlIDaD/6ShxRxoSobLRxGHAjKcPaA5o9/j0kfcg==
-X-Received: by 2002:a5d:63ca:: with SMTP id c10mr5578771wrw.407.1634207937942;
-        Thu, 14 Oct 2021 03:38:57 -0700 (PDT)
-Received: from bismarck.berto.se (p54ac5892.dip0.t-ipconnect.de. [84.172.88.146])
-        by smtp.googlemail.com with ESMTPSA id f6sm1744976wmj.28.2021.10.14.03.38.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Oct 2021 03:38:57 -0700 (PDT)
-From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v2 2/2] thermal: rcar_gen3_thermal: Read calibration from hardware
-Date:   Thu, 14 Oct 2021 12:38:16 +0200
-Message-Id: <20211014103816.1939782-3-niklas.soderlund+renesas@ragnatech.se>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211014103816.1939782-1-niklas.soderlund+renesas@ragnatech.se>
-References: <20211014103816.1939782-1-niklas.soderlund+renesas@ragnatech.se>
+        id S230248AbhJNLCz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Oct 2021 07:02:55 -0400
+Received: from mail-40140.protonmail.ch ([185.70.40.140]:45294 "EHLO
+        mail-40140.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230030AbhJNLCz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Oct 2021 07:02:55 -0400
+Date:   Thu, 14 Oct 2021 11:00:43 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail; t=1634209249;
+        bh=n4mPtVUr59VWCEZFnidSyoUyIQYDVsWqg6brIjzb/V0=;
+        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
+        b=hJbkHlvxKU5St/2CCdsloP3Enf4Y57xvBMKs2JmqmHQQtYkBSH9esuI96PrJFMau2
+         ZxVMrNaSnlpEnJtC+/Kr3RoGYNWeFCrtfXx91bsJ1amiUxNbWkqBouKKILIK1so5Zr
+         ilQgYf2ectR+fS/ku9R5a5w8CixIot5wcXHUeuVo=
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Loic Poulain <loic.poulain@linaro.org>
+From:   Yassine Oudjana <y.oudjana@protonmail.com>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org
+Reply-To: Yassine Oudjana <y.oudjana@protonmail.com>
+Subject: [PATCH 8/8] arm64: dts: qcom: msm8996-xiaomi-scorpio: Include msm8996pro.dtsi
+Message-ID: <20211014110024.5869-1-y.oudjana@protonmail.com>
+In-Reply-To: <20211014083016.137441-1-y.oudjana@protonmail.com>
+References: <20211014083016.137441-1-y.oudjana@protonmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In production hardware the calibration values used to convert register
-values to temperatures can be read from hardware. While pre-production
-hardware still depends on pseudo values hard-coded in the driver.
+Move msm8996.dtsi include to the end of the include chain.
 
-Add support for reading out calibration values from hardware if it's
-fused. The presence of fused calibration is indicated in the THSCP
-register.
-
-Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-Tested-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
 ---
-* Changes since v1
-- Renamed rcar_gen3_thermal_update_fuses() to
-  rcar_gen3_thermal_read_fuses().
-- Move static thcodes array inside the 'if' block where it's used.
-- Invert dev_info logic to only inform if there are no fused
-  calibration values, instead of logging if they are set as this should
-  be the default case in production systems.
-- Collect tags.
+ arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi | 3 ---
+ arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dts  | 1 +
+ arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dts | 2 +-
+ 3 files changed, 2 insertions(+), 4 deletions(-)
 
-* Changes since RFT
-- Keep thcodes array static.
----
- drivers/thermal/rcar_gen3_thermal.c | 94 +++++++++++++++++++++++------
- 1 file changed, 74 insertions(+), 20 deletions(-)
-
-diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
-index 7d7e6ebe837a83af..43eb25b167bc006f 100644
---- a/drivers/thermal/rcar_gen3_thermal.c
-+++ b/drivers/thermal/rcar_gen3_thermal.c
-@@ -34,6 +34,10 @@
- #define REG_GEN3_THCODE1	0x50
- #define REG_GEN3_THCODE2	0x54
- #define REG_GEN3_THCODE3	0x58
-+#define REG_GEN3_PTAT1		0x5c
-+#define REG_GEN3_PTAT2		0x60
-+#define REG_GEN3_PTAT3		0x64
-+#define REG_GEN3_THSCP		0x68
- 
- /* IRQ{STR,MSK,EN} bits */
- #define IRQ_TEMP1		BIT(0)
-@@ -55,6 +59,9 @@
- #define THCTR_PONM	BIT(6)
- #define THCTR_THSST	BIT(0)
- 
-+/* THSCP bits */
-+#define THSCP_COR_PARA_VLD	(BIT(15) | BIT(14))
-+
- #define CTEMP_MASK	0xFFF
- 
- #define MCELSIUS(temp)	((temp) * 1000)
-@@ -245,6 +252,64 @@ static const struct soc_device_attribute r8a7795es1[] = {
- 	{ /* sentinel */ }
- };
- 
-+static bool rcar_gen3_thermal_read_fuses(struct rcar_gen3_thermal_priv *priv)
-+{
-+	unsigned int i;
-+	u32 thscp;
-+
-+	/* If fuses are not set, fallback to pseudo values. */
-+	thscp = rcar_gen3_thermal_read(priv->tscs[0], REG_GEN3_THSCP);
-+	if ((thscp & THSCP_COR_PARA_VLD) != THSCP_COR_PARA_VLD) {
-+		/* Default THCODE values in case FUSEs are not set. */
-+		static const int thcodes[TSC_MAX_NUM][3] = {
-+			{ 3397, 2800, 2221 },
-+			{ 3393, 2795, 2216 },
-+			{ 3389, 2805, 2237 },
-+			{ 3415, 2694, 2195 },
-+			{ 3356, 2724, 2244 },
-+		};
-+
-+		priv->ptat[0] = 2631;
-+		priv->ptat[1] = 1509;
-+		priv->ptat[2] = 435;
-+
-+		for (i = 0; i < priv->num_tscs; i++) {
-+			struct rcar_gen3_thermal_tsc *tsc = priv->tscs[i];
-+
-+			tsc->thcode[0] = thcodes[i][0];
-+			tsc->thcode[1] = thcodes[i][1];
-+			tsc->thcode[2] = thcodes[i][2];
-+		}
-+
-+		return false;
-+	}
-+
-+	/*
-+	 * Set the pseudo calibration points with fused values.
-+	 * PTAT is shared between all TSCs but only fused for the first
-+	 * TSC while THCODEs are fused for each TSC.
-+	 */
-+	priv->ptat[0] = rcar_gen3_thermal_read(priv->tscs[0], REG_GEN3_PTAT1) &
-+		GEN3_FUSE_MASK;
-+	priv->ptat[1] = rcar_gen3_thermal_read(priv->tscs[0], REG_GEN3_PTAT2) &
-+		GEN3_FUSE_MASK;
-+	priv->ptat[2] = rcar_gen3_thermal_read(priv->tscs[0], REG_GEN3_PTAT3) &
-+		GEN3_FUSE_MASK;
-+
-+	for (i = 0; i < priv->num_tscs; i++) {
-+		struct rcar_gen3_thermal_tsc *tsc = priv->tscs[i];
-+
-+		tsc->thcode[0] = rcar_gen3_thermal_read(tsc, REG_GEN3_THCODE1) &
-+			GEN3_FUSE_MASK;
-+		tsc->thcode[1] = rcar_gen3_thermal_read(tsc, REG_GEN3_THCODE2) &
-+			GEN3_FUSE_MASK;
-+		tsc->thcode[2] = rcar_gen3_thermal_read(tsc, REG_GEN3_THCODE3) &
-+			GEN3_FUSE_MASK;
-+	}
-+
-+	return true;
-+}
-+
- static void rcar_gen3_thermal_init_r8a7795es1(struct rcar_gen3_thermal_tsc *tsc)
- {
- 	rcar_gen3_thermal_write(tsc, REG_GEN3_CTSR,  CTSR_THBGR);
-@@ -393,16 +458,6 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
- 	unsigned int i;
- 	int ret;
- 
--	/* Default THCODE values in case FUSEs are not set. */
--	/* TODO: Read values from hardware on supported platforms */
--	static const int thcodes[TSC_MAX_NUM][3] = {
--		{ 3397, 2800, 2221 },
--		{ 3393, 2795, 2216 },
--		{ 3389, 2805, 2237 },
--		{ 3415, 2694, 2195 },
--		{ 3356, 2724, 2244 },
--	};
+diff --git a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi b/arch/arm=
+64/boot/dts/qcom/msm8996-xiaomi-common.dtsi
+index d239b01b8505..831cd39aff14 100644
+--- a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi
+@@ -3,9 +3,6 @@
+  * Copyright (c) 2020, Yassine Oudjana <y.oudjana@protonmail.com>
+  */
+=20
+-/dts-v1/;
 -
- 	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
- 		return -ENOMEM;
-@@ -411,10 +466,6 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
- 	if (soc_device_match(r8a7795es1))
- 		priv->thermal_init = rcar_gen3_thermal_init_r8a7795es1;
- 
--	priv->ptat[0] = 2631;
--	priv->ptat[1] = 1509;
--	priv->ptat[2] = 435;
--
- 	platform_set_drvdata(pdev, priv);
- 
- 	if (rcar_gen3_thermal_request_irqs(priv, pdev))
-@@ -442,11 +493,16 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
- 			goto error_unregister;
- 		}
- 
--		tsc->thcode[0] = thcodes[i][0];
--		tsc->thcode[1] = thcodes[i][1];
--		tsc->thcode[2] = thcodes[i][2];
--
- 		priv->tscs[i] = tsc;
-+	}
-+
-+	priv->num_tscs = i;
-+
-+	if (!rcar_gen3_thermal_read_fuses(priv))
-+		dev_info(dev, "No calibration values fused, fallback to driver values\n");
-+
-+	for (i = 0; i < priv->num_tscs; i++) {
-+		struct rcar_gen3_thermal_tsc *tsc = priv->tscs[i];
- 
- 		zone = devm_thermal_zone_of_sensor_register(dev, i, tsc,
- 							    &rcar_gen3_tz_of_ops);
-@@ -476,8 +532,6 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
- 		dev_info(dev, "TSC%u: Loaded %d trip points\n", i, ret);
- 	}
- 
--	priv->num_tscs = i;
--
- 	if (!priv->num_tscs) {
- 		ret = -ENODEV;
- 		goto error_unregister;
--- 
+-#include "msm8996.dtsi"
+ #include "pm8994.dtsi"
+ #include "pmi8994.dtsi"
+ #include <dt-bindings/input/input.h>
+diff --git a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dts b/arch/arm6=
+4/boot/dts/qcom/msm8996-xiaomi-gemini.dts
+index 77d508e5164a..8ea5390f86ab 100644
+--- a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dts
++++ b/arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dts
+@@ -5,6 +5,7 @@
+=20
+ /dts-v1/;
+=20
++#include "msm8996.dtsi"
+ #include "msm8996-xiaomi-common.dtsi"
+ #include <dt-bindings/sound/qcom,q6afe.h>
+ #include <dt-bindings/sound/qcom,q6asm.h>
+diff --git a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dts b/arch/arm=
+64/boot/dts/qcom/msm8996-xiaomi-scorpio.dts
+index ea2ca271fe7d..4ffe7be34285 100644
+--- a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dts
++++ b/arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dts
+@@ -5,6 +5,7 @@
+=20
+ /dts-v1/;
+=20
++#include "msm8996pro.dtsi"
+ #include "msm8996-xiaomi-common.dtsi"
+ #include "pmi8996.dtsi"
+ #include <dt-bindings/sound/qcom,q6afe.h>
+@@ -13,7 +14,6 @@
+ / {
+ =09model =3D "Xiaomi Mi Note 2";
+ =09compatible =3D "xiaomi,scorpio", "qcom,msm8996";
+-=09qcom,msm-id =3D <305 0x10000>;
+ =09qcom,board-id =3D <34 0>;
+=20
+ =09chosen {
+--=20
 2.33.0
+
 
