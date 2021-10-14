@@ -2,101 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3101542DFCD
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Oct 2021 19:02:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73FC042E1F5
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Oct 2021 21:18:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232742AbhJNREf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Oct 2021 13:04:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47300 "EHLO
+        id S231612AbhJNTU2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Oct 2021 15:20:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231327AbhJNREf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Oct 2021 13:04:35 -0400
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD351C061570;
-        Thu, 14 Oct 2021 10:02:29 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 1BFD73FA5E;
-        Thu, 14 Oct 2021 17:02:21 +0000 (UTC)
-Subject: Re: [RFC PATCH 4/9] opp: core: Don't warn if required OPP device does
- not exist
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Sven Peter <sven@svenpeter.dev>, Marc Zyngier <maz@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20211011165707.138157-1-marcan@marcan.st>
- <20211011165707.138157-5-marcan@marcan.st>
- <20211012032144.2ltlpat7orrsyr6k@vireshk-i7>
- <b7cd51ec-38e5-11d8-5193-1170c9d60ac9@marcan.st>
- <20211012055143.xmkbvhbnolspgjin@vireshk-i7>
- <caf16a6c-f127-7f27-ed17-0522d9f1fb9e@marcan.st>
- <CAPDyKFoVjVYkc4+v-=eD+JbC10GazGt8A1LtD1so3PKMmVcyMg@mail.gmail.com>
- <bd07f4b3-6ebf-e074-c1cd-0ef501e8324f@marcan.st>
- <CAPDyKFrFX93XV8a7e7oo1N5weWp2auq=_94fTnzr2EkO3c37Ug@mail.gmail.com>
-From:   Hector Martin <marcan@marcan.st>
-Message-ID: <ca820b86-fc12-63b9-ec6b-5823ddd73aba@marcan.st>
-Date:   Fri, 15 Oct 2021 02:02:19 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        with ESMTP id S231434AbhJNTU1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Oct 2021 15:20:27 -0400
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BEC5C061570
+        for <linux-pm@vger.kernel.org>; Thu, 14 Oct 2021 12:18:22 -0700 (PDT)
+Received: by mail-ua1-x92b.google.com with SMTP id u5so13347163uao.13
+        for <linux-pm@vger.kernel.org>; Thu, 14 Oct 2021 12:18:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=E57tubdi4Kb+HoICFHf4HKGD0EgGpurJT1qek7rMtUQ=;
+        b=QyEYeNzazPqeU/U6dpvMKI/Buir1IPcgw7eW+83rSGsptvfHuPBxmyUbZ0Ps1ke2Rk
+         Qw2ghmc2EyrXZCEMD1pIfi2a0BsmdsHKE3w4uH/kvStWV3UEEkS6qjB7ACzEpmReHQFM
+         9kptbj+hPJxkuERn2ETNAPaxBeVkrAW0kSAItrEa4rLC22C0/ANnONq4zzeLK0bMBraS
+         S0O7iF4IC9y8aJcnA66Q8JBrAOrUWWrI4XojVYIB2/AxrM6Fjh+YVMSXUvEOEpfEWaGG
+         Q7+YAYo6iTyPBeyeDmBwkzcDBszige32IacbjISh0+kq71ujQ9/XhR9S2AwfyP/N0R1K
+         B2Ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=E57tubdi4Kb+HoICFHf4HKGD0EgGpurJT1qek7rMtUQ=;
+        b=D9o45tEIAWH3JQ1N47Usi44RnbNcc0Qbd6sIJkSs35I4mbFSrPnjgW+q8JfV2NViVA
+         8R47CIEuqYwhaZCSIOyjaD6jRTOt2gNIZcsGLGf5ExXrXvv65FJkJ6fY8MTVROdv/gRp
+         rm6JjGjL4aUpgFLk+c49ChCcr5o3nTXKi1p34lNzpFPT6qpFiZoyHPpWP8pFf6bkCNLV
+         Edveaj4kLyJwgMj6HCq/mGm3DW3eqyNUtsKP/FSU9Y/iFq+T/2dMZtLAtczTREs/qjqT
+         WK+1it8kHfIOqTEGR8l1smUy6IbWucOfCoee/sXNTjxCd+n0FQND0aLVik3aKu9cIf0j
+         XrWQ==
+X-Gm-Message-State: AOAM5321UY4mWbQ/ZQnddqRjIS8hZuqD6H6zQDVFEfbGoBMCb5N23Dre
+        AENaMS/QEwTNi0Zzfcw2mhjLOb+gYFA/z3G7Nkk=
+X-Google-Smtp-Source: ABdhPJxPysetk2NDPOaAvY5ibVxYC8pHg6Aick5fLRYEv9EZR4yDRckOnr8ysQYf22bzp1HLOUudi4rymaRNT25aZrk=
+X-Received: by 2002:a05:6102:54aa:: with SMTP id bk42mr5964893vsb.61.1634239101526;
+ Thu, 14 Oct 2021 12:18:21 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAPDyKFrFX93XV8a7e7oo1N5weWp2auq=_94fTnzr2EkO3c37Ug@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: es-ES
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a05:612c:1190:b0:235:60a2:bbed with HTTP; Thu, 14 Oct 2021
+ 12:18:21 -0700 (PDT)
+Reply-To: kaylamanthey022@gmail.com
+From:   Kayla Manthey <pastormdavid88@gmail.com>
+Date:   Thu, 14 Oct 2021 19:18:21 +0000
+Message-ID: <CAP=NM34JrfEJXy2gLFYS3EFswyUp49b8VfgzvrCHMESig36POQ@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 14/10/2021 21.55, Ulf Hansson wrote:
-> On Thu, 14 Oct 2021 at 13:43, Hector Martin <marcan@marcan.st> wrote:
->> I was poking around and noticed the OPP core can already integrate with
->> interconnect requirements, so perhaps the memory controller can be an
->> interconnect provider, and the CPU nodes can directly reference it as a
->> consumer? This seems like a more accurate model of what the hardware
->> does, and I think I saw some devices doing this already.
-> 
-> Yeah, that could work too. And, yes, I agree, it may be a better
-> description of the HW.
-> 
->>
->> (only problem is I have no idea of the actual bandwidth numbers involved
->> here... I'll have to run some benchmarks to make sure this isn't just
->> completely dummy data)
->>
-
-So... I tried getting bandwidth numbers and failed. It seems these 
-registers don't actually affect peak performance in any measurable way. 
-I'm also getting almost the same GeekBench scores on macOS with and 
-without this mechanism enabled, although there is one subtest that seems 
-to show a measurable difference.
-
-My current guess is this is something more subtle (latencies? idle 
-timers and such?) than a performance state. If that is the case, do you 
-have any ideas as to the best way to model it in Linux? Should we even 
-bother if it mostly has a minimal performance gain for typical workloads?
-
-I'll try to do some latency tests, see if I can make sense of what it's 
-actually doing.
-
--- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+Greetings, My name is Kayla Manthey, please reply me back?
