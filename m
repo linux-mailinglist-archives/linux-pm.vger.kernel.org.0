@@ -2,63 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAE7842D615
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Oct 2021 11:31:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F51C42D663
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Oct 2021 11:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbhJNJdb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Oct 2021 05:33:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58172 "EHLO mail.kernel.org"
+        id S230080AbhJNJsp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Oct 2021 05:48:45 -0400
+Received: from comms.puri.sm ([159.203.221.185]:42902 "EHLO comms.puri.sm"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229468AbhJNJdb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 14 Oct 2021 05:33:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3CD8D610F9;
-        Thu, 14 Oct 2021 09:31:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634203887;
-        bh=8bLxjH519a9u+yaeJrlmj0VDcOyXJXQtkx86R85XdUI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=unXPh2p9skXe4U7/udFxYXeDo0IwsnS8P84X75YQ5T26BOhfOKyGTuds9z8I/2Y+T
-         HW6INuvv6aLtWnyXz0IuQxykAMqyQJ6TVoyqLX888ZotDRvjN0U1JtnBmSCKlpMu83
-         pokXvVuHyT84eEsbW7217wBI8RVO5N7qFz4CXhPED2btIzIuB4ZRBqP3/NKyuOq7wC
-         yG78UkwanbCrlt/N8+Yr/ETgAofX3HUxTed9Y8+k6oCF73FUrV1ocWxhSlDm4IJ8s4
-         bqA+gyYG902TTmJdDWH+zfWkGqIBUHixdiNQV7ATQtSFf9nV/OEdsJZrEmMW2vz3Fd
-         qycfwiHU86eig==
-Date:   Thu, 14 Oct 2021 10:31:22 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     rjw@rjwysocki.net, oleg@redhat.com, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, linux-kernel@vger.kernel.org,
-        tj@kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 3/6] ptrace: Order and comment PT_flags
-Message-ID: <20211014093121.GA8239@willie-the-truck>
-References: <20211009100754.690769957@infradead.org>
- <20211009101444.971532166@infradead.org>
+        id S229988AbhJNJso (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 14 Oct 2021 05:48:44 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id EACDDE11E8;
+        Thu, 14 Oct 2021 02:46:09 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 6EcBzhtxUJVG; Thu, 14 Oct 2021 02:46:09 -0700 (PDT)
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     sre@kernel.org, linux-pm@vger.kernel.org
+Cc:     kernel@puri.sm, linux-kernel@vger.kernel.org,
+        Martin Kepplinger <martin.kepplinger@puri.sm>
+Subject: [PATCH] power: bq25890: add return values to error messages
+Date:   Thu, 14 Oct 2021 11:45:33 +0200
+Message-Id: <20211014094533.4169157-1-martin.kepplinger@puri.sm>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211009101444.971532166@infradead.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Oct 09, 2021 at 12:07:57PM +0200, Peter Zijlstra wrote:
-> Add a comment to the PT_flags to indicate their actual value, this
-> makes it easier to see what bits are used and where there might be a
-> possible hole to use.
-> 
-> Notable PT_SEIZED was placed wrong, also PT_EVENT_FLAG() space seems
-> ill defined, as written is seems to be meant to cover the entire
-> PTRACE_O_ range offset by 3 bits, which would then be 3+[0..21],
-> however PT_SEIZED is in the middle of that.
+Add more details to the error messages that indicate what went wrong
+and use dev_err_probe() at a few places in the probe() path in order
+to avoid error messages for deferred probe after which the driver probes
+correctly.
 
-Why do you think PT_EVENT_FLAG() should cover all the PTRACE_O_* options?
-Just going by the name and current callers, I'd only expect it to cover
-the PTRACE_EVENT_* flags, no?
+Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+---
+ drivers/power/supply/bq25890_charger.c | 34 ++++++++++++--------------
+ 1 file changed, 16 insertions(+), 18 deletions(-)
 
-But in any case, having the comments is helpful, so:
+diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
+index 0e23d2db0fc4..ec81653e58c0 100644
+--- a/drivers/power/supply/bq25890_charger.c
++++ b/drivers/power/supply/bq25890_charger.c
+@@ -979,13 +979,13 @@ static int bq25890_get_chip_version(struct bq25890_device *bq)
+ 
+ 	id = bq25890_field_read(bq, F_PN);
+ 	if (id < 0) {
+-		dev_err(bq->dev, "Cannot read chip ID.\n");
++		dev_err(bq->dev, "Cannot read chip ID: %d\n", id);
+ 		return id;
+ 	}
+ 
+ 	rev = bq25890_field_read(bq, F_DEV_REV);
+ 	if (rev < 0) {
+-		dev_err(bq->dev, "Cannot read chip revision.\n");
++		dev_err(bq->dev, "Cannot read chip revision: %d\n", rev);
+ 		return rev;
+ 	}
+ 
+@@ -1028,10 +1028,9 @@ static int bq25890_irq_probe(struct bq25890_device *bq)
+ 	struct gpio_desc *irq;
+ 
+ 	irq = devm_gpiod_get(bq->dev, BQ25890_IRQ_PIN, GPIOD_IN);
+-	if (IS_ERR(irq)) {
+-		dev_err(bq->dev, "Could not probe irq pin.\n");
+-		return PTR_ERR(irq);
+-	}
++	if (IS_ERR(irq))
++		return dev_err_probe(bq->dev, PTR_ERR(irq),
++				     "Could not probe irq pin.\n");
+ 
+ 	return gpiod_to_irq(irq);
+ }
+@@ -1153,34 +1152,33 @@ static int bq25890_probe(struct i2c_client *client,
+ 	mutex_init(&bq->lock);
+ 
+ 	bq->rmap = devm_regmap_init_i2c(client, &bq25890_regmap_config);
+-	if (IS_ERR(bq->rmap)) {
+-		dev_err(dev, "failed to allocate register map\n");
+-		return PTR_ERR(bq->rmap);
+-	}
++	if (IS_ERR(bq->rmap))
++		return dev_err_probe(dev, PTR_ERR(bq->rmap),
++				     "failed to allocate register map\n");
+ 
+ 	for (i = 0; i < ARRAY_SIZE(bq25890_reg_fields); i++) {
+ 		const struct reg_field *reg_fields = bq25890_reg_fields;
+ 
+ 		bq->rmap_fields[i] = devm_regmap_field_alloc(dev, bq->rmap,
+ 							     reg_fields[i]);
+-		if (IS_ERR(bq->rmap_fields[i])) {
+-			dev_err(dev, "cannot allocate regmap field\n");
+-			return PTR_ERR(bq->rmap_fields[i]);
+-		}
++		if (IS_ERR(bq->rmap_fields[i]))
++			return dev_err_probe(dev, PTR_ERR(bq->rmap_fields[i]),
++					     "cannot allocate regmap field\n");
+ 	}
+ 
+ 	i2c_set_clientdata(client, bq);
+ 
+ 	ret = bq25890_get_chip_version(bq);
+ 	if (ret) {
+-		dev_err(dev, "Cannot read chip ID or unknown chip.\n");
++		dev_err(dev, "Cannot read chip ID or unknown chip: %d\n", ret);
+ 		return ret;
+ 	}
+ 
+ 	if (!dev->platform_data) {
+ 		ret = bq25890_fw_probe(bq);
+ 		if (ret < 0) {
+-			dev_err(dev, "Cannot read device properties.\n");
++			dev_err(dev, "Cannot read device properties: %d\n",
++				ret);
+ 			return ret;
+ 		}
+ 	} else {
+@@ -1189,7 +1187,7 @@ static int bq25890_probe(struct i2c_client *client,
+ 
+ 	ret = bq25890_hw_init(bq);
+ 	if (ret < 0) {
+-		dev_err(dev, "Cannot initialize the chip.\n");
++		dev_err(dev, "Cannot initialize the chip: %d\n", ret);
+ 		return ret;
+ 	}
+ 
+@@ -1225,7 +1223,7 @@ static int bq25890_probe(struct i2c_client *client,
+ 
+ 	ret = bq25890_power_supply_init(bq);
+ 	if (ret < 0) {
+-		dev_err(dev, "Failed to register power supply\n");
++		dev_err_probe(dev, ret, "Failed to register power supply.\n");
+ 		goto irq_fail;
+ 	}
+ 
+-- 
+2.30.2
 
-Acked-by: Will Deacon <will@kernel.org>
-
-Will
