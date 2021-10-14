@@ -2,125 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 364E342D0C9
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Oct 2021 05:09:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D2BB42D2FA
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Oct 2021 08:53:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbhJNDLQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Oct 2021 23:11:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54532 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbhJNDLQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Oct 2021 23:11:16 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD1EC061570
-        for <linux-pm@vger.kernel.org>; Wed, 13 Oct 2021 20:09:11 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id g184so4196067pgc.6
-        for <linux-pm@vger.kernel.org>; Wed, 13 Oct 2021 20:09:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=TiwSeVlVup4sLwTVhPHk2bzGUXHXQ2j6MkbnlHgJiBM=;
-        b=f3+WgxIEHZqjI45FL1NxvIvL2VafVY9H2F5pcuJ/AbuqdpKntx9G/2lwllV1XOLjhF
-         UB9b9xsQ0jG8M0ySWdA56mgrVirET4bqR38TamPKcSdLYW6r4XC4/QAoUEDqlESOUods
-         aUolBKL8Gb5a6Y+iPAgMOARCFB6qfNwSCBwTEfSHRPS+yH2TEugoAIAGTfX4APh01FNz
-         mMvyWnbXTY/WVUiAAu7kREczZGChdIBhOEMPinjUQ9Z2imOejPdiBrxuZBWxluW3Unwd
-         6SZi0EYwT0aJV/X+oGnxfISthTZF1/i9LabnwFrchSmJjpP1NW1QAXRBwOpGke7MAVDW
-         2xNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=TiwSeVlVup4sLwTVhPHk2bzGUXHXQ2j6MkbnlHgJiBM=;
-        b=1HDtMf84i4w1SWZsU2hw3o3wfeleUbu9vdLi+WzeF5ahukZnyqEs/L8KMQZtIE+Pju
-         adYPmVjqCeIX0H5PWSBrs4KfuJANnm6n8bqDXkpOMJoWbaEV2sunjlafkEkvdhYsmP7m
-         xyUyY6jjncCj6uxY4SCU0WJExmA22ZJ4omdgXoui/NftlAzm/Zy5A+b01+jHfuE+ItKz
-         GisCvHL9x1acLlB3xNTQQsjRdn2Uj8+ebAIszQVcFbkQCx5QsuA4Z0h7sndbpnbvbfaW
-         plCUs7IETfN589ZPoBe7/TQ56v6xQfiv2/+0c+aqU8DGGTQhszfD27rD7TL9DtKfxdlA
-         anFw==
-X-Gm-Message-State: AOAM531KFN2v4f4P8m/WUZQjYyKVBkb/f278UT3znClMripGj8z7vobT
-        IeK2MIp0/+vdS3CI3rB9gROlVOSXhDjeqs0Hyxc=
-X-Google-Smtp-Source: ABdhPJwu+9iqmJCULB8Uv30JhyRM+qLp2EqqJCK7TVxjaTiYgzq9z/vkWIEwSY4jc5BW1SQdaYmEjw==
-X-Received: by 2002:a05:6a00:731:b0:44c:7c1b:fe6a with SMTP id 17-20020a056a00073100b0044c7c1bfe6amr3087115pfm.44.1634180951383;
-        Wed, 13 Oct 2021 20:09:11 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id j6sm848092pgq.0.2021.10.13.20.09.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Oct 2021 20:09:11 -0700 (PDT)
-Message-ID: <61679f57.1c69fb81.c0144.3db3@mx.google.com>
-Date:   Wed, 13 Oct 2021 20:09:11 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S229746AbhJNGzH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Oct 2021 02:55:07 -0400
+Received: from marcansoft.com ([212.63.210.85]:43070 "EHLO mail.marcansoft.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229584AbhJNGzG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 14 Oct 2021 02:55:06 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 9E34E41AC8;
+        Thu, 14 Oct 2021 06:52:54 +0000 (UTC)
+Subject: Re: [RFC PATCH 4/9] opp: core: Don't warn if required OPP device does
+ not exist
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Sibi Sankar <sibis@codeaurora.org>,
+        Saravana Kannan <saravanak@google.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>, Marc Zyngier <maz@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211011165707.138157-1-marcan@marcan.st>
+ <20211011165707.138157-5-marcan@marcan.st>
+ <20211012032144.2ltlpat7orrsyr6k@vireshk-i7>
+ <b7cd51ec-38e5-11d8-5193-1170c9d60ac9@marcan.st>
+ <20211012055143.xmkbvhbnolspgjin@vireshk-i7>
+ <caf16a6c-f127-7f27-ed17-0522d9f1fb9e@marcan.st>
+ <20211012092603.lkmhhjoo5v67wh44@vireshk-i7>
+ <049FC437-EC38-4FE5-891E-5E25960892CF@marcan.st>
+ <20211012093252.hb6rlcpxv5bmk7n3@vireshk-i7>
+From:   Hector Martin <marcan@marcan.st>
+Message-ID: <0db8e994-ac2c-8fad-55d0-1b5a9e2e21f2@marcan.st>
+Date:   Thu, 14 Oct 2021 15:52:52 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.15-rc5-53-g1b3dc77d7595
-Subject: pm/testing baseline: 73 runs,
- 1 regressions (v5.15-rc5-53-g1b3dc77d7595)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <20211012093252.hb6rlcpxv5bmk7n3@vireshk-i7>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: es-ES
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 73 runs, 1 regressions (v5.15-rc5-53-g1b3dc77d7595)
+On 12/10/2021 18.32, Viresh Kumar wrote:
+> On 12-10-21, 18:31, Hector Martin "marcan" wrote:
+>> That doesn't work, though, because the CPUs aren't normal devices
+>> with runtime-pm. That was the first thing I tried :).
+> 
+> What's the exact problem with runtime PM here ?
 
-Regressions Summary
--------------------
+The CPU devices aren't attached to their genpd, so the required OPP
+transition fails with the same error.
 
-platform  | arch | lab          | compiler | defconfig          | regressio=
-ns
-----------+------+--------------+----------+--------------------+----------=
---
-beagle-xm | arm  | lab-baylibre | gcc-8    | multi_v7_defconfig | 1        =
-  =
+However, this was easier to fix than I expected. With this patch to
+cpufreq-dt, it all works properly, and I can drop the parent genpd
+from the clock node and related handling. Thoughts?
 
+commit c4f88743374c1f4678ee7f17fb6cae30ded9ed59
+Author: Hector Martin <marcan@marcan.st>
+Date:   Thu Oct 14 15:47:45 2021 +0900
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.15-rc=
-5-53-g1b3dc77d7595/plan/baseline/
+     cpufreq: dt: Attach CPU devices to power domains
+     
+     This allows the required-opps mechanism to work for CPU OPP tables,
+     triggering specific OPP levels in a parent power domain.
+     
+     Signed-off-by: Hector Martin <marcan@marcan.st>
 
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.15-rc5-53-g1b3dc77d7595
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      1b3dc77d759553dba8e4842113a61a1a7de4adce =
+diff --git a/drivers/cpufreq/cpufreq-dt.c b/drivers/cpufreq/cpufreq-dt.c
+index 8fcaba541539..5b22846b557d 100644
+--- a/drivers/cpufreq/cpufreq-dt.c
++++ b/drivers/cpufreq/cpufreq-dt.c
+@@ -16,6 +16,7 @@
+  #include <linux/list.h>
+  #include <linux/module.h>
+  #include <linux/of.h>
++#include <linux/pm_domain.h>
+  #include <linux/pm_opp.h>
+  #include <linux/platform_device.h>
+  #include <linux/regulator/consumer.h>
+@@ -264,6 +265,16 @@ static int dt_cpufreq_early_init(struct device *dev, int cpu)
+  		goto out;
+  	}
+  
++	/*
++	 * Attach the CPU device to its genpd domain (if any), to allow OPP
++	 * dependencies to be satisfied.
++	 */
++	ret = genpd_dev_pm_attach(cpu_dev);
++	if (ret <= 0) {
++		dev_err(cpu_dev, "Failed to attach CPU device to genpd\n");
++		goto out;
++	}
++
+  	/*
+  	 * The OPP table must be initialized, statically or dynamically, by this
+  	 * point.
 
-
-
-Test Regressions
----------------- =
-
-
-
-platform  | arch | lab          | compiler | defconfig          | regressio=
-ns
-----------+------+--------------+----------+--------------------+----------=
---
-beagle-xm | arm  | lab-baylibre | gcc-8    | multi_v7_defconfig | 1        =
-  =
-
-
-  Details:     https://kernelci.org/test/plan/id/616792e46a7661a25c08facc
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.15-rc5-53-g1b3dc=
-77d7595/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-beagle-xm.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.15-rc5-53-g1b3dc=
-77d7595/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-beagle-xm.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/616792e46a7661a25c08f=
-acd
-        failing since 6 days (last pass: v5.15-rc4-24-g8e0efc215fb1, first =
-fail: v5.15-rc4-42-g574167bf7ed8) =
-
- =20
+-- 
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub
