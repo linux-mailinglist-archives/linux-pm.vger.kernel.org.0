@@ -2,106 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4485D42D4E4
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Oct 2021 10:30:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06A4F42D4E8
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Oct 2021 10:31:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbhJNIc4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Oct 2021 04:32:56 -0400
-Received: from mail-0201.mail-europe.com ([51.77.79.158]:47438 "EHLO
-        mail-0201.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230174AbhJNIcz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Oct 2021 04:32:55 -0400
-Date:   Thu, 14 Oct 2021 08:30:38 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail; t=1634200246;
-        bh=dYBtx/f72FXDYETSYLf5EAjO7iUAZoohiB+Y/H5mUU0=;
-        h=Date:To:From:Cc:Reply-To:Subject:From;
-        b=I8a9Rl4QsX2UuPOvVMYlUxxXgztYNgff7Vaf223KD4KAhJcfPaqG/tZS9CBWXGBZ6
-         hUrTCrUApoOEEtsMxuvFdPhHb1nZYwRTWnQqxj4SEzeiV78Ia67O8Y3bfMXavEEmnG
-         wVFvSlB4BNVt8CDZ42a8x9etqiBLIF/+EZYCUUMI=
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        id S230020AbhJNIdj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Oct 2021 04:33:39 -0400
+Received: from marcansoft.com ([212.63.210.85]:38746 "EHLO mail.marcansoft.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229970AbhJNIdj (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 14 Oct 2021 04:33:39 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 1C86A41EA2;
+        Thu, 14 Oct 2021 08:31:27 +0000 (UTC)
+Subject: Re: [RFC PATCH 6/9] memory: apple: Add apple-mcc driver to manage MCC
+ perf in Apple SoCs
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>, Marc Zyngier <maz@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
         Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Loic Poulain <loic.poulain@linaro.org>
-From:   Yassine Oudjana <y.oudjana@protonmail.com>
-Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org
-Reply-To: Yassine Oudjana <y.oudjana@protonmail.com>
-Subject: [PATCH 0/8] Add support for MSM8996 Pro
-Message-ID: <20211014083016.137441-1-y.oudjana@protonmail.com>
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211011165707.138157-1-marcan@marcan.st>
+ <20211011165707.138157-7-marcan@marcan.st>
+ <a9f6898d-bd76-b94e-52fc-98e9da1a04bd@canonical.com>
+ <2a6f14e5-fbc9-4b9a-9378-a4b5200bc3fb@marcan.st>
+ <f81467d4-74b2-176d-06bf-f04e073efce4@canonical.com>
+ <00925242-b837-d75b-3655-536d45dcd4d2@marcan.st>
+ <410c0ccb-68d3-478b-2b5b-9165890e614a@canonical.com>
+From:   Hector Martin <marcan@marcan.st>
+Message-ID: <839339f3-7c12-32aa-cd37-e91d824cfdbe@marcan.st>
+Date:   Thu, 14 Oct 2021 17:31:25 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+In-Reply-To: <410c0ccb-68d3-478b-2b5b-9165890e614a@canonical.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: es-ES
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-MSM8996 Pro (also known as MSM8996SG) is a newer revision of MSM8996
-with different CPU/CBF/GPU frequencies and CPR parameters. Its CBF clock al=
-so
-has a different divisor.
+On 14/10/2021 17.04, Krzysztof Kozlowski wrote:
+>> It is; only modules with a GPL-compatible MODULE_LICENSE get to use
+>> symbols exported via EXPORT_SYMBOL_GPL.
+> 
+> Although there might be such correlation but it's not a rule. You can
+> have a GPL module exporting symbols without GPL requirement
+> (EXPORT_SYMBOLS). You can have a GPL+MIT module exporting symbols as
+> GPL. Obviously you cannot have a non-GPL module, as we do not accept
+> these and there is no such choice.
 
-This series handles the difference in the CBF clock and adds a new DTSI for
-MSM8996 Pro with CPU and GPU OPPs. It also removes reading msm-id from SMEM
-in qcom-cpufreq-nvmem as it becomes no longer necessary. Separating MSM8996
-and MSM8996 Pro will help with implementing CBF scaling and CPR; since they
-have different CPR parameters and CPU:CBF OPP mapping which is difficult to
-implement in the same cluster OPP tables.
+What I mean is that modules can only import GPL symbols if they 
+themselves are GPL compatible. What I didn't know is that "Dual MIT/GPL" 
+is a valid string for MODULE_LICENSE to qualify as such.
 
-Dependencies:
-- clk: qcom: msm8996-cpu: Add CBF support
-  https://lore.kernel.org/linux-arm-msm/20210528192541.1120703-1-konrad.dyb=
-cio@somainline.org/
-- arm64: dts: qcom: msm8996: Add support for the CBF clock
-  https://lore.kernel.org/linux-arm-msm/20210528192541.1120703-2-konrad.dyb=
-cio@somainline.org/
+>> See kernel/module.c for the symbol lookup logic and
+>> include/linux/license.h for the logic to check the string (seems like
+>> "Dual MIT/GPL" is explicitly whitelisted there).
+> 
+> Not related to export symbol. It is used for determining the tainted
+> kernel via other licenses.
+> 
 
-Yassine Oudjana (8):
-  dt-bindings: clk: qcom: msm8996-apcc: Add CBF
-  dt-bindings: clk: qcom: msm8996-apcc: Add MSM8996 Pro compatible
-  clk: qcom: msm8996-cpu: Add MSM8996 Pro CBF support
-  cpufreq: qcom_cpufreq_nvmem: Simplify reading kryo speedbin
-  dt-bindings: opp: Convert qcom-nvmem-cpufreq to DT schema
-  dt-bindings: opp: qcom-cpufreq-nvmem: Remove SMEM
-  arm64: dts: qcom: msm8996: Add MSM8996 Pro support
-  arm64: dts: qcom: msm8996-xiaomi-scorpio: Include msm8996pro.dtsi
+Not just that; that module taint is used as a filter so that 
+non-GPL-compatible modules are technically prevented from resolving 
+EXPORT_SYMBOL_GPL symbols.
 
- .../bindings/clock/qcom,msm8996-apcc.yaml     |  11 +-
- .../bindings/opp/qcom-cpufreq-nvmem.yaml      | 557 ++++++++++++
- .../bindings/opp/qcom-nvmem-cpufreq.txt       | 796 ------------------
- MAINTAINERS                                   |   2 +-
- .../boot/dts/qcom/msm8996-xiaomi-common.dtsi  |   3 -
- .../boot/dts/qcom/msm8996-xiaomi-gemini.dts   |   1 +
- .../boot/dts/qcom/msm8996-xiaomi-scorpio.dts  |   2 +-
- arch/arm64/boot/dts/qcom/msm8996.dtsi         |  82 +-
- arch/arm64/boot/dts/qcom/msm8996pro.dtsi      | 281 +++++++
- drivers/clk/qcom/clk-cpu-8996.c               |  61 +-
- drivers/cpufreq/Kconfig.arm                   |   1 -
- drivers/cpufreq/qcom-cpufreq-nvmem.c          |  75 +-
- 12 files changed, 935 insertions(+), 937 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/opp/qcom-cpufreq-nvme=
-m.yaml
- delete mode 100644 Documentation/devicetree/bindings/opp/qcom-nvmem-cpufre=
-q.txt
- create mode 100644 arch/arm64/boot/dts/qcom/msm8996pro.dtsi
+>> Of course, this is a futile effort, as ~every time I see a proprietary
+>> module in some embedded device, it either falsely declares itself to be
+>> GPL, or they have a shim module that re-exports GPL symbols as non-GPL.
+>>
+> 
+> This is being removed soon (or already).
 
---=20
-2.33.0
+? Good luck getting proprietary embedded vendors to start following 
+licenses... :)
 
-
+-- 
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub
