@@ -2,96 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06A4F42D4E8
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Oct 2021 10:31:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D8C642D4EC
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Oct 2021 10:31:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbhJNIdj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Oct 2021 04:33:39 -0400
-Received: from marcansoft.com ([212.63.210.85]:38746 "EHLO mail.marcansoft.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229970AbhJNIdj (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 14 Oct 2021 04:33:39 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 1C86A41EA2;
-        Thu, 14 Oct 2021 08:31:27 +0000 (UTC)
-Subject: Re: [RFC PATCH 6/9] memory: apple: Add apple-mcc driver to manage MCC
- perf in Apple SoCs
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Sven Peter <sven@svenpeter.dev>, Marc Zyngier <maz@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        id S230235AbhJNIdp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Oct 2021 04:33:45 -0400
+Received: from mail-0201.mail-europe.com ([51.77.79.158]:37864 "EHLO
+        mail-0201.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230213AbhJNIdo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Oct 2021 04:33:44 -0400
+Date:   Thu, 14 Oct 2021 08:31:32 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail; t=1634200296;
+        bh=xvQBlmwCdU7fyQyVEeG5Hg3WKO2oNNUQWC2o9rpBt60=;
+        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
+        b=gXV1QQReCwCZN3+X1V+MMnkWg8gdsGOuFI4sSMMqfDxCNaqRTjMEM5kot3SdbvKRR
+         QbdY/AnE7wiBICXpnn6FhfXpsT0Z2kwVVu9RAvinj3SrlB57uMVnkpqCWWajdP5BqP
+         Q/RHpsdsod99aDG/bVPi+SaOuajFmYVJr6gRGVrk=
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
         Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211011165707.138157-1-marcan@marcan.st>
- <20211011165707.138157-7-marcan@marcan.st>
- <a9f6898d-bd76-b94e-52fc-98e9da1a04bd@canonical.com>
- <2a6f14e5-fbc9-4b9a-9378-a4b5200bc3fb@marcan.st>
- <f81467d4-74b2-176d-06bf-f04e073efce4@canonical.com>
- <00925242-b837-d75b-3655-536d45dcd4d2@marcan.st>
- <410c0ccb-68d3-478b-2b5b-9165890e614a@canonical.com>
-From:   Hector Martin <marcan@marcan.st>
-Message-ID: <839339f3-7c12-32aa-cd37-e91d824cfdbe@marcan.st>
-Date:   Thu, 14 Oct 2021 17:31:25 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Loic Poulain <loic.poulain@linaro.org>
+From:   Yassine Oudjana <y.oudjana@protonmail.com>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org
+Reply-To: Yassine Oudjana <y.oudjana@protonmail.com>
+Subject: [PATCH 1/8] dt-bindings: clk: qcom: msm8996-apcc: Add CBF
+Message-ID: <20211014083016.137441-2-y.oudjana@protonmail.com>
+In-Reply-To: <20211014083016.137441-1-y.oudjana@protonmail.com>
+References: <20211014083016.137441-1-y.oudjana@protonmail.com>
 MIME-Version: 1.0
-In-Reply-To: <410c0ccb-68d3-478b-2b5b-9165890e614a@canonical.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: es-ES
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 14/10/2021 17.04, Krzysztof Kozlowski wrote:
->> It is; only modules with a GPL-compatible MODULE_LICENSE get to use
->> symbols exported via EXPORT_SYMBOL_GPL.
-> 
-> Although there might be such correlation but it's not a rule. You can
-> have a GPL module exporting symbols without GPL requirement
-> (EXPORT_SYMBOLS). You can have a GPL+MIT module exporting symbols as
-> GPL. Obviously you cannot have a non-GPL module, as we do not accept
-> these and there is no such choice.
+Add CBF clock and reg.
 
-What I mean is that modules can only import GPL symbols if they 
-themselves are GPL compatible. What I didn't know is that "Dual MIT/GPL" 
-is a valid string for MODULE_LICENSE to qualify as such.
+Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+---
+ .../devicetree/bindings/clock/qcom,msm8996-apcc.yaml   | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
->> See kernel/module.c for the symbol lookup logic and
->> include/linux/license.h for the logic to check the string (seems like
->> "Dual MIT/GPL" is explicitly whitelisted there).
-> 
-> Not related to export symbol. It is used for determining the tainted
-> kernel via other licenses.
-> 
+diff --git a/Documentation/devicetree/bindings/clock/qcom,msm8996-apcc.yaml=
+ b/Documentation/devicetree/bindings/clock/qcom,msm8996-apcc.yaml
+index a20cb10636dd..325f8aef53b2 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,msm8996-apcc.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,msm8996-apcc.yaml
+@@ -10,8 +10,8 @@ maintainers:
+   - Loic Poulain <loic.poulain@linaro.org>
+=20
+ description: |
+-  Qualcomm CPU clock controller for MSM8996 CPUs, clock 0 is for Power clu=
+ster
+-  and clock 1 is for Perf cluster.
++  Qualcomm CPU clock controller for MSM8996 CPUs, clock 0 is for Power clu=
+ster,
++  clock 1 is for Perf cluster, and clock 2 is for Coherent bus fabric (CBF=
+).
+=20
+ properties:
+   compatible:
+@@ -19,7 +19,9 @@ properties:
+       - qcom,msm8996-apcc
+=20
+   reg:
+-    maxItems: 1
++    items:
++      - description: Cluster clock registers
++      - description: CBF clock registers
+=20
+   '#clock-cells':
+     const: 1
+@@ -49,6 +51,6 @@ examples:
+   - |
+     kryocc: clock-controller@6400000 {
+         compatible =3D "qcom,msm8996-apcc";
+-        reg =3D <0x6400000 0x90000>;
++        reg =3D <0x6400000 0x90000>, <0x09a11000 0x10000>;
+         #clock-cells =3D <1>;
+     };
+--=20
+2.33.0
 
-Not just that; that module taint is used as a filter so that 
-non-GPL-compatible modules are technically prevented from resolving 
-EXPORT_SYMBOL_GPL symbols.
 
->> Of course, this is a futile effort, as ~every time I see a proprietary
->> module in some embedded device, it either falsely declares itself to be
->> GPL, or they have a shim module that re-exports GPL symbols as non-GPL.
->>
-> 
-> This is being removed soon (or already).
-
-? Good luck getting proprietary embedded vendors to start following 
-licenses... :)
-
--- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
