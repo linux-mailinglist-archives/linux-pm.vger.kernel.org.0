@@ -2,121 +2,167 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2CDA42E6C5
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Oct 2021 04:46:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9019B42E704
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Oct 2021 04:59:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232369AbhJOCsI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Oct 2021 22:48:08 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:13741 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbhJOCsH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Oct 2021 22:48:07 -0400
-Received: from dggeml757-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4HVrFc49GLzWrHF;
-        Fri, 15 Oct 2021 10:44:20 +0800 (CST)
-Received: from localhost.localdomain (10.175.104.82) by
- dggeml757-chm.china.huawei.com (10.1.199.137) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.8; Fri, 15 Oct 2021 10:45:59 +0800
-From:   Ziyang Xuan <william.xuanziyang@huawei.com>
-To:     <rafael@kernel.org>, <daniel.lezcano@linaro.org>
-CC:     <amitk@kernel.org>, <rui.zhang@intel.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] thermal/core: fix a UAF bug in __thermal_cooling_device_register()
-Date:   Fri, 15 Oct 2021 10:45:04 +0800
-Message-ID: <20211015024504.947520-1-william.xuanziyang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        id S235345AbhJODBv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Oct 2021 23:01:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41722 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235274AbhJODBh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 14 Oct 2021 23:01:37 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BCF8261151;
+        Fri, 15 Oct 2021 02:59:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1634266772;
+        bh=KfjD2rCyH2HclCsiLQsNo252pJdf5DBVJQQPUNIyJMY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=X4O+yjylSXm3zsoDdbKT62HmSvuErqoiqFce2NbpOSDBeayumOqPhi1RZ8N+BPWBC
+         xajRjB/ccSW8vEOmpCgx62jC+6ZQWogjwvBOxYJ6tpVvlOEmUsENrERZXpOENCTeSh
+         cbCoq4nXKtU7lMiiT81bSxc9n62hxY/8rHplENhIhrPZejl5GHKX0TKjJhOU0QMRB/
+         LYvxNN8MB4e4da024qdfX/KAoNGoAZ077+4jmEGczW9venFscZgsPhYA5rEGpiLayL
+         X98pe+QssaZcOU6VKQu/HSGTBN/CECh/1aNof7LjL8ouFjjSvGbw8m8dhOdLGTUqoZ
+         CyQepUaKGNkIg==
+Date:   Fri, 15 Oct 2021 10:59:24 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Alistair Francis <alistair@alistair23.me>
+Cc:     lee.jones@linaro.org, robh+dt@kernel.org, lgirdwood@gmail.com,
+        broonie@kernel.org, kernel@pengutronix.de, s.hauer@pengutronix.de,
+        linux-imx@nxp.com, amitk@kernel.org, rui.zhang@intel.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alistair23@gmail.com, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v12 10/10] ARM: dts: imx7d: remarkable2: Enable lcdif
+Message-ID: <20211015025923.GA22881@dragon>
+References: <20211009115732.19102-1-alistair@alistair23.me>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.82]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggeml757-chm.china.huawei.com (10.1.199.137)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211009115732.19102-1-alistair@alistair23.me>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When device_register() return failed, program will goto out_kfree_type
-to release 'cdev->device' by put_device(). That will call thermal_release()
-to free 'cdev'. But the follow-up processes access 'cdev' continually.
-That trggers the UAF bug.
+On Sat, Oct 09, 2021 at 09:57:32PM +1000, Alistair Francis wrote:
+> Connect the dispaly on the reMarkable2.
+> 
+> Signed-off-by: Alistair Francis <alistair@alistair23.me>
 
-====================================================================
-BUG: KASAN: use-after-free in __thermal_cooling_device_register+0x75b/0xa90
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-Call Trace:
- dump_stack_lvl+0xe2/0x152
- print_address_description.constprop.0+0x21/0x140
- ? __thermal_cooling_device_register+0x75b/0xa90
- kasan_report.cold+0x7f/0x11b
- ? __thermal_cooling_device_register+0x75b/0xa90
- __thermal_cooling_device_register+0x75b/0xa90
- ? memset+0x20/0x40
- ? __sanitizer_cov_trace_pc+0x1d/0x50
- ? __devres_alloc_node+0x130/0x180
- devm_thermal_of_cooling_device_register+0x67/0xf0
- max6650_probe.cold+0x557/0x6aa
-......
+Maybe there are some patches missing.  It doesn't apply to my branch.
 
-Freed by task 258:
- kasan_save_stack+0x1b/0x40
- kasan_set_track+0x1c/0x30
- kasan_set_free_info+0x20/0x30
- __kasan_slab_free+0x109/0x140
- kfree+0x117/0x4c0
- thermal_release+0xa0/0x110
- device_release+0xa7/0x240
- kobject_put+0x1ce/0x540
- put_device+0x20/0x30
- __thermal_cooling_device_register+0x731/0xa90
- devm_thermal_of_cooling_device_register+0x67/0xf0
- max6650_probe.cold+0x557/0x6aa [max6650]
+Shawn 
 
-Do not use 'cdev' again after put_device() to fix the problem like doing
-in thermal_zone_device_register().
-
-Fixes: 584837618100 ("thermal/drivers/core: Use a char pointer for the cooling device name")
-Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: kernel test robot <lkp@intel.com>
----
- drivers/thermal/thermal_core.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 97ef9b040b84..d2c196b298c1 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -888,7 +888,7 @@ __thermal_cooling_device_register(struct device_node *np,
- {
- 	struct thermal_cooling_device *cdev;
- 	struct thermal_zone_device *pos = NULL;
--	int ret;
-+	int id, ret;
- 
- 	if (!ops || !ops->get_max_state || !ops->get_cur_state ||
- 	    !ops->set_cur_state)
-@@ -901,7 +901,7 @@ __thermal_cooling_device_register(struct device_node *np,
- 	ret = ida_simple_get(&thermal_cdev_ida, 0, 0, GFP_KERNEL);
- 	if (ret < 0)
- 		goto out_kfree_cdev;
--	cdev->id = ret;
-+	cdev->id = id = ret;
- 
- 	cdev->type = kstrdup(type ? type : "", GFP_KERNEL);
- 	if (!cdev->type) {
-@@ -942,8 +942,9 @@ __thermal_cooling_device_register(struct device_node *np,
- out_kfree_type:
- 	kfree(cdev->type);
- 	put_device(&cdev->device);
-+	cdev = NULL;
- out_ida_remove:
--	ida_simple_remove(&thermal_cdev_ida, cdev->id);
-+	ida_simple_remove(&thermal_cdev_ida, id);
- out_kfree_cdev:
- 	kfree(cdev);
- 	return ERR_PTR(ret);
--- 
-2.25.1
-
+> ---
+>  arch/arm/boot/dts/imx7d-remarkable2.dts | 74 +++++++++++++++++++++++++
+>  1 file changed, 74 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
+> index 1b49c26816cd..5f32c216c3fd 100644
+> --- a/arch/arm/boot/dts/imx7d-remarkable2.dts
+> +++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
+> @@ -47,6 +47,16 @@ reg_digitizer: regulator-digitizer {
+>  		startup-delay-us = <100000>; /* 100 ms */
+>  	};
+>  
+> +	reg_sdoe: regulator-sdoe {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "SDOE";
+> +		pinctrl-names = "default", "sleep";
+> +		pinctrl-0 = <&pinctrl_sdoe_reg>;
+> +		pinctrl-1 = <&pinctrl_sdoe_reg>;
+> +		gpio = <&gpio3 27 GPIO_ACTIVE_HIGH>;
+> +		enable-active-high;
+> +	};
+> +
+>  	wifi_pwrseq: wifi_pwrseq {
+>  		compatible = "mmc-pwrseq-simple";
+>  		pinctrl-names = "default";
+> @@ -55,6 +65,16 @@ wifi_pwrseq: wifi_pwrseq {
+>  		clocks = <&clks IMX7D_CLKO2_ROOT_DIV>;
+>  		clock-names = "ext_clock";
+>  	};
+> +
+> +	panel {
+> +		compatible = "eink,vb3300-kca";
+> +
+> +		port {
+> +			panel_in: endpoint {
+> +				remote-endpoint = <&display_out>;
+> +			};
+> +		};
+> +	};
+>  };
+>  
+>  &clks {
+> @@ -114,6 +134,20 @@ reg_epdpmic: vcom {
+>  	};
+>  };
+>  
+> +&lcdif {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_lcdif>;
+> +	lcd-supply = <&reg_epdpmic>;
+> +	lcd2-supply = <&reg_sdoe>;
+> +	status = "okay";
+> +
+> +	port {
+> +		display_out: endpoint {
+> +			remote-endpoint = <&panel_in>;
+> +		};
+> +	};
+> +};
+> +
+>  &snvs_pwrkey {
+>  	status = "okay";
+>  };
+> @@ -228,6 +262,46 @@ MX7D_PAD_I2C4_SCL__I2C4_SCL		0x4000007f
+>  		>;
+>  	};
+>  
+> +	pinctrl_lcdif: lcdifgrp {
+> +		fsl,pins = <
+> +			MX7D_PAD_LCD_DATA00__LCD_DATA0		0x79
+> +			MX7D_PAD_LCD_DATA01__LCD_DATA1		0x79
+> +			MX7D_PAD_LCD_DATA02__LCD_DATA2		0x79
+> +			MX7D_PAD_LCD_DATA03__LCD_DATA3		0x79
+> +			MX7D_PAD_LCD_DATA04__LCD_DATA4		0x79
+> +			MX7D_PAD_LCD_DATA05__LCD_DATA5		0x79
+> +			MX7D_PAD_LCD_DATA06__LCD_DATA6		0x79
+> +			MX7D_PAD_LCD_DATA07__LCD_DATA7		0x79
+> +			MX7D_PAD_LCD_DATA08__LCD_DATA8		0x79
+> +			MX7D_PAD_LCD_DATA09__LCD_DATA9		0x79
+> +			MX7D_PAD_LCD_DATA10__LCD_DATA10		0x79
+> +			MX7D_PAD_LCD_DATA11__LCD_DATA11		0x79
+> +			MX7D_PAD_LCD_DATA12__LCD_DATA12		0x79
+> +			MX7D_PAD_LCD_DATA13__LCD_DATA13		0x79
+> +			MX7D_PAD_LCD_DATA14__LCD_DATA14		0x79
+> +			MX7D_PAD_LCD_DATA15__LCD_DATA15		0x79
+> +
+> +			MX7D_PAD_LCD_DATA17__LCD_DATA17		0x79
+> +			MX7D_PAD_LCD_DATA18__LCD_DATA18		0x79
+> +			MX7D_PAD_LCD_DATA19__LCD_DATA19		0x79
+> +			MX7D_PAD_LCD_DATA20__LCD_DATA20		0x79
+> +			MX7D_PAD_LCD_DATA21__LCD_DATA21		0x79
+> +
+> +			MX7D_PAD_LCD_DATA23__LCD_DATA23		0x79
+> +			MX7D_PAD_LCD_CLK__LCD_CLK		0x79
+> +			MX7D_PAD_LCD_ENABLE__LCD_ENABLE		0x79
+> +			MX7D_PAD_LCD_VSYNC__LCD_VSYNC		0x79
+> +			MX7D_PAD_LCD_HSYNC__LCD_HSYNC		0x79
+> +			MX7D_PAD_LCD_RESET__LCD_RESET		0x79
+> +		>;
+> +	};
+> +
+> +	pinctrl_sdoe_reg: sdoereggrp {
+> +		fsl,pins = <
+> +			MX7D_PAD_LCD_DATA22__GPIO3_IO27		0x74
+> +		>;
+> +	};
+> +
+>  	pinctrl_uart1: uart1grp {
+>  		fsl,pins = <
+>  			MX7D_PAD_UART1_TX_DATA__UART1_DCE_TX	0x79
+> -- 
+> 2.31.1
+> 
