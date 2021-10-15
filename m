@@ -2,99 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C3F042E274
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Oct 2021 22:10:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 812EE42E523
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Oct 2021 02:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234098AbhJNUMZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Oct 2021 16:12:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33498 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234091AbhJNUMW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Oct 2021 16:12:22 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA747C061767
-        for <linux-pm@vger.kernel.org>; Thu, 14 Oct 2021 13:10:16 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id y7so6415390pfg.8
-        for <linux-pm@vger.kernel.org>; Thu, 14 Oct 2021 13:10:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=hcDyU+zIY4Ss8fjL+Pic9FdthqpnWN+VG42syy+/mwc=;
-        b=appy5bCOum3d8Tda8BTLGF3sKcXVtg/qY9l7fHvstYswnsAxrB39SLkFihIOJDzEVN
-         Qj0CMf4V9WQE477RZnBHhHQWMbYqVPOa2amkulcZxRbpouJciwKoDW7HF5z35BDE7A1j
-         ZjF9ZFw4Wp87+V7zB01CnVTsvjFA1cvX+5FGlEh4oQlVIJBLrf7TSbKutquBcVeguaT/
-         QHG+BPOB2M6vOIyXupX98BgdWtyduPZJD+970VfSJhrraInIuABONNe4a1L9ZKfPGxGk
-         t+XPl8kwZ958L4lFG9bSLepA+vwKRf+CDhJHLuYGnL9Tmd5V/vd8iMnwVAsfXdHKPtbz
-         JRdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=hcDyU+zIY4Ss8fjL+Pic9FdthqpnWN+VG42syy+/mwc=;
-        b=Z3oYRO1W2TWMhiAUoKEVVyBVcVbwPe3qNO9ZulUGW8P9N9d982i98U25zIFipj31jJ
-         +YCua84Ww8ImaT3y7ZC2t/ZSX/3bnNpuNbI46XVYNqjuxHFFsAEflR4HZJiIp2awObhS
-         Ux+YcXjdbTXAMDtVl+YOecI5jrFpAGexL/uqJEJmmC+1/ePn8PN9fEmd2dPgyXBVLkZf
-         OHaKLJ5znaBBMubZnX2gXuwc59eXXeVjwxRwV6CybHFLsxmCUuLHz8nUlWUdpq5SBj+3
-         EEDSgXxOtAFX7guUguqMnwq8nTOWbvHQt8nGRJaeZX+JvDaPVTLJ2Y/czKflrpWrpu5t
-         Iw1w==
-X-Gm-Message-State: AOAM531dv2Nmvd7jbifos8xy4dXXrxUPlmQmflZ2GhJbynHAcK7bL8K+
-        kNWlKvMo96T+ivf+e8Re15SNx4dMcLwWv6wNUk8=
-X-Google-Smtp-Source: ABdhPJz+q13zpzBeeAjLUv93jk50TSJ0o0r7nLDaTKEtPPl3iu8gjtpr1VZJln6YzYghtm858+E+qxIEcOox+2jAnIU=
-X-Received: by 2002:a63:7b18:: with SMTP id w24mr4919862pgc.234.1634242215900;
- Thu, 14 Oct 2021 13:10:15 -0700 (PDT)
+        id S232815AbhJOASz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Oct 2021 20:18:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39988 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230288AbhJOASy (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 14 Oct 2021 20:18:54 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E8CD660FDC;
+        Fri, 15 Oct 2021 00:16:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1634257009;
+        bh=y921IoviWP7ArGzf/NBOMznO7PDvJ8OxA3PyazLbsOc=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=pCi7obhE30Iv7WDLzDrA4nCqMpadPw7MZJ4gYnNOHFAEalPk0tCfXZ+HvEgIia54U
+         k5+ll1GaVAyg84eUhAyLwhqHOdQKc5j/bZAGSbmkH6qti6sgp8m0qd4S+tgooJBsvi
+         Bfo88sZs4vrSNE0j56eripPvUMf3IBWonfEc+HLOFZ9sxVGaJL8DzHHzYEXwRxWl0r
+         A4rwIYS+vtYWACJUmQ03lxppfSC74ZnEnhHDw/NZDVscNhabCkz2muTRcVOXPhQEjA
+         PJXP+VLbj7pUdDQo23ONQeh2EGBx+EfEgtxggBF7Ue2zJiXRQWWbLOdD60/739HnJ8
+         A6nKTZXjxBrOA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Received: by 2002:a17:90b:3e84:0:0:0:0 with HTTP; Thu, 14 Oct 2021 13:10:15
- -0700 (PDT)
-Reply-To: compaorekone34@gmail.com
-From:   kone compaore <abbttnb20@gmail.com>
-Date:   Thu, 14 Oct 2021 13:10:15 -0700
-Message-ID: <CAL4=2zk9MVCuXSKgZK4WxA-7Xy7uFNkc0wwWMEGk_RMaZDXB-g@mail.gmail.com>
-Subject: Greetings from kone
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20210920181145.19543-6-digetx@gmail.com>
+References: <20210920181145.19543-1-digetx@gmail.com> <20210920181145.19543-6-digetx@gmail.com>
+Subject: Re: [PATCH v12 05/35] dt-bindings: clock: tegra-car: Document new clock sub-nodes
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
+        linux-mmc@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        David Heidelberg <david@ixit.cz>
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Nishanth Menon <nm@ti.com>, Peter Chen <peter.chen@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Uwe =?utf-8?q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Viresh Kumar <vireshk@kernel.org>
+Date:   Thu, 14 Oct 2021 17:16:47 -0700
+Message-ID: <163425700766.1688384.4481739110941660602@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Greetings,
+Quoting Dmitry Osipenko (2021-09-20 11:11:15)
+> diff --git a/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.y=
+aml b/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml
+> index 459d2a525393..f832abb7f11a 100644
+> --- a/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml
+> +++ b/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml
+> @@ -42,6 +42,36 @@ properties:
+>    "#reset-cells":
+>      const: 1
+> =20
+> +patternProperties:
+> +  "^(sclk)|(pll-[cem])$":
+> +    type: object
+> +    properties:
+> +      compatible:
+> +        enum:
+> +          - nvidia,tegra20-sclk
+> +          - nvidia,tegra30-sclk
+> +          - nvidia,tegra30-pllc
+> +          - nvidia,tegra30-plle
+> +          - nvidia,tegra30-pllm
+> +
+> +      operating-points-v2: true
+> +
+> +      clocks:
+> +        items:
+> +          - description: node's clock
+> +
+> +      power-domains:
+> +        maxItems: 1
+> +        description: phandle to the core SoC power domain
 
-Greetings to you and your family.
+Is this done to associate the power domain with a particular clk? And an
+OPP table with a particular clk?
 
-My name is Mr. Kone Compaore, the auditing general with the bank,
-Africa Develop bank (ADB) Ouagadougou, Burkina
-
-Faso, in West Africa. I am contacting you to seek your honesty and
-sincere cooperation in confidential manner to
-
-transfer the sum of 10.5 (Ten million five hundred thousand Dollars)
-to your existing or new bank account.
-
-This money belongs to one of our bank client, a Libyan oil exporter
-who was working with the former Libyan
-
-government; I learn t that he was killed by the revolutionary forces
-since October 2011. Our bank is planning to
-
-transfer this entire fund into the government public treasury as
-unclaimed fund if nobody comes to claim the money
-
-from our bank after four years without account activities .
-
-What the bank need is proof and information about the late customer
-which I will assist you on. This is a genuine,
-
-risk free and legal business transaction, All details shall be sent to
-you once I hear from you.
-
-The information as contained herein be accorded the necessary
-attention, urgency as well as the secrecy it
-
-deserves.
-
-If you are really sure of your integrity, trustworthy and
-confidentiality reply back to me urgently for more
-
-details
-
-Best regards,
-Kone Compaore
+> +
+> +    required:
+> +      - compatible
+> +      - operating-points-v2
+> +      - clocks
+> +      - power-domains
+> +
+> +    additionalProperties: false
+> +
+>  required:
+>    - compatible
+>    - reg
