@@ -2,167 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9019B42E704
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Oct 2021 04:59:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45ECE42E94E
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Oct 2021 08:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235345AbhJODBv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Oct 2021 23:01:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41722 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235274AbhJODBh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 14 Oct 2021 23:01:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BCF8261151;
-        Fri, 15 Oct 2021 02:59:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634266772;
-        bh=KfjD2rCyH2HclCsiLQsNo252pJdf5DBVJQQPUNIyJMY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=X4O+yjylSXm3zsoDdbKT62HmSvuErqoiqFce2NbpOSDBeayumOqPhi1RZ8N+BPWBC
-         xajRjB/ccSW8vEOmpCgx62jC+6ZQWogjwvBOxYJ6tpVvlOEmUsENrERZXpOENCTeSh
-         cbCoq4nXKtU7lMiiT81bSxc9n62hxY/8rHplENhIhrPZejl5GHKX0TKjJhOU0QMRB/
-         LYvxNN8MB4e4da024qdfX/KAoNGoAZ077+4jmEGczW9venFscZgsPhYA5rEGpiLayL
-         X98pe+QssaZcOU6VKQu/HSGTBN/CECh/1aNof7LjL8ouFjjSvGbw8m8dhOdLGTUqoZ
-         CyQepUaKGNkIg==
-Date:   Fri, 15 Oct 2021 10:59:24 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Alistair Francis <alistair@alistair23.me>
-Cc:     lee.jones@linaro.org, robh+dt@kernel.org, lgirdwood@gmail.com,
-        broonie@kernel.org, kernel@pengutronix.de, s.hauer@pengutronix.de,
-        linux-imx@nxp.com, amitk@kernel.org, rui.zhang@intel.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alistair23@gmail.com, linux-hwmon@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v12 10/10] ARM: dts: imx7d: remarkable2: Enable lcdif
-Message-ID: <20211015025923.GA22881@dragon>
-References: <20211009115732.19102-1-alistair@alistair23.me>
+        id S235674AbhJOGvg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Oct 2021 02:51:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33660 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231949AbhJOGvg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Oct 2021 02:51:36 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D929EC061570;
+        Thu, 14 Oct 2021 23:49:29 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id p16so37688137lfa.2;
+        Thu, 14 Oct 2021 23:49:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=EddHbOUdADVimAbGlRz3BSKwi7rBdjCzr1uQlPDasjY=;
+        b=PmwPPO/GA/ClMdgV82YfF48PkWuhObrNiEQ1AVmHXtVjAzwjqHXrOkBSYDYYMl4cHw
+         OALDVYwz8N8AHBj6bFrjupDyUm5olb7WdS9DeH6MH0cfe7rnxMMgO2I/5lANMr9T0xk4
+         /TJS7SjUg1d9gFDei7Xra85sa304nA5F7tngZe1B2R8VNRHL2qntWXWmyyYX2f8gSlIm
+         WTUidy6ETXbRk4J0uyUA4U/MwZ90eWSwKMCscKPL10wOKDd2eCnYi1WwvsurqF6vpw6X
+         WOjIqlxOpwnBedK7eg09FBjgP/pyjJ20R7/+XTOQHbxySesutUzXWr7nJKYYWqzPdNa6
+         cc5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=EddHbOUdADVimAbGlRz3BSKwi7rBdjCzr1uQlPDasjY=;
+        b=b7T4vD+tn06LEinXcxdUA+Snl8sdg/0G5VuX7uOojqoeo9XXFjVMjqgqXWQPUlH9OW
+         p9qr8zAffzZ1oqrQZkCVOtDMKwLH1igMZaprRfCjndaxrDJpikP93DCU3+bddDZSeOfM
+         h6xrSaOcfclnbhgpy/xD3eOGjY6Q4EZfDWNjzgznnWJ6kTRSa78KCizTBX+O70JckWY9
+         rSNYWE6THNrNzE+GNd46KPWFmcMpgCslek24hWieFXgwQHAcl6PVsJeZEbNecJpIdKLr
+         3ybdULjHy1zSrLxGOx6yG8viXWNNeOMptvmLWggZaJYgrQEw/HSZfadtmc2vv2+bmYNK
+         2Smg==
+X-Gm-Message-State: AOAM531O7FaTyQ/BdGmiEX0zz2os1f91Oi9kVQQHQRs7SXSSTj5/Bvjj
+        /DXvn0ObSd9vmzh6a5arUp3652+oaKk=
+X-Google-Smtp-Source: ABdhPJyygzlRnZV944jPDBS6uILWDq3znMl83/ecUVpOGvqQn62q4swoXqP/LuPMyGP29IBpI5gY3A==
+X-Received: by 2002:a2e:90b:: with SMTP id 11mr11288492ljj.186.1634280567802;
+        Thu, 14 Oct 2021 23:49:27 -0700 (PDT)
+Received: from [192.168.2.145] (79-139-176-16.dynamic.spd-mgts.ru. [79.139.176.16])
+        by smtp.googlemail.com with ESMTPSA id s11sm69237ljp.60.2021.10.14.23.49.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Oct 2021 23:49:27 -0700 (PDT)
+Subject: Re: [PATCH] cpuidle: tegra: add ARCH_SUSPEND_POSSIBLE dependency
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thierry Reding <treding@nvidia.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        He Ying <heying24@huawei.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20211013160125.772873-1-arnd@kernel.org>
+ <2fdbd732-2496-2267-6636-2f682c39e928@gmail.com>
+ <CAK8P3a2jwJb_B8y3juin74kpW5cRJb2GQrYyTW8qJ+9y-x0cmQ@mail.gmail.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <86f9d315-7d98-ed92-0245-9d99f7131d1a@gmail.com>
+Date:   Fri, 15 Oct 2021 09:49:20 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211009115732.19102-1-alistair@alistair23.me>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <CAK8P3a2jwJb_B8y3juin74kpW5cRJb2GQrYyTW8qJ+9y-x0cmQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Oct 09, 2021 at 09:57:32PM +1000, Alistair Francis wrote:
-> Connect the dispaly on the reMarkable2.
+14.10.2021 17:41, Arnd Bergmann пишет:
+> On Thu, Oct 14, 2021 at 12:25 AM Dmitry Osipenko <digetx@gmail.com> wrote:
+>>
+>> 13.10.2021 19:01, Arnd Bergmann пишет:
+>>> From: Arnd Bergmann <arnd@arndb.de>
+>>>
+>>> Some StrongARM processors don't support suspend, which leads
+>>> to a build failure with the tegra cpuidle driver:
+>>>
+>>> WARNING: unmet direct dependencies detected for ARM_CPU_SUSPEND
+>>>   Depends on [n]: ARCH_SUSPEND_POSSIBLE [=n]
+>>>   Selected by [y]:
+>>>   - ARM_TEGRA_CPUIDLE [=y] && CPU_IDLE [=y] && (ARM [=y] || ARM64) && (ARCH_TEGRA [=n] || COMPILE_TEST [=y]) && !ARM64 && MMU [=y]
+>>>
+>>> arch/arm/kernel/sleep.o: in function `__cpu_suspend':
+>>> (.text+0x68): undefined reference to `cpu_sa110_suspend_size'
+>>>
+>>> Add an explicit dependency to make randconfig builds avoid
+>>> this combination.
+>>>
+>>> Fixes: faae6c9f2e68 ("cpuidle: tegra: Enable compile testing")
+>>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>>> ---
+>>>  drivers/cpuidle/Kconfig.arm | 1 +
+>>>  1 file changed, 1 insertion(+)
+>>>
+>>> diff --git a/drivers/cpuidle/Kconfig.arm b/drivers/cpuidle/Kconfig.arm
+>>> index 2cc3c208a180..af97992eaa82 100644
+>>> --- a/drivers/cpuidle/Kconfig.arm
+>>> +++ b/drivers/cpuidle/Kconfig.arm
+>>> @@ -100,6 +100,7 @@ config ARM_MVEBU_V7_CPUIDLE
+>>>  config ARM_TEGRA_CPUIDLE
+>>>       bool "CPU Idle Driver for NVIDIA Tegra SoCs"
+>>>       depends on (ARCH_TEGRA || COMPILE_TEST) && !ARM64 && MMU
+>>> +     depends on ARCH_SUSPEND_POSSIBLE
+>>>       select ARCH_NEEDS_CPU_IDLE_COUPLED if SMP
+>>>       select ARM_CPU_SUSPEND
+>>>       help
+>>>
+>>
+>> Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
 > 
-> Signed-off-by: Alistair Francis <alistair@alistair23.me>
-
-Maybe there are some patches missing.  It doesn't apply to my branch.
-
-Shawn 
-
-> ---
->  arch/arm/boot/dts/imx7d-remarkable2.dts | 74 +++++++++++++++++++++++++
->  1 file changed, 74 insertions(+)
+> Thanks!
 > 
-> diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
-> index 1b49c26816cd..5f32c216c3fd 100644
-> --- a/arch/arm/boot/dts/imx7d-remarkable2.dts
-> +++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
-> @@ -47,6 +47,16 @@ reg_digitizer: regulator-digitizer {
->  		startup-delay-us = <100000>; /* 100 ms */
->  	};
->  
-> +	reg_sdoe: regulator-sdoe {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "SDOE";
-> +		pinctrl-names = "default", "sleep";
-> +		pinctrl-0 = <&pinctrl_sdoe_reg>;
-> +		pinctrl-1 = <&pinctrl_sdoe_reg>;
-> +		gpio = <&gpio3 27 GPIO_ACTIVE_HIGH>;
-> +		enable-active-high;
-> +	};
-> +
->  	wifi_pwrseq: wifi_pwrseq {
->  		compatible = "mmc-pwrseq-simple";
->  		pinctrl-names = "default";
-> @@ -55,6 +65,16 @@ wifi_pwrseq: wifi_pwrseq {
->  		clocks = <&clks IMX7D_CLKO2_ROOT_DIV>;
->  		clock-names = "ext_clock";
->  	};
-> +
-> +	panel {
-> +		compatible = "eink,vb3300-kca";
-> +
-> +		port {
-> +			panel_in: endpoint {
-> +				remote-endpoint = <&display_out>;
-> +			};
-> +		};
-> +	};
->  };
->  
->  &clks {
-> @@ -114,6 +134,20 @@ reg_epdpmic: vcom {
->  	};
->  };
->  
-> +&lcdif {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_lcdif>;
-> +	lcd-supply = <&reg_epdpmic>;
-> +	lcd2-supply = <&reg_sdoe>;
-> +	status = "okay";
-> +
-> +	port {
-> +		display_out: endpoint {
-> +			remote-endpoint = <&panel_in>;
-> +		};
-> +	};
-> +};
-> +
->  &snvs_pwrkey {
->  	status = "okay";
->  };
-> @@ -228,6 +262,46 @@ MX7D_PAD_I2C4_SCL__I2C4_SCL		0x4000007f
->  		>;
->  	};
->  
-> +	pinctrl_lcdif: lcdifgrp {
-> +		fsl,pins = <
-> +			MX7D_PAD_LCD_DATA00__LCD_DATA0		0x79
-> +			MX7D_PAD_LCD_DATA01__LCD_DATA1		0x79
-> +			MX7D_PAD_LCD_DATA02__LCD_DATA2		0x79
-> +			MX7D_PAD_LCD_DATA03__LCD_DATA3		0x79
-> +			MX7D_PAD_LCD_DATA04__LCD_DATA4		0x79
-> +			MX7D_PAD_LCD_DATA05__LCD_DATA5		0x79
-> +			MX7D_PAD_LCD_DATA06__LCD_DATA6		0x79
-> +			MX7D_PAD_LCD_DATA07__LCD_DATA7		0x79
-> +			MX7D_PAD_LCD_DATA08__LCD_DATA8		0x79
-> +			MX7D_PAD_LCD_DATA09__LCD_DATA9		0x79
-> +			MX7D_PAD_LCD_DATA10__LCD_DATA10		0x79
-> +			MX7D_PAD_LCD_DATA11__LCD_DATA11		0x79
-> +			MX7D_PAD_LCD_DATA12__LCD_DATA12		0x79
-> +			MX7D_PAD_LCD_DATA13__LCD_DATA13		0x79
-> +			MX7D_PAD_LCD_DATA14__LCD_DATA14		0x79
-> +			MX7D_PAD_LCD_DATA15__LCD_DATA15		0x79
-> +
-> +			MX7D_PAD_LCD_DATA17__LCD_DATA17		0x79
-> +			MX7D_PAD_LCD_DATA18__LCD_DATA18		0x79
-> +			MX7D_PAD_LCD_DATA19__LCD_DATA19		0x79
-> +			MX7D_PAD_LCD_DATA20__LCD_DATA20		0x79
-> +			MX7D_PAD_LCD_DATA21__LCD_DATA21		0x79
-> +
-> +			MX7D_PAD_LCD_DATA23__LCD_DATA23		0x79
-> +			MX7D_PAD_LCD_CLK__LCD_CLK		0x79
-> +			MX7D_PAD_LCD_ENABLE__LCD_ENABLE		0x79
-> +			MX7D_PAD_LCD_VSYNC__LCD_VSYNC		0x79
-> +			MX7D_PAD_LCD_HSYNC__LCD_HSYNC		0x79
-> +			MX7D_PAD_LCD_RESET__LCD_RESET		0x79
-> +		>;
-> +	};
-> +
-> +	pinctrl_sdoe_reg: sdoereggrp {
-> +		fsl,pins = <
-> +			MX7D_PAD_LCD_DATA22__GPIO3_IO27		0x74
-> +		>;
-> +	};
-> +
->  	pinctrl_uart1: uart1grp {
->  		fsl,pins = <
->  			MX7D_PAD_UART1_TX_DATA__UART1_DCE_TX	0x79
-> -- 
-> 2.31.1
+> I realized now that we should drop the '&& MMU' after my fix, for both
+> the tegra and qualcomm drivers, reverting the change from 498ba2a8a275
+> ("cpuidle: Fix ARM_QCOM_SPM_CPUIDLE configuration") that got failed
+> to fix this problem. I'll resend it as a series of three patches with your R-b
+> on this patch.
 > 
+> On a related note, I now see that the "||COMPILE_TEST" bit for the
+> arm-specific cpuidle drivers is not all that useful because we can curently
+> not hit that on non-ARM machines at all. I'll try changing that as well, but
+> this is probably nontrivial.
+
+Ack
+
