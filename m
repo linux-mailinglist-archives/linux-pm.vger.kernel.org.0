@@ -2,140 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F6F942F0B5
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Oct 2021 14:25:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06A8242F0BA
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Oct 2021 14:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238785AbhJOM1V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Oct 2021 08:27:21 -0400
-Received: from mail-ot1-f54.google.com ([209.85.210.54]:34715 "EHLO
-        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231612AbhJOM1V (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Oct 2021 08:27:21 -0400
-Received: by mail-ot1-f54.google.com with SMTP id g62-20020a9d2dc4000000b0054752cfbc59so12597421otb.1;
-        Fri, 15 Oct 2021 05:25:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=I+FJSF2aUqnp4JnahjPPraJRIER8Ss0fZqzyewPOdxw=;
-        b=EW3v1KVNZd2R9lxH4k5dPjnV3OU3qhnpqI9uuGyMEMZgmkEn2SH5QBEoEOOV38L1nN
-         zGpv2hrGcnpuYV2wuSlCyhrNo/+Al5zvasaM4hVWRxAQqHg62cgBbnDb3U0wwtDw3A4T
-         Qgq1pvbis+WfaXMLeO+gl+EmkX3GwmXLLe/suKqb0YfR2V655LmAUsPp1RGYUeh3xRgO
-         6UuTWroSaPEI9WIEyBzQO8hSFxImPTAf3QeCtD+Q94G9VlRGlOeOniv4zhaXfXC4aP8x
-         RHvjeX8QTpV90sMsmkMDPtt8c4HvdYpOF5McyEg8iQfF7MHuK+UkTQzN7t2E/ypIOp/R
-         S1aA==
-X-Gm-Message-State: AOAM530jNBNwzwE9X04hpTKjVdl/jHpWEm5HzakJ2nHdUUOkmz6GKTPG
-        wI8IfouN/WYiz+HKmp2fvSgMhI18j7YFVZFVmjE=
-X-Google-Smtp-Source: ABdhPJzpvYsJ5DJ8Ndb1O60aAq9rYn4j18kammzbD1H0cXoBb64cvv3HURFg9ZcXvkn9GrV9ZqkCi38FC78xu40vhVA=
-X-Received: by 2002:a9d:65c1:: with SMTP id z1mr7364319oth.198.1634300714380;
- Fri, 15 Oct 2021 05:25:14 -0700 (PDT)
+        id S238802AbhJOM2O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Oct 2021 08:28:14 -0400
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:57003 "EHLO
+        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233784AbhJOM2O (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Oct 2021 08:28:14 -0400
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 13FD3580EC5;
+        Fri, 15 Oct 2021 08:26:03 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Fri, 15 Oct 2021 08:26:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
+         h=from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=fm2; bh=44klJtXqtdBjTuu73pipJjRiQc
+        AkB1BkOOwa02Xkj8w=; b=RJegcv7Z1vQDDRPesYzZeefBu8dPNn00MFFJoVZ+qh
+        iuWlfAAH4an91F3JleG5KSGTb7k66LTMmrIVlKyJVNyH3/4hbEmUZSa1mEa1lQqq
+        gAGdBhRGKtKoek0qA/2uN1b09dlVfVX5rWi64PbojGRThIQHU4zDKNZQD9JSVBsY
+        DN04cz9ZtXPnAaCTLwR2meqjLSs6kCINqrQ7vX9c+MkN6rQ307/tY1NitF48qJvU
+        nU9RECsspNkKI+yVS7vlixYLyHEJzyPVvLrT1wh6ik2RYVYImuIwIyR9O+Cxq76S
+        UA8rlsrxlOKYTF5nYbQAvimmBV/XVP6Fa+CRfYtYzZvw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=44klJtXqtdBjTuu73
+        pipJjRiQcAkB1BkOOwa02Xkj8w=; b=d2B0lOirCBqpayfy0gP2oxTt2mk3YHhm4
+        uXKAfOc1kfj95nOv889u17hFaUMwiu6lfoymoWiQRfkjm2nvSfwpcF4ta4qaZ/ll
+        bwyiGFwhqkLYncdbrlFb0UJH4seHlXJEkVku05Ej1j0vhXExFCd42/atypYY9EDD
+        2TktEe7P7wXkX+wi/NzBW9WVutN3iIk6sa+pGrSQ50XcAmvofaHJZCKv8f8GDOCa
+        rvNem/FIYefvZHGOhX+3DtZqxJo9ibyyRBXFcJmSGOs3HI01JRCYgjgXGd0IiazH
+        8LLUtmY8988KpRiGgPehsJUMipa6HOq0uBHtPcXJtiy57rtAMN7Sw==
+X-ME-Sender: <xms:WnNpYXKHG65Rbd2ug-U3SNBIjgvGa-v8t2LvA1bjwYztJ9WvM1-8vw>
+    <xme:WnNpYbIzd96aKYDAi6qeasCTh9OsncR4P4davOrPS9YzVFYHWgmHoosgPs4bdXKTg
+    Ou5EsiCpydS4eJqmEQ>
+X-ME-Received: <xmr:WnNpYftGq8y6vaHsK-sXHL2dVnlcV9FSLVWUSTDUKb2pNZElZlnzLG2jq-hZYE1BjqQoZzuEgSrq>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvddugedgheduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvffufffkofgggfestdekredtre
+    dttdenucfhrhhomheptehlihhsthgrihhrucfhrhgrnhgtihhsuceorghlihhsthgrihhr
+    segrlhhishhtrghirhdvfedrmhgvqeenucggtffrrghtthgvrhhnpeejleeihfdvtefgtd
+    ethfdtgefftdeiffefjeeiffefveeuleejheejvefhffeukeenucevlhhushhtvghrufhi
+    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhishhtrghirhesrghlihhsth
+    grihhrvdefrdhmvg
+X-ME-Proxy: <xmx:WnNpYQYn-mQWGuHgriOwETa3pmDaJN1tSnF1u2JJRvdaDf1j9rhyhQ>
+    <xmx:WnNpYebFXSex02e6PKxnB6ejYZZi-uTZCr7UBntyzjjWY_tUFphWRA>
+    <xmx:WnNpYUCDqGcCAhWFi0RaXHjVovhAu3dXc8O-VTg8o7kCG_kHSW0_RQ>
+    <xmx:W3NpYTI6GZ12ufXa_EOmljh8ffJHUlPG6JRxu_tmpruXoQgsVnOObQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 15 Oct 2021 08:25:57 -0400 (EDT)
+From:   Alistair Francis <alistair@alistair23.me>
+To:     lee.jones@linaro.org, robh+dt@kernel.org, lgirdwood@gmail.com,
+        broonie@kernel.org, kernel@pengutronix.de
+Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, linux-imx@nxp.com,
+        amitk@kernel.org, rui.zhang@intel.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alistair23@gmail.com,
+        linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org, Alistair Francis <alistair@alistair23.me>
+Subject: [PATCH v13 0/9] Add support for the silergy,sy7636a
+Date:   Fri, 15 Oct 2021 22:25:42 +1000
+Message-Id: <20211015122551.38951-1-alistair@alistair23.me>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20211015024504.947520-1-william.xuanziyang@huawei.com>
-In-Reply-To: <20211015024504.947520-1-william.xuanziyang@huawei.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 15 Oct 2021 14:25:03 +0200
-Message-ID: <CAJZ5v0h5-P+br-+44hv82jKdd=5Y-46daXMWLwsg9WDoEfG17g@mail.gmail.com>
-Subject: Re: [PATCH v2] thermal/core: fix a UAF bug in __thermal_cooling_device_register()
-To:     Ziyang Xuan <william.xuanziyang@huawei.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 15, 2021 at 4:46 AM Ziyang Xuan
-<william.xuanziyang@huawei.com> wrote:
->
-> When device_register() return failed, program will goto out_kfree_type
-> to release 'cdev->device' by put_device(). That will call thermal_release()
-> to free 'cdev'. But the follow-up processes access 'cdev' continually.
-> That trggers the UAF bug.
->
-> ====================================================================
-> BUG: KASAN: use-after-free in __thermal_cooling_device_register+0x75b/0xa90
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-> Call Trace:
->  dump_stack_lvl+0xe2/0x152
->  print_address_description.constprop.0+0x21/0x140
->  ? __thermal_cooling_device_register+0x75b/0xa90
->  kasan_report.cold+0x7f/0x11b
->  ? __thermal_cooling_device_register+0x75b/0xa90
->  __thermal_cooling_device_register+0x75b/0xa90
->  ? memset+0x20/0x40
->  ? __sanitizer_cov_trace_pc+0x1d/0x50
->  ? __devres_alloc_node+0x130/0x180
->  devm_thermal_of_cooling_device_register+0x67/0xf0
->  max6650_probe.cold+0x557/0x6aa
-> ......
->
-> Freed by task 258:
->  kasan_save_stack+0x1b/0x40
->  kasan_set_track+0x1c/0x30
->  kasan_set_free_info+0x20/0x30
->  __kasan_slab_free+0x109/0x140
->  kfree+0x117/0x4c0
->  thermal_release+0xa0/0x110
->  device_release+0xa7/0x240
->  kobject_put+0x1ce/0x540
->  put_device+0x20/0x30
->  __thermal_cooling_device_register+0x731/0xa90
->  devm_thermal_of_cooling_device_register+0x67/0xf0
->  max6650_probe.cold+0x557/0x6aa [max6650]
->
-> Do not use 'cdev' again after put_device() to fix the problem like doing
-> in thermal_zone_device_register().
->
-> Fixes: 584837618100 ("thermal/drivers/core: Use a char pointer for the cooling device name")
-> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> ---
->  drivers/thermal/thermal_core.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index 97ef9b040b84..d2c196b298c1 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -888,7 +888,7 @@ __thermal_cooling_device_register(struct device_node *np,
->  {
->         struct thermal_cooling_device *cdev;
->         struct thermal_zone_device *pos = NULL;
-> -       int ret;
-> +       int id, ret;
->
->         if (!ops || !ops->get_max_state || !ops->get_cur_state ||
->             !ops->set_cur_state)
-> @@ -901,7 +901,7 @@ __thermal_cooling_device_register(struct device_node *np,
->         ret = ida_simple_get(&thermal_cdev_ida, 0, 0, GFP_KERNEL);
->         if (ret < 0)
->                 goto out_kfree_cdev;
-> -       cdev->id = ret;
-> +       cdev->id = id = ret;
+v13:
+ - Address comments on thermal driver
+ - Rebase on master (without other patches)
+v12:
+ - Rebase
+v11:
+ - Address comments on hwmon
+ - Improve "mfd: simple-mfd-i2c: Add a Kconfig name" commit message
+v10:
+ - Use dev_get_regmap() instead of dev_get_drvdata()
+v9:
+ - Convert to use the simple-mfd-i2c instead
 
-I'd prefer this to be two statements, but I can fix it up.
+Alistair Francis (9):
+  dt-bindings: mfd: Initial commit of silergy,sy7636a.yaml
+  mfd: simple-mfd-i2c: Add a Kconfig name
+  mfd: simple-mfd-i2c: Enable support for the silergy,sy7636a
+  regulator: sy7636a: Remove requirement on sy7636a mfd
+  thermal: sy7636a: Add thermal driver for sy7636a
+  hwmon: sy7636a: Add temperature driver for sy7636a
+  ARM: imx_v6_v7_defconfig: Enable silergy,sy7636a
+  ARM: dts: imx7d: remarkable2: Enable silergy,sy7636a
+  ARM: dts: imx7d: remarkable2: Enable lcdif
 
-Daniel, would there be any issues if I applied it?
+ .../bindings/mfd/silergy,sy7636a.yaml         |  79 ++++++++++
+ Documentation/hwmon/sy7636a-hwmon.rst         |  24 ++++
+ arch/arm/boot/dts/imx7d-remarkable2.dts       | 136 ++++++++++++++++++
+ arch/arm/configs/imx_v6_v7_defconfig          |   4 +
+ drivers/hwmon/Kconfig                         |   9 ++
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/sy7636a-hwmon.c                 |  75 ++++++++++
+ drivers/mfd/Kconfig                           |   2 +-
+ drivers/mfd/simple-mfd-i2c.c                  |  12 ++
+ drivers/regulator/Kconfig                     |   1 -
+ drivers/regulator/sy7636a-regulator.c         |   2 +-
+ drivers/thermal/Kconfig                       |   6 +
+ drivers/thermal/Makefile                      |   1 +
+ drivers/thermal/sy7636a_thermal.c             |  94 ++++++++++++
+ include/linux/mfd/sy7636a.h                   |  41 ++++++
+ 15 files changed, 484 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml
+ create mode 100644 Documentation/hwmon/sy7636a-hwmon.rst
+ create mode 100644 drivers/hwmon/sy7636a-hwmon.c
+ create mode 100644 drivers/thermal/sy7636a_thermal.c
+ create mode 100644 include/linux/mfd/sy7636a.h
 
->
->         cdev->type = kstrdup(type ? type : "", GFP_KERNEL);
->         if (!cdev->type) {
-> @@ -942,8 +942,9 @@ __thermal_cooling_device_register(struct device_node *np,
->  out_kfree_type:
->         kfree(cdev->type);
->         put_device(&cdev->device);
-> +       cdev = NULL;
->  out_ida_remove:
-> -       ida_simple_remove(&thermal_cdev_ida, cdev->id);
-> +       ida_simple_remove(&thermal_cdev_ida, id);
->  out_kfree_cdev:
->         kfree(cdev);
->         return ERR_PTR(ret);
-> --
-> 2.25.1
->
+-- 
+2.31.1
+
