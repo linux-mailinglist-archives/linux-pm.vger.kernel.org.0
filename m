@@ -2,202 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D25442EDED
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Oct 2021 11:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A16D42EFB8
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Oct 2021 13:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237621AbhJOJqm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Oct 2021 05:46:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45870 "EHLO
+        id S234367AbhJOL3W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Oct 2021 07:29:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237656AbhJOJqi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Oct 2021 05:46:38 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD19C0617B1;
-        Fri, 15 Oct 2021 02:44:18 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id m20so6985478iol.4;
-        Fri, 15 Oct 2021 02:44:18 -0700 (PDT)
+        with ESMTP id S229768AbhJOL3S (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Oct 2021 07:29:18 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E2CC061570
+        for <linux-pm@vger.kernel.org>; Fri, 15 Oct 2021 04:27:12 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id o4so12575981oia.10
+        for <linux-pm@vger.kernel.org>; Fri, 15 Oct 2021 04:27:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=9NXi+dJimxQdgEFQS5128X7IR1wpG54I2lntzTVysHg=;
-        b=XOU78TQ4+Dq1jYhGaUo17LPV9+id1mBjGTAFHnpkW7G8ivA0zmAwctLEhBZsWiyv1y
-         gFba9Xj3V9oguFFp/2fprxXx86pYb8q++GyDHADK1o3igKaBBQ/S1Akhxpm7Tk17RdEO
-         WaJKviSWgBnoh+KhmgkEz+rx2pB6hT41L/ajzavZx274UgSYmaPN08c+egCeC6WDgyZ/
-         4RsnR5vgkA6lIg4EUhuhm6JxvIDhaS8cAIIdyDS+/auUcvyaKE9hMszVJFqrsdVbi+b3
-         9kC2Kz7VzULxHSzmlT30SAaZAlQ1lBrx327AUVixaFfdw1xj6BJ9m4yhd8fke+laPaUw
-         grDQ==
+        bh=NKgeFjMzQGbOlv7b4giRKfd3xluRkC6Y3aCMzdKTmcI=;
+        b=Wm4Wd6dvvDFnTkE00hxoA1bUki0lOHa+WoFWUIXZWiyl6BYiN/VJMfw+VnMnOCFaCL
+         jQ/04aPgGreSwDm51jxnPJc9pkqywXE26egdgnLAAok719vghfDASfmYTOjn+J9+fwG+
+         q/10lDtvDgAT1UYJHz5rI7tM4bgXHiMlTFU0bfwd97rrUQBuH+ZcmSEP+7HO6CUo/zZr
+         CYvsbAtjc89xss/CKzqeHdvLDimYn1hwLBeYUoQqfujZ+roY4R1sCnIjQGg7W3W/Tmsf
+         Xo/iQrJTbgRFodmMVP5Xapec+3WlJ78UAXbtc9fa6D6bWDahM/6PJbdWmF+2ol5JsZXE
+         T1fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=9NXi+dJimxQdgEFQS5128X7IR1wpG54I2lntzTVysHg=;
-        b=H7jUyjpxmMrUea977aFy3EzkU5D6Qhsas6JyoB8wPGTy/3HT7scpg/ipTZIeIMo6NZ
-         1KsnPsfGaZ8bKP8Rq4++CEezhCMkSTYjHTHySa+aiOHZVtlhdKnMusW2+LXRVcOlnnf+
-         e4W/awFrd2DR8nzQS77kKrIDMB1OsfdI4KOU/J2OYRwK705unUNA/Wd+cWZTMLhJZHGP
-         WQVZCx65fEx6t39l+5jwqn6xP70u25Smy33moixCy1opw+rnPC/GFDdfCpBCwn0K6Abu
-         N73vV/XD/Wmx7vb+5TiovPYWRvYMuNTyEmhGlFx2ihGd7zcSr3CIAhap6D4/YKebJk5o
-         gPOA==
-X-Gm-Message-State: AOAM530jx2U97o3PhmJVlQxqvY92zTFozbyXISIRVR2ylfc8Vb5V2VXh
-        Io3VLzvhfd7AjX+/t7tk03qclSqZBYZd4Jl61mQ=
-X-Google-Smtp-Source: ABdhPJzToyLsRp585Vw5bHBRFxQRavTC63/y0ndrD1zpvgnLBZyiU7PVPzBIK7eFo9EbjMpYJ7xD6FI5uGXlwhsP5m0=
-X-Received: by 2002:a5e:9612:: with SMTP id a18mr2929547ioq.57.1634291058137;
- Fri, 15 Oct 2021 02:44:18 -0700 (PDT)
+        bh=NKgeFjMzQGbOlv7b4giRKfd3xluRkC6Y3aCMzdKTmcI=;
+        b=X7Mw75XCPUa0Wvp9biy3DVh+tGbvgTOmXvg0l/ApzMwDn3ogElaGaFfUs+ILA2clPN
+         SkEOuYdXzytg2OZdocKwQKlDT4Hepbmn1Cj3GtpNuuIpJ3X5gXSJ+lrIuNsdB5lz1ioq
+         jNE3f6/CsYU/GIBJD6pcoP9Ys4vdXh+CtEOJHh5F81z0+bsSQkH+TJ4r7QYpbr+gWWz7
+         7CyVAM/4AIaKhDQY6E3xU5KYDrM+tuJke1qHvgPS562gy5rzNBFvuO0lNixIU1z449vs
+         +ApyE1CM/oZg+LcpzMnk6M1pJlcspm/vgVJJIerFABkJWXdjSNQM60HweIhxP5iAGMH3
+         9o/Q==
+X-Gm-Message-State: AOAM530949EmRh8vkNLoUMhs7rW+pCRuU0CzfYIsiCWRMzE8yaJ79f8K
+        fZGX7SYPUTR3u3EaaOjRuTpuze/S7PH31rE3Jun6aA==
+X-Google-Smtp-Source: ABdhPJyDcpqGbwskrQSivF3Hrk9czLe3jAaUJI090sO0PPQ/+jfBKyc4oV3D64eX1CbrHycowOE0cMxWzV6ZAtM7o8E=
+X-Received: by 2002:a05:6808:2218:: with SMTP id bd24mr513771oib.94.1634297231969;
+ Fri, 15 Oct 2021 04:27:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211009115732.19102-1-alistair@alistair23.me> <20211015025923.GA22881@dragon>
-In-Reply-To: <20211015025923.GA22881@dragon>
-From:   Alistair Francis <alistair23@gmail.com>
-Date:   Fri, 15 Oct 2021 19:43:00 +1000
-Message-ID: <CAKmqyKOjSCGNfyQj+eegixURM+NqTYWsa0QGLN+sV7he-RVCHg@mail.gmail.com>
-Subject: Re: [PATCH v12 10/10] ARM: dts: imx7d: remarkable2: Enable lcdif
-To:     Shawn Guo <shawnguo@kernel.org>
-Cc:     Alistair Francis <alistair@alistair23.me>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, lgirdwood@gmail.com,
-        Mark Brown <broonie@kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>, amitk@kernel.org,
-        rui.zhang@intel.com, devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-pm@vger.kernel.org
+References: <20211011165707.138157-1-marcan@marcan.st> <20211011165707.138157-5-marcan@marcan.st>
+ <20211012032144.2ltlpat7orrsyr6k@vireshk-i7> <b7cd51ec-38e5-11d8-5193-1170c9d60ac9@marcan.st>
+ <20211012055143.xmkbvhbnolspgjin@vireshk-i7> <caf16a6c-f127-7f27-ed17-0522d9f1fb9e@marcan.st>
+ <CAPDyKFoVjVYkc4+v-=eD+JbC10GazGt8A1LtD1so3PKMmVcyMg@mail.gmail.com>
+ <bd07f4b3-6ebf-e074-c1cd-0ef501e8324f@marcan.st> <CAPDyKFrFX93XV8a7e7oo1N5weWp2auq=_94fTnzr2EkO3c37Ug@mail.gmail.com>
+ <ca820b86-fc12-63b9-ec6b-5823ddd73aba@marcan.st>
+In-Reply-To: <ca820b86-fc12-63b9-ec6b-5823ddd73aba@marcan.st>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 15 Oct 2021 13:26:35 +0200
+Message-ID: <CAPDyKFpCw1M8bK5T6a+=x-kHaCco88wiRnvUm5Dy90XU360=4A@mail.gmail.com>
+Subject: Re: [RFC PATCH 4/9] opp: core: Don't warn if required OPP device does
+ not exist
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>, Marc Zyngier <maz@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 15, 2021 at 12:59 PM Shawn Guo <shawnguo@kernel.org> wrote:
+On Thu, 14 Oct 2021 at 19:02, Hector Martin <marcan@marcan.st> wrote:
 >
-> On Sat, Oct 09, 2021 at 09:57:32PM +1000, Alistair Francis wrote:
-> > Connect the dispaly on the reMarkable2.
+> On 14/10/2021 21.55, Ulf Hansson wrote:
+> > On Thu, 14 Oct 2021 at 13:43, Hector Martin <marcan@marcan.st> wrote:
+> >> I was poking around and noticed the OPP core can already integrate with
+> >> interconnect requirements, so perhaps the memory controller can be an
+> >> interconnect provider, and the CPU nodes can directly reference it as a
+> >> consumer? This seems like a more accurate model of what the hardware
+> >> does, and I think I saw some devices doing this already.
 > >
-> > Signed-off-by: Alistair Francis <alistair@alistair23.me>
+> > Yeah, that could work too. And, yes, I agree, it may be a better
+> > description of the HW.
+> >
+> >>
+> >> (only problem is I have no idea of the actual bandwidth numbers involved
+> >> here... I'll have to run some benchmarks to make sure this isn't just
+> >> completely dummy data)
+> >>
 >
-> Maybe there are some patches missing.  It doesn't apply to my branch.
+> So... I tried getting bandwidth numbers and failed. It seems these
+> registers don't actually affect peak performance in any measurable way.
+> I'm also getting almost the same GeekBench scores on macOS with and
+> without this mechanism enabled, although there is one subtest that seems
+> to show a measurable difference.
+>
+> My current guess is this is something more subtle (latencies? idle
+> timers and such?) than a performance state. If that is the case, do you
+> have any ideas as to the best way to model it in Linux? Should we even
+> bother if it mostly has a minimal performance gain for typical workloads?
 
-Sorry about that. This series applies on top of the "ARM: dts: imx7d:
-remarkable2: add wacom digitizer device" patch. The patch is on the
-list but not yet applied.
+For latency constraints, we have dev_pm_qos. This will make the genpd
+governor, to prevent deeper idle states for the device and its
+corresponding PM domain (genpd). But that doesn't sound like a good
+fit here.
 
-I'll send a rebased version.
-
-Alistair
+If you are right, it rather sounds like there is some kind of
+quiescence mode of the memory controller that can be prevented. But I
+have no clue, of course. :-)
 
 >
-> Shawn
+> I'll try to do some latency tests, see if I can make sense of what it's
+> actually doing.
 >
-> > ---
-> >  arch/arm/boot/dts/imx7d-remarkable2.dts | 74 +++++++++++++++++++++++++
-> >  1 file changed, 74 insertions(+)
-> >
-> > diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
-> > index 1b49c26816cd..5f32c216c3fd 100644
-> > --- a/arch/arm/boot/dts/imx7d-remarkable2.dts
-> > +++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
-> > @@ -47,6 +47,16 @@ reg_digitizer: regulator-digitizer {
-> >               startup-delay-us = <100000>; /* 100 ms */
-> >       };
-> >
-> > +     reg_sdoe: regulator-sdoe {
-> > +             compatible = "regulator-fixed";
-> > +             regulator-name = "SDOE";
-> > +             pinctrl-names = "default", "sleep";
-> > +             pinctrl-0 = <&pinctrl_sdoe_reg>;
-> > +             pinctrl-1 = <&pinctrl_sdoe_reg>;
-> > +             gpio = <&gpio3 27 GPIO_ACTIVE_HIGH>;
-> > +             enable-active-high;
-> > +     };
-> > +
-> >       wifi_pwrseq: wifi_pwrseq {
-> >               compatible = "mmc-pwrseq-simple";
-> >               pinctrl-names = "default";
-> > @@ -55,6 +65,16 @@ wifi_pwrseq: wifi_pwrseq {
-> >               clocks = <&clks IMX7D_CLKO2_ROOT_DIV>;
-> >               clock-names = "ext_clock";
-> >       };
-> > +
-> > +     panel {
-> > +             compatible = "eink,vb3300-kca";
-> > +
-> > +             port {
-> > +                     panel_in: endpoint {
-> > +                             remote-endpoint = <&display_out>;
-> > +                     };
-> > +             };
-> > +     };
-> >  };
-> >
-> >  &clks {
-> > @@ -114,6 +134,20 @@ reg_epdpmic: vcom {
-> >       };
-> >  };
-> >
-> > +&lcdif {
-> > +     pinctrl-names = "default";
-> > +     pinctrl-0 = <&pinctrl_lcdif>;
-> > +     lcd-supply = <&reg_epdpmic>;
-> > +     lcd2-supply = <&reg_sdoe>;
-> > +     status = "okay";
-> > +
-> > +     port {
-> > +             display_out: endpoint {
-> > +                     remote-endpoint = <&panel_in>;
-> > +             };
-> > +     };
-> > +};
-> > +
-> >  &snvs_pwrkey {
-> >       status = "okay";
-> >  };
-> > @@ -228,6 +262,46 @@ MX7D_PAD_I2C4_SCL__I2C4_SCL              0x4000007f
-> >               >;
-> >       };
-> >
-> > +     pinctrl_lcdif: lcdifgrp {
-> > +             fsl,pins = <
-> > +                     MX7D_PAD_LCD_DATA00__LCD_DATA0          0x79
-> > +                     MX7D_PAD_LCD_DATA01__LCD_DATA1          0x79
-> > +                     MX7D_PAD_LCD_DATA02__LCD_DATA2          0x79
-> > +                     MX7D_PAD_LCD_DATA03__LCD_DATA3          0x79
-> > +                     MX7D_PAD_LCD_DATA04__LCD_DATA4          0x79
-> > +                     MX7D_PAD_LCD_DATA05__LCD_DATA5          0x79
-> > +                     MX7D_PAD_LCD_DATA06__LCD_DATA6          0x79
-> > +                     MX7D_PAD_LCD_DATA07__LCD_DATA7          0x79
-> > +                     MX7D_PAD_LCD_DATA08__LCD_DATA8          0x79
-> > +                     MX7D_PAD_LCD_DATA09__LCD_DATA9          0x79
-> > +                     MX7D_PAD_LCD_DATA10__LCD_DATA10         0x79
-> > +                     MX7D_PAD_LCD_DATA11__LCD_DATA11         0x79
-> > +                     MX7D_PAD_LCD_DATA12__LCD_DATA12         0x79
-> > +                     MX7D_PAD_LCD_DATA13__LCD_DATA13         0x79
-> > +                     MX7D_PAD_LCD_DATA14__LCD_DATA14         0x79
-> > +                     MX7D_PAD_LCD_DATA15__LCD_DATA15         0x79
-> > +
-> > +                     MX7D_PAD_LCD_DATA17__LCD_DATA17         0x79
-> > +                     MX7D_PAD_LCD_DATA18__LCD_DATA18         0x79
-> > +                     MX7D_PAD_LCD_DATA19__LCD_DATA19         0x79
-> > +                     MX7D_PAD_LCD_DATA20__LCD_DATA20         0x79
-> > +                     MX7D_PAD_LCD_DATA21__LCD_DATA21         0x79
-> > +
-> > +                     MX7D_PAD_LCD_DATA23__LCD_DATA23         0x79
-> > +                     MX7D_PAD_LCD_CLK__LCD_CLK               0x79
-> > +                     MX7D_PAD_LCD_ENABLE__LCD_ENABLE         0x79
-> > +                     MX7D_PAD_LCD_VSYNC__LCD_VSYNC           0x79
-> > +                     MX7D_PAD_LCD_HSYNC__LCD_HSYNC           0x79
-> > +                     MX7D_PAD_LCD_RESET__LCD_RESET           0x79
-> > +             >;
-> > +     };
-> > +
-> > +     pinctrl_sdoe_reg: sdoereggrp {
-> > +             fsl,pins = <
-> > +                     MX7D_PAD_LCD_DATA22__GPIO3_IO27         0x74
-> > +             >;
-> > +     };
-> > +
-> >       pinctrl_uart1: uart1grp {
-> >               fsl,pins = <
-> >                       MX7D_PAD_UART1_TX_DATA__UART1_DCE_TX    0x79
-> > --
-> > 2.31.1
-> >
+
+Kind regards
+Uffe
