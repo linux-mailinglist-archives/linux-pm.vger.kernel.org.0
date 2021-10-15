@@ -2,96 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8561A42EAA6
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Oct 2021 09:54:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 179C942EB0E
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Oct 2021 10:07:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236334AbhJOH4L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Oct 2021 03:56:11 -0400
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:56150
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236271AbhJOH4K (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Oct 2021 03:56:10 -0400
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com [209.85.167.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 1C2E340016
-        for <linux-pm@vger.kernel.org>; Fri, 15 Oct 2021 07:54:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1634284444;
-        bh=FjiBWD6KOGxZjHagQXbhzd7t02HLGEzw8kC0g/03pT0=;
-        h=Subject:To:References:From:Message-ID:Date:MIME-Version:
-         In-Reply-To:Content-Type;
-        b=N7kkHNmx7Z3QYzFop+eq5FGv9Nf6e3oIOxcrJLa9N3TPbSVL+vN6TKaaxU9NSF5gC
-         fqRWmOn4qBNUlsZEEg+Yk1WTx3z33KtjOViBRew15gAT9VYYmlINY0NyYYE/l03/vR
-         NCuveaoQbj2qW/P1hN6JleJrPgJ/hU8H8/VeAE4z2n0lnwJ+KVq/wx/hRZivIi2UIf
-         V035jHYKqGdM4vNrtOZ8fdxenosslkPjeI8FtmMzGeUfQuQgY8Vz1FKmCxiEm9sKUU
-         mGWz7y3idKIbcfpjyyzGeut5rbGjZeWLmQYV78e57eKDSy94nu8u1KOWongeeK72D3
-         GqLhOHFf2q8fA==
-Received: by mail-lf1-f70.google.com with SMTP id k18-20020a05651210d200b003fd86616d39so1203114lfg.2
-        for <linux-pm@vger.kernel.org>; Fri, 15 Oct 2021 00:54:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=FjiBWD6KOGxZjHagQXbhzd7t02HLGEzw8kC0g/03pT0=;
-        b=QAp8WCbaH4RdmcwpfBhVsc2ubKsdZzkLK98ZyMyOGkqVXtJ0N02vDBGjWWK6loeHZ7
-         vB12a0ILWq7DkGbtQRtu3sxlA0u6DYThRhFTq/uv6Y4Q2cgT5Vm2uZgZUQqmry9uPwdW
-         Fm/OkxpSvFrDRRsRX1pAqU27n+yE8vd5CHSQEJBNPcloqDsb1lhwyZGl/BuliPsRbd5K
-         P5z1uSjsCCgYC9Ufsgmmo6Hkioj6J87UQ3pl6JZdwDzfhoZs6FoM6EiklZx9KeQyzEha
-         4FIdIS7qW9iI4wzPZWcUU5Kb0Mx8Zu7wRLVU3ZfQqECMgeViblBAwpaaBXNlO+u8QKYr
-         rvpQ==
-X-Gm-Message-State: AOAM531hgAfVPTH8j/5udKL+H53kPaIkxFAcqdb8T3C42EqLyBkHacHF
-        rN8aYBo+FATu1US/0E7jsnNifN7tQiS5yr/HeE8vDB/uwGF1kXI5aZLH5RJ1K/19ZYPEPCFIMj8
-        oXKyu7hUbhWLGjh6U9JmjJUeobxEymVitej/t
-X-Received: by 2002:a05:6512:3341:: with SMTP id y1mr6952812lfd.645.1634284443571;
-        Fri, 15 Oct 2021 00:54:03 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJytuH16ozPDRBURVxxyw+MBmbGvp1XT8IaLvklkb1cqqLUeYlT2L317N/zAHeTSLIGf4sTXcg==
-X-Received: by 2002:a05:6512:3341:: with SMTP id y1mr6952798lfd.645.1634284443418;
-        Fri, 15 Oct 2021 00:54:03 -0700 (PDT)
-Received: from [192.168.3.161] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id a26sm31023ljq.127.2021.10.15.00.54.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Oct 2021 00:54:03 -0700 (PDT)
-Subject: Re: [PATCH] dt-bindings: memory-controllers: correct path to LPDDR3
- bindings
-To:     Rob Herring <robh+dt@kernel.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20211015072857.9770-1-krzysztof.kozlowski@canonical.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <a34f6c91-8e94-e446-31fe-085f1e50b2c0@canonical.com>
-Date:   Fri, 15 Oct 2021 09:54:02 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S236379AbhJOIKC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Oct 2021 04:10:02 -0400
+Received: from mailout4.samsung.com ([203.254.224.34]:64072 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236638AbhJOIKA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Oct 2021 04:10:00 -0400
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20211015080749epoutp04fbfdb6dba5642ee6654fd7473c5ae10a~uJcsoYsm30938909389epoutp046
+        for <linux-pm@vger.kernel.org>; Fri, 15 Oct 2021 08:07:49 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20211015080749epoutp04fbfdb6dba5642ee6654fd7473c5ae10a~uJcsoYsm30938909389epoutp046
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1634285269;
+        bh=7Byz6yHaFyOlmUCVCF6GE7hQH0GcypoytV5GiyWBWl4=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=prjZVTYvd0bWvtJhnYI4TToCigs/YMBfOH/sn9GagYDJJsFvc0DDq22AqnbqCXAod
+         qMZDk1eGe+dCrvjXun6dqi/5YpIfEDJmMTottOS1URT2zZjGQGf+O2j8DI/qFgKZy4
+         /7pbuEhYL8J5GORvzq6/SFnnwvP3BOlPyrw00P2A=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20211015080748epcas1p4761a8b0969435ed1eade41fe27965b98~uJcrrUD2b0145601456epcas1p4S;
+        Fri, 15 Oct 2021 08:07:48 +0000 (GMT)
+Received: from epsmges1p1.samsung.com (unknown [182.195.38.236]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4HVzQT0TbMz4x9Q8; Fri, 15 Oct
+        2021 08:07:29 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        1E.42.24398.5B639616; Fri, 15 Oct 2021 17:07:17 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20211015080716epcas1p2a5d55913228043d0034623f33b8a2235~uJcORftPN1459114591epcas1p26;
+        Fri, 15 Oct 2021 08:07:16 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20211015080716epsmtrp2cf6bfe09c3a7f4114f0e812204825dcb~uJcOLUyuv0472204722epsmtrp2c;
+        Fri, 15 Oct 2021 08:07:16 +0000 (GMT)
+X-AuditID: b6c32a35-0edff70000005f4e-88-616936b56761
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A0.92.08750.4B639616; Fri, 15 Oct 2021 17:07:16 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20211015080716epsmtip2210df3418359de6cbbd6e6d521b23c98~uJcNx_eGJ1330313303epsmtip2d;
+        Fri, 15 Oct 2021 08:07:16 +0000 (GMT)
+Subject: Re: [PATCH v2 6/6] PM / devfreq: Add a driver for the sun8i/sun50i
+ MBUS
+To:     Samuel Holland <samuel@sholland.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <b6650bd2-7459-2604-f6ff-6eb6df739412@samsung.com>
+Date:   Fri, 15 Oct 2021 17:28:45 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
+        Thunderbird/59.0
 MIME-Version: 1.0
-In-Reply-To: <20211015072857.9770-1-krzysztof.kozlowski@canonical.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20211004012739.39053-7-samuel@sholland.org>
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrPJsWRmVeSWpSXmKPExsWy7bCmnu5Ws8xEg7k7ZC3mHznHavF8/jpG
+        i7NNb9gtNj2+xmpxedccNovPvUcYLabs28Vm0da5jNXi4ilXi9uNK9gsWvceYbd4/qiTzeLf
+        tY0sFj8PnWdy4PN4f6OV3WPDo9WsHjtn3WX32LSqk81j85J6jxebZzJ69G1Zxejx6utcRo/P
+        m+QCOKOybTJSE1NSixRS85LzUzLz0m2VvIPjneNNzQwMdQ0tLcyVFPISc1NtlVx8AnTdMnOA
+        bldSKEvMKQUKBSQWFyvp29kU5ZeWpCpk5BeX2CqlFqTkFJgW6BUn5haX5qXr5aWWWBkaGBiZ
+        AhUmZGecm7OApeAuZ8XMFR2MDYw32bsYOTgkBEwkWvYmdjFycQgJ7GCUeLLqGROE84lRYu/9
+        g+wQzmdGif4vbxm7GDnBOnp+vIdK7GKU+H56OSOE855RYlnzXzaQKmGBIIndd6aDVYkITGSS
+        mH3/AAuIwyzwllFi4a4dzCBVbAJaEvtf3ADr4BdQlLj64zHYDl4BO4mPT08zgdgsAqoSjTNf
+        sIPYogJhEie3tUDVCEqcnPmEBcTmFLCUmLC2D6yeWUBc4taT+VC2vMT2t3OYQRZLCLzgkNg4
+        dzUbxBMuEqdv7WCCsIUlXh3fwg5hS0l8frcXqqZaYuXJI2wQzR2MElv2X2CFSBhL7F86mQkU
+        fswCmhLrd+lDhBUldv6eywixmE/i3dceVkgQ80p0tAlBlChLXH5wF2qtpMTi9k62CYxKs5C8
+        MwvJC7OQvDALYdkCRpZVjGKpBcW56anFhgWG8PhOzs/dxAhO2VqmOxgnvv2gd4iRiYPxEKME
+        B7OSCO+7A+mJQrwpiZVVqUX58UWlOanFhxhNgQE8kVlKNDkfmDXySuINTSwNTMyMjE0sDM0M
+        lcR5j722TBQSSE8sSc1OTS1ILYLpY+LglGpg6pPepX55gsrE8K0Na3ZoFalOe1pWdmzq/g+x
+        q0RsDh14W3h2/1Hp5b/eKs22nqba+m6jvXsSg2BmiPincEPtkKQHbz/8MdNh99RODvk6b/nZ
+        z/Im/pp/OK/2H0/c8IxBtJ87m4+jeuH6KuvN9cIv2xkPKSkcW5fr9PRHy4Mpb55wrZ3h8m7i
+        1FuaJodKnFfu4fj6wsTDXPVp+iSmDdfDGLwarm/Z7VRVvbhnvkjnwYA7NxUjPh4Se2zk/e13
+        K4v767y4iEuPii9ek13O6rDmcPVU4RMKGg/Z+gKl1aZmbd10Y9bPF/eufDj7fHZrp/yNlXO2
+        rmP+qPfVY+N6XWX3zZ+aVvD+0DSNaWHWrOdpuaLEUpyRaKjFXFScCADjc84kYgQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrJIsWRmVeSWpSXmKPExsWy7bCSvO4Ws8xEg7lzJS3mHznHavF8/jpG
+        i7NNb9gtNj2+xmpxedccNovPvUcYLabs28Vm0da5jNXi4ilXi9uNK9gsWvceYbd4/qiTzeLf
+        tY0sFj8PnWdy4PN4f6OV3WPDo9WsHjtn3WX32LSqk81j85J6jxebZzJ69G1Zxejx6utcRo/P
+        m+QCOKO4bFJSczLLUov07RK4Ms7NWcBScJezYuaKDsYGxpvsXYycHBICJhI9P96D2UICOxgl
+        3vyNhYhLSky7eJS5i5EDyBaWOHy4uIuRC6jkLaPEiTvtTCA1wgJBErvvTGcHSYgITGaSOLn1
+        OBOIwwxS9erCdUaIlt2MEltWXWUBaWET0JLY/+IGG4jNL6AocfXHY0YQm1fATuLj09NgY1kE
+        VCUaZ74AO0lUIExi55LHTBA1ghInZz4Bm8MpYCkxYW0fWJxZQF3iz7xLzBC2uMStJ/Oh4vIS
+        29/OYZ7AKDwLSfssJC2zkLTMQtKygJFlFaNkakFxbnpusWGBUV5quV5xYm5xaV66XnJ+7iZG
+        cOxqae1g3LPqg94hRiYOxkOMEhzMSiK87w6kJwrxpiRWVqUW5ccXleakFh9ilOZgURLnvdB1
+        Ml5IID2xJDU7NbUgtQgmy8TBKdXA1DRnTdana6fWnHf8ujBw7X350MXveLQ1RRs/mDmu4jT9
+        Kq5oxLhgekzIc8O8y7EhQvLvG3dVO/+1XXKZLXpW2CmrzuOxNU+fainGPdrbfXJ12J+z9g6L
+        9jyom/qu/rjousWbv3Xl+L2X0V5g4rggRKkvMUPl+hfBe9MVmgLuLZj2vWjHi4kr+sueR2tv
+        /ph/4fnmeq7Htvlabv7PPhwxaem5+o2zJid+rnaB27NPQsb7TJYXN2grfvV2mv7G01jHmal5
+        wtbpaxz6GqY+5ilINm6u+Xn6pgBLz7l435treD3ki2Iivda7LHkq+orhzsQNFn4rU42m2hv8
+        T4+x+zEpubFgupQml9OEfM1HZXlLlFiKMxINtZiLihMByaHgWkwDAAA=
+X-CMS-MailID: 20211015080716epcas1p2a5d55913228043d0034623f33b8a2235
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20211004012806epcas1p1ba8ec0edc024a14e520865f689773be8
+References: <20211004012739.39053-1-samuel@sholland.org>
+        <CGME20211004012806epcas1p1ba8ec0edc024a14e520865f689773be8@epcas1p1.samsung.com>
+        <20211004012739.39053-7-samuel@sholland.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15/10/2021 09:28, Krzysztof Kozlowski wrote:
-> The LPDDR3 bindings were moved to memory-controllers/ddr.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> 
-> ---
-> 
-> I will fold it into original patch.
-> ---
->  .../devicetree/bindings/memory-controllers/ddr/lpddr3.txt    | 5 +++--
->  .../bindings/memory-controllers/samsung,exynos5422-dmc.yaml  | 3 ++-
->  2 files changed, 5 insertions(+), 3 deletions(-)
-> 
+Hi Samuel,
 
-Squashed into "dt-bindings: Relocate DDR bindings".
+On 10/4/21 10:27 AM, Samuel Holland wrote:
+> This driver works by adjusting the divider on the DRAM controller's
+> module clock. Thus there is no fixed set of OPPs, only "full speed" down
+> to "quarter speed" (or whatever the maximum divider is on that variant).
+> 
+> It makes use of the MDFS hardware in the MBUS, in "DFS" mode, which
+> takes care of updating registers during the critical section while DRAM
+> is inaccessible.
+> 
+> This driver should support several sunxi SoCs, starting with the A33,
+> which have a DesignWare DDR3 controller with merged PHY register space
+> and the matching MBUS register layout (so not A63 or later). However,
+> the driver has only been tested on the A64/H5, so those are the only
+> compatibles enabled for now.
+> 
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
+>  drivers/devfreq/Kconfig          |   8 +
+>  drivers/devfreq/Makefile         |   1 +
+>  drivers/devfreq/sun8i-a33-mbus.c | 511 +++++++++++++++++++++++++++++++
+>  3 files changed, 520 insertions(+)
+>  create mode 100644 drivers/devfreq/sun8i-a33-mbus.c
 
-Best regards,
-Krzysztof
+
+(snip)
+
+Looks good to me.
+
+Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+
+-- 
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
