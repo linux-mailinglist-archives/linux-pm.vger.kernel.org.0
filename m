@@ -2,211 +2,266 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ABBC4301BC
-	for <lists+linux-pm@lfdr.de>; Sat, 16 Oct 2021 12:11:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E30743020B
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Oct 2021 12:33:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243932AbhJPKNT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 16 Oct 2021 06:13:19 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:53658 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235335AbhJPKNT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Oct 2021 06:13:19 -0400
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 3.0.0)
- id 78e70f4d00fd6bb1; Sat, 16 Oct 2021 12:11:09 +0200
-Received: from kreacher.localnet (89-77-51-84.dynamic.chello.pl [89.77.51.84])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 28C0766A73A;
-        Sat, 16 Oct 2021 12:11:09 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linux PCI <linux-pci@vger.kernel.org>
-Subject: [PATCH v2 2/3] ACPI: PM: Fix sharing of wakeup power resources
-Date:   Sat, 16 Oct 2021 12:11:08 +0200
-Message-ID: <11874779.O9o76ZdvQC@kreacher>
-In-Reply-To: <2077987.irdbgypaU6@kreacher>
-References: <4347933.LvFx2qVVIh@kreacher> <2077987.irdbgypaU6@kreacher>
+        id S244110AbhJPKfK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 16 Oct 2021 06:35:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41422 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244095AbhJPKfK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Oct 2021 06:35:10 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E815C061765
+        for <linux-pm@vger.kernel.org>; Sat, 16 Oct 2021 03:33:02 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id g2so4339208wme.4
+        for <linux-pm@vger.kernel.org>; Sat, 16 Oct 2021 03:33:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=vNUTePMGtYNkuPQndPj+HEpkmZyC7cECLvtS0DJp+As=;
+        b=omsYXlnyaM9pWzRISy0ZZp7uu6+skSJIpUrgnr8FSX8WFfo7mTCOnl/Cj+heUEe17p
+         lDbXTZ1pm7TxOQqBZFsdrXRTw6F+lefg9tKLbRuTGkUM+KJN57UtdwA61kQwEl+lcxTj
+         ZxeTEHSog8Z+MHfIg+axE9FoTy7JOATAZ3R01aL4Ewdz0WQugogR38fFtfR8oWy2GurS
+         SeRHWHp4zm524d50ATo8NE8xiQwYnq/csiBk/+oe+bDA2EKAuHCXxvAiJF21+E5NBurK
+         H2Qe50YXaHhlhN4NqaF27Pnt83G5VQb+1t1cqV14EQ4KdcKMSrIVsOddOC7LSqo09wJc
+         /Dew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=vNUTePMGtYNkuPQndPj+HEpkmZyC7cECLvtS0DJp+As=;
+        b=So79DCRhGXpa5uS2whCvHHeSRublimuXBop33qEhtKglwNsQJ0L1+OefJYWopZVs4v
+         zddu6IWMNBndn0NYwIW8N40b+wyI1k9cAMmYI8cP+WkHLYrirDQHun8xnTrPG2xKwJ8I
+         AALQb+E/lY7/8ILmutE6+oBrCvmY11o4L85umCSBKZAXTBVpSufdt4Tifq3eQ5RaZno0
+         NhhR7fedTo3CaqFifNhpOS0G+cl3SrRY0aGoash6FPbRTztCXq82NaNj27k8RvPtViA4
+         0i52XqGEISa64hLNdnk3V0O+9s40PA4G/otzgaj9LvVHgDPpksCZmmXjbCtAAULHCQFS
+         XFYg==
+X-Gm-Message-State: AOAM531ziX+D8DVyazyQghy343B3/2QgJ4AOMa7KrHEcIroKWrFgH6YL
+        EQ4CjYJLKMOu6fa5CmogRYekiQ==
+X-Google-Smtp-Source: ABdhPJwC9EiRTX+oL3Aqz2Y5p8CIsCKXqu3mglaRf0lqeBtjrbAzk4vuKXWs8sNuS5ca57rlkf5dbQ==
+X-Received: by 2002:a1c:21d7:: with SMTP id h206mr32055637wmh.23.1634380380684;
+        Sat, 16 Oct 2021 03:33:00 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:2f2c:1294:472:2bfa? ([2a01:e34:ed2f:f020:2f2c:1294:472:2bfa])
+        by smtp.googlemail.com with ESMTPSA id z2sm7170906wrn.89.2021.10.16.03.32.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 16 Oct 2021 03:33:00 -0700 (PDT)
+Subject: Re: [PATCH v13 5/9] thermal: sy7636a: Add thermal driver for sy7636a
+To:     Alistair Francis <alistair@alistair23.me>, lee.jones@linaro.org,
+        robh+dt@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
+        kernel@pengutronix.de
+Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, linux-imx@nxp.com,
+        amitk@kernel.org, rui.zhang@intel.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alistair23@gmail.com,
+        linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org, lars.ivar.miljeteig@remarkable.com
+References: <20211015122551.38951-1-alistair@alistair23.me>
+ <20211015122551.38951-6-alistair@alistair23.me>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <cbd12880-253a-032e-9a80-4b414c8eb33a@linaro.org>
+Date:   Sat, 16 Oct 2021 12:32:58 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 89.77.51.84
-X-CLIENT-HOSTNAME: 89-77-51-84.dynamic.chello.pl
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvtddrvdduiedgvdehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvjeelgffhiedukedtleekkedvudfggefhgfegjefgueekjeelvefggfdvledutdenucfkphepkeelrdejjedrhedurdekgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeekledrjeejrdehuddrkeegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhhikhgrrdifvghsthgvrhgsvghrgheslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehlihhnuhigqdhp
- tghisehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+In-Reply-To: <20211015122551.38951-6-alistair@alistair23.me>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 15/10/2021 14:25, Alistair Francis wrote:
+> Add thermal driver to enable kernel based polling
+> and shutdown of device for temperatures out of spec
 
-If an ACPI wakeup power resource is shared between multiple devices,
-it may not be managed correctly.
+As it is an initial submission, could you give a brief description of
+the sensor even if it is very simple ?
 
-Suppose, for example, that two devices, A and B, share a wakeup power
-resource P whose wakeup_enabled flag is 0 initially.  Next, suppose
-that wakeup power is enabled for A and B, in this order, and disabled
-for B.  When wakeup power is enabled for A, P will be turned on and
-its wakeup_enabled flag will be set.  Next, when wakeup power is
-enabled for B, P will not be touched, because its wakeup_enabled flag
-is set.  Now, when wakeup power is disabled for B, P will be turned
-off which is incorrect, because A will still need P in order to signal
-wakeup.
+> Signed-off-by: Alistair Francis <alistair@alistair23.me>
+> ---
+>  drivers/thermal/Kconfig           |  6 ++
+>  drivers/thermal/Makefile          |  1 +
+>  drivers/thermal/sy7636a_thermal.c | 94 +++++++++++++++++++++++++++++++
+>  3 files changed, 101 insertions(+)
+>  create mode 100644 drivers/thermal/sy7636a_thermal.c
+> 
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index d7f44deab5b1..6ee0e7de1b37 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -450,6 +450,12 @@ depends on (ARCH_STI || ARCH_STM32) && OF
+>  source "drivers/thermal/st/Kconfig"
+>  endmenu
+>  
+> +config SY7636A_THERMAL
+> +	tristate "SY7636A thermal management"
 
-Moreover, if wakeup power is enabled for A and then disabled for B,
-the latter will cause P to be turned off incorrectly (it will be still
-needed by A), because acpi_disable_wakeup_device_power() is allowed
-to manipulate power resources when the wakeup.prepare_count counter
-of the given device is 0.
+no deps ?
 
-While the first issue could be addressed by changing the
-wakeup_enabled power resource flag into a counter, addressing the
-second one requires modifying acpi_disable_wakeup_device_power() to
-do nothing when the target device's wakeup.prepare_count reference
-counter is zero and that would cause the new counter to be redundant.
-Namely, if acpi_disable_wakeup_device_power() is modified as per the
-above, every change of the new counter following a wakeup.prepare_count
-change would be reflected by the analogous change of the main reference
-counter of the given power resource.
+> +	help
+> +	  Enable the sy7636a thermal driver, which supports the
+> +	  temperature sensor embedded in Silabs SY7636A IC.
+> +
+>  source "drivers/thermal/tegra/Kconfig"
+>  
+>  config GENERIC_ADC_THERMAL
+> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> index 82fc3e616e54..2e1aca8a0a09 100644
+> --- a/drivers/thermal/Makefile
+> +++ b/drivers/thermal/Makefile
+> @@ -51,6 +51,7 @@ obj-$(CONFIG_DA9062_THERMAL)	+= da9062-thermal.o
+>  obj-y				+= intel/
+>  obj-$(CONFIG_TI_SOC_THERMAL)	+= ti-soc-thermal/
+>  obj-y				+= st/
+> +obj-$(CONFIG_SY7636A_THERMAL)	+= sy7636a_thermal.o
+>  obj-$(CONFIG_QCOM_TSENS)	+= qcom/
+>  obj-y				+= tegra/
+>  obj-$(CONFIG_HISI_THERMAL)     += hisi_thermal.o
+> diff --git a/drivers/thermal/sy7636a_thermal.c b/drivers/thermal/sy7636a_thermal.c
+> new file mode 100644
+> index 000000000000..9e58305ca3ce
+> --- /dev/null
+> +++ b/drivers/thermal/sy7636a_thermal.c
+> @@ -0,0 +1,94 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Functions to access SY3686A power management chip temperature
+> + *
+> + * Copyright (C) 2019 reMarkable AS - http://www.remarkable.com/
 
-Accordingly, modify acpi_disable_wakeup_device_power() to do nothing
-when the target device's wakeup.prepare_count reference counter is
-zero and drop the power resource wakeup_enabled flag altogether.
+2021
 
-While at it, ensure that all of the power resources that can be
-turned off will be turned off when disabling device wakeup due to
-a power resource manipulation error, to prevent energy from being
-wasted.
+> + *
+> + * Authors: Lars Ivar Miljeteig <lars.ivar.miljeteig@remarkable.com>
+> + *          Alistair Francis <alistair@alistair23.me>
+> + */
 
-Fixes: b5d667eb392e ("ACPI / PM: Take unusual configurations of power resources into account")
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
+From Documentation/process/submitting-drivers.rst
 
-v1 -> v2:
-   * Restore the initialization of err in two places removed by v1 by mistake.
+"""
+Copyright:
+                The copyright owner must agree to use of GPL.
+                It's best if the submitter and copyright owner
+                are the same person/entity. If not, the name of
+                the person/entity authorizing use of GPL should be
+                listed in case it's necessary to verify the will of
+                the copyright owner.
+"""
 
----
- drivers/acpi/power.c |   69 +++++++++++++++++----------------------------------
- 1 file changed, 24 insertions(+), 45 deletions(-)
+[Cc'ed Lars Ivar Miljeteig]
 
-Index: linux-pm/drivers/acpi/power.c
-===================================================================
---- linux-pm.orig/drivers/acpi/power.c
-+++ linux-pm/drivers/acpi/power.c
-@@ -52,7 +52,6 @@ struct acpi_power_resource {
- 	u32 order;
- 	unsigned int ref_count;
- 	u8 state;
--	bool wakeup_enabled;
- 	struct mutex resource_lock;
- 	struct list_head dependents;
- };
-@@ -710,7 +709,6 @@ int acpi_device_sleep_wake(struct acpi_d
-  */
- int acpi_enable_wakeup_device_power(struct acpi_device *dev, int sleep_state)
- {
--	struct acpi_power_resource_entry *entry;
- 	int err = 0;
- 
- 	if (!dev || !dev->wakeup.flags.valid)
-@@ -721,26 +719,13 @@ int acpi_enable_wakeup_device_power(stru
- 	if (dev->wakeup.prepare_count++)
- 		goto out;
- 
--	list_for_each_entry(entry, &dev->wakeup.resources, node) {
--		struct acpi_power_resource *resource = entry->resource;
--
--		mutex_lock(&resource->resource_lock);
--
--		if (!resource->wakeup_enabled) {
--			err = acpi_power_on_unlocked(resource);
--			if (!err)
--				resource->wakeup_enabled = true;
--		}
--
--		mutex_unlock(&resource->resource_lock);
--
--		if (err) {
--			dev_err(&dev->dev,
--				"Cannot turn wakeup power resources on\n");
--			dev->wakeup.flags.valid = 0;
--			goto out;
--		}
-+	err = acpi_power_on_list(&dev->wakeup.resources);
-+	if (err) {
-+		dev_err(&dev->dev, "Cannot turn on wakeup power resources\n");
-+		dev->wakeup.flags.valid = 0;
-+		goto out;
- 	}
-+
- 	/*
- 	 * Passing 3 as the third argument below means the device may be
- 	 * put into arbitrary power state afterward.
-@@ -770,39 +755,33 @@ int acpi_disable_wakeup_device_power(str
- 
- 	mutex_lock(&acpi_device_lock);
- 
--	if (--dev->wakeup.prepare_count > 0)
-+	if (dev->wakeup.prepare_count > 1) {
-+		dev->wakeup.prepare_count--;
- 		goto out;
-+	}
- 
--	/*
--	 * Executing the code below even if prepare_count is already zero when
--	 * the function is called may be useful, for example for initialisation.
--	 */
--	if (dev->wakeup.prepare_count < 0)
--		dev->wakeup.prepare_count = 0;
-+	/* Do nothing if wakeup power has not been enabled for this device. */
-+	if (!dev->wakeup.prepare_count)
-+		goto out;
- 
- 	err = acpi_device_sleep_wake(dev, 0, 0, 0);
- 	if (err)
- 		goto out;
- 
-+	/*
-+	 * All of the power resources in the list need to be turned off even if
-+	 * there are errors.
-+	 */
- 	list_for_each_entry(entry, &dev->wakeup.resources, node) {
--		struct acpi_power_resource *resource = entry->resource;
--
--		mutex_lock(&resource->resource_lock);
--
--		if (resource->wakeup_enabled) {
--			err = acpi_power_off_unlocked(resource);
--			if (!err)
--				resource->wakeup_enabled = false;
--		}
--
--		mutex_unlock(&resource->resource_lock);
-+		int ret;
- 
--		if (err) {
--			dev_err(&dev->dev,
--				"Cannot turn wakeup power resources off\n");
--			dev->wakeup.flags.valid = 0;
--			break;
--		}
-+		ret = acpi_power_off(entry->resource);
-+		if (ret && !err)
-+			err = ret;
-+	}
-+	if (err) {
-+		dev_err(&dev->dev, "Cannot turn off wakeup power resources\n");
-+		dev->wakeup.flags.valid = 0;
- 	}
- 
-  out:
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/thermal.h>
+> +
+> +#include <linux/mfd/sy7636a.h>
+> +
+> +static int sy7636a_get_temp(void *arg, int *res)
+
+...(struct thermal_zone_device *tz, int *temp)
 
 
+> +{
+> +	unsigned int mode_ctr;
+> +	int ret, reg_val;
+> +	struct regmap *regmap = arg;
+> +	bool isVoltageActive;
+
+Looks like c++ code
+
+> +	ret = regmap_read(regmap,
+> +			SY7636A_REG_OPERATION_MODE_CRL, &mode_ctr);
+> +	if (ret)
+> +		return ret;
+> +
+> +	isVoltageActive = mode_ctr & SY7636A_OPERATION_MODE_CRL_ONOFF;
+> +
+> +	/* If operation mode isn't set to control, then let's set it. */
+> +	if (!isVoltageActive) {
+> +		ret = regmap_write(regmap,
+> +				SY7636A_REG_OPERATION_MODE_CRL,
+> +				mode_ctr | SY7636A_OPERATION_MODE_CRL_ONOFF);
+> +		if (ret)
+> +			return ret;
+> +	}
+
+Who is turnning off the 'control' outside of this driver?
+
+> +	ret = regmap_read(regmap,
+> +			SY7636A_REG_TERMISTOR_READOUT, &reg_val);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Restore the operation mode if it wasn't set */
+> +	if (!isVoltageActive) {
+> +		ret = regmap_write(regmap,
+> +				SY7636A_REG_OPERATION_MODE_CRL,
+> +				mode_ctr);
+> +		if (ret)
+> +			return ret;
+> +	}
+
+IIUC, this is a mfd, so if a component outside of this driver is
+touching this SY7636A_REG_OPERATION_MODE_CRL, there is no guarantee
+these operations will stay consistent.
+
+Is that correct ?
+
+> +	*res = reg_val * 1000;
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct thermal_zone_of_device_ops ops = {
+> +	.get_temp	= sy7636a_get_temp,
+> +};
+> +
+> +static int sy7636a_thermal_probe(struct platform_device *pdev)
+> +{
+> +	struct regmap *regmap = dev_get_regmap(pdev->dev.parent, NULL);
+> +	struct thermal_zone_device *thermal_zone_dev;
+
+regmap return value check, please
+
+> +	thermal_zone_dev = devm_thermal_zone_of_sensor_register(
+> +			pdev->dev.parent,
+> +			0,
+> +			regmap,
+> +			&ops);
+
+Fix indent please
+
+> +
+> +	return PTR_ERR_OR_ZERO(thermal_zone_dev);
+> +}
+> +
+> +static const struct platform_device_id sy7636a_thermal_id_table[] = {
+> +	{ "sy7636a-thermal", },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(platform, sy7636a_thermal_id_table);
+> +
+> +static struct platform_driver sy7636a_thermal_driver = {
+> +	.driver = {
+> +		.name = "sy7636a-thermal",
+> +	},
+> +	.probe = sy7636a_thermal_probe,
+> +	.id_table = sy7636a_thermal_id_table,
+> +};
+> +module_platform_driver(sy7636a_thermal_driver);
+> +
+> +MODULE_AUTHOR("Lars Ivar Miljeteig <lars.ivar.miljeteig@remarkable.com>");
+> +MODULE_DESCRIPTION("SY7636A thermal driver");
+> +MODULE_LICENSE("GPL v2");
+> 
 
 
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
