@@ -2,62 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FDD042FEEF
-	for <lists+linux-pm@lfdr.de>; Sat, 16 Oct 2021 01:36:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BB6F42FF68
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Oct 2021 02:19:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239201AbhJOXiX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Oct 2021 19:38:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40088 "EHLO
+        id S236239AbhJPAWA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Oct 2021 20:22:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238908AbhJOXiR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Oct 2021 19:38:17 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BDDBC061570
-        for <linux-pm@vger.kernel.org>; Fri, 15 Oct 2021 16:36:10 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id l6so7305592plh.9
-        for <linux-pm@vger.kernel.org>; Fri, 15 Oct 2021 16:36:10 -0700 (PDT)
+        with ESMTP id S231881AbhJPAWA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Oct 2021 20:22:00 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66269C061570
+        for <linux-pm@vger.kernel.org>; Fri, 15 Oct 2021 17:19:53 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id g5so7381576plg.1
+        for <linux-pm@vger.kernel.org>; Fri, 15 Oct 2021 17:19:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:content-transfer-encoding:subject:to
          :from;
-        bh=0IYMx2660f/9OFBTs/TiwKQJQhMbnN9oo206eTMLEQ8=;
-        b=SCuO/j7q4gkOmTRZeXQdQ300CANs8mJ7i+kSWJQuj8cC6DGgmgTK7rlPlMXg4/W04t
-         dx/7NlPYWekpKsYpjk0MxHuHqcRNRAqeQOfhURXj/hMFRrnGs/OXcP6wW3l9k903JqH2
-         K3citLfTCp8C3VsJRatxfHSI+Jrg6DW1zkay+8YqQUHKBVAcwYv/d7ShE6gzdvkepMju
-         NoOFOk3dPT9KKI/eFtj3rMYVfDPXug9ZrWvS+8y40LxDw0jvtuXaIjugmRTXD7e0dALc
-         DB2scovoQ0F1qG4WCaznwhR9dUgQ6ZSMd9YMGmP7PrMHdOjYSEuSb2BYJerObiL9zOYh
-         R91w==
+        bh=melXPuRhsv/Z0NlsBfahsZMg0ZQt/3HCtr/FUUI5Jhw=;
+        b=K/SzqSjO79nepVcfU1ANPjgMdFCxumqUGkxrrXwFd0V0X5bDLFGYU/ZLB9FZVG50Yw
+         +amADw1BKs34WOgJVd+oPI67ajDgS2VZeaqjfOYSSd3E1qcA2VB3GQidaoAevyLpueDv
+         BUPi0cUHmgD9TrXLjSUksfLgAZQeTEtbxoiJxCg3Qs3AWhxX1b/dyCp3ngO0nzovFLiZ
+         1OS5WNC+3PJYupWsiOpyk+xrfUaf5sjp2OvCsEvrXs1mFp9USyffMGdVguftgDdefWUs
+         skKY1mmG9yg3E3ID16kf4wtMhIKIMrmoCzLq94dHzhMrOwB0QHcN1NXpt0ssr+8KCIAo
+         M8qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version
          :content-transfer-encoding:subject:to:from;
-        bh=0IYMx2660f/9OFBTs/TiwKQJQhMbnN9oo206eTMLEQ8=;
-        b=0BXmOmjaafdd3FUnWPJlnkIP+w/xcBAMzyYRPMm1I3ZKpyXQMtsSg34k7pvb6F7/xb
-         8QYRgFmz5D9nxAkawUry82t6IjxS8vr3XZr5oThsYcliTx6oEuOPkSPIA0vF6EBTREsp
-         6yYQ95H9d7q2IqONKMyg3ynozOtGQb16etxGBP6G35LjsVgRAHiaOIe7D1D/XkrCJU9F
-         eauAPeblEJHghXi59CPUsfMRHxf/dBxvExYMOMZJhmin272mhsKF7SgLafq7Nu25fJ13
-         ooHnyRL+llwCIhWV/vtj28UBwBXnyiMKc/cCII3gsw0ZLBIOtYtKEdmG8OkVYFAS910X
-         bnLg==
-X-Gm-Message-State: AOAM530TfzDZJHB7s6Rw7bIC1WaS0yWAi0+VB7hjDuHKSb6J2SSZtkO5
-        1AfFO+rQx2bx3RGLaWYC5C1YrOn+XDZbKzqZ
-X-Google-Smtp-Source: ABdhPJyf+tutmkg4c6sRVjBkk7ZtgGvXkUyhG1sw7OqllmQbshHrYwr5lYHASR6sc1Nv/GcQ5as3wQ==
-X-Received: by 2002:a17:90b:2509:: with SMTP id ns9mr31178420pjb.47.1634340969961;
-        Fri, 15 Oct 2021 16:36:09 -0700 (PDT)
+        bh=melXPuRhsv/Z0NlsBfahsZMg0ZQt/3HCtr/FUUI5Jhw=;
+        b=5M+BKu2Ut2ZwwLmfKG3JvhaqkrkZEmQMX45jKwLmg/yk35AUUim2Za2GpNEhSp1yYg
+         AqDsApMOtLnR2mai883LvMthJMtRbUeY+XjNg0Wq16vqkmGJMuam6CcFSYdPK7zGJ7In
+         Lh1xs9RNr4mfz22+PCFTmvDXH7o1JdyAk6OL8OWyJFKtT56QtdWdIkq/7Mr9aXp1NlWL
+         32v75V6QEJ46O1vU1gs3fUwE4m25tIfxs/7jtJbYV1XU4o6mPwVQD77rtJHDQJGpcLFp
+         VClj417c0sfwXGodf9Q+bDJvgyeyG0ztkbEDCq+sj2fNNhyXf96mq/GhKsvXUROVSVCH
+         +iEw==
+X-Gm-Message-State: AOAM533DTQVIcifAXyeXHI7HDRC7AJZyipM6eHkb6walwDKrGzU+Y0r8
+        EmBLEXLGSRCWamAjqIRdYXoUb1A3MT0+fQ==
+X-Google-Smtp-Source: ABdhPJw1pgQFDCfaz9HviG5MK2RtnvgDx6EoA9YxDudlU6M8SMvKWoGjtjXXMhUv5tb8znl+ZyCFxg==
+X-Received: by 2002:a17:90b:3a8b:: with SMTP id om11mr10155071pjb.216.1634343592818;
+        Fri, 15 Oct 2021 17:19:52 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id c15sm5889004pfo.178.2021.10.15.16.36.09
+        by smtp.gmail.com with ESMTPSA id u2sm5721190pfi.120.2021.10.15.17.19.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Oct 2021 16:36:09 -0700 (PDT)
-Message-ID: <616a1069.1c69fb81.25a22.2f57@mx.google.com>
-Date:   Fri, 15 Oct 2021 16:36:09 -0700 (PDT)
+        Fri, 15 Oct 2021 17:19:52 -0700 (PDT)
+Message-ID: <616a1aa8.1c69fb81.6b16.27af@mx.google.com>
+Date:   Fri, 15 Oct 2021 17:19:52 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-Kernelci-Branch: testing
 X-Kernelci-Tree: pm
 X-Kernelci-Kernel: acpi-5.15-rc6-59-g180a736395e7
-X-Kernelci-Report-Type: build
-Subject: pm/testing build: 5 builds: 0 failed, 5 passed,
- 1 warning (acpi-5.15-rc6-59-g180a736395e7)
+X-Kernelci-Report-Type: test
+Subject: pm/testing baseline: 40 runs,
+ 1 regressions (acpi-5.15-rc6-59-g180a736395e7)
 To:     rafael@kernel.org, linux-pm@vger.kernel.org,
         kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
 From:   "kernelci.org bot" <bot@kernelci.org>
@@ -65,75 +65,63 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 5 builds: 0 failed, 5 passed, 1 warning (acpi-5.15-rc6-59=
--g180a736395e7)
+pm/testing baseline: 40 runs, 1 regressions (acpi-5.15-rc6-59-g180a736395e7)
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/acp=
-i-5.15-rc6-59-g180a736395e7/
+Regressions Summary
+-------------------
 
-Tree: pm
-Branch: testing
-Git Describe: acpi-5.15-rc6-59-g180a736395e7
-Git Commit: 180a736395e7e100b947e3e4a2a5bfe046faacfc
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 5 unique architectures
-
-Warnings Detected:
-
-arc:
-
-arm:
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-8): 1 warning
-
-x86_64:
+platform  | arch | lab          | compiler | defconfig          | regressio=
+ns
+----------+------+--------------+----------+--------------------+----------=
+--
+beagle-xm | arm  | lab-baylibre | gcc-8    | multi_v7_defconfig | 1        =
+  =
 
 
-Warnings summary:
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/acpi-5.1=
+5-rc6-59-g180a736395e7/plan/baseline/
 
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: acpi-5.15-rc6-59-g180a736395e7
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      180a736395e7e100b947e3e4a2a5bfe046faacfc =
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
 
-Detailed per-defconfig build reports:
 
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
+Test Regressions
+---------------- =
 
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
 
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
 
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
+platform  | arch | lab          | compiler | defconfig          | regressio=
+ns
+----------+------+--------------+----------+--------------------+----------=
+--
+beagle-xm | arm  | lab-baylibre | gcc-8    | multi_v7_defconfig | 1        =
+  =
 
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
 
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
+  Details:     https://kernelci.org/test/plan/id/616a0ca7e4e3b144193358ea
 
----
-For more info write to <info@kernelci.org>
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/acpi-5.15-rc6-59-g1=
+80a736395e7/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-beagle-xm.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/acpi-5.15-rc6-59-g1=
+80a736395e7/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-beagle-xm.ht=
+ml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/616a0ca7e4e3b14419335=
+8eb
+        failing since 8 days (last pass: v5.15-rc4-24-g8e0efc215fb1, first =
+fail: v5.15-rc4-42-g574167bf7ed8) =
+
+ =20
