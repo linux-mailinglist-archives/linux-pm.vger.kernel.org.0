@@ -2,70 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8437A4304DB
-	for <lists+linux-pm@lfdr.de>; Sat, 16 Oct 2021 22:06:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B18F5430563
+	for <lists+linux-pm@lfdr.de>; Sun, 17 Oct 2021 00:24:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244524AbhJPUIk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 16 Oct 2021 16:08:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53374 "EHLO
+        id S236957AbhJPW0S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 16 Oct 2021 18:26:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244507AbhJPUIk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Oct 2021 16:08:40 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D690AC061765
-        for <linux-pm@vger.kernel.org>; Sat, 16 Oct 2021 13:06:31 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id k7so32609290wrd.13
-        for <linux-pm@vger.kernel.org>; Sat, 16 Oct 2021 13:06:31 -0700 (PDT)
+        with ESMTP id S236505AbhJPW0K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Oct 2021 18:26:10 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61668C061766
+        for <linux-pm@vger.kernel.org>; Sat, 16 Oct 2021 15:24:00 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id l38-20020a05600c1d2600b0030d80c3667aso5052382wms.5
+        for <linux-pm@vger.kernel.org>; Sat, 16 Oct 2021 15:24:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=tqWkVmqraGpT9gt8hOkOwjhPgaiwTxED6JEqS6Skcng=;
-        b=xqKHdteVyd6dnadUU+tepraGJDExm26Otn34G7x4xfrACzTVK6bIFczvMUCLeYRv4F
-         mpv/05LowJ0oTwncA9Au379Jb7f8UVg4+AHxMlGbi/W4i8Ymd6/+eKDsxVLywVeJpIbp
-         YFjWhey0yVxKol2GMj8HndwOKvzhz/JXrqIwUP17yNQodvvuJvecNBOP5nPuTdjVTXJo
-         vDSQ5SU1M5Gs+cFp7R9rw1G9kYCOk+0hAGU7T/QRjGXyFKQCBNAbEwM55X9xNg87hFSV
-         5eKtz+Z1A0NYjnoJ3Bc9FX5O/5thYcb57jB1QPIq27PigXvEn5kvzsBxaiQFqBVed/gt
-         IGkg==
+        bh=BqbX/wOwlUQGVZxjSyS1aiwJt03MkC15YQIT8Xq1qPI=;
+        b=Vi5in+qPCWcYwZt0+DU0yyOxtYcml4HWBFOXO3+j2piaNB1BbtatiVB0u2uwvT2FD/
+         Emduaij2cKTKSANLgZSKY5Ui5oKh9iMzsWmZeQjY2tddPoynROuld4H0tGdIqSMluuwQ
+         ojYbMv5G7M3aXryljgjbzMbM1aG1wQZtgj7JsY6ozzw74ohPdiYwOAuSaq2brkKXgH3u
+         GWwvwgTjB2IKxiRxW0F2AGQFSs9m+eXhsg/kML3tZ5nYDX3CmtQWmHmw4o1gEpUqVK/4
+         qs0GN3QwEf2Z0O87xOFqWZ2GbiJEHCW+9P2c4WqFsgMSEju0S7bGhudC4YPjvogU/4tr
+         cbBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=tqWkVmqraGpT9gt8hOkOwjhPgaiwTxED6JEqS6Skcng=;
-        b=c7Hf3nA1QgVlE8PbeeKw9Ht6OyxYLcyLQ4gkiCTBCgj0taNLVquxF0Epy2EyBZ+sdE
-         cQbk2f+DB4JPCBip6rhKxpcLMxfG0VyA/LX8VRZfiAZ9tfuaNIo+IyAKWvksHmdrqwxw
-         /z0vVGMwrTSmgQK1qo8V2CMB9kd0Jg2jPtGj7U19nkOu/3eyCOqP5QpC9fpGmpSaCmiX
-         0v6GvywmRF6iX+EATvF8dmDyYu/k5aQFThH4rkyilqIiculWYS3tTbCeci4nOmYWpjpZ
-         iR816cjL80mzcWNKPC9FGjJ2tKSF2ne/4Csk5mA+SYV18/zC2WBwELwmBJCPjfFJS9dB
-         WKbg==
-X-Gm-Message-State: AOAM530OvlODPzpr5We8sL4VC4Vgzu3Fh7YHx6HAoncHKRzjr6YU8K99
-        kwMB8CD5tTy7/LwVHNvD18D/yA==
-X-Google-Smtp-Source: ABdhPJxWka+mhCqqZGhBTEGVr2ngGCW9Q5olDSi+tX7UIqvefkLXnAyWINDwWjf9KWX6L+vaiPNrpg==
-X-Received: by 2002:a5d:6d8c:: with SMTP id l12mr23728874wrs.80.1634414790161;
-        Sat, 16 Oct 2021 13:06:30 -0700 (PDT)
+        bh=BqbX/wOwlUQGVZxjSyS1aiwJt03MkC15YQIT8Xq1qPI=;
+        b=PxaqUQUNAjhXLW6s5hod6EKjdfF5fHRGD5NQH0nUfSJCLPLSZHCxNgs9at/YkuHWIS
+         yi/8C7dqEoF4hI2ykyJq94OXcn5yiOvtCNc0+7a8LLFWP9MJo5cbw5IFOKqMnV+jHvIy
+         yk2q1xXalCGwyVDDLM5QGk7ZmlESzhiqzH80v34F/WHvuI5nQc1MzwEEaifNWarn/1RM
+         ru/+pJtl3HmWBjkTXgXCNixjkQYx1NPjtkBADvnrjilxZBSSZ+YUxLdzwkMyMLgYkm33
+         +nNYPvDTptsg5oXPS1X6fUgz4NQAekA8tpEzzCGxDoCVvgfwwiUucqItOKiiLqfpXh0D
+         9UXA==
+X-Gm-Message-State: AOAM533ICx/WyQYD4UIcWRYzL1lNZfSBHoNxaVRpTqklpv7ZAh1TagYt
+        faiJ8xt4hJ5IyVHVlBURwFJpKQ==
+X-Google-Smtp-Source: ABdhPJySJtsAMFRmVhcDqy0W9uv1rkUuCq3gLR2Y9MaVHJElaJG9FWJJ/pDKVCMIR8jNeuEQZMV1Vw==
+X-Received: by 2002:a05:600c:896:: with SMTP id l22mr21122832wmp.92.1634423038800;
+        Sat, 16 Oct 2021 15:23:58 -0700 (PDT)
 Received: from ?IPv6:2a01:e34:ed2f:f020:f04d:f65f:efd5:698? ([2a01:e34:ed2f:f020:f04d:f65f:efd5:698])
-        by smtp.googlemail.com with ESMTPSA id f127sm13185359wmf.16.2021.10.16.13.06.28
+        by smtp.googlemail.com with ESMTPSA id y191sm16229441wmc.36.2021.10.16.15.23.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 16 Oct 2021 13:06:29 -0700 (PDT)
-Subject: Re: [PATCH 3/3] thermal: mediatek: add MT8365 thermal driver support
-To:     Markus Schneider-Pargmann <msp@baylibre.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, fparent@baylibre.com,
-        khilman@baylibre.com
-References: <20211014135636.3644166-1-msp@baylibre.com>
- <20211014135636.3644166-4-msp@baylibre.com>
+        Sat, 16 Oct 2021 15:23:58 -0700 (PDT)
+Subject: Re: [PATCH] thermal: imx: Fix temperature measurements on i.MX6 after
+ alarm
+To:     =?UTF-8?B?TWljaGFsIFZva8OhxI0=?= <michal.vokac@ysoft.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        linux-pm@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>
+Cc:     Amit Kucheria <amitk@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?Petr_Bene=c5=a1?= <petr.benes@ysoft.com>,
+        petrben@gmail.com, stable@vger.kernel.org
+References: <20211008081137.1948848-1-michal.vokac@ysoft.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <33815817-0f64-836a-5417-c614e66e231e@linaro.org>
-Date:   Sat, 16 Oct 2021 22:06:28 +0200
+Message-ID: <df545947-2f5b-a355-859d-7f61eab14dcb@linaro.org>
+Date:   Sun, 17 Oct 2021 00:23:56 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <20211014135636.3644166-4-msp@baylibre.com>
+In-Reply-To: <20211008081137.1948848-1-michal.vokac@ysoft.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -73,209 +76,159 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 14/10/2021 15:56, Markus Schneider-Pargmann wrote:
-> From: Fabien Parent <fparent@baylibre.com>
+On 08/10/2021 10:11, Michal Vokáč wrote:
+> From: Petr Beneš <petr.benes@ysoft.com>
 > 
-> mt8365 is similar to the other SoCs supported by the driver. It has only
-> one bank and 3 sensors that can be multiplexed.
+> SoC temperature readout may not work after thermal alarm fires interrupt.
+> This harms userspace as well as CPU cooling device.
 > 
-> Additionally the buffer has to be enabled and connected to AUXADC
-> similar to the V2 version but at a different register offset. That's why
-> I added three new configuration values to define the register, mask and
-> bits to be set to be able to use it for both V2 and mt8365.
+> Two issues with the logic involved. First, there is no protection against
+> concurent measurements, hence one can switch the sensor off while
+> the other one tries to read temperature later. Second, the interrupt path
+> usually fails. At the end the sensor is powered off and thermal IRQ is
+> disabled. One has to reenable the thermal zone by the sysfs interface.
 > 
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> [Added apmixed control register logic]
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Most of troubles come from commit d92ed2c9d3ff ("thermal: imx: Use
+> driver's local data to decide whether to run a measurement")
+
+Are these troubles observed and reproduced ? Or is it your understanding
+from reading the code ?
+
+get_temp() and tz enable/disable are protected against races in the core
+code via the tz mutex
+
+> It uses data->irq_enabled as the "local data". Indeed, its value is
+> related to the state of the sensor loosely under normal operation and,
+> frankly, gets unleashed when the thermal interrupt arrives.
+> 
+> Current patch adds the "local data" (new member sensor_on in
+> imx_thermal_data) and sets its value in controlled manner.>
+> Fixes: d92ed2c9d3ff ("thermal: imx: Use driver's local data to decide whether to run a measurement")
+> Cc: petrben@gmail.com
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Petr Beneš <petr.benes@ysoft.com>
+> Signed-off-by: Michal Vokáč <michal.vokac@ysoft.com>
 > ---
->  drivers/thermal/mtk_thermal.c | 91 ++++++++++++++++++++++++++++++++---
->  1 file changed, 85 insertions(+), 6 deletions(-)
+>  drivers/thermal/imx_thermal.c | 30 ++++++++++++++++++++++++++----
+>  1 file changed, 26 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-> index 93ee043d70da..7a75ae8231f2 100644
-> --- a/drivers/thermal/mtk_thermal.c
-> +++ b/drivers/thermal/mtk_thermal.c
-> @@ -31,6 +31,7 @@
->  #define AUXADC_CON2_V		0x010
->  #define AUXADC_DATA(channel)	(0x14 + (channel) * 4)
->  
-> +#define APMIXED_SYS_TS_CON0	0x600
->  #define APMIXED_SYS_TS_CON1	0x604
->  
->  /* Thermal Controller Registers */
-> @@ -245,6 +246,17 @@ enum mtk_thermal_version {
->  /* The calibration coefficient of sensor  */
->  #define MT8183_CALIBRATION	153
->  
-> +/* MT8365 */
-> +#define MT8365_TEMP_AUXADC_CHANNEL 11
-> +#define MT8365_CALIBRATION 164
-> +#define MT8365_NUM_CONTROLLER 1
-> +#define MT8365_NUM_BANKS 1
-> +#define MT8365_NUM_SENSORS 3
-> +#define MT8365_NUM_SENSORS_PER_ZONE 3
-
-You can get rid of these macros by using ARRAY_SIZE.
-
-eg.
-
-static const int mt8365_bank_data[] = {
-	MT8365_TS1,
-	MT8365_TS2,
-	MT8365_TS3
-};
-
-...
-
-	.num_sensors = ARRAY_SIZE(mt8365_bank_data);
-...
-
-
-> +#define MT8365_TS1 0
-> +#define MT8365_TS2 1
-> +#define MT8365_TS3 2
-> +
->  struct mtk_thermal;
->  
->  struct thermal_bank_cfg {
-> @@ -271,6 +283,9 @@ struct mtk_thermal_data {
->  	bool need_switch_bank;
->  	struct thermal_bank_cfg bank_data[MAX_NUM_ZONES];
->  	enum mtk_thermal_version version;
-> +	u32 apmixed_buffer_ctl_reg;
-> +	u32 apmixed_buffer_ctl_mask;
-> +	u32 apmixed_buffer_ctl_set;
+> diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
+> index 2c7473d86a59..df5658e21828 100644
+> --- a/drivers/thermal/imx_thermal.c
+> +++ b/drivers/thermal/imx_thermal.c
+> @@ -209,6 +209,8 @@ struct imx_thermal_data {
+>  	struct clk *thermal_clk;
+>  	const struct thermal_soc_data *socdata;
+>  	const char *temp_grade;
+> +	struct mutex sensor_lock;
+> +	bool sensor_on;
 >  };
 >  
->  struct mtk_thermal {
-> @@ -386,6 +401,24 @@ static const int mt7622_mux_values[MT7622_NUM_SENSORS] = { 0, };
->  static const int mt7622_vts_index[MT7622_NUM_SENSORS] = { VTS1 };
->  static const int mt7622_tc_offset[MT7622_NUM_CONTROLLER] = { 0x0, };
+>  static void imx_set_panic_temp(struct imx_thermal_data *data,
+> @@ -252,11 +254,12 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
+>  	const struct thermal_soc_data *soc_data = data->socdata;
+>  	struct regmap *map = data->tempmon;
+>  	unsigned int n_meas;
+> -	bool wait, run_measurement;
+> +	bool wait;
+>  	u32 val;
 >  
-> +/* MT8365 thermal sensor data */
-> +static const int mt8365_bank_data[MT8365_NUM_SENSORS] = {
-> +	MT8365_TS1, MT8365_TS2, MT8365_TS3
-> +};
+> -	run_measurement = !data->irq_enabled;
+> -	if (!run_measurement) {
+> +	mutex_lock(&data->sensor_lock);
 > +
-> +static const int mt8365_msr[MT8365_NUM_SENSORS_PER_ZONE] = {
-> +	TEMP_MSR0, TEMP_MSR1, TEMP_MSR2
-> +};
-> +
-> +static const int mt8365_adcpnp[MT8365_NUM_SENSORS_PER_ZONE] = {
-> +	TEMP_ADCPNP0, TEMP_ADCPNP1, TEMP_ADCPNP2
-> +};
-> +
-> +static const int mt8365_mux_values[MT8365_NUM_SENSORS] = { 0, 1, 2 };
-> +static const int mt8365_tc_offset[MT8365_NUM_CONTROLLER] = { 0 };
-> +
-> +static const int mt8365_vts_index[MT8365_NUM_SENSORS] = { VTS1, VTS2, VTS3 };
-> +
->  /*
->   * The MT8173 thermal controller has four banks. Each bank can read up to
->   * four temperature sensors simultaneously. The MT8173 has a total of 5
-> @@ -460,6 +493,40 @@ static const struct mtk_thermal_data mt2701_thermal_data = {
->  	.version = MTK_THERMAL_V1,
->  };
+> +	if (data->sensor_on) {
+>  		/* Check if a measurement is currently in progress */
+>  		regmap_read(map, soc_data->temp_data, &val);
+>  		wait = !(val & soc_data->temp_valid_mask);
+> @@ -283,13 +286,15 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
 >  
-> +/*
-> + * The MT8365 thermal controller has one bank, which can read up to
-> + * four temperature sensors simultaneously. The MT8365 has a total of 3
-> + * temperature sensors.
-> + *
-> + * The thermal core only gets the maximum temperature of this one bank,
-> + * so the bank concept wouldn't be necessary here. However, the SVS (Smart
-> + * Voltage Scaling) unit makes its decisions based on the same bank
-> + * data.
-> + */
-> +static const struct mtk_thermal_data mt8365_thermal_data = {
-> +	.auxadc_channel = MT8365_TEMP_AUXADC_CHANNEL,
-> +	.num_banks = MT8365_NUM_BANKS,
-> +	.num_sensors = MT8365_NUM_SENSORS,
-> +	.vts_index = mt8365_vts_index,
-> +	.cali_val = MT8365_CALIBRATION,
-> +	.num_controller = MT8365_NUM_CONTROLLER,
-> +	.controller_offset = mt8365_tc_offset,
-> +	.need_switch_bank = false,
-> +	.bank_data = {
-> +		{
-> +			.num_sensors = MT8365_NUM_SENSORS,
-> +			.sensors = mt8365_bank_data
-> +		},
-> +	},
-> +	.msr = mt8365_msr,
-> +	.adcpnp = mt8365_adcpnp,
-> +	.sensor_mux_values = mt8365_mux_values,
-> +	.version = MTK_THERMAL_V1,
-> +	.apmixed_buffer_ctl_reg = APMIXED_SYS_TS_CON0,
-> +	.apmixed_buffer_ctl_mask = ~(u32)GENMASK(29, 28),
-> +	.apmixed_buffer_ctl_set = 0,
-> +};
-> +
->  /*
->   * The MT2712 thermal controller has one bank, which can read up to
->   * four temperature sensors simultaneously. The MT2712 has a total of 4
-> @@ -514,6 +581,9 @@ static const struct mtk_thermal_data mt7622_thermal_data = {
->  	.adcpnp = mt7622_adcpnp,
->  	.sensor_mux_values = mt7622_mux_values,
->  	.version = MTK_THERMAL_V2,
-> +	.apmixed_buffer_ctl_reg = APMIXED_SYS_TS_CON1,
-> +	.apmixed_buffer_ctl_mask = ~0x37,
-> +	.apmixed_buffer_ctl_set = 0x1,
-
-Please change those literal into macros
-
->  };
+>  	regmap_read(map, soc_data->temp_data, &val);
 >  
->  /*
-> @@ -958,19 +1028,27 @@ static const struct of_device_id mtk_thermal_of_match[] = {
->  	{
->  		.compatible = "mediatek,mt8183-thermal",
->  		.data = (void *)&mt8183_thermal_data,
-> +	},
-> +	{
-> +		.compatible = "mediatek,mt8365-thermal",
-> +		.data = (void *)&mt8365_thermal_data,
-
-Is this cast really needed ?
-
->  	}, {
->  	},
->  };
->  MODULE_DEVICE_TABLE(of, mtk_thermal_of_match);
->  
-> -static void mtk_thermal_turn_on_buffer(void __iomem *apmixed_base)
-> +static void mtk_thermal_turn_on_buffer(struct mtk_thermal *mt,
-> +				       void __iomem *apmixed_base)
->  {
->  	int tmp;
->  
-> -	tmp = readl(apmixed_base + APMIXED_SYS_TS_CON1);
-> -	tmp &= ~(0x37);
-> -	tmp |= 0x1;
-> -	writel(tmp, apmixed_base + APMIXED_SYS_TS_CON1);
-> +	if (!mt->conf->apmixed_buffer_ctl_reg)
-> +		return;
-> +
-> +	tmp = readl(apmixed_base + mt->conf->apmixed_buffer_ctl_reg);
-> +	tmp &= mt->conf->apmixed_buffer_ctl_mask;
-> +	tmp |= mt->conf->apmixed_buffer_ctl_set;
-
-What is the goal of these two bits operations ?
-
-> +	writel(tmp, apmixed_base + mt->conf->apmixed_buffer_ctl_reg);
->  	udelay(200);
->  }
->  
-> @@ -1070,8 +1148,9 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->  		goto err_disable_clk_auxadc;
+> -	if (run_measurement) {
+> +	if (!data->sensor_on) {
+>  		regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
+>  			     soc_data->measure_temp_mask);
+>  		regmap_write(map, soc_data->sensor_ctrl + REG_SET,
+>  			     soc_data->power_down_mask);
 >  	}
 >  
-> +	mtk_thermal_turn_on_buffer(mt, apmixed_base);
+> +	mutex_unlock(&data->sensor_lock);
 > +
->  	if (mt->conf->version == MTK_THERMAL_V2) {
-> -		mtk_thermal_turn_on_buffer(apmixed_base);
->  		mtk_thermal_release_periodic_ts(mt, auxadc_base);
+>  	if ((val & soc_data->temp_valid_mask) == 0) {
+>  		dev_dbg(&tz->device, "temp measurement never finished\n");
+>  		return -EAGAIN;
+> @@ -339,20 +344,26 @@ static int imx_change_mode(struct thermal_zone_device *tz,
+>  	const struct thermal_soc_data *soc_data = data->socdata;
+>  
+>  	if (mode == THERMAL_DEVICE_ENABLED) {
+> +		mutex_lock(&data->sensor_lock);
+>  		regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
+>  			     soc_data->power_down_mask);
+>  		regmap_write(map, soc_data->sensor_ctrl + REG_SET,
+>  			     soc_data->measure_temp_mask);
+> +		data->sensor_on = true;
+> +		mutex_unlock(&data->sensor_lock);
+>  
+>  		if (!data->irq_enabled) {
+>  			data->irq_enabled = true;
+>  			enable_irq(data->irq);
+>  		}
+>  	} else {
+> +		mutex_lock(&data->sensor_lock);
+>  		regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
+>  			     soc_data->measure_temp_mask);
+>  		regmap_write(map, soc_data->sensor_ctrl + REG_SET,
+>  			     soc_data->power_down_mask);
+> +		data->sensor_on = false;
+> +		mutex_unlock(&data->sensor_lock);
+>  
+>  		if (data->irq_enabled) {
+>  			disable_irq(data->irq);
+> @@ -728,6 +739,8 @@ static int imx_thermal_probe(struct platform_device *pdev)
 >  	}
+>  
+>  	/* Make sure sensor is in known good state for measurements */
+> +	mutex_init(&data->sensor_lock);
+> +	mutex_lock(&data->sensor_lock);
+>  	regmap_write(map, data->socdata->sensor_ctrl + REG_CLR,
+>  		     data->socdata->power_down_mask);
+>  	regmap_write(map, data->socdata->sensor_ctrl + REG_CLR,
+> @@ -739,6 +752,8 @@ static int imx_thermal_probe(struct platform_device *pdev)
+>  			IMX6_MISC0_REFTOP_SELBIASOFF);
+>  	regmap_write(map, data->socdata->sensor_ctrl + REG_SET,
+>  		     data->socdata->power_down_mask);
+> +	data->sensor_on = false;
+> +	mutex_unlock(&data->sensor_lock);
+>  
+>  	ret = imx_thermal_register_legacy_cooling(data);
+>  	if (ret)
+> @@ -796,10 +811,13 @@ static int imx_thermal_probe(struct platform_device *pdev)
+>  	if (data->socdata->version == TEMPMON_IMX6SX)
+>  		imx_set_panic_temp(data, data->temp_critical);
+>  
+> +	mutex_lock(&data->sensor_lock);
+>  	regmap_write(map, data->socdata->sensor_ctrl + REG_CLR,
+>  		     data->socdata->power_down_mask);
+>  	regmap_write(map, data->socdata->sensor_ctrl + REG_SET,
+>  		     data->socdata->measure_temp_mask);
+> +	data->sensor_on = true;
+> +	mutex_unlock(&data->sensor_lock);
+>  
+>  	data->irq_enabled = true;
+>  	ret = thermal_zone_device_enable(data->tz);
+> @@ -832,8 +850,12 @@ static int imx_thermal_remove(struct platform_device *pdev)
+>  	struct regmap *map = data->tempmon;
+>  
+>  	/* Disable measurements */
+> +	mutex_lock(&data->sensor_lock);
+>  	regmap_write(map, data->socdata->sensor_ctrl + REG_SET,
+>  		     data->socdata->power_down_mask);
+> +	data->sensor_on = false;
+> +	mutex_unlock(&data->sensor_lock);
+> +
+>  	if (!IS_ERR(data->thermal_clk))
+>  		clk_disable_unprepare(data->thermal_clk);
 >  
 > 
 
