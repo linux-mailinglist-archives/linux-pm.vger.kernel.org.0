@@ -2,231 +2,161 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 990434317BF
+	by mail.lfdr.de (Postfix) with ESMTP id 6CDEF4317BE
 	for <lists+linux-pm@lfdr.de>; Mon, 18 Oct 2021 13:46:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230434AbhJRLsO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S231359AbhJRLsO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Mon, 18 Oct 2021 07:48:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38478 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231349AbhJRLsO (ORCPT
+Received: from Galois.linutronix.de ([193.142.43.55]:38064 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231293AbhJRLsO (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Oct 2021 07:48:14 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040B6C06161C
-        for <linux-pm@vger.kernel.org>; Mon, 18 Oct 2021 04:46:03 -0700 (PDT)
-Date:   Mon, 18 Oct 2021 11:46:00 -0000
+Date:   Mon, 18 Oct 2021 11:46:01 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1634557561;
+        s=2020; t=1634557562;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=PYWzFa1eJSsBIbpFrxfVI6heeq89CTXsE73LvSDIGn4=;
-        b=tISS4mXmtkZOxCTkKpxNkZzddGkQICvjk/nhpo9mz5Vl0S+ZTtF3dhMbpdDiFOu/A7UgLS
-        LHWH94Az8ddbcCXTfoxgzLoUqvyqkXbZ4xQKQsd2d5dtn7N/pyii3VnaoDCgHwNfI2elDi
-        ffTTtoE6eav1J9qykBqj5eq0vN9UteM/aNc0cg12bnSyyyig8Fvo/SZ3ybG81crxe1dRdx
-        WlSftUQlFD863GfM4duLwy2qkpzr+udlXS6992RZakXZyONF/wK2BsT+Dr7Hws6bUg1PHb
-        CMpwz4Lfks/K2QLbSakm/S1YbpTnua++iI4culoGMrwVqQkHGImu3gfSziFNtw==
+        bh=G/Hdl2TU5fqUAMbLOr2aomo5EJUHcrPK7NCk7OD0GFI=;
+        b=V4Afb+YZyHpMtF11ww/cZOLFKcKFZhf7+kn35Mi2+iKDzZ5v3N/BfK0cUikOsI85DL0ERB
+        eKXCrzjbFbmtTbk5KvTlHiJog0qiBw5HfMdtZteUC7r9srKG/gwioWmcqrDZxS0kBF4L94
+        EnadwZOSGZ+LT+bdPlm9CFfGbB2hazGGdEE9rWVYw5sgaa5CNfQdwdfIBpwP8d9FrksCTO
+        vIDSm8vrmHWXZJXKqFY5md7aKxaswOSEoEij3pu87ssTwVCoF7RCyLFmCe/W2i9FWQZsaN
+        ZoFEAKn6PgYck2LQTLC2kjF7ffXLFwv1iqhU/8fyEpBBMFRVijXoHyrJUdYWNg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1634557561;
+        s=2020e; t=1634557562;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=PYWzFa1eJSsBIbpFrxfVI6heeq89CTXsE73LvSDIGn4=;
-        b=pGrVky2kNPASQ+2ia6MdLzMxVakQkxa8S6PtGbs9+MqQUFyw+jD9C5j7O5bRI1Jig0zLMA
-        3w95E4DOS9UGqPDA==
-From:   thermal-bot for Niklas =?utf-8?q?S=C3=B6derlund?= 
-        <tip-bot2@linutronix.de>
+        bh=G/Hdl2TU5fqUAMbLOr2aomo5EJUHcrPK7NCk7OD0GFI=;
+        b=Hze5wOpYcPeRrIHnZNiCwOloHvL90oUjBhOd7Qm7spbFpow75Y6jzJ3NO6yAM+ayy6CEnM
+        ZmXSeQKhg02SI/Bg==
+From:   "thermal-bot for Bjorn Andersson" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal: rcar_gen3_thermal: Store thcode and
- ptat in priv data
-Cc:     niklas.soderlund+renesas@ragnatech.se,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
+Subject: [thermal: thermal/next] thermal/drivers/qcom/spmi-adc-tm5: Add
+ support for HC variant
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20211014103816.1939782-2-niklas.soderlund+renesas@ragnatech.se>
-References: <20211014103816.1939782-2-niklas.soderlund+renesas@ragnatech.se>
+In-Reply-To: <20211005032531.2251928-3-bjorn.andersson@linaro.org>
+References: <20211005032531.2251928-3-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
-Message-ID: <163455756063.25758.1280932998112405201.tip-bot2@tip-bot2>
+Message-ID: <163455756138.25758.3764629610427523719.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     b8aaf1415a1bc3a61f870366b3f989b3bc3e2824
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.=
-git//b8aaf1415a1bc3a61f870366b3f989b3bc3e2824
-Author:        Niklas S=C3=B6derlund <niklas.soderlund+renesas@ragnatech.se>
-AuthorDate:    Thu, 14 Oct 2021 12:38:15 +02:00
+Commit-ID:     f6c83676c6097d3f21895b360a03804f810e6d54
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//f6c83676c6097d3f21895b360a03804f810e6d54
+Author:        Bjorn Andersson <bjorn.andersson@linaro.org>
+AuthorDate:    Mon, 04 Oct 2021 20:25:29 -07:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Fri, 15 Oct 2021 09:15:52 +02:00
+CommitterDate: Fri, 15 Oct 2021 09:13:55 +02:00
 
-thermal: rcar_gen3_thermal: Store thcode and ptat in priv data
+thermal/drivers/qcom/spmi-adc-tm5: Add support for HC variant
 
-Prepare for reading the THCODE and PTAT values from hardware fuses by
-storing the values used during calculations in the drivers private
-data structures.
+The variant of the ADC Thermal Monitor block found in e.g. PM8998 is
+"HC", add support for this variant to the ADC TM5 driver in order to
+support using VADC channels as thermal_zones on SDM845 et al.
 
-As the values are now stored directly in the private data structures
-there is no need to keep track of the TSC channel id as its only usage
-was to lookup the THCODE row, drop it.
-
-Signed-off-by: Niklas S=C3=B6derlund <niklas.soderlund+renesas@ragnatech.se>
-Tested-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Link: https://lore.kernel.org/r/20211014103816.1939782-2-niklas.soderlund+ren=
-esas@ragnatech.se
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Link: https://lore.kernel.org/r/20211005032531.2251928-3-bjorn.andersson@linaro.org
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/rcar_gen3_thermal.c | 51 +++++++++++++++-------------
- 1 file changed, 28 insertions(+), 23 deletions(-)
+ drivers/thermal/qcom/qcom-spmi-adc-tm5.c | 41 ++++++++++++++++++++++-
+ 1 file changed, 40 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_=
-thermal.c
-index 85228d3..7d7e6eb 100644
---- a/drivers/thermal/rcar_gen3_thermal.c
-+++ b/drivers/thermal/rcar_gen3_thermal.c
-@@ -62,15 +62,6 @@
-=20
- #define TSC_MAX_NUM	5
-=20
--/* default THCODE values if FUSEs are missing */
--static const int thcodes[TSC_MAX_NUM][3] =3D {
--	{ 3397, 2800, 2221 },
--	{ 3393, 2795, 2216 },
--	{ 3389, 2805, 2237 },
--	{ 3415, 2694, 2195 },
--	{ 3356, 2724, 2244 },
--};
--
- /* Structure for thermal temperature calculation */
- struct equation_coefs {
- 	int a1;
-@@ -84,13 +75,14 @@ struct rcar_gen3_thermal_tsc {
- 	struct thermal_zone_device *zone;
- 	struct equation_coefs coef;
- 	int tj_t;
--	unsigned int id; /* thermal channel id */
-+	int thcode[3];
+diff --git a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+index 8494cc0..824671c 100644
+--- a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
++++ b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+@@ -82,6 +82,7 @@ struct adc_tm5_data {
+ 	const u32	full_scale_code_volt;
+ 	unsigned int	*decimation;
+ 	unsigned int	*hw_settle;
++	bool		is_hc;
  };
-=20
- struct rcar_gen3_thermal_priv {
- 	struct rcar_gen3_thermal_tsc *tscs[TSC_MAX_NUM];
- 	unsigned int num_tscs;
- 	void (*thermal_init)(struct rcar_gen3_thermal_tsc *tsc);
-+	int ptat[3];
+ 
+ enum adc_tm5_cal_method {
+@@ -146,6 +147,14 @@ static const struct adc_tm5_data adc_tm5_data_pmic = {
+ 					 64000, 128000 },
  };
-=20
- static inline u32 rcar_gen3_thermal_read(struct rcar_gen3_thermal_tsc *tsc,
-@@ -133,8 +125,8 @@ static inline void rcar_gen3_thermal_write(struct rcar_ge=
-n3_thermal_tsc *tsc,
- /* no idea where these constants come from */
- #define TJ_3 -41
-=20
--static void rcar_gen3_thermal_calc_coefs(struct rcar_gen3_thermal_tsc *tsc,
--					 int *ptat, const int *thcode,
-+static void rcar_gen3_thermal_calc_coefs(struct rcar_gen3_thermal_priv *priv,
-+					 struct rcar_gen3_thermal_tsc *tsc,
- 					 int ths_tj_1)
+ 
++static const struct adc_tm5_data adc_tm_hc_data_pmic = {
++	.full_scale_code_volt = 0x70e4,
++	.decimation = (unsigned int []) { 256, 512, 1024 },
++	.hw_settle = (unsigned int []) { 0, 100, 200, 300, 400, 500, 600, 700,
++					 1000, 2000, 4000, 6000, 8000, 10000 },
++	.is_hc = true,
++};
++
+ static int adc_tm5_read(struct adc_tm5_chip *adc_tm, u16 offset, u8 *data, int len)
  {
- 	/* TODO: Find documentation and document constant calculation formula */
-@@ -143,16 +135,16 @@ static void rcar_gen3_thermal_calc_coefs(struct rcar_ge=
-n3_thermal_tsc *tsc,
- 	 * Division is not scaled in BSP and if scaled it might overflow
- 	 * the dividend (4095 * 4095 << 14 > INT_MAX) so keep it unscaled
- 	 */
--	tsc->tj_t =3D (FIXPT_INT((ptat[1] - ptat[2]) * (ths_tj_1 - TJ_3))
--		     / (ptat[0] - ptat[2])) + FIXPT_INT(TJ_3);
-+	tsc->tj_t =3D (FIXPT_INT((priv->ptat[1] - priv->ptat[2]) * (ths_tj_1 - TJ_3=
-))
-+		     / (priv->ptat[0] - priv->ptat[2])) + FIXPT_INT(TJ_3);
-=20
--	tsc->coef.a1 =3D FIXPT_DIV(FIXPT_INT(thcode[1] - thcode[2]),
-+	tsc->coef.a1 =3D FIXPT_DIV(FIXPT_INT(tsc->thcode[1] - tsc->thcode[2]),
- 				 tsc->tj_t - FIXPT_INT(TJ_3));
--	tsc->coef.b1 =3D FIXPT_INT(thcode[2]) - tsc->coef.a1 * TJ_3;
-+	tsc->coef.b1 =3D FIXPT_INT(tsc->thcode[2]) - tsc->coef.a1 * TJ_3;
-=20
--	tsc->coef.a2 =3D FIXPT_DIV(FIXPT_INT(thcode[1] - thcode[0]),
-+	tsc->coef.a2 =3D FIXPT_DIV(FIXPT_INT(tsc->thcode[1] - tsc->thcode[0]),
- 				 tsc->tj_t - FIXPT_INT(ths_tj_1));
--	tsc->coef.b2 =3D FIXPT_INT(thcode[0]) - tsc->coef.a2 * ths_tj_1;
-+	tsc->coef.b2 =3D FIXPT_INT(tsc->thcode[0]) - tsc->coef.a2 * ths_tj_1;
+ 	return regmap_bulk_read(adc_tm->regmap, adc_tm->base + offset, data, len);
+@@ -375,6 +384,29 @@ static int adc_tm5_register_tzd(struct adc_tm5_chip *adc_tm)
+ 	return 0;
  }
-=20
- static int rcar_gen3_thermal_round(int temp)
-@@ -174,7 +166,7 @@ static int rcar_gen3_thermal_get_temp(void *devdata, int =
-*temp)
- 	/* Read register and convert to mili Celsius */
- 	reg =3D rcar_gen3_thermal_read(tsc, REG_GEN3_TEMP) & CTEMP_MASK;
-=20
--	if (reg <=3D thcodes[tsc->id][1])
-+	if (reg <=3D tsc->thcode[1])
- 		val =3D FIXPT_DIV(FIXPT_INT(reg) - tsc->coef.b1,
- 				tsc->coef.a1);
- 	else
-@@ -401,9 +393,15 @@ static int rcar_gen3_thermal_probe(struct platform_devic=
-e *pdev)
- 	unsigned int i;
- 	int ret;
-=20
--	/* default values if FUSEs are missing */
-+	/* Default THCODE values in case FUSEs are not set. */
- 	/* TODO: Read values from hardware on supported platforms */
--	int ptat[3] =3D { 2631, 1509, 435 };
-+	static const int thcodes[TSC_MAX_NUM][3] =3D {
-+		{ 3397, 2800, 2221 },
-+		{ 3393, 2795, 2216 },
-+		{ 3389, 2805, 2237 },
-+		{ 3415, 2694, 2195 },
-+		{ 3356, 2724, 2244 },
-+	};
-=20
- 	priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
-@@ -413,6 +411,10 @@ static int rcar_gen3_thermal_probe(struct platform_devic=
-e *pdev)
- 	if (soc_device_match(r8a7795es1))
- 		priv->thermal_init =3D rcar_gen3_thermal_init_r8a7795es1;
-=20
-+	priv->ptat[0] =3D 2631;
-+	priv->ptat[1] =3D 1509;
-+	priv->ptat[2] =3D 435;
+ 
++static int adc_tm_hc_init(struct adc_tm5_chip *chip)
++{
++	unsigned int i;
++	u8 buf[2];
++	int ret;
 +
- 	platform_set_drvdata(pdev, priv);
-=20
- 	if (rcar_gen3_thermal_request_irqs(priv, pdev))
-@@ -439,7 +441,10 @@ static int rcar_gen3_thermal_probe(struct platform_devic=
-e *pdev)
- 			ret =3D PTR_ERR(tsc->base);
- 			goto error_unregister;
- 		}
--		tsc->id =3D i;
++	for (i = 0; i < chip->nchannels; i++) {
++		if (chip->channels[i].channel >= ADC_TM5_NUM_CHANNELS) {
++			dev_err(chip->dev, "Invalid channel %d\n", chip->channels[i].channel);
++			return -EINVAL;
++		}
++	}
 +
-+		tsc->thcode[0] =3D thcodes[i][0];
-+		tsc->thcode[1] =3D thcodes[i][1];
-+		tsc->thcode[2] =3D thcodes[i][2];
-=20
- 		priv->tscs[i] =3D tsc;
-=20
-@@ -453,7 +458,7 @@ static int rcar_gen3_thermal_probe(struct platform_device=
- *pdev)
- 		tsc->zone =3D zone;
-=20
- 		priv->thermal_init(tsc);
--		rcar_gen3_thermal_calc_coefs(tsc, ptat, thcodes[i], *ths_tj_1);
-+		rcar_gen3_thermal_calc_coefs(priv, tsc, *ths_tj_1);
-=20
- 		tsc->zone->tzp->no_hwmon =3D false;
- 		ret =3D thermal_add_hwmon_sysfs(tsc->zone);
++	buf[0] = chip->decimation;
++	buf[1] = chip->avg_samples | ADC_TM5_FAST_AVG_EN;
++
++	ret = adc_tm5_write(chip, ADC_TM5_ADC_DIG_PARAM, buf, sizeof(buf));
++	if (ret)
++		dev_err(chip->dev, "block write failed: %d\n", ret);
++
++	return ret;
++}
++
+ static int adc_tm5_init(struct adc_tm5_chip *chip)
+ {
+ 	u8 buf[4], channels_available;
+@@ -591,7 +623,10 @@ static int adc_tm5_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
+-	ret = adc_tm5_init(adc_tm);
++	if (adc_tm->data->is_hc)
++		ret = adc_tm_hc_init(adc_tm);
++	else
++		ret = adc_tm5_init(adc_tm);
+ 	if (ret) {
+ 		dev_err(dev, "adc-tm init failed\n");
+ 		return ret;
+@@ -612,6 +647,10 @@ static const struct of_device_id adc_tm5_match_table[] = {
+ 		.compatible = "qcom,spmi-adc-tm5",
+ 		.data = &adc_tm5_data_pmic,
+ 	},
++	{
++		.compatible = "qcom,spmi-adc-tm-hc",
++		.data = &adc_tm_hc_data_pmic,
++	},
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, adc_tm5_match_table);
