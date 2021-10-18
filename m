@@ -2,80 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 878034317AD
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Oct 2021 13:44:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDE634317B7
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Oct 2021 13:46:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbhJRLqm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Oct 2021 07:46:42 -0400
-Received: from jabberwock.ucw.cz ([46.255.230.98]:49690 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbhJRLql (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Oct 2021 07:46:41 -0400
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 723EF1C0B77; Mon, 18 Oct 2021 13:44:29 +0200 (CEST)
-Date:   Mon, 18 Oct 2021 13:44:29 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
-        hpa@zytor.com, linux-kernel@vger.kernel.org, rafael@kernel.org,
-        len.brown@intel.com, linux-pm@vger.kernel.org,
-        sfr@canb.auug.org.au, gor@linux.ibm.com
-Subject: Re: next-20211015: suspend to ram on x86-32 broken
-Message-ID: <20211018114429.GA13693@duo.ucw.cz>
-References: <20211017093905.GA3069@amd>
- <20211017102547.GA3818@amd>
- <20211018071349.GA16631@duo.ucw.cz>
- <20211018081300.GA18193@duo.ucw.cz>
- <YW07O8ZPLVnbGLR7@hirez.programming.kicks-ass.net>
+        id S230381AbhJRLsH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Oct 2021 07:48:07 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:37968 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229519AbhJRLsF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Oct 2021 07:48:05 -0400
+Date:   Mon, 18 Oct 2021 11:45:51 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1634557553;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vg/f8ysec9c6jW11Duuq41ejPfFTm6LXtOic6G6uyq4=;
+        b=41ch11jKHwBE85OB5iX367qOrmdeFqBjrp91WPtbbNFSD8JylbsMHBOrwzR16mU86kDdqn
+        Onf5NIMvTo8H/zGklBHsTLG/CjRdfoqOKuYWqXw9QuoZG/FCU62Vn5HGm1bu9jO9xInZpt
+        3a1BZJWjJPbqBPMqBGe1wcwhkhoZ3tYW7OCG5QeDTHK/1FLoF8wrZd3LtlgknjeKhJFR9I
+        N3IeKCUiXRoEmBnfE6rJldTQMc9MhOzO3vyFstUCznPCfyEjXK6yQsNMNrOKmucSiO1GqE
+        Y2RYRmXXzsbHrjJNCffVv4LoRuBUa6o8ShBMzljqFkbIKNGQik/8TbUDZGIyRw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1634557553;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vg/f8ysec9c6jW11Duuq41ejPfFTm6LXtOic6G6uyq4=;
+        b=rh3/Qtc85j4wZ7UKeB4/Cmb9PiA+anvCT6g7m3PWgb5XI9XbIwdhXJxCdDTHVZBdyztqeS
+        z+lL1TFIfL/fiaDQ==
+From:   "thermal-bot for Johan Jonker" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-pm@vger.kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [thermal: thermal/next] thermal/drivers/rockchip_thermal: Allow more
+ resets for tsadc node
+Cc:     Johan Jonker <jbx6244@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        rui.zhang@intel.com, amitk@kernel.org
+In-Reply-To: <20210930110517.14323-3-jbx6244@gmail.com>
+References: <20210930110517.14323-3-jbx6244@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="4Ckj6UjgE2iN1+kY"
-Content-Disposition: inline
-In-Reply-To: <YW07O8ZPLVnbGLR7@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Message-ID: <163455755179.25758.6510823420851766419.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+The following commit has been merged into the thermal/next branch of thermal:
 
---4Ckj6UjgE2iN1+kY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Commit-ID:     02832ed8ae2c8b130efea4e43d3ecac50b4b7933
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//02832ed8ae2c8b130efea4e43d3ecac50b4b7933
+Author:        Johan Jonker <jbx6244@gmail.com>
+AuthorDate:    Thu, 30 Sep 2021 13:05:16 +02:00
+Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
+CommitterDate: Sun, 17 Oct 2021 00:15:09 +02:00
 
-Hi!
+thermal/drivers/rockchip_thermal: Allow more resets for tsadc node
 
-> > > commit 8850cb663b5cda04d33f9cfbc38889d73d3c8e24 (HEAD)
-> > > Author: Peter Zijlstra <peterz@infradead.org>
-> > > Date:   Tue Sep 21 22:16:02 2021 +0200
-> > >=20
-> > >     sched: Simplify wake_up_*idle*()
-> > >=20
-> > > is first bad commit.
-> >=20
-> > And reverting that one on the top of -next indeed fixes resume on
-> > thinkpad x60.
->=20
-> Can you try with just reverting the smp.c hunk and leaving the sched
-> hunk in place? I've got a hotplug lock related splat in my inbox from
-> late last week that I didn't get around to yet, I suspect they're
-> related.
+The tsadc node in rk356x.dtsi has more resets then currently supported
+by the rockchip_thermal.c driver, so use
+devm_reset_control_array_get() to reset them all.
 
-Reverting smp.c hunk is enough to get suspend/resume to work.
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+Link: https://lore.kernel.org/r/20210930110517.14323-3-jbx6244@gmail.com
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ drivers/thermal/rockchip_thermal.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
-							Pavel
---=20
-http://www.livejournal.com/~pavelmachek
-
---4Ckj6UjgE2iN1+kY
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYW1eHQAKCRAw5/Bqldv6
-8qLUAJ44hC68Ns4ZdtainJrvmg3ns95K2gCaAuQ9wYGpx9EmdhQb4+COhERMKdU=
-=ocHJ
------END PGP SIGNATURE-----
-
---4Ckj6UjgE2iN1+kY--
+diff --git a/drivers/thermal/rockchip_thermal.c b/drivers/thermal/rockchip_thermal.c
+index 657d84b..dc3a9c2 100644
+--- a/drivers/thermal/rockchip_thermal.c
++++ b/drivers/thermal/rockchip_thermal.c
+@@ -1383,7 +1383,7 @@ static int rockchip_thermal_probe(struct platform_device *pdev)
+ 	if (IS_ERR(thermal->regs))
+ 		return PTR_ERR(thermal->regs);
+ 
+-	thermal->reset = devm_reset_control_get(&pdev->dev, "tsadc-apb");
++	thermal->reset = devm_reset_control_array_get(&pdev->dev, false, false);
+ 	if (IS_ERR(thermal->reset)) {
+ 		error = PTR_ERR(thermal->reset);
+ 		dev_err(&pdev->dev, "failed to get tsadc reset: %d\n", error);
