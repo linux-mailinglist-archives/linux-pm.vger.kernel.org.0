@@ -2,56 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2EF84317C0
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Oct 2021 13:46:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41D584317C1
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Oct 2021 13:46:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231293AbhJRLsP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Oct 2021 07:48:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38482 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231337AbhJRLsP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Oct 2021 07:48:15 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534D2C06161C
-        for <linux-pm@vger.kernel.org>; Mon, 18 Oct 2021 04:46:04 -0700 (PDT)
+        id S231419AbhJRLsQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Oct 2021 07:48:16 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:38080 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230470AbhJRLsQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Oct 2021 07:48:16 -0400
 Date:   Mon, 18 Oct 2021 11:46:02 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1634557563;
+        s=2020; t=1634557564;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=YIBcUXCwY2J9qebf0j7LSoGgvurufIj+Rvu8t9ytaR4=;
-        b=PyjRfW6XzKZQFSnyner5VpA4nwR/xTFx/xT/8LD5GC8G9QieqruT7PSh+Tar2JMnjDdj47
-        fW0A6TvT69pCHoTsfLXu1lnicJt+3ipX+i7lbJzcmxs9pwPuMpfNfSsLqNCcI7Z/c6/ddX
-        E86pNYMOJ/7oGNriC2X+x9mphl01+w0yhriKFMPYoohKbPz0dXd8NaAx3PKoobHqRL5u1Q
-        klex/cPVVhOGgCD5o9h6+rEwxaqu1C/vYK+bY6724Ig7phQ5x4ie6UKYX0sMZ/v5tsLz3n
-        9EpN0AOjSnI1/9abL3RDsp30r62ffe3W6W21ObpavnF3meXi3rvHOuSzaDhBnA==
+        bh=7UCHsTOUXaegVXYwLcZ8Xdzc+kqsYzZ1rwgGIBkjz1c=;
+        b=TF5y2hX1anV+kx2uIDpdjX6NWcyBs8+PxEqwnAPLF187vFxrVB7IRx9hjIKKsUAsoVpmJW
+        SuaH7fkqCfTrVffTbzPOOenIeybRKDfvmgM6hkWTMUH/mPMqAFT8eacVD3j3tIaAY0nWvN
+        mV1kWStHVWL+XVhVku+jxIOG9fzjIxXiSVBMhIj816uryUn7+ChbJ4CQFJxL8qeWxO9xWD
+        869tcXePktUWhCo4EYiJxbjiOegNBY6jecWQgPEfcA84BpQ2w6wNxLeaZm5eVwuIkSUDve
+        +BBmnHLxjxiUOln1XbgbPBaubfd4+gxOR4WEvyix8yivcXGI9uUTbR0W/MYJsQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1634557563;
+        s=2020e; t=1634557564;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=YIBcUXCwY2J9qebf0j7LSoGgvurufIj+Rvu8t9ytaR4=;
-        b=TzDQeys1TH99x630c7zj6VeL6KjVXkqmwOXle09VFSmAJPWcJ3Q466iEUdx+tBkRnxO8hz
-        sJlynDUBDD7xu+Bw==
-From:   "thermal-bot for Bjorn Andersson" <tip-bot2@linutronix.de>
+        bh=7UCHsTOUXaegVXYwLcZ8Xdzc+kqsYzZ1rwgGIBkjz1c=;
+        b=8CdLUxjf9MhCXj3LYVjis+ANxyfkQd1n1fo/VwbcgalxshEhlK5nmMhUzRWSHct+mC/NWk
+        kXlOKUXaZQXLOcDw==
+From:   "thermal-bot for Daniel Lezcano" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] dt-bindings: thermal: qcom: add HC variant of
- adc-thermal monitor bindings
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20211005032531.2251928-2-bjorn.andersson@linaro.org>
-References: <20211005032531.2251928-2-bjorn.andersson@linaro.org>
+Subject: [thermal: thermal/next] thermal/drivers/netlink: Add the temperature
+ when crossing a trip point
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, rui.zhang@intel.com,
+        amitk@kernel.org
+In-Reply-To: <20211001223323.1836640-1-daniel.lezcano@linaro.org>
+References: <20211001223323.1836640-1-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-Message-ID: <163455756206.25758.3202806553805517036.tip-bot2@tip-bot2>
+Message-ID: <163455756280.25758.2126616786096568156.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -62,181 +59,116 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     db03874b854368c14f21bdc41f1044cf6cda6200
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//db03874b854368c14f21bdc41f1044cf6cda6200
-Author:        Bjorn Andersson <bjorn.andersson@linaro.org>
-AuthorDate:    Mon, 04 Oct 2021 20:25:28 -07:00
+Commit-ID:     fc656fa14da7865774b4251afa88ffcf22bf02d2
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//fc656fa14da7865774b4251afa88ffcf22bf02d2
+Author:        Daniel Lezcano <daniel.lezcano@linaro.org>
+AuthorDate:    Sat, 02 Oct 2021 00:33:23 +02:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Fri, 15 Oct 2021 09:13:55 +02:00
+CommitterDate: Thu, 07 Oct 2021 15:41:38 +02:00
 
-dt-bindings: thermal: qcom: add HC variant of adc-thermal monitor bindings
+thermal/drivers/netlink: Add the temperature when crossing a trip point
 
-The HC generation of the ADC Thermal Monitor is quite similar to the 5th
-generation, but differs in valid values for a few properties. Create a
-new binding for the HC version of the hardware, rather than sprinkle
-conditionals throughout the existing binding.
+The slope of the temperature increase or decrease can be high and when
+the temperature crosses the trip point, there could be a significant
+difference between the trip temperature and the measured temperatures.
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Reviewed-by: Rob Herring <robh@kernel.org>
-Link: https://lore.kernel.org/r/20211005032531.2251928-2-bjorn.andersson@linaro.org
+That forces the userspace to read the temperature back right after
+receiving a trip violation notification.
+
+In order to be efficient, give the temperature which resulted in the
+trip violation.
+
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+Link: https://lore.kernel.org/r/20211001223323.1836640-1-daniel.lezcano@linaro.org
 ---
- Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm-hc.yaml | 149 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 149 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm-hc.yaml
+ drivers/thermal/thermal_core.c    |  6 ++++--
+ drivers/thermal/thermal_netlink.c | 11 ++++++-----
+ drivers/thermal/thermal_netlink.h |  8 ++++----
+ 3 files changed, 14 insertions(+), 11 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm-hc.yaml b/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm-hc.yaml
-new file mode 100644
-index 0000000..8273ac5
---- /dev/null
-+++ b/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm-hc.yaml
-@@ -0,0 +1,149 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/thermal/qcom-spmi-adc-tm-hc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm's SPMI PMIC ADC HC Thermal Monitoring
-+maintainers:
-+  - Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-+
-+properties:
-+  compatible:
-+    const: qcom,spmi-adc-tm-hc
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  "#thermal-sensor-cells":
-+    const: 1
-+    description:
-+      Number of cells required to uniquely identify the thermal sensors. Since
-+      we have multiple sensors this is set to 1
-+
-+  "#address-cells":
-+    const: 1
-+
-+  "#size-cells":
-+    const: 0
-+
-+  qcom,avg-samples:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: Number of samples to be used for measurement.
-+    enum:
-+      - 1
-+      - 2
-+      - 4
-+      - 8
-+      - 16
-+    default: 1
-+
-+  qcom,decimation:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: This parameter is used to decrease ADC sampling rate.
-+            Quicker measurements can be made by reducing decimation ratio.
-+    enum:
-+      - 256
-+      - 512
-+      - 1024
-+    default: 1024
-+
-+patternProperties:
-+  "^([-a-z0-9]*)@[0-7]$":
-+    type: object
-+    description:
-+      Represent one thermal sensor.
-+
-+    properties:
-+      reg:
-+        description: Specify the sensor channel. There are 8 channels in PMIC5's ADC TM
-+        minimum: 0
-+        maximum: 7
-+
-+      io-channels:
-+        description:
-+          From common IIO binding. Used to pipe PMIC ADC channel to thermal monitor
-+
-+      qcom,ratiometric:
-+        $ref: /schemas/types.yaml#/definitions/flag
-+        description:
-+          Channel calibration type.
-+          If this property is specified VADC will use the VDD reference
-+          (1.875V) and GND for channel calibration. If property is not found,
-+          channel will be calibrated with 0V and 1.25V reference channels,
-+          also known as absolute calibration.
-+
-+      qcom,hw-settle-time-us:
-+        description: Time between AMUX getting configured and the ADC starting conversion.
-+        enum: [0, 100, 200, 300, 400, 500, 600, 700, 1000, 2000, 4000, 6000, 8000, 10000]
-+
-+      qcom,pre-scaling:
-+        $ref: /schemas/types.yaml#/definitions/uint32-array
-+        description: Used for scaling the channel input signal before the
-+          signal is fed to VADC. The configuration for this node is to know the
-+          pre-determined ratio and use it for post scaling. It is a pair of
-+          integers, denoting the numerator and denominator of the fraction by
-+          which input signal is multiplied. For example, <1 3> indicates the
-+          signal is scaled down to 1/3 of its value before ADC measurement.  If
-+          property is not found default value depending on chip will be used.
-+        items:
-+          - const: 1
-+          - enum: [ 1, 3, 4, 6, 20, 8, 10 ]
-+
-+    required:
-+      - reg
-+      - io-channels
-+
-+    additionalProperties:
-+      false
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - "#address-cells"
-+  - "#size-cells"
-+  - "#thermal-sensor-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/iio/qcom,spmi-vadc.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    spmi_bus {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        pm8998_adc: adc@3100 {
-+            reg = <0x3100>;
-+            compatible = "qcom,spmi-adc-rev2";
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+            #io-channel-cells = <1>;
-+
-+            /* Other propreties are omitted */
-+            adc-chan@4c {
-+                reg = <ADC5_XO_THERM_100K_PU>;
-+            };
-+        };
-+
-+        pm8998_adc_tm: adc-tm@3400 {
-+            compatible = "qcom,spmi-adc-tm-hc";
-+            reg = <0x3400>;
-+            interrupts = <0x2 0x34 0x0 IRQ_TYPE_EDGE_RISING>;
-+            #thermal-sensor-cells = <1>;
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            thermistor@1 {
-+                reg = <1>;
-+                io-channels = <&pm8998_adc ADC5_XO_THERM_100K_PU>;
-+                qcom,ratiometric;
-+                qcom,hw-settle-time-us = <200>;
-+            };
-+        };
-+    };
-+...
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 51374f4..9e243d9 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -375,10 +375,12 @@ static void handle_thermal_trip(struct thermal_zone_device *tz, int trip)
+ 	if (tz->last_temperature != THERMAL_TEMP_INVALID) {
+ 		if (tz->last_temperature < trip_temp &&
+ 		    tz->temperature >= trip_temp)
+-			thermal_notify_tz_trip_up(tz->id, trip);
++			thermal_notify_tz_trip_up(tz->id, trip,
++						  tz->temperature);
+ 		if (tz->last_temperature >= trip_temp &&
+ 		    tz->temperature < (trip_temp - hyst))
+-			thermal_notify_tz_trip_down(tz->id, trip);
++			thermal_notify_tz_trip_down(tz->id, trip,
++						    tz->temperature);
+ 	}
+ 
+ 	if (type == THERMAL_TRIP_CRITICAL || type == THERMAL_TRIP_HOT)
+diff --git a/drivers/thermal/thermal_netlink.c b/drivers/thermal/thermal_netlink.c
+index 1234dbe..a16dd4d 100644
+--- a/drivers/thermal/thermal_netlink.c
++++ b/drivers/thermal/thermal_netlink.c
+@@ -121,7 +121,8 @@ static int thermal_genl_event_tz(struct param *p)
+ static int thermal_genl_event_tz_trip_up(struct param *p)
+ {
+ 	if (nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_ID, p->tz_id) ||
+-	    nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_TRIP_ID, p->trip_id))
++	    nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_TRIP_ID, p->trip_id) ||
++	    nla_put_u32(p->msg, THERMAL_GENL_ATTR_TZ_TEMP, p->temp))
+ 		return -EMSGSIZE;
+ 
+ 	return 0;
+@@ -285,16 +286,16 @@ int thermal_notify_tz_disable(int tz_id)
+ 	return thermal_genl_send_event(THERMAL_GENL_EVENT_TZ_DISABLE, &p);
+ }
+ 
+-int thermal_notify_tz_trip_down(int tz_id, int trip_id)
++int thermal_notify_tz_trip_down(int tz_id, int trip_id, int temp)
+ {
+-	struct param p = { .tz_id = tz_id, .trip_id = trip_id };
++	struct param p = { .tz_id = tz_id, .trip_id = trip_id, .temp = temp };
+ 
+ 	return thermal_genl_send_event(THERMAL_GENL_EVENT_TZ_TRIP_DOWN, &p);
+ }
+ 
+-int thermal_notify_tz_trip_up(int tz_id, int trip_id)
++int thermal_notify_tz_trip_up(int tz_id, int trip_id, int temp)
+ {
+-	struct param p = { .tz_id = tz_id, .trip_id = trip_id };
++	struct param p = { .tz_id = tz_id, .trip_id = trip_id, .temp = temp };
+ 
+ 	return thermal_genl_send_event(THERMAL_GENL_EVENT_TZ_TRIP_UP, &p);
+ }
+diff --git a/drivers/thermal/thermal_netlink.h b/drivers/thermal/thermal_netlink.h
+index 828d1dd..e554f76 100644
+--- a/drivers/thermal/thermal_netlink.h
++++ b/drivers/thermal/thermal_netlink.h
+@@ -11,8 +11,8 @@ int thermal_notify_tz_create(int tz_id, const char *name);
+ int thermal_notify_tz_delete(int tz_id);
+ int thermal_notify_tz_enable(int tz_id);
+ int thermal_notify_tz_disable(int tz_id);
+-int thermal_notify_tz_trip_down(int tz_id, int id);
+-int thermal_notify_tz_trip_up(int tz_id, int id);
++int thermal_notify_tz_trip_down(int tz_id, int id, int temp);
++int thermal_notify_tz_trip_up(int tz_id, int id, int temp);
+ int thermal_notify_tz_trip_delete(int tz_id, int id);
+ int thermal_notify_tz_trip_add(int tz_id, int id, int type,
+ 			       int temp, int hyst);
+@@ -49,12 +49,12 @@ static inline int thermal_notify_tz_disable(int tz_id)
+ 	return 0;
+ }
+ 
+-static inline int thermal_notify_tz_trip_down(int tz_id, int id)
++static inline int thermal_notify_tz_trip_down(int tz_id, int id, int temp)
+ {
+ 	return 0;
+ }
+ 
+-static inline int thermal_notify_tz_trip_up(int tz_id, int id)
++static inline int thermal_notify_tz_trip_up(int tz_id, int id, int temp)
+ {
+ 	return 0;
+ }
