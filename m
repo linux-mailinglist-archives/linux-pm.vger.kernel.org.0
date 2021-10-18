@@ -2,119 +2,279 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64C3443166C
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Oct 2021 12:47:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B00B24316FF
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Oct 2021 13:11:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229473AbhJRKuJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Oct 2021 06:50:09 -0400
-Received: from mx1.uni-regensburg.de ([194.94.157.146]:57750 "EHLO
-        mx1.uni-regensburg.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbhJRKuI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Oct 2021 06:50:08 -0400
-X-Greylist: delayed 419 seconds by postgrey-1.27 at vger.kernel.org; Mon, 18 Oct 2021 06:50:07 EDT
-Received: from mx1.uni-regensburg.de (localhost [127.0.0.1])
-        by localhost (Postfix) with SMTP id 9070D600004E;
-        Mon, 18 Oct 2021 12:40:51 +0200 (CEST)
-Received: from smtp1.uni-regensburg.de (smtp1.uni-regensburg.de [194.94.157.129])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "smtp.uni-regensburg.de", Issuer "DFN-Verein Global Issuing CA" (not verified))
-        by mx1.uni-regensburg.de (Postfix) with ESMTPS id 71B1D600004D;
-        Mon, 18 Oct 2021 12:40:51 +0200 (CEST)
-From:   "Andreas K. Huettel" <andreas.huettel@ur.de>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: Re: [EXT] [PATCH v1 2/2][RFT] ACPI: PM: Check states of power resources during initialization
-Date:   Mon, 18 Oct 2021 12:40:47 +0200
-Message-ID: <5521425.DvuYhMxLoT@kailua>
-Organization: Universitaet Regensburg
-In-Reply-To: <8835496.CDJkKcVGEf@kreacher>
-References: <21226252.EfDdHjke4D@kreacher> <8835496.CDJkKcVGEf@kreacher>
+        id S231206AbhJRLN4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Oct 2021 07:13:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58712 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231171AbhJRLN4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Oct 2021 07:13:56 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF46C061714
+        for <linux-pm@vger.kernel.org>; Mon, 18 Oct 2021 04:11:44 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id v127so8383520wme.5
+        for <linux-pm@vger.kernel.org>; Mon, 18 Oct 2021 04:11:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=6LMkvC8rUvNEYJAWr0jeALL8Sd8+8yvSqunhnCPBHGc=;
+        b=agLE4W3w9cBeJBQob7LTEJI0PJSKdgKYVN93zezYOtv4ulZm+YthWc0jxZPudwKmgd
+         HhaFpLc9lDZsrBGTVJc4eu8c/s+QdoXAuQxp+kw+nqO45qaxVFenNXohqiAsEhfBlFt9
+         2Ye/RN9sOYSNG4KoI23TBDWjsxofIUvVlcUmwPNe1TGzon+NGNZyoeR4uE+116F2BgHZ
+         zD7d1hrK2UIVWvb3OFsHaTruZdT5j4ctTgC9hhxxfMh1bo9eRtThWV/ycxJukrvwwHIS
+         Mk4qu6YJ7wRV8lITDrCVJZ1VTXZ0hDCfqpweVsQJsn8/q514hViqWYSG/06rofS6mW1E
+         fcVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=6LMkvC8rUvNEYJAWr0jeALL8Sd8+8yvSqunhnCPBHGc=;
+        b=DV5ZeWVdSzoVk1ZSpkYf64/e8xzz3LeoR90Tn5zR1sCPK3t8puIyXUaULyVf3b5Csg
+         Zg1PzqhwUk+QisXe5kP7GQQUJd4wd6jjDt0+1xq8EvmaMozkwNT3EFBY8WvWUAY5sZeK
+         B3sU5AyVFiPVQVn11Nl5+Zjl9OuwrtY4hWb9Y4cfsxC1BUv70DgkwPejdxwStRqR5P2g
+         kUyNjcw3nVGeE/XmXURXgZ4J8K1lBO02O09DCtljgki4eomhDf7rUWHyEhiCl4h5DjlT
+         b27Ydi6jN/h1ZsAPqgcxu6bYu/L+FDfLTWkIlnMJWu/r8UDrMhXcUQpyCNXILwphrhDK
+         Jc4Q==
+X-Gm-Message-State: AOAM533I86q2ycbDznGXh5oJnI+9VAdHzmPfkxc0tMWUmgN1kc52Q06n
+        GVBFPO7GSXWgP9ZxEOZFW0jQPg==
+X-Google-Smtp-Source: ABdhPJwpFob4ROiW1u8XbTUkLDwo1BxmCCvDx3FUCb1tdEaSznuACTaOj4Hp1+i/EBHVaPsug5pCWg==
+X-Received: by 2002:a1c:7f0c:: with SMTP id a12mr30218368wmd.14.1634555502995;
+        Mon, 18 Oct 2021 04:11:42 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:b2b3:1133:5bdb:b2f2? ([2a01:e34:ed2f:f020:b2b3:1133:5bdb:b2f2])
+        by smtp.googlemail.com with ESMTPSA id b19sm18906146wmj.9.2021.10.18.04.11.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Oct 2021 04:11:42 -0700 (PDT)
+Subject: Re: [PATCH] thermal: imx: Fix temperature measurements on i.MX6 after
+ alarm
+To:     Petr Benes <petrben@gmail.com>
+Cc:     =?UTF-8?B?TWljaGFsIFZva8OhxI0=?= <michal.vokac@ysoft.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        linux-pm@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?Petr_Bene=c5=a1?= <petr.benes@ysoft.com>,
+        stable@vger.kernel.org
+References: <20211008081137.1948848-1-michal.vokac@ysoft.com>
+ <df545947-2f5b-a355-859d-7f61eab14dcb@linaro.org>
+ <CAPwXO5Z0OkmXuy=e6JDjFwqJMqOC4FDjs3uiwdZcJSxy5SPtVw@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <7a02cb0a-3360-4512-2425-8096d153ae48@linaro.org>
+Date:   Mon, 18 Oct 2021 13:11:40 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart5773348.lOV4Wx5bFT"; micalg="pgp-sha512"; protocol="application/pgp-signature"
+In-Reply-To: <CAPwXO5Z0OkmXuy=e6JDjFwqJMqOC4FDjs3uiwdZcJSxy5SPtVw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---nextPart5773348.lOV4Wx5bFT
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
-From: "Andreas K. Huettel" <andreas.huettel@ur.de>
-To: Linux ACPI <linux-acpi@vger.kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: LKML <linux-kernel@vger.kernel.org>, Linux PCI <linux-pci@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: Re: [EXT] [PATCH v1 2/2][RFT] ACPI: PM: Check states of power resources during initialization
-Date: Mon, 18 Oct 2021 12:40:47 +0200
-Message-ID: <5521425.DvuYhMxLoT@kailua>
-Organization: Universitaet Regensburg
-In-Reply-To: <8835496.CDJkKcVGEf@kreacher>
-References: <21226252.EfDdHjke4D@kreacher> <8835496.CDJkKcVGEf@kreacher>
 
-Am Freitag, 15. Oktober 2021, 19:14:10 CEST schrieb Rafael J. Wysocki:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> To avoid situations in which the actual states of certain ACPI power
-> resources are not known just because they have never been referenced
-> by any device configuration objects, check the initial states of all
-> power resources as soon as they are found in the ACPI namespace (and
-> fall back to turning them on if the state check fails).
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
-> 
-> Andreas, please test this patch (on top of the [1/2]) and let me know
-> if it works for you.
-> 
+I'm not seeing any thermal zone definitions in the DT for imx6 and imx7.
 
-I see no negative impact (actually, no impact at all) of the second
-additional patch. The network card is again working fine now.
+Am I missing something ?
 
-Boot logs (unpatched, with one patch, with both patches) at
-https://dev.gentoo.org/~dilfridge/igb/  (the 5.14.12* files).
 
-Best,
-Andreas
+On 18/10/2021 10:36, Petr Benes wrote:
+> On Sun, 17 Oct 2021 at 00:23, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>>
+>> On 08/10/2021 10:11, Michal Vokáč wrote:
+>>> From: Petr Beneš <petr.benes@ysoft.com>
+>>>
+>>> SoC temperature readout may not work after thermal alarm fires interrupt.
+>>> This harms userspace as well as CPU cooling device.
+>>>
+>>> Two issues with the logic involved. First, there is no protection against
+>>> concurent measurements, hence one can switch the sensor off while
+>>> the other one tries to read temperature later. Second, the interrupt path
+>>> usually fails. At the end the sensor is powered off and thermal IRQ is
+>>> disabled. One has to reenable the thermal zone by the sysfs interface.
+>>>
+>>> Most of troubles come from commit d92ed2c9d3ff ("thermal: imx: Use
+>>> driver's local data to decide whether to run a measurement")
+>>
+>> Are these troubles observed and reproduced ? Or is it your understanding
+>> from reading the code ?
+> 
+> Yes, it is observed. We are using:
+> CONFIG_CPU_THERMAL=y
+> CONFIG_CPU_FREQ_THERMAL=y
+> If the SoC temperature oscillates  around the passive trip point, it is not
+> possible to read out /sys/class/thermal/thermal_zone0/temp after
+> a while (minutes). For reproduction either heat the device up a bit or set
+> the passive trip point lower.
+> 
+>>
+>> get_temp() and tz enable/disable are protected against races in the core
+>> code via the tz mutex
+> 
+> imx_get_temp() itself doesn't handle concurrent invocations properly, despite
+> it may seem it does. The sensor is switched on/off without control.
+> That is a flaw in imx_get_temp().
+> No evidence the core locking is wrong.
+> 
+> data->irq_enabled is set to false in imx_thermal_alarm_irq() each time
+> the interrupt arrives. imx_get_temp() does wrong decision based
+> on the value later.
+> 
+>>
+>>> It uses data->irq_enabled as the "local data". Indeed, its value is
+>>> related to the state of the sensor loosely under normal operation and,
+>>> frankly, gets unleashed when the thermal interrupt arrives.
+>>>
+>>> Current patch adds the "local data" (new member sensor_on in
+>>> imx_thermal_data) and sets its value in controlled manner.>
+>>> Fixes: d92ed2c9d3ff ("thermal: imx: Use driver's local data to decide whether to run a measurement")
+>>> Cc: petrben@gmail.com
+>>> Cc: stable@vger.kernel.org
+>>> Signed-off-by: Petr Beneš <petr.benes@ysoft.com>
+>>> Signed-off-by: Michal Vokáč <michal.vokac@ysoft.com>
+>>> ---
+>>>  drivers/thermal/imx_thermal.c | 30 ++++++++++++++++++++++++++----
+>>>  1 file changed, 26 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
+>>> index 2c7473d86a59..df5658e21828 100644
+>>> --- a/drivers/thermal/imx_thermal.c
+>>> +++ b/drivers/thermal/imx_thermal.c
+>>> @@ -209,6 +209,8 @@ struct imx_thermal_data {
+>>>       struct clk *thermal_clk;
+>>>       const struct thermal_soc_data *socdata;
+>>>       const char *temp_grade;
+>>> +     struct mutex sensor_lock;
+>>> +     bool sensor_on;
+>>>  };
+>>>
+>>>  static void imx_set_panic_temp(struct imx_thermal_data *data,
+>>> @@ -252,11 +254,12 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
+>>>       const struct thermal_soc_data *soc_data = data->socdata;
+>>>       struct regmap *map = data->tempmon;
+>>>       unsigned int n_meas;
+>>> -     bool wait, run_measurement;
+>>> +     bool wait;
+>>>       u32 val;
+>>>
+>>> -     run_measurement = !data->irq_enabled;
+>>> -     if (!run_measurement) {
+>>> +     mutex_lock(&data->sensor_lock);
+>>> +
+>>> +     if (data->sensor_on) {
+>>>               /* Check if a measurement is currently in progress */
+>>>               regmap_read(map, soc_data->temp_data, &val);
+>>>               wait = !(val & soc_data->temp_valid_mask);
+>>> @@ -283,13 +286,15 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
+>>>
+>>>       regmap_read(map, soc_data->temp_data, &val);
+>>>
+>>> -     if (run_measurement) {
+>>> +     if (!data->sensor_on) {
+>>>               regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
+>>>                            soc_data->measure_temp_mask);
+>>>               regmap_write(map, soc_data->sensor_ctrl + REG_SET,
+>>>                            soc_data->power_down_mask);
+>>>       }
+>>>
+>>> +     mutex_unlock(&data->sensor_lock);
+>>> +
+>>>       if ((val & soc_data->temp_valid_mask) == 0) {
+>>>               dev_dbg(&tz->device, "temp measurement never finished\n");
+>>>               return -EAGAIN;
+>>> @@ -339,20 +344,26 @@ static int imx_change_mode(struct thermal_zone_device *tz,
+>>>       const struct thermal_soc_data *soc_data = data->socdata;
+>>>
+>>>       if (mode == THERMAL_DEVICE_ENABLED) {
+>>> +             mutex_lock(&data->sensor_lock);
+>>>               regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
+>>>                            soc_data->power_down_mask);
+>>>               regmap_write(map, soc_data->sensor_ctrl + REG_SET,
+>>>                            soc_data->measure_temp_mask);
+>>> +             data->sensor_on = true;
+>>> +             mutex_unlock(&data->sensor_lock);
+>>>
+>>>               if (!data->irq_enabled) {
+>>>                       data->irq_enabled = true;
+>>>                       enable_irq(data->irq);
+>>>               }
+>>>       } else {
+>>> +             mutex_lock(&data->sensor_lock);
+>>>               regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
+>>>                            soc_data->measure_temp_mask);
+>>>               regmap_write(map, soc_data->sensor_ctrl + REG_SET,
+>>>                            soc_data->power_down_mask);
+>>> +             data->sensor_on = false;
+>>> +             mutex_unlock(&data->sensor_lock);
+>>>
+>>>               if (data->irq_enabled) {
+>>>                       disable_irq(data->irq);
+>>> @@ -728,6 +739,8 @@ static int imx_thermal_probe(struct platform_device *pdev)
+>>>       }
+>>>
+>>>       /* Make sure sensor is in known good state for measurements */
+>>> +     mutex_init(&data->sensor_lock);
+>>> +     mutex_lock(&data->sensor_lock);
+>>>       regmap_write(map, data->socdata->sensor_ctrl + REG_CLR,
+>>>                    data->socdata->power_down_mask);
+>>>       regmap_write(map, data->socdata->sensor_ctrl + REG_CLR,
+>>> @@ -739,6 +752,8 @@ static int imx_thermal_probe(struct platform_device *pdev)
+>>>                       IMX6_MISC0_REFTOP_SELBIASOFF);
+>>>       regmap_write(map, data->socdata->sensor_ctrl + REG_SET,
+>>>                    data->socdata->power_down_mask);
+>>> +     data->sensor_on = false;
+>>> +     mutex_unlock(&data->sensor_lock);
+>>>
+>>>       ret = imx_thermal_register_legacy_cooling(data);
+>>>       if (ret)
+>>> @@ -796,10 +811,13 @@ static int imx_thermal_probe(struct platform_device *pdev)
+>>>       if (data->socdata->version == TEMPMON_IMX6SX)
+>>>               imx_set_panic_temp(data, data->temp_critical);
+>>>
+>>> +     mutex_lock(&data->sensor_lock);
+>>>       regmap_write(map, data->socdata->sensor_ctrl + REG_CLR,
+>>>                    data->socdata->power_down_mask);
+>>>       regmap_write(map, data->socdata->sensor_ctrl + REG_SET,
+>>>                    data->socdata->measure_temp_mask);
+>>> +     data->sensor_on = true;
+>>> +     mutex_unlock(&data->sensor_lock);
+>>>
+>>>       data->irq_enabled = true;
+>>>       ret = thermal_zone_device_enable(data->tz);
+>>> @@ -832,8 +850,12 @@ static int imx_thermal_remove(struct platform_device *pdev)
+>>>       struct regmap *map = data->tempmon;
+>>>
+>>>       /* Disable measurements */
+>>> +     mutex_lock(&data->sensor_lock);
+>>>       regmap_write(map, data->socdata->sensor_ctrl + REG_SET,
+>>>                    data->socdata->power_down_mask);
+>>> +     data->sensor_on = false;
+>>> +     mutex_unlock(&data->sensor_lock);
+>>> +
+>>>       if (!IS_ERR(data->thermal_clk))
+>>>               clk_disable_unprepare(data->thermal_clk);
+>>>
+>>>
+>>
+>>
+>> --
+>> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+>>
+>> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+>> <http://twitter.com/#!/linaroorg> Twitter |
+>> <http://www.linaro.org/linaro-blog/> Blog
+
 
 -- 
-PD Dr. Andreas K. Huettel
-Institute for Experimental and Applied Physics
-University of Regensburg
-93040 Regensburg
-Germany
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-tel. +49 151 241 67748 (mobile)
-tel. +49 941 943 1618 (office)
-e-mail andreas.huettel@ur.de
-http://www.akhuettel.de/
-http://www.physik.uni-r.de/forschung/huettel/
---nextPart5773348.lOV4Wx5bFT
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQKTBAABCgB9FiEE6W4INB9YeKX6Qpi1TEn3nlTQogYFAmFtTy9fFIAAAAAALgAo
-aXNzdWVyLWZwckBub3RhdGlvbnMub3BlbnBncC5maWZ0aGhvcnNlbWFuLm5ldEU5
-NkUwODM0MUY1ODc4QTVGQTQyOThCNTRDNDlGNzlFNTREMEEyMDYACgkQTEn3nlTQ
-ogYfKw//S5bt6q9nYvhToeuPtf23hVN0zT0fxyKHkKyaXRBSm7dBNbOd5ohEMNc7
-FQ7c2cOSgimJcQDBGzWn63X6T5XhzV8A7O9ITfq+UUfWxn7Xi0v4gCI3jubWjkep
-eFc2McLw67yngcnaDPFKaS0nejuWnoiRHA/4jUr36aoIDaGTYPq7IIxnEuhIGuzK
-Fu4m5NPOKcbhPtT5Bzut+fklzllD/ClKaNVZHToQmQkdkzaltTkFCwcGQTu05Q9j
-s4oxtPfwISCugoMQOJOVcJfqD2JRhw7yt2/c871G0ALhd3Yr6ZQMCZmw5IaP+p4E
-6NQL/9qU9a68Qrq+/XZ+AwGkIVKxBQuYMoazb5yw2rxhqBm9PDqriFZKmmxNZGZw
-OvmldGYFUc+5xMZ5OL1pTikS5OcIv6hHLsT5rUJJ+lN7izaQuWngrWHcdB/P5Bds
-RAf5wV3bWCKGBzfDF6c9IA3YCmUGlumfx0Sr4TigYDBOlpFL7H0aEsQ4PLsCB8WL
-drkAI5SZ3PUJf6ZyTfPP3SLEkKvgJFfn/0ujOzKlDZqjU9iQYAtho45BAOWiWC43
-g81MZrFbOTtw5BFZbv79cZj8abDKcdcZP6cKyIzbEXH0z/qOH2wmE9Yp9iFRJBjG
-HFRyCoP8iKL1m1wWk63uFlnP4FpEFkgwAghyCRRynuVxd5r8CBg=
-=O5sO
------END PGP SIGNATURE-----
-
---nextPart5773348.lOV4Wx5bFT--
-
-
-
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
