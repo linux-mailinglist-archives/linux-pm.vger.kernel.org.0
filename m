@@ -2,15 +2,15 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5849D4317BD
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Oct 2021 13:46:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4215E4317BC
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Oct 2021 13:46:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230478AbhJRLsN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Oct 2021 07:48:13 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:38036 "EHLO
+        id S231180AbhJRLsM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Oct 2021 07:48:12 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:38022 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230434AbhJRLsM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Oct 2021 07:48:12 -0400
+        with ESMTP id S230478AbhJRLsL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Oct 2021 07:48:11 -0400
 Date:   Mon, 18 Oct 2021 11:45:59 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1634557560;
@@ -19,12 +19,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=OEcHhBvmDNuGhKbTLy0VsKziab7I8Phy3NVKDrg2Obw=;
-        b=eqx82REawh7bDV6xX2PckEMWEG8nVGKNPqqQ79B2IroMzr+Fiaf9HYUHHmOMBSppYAQZ8E
-        Yahz5wI7r7svH2sUpevS1/XQ5p0OrSUCdpgc9pQcd7UKQ7MH2kcww5Lj1LKxTEPQ+VJr5j
-        KoHJ9eCJVLfLDAcPfdzywa0rWH3Lp2x+UWQp+h+GVk3LRwZda07yYqYjdfrCST+SVhCX3l
-        HnRlsj2MYtvc4IrDcs93U4HFtg1nAQnKqP4BlBiaHUjUnOkMT44UKdxU1j9b+bYu23JH7Y
-        BdpOqhQJfVyB2anSqgWoxxeH8RD/268HygGyEMHmbaY4EwTDaIM32LhzDae+zA==
+        bh=FhJVu8ebLMnM3z5GSHjOaIOjmCWYB4dLyxoav1f7dMM=;
+        b=cl1ZUkG7uPiu/dNCdJzXWpiUrIbjKmZcyRdjAF45A6hrG2X4BAynVpReLutPeDm/3vr2Ft
+        eRcfuuOTHHrRDNF4inK9J0scWlosF6sQD04yCZ2iJlDNRBsBl+pmXEYervwnMnrtu/MyTa
+        pMuv1dcqnccAqN8yyA7I0DObsoEhaoLLoNNp6/dC2EE88nrevegGH3qA6DqZP6RuzFfwmF
+        G6jC+ZGCjNKELx2mV4vFGGFkoE5c/tPRXcLjKH/IQIAjBSFTZbO/e9uq+9oJ8GRraez35s
+        2NwB6b+NqKKqxleA5ANIC7Tvv7WqPZKYpgGoD2do8LTm0rakogUDvUwxYtQKNw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1634557560;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -32,215 +32,93 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=OEcHhBvmDNuGhKbTLy0VsKziab7I8Phy3NVKDrg2Obw=;
-        b=5VXWSFFw9IKqIibvRTnF6MuFjxUprBB1A2v5A+tScvRfigikVHhaCJf1WgvUbCVND7aBVz
-        6GZzuu/I1sNJYKCg==
-From:   thermal-bot for Niklas =?utf-8?q?S=C3=B6derlund?= 
-        <tip-bot2@linutronix.de>
+        bh=FhJVu8ebLMnM3z5GSHjOaIOjmCWYB4dLyxoav1f7dMM=;
+        b=avgTJpK/4mYwJctfufRAOOUnOx2dE7qK7MYci8hEeydZVIj+GVM6YqJjSPoU8Ss901vThB
+        uht87tTeEvvzriCQ==
+From:   "thermal-bot for Yuanzheng Song" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal: rcar_gen3_thermal: Read calibration
- from hardware
-Cc:     niklas.soderlund+renesas@ragnatech.se,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
+Subject: [thermal: thermal/next] thermal/core: Fix null pointer dereference in
+ thermal_release()
+Cc:     Yuanzheng Song <songyuanzheng@huawei.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20211014103816.1939782-3-niklas.soderlund+renesas@ragnatech.se>
-References: <20211014103816.1939782-3-niklas.soderlund+renesas@ragnatech.se>
+In-Reply-To: <20211015083230.67658-1-songyuanzheng@huawei.com>
+References: <20211015083230.67658-1-songyuanzheng@huawei.com>
 MIME-Version: 1.0
-Message-ID: <163455755992.25758.13048367263186281980.tip-bot2@tip-bot2>
+Message-ID: <163455755909.25758.11632039922962462144.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     c3131bd5586d3e8b67dc69516e1734a7a03e19d7
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.=
-git//c3131bd5586d3e8b67dc69516e1734a7a03e19d7
-Author:        Niklas S=C3=B6derlund <niklas.soderlund+renesas@ragnatech.se>
-AuthorDate:    Thu, 14 Oct 2021 12:38:16 +02:00
+Commit-ID:     1dd7128b839f631b31a9e9dce3aaf639bef74e9d
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//1dd7128b839f631b31a9e9dce3aaf639bef74e9d
+Author:        Yuanzheng Song <songyuanzheng@huawei.com>
+AuthorDate:    Fri, 15 Oct 2021 08:32:30 
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Fri, 15 Oct 2021 09:15:52 +02:00
+CommitterDate: Fri, 15 Oct 2021 13:58:36 +02:00
 
-thermal: rcar_gen3_thermal: Read calibration from hardware
+thermal/core: Fix null pointer dereference in thermal_release()
 
-In production hardware the calibration values used to convert register
-values to temperatures can be read from hardware. While pre-production
-hardware still depends on pseudo values hard-coded in the driver.
+If both dev_set_name() and device_register() failed, then null pointer
+dereference occurs in thermal_release() which will use strncmp() to
+compare the name.
 
-Add support for reading out calibration values from hardware if it's
-fused. The presence of fused calibration is indicated in the THSCP
-register.
+So fix it by adding dev_set_name() return value check.
 
-Signed-off-by: Niklas S=C3=B6derlund <niklas.soderlund+renesas@ragnatech.se>
-Tested-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Link: https://lore.kernel.org/r/20211014103816.1939782-3-niklas.soderlund+ren=
-esas@ragnatech.se
+Signed-off-by: Yuanzheng Song <songyuanzheng@huawei.com>
+Link: https://lore.kernel.org/r/20211015083230.67658-1-songyuanzheng@huawei.com
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/rcar_gen3_thermal.c | 94 ++++++++++++++++++++++------
- 1 file changed, 74 insertions(+), 20 deletions(-)
+ drivers/thermal/thermal_core.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_=
-thermal.c
-index 7d7e6eb..43eb25b 100644
---- a/drivers/thermal/rcar_gen3_thermal.c
-+++ b/drivers/thermal/rcar_gen3_thermal.c
-@@ -34,6 +34,10 @@
- #define REG_GEN3_THCODE1	0x50
- #define REG_GEN3_THCODE2	0x54
- #define REG_GEN3_THCODE3	0x58
-+#define REG_GEN3_PTAT1		0x5c
-+#define REG_GEN3_PTAT2		0x60
-+#define REG_GEN3_PTAT3		0x64
-+#define REG_GEN3_THSCP		0x68
-=20
- /* IRQ{STR,MSK,EN} bits */
- #define IRQ_TEMP1		BIT(0)
-@@ -55,6 +59,9 @@
- #define THCTR_PONM	BIT(6)
- #define THCTR_THSST	BIT(0)
-=20
-+/* THSCP bits */
-+#define THSCP_COR_PARA_VLD	(BIT(15) | BIT(14))
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 9e243d9..6904b97 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -904,6 +904,10 @@ __thermal_cooling_device_register(struct device_node *np,
+ 		goto out_kfree_cdev;
+ 	cdev->id = ret;
+ 
++	ret = dev_set_name(&cdev->device, "cooling_device%d", cdev->id);
++	if (ret)
++		goto out_ida_remove;
 +
- #define CTEMP_MASK	0xFFF
-=20
- #define MCELSIUS(temp)	((temp) * 1000)
-@@ -245,6 +252,64 @@ static const struct soc_device_attribute r8a7795es1[] =
-=3D {
- 	{ /* sentinel */ }
- };
-=20
-+static bool rcar_gen3_thermal_read_fuses(struct rcar_gen3_thermal_priv *priv)
-+{
-+	unsigned int i;
-+	u32 thscp;
+ 	cdev->type = kstrdup(type ? type : "", GFP_KERNEL);
+ 	if (!cdev->type) {
+ 		ret = -ENOMEM;
+@@ -918,7 +922,6 @@ __thermal_cooling_device_register(struct device_node *np,
+ 	cdev->device.class = &thermal_class;
+ 	cdev->devdata = devdata;
+ 	thermal_cooling_device_setup_sysfs(cdev);
+-	dev_set_name(&cdev->device, "cooling_device%d", cdev->id);
+ 	ret = device_register(&cdev->device);
+ 	if (ret)
+ 		goto out_kfree_type;
+@@ -1229,6 +1232,10 @@ thermal_zone_device_register(const char *type, int trips, int mask,
+ 	tz->id = id;
+ 	strlcpy(tz->type, type, sizeof(tz->type));
+ 
++	result = dev_set_name(&tz->device, "thermal_zone%d", tz->id);
++	if (result)
++		goto remove_id;
 +
-+	/* If fuses are not set, fallback to pseudo values. */
-+	thscp =3D rcar_gen3_thermal_read(priv->tscs[0], REG_GEN3_THSCP);
-+	if ((thscp & THSCP_COR_PARA_VLD) !=3D THSCP_COR_PARA_VLD) {
-+		/* Default THCODE values in case FUSEs are not set. */
-+		static const int thcodes[TSC_MAX_NUM][3] =3D {
-+			{ 3397, 2800, 2221 },
-+			{ 3393, 2795, 2216 },
-+			{ 3389, 2805, 2237 },
-+			{ 3415, 2694, 2195 },
-+			{ 3356, 2724, 2244 },
-+		};
-+
-+		priv->ptat[0] =3D 2631;
-+		priv->ptat[1] =3D 1509;
-+		priv->ptat[2] =3D 435;
-+
-+		for (i =3D 0; i < priv->num_tscs; i++) {
-+			struct rcar_gen3_thermal_tsc *tsc =3D priv->tscs[i];
-+
-+			tsc->thcode[0] =3D thcodes[i][0];
-+			tsc->thcode[1] =3D thcodes[i][1];
-+			tsc->thcode[2] =3D thcodes[i][2];
-+		}
-+
-+		return false;
-+	}
-+
-+	/*
-+	 * Set the pseudo calibration points with fused values.
-+	 * PTAT is shared between all TSCs but only fused for the first
-+	 * TSC while THCODEs are fused for each TSC.
-+	 */
-+	priv->ptat[0] =3D rcar_gen3_thermal_read(priv->tscs[0], REG_GEN3_PTAT1) &
-+		GEN3_FUSE_MASK;
-+	priv->ptat[1] =3D rcar_gen3_thermal_read(priv->tscs[0], REG_GEN3_PTAT2) &
-+		GEN3_FUSE_MASK;
-+	priv->ptat[2] =3D rcar_gen3_thermal_read(priv->tscs[0], REG_GEN3_PTAT3) &
-+		GEN3_FUSE_MASK;
-+
-+	for (i =3D 0; i < priv->num_tscs; i++) {
-+		struct rcar_gen3_thermal_tsc *tsc =3D priv->tscs[i];
-+
-+		tsc->thcode[0] =3D rcar_gen3_thermal_read(tsc, REG_GEN3_THCODE1) &
-+			GEN3_FUSE_MASK;
-+		tsc->thcode[1] =3D rcar_gen3_thermal_read(tsc, REG_GEN3_THCODE2) &
-+			GEN3_FUSE_MASK;
-+		tsc->thcode[2] =3D rcar_gen3_thermal_read(tsc, REG_GEN3_THCODE3) &
-+			GEN3_FUSE_MASK;
-+	}
-+
-+	return true;
-+}
-+
- static void rcar_gen3_thermal_init_r8a7795es1(struct rcar_gen3_thermal_tsc *=
-tsc)
- {
- 	rcar_gen3_thermal_write(tsc, REG_GEN3_CTSR,  CTSR_THBGR);
-@@ -393,16 +458,6 @@ static int rcar_gen3_thermal_probe(struct platform_devic=
-e *pdev)
- 	unsigned int i;
- 	int ret;
-=20
--	/* Default THCODE values in case FUSEs are not set. */
--	/* TODO: Read values from hardware on supported platforms */
--	static const int thcodes[TSC_MAX_NUM][3] =3D {
--		{ 3397, 2800, 2221 },
--		{ 3393, 2795, 2216 },
--		{ 3389, 2805, 2237 },
--		{ 3415, 2694, 2195 },
--		{ 3356, 2724, 2244 },
--	};
--
- 	priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
- 		return -ENOMEM;
-@@ -411,10 +466,6 @@ static int rcar_gen3_thermal_probe(struct platform_devic=
-e *pdev)
- 	if (soc_device_match(r8a7795es1))
- 		priv->thermal_init =3D rcar_gen3_thermal_init_r8a7795es1;
-=20
--	priv->ptat[0] =3D 2631;
--	priv->ptat[1] =3D 1509;
--	priv->ptat[2] =3D 435;
--
- 	platform_set_drvdata(pdev, priv);
-=20
- 	if (rcar_gen3_thermal_request_irqs(priv, pdev))
-@@ -442,11 +493,16 @@ static int rcar_gen3_thermal_probe(struct platform_devi=
-ce *pdev)
- 			goto error_unregister;
- 		}
-=20
--		tsc->thcode[0] =3D thcodes[i][0];
--		tsc->thcode[1] =3D thcodes[i][1];
--		tsc->thcode[2] =3D thcodes[i][2];
--
- 		priv->tscs[i] =3D tsc;
-+	}
-+
-+	priv->num_tscs =3D i;
-+
-+	if (!rcar_gen3_thermal_read_fuses(priv))
-+		dev_info(dev, "No calibration values fused, fallback to driver values\n");
-+
-+	for (i =3D 0; i < priv->num_tscs; i++) {
-+		struct rcar_gen3_thermal_tsc *tsc =3D priv->tscs[i];
-=20
- 		zone =3D devm_thermal_zone_of_sensor_register(dev, i, tsc,
- 							    &rcar_gen3_tz_of_ops);
-@@ -476,8 +532,6 @@ static int rcar_gen3_thermal_probe(struct platform_device=
- *pdev)
- 		dev_info(dev, "TSC%u: Loaded %d trip points\n", i, ret);
- 	}
-=20
--	priv->num_tscs =3D i;
--
- 	if (!priv->num_tscs) {
- 		ret =3D -ENODEV;
- 		goto error_unregister;
+ 	if (!ops->critical)
+ 		ops->critical = thermal_zone_device_critical;
+ 
+@@ -1250,7 +1257,6 @@ thermal_zone_device_register(const char *type, int trips, int mask,
+ 	/* A new thermal zone needs to be updated anyway. */
+ 	atomic_set(&tz->need_update, 1);
+ 
+-	dev_set_name(&tz->device, "thermal_zone%d", tz->id);
+ 	result = device_register(&tz->device);
+ 	if (result)
+ 		goto release_device;
