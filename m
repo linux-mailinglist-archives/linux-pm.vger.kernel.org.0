@@ -2,55 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35BE34317B9
+	by mail.lfdr.de (Postfix) with ESMTP id ED3774317BB
 	for <lists+linux-pm@lfdr.de>; Mon, 18 Oct 2021 13:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbhJRLsK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Oct 2021 07:48:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38450 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbhJRLsJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Oct 2021 07:48:09 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B03C06161C
-        for <linux-pm@vger.kernel.org>; Mon, 18 Oct 2021 04:45:58 -0700 (PDT)
-Date:   Mon, 18 Oct 2021 11:45:56 -0000
+        id S231336AbhJRLsL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Oct 2021 07:48:11 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:38014 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231180AbhJRLsL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Oct 2021 07:48:11 -0400
+Date:   Mon, 18 Oct 2021 11:45:57 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1634557557;
+        s=2020; t=1634557559;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=e4hPYSWJEBNhlpoSOOmZpKzqq1+a8XkVCCYcNcC9iJM=;
-        b=l6YS3BoO+GrlZA/RqEhz2vEPAeKiFEiQGYH3mTlsgcBwydrWOnTdSVEkDmwV6YcC2ajdI0
-        nnC1wPu0bliOJsVHK7nNrUixHbS/32kFB0CvfVLXpkQDxFeisFlqx0K5vFpVAodKv3O1RF
-        gvh+Z5zSfv59FM8Ylu7+UzvgHt3Xarazg0JEOO4huLu9Cm0+tOQFFwZ/U/YVs4BJWjp/JZ
-        foZxFEr9V4d+nSUohgnHwGfpXhnXDXuiwdVnqOrEqIXgMPnqb2AMIJ67Stvd4LnYk0hAzn
-        UIYqVFuvziWylZtNCMoAtI1iskLU1wAb+2Cnfnr4mP52INzSdKvmoXcBLBNd0g==
+        bh=qOkpi7mtnc3FWmvclGCGWXawCznzRTf450IbXvyEF2s=;
+        b=xdMRkh/CZYqvlwkK+ct3DD9N0SvUUgauj0vMRCvLQok6nXT8OBVLu4RuohC0IeLuoHHmxN
+        7xRpf0MN0Oqqa5zMZ+8GyraRrsIqSBaK8xsrlLhpft85R94s4lBTdDrzF5ZsQB7tzaGsC/
+        GG+gkVdIix6pi7DJ+NiZQNUYk+btEhwZBwrHCLaLPqNeFbJwf3XYkKOt4qjD6tO6c0FL00
+        8Uopf+sd0A1D0D9HslaODMZFUK+f2dEqxChsVq825G6gtpCsLeBQ621Kz3TXKzjEC8EZ6e
+        aMAuyKq+wZRrRshYGzM9GlpUVDkdoC3+fcp9iiGud90aVC5cIzXVtHxP4HGkTA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1634557557;
+        s=2020e; t=1634557559;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=e4hPYSWJEBNhlpoSOOmZpKzqq1+a8XkVCCYcNcC9iJM=;
-        b=jFqV7jzuqFEfS4Oem7fSRDnwK+7Uv3cnZdtFluyGG9CHcxsILSaVRE9DNtJ+582KDcn5L7
-        gRzcDAeOYF00JgDw==
-From:   "thermal-bot for Jackie Liu" <tip-bot2@linutronix.de>
+        bh=qOkpi7mtnc3FWmvclGCGWXawCznzRTf450IbXvyEF2s=;
+        b=eLSiZxNuplUWjMWvs5XNnSIdMjaKGXMi8NOjQNQtIU5UOQB2QQ0HIFkWHtcgwUvANM7Sqr
+        A8Br787vawqB6kDA==
+From:   "thermal-bot for Ziyang Xuan" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/drivers/qcom/lmh: make QCOM_LMH
- depends on QCOM_SCM
-Cc:     Jackie Liu <liuyun01@kylinos.cn>,
+Subject: [thermal: thermal/next] thermal/core: fix a UAF bug in
+ __thermal_cooling_device_register()
+Cc:     Ziyang Xuan <william.xuanziyang@huawei.com>,
+        kernel test robot <lkp@intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20211009015853.3509559-1-liu.yun@linux.dev>
-References: <20211009015853.3509559-1-liu.yun@linux.dev>
+In-Reply-To: <20211015024504.947520-1-william.xuanziyang@huawei.com>
+References: <20211015024504.947520-1-william.xuanziyang@huawei.com>
 MIME-Version: 1.0
-Message-ID: <163455755641.25758.10001373491710171733.tip-bot2@tip-bot2>
+Message-ID: <163455755730.25758.6550468156631534146.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -61,52 +59,94 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     9e5a4fb8423081d0efbf165c71c7f4abdf5f918c
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//9e5a4fb8423081d0efbf165c71c7f4abdf5f918c
-Author:        Jackie Liu <liuyun01@kylinos.cn>
-AuthorDate:    Sat, 09 Oct 2021 09:58:53 +08:00
+Commit-ID:     0a5c26712f963f0500161a23e0ffff8d29f742ab
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//0a5c26712f963f0500161a23e0ffff8d29f742ab
+Author:        Ziyang Xuan <william.xuanziyang@huawei.com>
+AuthorDate:    Fri, 15 Oct 2021 10:45:04 +08:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Sat, 16 Oct 2021 20:20:42 +02:00
+CommitterDate: Fri, 15 Oct 2021 15:38:48 +02:00
 
-thermal/drivers/qcom/lmh: make QCOM_LMH depends on QCOM_SCM
+thermal/core: fix a UAF bug in __thermal_cooling_device_register()
 
-Without QCOM_SCM, build failed, avoid like below:
+When device_register() return failed, program will goto out_kfree_type
+to release 'cdev->device' by put_device(). That will call thermal_release()
+to free 'cdev'. But the follow-up processes access 'cdev' continually.
+That trggers the UAF bug.
 
-aarch64-linux-gnu-ld: Unexpected GOT/PLT entries detected!
-aarch64-linux-gnu-ld: Unexpected run-time procedure linkages detected!
-aarch64-linux-gnu-ld: drivers/thermal/qcom/lmh.o: in function `lmh_probe':
-/data/arm/workspace/kernel-build/linux/build/../drivers/thermal/qcom/lmh.c:141: undefined reference to `qcom_scm_lmh_dcvsh_available'
-aarch64-linux-gnu-ld: /data/arm/workspace/kernel-build/linux/build/../drivers/thermal/qcom/lmh.c:144: undefined reference to `qcom_scm_lmh_dcvsh'
-aarch64-linux-gnu-ld: /data/arm/workspace/kernel-build/linux/build/../drivers/thermal/qcom/lmh.c:149: undefined reference to `qcom_scm_lmh_dcvsh'
-aarch64-linux-gnu-ld: /data/arm/workspace/kernel-build/linux/build/../drivers/thermal/qcom/lmh.c:154: undefined reference to `qcom_scm_lmh_dcvsh'
-aarch64-linux-gnu-ld: /data/arm/workspace/kernel-build/linux/build/../drivers/thermal/qcom/lmh.c:159: undefined reference to `qcom_scm_lmh_dcvsh'
-aarch64-linux-gnu-ld: /data/arm/workspace/kernel-build/linux/build/../drivers/thermal/qcom/lmh.c:166: undefined reference to `qcom_scm_lmh_profile_change'
-aarch64-linux-gnu-ld: /data/arm/workspace/kernel-build/linux/build/../drivers/thermal/qcom/lmh.c:173: undefined reference to `qcom_scm_lmh_dcvsh'
-aarch64-linux-gnu-ld: /data/arm/workspace/kernel-build/linux/build/../drivers/thermal/qcom/lmh.c:180: undefined reference to `qcom_scm_lmh_dcvsh'
-aarch64-linux-gnu-ld: /data/arm/workspace/kernel-build/linux/build/../drivers/thermal/qcom/lmh.c:187: undefined reference to `qcom_scm_lmh_dcvsh'
-make[1]: *** [/data/arm/workspace/kernel-build/linux/Makefile:1183: vmlinux] Error 1
-make[1]: Leaving directory '/data/arm/workspace/kernel-build/linux/build'
-make: *** [Makefile:219: __sub-make] Error 2
-make: Leaving directory '/data/arm/workspace/kernel-build/linux'
+====================================================================
+BUG: KASAN: use-after-free in __thermal_cooling_device_register+0x75b/0xa90
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+Call Trace:
+ dump_stack_lvl+0xe2/0x152
+ print_address_description.constprop.0+0x21/0x140
+ ? __thermal_cooling_device_register+0x75b/0xa90
+ kasan_report.cold+0x7f/0x11b
+ ? __thermal_cooling_device_register+0x75b/0xa90
+ __thermal_cooling_device_register+0x75b/0xa90
+ ? memset+0x20/0x40
+ ? __sanitizer_cov_trace_pc+0x1d/0x50
+ ? __devres_alloc_node+0x130/0x180
+ devm_thermal_of_cooling_device_register+0x67/0xf0
+ max6650_probe.cold+0x557/0x6aa
+......
 
-Fixes: 53bca371cdf7 ("thermal/drivers/qcom: Add support for LMh driver")
-Signed-off-by: Jackie Liu <liuyun01@kylinos.cn>
-Link: https://lore.kernel.org/r/20211009015853.3509559-1-liu.yun@linux.dev
+Freed by task 258:
+ kasan_save_stack+0x1b/0x40
+ kasan_set_track+0x1c/0x30
+ kasan_set_free_info+0x20/0x30
+ __kasan_slab_free+0x109/0x140
+ kfree+0x117/0x4c0
+ thermal_release+0xa0/0x110
+ device_release+0xa7/0x240
+ kobject_put+0x1ce/0x540
+ put_device+0x20/0x30
+ __thermal_cooling_device_register+0x731/0xa90
+ devm_thermal_of_cooling_device_register+0x67/0xf0
+ max6650_probe.cold+0x557/0x6aa [max6650]
+
+Do not use 'cdev' again after put_device() to fix the problem like doing
+in thermal_zone_device_register().
+
+[dlezcano]: as requested by Rafael, change the affectation into two statements.
+
+Fixes: 584837618100 ("thermal/drivers/core: Use a char pointer for the cooling device name")
+Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/r/20211015024504.947520-1-william.xuanziyang@huawei.com
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/qcom/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/thermal/thermal_core.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/thermal/qcom/Kconfig b/drivers/thermal/qcom/Kconfig
-index 7d942f7..bfd8894 100644
---- a/drivers/thermal/qcom/Kconfig
-+++ b/drivers/thermal/qcom/Kconfig
-@@ -34,7 +34,7 @@ config QCOM_SPMI_TEMP_ALARM
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 6904b97..648829a 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -889,7 +889,7 @@ __thermal_cooling_device_register(struct device_node *np,
+ {
+ 	struct thermal_cooling_device *cdev;
+ 	struct thermal_zone_device *pos = NULL;
+-	int ret;
++	int id, ret;
  
- config QCOM_LMH
- 	tristate "Qualcomm Limits Management Hardware"
--	depends on ARCH_QCOM
-+	depends on ARCH_QCOM && QCOM_SCM
- 	help
- 	  This enables initialization of Qualcomm limits management
- 	  hardware(LMh). LMh allows for hardware-enforced mitigation for cpus based on
+ 	if (!ops || !ops->get_max_state || !ops->get_cur_state ||
+ 	    !ops->set_cur_state)
+@@ -903,6 +903,7 @@ __thermal_cooling_device_register(struct device_node *np,
+ 	if (ret < 0)
+ 		goto out_kfree_cdev;
+ 	cdev->id = ret;
++	id = ret;
+ 
+ 	ret = dev_set_name(&cdev->device, "cooling_device%d", cdev->id);
+ 	if (ret)
+@@ -946,8 +947,9 @@ __thermal_cooling_device_register(struct device_node *np,
+ out_kfree_type:
+ 	kfree(cdev->type);
+ 	put_device(&cdev->device);
++	cdev = NULL;
+ out_ida_remove:
+-	ida_simple_remove(&thermal_cdev_ida, cdev->id);
++	ida_simple_remove(&thermal_cdev_ida, id);
+ out_kfree_cdev:
+ 	kfree(cdev);
+ 	return ERR_PTR(ret);
