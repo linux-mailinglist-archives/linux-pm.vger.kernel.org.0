@@ -2,125 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3C45432370
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Oct 2021 18:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 089124323C9
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Oct 2021 18:25:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231931AbhJRQGA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Oct 2021 12:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42888 "EHLO
+        id S231944AbhJRQ1p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Oct 2021 12:27:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbhJRQF7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Oct 2021 12:05:59 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF2AC06161C
-        for <linux-pm@vger.kernel.org>; Mon, 18 Oct 2021 09:03:48 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id u18so42489418wrg.5
-        for <linux-pm@vger.kernel.org>; Mon, 18 Oct 2021 09:03:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=U+OIiOCMy27mbGAVIQWKPL+EskS0hM/mO2G0dhzOV/w=;
-        b=jvI5XDF/reW/lpq7AGNTSHhH/RptkMOZEnZr0m2g7jEJB8NC/GMARXVIORxhGwt1Mw
-         +o0kFqxpPGJ6aS5C8AAq4g03pNPwx9Mw7IyGBjuwyG4RoLlPfxTygaPaTqEC39VraXYa
-         M36mwhnX5wGM+lFGhylCkNeZY+2CCj3D6P8teKBcjRGsVU0mTU3J4y/ZpJ24FJHFo8dh
-         XekrGaczuX1zRfdUFw+6xqz8FPi7d4pb2dpy6kCWQLDFQ7Pri0itsDw6zcjn/pCADJ26
-         A8UmzJ/2cb2s4gZXMgAYWS25NAPkfaHhaQ2Ilcr4L+b58QdXl3n/C+z31kwYfjJzR5o9
-         kSqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=U+OIiOCMy27mbGAVIQWKPL+EskS0hM/mO2G0dhzOV/w=;
-        b=rqqPjJQVRwCP4Skbz8NzvkAGjyWv869K5mqGvv8mzW+/TomeFa53BbqIGJso+i0LcP
-         UCApYZATgzYqB/5Abw2zFp9zEi+LR/wVNWqjnvVuBMDTrlm4/t3dKkNA4eqnuSOBMZNT
-         P+YQbod5XQ/xNcyMJB0GEsRYsh3EybEvk8A3eqvuQtuwycyXUVL+s+y8vFbTKszYSUP/
-         9akTg5fvb4HdLPcO6xF9mMkR6fYiFbGc7hgyvlq8OXh/fSt7FhO2qkL+RdkA7w7cOdGu
-         Vwa2S7fvSbPqEOtgVz0D2S16TSWHP8qV5XpBEqoSL71vz0vtsOup704INPGPT9na9idJ
-         +93w==
-X-Gm-Message-State: AOAM530xm6ve1RnFBVWC5yQ/0eCZ05eKZ/5MxDDKPZgyVzDuF2/CnOYQ
-        1HvuCMCRFWWLtbra4AHEpYNF2Q==
-X-Google-Smtp-Source: ABdhPJyQuCKOS0zcwDTms53/DFCPp1vNgudJJWPlT53tuVhpwDzWhLqnggucx92t2Vco/MSTf8WIXA==
-X-Received: by 2002:adf:e7d0:: with SMTP id e16mr36332036wrn.283.1634573026584;
-        Mon, 18 Oct 2021 09:03:46 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:c590:9206:d20a:23bd? ([2a01:e34:ed2f:f020:c590:9206:d20a:23bd])
-        by smtp.googlemail.com with ESMTPSA id d3sm14437830wrb.36.2021.10.18.09.03.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Oct 2021 09:03:46 -0700 (PDT)
-Subject: Re: [PATCH 3/3] thermal: mediatek: add MT8365 thermal driver support
-To:     Markus Schneider-Pargmann <msp@baylibre.com>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, fparent@baylibre.com,
-        khilman@baylibre.com
-References: <20211014135636.3644166-1-msp@baylibre.com>
- <20211014135636.3644166-4-msp@baylibre.com>
- <33815817-0f64-836a-5417-c614e66e231e@linaro.org>
- <20211018154001.sj7nc575hln3jkel@blmsp>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <1844fd1b-d3ff-55c1-a98e-54219c3838df@linaro.org>
-Date:   Mon, 18 Oct 2021 18:03:44 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        with ESMTP id S231787AbhJRQ1o (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Oct 2021 12:27:44 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6AAEC06161C
+        for <linux-pm@vger.kernel.org>; Mon, 18 Oct 2021 09:25:33 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 0AAD21F42F6D
+Received: by earth.universe (Postfix, from userid 1000)
+        id 9CD483C0CA8; Mon, 18 Oct 2021 18:25:29 +0200 (CEST)
+Date:   Mon, 18 Oct 2021 18:25:29 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Kate Hsuan <hpa@redhat.com>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 0/3] power: supply: axp288-charger: cleanups + fixes
+Message-ID: <20211018162529.ryoq2xu3g6um3gqs@earth.universe>
+References: <20211018135053.213310-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20211018154001.sj7nc575hln3jkel@blmsp>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="w3spedfjxntaaaw3"
+Content-Disposition: inline
+In-Reply-To: <20211018135053.213310-1-hdegoede@redhat.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-Hi Markus,
+--w3spedfjxntaaaw3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 18/10/2021 17:40, Markus Schneider-Pargmann wrote:
+Hi,
 
-[ ... ]
+On Mon, Oct 18, 2021 at 03:50:50PM +0200, Hans de Goede wrote:
+> Here are 3 patches for the axp288-charger driver which apply on top of
+> commit ed229454856e ("power: supply: axp288-charger: Optimize register
+> reading method") in linux-power-supply/for-next .
+>=20
+> The first patch is a build fix and the other 2 are 2 small cleanups.
+>=20
+> Regards,
+>=20
+> Hans
+>=20
+>=20
+> Hans de Goede (3):
+>   power: supply: axp288-charger: Add depends on IOSF_MBIO to Kconfig
+>   power: supply: axp288-charger: Remove unnecessary is_present and
+>     is_online helpers
+>   power: supply: axp288-charger: Simplify axp288_get_charger_health()
+>=20
+>  drivers/power/supply/Kconfig          |  2 +-
+>  drivers/power/supply/axp288_charger.c | 37 +++++----------------------
+>  2 files changed, 8 insertions(+), 31 deletions(-)
 
->>
->>>  	}, {
->>>  	},
->>>  };
->>>  MODULE_DEVICE_TABLE(of, mtk_thermal_of_match);
->>>  
->>> -static void mtk_thermal_turn_on_buffer(void __iomem *apmixed_base)
->>> +static void mtk_thermal_turn_on_buffer(struct mtk_thermal *mt,
->>> +				       void __iomem *apmixed_base)
->>>  {
->>>  	int tmp;
->>>  
->>> -	tmp = readl(apmixed_base + APMIXED_SYS_TS_CON1);
->>> -	tmp &= ~(0x37);
->>> -	tmp |= 0x1;
->>> -	writel(tmp, apmixed_base + APMIXED_SYS_TS_CON1);
->>> +	if (!mt->conf->apmixed_buffer_ctl_reg)
->>> +		return;
->>> +
->>> +	tmp = readl(apmixed_base + mt->conf->apmixed_buffer_ctl_reg);
->>> +	tmp &= mt->conf->apmixed_buffer_ctl_mask;
->>> +	tmp |= mt->conf->apmixed_buffer_ctl_set;
->>
->> What is the goal of these two bits operations ?
-> 
-> mt7622 needs to unset a few bits and set one bit in this register.
-> mt8365 only unsets bits. For this purpose I created a _mask field to
-> unset bits and a _set field to set bits.
-> 
-> Would you suggest a different way?
+Thanks, queued.
 
-No, I understand what you wanted to do. I was just unsure if there was a
-trick because of the tmp |= 0;
+-- Sebastian
 
+--w3spedfjxntaaaw3
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmFtn/IACgkQ2O7X88g7
++przKQ/9EjmP8djlTOrSyqoykugHImZbotXLVgPizlVLpFsuAW/zJTMiZxeeU3NX
+ppBf8reepNcuoR1zF3LLCB4UltgvnP4IvpR4l4EOYTV1V6UjbBQCxBtM2NjXnDIm
+YjP37wPAtiOzvaiHvVDdbKkpFn5xbVgfgQdr0h/OKHpNDwVIb9OzszOOjgWzGU4I
+mddE/gNQbJF1FtdFkQmxDdR8CQb48T/S++H9sD1mssEbqp5PketZKWK31QeIO3gf
+Ugx7Mo0bGK9Gwg6m+jaWgyWEtaSg7dkBZcjACTJME8AUNfwO4+xHa5QsUM66xrih
+QuO6n6UtRN5qTQhRYORKKAFiin1yMpjn02phQH/zmx1vmQpJwCvX1te+DGEhX9XP
+X9WAJghcnGRJMIoIAVjwvJSwcM1p2ZM22sog+c4COPmI4pFZxnyLmceJNQ61UGtf
+wTSGSDQoZXgKr/2twliqKgDP6dV2LTbAougSGPv/s1mCcWUzcONo/BOtviTZ+v5/
+1WippROptQxOdwvvI3U6p0Tty9xQcYh/4O0rL2LRliVitTom1VPq8GX3q/iSpO+k
+vuEOpObZOH33Lo3S++SAsLRwCaJgbojdqbYmHEZd05LwhN+Psest7eitHfGm4lYg
+vgGYjwGhSn1neWLuls36HmcPTot258IjaTrJ1N5hD8yKuiXxSc0=
+=nVgE
+-----END PGP SIGNATURE-----
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+--w3spedfjxntaaaw3--
