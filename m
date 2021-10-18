@@ -2,55 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88E934317B6
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Oct 2021 13:46:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 049304317B8
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Oct 2021 13:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231351AbhJRLsI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Oct 2021 07:48:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38442 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231167AbhJRLsH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Oct 2021 07:48:07 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5530C06161C
-        for <linux-pm@vger.kernel.org>; Mon, 18 Oct 2021 04:45:56 -0700 (PDT)
-Date:   Mon, 18 Oct 2021 11:45:54 -0000
+        id S231167AbhJRLsJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Oct 2021 07:48:09 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:37996 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230478AbhJRLsI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Oct 2021 07:48:08 -0400
+Date:   Mon, 18 Oct 2021 11:45:55 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1634557555;
+        s=2020; t=1634557556;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=VElWnDep+EIyzLiGJXV8CtITvQ4Pi92KY84D1f6IWzk=;
-        b=RhRh1n6WgA4KFMs+VsmQHBlH6KQoaS6LPrK8BIptwf82fPi+BXn4PpyOf+alZwauTnatWp
-        0eF6mCAFz4ZT/NLRQxDawyLRvSBraLyVy68gds81Xo01DKFp1jMHXhrsU6UolNCrtWSdtR
-        xJ8AuAwQLpfKcc1ouT0Mu85XtSlaHKOe1NmhTg8f6sZQmYjBGi7Xe3xqu61kFqKfO4MZ/9
-        zrp+v5TPemkbpE/v5Kh6I8T49hKheMOoOLOSBi5dDhMHPbtdy8csWUmOE91JGJK2TX/a6w
-        OqztLLGHTWtE0RQJzg/bF7pSqegyxWLNJ6KIulj0c2XLnRtfTPZKeoUF80Z9XQ==
+        bh=BRnTgr0+wEcPom5foA5Xa6QkFYTm6AOJtqFPWL4Z76M=;
+        b=OQxwaBT0su6p8W0eATI08Is/NJQZcVQzxvOFwYAeSgakXgVHS5fcPG1hd7Xk1LNg5n0G9D
+        iVkXnKnHItA2AhUkeYKMNpKlvsPzQJwWT7oDP1R8YDKR2zy/GyJTXJX0/HOSKK/g05GSPa
+        7ZG7w/qjeAuBB65xIz7rtwLx4O+snLQWFNP/m20Xfz8ks0lBqUwDinM2YhnfPI7qKxTXIG
+        O89yfU71WCIkPqymE9+V6Vzdrerqwg+TdgYnJrJi+elpCabDzrHVmB6E+daV7nQOv/0iE3
+        jzAV8VzQBrUtCYOzaTrMTiLHR2KotcDJKmo1VTG7binB2PvdgbfBYDq0La0BTA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1634557555;
+        s=2020e; t=1634557556;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=VElWnDep+EIyzLiGJXV8CtITvQ4Pi92KY84D1f6IWzk=;
-        b=cFdyoQW6+ovrgU99wczJg/b6S/ehmJGh2SfWG9F9FJtAGKSzhl/2se9Q3viX/uaThfnEqf
-        dXniVjtL4E2eVCAw==
-From:   "thermal-bot for Johan Jonker" <tip-bot2@linutronix.de>
+        bh=BRnTgr0+wEcPom5foA5Xa6QkFYTm6AOJtqFPWL4Z76M=;
+        b=cXX2Vpw6nQnWVYdAJz9td+QbUIpb7fHPRatPEIA5FYaIeRImhp3BMVOzt3LF1hGQr3Tr+i
+        vydTXXFioMCBZMDQ==
+From:   "thermal-bot for Ansuel Smith" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] dt-bindings: thermal: allow more resets for
- tsadc node in rockchip-thermal.yaml
-Cc:     Johan Jonker <jbx6244@gmail.com>, Rob Herring <robh@kernel.org>,
+Subject: [thermal: thermal/next] thermal/drivers/tsens: Add timeout to
+ get_temp_tsens_valid
+Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20210930110517.14323-1-jbx6244@gmail.com>
-References: <20210930110517.14323-1-jbx6244@gmail.com>
+In-Reply-To: <20211007172859.583-1-ansuelsmth@gmail.com>
+References: <20211007172859.583-1-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-Message-ID: <163455755449.25758.12284355665959535282.tip-bot2@tip-bot2>
+Message-ID: <163455755542.25758.4594820260494925278.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -61,54 +59,69 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     07c54d9a409f1fd54df328ec742f156547594347
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//07c54d9a409f1fd54df328ec742f156547594347
-Author:        Johan Jonker <jbx6244@gmail.com>
-AuthorDate:    Thu, 30 Sep 2021 13:05:14 +02:00
+Commit-ID:     d012f9189fda0f3a1b303780ba0bbc7298d0d349
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//d012f9189fda0f3a1b303780ba0bbc7298d0d349
+Author:        Ansuel Smith <ansuelsmth@gmail.com>
+AuthorDate:    Thu, 07 Oct 2021 19:28:59 +02:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Sun, 17 Oct 2021 00:14:55 +02:00
+CommitterDate: Sat, 16 Oct 2021 20:24:43 +02:00
 
-dt-bindings: thermal: allow more resets for tsadc node in rockchip-thermal.yaml
+thermal/drivers/tsens: Add timeout to get_temp_tsens_valid
 
-The tsadc node in rk356x.dtsi has more resets defined then currently
-allowed by rockchip-thermal.yaml, so fix that in the documentation.
-The driver now uses the devm_reset_control_array_get() function,
-so reset-names is no longer required, but keep it for legacy reasons.
+The function can loop and lock the system if for whatever reason the bit
+for the target sensor is NEVER valid. This is the case if a sensor is
+disabled by the factory and the valid bit is never reported as actually
+valid. Add a timeout check and exit if a timeout occurs. As this is
+a very rare condition, handle the timeout only if the first read fails.
+While at it also rework the function to improve readability and convert
+to poll_timeout generic macro.
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
-Link: https://lore.kernel.org/r/20210930110517.14323-1-jbx6244@gmail.com
+Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20211007172859.583-1-ansuelsmth@gmail.com
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/thermal/qcom/tsens.c | 29 ++++++++++++++---------------
+ 1 file changed, 14 insertions(+), 15 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml b/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml
-index b96ea27..3c07470 100644
---- a/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml
-+++ b/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml
-@@ -37,11 +37,15 @@ properties:
-       - const: apb_pclk
+diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+index b1162e5..99a8d9f 100644
+--- a/drivers/thermal/qcom/tsens.c
++++ b/drivers/thermal/qcom/tsens.c
+@@ -603,22 +603,21 @@ int get_temp_tsens_valid(const struct tsens_sensor *s, int *temp)
+ 	int ret;
  
-   resets:
--    maxItems: 1
-+    minItems: 1
-+    maxItems: 3
+ 	/* VER_0 doesn't have VALID bit */
+-	if (tsens_version(priv) >= VER_0_1) {
+-		ret = regmap_field_read(priv->rf[valid_idx], &valid);
+-		if (ret)
+-			return ret;
+-		while (!valid) {
+-			/* Valid bit is 0 for 6 AHB clock cycles.
+-			 * At 19.2MHz, 1 AHB clock is ~60ns.
+-			 * We should enter this loop very, very rarely.
+-			 */
+-			ndelay(400);
+-			ret = regmap_field_read(priv->rf[valid_idx], &valid);
+-			if (ret)
+-				return ret;
+-		}
+-	}
++	if (tsens_version(priv) == VER_0)
++		goto get_temp;
++
++	/* Valid bit is 0 for 6 AHB clock cycles.
++	 * At 19.2MHz, 1 AHB clock is ~60ns.
++	 * We should enter this loop very, very rarely.
++	 * Wait 1 us since it's the min of poll_timeout macro.
++	 * Old value was 400 ns.
++	 */
++	ret = regmap_field_read_poll_timeout(priv->rf[valid_idx], valid,
++					     valid, 1, 20 * USEC_PER_MSEC);
++	if (ret)
++		return ret;
  
-   reset-names:
-+    minItems: 1
-     items:
-       - const: tsadc-apb
-+      - const: tsadc
-+      - const: tsadc-phy
++get_temp:
+ 	/* Valid bit is set, OK to read the temperature */
+ 	*temp = tsens_hw_to_mC(s, temp_idx);
  
-   "#thermal-sensor-cells":
-     const: 1
-@@ -71,7 +75,6 @@ required:
-   - clocks
-   - clock-names
-   - resets
--  - reset-names
-   - "#thermal-sensor-cells"
- 
- additionalProperties: false
