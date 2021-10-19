@@ -2,382 +2,233 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B5C443345F
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Oct 2021 13:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F6A84334BB
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Oct 2021 13:31:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235429AbhJSLHR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Oct 2021 07:07:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45740 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235531AbhJSLHK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Oct 2021 07:07:10 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD2D4C061746
-        for <linux-pm@vger.kernel.org>; Tue, 19 Oct 2021 04:04:49 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id d198-20020a1c1dcf000000b00322f53b9b89so2694719wmd.0
-        for <linux-pm@vger.kernel.org>; Tue, 19 Oct 2021 04:04:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=CN/Dv/6YKgAeJCJI90wMy0Tdo+rJz4ywym+xK0hXggo=;
-        b=duggVdUJFiCRdR5CntOD0hhuCZWwSEbeyStMXPL5gwVl/9dkSoekIY0hx7nQgdnFXx
-         tEwhASQVAoctPS1RK4pCYinTaKXNqFIvSnQC/hh1UmD9eMq8xQUcTCPTdUfJdnt9WuUX
-         icSV1bRV8iCAa69LPSCTUWFj7rQr8BZOG1+9b3bywMnJHDsjr83+54i43U/gXJWhiJJh
-         hLyHPXQGp/kAQla0Y5ugx/SWlqzsxwOCSmHHGBH1m7Nz+zaHKRxNKvNO08lo7qtJAM5J
-         38/ZTuExHfXJTnTAhJi+ntuORbGfEmyIhHrAAkHEmSqLOSzpzC0Ae1D27kSnALZ4pptz
-         /YAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=CN/Dv/6YKgAeJCJI90wMy0Tdo+rJz4ywym+xK0hXggo=;
-        b=4I2oX878iMUv9Si83XbkmbWAxREOfdHDwwVqyVAGsfrM4lwrqkqP1/zUwfjgI8mJuE
-         VaxavQDIHatJyRyFrW9SLSgFQ+HHM+nKahwEFDVEQAVTpsqm9MkzJ4tQZHJt53pWZ1N8
-         pj/XjQwGkPZHXS/18tLbFGHTKjc3fKpsnGKYYZc5BnrWjdfBdmS6iJknqQA/55wobICS
-         ++TEB9xRNSInM+6rHNCW8AP8ZlSjkFfx9a6Wbhjc+eLp7gujNmIFQYgNMa2Trf9+Dgv7
-         4v2X/RDuUdCItHykuh9fXjPXANyPlQrClAA/wCWqg6lVYzIQ+G6WqBO4rl/NlXGEl3TJ
-         P19g==
-X-Gm-Message-State: AOAM532sKRCjwKf1jfgeHBgzfH8iWPe+fxK4oFVmPt1qrss3RdDu5Zah
-        UOL2PH2n0uRTHtrxHmiXwPF9CQ==
-X-Google-Smtp-Source: ABdhPJyMmIrLWdpEFKzPt947QN9m+CxjJXudkw85sGlwfvTuG9BCcPh5I7OwznrE9eE4gBJl5PsH+g==
-X-Received: by 2002:a05:600c:ac1:: with SMTP id c1mr5232929wmr.99.1634641488060;
-        Tue, 19 Oct 2021 04:04:48 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:c590:9206:d20a:23bd? ([2a01:e34:ed2f:f020:c590:9206:d20a:23bd])
-        by smtp.googlemail.com with ESMTPSA id a63sm1912233wmd.34.2021.10.19.04.04.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Oct 2021 04:04:47 -0700 (PDT)
-Subject: Re: [PATCH v1 1/1] thermal: imx: implement runtime PM support
-To:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     Amit Kucheria <amitk@kernel.org>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, David Jander <david@protonic.nl>,
-        Petr Benes <petrben@gmail.com>
-References: <20210924115032.29684-1-o.rempel@pengutronix.de>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <19b2ab33-aa56-75fb-f6ef-3c928be9c50c@linaro.org>
-Date:   Tue, 19 Oct 2021 13:04:46 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S235291AbhJSLeB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Oct 2021 07:34:01 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:46866 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230281AbhJSLeA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Oct 2021 07:34:00 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 36B501F43268
+Received: by earth.universe (Postfix, from userid 1000)
+        id 571063C0CA8; Tue, 19 Oct 2021 13:31:44 +0200 (CEST)
+Date:   Tue, 19 Oct 2021 13:31:44 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     David Heidelberg <david@ixit.cz>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~okias/devicetree@lists.sr.ht
+Subject: Re: [PATCH] dt-bindings: power: reset: gpio-poweroff: Convert txt
+ bindings to yaml
+Message-ID: <20211019113144.77zhcagw6lvwmfjy@earth.universe>
+References: <20211009163226.45564-1-david@ixit.cz>
 MIME-Version: 1.0
-In-Reply-To: <20210924115032.29684-1-o.rempel@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tyn6d3fmh7rrtjqg"
+Content-Disposition: inline
+In-Reply-To: <20211009163226.45564-1-david@ixit.cz>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 24/09/2021 13:50, Oleksij Rempel wrote:
-> Starting with commit d92ed2c9d3ff ("thermal: imx: Use driver's local
-> data to decide whether to run a measurement") this driver stared using
-> irq_enabled flag to make decision to power on/off the thermal core. This
-> triggered a regression, where after reaching critical temperature, alarm
-> IRQ handler set irq_enabled to false,  disabled thermal core and was not
-> able read temperature and disable cooling sequence.
-> 
-> In case the cooling device is "CPU/GPU freq", the system will run with
-> reduce performance until next reboot.
-> 
-> To solve this issue, we need to move all parts implementing hand made
-> runtime power management and let it handle actual runtime PM framework.
-> 
-> Fixes: d92ed2c9d3ff ("thermal: imx: Use driver's local data to decide whether to run a measurement")
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-Thanks for this fix.
+--tyn6d3fmh7rrtjqg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Petr or Oleksij,
+Hi,
 
-could you confirm it is tested and working without CONFIG_PM ?
-
+On Sat, Oct 09, 2021 at 06:32:26PM +0200, David Heidelberg wrote:
+> Convert power-off action connected to the GPIO documentation to the YAML =
+syntax.
+>=20
+> Signed-off-by: David Heidelberg <david@ixit.cz>
 > ---
->  drivers/thermal/imx_thermal.c | 145 +++++++++++++++++++++-------------
->  1 file changed, 91 insertions(+), 54 deletions(-)
-> 
-> diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
-> index 2c7473d86a59..1db7ce6221b1 100644
-> --- a/drivers/thermal/imx_thermal.c
-> +++ b/drivers/thermal/imx_thermal.c
-> @@ -15,6 +15,7 @@
->  #include <linux/regmap.h>
->  #include <linux/thermal.h>
->  #include <linux/nvmem-consumer.h>
-> +#include <linux/pm_runtime.h>
->  
->  #define REG_SET		0x4
->  #define REG_CLR		0x8
-> @@ -194,6 +195,7 @@ static struct thermal_soc_data thermal_imx7d_data = {
->  };
->  
->  struct imx_thermal_data {
-> +	struct device *dev;
->  	struct cpufreq_policy *policy;
->  	struct thermal_zone_device *tz;
->  	struct thermal_cooling_device *cdev;
-> @@ -252,44 +254,15 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
->  	const struct thermal_soc_data *soc_data = data->socdata;
->  	struct regmap *map = data->tempmon;
->  	unsigned int n_meas;
-> -	bool wait, run_measurement;
->  	u32 val;
-> +	int ret;
->  
-> -	run_measurement = !data->irq_enabled;
-> -	if (!run_measurement) {
-> -		/* Check if a measurement is currently in progress */
-> -		regmap_read(map, soc_data->temp_data, &val);
-> -		wait = !(val & soc_data->temp_valid_mask);
-> -	} else {
-> -		/*
-> -		 * Every time we measure the temperature, we will power on the
-> -		 * temperature sensor, enable measurements, take a reading,
-> -		 * disable measurements, power off the temperature sensor.
-> -		 */
-> -		regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
-> -			    soc_data->power_down_mask);
-> -		regmap_write(map, soc_data->sensor_ctrl + REG_SET,
-> -			    soc_data->measure_temp_mask);
+>  .../bindings/power/reset/gpio-poweroff.txt    | 41 ------------
+>  .../bindings/power/reset/gpio-poweroff.yaml   | 64 +++++++++++++++++++
+>  2 files changed, 64 insertions(+), 41 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/power/reset/gpio-po=
+weroff.txt
+>  create mode 100644 Documentation/devicetree/bindings/power/reset/gpio-po=
+weroff.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/power/reset/gpio-poweroff.=
+txt b/Documentation/devicetree/bindings/power/reset/gpio-poweroff.txt
+> deleted file mode 100644
+> index 3e56c1b34a4c..000000000000
+> --- a/Documentation/devicetree/bindings/power/reset/gpio-poweroff.txt
+> +++ /dev/null
+> @@ -1,41 +0,0 @@
+> -Driver a GPIO line that can be used to turn the power off.
 > -
-> -		wait = true;
-> -	}
+> -The driver supports both level triggered and edge triggered power off.
+> -At driver load time, the driver will request the given gpio line and
+> -install a handler to power off the system. If the optional properties
+> -'input' is not found, the GPIO line will be driven in the inactive
+> -state. Otherwise its configured as an input.
 > -
-> -	/*
-> -	 * According to the temp sensor designers, it may require up to ~17us
-> -	 * to complete a measurement.
-> -	 */
-> -	if (wait)
-> -		usleep_range(20, 50);
-> +	ret = pm_runtime_resume_and_get(data->dev);
-> +	if (ret < 0)
-> +		return ret;
->  
->  	regmap_read(map, soc_data->temp_data, &val);
->  
-> -	if (run_measurement) {
-> -		regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
-> -			     soc_data->measure_temp_mask);
-> -		regmap_write(map, soc_data->sensor_ctrl + REG_SET,
-> -			     soc_data->power_down_mask);
-> -	}
+> -When the power-off handler is called, the gpio is configured as an
+> -output, and drive active, so triggering a level triggered power off
+> -condition. This will also cause an inactive->active edge condition, so
+> -triggering positive edge triggered power off. After a delay of 100ms,
+> -the GPIO is set to inactive, thus causing an active->inactive edge,
+> -triggering negative edge triggered power off. After another 100ms
+> -delay the GPIO is driver active again. If the power is still on and
+> -the CPU still running after a 3000ms delay, a WARN_ON(1) is emitted.
 > -
->  	if ((val & soc_data->temp_valid_mask) == 0) {
->  		dev_dbg(&tz->device, "temp measurement never finished\n");
->  		return -EAGAIN;
-> @@ -328,6 +301,8 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
->  		enable_irq(data->irq);
->  	}
->  
-> +	pm_runtime_put(data->dev);
+> -Required properties:
+> -- compatible : should be "gpio-poweroff".
+> -- gpios : The GPIO to set high/low, see "gpios property" in
+> -  Documentation/devicetree/bindings/gpio/gpio.txt. If the pin should be
+> -  low to power down the board set it to "Active Low", otherwise set
+> -  gpio to "Active High".
+> -
+> -Optional properties:
+> -- input : Initially configure the GPIO line as an input. Only reconfigure
+> -  it to an output when the power-off handler is called. If this optional
+> -  property is not specified, the GPIO is initialized as an output in its
+> -  inactive state.
+> -- active-delay-ms: Delay (default 100) to wait after driving gpio active
+> -- inactive-delay-ms: Delay (default 100) to wait after driving gpio inac=
+tive
+> -- timeout-ms: Time to wait before asserting a WARN_ON(1). If nothing is
+> -              specified, 3000 ms is used.
+> -
+> -Examples:
+> -
+> -gpio-poweroff {
+> -	compatible =3D "gpio-poweroff";
+> -	gpios =3D <&gpio 4 0>;
+> -	timeout-ms =3D <3000>;
+> -};
+> diff --git a/Documentation/devicetree/bindings/power/reset/gpio-poweroff.=
+yaml b/Documentation/devicetree/bindings/power/reset/gpio-poweroff.yaml
+> new file mode 100644
+> index 000000000000..50ae0cec6493
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/reset/gpio-poweroff.yaml
+> @@ -0,0 +1,64 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/reset/gpio-poweroff.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
->  	return 0;
->  }
->  
-> @@ -335,24 +310,16 @@ static int imx_change_mode(struct thermal_zone_device *tz,
->  			   enum thermal_device_mode mode)
->  {
->  	struct imx_thermal_data *data = tz->devdata;
-> -	struct regmap *map = data->tempmon;
-> -	const struct thermal_soc_data *soc_data = data->socdata;
->  
->  	if (mode == THERMAL_DEVICE_ENABLED) {
-> -		regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
-> -			     soc_data->power_down_mask);
-> -		regmap_write(map, soc_data->sensor_ctrl + REG_SET,
-> -			     soc_data->measure_temp_mask);
-> +		pm_runtime_get(data->dev);
->  
->  		if (!data->irq_enabled) {
->  			data->irq_enabled = true;
->  			enable_irq(data->irq);
->  		}
->  	} else {
-> -		regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
-> -			     soc_data->measure_temp_mask);
-> -		regmap_write(map, soc_data->sensor_ctrl + REG_SET,
-> -			     soc_data->power_down_mask);
-> +		pm_runtime_put(data->dev);
->  
->  		if (data->irq_enabled) {
->  			disable_irq(data->irq);
-> @@ -393,6 +360,11 @@ static int imx_set_trip_temp(struct thermal_zone_device *tz, int trip,
->  			     int temp)
->  {
->  	struct imx_thermal_data *data = tz->devdata;
-> +	int ret;
-> +
-> +	ret = pm_runtime_resume_and_get(data->dev);
-> +	if (ret < 0)
-> +		return ret;
->  
->  	/* do not allow changing critical threshold */
->  	if (trip == IMX_TRIP_CRITICAL)
-> @@ -406,6 +378,8 @@ static int imx_set_trip_temp(struct thermal_zone_device *tz, int trip,
->  
->  	imx_set_alarm_temp(data, temp);
->  
-> +	pm_runtime_put(data->dev);
-> +
->  	return 0;
->  }
->  
-> @@ -681,6 +655,8 @@ static int imx_thermal_probe(struct platform_device *pdev)
->  	if (!data)
->  		return -ENOMEM;
->  
-> +	data->dev = &pdev->dev;
-> +
->  	map = syscon_regmap_lookup_by_phandle(pdev->dev.of_node, "fsl,tempmon");
->  	if (IS_ERR(map)) {
->  		ret = PTR_ERR(map);
-> @@ -801,6 +777,14 @@ static int imx_thermal_probe(struct platform_device *pdev)
->  	regmap_write(map, data->socdata->sensor_ctrl + REG_SET,
->  		     data->socdata->measure_temp_mask);
->  
-> +	/* the core was configured and enabled just before */
-> +	pm_runtime_set_active(&pdev->dev);
-> +	pm_runtime_enable(data->dev);
-> +
-> +	ret = pm_runtime_resume_and_get(data->dev);
-> +	if (ret < 0)
-> +		goto disable_runtime_pm;
-> +
->  	data->irq_enabled = true;
->  	ret = thermal_zone_device_enable(data->tz);
->  	if (ret)
-> @@ -814,10 +798,17 @@ static int imx_thermal_probe(struct platform_device *pdev)
->  		goto thermal_zone_unregister;
->  	}
->  
-> +	ret = pm_runtime_put(data->dev);
-> +	if (ret < 0)
-> +		goto disable_runtime_pm;
-> +
->  	return 0;
->  
->  thermal_zone_unregister:
->  	thermal_zone_device_unregister(data->tz);
-> +disable_runtime_pm:
-> +	pm_runtime_put_noidle(data->dev);
-> +	pm_runtime_disable(data->dev);
->  clk_disable:
->  	clk_disable_unprepare(data->thermal_clk);
->  legacy_cleanup:
-> @@ -829,13 +820,9 @@ static int imx_thermal_probe(struct platform_device *pdev)
->  static int imx_thermal_remove(struct platform_device *pdev)
->  {
->  	struct imx_thermal_data *data = platform_get_drvdata(pdev);
-> -	struct regmap *map = data->tempmon;
->  
-> -	/* Disable measurements */
-> -	regmap_write(map, data->socdata->sensor_ctrl + REG_SET,
-> -		     data->socdata->power_down_mask);
-> -	if (!IS_ERR(data->thermal_clk))
-> -		clk_disable_unprepare(data->thermal_clk);
-> +	pm_runtime_put_noidle(data->dev);
-> +	pm_runtime_disable(data->dev);
->  
->  	thermal_zone_device_unregister(data->tz);
->  	imx_thermal_unregister_legacy_cooling(data);
-> @@ -858,29 +845,79 @@ static int __maybe_unused imx_thermal_suspend(struct device *dev)
->  	ret = thermal_zone_device_disable(data->tz);
->  	if (ret)
->  		return ret;
-> +
-> +	return pm_runtime_force_suspend(data->dev);
-> +}
-> +
-> +static int __maybe_unused imx_thermal_resume(struct device *dev)
-> +{
-> +	struct imx_thermal_data *data = dev_get_drvdata(dev);
-> +	int ret;
-> +
-> +	ret = pm_runtime_force_resume(data->dev);
-> +	if (ret)
-> +		return ret;
-> +	/* Enabled thermal sensor after resume */
-> +	return thermal_zone_device_enable(data->tz);
-> +}
-> +
-> +static int __maybe_unused imx_thermal_runtime_suspend(struct device *dev)
-> +{
-> +	struct imx_thermal_data *data = dev_get_drvdata(dev);
-> +	const struct thermal_soc_data *socdata = data->socdata;
-> +	struct regmap *map = data->tempmon;
-> +	int ret;
-> +
-> +	ret = regmap_write(map, socdata->sensor_ctrl + REG_CLR,
-> +			   socdata->measure_temp_mask);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = regmap_write(map, socdata->sensor_ctrl + REG_SET,
-> +			   socdata->power_down_mask);
-> +	if (ret)
-> +		return ret;
-> +
->  	clk_disable_unprepare(data->thermal_clk);
->  
->  	return 0;
->  }
->  
-> -static int __maybe_unused imx_thermal_resume(struct device *dev)
-> +static int __maybe_unused imx_thermal_runtime_resume(struct device *dev)
->  {
->  	struct imx_thermal_data *data = dev_get_drvdata(dev);
-> +	const struct thermal_soc_data *socdata = data->socdata;
-> +	struct regmap *map = data->tempmon;
->  	int ret;
->  
->  	ret = clk_prepare_enable(data->thermal_clk);
->  	if (ret)
->  		return ret;
-> -	/* Enabled thermal sensor after resume */
-> -	ret = thermal_zone_device_enable(data->tz);
-> +
-> +	ret = regmap_write(map, socdata->sensor_ctrl + REG_CLR,
-> +			   socdata->power_down_mask);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = regmap_write(map, socdata->sensor_ctrl + REG_SET,
-> +			   socdata->measure_temp_mask);
->  	if (ret)
->  		return ret;
->  
-> +	/*
-> +	 * According to the temp sensor designers, it may require up to ~17us
-> +	 * to complete a measurement.
-> +	 */
-> +	usleep_range(20, 50);
-> +
->  	return 0;
->  }
->  
-> -static SIMPLE_DEV_PM_OPS(imx_thermal_pm_ops,
-> -			 imx_thermal_suspend, imx_thermal_resume);
-> +static const struct dev_pm_ops imx_thermal_pm_ops = {
-> +	SET_SYSTEM_SLEEP_PM_OPS(imx_thermal_suspend, imx_thermal_resume)
-> +	SET_RUNTIME_PM_OPS(imx_thermal_runtime_suspend,
-> +			   imx_thermal_runtime_resume, NULL)
-> +};
->  
->  static struct platform_driver imx_thermal = {
->  	.driver = {
-> 
+> +title: Driver a GPIO line that can be used to turn the power off
 
+This is a DT binding, not kernel driver documentation. Title should
+be something like
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+title: GPIO controlled power off
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> +
+> +maintainers:
+> +  - Sebastian Reichel <sre@kernel.org>
+> +
+> +description:
+> +  The driver supports both level triggered and edge triggered power off.
+> +  At driver load time, the driver will request the given gpio line and
+> +  install a handler to power off the system. If the optional properties
+> +  'input' is not found, the GPIO line will be driven in the inactive
+> +  state. Otherwise its configured as an input.
+> +
+> +  When the power-off handler is called, the gpio is configured as an
+> +  output, and drive active, so triggering a level triggered power off
+> +  condition. This will also cause an inactive->active edge condition, so
+> +  triggering positive edge triggered power off. After a delay of 100ms,
+> +  the GPIO is set to inactive, thus causing an active->inactive edge,
+> +  triggering negative edge triggered power off. After another 100ms
+> +  delay the GPIO is driver active again. If the power is still on and
+> +  the CPU still running after a 3000ms delay, a WARN_ON(1) is emitted.
+
+This description is quite Linux specific. I think it should be
+easily possible to fix that:
+
+System power off support via a GPIO line. When a shutdown is
+executed the operating system is expected to switch the GPIO
+=66rom inactive to active. After a delay (active-delay-ms) it
+is expected to be switched back to inactive. After another
+delay (inactive-delay-ms) it is configured as active again.
+Finally the operating system assumes the power off failed if
+the system is still running after waiting some time (timeout-ms).
+
+> +properties:
+> +  compatible:
+> +    const: gpio-poweroff
+> +
+> +  gpios: true
+
+maxItems: 1
+
+> +
+> +  input:
+> +    description: |
+> +      Initially configure the GPIO line as an input. Only reconfigure
+> +      it to an output when the power-off handler is called. If this opti=
+onal
+
+type: boolean
+
+s/handler is called/power off sequence is initiated/
+
+> +      property is not specified, the GPIO is initialized as an output in=
+ its inactive state.
+> +
+> +  active-delay-ms:
+> +    default: 100
+> +    description: Delay to wait after driving gpio active
+> +
+> +  inactive-delay-ms:
+> +    default: 100
+> +    description: Delay to wait after driving gpio inactive
+> +
+> +  timeout-ms:
+> +    default: 3000
+> +    description: Time to wait before asserting a WARN_ON(1).
+
+Time to wait before assuming the power off sequence failed.
+
+> +required:
+> +  - compatible
+> +  - gpios
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    gpio-poweroff {
+> +        compatible =3D "gpio-poweroff";
+> +        gpios =3D <&gpio 4 0>;
+> +        timeout-ms =3D <3000>;
+> +    };
+
+Thanks,
+
+-- Sebastian
+
+--tyn6d3fmh7rrtjqg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmFurJkACgkQ2O7X88g7
++ppsbA/+KkgU4fyrWct6l/7zcBjWYuWDAeOb/1WjcRN6RcDWaLlf1JMVo+NCTUhj
+v0brN6mzdNQnGKVnzWypjPL3BZCrxu/RYdaMoBYoCqvMjRDd4k+w9sC4XloA6ByL
+Dhmz3o21GyFGxerk4H1M04+lcJkZIfE+skWbImDHRoSgpugPJC5xCMMlthoeUAmO
+w1kHomDT3yl1ZJjM0VFOc963zm7sreHUDksCuI7/eZTw4d9VcNnnnNnpMtCP9L/r
+2roQJHdCXsAszIPpIL84HFCRfc9V2wV5WvXQX7Y8cRrnzVSLTRXefMU9uVEn3Ol2
+4OyWIcdWHYj8DgR7epN7EvHqHwbHNSh+U9/85JsSeYJDAfdyRdrW1afmenuf4Zzd
+1kfdrrra3ctQbyYYo+HHMskgVzB8I4guASHqGOlbLnC9V2nmyJ6Je5FDq1DbEJnA
+82H1pbgFZQ5AUxQ7MK/dTwLL5GkrQHHjddGoJyiDNSDuYYGefW/DCQvDosxbZAIr
+QEfEFtgPt/sTCn1TyU+fTMBdvrX/ybaTwkURDUxWDt95aWO+VsiZbcybKQ3QKPoU
+Oyzx0/PdA5cduzw9Ny3V9vbsdkiBRdYJh8Pfb4mXHPKdk6DONfI3aOwHLyxX9oz5
+mnl9z9ExNDPXPUnnIt2QZiBt232Bhxgvap6aUeO6d70DI2f5A8c=
+=mb4Y
+-----END PGP SIGNATURE-----
+
+--tyn6d3fmh7rrtjqg--
