@@ -2,170 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 608CA433EF2
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Oct 2021 21:04:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A050A433F80
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Oct 2021 21:57:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234401AbhJSTGQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Oct 2021 15:06:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43776 "EHLO
+        id S231355AbhJST7N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Oct 2021 15:59:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232717AbhJSTGP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Oct 2021 15:06:15 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB990C06161C;
-        Tue, 19 Oct 2021 12:04:02 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id k26so801875pfi.5;
-        Tue, 19 Oct 2021 12:04:02 -0700 (PDT)
+        with ESMTP id S230481AbhJST7N (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Oct 2021 15:59:13 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E74C06161C
+        for <linux-pm@vger.kernel.org>; Tue, 19 Oct 2021 12:56:59 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d9so913205pfl.6
+        for <linux-pm@vger.kernel.org>; Tue, 19 Oct 2021 12:56:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=5jq+/J8X7Obd2imDcwpZ+MCW2sOsM0kIEXRg40RYP5o=;
-        b=mjKZ97EqSxYXXMQDfdwa8yGmDbqqi9AzYIMPNYrfK9qjoG4d547pyDtwBELYR2UIfr
-         TdcmFpdVAb9VXXkWVM0j/+9E077bhobVhAVuI6n0F0Dg4ftDMWepDyVkYOtF2V1fQXXH
-         4B5AvBhMF8JPUsxvZeIA0JUm5SM7Sc5eNSeMD2xNyLb8ZqeH7oJBgE4PuZd3YXHAo/fu
-         Kf4y6N5hsj1OVPRJMP+V1E4lXHcblQ0wRTw+6qMqxOO8tz/eszofBGFImrmmC8i8NeD2
-         vVz9fJ12p3Q5JhbeIYu/yhUU4F93gjXtdcOQ6jSNj4+h+GGAjhRgJhHYMrJ4F4/0JWsk
-         Qecw==
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=xO1I/riTEvxQXc+p0ueLA/UBlgGCBk6cpJ8mfk1SWig=;
+        b=YeYvu4Idfba1eKNH2Ibun5T7F22KJs6VrgNuXXtjAXQ4h4qwbw2PG2E1dkhxfMHcvz
+         JQrBZ7YNSvICVNxiRNRvtU4nnvw2kjJuIYf4mn4RXqanENXhiFRllR58Q7c8rUDTqopi
+         ondxw7YqjhlKptIPnOa8Ex9PgUD46kOUTDoWPOCzMiYDXQjFkamocUaiGtFMEwMoELCR
+         8Xru1cEdyJATcPmYMG4w/y4BL50Pso38K7mYefNnDSXzFG81dEt802+lfFdYmyCkNJRV
+         0cseBsKaPs1fJ3cPQvjaY18/RiyFIryBFR3FykGxGC5tLsS7dxnV18d/JQWtP5Bq+anF
+         dHYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=5jq+/J8X7Obd2imDcwpZ+MCW2sOsM0kIEXRg40RYP5o=;
-        b=W0Dz23TGeOa+1C1gShfpdzppR0mOkuw692zqLbP1CL0DLLSIB6FVwdIJIV3+6g3j+9
-         gFabmaa9oG0qVjSxohhjsu9XSSXksviDp//mav9OFUBUsVP5B39roF7l8w+Qxn+gevFg
-         gw7X/m9fNVmgi9f9S3nspmQdrpfZXVfz83x82f85rJ5w0UjrImrUP7xH6J/KZVWbIOet
-         RWp4qfHzSfGS5ZOKI17JhzUyPwZ05DiNToW43enUW7rYAxD7lXT2AJPqPoInjD83+a09
-         r6yY/uko0UmhsEnPH64Lo8L1TB2nbAs/fEXAZIQ5Vm+w9k9JSVw2LjsEje5+IvbVjSzt
-         PQ+A==
-X-Gm-Message-State: AOAM533xtkHDbkNlalUfOPex3v31/GbExhgh27RufQ5ZAiqDkP7RDSv4
-        gnhMWuE4fY5j1pknd1o2uC5/ol7vGVg=
-X-Google-Smtp-Source: ABdhPJy0yotQg3+/FscSU5AJf6cziXixCvM8DTsr+k5DZbp2BpsluWQZ2GYERX0Xeo9F1eD04HrrBQ==
-X-Received: by 2002:a05:6a00:248a:b0:44d:ca05:6430 with SMTP id c10-20020a056a00248a00b0044dca056430mr1660847pfv.62.1634670241561;
-        Tue, 19 Oct 2021 12:04:01 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id h24sm17356992pfn.180.2021.10.19.12.03.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Oct 2021 12:04:00 -0700 (PDT)
-Subject: Re: [PM] bfcc1e67ff:
- kernel-selftests.breakpoints.step_after_suspend_test.fail
-To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        lkp@lists.01.org, lkp@intel.com,
-        kernel test robot <oliver.sang@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-References: <20211014075731.GB18719@xsang-OptiPlex-9020>
- <51c0a15f-1941-f161-dcec-a7a9acc726f2@gmail.com>
- <e526de16-5efd-6474-20e1-3f96a2e3c524@intel.com>
- <6755cf07-fa5a-cbb7-c076-57c162a08c99@gmail.com>
- <d3cf18f1-2af7-5e4d-abe4-c882f25bd5c3@intel.com>
- <20aedfba-14e3-3677-d21a-b87610095445@gmail.com>
- <d36f79b4-472c-4852-7370-a011f9f556ce@intel.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <4300a3d4-76de-70c5-2a7b-c4d066ef5bc6@gmail.com>
-Date:   Tue, 19 Oct 2021 12:03:58 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=xO1I/riTEvxQXc+p0ueLA/UBlgGCBk6cpJ8mfk1SWig=;
+        b=3IREXy0q+oYDu6AfhI3GTr2VFLoO86VELmP8cS3uhHdkAvEcWHgJXxfx9s6X7q3NOF
+         NbiB8Mgc0rlWd05AEYJn8fIO9+EKKBQm2+tSXJy8KgaI/hSHI31cvlQrSxJrrffJAn62
+         wSqEzE460m8qAqKz1KjCFnjpV+aTft8VmXCBPEexmiFx1Agh0anS4mNK1WNHgVJnPYzE
+         GKingsnhzm3ZcreZvQJHwsgob9wjW6m75VN7mYoBUlhn6XDlqtz/p3CFiIuTh966KfDg
+         Jm1gDJljMI4/rYMYDq/N95GF60P3WJTKMoxxdL0cjE+Dr2m5lQTgfk2CPMsLnNk7OxNj
+         r+Tg==
+X-Gm-Message-State: AOAM5324cNz+0V0e+zICKR802g1iGZO+ptT1MAttmYef+d1u7qeFqqjx
+        XPSsBk/s/tDl1NGRNJ1MNF+Zg1B7qaIHtcBL
+X-Google-Smtp-Source: ABdhPJyO1TEpsoz9ODVumDgc4KqmqqTb7QU3+0muurdImzhxRSR0Jk4hBQk4JVhDepM6cgF9t48jCA==
+X-Received: by 2002:a63:fe41:: with SMTP id x1mr30446445pgj.272.1634673419429;
+        Tue, 19 Oct 2021 12:56:59 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id t38sm58265pfg.102.2021.10.19.12.56.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Oct 2021 12:56:59 -0700 (PDT)
+Message-ID: <616f230b.1c69fb81.9fc07.0457@mx.google.com>
+Date:   Tue, 19 Oct 2021 12:56:59 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <d36f79b4-472c-4852-7370-a011f9f556ce@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v5.15-rc6-60-g548e1842f9d7
+X-Kernelci-Report-Type: build
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 1 warning (v5.15-rc6-60-g548e1842f9d7)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/19/21 11:53 AM, Rafael J. Wysocki wrote:
-> On 10/15/2021 9:40 PM, Florian Fainelli wrote:
->> On 10/15/21 11:45 AM, Rafael J. Wysocki wrote:
->>> On 10/14/2021 11:55 PM, Florian Fainelli wrote:
->>>> On 10/14/21 12:23 PM, Rafael J. Wysocki wrote:
->>>>> On 10/14/2021 6:26 PM, Florian Fainelli wrote:
->>>>>> On 10/14/21 12:57 AM, kernel test robot wrote:
->>>>>>> Greeting,
->>>>>>>
->>>>>>> FYI, we noticed the following commit (built with gcc-9):
->>>>>>>
->>>>>>> commit: bfcc1e67ff1e4aa8bfe2ca57f99390fc284c799d ("PM: sleep: Do not
->>>>>>> assume that "mem" is always present")
->>>>>>> https://git.kernel.org/cgit/linux/kernel/git/next/linux-next.git
->>>>>>> master
->>>>>>>
->>>>>>>
->>>>>>> in testcase: kernel-selftests
->>>>>>> version: kernel-selftests-x86_64-c8c9111a-1_20210929
->>>>>>> with following parameters:
->>>>>>>
->>>>>>>       group: group-00
->>>>>>>       ucode: 0x11
->>>>>>>
->>>>>>> test-description: The kernel contains a set of "self tests" under
->>>>>>> the
->>>>>>> tools/testing/selftests/ directory. These are intended to be small
->>>>>>> unit tests to exercise individual code paths in the kernel.
->>>>>>> test-url: https://www.kernel.org/doc/Documentation/kselftest.txt
->>>>>>>
->>>>>>>
->>>>>>> on test machine: 288 threads 2 sockets Intel(R) Xeon Phi(TM) CPU
->>>>>>> 7295
->>>>>>> @ 1.50GHz with 80G memory
->>>>>>>
->>>>>>> caused below changes (please refer to attached dmesg/kmsg for entire
->>>>>>> log/backtrace):
->>>>>>>
->>>>>>>
->>>>>>>
->>>>>>>
->>>>>>> If you fix the issue, kindly add following tag
->>>>>>> Reported-by: kernel test robot <oliver.sang@intel.com>
->>>>>> Thanks for your report. Assuming that the code responsible for
->>>>>> registering the suspend operations is drivers/acpi/sleep.c for your
->>>>>> platform, and that acpi_sleep_suspend_setup() iterated over all
->>>>>> possible
->>>>>> sleep states, your platform must somehow be returning that
->>>>>> ACPI_STATE_S3
->>>>>> is not a supported state somehow?
->>>>>>
->>>>>> Rafael have you ever encountered something like that?
->>>>> Yes, there are systems with ACPI that don't support S3.
->>>> OK and do you know what happens when we enter suspend with "mem" in
->>>> those cases? Do we immediately return because ultimately the firmware
->>>> does not support ACPI S3?
->>> "mem" should not be present in the list of available strings then, so it
->>> should be rejected right away.
->> Well yes, that was the purpose of the patch I submitted, but assuming
->> that we did provide "mem" as one of the possible standby modes even
->> though that was wrong (before patch), and the test was trying to enter
->> ACPI S3 standby, what would have happened, would the ACPI firmware honor
->> the request but return an error, or would it actually enter ACPI S3?
->>
->> In any case, I will change the test to check that this is a supported
->> standby mode before trying it.
-> 
-> Unfortunately, I will need to revert bfcc1e67ff1e4aa8bfe2, because it
-> breaks user space compatibility and that's got caught properly by the test.
+pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.15-rc6-60-g54=
+8e1842f9d7)
 
-Reverting my commit will break powerpc and other ARM/ARM64 platforms
-where mem is not supported (via PSCI), I have a change pending for PSCI
-that will actually check that SYSTEM_SUSPEND is supported before
-unconditionally making use of it.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+15-rc6-60-g548e1842f9d7/
 
-> 
-> What happens is that "mem" is a "pointer" to a secondary list of
-> possible states and that generally is "s2idle shallow deep" and if
-> s2idle is the only available option, it will be just "s2idle".
-> 
-> This list is there in /sys/power/mem_sleep.
-> 
-> It was done this way, because some variants of user space expect "mem"
-> to be always present and don't recognize "freeze" properly.
-> 
-> Sorry for the confusion.
+Tree: pm
+Branch: testing
+Git Describe: v5.15-rc6-60-g548e1842f9d7
+Git Commit: 548e1842f9d7cdeb2eda8f16ae9ae7502d0d4049
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
-So how do we all get our cookie here? Should we just slap an #ifndef
-CONFIG_ACPI in order to allow platforms that do not have "mem" to not
-have it?
--- 
-Florian
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+x86_64:
+
+
+Warnings summary:
+
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
