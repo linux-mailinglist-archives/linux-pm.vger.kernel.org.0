@@ -2,176 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7CA2433CE2
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Oct 2021 19:00:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F272433D7C
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Oct 2021 19:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234192AbhJSRCQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Oct 2021 13:02:16 -0400
-Received: from mail-oi1-f176.google.com ([209.85.167.176]:37459 "EHLO
-        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234441AbhJSRCP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Oct 2021 13:02:15 -0400
-Received: by mail-oi1-f176.google.com with SMTP id o83so5947038oif.4;
-        Tue, 19 Oct 2021 10:00:02 -0700 (PDT)
+        id S233460AbhJSRbS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Oct 2021 13:31:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50414 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231226AbhJSRbS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Oct 2021 13:31:18 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6C8C06161C;
+        Tue, 19 Oct 2021 10:29:05 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id oa12-20020a17090b1bcc00b0019f715462a8so429203pjb.3;
+        Tue, 19 Oct 2021 10:29:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=W2X1FQaCbytH6Y85/dT0+c3wJsK9OsRJpL7ENlvvTJs=;
+        b=AeB+pOTf5kJs/Z0r3aBXdKqT6wEplbvKH+tXHvBYW/4r9+YpsZZFJokIKTVWvnPL9A
+         f2f7uAgd4x2L2hHZa7cFwOn3ulSBTfKCXgvAOJ2oqJDAcrbrQuZNXE1Eu6cxcRtqLmmc
+         8FkBfQH/+5/LCgdQiUTQt/GUPLLjvLQR2Pkq0dVE+FSahdSiC+env5vJNWN7vTVsvE9f
+         2O+G8h9nOlgcoORnzmjzSLusNjEhOwmBdat0jbNKkjdGJMrJA89C1vmyYkwi2tcV1RGY
+         DdtFLoQX/Mm3lTU2eW2nx8dYVhgLZsSUuy3Yg+ny37MFuFv+WPszlvM8AK2L6XQgdlNo
+         zE/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ooo83OSz7vbQdFOJmPWLx460yaZhwNmEZuCrtQkhKbY=;
-        b=l8ojSJ7kjg+Mq0NigvdQ9BSq8L+FTk3OTgi1ol4nxv9OxUgxlCR3j7ekI6eDwUSVtW
-         uyNi7E9gxxMT3C9ZKy4gm5O/bqmHY+17l/VXQaTiTiWRGMALLLt8tu+bYmYmxYWFZEvN
-         Jzl7Q0q2TYK9EcbfngiAPy7G5R0c5nO0cB3X+O2uHXiggkFzvnEC2MQ5fZc2q5VZajWL
-         oAf/9CVGiWU04NJEWk6S6hu/zuE31GlA0HkIPwXoa0bb2DxKVqG8nnTZKeAKjR0axlNL
-         X946WmEux7Ih6DRYVbpIFhDQLLiLekTw3mgNtZlnGxbom1ZXFOp+E+aUpkEgA/aD2NRF
-         TG8A==
-X-Gm-Message-State: AOAM533lgnOw/97bLDCzlurFkqgYC5hvgKbStLX64Bx9XxTeY154oWGq
-        7WblQcFJYCzwdmQ3WNZpN1frrmO1eFOSp8BSpeI=
-X-Google-Smtp-Source: ABdhPJw1BUjeQEztWtQ5VMRmMEPC4CU0qqAstnLfjebebV31MgAGnLdmPinIekBJQ+XTYwJSOFzekwr0ZmZJFd9ijlY=
-X-Received: by 2002:aca:b5c3:: with SMTP id e186mr5330439oif.51.1634662802579;
- Tue, 19 Oct 2021 10:00:02 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=W2X1FQaCbytH6Y85/dT0+c3wJsK9OsRJpL7ENlvvTJs=;
+        b=x/3Q083fYndIUBW/fu4pJRplJKOsQiMgH56jcVjdaJQkyctcXhSoEr43qkkSmTNHjd
+         j1W8QTxAMzGtJWmeXDE9g7O5WHOLS95Au1gdXmtPpbdRU41o2IihmrrvzVUg6O2I/0H/
+         W0261vanEtj41QO6u3KAL1jGcotOoXuYPuvIsRIbDdbIxGQBxheraVIp49C88lPHeDso
+         pVywAUULLtyojy9uoViF7KqQYJJvP788VdFdS6ug23Xz+oIhZn/R+WypkzMHXRIqeRfF
+         6ydrPAGSHfjglN+uh9v4ex70KsWXVyyzjISjI6GLjqdxPic9Lovxx58rxgMo3ntvO+Ds
+         O+Og==
+X-Gm-Message-State: AOAM531xE5c/1bsNsEtNiidXCAhEKIJ40oxMtvonnttNOPpDcAJeT0uY
+        2WKLxRf4sEcveUmfsnEVKF0pBik96E0CzcmaFxc=
+X-Google-Smtp-Source: ABdhPJxlZkFuoAjdUJS8GFXiwpiKnmbV7aKH1yCtEw9KDPHGOTMeTZIWT/+sCYUojN4mkkY26vQHTsYRx94VC8yzyQc=
+X-Received: by 2002:a17:902:a9c3:b0:13f:c765:148d with SMTP id
+ b3-20020a170902a9c300b0013fc765148dmr9256619plr.28.1634664544821; Tue, 19 Oct
+ 2021 10:29:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210926090605.3556134-1-ray.huang@amd.com> <20210926090605.3556134-5-ray.huang@amd.com>
-In-Reply-To: <20210926090605.3556134-5-ray.huang@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 19 Oct 2021 18:59:51 +0200
-Message-ID: <CAJZ5v0g58vrHNcOEoWUCKmTxraSTuCzVLffzEAgz7TPa8+TNyw@mail.gmail.com>
-Subject: Re: [PATCH v2 04/21] ACPI: CPPC: add cppc enable register function
-To:     Huang Rui <ray.huang@amd.com>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Borislav Petkov <bp@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>
+References: <20210924115032.29684-1-o.rempel@pengutronix.de>
+ <19b2ab33-aa56-75fb-f6ef-3c928be9c50c@linaro.org> <20211019115151.GC16320@pengutronix.de>
+ <df3f527d-22f3-b58d-a546-bdd8d312505c@linaro.org> <20211019125929.GD16320@pengutronix.de>
+In-Reply-To: <20211019125929.GD16320@pengutronix.de>
+From:   Petr Benes <petrben@gmail.com>
+Date:   Tue, 19 Oct 2021 19:28:53 +0200
+Message-ID: <CAPwXO5Z8k9TZ4y6ZTFrv-2TK7Lv8Y28LDSTXpT8s4oPPDxupYw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] thermal: imx: implement runtime PM support
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-pm@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        David Jander <david@protonic.nl>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        =?UTF-8?B?TWljaGFsIFZva8OhxI0=?= <michal.vokac@ysoft.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Sep 26, 2021 at 11:06 AM Huang Rui <ray.huang@amd.com> wrote:
+We dropped Michal from the loop. Adding him back.
+
+On Tue, 19 Oct 2021 at 14:59, Oleksij Rempel <o.rempel@pengutronix.de> wrot=
+e:
 >
-> From: Jinzhou Su <Jinzhou.Su@amd.com>
+> On Tue, Oct 19, 2021 at 01:55:32PM +0200, Daniel Lezcano wrote:
+> > On 19/10/2021 13:51, Oleksij Rempel wrote:
+> > > Hi Daniel,
+> > >
+> > > On Tue, Oct 19, 2021 at 01:04:46PM +0200, Daniel Lezcano wrote:
+> > >> On 24/09/2021 13:50, Oleksij Rempel wrote:
+> > >>> Starting with commit d92ed2c9d3ff ("thermal: imx: Use driver's loca=
+l
+> > >>> data to decide whether to run a measurement") this driver stared us=
+ing
+> > >>> irq_enabled flag to make decision to power on/off the thermal core.=
+ This
+> > >>> triggered a regression, where after reaching critical temperature, =
+alarm
+> > >>> IRQ handler set irq_enabled to false,  disabled thermal core and wa=
+s not
+> > >>> able read temperature and disable cooling sequence.
+> > >>>
+> > >>> In case the cooling device is "CPU/GPU freq", the system will run w=
+ith
+> > >>> reduce performance until next reboot.
+> > >>>
+> > >>> To solve this issue, we need to move all parts implementing hand ma=
+de
+> > >>> runtime power management and let it handle actual runtime PM framew=
+ork.
+> > >>>
+> > >>> Fixes: d92ed2c9d3ff ("thermal: imx: Use driver's local data to deci=
+de whether to run a measurement")
+> > >>> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> > >>
+> > >> Thanks for this fix.
+> > >>
+> > >> Petr or Oleksij,
+> > >>
+> > >> could you confirm it is tested and working without CONFIG_PM ?
+> > >
+> > > Petr was right, no it is not working without PM.
+> > Ok, thanks.
+> >
+> > I suppose the fix is related to the initialization of the sensor which
+> > should be enabled with/out pm_runtime, right ?
 >
-> Add a new function to enable CPPC feature. This function
-> will write Continuous Performance Control package
-> EnableRegister field on the processor.
-
-And what is going to take place after this write?
-
-Also, it would be good to mention that the user of this function will
-be added subsequently.
-
-> Signed-off-by: Jinzhou Su <Jinzhou.Su@amd.com>
-> Signed-off-by: Huang Rui <ray.huang@amd.com>
-> ---
->  drivers/acpi/cppc_acpi.c | 48 ++++++++++++++++++++++++++++++++++++++++
->  include/acpi/cppc_acpi.h |  5 +++++
->  2 files changed, 53 insertions(+)
+> No, i did sanity check on pm_runtime_put() within the probe. Without PM
+> it will properly return ENOSYS, so I aborted the probe. Looks like I
+> should ignore return value on this function like every driver is doing
+> it.
 >
-> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> index 2efe2ba97d96..b285960c35e7 100644
-> --- a/drivers/acpi/cppc_acpi.c
-> +++ b/drivers/acpi/cppc_acpi.c
-> @@ -1220,6 +1220,54 @@ int cppc_get_perf_ctrs(int cpunum, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
->  }
->  EXPORT_SYMBOL_GPL(cppc_get_perf_ctrs);
+> >
+> >
+> > --
+> > <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for =
+ARM SoCs
+> >
+> > Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> > <http://twitter.com/#!/linaroorg> Twitter |
+> > <http://www.linaro.org/linaro-blog/> Blog
+> >
 >
-> +/**
-> + * cppc_set_enable - Set to enable CPPC on the processor by writing the
-> + * Continuous Performance Control package EnableRegister feild.
-> + * @cpu: CPU for which to enable CPPC register.
-> + * @enable: 0 - disable, 1 - enable CPPC feature on the processor.
-> + *
-> + * Return: 0 for success, -ERRNO or -EIO otherwise.
-> + */
-> +int cppc_set_enable(int cpu, u32 enable)
-> +{
-> +       int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpu);
-> +       struct cpc_register_resource *enable_reg;
-> +       struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpu);
-> +       struct cppc_pcc_data *pcc_ss_data = NULL;
-> +       int ret = -1;
-> +
-> +       /* check the input value*/
-> +       if (cpu < 0 || cpu > num_possible_cpus() - 1 || enable > 1)
-
-Why not use cpu_possible()?  And why enable > 1 is a problem?
-
-> +               return -ENODEV;
-
--EINVAL
-
-> +
-> +       if (!cpc_desc) {
-
-if this is checked, the cpu_possible() check above is redundant.
-
-> +               pr_debug("No CPC descriptor for CPU:%d\n", cpu);
-> +               return -ENODEV;
-> +       }
-> +
-> +       enable_reg = &cpc_desc->cpc_regs[ENABLE];
-> +
-> +       if (CPC_IN_PCC(enable_reg)) {
-> +
-> +               if (pcc_ss_id < 0)
-> +                       return -EIO;
-> +
-> +               ret = cpc_write(cpu, enable_reg, enable);
-> +               if (ret)
-> +                       return ret;
-> +
-> +               pcc_ss_data = pcc_data[pcc_ss_id];
-> +
-> +               down_write(&pcc_ss_data->pcc_lock);
-> +               /* after writing CPC, transfer the ownership of PCC to platfrom */
-> +               ret = send_pcc_cmd(pcc_ss_id, CMD_WRITE);
-> +               up_write(&pcc_ss_data->pcc_lock);
-> +       }
-
-Does it really need to do nothing if the register is not in PCC?  If
-so, then why?
-
-> +
-> +       return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(cppc_set_enable);
-> +
->  /**
->   * cppc_set_perf - Set a CPU's performance controls.
->   * @cpu: CPU for which to set performance controls.
-> diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
-> index 9f4985b4d64d..3fdae40a75fc 100644
-> --- a/include/acpi/cppc_acpi.h
-> +++ b/include/acpi/cppc_acpi.h
-> @@ -137,6 +137,7 @@ struct cppc_cpudata {
->  extern int cppc_get_desired_perf(int cpunum, u64 *desired_perf);
->  extern int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs);
->  extern int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
-> +extern int cppc_set_enable(int cpu, u32 enable);
->  extern int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps);
->  extern bool acpi_cpc_valid(void);
->  extern int acpi_get_psd_map(unsigned int cpu, struct cppc_cpudata *cpu_data);
-> @@ -157,6 +158,10 @@ static inline int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls)
->  {
->         return -ENOTSUPP;
->  }
-> +static inline int cppc_set_enable(int cpu, u32 enable)
-> +{
-> +       return -ENOTSUPP;
-> +}
->  static inline int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps)
->  {
->         return -ENOTSUPP;
 > --
-> 2.25.1
->
+> Pengutronix e.K.                           |                             =
+|
+> Steuerwalder Str. 21                       | http://www.pengutronix.de/  =
+|
+> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    =
+|
+> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 =
+|
