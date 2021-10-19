@@ -2,103 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6846433C86
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Oct 2021 18:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 678F7433CC0
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Oct 2021 18:52:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234478AbhJSQlI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Oct 2021 12:41:08 -0400
-Received: from mail-ot1-f49.google.com ([209.85.210.49]:39865 "EHLO
-        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234483AbhJSQlI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Oct 2021 12:41:08 -0400
-Received: by mail-ot1-f49.google.com with SMTP id e59-20020a9d01c1000000b00552c91a99f7so3577937ote.6;
-        Tue, 19 Oct 2021 09:38:55 -0700 (PDT)
+        id S231750AbhJSQzC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Oct 2021 12:55:02 -0400
+Received: from mail-oi1-f170.google.com ([209.85.167.170]:44572 "EHLO
+        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229789AbhJSQzC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Oct 2021 12:55:02 -0400
+Received: by mail-oi1-f170.google.com with SMTP id y207so5852192oia.11;
+        Tue, 19 Oct 2021 09:52:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Pf+ZmgtAsq2+DIlmaBCIGg+7IqnLeyahgZKALzDPrlI=;
-        b=rU/fxWfYlKDNmuFJq4ltBDdZI1YVe23qrbPOYFMZxoRKf326QK1J/xRkGNYcJ8yA1e
-         68FFqMI7WeIrO8DITQ0uoi4n8vlnFXx8VUeTKwSczcmqgMbwrhbic1c/ktGmHCTnM0lN
-         7F57hYjb2lo9F4uQl8cXupcYuPJQ58g5VHIz37S3WDmSFUkr/uLYhFOTEt8ud+XuUj3d
-         wI2cmBl5gRTiGcZGnBTSKv8/EoA0QCgjEFQIE/6FBBD0A0ZQqk06PZrTgFp3JO4cFRQ0
-         T7xYvoa2CDj04HwFRnNoamEBi4JBaJjiohmtORjOpiL9cmhNZFEcFrbnaOzQG4y0S7F0
-         oSfg==
-X-Gm-Message-State: AOAM533j90wWMGUjcS8/xUSXIITEe5yrkJF9ftu3NiCktuSHvFO4C92K
-        DLHdrdepmTzupL6sF+INC5fqaP/JgBG/XR3gHjc=
-X-Google-Smtp-Source: ABdhPJz4tX4Yv52Culq0N48P2cv9qe6Npaic2i0EqWNOmgxyZFUmbGtx/PpMdt1CGVdzt50qxEKujGBy6dKL5zgPZww=
-X-Received: by 2002:a05:6830:1af0:: with SMTP id c16mr5911496otd.16.1634661534934;
- Tue, 19 Oct 2021 09:38:54 -0700 (PDT)
+        bh=fg0cCwJVHF76pIKAhe13PodfxRRyNCDHrc0ozMywzNw=;
+        b=XJx3BHDQcRn5lHt5LTxkkaknh4Cv1c763/+wzPrzxcQkFAm2EL+1D8dRR8Pgo9EChA
+         gxWU2VGe6Kg0Skq1M+lP+je25tuF2c7jH948Gpg4hx7RhkfSUr103wVWno9QLoaJg7yS
+         rxkkgwWHz4b42+r0L3Rz3CmPwoiopfQm7uKZzRhHQdzoGKW2RjOlzD7m16SkIROJtYW9
+         OC1EkFZMbMwUKFkdqwT+nZp/4i+uHuLSOJz/RmTeXDAY1qEQfExHjupblRY3QzAp5JjI
+         WacMU84GnCQyCA9tTRcsQrfE9qleSz/37fm34NENDB7VCIachB4QfMZonoOYgk2oCNID
+         DGcQ==
+X-Gm-Message-State: AOAM531AG6YGZGdjwxYmdReflTb8Rfx7AipUlsVPdRIMVTJ5n4/CavVC
+        Wb1M6Z5uBC4HqN7h7yQzcijLnCd5w3z81dt+REs=
+X-Google-Smtp-Source: ABdhPJydRVGsHDP0DrSDIexcFoZ34NnYWweKqZKndMhsMWMgocVz7pqdpzE7bjQh6NXPOYcv/36RcFZk9gDH6wKkjRM=
+X-Received: by 2002:aca:5c5:: with SMTP id 188mr5151432oif.154.1634662368345;
+ Tue, 19 Oct 2021 09:52:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211019163506.2831454-1-daniel.lezcano@linaro.org> <20211019163506.2831454-2-daniel.lezcano@linaro.org>
-In-Reply-To: <20211019163506.2831454-2-daniel.lezcano@linaro.org>
+References: <20210926090605.3556134-1-ray.huang@amd.com> <20210926090605.3556134-4-ray.huang@amd.com>
+In-Reply-To: <20210926090605.3556134-4-ray.huang@amd.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 19 Oct 2021 18:38:44 +0200
-Message-ID: <CAJZ5v0i=v8KvmZzyoaXNuTa-+C4PyQGBe1k2UYbXAg6GksoNzQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] thermal/core: Deprecate changing cooling device
- state from userspace
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+Date:   Tue, 19 Oct 2021 18:52:37 +0200
+Message-ID: <CAJZ5v0ivJk-cVv0kHUeF1M7aWBZ9ziuUF-9=M_eF+WQ1vQJfgQ@mail.gmail.com>
+Subject: Re: [PATCH v2 03/21] ACPI: CPPC: Check online CPUs for determining
+ _CPC is valid
+To:     Huang Rui <ray.huang@amd.com>
+Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Borislav Petkov <bp@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 19, 2021 at 6:35 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
+On Sun, Sep 26, 2021 at 11:06 AM Huang Rui <ray.huang@amd.com> wrote:
 >
-> The cooling devices have their cooling device set_cur_state
-> read-writable all the time in the sysfs directory, thus allowing the
-> userspace to act on it.
+> From: Mario Limonciello <mario.limonciello@amd.com>
 >
-> The thermal framework is wrongly used by userspace as a power capping
-> framework by acting on the cooling device opaque state. This one then
-> competes with the in-kernel governor decision.
+> As this is a static check, it should be based upon what is currently
+> present on the system. This makes probeing more deterministic.
 >
-> We have seen in out-of-tree kernels, a big number of devices which are
-> abusely declaring themselves as cooling device just to act on their
-> power.
+> While local APIC flags field (lapic_flags) of cpu core in MADT table is
+> 0, then the cpu core won't be enabled. In this case, _CPC won't be found
+> in this core, and return back to _CPC invalid with walking through
+> possible cpus (include disable cpus). This is not expected, so switch to
+> check online CPUs instead.
 >
-> The role of the thermal framework is to protect the junction
-> temperature of the silicon. Letting the userspace to play with a
-> cooling device is invalid and potentially dangerous.
->
-> The powercap framework is the right framework to do power capping and
-> moreover it deals with the aggregation via the dev pm qos.
->
-> As the userspace governor is marked deprecated and about to be
-> removed, there is no point to keep this file writable also in the
-> future.
->
-> Emit a warning and deprecate the interface.
->
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
+> Reported-by: Jinzhou Su <Jinzhou.Su@amd.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> Signed-off-by: Huang Rui <ray.huang@amd.com>
 > ---
->  drivers/thermal/thermal_sysfs.c | 3 +++
->  1 file changed, 3 insertions(+)
+>  drivers/acpi/cppc_acpi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-> index 1c4aac8464a7..f154bada2906 100644
-> --- a/drivers/thermal/thermal_sysfs.c
-> +++ b/drivers/thermal/thermal_sysfs.c
-> @@ -610,6 +610,9 @@ cur_state_store(struct device *dev, struct device_attribute *attr,
->         unsigned long state;
->         int result;
+> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+> index a4d4eebba1da..2efe2ba97d96 100644
+> --- a/drivers/acpi/cppc_acpi.c
+> +++ b/drivers/acpi/cppc_acpi.c
+> @@ -411,7 +411,7 @@ bool acpi_cpc_valid(void)
+>         struct cpc_desc *cpc_ptr;
+>         int cpu;
 >
-> +       dev_warn_once(&cdev->device,
-> +                     "Setting cooling device state is deprecated\n");
-> +
->         if (sscanf(buf, "%ld\n", &state) != 1)
->                 return -EINVAL;
->
+> -       for_each_possible_cpu(cpu) {
+> +       for_each_online_cpu(cpu) {
+
+Shouldn't this be for_each_present_cpu()?  In case a CPU is present,
+but not online when cppc_cpufreq is loaded?
+
+>                 cpc_ptr = per_cpu(cpc_desc_ptr, cpu);
+>                 if (!cpc_ptr)
+>                         return false;
 > --
-> 2.25.1
->
