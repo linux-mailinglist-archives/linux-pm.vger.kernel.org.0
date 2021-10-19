@@ -2,40 +2,41 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B23C443371A
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Oct 2021 15:31:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7C3843372C
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Oct 2021 15:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231616AbhJSNeF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Oct 2021 09:34:05 -0400
-Received: from mail-ot1-f53.google.com ([209.85.210.53]:41775 "EHLO
-        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231563AbhJSNeF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Oct 2021 09:34:05 -0400
-Received: by mail-ot1-f53.google.com with SMTP id v2-20020a05683018c200b0054e3acddd91so1923209ote.8;
-        Tue, 19 Oct 2021 06:31:52 -0700 (PDT)
+        id S235691AbhJSNik (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Oct 2021 09:38:40 -0400
+Received: from mail-oi1-f171.google.com ([209.85.167.171]:45901 "EHLO
+        mail-oi1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230487AbhJSNij (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Oct 2021 09:38:39 -0400
+Received: by mail-oi1-f171.google.com with SMTP id z126so4890917oiz.12;
+        Tue, 19 Oct 2021 06:36:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=U6dyuKoKqnraomZVjHNySnHy0G4MecFaWtG9OL7iF/g=;
-        b=3YMVKJa+WR1/8HWqiOksdsdTyYyuB3CqmZdYCrYn5nptGhBQgqp0BLyBpXIm4A4Gt6
-         JHobrktXBvgrtPMtrPAKvTYvRQhOudS3zveoGE65qYarLPEeEDqrE/Kz4J9Nq+JD5Qh0
-         5vpDuBF68pnbFJXwrVGFiqqr7AhtLDOxTMG42ZWk6maJtnm0b14yo5nNQF0lJ2eATEZs
-         m3/ncGMECkUDN9WUlAn6QV37o8gYdRKlMbvILAr1cHVir9TObaiu4HJMzRGLzJrHCMFC
-         JizPWaTUaGGdaeokBP0D8aswqmhkHgOsvj0uVuifuzeA+6ggeCMRmzTWd1GD3i1G0PDk
-         DWfg==
-X-Gm-Message-State: AOAM532jAa82K5/M3HNUA3JPaAFt3aBI2NWhJ90zQPyCuixg/LMuVvzj
-        B6LWiUtKqqrFFBqf9Vzn8srouOjlU/86Y7LXj/Y=
-X-Google-Smtp-Source: ABdhPJzA4KeA+we+cX9bD7GpWwMAux6IBCf3UUSiJNx5IcLvLkWmjiGrhbC/PTFmD5I/fjtqTzbSrvcJ5P2MisoO0V0=
-X-Received: by 2002:a05:6830:90b:: with SMTP id v11mr5364765ott.254.1634650312053;
- Tue, 19 Oct 2021 06:31:52 -0700 (PDT)
+        bh=Lnpf5eUhLXI8j2gElhp4/XH3DNWhAe73BljjrUh6kl8=;
+        b=Pbi6+9DMUxbit0oG3gzVRUD/GcvF2sgEnNrpkajuvHt0KH5RpZehhA8BKJkunj85TH
+         tmpKcS7Om4t45RHBqYmj8eHMpnjMucxJFosjGi/8RHeFmcqQgpnRrELFw0AsNAY1pmMd
+         N5iXe8ldVQXWttwdSZqfHScjLhnRc71lPQjgsHpx7VoLe6nAHk7nf23qORJ3kN3g04cq
+         qzx2v397AASQRTdO5Pj7QweDUz0UQH8m3STXLMsUqsgenQ4nq1i209hkCrWMxyaaCy07
+         RaY9486sT7fyxb+JCS0ZvtbSmW0V0bqGDggNFgKrjSpMRIk0x8Ut6j6Bx60vR7rxnyv4
+         jXRA==
+X-Gm-Message-State: AOAM530RfRgwCnJ8A179J/s1QLURim3eDmJ995G8yMBWLKAqNdVEkP7C
+        mn4koMXYJyqeEFcss/23aAgEwCBKKBSdYeZmVXs=
+X-Google-Smtp-Source: ABdhPJyLg69p7yFiPbQt3tlp9YiwCFJ/XYkoJTm1uPJm5yZpYQx4xx6EANj90TymnUjmY5/AQesSv8GqTSHHSArXNwQ=
+X-Received: by 2002:aca:b5c3:: with SMTP id e186mr4383173oif.51.1634650586176;
+ Tue, 19 Oct 2021 06:36:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211019132211.2792475-1-daniel.lezcano@linaro.org>
-In-Reply-To: <20211019132211.2792475-1-daniel.lezcano@linaro.org>
+References: <20211019132211.2792475-1-daniel.lezcano@linaro.org> <20211019132211.2792475-2-daniel.lezcano@linaro.org>
+In-Reply-To: <20211019132211.2792475-2-daniel.lezcano@linaro.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 19 Oct 2021 15:31:40 +0200
-Message-ID: <CAJZ5v0hBZ9R8LO340uY62bcMJK0KKi2RkX3p_SYPrkWJ-Qd8xQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] thermal/core: Make the userspace governor deprecated
+Date:   Tue, 19 Oct 2021 15:36:15 +0200
+Message-ID: <CAJZ5v0hdhHiSEOrMp+pK0=MvNjT9sTRS8=o0M2bCfwC43GK=6g@mail.gmail.com>
+Subject: Re: [PATCH 2/2] thermal/core: Make deprecated cooling device state
+ change from userspace
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Lukasz Luba <lukasz.luba@arm.com>,
@@ -51,58 +52,59 @@ X-Mailing-List: linux-pm@vger.kernel.org
 On Tue, Oct 19, 2021 at 3:22 PM Daniel Lezcano
 <daniel.lezcano@linaro.org> wrote:
 >
-> The userspace governor is sending temperature when polling is active
-> and trip point crossed events. Nothing else.
+> The cooling devices have their cooling device set_cur_state
+> read-writable all the time in the sysfs directory, thus allowing the
+> userspace to act on it.
 >
-> AFAICT, this governor is used with custom kernels making the userspace
-> governor co-existing with another governor on the same thermal zone
-> because there was no notification mechanism.
+> The thermal framework is wrongly used by userspace as a power capping
+> framework by acting on the cooling device opaque state. This one then
+> competes with the in-kernel governor decision.
 >
-> The new netlink thermal notification is able to provide more
-> information than the userspace governor and give the opportunity to
-> the users of this governor to replace it by a dedicated notification
-> framework.
+> We have seen in out-of-tree kernels, a big number of devices which are
+> abusely declaring themselves as cooling device just to act on their
+> power.
 >
-> The userspace governor will be removed as its usage is no longer
-> needed.
+> The role of the thermal framework is to protect the junction
+> temperature of the silicon.
+
+It's more than that.  You also don't want to let the system's skin
+temperature get too high, for example.
+
+I would just say that the role of the thermal framework is thermal control.
+
+> Letting the userspace to play with a
+> cooling device is wrong and potentially dangerous.
+
+Agreed, although I would say "invalid" instead of "wrong".
+
+> The powercap framework is the right framework to do power capping and
+> moreover it deals with the aggregation via the dev pm qos.
 >
-> Add a warning message to tell the userspace governor is deprecated.
+> As the userspace governor is marked deprecated and about to be
+> removed, there is no point to keep this file writable also in the
+> future.
+>
+> Emit a warning and deprecate the interface.
 >
 > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 > ---
->  drivers/thermal/gov_user_space.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
+>  drivers/thermal/thermal_sysfs.c | 2 ++
+>  1 file changed, 2 insertions(+)
 >
-> diff --git a/drivers/thermal/gov_user_space.c b/drivers/thermal/gov_user_space.c
-> index 82a7198bbe71..95d6d3d6b8f7 100644
-> --- a/drivers/thermal/gov_user_space.c
-> +++ b/drivers/thermal/gov_user_space.c
-> @@ -15,6 +15,14 @@
+> diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+> index 1c4aac8464a7..3f4ea3a283ae 100644
+> --- a/drivers/thermal/thermal_sysfs.c
+> +++ b/drivers/thermal/thermal_sysfs.c
+> @@ -610,6 +610,8 @@ cur_state_store(struct device *dev, struct device_attribute *attr,
+>         unsigned long state;
+>         int result;
 >
->  #include "thermal_core.h"
->
-> +static int user_space_bind(struct thermal_zone_device *tz)
-> +{
-> +       WARN(1, "Userspace governor deprecated: use thermal netlink "   \
-> +            "notification instead\n");
-
-This is really aggressive, because this becomes BUG() in certain
-kernel configurations.
-
-pr_warn() should be sufficient IMO.
-
+> +       WARN_ON_ONCE(1, "Setting cooling device state is deprecated\n");
 > +
-> +       return 0;
-> +}
-> +
->  /**
->   * notify_user_space - Notifies user space about thermal events
->   * @tz: thermal_zone_device
-> @@ -43,5 +51,6 @@ static int notify_user_space(struct thermal_zone_device *tz, int trip)
->  static struct thermal_governor thermal_gov_user_space = {
->         .name           = "user_space",
->         .throttle       = notify_user_space,
-> +       .bind_to_tz     = user_space_bind,
->  };
->  THERMAL_GOVERNOR_DECLARE(thermal_gov_user_space);
+
+I would use pr_warn_once() instead.
+
+>         if (sscanf(buf, "%ld\n", &state) != 1)
+>                 return -EINVAL;
+>
 > --
