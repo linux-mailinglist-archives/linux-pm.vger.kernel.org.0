@@ -2,97 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3E1043329D
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Oct 2021 11:39:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8396443339D
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Oct 2021 12:35:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235096AbhJSJle (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Oct 2021 05:41:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54194 "EHLO
+        id S234914AbhJSKhs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Oct 2021 06:37:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235156AbhJSJl0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Oct 2021 05:41:26 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A8DC06177F
-        for <linux-pm@vger.kernel.org>; Tue, 19 Oct 2021 02:39:02 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id bp7so13274571qkb.12
-        for <linux-pm@vger.kernel.org>; Tue, 19 Oct 2021 02:39:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=h7Ka/8DlpkXEXF23rPgOfJJ3SyquA2FhD5HYDsybiG4=;
-        b=TOvN/3L74NxJ8jkZLAwc1HWcAigE5PqgL50bgmFqgfF5N3Ni/F/hFF6HKKLKTN31yN
-         HevaAXYbPfypt8hhKvSPyehT5ALdXqczNk+5xUwtC+i5sgHXh2uIQwAecZjfCaWU8ix6
-         IP3iNNDeKzM9Rarn67S7Y6Q5meavaw7Mpk+sez5Jm9gTXVkS2K7rH0HxN0wGBD1vTEZW
-         SlZ7Ohjm5TDffwxVe9psHKkZrw9F8ewS3UJdvRp48BugnVC9N6o6tGt7kOuD9dBL9WOI
-         l1dbXlU20FuuDCR1G9eGV6dpPzPq/obtSd+vSUmjw4dvgQ3M4KndmuUgzevCd5/KLP2j
-         AvJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=h7Ka/8DlpkXEXF23rPgOfJJ3SyquA2FhD5HYDsybiG4=;
-        b=EYOF/z4qR53y0IFLfpNN1AVq88bPyGyJRmFr5zwnkUzWqVQ1WLaCnUNqkB/ck7YQGV
-         sWMlMQdfZrT+klEUSrI7R4wfXOEKPA/xdjHunKcDymU0td36Y+vil9RMDoJDCPfsoFjk
-         uViuyyE7IlOK8cfB9aIe0ApyJ+hGvqQ1o7YPZJzDP0FNDdN5uEXRoqS8apRmICbBOIw1
-         QRnbLYEK0btKH9P0iSVzAwI8T7NV86bl80QINDjw7muLJC1OFta/1x6SpzLMAFLa1uk/
-         V5FZkJpNaR2yhC/ncuCJmYSIOfJtmIERd7/UWlI6nNJWj4izmmSYq6QdvjXg0a5+CbRq
-         /zpA==
-X-Gm-Message-State: AOAM532iw8JJ5zVFL3+zFXss6H1syfp99iDbbLqo5Nd42t4TCc291JD/
-        JNf23heW+HVuStQXw0tLbAoperEoqFDRNfuPHwh4iTe18gM=
-X-Google-Smtp-Source: ABdhPJzMH7/Viv+gmOFi/wRxRbcc549EbhNxq1WBmFuuCl5Y1sIaNw3hPc5P9A8SHm6QnP1HNGNAvecvirmJS/oiL6w=
-X-Received: by 2002:a02:6f5d:: with SMTP id b29mr3319085jae.113.1634636331013;
- Tue, 19 Oct 2021 02:38:51 -0700 (PDT)
+        with ESMTP id S230123AbhJSKhr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Oct 2021 06:37:47 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216BEC06161C
+        for <linux-pm@vger.kernel.org>; Tue, 19 Oct 2021 03:35:35 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1mcmSt-0004vM-Dr; Tue, 19 Oct 2021 12:35:27 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1mcmSr-0007we-QY; Tue, 19 Oct 2021 12:35:25 +0200
+Date:   Tue, 19 Oct 2021 12:35:25 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Petr Benes <petrben@gmail.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Michal =?utf-8?B?Vm9rw6HEjQ==?= <michal.vokac@ysoft.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        linux-pm@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Petr =?utf-8?B?QmVuZcWh?= <petr.benes@ysoft.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] thermal: imx: Fix temperature measurements on i.MX6
+ after alarm
+Message-ID: <20211019103525.GB16320@pengutronix.de>
+References: <20211008081137.1948848-1-michal.vokac@ysoft.com>
+ <20211018112820.qkebjt2gk2w53lp5@pengutronix.de>
+ <37bc3702-bc98-dc54-e9c7-bf9bc92432f0@linaro.org>
+ <CAPwXO5YguJtSFSqnA_aGPch2NswmrP1EzOs0QH5O_iOdtn5W1A@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a92:c7c6:0:0:0:0:0 with HTTP; Tue, 19 Oct 2021 02:38:50
- -0700 (PDT)
-Reply-To: megaritalouisdrayfu199@yahoo.com
-From:   "Mrs. Margarita Louis-Dreyfus." <anniewei112@gmail.com>
-Date:   Mon, 18 Oct 2021 21:38:50 -1200
-Message-ID: <CAGT4pMkzKn8mfeY05OAG04CCAxodKEVDUk46D=O7cfK8+n1=tA@mail.gmail.com>
-Subject: Charitable funds to help the less privilege!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAPwXO5YguJtSFSqnA_aGPch2NswmrP1EzOs0QH5O_iOdtn5W1A@mail.gmail.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 12:31:56 up 243 days, 13:55, 126 users,  load average: 0.16, 0.21,
+ 0.22
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---=20
-Hello,
+Hi Petr,
 
-I am sorry to encroach into your privacy in this manner, my name
-Margarita Louis-Dreyfus , I find it pleasurable to offer you my
-partnership in business, i only pray at this time that your email
-address is still valid. I want to solicit your attention to receive
-money on my behalf for humanitarian project to help the less
-priviledge.
+On Tue, Oct 19, 2021 at 09:24:44AM +0200, Petr Benes wrote:
+> On Mon, 18 Oct 2021 at 13:38, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+> >
+> > On 18/10/2021 13:28, Oleksij Rempel wrote:
+> > > Hi Michal,
+> > >
+> > > I hope you have seen this patch:
+> > > https://lore.kernel.org/all/20210924115032.29684-1-o.rempel@pengutronix.de/
+> > >
+> > > Are there any reason why this was ignored?
+> >
+> > No reasons, I was waiting for some tags before merging it. But I forget
+> > about it when reviewing the current patch.
+> 
+> Tested Oleksij's patch. It works OK. A question arose. Does it require
+> CONFIG_PM=y?
+> If this condition is mandatory and the requirement is valid, Kconfig
+> should be changed accordingly.
+> I'm not able to verify it works without PM, seems it doesn't.
 
-The purpose of my contacting you is because my status would not permit
-me to do this alone. Given my current state of health, I have decided
-to donate Ninety -Eight Million United State Dollars to establish a
-foundation with your help to reach out to the less privilege, orphans,
-sick and homeless people in your country who will receive their
-blessings as i promised my God before i leave this earth.
+If CONFIG_PM=n, all pm_runtime_* will do nothing and the imx_thermal core
+will stay enabled, see:
+ 
++/* the core was configured and enabled just before */
++pm_runtime_set_active(&pdev->dev);
++pm_runtime_enable(data->dev);
 
-I got your contact through my personal search, you were revealed as
-being quite astute in private entrepreneurship, and i have no doubt
-that you can handle this huge financial transaction. Please contact my
-executor for more information:
-
-Mr. Ford Spencer(Attorney at Law).
-For: Mrs. Margarita Louis-Dreyfus
-LEGAL DEPARTMENT LAWSON & ASSOCIATES
-(JUSTICE, FAIRPLAY & EQUITY)
-Email: fordspencer828@yahoo.com, fordspencereqs828@gmail.com
-Office: +1-970-414-1400
-+1-702-714-3422
-Mobile: +1 916 269 2733
-Fax: +1-970-414-1433
-=C2=AE Property of Steven C Spence PA.
-
-Your earliest response to this letter will be appreciated.
-
-Kind Regards,
-
-Mrs. Margarita Louis-Dreyfus.
+Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
