@@ -2,219 +2,380 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E95EE4334E8
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Oct 2021 13:41:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 685AE433515
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Oct 2021 13:52:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235447AbhJSLnJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Oct 2021 07:43:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53980 "EHLO
+        id S235415AbhJSLyN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Oct 2021 07:54:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235353AbhJSLnH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Oct 2021 07:43:07 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04E3C06161C
-        for <linux-pm@vger.kernel.org>; Tue, 19 Oct 2021 04:40:54 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id j21so6936011lfe.0
-        for <linux-pm@vger.kernel.org>; Tue, 19 Oct 2021 04:40:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=p/y6DgAZycykowwrleZpy70Yak++qIhNqJ9ImugcYMs=;
-        b=gbZb/rIEkq16uEpMdDfbn531uPXxDE2vXRTZ1At7zc8FyijjHf+TaWP9WSCNsx9CRl
-         Ax+uAwkmd3zCdbRdDaM3dpQ6QH2wtz6LdoMLA6+gjkzDI8FsGa3Gg4WLu7V9K5SrUrby
-         y6A+UktAxyprVLbdSpurxxaZ8mnWtv03QgVC25vrqwdz6F5CjpkyH0G67ZL5o2xSalbx
-         z2YLwvEkGXJDZVRENSUyiANgZXnd7Hl65An187cV1TSi/tcYxCoWRVEqIP0BwzqCyQr0
-         hoZBxk1g0lrSFu4sw+cYxe+pvM8G9j1I2iiX+c9B9ryltLhmQtiX2zDR77yR1QolGdKK
-         MOng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=p/y6DgAZycykowwrleZpy70Yak++qIhNqJ9ImugcYMs=;
-        b=mr7rBWNCfv405ZaGj4MbjdkhbJ0akCwTyPZOO/zTbbTikKlPL6al7ueakqAjyC6FxH
-         LxkGKgQ6JxUbgigndZSG1ZohelpWyqIcuJdA5aj0vxa4Ppc73GvzkkkBpW8daoESr51C
-         ifqFbj5My+ZSOIHYNwQJH66FFwCxc1965V1YEuJPC9wBI+Hp2y/nxYYHQd5b2w1kpS2H
-         QUnqwpF7M04PkYShVO1EAQjDmxBWnka7EelZQkm4ZoM9NZw3hjCPtBoYvPGun4NoyJ7o
-         g/P8gDm1gN7lQSfC1bLahz9R6sdOcfdPskLoHneG9yMYubAgDruxHM4EIAzpQgky1sGV
-         EezA==
-X-Gm-Message-State: AOAM532pGakLowQIctah+pZl07wIMXqzydX8Kbuzji2b7FQ+xf3c0siS
-        lY6DDkP91Vvr+KUkeWetOAj+5aJWePHfVmD7M3TuaQ==
-X-Google-Smtp-Source: ABdhPJyiZ8hxPaWs5ZGwktR/58DXEHsnrg2iCZG7+dtLEFQZezq+DvEjCTIwbhL0fm341kLJAfk/05h60QX3kuXQ9G4=
-X-Received: by 2002:a05:6512:3084:: with SMTP id z4mr5314051lfd.167.1634643653278;
- Tue, 19 Oct 2021 04:40:53 -0700 (PDT)
+        with ESMTP id S230513AbhJSLyM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Oct 2021 07:54:12 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC1FC061745
+        for <linux-pm@vger.kernel.org>; Tue, 19 Oct 2021 04:51:59 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1mcner-0005ja-Cv; Tue, 19 Oct 2021 13:51:53 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1mcnep-0003xz-H0; Tue, 19 Oct 2021 13:51:51 +0200
+Date:   Tue, 19 Oct 2021 13:51:51 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-pm@vger.kernel.org, Petr Benes <petrben@gmail.com>,
+        Amit Kucheria <amitk@kernel.org>, linux-kernel@vger.kernel.org,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        David Jander <david@protonic.nl>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v1 1/1] thermal: imx: implement runtime PM support
+Message-ID: <20211019115151.GC16320@pengutronix.de>
+References: <20210924115032.29684-1-o.rempel@pengutronix.de>
+ <19b2ab33-aa56-75fb-f6ef-3c928be9c50c@linaro.org>
 MIME-Version: 1.0
-References: <20210926224058.1252-1-digetx@gmail.com> <20210926224058.1252-21-digetx@gmail.com>
- <CAPDyKFoF2QxZss_h9B1NFqOqgeF=TQ6LajCedGiJ9_P8X5M0NA@mail.gmail.com>
- <0bcbcd3d-2154-03d2-f572-dc9032125c26@gmail.com> <CAPDyKFohA9iu2UQfwoc0pCrCGupdwnUTWjKOtP09_C2KaFSo8w@mail.gmail.com>
- <073114ea-490b-89a9-e82d-852b34cb11df@gmail.com>
-In-Reply-To: <073114ea-490b-89a9-e82d-852b34cb11df@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 19 Oct 2021 13:40:16 +0200
-Message-ID: <CAPDyKFoOMvEW0o6=-_bYKhwUcbfeTD4qu-K2tfkdXiR0bErHsw@mail.gmail.com>
-Subject: Re: [PATCH v13 20/35] mtd: rawnand: tegra: Add runtime PM and OPP support
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        David Heidelberg <david@ixit.cz>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <19b2ab33-aa56-75fb-f6ef-3c928be9c50c@linaro.org>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 13:51:06 up 243 days, 15:14, 128 users,  load average: 0.17, 0.12,
+ 0.14
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 17 Oct 2021 at 10:38, Dmitry Osipenko <digetx@gmail.com> wrote:
->
-> 01.10.2021 18:01, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > On Fri, 1 Oct 2021 at 16:35, Dmitry Osipenko <digetx@gmail.com> wrote:
-> >>
-> >> 01.10.2021 17:24, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> >>> On Mon, 27 Sept 2021 at 00:42, Dmitry Osipenko <digetx@gmail.com> wro=
-te:
-> >>>>
-> >>>> The NAND on Tegra belongs to the core power domain and we're going t=
-o
-> >>>> enable GENPD support for the core domain. Now NAND must be resumed u=
-sing
-> >>>> runtime PM API in order to initialize the NAND power state. Add runt=
-ime PM
-> >>>> and OPP support to the NAND driver.
-> >>>>
-> >>>> Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> >>>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> >>>> ---
-> >>>>  drivers/mtd/nand/raw/tegra_nand.c | 55 ++++++++++++++++++++++++++--=
----
-> >>>>  1 file changed, 47 insertions(+), 8 deletions(-)
-> >>>>
-> >>>> diff --git a/drivers/mtd/nand/raw/tegra_nand.c b/drivers/mtd/nand/ra=
-w/tegra_nand.c
-> >>>> index 32431bbe69b8..098fcc9cb9df 100644
-> >>>> --- a/drivers/mtd/nand/raw/tegra_nand.c
-> >>>> +++ b/drivers/mtd/nand/raw/tegra_nand.c
-> >>>> @@ -17,8 +17,11 @@
-> >>>>  #include <linux/mtd/rawnand.h>
-> >>>>  #include <linux/of.h>
-> >>>>  #include <linux/platform_device.h>
-> >>>> +#include <linux/pm_runtime.h>
-> >>>>  #include <linux/reset.h>
-> >>>>
-> >>>> +#include <soc/tegra/common.h>
-> >>>> +
-> >>>>  #define COMMAND                                        0x00
-> >>>>  #define   COMMAND_GO                           BIT(31)
-> >>>>  #define   COMMAND_CLE                          BIT(30)
-> >>>> @@ -1151,6 +1154,7 @@ static int tegra_nand_probe(struct platform_de=
-vice *pdev)
-> >>>>                 return -ENOMEM;
-> >>>>
-> >>>>         ctrl->dev =3D &pdev->dev;
-> >>>> +       platform_set_drvdata(pdev, ctrl);
-> >>>>         nand_controller_init(&ctrl->controller);
-> >>>>         ctrl->controller.ops =3D &tegra_nand_controller_ops;
-> >>>>
-> >>>> @@ -1166,14 +1170,22 @@ static int tegra_nand_probe(struct platform_=
-device *pdev)
-> >>>>         if (IS_ERR(ctrl->clk))
-> >>>>                 return PTR_ERR(ctrl->clk);
-> >>>>
-> >>>> -       err =3D clk_prepare_enable(ctrl->clk);
-> >>>> +       err =3D devm_pm_runtime_enable(&pdev->dev);
-> >>>> +       if (err)
-> >>>> +               return err;
-> >>>> +
-> >>>> +       err =3D devm_tegra_core_dev_init_opp_table_common(&pdev->dev=
-);
-> >>>> +       if (err)
-> >>>> +               return err;
-> >>>> +
-> >>>> +       err =3D pm_runtime_resume_and_get(&pdev->dev);
-> >>>>         if (err)
-> >>>>                 return err;
-> >>>>
-> >>>>         err =3D reset_control_reset(rst);
-> >>>>         if (err) {
-> >>>>                 dev_err(ctrl->dev, "Failed to reset HW: %d\n", err);
-> >>>> -               goto err_disable_clk;
-> >>>> +               goto err_put_pm;
-> >>>>         }
-> >>>>
-> >>>>         writel_relaxed(HWSTATUS_CMD_DEFAULT, ctrl->regs + HWSTATUS_C=
-MD);
-> >>>> @@ -1188,21 +1200,19 @@ static int tegra_nand_probe(struct platform_=
-device *pdev)
-> >>>>                                dev_name(&pdev->dev), ctrl);
-> >>>>         if (err) {
-> >>>>                 dev_err(ctrl->dev, "Failed to get IRQ: %d\n", err);
-> >>>> -               goto err_disable_clk;
-> >>>> +               goto err_put_pm;
-> >>>>         }
-> >>>>
-> >>>>         writel_relaxed(DMA_MST_CTRL_IS_DONE, ctrl->regs + DMA_MST_CT=
-RL);
-> >>>>
-> >>>>         err =3D tegra_nand_chips_init(ctrl->dev, ctrl);
-> >>>>         if (err)
-> >>>> -               goto err_disable_clk;
-> >>>> -
-> >>>> -       platform_set_drvdata(pdev, ctrl);
-> >>>> +               goto err_put_pm;
-> >>>>
-> >>>
-> >>> There is no corresponding call pm_runtime_put() here. Is it
-> >>> intentional to always leave the device runtime resumed after ->probe(=
-)
-> >>> has succeeded?
-> >>>
-> >>> I noticed you included some comments about this for some other
-> >>> drivers, as those needed more tweaks. Is that also the case for this
-> >>> driver?
-> >>
-> >> Could you please clarify? There is pm_runtime_put() in both probe-erro=
-r
-> >> and remove() code paths here.
-> >
-> > I was not considering the error path of ->probe() (or ->remove()), but
-> > was rather thinking about when ->probe() completes successfully. Then
-> > you keep the device runtime resumed, because you have called
-> > pm_runtime_resume_and_get() for it.
-> >
-> > Shouldn't you have a corresponding pm_runtime_put() in ->probe(),
-> > allowing it to be runtime suspended, until the device is really needed
-> > later on. No?
->
-> This driver doesn't support active power management. I don't have Tegra
-> hardware that uses NAND storage for testing, so it's up to somebody else
-> to implement dynamic power management. NAND doesn't require high
-> voltages, so it's fine to keep the old driver behaviour by keeping
-> hardware resumed since the probe time.
+Hi Daniel,
 
-Alright, fair enough and thanks for clarifying!
+On Tue, Oct 19, 2021 at 01:04:46PM +0200, Daniel Lezcano wrote:
+> On 24/09/2021 13:50, Oleksij Rempel wrote:
+> > Starting with commit d92ed2c9d3ff ("thermal: imx: Use driver's local
+> > data to decide whether to run a measurement") this driver stared using
+> > irq_enabled flag to make decision to power on/off the thermal core. This
+> > triggered a regression, where after reaching critical temperature, alarm
+> > IRQ handler set irq_enabled to false,  disabled thermal core and was not
+> > able read temperature and disable cooling sequence.
+> > 
+> > In case the cooling device is "CPU/GPU freq", the system will run with
+> > reduce performance until next reboot.
+> > 
+> > To solve this issue, we need to move all parts implementing hand made
+> > runtime power management and let it handle actual runtime PM framework.
+> > 
+> > Fixes: d92ed2c9d3ff ("thermal: imx: Use driver's local data to decide whether to run a measurement")
+> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> 
+> Thanks for this fix.
+> 
+> Petr or Oleksij,
+> 
+> could you confirm it is tested and working without CONFIG_PM ?
 
-Kind regards
-Uffe
+Petr was right, no it is not working without PM.
+
+> > ---
+> >  drivers/thermal/imx_thermal.c | 145 +++++++++++++++++++++-------------
+> >  1 file changed, 91 insertions(+), 54 deletions(-)
+> > 
+> > diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
+> > index 2c7473d86a59..1db7ce6221b1 100644
+> > --- a/drivers/thermal/imx_thermal.c
+> > +++ b/drivers/thermal/imx_thermal.c
+> > @@ -15,6 +15,7 @@
+> >  #include <linux/regmap.h>
+> >  #include <linux/thermal.h>
+> >  #include <linux/nvmem-consumer.h>
+> > +#include <linux/pm_runtime.h>
+> >  
+> >  #define REG_SET		0x4
+> >  #define REG_CLR		0x8
+> > @@ -194,6 +195,7 @@ static struct thermal_soc_data thermal_imx7d_data = {
+> >  };
+> >  
+> >  struct imx_thermal_data {
+> > +	struct device *dev;
+> >  	struct cpufreq_policy *policy;
+> >  	struct thermal_zone_device *tz;
+> >  	struct thermal_cooling_device *cdev;
+> > @@ -252,44 +254,15 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
+> >  	const struct thermal_soc_data *soc_data = data->socdata;
+> >  	struct regmap *map = data->tempmon;
+> >  	unsigned int n_meas;
+> > -	bool wait, run_measurement;
+> >  	u32 val;
+> > +	int ret;
+> >  
+> > -	run_measurement = !data->irq_enabled;
+> > -	if (!run_measurement) {
+> > -		/* Check if a measurement is currently in progress */
+> > -		regmap_read(map, soc_data->temp_data, &val);
+> > -		wait = !(val & soc_data->temp_valid_mask);
+> > -	} else {
+> > -		/*
+> > -		 * Every time we measure the temperature, we will power on the
+> > -		 * temperature sensor, enable measurements, take a reading,
+> > -		 * disable measurements, power off the temperature sensor.
+> > -		 */
+> > -		regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
+> > -			    soc_data->power_down_mask);
+> > -		regmap_write(map, soc_data->sensor_ctrl + REG_SET,
+> > -			    soc_data->measure_temp_mask);
+> > -
+> > -		wait = true;
+> > -	}
+> > -
+> > -	/*
+> > -	 * According to the temp sensor designers, it may require up to ~17us
+> > -	 * to complete a measurement.
+> > -	 */
+> > -	if (wait)
+> > -		usleep_range(20, 50);
+> > +	ret = pm_runtime_resume_and_get(data->dev);
+> > +	if (ret < 0)
+> > +		return ret;
+> >  
+> >  	regmap_read(map, soc_data->temp_data, &val);
+> >  
+> > -	if (run_measurement) {
+> > -		regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
+> > -			     soc_data->measure_temp_mask);
+> > -		regmap_write(map, soc_data->sensor_ctrl + REG_SET,
+> > -			     soc_data->power_down_mask);
+> > -	}
+> > -
+> >  	if ((val & soc_data->temp_valid_mask) == 0) {
+> >  		dev_dbg(&tz->device, "temp measurement never finished\n");
+> >  		return -EAGAIN;
+> > @@ -328,6 +301,8 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
+> >  		enable_irq(data->irq);
+> >  	}
+> >  
+> > +	pm_runtime_put(data->dev);
+> > +
+> >  	return 0;
+> >  }
+> >  
+> > @@ -335,24 +310,16 @@ static int imx_change_mode(struct thermal_zone_device *tz,
+> >  			   enum thermal_device_mode mode)
+> >  {
+> >  	struct imx_thermal_data *data = tz->devdata;
+> > -	struct regmap *map = data->tempmon;
+> > -	const struct thermal_soc_data *soc_data = data->socdata;
+> >  
+> >  	if (mode == THERMAL_DEVICE_ENABLED) {
+> > -		regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
+> > -			     soc_data->power_down_mask);
+> > -		regmap_write(map, soc_data->sensor_ctrl + REG_SET,
+> > -			     soc_data->measure_temp_mask);
+> > +		pm_runtime_get(data->dev);
+> >  
+> >  		if (!data->irq_enabled) {
+> >  			data->irq_enabled = true;
+> >  			enable_irq(data->irq);
+> >  		}
+> >  	} else {
+> > -		regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
+> > -			     soc_data->measure_temp_mask);
+> > -		regmap_write(map, soc_data->sensor_ctrl + REG_SET,
+> > -			     soc_data->power_down_mask);
+> > +		pm_runtime_put(data->dev);
+> >  
+> >  		if (data->irq_enabled) {
+> >  			disable_irq(data->irq);
+> > @@ -393,6 +360,11 @@ static int imx_set_trip_temp(struct thermal_zone_device *tz, int trip,
+> >  			     int temp)
+> >  {
+> >  	struct imx_thermal_data *data = tz->devdata;
+> > +	int ret;
+> > +
+> > +	ret = pm_runtime_resume_and_get(data->dev);
+> > +	if (ret < 0)
+> > +		return ret;
+> >  
+> >  	/* do not allow changing critical threshold */
+> >  	if (trip == IMX_TRIP_CRITICAL)
+> > @@ -406,6 +378,8 @@ static int imx_set_trip_temp(struct thermal_zone_device *tz, int trip,
+> >  
+> >  	imx_set_alarm_temp(data, temp);
+> >  
+> > +	pm_runtime_put(data->dev);
+> > +
+> >  	return 0;
+> >  }
+> >  
+> > @@ -681,6 +655,8 @@ static int imx_thermal_probe(struct platform_device *pdev)
+> >  	if (!data)
+> >  		return -ENOMEM;
+> >  
+> > +	data->dev = &pdev->dev;
+> > +
+> >  	map = syscon_regmap_lookup_by_phandle(pdev->dev.of_node, "fsl,tempmon");
+> >  	if (IS_ERR(map)) {
+> >  		ret = PTR_ERR(map);
+> > @@ -801,6 +777,14 @@ static int imx_thermal_probe(struct platform_device *pdev)
+> >  	regmap_write(map, data->socdata->sensor_ctrl + REG_SET,
+> >  		     data->socdata->measure_temp_mask);
+> >  
+> > +	/* the core was configured and enabled just before */
+> > +	pm_runtime_set_active(&pdev->dev);
+> > +	pm_runtime_enable(data->dev);
+> > +
+> > +	ret = pm_runtime_resume_and_get(data->dev);
+> > +	if (ret < 0)
+> > +		goto disable_runtime_pm;
+> > +
+> >  	data->irq_enabled = true;
+> >  	ret = thermal_zone_device_enable(data->tz);
+> >  	if (ret)
+> > @@ -814,10 +798,17 @@ static int imx_thermal_probe(struct platform_device *pdev)
+> >  		goto thermal_zone_unregister;
+> >  	}
+> >  
+> > +	ret = pm_runtime_put(data->dev);
+> > +	if (ret < 0)
+> > +		goto disable_runtime_pm;
+> > +
+> >  	return 0;
+> >  
+> >  thermal_zone_unregister:
+> >  	thermal_zone_device_unregister(data->tz);
+> > +disable_runtime_pm:
+> > +	pm_runtime_put_noidle(data->dev);
+> > +	pm_runtime_disable(data->dev);
+> >  clk_disable:
+> >  	clk_disable_unprepare(data->thermal_clk);
+> >  legacy_cleanup:
+> > @@ -829,13 +820,9 @@ static int imx_thermal_probe(struct platform_device *pdev)
+> >  static int imx_thermal_remove(struct platform_device *pdev)
+> >  {
+> >  	struct imx_thermal_data *data = platform_get_drvdata(pdev);
+> > -	struct regmap *map = data->tempmon;
+> >  
+> > -	/* Disable measurements */
+> > -	regmap_write(map, data->socdata->sensor_ctrl + REG_SET,
+> > -		     data->socdata->power_down_mask);
+> > -	if (!IS_ERR(data->thermal_clk))
+> > -		clk_disable_unprepare(data->thermal_clk);
+> > +	pm_runtime_put_noidle(data->dev);
+> > +	pm_runtime_disable(data->dev);
+> >  
+> >  	thermal_zone_device_unregister(data->tz);
+> >  	imx_thermal_unregister_legacy_cooling(data);
+> > @@ -858,29 +845,79 @@ static int __maybe_unused imx_thermal_suspend(struct device *dev)
+> >  	ret = thermal_zone_device_disable(data->tz);
+> >  	if (ret)
+> >  		return ret;
+> > +
+> > +	return pm_runtime_force_suspend(data->dev);
+> > +}
+> > +
+> > +static int __maybe_unused imx_thermal_resume(struct device *dev)
+> > +{
+> > +	struct imx_thermal_data *data = dev_get_drvdata(dev);
+> > +	int ret;
+> > +
+> > +	ret = pm_runtime_force_resume(data->dev);
+> > +	if (ret)
+> > +		return ret;
+> > +	/* Enabled thermal sensor after resume */
+> > +	return thermal_zone_device_enable(data->tz);
+> > +}
+> > +
+> > +static int __maybe_unused imx_thermal_runtime_suspend(struct device *dev)
+> > +{
+> > +	struct imx_thermal_data *data = dev_get_drvdata(dev);
+> > +	const struct thermal_soc_data *socdata = data->socdata;
+> > +	struct regmap *map = data->tempmon;
+> > +	int ret;
+> > +
+> > +	ret = regmap_write(map, socdata->sensor_ctrl + REG_CLR,
+> > +			   socdata->measure_temp_mask);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	ret = regmap_write(map, socdata->sensor_ctrl + REG_SET,
+> > +			   socdata->power_down_mask);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> >  	clk_disable_unprepare(data->thermal_clk);
+> >  
+> >  	return 0;
+> >  }
+> >  
+> > -static int __maybe_unused imx_thermal_resume(struct device *dev)
+> > +static int __maybe_unused imx_thermal_runtime_resume(struct device *dev)
+> >  {
+> >  	struct imx_thermal_data *data = dev_get_drvdata(dev);
+> > +	const struct thermal_soc_data *socdata = data->socdata;
+> > +	struct regmap *map = data->tempmon;
+> >  	int ret;
+> >  
+> >  	ret = clk_prepare_enable(data->thermal_clk);
+> >  	if (ret)
+> >  		return ret;
+> > -	/* Enabled thermal sensor after resume */
+> > -	ret = thermal_zone_device_enable(data->tz);
+> > +
+> > +	ret = regmap_write(map, socdata->sensor_ctrl + REG_CLR,
+> > +			   socdata->power_down_mask);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	ret = regmap_write(map, socdata->sensor_ctrl + REG_SET,
+> > +			   socdata->measure_temp_mask);
+> >  	if (ret)
+> >  		return ret;
+> >  
+> > +	/*
+> > +	 * According to the temp sensor designers, it may require up to ~17us
+> > +	 * to complete a measurement.
+> > +	 */
+> > +	usleep_range(20, 50);
+> > +
+> >  	return 0;
+> >  }
+> >  
+> > -static SIMPLE_DEV_PM_OPS(imx_thermal_pm_ops,
+> > -			 imx_thermal_suspend, imx_thermal_resume);
+> > +static const struct dev_pm_ops imx_thermal_pm_ops = {
+> > +	SET_SYSTEM_SLEEP_PM_OPS(imx_thermal_suspend, imx_thermal_resume)
+> > +	SET_RUNTIME_PM_OPS(imx_thermal_runtime_suspend,
+> > +			   imx_thermal_runtime_resume, NULL)
+> > +};
+> >  
+> >  static struct platform_driver imx_thermal = {
+> >  	.driver = {
+> > 
+> 
+> 
+> -- 
+> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+> 
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
+> 
+> 
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
