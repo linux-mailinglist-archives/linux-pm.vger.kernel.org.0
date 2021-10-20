@@ -2,22 +2,19 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A630F434EE3
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Oct 2021 17:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F293434EE9
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Oct 2021 17:20:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbhJTPVG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Oct 2021 11:21:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35026 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230314AbhJTPVG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Oct 2021 11:21:06 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4AFDC06161C;
-        Wed, 20 Oct 2021 08:18:51 -0700 (PDT)
+        id S229952AbhJTPWi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Oct 2021 11:22:38 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:32860 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230331AbhJTPWh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Oct 2021 11:22:37 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id 308141F441DD
-Subject: Re: [PATCH v16 6/7] arm64: dts: mt8192: add svs device information
+        with ESMTPSA id 1C10F1F441E0
+Subject: Re: [PATCH v16 2/7] arm64: dts: mt8183: add svs device information
 To:     Roger Lu <roger.lu@mediatek.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         Enric Balletbo Serra <eballetbo@gmail.com>,
@@ -39,15 +36,15 @@ Cc:     Fan Chen <fan.chen@mediatek.com>,
         linux-pm@vger.kernel.org,
         Project_Global_Chrome_Upstream_Group@mediatek.com
 References: <20210428065440.3704-1-roger.lu@mediatek.com>
- <20210428065440.3704-7-roger.lu@mediatek.com>
+ <20210428065440.3704-3-roger.lu@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Message-ID: <dec2190e-ce5a-3192-73b4-f4aae772bf2d@collabora.com>
-Date:   Wed, 20 Oct 2021 17:18:45 +0200
+Message-ID: <70e71210-6d17-92e3-4e3f-01b83380be42@collabora.com>
+Date:   Wed, 20 Oct 2021 17:20:18 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <20210428065440.3704-7-roger.lu@mediatek.com>
+In-Reply-To: <20210428065440.3704-3-roger.lu@mediatek.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -56,115 +53,56 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 Il 28/04/21 08:54, Roger Lu ha scritto:
-> add compitable/reg/irq/clock/efuse/reset setting in svs node
+> add compitable/reg/irq/clock/efuse setting in svs node
 > 
 > Signed-off-by: Roger Lu <roger.lu@mediatek.com>
 > ---
->   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 34 ++++++++++++++++++++++++
->   1 file changed, 34 insertions(+)
+>   arch/arm64/boot/dts/mediatek/mt8183.dtsi | 18 ++++++++++++++++++
+>   1 file changed, 18 insertions(+)
 > 
-
-Hello Roger,
-
-thanks for this series! However, there is an issue with this patch:
-
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> index fe24cc66ff7a..e9816a56d87b 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> @@ -270,6 +270,14 @@
->   			compatible = "mediatek,mt8192-infracfg", "syscon";
->   			reg = <0 0x10001000 0 0x1000>;
->   			#clock-cells = <1>;
-> +
-> +			infracfg_rst: reset-controller {
-> +				compatible = "mediatek,infra-reset", "ti,syscon-reset";
-> +				#reset-cells = <1>;
-> +				ti,reset-bits = <
-> +					0x150 5 0x154 5 0 0     (ASSERT_SET | DEASSERT_SET | STATUS_NONE) /* 0: svs */
-
-You are using macros here, which are defined in dt-bindings/reset/ti-syscon.h
-
-hovever, you are not including this header in this devicetree, so it's not
-
-compiling.
-
-
-
-Please fix it.
-
-> +				>;
-> +			};
->   		};
->   
->   		pericfg: syscon@10003000 {
-> @@ -564,6 +572,20 @@
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> index 80519a145f13..441d617ece43 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> @@ -657,6 +657,18 @@
 >   			status = "disabled";
 >   		};
 >   
 > +		svs: svs@1100b000 {
-> +			compatible = "mediatek,mt8192-svs";
+> +			compatible = "mediatek,mt8183-svs";
 > +			reg = <0 0x1100b000 0 0x1000>;
-> +			interrupts = <GIC_SPI 167 IRQ_TYPE_LEVEL_HIGH 0>;
+> +			interrupts = <GIC_SPI 127 IRQ_TYPE_LEVEL_LOW>;
 > +			clocks = <&infracfg CLK_INFRA_THERM>;
 > +			clock-names = "main";
 > +			nvmem-cells = <&svs_calibration>,
-> +				      <&lvts_e_data1>;
+> +				      <&thermal_calibration>;
 > +			nvmem-cell-names = "svs-calibration-data",
 > +					   "t-calibration-data";
-> +			resets = <&infracfg_rst 0>;
-> +			reset-names = "svs_rst";
 > +		};
 > +
->   		spi1: spi@11010000 {
->   			compatible = "mediatek,mt8192-spi",
->   				     "mediatek,mt6765-spi";
-> @@ -681,6 +703,18 @@
->   			#clock-cells = <1>;
+>   		pwm0: pwm@1100e000 {
+>   			compatible = "mediatek,mt8183-disp-pwm";
+>   			reg = <0 0x1100e000 0 0x1000>;
+> @@ -941,9 +953,15 @@
+>   			reg = <0 0x11f10000 0 0x1000>;
+>   			#address-cells = <1>;
+>   			#size-cells = <1>;
+> +			thermal_calibration: calib@180 {
+> +				reg = <0x180 0xc>;
+> +			};
+>   			mipi_tx_calibration: calib@190 {
+>   				reg = <0x190 0xc>;
+>   			};
+> +			svs_calibration: calib@580 {
+> +				reg = <0x580 0x64>;
+> +			};
 >   		};
 >   
-> +		efuse: efuse@11c10000 {
-> +			compatible = "mediatek,efuse";
-> +			reg = <0 0x11c10000 0 0x1000>;
-> +
-
-arch/arm64/boot/dts/mediatek/mt8192.dtsi:510.5-24: Warning (reg_format): 
-/soc/efuse@11c10000/data1:reg: property has invalid length (8 bytes) 
-(#address-cells == 2, #size-cells == 1)
-
-
-
-arch/arm64/boot/dts/mediatek/mt8192.dtsi:513.5-24: Warning (reg_format): 
-/soc/efuse@11c10000/calib@580:reg: property has invalid length (8 bytes) 
-(#address-cells == 2, #size-cells == 1)
-
-
-
-
-
-In short, you should add here:
-
-             #address-cells = <1>;
-
-             #size-cells = <1>;
-
-> +			lvts_e_data1: data1 {
-> +				reg = <0x1C0 0x58>;
-> +			};
-> +			svs_calibration: calib@580 {
-> +				reg = <0x580 0x68>;
-> +			};
-> +		};
-> +
->   		i2c3: i2c3@11cb0000 {
->   			compatible = "mediatek,mt8192-i2c";
->   			reg = <0 0x11cb0000 0 0x1000>,
+>   		u3phy: usb-phy@11f40000 {
 > 
 
-P.S.: Sorry for the double email, the previous one got sent with the wrong
-       address.
+This patch doesn't apply on the latest linux-next due to some new commits in
+mt8183.dtsi, can you please rebase?
 
-
-Regards,
-
+Thanks,
 - Angelo
