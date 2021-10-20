@@ -2,127 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4453D4343BE
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Oct 2021 05:12:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 315A4434423
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Oct 2021 06:24:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbhJTDPJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Oct 2021 23:15:09 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:25299 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbhJTDPJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Oct 2021 23:15:09 -0400
-Received: from dggeme754-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4HYwY01kxYzbhBM;
-        Wed, 20 Oct 2021 11:08:20 +0800 (CST)
-Received: from [10.174.178.185] (10.174.178.185) by
- dggeme754-chm.china.huawei.com (10.3.19.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.15; Wed, 20 Oct 2021 11:12:53 +0800
-Subject: Re: [PATCH -next] PM: hibernate: Get block device exclusively when do
- swsusp_check
-To:     <rafael@kernel.org>, <len.brown@intel.com>, <pavel@ucw.cz>,
-        <linux-pm@vger.kernel.org>
-References: <20211013121914.3146812-1-yebin10@huawei.com>
-CC:     <tytso@mit.edu>, <linux-kernel@vger.kernel.org>, <jack@suse.cz>
-From:   yebin <yebin10@huawei.com>
-Message-ID: <616F8935.7070509@huawei.com>
-Date:   Wed, 20 Oct 2021 11:12:53 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
- Thunderbird/38.1.0
+        id S229941AbhJTE0g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Oct 2021 00:26:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55292 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229735AbhJTE0f (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Oct 2021 00:26:35 -0400
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36E63C061746
+        for <linux-pm@vger.kernel.org>; Tue, 19 Oct 2021 21:24:22 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id v2-20020a05683018c200b0054e3acddd91so4628030ote.8
+        for <linux-pm@vger.kernel.org>; Tue, 19 Oct 2021 21:24:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=elvoUBl7XEkbVo1g2RE1z3K+d4jyUSFlULoK7AzhEdQ=;
+        b=f1QKTIRCxNZb0itcE4P7vDHamWDkwmiUTe7FxK85ftucfSGYVuGRin5WuQc0AMorfL
+         ywKnPZMOlvBzFcunr64r7ASciayJ3Bhpfa/OBAjCWMMlNkBv/A8MWgOA+KANZQ9TFxns
+         lxnvWXTkZ3QI3Jky81N9oEkkZISXT/A+S3XkY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=elvoUBl7XEkbVo1g2RE1z3K+d4jyUSFlULoK7AzhEdQ=;
+        b=RbB/uakiskdJU8AEa1c92FHUX5tf5scTo4rm1Qd8GOQcWFSdj4iqV4eZ27DFc1g/b/
+         +9su6EMRtAnRssWrYxnggUBG2YAGSgDnJhpl1RyeniQqnVkGqcQKQ4VHqOharfVv+85l
+         K3ZSyXPoNqM9TvqUzI41BUPbFrn+mhwvFBFFsR5LCrUbQ95+5HD4M8JuZJjGXsF+RKPn
+         XY7pLZSO29p/+z3n34i00MwONf0khfKNf8+sVA9Mn2RujH2BQyhsvwhYIHm0ZzoLQbGQ
+         4anmr3a6YYA4+gFeCQ1eAvYy0ymtAO2oPQAqn0UYuA3FPXIf04iPjp0NVU6i6dudiZlK
+         9ugQ==
+X-Gm-Message-State: AOAM533vfq4c4jJCYSO2neMJ8Wxe/CgI4KB5QcQLQkh5AH/kNJQGJhSI
+        ZTQza6fZJvnOxHT8xcGsqN/XPSMwRTOfxMGlFTp9yg==
+X-Google-Smtp-Source: ABdhPJxaMZNzxtyBmA4rCXE3sYY70xRGR5VrFGomRibATDr1WeO/j2fA6f2qZduAErjFaES8HxDZ5QCDKXAE3lvSHz0=
+X-Received: by 2002:a05:6830:4187:: with SMTP id r7mr8915979otu.126.1634703861597;
+ Tue, 19 Oct 2021 21:24:21 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 19 Oct 2021 23:24:21 -0500
 MIME-Version: 1.0
-In-Reply-To: <20211013121914.3146812-1-yebin10@huawei.com>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.185]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggeme754-chm.china.huawei.com (10.3.19.100)
-X-CFilter-Loop: Reflected
+In-Reply-To: <20211019154224.624204-1-arnd@kernel.org>
+References: <20211019154224.624204-1-arnd@kernel.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.9.1
+Date:   Tue, 19 Oct 2021 23:24:21 -0500
+Message-ID: <CAE-0n51jb=H=tTusjhQYY09A5B6BVgYWokGoVsSaQUQ+0rtqGA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] qcom: spm: allow compile-testing
+To:     Arnd Bergmann <arnd@kernel.org>, linux-pm@vger.kernel.org
+Cc:     soc@kernel.org, Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Andy Gross <agross@kernel.org>,
+        Lina Iyer <ilina@codeaurora.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Maulik Shah <mkshah@codeaurora.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mahesh Sivasubramanian <msivasub@codeaurora.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        He Ying <heying24@huawei.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 2021/10/13 20:19, Ye Bin wrote:
-> We got follow issue:
-> [   89.266592] ------------[ cut here ]------------
-> [   89.267427] kernel BUG at fs/buffer.c:3020!
-> [   89.268264] invalid opcode: 0000 [#1] SMP KASAN PTI
-> [   89.269116] CPU: 7 PID: 1750 Comm: kmmpd-loop0 Not tainted 5.10.0-862.14.0.6.x86_64-08610-gc932cda3cef4-dirty #20
-> [   89.273169] RIP: 0010:submit_bh_wbc.isra.0+0x538/0x6d0
-> [   89.277157] RSP: 0018:ffff888105ddfd08 EFLAGS: 00010246
-> [   89.278093] RAX: 0000000000000005 RBX: ffff888124231498 RCX: ffffffffb2772612
-> [   89.279332] RDX: 1ffff11024846293 RSI: 0000000000000008 RDI: ffff888124231498
-> [   89.280591] RBP: ffff8881248cc000 R08: 0000000000000001 R09: ffffed1024846294
-> [   89.281851] R10: ffff88812423149f R11: ffffed1024846293 R12: 0000000000003800
-> [   89.283095] R13: 0000000000000001 R14: 0000000000000000 R15: ffff8881161f7000
-> [   89.284342] FS:  0000000000000000(0000) GS:ffff88839b5c0000(0000) knlGS:0000000000000000
-> [   89.285711] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [   89.286701] CR2: 00007f166ebc01a0 CR3: 0000000435c0e000 CR4: 00000000000006e0
-> [   89.287919] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> [   89.289138] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> [   89.290368] Call Trace:
-> [   89.290842]  write_mmp_block+0x2ca/0x510
-> [   89.292218]  kmmpd+0x433/0x9a0
-> [   89.294902]  kthread+0x2dd/0x3e0
-> [   89.296268]  ret_from_fork+0x22/0x30
-> [   89.296906] Modules linked in:
+Quoting Arnd Bergmann (2021-10-19 08:42:02)
+> From: Arnd Bergmann <arnd@arndb.de>
 >
-> We can reproduce this issue as follow:
-> 1. mkfs.ext4 -O mmp  /dev/sda -b 1024
-> 2. mount /dev/sda /home/test
-> 3. echo "/dev/sda" > /sys/power/resume
-> 4. wait a moment we will get exception
+> ARM_QCOM_SPM_CPUIDLE can be selected when compile-testing on
+> other architectures, but this causes a Kconfig warning
+> for QCOM_SPM:
 >
-> The sequence of issue is as follows:
->         Thread1                       Thread2
-> mount /dev/sda /home/test
-> get s_mmp_bh  --> has mapped flag
-> start kmmpd thread
-> 				echo "/dev/sda" > /sys/power/resume
-> 				  resume_store
-> 				    software_resume
-> 				      swsusp_check
-> 				        set_blocksize
-> 					  truncate_inode_pages_range
-> 					    truncate_cleanup_page
-> 					      block_invalidatepage
-> 					        discard_buffer --> clean mapped flag
-> write_mmp_block
->    submit_bh
->      submit_bh_wbc
->        BUG_ON(!buffer_mapped(bh)) --> trigger bug_on
+> WARNING: unmet direct dependencies detected for QCOM_SPM
+>   Depends on [n]: ARCH_QCOM [=n]
+>   Selected by [y]:
+>   - ARM_QCOM_SPM_CPUIDLE [=y] && CPU_IDLE [=y] && (ARM [=y] || ARM64) && (ARCH_QCOM [=n] || COMPILE_TEST [=y]) && !ARM64 && MMU [=y]
 >
-> To solve this issue, get block device exclusively when do swsusp_check.
+> Make it possible to also compile-test this one, which can
+> be done now that v5.15-rc5 lets you select QCOM_SCM everywhere.
 >
-> Signed-off-by: Ye Bin <yebin10@huawei.com>
+> Fixes: a871be6b8eee ("cpuidle: Convert Qualcomm SPM driver to a generic CPUidle driver")
+> Fixes: 498ba2a8a275 ("cpuidle: Fix ARM_QCOM_SPM_CPUIDLE configuration")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
->   kernel/power/swap.c | 5 +++--
->   1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-> index 9ec418955556..26c0bd2a50da 100644
-> --- a/kernel/power/swap.c
-> +++ b/kernel/power/swap.c
-> @@ -1521,9 +1521,10 @@ int swsusp_read(unsigned int *flags_p)
->   int swsusp_check(void)
->   {
->   	int error;
-> +	void *holder;
->   
->   	hib_resume_bdev = blkdev_get_by_dev(swsusp_resume_device,
-> -					    FMODE_READ, NULL);
-> +					    FMODE_READ | FMODE_EXCL, &holder);
->   	if (!IS_ERR(hib_resume_bdev)) {
->   		set_blocksize(hib_resume_bdev, PAGE_SIZE);
->   		clear_page(swsusp_header);
-> @@ -1545,7 +1546,7 @@ int swsusp_check(void)
->   
->   put:
->   		if (error)
-> -			blkdev_put(hib_resume_bdev, FMODE_READ);
-> +			blkdev_put(hib_resume_bdev, FMODE_READ | FMODE_EXCL);
->   		else
->   			pr_debug("Image signature found, resuming\n");
->   	} else {
-ping...
+
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
