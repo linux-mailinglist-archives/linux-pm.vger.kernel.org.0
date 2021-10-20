@@ -2,127 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29D44434D84
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Oct 2021 16:26:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB01E434E35
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Oct 2021 16:47:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbhJTO2p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Oct 2021 10:28:45 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:14835 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbhJTO2o (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Oct 2021 10:28:44 -0400
-Received: from dggeme754-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4HZCTk3Yc5z90Lj;
-        Wed, 20 Oct 2021 22:21:30 +0800 (CST)
-Received: from [10.174.178.185] (10.174.178.185) by
- dggeme754-chm.china.huawei.com (10.3.19.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.15; Wed, 20 Oct 2021 22:26:26 +0800
-Subject: Re: [PATCH -next] PM: hibernate: Get block device exclusively when do
- swsusp_check
-To:     <rafael@kernel.org>, <len.brown@intel.com>, <pavel@ucw.cz>,
-        <linux-pm@vger.kernel.org>
-References: <20211013121914.3146812-1-yebin10@huawei.com>
-CC:     <tytso@mit.edu>, <linux-kernel@vger.kernel.org>, <jack@suse.cz>
-From:   yebin <yebin10@huawei.com>
-Message-ID: <61702712.2020703@huawei.com>
-Date:   Wed, 20 Oct 2021 22:26:26 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
- Thunderbird/38.1.0
+        id S229695AbhJTOtN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Oct 2021 10:49:13 -0400
+Received: from mail-ot1-f54.google.com ([209.85.210.54]:40619 "EHLO
+        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229691AbhJTOtM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Oct 2021 10:49:12 -0400
+Received: by mail-ot1-f54.google.com with SMTP id s18-20020a0568301e1200b0054e77a16651so8512088otr.7;
+        Wed, 20 Oct 2021 07:46:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pasGqTuRZhubCpUnUf/TWc8G25S9HUibTcAJimgPxXA=;
+        b=dWHPhRapHMqjmn+L74FC/UA83ALdjbauDpVvCtHyhaG0rL5eOcWtkrz5Qwb6quGsnK
+         BO6DVomHH/+norClmAV7/Y1cKx+bCT+yAYcphSqaguxyFt0788E3orIeuWtUcqaQ+oMA
+         +dwJwhufJ/bod00hvZl+5gsoxWkfuJea2W9zkAvmboaIV2Zlpb7ArPlbCgJCj+MDINqj
+         FV3RrCapP2ySsfIUXlK41zaJrBR3oZoGbkQeiJaGv1sPsNeiPvZhiGdOsBo8S7l8y6xr
+         XEdcJNgLte898WczIoCS7s9ReJAJ9if/QbeGgiYgVZz304uDihPJnaoMQA91tZwkVBDN
+         Cp4A==
+X-Gm-Message-State: AOAM531EhvHpcz2/KN9IVGPq1FnuUmrjvxxhbsLtYZzIPhIfRVi03KbO
+        f/HHWTIERFWUuidkLEvM7Q==
+X-Google-Smtp-Source: ABdhPJzp6IUxvWJLdKtEe/ko4g5HhBARBdoKSrrQRhy4qCIw26mSvLZ75JSXyO0uu9OGEOozEEzsEg==
+X-Received: by 2002:a9d:6c4b:: with SMTP id g11mr281341otq.122.1634741217678;
+        Wed, 20 Oct 2021 07:46:57 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id q2sm434228ooe.12.2021.10.20.07.46.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Oct 2021 07:46:57 -0700 (PDT)
+Received: (nullmailer pid 2336346 invoked by uid 1000);
+        Wed, 20 Oct 2021 14:46:56 -0000
+Date:   Wed, 20 Oct 2021 09:46:56 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Nishanth Menon <nm@ti.com>, David Heidelberg <david@ixit.cz>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v1] dt-bindings: opp: Allow multi-worded node names
+Message-ID: <YXAr4OlhucAibMlH@robh.at.kernel.org>
+References: <20211019231905.2974-1-digetx@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20211013121914.3146812-1-yebin10@huawei.com>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.185]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggeme754-chm.china.huawei.com (10.3.19.100)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211019231905.2974-1-digetx@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 2021/10/13 20:19, Ye Bin wrote:
-> We got follow issue:
-> [   89.266592] ------------[ cut here ]------------
-> [   89.267427] kernel BUG at fs/buffer.c:3020!
-> [   89.268264] invalid opcode: 0000 [#1] SMP KASAN PTI
-> [   89.269116] CPU: 7 PID: 1750 Comm: kmmpd-loop0 Not tainted 5.10.0-862.14.0.6.x86_64-08610-gc932cda3cef4-dirty #20
-> [   89.273169] RIP: 0010:submit_bh_wbc.isra.0+0x538/0x6d0
-> [   89.277157] RSP: 0018:ffff888105ddfd08 EFLAGS: 00010246
-> [   89.278093] RAX: 0000000000000005 RBX: ffff888124231498 RCX: ffffffffb2772612
-> [   89.279332] RDX: 1ffff11024846293 RSI: 0000000000000008 RDI: ffff888124231498
-> [   89.280591] RBP: ffff8881248cc000 R08: 0000000000000001 R09: ffffed1024846294
-> [   89.281851] R10: ffff88812423149f R11: ffffed1024846293 R12: 0000000000003800
-> [   89.283095] R13: 0000000000000001 R14: 0000000000000000 R15: ffff8881161f7000
-> [   89.284342] FS:  0000000000000000(0000) GS:ffff88839b5c0000(0000) knlGS:0000000000000000
-> [   89.285711] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [   89.286701] CR2: 00007f166ebc01a0 CR3: 0000000435c0e000 CR4: 00000000000006e0
-> [   89.287919] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> [   89.289138] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> [   89.290368] Call Trace:
-> [   89.290842]  write_mmp_block+0x2ca/0x510
-> [   89.292218]  kmmpd+0x433/0x9a0
-> [   89.294902]  kthread+0x2dd/0x3e0
-> [   89.296268]  ret_from_fork+0x22/0x30
-> [   89.296906] Modules linked in:
->
-> We can reproduce this issue as follow:
-> 1. mkfs.ext4 -O mmp  /dev/sda -b 1024
-> 2. mount /dev/sda /home/test
-> 3. echo "/dev/sda" > /sys/power/resume
-> 4. wait a moment we will get exception
->
-> The sequence of issue is as follows:
->         Thread1                       Thread2
-> mount /dev/sda /home/test
-> get s_mmp_bh  --> has mapped flag
-> start kmmpd thread
-> 				echo "/dev/sda" > /sys/power/resume
-> 				  resume_store
-> 				    software_resume
-> 				      swsusp_check
-> 				        set_blocksize
-> 					  truncate_inode_pages_range
-> 					    truncate_cleanup_page
-> 					      block_invalidatepage
-> 					        discard_buffer --> clean mapped flag
-> write_mmp_block
->    submit_bh
->      submit_bh_wbc
->        BUG_ON(!buffer_mapped(bh)) --> trigger bug_on
->
-> To solve this issue, get block device exclusively when do swsusp_check.
->
-> Signed-off-by: Ye Bin <yebin10@huawei.com>
+On Wed, Oct 20, 2021 at 02:19:05AM +0300, Dmitry Osipenko wrote:
+> Not all OPP table names and OPP entries consist of a single word. In
+> particular NVIDIA Tegra OPP tables use multi-word names. Allow OPP node
+> and OPP entry name to have multi-worded names to silence DT checker
+> warnings about the multi-word names separated by hyphen.
+> 
+> Reviewed-by: David Heidelberg <david@ixit.cz>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
->   kernel/power/swap.c | 5 +++--
->   1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-> index 9ec418955556..26c0bd2a50da 100644
-> --- a/kernel/power/swap.c
-> +++ b/kernel/power/swap.c
-> @@ -1521,9 +1521,10 @@ int swsusp_read(unsigned int *flags_p)
->   int swsusp_check(void)
->   {
->   	int error;
-> +	void *holder;
->   
->   	hib_resume_bdev = blkdev_get_by_dev(swsusp_resume_device,
-> -					    FMODE_READ, NULL);
-> +					    FMODE_READ | FMODE_EXCL, &holder);
->   	if (!IS_ERR(hib_resume_bdev)) {
->   		set_blocksize(hib_resume_bdev, PAGE_SIZE);
->   		clear_page(swsusp_header);
-> @@ -1545,7 +1546,7 @@ int swsusp_check(void)
->   
->   put:
->   		if (error)
-> -			blkdev_put(hib_resume_bdev, FMODE_READ);
-> +			blkdev_put(hib_resume_bdev, FMODE_READ | FMODE_EXCL);
->   		else
->   			pr_debug("Image signature found, resuming\n");
->   	} else {
-ping...
+>  Documentation/devicetree/bindings/opp/opp-v2-base.yaml | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+> index ae3ae4d39843..298cf24af270 100644
+> --- a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+> +++ b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+> @@ -22,7 +22,7 @@ select: false
+>  
+>  properties:
+>    $nodename:
+> -    pattern: '^opp-table(-[a-z0-9]+)?$'
+> +    pattern: '^opp-table(-[a-z0-9]+)*$'
+
+I don't see how this helps you. What I see needed upstream is a prefix:
+
+'-?opp-table(-[0-9]+)?$'
+
+Though really what I'd like to see is the OPP nodes moved into the 
+device nodes they belong to when appropriate (i.e. when not shared 
+between multiple devices).
+
+>  
+>    opp-shared:
+>      description:
+> @@ -33,7 +33,7 @@ properties:
+>      type: boolean
+>  
+>  patternProperties:
+> -  '^opp-?[0-9]+$':
+> +  '^opp(-[0-9]+)*$':
+>      type: object
+>      description:
+>        One or more OPP nodes describing voltage-current-frequency combinations.
+> -- 
+> 2.32.0
+> 
+> 
