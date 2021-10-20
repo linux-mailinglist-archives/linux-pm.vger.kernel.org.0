@@ -2,166 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30B3043473E
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Oct 2021 10:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58F61434954
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Oct 2021 12:47:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbhJTIt5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Oct 2021 04:49:57 -0400
-Received: from mga14.intel.com ([192.55.52.115]:40250 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229627AbhJTIt4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 20 Oct 2021 04:49:56 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10142"; a="228999628"
-X-IronPort-AV: E=Sophos;i="5.87,166,1631602800"; 
-   d="scan'208";a="228999628"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2021 01:47:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,166,1631602800"; 
-   d="scan'208";a="444275912"
-Received: from lkp-server02.sh.intel.com (HELO 08b2c502c3de) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 20 Oct 2021 01:47:28 -0700
-Received: from kbuild by 08b2c502c3de with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1md7Fv-000DCC-Aw; Wed, 20 Oct 2021 08:47:27 +0000
-Date:   Wed, 20 Oct 2021 16:46:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 6cdd66fbde2b538418d13d06495b55d28131e6cf
-Message-ID: <616fd782./JpYwtG+XU2TZO42%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S230063AbhJTKuD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Oct 2021 06:50:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56606 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229702AbhJTKuD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Oct 2021 06:50:03 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B57A0C061746
+        for <linux-pm@vger.kernel.org>; Wed, 20 Oct 2021 03:47:48 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 77-20020a1c0450000000b0030da2439b21so620118wme.0
+        for <linux-pm@vger.kernel.org>; Wed, 20 Oct 2021 03:47:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=HBEIclTEjZ+Fsaop4U62ko5K3nTvsTWng5hE0irsAw0=;
+        b=RBpO/a6sGSY2J1VvI5FhcfBtSnfyCm0GY9rZIzOjzkU0htqyud98bXUSHv3oYWTi3v
+         aLPIIc99Wv5CPKNpvnNGbAv9/gVbvt7azRiDwnuD6H078BoDNYjhk0b40CrSn39NDbCI
+         Ya/YzFzW/v7rCfnLCF7ogaDPJzFnW6UW//WLj9DXA4Fkj4SaAvhCugRgvIN2pYmZ4gkw
+         MaNbLQZLEfJzsccJxBFLcqebL8t2hO3txX8++PYR7HSjiSyN8tNiBbcmvkOCZz5EzrNR
+         A3fV2K7dnU6AlgkHZDBhhA5PpjdMozWgE9VURaEhRvPfI2tsObl2LgJ8XSkyWVmLjoAN
+         ITQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=HBEIclTEjZ+Fsaop4U62ko5K3nTvsTWng5hE0irsAw0=;
+        b=drNnmkyb61JXlC+/aF/NMzNGlE+fRQR2SISLo/OaScjGcZ1WZYQ8DhjfBaKWjN2XQN
+         etX51Z5c/z7Zm14Gk9i1FWZgAGry8qrI+G8qpueLoIEpc3DncTpBMuW/L0fvy8Myp71A
+         B3N9kFLHKi2x2GNZHQR5mwOO6vWc+SWCoJ0GiCnEXSmE2kFELgsDlt7mri54DCkNcjGv
+         uo8lLeHZGlKiSF3w9tNPm9eij+hiwSuddaDc1Uv1zWsYq0lu1NODrp+2/pnkSVvfYD56
+         FnFh2k3g4WnItvJornxTjDS9TY09dUCA5PtYfrxYpR8CO4e4JfpVoWSX3F/ukbCUccrd
+         WfCQ==
+X-Gm-Message-State: AOAM5339/IK5RIPs9rvQbXeEtPeJQo4QwJOprtrAO97YmBEXzXUsH83g
+        CXxgjvrkWTpd0XLoIZPm+2x/XnBoAnV7U8MN
+X-Google-Smtp-Source: ABdhPJwokBEKxFsaXV5dkgf4vZTaV5x0bv7t9JafMAynZ/t9lVcUjphhmp4ecJAtl2uGa8jDHDhS+w==
+X-Received: by 2002:adf:a154:: with SMTP id r20mr51583586wrr.326.1634726867105;
+        Wed, 20 Oct 2021 03:47:47 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:4799:198d:b6ef:8da7? ([2a01:e34:ed2f:f020:4799:198d:b6ef:8da7])
+        by smtp.googlemail.com with ESMTPSA id o11sm2183231wry.0.2021.10.20.03.47.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Oct 2021 03:47:46 -0700 (PDT)
+Subject: Re: [PATCH v3 1/2] thermal/core: Make the userspace governor
+ deprecated
+To:     lukasz.luba@arm.com
+Cc:     rjw@rjwysocki.net, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>
+References: <20211019163506.2831454-1-daniel.lezcano@linaro.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <6372f16d-7d2d-cb1e-be86-23b21b41816b@linaro.org>
+Date:   Wed, 20 Oct 2021 12:47:45 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20211019163506.2831454-1-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 6cdd66fbde2b538418d13d06495b55d28131e6cf  Merge branch 'pm-sleep' into bleeding-edge
 
-elapsed time: 764m
+Hi Lukasz,
 
-configs tested: 107
-configs skipped: 3
+Do you agree with these changes ?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+On 19/10/2021 18:35, Daniel Lezcano wrote:
+> The userspace governor is sending temperature when polling is active
+> and trip point crossed events. Nothing else.
+> 
+> AFAICT, this governor is used with custom kernels making the userspace
+> governor co-existing with another governor on the same thermal zone
+> because there was no notification mechanism, implying a hack in the
+> framework to support this configuration.
+> 
+> The new netlink thermal notification is able to provide more
+> information than the userspace governor and give the opportunity to
+> the users of this governor to replace it by a dedicated notification
+> framework.
+> 
+> The userspace governor will be removed as its usage is no longer
+> needed.
+> 
+> Add a warning message to tell the userspace governor is deprecated.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/thermal/gov_user_space.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/drivers/thermal/gov_user_space.c b/drivers/thermal/gov_user_space.c
+> index 82a7198bbe71..f4fe050e1cbc 100644
+> --- a/drivers/thermal/gov_user_space.c
+> +++ b/drivers/thermal/gov_user_space.c
+> @@ -15,6 +15,14 @@
+>  
+>  #include "thermal_core.h"
+>  
+> +static int user_space_bind(struct thermal_zone_device *tz)
+> +{
+> +	pr_warn("Userspace governor deprecated: use thermal netlink "	\
+> +		"notification instead\n");
+> +
+> +	return 0;
+> +}
+> +
+>  /**
+>   * notify_user_space - Notifies user space about thermal events
+>   * @tz: thermal_zone_device
+> @@ -43,5 +51,6 @@ static int notify_user_space(struct thermal_zone_device *tz, int trip)
+>  static struct thermal_governor thermal_gov_user_space = {
+>  	.name		= "user_space",
+>  	.throttle	= notify_user_space,
+> +	.bind_to_tz	= user_space_bind,
+>  };
+>  THERMAL_GOVERNOR_DECLARE(thermal_gov_user_space);
+> 
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20211019
-powerpc                    ge_imp3a_defconfig
-powerpc                       ppc64_defconfig
-h8300                    h8300h-sim_defconfig
-powerpc                     ppa8548_defconfig
-arm                           sunxi_defconfig
-mips                      maltaaprp_defconfig
-arm                       imx_v4_v5_defconfig
-powerpc                     skiroot_defconfig
-powerpc                 mpc834x_itx_defconfig
-mips                         bigsur_defconfig
-sh                        edosk7760_defconfig
-sparc                       sparc64_defconfig
-powerpc                 mpc834x_mds_defconfig
-powerpc                     tqm5200_defconfig
-powerpc                      walnut_defconfig
-powerpc                        fsp2_defconfig
-arm                         palmz72_defconfig
-arm                         s3c2410_defconfig
-mips                      maltasmvp_defconfig
-arm                  randconfig-c002-20211019
-x86_64               randconfig-c001-20211019
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a004-20211020
-i386                 randconfig-a003-20211020
-i386                 randconfig-a002-20211020
-i386                 randconfig-a005-20211020
-i386                 randconfig-a006-20211020
-i386                 randconfig-a001-20211020
-x86_64               randconfig-a015-20211019
-x86_64               randconfig-a012-20211019
-x86_64               randconfig-a016-20211019
-x86_64               randconfig-a014-20211019
-x86_64               randconfig-a013-20211019
-x86_64               randconfig-a011-20211019
-i386                 randconfig-a014-20211019
-i386                 randconfig-a016-20211019
-i386                 randconfig-a011-20211019
-i386                 randconfig-a015-20211019
-i386                 randconfig-a012-20211019
-i386                 randconfig-a013-20211019
-arc                  randconfig-r043-20211019
-s390                 randconfig-r044-20211019
-riscv                randconfig-r042-20211019
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
 
-clang tested configs:
-x86_64               randconfig-a004-20211019
-x86_64               randconfig-a006-20211019
-x86_64               randconfig-a005-20211019
-x86_64               randconfig-a001-20211019
-x86_64               randconfig-a002-20211019
-x86_64               randconfig-a003-20211019
-i386                 randconfig-a001-20211019
-i386                 randconfig-a003-20211019
-i386                 randconfig-a004-20211019
-i386                 randconfig-a005-20211019
-i386                 randconfig-a002-20211019
-hexagon              randconfig-r041-20211019
-hexagon              randconfig-r045-20211019
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
