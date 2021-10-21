@@ -2,127 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A24A7436202
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Oct 2021 14:44:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D3D4362AD
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Oct 2021 15:19:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbhJUMq6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Oct 2021 08:46:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43062 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbhJUMq6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Oct 2021 08:46:58 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E652C06161C
-        for <linux-pm@vger.kernel.org>; Thu, 21 Oct 2021 05:44:42 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id q10-20020a17090a1b0a00b001a076a59640so5741116pjq.0
-        for <linux-pm@vger.kernel.org>; Thu, 21 Oct 2021 05:44:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=fPZhRlmvmcNir1y76+yyNj29wU9R71kryN4Jj//f9Gw=;
-        b=VJFsAT4KFkQ2egc8wLWcl8dJNQL67dRFBHLCnp/YSs++OErr+lxRRFapEnSWqdDVcd
-         /hemxx8ipSuJrms6gW2/kAjpToQcRcKpVuTXzyinFvwhUfHnBmm5KQwVUg6A/pgDITY+
-         4TQSVwq1KoDhw5zbEYFxc6kG6hP2FEKqDY9z/bLK+wwbUhCpmJ/R2EFsE2SdEVUgk9rN
-         Pnz2wiZiHWnHu6qpRlHUtAQvwPt+xW7AWg2WOo2nqnZNUpe2QRVN2vrCtqLf8mtzNufG
-         wkH/6XqlBuilN2KBeujzcrEp0Uoyuef3ukA4F2p0OHBTpzbOfRqUOIYcoBQQTsVaDqlS
-         9GnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=fPZhRlmvmcNir1y76+yyNj29wU9R71kryN4Jj//f9Gw=;
-        b=oaV1rfMrdH82/alO+EMq2qM6E9OpPjW896/qQHXKwcX0nKtoYViVZT8NYK59anwGsm
-         gbhS+9OuFah+xTp+J7YCp/lSsFj3Z/QvbeY5UIV+RFnR00wlZZ2EC9gSSQkHG6LKtCiP
-         X4R80U9NJ0fGnIDWhrbUIFYFiYIdY2Ui9h9ja0eQSP/NFU2qdGrt3ZbjCo+qnx2urFhO
-         KVXNK90mt/LeDwXcrDi84+7+CDQTqcNaXN8N3yP/bZUXJLdAQUhK6k0QY3AckdAqLZwc
-         nfbyMC/dKYWt3Sua23Nodvy2FlTWikzvh+spwkyYDcp0sdqbBcPwlzeqeIIBKeW3/xlv
-         HOHg==
-X-Gm-Message-State: AOAM533wIaXWTur+G/xoDOVXAmfhjclHunRCM3aUxzqcBQQ9m/lYZEWM
-        NSOGXHCLxJsEijLaaKTSm97EyQ==
-X-Google-Smtp-Source: ABdhPJwa9Jnle0wSOnXnh7ictqox+bh0Y/sY37JRca1kOM1++rUtY0gtmlr/iowyY/ncOcGYYBSNGA==
-X-Received: by 2002:a17:90b:1bce:: with SMTP id oa14mr6395999pjb.225.1634820281776;
-        Thu, 21 Oct 2021 05:44:41 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id h23sm6365691pfn.109.2021.10.21.05.44.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Oct 2021 05:44:41 -0700 (PDT)
-Message-ID: <617160b9.1c69fb81.34573.0b97@mx.google.com>
-Date:   Thu, 21 Oct 2021 05:44:41 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S230379AbhJUNVb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Oct 2021 09:21:31 -0400
+Received: from mail-0301.mail-europe.com ([188.165.51.139]:35828 "EHLO
+        mail-0301.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230072AbhJUNVb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Oct 2021 09:21:31 -0400
+Date:   Thu, 21 Oct 2021 13:19:05 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail; t=1634822352;
+        bh=LVkvx9GGJ+N/xVjEUjWIyINyqpMs9KCy7RcvjjDf9QM=;
+        h=Date:To:From:Reply-To:Subject:From;
+        b=bHSD/JrrJWnb+02sZ/gTBVCGXMt1haJcFjk8zcJU6ELCcl/KGGZV5TEfz4LG+8DkR
+         oLJTHT+r0jzu2YEganYF8hwmuA55h1yBFVwsjLrtr9fQF2ebVGL7eq+E9dVLF51+5S
+         7kQVy567wGIWlXqm40foW7o8x/So16PFP7p+Ee7k=
+To:     Georgi Djakov <djakov@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+From:   Yassine Oudjana <y.oudjana@protonmail.com>
+Reply-To: Yassine Oudjana <y.oudjana@protonmail.com>
+Subject: [PATCH v5 0/5] interconnect: qcom: Add MSM8996 interconnect driver
+Message-ID: <20211021131839.234662-1-y.oudjana@protonmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v5.15-rc6-69-g8b39e976f0f8
-X-Kernelci-Report-Type: test
-Subject: pm/testing baseline: 66 runs,
- 1 regressions (v5.15-rc6-69-g8b39e976f0f8)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 66 runs, 1 regressions (v5.15-rc6-69-g8b39e976f0f8)
+This series adds a driver for interconnects on MSM8996. This fixes some rar=
+e display underflows
+and provides a slight heat reduction.
 
-Regressions Summary
--------------------
+Changes since v4:
+ - Rebase on Dmitry's icc-rpm patches[1].
+ - Combine SDM660 bindings into the RPM interconnect schema.
+ - Clean up qcom_icc_node structs by removing unused properties, moving lin=
+ks to external
+   arrays and using the same arrays for multiple nodes where possible.
+ - Add support for Aggregate 0 NoC (a0noc).
+Changes since v3:
+ - Expand DEFINE_QNODE macros in msm8996.c.
+ - Commonize probe function.
+ - Don't rename qcom_icc_set in icc-rpmh since it's no longer needed.
+ - Code style fixes.
+Changes since v2:
+ - Dual-license qcom,msm8996.h and move it to the dt bindings patch
+ - Remove interconnect paths from CPUs since cpufreq driver doesn't support=
+ icc scaling yet.
+Changes since v1:
+ - Split first patch into 2 patches, one for renaming qcom_icc_set in icc-r=
+pmh, and another
+   one for the actual commonization.
+ - Revert unnecessary move of include line in sdm660.c
 
-platform                     | arch  | lab           | compiler | defconfig=
- | regressions
------------------------------+-------+---------------+----------+----------=
--+------------
-meson-g12b-a311d-khadas-vim3 | arm64 | lab-collabora | gcc-10   | defconfig=
- | 1          =
+[1] https://lore.kernel.org/linux-arm-msm/20210903232421.1384199-1-dmitry.b=
+aryshkov@linaro.org/
+
+Yassine Oudjana (5):
+  dt-bindings: interconnect: Combine SDM660 bindings into RPM schema
+  interconnect: icc-rpm: Add support for bus power domain
+  dt-bindings: interconnect: Add Qualcomm MSM8996 DT bindings
+  interconnect: qcom: Add MSM8996 interconnect provider driver
+  arm64: dts: qcom: msm8996: Add interconnect support
+
+ .../bindings/interconnect/qcom,rpm.yaml       |  143 +-
+ .../bindings/interconnect/qcom,sdm660.yaml    |  185 --
+ arch/arm64/boot/dts/qcom/msm8996.dtsi         |   93 +
+ drivers/interconnect/qcom/Kconfig             |    9 +
+ drivers/interconnect/qcom/Makefile            |    2 +
+ drivers/interconnect/qcom/icc-rpm.c           |    7 +
+ drivers/interconnect/qcom/icc-rpm.h           |    1 +
+ drivers/interconnect/qcom/msm8996.c           | 2113 +++++++++++++++++
+ drivers/interconnect/qcom/msm8996.h           |  149 ++
+ .../dt-bindings/interconnect/qcom,msm8996.h   |  163 ++
+ 10 files changed, 2673 insertions(+), 192 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sdm=
+660.yaml
+ create mode 100644 drivers/interconnect/qcom/msm8996.c
+ create mode 100644 drivers/interconnect/qcom/msm8996.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,msm8996.h
+
+--=20
+2.33.1
 
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.15-rc=
-6-69-g8b39e976f0f8/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.15-rc6-69-g8b39e976f0f8
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      8b39e976f0f81dd610ea1d7930dc8ba662b639b5 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
- | regressions
------------------------------+-------+---------------+----------+----------=
--+------------
-meson-g12b-a311d-khadas-vim3 | arm64 | lab-collabora | gcc-10   | defconfig=
- | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/617157a035ac120dad3358fd
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.15-rc6-69-g8b39e=
-976f0f8/arm64/defconfig/gcc-10/lab-collabora/baseline-meson-g12b-a311d-khad=
-as-vim3.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.15-rc6-69-g8b39e=
-976f0f8/arm64/defconfig/gcc-10/lab-collabora/baseline-meson-g12b-a311d-khad=
-as-vim3.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/617157a035ac120dad335=
-8fe
-        new failure (last pass: v5.15-rc6-67-g7f01eda12647) =
-
- =20
