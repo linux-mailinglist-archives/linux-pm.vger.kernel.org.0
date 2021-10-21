@@ -2,247 +2,398 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F01A24368E2
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Oct 2021 19:17:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA57D4368F0
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Oct 2021 19:21:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbhJURTs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Oct 2021 13:19:48 -0400
-Received: from mail-ot1-f42.google.com ([209.85.210.42]:35546 "EHLO
-        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbhJURTs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Oct 2021 13:19:48 -0400
-Received: by mail-ot1-f42.google.com with SMTP id w12-20020a056830410c00b0054e7ceecd88so1291178ott.2;
-        Thu, 21 Oct 2021 10:17:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=c2KcjPlP8dFVSBa3l2MWntZHeNa/nrmW3MDLjeHIqpo=;
-        b=ZhsnUuZeJb3hbCCCDhnqbValqqt3+cLcv+P+L6BBcMGsFN/GpAIkebqIeVwvwyEk+O
-         rvqO4j38D/gfwYZFGgDdxPXhaDweIA/3ohHakGc+xUxQri+3vccq42Amn7GokPHHArCH
-         ob4pr+ir6UyFMgN+2v0ETkZimI07nwfPzikFGGbemVJFrV/DN4yWdDtW6dUy4cdPty9i
-         JJvKXxjGGevjE7JpBn9oxQ4RAasv6MVE7Fq1KoXLbVGMoK9MzVVXr8mz2yR4YUDiLMtj
-         bmHcg0VL9Zol/C7POCiW3ZcKoErQzvLfUL4k8vt4J+jyxKzcNfJlG74WpeBYsz7cIk8q
-         iwkg==
-X-Gm-Message-State: AOAM531Izbls56Zz0TVJc3XSJ5D1IdLYn5YD1a7wS7wYpdWYP+4d16tz
-        8LwNQ5238ftTQizpIK6RXKqfFi6Prk4W7qjwtVo=
-X-Google-Smtp-Source: ABdhPJyNBCJam9Bx1qy7vft6okiRWZlRKb/iGBMCEs0rNfzSq62IuLlvM1BUAphdbXqQgL8kD1/Y5CQPv4I1InW8oCw=
-X-Received: by 2002:a9d:65c1:: with SMTP id z1mr5695139oth.198.1634836651708;
- Thu, 21 Oct 2021 10:17:31 -0700 (PDT)
+        id S230243AbhJURXO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Oct 2021 13:23:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52128 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229567AbhJURXO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Oct 2021 13:23:14 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2868DC061764
+        for <linux-pm@vger.kernel.org>; Thu, 21 Oct 2021 10:20:58 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1mdbkJ-0004MS-WF; Thu, 21 Oct 2021 19:20:52 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1mdbkG-0003Xy-Ud; Thu, 21 Oct 2021 19:20:48 +0200
+Date:   Thu, 21 Oct 2021 19:20:48 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Petr Benes <petrben@gmail.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Michal =?utf-8?B?Vm9rw6HEjQ==?= <michal.vokac@ysoft.com>,
+        linux-pm@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Amit Kucheria <amitk@kernel.org>, linux-kernel@vger.kernel.org,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        David Jander <david@protonic.nl>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2] thermal: imx: implement runtime PM support
+Message-ID: <20211021172048.GE2298@pengutronix.de>
+References: <20211019130809.21281-1-o.rempel@pengutronix.de>
+ <20211020050459.GE16320@pengutronix.de>
+ <CAPwXO5b=z1nhQCo55A_XuK-Es2o7TrL2Vj6AkRSXa3Wxh0s8sA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20211013121914.3146812-1-yebin10@huawei.com> <CAJZ5v0jX4N-mXYoVVeMB0XW9KcYq9DtE3-dvOoNEBmUa1xzEtw@mail.gmail.com>
- <61715146.2040000@huawei.com> <CAJZ5v0jLQP=T9Rd8JZq2px+CEbFVXmSu0qB1qTaHPh83uzdi_Q@mail.gmail.com>
- <61717B5E.3030300@huawei.com>
-In-Reply-To: <61717B5E.3030300@huawei.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 21 Oct 2021 19:17:20 +0200
-Message-ID: <CAJZ5v0i64QaN5sSxfEPWLJpZzvX6psizGjfDsi1BzRNdV45e=A@mail.gmail.com>
-Subject: Re: [PATCH -next] PM: hibernate: Get block device exclusively when do swsusp_check
-To:     yebin <yebin10@huawei.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Ted Ts'o" <tytso@mit.edu>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jan Kara <jack@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAPwXO5b=z1nhQCo55A_XuK-Es2o7TrL2Vj6AkRSXa3Wxh0s8sA@mail.gmail.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 19:12:24 up 245 days, 20:36, 111 users,  load average: 0.18, 0.25,
+ 0.25
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 21, 2021 at 4:38 PM yebin <yebin10@huawei.com> wrote:
->
->
->
-> On 2021/10/21 21:27, Rafael J. Wysocki wrote:
-> > On Thu, Oct 21, 2021 at 1:38 PM yebin <yebin10@huawei.com> wrote:
-> >>
-> >>
-> >> On 2021/10/21 19:00, Rafael J. Wysocki wrote:
-> >>> On Wed, Oct 13, 2021 at 2:06 PM Ye Bin <yebin10@huawei.com> wrote:
-> >>>> We got follow issue:
-> >>>> [   89.266592] ------------[ cut here ]------------
-> >>>> [   89.267427] kernel BUG at fs/buffer.c:3020!
-> >>>> [   89.268264] invalid opcode: 0000 [#1] SMP KASAN PTI
-> >>>> [   89.269116] CPU: 7 PID: 1750 Comm: kmmpd-loop0 Not tainted 5.10.0-862.14.0.6.x86_64-08610-gc932cda3cef4-dirty #20
-> >>>> [   89.273169] RIP: 0010:submit_bh_wbc.isra.0+0x538/0x6d0
-> >>>> [   89.277157] RSP: 0018:ffff888105ddfd08 EFLAGS: 00010246
-> >>>> [   89.278093] RAX: 0000000000000005 RBX: ffff888124231498 RCX: ffffffffb2772612
-> >>>> [   89.279332] RDX: 1ffff11024846293 RSI: 0000000000000008 RDI: ffff888124231498
-> >>>> [   89.280591] RBP: ffff8881248cc000 R08: 0000000000000001 R09: ffffed1024846294
-> >>>> [   89.281851] R10: ffff88812423149f R11: ffffed1024846293 R12: 0000000000003800
-> >>>> [   89.283095] R13: 0000000000000001 R14: 0000000000000000 R15: ffff8881161f7000
-> >>>> [   89.284342] FS:  0000000000000000(0000) GS:ffff88839b5c0000(0000) knlGS:0000000000000000
-> >>>> [   89.285711] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> >>>> [   89.286701] CR2: 00007f166ebc01a0 CR3: 0000000435c0e000 CR4: 00000000000006e0
-> >>>> [   89.287919] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> >>>> [   89.289138] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> >>>> [   89.290368] Call Trace:
-> >>>> [   89.290842]  write_mmp_block+0x2ca/0x510
-> >>>> [   89.292218]  kmmpd+0x433/0x9a0
-> >>>> [   89.294902]  kthread+0x2dd/0x3e0
-> >>>> [   89.296268]  ret_from_fork+0x22/0x30
-> >>>> [   89.296906] Modules linked in:
-> >>>>
-> >>>> We can reproduce this issue as follow:
-> >>>> 1. mkfs.ext4 -O mmp  /dev/sda -b 1024
-> >>>> 2. mount /dev/sda /home/test
-> >>>> 3. echo "/dev/sda" > /sys/power/resume
-> >>>> 4. wait a moment we will get exception
-> >>>>
-> >>>> The sequence of issue is as follows:
-> >>>>          Thread1                       Thread2
-> >>>> mount /dev/sda /home/test
-> >>>> get s_mmp_bh  --> has mapped flag
-> >>>> start kmmpd thread
-> >>>>                                   echo "/dev/sda" > /sys/power/resume
-> >>>>                                     resume_store
-> >>>>                                       software_resume
-> >>>>                                         swsusp_check
-> >>>>                                           set_blocksize
-> >>>>                                             truncate_inode_pages_range
-> >>>>                                               truncate_cleanup_page
-> >>>>                                                 block_invalidatepage
-> >>>>                                                   discard_buffer --> clean mapped flag
-> >>>> write_mmp_block
-> >>>>     submit_bh
-> >>>>       submit_bh_wbc
-> >>>>         BUG_ON(!buffer_mapped(bh)) --> trigger bug_on
-> >>>>
-> >>>> To solve this issue, get block device exclusively when do swsusp_check.
-> >>> And why exactly is this going to help?
-> >> If a  block device is already  mounted, then do  resume, it will discard
-> >> buffer
-> >> which file system being used.  That can cause the file system to crash and
-> >> may even cause the system to reset abnormally.
-> > I see.
+Hi Petr,
+
+On Wed, Oct 20, 2021 at 05:53:03PM +0200, Petr Benes wrote:
+> On Wed, 20 Oct 2021 at 07:05, Oleksij Rempel <o.rempel@pengutronix.de> wrote:
 > >
-> > Is there a way to indicate in swsusp_check() that the access will be
-> > read-only and so it doesn't care whether or not the block device is in
-> > use by someone else?
-> The root reason is that call  'set_blocksize' in 'swsusp_check' which
-> maybe invalidate
-> block device's page.
-
-I see.
-
-> Moreover, the file system and swap partition share storage space, which
-> will lead to
-> data confusion.
-> >> If the "/sys/power/resume" sysfs interface is unrestricted, it will provide
-> >> criminals with a way to attack the system.
-> >>
-> >>>> Signed-off-by: Ye Bin <yebin10@huawei.com>
-> >>>> ---
-> >>>>    kernel/power/swap.c | 5 +++--
-> >>>>    1 file changed, 3 insertions(+), 2 deletions(-)
-> >>>>
-> >>>> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-> >>>> index 9ec418955556..26c0bd2a50da 100644
-> >>>> --- a/kernel/power/swap.c
-> >>>> +++ b/kernel/power/swap.c
-> >>>> @@ -1521,9 +1521,10 @@ int swsusp_read(unsigned int *flags_p)
-> >>>>    int swsusp_check(void)
-> >>>>    {
-> >>>>           int error;
-> >>>> +       void *holder;
-> >>>>
-> >>>>           hib_resume_bdev = blkdev_get_by_dev(swsusp_resume_device,
-> >>>> -                                           FMODE_READ, NULL);
-> >>>> +                                           FMODE_READ | FMODE_EXCL, &holder);
-> >>> So you need to explain to me how this works.
-> >> As we call 'blkdev_get_by_path' in 'mount_bdev'  pass mode includes
-> >> FMODE_EXCL.
-> >> So if 'swsusp_check' try to get block device with mode includes
-> >> FMODE_EXCL will failed.
-> >>
-> >> I think if a block device is used as a swap partition, it cannot be
-> >> mounted at the
-> >> same time. Conversely, if a block device is already mounted, it cannot
-> >> be used as
-> >> a swap partition.
-> > Well, what if a hibernation image is located in a swap file?  This is
-> > one of the cases that need to be supported.
-> I don't know much about this, but I think the process can call
-> swsusp_check, the
-> hibernation image must be loaded into the block device.
-
-Yes, it is invalid to call swsusp_check() without a hibernation image
-in the target swap partition or swap file if that's what you mean.
-
-However, in the case of a swap file, the image may be there in theory
-even if the filesystem holding the swap file is mounted.
-
-> I refer to the process of swapon. If the swap partition is a block
-> device, it is also
-> opened exclusively.
->
-> swapon
->      claim_swapfile
-
-There are two cases, though, the S_ISBLK() one and the S_ISREG() one,
-and the latter is the swap file case I believe.
-
-> static int claim_swapfile(struct swap_info_struct *p, struct inode *inode)
-> {
->          int error;
->
->          if (S_ISBLK(inode->i_mode)) {    -->If a block device is
-> specified, it is also opened exclusively here.
->                  p->bdev = blkdev_get_by_dev(inode->i_rdev,
->                                     FMODE_READ | FMODE_WRITE |
-> FMODE_EXCL, p);
->                  if (IS_ERR(p->bdev)) {
->                          error = PTR_ERR(p->bdev);
->                          p->bdev = NULL;
->                          return error;
->                  }
->                  p->old_block_size = block_size(p->bdev);
->                  error = set_blocksize(p->bdev, PAGE_SIZE);
->                  if (error < 0)
->                          return error;
->                  /*
->                   * Zoned block devices contain zones that have a sequential
->                   * write only restriction.  Hence zoned block devices
-> are not
->                   * suitable for swapping.  Disallow them here.
->                   */
->                  if (blk_queue_is_zoned(p->bdev->bd_disk->queue))
->                          return -EINVAL;
->                  p->flags |= SWP_BLKDEV;
->          } else if (S_ISREG(inode->i_mode)) {
->                  p->bdev = inode->i_sb->s_bdev;
-
-Here, it is not exclusive.
-
-Anyway, I think that the change made by the patch should be fine,
-because it mostly affects restore and I'm not expecting anyone to
-restore the system from an image in a swap file while the filesystem
-holding it is mounted.
-
-So I'm going to apply it with some changelog edits.
-
-Thanks!
-
->          }
->
->          return 0;
-> }
-> >>>>           if (!IS_ERR(hib_resume_bdev)) {
-> >>>>                   set_blocksize(hib_resume_bdev, PAGE_SIZE);
-> >>>>                   clear_page(swsusp_header);
-> >>>> @@ -1545,7 +1546,7 @@ int swsusp_check(void)
-> >>>>
-> >>>>    put:
-> >>>>                   if (error)
-> >>>> -                       blkdev_put(hib_resume_bdev, FMODE_READ);
-> >>>> +                       blkdev_put(hib_resume_bdev, FMODE_READ | FMODE_EXCL);
-> >>>>                   else
-> >>>>                           pr_debug("Image signature found, resuming\n");
-> >>>>           } else {
-> >>>> --
-> >>> .
-> >>>
-> > .
+> > Hi Petr and Michal,
 > >
->
+> > I forgot to add you for v2 in CC. Please test/review this version.
+> 
+> Hi Oleksij,
+> 
+> It works good. with PM as well as without PM. The only minor issue I found is,
+> that the first temperature reading (when the driver probes) fails. That is
+> (val & soc_data->temp_valid_mask) == 0) holds true. How does
+> pm_runtime_resume_and_get() behave in imx_thermal_probe()?
+> Does it go through imx_thermal_runtime_resume() with usleep_range()?
+
+How exactly did you reproduce it? Even more or less understanding how
+this can potentially happen, i never had this issue on my HW. Is it something
+HW specific?
+
+Even after executing this command:
+echo disabled > /sys/class/thermal/thermal_zone0/mode
+cat /sys/class/thermal/thermal_zone0/temp
+
+In this case, IRQ is disabled and on each manual temp read, driver starts
+actively using runtime PM. I still never get (val & soc_data->temp_valid_mask)
+== 0)..
+
+> >
+> > On Tue, Oct 19, 2021 at 03:08:09PM +0200, Oleksij Rempel wrote:
+> > > Starting with commit d92ed2c9d3ff ("thermal: imx: Use driver's local
+> > > data to decide whether to run a measurement") this driver stared using
+> > > irq_enabled flag to make decision to power on/off the thermal core. This
+> > > triggered a regression, where after reaching critical temperature, alarm
+> > > IRQ handler set irq_enabled to false,  disabled thermal core and was not
+> > > able read temperature and disable cooling sequence.
+> > >
+> > > In case the cooling device is "CPU/GPU freq", the system will run with
+> > > reduce performance until next reboot.
+> > >
+> > > To solve this issue, we need to move all parts implementing hand made
+> > > runtime power management and let it handle actual runtime PM framework.
+> > >
+> > > Fixes: d92ed2c9d3ff ("thermal: imx: Use driver's local data to decide whether to run a measurement")
+> > > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> > > ---
+> > >  drivers/thermal/imx_thermal.c | 143 +++++++++++++++++++++-------------
+> > >  1 file changed, 89 insertions(+), 54 deletions(-)
+> > >
+> > > diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
+> > > index 2c7473d86a59..cb5a4354fc75 100644
+> > > --- a/drivers/thermal/imx_thermal.c
+> > > +++ b/drivers/thermal/imx_thermal.c
+> > > @@ -15,6 +15,7 @@
+> > >  #include <linux/regmap.h>
+> > >  #include <linux/thermal.h>
+> > >  #include <linux/nvmem-consumer.h>
+> > > +#include <linux/pm_runtime.h>
+> > >
+> > >  #define REG_SET              0x4
+> > >  #define REG_CLR              0x8
+> > > @@ -194,6 +195,7 @@ static struct thermal_soc_data thermal_imx7d_data = {
+> > >  };
+> > >
+> > >  struct imx_thermal_data {
+> > > +     struct device *dev;
+> > >       struct cpufreq_policy *policy;
+> > >       struct thermal_zone_device *tz;
+> > >       struct thermal_cooling_device *cdev;
+> > > @@ -252,44 +254,15 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
+> > >       const struct thermal_soc_data *soc_data = data->socdata;
+> > >       struct regmap *map = data->tempmon;
+> > >       unsigned int n_meas;
+> > > -     bool wait, run_measurement;
+> > >       u32 val;
+> > > +     int ret;
+> > >
+> > > -     run_measurement = !data->irq_enabled;
+> > > -     if (!run_measurement) {
+> > > -             /* Check if a measurement is currently in progress */
+> > > -             regmap_read(map, soc_data->temp_data, &val);
+> > > -             wait = !(val & soc_data->temp_valid_mask);
+> > > -     } else {
+> > > -             /*
+> > > -              * Every time we measure the temperature, we will power on the
+> > > -              * temperature sensor, enable measurements, take a reading,
+> > > -              * disable measurements, power off the temperature sensor.
+> > > -              */
+> > > -             regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
+> > > -                         soc_data->power_down_mask);
+> > > -             regmap_write(map, soc_data->sensor_ctrl + REG_SET,
+> > > -                         soc_data->measure_temp_mask);
+> > > -
+> > > -             wait = true;
+> > > -     }
+> > > -
+> > > -     /*
+> > > -      * According to the temp sensor designers, it may require up to ~17us
+> > > -      * to complete a measurement.
+> > > -      */
+> > > -     if (wait)
+> > > -             usleep_range(20, 50);
+> > > +     ret = pm_runtime_resume_and_get(data->dev);
+> > > +     if (ret < 0)
+> > > +             return ret;
+> > >
+> > >       regmap_read(map, soc_data->temp_data, &val);
+> > >
+> > > -     if (run_measurement) {
+> > > -             regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
+> > > -                          soc_data->measure_temp_mask);
+> > > -             regmap_write(map, soc_data->sensor_ctrl + REG_SET,
+> > > -                          soc_data->power_down_mask);
+> > > -     }
+> > > -
+> > >       if ((val & soc_data->temp_valid_mask) == 0) {
+> > >               dev_dbg(&tz->device, "temp measurement never finished\n");
+> > >               return -EAGAIN;
+> > > @@ -328,6 +301,8 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
+> > >               enable_irq(data->irq);
+> > >       }
+> > >
+> > > +     pm_runtime_put(data->dev);
+> > > +
+> > >       return 0;
+> > >  }
+> > >
+> > > @@ -335,24 +310,16 @@ static int imx_change_mode(struct thermal_zone_device *tz,
+> > >                          enum thermal_device_mode mode)
+> > >  {
+> > >       struct imx_thermal_data *data = tz->devdata;
+> > > -     struct regmap *map = data->tempmon;
+> > > -     const struct thermal_soc_data *soc_data = data->socdata;
+> > >
+> > >       if (mode == THERMAL_DEVICE_ENABLED) {
+> > > -             regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
+> > > -                          soc_data->power_down_mask);
+> > > -             regmap_write(map, soc_data->sensor_ctrl + REG_SET,
+> > > -                          soc_data->measure_temp_mask);
+> > > +             pm_runtime_get(data->dev);
+> > >
+> > >               if (!data->irq_enabled) {
+> > >                       data->irq_enabled = true;
+> > >                       enable_irq(data->irq);
+> > >               }
+> > >       } else {
+> > > -             regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
+> > > -                          soc_data->measure_temp_mask);
+> > > -             regmap_write(map, soc_data->sensor_ctrl + REG_SET,
+> > > -                          soc_data->power_down_mask);
+> > > +             pm_runtime_put(data->dev);
+> > >
+> > >               if (data->irq_enabled) {
+> > >                       disable_irq(data->irq);
+> > > @@ -393,6 +360,11 @@ static int imx_set_trip_temp(struct thermal_zone_device *tz, int trip,
+> > >                            int temp)
+> > >  {
+> > >       struct imx_thermal_data *data = tz->devdata;
+> > > +     int ret;
+> > > +
+> > > +     ret = pm_runtime_resume_and_get(data->dev);
+> > > +     if (ret < 0)
+> > > +             return ret;
+> > >
+> > >       /* do not allow changing critical threshold */
+> > >       if (trip == IMX_TRIP_CRITICAL)
+> > > @@ -406,6 +378,8 @@ static int imx_set_trip_temp(struct thermal_zone_device *tz, int trip,
+> > >
+> > >       imx_set_alarm_temp(data, temp);
+> > >
+> > > +     pm_runtime_put(data->dev);
+> > > +
+> > >       return 0;
+> > >  }
+> > >
+> > > @@ -681,6 +655,8 @@ static int imx_thermal_probe(struct platform_device *pdev)
+> > >       if (!data)
+> > >               return -ENOMEM;
+> > >
+> > > +     data->dev = &pdev->dev;
+> > > +
+> > >       map = syscon_regmap_lookup_by_phandle(pdev->dev.of_node, "fsl,tempmon");
+> > >       if (IS_ERR(map)) {
+> > >               ret = PTR_ERR(map);
+> > > @@ -801,6 +777,14 @@ static int imx_thermal_probe(struct platform_device *pdev)
+> > >       regmap_write(map, data->socdata->sensor_ctrl + REG_SET,
+> > >                    data->socdata->measure_temp_mask);
+> > >
+> > > +     /* the core was configured and enabled just before */
+> > > +     pm_runtime_set_active(&pdev->dev);
+> > > +     pm_runtime_enable(data->dev);
+> > > +
+> > > +     ret = pm_runtime_resume_and_get(data->dev);
+> > > +     if (ret < 0)
+> > > +             goto disable_runtime_pm;
+> > > +
+> > >       data->irq_enabled = true;
+> > >       ret = thermal_zone_device_enable(data->tz);
+> > >       if (ret)
+> > > @@ -814,10 +798,15 @@ static int imx_thermal_probe(struct platform_device *pdev)
+> > >               goto thermal_zone_unregister;
+> > >       }
+> > >
+> > > +     pm_runtime_put(data->dev);
+> > > +
+> > >       return 0;
+> > >
+> > >  thermal_zone_unregister:
+> > >       thermal_zone_device_unregister(data->tz);
+> > > +disable_runtime_pm:
+> > > +     pm_runtime_put_noidle(data->dev);
+> > > +     pm_runtime_disable(data->dev);
+> > >  clk_disable:
+> > >       clk_disable_unprepare(data->thermal_clk);
+> > >  legacy_cleanup:
+> > > @@ -829,13 +818,9 @@ static int imx_thermal_probe(struct platform_device *pdev)
+> > >  static int imx_thermal_remove(struct platform_device *pdev)
+> > >  {
+> > >       struct imx_thermal_data *data = platform_get_drvdata(pdev);
+> > > -     struct regmap *map = data->tempmon;
+> > >
+> > > -     /* Disable measurements */
+> > > -     regmap_write(map, data->socdata->sensor_ctrl + REG_SET,
+> > > -                  data->socdata->power_down_mask);
+> > > -     if (!IS_ERR(data->thermal_clk))
+> > > -             clk_disable_unprepare(data->thermal_clk);
+> > > +     pm_runtime_put_noidle(data->dev);
+> > > +     pm_runtime_disable(data->dev);
+> > >
+> > >       thermal_zone_device_unregister(data->tz);
+> > >       imx_thermal_unregister_legacy_cooling(data);
+> > > @@ -858,29 +843,79 @@ static int __maybe_unused imx_thermal_suspend(struct device *dev)
+> > >       ret = thermal_zone_device_disable(data->tz);
+> > >       if (ret)
+> > >               return ret;
+> > > +
+> > > +     return pm_runtime_force_suspend(data->dev);
+> > > +}
+> > > +
+> > > +static int __maybe_unused imx_thermal_resume(struct device *dev)
+> > > +{
+> > > +     struct imx_thermal_data *data = dev_get_drvdata(dev);
+> > > +     int ret;
+> > > +
+> > > +     ret = pm_runtime_force_resume(data->dev);
+> > > +     if (ret)
+> > > +             return ret;
+> > > +     /* Enabled thermal sensor after resume */
+> > > +     return thermal_zone_device_enable(data->tz);
+> > > +}
+> > > +
+> > > +static int __maybe_unused imx_thermal_runtime_suspend(struct device *dev)
+> > > +{
+> > > +     struct imx_thermal_data *data = dev_get_drvdata(dev);
+> > > +     const struct thermal_soc_data *socdata = data->socdata;
+> > > +     struct regmap *map = data->tempmon;
+> > > +     int ret;
+> > > +
+> > > +     ret = regmap_write(map, socdata->sensor_ctrl + REG_CLR,
+> > > +                        socdata->measure_temp_mask);
+> > > +     if (ret)
+> > > +             return ret;
+> > > +
+> > > +     ret = regmap_write(map, socdata->sensor_ctrl + REG_SET,
+> > > +                        socdata->power_down_mask);
+> > > +     if (ret)
+> > > +             return ret;
+> > > +
+> > >       clk_disable_unprepare(data->thermal_clk);
+> > >
+> > >       return 0;
+> > >  }
+> > >
+> > > -static int __maybe_unused imx_thermal_resume(struct device *dev)
+> > > +static int __maybe_unused imx_thermal_runtime_resume(struct device *dev)
+> > >  {
+> > >       struct imx_thermal_data *data = dev_get_drvdata(dev);
+> > > +     const struct thermal_soc_data *socdata = data->socdata;
+> > > +     struct regmap *map = data->tempmon;
+> > >       int ret;
+> > >
+> > >       ret = clk_prepare_enable(data->thermal_clk);
+> > >       if (ret)
+> > >               return ret;
+> > > -     /* Enabled thermal sensor after resume */
+> > > -     ret = thermal_zone_device_enable(data->tz);
+> > > +
+> > > +     ret = regmap_write(map, socdata->sensor_ctrl + REG_CLR,
+> > > +                        socdata->power_down_mask);
+> > > +     if (ret)
+> > > +             return ret;
+> > > +
+> > > +     ret = regmap_write(map, socdata->sensor_ctrl + REG_SET,
+> > > +                        socdata->measure_temp_mask);
+> > >       if (ret)
+> > >               return ret;
+> > >
+> > > +     /*
+> > > +      * According to the temp sensor designers, it may require up to ~17us
+> > > +      * to complete a measurement.
+> > > +      */
+> > > +     usleep_range(20, 50);
+> > > +
+> > >       return 0;
+> > >  }
+> > >
+> > > -static SIMPLE_DEV_PM_OPS(imx_thermal_pm_ops,
+> > > -                      imx_thermal_suspend, imx_thermal_resume);
+> > > +static const struct dev_pm_ops imx_thermal_pm_ops = {
+> > > +     SET_SYSTEM_SLEEP_PM_OPS(imx_thermal_suspend, imx_thermal_resume)
+> > > +     SET_RUNTIME_PM_OPS(imx_thermal_runtime_suspend,
+> > > +                        imx_thermal_runtime_resume, NULL)
+> > > +};
+> > >
+> > >  static struct platform_driver imx_thermal = {
+> > >       .driver = {
+> > > --
+> > > 2.30.2
+> > >
+> > >
+> >
+> > --
+> > Pengutronix e.K.                           |                             |
+> > Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+> > 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+> > Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+> 
+> 
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
