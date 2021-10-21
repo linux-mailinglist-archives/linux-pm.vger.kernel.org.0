@@ -2,14 +2,14 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC901436BE6
+	by mail.lfdr.de (Postfix) with ESMTP id 63115436BE5
 	for <lists+linux-pm@lfdr.de>; Thu, 21 Oct 2021 22:16:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231958AbhJUUTH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S232002AbhJUUTH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Thu, 21 Oct 2021 16:19:07 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:34220 "EHLO
+Received: from Galois.linutronix.de ([193.142.43.55]:34216 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231948AbhJUUTG (ORCPT
+        with ESMTP id S231958AbhJUUTG (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Oct 2021 16:19:06 -0400
 Date:   Thu, 21 Oct 2021 20:16:48 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
@@ -19,12 +19,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BR451V9gHV5d2tMJ9zMTbGDioaMQw/Et568tIau39FA=;
-        b=RWFDsvBwNuuYg+m/yXL27crgnc3RCG0H6kh88EQEl+Yi3KSnlb1veH2XQZiVJS/XE2h25i
-        znmFgA8q7D4W0luVscHOBL+AF79M/HhEaOsHsmqO/Ndct1x0gYFN1IQMFI2MNkljDNFP7g
-        FWt4Bos2WhPVdMSPfub0jmFK1PqKrqwV88+4OH88s/07AhCKLjFu+xMzyKx82Ps+1Dv37j
-        xc9pV52lx1WxoogVnZIPfLqUQ2xxKcRrmKUO+o3gLfCT6OF/0oyeVQikE0O9izTePVQJDe
-        EsoQauCMYs0QzGhpmcCEkXK7Ciuo09tNjCQrcw5rmbqgAr1xSBg5Gq78AToaHw==
+        bh=jL6wyZNqlf2H9e//+80GqcfAdGQXJsVxVfyydZ6D924=;
+        b=IMUEjv3hMEpFJheRcXqFHdbw+6aNZC6tqeM0wv43C7wNK8p43BXOgxMzl726E0STf2/4/g
+        9lkaF1yQOUDzb8nsRm3o4jmnn8qr2flfStjHXRmWdvHhP3lXXom9IGW5EWXPk30/MH9gGO
+        3vAB6cvf0atW4fzv/Vv15lxZbwXEyvjpwmsx3TgzhiAngsGzrctEf9IIOUF3xnuJ8+00oQ
+        n6+umIptNv4GQwFp3CHqOzU1cfHFfOk2SZvCYAFBBkQVtP2b9n8tP8y3bZXh6jYWa7ZfM4
+        g3sFhDZHY1wBhUd9QRl+M+W2GhMNiI1AgtJ1pHWREkHIC8cKDTQWodUX5ArTrg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1634847409;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -32,22 +32,22 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BR451V9gHV5d2tMJ9zMTbGDioaMQw/Et568tIau39FA=;
-        b=SdJzlqD+wb+Qpq5AU38fekV1wEKyk1udw1D+OhPESgjeu1jNHmYrsKRCzXpniPvbCa3XAH
-        Yx7OS2FGf999ypCw==
+        bh=jL6wyZNqlf2H9e//+80GqcfAdGQXJsVxVfyydZ6D924=;
+        b=/GGYFOqvUiu17n4nefL3mSk6btWYh/5qb697fGq3AYXZKBY+ixWL/9qH+qHl5sWNJrnd4o
+        Eup8LztnEdW9/hCw==
 From:   "thermal-bot for Kunihiko Hayashi" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] dt-bindings: thermal: uniphier: Add binding
- for NX1 SoC
+Subject: [thermal: thermal/next] thermal/drivers/uniphier: Add compatible
+ string for NX1 SoC
 Cc:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <1634520891-16801-2-git-send-email-hayashi.kunihiko@socionext.com>
-References: <1634520891-16801-2-git-send-email-hayashi.kunihiko@socionext.com>
+In-Reply-To: <1634520891-16801-3-git-send-email-hayashi.kunihiko@socionext.com>
+References: <1634520891-16801-3-git-send-email-hayashi.kunihiko@socionext.com>
 MIME-Version: 1.0
-Message-ID: <163484740875.25758.5680896084824244200.tip-bot2@tip-bot2>
+Message-ID: <163484740810.25758.18225294692290217017.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -58,33 +58,37 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     5041e63aaf36021f71b5f6244811a9cf2fe89fb4
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//5041e63aaf36021f71b5f6244811a9cf2fe89fb4
+Commit-ID:     fb6de59d3967f87fe4cae4b08f55cbe0d5a30b77
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//fb6de59d3967f87fe4cae4b08f55cbe0d5a30b77
 Author:        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-AuthorDate:    Mon, 18 Oct 2021 10:34:50 +09:00
+AuthorDate:    Mon, 18 Oct 2021 10:34:51 +09:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Mon, 18 Oct 2021 13:59:57 +02:00
+CommitterDate: Mon, 18 Oct 2021 14:00:13 +02:00
 
-dt-bindings: thermal: uniphier: Add binding for NX1 SoC
+thermal/drivers/uniphier: Add compatible string for NX1 SoC
 
-Update thermal binding document for UniPhier NX1 SoC.
+Add basic support for UniPhier NX1 SoC. This includes a compatible string
+and the same SoC-dependent data as LD20 SoC.
 
 Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Link: https://lore.kernel.org/r/1634520891-16801-2-git-send-email-hayashi.kunihiko@socionext.com
+Link: https://lore.kernel.org/r/1634520891-16801-3-git-send-email-hayashi.kunihiko@socionext.com
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- Documentation/devicetree/bindings/thermal/socionext,uniphier-thermal.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/thermal/uniphier_thermal.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/thermal/socionext,uniphier-thermal.yaml b/Documentation/devicetree/bindings/thermal/socionext,uniphier-thermal.yaml
-index 553c9dc..c5b25ce 100644
---- a/Documentation/devicetree/bindings/thermal/socionext,uniphier-thermal.yaml
-+++ b/Documentation/devicetree/bindings/thermal/socionext,uniphier-thermal.yaml
-@@ -20,6 +20,7 @@ properties:
-       - socionext,uniphier-pxs2-thermal
-       - socionext,uniphier-ld20-thermal
-       - socionext,uniphier-pxs3-thermal
-+      - socionext,uniphier-nx1-thermal
- 
-   interrupts:
-     maxItems: 1
+diff --git a/drivers/thermal/uniphier_thermal.c b/drivers/thermal/uniphier_thermal.c
+index bba2284..4cae556 100644
+--- a/drivers/thermal/uniphier_thermal.c
++++ b/drivers/thermal/uniphier_thermal.c
+@@ -358,6 +358,10 @@ static const struct of_device_id uniphier_tm_dt_ids[] = {
+ 		.compatible = "socionext,uniphier-pxs3-thermal",
+ 		.data       = &uniphier_ld20_tm_data,
+ 	},
++	{
++		.compatible = "socionext,uniphier-nx1-thermal",
++		.data       = &uniphier_ld20_tm_data,
++	},
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(of, uniphier_tm_dt_ids);
