@@ -2,152 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AADC435987
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Oct 2021 05:49:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17FAA4359BB
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Oct 2021 06:10:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbhJUDwI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Oct 2021 23:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34932 "EHLO
+        id S229914AbhJUEMW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Oct 2021 00:12:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230155AbhJUDwH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Oct 2021 23:52:07 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3D1C06161C
-        for <linux-pm@vger.kernel.org>; Wed, 20 Oct 2021 20:49:52 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id q2-20020a17090a2e0200b001a0fd4efd49so4951161pjd.1
-        for <linux-pm@vger.kernel.org>; Wed, 20 Oct 2021 20:49:52 -0700 (PDT)
+        with ESMTP id S229700AbhJUEMW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Oct 2021 00:12:22 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27996C06161C
+        for <linux-pm@vger.kernel.org>; Wed, 20 Oct 2021 21:10:07 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id f21so17603228plb.3
+        for <linux-pm@vger.kernel.org>; Wed, 20 Oct 2021 21:10:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=Bzsb/Q6r1Zi5rdVjHI+KqXAiBXXQlbcZyUdL2/Kj+CY=;
-        b=FGRA4DViWQCCQUQP38kX2cAImAAWJEgYVyeExhDm/BnXEhkg6I+OkXAFkGFzYHh66d
-         5MJie56COMrqEZBrUJ/VV5SM+4sKTSsdlWyUroOdkr+eAusz/FW4BwK/MbP2qqJrM4ai
-         4x+VnLAc7qn0ohdRJn0emszioaimT7/5qJfAYYHHhgJFSlTtL5gT5RiQdWd6vmVRYtig
-         NgOARlWkpAui3X1fC6oNqduc+90RrJPZ1hH+wAML5DcZuO93kJ6OCku2Q4d1H6XUDhNY
-         ZkBz6q51J5THO7y1z6b65rOOAIDXjm2lyc6QNZgo1NGDkOvq+dW4+P2WLej/60Brulf3
-         5vOA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=yLK4NxbVqDLH3nRLVYQccxDS/5AO+FQ5rIKLjjCYFX0=;
+        b=jfZWIuznt21Lek3cIqItyOPu5IOr0TBTScrFk1fyO29je7a+YB158rIbSrQ3p8IUCR
+         RPWttendbmEAlB0am37fji3QCDgtRuJIHPmCsYVZYI4qj2o7Nj+odrQRAWFh5S9D5ii7
+         io+MBLQt3oOz+yM3qKHtYi+SxX3SV5uF/2m1kwjMwvmyKXqp+UaGQ77LsBg6uvcj5c6g
+         MQckYoZmlMyjYNgrIadAr+juQbuEVrnJi27bhJ4l0Ct59mtf7aEL161ozflqPSN3Rd1E
+         RvpyIO+BFhxbFP1ydxnYIPZq9ZEp4dqm1K+UQS78qOvy9Rd1yayucIg5nZ3vGO7Tvt/B
+         kCcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=Bzsb/Q6r1Zi5rdVjHI+KqXAiBXXQlbcZyUdL2/Kj+CY=;
-        b=GjuayJEADN4gnZ8K/02qDo5p5vDf2UpGxoRPv/rUHx0fv422zfQf4+57CEd6H84G0p
-         gCeubhmrov8OoY6z8IKV7GahqMMXjDAxVPRUXiNAkcSE09qhoCOJeKGUMaESQTrrVOvB
-         qwhcqvFaVls8YACgNrc+h9VwfMKgEbutHBnfkG/3agyrrthHK1XGEX9/vGnnZAgIQsin
-         vcBnyZP4dY5haKX8/VjN28YHH6UV2JE99G3WikqnOr7FyXTOSP0v9dkOfBM8ncc6g7AE
-         HQfY5ZQfp9UsCDiDr4UMe8FQ6SSTc9IhHlchcfxwTswjExKKA53E3w468h0ugD90zMoP
-         u4gg==
-X-Gm-Message-State: AOAM533aQdTbA/w4EVX3hVm1rtOXOC0YuOjl2505Mrpqm23XEIp/Cp+S
-        48O9+Zvkxs6twsjoPNKx1R8C3w==
-X-Google-Smtp-Source: ABdhPJxdp6Sjp+RDmqITAHT8Gr5y6s5BP1FkfrJxodvEwHYAViNxlrdz6SKAr3LRXwRwQ8rpM3u1Sg==
-X-Received: by 2002:a17:90b:3687:: with SMTP id mj7mr3747650pjb.196.1634788192190;
-        Wed, 20 Oct 2021 20:49:52 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id a27sm4017169pfl.20.2021.10.20.20.49.51
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=yLK4NxbVqDLH3nRLVYQccxDS/5AO+FQ5rIKLjjCYFX0=;
+        b=C2kaXCjEvmTRjJV+48DdpayEuZylwt0rpq8ZcnPmrjzDbT4ZO00+2Fr3Xt5SXZcVka
+         Ogxo+ENeEYDHmmVBvk+y6dmkKujabFwo3Y3gAzaWLfoylG1CEK9PX/9T9s8ZwL41znO4
+         EF1lI8j3rmD85jYIWqc3mBW5LuHnAu7keSHrdU/7gcwaxReOLzXtAC2OQdcpcBge2qkN
+         EmWj5YrGoXeZ8qaiTl6DTN2a69nO9OsEZ+sIZAlwIb92JhNYWeGzrznMwQZ441JCLeb4
+         iUbsIaXciRdJTYFbEexoiz/VZ6YHWgFRlE4knPCJPCO2mseW5d5ie6ZhmNVSvElZJ63t
+         UnCQ==
+X-Gm-Message-State: AOAM531NWfHRNi7syDZHwgpoNDoAHrY+mpQYIY/Hwi3oLh8Qe1crm9fh
+        Wzo7fX25/uvWWtmS9kqnYjLxdA==
+X-Google-Smtp-Source: ABdhPJy+Bk9B2LacGLYy31NgFsLeXyeX3jUeC89nXJZGJcjbQCASaWxgmUhmeCJUSwOdq5oy4qD6ZA==
+X-Received: by 2002:a17:902:6808:b0:13e:a85b:52bd with SMTP id h8-20020a170902680800b0013ea85b52bdmr2940449plk.76.1634789406546;
+        Wed, 20 Oct 2021 21:10:06 -0700 (PDT)
+Received: from localhost ([106.201.113.61])
+        by smtp.gmail.com with ESMTPSA id p25sm4986407pfh.86.2021.10.20.21.10.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Oct 2021 20:49:51 -0700 (PDT)
-Message-ID: <6170e35f.1c69fb81.c6615.c78c@mx.google.com>
-Date:   Wed, 20 Oct 2021 20:49:51 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 20 Oct 2021 21:10:05 -0700 (PDT)
+Date:   Thu, 21 Oct 2021 09:40:01 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] cpufreq: Fix typo in cpufreq.h
+Message-ID: <20211021041001.nbtra55ziwi2d7xb@vireshk-i7>
+References: <11860065.O9o76ZdvQC@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v5.15-rc6-67-g7f01eda12647
-X-Kernelci-Report-Type: build
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 1 warning (v5.15-rc6-67-g7f01eda12647)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <11860065.O9o76ZdvQC@kreacher>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.15-rc6-67-g7f=
-01eda12647)
+On 20-10-21, 21:08, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> s/internale/internal/
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  include/linux/cpufreq.h |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> Index: linux-pm/include/linux/cpufreq.h
+> ===================================================================
+> --- linux-pm.orig/include/linux/cpufreq.h
+> +++ linux-pm/include/linux/cpufreq.h
+> @@ -398,7 +398,7 @@ struct cpufreq_driver {
+>  /* flags */
+>  
+>  /*
+> - * Set by drivers that need to update internale upper and lower boundaries along
+> + * Set by drivers that need to update internal upper and lower boundaries along
+>   * with the target frequency and so the core and governors should also invoke
+>   * the diver if the target frequency does not change, but the policy min or max
+>   * may have changed.
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-15-rc6-67-g7f01eda12647/
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Tree: pm
-Branch: testing
-Git Describe: v5.15-rc6-67-g7f01eda12647
-Git Commit: 7f01eda12647cb419b7cc23b206423de75b7eefa
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
-
-Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-
-riscv:
-
-x86_64:
-
-
-Warnings summary:
-
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+-- 
+viresh
