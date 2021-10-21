@@ -2,62 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DFFA4360EC
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Oct 2021 14:01:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A24A7436202
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Oct 2021 14:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbhJUMDz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Oct 2021 08:03:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60780 "EHLO
+        id S230231AbhJUMq6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Oct 2021 08:46:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230459AbhJUMDt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Oct 2021 08:03:49 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1EEAC06174E
-        for <linux-pm@vger.kernel.org>; Thu, 21 Oct 2021 05:01:33 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id s1so210758plg.12
-        for <linux-pm@vger.kernel.org>; Thu, 21 Oct 2021 05:01:33 -0700 (PDT)
+        with ESMTP id S230190AbhJUMq6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Oct 2021 08:46:58 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E652C06161C
+        for <linux-pm@vger.kernel.org>; Thu, 21 Oct 2021 05:44:42 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id q10-20020a17090a1b0a00b001a076a59640so5741116pjq.0
+        for <linux-pm@vger.kernel.org>; Thu, 21 Oct 2021 05:44:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:content-transfer-encoding:subject:to
          :from;
-        bh=aHgcOY9eoot29UHhiujcK5hlJq12fPUSeuxyMssLu2c=;
-        b=PCejRw2+NztcHBEghbevAb2kh+BmPgy4lsHY+VBX+dIEailvljlVxdYd8Ioppq3hGS
-         VyUxldXzymQJ64OG0hVM6gAVrWFsoPTM2IXaD/aWDFkYjswUAQJFylJ2SSATb3LLPiKS
-         DUql/7o6WTuZNB03R90Bcd8QDn+cbEpYs9I1Ac7dEhGIQuUJlBZTnn9uPQ4kpij9G1RM
-         rL/VjruCR9Mnf4imUbCYDGVVAx79YtmgUOnlhUg8dtTws11RcSBvH9hr5v70DFO9PUiI
-         IuWY+l3Kyacmw8lamIdrAtE23bnNq7b58WJ5js5sCMeqt8L55r3+wwlMMFLelIH/nnJa
-         XJtw==
+        bh=fPZhRlmvmcNir1y76+yyNj29wU9R71kryN4Jj//f9Gw=;
+        b=VJFsAT4KFkQ2egc8wLWcl8dJNQL67dRFBHLCnp/YSs++OErr+lxRRFapEnSWqdDVcd
+         /hemxx8ipSuJrms6gW2/kAjpToQcRcKpVuTXzyinFvwhUfHnBmm5KQwVUg6A/pgDITY+
+         4TQSVwq1KoDhw5zbEYFxc6kG6hP2FEKqDY9z/bLK+wwbUhCpmJ/R2EFsE2SdEVUgk9rN
+         Pnz2wiZiHWnHu6qpRlHUtAQvwPt+xW7AWg2WOo2nqnZNUpe2QRVN2vrCtqLf8mtzNufG
+         wkH/6XqlBuilN2KBeujzcrEp0Uoyuef3ukA4F2p0OHBTpzbOfRqUOIYcoBQQTsVaDqlS
+         9GnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version
          :content-transfer-encoding:subject:to:from;
-        bh=aHgcOY9eoot29UHhiujcK5hlJq12fPUSeuxyMssLu2c=;
-        b=FdnuTzd6YgFKb8DVCwXuNLPHBHQ8gcz+LD+wJ1s5k8P2mttDsziYQyOobt97h7bcm0
-         rqMoi9+16GDqxstdieOJYysSTWTh8areTM+rvWVVM70afkTx/7I+ck2yva45m97O1t04
-         3vrKV+d6ssW2y93N+iYFwRyQUseQ426UAZteVGYCWsy0M5aO5JN21VJfvKmNLE0YgKL/
-         c1Pl2rrlY0jZJxzPQHVmv6GOx8X+99UNY+gZk8R9m+Y0EKapTAiksVgOpkeUaYhcoUFg
-         RxB/+oMiizGg7VpHAjpeqJK0mWG/TnXAiBlEKS4JH6JtVZqMTLcoaT78UJfyw5aTQafK
-         xdsw==
-X-Gm-Message-State: AOAM532v1Q5eT/jv42pYvqrGZny1E26Y50OiYNvVHCAraGNdjNLOExo6
-        8a0sX5fRFJFXAYri9MAgAji1XA==
-X-Google-Smtp-Source: ABdhPJzm/pro1naGjQLwi8GpBP9Bhj9ozUqAHqkiTSRuBWwQJG6m5fdPj8Uw0ciZ1bZRvJ1rYH+1AA==
-X-Received: by 2002:a17:902:c102:b0:13f:5507:bdc9 with SMTP id 2-20020a170902c10200b0013f5507bdc9mr4789979pli.8.1634817693187;
-        Thu, 21 Oct 2021 05:01:33 -0700 (PDT)
+        bh=fPZhRlmvmcNir1y76+yyNj29wU9R71kryN4Jj//f9Gw=;
+        b=oaV1rfMrdH82/alO+EMq2qM6E9OpPjW896/qQHXKwcX0nKtoYViVZT8NYK59anwGsm
+         gbhS+9OuFah+xTp+J7YCp/lSsFj3Z/QvbeY5UIV+RFnR00wlZZ2EC9gSSQkHG6LKtCiP
+         X4R80U9NJ0fGnIDWhrbUIFYFiYIdY2Ui9h9ja0eQSP/NFU2qdGrt3ZbjCo+qnx2urFhO
+         KVXNK90mt/LeDwXcrDi84+7+CDQTqcNaXN8N3yP/bZUXJLdAQUhK6k0QY3AckdAqLZwc
+         nfbyMC/dKYWt3Sua23Nodvy2FlTWikzvh+spwkyYDcp0sdqbBcPwlzeqeIIBKeW3/xlv
+         HOHg==
+X-Gm-Message-State: AOAM533wIaXWTur+G/xoDOVXAmfhjclHunRCM3aUxzqcBQQ9m/lYZEWM
+        NSOGXHCLxJsEijLaaKTSm97EyQ==
+X-Google-Smtp-Source: ABdhPJwa9Jnle0wSOnXnh7ictqox+bh0Y/sY37JRca1kOM1++rUtY0gtmlr/iowyY/ncOcGYYBSNGA==
+X-Received: by 2002:a17:90b:1bce:: with SMTP id oa14mr6395999pjb.225.1634820281776;
+        Thu, 21 Oct 2021 05:44:41 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id s35sm2352781pjd.32.2021.10.21.05.01.32
+        by smtp.gmail.com with ESMTPSA id h23sm6365691pfn.109.2021.10.21.05.44.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Oct 2021 05:01:32 -0700 (PDT)
-Message-ID: <6171569c.1c69fb81.d27bb.5661@mx.google.com>
-Date:   Thu, 21 Oct 2021 05:01:32 -0700 (PDT)
+        Thu, 21 Oct 2021 05:44:41 -0700 (PDT)
+Message-ID: <617160b9.1c69fb81.34573.0b97@mx.google.com>
+Date:   Thu, 21 Oct 2021 05:44:41 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-Kernelci-Branch: testing
 X-Kernelci-Tree: pm
 X-Kernelci-Kernel: v5.15-rc6-69-g8b39e976f0f8
-X-Kernelci-Report-Type: build
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 1 warning (v5.15-rc6-69-g8b39e976f0f8)
+X-Kernelci-Report-Type: test
+Subject: pm/testing baseline: 66 runs,
+ 1 regressions (v5.15-rc6-69-g8b39e976f0f8)
 To:     rafael@kernel.org, linux-pm@vger.kernel.org,
         kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
 From:   "kernelci.org bot" <bot@kernelci.org>
@@ -65,89 +65,64 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.15-rc6-69-g8b=
-39e976f0f8)
+pm/testing baseline: 66 runs, 1 regressions (v5.15-rc6-69-g8b39e976f0f8)
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-15-rc6-69-g8b39e976f0f8/
+Regressions Summary
+-------------------
 
-Tree: pm
-Branch: testing
-Git Describe: v5.15-rc6-69-g8b39e976f0f8
-Git Commit: 8b39e976f0f81dd610ea1d7930dc8ba662b639b5
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
-
-Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-
-riscv:
-
-x86_64:
+platform                     | arch  | lab           | compiler | defconfig=
+ | regressions
+-----------------------------+-------+---------------+----------+----------=
+-+------------
+meson-g12b-a311d-khadas-vim3 | arm64 | lab-collabora | gcc-10   | defconfig=
+ | 1          =
 
 
-Warnings summary:
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.15-rc=
+6-69-g8b39e976f0f8/plan/baseline/
 
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v5.15-rc6-69-g8b39e976f0f8
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      8b39e976f0f81dd610ea1d7930dc8ba662b639b5 =
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
 
-Detailed per-defconfig build reports:
 
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
+Test Regressions
+---------------- =
 
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
 
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
 
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+platform                     | arch  | lab           | compiler | defconfig=
+ | regressions
+-----------------------------+-------+---------------+----------+----------=
+-+------------
+meson-g12b-a311d-khadas-vim3 | arm64 | lab-collabora | gcc-10   | defconfig=
+ | 1          =
 
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
 
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
+  Details:     https://kernelci.org/test/plan/id/617157a035ac120dad3358fd
 
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.15-rc6-69-g8b39e=
+976f0f8/arm64/defconfig/gcc-10/lab-collabora/baseline-meson-g12b-a311d-khad=
+as-vim3.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.15-rc6-69-g8b39e=
+976f0f8/arm64/defconfig/gcc-10/lab-collabora/baseline-meson-g12b-a311d-khad=
+as-vim3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
 
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
 
----
-For more info write to <info@kernelci.org>
+
+  * baseline.login: https://kernelci.org/test/case/id/617157a035ac120dad335=
+8fe
+        new failure (last pass: v5.15-rc6-67-g7f01eda12647) =
+
+ =20
