@@ -2,94 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A53435F71
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Oct 2021 12:41:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D590B435FAA
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Oct 2021 12:49:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230500AbhJUKoM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Oct 2021 06:44:12 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:58573 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230483AbhJUKoM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Oct 2021 06:44:12 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1634812917; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=YNKJJhqT7RyNQ/bpCQuxzrbnZdRVhM2WLYXwCBixS+U=; b=s9odeqMxSQ98kXiBE81sF+2l0cEk6o9R1wPJgdM8ndSJp/rDbCOPDUQ1FJJcUN1NJvcLKztX
- RIwsEOXOyzvUwXBpqwBr6FeRBOyXERIPr7S/9nhH1bVRsbNgHhw5N3xCtXSBQ6HrqXOzT/YR
- sWk3r1xlAcH1oDcUkJl4DFkYH70=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
- 617143db59612e0100e4349f (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 21 Oct 2021 10:41:31
- GMT
-Sender: okukatla=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 89129C4361A; Thu, 21 Oct 2021 10:41:30 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
-        autolearn=no autolearn_force=no version=3.4.0
-Received: from okukatla1-linux.qualcomm.com (unknown [202.46.22.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: okukatla)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 46AA9C4360C;
-        Thu, 21 Oct 2021 10:41:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 46AA9C4360C
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-From:   Odelu Kukatla <okukatla@codeaurora.org>
-To:     georgi.djakov@linaro.org, bjorn.andersson@linaro.org,
-        evgreen@google.com, Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     sboyd@kernel.org, mdtipton@codeaurora.org, sibis@codeaurora.org,
-        saravanak@google.com, okukatla@codeaurora.org,
-        seansw@qti.qualcomm.com, elder@linaro.org,
-        linux-pm@vger.kernel.org, linux-arm-msm-owner@vger.kernel.org
-Subject: [v8 3/3] arm64: dts: qcom: sc7280: Add EPSS L3 interconnect provider
-Date:   Thu, 21 Oct 2021 16:10:57 +0530
-Message-Id: <1634812857-10676-4-git-send-email-okukatla@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1634812857-10676-1-git-send-email-okukatla@codeaurora.org>
-References: <1634812857-10676-1-git-send-email-okukatla@codeaurora.org>
+        id S230105AbhJUKvf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Oct 2021 06:51:35 -0400
+Received: from mail-oi1-f171.google.com ([209.85.167.171]:34530 "EHLO
+        mail-oi1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229570AbhJUKve (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Oct 2021 06:51:34 -0400
+Received: by mail-oi1-f171.google.com with SMTP id v77so366548oie.1;
+        Thu, 21 Oct 2021 03:49:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nP2vFNPxI37N8uLOpzFpF7dKWuNYgW2/FE/Tat39R0Q=;
+        b=QpPzAI9kHcato9eV8oye5+iRrSm6Ji0ZQJT0CZarhNgBJR8qVBkgndyJhLroLdo1Dp
+         9QbX12YuTwu12BuHJA1zy3k5SK+kvum6kzJlcxlYtgX13HaPn2/0no86GnpHzr24jNQx
+         LbeBB+HwTomfPH2z+S/OiH+/Rv2BMZ7Wq/FVIaFCh873swrcmzxB7+uisSw/6r1D+uYT
+         kisXtoNbKGxoP3QMC4j4+8bX+Jay5KF9URNdoYRZ2+Ko+GI33JorKhM22V/sXKXiT2AX
+         ycozBg6UdgrkQBHkAmdxfaovG+JbFA0foc3LuyXIKqI9nou8Y8b1JdwlQpOJe6O63D+7
+         DsiQ==
+X-Gm-Message-State: AOAM532szNTnewlRYpxSC/3TdK2y25CI2KC0c48if+4VJWBj68JWKgha
+        1f6Kaspn07bT6Y6L5hGH5tInvR1IqHdwtuYvRYwaTOel
+X-Google-Smtp-Source: ABdhPJw8q3JuoPKjv5MTm9qAw0p16wHNn/zGVn84Q18EczAeLiPhmFlKo3UQ5njvrzeUENKc84wbLk79fKo+MUjtITQ=
+X-Received: by 2002:aca:5c5:: with SMTP id 188mr3673122oif.154.1634813358761;
+ Thu, 21 Oct 2021 03:49:18 -0700 (PDT)
+MIME-Version: 1.0
+References: <20211007191337.540058-1-anders.roxell@linaro.org>
+In-Reply-To: <20211007191337.540058-1-anders.roxell@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 21 Oct 2021 12:49:07 +0200
+Message-ID: <CAJZ5v0gTK79W5RK3v+4GPN+EN68EHoDhbQjxi7t-bHASTxcFhw@mail.gmail.com>
+Subject: Re: [PATCH] kernel: power: swap: fix sparse warnings
+To:     Anders Roxell <anders.roxell@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add Epoch Subsystem (EPSS) L3 interconnect provider node on SC7280
-SoCs.
+On Thu, Oct 7, 2021 at 9:13 PM Anders Roxell <anders.roxell@linaro.org> wrote:
+>
+> When building the kernel with sparse enabled 'C=1' the following
+> warnings shows up:
+>
+> kernel/power/swap.c:390:29: warning: incorrect type in assignment (different base types)
+> kernel/power/swap.c:390:29:    expected int ret
+> kernel/power/swap.c:390:29:    got restricted blk_status_t
+>
+> This is due to function hib_wait_io() returns a 'blk_status_t' which is
+> a bitwise u8. Commit 5416da01ff6e ("PM: hibernate: Remove
+> blk_status_to_errno in hib_wait_io") seemed to have mixed up the return
+> type. However, the 4e4cbee93d56 ("block: switch bios to blk_status_t")
+> actually broke the behaviour by returning the wrong type.
+>
+> Rework so function hib_wait_io() returns a 'int' instead of
+> 'blk_status_t' and make sure to call function
+> blk_status_to_errno(hb->error)' when returning from function
+> hib_wait_io() a int gets returned.
+>
+> Fixes: 4e4cbee93d56 ("block: switch bios to blk_status_t")
+> Fixes: 5416da01ff6e ("PM: hibernate: Remove blk_status_to_errno in hib_wait_io")
+> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+> ---
+>  kernel/power/swap.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
+> index 9ec418955556..47107f9cd14c 100644
+> --- a/kernel/power/swap.c
+> +++ b/kernel/power/swap.c
+> @@ -299,14 +299,14 @@ static int hib_submit_io(int op, int op_flags, pgoff_t page_off, void *addr,
+>         return error;
+>  }
+>
+> -static blk_status_t hib_wait_io(struct hib_bio_batch *hb)
+> +static int hib_wait_io(struct hib_bio_batch *hb)
+>  {
+>         /*
+>          * We are relying on the behavior of blk_plug that a thread with
+>          * a plug will flush the plug list before sleeping.
+>          */
+>         wait_event(hb->wait, atomic_read(&hb->count) == 0);
+> -       return hb->error;
+> +       return blk_status_to_errno(hb->error);
+>  }
+>
+>  /*
+> --
 
-Signed-off-by: Odelu Kukatla <okukatla@codeaurora.org>
----
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index d74a4c8..0b55742 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -3687,6 +3687,14 @@
- 			};
- 		};
- 
-+		epss_l3: interconnect@18590000 {
-+			compatible = "qcom,sc7280-epss-l3";
-+			reg = <0 0x18590000 0 0x1000>;
-+			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
-+			clock-names = "xo", "alternate";
-+			#interconnect-cells = <1>;
-+		};
-+
- 		cpufreq_hw: cpufreq@18591000 {
- 			compatible = "qcom,cpufreq-epss";
- 			reg = <0 0x18591000 0 0x1000>,
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+Applied as 5.16 material, thanks!
