@@ -2,24 +2,23 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A007B4362CD
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Oct 2021 15:24:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED62D4362D4
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Oct 2021 15:24:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230425AbhJUN0v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Oct 2021 09:26:51 -0400
-Received: from mail-4027.protonmail.ch ([185.70.40.27]:11268 "EHLO
-        mail-4027.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231134AbhJUN0u (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Oct 2021 09:26:50 -0400
-X-Greylist: delayed 321 seconds by postgrey-1.27 at vger.kernel.org; Thu, 21 Oct 2021 09:26:50 EDT
-Date:   Thu, 21 Oct 2021 13:24:25 +0000
+        id S230283AbhJUN1G (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Oct 2021 09:27:06 -0400
+Received: from mail-0301.mail-europe.com ([188.165.51.139]:33001 "EHLO
+        mail-0301.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231425AbhJUN1G (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Oct 2021 09:27:06 -0400
+Date:   Thu, 21 Oct 2021 13:24:42 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail; t=1634822672;
-        bh=AfVYCFQdKCdmFWj4WldBvSqi3zgq359IaRLBqHgjcMU=;
+        s=protonmail; t=1634822686;
+        bh=GpiB0I+KGCnyy1lCsiKsCapszoFphoofSjyFZ0nHIGs=;
         h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=cEyCi8NcgZdYJYR7tvs+1JCw1QNFNL73FGO9VXTrH4zuXbVhO7XQyOcH2WJc8gDn1
-         uYlswACrd9v1Rp7kP3feMME+qVmNcast44TK+hFN8Bw5xAgHZAtMJLy/IZtjsFHigr
-         IVcSetBI1ufHek8LSUGQ9BEmm+d7wyzPjNuM6e4o=
+        b=GI8gqtgkBVeF+qWYT8VchVgCWZ2lYwmrXZWfaef3wHlPyqn8DkyN5A9Z1MRNcsRDT
+         o4gCG88KtzttIgHAgdD0ROGmZdC8nvK8ETVs9eVtH2HDNNQFak4Ou52C3pBsl8iGoZ
+         1wYHfgpcpf4YiJroAWJX12cF9Ud66+twXDDTUtuA=
 To:     Georgi Djakov <djakov@kernel.org>, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>
@@ -35,8 +34,8 @@ Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht
 Reply-To: Yassine Oudjana <y.oudjana@protonmail.com>
-Subject: [PATCH RESEND v5 1/5] dt-bindings: interconnect: Combine SDM660 bindings into RPM schema
-Message-ID: <20211021132329.234942-2-y.oudjana@protonmail.com>
+Subject: [PATCH RESEND v5 2/5] interconnect: icc-rpm: Add support for bus power domain
+Message-ID: <20211021132329.234942-3-y.oudjana@protonmail.com>
 In-Reply-To: <20211021132329.234942-1-y.oudjana@protonmail.com>
 References: <20211021132329.234942-1-y.oudjana@protonmail.com>
 MIME-Version: 1.0
@@ -51,337 +50,54 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SDM660 interconnect bindings are similar to other RPM interconnect
-providers, and now it shares the same common driver with them, so
-it is better to combine them into qcom,rpm.yaml.
+Add support for attaching to a power domain. This is required
+for Aggregate 0 NoC on MSM8996, which is powered by a GDSC.
 
 Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
 ---
- .../bindings/interconnect/qcom,rpm.yaml       | 103 +++++++++-
- .../bindings/interconnect/qcom,sdm660.yaml    | 185 ------------------
- 2 files changed, 95 insertions(+), 193 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sdm=
-660.yaml
+ drivers/interconnect/qcom/icc-rpm.c | 7 +++++++
+ drivers/interconnect/qcom/icc-rpm.h | 1 +
+ 2 files changed, 8 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml b=
-/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml
-index 983d71fb5399..6c39c0529e36 100644
---- a/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml
-+++ b/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml
-@@ -30,19 +30,23 @@ properties:
-       - qcom,qcs404-bimc
-       - qcom,qcs404-pcnoc
-       - qcom,qcs404-snoc
-+      - qcom,sdm660-a2noc
-+      - qcom,sdm660-bimc
-+      - qcom,sdm660-cnoc
-+      - qcom,sdm660-gnoc
-+      - qcom,sdm660-mnoc
-+      - qcom,sdm660-snoc
+diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qco=
+m/icc-rpm.c
+index ef7999a08c8b..6b918d082ab6 100644
+--- a/drivers/interconnect/qcom/icc-rpm.c
++++ b/drivers/interconnect/qcom/icc-rpm.c
+@@ -11,6 +11,7 @@
+ #include <linux/of_device.h>
+ #include <linux/of_platform.h>
+ #include <linux/platform_device.h>
++#include <linux/pm_domain.h>
+ #include <linux/regmap.h>
+ #include <linux/slab.h>
 =20
-   '#interconnect-cells':
-     const: 1
+@@ -340,6 +341,12 @@ int qnoc_probe(struct platform_device *pdev)
+ =09if (ret)
+ =09=09return ret;
 =20
--  clock-names:
--    items:
--      - const: bus
--      - const: bus_a
--
-   clocks:
--    items:
--      - description: Bus Clock
--      - description: Bus A Clock
-+    minItems: 2
-+    maxItems: 7
++=09if (desc->has_bus_pd) {
++=09=09ret =3D dev_pm_domain_attach(dev, true);
++=09=09if (ret)
++=09=09=09return ret;
++=09}
 +
-+  clock-names:
-+    minItems: 2
-+    maxItems: 7
-=20
- required:
-   - compatible
-@@ -53,6 +57,89 @@ required:
-=20
- additionalProperties: false
-=20
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,msm8916-bimc
-+              - qcom,msm8916-pcnoc
-+              - qcom,msm8916-snoc
-+              - qcom,msm8939-bimc
-+              - qcom,msm8939-pcnoc
-+              - qcom,msm8939-snoc
-+              - qcom,msm8939-snoc-mm
-+              - qcom,qcs404-bimc
-+              - qcom,qcs404-pcnoc
-+              - qcom,qcs404-snoc
-+              - qcom,sdm660-bimc
-+              - qcom,sdm660-cnoc
-+              - qcom,sdm660-gnoc
-+              - qcom,sdm660-snoc
-+
-+      then:
-+        properties:
-+          clock-names:
-+            items:
-+              - const: bus
-+              - const: bus_a
-+
-+          clocks:
-+            items:
-+              - description: Bus Clock
-+              - description: Bus A Clock
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,sdm660-mnoc
-+
-+    then:
-+      properties:
-+        clock-names:
-+          items:
-+            - const: bus
-+            - const: bus_a
-+            - const: iface
-+
-+        clocks:
-+          items:
-+            - description: Bus Clock.
-+            - description: Bus A Clock.
-+            - description: CPU-NoC High-performance Bus Clock.
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,sdm660-a2noc
-+
-+    then:
-+      properties:
-+        clock-names:
-+          items:
-+            - const: bus
-+            - const: bus_a
-+            - const: ipa
-+            - const: ufs_axi
-+            - const: aggre2_ufs_axi
-+            - const: aggre2_usb3_axi
-+            - const: cfg_noc_usb2_axi
-+
-+        clocks:
-+          items:
-+            - description: Bus Clock.
-+            - description: Bus A Clock.
-+            - description: IPA Clock.
-+            - description: UFS AXI Clock.
-+            - description: Aggregate2 UFS AXI Clock.
-+            - description: Aggregate2 USB3 AXI Clock.
-+            - description: Config NoC USB2 AXI Clock.
-+
- examples:
-   - |
-       #include <dt-bindings/clock/qcom,rpmcc.h>
-diff --git a/Documentation/devicetree/bindings/interconnect/qcom,sdm660.yam=
-l b/Documentation/devicetree/bindings/interconnect/qcom,sdm660.yaml
-deleted file mode 100644
-index bcd41e491f1d..000000000000
---- a/Documentation/devicetree/bindings/interconnect/qcom,sdm660.yaml
-+++ /dev/null
-@@ -1,185 +0,0 @@
--# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
--%YAML 1.2
-----
--$id: http://devicetree.org/schemas/interconnect/qcom,sdm660.yaml#
--$schema: http://devicetree.org/meta-schemas/core.yaml#
--
--title: Qualcomm SDM660 Network-On-Chip interconnect
--
--maintainers:
--  - AngeloGioacchino Del Regno <kholk11@gmail.com>
--
--description: |
--  The Qualcomm SDM660 interconnect providers support adjusting the
--  bandwidth requirements between the various NoC fabrics.
--
--properties:
--  reg:
--    maxItems: 1
--
--  compatible:
--    enum:
--      - qcom,sdm660-a2noc
--      - qcom,sdm660-bimc
--      - qcom,sdm660-cnoc
--      - qcom,sdm660-gnoc
--      - qcom,sdm660-mnoc
--      - qcom,sdm660-snoc
--
--  '#interconnect-cells':
--    const: 1
--
--  clocks:
--    minItems: 1
--    maxItems: 7
--
--  clock-names:
--    minItems: 1
--    maxItems: 7
--
--required:
--  - compatible
--  - reg
--  - '#interconnect-cells'
--  - clock-names
--  - clocks
--
--additionalProperties: false
--
--allOf:
--  - if:
--      properties:
--        compatible:
--          contains:
--            enum:
--              - qcom,sdm660-mnoc
--    then:
--      properties:
--        clocks:
--          items:
--            - description: Bus Clock.
--            - description: Bus A Clock.
--            - description: CPU-NoC High-performance Bus Clock.
--        clock-names:
--          items:
--            - const: bus
--            - const: bus_a
--            - const: iface
--
--  - if:
--      properties:
--        compatible:
--          contains:
--            enum:
--              - qcom,sdm660-a2noc
--    then:
--      properties:
--        clocks:
--          items:
--            - description: Bus Clock.
--            - description: Bus A Clock.
--            - description: IPA Clock.
--            - description: UFS AXI Clock.
--            - description: Aggregate2 UFS AXI Clock.
--            - description: Aggregate2 USB3 AXI Clock.
--            - description: Config NoC USB2 AXI Clock.
--        clock-names:
--          items:
--            - const: bus
--            - const: bus_a
--            - const: ipa
--            - const: ufs_axi
--            - const: aggre2_ufs_axi
--            - const: aggre2_usb3_axi
--            - const: cfg_noc_usb2_axi
--
--  - if:
--      properties:
--        compatible:
--          contains:
--            enum:
--              - qcom,sdm660-bimc
--              - qcom,sdm660-cnoc
--              - qcom,sdm660-gnoc
--              - qcom,sdm660-snoc
--    then:
--      properties:
--        clocks:
--          items:
--            - description: Bus Clock.
--            - description: Bus A Clock.
--        clock-names:
--          items:
--            - const: bus
--            - const: bus_a
--
--examples:
--  - |
--      #include <dt-bindings/clock/qcom,rpmcc.h>
--      #include <dt-bindings/clock/qcom,mmcc-sdm660.h>
--      #include <dt-bindings/clock/qcom,gcc-sdm660.h>
--
--      bimc: interconnect@1008000 {
--              compatible =3D "qcom,sdm660-bimc";
--              reg =3D <0x01008000 0x78000>;
--              #interconnect-cells =3D <1>;
--              clock-names =3D "bus", "bus_a";
--              clocks =3D <&rpmcc RPM_SMD_BIMC_CLK>,
--                       <&rpmcc RPM_SMD_BIMC_A_CLK>;
--      };
--
--      cnoc: interconnect@1500000 {
--              compatible =3D "qcom,sdm660-cnoc";
--              reg =3D <0x01500000 0x10000>;
--              #interconnect-cells =3D <1>;
--              clock-names =3D "bus", "bus_a";
--              clocks =3D <&rpmcc RPM_SMD_CNOC_CLK>,
--                       <&rpmcc RPM_SMD_CNOC_A_CLK>;
--      };
--
--      snoc: interconnect@1626000 {
--              compatible =3D "qcom,sdm660-snoc";
--              reg =3D <0x01626000 0x7090>;
--              #interconnect-cells =3D <1>;
--              clock-names =3D "bus", "bus_a";
--              clocks =3D <&rpmcc RPM_SMD_SNOC_CLK>,
--                       <&rpmcc RPM_SMD_SNOC_A_CLK>;
--      };
--
--      a2noc: interconnect@1704000 {
--              compatible =3D "qcom,sdm660-a2noc";
--              reg =3D <0x01704000 0xc100>;
--              #interconnect-cells =3D <1>;
--              clock-names =3D "bus",
--                            "bus_a",
--                            "ipa",
--                            "ufs_axi",
--                            "aggre2_ufs_axi",
--                            "aggre2_usb3_axi",
--                            "cfg_noc_usb2_axi";
--              clocks =3D <&rpmcc RPM_SMD_AGGR2_NOC_CLK>,
--                       <&rpmcc RPM_SMD_AGGR2_NOC_A_CLK>,
--                       <&rpmcc RPM_SMD_IPA_CLK>,
--                       <&gcc GCC_UFS_AXI_CLK>,
--                       <&gcc GCC_AGGRE2_UFS_AXI_CLK>,
--                       <&gcc GCC_AGGRE2_USB3_AXI_CLK>,
--                       <&gcc GCC_CFG_NOC_USB2_AXI_CLK>;
--      };
--
--      mnoc: interconnect@1745000 {
--              compatible =3D "qcom,sdm660-mnoc";
--              reg =3D <0x01745000 0xa010>;
--              #interconnect-cells =3D <1>;
--              clock-names =3D "bus", "bus_a", "iface";
--              clocks =3D <&rpmcc RPM_SMD_MMSSNOC_AXI_CLK>,
--                       <&rpmcc RPM_SMD_MMSSNOC_AXI_CLK_A>,
--                       <&mmcc AHB_CLK_SRC>;
--      };
--
--      gnoc: interconnect@17900000 {
--              compatible =3D "qcom,sdm660-gnoc";
--              reg =3D <0x17900000 0xe000>;
--              #interconnect-cells =3D <1>;
--              clock-names =3D "bus", "bus_a";
--              clocks =3D <&xo_board>, <&xo_board>;
--      };
+ =09provider =3D &qp->provider;
+ =09INIT_LIST_HEAD(&provider->nodes);
+ =09provider->dev =3D dev;
+diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qco=
+m/icc-rpm.h
+index f5744de4da19..fd06a3b9e3f7 100644
+--- a/drivers/interconnect/qcom/icc-rpm.h
++++ b/drivers/interconnect/qcom/icc-rpm.h
+@@ -77,6 +77,7 @@ struct qcom_icc_desc {
+ =09size_t num_nodes;
+ =09const char * const *clocks;
+ =09size_t num_clocks;
++=09bool has_bus_pd;
+ =09bool is_bimc_node;
+ =09const struct regmap_config *regmap_cfg;
+ =09unsigned int qos_offset;
 --=20
 2.33.1
 
