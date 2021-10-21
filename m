@@ -2,33 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E15C04366B2
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Oct 2021 17:46:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EB3F43676E
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Oct 2021 18:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231319AbhJUPs0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Oct 2021 11:48:26 -0400
-Received: from mail-ot1-f41.google.com ([209.85.210.41]:40602 "EHLO
-        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbhJUPs0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Oct 2021 11:48:26 -0400
-Received: by mail-ot1-f41.google.com with SMTP id s18-20020a0568301e1200b0054e77a16651so925165otr.7;
-        Thu, 21 Oct 2021 08:46:10 -0700 (PDT)
+        id S231182AbhJUQTk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Oct 2021 12:19:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37024 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230072AbhJUQTj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Oct 2021 12:19:39 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7105C0613B9
+        for <linux-pm@vger.kernel.org>; Thu, 21 Oct 2021 09:17:22 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id r6so545118ljg.6
+        for <linux-pm@vger.kernel.org>; Thu, 21 Oct 2021 09:17:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OoBKIJl0uVlCb4y2ghR0UXvsYP6ZZa4eIRxH6OeTSvA=;
+        b=HYNNxlFb12+KrW4ACf3ZIco7O3zVNdL1ljmGjOUHDrymKhjdwmlg5PbIAgQKKxHl8R
+         c7fqFn9Wg69ZPaZjYWa0k5kIgqnMFg6cUWQ9gYaPoF2fVkJH2RRyogdCffgNAel0fOsr
+         wL/nYzFerPe4wsmY0udLwNvTnkIojiV6cGofqBixIutk4MBIql0GP5Jp2Xj+tXRB7Tp+
+         6QF/UB4qiqSqErttes+QvFvPQsQU93GU5uw+qkRPb9Z8/JdxJp5P1cvWmGG6phaxBSuV
+         gWIewpi+qHCU4PjUMbdNmHp5+ZGMtWoKFVIhRnl/zXtxLNeaDGDIPUemkr53r8XTS7JT
+         QOfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=TyLKo7wmJzl5iU2eYxxyqjNPkbP8aD/hZfEwsYG3o0o=;
-        b=esrc1cPlkakOoTHxPzIARZwO2pVNuxFHLNN22MN6Xec72WhAtLuZDFMQVhmm3CV5W3
-         MNK6clr53Q2G34xf9wk4sC8x1Jpa1DTLf5ql/25Ji2NVNRxDBc007vLh/OKqhToFLsHn
-         B43A0rCZpyBsB0LTuGQ8I0Qt+Z+DXE2PHX6Rh4ggTgcMaXUI3KP5YsRTATdBcPrp9+sk
-         A0QQO27pZkLPQWjZ2uc57Be7q6HldOIF7g/bGbEHDShpZNKPLRCla/FtOOFZpKwQBme5
-         blo9ODOHyLL4acRLAfwJQ++PnDr/TVXiEzZ4+XpgAX42HVUFUunE08EaJMg4z3yKk8+w
-         ZwHQ==
-X-Gm-Message-State: AOAM530xA1QK+ZHCj3UoO5AOTnukn/FivuOndSFhBbez7iImN7QfNqsS
-        S6fD7KoJ4QfeyTJKfuL8X/axUEaFfnKHzXF3Zvo=
-X-Google-Smtp-Source: ABdhPJyV+TTcoVeO8k2PLrDZgCw/GTA0pAb+OmlsQCX3yuIteqQA1LadZ7zEgVDKTAy2NVDlFha0Q358RpdsFHZdMGw=
-X-Received: by 2002:a05:6830:1af0:: with SMTP id c16mr5300676otd.16.1634831170051;
- Thu, 21 Oct 2021 08:46:10 -0700 (PDT)
+        bh=OoBKIJl0uVlCb4y2ghR0UXvsYP6ZZa4eIRxH6OeTSvA=;
+        b=uOL9yWzRFtCbOqHbIvb0qWVcis6feloGxw/KV0AHPvCxFTUt+mlNLEUcVmmLbrGDEk
+         l4buDrLGJDWiXbXX36ske51I0skhFSKgLhf7P0GsA0VywB566MrZzo0XVwucYQsvpfaZ
+         2RNO4HpGNjotgGP5QXI/nBnwQI+Ns8hPmTmsaO15qqYWNI8E0eZVjBd0+/ToSgMxt0N4
+         o0MMjjjfddfGGInxnA29LOcb1YKb6h1TF/terZZNr/outKMa8e9Dcbfcz0idyz8TeR1+
+         jzRGVZGo6bt1NMAx7JaM9o8Y/NNtTqxtY7EUkF1ppigi2wY8j49KZ7Vej78+AML/DRtW
+         lqRQ==
+X-Gm-Message-State: AOAM531rt49GWKfpZ4v4rbJCQPbC8DgMOTyaSosGJMpiZaz7K3UZoUfd
+        fL3yXx/zqYJo1obYrGG1pIbG5EMKQwu7FmOAip2RCQ==
+X-Google-Smtp-Source: ABdhPJwjsfh9moN6GY1R1FG3/BrFnDliW52+O2lbfMHOscLhrwPmUamaQO6aao7it4IQ2BnRwx5fhh4FPbfxCYPsEmQ=
+X-Received: by 2002:a05:651c:907:: with SMTP id e7mr3647826ljq.300.1634833040558;
+ Thu, 21 Oct 2021 09:17:20 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210929144451.113334-1-ulf.hansson@linaro.org>
  <20210929144451.113334-3-ulf.hansson@linaro.org> <CAJZ5v0hgdQeJ+6mLMLQcvnM_+EiyDBERj54aT2cL=HiTO9nMNQ@mail.gmail.com>
@@ -36,13 +50,12 @@ References: <20210929144451.113334-1-ulf.hansson@linaro.org>
  <CAJZ5v0j=Fi5vOh45de-u7FwsCm4zsAsHepp16xQ3U5_WjrtWJw@mail.gmail.com>
  <CAPDyKFqeAFhgCFSaFAWnp5xorxSVwAL=z2g6vHJ0PWjtt9GDNg@mail.gmail.com> <CAJZ5v0iA4O=tx7qiLKCOze87dcUtwtDJqi2B+2O=oOyCSzgmtQ@mail.gmail.com>
 In-Reply-To: <CAJZ5v0iA4O=tx7qiLKCOze87dcUtwtDJqi2B+2O=oOyCSzgmtQ@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 21 Oct 2021 17:45:59 +0200
-Message-ID: <CAJZ5v0jQM3VDy_U8TiC3601ivSYVXyT5jJVjLt8qyMWE49zOeg@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 21 Oct 2021 18:16:43 +0200
+Message-ID: <CAPDyKFr_-ON1JWXe3W7DAXUzKdrceqXPwLAdHnKeXajy=pFnug@mail.gmail.com>
 Subject: Re: [PATCH 2/2] PM: sleep: Fix runtime PM based cpuidle support
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         Linux PM <linux-pm@vger.kernel.org>,
         Maulik Shah <mkshah@codeaurora.org>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -56,7 +69,7 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 21, 2021 at 5:09 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+On Thu, 21 Oct 2021 at 17:09, Rafael J. Wysocki <rafael@kernel.org> wrote:
 >
 > On Thu, Oct 21, 2021 at 4:05 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
 > >
@@ -174,6 +187,9 @@ On Thu, Oct 21, 2021 at 5:09 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
 > > states in suspend-to-idle,
 >
 > So does PM-runtime work in suspend-to-idle?  How?
+
+No it doesn't. See below.
+
 >
 > > but prevent those that rely on runtime PM
 > > (after it has been disabled) for the regular idle path.
@@ -181,10 +197,16 @@ On Thu, Oct 21, 2021 at 5:09 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
 > Do you have a special suspend-to-idle handling of those states that
 > doesn't require PM-runtime?
 
-Regardless, pausing cpuidle in the suspend-to-idle path simply doesn't
-make sense at all, so this needs to be taken care of in the first
-place.
+Yes. Feel free to have a look in __psci_enter_domain_idle_state().
 
-The problem with PM-runtime being unavailable after dpm_suspend()
-needs to be addressed in a different way IMO, because it only affects
-one specific use case.
+In principle, when running the s2idle path, we call
+dev_pm_genpd_suspend|resume(), rather than pm_runtime_get|put*.
+
+This let genpd manage the reference counting (hierarchically too) and
+it also ignores the genpd governor in this stage, which also is needed
+to enter the deepest state. Quite similar to how cpuidle works.
+
+[...]
+
+Kind regards
+Uffe
