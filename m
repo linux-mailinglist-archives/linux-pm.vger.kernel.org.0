@@ -2,125 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 132B7436B9F
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Oct 2021 21:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0449F436BE3
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Oct 2021 22:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231819AbhJUT7H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Oct 2021 15:59:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59222 "EHLO
+        id S231976AbhJUUTF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Oct 2021 16:19:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231784AbhJUT7H (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Oct 2021 15:59:07 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B1B7C0613B9
-        for <linux-pm@vger.kernel.org>; Thu, 21 Oct 2021 12:56:50 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 204so4571ljf.9
-        for <linux-pm@vger.kernel.org>; Thu, 21 Oct 2021 12:56:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XyhoHE7sxv5I2EpYeVeJH0GIKfhcQY389jVe4IVPrso=;
-        b=fajWtGHos8khUlCJgvpdSRJD5xpYLZ79Lr2JBHTNmtUKS3cX8ZlnEwgx+1S9+b91Jx
-         xIAREn1mxSFn3lWZ8eC1aaNnhKsBHvyNNoQ+ZiUYwMiFj7eI7DtbGZLrFQ02vjk/za3F
-         n5tzxDxUgWk3TS0NL82gfmIRApn3g95CzMW5kDKCbySKWOQVGOt9dhMfgoFxouk8s7BQ
-         qkozvuudgympgQiVJIv24nCREM9G4TUwGTPzhIHPk+OC0PFpvTzF1opal3pOXlKjd6dN
-         odykl9GddCEXRQKtJkeeWO6tu8RB2ORt7/STAWx3OSx7MEjRK8DsroWwXJT31GCjIQTN
-         zE5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XyhoHE7sxv5I2EpYeVeJH0GIKfhcQY389jVe4IVPrso=;
-        b=OWvGSRc9VnkDlrbxQEUEH2qrZXK3fP1TY7xGJeTed0uhrWjrih6a9XchWyowlHlTPh
-         QJmT/ETKT+Q+yyKLjf7+phOSVJ5S9/z64r9EXRrjywRtVDja0p2mR/yUrCW/VsDyXLiE
-         tesZbD91cWJ9XQLbxa4cMo9cwB9lIj0Rtw8FMiRdxEkg8LOOmu7Vnmu247mWtLRENXt0
-         5UxtbbyI7maJ6+l3DvY+NmlzvobIMrmbrhf8MI8lkg0ib2G8zqDcos/vamCnGw8MB5t1
-         rKMm9DNbsFskbyKdKCaow/E/2XpajUaBxB3AIG3lPPAtMUj6XCDrBrmhQhPg2ueUf/yd
-         ROKQ==
-X-Gm-Message-State: AOAM531wWikSJpH7KHXawhlZ93Xkb4bbuHK+Qsz+gpghqtRp4P74RIvv
-        kDhA8h1Jo7oQYwyUA53RglesJ5eHJoTLNI4o00U6MA==
-X-Google-Smtp-Source: ABdhPJzxCO5iobX3X9/3J7SUpG7HeCrofcWJedaNNyaZgtw9IetFPn5k5xibQ+0WN4id9doUujHVDLoo8VDf2eyts8Q=
-X-Received: by 2002:a2e:874d:: with SMTP id q13mr8133479ljj.16.1634846208850;
- Thu, 21 Oct 2021 12:56:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210929144451.113334-1-ulf.hansson@linaro.org>
- <20210929144451.113334-3-ulf.hansson@linaro.org> <CAJZ5v0hgdQeJ+6mLMLQcvnM_+EiyDBERj54aT2cL=HiTO9nMNQ@mail.gmail.com>
- <CAPDyKFpep3aPmGGo=aA5dHZZjb-O51et47C9_hgVbZbXMJZX_g@mail.gmail.com>
- <CAJZ5v0j=Fi5vOh45de-u7FwsCm4zsAsHepp16xQ3U5_WjrtWJw@mail.gmail.com>
- <CAPDyKFqeAFhgCFSaFAWnp5xorxSVwAL=z2g6vHJ0PWjtt9GDNg@mail.gmail.com>
- <CAJZ5v0iA4O=tx7qiLKCOze87dcUtwtDJqi2B+2O=oOyCSzgmtQ@mail.gmail.com>
- <CAPDyKFr_-ON1JWXe3W7DAXUzKdrceqXPwLAdHnKeXajy=pFnug@mail.gmail.com>
- <CAJZ5v0itweerfbq8NE9rEonZ2Nfu_nfKgERv2tweeLO4fgAgLg@mail.gmail.com>
- <CAPDyKFrOSd2xEXuvDki9Em+xFLHfeTfZz3NtnWwNmWB1H6i=Kg@mail.gmail.com> <CAJZ5v0j3a_m5T9nbxk4VSuABOq12JEC0fi=0SQ8+=Vwv-qDeOA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0j3a_m5T9nbxk4VSuABOq12JEC0fi=0SQ8+=Vwv-qDeOA@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 21 Oct 2021 21:56:12 +0200
-Message-ID: <CAPDyKFpjy5sZo6ayqPx07Jzs4J2yePy=cZk=k6VjhWB7zGeedg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] PM: sleep: Fix runtime PM based cpuidle support
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
+        with ESMTP id S231206AbhJUUTF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Oct 2021 16:19:05 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2781CC0613B9
+        for <linux-pm@vger.kernel.org>; Thu, 21 Oct 2021 13:16:49 -0700 (PDT)
+Date:   Thu, 21 Oct 2021 20:16:45 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1634847406;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dXJBugjrAr9RywylaTWd01fX2olQ2Q9ubsjyqst93bo=;
+        b=q1fgWawg/WLTvPzQ2fvs8+WhzG/Q0wls6YDUybop5vj2wOfWDXPfdR1pXLEAIhW/4SAWJv
+        9Il7PE0YlGpQGMQkIkDuc38zzW72LjqqOM/7OeS9Vg1wGbZVIvuKIaxSo4gtVZeCiUOBjQ
+        Y0X6+hU0KVY1s1d4NlhmLS+Q5PvWF8MOQcew4klkSXTKkVGE2dwBbD5xjBbMrjB15T1ZNy
+        d43SGk7KI6X5wVyk5tGhENjHgTEgqTM4FoRjyQ88tn5s11O1k4LMOIfMWiboKG8c+A+Lmo
+        bu2HhNPAORaJTeAXOM5tX8ZMjpX5xvbONXH+ZoDh68Tq64hrnMJIIk8S+wBYnA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1634847406;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dXJBugjrAr9RywylaTWd01fX2olQ2Q9ubsjyqst93bo=;
+        b=UvjBtxkudcLmhVFIHPfsmSRQhPeTHt/6NXdn96B+GGsEyrtOOgeVFkBccol7n+AXF0agqP
+        KixJDjOC4t9hcnCQ==
+From:   "thermal-bot for Daniel Lezcano" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-pm@vger.kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [thermal: thermal/next] thermal/core: Deprecate changing cooling
+ device state from userspace
 Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Maulik Shah <mkshah@codeaurora.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Len Brown <len.brown@intel.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>, rui.zhang@intel.com,
+        amitk@kernel.org
+In-Reply-To: <20211019163506.2831454-2-daniel.lezcano@linaro.org>
+References: <20211019163506.2831454-2-daniel.lezcano@linaro.org>
+MIME-Version: 1.0
+Message-ID: <163484740592.25758.10288562624422443960.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 21 Oct 2021 at 21:02, Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Thu, Oct 21, 2021 at 8:12 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> >
-> > On Thu, 21 Oct 2021 at 18:33, Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > >
-> > > On Thu, Oct 21, 2021 at 6:17 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> [cut]
->
-> > > So in theory you could check the pm_runtime_put_sync_suspend() return
-> > > value and fall back to something like WFI if that's an error code.
-> >
-> > I have already tried that, but it simply got too complicated. The main
-> > issue was that runtime PM could become disabled for the device in the
-> > middle of executing the ->enter() callback.
->
-> So IIUC the problem is that you cannot resume after suspending in that case.
->
-> IOW, you need to guarantee that if the suspend is successful, the
-> resume also will take place, but if the suspend fails, you basically
-> don't care.
+The following commit has been merged into the thermal/next branch of thermal:
 
-Exactly.
+Commit-ID:     a67a46af4ad6342378e332b7420c1d1a2818c53f
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//a67a46af4ad6342378e332b7420c1d1a2818c53f
+Author:        Daniel Lezcano <daniel.lezcano@linaro.org>
+AuthorDate:    Tue, 19 Oct 2021 18:35:06 +02:00
+Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
+CommitterDate: Thu, 21 Oct 2021 17:35:11 +02:00
 
->
-> > For example, if pm_runtime_get_sync() fails, I still need to make sure
-> > the reference counting in genpd becomes correct - and I can't do that
-> > using dev_pm_genpd_resume(). That's because it's not designed to be
-> > called in this "unknown" suspend phase, but should be called after the
-> > noirq phase and be properly balanced with dev_pm_genpd_suspend().
-> >
-> > In other words, the error path didn't work out for me.
->
-> It should be sufficient to call wake_up_all_idle_cpus() in the suspend
-> path before dpm_suspend_late(), because system suspend acquires a
-> PM-runtime reference on every device.  IOW, it won't let any devices
-> runtime-suspend, so if your power domain devices are resumed in that
-> path, they will never suspend again in it and the
-> pm_runtime_put_sync_suspend() in __psci_enter_domain_idle_state()
-> becomes a reference counter management call which works regardless of
-> whether or not PM runtime is disabled.
+thermal/core: Deprecate changing cooling device state from userspace
 
-That sounds like a great idea, this should work too! Then the question
-is, how to make that call to wake_up_all_idle_cpus() to become
-optional - or only invoked for the cpuidle drivers that need it.
+The cooling devices have their cooling device set_cur_state
+read-writable all the time in the sysfs directory, thus allowing the
+userspace to act on it.
 
-In any case, I will try this out, thanks for the suggestion!
+The thermal framework is wrongly used by userspace as a power capping
+framework by acting on the cooling device opaque state. This one then
+competes with the in-kernel governor decision.
 
-Kind regards
-Uffe
+We have seen in out-of-tree kernels, a big number of devices which are
+abusely declaring themselves as cooling device just to act on their
+power.
+
+The role of the thermal framework is to protect the junction
+temperature of the silicon. Letting the userspace to play with a
+cooling device is invalid and potentially dangerous.
+
+The powercap framework is the right framework to do power capping and
+moreover it deals with the aggregation via the dev pm qos.
+
+As the userspace governor is marked deprecated and about to be
+removed, there is no point to keep this file writable also in the
+future.
+
+Emit a warning and deprecate the interface.
+
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+Link: https://lore.kernel.org/r/20211019163506.2831454-2-daniel.lezcano@linaro.org
+---
+ drivers/thermal/thermal_sysfs.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+index 1c4aac8..f154bad 100644
+--- a/drivers/thermal/thermal_sysfs.c
++++ b/drivers/thermal/thermal_sysfs.c
+@@ -610,6 +610,9 @@ cur_state_store(struct device *dev, struct device_attribute *attr,
+ 	unsigned long state;
+ 	int result;
+ 
++	dev_warn_once(&cdev->device,
++		      "Setting cooling device state is deprecated\n");
++	
+ 	if (sscanf(buf, "%ld\n", &state) != 1)
+ 		return -EINVAL;
+ 
