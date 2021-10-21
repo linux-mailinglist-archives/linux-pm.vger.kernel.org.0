@@ -2,214 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8337436523
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Oct 2021 17:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AB84436645
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Oct 2021 17:30:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231207AbhJUPLj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Oct 2021 11:11:39 -0400
-Received: from mail-oi1-f169.google.com ([209.85.167.169]:45886 "EHLO
-        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231503AbhJUPLi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Oct 2021 11:11:38 -0400
-Received: by mail-oi1-f169.google.com with SMTP id z126so1190902oiz.12;
-        Thu, 21 Oct 2021 08:09:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RvOTN1WtkH5yz7qex2pCyDRZPmCtpaKD7ET9RQlXazU=;
-        b=4N6J6z6e8FjIjWW2HSyJm3jCb0DStZ/NjZNtewptRpJo9zftRstsVcusFWtCl8dp+F
-         5egSqkPUxrJf69NzpP5KsloLErxSAlXqM3fBI6+pn4Wh/CqWdkYvgf+S8/BTJ7V2WeS/
-         nfRhn6J4U3GPBCX1GwxJpr8OTjQ/rthagIoMSfMomJKC2NuHBua5Lq0sx3mJ3LcY+sZ6
-         TqMAQ8T7ZI3NybgRr1XodvlnFLJI+5qwK7eyCW7dYDrwtUd31tMIj9ZFNhF7Fyo0Kfdb
-         GJX5En9CAD4RLtlo8gTXUy09pHu0JeFj2ieAi2AkO5RtR3U5en2An/O2gzyCparJ5r8s
-         wJnw==
-X-Gm-Message-State: AOAM53355lSR2NtnpzdFh9HvhENs/wmLhhJqTn+Hz2OujPsBlCwri19W
-        E9dICo/ggoE97BW1xv1wN66MmlU+tREs5WuJyaU=
-X-Google-Smtp-Source: ABdhPJx4IibCDJVWqGUSTDyIxtZc+OmCntvLyjCjSTdtk67SM3wmZy3GH+bkZ7RIYrMttzv0qme1PB3f2EyZ/hsB5Tc=
-X-Received: by 2002:aca:5c5:: with SMTP id 188mr4802252oif.154.1634828962563;
- Thu, 21 Oct 2021 08:09:22 -0700 (PDT)
+        id S231790AbhJUPct (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Oct 2021 11:32:49 -0400
+Received: from foss.arm.com ([217.140.110.172]:44314 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231687AbhJUPcs (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 21 Oct 2021 11:32:48 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 58B57D6E;
+        Thu, 21 Oct 2021 08:30:32 -0700 (PDT)
+Received: from [10.57.21.86] (unknown [10.57.21.86])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 21CC43F694;
+        Thu, 21 Oct 2021 08:30:30 -0700 (PDT)
+Subject: Re: [PATCH v3 1/2] thermal/core: Make the userspace governor
+ deprecated
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rjw@rjwysocki.net, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>
+References: <20211019163506.2831454-1-daniel.lezcano@linaro.org>
+ <6372f16d-7d2d-cb1e-be86-23b21b41816b@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <942b9998-9858-7776-97b7-b5ac1c637a2e@arm.com>
+Date:   Thu, 21 Oct 2021 16:30:28 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-References: <20210929144451.113334-1-ulf.hansson@linaro.org>
- <20210929144451.113334-3-ulf.hansson@linaro.org> <CAJZ5v0hgdQeJ+6mLMLQcvnM_+EiyDBERj54aT2cL=HiTO9nMNQ@mail.gmail.com>
- <CAPDyKFpep3aPmGGo=aA5dHZZjb-O51et47C9_hgVbZbXMJZX_g@mail.gmail.com>
- <CAJZ5v0j=Fi5vOh45de-u7FwsCm4zsAsHepp16xQ3U5_WjrtWJw@mail.gmail.com> <CAPDyKFqeAFhgCFSaFAWnp5xorxSVwAL=z2g6vHJ0PWjtt9GDNg@mail.gmail.com>
-In-Reply-To: <CAPDyKFqeAFhgCFSaFAWnp5xorxSVwAL=z2g6vHJ0PWjtt9GDNg@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 21 Oct 2021 17:09:11 +0200
-Message-ID: <CAJZ5v0iA4O=tx7qiLKCOze87dcUtwtDJqi2B+2O=oOyCSzgmtQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] PM: sleep: Fix runtime PM based cpuidle support
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Maulik Shah <mkshah@codeaurora.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Len Brown <len.brown@intel.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <6372f16d-7d2d-cb1e-be86-23b21b41816b@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 21, 2021 at 4:05 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> On Thu, 21 Oct 2021 at 15:45, Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >
-> > On Thu, Oct 21, 2021 at 1:49 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > >
-> > > On Wed, 20 Oct 2021 at 20:18, Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > >
-> > > > On Wed, Sep 29, 2021 at 4:44 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > > > >
-> > > > > In the cpuidle-psci case, runtime PM in combination with the generic PM
-> > > > > domain (genpd), may be used when entering/exiting an idlestate. More
-> > > > > precisely, genpd relies on runtime PM to be enabled for the attached device
-> > > > > (in this case it belongs to a CPU), to properly manage the reference
-> > > > > counting of its PM domain.
-> > > > >
-> > > > > This works fine most of the time, but during system suspend in the
-> > > > > dpm_suspend_late() phase, the PM core disables runtime PM for all devices.
-> > > > > Beyond this point and until runtime PM becomes re-enabled in the
-> > > > > dpm_resume_early() phase, calls to pm_runtime_get|put*() will fail.
-> > > > >
-> > > > > To make sure the reference counting in genpd becomes correct, we need to
-> > > > > prevent cpuidle-psci from using runtime PM when it has been disabled for
-> > > > > the device. Therefore, let's move the call to cpuidle_pause() from
-> > > > > dpm_suspend_noirq() to dpm_suspend_late() - and cpuidle_resume() from
-> > > > > dpm_resume_noirq() into dpm_resume_early().
-> > > > >
-> > > > > Diagnosed-by: Maulik Shah <mkshah@codeaurora.org>
-> > > > > Suggested-by: Maulik Shah <mkshah@codeaurora.org>
-> > > > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > > > > ---
-> > > > >  drivers/base/power/main.c | 6 ++----
-> > > > >  1 file changed, 2 insertions(+), 4 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-> > > > > index cbea78e79f3d..1c753b651272 100644
-> > > > > --- a/drivers/base/power/main.c
-> > > > > +++ b/drivers/base/power/main.c
-> > > > > @@ -747,8 +747,6 @@ void dpm_resume_noirq(pm_message_t state)
-> > > > >
-> > > > >         resume_device_irqs();
-> > > > >         device_wakeup_disarm_wake_irqs();
-> > > > > -
-> > > > > -       cpuidle_resume();
-> > > > >  }
-> > > > >
-> > > > >  /**
-> > > > > @@ -870,6 +868,7 @@ void dpm_resume_early(pm_message_t state)
-> > > > >         }
-> > > > >         mutex_unlock(&dpm_list_mtx);
-> > > > >         async_synchronize_full();
-> > > > > +       cpuidle_resume();
-> > > > >         dpm_show_time(starttime, state, 0, "early");
-> > > > >         trace_suspend_resume(TPS("dpm_resume_early"), state.event, false);
-> > > > >  }
-> > > > > @@ -1336,8 +1335,6 @@ int dpm_suspend_noirq(pm_message_t state)
-> > > > >  {
-> > > > >         int ret;
-> > > > >
-> > > > > -       cpuidle_pause();
-> > > > > -
-> > > > >         device_wakeup_arm_wake_irqs();
-> > > > >         suspend_device_irqs();
-> > > > >
-> > > > > @@ -1467,6 +1464,7 @@ int dpm_suspend_late(pm_message_t state)
-> > > > >         int error = 0;
-> > > > >
-> > > > >         trace_suspend_resume(TPS("dpm_suspend_late"), state.event, true);
-> > > > > +       cpuidle_pause();
-> > > > >         mutex_lock(&dpm_list_mtx);
-> > > > >         pm_transition = state;
-> > > > >         async_error = 0;
-> > > > > --
-> > > >
-> > > > Well, this is somewhat heavy-handed and it affects even the systems
-> > > > that don't really need to pause cpuidle at all in the suspend path.
-> > >
-> > > Yes, I agree.
-> > >
-> > > Although, I am not really changing the behaviour in regards to this.
-> > > cpuidle_pause() is already being called in dpm_suspend_noirq(), for
-> > > everybody today.
-> >
-> > Yes, it is, but pausing it earlier will cause more energy to be spent,
-> > potentially.
-> >
-> > That said, there are not too many users of suspend_late callbacks in
-> > the tree, so it may not matter too much.
-> >
-> > > >
-> > > > Also, IIUC you don't need to pause cpuidle completely, but make it
-> > > > temporarily avoid idle states potentially affected by this issue.  An
-> > > > additional CPUIDLE_STATE_DISABLED_ flag could be used for that I
-> > > > suppose and it could be set via cpuidle_suspend() called from the core
-> > > > next to cpufreq_suspend().
-> > >
-> > > cpuidle_suspend() would then need to go and fetch the cpuidle driver
-> > > instance, which in some cases is one driver per CPU. Doesn't that get
-> > > rather messy?
-> >
-> > Per-CPU variables are used for that, so it is quite straightforward.
-> >
-> > > Additionally, since find_deepest_state() is being called for
-> > > cpuidle_enter_s2idle() too, we would need to treat the new
-> > > CPUIDLE_STATE_DISABLED_ flag in a special way, right?
-> >
-> > No, it already checks "disabled".
->
-> Yes, but that would be wrong.
+Hi Daniel,
 
-Hmmm.
 
-> The use case I want to support, for cpuidle-psci, is to allow all idle
-> states in suspend-to-idle,
+On 10/20/21 11:47 AM, Daniel Lezcano wrote:
+> 
+> Hi Lukasz,
+> 
+> Do you agree with these changes ?
 
-So does PM-runtime work in suspend-to-idle?  How?
+Yes, I agree with these changes.
 
-> but prevent those that rely on runtime PM
-> (after it has been disabled) for the regular idle path.
+> 
+> On 19/10/2021 18:35, Daniel Lezcano wrote:
+>> The userspace governor is sending temperature when polling is active
+>> and trip point crossed events. Nothing else.
+>>
+>> AFAICT, this governor is used with custom kernels making the userspace
+>> governor co-existing with another governor on the same thermal zone
+>> because there was no notification mechanism, implying a hack in the
+>> framework to support this configuration.
+>>
+>> The new netlink thermal notification is able to provide more
+>> information than the userspace governor and give the opportunity to
+>> the users of this governor to replace it by a dedicated notification
+>> framework.
+>>
+>> The userspace governor will be removed as its usage is no longer
+>> needed.
+>>
+>> Add a warning message to tell the userspace governor is deprecated.
+>>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>> ---
+>>   drivers/thermal/gov_user_space.c | 9 +++++++++
+>>   1 file changed, 9 insertions(+)
+>>
+>> diff --git a/drivers/thermal/gov_user_space.c b/drivers/thermal/gov_user_space.c
+>> index 82a7198bbe71..f4fe050e1cbc 100644
+>> --- a/drivers/thermal/gov_user_space.c
+>> +++ b/drivers/thermal/gov_user_space.c
+>> @@ -15,6 +15,14 @@
+>>   
+>>   #include "thermal_core.h"
+>>   
+>> +static int user_space_bind(struct thermal_zone_device *tz)
+>> +{
+>> +	pr_warn("Userspace governor deprecated: use thermal netlink "	\
+>> +		"notification instead\n");
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>   /**
+>>    * notify_user_space - Notifies user space about thermal events
+>>    * @tz: thermal_zone_device
+>> @@ -43,5 +51,6 @@ static int notify_user_space(struct thermal_zone_device *tz, int trip)
+>>   static struct thermal_governor thermal_gov_user_space = {
+>>   	.name		= "user_space",
+>>   	.throttle	= notify_user_space,
+>> +	.bind_to_tz	= user_space_bind,
+>>   };
+>>   THERMAL_GOVERNOR_DECLARE(thermal_gov_user_space);
+>>
+> 
+> 
 
-Do you have a special suspend-to-idle handling of those states that
-doesn't require PM-runtime?
 
-> >
-> > > Is this really what we want?
-> > >
-> > > >
-> > > > The other guys who rely on the cpuidle pausing today could be switched
-> > > > over to this new mechanism later and it would be possible to get rid
-> > > > of the pausing from the system suspend path completely.
-> > >
-> > > Avoiding to pause cpuidle when it's not needed makes perfect sense.
-> > > Although, it looks to me that we could also implement that on top of
-> > > $subject patch.
-> >
-> > Yes, it could.
-> >
-> > > Unless you insist on the CPUIDLE_STATE_DISABLED_ way, I would probably
-> > > explore an option to let a cpuidle driver to set a global cpuidle flag
-> > > during ->probe(). Depending if this flag is set, we can simply skip
-> > > calling cpuidle_pause() during system suspend.
-> > >
-> > > What do you think?
-> >
-> > Well, which driver in particular is in question here?
->
-> Honestly, I don't know. It has not been my goal to entirely prevent
-> calling cpuidle_pause().
->
-> In any case, it was introduced in the below commit, perhaps that can
-> give us a hint when this is still needed?
->
-> commit 8651f97bd951d0bb1c10fa24e3fa3455193f3548
-> Author: Preeti U Murthy <preeti@linux.vnet.ibm.com>
-> Date:   Mon Jul 9 10:12:56 2012 +0200
-> PM / cpuidle: System resume hang fix with cpuidle
+You can add:
 
-Yes, I remember that.
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+
+Regards,
+Lukasz
