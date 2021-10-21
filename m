@@ -2,218 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E66F4362E0
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Oct 2021 15:25:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B249E4362E8
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Oct 2021 15:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231522AbhJUN1t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Oct 2021 09:27:49 -0400
-Received: from mail-40138.protonmail.ch ([185.70.40.138]:16716 "EHLO
-        mail-40138.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231586AbhJUN1r (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Oct 2021 09:27:47 -0400
-X-Greylist: delayed 352 seconds by postgrey-1.27 at vger.kernel.org; Thu, 21 Oct 2021 09:27:46 EDT
-Date:   Thu, 21 Oct 2021 13:25:23 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail; t=1634822726;
-        bh=nuOvHKjHTwxeAM9TscBnoeXxs/55JU1OgJG+jydjNjU=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=NZYCHXTTgfLYN6D2i++aL5NaDf/JmvoybTWbpk2sWUCgVnPjjzj7x4ltb9EzwVi/x
-         m9tCxACJZfuo0uk3BqGj5vkGhIijOrR221Cl4P3awENRvb321VJENgI/jQQafr6HvK
-         ozA2JkVte8hygwT0I8DqFr34/CcNbWck6i/lRWbI=
-To:     Georgi Djakov <djakov@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-From:   Yassine Oudjana <y.oudjana@protonmail.com>
-Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Reply-To: Yassine Oudjana <y.oudjana@protonmail.com>
-Subject: [PATCH RESEND v5 5/5] arm64: dts: qcom: msm8996: Add interconnect support
-Message-ID: <20211021132329.234942-6-y.oudjana@protonmail.com>
-In-Reply-To: <20211021132329.234942-1-y.oudjana@protonmail.com>
-References: <20211021132329.234942-1-y.oudjana@protonmail.com>
+        id S230072AbhJUN3s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Oct 2021 09:29:48 -0400
+Received: from mail-ot1-f48.google.com ([209.85.210.48]:34560 "EHLO
+        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229952AbhJUN3q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Oct 2021 09:29:46 -0400
+Received: by mail-ot1-f48.google.com with SMTP id g62-20020a9d2dc4000000b0054752cfbc59so439463otb.1;
+        Thu, 21 Oct 2021 06:27:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aSF6RDZJjCFHG8Adf4z0QCLxKgIClrPXbWqUE8FFKDw=;
+        b=YXMkqrPSWWN+xupXyzONqdfvYaDZj8gQbEsVGkbFGixa3N55xNE8YiIfEPGH17yoow
+         NBNlnNeIZ+CTz6uQhyn/k5yeCMgppqGSeTMQoyj1ORi3fgk8eYKcESZIQQbJIOzFFczi
+         o1XTCZYk8m5U/6PJ9Gy4pd2VzkJZjMkhVqtAumSMOhKv7Unxr+eS3fnC50XNq+rfnuC9
+         CBiFLTJGaao/RcWUgbG9Jvwo4XOArcAvti3AOs3AiORMfF+5FSk36AiVWG7Uvfk/IjR6
+         4cobsc94T544mQY3OBxW5z5Gm668CWYj+9SFf82UjTbYkCRuuYSbkxM93kKbE1+jhhVl
+         w1Gg==
+X-Gm-Message-State: AOAM531VvdO6opLaCyyPUd9jwbprDDJzGd8vWWTbCTp3yNmYT3GemyJz
+        ocExNxpjfKSt593ZFotY2D4hB4tdj+gpjM8WQvM=
+X-Google-Smtp-Source: ABdhPJxHh+PxqTZjla8xiU/ftTJiMoG00fK2QIIoJIZN/kQsvTBW4FViFRr/WVjC+jpMzec5xdvjbLa8oxLc2xoPJI8=
+X-Received: by 2002:a05:6830:1af0:: with SMTP id c16mr4702129otd.16.1634822850369;
+ Thu, 21 Oct 2021 06:27:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+References: <20211013121914.3146812-1-yebin10@huawei.com> <CAJZ5v0jX4N-mXYoVVeMB0XW9KcYq9DtE3-dvOoNEBmUa1xzEtw@mail.gmail.com>
+ <61715146.2040000@huawei.com>
+In-Reply-To: <61715146.2040000@huawei.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 21 Oct 2021 15:27:19 +0200
+Message-ID: <CAJZ5v0jLQP=T9Rd8JZq2px+CEbFVXmSu0qB1qTaHPh83uzdi_Q@mail.gmail.com>
+Subject: Re: [PATCH -next] PM: hibernate: Get block device exclusively when do swsusp_check
+To:     yebin <yebin10@huawei.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Ted Ts'o" <tytso@mit.edu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jan Kara <jack@suse.cz>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add interconnect providers for the multiple NoCs available on the platform,
-and assign interconnects used by some blocks.
+On Thu, Oct 21, 2021 at 1:38 PM yebin <yebin10@huawei.com> wrote:
+>
+>
+>
+> On 2021/10/21 19:00, Rafael J. Wysocki wrote:
+> > On Wed, Oct 13, 2021 at 2:06 PM Ye Bin <yebin10@huawei.com> wrote:
+> >> We got follow issue:
+> >> [   89.266592] ------------[ cut here ]------------
+> >> [   89.267427] kernel BUG at fs/buffer.c:3020!
+> >> [   89.268264] invalid opcode: 0000 [#1] SMP KASAN PTI
+> >> [   89.269116] CPU: 7 PID: 1750 Comm: kmmpd-loop0 Not tainted 5.10.0-862.14.0.6.x86_64-08610-gc932cda3cef4-dirty #20
+> >> [   89.273169] RIP: 0010:submit_bh_wbc.isra.0+0x538/0x6d0
+> >> [   89.277157] RSP: 0018:ffff888105ddfd08 EFLAGS: 00010246
+> >> [   89.278093] RAX: 0000000000000005 RBX: ffff888124231498 RCX: ffffffffb2772612
+> >> [   89.279332] RDX: 1ffff11024846293 RSI: 0000000000000008 RDI: ffff888124231498
+> >> [   89.280591] RBP: ffff8881248cc000 R08: 0000000000000001 R09: ffffed1024846294
+> >> [   89.281851] R10: ffff88812423149f R11: ffffed1024846293 R12: 0000000000003800
+> >> [   89.283095] R13: 0000000000000001 R14: 0000000000000000 R15: ffff8881161f7000
+> >> [   89.284342] FS:  0000000000000000(0000) GS:ffff88839b5c0000(0000) knlGS:0000000000000000
+> >> [   89.285711] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> >> [   89.286701] CR2: 00007f166ebc01a0 CR3: 0000000435c0e000 CR4: 00000000000006e0
+> >> [   89.287919] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> >> [   89.289138] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> >> [   89.290368] Call Trace:
+> >> [   89.290842]  write_mmp_block+0x2ca/0x510
+> >> [   89.292218]  kmmpd+0x433/0x9a0
+> >> [   89.294902]  kthread+0x2dd/0x3e0
+> >> [   89.296268]  ret_from_fork+0x22/0x30
+> >> [   89.296906] Modules linked in:
+> >>
+> >> We can reproduce this issue as follow:
+> >> 1. mkfs.ext4 -O mmp  /dev/sda -b 1024
+> >> 2. mount /dev/sda /home/test
+> >> 3. echo "/dev/sda" > /sys/power/resume
+> >> 4. wait a moment we will get exception
+> >>
+> >> The sequence of issue is as follows:
+> >>         Thread1                       Thread2
+> >> mount /dev/sda /home/test
+> >> get s_mmp_bh  --> has mapped flag
+> >> start kmmpd thread
+> >>                                  echo "/dev/sda" > /sys/power/resume
+> >>                                    resume_store
+> >>                                      software_resume
+> >>                                        swsusp_check
+> >>                                          set_blocksize
+> >>                                            truncate_inode_pages_range
+> >>                                              truncate_cleanup_page
+> >>                                                block_invalidatepage
+> >>                                                  discard_buffer --> clean mapped flag
+> >> write_mmp_block
+> >>    submit_bh
+> >>      submit_bh_wbc
+> >>        BUG_ON(!buffer_mapped(bh)) --> trigger bug_on
+> >>
+> >> To solve this issue, get block device exclusively when do swsusp_check.
+> > And why exactly is this going to help?
+> If a  block device is already  mounted, then do  resume, it will discard
+> buffer
+> which file system being used.  That can cause the file system to crash and
+> may even cause the system to reset abnormally.
 
-Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
----
-Changes since v4:
- - Add support for Aggregate 0 NoC (a0noc).
-Changes since v2:
- - Remove interconnect paths from CPUs since cpufreq driver doesn't support=
- icc scaling yet.
+I see.
 
- arch/arm64/boot/dts/qcom/msm8996.dtsi | 93 +++++++++++++++++++++++++++
- 1 file changed, 93 insertions(+)
+Is there a way to indicate in swsusp_check() that the access will be
+read-only and so it doesn't care whether or not the block device is in
+use by someone else?
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qc=
-om/msm8996.dtsi
-index 465cd19a4951..9f0cfe19163c 100644
---- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-@@ -7,6 +7,7 @@
- #include <dt-bindings/clock/qcom,mmcc-msm8996.h>
- #include <dt-bindings/clock/qcom,rpmcc.h>
- #include <dt-bindings/power/qcom-rpmpd.h>
-+#include <dt-bindings/interconnect/qcom,msm8996.h>
- #include <dt-bindings/soc/qcom,apr.h>
- #include <dt-bindings/thermal/thermal.h>
-=20
-@@ -683,6 +684,15 @@ gcc: clock-controller@300000 {
- =09=09=09clock-names =3D "cxo2";
- =09=09};
-=20
-+=09=09bimc: interconnect@408000 {
-+=09=09=09compatible =3D "qcom,msm8996-bimc";
-+=09=09=09reg =3D <0x00408000 0x5a000>;
-+=09=09=09#interconnect-cells =3D <1>;
-+=09=09=09clock-names =3D "bus", "bus_a";
-+=09=09=09clocks =3D <&rpmcc RPM_SMD_BIMC_CLK>,
-+=09=09=09=09 <&rpmcc RPM_SMD_BIMC_A_CLK>;
-+=09=09};
-+
- =09=09tsens0: thermal-sensor@4a9000 {
- =09=09=09compatible =3D "qcom,msm8996-tsens", "qcom,tsens-v2";
- =09=09=09reg =3D <0x004a9000 0x1000>, /* TM */
-@@ -705,6 +715,74 @@ tsens1: thermal-sensor@4ad000 {
- =09=09=09#thermal-sensor-cells =3D <1>;
- =09=09};
-=20
-+=09=09cnoc: interconnect@500000 {
-+=09=09=09compatible =3D "qcom,msm8996-cnoc";
-+=09=09=09reg =3D <0x00500000 0x1000>;
-+=09=09=09#interconnect-cells =3D <1>;
-+=09=09=09clock-names =3D "bus", "bus_a";
-+=09=09=09clocks =3D <&rpmcc RPM_SMD_CNOC_CLK>,
-+=09=09=09=09 <&rpmcc RPM_SMD_CNOC_A_CLK>;
-+=09=09};
-+
-+=09=09snoc: interconnect@524000 {
-+=09=09=09compatible =3D "qcom,msm8996-snoc";
-+=09=09=09reg =3D <0x00524000 0x1c000>;
-+=09=09=09#interconnect-cells =3D <1>;
-+=09=09=09clock-names =3D "bus", "bus_a";
-+=09=09=09clocks =3D <&rpmcc RPM_SMD_SNOC_CLK>,
-+=09=09=09=09 <&rpmcc RPM_SMD_SNOC_A_CLK>;
-+=09=09};
-+
-+=09=09a0noc: interconnect@543000 {
-+=09=09=09compatible =3D "qcom,msm8996-a0noc";
-+=09=09=09reg =3D <0x00543000 0x6000>;
-+=09=09=09#interconnect-cells =3D <1>;
-+=09=09=09clock-names =3D "aggre0_snoc_axi",
-+=09=09=09=09      "aggre0_cnoc_ahb",
-+=09=09=09=09      "aggre0_noc_mpu_cfg";
-+=09=09=09clocks =3D <&gcc GCC_AGGRE0_SNOC_AXI_CLK>,
-+=09=09=09=09 <&gcc GCC_AGGRE0_CNOC_AHB_CLK>,
-+=09=09=09=09 <&gcc GCC_AGGRE0_NOC_MPU_CFG_AHB_CLK>;
-+=09=09=09power-domains =3D <&gcc AGGRE0_NOC_GDSC>;
-+=09=09};
-+
-+=09=09a1noc: interconnect@562000 {
-+=09=09=09compatible =3D "qcom,msm8996-a1noc";
-+=09=09=09reg =3D <0x00562000 0x5000>;
-+=09=09=09#interconnect-cells =3D <1>;
-+=09=09=09clock-names =3D "bus", "bus_a";
-+=09=09=09clocks =3D <&rpmcc RPM_SMD_AGGR1_NOC_CLK>,
-+=09=09=09=09 <&rpmcc RPM_SMD_AGGR1_NOC_A_CLK>;
-+=09=09};
-+
-+=09=09a2noc: interconnect@583000 {
-+=09=09=09compatible =3D "qcom,msm8996-a2noc";
-+=09=09=09reg =3D <0x00583000 0x7000>;
-+=09=09=09#interconnect-cells =3D <1>;
-+=09=09=09clock-names =3D "bus", "bus_a";
-+=09=09=09clocks =3D <&rpmcc RPM_SMD_AGGR2_NOC_CLK>,
-+=09=09=09=09 <&rpmcc RPM_SMD_AGGR2_NOC_A_CLK>;
-+=09=09};
-+
-+=09=09mnoc: interconnect@5a4000 {
-+=09=09=09compatible =3D "qcom,msm8996-mnoc";
-+=09=09=09reg =3D <0x005a4000 0x1c000>;
-+=09=09=09#interconnect-cells =3D <1>;
-+=09=09=09clock-names =3D "bus", "bus_a", "iface";
-+=09=09=09clocks =3D <&rpmcc RPM_SMD_MMAXI_CLK>,
-+=09=09=09=09 <&rpmcc RPM_SMD_MMAXI_A_CLK>,
-+=09=09=09=09 <&mmcc AHB_CLK_SRC>;
-+=09=09};
-+
-+=09=09pnoc: interconnect@5c0000 {
-+=09=09=09compatible =3D "qcom,msm8996-pnoc";
-+=09=09=09reg =3D <0x005c0000 0x3000>;
-+=09=09=09#interconnect-cells =3D <1>;
-+=09=09=09clock-names =3D "bus", "bus_a";
-+=09=09=09clocks =3D <&rpmcc RPM_SMD_PCNOC_CLK>,
-+=09=09=09=09 <&rpmcc RPM_SMD_PCNOC_A_CLK>;
-+=09=09};
-+
- =09=09tcsr_mutex_regs: syscon@740000 {
- =09=09=09compatible =3D "syscon";
- =09=09=09reg =3D <0x00740000 0x40000>;
-@@ -784,6 +862,11 @@ mdp: mdp@901000 {
- =09=09=09=09assigned-clock-rates =3D <300000000>,
- =09=09=09=09=09 <19200000>;
-=20
-+=09=09=09=09interconnects =3D <&mnoc MASTER_MDP_PORT0 &bimc SLAVE_EBI_CH0>=
-,
-+=09=09=09=09=09=09<&mnoc MASTER_MDP_PORT1 &bimc SLAVE_EBI_CH0>,
-+=09=09=09=09=09=09<&mnoc MASTER_ROTATOR &bimc SLAVE_EBI_CH0>;
-+=09=09=09=09interconnect-names =3D "mdp0-mem", "mdp1-mem", "rotator-mem";
-+
- =09=09=09=09ports {
- =09=09=09=09=09#address-cells =3D <1>;
- =09=09=09=09=09#size-cells =3D <0>;
-@@ -959,6 +1042,9 @@ gpu: gpu@b00000 {
- =09=09=09=09"mem",
- =09=09=09=09"mem_iface";
-=20
-+=09=09=09interconnects =3D <&bimc MASTER_GRAPHICS_3D &bimc SLAVE_EBI_CH0>;
-+=09=09=09interconnect-names =3D "gfx-mem";
-+
- =09=09=09power-domains =3D <&mmcc GPU_GX_GDSC>;
- =09=09=09iommus =3D <&adreno_smmu 0>;
-=20
-@@ -1986,6 +2072,9 @@ venus: video-codec@c00000 {
- =09=09=09=09 <&mmcc VIDEO_AXI_CLK>,
- =09=09=09=09 <&mmcc VIDEO_MAXI_CLK>;
- =09=09=09clock-names =3D "core", "iface", "bus", "mbus";
-+=09=09=09interconnects =3D <&mnoc MASTER_VIDEO_P0 &bimc SLAVE_EBI_CH0>,
-+=09=09=09=09=09<&bimc MASTER_AMPSS_M0 &mnoc SLAVE_VENUS_CFG>;
-+=09=09=09interconnect-names =3D "video-mem", "cpu-cfg";
- =09=09=09iommus =3D <&venus_smmu 0x00>,
- =09=09=09=09 <&venus_smmu 0x01>,
- =09=09=09=09 <&venus_smmu 0x0a>,
-@@ -2602,6 +2691,10 @@ usb3: usb@6af8800 {
- =09=09=09=09=09  <&gcc GCC_USB30_MASTER_CLK>;
- =09=09=09assigned-clock-rates =3D <19200000>, <120000000>;
-=20
-+=09=09=09interconnects =3D <&a2noc MASTER_USB3 &bimc SLAVE_EBI_CH0>,
-+=09=09=09=09=09<&bimc MASTER_AMPSS_M0 &snoc SLAVE_USB3>;
-+=09=09=09interconnect-names =3D "usb-ddr", "apps-usb";
-+
- =09=09=09power-domains =3D <&gcc USB30_GDSC>;
- =09=09=09status =3D "disabled";
-=20
---=20
-2.33.1
+> If the "/sys/power/resume" sysfs interface is unrestricted, it will provide
+> criminals with a way to attack the system.
+>
+> >> Signed-off-by: Ye Bin <yebin10@huawei.com>
+> >> ---
+> >>   kernel/power/swap.c | 5 +++--
+> >>   1 file changed, 3 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
+> >> index 9ec418955556..26c0bd2a50da 100644
+> >> --- a/kernel/power/swap.c
+> >> +++ b/kernel/power/swap.c
+> >> @@ -1521,9 +1521,10 @@ int swsusp_read(unsigned int *flags_p)
+> >>   int swsusp_check(void)
+> >>   {
+> >>          int error;
+> >> +       void *holder;
+> >>
+> >>          hib_resume_bdev = blkdev_get_by_dev(swsusp_resume_device,
+> >> -                                           FMODE_READ, NULL);
+> >> +                                           FMODE_READ | FMODE_EXCL, &holder);
+> > So you need to explain to me how this works.
+> As we call 'blkdev_get_by_path' in 'mount_bdev'  pass mode includes
+> FMODE_EXCL.
+> So if 'swsusp_check' try to get block device with mode includes
+> FMODE_EXCL will failed.
+>
+> I think if a block device is used as a swap partition, it cannot be
+> mounted at the
+> same time. Conversely, if a block device is already mounted, it cannot
+> be used as
+> a swap partition.
 
+Well, what if a hibernation image is located in a swap file?  This is
+one of the cases that need to be supported.
 
+> >
+> >>          if (!IS_ERR(hib_resume_bdev)) {
+> >>                  set_blocksize(hib_resume_bdev, PAGE_SIZE);
+> >>                  clear_page(swsusp_header);
+> >> @@ -1545,7 +1546,7 @@ int swsusp_check(void)
+> >>
+> >>   put:
+> >>                  if (error)
+> >> -                       blkdev_put(hib_resume_bdev, FMODE_READ);
+> >> +                       blkdev_put(hib_resume_bdev, FMODE_READ | FMODE_EXCL);
+> >>                  else
+> >>                          pr_debug("Image signature found, resuming\n");
+> >>          } else {
+> >> --
+> > .
+> >
+>
