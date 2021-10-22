@@ -2,93 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63115436BE5
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Oct 2021 22:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90864436F18
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Oct 2021 02:52:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232002AbhJUUTH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Oct 2021 16:19:07 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:34216 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231958AbhJUUTG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Oct 2021 16:19:06 -0400
-Date:   Thu, 21 Oct 2021 20:16:48 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1634847409;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jL6wyZNqlf2H9e//+80GqcfAdGQXJsVxVfyydZ6D924=;
-        b=IMUEjv3hMEpFJheRcXqFHdbw+6aNZC6tqeM0wv43C7wNK8p43BXOgxMzl726E0STf2/4/g
-        9lkaF1yQOUDzb8nsRm3o4jmnn8qr2flfStjHXRmWdvHhP3lXXom9IGW5EWXPk30/MH9gGO
-        3vAB6cvf0atW4fzv/Vv15lxZbwXEyvjpwmsx3TgzhiAngsGzrctEf9IIOUF3xnuJ8+00oQ
-        n6+umIptNv4GQwFp3CHqOzU1cfHFfOk2SZvCYAFBBkQVtP2b9n8tP8y3bZXh6jYWa7ZfM4
-        g3sFhDZHY1wBhUd9QRl+M+W2GhMNiI1AgtJ1pHWREkHIC8cKDTQWodUX5ArTrg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1634847409;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jL6wyZNqlf2H9e//+80GqcfAdGQXJsVxVfyydZ6D924=;
-        b=/GGYFOqvUiu17n4nefL3mSk6btWYh/5qb697fGq3AYXZKBY+ixWL/9qH+qHl5sWNJrnd4o
-        Eup8LztnEdW9/hCw==
-From:   "thermal-bot for Kunihiko Hayashi" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-pm@vger.kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/drivers/uniphier: Add compatible
- string for NX1 SoC
-Cc:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <1634520891-16801-3-git-send-email-hayashi.kunihiko@socionext.com>
-References: <1634520891-16801-3-git-send-email-hayashi.kunihiko@socionext.com>
+        id S231567AbhJVAzH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Oct 2021 20:55:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40870 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229512AbhJVAzH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 21 Oct 2021 20:55:07 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 05DFC6135F;
+        Fri, 22 Oct 2021 00:52:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1634863970;
+        bh=3gGl+p/p7nrAAcGQCrBlZ0+ewM4YLxTwf4TWidy+7po=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=BovWNkfe3c08rlup31Cfgo839P5smFnYqAl19DbqRa7QJrqenf5HrSUb7igGdLEvu
+         6JmqIUTp48zkUi8ETtaxGb6rR+30U0bBKQlKdNAZ6hyJpG5BtBnzoLmIUdUyQBNinr
+         al6E1G0wUl7SM3m5+rewC/eDk4fCD1RX7BdJ+wNXiuSmUKlUa6cLL3GhWd3zNDlEU7
+         4wjMZwguMzRyL8GSwXQOZ5ZoRHPBlBhe4PygNbtnKzWMy0fFlwhpnsqsZV6U/WoEZB
+         hpvyAWxLlGjBvZtntNVmaC1PWlUwq6KyU3sS0vaz0zDay/J0JGhSNP1qz1hvkZCDvs
+         QSQn3uq62hbQw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Alistair Francis <alistair@alistair23.me>, robh+dt@kernel.org,
+        lgirdwood@gmail.com, kernel@pengutronix.de, lee.jones@linaro.org
+Cc:     Mark Brown <broonie@kernel.org>, linux-pm@vger.kernel.org,
+        alistair23@gmail.com, linux-imx@nxp.com,
+        linux-hwmon@vger.kernel.org, rui.zhang@intel.com,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        s.hauer@pengutronix.de, amitk@kernel.org,
+        linux-kernel@vger.kernel.org, shawnguo@kernel.org
+Subject: Re: (subset) [PATCH v13 0/9] Add support for the silergy,sy7636a
+Date:   Fri, 22 Oct 2021 01:52:44 +0100
+Message-Id: <163486395940.2610269.12381320818786809684.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211015122551.38951-1-alistair@alistair23.me>
+References: <20211015122551.38951-1-alistair@alistair23.me>
 MIME-Version: 1.0
-Message-ID: <163484740810.25758.18225294692290217017.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The following commit has been merged into the thermal/next branch of thermal:
+On Fri, 15 Oct 2021 22:25:42 +1000, Alistair Francis wrote:
+> v13:
+>  - Address comments on thermal driver
+>  - Rebase on master (without other patches)
+> v12:
+>  - Rebase
+> v11:
+>  - Address comments on hwmon
+>  - Improve "mfd: simple-mfd-i2c: Add a Kconfig name" commit message
+> v10:
+>  - Use dev_get_regmap() instead of dev_get_drvdata()
+> v9:
+>  - Convert to use the simple-mfd-i2c instead
+> 
+> [...]
 
-Commit-ID:     fb6de59d3967f87fe4cae4b08f55cbe0d5a30b77
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//fb6de59d3967f87fe4cae4b08f55cbe0d5a30b77
-Author:        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-AuthorDate:    Mon, 18 Oct 2021 10:34:51 +09:00
-Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Mon, 18 Oct 2021 14:00:13 +02:00
+Applied to
 
-thermal/drivers/uniphier: Add compatible string for NX1 SoC
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
-Add basic support for UniPhier NX1 SoC. This includes a compatible string
-and the same SoC-dependent data as LD20 SoC.
+Thanks!
 
-Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Link: https://lore.kernel.org/r/1634520891-16801-3-git-send-email-hayashi.kunihiko@socionext.com
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/thermal/uniphier_thermal.c | 4 ++++
- 1 file changed, 4 insertions(+)
+[4/9] regulator: sy7636a: Remove requirement on sy7636a mfd
+      commit: cb17820ef71ed70f70ee1eed2b378664746b6fde
 
-diff --git a/drivers/thermal/uniphier_thermal.c b/drivers/thermal/uniphier_thermal.c
-index bba2284..4cae556 100644
---- a/drivers/thermal/uniphier_thermal.c
-+++ b/drivers/thermal/uniphier_thermal.c
-@@ -358,6 +358,10 @@ static const struct of_device_id uniphier_tm_dt_ids[] = {
- 		.compatible = "socionext,uniphier-pxs3-thermal",
- 		.data       = &uniphier_ld20_tm_data,
- 	},
-+	{
-+		.compatible = "socionext,uniphier-nx1-thermal",
-+		.data       = &uniphier_ld20_tm_data,
-+	},
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, uniphier_tm_dt_ids);
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
