@@ -2,102 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33EB7437B25
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Oct 2021 18:54:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE436437D0D
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Oct 2021 21:01:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231942AbhJVQ4R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Oct 2021 12:56:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59130 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231453AbhJVQ4Q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Oct 2021 12:56:16 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99F7C061767
-        for <linux-pm@vger.kernel.org>; Fri, 22 Oct 2021 09:53:58 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id z14so4793827wrg.6
-        for <linux-pm@vger.kernel.org>; Fri, 22 Oct 2021 09:53:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XBYpLCzxBp4dnqMRtudEayqwtt6586cSrD3vD1zTYK4=;
-        b=ZQa2TulqQuJs13cEwGzAmwTNflFa//aAb1TCujoiZ3w++2Fm+ghOs28w0Zg9izrxc7
-         rz3m+09fm4EdrFzNrqlEfGtjItSLd4+5zUG4JG5QcODmXXFSIxUygRlpx1i2xm/O1hw0
-         Xw2h0a2npU42wE3Ofld/9C6Yr5Ww4gWzFPdXWaMSl6FhfGxtYQRy2Amp02WB1np/6oSd
-         RKiuHAQaEPNmJaTwYCcC9FFUohrTq/yhgkVcE2JKyrqPCf5A2a4nxwwoEn9TvQ3cGAWF
-         nCiUyKJmWHKFtBvTmcwFq8rskye4uu6Fva8HAZUUAhAhKF5Fi7E87+DuDj3ka2oX4yoQ
-         TZvA==
+        id S233615AbhJVTDf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Oct 2021 15:03:35 -0400
+Received: from mail-oi1-f172.google.com ([209.85.167.172]:33523 "EHLO
+        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233568AbhJVTDd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Oct 2021 15:03:33 -0400
+Received: by mail-oi1-f172.google.com with SMTP id q129so6283587oib.0;
+        Fri, 22 Oct 2021 12:01:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XBYpLCzxBp4dnqMRtudEayqwtt6586cSrD3vD1zTYK4=;
-        b=3OnuDShMLzCW64l9VHYRzRAkCxvuIk6A/0tWlJLuTBfOiC5Pvjtppq7++ajkrfXe0q
-         p75qfdacVSIvbFlFPYehwWXTL82JYQSd5mPRQ13mdRJhn4h6uoriubsdPppbPF0yQ33F
-         WbkR67aZOB0mOwsobhs/4m6sMmkATUXNcvJldZVx/YFo5ZVTu6YhoyXmPiATh5vb0iNE
-         c1nyPDxBF+a4xyMEe4JPp+mxAFE307Pwl1Lg17FUZjENksxJ1NAOaUpyznbTT3+X0fGb
-         mpvEjSzk2Pqk/PnPNhwZfvf6uVVRqYqIEgkNIGH+cV2rTW5vM4wnNEb8IdWRTdlsssPC
-         fSnA==
-X-Gm-Message-State: AOAM531NKR9ENz22lbyUldrJ1tshsiHcNIg0Hp3q7H7xPc5MJOFm/+E9
-        kbW2Fv/8cN/po/njA3Sk+a8OXoiJCa7wRn100Z9ZnA==
-X-Google-Smtp-Source: ABdhPJyD3xwrnY7QjdqI3oOap5Bt2wrcAdc89XNctOI16iX51jdRgWFta04EIVXopHJrE0LrTBL/4vDEiv73SO9v3pw=
-X-Received: by 2002:adf:f305:: with SMTP id i5mr1180523wro.155.1634921637042;
- Fri, 22 Oct 2021 09:53:57 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=sVPsYavfjqxFWrItFViHXcG8XKwEKF8PjeSz3vyL0+o=;
+        b=Z+HVPS3Ed/3hkqIlogw66ybqYc797coIGXi5FhBpX2uwZysuLafjKzZHxHnXSbPWEu
+         D6yo8Mz/YNhAZCWU0n/ZKyznq/n/QXEUnjqTp3Gz1FjU/n/Sf+H7/ztcIvvMahFxMJk4
+         VSd2Rw+TXnMx9a3qu4q1fOyCSVlRhGLSN1OKu8luC54skuNdez/MK4o7yqP5jfcrhc3K
+         LWovbry9Klqtd3YxheGbBNYEERFmqgK770uNAGqq133kYI8h/3oed2dF3sgAmT9MWKhQ
+         JgKP3degT+RBVSDGPUKYDZ3AbYdm1Vu48Pc5ER/+9Gwld+3gDzyYZPcySZ0/VNKcdaGg
+         wC4Q==
+X-Gm-Message-State: AOAM533iAAPFNAvdN42v4+/H4klsT3hW6oLnteL1udl8H2tseY2/a49W
+        aM7sj3YJCp9d7oDCmfCL4pwuLP+vxDvoIPfUL65LeGuA8B0=
+X-Google-Smtp-Source: ABdhPJza4UDhYY1YwYmHq8EtydwJDr1+Sbi/5eSgIKWebxzWVrw4NOs2yyvhyLLfZeDBJeZEuaSTn1GONNhoLsRwbGI=
+X-Received: by 2002:a05:6808:e87:: with SMTP id k7mr1117483oil.166.1634929274954;
+ Fri, 22 Oct 2021 12:01:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211022022859.1888836-1-rajatja@google.com> <20211022022859.1888836-2-rajatja@google.com>
- <7d94d015-ebff-ee46-3726-9091fe3cdff4@linux.intel.com>
-In-Reply-To: <7d94d015-ebff-ee46-3726-9091fe3cdff4@linux.intel.com>
-From:   Dmitry Torokhov <dtor@google.com>
-Date:   Fri, 22 Oct 2021 09:53:40 -0700
-Message-ID: <CAE_wzQ8nBBHMr4c=SXVpDq2iz=eu0RbJgTHrKkU1_Hsdj9SLzQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] i2c: designware: Enable async suspend / resume of
- designware devices
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     Rajat Jain <rajatja@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rajatxjain@gmail.com, dbasehore@chromium.org
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 22 Oct 2021 21:01:04 +0200
+Message-ID: <CAJZ5v0hTtyu981j91vxH_u3bvHWWBho4YSAhd+os9Zn=sbwe2Q@mail.gmail.com>
+Subject: [GIT PULL] ACPI fixes for v5.15-rc7
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Jarkko,
+Hi Linus,
 
-On Fri, Oct 22, 2021 at 4:37 AM Jarkko Nikula
-<jarkko.nikula@linux.intel.com> wrote:
->
-> On 10/22/21 5:28 AM, Rajat Jain wrote:
-> > Mark the designware devices for asynchronous suspend. With this, the
-> > resume for designware devices does not get stuck behind other unrelated
-> > devices (e.g. intel_backlight that takes hundreds of ms to resume,
-> > waiting for its parent devices).
-> >
-> > Signed-off-by: Rajat Jain <rajatja@google.com>
-> > ---
-> >   drivers/i2c/busses/i2c-designware-platdrv.c | 2 ++
-> >   1 file changed, 2 insertions(+)
-> >
-> > diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
-> > index 21113665ddea..2bd81abc86f6 100644
-> > --- a/drivers/i2c/busses/i2c-designware-platdrv.c
-> > +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-> > @@ -293,6 +293,8 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
-> >                                       DPM_FLAG_MAY_SKIP_RESUME);
-> >       }
-> >
-> > +     device_enable_async_suspend(&pdev->dev);
-> > +
-> >       /* The code below assumes runtime PM to be disabled. */
-> >       WARN_ON(pm_runtime_enabled(&pdev->dev));
-> >
-> I guess same can be done to i2c_dw_pci_probe() too. I don't have any
-> strong opinion should it be done in this patch or somewhere in the future.
+Please pull from the tag
 
-All PCI devices are marked for asynchronous suspend/resume by default.
-See drivers/pci/pci.c::pci_pm_init().
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ acpi-5.15-rc7
 
-Thanks,
-Dmitry
+with top-most commit 7a7489005a80af97ba289dc0579fccd50af4fe8d
+
+ Merge branch 'acpi-tools'
+
+on top of commit 519d81956ee277b4419c723adfb154603c2565ba
+
+ Linux 5.15-rc6
+
+to receive ACPI fixes for 5.15-rc7.
+
+These fix two regressions, one related to ACPI power resources
+management and one that broke ACPI tools compilation.
+
+Specifics:
+
+ - Stop turning off unused ACPI power resources in an unknown state
+   to address a regression introduced during the 5.14 cycle (Rafael
+   Wysocki).
+
+ - Fix an ACPI tools build issue introduced recently when the minimal
+   stdarg.h was added (Miguel Bernal Marin).
+
+Thanks!
+
+
+---------------
+
+Miguel Bernal Marin (1):
+      ACPI: tools: fix compilation error
+
+Rafael J. Wysocki (1):
+      ACPI: PM: Do not turn off power resources in unknown state
+
+---------------
+
+ drivers/acpi/power.c          | 7 +------
+ include/acpi/platform/acgcc.h | 9 +++++++--
+ 2 files changed, 8 insertions(+), 8 deletions(-)
