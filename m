@@ -2,238 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD8FE437A95
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Oct 2021 18:08:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33EB7437B25
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Oct 2021 18:54:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232835AbhJVQKr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Oct 2021 12:10:47 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:54312 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbhJVQKr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Oct 2021 12:10:47 -0400
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 3.0.0)
- id 39576844557c031d; Fri, 22 Oct 2021 18:08:28 +0200
-Received: from kreacher.localnet (unknown [213.134.175.233])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id B5AE966A9A4;
-        Fri, 22 Oct 2021 18:08:27 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [PATCH 2/2] PM: sleep: Pause cpuidle later and resume it earlier during system transitions
-Date:   Fri, 22 Oct 2021 18:07:47 +0200
-Message-ID: <2813389.e9J7NaK4W3@kreacher>
-In-Reply-To: <2230995.ElGaqSPkdT@kreacher>
-References: <2230995.ElGaqSPkdT@kreacher>
+        id S231942AbhJVQ4R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Oct 2021 12:56:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59130 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231453AbhJVQ4Q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Oct 2021 12:56:16 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99F7C061767
+        for <linux-pm@vger.kernel.org>; Fri, 22 Oct 2021 09:53:58 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id z14so4793827wrg.6
+        for <linux-pm@vger.kernel.org>; Fri, 22 Oct 2021 09:53:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XBYpLCzxBp4dnqMRtudEayqwtt6586cSrD3vD1zTYK4=;
+        b=ZQa2TulqQuJs13cEwGzAmwTNflFa//aAb1TCujoiZ3w++2Fm+ghOs28w0Zg9izrxc7
+         rz3m+09fm4EdrFzNrqlEfGtjItSLd4+5zUG4JG5QcODmXXFSIxUygRlpx1i2xm/O1hw0
+         Xw2h0a2npU42wE3Ofld/9C6Yr5Ww4gWzFPdXWaMSl6FhfGxtYQRy2Amp02WB1np/6oSd
+         RKiuHAQaEPNmJaTwYCcC9FFUohrTq/yhgkVcE2JKyrqPCf5A2a4nxwwoEn9TvQ3cGAWF
+         nCiUyKJmWHKFtBvTmcwFq8rskye4uu6Fva8HAZUUAhAhKF5Fi7E87+DuDj3ka2oX4yoQ
+         TZvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XBYpLCzxBp4dnqMRtudEayqwtt6586cSrD3vD1zTYK4=;
+        b=3OnuDShMLzCW64l9VHYRzRAkCxvuIk6A/0tWlJLuTBfOiC5Pvjtppq7++ajkrfXe0q
+         p75qfdacVSIvbFlFPYehwWXTL82JYQSd5mPRQ13mdRJhn4h6uoriubsdPppbPF0yQ33F
+         WbkR67aZOB0mOwsobhs/4m6sMmkATUXNcvJldZVx/YFo5ZVTu6YhoyXmPiATh5vb0iNE
+         c1nyPDxBF+a4xyMEe4JPp+mxAFE307Pwl1Lg17FUZjENksxJ1NAOaUpyznbTT3+X0fGb
+         mpvEjSzk2Pqk/PnPNhwZfvf6uVVRqYqIEgkNIGH+cV2rTW5vM4wnNEb8IdWRTdlsssPC
+         fSnA==
+X-Gm-Message-State: AOAM531NKR9ENz22lbyUldrJ1tshsiHcNIg0Hp3q7H7xPc5MJOFm/+E9
+        kbW2Fv/8cN/po/njA3Sk+a8OXoiJCa7wRn100Z9ZnA==
+X-Google-Smtp-Source: ABdhPJyD3xwrnY7QjdqI3oOap5Bt2wrcAdc89XNctOI16iX51jdRgWFta04EIVXopHJrE0LrTBL/4vDEiv73SO9v3pw=
+X-Received: by 2002:adf:f305:: with SMTP id i5mr1180523wro.155.1634921637042;
+ Fri, 22 Oct 2021 09:53:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+References: <20211022022859.1888836-1-rajatja@google.com> <20211022022859.1888836-2-rajatja@google.com>
+ <7d94d015-ebff-ee46-3726-9091fe3cdff4@linux.intel.com>
+In-Reply-To: <7d94d015-ebff-ee46-3726-9091fe3cdff4@linux.intel.com>
+From:   Dmitry Torokhov <dtor@google.com>
+Date:   Fri, 22 Oct 2021 09:53:40 -0700
+Message-ID: <CAE_wzQ8nBBHMr4c=SXVpDq2iz=eu0RbJgTHrKkU1_Hsdj9SLzQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] i2c: designware: Enable async suspend / resume of
+ designware devices
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     Rajat Jain <rajatja@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rajatxjain@gmail.com, dbasehore@chromium.org
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.175.233
-X-CLIENT-HOSTNAME: 213.134.175.233
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvtddrudeljedgleelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvjeelgffhiedukedtleekkedvudfggefhgfegjefgueekjeelvefggfdvledutdenucfkphepvddufedrudefgedrudejhedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddujeehrddvfeefpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuhhlfhdrhhgrnhhsshhonheslhhinhgrrhhordhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrgh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Hi Jarkko,
 
-Commit 8651f97bd951 ("PM / cpuidle: System resume hang fix with
-cpuidle") that introduced cpuidle pausing during system suspend
-did that to work around a platform firmware issue causing systems
-to hang during resume if CPUs were allowed to enter idle states
-in the system suspend and resume code paths.
+On Fri, Oct 22, 2021 at 4:37 AM Jarkko Nikula
+<jarkko.nikula@linux.intel.com> wrote:
+>
+> On 10/22/21 5:28 AM, Rajat Jain wrote:
+> > Mark the designware devices for asynchronous suspend. With this, the
+> > resume for designware devices does not get stuck behind other unrelated
+> > devices (e.g. intel_backlight that takes hundreds of ms to resume,
+> > waiting for its parent devices).
+> >
+> > Signed-off-by: Rajat Jain <rajatja@google.com>
+> > ---
+> >   drivers/i2c/busses/i2c-designware-platdrv.c | 2 ++
+> >   1 file changed, 2 insertions(+)
+> >
+> > diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
+> > index 21113665ddea..2bd81abc86f6 100644
+> > --- a/drivers/i2c/busses/i2c-designware-platdrv.c
+> > +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+> > @@ -293,6 +293,8 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
+> >                                       DPM_FLAG_MAY_SKIP_RESUME);
+> >       }
+> >
+> > +     device_enable_async_suspend(&pdev->dev);
+> > +
+> >       /* The code below assumes runtime PM to be disabled. */
+> >       WARN_ON(pm_runtime_enabled(&pdev->dev));
+> >
+> I guess same can be done to i2c_dw_pci_probe() too. I don't have any
+> strong opinion should it be done in this patch or somewhere in the future.
 
-However, pausing cpuidle before the last phase of suspending
-devices is the source of an otherwise arbitrary difference between
-the suspend-to-idle path and other system suspend variants, so it is
-cleaner to do that later, before taking secondary CPUs offline (it
-is still safer to take secondary CPUs offline with cpuidle paused,
-though).
+All PCI devices are marked for asynchronous suspend/resume by default.
+See drivers/pci/pci.c::pci_pm_init().
 
-Modify the code accordingly, but in order to avoid code duplication,
-introduce new wrapper functions, pm_sleep_disable_secondary_cpus()
-and pm_sleep_enable_secondary_cpus(), to combine cpuidle_pause()
-and cpuidle_resume(), respectively, with the handling of secondary
-CPUs during system-wide transitions to sleep states.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/base/power/main.c |    8 +-------
- kernel/power/hibernate.c  |   12 +++++++-----
- kernel/power/power.h      |   14 ++++++++++++++
- kernel/power/suspend.c    |   10 ++--------
- 4 files changed, 24 insertions(+), 20 deletions(-)
-
-Index: linux-pm/kernel/power/suspend.c
-===================================================================
---- linux-pm.orig/kernel/power/suspend.c
-+++ linux-pm/kernel/power/suspend.c
-@@ -403,9 +403,6 @@ static int suspend_enter(suspend_state_t
- 	if (error)
- 		goto Devices_early_resume;
- 
--	if (state != PM_SUSPEND_TO_IDLE)
--		cpuidle_pause();
--
- 	error = dpm_suspend_noirq(PMSG_SUSPEND);
- 	if (error) {
- 		pr_err("noirq suspend of devices failed\n");
-@@ -423,7 +420,7 @@ static int suspend_enter(suspend_state_t
- 		goto Platform_wake;
- 	}
- 
--	error = suspend_disable_secondary_cpus();
-+	error = pm_sleep_disable_secondary_cpus();
- 	if (error || suspend_test(TEST_CPUS))
- 		goto Enable_cpus;
- 
-@@ -453,16 +450,13 @@ static int suspend_enter(suspend_state_t
- 	BUG_ON(irqs_disabled());
- 
-  Enable_cpus:
--	suspend_enable_secondary_cpus();
-+	pm_sleep_enable_secondary_cpus();
- 
-  Platform_wake:
- 	platform_resume_noirq(state);
- 	dpm_resume_noirq(PMSG_RESUME);
- 
-  Platform_early_resume:
--	if (state != PM_SUSPEND_TO_IDLE)
--		cpuidle_resume();
--
- 	platform_resume_early(state);
- 
-  Devices_early_resume:
-Index: linux-pm/kernel/power/hibernate.c
-===================================================================
---- linux-pm.orig/kernel/power/hibernate.c
-+++ linux-pm/kernel/power/hibernate.c
-@@ -300,7 +300,7 @@ static int create_image(int platform_mod
- 	if (error || hibernation_test(TEST_PLATFORM))
- 		goto Platform_finish;
- 
--	error = suspend_disable_secondary_cpus();
-+	error = pm_sleep_disable_secondary_cpus();
- 	if (error || hibernation_test(TEST_CPUS))
- 		goto Enable_cpus;
- 
-@@ -342,7 +342,7 @@ static int create_image(int platform_mod
- 	local_irq_enable();
- 
-  Enable_cpus:
--	suspend_enable_secondary_cpus();
-+	pm_sleep_enable_secondary_cpus();
- 
- 	/* Allow architectures to do nosmt-specific post-resume dances */
- 	if (!in_suspend)
-@@ -466,6 +466,8 @@ static int resume_target_kernel(bool pla
- 	if (error)
- 		goto Cleanup;
- 
-+	cpuidle_pause();
-+
- 	error = hibernate_resume_nonboot_cpu_disable();
- 	if (error)
- 		goto Enable_cpus;
-@@ -509,7 +511,7 @@ static int resume_target_kernel(bool pla
- 	local_irq_enable();
- 
-  Enable_cpus:
--	suspend_enable_secondary_cpus();
-+	pm_sleep_enable_secondary_cpus();
- 
-  Cleanup:
- 	platform_restore_cleanup(platform_mode);
-@@ -587,7 +589,7 @@ int hibernation_platform_enter(void)
- 	if (error)
- 		goto Platform_finish;
- 
--	error = suspend_disable_secondary_cpus();
-+	error = pm_sleep_disable_secondary_cpus();
- 	if (error)
- 		goto Enable_cpus;
- 
-@@ -609,7 +611,7 @@ int hibernation_platform_enter(void)
- 	local_irq_enable();
- 
-  Enable_cpus:
--	suspend_enable_secondary_cpus();
-+	pm_sleep_enable_secondary_cpus();
- 
-  Platform_finish:
- 	hibernation_ops->finish();
-Index: linux-pm/drivers/base/power/main.c
-===================================================================
---- linux-pm.orig/drivers/base/power/main.c
-+++ linux-pm/drivers/base/power/main.c
-@@ -32,7 +32,6 @@
- #include <linux/suspend.h>
- #include <trace/events/power.h>
- #include <linux/cpufreq.h>
--#include <linux/cpuidle.h>
- #include <linux/devfreq.h>
- #include <linux/timer.h>
- 
-@@ -879,7 +878,6 @@ void dpm_resume_early(pm_message_t state
- void dpm_resume_start(pm_message_t state)
- {
- 	dpm_resume_noirq(state);
--	cpuidle_resume();
- 	dpm_resume_early(state);
- }
- EXPORT_SYMBOL_GPL(dpm_resume_start);
-@@ -1518,13 +1516,9 @@ int dpm_suspend_end(pm_message_t state)
- 	if (error)
- 		goto out;
- 
--	cpuidle_pause();
--
- 	error = dpm_suspend_noirq(state);
--	if (error) {
--		cpuidle_resume();
-+	if (error)
- 		dpm_resume_early(resume_event(state));
--	}
- 
- out:
- 	dpm_show_time(starttime, state, error, "end");
-Index: linux-pm/kernel/power/power.h
-===================================================================
---- linux-pm.orig/kernel/power/power.h
-+++ linux-pm/kernel/power/power.h
-@@ -4,6 +4,8 @@
- #include <linux/utsname.h>
- #include <linux/freezer.h>
- #include <linux/compiler.h>
-+#include <linux/cpu.h>
-+#include <linux/cpuidle.h>
- 
- struct swsusp_info {
- 	struct new_utsname	uts;
-@@ -310,3 +312,15 @@ extern int pm_wake_lock(const char *buf)
- extern int pm_wake_unlock(const char *buf);
- 
- #endif /* !CONFIG_PM_WAKELOCKS */
-+
-+static inline int pm_sleep_disable_secondary_cpus(void)
-+{
-+	cpuidle_pause();
-+	return suspend_disable_secondary_cpus();
-+}
-+
-+static inline void pm_sleep_enable_secondary_cpus(void)
-+{
-+	suspend_enable_secondary_cpus();
-+	cpuidle_resume();
-+}
-
-
-
+Thanks,
+Dmitry
