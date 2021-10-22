@@ -2,117 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5B9643723B
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Oct 2021 08:50:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F638437277
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Oct 2021 09:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232054AbhJVGwt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Oct 2021 02:52:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35530 "EHLO
+        id S231773AbhJVHDG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Oct 2021 03:03:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231984AbhJVGwt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Oct 2021 02:52:49 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8838CC061766
-        for <linux-pm@vger.kernel.org>; Thu, 21 Oct 2021 23:50:32 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id ls18so2238933pjb.3
-        for <linux-pm@vger.kernel.org>; Thu, 21 Oct 2021 23:50:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=WZ+ype5zlW+h8bFNZ2YEMsUet/zXlWYw0zBHW07P/JU=;
-        b=PlHArJGZkVc2JunuB9TYLN4D+5Ov9sm9BsrmHWNkShf+kyxPWYPlbP5dnnAJCuKagu
-         NEex02MH3cWJb0TNad1yrsM1Ja5AR6PSMFt6v2PFXP6Hetq2ShgA89vqrnP3vGske0Uv
-         h1bsoYOamJkyCxa7x58RquA25wfXSGqQop6WC6rqu2d6XZjMMiZmiGKyBxhQPGck2zTt
-         KDLHACMI0VG9J0pbINLTDtxAzrbCuM0/GRtpjN2rWKlmUJRDcVh16GKB+FRNV00W/vqu
-         9zjLh7tb762N6IhAP3WGSYMaBS+maU2yVcla60IFHUJe4dCWYSJRsSN6gNjH5VxjdvrK
-         nDIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=WZ+ype5zlW+h8bFNZ2YEMsUet/zXlWYw0zBHW07P/JU=;
-        b=nFCQouU9z9IiOA2/qastSEKumpq9X44Wfamf22IMT71FfxUmUCn5iKOKNbs6wsHQXI
-         fcqXkwtOC2AAsYPcbXkPZgSyQxb5s5/NmfUs5ZTMg5jPTLsIfo6pCC1Zu5GQYwvUjSvn
-         5ENKIg0HACWkBdVc2JTgYhFdCIrjEen/Gf/IQjdahavtPhtmhDNiVaBY2ILd8e2C/LNa
-         U4i/ckrXb+bG/6s9dt1lQYt935VoZbF229WGt0y+fBON9n/tj+a9nlfhyzfkLAikwAvM
-         R5E/p+R13cX4Oq4Iu99RyHqBC1RzTBU2dzn15SdPXJ1aSrKnn1Yq5luMAlykmAg8kV2A
-         zKMg==
-X-Gm-Message-State: AOAM5319tfW70MRBdW3IVV6ct+8hcO9F5nQ21GjTkyF4RntYTaXWHtcK
-        jSxA3PMMqCA1vprMqVEnShgEzg==
-X-Google-Smtp-Source: ABdhPJxQMjnCGTaknosIvlVPyTMdNa0CFzWJY6NyS1nvx/0OeI0uuhyCBQOcxv/Eo1m8QiMod18Abw==
-X-Received: by 2002:a17:902:6bc5:b0:13f:f585:4087 with SMTP id m5-20020a1709026bc500b0013ff5854087mr8495827plt.32.1634885431977;
-        Thu, 21 Oct 2021 23:50:31 -0700 (PDT)
-Received: from localhost ([106.201.113.61])
-        by smtp.gmail.com with ESMTPSA id me18sm8407427pjb.33.2021.10.21.23.50.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Oct 2021 23:50:31 -0700 (PDT)
-Date:   Fri, 22 Oct 2021 12:20:29 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Rob Herring <robh@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        David Heidelberg <david@ixit.cz>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v1] dt-bindings: opp: Allow multi-worded node names
-Message-ID: <20211022065029.x5a5oh7mh2sjofey@vireshk-i7>
-References: <20211019231905.2974-1-digetx@gmail.com>
- <YXAr4OlhucAibMlH@robh.at.kernel.org>
- <20211022044334.4yn3i4kwinbrjicd@vireshk-i7>
- <48de7f40-deda-739d-96ca-e61ec5a0b257@gmail.com>
+        with ESMTP id S230428AbhJVHDF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Oct 2021 03:03:05 -0400
+X-Greylist: delayed 462 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 22 Oct 2021 00:00:48 PDT
+Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [IPv6:2a01:37:3000::53df:4ef0:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F973C061764;
+        Fri, 22 Oct 2021 00:00:48 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout2.hostsharing.net (Postfix) with ESMTPS id 9F2392800C91C;
+        Fri, 22 Oct 2021 08:53:01 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 925C3189034; Fri, 22 Oct 2021 08:53:01 +0200 (CEST)
+Date:   Fri, 22 Oct 2021 08:53:01 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v2] PCI: Check PCIe upstream port for PME support
+Message-ID: <20211022065301.GA17656@wunner.de>
+References: <20210812153944.813949-1-kai.heng.feng@canonical.com>
+ <CAAd53p7sPoH-MD9VMh1u+mf_E7Mc2xVfkHbhN4PCdxQM+v274g@mail.gmail.com>
+ <6289c754-3580-4102-8ff2-666c3cad8da2@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <48de7f40-deda-739d-96ca-e61ec5a0b257@gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <6289c754-3580-4102-8ff2-666c3cad8da2@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22-10-21, 09:40, Dmitry Osipenko wrote:
-> 22.10.2021 07:43, Viresh Kumar пишет:
-> > On 20-10-21, 09:46, Rob Herring wrote:
-> >> On Wed, Oct 20, 2021 at 02:19:05AM +0300, Dmitry Osipenko wrote:
-> >>> Not all OPP table names and OPP entries consist of a single word. In
-> >>> particular NVIDIA Tegra OPP tables use multi-word names. Allow OPP node
-> >>> and OPP entry name to have multi-worded names to silence DT checker
-> >>> warnings about the multi-word names separated by hyphen.
-> >>>
-> >>> Reviewed-by: David Heidelberg <david@ixit.cz>
-> >>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> >>> ---
-> >>>  Documentation/devicetree/bindings/opp/opp-v2-base.yaml | 4 ++--
-> >>>  1 file changed, 2 insertions(+), 2 deletions(-)
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-> >>> index ae3ae4d39843..298cf24af270 100644
-> >>> --- a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-> >>> +++ b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-> >>> @@ -22,7 +22,7 @@ select: false
-> >>>  
-> >>>  properties:
-> >>>    $nodename:
-> >>> -    pattern: '^opp-table(-[a-z0-9]+)?$'
-> >>> +    pattern: '^opp-table(-[a-z0-9]+)*$'
-> >>
-> >> I don't see how this helps you. What I see needed upstream is a prefix:
-> >>
-> >> '-?opp-table(-[0-9]+)?$'
-> > 
-> > I wonder if we should disallow that to keep naming more 
+On Thu, Oct 21, 2021 at 09:13:29PM +0200, Rafael J. Wysocki wrote:
+> On 10/21/2021 8:56 AM, Kai-Heng Feng wrote:
+> > On Thu, Aug 12, 2021 at 11:39 PM Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
+> > > Some platforms cannot detect ethernet hotplug once its upstream port is
+> > > runtime suspended because PME isn't granted by BIOS _OSC. The issue can
+> > > be workarounded by "pcie_ports=native".
+> > > 
+> > > The vendor confirmed that the PME in _OSC is disabled intentionally for
+> > > system stability issues on the other OS, so we should also honor the PME
+> > > setting here.
+> > > 
+> > > So before marking PME support status for the device, check
+> > > PCI_EXP_RTCTL_PMEIE bit to ensure PME interrupt is either enabled by
+> > > firmware or OS.
 > 
-> I also think that postfix variant should be disallowed for consistency.
-> I sent out patches for both variants.
-> 
-> V2 uses pattern that supports both naming schemes. If V2 is less
-> appropriate, then please take this V1.
+> So you basically want to check whether or not the PME interrupts are
+> configured on the port?
 
-I didn't like V2, we can mandate to keep it like opp-* and opp-table-*.
+This platform doesn't grant PME handling to OSPM, but the platform
+doesn't handle PME itself either (recognizable by the fact that it
+didn't set the PME Interrupt Enable bit in the Root Control Register).
 
-This patch looked okay to me, lets see what Rob has to say.
+The rationale of the patch is to recognize this situation and rely
+on PME polling instead.
 
--- 
-viresh
+That is achieved by assuming no PME support for the device, despite
+the device claiming that PME is supported.
+
+(This information should probably be included in the commit message.)
+
+
+> > > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> > > index aacf575c15cf..4344dc302edd 100644
+> > > --- a/drivers/pci/pci.c
+> > > +++ b/drivers/pci/pci.c
+> > > @@ -2294,6 +2294,32 @@ void pci_pme_wakeup_bus(struct pci_bus *bus)
+> > >                  pci_walk_bus(bus, pci_pme_wakeup, (void *)true);
+> > >   }
+> > > 
+> > > +#ifdef CONFIG_PCIE_PME
+> > > +static bool pci_pcie_port_pme_enabled(struct pci_dev *dev)
+> > > +{
+> > > +       struct pci_dev *bridge = pci_upstream_bridge(dev);
+> > > +       u16 val;
+> > > +       int ret;
+> > > +
+> > > +       if (!bridge)
+> > > +               return true;
+> > > +
+> > > +       if (pci_pcie_type(bridge) != PCI_EXP_TYPE_ROOT_PORT &&
+> > > +           pci_pcie_type(bridge) != PCI_EXP_TYPE_RC_EC)
+> > > +               return true;
+> > > +
+> > > +       ret = pcie_capability_read_word(bridge, PCI_EXP_RTCTL, &val);
+> > > +       if (ret)
+> > > +               return false;
+> > > +
+> > > +       return val & PCI_EXP_RTCTL_PMEIE;
+> > > +}
+> > > +#else
+> > > +static bool pci_pcie_port_pme_enabled(struct pci_dev *dev)
+> > > +{
+> > > +       return true;
+> > > +}
+> > > +#endif
+> > > 
+> > >   /**
+> > >    * pci_pme_capable - check the capability of PCI device to generate PME#
+> > > @@ -3095,7 +3121,7 @@ void pci_pm_init(struct pci_dev *dev)
+> > >          }
+> > > 
+> > >          pmc &= PCI_PM_CAP_PME_MASK;
+> > > -       if (pmc) {
+> > > +       if (pmc && pci_pcie_port_pme_enabled(dev)) {
+> > >                  pci_info(dev, "PME# supported from%s%s%s%s%s\n",
+> > >                           (pmc & PCI_PM_CAP_PME_D0) ? " D0" : "",
+> > >                           (pmc & PCI_PM_CAP_PME_D1) ? " D1" : "",
+> > > --
+> > > 2.32.0
