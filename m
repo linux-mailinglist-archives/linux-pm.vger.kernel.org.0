@@ -2,61 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9503436F8C
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Oct 2021 03:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A221A436FF5
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Oct 2021 04:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230521AbhJVBpa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Oct 2021 21:45:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52154 "EHLO
+        id S232131AbhJVCbW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Oct 2021 22:31:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230288AbhJVBp3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Oct 2021 21:45:29 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B72C061764
-        for <linux-pm@vger.kernel.org>; Thu, 21 Oct 2021 18:43:13 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id v20so1647173plo.7
-        for <linux-pm@vger.kernel.org>; Thu, 21 Oct 2021 18:43:12 -0700 (PDT)
+        with ESMTP id S232125AbhJVCbW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Oct 2021 22:31:22 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBCCC061766
+        for <linux-pm@vger.kernel.org>; Thu, 21 Oct 2021 19:29:05 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id o6-20020a170902778600b0013c8ce59005so1041309pll.2
+        for <linux-pm@vger.kernel.org>; Thu, 21 Oct 2021 19:29:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=0NqHQYP/c3mUi/IFOx7CMz/U7QYzqFRbcXZKclx3qeg=;
-        b=p8gLATRZ9X5e2blSMFU6XX/vb+bt+RzW8zOPPmilIl3kjINSvQvG1hIrIFGg4GH2/l
-         6Z27Q9Yp70e87qzrkNearwtBOEsjRj4g4DpQkWuoXNjYeBubQfmIkxdiPbeVzhuz02Zo
-         3sZX+b8LcGGkl6bA7ulvdEDcjaLD+TBk19GbwRTRL6Nymd6JeSZb+fZaeMu/cLo2rYH0
-         Fnn9wg3GMeugDLZ+N09EbaZ+BshlFFe596L9fpAPXtu+lAvUv2JWXwdGVpUUqDMokzh3
-         qqVIejYZSm6U6mwxA9oq2Ln6B3OYF6YIP8m91MxY1+lOV63HEQBnzXCUoVsaNJewhsC3
-         jKHQ==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=5ZMpMtjR+wLOolLwIfiGLGJ0aQUfB1I4d9AgzhjDlQE=;
+        b=SMUDcX7nCULVnXJiTLztKbrv7nsnJyfQto4brqP12SZrZqIDlHUN7HpIfWrxUNAuof
+         VNuf9o+sJsUy89BJbqJYJSh88KZVFT7oA7scSZgdfuHoMysrOskKowt22ya+H+bNE2bt
+         7qsqNuAd8mXQyQPPBG4nLL7Pty+MZtKECe9FrIOxjzSpKMDx+kWKn+3C3lm6aV6OHW7d
+         tgf9493Vi78nzGjs9ieoPjidtrct3BeAisWlxFhmqW7BUhixVWMIE32jbK+EFLWgQ8Yh
+         ka5jsqSWrcygTUVRW2aMsbQGwFtJfdZu9zgwhvwlObW9Eub+Xb341Eoh1rlkHi0FfpLu
+         vmMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=0NqHQYP/c3mUi/IFOx7CMz/U7QYzqFRbcXZKclx3qeg=;
-        b=MJSEW1oly6z5IP92fKkXOFIJfb2kXL1VSfp4RKbOtDAeaMho91MlAY7tQtgycqegV9
-         fL6VMd1qaOLcLdwVKzkK7sgnejFmakOBWnBzt2lUkG0aDIBKzOjwrfBKcwz0bYzyJRCY
-         PPVa0CAUY6o1Kt1fRx4JVY/EH7ciV3au26T45WsGvkh+KKRjdIz9qwsNjW6tujqZfWW/
-         3OC5dYV4LND86/VYyntADqUN1G2v/78iktkY6qbETFltJdkpUasglL5NypfKRd6DKz7X
-         Fw7E5bIU3tC+nZk7U5julxaUqXjqmtXRa6psA9HmvHPrBNoeuynrfq8oA18JQYpzdaQH
-         vdQw==
-X-Gm-Message-State: AOAM530f+wsf7O1kjgE41rl9cWELSsoIp4T0F0+SJ9Ebd3XM7RrHsuaP
-        cZJnx7zbmeqnO+xI/rDz/4OdQspb2eaNPylKNT0=
-X-Google-Smtp-Source: ABdhPJxp5lZu74b+FGMTSIfcUY5YMWim1lRGe3cFquCZ+x/HAALW40M22/SXDPm8BmBlmDJVjl9/ERnQza7fzbnS/sA=
-X-Received: by 2002:a17:903:283:b0:13f:974a:95a5 with SMTP id
- j3-20020a170903028300b0013f974a95a5mr8792142plr.19.1634866991491; Thu, 21 Oct
- 2021 18:43:11 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a17:90b:33cd:0:0:0:0 with HTTP; Thu, 21 Oct 2021 18:43:11
- -0700 (PDT)
-Reply-To: monica43brown@gmail.com
-From:   monica brown <abdourazakmoussa080@gmail.com>
-Date:   Fri, 22 Oct 2021 01:43:11 +0000
-Message-ID: <CALFgobs=uB364BXhUff-1+Gv9nyM2QRLfG7vyW6H+Qx+jgaiNw@mail.gmail.com>
-Subject: Hi
-To:     undisclosed-recipients:;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=5ZMpMtjR+wLOolLwIfiGLGJ0aQUfB1I4d9AgzhjDlQE=;
+        b=qF4zEsQGkYhBX+pU5DypR6DNdtx5xwrFu9W+WJtVIKuLPhT+doA4dQzgL6/7YQ0Aqt
+         FG5yxkyH1DLImkW3X0FsZ/jn0R3jAe/s3fR6EBUEw4CZKK+p7NVadab1ZZ9MWV3+hSvx
+         Uw+P5TAIJm4RyApaQID7zj/fPYLygU1XM8xvDbPIg+NHLoGjuyeaCHWqwr0bEoRGaXyv
+         uSU2JvDC0wEGGFr3k/VfvG+TPEm8yO0FeWwibR2IjfvUkPkxRH3qM0sx8VeHavYosZ61
+         8JWy92yYCgc6BpFxwTRk7f+nqVFBzTGLRDKX4Va84b3dpVqoXYCtEJbeyCyBiTr5G34i
+         YKIQ==
+X-Gm-Message-State: AOAM531gxlH2T8YdtM/X1E6V1QyRUCH6YfTOUVT+oo+bezU9sh9aj6JK
+        JGOaTkh5HU1UO0/r3nVdz7IlgPhXosTT
+X-Google-Smtp-Source: ABdhPJwtLEwAqBwXo0oxWaUpZCjXEkUjOPQSDHYzyzqFzbJOeWVgvxOVF7Io8wGY6faM+UgPKsjXdcI6RGOG
+X-Received: from rajat2.mtv.corp.google.com ([2620:15c:202:201:cc25:d9a3:4b5:37b9])
+ (user=rajatja job=sendgmr) by 2002:aa7:8bd3:0:b0:44c:68b3:a52e with SMTP id
+ s19-20020aa78bd3000000b0044c68b3a52emr9578300pfd.74.1634869744744; Thu, 21
+ Oct 2021 19:29:04 -0700 (PDT)
+Date:   Thu, 21 Oct 2021 19:28:56 -0700
+Message-Id: <20211022022859.1888836-1-rajatja@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.33.0.1079.g6e70778dc9-goog
+Subject: [PATCH 0/3] i2c: Enable async resume for i2c devices
+From:   Rajat Jain <rajatja@google.com>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        dtor@google.com
+Cc:     Rajat Jain <rajatja@google.com>, rajatxjain@gmail.com,
+        dbasehore@chromium.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Greetings from me
-My name is Monica Brown and how are you today, please I have something that
-i will like to share with you okay please try and get back.
+PM Core allows buses and drivers to specify if they'd like their devices
+to suspend/resume synchronously or asynchronously. When resuming:
+
+1) SYNCHRONOUS DEVICES:
+ - All synchronous devices (system wide!) are resumed in a single thread,
+   serially i.e. one after the other. So their resume latencies add up,
+   and also, this results in unnecessary and unnatural waiting order.
+
+   In my current system (total resume time ~895ms) and this is the trend
+   on almost all chromebooks in the past 3-4 years (we carry patch3 in
+   our tree already, without which it would be even more worse):
+   https://rajatxjain.github.io/public_shared/resume_before_patches.html
+   As you can see I2C devices do not even begin to resume until 450ms,
+   waiting unnaturally for another device i915 to finish resuming: 
+
+   I2C touchscreen device (resume latency = 374 ms) - asynchronous
+   -> (waiting on) I2C adapter resume (synchronous)
+     -> (waiting on) Designware resume (synchronous)
+       -> (waiting on) intel_backlight resume (synchronous)
+         -> (waiting on) its PARENT i915 resume (asynchronous resume
+                                                       time = 376ms)
+   As you can see the two biggest resume routines are both run serially
+   after one another (even though they don't have any real dependency)
+   thus increasing the system critical resume path. If we can run them
+   concurrently, we can cut down the system resume time considerably. 
+ 
+2) ASYNCHRONOUS DEVICES: 
+- On the other hand, all asynchronous devices's resume routines are
+  scheduled so they can run in parallel with other asynchronous
+  routines. PM core still ensures for both async/sync devices that:
+   - All parent child relations are honored.
+   - Any device dependencies are honored. Device dependencies between
+     any 2 unrelated devices can be specified using device_link_add().
+   - Async resume devices are sychnronized at the end of each
+     suspend/resume phase, before moving onto next.
+
+   With these patches in place, the I2C devices can resume in parallel
+   with i915: 
+   https://rajatxjain.github.io/public_shared/resume_after_patch.html
+
+As far as I understand, the only reason we might not want a device to be
+marked for asynchronous resume is if we suspect it cannot handle
+concurrent resume with other devices, which does not look to be the
+case. 
+    
+This patchset marks the designware, the I2c adapters, and the i2c 
+clients for asynchronous suspend/resume. In case it helps to gain any
+confidence, the patch 3 (for i2c clients) has been included and shipping
+on all our chromebooks for the past 3+ years, and has not shown any
+issues. The designware and i2c adapters should be easier.
+
+Derek Basehore (1):
+  i2c: enable async suspend/resume on i2c client devices
+
+Rajat Jain (2):
+  i2c: designware: Enable async suspend / resume of designware devices
+  i2c: enable async suspend/resume for i2c adapters
+
+ drivers/i2c/busses/i2c-designware-platdrv.c | 2 ++
+ drivers/i2c/i2c-core-base.c                 | 2 ++
+ 2 files changed, 4 insertions(+)
+
+-- 
+2.33.0.1079.g6e70778dc9-goog
+
