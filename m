@@ -2,109 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 920D4437102
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Oct 2021 06:45:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DCAB437176
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Oct 2021 07:58:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232021AbhJVEp5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Oct 2021 00:45:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35738 "EHLO
+        id S229484AbhJVGAw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Oct 2021 02:00:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231134AbhJVEp4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Oct 2021 00:45:56 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2DA2C061764
-        for <linux-pm@vger.kernel.org>; Thu, 21 Oct 2021 21:43:39 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id t11so1866872plq.11
-        for <linux-pm@vger.kernel.org>; Thu, 21 Oct 2021 21:43:39 -0700 (PDT)
+        with ESMTP id S230086AbhJVGAw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Oct 2021 02:00:52 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22138C061764;
+        Thu, 21 Oct 2021 22:58:35 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id i6so516638lfv.9;
+        Thu, 21 Oct 2021 22:58:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=2b8hUCDhenD3A68S7sjLVwnkOcO6p6v7nwBh27Bf6xE=;
-        b=SoM3r/7j/3Px8BWms9I+P9JYjaRtqXm0tpjhcipvjRZ6SDr7GmcfIw8faxA7aHWInJ
-         D+GUlO7Muw+p0A8hbbzBJ97/zYXFIYiI4KyhCh8kB5667qwWQKUDKYAZQxr2Bbid89f/
-         bU1l85s8lG6phRErDbbHbBKytvnNjG2MBaNo9UsaW9m2HBOnj0OvRhTMQvf92gJHti7T
-         6KVmr6qZqQP+xUSJKpoFPj1Qw2QZXCDRXcJn4Rd15U0kdzUPDMg//4C0+LPpor7VFlrh
-         58zWxGMVwhrvP+nTL+0+3ezBtiDTMLZHSO/+Du5sszjtAc+sqyo7i3Gtqc5yeeJ6nmwy
-         cNfg==
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=LjFmEeV00RuFncTblJ5Dy7JPoBVQH1IRuNrpKBOX7Sk=;
+        b=ofO598ygKjxBqO2DT5JrnUeVP8xaYK5mJYy0mg9YogHwEmITstNU5oU9xRi+kc6GtZ
+         PIeq1o8QJ1orsMKRgHnrO2mxzGncDlkRQNw/ORDGp1rpvh58xTgahr1NQ+D5W+43c3Mk
+         sHiH/6bbY3jHU3i2N4sESlejbpjQrKSUGVL8o3RMVjorzBzAfE+ts1MV1qEN8DxvnLCv
+         5WsKyEZ8DJNmizkSCrUME7yZuuEMwhR47NlVoZWjo5P0GSLqiaX7VZaQ9ETsyO3lRKOS
+         l3pIwa4bCbXlEAImbZZKsvY7vFZYEbm6GoZ8cKjSM+q2KGyli6CC6vfISAfuTQ6ukC0h
+         6TtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=2b8hUCDhenD3A68S7sjLVwnkOcO6p6v7nwBh27Bf6xE=;
-        b=kpGuVEN+kwp8XluHBbEkuszm/2nZk8tHD+XZzL4tQunsDgSMqf+xgXQtckrsceIdkE
-         XQhob1iAAImbqCerI7Hd6ojBkPCdSljFEXhiAR6fFlUU5KPQqtc11gwFi68O0gc98Yfe
-         U5pJpYfx8oqLB1dJzFnaQzXVSvR7GUbSD18/xzrdLHi1fN6PJDroRSoqB1pWFaXy6Ygw
-         c/d0SpGKHaCqj/iLORAgrKpCg0d6NAWlpllr275+UAxW48ZINjX50x3NiunFNL5sQT3/
-         JogLbBeNjs7HxcKlQ/OipZmatFohqEoIV8Ri8XyMTR21UWZxDIBRCyn1Qvc8ZcWjdgtw
-         acgA==
-X-Gm-Message-State: AOAM5339rzzSDQMqr+gKfCvgN6UOYw4dciRaThV89CIWHcjgke/gX1GG
-        16z8CQfqzKi4UaaUCY+KeCyJew==
-X-Google-Smtp-Source: ABdhPJwsYr7yGuAcdThYvhCb2+nCzIQTaKVAXmFBDnjK3FbIGqmHVsUpgVI6s30sjV81YcvwXZyyGQ==
-X-Received: by 2002:a17:90b:1645:: with SMTP id il5mr11540510pjb.158.1634877819289;
-        Thu, 21 Oct 2021 21:43:39 -0700 (PDT)
-Received: from localhost ([106.201.113.61])
-        by smtp.gmail.com with ESMTPSA id e9sm8693186pfv.189.2021.10.21.21.43.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Oct 2021 21:43:38 -0700 (PDT)
-Date:   Fri, 22 Oct 2021 10:13:34 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        David Heidelberg <david@ixit.cz>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=LjFmEeV00RuFncTblJ5Dy7JPoBVQH1IRuNrpKBOX7Sk=;
+        b=orCEgal+y0lEIrGbiv0LXk6DrvkbOKA9DPBsFpvAvAPosDpqy47psQphhtM2slbRrD
+         7yYpdfDj+4kAISHXvkBzOru4i8SxLvVR97cyg8kt4Z6w8BJN7P8E/w2p+2Ap7Pqp/GsH
+         yITvYY3gwXYQEseySdsFTYps/00zqHJj3I8Nlf+YIGOpBR59hL8ra4ENPvMEeD3AJAT0
+         /Kj59wybKm8uo4+130W73ZQC4bSFfWzqHxPWaUvIiXuBpTHNVyXLjzdy5JHkNLBQgB6w
+         U39nsCE5H+G2WDsWrW0yOrr5hMm76ycxDuXvEIDWDbWJYYazgr5jaOKIDWMI5Fx8DPZb
+         PP0A==
+X-Gm-Message-State: AOAM533AEeUpDmCDlq25IpNsIwc8iou8k/rznB7CAxrG5O4S5136F86e
+        u+gLrSmHmG6Yt2IEHTSo+3TiZPj6ff0=
+X-Google-Smtp-Source: ABdhPJzfP+XFNKubQWaoU3N36DnYL2ckZCnZPzWNBKTZGZwUw9z6pE4uNby581VLTrXRJ9ycegKIpw==
+X-Received: by 2002:a05:6512:3d14:: with SMTP id d20mr2840289lfv.542.1634882313098;
+        Thu, 21 Oct 2021 22:58:33 -0700 (PDT)
+Received: from [192.168.2.145] (94-29-61-202.dynamic.spd-mgts.ru. [94.29.61.202])
+        by smtp.googlemail.com with ESMTPSA id v3sm788208ljv.7.2021.10.21.22.58.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Oct 2021 22:58:32 -0700 (PDT)
 Subject: Re: [PATCH v1] dt-bindings: opp: Allow multi-worded node names
-Message-ID: <20211022044334.4yn3i4kwinbrjicd@vireshk-i7>
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Nishanth Menon <nm@ti.com>, David Heidelberg <david@ixit.cz>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
 References: <20211019231905.2974-1-digetx@gmail.com>
  <YXAr4OlhucAibMlH@robh.at.kernel.org>
+ <20211022044334.4yn3i4kwinbrjicd@vireshk-i7>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <6e26c2fe-9288-1d90-585f-f173e693d9e8@gmail.com>
+Date:   Fri, 22 Oct 2021 08:58:32 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YXAr4OlhucAibMlH@robh.at.kernel.org>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20211022044334.4yn3i4kwinbrjicd@vireshk-i7>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20-10-21, 09:46, Rob Herring wrote:
-> On Wed, Oct 20, 2021 at 02:19:05AM +0300, Dmitry Osipenko wrote:
-> > Not all OPP table names and OPP entries consist of a single word. In
-> > particular NVIDIA Tegra OPP tables use multi-word names. Allow OPP node
-> > and OPP entry name to have multi-worded names to silence DT checker
-> > warnings about the multi-word names separated by hyphen.
-> > 
-> > Reviewed-by: David Heidelberg <david@ixit.cz>
-> > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> > ---
-> >  Documentation/devicetree/bindings/opp/opp-v2-base.yaml | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-> > index ae3ae4d39843..298cf24af270 100644
-> > --- a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-> > +++ b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-> > @@ -22,7 +22,7 @@ select: false
-> >  
-> >  properties:
-> >    $nodename:
-> > -    pattern: '^opp-table(-[a-z0-9]+)?$'
-> > +    pattern: '^opp-table(-[a-z0-9]+)*$'
+22.10.2021 07:43, Viresh Kumar пишет:
+> On 20-10-21, 09:46, Rob Herring wrote:
+>> On Wed, Oct 20, 2021 at 02:19:05AM +0300, Dmitry Osipenko wrote:
+>>> Not all OPP table names and OPP entries consist of a single word. In
+>>> particular NVIDIA Tegra OPP tables use multi-word names. Allow OPP node
+>>> and OPP entry name to have multi-worded names to silence DT checker
+>>> warnings about the multi-word names separated by hyphen.
+>>>
+>>> Reviewed-by: David Heidelberg <david@ixit.cz>
+>>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>>> ---
+>>>  Documentation/devicetree/bindings/opp/opp-v2-base.yaml | 4 ++--
+>>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+>>> index ae3ae4d39843..298cf24af270 100644
+>>> --- a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+>>> +++ b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+>>> @@ -22,7 +22,7 @@ select: false
+>>>  
+>>>  properties:
+>>>    $nodename:
+>>> -    pattern: '^opp-table(-[a-z0-9]+)?$'
+>>> +    pattern: '^opp-table(-[a-z0-9]+)*$'
+>>
+>> I don't see how this helps you. What I see needed upstream is a prefix:
+>>
+>> '-?opp-table(-[0-9]+)?$'
 > 
-> I don't see how this helps you. What I see needed upstream is a prefix:
+> I wonder if we should disallow that to keep naming more consistent.
 > 
-> '-?opp-table(-[0-9]+)?$'
+>> Though really what I'd like to see is the OPP nodes moved into the 
+>> device nodes they belong to when appropriate (i.e. when not shared 
+>> between multiple devices).
+> 
+> +1
+> 
+> The only reason for keeping it outside was because CPUs were sharing them.
+> 
 
-I wonder if we should disallow that to keep naming more consistent.
-
-> Though really what I'd like to see is the OPP nodes moved into the 
-> device nodes they belong to when appropriate (i.e. when not shared 
-> between multiple devices).
-
-+1
-
-The only reason for keeping it outside was because CPUs were sharing them.
-
--- 
-viresh
+Not very doable for Tegra device-trees. Those OPP tables are huge, it's
+impractical to put them into device nodes.
