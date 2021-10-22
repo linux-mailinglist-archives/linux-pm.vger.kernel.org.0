@@ -2,112 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DFAE43762F
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Oct 2021 13:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBFE6437657
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Oct 2021 14:02:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232708AbhJVLxX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Oct 2021 07:53:23 -0400
-Received: from mga17.intel.com ([192.55.52.151]:52331 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232670AbhJVLxX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 22 Oct 2021 07:53:23 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10144"; a="210078066"
-X-IronPort-AV: E=Sophos;i="5.87,172,1631602800"; 
-   d="scan'208";a="210078066"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2021 04:50:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,172,1631602800"; 
-   d="scan'208";a="663160687"
-Received: from mylly.fi.intel.com (HELO [10.237.72.159]) ([10.237.72.159])
-  by orsmga005.jf.intel.com with ESMTP; 22 Oct 2021 04:50:55 -0700
-Subject: Re: [PATCH 0/3] i2c: Enable async resume for i2c devices
-To:     Rajat Jain <rajatja@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        dtor@google.com
-Cc:     rajatxjain@gmail.com, dbasehore@chromium.org
-References: <20211022022859.1888836-1-rajatja@google.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Message-ID: <f3bdb094-cd7d-dc44-e5f2-808395c42932@linux.intel.com>
-Date:   Fri, 22 Oct 2021 14:50:54 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        id S229771AbhJVMFC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Oct 2021 08:05:02 -0400
+Received: from mail-oo1-f48.google.com ([209.85.161.48]:43996 "EHLO
+        mail-oo1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229842AbhJVMFA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Oct 2021 08:05:00 -0400
+Received: by mail-oo1-f48.google.com with SMTP id w9-20020a4adec9000000b002b696945457so1023536oou.10;
+        Fri, 22 Oct 2021 05:02:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vb9ybLLtVGcasBUj4S63VDy6H8luqutt3xdc3pcVq78=;
+        b=UEpZtu21xQtqkFTmMcZWibEgJLgSS/fh8FRHJ/kSBQcU1CCbuFt8Myv6NbO2xP+ZEX
+         LqUGDeeXROQWhF++JKuXwZ4DsP6PNIGJcByvSq3LUZESQIhYbBJYOEDSsZEBBZZ0yA4f
+         728i8Ftj6+rCq93yUl9zxUFTh67/5Np3TPiVb/0GS89Y1jIUyVQBXwoEQfvKS1uOPRJD
+         PWkwlr5S6BUrhSqHkehL79wuSrXJHUO3/qSx+xqFF1aGcnYEP66ZhPMbzTf9yUlQJ9AF
+         3IdaECHmd5LNXNfq6kfiek2gY759s8dhzdysKN5alW5XFnofZprtXXy1lB3RcC3+xb4s
+         PSqQ==
+X-Gm-Message-State: AOAM531R4gLAdG77YfqB2FfoDIu7aGyUS9NbrXhGrle6lD1dQguUiCSY
+        elshwB+hxfUQc3bGPajCyx5s/NbSp9jyyWMn1iE=
+X-Google-Smtp-Source: ABdhPJze3v0ez3rcx7Cqcn8ZP7TMyRJHdxJ29JvtpjDpetrBwYdcs+dtB5hGPVCMULTmj42hLs19IAd80/Pt97/FMZg=
+X-Received: by 2002:a05:6820:54e:: with SMTP id n14mr8926037ooj.89.1634904163022;
+ Fri, 22 Oct 2021 05:02:43 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20211022022859.1888836-1-rajatja@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210929144451.113334-1-ulf.hansson@linaro.org>
+ <20210929144451.113334-3-ulf.hansson@linaro.org> <CAJZ5v0hgdQeJ+6mLMLQcvnM_+EiyDBERj54aT2cL=HiTO9nMNQ@mail.gmail.com>
+ <CAPDyKFpep3aPmGGo=aA5dHZZjb-O51et47C9_hgVbZbXMJZX_g@mail.gmail.com>
+ <CAJZ5v0j=Fi5vOh45de-u7FwsCm4zsAsHepp16xQ3U5_WjrtWJw@mail.gmail.com>
+ <CAPDyKFqeAFhgCFSaFAWnp5xorxSVwAL=z2g6vHJ0PWjtt9GDNg@mail.gmail.com>
+ <CAJZ5v0iA4O=tx7qiLKCOze87dcUtwtDJqi2B+2O=oOyCSzgmtQ@mail.gmail.com>
+ <CAPDyKFr_-ON1JWXe3W7DAXUzKdrceqXPwLAdHnKeXajy=pFnug@mail.gmail.com>
+ <CAJZ5v0itweerfbq8NE9rEonZ2Nfu_nfKgERv2tweeLO4fgAgLg@mail.gmail.com>
+ <CAPDyKFrOSd2xEXuvDki9Em+xFLHfeTfZz3NtnWwNmWB1H6i=Kg@mail.gmail.com>
+ <CAJZ5v0j3a_m5T9nbxk4VSuABOq12JEC0fi=0SQ8+=Vwv-qDeOA@mail.gmail.com>
+ <CAPDyKFpjy5sZo6ayqPx07Jzs4J2yePy=cZk=k6VjhWB7zGeedg@mail.gmail.com> <CAPDyKFooeseEXW-O8DCAd5Jku1n0iNXfHFt_HVjcfMYFvw4a2g@mail.gmail.com>
+In-Reply-To: <CAPDyKFooeseEXW-O8DCAd5Jku1n0iNXfHFt_HVjcfMYFvw4a2g@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 22 Oct 2021 14:02:26 +0200
+Message-ID: <CAJZ5v0i5qQ7bXoG3cK2LESibKRb3sahmaC-M2_mgwqSSS6Sz1Q@mail.gmail.com>
+Subject: Re: [PATCH 2/2] PM: sleep: Fix runtime PM based cpuidle support
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Maulik Shah <mkshah@codeaurora.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Len Brown <len.brown@intel.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/22/21 5:28 AM, Rajat Jain wrote:
-> PM Core allows buses and drivers to specify if they'd like their devices
-> to suspend/resume synchronously or asynchronously. When resuming:
-> 
-> 1) SYNCHRONOUS DEVICES:
->   - All synchronous devices (system wide!) are resumed in a single thread,
->     serially i.e. one after the other. So their resume latencies add up,
->     and also, this results in unnecessary and unnatural waiting order.
-> 
->     In my current system (total resume time ~895ms) and this is the trend
->     on almost all chromebooks in the past 3-4 years (we carry patch3 in
->     our tree already, without which it would be even more worse):
->     https://rajatxjain.github.io/public_shared/resume_before_patches.html
->     As you can see I2C devices do not even begin to resume until 450ms,
->     waiting unnaturally for another device i915 to finish resuming:
-> 
->     I2C touchscreen device (resume latency = 374 ms) - asynchronous
->     -> (waiting on) I2C adapter resume (synchronous)
->       -> (waiting on) Designware resume (synchronous)
->         -> (waiting on) intel_backlight resume (synchronous)
->           -> (waiting on) its PARENT i915 resume (asynchronous resume
->                                                         time = 376ms)
->     As you can see the two biggest resume routines are both run serially
->     after one another (even though they don't have any real dependency)
->     thus increasing the system critical resume path. If we can run them
->     concurrently, we can cut down the system resume time considerably.
->   
-> 2) ASYNCHRONOUS DEVICES:
-> - On the other hand, all asynchronous devices's resume routines are
->    scheduled so they can run in parallel with other asynchronous
->    routines. PM core still ensures for both async/sync devices that:
->     - All parent child relations are honored.
->     - Any device dependencies are honored. Device dependencies between
->       any 2 unrelated devices can be specified using device_link_add().
->     - Async resume devices are sychnronized at the end of each
->       suspend/resume phase, before moving onto next.
-> 
->     With these patches in place, the I2C devices can resume in parallel
->     with i915:
->     https://rajatxjain.github.io/public_shared/resume_after_patch.html
-> 
-> As far as I understand, the only reason we might not want a device to be
-> marked for asynchronous resume is if we suspect it cannot handle
-> concurrent resume with other devices, which does not look to be the
-> case.
->      
-> This patchset marks the designware, the I2c adapters, and the i2c
-> clients for asynchronous suspend/resume. In case it helps to gain any
-> confidence, the patch 3 (for i2c clients) has been included and shipping
-> on all our chromebooks for the past 3+ years, and has not shown any
-> issues. The designware and i2c adapters should be easier.
-> 
-> Derek Basehore (1):
->    i2c: enable async suspend/resume on i2c client devices
-> 
-> Rajat Jain (2):
->    i2c: designware: Enable async suspend / resume of designware devices
->    i2c: enable async suspend/resume for i2c adapters
-> 
-I did a quick test to these three patches on one system. It has i2c-hid 
-compatible touchpanel and touchpad on separate I2C buses. Nothing 
-exploded but I don't know does it qualify as comprehensive test for 
-Tested-by. Perhaps it's good idea to try do changes here expose any 
-regressions on some use cases and systems? At least it brings good 
-improvements to resume time according to your measurements.
+On Fri, Oct 22, 2021 at 12:18 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+>
+> On Thu, 21 Oct 2021 at 21:56, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> >
+> > On Thu, 21 Oct 2021 at 21:02, Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > >
+> > > On Thu, Oct 21, 2021 at 8:12 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > > >
+> > > > On Thu, 21 Oct 2021 at 18:33, Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > > > >
+> > > > > On Thu, Oct 21, 2021 at 6:17 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > >
+> > > [cut]
+> > >
+> > > > > So in theory you could check the pm_runtime_put_sync_suspend() return
+> > > > > value and fall back to something like WFI if that's an error code.
+> > > >
+> > > > I have already tried that, but it simply got too complicated. The main
+> > > > issue was that runtime PM could become disabled for the device in the
+> > > > middle of executing the ->enter() callback.
+> > >
+> > > So IIUC the problem is that you cannot resume after suspending in that case.
+> > >
+> > > IOW, you need to guarantee that if the suspend is successful, the
+> > > resume also will take place, but if the suspend fails, you basically
+> > > don't care.
+> >
+> > Exactly.
+> >
+> > >
+> > > > For example, if pm_runtime_get_sync() fails, I still need to make sure
+> > > > the reference counting in genpd becomes correct - and I can't do that
+> > > > using dev_pm_genpd_resume(). That's because it's not designed to be
+> > > > called in this "unknown" suspend phase, but should be called after the
+> > > > noirq phase and be properly balanced with dev_pm_genpd_suspend().
+> > > >
+> > > > In other words, the error path didn't work out for me.
+> > >
+> > > It should be sufficient to call wake_up_all_idle_cpus() in the suspend
+> > > path before dpm_suspend_late(), because system suspend acquires a
+> > > PM-runtime reference on every device.  IOW, it won't let any devices
+> > > runtime-suspend, so if your power domain devices are resumed in that
+> > > path, they will never suspend again in it and the
+> > > pm_runtime_put_sync_suspend() in __psci_enter_domain_idle_state()
+> > > becomes a reference counter management call which works regardless of
+> > > whether or not PM runtime is disabled.
+> >
+> > That sounds like a great idea, this should work too! Then the question
+> > is, how to make that call to wake_up_all_idle_cpus() to become
+> > optional - or only invoked for the cpuidle drivers that need it.
 
-Tested-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+It need not be optional.
+
+For suspend-to-idle it doesn't matter, because all CPUs will be woken
+up from idle shortly anyway.
+
+For other suspend variants this doesn't matter, because all secondary
+CPUs will be taken offline shortly and the primary CPU will call into
+the platform "sleep" handler.
+
+> >
+> > In any case, I will try this out, thanks for the suggestion!
+>
+> I now recall that I have already tried this, but unfortunately it doesn't work.
+>
+> The problem is that the dev->power.syscore flag is set for the device,
+> which makes device_prepare() to bail out early and skip calling
+> pm_runtime_get_noresume().
+
+This needs to be fixed, then.
