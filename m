@@ -2,104 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 285AB438C38
-	for <lists+linux-pm@lfdr.de>; Sun, 24 Oct 2021 23:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 369F3438C6B
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Oct 2021 00:44:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230520AbhJXWAF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 24 Oct 2021 18:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43722 "EHLO
+        id S231579AbhJXWqg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 24 Oct 2021 18:46:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbhJXWAF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 24 Oct 2021 18:00:05 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C783EC061745;
-        Sun, 24 Oct 2021 14:57:43 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id j21so6906349lfe.0;
-        Sun, 24 Oct 2021 14:57:43 -0700 (PDT)
+        with ESMTP id S229533AbhJXWqg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 24 Oct 2021 18:46:36 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DADC9C061745
+        for <linux-pm@vger.kernel.org>; Sun, 24 Oct 2021 15:44:14 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id x192so6834278lff.12
+        for <linux-pm@vger.kernel.org>; Sun, 24 Oct 2021 15:44:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+OPNFjQ0wVzkY1u6XnIDimYIJnCs2bgrAf6ProT42W0=;
-        b=IrnQq0Ym/QnKoKVI7edsx4cAuDrzOkiqVEgNPjETSF4ydD9jJn6qC8iQNp5gwwrzUg
-         dNNnNXC+8Io5c01EKUT5xLEY87PYxvuchZqE2tLsjro2P/0ruUOs3QTK8oEcQaEDVS8a
-         4K15OGXLosRivPeDIFB/d2alg4MIMSBFtz4X5NWWhzs+mUO0so5S5Nuzw9pJHuRVLxMH
-         xQLdySugfdoXNV+eiO9zi8952p6k246DuFaD5BW1qS+wPWMc1pxPjcXJB16cVvdakNRm
-         8oUP3kaydN4Pb3m5EGwErpjIaqkZC3xiNDJtOPqVkosue4F+r2hJBaA1Luz/Z6L2xKKN
-         eDfg==
+        d=telus.net; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=51ktLrJvct0ot1+JgSOephKK4b8DM/OzJiyeTI83ARQ=;
+        b=UenXvHNONXZSMSuuyNNb4R194pRYfRIhTqBBsQrRzUTEUetCCaiBoOHIccpGAxBLSI
+         tr5U5Qb/AL5+zxd+T71wwjCidfpswk6MZUdH7hcePfh0gnJ3QDtjfeo4qZ1KKv0TZC0e
+         dzR3FxMLvoEPiGxeBB3m6HOD2RRBqKB1i3XB+9G3dDcBNu2b3Iy0d14XnucSmt42FqUD
+         /HfMhAf/e7DUMWVWTyWKzaUAvP3rs8WCh10iKQUygNr3/tV571jtPT99eFMhAPNOu0g0
+         W68cozCn7TQHvsJqerBpRQ/sFKRoCSqtHEa/XaifvU4SEVVrxryPF9yG+51wmEV4d0Xd
+         OCSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+OPNFjQ0wVzkY1u6XnIDimYIJnCs2bgrAf6ProT42W0=;
-        b=PMNUdAKsvhAszevU8M/jhrDNlz3jnB/c7OMs2S9Q0aEEUTIUkGw4VIYx5omnFmVXAi
-         dFkqYP2INo11NFm6M/nHcyGtAAyftVDChzgsMCnUBw9i2UJOW37U35zbiLtpNc4XiP1Y
-         DZ6zCjesWuUc/cxNuWbTXZhKibUU6Yt7vGkvSV6doDskqEq1ZEogBPzgowJtK5H7mpF1
-         uGCdCVflqVB6HnRRrApQEh8FBj1xnrGx7zAoj1vWiP+7xL6E+Gjx9sP9GAj3ILIvAq7V
-         tlOCVaNrO9WLgL6qU06SPB4iEnsm92os9R1ce8Ms0NsUGH52wbFMrUr5PPtK8wbFYZgT
-         GbLw==
-X-Gm-Message-State: AOAM530C4U4eNF7fRJnGuXyyzxmHfkAzEdQBoZsb+A/AaP3eNXEmxMV9
-        4SWxg8Mifp6BGbm1Z/NIWfo=
-X-Google-Smtp-Source: ABdhPJwzKtqJ08WOIh+DpB8KaTx7RH+I+2hakfvKl8cIVp2e+hPQrUdsJaAcL3p90wdPlomH4G2dEw==
-X-Received: by 2002:a05:6512:33c8:: with SMTP id d8mr12823570lfg.621.1635112662112;
-        Sun, 24 Oct 2021 14:57:42 -0700 (PDT)
-Received: from localhost.localdomain (46-138-41-28.dynamic.spd-mgts.ru. [46.138.41.28])
-        by smtp.gmail.com with ESMTPSA id d27sm1577364ljo.15.2021.10.24.14.57.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Oct 2021 14:57:41 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Viresh Kumar <vireshk@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Nishanth Menon <nm@ti.com>, Rob Herring <robh+dt@kernel.org>,
-        David Heidelberg <david@ixit.cz>,
-        Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH v3] dt-bindings: opp: Allow multi-worded OPP entry names
-Date:   Mon, 25 Oct 2021 00:57:18 +0300
-Message-Id: <20211024215718.28969-1-digetx@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=51ktLrJvct0ot1+JgSOephKK4b8DM/OzJiyeTI83ARQ=;
+        b=eh0gdSKhC6ru4/HosYahddEms+rgJApzxh/EyMj3dfV9MmPtUukTeZL5GdZr/5JXKB
+         +k9gmrbjBjCNPN1N86wGR+DY2KDodD5IIP1jGDn+DWpA7zRwxmhoxU2r0p7Bvc0KVSNF
+         CKEnbuW3+S+n4R/aQQsdVARv4zayk6dbEGOkdjjBw+KYdo3TDO3MUwtVzyv2RHMoP3WW
+         lgnhl0I7e3zQqpGUlmZ3grH3Lvu8FZM9Tp5s999/ylPFTc0krXLx9RWh1C0BEWWB+rPE
+         mAqAamn9YiNwfHJ/hC9r10L8gT7m8zzbox1nSyFTyd9UmmCwGjBxsuDsMxyKw1wgbe/i
+         YQ3w==
+X-Gm-Message-State: AOAM533QW0J9iM0BtPHL5lhSVk45XOGQs7jt4BIZifvsT5wypCvslOID
+        VFKpuSeruQjfodHVE156asFrOFJUAuxpdZN7cQsT1g==
+X-Google-Smtp-Source: ABdhPJyqdgKU5NUoVy996qBcNZrXN43FVzKMrjq+DSYceoIwbTHqzzHyA3WMU3OJ565gUXZ41mYygscsYLZdzGYyr6Y=
+X-Received: by 2002:a05:6512:3407:: with SMTP id i7mr13558069lfr.563.1635115453218;
+ Sun, 24 Oct 2021 15:44:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <alpine.DEB.2.22.394.2110241452460.2997@hadrien>
+In-Reply-To: <alpine.DEB.2.22.394.2110241452460.2997@hadrien>
+From:   Doug Smythies <dsmythies@telus.net>
+Date:   Sun, 24 Oct 2021 15:44:03 -0700
+Message-ID: <CAAYoRsXeQravNXKsWAZvacMmE_iBzaQ+mQxNbB5jcD_vkny+Sg@mail.gmail.com>
+Subject: Re: problem in changing from active to passive mode
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dsmythies <dsmythies@telus.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Not all OPP entries fit into a single word. In particular NVIDIA Tegra OPP
-tables use multi-word names where first part is freq and second voltage
-because different hardware versions use different voltages for the same
-freqs. Allow OPP entry to have multi-worded name separated by hyphen.
-This silences DT checker warnings about wrong naming scheme.
+On Sun, Oct 24, 2021 at 6:03 AM Julia Lawall <julia.lawall@inria.fr> wrote:
+>
+> Hello,
 
-Reviewed-by: David Heidelberg <david@ixit.cz>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
+Hi,
 
-Changelog:
+>
+> I have an Intel 6130 and an Intel 5218.  These machines have HWP.  They
+> are configured to boot with active mode and performance as the power
+> governor.  Since the following commit:
+>
+> commit a365ab6b9dfbaf8fb4fb4cd5d8a4c55dc4fb8b1c (HEAD, refs/bisect/bad)
+> Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Date:   Mon Dec 14 21:09:26 2020 +0100
+>
+>     cpufreq: intel_pstate: Implement the ->adjust_perf() callback
+>
+> If I change te mode from active to passive, I have the impression that the
+> machine is no longer able to raise the core frequencies above the minimum.
+> Changing the mode back to active has no effect.  This persists if I reboot
+> to another kernel.
+>
+> Here are some runs that illustrate the problem.  I have tested the
+> benchmark many times, and apart from this issue its performance is stable.
 
-v3: - Viresh Kumar suggested that we shouldn't support postfix variant.
-      I dropped variant with postfix naming scheme and multi-wording
-      support of table names.
+Could you also list the CPU frequency scaling governor being used in your
+tests. I know you mentioned the performance governor above, but it
+changes between active/passive/active transitions.
 
-v2: - In addition to a multi-wording support, support of the postfix
-      *-opp-table naming scheme is added to the updated pattern.
+Example from my test computer:
 
- Documentation/devicetree/bindings/opp/opp-v2-base.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Note 1: It is only for brevity of this e-mail that I only list for one CPU.
+Obviously, I looked at all CPUs when doing this.
 
-diff --git a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-index ae3ae4d39843..f79343960539 100644
---- a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-+++ b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-@@ -33,7 +33,7 @@ properties:
-     type: boolean
- 
- patternProperties:
--  '^opp-?[0-9]+$':
-+  '^opp(-[0-9]+)*$':
-     type: object
-     description:
-       One or more OPP nodes describing voltage-current-frequency combinations.
--- 
-2.33.1
+Note 2: The test example and conditions have been cherry picked
+for dramatic effect.
 
+$ cat /sys/devices/system/cpu/cpu6/cpufreq/scaling_driver
+intel_pstate
+$ cat /sys/devices/system/cpu/cpu6/cpufreq/scaling_governor
+performance
+$ cat /sys/devices/system/cpu/intel_pstate/status
+active
+$ ./ping-pong-many 100000 500 10
+1418.0660 usecs/loop. (less is better)
+
+$ echo passive | sudo tee /sys/devices/system/cpu/intel_pstate/status
+passive
+$ cat /sys/devices/system/cpu/cpu6/cpufreq/scaling_driver
+intel_cpufreq
+$ cat /sys/devices/system/cpu/cpu6/cpufreq/scaling_governor
+schedutil
+$ cat /sys/devices/system/cpu/intel_pstate/status
+passive
+$ ./ping-pong-many 100000 500 10
+5053.6355 usecs/loop.
+
+$ echo active | sudo tee /sys/devices/system/cpu/intel_pstate/status
+active
+$ cat /sys/devices/system/cpu/cpu6/cpufreq/scaling_driver
+intel_pstate
+$ cat /sys/devices/system/cpu/cpu6/cpufreq/scaling_governor
+powersave
+$ cat /sys/devices/system/cpu/intel_pstate/status
+active
+$ ./ping-pong-many 100000 500 10
+2253.5833 usecs/loop.
+
+... Doug
+
+>
+> Intel 6130:
+>
+> root@yeti-2:/tmp# java -jar dacapo-9.12-MR1-bach.jar avrora -n 3
+> ===== DaCapo 9.12-MR1 avrora starting warmup 1 =====
+> ===== DaCapo 9.12-MR1 avrora completed warmup 1 in 3420 msec =====
+> ===== DaCapo 9.12-MR1 avrora starting warmup 2 =====
+> ===== DaCapo 9.12-MR1 avrora completed warmup 2 in 2536 msec =====
+> ===== DaCapo 9.12-MR1 avrora starting =====
+> ===== DaCapo 9.12-MR1 avrora PASSED in 2502 msec =====
+> root@yeti-2:/tmp# echo passive | tee /sys/devices/system/cpu/intel_pstate/status
+> passive
+> root@yeti-2:/tmp#
+> root@yeti-2:/tmp# echo active | tee /sys/devices/system/cpu/intel_pstate/status
+> active
+> root@yeti-2:/tmp# java -jar dacapo-9.12-MR1-bach.jar avrora -n 3
+> ===== DaCapo 9.12-MR1 avrora starting warmup 1 =====
+> ===== DaCapo 9.12-MR1 avrora completed warmup 1 in 7561 msec =====
+> ===== DaCapo 9.12-MR1 avrora starting warmup 2 =====
+> ===== DaCapo 9.12-MR1 avrora completed warmup 2 in 6528 msec =====
+> ===== DaCapo 9.12-MR1 avrora starting =====
+> ===== DaCapo 9.12-MR1 avrora PASSED in 7796 msec =====
+>
+> -------------------------------------------------------------------------
+>
+> Intel 5218:
+>
+> root@troll-2:/tmp# java -jar dacapo-9.12-MR1-bach.jar avrora -n 3
+> ===== DaCapo 9.12-MR1 avrora starting warmup 1 =====
+> ===== DaCapo 9.12-MR1 avrora completed warmup 1 in 2265 msec =====
+> ===== DaCapo 9.12-MR1 avrora starting warmup 2 =====
+> ===== DaCapo 9.12-MR1 avrora completed warmup 2 in 2033 msec =====
+> ===== DaCapo 9.12-MR1 avrora starting =====
+> ===== DaCapo 9.12-MR1 avrora PASSED in 2068 msec =====
+> root@troll-2:/tmp# echo passive | tee /sys/devices/system/cpu/intel_pstate/status
+> passive
+> root@troll-2:/tmp# echo active | tee /sys/devices/system/cpu/intel_pstate/statusactive
+> root@troll-2:/tmp# java -jar dacapo-9.12-MR1-bach.jar avrora -n 3
+> ===== DaCapo 9.12-MR1 avrora starting warmup 1 =====
+> ===== DaCapo 9.12-MR1 avrora completed warmup 1 in 4363 msec =====
+> ===== DaCapo 9.12-MR1 avrora starting warmup 2 =====
+> ===== DaCapo 9.12-MR1 avrora completed warmup 2 in 4486 msec =====
+> ===== DaCapo 9.12-MR1 avrora starting =====
+> ===== DaCapo 9.12-MR1 avrora PASSED in 3417 msec =====
+>
+> -------------------------------------------------------------------------
+>
+> thanks,
+> julia
