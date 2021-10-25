@@ -2,58 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4B8843942A
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Oct 2021 12:54:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3AE543942F
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Oct 2021 12:54:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232969AbhJYK4T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Oct 2021 06:56:19 -0400
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:36689 "EHLO
+        id S232949AbhJYK41 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Oct 2021 06:56:27 -0400
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:37855 "EHLO
         new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232951AbhJYK4Q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Oct 2021 06:56:16 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.nyi.internal (Postfix) with ESMTP id C9D1858045A;
-        Mon, 25 Oct 2021 06:53:53 -0400 (EDT)
+        by vger.kernel.org with ESMTP id S232960AbhJYK4Z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Oct 2021 06:56:25 -0400
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
+        by mailnew.nyi.internal (Postfix) with ESMTP id D693F58045A;
+        Mon, 25 Oct 2021 06:54:02 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Mon, 25 Oct 2021 06:53:53 -0400
+  by compute2.internal (MEProxy); Mon, 25 Oct 2021 06:54:02 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
          h=from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm2; bh=LuBuJ51kAs683
-        zqagRQH/JKcv0PkL6c6myFxIpkwVuU=; b=ZCxLDnyWr0Pq9l9Mw18+UvpgAw/M6
-        OX7+WwBKykBmT7M/QH1mdxNy9pu+ZwZxHsDmS5VHmbOoAcdCbyKUTxVw3qKNLq0S
-        usa5ev/O+JZCsJDm3aKfpij8xa3WJgnPNhmvKKXzOpZk7JTn36RZK1f5rRQ1LvCv
-        grTQce5HfjmjGIAbk8HLEyFdO/pQdQ6RrVNZkr2DEwtE5bbjMILJjg2FttxiasYI
-        t/QejmUdclpBOueSISOFhFF6nWExHgGfaiJamFAg79/qSe8oVoH7EoORna2Z4Tyc
-        TTuXtDIe16VwVfCamwRJdMJSbLLVcx87yJnvj/BxtAwmXeUzykBJoFICg==
+        :mime-version:content-transfer-encoding; s=fm2; bh=qE6SMYoRQzVad
+        KkaxPJOujbvaC++jF3gyfOey8v1upo=; b=Hoev4zvS9ET4XlsAfsLElP3S1h8/A
+        pnK2HRnC0V7y60HoURLkek+NIkyjiCgyqLQPvrnCYevEzDn5bag2IiGsGtaCBFIO
+        FUVDBWt1bvVTgSXOPSo37mFJ/MxbIGnbdSwkeAnjlb83R1QAj2H0nCAa4l+Nc4xF
+        7rQ92ugfNkePmnDi5eK5MisMhTaCh2c/0FTV5kGY96x+g+N7I8j2s8zkni8wX4EH
+        Goq5+PezE2j24hoBXTT10DA1hULEA4BaNBxGj/DDq+H0RZrgqAk64+WycyvAVyAh
+        kS2dPbwRgZdCHCvHqP1VAnABz6M1GGuMgXZtj3lDRTude8YtyUxoQ7xvQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
         :in-reply-to:message-id:mime-version:references:subject:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=LuBuJ51kAs683zqagRQH/JKcv0PkL6c6myFxIpkwVuU=; b=fugy0bp1
-        b2e3mPjitpKoZTXVyM3KoeVF/oWhAH07La9tCmNddbnxM2nJG2LTYPC2/GWP5xlI
-        8bzL8K02ctWebjHh+4cEGATLO8nyO5lqfnb3291vy56iCm3Q/7hmEINtmtWuxi0u
-        1wjLPEv33fcrOafZRZjT+8TZscRgO+9glGgZWx3rhHDfzpSQSrnzy25xIuQOj/Wq
-        ulKCMgUUxwkN9VvE8ryIfLJx+04u3VKIePqIQOiI1ZTea9WwPTgKcj5pPl4qz0Uw
-        ApwLBXjGViyqSZ6uXdS5mamSkhRGXRagDijb4jaW6loji274eQxfx75acJBy8v04
-        lsQC/lRNbY7Fag==
-X-ME-Sender: <xms:wYx2YQ2bcRDRwlYdUtFV4atyBYNhUT90DubKhp8D3jDU2se9XPO9og>
-    <xme:wYx2YbHOno-szkqHe_Cuq7lLCsTr5Oz5cwQWJIPR1ZSbBmQr-Z4Pfgi5umexKGSla
-    yYQKl0YyfV_RlkIPQE>
-X-ME-Received: <xmr:wYx2YY5f3dTmIZWyyzPDHDWbTrtyp4EoUraVhDhFRSYEy5qGYHF5tOb1qRR0L_WZ3m5hNM1jaCtE>
+        fm1; bh=qE6SMYoRQzVadKkaxPJOujbvaC++jF3gyfOey8v1upo=; b=kYznf7/6
+        TY/wCgYmnnRYUE417/4eqa6irsHlBEka7VUGHAaoU2fcpkeotmx25dQi84qQw+/6
+        JPKKtJVt1v5x1REhN4+19o3tG+cV2AX4iu/OMtqpseXilCQJuKlJtmcBj5rWkFiX
+        ByIPXJ43nExftd/437UarJfNZmHoyuhv/7sM2RoNp/0rM/mnTGVYusIy5zpwJPgY
+        7yQrbU/b4hQ2tcRa06rX0Gv+sNa9vpExzyeUHfol3iyhLrKPDiDZxac8+WL8TWby
+        QyyX/zc8BaklQxyjoowV64eGF9t4yt9o9p5O5+K8Sla1uKD+m+IUL75SbYtceBKZ
+        bB2WfQbIoR5SiA==
+X-ME-Sender: <xms:yox2YSbb6dXJ_sK15xWZ8M3a-LdwVfbEj5vDOOeqDzDulElhxnf8Cg>
+    <xme:yox2YVaPdHJbZWCAxT8NnIklw_tplqatdI3J8PdAF20HkXBX3WdLsU611cNE5sQrc
+    ckolfGjEugyNd13q5E>
+X-ME-Received: <xmr:yox2Yc-jECMVtxTdLlFI6ypzvIOwoOwfdi396yiClUbvOOe1OnWCeFE5FZRtxmx3c_0BhSrdyyUr>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvdefhedgfedvucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucenucfjughrpefhvffufffkofgjfhgggfestdekre
     dtredttdenucfhrhhomheptehlihhsthgrihhrucfhrhgrnhgtihhsuceorghlihhsthgr
-    ihhrsegrlhhishhtrghirhdvfedrmhgvqeenucggtffrrghtthgvrhhnpeehffejteette
-    ekfffhvdeghfegvedvvdeujeehheefveefudefgeeitdehueejleenucffohhmrghinhep
-    rhgvmhgrrhhkrggslhgvrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomheprghlihhsthgrihhrsegrlhhishhtrghirhdvfedrmhgv
-X-ME-Proxy: <xmx:wYx2YZ2v5gX9h9CQLL5bE-R52DCChIIezyOgfwwg_dV7yP7-hgmK6g>
-    <xmx:wYx2YTGY_wvVFZBMJ4MU99hyUFTG_Kc7-gSAJVCivHDFEvDfdV-tPA>
-    <xmx:wYx2YS9vogrKA1Nzsqn3FCikXA3J4qP2ChfmACRB35-vt333mySDOQ>
-    <xmx:wYx2YZXOLuBVb4aH4m9U1bXc6oJo8aHddTzXYGCOV9WGKjk_OhK7wQ>
+    ihhrsegrlhhishhtrghirhdvfedrmhgvqeenucggtffrrghtthgvrhhnpeeggedtteejke
+    eggeeugfehueevudegvdetjeeviedugedvtdekffekhedtteduhfenucevlhhushhtvghr
+    ufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhishhtrghirhesrghlih
+    hsthgrihhrvdefrdhmvg
+X-ME-Proxy: <xmx:yox2YUol-aro3dap04uXBMEYivfuwdYQGg6TBnW5hqCb5ciqwT5pLw>
+    <xmx:yox2YdogEWyJmqYUZrczVU31hxaZM5KTZ-81WzWFE7IaSTsW1k5r6Q>
+    <xmx:yox2YSR1rTw6i97DLHU3bV41vibnfHH-Djusa3bGhn4rI1HoqkKp_w>
+    <xmx:yox2YTaUKfTp5YZE9wm2-WMZSVEbPiUjMAszKvyN--oh-xsik8MF-A>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 25 Oct 2021 06:53:43 -0400 (EDT)
+ 25 Oct 2021 06:53:54 -0400 (EDT)
 From:   Alistair Francis <alistair@alistair23.me>
 To:     robh+dt@kernel.org, kernel@pengutronix.de, lgirdwood@gmail.com,
         lee.jones@linaro.org, broonie@kernel.org
@@ -64,9 +64,9 @@ Cc:     s.hauer@pengutronix.de, rui.zhang@intel.com,
         andreas@kemnade.info, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Alistair Francis <alistair@alistair23.me>
-Subject: [PATCH v14 3/8] mfd: simple-mfd-i2c: Enable support for the silergy,sy7636a
-Date:   Mon, 25 Oct 2021 20:53:04 +1000
-Message-Id: <20211025105309.37942-4-alistair@alistair23.me>
+Subject: [PATCH v14 4/8] regulator: sy7636a: Remove requirement on sy7636a mfd
+Date:   Mon, 25 Oct 2021 20:53:05 +1000
+Message-Id: <20211025105309.37942-5-alistair@alistair23.me>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211025105309.37942-1-alistair@alistair23.me>
 References: <20211025105309.37942-1-alistair@alistair23.me>
@@ -77,79 +77,53 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 Signed-off-by: Alistair Francis <alistair@alistair23.me>
-Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/mfd/simple-mfd-i2c.c | 11 +++++++++++
- include/linux/mfd/sy7636a.h  | 36 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 47 insertions(+)
- create mode 100644 include/linux/mfd/sy7636a.h
+ drivers/regulator/Kconfig             | 1 -
+ drivers/regulator/sy7636a-regulator.c | 9 ++++++---
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
-index 51536691ad9d..f4c8fc3ee463 100644
---- a/drivers/mfd/simple-mfd-i2c.c
-+++ b/drivers/mfd/simple-mfd-i2c.c
-@@ -62,8 +62,19 @@ static int simple_mfd_i2c_probe(struct i2c_client *i2c)
- 	return ret;
- }
+diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
+index 4fd13b06231f..21077cb14625 100644
+--- a/drivers/regulator/Kconfig
++++ b/drivers/regulator/Kconfig
+@@ -1199,7 +1199,6 @@ config REGULATOR_STW481X_VMMC
  
-+static const struct mfd_cell sy7636a_cells[] = {
-+	{ .name = "sy7636a-regulator", },
-+	{ .name = "sy7636a-temperature", },
-+};
-+
-+static const struct simple_mfd_data silergy_sy7636a = {
-+	.mfd_cell = sy7636a_cells,
-+	.mfd_cell_size = ARRAY_SIZE(sy7636a_cells),
-+};
-+
- static const struct of_device_id simple_mfd_i2c_of_match[] = {
- 	{ .compatible = "kontron,sl28cpld" },
-+	{ .compatible = "silergy,sy7636a", .data = &silergy_sy7636a},
- 	{}
- };
- MODULE_DEVICE_TABLE(of, simple_mfd_i2c_of_match);
-diff --git a/include/linux/mfd/sy7636a.h b/include/linux/mfd/sy7636a.h
-new file mode 100644
-index 000000000000..2797c22dabc2
---- /dev/null
-+++ b/include/linux/mfd/sy7636a.h
-@@ -0,0 +1,36 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Functions to access SY3686A power management chip.
-+ *
-+ * Copyright (C) 2021 reMarkable AS - http://www.remarkable.com/
-+ */
-+
-+#ifndef __MFD_SY7636A_H
-+#define __MFD_SY7636A_H
-+
-+#define SY7636A_REG_OPERATION_MODE_CRL		0x00
-+#define SY7636A_OPERATION_MODE_CRL_VCOMCTL	BIT(6)
-+#define SY7636A_OPERATION_MODE_CRL_ONOFF	BIT(7)
-+#define SY7636A_REG_VCOM_ADJUST_CTRL_L		0x01
-+#define SY7636A_REG_VCOM_ADJUST_CTRL_H		0x02
-+#define SY7636A_REG_VCOM_ADJUST_CTRL_MASK	0x01ff
-+#define SY7636A_REG_VLDO_VOLTAGE_ADJULST_CTRL	0x03
-+#define SY7636A_REG_POWER_ON_DELAY_TIME		0x06
-+#define SY7636A_REG_FAULT_FLAG			0x07
-+#define SY7636A_FAULT_FLAG_PG			BIT(0)
-+#define SY7636A_REG_TERMISTOR_READOUT		0x08
-+
-+#define SY7636A_REG_MAX				0x08
-+
-+#define VCOM_MIN		0
-+#define VCOM_MAX		5000
-+
-+#define VCOM_ADJUST_CTRL_MASK	0x1ff
-+// Used to shift the high byte
-+#define VCOM_ADJUST_CTRL_SHIFT	8
-+// Used to scale from VCOM_ADJUST_CTRL to mv
-+#define VCOM_ADJUST_CTRL_SCAL	10000
-+
-+#define FAULT_FLAG_SHIFT	1
-+
-+#endif /* __LINUX_MFD_SY7636A_H */
+ config REGULATOR_SY7636A
+ 	tristate "Silergy SY7636A voltage regulator"
+-	depends on MFD_SY7636A
+ 	help
+ 	  This driver supports Silergy SY3686A voltage regulator.
+ 
+diff --git a/drivers/regulator/sy7636a-regulator.c b/drivers/regulator/sy7636a-regulator.c
+index 8360b3947ead..29fc27c2cda0 100644
+--- a/drivers/regulator/sy7636a-regulator.c
++++ b/drivers/regulator/sy7636a-regulator.c
+@@ -7,11 +7,14 @@
+ // Authors: Lars Ivar Miljeteig <lars.ivar.miljeteig@remarkable.com>
+ //          Alistair Francis <alistair@alistair23.me>
+ 
++#include <linux/gpio/consumer.h>
++#include <linux/i2c.h>
++#include <linux/mfd/sy7636a.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
++#include <linux/regulator/driver.h>
++#include <linux/regulator/machine.h>
+ #include <linux/regmap.h>
+-#include <linux/gpio/consumer.h>
+-#include <linux/mfd/sy7636a.h>
+ 
+ struct sy7636a_data {
+ 	struct regmap *regmap;
+@@ -70,7 +73,7 @@ static const struct regulator_desc desc = {
+ 
+ static int sy7636a_regulator_probe(struct platform_device *pdev)
+ {
+-	struct regmap *regmap = dev_get_drvdata(pdev->dev.parent);
++	struct regmap *regmap = dev_get_regmap(pdev->dev.parent, NULL);
+ 	struct regulator_config config = { };
+ 	struct regulator_dev *rdev;
+ 	struct gpio_desc *gdp;
 -- 
 2.31.1
 
