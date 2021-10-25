@@ -2,51 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 719D043A5F1
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Oct 2021 23:35:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E60443A5F4
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Oct 2021 23:35:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233920AbhJYVh7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Oct 2021 17:37:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53864 "EHLO
+        id S233949AbhJYViB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Oct 2021 17:38:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233394AbhJYVh6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Oct 2021 17:37:58 -0400
+        with ESMTP id S233946AbhJYViA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Oct 2021 17:38:00 -0400
 Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF96C061745
-        for <linux-pm@vger.kernel.org>; Mon, 25 Oct 2021 14:35:36 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id t75-20020a63784e000000b002993a9284b0so6849567pgc.11
-        for <linux-pm@vger.kernel.org>; Mon, 25 Oct 2021 14:35:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325ECC061348
+        for <linux-pm@vger.kernel.org>; Mon, 25 Oct 2021 14:35:38 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id g26-20020a63521a000000b0029524f04f5aso6848930pgb.5
+        for <linux-pm@vger.kernel.org>; Mon, 25 Oct 2021 14:35:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=IsG+1m99AvoR1yZKJQrlzvDKdWHsv+YhZuLrk/U7nqM=;
-        b=nb3VuU7Ntj1eqgLyfUJOmSueS+kzxRn5xRwY2HECFl95yc1ZFK+33rTVSGkm5KfuYY
-         adNJ7rNi0AiA209QwvG6tbsGzzvPOVTZZKPdFHfXOEllvEjM4Bx5sGSe4m+euxR6plwK
-         oZPIfDsk8DuutC6BSByCbYpo1UVU5yYINtqZWEwqmK4sKpPskC0y4DR9tLLWCo1c+Qa4
-         gxa9PwtlkKpe+ke0HbEqiUVMJQgWdCM4me3E3AZMBF4Jxkz9irB8lW4RExijrsIx8a2p
-         AYlatBnzdMBxWZZY3O4urwqHW561D0s7fUlKTosWiWk4pr8fgUKCpj079qfn/6vCizpO
-         6Rwg==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=TKRBjHsCjPIxlOUEzR0Pb/eiKAPe4iD4OTxtg9Qg2Kk=;
+        b=gW0LmKm+u4QbAACyTrJHmOYLnfYNWriZsR/wK2+bqguI3qJ/PBaVOk+MKVpyE5OQHL
+         3D+mq+0xwDGGryFNTSu9kjwrMZ+jZxTjlO1mGlHt4buLbs++7/Iz8MwYiKPlIinFBp78
+         BrvGlHHRsmjI2EX60hcP5GX9l9J2VmI7CKcT70rglqqDC+fRhqs1h6b+dewxMI5YVx3A
+         D4Vq9fYTbvDmDgnyjgEm05ywPWoIcALKJHdwrlgfxFVhZC3of8vulCcgjIEAJ7Zg8suA
+         /dxG02tAT+Vzs2UXveta6nqOq50Yv/3e6gl/cFHF9IL7QxgML/XHaxV18HLOFrWJS8xB
+         fh/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=IsG+1m99AvoR1yZKJQrlzvDKdWHsv+YhZuLrk/U7nqM=;
-        b=dsSS5ykX1H4b9mgw9Sd+Od6qhi4j72HLfAXpHCZGThguPkejbjJ8uRti6rlXPlYYD4
-         6L3bk4imgBicEGSBq0Md3TnIjYUKIMaVB/r2uGrv8azSf7z31lbbUW74UntETtmuLRXF
-         GWg5RNUV0Bk07nkh99QhILQQrq5VzjgtdRq90Edn2iYH/ssiwqB19RK9GkLhoio79sYp
-         gmTQ865b8rHc6LEpOeIxj4uWuwlvB/sDaJVDrc9rlfPKSJ6MK6SwDl6x0RMTEMViT8Dj
-         eeSwJrD2odV80ZsCxt9VYH+J21z9MEvtknHkalAPc44G5FwyiS4EVUcD3XUVeTUE+qOA
-         1HtQ==
-X-Gm-Message-State: AOAM533EidmoyhSn1ohFRJ+2j42EeEyIPfwhti8rSXg6P6oDnYEOf1zU
-        +BTjfkQxxDTY9mv6Rr8VdVsF4tbYU8n4
-X-Google-Smtp-Source: ABdhPJzES92KcEzUjQonpDW/7/i9OxpiiGezgo7YKMv28uo46LmDd7nvnKJGsZ+zBG+xuEvbLNeZmcJFh/+9
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=TKRBjHsCjPIxlOUEzR0Pb/eiKAPe4iD4OTxtg9Qg2Kk=;
+        b=swCW49EObHHbjbPWdhQgk9cCka1q7waF1iM/k69HbFKSNoG4A8NLOzH4K1GHiL+nmH
+         Wvgc8FIy0HyFTRhPPlWHp0Awo77sdzR2S+en3BfbGlF1TGFmXMgwY240v71f0QeQ9cPN
+         wz9umb2FvxgWzZ/KTeglWxD4nXia2D+7Yc+ePLqRAv/vc2Zmkl5rBpL5s7cvJNgh+non
+         DuDi6s8VTbU3u/iTqrI4IeBXv0fp3NLZz5sR/HSgQomyJoS65GxKGRqEEr1D1WrPETqL
+         qhOEueJb2J5a/OKfDUJw5wsEuDyNVPe7ums7yyK88lzqh8Y6O3DEkn8iE8uq5qmTYdyu
+         WYHA==
+X-Gm-Message-State: AOAM533iFKgVI0uqVo+T4rlMVJXO7fLFamn7PPVWYZNSPBb/ObtgWEfw
+        aWZJoChFipDn9ogB5wCfsMN+6kMuIac4
+X-Google-Smtp-Source: ABdhPJxylj23bhbDXfOwywyglJGgQuaQVa+8V8I4Mo4MBJZH7vWobZ4mPT6W37GoD3U/xaqpW8+LVjazfcWn
 X-Received: from rajat2.mtv.corp.google.com ([2620:15c:202:201:5478:3d15:6893:1074])
- (user=rajatja job=sendgmr) by 2002:a17:90a:eb18:: with SMTP id
- j24mr22613368pjz.196.1635197735729; Mon, 25 Oct 2021 14:35:35 -0700 (PDT)
-Date:   Mon, 25 Oct 2021 14:35:28 -0700
-Message-Id: <20211025213532.2349161-1-rajatja@google.com>
+ (user=rajatja job=sendgmr) by 2002:a17:90b:3793:: with SMTP id
+ mz19mr579625pjb.6.1635197737743; Mon, 25 Oct 2021 14:35:37 -0700 (PDT)
+Date:   Mon, 25 Oct 2021 14:35:29 -0700
+In-Reply-To: <20211025213532.2349161-1-rajatja@google.com>
+Message-Id: <20211025213532.2349161-2-rajatja@google.com>
 Mime-Version: 1.0
+References: <20211025213532.2349161-1-rajatja@google.com>
 X-Mailer: git-send-email 2.33.0.1079.g6e70778dc9-goog
-Subject: [PATCH v2 0/3] i2c: Enable asynchronous suspend/resume
+Subject: [PATCH v2 1/3] i2c: designware: Enable async suspend / resume of
+ designware devices
 From:   Rajat Jain <rajatja@google.com>
 To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -61,70 +66,33 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-(The only change in v2 is to add Jarkko's ack / tested-by)
+Mark the designware devices for asynchronous suspend. With this, the
+resume for designware devices does not get stuck behind other unrelated
+devices (e.g. intel_backlight that takes hundreds of ms to resume,
+waiting for its parent devices).
 
-PM Core allows buses and drivers to specify if they'd like their devices
-to suspend/resume synchronously or asynchronously. When resuming:
-
-1) SYNCHRONOUS DEVICES:
- - All synchronous devices (system wide!) are resumed in a single thread,
-   serially i.e. one after the other. So their resume latencies add up,
-   and also, this results in unnecessary and unnatural waiting order.
-
-   In my current system (total resume time ~895ms) and this is the trend
-   on almost all chromebooks in the past 3-4 years (we carry patch3 in
-   our tree already, without which it would be even more worse):
-   https://rajatxjain.github.io/public_shared/resume_before_patches.html
-   As you can see I2C devices do not even begin to resume until 450ms,
-   waiting unnaturally for another device i915 to finish resuming: 
-
-   I2C touchscreen device (resume latency = 374 ms) - asynchronous
-   -> (waiting on) I2C adapter resume (synchronous)
-     -> (waiting on) Designware resume (synchronous)
-       -> (waiting on) intel_backlight resume (synchronous)
-         -> (waiting on) its PARENT i915 resume (asynchronous resume
-                                                       time = 376ms)
-   As you can see the two biggest resume routines are both run serially
-   after one another (even though they don't have any real dependency)
-   thus increasing the system critical resume path. If we can run them
-   concurrently, we can cut down the system resume time considerably. 
- 
-2) ASYNCHRONOUS DEVICES: 
-- On the other hand, all asynchronous devices's resume routines are
-  scheduled so they can run in parallel with other asynchronous
-  routines. PM core still ensures for both async/sync devices that:
-   - All parent child relations are honored.
-   - Any device dependencies are honored. Device dependencies between
-     any 2 unrelated devices can be specified using device_link_add().
-   - Async resume devices are sychnronized at the end of each
-     suspend/resume phase, before moving onto next.
-
-   With these patches in place, the I2C devices can resume in parallel
-   with i915: 
-   https://rajatxjain.github.io/public_shared/resume_after_patch.html
-
-As far as I understand, the only reason we might not want a device to be
-marked for asynchronous resume is if we suspect it cannot handle
-concurrent resume with other devices, which does not look to be the
-case. 
-    
-This patchset marks the designware, the I2c adapters, and the i2c 
-clients for asynchronous suspend/resume. In case it helps to gain any
-confidence, the patch 3 (for i2c clients) has been included and shipping
-on all our chromebooks for the past 3+ years, and has not shown any
-issues. The designware and i2c adapters should be easier.
-
-Derek Basehore (1):
-  i2c: enable async suspend/resume on i2c client devices
-
-Rajat Jain (2):
-  i2c: designware: Enable async suspend / resume of designware devices
-  i2c: enable async suspend/resume for i2c adapters
+Signed-off-by: Rajat Jain <rajatja@google.com>
+Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Tested-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+---
+v2: Add Jarkko's ack / tested by
 
  drivers/i2c/busses/i2c-designware-platdrv.c | 2 ++
- drivers/i2c/i2c-core-base.c                 | 2 ++
- 2 files changed, 4 insertions(+)
+ 1 file changed, 2 insertions(+)
 
+diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
+index 21113665ddea..2bd81abc86f6 100644
+--- a/drivers/i2c/busses/i2c-designware-platdrv.c
++++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+@@ -293,6 +293,8 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
+ 					DPM_FLAG_MAY_SKIP_RESUME);
+ 	}
+ 
++	device_enable_async_suspend(&pdev->dev);
++
+ 	/* The code below assumes runtime PM to be disabled. */
+ 	WARN_ON(pm_runtime_enabled(&pdev->dev));
+ 
 -- 
 2.33.0.1079.g6e70778dc9-goog
 
