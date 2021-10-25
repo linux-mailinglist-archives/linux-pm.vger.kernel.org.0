@@ -2,56 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E60443A5F4
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Oct 2021 23:35:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C501443A5F6
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Oct 2021 23:35:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233949AbhJYViB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Oct 2021 17:38:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53882 "EHLO
+        id S234216AbhJYViG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Oct 2021 17:38:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233946AbhJYViA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Oct 2021 17:38:00 -0400
+        with ESMTP id S233978AbhJYViD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Oct 2021 17:38:03 -0400
 Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325ECC061348
-        for <linux-pm@vger.kernel.org>; Mon, 25 Oct 2021 14:35:38 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id g26-20020a63521a000000b0029524f04f5aso6848930pgb.5
-        for <linux-pm@vger.kernel.org>; Mon, 25 Oct 2021 14:35:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63EB1C061243
+        for <linux-pm@vger.kernel.org>; Mon, 25 Oct 2021 14:35:40 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id c2-20020a63d5020000b029023ae853b72cso6824881pgg.18
+        for <linux-pm@vger.kernel.org>; Mon, 25 Oct 2021 14:35:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=TKRBjHsCjPIxlOUEzR0Pb/eiKAPe4iD4OTxtg9Qg2Kk=;
-        b=gW0LmKm+u4QbAACyTrJHmOYLnfYNWriZsR/wK2+bqguI3qJ/PBaVOk+MKVpyE5OQHL
-         3D+mq+0xwDGGryFNTSu9kjwrMZ+jZxTjlO1mGlHt4buLbs++7/Iz8MwYiKPlIinFBp78
-         BrvGlHHRsmjI2EX60hcP5GX9l9J2VmI7CKcT70rglqqDC+fRhqs1h6b+dewxMI5YVx3A
-         D4Vq9fYTbvDmDgnyjgEm05ywPWoIcALKJHdwrlgfxFVhZC3of8vulCcgjIEAJ7Zg8suA
-         /dxG02tAT+Vzs2UXveta6nqOq50Yv/3e6gl/cFHF9IL7QxgML/XHaxV18HLOFrWJS8xB
-         fh/w==
+        bh=jYZ/gLN2FtdtPCm5bp5BM+B38r1yxpSWcEKu3dd8FPk=;
+        b=Q7p9y6SsnmzF1ZhJu3/jii6ySfU9hpX3ZUBNIwzd3ocDPVGfH5m4sDwSwj4P07sPdu
+         8mJSjSJwoTxs99b5GAq0GSkv0GpO5e10kRp7EERpRmmYYI9WSBr6NgNefFgRRgWu5FUW
+         z/AXxlwzso9sF8y22x6NJUXvVlF9wxNggQARFGaMpTYvLQfgzk2QUsk5GFH3QxFGbzQv
+         MfkU1Lrh0qiacj8WIckRXofSTh5k0fX9HcG+kUmkUfTSU0RKYNteaxXSUGtZGSsjNPAF
+         iL3evaps+l3CAH72ZooXnARTMBNOjK6uSYvUtT3Gv77l6mOwDFPRKV0drzKQWddgbpMq
+         GrRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=TKRBjHsCjPIxlOUEzR0Pb/eiKAPe4iD4OTxtg9Qg2Kk=;
-        b=swCW49EObHHbjbPWdhQgk9cCka1q7waF1iM/k69HbFKSNoG4A8NLOzH4K1GHiL+nmH
-         Wvgc8FIy0HyFTRhPPlWHp0Awo77sdzR2S+en3BfbGlF1TGFmXMgwY240v71f0QeQ9cPN
-         wz9umb2FvxgWzZ/KTeglWxD4nXia2D+7Yc+ePLqRAv/vc2Zmkl5rBpL5s7cvJNgh+non
-         DuDi6s8VTbU3u/iTqrI4IeBXv0fp3NLZz5sR/HSgQomyJoS65GxKGRqEEr1D1WrPETqL
-         qhOEueJb2J5a/OKfDUJw5wsEuDyNVPe7ums7yyK88lzqh8Y6O3DEkn8iE8uq5qmTYdyu
-         WYHA==
-X-Gm-Message-State: AOAM533iFKgVI0uqVo+T4rlMVJXO7fLFamn7PPVWYZNSPBb/ObtgWEfw
-        aWZJoChFipDn9ogB5wCfsMN+6kMuIac4
-X-Google-Smtp-Source: ABdhPJxylj23bhbDXfOwywyglJGgQuaQVa+8V8I4Mo4MBJZH7vWobZ4mPT6W37GoD3U/xaqpW8+LVjazfcWn
+        bh=jYZ/gLN2FtdtPCm5bp5BM+B38r1yxpSWcEKu3dd8FPk=;
+        b=sMAzuqu2kH/bae1Lx2yHRtFGoMddbEBSpRrGuQKp//To9WwcZew/mQwikikT1ora2a
+         GyIpOBseTdmUDXYynblse6dT/LcPUNl3F2Xcykkt8NwJW+DqShuWl/sOEcGdrJPlJx1u
+         BAdBmpBgV9O2nSdzAjUnCcL6pzw3Ekb+onhgkVhEXH+OTTx105cQ29KJIOVQHr02fpCt
+         idXy61l1xfiZA9NCeyYgaPqeS8tZTKV4+aTAQAfOmRGlnCll5CB3264PlMx2iKBKemP3
+         lb9Pmr9mP/AoPmqd2O6TwMteFHTJ6+f86MaVLWuHTzx1+EsMVAmf3f3hr8fkq9rG9a1h
+         zspg==
+X-Gm-Message-State: AOAM532v+jJRkfni9NN93+8/IrULgQZ67rkYb65XFu26jVoTi+8m6niL
+        82stv+MEUHR59D9S4WJIrR5Unlt6zA9w
+X-Google-Smtp-Source: ABdhPJzVKK7ZDVEgV0xPUL1u4UVmovt9MKolVdLnS+fAVQoyvq/LRoKqY06DDnF8Pfx2uSTlfXGeW0PRMfzo
 X-Received: from rajat2.mtv.corp.google.com ([2620:15c:202:201:5478:3d15:6893:1074])
- (user=rajatja job=sendgmr) by 2002:a17:90b:3793:: with SMTP id
- mz19mr579625pjb.6.1635197737743; Mon, 25 Oct 2021 14:35:37 -0700 (PDT)
-Date:   Mon, 25 Oct 2021 14:35:29 -0700
+ (user=rajatja job=sendgmr) by 2002:a17:90b:1e49:: with SMTP id
+ pi9mr38518077pjb.144.1635197739902; Mon, 25 Oct 2021 14:35:39 -0700 (PDT)
+Date:   Mon, 25 Oct 2021 14:35:30 -0700
 In-Reply-To: <20211025213532.2349161-1-rajatja@google.com>
-Message-Id: <20211025213532.2349161-2-rajatja@google.com>
+Message-Id: <20211025213532.2349161-3-rajatja@google.com>
 Mime-Version: 1.0
 References: <20211025213532.2349161-1-rajatja@google.com>
 X-Mailer: git-send-email 2.33.0.1079.g6e70778dc9-goog
-Subject: [PATCH v2 1/3] i2c: designware: Enable async suspend / resume of
- designware devices
+Subject: [PATCH 2/3] i2c: enable async suspend/resume for i2c adapters
 From:   Rajat Jain <rajatja@google.com>
 To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -66,33 +65,30 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Mark the designware devices for asynchronous suspend. With this, the
-resume for designware devices does not get stuck behind other unrelated
-devices (e.g. intel_backlight that takes hundreds of ms to resume,
-waiting for its parent devices).
+Enable async suspend/resume of i2c adapters. It enormously helps with
+reducing the resume time of systems (as much as 20%-40%) where I2C devices
+can take significant time (100s of ms) to resume.
 
 Signed-off-by: Rajat Jain <rajatja@google.com>
-Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 Tested-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 ---
-v2: Add Jarkko's ack / tested by
+v2: Add Jarkko's tested by
 
- drivers/i2c/busses/i2c-designware-platdrv.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/i2c/i2c-core-base.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
-index 21113665ddea..2bd81abc86f6 100644
---- a/drivers/i2c/busses/i2c-designware-platdrv.c
-+++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-@@ -293,6 +293,8 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
- 					DPM_FLAG_MAY_SKIP_RESUME);
- 	}
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index 54964fbe3f03..8d4f2be54e17 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -1576,6 +1576,7 @@ static int i2c_register_adapter(struct i2c_adapter *adap)
+ 	if (res)
+ 		goto out_reg;
  
-+	device_enable_async_suspend(&pdev->dev);
-+
- 	/* The code below assumes runtime PM to be disabled. */
- 	WARN_ON(pm_runtime_enabled(&pdev->dev));
- 
++	device_enable_async_suspend(&adap->dev);
+ 	pm_runtime_no_callbacks(&adap->dev);
+ 	pm_suspend_ignore_children(&adap->dev, true);
+ 	pm_runtime_enable(&adap->dev);
 -- 
 2.33.0.1079.g6e70778dc9-goog
 
