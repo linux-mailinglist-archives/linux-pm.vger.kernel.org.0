@@ -2,80 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0730439BED
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Oct 2021 18:43:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30AB8439E13
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Oct 2021 20:06:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233155AbhJYQpk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Oct 2021 12:45:40 -0400
-Received: from foss.arm.com ([217.140.110.172]:48052 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234036AbhJYQpi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 25 Oct 2021 12:45:38 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 498441FB;
-        Mon, 25 Oct 2021 09:43:16 -0700 (PDT)
-Received: from [10.57.21.241] (unknown [10.57.21.241])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 006DD3F5A1;
-        Mon, 25 Oct 2021 09:43:12 -0700 (PDT)
-Subject: Re: [PATCH v2 0/5] Refactor thermal pressure update to avoid code
- duplication
-To:     rafael@kernel.org, viresh.kumar@linaro.org,
-        daniel.lezcano@linaro.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, sudeep.holla@arm.com,
-        will@kernel.org, catalin.marinas@arm.com, linux@armlinux.org.uk,
-        gregkh@linuxfoundation.org, amitk@kernel.org,
-        amit.kachhap@gmail.com, thara.gopinath@linaro.org,
-        bjorn.andersson@linaro.org, agross@kernel.org
-References: <20211015144550.23719-1-lukasz.luba@arm.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <3cc80fea-1320-9a1a-9954-85b30f3d933a@arm.com>
-Date:   Mon, 25 Oct 2021 17:43:11 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S233196AbhJYSIg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Oct 2021 14:08:36 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:41184 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231760AbhJYSIg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Oct 2021 14:08:36 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 19PI69Kr004910;
+        Mon, 25 Oct 2021 13:06:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1635185169;
+        bh=Yrd+yUTsbGR89/ahPzrGQ0VTae+vnDUBOTH+jtgHwAI=;
+        h=From:To:CC:Subject:Date;
+        b=SzwAZBYDdmRMf9SVzBRaPjl5FaKKVAcBsco8Z8Yu0zNZDLHVX61N+nJQWBO3r/dYa
+         WlhyINMQkXHK+2a6F1lnfWX32WixqdLgwktGsIE8IgMIsqywPSWIM+mE/swbehkLp0
+         rp/ViIec5NAdzf3Kg6q9abtVNkZlgqtuWNNW21Mg=
+Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 19PI69pm071970
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 25 Oct 2021 13:06:09 -0500
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 25
+ Oct 2021 13:06:09 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 25 Oct 2021 13:06:08 -0500
+Received: from localhost.localdomain (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 19PI65CT056165;
+        Mon, 25 Oct 2021 13:06:06 -0500
+From:   Keerthy <j-keerthy@ti.com>
+To:     <robh+dt@kernel.org>, <daniel.lezcano@linaro.org>,
+        <rui.zhang@intel.com>, <amitk@kernel.org>, <kristo@kernel.org>
+CC:     <j-keerthy@ti.com>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 0/4]  thermal: k3_j72xx_bandgap: Add the bandgap driver support
+Date:   Mon, 25 Oct 2021 23:35:59 +0530
+Message-ID: <20211025180603.22290-1-j-keerthy@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <20211015144550.23719-1-lukasz.luba@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Add VTM thermal support. In the Voltage Thermal Management
+Module(VTM), K3 J72XX supplies a voltage reference and a temperature
+sensor feature that are gathered in the band gap voltage and
+temperature sensor (VBGAPTS) module. The band gap provides current and
+voltage reference for its internal circuits and other analog IP
+blocks. The analog-to-digital converter (ADC) produces an output value
+that is proportional to the silicon temperature.
 
-On 10/15/21 3:45 PM, Lukasz Luba wrote:
-> Hi all,
-> 
-> This patch set v2 aims to refactor the thermal pressure update
-> code. There are already two clients which do similar thing:
-> convert the capped frequency value into the capacity of
-> affected CPU and call the 'set' function to store the
-> reduced capacity into the per-cpu variable.
-> There might be more than two of these users. In near future
-> it will be scmi-cpufreq driver, which receives notification
-> from FW about reduced frequency due to thermal. Other vendors
-> might follow. Let's avoid code duplication and potential
-> conversion bugs. Move the conversion code into the arch_topology.c
-> where the capacity calculation setup code and thermal pressure sit.
-> 
-> Apart from that $subject patches, there is one patch (3/5) which fixes
-> issue in qcom-cpufreq-hw.c when the thermal pressure is not
-> updated for offline CPUs. It's similar fix that has been merged
-> recently for cpufreq_cooling.c:
-> 2ad8ccc17d1e4270cf65a3f2
-> 
-> Changes:
-> v2:
-> - added Reviewed-by from Thara for patch 3/5
-> - changed the doxygen comment and used mult_frac()
->    according to Thara's suggestion in patch 1/5
-> v1 -> [1]
-> 
+Currently reading temperatures only is supported.  There are no
+active/passive cooling agent supported.
 
-Gentle ping.
+J721e SoCs have errata i2128: https://www.ti.com/lit/pdf/sprz455
 
-Viresh, Daniel, Rafael could you have a look at this, please?
+The series also incorporates workaround for Errata i2128.
 
-Regards,
-Lukasz
+Changes in v3:
+
+  * Removed static look up tables & added functions to dynamically generate them.
+
+
+Changes in v2:
+
+  * Fixed DT binding errors.
+
+Keerthy (4):
+  dt-bindings: thermal: k3-j72xx: Add VTM bindings documentation
+  arm64: dts: ti: j721e: Add VTM node
+  arm64: dts: ti: j7200: Add VTM node
+  thermal: k3_j72xx_bandgap: Add the bandgap driver support
+
+ .../bindings/thermal/ti,j72xx-thermal.yaml    |  62 ++
+ .../boot/dts/ti/k3-j7200-mcu-wakeup.dtsi      |   9 +
+ arch/arm64/boot/dts/ti/k3-j7200-thermal.dtsi  |  45 ++
+ arch/arm64/boot/dts/ti/k3-j7200.dtsi          |   4 +
+ .../boot/dts/ti/k3-j721e-mcu-wakeup.dtsi      |   9 +
+ arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi  |  73 ++
+ arch/arm64/boot/dts/ti/k3-j721e.dtsi          |   4 +
+ drivers/thermal/Makefile                      |   2 +-
+ drivers/thermal/k3_j72xx_bandgap.c            | 635 ++++++++++++++++++
+ 9 files changed, 842 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j7200-thermal.dtsi
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi
+ create mode 100644 drivers/thermal/k3_j72xx_bandgap.c
+
+-- 
+2.17.1
+
