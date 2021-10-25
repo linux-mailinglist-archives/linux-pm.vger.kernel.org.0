@@ -2,74 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD658439E63
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Oct 2021 20:21:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75D0543A184
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Oct 2021 21:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232658AbhJYSYD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Oct 2021 14:24:03 -0400
-Received: from marcansoft.com ([212.63.210.85]:33748 "EHLO mail.marcansoft.com"
+        id S236227AbhJYTjL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Oct 2021 15:39:11 -0400
+Received: from mga02.intel.com ([134.134.136.20]:30708 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231233AbhJYSYD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 25 Oct 2021 14:24:03 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id ED557419B4;
-        Mon, 25 Oct 2021 18:21:33 +0000 (UTC)
-Subject: Re: [PATCH v2 2/8] dt-bindings: arm: apple: Add apple,pmgr binding
-To:     Rob Herring <robh@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        Mark Kettenis <kettenis@openbsd.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        Arnd Bergmann <arnd@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-serial@vger.kernel.org,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Johan Hovold <johan@kernel.org>
-References: <20211025144718.157794-1-marcan@marcan.st>
- <20211025144718.157794-3-marcan@marcan.st>
- <1635185813.758208.824867.nullmailer@robh.at.kernel.org>
-From:   Hector Martin <marcan@marcan.st>
-Message-ID: <767a424f-543c-3eda-4b7f-a6113c9cf250@marcan.st>
-Date:   Tue, 26 Oct 2021 03:21:31 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S235933AbhJYThI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 25 Oct 2021 15:37:08 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10148"; a="216915181"
+X-IronPort-AV: E=Sophos;i="5.87,181,1631602800"; 
+   d="scan'208";a="216915181"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2021 12:28:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,181,1631602800"; 
+   d="scan'208";a="446772164"
+Received: from lkp-server01.sh.intel.com (HELO 0352ec6b4cf1) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 25 Oct 2021 12:28:15 -0700
+Received: from kbuild by 0352ec6b4cf1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mf5dm-0000Bs-FT; Mon, 25 Oct 2021 19:28:14 +0000
+Date:   Tue, 26 Oct 2021 03:27:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ af2b73b422405bf7d7aef0060da17281f7a0e6d4
+Message-ID: <61770535.Egfg7roQia0TU6Qf%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <1635185813.758208.824867.nullmailer@robh.at.kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: es-ES
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26/10/2021 03.16, Rob Herring wrote:
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> Unknown file referenced: [Errno 2] No such file or directory: '/usr/local/lib/python3.8/dist-packages/dtschema/power/apple,pmgr-pwrstate.yaml'
-> xargs: dt-doc-validate: exited with status 255; aborting
-> make[1]: *** Deleting file 'Documentation/devicetree/bindings/arm/apple/apple,pmgr.example.dt.yaml'
-> Unknown file referenced: [Errno 2] No such file or directory: '/usr/local/lib/python3.8/dist-packages/dtschema/power/apple,pmgr-pwrstate.yaml'
-> make[1]: *** [scripts/Makefile.lib:385: Documentation/devicetree/bindings/arm/apple/apple,pmgr.example.dt.yaml] Error 255
-> make[1]: *** Waiting for unfinished jobs....
-> make: *** [Makefile:1441: dt_binding_check] Error 2
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: af2b73b422405bf7d7aef0060da17281f7a0e6d4  Merge branch 'pm-sleep' into bleeding-edge
 
-Ah, I guess this is just an order issue. Patches 2/3 should've been 
-swapped... sorry about that, I only ran the checker on the final state, 
-not the intermediate ones.
+elapsed time: 2416m
 
--- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+configs tested: 81
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a002-20211024
+x86_64               randconfig-a004-20211024
+x86_64               randconfig-a005-20211024
+x86_64               randconfig-a006-20211024
+x86_64               randconfig-a001-20211024
+x86_64               randconfig-a003-20211024
+x86_64               randconfig-a013-20211025
+x86_64               randconfig-a015-20211025
+x86_64               randconfig-a011-20211025
+x86_64               randconfig-a014-20211025
+x86_64               randconfig-a016-20211025
+x86_64               randconfig-a012-20211025
+i386                 randconfig-a012-20211025
+i386                 randconfig-a013-20211025
+i386                 randconfig-a011-20211025
+i386                 randconfig-a016-20211025
+i386                 randconfig-a015-20211025
+i386                 randconfig-a014-20211025
+arc                  randconfig-r043-20211025
+s390                 randconfig-r044-20211025
+riscv                randconfig-r042-20211025
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+clang tested configs:
+i386                 randconfig-a003-20211025
+i386                 randconfig-a004-20211025
+i386                 randconfig-a002-20211025
+i386                 randconfig-a005-20211025
+i386                 randconfig-a001-20211025
+i386                 randconfig-a006-20211025
+hexagon              randconfig-r045-20211025
+hexagon              randconfig-r041-20211025
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
