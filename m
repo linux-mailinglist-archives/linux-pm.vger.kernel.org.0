@@ -2,58 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4604439432
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Oct 2021 12:54:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE3E8439437
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Oct 2021 12:54:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232837AbhJYK4h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Oct 2021 06:56:37 -0400
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:58901 "EHLO
+        id S232947AbhJYK4n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Oct 2021 06:56:43 -0400
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:52589 "EHLO
         new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231338AbhJYK4f (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Oct 2021 06:56:35 -0400
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 040A258045A;
-        Mon, 25 Oct 2021 06:54:13 -0400 (EDT)
+        by vger.kernel.org with ESMTP id S229928AbhJYK4m (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Oct 2021 06:56:42 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 126C158052B;
+        Mon, 25 Oct 2021 06:54:20 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Mon, 25 Oct 2021 06:54:13 -0400
+  by compute6.internal (MEProxy); Mon, 25 Oct 2021 06:54:20 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
          h=from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm2; bh=26mmE8gPTzxJk
-        4F657DbPbd4Vbe1ZwN4n5cX/C8l/bM=; b=mfaRE/Clbv5eQCOrq1oDd09LeSjMq
-        eTNWy+r3epmcLze4BhIKE9mHyfC90KqY4rGOwftPuYf2iiqt+1IYCjTFuOYHGe70
-        WSCeQj7NLdhtt/5C2V1L0GFpOIVQ8yoU3TGHmnCe73hutjf5LYwXmWkAioiqPTl2
-        Dx3j2HDNyt9sDb2ch1gzuiuT1V/NwQXuSJ+2FHSqDDh9zj0/Z61M1dAXs0eNlNS6
-        OWSHAso5oONmwWSSwKQwJRzt2WjmPcLkIgV4rCdwkLmYHa7OKTNF9UpD/qh9Wp44
-        50DeETqkiFUBIPRhj97yX2H9D9ID3QMkTsTQ+XfqlWi86wsaiP7SitvGQ==
+        :mime-version:content-transfer-encoding; s=fm2; bh=9BJcSEnAQZ1JM
+        Eh8K5qz9X3NSWkhPJwu0Qc49e7vu9I=; b=tSFm2b+nHqdU8/ZTylrrgx+150P4P
+        bNF4JUuWWENp4UPFAwG/G+WNHMkg5QMSAuK+pmG/lsTsaJ5PJEqRzT7UZD7TSxpX
+        dlmlCv7c9xDKQJBrRs/zRTSlwqcKJu7nA9md2A22LnN0RaBqq5s8yZeogTg6a+6t
+        NydYmqPiW21a9uUP/DA+YSj7A+tWB57tqh4ssin+kkGm4crQZRTJ1hSLAsy0n5+b
+        Ppu31F8wh7IOqDqhi2GqBZTsnCOZ5d7UIJ0ZQR8irVV1clFZPOQ+2xrcvrZmc/vR
+        OfXEpGlhMC6MnaKrd2nnt0grorEt6KpkeX6NtkqqiUXuuwAPzf3KCMW0A==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
         :in-reply-to:message-id:mime-version:references:subject:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=26mmE8gPTzxJk4F657DbPbd4Vbe1ZwN4n5cX/C8l/bM=; b=geYmhNEe
-        UcMQgn+6jaRjqcf0b5jGxgVwCZhEtZnAURAmiw2iRh+v/Zgrz1kFcQgvnrTJTIZn
-        6ifP4untr/JVbdLiXInw6DtL3WsjhSJrKJhMIqA86QtgLmPaZYs9zo5tifpsA4gs
-        AxCfjfH85IJTPYHup9Bcw+wyMs+U7W98w8/iQM9r88z8Wu823rvet84WKUDgKylJ
-        1V2CT465zMMqQecEdnWTwJv8qIDAYE0KZUCMjEjxWfTNVUA/8DZmr+yIB9eRLL7C
-        wYaal4KhzPOxKmInEAbyvLprFrFnV0u0YxSBtuk/2QWbKTIpb7hl+H+rp5Fkw8C1
-        xopBd1K8iAFj9A==
-X-ME-Sender: <xms:1Ix2YQfXqgcMRs4asqz8dQu1_n4jWfaRbIQlmppbEn1pIIJkv9TZPA>
-    <xme:1Ix2YSP0V1VJCr8uX9Ku1UAeKUU9dvsyi4RpYLBPUSH8lhAk3ZC4Y0sXRV0drCBQR
-    HGzlGMnsDixzN8PLT8>
-X-ME-Received: <xmr:1Ix2YRi9br1DbDY9SJmpi8ep_Ntj9MVkEMrJ94kxQO4ussACiu-5pGTlvEfgnRENHOk3dEnO-Bsj>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvdefhedgfedvucetufdoteggodetrfdotf
+        fm1; bh=9BJcSEnAQZ1JMEh8K5qz9X3NSWkhPJwu0Qc49e7vu9I=; b=mf5WIpwE
+        8PhijkI8VY66A6c4wWyBPnCMCUsoWZ+01BU5Z9E+dImi3gXxCr2mSlI9T712klI2
+        2kuQbOIJ8AdgD5WdvPQispcd/eiQm0z0kgVO4IrJwsHlo/xe59oFUJ4ZhJlgxsz0
+        Z+px2+3BV/3OBftqdZbvVo/AbdwAD8pIJeQZoDpow7D36M8lkJVLdogR3nf0xvzG
+        fyf0Ovnh7oI7UWanj9S7Y1izXOcNAc3MdqcwQ8EpCvWwMkUxscoH9iOyv74wF+lU
+        kPg4LGNbkR8oe55GlZmK1aBN7Y4ZSwX5aBl90z5neBG8PjkuyUB5PSPYVWnp20RV
+        FFq5dK5w7CWBjQ==
+X-ME-Sender: <xms:24x2YQmftRjVmYJOCH7x1wXTck1NDebFHi4AXuEvRjjJcPXP8aiDag>
+    <xme:24x2Yf3oeGS2gyq-splCma6uVjchXb0ge18Q6dwYTy_IS6ZVV4d6RVXqnf15bE6tR
+    6LhmlSS82f5FFuDDV4>
+X-ME-Received: <xmr:24x2YerZao8H_PZdPNpLC11wW6LEcVv8y_hTsEbffQn0NxUC8gUNorBbAKNytUeFu_2yPmLEOHT->
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvdefhedgfeduucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucenucfjughrpefhvffufffkofgjfhgggfestdekre
     dtredttdenucfhrhhomheptehlihhsthgrihhrucfhrhgrnhgtihhsuceorghlihhsthgr
-    ihhrsegrlhhishhtrghirhdvfedrmhgvqeenucggtffrrghtthgvrhhnpeehffejteette
-    ekfffhvdeghfegvedvvdeujeehheefveefudefgeeitdehueejleenucffohhmrghinhep
-    rhgvmhgrrhhkrggslhgvrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomheprghlihhsthgrihhrsegrlhhishhtrghirhdvfedrmhgv
-X-ME-Proxy: <xmx:1Ix2YV9_DY1BdHReW9LKoHxdcS_DJc_BatikcIbya_6K0HFkatruWg>
-    <xmx:1Ix2YctZBjlLt2uDLS87O2Pv02iOM6_9Y6nDo4DcpdCPSyeuKTDMcw>
-    <xmx:1Ix2YcE5a05mnhlnqr1vWXNooWsOKBNI6RvjfH8yW8s2kI5n7o_1Sw>
-    <xmx:1Yx2Yd9Z-YuE_DpE3t5s99Iz7GSTNsWvaZoBJSTt-YGO1WJWwdqOaQ>
+    ihhrsegrlhhishhtrghirhdvfedrmhgvqeenucggtffrrghtthgvrhhnpeeggedtteejke
+    eggeeugfehueevudegvdetjeeviedugedvtdekffekhedtteduhfenucevlhhushhtvghr
+    ufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhishhtrghirhesrghlih
+    hsthgrihhrvdefrdhmvg
+X-ME-Proxy: <xmx:24x2Yclw4iQnKjDSk5fWGBCHmQo3A0kuPpahlWZqJn0QxZpNhXuGug>
+    <xmx:24x2Ye1fTqmM84-A-_J8zbU4_tkPqB-znST2oGoQVijB5gIul-a-TQ>
+    <xmx:24x2YTti8PUasQ8210skhMCnEk2o_DXXlY_Fo_CUTFIvEORC_m2TtQ>
+    <xmx:3Ix2YXHnNMiS_DyfEyqdazNT3OvLnCfjAbkYNG62AYh39fc1YsuN-A>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 25 Oct 2021 06:54:03 -0400 (EDT)
+ 25 Oct 2021 06:54:13 -0400 (EDT)
 From:   Alistair Francis <alistair@alistair23.me>
 To:     robh+dt@kernel.org, kernel@pengutronix.de, lgirdwood@gmail.com,
         lee.jones@linaro.org, broonie@kernel.org
@@ -64,9 +64,9 @@ Cc:     s.hauer@pengutronix.de, rui.zhang@intel.com,
         andreas@kemnade.info, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Alistair Francis <alistair@alistair23.me>
-Subject: [PATCH v14 5/8] hwmon: sy7636a: Add temperature driver for sy7636a
-Date:   Mon, 25 Oct 2021 20:53:06 +1000
-Message-Id: <20211025105309.37942-6-alistair@alistair23.me>
+Subject: [PATCH v14 6/8] ARM: imx_v6_v7_defconfig: Enable silergy,sy7636a
+Date:   Mon, 25 Oct 2021 20:53:07 +1000
+Message-Id: <20211025105309.37942-7-alistair@alistair23.me>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211025105309.37942-1-alistair@alistair23.me>
 References: <20211025105309.37942-1-alistair@alistair23.me>
@@ -76,201 +76,42 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This is a multi-function device to interface with the sy7636a
-EPD PMIC chip from Silergy.
+Enable the silergy,sy7636a and silergy,sy7636a-regulator for the
+reMarkable2.
 
 Signed-off-by: Alistair Francis <alistair@alistair23.me>
 ---
- Documentation/hwmon/sy7636a-hwmon.rst |  24 ++++++
- drivers/hwmon/Kconfig                 |   9 ++
- drivers/hwmon/Makefile                |   1 +
- drivers/hwmon/sy7636a-hwmon.c         | 114 ++++++++++++++++++++++++++
- 4 files changed, 148 insertions(+)
- create mode 100644 Documentation/hwmon/sy7636a-hwmon.rst
- create mode 100644 drivers/hwmon/sy7636a-hwmon.c
+ arch/arm/configs/imx_v6_v7_defconfig | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/hwmon/sy7636a-hwmon.rst b/Documentation/hwmon/sy7636a-hwmon.rst
-new file mode 100644
-index 000000000000..6b3e36d028dd
---- /dev/null
-+++ b/Documentation/hwmon/sy7636a-hwmon.rst
-@@ -0,0 +1,24 @@
-+Kernel driver sy7636a-hwmon
-+=========================
-+
-+Supported chips:
-+
-+ * Silergy SY7636A PMIC
-+
-+
-+Description
-+-----------
-+
-+This driver adds hardware temperature reading support for
-+the Silergy SY7636A PMIC.
-+
-+The following sensors are supported
-+
-+  * Temperature
-+      - SoC on-die temperature in milli-degree C
-+
-+sysfs-Interface
-+---------------
-+
-+temp0_input
-+	- SoC on-die temperature (milli-degree C)
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index c4578e8f34bb..d768b833b721 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -1651,6 +1651,15 @@ config SENSORS_SIS5595
- 	  This driver can also be built as a module. If so, the module
- 	  will be called sis5595.
- 
-+config SENSORS_SY7636A
-+	tristate "Silergy SY7636A"
-+	help
-+	  If you say yes here you get support for the thermistor readout of
-+	  the Silergy SY7636A PMIC.
-+
-+	  This driver can also be built as a module.  If so, the module
-+	  will be called sy7636a-hwmon.
-+
- config SENSORS_DME1737
- 	tristate "SMSC DME1737, SCH311x and compatibles"
- 	depends on I2C && !PPC
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index 162940270661..1355ffdb1481 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -181,6 +181,7 @@ obj-$(CONFIG_SENSORS_SMSC47M1)	+= smsc47m1.o
- obj-$(CONFIG_SENSORS_SMSC47M192)+= smsc47m192.o
- obj-$(CONFIG_SENSORS_SPARX5)	+= sparx5-temp.o
- obj-$(CONFIG_SENSORS_STTS751)	+= stts751.o
-+obj-$(CONFIG_SENSORS_SY7636A)	+= sy7636a-hwmon.o
- obj-$(CONFIG_SENSORS_AMC6821)	+= amc6821.o
- obj-$(CONFIG_SENSORS_TC74)	+= tc74.o
- obj-$(CONFIG_SENSORS_THMC50)	+= thmc50.o
-diff --git a/drivers/hwmon/sy7636a-hwmon.c b/drivers/hwmon/sy7636a-hwmon.c
-new file mode 100644
-index 000000000000..1727a5f2a2ea
---- /dev/null
-+++ b/drivers/hwmon/sy7636a-hwmon.c
-@@ -0,0 +1,114 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Functions to access SY3686A power management chip temperature
-+ *
-+ * Copyright (C) 2021 reMarkable AS - http://www.remarkable.com/
-+ *
-+ * Authors: Lars Ivar Miljeteig <lars.ivar.miljeteig@remarkable.com>
-+ *          Alistair Francis <alistair@alistair23.me>
-+ */
-+
-+#include <linux/err.h>
-+#include <linux/hwmon.h>
-+#include <linux/init.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/regulator/machine.h>
-+
-+#include <linux/mfd/sy7636a.h>
-+
-+struct sy7636a_data {
-+	struct regmap *regmap;
-+	struct regulator *regulator;
-+};
-+
-+static int sy7636a_read(struct device *dev, enum hwmon_sensor_types type,
-+			 u32 attr, int channel, long *temp)
-+{
-+	struct sy7636a_data *data = dev_get_drvdata(dev);
-+	int ret, reg_val;
-+
-+	ret = regulator_enable(data->regulator);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_read(data->regmap,
-+			SY7636A_REG_TERMISTOR_READOUT, &reg_val);
-+	if (ret)
-+		return ret;
-+
-+	*temp = reg_val * 1000;
-+
-+	return 0;
-+}
-+
-+static umode_t sy7636a_is_visible(const void *data,
-+				   enum hwmon_sensor_types type,
-+				   u32 attr, int channel)
-+{
-+	if (type != hwmon_temp)
-+		return 0;
-+
-+	if (attr != hwmon_temp_input)
-+		return 0;
-+
-+	return 0444;
-+}
-+
-+static const struct hwmon_ops sy7636a_hwmon_ops = {
-+	.is_visible = sy7636a_is_visible,
-+	.read = sy7636a_read,
-+};
-+
-+static const struct hwmon_channel_info *sy7636a_info[] = {
-+	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
-+	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
-+	NULL
-+};
-+
-+static const struct hwmon_chip_info sy7636a_chip_info = {
-+	.ops = &sy7636a_hwmon_ops,
-+	.info = sy7636a_info,
-+};
-+
-+static int sy7636a_sensor_probe(struct platform_device *pdev)
-+{
-+	struct regmap *regmap = dev_get_regmap(pdev->dev.parent, NULL);
-+	struct sy7636a_data *data;
-+	struct device *hwmon_dev;
-+	int err;
-+
-+	if (!regmap)
-+		return -EPROBE_DEFER;
-+
-+	data = devm_kzalloc(&pdev->dev, sizeof(struct sy7636a_data), GFP_KERNEL);
-+	if (!data) {
-+		return -ENOMEM;
-+	}
-+
-+	data->regmap = regmap;
-+	data->regulator = devm_regulator_get(&pdev->dev, "vcom");
-+
-+	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev,
-+			"sy7636a_temperature", regmap, &sy7636a_chip_info, NULL);
-+
-+	if (IS_ERR(hwmon_dev)) {
-+		err = PTR_ERR(hwmon_dev);
-+		dev_err(&pdev->dev, "Unable to register hwmon device, returned %d\n", err);
-+		return err;
-+	}
-+
-+	return 0;
-+}
-+
-+static struct platform_driver sy7636a_sensor_driver = {
-+	.probe = sy7636a_sensor_probe,
-+	.driver = {
-+		.name = "sy7636a-temperature",
-+	},
-+};
-+module_platform_driver(sy7636a_sensor_driver);
-+
-+MODULE_DESCRIPTION("SY7636A sensor driver");
-+MODULE_LICENSE("GPL");
+diff --git a/arch/arm/configs/imx_v6_v7_defconfig b/arch/arm/configs/imx_v6_v7_defconfig
+index 5e4128dadd8d..a0b7528d7378 100644
+--- a/arch/arm/configs/imx_v6_v7_defconfig
++++ b/arch/arm/configs/imx_v6_v7_defconfig
+@@ -228,6 +228,7 @@ CONFIG_RN5T618_POWER=m
+ CONFIG_SENSORS_MC13783_ADC=y
+ CONFIG_SENSORS_GPIO_FAN=y
+ CONFIG_SENSORS_IIO_HWMON=y
++CONFIG_SENSORS_SY7636A=y
+ CONFIG_THERMAL_STATISTICS=y
+ CONFIG_THERMAL_WRITABLE_TRIPS=y
+ CONFIG_CPU_THERMAL=y
+@@ -244,6 +245,7 @@ CONFIG_MFD_DA9063=y
+ CONFIG_MFD_MC13XXX_SPI=y
+ CONFIG_MFD_MC13XXX_I2C=y
+ CONFIG_MFD_RN5T618=y
++CONFIG_MFD_SIMPLE_MFD_I2C=y
+ CONFIG_MFD_STMPE=y
+ CONFIG_REGULATOR=y
+ CONFIG_REGULATOR_FIXED_VOLTAGE=y
+@@ -257,6 +259,7 @@ CONFIG_REGULATOR_MC13783=y
+ CONFIG_REGULATOR_MC13892=y
+ CONFIG_REGULATOR_PFUZE100=y
+ CONFIG_REGULATOR_RN5T618=y
++CONFIG_REGULATOR_SY7636A=y
+ CONFIG_RC_CORE=y
+ CONFIG_RC_DEVICES=y
+ CONFIG_IR_GPIO_CIR=y
 -- 
 2.31.1
 
