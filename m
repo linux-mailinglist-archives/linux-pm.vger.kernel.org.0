@@ -2,140 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75D0543A184
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Oct 2021 21:37:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E0EA43A4FF
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Oct 2021 22:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236227AbhJYTjL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Oct 2021 15:39:11 -0400
-Received: from mga02.intel.com ([134.134.136.20]:30708 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235933AbhJYThI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 25 Oct 2021 15:37:08 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10148"; a="216915181"
-X-IronPort-AV: E=Sophos;i="5.87,181,1631602800"; 
-   d="scan'208";a="216915181"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2021 12:28:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,181,1631602800"; 
-   d="scan'208";a="446772164"
-Received: from lkp-server01.sh.intel.com (HELO 0352ec6b4cf1) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 25 Oct 2021 12:28:15 -0700
-Received: from kbuild by 0352ec6b4cf1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mf5dm-0000Bs-FT; Mon, 25 Oct 2021 19:28:14 +0000
-Date:   Tue, 26 Oct 2021 03:27:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- af2b73b422405bf7d7aef0060da17281f7a0e6d4
-Message-ID: <61770535.Egfg7roQia0TU6Qf%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S231339AbhJYUwT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Oct 2021 16:52:19 -0400
+Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:38726
+        "EHLO mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230490AbhJYUwS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Oct 2021 16:52:18 -0400
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AMRwSCKgxYZU7dRkm7HVJMztskXBQXuoji2hC?=
+ =?us-ascii?q?6mlwRA09T+Wxi92plu8KzAKcslgssb8b9OxoS5PwJk80kqQFh7X5XI3SODUO11?=
+ =?us-ascii?q?HJEGgP1+TfKnjbakjDH41mpMVdmspFaeEYZGIS5foSojPVLz9K+rK6Gc6T79s2?=
+ =?us-ascii?q?g00dLj1XVw=3D=3D?=
+X-IronPort-AV: E=Sophos;i="5.84,326,1620684000"; 
+   d="scan'208";a="397332773"
+Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Oct 2021 22:49:54 +0200
+Date:   Mon, 25 Oct 2021 22:49:54 +0200 (CEST)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Doug Smythies <dsmythies@telus.net>
+cc:     Julia Lawall <julia.lawall@inria.fr>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: problem in changing from active to passive mode
+In-Reply-To: <CAAYoRsXeQravNXKsWAZvacMmE_iBzaQ+mQxNbB5jcD_vkny+Sg@mail.gmail.com>
+Message-ID: <alpine.DEB.2.22.394.2110250832080.2938@hadrien>
+References: <alpine.DEB.2.22.394.2110241452460.2997@hadrien> <CAAYoRsXeQravNXKsWAZvacMmE_iBzaQ+mQxNbB5jcD_vkny+Sg@mail.gmail.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: af2b73b422405bf7d7aef0060da17281f7a0e6d4  Merge branch 'pm-sleep' into bleeding-edge
+Thanks for the feedback.  I see that if I change the mode from active to
+passive and back to active, I end up in active powersave, not active
+performance.  Changing the governor to performance does reproducethe
+original performance.
 
-elapsed time: 2416m
+Still, I have the impression that the performance with passive/schedutil
+is excessively bad because the frequency is excessively low.  But my
+machines are not available at the moment, so I will have to try again
+tomorrow to see what exactly is going on.
 
-configs tested: 81
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a002-20211024
-x86_64               randconfig-a004-20211024
-x86_64               randconfig-a005-20211024
-x86_64               randconfig-a006-20211024
-x86_64               randconfig-a001-20211024
-x86_64               randconfig-a003-20211024
-x86_64               randconfig-a013-20211025
-x86_64               randconfig-a015-20211025
-x86_64               randconfig-a011-20211025
-x86_64               randconfig-a014-20211025
-x86_64               randconfig-a016-20211025
-x86_64               randconfig-a012-20211025
-i386                 randconfig-a012-20211025
-i386                 randconfig-a013-20211025
-i386                 randconfig-a011-20211025
-i386                 randconfig-a016-20211025
-i386                 randconfig-a015-20211025
-i386                 randconfig-a014-20211025
-arc                  randconfig-r043-20211025
-s390                 randconfig-r044-20211025
-riscv                randconfig-r042-20211025
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-
-clang tested configs:
-i386                 randconfig-a003-20211025
-i386                 randconfig-a004-20211025
-i386                 randconfig-a002-20211025
-i386                 randconfig-a005-20211025
-i386                 randconfig-a001-20211025
-i386                 randconfig-a006-20211025
-hexagon              randconfig-r045-20211025
-hexagon              randconfig-r041-20211025
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+julia
