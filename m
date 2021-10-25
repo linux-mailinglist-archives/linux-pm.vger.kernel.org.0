@@ -2,22 +2,25 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2E1143990A
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Oct 2021 16:48:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3564743990C
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Oct 2021 16:48:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233375AbhJYOuU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Oct 2021 10:50:20 -0400
-Received: from marcansoft.com ([212.63.210.85]:38514 "EHLO mail.marcansoft.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233367AbhJYOuO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 25 Oct 2021 10:50:14 -0400
+        id S233384AbhJYOuV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Oct 2021 10:50:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44534 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233401AbhJYOuQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Oct 2021 10:50:16 -0400
+Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A582C061745;
+        Mon, 25 Oct 2021 07:47:51 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: hector@marcansoft.com)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 67C3C419B4;
-        Mon, 25 Oct 2021 14:47:39 +0000 (UTC)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id D1FE541E57;
+        Mon, 25 Oct 2021 14:47:44 +0000 (UTC)
 From:   Hector Martin <marcan@marcan.st>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Hector Martin <marcan@marcan.st>, Marc Zyngier <maz@kernel.org>,
@@ -32,11 +35,10 @@ Cc:     Hector Martin <marcan@marcan.st>, Marc Zyngier <maz@kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Johan Hovold <johan@kernel.org>, devicetree@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org,
-        Mark Kettenis <kettenis@openbsd.org>
-Subject: [PATCH v2 3/8] dt-bindings: power: Add apple,pmgr-pwrstate binding
-Date:   Mon, 25 Oct 2021 23:47:13 +0900
-Message-Id: <20211025144718.157794-4-marcan@marcan.st>
+        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: [PATCH v2 4/8] soc: apple: Add driver for Apple PMGR power state controls
+Date:   Mon, 25 Oct 2021 23:47:14 +0900
+Message-Id: <20211025144718.157794-5-marcan@marcan.st>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211025144718.157794-1-marcan@marcan.st>
 References: <20211025144718.157794-1-marcan@marcan.st>
@@ -46,104 +48,377 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This syscon child node represents a single SoC device controlled by the
-PMGR block. This layout allows us to declare all device power state
-controls (power/clock gating and reset) in the device tree, including
-dependencies, instead of hardcoding it into the driver. The register
-layout is uniform.
+Implements genpd and reset providers for downstream devices. Each
+instance of the driver binds to a single register and represents a
+single SoC power domain.
 
-Each pmgr-pwrstate node provides genpd and reset features, to be
-consumed by downstream device nodes.
+The driver does not currently implement all features (auto-pm,
+clockgate-only state), but we declare the respective registers for
+documentation purposes. These features will be added as they become
+useful for downstream devices.
 
-Future SoCs are expected to use backwards compatible registers, and the
-"apple,pmgr-pwrstate" represents any such interfaces (possibly with
-additional features gated by the more specific compatible), allowing
-them to be bound without driver updates. If a backwards incompatible
-change is introduced in future SoCs, it will require a new compatible,
-such as "apple,pmgr-pwrstate-v2".
+This also creates the apple/soc tree and Kconfig submenu.
 
-Reviewed-by: Mark Kettenis <kettenis@openbsd.org>
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Hector Martin <marcan@marcan.st>
 ---
- .../bindings/power/apple,pmgr-pwrstate.yaml   | 69 +++++++++++++++++++
- 1 file changed, 69 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/power/apple,pmgr-pwrstate.yaml
+ drivers/soc/Kconfig                     |   1 +
+ drivers/soc/Makefile                    |   1 +
+ drivers/soc/apple/Kconfig               |  21 ++
+ drivers/soc/apple/Makefile              |   2 +
+ drivers/soc/apple/apple-pmgr-pwrstate.c | 282 ++++++++++++++++++++++++
+ 5 files changed, 307 insertions(+)
+ create mode 100644 drivers/soc/apple/Kconfig
+ create mode 100644 drivers/soc/apple/Makefile
+ create mode 100644 drivers/soc/apple/apple-pmgr-pwrstate.c
 
-diff --git a/Documentation/devicetree/bindings/power/apple,pmgr-pwrstate.yaml b/Documentation/devicetree/bindings/power/apple,pmgr-pwrstate.yaml
+diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
+index e8a30c4c5aec..a8562678c437 100644
+--- a/drivers/soc/Kconfig
++++ b/drivers/soc/Kconfig
+@@ -3,6 +3,7 @@ menu "SOC (System On Chip) specific Drivers"
+ 
+ source "drivers/soc/actions/Kconfig"
+ source "drivers/soc/amlogic/Kconfig"
++source "drivers/soc/apple/Kconfig"
+ source "drivers/soc/aspeed/Kconfig"
+ source "drivers/soc/atmel/Kconfig"
+ source "drivers/soc/bcm/Kconfig"
+diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
+index a05e9fbcd3e0..adb30c2d4fea 100644
+--- a/drivers/soc/Makefile
++++ b/drivers/soc/Makefile
+@@ -4,6 +4,7 @@
+ #
+ 
+ obj-$(CONFIG_ARCH_ACTIONS)	+= actions/
++obj-$(CONFIG_ARCH_APPLE)	+= apple/
+ obj-y				+= aspeed/
+ obj-$(CONFIG_ARCH_AT91)		+= atmel/
+ obj-y				+= bcm/
+diff --git a/drivers/soc/apple/Kconfig b/drivers/soc/apple/Kconfig
 new file mode 100644
-index 000000000000..010f8b641304
+index 000000000000..271092b6aee7
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/power/apple,pmgr-pwrstate.yaml
-@@ -0,0 +1,69 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/power/apple,pmgr-pwrstate.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/soc/apple/Kconfig
+@@ -0,0 +1,21 @@
++# SPDX-License-Identifier: GPL-2.0-only
 +
-+title: Apple SoC PMGR Power States
++if ARCH_APPLE || COMPILE_TEST
 +
-+maintainers:
-+  - Hector Martin <marcan@marcan.st>
++menu "Apple SoC drivers"
 +
-+allOf:
-+  - $ref: "power-domain.yaml#"
++config APPLE_PMGR_PWRSTATE
++	tristate "Apple SoC PMGR power state control"
++	select REGMAP
++	select MFD_SYSCON
++	select PM_GENERIC_DOMAINS
++	select RESET_CONTROLLER
++	default ARCH_APPLE
++	help
++	  The PMGR block in Apple SoCs provides high-level power state
++	  controls for SoC devices. This driver manages them through the
++	  generic power domain framework, and also provides reset support.
 +
-+description: |
-+  Apple SoCs include a PMGR block responsible for power management,
-+  which can control various clocks, resets, power states, and
-+  performance features. This binding describes the device power
-+  state registers, which control power states and resets.
++endmenu
 +
-+  Each instance of a power controller within the PMGR syscon node
-+  represents a generic power domain provider, as documented in
-+  Documentation/devicetree/bindings/power/power-domain.yaml.
-+  The provider controls a single SoC block. The power hierarchy is
-+  represented via power-domains relationships between these nodes.
++endif
+diff --git a/drivers/soc/apple/Makefile b/drivers/soc/apple/Makefile
+new file mode 100644
+index 000000000000..c114e84667e4
+--- /dev/null
++++ b/drivers/soc/apple/Makefile
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-$(CONFIG_APPLE_PMGR_PWRSTATE)	+= apple-pmgr-pwrstate.o
+diff --git a/drivers/soc/apple/apple-pmgr-pwrstate.c b/drivers/soc/apple/apple-pmgr-pwrstate.c
+new file mode 100644
+index 000000000000..4c6997ddab8d
+--- /dev/null
++++ b/drivers/soc/apple/apple-pmgr-pwrstate.c
+@@ -0,0 +1,282 @@
++// SPDX-License-Identifier: GPL-2.0-only OR MIT
++/*
++ * Apple SoC PMGR device power state driver
++ *
++ * Copyright The Asahi Linux Contributors
++ */
 +
-+  See Documentation/devicetree/bindings/arm/apple/apple,pmgr.yaml
-+  for the top-level PMGR node documentation.
++#include <linux/bitops.h>
++#include <linux/bitfield.h>
++#include <linux/err.h>
++#include <linux/of.h>
++#include <linux/of_address.h>
++#include <linux/platform_device.h>
++#include <linux/pm_domain.h>
++#include <linux/regmap.h>
++#include <linux/mfd/syscon.h>
++#include <linux/reset-controller.h>
++#include <linux/module.h>
 +
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - apple,t8103-pmgr-pwrstate
-+      - const: apple,pmgr-pwrstate
++#define APPLE_PMGR_RESET        BIT(31)
++#define APPLE_PMGR_AUTO_ENABLE  BIT(28)
++#define APPLE_PMGR_PS_AUTO      GENMASK(27, 24)
++#define APPLE_PMGR_PARENT_OFF   BIT(11)
++#define APPLE_PMGR_DEV_DISABLE  BIT(10)
++#define APPLE_PMGR_WAS_CLKGATED BIT(9)
++#define APPLE_PMGR_WAS_PWRGATED BIT(8)
++#define APPLE_PMGR_PS_ACTUAL    GENMASK(7, 4)
++#define APPLE_PMGR_PS_TARGET    GENMASK(3, 0)
 +
-+  reg:
-+    maxItems: 1
++#define APPLE_PMGR_PS_ACTIVE    0xf
++#define APPLE_PMGR_PS_CLKGATE   0x4
++#define APPLE_PMGR_PS_PWRGATE   0x0
 +
-+  "#power-domain-cells":
-+    const: 0
++#define APPLE_PMGR_PS_SET_TIMEOUT 100
++#define APPLE_PMGR_RESET_TIME 1
 +
-+  "#reset-cells":
-+    const: 0
++struct apple_pmgr_ps {
++	struct device *dev;
++	struct generic_pm_domain genpd;
++	struct reset_controller_dev rcdev;
++	struct regmap *regmap;
++	u32 offset;
++};
 +
-+  power-domains:
-+    description:
-+      Reference to parent power domains. A domain may have multiple parents,
-+      and all will be powered up when it is powered.
-+    minItems: 1
++#define genpd_to_apple_pmgr_ps(_genpd) container_of(_genpd, struct apple_pmgr_ps, genpd)
++#define rcdev_to_apple_pmgr_ps(_rcdev) container_of(_rcdev, struct apple_pmgr_ps, rcdev)
 +
-+  label:
-+    description: |
-+      Specifies the name of the SoC domain being controlled. This is used to
-+      name the power/reset domains.
++static int apple_pmgr_ps_set(struct generic_pm_domain *genpd, u32 pstate)
++{
++	int ret;
++	struct apple_pmgr_ps *ps = genpd_to_apple_pmgr_ps(genpd);
++	u32 reg;
 +
-+  apple,always-on:
-+    description: |
-+      Forces this power domain to always be powered up.
-+    type: boolean
++	ret = regmap_read(ps->regmap, ps->offset, &reg);
++	if (ret < 0)
++		return ret;
 +
-+required:
-+  - compatible
-+  - reg
-+  - "#power-domain-cells"
-+  - "#reset-cells"
-+  - label
++	/* Resets are synchronous, and only work if the device is powered and clocked. */
++	if (reg & APPLE_PMGR_RESET && pstate != APPLE_PMGR_PS_ACTIVE)
++		dev_err(ps->dev, "PS 0x%x: powering off with RESET active\n", ps->offset);
 +
-+additionalProperties: false
++	reg &= ~(APPLE_PMGR_AUTO_ENABLE | APPLE_PMGR_WAS_CLKGATED | APPLE_PMGR_WAS_PWRGATED |
++		 APPLE_PMGR_PS_TARGET);
++	reg |= FIELD_PREP(APPLE_PMGR_PS_TARGET, pstate);
++
++	dev_dbg(ps->dev, "PS 0x%x: pwrstate = 0x%x: 0x%x\n", ps->offset, pstate, reg);
++
++	regmap_write(ps->regmap, ps->offset, reg);
++
++	ret = regmap_read_poll_timeout_atomic(
++		ps->regmap, ps->offset, reg,
++		(FIELD_GET(APPLE_PMGR_PS_ACTUAL, reg) == pstate), 1,
++		APPLE_PMGR_PS_SET_TIMEOUT);
++	if (ret < 0)
++		dev_err(ps->dev, "PS 0x%x: Failed to reach power state 0x%x (now: 0x%x)\n",
++			ps->offset, pstate, reg);
++	return ret;
++}
++
++static bool apple_pmgr_ps_is_active(struct apple_pmgr_ps *ps)
++{
++	u32 reg = 0;
++
++	regmap_read(ps->regmap, ps->offset, &reg);
++	return FIELD_GET(APPLE_PMGR_PS_ACTUAL, reg) == APPLE_PMGR_PS_ACTIVE;
++}
++
++static int apple_pmgr_ps_power_on(struct generic_pm_domain *genpd)
++{
++	return apple_pmgr_ps_set(genpd, APPLE_PMGR_PS_ACTIVE);
++}
++
++static int apple_pmgr_ps_power_off(struct generic_pm_domain *genpd)
++{
++	return apple_pmgr_ps_set(genpd, APPLE_PMGR_PS_PWRGATE);
++}
++
++static int apple_pmgr_reset_assert(struct reset_controller_dev *rcdev, unsigned long id)
++{
++	struct apple_pmgr_ps *ps = rcdev_to_apple_pmgr_ps(rcdev);
++
++	mutex_lock(&ps->genpd.mlock);
++
++	if (ps->genpd.status == GENPD_STATE_OFF)
++		dev_err(ps->dev, "PS 0x%x: asserting RESET while powered down\n", ps->offset);
++
++	dev_dbg(ps->dev, "PS 0x%x: assert reset\n", ps->offset);
++	/* Quiesce device before asserting reset */
++	regmap_set_bits(ps->regmap, ps->offset, APPLE_PMGR_DEV_DISABLE);
++	regmap_set_bits(ps->regmap, ps->offset, APPLE_PMGR_RESET);
++
++	mutex_unlock(&ps->genpd.mlock);
++
++	return 0;
++}
++
++static int apple_pmgr_reset_deassert(struct reset_controller_dev *rcdev, unsigned long id)
++{
++	struct apple_pmgr_ps *ps = rcdev_to_apple_pmgr_ps(rcdev);
++
++	mutex_lock(&ps->genpd.mlock);
++
++	dev_dbg(ps->dev, "PS 0x%x: deassert reset\n", ps->offset);
++	regmap_clear_bits(ps->regmap, ps->offset, APPLE_PMGR_RESET);
++	regmap_clear_bits(ps->regmap, ps->offset, APPLE_PMGR_DEV_DISABLE);
++
++	if (ps->genpd.status == GENPD_STATE_OFF)
++		dev_err(ps->dev, "PS 0x%x: RESET was deasserted while powered down\n", ps->offset);
++
++	mutex_unlock(&ps->genpd.mlock);
++
++	return 0;
++}
++
++static int apple_pmgr_reset_reset(struct reset_controller_dev *rcdev, unsigned long id)
++{
++	int ret;
++
++	ret = apple_pmgr_reset_assert(rcdev, id);
++	if (ret)
++		return ret;
++
++	usleep_range(APPLE_PMGR_RESET_TIME, 2 * APPLE_PMGR_RESET_TIME);
++
++	return apple_pmgr_reset_deassert(rcdev, id);
++}
++
++static int apple_pmgr_reset_status(struct reset_controller_dev *rcdev, unsigned long id)
++{
++	struct apple_pmgr_ps *ps = rcdev_to_apple_pmgr_ps(rcdev);
++	u32 reg = 0;
++
++	regmap_read(ps->regmap, ps->offset, &reg);
++
++	return !!(reg & APPLE_PMGR_RESET);
++}
++
++const struct reset_control_ops apple_pmgr_reset_ops = {
++	.assert		= apple_pmgr_reset_assert,
++	.deassert	= apple_pmgr_reset_deassert,
++	.reset		= apple_pmgr_reset_reset,
++	.status		= apple_pmgr_reset_status,
++};
++
++static int apple_pmgr_reset_xlate(struct reset_controller_dev *rcdev,
++				  const struct of_phandle_args *reset_spec)
++{
++	return 0;
++}
++
++static int apple_pmgr_ps_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct device_node *node = dev->of_node;
++	struct apple_pmgr_ps *ps;
++	struct regmap *regmap;
++	struct of_phandle_iterator it;
++	int ret;
++	const char *name;
++
++	regmap = syscon_node_to_regmap(node->parent);
++	if (IS_ERR(regmap))
++		return PTR_ERR(regmap);
++
++	ps = devm_kzalloc(dev, sizeof(*ps), GFP_KERNEL);
++	if (!ps)
++		return -ENOMEM;
++
++	ps->dev = dev;
++	ps->regmap = regmap;
++
++	ret = of_property_read_string(node, "label", &name);
++	if (ret < 0) {
++		dev_err(dev, "missing label property\n");
++		return ret;
++	}
++
++	ret = of_property_read_u32(node, "reg", &ps->offset);
++	if (ret < 0) {
++		dev_err(dev, "missing reg property\n");
++		return ret;
++	}
++
++	if (of_property_read_bool(node, "apple,always-on"))
++		ps->genpd.flags |= GENPD_FLAG_ALWAYS_ON;
++
++	ps->genpd.name = name;
++	ps->genpd.power_on = apple_pmgr_ps_power_on;
++	ps->genpd.power_off = apple_pmgr_ps_power_off;
++
++	ret = pm_genpd_init(&ps->genpd, NULL, !apple_pmgr_ps_is_active(ps));
++	if (ret < 0) {
++		dev_err(dev, "pm_genpd_init failed\n");
++		return ret;
++	}
++
++	ret = of_genpd_add_provider_simple(node, &ps->genpd);
++	if (ret < 0) {
++		dev_err(dev, "of_genpd_add_provider_simple failed\n");
++		return ret;
++	}
++
++	of_for_each_phandle(&it, ret, node, "power-domains", "#power-domain-cells", -1) {
++		struct of_phandle_args parent, child;
++
++		parent.np = it.node;
++		parent.args_count = of_phandle_iterator_args(&it, parent.args, MAX_PHANDLE_ARGS);
++		child.np = node;
++		child.args_count = 0;
++		ret = of_genpd_add_subdomain(&parent, &child);
++
++		if (ret == -EPROBE_DEFER) {
++			of_node_put(parent.np);
++			goto err_remove;
++		} else if (ret < 0) {
++			dev_err(dev, "failed to add to parent domain: %d (%s -> %s)\n",
++				ret, it.node->name, node->name);
++			of_node_put(parent.np);
++			goto err_remove;
++		}
++	}
++
++	pm_genpd_remove_device(dev);
++
++	ps->rcdev.owner = THIS_MODULE;
++	ps->rcdev.nr_resets = 1;
++	ps->rcdev.ops = &apple_pmgr_reset_ops;
++	ps->rcdev.of_node = dev->of_node;
++	ps->rcdev.of_reset_n_cells = 0;
++	ps->rcdev.of_xlate = apple_pmgr_reset_xlate;
++
++	ret = devm_reset_controller_register(dev, &ps->rcdev);
++	if (ret < 0)
++		goto err_remove;
++
++	return 0;
++err_remove:
++	of_genpd_del_provider(node);
++	pm_genpd_remove(&ps->genpd);
++	return ret;
++}
++
++static const struct of_device_id apple_pmgr_ps_of_match[] = {
++	{ .compatible = "apple,pmgr-pwrstate" },
++	{}
++};
++
++MODULE_DEVICE_TABLE(of, apple_pmgr_ps_of_match);
++
++static struct platform_driver apple_pmgr_ps_driver = {
++	.probe = apple_pmgr_ps_probe,
++	.driver = {
++		.name = "apple-pmgr-pwrstate",
++		.of_match_table = apple_pmgr_ps_of_match,
++	},
++};
++
++MODULE_AUTHOR("Hector Martin <marcan@marcan.st>");
++MODULE_DESCRIPTION("PMGR power state driver for Apple SoCs");
++MODULE_LICENSE("GPL v2");
++
++module_platform_driver(apple_pmgr_ps_driver);
 -- 
 2.33.0
 
