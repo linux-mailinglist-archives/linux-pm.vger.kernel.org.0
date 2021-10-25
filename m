@@ -2,58 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE73F439418
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Oct 2021 12:53:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EB2343941C
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Oct 2021 12:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231267AbhJYKzo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Oct 2021 06:55:44 -0400
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:55049 "EHLO
+        id S232832AbhJYKz4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Oct 2021 06:55:56 -0400
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:58005 "EHLO
         new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229890AbhJYKzn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Oct 2021 06:55:43 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 1D55F580477;
-        Mon, 25 Oct 2021 06:53:21 -0400 (EDT)
+        by vger.kernel.org with ESMTP id S232837AbhJYKzz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Oct 2021 06:55:55 -0400
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id E34F158045A;
+        Mon, 25 Oct 2021 06:53:31 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Mon, 25 Oct 2021 06:53:21 -0400
+  by compute3.internal (MEProxy); Mon, 25 Oct 2021 06:53:31 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
-         h=from:to:cc:subject:date:message-id:content-type:mime-version
-        :content-transfer-encoding; s=fm2; bh=E/lvINlfaDwDv0II0+z7GqFpIN
-        xVAc1W2JO3GLlW0rs=; b=tN+9t6ZEHIZv+bVrjduN7ovPJzj1aSUmxaRtHd7aLR
-        LcSD9oQiesQ2l6PzKAtotOukl6wKlO3jYSCSSdANaAFPxyuh82lEawjvF8Rqkqwj
-        bKTdvIPnxRXj70imyA0epfTzXMlAeA7z6ZxkU/AugJl8LeTzJutOs06xbjtNUo6q
-        xAn4BwsX1AArzvsYTIUwP+kPfx4SeA7gh1Rlt25yvPNHLALCnWX7Q74w3SIXU2Eo
-        W95h4+2ynnhmlQuQs+DwYvVzkmwebJkHnHxaX5O2uSyiYGViA9PFZCbrhJhpVrn/
-        UYWAzQ3qe27WSnAPXuaWkJl8XEr1/g4ZPMggtopyr0Ww==
+         h=from:to:cc:subject:date:message-id:in-reply-to:references
+        :mime-version:content-transfer-encoding; s=fm2; bh=xPIOWPlEpcSPg
+        VeMbUyqzIh0yquJ8UKRhzhIcmgwvNU=; b=MyMo3f0t/4hNgBQPbTN0Vfo5b0L2Y
+        my6Ff2ag4qDoUP0xA7eFSf5OgI2rjk+gJTXfvUeUxomNKTfS9ZCzBDoeiUS77FHT
+        zHAG27671eFMGvtPW14LGistc3Ljr20ZooC4MM+j+vmSLMbZVCAvN8mtAugI0KND
+        zfrxBCdQcX3MbQgyVuu9k42JVIzyo2HqPKCXTa1YyXG3Eh7J5U7X6BujLWH/5tF/
+        FNvFIi08oTpPhvDW+D1owBeFt0eZO8DEz1SDPoTI0bLM0EXrgYIWKY1niP/Gd3FI
+        IlKtG7P3ud6CP5WgeN3+0f2jyGtZSBQPgSBRPFdPyA39xxOSXC1/DiDtw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:message-id:mime-version:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=E/lvIN
-        lfaDwDv0II0+z7GqFpINxVAc1W2JO3GLlW0rs=; b=SV4eDD63byAlyVN8/UxyA+
-        vmxDbfWnIkfys16pVnx17NEzQ2xHcphKZa0uAkcwT2x4TIXT19iGM0OicRsI6Jgr
-        5JCY1CRfdT/8pJ0xb+XTAj1K0Kt4bUjAhsx+Im1HVBzgtpkvXggEviywpwsGMpkR
-        0lFil1fFezNAv9uBU9sY9pUaOvth6kcRHl7YUnfKOlzkkBxcnlyga1xjNOGVz9KR
-        2OJnQMGXp4k3n5JUGw/C/UxucbanCqwXAxKfEcNZx1jhQJ0XMX5Q5fUp2p5+hI1A
-        tqTDWQjRkDvteh9/2sUTJUd7F4X0UpaSOleHAkI/ggrTeEqbbn3DiI2cFPki5ltg
-        ==
-X-ME-Sender: <xms:oIx2YcBuKEAUVD9nCEmxvXOp-WOvfd6lef5oadmee3CdpQ7uIl3WRw>
-    <xme:oIx2YejDrYWetbn8m7CarVGTRh9J24-p7dWFWy8TG7HmHZayEQlYFdCpbtLZehS_k
-    6Q6fiplO1DX-oLz0R4>
-X-ME-Received: <xmr:oIx2YfkxP8qKJHSipgDx4QdOkjY8vbtI9wM5xb8q8LNjf2xKV5flvcHkKEOIpcq8pCwvfROCAbO5>
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :in-reply-to:message-id:mime-version:references:subject:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; bh=xPIOWPlEpcSPgVeMbUyqzIh0yquJ8UKRhzhIcmgwvNU=; b=EzYtRWQB
+        FIKNpZxoTZHUoaHAFA9x2FKhVJ+D0rXaoPk6/YiZGpDgajsE+eDB9kscZHtz9uZa
+        aGi5eY7lyRku/EujHylPasBZN4xKiqLkUq+mOh/SXtcfWqP96sd4HttcTxXPKNGK
+        q8vPLsdDNAhZdCIJ7YCOUqfsRl635lWOaXsKcFv9WTntSpmDv6OJwxH5pr2/JTN5
+        av/RoUl7vExbETbN3IvzC276XANCYLl/Q5mYu2hD5QGc+O2i7RTlqPwAGSUUk5+J
+        uh+/FAF+6dyEeDm7YRIXDK0ANDvQ2zlWZgoi3AkhJPUWq8XnV8vxxT9rOn04+/ov
+        QlI9VezkmrBUrg==
+X-ME-Sender: <xms:q4x2Yele2fONxIMNkWeHzrALhUo56Oa7Zs0_WFJUNNEd-wMjyLoraw>
+    <xme:q4x2YV3blPML3hzlOrvXb1ewuzUxbk3YzfJKdSpFlU4pMvJTnI4TYyJU7STY7G3eI
+    tQ5wbjbV9dEAcva_fk>
+X-ME-Received: <xmr:q4x2YcpMk0rE15O_gFug9UjdY971wanDYAyeRUvw5oj968zLgFHpt-DzGscxBYS8ka9r1IAIF1aC>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvdefhedgfeduucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvffufffkofgtggfgsehtqhertd
-    ertdejnecuhfhrohhmpeetlhhishhtrghirhcuhfhrrghntghishcuoegrlhhishhtrghi
-    rhesrghlihhsthgrihhrvdefrdhmvgeqnecuggftrfgrthhtvghrnhepheetfefgjeeuje
-    dtgedvgfeghfeigfehffdvffduveevteejudfhudekudetveejnecuvehluhhsthgvrhfu
-    ihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghlihhsthgrihhrsegrlhhish
-    htrghirhdvfedrmhgv
-X-ME-Proxy: <xmx:oIx2YSxpPSjPnnXapU4XhCHxAzW3Tl2ylAB6fbzxR5cGovnQORfpXw>
-    <xmx:oIx2YRQUd6dEDRAyAvERAkW5_3l0ulG75TBHI6W1Ki79f_KXU0UJSw>
-    <xmx:oIx2YdYgFKXMiKpbqmWq6HAsTjXAnt3f3LnPVEI0W4H_KBTRHqx54Q>
-    <xmx:oYx2YSAs_aXQpOpVILKRjR5NFk5vZvDipS-J3C2D2EZs5UzgP6qPDw>
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeetlhhishht
+    rghirhcuhfhrrghntghishcuoegrlhhishhtrghirhesrghlihhsthgrihhrvdefrdhmvg
+    eqnecuggftrfgrthhtvghrnhepffdthffggefglefgkeejhfekiefgleelfefhtefhheef
+    teelgeeggefgfeffvddtnecuffhomhgrihhnpeguvghvihgtvghtrhgvvgdrohhrghenuc
+    evlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhishht
+    rghirhesrghlihhsthgrihhrvdefrdhmvg
+X-ME-Proxy: <xmx:q4x2YSma0FL2-QHjJNSlHnwPZkl7H8fyC_ggcdtWmQXcmYkXcY8N9g>
+    <xmx:q4x2Yc09YpWoQYcXE3-ORQm83UgXuz19XO4kTBq8Iy4F1nLGPBpoLg>
+    <xmx:q4x2YZsaPR5zOX-JKnr96smMtAnPxpzS6R7ZS5oMbxTn4-deFLzi9g>
+    <xmx:q4x2YU4suk1rmB1q1eE4v0LLQEs-k_7UNtQjMhVU8nbwBM-lmBa9yg>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 25 Oct 2021 06:53:12 -0400 (EDT)
+ 25 Oct 2021 06:53:21 -0400 (EDT)
 From:   Alistair Francis <alistair@alistair23.me>
 To:     robh+dt@kernel.org, kernel@pengutronix.de, lgirdwood@gmail.com,
         lee.jones@linaro.org, broonie@kernel.org
@@ -63,62 +64,116 @@ Cc:     s.hauer@pengutronix.de, rui.zhang@intel.com,
         devicetree@vger.kernel.org, linux-imx@nxp.com,
         andreas@kemnade.info, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Alistair Francis <alistair@alistair23.me>
-Subject: [PATCH v14 0/8] Add support for the silergy,sy7636a
-Date:   Mon, 25 Oct 2021 20:53:01 +1000
-Message-Id: <20211025105309.37942-1-alistair@alistair23.me>
+        Alistair Francis <alistair@alistair23.me>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v14 1/8] dt-bindings: mfd: Initial commit of silergy,sy7636a.yaml
+Date:   Mon, 25 Oct 2021 20:53:02 +1000
+Message-Id: <20211025105309.37942-2-alistair@alistair23.me>
 X-Mailer: git-send-email 2.31.1
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20211025105309.37942-1-alistair@alistair23.me>
+References: <20211025105309.37942-1-alistair@alistair23.me>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-v14:=0D
- - Merge the thermal driver and hwmon=0D
-v13:=0D
- - Address comments on thermal driver=0D
- - Rebase on master (without other patches)=0D
-v12:=0D
- - Rebase=0D
-v11:=0D
- - Address comments on hwmon=0D
- - Improve "mfd: simple-mfd-i2c: Add a Kconfig name" commit message=0D
-v10:=0D
- - Use dev_get_regmap() instead of dev_get_drvdata()=0D
-v9:=0D
- - Convert to use the simple-mfd-i2c instead=0D
-=0D
-Alistair Francis (8):=0D
-  dt-bindings: mfd: Initial commit of silergy,sy7636a.yaml=0D
-  mfd: simple-mfd-i2c: Add a Kconfig name=0D
-  mfd: simple-mfd-i2c: Enable support for the silergy,sy7636a=0D
-  regulator: sy7636a: Remove requirement on sy7636a mfd=0D
-  hwmon: sy7636a: Add temperature driver for sy7636a=0D
-  ARM: imx_v6_v7_defconfig: Enable silergy,sy7636a=0D
-  ARM: dts: imx7d: remarkable2: Enable silergy,sy7636a=0D
-  ARM: dts: imx7d: remarkable2: Enable lcdif=0D
-=0D
- .../bindings/mfd/silergy,sy7636a.yaml         |  79 ++++++++++=0D
- Documentation/hwmon/sy7636a-hwmon.rst         |  24 ++++=0D
- arch/arm/boot/dts/imx7d-remarkable2.dts       | 136 ++++++++++++++++++=0D
- arch/arm/configs/imx_v6_v7_defconfig          |   3 +=0D
- drivers/hwmon/Kconfig                         |   9 ++=0D
- drivers/hwmon/Makefile                        |   1 +=0D
- drivers/hwmon/sy7636a-hwmon.c                 | 114 +++++++++++++++=0D
- drivers/mfd/Kconfig                           |   2 +-=0D
- drivers/mfd/simple-mfd-i2c.c                  |  11 ++=0D
- drivers/regulator/Kconfig                     |   1 -=0D
- drivers/regulator/sy7636a-regulator.c         |   9 +-=0D
- include/linux/mfd/sy7636a.h                   |  36 +++++=0D
- 12 files changed, 420 insertions(+), 5 deletions(-)=0D
- create mode 100644 Documentation/devicetree/bindings/mfd/silergy,sy7636a.y=
-aml=0D
- create mode 100644 Documentation/hwmon/sy7636a-hwmon.rst=0D
- create mode 100644 drivers/hwmon/sy7636a-hwmon.c=0D
- create mode 100644 include/linux/mfd/sy7636a.h=0D
-=0D
--- =0D
-2.31.1=0D
-=0D
+Initial support for the Silergy SY7636A Power Management chip
+and regulator.
+
+Signed-off-by: Alistair Francis <alistair@alistair23.me>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+---
+ .../bindings/mfd/silergy,sy7636a.yaml         | 79 +++++++++++++++++++
+ 1 file changed, 79 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml
+
+diff --git a/Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml b/Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml
+new file mode 100644
+index 000000000000..0566f9498e2f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml
+@@ -0,0 +1,79 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/mfd/silergy,sy7636a.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: silergy sy7636a PMIC
++
++maintainers:
++  - Alistair Francis <alistair@alistair23.me>
++
++properties:
++  compatible:
++    const: silergy,sy7636a
++
++  reg:
++    description:
++      I2C device address.
++    maxItems: 1
++
++  "#address-cells":
++    const: 1
++
++  "#size-cells":
++    const: 0
++
++  '#thermal-sensor-cells':
++    const: 0
++
++  epd-pwr-good-gpios:
++    description:
++      Specifying the power good GPIOs.
++    maxItems: 1
++
++  regulators:
++    type: object
++
++    properties:
++      compatible:
++        const: silergy,sy7636a-regulator
++
++      vcom:
++        type: object
++        $ref: /schemas/regulator/regulator.yaml#
++        properties:
++          regulator-name:
++            const: vcom
++
++    additionalProperties: false
++
++required:
++  - compatible
++  - reg
++  - '#thermal-sensor-cells'
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      pmic@62 {
++        compatible = "silergy,sy7636a";
++        reg = <0x62>;
++        pinctrl-names = "default";
++        pinctrl-0 = <&pinctrl_epdpmic>;
++        #thermal-sensor-cells = <0>;
++
++        regulators {
++          reg_epdpmic: vcom {
++            regulator-name = "vcom";
++            regulator-boot-on;
++          };
++        };
++      };
++    };
++...
+-- 
+2.31.1
+
