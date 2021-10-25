@@ -2,148 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B317E4393B9
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Oct 2021 12:30:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE73F439418
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Oct 2021 12:53:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231617AbhJYKcm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Oct 2021 06:32:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41106 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbhJYKcl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Oct 2021 06:32:41 -0400
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE88C061745;
-        Mon, 25 Oct 2021 03:30:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=Content-Transfer-Encoding:Content-Type:
-        References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-ID
-        :Content-Description; bh=zaVg4jBc9F4rk3WaC2BbIGzIvbQck+4g8h3ofbOG7k0=; b=ZbPo
-        LvulK7ILdjJM7xAIoJFe/wEuFTRA/Z/DLCyf3Sgu8avt1fA3+Vr/PuDRBSlUOyp4U1eLAKXpkr3lG
-        +nS9h235f/vegS0mVCH6SnPgykf1731fOdCrc3O9HN8WjlxHZS3S5bTx2hiU+Xx5MQ3gk0E7/UeYz
-        9R3ThRzTLLsMIMYFOOOsioPE+TuH05PgCcqROAqLap5vOtW6KDNp7/MTxaZaoy+nckDiCP3kSgVOk
-        mjdiQ00N/DttyPkVpi1AUZwAmt+3ws2xOu/R7bqCaF3Ib6Dy5F4rb+xSZZkhMv94phQF6/dRk1R3c
-        M9+f3SpQolzKaOcME5T94uZBSeq7Hw==;
-Received: from [81.174.171.191] (helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <john@metanate.com>)
-        id 1mexF6-0002VB-Gf; Mon, 25 Oct 2021 11:30:12 +0100
-Date:   Mon, 25 Oct 2021 11:30:07 +0100
-From:   John Keeping <john@metanate.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-rt-users@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [RFC PATCH RT] PM: runtime: avoid retry loops on RT
-Message-ID: <20211025113007.6d09bfed.john@metanate.com>
-In-Reply-To: <CAJZ5v0hD61=MsVWmoGNJ50a6raGrsME_=7ha=E-Y3AgmuvQsjw@mail.gmail.com>
-References: <20211005155427.1591196-1-john@metanate.com>
- <CAJZ5v0gPwUQzGBa2VDeC3xAF9zJVm486BC0eue10-urJ8Xz+iw@mail.gmail.com>
- <20211005181706.66102578.john@metanate.com>
- <CAJZ5v0iFKYvM+rn68VaAbM4=ZLAQBR_UPzvAuKqVLQuP=ZJPew@mail.gmail.com>
- <20211006191813.0e097b9f.john@metanate.com>
- <CAJZ5v0hD61=MsVWmoGNJ50a6raGrsME_=7ha=E-Y3AgmuvQsjw@mail.gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
+        id S231267AbhJYKzo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Oct 2021 06:55:44 -0400
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:55049 "EHLO
+        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229890AbhJYKzn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Oct 2021 06:55:43 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 1D55F580477;
+        Mon, 25 Oct 2021 06:53:21 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 25 Oct 2021 06:53:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
+         h=from:to:cc:subject:date:message-id:content-type:mime-version
+        :content-transfer-encoding; s=fm2; bh=E/lvINlfaDwDv0II0+z7GqFpIN
+        xVAc1W2JO3GLlW0rs=; b=tN+9t6ZEHIZv+bVrjduN7ovPJzj1aSUmxaRtHd7aLR
+        LcSD9oQiesQ2l6PzKAtotOukl6wKlO3jYSCSSdANaAFPxyuh82lEawjvF8Rqkqwj
+        bKTdvIPnxRXj70imyA0epfTzXMlAeA7z6ZxkU/AugJl8LeTzJutOs06xbjtNUo6q
+        xAn4BwsX1AArzvsYTIUwP+kPfx4SeA7gh1Rlt25yvPNHLALCnWX7Q74w3SIXU2Eo
+        W95h4+2ynnhmlQuQs+DwYvVzkmwebJkHnHxaX5O2uSyiYGViA9PFZCbrhJhpVrn/
+        UYWAzQ3qe27WSnAPXuaWkJl8XEr1/g4ZPMggtopyr0Ww==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:message-id:mime-version:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=E/lvIN
+        lfaDwDv0II0+z7GqFpINxVAc1W2JO3GLlW0rs=; b=SV4eDD63byAlyVN8/UxyA+
+        vmxDbfWnIkfys16pVnx17NEzQ2xHcphKZa0uAkcwT2x4TIXT19iGM0OicRsI6Jgr
+        5JCY1CRfdT/8pJ0xb+XTAj1K0Kt4bUjAhsx+Im1HVBzgtpkvXggEviywpwsGMpkR
+        0lFil1fFezNAv9uBU9sY9pUaOvth6kcRHl7YUnfKOlzkkBxcnlyga1xjNOGVz9KR
+        2OJnQMGXp4k3n5JUGw/C/UxucbanCqwXAxKfEcNZx1jhQJ0XMX5Q5fUp2p5+hI1A
+        tqTDWQjRkDvteh9/2sUTJUd7F4X0UpaSOleHAkI/ggrTeEqbbn3DiI2cFPki5ltg
+        ==
+X-ME-Sender: <xms:oIx2YcBuKEAUVD9nCEmxvXOp-WOvfd6lef5oadmee3CdpQ7uIl3WRw>
+    <xme:oIx2YejDrYWetbn8m7CarVGTRh9J24-p7dWFWy8TG7HmHZayEQlYFdCpbtLZehS_k
+    6Q6fiplO1DX-oLz0R4>
+X-ME-Received: <xmr:oIx2YfkxP8qKJHSipgDx4QdOkjY8vbtI9wM5xb8q8LNjf2xKV5flvcHkKEOIpcq8pCwvfROCAbO5>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvdefhedgfeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvffufffkofgtggfgsehtqhertd
+    ertdejnecuhfhrohhmpeetlhhishhtrghirhcuhfhrrghntghishcuoegrlhhishhtrghi
+    rhesrghlihhsthgrihhrvdefrdhmvgeqnecuggftrfgrthhtvghrnhepheetfefgjeeuje
+    dtgedvgfeghfeigfehffdvffduveevteejudfhudekudetveejnecuvehluhhsthgvrhfu
+    ihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghlihhsthgrihhrsegrlhhish
+    htrghirhdvfedrmhgv
+X-ME-Proxy: <xmx:oIx2YSxpPSjPnnXapU4XhCHxAzW3Tl2ylAB6fbzxR5cGovnQORfpXw>
+    <xmx:oIx2YRQUd6dEDRAyAvERAkW5_3l0ulG75TBHI6W1Ki79f_KXU0UJSw>
+    <xmx:oIx2YdYgFKXMiKpbqmWq6HAsTjXAnt3f3LnPVEI0W4H_KBTRHqx54Q>
+    <xmx:oYx2YSAs_aXQpOpVILKRjR5NFk5vZvDipS-J3C2D2EZs5UzgP6qPDw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 25 Oct 2021 06:53:12 -0400 (EDT)
+From:   Alistair Francis <alistair@alistair23.me>
+To:     robh+dt@kernel.org, kernel@pengutronix.de, lgirdwood@gmail.com,
+        lee.jones@linaro.org, broonie@kernel.org
+Cc:     s.hauer@pengutronix.de, rui.zhang@intel.com,
+        linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        amitk@kernel.org, shawnguo@kernel.org, alistair23@gmail.com,
+        devicetree@vger.kernel.org, linux-imx@nxp.com,
+        andreas@kemnade.info, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alistair Francis <alistair@alistair23.me>
+Subject: [PATCH v14 0/8] Add support for the silergy,sy7636a
+Date:   Mon, 25 Oct 2021 20:53:01 +1000
+Message-Id: <20211025105309.37942-1-alistair@alistair23.me>
+X-Mailer: git-send-email 2.31.1
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Authenticated: YES
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 21 Oct 2021 12:37:05 +0200
-"Rafael J. Wysocki" <rafael@kernel.org> wrote:
-
-> The initial motivation for adding irq_safe was to allow interrupt
-> handlers of some devices to use PM-runtime, but in RT kernels that's
-> possible regardless IIUC, so I don't see a reason for having irq_safe
-> at all in that case.
-
-I coded up the "no irq_safe" version but lockdep complains loudly about
-it:
-
-	BUG: sleeping function called from invalid context at drivers/base/power/runtime.c:1111
-	in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 237, name: pm-runtime-prio
-	preempt_count: 0, expected: 0
-	RCU nest depth: 2, expected: 0
-	INFO: lockdep is turned off.
-	CPU: 3 PID: 237 Comm: pm-runtime-prio Tainted: G        W         5.15.0-rc6-rt13 #1
-	Hardware name: Rockchip (Device Tree)
-	[<c010f9d0>] (unwind_backtrace) from [<c010afc8>] (show_stack+0x10/0x14)
-	[<c010afc8>] (show_stack) from [<c090ec30>] (dump_stack_lvl+0x58/0x70)
-	[<c090ec30>] (dump_stack_lvl) from [<c014bee0>] (__might_resched+0x1dc/0x270)
-	[<c014bee0>] (__might_resched) from [<c059a1a0>] (__pm_runtime_resume+0x2c/0x6c)
-	[<c059a1a0>] (__pm_runtime_resume) from [<c04b8a44>] (pl330_issue_pending+0x60/0x84)
-	[<c04b8a44>] (pl330_issue_pending) from [<c07306b8>] (snd_dmaengine_pcm_trigger+0xec/0x14c)
-	[<c07306b8>] (snd_dmaengine_pcm_trigger) from [<c0767528>] (soc_component_trigger+0x20/0x38)
-	[<c0767528>] (soc_component_trigger) from [<c0768440>] (snd_soc_pcm_component_trigger+0xd8/0xf4)
-	[<c0768440>] (snd_soc_pcm_component_trigger) from [<c0768e34>] (soc_pcm_trigger+0x48/0x154)
-	[<c0768e34>] (soc_pcm_trigger) from [<c0725f74>] (snd_pcm_action_single+0x38/0x64)
-	[<c0725f74>] (snd_pcm_action_single) from [<c0727f28>] (snd_pcm_action+0x5c/0x60)
-	[<c0727f28>] (snd_pcm_action) from [<c0727f68>] (snd_pcm_action_lock_irq+0x28/0x3c)
-	[<c0727f68>] (snd_pcm_action_lock_irq) from [<c027f474>] (vfs_ioctl+0x20/0x38)
-	[<c027f474>] (vfs_ioctl) from [<c027fe54>] (sys_ioctl+0xc0/0x96c)
-	[<c027fe54>] (sys_ioctl) from [<c0100060>] (ret_fast_syscall+0x0/0x1c)
-
-Now that I have a reliable reproducer, it turns out the original patch
-in this thread also has problems and causes a WARN from RCU.  The
-version I have now that seems to work and doesn't cause any dmesg
-complaints is below, but I'm really not sure if this is considered an
-acceptable use of schedule_rtlock() (I suspect this also fails to
-compile without CONFIG_PREEMPT_RT since schedule_rtlock() isn't declared
-in that case).
-
-
--- >8 --
-diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-index ec94049442b9..79cf9997f71b 100644
---- a/drivers/base/power/runtime.c
-+++ b/drivers/base/power/runtime.c
-@@ -596,7 +596,7 @@ static int rpm_suspend(struct device *dev, int rpmflags)
-                        goto out;
-                }
- 
--               if (dev->power.irq_safe) {
-+               if (dev->power.irq_safe && !IS_ENABLED(CONFIG_PREEMPT_RT)) {
-                        spin_unlock(&dev->power.lock);
- 
-                        cpu_relax();
-@@ -614,7 +614,10 @@ static int rpm_suspend(struct device *dev, int rpmflags)
- 
-                        spin_unlock_irq(&dev->power.lock);
- 
--                       schedule();
-+                       if (dev->power.irq_safe)
-+                               schedule_rtlock();
-+                       else
-+                               schedule();
- 
-                        spin_lock_irq(&dev->power.lock);
-                }
-@@ -777,7 +780,7 @@ static int rpm_resume(struct device *dev, int rpmflags)
-                        goto out;
-                }
- 
--               if (dev->power.irq_safe) {
-+               if (dev->power.irq_safe && !IS_ENABLED(CONFIG_PREEMPT_RT)) {
-                        spin_unlock(&dev->power.lock);
- 
-                        cpu_relax();
-@@ -796,7 +799,10 @@ static int rpm_resume(struct device *dev, int rpmflags)
- 
-                        spin_unlock_irq(&dev->power.lock);
- 
--                       schedule();
-+                       if (dev->power.irq_safe)
-+                               schedule_rtlock();
-+                       else
-+                               schedule();
- 
-                        spin_lock_irq(&dev->power.lock);
-                }
+v14:=0D
+ - Merge the thermal driver and hwmon=0D
+v13:=0D
+ - Address comments on thermal driver=0D
+ - Rebase on master (without other patches)=0D
+v12:=0D
+ - Rebase=0D
+v11:=0D
+ - Address comments on hwmon=0D
+ - Improve "mfd: simple-mfd-i2c: Add a Kconfig name" commit message=0D
+v10:=0D
+ - Use dev_get_regmap() instead of dev_get_drvdata()=0D
+v9:=0D
+ - Convert to use the simple-mfd-i2c instead=0D
+=0D
+Alistair Francis (8):=0D
+  dt-bindings: mfd: Initial commit of silergy,sy7636a.yaml=0D
+  mfd: simple-mfd-i2c: Add a Kconfig name=0D
+  mfd: simple-mfd-i2c: Enable support for the silergy,sy7636a=0D
+  regulator: sy7636a: Remove requirement on sy7636a mfd=0D
+  hwmon: sy7636a: Add temperature driver for sy7636a=0D
+  ARM: imx_v6_v7_defconfig: Enable silergy,sy7636a=0D
+  ARM: dts: imx7d: remarkable2: Enable silergy,sy7636a=0D
+  ARM: dts: imx7d: remarkable2: Enable lcdif=0D
+=0D
+ .../bindings/mfd/silergy,sy7636a.yaml         |  79 ++++++++++=0D
+ Documentation/hwmon/sy7636a-hwmon.rst         |  24 ++++=0D
+ arch/arm/boot/dts/imx7d-remarkable2.dts       | 136 ++++++++++++++++++=0D
+ arch/arm/configs/imx_v6_v7_defconfig          |   3 +=0D
+ drivers/hwmon/Kconfig                         |   9 ++=0D
+ drivers/hwmon/Makefile                        |   1 +=0D
+ drivers/hwmon/sy7636a-hwmon.c                 | 114 +++++++++++++++=0D
+ drivers/mfd/Kconfig                           |   2 +-=0D
+ drivers/mfd/simple-mfd-i2c.c                  |  11 ++=0D
+ drivers/regulator/Kconfig                     |   1 -=0D
+ drivers/regulator/sy7636a-regulator.c         |   9 +-=0D
+ include/linux/mfd/sy7636a.h                   |  36 +++++=0D
+ 12 files changed, 420 insertions(+), 5 deletions(-)=0D
+ create mode 100644 Documentation/devicetree/bindings/mfd/silergy,sy7636a.y=
+aml=0D
+ create mode 100644 Documentation/hwmon/sy7636a-hwmon.rst=0D
+ create mode 100644 drivers/hwmon/sy7636a-hwmon.c=0D
+ create mode 100644 include/linux/mfd/sy7636a.h=0D
+=0D
+-- =0D
+2.31.1=0D
+=0D
