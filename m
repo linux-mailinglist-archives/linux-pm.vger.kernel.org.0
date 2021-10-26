@@ -2,109 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B22F43B194
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Oct 2021 13:53:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2061643B2F2
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Oct 2021 15:10:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234936AbhJZLzt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Oct 2021 07:55:49 -0400
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:58546 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233909AbhJZLzs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Oct 2021 07:55:48 -0400
-Received: from [79.2.93.196] (port=34480 helo=[192.168.101.73])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1mfL19-004tyV-LQ; Tue, 26 Oct 2021 13:53:23 +0200
-Subject: Re: [PATCH 1/2] dt-bindings: power: supply: add Maxim MAX77976
- battery charger
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     linux-pm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211004130732.950512-1-luca@lucaceresoli.net>
- <20211006161548.ary3mijxlcz6mdob@earth.universe>
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-Message-ID: <fdc20f96-c407-b0e9-365d-264655a74844@lucaceresoli.net>
-Date:   Tue, 26 Oct 2021 13:53:23 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S236134AbhJZNM1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Oct 2021 09:12:27 -0400
+Received: from mail-ot1-f43.google.com ([209.85.210.43]:38697 "EHLO
+        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230324AbhJZNM0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Oct 2021 09:12:26 -0400
+Received: by mail-ot1-f43.google.com with SMTP id l10-20020a056830154a00b00552b74d629aso19707533otp.5;
+        Tue, 26 Oct 2021 06:10:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Z9PrHpMnBVtvWr00+icxRV4av+NKqhl73Kg/aCTsavk=;
+        b=lQT20vlzl1Ff2fFK4rfN1FZipKO1Ly7t1knjRSK6yHfoiqHosbRnwexZ2jK0QocNqC
+         Sn7mOtq3/ZZVIIIAIxEBXwpOWuWz7UgIpDgBOfOMi3wbfzgh6Qta/7dPMyZoXuGELVXU
+         V9XnjZgCJMKbql1bnJH/UqxG3E7GeJBKg49vFn9wUUz0CXiLeAkUSR6Sg0Tj6FIb4eV4
+         l7H/wlUMEjv/XpINnoH1vHwwD+A9iqnjbVYEFoTJWw+9YxUeUcFrLbm2yCTDnwuy0I58
+         Q/K/rbb9ZmE9pLDOY/q2O++Ch4YMKbV8sM0AKh3c4cpc9c25n2m+yEmYcO980AGv0QV1
+         86yQ==
+X-Gm-Message-State: AOAM5301NMpEkYy8kFM3CB1gxpsPdbzYwNRpMw/Rr1ita6SPoqKawkXF
+        qa1ehwyw4kbP4Q7TQLCrPR0/llXnMB2+3pm4MJs=
+X-Google-Smtp-Source: ABdhPJyhl16PtCJ+HSjPyqHkqzZ9nwX8Zpr5Oo2rkx14ciXc+GlrGiEh6rYdrqKtNPiQ5x6XYX0v1USyfvuNcD0FcgA=
+X-Received: by 2002:a9d:65c1:: with SMTP id z1mr18935202oth.198.1635253802151;
+ Tue, 26 Oct 2021 06:10:02 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20211006161548.ary3mijxlcz6mdob@earth.universe>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+References: <60a16c62-d14d-6943-f163-b2cc3d05c3b0@linaro.org>
+In-Reply-To: <60a16c62-d14d-6943-f163-b2cc3d05c3b0@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 26 Oct 2021 15:09:45 +0200
+Message-ID: <CAJZ5v0imARUv4-eQZFzhxsA-J1DcNuLZOL-AcUoe4Fevmuqg_Q@mail.gmail.com>
+Subject: Re: [GIT PULL] thermal for v5.16
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Ansuel Smith <ansuelsmth@gmail.com>,
+        Antoine Tenart <antoine.tenart@bootlin.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        liuyun01@kylinos.cn, Johan Jonker <jbx6244@gmail.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Yuanzheng Song <songyuanzheng@huawei.com>,
+        Ziyang Xuan <william.xuanziyang@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Sebastian,
+On Fri, Oct 22, 2021 at 4:32 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> The following changes since commit 5816b3e6577eaa676ceb00a848f0fd65fe2adc29:
+>
+>   Linux 5.15-rc3 (2021-09-26 14:08:19 -0700)
+>
+> are available in the Git repository at:
+>
+>
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
+> tags/thermal-v5.16-rc1
+>
+> for you to fetch changes up to a67a46af4ad6342378e332b7420c1d1a2818c53f:
+>
+>   thermal/core: Deprecate changing cooling device state from userspace
+> (2021-10-21 17:35:11 +0200)
 
-On 06/10/21 18:15, Sebastian Reichel wrote:
-> Hi,
-> 
-> On Mon, Oct 04, 2021 at 03:07:31PM +0200, Luca Ceresoli wrote:
->> Add bindings for the Maxim MAX77976 I2C-controlled battery charger.
->>
->> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->> ---
->>  .../bindings/power/supply/maxim,max77976.yaml | 41 +++++++++++++++++++
->>  MAINTAINERS                                   |  5 +++
->>  2 files changed, 46 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/power/supply/maxim,max77976.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max77976.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max77976.yaml
->> new file mode 100644
->> index 000000000000..b508d9cc04a0
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/power/supply/maxim,max77976.yaml
->> @@ -0,0 +1,41 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/power/supply/maxim,max77976.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Maxim Integrated MAX77976 Battery charger
->> +
->> +maintainers:
->> +  - Luca Ceresoli <luca@lucaceresoli.net>
->> +
->> +description: |
->> +  The Maxim MAX77976 is a 19Vin / 5.5A, 1-Cell Li+ battery charger
->> +  configured via I2C.
->> +
->> +properties:
->> +  compatible:
->> +    const: maxim,max77976
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +
->> +additionalProperties: false
-> 
-> Add
-> 
-> allOf:
->   - $ref: power-supply.yaml#
-> 
-> and replace additionalProperties with unevaluatedProperties, so that
-> the power-supplies property is also valid.
+Pulled and pushed into linux-pm.git/thermal
 
-OK, will fix.
-
--- 
-Luca
+Thank you!
