@@ -2,78 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2061643B2F2
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Oct 2021 15:10:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 321C643B38D
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Oct 2021 16:03:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236134AbhJZNM1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Oct 2021 09:12:27 -0400
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:38697 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230324AbhJZNM0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Oct 2021 09:12:26 -0400
-Received: by mail-ot1-f43.google.com with SMTP id l10-20020a056830154a00b00552b74d629aso19707533otp.5;
-        Tue, 26 Oct 2021 06:10:02 -0700 (PDT)
+        id S235206AbhJZOF5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Oct 2021 10:05:57 -0400
+Received: from mail-oi1-f169.google.com ([209.85.167.169]:36717 "EHLO
+        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230119AbhJZOFz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Oct 2021 10:05:55 -0400
+Received: by mail-oi1-f169.google.com with SMTP id q124so2023044oig.3
+        for <linux-pm@vger.kernel.org>; Tue, 26 Oct 2021 07:03:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Z9PrHpMnBVtvWr00+icxRV4av+NKqhl73Kg/aCTsavk=;
-        b=lQT20vlzl1Ff2fFK4rfN1FZipKO1Ly7t1knjRSK6yHfoiqHosbRnwexZ2jK0QocNqC
-         Sn7mOtq3/ZZVIIIAIxEBXwpOWuWz7UgIpDgBOfOMi3wbfzgh6Qta/7dPMyZoXuGELVXU
-         V9XnjZgCJMKbql1bnJH/UqxG3E7GeJBKg49vFn9wUUz0CXiLeAkUSR6Sg0Tj6FIb4eV4
-         l7H/wlUMEjv/XpINnoH1vHwwD+A9iqnjbVYEFoTJWw+9YxUeUcFrLbm2yCTDnwuy0I58
-         Q/K/rbb9ZmE9pLDOY/q2O++Ch4YMKbV8sM0AKh3c4cpc9c25n2m+yEmYcO980AGv0QV1
-         86yQ==
-X-Gm-Message-State: AOAM5301NMpEkYy8kFM3CB1gxpsPdbzYwNRpMw/Rr1ita6SPoqKawkXF
-        qa1ehwyw4kbP4Q7TQLCrPR0/llXnMB2+3pm4MJs=
-X-Google-Smtp-Source: ABdhPJyhl16PtCJ+HSjPyqHkqzZ9nwX8Zpr5Oo2rkx14ciXc+GlrGiEh6rYdrqKtNPiQ5x6XYX0v1USyfvuNcD0FcgA=
-X-Received: by 2002:a9d:65c1:: with SMTP id z1mr18935202oth.198.1635253802151;
- Tue, 26 Oct 2021 06:10:02 -0700 (PDT)
+        bh=OzpwedzMOKOOs2Lj84TYRb3SlBKhFSU3i1WuT4zBS2o=;
+        b=EVCbqV2mII/FAO3clLkSx1GzDMm1N3ShEYGhsGV8zPnlEvsTkJnMhE/ilPNJNwk9DG
+         KI+cOf8+Yg3TCp3iL8JcR4zUxMzjfUXpCr7vvvpFHSBOPJObNSHBgO+/RSCnKwlIEiVZ
+         CgEZkOVO5tEFBYja41chIxFhfToTHDd7guz/2Pm1/XQSW/A7M1U+OQJiGbffQGVQzs/F
+         jKk7CqPuWqPa/myjls66XUpZKmnBkH7OfVMr0qGGuoV1lg9lzuH0XxzPy0JZjqSqAkHh
+         HuCXPB7kUrZpKSMqNpIP7iM6Y6iUr1My90Rz8dkvqOO5mcxdh5KVLh8a7Yypsjzq9NFw
+         Ivbg==
+X-Gm-Message-State: AOAM533RDeRat5bljHx/1ji3my4gM6Y9NwyIIMsu5RQqjzGrhsKIgqAh
+        QXm3Bc5mm2ByvquIfkwGHyXyeCUphUZRHno51+qW3ui5
+X-Google-Smtp-Source: ABdhPJx5gQSfMqPqucm/IYgoeoTXx62UCZGjOPcTNCqwbeh/QdJHN3JT2daTgokwvGSqQc7pw0hztz6uXF6x8K13oGo=
+X-Received: by 2002:a05:6808:e90:: with SMTP id k16mr5868719oil.166.1635257011357;
+ Tue, 26 Oct 2021 07:03:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <60a16c62-d14d-6943-f163-b2cc3d05c3b0@linaro.org>
-In-Reply-To: <60a16c62-d14d-6943-f163-b2cc3d05c3b0@linaro.org>
+References: <20211026083242.27472-1-rui.zhang@intel.com>
+In-Reply-To: <20211026083242.27472-1-rui.zhang@intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 26 Oct 2021 15:09:45 +0200
-Message-ID: <CAJZ5v0imARUv4-eQZFzhxsA-J1DcNuLZOL-AcUoe4Fevmuqg_Q@mail.gmail.com>
-Subject: Re: [GIT PULL] thermal for v5.16
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Ansuel Smith <ansuelsmth@gmail.com>,
-        Antoine Tenart <antoine.tenart@bootlin.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        liuyun01@kylinos.cn, Johan Jonker <jbx6244@gmail.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Yuanzheng Song <songyuanzheng@huawei.com>,
-        Ziyang Xuan <william.xuanziyang@huawei.com>
+Date:   Tue, 26 Oct 2021 16:03:20 +0200
+Message-ID: <CAJZ5v0gujt5g9D+L+zxB0XbnvtoyhkDy8MytHAc-Jcqy+3Oq9g@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Fix cpu->pstate.turbo_freq initialization
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 22, 2021 at 4:32 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
+On Tue, Oct 26, 2021 at 10:17 AM Zhang Rui <rui.zhang@intel.com> wrote:
 >
-> The following changes since commit 5816b3e6577eaa676ceb00a848f0fd65fe2adc29:
+> Fix a problem in active mode that cpu->pstate.turbo_freq is initialized
+> only if HWP-to-frequency scaling factor is refined.
 >
->   Linux 5.15-rc3 (2021-09-26 14:08:19 -0700)
+> In passive mode, this problem is not exposed, because
+> cpu->pstate.turbo_freq is set again, later in
+> intel_cpufreq_cpu_init()->intel_pstate_get_hwp_cap().
 >
-> are available in the Git repository at:
+> Fixes: eb3693f0521e ("cpufreq: intel_pstate: hybrid: CPU-specific scaling factor")
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> ---
+>  drivers/cpufreq/intel_pstate.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 >
->
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
-> tags/thermal-v5.16-rc1
->
-> for you to fetch changes up to a67a46af4ad6342378e332b7420c1d1a2818c53f:
->
->   thermal/core: Deprecate changing cooling device state from userspace
-> (2021-10-21 17:35:11 +0200)
+> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+> index 8c176b7dae41..fc7a429f22d3 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -537,7 +537,8 @@ static void intel_pstate_hybrid_hwp_adjust(struct cpudata *cpu)
+>          * scaling factor is too high, so recompute it to make the HWP_CAP
+>          * highest performance correspond to the maximum turbo frequency.
+>          */
+> -       if (turbo_freq < cpu->pstate.turbo_pstate * scaling) {
+> +       cpu->pstate.turbo_freq = cpu->pstate.turbo_pstate * scaling;
+> +       if (turbo_freq < cpu->pstate.turbo_freq) {
+>                 cpu->pstate.turbo_freq = turbo_freq;
+>                 scaling = DIV_ROUND_UP(turbo_freq, cpu->pstate.turbo_pstate);
+>                 cpu->pstate.scaling = scaling;
+> --
 
-Pulled and pushed into linux-pm.git/thermal
-
-Thank you!
+Applied as 5.16 material, thanks!
