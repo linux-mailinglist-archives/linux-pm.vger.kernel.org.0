@@ -2,152 +2,165 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1FB243CD0E
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Oct 2021 17:07:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE91643CD20
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Oct 2021 17:10:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242655AbhJ0PJY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Oct 2021 11:09:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52850 "EHLO
+        id S236613AbhJ0PMr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Oct 2021 11:12:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242658AbhJ0PJX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Oct 2021 11:09:23 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93322C061348
-        for <linux-pm@vger.kernel.org>; Wed, 27 Oct 2021 08:06:57 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id l2so5212880lji.6
-        for <linux-pm@vger.kernel.org>; Wed, 27 Oct 2021 08:06:57 -0700 (PDT)
+        with ESMTP id S235152AbhJ0PMr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Oct 2021 11:12:47 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26681C061570
+        for <linux-pm@vger.kernel.org>; Wed, 27 Oct 2021 08:10:21 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 205so5199353ljf.9
+        for <linux-pm@vger.kernel.org>; Wed, 27 Oct 2021 08:10:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=telus.net; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=eEeOc3SRoTkeXEKVHoRlTI3OBL2wUysOvGNTyGSpDRc=;
-        b=vBrX1hroP2zBuvD1iKJmnG7LMigUVOYCCUjI8nNnhrOkTN5QjBm3VWoeIohRkK94mM
-         0iA0f/MUpH4lU1LpX3SUAg9Qb9ffQA0/D8+lP5Yzp3hO1Oc/dXHRmqswxRuT9K08TkOO
-         JxqtHG9LNOmuEPBOqsrakS8A/PnsDc4pWHFk4nsd1CWrbhV3CP6XgVEYZVsOFiX/FjzB
-         9hgAWNpXsxKJufJeQdlXOK36M6tMtnDPGse1nNhXhUmjKb5V5lpoDBCxHytpfbgd1la/
-         VwvSyqBmg75weHCA9Vnyf+aKIJjXvgL/syNjDNOWymJZFrIy8+prLwST1MBBhfHGFO6k
-         aaQg==
+        bh=3CLKCt4ozxElbnzSZjxsFLN7ur/ju/mKMQO+9ROBwfA=;
+        b=R5qxY7fb3ayRyca952OvZ4iWjQqSjp2/77ZZXbji8xbdJqscOw6KZ9Pk+k7D8mHXi2
+         2EWEzXbrkTHNTfGRkyxMItChdczfvMcNw1T5BWi+b6tFP0rZy1eNKF3CzRo/5/78GVcs
+         hRlzFXUTlcNncCdJeCxThkGmggPl5xZabaquHxGGNO7W1WR1XNrchc33M4vEGsComHZA
+         tLYWD6GAsqkbCP6ECxqmtKj5pEbX58e0sfnghXJev7eWPMRVaSfel81PLIofzwUTZ9v5
+         /ATAzPgkYv53M/tDfRUqqay9lv2zMENvSL3i3CdqoaITBkQiNOGiqNEUHiJVW06D66/f
+         Xehw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=eEeOc3SRoTkeXEKVHoRlTI3OBL2wUysOvGNTyGSpDRc=;
-        b=3h2lWDy24Il9phknblLBxGbmUnZMUq6s7l/SY/PuPl+Uv6gZo94OlEYXGTol3GqGkK
-         5RUp5YaC/Xwt8Txf+suQSWc4ptMz8L0pua/BtqXETsbBJS75TvzSYUD/ClawD3oOsM54
-         Ot/VHPUiNeIvF8eJhpBZF+uuxn3yfSEmygc0uzt/jQvLgTbgq0tB+2OU4V0BNdKOByP1
-         GydvTSojncYRXH0Wg9WqCY67mhHHoFGrjw9mOFHQ4yLbI6iuHaCPgmPOfDHlALWNbmGP
-         QF+yrTyinoSLScb65iYyvhcO380mybWXPyJiorGgjqaDYWFlGxLDQEOq8186GnA4GmvD
-         YlsA==
-X-Gm-Message-State: AOAM532fjSr2eNed2juGUu+U1L5q7YtbxYhQZL5I4vjRzZMjCDA0h8z0
-        AHlvZRxncijxCIsDFVAVL8+c4XPbipTOsceKWDiCWQ==
-X-Google-Smtp-Source: ABdhPJysjKT4Qj/n7/ftR0oVtnZjTh7iTetwxvNQGH0ktAIGHoCGiRAbJE5llFkaZZ7c+ePHtcATzAPymmbQqNT848A=
-X-Received: by 2002:a05:651c:11c4:: with SMTP id z4mr33240531ljo.463.1635347215604;
- Wed, 27 Oct 2021 08:06:55 -0700 (PDT)
+        bh=3CLKCt4ozxElbnzSZjxsFLN7ur/ju/mKMQO+9ROBwfA=;
+        b=cjX84VdjyYwg+BvF6+B7K22tsgIXFdg7qsHk6xZbv3AAc6ywb2/jX8A/C/hlkFwQrv
+         88EvgX42Wd1dqiQQaNv7gu/kHH3K1o12bO34ErloZgJ8laUenVwM1kC70/zGzGbEARit
+         3NEl65jFJFMHmPSNUhsX5Ij7zR/7OtvsPLpmwINgIMgDYZuM2BJ1diX35r/nFi3SI5CD
+         iy6lHrhNQHwoH2bOXQ5h6Tg6cMfst1RgUNgN1fOh2EMwV8LntUZA9oHwBrkItCeVxRlA
+         tiH9eZATl3ENC9dnypGdcc1Nzo5y47XEAFmgRaDAazY0h2pc3GZ7UMx5NlECLhtxjSYX
+         C90A==
+X-Gm-Message-State: AOAM532meZPs+RC8TH3eLSTuyp3ZHexT1LhKIG4K/0h9zvEnPbUtuk49
+        5DEAbV3Mt4mtSfi4XkLpIimC4Vm5MDzNLVeQEkR4rw==
+X-Google-Smtp-Source: ABdhPJxEId8JXtqsIcTwSZWJAiHzSaAvFARVIPb0iV3NsiaqSCXwha06DmMy6vMKM1vw0zhSQz94MXWjmXjF0lDCF8c=
+X-Received: by 2002:a2e:bf18:: with SMTP id c24mr33289636ljr.408.1635347419423;
+ Wed, 27 Oct 2021 08:10:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211025224032.21012-1-digetx@gmail.com> <20211025224032.21012-2-digetx@gmail.com>
-In-Reply-To: <20211025224032.21012-2-digetx@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 27 Oct 2021 17:06:19 +0200
-Message-ID: <CAPDyKFr7VY73cQugSA5n-p_oXf43o1M-7s3-M+fnk0656h25UA@mail.gmail.com>
-Subject: Re: [PATCH v14 01/39] soc/tegra: Enable runtime PM during OPP state-syncing
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-mmc@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-clk@vger.kernel.org, David Heidelberg <david@ixit.cz>
+References: <alpine.DEB.2.22.394.2110241452460.2997@hadrien>
+ <CAAYoRsXeQravNXKsWAZvacMmE_iBzaQ+mQxNbB5jcD_vkny+Sg@mail.gmail.com> <alpine.DEB.2.22.394.2110261658440.3825@hadrien>
+In-Reply-To: <alpine.DEB.2.22.394.2110261658440.3825@hadrien>
+From:   Doug Smythies <dsmythies@telus.net>
+Date:   Wed, 27 Oct 2021 08:10:12 -0700
+Message-ID: <CAAYoRsWXew+9Pch_9ux+UK0LFwy+211d2LmNLGKF_UTr3eS2Fw@mail.gmail.com>
+Subject: Re: problem in changing from active to passive mode
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dsmythies <dsmythies@telus.net>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 26 Oct 2021 at 00:45, Dmitry Osipenko <digetx@gmail.com> wrote:
+On Tue, Oct 26, 2021 at 8:13 AM Julia Lawall <julia.lawall@inria.fr> wrote:
 >
-> GENPD core now can set up domain's performance state properly while device
-> is RPM-suspended. Runtime PM of a device must be enabled during setup
-> because GENPD checks whether device is suspended and check doesn't work
-> while RPM is disabled. Instead of replicating the boilerplate RPM-enable
-> code around OPP helper for each driver, let's make OPP helper to take care
-> of enabling it.
+> The problem is illustrated by the attached graphs.  These graphs on the
+> odd numbered pages show the frequency of each core measures at every clock
+> tick.  At each measurement there is a small bar representing 4ms of the
+> color associated with the frequency.  The percentages shown are thus not
+> entirely accurate, because the frequency could change within those 4ms and
+> we would not observe that.
 >
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-
-Just a minor nitpick, see below. Nevertheless feel free to add:
-
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-
-Kind regards
-Uffe
-
-> ---
->  drivers/soc/tegra/common.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
+> The first graph, 5.9schedutil_yeti, is the normal behavior of schedutil
+> running.  The application mostly uses the second highest turbo mode, which
+> is the appropriate one given that there are around 5 active cores most of
+> the time.  I traced power:cpu_frequency, which is the event that occurs
+> when the OS requests a change of frequency.  This happens around 5400
+> times.
 >
-> diff --git a/drivers/soc/tegra/common.c b/drivers/soc/tegra/common.c
-> index cd33e99249c3..d930a2b4facc 100644
-> --- a/drivers/soc/tegra/common.c
-> +++ b/drivers/soc/tegra/common.c
-> @@ -10,6 +10,7 @@
->  #include <linux/export.h>
->  #include <linux/of.h>
->  #include <linux/pm_opp.h>
-> +#include <linux/pm_runtime.h>
+> The second graph, 5.15-schedutil_yeti, is the latest version of Linus's
+> tree.  The cores are almost always at the lowest frequency.  There are no
+> occurrences of the power:cpu_frequency event.
 >
->  #include <soc/tegra/common.h>
->  #include <soc/tegra/fuse.h>
-> @@ -43,6 +44,7 @@ static int tegra_core_dev_init_opp_state(struct device *dev)
->  {
->         unsigned long rate;
->         struct clk *clk;
-> +       bool rpm_enabled;
->         int err;
+> The third graph, 5.9schedutil_after_yeti, it what happens when I reboot
+> into 5.9 after having changed to passive mode in 5.15.  The number of
+> power:cpu_frequency drops to around 1100.  The proper turbo mode is
+> actually used sometimes, but much less than in the first graph.  More than
+> half of the time, an active core is at the lowest frequency.
 >
->         clk = devm_clk_get(dev, NULL);
-> @@ -57,8 +59,22 @@ static int tegra_core_dev_init_opp_state(struct device *dev)
->                 return -EINVAL;
->         }
+> This application (avrora from the DaCapo benchmarks) is continually
+> stopping and starting, both for very short intervals.  This may discourage
+> the hardware from raising the frequency of its own volition.
+
+Agreed. This type of workflow has long been known to be a challenge
+for various CPU frequency scaling governors. It comes up every so
+often on the linux-pm email list. Basically, the schedutil CPU frequency
+scaling governor becomes somewhat indecisive under these conditions.
+However, if for some reason it gets kicked up to max CPU frequency,
+then often it will stay there (depending on details of the workflow,
+it stays up for my workflows).
+
+Around the time of the commit you referenced in your earlier
+email, it was recognised that proposed changes were adding
+a bit of a downward bias to the hwp-passive-scheutil case for
+some of these difficult workflows [1].
+
+I booted an old 5.9, HWP enabled, passive, schedutil.
+I got the following for my ping-pong test type workflow,
+(which is not the best example):
+
+Run 1: 6234 uSecs/loop
+Run 2: 2813 uSecs/loop
+Run 3: 2721 uSecs/loop
+Run 4: 2813 uSecs/loop
+Run 5: 11303 uSecs/loop
+Run 6: 13803 uSecs/loop
+Run 7: 2809 uSecs/loop
+Run 8: 2796 uSecs/loop
+Run 9: 2760 uSecs/loop
+Run 10: 2691 uSecs/loop
+Run 11: 9288 uSecs/loop
+Run 12: 4275 uSecs/loop
+
+Then the same with kernel 5.15-rc5
+(I am a couple of weeks behind).
+
+Run 1: 13618 uSecs/loop
+Run 2: 13901 uSecs/loop
+Run 3: 8929 uSecs/loop
+Run 4: 12189 uSecs/loop
+Run 5: 10338 uSecs/loop
+Run 6: 12846 uSecs/loop
+Run 7: 5418 uSecs/loop
+Run 8: 7692 uSecs/loop
+Run 9: 11531 uSecs/loop
+Run 10: 9763 uSecs/loop
+
+Now, for your graph 3, are you saying this pseudo
+code of the process is repeatable?:
+
+Power up the system, booting kernel 5.9
+switch to passive/schedutil.
+wait X minutes for system to settle
+do benchmark, result ~13 seconds
+re-boot to kernel 5.15-RC
+switch to passive/schedutil.
+wait X minutes for system to settle
+do benchmark, result ~40 seconds
+re-boot to kernel 5.9
+switch to passive/schedutil.
+wait X minutes for system to settle
+do benchmark, result ~28 seconds
+
+... Doug
+
+>  I also tried
+> a simple spin loop (for(;;);) with the 5.15 rc version, and it does go to
+> the highest frequency as one would expect.  But there are again no
+> power:cpu_frequency events.
 >
-> +       /*
-> +        * Runtime PM of the device must be enabled in order to set up
-> +        * GENPD's performance properly because GENPD core checks whether
-> +        * device is suspended and this check doesn't work while RPM is
-> +        * disabled.
-> +        */
-> +       rpm_enabled = pm_runtime_enabled(dev);
-> +       if (!rpm_enabled)
-> +               pm_runtime_enable(dev);
+> julia
 
-This makes sure the OPP vote below gets cached in genpd for the
-device. Instead, the vote is done the next time the device gets
-runtime resumed.
-
-I don't have an issue doing it like this, but at the same time it does
-remove some flexibility for the drivers/subsystem that calls
-tegra_core_dev_init_opp_state().
-
-Isn't it better to leave this to be flexible - or you prefer to have
-it done like this for everybody?
-
-> +
->         /* first dummy rate-setting initializes voltage vote */
->         err = dev_pm_opp_set_rate(dev, rate);
-> +
-> +       if (!rpm_enabled)
-> +               pm_runtime_disable(dev);
-> +
->         if (err) {
->                 dev_err(dev, "failed to initialize OPP clock: %d\n", err);
->                 return err;
-
-Kind regards
-Uffe
+[1] https://www.spinics.net/lists/kernel/msg3775304.html
