@@ -2,96 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D50FE43D4AC
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Oct 2021 23:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD14543D745
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Oct 2021 01:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240001AbhJ0VXp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Oct 2021 17:23:45 -0400
-Received: from mail-oo1-f44.google.com ([209.85.161.44]:35688 "EHLO
-        mail-oo1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241171AbhJ0VVv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Oct 2021 17:21:51 -0400
-Received: by mail-oo1-f44.google.com with SMTP id 64-20020a4a0d43000000b002b866fa13eeso1408719oob.2;
-        Wed, 27 Oct 2021 14:19:25 -0700 (PDT)
+        id S230298AbhJ0XLj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Oct 2021 19:11:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50528 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230260AbhJ0XLe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Oct 2021 19:11:34 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8507C061243
+        for <linux-pm@vger.kernel.org>; Wed, 27 Oct 2021 16:09:08 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id n11-20020a17090a2bcb00b001a1e7a0a6a6so6436332pje.0
+        for <linux-pm@vger.kernel.org>; Wed, 27 Oct 2021 16:09:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XJfFTW9EjYJeHoclf1SeEwj25PLenE7ts5EFTr8vzec=;
+        b=vYjyS+8EH3CfIBezSrdmSEFFSJc1bpK8IsDLNwp4SIdgzIr0qhB73jSdQ+tZtt+gKe
+         gLRCAnofL8DMkcE7vLBKcZfntvEYsCybXJMFIekVgyaoqoB4d2yoy2/fxl6NKOgXIYmd
+         GMEiLNFKg0iVmrnBvlpV4pv/PV+nqVeQwlB1PLBrwM8b8vjtjZjGvc3MJRrAfuUoDBNo
+         ViaF9lo0gQuECLSnf0dUVzQmZPRvjI+cvfCWgH2cYeMbb2VhrXJlj9sEs5Y4vYC263de
+         h2wbGwEHNdbZkGS/4AP/MxQ7HKYBbqiVTjD7lo6//33sqHBHnP35ISg1TmvMKaMznq9A
+         cKAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FyelOIZ97OsIbI5HBi7o/appj9ec6FKJkiVDLu2gRJA=;
-        b=bej/YQ/F0MJBnlOM/+8mBUIHRTXxKvB9MeybgjsApPd/ytwWClSsB1EzeY9WfD5LnX
-         FiGSbf3uUpBw2jv791COCcOvGMa7CzPMzvcoCaTym6uHmkTMscm9TEEqorTaqH/Rgeyc
-         FByOhJnLOiEAPG+oY1oBfjjjZnnVLeH8BN2gG5XGLRgPSi4nDwpA79psDkVOemko/tD+
-         DpcDiOLFqYyabvvDJuYm3g/a1U15gF32IJaSFZDTwLskqlP60tc6qf6d5BR/CZOqnXLD
-         j88l9wQywF0vSaVthydAFyFLO8N+AEwVKMT9VfaKh1SzX5itf+w8JkKhbOu6EfqtlGt5
-         tnUA==
-X-Gm-Message-State: AOAM531TPCHufxW378SiBG/BxVGZEtk0OFLKb3QWAJ8vV5MXt+gCIOZo
-        CpJfgYZN11Z0DBG/r99mTg==
-X-Google-Smtp-Source: ABdhPJyz8qbGMscp1wt9cyF+o674ZtRUtlxyhur7dLM8bkeJYMZTonnu3UxlXbMxfyrsIoOI8LoNhg==
-X-Received: by 2002:a4a:430c:: with SMTP id k12mr85400ooj.43.1635369565454;
-        Wed, 27 Oct 2021 14:19:25 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id n17sm401101oic.21.2021.10.27.14.19.24
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=XJfFTW9EjYJeHoclf1SeEwj25PLenE7ts5EFTr8vzec=;
+        b=eEwkwb0sg2hk4OJZgy2c9O65AHVErVGddu82SA0WBeM4YAuNrkwVH8jDobIXfYmu4K
+         Q2H0pZqO2O10M64KbcrynXt0N3OMwL3XLjk0BzqSAgWsgZ8fz8yST0AbO4/TW5nXCbM0
+         vkooRfiP14Idn1Bw22eIus7bXsc1/VuqtWwYVovmMOBANZFlQHLAFMKXUX/EDz0xn/5L
+         jv7II0vAjrD7fpFDMRXVUMZ6cXyF3aKOlXdW/8gPWLoo42WBSJ5SholtHm9ZVBHUaSyh
+         UIcwb05EqPGj0g/OsyQi/N5QehFqnf6jJ1NztMqgNNqgGJ31Bsg3GyLD8WhDjz5g2q7w
+         B8Zg==
+X-Gm-Message-State: AOAM533WNg6GfLEWOeSLjzaYUbPspBe6UTT+KEf6MqKFg6XFslPBPi86
+        n3bha7PsZuuAY5BSkS9hamW46w==
+X-Google-Smtp-Source: ABdhPJxUJYglQ4uyqyrvUHQJ2HBzLbAnkI4OfP0sJtC8YPLND6BbQ0gKrpcxmED13rpzsyQoceaG3g==
+X-Received: by 2002:a17:903:246:b0:13f:2ff9:8b93 with SMTP id j6-20020a170903024600b0013f2ff98b93mr652035plh.54.1635376148047;
+        Wed, 27 Oct 2021 16:09:08 -0700 (PDT)
+Received: from localhost ([2620:0:1000:5e10:60fc:a50:6d27:9fd3])
+        by smtp.gmail.com with ESMTPSA id bg15sm739067pjb.15.2021.10.27.16.09.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Oct 2021 14:19:24 -0700 (PDT)
-Received: (nullmailer pid 2181423 invoked by uid 1000);
-        Wed, 27 Oct 2021 21:19:23 -0000
-Date:   Wed, 27 Oct 2021 16:19:23 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Nishanth Menon <nm@ti.com>, David Heidelberg <david@ixit.cz>,
-        Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v3] dt-bindings: opp: Allow multi-worded OPP entry names
-Message-ID: <YXnCW1KSg2RBIdDy@robh.at.kernel.org>
-References: <20211024215718.28969-1-digetx@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211024215718.28969-1-digetx@gmail.com>
+        Wed, 27 Oct 2021 16:09:07 -0700 (PDT)
+Date:   Wed, 27 Oct 2021 16:09:07 -0700 (PDT)
+X-Google-Original-Date: Wed, 27 Oct 2021 16:09:01 PDT (-0700)
+Subject:     Re: [PATCH v2 18/45] riscv: Use do_kernel_power_off()
+In-Reply-To: <20211027211715.12671-19-digetx@gmail.com>
+CC:     thierry.reding@gmail.com, jonathanh@nvidia.com,
+        lee.jones@linaro.org, rafael@kernel.org, broonie@kernel.org,
+        akpm@linux-foundation.org, linux@roeck-us.net,
+        linux@armlinux.org.uk, daniel.lezcano@linaro.org,
+        andriy.shevchenko@linux.intel.com, ulf.hansson@linaro.org,
+        catalin.marinas@arm.com, will@kernel.org, guoren@kernel.org,
+        geert@linux-m68k.org, gerg@linux-m68k.org, funaho@jurai.org,
+        tsbogend@alpha.franken.de, nickhu@andestech.com,
+        green.hu@gmail.com, deanbo422@gmail.com,
+        James.Bottomley@HansenPartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, ysato@users.sourceforge.jp, dalias@libc.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        boris.ostrovsky@oracle.com, jgross@suse.com,
+        sstabellini@kernel.org, lenb@kernel.org, ssantosh@kernel.org,
+        krzysztof.kozlowski@canonical.com, linus.walleij@linaro.org,
+        wens@csie.org, j.neuschaefer@gmx.net, tony@atomide.com,
+        lgirdwood@gmail.com, p.zabel@pengutronix.de, vz@mleia.com,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        pavel@ucw.cz, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-acpi@vger.kernel.org, linux-omap@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     digetx@gmail.com
+Message-ID: <mhng-fd8f451c-4860-4b0c-a155-6f65891cd276@palmerdabbelt-glaptop>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Oct 25, 2021 at 12:57:18AM +0300, Dmitry Osipenko wrote:
-> Not all OPP entries fit into a single word. In particular NVIDIA Tegra OPP
-> tables use multi-word names where first part is freq and second voltage
-> because different hardware versions use different voltages for the same
-> freqs. Allow OPP entry to have multi-worded name separated by hyphen.
-> This silences DT checker warnings about wrong naming scheme.
-> 
-> Reviewed-by: David Heidelberg <david@ixit.cz>
+On Wed, 27 Oct 2021 14:16:48 PDT (-0700), digetx@gmail.com wrote:
+> Kernel now supports chained power-off handlers. Use do_kernel_power_off()
+> that invokes chained power-off handlers. It also invokes legacy
+> pm_power_off() for now, which will be removed once all drivers will
+> be converted to the new power-off API.
+>
 > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
-> 
-> Changelog:
-> 
-> v3: - Viresh Kumar suggested that we shouldn't support postfix variant.
->       I dropped variant with postfix naming scheme and multi-wording
->       support of table names.
-> 
-> v2: - In addition to a multi-wording support, support of the postfix
->       *-opp-table naming scheme is added to the updated pattern.
-> 
->  Documentation/devicetree/bindings/opp/opp-v2-base.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-> index ae3ae4d39843..f79343960539 100644
-> --- a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-> +++ b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-> @@ -33,7 +33,7 @@ properties:
->      type: boolean
->  
->  patternProperties:
-> -  '^opp-?[0-9]+$':
-> +  '^opp(-[0-9]+)*$':
+>  arch/riscv/kernel/reset.c | 12 ++++--------
+>  1 file changed, 4 insertions(+), 8 deletions(-)
+>
+> diff --git a/arch/riscv/kernel/reset.c b/arch/riscv/kernel/reset.c
+> index 9c842c41684a..912288572226 100644
+> --- a/arch/riscv/kernel/reset.c
+> +++ b/arch/riscv/kernel/reset.c
+> @@ -23,16 +23,12 @@ void machine_restart(char *cmd)
+>
+>  void machine_halt(void)
+>  {
+> -	if (pm_power_off != NULL)
+> -		pm_power_off();
+> -	else
+> -		default_power_off();
+> +	do_kernel_power_off();
+> +	default_power_off();
+>  }
+>
+>  void machine_power_off(void)
+>  {
+> -	if (pm_power_off != NULL)
+> -		pm_power_off();
+> -	else
+> -		default_power_off();
+> +	do_kernel_power_off();
+> +	default_power_off();
+>  }
 
-This drops support for cases like 'opp1' which there are a ton of. It 
-should be '^opp(-?[0-9]+)*$' if we want to keep that support.
-
-I'd love to be stricter, but trying to find a balance.
-
-Rob
+Acked-by: Palmer Dabbelt <palmer@dabbelt.com>
