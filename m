@@ -2,201 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEFFC43D07F
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Oct 2021 20:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC9F43D0EE
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Oct 2021 20:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243474AbhJ0STP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Oct 2021 14:19:15 -0400
-Received: from smtprelay0188.hostedemail.com ([216.40.44.188]:60032 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S243507AbhJ0SSv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Oct 2021 14:18:51 -0400
-X-Greylist: delayed 4652 seconds by postgrey-1.27 at vger.kernel.org; Wed, 27 Oct 2021 14:18:42 EDT
-Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-        by smtpgrave04.hostedemail.com (Postfix) with ESMTP id D94841811FE43;
-        Wed, 27 Oct 2021 16:58:46 +0000 (UTC)
-Received: from omf01.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay05.hostedemail.com (Postfix) with ESMTP id 88CE218027A8A;
-        Wed, 27 Oct 2021 16:58:41 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf01.hostedemail.com (Postfix) with ESMTPA id 34EC11727C;
-        Wed, 27 Oct 2021 16:57:52 +0000 (UTC)
-Message-ID: <20ffb5604269f9add568b343701d42097c599c89.camel@perches.com>
-Subject: Re: dt-bindings: treewide: Update @st.com email address to
- @foss.st.com
-From:   Joe Perches <joe@perches.com>
-To:     Patrice CHOTARD <patrice.chotard@foss.st.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        maxime coquelin <mcoquelin.stm32@gmail.com>,
-        alexandre torgue <alexandre.torgue@foss.st.com>,
-        michael turquette <mturquette@baylibre.com>,
-        stephen boyd <sboyd@kernel.org>,
-        herbert xu <herbert@gondor.apana.org.au>,
-        "david s . miller" <davem@davemloft.net>,
-        david airlie <airlied@linux.ie>,
-        daniel vetter <daniel@ffwll.ch>,
-        thierry reding <thierry.reding@gmail.com>,
-        sam ravnborg <sam@ravnborg.org>,
-        yannick fertre <yannick.fertre@foss.st.com>,
-        philippe cornu <philippe.cornu@foss.st.com>,
-        benjamin gaignard <benjamin.gaignard@linaro.org>,
-        vinod koul <vkoul@kernel.org>,
-        ohad ben-cohen <ohad@wizery.com>,
-        bjorn andersson <bjorn.andersson@linaro.org>,
-        baolin wang <baolin.wang7@gmail.com>,
-        jonathan cameron <jic23@kernel.org>,
-        lars-peter clausen <lars@metafoo.de>,
-        olivier moysan <olivier.moysan@foss.st.com>,
-        arnaud pouliquen <arnaud.pouliquen@foss.st.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hugues Fruchet <hugues.fruchet@foss.st.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Matt Mackall <mpm@selenic.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        dillon min <dillon.minfei@gmail.com>,
-        Marek Vasut <marex@denx.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Fabien Dessenne <fabien.dessenne@foss.st.com>,
-        Christophe Roullier <christophe.roullier@foss.st.com>,
-        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
-        Lionel Debieve <lionel.debieve@foss.st.com>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-        Ludovic Barre <ludovic.barre@foss.st.com>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        pascal Paillet <p.paillet@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Le Ray <erwan.leray@foss.st.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-crypto@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        dmaengine@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-media@vger.kernel.org,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org
-Date:   Wed, 27 Oct 2021 09:57:50 -0700
-In-Reply-To: <865a4055-5c2f-0793-bdce-9f04eac167d2@foss.st.com>
-References: <20211020065000.21312-1-patrice.chotard@foss.st.com>
-         <22fb6f19-21eb-dcb5-fa31-bb243d4a7eaf@canonical.com>
-         <878ryoc4dc.wl-maz@kernel.org>
-         <82492eb2-5a5e-39a2-a058-5e2ba75323e0@foss.st.com>
-         <865a4055-5c2f-0793-bdce-9f04eac167d2@foss.st.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1 
+        id S243587AbhJ0Sn4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Oct 2021 14:43:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46116 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243574AbhJ0Sn4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Oct 2021 14:43:56 -0400
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DBE2C061767
+        for <linux-pm@vger.kernel.org>; Wed, 27 Oct 2021 11:41:30 -0700 (PDT)
+Received: by mail-oo1-xc2e.google.com with SMTP id t7-20020a4aadc7000000b002b8733ab498so1248999oon.3
+        for <linux-pm@vger.kernel.org>; Wed, 27 Oct 2021 11:41:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=wHK6yHDny9iLB//O45DyauV4nk5jaYAc4hww2YZyQ0k=;
+        b=FWwPL9M7EALBivB1WmQb630SogBJYmaJdteHDY//7nj3TsoFhGgdBTtaKSlNgMTPL9
+         Ws/8t0W0AaFm3G8aIXeNr8B7+sCSvOqGj8uDiOG6OM5MXy3CGs91+UAyqvz/8VpERv8n
+         TkD7WLp6AXPRil0K3rbFTSv8Jl/5sVoBafmx+8HN55/+vdpuUUmZmWcu61i42bnQu7QH
+         Tv8Kid/q0wPQCuavDaOcN758r1sJl17OjeqSpNfGpsQZDfwoj5It25xUedUskUvVbnTk
+         +IVeBv5PImQjTXvW4Vc2eAQmiJBdW5i1Fggryxm+SPYwkTYmwTrHdKNaQBV2mRJ+d/JK
+         hYZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wHK6yHDny9iLB//O45DyauV4nk5jaYAc4hww2YZyQ0k=;
+        b=aEOi5RMsMF7/ZUpJGnRuOKN8B0Sjl1ZBAWSEOidDMZ+Q8fJ3VHBzMCSEbyMgM93apQ
+         wKjZic9PQ0GuygWp7IdwPGqKWDGWzW1up2EhkaqxfDbWO5nMDXxGTmzZnk+d9GpggVzi
+         Gp/XBNHE9CGM0mxHniQIRRpA2qM+lIMD59bPZl5qCQ1KhSuSuMCx5iy/xzrhhC118U8y
+         QdUE0TgFKobCkDf/RYpO9ZVY/zY8qqG+nwEvT1SagHN0ZrphutTl+taFLyWyEm9IxwTY
+         EfXyf9zlZB/2uEKNEmRqdyJnVhMQYnE7ry9GRHSCnBr1GVsmzKZU05ngh4tX7MtAuykQ
+         qEhw==
+X-Gm-Message-State: AOAM533XJzKWd4joLDHiOgIYWKQAber//ujFGv9MeCoHFCSOMqUK8gk5
+        fzfRF8wIRJFE7GuHz9D1zpqmnA==
+X-Google-Smtp-Source: ABdhPJwFBBFotXZX5piAxteH5rE+Y4OBNlnksB1oGFkl2n2gZoSj8HvkonS0+VEay3gPQz66SSzY1Q==
+X-Received: by 2002:a4a:b48a:: with SMTP id b10mr23498049ooo.24.1635360089665;
+        Wed, 27 Oct 2021 11:41:29 -0700 (PDT)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id w2sm257922ooa.26.2021.10.27.11.41.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Oct 2021 11:41:28 -0700 (PDT)
+Date:   Wed, 27 Oct 2021 11:43:21 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, sudeep.holla@arm.com,
+        will@kernel.org, catalin.marinas@arm.com, linux@armlinux.org.uk,
+        gregkh@linuxfoundation.org, rafael@kernel.org,
+        viresh.kumar@linaro.org, amitk@kernel.org,
+        daniel.lezcano@linaro.org, amit.kachhap@gmail.com,
+        thara.gopinath@linaro.org, agross@kernel.org
+Subject: Re: [PATCH v2 1/5] arch_topology: Introduce thermal pressure update
+ function
+Message-ID: <YXmdyeOmNS2x3K0W@ripper>
+References: <20211015144550.23719-1-lukasz.luba@arm.com>
+ <20211015144550.23719-2-lukasz.luba@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.20
-X-Stat-Signature: d7f39g9ut4x78f1qzm6ux4u3z7warbny
-X-Rspamd-Server: rspamout02
-X-Rspamd-Queue-Id: 34EC11727C
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/mP1yO9Xb7wezovkJWdqP2VR+2BHiCxac=
-X-HE-Tag: 1635353872-396338
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211015144550.23719-2-lukasz.luba@arm.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 2021-10-27 at 15:56 +0200, Patrice CHOTARD wrote:
-> On 10/27/21 8:11 AM, Patrice CHOTARD wrote:
-> > On 10/20/21 1:39 PM, Marc Zyngier wrote:
-> > > On Wed, 20 Oct 2021 08:45:02 +0100,
-> > > Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> wrote:
-> > > > On 20/10/2021 08:50, patrice.chotard@foss.st.com wrote:
-> > > > > From: Patrice Chotard <patrice.chotard@foss.st.com>
-> > > > > 
-> > > > > Not all @st.com email address are concerned, only people who have
-> > > > > a specific @foss.st.com email will see their entry updated.
-> > > > > For some people, who left the company, remove their email.
-> > > > Also would be nice to see here explained *why* are you doing this.
-> > > 
-> > > And why this can't be done with a single update to .mailmap, like
-> > > anyone else does.
-> > 
-> > Thanks for the tips, yes, it will be simpler.
-> 
-> I made a try by updating .mailmap with adding a new entry with my @foss.st.com email :
-> 
->  Pali Rohár <pali@kernel.org> <pali.rohar@gmail.com>
->  Paolo 'Blaisorblade' Giarrusso <blaisorblade@yahoo.it>
-> +Patrice Chotard <patrice.chotard@foss.st.com> <patrice.chotard@st.com>
->  Patrick Mochel <mochel@digitalimplant.org>
->  Paul Burton <paulburton@kernel.org> <paul.burton@imgtec.com>
-> 
-> But when running ./scripts/get_maintainer.pl Documentation/devicetree/bindings/arm/sti.yaml, by old email is still displayed
-> 
-> Rob Herring <robh+dt@kernel.org> (maintainer:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
-> Patrice Chotard <patrice.chotard@st.com> (in file)
-> devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
-> linux-kernel@vger.kernel.org (open list)
-> 
-> By default, the get_maintainer.pl script is using .mailmap file ($email_use_mailmap = 1).
-> 
-> It seems there is an issue with get_maintainer.pl and maintainer name/e-mail found in yaml file ?
+On Fri 15 Oct 07:45 PDT 2021, Lukasz Luba wrote:
+> diff --git a/arch/arm64/include/asm/topology.h b/arch/arm64/include/asm/topology.h
+[..]
+> +/**
+> + * topology_thermal_pressure_update() - Update thermal pressure for CPUs
+> + * @cpus	: The related CPUs for which capacity has been reduced
+> + * @capped_freq	: The maximum allowed frequency that CPUs can run at
 
-I'm of two minds whether it's an "issue" actually.
+I know this matches what I see in e.g. the Qualcomm cpufreq hw driver,
+but in what cases will @capped_freq differ from
+cpufreq_get_hw_max_freq(cpumask_first(cpus))?
 
-get_maintainer is not the only tool used to create email
-address lists.
+Regards,
+Bjorn
 
-Some actually read files like MAINTAINERS or .dts or .yaml
-files directly to find maintainer addresses.
-
-So If your name and email address is listed in an source file
-where nominally active email addresses are entered then I
-believe .mailmap should not modify it.
-
-So I believe email addresses in each file should be updated
-in preference to using a mailmap entry for nominally active
-email addresses in these files.
-
----
-
-$ cat Documentation/devicetree/bindings/arm/sti.yaml
-# SPDX-License-Identifier: GPL-2.0
-%YAML 1.2
----
-$id: http://devicetree.org/schemas/arm/sti.yaml#
-$schema: http://devicetree.org/meta-schemas/core.yaml#
-
-title: ST STi Platforms Device Tree Bindings
-
-maintainers:
-  - Patrice Chotard <patrice.chotard@st.com>
-
-
-
+> + *
+> + * Update the value of thermal pressure for all @cpus in the mask. The
+> + * cpumask should include all (online+offline) affected CPUs, to avoid
+> + * operating on stale data when hot-plug is used for some CPUs. The
+> + * @capped_freq must be less or equal to the max possible frequency and
+> + * reflects the currently allowed max CPUs frequency due to thermal capping.
+> + * The @capped_freq must be provided in kHz.
+> + */
+> +void topology_thermal_pressure_update(const struct cpumask *cpus,
+> +				      unsigned long capped_freq)
+> +{
+> +	unsigned long max_capacity, capacity;
+> +	int cpu;
+> +
+> +	if (!cpus)
+> +		return;
+> +
+> +	cpu = cpumask_first(cpus);
+> +	max_capacity = arch_scale_cpu_capacity(cpu);
+> +
+> +	/* Convert to MHz scale which is used in 'freq_factor' */
+> +	capped_freq /= 1000;
+> +
+> +	capacity = mult_frac(capped_freq, max_capacity,
+> +			     per_cpu(freq_factor, cpu));
+> +
+> +	arch_set_thermal_pressure(cpus, max_capacity - capacity);
+> +}
+> +EXPORT_SYMBOL_GPL(topology_thermal_pressure_update);
+> +
+>  static ssize_t cpu_capacity_show(struct device *dev,
+>  				 struct device_attribute *attr,
+>  				 char *buf)
+> @@ -220,7 +255,6 @@ static void update_topology_flags_workfn(struct work_struct *work)
+>  	update_topology = 0;
+>  }
+>  
+> -static DEFINE_PER_CPU(u32, freq_factor) = 1;
+>  static u32 *raw_capacity;
+>  
+>  static int free_raw_capacity(void)
