@@ -2,127 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61BEC43CE32
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Oct 2021 18:01:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A6F343CF3E
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Oct 2021 18:59:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238820AbhJ0QEF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Oct 2021 12:04:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37352 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242884AbhJ0QEF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Oct 2021 12:04:05 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8165DC061767
-        for <linux-pm@vger.kernel.org>; Wed, 27 Oct 2021 09:01:39 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id i26so3603513ljg.7
-        for <linux-pm@vger.kernel.org>; Wed, 27 Oct 2021 09:01:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tkCgQJkUSUXPKa9PPaG98xGW8ORLrJoeUL+lFNuAKlI=;
-        b=JuXVzxzuz+qv/oGJh4H3FGcoT4i1PRfFmZGPc6lEW/N9sVUHQywzVSA6QOXoew8eMN
-         2VuWytyylFxvVVv4NHBnyfc0Qf66xZSXHV0PNkrxsRogr/txx31V1QIsqMYUDW3/lS/Q
-         puLCWl/i68QH+uN4xJWqYNAHxq8s/ABltDsTffJInX/ueXsemQ/gPVFmTZ93Ha2IFRxA
-         fbB3/Ci3reBmhbmZLY5Agp3ldPGxwIMR97E/B9IL/d5CWC5Xg4LcOyrcEsyeLsDfw7q4
-         1r0gIxWuTyvt/wIwtmEfq/EQYkL7wpbE/0EDTKaVxaRJS8WIN0jvlGqgTJ1Igaa+L78p
-         ZceQ==
+        id S243149AbhJ0RB4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Oct 2021 13:01:56 -0400
+Received: from mail-oo1-f52.google.com ([209.85.161.52]:40572 "EHLO
+        mail-oo1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243158AbhJ0RBi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Oct 2021 13:01:38 -0400
+Received: by mail-oo1-f52.google.com with SMTP id m37-20020a4a9528000000b002b83955f771so1132466ooi.7;
+        Wed, 27 Oct 2021 09:59:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tkCgQJkUSUXPKa9PPaG98xGW8ORLrJoeUL+lFNuAKlI=;
-        b=nsu65RUuh+cp3lc/KFZcvWAmYvCeTPCGLPeP8+MaIydyykErfEOF/KvibczbO380TS
-         HwNooPt75mrzHdiyphFzFtID2A8wr3tD+kgx2j/2gJj5EyRqOaQfipivFM+/PPxCfLSh
-         lxQb+6oeQGFij0iDFKRvb/LjUuRITd5+5RADhf4xn48Zyipiv6oRPQgC3MRMLsssxOJF
-         mXdpMpyR7Eza7I71uz0tkwCxJ7op6m+r1W1XUhX68XnyozZ2abpwNBi8Q9dWzeQAhViN
-         BHWkh/PWnDOm5iL88kDmwV3uBms/luv3i2081YCnB3TKJcEGyjTgleR07c04OfyQ2lSZ
-         Jv4w==
-X-Gm-Message-State: AOAM53350APD2NCI9njXhkhvzGKjuh723MCTOf8Jv1ZDrDG0XputtQY2
-        ELJ1oThncrJtFxZjx96fLoG1j7NbS3uy4VG3VJ+dgA==
-X-Google-Smtp-Source: ABdhPJyLTmxvQZ0j5lQGHsFYcydy71+PhRmg+SxpLEXAm87AnzbFNmKI1TyiM271I2tAbjx+BOKyohjDU7jCER0qQM4=
-X-Received: by 2002:a2e:5c45:: with SMTP id q66mr22976435ljb.273.1635350497549;
- Wed, 27 Oct 2021 09:01:37 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3xNLUk6B6HG3KUZQunYiPk6GxwNlFHDYS2KiJ7xOzd0=;
+        b=ghxwW0MTLBPmuJuHTCjyds2HUQbFd0UQbHVCA69CgeXp2DPYC+yh71uw0CkbzSn6hz
+         6qmHMFZYi1QrWrqt7fYIDll6P515rWZNKPgZmnqPVb6QvzejYBbcGXSYlhdOvs5YP8az
+         /hHOmdF2LeSZxe32aWLJk67IowzU7ICnWF+oPPPITns48FVhcSsQaKG79ls0EpbpVXEG
+         D19UWigGEtsG/eWoupPwgwV07tddN/ONRr6L/bxMLq3HEF6eSbEU/hh56KabexD7tzTe
+         3+t9AcoLWvhH7iXMTBRapPv1/+x/UFPGvjMXIWwkh1fF/iDKqPxseLcLKibbI6GViPlm
+         Aw3A==
+X-Gm-Message-State: AOAM533PVVZniVdRj+oR4SV821/gLdioFA6tae7gNiqopbmYLlcYyv1M
+        F2U/WK1yVVHrg9BHN4bBqg==
+X-Google-Smtp-Source: ABdhPJz2mU9EVbEpZu1D4mjpd0zA7Lfg4qao8M88Gqdf0Vnqbz2FDr6xTj3Smo7ox6FLH3iDEajiIw==
+X-Received: by 2002:a4a:eacc:: with SMTP id s12mr8853355ooh.14.1635353952123;
+        Wed, 27 Oct 2021 09:59:12 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id d4sm238597otu.57.2021.10.27.09.59.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Oct 2021 09:59:11 -0700 (PDT)
+Received: (nullmailer pid 1698392 invoked by uid 1000);
+        Wed, 27 Oct 2021 16:59:10 -0000
+Date:   Wed, 27 Oct 2021 11:59:10 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Odelu Kukatla <okukatla@codeaurora.org>
+Cc:     sboyd@kernel.org, Georgi Djakov <djakov@kernel.org>,
+        mdtipton@codeaurora.org, Andy Gross <agross@kernel.org>,
+        linux-pm@vger.kernel.org, linux-arm-msm-owner@vger.kernel.org,
+        evgreen@google.com, bjorn.andersson@linaro.org,
+        Rob Herring <robh+dt@kernel.org>, seansw@qti.qualcomm.com,
+        georgi.djakov@linaro.org, saravanak@google.com, elder@linaro.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Sibi Sankar <sibis@codeaurora.org>
+Subject: Re: [v8 1/3] dt-bindings: interconnect: Add EPSS L3 DT binding on
+ SC7280
+Message-ID: <YXmFXoKLmDsigVqt@robh.at.kernel.org>
+References: <1634812857-10676-1-git-send-email-okukatla@codeaurora.org>
+ <1634812857-10676-2-git-send-email-okukatla@codeaurora.org>
 MIME-Version: 1.0
-References: <20211025224032.21012-1-digetx@gmail.com>
-In-Reply-To: <20211025224032.21012-1-digetx@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 27 Oct 2021 18:01:01 +0200
-Message-ID: <CAPDyKFrA2Jcb5BmaFmajtdUCmpwoPjAAvPC_MhoWwjDXJynD=w@mail.gmail.com>
-Subject: Re: [PATCH v14 00/39] NVIDIA Tegra power management patches for 5.17
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-mmc@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-clk@vger.kernel.org, David Heidelberg <david@ixit.cz>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1634812857-10676-2-git-send-email-okukatla@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 26 Oct 2021 at 00:45, Dmitry Osipenko <digetx@gmail.com> wrote:
->
-> This series adds runtime PM support to Tegra drivers and enables core
-> voltage scaling for Tegra20/30 SoCs, resolving overheating troubles.
->
-> All patches in this series are interdependent and should go via Tegra tree
-> for simplicity.
->
-> Changelog:
->
-> v14: - Fixed missing runtime PM syncing on removal of drivers, which was
->        spotted by Ulf Hansson in v13.
->
->      - clk-device driver now resumes RPM on system suspend instead of
->        preparing clock which it backs. This was suggested by Ulf Hansson.
->
->      - clk-device driver now syncs power domain performance unconditionally
->        during driver's probe time since GENPD API allows to do this now.
->        It was spotted by Ulf Hansson.
->
->      - Added new "Enable runtime PM during OPP state-syncing" patch, which
->        allows drivers to sync state at any time. Previously drivers were
->        obligated to take care of enabling RPM at the "right" time.
->
->      - Moved runtime PM initialization/uninitialization of DRM drivers that
->        use host1x channel to host1x client init/deinit phase. I noticed that
->        there is UAF problem because RPM-suspend callback waits until channel
->        is idling and channel is already released/freed during driver's removal
->        phase.
->
->      - Added system suspend support to the new NVDEC DRM driver.
->
->      - Added missing pm_runtime_mark_last_busy() to DRM driver.
->
->      - Corrected VDE GENPD patch which previously made video decoder clock
->        always-enabled by mistake if legacy PD code path was used. It was
->        spotted while we were testing VDE on Tegra114 that doesn't support
->        GENPD yet.
->
->      - Added ack from Peter Chen to the USB patch that he gave to v13.
->
->      - Changed OPP table names in accordance to the new naming scheme
->        required by the recent core OPP binding.
->
->      - Added 500MHz memory OPP entry used by ASUS Transformer tablets.
+On Thu, 21 Oct 2021 16:10:55 +0530, Odelu Kukatla wrote:
+> Add Epoch Subsystem (EPSS) L3 interconnect provider binding on SC7280
+> SoCs.
+> 
+> Signed-off-by: Odelu Kukatla <okukatla@codeaurora.org>
+> ---
+>  Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-Besides those minor nitpicks/questions that I have sent for patch1 and
-patch29, the series looks good to me!
-
-Feel free to add, for the whole series:
-
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-
-Kind regards
-Uffe
+Acked-by: Rob Herring <robh@kernel.org>
