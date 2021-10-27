@@ -2,154 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAA1943C823
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Oct 2021 12:56:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FA4A43CAC3
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Oct 2021 15:35:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239747AbhJ0K6s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Oct 2021 06:58:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51262 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237068AbhJ0K6r (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Oct 2021 06:58:47 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5584BC061745
-        for <linux-pm@vger.kernel.org>; Wed, 27 Oct 2021 03:56:22 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id e2so3917530ljg.13
-        for <linux-pm@vger.kernel.org>; Wed, 27 Oct 2021 03:56:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VcwIbDXyqxOVXmwhFTh3M4U8pwTWBcfpjA1gKThuQwM=;
-        b=DOleeR66hVCWRUSE1vVRgpe8SJwg3hXoPhnYGSWr2h/1QsY59933hT503CxAL7bTNk
-         iAmCUx0TWh3pVoqWNx9NfD3cn8DWC6uQYvCRUH8Mze9MIUaGAlJOWh9Rs6Jb+LYtgoST
-         cjvI7vr2NNcKcaTXT3/tV9MElrGguJ5w9z+JbcXFX/2ofZN8/UsF+gKVIIl+ByuNaQ8Y
-         yPsk8wPrbdfXVROwTXzZuSRkjgb9arBztxSpf3SmGhRUuRLcpdrnjYCpgT+j4EHzVgHA
-         DYQvE5KXJ/1CnQ6ufOLPUW7E3xStkYgXY4qDSJNfLOpWZV1eVezITj1sM6bh3c8kXPLb
-         DFOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VcwIbDXyqxOVXmwhFTh3M4U8pwTWBcfpjA1gKThuQwM=;
-        b=BIzdmUnlslxJbEwWScJ2pIts8WPGnak2SlYtRjAi0+7d36Z+2hU7wnTo9Fojn0jnL4
-         pFWhtW5hmk6g75Atho8Dqa1sZFmk+kEawYAfGsVECT5QAMv/nwBF69JIleaQmz5ZZV6F
-         E55U5atZoCRJziBJ1scxI2cH3tccg8gSG6h+3MjLZ1NmpxhrUEzeN184ZpcuN+yWN+Ij
-         kiH0o+w4lMztQmBBU10JxzCPcF6aMh8jmCDa2Hj/rdZOxPdwhoSOEsBpp9cAqySlf2Ff
-         FxkuRYm+rfFeAn0Mh3iJCBJbchxht9FMMSUJlo1cfE2AvX6rWYA0A8v/MCVnp/zZHfJc
-         7XaA==
-X-Gm-Message-State: AOAM530kI/Ytkx2y5U39vLH+n1usu1MGw+Ozodzl6865HvQeZ6OveuRa
-        5hV5mQN3kAah7z6l3RAGnTEyuAoCTqm11dqkBImEMg==
-X-Google-Smtp-Source: ABdhPJy1h3NelpYd9TSvKaUHWrMYA+ZVL3fwLTcVJEPZpatCHhPdaElqmnb17Fr40bMDmvrRBl+JpTVBgGxcDMAKBTQ=
-X-Received: by 2002:a2e:b550:: with SMTP id a16mr32975194ljn.229.1635332180469;
- Wed, 27 Oct 2021 03:56:20 -0700 (PDT)
+        id S237425AbhJ0Nhs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Oct 2021 09:37:48 -0400
+Received: from foss.arm.com ([217.140.110.172]:43446 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236811AbhJ0Nhs (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 27 Oct 2021 09:37:48 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 821E71FB;
+        Wed, 27 Oct 2021 06:35:22 -0700 (PDT)
+Received: from [192.168.185.184] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 13E003F73D;
+        Wed, 27 Oct 2021 06:35:16 -0700 (PDT)
+Subject: Re: [PATCH v2 1/5] arch_topology: Introduce thermal pressure update
+ function
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, sudeep.holla@arm.com,
+        will@kernel.org, catalin.marinas@arm.com, linux@armlinux.org.uk,
+        gregkh@linuxfoundation.org, rafael@kernel.org,
+        viresh.kumar@linaro.org, amitk@kernel.org,
+        daniel.lezcano@linaro.org, amit.kachhap@gmail.com,
+        thara.gopinath@linaro.org, bjorn.andersson@linaro.org,
+        agross@kernel.org
+References: <20211015144550.23719-1-lukasz.luba@arm.com>
+ <20211015144550.23719-2-lukasz.luba@arm.com>
+ <431230a5-00e9-0211-0731-035eab5fa3f6@arm.com>
+ <e38d2b22-0579-90ac-11fe-3c3163bef685@arm.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+Message-ID: <018a888d-ed39-09a1-9828-cedef23c7701@arm.com>
+Date:   Wed, 27 Oct 2021 15:35:14 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-References: <20211026222626.39222-1-ulf.hansson@linaro.org> <20211027020235.GA1306582@rowland.harvard.edu>
-In-Reply-To: <20211027020235.GA1306582@rowland.harvard.edu>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 27 Oct 2021 12:55:43 +0200
-Message-ID: <CAPDyKFpgHJA-duQSA2uqhccrDxFqWXO1R1DJxo=aOkT5FyX+Ag@mail.gmail.com>
-Subject: Re: [PATCH] PM: runtime: Allow rpm_resume() to succeed when runtime
- PM is disabled
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        Kevin Hilman <khilman@kernel.org>,
-        Maulik Shah <mkshah@codeaurora.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <e38d2b22-0579-90ac-11fe-3c3163bef685@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 27 Oct 2021 at 04:02, Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Wed, Oct 27, 2021 at 12:26:26AM +0200, Ulf Hansson wrote:
-> > During system suspend, the PM core sets dev->power.is_suspended for the
-> > device that is being suspended. This flag is also being used in
-> > rpm_resume(), to allow it to succeed by returning 1, assuming that runtime
-> > PM has been disabled and the runtime PM status is RPM_ACTIVE, for the
-> > device.
-> >
-> > To make this behaviour a bit more useful, let's drop the check for the
-> > dev->power.is_suspended flag in rpm_resume(), as it doesn't really need to
-> > be limited to this anyway.
-> >
-> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > ---
-> >  drivers/base/power/runtime.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-> > index ec94049442b9..fadc278e3a66 100644
-> > --- a/drivers/base/power/runtime.c
-> > +++ b/drivers/base/power/runtime.c
-> > @@ -742,8 +742,8 @@ static int rpm_resume(struct device *dev, int rpmflags)
-> >   repeat:
-> >       if (dev->power.runtime_error)
-> >               retval = -EINVAL;
-> > -     else if (dev->power.disable_depth == 1 && dev->power.is_suspended
-> > -         && dev->power.runtime_status == RPM_ACTIVE)
-> > +     else if (dev->power.disable_depth > 0 &&
-> > +             dev->power.runtime_status == RPM_ACTIVE)
->
-> IIRC there was a good reason why the original code checked for
-> disable_depth == 1 rather than > 0.  But I don't remember exactly what
-> the reason was.  Maybe it had something to do with the fact that during
-> a system sleep __device_suspend_late calls __pm_runtime_disable, and the
-> code was checking that there were no other disables in effect.
+On 27/10/2021 10:56, Lukasz Luba wrote:
+> Hi Dietmar,
+> 
+> Thank you for having a look at this.
+> 
+> On 10/26/21 5:51 PM, Dietmar Eggemann wrote:
+>> On 15/10/2021 16:45, Lukasz Luba wrote:
 
-The check was introduced in the below commit:
+[...]
 
-Commit 6f3c77b040fc
-Author: Kevin Hilman <khilman@ti.com>
-Date:   Fri Sep 21 22:47:34 2012 +0000
-PM / Runtime: let rpm_resume() succeed if RPM_ACTIVE, even when disabled, v2
+>>> +void topology_thermal_pressure_update(const struct cpumask *cpus,
+>>> +                      unsigned long capped_freq)
+>>> +{
+>>
+>> ... why not just s/unsigned long th_pressure/unsigned long capped_freq
+>> in existing topology_set_thermal_pressure() and move code the
+>> frequency/capacity conversion in there? The patch set will become
+>> considerably smaller.
+> 
+> I've been trying to avoid confusion when changing actually behavior
+> of the API function. Thus, introducing new would IMO opinion
+> make sure the old 'set' function was expecting proper pressure
+> value, while the new 'update' expects frequency.
+> 
+> I agree that the patch set would be smaller in that case, but I'm
+> not sure if that would not hide some issues. This one would
+> definitely break compilation of some vendor modules (or drivers
+> queuing or under review), not silently passing them through (with wrong
+> argument).
 
-By reading the commit message it's pretty clear to me that the check
-was added to cover only one specific use case, during system suspend.
+I see, since the parameter type list would stay the same, this could
+potentially happen.
 
-That is, that a driver may want to call pm_runtime_get_sync() from a
-late/noirq callback (when the PM core has disabled runtime PM), to
-understand whether the device is still powered on and accessible.
-
-> This is
-> related to the documented behavior of rpm_resume (it's supposed to fail
-> with -EACCES if the device is disabled for runtime PM, no matter what
-> power state the device is in).
->
-> That probably is also the explanation for why dev->power.is_suspended
-> gets checked: It's how the code tells whether a system sleep is in
-> progress.
-
-Yes, you are certainly correct about the current behaviour. It's there
-for a reason.
-
-On the other hand I would be greatly surprised if this change would
-cause any issues. Of course, I can't make guarantees, but I am, of
-course, willing to help to fix problems if those happen.
-
-As a matter of fact, I think the current behaviour looks quite
-inconsistent, as it depends on whether the device is being system
-suspended.
-
-Moreover, for syscore devices (dev->power.syscore is set for them),
-the PM core doesn't set the "is_suspended" flag. Those can benefit
-from a common behaviour.
-
-Finally, I think the "is_suspended" flag actually needs to be
-protected by a lock when set by the PM core, as it's being used in two
-separate execution paths. Although, rather than adding a lock for
-protection, we can just rely on the "disable_depth" in rpm_resume().
-It would be easier and makes the behaviour consistent too.
-
->
-> So overall, I suspect this change should not be made.  But some other
-> improvement (like a nice comment) might be in order.
->
-> Alan Stern
-
-Thanks for reviewing!
-
-Kind regards
-Uffe
+[...]
