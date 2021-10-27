@@ -2,206 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8251243CB47
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Oct 2021 15:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFFA743CC4B
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Oct 2021 16:33:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236191AbhJ0N7s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Oct 2021 09:59:48 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:36496 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231838AbhJ0N7p (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Oct 2021 09:59:45 -0400
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19RD9TUg016081;
-        Wed, 27 Oct 2021 15:56:41 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : from : to
- : cc : references : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=SonikwPLivf5Wf37m9QGw9Dbl0nfvPwQE843HNWkcTc=;
- b=WzTh3e1T+lbbR0asJHNFou5wy8ymDy2S+R6rPJyrqAzstKAMap8J47xdHxMl2RgiS0FA
- GmPrGi2x3OeVUYtOCqe6mJeZ8Qnqgr3AqxOk450p67gxTAT52rOaRO+ShqQ7sCyKWJnI
- akk/0WBtQxfWvGvmNBBFHNJxGj2edblZplh16L99+Icve2UKQ3u0Y7rBt6zEBSDWSZG4
- hjGa2jeJcZtnU6/w30poOeFwKUFpEn8VYHXLg/vCxFZY0lY9ng2HR45n3c8vhiJwnllz
- Jwmg2Jsob0VeZLHlpEugPKm678F0Rb6n0r6pPAbgzUx5bSgYL/7OoJXo5clDxcl3kg2U lg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 3by38r22bq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 27 Oct 2021 15:56:41 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5734910002A;
-        Wed, 27 Oct 2021 15:56:39 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 3742D22D168;
-        Wed, 27 Oct 2021 15:56:39 +0200 (CEST)
-Received: from lmecxl0573.lme.st.com (10.75.127.50) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 27 Oct
- 2021 15:56:35 +0200
-Subject: Re: dt-bindings: treewide: Update @st.com email address to
- @foss.st.com
-From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
-To:     Marc Zyngier <maz@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        <joe@perches.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        maxime coquelin <mcoquelin.stm32@gmail.com>,
-        alexandre torgue <alexandre.torgue@foss.st.com>,
-        michael turquette <mturquette@baylibre.com>,
-        stephen boyd <sboyd@kernel.org>,
-        herbert xu <herbert@gondor.apana.org.au>,
-        "david s . miller" <davem@davemloft.net>,
-        david airlie <airlied@linux.ie>,
-        daniel vetter <daniel@ffwll.ch>,
-        thierry reding <thierry.reding@gmail.com>,
-        sam ravnborg <sam@ravnborg.org>,
-        yannick fertre <yannick.fertre@foss.st.com>,
-        "philippe cornu" <philippe.cornu@foss.st.com>,
-        benjamin gaignard <benjamin.gaignard@linaro.org>,
-        vinod koul <vkoul@kernel.org>,
-        ohad ben-cohen <ohad@wizery.com>,
-        bjorn andersson <bjorn.andersson@linaro.org>,
-        baolin wang <baolin.wang7@gmail.com>,
-        jonathan cameron <jic23@kernel.org>,
-        "lars-peter clausen" <lars@metafoo.de>,
-        olivier moysan <olivier.moysan@foss.st.com>,
-        arnaud pouliquen <arnaud.pouliquen@foss.st.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        Hugues Fruchet <hugues.fruchet@foss.st.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        "Richard Weinberger" <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Matt Mackall <mpm@selenic.com>,
-        "Alessandro Zummo" <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Ahmad Fatoum" <a.fatoum@pengutronix.de>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        dillon min <dillon.minfei@gmail.com>,
-        Marek Vasut <marex@denx.de>,
-        "Laurent Pinchart" <laurent.pinchart@ideasonboard.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Fabien Dessenne <fabien.dessenne@foss.st.com>,
-        Christophe Roullier <christophe.roullier@foss.st.com>,
-        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
-        Lionel Debieve <lionel.debieve@foss.st.com>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-        Ludovic Barre <ludovic.barre@foss.st.com>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        pascal Paillet <p.paillet@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        "Jose Abreu" <joabreu@synopsys.com>,
-        Le Ray <erwan.leray@foss.st.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-clk@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <dmaengine@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-iio@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        <linux-media@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
-        <netdev@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <linux-gpio@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>
-References: <20211020065000.21312-1-patrice.chotard@foss.st.com>
- <22fb6f19-21eb-dcb5-fa31-bb243d4a7eaf@canonical.com>
- <878ryoc4dc.wl-maz@kernel.org>
- <82492eb2-5a5e-39a2-a058-5e2ba75323e0@foss.st.com>
-Message-ID: <865a4055-5c2f-0793-bdce-9f04eac167d2@foss.st.com>
-Date:   Wed, 27 Oct 2021 15:56:35 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S235377AbhJ0OgL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Oct 2021 10:36:11 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:38441 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S235365AbhJ0OgK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Oct 2021 10:36:10 -0400
+Received: (qmail 1321012 invoked by uid 1000); 27 Oct 2021 10:33:43 -0400
+Date:   Wed, 27 Oct 2021 10:33:43 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Kevin Hilman <khilman@kernel.org>,
+        Maulik Shah <mkshah@codeaurora.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PM: runtime: Allow rpm_resume() to succeed when runtime
+ PM is disabled
+Message-ID: <20211027143343.GC1319606@rowland.harvard.edu>
+References: <20211026222626.39222-1-ulf.hansson@linaro.org>
+ <20211027020235.GA1306582@rowland.harvard.edu>
+ <CAPDyKFpgHJA-duQSA2uqhccrDxFqWXO1R1DJxo=aOkT5FyX+Ag@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <82492eb2-5a5e-39a2-a058-5e2ba75323e0@foss.st.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.75.127.50]
-X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-10-27_04,2021-10-26_01,2020-04-07_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFpgHJA-duQSA2uqhccrDxFqWXO1R1DJxo=aOkT5FyX+Ag@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Marc
-
-+Joe Perches
-
-On 10/27/21 8:11 AM, Patrice CHOTARD wrote:
-> Hi Marc
+On Wed, Oct 27, 2021 at 12:55:43PM +0200, Ulf Hansson wrote:
+> On Wed, 27 Oct 2021 at 04:02, Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > On Wed, Oct 27, 2021 at 12:26:26AM +0200, Ulf Hansson wrote:
+> > > During system suspend, the PM core sets dev->power.is_suspended for the
+> > > device that is being suspended. This flag is also being used in
+> > > rpm_resume(), to allow it to succeed by returning 1, assuming that runtime
+> > > PM has been disabled and the runtime PM status is RPM_ACTIVE, for the
+> > > device.
+> > >
+> > > To make this behaviour a bit more useful, let's drop the check for the
+> > > dev->power.is_suspended flag in rpm_resume(), as it doesn't really need to
+> > > be limited to this anyway.
+> > >
+> > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > > ---
+> > >  drivers/base/power/runtime.c | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+> > > index ec94049442b9..fadc278e3a66 100644
+> > > --- a/drivers/base/power/runtime.c
+> > > +++ b/drivers/base/power/runtime.c
+> > > @@ -742,8 +742,8 @@ static int rpm_resume(struct device *dev, int rpmflags)
+> > >   repeat:
+> > >       if (dev->power.runtime_error)
+> > >               retval = -EINVAL;
+> > > -     else if (dev->power.disable_depth == 1 && dev->power.is_suspended
+> > > -         && dev->power.runtime_status == RPM_ACTIVE)
+> > > +     else if (dev->power.disable_depth > 0 &&
+> > > +             dev->power.runtime_status == RPM_ACTIVE)
+> >
+> > IIRC there was a good reason why the original code checked for
+> > disable_depth == 1 rather than > 0.  But I don't remember exactly what
+> > the reason was.  Maybe it had something to do with the fact that during
+> > a system sleep __device_suspend_late calls __pm_runtime_disable, and the
+> > code was checking that there were no other disables in effect.
 > 
-> On 10/20/21 1:39 PM, Marc Zyngier wrote:
->> On Wed, 20 Oct 2021 08:45:02 +0100,
->> Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> wrote:
->>>
->>> On 20/10/2021 08:50, patrice.chotard@foss.st.com wrote:
->>>> From: Patrice Chotard <patrice.chotard@foss.st.com>
->>>>
->>>> Not all @st.com email address are concerned, only people who have
->>>> a specific @foss.st.com email will see their entry updated.
->>>> For some people, who left the company, remove their email.
->>>>
->>>
->>> Please split simple address change from maintainer updates (removal,
->>> addition).
->>>
->>> Also would be nice to see here explained *why* are you doing this.
->>
->> And why this can't be done with a single update to .mailmap, like
->> anyone else does.
+> The check was introduced in the below commit:
 > 
-> Thanks for the tips, yes, it will be simpler.
+> Commit 6f3c77b040fc
+> Author: Kevin Hilman <khilman@ti.com>
+> Date:   Fri Sep 21 22:47:34 2012 +0000
+> PM / Runtime: let rpm_resume() succeed if RPM_ACTIVE, even when disabled, v2
 > 
-> Thanks
-> Patrice
+> By reading the commit message it's pretty clear to me that the check
+> was added to cover only one specific use case, during system suspend.
 > 
->>
->> 	M.
->>
+> That is, that a driver may want to call pm_runtime_get_sync() from a
+> late/noirq callback (when the PM core has disabled runtime PM), to
+> understand whether the device is still powered on and accessible.
+> 
+> > This is
+> > related to the documented behavior of rpm_resume (it's supposed to fail
+> > with -EACCES if the device is disabled for runtime PM, no matter what
+> > power state the device is in).
+> >
+> > That probably is also the explanation for why dev->power.is_suspended
+> > gets checked: It's how the code tells whether a system sleep is in
+> > progress.
+> 
+> Yes, you are certainly correct about the current behaviour. It's there
+> for a reason.
+> 
+> On the other hand I would be greatly surprised if this change would
+> cause any issues. Of course, I can't make guarantees, but I am, of
+> course, willing to help to fix problems if those happen.
+> 
+> As a matter of fact, I think the current behaviour looks quite
+> inconsistent, as it depends on whether the device is being system
+> suspended.
+> 
+> Moreover, for syscore devices (dev->power.syscore is set for them),
+> the PM core doesn't set the "is_suspended" flag. Those can benefit
+> from a common behaviour.
+> 
+> Finally, I think the "is_suspended" flag actually needs to be
+> protected by a lock when set by the PM core, as it's being used in two
+> separate execution paths. Although, rather than adding a lock for
+> protection, we can just rely on the "disable_depth" in rpm_resume().
+> It would be easier and makes the behaviour consistent too.
 
-I made a try by updating .mailmap with adding a new entry with my @foss.st.com email :
+As long as is_suspended isn't _written_ in two separate execution paths, 
+we're probably okay without a lock -- provided the code doesn't mind 
+getting an indefinite result when a read races with a write.
 
- Pali Rohár <pali@kernel.org> <pali.rohar@gmail.com>
- Paolo 'Blaisorblade' Giarrusso <blaisorblade@yahoo.it>
-+Patrice Chotard <patrice.chotard@foss.st.com> <patrice.chotard@st.com>
- Patrick Mochel <mochel@digitalimplant.org>
- Paul Burton <paulburton@kernel.org> <paul.burton@imgtec.com>
+> > So overall, I suspect this change should not be made.  But some other
+> > improvement (like a nice comment) might be in order.
+> >
+> > Alan Stern
+> 
+> Thanks for reviewing!
 
-But when running ./scripts/get_maintainer.pl Documentation/devicetree/bindings/arm/sti.yaml, by old email is still displayed
+You're welcome.  Whatever you eventually decide to do should be okay 
+with me.  I just wanted to make sure that you understood the deeper 
+issue here and had given it some thought.  For example, it may turn out 
+that you can resolve matters simply by updating the documentation.
 
-Rob Herring <robh+dt@kernel.org> (maintainer:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
-Patrice Chotard <patrice.chotard@st.com> (in file)
-devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
-linux-kernel@vger.kernel.org (open list)
-
-By default, the get_maintainer.pl script is using .mailmap file ($email_use_mailmap = 1).
-
-It seems there is an issue with get_maintainer.pl and maintainer name/e-mail found in yaml file ?
-
-Thanks
-Patrice
+Alan Stern
