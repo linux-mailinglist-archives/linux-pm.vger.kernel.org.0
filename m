@@ -2,78 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B88D43D9CE
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Oct 2021 05:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01EF843DAD4
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Oct 2021 07:45:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbhJ1DY0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Oct 2021 23:24:26 -0400
-Received: from smtp23.cstnet.cn ([159.226.251.23]:54384 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229704AbhJ1DYZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 27 Oct 2021 23:24:25 -0400
-Received: from localhost.localdomain (unknown [124.16.138.128])
-        by APP-03 (Coremail) with SMTP id rQCowAB3fKg9F3phlTw+BQ--.43941S2;
-        Thu, 28 Oct 2021 11:21:33 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     rui.zhang@intel.com, daniel.lezcano@linaro.org, amitk@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] thermal: Fix implicit type conversion
-Date:   Thu, 28 Oct 2021 03:21:32 +0000
-Message-Id: <1635391292-2879179-1-git-send-email-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.7.4
-X-CM-TRANSID: rQCowAB3fKg9F3phlTw+BQ--.43941S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrKFyUWFyxJF1rZr4rXr1fJFb_yoWkJFb_CF
-        n3Xr1093s8CF1FvFn7Cr18C347tasFqanag34FvwnxZ348Z343Wr1qqF98Wr48WrZYyF9r
-        ZF12kr1xAw1xZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb48FF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
-        0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r48
-        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
-        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
-        W8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
-        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUj8uctUUUU
-        U==
-X-Originating-IP: [124.16.138.128]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+        id S229772AbhJ1Fr3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Oct 2021 01:47:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52970 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229694AbhJ1Fr2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Oct 2021 01:47:28 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60BD4C061745
+        for <linux-pm@vger.kernel.org>; Wed, 27 Oct 2021 22:45:02 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id l203so4949273pfd.2
+        for <linux-pm@vger.kernel.org>; Wed, 27 Oct 2021 22:45:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=GG4woYR7NisY/q8Aqftt8VbaoIUjeCAFtan/TYRsjpU=;
+        b=GrlMrACUpkv4yRw/bDNI74wjHSJX2ujYSjccxXlMwSqpqwHxbMBmdMvVkv0bO9AjH8
+         ic8U5zL/L9NoK4aaLi1aw4q0ZpTdDrdkzCrxPOmAQlBq6v7AxoqEo3ecAb7FVrY4U+01
+         yB9/LEjRxgwzYrK+z1kmhEWslqQQBaxUgEthyd6cSKEvhtTrypqWG8bqYIbPvwhjGLuK
+         PS3oTkLVzKTq91pmr5BgCC9SRyHeg1dvVQMSMqfh0N5dM9BchT9B4Bhg0enreOm3xcyl
+         2CcPf4CeQYiYc7C9LmwNPU+Q2zHLH3VFKvH9P3tobjVq6wjazpM7MpFRkQQ4YpL4ibCp
+         Ixog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=GG4woYR7NisY/q8Aqftt8VbaoIUjeCAFtan/TYRsjpU=;
+        b=zj4FtXcJ4ua2+s7yq467Hn0HfDAkLcFEBAQxFUUs2B37NpRLgziIyMUuKbBAS3xhCx
+         RQms88c7oVpvhgWNInfGh3dpohmYgK9KzCTJVTXbN0PvsI1QYKTarsDqVreTFzrtHGOc
+         47Mmuglkuj04s/hsW2JSWhqGxmrSt4+w8aD8nfIW0eRRnGjFH6z8A9HKbYd0C224SHJW
+         nrYDhlm7ldU/DPWaOeZzS3Gt2BkGXso+yr0MH/y82jy1ougXnpdTrxFVhitUTQI0fRxc
+         4cUR2s/yPLxu6xnzpiLP7JCTyKdxZvWmfCGnFCMPOxX3aNR/JAicewwduBFQ9qEAiumP
+         ysyw==
+X-Gm-Message-State: AOAM531MtSTrgystym/36oa5f4O0MS082XrsYhZJwxloGBBjUPJplhOH
+        JZz2ak+rxElcfxbSfnWC4t/bOg==
+X-Google-Smtp-Source: ABdhPJykT+5wpjxxfNlbo1iflYwQ32FIIWG5dI2LruihbbOqUdV3QEb5FgCDaxq2gggVjjxyWadZYA==
+X-Received: by 2002:a63:3759:: with SMTP id g25mr1671466pgn.231.1635399901817;
+        Wed, 27 Oct 2021 22:45:01 -0700 (PDT)
+Received: from localhost ([106.201.113.61])
+        by smtp.gmail.com with ESMTPSA id pj12sm1467465pjb.19.2021.10.27.22.45.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Oct 2021 22:45:01 -0700 (PDT)
+Date:   Thu, 28 Oct 2021 11:14:59 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, sudeep.holla@arm.com,
+        will@kernel.org, catalin.marinas@arm.com, linux@armlinux.org.uk,
+        gregkh@linuxfoundation.org, rafael@kernel.org, amitk@kernel.org,
+        daniel.lezcano@linaro.org, amit.kachhap@gmail.com,
+        thara.gopinath@linaro.org, bjorn.andersson@linaro.org,
+        agross@kernel.org
+Subject: Re: [PATCH v2 1/5] arch_topology: Introduce thermal pressure update
+ function
+Message-ID: <20211028054459.dve6s2my2tq7odem@vireshk-i7>
+References: <20211015144550.23719-1-lukasz.luba@arm.com>
+ <20211015144550.23719-2-lukasz.luba@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211015144550.23719-2-lukasz.luba@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The parameter 'cpu' is defined as unsigned int.
-However in the cpumask_next() it is implicitly type conversed
-to int.
-It is universally accepted that the implicit type conversion is
-terrible.
-Also, having the good programming custom will set an example for
-others.
-Thus, it might be better to change the type of 'cpu' from
-unsigned int to int.
+On 15-10-21, 15:45, Lukasz Luba wrote:
+> +/**
+> + * topology_thermal_pressure_update() - Update thermal pressure for CPUs
+> + * @cpus	: The related CPUs for which capacity has been reduced
+> + * @capped_freq	: The maximum allowed frequency that CPUs can run at
 
-Fixes: 3e8c4d3 ("drivers: thermal: Move various drivers for intel platforms into a subdir")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/thermal/intel/intel_powerclamp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Maybe replace tabs with spaces here ?
 
-diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
-index b0eb5ec..ed46b5e 100644
---- a/drivers/thermal/intel/intel_powerclamp.c
-+++ b/drivers/thermal/intel/intel_powerclamp.c
-@@ -578,7 +578,7 @@ static int powerclamp_cpu_online(unsigned int cpu)
- 	return 0;
- }
- 
--static int powerclamp_cpu_predown(unsigned int cpu)
-+static int powerclamp_cpu_predown(int cpu)
- {
- 	if (clamping == false)
- 		return 0;
+> + *
+> + * Update the value of thermal pressure for all @cpus in the mask. The
+> + * cpumask should include all (online+offline) affected CPUs, to avoid
+> + * operating on stale data when hot-plug is used for some CPUs. The
+> + * @capped_freq must be less or equal to the max possible frequency and
+> + * reflects the currently allowed max CPUs frequency due to thermal capping.
+> + * The @capped_freq must be provided in kHz.
+> + */
+> +void topology_thermal_pressure_update(const struct cpumask *cpus,
+> +				      unsigned long capped_freq)
+> +{
+> +	unsigned long max_capacity, capacity;
+> +	int cpu;
+> +
+> +	if (!cpus)
+
+I will drop this and let the kernel crash :)
+
+> +		return;
+> +
+> +	cpu = cpumask_first(cpus);
+> +	max_capacity = arch_scale_cpu_capacity(cpu);
+> +
+> +	/* Convert to MHz scale which is used in 'freq_factor' */
+> +	capped_freq /= 1000;
+
+We should make sure capped_freq > freq_factor and WARN if not. This will also
+get rid of similar checks at the users.
+
+> +
+> +	capacity = mult_frac(capped_freq, max_capacity,
+> +			     per_cpu(freq_factor, cpu));
+> +
+> +	arch_set_thermal_pressure(cpus, max_capacity - capacity);
+> +}
+> +EXPORT_SYMBOL_GPL(topology_thermal_pressure_update);
+
 -- 
-2.7.4
-
+viresh
