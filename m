@@ -2,147 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4E7243E978
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Oct 2021 22:18:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D410A43EA11
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Oct 2021 23:13:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231206AbhJ1UVF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Oct 2021 16:21:05 -0400
-Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:10849
-        "EHLO mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230424AbhJ1UVF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Oct 2021 16:21:05 -0400
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AhsSUma94wQwPkLbhP1Vuk+GWdb1zdoMgy1kn?=
- =?us-ascii?q?xilNoRw8SL37qymLppsmPHjP+X8ssRAb6Ka90cy7LE80mqQFmrX5A43SFDUO1F?=
- =?us-ascii?q?HJEGmNhbGSsQEJNUXFh5pgPI1bAthD4OSZNykOsS4RiDPIZOrIueP3g5xA5t2x?=
- =?us-ascii?q?854Od3AOV0g61XYJNu/zKCQfL2MrOXcgLuvn2iMEnUvFRZ05VLXxOpBvZZm+mz?=
- =?us-ascii?q?SkruOEXfbGbyRXlzWmvHeE5LX7Gx/d5yxbdz9U278t/QH+4nXEz5Tmnv2xyhfa?=
- =?us-ascii?q?k1bpq61fktnoxNcrPr3qtuElbhjhgQahY8BZYPm5uiwvqu3H0idNrDHzyS1QR/?=
- =?us-ascii?q?ibk0mxQok7ySGdpTXIwXIi53TjwVjdiWL7usrnSD9SMbs9ub5k?=
-X-IronPort-AV: E=Sophos;i="5.84,326,1620684000"; 
-   d="scan'208";a="397681647"
-Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 28 Oct 2021 22:18:36 +0200
-Date:   Thu, 28 Oct 2021 22:18:35 +0200 (CEST)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-cc:     Doug Smythies <dsmythies@telus.net>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: problem in changing from active to passive mode
-In-Reply-To: <CAJZ5v0j9fJi+Fa1404uH3V2XJUrVB5crEjcZ9tsnBtQWgCCu4w@mail.gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2110282217390.9518@hadrien>
-References: <alpine.DEB.2.22.394.2110241452460.2997@hadrien> <CAAYoRsXeQravNXKsWAZvacMmE_iBzaQ+mQxNbB5jcD_vkny+Sg@mail.gmail.com> <alpine.DEB.2.22.394.2110261658440.3825@hadrien> <CAAYoRsWXew+9Pch_9ux+UK0LFwy+211d2LmNLGKF_UTr3eS2Fw@mail.gmail.com>
- <alpine.DEB.2.22.394.2110281908150.9518@hadrien> <CAJZ5v0ihVdrZ1ogEc34+QgZUJW5-=RzP34-U1_91VTcLhbc4Nw@mail.gmail.com> <CAJZ5v0ij105B05xPGgfauwFv1KhXRnwh5p28R1y11qKWjxUOhg@mail.gmail.com> <CAJZ5v0gAax-uz+shKv4MNBiSBPKGroQGNKdYyUK4v6sRS15o_w@mail.gmail.com>
- <alpine.DEB.2.22.394.2110282112060.9518@hadrien> <CAJZ5v0jmQgg_DwqSdFsoMd5qV_ZH=cHUJtb372mqv=GSWioRgw@mail.gmail.com> <alpine.DEB.2.22.394.2110282124201.9518@hadrien> <CAJZ5v0j9fJi+Fa1404uH3V2XJUrVB5crEjcZ9tsnBtQWgCCu4w@mail.gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        id S230495AbhJ1VP2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Oct 2021 17:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39242 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230404AbhJ1VP1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Oct 2021 17:15:27 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01DAC061570;
+        Thu, 28 Oct 2021 14:12:59 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id j2so16371832lfg.3;
+        Thu, 28 Oct 2021 14:12:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=XF91eiN0iC14ROr83KuAgnnKSRf4eWRTqZgrNJQJHx0=;
+        b=MJLJ1AGyaa1L9ChiUkSb6VfqZe8YaY3CS6pAwhJiIYR2JksscthTc8Gds4kcvEgq5z
+         iaXlIyw2x7pOt0JM/CDAk4Wd4SyMPiGAAgaoaDMmXAmbK6TARMEtB9Zg1McAJtPiZoqz
+         wwBP0fbXEEAdA+KcSKF0uw61NpdynZN57FJSU6ZvnDhgdeLbbmEskxQkf6vz7tURKaYN
+         PyPF5E3sQ4cCgQGQiCCYgapxmuSls7lGhgf1ajVTGlns4ftmM5nR7u3FpydAUzYPW4YI
+         90H/+Hn3UABOsu2zc/lsU0BhrRRY3kKVWNnK2mSN65VN4JxFjut5jWgeesTxQzco4/xQ
+         ZUsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=XF91eiN0iC14ROr83KuAgnnKSRf4eWRTqZgrNJQJHx0=;
+        b=oZBUw36gkR0O3k9DNLt8rLX0HX/V0nwhRd8SB3rHJrTTrbm9/gST4bi0rolVRNLZGX
+         05RYxjJEwkW4LhR6zou4vM2i3Vq0+eFDq746o/9xoXapnb5GonxEz1O+vrJUAZgqQu8I
+         XMsui+bJmf7LGoHNFLKn7a2mcAg1Gar+vg2WO6cQV/zFfrbKXg5csLx9KKzo4jJc3biA
+         u/VSd3KFiJmvAUcMQTIwGSDu/wdHoi0z8QYEMSa/QoGF5mH6AXYsV6R+5YS8IvnnvbnF
+         8YFEbm268MZMlADD+9pXgttD21SwWPxJbe+FRlBJh5OgdTSNVaqUAUmu/cYxc5Ag+Ypj
+         0akw==
+X-Gm-Message-State: AOAM532gur5cIDctlOEkkT5yF9G0Z61kQrUcggcnleLNMoQwDA6YLiNT
+        ZKQZ8GWB5bRnjqsQTGNKw1FQX9LqW50=
+X-Google-Smtp-Source: ABdhPJzpUYdLt7duRUCUwabBB4f1hRQD4mkQHJIUDsTOvz/3bmV500KcyoTuhXUeDLXD6gGjzb6rlQ==
+X-Received: by 2002:a05:6512:21b1:: with SMTP id c17mr6717508lft.266.1635455578160;
+        Thu, 28 Oct 2021 14:12:58 -0700 (PDT)
+Received: from [192.168.2.145] (46-138-44-18.dynamic.spd-mgts.ru. [46.138.44.18])
+        by smtp.googlemail.com with ESMTPSA id o21sm422349lfu.77.2021.10.28.14.12.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Oct 2021 14:12:57 -0700 (PDT)
+Subject: Re: [PATCH v3] dt-bindings: opp: Allow multi-worded OPP entry names
+To:     Rob Herring <robh@kernel.org>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Nishanth Menon <nm@ti.com>, David Heidelberg <david@ixit.cz>,
+        Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org
+References: <20211024215718.28969-1-digetx@gmail.com>
+ <YXnCW1KSg2RBIdDy@robh.at.kernel.org>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <c880012e-2986-aa42-6549-f47aa4bb1dde@gmail.com>
+Date:   Fri, 29 Oct 2021 00:12:56 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <YXnCW1KSg2RBIdDy@robh.at.kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+28.10.2021 00:19, Rob Herring пишет:
+> On Mon, Oct 25, 2021 at 12:57:18AM +0300, Dmitry Osipenko wrote:
+>> Not all OPP entries fit into a single word. In particular NVIDIA Tegra OPP
+>> tables use multi-word names where first part is freq and second voltage
+>> because different hardware versions use different voltages for the same
+>> freqs. Allow OPP entry to have multi-worded name separated by hyphen.
+>> This silences DT checker warnings about wrong naming scheme.
+>>
+>> Reviewed-by: David Heidelberg <david@ixit.cz>
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>> ---
+>>
+>> Changelog:
+>>
+>> v3: - Viresh Kumar suggested that we shouldn't support postfix variant.
+>>       I dropped variant with postfix naming scheme and multi-wording
+>>       support of table names.
+>>
+>> v2: - In addition to a multi-wording support, support of the postfix
+>>       *-opp-table naming scheme is added to the updated pattern.
+>>
+>>  Documentation/devicetree/bindings/opp/opp-v2-base.yaml | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+>> index ae3ae4d39843..f79343960539 100644
+>> --- a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+>> +++ b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+>> @@ -33,7 +33,7 @@ properties:
+>>      type: boolean
+>>  
+>>  patternProperties:
+>> -  '^opp-?[0-9]+$':
+>> +  '^opp(-[0-9]+)*$':
+> 
+> This drops support for cases like 'opp1' which there are a ton of. It 
+> should be '^opp(-?[0-9]+)*$' if we want to keep that support.
+> 
+> I'd love to be stricter, but trying to find a balance.
 
-
-On Thu, 28 Oct 2021, Rafael J. Wysocki wrote:
-
-> On Thu, Oct 28, 2021 at 9:25 PM Julia Lawall <julia.lawall@inria.fr> wrote:
-> >
-> >
-> >
-> > On Thu, 28 Oct 2021, Rafael J. Wysocki wrote:
-> >
-> > > On Thu, Oct 28, 2021 at 9:13 PM Julia Lawall <julia.lawall@inria.fr> wrote:
-> > > >
-> > > >
-> > > >
-> > > > On Thu, 28 Oct 2021, Rafael J. Wysocki wrote:
-> > > >
-> > > > > On Thu, Oct 28, 2021 at 7:57 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > > > >
-> > > > > > On Thu, Oct 28, 2021 at 7:29 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > > > > >
-> > > > > > > On Thu, Oct 28, 2021 at 7:10 PM Julia Lawall <julia.lawall@inria.fr> wrote:
-> > > > > > > >
-> > > > > > > > > Now, for your graph 3, are you saying this pseudo
-> > > > > > > > > code of the process is repeatable?:
-> > > > > > > > >
-> > > > > > > > > Power up the system, booting kernel 5.9
-> > > > > > > > > switch to passive/schedutil.
-> > > > > > > > > wait X minutes for system to settle
-> > > > > > > > > do benchmark, result ~13 seconds
-> > > > > > > > > re-boot to kernel 5.15-RC
-> > > > > > > > > switch to passive/schedutil.
-> > > > > > > > > wait X minutes for system to settle
-> > > > > > > > > do benchmark, result ~40 seconds
-> > > > > > > > > re-boot to kernel 5.9
-> > > > > > > > > switch to passive/schedutil.
-> > > > > > > > > wait X minutes for system to settle
-> > > > > > > > > do benchmark, result ~28 seconds
-> > > > > > > >
-> > > > > > > > In the first boot of 5.9, the des (desired?) field of the HWP_REQUEST
-> > > > > > > > register is 0 and in the second boot (after booting 5.15 and entering
-> > > > > > > > passive mode) it is 10.  I don't know though if this is a bug or a
-> > > > > > > > feature...
-> > > > > > >
-> > > > > > > It looks like a bug.
-> > > > > > >
-> > > > > > > I think that the desired value is not cleared on driver exit which
-> > > > > > > should happen.  Let me see if I can do a quick patch for that.
-> > > > > >
-> > > > > > Please check the behavior with the attached patch applied.
-> > > > >
-> > > > > Well, actually, the previous one won't do anything, because the
-> > > > > desired perf field is already cleared in this function before writing
-> > > > > the MSR, so please try the one attached to this message instead.
-> > > > >
-> > > >
-> > > > Turbostat still shows 10:
-> > > >
-> > > > cpu0: MSR_HWP_CAPABILITIES: 0x070a1525 (high 37 guar 21 eff 10 low 7)
-> > > > cpu0: MSR_HWP_REQUEST: 0x000a2525 (min 37 max 37 des 10 epp 0x0 window 0x0 pkg 0x0)
-> > > > cpu0: MSR_HWP_REQUEST_PKG: 0x8000ff00 (min 0 max 255 des 0 epp 0x80 window 0x0)
-> > > > cpu0: MSR_HWP_STATUS: 0x00000004 (No-Guaranteed_Perf_Change, No-Excursion_Min)
-> > > > cpu1: MSR_PM_ENABLE: 0x00000001 (HWP)
-> > > > cpu1: MSR_HWP_CAPABILITIES: 0x070a1525 (high 37 guar 21 eff 10 low 7)
-> > > > cpu1: MSR_HWP_REQUEST: 0x000a2525 (min 37 max 37 des 10 epp 0x0 window 0x0 pkg 0x0)
-> > > > cpu1: MSR_HWP_REQUEST_PKG: 0x8000ff00 (min 0 max 255 des 0 epp 0x80 window 0x0)
-> > > > cpu1: MSR_HWP_STATUS: 0x00000004 (No-Guaranteed_Perf_Change, No-Excursion_Min)
-> > > > cpu2: MSR_PM_ENABLE: 0x00000001 (HWP)
-> > > > cpu2: MSR_HWP_CAPABILITIES: 0x070a1525 (high 37 guar 21 eff 10 low 7)
-> > > > cpu2: MSR_HWP_REQUEST: 0x000a2525 (min 37 max 37 des 10 epp 0x0 window 0x0 pkg 0x0)
-> > > > cpu2: MSR_HWP_REQUEST_PKG: 0x8000ff00 (min 0 max 255 des 0 epp 0x80 window 0x0)
-> > > > cpu2: MSR_HWP_STATUS: 0x00000004 (No-Guaranteed_Perf_Change, No-Excursion_Min)
-> > > > cpu3: MSR_PM_ENABLE: 0x00000001 (HWP)
-> > > > cpu3: MSR_HWP_CAPABILITIES: 0x070a1525 (high 37 guar 21 eff 10 low 7)
-> > > > cpu3: MSR_HWP_REQUEST: 0x000a2525 (min 37 max 37 des 10 epp 0x0 window 0x0 pkg 0x0)
-> > > > cpu3: MSR_HWP_REQUEST_PKG: 0x8000ff00 (min 0 max 255 des 0 epp 0x80 window 0x0)
-> > > > cpu3: MSR_HWP_STATUS: 0x00000004 (No-Guaranteed_Perf_Change, No-Excursion_Min)
-> > >
-> > > Hmmm.
-> > >
-> > > Is this also the case if you go from "passive" to "active" on 5.15-rc
-> > > w/ the patch applied?
-> >
-> > Sorry, I was wrong.  If I am in 5.15 and go from passive to active, the
-> > des field indeed returns to 0.  If I use kexec
->
-> Well, this means that the cpufreq driver cleanup is not carried out in
-> the kexec path and the old desired value remains in the register.
->
-> > to reboot from 5.15 passive into 5.9, then the des field remains 10.
->
-> It looks like desired perf needs to be cleared explicitly in the active mode.
->
-> Attached is a patch to do that, but please note that the 5.9 will need
-> to be patched too to address this issue.
-
-I'm not completely clear on what the new patch is doing and how I should
-test it.  If I stay in 5.15, the original patch worked for clearing des
-when going from passive to active.
-
-julia
+Good catch, let me make v4.
