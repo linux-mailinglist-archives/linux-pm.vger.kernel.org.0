@@ -2,119 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36E8143E822
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Oct 2021 20:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48F8943E81E
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Oct 2021 20:17:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230350AbhJ1STj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Oct 2021 14:19:39 -0400
-Received: from mail-ot1-f54.google.com ([209.85.210.54]:44810 "EHLO
-        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230501AbhJ1STd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Oct 2021 14:19:33 -0400
-Received: by mail-ot1-f54.google.com with SMTP id o10-20020a9d718a000000b00554a0fe7ba0so3950114otj.11;
-        Thu, 28 Oct 2021 11:17:06 -0700 (PDT)
+        id S230473AbhJ1ST2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Oct 2021 14:19:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56010 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230258AbhJ1ST0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Oct 2021 14:19:26 -0400
+Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143B4C061767
+        for <linux-pm@vger.kernel.org>; Thu, 28 Oct 2021 11:16:59 -0700 (PDT)
+Received: by mail-oo1-xc2f.google.com with SMTP id a17-20020a4a6851000000b002b59bfbf669so2424396oof.9
+        for <linux-pm@vger.kernel.org>; Thu, 28 Oct 2021 11:16:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Wusxu4vVS094WYADHFLACryqXCZAQomcEnv/oqtQUp8=;
+        b=cIHck4f7AU6fCfChVEV2LovuiRMjA9npqq575g7mD6uUXAWIZK7H/dd0FYbkYWvcLw
+         THcW+crPTr8lmtELnV92shgpOg7arjpaszvQRz613ZU/fICX96ZR7nz0A+Zs5ZWX2Kzu
+         3Fxyh0V1kgUIi49NKrpybu+L1b2eGf9O4QvZQI8qc2ZWwFFux0z41haIX4Vcc6wgljWR
+         MDV+4WCiRPJBUi+UaFPrdiEtNHYRNGNAC/yesi/c2odE1ZPoTN4ofOemZsJA0bfvkzro
+         RVFdWyPcFsTjJWMnxm3mzqX74df7+nxkEJqS8WqXZ6DsJcMWEMdTR/QCI0bM6LMkj2JB
+         0REg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=truNDpG90fQWo72XkDijF7IWVXAMqmIuqcS6DGlpBFY=;
-        b=ZPV52JsXVk2wLT7vT/wrij907ZWFJ1cTyDvvL7e7c9dXwyQWp6r13uamVcWJ7KrzgD
-         55r+gtDNcyBOfgklG6Ih6XSpFczCQtfKz+0zVDW/3g5leQcHMmKgSfWoiysZSf+sc8gj
-         kFRXwwssEJCkMzXnYhbT78BxznKpESv+sMOvI3iv8TBmRvUHpx18einQ+9bnN5w/GJ68
-         a8pBeUo8eR5iMhNAlsYnN88ZkaICmewZ6TFiD7SJdFih3dUTGUpo+QB3QPewbnhOWKHr
-         KOdDOEuLON0CEhsrBG5u2pgomemGHpaafFQDgzsofov8bN178Cz4KqOARDcDxCbOTu0B
-         Rybg==
-X-Gm-Message-State: AOAM533925hqyO/fXWW0sEyPs4grO2HOojoz3+jOqWw+1LhrTvUkTp70
-        9BKw8OHPpTQwjeOXqkISWQ9M6rYhE2vGm+DjPK5qC91J
-X-Google-Smtp-Source: ABdhPJyYdC+RZ3q7w06ZOd4hr8KIaHlaIPh+eHjvQ2q/E3+nuQusT+FskZaV8L4M//MpaGqFfy/usE64BK+L3qqeZ7Q=
-X-Received: by 2002:a9d:65c1:: with SMTP id z1mr4649248oth.198.1635445026044;
- Thu, 28 Oct 2021 11:17:06 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Wusxu4vVS094WYADHFLACryqXCZAQomcEnv/oqtQUp8=;
+        b=En9xkoBQu5lay7ZZpWJCyfETu1nK05eUVmA56e8p+TABBl4qhMcS4TWJh+S4WvSnK8
+         NDP5XY3EmEFjjcFhJrquQ6GxYewk58OKMm6NdEkFxKKa6/Bb3DFFSJee3lyQAROsuME4
+         oUHJEYpK1K/BOo9Vj9Du1p6c6O8iQxCJiGQagCk8pGu0cbAjt3nAGCqDFvvU17cyGm5g
+         /ywA6IImVKK9R/aprdLCj/64g3MqbJryAY1Q3r6K4huNOyUDiMjR06soCDb+FixhPU6L
+         EFL9bzGfpd07EiY7PXQDu4v1r0gw23MzLgABWW/b8zBEqGR3bVUEHACQr1wogZDUdWDe
+         /S3A==
+X-Gm-Message-State: AOAM5303r4Mhev2YnU2WJFC5lc8t0mIE8tYvbGZ8Ve0uKtF50VgjK30H
+        WqFxkBjcxM3ZhiqQhasm77yU7Q==
+X-Google-Smtp-Source: ABdhPJy7YMoWnmrHfImanNmbs6Unt0iAC5Q17Vv8gEqfdVoObsC06l/dfy2j5VCFf7uWMyZht8j/MQ==
+X-Received: by 2002:a4a:e218:: with SMTP id b24mr4268610oot.36.1635445018092;
+        Thu, 28 Oct 2021 11:16:58 -0700 (PDT)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id bq10sm1288528oib.25.2021.10.28.11.16.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Oct 2021 11:16:57 -0700 (PDT)
+Date:   Thu, 28 Oct 2021 11:18:45 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org
+Subject: Re: [PATCH 4/8] cpufreq: qcom_cpufreq_nvmem: Simplify reading kryo
+ speedbin
+Message-ID: <YXrphSSG9+zsZbJ9@ripper>
+References: <20211014083016.137441-1-y.oudjana@protonmail.com>
+ <20211014083016.137441-5-y.oudjana@protonmail.com>
+ <f4af0e40-9e93-dba9-7401-cdfc76ba667e@somainline.org>
 MIME-Version: 1.0
-References: <alpine.DEB.2.22.394.2110241452460.2997@hadrien>
- <CAAYoRsXeQravNXKsWAZvacMmE_iBzaQ+mQxNbB5jcD_vkny+Sg@mail.gmail.com>
- <alpine.DEB.2.22.394.2110261658440.3825@hadrien> <CAAYoRsWXew+9Pch_9ux+UK0LFwy+211d2LmNLGKF_UTr3eS2Fw@mail.gmail.com>
- <alpine.DEB.2.22.394.2110281908150.9518@hadrien> <CAJZ5v0ihVdrZ1ogEc34+QgZUJW5-=RzP34-U1_91VTcLhbc4Nw@mail.gmail.com>
- <CAJZ5v0ij105B05xPGgfauwFv1KhXRnwh5p28R1y11qKWjxUOhg@mail.gmail.com>
-In-Reply-To: <CAJZ5v0ij105B05xPGgfauwFv1KhXRnwh5p28R1y11qKWjxUOhg@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 28 Oct 2021 20:16:54 +0200
-Message-ID: <CAJZ5v0gAax-uz+shKv4MNBiSBPKGroQGNKdYyUK4v6sRS15o_w@mail.gmail.com>
-Subject: Re: problem in changing from active to passive mode
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     Doug Smythies <dsmythies@telus.net>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: multipart/mixed; boundary="000000000000d3cfcc05cf6db77c"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f4af0e40-9e93-dba9-7401-cdfc76ba667e@somainline.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---000000000000d3cfcc05cf6db77c
-Content-Type: text/plain; charset="UTF-8"
+On Fri 15 Oct 11:58 PDT 2021, Konrad Dybcio wrote:
 
-On Thu, Oct 28, 2021 at 7:57 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Thu, Oct 28, 2021 at 7:29 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> 
+> On 14.10.2021 10:32, Yassine Oudjana wrote:
+> > In preparation for adding a separate device tree for MSM8996 Pro, skip reading
+> > msm-id from smem and just read the speedbin efuse.
 > >
-> > On Thu, Oct 28, 2021 at 7:10 PM Julia Lawall <julia.lawall@inria.fr> wrote:
-> > >
-> > > > Now, for your graph 3, are you saying this pseudo
-> > > > code of the process is repeatable?:
-> > > >
-> > > > Power up the system, booting kernel 5.9
-> > > > switch to passive/schedutil.
-> > > > wait X minutes for system to settle
-> > > > do benchmark, result ~13 seconds
-> > > > re-boot to kernel 5.15-RC
-> > > > switch to passive/schedutil.
-> > > > wait X minutes for system to settle
-> > > > do benchmark, result ~40 seconds
-> > > > re-boot to kernel 5.9
-> > > > switch to passive/schedutil.
-> > > > wait X minutes for system to settle
-> > > > do benchmark, result ~28 seconds
-> > >
-> > > In the first boot of 5.9, the des (desired?) field of the HWP_REQUEST
-> > > register is 0 and in the second boot (after booting 5.15 and entering
-> > > passive mode) it is 10.  I don't know though if this is a bug or a
-> > > feature...
-> >
-> > It looks like a bug.
-> >
-> > I think that the desired value is not cleared on driver exit which
-> > should happen.  Let me see if I can do a quick patch for that.
->
-> Please check the behavior with the attached patch applied.
+> While I'd really like for this to be merged, it's gonna totally wreck backwards
+> 
+> compatibility.. But then, since APCC was not defined properly before commit
+> 
+> 0a275a35ceab07 arm64: dts: qcom: msm8996: Make CPUCC actually probe (and work)
+> 
+> there's only 5.14/5.15 (both of which were non-LTS) which would *actually* break given
+> 
+> somebody decided that "ah yes, pulling in DTs from these specific mainline kernel releases
+> 
+> is a good idea"...
+> 
+> 
+> If I were to judge, it would probably be fine to rid the old mechanism..
+> 
 
-Well, actually, the previous one won't do anything, because the
-desired perf field is already cleared in this function before writing
-the MSR, so please try the one attached to this message instead.
+Given that various people have reported instabilities on db820c in its
+current form - and prior to that it was too slow - I think it's fine to
+favour getting this sorted out properly over backwards compatibility.
 
---000000000000d3cfcc05cf6db77c
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="intel_pstate-clear-desired-on-offline.patch"
-Content-Disposition: attachment; 
-	filename="intel_pstate-clear-desired-on-offline.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_kvb9osa10>
-X-Attachment-Id: f_kvb9osa10
-
-LS0tCiBkcml2ZXJzL2NwdWZyZXEvaW50ZWxfcHN0YXRlLmMgfCAgICA1ICsrKystCiAxIGZpbGUg
-Y2hhbmdlZCwgNCBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCgpJbmRleDogbGludXgtcG0v
-ZHJpdmVycy9jcHVmcmVxL2ludGVsX3BzdGF0ZS5jCj09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KLS0tIGxpbnV4LXBtLm9y
-aWcvZHJpdmVycy9jcHVmcmVxL2ludGVsX3BzdGF0ZS5jCisrKyBsaW51eC1wbS9kcml2ZXJzL2Nw
-dWZyZXEvaW50ZWxfcHN0YXRlLmMKQEAgLTEwMDUsOSArMTAwNSwxMiBAQCBzdGF0aWMgdm9pZCBp
-bnRlbF9wc3RhdGVfaHdwX29mZmxpbmUoc3RyCiAJCSAqLwogCQl2YWx1ZSAmPSB+R0VOTUFTS19V
-TEwoMzEsIDI0KTsKIAkJdmFsdWUgfD0gSFdQX0VORVJHWV9QRVJGX1BSRUZFUkVOQ0UoY3B1LT5l
-cHBfY2FjaGVkKTsKLQkJV1JJVEVfT05DRShjcHUtPmh3cF9yZXFfY2FjaGVkLCB2YWx1ZSk7CiAJ
-fQogCisJLyogQ2xlYXIgdGhlIGRlc2lyZWQgcGVyZiBmaWVsZCBpbiB0aGUgY2FjaGVkIEhXUCBy
-ZXF1ZXN0IHZhbHVlLiAqLworCXZhbHVlICY9IH5IV1BfREVTSVJFRF9QRVJGKH4wTCk7CisJV1JJ
-VEVfT05DRShjcHUtPmh3cF9yZXFfY2FjaGVkLCB2YWx1ZSk7CisKIAl2YWx1ZSAmPSB+R0VOTUFT
-S19VTEwoMzEsIDApOwogCW1pbl9wZXJmID0gSFdQX0xPV0VTVF9QRVJGKFJFQURfT05DRShjcHUt
-Pmh3cF9jYXBfY2FjaGVkKSk7CiAK
---000000000000d3cfcc05cf6db77c--
+Regards,
+Bjorn
