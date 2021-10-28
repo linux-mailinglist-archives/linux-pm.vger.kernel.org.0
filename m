@@ -2,120 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F5C143E6B6
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Oct 2021 18:59:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C7BE43E6DF
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Oct 2021 19:10:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230164AbhJ1RBp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Oct 2021 13:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38270 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbhJ1RBo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Oct 2021 13:01:44 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B5AC061570
-        for <linux-pm@vger.kernel.org>; Thu, 28 Oct 2021 09:59:17 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id v20so4859328plo.7
-        for <linux-pm@vger.kernel.org>; Thu, 28 Oct 2021 09:59:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=9VqXA6w7TThWcqG1p9YDumg4wUPeeGGcExc4jrIQ10s=;
-        b=NQthHV/t06sVx9/JiWKMeDrfYrPaDszKb+TP8QlAwURfKTLsOWlP9gRyW3CMXy3ytl
-         JV8OZ47O6hmY3pFbVbAaXYwz9vVqSE0KchY0/WkyNgLE2fvhjaqAsDtHnvi2A2ZsDCcW
-         Ya8HeL8ku1ogtltrFLOajmr8aif8Cl38CuXoZl1JyNGBpRLy92EJjFhnpz98+11Gz20E
-         Kl5xC/bofwB7L96VTYqpaDw/r9MFo1LILA2EA/JLq8xZP0Xa1dRtzGf8Lm5yDuXedlDp
-         zDcai08cBhahmroUwNjErnRdWNW60Nscrgd4i74EQU4xfV3Aws8Iee+tuBoelBJRPG9t
-         b3RA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=9VqXA6w7TThWcqG1p9YDumg4wUPeeGGcExc4jrIQ10s=;
-        b=qiMSd2UicSvsKJx1kS4TJMtE6ZMdmMDpoESlLfkF35a1QGhH9BrIn2JwJmjR5bxesl
-         zXO3roew4TZOrYPJ2xUHeBzXRSXnFbaJReeRZ+olpsVSAakXUFxWOJZKDfo5ZNsroTyt
-         bRxEsyKTZx8BQEm55rwn+VbvcQwI2ZP4eJ+R0lNmLNL4tEIH6ltv6JAO65dsbHaeciax
-         DLxSgJsIA6ECFqFwsPK62tIUgtUVxuMo0I2TZUCYN046tCtOfteq5zijoDw1NxnW1jAd
-         2OX8vNk+HllLPlvW8wKh8rOgdq6wxRlVq4fSMK1VkdcB81Y7a59368E2gYRwlSoQ0BKZ
-         qTXQ==
-X-Gm-Message-State: AOAM532tPMXFM6DM9fGoQ3s1Cw5D4xL2e6WQvwQrOpa21CFOwj/6tJWD
-        bPkxabqd3q+5X73CVWfFEwHsEQbBuQGf4g8/W+M=
-X-Google-Smtp-Source: ABdhPJywU7Qi3s7r0N2eTxRjQoWJKPQ1my50ipBX8WAASsvsu2xkbTUyWMuZ7BVzau8CdnOCyv7HPA==
-X-Received: by 2002:a17:90b:4c0f:: with SMTP id na15mr5653704pjb.96.1635440357100;
-        Thu, 28 Oct 2021 09:59:17 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id z15sm3234806pga.16.2021.10.28.09.59.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Oct 2021 09:59:16 -0700 (PDT)
-Message-ID: <617ad6e4.1c69fb81.1bbc0.9b1a@mx.google.com>
-Date:   Thu, 28 Oct 2021 09:59:16 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S230230AbhJ1RNR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Oct 2021 13:13:17 -0400
+Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:54729 "EHLO
+        mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230223AbhJ1RNR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Oct 2021 13:13:17 -0400
+IronPort-Data: =?us-ascii?q?A9a23=3AGJpiAK0+5EntTj2VtfbD5WBzkn2cJEfYwER7XOP?=
+ =?us-ascii?q?LsXnJgWgm02YDmGUfDG+Gb/yPMTened1/aoq29x5TuZHUy4U2QQE+nZ1PZyIT+?=
+ =?us-ascii?q?JCdXbx1DW+pYnjMdpWbJK5fAnR3huDodKjYdVeB4EfyWlTdhSMkj/jRHuCsULS?=
+ =?us-ascii?q?s1h1ZHmeIdg9w0HqPpMZp2uaEsfDha++8kYuaT//3YDdJ6BYoWo4g0J9vnTs01?=
+ =?us-ascii?q?BjEVJz0iXRlDRxDlAe2e3D4l/vzL4npR5fzatE88uJX24/+IL+FEmPxp3/BC/u?=
+ =?us-ascii?q?lm7rhc0AMKlLQFVjTzCQGHfH4214b+XdaPqUTbZLwbW9VljGIlpZ1wcpEsZiYS?=
+ =?us-ascii?q?AEzP6SKlv51vxxwSnkkZ/IZp9crJlD666R/1Xbuf2Dp0uluDUwtFZEV/vtsR2d?=
+ =?us-ascii?q?D6ZQwMyoMaBGdjvnw2Lu9RvNxmM0vJeHvPYUCqjdhyy3UCbAtRpWra6HH49Vw3?=
+ =?us-ascii?q?zoqgM1KW/HEaKIxczhwRA7CfAxUPVwUCdQ4kfvArmf+aTBDqBSWuK8++UDXzQp?=
+ =?us-ascii?q?4yr+rN8DaEvSORMNIjgOAo0rY8GnjRBIXLtqSzXyC6H3EruvOmz7rHYEfDru18?=
+ =?us-ascii?q?tZ0j1CJgG8eEhsbUR28u/bRt6IUc7qzMGRNpXFo9PJrshL7CImgGQe1vjifsAR?=
+ =?us-ascii?q?aXddMe9DWITqlksL8izt1zEBdJtKZVOEbiQ=3D=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3Aue7oYatwqwOcuG9rDm9G7+hw7skDYdV00zEX?=
+ =?us-ascii?q?/kB9WHVpm6uj5qWTdZUgpH3JYVMqKRUdcL+7VJVoLUmyyXcN2+ks1NSZLWrbUQ?=
+ =?us-ascii?q?mTTb2KhLGKq1bd8kvFmNK1vp0MT0ERMrfNMWQ=3D?=
+X-IronPort-AV: E=Sophos;i="5.87,190,1631570400"; 
+   d="scan'208";a="1022777"
+Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 28 Oct 2021 19:10:48 +0200
+Date:   Thu, 28 Oct 2021 19:10:48 +0200 (CEST)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Doug Smythies <dsmythies@telus.net>
+cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: problem in changing from active to passive mode
+In-Reply-To: <CAAYoRsWXew+9Pch_9ux+UK0LFwy+211d2LmNLGKF_UTr3eS2Fw@mail.gmail.com>
+Message-ID: <alpine.DEB.2.22.394.2110281908150.9518@hadrien>
+References: <alpine.DEB.2.22.394.2110241452460.2997@hadrien> <CAAYoRsXeQravNXKsWAZvacMmE_iBzaQ+mQxNbB5jcD_vkny+Sg@mail.gmail.com> <alpine.DEB.2.22.394.2110261658440.3825@hadrien> <CAAYoRsWXew+9Pch_9ux+UK0LFwy+211d2LmNLGKF_UTr3eS2Fw@mail.gmail.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v5.15-rc7-120-g1eb4f10091ca
-X-Kernelci-Report-Type: test
-Subject: pm/testing baseline: 82 runs,
- 1 regressions (v5.15-rc7-120-g1eb4f10091ca)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 82 runs, 1 regressions (v5.15-rc7-120-g1eb4f10091ca)
+> Now, for your graph 3, are you saying this pseudo
+> code of the process is repeatable?:
+>
+> Power up the system, booting kernel 5.9
+> switch to passive/schedutil.
+> wait X minutes for system to settle
+> do benchmark, result ~13 seconds
+> re-boot to kernel 5.15-RC
+> switch to passive/schedutil.
+> wait X minutes for system to settle
+> do benchmark, result ~40 seconds
+> re-boot to kernel 5.9
+> switch to passive/schedutil.
+> wait X minutes for system to settle
+> do benchmark, result ~28 seconds
 
-Regressions Summary
--------------------
+In the first boot of 5.9, the des (desired?) field of the HWP_REQUEST
+register is 0 and in the second boot (after booting 5.15 and entering
+passive mode) it is 10.  I don't know though if this is a bug or a
+feature...
 
-platform      | arch  | lab          | compiler | defconfig | regressions
---------------+-------+--------------+----------+-----------+------------
-rk3328-rock64 | arm64 | lab-baylibre | gcc-10   | defconfig | 1          =
-
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.15-rc=
-7-120-g1eb4f10091ca/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.15-rc7-120-g1eb4f10091ca
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      1eb4f10091caba528d8f81e0e14e9f6be1b22427 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform      | arch  | lab          | compiler | defconfig | regressions
---------------+-------+--------------+----------+-----------+------------
-rk3328-rock64 | arm64 | lab-baylibre | gcc-10   | defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/617acbae6dde82a4d53358e9
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.15-rc7-120-g1eb4=
-f10091ca/arm64/defconfig/gcc-10/lab-baylibre/baseline-rk3328-rock64.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.15-rc7-120-g1eb4=
-f10091ca/arm64/defconfig/gcc-10/lab-baylibre/baseline-rk3328-rock64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/617acbae6dde82a4d5335=
-8ea
-        failing since 2 days (last pass: v5.15-rc6-80-g30c7771b41dc, first =
-fail: v5.15-rc7-95-g5ae5ac40021d) =
-
- =20
+julia
