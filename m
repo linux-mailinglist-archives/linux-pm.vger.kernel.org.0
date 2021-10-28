@@ -2,160 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7935F43D80E
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Oct 2021 02:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B88D43D9CE
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Oct 2021 05:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229469AbhJ1AZU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Oct 2021 20:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38786 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbhJ1AZT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Oct 2021 20:25:19 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D02C061570
-        for <linux-pm@vger.kernel.org>; Wed, 27 Oct 2021 17:22:53 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id 127so4322790pfu.1
-        for <linux-pm@vger.kernel.org>; Wed, 27 Oct 2021 17:22:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=5QjJWOrboaweUTKWd+ZhBgEdyk0L409tKmcQcU3HKWQ=;
-        b=ThW6622/AVDGRdKMdtQh/ZJ8bNscUV3DciLt2GdQitF28SFakinFJVDTx/Vg+mM9hD
-         7Kd/XD2xosEg/qrk8DpEmLhW7dLS9hbgms1/5PgWIH24zU9RbhrZXK06iU8aXxf0g8u9
-         +RatXkhVqg+y1VWnEfrO5IJsVY07cWQxFJGR1gFULGV/JlX2LpADSZmfRvuWEhYFWw2d
-         u8uKzkGVT5v2pgyv0FD3sMDdRpSJT5PwrV3h9DbR49SzyxXkOhPuWbV3xkqt1Ukz/1R1
-         /EdMV4Pajfd62mjjTyu24oV9r0gXxk0rDtEJyMq3l1SwtkCuuL/EHwa38CDyHjdijvl4
-         wv3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=5QjJWOrboaweUTKWd+ZhBgEdyk0L409tKmcQcU3HKWQ=;
-        b=q4RmU529fNN2REfrakSUIPmSzUXV1sBbJzHxyiWZIV6YiBWL2gcEOho1X8GG11Z0+L
-         DebdJ8Pa4WK4iFrhbk6gM4YqTLVy2b8VC+Dq4hAp1G89ZWzRbxBXsZF0wO2qekUXfvh1
-         sF+qZ15ABMt1Hho6PuADTEInWF6gBlwyCL7x007brzG3XAZHZ1nrW/CfJdCNS3ZL9XfE
-         zEgJBOHiVP5mLhXbUNVQxllree76rA126OXhdpQTgVwTnPsocGBWp5LnL5q5NCuNoGr4
-         upfytkZNI5ZXn5fPqxjPBPiZsJUXXJKTw8RBrCzBzQ5kDB7pB8e1pNTzFOcUwXQcTRz2
-         2aGw==
-X-Gm-Message-State: AOAM531Rn7ze0xJJ69ebAJnZdfwnWo0MDt0EeLsibBINSLOBMCeEgp9p
-        HaG7CMYtKq3Zs+5p1VNnvUI/6A==
-X-Google-Smtp-Source: ABdhPJwxrFY3/vYAFkBJ24CwdDQu3/TCKXIZHkq6QOYzR8z+i1yPD6hshk30Fl7CSv7EgiT7WOHhPQ==
-X-Received: by 2002:a63:bf41:: with SMTP id i1mr757994pgo.412.1635380573316;
-        Wed, 27 Oct 2021 17:22:53 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id b8sm1053229pfi.103.2021.10.27.17.22.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Oct 2021 17:22:53 -0700 (PDT)
-Message-ID: <6179ed5d.1c69fb81.9c618.4c0b@mx.google.com>
-Date:   Wed, 27 Oct 2021 17:22:53 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v5.15-rc7-108-gba9410801460
-X-Kernelci-Report-Type: test
-Subject: pm/testing baseline: 48 runs,
- 2 regressions (v5.15-rc7-108-gba9410801460)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+        id S229705AbhJ1DY0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Oct 2021 23:24:26 -0400
+Received: from smtp23.cstnet.cn ([159.226.251.23]:54384 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229704AbhJ1DYZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 27 Oct 2021 23:24:25 -0400
+Received: from localhost.localdomain (unknown [124.16.138.128])
+        by APP-03 (Coremail) with SMTP id rQCowAB3fKg9F3phlTw+BQ--.43941S2;
+        Thu, 28 Oct 2021 11:21:33 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     rui.zhang@intel.com, daniel.lezcano@linaro.org, amitk@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] thermal: Fix implicit type conversion
+Date:   Thu, 28 Oct 2021 03:21:32 +0000
+Message-Id: <1635391292-2879179-1-git-send-email-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.7.4
+X-CM-TRANSID: rQCowAB3fKg9F3phlTw+BQ--.43941S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrKFyUWFyxJF1rZr4rXr1fJFb_yoWkJFb_CF
+        n3Xr1093s8CF1FvFn7Cr18C347tasFqanag34FvwnxZ348Z343Wr1qqF98Wr48WrZYyF9r
+        ZF12kr1xAw1xZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb48FF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
+        0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r48
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
+        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUj8uctUUUU
+        U==
+X-Originating-IP: [124.16.138.128]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 48 runs, 2 regressions (v5.15-rc7-108-gba9410801460)
+The parameter 'cpu' is defined as unsigned int.
+However in the cpumask_next() it is implicitly type conversed
+to int.
+It is universally accepted that the implicit type conversion is
+terrible.
+Also, having the good programming custom will set an example for
+others.
+Thus, it might be better to change the type of 'cpu' from
+unsigned int to int.
 
-Regressions Summary
--------------------
-
-platform           | arch  | lab          | compiler | defconfig | regressi=
-ons
--------------------+-------+--------------+----------+-----------+---------=
+Fixes: 3e8c4d3 ("drivers: thermal: Move various drivers for intel platforms into a subdir")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
-kontron-pitx-imx8m | arm64 | lab-kontron  | gcc-10   | defconfig | 1       =
-   =
+ drivers/thermal/intel/intel_powerclamp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-rk3328-rock64      | arm64 | lab-baylibre | gcc-10   | defconfig | 1       =
-   =
+diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
+index b0eb5ec..ed46b5e 100644
+--- a/drivers/thermal/intel/intel_powerclamp.c
++++ b/drivers/thermal/intel/intel_powerclamp.c
+@@ -578,7 +578,7 @@ static int powerclamp_cpu_online(unsigned int cpu)
+ 	return 0;
+ }
+ 
+-static int powerclamp_cpu_predown(unsigned int cpu)
++static int powerclamp_cpu_predown(int cpu)
+ {
+ 	if (clamping == false)
+ 		return 0;
+-- 
+2.7.4
 
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.15-rc=
-7-108-gba9410801460/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.15-rc7-108-gba9410801460
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      ba9410801460466c3d47801e2df1052da9f36132 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform           | arch  | lab          | compiler | defconfig | regressi=
-ons
--------------------+-------+--------------+----------+-----------+---------=
----
-kontron-pitx-imx8m | arm64 | lab-kontron  | gcc-10   | defconfig | 1       =
-   =
-
-
-  Details:     https://kernelci.org/test/plan/id/6179e4c1ef07d7ef3a33590a
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.15-rc7-108-gba94=
-10801460/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-pitx-imx8m.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.15-rc7-108-gba94=
-10801460/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-pitx-imx8m.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6179e4c1ef07d7ef3a335=
-90b
-        new failure (last pass: v5.15-rc7-95-g5ae5ac40021d) =
-
- =
-
-
-
-platform           | arch  | lab          | compiler | defconfig | regressi=
-ons
--------------------+-------+--------------+----------+-----------+---------=
----
-rk3328-rock64      | arm64 | lab-baylibre | gcc-10   | defconfig | 1       =
-   =
-
-
-  Details:     https://kernelci.org/test/plan/id/6179e2ebc73ca33284335912
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.15-rc7-108-gba94=
-10801460/arm64/defconfig/gcc-10/lab-baylibre/baseline-rk3328-rock64.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.15-rc7-108-gba94=
-10801460/arm64/defconfig/gcc-10/lab-baylibre/baseline-rk3328-rock64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6179e2ebc73ca33284335=
-913
-        failing since 1 day (last pass: v5.15-rc6-80-g30c7771b41dc, first f=
-ail: v5.15-rc7-95-g5ae5ac40021d) =
-
- =20
