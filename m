@@ -2,174 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D502F43E6A1
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Oct 2021 18:51:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F5C143E6B6
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Oct 2021 18:59:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230481AbhJ1QyG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Oct 2021 12:54:06 -0400
-Received: from ixit.cz ([94.230.151.217]:42626 "EHLO ixit.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230457AbhJ1Qx4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 28 Oct 2021 12:53:56 -0400
-Received: from localhost.localdomain (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id B162520064;
-        Thu, 28 Oct 2021 18:51:25 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1635439886;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=UKp1ql47JL+USXsrEy5E93P0OLiPl1As1GzW+P8vLKs=;
-        b=uyq7h/BDMOH5QW//nPOGAvS/NMZhEYHk71/kw5bXiA4EGLNubvHeuDYy+r3otIaFMgcOOM
-        mM2YFm3oJhwze1taF4gTQ15lpeNcjgFIOiBcK1MdYJTGjKzAcZ6FkJ4DdXAzvGsYAvETum
-        idcT8etsuhZTot60Zi7ndjxiefBhBIc=
-From:   David Heidelberg <david@ixit.cz>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     ~okias/devicetree@lists.sr.ht, David Heidelberg <david@ixit.cz>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] dt-bindings: power: reset: gpio-poweroff: Convert txt bindings to yaml
-Date:   Thu, 28 Oct 2021 18:50:08 +0200
-Message-Id: <20211028165009.76641-1-david@ixit.cz>
-X-Mailer: git-send-email 2.33.0
+        id S230164AbhJ1RBp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Oct 2021 13:01:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38270 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229565AbhJ1RBo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Oct 2021 13:01:44 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B5AC061570
+        for <linux-pm@vger.kernel.org>; Thu, 28 Oct 2021 09:59:17 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id v20so4859328plo.7
+        for <linux-pm@vger.kernel.org>; Thu, 28 Oct 2021 09:59:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=9VqXA6w7TThWcqG1p9YDumg4wUPeeGGcExc4jrIQ10s=;
+        b=NQthHV/t06sVx9/JiWKMeDrfYrPaDszKb+TP8QlAwURfKTLsOWlP9gRyW3CMXy3ytl
+         JV8OZ47O6hmY3pFbVbAaXYwz9vVqSE0KchY0/WkyNgLE2fvhjaqAsDtHnvi2A2ZsDCcW
+         Ya8HeL8ku1ogtltrFLOajmr8aif8Cl38CuXoZl1JyNGBpRLy92EJjFhnpz98+11Gz20E
+         Kl5xC/bofwB7L96VTYqpaDw/r9MFo1LILA2EA/JLq8xZP0Xa1dRtzGf8Lm5yDuXedlDp
+         zDcai08cBhahmroUwNjErnRdWNW60Nscrgd4i74EQU4xfV3Aws8Iee+tuBoelBJRPG9t
+         b3RA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=9VqXA6w7TThWcqG1p9YDumg4wUPeeGGcExc4jrIQ10s=;
+        b=qiMSd2UicSvsKJx1kS4TJMtE6ZMdmMDpoESlLfkF35a1QGhH9BrIn2JwJmjR5bxesl
+         zXO3roew4TZOrYPJ2xUHeBzXRSXnFbaJReeRZ+olpsVSAakXUFxWOJZKDfo5ZNsroTyt
+         bRxEsyKTZx8BQEm55rwn+VbvcQwI2ZP4eJ+R0lNmLNL4tEIH6ltv6JAO65dsbHaeciax
+         DLxSgJsIA6ECFqFwsPK62tIUgtUVxuMo0I2TZUCYN046tCtOfteq5zijoDw1NxnW1jAd
+         2OX8vNk+HllLPlvW8wKh8rOgdq6wxRlVq4fSMK1VkdcB81Y7a59368E2gYRwlSoQ0BKZ
+         qTXQ==
+X-Gm-Message-State: AOAM532tPMXFM6DM9fGoQ3s1Cw5D4xL2e6WQvwQrOpa21CFOwj/6tJWD
+        bPkxabqd3q+5X73CVWfFEwHsEQbBuQGf4g8/W+M=
+X-Google-Smtp-Source: ABdhPJywU7Qi3s7r0N2eTxRjQoWJKPQ1my50ipBX8WAASsvsu2xkbTUyWMuZ7BVzau8CdnOCyv7HPA==
+X-Received: by 2002:a17:90b:4c0f:: with SMTP id na15mr5653704pjb.96.1635440357100;
+        Thu, 28 Oct 2021 09:59:17 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id z15sm3234806pga.16.2021.10.28.09.59.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Oct 2021 09:59:16 -0700 (PDT)
+Message-ID: <617ad6e4.1c69fb81.1bbc0.9b1a@mx.google.com>
+Date:   Thu, 28 Oct 2021 09:59:16 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam: Yes
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v5.15-rc7-120-g1eb4f10091ca
+X-Kernelci-Report-Type: test
+Subject: pm/testing baseline: 82 runs,
+ 1 regressions (v5.15-rc7-120-g1eb4f10091ca)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Convert power-off action connected to the GPIO documentation to the YAML syntax.
+pm/testing baseline: 82 runs, 1 regressions (v5.15-rc7-120-g1eb4f10091ca)
 
-Signed-off-by: David Heidelberg <david@ixit.cz>
----
-v3:
- - incorporated Sebastian notes
-v2:
- - remove driver specific note about WARN_ON
+Regressions Summary
+-------------------
 
- .../bindings/power/reset/gpio-poweroff.txt    | 41 -------------
- .../bindings/power/reset/gpio-poweroff.yaml   | 59 +++++++++++++++++++
- 2 files changed, 59 insertions(+), 41 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/power/reset/gpio-poweroff.txt
- create mode 100644 Documentation/devicetree/bindings/power/reset/gpio-poweroff.yaml
+platform      | arch  | lab          | compiler | defconfig | regressions
+--------------+-------+--------------+----------+-----------+------------
+rk3328-rock64 | arm64 | lab-baylibre | gcc-10   | defconfig | 1          =
 
-diff --git a/Documentation/devicetree/bindings/power/reset/gpio-poweroff.txt b/Documentation/devicetree/bindings/power/reset/gpio-poweroff.txt
-deleted file mode 100644
-index 3e56c1b34a4c..000000000000
---- a/Documentation/devicetree/bindings/power/reset/gpio-poweroff.txt
-+++ /dev/null
-@@ -1,41 +0,0 @@
--Driver a GPIO line that can be used to turn the power off.
--
--The driver supports both level triggered and edge triggered power off.
--At driver load time, the driver will request the given gpio line and
--install a handler to power off the system. If the optional properties
--'input' is not found, the GPIO line will be driven in the inactive
--state. Otherwise its configured as an input.
--
--When the power-off handler is called, the gpio is configured as an
--output, and drive active, so triggering a level triggered power off
--condition. This will also cause an inactive->active edge condition, so
--triggering positive edge triggered power off. After a delay of 100ms,
--the GPIO is set to inactive, thus causing an active->inactive edge,
--triggering negative edge triggered power off. After another 100ms
--delay the GPIO is driver active again. If the power is still on and
--the CPU still running after a 3000ms delay, a WARN_ON(1) is emitted.
--
--Required properties:
--- compatible : should be "gpio-poweroff".
--- gpios : The GPIO to set high/low, see "gpios property" in
--  Documentation/devicetree/bindings/gpio/gpio.txt. If the pin should be
--  low to power down the board set it to "Active Low", otherwise set
--  gpio to "Active High".
--
--Optional properties:
--- input : Initially configure the GPIO line as an input. Only reconfigure
--  it to an output when the power-off handler is called. If this optional
--  property is not specified, the GPIO is initialized as an output in its
--  inactive state.
--- active-delay-ms: Delay (default 100) to wait after driving gpio active
--- inactive-delay-ms: Delay (default 100) to wait after driving gpio inactive
--- timeout-ms: Time to wait before asserting a WARN_ON(1). If nothing is
--              specified, 3000 ms is used.
--
--Examples:
--
--gpio-poweroff {
--	compatible = "gpio-poweroff";
--	gpios = <&gpio 4 0>;
--	timeout-ms = <3000>;
--};
-diff --git a/Documentation/devicetree/bindings/power/reset/gpio-poweroff.yaml b/Documentation/devicetree/bindings/power/reset/gpio-poweroff.yaml
-new file mode 100644
-index 000000000000..45d66c775115
---- /dev/null
-+++ b/Documentation/devicetree/bindings/power/reset/gpio-poweroff.yaml
-@@ -0,0 +1,59 @@
-+# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/power/reset/gpio-poweroff.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: GPIO controlled power off
-+
-+maintainers:
-+  - Sebastian Reichel <sre@kernel.org>
-+
-+description: >
-+  System power off support via a GPIO line. When a shutdown is
-+  executed the operating system is expected to switch the GPIO
-+  from inactive to active. After a delay (active-delay-ms) it
-+  is expected to be switched back to inactive. After another
-+  delay (inactive-delay-ms) it is configured as active again.
-+  Finally the operating system assumes the power off failed if
-+  the system is still running after waiting some time (timeout-ms).
-+
-+properties:
-+  compatible:
-+    const: gpio-poweroff
-+
-+  gpios:
-+    maxItems: 1
-+
-+  input:
-+    type: boolean
-+    description: >
-+      Initially configure the GPIO line as an input. Only reconfigure
-+      it to an output when the power-off sequence is initiated. If this optional
-+      property is not specified, the GPIO is initialized as an output in its inactive state.
-+
-+  active-delay-ms:
-+    default: 100
-+    description: Delay to wait after driving gpio active
-+
-+  inactive-delay-ms:
-+    default: 100
-+    description: Delay to wait after driving gpio inactive
-+
-+  timeout-ms:
-+    default: 3000
-+    description: Time to wait before assuming the power off sequence failed.
-+
-+required:
-+  - compatible
-+  - gpios
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    gpio-poweroff {
-+        compatible = "gpio-poweroff";
-+        gpios = <&gpio 4 0>;
-+        timeout-ms = <3000>;
-+    };
--- 
-2.33.0
 
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.15-rc=
+7-120-g1eb4f10091ca/plan/baseline/
+
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v5.15-rc7-120-g1eb4f10091ca
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      1eb4f10091caba528d8f81e0e14e9f6be1b22427 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform      | arch  | lab          | compiler | defconfig | regressions
+--------------+-------+--------------+----------+-----------+------------
+rk3328-rock64 | arm64 | lab-baylibre | gcc-10   | defconfig | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/617acbae6dde82a4d53358e9
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.15-rc7-120-g1eb4=
+f10091ca/arm64/defconfig/gcc-10/lab-baylibre/baseline-rk3328-rock64.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.15-rc7-120-g1eb4=
+f10091ca/arm64/defconfig/gcc-10/lab-baylibre/baseline-rk3328-rock64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/617acbae6dde82a4d5335=
+8ea
+        failing since 2 days (last pass: v5.15-rc6-80-g30c7771b41dc, first =
+fail: v5.15-rc7-95-g5ae5ac40021d) =
+
+ =20
