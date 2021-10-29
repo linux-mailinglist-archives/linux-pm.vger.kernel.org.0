@@ -2,132 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7629443FFEC
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Oct 2021 17:56:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 816DB44000A
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Oct 2021 18:07:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbhJ2P67 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 29 Oct 2021 11:58:59 -0400
-Received: from mail-oi1-f174.google.com ([209.85.167.174]:44965 "EHLO
-        mail-oi1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbhJ2P66 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Oct 2021 11:58:58 -0400
-Received: by mail-oi1-f174.google.com with SMTP id y207so13932305oia.11;
-        Fri, 29 Oct 2021 08:56:30 -0700 (PDT)
+        id S229652AbhJ2QKA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 Oct 2021 12:10:00 -0400
+Received: from mail-oi1-f172.google.com ([209.85.167.172]:41758 "EHLO
+        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229607AbhJ2QJ7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Oct 2021 12:09:59 -0400
+Received: by mail-oi1-f172.google.com with SMTP id y128so13997363oie.8;
+        Fri, 29 Oct 2021 09:07:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=/SMjFsF1c2jJAFrAQjbA6gkypuYLRMtEM9UCUe5CB44=;
-        b=XvruEgbq7nqBo2gsz2lqSNIuzXn6FpXLiQUfC9viytYOUOOubxsaauhvlk/erw/vpH
-         AciuLqAWXCYdmEsrF0CKe9BF+IADh3luNjqBujkPMlQr99xcq55DfpFEeZz+kC6fn8VO
-         pim4ETWFcwQo20zJPFtC/H11hQPevtK61qNNvNEuNGz0dNGsS0r0wm/e6HoJNYMbBOCp
-         ukmC8ao2yWYJ66hYb4U+RFaZtnql/A1T5VrCvmYKRisg5OvLVi2S4d+IHzBXw7dLnbDj
-         /Sqmi7ohii0MYS1VquVNTORF0LIJzcycXiebwZw+tHpZ25cRj/R2/ywYsqyWxktsLzbR
-         4wOw==
-X-Gm-Message-State: AOAM530bRLEOof/BF2tsgePqfh/DyLDffSdjP87y8B814ukz+TUXY2Mv
-        tRx5Dcj3l//1WktkiRYJJnYZU2UG1KiE/LresbM=
-X-Google-Smtp-Source: ABdhPJyt4UMxkF1vsuAi+BGZn90y8TkCvU/MAtayV4OwG5udI4L0shq0uzCyV4nG28Fc/pQknaSM5LL0g9M7DRCchMM=
-X-Received: by 2002:a05:6808:128d:: with SMTP id a13mr2577oiw.51.1635522989816;
- Fri, 29 Oct 2021 08:56:29 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=lu7KlDiDD4b+IN0GOyZKFEqg42aag7ye4ODeWU/vdAQ=;
+        b=PrXYCtu+BFF+QJN+asWOiR2YFHkZIsbcMUyKLpUL+QC7zzclyzL5dzw+z8O85DbI+X
+         F3k2O/Z/h6c1UWz/tojbkbsd8W3iyShUJ3Q5pIb/kDBqLhE6FWmHhQdLiKsFlc1D4u8o
+         NVyH+qD3Jl3tztpsHodFIMoTaCxiuIKElff6A+Qen9uedgYcupEd/Lfubfvig+GOKlSd
+         thMtx6cG4RKe/JSgS1DlCTLRm3Wro/xC6hpIoqNBy/zwCNTX9AxeStR3L1bMN/vgohjd
+         oKhJvgany22eMbH6n/vTlfr751bxSqP4O3rL92U7J5xqgY9b43JaRgB6gJpxVJs3olrV
+         RqwQ==
+X-Gm-Message-State: AOAM531MyMxyBz0o1j50OblMgSa3GKQ/xSOT4yKW2htUXfN0snziHLXB
+        FGWA/LHFMatTeqIgrTH/IwP0TUeTiVBd0FzCRHI=
+X-Google-Smtp-Source: ABdhPJwtnN5N6Ip5bwANimooyjfDhNJ07hr/7h7HbCuFbTx7dntx+hag2+5dWh6IP0CHbPF3De7DcywkGiS4YigdzUU=
+X-Received: by 2002:a05:6808:e90:: with SMTP id k16mr8536510oil.166.1635523649047;
+ Fri, 29 Oct 2021 09:07:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211025224032.21012-1-digetx@gmail.com> <20211025224032.21012-21-digetx@gmail.com>
- <09c05206-c0e5-9a25-8ffa-b9291f6ea5ae@gmail.com>
-In-Reply-To: <09c05206-c0e5-9a25-8ffa-b9291f6ea5ae@gmail.com>
+References: <1635478517-3071352-1-git-send-email-jiasheng@iscas.ac.cn>
+In-Reply-To: <1635478517-3071352-1-git-send-email-jiasheng@iscas.ac.cn>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 29 Oct 2021 17:56:18 +0200
-Message-ID: <CAJZ5v0i9OtA1nDiv8UXuF3ASdENFYJFV7+nMWm6Pcu=kw8k1aQ@mail.gmail.com>
-Subject: Re: [PATCH v14 20/39] pwm: tegra: Add runtime PM and OPP support
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
+Date:   Fri, 29 Oct 2021 18:07:18 +0200
+Message-ID: <CAJZ5v0iRD0pLkVfDE7KgmTfZJJZ2BFquV8owiPoQgFMmC2ZrGA@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: Fix implicit type conversion
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Benjamin Segall <bsegall@google.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        David Heidelberg <david@ixit.cz>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 29, 2021 at 5:20 PM Dmitry Osipenko <digetx@gmail.com> wrote:
+On Fri, Oct 29, 2021 at 5:51 AM Jiasheng Jiang <jiasheng@iscas.ac.cn> wrote:
 >
-> 26.10.2021 01:40, Dmitry Osipenko пишет:
-> > +     ret = devm_pm_runtime_enable(&pdev->dev);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     ret = devm_tegra_core_dev_init_opp_table_common(&pdev->dev);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     ret = pm_runtime_resume_and_get(&pdev->dev);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> >       /* Set maximum frequency of the IP */
-> > -     ret = clk_set_rate(pwm->clk, pwm->soc->max_frequency);
-> > +     ret = dev_pm_opp_set_rate(pwm->dev, pwm->soc->max_frequency);
-> >       if (ret < 0) {
-> >               dev_err(&pdev->dev, "Failed to set max frequency: %d\n", ret);
-> > -             return ret;
-> > +             goto put_pm;
-> >       }
-> >
-> >       /*
-> > @@ -278,7 +294,7 @@ static int tegra_pwm_probe(struct platform_device *pdev)
-> >       if (IS_ERR(pwm->rst)) {
-> >               ret = PTR_ERR(pwm->rst);
-> >               dev_err(&pdev->dev, "Reset control is not found: %d\n", ret);
-> > -             return ret;
-> > +             goto put_pm;
-> >       }
-> >
-> >       reset_control_deassert(pwm->rst);
-> > @@ -291,10 +307,15 @@ static int tegra_pwm_probe(struct platform_device *pdev)
-> >       if (ret < 0) {
-> >               dev_err(&pdev->dev, "pwmchip_add() failed: %d\n", ret);
-> >               reset_control_assert(pwm->rst);
-> > -             return ret;
-> > +             goto put_pm;
-> >       }
-> >
-> > +     pm_runtime_put(&pdev->dev);
-> > +
-> >       return 0;
-> > +put_pm:
-> > +     pm_runtime_put_sync_suspend(&pdev->dev);
-> > +     return ret;
-> >  }
-> >
-> >  static int tegra_pwm_remove(struct platform_device *pdev)
-> > @@ -305,20 +326,44 @@ static int tegra_pwm_remove(struct platform_device *pdev)
-> >
-> >       reset_control_assert(pc->rst);
-> >
-> > +     pm_runtime_force_suspend(&pdev->dev);
->
-> I just noticed that RPM core doesn't reset RPM-enable count of a device
-> on driver's unbind (pm_runtime_reinit). It was a bad idea to use
-> devm_pm_runtime_enable() + pm_runtime_force_suspend() here, since RPM is
-> disabled twice on driver's removal, and thus, RPM will never be enabled
-> again.
->
-> I'll fix it for PWM and other drivers in this series, in v15.
+> The variable 'cpu' and 'j' are defined as unsigned int.
+> However in the for_each_cpu, their values are assigned to -1.
+> That doesn't make sense
 
-Well, for the record, IMV using pm_runtime_force_suspend() is
-generally a questionable idea.
+Yes, it does.
+
+The binary representation of -1 is an all-ones value of the size of
+int.  It is perfectly valid to store that value in an unsigned int
+variable.
+
+> and in the cpumask_next() they are implicitly type conversed to int.
+
+However, the return type of cpumask_next() is unsigned int.
+
+> It is universally accepted that the implicit type conversion is terrible.
+
+I wouldn't say "terrible", but yes, it is risky when dealing with
+variables of different sizes and possible sign-extensions.
+
+In this particular case, I don't see a problem.
+
+> Also, having the good programming custom will set an example for
+> others.
+> Thus, it might be better to change the definition of 'cpu' and 'j'
+> from unsigned int to int.
+>
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
+>  kernel/sched/cpufreq_schedutil.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> index 4f09afd..4aff4b6 100644
+> --- a/kernel/sched/cpufreq_schedutil.c
+> +++ b/kernel/sched/cpufreq_schedutil.c
+> @@ -409,7 +409,7 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
+>         struct sugov_policy *sg_policy = sg_cpu->sg_policy;
+>         struct cpufreq_policy *policy = sg_policy->policy;
+>         unsigned long util = 0, max = 1;
+> -       unsigned int j;
+> +       int j;
+>
+>         for_each_cpu(j, policy->cpus) {
+>                 struct sugov_cpu *j_sg_cpu = &per_cpu(sugov_cpu, j);
+> @@ -746,7 +746,7 @@ static int sugov_start(struct cpufreq_policy *policy)
+>  {
+>         struct sugov_policy *sg_policy = policy->governor_data;
+>         void (*uu)(struct update_util_data *data, u64 time, unsigned int flags);
+> -       unsigned int cpu;
+> +       int cpu;
+>
+>         sg_policy->freq_update_delay_ns = sg_policy->tunables->rate_limit_us * NSEC_PER_USEC;
+>         sg_policy->last_freq_update_time        = 0;
+> @@ -783,7 +783,7 @@ static int sugov_start(struct cpufreq_policy *policy)
+>  static void sugov_stop(struct cpufreq_policy *policy)
+>  {
+>         struct sugov_policy *sg_policy = policy->governor_data;
+> -       unsigned int cpu;
+> +       int cpu;
+>
+>         for_each_cpu(cpu, policy->cpus)
+>                 cpufreq_remove_update_util_hook(cpu);
+> --
+> 2.7.4
+>
