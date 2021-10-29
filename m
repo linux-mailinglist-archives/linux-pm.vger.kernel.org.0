@@ -2,167 +2,175 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B72094401AE
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Oct 2021 20:06:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A4134401D7
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Oct 2021 20:27:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbhJ2SJY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 29 Oct 2021 14:09:24 -0400
-Received: from mail-oi1-f175.google.com ([209.85.167.175]:44685 "EHLO
-        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbhJ2SJX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Oct 2021 14:09:23 -0400
-Received: by mail-oi1-f175.google.com with SMTP id y207so14481360oia.11;
-        Fri, 29 Oct 2021 11:06:54 -0700 (PDT)
+        id S229968AbhJ2S3h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 Oct 2021 14:29:37 -0400
+Received: from mail-ot1-f53.google.com ([209.85.210.53]:36401 "EHLO
+        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229498AbhJ2S3g (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Oct 2021 14:29:36 -0400
+Received: by mail-ot1-f53.google.com with SMTP id s23-20020a056830125700b00553e2ca2dccso9881693otp.3;
+        Fri, 29 Oct 2021 11:27:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=5+xv1sYACq7ekC+Hz2Y0cCbNG5PRGqC0Z37yaKBG5NI=;
-        b=Sr0btJpxeH+8l2WkcJB+nnurmUh8y2agnebQltQWjlijMFsRLzNz+czsHj8whq3qi8
-         cZiMqp+uGs0JoPBR8jHVrueuwF+BzRm+SHV8yjchhh7nPjTAmUMXAG58R8S1B/HrEKXE
-         48Y0+6VLP9FVpQa46Ocu3aTcAmjJfrhoBlRgVWosGkN91c7FWFNGcaTeVpDL7XVgMiQP
-         smv0aKKeOZUdg3iehJN+o5We3B+sLPbWSs/6dtjHM64Zb0CVWyhS+okykTDatxNE0WmA
-         O6pzIleKnJWT/4gMj5HCBy4PdcDBQiA7JeoAUxalNJTEP8tqJlpBM9Xxqp993hdVd1wr
-         IAkg==
-X-Gm-Message-State: AOAM5320jm2lq6Qw2bZiyr9kQobeP33rgUWYXPxHR5UFYFUhMacTdC8R
-        iJtkOsUiGzB8Cl8ARjMRRZcDicgxCqkTxsv3TlJOsL87LJ8=
-X-Google-Smtp-Source: ABdhPJyOQcK/yH8YWrJNxVYGyhhICBtBpU/kmrIuW/r1/0glQukNI66xy0DXMlLLQgevqp7sBswHRDfWJcvpb+2DdN8=
-X-Received: by 2002:a05:6808:128d:: with SMTP id a13mr612592oiw.51.1635530814547;
- Fri, 29 Oct 2021 11:06:54 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=mu4HMb4tZXB/weqJB3pLyEJlJzC5RBpRbYVUncyfRaQ=;
+        b=wYN073UdhEFGq8iOQDymhcyFQ1cvjFLGNSt63C0TKJq59COa6//6W8FBn96LlEssrH
+         H5pn4uHe69A/ULs905yn2KGP0xHyVIIcR6sGoiBlw4ibCkyranM2wbAyShtknkCSayQf
+         8NLIXUECgPIIEzIYiOaoYkIi5ixJMCgPD7ACF5025nsLCGiezAW0x8SiEt+BMZxbvHKh
+         ipuM5OqdGH+XKN+ONrKIfCq2IGNhuJBvLO0lhJil5Kfld6vcKyLz7aAfamSov60tKM0u
+         W3UWprJ+bNexn7KChYbWxRf/DBDpcCVdT/dzZhQFpDnSg5btttEzKgj/jEZX5vnIrecN
+         Txmw==
+X-Gm-Message-State: AOAM5314CfUvpPa537SLlFf/aZ2b56dpOl3jxauupkqTvv1HCLCgUAur
+        59drJbrpDb8EdHRqiEM03mLQWyl2h4MG0WkoqFQ=
+X-Google-Smtp-Source: ABdhPJw8b68iFylRPIBKkjttf46BZN35sZUnlr1Ny/PCElz9n6ckpJjtkmRdbxIIGjQu1WgbpWZZn346XQ7t9dCjLpI=
+X-Received: by 2002:a9d:a64:: with SMTP id 91mr2620592otg.198.1635532027425;
+ Fri, 29 Oct 2021 11:27:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211025224032.21012-1-digetx@gmail.com> <20211025224032.21012-21-digetx@gmail.com>
- <09c05206-c0e5-9a25-8ffa-b9291f6ea5ae@gmail.com> <CAJZ5v0i9OtA1nDiv8UXuF3ASdENFYJFV7+nMWm6Pcu=kw8k1aQ@mail.gmail.com>
- <4dc8a6bd-4072-ccbf-513b-221d286bd6d5@gmail.com>
-In-Reply-To: <4dc8a6bd-4072-ccbf-513b-221d286bd6d5@gmail.com>
+References: <20211026222626.39222-1-ulf.hansson@linaro.org>
+ <20211027020235.GA1306582@rowland.harvard.edu> <CAPDyKFpgHJA-duQSA2uqhccrDxFqWXO1R1DJxo=aOkT5FyX+Ag@mail.gmail.com>
+ <20211027143343.GC1319606@rowland.harvard.edu> <CAPDyKFoMS-0WqNjtsrGy5-SV3RRbpgA3_HS5XDtNHH9wFgLhXg@mail.gmail.com>
+In-Reply-To: <CAPDyKFoMS-0WqNjtsrGy5-SV3RRbpgA3_HS5XDtNHH9wFgLhXg@mail.gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 29 Oct 2021 20:06:43 +0200
-Message-ID: <CAJZ5v0hKQf-xZq2fx1pA5oxMqP_XJV=AG0Rqu7BKRUZGDz6H5Q@mail.gmail.com>
-Subject: Re: [PATCH v14 20/39] pwm: tegra: Add runtime PM and OPP support
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
+Date:   Fri, 29 Oct 2021 20:26:56 +0200
+Message-ID: <CAJZ5v0iKMKhdxP9htt-fVm1RVBJnRO-pzJ9eySbBOSviSXCAdQ@mail.gmail.com>
+Subject: Re: [PATCH] PM: runtime: Allow rpm_resume() to succeed when runtime
+ PM is disabled
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        David Heidelberg <david@ixit.cz>
+        Kevin Hilman <khilman@kernel.org>,
+        Maulik Shah <mkshah@codeaurora.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 29, 2021 at 6:29 PM Dmitry Osipenko <digetx@gmail.com> wrote:
+On Fri, Oct 29, 2021 at 12:20 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
 >
-> 29.10.2021 18:56, Rafael J. Wysocki пишет:
-> > On Fri, Oct 29, 2021 at 5:20 PM Dmitry Osipenko <digetx@gmail.com> wrote:
-> >>
-> >> 26.10.2021 01:40, Dmitry Osipenko пишет:
-> >>> +     ret = devm_pm_runtime_enable(&pdev->dev);
-> >>> +     if (ret)
-> >>> +             return ret;
-> >>> +
-> >>> +     ret = devm_tegra_core_dev_init_opp_table_common(&pdev->dev);
-> >>> +     if (ret)
-> >>> +             return ret;
-> >>> +
-> >>> +     ret = pm_runtime_resume_and_get(&pdev->dev);
-> >>> +     if (ret)
-> >>> +             return ret;
-> >>> +
-> >>>       /* Set maximum frequency of the IP */
-> >>> -     ret = clk_set_rate(pwm->clk, pwm->soc->max_frequency);
-> >>> +     ret = dev_pm_opp_set_rate(pwm->dev, pwm->soc->max_frequency);
-> >>>       if (ret < 0) {
-> >>>               dev_err(&pdev->dev, "Failed to set max frequency: %d\n", ret);
-> >>> -             return ret;
-> >>> +             goto put_pm;
-> >>>       }
-> >>>
-> >>>       /*
-> >>> @@ -278,7 +294,7 @@ static int tegra_pwm_probe(struct platform_device *pdev)
-> >>>       if (IS_ERR(pwm->rst)) {
-> >>>               ret = PTR_ERR(pwm->rst);
-> >>>               dev_err(&pdev->dev, "Reset control is not found: %d\n", ret);
-> >>> -             return ret;
-> >>> +             goto put_pm;
-> >>>       }
-> >>>
-> >>>       reset_control_deassert(pwm->rst);
-> >>> @@ -291,10 +307,15 @@ static int tegra_pwm_probe(struct platform_device *pdev)
-> >>>       if (ret < 0) {
-> >>>               dev_err(&pdev->dev, "pwmchip_add() failed: %d\n", ret);
-> >>>               reset_control_assert(pwm->rst);
-> >>> -             return ret;
-> >>> +             goto put_pm;
-> >>>       }
-> >>>
-> >>> +     pm_runtime_put(&pdev->dev);
-> >>> +
-> >>>       return 0;
-> >>> +put_pm:
-> >>> +     pm_runtime_put_sync_suspend(&pdev->dev);
-> >>> +     return ret;
-> >>>  }
-> >>>
-> >>>  static int tegra_pwm_remove(struct platform_device *pdev)
-> >>> @@ -305,20 +326,44 @@ static int tegra_pwm_remove(struct platform_device *pdev)
-> >>>
-> >>>       reset_control_assert(pc->rst);
-> >>>
-> >>> +     pm_runtime_force_suspend(&pdev->dev);
-> >>
-> >> I just noticed that RPM core doesn't reset RPM-enable count of a device
-> >> on driver's unbind (pm_runtime_reinit). It was a bad idea to use
-> >> devm_pm_runtime_enable() + pm_runtime_force_suspend() here, since RPM is
-> >> disabled twice on driver's removal, and thus, RPM will never be enabled
-> >> again.
-> >>
-> >> I'll fix it for PWM and other drivers in this series, in v15.
+> On Wed, 27 Oct 2021 at 16:33, Alan Stern <stern@rowland.harvard.edu> wrote:
 > >
-> > Well, for the record, IMV using pm_runtime_force_suspend() is
-> > generally a questionable idea.
+> > On Wed, Oct 27, 2021 at 12:55:43PM +0200, Ulf Hansson wrote:
+> > > On Wed, 27 Oct 2021 at 04:02, Alan Stern <stern@rowland.harvard.edu> wrote:
+> > > >
+> > > > On Wed, Oct 27, 2021 at 12:26:26AM +0200, Ulf Hansson wrote:
+> > > > > During system suspend, the PM core sets dev->power.is_suspended for the
+> > > > > device that is being suspended. This flag is also being used in
+> > > > > rpm_resume(), to allow it to succeed by returning 1, assuming that runtime
+> > > > > PM has been disabled and the runtime PM status is RPM_ACTIVE, for the
+> > > > > device.
+> > > > >
+> > > > > To make this behaviour a bit more useful, let's drop the check for the
+> > > > > dev->power.is_suspended flag in rpm_resume(), as it doesn't really need to
+> > > > > be limited to this anyway.
+> > > > >
+> > > > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > > > > ---
+> > > > >  drivers/base/power/runtime.c | 4 ++--
+> > > > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+> > > > > index ec94049442b9..fadc278e3a66 100644
+> > > > > --- a/drivers/base/power/runtime.c
+> > > > > +++ b/drivers/base/power/runtime.c
+> > > > > @@ -742,8 +742,8 @@ static int rpm_resume(struct device *dev, int rpmflags)
+> > > > >   repeat:
+> > > > >       if (dev->power.runtime_error)
+> > > > >               retval = -EINVAL;
+> > > > > -     else if (dev->power.disable_depth == 1 && dev->power.is_suspended
+> > > > > -         && dev->power.runtime_status == RPM_ACTIVE)
+> > > > > +     else if (dev->power.disable_depth > 0 &&
+> > > > > +             dev->power.runtime_status == RPM_ACTIVE)
+> > > >
+> > > > IIRC there was a good reason why the original code checked for
+> > > > disable_depth == 1 rather than > 0.  But I don't remember exactly what
+> > > > the reason was.  Maybe it had something to do with the fact that during
+> > > > a system sleep __device_suspend_late calls __pm_runtime_disable, and the
+> > > > code was checking that there were no other disables in effect.
+> > >
+> > > The check was introduced in the below commit:
+> > >
+> > > Commit 6f3c77b040fc
+> > > Author: Kevin Hilman <khilman@ti.com>
+> > > Date:   Fri Sep 21 22:47:34 2012 +0000
+> > > PM / Runtime: let rpm_resume() succeed if RPM_ACTIVE, even when disabled, v2
+> > >
+> > > By reading the commit message it's pretty clear to me that the check
+> > > was added to cover only one specific use case, during system suspend.
+> > >
+> > > That is, that a driver may want to call pm_runtime_get_sync() from a
+> > > late/noirq callback (when the PM core has disabled runtime PM), to
+> > > understand whether the device is still powered on and accessible.
+> > >
+> > > > This is
+> > > > related to the documented behavior of rpm_resume (it's supposed to fail
+> > > > with -EACCES if the device is disabled for runtime PM, no matter what
+> > > > power state the device is in).
+> > > >
+> > > > That probably is also the explanation for why dev->power.is_suspended
+> > > > gets checked: It's how the code tells whether a system sleep is in
+> > > > progress.
+> > >
+> > > Yes, you are certainly correct about the current behaviour. It's there
+> > > for a reason.
+> > >
+> > > On the other hand I would be greatly surprised if this change would
+> > > cause any issues. Of course, I can't make guarantees, but I am, of
+> > > course, willing to help to fix problems if those happen.
+> > >
+> > > As a matter of fact, I think the current behaviour looks quite
+> > > inconsistent, as it depends on whether the device is being system
+> > > suspended.
+> > >
+> > > Moreover, for syscore devices (dev->power.syscore is set for them),
+> > > the PM core doesn't set the "is_suspended" flag. Those can benefit
+> > > from a common behaviour.
+> > >
+> > > Finally, I think the "is_suspended" flag actually needs to be
+> > > protected by a lock when set by the PM core, as it's being used in two
+> > > separate execution paths. Although, rather than adding a lock for
+> > > protection, we can just rely on the "disable_depth" in rpm_resume().
+> > > It would be easier and makes the behaviour consistent too.
 > >
+> > As long as is_suspended isn't _written_ in two separate execution paths,
+> > we're probably okay without a lock -- provided the code doesn't mind
+> > getting an indefinite result when a read races with a write.
 >
-> Please clarify why it's a questionable idea.
+> Well, indefinite doesn't sound very good to me for these cases, even
+> if it most likely never will happen.
+>
+> >
+> > > > So overall, I suspect this change should not be made.  But some other
+> > > > improvement (like a nice comment) might be in order.
+> > > >
+> > > > Alan Stern
+> > >
+> > > Thanks for reviewing!
+> >
+> > You're welcome.  Whatever you eventually decide to do should be okay
+> > with me.  I just wanted to make sure that you understood the deeper
+> > issue here and had given it some thought.  For example, it may turn out
+> > that you can resolve matters simply by updating the documentation.
+>
+> I observed the issue on cpuidle-psci. The devices it operates upon are
+> assigned as syscore devices and these are hooked up to a genpd.
+>
+> A call to pm_runtime_get_sync() can happen even after the PM core has
+> disabled runtime PM in the "late" phase. So the error code is received
+> for these real use-cases.
+>
+> Now, as we currently don't check the return value of
+> pm_runtime_get_sync() in cpuidle-psci, it's not a big deal. But it
+> certainly seems worth fixing in my opinion.
+>
+> Let's see if Rafael has some thoughts around this.
 
-There are a few reasons.
-
-Generally speaking, it makes assumptions that may not be satisfied.
-
-For instance, it assumes that the driver will never have to work with
-the ACPI PM domain, because the ACPI PM domain has a separate set of
-callbacks for system-wide suspend and resume and they are not the same
-as its PM-runtime callbacks, so if the driver is combined with the
-ACPI PM domain, running pm_runtime_force_suspend() may not work as
-expected.
-
-Next, it assumes that PM-runtime is actually enabled for the device
-and the RPM_STATUS of it is valid when it is running.
-
-Further, it assumes that the PM-runtime suspend callback of the driver
-will always be suitable for system-wide suspend which may not be the
-case if the device can generate wakeup signals and it is not allowed
-to wake up the system from sleep by user space.
-
-Next, if the driver has to work with a PM domain (other than the ACPI
-one) or bus type that doesn't take the pm_runtime_force_suspend()
-explicitly into account, it may end up running the runtime-suspend
-callback provided by that entity from within its system-wide suspend
-callback which may not work as expected.
-
-I guess I could add a few if I had to.
+Am I thinking correctly that this is mostly about working around the
+limitations of pm_runtime_force_suspend()?
