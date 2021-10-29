@@ -2,151 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2728543FF97
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Oct 2021 17:29:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D7B43FFB4
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Oct 2021 17:39:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbhJ2PcM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 Oct 2021 11:32:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59530 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231273AbhJ2PcD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Oct 2021 11:32:03 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A673C061210
-        for <linux-pm@vger.kernel.org>; Fri, 29 Oct 2021 08:29:33 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id y26so21704358lfa.11
-        for <linux-pm@vger.kernel.org>; Fri, 29 Oct 2021 08:29:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=zb5to8IVmbXLcOuzy5HbR2D8SvYMJeBSxxm0t+10yes=;
-        b=jJdFEoGn8EIaT8Neu3EZWdJ0T5kC3jtTFduArBVtuDx6mWscceXNrcx8A7PEO5SBFt
-         VxxBXXtewNAOyGL9NISwbn8uqUJ5agsj+UemHZbI2/6GXh0Tr7GVCB0sMxna8iiURDvP
-         v9RHYsHtNaNk3Z5iFWB2866iTaQva51DvN9TpWrWrCbscBsIE0cO9GtkiubMAwsrOnIj
-         yM8X/+Go+hn6MacM8IB9wZCUBNon7GCbqfRHOQnFdCG8KGX3ZiGnYkm2SdJYeEhRuB4s
-         y7d2vyxzyYm6MajX8LroWwZMrNJxTMCADiRhF8UTkbgJfaP60pk1oD6GF5HsVYx/WHnM
-         NnEg==
+        id S229607AbhJ2PmP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 Oct 2021 11:42:15 -0400
+Received: from mail-oi1-f175.google.com ([209.85.167.175]:40587 "EHLO
+        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229527AbhJ2PmO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Oct 2021 11:42:14 -0400
+Received: by mail-oi1-f175.google.com with SMTP id k8so817631oik.7;
+        Fri, 29 Oct 2021 08:39:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=zb5to8IVmbXLcOuzy5HbR2D8SvYMJeBSxxm0t+10yes=;
-        b=6VBdz7U39LdTwwUGO1KAzPTZDZTQGfT5ewCC6jZpUOm+c1YSN2fUI3Qz2Zg2rZMIZ7
-         bSG9JvIuH3k8V/CW5gSvMYLLQuljwWHC9Gu3guK4faLkprRbsnPKiETlIaWLKrEsZcP2
-         cFgA9QWWYFffPeClWAjHgBbRO+E+rSr64Ljk/KKEVvB2X2Yb+CqU7oDDoaQMKRVn9EF4
-         9Qky0LN83Pcdwpm8CgH4/3D/WTV/MYqHcnHemsOl88MzH2ry5lzrJDMM4T+j/iRjSwX2
-         Gh4Ak4x2suZ6rkekPr1iSPPddNk73kfkvs1V13tgbTFJlUkNg0nYD973X6O0+R6dLT4J
-         s7FA==
-X-Gm-Message-State: AOAM532v8v3ntXF7N5r8/DKP10UKlAf7yM8GPIvfR/g+8kM0bd/pvHF9
-        wGfU3PDUcr5F7G/CrAGz17qDKmQXCnUZ6V6fWLT2lA==
-X-Google-Smtp-Source: ABdhPJz3Gt3DD4ggJlW5a/iffQ9H3If6jJ5fMxiXKNlpkM72XuoMKE2zri1Er8kmZWdw04yhv5F2a0V1Eko88RxRgy4=
-X-Received: by 2002:ac2:5328:: with SMTP id f8mr11555895lfh.233.1635521371526;
- Fri, 29 Oct 2021 08:29:31 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=pAnKrByzxlYuTvGkBOjeaG54WmBkl53hDOGdLVYByPQ=;
+        b=i6ll4pn/gfiOx6hOkvznsMjABuH4Exycl1GCG2EoMCn74ggX1yE+/TO2SQIUDyhOOW
+         EP15LbhDiUFnsziG7Ax3RHxLYyUimD+DUsjm7eDfQlfn8zfSRU6ZkZsIclMt35JpLp98
+         YxtCSMFH6mlxc6hhJZOKxT2RGice7tSBIN7vHnlFFB+oFgYkxV0GQzzWMFMYN/7CAFnz
+         1RoVlg8cTRdby7llG1utuFjRKsxMEvL7cWtyeilnG8J89MEGBG3BWXLDJJnPXKU8aKNp
+         MJf+zq2sIeuCWCxKKS2mzrPhxGz/9w02VNUyjpG5ycxjQ29GhL3OnWq3g/LucWTn4jFW
+         NSqw==
+X-Gm-Message-State: AOAM531riGJ5ag8UjxQhPuQn757Wst91RtdYu8pouPr7TQ5uOYCkxoVH
+        YeGC9yNB/Bmm7qESbwMUVEEfC7K+NRa9VC0VJkY=
+X-Google-Smtp-Source: ABdhPJzYDwJyQqQ7JC1M6qyzBJGFPsoIMQgLzghjsRQDN9FAEWAPWpbaNU8Vtky1KIfqGcAGnrZfFaspRcPgO5cVhbY=
+X-Received: by 2002:aca:5c5:: with SMTP id 188mr8454704oif.154.1635521985809;
+ Fri, 29 Oct 2021 08:39:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211025224032.21012-1-digetx@gmail.com> <20211025224032.21012-21-digetx@gmail.com>
- <09c05206-c0e5-9a25-8ffa-b9291f6ea5ae@gmail.com>
-In-Reply-To: <09c05206-c0e5-9a25-8ffa-b9291f6ea5ae@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 29 Oct 2021 17:28:55 +0200
-Message-ID: <CAPDyKFoa5eQTrNxyiFevUCWitUecX=hi=y7qv1dC2mqk0+0XBA@mail.gmail.com>
-Subject: Re: [PATCH v14 20/39] pwm: tegra: Add runtime PM and OPP support
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-mmc@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-clk@vger.kernel.org, David Heidelberg <david@ixit.cz>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+References: <alpine.DEB.2.22.394.2110241452460.2997@hadrien>
+ <CAAYoRsXeQravNXKsWAZvacMmE_iBzaQ+mQxNbB5jcD_vkny+Sg@mail.gmail.com>
+ <alpine.DEB.2.22.394.2110261658440.3825@hadrien> <CAAYoRsWXew+9Pch_9ux+UK0LFwy+211d2LmNLGKF_UTr3eS2Fw@mail.gmail.com>
+ <alpine.DEB.2.22.394.2110281908150.9518@hadrien> <CAJZ5v0ihVdrZ1ogEc34+QgZUJW5-=RzP34-U1_91VTcLhbc4Nw@mail.gmail.com>
+ <CAJZ5v0ij105B05xPGgfauwFv1KhXRnwh5p28R1y11qKWjxUOhg@mail.gmail.com>
+ <CAJZ5v0gAax-uz+shKv4MNBiSBPKGroQGNKdYyUK4v6sRS15o_w@mail.gmail.com>
+ <alpine.DEB.2.22.394.2110282112060.9518@hadrien> <CAJZ5v0jmQgg_DwqSdFsoMd5qV_ZH=cHUJtb372mqv=GSWioRgw@mail.gmail.com>
+ <alpine.DEB.2.22.394.2110282124201.9518@hadrien> <CAJZ5v0j9fJi+Fa1404uH3V2XJUrVB5crEjcZ9tsnBtQWgCCu4w@mail.gmail.com>
+ <alpine.DEB.2.22.394.2110282217390.9518@hadrien>
+In-Reply-To: <alpine.DEB.2.22.394.2110282217390.9518@hadrien>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 29 Oct 2021 17:39:34 +0200
+Message-ID: <CAJZ5v0ijM9V2UmgqM4FzckXA8SQy6pHpBTFm8LLv1Lp_L8JiLw@mail.gmail.com>
+Subject: Re: problem in changing from active to passive mode
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Doug Smythies <dsmythies@telus.net>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: multipart/mixed; boundary="000000000000fcaa1d05cf7fa277"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 29 Oct 2021 at 17:20, Dmitry Osipenko <digetx@gmail.com> wrote:
->
-> 26.10.2021 01:40, Dmitry Osipenko =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > +     ret =3D devm_pm_runtime_enable(&pdev->dev);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     ret =3D devm_tegra_core_dev_init_opp_table_common(&pdev->dev);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     ret =3D pm_runtime_resume_and_get(&pdev->dev);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> >       /* Set maximum frequency of the IP */
-> > -     ret =3D clk_set_rate(pwm->clk, pwm->soc->max_frequency);
-> > +     ret =3D dev_pm_opp_set_rate(pwm->dev, pwm->soc->max_frequency);
-> >       if (ret < 0) {
-> >               dev_err(&pdev->dev, "Failed to set max frequency: %d\n", =
-ret);
-> > -             return ret;
-> > +             goto put_pm;
-> >       }
-> >
-> >       /*
-> > @@ -278,7 +294,7 @@ static int tegra_pwm_probe(struct platform_device *=
-pdev)
-> >       if (IS_ERR(pwm->rst)) {
-> >               ret =3D PTR_ERR(pwm->rst);
-> >               dev_err(&pdev->dev, "Reset control is not found: %d\n", r=
-et);
-> > -             return ret;
-> > +             goto put_pm;
-> >       }
-> >
-> >       reset_control_deassert(pwm->rst);
-> > @@ -291,10 +307,15 @@ static int tegra_pwm_probe(struct platform_device=
- *pdev)
-> >       if (ret < 0) {
-> >               dev_err(&pdev->dev, "pwmchip_add() failed: %d\n", ret);
-> >               reset_control_assert(pwm->rst);
-> > -             return ret;
-> > +             goto put_pm;
-> >       }
-> >
-> > +     pm_runtime_put(&pdev->dev);
-> > +
-> >       return 0;
-> > +put_pm:
-> > +     pm_runtime_put_sync_suspend(&pdev->dev);
-> > +     return ret;
-> >  }
-> >
-> >  static int tegra_pwm_remove(struct platform_device *pdev)
-> > @@ -305,20 +326,44 @@ static int tegra_pwm_remove(struct platform_devic=
-e *pdev)
-> >
-> >       reset_control_assert(pc->rst);
-> >
-> > +     pm_runtime_force_suspend(&pdev->dev);
->
-> I just noticed that RPM core doesn't reset RPM-enable count of a device
-> on driver's unbind (pm_runtime_reinit). It was a bad idea to use
-> devm_pm_runtime_enable() + pm_runtime_force_suspend() here, since RPM is
-> disabled twice on driver's removal, and thus, RPM will never be enabled
-> again.
->
-> I'll fix it for PWM and other drivers in this series, in v15.
+--000000000000fcaa1d05cf7fa277
+Content-Type: text/plain; charset="UTF-8"
 
-Good catch - and sorry for not spotting it while reviewing!
+On Thu, Oct 28, 2021 at 10:18 PM Julia Lawall <julia.lawall@inria.fr> wrote:
+>
+>
+>
+> On Thu, 28 Oct 2021, Rafael J. Wysocki wrote:
+>
+> > On Thu, Oct 28, 2021 at 9:25 PM Julia Lawall <julia.lawall@inria.fr> wrote:
 
-Maybe devm_pm_runtime_enable() isn't that useful after all? Should we
-suggest to remove it so others don't fall into the same trap?
+[cut]
 
-Kind regards
-Uffe
+> > Attached is a patch to do that, but please note that the 5.9 will need
+> > to be patched too to address this issue.
+>
+> I'm not completely clear on what the new patch is doing and how I should
+> test it.  If I stay in 5.15, the original patch worked for clearing des
+> when going from passive to active.
+
+Sorry for the confusion.
+
+If applied to 5.15-rc alone, the last patch would cause des to be
+cleared when switching from passive to active and if applied to both
+5.15-rc and 5.9, it would fix the kexec issue as well.
+
+Never mind, though.
+
+The patch attached to this message should cause des to be cleared when
+switching from passive to active (because it is based on the previous
+patch doing that) and it should prevent nonzero des from being leaked
+via the HWP_REQUEST MSR to the new kernel started via kexec.  With
+this patch applied to 5.15-rc des should be 0 when switching from
+passive to active and it should also be 0 after starting another
+kernel via kexec while intel_pstate is running in the passive mode.
+
+Can you please verify that it works as expected?
+
+--000000000000fcaa1d05cf7fa277
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="intel_pstate-clear-desired-on-offline-and-suspend.patch"
+Content-Disposition: attachment; 
+	filename="intel_pstate-clear-desired-on-offline-and-suspend.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_kvcjdmkr0>
+X-Attachment-Id: f_kvcjdmkr0
+
+LS0tCiBkcml2ZXJzL2NwdWZyZXEvaW50ZWxfcHN0YXRlLmMgfCAgIDI4ICsrKysrKysrKysrKysr
+KysrKysrKysrKysrLS0KIDEgZmlsZSBjaGFuZ2VkLCAyNiBpbnNlcnRpb25zKCspLCAyIGRlbGV0
+aW9ucygtKQoKSW5kZXg6IGxpbnV4LXBtL2RyaXZlcnMvY3B1ZnJlcS9pbnRlbF9wc3RhdGUuYwo9
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09Ci0tLSBsaW51eC1wbS5vcmlnL2RyaXZlcnMvY3B1ZnJlcS9pbnRlbF9wc3RhdGUu
+YworKysgbGludXgtcG0vZHJpdmVycy9jcHVmcmVxL2ludGVsX3BzdGF0ZS5jCkBAIC0xMDA1LDkg
+KzEwMDUsMTIgQEAgc3RhdGljIHZvaWQgaW50ZWxfcHN0YXRlX2h3cF9vZmZsaW5lKHN0cgogCQkg
+Ki8KIAkJdmFsdWUgJj0gfkdFTk1BU0tfVUxMKDMxLCAyNCk7CiAJCXZhbHVlIHw9IEhXUF9FTkVS
+R1lfUEVSRl9QUkVGRVJFTkNFKGNwdS0+ZXBwX2NhY2hlZCk7Ci0JCVdSSVRFX09OQ0UoY3B1LT5o
+d3BfcmVxX2NhY2hlZCwgdmFsdWUpOwogCX0KIAorCS8qIENsZWFyIHRoZSBkZXNpcmVkIHBlcmYg
+ZmllbGQgaW4gdGhlIGNhY2hlZCBIV1AgcmVxdWVzdCB2YWx1ZS4gKi8KKwl2YWx1ZSAmPSB+SFdQ
+X0RFU0lSRURfUEVSRih+MEwpOworCVdSSVRFX09OQ0UoY3B1LT5od3BfcmVxX2NhY2hlZCwgdmFs
+dWUpOworCiAJdmFsdWUgJj0gfkdFTk1BU0tfVUxMKDMxLCAwKTsKIAltaW5fcGVyZiA9IEhXUF9M
+T1dFU1RfUEVSRihSRUFEX09OQ0UoY3B1LT5od3BfY2FwX2NhY2hlZCkpOwogCkBAIC0zMDAyLDYg
+KzMwMDUsMjcgQEAgc3RhdGljIGludCBpbnRlbF9jcHVmcmVxX2NwdV9leGl0KHN0cnVjdAogCXJl
+dHVybiBpbnRlbF9wc3RhdGVfY3B1X2V4aXQocG9saWN5KTsKIH0KIAorc3RhdGljIGludCBpbnRl
+bF9jcHVmcmVxX3N1c3BlbmQoc3RydWN0IGNwdWZyZXFfcG9saWN5ICpwb2xpY3kpCit7CisJaW50
+ZWxfcHN0YXRlX3N1c3BlbmQocG9saWN5KTsKKworCWlmIChod3BfYWN0aXZlKSB7CisJCXN0cnVj
+dCBjcHVkYXRhICpjcHUgPSBhbGxfY3B1X2RhdGFbcG9saWN5LT5jcHVdOworCQl1NjQgdmFsdWUg
+PSBSRUFEX09OQ0UoY3B1LT5od3BfcmVxX2NhY2hlZCk7CisKKwkJLyoKKwkJICogQ2xlYXIgdGhl
+IGRlc2lyZWQgcGVyZiBmaWVsZCBpbiBNU1JfSFdQX1JFUVVFU1QgaW4gY2FzZQorCQkgKiBpbnRl
+bF9jcHVmcmVxX2FkanVzdF9wZXJmKCkgaXMgaW4gdXNlIGFuZCB0aGUgbGFzdCB2YWx1ZQorCQkg
+KiB3cml0dGVuIGJ5IGl0IG1heSBub3QgYmUgc3VpdGFibGUuCisJCSAqLworCQl2YWx1ZSAmPSB+
+SFdQX0RFU0lSRURfUEVSRih+MEwpOworCQl3cm1zcmxfb25fY3B1KGNwdS0+Y3B1LCBNU1JfSFdQ
+X1JFUVVFU1QsIHZhbHVlKTsKKwkJV1JJVEVfT05DRShjcHUtPmh3cF9yZXFfY2FjaGVkLCB2YWx1
+ZSk7CisJfQorCisJcmV0dXJuIDA7Cit9CisKIHN0YXRpYyBzdHJ1Y3QgY3B1ZnJlcV9kcml2ZXIg
+aW50ZWxfY3B1ZnJlcSA9IHsKIAkuZmxhZ3MJCT0gQ1BVRlJFUV9DT05TVF9MT09QUywKIAkudmVy
+aWZ5CQk9IGludGVsX2NwdWZyZXFfdmVyaWZ5X3BvbGljeSwKQEAgLTMwMTEsNyArMzAzNSw3IEBA
+IHN0YXRpYyBzdHJ1Y3QgY3B1ZnJlcV9kcml2ZXIgaW50ZWxfY3B1ZnIKIAkuZXhpdAkJPSBpbnRl
+bF9jcHVmcmVxX2NwdV9leGl0LAogCS5vZmZsaW5lCT0gaW50ZWxfY3B1ZnJlcV9jcHVfb2ZmbGlu
+ZSwKIAkub25saW5lCQk9IGludGVsX3BzdGF0ZV9jcHVfb25saW5lLAotCS5zdXNwZW5kCT0gaW50
+ZWxfcHN0YXRlX3N1c3BlbmQsCisJLnN1c3BlbmQJPSBpbnRlbF9jcHVmcmVxX3N1c3BlbmQsCiAJ
+LnJlc3VtZQkJPSBpbnRlbF9wc3RhdGVfcmVzdW1lLAogCS51cGRhdGVfbGltaXRzCT0gaW50ZWxf
+cHN0YXRlX3VwZGF0ZV9saW1pdHMsCiAJLm5hbWUJCT0gImludGVsX2NwdWZyZXEiLAo=
+--000000000000fcaa1d05cf7fa277--
