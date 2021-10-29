@@ -2,94 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2C34440412
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Oct 2021 22:29:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 944E7440431
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Oct 2021 22:36:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbhJ2Ub5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 Oct 2021 16:31:57 -0400
-Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:8962 "EHLO
-        mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229441AbhJ2Ub4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Oct 2021 16:31:56 -0400
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AyjgT4qNwVuGiTMBcTkSjsMiBIKoaSvp037B8?=
- =?us-ascii?q?7TEVdfUzSL3sqynOpoVo6faaskd2ZJgfo6H1BEDtexzhHXAc2/huAV+NNDOWyF?=
- =?us-ascii?q?dABrsSkbcL+lXbalzDHgQ079YST0EGMqyOMbEYt7ef3ODHKadG/DDdytHLuQ62?=
- =?us-ascii?q?9R4EJmsGB52M9z0JczpzPXcGMzWubqBJb6Z0iPAom9JgEU5nFPiTNz0pd8qrnb?=
- =?us-ascii?q?z2vaOjTBIMBxYhgTPvsRqYrJP3GBiR2VMmWzlMybkvmFK18DAQac2YwoyG4w6Z?=
- =?us-ascii?q?2mPZ75xQ3NP508BEG8CA4/JlUgnRtg=3D=3D?=
-X-IronPort-AV: E=Sophos;i="5.84,326,1620684000"; 
-   d="scan'208";a="397787168"
-Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Oct 2021 22:29:25 +0200
-Date:   Fri, 29 Oct 2021 22:29:25 +0200 (CEST)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-cc:     Doug Smythies <dsmythies@telus.net>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: problem in changing from active to passive mode
-In-Reply-To: <CAJZ5v0ijM9V2UmgqM4FzckXA8SQy6pHpBTFm8LLv1Lp_L8JiLw@mail.gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2110292227540.3011@hadrien>
-References: <alpine.DEB.2.22.394.2110241452460.2997@hadrien> <CAAYoRsXeQravNXKsWAZvacMmE_iBzaQ+mQxNbB5jcD_vkny+Sg@mail.gmail.com> <alpine.DEB.2.22.394.2110261658440.3825@hadrien> <CAAYoRsWXew+9Pch_9ux+UK0LFwy+211d2LmNLGKF_UTr3eS2Fw@mail.gmail.com>
- <alpine.DEB.2.22.394.2110281908150.9518@hadrien> <CAJZ5v0ihVdrZ1ogEc34+QgZUJW5-=RzP34-U1_91VTcLhbc4Nw@mail.gmail.com> <CAJZ5v0ij105B05xPGgfauwFv1KhXRnwh5p28R1y11qKWjxUOhg@mail.gmail.com> <CAJZ5v0gAax-uz+shKv4MNBiSBPKGroQGNKdYyUK4v6sRS15o_w@mail.gmail.com>
- <alpine.DEB.2.22.394.2110282112060.9518@hadrien> <CAJZ5v0jmQgg_DwqSdFsoMd5qV_ZH=cHUJtb372mqv=GSWioRgw@mail.gmail.com> <alpine.DEB.2.22.394.2110282124201.9518@hadrien> <CAJZ5v0j9fJi+Fa1404uH3V2XJUrVB5crEjcZ9tsnBtQWgCCu4w@mail.gmail.com>
- <alpine.DEB.2.22.394.2110282217390.9518@hadrien> <CAJZ5v0ijM9V2UmgqM4FzckXA8SQy6pHpBTFm8LLv1Lp_L8JiLw@mail.gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        id S230215AbhJ2UjX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 Oct 2021 16:39:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44700 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229968AbhJ2UjW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Oct 2021 16:39:22 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3779C061570
+        for <linux-pm@vger.kernel.org>; Fri, 29 Oct 2021 13:36:53 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id s24so7608495plp.0
+        for <linux-pm@vger.kernel.org>; Fri, 29 Oct 2021 13:36:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=MGQYZLRsHEcO23nfBccodDoInLk+NNsFIhGPGy4wns0=;
+        b=EUJ/PShJLGbNLUQl4WBbOYzMODanJltqfzUXRNLcKAY9UAtmTDUZJjJtxLfYGl1+5W
+         P70irSRh1vaBwYqEw6BQzLBogQhx1KPeRmMkAQG+wNlCvcoGrsRGAj/3+ISy2B7ehpva
+         lvXWOZ06m8OnDgVrmJLKD9VauMPbWQGqOarZddMAL8HJJxDfTaZ62prH0l6CCviGV8VA
+         cIoZ/TOgqSzRw7mW/aLIlYDIFjAvGQ/gcx2Z+k5VzRNr2OphyDNZzvGmY2iGRdNwkemm
+         uQXlyJQkAbbnmI8Hpuap+NJE7gMVKyP+Up7Kg76XME5Dg4sJDdEEXYBd/9Vz7oX6hyBQ
+         vu3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=MGQYZLRsHEcO23nfBccodDoInLk+NNsFIhGPGy4wns0=;
+        b=QOUkzN3sMaWxrldJIDfPdK4rpDHH2U8FVsblYZNrGYAB3kJ9LoqnqXhWpndJlFJUTl
+         /KMlsSOvYDXx2QaVqBu1O5bFiTUbnq8o/Xe/VneD4tQ83qTpkkEvJ7pR2q/6FO6FRnR7
+         dYolWCHhIsG0gXQbfXeQ51NEgghuvYJUKd1jZAZ/dHSMiMvc/HBfuWVLkJf9Bk6xS0TL
+         3QxFCFM0WGYaktd5PN0aEFHiGssUSb7wVMRrbDZVFdu9gAT3UlXNOs62gZkiAgK7J1cb
+         Ey8gfPl5rMato/9JaV+jLkkFAgo9wX1g7vxT5B/Mr5QHJQE0kV886pLXWRXs/4StFoG9
+         iR5g==
+X-Gm-Message-State: AOAM531+HodohYCF8JC7PucjkVv/MlTFJ8q9+X1Pk7dcF1zqIE0s3VJP
+        jG/zfM299ow4aBDmtonr3nBlhA==
+X-Google-Smtp-Source: ABdhPJz2c+eYZfJDVFLxbjn8ORPyPHdl+7gpHFFmrkzQlzwGQ2b8a1eybfLakfyALFdP7Eoq7rpllg==
+X-Received: by 2002:a17:90b:3b88:: with SMTP id pc8mr13474260pjb.93.1635539813431;
+        Fri, 29 Oct 2021 13:36:53 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id rm6sm6951953pjb.18.2021.10.29.13.36.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Oct 2021 13:36:53 -0700 (PDT)
+Message-ID: <617c5b65.1c69fb81.60c9a.42fc@mx.google.com>
+Date:   Fri, 29 Oct 2021 13:36:53 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v5.15-rc7-122-g5f6ba0ff183c
+X-Kernelci-Report-Type: build
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 1 warning (v5.15-rc7-122-g5f6ba0ff183c)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.15-rc7-122-g5=
+f6ba0ff183c)
+
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+15-rc7-122-g5f6ba0ff183c/
+
+Tree: pm
+Branch: testing
+Git Describe: v5.15-rc7-122-g5f6ba0ff183c
+Git Commit: 5f6ba0ff183c91ef793c5db5da532357e7b0ba5e
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+x86_64:
 
 
-On Fri, 29 Oct 2021, Rafael J. Wysocki wrote:
+Warnings summary:
 
-> On Thu, Oct 28, 2021 at 10:18 PM Julia Lawall <julia.lawall@inria.fr> wrote:
-> >
-> >
-> >
-> > On Thu, 28 Oct 2021, Rafael J. Wysocki wrote:
-> >
-> > > On Thu, Oct 28, 2021 at 9:25 PM Julia Lawall <julia.lawall@inria.fr> wrote:
->
-> [cut]
->
-> > > Attached is a patch to do that, but please note that the 5.9 will need
-> > > to be patched too to address this issue.
-> >
-> > I'm not completely clear on what the new patch is doing and how I should
-> > test it.  If I stay in 5.15, the original patch worked for clearing des
-> > when going from passive to active.
->
-> Sorry for the confusion.
->
-> If applied to 5.15-rc alone, the last patch would cause des to be
-> cleared when switching from passive to active and if applied to both
-> 5.15-rc and 5.9, it would fix the kexec issue as well.
->
-> Never mind, though.
->
-> The patch attached to this message should cause des to be cleared when
-> switching from passive to active (because it is based on the previous
-> patch doing that) and it should prevent nonzero des from being leaked
-> via the HWP_REQUEST MSR to the new kernel started via kexec.  With
-> this patch applied to 5.15-rc des should be 0 when switching from
-> passive to active and it should also be 0 after starting another
-> kernel via kexec while intel_pstate is running in the passive mode.
->
-> Can you please verify that it works as expected?
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
 
-I booted 5.15 rc6 in active then changed to passive making the des field
-non zero, and then changed back to active, making it 0 again.  I them
-changed again to passive and kexeced 5.9.  The des field was again 0.
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
-So it looks fine.
+Detailed per-defconfig build reports:
 
-thanks,
-julia
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
