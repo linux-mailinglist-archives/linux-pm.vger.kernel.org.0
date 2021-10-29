@@ -2,135 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B941943FDAA
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Oct 2021 15:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CE5643FC69
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Oct 2021 14:39:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231527AbhJ2N7Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 Oct 2021 09:59:16 -0400
-Received: from mailgw01.mediatek.com ([60.244.123.138]:43806 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231506AbhJ2N7N (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Oct 2021 09:59:13 -0400
-X-UUID: 7eaa6856c3e8495a8355e0c256e75812-20211029
-X-UUID: 7eaa6856c3e8495a8355e0c256e75812-20211029
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <hector.yuan@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 707469765; Fri, 29 Oct 2021 21:56:40 +0800
-Received: from mtkmbs10n2.mediatek.inc (172.21.101.183) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Fri, 29 Oct 2021 21:56:39 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by
- mtkmbs10n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Fri, 29 Oct 2021 21:56:39 +0800
-From:   Hector Yuan <hector.yuan@mediatek.com>
-To:     <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-CC:     <linux-kernel@vger.kernel.org>, <wsd_upstream@mediatek.com>,
-        <hector.yuan@mediatek.com>
-Subject: [PATCH v1 1/1] cpufreq: mediatek-hw: Fix double devm_remap in hotplug case
-Date:   Fri, 29 Oct 2021 19:42:23 +0800
-Message-ID: <1635507743-17919-2-git-send-email-hector.yuan@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <1635507743-17919-1-git-send-email-hector.yuan@mediatek.com>
-References: <1635507743-17919-1-git-send-email-hector.yuan@mediatek.com>
+        id S231431AbhJ2Ml5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 Oct 2021 08:41:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48184 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231409AbhJ2Ml5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Oct 2021 08:41:57 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85AD8C061714
+        for <linux-pm@vger.kernel.org>; Fri, 29 Oct 2021 05:39:28 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id i13so11250526lfe.4
+        for <linux-pm@vger.kernel.org>; Fri, 29 Oct 2021 05:39:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=B2T3v4jXO25JT49qo2reiE0rneUAVuElVzG5JppoEM8=;
+        b=jxD6biwTfe3xu6SqBzLET7VGwK1z+O5kXXr9D9ld+3oXexNknMqaFCW9F2LVUIXD+G
+         ucuVD7vOA4sZwbtUVVm7VzO3veKFGjRJHKI0vsCgqedXMckkcCuS5RX2luse2sdk1Twa
+         WBDj6uMCqZkJ/KYciN73SIqRqEBtCSDSF63zmsvalZsfnmh4tgcEAgjPi9ilrgDdWMVb
+         ZEJT/Qe6glvFD7+mxzhPkUnG56DeqPTqZIJn0EwzCL6fb0mJg+J37Y3J8rVtha2bb88g
+         FhnpS+0RzDdrfPrw09Zk0fIpd8IvICd3VoueJ91jfIvaJiW7UN68emvVY/bbOQyolIXI
+         WutQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=B2T3v4jXO25JT49qo2reiE0rneUAVuElVzG5JppoEM8=;
+        b=q/OczHfHpt0yXVVHs0E2ffZM7rg9NxyFWouW0tUodB+NHSXFg26v06bURdpgRl3mcJ
+         0+j19tLo01WNUS55aFKiZJ3TXrtBfLTXqjfHbTXz2iU71cYGgVFirK9eUnwyV+7YANCz
+         t7ZAYlO4bL5EtQDimgIcy35e5Uz4/8xgvZj58h1dhoWJKupVGuWzjFPhNyB47nzxrOXQ
+         TSw0vCTH8xjnZ4I5QPISDCJ5QjAHt0W1LjJhPLpIGIuxFfTUOC2oLGtR2KwuuucFVhEm
+         YgNUpV+7Mdg62WG8M6EhJqti0reZ1nMKy8DsKEmKOMoC+fnWeiS162ZV2VLT2eASyq2S
+         aNbA==
+X-Gm-Message-State: AOAM531fead4xA9RSXp/DXyrpe3uS+QwVUJU8vu4dNnk8dQ9nByML138
+        PJ2KRUanRjEDr/pU0NOrmIAvaQ==
+X-Google-Smtp-Source: ABdhPJyTjynt3OjUbfPQGjnjOlAGOKmxPdHzyoRf35p2/vo3MySu4coNCsQpIc9on1MRDnXuPapytw==
+X-Received: by 2002:a05:6512:2309:: with SMTP id o9mr10050460lfu.124.1635511166794;
+        Fri, 29 Oct 2021 05:39:26 -0700 (PDT)
+Received: from localhost.localdomain (h-155-4-129-146.NA.cust.bahnhof.se. [155.4.129.146])
+        by smtp.gmail.com with ESMTPSA id y35sm602528lfa.16.2021.10.29.05.39.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Oct 2021 05:39:25 -0700 (PDT)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org
+Cc:     Maulik Shah <mkshah@codeaurora.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Len Brown <len.brown@intel.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] PM: sleep: Fix runtime PM based cpuidle support
+Date:   Fri, 29 Oct 2021 14:38:55 +0200
+Message-Id: <20211029123855.80344-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: "Hector.Yuan" <hector.yuan@mediatek.com>
+In the cpuidle-psci case, runtime PM in combination with the generic PM
+domain (genpd), may be used when entering/exiting a shared idlestate. More
+precisely, genpd relies on runtime PM to be enabled for the attached device
+(in this case it belongs to a CPU), to properly manage the reference
+counting of its PM domain.
 
-When hotpluging policy cpu, cpu policy init will be called multiple times.
-Unplug CPU7 -> CPU6 -> CPU5 -> CPU4, then plug CPU4 again.
-In this case, devm_remap will double remap and resource allocate fail.
-So replace devm_remap to ioremap and release resources in cpu policy exit.
+This works fine most of the time, but during system suspend in
+dpm_suspend_late(), the PM core disables runtime PM for all devices. Beyond
+this point, calls to pm_runtime_get_sync() to runtime resume a device may
+fail and therefore it could also mess up the reference counting in genpd.
 
-Signed-off-by: Hector.Yuan <hector.yuan@mediatek.com>
+To fix this problem, let's call wake_up_all_idle_cpus() in
+dpm_suspend_late(), prior to disabling runtime PM. In this way a device
+that belongs to a CPU, becomes runtime resumed through cpuidle-psci and
+stays like that, because the runtime PM usage count has been bumped in
+device_prepare().
+
+Diagnosed-by: Maulik Shah <mkshah@codeaurora.org>
+Suggested-by: Rafael J. Wysocki <rafael@kernel.org>
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
- drivers/cpufreq/mediatek-cpufreq-hw.c |   33 ++++++++++++++++++++++++++++++---
- 1 file changed, 30 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/cpufreq/mediatek-cpufreq-hw.c b/drivers/cpufreq/mediatek-cpufreq-hw.c
-index 0cf18dd..25317d7 100644
---- a/drivers/cpufreq/mediatek-cpufreq-hw.c
-+++ b/drivers/cpufreq/mediatek-cpufreq-hw.c
-@@ -36,6 +36,8 @@ enum {
- struct mtk_cpufreq_data {
- 	struct cpufreq_frequency_table *table;
- 	void __iomem *reg_bases[REG_ARRAY_SIZE];
-+	struct resource *res;
-+	void __iomem *base;
- 	int nr_opp;
- };
+Changes in v2:
+	- Moved away from using cpuidle_pause|resume() to solve the problem, but
+	instead just waking up idle CPUs is suffient, due to other recent merged
+	changes.
+
+---
+ drivers/base/power/main.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+index ac4dde8fdb8b..2fb08d4f1aca 100644
+--- a/drivers/base/power/main.c
++++ b/drivers/base/power/main.c
+@@ -1463,6 +1463,7 @@ int dpm_suspend_late(pm_message_t state)
+ 	int error = 0;
  
-@@ -156,6 +158,7 @@ static int mtk_cpu_resources_init(struct platform_device *pdev,
- {
- 	struct mtk_cpufreq_data *data;
- 	struct device *dev = &pdev->dev;
-+	struct resource *res;
- 	void __iomem *base;
- 	int ret, i;
- 	int index;
-@@ -170,9 +173,26 @@ static int mtk_cpu_resources_init(struct platform_device *pdev,
- 	if (index < 0)
- 		return index;
- 
--	base = devm_platform_ioremap_resource(pdev, index);
--	if (IS_ERR(base))
--		return PTR_ERR(base);
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, index);
-+	if (!res) {
-+		dev_err(dev, "failed to get mem resource %d\n", index);
-+		return -ENODEV;
-+	}
-+
-+	if (!request_mem_region(res->start, resource_size(res), res->name)) {
-+		dev_err(dev, "failed to request resource %pR\n", res);
-+		return -EBUSY;
-+	}
-+
-+	base = ioremap(res->start, resource_size(res));
-+	if (!base) {
-+		dev_err(dev, "failed to map resource %pR\n", res);
-+		ret = -ENOMEM;
-+		goto release_region;
-+	}
-+
-+	data->base = base;
-+	data->res = res;
- 
- 	for (i = REG_FREQ_LUT_TABLE; i < REG_ARRAY_SIZE; i++)
- 		data->reg_bases[i] = base + offsets[i];
-@@ -187,6 +207,9 @@ static int mtk_cpu_resources_init(struct platform_device *pdev,
- 	policy->driver_data = data;
- 
- 	return 0;
-+release_region:
-+	release_mem_region(res->start, resource_size(res));
-+	return ret;
- }
- 
- static int mtk_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
-@@ -233,9 +256,13 @@ static int mtk_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
- static int mtk_cpufreq_hw_cpu_exit(struct cpufreq_policy *policy)
- {
- 	struct mtk_cpufreq_data *data = policy->driver_data;
-+	struct resource *res = data->res;
-+	void __iomem *base = data->base;
- 
- 	/* HW should be in paused state now */
- 	writel_relaxed(0x0, data->reg_bases[REG_FREQ_ENABLE]);
-+	iounmap(base);
-+	release_mem_region(res->start, resource_size(res));
- 
- 	return 0;
- }
+ 	trace_suspend_resume(TPS("dpm_suspend_late"), state.event, true);
++	wake_up_all_idle_cpus();
+ 	mutex_lock(&dpm_list_mtx);
+ 	pm_transition = state;
+ 	async_error = 0;
 -- 
-1.7.9.5
+2.25.1
 
