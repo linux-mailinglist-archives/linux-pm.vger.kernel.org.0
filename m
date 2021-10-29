@@ -2,101 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3877943F589
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Oct 2021 05:51:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B96B043F7AC
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Oct 2021 09:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231611AbhJ2Dxu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Oct 2021 23:53:50 -0400
-Received: from smtp25.cstnet.cn ([159.226.251.25]:41718 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231523AbhJ2Dxu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 28 Oct 2021 23:53:50 -0400
-X-Greylist: delayed 921 seconds by postgrey-1.27 at vger.kernel.org; Thu, 28 Oct 2021 23:53:49 EDT
-Received: from localhost.localdomain (unknown [124.16.138.128])
-        by APP-05 (Coremail) with SMTP id zQCowAAH6e32a3thTamVBQ--.42489S2;
-        Fri, 29 Oct 2021 11:35:18 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     rjw@rjwysocki.net, viresh.kumar@linaro.org, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] cpufreq: Fix implicit type conversion
-Date:   Fri, 29 Oct 2021 03:35:17 +0000
-Message-Id: <1635478517-3071352-1-git-send-email-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.7.4
-X-CM-TRANSID: zQCowAAH6e32a3thTamVBQ--.42489S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zr45Gr48ZF4rJF1xtFWxXrb_yoW8CFW5pF
-        Wj9ayYyr4qgryjy3y7CrWkWF45KFnrJ39rKr9xGr9YywnrJ3WF9w18KF1DXrW8Crn5uF17
-        Ar1Yqay7Ga18JaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9014x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
-        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
-        8cxan2IY04v7MxkIecxEwVAFwVW8GwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
-        WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
-        67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42
-        IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1U
-        MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIda
-        VFxhVjvjDU0xZFpf9x0JUk3ktUUUUU=
-X-Originating-IP: [124.16.138.128]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+        id S232108AbhJ2HLj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 Oct 2021 03:11:39 -0400
+Received: from marcansoft.com ([212.63.210.85]:49316 "EHLO mail.marcansoft.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229464AbhJ2HLj (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 29 Oct 2021 03:11:39 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 02A34424B9;
+        Fri, 29 Oct 2021 07:09:04 +0000 (UTC)
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Rob Herring <robh@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Johan Hovold <johan@kernel.org>, devicetree@vger.kernel.org,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Mark Kettenis <kettenis@openbsd.org>
+References: <20211025144718.157794-1-marcan@marcan.st>
+ <20211025144718.157794-3-marcan@marcan.st>
+ <YXhINE00HG6hbQI4@robh.at.kernel.org>
+ <c0f2587c-ab69-8194-e618-ce7919c1aeb1@marcan.st>
+ <CAL_JsqJbVcqy8n0EroV=nFZoJ_WAr+JbrDf-c1jso856NghC2A@mail.gmail.com>
+ <CAJKOXPfDAnECHzGDTisuujT-rGvUqVp4a5WTOQ196yTqwLKHuA@mail.gmail.com>
+From:   Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH v2 2/8] dt-bindings: arm: apple: Add apple,pmgr binding
+Message-ID: <0614b9ba-79f8-afc5-793d-6d465df51bed@marcan.st>
+Date:   Fri, 29 Oct 2021 16:09:02 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+MIME-Version: 1.0
+In-Reply-To: <CAJKOXPfDAnECHzGDTisuujT-rGvUqVp4a5WTOQ196yTqwLKHuA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: es-ES
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The variable 'cpu' and 'j' are defined as unsigned int.
-However in the for_each_cpu, their values are assigned to -1.
-That doesn't make sense and in the cpumask_next() they are
-implicitly type conversed to int.
-It is universally accepted that the implicit type conversion is
-terrible.
-Also, having the good programming custom will set an example for
-others.
-Thus, it might be better to change the definition of 'cpu' and 'j'
-from unsigned int to int.
+On 27/10/2021 23.51, Krzysztof Kozlowski wrote:
+> On Wed, 27 Oct 2021 at 16:44, Rob Herring <robh@kernel.org> wrote:
+>>
+>> On Tue, Oct 26, 2021 at 10:38 PM Hector Martin <marcan@marcan.st> wrote:
+>>>
+>>> On 27/10/2021 03.25, Rob Herring wrote:
+>>>> On Mon, Oct 25, 2021 at 11:47:12PM +0900, Hector Martin wrote:
+>>>>> +  compatible:
+>>>>> +    items:
+>>>>> +      - enum:
+>>>>> +          - apple,t8103-pmgr
+>>>>> +          - apple,t8103-minipmgr
+>>>>> +      - const: apple,pmgr
+>>>>> +      - const: syscon
+>>>>> +      - const: simple-mfd
+>>>>
+>>>>
+>>>> 'simple-mfd' means 'there's nothing in this node that any of the child
+>>>> nodes depend on'. You should be somewhat certain as dropping it later
+>>>> creates compatibility issues.
+>>>
+>>> Hmm, I see simple-mfd turns this into a bus which I guess allows child
+>>> nodes to be probed without the parent node doing anything special (then
+>>> we use syscon_node_to_regmap to get the syscon instantiated). Do you
+>>> have a example use case for doing this without simple-mfd?
+>>
+>> Drivers calling of_platform_populate or devm_of_platform_populate.
+>>
+>> That of course does mean you need a driver. We could probably make the
+>> syscon driver call these if needed.
+>>
+> 
+> Hi Hector,
+> 
+> I thought I mentioned this with your v1, maybe the comment got lost.
+> We have it for Exynos PMU:
+> drivers/soc/samsung/exynos-pmu.c
+> arch/arm/boot/dts/exynos-syscon-restart.dtsi (extending node from
+> arch/arm/boot/dts/exynos5420.dtsi)
+> Maybe you can base on that.
 
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- kernel/sched/cpufreq_schedutil.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Ah, I remember the discrete power domains but I missed this syscon.
 
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index 4f09afd..4aff4b6 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -409,7 +409,7 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
- 	struct sugov_policy *sg_policy = sg_cpu->sg_policy;
- 	struct cpufreq_policy *policy = sg_policy->policy;
- 	unsigned long util = 0, max = 1;
--	unsigned int j;
-+	int j;
- 
- 	for_each_cpu(j, policy->cpus) {
- 		struct sugov_cpu *j_sg_cpu = &per_cpu(sugov_cpu, j);
-@@ -746,7 +746,7 @@ static int sugov_start(struct cpufreq_policy *policy)
- {
- 	struct sugov_policy *sg_policy = policy->governor_data;
- 	void (*uu)(struct update_util_data *data, u64 time, unsigned int flags);
--	unsigned int cpu;
-+	int cpu;
- 
- 	sg_policy->freq_update_delay_ns	= sg_policy->tunables->rate_limit_us * NSEC_PER_USEC;
- 	sg_policy->last_freq_update_time	= 0;
-@@ -783,7 +783,7 @@ static int sugov_start(struct cpufreq_policy *policy)
- static void sugov_stop(struct cpufreq_policy *policy)
- {
- 	struct sugov_policy *sg_policy = policy->governor_data;
--	unsigned int cpu;
-+	int cpu;
- 
- 	for_each_cpu(cpu, policy->cpus)
- 		cpufreq_remove_update_util_hook(cpu);
+I see this is mostly used for poweroff/reboot, which makes sense in this 
+context. For pmgr though, the binding only describes the uniform power 
+state registers, so I think I'm comfortable leaving it as a simple-mfd. 
+Other pmgr sub-blocks will probably end up as separate nodes with 
+different bindings anyway (e.g. whatever I do for the clock muxes, need 
+to see how that ties in with audio which I think is the only consumer so 
+far).
+
+If things get more complicated in future SoCs then we can change how we 
+do it on those, of course :)
+
 -- 
-2.7.4
-
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub
