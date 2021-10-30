@@ -2,159 +2,216 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C2AC440696
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Oct 2021 03:04:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EED64409F4
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Oct 2021 17:31:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbhJ3BG4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 Oct 2021 21:06:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47634 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbhJ3BGz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Oct 2021 21:06:55 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601AFC061570;
-        Fri, 29 Oct 2021 18:04:26 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id u11so24335403lfs.1;
-        Fri, 29 Oct 2021 18:04:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=jsVDqvtMCjEItY59BjDdXBjqSCj5AFKpqqKBAZC15PM=;
-        b=GpLS5QoeSZiVYuQcyQg/wOKpPbg40IU+2Dfb9FcXU4nYeCmN6KJXjfh49JBd/wKAHD
-         591KA3gQIf1SBvyjgUMmYV8cBXFTC/cdQ4HENj5UhrW8Zc5/6NQVTcbHDpp/uP/CtM/l
-         31doiyyMMYYg0QJkQWOkCsBIMW+mBz8uv2F64Oi2QMKIfsIG/oChYJ9O+QA33jYEsngE
-         FrvXPW+rYpkwao9yDetR1TGipaDBlZx2RObVu97eob6CBZrnUrIsLKwo4+T+zZ5rm6br
-         At5zVemkgnR+a9B35XIsz2qkCf1eXFLUUqLj7BeJp/CwzdGna52h2P/7YR84Xq7I1QPX
-         qHKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=jsVDqvtMCjEItY59BjDdXBjqSCj5AFKpqqKBAZC15PM=;
-        b=qe8072u5/hQ+tBaBzpk1pwFOXVeYbutCY4LdsKiUsziJEEo5IE6xgylW+GN8P8BJ43
-         r9uCIop/x2hxTGzuHeNk1Uaf8XCGDypVzzRHCT0/WW4RIZYabOtztd0Fcvk+lSxoSiv9
-         4q9emTH/EJSIG+7tdubbseXL2ZeBxp92lpQjRh9kX4buQ1eog5YSqoK4hvdy3h0uRzeB
-         Cecq9PczXH8pWO7EHHcQ0iNXmGSFYFe5rNa+fmbmPLKNKa/HsY1bLljxSB7PrR3EntaC
-         Wptwrw2DHEzLUCq0B63ceGqUZ9oen6mrlvLYJ+V1/jGdYyk+mjeeiFSgR67tYEuaJOeD
-         xWLw==
-X-Gm-Message-State: AOAM533mkSvzJiWheVSGHOKwfUIGIVd9KiNm/havnFuUmvSjfElgvHd/
-        AkjZgVA1oNzUQaZoVpKlP8E=
-X-Google-Smtp-Source: ABdhPJx9M756TGAugbnDnJ3XSPzCFgHZzkSWbjRs2ZMvdkgT0v7toK9mxfqBf0H0S0K+YMfr11W+ug==
-X-Received: by 2002:a05:6512:1287:: with SMTP id u7mr9587759lfs.590.1635555864551;
-        Fri, 29 Oct 2021 18:04:24 -0700 (PDT)
-Received: from [192.168.2.145] (46-138-44-18.dynamic.spd-mgts.ru. [46.138.44.18])
-        by smtp.googlemail.com with ESMTPSA id f13sm748072lfv.72.2021.10.29.18.04.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Oct 2021 18:04:24 -0700 (PDT)
-Subject: Re: [PATCH v14 20/39] pwm: tegra: Add runtime PM and OPP support
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        David Heidelberg <david@ixit.cz>
-References: <20211025224032.21012-1-digetx@gmail.com>
- <20211025224032.21012-21-digetx@gmail.com>
- <09c05206-c0e5-9a25-8ffa-b9291f6ea5ae@gmail.com>
- <CAJZ5v0i9OtA1nDiv8UXuF3ASdENFYJFV7+nMWm6Pcu=kw8k1aQ@mail.gmail.com>
- <4dc8a6bd-4072-ccbf-513b-221d286bd6d5@gmail.com>
- <CAJZ5v0hKQf-xZq2fx1pA5oxMqP_XJV=AG0Rqu7BKRUZGDz6H5Q@mail.gmail.com>
- <72160e55-6aa5-9541-43f2-fbf025f84ffb@gmail.com>
-Message-ID: <5469f48f-2137-59ae-5298-6dc68c12a126@gmail.com>
-Date:   Sat, 30 Oct 2021 04:04:23 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S231995AbhJ3PeM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 30 Oct 2021 11:34:12 -0400
+Received: from mga05.intel.com ([192.55.52.43]:35983 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230285AbhJ3PeL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 30 Oct 2021 11:34:11 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10153"; a="317023221"
+X-IronPort-AV: E=Sophos;i="5.87,195,1631602800"; 
+   d="scan'208";a="317023221"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2021 08:31:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,195,1631602800"; 
+   d="scan'208";a="466826468"
+Received: from lkp-server02.sh.intel.com (HELO c20d8bc80006) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 30 Oct 2021 08:31:39 -0700
+Received: from kbuild by c20d8bc80006 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mgqKY-0001WX-Rk; Sat, 30 Oct 2021 15:31:38 +0000
+Date:   Sat, 30 Oct 2021 23:31:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 5f6ba0ff183c91ef793c5db5da532357e7b0ba5e
+Message-ID: <617d6546.PHVeTb5tmx4hXGQe%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <72160e55-6aa5-9541-43f2-fbf025f84ffb@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-30.10.2021 03:47, Dmitry Osipenko пишет:
-> 29.10.2021 21:06, Rafael J. Wysocki пишет:
-> ...
->>>>> I just noticed that RPM core doesn't reset RPM-enable count of a device
->>>>> on driver's unbind (pm_runtime_reinit). It was a bad idea to use
->>>>> devm_pm_runtime_enable() + pm_runtime_force_suspend() here, since RPM is
->>>>> disabled twice on driver's removal, and thus, RPM will never be enabled
->>>>> again.
->>>>>
->>>>> I'll fix it for PWM and other drivers in this series, in v15.
->>>>
->>>> Well, for the record, IMV using pm_runtime_force_suspend() is
->>>> generally a questionable idea.
->>>>
->>>
->>> Please clarify why it's a questionable idea.
->>
->> There are a few reasons.
->>
->> Generally speaking, it makes assumptions that may not be satisfied.
->>
->> For instance, it assumes that the driver will never have to work with
->> the ACPI PM domain, because the ACPI PM domain has a separate set of
->> callbacks for system-wide suspend and resume and they are not the same
->> as its PM-runtime callbacks, so if the driver is combined with the
->> ACPI PM domain, running pm_runtime_force_suspend() may not work as
->> expected.
-> 
-> ACPI is irrelevant to the drivers touched by this series.
-> 
-> This series is about older ARM32 Tegra SoCs which either don't have ACPI
-> at all or it's unusable by Linux, like a non-standard ACPI of M$ Surface
-> tablets.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 5f6ba0ff183c91ef793c5db5da532357e7b0ba5e  Merge branch 'acpi-glue' into linux-next
 
-Although, there are VIC and NVDEC drivers of newer Tegra SoCs touched by
-this series. Maybe they could get ACPI support in the future, but this
-needs to be clarified. Perhaps Thierry or Mikko could comment on it.
+elapsed time: 1242m
 
->> Next, it assumes that PM-runtime is actually enabled for the device
->> and the RPM_STATUS of it is valid when it is running.
-> 
-> Runtime PM presence is mandatory for Tegra and drivers take care of
-> enabling it, should be good here.
-> 
->> Further, it assumes that the PM-runtime suspend callback of the driver
->> will always be suitable for system-wide suspend which may not be the
->> case if the device can generate wakeup signals and it is not allowed
->> to wake up the system from sleep by user space.
-> 
-> There are no such 'wakeup' drivers in the context of this patchset.
-> 
->> Next, if the driver has to work with a PM domain (other than the ACPI
->> one) or bus type that doesn't take the pm_runtime_force_suspend()
->> explicitly into account, it may end up running the runtime-suspend
->> callback provided by that entity from within its system-wide suspend
->> callback which may not work as expected.
-> 
-> Only platform bus and generic power domain are relevant for this patchset.
-> 
->> I guess I could add a few if I had to.
->>
-> 
-> So far I can't see any problems.
-> 
-> If you have a better alternative on yours mind, please share.
-> 
+configs tested: 154
+configs skipped: 3
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20211028
+sparc                            allyesconfig
+arc                              allyesconfig
+nios2                            allyesconfig
+alpha                            allyesconfig
+s390                       zfcpdump_defconfig
+powerpc                 mpc8272_ads_defconfig
+arc                              alldefconfig
+sh                            shmin_defconfig
+powerpc                 canyonlands_defconfig
+mips                        vocore2_defconfig
+arm                            lart_defconfig
+arc                 nsimosci_hs_smp_defconfig
+mips                      loongson3_defconfig
+arm                            mps2_defconfig
+mips                   sb1250_swarm_defconfig
+arm                       omap2plus_defconfig
+powerpc                     redwood_defconfig
+um                           x86_64_defconfig
+m68k                          atari_defconfig
+mips                        jmr3927_defconfig
+mips                      fuloong2e_defconfig
+arm                           h3600_defconfig
+arm                         s5pv210_defconfig
+s390                             alldefconfig
+powerpc                 mpc836x_rdk_defconfig
+m68k                            mac_defconfig
+um                               alldefconfig
+arm                             pxa_defconfig
+sh                          polaris_defconfig
+mips                          rm200_defconfig
+mips                malta_qemu_32r6_defconfig
+m68k                        mvme147_defconfig
+arm                         shannon_defconfig
+nios2                         10m50_defconfig
+arm64                            alldefconfig
+powerpc                        warp_defconfig
+mips                          ath25_defconfig
+sh                             shx3_defconfig
+sh                          r7780mp_defconfig
+arm                       aspeed_g5_defconfig
+arc                    vdk_hs38_smp_defconfig
+m68k                          sun3x_defconfig
+powerpc                   microwatt_defconfig
+arm                  randconfig-c002-20211028
+arm                  randconfig-c002-20211029
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nios2                               defconfig
+nds32                             allnoconfig
+nds32                               defconfig
+csky                                defconfig
+alpha                               defconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+xtensa                           allyesconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+parisc                              defconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a004-20211028
+i386                 randconfig-a003-20211028
+i386                 randconfig-a002-20211028
+i386                 randconfig-a006-20211028
+i386                 randconfig-a001-20211028
+i386                 randconfig-a005-20211028
+x86_64               randconfig-a015-20211029
+x86_64               randconfig-a013-20211029
+x86_64               randconfig-a011-20211029
+x86_64               randconfig-a014-20211029
+x86_64               randconfig-a012-20211029
+x86_64               randconfig-a016-20211029
+i386                 randconfig-a012-20211029
+i386                 randconfig-a013-20211029
+i386                 randconfig-a011-20211029
+i386                 randconfig-a015-20211029
+i386                 randconfig-a016-20211029
+i386                 randconfig-a014-20211029
+x86_64               randconfig-a002-20211028
+x86_64               randconfig-a004-20211028
+x86_64               randconfig-a005-20211028
+x86_64               randconfig-a001-20211028
+x86_64               randconfig-a006-20211028
+x86_64               randconfig-a003-20211028
+arc                  randconfig-r043-20211028
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allyesconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                             i386_defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                           allyesconfig
+
+clang tested configs:
+arm                  randconfig-c002-20211029
+powerpc              randconfig-c003-20211029
+riscv                randconfig-c006-20211029
+x86_64               randconfig-c007-20211029
+mips                 randconfig-c004-20211029
+s390                 randconfig-c005-20211029
+i386                 randconfig-c001-20211029
+arm                  randconfig-c002-20211028
+powerpc              randconfig-c003-20211028
+riscv                randconfig-c006-20211028
+x86_64               randconfig-c007-20211028
+mips                 randconfig-c004-20211028
+s390                 randconfig-c005-20211028
+i386                 randconfig-c001-20211028
+x86_64               randconfig-a005-20211030
+x86_64               randconfig-a004-20211030
+x86_64               randconfig-a002-20211030
+x86_64               randconfig-a003-20211030
+x86_64               randconfig-a001-20211030
+x86_64               randconfig-a006-20211030
+x86_64               randconfig-a015-20211028
+x86_64               randconfig-a013-20211028
+x86_64               randconfig-a011-20211028
+x86_64               randconfig-a014-20211028
+x86_64               randconfig-a012-20211028
+x86_64               randconfig-a016-20211028
+i386                 randconfig-a012-20211028
+i386                 randconfig-a013-20211028
+i386                 randconfig-a011-20211028
+i386                 randconfig-a015-20211028
+i386                 randconfig-a016-20211028
+i386                 randconfig-a014-20211028
+hexagon              randconfig-r045-20211028
+riscv                randconfig-r042-20211028
+s390                 randconfig-r044-20211028
+hexagon              randconfig-r041-20211028
+hexagon              randconfig-r045-20211029
+hexagon              randconfig-r041-20211029
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
