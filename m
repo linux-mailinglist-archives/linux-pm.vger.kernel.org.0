@@ -2,216 +2,165 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EED64409F4
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Oct 2021 17:31:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F0E2440B00
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Oct 2021 20:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231995AbhJ3PeM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 30 Oct 2021 11:34:12 -0400
-Received: from mga05.intel.com ([192.55.52.43]:35983 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230285AbhJ3PeL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 30 Oct 2021 11:34:11 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10153"; a="317023221"
-X-IronPort-AV: E=Sophos;i="5.87,195,1631602800"; 
-   d="scan'208";a="317023221"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2021 08:31:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,195,1631602800"; 
-   d="scan'208";a="466826468"
-Received: from lkp-server02.sh.intel.com (HELO c20d8bc80006) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 30 Oct 2021 08:31:39 -0700
-Received: from kbuild by c20d8bc80006 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mgqKY-0001WX-Rk; Sat, 30 Oct 2021 15:31:38 +0000
-Date:   Sat, 30 Oct 2021 23:31:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 5f6ba0ff183c91ef793c5db5da532357e7b0ba5e
-Message-ID: <617d6546.PHVeTb5tmx4hXGQe%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S230338AbhJ3Sa7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 30 Oct 2021 14:30:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:45058 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230145AbhJ3Sa6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 30 Oct 2021 14:30:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1635618508;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=tVvWAEyocSYIBR9AcGsLALyZb02ytJh04fxwsOMZ8rM=;
+        b=dZRzDV9N+NIKxwDBXl2e3Q/tan7Ppy4ux9aw38+Qxn3XSeiLuKUk5lkDs+OMXP+3yMCYzd
+        FWPtt/omSZUCxSv1DuwUVcW9ZJxkVBtOpnIdmVMReVqkEdwIfz4YJ7V772uc5RMKXNZ9pu
+        qIAHSLt8BgoF66z4gFT8iRra7h5saKg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-549-bnSJrRByMw68x3MMRsWsFw-1; Sat, 30 Oct 2021 14:28:19 -0400
+X-MC-Unique: bnSJrRByMw68x3MMRsWsFw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A1DCD1808319;
+        Sat, 30 Oct 2021 18:28:17 +0000 (UTC)
+Received: from x1.localdomain (unknown [10.39.192.75])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D26425F4E9;
+        Sat, 30 Oct 2021 18:28:14 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Yauhen Kharuzhy <jekhor@gmail.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        platform-driver-x86@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-efi@vger.kernel.org
+Subject: [PATCH 00/13] power-suppy/i2c/extcon: Add support for cht-wc PMIC without USB-PD support
+Date:   Sat, 30 Oct 2021 20:28:00 +0200
+Message-Id: <20211030182813.116672-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 5f6ba0ff183c91ef793c5db5da532357e7b0ba5e  Merge branch 'acpi-glue' into linux-next
+On many X86 devices with a Cherry Trail SoC the PMIC / battery charger
+support is not fully handled by ACPI. Instead we need to load native
+drivers for the PMIC and various chips surrounding the PMIC like the
+charger IC. So far we mostly support the AXP288 PMIC this way, as well
+as the Intel Whiskey Cove PMIC with a FUSB302 Type-C controller + other
+ICs for a USB-PD, USB-3 (superspeed) and DP-altmode capable Type-C
+connector, as found on the GPD win and GPD pocket mini laptops.
 
-elapsed time: 1242m
+On the Xiaomi Mi Pad 2 tablet the Whiskey Cove PMIC is used in
+a different setup then on the GPD devices, supporting only USB-2 with
+BC1.2 spec charger detection on its USB connector.
 
-configs tested: 154
-configs skipped: 3
+This series adds support for the charger IC in this setup and for having
+the extcon-intel-cht-wc code control the 5V Vbus boost converter and
+the USB role-switch, which is done by the FUSB302 Type-C controller driver
+in the GPD case.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+This fixes the tablet not charging under Linux, host-mode only working
+when booted in host-mode, as well as device-mode not working. Note
+device-mode still does not work when plugged into a CDP port. I have
+identified the cause for this and I plan to submit a fix later.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20211028
-sparc                            allyesconfig
-arc                              allyesconfig
-nios2                            allyesconfig
-alpha                            allyesconfig
-s390                       zfcpdump_defconfig
-powerpc                 mpc8272_ads_defconfig
-arc                              alldefconfig
-sh                            shmin_defconfig
-powerpc                 canyonlands_defconfig
-mips                        vocore2_defconfig
-arm                            lart_defconfig
-arc                 nsimosci_hs_smp_defconfig
-mips                      loongson3_defconfig
-arm                            mps2_defconfig
-mips                   sb1250_swarm_defconfig
-arm                       omap2plus_defconfig
-powerpc                     redwood_defconfig
-um                           x86_64_defconfig
-m68k                          atari_defconfig
-mips                        jmr3927_defconfig
-mips                      fuloong2e_defconfig
-arm                           h3600_defconfig
-arm                         s5pv210_defconfig
-s390                             alldefconfig
-powerpc                 mpc836x_rdk_defconfig
-m68k                            mac_defconfig
-um                               alldefconfig
-arm                             pxa_defconfig
-sh                          polaris_defconfig
-mips                          rm200_defconfig
-mips                malta_qemu_32r6_defconfig
-m68k                        mvme147_defconfig
-arm                         shannon_defconfig
-nios2                         10m50_defconfig
-arm64                            alldefconfig
-powerpc                        warp_defconfig
-mips                          ath25_defconfig
-sh                             shx3_defconfig
-sh                          r7780mp_defconfig
-arm                       aspeed_g5_defconfig
-arc                    vdk_hs38_smp_defconfig
-m68k                          sun3x_defconfig
-powerpc                   microwatt_defconfig
-arm                  randconfig-c002-20211028
-arm                  randconfig-c002-20211029
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-nios2                               defconfig
-nds32                             allnoconfig
-nds32                               defconfig
-csky                                defconfig
-alpha                               defconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-xtensa                           allyesconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-parisc                              defconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a004-20211028
-i386                 randconfig-a003-20211028
-i386                 randconfig-a002-20211028
-i386                 randconfig-a006-20211028
-i386                 randconfig-a001-20211028
-i386                 randconfig-a005-20211028
-x86_64               randconfig-a015-20211029
-x86_64               randconfig-a013-20211029
-x86_64               randconfig-a011-20211029
-x86_64               randconfig-a014-20211029
-x86_64               randconfig-a012-20211029
-x86_64               randconfig-a016-20211029
-i386                 randconfig-a012-20211029
-i386                 randconfig-a013-20211029
-i386                 randconfig-a011-20211029
-i386                 randconfig-a015-20211029
-i386                 randconfig-a016-20211029
-i386                 randconfig-a014-20211029
-x86_64               randconfig-a002-20211028
-x86_64               randconfig-a004-20211028
-x86_64               randconfig-a005-20211028
-x86_64               randconfig-a001-20211028
-x86_64               randconfig-a006-20211028
-x86_64               randconfig-a003-20211028
-arc                  randconfig-r043-20211028
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allyesconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                             i386_defconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-x86_64                           allyesconfig
+This series consists of the following parts:
 
-clang tested configs:
-arm                  randconfig-c002-20211029
-powerpc              randconfig-c003-20211029
-riscv                randconfig-c006-20211029
-x86_64               randconfig-c007-20211029
-mips                 randconfig-c004-20211029
-s390                 randconfig-c005-20211029
-i386                 randconfig-c001-20211029
-arm                  randconfig-c002-20211028
-powerpc              randconfig-c003-20211028
-riscv                randconfig-c006-20211028
-x86_64               randconfig-c007-20211028
-mips                 randconfig-c004-20211028
-s390                 randconfig-c005-20211028
-i386                 randconfig-c001-20211028
-x86_64               randconfig-a005-20211030
-x86_64               randconfig-a004-20211030
-x86_64               randconfig-a002-20211030
-x86_64               randconfig-a003-20211030
-x86_64               randconfig-a001-20211030
-x86_64               randconfig-a006-20211030
-x86_64               randconfig-a015-20211028
-x86_64               randconfig-a013-20211028
-x86_64               randconfig-a011-20211028
-x86_64               randconfig-a014-20211028
-x86_64               randconfig-a012-20211028
-x86_64               randconfig-a016-20211028
-i386                 randconfig-a012-20211028
-i386                 randconfig-a013-20211028
-i386                 randconfig-a011-20211028
-i386                 randconfig-a015-20211028
-i386                 randconfig-a016-20211028
-i386                 randconfig-a014-20211028
-hexagon              randconfig-r045-20211028
-riscv                randconfig-r042-20211028
-s390                 randconfig-r044-20211028
-hexagon              randconfig-r041-20211028
-hexagon              randconfig-r045-20211029
-hexagon              randconfig-r041-20211029
+Patch 1 + 2: Add a "intel,cht-wc-setup" device property to the Whiskey Cove
+i2c-client so that various WC drivers can use this to identify which setup
+they are dealing with.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Patch 3 + 4: bq25890 psy driver bug-fixes
+
+Patch 5 - 8: bq25890 psy support for non-devicetree devices
+
+Patch 9 + 10: bq25890 psy support for registering the builtin Vbus boost
+converter as a regulator
+
+Patch 11: Add support to the i2c-cht-wc I2C-controller driver to
+instantiate an i2c-client for the attached bq25890 charger
+
+Patch 12 + 13: extcon-intel-cht-wc add support for the USB-2 only with
+BC1.2 charger detection setup
+
+Assuming everybody is ok with this series, we need to talk about how
+to merge this.
+
+Patch 1 makes some very small changes (just a rename) to
+drivers/firmware/efi code, I would like to merging this + patch 2 through
+the pdx86 tree (where the real changes are). Ard, can I have your ack
+for this please ?
+
+Patch 11 depends on a header file added by patch 10, since the
+i2c-cht-wc.c code otherwise sees very little changes I believe it makes
+sense for patch 11 to be merged into linux-power-supply.git/for-next
+together with patches 3-10. Wolfram can we have you ack for this?
+
+Patch 12 + 13 can be merged through the extcon tree, these have no
+(compile time) dependencies on the other patches.
+
+This is all 5.17 material, and I will make sure the pdx86 patches
+adding the new property will land in 5.17-rc1, hopefully the rest
+will land then too, but if other bits land later that is fine too,
+as long as the new property is there behavior won't change on the
+GPD win/pocket and we won't get any regressions.
+
+Regards,
+
+Hans
+
+p.s.
+
+Patch 3 and 4 are pure bq25890 bugfixes and should probably be picked up
+right away independent of the rest of the series.
+
+
+Hans de Goede (13):
+  platform/x86: Rename touchscreen_dmi to dmi_device_properties
+  platform/x86: dmi_device_properties: Add setup info for boards with a
+    CHT Whiskey Cove PMIC
+  power: supply: bq25890: Fix race causing oops at boot
+  power: supply: bq25890: Fix initial setting of the F_CONV_RATE field
+  power: supply: bq25890: Add a bq25890_rw_init_data() helper
+  power: supply: bq25890: Add support for skipping initialization
+  power: supply: bq25890: Enable charging on boards where we skip reset
+  power: supply: bq25890: Drop dev->platform_data == NULL check
+  power: supply: bq25890: Add bq25890_set_otg_cfg() helper
+  power: supply: bq25890: Add support for registering the Vbus boost
+    converter as a regulator
+  i2c: cht-wc: Add support for devices using a bq25890 charger
+  extcon: intel-cht-wc: Check new "intel,cht-wc-setup" device-property
+  extcon: intel-cht-wc: Add support for devices with an USB-micro-B
+    connector
+
+ MAINTAINERS                                   |   2 +-
+ drivers/extcon/extcon-intel-cht-wc.c          | 119 ++++++++--
+ drivers/firmware/efi/embedded-firmware.c      |   4 +-
+ drivers/i2c/busses/i2c-cht-wc.c               |  77 ++++--
+ drivers/platform/x86/Kconfig                  |  20 +-
+ drivers/platform/x86/Makefile                 |   2 +-
+ ...chscreen_dmi.c => dmi_device_properties.c} |  54 ++++-
+ drivers/power/supply/bq25890_charger.c        | 223 ++++++++++++------
+ include/linux/efi_embedded_fw.h               |   2 +-
+ include/linux/power/bq25890_charger.h         |  15 ++
+ 10 files changed, 400 insertions(+), 118 deletions(-)
+ rename drivers/platform/x86/{touchscreen_dmi.c => dmi_device_properties.c} (96%)
+ create mode 100644 include/linux/power/bq25890_charger.h
+
+-- 
+2.31.1
+
