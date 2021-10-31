@@ -2,121 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CB9A440E75
-	for <lists+linux-pm@lfdr.de>; Sun, 31 Oct 2021 13:52:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30234440E7C
+	for <lists+linux-pm@lfdr.de>; Sun, 31 Oct 2021 13:58:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbhJaMzV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 31 Oct 2021 08:55:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57620 "EHLO
+        id S229791AbhJaNAd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 31 Oct 2021 09:00:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbhJaMzV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 31 Oct 2021 08:55:21 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6269DC061570;
-        Sun, 31 Oct 2021 05:52:49 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id bu18so13856717lfb.0;
-        Sun, 31 Oct 2021 05:52:49 -0700 (PDT)
+        with ESMTP id S229626AbhJaNAc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 31 Oct 2021 09:00:32 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0723C061570;
+        Sun, 31 Oct 2021 05:58:00 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 1so19037274ljv.2;
+        Sun, 31 Oct 2021 05:58:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=KsU6C8DCbzTsNFFfktVF1wri/7sdYIU4HQYUbAWLagc=;
-        b=PhslQAKvrpeIN7feHYjaT5Px4ASWnFZP1fd1o0IpUunKpikQj842qisdh07HLB74Iy
-         +4tGrRWCvDG2rV5CDp5eA6bZ310HUXb6vtZfp98kFUnTEPlRpTL24qpi6l/iaMlg+jWZ
-         DjYjQUy0//T74C8jPP0cr9BffYT8HwbznZ5ccT+pW7pJPRVsq0ia1QN4pwDxTNz5dcHr
-         vrV95BTa2gZym8+wBR222hBgJBK0bLKgGlyqgpA5zpQxL8hhbxh6s01/1//ouL9Ju57H
-         1zgshTF8xcfZwKSepeqn5E1uvYMaMedTR4Ukvrx3WrWHOaGB3Cvg3tzIcjafR9eQdWfB
-         iKyA==
+        bh=TA6d7M3LHM9SuI1wIVm/Ylw65AVnuTrxrE8hG0L+h/w=;
+        b=lgzkHqpL3OhYUvqaqGnsAh6hh3upxZRGVjXQESDsstM3PbOEluLZvHaae+2vY35gZT
+         L0tZ7+uuJ1N+JWUn9a2D35FGntkRnskt2kCSyejPOflQg6cHHPORIZG27DUyRYT02aa8
+         jNd07Dk5/QI5ukbaUGUj4Tw7v+HBvGyszcps6hqVJugdZZdfUVUpYdWXrCZGP4q6AdKq
+         YgTc7zyaPMvXVmJMgAw/19Rh1J6za6D1bvRO1gN4E4EfoDPhWj5sTO5Kxk9QjZ+pYL+M
+         16OUPHL2ymRDH5hSPEpNSvD9g3JiRSUbVO2WpAnM9aBMTSCj2PF4sKKRxmAriKAVe9Lo
+         c8Kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=KsU6C8DCbzTsNFFfktVF1wri/7sdYIU4HQYUbAWLagc=;
-        b=O13/7zCjlVGlzoL/1OIedA0cKiFs3zHozZyVs0yBRnyRd2vDOmjDaXqcAGgJFrkI1+
-         7hvTzJ7bs43JZ55PdOxxLosAPZg4iXXAA9w3eIHl5IKkxhFz6haj2sVxDJHsrOzRHt5C
-         HRnhhJjtHepQ1BA3FaqqRLs3zIvCuiLj/24RBZ52RppJk5SVOwjoUHch4XK/umP7z1nD
-         kIeEgHHjb41BLjZe1fDQBAIY3DvX7q3fJt5/qWXZ2+FE8LFXO+fBtsn05y36FaKfSwim
-         PcOC6epQXSHnQRUPJIXq8d73LzE0BpHPuDTwe9Eq+f6uEPRFnIKMjcQ3Xyb9yAZj3RxS
-         jWGQ==
-X-Gm-Message-State: AOAM532ZyzNI1CpqU4Tz/2aUzdZylQsknOrPiA8vjwAFVDygvxW2LwL6
-        aOXqeqsdQ5JTQKc3MweA/0eRsl81fIBrAjznjHM=
-X-Google-Smtp-Source: ABdhPJzKIgyiS9xupKWX+ht1y8HzbkQ9S2BGp5QpsvkwXuwzgDgydBnU1hAMgz/1QNnxMJSFj38Hdmd26EuI/eqD7VE=
-X-Received: by 2002:a05:6512:acd:: with SMTP id n13mr21685799lfu.60.1635684767624;
- Sun, 31 Oct 2021 05:52:47 -0700 (PDT)
+        bh=TA6d7M3LHM9SuI1wIVm/Ylw65AVnuTrxrE8hG0L+h/w=;
+        b=Uuf8ousGTXk3EluJfTgHwk37HIKvi19KiHcLgv4/dFSxwdlYVd08JaCIrk/JWx7mtt
+         +cO2Mr7CSTdHhMXaUKPyRZgEKhVtUKcEEEllsIBCx2wurla3tCEJzo9/J6Zm/9I80zxf
+         C6LOsYHX+mmy3vx6t8i2pkbkMVlfzSvzRfqyZRNlvaFVCS+BiJ70YWJoOREk2UV2PJNy
+         rEeem1alEZPmOBvEzHLXfp9s2HvKdfZjEIbTeAcN7VbEo6QK6KYwFskxr5o8brC0Han6
+         0NgofkOKw+YqYIJl13e2m6mKYCRCuxl/N3B8tcWYgLZ68IuyWHdxqgV44PkZdiAGGLLd
+         +/fQ==
+X-Gm-Message-State: AOAM533Tyk2mil29tFEK1b0qwiOTPigEV/6QalJ7gu0F6lOFFhy9Kbvg
+        qcRdUHpYChaQbTyQALf+GtKgVCW4wxRsw/NtkjY=
+X-Google-Smtp-Source: ABdhPJwZt88JpwfFKC89QrKsOUKDOwUvKeT3ezfPpc1Z4mfC8xGn5XutAUvCcpuivonNsY+SeRGNhGHzYHFriQHVwHo=
+X-Received: by 2002:a2e:8605:: with SMTP id a5mr25591487lji.107.1635685079348;
+ Sun, 31 Oct 2021 05:57:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211030182813.116672-1-hdegoede@redhat.com> <20211030182813.116672-14-hdegoede@redhat.com>
-In-Reply-To: <20211030182813.116672-14-hdegoede@redhat.com>
+References: <20211031090208.6564-1-hdegoede@redhat.com>
+In-Reply-To: <20211031090208.6564-1-hdegoede@redhat.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 31 Oct 2021 14:52:11 +0200
-Message-ID: <CAHp75VfRALjbGaY8rdt5HCte3_NPuwpdkr+GNZV7qMWBK1idWg@mail.gmail.com>
-Subject: Re: [PATCH 13/13] extcon: intel-cht-wc: Add support for devices with
- an USB-micro-B connector
+Date:   Sun, 31 Oct 2021 14:57:23 +0200
+Message-ID: <CAHp75Ve5zUxsB4L613FEE=2cPK8XopLYVC7Ew5Z23r2Xqq-cyA@mail.gmail.com>
+Subject: Re: [PATCH] power: supply: bq27xxx: Fix kernel crash on IRQ handler
+ register error
 To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Yauhen Kharuzhy <jekhor@gmail.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
         Platform Driver <platform-driver-x86@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>
+        "Andrew F . Davis" <afd@ti.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Oct 30, 2021 at 9:29 PM Hans de Goede <hdegoede@redhat.com> wrote:
+On Sun, Oct 31, 2021 at 11:07 AM Hans de Goede <hdegoede@redhat.com> wrote:
 >
-> So far the extcon-intel-cht-wc code has only been tested on devices with
-> a Type-C connector with USB-PD, USB3 (superspeed) and DP-altmode support
-> through a FUSB302 Type-C controller.
+> When registering the IRQ handler fails, do not just return the error code,
+> this will free the devm_kalloc-ed data struct while leaving the queued
+
+devm_kzalloc()-ed?
+
+(main point is z/m/etc in the function name)
+
+> work queued and the registered power_supply registered with both of them
+> now pointing to free-ed memory, resulting in various kernel crashes
+> soon afterwards.
 >
-> Some devices with the intel-cht-wc PMIC however come with an USB-micro-B
-> connector, or an USB-2 only Type-C connector without USB-PD.
->
-> These device are identified by "intel,cht-wc-setup" = "bq25890,bq27520",
-> since there is no Type-C controller on these devices the extcon code must
-> control the Vbus 5V boost converter and the USB role switch depending on
-> the detected cable-type.
+> Instead properly tear-down things on IRQ handler register errors.
 
-...
-
-> +       if (ext->vbus_boost && ext->vbus_boost_enabled != enable) {
-> +               if (enable)
-> +                       ret = regulator_enable(ext->vbus_boost);
-> +               else
-> +                       ret = regulator_disable(ext->vbus_boost);
-
-> +               if (ret == 0)
-> +                       ext->vbus_boost_enabled = enable;
-> +               else
-> +                       dev_err(ext->dev, "Error updating Vbus boost regulator: %d\n", ret);
-
-if (ret)
- dev_err()
-else
- ...
-
-?
-
-> +       }
-
-...
-
-
-> +               /*
-> +                * Classic micro USB-B setup, this requires controling
-
-controlling
-
-> +                * the role-sw and vbus based on the id-pin.
-> +                */
 
 -- 
 With Best Regards,
