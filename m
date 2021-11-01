@@ -2,122 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 630BC4420A2
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Nov 2021 20:16:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E68FF4421E2
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Nov 2021 21:47:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232533AbhKATTP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Nov 2021 15:19:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:23331 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232512AbhKATTO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Nov 2021 15:19:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1635794200;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vPxF4UHOaFrwq4ubL6S9n5LY4w6t78aRQ2QSJla2WzE=;
-        b=iHQc0ylCsYQHM/YZ7Inan+C4Pk4Fnbh5MG1f3xQEYDQvhBsF4lSefP5cyYx0KPI4IOyyR2
-        XK7eQXFkfEjjFgldYSav7JiocdeWItKBlookSjnmvotZENYOKIhpLZ8iaoTc59Er3ZQGoy
-        KGLL3G4i6nrTqS7GF2daqNeccs23gY4=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-224-CnmMMeRfO4Gqu4ppOWnuzQ-1; Mon, 01 Nov 2021 15:16:39 -0400
-X-MC-Unique: CnmMMeRfO4Gqu4ppOWnuzQ-1
-Received: by mail-ed1-f70.google.com with SMTP id z20-20020a05640240d400b003dce046ab51so16461377edb.14
-        for <linux-pm@vger.kernel.org>; Mon, 01 Nov 2021 12:16:39 -0700 (PDT)
+        id S230329AbhKAUtt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Nov 2021 16:49:49 -0400
+Received: from mail-oi1-f176.google.com ([209.85.167.176]:46833 "EHLO
+        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229896AbhKAUtq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Nov 2021 16:49:46 -0400
+Received: by mail-oi1-f176.google.com with SMTP id bd30so7027226oib.13;
+        Mon, 01 Nov 2021 13:47:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vPxF4UHOaFrwq4ubL6S9n5LY4w6t78aRQ2QSJla2WzE=;
-        b=J5GeUwfcKikqtvx48XgV0vSnGjq6iuzg3QftE+8/SeCP1daUk42UOWqhy36GGzQc4c
-         EiZmTThmBVMZFV7qKhLjasJG3HsZgb/2SfuGb0tz7dzhxsgd2RfYj8wSuSnhrfmZ0IMo
-         HoedCP4DcnGatDLaVpXQWvH/oLeMoLNaLnEp/Hq8QVNh7Apkw1pAW8acRDgWvMA7lUWN
-         7w8ml3JvRo3tmBmgdLYsiTilAqauurq5Dx/45BS/ZY7DdRFoPEKY9/+nwMRxDTMb3f7M
-         SnGIcZOtHSsmncMWhSXxUgKY3n8vt9ikxUGzSOXOEnKFRllpnsqmTO3Yk71DG5KWCOiY
-         uljw==
-X-Gm-Message-State: AOAM531nN30c66AggvzEjncshwVzy5oDDuS5hCB0o0RIm8pUp/QsxRQ1
-        J53OOKtT4a8F/+gNWFp4gRi0l+viNu/OssFKymR0WvWkeBQ9lzso9JP7XJmgxB7LdnDzJjZaVEa
-        hKmkeHybyk23FSYjUgoo=
-X-Received: by 2002:a17:906:9acb:: with SMTP id ah11mr31873291ejc.305.1635794198471;
-        Mon, 01 Nov 2021 12:16:38 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzqRGooy6XZA1Y8t1ql0dlnn+gjO+gI4KXUs5ozQ5VUAaxbAmo9oSU5aRgIi+dcO44lXRA7hQ==
-X-Received: by 2002:a17:906:9acb:: with SMTP id ah11mr31873261ejc.305.1635794198319;
-        Mon, 01 Nov 2021 12:16:38 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id h10sm9331056edf.85.2021.11.01.12.16.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Nov 2021 12:16:37 -0700 (PDT)
-Message-ID: <b3f0d3fe-8038-626e-a68c-b818e6de69da@redhat.com>
-Date:   Mon, 1 Nov 2021 20:16:37 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Bjw0j7Mx1+gCUHPQkiItObMWxExdrxG5rwoBsdrg1Qs=;
+        b=w5HrDi0V3LJiE3idmbiHAKi4YmVrzbtithgFCkUSJb4SiFyMxA+iUIZ5NiVXiO2cIQ
+         iumYwiIBgX2wq8DcGo6gzZe8gbcFZEgGZ6LtnUwZje8dBWkvt66JSWfiQHm256wpwBbG
+         5Mr2UuQ2lhnO24Je4Ux1YotXNrzv7eKsDyTS9DgP64qcEcFqvsmwkDJ+9srbnKaHbUob
+         K1373FmF9DHEtFsVush7Aj20RKZLU6phPZYukYtLY5UYmFZyQNRBi0yPCk+vr9eNaPha
+         8QuVbWioapRT3b5c2DIBVFwqXtpcesaCRnNwWTnmwHgEw519Iv6mDqgWThTALnYnK0q1
+         Z/vQ==
+X-Gm-Message-State: AOAM531S2ko5Vv0XrKpsNjrUsosojTc8GrrAXinDgS2DzU3Q+JN1aVEZ
+        7RHFdNoLPyTs7kCTGO3FbNO41qR3Ag==
+X-Google-Smtp-Source: ABdhPJyyffhPl0qaDKlAt9AR/wfks2LhgDYHRLW/t2QL35e3G5C4F0WbhFfE8/aGAkn0dzN4nI/rTg==
+X-Received: by 2002:aca:6c2:: with SMTP id 185mr1207003oig.31.1635799632535;
+        Mon, 01 Nov 2021 13:47:12 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id x65sm4343189oix.43.2021.11.01.13.47.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Nov 2021 13:47:11 -0700 (PDT)
+Received: (nullmailer pid 1020841 invoked by uid 1000);
+        Mon, 01 Nov 2021 20:47:11 -0000
+Date:   Mon, 1 Nov 2021 15:47:11 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Keerthy <j-keerthy@ti.com>
+Cc:     daniel.lezcano@linaro.org, rui.zhang@intel.com, amitk@kernel.org,
+        kristo@kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/4] dt-bindings: thermal: k3-j72xx: Add VTM bindings
+ documentation
+Message-ID: <YYBST6SAR0B9J+gM@robh.at.kernel.org>
+References: <20211025180603.22290-1-j-keerthy@ti.com>
+ <20211025180603.22290-2-j-keerthy@ti.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [RFC 3/5] gpiolib: acpi: Add a new "ignore" module option
-Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Yauhen Kharuzhy <jekhor@gmail.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>
-References: <20211031162428.22368-1-hdegoede@redhat.com>
- <20211031162428.22368-4-hdegoede@redhat.com>
- <CAHp75Vf-EOfF_XfqfWFQZNLp3B03o79xHf4bUrf9x9D9pTrvgw@mail.gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CAHp75Vf-EOfF_XfqfWFQZNLp3B03o79xHf4bUrf9x9D9pTrvgw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211025180603.22290-2-j-keerthy@ti.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
-
-On 10/31/21 20:59, Andy Shevchenko wrote:
-> On Sun, Oct 31, 2021 at 6:25 PM Hans de Goede <hdegoede@redhat.com> wrote:
->>
->> Add a new "ignore" module option to completely ignore controller@pin combos
->> from _AEI lists.
->>
->> And add a DMI quirk to ignore the interrupt of the BQ27520 fuel-gauge IC
->> on the Xiaomi Mi Pad 2. On this device we use native charger + fuel-gauge
->> drivers because of issues with the ACPI battery implementation. The _AEI
->> listing of the fuel-gauge IRQ is intended for use with the unused ACPI
->> battery implementation and is blocking the bq27xxx fuel-gauge driver
->> from binding.
+On Mon, Oct 25, 2021 at 11:36:00PM +0530, Keerthy wrote:
+> Add VTM bindings documentation. In the Voltage Thermal
+> Management Module(VTM), K3 J72XX supplies a voltage
+> reference and a temperature sensor feature that are gathered in the band
+> gap voltage and temperature sensor (VBGAPTS) module. The band
+> gap provides current and voltage reference for its internal
+> circuits and other analog IP blocks. The analog-to-digital
+> converter (ADC) produces an output value that is proportional
+> to the silicon temperature.
 > 
-> I'm wondering if the idea behind this is something relative to
-> https://elixir.bootlin.com/linux/latest/source/drivers/acpi/sysfs.c
+> Signed-off-by: Keerthy <j-keerthy@ti.com>
+> ---
+>  .../bindings/thermal/ti,j72xx-thermal.yaml    | 62 +++++++++++++++++++
+>  1 file changed, 62 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+> new file mode 100644
+> index 000000000000..8483c495cb9a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+> @@ -0,0 +1,62 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/thermal/ti,j72xx-thermal.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Texas Instruments J72XX VTM (DTS) binding
+> +
+> +maintainers:
+> +  - Keerthy <j-keerthy@ti.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: ti,j721e-vtm
+> +    oneOf:
+> +      - enum:
+> +          - ti,j721e-vtm
+> +          - ti,j7200-vtm
 
-The idea indeed is similar, but there is only one set of GPEs and
-the GPIO pin-namespace is per GPIO controller, hence the
-controller-name@pin format used, which is also used for the
-already existing ignore_wake gpiolib-acpi.c module option and
-the patches re-use the existing parsing code.
+Not sure what you are trying to say here, but the 'const' with 'oneOf' 
+isn't correct. If it is just 1 of either compatible string, you want 
+just 'enum' part:
 
-But since there seems to be agreement that using a board-file to
-work around the DSDT deficiencies is the best option this patch
-will no longer be needed. It is probably still good to keep it
-archived somewhere in case the functionality turns out to be
-useful on some other device(s).
+compatible:
+  enum:
+    - ti,j721e-vtm
+    - ti,j7200-vtm
 
-Regards,
+> +
+> +  reg:
+> +    maxItems: 3
 
-Hans
+Need to define what each entry is.
 
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  "#thermal-sensor-cells":
+> +    const: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - power-domains
+> +  - "#thermal-sensor-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/soc/ti,sci_pm_domain.h>
+> +    wkup_vtm0: wkup_vtm0@42040000 {
+> +        compatible = "ti,j721e-vtm";
+> +        reg = <0x42040000 0x350>,
+> +            <0x42050000 0x350>,
+> +            <0x43000300 0x10>;
+> +        power-domains = <&k3_pds 154 TI_SCI_PD_EXCLUSIVE>;
+> +        #thermal-sensor-cells = <1>;
+> +    };
+> +
+> +    mpu_thermal: mpu_thermal {
+> +        polling-delay-passive = <250>; /* milliseconds */
+> +        polling-delay = <500>; /* milliseconds */
+> +        thermal-sensors = <&wkup_vtm0 0>;
+> +
+> +        trips {
+> +                mpu_crit: mpu_crit {
+> +                        temperature = <125000>; /* milliCelsius */
+> +                        hysteresis = <2000>; /* milliCelsius */
+> +                        type = "critical";
+> +                };
+> +        };
+> +    };
+> +...
+> -- 
+> 2.17.1
+> 
+> 
