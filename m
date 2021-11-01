@@ -2,117 +2,228 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F3FD441BD7
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Nov 2021 14:40:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72A8D441CCA
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Nov 2021 15:42:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232054AbhKANmc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Nov 2021 09:42:32 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:41443 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231741AbhKANmb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 1 Nov 2021 09:42:31 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1635773998; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=oCiwHNpAGx+7qf4ko0KtXb5a49/AVJ95iHboNyo0CEo=;
- b=HhNEm5ezb+cy4dzCqaCqDk8xRY3fbMAHjVIkhWu2vMSfTpXylnOWvby8M7t0iZ+bo7JausS/
- HwcydQkAS5e8rCMdSlEFip392/AM+WLVaT2pyow37rhWvDTCd3JyKvh//1cXnEChnrC+TDed
- Jl8NRn23c7aAF6wrepKxYYdDnsI=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
- 617fee2d2e144ac4d3ef0af8 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 01 Nov 2021 13:39:57
- GMT
-Sender: okukatla=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id ED320C43617; Mon,  1 Nov 2021 13:39:56 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: okukatla)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 435E1C4338F;
-        Mon,  1 Nov 2021 13:39:56 +0000 (UTC)
+        id S232070AbhKAOok (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Nov 2021 10:44:40 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:35208 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230204AbhKAOoj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Nov 2021 10:44:39 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1A1EfkgL109511;
+        Mon, 1 Nov 2021 09:41:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1635777706;
+        bh=QkLiXBYPS+6udSUJAfl/L/pIj1UeQQKS8a3o68QwalA=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=XH0Q5LZFDq2zIz6TWNWUVTSYYr9zpBxnRenbCcrTqb4/NMu25B2WS8rSm+XMrgXPd
+         vNDq7c7gdJ857eLDM024Ht0cxIDGJ7NKwF4WiJfFn3xQcVhWcE4u5HfgXay2PYw/Mq
+         BjdNHLCdVeKcojX/Ts51f59XEVNWzdabCsnubaHg=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1A1EfkZp054851
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 1 Nov 2021 09:41:46 -0500
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 1
+ Nov 2021 09:41:46 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 1 Nov 2021 09:41:46 -0500
+Received: from [10.250.100.73] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1A1EfhNA059398;
+        Mon, 1 Nov 2021 09:41:44 -0500
+Subject: Re: [PATCH] PM: runtime: Allow rpm_resume() to succeed when runtime
+ PM is disabled
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+CC:     Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Maulik Shah <mkshah@codeaurora.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20211026222626.39222-1-ulf.hansson@linaro.org>
+ <20211027020235.GA1306582@rowland.harvard.edu>
+ <CAPDyKFpgHJA-duQSA2uqhccrDxFqWXO1R1DJxo=aOkT5FyX+Ag@mail.gmail.com>
+ <20211027143343.GC1319606@rowland.harvard.edu>
+ <CAPDyKFoMS-0WqNjtsrGy5-SV3RRbpgA3_HS5XDtNHH9wFgLhXg@mail.gmail.com>
+ <CAJZ5v0iKMKhdxP9htt-fVm1RVBJnRO-pzJ9eySbBOSviSXCAdQ@mail.gmail.com>
+ <CAPDyKFqR1S5Hw_RM90b44qETieW1f_59+k3KExdMXPpk_3Yygg@mail.gmail.com>
+From:   Grygorii Strashko <grygorii.strashko@ti.com>
+Message-ID: <641a41bc-68ea-c0e9-9430-faf3803e12d5@ti.com>
+Date:   Mon, 1 Nov 2021 16:41:32 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+In-Reply-To: <CAPDyKFqR1S5Hw_RM90b44qETieW1f_59+k3KExdMXPpk_3Yygg@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Date:   Mon, 01 Nov 2021 19:09:56 +0530
-From:   okukatla@codeaurora.org
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     georgi.djakov@linaro.org, evgreen@google.com,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sboyd@kernel.org,
-        mdtipton@codeaurora.org, sibis@codeaurora.org,
-        saravanak@google.com, seansw@qti.qualcomm.com, elder@linaro.org,
-        linux-pm@vger.kernel.org, linux-arm-msm-owner@vger.kernel.org
-Subject: Re: [v8 3/3] arm64: dts: qcom: sc7280: Add EPSS L3 interconnect
- provider
-In-Reply-To: <YXsxxd7f/FaDJEMa@ripper>
-References: <1634812857-10676-1-git-send-email-okukatla@codeaurora.org>
- <1634812857-10676-4-git-send-email-okukatla@codeaurora.org>
- <YXsxxd7f/FaDJEMa@ripper>
-Message-ID: <fc4ef5ecd91401f49411cf138b0da526@codeaurora.org>
-X-Sender: okukatla@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2021-10-29 04:57, Bjorn Andersson wrote:
-> On Thu 21 Oct 03:40 PDT 2021, Odelu Kukatla wrote:
+
+
+On 01/11/2021 11:27, Ulf Hansson wrote:
+> On Fri, 29 Oct 2021 at 20:27, Rafael J. Wysocki <rafael@kernel.org> wrote:
+>>
+>> On Fri, Oct 29, 2021 at 12:20 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+>>>
+>>> On Wed, 27 Oct 2021 at 16:33, Alan Stern <stern@rowland.harvard.edu> wrote:
+>>>>
+>>>> On Wed, Oct 27, 2021 at 12:55:43PM +0200, Ulf Hansson wrote:
+>>>>> On Wed, 27 Oct 2021 at 04:02, Alan Stern <stern@rowland.harvard.edu> wrote:
+>>>>>>
+>>>>>> On Wed, Oct 27, 2021 at 12:26:26AM +0200, Ulf Hansson wrote:
+>>>>>>> During system suspend, the PM core sets dev->power.is_suspended for the
+>>>>>>> device that is being suspended. This flag is also being used in
+>>>>>>> rpm_resume(), to allow it to succeed by returning 1, assuming that runtime
+>>>>>>> PM has been disabled and the runtime PM status is RPM_ACTIVE, for the
+>>>>>>> device.
+>>>>>>>
+>>>>>>> To make this behaviour a bit more useful, let's drop the check for the
+>>>>>>> dev->power.is_suspended flag in rpm_resume(), as it doesn't really need to
+>>>>>>> be limited to this anyway.
+>>>>>>>
+>>>>>>> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+>>>>>>> ---
+>>>>>>>   drivers/base/power/runtime.c | 4 ++--
+>>>>>>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>>>>
+>>>>>>> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+>>>>>>> index ec94049442b9..fadc278e3a66 100644
+>>>>>>> --- a/drivers/base/power/runtime.c
+>>>>>>> +++ b/drivers/base/power/runtime.c
+>>>>>>> @@ -742,8 +742,8 @@ static int rpm_resume(struct device *dev, int rpmflags)
+>>>>>>>    repeat:
+>>>>>>>        if (dev->power.runtime_error)
+>>>>>>>                retval = -EINVAL;
+>>>>>>> -     else if (dev->power.disable_depth == 1 && dev->power.is_suspended
+>>>>>>> -         && dev->power.runtime_status == RPM_ACTIVE)
+>>>>>>> +     else if (dev->power.disable_depth > 0 &&
+>>>>>>> +             dev->power.runtime_status == RPM_ACTIVE)
+>>>>>>
+>>>>>> IIRC there was a good reason why the original code checked for
+>>>>>> disable_depth == 1 rather than > 0.  But I don't remember exactly what
+>>>>>> the reason was.  Maybe it had something to do with the fact that during
+>>>>>> a system sleep __device_suspend_late calls __pm_runtime_disable, and the
+>>>>>> code was checking that there were no other disables in effect.
+>>>>>
+>>>>> The check was introduced in the below commit:
+>>>>>
+>>>>> Commit 6f3c77b040fc
+>>>>> Author: Kevin Hilman <khilman@ti.com>
+>>>>> Date:   Fri Sep 21 22:47:34 2012 +0000
+>>>>> PM / Runtime: let rpm_resume() succeed if RPM_ACTIVE, even when disabled, v2
+>>>>>
+>>>>> By reading the commit message it's pretty clear to me that the check
+>>>>> was added to cover only one specific use case, during system suspend.
+>>>>>
+>>>>> That is, that a driver may want to call pm_runtime_get_sync() from a
+>>>>> late/noirq callback (when the PM core has disabled runtime PM), to
+>>>>> understand whether the device is still powered on and accessible.
+>>>>>
+>>>>>> This is
+>>>>>> related to the documented behavior of rpm_resume (it's supposed to fail
+>>>>>> with -EACCES if the device is disabled for runtime PM, no matter what
+>>>>>> power state the device is in).
+>>>>>>
+>>>>>> That probably is also the explanation for why dev->power.is_suspended
+>>>>>> gets checked: It's how the code tells whether a system sleep is in
+>>>>>> progress.
+>>>>>
+>>>>> Yes, you are certainly correct about the current behaviour. It's there
+>>>>> for a reason.
+>>>>>
+>>>>> On the other hand I would be greatly surprised if this change would
+>>>>> cause any issues. Of course, I can't make guarantees, but I am, of
+>>>>> course, willing to help to fix problems if those happen.
+>>>>>
+>>>>> As a matter of fact, I think the current behaviour looks quite
+>>>>> inconsistent, as it depends on whether the device is being system
+>>>>> suspended.
+>>>>>
+>>>>> Moreover, for syscore devices (dev->power.syscore is set for them),
+>>>>> the PM core doesn't set the "is_suspended" flag. Those can benefit
+>>>>> from a common behaviour.
+>>>>>
+>>>>> Finally, I think the "is_suspended" flag actually needs to be
+>>>>> protected by a lock when set by the PM core, as it's being used in two
+>>>>> separate execution paths. Although, rather than adding a lock for
+>>>>> protection, we can just rely on the "disable_depth" in rpm_resume().
+>>>>> It would be easier and makes the behaviour consistent too.
+>>>>
+>>>> As long as is_suspended isn't _written_ in two separate execution paths,
+>>>> we're probably okay without a lock -- provided the code doesn't mind
+>>>> getting an indefinite result when a read races with a write.
+>>>
+>>> Well, indefinite doesn't sound very good to me for these cases, even
+>>> if it most likely never will happen.
+>>>
+>>>>
+>>>>>> So overall, I suspect this change should not be made.  But some other
+>>>>>> improvement (like a nice comment) might be in order.
+>>>>>>
+>>>>>> Alan Stern
+>>>>>
+>>>>> Thanks for reviewing!
+>>>>
+>>>> You're welcome.  Whatever you eventually decide to do should be okay
+>>>> with me.  I just wanted to make sure that you understood the deeper
+>>>> issue here and had given it some thought.  For example, it may turn out
+>>>> that you can resolve matters simply by updating the documentation.
+>>>
+>>> I observed the issue on cpuidle-psci. The devices it operates upon are
+>>> assigned as syscore devices and these are hooked up to a genpd.
+>>>
+>>> A call to pm_runtime_get_sync() can happen even after the PM core has
+>>> disabled runtime PM in the "late" phase. So the error code is received
+>>> for these real use-cases.
+>>>
+>>> Now, as we currently don't check the return value of
+>>> pm_runtime_get_sync() in cpuidle-psci, it's not a big deal. But it
+>>> certainly seems worth fixing in my opinion.
+>>>
+>>> Let's see if Rafael has some thoughts around this.
+>>
+>> Am I thinking correctly that this is mostly about working around the
+>> limitations of pm_runtime_force_suspend()?
 > 
->> Add Epoch Subsystem (EPSS) L3 interconnect provider node on SC7280
->> SoCs.
->> 
->> Signed-off-by: Odelu Kukatla <okukatla@codeaurora.org>
->> ---
->>  arch/arm64/boot/dts/qcom/sc7280.dtsi | 8 ++++++++
->>  1 file changed, 8 insertions(+)
->> 
->> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi 
->> b/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> index d74a4c8..0b55742 100644
->> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> @@ -3687,6 +3687,14 @@
->>  			};
->>  		};
->> 
->> +		epss_l3: interconnect@18590000 {
->> +			compatible = "qcom,sc7280-epss-l3";
->> +			reg = <0 0x18590000 0 0x1000>;
+> No, this isn't related at all.
 > 
-> This series looks like I would expect, with and without per-core dcvs.
-> But can you please explain why this contradict what Sibi says here:
-> https://lore.kernel.org/all/1627581885-32165-3-git-send-email-sibis@codeaurora.org/
+> The cpuidle-psci driver doesn't have PM callbacks, thus using
+> pm_runtime_force_suspend() would not work here.
 > 
-> Regards,
-> Bjorn
-> 
-Thanks for Review!
-Sibi's patch will be dropped, it is not required with my updated patch 
-series:
-https://lore.kernel.org/all/1627581885-32165-3-git-send-email-sibis@codeaurora.org/
->> +			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
->> +			clock-names = "xo", "alternate";
->> +			#interconnect-cells = <1>;
->> +		};
->> +
->>  		cpufreq_hw: cpufreq@18591000 {
->>  			compatible = "qcom,cpufreq-epss";
->>  			reg = <0 0x18591000 0 0x1000>,
->> --
->> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora 
->> Forum,
->> a Linux Foundation Collaborative Project
->> 
+
+i think reason for (dev->power.disable_depth == 1 && dev->power.is_suspended)
+can be found in [1], as other related comments:
+
+Rafael J. Wysocki:
+>>>
+I've discussed that with Kevin. The problem is that the runtime PM
+status may be changed at will when runtime PM is disabled by using
+__pm_runtime_set_status(), so the status generally cannod be trusted
+if power.disable_depth > 0.
+
+During system suspend, however, runtime PM is disabled by the core and
+if neither the driver nor the subsystem has disabled it in the meantime,
+the status should be actually valid.
+<<<
+
+Hence, this is about using PM runtime for CPU PM and, CPU PM is pretty specific case,
+wouldn't manual check for CPU PM status work for you, like !pm_runtime_status_suspended()?
+  (if i'm not mistaken - CPU PM done in atomic context).
+  
+
+[1] http://lkml.iu.edu/hypermail/linux/kernel/1209.2/03256.html
+
+-- 
+Best regards,
+grygorii
