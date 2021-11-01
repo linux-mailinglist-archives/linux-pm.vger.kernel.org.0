@@ -2,156 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B0D34411F8
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Nov 2021 02:57:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12B324414E7
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Nov 2021 09:06:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230460AbhKACAG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 31 Oct 2021 22:00:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38910 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230234AbhKACAF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 31 Oct 2021 22:00:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 96C77610E5;
-        Mon,  1 Nov 2021 01:57:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635731852;
-        bh=fuaUan8WpsO3AU0Pd876OqdiQB5S59Rz/RFmfxHCqFo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WTZ2r/aqsZBJ/SEMp/W5aRRvu0wWWG+qZmM8hZPwjrObwwMpW1TgXwf1zWnw0Qa9i
-         Zv/YGYWGYxl7myNvWxfw0CIgJUc9b2/XePq2AH0H37XLuqx44GHHVjgkb3ys6UwuYH
-         QFUJSlyCI2x3AldpppHi6cKlbUrpf5epTIwYkQ0LyIddZNVrNNmKUj9pq1nkh3vhav
-         ePFznWLS5KXHwuBhRZexeraVkFwzXRLP/38HX/OFwy/5mrR8Hs9LdC9PbwjoOwqbNV
-         ADgrJu7beLvyyJTcpsvn3lAsea5miSCymSsM2dL/H4uMyDHc1oqmdVcUWCHL7cYIF+
-         w+SQ6/88DMfNA==
-Received: by mail-yb1-f173.google.com with SMTP id q74so34927729ybq.11;
-        Sun, 31 Oct 2021 18:57:32 -0700 (PDT)
-X-Gm-Message-State: AOAM532NZZipZ4PmQd8aebdgMaPN+5gcICkzFLd/y8dVP59BicYUBfRR
-        GiO3PJt2T6KiHFhFuW8wOniKZgqQn/AFtYLfgjc=
-X-Google-Smtp-Source: ABdhPJwLzr48xvkbPUYNSwW4wG4jcRHULAsaxHDgvLOaeOhiDi1MY+7mZCeP1WaifSe+QfUYgjKQrdu4XIYT2pTMgvI=
-X-Received: by 2002:ab0:6883:: with SMTP id t3mr16913634uar.66.1635731841194;
- Sun, 31 Oct 2021 18:57:21 -0700 (PDT)
+        id S231735AbhKAIIv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Nov 2021 04:08:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54070 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231750AbhKAIIi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Nov 2021 04:08:38 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B02C06122A
+        for <linux-pm@vger.kernel.org>; Mon,  1 Nov 2021 01:06:01 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id o14so26834577wra.12
+        for <linux-pm@vger.kernel.org>; Mon, 01 Nov 2021 01:06:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=J/sLAHxRh6EjJh2rcjPDJLzA40VXjb4DP54UXQAr8IU=;
+        b=SFtDbE+6IDkHc1ulMYz3kIam1g8jrqMGveAFEIhzD57obcB2AAsvwDS7G9U5mllj4v
+         CXcMkcBLXp8av6pKrkxlnlH5OKDvvoptJUs33+ZsvH08EiMe99qcW7O6zHQLvSZrgd0O
+         vCM1DFFUxXbOTgTBZUHaqMWAsLsVkwQHIKx7yYArIjJiU9Id6qnVa2AaPiZRD+AlKd5h
+         AdNSKNBm0Kf1bwocLQT9cET1yolKLuAIwOilZUtmrnQSP+fGgJWS3nO8E8Mb56sNH1Bp
+         AO0nfdr8sSYDIc/xE0EXH23DxgT/1mFqpNrA+Y0Xex+/Q8MVRWz+jzSmqE3rPOpMkPfs
+         t3vQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=J/sLAHxRh6EjJh2rcjPDJLzA40VXjb4DP54UXQAr8IU=;
+        b=Lf5p6FrTt2TUFnf3vCKieO1HOwoPSvAAtL5FE2A6lsO8jaw4eVG8RDq7tTxMdCKJwt
+         MS/F2wvNR50QPzY4VKZWDeLGVBXyRuxfIjME9cf0R/qo6cWKEzEs2IIbH8oUQnR6sFt5
+         W0J3+Lj0x3wejbmT+XHuIR4xRNqZwy/3ZB8No4wUC8BgSySZSFzie8r4gvJyAbvYdqsU
+         wlL+t2H/b+ZVvfq01ONh436o9ZmiJ4f5lWS5VqixoicxpAzWaEpTvf22gpMTNj2zsapL
+         yerRr/uqE5lAsHcR2oDb/l0F+JFoAKzmiWATA9liB7vo7fptc9odxOkxdFlpuU1n2mQu
+         dA3A==
+X-Gm-Message-State: AOAM531wox1Zx4PkUtvnaHucB3kIWHvVticqEsyuLIEQ5zdlqX/cgudE
+        gSWpoXziO3HaJpVq869EUcF3HOpwMx6aY5t7ywt8XvMc8KA=
+X-Google-Smtp-Source: ABdhPJxUF1tFmQzyAoIKyVPAG7R9FZL/KscgZLvfipr9TchgvjoT54aDh6EPcy8Ml6w3HwOZZMYj/oDtLWKn7uRbNdI=
+X-Received: by 2002:a05:651c:548:: with SMTP id q8mr6002668ljp.220.1635753949864;
+ Mon, 01 Nov 2021 01:05:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211027211715.12671-1-digetx@gmail.com> <20211027211715.12671-13-digetx@gmail.com>
-In-Reply-To: <20211027211715.12671-13-digetx@gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 1 Nov 2021 09:57:10 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTT+EsLt+pnYyTw_B0C8isho=E4tfOWROe9h-GZpYjET=w@mail.gmail.com>
-Message-ID: <CAJF2gTT+EsLt+pnYyTw_B0C8isho=E4tfOWROe9h-GZpYjET=w@mail.gmail.com>
-Subject: Re: [PATCH v2 12/45] csky: Use do_kernel_power_off()
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Tony Lindgren <tony@atomide.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-sh@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-acpi@vger.kernel.org, linux-omap@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org
+Received: by 2002:a05:6512:304b:0:0:0:0 with HTTP; Mon, 1 Nov 2021 01:05:49
+ -0700 (PDT)
+Reply-To: aisha.7d@yahoo.com
+From:   Aisha AG <rbx17058@gmail.com>
+Date:   Mon, 1 Nov 2021 00:05:49 -0800
+Message-ID: <CA+KbyydWeN4vHtdJCa8_Ot01GFV1JVo19c-A3KMMDn_Yj4rckg@mail.gmail.com>
+Subject: Hello Dear,
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Only for this patch, Acked-by: Guo Ren <guoren@kernel.org>
-
-On Thu, Oct 28, 2021 at 5:18 AM Dmitry Osipenko <digetx@gmail.com> wrote:
->
-> Kernel now supports chained power-off handlers. Use do_kernel_power_off()
-> that invokes chained power-off handlers. It also invokes legacy
-> pm_power_off() for now, which will be removed once all drivers will
-> be converted to the new power-off API.
->
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  arch/csky/kernel/power.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
->
-> diff --git a/arch/csky/kernel/power.c b/arch/csky/kernel/power.c
-> index 923ee4e381b8..86ee202906f8 100644
-> --- a/arch/csky/kernel/power.c
-> +++ b/arch/csky/kernel/power.c
-> @@ -9,16 +9,14 @@ EXPORT_SYMBOL(pm_power_off);
->  void machine_power_off(void)
->  {
->         local_irq_disable();
-> -       if (pm_power_off)
-> -               pm_power_off();
-> +       do_kernel_power_off();
->         asm volatile ("bkpt");
->  }
->
->  void machine_halt(void)
->  {
->         local_irq_disable();
-> -       if (pm_power_off)
-> -               pm_power_off();
-> +       do_kernel_power_off();
->         asm volatile ("bkpt");
->  }
->
-> --
-> 2.33.1
->
-
-
 -- 
-Best Regards
- Guo Ren
 
-ML: https://lore.kernel.org/linux-csky/
+Hello Dear,
+
+I came across your e-mail contact prior to a private search while in
+need of your assistance. I am Aisha Al-Qaddafi, the only biological
+Daughter of Former President of Libya Col.Muammar Al-Qaddafi.
+Am a Widow and a single Mother with three Children.
+
+I have investment funds worth Twenty Seven Million Five Hundred
+Thousand United State Dollar $27.500.000.00, and i need a trusted
+investment Manager/Partner because of my current refugee status,
+however, I am interested in you for investment project assistance in
+your country,may be from there,we can build business relationship
+in the nearest future.
+
+I am willing to negotiate an investment/business profit sharing ratio
+with you based on the future investment earning profits.
+
+If you are willing to handle this project on my behalf kindly reply
+urgently to enable me to provide you more information about the
+investment funds.
+Best Regards
+Mrs Aisha Al-Qaddafi.
