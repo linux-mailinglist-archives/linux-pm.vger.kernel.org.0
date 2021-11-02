@@ -2,109 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9E09442EDD
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Nov 2021 14:11:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D015D442F0F
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Nov 2021 14:23:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbhKBNNh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 2 Nov 2021 09:13:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52062 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbhKBNNf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Nov 2021 09:13:35 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C504CC061714
-        for <linux-pm@vger.kernel.org>; Tue,  2 Nov 2021 06:11:00 -0700 (PDT)
-Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1mhtYt-0004rh-Fm; Tue, 02 Nov 2021 14:10:47 +0100
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1mhtYp-004CFx-W3; Tue, 02 Nov 2021 14:10:44 +0100
-Message-ID: <276db30d95bf84cb31f9d9a6c029593fb0ccec21.camel@pengutronix.de>
-Subject: Re: [PATCH 2/5] reset: tegra-bpmp: Handle errors in BPMP response
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Jon Hunter <jonathanh@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org, thierry.reding@gmail.com,
-        krzysztof.kozlowski@canonical.com, lorenzo.pieralisi@arm.com,
-        robh@kernel.org, kw@linux.com, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, amitk@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
-Date:   Tue, 02 Nov 2021 14:10:43 +0100
-In-Reply-To: <397003f8-bf3c-68a4-828c-1254710f714b@nvidia.com>
-References: <20210915085517.1669675-1-mperttunen@nvidia.com>
-         <20210915085517.1669675-2-mperttunen@nvidia.com>
-         <397003f8-bf3c-68a4-828c-1254710f714b@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
+        id S230321AbhKBN0b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 2 Nov 2021 09:26:31 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:60606 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229924AbhKBN0a (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Nov 2021 09:26:30 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id ABD4F1F44A21
+Received: by earth.universe (Postfix, from userid 1000)
+        id 1C9313C0F95; Tue,  2 Nov 2021 14:23:52 +0100 (CET)
+Date:   Tue, 2 Nov 2021 14:23:52 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Andrew F . Davis" <afd@ti.com>
+Subject: Re: [PATCH v2] power: supply: bq27xxx: Fix kernel crash on IRQ
+ handler register error
+Message-ID: <20211102132352.yqazgy2njnbthujb@earth.universe>
+References: <20211031152522.3911-1-hdegoede@redhat.com>
+ <CAHp75Vc6GO4e0_Qp6HfFtd_kbSakaMXsQN4oEPArdmMrxTFb7A@mail.gmail.com>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="exju7zrkmgu2clvz"
+Content-Disposition: inline
+In-Reply-To: <CAHp75Vc6GO4e0_Qp6HfFtd_kbSakaMXsQN4oEPArdmMrxTFb7A@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Jon,
 
-On Thu, 2021-10-28 at 12:54 +0100, Jon Hunter wrote:
-> Hi Philipp,
-> 
-> On 15/09/2021 09:55, Mikko Perttunen wrote:
-> > The return value from tegra_bpmp_transfer indicates the success or
-> > failure of the IPC transaction with BPMP. If the transaction
-> > succeeded, we also need to check the actual command's result code.
-> > Add code to do this.
-> > 
-> > Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
+--exju7zrkmgu2clvz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+On Sun, Oct 31, 2021 at 09:34:46PM +0200, Andy Shevchenko wrote:
+> On Sun, Oct 31, 2021 at 5:25 PM Hans de Goede <hdegoede@redhat.com> wrote:
+> >
+> > When registering the IRQ handler fails, do not just return the error co=
+de,
+> > this will free the devm_kzalloc()-ed data struct while leaving the queu=
+ed
+> > work queued and the registered power_supply registered with both of them
+> > now pointing to free-ed memory, resulting in various kernel crashes
+> > soon afterwards.
+> >
+> > Instead properly tear-down things on IRQ handler register errors.
+>=20
+> FWIW,
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+
+Thanks, queued.
+
+-- Sebastian
+
+> > Fixes: 703df6c09795 ("power: bq27xxx_battery: Reorganize I2C into a mod=
+ule")
+> > Cc: Andrew F. Davis <afd@ti.com>
+> > Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 > > ---
-> >   drivers/reset/tegra/reset-bpmp.c | 9 ++++++++-
-> >   1 file changed, 8 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/reset/tegra/reset-bpmp.c b/drivers/reset/tegra/reset-bpmp.c
-> > index 24d3395964cc..4c5bba52b105 100644
-> > --- a/drivers/reset/tegra/reset-bpmp.c
-> > +++ b/drivers/reset/tegra/reset-bpmp.c
-> > @@ -20,6 +20,7 @@ static int tegra_bpmp_reset_common(struct reset_controller_dev *rstc,
-> >   	struct tegra_bpmp *bpmp = to_tegra_bpmp(rstc);
-> >   	struct mrq_reset_request request;
-> >   	struct tegra_bpmp_message msg;
-> > +	int err;
-> >   
-> > 
-> >   	memset(&request, 0, sizeof(request));
-> >   	request.cmd = command;
-> > @@ -30,7 +31,13 @@ static int tegra_bpmp_reset_common(struct reset_controller_dev *rstc,
-> >   	msg.tx.data = &request;
-> >   	msg.tx.size = sizeof(request);
-> >   
-> > 
-> > -	return tegra_bpmp_transfer(bpmp, &msg);
-> > +	err = tegra_bpmp_transfer(bpmp, &msg);
-> > +	if (err)
-> > +		return err;
-> > +	if (msg.rx.ret)
-> > +		return -EINVAL;
-> > +
-> > +	return 0;
-> >   }
-> >   
-> > 
-> >   static int tegra_bpmp_reset_module(struct reset_controller_dev *rstc,
-> 
-> I see that you have pulled this into the mainline for v5.15. 
-> Unfortunately, this is causing a regression for the Tegra HDA 
-> controller. We need to fix the Tegra HDA driver but this is too late now 
-> for v5.15 and so we need to revert this change for v5.15. Sorry about 
-> this, but I did not expect this to be pulled in so late.
+> > Changes in v2:
+> > - Fix devm_kzalloc()-ed type in the commit message
+> > ---
+> >  drivers/power/supply/bq27xxx_battery_i2c.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/power/supply/bq27xxx_battery_i2c.c b/drivers/power=
+/supply/bq27xxx_battery_i2c.c
+> > index 46f078350fd3..cf38cbfe13e9 100644
+> > --- a/drivers/power/supply/bq27xxx_battery_i2c.c
+> > +++ b/drivers/power/supply/bq27xxx_battery_i2c.c
+> > @@ -187,7 +187,8 @@ static int bq27xxx_battery_i2c_probe(struct i2c_cli=
+ent *client,
+> >                         dev_err(&client->dev,
+> >                                 "Unable to register IRQ %d error %d\n",
+> >                                 client->irq, ret);
+> > -                       return ret;
+> > +                       bq27xxx_battery_teardown(di);
+> > +                       goto err_failed;
+> >                 }
+> >         }
+> >
+> > --
+> > 2.31.1
+> >
+>=20
+>=20
+> --=20
+> With Best Regards,
+> Andy Shevchenko
 
-I'm sorry, I picked this up as a fix and went on vacation. Now that
-v5.15 has already been released, could you send a revert for stable?
+--exju7zrkmgu2clvz
+Content-Type: application/pgp-signature; name="signature.asc"
 
-regards
-Philipp
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmGBO+EACgkQ2O7X88g7
++ppmxhAAil5Wgix3gYlBueXhIOuA/ZHpHFxnUZZQHnDlN6n+z3AZMj8quc0MrguB
+kPyqTDIUl1mGIZCTWW3QrqJdMrP4+7NV432F15QKH5G1zMizcvE+K3IXoPvsWMq8
+tyo4ADWcDDNEFE9F8zc2TrE7AextggLMu/fXVwTuBIYVOl9g1QzJKx+p4dghqBGR
+McUpF5isE9APxjHIE36GvgS9nBeyrsylEZ3vS5Qo+Qz0LaMTYvEBzDrLnXD+3p/S
+YGejrstEX1uEt+ulPIDRUU8C+BYlRyVke1EIX//l+OOHbJJE9oPb64KoTIlZIiDf
+cCMqxWF+gKX0XOpVPRME7LuEdbUGDoVGKqaK1qo3vB2AI6g28M+aVFeSx4ot87FZ
+ONjK7TXVl3KCmPcBe1alRlIxNnb2Aj5fXipIoaU6kM9VEEBMjtZFSzKoxi6vCV0E
+e7VTHzOIQsVBu7IIeXoN3OmnZE0O4rYtUtfXLJHxDaS7LvfEyBZk4fRhsMCWSA6C
+MKTSDx6J/f3wWGRNi+z2vFOrAcyLHiAMh6MHVemSTyWZKghhC9DOBuCJo0Bp/Vlb
+3iplXb3YPbqQW9HgQzRyZpEpL4JdjxSdOdAW3j8mjpQYAUFoKTNy/Toq2/SecKhu
+tjeQksvHh24hpfWwTZ8n5lVyBoUEALaNGHTTtkN+vmtWPL05aSA=
+=/dC6
+-----END PGP SIGNATURE-----
+
+--exju7zrkmgu2clvz--
