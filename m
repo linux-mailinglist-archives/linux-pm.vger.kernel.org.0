@@ -2,123 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D18F7443343
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Nov 2021 17:41:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26FF444339A
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Nov 2021 17:46:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234709AbhKBQn5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 2 Nov 2021 12:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43720 "EHLO
+        id S230413AbhKBQtJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 2 Nov 2021 12:49:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234718AbhKBQn4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Nov 2021 12:43:56 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96FE5C061714;
-        Tue,  2 Nov 2021 09:41:21 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 7A07F1F44D9D
-Received: by earth.universe (Postfix, from userid 1000)
-        id C75243C0F95; Tue,  2 Nov 2021 17:41:17 +0100 (CET)
-Date:   Tue, 2 Nov 2021 17:41:17 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Andrew F . Davis" <afd@ti.com>
-Subject: Re: [PATCH v2] power: supply: bq27xxx: Fix kernel crash on IRQ
- handler register error
-Message-ID: <20211102164117.pnbpvephlh4wgrwb@earth.universe>
-References: <20211031152522.3911-1-hdegoede@redhat.com>
- <CAHp75Vc6GO4e0_Qp6HfFtd_kbSakaMXsQN4oEPArdmMrxTFb7A@mail.gmail.com>
- <20211102132352.yqazgy2njnbthujb@earth.universe>
- <e74947c4-74c8-a17e-f4cb-752a79851954@redhat.com>
+        with ESMTP id S234994AbhKBQru (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Nov 2021 12:47:50 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C682CC079786
+        for <linux-pm@vger.kernel.org>; Tue,  2 Nov 2021 09:45:04 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id x64so1671905pfd.6
+        for <linux-pm@vger.kernel.org>; Tue, 02 Nov 2021 09:45:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=VaJ3gO/HI7d9YLRa8GBC0Mh5B8uK048gqg6WbaA07XQ=;
+        b=Ui1W7XZuIFX3yYrvCx9l6X3SFiviGUzAwcSyN7dC9HDqCrHU4tFdv223iKo87ph7br
+         W53m/Fnu1kAkf9GCnCidLs9jEGN86WpxlLO3CSOwa1i5hn2YVzk2utCCe3HVNFJPHMdS
+         QtgTawQqiV7I2OS0gRQleEDB6keq+pTUNgQ2yGbWj5jjJPEy3nZ/SfNvtSi/YxuNbFEs
+         7BxGxJBTbVqnzb/Ppez0d+OvPT0XH/k5RFZrsV0plTmFYnf0oaQNd7hUP3/lrZpGsVQL
+         Sv2MMfmm8NP7lRHEYmxR4ID/PCLBnDRiXQyrMlKfP4DkpN06cERByb9akqwaiaTHfcSG
+         8GVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=VaJ3gO/HI7d9YLRa8GBC0Mh5B8uK048gqg6WbaA07XQ=;
+        b=zU3LIVyhWo0Mx4m52cAB6+0/oepb6VRJwoXhlN4qGMvJLPxWQ9m4CnjeO3SkMjDK1b
+         KBcaTBtVORggN8UE/mKSlkMjnobr8nk+QZB5JmWBjaLg1ReQDk9bGvWXJjakTesETzPg
+         R7s7+lwunvb3ymJ531xLn+TCQMlhx9TH1OkOjzyE9DpErprCpsViSBZnkS8RRkd7sXZt
+         Wh7WrZ4sSW3h8w1QO82wy0Pshakm6+avuIoJ0lXxHkSV5xaNqgB6Trgl4ZbyJjyXaWKD
+         k8EfJCf97Ly7w/baUWAZfC9RexCv1V7s+49X/Kc2x7DQrq6inZdasxy5wMbd8srxEOjb
+         0+EQ==
+X-Gm-Message-State: AOAM531uadYt4CCIVn5ADTQDtiwooFl3iQHNaOpkEOW4lKeBaanifzbP
+        NPn2c8kF9jYiHTRDStz0FRndXg8/Kz/UF6GXZJA=
+X-Google-Smtp-Source: ABdhPJxhEukhstkDmTyvqEn/tZbhVMAuT+4DBSUi91e/BYg6ZWoP1NExYxE60Tu7Pc9ALhWXBGN9uIRkyu/qkjYpeXY=
+X-Received: by 2002:a63:2cca:: with SMTP id s193mr28533256pgs.240.1635871504079;
+ Tue, 02 Nov 2021 09:45:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="trige6lnttlhwn57"
-Content-Disposition: inline
-In-Reply-To: <e74947c4-74c8-a17e-f4cb-752a79851954@redhat.com>
+Received: by 2002:a17:90b:1b42:0:0:0:0 with HTTP; Tue, 2 Nov 2021 09:45:03
+ -0700 (PDT)
+Reply-To: azizissa880088@gmail.com
+From:   "From Mr.Aziz Issa" <rosezongo1972@gmail.com>
+Date:   Tue, 2 Nov 2021 16:45:03 +0000
+Message-ID: <CAMoxGs6-UQtWGPX46ZAM-tTCLoCuChDPGqF9pSsGhLjjDbBgHw@mail.gmail.com>
+Subject: Greeting to you,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Greeting to you,
 
---trige6lnttlhwn57
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I know that this mail will come to you as a surprise I Mr.Aziz Issa,I
+work in a Banque International Du Burkina Faso (B.I.B) Bank. I hope
+that you will not expose or betray this trust and confident that am
+about to repose in you for the benefit of our both families.
 
-Hi Hans,
+Am in need of your help as a foreigner to transfer (($10.5m US
+dollars))(Ten Million five hundred thousand US Dollars)) into your
+account,The fund is for late .Robert William, a Germany nationality.
+whom died on December 2014 in plane crash with Airbus A320 Plane.
+living nobody as the next of kin to the fund. Risk is completely 100%
+free for this transaction.
 
-On Tue, Nov 02, 2021 at 03:12:51PM +0100, Hans de Goede wrote:
-> Hi Sebastian,
->=20
-> On 11/2/21 14:23, Sebastian Reichel wrote:
-> > Hi,
-> >=20
-> > On Sun, Oct 31, 2021 at 09:34:46PM +0200, Andy Shevchenko wrote:
-> >> On Sun, Oct 31, 2021 at 5:25 PM Hans de Goede <hdegoede@redhat.com> wr=
-ote:
-> >>>
-> >>> When registering the IRQ handler fails, do not just return the error =
-code,
-> >>> this will free the devm_kzalloc()-ed data struct while leaving the qu=
-eued
-> >>> work queued and the registered power_supply registered with both of t=
-hem
-> >>> now pointing to free-ed memory, resulting in various kernel crashes
-> >>> soon afterwards.
-> >>>
-> >>> Instead properly tear-down things on IRQ handler register errors.
-> >>
-> >> FWIW,
-> >> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> >=20
-> > Thanks, queued.
->=20
-> Thank you, note these 2 patches (for the bq25980 driver) are also
-> pure bug-fixes, I posted them as part of a larger series, but
-> in hindsight I should have probably posted them separately:
->=20
-> https://lore.kernel.org/platform-driver-x86/20211030182813.116672-4-hdego=
-ede@redhat.com/
-> https://lore.kernel.org/platform-driver-x86/20211030182813.116672-5-hdego=
-ede@redhat.com/
->=20
-> It would be good if you can pick these 2 up too
-> (I'll respin the rest of the series to address various
-> review comments without them then).
-> Let me know if you want me to resend these 2 as a stand alone
-> series.
+Please I will like you to keep this proposal as a top secret or delete
+it from your mail box, if you are not interested.
 
-Thanks for the pointer, I queued both of them. I had to slightly
-rebase, since your base did not include 172d0ccea55c. I have not
-yet reviewed the remaining patchset, but considering there are more
-patches to bq25890 a rebase would be ncie.
+I agree that 50% of this money will be for you as a foreign partner,
+in respect to the provision of a foreign account,and 50% will be for
+me.
 
-Greetings,
+Also know that immediately this fund is transfered to your account, I
+will resign from my work and come over to your country  for the
+sharing of the money and for you to help me and direct me on what is
+profitable that i can invest my own share of the money on it in your
+country.
 
--- Sebastian
+Please you should me mmediately  as soon as you receive this letter
+for more explanation.
 
---trige6lnttlhwn57
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmGBaiYACgkQ2O7X88g7
-+prPEw/7BK4/d6vHO+t3ZgIuXcTgzREZot5nMRhqnKe5slPDJ32aTn8tdWwIOn0p
-WA6tL0645Ktvkfx/DmDlEnwU9hJq0Bg4EUH8Fo8wrd9DyNtkt/vvtx5NVcEa+W3K
-Lvtawc0+skeicsoOtJP/6qKgbWtZa+RsrCeYzjx9kJm9iqgzFCQH4gzgF+1THcNh
-93EG+EmmZbVHprwvYWXFKroBk5quvT3/1yaiuvgUqSUWgpGSPUpszYDb/K79u0US
-1oKyHXzPS6z9ColrkSwvfxXn8jvfTCPROlJnyhljjkpsxWY2ro6zU58e4zf7mqY+
-OTUr2wbMb7CGhILuj43A+IaPqm4dzBZ5B2zH18spqI3Ogm44x+5PJlDAOGAjRoR6
-P+jsS7aI7+QY3zLVNF1hs/quowAsOwPhaojOumcbp3XtPQhv4HP2vW5B5ndjQNEW
-Ps2c6pKho+MwPSNJAbXGc4BQxAXmLmshfLzTbjoEmiuMbsrPNekauhN5lnrZMqoz
-4xDqy1LEM7evf2p4GXgbfKBtTDZWi7dGJ9gmn8uDCjZXZtO8Rr7NEFOnbCI1hhbz
-HAcjSIgVacBP4wfp3ULGTN3cUbPJNZOcOOxFau5gOmXBMlMz8nt8QdpFxoRmyXOT
-G8ROJ4Pki8DXcrPde3eHzt0bVljTWzDhJwuF6dFpe5/nXIVzpLU=
-=w4zN
------END PGP SIGNATURE-----
-
---trige6lnttlhwn57--
+Yours faithfully,
+Mr.Aziz Issa.
