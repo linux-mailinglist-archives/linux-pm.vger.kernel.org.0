@@ -2,117 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19CF344263A
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Nov 2021 04:54:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2370442640
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Nov 2021 04:55:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232087AbhKBD4r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Nov 2021 23:56:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39684 "EHLO
+        id S232749AbhKBD6J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Nov 2021 23:58:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231555AbhKBD4q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Nov 2021 23:56:46 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3690CC061714
-        for <linux-pm@vger.kernel.org>; Mon,  1 Nov 2021 20:54:12 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id u11so1679006plf.3
-        for <linux-pm@vger.kernel.org>; Mon, 01 Nov 2021 20:54:12 -0700 (PDT)
+        with ESMTP id S232764AbhKBD56 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Nov 2021 23:57:58 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7B1BC0613B9
+        for <linux-pm@vger.kernel.org>; Mon,  1 Nov 2021 20:55:24 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id t11so13914518plq.11
+        for <linux-pm@vger.kernel.org>; Mon, 01 Nov 2021 20:55:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=zV8VlelAgHX4Y2Cd2GYWibxybxjp9cutuz79DN9ObU8=;
-        b=wl1ZuGZXWfwLhNlWlGjOv2q66UeAjAEfbV9VEKFwEuOkIX0w3QzPwmA+HQN3x0MXWH
-         9ztkwtdGN0zrVCM6vKGi1rKk4QAod3EYDd8nVIf/Kk5v2nTwLsS5qVB9cBMfpeBFS+au
-         gUbcKE1cph2ELhP/xWF7l6FgrQD7ssI3rb9wxSSkjgGJxXI9MSMTBJJ3noyeaSxrGkcE
-         3ljOHprjZZJgnKucWQoYd4p/E002yCKySU0SLyDGNK936NDW5x7hoOJon4jxtbvFhD1Q
-         CmukLGG97AYujAJz06pPPvA5rURuWL6bZHtiIpVJESFCKHJWSD0NNBk3HGXc1raegZGF
-         8OWQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=m8cVtkWKgPUMZJ3AtVb3knoep8UoSR2rrED4LPbjbkI=;
+        b=GHiBd4jBYqQVyoTuEDOCGYv7kgWm3OdNrGRL353yRlewVRaowwKQixpzN/LH6AFpid
+         m4WzVFrdeu3ZX3bHBHAUmBPp5xLmoaSPRwyZfQxrnuShScp+Q6ZxSuWHX2bfXDQOCgLC
+         3USNfB9kUE0AnWcziU5RZ7rqGzmPTEZI5Ip96KwSfOdOttBqaQXwfXCxTIZsAag/JzDC
+         7AvG9MMdZBTuPzHtwmdIii/ejhX1Ml/P8Xn1aKA+7W2mRFTI3n5GfeUIPBrumqQtf82b
+         QM1l/EF3ixqxynaAGncd18LbuBwGngkBA/KKg0fssdb8VLYbZZKleUmlY4nL4vgkp29F
+         FRJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=zV8VlelAgHX4Y2Cd2GYWibxybxjp9cutuz79DN9ObU8=;
-        b=r0fgO/996ME8ImIK+yWLBKDgMu6DP7JNyvv6A8GtvAKGYL/P7ImC8wOL/qEIFdz0Vl
-         fGP1URdIQyNQfA8998/6+Va+OiYIe4icKSY0YSLDml9U7PUaAUlJks5IttL97OJZP7Yc
-         imUIzrK9gpk6tr9OyLy4Qj6X+2k1PJ4vwgiQm7a21TFlNTe9bQCkbJcKqGZfeKiUbOry
-         Aj0y5E7W+CEUCs+HgCpPrbBwI5Hl/plEcRXhWp4ptPMtVnR2+0PNkNK1ujmyzHL01ZWq
-         uz+OdpPL259sTiuKcE/NAdZKGxXa/J2xesSBuY/OaBVRsqgikwTzk9l4k7KBIM11ziAi
-         jfBA==
-X-Gm-Message-State: AOAM532qbzjEnn/ZPH2nnzju70ibmQFuOMSQSfx34+2KyfJvdHL18t54
-        SbafxCfLq4hMnZH0hCnqiUyRhw==
-X-Google-Smtp-Source: ABdhPJxezWws/+Q+v6hF4MShvzMFzeEPuGFvzsbgD9qKNJxcAR1vC0pQGnUZxx0afuaAAa2P3NHFig==
-X-Received: by 2002:a17:90a:e7c3:: with SMTP id kb3mr3661542pjb.5.1635825251768;
-        Mon, 01 Nov 2021 20:54:11 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=m8cVtkWKgPUMZJ3AtVb3knoep8UoSR2rrED4LPbjbkI=;
+        b=4gWEiVJ4mIQ1mlm6YZj1l3RqW6fYuemNb+y57JzUt7as3/LUlLzHKBIM5qz+mUeV73
+         CYtyA0M7YuhYHxbAPhHxFBdVLWWS1mfb55qXlwiHxWT7cZZXk96whF6ewwKL+E8PafRM
+         7WaxhCJ97DPDjuo0DZCNamMExnasmkPRCTZpz2RdUGoVG9r8HcNfsQ7zHgpT5kpTcmjC
+         s3T5dDrH0l5Wy2l1VMQdiGwFkgfpdGpbOdd1HR70hH2P9SYdwXt55jxqDrU35v4/u6Xv
+         Ro3kTHIkNnQMaPprZu6Ef/eVRM+Nv4Fp87m2U0i4UqLqwWCH+GSO1yXWyKKar6ykXo4T
+         UGKw==
+X-Gm-Message-State: AOAM530IePuIwHcILFkYBVcwQtFSE6mFai3Z+5yFhoWYIPhfqQAuBfiY
+        9vF5IKzKh6RdB0BGM07amYAiPQ==
+X-Google-Smtp-Source: ABdhPJxYfBW/c6mWtHDy4XXyKl3wz+a7WMN6k3KSAwhuYnuossmKhj2QHWFZWPxEOROKs7wzZIA0fg==
+X-Received: by 2002:a17:90b:1d86:: with SMTP id pf6mr3688966pjb.20.1635825324232;
+        Mon, 01 Nov 2021 20:55:24 -0700 (PDT)
 Received: from localhost ([106.201.113.61])
-        by smtp.gmail.com with ESMTPSA id k14sm1070464pff.64.2021.11.01.20.54.10
+        by smtp.gmail.com with ESMTPSA id c3sm3264992pfv.25.2021.11.01.20.55.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Nov 2021 20:54:11 -0700 (PDT)
-Date:   Tue, 2 Nov 2021 09:24:09 +0530
+        Mon, 01 Nov 2021 20:55:23 -0700 (PDT)
+Date:   Tue, 2 Nov 2021 09:25:22 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>
-Subject: cpufreq/arm updates for 5.16-rc1
-Message-ID: <20211102035409.snv4ehc7n6t52n4x@vireshk-i7>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Nishanth Menon <nm@ti.com>, Rob Herring <robh+dt@kernel.org>,
+        David Heidelberg <david@ixit.cz>,
+        Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v4] dt-bindings: opp: Allow multi-worded OPP entry name
+Message-ID: <20211102035522.z3nemnrz6r5ycf6z@vireshk-i7>
+References: <20211028221547.22601-1-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20211028221547.22601-1-digetx@gmail.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+On 29-10-21, 01:15, Dmitry Osipenko wrote:
+> Not all OPP entries fit into a single word. In particular NVIDIA Tegra OPP
+> tables use multi-word names. Allow OPP entry to have multi-worded name
+> separated by hyphen. This silences DT checker warnings about wrong naming
+> scheme.
+> 
+> Reviewed-by: David Heidelberg <david@ixit.cz>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 
-This pull request contains following changes:
+Applied. Thanks.
 
-- Fix tegra driver to handle BPMP errors properly (Mikko Perttunen).
-
-- Fix the parameter usage of the newly added perf-domain API (Hector
-  Yuan).
-
-- Minor cleanups to cppc, vexpress and s3c244x drivers (Han Wang,
-  Guenter Roeck, and Arnd Bergmann).
-
-Thanks.
-
---
-Viresh
-
--------------------------8<-------------------------
-
-The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
-
-  Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/linux-next
-
-for you to fetch changes up to 4a08e3271c55f8b5d56906a8aa5bd041911cf897:
-
-  cpufreq: Fix parameter in parse_perf_domain() (2021-11-02 09:21:43 +0530)
-
-----------------------------------------------------------------
-Arnd Bergmann (1):
-      cpufreq: s3c244x: add fallthrough comments for switch
-
-Guenter Roeck (1):
-      cpufreq: vexpress: Drop unused variable
-
-Han Wang (1):
-      cpufreq: remove useless INIT_LIST_HEAD()
-
-Hector.Yuan (1):
-      cpufreq: Fix parameter in parse_perf_domain()
-
-Mikko Perttunen (1):
-      cpufreq: tegra186/tegra194: Handle errors in BPMP response
-
- drivers/cpufreq/cppc_cpufreq.c         | 2 --
- drivers/cpufreq/s3c2440-cpufreq.c      | 2 ++
- drivers/cpufreq/tegra186-cpufreq.c     | 4 ++++
- drivers/cpufreq/tegra194-cpufreq.c     | 8 +++++++-
- drivers/cpufreq/vexpress-spc-cpufreq.c | 1 -
- include/linux/cpufreq.h                | 2 +-
- 6 files changed, 14 insertions(+), 5 deletions(-)
-
+-- 
+viresh
