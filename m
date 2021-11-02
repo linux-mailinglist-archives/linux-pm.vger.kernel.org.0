@@ -2,43 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EABF24436CD
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Nov 2021 20:53:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9612F4436D0
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Nov 2021 20:55:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231326AbhKBT4F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 2 Nov 2021 15:56:05 -0400
-Received: from mail-ot1-f53.google.com ([209.85.210.53]:37386 "EHLO
-        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231825AbhKBTzz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Nov 2021 15:55:55 -0400
-Received: by mail-ot1-f53.google.com with SMTP id v40-20020a056830092800b0055591caa9c6so433451ott.4;
-        Tue, 02 Nov 2021 12:53:20 -0700 (PDT)
+        id S230409AbhKBT5k convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 2 Nov 2021 15:57:40 -0400
+Received: from mail-ot1-f47.google.com ([209.85.210.47]:43701 "EHLO
+        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229813AbhKBT5k (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Nov 2021 15:57:40 -0400
+Received: by mail-ot1-f47.google.com with SMTP id n13-20020a9d710d000000b005558709b70fso398152otj.10;
+        Tue, 02 Nov 2021 12:55:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=4ysC2TK49duZLeBEw05462rtywvOR8eexLWqsfLcCUY=;
-        b=YQ3LU+t+yFQWumKjLRbaF/k+MBO8JSVraMRFPQAXxZlJ7DJG05jYyP17KzfvQwE+7B
-         ld9GmvTSwHJXKejFdmnhvgLM9qWlHKtIMkaOh2TE5tlKksmLr7u0M2dxb/xWovWP+FNt
-         o5oLpFzY05LzdA2xnCAShHhmB0xOhGzA4CMveKrRN0ameho7X1dIyunc3drwM2qd9VNV
-         3xrvlLTq9f2U+OLFY26++5XWjbjI9dcvNilg5DnSmic89jllZ2IALBkWKpuDbyW6Zo6x
-         JesudcKEbP0Yb8m1iXK+7OWKrYPTg958RYQEmmW4gXKqJ9csEBm//PHVuWso2Zrfb6x3
-         7TVg==
-X-Gm-Message-State: AOAM5314UER1Pb0Row2kaIyssuAcGpAYb+ywylBg6XYmPHnWmYiLmyfo
-        klBKslvq5R3UzQ0VSS6BrVDUoebjs4QeHhgeZZqk4dyW52U=
-X-Google-Smtp-Source: ABdhPJxL66qxLyN//dF1ujCG/e6s/ArvveoGNJAM+n1p7RgtuxComWbDfWGuMfVaHiq93Wh22COzia2CYq+/zPASgSY=
-X-Received: by 2002:a9d:a64:: with SMTP id 91mr21571353otg.198.1635882800188;
- Tue, 02 Nov 2021 12:53:20 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=ojYC7+8pGFnZez1RENadAM+0s5So3cR5+id4A+VoJoc=;
+        b=pFhnvWQlUdTvLvzcDVQ4aMHgaccBOIpef7APqXmp9BO5rL2anFDnhcmufuWPTIFyy3
+         M0BNKlxUmfAcbFwDRntyW2zUBi8Jhkl5ZLFS7arqrFiCBIT+3p6gZEeSO+0tDi4lDkuH
+         xTaG1S+OZZDpDQi0PqdrsWyBKzT4RqikyMUVRhaU2n/3ujzYDOQph1xYjSJP24tnNFfL
+         O24MblaKa9iNzjinFzifcuwJWy4Ike68fuSl2zvU4SlXcmeqoL7riDiJJOwYwPSthIPV
+         kejKg7IIT2HPvYKH9hrEcW/TiVSEEIaUug6bSTo8BHy5KoIGr0XnFt6plOT1UQyFIbF0
+         ebKA==
+X-Gm-Message-State: AOAM533J4Diys3uBbFpdfxro+cE20ZgaEIGu+c6iYFOVRkHn/b/1Q5Dh
+        JqIYdFJPjQhb1E83S/nYxbjVk+m3oQX9v/yfOV0=
+X-Google-Smtp-Source: ABdhPJxC8mUQcbN0cZIfkBuCiruN+G2E1uSf46kVS2G6wx/9mvo1rXtuSTkxn2gQ76xQom0dd8CM/lhlQI+Eu0u28pk=
+X-Received: by 2002:a05:6830:1af0:: with SMTP id c16mr27297046otd.16.1635882904555;
+ Tue, 02 Nov 2021 12:55:04 -0700 (PDT)
 MIME-Version: 1.0
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 2 Nov 2021 20:53:09 +0100
-Message-ID: <CAJZ5v0iSL3vwvmRL_BvS1J4_NHCNoLO5bG4YFcjVK-oXH_uTAg@mail.gmail.com>
-Subject: [GIT PULL] Power management updates for v5.16-rc1
+Date:   Tue, 2 Nov 2021 20:54:53 +0100
+Message-ID: <CAJZ5v0hnj0zCXsZy0=Ukud3U_cn054GULmHmpz7Qrpg_TkLLqA@mail.gmail.com>
+Subject: [GIT PULL] Thermal control updates for v5.16-rc1
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -48,251 +49,150 @@ Hi Linus,
 Please pull from the tag
 
  git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-5.16-rc1
+ thermal-5.16-rc1
 
-with top-most commit bf56b90797c4a03c94b702c50e62296edea9fad9
+with top-most commit 46e9f92f31e67385fab8b49c030635415f36b362
 
- Merge branches 'pm-em' and 'powercap'
+ Merge branches 'thermal-int340x', 'thermal-powerclamp' and 'thermal-docs'
 
 on top of commit 3906fe9bb7f1a2c8667ae54e967dc8690824f4ea
 
  Linux 5.15-rc7
 
-to receive power management updates for 5.16-rc1.
+to receive thermal control updates for 5.16-rc1.
 
-These make the power management of PCI devices with ACPI companions
-more straightforwad, add support for inefficient operating performance
-points to the Energy model and make cpufreq handle them as appropriate,
-rearrange the handling of cpuidle during system PM transitions,
-update a few cpufreq drivers and intel_idle, fix assorded issues and
-clean up code in multiple places.
+These extend the thermal trip point crossing notifications sent via
+netlink to contain the temperature causing the trip point to be
+crossed, deprecate the user space thermal governor, add new DT
+bindings to drivers, move ABI documentation to Documentation/ABI,
+fix assorted issues and clean up code.
 
 Specifics:
 
- - Add support for inefficient operating performance points to the
-   Energy Model and modify cpufreq to use them properly (Vincent
-   Donnefort).
+ - Constify a variable in thermal MMIO driver (Rikard Falkeborn).
 
- - Rearrange the DTPM framework code to simplify it and make it easier
-   to follow (Daniel Lezcano).
+ - Add the current temperature in the netlink message when crossing a
+   trip point in order to prevent useless back and forth reading from
+   userspace (Daniel Lezcano).
 
- - Fix power intialization in DTPM (Daniel Lezcano).
+ - Add support for the 'HC' variant on PM8998 PMIC in order to support
+   VADC channels on recent QCom boards (Bjorn Andersson).
 
- - Add CPU load consideration when estimating the instaneous power
-   consumption in DTPM (Daniel Lezcano).
+ - Add support for calibration values from hardware when they are
+   fused (Niklas Söderlund).
 
- - Fix cpu->pstate.turbo_freq initialization in intel_pstate (Zhang
-   Rui).
+ - Fix NULL pointer dereference in the thermal_release callback when
+   an error occurs in the thermal_zone_device_register() (Yuanzheng
+   Song).
 
- - Make intel_pstate process HWP Guaranteed change notifications from
-   the processor (Srinivas Pandruvada).
+ - Fix use-after-free in __thermal_cooling_device_register() in the
+   error path (Ziyang Xuan).
 
- - Fix typo in cpufreq.h (Rafael Wysocki).
+ - Fix compilation of the LMh driver when CONFIG_QCOM_SCM is not set
+   (Jackie Liu).
 
- - Fix tegra driver to handle BPMP errors properly (Mikko Perttunen).
+ - Add timeout when reading a register that can block forever in
+   certain circumstances in the tsens driver (Ansuel Smith).
 
- - Fix the parameter usage of the newly added perf-domain API (Hector
-   Yuan).
+ - Add DT binding for the reset lines and use them in the rockchip
+   sensor driver (Johan Jonker).
 
- - Minor cleanups to cppc, vexpress and s3c244x drivers (Han Wang,
-   Guenter Roeck, and Arnd Bergmann).
+ - Add new uniphier NX1 SoC temperature sensor (Kunihiko Hayashi).
 
- - Fix kobject memory leaks in cpuidle error paths (Anel Orazgaliyeva).
+ - Save and restore the TCC value in the int340x driver (Antoine
+   Tenart).
 
- - Make intel_idle enable interrupts before entering C1 on some Xeon
-   processor models (Artem Bityutskiy).
+ - Deprecate the writability of the cooling device state sysfs file
+   and the user space governor (Daniel Lezcano).
 
- - Clean up hib_wait_io() (Falla Coulibaly).
+ - Delete bogus length check in int340x (Dan Carpenter).
 
- - Fix sparse warnings in hibernation-related code (Anders Roxell).
+ - Use bitmap_zalloc/bitmap_free when applicable in intel_powerclamp
+   (Christophe JAILLET).
 
- - Use vzalloc() and kzalloc() instead of their open-coded
-   equivalents in hibernation-related code (Cai Huoqing).
-
- - Prevent user space from crashing the kernel by attempting to
-   restore the system state from a swap partition in use (Ye Bin).
-
- - Do not let "syscore" devices runtime-suspend during system PM
-   transitions (Rafael Wysocki).
-
- - Do not pause cpuidle in the suspend-to-idle path (Rafael Wysocki).
-
- - Pause cpuidle later and resume it earlier during system PM
-   transitions (Rafael Wysocki).
-
- - Make system suspend code use valid_state() consistently (Rafael
-   Wysocki).
-
- - Add support for enabling wakeup IRQs after invoking the
-   ->runtime_suspend() callback and make two drivers use it (Chunfeng
-   Yun).
-
- - Make the association of ACPI device objects with PCI devices more
-   straightforward and simplify the code doing that for all devices
-   in general (Rafael Wysocki).
-
- - Eliminate struct pci_platform_pm_ops and handle the both of its
-   users (PCI and Intel MID) directly in the PCI bus code (Rafael
-   Wysocki).
-
- - Simplify and clarify ACPI PCI device PM helpers (Rafael Wysocki).
-
- - Fix ordering of operations in pci_back_from_sleep() (Rafael
-   Wysocki).
-
- - Make exynos-ppmu use hyphens in DT properties (Krzysztof
-   Kozlowski).
-
- - Simplify parsing event-type from DT in exynos-ppmu (Krzysztof
-   Kozlowski).
-
- - Strengthen check for freq_table in devfreq (Samuel Holland).
-
-Some of the changes listed above are also present in the ACPI updates
-pull request sent earlier due to dependencies between the ACPI "glue"
-code and the PCI device PM changes.
+ - Move thermal ABI documentation to Documentation/ABI (Mauro Carvalho
+   Chehab).
 
 Thanks!
 
 
 ---------------
 
-Anders Roxell (1):
-      PM: hibernate: fix sparse warnings
+Ansuel Smith (1):
+      thermal/drivers/tsens: Add timeout to get_temp_tsens_valid
 
-Anel Orazgaliyeva (1):
-      cpuidle: Fix kobject memory leaks in error paths
+Antoine Tenart (1):
+      thermal/drivers/int340x: Improve the tcc offset saving for suspend/resume
 
-Arnd Bergmann (1):
-      cpufreq: s3c244x: add fallthrough comments for switch
+Bjorn Andersson (2):
+      dt-bindings: thermal: qcom: add HC variant of adc-thermal monitor bindings
+      thermal/drivers/qcom/spmi-adc-tm5: Add support for HC variant
 
-Artem Bityutskiy (1):
-      intel_idle: enable interrupts before C1 on Xeons
+Christophe JAILLET (1):
+      thermal: intel_powerclamp: Use bitmap_zalloc/bitmap_free when applicable
 
-Cai Huoqing (1):
-      PM: hibernate: swap: Use vzalloc() and kzalloc()
+Dan Carpenter (1):
+      thermal: int340x: delete bogus length check
 
-Chunfeng Yun (3):
-      PM / wakeirq: support enabling wake-up irq after runtime_suspend called
-      usb: xhci-mtk: enable wake-up interrupt after runtime_suspend called
-      usb: mtu3: enable wake-up interrupt after runtime_suspend called
+Daniel Lezcano (3):
+      thermal/drivers/netlink: Add the temperature when crossing a trip point
+      thermal/core: Make the userspace governor deprecated
+      thermal/core: Deprecate changing cooling device state from userspace
 
-Daniel Lezcano (5):
-      powercap/drivers/dtpm: Encapsulate even more the code
-      powercap/drivers/dtpm: Simplify the dtpm table
-      powercap/drivers/dtpm: Use container_of instead of a private data field
-      powercap/drivers/dtpm: Scale the power with the load
-      powercap/drivers/dtpm: Fix power limit initialization
+Jackie Liu (1):
+      thermal/drivers/qcom/lmh: make QCOM_LMH depends on QCOM_SCM
 
-Falla Coulibaly (1):
-      PM: hibernate: Remove blk_status_to_errno in hib_wait_io
+Johan Jonker (3):
+      dt-bindings: thermal: allow more resets for tsadc node in
+rockchip-thermal.yaml
+      dt-bindings: thermal: remove redundant comments from rockchip-thermal.yaml
+      thermal/drivers/rockchip_thermal: Allow more resets for tsadc node
 
-Florian Fainelli (1):
-      PM: sleep: Do not assume that "mem" is always present
+Kunihiko Hayashi (2):
+      dt-bindings: thermal: uniphier: Add binding for NX1 SoC
+      thermal/drivers/uniphier: Add compatible string for NX1 SoC
 
-Guenter Roeck (1):
-      cpufreq: vexpress: Drop unused variable
+Mauro Carvalho Chehab (1):
+      thermal: Move ABI documentation to Documentation/ABI
 
-Han Wang (1):
-      cpufreq: remove useless INIT_LIST_HEAD()
+Niklas Söderlund (2):
+      thermal: rcar_gen3_thermal: Store thcode and ptat in priv data
+      thermal: rcar_gen3_thermal: Read calibration from hardware
 
-Hector.Yuan (1):
-      cpufreq: Fix parameter in parse_perf_domain()
+Rikard Falkeborn (1):
+      thermal/drivers/thermal_mmio: Constify static struct thermal_mmio_ops
 
-Krzysztof Kozlowski (2):
-      devfreq: exynos-ppmu: use node names with hyphens
-      devfreq: exynos-ppmu: simplify parsing event-type from DT
+Yuanzheng Song (1):
+      thermal/core: Fix null pointer dereference in thermal_release()
 
-Mikko Perttunen (1):
-      cpufreq: tegra186/tegra194: Handle errors in BPMP response
-
-Rafael J. Wysocki (17):
-      PCI: ACPI: Drop acpi_pci_bus
-      ACPI: glue: Drop cleanup callback from struct acpi_bus_type
-      ACPI: glue: Look for ACPI bus type only if ACPI companion is not known
-      PCI: PM: Do not use pci_platform_pm_ops for Intel MID PM
-      PCI: ACPI: PM: Do not use pci_platform_pm_ops for ACPI
-      PCI: PM: Drop struct pci_platform_pm_ops
-      PCI: PM: Simplify acpi_pci_power_manageable()
-      PCI: PM: Rearrange pci_target_state()
-      PCI: PM: Make pci_choose_state() call pci_target_state()
-      PCI: PM: Do not call platform_pci_power_manageable() unnecessarily
-      Revert "PM: sleep: Do not assume that "mem" is always present"
-      PCI: PM: Fix ordering of operations in pci_back_from_sleep()
-      cpufreq: Fix typo in cpufreq.h
-      PM: sleep: Do not let "syscore" devices runtime-suspend during
-system transitions
-      PM: suspend: Do not pause cpuidle in the suspend-to-idle path
-      PM: sleep: Pause cpuidle later and resume it earlier during
-system transitions
-      PM: suspend: Use valid_state() consistently
-
-Samuel Holland (1):
-      PM / devfreq: Strengthen check for freq_table
-
-Srinivas Pandruvada (1):
-      cpufreq: intel_pstate: Process HWP Guaranteed change notification
-
-Vincent Donnefort (10):
-      PM: EM: Fix inefficient states detection
-      PM: EM: Mark inefficient states
-      PM: EM: Extend em_perf_domain with a flag field
-      PM: EM: Allow skipping inefficient states
-      cpufreq: Make policy min/max hard requirements
-      cpufreq: Add an interface to mark inefficient frequencies
-      cpufreq: Introducing CPUFREQ_RELATION_E
-      cpufreq: Use CPUFREQ_RELATION_E in DVFS governors
-      PM: EM: Mark inefficiencies in CPUFreq
-      cpufreq: mediatek-hw: Fix cpufreq_table_find_index_dl() call
-
-Ye Bin (1):
-      PM: hibernate: Get block device exclusively in swsusp_check()
-
-Zhang Rui (1):
-      cpufreq: intel_pstate: Fix cpu->pstate.turbo_freq initialization
+Ziyang Xuan (1):
+      thermal/core: fix a UAF bug in __thermal_cooling_device_register()
 
 ---------------
 
- drivers/acpi/glue.c                    |  34 +++--
- drivers/base/power/main.c              |  14 +-
- drivers/base/power/power.h             |   7 +-
- drivers/base/power/runtime.c           |   6 +-
- drivers/base/power/wakeirq.c           | 101 ++++++++++++---
- drivers/cpufreq/acpi-cpufreq.c         |   3 +-
- drivers/cpufreq/amd_freq_sensitivity.c |   3 +-
- drivers/cpufreq/cppc_cpufreq.c         |   2 -
- drivers/cpufreq/cpufreq.c              |  19 ++-
- drivers/cpufreq/cpufreq_conservative.c |   6 +-
- drivers/cpufreq/cpufreq_ondemand.c     |  16 ++-
- drivers/cpufreq/intel_pstate.c         | 120 ++++++++++++++++-
- drivers/cpufreq/mediatek-cpufreq-hw.c  |   2 +-
- drivers/cpufreq/powernv-cpufreq.c      |   4 +-
- drivers/cpufreq/s3c2440-cpufreq.c      |   2 +
- drivers/cpufreq/s5pv210-cpufreq.c      |   2 +-
- drivers/cpufreq/tegra186-cpufreq.c     |   4 +
- drivers/cpufreq/tegra194-cpufreq.c     |   8 +-
- drivers/cpuidle/sysfs.c                |   5 +-
- drivers/devfreq/devfreq.c              |   2 +-
- drivers/devfreq/event/exynos-ppmu.c    |  12 +-
- drivers/idle/intel_idle.c              |  13 +-
- drivers/pci/pci-acpi.c                 |  74 +++--------
- drivers/pci/pci-mid.c                  |  37 ++----
- drivers/pci/pci.c                      | 154 ++++++++++------------
- drivers/pci/pci.h                      |  96 ++++++++------
- drivers/powercap/dtpm.c                |  78 ++++++-----
- drivers/powercap/dtpm_cpu.c            | 228 ++++++++++++++++++---------------
- drivers/usb/host/xhci-mtk.c            |   2 +-
- drivers/usb/mtu3/mtu3_plat.c           |   2 +-
- include/acpi/acpi_bus.h                |   1 -
- include/linux/cpufreq.h                | 169 +++++++++++++++++++-----
- include/linux/cpuhotplug.h             |   2 +-
- include/linux/dtpm.h                   |  26 ++--
- include/linux/energy_model.h           |  68 ++++++++--
- include/linux/pci-acpi.h               |   8 ++
- include/linux/pm_wakeirq.h             |   9 +-
- kernel/power/energy_model.c            |  86 ++++++++++---
- kernel/power/hibernate.c               |  12 +-
- kernel/power/power.h                   |  14 ++
- kernel/power/suspend.c                 |  18 +--
- kernel/power/swap.c                    |  21 ++-
- 42 files changed, 946 insertions(+), 544 deletions(-)
+ Documentation/ABI/testing/sysfs-class-thermal      | 259 +++++++++++++++++++++
+ .../bindings/thermal/qcom-spmi-adc-tm-hc.yaml      | 149 ++++++++++++
+ .../bindings/thermal/rockchip-thermal.yaml         |  23 +-
+ .../thermal/socionext,uniphier-thermal.yaml        |   1 +
+ Documentation/driver-api/thermal/sysfs-api.rst     | 225 +-----------------
+ MAINTAINERS                                        |   2 +
+ drivers/thermal/gov_user_space.c                   |   9 +
+ .../intel/int340x_thermal/int3400_thermal.c        |   9 +-
+ .../intel/int340x_thermal/int3401_thermal.c        |   8 +-
+ .../int340x_thermal/processor_thermal_device.c     |  36 ++-
+ .../int340x_thermal/processor_thermal_device.h     |   1 +
+ .../int340x_thermal/processor_thermal_device_pci.c |  18 +-
+ .../processor_thermal_device_pci_legacy.c          |   8 +-
+ drivers/thermal/intel/intel_powerclamp.c           |   8 +-
+ drivers/thermal/qcom/Kconfig                       |   2 +-
+ drivers/thermal/qcom/qcom-spmi-adc-tm5.c           |  41 +++-
+ drivers/thermal/qcom/tsens.c                       |  29 ++-
+ drivers/thermal/rcar_gen3_thermal.c                | 113 ++++++---
+ drivers/thermal/rockchip_thermal.c                 |   2 +-
+ drivers/thermal/thermal_core.c                     |  22 +-
+ drivers/thermal/thermal_mmio.c                     |   2 +-
+ drivers/thermal/thermal_netlink.c                  |  11 +-
+ drivers/thermal/thermal_netlink.h                  |   8 +-
+ drivers/thermal/thermal_sysfs.c                    |   3 +
+ drivers/thermal/uniphier_thermal.c                 |   4 +
+ 25 files changed, 679 insertions(+), 314 deletions(-)
