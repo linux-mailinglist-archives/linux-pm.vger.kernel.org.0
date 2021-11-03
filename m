@@ -2,119 +2,184 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 725A14441B4
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Nov 2021 13:40:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60E62444258
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Nov 2021 14:25:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231922AbhKCMn0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 3 Nov 2021 08:43:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34436 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231411AbhKCMn0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 3 Nov 2021 08:43:26 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6FE0261175;
-        Wed,  3 Nov 2021 12:40:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635943249;
-        bh=PfdPMn8THwD7MPJd6FdRC7fBH8LHeMi65GkAkDFNsfc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=a8S+PefzJQlycoyB+Dlj67jn06Xp3gB1Do50lo0D8Xuz8mut29MJYdGQhBZUYBhpG
-         8QU+ZUrD836+V0G1QeBs8oo9qWhMIPI5W1qYbo2ezaVFINbPsnsIUMivqF7F8y1YZe
-         5my9jiRUgcCdT53sxuRib06f8nx5kjHSqz1XEdn+TMoCGKTQnFRDjU153tq+YrMyto
-         0cKcFVUmrt/SDBorQ+ZghEefwzkaOCy2jVVwZwySbh80MGNzbab9xtXVM+7bU/y/QT
-         g0g4XUFFuSuBeo7a0kpC5R4g9amxnCpF/ReGfZjt8h3WHaj8Z2BUG516FchVUaKdks
-         LF4f9jKzIG6mQ==
-Received: by earth.universe (Postfix, from userid 1000)
-        id EA6443C0F95; Wed,  3 Nov 2021 13:40:46 +0100 (CET)
-Date:   Wed, 3 Nov 2021 13:40:46 +0100
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        Paul Cercueil <paul@crapouillou.net>,
-        Paul Burton <paul.burton@mips.com>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 1/9] Remove unused headers <linux/jz4740-adc.h> and
- <linux/power/jz4740-battery.h>
-Message-ID: <20211103124046.te5rfhfvkbw2tby3@earth.universe>
-References: <20211102220203.940290-1-corbet@lwn.net>
- <20211102220203.940290-2-corbet@lwn.net>
- <YYI9t2Ng1Uppkiav@google.com>
+        id S231514AbhKCN1g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 3 Nov 2021 09:27:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:29574 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231959AbhKCN13 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Nov 2021 09:27:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1635945893;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1UEjne3KTsM7G0LAMn2SKIuBZS6NQXeQ5ig+HYQFpI4=;
+        b=ZnUxJCDcX7GmrK0zYc1GoKpTKTuBM7zxka+SFA0+2RQo+rNk+7EEqN+ISID0LD9/yT2WfG
+        gcYdjKPMKtK3N7gfMcCA/9R5pXyIYMsK6/gKs+27euwYgCgzUxxk7qcGnwYa37BzzejW5Y
+        6xLeYFRcWskD6uCpR5NrwOb5y5zdU5s=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-164-x7Fa6zw1PSeVB4dg1a4PNg-1; Wed, 03 Nov 2021 09:24:52 -0400
+X-MC-Unique: x7Fa6zw1PSeVB4dg1a4PNg-1
+Received: by mail-ed1-f70.google.com with SMTP id y12-20020a056402270c00b003e28de6e995so2447892edd.11
+        for <linux-pm@vger.kernel.org>; Wed, 03 Nov 2021 06:24:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1UEjne3KTsM7G0LAMn2SKIuBZS6NQXeQ5ig+HYQFpI4=;
+        b=EbZS7NxrwBZflP4JqTKxZZZf/CIG2vSNrxW4dp0d1JTBJ/9OW6vuLr6uuHADvHtmlU
+         v2halu8jXIiINLTCvxPHq3x/DxbUpGbYjsW9BFEE1gkUCkmRMWoDj7BYZ8IFFikCl9Vh
+         Xn4+jtYYi/ihtknsIfVU55V6ORyDLqzSc4AoLYVuB+IqTbTLZx82JVQmuYkzxUb3lBHG
+         gyLbgknMi9RqPDVQYNYk/Z39uZJn0SbKNbddKXGNWxwioTgat0d6o7hFw0nao5b9+FKj
+         AzERJyqRVa48wrjkKWsuLGju0vhBoZtGzKI5u7QDQGR/tM/5rDF9VJfSPqKiydmaG/AB
+         2+gQ==
+X-Gm-Message-State: AOAM531ZCMi4+rgW4JB94VdWmT2wMVtJ0YnEwiLj2xqHNans4lVtIild
+        T1pi8UY9HA0J2Bu3sPv2BIW3ELhAyVqPPwdloweQOwJHcBqqDgk1dCj2tdEMVAiqocK8Ju8BQCO
+        ShOnsGVpLLRhhYQVLcsg=
+X-Received: by 2002:a17:906:c156:: with SMTP id dp22mr16108430ejc.168.1635945890809;
+        Wed, 03 Nov 2021 06:24:50 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwCqyHl8agNlXtb5HAok/T9a3IaOhS26SNarB/DH1d5lwiDutq5HNGG50nvkNjDJuoExRsndA==
+X-Received: by 2002:a17:906:c156:: with SMTP id dp22mr16108401ejc.168.1635945890567;
+        Wed, 03 Nov 2021 06:24:50 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id m3sm1304890eds.71.2021.11.03.06.24.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Nov 2021 06:24:50 -0700 (PDT)
+Message-ID: <1f5708b8-c190-f732-bc91-64c8657fea73@redhat.com>
+Date:   Wed, 3 Nov 2021 14:24:49 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="an6co72dydfgj767"
-Content-Disposition: inline
-In-Reply-To: <YYI9t2Ng1Uppkiav@google.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [RFC v2 0/2] ACPI/power-suppy add fuel-gauge support on cht-wc
+ PMIC without USB-PD support devs
+Content-Language: en-US
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Yauhen Kharuzhy <jekhor@gmail.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+References: <20211102223959.3873-1-hdegoede@redhat.com>
+ <CAHp75VdoYO7DCWGHadgto3Aay836z1A7g4LHT7RNLF4kgAa_Pg@mail.gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <CAHp75VdoYO7DCWGHadgto3Aay836z1A7g4LHT7RNLF4kgAa_Pg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
---an6co72dydfgj767
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
 Hi,
 
-On Wed, Nov 03, 2021 at 07:43:51AM +0000, Lee Jones wrote:
-> On Tue, 02 Nov 2021, Jonathan Corbet wrote:
-> > Commit ff71266aa490 ("mfd: Drop obsolete JZ4740 driver") removed the la=
-st
-> > file to include <linux/jz4740-adc.h> but left the header file itself
-> > behind.  Nothing uses it, remove it now.
-> >=20
-> > Similarly, aea12071d6fc ("power/supply: Drop obsolete JZ4740 driver")
-> > deleted the last use of <linux/power/jz4740-battery.h>, so remove that =
-one
-> > too.
+On 11/3/21 10:18, Andy Shevchenko wrote:
+> On Wed, Nov 3, 2021 at 12:40 AM Hans de Goede <hdegoede@redhat.com> wrote:
+> 
+> ...
+> 
+>> While working on this I realized that there also is a 4th option,
+>> which is basically option 1 from the v1 RFC minus the 2 gpiolib-acpi
+>> patches.
+>>
+>> With the 2nd option (as implemented by this RFC) we leave the
+>> _AEI handler in place and run the fuel-gauge without interrupt,
+>> we can do the same when marking the fuel-gauge as always present
+>> by treating IRQs on ACPI devices the same way as in the
+>> max17042_battery code, which has already solved the IRQ problem
+>> without disabling the _AEI handler:
+>>
+>>                 /*
+>>                  * On ACPI systems the IRQ may be handled by ACPI-event code,
+>>                  * so we need to share (if the ACPI code is willing to share).
+>>                  */
+> 
+>>                 if (acpi_id)
+>>                         flags |= IRQF_SHARED | IRQF_PROBE_SHARED;
+>>
+>> This is a pretty decent option too, it requires:
+>>
+>> 1. 2 more always_present quirks in the ACPI scan code which is part of
+>> the main kernel image.
+>>
+>> 2. Patches to the bq27xxx_battery code to support ACPI enumeration.
+> 
+> If it works, why not try it?
 
-Thanks for the cleanup Jonathan.
+I'm 99.9% sure it will work, so I see no reason to actually try it unless
+we decide that this is a better option.
 
-> > Cc: Paul Cercueil <paul@crapouillou.net>
-> > Cc: Lee Jones <lee.jones@linaro.org>
-> > Cc: Paul Burton <paul.burton@mips.com>
-> > Cc: Sebastian Reichel <sre@kernel.org>
-> > Cc: linux-pm@vger.kernel.org
-> > Signed-off-by: Jonathan Corbet <corbet@lwn.net>
-> > ---
-> >  include/linux/jz4740-adc.h           | 33 ----------------------------
-> >  include/linux/power/jz4740-battery.h | 15 -------------
->=20
-> It appears as though there are still references to both of these
-> *devices* in the kernel tree.  Should those be removed also?
->=20
-> >  2 files changed, 48 deletions(-)
-> >  delete mode 100644 include/linux/jz4740-adc.h
-> >  delete mode 100644 include/linux/power/jz4740-battery.h
->=20
-> Patch looks fine though.
->=20
-> Let me know if you want me to take it in via MFD.  Otherwise:
->=20
-> Acked-by: Lee Jones <lee.jones@linaro.org>
+This option would basically be patches 1 + 4-5 from option 1 / the v1 RFC:
+https://lore.kernel.org/platform-driver-x86/20211031162428.22368-1-hdegoede@redhat.com/
 
-You can take it through MFD, no immutable branch needed.
+plus extra changes to the bq27xxx_battery code IRQ handling like above.
 
-Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+So this would mean 2 extra quirks in drivers/apci/x86/utils.c vs this
+RFC v2 patches + various changes to the bq27xxx_battery code, where as
+this (option 2/RFC v2) approach requires no changes to the bq27xxx_battery
+code at all (1).
 
--- Sebastian
+So at the cost of a board_file (patch 2/2 of this RFC v2 series) we save 2 quirks
+which would be in the main vmlinuz image for everyone, as well as not having
+to add any special code to the bq27xxx_battery code just for this one board;
+and as mentioned the board-file .ko will only ever auto-load on the actual
+board, so it just costs diskspace when enabled in generic distro kernels,
+where as e.g. the 2 quirks take op memory for everyone.
 
---an6co72dydfgj767
-Content-Type: application/pgp-signature; name="signature.asc"
+So all in all I still believe that the approach in this v2 RFC is the best.
 
------BEGIN PGP SIGNATURE-----
+Also note that we already have an i2c-client being instantiated for a
+bq27xxx_battery fuel-gauge (rather then forcing an ACPI-device as always-
+present) here:
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmGCg0sACgkQ2O7X88g7
-+pqdJw//XJ5guSGnd/+nBuxlcgnDWIw4e+/DCoEFHKG+jrPAEwxU/BzAxq2iMdZy
-vstTfiEobkL36pWJW+OKB1uM5ZlBp657Z2gOFC0XAZdqMGniNfLL0/rTFBIkBVWj
-uiHQwd4EHhvK0QScJKRC5wKAgDt2/MQ+kRqhBc+lXufxqoTNoKRFzMIAn3iZgtKz
-JmUt7+ZZf+rO5uHpCjVW4/0Nl4UnHY6qKBnIfkVFIJGFw1W+QxynFZkZ5sHdPJDR
-LGBZPNuzCIFROeXldT4N0x/dcRPQWq9Hw8cLRQISLxEGyKHLEHC89fZJffv0w/BN
-2T1YrqgXLCK+R+D9I7n85LJWdkNMk0YXqWyTLBdoad3XGYt4Yg93u7XgZJf5+kyU
-RDrO+VWW7ft1g/+A4cmZHc/0NavJplW3fETuXX0/1raJYGtN0YDyaoYYTQJQRqbJ
-7zo/7oF7D8rAPcc5Ky2WNyrcyw4dCSBgdeny6HEYAdU9P2PBAF6iBprtRU0M07zl
-zx4UDWEqycwmT9+dVhNx78ypRpTsd8apGxq4LgmnN7Uyb5liL1BM4P9NljR39cS8
-aZ+4TFsNFNmG8maKe+uq8ZX9gffR5U9oOxF6sheA0864rk6xDPSjCkLrWh1Ode5M
-6+GZN8d+ghNT/7AdqtLm5Vqk8umK/7UMERdUAT5Dx5grXF9r5M8=
-=vzYR
------END PGP SIGNATURE-----
+drivers/platform/x86/intel/int33fe/intel_cht_int33fe_microb.c
 
---an6co72dydfgj767--
+and for the max17042 fg here:
+
+drivers/platform/x86/intel/int33fe/intel_cht_int33fe_typec.c
+
+So doing the manual instantiation already is somewhat of a pattern
+and IMHO is the best (least bad) option to deal with this.
+
+> I like the common base for the FG drivers that can be used as a pattern then.
+
+I don't believe this is a pattern which we want to introduce, with the
+exception of one buggy BIOS version (2) fuel-gauges on ACPI devices
+are never directly instantiated through an ACPI-device / fwnode.
+
+The whole business of using native fuel-gauge drivers on X86/ACPI is
+a special case just for BYT/CHT devices to begin with (because of
+broken or outright missing ACPI battery class support) and on all but
+the broken BIOS version the platform_dev or i2c-client for the
+fuel-gauge is instantiated by specific kernel-code, rather then
+directly from ACPI tables. So having ACPI enumeration support
+in fuel-gauge drivers is something which we do not need and
+should not want.
+
+(Arguably we also need an always_hidden option for the ACPI quirks
+and then use that to hide the anomaly of the MAX17042 ACPI device
+not being hidden on the one troublesome BIOS version, this would
+allow removing a nice amount of code in a bunch of places.)
+
+Regards,
+
+Hans
+
+
+
+1) Well I notices some issues there which need fixes but those issues impact
+all users of the bq27xxx_battery code and are not related to the discussed
+enumeration issues
+
+2) BIOS version, not board, other BIOS versions for the same board are fine
+
