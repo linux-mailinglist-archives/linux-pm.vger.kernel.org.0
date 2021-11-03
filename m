@@ -2,111 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FEFF443F2B
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Nov 2021 10:19:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 874EB443F30
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Nov 2021 10:19:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231629AbhKCJVr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 3 Nov 2021 05:21:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43658 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231240AbhKCJVq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Nov 2021 05:21:46 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53341C061714;
-        Wed,  3 Nov 2021 02:19:10 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id f4so6649706edx.12;
-        Wed, 03 Nov 2021 02:19:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=izh+Izi2ViuBwJmcCrMjhlzLlTjUKnonv7xgDnMZKrU=;
-        b=TOKXBUUZnEhSiVUGswo5BWK4XFiOQ2DZnwlqKSdHEn10SsJWliHEGHgqw+9ylVayJt
-         0caUEzS8EWy0LF4JQtctFoGh5RdeYpx+7IQqErlBGO2l7DdUhV+P5GmH6qngfsNRwk4f
-         QV74rbGLnWWigx5dWqctsPl7vZQYQh7urXzFT6EacH63MKT9vaY4a/w2PLDAzcm0U2vA
-         TptxGVG18x246E1nDbf0/8ht0qt1SvLPGAxFt9sq0M0hCr3nd+4aJD3Rdg5tTtsLPevu
-         VDwcDwrgtcsU+RfaLUpEvakbwjWWpLxfMOx2Rq5RgaBlhxgHRBmIfFoUOkuGrOBpAkVY
-         7NmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=izh+Izi2ViuBwJmcCrMjhlzLlTjUKnonv7xgDnMZKrU=;
-        b=YMJbFUm8sXX4rnxoYg+y12JIQl+qddkVpoh94+gldV8orlFE7FwTsikCd5qON+lOms
-         zblxs4Na9aWy15OGal/CJ2jKY+5Vnxrk8lncqSqXNb2ottXc+77W8CrcW9zAMe870j57
-         2IRebJnDQJqe/QEKH/SQuQV7Of8O+3spCnKyID80wVBS+rm79Z1W1vesM0GZubDsCdvp
-         zicCakhz49JPfACYjDAjcePWzjw2B9G/YlZVu8YzbTUTRi2XceZzcifk+SeU00oEYcEZ
-         6c2d/TJWmLDHf5RBfITXxOfwPamIJMH6mr1EpYDm6b+jZWCWGLeCilQT9qfb1oHcFXKL
-         RG7g==
-X-Gm-Message-State: AOAM533XOkQrjUvWOoGAfAbzzma3cymfS6fOyaP6IKKS9xm49pPIE+68
-        1+LESdhPzh03MDSZEe3ub4i85QEAzTZOS9Fi+0s=
-X-Google-Smtp-Source: ABdhPJylFvUk+eMM/aD3uh9TFRjKL0A0DPL5/C9zxrRXh8EDSBK11TVImY7EP6IdHGBEUgJ/89og7ZwlPvXA2Da80+M=
-X-Received: by 2002:a05:6402:207c:: with SMTP id bd28mr48553253edb.240.1635931148908;
- Wed, 03 Nov 2021 02:19:08 -0700 (PDT)
+        id S231748AbhKCJWM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 3 Nov 2021 05:22:12 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:43428 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231971AbhKCJWL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Nov 2021 05:22:11 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1A39JWrV093846;
+        Wed, 3 Nov 2021 04:19:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1635931172;
+        bh=LjPjaF5YrPiixh2kn/F2Mk9lyE4maZrKEJ7LHA7fDq8=;
+        h=From:To:CC:Subject:Date;
+        b=c/apHKBBAwK4gz9gRgq2eZbt+LH4GxB+U/84Lv5NLBRQyngqKBXHO1LihhbJAKI6n
+         kVsw2hBMxuQr6/+JK7b8V0bLAcvaaY4qf5/mkpK0MFsg34XJS0myw5QGaDQgXTaRaV
+         Z4ZGo99DnqtjL2hlviKcNHPFAPlMK1TAB7w5QI/8=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1A39JW4A067914
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 3 Nov 2021 04:19:32 -0500
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 3
+ Nov 2021 04:19:32 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 3 Nov 2021 04:19:32 -0500
+Received: from localhost.localdomain (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1A39JSrK002784;
+        Wed, 3 Nov 2021 04:19:29 -0500
+From:   Keerthy <j-keerthy@ti.com>
+To:     <robh+dt@kernel.org>, <daniel.lezcano@linaro.org>,
+        <rui.zhang@intel.com>, <amitk@kernel.org>, <kristo@kernel.org>
+CC:     <j-keerthy@ti.com>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v4 0/4] thermal: k3_j72xx_bandgap: Add the bandgap driver support
+Date:   Wed, 3 Nov 2021 14:49:20 +0530
+Message-ID: <20211103091924.32742-1-j-keerthy@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20211102223959.3873-1-hdegoede@redhat.com>
-In-Reply-To: <20211102223959.3873-1-hdegoede@redhat.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 3 Nov 2021 11:18:31 +0200
-Message-ID: <CAHp75VdoYO7DCWGHadgto3Aay836z1A7g4LHT7RNLF4kgAa_Pg@mail.gmail.com>
-Subject: Re: [RFC v2 0/2] ACPI/power-suppy add fuel-gauge support on cht-wc
- PMIC without USB-PD support devs
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Yauhen Kharuzhy <jekhor@gmail.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 3, 2021 at 12:40 AM Hans de Goede <hdegoede@redhat.com> wrote:
+Add VTM thermal support. In the Voltage Thermal Management
+Module(VTM), K3 J72XX supplies a voltage reference and a temperature
+sensor feature that are gathered in the band gap voltage and
+temperature sensor (VBGAPTS) module. The band gap provides current and
+voltage reference for its internal circuits and other analog IP
+blocks. The analog-to-digital converter (ADC) produces an output value
+that is proportional to the silicon temperature.
 
-...
+Currently reading temperatures only is supported.  There are no
+active/passive cooling agent supported.
 
-> While working on this I realized that there also is a 4th option,
-> which is basically option 1 from the v1 RFC minus the 2 gpiolib-acpi
-> patches.
->
-> With the 2nd option (as implemented by this RFC) we leave the
-> _AEI handler in place and run the fuel-gauge without interrupt,
-> we can do the same when marking the fuel-gauge as always present
-> by treating IRQs on ACPI devices the same way as in the
-> max17042_battery code, which has already solved the IRQ problem
-> without disabling the _AEI handler:
->
->                 /*
->                  * On ACPI systems the IRQ may be handled by ACPI-event code,
->                  * so we need to share (if the ACPI code is willing to share).
->                  */
+J721e SoCs have errata i2128: https://www.ti.com/lit/pdf/sprz455
 
->                 if (acpi_id)
+The series also incorporates workaround for Errata i2128.
 
-(Side remark: wouldn't it be better to have has_acpi_companion() and
-use device_get_match_data()?)
+Changes in v4:
 
->                         flags |= IRQF_SHARED | IRQF_PROBE_SHARED;
->
-> This is a pretty decent option too, it requires:
->
-> 1. 2 more always_present quirks in the ACPI scan code which is part of
-> the main kernel image.
->
-> 2. Patches to the bq27xxx_battery code to support ACPI enumeration.
+  * Fixed compilation warning with W=1.
 
-If it works, why not try it?
+Changes in v3:
 
-I like the common base for the FG drivers that can be used as a pattern then.
+  * Removed static look up tables & added functions to dynamically generate them.
 
+
+Changes in v2:
+
+  * Fixed DT binding errors.
+
+Keerthy (4):
+  dt-bindings: thermal: k3-j72xx: Add VTM bindings documentation
+  arm64: dts: ti: j721e: Add VTM node
+  arm64: dts: ti: j7200: Add VTM node
+  thermal: k3_j72xx_bandgap: Add the bandgap driver support
+
+ .../bindings/thermal/ti,j72xx-thermal.yaml    |  62 ++
+ .../boot/dts/ti/k3-j7200-mcu-wakeup.dtsi      |   9 +
+ arch/arm64/boot/dts/ti/k3-j7200-thermal.dtsi  |  45 ++
+ arch/arm64/boot/dts/ti/k3-j7200.dtsi          |   4 +
+ .../boot/dts/ti/k3-j721e-mcu-wakeup.dtsi      |   9 +
+ arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi  |  73 ++
+ arch/arm64/boot/dts/ti/k3-j721e.dtsi          |   4 +
+ drivers/thermal/Makefile                      |   2 +-
+ drivers/thermal/k3_j72xx_bandgap.c            | 634 ++++++++++++++++++
+ 9 files changed, 841 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j7200-thermal.dtsi
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi
+ create mode 100644 drivers/thermal/k3_j72xx_bandgap.c
 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.17.1
+
