@@ -2,96 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D17AD4444E8
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Nov 2021 16:47:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0017344457E
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Nov 2021 17:11:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232476AbhKCPub (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 3 Nov 2021 11:50:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47998 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232095AbhKCPub (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Nov 2021 11:50:31 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B054AC061203
-        for <linux-pm@vger.kernel.org>; Wed,  3 Nov 2021 08:47:54 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id r12so10891561edt.6
-        for <linux-pm@vger.kernel.org>; Wed, 03 Nov 2021 08:47:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=y0dw6iSs7wbSAVhV634Ng3l66t65/ksZhBOuiGx+tEI=;
-        b=N5s4Nl8LMN4AFMZPMSc2tfPh6uyAlWKY7Y77Lw3gkDdta6uD3SctBY4MvnvDqSCokO
-         FyGG0mrO1V6EaUQGwh9wqREG972EQInsBuRc6+YUlAGBVt7bEADj4uspUUsEirOc31Xl
-         kCSQS3Wzw8RGjmYlOdP6UwXoEB4pPqcNAR+5CiS+wDfLlAtsyd3iId8IgmvOC3RV/put
-         857Hn5+e9MjJirC1GlYMEp+J3a8cT4cAilIGJKUeYcLsFK7TUGtxficdPd6q0le4z6CL
-         /mMYOVNnJ3rN4IP+2j7z2bTtnK3dOPN8bmzkZjzDHYgFVqgy7rkec2rh/MekQkLEYc0s
-         SALg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=y0dw6iSs7wbSAVhV634Ng3l66t65/ksZhBOuiGx+tEI=;
-        b=f7tWy6BjdVmjuczFJ8u6RAho5YoxGB0rW8Z1sFSdDVuDXV9tivBl47aocurx+IxKcP
-         MqbzgzsmC4mqDRkRTsbyFkQ2XLpa2vpQKA9UeYAuNHpxX3OdbOM6EEt4CrGqIJ4YfGGv
-         hIYOr9Zuwhl7l9di2kWKqZDAs0y60fQ5nSnevwuI/g0ruCzGeAGmyqCgJosuMtufe9m8
-         L/yTC9Y+EkQCq9sDIgrPRmALcDTq0O1HHVhjeyi+Ra3toPmLi8Wvb9xNrlQ7MznkZPPD
-         g+4f+ux3saKsEnG1yUIo9KjtnUvQFlRRcx6+Me1OqXVfg8VF/+Yc5ZWlI5TOmDhc3IEg
-         xCGg==
-X-Gm-Message-State: AOAM531wD4p6lcPE6yW7SM4j6Zm4jcM5jVrnxDgMM+gVupKEX+KUdK3L
-        5uCzUBq55n9MXx3w2P7YTMLWD1sCnWgkrIOxL+M=
-X-Google-Smtp-Source: ABdhPJzIEFMdz3X5eFtim6R8Doqcy1P5HVPRXBRaEKtXjZwhK13Kv+AJ2ZnExGrIKwtqyadCplercmh8Rzs5oEZoL2g=
-X-Received: by 2002:aa7:c941:: with SMTP id h1mr62981863edt.128.1635954472946;
- Wed, 03 Nov 2021 08:47:52 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a54:258b:0:0:0:0:0 with HTTP; Wed, 3 Nov 2021 08:47:52 -0700 (PDT)
-Reply-To: juliahelibert77@gmail.com
-From:   Julia Helibert <artslineinks@gmail.com>
-Date:   Wed, 3 Nov 2021 15:47:52 +0000
-Message-ID: <CAGzh0-ob6HRekGDRTPbE=tWFbEf7XN60Rp2+ygxGG9rvf=OzyA@mail.gmail.com>
-Subject: HO BISOGNO DELLA TUA RISPOSTA
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S232755AbhKCQNi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 3 Nov 2021 12:13:38 -0400
+Received: from foss.arm.com ([217.140.110.172]:32992 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232762AbhKCQNO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 3 Nov 2021 12:13:14 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 49C8EED1;
+        Wed,  3 Nov 2021 09:10:37 -0700 (PDT)
+Received: from e123648.arm.com (unknown [10.57.26.226])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D1DA23F7D7;
+        Wed,  3 Nov 2021 09:10:32 -0700 (PDT)
+From:   Lukasz Luba <lukasz.luba@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, lukasz.luba@arm.com,
+        sudeep.holla@arm.com, will@kernel.org, catalin.marinas@arm.com,
+        linux@armlinux.org.uk, gregkh@linuxfoundation.org,
+        rafael@kernel.org, viresh.kumar@linaro.org, amitk@kernel.org,
+        daniel.lezcano@linaro.org, amit.kachhap@gmail.com,
+        thara.gopinath@linaro.org, bjorn.andersson@linaro.org,
+        agross@kernel.org
+Subject: [PATCH v3 0/5] Refactor thermal pressure update to avoid code duplication
+Date:   Wed,  3 Nov 2021 16:10:15 +0000
+Message-Id: <20211103161020.26714-1-lukasz.luba@arm.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---=20
+Hi all,
 
-Buona giornata,
+This patch set v3 aims to refactor the thermal pressure update
+code. There are already two clients which do similar thing:
+convert the capped frequency value into the capacity of
+affected CPU and call the 'set' function to store the 
+reduced capacity into the per-cpu variable.
+There might be more than two of these users. In near future
+it will be scmi-cpufreq driver, which receives notification
+from FW about reduced frequency due to thermal. Other vendors
+might follow. Let's avoid code duplication and potential
+conversion bugs. Move the conversion code into the arch_topology.c
+where the capacity calculation setup code and thermal pressure sit.
 
-Sono obbligato a effettuare il trasferimento dei tuoi fondi tramite ATM CAR=
-D.
+Apart from that $subject patches, there is one patch (3/5) which fixes
+issue in qcom-cpufreq-hw.c when the thermal pressure is not 
+updated for offline CPUs. It's similar fix that has been merged
+recently for cpufreq_cooling.c:
+2ad8ccc17d1e4270cf65a3f2
 
-A causa della rigorosa politica finanziaria e della
-regolamentazione/riforma monetaria
-introdotto dalla Banca per il primo trimestre di questo anno fiscale 2021 e
-gli enormi costi legati al bonifico diretto del fondo dall'Apex
-banca, diventa opportuno formulare un mezzo pi=C3=B9 praticabile di
-versando il fondo su qualsiasi conto designato da te nominato.
+Changes:
+v3:
+- added warning and check if provided capped frequency is lower than
+  max (Viresh)
+- removed check for empty cpu mask (Viresh)
+- replaced tabs with spaces in the doxygen comment (Viresh)
+- renamed {arch|topology}_thermal_pressure_update() to
+  {arch|topology}_update_thermal_pressure() so it's align with scheme (Dietmar)
+- added info about MHz in freq_factor into patch description (Dietmar)
+v2 [2]:
+- added Reviewed-by from Thara for patch 3/5
+- changed the doxygen comment and used mult_frac()
+  according to Thara's suggestion in patch 1/5
+v1 -> [1]
 
-Richieder=C3=B2 che i fondi vengano impacchettati nel sistema bancario elet=
-tronico
-e pagato da Automated Payment Systems (CHAPS ///ATM per $ 1.200.000,00 Unit=
-ed
-solo dollari statunitensi).
+Regards,
+Lukasz Luba
 
-Un bancomat (ATM) =C3=A8 uno sportello bancario elettronico, che
-consente ai clienti di completare le transazioni di base senza
-l'ausilio di una filiale
-rappresentante o cassiere.
+[1] https://lore.kernel.org/linux-pm/20211007080729.8262-1-lukasz.luba@arm.com/
+[2] https://lore.kernel.org/linux-pm/20211015144550.23719-1-lukasz.luba@arm.com/
 
-Prender=C3=B2 le disposizioni adeguate per l'invio della carta bancomat nel
-i prossimi giorni.
+Lukasz Luba (5):
+  arch_topology: Introduce thermal pressure update function
+  thermal: cpufreq_cooling: Use new thermal pressure update function
+  cpufreq: qcom-cpufreq-hw: Update offline CPUs per-cpu thermal pressure
+  cpufreq: qcom-cpufreq-hw: Use new thermal pressure update function
+  arch_topology: Remove unused topology_set_thermal_pressure() and
+    related
 
-Riconfermami quanto segue:
+ arch/arm/include/asm/topology.h   |  2 +-
+ arch/arm64/include/asm/topology.h |  2 +-
+ drivers/base/arch_topology.c      | 36 +++++++++++++++++++++++++++----
+ drivers/cpufreq/qcom-cpufreq-hw.c | 14 +++++-------
+ drivers/thermal/cpufreq_cooling.c |  6 +-----
+ include/linux/arch_topology.h     |  4 ++--
+ include/linux/sched/topology.h    |  6 +++---
+ init/Kconfig                      |  2 +-
+ 8 files changed, 46 insertions(+), 26 deletions(-)
 
-1. I tuoi nomi completi e indirizzo completo
+-- 
+2.17.1
 
-2.Il tuo numero di telefono diretto per consentirmi di raggiungerti in
-ogni momento
-
-RISPETTOSAMENTE,
-
-IL SIGNOR HELIBERT.
