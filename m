@@ -2,166 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08D25444587
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Nov 2021 17:11:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95B7D444838
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Nov 2021 19:21:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232823AbhKCQNk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 3 Nov 2021 12:13:40 -0400
-Received: from foss.arm.com ([217.140.110.172]:33072 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232788AbhKCQNi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 3 Nov 2021 12:13:38 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7E516ED1;
-        Wed,  3 Nov 2021 09:11:01 -0700 (PDT)
-Received: from e123648.arm.com (unknown [10.57.26.226])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 219DB3F7D7;
-        Wed,  3 Nov 2021 09:10:56 -0700 (PDT)
-From:   Lukasz Luba <lukasz.luba@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, lukasz.luba@arm.com,
-        sudeep.holla@arm.com, will@kernel.org, catalin.marinas@arm.com,
-        linux@armlinux.org.uk, gregkh@linuxfoundation.org,
-        rafael@kernel.org, viresh.kumar@linaro.org, amitk@kernel.org,
-        daniel.lezcano@linaro.org, amit.kachhap@gmail.com,
-        thara.gopinath@linaro.org, bjorn.andersson@linaro.org,
-        agross@kernel.org
-Subject: [PATCH v3 5/5] arch_topology: Remove unused topology_set_thermal_pressure() and related
-Date:   Wed,  3 Nov 2021 16:10:20 +0000
-Message-Id: <20211103161020.26714-6-lukasz.luba@arm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211103161020.26714-1-lukasz.luba@arm.com>
-References: <20211103161020.26714-1-lukasz.luba@arm.com>
+        id S231533AbhKCSXv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 3 Nov 2021 14:23:51 -0400
+Received: from mail-ot1-f41.google.com ([209.85.210.41]:36783 "EHLO
+        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231230AbhKCSXu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Nov 2021 14:23:50 -0400
+Received: by mail-ot1-f41.google.com with SMTP id r10-20020a056830448a00b0055ac7767f5eso4721311otv.3;
+        Wed, 03 Nov 2021 11:21:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pvIpNYV2Tx6bolS6CIHdaJSwGnfCSaBkUG5dm1ZVR98=;
+        b=6kl5u+eIuGfHO7Hro1uhACgNXFnhIdtnwfwJLxEIZK9R2auB/4UdKoiN+Dw889cs3m
+         IppuPg6xCyS7rG5+05+3NZGFRIM7JLVlMAb5jLb45j7dpWVPWgTW0dPk5bSer3BWxQPY
+         GiSERN8DjvDlcsHYPDzQrBz3XWuVbICElK44qfmyfXMZIxYMCPzJIcTueodtkoZ7h/nZ
+         m7wMSywrvePQRQpBW5ukCVLWEmNP14sEH6qRWbyzZYJOUzs3Zs53cVvUbX97kHyxg2mN
+         71u88FIwmFGnbWnJfOhwURf0pySvL+v4JtWzK5AyZqRq7uxE4KLwMeTbq9eaP48neSvM
+         JXMA==
+X-Gm-Message-State: AOAM530Fw8uXKaF95iIaX3INr4eOtjzRNL0eANTngEt/TXHHOdSGMMfO
+        uVQbrd+fzcto4BlBXHVWUDB/Itt9QyimpiF2/A4=
+X-Google-Smtp-Source: ABdhPJz6oq6BMpLa6xzEMg2bbk/wKb3OdSX/FB2sb6qFm6Gaed9h7yaHFioG+FDztVtbc9Yk02bLWu2ZX0mfGQoHwSY=
+X-Received: by 2002:a05:6830:3484:: with SMTP id c4mr17342342otu.254.1635963673329;
+ Wed, 03 Nov 2021 11:21:13 -0700 (PDT)
+MIME-Version: 1.0
+References: <20211102223959.3873-1-hdegoede@redhat.com> <20211102223959.3873-2-hdegoede@redhat.com>
+In-Reply-To: <20211102223959.3873-2-hdegoede@redhat.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 3 Nov 2021 19:21:02 +0100
+Message-ID: <CAJZ5v0gRna0DBK6CbaOTp82EVmmF67UxgaZoW3cu=YbVG21o4A@mail.gmail.com>
+Subject: Re: [RFC v2 1/2] ACPI / x86: Add PWM2 on the Xiaomi Mi Pad 2 to the
+ always_present list
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Yauhen Kharuzhy <jekhor@gmail.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There is no need of this function (and related) since code has been
-converted to use the new arch_thermal_pressure_update() API. The old
-code can be removed.
+On Tue, Nov 2, 2021 at 11:40 PM Hans de Goede <hdegoede@redhat.com> wrote:
+>
+> The Xiaomi Mi Pad 2 has backlit LEDs behind the capacitive menu, home
+> and back buttons below the screen which are controlled by the PWM2
+> controller of the CHT SoC. This PWM2 controller gets hidden by the
+> firmware, add it to the always_present_ids table so that we can use
+> the PWM controller to control the backlighting of the buttons.
+>
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 
-Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
----
- arch/arm/include/asm/topology.h   |  1 -
- arch/arm64/include/asm/topology.h |  1 -
- drivers/base/arch_topology.c      | 17 +++++------------
- include/linux/arch_topology.h     |  3 ---
- include/linux/sched/topology.h    |  7 -------
- init/Kconfig                      |  2 +-
- 6 files changed, 6 insertions(+), 25 deletions(-)
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-diff --git a/arch/arm/include/asm/topology.h b/arch/arm/include/asm/topology.h
-index f1eafacc9a30..c7d2510e5a78 100644
---- a/arch/arm/include/asm/topology.h
-+++ b/arch/arm/include/asm/topology.h
-@@ -23,7 +23,6 @@
- 
- /* Replace task scheduler's default thermal pressure API */
- #define arch_scale_thermal_pressure topology_get_thermal_pressure
--#define arch_set_thermal_pressure   topology_set_thermal_pressure
- #define arch_update_thermal_pressure	topology_update_thermal_pressure
- 
- #else
-diff --git a/arch/arm64/include/asm/topology.h b/arch/arm64/include/asm/topology.h
-index 7a421cbc99ed..f386b90a79c8 100644
---- a/arch/arm64/include/asm/topology.h
-+++ b/arch/arm64/include/asm/topology.h
-@@ -32,7 +32,6 @@ void update_freq_counters_refs(void);
- 
- /* Replace task scheduler's default thermal pressure API */
- #define arch_scale_thermal_pressure topology_get_thermal_pressure
--#define arch_set_thermal_pressure   topology_set_thermal_pressure
- #define arch_update_thermal_pressure	topology_update_thermal_pressure
- 
- #include <asm-generic/topology.h>
-diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-index d66aa46b7e1a..db18d79065fe 100644
---- a/drivers/base/arch_topology.c
-+++ b/drivers/base/arch_topology.c
-@@ -159,16 +159,6 @@ void topology_set_cpu_scale(unsigned int cpu, unsigned long capacity)
- 
- DEFINE_PER_CPU(unsigned long, thermal_pressure);
- 
--void topology_set_thermal_pressure(const struct cpumask *cpus,
--			       unsigned long th_pressure)
--{
--	int cpu;
--
--	for_each_cpu(cpu, cpus)
--		WRITE_ONCE(per_cpu(thermal_pressure, cpu), th_pressure);
--}
--EXPORT_SYMBOL_GPL(topology_set_thermal_pressure);
--
- /**
-  * topology_update_thermal_pressure() - Update thermal pressure for CPUs
-  * @cpus        : The related CPUs for which capacity has been reduced
-@@ -184,7 +174,7 @@ EXPORT_SYMBOL_GPL(topology_set_thermal_pressure);
- void topology_update_thermal_pressure(const struct cpumask *cpus,
- 				      unsigned long capped_freq)
- {
--	unsigned long max_capacity, capacity;
-+	unsigned long max_capacity, capacity, th_pressure;
- 	u32 max_freq;
- 	int cpu;
- 
-@@ -200,7 +190,10 @@ void topology_update_thermal_pressure(const struct cpumask *cpus,
- 
- 	capacity = mult_frac(capped_freq, max_capacity, max_freq);
- 
--	arch_set_thermal_pressure(cpus, max_capacity - capacity);
-+	th_pressure = max_capacity - capacity;
-+
-+	for_each_cpu(cpu, cpus)
-+		WRITE_ONCE(per_cpu(thermal_pressure, cpu), th_pressure);
- }
- EXPORT_SYMBOL_GPL(topology_update_thermal_pressure);
- 
-diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
-index ace1e5dcf773..cce6136b300a 100644
---- a/include/linux/arch_topology.h
-+++ b/include/linux/arch_topology.h
-@@ -56,9 +56,6 @@ static inline unsigned long topology_get_thermal_pressure(int cpu)
- 	return per_cpu(thermal_pressure, cpu);
- }
- 
--void topology_set_thermal_pressure(const struct cpumask *cpus,
--				   unsigned long th_pressure);
--
- void topology_update_thermal_pressure(const struct cpumask *cpus,
- 				      unsigned long capped_freq);
- 
-diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
-index 6e89a8e43aa7..8054641c0a7b 100644
---- a/include/linux/sched/topology.h
-+++ b/include/linux/sched/topology.h
-@@ -266,13 +266,6 @@ unsigned long arch_scale_thermal_pressure(int cpu)
- }
- #endif
- 
--#ifndef arch_set_thermal_pressure
--static __always_inline
--void arch_set_thermal_pressure(const struct cpumask *cpus,
--			       unsigned long th_pressure)
--{ }
--#endif
--
- #ifndef arch_update_thermal_pressure
- static __always_inline
- void arch_update_thermal_pressure(const struct cpumask *cpus,
-diff --git a/init/Kconfig b/init/Kconfig
-index 11f8a845f259..b5d6eeb86275 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -550,7 +550,7 @@ config SCHED_THERMAL_PRESSURE
- 	  i.e. put less load on throttled CPUs than on non/less throttled ones.
- 
- 	  This requires the architecture to implement
--	  arch_set_thermal_pressure() and arch_scale_thermal_pressure().
-+	  arch_update_thermal_pressure() and arch_scale_thermal_pressure().
- 
- config BSD_PROCESS_ACCT
- 	bool "BSD Process Accounting"
--- 
-2.17.1
-
+> ---
+>  drivers/acpi/x86/utils.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/drivers/acpi/x86/utils.c b/drivers/acpi/x86/utils.c
+> index f22f23933063..cb988f9b23a1 100644
+> --- a/drivers/acpi/x86/utils.c
+> +++ b/drivers/acpi/x86/utils.c
+> @@ -58,6 +58,11 @@ static const struct always_present_id always_present_ids[] = {
+>         ENTRY("80862289", "2", X86_MATCH(ATOM_AIRMONT), {
+>                         DMI_MATCH(DMI_PRODUCT_NAME, "Lenovo YB1-X9"),
+>                 }),
+> +       /* The Xiaomi Mi Pad 2 uses PWM2 for touchkeys backlight control */
+> +       ENTRY("80862289", "2", X86_MATCH(ATOM_AIRMONT), {
+> +               DMI_MATCH(DMI_SYS_VENDOR, "Xiaomi Inc"),
+> +               DMI_MATCH(DMI_PRODUCT_NAME, "Mipad2"),
+> +             }),
+>         /*
+>          * The INT0002 device is necessary to clear wakeup interrupt sources
+>          * on Cherry Trail devices, without it we get nobody cared IRQ msgs.
+> --
+> 2.31.1
+>
