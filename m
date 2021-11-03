@@ -2,97 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47EF5443DD9
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Nov 2021 08:53:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FEFF443F2B
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Nov 2021 10:19:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbhKCHzo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 3 Nov 2021 03:55:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52012 "EHLO
+        id S231629AbhKCJVr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 3 Nov 2021 05:21:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230046AbhKCHzo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Nov 2021 03:55:44 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C813CC061714
-        for <linux-pm@vger.kernel.org>; Wed,  3 Nov 2021 00:53:07 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id c71-20020a1c9a4a000000b0032cdcc8cbafso1120664wme.3
-        for <linux-pm@vger.kernel.org>; Wed, 03 Nov 2021 00:53:07 -0700 (PDT)
+        with ESMTP id S231240AbhKCJVq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Nov 2021 05:21:46 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53341C061714;
+        Wed,  3 Nov 2021 02:19:10 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id f4so6649706edx.12;
+        Wed, 03 Nov 2021 02:19:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=VPh4Dp+YKR59+rlQQnZun9Wq0rnlFLvRuPBwa+z2RvM=;
-        b=Bvs59YztcKrQgr/3MlFXaNRvNjo3nIrK+STERsF0DOCNPqViLk7I5MkvstnEdP9yHk
-         tGarK71Fb/8M8fSU6GeJavnGlCz85SClNxIUtABsNC0Jht1of/BpWbTqduvu6Hgsafis
-         qkEbXjsFKUIyLeL2SxUDgecrCw+vEYLGOvyfN+iMHisrHMv2dfpsqjstkgiUVfThiJPF
-         5h0d8hd7b85U65GKeFfjGDLbjOB2REbRkt8VLI8UcoAp02DORXpHk/vm6CGAom9+CrQ8
-         bsRcmnxgH+SNWNbPLUGfIKvyXApSN6a86dl2+JpPI0/uJwbyJyKlAubUeaF5mmF017U5
-         j7PQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=izh+Izi2ViuBwJmcCrMjhlzLlTjUKnonv7xgDnMZKrU=;
+        b=TOKXBUUZnEhSiVUGswo5BWK4XFiOQ2DZnwlqKSdHEn10SsJWliHEGHgqw+9ylVayJt
+         0caUEzS8EWy0LF4JQtctFoGh5RdeYpx+7IQqErlBGO2l7DdUhV+P5GmH6qngfsNRwk4f
+         QV74rbGLnWWigx5dWqctsPl7vZQYQh7urXzFT6EacH63MKT9vaY4a/w2PLDAzcm0U2vA
+         TptxGVG18x246E1nDbf0/8ht0qt1SvLPGAxFt9sq0M0hCr3nd+4aJD3Rdg5tTtsLPevu
+         VDwcDwrgtcsU+RfaLUpEvakbwjWWpLxfMOx2Rq5RgaBlhxgHRBmIfFoUOkuGrOBpAkVY
+         7NmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=VPh4Dp+YKR59+rlQQnZun9Wq0rnlFLvRuPBwa+z2RvM=;
-        b=h0iMHUzkT6/RbbvsR7xQ+y3IypcdKSV8V/imvSA8ei3IBe3Kit8o8UVuGmiIxdBsqG
-         0jsuPxSGQUtAyo/TJklCZ0UOmttCmYh61JQSHmZ6wO2owSMx3Qgo5Dx6qrN6xY+QFa+C
-         YXcvAMviOC8CnpDsRRfuzdRhzaSSiLNOqCpVYBiFViUJcnoDIycGdFn+7/riid8DnQxj
-         JxX4GlUBlMCPU+VEOrleUQgqZJBPYkLfbGu/VjpVW1RaLstnJCcNTXsdVfBrUxrgG5T3
-         fvplRPdJiSu+LCo6t5spqDfUBe5gIWAkqKdUl/6yE1j4pP0tDyHqlByZwyhIE86qfNHn
-         BcJg==
-X-Gm-Message-State: AOAM533lFoz9j1ThzJgGgW5tJSoiykuE316dNxeMjGS1oLmFgrtI02me
-        SvHwFHHf57ym3m1spq9T4Fqkz4y1HAlaiA==
-X-Google-Smtp-Source: ABdhPJypsAKICi5O+rUKAdmond76Pe0yRzhI6Its+Jwd5+oXnfb+g1mW5wvyHbF0a11pZZmnTYw4mg==
-X-Received: by 2002:a05:600c:5125:: with SMTP id o37mr12877614wms.81.1635925986247;
-        Wed, 03 Nov 2021 00:53:06 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:9646:a63d:c457:d22e? ([2a01:e34:ed2f:f020:9646:a63d:c457:d22e])
-        by smtp.googlemail.com with ESMTPSA id z11sm1190976wrt.58.2021.11.03.00.53.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Nov 2021 00:53:05 -0700 (PDT)
-Subject: Re: [GIT PULL] Thermal control updates for v5.16-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <CAJZ5v0hnj0zCXsZy0=Ukud3U_cn054GULmHmpz7Qrpg_TkLLqA@mail.gmail.com>
- <CAHk-=wijOKZNA0Ahd0fNDDa8pc6abv9wUHbxBf8giOeERHkW0g@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <60950c33-a5be-c465-cb5a-9e33b13a1ee4@linaro.org>
-Date:   Wed, 3 Nov 2021 08:53:04 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=izh+Izi2ViuBwJmcCrMjhlzLlTjUKnonv7xgDnMZKrU=;
+        b=YMJbFUm8sXX4rnxoYg+y12JIQl+qddkVpoh94+gldV8orlFE7FwTsikCd5qON+lOms
+         zblxs4Na9aWy15OGal/CJ2jKY+5Vnxrk8lncqSqXNb2ottXc+77W8CrcW9zAMe870j57
+         2IRebJnDQJqe/QEKH/SQuQV7Of8O+3spCnKyID80wVBS+rm79Z1W1vesM0GZubDsCdvp
+         zicCakhz49JPfACYjDAjcePWzjw2B9G/YlZVu8YzbTUTRi2XceZzcifk+SeU00oEYcEZ
+         6c2d/TJWmLDHf5RBfITXxOfwPamIJMH6mr1EpYDm6b+jZWCWGLeCilQT9qfb1oHcFXKL
+         RG7g==
+X-Gm-Message-State: AOAM533XOkQrjUvWOoGAfAbzzma3cymfS6fOyaP6IKKS9xm49pPIE+68
+        1+LESdhPzh03MDSZEe3ub4i85QEAzTZOS9Fi+0s=
+X-Google-Smtp-Source: ABdhPJylFvUk+eMM/aD3uh9TFRjKL0A0DPL5/C9zxrRXh8EDSBK11TVImY7EP6IdHGBEUgJ/89og7ZwlPvXA2Da80+M=
+X-Received: by 2002:a05:6402:207c:: with SMTP id bd28mr48553253edb.240.1635931148908;
+ Wed, 03 Nov 2021 02:19:08 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAHk-=wijOKZNA0Ahd0fNDDa8pc6abv9wUHbxBf8giOeERHkW0g@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20211102223959.3873-1-hdegoede@redhat.com>
+In-Reply-To: <20211102223959.3873-1-hdegoede@redhat.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 3 Nov 2021 11:18:31 +0200
+Message-ID: <CAHp75VdoYO7DCWGHadgto3Aay836z1A7g4LHT7RNLF4kgAa_Pg@mail.gmail.com>
+Subject: Re: [RFC v2 0/2] ACPI/power-suppy add fuel-gauge support on cht-wc
+ PMIC without USB-PD support devs
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Yauhen Kharuzhy <jekhor@gmail.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03/11/2021 01:07, Linus Torvalds wrote:
-> On Tue, Nov 2, 2021 at 12:55 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->>
->> Daniel Lezcano (3):
->>       thermal/core: Make the userspace governor deprecated
-> 
-> This one is very annoying indeed.
-> 
-> How about making that "pr_warn()" be a "pr_warn_once()"?
-> 
-> Because I don't see the point of
-> 
->     dmesg  | grep "Userspace governor deprecated" | wc -l
->     19
-> 
-> almost immediately after boot.
+On Wed, Nov 3, 2021 at 12:40 AM Hans de Goede <hdegoede@redhat.com> wrote:
 
-Is the platform with 19 thermal zones and default thermal policy set to
-userspace governor ?
+...
+
+> While working on this I realized that there also is a 4th option,
+> which is basically option 1 from the v1 RFC minus the 2 gpiolib-acpi
+> patches.
+>
+> With the 2nd option (as implemented by this RFC) we leave the
+> _AEI handler in place and run the fuel-gauge without interrupt,
+> we can do the same when marking the fuel-gauge as always present
+> by treating IRQs on ACPI devices the same way as in the
+> max17042_battery code, which has already solved the IRQ problem
+> without disabling the _AEI handler:
+>
+>                 /*
+>                  * On ACPI systems the IRQ may be handled by ACPI-event code,
+>                  * so we need to share (if the ACPI code is willing to share).
+>                  */
+
+>                 if (acpi_id)
+
+(Side remark: wouldn't it be better to have has_acpi_companion() and
+use device_get_match_data()?)
+
+>                         flags |= IRQF_SHARED | IRQF_PROBE_SHARED;
+>
+> This is a pretty decent option too, it requires:
+>
+> 1. 2 more always_present quirks in the ACPI scan code which is part of
+> the main kernel image.
+>
+> 2. Patches to the bq27xxx_battery code to support ACPI enumeration.
+
+If it works, why not try it?
+
+I like the common base for the FG drivers that can be used as a pattern then.
 
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+With Best Regards,
+Andy Shevchenko
