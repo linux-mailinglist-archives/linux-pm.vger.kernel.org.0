@@ -2,107 +2,179 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35CFA445448
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Nov 2021 14:53:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D00E44544E
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Nov 2021 14:53:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231215AbhKDN4P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 4 Nov 2021 09:56:15 -0400
-Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:35644 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230401AbhKDN4O (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Nov 2021 09:56:14 -0400
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1A46fQYI015730;
-        Thu, 4 Nov 2021 08:53:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PODMain02222019;
- bh=1Pv77IRgt/Ji1nC8p5CSpvCGKBLNjyJ+wDCSD75Dx1I=;
- b=CRxt13aM+FO8mBhGgojz7Y/Dy6VNL3rEixZrx4EN7Gk5hPl+o+7IBamb8Yuz2SHMvH/q
- f3lm5ld+haTKozcUikjDn3wlqZbhopvky+upUI2btDUVFWR+f3ga5ba79IFEztAqRGmb
- tjy/xGSm1ai6cpuE8vEyKI22qEDiVB1DDiYdm2dh0i4qann8uk2gM/rE+c0S9b7DHwBk
- dIMEezy6e+tzoOBX7HRfBaL5XCN0az/Mo8IPQxbwhKckrKjwWgibJAsYpeg5YdP2wBmq
- 0o9oAKn6MWe2q0uQPTNr3hSwNOVrbsxwbCdtBsmLycSMj/lpQTVvrmcu/2f6nEJPk87A Lg== 
-Received: from ediex01.ad.cirrus.com ([87.246.76.36])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3c3e1432nk-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 04 Nov 2021 08:53:33 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.12; Thu, 4 Nov
- 2021 13:53:31 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.12 via Frontend
- Transport; Thu, 4 Nov 2021 13:53:31 +0000
-Received: from ricardo-lws.crystal.cirrus.com (ricardo-lws.ad.cirrus.com [141.131.206.19])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id D63BAB16;
-        Thu,  4 Nov 2021 13:53:30 +0000 (UTC)
-From:   Ricardo Rivera-Matos <rriveram@opensource.cirrus.com>
-To:     <patches@opensource.cirrus.com>, <sre@kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Ricardo Rivera-Matos <rriveram@opensource.cirrus.com>
-Subject: [PATCH 1/1] power: supply: Introduces bypass charging property
-Date:   Thu, 4 Nov 2021 08:50:27 -0500
-Message-ID: <20211104135027.2352874-2-rriveram@opensource.cirrus.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211104135027.2352874-1-rriveram@opensource.cirrus.com>
-References: <20211104135027.2352874-1-rriveram@opensource.cirrus.com>
+        id S231267AbhKDN4b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 4 Nov 2021 09:56:31 -0400
+Received: from mga01.intel.com ([192.55.52.88]:46664 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231345AbhKDN4a (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 4 Nov 2021 09:56:30 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10157"; a="255346056"
+X-IronPort-AV: E=Sophos;i="5.87,208,1631602800"; 
+   d="scan'208";a="255346056"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2021 06:53:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,208,1631602800"; 
+   d="scan'208";a="600254262"
+Received: from lkp-server02.sh.intel.com (HELO c20d8bc80006) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 04 Nov 2021 06:53:49 -0700
+Received: from kbuild by c20d8bc80006 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1midBd-0006Sv-3a; Thu, 04 Nov 2021 13:53:49 +0000
+Date:   Thu, 04 Nov 2021 21:53:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ c983c327442e1d67cccb9e2c73589d7cafd2514c
+Message-ID: <6183e5da.3b1O4twb/XE75+ep%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: T9gXKuatNBMzi9LgkXlFylFhMdglzSSD
-X-Proofpoint-GUID: T9gXKuatNBMzi9LgkXlFylFhMdglzSSD
-X-Proofpoint-Spam-Reason: safe
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Adds a POWER_SUPPLY_CHARGE_TYPE_BYPASS option to the POWER_SUPPLY_PROP_CHARGE_TYPE
-property to facilitate bypass charging operation.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: c983c327442e1d67cccb9e2c73589d7cafd2514c  Merge branch 'acpi-video' into bleeding-edge
 
-In bypass charging operation, the charger bypasses the charging path around the
-integrated converter allowing for a "smart" wall adaptor to perform the power
-conversion externally.
+elapsed time: 1154m
 
-This operational mode is critical for the USB PPS standard of power adaptors and is
-becoming a common feature in modern charging ICs such as:
+configs tested: 118
+configs skipped: 3
 
-- BQ25980
-- BQ25975
-- BQ25960
-- LN8000
-- LN8410
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Signed-off-by: Ricardo Rivera-Matos <rriveram@opensource.cirrus.com>
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20211103
+mips                     loongson1b_defconfig
+powerpc                      cm5200_defconfig
+mips                         mpc30x_defconfig
+powerpc                        icon_defconfig
+sh                           se7721_defconfig
+powerpc                 mpc837x_rdb_defconfig
+nios2                         3c120_defconfig
+nds32                               defconfig
+powerpc                 mpc8540_ads_defconfig
+arm                        neponset_defconfig
+powerpc                     tqm8560_defconfig
+arm                          collie_defconfig
+sh                      rts7751r2d1_defconfig
+sh                 kfr2r09-romimage_defconfig
+m68k                       m5249evb_defconfig
+m68k                       bvme6000_defconfig
+sparc                       sparc32_defconfig
+powerpc                         ps3_defconfig
+mips                      bmips_stb_defconfig
+arm                        mvebu_v7_defconfig
+arm                            dove_defconfig
+arm                       multi_v4t_defconfig
+powerpc                     tqm8540_defconfig
+arm                  randconfig-c002-20211103
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a012-20211103
+x86_64               randconfig-a015-20211103
+i386                 randconfig-a014-20211103
+i386                 randconfig-a016-20211103
+i386                 randconfig-a013-20211103
+i386                 randconfig-a015-20211103
+i386                 randconfig-a011-20211103
+i386                 randconfig-a012-20211103
+arc                  randconfig-r043-20211103
+riscv                randconfig-r042-20211103
+s390                 randconfig-r044-20211103
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+
+clang tested configs:
+mips                 randconfig-c004-20211103
+arm                  randconfig-c002-20211103
+i386                 randconfig-c001-20211103
+s390                 randconfig-c005-20211103
+powerpc              randconfig-c003-20211103
+mips                 randconfig-c004-20211104
+i386                 randconfig-c001-20211104
+arm                  randconfig-c002-20211104
+s390                 randconfig-c005-20211104
+riscv                randconfig-c006-20211104
+powerpc              randconfig-c003-20211104
+x86_64               randconfig-c007-20211104
+i386                 randconfig-a005-20211103
+i386                 randconfig-a003-20211103
+i386                 randconfig-a001-20211103
+i386                 randconfig-a004-20211103
+i386                 randconfig-a006-20211103
+i386                 randconfig-a002-20211103
+x86_64               randconfig-a012-20211104
+x86_64               randconfig-a016-20211104
+x86_64               randconfig-a015-20211104
+x86_64               randconfig-a013-20211104
+x86_64               randconfig-a011-20211104
+x86_64               randconfig-a014-20211104
+x86_64               randconfig-a006-20211103
+x86_64               randconfig-a004-20211103
+x86_64               randconfig-a001-20211103
+x86_64               randconfig-a002-20211103
+x86_64               randconfig-a005-20211103
+x86_64               randconfig-a003-20211103
+hexagon              randconfig-r041-20211103
+hexagon              randconfig-r045-20211103
+
 ---
- drivers/power/supply/power_supply_sysfs.c | 1 +
- include/linux/power_supply.h              | 1 +
- 2 files changed, 2 insertions(+)
-
-diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-index c3d7cbcd4fad..1368e13dc94b 100644
---- a/drivers/power/supply/power_supply_sysfs.c
-+++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -89,6 +89,7 @@ static const char * const POWER_SUPPLY_CHARGE_TYPE_TEXT[] = {
- 	[POWER_SUPPLY_CHARGE_TYPE_ADAPTIVE]	= "Adaptive",
- 	[POWER_SUPPLY_CHARGE_TYPE_CUSTOM]	= "Custom",
- 	[POWER_SUPPLY_CHARGE_TYPE_LONGLIFE]	= "Long Life",
-+	[POWER_SUPPLY_CHARGE_TYPE_BYPASS]	= "Bypass",
- };
- 
- static const char * const POWER_SUPPLY_HEALTH_TEXT[] = {
-diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index 9ca1f120a211..9432234d7900 100644
---- a/include/linux/power_supply.h
-+++ b/include/linux/power_supply.h
-@@ -49,6 +49,7 @@ enum {
- 	POWER_SUPPLY_CHARGE_TYPE_ADAPTIVE,	/* dynamically adjusted speed */
- 	POWER_SUPPLY_CHARGE_TYPE_CUSTOM,	/* use CHARGE_CONTROL_* props */
- 	POWER_SUPPLY_CHARGE_TYPE_LONGLIFE,	/* slow speed, longer life */
-+	POWER_SUPPLY_CHARGE_TYPE_BYPASS,	/* bypassing the charger */
- };
- 
- enum {
--- 
-2.25.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
