@@ -2,186 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0008F4459BD
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Nov 2021 19:29:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 697764459F4
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Nov 2021 19:46:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233342AbhKDSb7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 4 Nov 2021 14:31:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60900 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233932AbhKDSb7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 4 Nov 2021 14:31:59 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5BA1D61212;
-        Thu,  4 Nov 2021 18:29:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636050560;
-        bh=7dONt4J1TqjYGPV4HWrCgKohbev1hDMDfz/GjnNRL/o=;
-        h=Date:From:To:Cc:Subject:From;
-        b=vDN0azxiOmm6kR4MxswDmX/t+xWRubUr+2iV8yilCLOCpNlhMNLw7eCKslGPC45z5
-         1HpezdUujd0GdGDtJMC+YQtl92gRacB2gwxw3eVbobxoBLxL9uPzkfG7htXxTuWcKC
-         cTyzimVbhHieXniQFZyPaRqibV4Fr+LHR4e0dHaQDQMRCh+eYU5b1RVUVXPYFOicUG
-         gNJDBUyNWfbxBjLU5fDHTJXs9BZ3rqDsbyKsikE/qpqzsjFs18ZI0DclhtmYWGfL3a
-         gnGHVp08KxtupmEo2av2I0WUoIT70XvND7S0Jysx4tQufrKwr49EbCytuK9xe8YM/V
-         y1zlDzYydE5zQ==
-Received: by earth.universe (Postfix, from userid 1000)
-        id 3B04F3C0F95; Thu,  4 Nov 2021 19:29:18 +0100 (CET)
-Date:   Thu, 4 Nov 2021 19:29:18 +0100
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [GIT PULL] power-supply changes for 5.16
-Message-ID: <20211104182918.nqvaukg6y6qq6mbp@earth.universe>
+        id S231826AbhKDStT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 4 Nov 2021 14:49:19 -0400
+Received: from mail-ot1-f49.google.com ([209.85.210.49]:43804 "EHLO
+        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230438AbhKDStS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Nov 2021 14:49:18 -0400
+Received: by mail-ot1-f49.google.com with SMTP id n13-20020a9d710d000000b005558709b70fso9543097otj.10;
+        Thu, 04 Nov 2021 11:46:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DibJrm4A9ig/vBo1EjDioFiIQk3mKd4WJjbVURulMb4=;
+        b=00mdBxoJEW9fR8XnU1n/NPoPkzeAbFAzBaKS+RQRzEp7MIKf9WUDrneiLSGm5g2jWD
+         yioFEY2MSAd5X8b8Kys44ZIOq8KHbR1bWtomHDRIMAJ5e1yD3lNI9pv/VlVD00T6a914
+         mZpYqNIWzQzKyJfiGb9oBoeM4Cfu/LoFcZ1rR/7Y6casys1ivCfPoQ3fgTNURAwRgMcj
+         0zKNKbG/+55SU+Nqn+sFVmpUQZ8PNlHND2Qk+FCTO00gAUGnmz5UlgLBk1BzhU8vSiwo
+         pBupOysB0xZIXHYQJ3cQVbO34291y+0F27mZJBig1sxmklGj6TTqsYtvyZwYUQq/baPu
+         bawA==
+X-Gm-Message-State: AOAM533z0jfPDtsONomY2UBoHxzSRfkk6SsjAy+VFU8XLjPHVnkv5Q7J
+        MntElKJqAPBxuz9fZ7+2yDmzoBIr2AyW96ktGNc=
+X-Google-Smtp-Source: ABdhPJwQnNjp3uYgBocO01tJttUYZD/1g6MMnI1UZa5kkK2HlPf3uKpAJyavXP4I/0VCGiDu5nLKWC0dOwvQGzLN8DY=
+X-Received: by 2002:a9d:a64:: with SMTP id 91mr33119161otg.198.1636051600270;
+ Thu, 04 Nov 2021 11:46:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="szuc5cz5kprafwzc"
-Content-Disposition: inline
+References: <20211029123855.80344-1-ulf.hansson@linaro.org>
+In-Reply-To: <20211029123855.80344-1-ulf.hansson@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 4 Nov 2021 19:46:29 +0100
+Message-ID: <CAJZ5v0gMNP_MLCJiZq8FCCOXxh+V31gTCx5OCNpP-__9Pq0_uA@mail.gmail.com>
+Subject: Re: [PATCH v2] PM: sleep: Fix runtime PM based cpuidle support
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Maulik Shah <mkshah@codeaurora.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Len Brown <len.brown@intel.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-riscv@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Fri, Oct 29, 2021 at 2:39 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+>
+> In the cpuidle-psci case, runtime PM in combination with the generic PM
+> domain (genpd), may be used when entering/exiting a shared idlestate. More
+> precisely, genpd relies on runtime PM to be enabled for the attached device
+> (in this case it belongs to a CPU), to properly manage the reference
+> counting of its PM domain.
+>
+> This works fine most of the time, but during system suspend in
+> dpm_suspend_late(), the PM core disables runtime PM for all devices. Beyond
+> this point, calls to pm_runtime_get_sync() to runtime resume a device may
+> fail and therefore it could also mess up the reference counting in genpd.
+>
+> To fix this problem, let's call wake_up_all_idle_cpus() in
+> dpm_suspend_late(), prior to disabling runtime PM. In this way a device
+> that belongs to a CPU, becomes runtime resumed through cpuidle-psci and
+> stays like that, because the runtime PM usage count has been bumped in
+> device_prepare().
+>
+> Diagnosed-by: Maulik Shah <mkshah@codeaurora.org>
+> Suggested-by: Rafael J. Wysocki <rafael@kernel.org>
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> ---
+>
+> Changes in v2:
+>         - Moved away from using cpuidle_pause|resume() to solve the problem, but
+>         instead just waking up idle CPUs is suffient, due to other recent merged
+>         changes.
+>
+> ---
+>  drivers/base/power/main.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+> index ac4dde8fdb8b..2fb08d4f1aca 100644
+> --- a/drivers/base/power/main.c
+> +++ b/drivers/base/power/main.c
+> @@ -1463,6 +1463,7 @@ int dpm_suspend_late(pm_message_t state)
+>         int error = 0;
+>
+>         trace_suspend_resume(TPS("dpm_suspend_late"), state.event, true);
+> +       wake_up_all_idle_cpus();
+>         mutex_lock(&dpm_list_mtx);
+>         pm_transition = state;
+>         async_error = 0;
+> --
 
---szuc5cz5kprafwzc
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi Linus,
-
-The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
-
-  Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
-
-are available in the Git repository at:
-
-  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-su=
-pply.git tags/for-v5.16
-
-for you to fetch changes up to 22ad4f99f63fc892412cde5a45d43b2288a60b88:
-
-  power: supply: bq25890: Fix initial setting of the F_CONV_RATE field (202=
-1-11-02 16:48:47 +0100)
-
-----------------------------------------------------------------
-power supply and reset changes for the v5.16 series
-
-Miscellaneous small fixes and improvements all over
-the place. Nothing stands out in particular.
-
-----------------------------------------------------------------
-Claudiu Beznea (1):
-      power: reset: at91-reset: check properly the return value of devm_of_=
-iomap
-
-Colin Ian King (1):
-      power: supply: wm831x_power: fix spelling mistake on function name
-
-David Heidelberg (1):
-      dt-bindings: power: supply: max17040: switch to unevaluatedProperties
-
-Geert Uytterhoeven (1):
-      power: supply: core: Move psy_has_property() to fix build
-
-Hans de Goede (7):
-      docs: ABI: sysfs-class-power: Documented cycle_count property
-      power: supply: axp288-charger: Add depends on IOSF_MBIO to Kconfig
-      power: supply: axp288-charger: Remove unnecessary is_present and is_o=
-nline helpers
-      power: supply: axp288-charger: Simplify axp288_get_charger_health()
-      power: supply: bq27xxx: Fix kernel crash on IRQ handler register error
-      power: supply: bq25890: Fix race causing oops at boot
-      power: supply: bq25890: Fix initial setting of the F_CONV_RATE field
-
-Henrik Grimler (2):
-      power: supply: max17042_battery: use VFSOC for capacity when no rsns
-      power: supply: max17042_battery: fix typo in MAX17042_IAvg_empty
-
-Jakob Hauser (1):
-      power: supply: rt5033_battery: Change voltage values to =B5V
-
-Kate Hsuan (1):
-      power: supply: axp288-charger: Optimize register reading method
-
-Krzysztof Kozlowski (4):
-      power: supply: max17040: extend help/description
-      power: supply: max17042: extend help/description
-      MAINTAINERS: power: supply: max17042: add entry with reviewers
-      MAINTAINERS: power: supply: max17040: add entry with reviewers
-
-Linus Walleij (3):
-      dt-bindings: power: Bindings for Samsung batteries
-      dt-bindings: power: supply: ab8500: Standard monitored-battery
-      power: supply: ab8500_bmdata: Use standard phandle
-
-Martin Kepplinger (1):
-      power: bq25890: add return values to error messages
-
-Matthias Kaehlcke (1):
-      power: supply: core: Add psy_has_property()
-
-Sebastian Krzyszkowiak (2):
-      power: supply: max17042_battery: Clear status bits in interrupt handl=
-er
-      power: supply: max17042_battery: Prevent int underflow in set_soc_thr=
-eshold
-
-Tang Bin (1):
-      power: supply: cpcap-battery: use device_get_match_data() to simplify=
- code
-
-Thomas Gleixner (1):
-      power: reset: ltc2952: Use hrtimer_forward_now()
-
-Wei Yongjun (1):
-      power: supply: axp288_charger: Fix missing mutex_init()
-
-Yang Yingliang (1):
-      power: supply: max17040: fix null-ptr-deref in max17040_probe()
-
- Documentation/ABI/testing/sysfs-class-power        |  13 ++
- .../bindings/power/supply/maxim,max17040.yaml      |   2 +-
- .../bindings/power/supply/samsung,battery.yaml     |  56 +++++++
- .../power/supply/stericsson,ab8500-btemp.yaml      |  10 +-
- .../power/supply/stericsson,ab8500-chargalg.yaml   |  10 +-
- .../power/supply/stericsson,ab8500-charger.yaml    |  10 +-
- .../power/supply/stericsson,ab8500-fg.yaml         |  10 +-
- MAINTAINERS                                        |  21 +++
- drivers/power/reset/at91-reset.c                   |   4 +-
- drivers/power/reset/ltc2952-poweroff.c             |   4 +-
- drivers/power/supply/Kconfig                       |  23 +--
- drivers/power/supply/ab8500_bmdata.c               |   3 +-
- drivers/power/supply/axp288_charger.c              | 178 ++++++++++++-----=
-----
- drivers/power/supply/bq25890_charger.c             |  65 ++++----
- drivers/power/supply/bq27xxx_battery_i2c.c         |   3 +-
- drivers/power/supply/cpcap-battery.c               |  15 +-
- drivers/power/supply/max17040_battery.c            |   2 +
- drivers/power/supply/max17042_battery.c            |  14 +-
- drivers/power/supply/power_supply_core.c           |  65 ++++----
- drivers/power/supply/rt5033_battery.c              |   2 +-
- drivers/power/supply/wm831x_power.c                |  12 +-
- include/linux/power/max17042_battery.h             |   4 +-
- 22 files changed, 335 insertions(+), 191 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/power/supply/samsung,=
-battery.yaml
-
---szuc5cz5kprafwzc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmGEJncACgkQ2O7X88g7
-+prNYA/9E8Vo3yPjGarCPhfoRHTXBqS4pXSAPTrwDGF/+oKxH5aTP596kyIwDVDy
-vkzTfqULz4bUeT9EiA+Q3DgNVkMlUyTGCj4W85Z3rzMCzfgytyvnNy8QUPht3d+a
-0aL90B09E/A7rL2S13906Mg4O+FgdVobh21A6eSQAOBgiev8fckE/RUdOQofZRZh
-x1r00+pxeQzN+Dl2nebnjVcaaHAECoInl/Jasyi4lpn0l0kOKpF148hsiOsILwP0
-EWISHFYer4ETHrKTH73i72VZVKK1X5K3XNlTRNHslHhteWFLG+y3DVs0SNWuw/Hz
-LAqzHaG1RKowQtf9nlYPGs7E1ahsQVshWlVILCrGuUO4hM1qaFFZQmGv4GgfWUTc
-TZ7s84dkuxVdENJPCmxC+/VCUqqTWNviv7a4QtSdDXDzIVYw/r/ZwcuvW+wLcACw
-JFpDi+0VIBuHOAklEa3+DBnHO5+eprmexydrHFx/99r7ndvxBtoxZHQSNlq8DS5w
-axj6YHsFayteKOkAb8/yCnBnJsxue3LRdBL7rCZVTkS3uvyU95dEy1GVjEKAF1GR
-vymqCRwsL6MYcmKTLJB/dKB4h7s9xK77fydlKTEhHKfhUOXK1ey7dodOPnEOyPvg
-WiEWVKh1rtXscDozmEHuwf3M5G3o9W6TzqqORrMNfRnqEilsQl0=
-=WBON
------END PGP SIGNATURE-----
-
---szuc5cz5kprafwzc--
+Applied as 5.16-rc material, thanks!
