@@ -2,181 +2,290 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E902F4466B1
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Nov 2021 17:06:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E1EC4466C3
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Nov 2021 17:10:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231510AbhKEQJ2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Nov 2021 12:09:28 -0400
-Received: from mga14.intel.com ([192.55.52.115]:36614 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230345AbhKEQJ1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 5 Nov 2021 12:09:27 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10159"; a="232179959"
-X-IronPort-AV: E=Sophos;i="5.87,212,1631602800"; 
-   d="scan'208";a="232179959"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2021 09:04:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,212,1631602800"; 
-   d="scan'208";a="490375239"
-Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
-  by orsmga007.jf.intel.com with ESMTP; 05 Nov 2021 09:03:59 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12; Fri, 5 Nov 2021 09:03:59 -0700
-Received: from fmsmsx606.amr.corp.intel.com (10.18.126.86) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12; Fri, 5 Nov 2021 09:03:58 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12 via Frontend Transport; Fri, 5 Nov 2021 09:03:58 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.106)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2242.12; Fri, 5 Nov 2021 09:03:57 -0700
+        id S234022AbhKEQNB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Nov 2021 12:13:01 -0400
+Received: from mail-mw2nam08on2080.outbound.protection.outlook.com ([40.107.101.80]:15811
+        "EHLO NAM04-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232773AbhKEQNA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 5 Nov 2021 12:13:00 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aHLKMCMAZD6ITwsJpjNGXcAsh1XRBMrQ8wSwrjkVBMtz+CYiSxVFVzl132BBazF4SZX214+wCiPgQ4FRN9PRNNDIRpNdOZQEOGjXkWsPyxe0rD/4kHtNT5Vd5xMPbbXDxxMAoBIEiYvfBzy5Itiiqu13lPSqAZYoibV7/HbTZCk3Inu/xcZiyOhYQMeuGnM9K/t8QzhbevYRjhLOgkWMa3odPZGOgE/2PqLl0H1f4G1iBjS6+5B7MZYQ/CdJdbjP/H7Hw5oIbxOptYJIZCjELhxo9GmDCuGKY+l3YN60vYZWBcMnvnrNSs/KuidLX12pHC68mvYGeTspw9GmpOtTkg==
+ b=nVlreiXUZBImK6KWz61uLXpJKl5XYIkAO2gWeIgTEdSj7KxgRogovZp/fdDzMsAGxALZs5dWSu/nbbikmhazTH5uOzaz4Xtxs2ZCgKQYKylWcOnwhjwdAy7R0IXEy/10zckpjwGeFAehgnPPdBDEhzldFSid7iM0BrCG04dhpNqQr1VYpxFSOgrPxHlVXDa/pNxFsYKW/ZweiB1QUSNA4EV1ZGjpiASFcijDBThI6lqMqLUJJj3cZh345JVFOcelTF2fp2zyOlicG0rDakBgANgBHUFjJK6nxsY6gfuDWXMsC8KgLpPUuAiF/rUFQF3XoSd0ThmSi60wUAMGqCZvbA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sySoicYh/XShejlR1aLAoj8mfVMDJKQDvSADs3mxM7M=;
- b=SU36vb4lcAqebm/ep94UNVHl5emuvCGFlWTd81y+KFCtgeeCjvY3NPZirFkH7IV+Wcm1AwqlMg9s1wzUatJp32fHWMzGTNnOc2e99C223u+6DmuQkXawpFjFuA0PknxXx1aiOw7t9SOQS/zWY+zkCryploM5TAQStKaZey6WwpXFco/FV2+9xuxMMNYiqGJtRX5oc4gb1TNYVckgwIa08og4shK34RY/AMVr+Jtynt0IgNjsR60rS8XyuqOVp8Sc2m5d34TqvXuWZyRvRV0Q6zXAxqjy2H3kZ4My9GF70vm5fFQz9LV7HYxn2FFi6D3J6Erc1d8SK8LZQmBhlpZnbA==
+ bh=U2BKOYUExTthJpORxjBQFRHObc27PGmBWo94ZnkdsHc=;
+ b=SEhSBL4fmqDBjxNWJ3i3uWNIfzoN0pC0IXRQL8gfGMQPwIpQdthZF9NuEFTSipzOfXNIuayMkluonUOhYhK5FoKE/LVnHSr8E9adCibOoXQ2EKKX1bVY8uCU4Wc/k2fkizexIx1wJjGAkgUus1N42ZvJn6LYBDYm79d26zzXSje22iiR3TBrn/FK+jtGHWbAi6skqm28xBSU7zZI5wjks0B10OfHAVhl37hbSn0uMo/EAI/+bkw9JKvR5np8vq1+ylwF8/Un61FR++Gj8Ra5guLqYllLsYO5V+OkxJdrZZERXjqqCw/rMvR7WNRixcQ/6olA2gvyppQAgr0BXrfzsA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sySoicYh/XShejlR1aLAoj8mfVMDJKQDvSADs3mxM7M=;
- b=lyze4e5Af8UsIjynO+gToaNFshzlI3P9Y1ioT0eEhNkR6385CGxRxt3TbqS+hA/z8lqdXNvVtZ9Z58Q4PKurI6dZhdKY+670aNX8VkKc78tSZgSqa4mqIH8r1OHnom3YAUCyHx6ZCKi6RWWxxh/khhRBdKlWanEjmH/mkkq6GnA=
-Received: from PH0PR11MB4855.namprd11.prod.outlook.com (2603:10b6:510:41::12)
- by PH0PR11MB4870.namprd11.prod.outlook.com (2603:10b6:510:34::16) with
+ bh=U2BKOYUExTthJpORxjBQFRHObc27PGmBWo94ZnkdsHc=;
+ b=Q0WXpUN0XU38KBA4LnTb0eza+TStAEf3gQSk2MCv/NJTEr39esNAGaCkgv9qN4Jyt8AINAkJm0PJt0DcL1S10yrA91Y5eB8muDNFiP8PuaMYezXdXANSGhv4tnyx+RHBOK6jl/BhbtBRYlWpSzRhEJ+8mWvYc13AqHnvDTzD5Y8=
+Authentication-Results: suse.cz; dkim=none (message not signed)
+ header.d=none;suse.cz; dmarc=none action=none header.from=amd.com;
+Received: from DM5PR1201MB0249.namprd12.prod.outlook.com (2603:10b6:4:57::8)
+ by DM6PR12MB3979.namprd12.prod.outlook.com (2603:10b6:5:1cd::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4669.11; Fri, 5 Nov
- 2021 16:03:56 +0000
-Received: from PH0PR11MB4855.namprd11.prod.outlook.com
- ([fe80::11ef:b2be:5019:6749]) by PH0PR11MB4855.namprd11.prod.outlook.com
- ([fe80::11ef:b2be:5019:6749%5]) with mapi id 15.20.4669.013; Fri, 5 Nov 2021
- 16:03:56 +0000
-From:   "Bae, Chang Seok" <chang.seok.bae@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4669.10; Fri, 5 Nov
+ 2021 16:10:18 +0000
+Received: from DM5PR1201MB0249.namprd12.prod.outlook.com
+ ([fe80::85fc:d7b2:ba34:d7d6]) by DM5PR1201MB0249.namprd12.prod.outlook.com
+ ([fe80::85fc:d7b2:ba34:d7d6%5]) with mapi id 15.20.4669.013; Fri, 5 Nov 2021
+ 16:10:18 +0000
+Date:   Sat, 6 Nov 2021 00:09:59 +0800
+From:   Huang Rui <ray.huang@amd.com>
+To:     Giovanni Gherdovich <ggherdovich@suse.cz>
+Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Borislav Petkov <bp@suse.de>,
         Peter Zijlstra <peterz@infradead.org>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH 4/4] intel_idle: Add SPR support with AMX INIT-state
-Thread-Topic: [PATCH 4/4] intel_idle: Add SPR support with AMX INIT-state
-Thread-Index: AQHX0c/APbc/D9rdR0CrtVWzx46Eh6v1AK8AgAAZKgA=
-Date:   Fri, 5 Nov 2021 16:03:56 +0000
-Message-ID: <0B7F49C0-B850-45BC-BEC9-60DF3E2D88C5@intel.com>
-References: <20211104225226.5031-1-chang.seok.bae@intel.com>
- <20211104225226.5031-5-chang.seok.bae@intel.com> <878ry24qpb.ffs@tglx>
-In-Reply-To: <878ry24qpb.ffs@tglx>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3608.120.23.2.7)
-authentication-results: linutronix.de; dkim=none (message not signed)
- header.d=none;linutronix.de; dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f32a4f2a-27d3-4429-f376-08d9a075df66
-x-ms-traffictypediagnostic: PH0PR11MB4870:
-x-microsoft-antispam-prvs: <PH0PR11MB487056A1B688C2E2007D4CC1D88E9@PH0PR11MB4870.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: UXAO1KE6S/6COYZN8DVXTkaFGjucG7/SCuQN0+XXvYygnA6bTOFp8Rs/xbCHn74cXTkOEJ9F1hmNsS4TImN/w+QF/88Bhyvo+idm0gVMMrdlzC0CRov8/kHfQ+er+B2DdKPpzpk67cUttakEkH4xxK4vt8vYIDwiMguwyckxzLpEfLDIjRshTC2rdSwEQSfkkqRqfEgdws/XK93wB0EpAfGmMaJAhRo1WjoQZgzgm0h/TC5sCsp5jpvo9HSeXf8bML8LTbrrmXiObqN0366Z5c/0FKYN8nQ7hRDZFnfco7Ad3UzAmbYaryc0XRjN/Yk3fSBWuovU3quzULJBXaEpvAE39fMVhpfEmklYmEKtos8rAAMPDJc9nuZFmvm7xVEpadAcbysVNkqI3MqFSTkyDU5NuRVizIQT4eWWQpw1/B68v5udgLR+CMQ3Nt9Jo6j7aYbmx+JDq/QPBSTmH0fw6LV6TzGqwwSecWuOLSz40KsTiAf97nPWTc425ClCQ35sCO1JlMAWINzPt3ox3fuTMEcNw3UIO/hTYUFtFDym8BZhQBw4wi0O+Nflum7crdHprXLfQ7UnO6lijQZs74tBktx9MqsvYhLMDwyHekID0mvQuOzMMaS2+ib+nGmA4vUEGnkLdhwubXeanct3w5c/uI/8sPQ3NHNkvC5J9yczuJAzQjD2gsOe++vves1HwEXqvJ1hpR27AGoAP9ssFSHhfY3wUGpI5iGuP5+KnDyV0g1NYilTL/3YZRHPW/6BLqCP
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4855.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(122000001)(26005)(36756003)(66556008)(66446008)(64756008)(66476007)(76116006)(66946007)(71200400001)(86362001)(82960400001)(6916009)(54906003)(2906002)(38100700002)(316002)(6512007)(6486002)(4326008)(53546011)(33656002)(5660300002)(508600001)(8936002)(38070700005)(6506007)(2616005)(186003)(8676002)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?FPEuJf/scqck7Ks56QyXk0n10kDI2vQE0P0Op0fO0TiBd+DwmR0iruJxKpmv?=
- =?us-ascii?Q?/znxvC51cr83Ihs7AO2zNNUOiPvavSHiPZdcO3gKbmQOcuUhgmN3xZG4LHFJ?=
- =?us-ascii?Q?S8InzqF5nHwnGVC7QH3gG9zSR+NuLMRDCggihGSHw9aBVlQDGrfceRhSetef?=
- =?us-ascii?Q?O7swnNu48RMkd7F+FZoupVu3vvXJ3dLg31UDQ+ey/DHkpaf1qugDdvtXjDeJ?=
- =?us-ascii?Q?9yoKy5K3iCuwSldvwlFAFk5lWba2oolAbjHFpDPwi3AhbfdzFl8mCciV1yU5?=
- =?us-ascii?Q?/OPqYljHWREQWb+6kroWZ5KqTBeAh8M7CpAyIWSFKLB85G4Q2H++JWhgUyJU?=
- =?us-ascii?Q?pedYssI1dGQi/SjkQUnALR9ARDOXU8OXTmNsoIKauOwoCtiodGLDH1t96i9g?=
- =?us-ascii?Q?WPumi2hVRsSNDfVxj3WuwK3iJzYIbgYrS841k+Z5YurYmaY83xjHCfSdlTQ5?=
- =?us-ascii?Q?NWXAmPkN6KZqZlivI6DvUTCIxYObEx9K+exMSDYlkPINrmqvp8Mv/HUGS04L?=
- =?us-ascii?Q?cQ7+X2lluQgFIe/calpvCBixluTYhpjxJopWdrF8Ng25b8aSzZIzV+S+wjNM?=
- =?us-ascii?Q?V3m5gbhNhV2F0728U32M6gfoY2/y2xc/Z5AFz8pzRS/pr8T3G2Pz8ifBmzn+?=
- =?us-ascii?Q?aIcAi1nZceCcAJccrEIRFrs8JfRVYaeLQfvwwBO8madayxfvutDCdQF6bcbM?=
- =?us-ascii?Q?zl0EQEUZ2q+gXp0R6vJaevSxRhAK4Kp3rS/pyL+Cj8fXyCOt57PPJbG/b/Qw?=
- =?us-ascii?Q?f2zBONpN2BV/eNp1T84TeJ8IKbD6QW6XN1wJRGawPEf8QbllbzZgSK4/X7vS?=
- =?us-ascii?Q?D7mxG8wBNupGwWYiNyV02FRZn0EgC/DKb8Nr6oRK8slTmTs85j3jPVrwrqgs?=
- =?us-ascii?Q?jkkH0Qr3p86XpaO0LFmS/V8qqOKRmBYk6xQDK1b4ntmH+1uV86riYpcg9nZ/?=
- =?us-ascii?Q?DBsNFi2eatY6/lT6d3CC/K1H1171dXKLbDrzmYZO6XXwgfHkS5tkidvTv0j9?=
- =?us-ascii?Q?op0zv059G3gdgiizhHeQKKwOnb8AG2o533ALSX9EhBLs07tc617ahJ8/BlOo?=
- =?us-ascii?Q?Vwm4RaI43eN9j/0CDiT1cWNKYiq51dXZD4rZcaSXVVZZpzcykE2XwK1bAHkn?=
- =?us-ascii?Q?41e6UtpCzqEKi8LVO3g5svwAq31MKcMwnEOI3S4DGxjntV1Ir+Dr2ujFhU4X?=
- =?us-ascii?Q?CGdSc/jYmfJswWWtscnn7f614I6oebZlrloZ3LPLb8vZEcGq8JH7BHjQVh/h?=
- =?us-ascii?Q?rvQZWMJW8roYOWYxE+4Pgo/bMOdvG2As9NjDaxLk+MRln9jf7iN7teT+HoOv?=
- =?us-ascii?Q?a1Pz8GOJLCpYz10NaHZYMtgg/yFMyPXCHvmwT4yTfWRS8X1sbHzpx/gHxHUq?=
- =?us-ascii?Q?uZ2lELe+8qvpinUwvuAGFu3y/nA9Ue2tU7yQ3v3jtXUHw9tz/94lzZMfqgBZ?=
- =?us-ascii?Q?5BsqZ8GErjq+R4Y/gsDQWWhkBAjtXhbVwnRlxOvnDPww8GLsaxkVpekSj4b3?=
- =?us-ascii?Q?ZLZUxcFVJohOnjYb91qwhoyHh+lXrsuoWLuj72nVf4bGEgq/dNOOESEEjPvD?=
- =?us-ascii?Q?hNhgD48A+x6rlZWsqKR2/BWQyAaoCzC898/AdDDjMfQNksUHRh/FageDCIEJ?=
- =?us-ascii?Q?x8Au7T7WdCG9bm2ZqOGlkhqdsf2UDRCHTKPgWWBpHFVWxoCbXJkfhAXZM1ov?=
- =?us-ascii?Q?NEIcPf5Fe+EXSHfmUcbecGfXsLQ=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <05FD707CD61BFC4B9E78939D8A4D2867@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Ingo Molnar <mingo@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        Steven Noonan <steven@valvesoftware.com>,
+        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: Re: [PATCH v3 00/21] cpufreq: introduce a new AMD CPU frequency
+ control mechanism
+Message-ID: <YYVXV/sCbO0mPVK2@hr-amd>
+References: <20211029130241.1984459-1-ray.huang@amd.com>
+ <a0e932477e9b826c0781dda1d0d2953e57f904cc.camel@suse.cz>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a0e932477e9b826c0781dda1d0d2953e57f904cc.camel@suse.cz>
+X-ClientProxiedBy: HK0PR01CA0050.apcprd01.prod.exchangelabs.com
+ (2603:1096:203:a6::14) To DM5PR1201MB0249.namprd12.prod.outlook.com
+ (2603:10b6:4:57::8)
 MIME-Version: 1.0
+Received: from hr-amd (165.204.134.251) by HK0PR01CA0050.apcprd01.prod.exchangelabs.com (2603:1096:203:a6::14) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4669.11 via Frontend Transport; Fri, 5 Nov 2021 16:10:11 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 10b64974-5f95-4371-ad5f-08d9a076c267
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3979:
+X-Microsoft-Antispam-PRVS: <DM6PR12MB3979E4CC9A271AAE56255CF4EC8E9@DM6PR12MB3979.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: uF11hM0XTwnrBcoJWLFThSU3O9IDxFbJZpar1gv66faVk/jkymRhZGQOBPjTnCevSFYDSos4omdWxPjmyz4H7oJTTi6oLgzTpKc+3vfvzWlSL88r2biTYQ6M2U3G494m2jNlLOIVmzL/fbwAbYltPs0OSLrpb92Zl2zifgxQ9ExCr2PHIVkrrYemdUCbry5Du5l2L6+BPTq5ruuaoTwWdOeOLw4VjZNrk9cFaAnS3Fw6Sxnq3m+v2f6KgkIxqnn9OPm/GP6GgJg+/WnpOEMDkzuiid+2/VeX9zCVqKUTc/WGc8bqjSW/RiEDPCYZ9Seffxg+iWX8aFmK+aTeWEla4r19fe7v0mpkOMYsztC5lYP/9TSX5EC7MDUwuTTgxTOvCjjIFEQ1b39vbBJ89OwwSeyHn9xPQCiDNN3rbyvr9tL75UWBUpo7nLNHt9JA6rK+kty8rJWc8jtaPrO2aCfX+xIGo9GvV9FgnHLuiQbjlStjgAkL7xmHhczdqGfSxxv3QJB9Hq4gEQ1oZJtR5yWwtSFH704+jnX9/2sF352ZWgZsipUIWFEwbey5yXkra6CL2lTr4BTzxCPuPYwBoUbyA0JW7b/8kYftnzzGe3I3EnHMiiSfAaY1aVkHgMCDSRisTqcbwbSgbvTr+yPpq4iyow==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR1201MB0249.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(508600001)(4326008)(6496006)(66946007)(83380400001)(8936002)(7416002)(6916009)(8676002)(4001150100001)(33716001)(26005)(38100700002)(6666004)(54906003)(66556008)(66476007)(186003)(956004)(9686003)(55016002)(5660300002)(2906002)(86362001)(316002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?P8BbzKcmyd6cwnhI88ywqrK492KnOpaPDX4o4P1p7c7XH7nBRRmpNqD6Q437?=
+ =?us-ascii?Q?9XCN2ls31u+GG1DqhB899h4M4w+a7C0olUSndDGnlyO5mYyjG+I8/GbSMzzs?=
+ =?us-ascii?Q?TakeKQyd58YF9+BiZortzFRaUQC9VLEizBUJLsCzMKjbwFXphLG5+6PC2cgG?=
+ =?us-ascii?Q?LWC8z1KHYaZmjqlutbEZ/hIWsw2YIblWJW6QGdn1Zxgabh5lALi3RoKhJbOR?=
+ =?us-ascii?Q?JcfW0PuZbJb4cy4ELBqu+Oaz6F+lmy18bFZkWsArvzoHY1cdEg7HWBdAGbCv?=
+ =?us-ascii?Q?RcEXE/yIW2cs9S17fvRQg9pFWoOLipATZo1Y8h853H7QbIIMqogdE+zunT9h?=
+ =?us-ascii?Q?lLESzMM4TgPVnAuzSQ+ytI+iuWueKoG1/mTxGiTeF5/ZLKfanmqcy1x4p5vX?=
+ =?us-ascii?Q?cxieAkQlhl5kUTWevJd5sccwKwzKjwlwuq4GYvIm7NEPM6PYzQbMhuVGf4se?=
+ =?us-ascii?Q?ulGFNEgM2eg1kIL4rPmo7F+FaArQUF8hG22xNjIaw9G+38BqXywWjdxDvI0e?=
+ =?us-ascii?Q?AMG7ea3JrFQpZyFUajzpAUT8vVoSv/pmo7NR/sglNZTYzeEClALy+nqrz/IQ?=
+ =?us-ascii?Q?BmM7ZjOIo/uSjCsA6Sv1w+o3nrpz5YVSP+c98bnYQ3gIrFucTM23sFf3Zcbw?=
+ =?us-ascii?Q?oGkDn18oOXjj4zIEjtz3pIQt7tSnm7VRMRk4QMX8YMVBCKX7OStkuMHycl49?=
+ =?us-ascii?Q?41lSJvSGU7ilpGrnlpXczI7fAbDtD70LXChdn3VTii1snh+XbtKOpHWdLg3d?=
+ =?us-ascii?Q?8D9RdNfyBduYOuijePyWhlEim2ldC+ESTBx8icRDBstdzxzbR7+JuM+0OMdR?=
+ =?us-ascii?Q?+00sOuOi+w5WigyFWDHZsy5+R3CEKZ68hSIKGN8dIXX02QOxUZUutL93uzrc?=
+ =?us-ascii?Q?0eV/nl9TGIQYI1B0yRcHmd5xeLuONpW53mVnRr7Xdl/erJUUlK2yjX/b5Vxz?=
+ =?us-ascii?Q?4mHqpjJFQYPY8cWYdvkEsot8DjguRUeCZl3heMZ+5ZxPN8iT74yKcRiTtKGt?=
+ =?us-ascii?Q?Nchb1qOVSgjUyGi3ylmiXRD7iqbjvQRxK0U+KNB/pYb1p87NArIbhMQPDcqV?=
+ =?us-ascii?Q?J6vie8S1OQQdt5WOMbFf0Ww/bJ3YezcSyFoad0pKEStGsp6FAK9JFDhH124f?=
+ =?us-ascii?Q?yQflXQeHxFkVKg7mK5Tngl1qJ2zimQ6zsZFZMjQ5sfqKYlzinGsBw4X7t+Bk?=
+ =?us-ascii?Q?qFkhRDLq6zCk+E9p4goM4Mqm7Hdimwzsc/2CGb9mo3AQO2JoYbApl3qYNWhm?=
+ =?us-ascii?Q?ikseCI/PjMqGd+38YcbrgevpWo1A0dWTkR9JU7IUUWuPqbxLBgn4Hc4RjNd0?=
+ =?us-ascii?Q?C+uBzg6dBN3kLqhPKeKBlffbdGqEaSmmavZVF1j3EhAMSLtCJXLazAjDwthI?=
+ =?us-ascii?Q?dT54z6owZrJ+SPCnJS2fmqMdkn8QOP0JGp4G57FYxJBpCNQL+wrDKLZxE/dS?=
+ =?us-ascii?Q?/90chEEz74B6ANtbvS64MkxaGrUStx4tmkXnQzYN4Kfb2zG7hCzb3Ds+vvYK?=
+ =?us-ascii?Q?yUe1OaS98gvl8fiDYpZ4EyAGJqEKmKCfSW0tgOhFsVyWT7xbmVXhsFBbo2k6?=
+ =?us-ascii?Q?ilyaWtX28eAvkDNlm58bzgFHx4hoYGiqidJiSb1YTr8iKR3lq5wxSLS7b+mC?=
+ =?us-ascii?Q?5UXWh0EGGgUHKINYlzmydMU=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 10b64974-5f95-4371-ad5f-08d9a076c267
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR1201MB0249.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4855.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f32a4f2a-27d3-4429-f376-08d9a075df66
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Nov 2021 16:03:56.8304
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Nov 2021 16:10:17.9754
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4vNHfTP8rw5AfgQWpi1ntQphBnFNnb/VDxH/itstI9egmbeAf0dxjKuHmyn9+C6kMf+Lr2neYBBrAhEcpicYxWGXQNjqaIjninAaj151h2E=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4870
-X-OriginatorOrg: intel.com
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ALSJPWeDQ5PeQ/D5ct4zn4yCNJPekPmrLltUMo9Pqk3zeTrWKhKFPBn+QkpTRX5ygbyqdBwUOlDwnsqeadv+hA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3979
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Nov 5, 2021, at 07:33, Thomas Gleixner <tglx@linutronix.de> wrote:
->=20
-> Chang,
->=20
-> On Thu, Nov 04 2021 at 15:52, Chang S. Bae wrote:
->> +/**
->> + * intel_idle_tile - Ask the processor to enter the given idle state.
->> + * @dev: cpuidle device of the target CPU.
->> + * @drv: cpuidle driver (assumed to point to intel_idle_driver).
->> + *
->> + * Ensure TILE registers in INIT-state before using intel_idle() to
->> + * enter the idle state.
->> + */
->> +static __cpuidle int intel_idle_tile(struct cpuidle_device *dev,
->> +				     struct cpuidle_driver *drv, int index)
->> +{
->> +	fpu_idle_fpregs();
->=20
-> That's redundant because arch_cpu_idle_enter() is invoked before the
-> actual idle mechanism.=20
+On Fri, Nov 05, 2021 at 12:40:18AM +0800, Giovanni Gherdovich wrote:
+> On Fri, 2021-10-29 at 21:02 +0800, Huang Rui wrote:
+> > Hi all,
+> > 
+> > We would like to introduce a new AMD CPU frequency control mechanism as the
+> > "amd-pstate" driver for modern AMD Zen based CPU series in Linux Kernel.
+> > 
+> > ..snip..
+> 
+> Hello,
+> 
+> I've tested this driver and it seems the results are a little underwhelming.
+> The test machine is a two sockets server with two AMD EPYC 7713,
+> family:model:stepping 25:1:1, 128 cores/256 threads, 256G of memory and SSD
+> storage. On this system, the amd-pstate driver works only in "shared memory
+> support", not in "full MSR support", meaning that frequency switches are
+> triggered from a workqueue instead of scheduler context (!fast_switch).
+> 
 
-I think the way this series is shaped makes confusion, sorry.
+Hi Giovanni,
 
-Since PATCH3 and PATCH4 are in debate -- which approach should be chosen, i=
-t
-was decided to post both and let just one of them be selected. E.g., if PAT=
-CH3
-is right, then PATCH4 should be abandoned.
+I am really appreciated for the detailed tests and analysis! Thank you!
 
-I think PATCH3 is better. Maybe PATCH4 should not be sent together to avoid
-such confusion.
+The initial driver was developed on a mobile CPU (Cezanne) with 8 cores/16
+threads which supports the "full MSR" solution. And we spent a lot of time
+to debug with BIOS, SMU firmware, and hardware guys to bring up this driver
+on this CPU. The test results we provided were based on those series of
+processors.
+
+For the processors with "shared memory solution", we bring it up in a short
+time recently to hope more AMD processors to also support new driver. :-)
+Although our CPUs comply with the ACPI standard theoretically, different
+processors have different SBIOS and SMU firmware (I assumed you know this
+in previous mail). In real case, we need to verify it one by one, because
+there are some differences in SBIOS ACPI _CPC table and firmware
+implementation.
+
+Of course, right now, we can start to optimize other processors and "shared
+memory solution" in parallel.
+
+Would you mind that we add a module param or filter the known good
+processors (mobile parts) to load amd-pstate. And others can use the param
+to switch between amd-pstate and acpi-cpufreq manually? After we address the
+performance gap, then we can switch it back.
+
+> Dbench sees some ludicrous improvements in both performance and performance
+> per watt; likewise netperf sees some modest improvements, but that's about
+> the only good news. Schedutil/ondemand on tbench and hackbench do worse
+> with amd-pstate than acpi-cpufreq. I don't have data for
+> ondemand/amd-pstate on kernbench and gitsource, but schedutil regresses on
+> both.
+> 
+> Here the tables, then some questions & discussion points.
+> 
+> Tilde (~) means the result is the same as baseline (which is, the ratio is close to 1).
+> "Sugov" means "schedutil governor", "perfgov" means "performance governor".
+> 
+>              :        acpi-cpufreq          :        amd-pstate          :
+>  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+>              :  ondemand  sugov  perfgov    :  ondemand  sugov  perfgov  :  better if
+>  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+>                                        PERFORMANCE RATIOS
+> dbench       :  1.00      ~      0.33       :  0.37      0.35   0.36     :  lower
+> netperf      :  1.00      0.97   ~          :  1.03      1.04   ~        :  higher
+> tbench       :  1.00      1.04   1.06       :  0.83      0.40   1.05     :  higher
+> hackbench    :  1.00      ~      1.03       :  1.09      1.42   1.03     :  lower
+> kernbench    :  1.00      0.96   0.97       :  N/A       1.08   ~        :  lower
+> gitsource    :  1.00      0.67   0.69       :  N/A       0.79   0.67     :  lower
+>  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+>                                   PERFORMANCE-PER-WATT RATIOS
+> dbench4      :  1.00      ~      3.37       :  2.68      3.12   3.03     :  higher
+> netperf      :  1.00      0.96   ~          :  1.09      1.06   ~        :  higher
+> tbench4      :  1.00      1.03   1.06       :  0.76      0.34   1.04     :  higher
+> hackbench    :  1.00      ~      0.95       :  0.88      0.65   0.96     :  higher
+> kernbench    :  1.00      1.06   1.05       :  N/A       0.93   1.05     :  higher
+> gitsource    :  1.00      1.53   1.50       :  N/A       1.33   1.55     :  higher
+> 
+> 
+> How to read the table: all numbers are ratios of the results of some
+> governor/driver combination and ondemand/acpi-cpufreq, which is the
+> baseline (first column). When the "better if" column says "higher", a ratio
+> larger than 1 indicates an improvement; otherwise it's a regression.
+> Example: hackbench with sugov/amd-pstate is 42% slower than with
+> ondemand/acpi-cpufreq (top table). At the same time, it's also 35% less
+> efficient (bottom table).
+
+It seems the issue mainly from the processors with big number of cores and
+threads. Let's find the similiar family threadripper or EYPC processors to
+duplicate the test results. Will contact at you for details. :-)
+
+> 
+> Now, some questions / possible troubleshooting directions:
+> 
+> - ACPI-CPUFREQ DRIVER: REQUESTS ARE HINTS OR MANDATES?
+>   When using acpi-cpufreq, and the OS requests some frequency (one of the
+>   three allowed P-States), does the hardware underneath stick to it? Or
+>   does it do some ulterior adjustment based on the load?
+>   This would tell if a machine using acpi-cpufreq is less dumb than it
+>   seems, and can in principle do fine-grain adjustments all the same.
+> 
+
+The acpi-cpufreq driver should request the frequency level to go, however,
+the firmware has a policy to adjust clock as well according to the hardware
+condition such as voltage, electricity, and temperature. Legacy ACPI
+P-state doesn't have any transaction to firmware side. But on amd-pstate,
+the firmware can detects the performance goals as the hints that driver
+provides.
+
+> - PROCESSING CPPC DOORBELL REQUESTS: HOW FAST IS THAT?
+>   How long does it take the hardware to process the CPPC doorbell
+>   request to change frequency? What happens to outstanding requests, if
+>   they're not processed in a timely manner? Is there any queue of requests,
+>   and if so, how long is it? Could it be that if requests come in too quickly
+>   the CPU ends up playing catch-up on freq switches that are obsoletes or
+>   redundant?
+
+That's a good question. We need to consult with firmware and hardware guys.
+Or any method, we can caculate it from software side.
+
+> 
+> - LIKE-FOR-LIKE: TRY BENCHMARKING WITH AMD-PSTATE LIMITED TO 3 P-STATES?
+>   Could it be that to study the performance of the "shared memory support"
+>   system against acpi-cpufreq a more like-to-like comparison would be to limit
+>   amd-pstate to only the 3 P-States available to acpi-cpufreq? That would be
+>   for experimental/benchmarking purposes only. Eg: on my machines acpi-cpufreq
+>   sees 1.5GHz, 1.7GHz and 2GHz. Given that max boost is 3.72GHz, and the CPPC
+>   range is the abstract interval 0..255, I could limit amd-pstate to only set
+>   performance level of 68, 102 and 137, and see what it gives against the old
+>   driver. What do you think?
+
+That's good idea. We can give some experiments like this.
+
+> 
+> - PROCESSING CPPC DOORBELL REQS IS SLOW. BUT /MAKING/ A REQUEST, SLOW TOO?
+>   Looks to me that with the "shared memory support" the frequency update
+>   process is doubly asynchronous: first we have the ->target() callback
+>   deferred to a workqueue, then when it's eventually executed, it calls
+>   cppc_update_perf() which again just asks the firmware to do work at a
+>   later time. Are we sure that cppc_update_perf() is actually so slow to
+>   warrant !fast_switch?
+
+That's a good question! I think your platform with "shared memory support"
+is actually to read/write the memory in Platform Communication Channel
+(PCC) to update the performance goals. However, acpi-cpufreq driver is
+using the MSR registers with cpu_freq_write_amd()/cpu_freq_read_amd().
+
+Is that possible that MSR register access faster than the memory doorbell
+in PCC?
+
+> 
+> - HOW MANY P-STATES ARE TOO MANY?
+>   I've always believed the contrary, but what if having too many P-States is
+>   harmful for both performance and efficiency? Maybe the governor is
+>   requesting many updates in small increments where less (and larger) updates
+>   would be more appropriate?
+
+I am thinking that, maybe, we can dig out better policy to control the
+perf range.
+
+
+Thanks again for questions / possible troubleshooting directions. They are
+very helpful. Next step, let us find out what is the root cause of the
+performance gap between acpi-cpufreq and amd-pstate driver.
 
 Thanks,
-Chang
-
-
+Ray
