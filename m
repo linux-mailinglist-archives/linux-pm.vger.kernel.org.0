@@ -2,115 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AC8E44671C
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Nov 2021 17:37:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8869A4467DF
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Nov 2021 18:27:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233613AbhKEQkY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Nov 2021 12:40:24 -0400
-Received: from mail-oo1-f41.google.com ([209.85.161.41]:36746 "EHLO
-        mail-oo1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233382AbhKEQkY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Nov 2021 12:40:24 -0400
-Received: by mail-oo1-f41.google.com with SMTP id t7-20020a4aadc7000000b002b8733ab498so3210118oon.3;
-        Fri, 05 Nov 2021 09:37:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=P1Gp0/MAdFAvXBeRj35bImIZhx/EFHupa8h4iwZFEeg=;
-        b=WNo4yOW/fr/VGFaAidZB97Q23JxqT7NeepXrOaVTku/HvdmPrMiaOmLTdZxDJotuib
-         VPbrpWGa4ty44MmyRPL3hxCCqyO+ZNKGVLcVOih06WdGHB3k2mFvruiftY7dKtclarjo
-         fpzIZKDf9UU37J/oHtZ7KpR9ZbxK3r/C85UZzLSpmm4bclOE2dy3ABQMjl28tdqAPXY0
-         9DXiOezPsLlGDPYIyJkgX0/dlTR7c22Sp4ngZClY4/vX2YGhj9InyyQ8/o+Ygrjd+Hh0
-         itDowhTH0zaUC77qSSTjSN6WVs72j7gVvrX1TbYCUZ44FwP3jv6DovCd/TSol2VGuyst
-         Yeuw==
-X-Gm-Message-State: AOAM53378VE8s8aP3cFUYFKWYyrk79zfQ13jpCjLHgvhzFPnMCeXnlx1
-        zFymDF7/14NdMNC2AYusCI88KcqtImcP9oSpzKQ=
-X-Google-Smtp-Source: ABdhPJwJDsvykL3wZ8MVMKzW4SKFSt5yr4+mf5kAd6MjF5Yui+IbB1w0qgns3f1hdjUwgp+W/rrt+pGwrnXgL1KJiA0=
-X-Received: by 2002:a4a:e544:: with SMTP id s4mr9557867oot.0.1636130264293;
- Fri, 05 Nov 2021 09:37:44 -0700 (PDT)
+        id S232536AbhKER3O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Nov 2021 13:29:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40098 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234083AbhKER3J (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Nov 2021 13:29:09 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC7F3C061714;
+        Fri,  5 Nov 2021 10:26:29 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1636133188;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VKIhEPtrIBLVQEGlBVNklKOA/z9ASGygP+at60u3C5s=;
+        b=NomZK0Xl/W6VZS1jYGUWvFlDnKuHW2010rs+wzTydZmfGPNDBt3SCR3Q8pIrvgE67Cr1ah
+        dWwy0fi8EpXO4SInoNF7QJB2Uvsd94lxJx0PQCBvnt/0jSU2HPGlulte/bA87oCX7W31NJ
+        nvdffNAliipXT4TZx5VGfkaZM4e2/G8KBsBTGRuFias9LHgFyMb9Bx8G4DtQgaQDBhuYwK
+        UkkxQ7s2TPcR9yCCNUGh6nEjSTxTl/TZzdPusNo9sjZL0k9XiLGevHvkky2sxqC8CRnVHS
+        BOp4kQBXEFzQP2DZN+Z2fOxq9xKsN8Y7u45gpfGMOiiwDHb29P3E36pHs/tnLA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1636133188;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VKIhEPtrIBLVQEGlBVNklKOA/z9ASGygP+at60u3C5s=;
+        b=YMeIPvzk6jiuTJdEPWvIhR+kBGH9OCu4QTYklvPkndhZz7LilMR9f86kf3BNhyDGKc894M
+        QeDK5x1NGr6FkfCg==
+To:     "Bae, Chang Seok" <chang.seok.bae@intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH 4/4] intel_idle: Add SPR support with AMX INIT-state
+In-Reply-To: <0B7F49C0-B850-45BC-BEC9-60DF3E2D88C5@intel.com>
+References: <20211104225226.5031-1-chang.seok.bae@intel.com>
+ <20211104225226.5031-5-chang.seok.bae@intel.com> <878ry24qpb.ffs@tglx>
+ <0B7F49C0-B850-45BC-BEC9-60DF3E2D88C5@intel.com>
+Date:   Fri, 05 Nov 2021 18:26:27 +0100
+Message-ID: <8735oa4ipo.ffs@tglx>
 MIME-Version: 1.0
-References: <1636070227-15909-1-git-send-email-quic_subbaram@quicinc.com>
- <CAJZ5v0gONybD_pVCAq6ZJTMuStXtoF064u9qPYxco4y=b-JD9A@mail.gmail.com> <c7ede029-b75f-e57e-24f1-9633d5d47401@linaro.org>
-In-Reply-To: <c7ede029-b75f-e57e-24f1-9633d5d47401@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 5 Nov 2021 17:37:33 +0100
-Message-ID: <CAJZ5v0j1TDe0ZiBg_ju-JDuCsBDb_exueRDUwCcJ6VD_=fbzjg@mail.gmail.com>
-Subject: Re: [RESEND PATCH v2] thermal: Fix a NULL pointer dereference
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        David Collins <quic_collinsd@quicinc.com>,
-        Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>,
-        Stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Nov 5, 2021 at 5:19 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+On Fri, Nov 05 2021 at 16:03, Bae, Chang Seok wrote:
+> On Nov 5, 2021, at 07:33, Thomas Gleixner <tglx@linutronix.de> wrote:
+>> On Thu, Nov 04 2021 at 15:52, Chang S. Bae wrote:
+>>> +static __cpuidle int intel_idle_tile(struct cpuidle_device *dev,
+>>> +				     struct cpuidle_driver *drv, int index)
+>>> +{
+>>> +	fpu_idle_fpregs();
+>> 
+>> That's redundant because arch_cpu_idle_enter() is invoked before the
+>> actual idle mechanism. 
 >
-> On 05/11/2021 16:14, Rafael J. Wysocki wrote:
-> > On Fri, Nov 5, 2021 at 12:57 AM Subbaraman Narayanamurthy
-> > <quic_subbaram@quicinc.com> wrote:
-> >>
-> >> of_parse_thermal_zones() parses the thermal-zones node and registers a
-> >> thermal_zone device for each subnode. However, if a thermal zone is
-> >> consuming a thermal sensor and that thermal sensor device hasn't probed
-> >> yet, an attempt to set trip_point_*_temp for that thermal zone device
-> >> can cause a NULL pointer dereference. Fix it.
-> >>
-> >>  console:/sys/class/thermal/thermal_zone87 # echo 120000 > trip_point_0_temp
-> >>  ...
-> >>  Unable to handle kernel NULL pointer dereference at virtual address 0000000000000020
-> >>  ...
-> >>  Call trace:
-> >>   of_thermal_set_trip_temp+0x40/0xc4
-> >>   trip_point_temp_store+0xc0/0x1dc
-> >>   dev_attr_store+0x38/0x88
-> >>   sysfs_kf_write+0x64/0xc0
-> >>   kernfs_fop_write_iter+0x108/0x1d0
-> >>   vfs_write+0x2f4/0x368
-> >>   ksys_write+0x7c/0xec
-> >>   __arm64_sys_write+0x20/0x30
-> >>   el0_svc_common.llvm.7279915941325364641+0xbc/0x1bc
-> >>   do_el0_svc+0x28/0xa0
-> >>   el0_svc+0x14/0x24
-> >>   el0_sync_handler+0x88/0xec
-> >>   el0_sync+0x1c0/0x200
-> >>
-> >> While at it, fix the possible NULL pointer dereference in other
-> >> functions as well: of_thermal_get_temp(), of_thermal_set_emul_temp(),
-> >> of_thermal_get_trend().
-> >
-> > Can the subject be more specific, please?
-> >
-> > The issue appears to be limited to the of_thermal_ family of
-> > functions, but the subject doesn't reflect that at all.
-> >
-> >> Suggested-by: David Collins <quic_collinsd@quicinc.com>
-> >> Signed-off-by: Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
-> >
-> > Daniel, any concerns regarding the code changes below?
+> I think the way this series is shaped makes confusion, sorry.
 >
-> I've a concern about the root cause but I did not have time to
-> investigate how to fix it nicely.
->
-> thermal_of is responsible of introducing itself between the thermal core
-> code and the backend. So it defines the ops which in turn call the
-> sensor ops leading us to this problem.
->
-> So, without a better solution, this fix can be applied until we rethink
-> the thermal_of approach.
->
-> Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Since PATCH3 and PATCH4 are in debate -- which approach should be chosen, it
+> was decided to post both and let just one of them be selected. E.g., if PATCH3
+> is right, then PATCH4 should be abandoned.
 
-Thanks!
+My bad. I should have read the cover letter before complaining.
 
-I've queued it up for 5.16-rc as "thermal: Fix NULL pointer
-dereferences in of_thermal_ functions".
+> I think PATCH3 is better. Maybe PATCH4 should not be sent together to avoid
+> such confusion.
+
+Yes. patch 3 is way better than patch 4.
+
+Thanks,
+
+        tglx
