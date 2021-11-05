@@ -2,65 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB3D34461CF
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Nov 2021 11:01:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C3EB446308
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Nov 2021 12:55:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232978AbhKEKC1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Nov 2021 06:02:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51142 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232955AbhKEKC0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Nov 2021 06:02:26 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76AE0C06120A
-        for <linux-pm@vger.kernel.org>; Fri,  5 Nov 2021 02:59:47 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id bq11so17610566lfb.10
-        for <linux-pm@vger.kernel.org>; Fri, 05 Nov 2021 02:59:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=mq4NwpCW/zyP6zGjxoknFDxBSMv2g+R4MbSXfScKKn0=;
-        b=qwOdadKiCisTDVNoafJnAqO+W4+SX71lDZtNRBlMsbRHpjcryDeu5nmREYRPD4pi9A
-         QU9pohQN47UuoG4YTbOWgq3rHea98Qc/9f7BsQuwE+AKz1UIxMvPyAku8quBeTTgwZyD
-         2q1K4cQyEdJ7CSUXNiWbP6+mN5+QbmoBPTGCRtYFntJGBGvZpWN0B+zAJxwJqPfkk4tH
-         jlmlTTouC9ybQfI2v0krNPfnNR02AbsEHaN719BzLOFm1oxUqxHWMmH+JhhtdYQVsuy0
-         4PlhNZX+PnyLxn4KheqmxLVboH4xfUD5niTaSokcZxP913nDpNhDUIqY9vdYL3+HJ3wI
-         E7WA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=mq4NwpCW/zyP6zGjxoknFDxBSMv2g+R4MbSXfScKKn0=;
-        b=tlCsCUcXpMPZyPhslHdeMfx/x4zyjxdgIvKjgHGmj9sa2X3Sk+ScJRlWRUyZ19uQws
-         3q8cEFgvgW02HOoEKU+pTVpGWTfUR4W/ZOHwilPaZ+90NN6c4GCWIUZMl55iP7TP0XIf
-         bZca1oSK6tXumSVhd3Q7PT6Wb4knDpo+Ri7KJY04ZzNfD3xBzfEY3gkpUdTopOfp7G1B
-         evjDpCEJEisR1s3PGDpDT9NGYq5wbWLLhTOA6w3wMczJNXbirGB9i0VEmhaH5y6xwDRm
-         EeBdn147C8088MptslfYUXX7JqSyC2H9oyRxwfU4k8nYzmcLDv5o3Y5DjOXkI0x8c0kx
-         u6iA==
-X-Gm-Message-State: AOAM533j+uC7ua9+gpTcM5wL2ys8URRdMSS7s/iYpSAMfwPrEdHU150M
-        UFmmxdH9EbGn+EmswCiAtSPiFN4LJz/dHLRNSLruax/ZDw==
-X-Google-Smtp-Source: ABdhPJxTMuVokzh3NW6I9tkjxrZAvyuK4ueyeF5wKoCZ9Wc79ED3eaV/dliyav/+e+Hwokq1pMQrbFjByIOLBK6wCO0=
-X-Received: by 2002:a17:906:3c46:: with SMTP id i6mr10702027ejg.371.1636106374168;
- Fri, 05 Nov 2021 02:59:34 -0700 (PDT)
+        id S232467AbhKEL61 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Nov 2021 07:58:27 -0400
+Received: from mga14.intel.com ([192.55.52.115]:18600 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231852AbhKEL60 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 5 Nov 2021 07:58:26 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10158"; a="232134822"
+X-IronPort-AV: E=Sophos;i="5.87,211,1631602800"; 
+   d="scan'208";a="232134822"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2021 04:55:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,211,1631602800"; 
+   d="scan'208";a="490300478"
+Received: from lkp-server02.sh.intel.com (HELO c20d8bc80006) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 05 Nov 2021 04:55:45 -0700
+Received: from kbuild by c20d8bc80006 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mixou-0007d0-Da; Fri, 05 Nov 2021 11:55:44 +0000
+Date:   Fri, 05 Nov 2021 19:55:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ c00ddaa2e79ed178db8f6c06a77ddc41adc06d9e
+Message-ID: <61851b9d.8faa51Pnt3pJfROV%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Received: by 2002:a17:906:dc8f:0:0:0:0 with HTTP; Fri, 5 Nov 2021 02:59:32
- -0700 (PDT)
-Reply-To: jjogbu64.5@gmail.com
-From:   JAMES OKAME <gastonsiotso@gmail.com>
-Date:   Fri, 5 Nov 2021 10:59:32 +0100
-Message-ID: <CAAEAjSji0mnLenZcqj_kejAFydseN9+6X9_Nvt7CWVKv-6CZ4A@mail.gmail.com>
-Subject: Re//
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dear Friend,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: c00ddaa2e79ed178db8f6c06a77ddc41adc06d9e  Merge branch 'thermal-int340x' into bleeding-edge
 
-I have a confidential matter to discuss with you about my deceased
-customer who died in a car accident and his unclaimed funds in his
-bank. I wonder if he's your relative?
+elapsed time: 924m
 
-Yours Sincerely
-James Okame
+configs tested: 95
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20211105
+m68k                          hp300_defconfig
+arm                            qcom_defconfig
+ia64                          tiger_defconfig
+s390                             allmodconfig
+arm                       versatile_defconfig
+mips                       lemote2f_defconfig
+powerpc                      walnut_defconfig
+riscv                            allyesconfig
+sh                           se7712_defconfig
+powerpc                     asp8347_defconfig
+arm                            mmp2_defconfig
+sh                   sh7770_generic_defconfig
+arm                        oxnas_v6_defconfig
+sh                        sh7757lcr_defconfig
+arm                    vt8500_v6_v7_defconfig
+sh                          r7785rp_defconfig
+arm                        cerfcube_defconfig
+mips                      maltasmvp_defconfig
+arm                  randconfig-c002-20211105
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a012-20211105
+x86_64               randconfig-a016-20211105
+x86_64               randconfig-a015-20211105
+x86_64               randconfig-a013-20211105
+x86_64               randconfig-a011-20211105
+x86_64               randconfig-a014-20211105
+i386                 randconfig-a016-20211105
+i386                 randconfig-a014-20211105
+i386                 randconfig-a015-20211105
+i386                 randconfig-a013-20211105
+i386                 randconfig-a011-20211105
+i386                 randconfig-a012-20211105
+arc                  randconfig-r043-20211105
+riscv                randconfig-r042-20211105
+s390                 randconfig-r044-20211105
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a004-20211105
+i386                 randconfig-a005-20211105
+i386                 randconfig-a001-20211105
+i386                 randconfig-a003-20211105
+i386                 randconfig-a004-20211105
+i386                 randconfig-a006-20211105
+i386                 randconfig-a002-20211105
+hexagon              randconfig-r041-20211105
+hexagon              randconfig-r045-20211105
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
