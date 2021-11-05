@@ -2,111 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9732446719
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Nov 2021 17:37:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AC8E44671C
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Nov 2021 17:37:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233266AbhKEQkR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Nov 2021 12:40:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56626 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231140AbhKEQkQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Nov 2021 12:40:16 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B716EC061714
-        for <linux-pm@vger.kernel.org>; Fri,  5 Nov 2021 09:37:36 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id d72-20020a1c1d4b000000b00331140f3dc8so6845592wmd.1
-        for <linux-pm@vger.kernel.org>; Fri, 05 Nov 2021 09:37:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=lCuZe3dQjk8AA9sGZyhsQ2hcGD7zy2mrb1RnM0w2mCQ=;
-        b=wmttnqUJcWTUHS2YizWFUn9YVCqVzzcA4HMcr+xT8KfZCKuudjVXoYgczzjMMv8Ta2
-         E1IkhBK2ZxM6xQ0tG0AqYiRSwDVoc1n+DW9lxQgzcGc0RWdN3hIQ30fpQw/gtsfjbggW
-         Z+szJHpndEPe5oA2J/87AmDQ2gjv8zc65RjIjcW5uGPYs1rrEbze0pyWpCnLZq80NcMR
-         Upwntxv8AIa77rBo5p24AwwKX7IFNg/WsA5QW9X/VRNS9G/N2TZ2nna4n5xh5TS/qiz3
-         7QkIIQ3K8K7pRbl8hh/m8l4eyH19FWJqGtCyVAaCTYlKabhabULHEfM7L7NitxFkCXe5
-         uzug==
+        id S233613AbhKEQkY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Nov 2021 12:40:24 -0400
+Received: from mail-oo1-f41.google.com ([209.85.161.41]:36746 "EHLO
+        mail-oo1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233382AbhKEQkY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Nov 2021 12:40:24 -0400
+Received: by mail-oo1-f41.google.com with SMTP id t7-20020a4aadc7000000b002b8733ab498so3210118oon.3;
+        Fri, 05 Nov 2021 09:37:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=lCuZe3dQjk8AA9sGZyhsQ2hcGD7zy2mrb1RnM0w2mCQ=;
-        b=weATa4Al4RB8DRYS6luhyuZ/fcuWRChdKywCFJ3BgCISY9utXrZqxk6692x9uwbHNA
-         w/QMUxwMykUB3UKUbq2bZoqwG42Q8KeZgD3MEvKe7NgXI5b29d4atj9uOc7pecyq9XQb
-         +Z9ivVxH41XQ9EVx6lpDUeq0ITR1GSEdJFEnYBcHkb5uiYItW/oyaenDzwqIqTOCZgn5
-         zDtE4nQHltEAPcbU77tnEZZO2zCuOuQekzXQZekGN74H9y5oh4fvmNXEzou42zm4z4g5
-         LeoIkaLBa0Oqz5F+VZr7kVI1VxWG7Oe+USqKTIrrDS4z1KI55+tplxVXDtvW+mFLiUt+
-         CLxQ==
-X-Gm-Message-State: AOAM5316jJMvvGZm4FordHMdIdduZ8ED8hTCKzJLhm1p9nQas3OT/+I6
-        ZtlZ5IXT/351psAgxyisPlpHhh6VSoc3qQ==
-X-Google-Smtp-Source: ABdhPJydeLXS879wxW8vKrB5Nx6T0y2eZtVPmDLwwT8DEwXUTAcO7YGI//acLR2JgTy+xAbUbSOJew==
-X-Received: by 2002:a05:600c:354b:: with SMTP id i11mr30185548wmq.61.1636130255222;
-        Fri, 05 Nov 2021 09:37:35 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:decd:efcb:adc8:b46? ([2a01:e34:ed2f:f020:decd:efcb:adc8:b46])
-        by smtp.googlemail.com with ESMTPSA id p19sm2976787wmq.4.2021.11.05.09.37.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Nov 2021 09:37:33 -0700 (PDT)
-Subject: Re: [PATCH] thermal: Replace pr_warn() with pr_warn_once() in
- user_space_bind()
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linuxfoundation.org>
-References: <2607026.mvXUDI8C0e@kreacher>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <85dab5a5-733b-6bfa-2ddf-ee4a2f0b7117@linaro.org>
-Date:   Fri, 5 Nov 2021 17:37:32 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=P1Gp0/MAdFAvXBeRj35bImIZhx/EFHupa8h4iwZFEeg=;
+        b=WNo4yOW/fr/VGFaAidZB97Q23JxqT7NeepXrOaVTku/HvdmPrMiaOmLTdZxDJotuib
+         VPbrpWGa4ty44MmyRPL3hxCCqyO+ZNKGVLcVOih06WdGHB3k2mFvruiftY7dKtclarjo
+         fpzIZKDf9UU37J/oHtZ7KpR9ZbxK3r/C85UZzLSpmm4bclOE2dy3ABQMjl28tdqAPXY0
+         9DXiOezPsLlGDPYIyJkgX0/dlTR7c22Sp4ngZClY4/vX2YGhj9InyyQ8/o+Ygrjd+Hh0
+         itDowhTH0zaUC77qSSTjSN6WVs72j7gVvrX1TbYCUZ44FwP3jv6DovCd/TSol2VGuyst
+         Yeuw==
+X-Gm-Message-State: AOAM53378VE8s8aP3cFUYFKWYyrk79zfQ13jpCjLHgvhzFPnMCeXnlx1
+        zFymDF7/14NdMNC2AYusCI88KcqtImcP9oSpzKQ=
+X-Google-Smtp-Source: ABdhPJwJDsvykL3wZ8MVMKzW4SKFSt5yr4+mf5kAd6MjF5Yui+IbB1w0qgns3f1hdjUwgp+W/rrt+pGwrnXgL1KJiA0=
+X-Received: by 2002:a4a:e544:: with SMTP id s4mr9557867oot.0.1636130264293;
+ Fri, 05 Nov 2021 09:37:44 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <2607026.mvXUDI8C0e@kreacher>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <1636070227-15909-1-git-send-email-quic_subbaram@quicinc.com>
+ <CAJZ5v0gONybD_pVCAq6ZJTMuStXtoF064u9qPYxco4y=b-JD9A@mail.gmail.com> <c7ede029-b75f-e57e-24f1-9633d5d47401@linaro.org>
+In-Reply-To: <c7ede029-b75f-e57e-24f1-9633d5d47401@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 5 Nov 2021 17:37:33 +0100
+Message-ID: <CAJZ5v0j1TDe0ZiBg_ju-JDuCsBDb_exueRDUwCcJ6VD_=fbzjg@mail.gmail.com>
+Subject: Re: [RESEND PATCH v2] thermal: Fix a NULL pointer dereference
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        David Collins <quic_collinsd@quicinc.com>,
+        Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>,
+        Stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05/11/2021 17:31, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Use pr_warn_once() instead of pr_warn() to print the user space
-> governor deprecation message in user_space_bind() to reduce the
-> kernel log noise.
-> 
-> Fixes: 0275c9fb0eff ("thermal/core: Make the userspace governor deprecated")
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+On Fri, Nov 5, 2021 at 5:19 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>
+> On 05/11/2021 16:14, Rafael J. Wysocki wrote:
+> > On Fri, Nov 5, 2021 at 12:57 AM Subbaraman Narayanamurthy
+> > <quic_subbaram@quicinc.com> wrote:
+> >>
+> >> of_parse_thermal_zones() parses the thermal-zones node and registers a
+> >> thermal_zone device for each subnode. However, if a thermal zone is
+> >> consuming a thermal sensor and that thermal sensor device hasn't probed
+> >> yet, an attempt to set trip_point_*_temp for that thermal zone device
+> >> can cause a NULL pointer dereference. Fix it.
+> >>
+> >>  console:/sys/class/thermal/thermal_zone87 # echo 120000 > trip_point_0_temp
+> >>  ...
+> >>  Unable to handle kernel NULL pointer dereference at virtual address 0000000000000020
+> >>  ...
+> >>  Call trace:
+> >>   of_thermal_set_trip_temp+0x40/0xc4
+> >>   trip_point_temp_store+0xc0/0x1dc
+> >>   dev_attr_store+0x38/0x88
+> >>   sysfs_kf_write+0x64/0xc0
+> >>   kernfs_fop_write_iter+0x108/0x1d0
+> >>   vfs_write+0x2f4/0x368
+> >>   ksys_write+0x7c/0xec
+> >>   __arm64_sys_write+0x20/0x30
+> >>   el0_svc_common.llvm.7279915941325364641+0xbc/0x1bc
+> >>   do_el0_svc+0x28/0xa0
+> >>   el0_svc+0x14/0x24
+> >>   el0_sync_handler+0x88/0xec
+> >>   el0_sync+0x1c0/0x200
+> >>
+> >> While at it, fix the possible NULL pointer dereference in other
+> >> functions as well: of_thermal_get_temp(), of_thermal_set_emul_temp(),
+> >> of_thermal_get_trend().
+> >
+> > Can the subject be more specific, please?
+> >
+> > The issue appears to be limited to the of_thermal_ family of
+> > functions, but the subject doesn't reflect that at all.
+> >
+> >> Suggested-by: David Collins <quic_collinsd@quicinc.com>
+> >> Signed-off-by: Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
+> >
+> > Daniel, any concerns regarding the code changes below?
+>
+> I've a concern about the root cause but I did not have time to
+> investigate how to fix it nicely.
+>
+> thermal_of is responsible of introducing itself between the thermal core
+> code and the backend. So it defines the ops which in turn call the
+> sensor ops leading us to this problem.
+>
+> So, without a better solution, this fix can be applied until we rethink
+> the thermal_of approach.
+>
+> Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-> ---
->  drivers/thermal/gov_user_space.c |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> Index: linux-pm/drivers/thermal/gov_user_space.c
-> ===================================================================
-> --- linux-pm.orig/drivers/thermal/gov_user_space.c
-> +++ linux-pm/drivers/thermal/gov_user_space.c
-> @@ -17,8 +17,8 @@
->  
->  static int user_space_bind(struct thermal_zone_device *tz)
->  {
-> -	pr_warn("Userspace governor deprecated: use thermal netlink "	\
-> -		"notification instead\n");
-> +	pr_warn_once("Userspace governor deprecated: use thermal netlink " \
-> +		     "notification instead\n");
->  
->  	return 0;
->  }
-> 
-> 
-> 
+Thanks!
 
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+I've queued it up for 5.16-rc as "thermal: Fix NULL pointer
+dereferences in of_thermal_ functions".
