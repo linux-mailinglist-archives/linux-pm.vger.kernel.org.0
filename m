@@ -2,55 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0FC54468CD
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Nov 2021 20:18:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C9AE44694F
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Nov 2021 20:51:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233260AbhKETVI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Nov 2021 15:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36644 "EHLO
+        id S232582AbhKETyP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Nov 2021 15:54:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231221AbhKETVH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Nov 2021 15:21:07 -0400
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 936C1C061714
-        for <linux-pm@vger.kernel.org>; Fri,  5 Nov 2021 12:18:27 -0700 (PDT)
-Received: by mail-qv1-xf33.google.com with SMTP id d6so7967847qvb.3
-        for <linux-pm@vger.kernel.org>; Fri, 05 Nov 2021 12:18:27 -0700 (PDT)
+        with ESMTP id S232541AbhKETyO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Nov 2021 15:54:14 -0400
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67BEEC061714
+        for <linux-pm@vger.kernel.org>; Fri,  5 Nov 2021 12:51:34 -0700 (PDT)
+Received: by mail-ot1-x333.google.com with SMTP id g91-20020a9d12e4000000b0055ae68cfc3dso11937998otg.9
+        for <linux-pm@vger.kernel.org>; Fri, 05 Nov 2021 12:51:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=nMArXgyRFwIr/sExIAj6beitEUrgpBOeYC39dRrZA5I=;
-        b=AdQbRzdKfXwzzyLDgZX1CPfVluGPIImeOYdxUdUmoANKwSq3VVvIoI6kyaAnAr41G9
-         eTMia7SAgT3ntSLmMnLcARVktjoaB/URXjZczXxIX2Pdqe2ZslrTJVRQmNWClpL8qVc7
-         GN4c7/Y4RX54uVCw03hywLK5VA1muBsdKTKK4sii0WmCQTf2H4TKV/ZMVfRa7MPOPEVG
-         2NafwD/0nNIfv++HAVDmLCC5IsRosfK/J0dgzQunzRqeruyXGa31dblkvYtfnB020zME
-         dVUWUQ40aTvWgDngz9rc9/k8CfErRWkpKG3NnnVTcS5P8qeXI3ey09AFVq94lvQu1V5f
-         TDBg==
+        d=kali.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zab+Ou5F3dW/0ZI0DKEFUpycAWNeYtpXPO2oI479330=;
+        b=KcqJhLbaoCexVm3KDkroByaRJ7lHmAQeK3eocFyPKufdbpWkkF77OSWmTJyBmS4EbW
+         jHHIb/nS3qCIIQwDjMapXNFrnyC/hUn1srD0MPGA/r8t7N140uA/WfyrFVyPQrscIlrK
+         SLs3vNwYKoGgwgY0XbZgmpuEl536B//TmdSAI5h3Gju5uF+CWwC1OuizoRA2WzzHRty3
+         he5j3o6H+9b53pBIiQ4YnU95WWl4344y2vlMiLw8mFtWXblOATFL4nRZEjpfhG9VCLAk
+         8sI6rr6dNaNn4JyPLsFtYt/iLwpTxF+JcmlmuxGKJoBL+q133GpWmDx9ylayRNipwLRI
+         sypw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=nMArXgyRFwIr/sExIAj6beitEUrgpBOeYC39dRrZA5I=;
-        b=vBSCJ5swZa/TBQmo5zf5quNtvI8U974wLfEW5ODn4NcodoSSQH4aJjNFp5uk7OjlKz
-         02KN8PTRaGCHjCo/umZwR2r/3Gk3y0dFe3LohpagGxLb6hDwcFUFK3Fh7x9Sh1WVU74P
-         9icEviLCKRjaB2SP/l9rQoqoiiVKrcOqommjQfQhBrJsY6DpDG9YASe+B5TfHhcHEimx
-         FhXLtCUjlg+ykvK9GCk534dx35cq4tJRj4uOlomcIJ1UlpIjenXEj8nxHim+WREzwdmp
-         1u7AvRPRPoFsuCKX2HCjQlC/OEqA81hfvGyAZjJOQ5mQp6czhNfZd4fTCWGEDfua9fTv
-         okGw==
-X-Gm-Message-State: AOAM530+EV52rSVUHHZ+oxD8KRaBN2CY39AcBcqTe6KjYhSv72c1nVKu
-        BeMTOgsFjadFJHwmhNMTYSdlYw==
-X-Google-Smtp-Source: ABdhPJwwN/1wpc/53ZbKLojNDqoWojpqgZ3ZfuRwqRFO27IFWzyS158WAM1g+eoCD7u2bFewNr246g==
-X-Received: by 2002:a05:6214:2429:: with SMTP id gy9mr10334015qvb.36.1636139906623;
-        Fri, 05 Nov 2021 12:18:26 -0700 (PDT)
-Received: from [192.168.1.93] (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
-        by smtp.gmail.com with ESMTPSA id d203sm1001287qke.37.2021.11.05.12.18.25
+        bh=zab+Ou5F3dW/0ZI0DKEFUpycAWNeYtpXPO2oI479330=;
+        b=EHGUDUgmLxR4E/cDS3XWI81mc6S0/iodnNUd7SPxXfN6xXfydyukxazH3dzvi4QfnQ
+         N7JmO21OozthKF/PeB0ijQJOfSbY2y/E+mMU1HBwiOaqnNuUfXsiPx76nvnzA2808wkK
+         WWcDD9fV6W5grG01HE7JbF0ArCENACZhZ8Yy4tVZBbgboOgoVNTm0mNn6WOIk2KmGaq0
+         2ONyE1MvMuyod58skgCgEmZ3Rpe4xv1yX5aMuAhN7W+7JJnIdiDGVXhtLU2mQ1wFfZyD
+         Suw2OiSHjPuXsZtbpo5ukDCHHFXU+BVN2HBMBE+vve9o5iWXyxCPzXPw7HMX3T3CgjHx
+         JXlQ==
+X-Gm-Message-State: AOAM531iU0MlqlPeH8FLiLdWwk6FqCb9NFt/SMvCh+R9H7HsjXdcFr9q
+        Wb3GVD+rhwjP3x/LrUqF/1Z8Pg==
+X-Google-Smtp-Source: ABdhPJwwcJebiYj6bzdtbn3M7TB4ZyB2aAPZl+DRYQNGGHgqlwqzd2M4WHSiZ8HTWqu9YZ27mLAikg==
+X-Received: by 2002:a05:6830:91a:: with SMTP id v26mr31093705ott.313.1636141893687;
+        Fri, 05 Nov 2021 12:51:33 -0700 (PDT)
+Received: from [192.168.11.48] (cpe-173-173-107-246.satx.res.rr.com. [173.173.107.246])
+        by smtp.gmail.com with ESMTPSA id x13sm2664707ooj.37.2021.11.05.12.51.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Nov 2021 12:18:25 -0700 (PDT)
+        Fri, 05 Nov 2021 12:51:33 -0700 (PDT)
+Message-ID: <74603569-2ff1-999e-9618-79261fdb0ee4@kali.org>
+Date:   Fri, 5 Nov 2021 14:51:31 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.3.0
 Subject: Re: [PATCH v3 0/5] Refactor thermal pressure update to avoid code
  duplication
-To:     Steev Klimaszewski <steev@kali.org>,
+Content-Language: en-US
+To:     Thara Gopinath <thara.gopinath@linaro.org>,
         Lukasz Luba <lukasz.luba@arm.com>
 Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
@@ -64,299 +70,253 @@ References: <20211103161020.26714-1-lukasz.luba@arm.com>
  <c7b526f0-2c26-0cfc-910b-3521c6a6ef51@kali.org>
  <3cba148a-7077-7b6b-f131-dc65045aa348@arm.com>
  <9d533b6e-a81c-e823-fa6f-61fdea92fa65@kali.org>
-From:   Thara Gopinath <thara.gopinath@linaro.org>
-Message-ID: <74ea027b-b213-42b8-0f7d-275f3b84712e@linaro.org>
-Date:   Fri, 5 Nov 2021 15:18:25 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <9d533b6e-a81c-e823-fa6f-61fdea92fa65@kali.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+ <74ea027b-b213-42b8-0f7d-275f3b84712e@linaro.org>
+From:   Steev Klimaszewski <steev@kali.org>
+In-Reply-To: <74ea027b-b213-42b8-0f7d-275f3b84712e@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-
-On 11/5/21 1:33 PM, Steev Klimaszewski wrote:
-> Hi,
-> 
-> On 11/5/21 11:26 AM, Lukasz Luba wrote:
->> Hi Steev,
+On 11/5/21 2:18 PM, Thara Gopinath wrote:
+>
+>
+> On 11/5/21 1:33 PM, Steev Klimaszewski wrote:
+>> Hi,
 >>
->> On 11/5/21 3:39 PM, Steev Klimaszewski wrote:
->>> Hi Lukasz,
+>> On 11/5/21 11:26 AM, Lukasz Luba wrote:
+>>> Hi Steev,
 >>>
->>
->> [snip]
->>
->>> I've been testing this patchset on the Lenovo Yoga C630, and today 
->>> while compiling alacritty and running an apt-get full-upgrade, I 
->>> found the following in dmesg output:
->>
->> Thank you for testing and sending feedback!
->>
->> Are you using a mainline kernel or you applied on some vendor production
->> kernel this patch set? I need to exclude a different code base
->> from the equation, especially to the arch_topology.c init code.
->>
-> This is stabe 5.15.0 tree with ~72 (including your 6 patches on top 
-> (including the below as a patch).  You can find it at 
-> https://github.com/steev/linux/commits/linux-5.15.y - the vast majority 
-> are just various fixups for sdm845/sdm850 for the Lenovo Yoga (or crypto 
-> since I'd like to see the crypto unit working).
-> 
-> I did grep through my logs and it appears that this started after I 
-> moved from v2 to v3 - I'd tested v2 and it didn't show this.
-> 
-> [snip]
-> 
->> [snip]
->>
->> That's interesting why we hit this. I should have added info about
->> those two values, which are compared.
->>
->> Could you make this change and try it again, please?
->> We would know the problematic values, which triggered this.
->> ---------------------8<-----------------------------------
->> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
->> index db18d79065fe..0d8db0927041 100644
->> --- a/drivers/base/arch_topology.c
->> +++ b/drivers/base/arch_topology.c
->> @@ -185,8 +185,11 @@ void topology_update_thermal_pressure(const 
->> struct cpumask *cpus,
->>         /* Convert to MHz scale which is used in 'freq_factor' */
->>         capped_freq /= 1000;
->>
->> -       if (WARN_ON(max_freq < capped_freq))
->> +       if (max_freq < capped_freq) {
->> +               pr_warn("THERMAL_PRESSURE: max_freq (%lu) < 
->> capped_freq (%lu) for CPUs [%*pbl]\n",
->> +                       max_freq, capped_freq, cpumask_pr_args(cpus));
->>                 return;
->> +       }
->>
->>         capacity = mult_frac(capped_freq, max_capacity, max_freq);
->>
->> ------------------------------>8---------------------------
-> 
-> Applying this to the above kernel.. will test...
-> 
-> 
->>
->> Could you also dump for me the cpufreq and capacity sysfs content?
->> $ grep . /sys/devices/system/cpu/cpu*/cpufreq/*
-> 
-> 
-> /sys/devices/system/cpu/cpu0/cpufreq/affected_cpus:0 1 2 3
-> /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq:300000
-> /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq:1766400
-> /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_min_freq:300000
-> /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_transition_latency:0
-> /sys/devices/system/cpu/cpu0/cpufreq/related_cpus:0 1 2 3
-> /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies:300000 403200 
-> 480000 576000 652800 748800 825600 902400 979200 1056000 1132800 1228800 
-> 1324800 1420800 1516800 1612800 1689600 1766400
-> /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors:ondemand conservative 
-> powersave userspace performance schedutil
-> /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq:300000
-> /sys/devices/system/cpu/cpu0/cpufreq/scaling_driver:qcom-cpufreq-hw
-> /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor:schedutil
-> /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq:1766400
-> /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq:300000
-> /sys/devices/system/cpu/cpu0/cpufreq/scaling_setspeed:<unsupported>
-> /sys/devices/system/cpu/cpu1/cpufreq/affected_cpus:0 1 2 3
-> /sys/devices/system/cpu/cpu1/cpufreq/cpuinfo_cur_freq:300000
-> /sys/devices/system/cpu/cpu1/cpufreq/cpuinfo_max_freq:1766400
-> /sys/devices/system/cpu/cpu1/cpufreq/cpuinfo_min_freq:300000
-> /sys/devices/system/cpu/cpu1/cpufreq/cpuinfo_transition_latency:0
-> /sys/devices/system/cpu/cpu1/cpufreq/related_cpus:0 1 2 3
-> /sys/devices/system/cpu/cpu1/cpufreq/scaling_available_frequencies:300000 403200 
-> 480000 576000 652800 748800 825600 902400 979200 1056000 1132800 1228800 
-> 1324800 1420800 1516800 1612800 1689600 1766400
-> /sys/devices/system/cpu/cpu1/cpufreq/scaling_available_governors:ondemand conservative 
-> powersave userspace performance schedutil
-> /sys/devices/system/cpu/cpu1/cpufreq/scaling_cur_freq:300000
-> /sys/devices/system/cpu/cpu1/cpufreq/scaling_driver:qcom-cpufreq-hw
-> /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor:schedutil
-> /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq:1766400
-> /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq:300000
-> /sys/devices/system/cpu/cpu1/cpufreq/scaling_setspeed:<unsupported>
-> /sys/devices/system/cpu/cpu2/cpufreq/affected_cpus:0 1 2 3
-> /sys/devices/system/cpu/cpu2/cpufreq/cpuinfo_cur_freq:300000
-> /sys/devices/system/cpu/cpu2/cpufreq/cpuinfo_max_freq:1766400
-> /sys/devices/system/cpu/cpu2/cpufreq/cpuinfo_min_freq:300000
-> /sys/devices/system/cpu/cpu2/cpufreq/cpuinfo_transition_latency:0
-> /sys/devices/system/cpu/cpu2/cpufreq/related_cpus:0 1 2 3
-> /sys/devices/system/cpu/cpu2/cpufreq/scaling_available_frequencies:300000 403200 
-> 480000 576000 652800 748800 825600 902400 979200 1056000 1132800 1228800 
-> 1324800 1420800 1516800 1612800 1689600 1766400
-> /sys/devices/system/cpu/cpu2/cpufreq/scaling_available_governors:ondemand conservative 
-> powersave userspace performance schedutil
-> /sys/devices/system/cpu/cpu2/cpufreq/scaling_cur_freq:300000
-> /sys/devices/system/cpu/cpu2/cpufreq/scaling_driver:qcom-cpufreq-hw
-> /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor:schedutil
-> /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq:1766400
-> /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq:300000
-> /sys/devices/system/cpu/cpu2/cpufreq/scaling_setspeed:<unsupported>
-> /sys/devices/system/cpu/cpu3/cpufreq/affected_cpus:0 1 2 3
-> /sys/devices/system/cpu/cpu3/cpufreq/cpuinfo_cur_freq:300000
-> /sys/devices/system/cpu/cpu3/cpufreq/cpuinfo_max_freq:1766400
-> /sys/devices/system/cpu/cpu3/cpufreq/cpuinfo_min_freq:300000
-> /sys/devices/system/cpu/cpu3/cpufreq/cpuinfo_transition_latency:0
-> /sys/devices/system/cpu/cpu3/cpufreq/related_cpus:0 1 2 3
-> /sys/devices/system/cpu/cpu3/cpufreq/scaling_available_frequencies:300000 403200 
-> 480000 576000 652800 748800 825600 902400 979200 1056000 1132800 1228800 
-> 1324800 1420800 1516800 1612800 1689600 1766400
-> /sys/devices/system/cpu/cpu3/cpufreq/scaling_available_governors:ondemand conservative 
-> powersave userspace performance schedutil
-> /sys/devices/system/cpu/cpu3/cpufreq/scaling_cur_freq:300000
-> /sys/devices/system/cpu/cpu3/cpufreq/scaling_driver:qcom-cpufreq-hw
-> /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor:schedutil
-> /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq:1766400
-> /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq:300000
-> /sys/devices/system/cpu/cpu3/cpufreq/scaling_setspeed:<unsupported>
-> /sys/devices/system/cpu/cpu4/cpufreq/affected_cpus:4 5 6 7
-> /sys/devices/system/cpu/cpu4/cpufreq/cpuinfo_cur_freq:1920000
-> /sys/devices/system/cpu/cpu4/cpufreq/cpuinfo_max_freq:2956800
-> /sys/devices/system/cpu/cpu4/cpufreq/cpuinfo_min_freq:825600
-> /sys/devices/system/cpu/cpu4/cpufreq/cpuinfo_transition_latency:0
-> /sys/devices/system/cpu/cpu4/cpufreq/related_cpus:4 5 6 7
-> /sys/devices/system/cpu/cpu4/cpufreq/scaling_available_frequencies:825600 902400 
-> 979200 1056000 1209600 1286400 1363200 1459200 1536000 1612800 1689600 
-> 1766400 1843200 1920000 1996800 2092800 2169600 2246400 2323200 2400000 
-> 2476800 2553600 2649600 2745600 2841600
-> /sys/devices/system/cpu/cpu4/cpufreq/scaling_available_governors:ondemand conservative 
-> powersave userspace performance schedutil
-> /sys/devices/system/cpu/cpu4/cpufreq/scaling_boost_frequencies:2956800
-> /sys/devices/system/cpu/cpu4/cpufreq/scaling_cur_freq:1920000
-> /sys/devices/system/cpu/cpu4/cpufreq/scaling_driver:qcom-cpufreq-hw
-> /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor:schedutil
-> /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq:2841600
-> /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq:825600
-> /sys/devices/system/cpu/cpu4/cpufreq/scaling_setspeed:<unsupported>
-> /sys/devices/system/cpu/cpu5/cpufreq/affected_cpus:4 5 6 7
-> /sys/devices/system/cpu/cpu5/cpufreq/cpuinfo_cur_freq:1996800
-> /sys/devices/system/cpu/cpu5/cpufreq/cpuinfo_max_freq:2956800
-> /sys/devices/system/cpu/cpu5/cpufreq/cpuinfo_min_freq:825600
-> /sys/devices/system/cpu/cpu5/cpufreq/cpuinfo_transition_latency:0
-> /sys/devices/system/cpu/cpu5/cpufreq/related_cpus:4 5 6 7
-> /sys/devices/system/cpu/cpu5/cpufreq/scaling_available_frequencies:825600 902400 
-> 979200 1056000 1209600 1286400 1363200 1459200 1536000 1612800 1689600 
-> 1766400 1843200 1920000 1996800 2092800 2169600 2246400 2323200 2400000 
-> 2476800 2553600 2649600 2745600 2841600
-> /sys/devices/system/cpu/cpu5/cpufreq/scaling_available_governors:ondemand conservative 
-> powersave userspace performance schedutil
-> /sys/devices/system/cpu/cpu5/cpufreq/scaling_boost_frequencies:2956800
-> /sys/devices/system/cpu/cpu5/cpufreq/scaling_cur_freq:1996800
-> /sys/devices/system/cpu/cpu5/cpufreq/scaling_driver:qcom-cpufreq-hw
-> /sys/devices/system/cpu/cpu5/cpufreq/scaling_governor:schedutil
-> /sys/devices/system/cpu/cpu5/cpufreq/scaling_max_freq:2841600
-> /sys/devices/system/cpu/cpu5/cpufreq/scaling_min_freq:825600
-> /sys/devices/system/cpu/cpu5/cpufreq/scaling_setspeed:<unsupported>
-> /sys/devices/system/cpu/cpu6/cpufreq/affected_cpus:4 5 6 7
-> /sys/devices/system/cpu/cpu6/cpufreq/cpuinfo_cur_freq:1996800
-> /sys/devices/system/cpu/cpu6/cpufreq/cpuinfo_max_freq:2956800
-> /sys/devices/system/cpu/cpu6/cpufreq/cpuinfo_min_freq:825600
-> /sys/devices/system/cpu/cpu6/cpufreq/cpuinfo_transition_latency:0
-> /sys/devices/system/cpu/cpu6/cpufreq/related_cpus:4 5 6 7
-> /sys/devices/system/cpu/cpu6/cpufreq/scaling_available_frequencies:825600 902400 
-> 979200 1056000 1209600 1286400 1363200 1459200 1536000 1612800 1689600 
-> 1766400 1843200 1920000 1996800 2092800 2169600 2246400 2323200 2400000 
-> 2476800 2553600 2649600 2745600 2841600
-> /sys/devices/system/cpu/cpu6/cpufreq/scaling_available_governors:ondemand conservative 
-> powersave userspace performance schedutil
-> /sys/devices/system/cpu/cpu6/cpufreq/scaling_boost_frequencies:2956800
-> /sys/devices/system/cpu/cpu6/cpufreq/scaling_cur_freq:1996800
-> /sys/devices/system/cpu/cpu6/cpufreq/scaling_driver:qcom-cpufreq-hw
-> /sys/devices/system/cpu/cpu6/cpufreq/scaling_governor:schedutil
-> /sys/devices/system/cpu/cpu6/cpufreq/scaling_max_freq:2841600
-> /sys/devices/system/cpu/cpu6/cpufreq/scaling_min_freq:825600
-> /sys/devices/system/cpu/cpu6/cpufreq/scaling_setspeed:<unsupported>
-> /sys/devices/system/cpu/cpu7/cpufreq/affected_cpus:4 5 6 7
-> /sys/devices/system/cpu/cpu7/cpufreq/cpuinfo_cur_freq:1996800
-> /sys/devices/system/cpu/cpu7/cpufreq/cpuinfo_max_freq:2956800
-> /sys/devices/system/cpu/cpu7/cpufreq/cpuinfo_min_freq:825600
-> /sys/devices/system/cpu/cpu7/cpufreq/cpuinfo_transition_latency:0
-> /sys/devices/system/cpu/cpu7/cpufreq/related_cpus:4 5 6 7
-> /sys/devices/system/cpu/cpu7/cpufreq/scaling_available_frequencies:825600 902400 
-> 979200 1056000 1209600 1286400 1363200 1459200 1536000 1612800 1689600 
-> 1766400 1843200 1920000 1996800 2092800 2169600 2246400 2323200 2400000 
-> 2476800 2553600 2649600 2745600 2841600
-> /sys/devices/system/cpu/cpu7/cpufreq/scaling_available_governors:ondemand conservative 
-> powersave userspace performance schedutil
-> /sys/devices/system/cpu/cpu7/cpufreq/scaling_boost_frequencies:2956800
-> /sys/devices/system/cpu/cpu7/cpufreq/scaling_cur_freq:1996800
-> /sys/devices/system/cpu/cpu7/cpufreq/scaling_driver:qcom-cpufreq-hw
-> /sys/devices/system/cpu/cpu7/cpufreq/scaling_governor:schedutil
-> /sys/devices/system/cpu/cpu7/cpufreq/scaling_max_freq:2841600
-> /sys/devices/system/cpu/cpu7/cpufreq/scaling_min_freq:825600
-> /sys/devices/system/cpu/cpu7/cpufreq/scaling_setspeed:<unsupported>
-> 
-> 
->> $ grep . /sys/devices/system/cpu/cpu*/cpu_capacity
-> 
-> /sys/devices/system/cpu/cpu0/cpu_capacity:377
-> /sys/devices/system/cpu/cpu1/cpu_capacity:377
-> /sys/devices/system/cpu/cpu2/cpu_capacity:377
-> /sys/devices/system/cpu/cpu3/cpu_capacity:377
-> /sys/devices/system/cpu/cpu4/cpu_capacity:1024
-> /sys/devices/system/cpu/cpu5/cpu_capacity:1024
-> /sys/devices/system/cpu/cpu6/cpu_capacity:1024
-> /sys/devices/system/cpu/cpu7/cpu_capacity:1024
-> 
-> 
-> In taking a look at cpufreq-info, one thing I noticed is that even 
-> though I have 1 in /sys/devices/system/cpu/cpufreq/boost, I am *never* 
-> hitting the 2.96GHz now
-> 
-> cpufreq stats: 826 MHz:59.14%, 902 MHz:0.15%, 979 MHz:0.18%, 1.06 
-> GHz:0.11%, 1.21 GHz:0.49%, 1.29 GHz:0.26%, 1.36 GHz:0.12%, 1.46 
-> GHz:0.23%, 1.54 GHz:0.10%, 1.61 GHz:0.14%, 1.69 GHz:0.09%, 1.77 
-> GHz:0.28%, 1.84 GHz:0.64%, 1.92 GHz:0.23%, 2.00 GHz:0.05%, 2.09 
-> GHz:0.05%, 2.17 GHz:0.03%, 2.25 GHz:0.03%, 2.32 GHz:0.03%, 2.40 
-> GHz:0.03%, 2.48 GHz:0.02%, 2.55 GHz:0.02%, 2.65 GHz:0.03%, 2.75 
-> GHz:0.03%, 2.84 GHz:37.53%, 2.96 GHz:0.00%  (20854)
-> 
-> Aaaand it looks like that is part of the deal - with your patch from 
-> above applied, we get:
-> 
-> [   22.487268] THERMAL_PRESSURE: max_freq(2841) < capped_freq(2956) for 
-> CPUs [4-7]
-> [   22.487313] THERMAL_PRESSURE: max_freq(2841) < capped_freq(2956) for 
-> CPUs [4-7]
-> [   22.508642] THERMAL_PRESSURE: max_freq(2841) < capped_freq(2956) for 
-> CPUs [4-7]
-> [   22.552273] THERMAL_PRESSURE: max_freq(2841) < capped_freq(2956) for 
-> CPUs [4-7]
-> 
-> So, we're not able to hit boost frequencies with this applied?
+>>> On 11/5/21 3:39 PM, Steev Klimaszewski wrote:
+>>>> Hi Lukasz,
+>>>>
+>>> [snip]
+> Hi Steve,
+>
+> Does your system have enough load to hit the boost frequencies ? I 
+> don't think this patch should affect hitting boost frequencies as 
+> there is no error being returned from topology_update_thermal_pressure.
+>
+> The warning you are getting is because you have boost frequency 
+> enabled and IIUC lmh enabled and thermal pressure framework bails out 
+> due to boost_frequency being greater than what is available in per_cpu 
+> freq_factor. This is because we do not recalculate freq_factor every 
+> time boost is enabled / disabled. IIRC there were some discussions 
+> around rebuilding scheduler domains and capacity with user space 
+> changes to max frequency but it has never proceeded much. Till that 
+> point, I think the right way, is to check whether the new capcity 
+> exceeds the max_capacity of the cpu and if yes use max_capacity in 
+> lieu of new_capacity to calculate thermal pressure.
+>
+Hi Thara,
 
-Hi Steve,
+I should definitely be able to push it to 2.96GHz, however I'm simply 
+not getting it at all with these patches applied.
 
-Does your system have enough load to hit the boost frequencies ? I don't 
-think this patch should affect hitting boost frequencies as there is no 
-error being returned from topology_update_thermal_pressure.
+So, I'm currently compiling multiple applications - alacritty 
+(https://github.com/alacritty/alacritty), and zellij 
+(https://github.com/zellij-org/zellij), as well as running pixz on a 
+5.1GB file to compress it, and throwing in cpuburn-a53 
+(https://github.com/ssvb/cpuburn-arm) and I'm simply not getting 2.96GHz 
+at all.  Ever.  I don't normally try to push it that high, but I wanted 
+to see if we could ever hit it (the system was also never going above 86C)
 
-The warning you are getting is because you have boost frequency enabled 
-and IIUC lmh enabled and thermal pressure framework bails out due to 
-boost_frequency being greater than what is available in per_cpu 
-freq_factor. This is because we do not recalculate freq_factor every 
-time boost is enabled / disabled. IIRC there were some discussions 
-around rebuilding scheduler domains and capacity with user space changes 
-to max frequency but it has never proceeded much. Till that point, I 
-think the right way, is to check whether the new capcity exceeds the 
-max_capacity of the cpu and if yes use max_capacity in lieu of 
-new_capacity to calculate thermal pressure.
+analyzing CPU 4:
+   driver: qcom-cpufreq-hw
+   CPUs which run at the same hardware frequency: 4 5 6 7
+   CPUs which need to have their frequency coordinated by software: 4 5 6 7
+   maximum transition latency: 4294.55 ms.
+   hardware limits: 826 MHz - 2.96 GHz
+   available frequency steps: 826 MHz, 902 MHz, 979 MHz, 1.06 GHz, 1.21 
+GHz, 1.29 GHz, 1.36 GHz, 1.46 GHz, 1.54 GHz, 1.61 GHz, 1.69 GHz, 1.77 
+GHz, 1.84 GHz, 1.92 GHz, 2.00 GHz, 2.09 GHz, 2.17 GHz, 2.25 GHz, 2.32 
+GHz, 2.40 GHz, 2.48 GHz, 2.55 GHz, 2.65 GHz, 2.75 GHz, 2.84 GHz
+   available cpufreq governors: ondemand, conservative, powersave, 
+userspace, performance, schedutil
+   current policy: frequency should be within 826 MHz and 2.84 GHz.
+                   The governor "schedutil" may decide which speed to use
+                   within this range.
+   current CPU frequency is 2.84 GHz.
+   cpufreq stats: 826 MHz:54.84%, 902 MHz:0.02%, 979 MHz:0.02%, 1.06 
+GHz:0.02%, 1.21 GHz:0.08%, 1.29 GHz:0.07%, 1.36 GHz:0.09%, 1.46 
+GHz:0.04%, 1.54 GHz:0.02%, 1.61 GHz:0.02%, 1.69 GHz:0.02%, 1.77 
+GHz:0.13%, 1.84 GHz:0.04%, 1.92 GHz:0.04%, 2.00 GHz:0.02%, 2.09 
+GHz:0.03%, 2.17 GHz:0.02%, 2.25 GHz:0.02%, 2.32 GHz:0.01%, 2.40 
+GHz:0.02%, 2.48 GHz:0.02%, 2.55 GHz:0.02%, 2.65 GHz:0.02%, 2.75 
+GHz:0.02%, 2.84 GHz:44.38%, 2.96 GHz:0.00%  (8066)
+analyzing CPU 5:
+   driver: qcom-cpufreq-hw
+   CPUs which run at the same hardware frequency: 4 5 6 7
+   CPUs which need to have their frequency coordinated by software: 4 5 6 7
+   maximum transition latency: 4294.55 ms.
+   hardware limits: 826 MHz - 2.96 GHz
+   available frequency steps: 826 MHz, 902 MHz, 979 MHz, 1.06 GHz, 1.21 
+GHz, 1.29 GHz, 1.36 GHz, 1.46 GHz, 1.54 GHz, 1.61 GHz, 1.69 GHz, 1.77 
+GHz, 1.84 GHz, 1.92 GHz, 2.00 GHz, 2.09 GHz, 2.17 GHz, 2.25 GHz, 2.32 
+GHz, 2.40 GHz, 2.48 GHz, 2.55 GHz, 2.65 GHz, 2.75 GHz, 2.84 GHz
+   available cpufreq governors: ondemand, conservative, powersave, 
+userspace, performance, schedutil
+   current policy: frequency should be within 826 MHz and 2.84 GHz.
+                   The governor "schedutil" may decide which speed to use
+                   within this range.
+   current CPU frequency is 2.84 GHz.
+   cpufreq stats: 826 MHz:54.84%, 902 MHz:0.02%, 979 MHz:0.02%, 1.06 
+GHz:0.02%, 1.21 GHz:0.08%, 1.29 GHz:0.07%, 1.36 GHz:0.09%, 1.46 
+GHz:0.04%, 1.54 GHz:0.02%, 1.61 GHz:0.02%, 1.69 GHz:0.02%, 1.77 
+GHz:0.13%, 1.84 GHz:0.04%, 1.92 GHz:0.04%, 2.00 GHz:0.02%, 2.09 
+GHz:0.03%, 2.17 GHz:0.02%, 2.25 GHz:0.02%, 2.32 GHz:0.01%, 2.40 
+GHz:0.02%, 2.48 GHz:0.02%, 2.55 GHz:0.02%, 2.65 GHz:0.02%, 2.75 
+GHz:0.02%, 2.84 GHz:44.38%, 2.96 GHz:0.00%  (8066)
+analyzing CPU 6:
+   driver: qcom-cpufreq-hw
+   CPUs which run at the same hardware frequency: 4 5 6 7
+   CPUs which need to have their frequency coordinated by software: 4 5 6 7
+   maximum transition latency: 4294.55 ms.
+   hardware limits: 826 MHz - 2.96 GHz
+   available frequency steps: 826 MHz, 902 MHz, 979 MHz, 1.06 GHz, 1.21 
+GHz, 1.29 GHz, 1.36 GHz, 1.46 GHz, 1.54 GHz, 1.61 GHz, 1.69 GHz, 1.77 
+GHz, 1.84 GHz, 1.92 GHz, 2.00 GHz, 2.09 GHz, 2.17 GHz, 2.25 GHz, 2.32 
+GHz, 2.40 GHz, 2.48 GHz, 2.55 GHz, 2.65 GHz, 2.75 GHz, 2.84 GHz
+   available cpufreq governors: ondemand, conservative, powersave, 
+userspace, performance, schedutil
+   current policy: frequency should be within 826 MHz and 2.84 GHz.
+                   The governor "schedutil" may decide which speed to use
+                   within this range.
+   current CPU frequency is 2.84 GHz.
+   cpufreq stats: 826 MHz:54.84%, 902 MHz:0.02%, 979 MHz:0.02%, 1.06 
+GHz:0.02%, 1.21 GHz:0.08%, 1.29 GHz:0.07%, 1.36 GHz:0.09%, 1.46 
+GHz:0.04%, 1.54 GHz:0.02%, 1.61 GHz:0.02%, 1.69 GHz:0.02%, 1.77 
+GHz:0.13%, 1.84 GHz:0.04%, 1.92 GHz:0.04%, 2.00 GHz:0.02%, 2.09 
+GHz:0.03%, 2.17 GHz:0.02%, 2.25 GHz:0.02%, 2.32 GHz:0.01%, 2.40 
+GHz:0.02%, 2.48 GHz:0.02%, 2.55 GHz:0.02%, 2.65 GHz:0.02%, 2.75 
+GHz:0.02%, 2.84 GHz:44.38%, 2.96 GHz:0.00%  (8066)
+analyzing CPU 7:
+   driver: qcom-cpufreq-hw
+   CPUs which run at the same hardware frequency: 4 5 6 7
+   CPUs which need to have their frequency coordinated by software: 4 5 6 7
+   maximum transition latency: 4294.55 ms.
+   hardware limits: 826 MHz - 2.96 GHz
+   available frequency steps: 826 MHz, 902 MHz, 979 MHz, 1.06 GHz, 1.21 
+GHz, 1.29 GHz, 1.36 GHz, 1.46 GHz, 1.54 GHz, 1.61 GHz, 1.69 GHz, 1.77 
+GHz, 1.84 GHz, 1.92 GHz, 2.00 GHz, 2.09 GHz, 2.17 GHz, 2.25 GHz, 2.32 
+GHz, 2.40 GHz, 2.48 GHz, 2.55 GHz, 2.65 GHz, 2.75 GHz, 2.84 GHz
+   available cpufreq governors: ondemand, conservative, powersave, 
+userspace, performance, schedutil
+   current policy: frequency should be within 826 MHz and 2.84 GHz.
+                   The governor "schedutil" may decide which speed to use
+                   within this range.
+   current CPU frequency is 2.84 GHz.
+   cpufreq stats: 826 MHz:54.84%, 902 MHz:0.02%, 979 MHz:0.02%, 1.06 
+GHz:0.02%, 1.21 GHz:0.08%, 1.29 GHz:0.07%, 1.36 GHz:0.09%, 1.46 
+GHz:0.04%, 1.54 GHz:0.02%, 1.61 GHz:0.02%, 1.69 GHz:0.02%, 1.77 
+GHz:0.13%, 1.84 GHz:0.04%, 1.92 GHz:0.04%, 2.00 GHz:0.02%, 2.09 
+GHz:0.03%, 2.17 GHz:0.02%, 2.25 GHz:0.02%, 2.32 GHz:0.01%, 2.40 
+GHz:0.02%, 2.48 GHz:0.02%, 2.55 GHz:0.02%, 2.65 GHz:0.02%, 2.75 
+GHz:0.02%, 2.84 GHz:44.38%, 2.96 GHz:0.00%  (8066)
 
-> 
-> Thank you for the fast response!
-> 
-> -- steev
-> 
 
--- 
-Warm Regards
-Thara (She/Her/Hers)
+
+After removing this patchset, and rebooting and just compiling zellij:
+
+analyzing CPU 4:
+   driver: qcom-cpufreq-hw
+   CPUs which run at the same hardware frequency: 4 5 6 7
+   CPUs which need to have their frequency coordinated by software: 4 5 6 7
+   maximum transition latency: 4294.55 ms.
+   hardware limits: 826 MHz - 2.96 GHz
+   available frequency steps: 826 MHz, 902 MHz, 979 MHz, 1.06 GHz, 1.21 
+GHz, 1.29 GHz, 1.36 GHz, 1.46 GHz, 1.54 GHz, 1.61 GHz, 1.69 GHz, 1.77 
+GHz, 1.84 GHz, 1.92 GHz, 2.00 GHz, 2.09 GHz, 2.17 GHz, 2.25 GHz, 2.32 
+GHz, 2.40 GHz, 2.48 GHz, 2.55 GHz, 2.65 GHz, 2.75 GHz, 2.84 GHz
+   available cpufreq governors: ondemand, conservative, powersave, 
+userspace, performance, schedutil
+   current policy: frequency should be within 826 MHz and 2.84 GHz.
+                   The governor "schedutil" may decide which speed to use
+                   within this range.
+   current CPU frequency is 2.84 GHz.
+   cpufreq stats: 826 MHz:16.01%, 902 MHz:0.08%, 979 MHz:0.05%, 1.06 
+GHz:0.06%, 1.21 GHz:0.37%, 1.29 GHz:0.17%, 1.36 GHz:0.15%, 1.46 
+GHz:0.20%, 1.54 GHz:0.18%, 1.61 GHz:0.21%, 1.69 GHz:0.17%, 1.77 
+GHz:0.22%, 1.84 GHz:0.32%, 1.92 GHz:0.37%, 2.00 GHz:0.22%, 2.09 
+GHz:0.20%, 2.17 GHz:0.20%, 2.25 GHz:0.19%, 2.32 GHz:0.19%, 2.40 
+GHz:0.21%, 2.48 GHz:0.18%, 2.55 GHz:0.18%, 2.65 GHz:0.21%, 2.75 
+GHz:0.16%, 2.84 GHz:79.49%, 2.96 GHz:0.03%  (5315)
+analyzing CPU 5:
+   driver: qcom-cpufreq-hw
+   CPUs which run at the same hardware frequency: 4 5 6 7
+   CPUs which need to have their frequency coordinated by software: 4 5 6 7
+   maximum transition latency: 4294.55 ms.
+   hardware limits: 826 MHz - 2.96 GHz
+   available frequency steps: 826 MHz, 902 MHz, 979 MHz, 1.06 GHz, 1.21 
+GHz, 1.29 GHz, 1.36 GHz, 1.46 GHz, 1.54 GHz, 1.61 GHz, 1.69 GHz, 1.77 
+GHz, 1.84 GHz, 1.92 GHz, 2.00 GHz, 2.09 GHz, 2.17 GHz, 2.25 GHz, 2.32 
+GHz, 2.40 GHz, 2.48 GHz, 2.55 GHz, 2.65 GHz, 2.75 GHz, 2.84 GHz
+   available cpufreq governors: ondemand, conservative, powersave, 
+userspace, performance, schedutil
+   current policy: frequency should be within 826 MHz and 2.84 GHz.
+                   The governor "schedutil" may decide which speed to use
+                   within this range.
+   current CPU frequency is 2.84 GHz.
+   cpufreq stats: 826 MHz:16.01%, 902 MHz:0.08%, 979 MHz:0.05%, 1.06 
+GHz:0.06%, 1.21 GHz:0.37%, 1.29 GHz:0.17%, 1.36 GHz:0.15%, 1.46 
+GHz:0.20%, 1.54 GHz:0.18%, 1.61 GHz:0.21%, 1.69 GHz:0.17%, 1.77 
+GHz:0.22%, 1.84 GHz:0.32%, 1.92 GHz:0.37%, 2.00 GHz:0.22%, 2.09 
+GHz:0.20%, 2.17 GHz:0.20%, 2.25 GHz:0.19%, 2.32 GHz:0.19%, 2.40 
+GHz:0.21%, 2.48 GHz:0.18%, 2.55 GHz:0.18%, 2.65 GHz:0.21%, 2.75 
+GHz:0.16%, 2.84 GHz:79.49%, 2.96 GHz:0.03%  (5315)
+analyzing CPU 6:
+   driver: qcom-cpufreq-hw
+   CPUs which run at the same hardware frequency: 4 5 6 7
+   CPUs which need to have their frequency coordinated by software: 4 5 6 7
+   maximum transition latency: 4294.55 ms.
+   hardware limits: 826 MHz - 2.96 GHz
+   available frequency steps: 826 MHz, 902 MHz, 979 MHz, 1.06 GHz, 1.21 
+GHz, 1.29 GHz, 1.36 GHz, 1.46 GHz, 1.54 GHz, 1.61 GHz, 1.69 GHz, 1.77 
+GHz, 1.84 GHz, 1.92 GHz, 2.00 GHz, 2.09 GHz, 2.17 GHz, 2.25 GHz, 2.32 
+GHz, 2.40 GHz, 2.48 GHz, 2.55 GHz, 2.65 GHz, 2.75 GHz, 2.84 GHz
+   available cpufreq governors: ondemand, conservative, powersave, 
+userspace, performance, schedutil
+   current policy: frequency should be within 826 MHz and 2.84 GHz.
+                   The governor "schedutil" may decide which speed to use
+                   within this range.
+   current CPU frequency is 2.84 GHz.
+   cpufreq stats: 826 MHz:16.01%, 902 MHz:0.08%, 979 MHz:0.05%, 1.06 
+GHz:0.06%, 1.21 GHz:0.37%, 1.29 GHz:0.17%, 1.36 GHz:0.15%, 1.46 
+GHz:0.20%, 1.54 GHz:0.18%, 1.61 GHz:0.21%, 1.69 GHz:0.17%, 1.77 
+GHz:0.22%, 1.84 GHz:0.32%, 1.92 GHz:0.37%, 2.00 GHz:0.22%, 2.09 
+GHz:0.20%, 2.17 GHz:0.20%, 2.25 GHz:0.19%, 2.32 GHz:0.19%, 2.40 
+GHz:0.21%, 2.48 GHz:0.18%, 2.55 GHz:0.18%, 2.65 GHz:0.21%, 2.75 
+GHz:0.16%, 2.84 GHz:79.49%, 2.96 GHz:0.03%  (5315)
+analyzing CPU 7:
+   driver: qcom-cpufreq-hw
+   CPUs which run at the same hardware frequency: 4 5 6 7
+   CPUs which need to have their frequency coordinated by software: 4 5 6 7
+   maximum transition latency: 4294.55 ms.
+   hardware limits: 826 MHz - 2.96 GHz
+   available frequency steps: 826 MHz, 902 MHz, 979 MHz, 1.06 GHz, 1.21 
+GHz, 1.29 GHz, 1.36 GHz, 1.46 GHz, 1.54 GHz, 1.61 GHz, 1.69 GHz, 1.77 
+GHz, 1.84 GHz, 1.92 GHz, 2.00 GHz, 2.09 GHz, 2.17 GHz, 2.25 GHz, 2.32 
+GHz, 2.40 GHz, 2.48 GHz, 2.55 GHz, 2.65 GHz, 2.75 GHz, 2.84 GHz
+   available cpufreq governors: ondemand, conservative, powersave, 
+userspace, performance, schedutil
+   current policy: frequency should be within 826 MHz and 2.84 GHz.
+                   The governor "schedutil" may decide which speed to use
+                   within this range.
+   current CPU frequency is 2.84 GHz.
+   cpufreq stats: 826 MHz:16.01%, 902 MHz:0.08%, 979 MHz:0.05%, 1.06 
+GHz:0.06%, 1.21 GHz:0.37%, 1.29 GHz:0.17%, 1.36 GHz:0.15%, 1.46 
+GHz:0.20%, 1.54 GHz:0.18%, 1.61 GHz:0.21%, 1.69 GHz:0.17%, 1.77 
+GHz:0.22%, 1.84 GHz:0.32%, 1.92 GHz:0.37%, 2.00 GHz:0.22%, 2.09 
+GHz:0.20%, 2.17 GHz:0.20%, 2.25 GHz:0.19%, 2.32 GHz:0.19%, 2.40 
+GHz:0.21%, 2.48 GHz:0.18%, 2.55 GHz:0.18%, 2.65 GHz:0.21%, 2.75 
+GHz:0.16%, 2.84 GHz:79.49%, 2.96 GHz:0.03%  (5315)
+
+
+>>
+>> Thank you for the fast response!
+>>
+>> -- steev
+>>
+>
