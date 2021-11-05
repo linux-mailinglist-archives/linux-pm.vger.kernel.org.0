@@ -2,154 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C3EB446308
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Nov 2021 12:55:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C30446500
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Nov 2021 15:33:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232467AbhKEL61 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Nov 2021 07:58:27 -0400
-Received: from mga14.intel.com ([192.55.52.115]:18600 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231852AbhKEL60 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 5 Nov 2021 07:58:26 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10158"; a="232134822"
-X-IronPort-AV: E=Sophos;i="5.87,211,1631602800"; 
-   d="scan'208";a="232134822"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2021 04:55:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,211,1631602800"; 
-   d="scan'208";a="490300478"
-Received: from lkp-server02.sh.intel.com (HELO c20d8bc80006) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 05 Nov 2021 04:55:45 -0700
-Received: from kbuild by c20d8bc80006 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mixou-0007d0-Da; Fri, 05 Nov 2021 11:55:44 +0000
-Date:   Fri, 05 Nov 2021 19:55:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- c00ddaa2e79ed178db8f6c06a77ddc41adc06d9e
-Message-ID: <61851b9d.8faa51Pnt3pJfROV%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S233255AbhKEOgf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Nov 2021 10:36:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56354 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233259AbhKEOge (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Nov 2021 10:36:34 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25785C061714;
+        Fri,  5 Nov 2021 07:33:55 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1636122832;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pDQ7Vlp4ZOk3OANnx52v04hzRNMdVvh44HRolFIyIAQ=;
+        b=XO98W27616NvKI97Mivdn1rwsesN/VZHlmzi8aFlXtf8O1iBxJfFa81vtOieGEbSmJyLjA
+        1Iex+jL+fh+71A5wfgk/gY8oz+lFurfAs5fMu8uGNISpkL+U+EGjMXxzoZoL/EtwL2NXZc
+        /Z1OaGvMT6H77GzIgqRzMOt7c1aYnGJMcuUZUeA4gs2Lss0Eh1noYfkNxVJ7qcHb8BIAue
+        WPGuF3eHeSaG82ESTh4du5QwolZxKz8p972tuF9pQlj+1Pmi50z6/tfLe7vSOCmLd6fBKq
+        3fNp1/3wjIJnGATg3hG7rmWitD1+Z2dZS0oGEQAhSxi3TI1GPXSQDPyga1qnng==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1636122832;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pDQ7Vlp4ZOk3OANnx52v04hzRNMdVvh44HRolFIyIAQ=;
+        b=BbR0IXGCaZkM33c0ZQTShuP3SUwC6/3Cbn/eW73UTOoPjqkBCtKYCARHootjdKiF0jeLja
+        h9XbkLJsksJlhzDA==
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>,
+        linux-kernel@vger.kernel.org
+Cc:     x86@kernel.org, dave.hansen@linux.intel.com, peterz@infradead.org,
+        bp@alien8.de, mingo@redhat.com, chang.seok.bae@intel.com,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH 4/4] intel_idle: Add SPR support with AMX INIT-state
+In-Reply-To: <20211104225226.5031-5-chang.seok.bae@intel.com>
+References: <20211104225226.5031-1-chang.seok.bae@intel.com>
+ <20211104225226.5031-5-chang.seok.bae@intel.com>
+Date:   Fri, 05 Nov 2021 15:33:52 +0100
+Message-ID: <878ry24qpb.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: c00ddaa2e79ed178db8f6c06a77ddc41adc06d9e  Merge branch 'thermal-int340x' into bleeding-edge
+Chang,
 
-elapsed time: 924m
+On Thu, Nov 04 2021 at 15:52, Chang S. Bae wrote:
+> +/**
+> + * intel_idle_tile - Ask the processor to enter the given idle state.
+> + * @dev: cpuidle device of the target CPU.
+> + * @drv: cpuidle driver (assumed to point to intel_idle_driver).
+> + *
+> + * Ensure TILE registers in INIT-state before using intel_idle() to
+> + * enter the idle state.
+> + */
+> +static __cpuidle int intel_idle_tile(struct cpuidle_device *dev,
+> +				     struct cpuidle_driver *drv, int index)
+> +{
+> +	fpu_idle_fpregs();
 
-configs tested: 95
-configs skipped: 3
+That's redundant because arch_cpu_idle_enter() is invoked before the
+actual idle mechanism. 
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> +/**
+> + * intel_idle_s2idle_tile - Ask the processor to enter the given idle state.
+> + * @dev: cpuidle device of the target CPU.
+> + * @drv: cpuidle driver (assumed to point to intel_idle_driver).
+> + * @index: Target idle state index.
+> + *
+> + * Ensure TILE registers in INIT-state before using intel_idle_s2idle() to
+> + * enter the idle state.
+> + */
+> +static __cpuidle int intel_idle_s2idle_tile(struct cpuidle_device *dev,
+> +					    struct cpuidle_driver *drv, int index)
+> +{
+> +	fpu_idle_fpregs();
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20211105
-m68k                          hp300_defconfig
-arm                            qcom_defconfig
-ia64                          tiger_defconfig
-s390                             allmodconfig
-arm                       versatile_defconfig
-mips                       lemote2f_defconfig
-powerpc                      walnut_defconfig
-riscv                            allyesconfig
-sh                           se7712_defconfig
-powerpc                     asp8347_defconfig
-arm                            mmp2_defconfig
-sh                   sh7770_generic_defconfig
-arm                        oxnas_v6_defconfig
-sh                        sh7757lcr_defconfig
-arm                    vt8500_v6_v7_defconfig
-sh                          r7785rp_defconfig
-arm                        cerfcube_defconfig
-mips                      maltasmvp_defconfig
-arm                  randconfig-c002-20211105
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a012-20211105
-x86_64               randconfig-a016-20211105
-x86_64               randconfig-a015-20211105
-x86_64               randconfig-a013-20211105
-x86_64               randconfig-a011-20211105
-x86_64               randconfig-a014-20211105
-i386                 randconfig-a016-20211105
-i386                 randconfig-a014-20211105
-i386                 randconfig-a015-20211105
-i386                 randconfig-a013-20211105
-i386                 randconfig-a011-20211105
-i386                 randconfig-a012-20211105
-arc                  randconfig-r043-20211105
-riscv                randconfig-r042-20211105
-s390                 randconfig-r044-20211105
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
+Ditto
 
-clang tested configs:
-x86_64               randconfig-a004-20211105
-i386                 randconfig-a005-20211105
-i386                 randconfig-a001-20211105
-i386                 randconfig-a003-20211105
-i386                 randconfig-a004-20211105
-i386                 randconfig-a006-20211105
-i386                 randconfig-a002-20211105
-hexagon              randconfig-r041-20211105
-hexagon              randconfig-r045-20211105
+Thanks,
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+        tglx
