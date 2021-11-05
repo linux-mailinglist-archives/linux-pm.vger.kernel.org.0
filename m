@@ -2,90 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72C30446500
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Nov 2021 15:33:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 602AC446520
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Nov 2021 15:39:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233255AbhKEOgf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Nov 2021 10:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56354 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233259AbhKEOge (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Nov 2021 10:36:34 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25785C061714;
-        Fri,  5 Nov 2021 07:33:55 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1636122832;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pDQ7Vlp4ZOk3OANnx52v04hzRNMdVvh44HRolFIyIAQ=;
-        b=XO98W27616NvKI97Mivdn1rwsesN/VZHlmzi8aFlXtf8O1iBxJfFa81vtOieGEbSmJyLjA
-        1Iex+jL+fh+71A5wfgk/gY8oz+lFurfAs5fMu8uGNISpkL+U+EGjMXxzoZoL/EtwL2NXZc
-        /Z1OaGvMT6H77GzIgqRzMOt7c1aYnGJMcuUZUeA4gs2Lss0Eh1noYfkNxVJ7qcHb8BIAue
-        WPGuF3eHeSaG82ESTh4du5QwolZxKz8p972tuF9pQlj+1Pmi50z6/tfLe7vSOCmLd6fBKq
-        3fNp1/3wjIJnGATg3hG7rmWitD1+Z2dZS0oGEQAhSxi3TI1GPXSQDPyga1qnng==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1636122832;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pDQ7Vlp4ZOk3OANnx52v04hzRNMdVvh44HRolFIyIAQ=;
-        b=BbR0IXGCaZkM33c0ZQTShuP3SUwC6/3Cbn/eW73UTOoPjqkBCtKYCARHootjdKiF0jeLja
-        h9XbkLJsksJlhzDA==
-To:     "Chang S. Bae" <chang.seok.bae@intel.com>,
-        linux-kernel@vger.kernel.org
-Cc:     x86@kernel.org, dave.hansen@linux.intel.com, peterz@infradead.org,
-        bp@alien8.de, mingo@redhat.com, chang.seok.bae@intel.com,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH 4/4] intel_idle: Add SPR support with AMX INIT-state
-In-Reply-To: <20211104225226.5031-5-chang.seok.bae@intel.com>
-References: <20211104225226.5031-1-chang.seok.bae@intel.com>
- <20211104225226.5031-5-chang.seok.bae@intel.com>
-Date:   Fri, 05 Nov 2021 15:33:52 +0100
-Message-ID: <878ry24qpb.ffs@tglx>
+        id S233140AbhKEOmE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Nov 2021 10:42:04 -0400
+Received: from mail-ot1-f48.google.com ([209.85.210.48]:39561 "EHLO
+        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232865AbhKEOmE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Nov 2021 10:42:04 -0400
+Received: by mail-ot1-f48.google.com with SMTP id c26-20020a9d615a000000b0055bf6efab46so5106349otk.6;
+        Fri, 05 Nov 2021 07:39:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VTa1m+M0trWvovWd1u5XqKaD5cR/58XJc93gIZv2JIU=;
+        b=t9m8ZkGOOjtugnTKXE3EgLwT9We6Xtu0HDHJ7RRsefBPGWlDPbdBEmxvOq8F7YCk2g
+         seaRmRJew2ddbO81d7ZvTiDP7VsFGws2rMldtrn/YulP0FszYdRRF4inzqpDyWpyQ+oF
+         Zmc1km1so3lLY6srmP13rHJbtHHrSCZTrIZxSNwoFl7LmLXIm1G+kciO987z3H86YwZG
+         1Q4waSAEzMArZdYtYLWQVnHmF6E75ws7Qv8zQWsW3iMklSpvvuBHif3Ek44SIix6JcJj
+         APZ4a++TTUy/kMHCQyqvYPUQYjk/3XgY2E6xslIVgsoSFvyeLvPnwVgHQzk2bV4Q51Cy
+         pr7w==
+X-Gm-Message-State: AOAM531BymkR77nQsKZeNGys5vHJ192O92pXXRTIjcbxYZWP1RYEWvle
+        dLF0FONN88ExAqxxnjZtOuwEdG5IDoBWOLEwQZu016/T
+X-Google-Smtp-Source: ABdhPJy+X17NfVBfLLcL6WVEJYs2fK1iJTS+86IZ46E7ixSdCOhWifsBUKtdUr3xdhTL4Olm7jipl9zFqmbyXWSaXEY=
+X-Received: by 2002:a9d:a64:: with SMTP id 91mr38181170otg.198.1636123163940;
+ Fri, 05 Nov 2021 07:39:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <2606454.mvXUDI8C0e@kreacher> <11862743.O9o76ZdvQC@kreacher>
+In-Reply-To: <11862743.O9o76ZdvQC@kreacher>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 5 Nov 2021 15:39:13 +0100
+Message-ID: <CAJZ5v0i4QAmHszoKybD_TSHdkA6T+LE52DP7Bs_YUGo9NFmNDw@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: PM: Fix device wakeup power reference counting error
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Chang,
+On Thu, Nov 4, 2021 at 10:54 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+>
+> On Thursday, November 4, 2021 6:21:51 PM CET Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Fix a device wakeup power reference counting error introduced by
+> > commit a2d7b2e004af ("ACPI: PM: Fix sharing of wakeup power
+> > resources").
+> >
+> > Fixes: a2d7b2e004af ("ACPI: PM: Fix sharing of wakeup power resources")
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >  drivers/acpi/power.c |    4 +---
+> >  1 file changed, 1 insertion(+), 3 deletions(-)
+> >
+> > Index: linux-pm/drivers/acpi/power.c
+> > ===================================================================
+> > --- linux-pm.orig/drivers/acpi/power.c
+> > +++ linux-pm/drivers/acpi/power.c
+> > @@ -757,10 +757,8 @@ int acpi_disable_wakeup_device_power(str
+> >
+> >       mutex_lock(&acpi_device_lock);
+> >
+> > -     if (dev->wakeup.prepare_count > 1) {
+> > +     if (dev->wakeup.prepare_count >= 1)
+> >               dev->wakeup.prepare_count--;
+> > -             goto out;
+> > -     }
+> >
+> >       /* Do nothing if wakeup power has not been enabled for this device. */
+> >       if (!dev->wakeup.prepare_count)
+>
+> This is still not good.  It should be something like the patch below, but I
+> need to test that one.
 
-On Thu, Nov 04 2021 at 15:52, Chang S. Bae wrote:
-> +/**
-> + * intel_idle_tile - Ask the processor to enter the given idle state.
-> + * @dev: cpuidle device of the target CPU.
-> + * @drv: cpuidle driver (assumed to point to intel_idle_driver).
-> + *
-> + * Ensure TILE registers in INIT-state before using intel_idle() to
-> + * enter the idle state.
-> + */
-> +static __cpuidle int intel_idle_tile(struct cpuidle_device *dev,
-> +				     struct cpuidle_driver *drv, int index)
-> +{
-> +	fpu_idle_fpregs();
+Tested now, so applying as 5.16-rc material.
 
-That's redundant because arch_cpu_idle_enter() is invoked before the
-actual idle mechanism. 
-
-> +/**
-> + * intel_idle_s2idle_tile - Ask the processor to enter the given idle state.
-> + * @dev: cpuidle device of the target CPU.
-> + * @drv: cpuidle driver (assumed to point to intel_idle_driver).
-> + * @index: Target idle state index.
-> + *
-> + * Ensure TILE registers in INIT-state before using intel_idle_s2idle() to
-> + * enter the idle state.
-> + */
-> +static __cpuidle int intel_idle_s2idle_tile(struct cpuidle_device *dev,
-> +					    struct cpuidle_driver *drv, int index)
-> +{
-> +	fpu_idle_fpregs();
-
-Ditto
-
-Thanks,
-
-        tglx
+> ---
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Subject: [PATCH v2] ACPI: PM: Fix device wakeup power reference counting error
+>
+> Fix a device wakeup power reference counting error introduced by
+> commit a2d7b2e004af ("ACPI: PM: Fix sharing of wakeup power
+> resources").
+>
+> Fixes: a2d7b2e004af ("ACPI: PM: Fix sharing of wakeup power resources")
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>
+> -> v2: Actually disable wakeup power when the reference count becomes zero.
+>
+> ---
+>  drivers/acpi/power.c |    8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
+>
+> Index: linux-pm/drivers/acpi/power.c
+> ===================================================================
+> --- linux-pm.orig/drivers/acpi/power.c
+> +++ linux-pm/drivers/acpi/power.c
+> @@ -757,13 +757,11 @@ int acpi_disable_wakeup_device_power(str
+>
+>         mutex_lock(&acpi_device_lock);
+>
+> -       if (dev->wakeup.prepare_count > 1) {
+> -               dev->wakeup.prepare_count--;
+> +       /* Do nothing if wakeup power has not been enabled for this device. */
+> +       if (dev->wakeup.prepare_count <= 0)
+>                 goto out;
+> -       }
+>
+> -       /* Do nothing if wakeup power has not been enabled for this device. */
+> -       if (!dev->wakeup.prepare_count)
+> +       if (--dev->wakeup.prepare_count > 0)
+>                 goto out;
+>
+>         err = acpi_device_sleep_wake(dev, 0, 0, 0);
+>
+>
+>
+>
