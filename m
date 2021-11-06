@@ -2,92 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E855446D6B
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Nov 2021 11:30:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05125446EBF
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Nov 2021 16:50:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233000AbhKFKdh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 6 Nov 2021 06:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37448 "EHLO
+        id S233484AbhKFPxJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 6 Nov 2021 11:53:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232907AbhKFKdh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 6 Nov 2021 06:33:37 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A30BC061570;
-        Sat,  6 Nov 2021 03:30:56 -0700 (PDT)
-Received: from zn.tnic (p200300ec2f24220090a6d55143070fc9.dip0.t-ipconnect.de [IPv6:2003:ec:2f24:2200:90a6:d551:4307:fc9])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 132DD1EC03AD;
-        Sat,  6 Nov 2021 11:30:54 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1636194654;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=CWWsbcPKigAg0VlntD1Pn97j684PNCoVltKLlMIctUE=;
-        b=Ya9g29eVrh7JQaH7aP580Sk9mllcBhs2J5IVMhvquF+CODnzChh8Y3Bg4mLF64IuwnTtYH
-        F3Qc4pMNIRsY5Gkx04O1iONHfvmoFhJojkrpUB+PmIgXqNQXaaynwOiFUlVoRmB8dwVMX/
-        XfH1pGomfNC2uA65Wq7EWujbnDwQW0o=
-Date:   Sat, 6 Nov 2021 11:30:51 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, x86@kernel.org,
-        linux-doc@vger.kernel.org, Len Brown <len.brown@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ricardo Neri <ricardo.neri@intel.com>,
+        with ESMTP id S233409AbhKFPxI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 6 Nov 2021 11:53:08 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984FEC061714
+        for <linux-pm@vger.kernel.org>; Sat,  6 Nov 2021 08:50:27 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id o83so19801661oif.4
+        for <linux-pm@vger.kernel.org>; Sat, 06 Nov 2021 08:50:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=8Qra9akannOKhHfzF9P4EEi/dtPKcdfqFmb0pyjRQ68=;
+        b=dzv9XWCCxRprjKKXScrpOCvs+6FdSi28Gvt0E1xNYibSuwbNIz+resh9bS19/F+rFB
+         t3N9/psI/V5V06B0wdF1Q83rUvrwpFcMIi8ABjTLHFXJZZxNYQbhP+IKTkB56rXKdRaA
+         iGWrck51xPr9+jbs1gdQIJFuj8WU778qgruuT2oafrCA+iyRBsKXKYPGeGly0kJKqjv5
+         8LonxpWyKsTkJVtKSNpsh2smJm7vHFECuaTsIw+4feUfOXUnEheE2rD6/Dx4652yVGCa
+         3FXl0NyG2/wiL7MF8EqEGDY2mZFMIY4EniTD16YqZy5xcXtfvLoVHx6bSTkA5DoFrTBb
+         gqJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8Qra9akannOKhHfzF9P4EEi/dtPKcdfqFmb0pyjRQ68=;
+        b=YT2hjsxV5My0k7nI+UcxJK3ndKyhBtosWW3ES3XhH3FA0goWY76Uu69zD2VnLucvph
+         5A5yAWlT7Kkj6C7Z64EvVV7Y7UbffOui+EcPiuohMO00Lwh5NnNApCa1et6Av3d5HILV
+         xu+dxLWHNV+SM3mTMIiPsJD+aeKBWn2iF2w6jLZIUS2uhK7Kl3Jx/RmiEyL1HDtVPasH
+         Kh3MJvDs2fFuTvfuwz1BBzk0mV5xXetx/E9ua7YXVEo0JITtZcAN8xqAxQumrGKJlGAM
+         FPUCk2oAq27CuoMSUxmnM07ZjF+FJJHBltWYPy2PhkRqHLFhlbFmYqqIZCAZp0pYnNXk
+         B6TA==
+X-Gm-Message-State: AOAM533k2OUK2hmB1Y8C+YV42HSDeF5cAG38GY3HZi6GggCszLWz3IuL
+        p/KV/Uu9OiI8QRLIGJphIgZ2HQ==
+X-Google-Smtp-Source: ABdhPJwBJ9YCa16fxUpZolirtN5bLSZpdYhwFTjrajGd+orwqE/4zEDLYu89/vMhKXVRAg59/mmxIw==
+X-Received: by 2002:a05:6808:144f:: with SMTP id x15mr27350233oiv.132.1636213826928;
+        Sat, 06 Nov 2021 08:50:26 -0700 (PDT)
+Received: from yoga (rrcs-97-77-166-58.sw.biz.rr.com. [97.77.166.58])
+        by smtp.gmail.com with ESMTPSA id o42sm3797396ooi.9.2021.11.06.08.50.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 Nov 2021 08:50:26 -0700 (PDT)
+Date:   Sat, 6 Nov 2021 10:50:24 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Xu Wang <vulab@iscas.ac.cn>
+Cc:     agross@kernel.org, amitk@kernel.org, thara.gopinath@linaro.org,
+        rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/7] x86: Add definitions for the Intel Hardware Feedback
- Interface
-Message-ID: <YYZZWzNWdmeCFBAd@zn.tnic>
-References: <20211106013312.26698-1-ricardo.neri-calderon@linux.intel.com>
- <20211106013312.26698-3-ricardo.neri-calderon@linux.intel.com>
+Subject: Re: [PATCH] thermal/drivers/qcom/spmi-adc-tm5: Remove unnecessary
+ print function dev_err()
+Message-ID: <YYakQHd3Hr944k1B@yoga>
+References: <20211105013340.38300-1-vulab@iscas.ac.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211106013312.26698-3-ricardo.neri-calderon@linux.intel.com>
+In-Reply-To: <20211105013340.38300-1-vulab@iscas.ac.cn>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Nov 05, 2021 at 06:33:07PM -0700, Ricardo Neri wrote:
-> Add the CPUID feature bit and the model-specific registers needed to
-> identify and configure the Intel Hardware Feedback Interface.
+On Thu 04 Nov 20:33 CDT 2021, Xu Wang wrote:
+
+> The print function dev_err() is redundant because
+> platform_get_irq() already prints an error.
 > 
-> Cc: Andi Kleen <ak@linux.intel.com>
-> Cc: Aubrey Li <aubrey.li@linux.intel.com>
-> Cc: Len Brown <len.brown@intel.com>
-> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Cc: Tim Chen <tim.c.chen@linux.intel.com>
-> Cc: "Ravi V. Shankar" <ravi.v.shankar@intel.com>
-> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> Signed-off-by: Xu Wang <vulab@iscas.ac.cn>
+
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+
 > ---
->  arch/x86/include/asm/cpufeatures.h | 1 +
->  arch/x86/include/asm/msr-index.h   | 6 ++++++
->  2 files changed, 7 insertions(+)
+>  drivers/thermal/qcom/qcom-spmi-adc-tm5.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 > 
-> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-> index d0ce5cfd3ac1..d76d8daf1b2b 100644
-> --- a/arch/x86/include/asm/cpufeatures.h
-> +++ b/arch/x86/include/asm/cpufeatures.h
-> @@ -325,6 +325,7 @@
->  #define X86_FEATURE_HWP_ACT_WINDOW	(14*32+ 9) /* HWP Activity Window */
->  #define X86_FEATURE_HWP_EPP		(14*32+10) /* HWP Energy Perf. Preference */
->  #define X86_FEATURE_HWP_PKG_REQ		(14*32+11) /* HWP Package Level Request */
-> +#define X86_FEATURE_INTEL_HFI		(14*32+19) /* Hardware Feedback Interface */
-
-X86_FEATURE_HFI
-
-i.e., without the vendor name is perfectly fine.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+> diff --git a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+> index 824671cf494a..8492dd3bfed6 100644
+> --- a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+> +++ b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+> @@ -612,10 +612,8 @@ static int adc_tm5_probe(struct platform_device *pdev)
+>  	adc_tm->base = reg;
+>  
+>  	irq = platform_get_irq(pdev, 0);
+> -	if (irq < 0) {
+> -		dev_err(dev, "get_irq failed: %d\n", irq);
+> +	if (irq < 0)
+>  		return irq;
+> -	}
+>  
+>  	ret = adc_tm5_get_dt_data(adc_tm, node);
+>  	if (ret) {
+> -- 
+> 2.25.1
+> 
