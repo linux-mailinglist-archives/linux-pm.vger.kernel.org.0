@@ -2,335 +2,258 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DFDB446EF0
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Nov 2021 17:27:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CB6244707F
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Nov 2021 21:56:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234556AbhKFQ3x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 6 Nov 2021 12:29:53 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:49840 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234552AbhKFQ3w (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 6 Nov 2021 12:29:52 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 548961F45641
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
-        t=1636216025; bh=njLeoKTzp5v0KsQV6uI0Ym0uiDEJl+S+cPk1tEuXLdo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=km48YJbWt0GVgvflYKGrOFJgPTM4EG0RHPuoAH8+FMfA5TWbw1ihoK5x+sksj8d2V
-         cn9gnx7JwIIIWOWk6dQxKHNR4m0zSACW4enAAPhT3IZY15WhRcBI9EjYkUwOWEgPKL
-         wd85oxcrgeEWUREoQMpwafEgyZBoYZ+Fvu9x1+Qn5/tt6s5TEIvpSMILz9Ab/t6lK3
-         zLGW8uTd0S22rZjlJUOynDCpg0WEtpts6tgiilPFXuD7KtDKbqgodSYVPKh5V5XSZW
-         s8zDxniLFNbzJNLWQIMGK0QphhBmYvA8DsE3QYFvHv3Fo4BoOMws5So6oEyEg58Kbh
-         8OnzKwfs07BQQ==
-Received: by earth.universe (Postfix, from userid 1000)
-        id 63F8E3C0F95; Sat,  6 Nov 2021 17:27:03 +0100 (CET)
-Date:   Sat, 6 Nov 2021 17:27:03 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] power: supply: core: Add kerneldoc to battery struct
-Message-ID: <20211106162703.xjxsxdg3hrm7t3g3@earth.universe>
-References: <20211105003026.970184-1-linus.walleij@linaro.org>
- <d296ee8c-f6f0-aa42-e261-ed631f598fd0@infradead.org>
+        id S235090AbhKFU7Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 6 Nov 2021 16:59:25 -0400
+Received: from mout.gmx.net ([212.227.17.20]:45699 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229723AbhKFU7X (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 6 Nov 2021 16:59:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1636232056;
+        bh=Mwd00qb2ZiJx72AR8VOZy+k9pKeasCOoFRxt9I1uV2U=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=C0sCrT8yqXlZxZN/D8t3r5AoxwhULAsJ8jy0NerNyYtNdbWgnqBYX9Y6CiU9MHxYu
+         zquWuU6nUJY+jyfB4yNiyLcx1VtjpHa5bjIspLTdTbHxN0xolbUGlTJ6HhUeKdKZyT
+         nslIEB0sT9+3bcpa5ZRh7JRv4jOvvxznOxhoRVuE=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([87.79.195.52]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MOA3F-1n7sEw3p2f-00OWCa; Sat, 06
+ Nov 2021 21:54:16 +0100
+Date:   Sat, 6 Nov 2021 21:54:06 +0100
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Tony Lindgren <tony@atomide.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
+        linux-omap@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 27/45] mfd: ntxec: Use devm_register_power_handler()
+Message-ID: <YYbqlmOM95q7Hbjo@latitude>
+References: <20211027211715.12671-1-digetx@gmail.com>
+ <20211027211715.12671-28-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dfqkftfbnmikcljl"
+        protocol="application/pgp-signature"; boundary="EIEte5+tjVxDHmE6"
 Content-Disposition: inline
-In-Reply-To: <d296ee8c-f6f0-aa42-e261-ed631f598fd0@infradead.org>
+In-Reply-To: <20211027211715.12671-28-digetx@gmail.com>
+X-Provags-ID: V03:K1:SVFlmtuvvynO7MrtDzObaEyN/WaPcv8tOsGAlIRvdbuKBKDAEQ/
+ nVePqR5eYOMd9xdpGO5unEqHbls4MbMcwDHHiD/2xW054xRTDPzVuInIGVNwfhVnOpuaRe4
+ ac8qzmvsisWAHTSwATyyh2lQM4j3GTT+YgfTlnX+xnTkWWDcDQ1QJM/FLNOUp2gu+vKNebi
+ 4PIdlh56euOWziRZzNIlQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:u5Fne7zv3PE=:dNBEMEjx9T9adiFRODtMYS
+ bP1c0hzh59ZKklI1R2cCTJxmTQB45y+QzZX2y0PFbg7yQDeDmSxw52obaEhQa1OdTD86QHXVu
+ bbxucMZOIMSbjbLPCif24qpNcHVpf4XClB+BVAEEUwNoQd2u+UA3qLozpzzQZNC8E146erRcl
+ EAKHMtg1jl5nUIbs95J8LLOgltdAEihA4JrPrtzt7z304ULnl8JDCKZ1GtxLnSmRKL2GPNjji
+ BW4Wh4ednr1BPkh3V5pGtcs7sYJeT+fCg9+1Ao3TSUyI/IMvOamAK8fVGMSOSa8NHso9PeZQG
+ p+/g7H+fY7krRTHyMZXbNHeGC6zFFjT+rzUWo+KzQQxtKMn72KqFsaG2rKGpecWbyuM0yrSA3
+ xhBNrwHcineUl3uAIRxEl8UFkkXss6eAsh3Q7PLKHNXtaR46/z4OumfDtDC9mwHJVuXp9n3KM
+ M7BF+sRUvasT/1Hjw3WGpiUE/z6upYRlSC4e82UllEXyFN6W5gyX4r9kjFZV6JMJQR4UbuEW1
+ 4g31iHAtTXNZxCvREA7FhQCKM9rtiy8KysUGnceOt3v+aXNzH7SzuQRyJ9+2MgAUQhI7LT2+v
+ VClVfxb0rprv/xqBe8DR8WZ7vcK3mCHHlNMCIkYs+6FCITYMw1DHU+CCMKRJej3SCQwR1LGqj
+ hUPkhNKbB6PRt/vk+6c77kVWLHqNnHOCN73BdRo6Txp4mZxNOEbbazHi+tZW5jEpWLgiTWfNM
+ nvxwa10sJSG8hWu5gGN/aF40RAay1aoGu/k5TA+el84toB3VY6ini0lBJUlrb8M4zbzR9pa9/
+ Pm44sh1ruNP7AzMnsBiAzzZX6lqJDAsa+TO5YVhuM9bbKS9hD1KoschPm0B4aJf++t2+ahC/M
+ b/QH4Oe5cluIsKILSHGZSoRrX9sqCtW26taTpZQSEsbNePGKbzsw8Oa3lejuRZ+LJbcUK2xLt
+ ttQpHqsFbUZlBFAYwpFpRbcNm/+LQLWVCLIU9Rk9O9c0hSOeoGw2PLPC+aL/hsmQVrqlLI/F5
+ NAfMG2YBy//Wmh7LL2E3535/ea8r6g8I6Rr7Y4YuBRiuLWpoBhkDI8ZJxuoe0BuQmictlfruZ
+ QdH3qyP8a6Ex3I=
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---dfqkftfbnmikcljl
-Content-Type: text/plain; charset=us-ascii
+--EIEte5+tjVxDHmE6
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Thu, Nov 04, 2021 at 07:20:24PM -0700, Randy Dunlap wrote:
-> Hi,
+On Thu, Oct 28, 2021 at 12:16:57AM +0300, Dmitry Osipenko wrote:
+> Use devm_register_power_handler() that replaces global pm_power_off
+> variable and allows to register multiple power-off handlers. It also
+> provides restart-handler support, i.e. all in one API.
 >=20
-> On 11/4/21 5:30 PM, Linus Walleij wrote:
-> > This complements the struct power_supply_battery_info with
-> > extensive kerneldoc explaining the different semantics of the
-> > fields, including an overview of the CC/CV charging concepts
-> > implicit in some of the struct members.
-> >=20
-> > This is done to first establish semantics before I can
-> > add more charging methods by breaking out the CC/CV parameters
-> > to its own struct.
-> >=20
-> > Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> > ---
-> >   include/linux/power_supply.h | 209 +++++++++++++++++++++++++++++++----
-> >   1 file changed, 186 insertions(+), 23 deletions(-)
-> >=20
-> > diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-> > index 9ca1f120a211..671730c5279f 100644
-> > --- a/include/linux/power_supply.h
-> > +++ b/include/linux/power_supply.h
-> > @@ -342,37 +342,200 @@ struct power_supply_resistance_temp_table {
-> >   #define POWER_SUPPLY_OCV_TEMP_MAX 20
-> > -/*
-> > +/**
-> > + * struct power_supply_battery_info - information about batteries
-> > + * @technology: from the POWER_SUPPLY_TECHNOLOGY_* enum
-> > + * @energy_full_design_uwh: energy content when fully charged in micro=
-watt
-> > + *   hours
-> > + * @charge_full_design_uah: charge content when fully charged in micro=
-ampere
-> > + *   hours
-> > + * @voltage_min_design_uv: minimum voltage across the poles when the b=
-attery
-> > + *   is at minimum voltage level in microvolts. If the voltage drops b=
-elow this
-> > + *   level the battery will need precharging when using CC/CV charging.
-> > + * @voltage_max_design_uv: voltage across the poles when the battery i=
-s fully
-> > + *   charged in microvolts. This is the "nominal voltage" i.e. the vol=
-tage
-> > + *   printed on the label of the battery.
-> > + * @tricklecharge_current_ua: the tricklecharge current used when tric=
-kle
-> > + *   charging the battery in microamperes. This is the charging phase =
-when the
-> > + *   battery is fully charged and we just trickle in some current to k=
-eep the
-> > + *   voltage up between constant_charge_voltage_max_uv and overvoltage=
-_limit_uv.
-> > + * @precharge_current_ua: current to use in the precharge phase in mic=
-roamperes,
-> > + *   the precharge rate is limited by limiting the current to this val=
-ue.
-> > + * @precharge_voltage_max_uv: the maximum voltage allowed when prechar=
-ging in
-> > + *   microvolts. When we pass this voltage we will nominally switch ov=
-er to the
-> > + *   next charging phase defined by constant_charge_current_ua and
-> > + *   constant_charge_voltage_max_uv.
-> > + * @charge_term_current_ua: when the current in the CV (constant volta=
-ge)
-> > + *   charging phase drops below this value in microamperes the chargin=
-g will
-> > + *   terminate completely and not restart until the voltage over the b=
-attery
-> > + *   poles reach charge_restart_voltage_uv unless we use trickle charg=
-ing.
-> > + * @charge_restart_voltage_uv: when the battery has been fully charged=
- by
-> > + *   CC/CV charging and charging has been disabled, and the voltage su=
-bsequently
-> > + *   drops below this value in microvolts, the charging will be restar=
-ted
-> > + *   (typically using CV charging).
-> > + * @overvoltage_limit_uv: when tricklecharging the battery can tempora=
-rily
-> > + *   exceed the nominal voltage voltage_max_design_uv. The tricklechar=
-ginging
-> > + *   must stop when we reach this value, not to restart unless we get =
-back
-> > + *   down to constant_charge_voltage_max_uv.
-> > + * @constant_charge_current_max_ua: current in microamperes to use in =
-the CC
-> > + *   (constant current) charging phase. The charging rate is limited
-> > + *   by this current. This is the main charging phase and as the curre=
-nt is
-> > + *   constant into the battery the voltage slowly ascends to
-> > + *   constant_charge_voltage_max_uv.
-> > + * @constant_charge_voltage_max_uv: voltage in microvolts signifying t=
-he end of
-> > + *   the CC (constant current) charging phase and the beginning of the=
- CV
-> > + *   (constant voltage) charging phase.
-> > + * @factory_internal_resistance_uohm: the internal resistance of the b=
-attery
-> > + *   at fabrication time, expressed in microohms. This resistance will=
- vary
-> > + *   depending on the lifetime and charge of the battery, so this is j=
-ust a
-> > + *   nominal ballpark figure.
-> > + * @ocv_temp: array indicating the open circuit voltage (OCV) capacity
-> > + *   temperature indices. This is an array of temperatures in degrees =
-celsius
->=20
->                                                            preferably    =
-Celsius
->=20
-> > + *   indicating which capacity table to used for a certain temperature=
-, since
-> > + *   the capacity for reasons of chemistry will be different at differ=
-ent
-> > + *   temperatures. Determining capacity is a multivariate problem and =
-the
-> > + *   temperature is the first variable we determine.
-> > + * @temp_ambient_alert_min: the battery will go outside of operating c=
-onditions
-> > + *   when the ambient temperature goes below this temperature in degre=
-es
-> > + *   celsius.
-> > + * @temp_ambient_alert_max: the battery will go outside of operating c=
-onditions
-> > + *   when the ambient temperature goes above this temperature in degre=
-es
-> > + *   celsius.
->=20
-> Ditto. et al.
->=20
-> > + * @temp_alert_min: the battery should issue an alert if the internal
-> > + *   temperature goes below this temperature in degrees celsius.
-> > + * @temp_alert_max: the battery should issue an alert if the internal
-> > + *   temperature goes above this temperature in degrees celsius.
-> > + * @temp_min: the battery will go outside of operating conditions when
-> > + *   the internal temperature goes below this temperature in degrees c=
-elsius.
-> > + *   Normally this means the system should shut down.
-> > + * @temp_max: the battery will go outside of operating conditions when
-> > + *   the internal temperature goes above this temperature in degrees c=
-elsius.
-> > + *   Normally this means the system should shut down.
-> > + * @ocv_table: for each entry in ocv_temp there is a corresponding ent=
-ry in
-> > + *   ocv_table and a size for each entry in ocv_table_size. These arra=
-ys
-> > + *   determine the capacity in percent in relation to the voltage in m=
-icrovolts
-> > + *   at the indexed temperature.
-> > + * @ocv_table_size: for each entry in ocv_temp this array is giving th=
-e size of
-> > + *   each entry in the array of capacity arrays in ocv_table.
-> > + * @resist_table: this is a table that correlates a resistance to an i=
-nternal
-> > + *   temperature of a battery. This can be achieved by a separate ther=
-mistor to
-> > + *   supply voltage on a third terminal on a battery which is the most
-> > + *   reliable. An external thermistor can also be used sometimes.
-> > + * @resist_table_size: the number of items in the resist table.
-> > + *
-> >    * This is the recommended struct to manage static battery parameters,
-> >    * populated by power_supply_get_battery_info(). Most platform driver=
-s should
-> >    * use these for consistency.
-> > + *
-> >    * Its field names must correspond to elements in enum power_supply_p=
-roperty.
-> >    * The default field value is -EINVAL.
-> > - * Power supply class itself doesn't use this.
-> > + *
-> > + * The charging parameters here assumes a CC/CV charging scheme. This =
-method
->=20
->                                    assume
->=20
-> > + * is most common with Lithium Ion batteries (other methods are possib=
-le) and
-> > + * looks as follows:
-> > + *
-> > + * ^ Battery voltage
-> ...
-> > + * +------------------------------------------------------------------=
-> time
-> > + *
-> > + * ^ Current into the battery
-> ...
-> > + * +----------------------------------------------------------------->=
- time
-> > + *
-> > + * These diagrams are synchronized on time and the voltage and current
-> > + * follow each other.
-> > + *
-> > + * With CC/CV charging commence over time like this for an empty batte=
-ry:
-> > + *
-> > + * 1. First a small initial pre-charge current (precharge_current_ua)
-> > + *    is applied if the voltage is below precharge_voltage_max_uv unti=
-l we
-> > + *    reach precharge_voltage_max_uv. CATION: in some text this is ref=
-erred
->=20
->                                          CAUTION:        texts
-> (although CATION is a word!)
->=20
-> > + *    to as "trickle charging" but the use in the Linux kernel is diff=
-eren
->=20
->                                                                      diff=
-erent
->=20
-> > + *    see below!
-> > + *
-> > + * 2. Then the main charging current is applied, which is called the c=
-onstant
-> > + *    current (CC) phase. A current regulator is set up to allow
-> > + *    constant_charge_current_max_ua of current to flow into the batte=
-ry.
-> > + *    The chemical reaction in the battery will make the voltage go up=
- as
-> > + *    charge goes into the battery. This current is applied until we r=
-each
-> > + *    the constant_charge_voltage_max_uv voltage.
-> > + *
-> > + * 3. At this voltage we switch over to the constant voltage (CV) phas=
-e. This
-> > + *    means we allow current to go into the battery, but we keep the v=
-oltage
-> > + *    fixed. This current will continue to charge the battery while ke=
-eping
-> > + *    the voltage the same. A chemical reaction in the battery goes on
-> > + *    storing energy without affecting the voltage. Over time the curr=
-ent
-> > + *    will slowly drop and when we reach charge_term_current_ua we will
-> > + *    end the constant voltage phase.
-> > + *
-> > + * After this the battery is fully charged, and if we do not support t=
-rickle
-> > + * charging, the charging will not restart until power dissapation mak=
-e the
->=20
->                                                           dissipation mak=
-es
->=20
-> > + * voltage fall so that we reach charge_restart_voltage_uv and at this=
- point
-> > + * we restart charging at the appropriate phase, usually this will be =
-inside
-> > + * the CV phase.
->=20
->=20
-> Tested-by: Randy Dunlap <rdunlap@infradead.org>
->=20
-> and if (when :) you fix these, you can add
->=20
-> Acked-by: Randy Dunlap <rdunlap@infradead.org>
->=20
-> Thanks for doing this.
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
 
-Thanks Linus, LGTM and is appreciated a lot :)
-Also thanks you for the review Randy!
+When I boot with (most of) this patchset applied, I get the warning at
+kernel/reboot.c:187:
 
--- Sebastian
+	/*
+	 * Handler must have unique priority. Otherwise call order is
+	 * determined by registration order, which is unreliable.
+	 */
+	WARN_ON(!atomic_notifier_has_unique_priority(&restart_handler_list, nb));
 
---dfqkftfbnmikcljl
+As the NTXEC driver doesn't specify a priority, I think this is an issue
+to be fixed elsewhere.
+
+Other than that, it works and looks good, as far as I can tell.
+
+
+For this patch:
+
+Reviewed-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+Tested-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+
+
+Best regards,
+Jonathan
+---
+
+Full Oops log:
+
+[    3.523294] ------------[ cut here ]------------
+[    3.528193] WARNING: CPU: 0 PID: 1 at kernel/reboot.c:187 register_resta=
+rt_handler+0x4c/0x58
+[    3.536975] Modules linked in:
+[    3.540312] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.15.0-00021-gcb24=
+c628b307 #622
+[    3.548214] Hardware name: Freescale i.MX50 (Device Tree Support)
+[    3.554357] [<c0111540>] (unwind_backtrace) from [<c010cdd0>] (show_stac=
+k+0x10/0x14)
+[    3.562183] [<c010cdd0>] (show_stack) from [<c0bf240c>] (dump_stack_lvl+=
+0x58/0x70)
+[    3.569824] [<c0bf240c>] (dump_stack_lvl) from [<c0127604>] (__warn+0xd4=
+/0x154)
+[    3.577191] [<c0127604>] (__warn) from [<c0bec844>] (warn_slowpath_fmt+0=
+x74/0xa8)
+[    3.584727] [<c0bec844>] (warn_slowpath_fmt) from [<c01593c8>] (register=
+_restart_handler+0x4c/0x58)
+[    3.593823] [<c01593c8>] (register_restart_handler) from [<c08676c8>] (_=
+_watchdog_register_device+0x13c/0x27c)
+[    3.603889] [<c08676c8>] (__watchdog_register_device) from [<c0867868>] =
+(watchdog_register_device+0x60/0xb4)
+[    3.613764] [<c0867868>] (watchdog_register_device) from [<c08678f8>] (d=
+evm_watchdog_register_device+0x3c/0x84)
+[    3.623898] [<c08678f8>] (devm_watchdog_register_device) from [<c1146454=
+>] (imx2_wdt_probe+0x254/0x2ac)
+[    3.633346] [<c1146454>] (imx2_wdt_probe) from [<c06feb74>] (platform_pr=
+obe+0x58/0xb8)
+[    3.641314] [<c06feb74>] (platform_probe) from [<c06fb2f8>] (call_driver=
+_probe+0x24/0x108)
+[    3.649636] [<c06fb2f8>] (call_driver_probe) from [<c06fbe08>] (really_p=
+robe.part.0+0xa8/0x358)
+[    3.658384] [<c06fbe08>] (really_probe.part.0) from [<c06fc1c4>] (__driv=
+er_probe_device+0x94/0x208)
+[    3.667470] [<c06fc1c4>] (__driver_probe_device) from [<c06fc368>] (driv=
+er_probe_device+0x30/0xc8)
+[    3.676468] [<c06fc368>] (driver_probe_device) from [<c06fcb0c>] (__driv=
+er_attach+0xe0/0x1c4)
+[    3.685032] [<c06fcb0c>] (__driver_attach) from [<c06f9a20>] (bus_for_ea=
+ch_dev+0x74/0xc0)
+[    3.693253] [<c06f9a20>] (bus_for_each_dev) from [<c06faeb8>] (bus_add_d=
+river+0x100/0x208)
+[    3.701563] [<c06faeb8>] (bus_add_driver) from [<c06fd8a0>] (driver_regi=
+ster+0x88/0x118)
+[    3.709696] [<c06fd8a0>] (driver_register) from [<c06fe920>] (__platform=
+_driver_probe+0x44/0xdc)
+[    3.718522] [<c06fe920>] (__platform_driver_probe) from [<c01022ac>] (do=
+_one_initcall+0x78/0x388)
+[    3.727444] [<c01022ac>] (do_one_initcall) from [<c1101708>] (do_initcal=
+ls+0xcc/0x110)
+[    3.735413] [<c1101708>] (do_initcalls) from [<c110198c>] (kernel_init_f=
+reeable+0x1ec/0x250)
+[    3.743896] [<c110198c>] (kernel_init_freeable) from [<c0bfe724>] (kerne=
+l_init+0x10/0x128)
+[    3.752224] [<c0bfe724>] (kernel_init) from [<c010011c>] (ret_from_fork+=
+0x14/0x38)
+[    3.759844] Exception stack(0xc40adfb0 to 0xc40adff8)
+[    3.764933] dfa0:                                     00000000 00000000 =
+00000000 00000000
+[    3.773143] dfc0: 00000000 00000000 00000000 00000000 00000000 00000000 =
+00000000 00000000
+[    3.781351] dfe0: 00000000 00000000 00000000 00000000 00000013 00000000
+[    3.788347] irq event stamp: 143613
+[    3.792102] hardirqs last  enabled at (143623): [<c01a3ebc>] __up_consol=
+e_sem+0x50/0x60
+[    3.800397] hardirqs last disabled at (143632): [<c01a3ea8>] __up_consol=
+e_sem+0x3c/0x60
+[    3.808491] softirqs last  enabled at (143612): [<c0101518>] __do_softir=
+q+0x2f8/0x5b0
+[    3.816591] softirqs last disabled at (143603): [<c01307dc>] __irq_exit_=
+rcu+0x160/0x1d8
+[    3.825014] ---[ end trace 7f6709d2c89774b4 ]---
+
+--EIEte5+tjVxDHmE6
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmGGrMYACgkQ2O7X88g7
-+prB2hAAo0I+LSkGNn75a+H6hUNLua+a5LCrrOb2Mu2uLFW0sBVFqUQcEo/54miG
-+are1HCauXLP8KWEyVETlmDO6FDKdnhz3dQ7EW2hMxqRdxL+Sg3b82ZMX1/S/+E5
-tr5TZgoXFieBJYih1Oce3q1OpWq1JmbivOqZS9g8BRnhIYq6muFUdADx6GglClwQ
-wFF5JfCSAfnrr2370b8WI2pk8zksPfc0HM2SlsowWlorvmktZDt/bIiDmefNa0sN
-Da3ILn/4iY9AFOyjJle4JIyVY/Me4WrTH1oQWWzXTRij/Jz4Kc1PGKkOUhPWbyxm
-E4uy9/gbN3GgzKL7SUaYjjY4U8B622CwsGHm7XcqwQOm+GNlYlwMTIKhIb9c4S1I
-1OGjX5RP0aduM8QQMl8UluzTyBT9otuniOKNflfYu/6Rh3Q7/ZmJUZJap5jO1YYw
-zCqCpcs7FO9DrWRpJPcmD7ZKjWodGBsSKWt2KbhVgNUgVDsjq727tyjKpou0s8Ya
-r8osNd2/SPmpwxeKe8kabg89eciOmtSBn50DlPkfAYjp45G1UMz4p0lLnoxhMgLb
-A+9CULmtv20zVQI8fZn85p2uWrw+V4yPyQe+szH5TLTvtIMGIRtNaYPX911OQnl5
-wwsRpDRm8nkhEe7otD+xlZhTFsc7rOiFglsRvnIIXP1L9zWnIDk=
-=kYxN
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmGG624ACgkQCDBEmo7z
+X9s6ChAAk6BAeo5fWoSSZHjjpn6ATqjK8ym6Qwe2EuauLkxbrtHK3OsbljBzCdtj
+p4LUnHOvUjWpnlBRfbbZSXKo5B0LxFtUhe/Cz9IDICft4K2DmOExc+xY9zQNcjMO
+rNIxDh4Q8qUdWv4c4B3p812s36yVKoaAGT6XHR9ISWOWmTWq/SNXiFetn9KdMaRs
+INw4aNL0grB717V8ucg5RtEOcrLEHRPf6Rv0b6yhfRdBQGx5XCatsdkofBcM9Rlr
+ECVr+SDk6hoMvPgqbnK3hh1fU0MGiDoyHN/+PhdW5k71EoqynneLlz1xhU4P1TAQ
+4leH70X0lvTJSlpZ+dWkgVGkGzE8LtrjCwhCzZvf+UKqhKf4VWp9LInkiRU2mEaN
+ZGeaNLEL/oEE2nHZuWuW8imYr/WoYQKyZX+rG/g+aViMxom4/RC/IF5GFWxInCgi
+IBVFSiKxJOwKvKHZrsiJsk+zqcmb1TRObyYd0ecsOPD413IWwnFIl6502QRQolJH
+UvdIANNtt2/XORmBBNNGCQtZJ82srfxBpn9jzBtCZu03m4RymWvURbqbIx7mAiz0
+6nj5cArubiCB8WOnOcCmsgHzLZDzN2SAy5UFxsELy67LUXWjsGMG++sHbkDuaiji
+/h71rvx5wmakG7quyBIQDCUtxgSMJL73yZA4N8UsQABCsmnNXgE=
+=jBJI
 -----END PGP SIGNATURE-----
 
---dfqkftfbnmikcljl--
+--EIEte5+tjVxDHmE6--
