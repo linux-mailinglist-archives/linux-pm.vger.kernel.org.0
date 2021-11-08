@@ -2,114 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F4F94498E2
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Nov 2021 17:02:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45FA64498EF
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Nov 2021 17:02:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241144AbhKHQB4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Nov 2021 11:01:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33440 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236850AbhKHQBy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Nov 2021 11:01:54 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA6DC061570;
-        Mon,  8 Nov 2021 07:59:09 -0800 (PST)
-Received: from zn.tnic (p200300ec2f331100b486bab6e60d7aaf.dip0.t-ipconnect.de [IPv6:2003:ec:2f33:1100:b486:bab6:e60d:7aaf])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 341131EC04DE;
-        Mon,  8 Nov 2021 16:59:08 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1636387148;
+        id S241176AbhKHQCJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Nov 2021 11:02:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:48100 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241139AbhKHQCD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Nov 2021 11:02:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1636387158;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=JALJsenIQCt4BletZS/B+Zq0YBxBp6L9Ch45cvOw8XQ=;
-        b=LCBDSZEhct23FIVquhfAlhIS3MpLXm84rotG+ppp99dGMPWi9iJHGgKkfiFg0DoLQ+NSWf
-        ixY2Bl+WafqAknd6kFkKb4q9SvLPR/pI4iyCTMD6S/zki4CWzqH6/1ZBq8awazUNWt4Xi0
-        idSLz3mdlao9wfI9n1SzGKhLH2sR0dI=
-Date:   Mon, 8 Nov 2021 16:58:57 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Ayush Sawal <ayush.sawal@chelsio.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rohit Maheshwari <rohitm@chelsio.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vinay Kumar Yadav <vinay.yadav@chelsio.com>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        intel-gvt-dev@lists.freedesktop.org,
-        alpha <linux-alpha@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-edac@vger.kernel.org,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        linux-hyperv@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-leds <linux-leds@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
-        <linux-remoteproc@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        scsi <linux-scsi@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-staging@lists.linux.dev,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>, netdev <netdev@vger.kernel.org>,
-        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
-        sparclinux <sparclinux@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        xen-devel@lists.xenproject.org
-Subject: Re: [PATCH v0 42/42] notifier: Return an error when callback is
- already registered
-Message-ID: <YYlJQYLiIrhjwOmT@zn.tnic>
-References: <20211108101157.15189-1-bp@alien8.de>
- <20211108101157.15189-43-bp@alien8.de>
- <CAMuHMdWH+txiSP_d7Jc4f_bU8Lf9iWpT4E3o5o7BJr-YdA6-VA@mail.gmail.com>
- <YYkyUEqcsOwQMb1S@zn.tnic>
- <CAMuHMdXiBEQyEXJagSfpH44hxVA2t0sDH7B7YubLGHrb2MJLLA@mail.gmail.com>
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0FX33YX3/KEHbRU3d7P7kXufc5u/aEPzAlj6z3nAH7Y=;
+        b=OA/OVwsvnjEs/9wJlkUk6Tmuvemh7MgG3GGAoB2t3jFoeVi/mMHSF7AH0XpKOs7A+67Qoa
+        kX+y+ew94jGo3JcrGoVW3jlhPM0G6qdCRknKP+zENgxoWfHNlIkYXZ5gdB/dZr36chbP79
+        unXlGaWqlEA9HPuen0a+6vrFrhdKq64=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-433-0SijtKNsPMCOTmLWw79JEw-1; Mon, 08 Nov 2021 10:59:16 -0500
+X-MC-Unique: 0SijtKNsPMCOTmLWw79JEw-1
+Received: by mail-ed1-f69.google.com with SMTP id t20-20020a056402525400b003e2ad6b5ee7so15269409edd.8
+        for <linux-pm@vger.kernel.org>; Mon, 08 Nov 2021 07:59:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0FX33YX3/KEHbRU3d7P7kXufc5u/aEPzAlj6z3nAH7Y=;
+        b=fnOZIMsesKL1CMh9Z70Qf2O0Ph5fPgVIvOMgahD7h6HMkfHCeLfEz/2ZGb8KuijJ0B
+         4AuKp7MduE6hoIN397f6xd33lGSUw40b4LMZXY48QdrDWJV9HUwVsr/+JJE87E/Ke0ed
+         Seck6pPBvdqYuvENHkts5Lz9LJ/qCWwjCapX2VaJv3lwNHybAhcNSZYnVJn8hNIms6OZ
+         3vNg4lOlnjJHJhY5hTryGQMFHR9fVa7VWiT6g+xqo/5t5xtgDUfofP1h8dMwDtZF6CIO
+         ixDU8nAKB/FyvLmWeAhkR//cuxCxZcqxMpvL4ZGo+adbeyPEhoc5FypBCMlvAtA7BEXG
+         oNXQ==
+X-Gm-Message-State: AOAM531ruraOCw2Fblm8b+1tuJ06m6IYxbmZfZ6AVxYIuZCxIig37ESg
+        Us4QU8jo1AmKs47npOjyX/4iRlj1YgN0GOiHl2orEzeg+6qfiiDvnVwPXv8B+01F0uG0MEEpTk3
+        R44H8/swhUv+C8ueBHs8=
+X-Received: by 2002:a17:906:ce2a:: with SMTP id sd10mr446130ejb.154.1636387155374;
+        Mon, 08 Nov 2021 07:59:15 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzM+ps60VfZ94gEqS5fzeul9kwGKMKVeKZIAnSvvogw3JjAS/vRJ5dtMKHz5XSx9gQP8MDeNw==
+X-Received: by 2002:a17:906:ce2a:: with SMTP id sd10mr446099ejb.154.1636387155187;
+        Mon, 08 Nov 2021 07:59:15 -0800 (PST)
+Received: from [10.40.1.223] ([81.30.35.201])
+        by smtp.gmail.com with ESMTPSA id r7sm7446410edd.5.2021.11.08.07.59.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Nov 2021 07:59:14 -0800 (PST)
+Message-ID: <5413cf06-6058-647a-0bf5-b7ae5cdd793a@redhat.com>
+Date:   Mon, 8 Nov 2021 16:59:14 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdXiBEQyEXJagSfpH44hxVA2t0sDH7B7YubLGHrb2MJLLA@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 09/13] power: supply: bq25890: Add bq25890_set_otg_cfg()
+ helper
+Content-Language: en-US
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Yauhen Kharuzhy <jekhor@gmail.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>
+References: <20211030182813.116672-1-hdegoede@redhat.com>
+ <20211030182813.116672-10-hdegoede@redhat.com>
+ <CAHp75Vf=ff840YD8_4QJpir_u__Rr_aN_0C-sqQOkt7PboWpww@mail.gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <CAHp75Vf=ff840YD8_4QJpir_u__Rr_aN_0C-sqQOkt7PboWpww@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 08, 2021 at 04:25:47PM +0100, Geert Uytterhoeven wrote:
-> I'm not against returning proper errors codes.  I'm against forcing
-> callers to check things that cannot fail and to add individual error
-> printing to each and every caller.
+Hi,
 
-If you're against checking things at the callers, then the registration
-function should be void. IOW, those APIs are not optimally designed atm.
+On 10/31/21 00:10, Andy Shevchenko wrote:
+> On Sat, Oct 30, 2021 at 9:28 PM Hans de Goede <hdegoede@redhat.com> wrote:
+>>
+>> Add a bq25890_set_otg_cfg() helper function, this is a preparation
+>> patch for adding regulator support.
+> 
+> ...
+> 
+>>         switch (bq->usb_event) {
+>>         case USB_EVENT_ID:
+>>                 /* Enable boost mode */
+>> -               ret = bq25890_field_write(bq, F_OTG_CFG, 1);
+>> -               if (ret < 0)
+>> -                       goto error;
+>> +               bq25890_set_otg_cfg(bq, 1);
+>>                 break;
+>>
+>>         case USB_EVENT_NONE:
+>>                 /* Disable boost mode */
+>> -               ret = bq25890_field_write(bq, F_OTG_CFG, 0);
+>> -               if (ret < 0)
+>> -                       goto error;
+>> -
+>> -               power_supply_changed(bq->charger);
+>> +               ret = bq25890_set_otg_cfg(bq, 0);
+>> +               if (ret == 0)
+>> +                       power_supply_changed(bq->charger);
+>>                 break;
+>>         }
+> 
+> While at it,
+> 
+> default:
+>  break;
 
-> Note that in other areas, we are moving in the other direction,
-> to a centralized printing of error messages, cfr. e.g. commit
-> 7723f4c5ecdb8d83 ("driver core: platform: Add an error message to
-> platform_get_irq*()").
+bq->usb_event is not an enum, so there is no need for this.
 
-Yes, thus my other idea to add a lower level __notifier_chain_register()
-to do the checking.
+Regards,
 
-I'll see if I can convert those notifier registration functions to
-return void, in the process. But let's see what the others think first.
+Hans
 
-Thanks for taking the time.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
