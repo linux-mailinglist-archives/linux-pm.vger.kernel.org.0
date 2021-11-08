@@ -2,110 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB1A9449E4E
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Nov 2021 22:37:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A0A449EC3
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Nov 2021 23:50:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240452AbhKHVjq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Nov 2021 16:39:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53902 "EHLO
+        id S240807AbhKHWxX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Nov 2021 17:53:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238219AbhKHVjp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Nov 2021 16:39:45 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8566EC061570
-        for <linux-pm@vger.kernel.org>; Mon,  8 Nov 2021 13:37:00 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id o4so29926537oia.10
-        for <linux-pm@vger.kernel.org>; Mon, 08 Nov 2021 13:37:00 -0800 (PST)
+        with ESMTP id S240791AbhKHWxV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Nov 2021 17:53:21 -0500
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DEB1C061570
+        for <linux-pm@vger.kernel.org>; Mon,  8 Nov 2021 14:50:35 -0800 (PST)
+Received: by mail-oi1-x232.google.com with SMTP id bk14so7264963oib.7
+        for <linux-pm@vger.kernel.org>; Mon, 08 Nov 2021 14:50:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=swiecki.net; s=google;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=IsLQjaQdlMGXIqecV4wPF8ML0lgecFSezbvs+txi9VE=;
-        b=dO/8dgSkwsbaWeZhkST1HoJnZWRSi9WmJh6Z+KGnOn/I5nSUwEdWTYmTuxCFpoL0ms
-         QXtz+2H8zmEf/z8pvOeYPDdyaAxvAganwCNlM7m6EOfImqGW9PSSYCfU1pt7DRoFDDXA
-         MTmEbkAfnMFwS5N3tZ/HnExYQtnOEtpv8bknU=
+        bh=Wzbq21jEiIL9z0Wvbk1oD4Zrjwz1khIGy04ukq+RNE0=;
+        b=LkMa1EGwAQN/h8udna9hkZM29+jtW+AO391XIUaMTfWdEPLdBYFiWhUJbRpxh4HyHx
+         qawH+bHhU6bU4VYQ0siW/tdLT6WukFPDIDvz6of9xh++fE97hB1UQxbhkvEVLexjGrl0
+         7mV7Vc6d+NIxgcLaYxOcpQ1o6ID6K2p4KebEbaQjrEAG7jSrQJdGwT61T/MFpJS6qjzk
+         5PdyAOQBFvGUy31/7x/XwvQy8D6B7fqQ8PMJDR19rfEmkEAzmHMsi/bMHc+Z0O/UcOzb
+         9N0NXkZ0UIaMwwcHeoVnIj69NbK2Oro5BNY1u+aaZrDtduNePusEIJ2k8Cb5gBa9Rpr7
+         Im7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=IsLQjaQdlMGXIqecV4wPF8ML0lgecFSezbvs+txi9VE=;
-        b=p0gJYVaX/Yt1FIBV0Pq/JEvpghFVXuKaPFVrhhVoWqHwjh+2ayqE6uuePG8P3hl0EK
-         VRmLZqKjfuj5SkwR2A4CMt4KP3Km52keC0xOrQnkFoq5qTbuDeK3E/Tos+P7HQzEgkfq
-         4h4Ldi12jEOAiKQIIEOxG3VioN6YjmINGhz3j6I7TP1NB6yq3L4+l4jyYhL5gFxIth2z
-         kdknoA3XZM4rv7cZ52Q9SB4iF7FMphfns6qZhRezbIxkq2KPS9hF0HLRlqz7iEepBVZM
-         Xf72AA4XrNtR0TVPB8VRaLtKVA+JFt8Xio6DA5S3YPzNdvmBlsyDuQvZHM+gg/5d+rRP
-         Lf8g==
-X-Gm-Message-State: AOAM533fSjdhJHrCqfLLHG55f1QhvP3Ur/XoxGWjpwfjG+6i3QtNaQOS
-        usFAT87gshze/BP2db0w9D9qNkEywH37lqHrSi6c8A==
-X-Google-Smtp-Source: ABdhPJxdmLSrnfD8gVnnutOGCvmzv2yNsvvaDMK3Mj2LQK2LTxpzAtdqhn4xDaUdcEVCmY4+jYIJjvEhNWnCKQH/g0Q=
-X-Received: by 2002:a54:4e98:: with SMTP id c24mr1286748oiy.144.1636407419924;
- Mon, 08 Nov 2021 13:36:59 -0800 (PST)
+        bh=Wzbq21jEiIL9z0Wvbk1oD4Zrjwz1khIGy04ukq+RNE0=;
+        b=0LSd2Dob4Sseaj2ft80/oLfMyazjyb9iDDd2vyQ4pfNjuF2RQUvgynK+1UcffAgOO7
+         dRZu1NDIgGjTibV+bdhio+Q5oVenCGUqdVZLTB+bU/1aSW8B49iqK+uZ5vq/vvCVYKY9
+         Fko+BVlhbipobdXU2HJO7dtRB5wwYX4ghTMUt013CPCOFBNHPAfisjF+w6oCFsHr55Uv
+         XjrPQd6/ZhSmSW5XVOvWO+iWvhey+n36VPO1Ti4icTM3xwsOI3avZnRJiQpcEudXk4Nz
+         FC+Vz8kCRMJawToykVA5XR+okDAtPL/Ahuzw4t3DGogOr9h+MSiauwUqoRwzim9M4yRQ
+         ySPw==
+X-Gm-Message-State: AOAM531jbRzsNC2ZQYKANtaoK2UAgYS9W7vYhwOXkQtCA80M1+B4CJ7t
+        DMGkMPNVGlwbs0BCSDO+tuLCywtc5baXYSao6/ZgJw==
+X-Google-Smtp-Source: ABdhPJzX+5/Rnl1oOvixAqKR6SWlmI4XoiwBjzFG2CXMvXen3rvuo5xLCBFX6QSddmtAL8fulSjDTkZP+/Fz1v4NMGQ=
+X-Received: by 2002:a54:4791:: with SMTP id o17mr1759209oic.114.1636411834440;
+ Mon, 08 Nov 2021 14:50:34 -0800 (PST)
 MIME-Version: 1.0
-References: <CAP145phj7jEy6tkdFMdW-rzPprMTUckaaSrtrVysE-u+S+=Lcg@mail.gmail.com>
- <20211108185823.GA1101310@bhelgaas> <20211108212226.253mwl4wp7xjckqz@pengutronix.de>
-In-Reply-To: <20211108212226.253mwl4wp7xjckqz@pengutronix.de>
-From:   =?UTF-8?B?Um9iZXJ0IMWad2nEmWNraQ==?= <robert@swiecki.net>
-Date:   Mon, 8 Nov 2021 22:36:49 +0100
-Message-ID: <CAP145phFHh+pMTXbdwwQK6bgxLBcF2JgQKwz2L+2vJRs2dMiVg@mail.gmail.com>
-Subject: Re: [PATCH] pci: Don't call resume callback for nearly bound devices
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>, linux-i2c@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20211105003026.970184-1-linus.walleij@linaro.org> <d296ee8c-f6f0-aa42-e261-ed631f598fd0@infradead.org>
+In-Reply-To: <d296ee8c-f6f0-aa42-e261-ed631f598fd0@infradead.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 8 Nov 2021 23:50:23 +0100
+Message-ID: <CACRpkdb0BT43Zm5=OgKFTgYeabNy7B0oRFO9aOJCy4Pbz1TJtQ@mail.gmail.com>
+Subject: Re: [PATCH] power: supply: core: Add kerneldoc to battery struct
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi all,
+Hi Randy,
 
-> > Here's the call tree:
-> >
-> >     really_probe
-> >       dev->driver = drv;                       # <--
-> >       call_driver_probe
-> >         dev->bus->probe
-> >           pci_device_probe
-> >             __pci_device_probe
-> >               pci_call_probe
-> >                 local_pci_probe
-> >                   pm_runtime_get_sync
-> >                     ...
-> >                     pci_pm_runtime_resume
-> >   -                   if (!pci_dev->driver)    # 2a4d9408c9e8 ("PCI: Use to_pci_driver() instead of pci_dev->driver")
-> >   +                   if (!to_pci_driver(dev->driver))
-> >                         return 0
-> >                       pm->runtime_resume
-> >                         i2c_dw_pci_resume
-> >                           i_dev->init()        # <-- NULL ptr deref
-> >   -                 pci_dev->driver = pci_drv  # b5f9c644eb1b ("PCI: Remove struct pci_dev->driver")
-> >                   pci_drv->probe
-> >                     i2c_dw_pci_probe
->
-> I think this analysis is right.
->
-> I didn't test this patch, @Robert, maybe you can do this?
->
-> Best regards
-> Uwe
->
->  drivers/pci/pci-driver.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
-> index 1d98c974381c..202533654012 100644
-> --- a/drivers/pci/pci-driver.c
-> +++ b/drivers/pci/pci-driver.c
-> @@ -1299,7 +1299,7 @@ static int pci_pm_runtime_resume(struct device *dev)
->          */
->         pci_restore_standard_config(pci_dev);
->
-> -       if (!to_pci_driver(dev->driver))
-> +       if (!device_is_bound(dev))
->                 return 0;
->
->         pci_fixup_device(pci_fixup_resume_early, pci_dev);
+thanks for your review, I incorporated all of them, but I have one
+question:
 
-Yes, that fixes it. Thanks for the patch.
+On Fri, Nov 5, 2021 at 3:20 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+
+> > + * @ocv_temp: array indicating the open circuit voltage (OCV) capacity
+> > + *   temperature indices. This is an array of temperatures in degrees celsius
+>
+>                                                             preferably    Celsius
+
+I understand spelling Celsius with big C (he was even Swedish, I should know...)
+but what is "preferably" here?
+
+If the idea is to reuse these properties between different chargers and
+batteries we should rather state that this has to be Celsius or
+we will have trouble.
+
+Since no driver is using this yet I think it is fine to mandate Celsius?
+
+Or am I misunderstanding the comment?
+
+Yours,
+Linus Walleij
