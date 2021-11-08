@@ -2,145 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1172E447EF7
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Nov 2021 12:36:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E6A9447FFF
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Nov 2021 14:03:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237341AbhKHLjc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Nov 2021 06:39:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57994 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbhKHLja (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Nov 2021 06:39:30 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31329C061714;
-        Mon,  8 Nov 2021 03:36:46 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id d11so7696680ljg.8;
-        Mon, 08 Nov 2021 03:36:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=X+QlLlo/0/3EVdBxA2kw9RSD+7dI68j0akmWtlfHVoc=;
-        b=aZVzW8uInA8LU/x+WSDcs8GL423pa/2TbHlNFMZCd9U6UTTINhRxHwWgMG+VIGRFXX
-         YHsHS1Zp8SLg7g0I8x9US08hxM80ZghlJabXZBFwbjt/NZTi8D93A6u3DdWQsriGAEMv
-         bFmB7LTf3DQwVbSm6WogHRt9oYdTZJJwV6Cdja/STeDW7/10QbzkyuPD5z+/FAuGPwej
-         XDOG6vFO/moWThDJAR559rbcfRfK+AgOLrilun42rQLGkujwn1pckpcm4TgSB3WIb1LP
-         WWP0u+S7lmnv27N0vKhUH9Av/RJV5C0NJsxi8Lo9cU/Zh/pB4HH/qd8XqYWZNDXsqTHX
-         YlNA==
+        id S239784AbhKHNFs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Nov 2021 08:05:48 -0500
+Received: from mail-ot1-f47.google.com ([209.85.210.47]:36562 "EHLO
+        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230303AbhKHNFs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Nov 2021 08:05:48 -0500
+Received: by mail-ot1-f47.google.com with SMTP id r10-20020a056830448a00b0055ac7767f5eso25346883otv.3;
+        Mon, 08 Nov 2021 05:03:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=X+QlLlo/0/3EVdBxA2kw9RSD+7dI68j0akmWtlfHVoc=;
-        b=KWZdk7RIX27jzq4RWHkl++6p6t82eepplG51Hg6iBlvnXdeiNGg5mWFtBTgM55fD7r
-         XaIcxM0I9HVYSuwEcBCiArXlfnjus7cT9ZZ6iMzQF2pJKl4TpaiZpgKqRZH7d3DEo4Dn
-         uvhpIT2CpKXKxDgJ/yBdCo1CWE8bTJqe7wdeVeEhl5iwBR/NsMnhlMhwyIJKj8NKcQrq
-         IWba0h+ROl9jelRGhDswgqd4dLCsuPegDv//UT7Hzc6OQKftauIME2n+0p/8opchtOcN
-         QJ8Z+DkbR+WsvH7yCQBhWIuqXTl3AYGiG0kohknrg8xW+MA86Ja7rV7VJQDBR6pi66gG
-         09dA==
-X-Gm-Message-State: AOAM5318fCuZW4f5bQvwbv1aWwofiCGjZ7druMr/mD/F+riYA9nvuZM9
-        B6LlG+MxfE+0FzcGt1tuJcOi/G4F1CM=
-X-Google-Smtp-Source: ABdhPJzzWZ+q13ptoCU5JHKLBozyl2qyG0di7fj7GC0x6tQVXWEZ5utjk3vHuuOVClKYY3WCOwTKiw==
-X-Received: by 2002:a2e:bd88:: with SMTP id o8mr69963654ljq.197.1636371404363;
-        Mon, 08 Nov 2021 03:36:44 -0800 (PST)
-Received: from [192.168.2.145] (79-139-188-96.dynamic.spd-mgts.ru. [79.139.188.96])
-        by smtp.googlemail.com with ESMTPSA id q6sm1523591ljh.1.2021.11.08.03.36.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Nov 2021 03:36:44 -0800 (PST)
-Subject: Re: [PATCH v2 27/45] mfd: ntxec: Use devm_register_power_handler()
-To:     =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>, Tony Lindgren <tony@atomide.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
-        linux-omap@vger.kernel.org, openbmc@lists.ozlabs.org,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20211027211715.12671-1-digetx@gmail.com>
- <20211027211715.12671-28-digetx@gmail.com> <YYbqlmOM95q7Hbjo@latitude>
- <be0c74c6-05a9-cad5-c285-6626d05f8860@gmail.com>
- <9a22c22d-94b1-f519-27a2-ae0b8bbf6e99@roeck-us.net>
- <658cf796-e3b1-f816-1e15-9e9e08b8ade0@gmail.com>
- <5a17fee3-4214-c2b9-abc1-ab9d6071591b@roeck-us.net>
- <c0b52994-51f5-806b-b07e-3e70d8217ffc@gmail.com> <YYkIeBSCFka9yrqC@latitude>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <04103df3-1ef4-b560-a5cb-fa51737d28ad@gmail.com>
-Date:   Mon, 8 Nov 2021 14:36:42 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <YYkIeBSCFka9yrqC@latitude>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=VKUPtClGvMYDKizfMfyOiejcSked8y/6afCSZ5ymgCk=;
+        b=II9+Ysa6MT/5r+K7JE7Weh+ZEjafzXd7gqfRs31wXYaiGbuchSw+5LkxCS97fXi0ZB
+         rV61HA2bkQpQIcLty9Lq3It0ZTp+UrBHbcL4p3fwukgTE7WfPGs5LmSx5FrSBXuAwhPg
+         th1jEABuY+KkqMKJLAeuVVD0opaDxeLaoLf/ObopQ4IFSPFlxIXc0v0G/jjEsLdwqJPd
+         TBwkxIsa+EE6EgXv1ZfTUfGGngzW0xp5Nf876RswFjhOwwMbxbF12Ir6Qn4FkgxlKmjB
+         SaOUtEHaNfGLD8QxkHtwCUZagbfRhSTtjUxKCxYwKGibfC5SjfAqaIu+1Zyi+k/0STuJ
+         ICtA==
+X-Gm-Message-State: AOAM533YShN21yDudWCtCfMyY1Q2o921wepTs/hadKhGoz2VYphVhRSD
+        +Kg1/yWvaxH3TI5RaiTnLF1Qhlh1RA==
+X-Google-Smtp-Source: ABdhPJw3S8w5gZ3puthsDp3FS0eJzL6zUpv+m5QlrHcSA+4WrWDFdno2qQox8R91MoOjqXvcLuUwYA==
+X-Received: by 2002:a9d:7cca:: with SMTP id r10mr26834237otn.228.1636376583565;
+        Mon, 08 Nov 2021 05:03:03 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id u28sm3448014oth.52.2021.11.08.05.03.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Nov 2021 05:03:02 -0800 (PST)
+Received: (nullmailer pid 3181500 invoked by uid 1000);
+        Mon, 08 Nov 2021 13:03:02 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Edwin chiu <edwinchiu0505tw@gmail.com>
+Cc:     robh+dt@kernel.org, daniel.lezcano@linaro.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rafael@kernel.org, linux-pm@vger.kernel.org,
+        Edwin chiu <edwin.chiu@sunplus.com>
+In-Reply-To: <5d2231d33d647d24d2b95c9f652687f7f1dccd2d.1636356928.git.edwin.chiu@sunplus.com>
+References: <cover.1636356928.git.edwin.chiu@sunplus.com> <5d2231d33d647d24d2b95c9f652687f7f1dccd2d.1636356928.git.edwin.chiu@sunplus.com>
+Subject: Re: [PATCH 1/2] dt-bingings:arm:sunplus:add sp7021 compatible string to sunplus,idle-state.yaml
+Date:   Mon, 08 Nov 2021 07:03:02 -0600
+Message-Id: <1636376582.101053.3181499.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-08.11.2021 14:22, Jonathan Neuschäfer пишет:
-> On Sun, Nov 07, 2021 at 08:42:33PM +0300, Dmitry Osipenko wrote:
-> [...]
->> EC drivers tend to use higher priority in general. Jonathan, could you
->> please confirm that NTXEC driver is a more preferable restart method
->> than the watchdog?
+On Mon, 08 Nov 2021 15:55:09 +0800, Edwin chiu wrote:
+> Add the compatible string for cpuidle state on sp7021
 > 
-> Yes. The original firmware uses the NTXEC to restart, and it works well,
-> so I do think it's preferable.
+> Signed-off-by: Edwin chiu <edwin.chiu@sunplus.com>
+> ---
+>  .../bindings/arm/sunplus/sunplus,idle-state.yaml   | 55 ++++++++++++++++++++++
+>  MAINTAINERS                                        |  6 +++
+>  2 files changed, 61 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/sunplus/sunplus,idle-state.yaml
+> 
 
-Thank you, then I'll update the NTXEC patch like this:
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-https://github.com/grate-driver/linux/commit/22da3d91f1734d9a0ed036220ad4ea28465af988
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
+
+Full log is available here: https://patchwork.ozlabs.org/patch/1552228
+
+
+spc: compatible:0: 'arm,idle-state' was expected
+	arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dt.yaml
+	arch/arm/boot/dts/qcom-apq8064-cm-qs600.dt.yaml
+	arch/arm/boot/dts/qcom-apq8064-ifc6410.dt.yaml
+	arch/arm/boot/dts/qcom-apq8064-sony-xperia-yuga.dt.yaml
+	arch/arm/boot/dts/qcom-apq8074-dragonboard.dt.yaml
+	arch/arm/boot/dts/qcom-apq8084-ifc6540.dt.yaml
+	arch/arm/boot/dts/qcom-apq8084-mtp.dt.yaml
+	arch/arm/boot/dts/qcom-msm8974-fairphone-fp2.dt.yaml
+	arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dt.yaml
+	arch/arm/boot/dts/qcom-msm8974-samsung-klte.dt.yaml
+	arch/arm/boot/dts/qcom-msm8974-sony-xperia-amami.dt.yaml
+	arch/arm/boot/dts/qcom-msm8974-sony-xperia-castor.dt.yaml
+	arch/arm/boot/dts/qcom-msm8974-sony-xperia-honami.dt.yaml
+
+spc: compatible: Additional items are not allowed ('arm,idle-state' was unexpected)
+	arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dt.yaml
+	arch/arm/boot/dts/qcom-apq8064-cm-qs600.dt.yaml
+	arch/arm/boot/dts/qcom-apq8064-ifc6410.dt.yaml
+	arch/arm/boot/dts/qcom-apq8064-sony-xperia-yuga.dt.yaml
+	arch/arm/boot/dts/qcom-apq8074-dragonboard.dt.yaml
+	arch/arm/boot/dts/qcom-apq8084-ifc6540.dt.yaml
+	arch/arm/boot/dts/qcom-apq8084-mtp.dt.yaml
+	arch/arm/boot/dts/qcom-msm8974-fairphone-fp2.dt.yaml
+	arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dt.yaml
+	arch/arm/boot/dts/qcom-msm8974-samsung-klte.dt.yaml
+	arch/arm/boot/dts/qcom-msm8974-sony-xperia-amami.dt.yaml
+	arch/arm/boot/dts/qcom-msm8974-sony-xperia-castor.dt.yaml
+	arch/arm/boot/dts/qcom-msm8974-sony-xperia-honami.dt.yaml
+
+spc: compatible: ['qcom,idle-state-spc', 'arm,idle-state'] is too long
+	arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dt.yaml
+	arch/arm/boot/dts/qcom-apq8064-cm-qs600.dt.yaml
+	arch/arm/boot/dts/qcom-apq8064-ifc6410.dt.yaml
+	arch/arm/boot/dts/qcom-apq8064-sony-xperia-yuga.dt.yaml
+	arch/arm/boot/dts/qcom-apq8074-dragonboard.dt.yaml
+	arch/arm/boot/dts/qcom-apq8084-ifc6540.dt.yaml
+	arch/arm/boot/dts/qcom-apq8084-mtp.dt.yaml
+	arch/arm/boot/dts/qcom-msm8974-fairphone-fp2.dt.yaml
+	arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dt.yaml
+	arch/arm/boot/dts/qcom-msm8974-samsung-klte.dt.yaml
+	arch/arm/boot/dts/qcom-msm8974-sony-xperia-amami.dt.yaml
+	arch/arm/boot/dts/qcom-msm8974-sony-xperia-castor.dt.yaml
+	arch/arm/boot/dts/qcom-msm8974-sony-xperia-honami.dt.yaml
 
