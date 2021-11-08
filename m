@@ -2,154 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84F5B44986F
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Nov 2021 16:33:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B623A4498AA
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Nov 2021 16:44:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240943AbhKHPgG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Nov 2021 10:36:06 -0500
-Received: from mail-qt1-f172.google.com ([209.85.160.172]:43861 "EHLO
-        mail-qt1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240901AbhKHPgE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Nov 2021 10:36:04 -0500
-Received: by mail-qt1-f172.google.com with SMTP id 8so13954457qty.10;
-        Mon, 08 Nov 2021 07:33:18 -0800 (PST)
+        id S241063AbhKHPq6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Nov 2021 10:46:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:37222 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241058AbhKHPq5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Nov 2021 10:46:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1636386252;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2RyU8qhSeZit5hKsiu2hQbRUAvUK+e+McPaAjHTnw30=;
+        b=HS6x5FyGQQVlFuQGME6P34WvESt32V2oisiWSOpoMV/PAyCf+0SqzxF9nTz0hteXflCb1c
+        mGXG9s4JQcm/Lf9krUchKvOOswr41RRqe/Mf9oPHrvikOZUV7y/AqI8Wkmw8bS+arxBM4T
+        EmjPUDugHiNcrflsXVgZ+8/T1J4VXqM=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-261-pTc5AgN1P3u7JmIDUtQpUA-1; Mon, 08 Nov 2021 10:44:11 -0500
+X-MC-Unique: pTc5AgN1P3u7JmIDUtQpUA-1
+Received: by mail-ed1-f71.google.com with SMTP id y20-20020a056402359400b003e28c9bc02cso15305552edc.9
+        for <linux-pm@vger.kernel.org>; Mon, 08 Nov 2021 07:44:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=x4ykPITI22sSh/L6reU4seHVLFfVjdO/v+W3/SN8DUg=;
-        b=AK5+ymHpBJW394fq5QAJLtdTA/ZOqD4CMNR9HBtKgBlKaocEikykm9zWu2Qq3FsTDL
-         IBKgKBLjeGow4SxpkJ3x2oRGNnBBM0NSZ7leYaUE+sCbLlU8e+JdCCmHwGdf11yTS7jj
-         INUpSYd8YTGwyay9k1OcwzYpdYcV9EphK2OvOUVV9gSZxXZxi4QIiBYrsZTyoOgrppre
-         0wprgxHXRXz//JJtuaBp7hB+dbvc/y85rRMUeNSC0zaCdkGtvZcR3mZvLtetjRGhVxNU
-         Kq48BbcYt3WMF9YTaLnfqSufIaTCw2FbfsTbHiFPM419cNwj86653TvYIoMnsf+J4fK+
-         gBYw==
-X-Gm-Message-State: AOAM533eiMtrTJQK05ouqSS0wCB8B6mKp/DGcpb7z8dQ92ZCTvl80eY0
-        jARg/oG42UJJhg0c3f7dAUMoRa5LWBurk5lZ
-X-Google-Smtp-Source: ABdhPJykPOH3YWmh1bWslDbzGH3og2HDnOT28nOQQhf2wbjOhuI4A+4quz4f35G+kzZC3Oinm8VRnw==
-X-Received: by 2002:ac8:5a4b:: with SMTP id o11mr304870qta.321.1636385597559;
-        Mon, 08 Nov 2021 07:33:17 -0800 (PST)
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
-        by smtp.gmail.com with ESMTPSA id i14sm11098927qti.25.2021.11.08.07.33.17
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=2RyU8qhSeZit5hKsiu2hQbRUAvUK+e+McPaAjHTnw30=;
+        b=th7u4Ikd1DmEmNyG9aR11bXT28Iv0L/zoZVmUJMfQwEzJuVgKBhGHsfdXdRZVtMd17
+         VXK+mwzrfq48lvjH4Xn42m4TDTebYsw0r5nRD+EmF4dlaBT9vjGueJLv2Qfk3LMYRz3g
+         AnheaFs8aFwB96LxT4rT/3gzZOw94Uf8sebcjA0ZMu/Zqs9ML2rRJA016uHB1VHtNoFo
+         hq4/s6nzYQSIWyHIaKTYulNm0GwnVviY8obN0oCdqfZyEGgDKhR4XTFFgNIPfWdDKu0x
+         7f9cw8ezNsXbfHcdfdFTa1qcyum2ybXch/BHN44ewzRGwm/9O+nUrVd0/iqw7eXIrn7d
+         8VTA==
+X-Gm-Message-State: AOAM532HbiBmzuPI2B8/iG0pdKOzJZBY5k/FHYNvK1QJyxTIxYU7xKAx
+        9II7fDaRg+ovrviRflv3vK8iUJkQd804B4onD4AfHCLsjywFFtyffCzY6BtYxAcfeRfVbkgIX4A
+        t1XHFbdLO6sOlsge5TPw=
+X-Received: by 2002:a17:906:2c16:: with SMTP id e22mr215013ejh.501.1636386250057;
+        Mon, 08 Nov 2021 07:44:10 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzlq0HQMHgB4Zj6dSwUyUqA2pyHOS5wXAZQanD1ylnLhmhVrP+t0k2sXvtMwqypw3DeXs0uyg==
+X-Received: by 2002:a17:906:2c16:: with SMTP id e22mr214996ejh.501.1636386249907;
+        Mon, 08 Nov 2021 07:44:09 -0800 (PST)
+Received: from [10.40.1.223] ([81.30.35.201])
+        by smtp.gmail.com with ESMTPSA id sd28sm9076804ejc.37.2021.11.08.07.44.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Nov 2021 07:33:17 -0800 (PST)
-Received: by mail-yb1-f174.google.com with SMTP id v7so44765592ybq.0;
-        Mon, 08 Nov 2021 07:33:17 -0800 (PST)
-X-Received: by 2002:a9f:2c98:: with SMTP id w24mr725068uaj.89.1636385158322;
- Mon, 08 Nov 2021 07:25:58 -0800 (PST)
+        Mon, 08 Nov 2021 07:44:09 -0800 (PST)
+Message-ID: <0b27cd90-3174-01f5-359c-be0c2e094fc8@redhat.com>
+Date:   Mon, 8 Nov 2021 16:44:08 +0100
 MIME-Version: 1.0
-References: <20211108101157.15189-1-bp@alien8.de> <20211108101157.15189-43-bp@alien8.de>
- <CAMuHMdWH+txiSP_d7Jc4f_bU8Lf9iWpT4E3o5o7BJr-YdA6-VA@mail.gmail.com> <YYkyUEqcsOwQMb1S@zn.tnic>
-In-Reply-To: <YYkyUEqcsOwQMb1S@zn.tnic>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 8 Nov 2021 16:25:47 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXiBEQyEXJagSfpH44hxVA2t0sDH7B7YubLGHrb2MJLLA@mail.gmail.com>
-Message-ID: <CAMuHMdXiBEQyEXJagSfpH44hxVA2t0sDH7B7YubLGHrb2MJLLA@mail.gmail.com>
-Subject: Re: [PATCH v0 42/42] notifier: Return an error when callback is
- already registered
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Ayush Sawal <ayush.sawal@chelsio.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rohit Maheshwari <rohitm@chelsio.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vinay Kumar Yadav <vinay.yadav@chelsio.com>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        intel-gvt-dev@lists.freedesktop.org,
-        alpha <linux-alpha@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-edac@vger.kernel.org,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        linux-hyperv@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-leds <linux-leds@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
-        <linux-remoteproc@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        scsi <linux-scsi@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-staging@lists.linux.dev,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>, netdev <netdev@vger.kernel.org>,
-        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
-        sparclinux <sparclinux@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        xen-devel@lists.xenproject.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 13/13] extcon: intel-cht-wc: Add support for devices with
+ an USB-micro-B connector
+Content-Language: en-US
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Yauhen Kharuzhy <jekhor@gmail.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>
+References: <20211030182813.116672-1-hdegoede@redhat.com>
+ <20211030182813.116672-14-hdegoede@redhat.com>
+ <CAHp75VfRALjbGaY8rdt5HCte3_NPuwpdkr+GNZV7qMWBK1idWg@mail.gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <CAHp75VfRALjbGaY8rdt5HCte3_NPuwpdkr+GNZV7qMWBK1idWg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Borislav,
+Hi,
 
-On Mon, Nov 8, 2021 at 3:21 PM Borislav Petkov <bp@alien8.de> wrote:
-> On Mon, Nov 08, 2021 at 03:07:03PM +0100, Geert Uytterhoeven wrote:
-> > I think the addition of __must_check is overkill, leading to the
-> > addition of useless error checks and message printing.
->
-> See the WARN in notifier_chain_register() - it will already do "message
-> printing".
+On 10/31/21 13:52, Andy Shevchenko wrote:
+> On Sat, Oct 30, 2021 at 9:29 PM Hans de Goede <hdegoede@redhat.com> wrote:
+>>
+>> So far the extcon-intel-cht-wc code has only been tested on devices with
+>> a Type-C connector with USB-PD, USB3 (superspeed) and DP-altmode support
+>> through a FUSB302 Type-C controller.
+>>
+>> Some devices with the intel-cht-wc PMIC however come with an USB-micro-B
+>> connector, or an USB-2 only Type-C connector without USB-PD.
+>>
+>> These device are identified by "intel,cht-wc-setup" = "bq25890,bq27520",
+>> since there is no Type-C controller on these devices the extcon code must
+>> control the Vbus 5V boost converter and the USB role switch depending on
+>> the detected cable-type.
+> 
+> ...
+> 
+>> +       if (ext->vbus_boost && ext->vbus_boost_enabled != enable) {
+>> +               if (enable)
+>> +                       ret = regulator_enable(ext->vbus_boost);
+>> +               else
+>> +                       ret = regulator_disable(ext->vbus_boost);
+> 
+>> +               if (ret == 0)
+>> +                       ext->vbus_boost_enabled = enable;
+>> +               else
+>> +                       dev_err(ext->dev, "Error updating Vbus boost regulator: %d\n", ret);
+> 
+> if (ret)
+>  dev_err()
+> else
+>  ...
+> 
+> ?
 
-I mean the addition of useless error checks and message printing _to
-the callers_.
+When doing if-else branches around an error code I always put the success
+handling in the if branch and have the else branch deal with the error
+to me that feels as the most natural way to do it the error is the exception
+and thus the "else"
 
-> > Many callers call this where it cannot fail, and where nothing can
-> > be done in the very unlikely event that the call would ever start to
-> > fail.
->
-> This is an attempt to remove this WARN() hack in
-> notifier_chain_register() and have the function return a proper error
-> value instead of this "Currently always returns zero." which is bad
-> design.
->
-> Some of the registration functions around the tree check that retval and
-> some don't. So if "it cannot fail" those registration either should not
-> return a value or callers should check that return value - what we have
-> now doesn't make a whole lot of sense.
+> 
+>> +       }
+> 
+> ...
+> 
+> 
+>> +               /*
+>> +                * Classic micro USB-B setup, this requires controling
+> 
+> controlling
 
-With __must_check callers are required to check, even if they know
-it cannot fail.
+Fixed for the next version.
 
-> Oh, and then fixing this should avoid stuff like:
->
-> +       if (notifier_registered == false) {
-> +               mce_register_decode_chain(&amdgpu_bad_page_nb);
-> +               notifier_registered = true;
-> +       }
->
-> from propagating in the code.
+Thanks & Regards,
 
-That's unrelated to the addition of __must_check.
+Hans
 
-I'm not against returning proper errors codes.  I'm against forcing
-callers to check things that cannot fail and to add individual error
-printing to each and every caller.
 
-Note that in other areas, we are moving in the other
-direction, to a centralized printing of error messages,
-cfr. e.g. commit 7723f4c5ecdb8d83 ("driver core: platform: Add an
-error message to platform_get_irq*()").
+> 
+>> +                * the role-sw and vbus based on the id-pin.
+>> +                */
+> 
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
