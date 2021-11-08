@@ -2,166 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ECA8449815
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Nov 2021 16:23:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84F5B44986F
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Nov 2021 16:33:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238998AbhKHPZc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Nov 2021 10:25:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53302 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231776AbhKHPZ3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Nov 2021 10:25:29 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0387C061714
-        for <linux-pm@vger.kernel.org>; Mon,  8 Nov 2021 07:22:44 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id n66so4480820oia.9
-        for <linux-pm@vger.kernel.org>; Mon, 08 Nov 2021 07:22:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=g/Jzi4/bsCpORi3XVmLRvQb2/I7DBGZkp7KCpuyf5T4=;
-        b=mwH7FrqfQHnXKY5/RCDBKF2ggnIJcEyODdypMgivJ6eQLdASF6Hwkjw3j5vZk9kv0j
-         EGZnIsoaH/xgkRkINylGmDaZMfPtv07Jq6XIvgIctnr/nRWCHbl2sUHKp/7FYlI+/cF+
-         P2V07ztnCG2SdGzcI26Gd24RsTx8znOcyNBH/jePoOI5JDZPAXFDs+PfgixGFeCt70o7
-         98mL+hZWz4UGgFtzGH9I8ZXm9vivkR1XFZcuQ7ZDu/lw3rRiQdKVurksZ7gzDlynnSts
-         alGl5qGDn8/MyKSfW+/q4YxhmzspH2JzpAyaLSkEDyjgPGPt7LtlxCW9Xr9l8UGlYZRc
-         PEhA==
+        id S240943AbhKHPgG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Nov 2021 10:36:06 -0500
+Received: from mail-qt1-f172.google.com ([209.85.160.172]:43861 "EHLO
+        mail-qt1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240901AbhKHPgE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Nov 2021 10:36:04 -0500
+Received: by mail-qt1-f172.google.com with SMTP id 8so13954457qty.10;
+        Mon, 08 Nov 2021 07:33:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=g/Jzi4/bsCpORi3XVmLRvQb2/I7DBGZkp7KCpuyf5T4=;
-        b=2vj9OjZULvI+9Q+DIImhRV6sTyErl6S0/NCVKspeblN4OsiVNpet4tlzM557SSLswR
-         46JYMHk+NNqIbdY+bwYaTGpjAIlF0LMorx5jImAsaUk5ENwdiLtzcJaiZinpl+EsRbg9
-         PyOIU2BlWNwtVL/PvMPu2S1/lr8p8GV/1XLKJDaHuJDPF/8gzkL/x3wQcPe/eRIWzk8b
-         2cNvsOJdPgbDhT3HOTqXD7ODTKLn6oDilPPoGxM0Rt3/3pJOcAk0WbXHEYWDJtbNTxMB
-         asZBFAvh3I4MDUTFgE/sLrkv+0xQprWNrol4sbV5XoydlLoW0yFh7rVx8WBM8YkVtgwR
-         bHwA==
-X-Gm-Message-State: AOAM530z6wvRDLZQ04y5ItMO32gy7CA4DdtYVPEB2WeNsTpvo07GhQ7R
-        LmVoR2b28m+89QrkDR2QaljtvQ==
-X-Google-Smtp-Source: ABdhPJyA6CRh1gldV9oc+Y86Ziq8FBRBvK1+8E1GkBSCwavEQvBLlT9jJop8RTiuLa1QL65Gd4rWOA==
-X-Received: by 2002:a05:6808:d53:: with SMTP id w19mr23526832oik.19.1636384964280;
-        Mon, 08 Nov 2021 07:22:44 -0800 (PST)
-Received: from [192.168.11.48] (cpe-173-173-107-246.satx.res.rr.com. [173.173.107.246])
-        by smtp.gmail.com with ESMTPSA id e2sm5524291ooh.40.2021.11.08.07.22.42
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=x4ykPITI22sSh/L6reU4seHVLFfVjdO/v+W3/SN8DUg=;
+        b=AK5+ymHpBJW394fq5QAJLtdTA/ZOqD4CMNR9HBtKgBlKaocEikykm9zWu2Qq3FsTDL
+         IBKgKBLjeGow4SxpkJ3x2oRGNnBBM0NSZ7leYaUE+sCbLlU8e+JdCCmHwGdf11yTS7jj
+         INUpSYd8YTGwyay9k1OcwzYpdYcV9EphK2OvOUVV9gSZxXZxi4QIiBYrsZTyoOgrppre
+         0wprgxHXRXz//JJtuaBp7hB+dbvc/y85rRMUeNSC0zaCdkGtvZcR3mZvLtetjRGhVxNU
+         Kq48BbcYt3WMF9YTaLnfqSufIaTCw2FbfsTbHiFPM419cNwj86653TvYIoMnsf+J4fK+
+         gBYw==
+X-Gm-Message-State: AOAM533eiMtrTJQK05ouqSS0wCB8B6mKp/DGcpb7z8dQ92ZCTvl80eY0
+        jARg/oG42UJJhg0c3f7dAUMoRa5LWBurk5lZ
+X-Google-Smtp-Source: ABdhPJykPOH3YWmh1bWslDbzGH3og2HDnOT28nOQQhf2wbjOhuI4A+4quz4f35G+kzZC3Oinm8VRnw==
+X-Received: by 2002:ac8:5a4b:: with SMTP id o11mr304870qta.321.1636385597559;
+        Mon, 08 Nov 2021 07:33:17 -0800 (PST)
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
+        by smtp.gmail.com with ESMTPSA id i14sm11098927qti.25.2021.11.08.07.33.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Nov 2021 07:22:43 -0800 (PST)
-Message-ID: <eac00041-a1b8-0780-931d-52249d538800@kali.org>
-Date:   Mon, 8 Nov 2021 09:22:42 -0600
+        Mon, 08 Nov 2021 07:33:17 -0800 (PST)
+Received: by mail-yb1-f174.google.com with SMTP id v7so44765592ybq.0;
+        Mon, 08 Nov 2021 07:33:17 -0800 (PST)
+X-Received: by 2002:a9f:2c98:: with SMTP id w24mr725068uaj.89.1636385158322;
+ Mon, 08 Nov 2021 07:25:58 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.0
-Subject: Re: [PATCH v3 0/5] Refactor thermal pressure update to avoid code
- duplication
-Content-Language: en-US
-To:     Thara Gopinath <thara.gopinath@linaro.org>,
-        Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, sudeep.holla@arm.com,
-        will@kernel.org, catalin.marinas@arm.com, linux@armlinux.org.uk,
-        gregkh@linuxfoundation.org, rafael@kernel.org,
-        viresh.kumar@linaro.org, amitk@kernel.org,
-        daniel.lezcano@linaro.org, amit.kachhap@gmail.com,
-        bjorn.andersson@linaro.org, agross@kernel.org
-References: <20211103161020.26714-1-lukasz.luba@arm.com>
- <c7b526f0-2c26-0cfc-910b-3521c6a6ef51@kali.org>
- <3cba148a-7077-7b6b-f131-dc65045aa348@arm.com>
- <9d533b6e-a81c-e823-fa6f-61fdea92fa65@kali.org>
- <74ea027b-b213-42b8-0f7d-275f3b84712e@linaro.org>
- <74603569-2ff1-999e-9618-79261fdb0ee4@kali.org>
- <b7e76c2a-ceac-500a-ff75-535a3f0d51d6@linaro.org>
- <f955a2aa-f788-00db-1ed8-dc9c7a1b2572@kali.org>
- <59054c90-c1cd-85bf-406e-579df668d7b4@linaro.org>
-From:   Steev Klimaszewski <steev@kali.org>
-In-Reply-To: <59054c90-c1cd-85bf-406e-579df668d7b4@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20211108101157.15189-1-bp@alien8.de> <20211108101157.15189-43-bp@alien8.de>
+ <CAMuHMdWH+txiSP_d7Jc4f_bU8Lf9iWpT4E3o5o7BJr-YdA6-VA@mail.gmail.com> <YYkyUEqcsOwQMb1S@zn.tnic>
+In-Reply-To: <YYkyUEqcsOwQMb1S@zn.tnic>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 8 Nov 2021 16:25:47 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXiBEQyEXJagSfpH44hxVA2t0sDH7B7YubLGHrb2MJLLA@mail.gmail.com>
+Message-ID: <CAMuHMdXiBEQyEXJagSfpH44hxVA2t0sDH7B7YubLGHrb2MJLLA@mail.gmail.com>
+Subject: Re: [PATCH v0 42/42] notifier: Return an error when callback is
+ already registered
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ayush Sawal <ayush.sawal@chelsio.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rohit Maheshwari <rohitm@chelsio.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vinay Kumar Yadav <vinay.yadav@chelsio.com>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        intel-gvt-dev@lists.freedesktop.org,
+        alpha <linux-alpha@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-edac@vger.kernel.org,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        linux-hyperv@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-leds <linux-leds@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
+        <linux-remoteproc@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        scsi <linux-scsi@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        linux-staging@lists.linux.dev,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>, netdev <netdev@vger.kernel.org>,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux <sparclinux@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        xen-devel@lists.xenproject.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Borislav,
 
-> Hi Steev,
+On Mon, Nov 8, 2021 at 3:21 PM Borislav Petkov <bp@alien8.de> wrote:
+> On Mon, Nov 08, 2021 at 03:07:03PM +0100, Geert Uytterhoeven wrote:
+> > I think the addition of __must_check is overkill, leading to the
+> > addition of useless error checks and message printing.
 >
-> So this depends on the cpufreq governor you are using. By-default arm 
-> systems have sched-util governor enabled. This means you will scale up 
-> to boost depending on cpu load and not always. If you want to ensure 
-> you are always hitting boost frequency, you should enable performance 
-> governor for cpufreq and try.
+> See the WARN in notifier_chain_register() - it will already do "message
+> printing".
+
+I mean the addition of useless error checks and message printing _to
+the callers_.
+
+> > Many callers call this where it cannot fail, and where nothing can
+> > be done in the very unlikely event that the call would ever start to
+> > fail.
 >
-> Also since the defconfig has by default CPU_FREQ_STAT enabled, you 
-> should be able to get statistics out of cpufreq to see the time spent 
-> by a cpu in each frequency. I think cpufreq-info -s should give you 
-> this info. If not, you can explicitly get it for each cpu from
+> This is an attempt to remove this WARN() hack in
+> notifier_chain_register() and have the function return a proper error
+> value instead of this "Currently always returns zero." which is bad
+> design.
 >
-> cat /sys/devices/system/cpu/cpu<X>/cpufreq/stats/time_in_state
+> Some of the registration functions around the tree check that retval and
+> some don't. So if "it cannot fail" those registration either should not
+> return a value or callers should check that return value - what we have
+> now doesn't make a whole lot of sense.
+
+With __must_check callers are required to check, even if they know
+it cannot fail.
+
+> Oh, and then fixing this should avoid stuff like:
 >
-> Regarding temperature, if you have applied all the patches in the 
-> sdm845 LMh series and have LMh enabled, cpu throttling starts around 
-> 95 degree C.
+> +       if (notifier_registered == false) {
+> +               mce_register_decode_chain(&amdgpu_bad_page_nb);
+> +               notifier_registered = true;
+> +       }
 >
-Hi Thara,
+> from propagating in the code.
 
-Indeed, I ended up finding the time_in_state when I was doing more 
-digging after my last mail.  I do have the sdm845 LMh series and LMh 
-enabled, however I don't think I've ever seen my system go above 90C here.
+That's unrelated to the addition of __must_check.
 
-So a quick look, and... we are simply almost never getting the 2.95GHz 
-at all, regardless of workload.  I saw Lukasz response as well about the 
-math possibly being wrong, but I haven't had a chance.
+I'm not against returning proper errors codes.  I'm against forcing
+callers to check things that cannot fail and to add individual error
+printing to each and every caller.
 
-Regarding the time in state - I went with policy4 instead of per cpu 
-(for brevity sake) and it's here:
+Note that in other areas, we are moving in the other
+direction, to a centralized printing of error messages,
+cfr. e.g. commit 7723f4c5ecdb8d83 ("driver core: platform: Add an
+error message to platform_get_irq*()").
 
-c630:~$ cat /sys/devices/system/cpu/cpufreq/policy4/stats/time_in_state
-825600 225037
-902400 92
-979200 205
-1056000 96
-1209600 902
-1286400 386
-1363200 396
-1459200 217
-1536000 101
-1612800 75
-1689600 95
-1766400 130
-1843200 255
-1920000 318
-1996800 92
-2092800 87
-2169600 66
-2246400 60
-2323200 58
-2400000 54
-2476800 47
-2553600 50
-2649600 69
-2745600 58
-2841600 54619
-2956800 5
+Gr{oetje,eeting}s,
 
-So we spend *very* little time in 2.96GHz and this is after almost 14 
-hours of uptime on the C630.  By comparison, on a Pinebook Pro where 
-I've added in 2GHz as a boost frequency :
+                        Geert
 
-pinebook-pro:~$ cat 
-/sys/devices/system/cpu/cpufreq/policy4/stats/time_in_state
-408000 16084466
-600000 27212
-816000 32487
-1008000 11331
-1200000 13268
-1416000 75078
-1608000 18392
-1800000 207266
-2016000 648612
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-With the Pinebook Pro, which doesn't even come close to getting to 95C, 
-we spend a lot more time in 2GHz.
-
--- steev
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
