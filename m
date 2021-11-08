@@ -2,128 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0537D447B58
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Nov 2021 08:47:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ED6C447B6A
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Nov 2021 08:55:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236560AbhKHHuR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Nov 2021 02:50:17 -0500
-Received: from mail-qk1-f170.google.com ([209.85.222.170]:46929 "EHLO
-        mail-qk1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235081AbhKHHuQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Nov 2021 02:50:16 -0500
-Received: by mail-qk1-f170.google.com with SMTP id bl12so14637691qkb.13;
-        Sun, 07 Nov 2021 23:47:32 -0800 (PST)
+        id S237081AbhKHH6C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Nov 2021 02:58:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35598 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234532AbhKHH6B (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Nov 2021 02:58:01 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E798BC061570;
+        Sun,  7 Nov 2021 23:55:17 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id q126so10495921pgq.13;
+        Sun, 07 Nov 2021 23:55:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=pvqPSiHglh+tgwa09KnyvArHLxkBsvPOohaV0vHhBok=;
+        b=h6/TKkxNga6mtcYY//j82Dt4lsQKKe21TjiF6GaUA35aCV4sVHaMakk5jL95Tg/oP0
+         yFIBgpSaKtM92TJnZVTRbYirIF9ESjE4uvzDNmMUuOifOh4Id4VUsfTtvoiyOoOq1eU6
+         8ecGdCuQpx2Ux/QCwcl3OeJxz1jb1FmcAtUFAc1JwTEpOotlCLorCgYHxF1af88ejyWG
+         HmZTHLVqjoCFhmSKSqPHJn6vnkEx3ltoCT8B+hoMFlvU3d/L4KdsJsKv68y2cQOHay2D
+         /BoMqzChsg9ADDEFPAaTrJcSfw9jgOxxk7BZ5LYs98MrrdusQNZRIpbgf1epbBJvr/d7
+         LxWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=niQCVpji9nu8a8Mfie3ofua8MkF1HzpLuS22ys5pvwg=;
-        b=QxhKC3BH6UKmsf+en5LDsE2LBeZaA/X8MZ852CifiBk7lxKwvvQ8DvQzVCJxpn5NLP
-         sUafxXkCujdPkXdjCp08V3qdDG7N1+RyuQ4yRaYSXr9VC8emQREANOjzOZyjMa/6MyZ1
-         ebyXOdDFecNFXOnOI9KCznfXjls9NSdbdlYPIqzXgQKeYmXawyeNbqPk+wpw/iM3p8Qz
-         GYnZJI/gOifPb+tn1N/ez25v3Z+EZKbOTcnsyGCUaB1vQAwldUQHRYwqwJ4JsbCGpA52
-         q/cZpzUYpazcuYCAjvlNWmBhpUmXw2FumJQh7RMmwOl9AidSO6dCrA3Tw6e+d4XChmpJ
-         S2qQ==
-X-Gm-Message-State: AOAM533Ndj5HCg9s4l2OPPgz513/MnYueo8JLiwpRssuUn55AVtH5Ycg
-        pSYGW71BTe5t90Ouy0Kgyqyh+38S0qx3Jg==
-X-Google-Smtp-Source: ABdhPJwQvMewvRjNbN/c0TXq4JonZhcv8d7XAj6/kChLjlMOwqYn6iZDfJo4XDnr1yHj+M1GgRMQ2Q==
-X-Received: by 2002:a05:620a:752:: with SMTP id i18mr6713068qki.453.1636357651412;
-        Sun, 07 Nov 2021 23:47:31 -0800 (PST)
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com. [209.85.219.41])
-        by smtp.gmail.com with ESMTPSA id s13sm5045006qtw.33.2021.11.07.23.47.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 07 Nov 2021 23:47:31 -0800 (PST)
-Received: by mail-qv1-f41.google.com with SMTP id gh1so11375219qvb.8;
-        Sun, 07 Nov 2021 23:47:31 -0800 (PST)
-X-Received: by 2002:a05:6102:3a07:: with SMTP id b7mr71214037vsu.35.1636357641114;
- Sun, 07 Nov 2021 23:47:21 -0800 (PST)
-MIME-Version: 1.0
-References: <20211108004524.29465-1-digetx@gmail.com> <20211108004524.29465-22-digetx@gmail.com>
-In-Reply-To: <20211108004524.29465-22-digetx@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 8 Nov 2021 08:47:10 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXpW0389_uJR2xg+HCstXanutPxrcRdvgu8kxH1J9T++w@mail.gmail.com>
-Message-ID: <CAMuHMdXpW0389_uJR2xg+HCstXanutPxrcRdvgu8kxH1J9T++w@mail.gmail.com>
-Subject: Re: [PATCH v3 21/25] m68k: Switch to new sys-off handler API
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee.jones@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=pvqPSiHglh+tgwa09KnyvArHLxkBsvPOohaV0vHhBok=;
+        b=ntmVsKefovqMmuGEE04dVkyyp6ZzbQxr8h5LYq8mqEBbWsJMzndFSiiy2iNTugyUdq
+         Qp9BNvhcnuo/8He+Csd1Bbv60eY62h2ohsbIT/PgOw14kVnfvaoJeCnlA8vj6awdjTDM
+         TLwUX7dKXxORheurpeEkoVFfFO6kY1aWyUzKpRZ5MTLKwZu1nskzx89Hgt4I141r/ik1
+         IxxmNoQTPkDi+ga9G7CoQkGA7UCoJtB8f+gwTd4jesx3v1kENXZTxxKOKP3g5nZmocvz
+         kEPdg5LTqFUXlxw+XPJLRYKIefyUqi3RZc3GJh0vjL5HEB0aKcUnVbROcvjfxsGwmoqe
+         IB5g==
+X-Gm-Message-State: AOAM532aeW0x7QW3wRLqI8rMPaQUBVMtsozB1mxMzBS4NR9fKH4gv5Aw
+        Tws8xiBhbk7JFQrO3Q6qs1c=
+X-Google-Smtp-Source: ABdhPJy8sGQvw5pDbl7DBLK5/cfTt8Gxn7fjM1Zi0IEgcuCHUWSS//1foL3ovJG1Rh5ITi8dbyx/kg==
+X-Received: by 2002:a05:6a00:15ca:b0:49f:d22b:afff with SMTP id o10-20020a056a0015ca00b0049fd22bafffmr6612023pfu.35.1636358117543;
+        Sun, 07 Nov 2021 23:55:17 -0800 (PST)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id ep15sm1631150pjb.3.2021.11.07.23.55.15
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 07 Nov 2021 23:55:17 -0800 (PST)
+From:   Edwin chiu <edwinchiu0505tw@gmail.com>
+X-Google-Original-From: Edwin chiu <edwin.chiu@sunplus.com>
+To:     robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rafael@kernel.org,
+        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org
+Cc:     Edwin chiu <edwin.chiu@sunplus.com>
+Subject: [PATCH 0/2] Add cpuidle driver for Sunplus SP7021
+Date:   Mon,  8 Nov 2021 15:55:08 +0800
+Message-Id: <cover.1636356928.git.edwin.chiu@sunplus.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 8, 2021 at 1:48 AM Dmitry Osipenko <digetx@gmail.com> wrote:
-> Kernel now supports chained power-off handlers. Use
-> register_power_off_handler() that registers power-off handlers and
-> do_kernel_power_off() that invokes chained power-off handlers. Legacy
-> pm_power_off() will be removed once all drivers will be converted to
-> the new power-off API.
->
-> Normally arch code should adopt only the do_kernel_power_off() at first,
-> but m68k is a special case because it uses pm_power_off() "inside out",
-> i.e. pm_power_off() invokes machine_power_off() [in fact it does nothing],
-> while it's machine_power_off() that should invoke the pm_power_off(), and
-> thus, we can't convert platforms to the new API separately. There are only
-> two platforms changed here, so it's not a big deal.
->
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+This is a patch series for cpuidle driver for Sunplus SP7021 SoC.
 
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and 
+etc.) into a single chip. It is designed for industrial control.
 
-Gr{oetje,eeting}s,
+Refer to:
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+https://tibbo.com/store/plus1.html
 
-                        Geert
+Edwin chiu (2):
+  dt-bingings:arm:sunplus:add sp7021 compatible string to
+    sunplus,idle-state.yaml
+  cpuidle:sunplus:create cpuidle driver for sunplus sp7021
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+ .../bindings/arm/sunplus/sunplus,idle-state.yaml   |  55 ++++++
+ MAINTAINERS                                        |   9 +
+ drivers/cpuidle/Kconfig.arm                        |   7 +
+ drivers/cpuidle/Makefile                           |   1 +
+ drivers/cpuidle/cpuidle-sunplus.c                  | 185 +++++++++++++++++++++
+ include/linux/platform_data/cpuidle-sunplus.h      |  14 ++
+ 6 files changed, 271 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/sunplus/sunplus,idle-state.yaml
+ create mode 100644 drivers/cpuidle/cpuidle-sunplus.c
+ create mode 100644 include/linux/platform_data/cpuidle-sunplus.h
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+2.7.4
+
