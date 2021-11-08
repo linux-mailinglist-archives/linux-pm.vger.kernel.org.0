@@ -2,126 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AD6F4498D5
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Nov 2021 17:02:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F4F94498E2
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Nov 2021 17:02:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241115AbhKHQAe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Nov 2021 11:00:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:27036 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241110AbhKHQAc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Nov 2021 11:00:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1636387067;
+        id S241144AbhKHQB4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Nov 2021 11:01:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33440 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236850AbhKHQBy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Nov 2021 11:01:54 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA6DC061570;
+        Mon,  8 Nov 2021 07:59:09 -0800 (PST)
+Received: from zn.tnic (p200300ec2f331100b486bab6e60d7aaf.dip0.t-ipconnect.de [IPv6:2003:ec:2f33:1100:b486:bab6:e60d:7aaf])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 341131EC04DE;
+        Mon,  8 Nov 2021 16:59:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1636387148;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8KYz763bboOxbMn20cIS2HzETWIJmR4WwhBPXCqWbVg=;
-        b=AtmVuMh0zrIyoQYuerGxzyQJFJ4lBFfUkq2g6rhqHWfVzeMmu1H42avDVasQDMDnfUc5Q4
-        If8yJlm/1NZqGe1A9ZGm/oA6QYAc0Ue5sJaUD1wvAr2tDu7QAqkx5licJGsFRz02miFDwG
-        uRHqXJ4QaWF7bOQxtfG68keNY1PhxD8=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-525-hVuNsx2QOdOR3BVO6tEYzQ-1; Mon, 08 Nov 2021 10:57:46 -0500
-X-MC-Unique: hVuNsx2QOdOR3BVO6tEYzQ-1
-Received: by mail-ed1-f70.google.com with SMTP id w13-20020a05640234cd00b003e2fde5ff8aso9557559edc.14
-        for <linux-pm@vger.kernel.org>; Mon, 08 Nov 2021 07:57:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=8KYz763bboOxbMn20cIS2HzETWIJmR4WwhBPXCqWbVg=;
-        b=7/4j2EMmuxlG6fkw+8taz1yZ+HX0C0iNBXPZxYf+C9CRJWeZdSz8vsZpGUQIIkayE/
-         qjGRDBocDUgfF4rOpGc21ZUVAglC99Me2u+z2YcawFieOdhZmfqlzSZjvrq0g2Nx8eJD
-         qXZVPmSO3eciwlm55ouSlbdY3mUUoFV/KLR5pBo2W4rv/CeRBffy0uWGv8w+uJwbppDT
-         4ixXXieCAd6Z9ohqCYahQb5QsSu3P/bFuQZ959K1xOoQxG26n6aWulI/+p71JPBZvOKd
-         2dpmN1vqDUtueyW2CIxsy+x5W6MMV/rTVcVK4+V9yQqNmMGE0cjepPVRCo1YvBLNsVjy
-         B83A==
-X-Gm-Message-State: AOAM532sT0BqBMRFn1SHnqLK2QlEkddpu6tcSNvU40isPrErKBLW4iF2
-        AL9iqzfHDySnExZEJYq0t4hcAvu/SF3+wV5lfqx83Odb9Y1fIwwo2vbw/3PDD1a8g+anuwyxKlL
-        QzcM1tPyGwg8Ku+w+gJI=
-X-Received: by 2002:a17:907:8a12:: with SMTP id sc18mr430348ejc.274.1636387065481;
-        Mon, 08 Nov 2021 07:57:45 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxf0iOhJfjaTSwaGCcG/REySSi4fRJPc4StH7NfD4KKXRYX4Nljlyh8cUTGdYWEErdHWc5rDg==
-X-Received: by 2002:a17:907:8a12:: with SMTP id sc18mr430325ejc.274.1636387065338;
-        Mon, 08 Nov 2021 07:57:45 -0800 (PST)
-Received: from [10.40.1.223] ([81.30.35.201])
-        by smtp.gmail.com with ESMTPSA id e20sm9389142edv.64.2021.11.08.07.57.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Nov 2021 07:57:44 -0800 (PST)
-Message-ID: <10c9d774-dcae-e80d-e6fa-235410658b84@redhat.com>
-Date:   Mon, 8 Nov 2021 16:57:44 +0100
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=JALJsenIQCt4BletZS/B+Zq0YBxBp6L9Ch45cvOw8XQ=;
+        b=LCBDSZEhct23FIVquhfAlhIS3MpLXm84rotG+ppp99dGMPWi9iJHGgKkfiFg0DoLQ+NSWf
+        ixY2Bl+WafqAknd6kFkKb4q9SvLPR/pI4iyCTMD6S/zki4CWzqH6/1ZBq8awazUNWt4Xi0
+        idSLz3mdlao9wfI9n1SzGKhLH2sR0dI=
+Date:   Mon, 8 Nov 2021 16:58:57 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ayush Sawal <ayush.sawal@chelsio.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rohit Maheshwari <rohitm@chelsio.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vinay Kumar Yadav <vinay.yadav@chelsio.com>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        intel-gvt-dev@lists.freedesktop.org,
+        alpha <linux-alpha@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-edac@vger.kernel.org,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        linux-hyperv@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-leds <linux-leds@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
+        <linux-remoteproc@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        scsi <linux-scsi@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        linux-staging@lists.linux.dev,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>, netdev <netdev@vger.kernel.org>,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux <sparclinux@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        xen-devel@lists.xenproject.org
+Subject: Re: [PATCH v0 42/42] notifier: Return an error when callback is
+ already registered
+Message-ID: <YYlJQYLiIrhjwOmT@zn.tnic>
+References: <20211108101157.15189-1-bp@alien8.de>
+ <20211108101157.15189-43-bp@alien8.de>
+ <CAMuHMdWH+txiSP_d7Jc4f_bU8Lf9iWpT4E3o5o7BJr-YdA6-VA@mail.gmail.com>
+ <YYkyUEqcsOwQMb1S@zn.tnic>
+ <CAMuHMdXiBEQyEXJagSfpH44hxVA2t0sDH7B7YubLGHrb2MJLLA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 06/13] power: supply: bq25890: Add support for skipping
- initialization
-Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Yauhen Kharuzhy <jekhor@gmail.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>
-References: <20211030182813.116672-1-hdegoede@redhat.com>
- <20211030182813.116672-7-hdegoede@redhat.com>
- <CAHp75VeO60umiJTAbL+nR==4pP0KkKQQ71yFNdK2SAkJ0rRXug@mail.gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CAHp75VeO60umiJTAbL+nR==4pP0KkKQQ71yFNdK2SAkJ0rRXug@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdXiBEQyEXJagSfpH44hxVA2t0sDH7B7YubLGHrb2MJLLA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On Mon, Nov 08, 2021 at 04:25:47PM +0100, Geert Uytterhoeven wrote:
+> I'm not against returning proper errors codes.  I'm against forcing
+> callers to check things that cannot fail and to add individual error
+> printing to each and every caller.
 
-On 10/31/21 00:07, Andy Shevchenko wrote:
-> On Sat, Oct 30, 2021 at 9:28 PM Hans de Goede <hdegoede@redhat.com> wrote:
->>
->> On most X86/ACPI devices there is no devicetree to supply the necessary
->> init-data. Instead the firmware already fully initializes the bq25890
->> charger at boot.
->>
->> At support for a new "ti,skip-init" boolean property to support this.
->> So far this new property is only used on X86/ACPI (non devicetree) devs,
->> IOW it is not used in actual devicetree files. The devicetree-bindings
->> maintainers have requested properties like these to not be added to the
->> devicetree-bindings, so the new property is deliberately not added
->> to the existing devicetree-bindings.
-> 
-> With 'ti,' prefix it can be a potential collision in name space, for
-> internal properties I would rather use 'linux,' one.
+If you're against checking things at the callers, then the registration
+function should be void. IOW, those APIs are not optimally designed atm.
 
-Good point, changed for v2.
+> Note that in other areas, we are moving in the other direction,
+> to a centralized printing of error messages, cfr. e.g. commit
+> 7723f4c5ecdb8d83 ("driver core: platform: Add an error message to
+> platform_get_irq*()").
 
-> ...
-> 
->> +       init->write_cfg = !device_property_read_bool(bq->dev, "ti,skip-init");
->> +       if (!init->write_cfg)
->> +               return 0;
-> 
-> Why to have double negation here?
-> I would rather expect that you will have direct value in the structure
-> and do a respective check in the functions.
+Yes, thus my other idea to add a lower level __notifier_chain_register()
+to do the checking.
 
-Because in all places except this one we want to know if we need to
-write the cfg to the device, removing the double negation here would
-mean adding negation to a init->skip_init check in many places, so this
-is cleaner.
+I'll see if I can convert those notifier registration functions to
+return void, in the process. But let's see what the others think first.
 
-Regards,
+Thanks for taking the time.
 
-Hans
+-- 
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
