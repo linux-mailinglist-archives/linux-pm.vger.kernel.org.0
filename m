@@ -2,116 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 854C3449C82
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Nov 2021 20:41:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5F2B449D62
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Nov 2021 21:59:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235382AbhKHTcg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Nov 2021 14:32:36 -0500
-Received: from todd.t-8ch.de ([159.69.126.157]:34617 "EHLO todd.t-8ch.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230136AbhKHTcf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 8 Nov 2021 14:32:35 -0500
-From:   =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1636399787;
-        bh=lCoxgCkW+ya6kBvkFnYw9vuv4lbSkSjmPSR9jBoDfQI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=nN+ZeA1gAJzoEnRYXi/+Z8oLrL4em2OLEZ+jEL6wptusYpidOwyLH1XHJQu5bd9HR
-         22YE2eOhgerXevLMp3In7Q/ZuAFYTEWipWSPpHZHfyUB0wdm8q6NcY2Cpj0Urzr0Z4
-         d7EKmyiWOr9Dorh3tOGTz+WybkU20UwLSUF3/Weo=
-To:     linux-pm@vger.kernel.org
-Cc:     nicolopiazzalunga@gmail.com, linrunner@gmx.net,
-        platform-driver-x86@vger.kernel.org, smclt30p@gmail.com,
-        sre@kernel.org,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [RFC v2] standardized attributes for powersupply charge behaviour
-Date:   Mon,  8 Nov 2021 20:28:52 +0100
-Message-Id: <20211108192852.357473-1-linux@weissschuh.net>
-X-Mailer: git-send-email 2.33.1
+        id S238256AbhKHVCP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Nov 2021 16:02:15 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:56803 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S238240AbhKHVCN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Nov 2021 16:02:13 -0500
+Received: (qmail 1679175 invoked by uid 1000); 8 Nov 2021 15:59:26 -0500
+Date:   Mon, 8 Nov 2021 15:59:26 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ayush Sawal <ayush.sawal@chelsio.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rohit Maheshwari <rohitm@chelsio.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vinay Kumar Yadav <vinay.yadav@chelsio.com>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        intel-gvt-dev@lists.freedesktop.org,
+        alpha <linux-alpha@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-edac@vger.kernel.org,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        linux-hyperv@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-leds <linux-leds@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "open list:REMOTE PROCESSOR \(REMOTEPROC\) SUBSYSTEM" 
+        <linux-remoteproc@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        scsi <linux-scsi@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        linux-staging@lists.linux.dev,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        "open list:TENSILICA XTENSA PORT \(xtensa\)" 
+        <linux-xtensa@linux-xtensa.org>, netdev <netdev@vger.kernel.org>,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux <sparclinux@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        xen-devel@lists.xenproject.org
+Subject: Re: [PATCH v0 42/42] notifier: Return an error when callback is
+ already registered
+Message-ID: <20211108205926.GA1678880@rowland.harvard.edu>
+References: <20211108101157.15189-1-bp@alien8.de>
+ <20211108101157.15189-43-bp@alien8.de>
+ <CAMuHMdWH+txiSP_d7Jc4f_bU8Lf9iWpT4E3o5o7BJr-YdA6-VA@mail.gmail.com>
+ <YYkyUEqcsOwQMb1S@zn.tnic>
+ <CAMuHMdXiBEQyEXJagSfpH44hxVA2t0sDH7B7YubLGHrb2MJLLA@mail.gmail.com>
+ <YYlJQYLiIrhjwOmT@zn.tnic>
+ <CAMuHMdXHikGrmUzuq0WG5JRHUUE=5zsaVCTF+e4TiHpM5tc5kA@mail.gmail.com>
+ <YYlOmd0AeA8DSluD@zn.tnic>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YYlOmd0AeA8DSluD@zn.tnic>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This a revised version of
-"[RFC] add standardized attributes for force_discharge and inhibit_charge" [0],
-incorporating discussion results.
+On Mon, Nov 08, 2021 at 05:21:45PM +0100, Borislav Petkov wrote:
+> On Mon, Nov 08, 2021 at 05:12:16PM +0100, Geert Uytterhoeven wrote:
+> > Returning void is the other extreme ;-)
+> > 
+> > There are 3 levels (ignoring BUG_ON()/panic () inside the callee):
+> >   1. Return void: no one can check success or failure,
+> >   2. Return an error code: up to the caller to decide,
+> >   3. Return a __must_check error code: every caller must check.
+> > 
+> > I'm in favor of 2, as there are several places where it cannot fail.
+> 
+> Makes sense to me. I'll do that in the next iteration.
 
-The biggest change is the switch from two boolean attributes to a single
-enum attribute.
+Is there really any reason for returning an error code?  For example, is 
+it anticipated that at some point in the future these registration calls 
+might fail?
 
-[0] https://lore.kernel.org/platform-driver-x86/21569a89-8303-8573-05fb-c2fec29983d1@gmail.com/
----
- Documentation/ABI/testing/sysfs-class-power | 14 ++++++++++++++
- drivers/power/supply/power_supply_sysfs.c   |  1 +
- include/linux/power_supply.h                |  7 +++++++
- 3 files changed, 22 insertions(+)
+Currently, the only reason for failing to register a notifier callback 
+is because the callback is already registered.  In a sense this isn't 
+even an actual failure -- after the registration returns the callback 
+_will_ still be registered.
 
-diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
-index ca830c6cd809..2f58cfc91420 100644
---- a/Documentation/ABI/testing/sysfs-class-power
-+++ b/Documentation/ABI/testing/sysfs-class-power
-@@ -455,6 +455,20 @@ Description:
- 			      "Unknown", "Charging", "Discharging",
- 			      "Not charging", "Full"
- 
-+What:		/sys/class/power_supply/<supply_name>/charge_behaviour
-+Date:		November 2021
-+Contact:	linux-pm@vger.kernel.org
-+Description:
-+		Represents the charging behaviour.
-+
-+		Access: Read, Write
-+
-+		Valid values:
-+			================ ====================================
-+			auto:            Charge normally, respect thresholds
-+			inhibit-charge:  Do not charge while AC is attached
-+			force-discharge: Force discharge while AC is attached
-+
- What:		/sys/class/power_supply/<supply_name>/technology
- Date:		May 2007
- Contact:	linux-pm@vger.kernel.org
-diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-index c3d7cbcd4fad..26c60587dca1 100644
---- a/drivers/power/supply/power_supply_sysfs.c
-+++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -172,6 +172,7 @@ static struct power_supply_attr power_supply_attrs[] = {
- 	POWER_SUPPLY_ATTR(CHARGE_CONTROL_LIMIT_MAX),
- 	POWER_SUPPLY_ATTR(CHARGE_CONTROL_START_THRESHOLD),
- 	POWER_SUPPLY_ATTR(CHARGE_CONTROL_END_THRESHOLD),
-+	POWER_SUPPLY_ENUM_ATTR(CHARGE_BEHAVIOUR),
- 	POWER_SUPPLY_ATTR(INPUT_CURRENT_LIMIT),
- 	POWER_SUPPLY_ATTR(INPUT_VOLTAGE_LIMIT),
- 	POWER_SUPPLY_ATTR(INPUT_POWER_LIMIT),
-diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index 9ca1f120a211..70c333e86293 100644
---- a/include/linux/power_supply.h
-+++ b/include/linux/power_supply.h
-@@ -132,6 +132,7 @@ enum power_supply_property {
- 	POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX,
- 	POWER_SUPPLY_PROP_CHARGE_CONTROL_START_THRESHOLD, /* in percents! */
- 	POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD, /* in percents! */
-+	POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR,
- 	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
- 	POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT,
- 	POWER_SUPPLY_PROP_INPUT_POWER_LIMIT,
-@@ -202,6 +203,12 @@ enum power_supply_usb_type {
- 	POWER_SUPPLY_USB_TYPE_APPLE_BRICK_ID,	/* Apple Charging Method */
- };
- 
-+enum power_supply_charge_behaviour {
-+	POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO = 0,
-+	POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE,
-+	POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE,
-+};
-+
- enum power_supply_notifier_events {
- 	PSY_EVENT_PROP_CHANGED,
- };
+So if the call can never really fail, why bother with a return code?  
+Especially since the caller can't do anything with such a code value.
 
-base-commit: 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f
--- 
-2.33.1
+Given the current state of affairs, I vote in favor of 1 (plus a WARN or 
+something similar to generate a stack dump in the callee, since double 
+registration really is a bug).
 
+Alan Stern
