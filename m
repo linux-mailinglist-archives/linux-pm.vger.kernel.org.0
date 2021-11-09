@@ -2,139 +2,177 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C21E44A3F3
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Nov 2021 02:30:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9ADD44A4C5
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Nov 2021 03:28:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242784AbhKIBcn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Nov 2021 20:32:43 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53836 "EHLO mail.kernel.org"
+        id S235413AbhKICay (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Nov 2021 21:30:54 -0500
+Received: from mga03.intel.com ([134.134.136.65]:16061 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242065AbhKIBZi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 8 Nov 2021 20:25:38 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7B8D661B42;
-        Tue,  9 Nov 2021 01:10:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636420203;
-        bh=yxZ8DWROdtslFqaIGRTjCIqXJ2qjzCM3qNLAPHmQ/QA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZrnLk32WWvyvtSm/fWqZ7pSS1jn9tPJC9Z6mxp6ARvFnXkOg7aPeSkGTLb9RS4Tct
-         f4suW+6PRn+tEM7cxNycKFP9QAHbxPBgYwZNg/twQUhsO7f0nVnPzwS6RqyHHw+HyP
-         khHgQEyga79mzyOUp9GKYXCtJes0dgmlZe5LGeHIsbUtTwdN+/qTB9j/VFm6ysszhm
-         t1oOxpTV04fV1ejKHYVfGdKJEAoCmjbQocE/K9uWQfhX2FTEzY4XdAP3097rMAl1hn
-         VNELJclWxkGof1ay9Bcyai/8OB0BSRjChYrvxdk4UZoRdgswzUdYdSnP4iRuw9DTqn
-         q1N2FdbnZVHZw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ye Bin <yebin10@huawei.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Sasha Levin <sashal@kernel.org>, rafael@kernel.org,
-        len.brown@intel.com, pavel@ucw.cz, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 24/30] PM: hibernate: Get block device exclusively in swsusp_check()
-Date:   Mon,  8 Nov 2021 20:09:12 -0500
-Message-Id: <20211109010918.1192063-24-sashal@kernel.org>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211109010918.1192063-1-sashal@kernel.org>
-References: <20211109010918.1192063-1-sashal@kernel.org>
+        id S229999AbhKICav (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 8 Nov 2021 21:30:51 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10162"; a="232311894"
+X-IronPort-AV: E=Sophos;i="5.87,219,1631602800"; 
+   d="scan'208";a="232311894"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2021 18:27:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,219,1631602800"; 
+   d="scan'208";a="451708892"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by orsmga006.jf.intel.com with ESMTP; 08 Nov 2021 18:26:59 -0800
+Date:   Mon, 8 Nov 2021 18:26:13 -0800
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org, x86@kernel.org,
+        linux-doc@vger.kernel.org, Len Brown <len.brown@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/7] thermal: intel: hfi: Enable notification interrupt
+Message-ID: <20211109022613.GA16930@ranerica-svr.sc.intel.com>
+References: <20211106013312.26698-1-ricardo.neri-calderon@linux.intel.com>
+ <20211106013312.26698-6-ricardo.neri-calderon@linux.intel.com>
+ <YYjo3Jx6JosHhoHM@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YYjo3Jx6JosHhoHM@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Ye Bin <yebin10@huawei.com>
+On Mon, Nov 08, 2021 at 10:07:40AM +0100, Peter Zijlstra wrote:
+> On Fri, Nov 05, 2021 at 06:33:10PM -0700, Ricardo Neri wrote:
+> 
+> > @@ -72,6 +78,9 @@ struct hfi_instance {
+> >  	u16			die_id;
+> >  	struct cpumask		*cpus;
+> >  	void			*hw_table;
+> > +	struct delayed_work	update_work;
+> > +	raw_spinlock_t		event_lock;
+>   +	raw_spinlock_t		interrupt_lock;
 
-[ Upstream commit 39fbef4b0f77f9c89c8f014749ca533643a37c9f ]
+Thank you very much for your feedback Peter!
 
-The following kernel crash can be triggered:
+I would like to confirm that I understand your feedback correctly: you are
+suggesting to use to spinlocks...
 
-[   89.266592] ------------[ cut here ]------------
-[   89.267427] kernel BUG at fs/buffer.c:3020!
-[   89.268264] invalid opcode: 0000 [#1] SMP KASAN PTI
-[   89.269116] CPU: 7 PID: 1750 Comm: kmmpd-loop0 Not tainted 5.10.0-862.14.0.6.x86_64-08610-gc932cda3cef4-dirty #20
-[   89.273169] RIP: 0010:submit_bh_wbc.isra.0+0x538/0x6d0
-[   89.277157] RSP: 0018:ffff888105ddfd08 EFLAGS: 00010246
-[   89.278093] RAX: 0000000000000005 RBX: ffff888124231498 RCX: ffffffffb2772612
-[   89.279332] RDX: 1ffff11024846293 RSI: 0000000000000008 RDI: ffff888124231498
-[   89.280591] RBP: ffff8881248cc000 R08: 0000000000000001 R09: ffffed1024846294
-[   89.281851] R10: ffff88812423149f R11: ffffed1024846293 R12: 0000000000003800
-[   89.283095] R13: 0000000000000001 R14: 0000000000000000 R15: ffff8881161f7000
-[   89.284342] FS:  0000000000000000(0000) GS:ffff88839b5c0000(0000) knlGS:0000000000000000
-[   89.285711] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   89.286701] CR2: 00007f166ebc01a0 CR3: 0000000435c0e000 CR4: 00000000000006e0
-[   89.287919] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[   89.289138] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[   89.290368] Call Trace:
-[   89.290842]  write_mmp_block+0x2ca/0x510
-[   89.292218]  kmmpd+0x433/0x9a0
-[   89.294902]  kthread+0x2dd/0x3e0
-[   89.296268]  ret_from_fork+0x22/0x30
-[   89.296906] Modules linked in:
 
-by running the following commands:
+> > +	u64			timestamp;
+> >  	bool			initialized;
+> >  };
+> >  
+> > @@ -114,6 +123,75 @@ static struct hfi_instance *hfi_instances;
+> >  static struct hfi_features hfi_features;
+> >  static DEFINE_MUTEX(hfi_lock);
+> >  
+> > +#define HFI_UPDATE_INTERVAL	HZ
+> > +
+> > +static void hfi_update_work_fn(struct work_struct *work)
+> > +{
+> > +	struct hfi_instance *hfi_instance;
+> > +
+> > +	hfi_instance = container_of(to_delayed_work(work), struct hfi_instance,
+> > +				    update_work);
+> > +	if (!hfi_instance)
+> > +		return;
+> > +
+> > +	/* TODO: Consume update here. */
+> 
+> 	// this here uses ->event_lock to serialize against the
+> 	// interrupt below changing the data...
 
- 1. mkfs.ext4 -O mmp  /dev/sda -b 1024
- 2. mount /dev/sda /home/test
- 3. echo "/dev/sda" > /sys/power/resume
+Anyone reading the HFI table would need to take ->event_lock.
 
-That happens because swsusp_check() calls set_blocksize() on the
-target partition which confuses the file system:
+> 
+> > +}
+> > +
+> > +void intel_hfi_process_event(__u64 pkg_therm_status_msr_val)
+> > +{
+> > +	struct hfi_instance *hfi_instance;
+> > +	int cpu = smp_processor_id();
+> > +	struct hfi_cpu_info *info;
+> > +	unsigned long flags;
+> > +	u64 timestamp;
+> > +
+> > +	if (!pkg_therm_status_msr_val)
+> > +		return;
+> > +
+> > +	info = &per_cpu(hfi_cpu_info, cpu);
+> > +	if (!info)
+> > +		return;
+> > +
+> > +	/*
+> > +	 * It is possible that we get an HFI thermal interrupt on this CPU
+> > +	 * before its HFI instance is initialized. This is not a problem. The
+> > +	 * CPU that enabled the interrupt for this package will also get the
+> > +	 * interrupt and is fully initialized.
+> > +	 */
+> > +	hfi_instance = info->hfi_instance;
+> > +	if (!hfi_instance)
+> > +		return;
+> > +
+> 
+> 	/*
+> 	 * If someone is already handling the interrupt, we shouldn't be
+> 	 * burning time waiting for them to then do more nothing.
+> 	 */
+> 	if (!raw_spin_trylock(&hfi_instance->interrupt_lock))
+> 		return;
+> 
+> 
+> > +	raw_spin_lock_irqsave(&hfi_instance->event_lock, flags);
 
-       Thread1                       Thread2
-mount /dev/sda /home/test
-get s_mmp_bh  --> has mapped flag
-start kmmpd thread
-				echo "/dev/sda" > /sys/power/resume
-				  resume_store
-				    software_resume
-				      swsusp_check
-				        set_blocksize
-					  truncate_inode_pages_range
-					    truncate_cleanup_page
-					      block_invalidatepage
-					        discard_buffer --> clean mapped flag
-write_mmp_block
-  submit_bh
-    submit_bh_wbc
-      BUG_ON(!buffer_mapped(bh))
+The CPU who acquired ->interrupt_lock successfully now will acquire
+->event_lock to serialize writes and reads to the HFI table.
 
-To address this issue, modify swsusp_check() to open the target block
-device with exclusive access.
+> > +
+> > +	/*
+> > +	 * On most systems, all CPUs in the package receive a package-level
+> > +	 * thermal interrupt when there is an HFI update. Since they all are
+> > +	 * dealing with the same update (as indicated by the update timestamp),
+> > +	 * it is sufficient to let a single CPU to acknowledge the update and
+> > +	 * schedule work to process it.
+> > +	 */
+> > +	timestamp = *(u64 *)hfi_instance->hw_table;
+> > +	if (hfi_instance->timestamp >= timestamp)
+> > +		goto unlock_spinlock;
+> 
+> This can go the way of the dodo.
 
-Signed-off-by: Ye Bin <yebin10@huawei.com>
-[ rjw: Subject and changelog edits ]
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- kernel/power/swap.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+(I guess I can still check the timestamp in case buggy firmware triggers
+updates with the same timestamp, right?)
 
-diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-index 160e1006640d5..a7630e7b22a5d 100644
---- a/kernel/power/swap.c
-+++ b/kernel/power/swap.c
-@@ -1519,9 +1519,10 @@ int swsusp_read(unsigned int *flags_p)
- int swsusp_check(void)
- {
- 	int error;
-+	void *holder;
- 
- 	hib_resume_bdev = blkdev_get_by_dev(swsusp_resume_device,
--					    FMODE_READ, NULL);
-+					    FMODE_READ | FMODE_EXCL, &holder);
- 	if (!IS_ERR(hib_resume_bdev)) {
- 		set_blocksize(hib_resume_bdev, PAGE_SIZE);
- 		clear_page(swsusp_header);
-@@ -1541,7 +1542,7 @@ int swsusp_check(void)
- 
- put:
- 		if (error)
--			blkdev_put(hib_resume_bdev, FMODE_READ);
-+			blkdev_put(hib_resume_bdev, FMODE_READ | FMODE_EXCL);
- 		else
- 			pr_debug("PM: Image signature found, resuming\n");
- 	} else {
--- 
-2.33.0
+> 
+> > +
+> > +	hfi_instance->timestamp = timestamp;
+> > +
+> > +	memcpy(hfi_instance->table_base, hfi_instance->hw_table,
+> > +	       hfi_features.nr_table_pages << PAGE_SHIFT);
+> > +	/*
+> > +	 * Let hardware and other CPUs know that we are done reading the HFI
+> > +	 * table and it is free to update it again.
+> > +	 */
+> > +	pkg_therm_status_msr_val &= THERM_STATUS_CLEAR_PKG_MASK &
+> > +				    ~PACKAGE_THERM_STATUS_HFI_UPDATED;
+> > +	wrmsrl(MSR_IA32_PACKAGE_THERM_STATUS, pkg_therm_status_msr_val);
+> > +	schedule_delayed_work(&hfi_instance->update_work, HFI_UPDATE_INTERVAL);
+> > +
+> > +unlock_spinlock:
+> > +	raw_spin_unlock_irqrestore(&hfi_instance->event_lock, flags);
+> 
+> 	raw_spin_unlock(&hfi_instance->interrupt_lock);
 
+... and here we release both locks.
+
+Thanks and BR,
+Ricardo
