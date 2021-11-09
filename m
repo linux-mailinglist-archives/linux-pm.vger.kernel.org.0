@@ -2,153 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA4ED44B285
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Nov 2021 19:12:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81F2444B28B
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Nov 2021 19:13:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241988AbhKISPN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Nov 2021 13:15:13 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54066 "EHLO mail.kernel.org"
+        id S242099AbhKISQ0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Nov 2021 13:16:26 -0500
+Received: from foss.arm.com ([217.140.110.172]:37040 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239343AbhKISPM (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 9 Nov 2021 13:15:12 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4ACE66103B;
-        Tue,  9 Nov 2021 18:12:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636481546;
-        bh=qY25I7fjZMOYZn2NSK8mq84doxGOsT1XF+bdhnAcJF0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=BVAhKhtNsLij8UqnA9iWAzdKcQSpglPD7JYYjxjXuYOfdKQDNFR5IRtPTB3Ae9pNC
-         vroMCTsaqB9yNdkq4hM5x1ElTVtNNt+AuwYuqA6oToOu514R1oSvHjO1aXvuMvXVtq
-         cGDkEcahX759oZMCXhyraOW+m5IEyaYsa7E1KhWfEFrPre6jd/GtsY0UuCgxn8UJKx
-         y20ci8ba2qyfPXjArPG/OT99QWchgxACoQnRa0w/fYeS/VGqmUrFUUiZCtlPS98YH+
-         r29nCpn7X8Mb4aXTsNeaRONJIVEo4Eb/zrj7yhVGAjWFjprh9H1rZdzFv5S2KnnTL9
-         gWzsVj9vL9osA==
-Date:   Tue, 9 Nov 2021 12:12:24 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Robert =?utf-8?B?xZp3acSZY2tp?= <robert@swiecki.net>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] pci: Don't call resume callback for nearly bound devices
-Message-ID: <20211109181224.GA1162053@bhelgaas>
+        id S239343AbhKISQZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 9 Nov 2021 13:16:25 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 468DEED1;
+        Tue,  9 Nov 2021 10:13:39 -0800 (PST)
+Received: from [10.57.26.224] (unknown [10.57.26.224])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3CB763F7F5;
+        Tue,  9 Nov 2021 10:13:35 -0800 (PST)
+Subject: Re: [PATCH v3 0/5] Refactor thermal pressure update to avoid code
+ duplication
+From:   Lukasz Luba <lukasz.luba@arm.com>
+To:     Steev Klimaszewski <steev@kali.org>
+Cc:     Thara Gopinath <thara.gopinath@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, sudeep.holla@arm.com,
+        will@kernel.org, catalin.marinas@arm.com, linux@armlinux.org.uk,
+        gregkh@linuxfoundation.org, rafael@kernel.org,
+        viresh.kumar@linaro.org, amitk@kernel.org,
+        daniel.lezcano@linaro.org, amit.kachhap@gmail.com,
+        bjorn.andersson@linaro.org, agross@kernel.org
+References: <20211103161020.26714-1-lukasz.luba@arm.com>
+ <c7b526f0-2c26-0cfc-910b-3521c6a6ef51@kali.org>
+ <3cba148a-7077-7b6b-f131-dc65045aa348@arm.com>
+ <9d533b6e-a81c-e823-fa6f-61fdea92fa65@kali.org>
+ <74ea027b-b213-42b8-0f7d-275f3b84712e@linaro.org>
+ <74603569-2ff1-999e-9618-79261fdb0ee4@kali.org>
+ <b7e76c2a-ceac-500a-ff75-535a3f0d51d6@linaro.org>
+ <f955a2aa-f788-00db-1ed8-dc9c7a1b2572@kali.org>
+ <59054c90-c1cd-85bf-406e-579df668d7b4@linaro.org>
+ <eac00041-a1b8-0780-931d-52249d538800@kali.org>
+ <2c54dbbd-2ecb-fb76-fa9f-9752f429c20e@linaro.org>
+ <97e93876-d654-0a89-dce1-6fe1189345e2@kali.org>
+ <d83a5c25-2eae-3626-f78a-e42915076556@arm.com>
+ <ac3f1771-0516-48dd-ee4d-5752e0433472@kali.org>
+ <19ecab72-4a2f-1f4a-b999-d3967a4a1a76@arm.com>
+Message-ID: <676d79ca-ae2e-f5fa-1e54-253efd6934d4@arm.com>
+Date:   Tue, 9 Nov 2021 18:13:33 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+In-Reply-To: <19ecab72-4a2f-1f4a-b999-d3967a4a1a76@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0hEKO-RFBzkBU+orcM68shODd-qjiuxaYGxhvh2b=NDXA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Nov 09, 2021 at 06:18:18PM +0100, Rafael J. Wysocki wrote:
-> On Tue, Nov 9, 2021 at 7:59 AM Uwe Kleine-König
-> <u.kleine-koenig@pengutronix.de> wrote:
-> > On Mon, Nov 08, 2021 at 08:56:19PM -0600, Bjorn Helgaas wrote:
-> > > [+cc Greg: new device_is_bound() use]
-> >
-> > ack, that's what I would have suggested now, too.
-> >
-> > > On Mon, Nov 08, 2021 at 10:22:26PM +0100, Uwe Kleine-König wrote:
-> > > > pci_pm_runtime_resume() exits early when the device to resume isn't
-> > > > bound yet:
-> > > >
-> > > >     if (!to_pci_driver(dev->driver))
-> > > >             return 0;
-> > > >
-> > > > This however isn't true when the device currently probes and
-> > > > local_pci_probe() calls pm_runtime_get_sync() because then the driver
-> > > > core already setup dev->driver. As a result the driver's resume callback
-> > > > is called before the driver's probe function is called and so more often
-> > > > than not required driver data isn't setup yet.
-> > > >
-> > > > So replace the check for the device being unbound by a check that only
-> > > > becomes true after .probe() succeeded.
-> > >
-> > > I like the fact that this patch is short and simple.
-> > >
-> > > But there are 30+ users of to_pci_driver().  This patch asserts that
-> > > *one* of them, pci_pm_runtime_resume(), is special and needs to test
-> > > device_is_bound() instead of using to_pci_driver().
-> >
-> > Maybe for the other locations using device_is_bound(&pdev->dev) instead
-> > of to_pci_driver(pdev) != NULL would be nice, too?
-> >
-> > I have another doubt: device_is_bound() should (according to its
-> > kernel-doc) be called with the device lock held. For the call stack that
-> > is (maybe) fixed here, the lock is held (by __device_attach). We
-> > probably should check if the lock is also held for the other calls of
-> > pci_pm_runtime_resume().
-> >
-> > Hmm, the device lock is a mutex, the pm functions might be called in
-> > atomic context, right?
-> >
-> > > It's special because the current PM implementation calls it via
-> > > pm_runtime_get_sync() before the driver's .probe() method.  That
-> > > connection is a little bit obscure and fragile.  What if the PM
-> > > implementation changes?
-> >
-> > Maybe a saver bet would be to not use pm_runtime_get_sync() in
-> > local_pci_probe()?
+
+
+On 11/9/21 4:22 PM, Lukasz Luba wrote:
 > 
-> Yes, in principle it might be replaced with pm_runtime_get_noresume().
 > 
-> In theory, that may be problematic if a device is put into a low-power
-> state on remove and then the driver is bound again to it.
+> On 11/9/21 3:46 PM, Steev Klimaszewski wrote:
+>>
+>> On 11/9/21 2:29 AM, Lukasz Luba wrote:
+>>> Hi Steev,
+>>>
+>>> That's interesting what you've done with Rockchip RK3399.
+>>> I would like to reproduce your experiment on my RockPI 4B v1.3.
+>>> Could you tell me how you to add this boost frequency that you have
+>>> mentioned in some previous emails?
+>>>
+>>> I want to have similar setup to yours and I'll check all the subsystems
+>>> involved in the decision making process for triggering this boost freq.
+>>>
+>>> Thank you for your support.
+>>>
+>>> Regards,
+>>> Lukasz
+>>
+>>
+>> Hi Lukasz,
+>>
+>> It was actually something that Armbian had been doing as an overlay 
+>> for their setup, and I thought, why does it need to be an overlay, 
+>> when we could simply hide it behind turbo-mode so that if users want 
+>> to overclock, they simply echo 1 and if it's unstable or cooling/power 
+>> isn't enough, they can echo 0 or leave it off (boost defaults to off) 
+>> - so that being said:
+>>
+>> I apply this patch 
+>> https://gitlab.com/kalilinux/build-scripts/kali-arm/-/blob/master/patches/pinebook-pro/pbp-5.14/rk3399-opp-overclock-2GHz-turbo-mode.patch 
+>> which adds the 1.5GHz for little cores and 2GHz for the big to the 
+>> rk3399 dtsi
+>>
+>> To enable at boot time, I simply have "echo 1 > 
+>> /sys/devices/system/cpu/cpufreq/boost" in my /etc/rc.localÂ  And to 
+>> disable, simply echo 0 in there (it defaults to 0 so it's off and most 
+>> users won't know it exists.)
+>>
+>> I'm pretty sure this is "abusing" turbo-mode, but it works well enough...
+>>
+>> Hope that helps,
+>>
 > 
-> > I wonder if the same problem exists on remove, i.e. pci_device_remove()
-> > calls pm_runtime_put_sync() after the driver's .remove() callback was
-> > called.
+> Yes, that help. Thank you for the info.
+> I'll play a bit with this boosting and try to figure out
+> the mechanisms.
 > 
-> If it is called after ->remove() and before clearing the device's
-> driver pointer, then yes.
+> For the $subject patch set, I'm going to send v4, since
+> it's not affecting the boost usage. The newly introduced
+> interface must handle these boost frequency values and not
+> simply ignore them with also printing a warning.
+> They are valid frequencies and we should just put 0 to
+> the thermal pressure in such cases.
+> 
 
-Yes, that is the case:
+I think I have figure out what is going on with the issue that
+you've reported. On this rockchip platform you are probably using
+step-wise thermal governor, which tries to decrease/increase
+max allowed frequency step-by-step walking through the sorted
+frequencies. So it would always set the thermal pressure to 0
+when the thermal throttling is gone.
+On the Qcom platform there is a different policy in HW/FW which
+controls thermal and it can simple remove clamping 'instantly'
+and allow all frequencies also the boost one. The highest possible
+frequency is passed then to the this thermal pressure machinery.
+So we see the warning that the boost frequency value is trying to
+be passed to this arch_update_thermal_pressure(), but we ignore
+such big frequency value and unfortunately do not clean the previously
+set thermal pressure. Then the scheduler still sees the reduced
+capacity on that CPU and cannot request higher frequencies.
 
-  pci_device_remove
-    if (drv->remove) {
-      pm_runtime_get_sync
-      drv->remove()                # <-- driver ->remove() method
-      pm_runtime_put_noidle
-    }
-    ...
-    pm_runtime_put_sync            # <-- after ->remove()
+The v4 patch would allow to pass the boost frequencies values, so
+the issue would be solved.
 
-So pm_runtime_put_sync() is called after drv->remove(), and it may
-call drv->pm->runtime_idle().  I think the driver may not expect this.
-
-> If this is turned into pm_runtime_put_noidle(), all should work.
-
-pci_device_remove() already calls pm_runtime_put_noidle() immediately
-after calling the driver ->remove() method.
-
-Are you saying we should do this, which means pci_device_remove()
-would call pm_runtime_put_noidle() twice?
-
-diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
-index 1d98c974381c..79c1a920fdc8 100644
---- a/drivers/pci/pci-driver.c
-+++ b/drivers/pci/pci-driver.c
-@@ -318,7 +318,7 @@ static long local_pci_probe(void *_ddi)
- 	 * count, in its probe routine and pm_runtime_get_noresume() in
- 	 * its remove routine.
- 	 */
--	pm_runtime_get_sync(dev);
-+	pm_runtime_get_noresume(dev);
- 	rc = pci_drv->probe(pci_dev, ddi->id);
- 	if (!rc)
- 		return rc;
-@@ -465,7 +465,7 @@ static void pci_device_remove(struct device *dev)
- 	pci_iov_remove(pci_dev);
- 
- 	/* Undo the runtime PM settings in local_pci_probe() */
--	pm_runtime_put_sync(dev);
-+	pm_runtime_put_noidle(dev);
- 
- 	/*
- 	 * If the device is still on, set the power state as "unknown",
+Regards,
+Lukasz
