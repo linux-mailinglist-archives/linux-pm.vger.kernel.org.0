@@ -2,39 +2,39 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE03044A383
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Nov 2021 02:25:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C21E44A3F3
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Nov 2021 02:30:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235882AbhKIB1Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Nov 2021 20:27:25 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50180 "EHLO mail.kernel.org"
+        id S242784AbhKIBcn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Nov 2021 20:32:43 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53836 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243457AbhKIBXT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 8 Nov 2021 20:23:19 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5381461B2E;
-        Tue,  9 Nov 2021 01:08:57 +0000 (UTC)
+        id S242065AbhKIBZi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 8 Nov 2021 20:25:38 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7B8D661B42;
+        Tue,  9 Nov 2021 01:10:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636420138;
-        bh=/o4bodOKSn+6e4VwJRg9x2mihnkrRjcNTIz6gUkm5xg=;
+        s=k20201202; t=1636420203;
+        bh=yxZ8DWROdtslFqaIGRTjCIqXJ2qjzCM3qNLAPHmQ/QA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jicfBQTtuKWYvEPAxwpuvcGCjKOZuNDUWVne02XKkz0qvO/SDHyS+a890lGcX6cRt
-         m+JTAUUHE1JIc/ggbiQQ7kIwan8tYMfHmMvA8F5+zhb3lsmA0lRE0MWWU0fSCX+Wgg
-         RtGbjMwDG8oHicvjDosFbiLkThA/y5c8NpThCDnicoyqOMVSTNCywcYfKGO/Id94Ni
-         58KYD/fzrJZZZqWkZLjz1D5Eb0OO1f1XXHbQyAsW0Ack6FnfyGMoPfbx1fDj/MduPI
-         BoXgAJYBD7ZiT7x03ZH9Y3URaZs6c3tLFAZITXUCH3CReCugc3pfCl18CZIUq9pnFo
-         GjG8CPXCHNxCg==
+        b=ZrnLk32WWvyvtSm/fWqZ7pSS1jn9tPJC9Z6mxp6ARvFnXkOg7aPeSkGTLb9RS4Tct
+         f4suW+6PRn+tEM7cxNycKFP9QAHbxPBgYwZNg/twQUhsO7f0nVnPzwS6RqyHHw+HyP
+         khHgQEyga79mzyOUp9GKYXCtJes0dgmlZe5LGeHIsbUtTwdN+/qTB9j/VFm6ysszhm
+         t1oOxpTV04fV1ejKHYVfGdKJEAoCmjbQocE/K9uWQfhX2FTEzY4XdAP3097rMAl1hn
+         VNELJclWxkGof1ay9Bcyai/8OB0BSRjChYrvxdk4UZoRdgswzUdYdSnP4iRuw9DTqn
+         q1N2FdbnZVHZw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Ye Bin <yebin10@huawei.com>,
         "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>, rafael@kernel.org,
         len.brown@intel.com, pavel@ucw.cz, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 26/33] PM: hibernate: Get block device exclusively in swsusp_check()
-Date:   Mon,  8 Nov 2021 20:08:00 -0500
-Message-Id: <20211109010807.1191567-26-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 24/30] PM: hibernate: Get block device exclusively in swsusp_check()
+Date:   Mon,  8 Nov 2021 20:09:12 -0500
+Message-Id: <20211109010918.1192063-24-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211109010807.1191567-1-sashal@kernel.org>
-References: <20211109010807.1191567-1-sashal@kernel.org>
+In-Reply-To: <20211109010918.1192063-1-sashal@kernel.org>
+References: <20211109010918.1192063-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -111,10 +111,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-index a3b1e617bcdc3..8009cd308fcc6 100644
+index 160e1006640d5..a7630e7b22a5d 100644
 --- a/kernel/power/swap.c
 +++ b/kernel/power/swap.c
-@@ -1528,9 +1528,10 @@ int swsusp_read(unsigned int *flags_p)
+@@ -1519,9 +1519,10 @@ int swsusp_read(unsigned int *flags_p)
  int swsusp_check(void)
  {
  	int error;
@@ -126,7 +126,7 @@ index a3b1e617bcdc3..8009cd308fcc6 100644
  	if (!IS_ERR(hib_resume_bdev)) {
  		set_blocksize(hib_resume_bdev, PAGE_SIZE);
  		clear_page(swsusp_header);
-@@ -1552,7 +1553,7 @@ int swsusp_check(void)
+@@ -1541,7 +1542,7 @@ int swsusp_check(void)
  
  put:
  		if (error)
