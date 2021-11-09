@@ -2,253 +2,312 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5090344B3B2
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Nov 2021 21:05:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67C8944B3CC
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Nov 2021 21:13:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244132AbhKIUIG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Nov 2021 15:08:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39012 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244130AbhKIUIG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 9 Nov 2021 15:08:06 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E332461057;
-        Tue,  9 Nov 2021 20:05:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636488320;
-        bh=pAYP5FsfQrBCb1kV+iD+1m630Cp0TkRt5IHiAykV0/I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=DWdHh7mPShwm0JICakWt13I1cDfFoxveS1bjg+BF/4rAKVtk9zKEQ/XGkPYBzzr6g
-         heqCNVM7Zxq0s7fZCpQ5ZTCHR7k9CpbXjB9CVosnh1d35ZJy1KIJ3sAPSCN1dhOoDj
-         1i68IcAvyVK5MpP0VRCOreAoZZEjoHrhsKPoHFRf+6ab3cewM7ADoZy846v2c054nT
-         EgMYVaGaXhJceh5pvBLlU7cHN2owuanFd8gUrGw9pci7JMXzpLjHPn3n8TN/fngWVg
-         KOp8rkKfcPJcVPagfjYrYMksMDFz/b+n4yZTsjx6pVKUHzKkFgJABKKkvrUE3E8Mo3
-         QqIPioqLJ6Upw==
-Date:   Tue, 9 Nov 2021 14:05:18 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Robert =?utf-8?B?xZp3acSZY2tp?= <robert@swiecki.net>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] pci: Don't call resume callback for nearly bound devices
-Message-ID: <20211109200518.GA1176309@bhelgaas>
+        id S243455AbhKIUQV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Nov 2021 15:16:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50778 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242293AbhKIUQU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Nov 2021 15:16:20 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29015C061764
+        for <linux-pm@vger.kernel.org>; Tue,  9 Nov 2021 12:13:34 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id y26so274497lfa.11
+        for <linux-pm@vger.kernel.org>; Tue, 09 Nov 2021 12:13:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7pRWCZ99Mi7/Mxt+pEB79FDNgdzTJ2JwhaR9dhhhkOI=;
+        b=mue0RU/8W/Mp+ZVdMtCyZOGfvu9abmqh4YIBFTatH+jxKq7R3sHFZiUBSbd176e+/O
+         21LYc6wuBUAt121skAfN75CJMyZIakkN9hZMAbCmv0CHuaqeVrWKGtBGSGIBbGVFvvSk
+         6mm5AMTuBQkRBn99QbWOcHsO408ohJQEiQiRQAIR3XDTLh8852k3W8xHoWCgrEm0Rg37
+         6rAG2HGfLI5AE5pfTu2TNnhBi9hxo0QWjXQgr4aaWUR5912YC76ixuUQNkNJIjXmQQvH
+         Gv9kl6gl6RDlLlretDmcge5KLVw9hddzut9ayWEAQXvKb6b372hUbz8QjyuKsu1Mnoee
+         MGVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7pRWCZ99Mi7/Mxt+pEB79FDNgdzTJ2JwhaR9dhhhkOI=;
+        b=A9cdptm/OoCKkLLKjTPg4R9gAMEnDIB7D5XTBXfzIbq6hszrm1NDmgfPxYKLG+TXtV
+         SDAEBoKFO7cHStjYkqpbbrVjl7wUVon7CZwGW9oCBDDTQ7gwKnC+88riS7l/UbvhKI9b
+         E7S4JO/n8IiSqrK2WB1b/e+qLKCa3RHBOb5gY5zfPaV4UPBiuTw7tqo5vFeMqyg9xK2z
+         cnkaB+S2y8qKl79k2gjZzCWjSV76vhxPBnBgtj955ngM9fRdN9RfxVUmof4kdhEOhNr8
+         uj5Ev68tCDTnH90Ar1vdP/T1tGe7jleX7kRcpUWnOJzMj2WUxZT1DLqnHRo8zAqtxTPI
+         OPTw==
+X-Gm-Message-State: AOAM5337jRoIv5iwLjiQHztyXWXtLXwgUkr/ODupW6DosCVKh90XmVSK
+        GEoTT+9hcpvGXyHwlzZ2ieqMkQ==
+X-Google-Smtp-Source: ABdhPJzosR5+zc7zPBSpmli0vIGs4FRr5n5Fkks87vAy2PuJ0b2RQ6+nnpwyMqZjuF/VlisNobAF/A==
+X-Received: by 2002:a05:6512:3591:: with SMTP id m17mr9187386lfr.197.1636488812267;
+        Tue, 09 Nov 2021 12:13:32 -0800 (PST)
+Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
+        by smtp.gmail.com with ESMTPSA id i1sm2228040lfr.287.2021.11.09.12.13.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Nov 2021 12:13:31 -0800 (PST)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH v2] power: supply: core: Add kerneldoc to battery struct
+Date:   Tue,  9 Nov 2021 21:11:27 +0100
+Message-Id: <20211109201127.1256200-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0impb8uscbp8LUTBMExfMoGz=cPrTWhSGh0GF_SANNKPQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Nov 09, 2021 at 07:58:47PM +0100, Rafael J. Wysocki wrote:
-> On Tue, Nov 9, 2021 at 7:52 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > On Tue, Nov 9, 2021 at 7:12 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > On Tue, Nov 09, 2021 at 06:18:18PM +0100, Rafael J. Wysocki wrote:
-> > > > On Tue, Nov 9, 2021 at 7:59 AM Uwe Kleine-König
-> > > > <u.kleine-koenig@pengutronix.de> wrote:
-> > > > > On Mon, Nov 08, 2021 at 08:56:19PM -0600, Bjorn Helgaas wrote:
-> > > > > > [+cc Greg: new device_is_bound() use]
-> > > > >
-> > > > > ack, that's what I would have suggested now, too.
-> > > > >
-> > > > > > On Mon, Nov 08, 2021 at 10:22:26PM +0100, Uwe Kleine-König wrote:
-> > > > > > > pci_pm_runtime_resume() exits early when the device to resume isn't
-> > > > > > > bound yet:
-> > > > > > >
-> > > > > > >     if (!to_pci_driver(dev->driver))
-> > > > > > >             return 0;
-> > > > > > >
-> > > > > > > This however isn't true when the device currently probes and
-> > > > > > > local_pci_probe() calls pm_runtime_get_sync() because then the driver
-> > > > > > > core already setup dev->driver. As a result the driver's resume callback
-> > > > > > > is called before the driver's probe function is called and so more often
-> > > > > > > than not required driver data isn't setup yet.
-> > > > > > >
-> > > > > > > So replace the check for the device being unbound by a check that only
-> > > > > > > becomes true after .probe() succeeded.
-> > > > > >
-> > > > > > I like the fact that this patch is short and simple.
-> > > > > >
-> > > > > > But there are 30+ users of to_pci_driver().  This patch asserts that
-> > > > > > *one* of them, pci_pm_runtime_resume(), is special and needs to test
-> > > > > > device_is_bound() instead of using to_pci_driver().
-> > > > >
-> > > > > Maybe for the other locations using device_is_bound(&pdev->dev) instead
-> > > > > of to_pci_driver(pdev) != NULL would be nice, too?
-> > > > >
-> > > > > I have another doubt: device_is_bound() should (according to its
-> > > > > kernel-doc) be called with the device lock held. For the call stack that
-> > > > > is (maybe) fixed here, the lock is held (by __device_attach). We
-> > > > > probably should check if the lock is also held for the other calls of
-> > > > > pci_pm_runtime_resume().
-> > > > >
-> > > > > Hmm, the device lock is a mutex, the pm functions might be called in
-> > > > > atomic context, right?
-> > > > >
-> > > > > > It's special because the current PM implementation calls it via
-> > > > > > pm_runtime_get_sync() before the driver's .probe() method.  That
-> > > > > > connection is a little bit obscure and fragile.  What if the PM
-> > > > > > implementation changes?
-> > > > >
-> > > > > Maybe a saver bet would be to not use pm_runtime_get_sync() in
-> > > > > local_pci_probe()?
-> > > >
-> > > > Yes, in principle it might be replaced with pm_runtime_get_noresume().
-> > > >
-> > > > In theory, that may be problematic if a device is put into a low-power
-> > > > state on remove and then the driver is bound again to it.
-> > > >
-> > > > > I wonder if the same problem exists on remove, i.e. pci_device_remove()
-> > > > > calls pm_runtime_put_sync() after the driver's .remove() callback was
-> > > > > called.
-> > > >
-> > > > If it is called after ->remove() and before clearing the device's
-> > > > driver pointer, then yes.
-> > >
-> > > Yes, that is the case:
-> > >
-> > >   pci_device_remove
-> > >     if (drv->remove) {
-> > >       pm_runtime_get_sync
-> > >       drv->remove()                # <-- driver ->remove() method
-> > >       pm_runtime_put_noidle
-> > >     }
-> > >     ...
-> > >     pm_runtime_put_sync            # <-- after ->remove()
-> > >
-> > > So pm_runtime_put_sync() is called after drv->remove(), and it may
-> > > call drv->pm->runtime_idle().  I think the driver may not expect this.
-> > >
-> > > > If this is turned into pm_runtime_put_noidle(), all should work.
-> > >
-> > > pci_device_remove() already calls pm_runtime_put_noidle() immediately
-> > > after calling the driver ->remove() method.
-> > >
-> > > Are you saying we should do this, which means pci_device_remove()
-> > > would call pm_runtime_put_noidle() twice?
-> >
-> > Well, they are both needed to keep the PM-runtime reference counting in balance.
-> >
-> > This still has an issue, though, because user space would be able to
-> > trigger a runtime suspend via sysfs after we've dropped the last
-> > reference to the device in pci_device_remove().
-> >
-> > So instead, we can drop the pm_runtime_get_sync() and
-> > pm_runtime_put_sync() from local_pci_probe() and pci_device_remove(),
-> > respectively, and add pm_runtine_get_noresume() to pci_pm_init(),
-> > which will prevent PM-runtime from touching the device until it has a
-> > driver that supports PM-runtime.
-> >
-> > We'll lose the theoretical ability to put unbound devices into D3 this
-> > way, but we learned some time ago that this isn't safe in all cases
-> > anyway.
-> 
-> IOW, something like this (untested and most likely white-space-damaged).
+This complements the struct power_supply_battery_info with
+extensive kerneldoc explaining the different semantics of the
+fields, including an overview of the CC/CV charging concepts
+implicit in some of the struct members.
 
-Thanks!  I applied this manually to for-linus in hopes of making the
-the next linux-next build.
+This is done to first establish semantics before I can
+add more charging methods by breaking out the CC/CV parameters
+to its own struct.
 
-Please send any testing reports and corrections to the patch and
-commit log!
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ChangeLog v1->v2:
+- Fix some spelling error etc.
+---
+ include/linux/power_supply.h | 209 +++++++++++++++++++++++++++++++----
+ 1 file changed, 186 insertions(+), 23 deletions(-)
 
-commit dd414877b58b ("PCI/PM: Prevent runtime PM until claimed by a driver that supports it")
-Author: Bjorn Helgaas <bhelgaas@google.com>
-Date:   Tue Nov 9 13:36:09 2021 -0600
-
-    PCI/PM: Prevent runtime PM until claimed by a driver that supports it
-    
-    Previously we had a path that could call a driver's ->runtime_resume()
-    method before calling the driver's ->probe() method, which is a problem
-    because ->runtime_resume() often relies on initialization done in
-    ->probe():
-    
-      local_pci_probe
-        pm_runtime_get_sync
-          ...
-            pci_pm_runtime_resume
-              if (!pci_dev->driver)
-                return 0;                          <-- early exit
-              dev->driver->pm->runtime_resume();   <-- driver ->runtime_resume()
-        pci_dev->driver = pci_drv;
-        pci_drv->probe()                           <-- driver ->probe()
-    
-    Prior to 2a4d9408c9e8 ("PCI: Use to_pci_driver() instead of
-    pci_dev->driver"), we took the early exit, which avoided the problem.  But
-    2a4d9408c9e8 removed pci_dev->driver (since it's redundant with
-    device->driver), so we no longer take the early exit, which leads to havoc
-    in ->runtime_resume().
-    
-    Similarly, we could call the driver's ->runtime_idle() method after its
-    ->remove() method.
-    
-    Avoid the problem by dropping the pm_runtime_get_sync() and
-    pm_runtime_put_sync() from local_pci_probe() and pci_device_remove(),
-    respectively.
-    
-    Add pm_runtime_get_noresume(), which uses no driver PM callbacks, to the
-    pci_pm_init() enumeration path.  This will prevent PM-runtime from touching
-    the device until it has a driver that supports PM-runtime.
-    
-    Link: https://lore.kernel.org/r/CAJZ5v0impb8uscbp8LUTBMExfMoGz=cPrTWhSGh0GF_SANNKPQ@mail.gmail.com
-    Fixes: 2a4d9408c9e8 ("PCI: Use to_pci_driver() instead of pci_dev->driver")
-    Reported-by: Robert Święcki <robert@swiecki.net>
-    Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-    Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-
-diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
-index 1d98c974381c..41cdf510214f 100644
---- a/drivers/pci/pci-driver.c
-+++ b/drivers/pci/pci-driver.c
-@@ -309,16 +309,6 @@ static long local_pci_probe(void *_ddi)
- 	struct device *dev = &pci_dev->dev;
- 	int rc;
+diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+index 9ca1f120a211..8a8c074f709c 100644
+--- a/include/linux/power_supply.h
++++ b/include/linux/power_supply.h
+@@ -342,37 +342,200 @@ struct power_supply_resistance_temp_table {
  
--	/*
--	 * Unbound PCI devices are always put in D0, regardless of
--	 * runtime PM status.  During probe, the device is set to
--	 * active and the usage count is incremented.  If the driver
--	 * supports runtime PM, it should call pm_runtime_put_noidle(),
--	 * or any other runtime PM helper function decrementing the usage
--	 * count, in its probe routine and pm_runtime_get_noresume() in
--	 * its remove routine.
--	 */
--	pm_runtime_get_sync(dev);
- 	rc = pci_drv->probe(pci_dev, ddi->id);
- 	if (!rc)
- 		return rc;
-@@ -464,9 +454,6 @@ static void pci_device_remove(struct device *dev)
- 	pcibios_free_irq(pci_dev);
- 	pci_iov_remove(pci_dev);
+ #define POWER_SUPPLY_OCV_TEMP_MAX 20
  
--	/* Undo the runtime PM settings in local_pci_probe() */
--	pm_runtime_put_sync(dev);
--
- 	/*
- 	 * If the device is still on, set the power state as "unknown",
- 	 * since it might change by the next time we load the driver.
-diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-index b88db815ee01..e9c38b994c73 100644
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -3097,7 +3097,15 @@ void pci_pm_init(struct pci_dev *dev)
- 	u16 pmc;
+-/*
++/**
++ * struct power_supply_battery_info - information about batteries
++ * @technology: from the POWER_SUPPLY_TECHNOLOGY_* enum
++ * @energy_full_design_uwh: energy content when fully charged in microwatt
++ *   hours
++ * @charge_full_design_uah: charge content when fully charged in microampere
++ *   hours
++ * @voltage_min_design_uv: minimum voltage across the poles when the battery
++ *   is at minimum voltage level in microvolts. If the voltage drops below this
++ *   level the battery will need precharging when using CC/CV charging.
++ * @voltage_max_design_uv: voltage across the poles when the battery is fully
++ *   charged in microvolts. This is the "nominal voltage" i.e. the voltage
++ *   printed on the label of the battery.
++ * @tricklecharge_current_ua: the tricklecharge current used when trickle
++ *   charging the battery in microamperes. This is the charging phase when the
++ *   battery is fully charged and we just trickle in some current to keep the
++ *   voltage up between constant_charge_voltage_max_uv and overvoltage_limit_uv.
++ * @precharge_current_ua: current to use in the precharge phase in microamperes,
++ *   the precharge rate is limited by limiting the current to this value.
++ * @precharge_voltage_max_uv: the maximum voltage allowed when precharging in
++ *   microvolts. When we pass this voltage we will nominally switch over to the
++ *   next charging phase defined by constant_charge_current_ua and
++ *   constant_charge_voltage_max_uv.
++ * @charge_term_current_ua: when the current in the CV (constant voltage)
++ *   charging phase drops below this value in microamperes the charging will
++ *   terminate completely and not restart until the voltage over the battery
++ *   poles reach charge_restart_voltage_uv unless we use trickle charging.
++ * @charge_restart_voltage_uv: when the battery has been fully charged by
++ *   CC/CV charging and charging has been disabled, and the voltage subsequently
++ *   drops below this value in microvolts, the charging will be restarted
++ *   (typically using CV charging).
++ * @overvoltage_limit_uv: when tricklecharging the battery can temporarily
++ *   exceed the nominal voltage voltage_max_design_uv. The tricklecharginging
++ *   must stop when we reach this value, not to restart unless we get back
++ *   down to constant_charge_voltage_max_uv.
++ * @constant_charge_current_max_ua: current in microamperes to use in the CC
++ *   (constant current) charging phase. The charging rate is limited
++ *   by this current. This is the main charging phase and as the current is
++ *   constant into the battery the voltage slowly ascends to
++ *   constant_charge_voltage_max_uv.
++ * @constant_charge_voltage_max_uv: voltage in microvolts signifying the end of
++ *   the CC (constant current) charging phase and the beginning of the CV
++ *   (constant voltage) charging phase.
++ * @factory_internal_resistance_uohm: the internal resistance of the battery
++ *   at fabrication time, expressed in microohms. This resistance will vary
++ *   depending on the lifetime and charge of the battery, so this is just a
++ *   nominal ballpark figure.
++ * @ocv_temp: array indicating the open circuit voltage (OCV) capacity
++ *   temperature indices. This is an array of temperatures in degrees Celsius
++ *   indicating which capacity table to use for a certain temperature, since
++ *   the capacity for reasons of chemistry will be different at different
++ *   temperatures. Determining capacity is a multivariate problem and the
++ *   temperature is the first variable we determine.
++ * @temp_ambient_alert_min: the battery will go outside of operating conditions
++ *   when the ambient temperature goes below this temperature in degrees
++ *   Celsius.
++ * @temp_ambient_alert_max: the battery will go outside of operating conditions
++ *   when the ambient temperature goes above this temperature in degrees
++ *   Celsius.
++ * @temp_alert_min: the battery should issue an alert if the internal
++ *   temperature goes below this temperature in degrees Celsius.
++ * @temp_alert_max: the battery should issue an alert if the internal
++ *   temperature goes above this temperature in degrees Celsius.
++ * @temp_min: the battery will go outside of operating conditions when
++ *   the internal temperature goes below this temperature in degrees Celsius.
++ *   Normally this means the system should shut down.
++ * @temp_max: the battery will go outside of operating conditions when
++ *   the internal temperature goes above this temperature in degrees Celsius.
++ *   Normally this means the system should shut down.
++ * @ocv_table: for each entry in ocv_temp there is a corresponding entry in
++ *   ocv_table and a size for each entry in ocv_table_size. These arrays
++ *   determine the capacity in percent in relation to the voltage in microvolts
++ *   at the indexed temperature.
++ * @ocv_table_size: for each entry in ocv_temp this array is giving the size of
++ *   each entry in the array of capacity arrays in ocv_table.
++ * @resist_table: this is a table that correlates a resistance to an internal
++ *   temperature of a battery. This can be achieved by a separate thermistor to
++ *   supply voltage on a third terminal on a battery which is the most
++ *   reliable. An external thermistor can also be used sometimes.
++ * @resist_table_size: the number of items in the resist table.
++ *
+  * This is the recommended struct to manage static battery parameters,
+  * populated by power_supply_get_battery_info(). Most platform drivers should
+  * use these for consistency.
++ *
+  * Its field names must correspond to elements in enum power_supply_property.
+  * The default field value is -EINVAL.
+- * Power supply class itself doesn't use this.
++ *
++ * The charging parameters here assume a CC/CV charging scheme. This method
++ * is most common with Lithium Ion batteries (other methods are possible) and
++ * looks as follows:
++ *
++ * ^ Battery voltage
++ * |                                                   overvoltage_limit_uv
++ * |                                                    ..          ..
++ * |                    ................................  ....   ..   ..
++ * |                 .. constant_charge_voltage_max_uv        ...
++ * |              ..
++ * |             .
++ * |            .
++ * |           .
++ * |          .
++ * |         .
++ * |     .. precharge_voltage_max_uv
++ * |  ..
++ * |.
++ * +------------------------------------------------------------------> time
++ *
++ * ^ Current into the battery
++ * |
++ * |      ............. constant_charge_current_max_ua
++ * |      .            .
++ * |      .             .
++ * |      .              .
++ * |      .               .
++ * |      .                ..
++ * |      .                  ....
++ * |      .                       .....
++ * |      .                            .......  charge_term_current_ua
++ * |      .                                   ..........
++ * |....... precharge_current_ua                       . tricklecharge_current_ua
++ * |                                                   ...      ....
++ * |                                                     .      .  .
++ * +-----------------------------------------------------------------> time
++ *
++ * These diagrams are synchronized on time and the voltage and current
++ * follow each other.
++ *
++ * With CC/CV charging commence over time like this for an empty battery:
++ *
++ * 1. First a small initial pre-charge current (precharge_current_ua)
++ *    is applied if the voltage is below precharge_voltage_max_uv until we
++ *    reach precharge_voltage_max_uv. CAUTION: in some texts this is referred
++ *    to as "trickle charging" but the use in the Linux kernel is different
++ *    see below!
++ *
++ * 2. Then the main charging current is applied, which is called the constant
++ *    current (CC) phase. A current regulator is set up to allow
++ *    constant_charge_current_max_ua of current to flow into the battery.
++ *    The chemical reaction in the battery will make the voltage go up as
++ *    charge goes into the battery. This current is applied until we reach
++ *    the constant_charge_voltage_max_uv voltage.
++ *
++ * 3. At this voltage we switch over to the constant voltage (CV) phase. This
++ *    means we allow current to go into the battery, but we keep the voltage
++ *    fixed. This current will continue to charge the battery while keeping
++ *    the voltage the same. A chemical reaction in the battery goes on
++ *    storing energy without affecting the voltage. Over time the current
++ *    will slowly drop and when we reach charge_term_current_ua we will
++ *    end the constant voltage phase.
++ *
++ * After this the battery is fully charged, and if we do not support trickle
++ * charging, the charging will not restart until power dissipation makes the
++ * voltage fall so that we reach charge_restart_voltage_uv and at this point
++ * we restart charging at the appropriate phase, usually this will be inside
++ * the CV phase.
++ *
++ * If we support trickle charging the voltage is however kept high after
++ * the CV phase with a very low current. This is meant to let some charge
++ * "trickle in" for usage while the charger is still connected, mainly for
++ * dissipation for the power consuming entity while connected to the
++ * charger. We allow extra charge to trickle in so that the voltage can
++ * occasionally rise up to overvoltage_limit_uv, and if this happens even
++ * trickle charging is disabled and no current goes into the battery.
++ *
++ * Trickle- and any other charging MUST terminate if the overvoltage_limit_uv
++ * is ever reached. Overcharging Lithium Ion cells can be DANGEROUS and lead
++ * to fire or explosions.
++ *
++ * The power supply class itself doesn't use this struct as of now.
+  */
  
- 	pm_runtime_forbid(&dev->dev);
-+
-+	/*
-+	 * Unbound PCI devices are always put in D0.  If the driver supports
-+	 * runtime PM, it should call pm_runtime_put_noidle(), or any other
-+	 * runtime PM helper function decrementing the usage count, in its
-+	 * probe routine and pm_runtime_get_noresume() in its remove routine.
-+	 */
- 	pm_runtime_set_active(&dev->dev);
-+	pm_runtime_get_noresume(&dev->dev);
- 	pm_runtime_enable(&dev->dev);
- 	device_enable_async_suspend(&dev->dev);
- 	dev->wakeup_prepared = false;
+ struct power_supply_battery_info {
+-	unsigned int technology;	    /* from the enum above */
+-	int energy_full_design_uwh;	    /* microWatt-hours */
+-	int charge_full_design_uah;	    /* microAmp-hours */
+-	int voltage_min_design_uv;	    /* microVolts */
+-	int voltage_max_design_uv;	    /* microVolts */
+-	int tricklecharge_current_ua;	    /* microAmps */
+-	int precharge_current_ua;	    /* microAmps */
+-	int precharge_voltage_max_uv;	    /* microVolts */
+-	int charge_term_current_ua;	    /* microAmps */
+-	int charge_restart_voltage_uv;	    /* microVolts */
+-	int overvoltage_limit_uv;	    /* microVolts */
+-	int constant_charge_current_max_ua; /* microAmps */
+-	int constant_charge_voltage_max_uv; /* microVolts */
+-	int factory_internal_resistance_uohm;   /* microOhms */
+-	int ocv_temp[POWER_SUPPLY_OCV_TEMP_MAX];/* celsius */
+-	int temp_ambient_alert_min;             /* celsius */
+-	int temp_ambient_alert_max;             /* celsius */
+-	int temp_alert_min;                     /* celsius */
+-	int temp_alert_max;                     /* celsius */
+-	int temp_min;                           /* celsius */
+-	int temp_max;                           /* celsius */
++	unsigned int technology;
++	int energy_full_design_uwh;
++	int charge_full_design_uah;
++	int voltage_min_design_uv;
++	int voltage_max_design_uv;
++	int tricklecharge_current_ua;
++	int precharge_current_ua;
++	int precharge_voltage_max_uv;
++	int charge_term_current_ua;
++	int charge_restart_voltage_uv;
++	int overvoltage_limit_uv;
++	int constant_charge_current_max_ua;
++	int constant_charge_voltage_max_uv;
++	int factory_internal_resistance_uohm;
++	int ocv_temp[POWER_SUPPLY_OCV_TEMP_MAX];
++	int temp_ambient_alert_min;
++	int temp_ambient_alert_max;
++	int temp_alert_min;
++	int temp_alert_max;
++	int temp_min;
++	int temp_max;
+ 	struct power_supply_battery_ocv_table *ocv_table[POWER_SUPPLY_OCV_TEMP_MAX];
+ 	int ocv_table_size[POWER_SUPPLY_OCV_TEMP_MAX];
+ 	struct power_supply_resistance_temp_table *resist_table;
+-- 
+2.31.1
+
