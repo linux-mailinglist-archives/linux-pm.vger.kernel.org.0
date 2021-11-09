@@ -2,121 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47AB944AB88
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Nov 2021 11:31:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C5AB44ABA9
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Nov 2021 11:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245354AbhKIKeP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Nov 2021 05:34:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59152 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245331AbhKIKeM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Nov 2021 05:34:12 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41CD7C061766
-        for <linux-pm@vger.kernel.org>; Tue,  9 Nov 2021 02:31:26 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id a20-20020a1c7f14000000b003231d13ee3cso1489484wmd.3
-        for <linux-pm@vger.kernel.org>; Tue, 09 Nov 2021 02:31:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+euuTZvhkOnDgMjmppHViulHDx6zSAfM+VRF7TWz+pU=;
-        b=6vlRBXlYnB1c6bx4RKXZbqt8HKPSAqnWbj2TvKybRcWeUXa7/oN8cYlRkihwHE+4Ip
-         x7AzQ/JOkZviajlspvGZkRNtwiU+cFZAGVjdqG+GGLwlu9jCQ8eeX1Gvo9XNd2BaOgDi
-         uKaNyKNfy2DyuKFZjQyspVA5GOJ5SfgIZRgADH5VYaU2n7yCJkw0QsuFI72lPUqMvRCC
-         oTmy1LmoV0onweWoq33Nv/e4y8lFcorin8OV3+snScnXG2+xsrFCHTaBuGjlYXdcoben
-         wFx2/TrUQqs74hWSMG85fQAiGmICurTz6o7IDwfCbpDnucI4edvVjI0OvrWqjfcyEvtF
-         ExjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+euuTZvhkOnDgMjmppHViulHDx6zSAfM+VRF7TWz+pU=;
-        b=CiIRE2H9OU1Xr8EqX1IXM9FWJjNBKzvqj+GOlfKhc8kfhJlf35ahpLL4euqbd0cN6o
-         8xRGFwLBKyybkRg3mYtGQVPfvXnPlMh91a8udoA9vlBcH8//yH0fkKukVWyYUJFe3r2J
-         CKNVnfr6N3/6Qkrku3snEmd3VNuSb2JLOOgJiTwSR1s3XjuwJaaQzmBeA8dG2KMmfbnV
-         0+9W0xb8GwD2cbCSO5o1+JQL1XQ9CK+CjLWI4F+H/LMSCyPrj3itMT9oqGwePYBdqCAY
-         ZE1FMDrBDzSZ7XcS47EOgU+i2WRl07qbkOojG6urhRHW45Q9LOhtu/L0Bf+wih4NP9fn
-         Fkkg==
-X-Gm-Message-State: AOAM532UOs9Y5nb2bnznqt3BtJ7Ryhu8gf9fJlBGTSLKU7QDyZVCIK+X
-        BIThbwR8Zyjg4QSLdrh9YG4qfA==
-X-Google-Smtp-Source: ABdhPJyV47u02wpkyTo3KrS7mQ6sP8YiFdmifCrPzyDUmffqXQuzEvPPEmuR6tyPfSh8+G5RVTJTWw==
-X-Received: by 2002:a1c:1d42:: with SMTP id d63mr5861721wmd.184.1636453884902;
-        Tue, 09 Nov 2021 02:31:24 -0800 (PST)
-Received: from bismarck.berto.se (p54ac5892.dip0.t-ipconnect.de. [84.172.88.146])
-        by smtp.googlemail.com with ESMTPSA id t11sm19381936wrz.97.2021.11.09.02.31.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Nov 2021 02:31:24 -0800 (PST)
-From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-To:     Rob Herring <robh+dt@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Subject: [PATCH] dt-bindings: thermal: Fix definition of cooling-maps contribution property
-Date:   Tue,  9 Nov 2021 11:30:45 +0100
-Message-Id: <20211109103045.1403686-1-niklas.soderlund+renesas@ragnatech.se>
-X-Mailer: git-send-email 2.33.1
+        id S245388AbhKIKlm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Nov 2021 05:41:42 -0500
+Received: from foss.arm.com ([217.140.110.172]:59956 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S245389AbhKIKlk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 9 Nov 2021 05:41:40 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 844B3101E;
+        Tue,  9 Nov 2021 02:38:54 -0800 (PST)
+Received: from [10.57.26.224] (unknown [10.57.26.224])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 726913F85F;
+        Tue,  9 Nov 2021 02:38:53 -0800 (PST)
+Subject: Re: [PATCH 1/2] Documentation: power: Add description about new
+ callback for EM registration
+To:     linux-kernel@vger.kernel.org
+Cc:     dietmar.eggemann@arm.com, rafael@kernel.org,
+        linux-pm@vger.kernel.org
+References: <20211102180144.1647-1-lukasz.luba@arm.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <22bdfc88-983d-fc86-0abb-404eedf03274@arm.com>
+Date:   Tue, 9 Nov 2021 10:38:51 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211102180144.1647-1-lukasz.luba@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When converting the thermal-zones bindings to yaml the definition of the
-contribution property changed. The intention is the same, an integer
-value expressing a ratio of a sum on how much cooling is provided by the
-device to the zone. But after the conversion the integer value is
-limited to the range 0 to 100 and expressed as a percentage.
+Hi Rafael,
 
-This is problematic for two reasons.
 
-- This do not match how the binding is used. Out of the 18 files that
-  make use of the property only two (ste-dbx5x0.dtsi and
-  ste-hrefv60plus.dtsi) sets it at a value that satisfy the binding,
-  100. The remaining 16 files set the value higher and fail to validate.
+On 11/2/21 6:01 PM, Lukasz Luba wrote:
+> The Energy Model (EM) registration for CPUs should now be done using
+> a dedicated callback added recently into CPUFreq framework and drivers.
+> 
+> Commit c17495b01b72 ("cpufreq: Add callback to register with energy model")
+> 
+> The callback guaranties that the EM registration is called at the right
+> time during driver setup. To avoid mistakes update the documentation
+> to align with the existing code implementation.
+> 
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+>   Documentation/power/energy-model.rst | 31 ++++++++++++++--------------
+>   1 file changed, 16 insertions(+), 15 deletions(-)
+> 
 
-- Expressing the value as a percentage instead of a ratio of the sum is
-  confusing as there is nothing to enforce the sum in the zone is not
-  greater then 100.
 
-This patch restore the pre yaml conversion description and removes the
-value limitation allowing the usage of the bindings to validate.
+Gentle ping. Could you have a look at these documentation
+two patches and maybe pick them, please?
+They are trying to solve some confusion discussed with our partners
+recently.
 
-Fixes: 1202a442a31fd2e5 ("dt-bindings: thermal: Add yaml bindings for thermal zones")
-Reported-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
----
- .../devicetree/bindings/thermal/thermal-zones.yaml       | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-index a07de5ed0ca6ae2d..2d34f3ccb2572ddb 100644
---- a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-+++ b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-@@ -199,12 +199,11 @@ patternProperties:
- 
-               contribution:
-                 $ref: /schemas/types.yaml#/definitions/uint32
--                minimum: 0
--                maximum: 100
-                 description:
--                  The percentage contribution of the cooling devices at the
--                  specific trip temperature referenced in this map
--                  to this thermal zone
-+                  The cooling contribution to the thermal zone of the referred
-+                  cooling device at the referred trip point. The contribution is
-+                  a ratio of the sum of all cooling contributions within a
-+                  thermal zone.
- 
-             required:
-               - trip
--- 
-2.33.1
-
+Regards,
+Lukasz
