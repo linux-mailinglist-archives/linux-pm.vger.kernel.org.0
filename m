@@ -2,124 +2,182 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A55144A9A0
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Nov 2021 09:46:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC7D344A9AD
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Nov 2021 09:48:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242797AbhKIIte (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Nov 2021 03:49:34 -0500
-Received: from foss.arm.com ([217.140.110.172]:58496 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242854AbhKIItd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 9 Nov 2021 03:49:33 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A81E42B;
-        Tue,  9 Nov 2021 00:46:47 -0800 (PST)
-Received: from [10.57.26.224] (unknown [10.57.26.224])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BB0953F7F5;
-        Tue,  9 Nov 2021 00:46:43 -0800 (PST)
-Subject: Re: [PATCH v3 4/5] cpufreq: qcom-cpufreq-hw: Use new thermal pressure
- update function
-To:     Thara Gopinath <thara.gopinath@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, sudeep.holla@arm.com,
-        will@kernel.org, catalin.marinas@arm.com, linux@armlinux.org.uk,
-        gregkh@linuxfoundation.org, rafael@kernel.org,
-        viresh.kumar@linaro.org, amitk@kernel.org,
-        daniel.lezcano@linaro.org, amit.kachhap@gmail.com,
-        bjorn.andersson@linaro.org, agross@kernel.org,
-        Steev Klimaszewski <steev@kali.org>
-References: <20211103161020.26714-1-lukasz.luba@arm.com>
- <20211103161020.26714-5-lukasz.luba@arm.com>
- <c4a2618f-71ee-b688-6268-08256a8edf10@linaro.org>
- <02468805-f626-1f61-7f7f-73ed7dfad034@arm.com>
- <af73cc0a-4dd2-832f-13b0-08807df64ce2@linaro.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <e4907877-6cfe-57fe-74b4-6d4efeb1d25a@arm.com>
-Date:   Tue, 9 Nov 2021 08:46:41 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S241970AbhKIIvC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Nov 2021 03:51:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35294 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234536AbhKIIvC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Nov 2021 03:51:02 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85115C061764;
+        Tue,  9 Nov 2021 00:48:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=GGuZB0RVdPrXN4n7lBWpU1GjFO22hMBYCHctpSGrxoU=; b=e/sSyCn6ln4c+tGO1J45vHh9fT
+        yUEDqIbElO9i+rnIv0GsR9Tw1+hVZ/1MHgOCsWDnnwyZXgg/MmVEflUXifcolTv6B8eXOD55ckpXF
+        QdZZCcgH8PWhM+JVmPhyQauv3rgLUpWLO/JucGxcgxBcYRAH7KpdGf8jjZ0ea7/BFhy7o29zgTJPn
+        aEtWrgG277FhMr6if8djoZ59xQyvzOrGaCVDHgLsBCoRch+jy6QtN2ODysuxUIy0f4BjQBwMfWy1R
+        j7u9+dGRhcSFxknF6RsNmJOQvggtpNxFWpnnMeRD95mq4o0OrGqhZNB2t8577LoMVogd5R9gHPQEC
+        Qvedx83w==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mkMnZ-00F1xD-KZ; Tue, 09 Nov 2021 08:48:09 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 46C253001C7;
+        Tue,  9 Nov 2021 09:48:08 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id E449E206D9951; Tue,  9 Nov 2021 09:48:07 +0100 (CET)
+Date:   Tue, 9 Nov 2021 09:48:07 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org, x86@kernel.org,
+        linux-doc@vger.kernel.org, Len Brown <len.brown@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/7] thermal: intel: hfi: Enable notification interrupt
+Message-ID: <YYo1x8YLozBZbqwC@hirez.programming.kicks-ass.net>
+References: <20211106013312.26698-1-ricardo.neri-calderon@linux.intel.com>
+ <20211106013312.26698-6-ricardo.neri-calderon@linux.intel.com>
+ <YYjo3Jx6JosHhoHM@hirez.programming.kicks-ass.net>
+ <20211109022613.GA16930@ranerica-svr.sc.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <af73cc0a-4dd2-832f-13b0-08807df64ce2@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211109022613.GA16930@ranerica-svr.sc.intel.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Mon, Nov 08, 2021 at 06:26:13PM -0800, Ricardo Neri wrote:
+> On Mon, Nov 08, 2021 at 10:07:40AM +0100, Peter Zijlstra wrote:
+> > On Fri, Nov 05, 2021 at 06:33:10PM -0700, Ricardo Neri wrote:
 
-
-On 11/8/21 9:23 PM, Thara Gopinath wrote:
+> > > +static void hfi_update_work_fn(struct work_struct *work)
+> > > +{
+> > > +	struct hfi_instance *hfi_instance;
+> > > +
+> > > +	hfi_instance = container_of(to_delayed_work(work), struct hfi_instance,
+> > > +				    update_work);
+> > > +	if (!hfi_instance)
+> > > +		return;
+> > > +
+> > > +	/* TODO: Consume update here. */
+> > 
+> > 	// this here uses ->event_lock to serialize against the
+> > 	// interrupt below changing the data...
 > 
-> 
-> On 11/8/21 9:12 AM, Lukasz Luba wrote:
-> ...snip
-> 
->>>
->>>
->>
->> Well, I think the issue is broader. Look at the code which
->> calculate this 'capacity'. It's just a multiplication & division:
->>
->> max_capacity = arch_scale_cpu_capacity(cpu); // =1024 in our case
->> capacity = mult_frac(max_capacity, throttled_freq,
->>          policy->cpuinfo.max_freq);
->>
->> In the reported by Steev output from sysfs cpufreq we know
->> that the value of 'policy->cpuinfo.max_freq' is:
->> /sys/devices/system/cpu/cpu5/cpufreq/cpuinfo_max_freq:2956800
->>
->> so when we put the values to the equation we get:
->> capacity = 1024 * 2956800 / 2956800; // =1024
->> The 'capacity' will be always <= 1024 and this check won't
->> be triggered:
->>
->> /* Don't pass boost capacity to scheduler */
->> if (capacity > max_capacity)
->>      capacity = max_capacity;
->>
->>
->> IIUC you original code, you don't want to have this boost
->> frequency to be treated as 1024 capacity. The reason is because
->> the whole capacity machinery in arch_topology.c is calculated based
->> on max freq value = 2841600,
->> so the max capacity 1024 would be pinned to that frequency
->> (according to Steeve's log:
->> [   22.552273] THERMAL_PRESSURE: max_freq(2841) < capped_freq(2956) 
->> for CPUs [4-7] )
-> 
-> Hi Lukasz,
-> 
-> Yes you are right in that I was using policy->cpuinfo.max_freq where as 
-> I should have used freq_factor. So now that you are using freq_factor, 
-> it makes sense to cap the capacity at the max capacity calulated by the 
-> scheduler.
-> 
-> I agree that the problem is complex because at some point we should look 
-> at rebuilding the topology based on changes to policy->cpuinfo.max_freq.
-> 
+> Anyone reading the HFI table would need to take ->event_lock.
 
-I probably cannot fix your driver easily right now. What I can do and is
-actually required for this new API arch_update_thermal_pressure() is to
-accept boost frequencies (values which are higher that 'freq_factor')
-without triggering a warning and just setting the thermal pressure to 0
-(since we are told that the frequency capping is completely removed even
-for boost values).
+Right.. that implies ->event_lock can be taken while there is no
+interrupt active, which then necessitates the additional lock.
 
-The next step would be to perform longer investigation how the boost
-frequencies are accepted then triggered/used by scheduler and other
-involved machinery.
+> > > +}
+> > > +
+> > > +void intel_hfi_process_event(__u64 pkg_therm_status_msr_val)
+> > > +{
+> > > +	struct hfi_instance *hfi_instance;
+> > > +	int cpu = smp_processor_id();
+> > > +	struct hfi_cpu_info *info;
+> > > +	unsigned long flags;
+> > > +	u64 timestamp;
+> > > +
+> > > +	if (!pkg_therm_status_msr_val)
+> > > +		return;
+> > > +
+> > > +	info = &per_cpu(hfi_cpu_info, cpu);
+> > > +	if (!info)
+> > > +		return;
+> > > +
+> > > +	/*
+> > > +	 * It is possible that we get an HFI thermal interrupt on this CPU
+> > > +	 * before its HFI instance is initialized. This is not a problem. The
+> > > +	 * CPU that enabled the interrupt for this package will also get the
+> > > +	 * interrupt and is fully initialized.
+> > > +	 */
+> > > +	hfi_instance = info->hfi_instance;
+> > > +	if (!hfi_instance)
+> > > +		return;
+> > > +
+> > 
+> > 	/*
+> > 	 * If someone is already handling the interrupt, we shouldn't be
+> > 	 * burning time waiting for them to then do more nothing.
+> > 	 */
+> > 	if (!raw_spin_trylock(&hfi_instance->interrupt_lock))
+> > 		return;
+> > 
+> > 
+> > > +	raw_spin_lock_irqsave(&hfi_instance->event_lock, flags);
+> 
+> The CPU who acquired ->interrupt_lock successfully now will acquire
+> ->event_lock to serialize writes and reads to the HFI table.
 
-I've asked Steev for help with setting up this Rockchip RK3399 new boost
-frequency which actually is used. I want to understand why that platform
-is able to use the boost freq and this Qcom SoC is not able to use it.
+Right, so ->interrupt_lock is purely used to serialize interrupts, and
+only one interrupt gets to do the update, while the others can exit and
+resume with what they were doing asap, without wasting cycles spinning
+on ->event_lock only to then not do anything.
 
-I agree with you that at some point we might need to try rebuilding the
-topology information based on these policy->cpuinfo.max_freq changes.
+> > > +	/*
+> > > +	 * On most systems, all CPUs in the package receive a package-level
+> > > +	 * thermal interrupt when there is an HFI update. Since they all are
+> > > +	 * dealing with the same update (as indicated by the update timestamp),
+> > > +	 * it is sufficient to let a single CPU to acknowledge the update and
+> > > +	 * schedule work to process it.
+> > > +	 */
+> > > +	timestamp = *(u64 *)hfi_instance->hw_table;
+> > > +	if (hfi_instance->timestamp >= timestamp)
+> > > +		goto unlock_spinlock;
+> > 
+> > This can go the way of the dodo.
+> 
+> (I guess I can still check the timestamp in case buggy firmware triggers
+> updates with the same timestamp, right?)
 
-I hope it would take only a few steps to fix these issues completely,
-without destroying a lot of existing code...
+Sure..
 
-Regards,
-Lukasz
+> > 
+> > > +
+> > > +	hfi_instance->timestamp = timestamp;
+> > > +
+> > > +	memcpy(hfi_instance->table_base, hfi_instance->hw_table,
+> > > +	       hfi_features.nr_table_pages << PAGE_SHIFT);
+
+I think we actually need to release ->interrupt_lock here, *before* the
+WRMSR that ACKs the HFI update. Because I think the moment that WRMSR
+goes through we can get another interrupt, and that *must* not find
+->interrupt_lock taken, otherwise it will not process the update etc..
+leading to lost interrupts.
+
+> > > +	/*
+> > > +	 * Let hardware and other CPUs know that we are done reading the HFI
+> > > +	 * table and it is free to update it again.
+> > > +	 */
+> > > +	pkg_therm_status_msr_val &= THERM_STATUS_CLEAR_PKG_MASK &
+> > > +				    ~PACKAGE_THERM_STATUS_HFI_UPDATED;
+> > > +	wrmsrl(MSR_IA32_PACKAGE_THERM_STATUS, pkg_therm_status_msr_val);
+> > > +	schedule_delayed_work(&hfi_instance->update_work, HFI_UPDATE_INTERVAL);
+> > > +
+> > > +unlock_spinlock:
+> > > +	raw_spin_unlock_irqrestore(&hfi_instance->event_lock, flags);
+> > 
+> > 	raw_spin_unlock(&hfi_instance->interrupt_lock);
+> 
+> ... and here we release both locks.
+
+See above.
