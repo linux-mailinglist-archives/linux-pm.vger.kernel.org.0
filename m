@@ -2,27 +2,27 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E97C044B619
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Nov 2021 23:22:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73BA944B6DC
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Nov 2021 23:27:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343715AbhKIWZR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Nov 2021 17:25:17 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41598 "EHLO mail.kernel.org"
+        id S1344652AbhKIWab (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Nov 2021 17:30:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50870 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1343784AbhKIWV3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 9 Nov 2021 17:21:29 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6CF3F61207;
-        Tue,  9 Nov 2021 22:18:12 +0000 (UTC)
+        id S1344751AbhKIW2a (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 9 Nov 2021 17:28:30 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9051861A7C;
+        Tue,  9 Nov 2021 22:20:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636496293;
+        s=k20201202; t=1636496422;
         bh=3rmI0HOjS667eg5AE/qvuawOwCyc1f9XfLR7kyTPiEk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DJ8MlI4E67Iawx7zgsKwq16jGUnLj8dFsWEPRXpqO2eVq9bx8hynSbikDsgj6Beb9
-         C9BCgpDx0CP5VudzbKEV+m5N5yZl5ztnUgdqfpGSpIkTbFEcneT1ALX1+KOR9r1100
-         PU3M2SbwVJKFP3v1NOD9OdXl8XOdC5NLGP5t+sXrwF/eh6GWYupy9S1IPz75pG9KFf
-         MIcUUzvu0Fm42Tgny7epxQxR481bYcpTiNddIVq7hQKclrn+Wl39p8IoeJDRMcX9xc
-         0nQA+OrvCA35+i00ESKTcKLfSpxG/tTjh22B8KJkPYF8OowZmGWp4LvtkTRIObGEAy
-         9NkMgLGW50IHA==
+        b=VJ+2fPHETVS35FCOYS3FiRp2pqNsd0t8M3payKNDA/2NiBR9waiLoZk53kzHntehI
+         bgwRj8ER/xo7o1nW+Mp/5lmuhZ8B1dnxT35MBQJSjMyh4DnxIxwvS+7SGlbDjJDiBh
+         njsAToEMjSiDWjesLuZSBTSmla+hdABprkKSdllcPkCaArjpcFJ0RFt/tn4G2iYr6o
+         qrcxA7IGkl7ozhRJkyzMGztNZTT5Gme+wiF8iHMkH967ZygZgM/IcGhYtwS0jaE/aZ
+         yNeh13YicDhClXFoFsWVzLI7d0gzSsFmt2SX3ToFN+N96iGo+EJZSW4YRFJ9o0Kkzv
+         bCf5Dz73IFYUw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Dmitry Osipenko <digetx@gmail.com>,
@@ -31,12 +31,12 @@ Cc:     Dmitry Osipenko <digetx@gmail.com>,
         Sasha Levin <sashal@kernel.org>, rjw@rjwysocki.net,
         swarren@wwwdotorg.org, thierry.reding@gmail.com, gnurou@gmail.com,
         linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 50/82] cpuidle: tegra: Check whether PMC is ready
-Date:   Tue,  9 Nov 2021 17:16:08 -0500
-Message-Id: <20211109221641.1233217-50-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.14 47/75] cpuidle: tegra: Check whether PMC is ready
+Date:   Tue,  9 Nov 2021 17:18:37 -0500
+Message-Id: <20211109221905.1234094-47-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211109221641.1233217-1-sashal@kernel.org>
-References: <20211109221641.1233217-1-sashal@kernel.org>
+In-Reply-To: <20211109221905.1234094-1-sashal@kernel.org>
+References: <20211109221905.1234094-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
