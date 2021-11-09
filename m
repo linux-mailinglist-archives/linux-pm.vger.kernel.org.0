@@ -2,125 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 952BF44B1D7
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Nov 2021 18:18:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5410544B232
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Nov 2021 18:51:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239433AbhKIRVQ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 9 Nov 2021 12:21:16 -0500
-Received: from mail-oi1-f182.google.com ([209.85.167.182]:37831 "EHLO
-        mail-oi1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238356AbhKIRVP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Nov 2021 12:21:15 -0500
-Received: by mail-oi1-f182.google.com with SMTP id o83so34937095oif.4;
-        Tue, 09 Nov 2021 09:18:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=g9XioftQsCKqEN/WNIzKk9RPvl8jzkbkoGIE6GFwjbw=;
-        b=NAHK7EPKDknt5TWzMVEEmWAx9UlsU4mA3vSpzR6IX/yiXfpkSDjolnO3VZ17chuhQh
-         fMxVFBnC/4eslL0MSWnfR/Oc5xCfSDQSvJaxS6vG0Kj1RgIvk+peAkoSUwUTcWNe4M3r
-         SLsyYOxeH+QM2TjbDkj8ojxejCsB1imM3VLp1uIlKqpvDTgPF9a72bsZ6THkLtKiBoH6
-         tphTZB5+VkBG9OwJOeQyJGWFDYPIUWwdUmEFDu5x8xnnjr8QiAJDT4N3ADI2WwarT7Ak
-         GysH8N0SC42HyMx8EeOtEfbeHkmVj8kIOdzu18jndrzBBJJueL8KZUD797OPQsh3EkOS
-         9PEA==
-X-Gm-Message-State: AOAM532dCOrc2Dk9EC0SBEOFwutOkgpuCKX4XzI3iZT0Hur6AdIyr+Hs
-        hIjlc5wBhmr98vj6v+x9QfD/5gpzMpYhcpg1Syg=
-X-Google-Smtp-Source: ABdhPJymUylwak0rXETxr+g8epAkkuTeoCt7Hgm7pZblQn9wOLdt/rowTfArgWm4UjKv4MjV6oS7RJxAsSuiBh+BZQs=
-X-Received: by 2002:aca:5c5:: with SMTP id 188mr7225611oif.154.1636478309105;
- Tue, 09 Nov 2021 09:18:29 -0800 (PST)
+        id S241413AbhKIRxz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Nov 2021 12:53:55 -0500
+Received: from foss.arm.com ([217.140.110.172]:36814 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239360AbhKIRxy (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 9 Nov 2021 12:53:54 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5201EED1;
+        Tue,  9 Nov 2021 09:51:08 -0800 (PST)
+Received: from [10.57.26.224] (unknown [10.57.26.224])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 015893F7F5;
+        Tue,  9 Nov 2021 09:51:04 -0800 (PST)
+Subject: Re: [PATCH 6/7] thermal: netlink: Add a new event to notify CPU
+ capabilities change
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org, x86@kernel.org,
+        linux-doc@vger.kernel.org, Len Brown <len.brown@intel.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        linux-kernel@vger.kernel.org
+References: <20211106013312.26698-1-ricardo.neri-calderon@linux.intel.com>
+ <20211106013312.26698-7-ricardo.neri-calderon@linux.intel.com>
+ <2160a0b8-59ec-03a1-1fd5-a3f98085be07@arm.com>
+ <e244e3aa9fc323973d7da8d3ebc3e1fad1fdb731.camel@linux.intel.com>
+ <5e4d7661-1e91-0c72-ae02-b2c60c2ad95e@arm.com>
+ <94ddfd1177c3f119de2794d9fb659a6578f560c6.camel@linux.intel.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <a2389c0f-c42d-0198-a625-0eb2a97628f0@arm.com>
+Date:   Tue, 9 Nov 2021 17:51:02 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-References: <20211108212226.253mwl4wp7xjckqz@pengutronix.de>
- <20211109025619.GA1131403@bhelgaas> <20211109065927.26v6xn7d5yyuxw4h@pengutronix.de>
-In-Reply-To: <20211109065927.26v6xn7d5yyuxw4h@pengutronix.de>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 9 Nov 2021 18:18:18 +0100
-Message-ID: <CAJZ5v0hEKO-RFBzkBU+orcM68shODd-qjiuxaYGxhvh2b=NDXA@mail.gmail.com>
-Subject: Re: [PATCH] pci: Don't call resume callback for nearly bound devices
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        =?UTF-8?B?Um9iZXJ0IMWad2nEmWNraQ==?= <robert@swiecki.net>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+In-Reply-To: <94ddfd1177c3f119de2794d9fb659a6578f560c6.camel@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Nov 9, 2021 at 7:59 AM Uwe Kleine-König
-<u.kleine-koenig@pengutronix.de> wrote:
->
-> Hello,
->
-> On Mon, Nov 08, 2021 at 08:56:19PM -0600, Bjorn Helgaas wrote:
-> > [+cc Greg: new device_is_bound() use]
->
-> ack, that's what I would have suggested now, too.
->
-> > On Mon, Nov 08, 2021 at 10:22:26PM +0100, Uwe Kleine-König wrote:
-> > > pci_pm_runtime_resume() exits early when the device to resume isn't
-> > > bound yet:
-> > >
-> > >     if (!to_pci_driver(dev->driver))
-> > >             return 0;
-> > >
-> > > This however isn't true when the device currently probes and
-> > > local_pci_probe() calls pm_runtime_get_sync() because then the driver
-> > > core already setup dev->driver. As a result the driver's resume callback
-> > > is called before the driver's probe function is called and so more often
-> > > than not required driver data isn't setup yet.
-> > >
-> > > So replace the check for the device being unbound by a check that only
-> > > becomes true after .probe() succeeded.
-> >
-> > I like the fact that this patch is short and simple.
-> >
-> > But there are 30+ users of to_pci_driver().  This patch asserts that
-> > *one* of them, pci_pm_runtime_resume(), is special and needs to test
-> > device_is_bound() instead of using to_pci_driver().
->
-> Maybe for the other locations using device_is_bound(&pdev->dev) instead
-> of to_pci_driver(pdev) != NULL would be nice, too?
->
-> I have another doubt: device_is_bound() should (according to its
-> kernel-doc) be called with the device lock held. For the call stack that
-> is (maybe) fixed here, the lock is held (by __device_attach). We
-> probably should check if the lock is also held for the other calls of
-> pci_pm_runtime_resume().
->
-> Hmm, the device lock is a mutex, the pm functions might be called in
-> atomic context, right?
->
-> > It's special because the current PM implementation calls it via
-> > pm_runtime_get_sync() before the driver's .probe() method.  That
-> > connection is a little bit obscure and fragile.  What if the PM
-> > implementation changes?
->
-> Maybe a saver bet would be to not use pm_runtime_get_sync() in
-> local_pci_probe()?
 
-Yes, in principle it might be replaced with pm_runtime_get_noresume().
 
-In theory, that may be problematic if a device is put into a low-power
-state on remove and then the driver is bound again to it.
+On 11/9/21 2:15 PM, Srinivas Pandruvada wrote:
+> On Tue, 2021-11-09 at 13:53 +0000, Lukasz Luba wrote:
+>> Hi Srinivas,
+>>
+>> On 11/9/21 1:23 PM, Srinivas Pandruvada wrote:
+>>> Hi Lukasz,
+>>>
+>>> On Tue, 2021-11-09 at 12:39 +0000, Lukasz Luba wrote:
+>>>> Hi Ricardo,
+>>>>
+>>>>
+>>>> On 11/6/21 1:33 AM, Ricardo Neri wrote:
+>>>>> From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+>>>>>
+>>>>> Add a new netlink event to notify change in CPU capabilities in
+>>>>> terms of
+>>>>> performance and efficiency.
+>>>>
+>>>> Is this going to be handled by some 'generic' tools? If yes,
+>>>> maybe
+>>>> the values for 'performance' might be aligned with capacity
+>>>> [0,1024] ? Or are they completely not related so the mapping is
+>>>> simply impossible?
+>>>>
+>>>
+>>> That would have been very useful.
+>>>
+>>> The problem is that we may not know the maximum performance as
+>>> system
+>>> may be booting with few CPUs (using maxcpus kernel command line)
+>>> and
+>>> then user hot adding them. So we may need to rescale when we get a
+>>> new
+>>> maximum performance CPU and send to user space.
+>>>
+>>> We can't just use max from HFI table at in instance as it is not
+>>> necessary that HFI table contains data for all CPUs.
+>>>
+>>> If HFI max performance value of 255 is a scaled value to max
+>>> performance CPU value in the system, then this conversion would
+>>> have
+>>> been easy. But that is not.
+>>
+>> I see. I was asking because I'm working on similar interface and
+>> just wanted to understand your approach better. In my case we
+>> would probably simply use 'capacity' scale, or more
+>> precisely available capacity after subtracting 'thermal pressure'
+>> value.
+>> That might confuse a generic tool which listens to these socket
+>> messages, though. So probably I would have to add a new
+>> THERMAL_GENL_ATTR_CPU_CAPABILITY_* id
+>> to handle this different normalized across CPUs scale.
+> I can add a field capacity_scale. In HFI case it will always be 255. In
+> your cases it will 1024.
+> 
+> 
 
-> I wonder if the same problem exists on remove, i.e. pci_device_remove()
-> calls pm_runtime_put_sync() after the driver's .remove() callback was
-> called.
+Sounds good, with that upper limit those tools would not build
+up assumptions (they would have to parse that scale value).
+Although, I would prefer to call it 'performance_scale' if you don't
+mind.
+I've done similar renaming  s/capacity/performance/ in the Energy Model
+(EM) some time ago [1]. Some reasons:
+- in the scheduler we have 'Performance Domains (PDs)'
+- for GPUs we talk about 'performance', because 'capacity' sounds odd
+   in that case
 
-If it is called after ->remove() and before clearing the device's
-driver pointer, then yes.
-
-If this is turned into pm_runtime_put_noidle(), all should work.
-
-> > Maybe we just need a comment there about why it looks different than
-> > the other PM interfaces?
->
-> A comment is a good idea for sure.
+[1] 
+https://lore.kernel.org/linux-pm/20200527095854.21714-2-lukasz.luba@arm.com/
