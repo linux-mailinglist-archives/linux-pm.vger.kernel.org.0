@@ -2,27 +2,27 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73BA944B6DC
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Nov 2021 23:27:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4AC444B796
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Nov 2021 23:33:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344652AbhKIWab (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Nov 2021 17:30:31 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50870 "EHLO mail.kernel.org"
+        id S1345006AbhKIWfw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Nov 2021 17:35:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56192 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344751AbhKIW2a (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 9 Nov 2021 17:28:30 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9051861A7C;
-        Tue,  9 Nov 2021 22:20:21 +0000 (UTC)
+        id S1345346AbhKIWdv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 9 Nov 2021 17:33:51 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E249761AE4;
+        Tue,  9 Nov 2021 22:21:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636496422;
-        bh=3rmI0HOjS667eg5AE/qvuawOwCyc1f9XfLR7kyTPiEk=;
+        s=k20201202; t=1636496516;
+        bh=2xIC4RW/7+34GK6xmB3u03swd/O3KlxuJtrTuGNn2wg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VJ+2fPHETVS35FCOYS3FiRp2pqNsd0t8M3payKNDA/2NiBR9waiLoZk53kzHntehI
-         bgwRj8ER/xo7o1nW+Mp/5lmuhZ8B1dnxT35MBQJSjMyh4DnxIxwvS+7SGlbDjJDiBh
-         njsAToEMjSiDWjesLuZSBTSmla+hdABprkKSdllcPkCaArjpcFJ0RFt/tn4G2iYr6o
-         qrcxA7IGkl7ozhRJkyzMGztNZTT5Gme+wiF8iHMkH967ZygZgM/IcGhYtwS0jaE/aZ
-         yNeh13YicDhClXFoFsWVzLI7d0gzSsFmt2SX3ToFN+N96iGo+EJZSW4YRFJ9o0Kkzv
-         bCf5Dz73IFYUw==
+        b=o9aK8oM0UyNxOxkV6TDj0p53OJy5aXgRd1L/hiqUpjV7SD3tRSRAvz5Bt8byHHKdx
+         wNlnmlYbKYOoBC7Wwvq34yidrFQMopu/yhqQ5NMm36B86bVFlEFExfcw61JflirK5k
+         JBIAmOe1TVF/2Vj2X25kEyv+cwSrVasECG4bIPo+KZt2JxR+am5ukhadEvkEFt5dtE
+         NP0mSi23AsoXCa9h9458vpchonj7/Vir2RGSHGen/5ZbWxFYKpj5ARMLHbCzCiI76w
+         0vdHCrVmJZRnjk3McVS0Vfl+br4JPmt148DljtS5PzgIIBovcXw3Bdvlyo2firRz/f
+         E99kpLQIhEp3A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Dmitry Osipenko <digetx@gmail.com>,
@@ -31,12 +31,12 @@ Cc:     Dmitry Osipenko <digetx@gmail.com>,
         Sasha Levin <sashal@kernel.org>, rjw@rjwysocki.net,
         swarren@wwwdotorg.org, thierry.reding@gmail.com, gnurou@gmail.com,
         linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.14 47/75] cpuidle: tegra: Check whether PMC is ready
-Date:   Tue,  9 Nov 2021 17:18:37 -0500
-Message-Id: <20211109221905.1234094-47-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 32/50] cpuidle: tegra: Check whether PMC is ready
+Date:   Tue,  9 Nov 2021 17:20:45 -0500
+Message-Id: <20211109222103.1234885-32-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211109221905.1234094-1-sashal@kernel.org>
-References: <20211109221905.1234094-1-sashal@kernel.org>
+In-Reply-To: <20211109222103.1234885-1-sashal@kernel.org>
+References: <20211109222103.1234885-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -63,10 +63,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+)
 
 diff --git a/drivers/cpuidle/cpuidle-tegra.c b/drivers/cpuidle/cpuidle-tegra.c
-index 508bd9f237929..9845629aeb6d4 100644
+index 29c5e83500d33..e6f96d272d240 100644
 --- a/drivers/cpuidle/cpuidle-tegra.c
 +++ b/drivers/cpuidle/cpuidle-tegra.c
-@@ -337,6 +337,9 @@ static void tegra_cpuidle_setup_tegra114_c7_state(void)
+@@ -346,6 +346,9 @@ static void tegra_cpuidle_setup_tegra114_c7_state(void)
  
  static int tegra_cpuidle_probe(struct platform_device *pdev)
  {
