@@ -2,110 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E7BA44BB79
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Nov 2021 06:54:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 343A844BBD8
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Nov 2021 07:57:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbhKJF5K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Nov 2021 00:57:10 -0500
-Received: from mga06.intel.com ([134.134.136.31]:17667 "EHLO mga06.intel.com"
+        id S229545AbhKJHAP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Nov 2021 02:00:15 -0500
+Received: from mga14.intel.com ([192.55.52.115]:19092 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229811AbhKJF5J (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 10 Nov 2021 00:57:09 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10163"; a="293440174"
-X-IronPort-AV: E=Sophos;i="5.87,222,1631602800"; 
-   d="scan'208";a="293440174"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2021 21:54:22 -0800
+        id S229522AbhKJHAP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 10 Nov 2021 02:00:15 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10163"; a="232858807"
+X-IronPort-AV: E=Sophos;i="5.87,223,1631602800"; 
+   d="scan'208";a="232858807"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2021 22:57:28 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,222,1631602800"; 
-   d="scan'208";a="452178190"
-Received: from lkp-server02.sh.intel.com (HELO c20d8bc80006) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 09 Nov 2021 21:54:20 -0800
-Received: from kbuild by c20d8bc80006 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mkgYt-000ETd-O0; Wed, 10 Nov 2021 05:54:19 +0000
-Date:   Wed, 10 Nov 2021 13:53:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 8158a90cbe6c549c0b816ac2d747b787f2bec5ef
-Message-ID: <618b5e5d.LIIA+YkluiYtLQNJ%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+X-IronPort-AV: E=Sophos;i="5.87,223,1631602800"; 
+   d="scan'208";a="533951198"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga001.jf.intel.com with ESMTP; 09 Nov 2021 22:57:27 -0800
+Received: from abityuts-desk1.fi.intel.com (abityuts-desk1.fi.intel.com [10.237.68.32])
+        by linux.intel.com (Postfix) with ESMTP id 6EDA1580699;
+        Tue,  9 Nov 2021 22:57:26 -0800 (PST)
+Message-ID: <ff68ed136f78de109f467f9fc23493ac7ed14d39.camel@gmail.com>
+Subject: Re: [PATCH] turbostat: fix PC6 displaying on some systems
+From:   Artem Bityutskiy <dedekind1@gmail.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Len Brown <lenb@kernel.org>
+Cc:     Linux PM Mailing List <linux-pm@vger.kernel.org>
+Date:   Wed, 10 Nov 2021 08:57:25 +0200
+In-Reply-To: <20211004105224.3145916-1-dedekind1@gmail.com>
+References: <20211004105224.3145916-1-dedekind1@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 8158a90cbe6c549c0b816ac2d747b787f2bec5ef  Merge branch 'thermal-core' into linux-next
+On Mon, 2021-10-04 at 13:52 +0300, Artem Bityutskiy wrote:
+> From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+> 
+> 'MSR_PKG_CST_CONFIG_CONTROL' encodes the deepest allowed package C-state limit,
+> and turbostat decodes it.
+> 
+> Before this patch: turbostat does not recognize value "3" on Ice Lake Xeon
+> (ICX), treats it as "unknown", and does not display any package C-states in the
+> results table.
+> 
+> After this patch: turbostat recognizes value 3 on ICX, treats it as "PC6", and
+> correctly displays package C-states in the results table.
+> 
+> Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 
-elapsed time: 728m
+Hi,
 
-configs tested: 53
-configs skipped: 3
+any chance for this patch to be picked?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Thanks,
+Artem.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                              debian-10.3
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
