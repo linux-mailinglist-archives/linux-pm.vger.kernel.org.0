@@ -2,88 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A16A44C68F
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Nov 2021 18:59:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6DB744C8E1
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Nov 2021 20:17:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232213AbhKJSCU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Nov 2021 13:02:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36822 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230311AbhKJSCT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 10 Nov 2021 13:02:19 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D7FAA61159;
-        Wed, 10 Nov 2021 17:59:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636567172;
-        bh=Ofe7eOWNhRiC50gEQfKlr9CMMuFmkI3ju3xfiZYyFrY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=rEP32YbBqIePn8GoT80SgIFr3elQJFDM3gSWJVE1+is3HvHlpnQUw41LBLfsI4h1w
-         YCNfyWeIQLvNjmHqJIpAAudhngNYYdxS+Ij2I39rOcjkUujSJtokc0krejrfk8vVTH
-         +7XYf0bCe76SRrSjh8BY9EkoZ3CReYy0FnrnidFD4uFpXUt3hD3UwLDNQh1h/92g6x
-         /cj84RDYWSoaOrUHhmVqyctQ1UkolBiSKrHfi3P49JFTkAxadb+ncQMeoNN1vrjuSl
-         /ei/em8Bm1b8hgAeqHKnn/z3ShASG2w0bIZi8uVQulI4LEPHI0Y9FV0XT36JA28W4K
-         G9iOBlWvuI4+Q==
-Date:   Wed, 10 Nov 2021 11:59:29 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Robert =?utf-8?B?xZp3acSZY2tp?= <robert@swiecki.net>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] pci: Don't call resume callback for nearly bound devices
-Message-ID: <20211110175929.GA1245597@bhelgaas>
+        id S232718AbhKJTT7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Nov 2021 14:19:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51162 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232490AbhKJTT6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Nov 2021 14:19:58 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF56C061764;
+        Wed, 10 Nov 2021 11:17:11 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id y1so3802330plk.10;
+        Wed, 10 Nov 2021 11:17:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=hdOTGadr8Ex9gtj+XAkOSOOv2nJ7N3DNP23DIr6L3AU=;
+        b=dWAaFqKZgag1WzlhK1qHQzqMSbfeL2u/9jwQcv88GAuiEFAb5CFSU8NXxgC11WdBu/
+         /YI/WRCGZjn1rjSyMBQu4VJJwBUVbDvT2RptRFRxCxgKsHhgWoYy6nSaGrcfVP8M7/ZE
+         /+qXbTC9nubxzaeMNume8Olae40ijS5T1xHpjjqtBoC6RPvxvqLtor38omj9/0Rf8Zsb
+         k1PzmOlf9R/V5UHgdyGDMLEXfFMmBkltm+cewdOioqMNS86O1NkQx7W3/cIN/acYJFdl
+         vykrMk8FnPiG8MoOMtU1ueROsKRSRNo6OQRuFE2F+q+WmdNmdKc++PBaegDAeO6FJ0Ts
+         ZxYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=hdOTGadr8Ex9gtj+XAkOSOOv2nJ7N3DNP23DIr6L3AU=;
+        b=aRo+y7mDastLmXJyVFtuDTprY283zS1iynCENitRlD/wXiimczX3I3Vk/YZ/XYK2CP
+         eHHyOI2NPJwABBVDxseWvcJzo0owW7BZVMvMtRCHYtrMh7oUIzh8Opge6QMVDvrHx2QB
+         tqF4pBKcy0HgJvXbONm1Q/9KeN6zZPRDnMsk90ghj8ycoMJJLiFWL+8uI20a56UThFBD
+         VIg5G5Mur+sAAXQ9vQi15KfJ8xBOotea4eXVBDZPQq/s30mSZx8fSZhSTUQgunzS+zr/
+         5/CdlM7AeKJLhdJnME/jkyFMCrRF6ll5wZdaIHSCuM7Z6x8PGfbrQduNTooqIUzA8qM3
+         DHVA==
+X-Gm-Message-State: AOAM530GanoUAOqbnVJJuhesjtFsfgE4TAtNyHfDwOnj2o8Mxrcel7n5
+        mNUlKv4qdE69EQ/ZCArNBz9YTpbijQ+rsZN3VfQ=
+X-Google-Smtp-Source: ABdhPJwwYf9qtGwKi7uBwZ5ak9iN48PyE4XlwlVfIyvxwwOM3xYUZNxh6R4MKJqIcWRl11rsffaGwQ==
+X-Received: by 2002:a17:90b:4b0e:: with SMTP id lx14mr18179761pjb.160.1636571830331;
+        Wed, 10 Nov 2021 11:17:10 -0800 (PST)
+Received: from makvihas ([103.85.8.15])
+        by smtp.gmail.com with ESMTPSA id fw21sm6138095pjb.25.2021.11.10.11.17.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Nov 2021 11:17:09 -0800 (PST)
+Date:   Thu, 11 Nov 2021 00:47:07 +0530
+From:   Vihas Mak <makvihas@gmail.com>
+To:     ssantosh@kernel.org
+Cc:     nm@ti.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: [PATCH] soc: ti: Use DEFINE_DEBUGFS_ATTRIBUTE
+Message-ID: <20211110191707.GA98778@makvihas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0gGZEpj7bJZx9teNJsDfuVA0YW8PGt+q_aEDdGJPDh=bg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 10, 2021 at 05:48:52PM +0100, Rafael J. Wysocki wrote:
-> On Wed, Nov 10, 2021 at 5:33 PM Robert Święcki <robert@swiecki.net> wrote:
-> > śr., 10 lis 2021 o 15:14 Bjorn Helgaas <helgaas@kernel.org> napisał(a):
-> > > On Tue, Nov 09, 2021 at 02:05:18PM -0600, Bjorn Helgaas wrote:
-> > > > On Tue, Nov 09, 2021 at 07:58:47PM +0100, Rafael J. Wysocki wrote:
-> > > > > On Tue, Nov 9, 2021 at 7:52 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > > > > ...
-> > >
-> > > > > > So instead, we can drop the pm_runtime_get_sync() and
-> > > > > > pm_runtime_put_sync() from local_pci_probe() and pci_device_remove(),
-> > > > > > respectively, and add pm_runtine_get_noresume() to pci_pm_init(),
-> > > > > > which will prevent PM-runtime from touching the device until it has a
-> > > > > > driver that supports PM-runtime.
-> > > > > >
-> > > > > > We'll lose the theoretical ability to put unbound devices into D3 this
-> > > > > > way, but we learned some time ago that this isn't safe in all cases
-> > > > > > anyway.
-> > > > >
-> > > > > IOW, something like this (untested and most likely white-space-damaged).
-> > > >
-> > > > Thanks!  I applied this manually to for-linus in hopes of making the
-> > > > the next linux-next build.
-> > > >
-> > > > Please send any testing reports and corrections to the patch and
-> > > > commit log!
-> > >
-> > > Robert, I hate to ask even more of you, but if you have a chance, it
-> > > would be very helpful if you could test the patch below.  I'm pretty
-> > > sure it should fix the problem you saw, and I hope to ask Linus to
-> > > merge it today.
-> >
-> > I think the most recent patch creates some timeouts and other problems
-> > in pci-related code? Things I haven't seen before.
-> 
-> So I honestly think that commit 2a4d9408c9e8 needs to be reverted,
-> because it clearly does more than it is supposed to and we need to go
-> back to the drawing board and do this again, but correctly.
+Use DEFINE_DEBUGFS_ATTRIBUTE instead of DEFINE_SIMPLE_ATTRIBUTE as
+pm_sr_fops is used to create a debugfs file.
 
-Yep, I agree, I'll work on that today.
+This solves following warning generated by coccicheck:
 
-Bjorn
+./drivers/soc/ti/smartreflex.c:815:0-23: WARNING: pm_sr_fops should be defined with DEFINE_DEBUGFS_ATTRIBUTE
+
+Signed-off-by: Vihas Mak <makvihas@gmail.com>
+---
+ drivers/soc/ti/smartreflex.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/soc/ti/smartreflex.c b/drivers/soc/ti/smartreflex.c
+index b5b2fa538..14b69307d 100644
+--- a/drivers/soc/ti/smartreflex.c
++++ b/drivers/soc/ti/smartreflex.c
+@@ -812,7 +812,7 @@ static int omap_sr_autocomp_store(void *data, u64 val)
+ 	return 0;
+ }
+ 
+-DEFINE_SIMPLE_ATTRIBUTE(pm_sr_fops, omap_sr_autocomp_show,
++DEFINE_DEBUGFS_ATTRIBUTE(pm_sr_fops, omap_sr_autocomp_show,
+ 			omap_sr_autocomp_store, "%llu\n");
+ 
+ static int omap_sr_probe(struct platform_device *pdev)
+-- 
+2.25.1
+
