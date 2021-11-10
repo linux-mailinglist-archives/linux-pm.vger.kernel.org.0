@@ -2,172 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16D9444C232
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Nov 2021 14:38:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D26AD44C2CE
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Nov 2021 15:14:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232032AbhKJNlB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Nov 2021 08:41:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58668 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231643AbhKJNk7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Nov 2021 08:40:59 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5FE8C061766;
-        Wed, 10 Nov 2021 05:38:11 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id u11so6136538lfs.1;
-        Wed, 10 Nov 2021 05:38:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=WtBceGsuNkvJWXKObFPMz3/faWDyi74JI/F+pRXLbvs=;
-        b=lD15/VjqUInHM3dZidzqbDMtU49DALHBS4Ay1C40nUi5lxcF7BMQ5EnHXXzG4e6Wu9
-         KEtaN/+P0k1Njtg3ToWP1/KM8wIXtXfb2GMI1jVOw30JDescBKoGZyWGQkHaeFFMF1Cx
-         557WfM+CudsCe0rfY4tn9Qu/fZ6FXK7hdk9Wu9dTaZ71QukQt6Mf26SjkHrJIeq+MupJ
-         /vckqogxswS5UmhYqlk9vNHYa1S8ChRuc7OrOB+B+82hPJEZwrpCBIceX5S6KM+5NMWF
-         FSm1MYMPHMKiWtHmf2u4gxwpqn+oAaxX8rT7fWDE5HDvTnS5+IytbAjE77fEnTdMp1QG
-         4sBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=WtBceGsuNkvJWXKObFPMz3/faWDyi74JI/F+pRXLbvs=;
-        b=dR7RIwju1mPuGWy/xF/xjTUNZDjxCj7/xLYHZ0G4XEgsLYxEjxWiODFMVLchb39Avf
-         3PT2MHTzkGrGi0VkpWGh8JBrkkVqXmjWqSKSVyvWcCMiXSGvYEt0sIVmubHV/fSpSCDn
-         XcnTjHclx1GUlEfvJUz81b0scOwyGZUoEB3BOBud7SA5LMvReiMMPqRSgtZYYzfs5+kC
-         B/tgHbJGdHTstc4S9x+4aCkUlxKwkQQCkgvgyY2KwKqnk4wtJwi1y1sx1dz+OWbAvIIl
-         kU6+G5olyje+XVnVW0fELBGXM78/eYCOT44u7snurcXBDph8CIks7m7VABfrstWQQ0cZ
-         znzA==
-X-Gm-Message-State: AOAM530ZdC16NX6+rQ2X0060vkY8vZzZ1rZjM3h6fLK8seXOLgbpewIz
-        S/8sUX6ZWf7JKvuXIGQm32YE88HSLQg=
-X-Google-Smtp-Source: ABdhPJxBHb2JNLIS70NEJi27Oqj8IHGODoK0u1oyS1uV5awJ6mpkyMTiHwL65DF0nZiuWJMJYZ6aSw==
-X-Received: by 2002:a05:6512:c02:: with SMTP id z2mr14599668lfu.445.1636551490068;
-        Wed, 10 Nov 2021 05:38:10 -0800 (PST)
-Received: from [192.168.2.145] (79-139-177-117.dynamic.spd-mgts.ru. [79.139.177.117])
-        by smtp.googlemail.com with ESMTPSA id z25sm60391lja.99.2021.11.10.05.38.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Nov 2021 05:38:09 -0800 (PST)
-Subject: Re: [PATCH v2 27/45] mfd: ntxec: Use devm_register_power_handler()
-To:     =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>, Tony Lindgren <tony@atomide.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
-        linux-omap@vger.kernel.org, openbmc@lists.ozlabs.org,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20211027211715.12671-1-digetx@gmail.com>
- <20211027211715.12671-28-digetx@gmail.com> <YYbqlmOM95q7Hbjo@latitude>
- <be0c74c6-05a9-cad5-c285-6626d05f8860@gmail.com>
- <9a22c22d-94b1-f519-27a2-ae0b8bbf6e99@roeck-us.net>
- <658cf796-e3b1-f816-1e15-9e9e08b8ade0@gmail.com>
- <5a17fee3-4214-c2b9-abc1-ab9d6071591b@roeck-us.net>
- <c0b52994-51f5-806b-b07e-3e70d8217ffc@gmail.com> <YYkIeBSCFka9yrqC@latitude>
- <04103df3-1ef4-b560-a5cb-fa51737d28ad@gmail.com> <YYuia9KFdi+ETT+I@latitude>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <ceefc854-5d15-b73c-0135-c1cbbbb473b7@gmail.com>
-Date:   Wed, 10 Nov 2021 16:38:07 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S231770AbhKJOR3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Nov 2021 09:17:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36682 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231607AbhKJOR3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 10 Nov 2021 09:17:29 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 536C8610CF;
+        Wed, 10 Nov 2021 14:14:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1636553681;
+        bh=ULssGWa9GKLPoBBHvT9SZdMTkwJdbGAWdXOkGpY4kkc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=knfAa4ESl4Ws/Ll++SyVhZfck9pYKkVkJUlFPDpi0DzFMPBbj7hxEsIwpXxsjXj55
+         kgpxs1ATu1nRh4EYPI4v0MFtJRAp6Kj1sjvAXXj6tipQifxyBxJKri56MsnzIc8SWE
+         P0fnTWXqgTO0JCVqLlxyEZejU5tNF1mIsQm4+4sGW8Ab0h5M0IKUlWBaz2EljopmxK
+         ha9rBeOeteZt1DC8wDEhHoFaMitgM0c7BirhK3NiKY2ttbXcuCTHQiIfAFvXqX1tbg
+         0RQTcZ5iVZK2bUAYuAbCUghnVmk9zjuqTYVSfeVQGh2Tbaq9lSXCZCCglKxsKPOcdG
+         hY0rrWvi5u6pg==
+Date:   Wed, 10 Nov 2021 08:14:39 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Robert =?utf-8?B?xZp3acSZY2tp?= <robert@swiecki.net>
+Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH] pci: Don't call resume callback for nearly bound devices
+Message-ID: <20211110141439.GA1240945@bhelgaas>
 MIME-Version: 1.0
-In-Reply-To: <YYuia9KFdi+ETT+I@latitude>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211109200518.GA1176309@bhelgaas>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-10.11.2021 13:43, Jonathan Neuschäfer пишет:
-> On Mon, Nov 08, 2021 at 02:36:42PM +0300, Dmitry Osipenko wrote:
->> 08.11.2021 14:22, Jonathan Neuschäfer пишет:
->>> On Sun, Nov 07, 2021 at 08:42:33PM +0300, Dmitry Osipenko wrote:
->>> [...]
->>>> EC drivers tend to use higher priority in general. Jonathan, could you
->>>> please confirm that NTXEC driver is a more preferable restart method
->>>> than the watchdog?
->>>
->>> Yes. The original firmware uses the NTXEC to restart, and it works well,
->>> so I do think it's preferable.
->>
->> Thank you, then I'll update the NTXEC patch like this:
->>
->> https://github.com/grate-driver/linux/commit/22da3d91f1734d9a0ed036220ad4ea28465af988
-> 
-> I tested again, but sys_off_handler_reboot called a bogus pointer
-> (probably reboot_prepare_cb). I think it was left uninitialized in
-> ntxec_probe, which uses devm_kmalloc. I guess we could switch it to
-> devm_kzalloc:
-> 
-> diff --git a/drivers/mfd/ntxec.c b/drivers/mfd/ntxec.c
-> index 1f55dfce14308..30364beb4b1d0 100644
-> --- a/drivers/mfd/ntxec.c
-> +++ b/drivers/mfd/ntxec.c
-> @@ -144,7 +144,7 @@ static int ntxec_probe(struct i2c_client *client)
->  	const struct mfd_cell *subdevs;
->  	size_t n_subdevs;
->  
-> -	ec = devm_kmalloc(&client->dev, sizeof(*ec), GFP_KERNEL);
-> +	ec = devm_kzalloc(&client->dev, sizeof(*ec), GFP_KERNEL);
->  	if (!ec)
->  		return -ENOMEM;
->  
-> 
-> 
-> With that done, it works flawlessly.
+On Tue, Nov 09, 2021 at 02:05:18PM -0600, Bjorn Helgaas wrote:
+> On Tue, Nov 09, 2021 at 07:58:47PM +0100, Rafael J. Wysocki wrote:
+> > On Tue, Nov 9, 2021 at 7:52 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > > ...
 
-Good catch, thank you! I'll correct this patch and add yours t-b.
+> > > So instead, we can drop the pm_runtime_get_sync() and
+> > > pm_runtime_put_sync() from local_pci_probe() and pci_device_remove(),
+> > > respectively, and add pm_runtine_get_noresume() to pci_pm_init(),
+> > > which will prevent PM-runtime from touching the device until it has a
+> > > driver that supports PM-runtime.
+> > >
+> > > We'll lose the theoretical ability to put unbound devices into D3 this
+> > > way, but we learned some time ago that this isn't safe in all cases
+> > > anyway.
+> > 
+> > IOW, something like this (untested and most likely white-space-damaged).
+> 
+> Thanks!  I applied this manually to for-linus in hopes of making the
+> the next linux-next build.
+> 
+> Please send any testing reports and corrections to the patch and
+> commit log!
 
+Robert, I hate to ask even more of you, but if you have a chance, it
+would be very helpful if you could test the patch below.  I'm pretty
+sure it should fix the problem you saw, and I hope to ask Linus to
+merge it today.
+
+> commit dd414877b58b ("PCI/PM: Prevent runtime PM until claimed by a driver that supports it")
+> Author: Bjorn Helgaas <bhelgaas@google.com>
+> Date:   Tue Nov 9 13:36:09 2021 -0600
+> 
+>     PCI/PM: Prevent runtime PM until claimed by a driver that supports it
+>     
+>     Previously we had a path that could call a driver's ->runtime_resume()
+>     method before calling the driver's ->probe() method, which is a problem
+>     because ->runtime_resume() often relies on initialization done in
+>     ->probe():
+>     
+>       local_pci_probe
+>         pm_runtime_get_sync
+>           ...
+>             pci_pm_runtime_resume
+>               if (!pci_dev->driver)
+>                 return 0;                          <-- early exit
+>               dev->driver->pm->runtime_resume();   <-- driver ->runtime_resume()
+>         pci_dev->driver = pci_drv;
+>         pci_drv->probe()                           <-- driver ->probe()
+>     
+>     Prior to 2a4d9408c9e8 ("PCI: Use to_pci_driver() instead of
+>     pci_dev->driver"), we took the early exit, which avoided the problem.  But
+>     2a4d9408c9e8 removed pci_dev->driver (since it's redundant with
+>     device->driver), so we no longer take the early exit, which leads to havoc
+>     in ->runtime_resume().
+>     
+>     Similarly, we could call the driver's ->runtime_idle() method after its
+>     ->remove() method.
+>     
+>     Avoid the problem by dropping the pm_runtime_get_sync() and
+>     pm_runtime_put_sync() from local_pci_probe() and pci_device_remove(),
+>     respectively.
+>     
+>     Add pm_runtime_get_noresume(), which uses no driver PM callbacks, to the
+>     pci_pm_init() enumeration path.  This will prevent PM-runtime from touching
+>     the device until it has a driver that supports PM-runtime.
+>     
+>     Link: https://lore.kernel.org/r/CAJZ5v0impb8uscbp8LUTBMExfMoGz=cPrTWhSGh0GF_SANNKPQ@mail.gmail.com
+>     Fixes: 2a4d9408c9e8 ("PCI: Use to_pci_driver() instead of pci_dev->driver")
+>     Reported-by: Robert Święcki <robert@swiecki.net>
+>     Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>     Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> 
+> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+> index 1d98c974381c..41cdf510214f 100644
+> --- a/drivers/pci/pci-driver.c
+> +++ b/drivers/pci/pci-driver.c
+> @@ -309,16 +309,6 @@ static long local_pci_probe(void *_ddi)
+>  	struct device *dev = &pci_dev->dev;
+>  	int rc;
+>  
+> -	/*
+> -	 * Unbound PCI devices are always put in D0, regardless of
+> -	 * runtime PM status.  During probe, the device is set to
+> -	 * active and the usage count is incremented.  If the driver
+> -	 * supports runtime PM, it should call pm_runtime_put_noidle(),
+> -	 * or any other runtime PM helper function decrementing the usage
+> -	 * count, in its probe routine and pm_runtime_get_noresume() in
+> -	 * its remove routine.
+> -	 */
+> -	pm_runtime_get_sync(dev);
+>  	rc = pci_drv->probe(pci_dev, ddi->id);
+>  	if (!rc)
+>  		return rc;
+> @@ -464,9 +454,6 @@ static void pci_device_remove(struct device *dev)
+>  	pcibios_free_irq(pci_dev);
+>  	pci_iov_remove(pci_dev);
+>  
+> -	/* Undo the runtime PM settings in local_pci_probe() */
+> -	pm_runtime_put_sync(dev);
+> -
+>  	/*
+>  	 * If the device is still on, set the power state as "unknown",
+>  	 * since it might change by the next time we load the driver.
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index b88db815ee01..e9c38b994c73 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -3097,7 +3097,15 @@ void pci_pm_init(struct pci_dev *dev)
+>  	u16 pmc;
+>  
+>  	pm_runtime_forbid(&dev->dev);
+> +
+> +	/*
+> +	 * Unbound PCI devices are always put in D0.  If the driver supports
+> +	 * runtime PM, it should call pm_runtime_put_noidle(), or any other
+> +	 * runtime PM helper function decrementing the usage count, in its
+> +	 * probe routine and pm_runtime_get_noresume() in its remove routine.
+> +	 */
+>  	pm_runtime_set_active(&dev->dev);
+> +	pm_runtime_get_noresume(&dev->dev);
+>  	pm_runtime_enable(&dev->dev);
+>  	device_enable_async_suspend(&dev->dev);
+>  	dev->wakeup_prepared = false;
