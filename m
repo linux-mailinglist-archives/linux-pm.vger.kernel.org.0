@@ -2,99 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F35C344C49A
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Nov 2021 16:45:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A78C644C4A7
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Nov 2021 16:52:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232030AbhKJPsU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Nov 2021 10:48:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59934 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231795AbhKJPsU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Nov 2021 10:48:20 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84553C061766
-        for <linux-pm@vger.kernel.org>; Wed, 10 Nov 2021 07:45:32 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id h11so6176998ljk.1
-        for <linux-pm@vger.kernel.org>; Wed, 10 Nov 2021 07:45:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Evhl9Rnbo6uGgtOTWwfei9Et0IZhF1n9wlVeq6oIj1A=;
-        b=XvHKB56mv5C90vcBjAZBO7aaT4t9iqxblYkip8T5trmXnoz4XYw7Olww682/lZ/P9I
-         EAuFNfQIi6Y0sMgc1XNsguFdmHuvsRIObaddzr6sv0YwILUKw61H5JQOew6NWs+cjC2r
-         ALhEd5Dy/qwHEMG5sEXqxToSUQLBPHb5d5GUS/Z77x0a7oCj0jsmegSuM/8bYAFV7IoF
-         x15YysBtWWmxm2qrfoVTQ8NfnNjTk2hSFrCeOk4Sl14EQQ2rR0nMij3SKZdV0vP1Z/rW
-         aFZfo3s3yC4p3Go6S5pY8mwow0YWu9C+He3KN+m4qsuczvRNBSrHQWMXf5aMgpb2zbnX
-         ZFHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Evhl9Rnbo6uGgtOTWwfei9Et0IZhF1n9wlVeq6oIj1A=;
-        b=SKkbFNGOcKI6/YxaRosk7G28+WZPKD4iGW7HSHf8KJ7BsEB5Nx4I5U2QOiflO9W+zN
-         zYBzRJSZpwP6XXzq/lwgPAesus9GjdQLlkpKyNj1nsq4m9aixrROzMijwkbO12B6MykF
-         2sQdtEpy3EhUzZOjCFIvdl7akjhWs58PAhciL9g2sM0W72ymt/DdSSIlRXPn/PCKA2fx
-         LFQVh7Zul2CuQ4sxUGkpiy1kGKgfJPTesE8THFsBm8igxMiYdlMCw3nbfemk5qJcZZ1e
-         mER2a36N5TuEI1XYviyX4scFUKRFVFrVPeUCe6+SsrxgPlJFjcQxev0RWg5ri9rTLH7V
-         c/Zw==
-X-Gm-Message-State: AOAM5309S8qngSxSqBfdEWhLxLK6iwEqsKCS6kcSm0dSvk1tvLKMzkgU
-        ZLnux6WDuvTmc81Z7jzsLg13knWYZvvqXdCA
-X-Google-Smtp-Source: ABdhPJyDNSBBZhe8ArtBHOdesPHCOUbDOWVH5GndVM9ompCdI+efQgsi7WtTpUgIXin/FubpBdihBw==
-X-Received: by 2002:a2e:a413:: with SMTP id p19mr382804ljn.252.1636559130895;
-        Wed, 10 Nov 2021 07:45:30 -0800 (PST)
-Received: from [192.168.1.102] (62-248-207-242.elisa-laajakaista.fi. [62.248.207.242])
-        by smtp.gmail.com with ESMTPSA id d16sm13817ljj.87.2021.11.10.07.45.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Nov 2021 07:45:30 -0800 (PST)
-Subject: Re: [PATCH] cpufreq: qcom-hw: Fix exposed stack contents
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Thara Gopinath <thara.gopinath@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20211110152745.1868099-1-vladimir.zapolskiy@linaro.org>
- <YYvn1CJBrWprEKCD@ripper>
-From:   Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Message-ID: <8e6c81de-9cd3-5f05-f310-a5d3df36a151@linaro.org>
-Date:   Wed, 10 Nov 2021 17:45:20 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
-MIME-Version: 1.0
-In-Reply-To: <YYvn1CJBrWprEKCD@ripper>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S231838AbhKJPzC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Nov 2021 10:55:02 -0500
+Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:25750 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231795AbhKJPzC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Nov 2021 10:55:02 -0500
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1AA6WCJE027707;
+        Wed, 10 Nov 2021 09:52:12 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to;
+ s=PODMain02222019; bh=LMIc1XTCuMORjcqD74fjjOGC13l25tQnCBMxRD7cPDw=;
+ b=DD7TOEr58YaI/3QdQztz+DIU5Xv4DKK5Sz+eIEWkS0hwVzgct6KZIPdQyOBJSjP5Yj/i
+ S96HJVOrVKpN5W+TYINynlFgDC2russ6k6HWFGCvrwQvtuGpmr/1ILFRSVfJfrPN8JiY
+ PEmhS8kyLPmMh2syOXBtj8KWtqG+WLVMKro8CzrAFbA0p47CAoIRctnCgZw0brWrPrTV
+ tqhBMon9IobaMSDsgqOenybM6wUVwmxh98dDLTHChA82lrzJdKO8IL+vButoRm++QRNY
+ 780OghuYkISKkv1Pr9Rp/hS73aBXjGX4vcXqYJXJfIlhFgtZvvLjkseh23r83egkouBT sA== 
+Received: from ediex01.ad.cirrus.com ([87.246.76.36])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3c7th8hp22-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 10 Nov 2021 09:52:12 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.12; Wed, 10 Nov
+ 2021 15:52:10 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.12 via Frontend
+ Transport; Wed, 10 Nov 2021 15:52:10 +0000
+Received: from smtpclient.apple (macC02FN0GLMD6T.ad.cirrus.com [141.131.65.13])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 8BAF9B2F;
+        Wed, 10 Nov 2021 15:52:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
+Subject: Re: [PATCH 1/1] power: supply: Introduces bypass charging property
+From:   "Rivera-Matos, Ricardo" <rriveram@opensource.cirrus.com>
+In-Reply-To: <20211104144444.rulz4br3xu4qc7yh@earth.universe>
+Date:   Wed, 10 Nov 2021 09:52:08 -0600
+CC:     <patches@opensource.cirrus.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-ID: <75DE78A9-572A-46EC-932E-057EFB7F6421@opensource.cirrus.com>
+References: <20211104135027.2352874-1-rriveram@opensource.cirrus.com>
+ <20211104135027.2352874-2-rriveram@opensource.cirrus.com>
+ <20211104144444.rulz4br3xu4qc7yh@earth.universe>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+X-Mailer: Apple Mail (2.3654.120.0.1.13)
+X-Proofpoint-ORIG-GUID: pHzHl3JYBTGIPcG45iDmzSOXYHh0BQ-S
+X-Proofpoint-GUID: pHzHl3JYBTGIPcG45iDmzSOXYHh0BQ-S
+X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Bjorn,
+Hello,
 
-On 11/10/21 5:40 PM, Bjorn Andersson wrote:
-> On Wed 10 Nov 07:27 PST 2021, Vladimir Zapolskiy wrote:
-> 
->> On irq request it is improper to pass its designated name, which is
->> allocated on stack, because the irq name string is not copied, thus
->> there is a risk of leaking partial stack contents to userspace.
->>
->> Fixes: 275157b367f4 ("cpufreq: qcom-cpufreq-hw: Add dcvs interrupt support")
->> Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-> 
-> This was already proposed and reviewed at:
-> 
-> https://lore.kernel.org/all/20210901084732.943248-1-ardb@kernel.org/
+> On Nov 4, 2021, at 9:44 AM, Sebastian Reichel =
+<sebastian.reichel@collabora.com> wrote:
+>=20
+> Hi,
+>=20
+> On Thu, Nov 04, 2021 at 08:50:27AM -0500, Ricardo Rivera-Matos wrote:
+>> Adds a POWER_SUPPLY_CHARGE_TYPE_BYPASS option to the =
+POWER_SUPPLY_PROP_CHARGE_TYPE
+>> property to facilitate bypass charging operation.
+>>=20
+>> In bypass charging operation, the charger bypasses the charging path =
+around the
+>> integrated converter allowing for a "smart" wall adaptor to perform =
+the power
+>> conversion externally.
+>>=20
+>> This operational mode is critical for the USB PPS standard of power =
+adaptors and is
+>> becoming a common feature in modern charging ICs such as:
+>>=20
+>> - BQ25980
+>> - BQ25975
+>> - BQ25960
+>> - LN8000
+>> - LN8410
+>>=20
+>> Signed-off-by: Ricardo Rivera-Matos <rriveram@opensource.cirrus.com>
+>> ---
+>=20
+> Please always send API changes together with a user (e.g. in this
+> case you could update bq25980_charger driver to use this property).
 
-thank you for pointing it out, missed the fix in my mailbox and have to
-reinvent it after stumbling upon the problem.
+Ack, I will send out a v2 patch series with an update to the =
+bq25980_charger driver.
+>=20
+> =E2=80=94 Sebastian
 
-> Could Ard's patch please be picked up by the maintainers, preferably
-> with above Fixes added, so we get this backported onto v5.15 stable...
-> 
+Best Regards,
+Ricardo
+>=20
+>> drivers/power/supply/power_supply_sysfs.c | 1 +
+>> include/linux/power_supply.h              | 1 +
+>> 2 files changed, 2 insertions(+)
+>>=20
+>> diff --git a/drivers/power/supply/power_supply_sysfs.c =
+b/drivers/power/supply/power_supply_sysfs.c
+>> index c3d7cbcd4fad..1368e13dc94b 100644
+>> --- a/drivers/power/supply/power_supply_sysfs.c
+>> +++ b/drivers/power/supply/power_supply_sysfs.c
+>> @@ -89,6 +89,7 @@ static const char * const =
+POWER_SUPPLY_CHARGE_TYPE_TEXT[] =3D {
+>> 	[POWER_SUPPLY_CHARGE_TYPE_ADAPTIVE]	=3D "Adaptive",
+>> 	[POWER_SUPPLY_CHARGE_TYPE_CUSTOM]	=3D "Custom",
+>> 	[POWER_SUPPLY_CHARGE_TYPE_LONGLIFE]	=3D "Long Life",
+>> +	[POWER_SUPPLY_CHARGE_TYPE_BYPASS]	=3D "Bypass",
+>> };
+>>=20
+>> static const char * const POWER_SUPPLY_HEALTH_TEXT[] =3D {
+>> diff --git a/include/linux/power_supply.h =
+b/include/linux/power_supply.h
+>> index 9ca1f120a211..9432234d7900 100644
+>> --- a/include/linux/power_supply.h
+>> +++ b/include/linux/power_supply.h
+>> @@ -49,6 +49,7 @@ enum {
+>> 	POWER_SUPPLY_CHARGE_TYPE_ADAPTIVE,	/* dynamically adjusted =
+speed */
+>> 	POWER_SUPPLY_CHARGE_TYPE_CUSTOM,	/* use CHARGE_CONTROL_* =
+props */
+>> 	POWER_SUPPLY_CHARGE_TYPE_LONGLIFE,	/* slow speed, longer =
+life */
+>> +	POWER_SUPPLY_CHARGE_TYPE_BYPASS,	/* bypassing the charger =
+*/
+>> };
+>>=20
+>> enum {
+>> --=20
+>> 2.25.1
+>>=20
 
-Right, the bug is quite critical and needs backporting.
-
---
-Best wishes,
-Vladimir
