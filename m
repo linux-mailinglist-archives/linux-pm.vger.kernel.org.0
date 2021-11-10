@@ -2,64 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 343A844BBD8
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Nov 2021 07:57:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20EF844BE43
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Nov 2021 11:07:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbhKJHAP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Nov 2021 02:00:15 -0500
-Received: from mga14.intel.com ([192.55.52.115]:19092 "EHLO mga14.intel.com"
+        id S230117AbhKJKKW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Nov 2021 05:10:22 -0500
+Received: from uho.ysoft.cz ([81.19.3.130]:18961 "EHLO uho.ysoft.cz"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229522AbhKJHAP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 10 Nov 2021 02:00:15 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10163"; a="232858807"
-X-IronPort-AV: E=Sophos;i="5.87,223,1631602800"; 
-   d="scan'208";a="232858807"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2021 22:57:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,223,1631602800"; 
-   d="scan'208";a="533951198"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga001.jf.intel.com with ESMTP; 09 Nov 2021 22:57:27 -0800
-Received: from abityuts-desk1.fi.intel.com (abityuts-desk1.fi.intel.com [10.237.68.32])
-        by linux.intel.com (Postfix) with ESMTP id 6EDA1580699;
-        Tue,  9 Nov 2021 22:57:26 -0800 (PST)
-Message-ID: <ff68ed136f78de109f467f9fc23493ac7ed14d39.camel@gmail.com>
-Subject: Re: [PATCH] turbostat: fix PC6 displaying on some systems
-From:   Artem Bityutskiy <dedekind1@gmail.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Len Brown <lenb@kernel.org>
-Cc:     Linux PM Mailing List <linux-pm@vger.kernel.org>
-Date:   Wed, 10 Nov 2021 08:57:25 +0200
-In-Reply-To: <20211004105224.3145916-1-dedekind1@gmail.com>
-References: <20211004105224.3145916-1-dedekind1@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
+        id S229831AbhKJKKV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 10 Nov 2021 05:10:21 -0500
+Received: from [10.0.29.210] (unknown [10.0.29.210])
+        by uho.ysoft.cz (Postfix) with ESMTP id 0A381A0753;
+        Wed, 10 Nov 2021 11:07:32 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ysoft.com;
+        s=20160406-ysoft-com; t=1636538852;
+        bh=dd4tweGuclD5iB1Lg5dfzSruG+i/XLfegDyheWwHhSE=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=LFZeOvbiVMfXPvItc40LgittKMeQljGiubYm5zvEVqxxCfcDoemPzcsrEMUipFshv
+         mSAl2Pfw0mnGkege/Q+S1mmN7dZ8HJUVT7OpNKgYcAhpnuS6Cehe/tgKAM2mH4+28o
+         Oa2Q88yz+My1z8ntDZxAmZ7T5bekDfbIRSdIKmNc=
+Subject: Re: [PATCH v2] thermal: imx: implement runtime PM support
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Amit Kucheria <amitk@kernel.org>, linux-kernel@vger.kernel.org,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        David Jander <david@protonic.nl>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Petr Benes <petrben@gmail.com>
+References: <20211019130809.21281-1-o.rempel@pengutronix.de>
+ <20211020050459.GE16320@pengutronix.de>
+ <CAPwXO5b=z1nhQCo55A_XuK-Es2o7TrL2Vj6AkRSXa3Wxh0s8sA@mail.gmail.com>
+ <20211021172048.GE2298@pengutronix.de>
+ <CAPwXO5bWoAvZgQLQHa6CsFmZ2bcUQ9pJQBBL3F+goppMeAKkFQ@mail.gmail.com>
+From:   =?UTF-8?B?TWljaGFsIFZva8OhxI0=?= <michal.vokac@ysoft.com>
+Message-ID: <8692108c-1b46-3d3d-6911-300ac27c2980@ysoft.com>
+Date:   Wed, 10 Nov 2021 11:07:31 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
+In-Reply-To: <CAPwXO5bWoAvZgQLQHa6CsFmZ2bcUQ9pJQBBL3F+goppMeAKkFQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 2021-10-04 at 13:52 +0300, Artem Bityutskiy wrote:
-> From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+On 25. 10. 21 13:06, Petr Benes wrote:
+> Hi Oleksij,
 > 
-> 'MSR_PKG_CST_CONFIG_CONTROL' encodes the deepest allowed package C-state limit,
-> and turbostat decodes it.
+> On Thu, 21 Oct 2021 at 19:21, Oleksij Rempel <o.rempel@pengutronix.de> wrote:
+>>
+>> Hi Petr,
+>>
+>> On Wed, Oct 20, 2021 at 05:53:03PM +0200, Petr Benes wrote:
+>>> On Wed, 20 Oct 2021 at 07:05, Oleksij Rempel <o.rempel@pengutronix.de> wrote:
+>>>>
+>>>> Hi Petr and Michal,
+>>>>
+>>>> I forgot to add you for v2 in CC. Please test/review this version.
+>>>
+>>> Hi Oleksij,
+>>>
+>>> It works good. with PM as well as without PM. The only minor issue I found is,
+>>> that the first temperature reading (when the driver probes) fails. That is
+>>> (val & soc_data->temp_valid_mask) == 0) holds true. How does
+>>> pm_runtime_resume_and_get() behave in imx_thermal_probe()?
+>>> Does it go through imx_thermal_runtime_resume() with usleep_range()?
+>>
+>> How exactly did you reproduce it? Even more or less understanding how
 > 
-> Before this patch: turbostat does not recognize value "3" on Ice Lake Xeon
-> (ICX), treats it as "unknown", and does not display any package C-states in the
-> results table.
+> I just placed my debug print into get_temp()
 > 
-> After this patch: turbostat recognizes value 3 on ICX, treats it as "PC6", and
-> correctly displays package C-states in the results table.
+>      if ((val & soc_data->temp_valid_mask) == 0) {
+>          dev_dbg(&tz->device, "temp measurement never finished\n");
+>          printk("Wrong temperature reading!!!!!!\n");
+>          return -EAGAIN;
+>      }
 > 
-> Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+>> this can potentially happen, i never had this issue on my HW. Is it something
+>> HW specific?
+> 
+> IMHO it is just product of the following sequence:
+> 
+> pm_runtime_set_active(&pdev->dev);
+> pm_runtime_enable(data->dev);
+> pm_runtime_resume_and_get(data->dev);
+> thermal_zone_device_enable(data->tz);
+> 
+> With assumption imx_thermal_runtime_resume() didn't run,
+> hence the sensor didn't get enough time to come up.
+> 
+> I didn't have time to spend it on and you have better knowledge of the
+> area. If it is not that straightforward I can try to diagnose it better.
+>
+Hi Oleksij,
+Did you manage to further debug and reproduce this problem?
+Do you plan to send the v3?
 
-Hi,
+Regarding your question about the HW - this problem occured once we
+upgraded the SoC on our SBC from i.MX6DL to i.MX6Q/QP. With the DualLite
+we never had this problem but the Quad is getting hot quite fast.
+We have pretty limited cooling options so the core is operated at its
+upper temperature limits when fully loaded.
 
-any chance for this patch to be picked?
+Best regards,
+Michal
 
-Thanks,
-Artem.
 
