@@ -2,94 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84EFB44CB85
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Nov 2021 23:01:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 794B344CC9D
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Nov 2021 23:24:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233555AbhKJWEi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Nov 2021 17:04:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60584 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233284AbhKJWEh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Nov 2021 17:04:37 -0500
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B35EFC0613F5
-        for <linux-pm@vger.kernel.org>; Wed, 10 Nov 2021 14:01:49 -0800 (PST)
-Received: by mail-ot1-x32f.google.com with SMTP id z2-20020a9d71c2000000b0055c6a7d08b8so6054351otj.5
-        for <linux-pm@vger.kernel.org>; Wed, 10 Nov 2021 14:01:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=swiecki.net; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=YUdZCO/hNfprbwtfZTPl8gI7fzwGN/mef1SZePWhdGQ=;
-        b=CMeKc3cCRv5cPku84sXDxWyZtOKUSgVHaF691D2GsGw/rfrBZEWmN/+P4oYKri5W0Q
-         Hom1d8v/i/X19PS31UoM6OrEr69rT8g6+QAsH/6kw/fcG2SV9e9X9V2p15W29ImmMHrF
-         jwG+4wdK+6D1+HSKQCvoSOC5BG+2J1E+RSTnw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=YUdZCO/hNfprbwtfZTPl8gI7fzwGN/mef1SZePWhdGQ=;
-        b=Qt1ycw/wqUFTM84rPsWr2TCVL65WTvacCJubdAi9DzJ3pfYTmD/86cFk3hnRYWivN2
-         QIHTFmOol5Xq69vSdUohKlG6nBTqXhtv6qNdJA5rT0yIC6mxFPCxExiospBjjMo//IR8
-         E/j6ad/OXZn6+H5dqyKYjW5idf90dKlUaOOYFDEPZi+Mnw3nNKhVywZmJljcviQG7Xlm
-         ceAtYY2S+5So545j3tejSauEN67Zeeou3G8uL4svMtf+UjwLajfGCK2kqsk7MLKM6Vjy
-         cCiza93FbXweP65gG6p3EJZipW4vIUmkMtS/f6ppdsSyCYU/MKic/SMj6sgH0w9NgU9L
-         YQzA==
-X-Gm-Message-State: AOAM530Vybz85Tyz3uz9I9ceiIo4VV1z0EhHNk06+G36uGZvHegNECUz
-        11VXnBI9Yb0hMJTDayCfSpC7DjhEvqrPjpX5g2nS7g==
-X-Google-Smtp-Source: ABdhPJy/gqROCJ6wB4jz2whMB+ZkC2aUf8dXdseelcRFvHN7Y21FZ1S2dhIxLup+gHQ3lwU3mjjJfBH6MbJl12Wy1Ks=
-X-Received: by 2002:a05:6830:1690:: with SMTP id k16mr2073994otr.148.1636581708952;
- Wed, 10 Nov 2021 14:01:48 -0800 (PST)
+        id S233592AbhKJW1E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Nov 2021 17:27:04 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58838 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233552AbhKJW1D (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 10 Nov 2021 17:27:03 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C93AD61213;
+        Wed, 10 Nov 2021 22:24:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1636583055;
+        bh=0fre3SfK7wolFNYE3+elp2EAeuxzNIUlhw2MJlqR2YI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=qJwZtK0YNM4LSAIpSGnz+GMPkKwY05rEjGKMOVkYvw1I/fkCQb5+NVkaJ9TMiUUhB
+         oOneNgf//xVucjOdymwI1SYmNF5DLu0FiKFdkc3HgqGm6Os2e7CA2RTNZZTzxLG9Px
+         62EgLOqgf22/mKhHkxiCjBY+lYYqIujKHlIRGDJrnKcE17hLo5ofrDiGd+cr1A6smN
+         V/1xBUBbXum6TyYTOcBOrLgJsabIfldqU/cITk6ebhCoZsK2hJRIaNwRk6vDWgNUTq
+         /uimdCnaxoEtcg697CvcPGPO7Kwd1ZUmCznmOOwhCVWhh81uR5QUZC+Os2tFbbML+3
+         EUnOyoe1pRgjA==
+Received: by mail-oo1-f50.google.com with SMTP id z11-20020a4a870b000000b002b883011c77so1250558ooh.5;
+        Wed, 10 Nov 2021 14:24:15 -0800 (PST)
+X-Gm-Message-State: AOAM530z5Ls4Qs+6uSrQcNUgdH4d8RAb7p8WRMjSKlifcWxSlMt6BDsF
+        dVXj68w79s/MivTqWVGllL9xhITJmgedmvp8p5s=
+X-Google-Smtp-Source: ABdhPJwTbANCR4LyGDnbFZlq9QNtUtJ2ht9HKEiYvAszj6gDBkZxO/hSaVifqPNefuFrcmHrEmsRPVYdZZNQeOj2G0Q=
+X-Received: by 2002:a4a:a641:: with SMTP id j1mr1471623oom.63.1636583055093;
+ Wed, 10 Nov 2021 14:24:15 -0800 (PST)
 MIME-Version: 1.0
-References: <CAP145pjO9zdGgutHP=of0H+L1=nSz097zf73i7ZYm2-NWuwHhQ@mail.gmail.com>
- <20211110212647.GA1262229@bhelgaas>
-In-Reply-To: <20211110212647.GA1262229@bhelgaas>
-From:   =?UTF-8?B?Um9iZXJ0IMWad2nEmWNraQ==?= <robert@swiecki.net>
-Date:   Wed, 10 Nov 2021 23:01:38 +0100
-Message-ID: <CAP145phdRheFzkvcBticrmhFKDFSyW6vpK-KMw+-QLxLJn3X4g@mail.gmail.com>
-Subject: Re: [PATCH] pci: Don't call resume callback for nearly bound devices
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20211110200253.rfudkt3edbd3nsyj@lahvuun>
+In-Reply-To: <20211110200253.rfudkt3edbd3nsyj@lahvuun>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 10 Nov 2021 23:24:03 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXHuU8dFBUeM41bHu13nd2qQVPJizt8Epw596K89_samiQ@mail.gmail.com>
+Message-ID: <CAMj1kXHuU8dFBUeM41bHu13nd2qQVPJizt8Epw596K89_samiQ@mail.gmail.com>
+Subject: Re: [REGRESSION]: drivers/firmware: move x86 Generic System
+ Framebuffers support
+To:     Ilya Trukhanov <lahvuun@gmail.com>
+Cc:     "# 3.4.x" <stable@vger.kernel.org>, regressions@lists.linux.dev,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, pavel@ucw.cz
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+Hi Ilya,
 
-=C5=9Br., 10 lis 2021 o 22:26 Bjorn Helgaas <helgaas@kernel.org> napisa=C5=
-=82(a):
+On Wed, 10 Nov 2021 at 21:02, Ilya Trukhanov <lahvuun@gmail.com> wrote:
 >
-> On Tue, Nov 09, 2021 at 01:42:29PM +0100, Robert =C5=9Awi=C4=99cki wrote:
-> > Also, this might be unrelated, but the following happened around this
-> > patch (ie https://github.com/torvalds/linux/commit/0c5c62ddf88c34bc83b6=
-6e4ac9beb2bb0e1887d4)
-> >
-> > I sometimes run Win11 under qemu/kvm/vfio (gfx card), and it stopped
-> > booting (even with the latest patch for pci). Another Linux distro
-> > boots fine under the same qemu/kvm/vfio, but Win11 stops at the boot
-> > screen.
-> >
-> > It worked well with 5.15.0 and a few PRs later - with the git tip it's
-> > not booting - and it works well with 5.15.0-rc7
-> >
-> > Maybe related to pci/vfio changes, maybe not, just leaving it here for
-> > track record. I'll try to debug it a bit.
+> Suspend-to-RAM with elogind under Wayland stopped working in 5.15.
 >
-> Hmm.  I have no idea how to debug a Win11 boot issue.  Unless there
-> are clues in the dmesg log or some qemu or kvm logs (if you find any
-> such logs, please put the complete logs somewhere), the only thing I
-> can think to do would be bisecting it.  "git bisect" between v5.15 and
-> 0c5c62ddf88c looks like about 13 steps.
+> This occurs with 5.15, 5.15.1 and latest master at
+> 89d714ab6043bca7356b5c823f5335f5dce1f930. 5.14 and earlier releases work
+> fine.
+>
+> git bisect gives d391c58271072d0b0fad93c82018d495b2633448.
+>
+> To reproduce:
+> - Use elogind and Linux 5.15.1 with CONFIG_SYSFB_SIMPLEFB=n.
+> - Start a Wayland session. I tested sway and weston, neither worked.
+> - In a terminal emulator (I used alacritty) execute `loginctl suspend`.
+>
+> Normally after the last step the system would suspend, but it no longer
+> does so after I upgraded to Linux 5.15. After running `loginctl suspend`
+> in dmesg I get the following:
+> [  103.098782] elogind-daemon[2357]: Suspending system...
+> [  103.098794] PM: suspend entry (deep)
+> [  103.124621] Filesystems sync: 0.025 seconds
+>
+> But nothing happens afterwards.
+>
+> Suspend works as expected if I do any of the following:
+> - Revert d391c58271072d0b0fad93c82018d495b2633448.
+> - Build with CONFIG_SYSFB_SIMPLEFB=y.
 
-I think I wouldn't worry about it just yet. It's a problem with many
-possible culprits (kvm, qemu, vfio, Win11 itself). Once the pci code
-is stable, I'll take another look and do some, at least basic,
-debugging. Though the problem is somewhat intermittent (mostly the
-system doesn't boot, but sometimes it does).
+If this solves the issue, what else is there to discuss?
+
+
+
+> - Suspend from tty, even if a Wayland session is running in parallel.
+> - Suspend from under an X11 session.
+> - Suspend with `echo mem > /sys/power/state`.
+>
+> If I attach strace to the elogind-daemon process after running
+> `loginctl suspend` then the system immediately suspends. However, if
+> I attach strace *prior* to running `loginctl suspend` then no suspend,
+> and the process gets stuck on a write syscall to `/sys/power/state`.
+>
+> I "traced" a little bit with printk (sorry, I don't know of a better
+> way) and the call chain is as follows:
+> state_store -> pm_suspend -> enter_state -> suspend_prepare
+> -> pm_prepare_console -> vt_move_to_console -> vt_waitactive
+> -> __vt_event_wait
+>
+> __vt_event_wait just waits until wait_event_interruptible completes, but
+> it never does (not until I attach to elogind-daemon with strace, at
+> least). I did not follow the chain further.
+>
+> - Linux version 5.15.1 (lahvuun@lahvuun) (gcc (Gentoo 11.2.0 p1) 11.2.0,
+>   GNU ld (Gentoo 2.37_p1 p0) 2.37) #51 SMP PREEMPT Tue Nov 9 23:39:25
+>   EET 2021
+> - Gentoo Linux 2.8
+> - x86_64 AuthenticAMD
+> - dmesg: https://pastebin.com/duj33bY8
+> - .config: https://pastebin.com/7Hew1g0T
