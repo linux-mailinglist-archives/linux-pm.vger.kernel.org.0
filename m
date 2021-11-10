@@ -2,141 +2,284 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A78C644C4A7
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Nov 2021 16:52:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B15544C4B8
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Nov 2021 16:55:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231838AbhKJPzC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Nov 2021 10:55:02 -0500
-Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:25750 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231795AbhKJPzC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Nov 2021 10:55:02 -0500
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1AA6WCJE027707;
-        Wed, 10 Nov 2021 09:52:12 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=content-type :
- mime-version : subject : from : in-reply-to : date : cc :
- content-transfer-encoding : message-id : references : to;
- s=PODMain02222019; bh=LMIc1XTCuMORjcqD74fjjOGC13l25tQnCBMxRD7cPDw=;
- b=DD7TOEr58YaI/3QdQztz+DIU5Xv4DKK5Sz+eIEWkS0hwVzgct6KZIPdQyOBJSjP5Yj/i
- S96HJVOrVKpN5W+TYINynlFgDC2russ6k6HWFGCvrwQvtuGpmr/1ILFRSVfJfrPN8JiY
- PEmhS8kyLPmMh2syOXBtj8KWtqG+WLVMKro8CzrAFbA0p47CAoIRctnCgZw0brWrPrTV
- tqhBMon9IobaMSDsgqOenybM6wUVwmxh98dDLTHChA82lrzJdKO8IL+vButoRm++QRNY
- 780OghuYkISKkv1Pr9Rp/hS73aBXjGX4vcXqYJXJfIlhFgtZvvLjkseh23r83egkouBT sA== 
-Received: from ediex01.ad.cirrus.com ([87.246.76.36])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3c7th8hp22-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 10 Nov 2021 09:52:12 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.12; Wed, 10 Nov
- 2021 15:52:10 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.12 via Frontend
- Transport; Wed, 10 Nov 2021 15:52:10 +0000
-Received: from smtpclient.apple (macC02FN0GLMD6T.ad.cirrus.com [141.131.65.13])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 8BAF9B2F;
-        Wed, 10 Nov 2021 15:52:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
-Subject: Re: [PATCH 1/1] power: supply: Introduces bypass charging property
-From:   "Rivera-Matos, Ricardo" <rriveram@opensource.cirrus.com>
-In-Reply-To: <20211104144444.rulz4br3xu4qc7yh@earth.universe>
-Date:   Wed, 10 Nov 2021 09:52:08 -0600
-CC:     <patches@opensource.cirrus.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-ID: <75DE78A9-572A-46EC-932E-057EFB7F6421@opensource.cirrus.com>
-References: <20211104135027.2352874-1-rriveram@opensource.cirrus.com>
- <20211104135027.2352874-2-rriveram@opensource.cirrus.com>
- <20211104144444.rulz4br3xu4qc7yh@earth.universe>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-X-Mailer: Apple Mail (2.3654.120.0.1.13)
-X-Proofpoint-ORIG-GUID: pHzHl3JYBTGIPcG45iDmzSOXYHh0BQ-S
-X-Proofpoint-GUID: pHzHl3JYBTGIPcG45iDmzSOXYHh0BQ-S
-X-Proofpoint-Spam-Reason: safe
+        id S232262AbhKJP6Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Nov 2021 10:58:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33900 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231838AbhKJP6X (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Nov 2021 10:58:23 -0500
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC80C061764;
+        Wed, 10 Nov 2021 07:55:36 -0800 (PST)
+Received: by mail-ot1-x334.google.com with SMTP id h12-20020a056830034c00b0055c8458126fso4642976ote.0;
+        Wed, 10 Nov 2021 07:55:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=33y2K1n4+a77pWOR3n6HeGOY3n+xOhILC5MDJChRPQs=;
+        b=lNx1dXg/KoSTJEUrthhuuymEFJiI4KHW5wtQZ5wifVxeU5YV7hD/VMvKQ8u1f3nxp1
+         UD1E0bCOK2aWK3ld6GztgOgLAli498Zgb0mHDrqCwwoW0DNvX/U9s430uxlshlG0mgHD
+         WgX50vixrzGZXvZNaXnPrYpk1NXfTlAjEne5R6jA7Jtxxs6TRXPinKmtanj4jhQKdpjK
+         s+Li88Fuu5avu+vraUlUifA/EjWlQ+xnuYLuXWiRY016aurqXGBjwMRws3GMYy8hF/Be
+         LesgolfkxJvxgYDnk+NUAGGBKkGAso7/IXOcRMFiMTRaCJ+hQtbPcTXyWkckZyCZs56Z
+         tTCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=33y2K1n4+a77pWOR3n6HeGOY3n+xOhILC5MDJChRPQs=;
+        b=DRljFTFmimh0wAXRgGSXuhATIkY/WVJIvyzFZoodc6YR/1JzK+LDlg4p4VU8ACY2wg
+         AGoxUK9lkP3lCibNWcdJLarJv0iLE/tQDDJUjArUPISLj6Wss1MDkyab2h8GMUVBxSTz
+         X3hxJ8HkGhjeO87XR+fnp6wATeuGVVCwbriosCn5GfzFRFGEoUdcC7050ovhTf1bpZzP
+         +43bhr2QCAtTIIhGuTGH+6pEI0ekz+4FNAX+j7qDjy96RTX4nm1PXfMXtliQik3NUe9o
+         KgzAnqNizxcWVFl3hDBaQ0fusLeK3ujebWZGsWuSzI3TTJy6XX9AOtJAcVleT0kH0D/a
+         tfsA==
+X-Gm-Message-State: AOAM530lwKkT9Br8ktPaQ6Ig//4qRQXO3sngmjGij1JrQ+anhnQ0YS6+
+        RKYXxB9cWZI0TtQQITIYC00=
+X-Google-Smtp-Source: ABdhPJyTsvfV3nJgDRLyuR7Gv6RwKoDLsSEonATegNm7ehO7yJyI+hv3yWf6/cLlDC08wXUuK+rWIA==
+X-Received: by 2002:a05:6830:236b:: with SMTP id r11mr207666oth.145.1636559734819;
+        Wed, 10 Nov 2021 07:55:34 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i15sm45851otu.67.2021.11.10.07.55.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Nov 2021 07:55:33 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 10 Nov 2021 07:55:30 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Alistair Francis <alistair@alistair23.me>
+Cc:     lee.jones@linaro.org, broonie@kernel.org, kernel@pengutronix.de,
+        lgirdwood@gmail.com, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        s.hauer@pengutronix.de, linux-hwmon@vger.kernel.org,
+        amitk@kernel.org, linux-pm@vger.kernel.org, linux-imx@nxp.com,
+        alistair23@gmail.com, andreas@kemnade.info, shawnguo@kernel.org
+Subject: Re: [PATCH v15 5/8] hwmon: sy7636a: Add temperature driver for
+ sy7636a
+Message-ID: <20211110155530.GA2341709@roeck-us.net>
+References: <20211110122948.188683-1-alistair@alistair23.me>
+ <20211110122948.188683-6-alistair@alistair23.me>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211110122948.188683-6-alistair@alistair23.me>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
+On Wed, Nov 10, 2021 at 10:29:45PM +1000, Alistair Francis wrote:
+> This is a multi-function device to interface with the sy7636a
+> EPD PMIC chip from Silergy.
+> 
+> Signed-off-by: Alistair Francis <alistair@alistair23.me>
+> ---
+>  Documentation/hwmon/index.rst         |   1 +
+>  Documentation/hwmon/sy7636a-hwmon.rst |  24 ++++++
+>  drivers/hwmon/Kconfig                 |   9 +++
+>  drivers/hwmon/Makefile                |   1 +
+>  drivers/hwmon/sy7636a-hwmon.c         | 108 ++++++++++++++++++++++++++
+>  5 files changed, 143 insertions(+)
+>  create mode 100644 Documentation/hwmon/sy7636a-hwmon.rst
+>  create mode 100644 drivers/hwmon/sy7636a-hwmon.c
+> 
+> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+> index 7046bf1870d9..a887308850cd 100644
+> --- a/Documentation/hwmon/index.rst
+> +++ b/Documentation/hwmon/index.rst
+> @@ -180,6 +180,7 @@ Hardware Monitoring Kernel Drivers
+>     smsc47m1
+>     sparx5-temp
+>     stpddc60
+> +   sy7636a-hwmon
+>     tc654
+>     tc74
+>     thmc50
+> diff --git a/Documentation/hwmon/sy7636a-hwmon.rst b/Documentation/hwmon/sy7636a-hwmon.rst
+> new file mode 100644
+> index 000000000000..6b3e36d028dd
+> --- /dev/null
+> +++ b/Documentation/hwmon/sy7636a-hwmon.rst
+> @@ -0,0 +1,24 @@
+> +Kernel driver sy7636a-hwmon
+> +=========================
+> +
+> +Supported chips:
+> +
+> + * Silergy SY7636A PMIC
+> +
+> +
+> +Description
+> +-----------
+> +
+> +This driver adds hardware temperature reading support for
+> +the Silergy SY7636A PMIC.
+> +
+> +The following sensors are supported
+> +
+> +  * Temperature
+> +      - SoC on-die temperature in milli-degree C
+> +
+> +sysfs-Interface
+> +---------------
+> +
+> +temp0_input
+> +	- SoC on-die temperature (milli-degree C)
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 64bd3dfba2c4..3139a286c35a 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -1662,6 +1662,15 @@ config SENSORS_SIS5595
+>  	  This driver can also be built as a module. If so, the module
+>  	  will be called sis5595.
+>  
+> +config SENSORS_SY7636A
+> +	tristate "Silergy SY7636A"
+> +	help
+> +	  If you say yes here you get support for the thermistor readout of
+> +	  the Silergy SY7636A PMIC.
+> +
+> +	  This driver can also be built as a module.  If so, the module
+> +	  will be called sy7636a-hwmon.
+> +
+>  config SENSORS_DME1737
+>  	tristate "SMSC DME1737, SCH311x and compatibles"
+>  	depends on I2C && !PPC
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index baee6a8d4dd1..8f8da52098d1 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -182,6 +182,7 @@ obj-$(CONFIG_SENSORS_SMSC47M1)	+= smsc47m1.o
+>  obj-$(CONFIG_SENSORS_SMSC47M192)+= smsc47m192.o
+>  obj-$(CONFIG_SENSORS_SPARX5)	+= sparx5-temp.o
+>  obj-$(CONFIG_SENSORS_STTS751)	+= stts751.o
+> +obj-$(CONFIG_SENSORS_SY7636A)	+= sy7636a-hwmon.o
+>  obj-$(CONFIG_SENSORS_AMC6821)	+= amc6821.o
+>  obj-$(CONFIG_SENSORS_TC74)	+= tc74.o
+>  obj-$(CONFIG_SENSORS_THMC50)	+= thmc50.o
+> diff --git a/drivers/hwmon/sy7636a-hwmon.c b/drivers/hwmon/sy7636a-hwmon.c
+> new file mode 100644
+> index 000000000000..84ceaae3a404
+> --- /dev/null
+> +++ b/drivers/hwmon/sy7636a-hwmon.c
+> @@ -0,0 +1,108 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Functions to access SY3686A power management chip temperature
+> + *
+> + * Copyright (C) 2021 reMarkable AS - http://www.remarkable.com/
+> + *
+> + * Authors: Lars Ivar Miljeteig <lars.ivar.miljeteig@remarkable.com>
+> + *          Alistair Francis <alistair@alistair23.me>
+> + */
+> +
+> +#include <linux/err.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/init.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/regulator/machine.h>
+> +
+> +#include <linux/mfd/sy7636a.h>
+> +
+> +static int sy7636a_read(struct device *dev, enum hwmon_sensor_types type,
+> +			 u32 attr, int channel, long *temp)
+> +{
+> +	struct regmap *regmap = dev_get_drvdata(dev);
+> +	int ret, reg_val;
+> +
+> +	ret = regmap_read(regmap,
+> +			SY7636A_REG_TERMISTOR_READOUT, &reg_val);
+> +	if (ret)
+> +		return ret;
+> +
+> +	*temp = reg_val * 1000;
+> +
+> +	return 0;
+> +}
+> +
+> +static umode_t sy7636a_is_visible(const void *data,
+> +				   enum hwmon_sensor_types type,
+> +				   u32 attr, int channel)
+> +{
+> +	if (type != hwmon_temp)
+> +		return 0;
+> +
+> +	if (attr != hwmon_temp_input)
+> +		return 0;
+> +
+> +	return 0444;
+> +}
+> +
+> +static const struct hwmon_ops sy7636a_hwmon_ops = {
+> +	.is_visible = sy7636a_is_visible,
+> +	.read = sy7636a_read,
+> +};
+> +
+> +static const struct hwmon_channel_info *sy7636a_info[] = {
+> +	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
+> +	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
+> +	NULL
+> +};
+> +
+> +static const struct hwmon_chip_info sy7636a_chip_info = {
+> +	.ops = &sy7636a_hwmon_ops,
+> +	.info = sy7636a_info,
+> +};
+> +
+> +static int sy7636a_sensor_probe(struct platform_device *pdev)
+> +{
+> +	struct regmap *regmap = dev_get_regmap(pdev->dev.parent, NULL);
+> +	struct regulator *regulator;
+> +	struct device *hwmon_dev;
+> +	int err;
+> +
+> +	if (!regmap)
+> +		return -EPROBE_DEFER;
+> +
+> +	regulator = devm_regulator_get(&pdev->dev, "vcom");
+> +	if (IS_ERR(regulator)) {
+> +		return PTR_ERR(regulator);
+> +	}
+> +
+> +	err = regulator_enable(regulator);
+> +	if (err) {
+> +		regulator_put(regulator);
 
-> On Nov 4, 2021, at 9:44 AM, Sebastian Reichel =
-<sebastian.reichel@collabora.com> wrote:
->=20
-> Hi,
->=20
-> On Thu, Nov 04, 2021 at 08:50:27AM -0500, Ricardo Rivera-Matos wrote:
->> Adds a POWER_SUPPLY_CHARGE_TYPE_BYPASS option to the =
-POWER_SUPPLY_PROP_CHARGE_TYPE
->> property to facilitate bypass charging operation.
->>=20
->> In bypass charging operation, the charger bypasses the charging path =
-around the
->> integrated converter allowing for a "smart" wall adaptor to perform =
-the power
->> conversion externally.
->>=20
->> This operational mode is critical for the USB PPS standard of power =
-adaptors and is
->> becoming a common feature in modern charging ICs such as:
->>=20
->> - BQ25980
->> - BQ25975
->> - BQ25960
->> - LN8000
->> - LN8410
->>=20
->> Signed-off-by: Ricardo Rivera-Matos <rriveram@opensource.cirrus.com>
->> ---
->=20
-> Please always send API changes together with a user (e.g. in this
-> case you could update bq25980_charger driver to use this property).
+Is this needed ? I would have assumed that the devm_ function
+above would ensure that the put is handled automatically.
 
-Ack, I will send out a v2 patch series with an update to the =
-bq25980_charger driver.
->=20
-> =E2=80=94 Sebastian
+Guenter
 
-Best Regards,
-Ricardo
->=20
->> drivers/power/supply/power_supply_sysfs.c | 1 +
->> include/linux/power_supply.h              | 1 +
->> 2 files changed, 2 insertions(+)
->>=20
->> diff --git a/drivers/power/supply/power_supply_sysfs.c =
-b/drivers/power/supply/power_supply_sysfs.c
->> index c3d7cbcd4fad..1368e13dc94b 100644
->> --- a/drivers/power/supply/power_supply_sysfs.c
->> +++ b/drivers/power/supply/power_supply_sysfs.c
->> @@ -89,6 +89,7 @@ static const char * const =
-POWER_SUPPLY_CHARGE_TYPE_TEXT[] =3D {
->> 	[POWER_SUPPLY_CHARGE_TYPE_ADAPTIVE]	=3D "Adaptive",
->> 	[POWER_SUPPLY_CHARGE_TYPE_CUSTOM]	=3D "Custom",
->> 	[POWER_SUPPLY_CHARGE_TYPE_LONGLIFE]	=3D "Long Life",
->> +	[POWER_SUPPLY_CHARGE_TYPE_BYPASS]	=3D "Bypass",
->> };
->>=20
->> static const char * const POWER_SUPPLY_HEALTH_TEXT[] =3D {
->> diff --git a/include/linux/power_supply.h =
-b/include/linux/power_supply.h
->> index 9ca1f120a211..9432234d7900 100644
->> --- a/include/linux/power_supply.h
->> +++ b/include/linux/power_supply.h
->> @@ -49,6 +49,7 @@ enum {
->> 	POWER_SUPPLY_CHARGE_TYPE_ADAPTIVE,	/* dynamically adjusted =
-speed */
->> 	POWER_SUPPLY_CHARGE_TYPE_CUSTOM,	/* use CHARGE_CONTROL_* =
-props */
->> 	POWER_SUPPLY_CHARGE_TYPE_LONGLIFE,	/* slow speed, longer =
-life */
->> +	POWER_SUPPLY_CHARGE_TYPE_BYPASS,	/* bypassing the charger =
-*/
->> };
->>=20
->> enum {
->> --=20
->> 2.25.1
->>=20
-
+> +		return err;
+> +	}
+> +
+> +	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev,
+> +			"sy7636a_temperature", regmap, &sy7636a_chip_info, NULL);
+> +
+> +	if (IS_ERR(hwmon_dev)) {
+> +		err = PTR_ERR(hwmon_dev);
+> +		dev_err(&pdev->dev, "Unable to register hwmon device, returned %d\n", err);
+> +		return err;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static struct platform_driver sy7636a_sensor_driver = {
+> +	.probe = sy7636a_sensor_probe,
+> +	.driver = {
+> +		.name = "sy7636a-temperature",
+> +	},
+> +};
+> +module_platform_driver(sy7636a_sensor_driver);
+> +
+> +MODULE_DESCRIPTION("SY7636A sensor driver");
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.31.1
+> 
