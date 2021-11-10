@@ -2,80 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4AC444B796
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Nov 2021 23:33:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 442F244B9A1
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Nov 2021 01:34:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345006AbhKIWfw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Nov 2021 17:35:52 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56192 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345346AbhKIWdv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 9 Nov 2021 17:33:51 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E249761AE4;
-        Tue,  9 Nov 2021 22:21:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636496516;
-        bh=2xIC4RW/7+34GK6xmB3u03swd/O3KlxuJtrTuGNn2wg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o9aK8oM0UyNxOxkV6TDj0p53OJy5aXgRd1L/hiqUpjV7SD3tRSRAvz5Bt8byHHKdx
-         wNlnmlYbKYOoBC7Wwvq34yidrFQMopu/yhqQ5NMm36B86bVFlEFExfcw61JflirK5k
-         JBIAmOe1TVF/2Vj2X25kEyv+cwSrVasECG4bIPo+KZt2JxR+am5ukhadEvkEFt5dtE
-         NP0mSi23AsoXCa9h9458vpchonj7/Vir2RGSHGen/5ZbWxFYKpj5ARMLHbCzCiI76w
-         0vdHCrVmJZRnjk3McVS0Vfl+br4JPmt148DljtS5PzgIIBovcXw3Bdvlyo2firRz/f
-         E99kpLQIhEp3A==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thierry Reding <treding@nvidia.com>,
-        Sasha Levin <sashal@kernel.org>, rjw@rjwysocki.net,
-        swarren@wwwdotorg.org, thierry.reding@gmail.com, gnurou@gmail.com,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 32/50] cpuidle: tegra: Check whether PMC is ready
-Date:   Tue,  9 Nov 2021 17:20:45 -0500
-Message-Id: <20211109222103.1234885-32-sashal@kernel.org>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211109222103.1234885-1-sashal@kernel.org>
-References: <20211109222103.1234885-1-sashal@kernel.org>
+        id S230484AbhKJAhG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Nov 2021 19:37:06 -0500
+Received: from li1434-30.members.linode.com ([45.33.107.30]:46204 "EHLO
+        node.akkea.ca" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230369AbhKJAhF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 9 Nov 2021 19:37:05 -0500
+X-Greylist: delayed 563 seconds by postgrey-1.27 at vger.kernel.org; Tue, 09 Nov 2021 19:37:05 EST
+Received: from localhost (localhost [127.0.0.1])
+        by node.akkea.ca (Postfix) with ESMTP id 14B1C5DE02F;
+        Wed, 10 Nov 2021 00:24:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akkea.ca; s=mail;
+        t=1636503896; bh=fV1/s/8BNEP4rofaEIpdzzOvWDJaKNztJSjH9886HB8=;
+        h=From:To:Cc:Subject:Date;
+        b=i1NqxdibxkLCEO0qZoDS49QGLASKaFFnzcr73R9A7SVqt+KJNkrsfQkMGag/QEwYc
+         oijHyDiD2eVLCiGvnlTxOQENEoT4D5Md3skfoBHDed8wxQmwPpQSLmLoU6kgktCvLK
+         fjOQ6K2X+UPV+5wQAyzIMwsgTJ7Ii9ymbMbqKjm0=
+X-Virus-Scanned: Debian amavisd-new at mail.akkea.ca
+Received: from node.akkea.ca ([127.0.0.1])
+        by localhost (mail.akkea.ca [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id dlzn0ko_5TOf; Wed, 10 Nov 2021 00:24:55 +0000 (UTC)
+Received: from midas.localdomain (S0106788a2041785e.gv.shawcable.net [70.66.86.75])
+        by node.akkea.ca (Postfix) with ESMTPSA id 5C7535DE01D;
+        Wed, 10 Nov 2021 00:24:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akkea.ca; s=mail;
+        t=1636503895; bh=fV1/s/8BNEP4rofaEIpdzzOvWDJaKNztJSjH9886HB8=;
+        h=From:To:Cc:Subject:Date;
+        b=h1/QL0rfr0gQusd5Z5tPzpo3dQZv1xUv7ZLujymVUU6iPWN6xL/C8pzdRzqiK4hBf
+         tT0fnlPZ52pXSzyhC5OpyDuxXHq+vW70FSa4kImjpTmV1ZvtJC2eGBUF0+ROQ7XpLA
+         LJ0d4UnYgoSEgxRErCZL3U7oDJAogQc2v43LTRzM=
+From:   Angus Ainslie <angus@akkea.ca>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@puri.sm, Angus Ainslie <angus@akkea.ca>
+Subject: [PATCH] power: bq25890: temperature is also an adc value
+Date:   Tue,  9 Nov 2021 16:24:40 -0800
+Message-Id: <20211110002440.71404-1-angus@akkea.ca>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Dmitry Osipenko <digetx@gmail.com>
+Make sure that a conversion is forced when the power supply is offline so
+the temperature is valid.
 
-[ Upstream commit bdb1ffdad3b73e4d0538098fc02e2ea87a6b27cd ]
-
-Check whether PMC is ready before proceeding with the cpuidle registration.
-This fixes racing with the PMC driver probe order, which results in a
-disabled deepest CC6 idling state if cpuidle driver is probed before the
-PMC.
-
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-Signed-off-by: Thierry Reding <treding@nvidia.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Angus Ainslie <angus@akkea.ca>
 ---
- drivers/cpuidle/cpuidle-tegra.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/power/supply/bq25890_charger.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/cpuidle/cpuidle-tegra.c b/drivers/cpuidle/cpuidle-tegra.c
-index 29c5e83500d33..e6f96d272d240 100644
---- a/drivers/cpuidle/cpuidle-tegra.c
-+++ b/drivers/cpuidle/cpuidle-tegra.c
-@@ -346,6 +346,9 @@ static void tegra_cpuidle_setup_tegra114_c7_state(void)
+diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
+index 945c3257ca93..23a91c5d1f9d 100644
+--- a/drivers/power/supply/bq25890_charger.c
++++ b/drivers/power/supply/bq25890_charger.c
+@@ -388,6 +388,7 @@ static bool bq25890_is_adc_property(enum power_supply_property psp)
+ 	switch (psp) {
+ 	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
+ 	case POWER_SUPPLY_PROP_CURRENT_NOW:
++	case POWER_SUPPLY_PROP_TEMP:
+ 		return true;
  
- static int tegra_cpuidle_probe(struct platform_device *pdev)
- {
-+	if (tegra_pmc_get_suspend_mode() == TEGRA_SUSPEND_NOT_READY)
-+		return -EPROBE_DEFER;
-+
- 	/* LP2 could be disabled in device-tree */
- 	if (tegra_pmc_get_suspend_mode() < TEGRA_SUSPEND_LP2)
- 		tegra_cpuidle_disable_state(TEGRA_CC6);
+ 	default:
 -- 
-2.33.0
+2.25.1
 
