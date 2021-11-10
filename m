@@ -2,40 +2,39 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4282344C2FA
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Nov 2021 15:30:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A30BA44C2FF
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Nov 2021 15:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232193AbhKJOdh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Nov 2021 09:33:37 -0500
-Received: from mail-ot1-f50.google.com ([209.85.210.50]:46878 "EHLO
-        mail-ot1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232195AbhKJOdg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Nov 2021 09:33:36 -0500
-Received: by mail-ot1-f50.google.com with SMTP id b5-20020a9d60c5000000b0055c6349ff22so4090953otk.13;
-        Wed, 10 Nov 2021 06:30:49 -0800 (PST)
+        id S231969AbhKJOey (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Nov 2021 09:34:54 -0500
+Received: from mail-oi1-f169.google.com ([209.85.167.169]:39487 "EHLO
+        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232176AbhKJOey (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Nov 2021 09:34:54 -0500
+Received: by mail-oi1-f169.google.com with SMTP id bf8so5559161oib.6;
+        Wed, 10 Nov 2021 06:32:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=XjAf3OlmbwOXhyg2GEvgGGx342vsuJVL9IPZ/IIBANY=;
-        b=ZxTolRUZ4DcX4WBuOUCSe1UDzLMTtf1En9FZwu/2yvM0dRVEQzwFTjr3HPHdIdUaKi
-         ZQJQUaQ9XevtqPxGgMxVip4r6qN0IUZpzUgVG/+XD+IvZchtKiIiHhzKoP4Pb9nuDEcw
-         3cvJNt1U7HJlXqUIsponeyaMlURHUfOvHWlzThqJLP74wyQRNeN8aT49G4SgG5RvZj+1
-         6UQAtudIaSOYtpmkc6alhUdVxe2Gj+6JmAOq6e1GoQ6i3sdynZ5b0mfmUJ+tZWbYqumy
-         4/SE3bt63vqlnwM/ZA9KaeYX6Yl7KVhcceml9j5k4yuKGHyw9WTvlJZFHtIZn0FGfAl+
-         NGXw==
-X-Gm-Message-State: AOAM531pRLlbnUE1/YUhpSKA6Zb8HqTIbM1KcUmVTiIO4+1PfxhpqapP
-        mgvhTr3rChTU23LZEp00J106FWvoNr5i8UYsSKMdVS+iNXM=
-X-Google-Smtp-Source: ABdhPJwi1BEY0IwcEqIvTRpTXx9VoeabJxpg6sKKwVVM8Llb/8b4C+IVunq6CwGn+/m4cuXt5XNzAwFGh6cj3vkh/H8=
-X-Received: by 2002:a05:6830:348f:: with SMTP id c15mr243394otu.254.1636554648750;
- Wed, 10 Nov 2021 06:30:48 -0800 (PST)
+        bh=/02Exx/ph/UcNJNTQkGez12UzJqq82J9H0P+Kmhe9ik=;
+        b=H5xI42tOcjWG88i17eu80KW/8+8xGgqvoh3NPlYn9laLBJVRar1vHYjqmf1rkJhxmg
+         WlG7TU+pnbPkKzj6U7oR7/Dm3xeqdy+7FVr1LXWi/f+pDxY0EHDDCC5Z8rOBpeCaLQRC
+         0EgHV3huxn8AURLD6LwbWVLorZf4jWhT+4vYKHpUicmoSkVgFrlbfXYqA4zU5RHZKF2/
+         xACEwmJgNcNWwiUDO5c992Ua6Ieuen/7qiSLMFxgIHFmrmmXLou7iSggZRqf9MSxqqp7
+         dsPxXLT3khJ3vfzyKrmWh1clXht8AySPz7KxJ87EKBuLhnI/QUEadXhzGdIdy2ZY45+K
+         saQg==
+X-Gm-Message-State: AOAM532f4nCt0keAWyR0J1hcA5F7dWhiaqK9bfglMO/060yPXYG5YBLE
+        bJpoNRh8G24aSSHW7qrxTuI6lbU2dfPPYswU+aSFuRmSrq8=
+X-Google-Smtp-Source: ABdhPJzpPxPWj610km0kVDhyoJvd8Sm63jEpZ9VWQntHjhS3aR57WlQKbef4tlhe/Yy0GEfQtFY8habtiV8JK4t+Z5U=
+X-Received: by 2002:aca:5c5:: with SMTP id 188mr24097oif.154.1636554726515;
+ Wed, 10 Nov 2021 06:32:06 -0800 (PST)
 MIME-Version: 1.0
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 10 Nov 2021 15:30:37 +0100
-Message-ID: <CAJZ5v0hjcR1z_kD_jXthbXuebYbRCG3-BZsaZBD+Ta83-Kf+og@mail.gmail.com>
-Subject: [GIT PULL] More ACPI updates for v5.16-rc1
+Date:   Wed, 10 Nov 2021 15:31:55 +0100
+Message-ID: <CAJZ5v0jfXr+6YaQpeAeEN11R47BdvjiM1_JsWfrCSLNpVpt1pw@mail.gmail.com>
+Subject: [GIT PULL] More power management updates for v5.16-rc1
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
@@ -47,95 +46,90 @@ Hi Linus,
 Please pull from the tag
 
  git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- acpi-5.16-rc1-2
+ pm-5.16-rc1-2
 
-with top-most commit 314c6e2b4545efd5b88988f2308e90eda6a4bcf1
+with top-most commit dcc0b6f2e63ac3bdcea5c9686de4cb1684f2eb33
 
- Merge branches 'acpica', 'acpi-ec', 'acpi-pmic' and 'acpi-video'
+ Merge branches 'pm-opp' and 'pm-cpufreq'
 
-on top of commit c0d6586afa3546a3d148cf4b9d9a407b4f79d0bb
+on top of commit 833db72142b93a89211c1e43ca0a1e2e16457756
 
- Merge tag 'acpi-5.16-rc1' of
+ Merge tag 'pm-5.16-rc1' of
 git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
 
-to receive more ACPI updates for 5.16-rc1.
+to receive more power management updates for 5.16-rc1.
 
-These add support for a new ACPI device configuration object called
-_DSC, fix some issues including one recent regression, add two new
-items to quirk lists and clean up assorted pieces of code.
+These fix 3 intel_pstate driver regressions, fix locking in the core
+code suspending and resuming devices during system PM transitions, fix
+the handling of cpuidle drivers based on runtime PM during system-wide
+suspend, fix 2 issues in the operating performance points (OPP)
+framework and resource-managed helpers to it.
 
 Specifics:
 
- - Add support for new ACPI device configuration object called _DSC
-   to allow certain devices to be probed without changing their power
-   states, document it and make two drivers use it (Sakari Ailus,
-   Rajmohan Mani).
+ - Fix 2 intel_pstate driver regressions related to the HWP interrupt
+   handling added recently (Srinivas Pandruvada).
 
- - Fix device wakeup power reference counting broken recently by
-   mistake (Rafael Wysocki).
+ - Fix intel_pstate driver regression introduced during the 5.11
+   cycle and causing HWP desired performance to be mishandled in
+   some cases when switching driver modes and during system
+   suspend and shutdown (Rafael Wysocki).
 
- - Drop unused symbol and macros depending on it from acgcc.h (Rafael
-   Wysocki).
+ - Fix system-wide device suspend and resume locking to avoid
+   deadlocks when device objects are deleted during a system-wide
+   PM transition (Rafael Wysocki).
 
- - Add HP ZHAN 66 Pro to the "no EC wakeup" quirk list (Binbin Zhou).
+ - Modify system-wide suspend of devices to prevent cpuidle drivers
+   based on runtime PM from misbehaving during the "no IRQ" phase of
+   it (Ulf Hansson).
 
- - Add Xiaomi Mi Pad 2 to the backlight quirk list and drop an unused
-   piece of data from all of the list entries (Hans de Goede).
+ - Fix return value of _opp_add_static_v2() helper (YueHaibing).
 
- - Fix register read accesses handling in the Intel PMIC operation
-   region driver (Hans de Goede).
+ - Fix required-opp handle count (Pavankumar Kondeti).
 
- - Clean up static variables initialization in the EC driver
-   (wangzhitong).
+ - Add resource managed OPP helpers, update dev_pm_opp_attach_genpd(),
+   update their devfreq users, and make minor DT binding change (Dmitry
+   Osipenko).
 
 Thanks!
 
 
 ---------------
 
-Binbin Zhou (1):
-      ACPI: EC: Use ec_no_wakeup on HP ZHAN 66 Pro
+Dmitry Osipenko (6):
+      opp: Change type of dev_pm_opp_attach_genpd(names) argument
+      opp: Add more resource-managed variants of dev_pm_opp_of_add_table()
+      PM / devfreq: Add devm_devfreq_add_governor()
+      PM / devfreq: tegra30: Use resource-managed helpers
+      PM / devfreq: tegra30: Check whether clk_round_rate() returns zero rate
+      dt-bindings: opp: Allow multi-worded OPP entry name
 
-Hans de Goede (3):
-      ACPI: PMIC: Fix intel_pmic_regs_handler() read accesses
-      ACPI: video: Drop dmi_system_id.ident settings from
-video_detect_dmi_table[]
-      ACPI: video: use platform backlight driver on Xiaomi Mi Pad 2
+Pavankumar Kondeti (1):
+      opp: Fix required-opps phandle array count check
 
 Rafael J. Wysocki (2):
-      ACPI: PM: Fix device wakeup power reference counting error
-      ACPI: Drop ACPI_USE_BUILTIN_STDARG ifdef from acgcc.h
+      cpufreq: intel_pstate: Clear HWP desired on suspend/shutdown and offline
+      PM: sleep: Avoid calling put_device() under dpm_list_mtx
 
-Rajmohan Mani (1):
-      media: i2c: imx319: Support device probe in non-zero ACPI D state
+Srinivas Pandruvada (2):
+      cpufreq: intel_pstate: Fix unchecked MSR 0x773 access
+      cpufreq: intel_pstate: Clear HWP Status during HWP Interrupt enable
 
-Sakari Ailus (6):
-      ACPI: scan: Obtain device's desired enumeration power state
-      i2c: Allow an ACPI driver to manage the device's power state during probe
-      Documentation: ACPI: Document _DSC object usage for enum power state
-      ACPI: Add a convenience function to tell a device is in D0 state
-      at24: Support probing while in non-zero ACPI D state
-      Documentation: ACPI: Fix non-D0 probe _DSC object example
+Ulf Hansson (1):
+      PM: sleep: Fix runtime PM based cpuidle support
 
-wangzhitong (1):
-      ACPI: EC: Remove initialization of static variables to false
+YueHaibing (1):
+      opp: Fix return in _opp_add_static_v2()
 
 ---------------
 
- Documentation/firmware-guide/acpi/index.rst        |  1 +
- Documentation/firmware-guide/acpi/non-d0-probe.rst | 78 ++++++++++++++++++++++
- drivers/acpi/device_pm.c                           | 26 ++++++++
- drivers/acpi/ec.c                                  | 11 ++-
- drivers/acpi/pmic/intel_pmic.c                     | 51 +++++++-------
- drivers/acpi/power.c                               |  8 +--
- drivers/acpi/scan.c                                |  4 ++
- drivers/acpi/video_detect.c                        | 78 ++++++++++++----------
- drivers/i2c/i2c-core-acpi.c                        | 10 +++
- drivers/i2c/i2c-core-base.c                        |  7 +-
- drivers/media/i2c/imx319.c                         | 74 +++++++++++---------
- drivers/misc/eeprom/at24.c                         | 45 ++++++++-----
- include/acpi/acpi_bus.h                            |  1 +
- include/acpi/platform/acgcc.h                      | 13 ----
- include/linux/acpi.h                               |  5 ++
- include/linux/i2c.h                                | 18 +++++
- 16 files changed, 301 insertions(+), 129 deletions(-)
+ .../devicetree/bindings/opp/opp-v2-base.yaml       |   2 +-
+ drivers/base/power/main.c                          |  85 +++++++++++-----
+ drivers/cpufreq/intel_pstate.c                     |  36 ++++++-
+ drivers/devfreq/devfreq.c                          |  26 +++++
+ drivers/devfreq/governor.h                         |   3 +
+ drivers/devfreq/tegra30-devfreq.c                  | 109 +++++++++------------
+ drivers/opp/core.c                                 |   6 +-
+ drivers/opp/of.c                                   |  50 ++++++++--
+ include/linux/pm_opp.h                             |  20 +++-
+ 9 files changed, 229 insertions(+), 108 deletions(-)
