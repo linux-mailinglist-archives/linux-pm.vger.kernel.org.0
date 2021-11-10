@@ -2,50 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8CF744C0D3
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Nov 2021 13:07:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 328E844C0DD
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Nov 2021 13:08:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231254AbhKJMKc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Nov 2021 07:10:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37822 "EHLO
+        id S231740AbhKJMKn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Nov 2021 07:10:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231639AbhKJMKb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Nov 2021 07:10:31 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94810C0613F5
-        for <linux-pm@vger.kernel.org>; Wed, 10 Nov 2021 04:07:43 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id o6-20020a17090a0a0600b001a64b9a11aeso1494740pjo.3
-        for <linux-pm@vger.kernel.org>; Wed, 10 Nov 2021 04:07:43 -0800 (PST)
+        with ESMTP id S231753AbhKJMKk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Nov 2021 07:10:40 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED3FC061208
+        for <linux-pm@vger.kernel.org>; Wed, 10 Nov 2021 04:07:49 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id r130so2496172pfc.1
+        for <linux-pm@vger.kernel.org>; Wed, 10 Nov 2021 04:07:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=e4wbC/c+PlTgP+0hMVrwFXZ/CJ/XYwQSDd31EyjFYk0=;
-        b=F6qaUSO2IL8wnvM33ybKa5mLX+XGYpvqgA+iUAUKTmv3jYSitB6M8o5l8S++HXjIZS
-         21wMnPBhf53uBmR3/oFqnPlBq7DXPT+/DRXiBYiWJf9DfAiNrTudUK7lxK22vnJLEjJB
-         y2CHBxIw2ug9v+AzVZfNqQ9CQIqHE5rdDlDbbzM3i6mpGrSv0ch1R20FXiEHKP9wZNmY
-         T4LQ6b8W2F8DDvIlMpE+5x40mnb6q1Ns+thZhVWgbh/VpXyP+qQ8mpXEHlNX1cM7Aq8j
-         S5X9PYUZnpmXAG/f1YnzdAnii8cuxd2zI03NLftM6NdXFOnoGapCrAQUgCoGwa3o65iI
-         SnSg==
+        bh=VyhuPuo3Dr6FLX90Yql2n8R2Vy9SBLHywkAT4A3YPD8=;
+        b=eIW85C9CExtGE8flCJQCSN+XChabht7eH0U/OVjuA7BCE91EkfJ/CNS4qiPD+AfL2g
+         ri18zagn1FlARjWtl8GyWJXyJmVs4gYrpfHTS2VkiHKNvrZJ0DHmLN+3WiBf2xt/xCIx
+         Sa+JSTYVw1AsCyhrg/wuSWCIKNJjDJcuKyV1jZaC/qQg9R3Lrn3kNngVHQXWf3d6Eg56
+         NNrEEC9XkgSzHjuJOT6F8917/4hYEX9tEm8xJ2TWD+8ksPvfih+b9QkxfWQvF75EaIC8
+         mPbI0jaYop4g4pOPqm1Zq5/DYeLGmWqtC33EoDJiRbr3g6H7a27n9aWvsWdti3zi9aom
+         Aq3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=e4wbC/c+PlTgP+0hMVrwFXZ/CJ/XYwQSDd31EyjFYk0=;
-        b=4cKy24M1uPjM3aJybJUWpOI1lemXnce3V1hMDVXycotXexd1z20/iEsKF9Pym56yAz
-         acXpcGMzlLVeDu6U0I9MlI7ZtXo/lwwM/rtdeudPaBnUouCKOzAbEuZs7vwrJrB8Xpuy
-         8rtO3HzaCVdjTx9OtLhCGBbhf2BpxeX7GxtPmcj2ESmr3KGh6FJcIedgcEiVk2JuMt65
-         kPUysTdyYKrAbTHlEd/OssQT0EDFJ3rdM8XuvbqEp4eXFvwsSCNhiBRkr8P3lXAPDMkn
-         9XIxkkDIGCQCnyt7921+3un1n83Af0wZ68Yt1QfOa/vXfVXE190mw4nEsJDNMwHi38QS
-         OdAA==
-X-Gm-Message-State: AOAM530QY0tzBXIKNKDCWjjlFBo/mdO90j9xIPvOpEQ8kP3gA0TApVFu
-        pMe79FkSxd23UqPYDiKR2pIohQ==
-X-Google-Smtp-Source: ABdhPJwdjF15BZMcIOuD7a9lGwM6C0EX8MPEPj6f9V/ly3VN0FxQZBDWeOejgRhdia8FxcPhmM0Bgg==
-X-Received: by 2002:a17:90a:2843:: with SMTP id p3mr16371308pjf.176.1636546063118;
-        Wed, 10 Nov 2021 04:07:43 -0800 (PST)
+        bh=VyhuPuo3Dr6FLX90Yql2n8R2Vy9SBLHywkAT4A3YPD8=;
+        b=kJK2hWEn7ivfDyjj4kD261wl2a9/+vH5j20lFze89ZA6VOqRHqjTpyGyKyPGhCi2g7
+         uruHhG7jbLKnjooZGY9eVEOjqnguG1tLrbmFcRZKcH/LK24jGgjrs+TZIkXkBUeNhDFU
+         WWRwv1n7sR+7H3qxqEV13FQZuVc+ZEnY3+kIXjO5lC4dIdr6wQzOuIWL+P3xHD1rHl5N
+         X46aMnfFDlyJSiSBbeUD8Sd/2JRcykVpXBm9UZG8A15kdc0jPJk39T+vwcGF13Z/DlRG
+         dKk1gLzhuC6tuMrgwELWcvIcb/Ger0c7oko8M7hJydMCnos0qsALyF7ZQyk6nHZMLhoW
+         qR1w==
+X-Gm-Message-State: AOAM533Cfk1936CGa3cqaRQsgv8xz7Nt5LidGkQj9HsiJUqfWBtcGmMG
+        +wWeWmAsS4Aocl1lvWw79aVn1w==
+X-Google-Smtp-Source: ABdhPJwl2igEQDtRk6LZOS0wqIGXPufuKhjraU6yInpduw/FGk4ICc9QuBLJeHKQBXmPzwAgvuHk/A==
+X-Received: by 2002:a63:e755:: with SMTP id j21mr11565738pgk.235.1636546068584;
+        Wed, 10 Nov 2021 04:07:48 -0800 (PST)
 Received: from localhost.localdomain (80.251.214.228.16clouds.com. [80.251.214.228])
-        by smtp.gmail.com with ESMTPSA id g9sm8377914pfc.182.2021.11.10.04.07.40
+        by smtp.gmail.com with ESMTPSA id g9sm8377914pfc.182.2021.11.10.04.07.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Nov 2021 04:07:42 -0800 (PST)
+        Wed, 10 Nov 2021 04:07:47 -0800 (PST)
 From:   Shawn Guo <shawn.guo@linaro.org>
 To:     Georgi Djakov <djakov@kernel.org>
 Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -54,9 +54,9 @@ Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Shawn Guo <shawn.guo@linaro.org>
-Subject: [PATCH 2/6] interconnect: icc-rpm: Define ICC device type
-Date:   Wed, 10 Nov 2021 20:07:12 +0800
-Message-Id: <20211110120716.6401-3-shawn.guo@linaro.org>
+Subject: [PATCH 3/6] interconnect: icc-rpm: Add QNOC type QoS support
+Date:   Wed, 10 Nov 2021 20:07:13 +0800
+Message-Id: <20211110120716.6401-4-shawn.guo@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211110120716.6401-1-shawn.guo@linaro.org>
 References: <20211110120716.6401-1-shawn.guo@linaro.org>
@@ -64,208 +64,112 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The driver currently uses .is_bimc_node to distinguish device type BIMC
-from NOC.  Define type for bus/noc devices like what downstream[1] does
-to make support for more types easier.
+It adds QoS support for QNOC type device which can be found on QCM2290
+platform.  The downstream driver[1] includes support for priority,
+limiter, regulator and forwarding setup.  As QCM2290 support only
+requires priority and forwarding configuration, limiter and regulator
+support are omitted for this initial submission.
 
-[1] https://source.codeaurora.org/quic/la/kernel/msm-4.19/tree/drivers/soc/qcom/msm_bus/msm_bus_core.h?h=kernel.lnx.4.19.r22-rel#n46
+[1] https://source.codeaurora.org/quic/la/kernel/msm-4.19/tree/drivers/soc/qcom/msm_bus/msm_bus_qnoc_adhoc.c?h=kernel.lnx.4.19.r22-rel
 
 Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
 ---
- drivers/interconnect/qcom/icc-rpm.c |  4 ++--
- drivers/interconnect/qcom/icc-rpm.h | 11 ++++++++---
- drivers/interconnect/qcom/msm8916.c |  4 +++-
- drivers/interconnect/qcom/msm8939.c |  5 ++++-
- drivers/interconnect/qcom/sdm660.c  |  7 ++++++-
- 5 files changed, 23 insertions(+), 8 deletions(-)
+ drivers/interconnect/qcom/icc-rpm.c | 38 ++++++++++++++++++++++++++---
+ drivers/interconnect/qcom/icc-rpm.h |  3 +++
+ 2 files changed, 38 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-index 35888721a690..264a9399fb28 100644
+index 264a9399fb28..22a98c0b29af 100644
 --- a/drivers/interconnect/qcom/icc-rpm.c
 +++ b/drivers/interconnect/qcom/icc-rpm.c
-@@ -163,7 +163,7 @@ static int qcom_icc_qos_set(struct icc_node *node, u64 sum_bw)
+@@ -17,6 +17,13 @@
+ #include "smd-rpm.h"
+ #include "icc-rpm.h"
+ 
++/* QNOC QoS */
++#define QNOC_QOS_MCTL_LOWn_ADDR(n)	(0x8 + (n * 0x1000))
++#define QNOC_QOS_MCTL_DFLT_PRIO_MASK	0x70
++#define QNOC_QOS_MCTL_DFLT_PRIO_SHIFT	4
++#define QNOC_QOS_MCTL_URGFWD_EN_MASK	0x8
++#define QNOC_QOS_MCTL_URGFWD_EN_SHIFT	3
++
+ /* BIMC QoS */
+ #define M_BKE_REG_BASE(n)		(0x300 + (0x4000 * n))
+ #define M_BKE_EN_ADDR(n)		(M_BKE_REG_BASE(n))
+@@ -39,6 +46,27 @@
+ #define NOC_QOS_MODEn_ADDR(n)		(0xc + (n * 0x1000))
+ #define NOC_QOS_MODEn_MASK		0x3
+ 
++static int qcom_icc_set_qnoc_qos(struct icc_node *src, u64 max_bw)
++{
++	struct icc_provider *provider = src->provider;
++	struct qcom_icc_provider *qp = to_qcom_provider(provider);
++	struct qcom_icc_node *qn = src->data;
++	struct qcom_icc_qos *qos = &qn->qos;
++	int rc;
++
++	rc = regmap_update_bits(qp->regmap,
++			qp->qos_offset + QNOC_QOS_MCTL_LOWn_ADDR(qos->qos_port),
++			QNOC_QOS_MCTL_DFLT_PRIO_MASK,
++			qos->areq_prio << QNOC_QOS_MCTL_DFLT_PRIO_SHIFT);
++	if (rc)
++		return rc;
++
++	return regmap_update_bits(qp->regmap,
++			qp->qos_offset + QNOC_QOS_MCTL_LOWn_ADDR(qos->qos_port),
++			QNOC_QOS_MCTL_URGFWD_EN_MASK,
++			!!qos->urg_fwd_en << QNOC_QOS_MCTL_URGFWD_EN_SHIFT);
++}
++
+ static int qcom_icc_bimc_set_qos_health(struct qcom_icc_provider *qp,
+ 					struct qcom_icc_qos *qos,
+ 					int regnum)
+@@ -163,10 +191,14 @@ static int qcom_icc_qos_set(struct icc_node *node, u64 sum_bw)
  
  	dev_dbg(node->provider->dev, "Setting QoS for %s\n", qn->name);
  
--	if (qp->is_bimc_node)
-+	if (qp->type == QCOM_ICC_BIMC)
+-	if (qp->type == QCOM_ICC_BIMC)
++	switch (qp->type) {
++	case QCOM_ICC_BIMC:
  		return qcom_icc_set_bimc_qos(node, sum_bw);
+-
+-	return qcom_icc_set_noc_qos(node, sum_bw);
++	case QCOM_ICC_QNOC:
++		return qcom_icc_set_qnoc_qos(node, sum_bw);
++	default:
++		return qcom_icc_set_noc_qos(node, sum_bw);
++	}
+ }
  
- 	return qcom_icc_set_noc_qos(node, sum_bw);
-@@ -307,7 +307,7 @@ int qnoc_probe(struct platform_device *pdev)
- 		qp->bus_clks[i].id = cds[i];
- 	qp->num_clks = cd_num;
- 
--	qp->is_bimc_node = desc->is_bimc_node;
-+	qp->type = desc->type;
- 	qp->qos_offset = desc->qos_offset;
- 
- 	if (desc->regmap_cfg) {
+ static int qcom_icc_rpm_set(int mas_rpm_id, int slv_rpm_id, u64 sum_bw)
 diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
-index f5744de4da19..d8e77ce7fe06 100644
+index d8e77ce7fe06..66ce908a6e65 100644
 --- a/drivers/interconnect/qcom/icc-rpm.h
 +++ b/drivers/interconnect/qcom/icc-rpm.h
-@@ -12,19 +12,24 @@
- #define to_qcom_provider(_provider) \
- 	container_of(_provider, struct qcom_icc_provider, provider)
+@@ -15,6 +15,7 @@
+ enum qcom_icc_type {
+ 	QCOM_ICC_NOC,
+ 	QCOM_ICC_BIMC,
++	QCOM_ICC_QNOC,
+ };
  
-+enum qcom_icc_type {
-+	QCOM_ICC_NOC,
-+	QCOM_ICC_BIMC,
-+};
-+
  /**
-  * struct qcom_icc_provider - Qualcomm specific interconnect provider
-  * @provider: generic interconnect provider
-  * @bus_clks: the clk_bulk_data table of bus clocks
-  * @num_clks: the total number of clk_bulk_data entries
-- * @is_bimc_node: indicates whether to use bimc specific setting
-+ * @type: the ICC provider type
-  * @qos_offset: offset to QoS registers
-  * @regmap: regmap for QoS registers read/write access
+@@ -43,6 +44,7 @@ struct qcom_icc_provider {
+  * @ap_owned: indicates if the node is owned by the AP or by the RPM
+  * @qos_mode: default qos mode for this node
+  * @qos_port: qos port number for finding qos registers of this node
++ * @urg_fwd_en: enable urgent forwarding
   */
- struct qcom_icc_provider {
- 	struct icc_provider provider;
- 	int num_clks;
--	bool is_bimc_node;
-+	enum qcom_icc_type type;
- 	struct regmap *regmap;
- 	unsigned int qos_offset;
- 	struct clk_bulk_data bus_clks[];
-@@ -77,7 +82,7 @@ struct qcom_icc_desc {
- 	size_t num_nodes;
- 	const char * const *clocks;
- 	size_t num_clocks;
--	bool is_bimc_node;
-+	enum qcom_icc_type type;
- 	const struct regmap_config *regmap_cfg;
- 	unsigned int qos_offset;
- };
-diff --git a/drivers/interconnect/qcom/msm8916.c b/drivers/interconnect/qcom/msm8916.c
-index e3c995b11357..2f397a7c3322 100644
---- a/drivers/interconnect/qcom/msm8916.c
-+++ b/drivers/interconnect/qcom/msm8916.c
-@@ -1229,6 +1229,7 @@ static const struct regmap_config msm8916_snoc_regmap_config = {
+ struct qcom_icc_qos {
+ 	u32 areq_prio;
+@@ -51,6 +53,7 @@ struct qcom_icc_qos {
+ 	bool ap_owned;
+ 	int qos_mode;
+ 	int qos_port;
++	bool urg_fwd_en;
  };
  
- static struct qcom_icc_desc msm8916_snoc = {
-+	.type = QCOM_ICC_NOC,
- 	.nodes = msm8916_snoc_nodes,
- 	.num_nodes = ARRAY_SIZE(msm8916_snoc_nodes),
- 	.regmap_cfg = &msm8916_snoc_regmap_config,
-@@ -1256,9 +1257,9 @@ static const struct regmap_config msm8916_bimc_regmap_config = {
- };
- 
- static struct qcom_icc_desc msm8916_bimc = {
-+	.type = QCOM_ICC_BIMC,
- 	.nodes = msm8916_bimc_nodes,
- 	.num_nodes = ARRAY_SIZE(msm8916_bimc_nodes),
--	.is_bimc_node = true,
- 	.regmap_cfg = &msm8916_bimc_regmap_config,
- 	.qos_offset = 0x8000,
- };
-@@ -1325,6 +1326,7 @@ static const struct regmap_config msm8916_pcnoc_regmap_config = {
- };
- 
- static struct qcom_icc_desc msm8916_pcnoc = {
-+	.type = QCOM_ICC_NOC,
- 	.nodes = msm8916_pcnoc_nodes,
- 	.num_nodes = ARRAY_SIZE(msm8916_pcnoc_nodes),
- 	.regmap_cfg = &msm8916_pcnoc_regmap_config,
-diff --git a/drivers/interconnect/qcom/msm8939.c b/drivers/interconnect/qcom/msm8939.c
-index 16272a477bd8..d188f3636e4c 100644
---- a/drivers/interconnect/qcom/msm8939.c
-+++ b/drivers/interconnect/qcom/msm8939.c
-@@ -1282,6 +1282,7 @@ static const struct regmap_config msm8939_snoc_regmap_config = {
- };
- 
- static struct qcom_icc_desc msm8939_snoc = {
-+	.type = QCOM_ICC_NOC,
- 	.nodes = msm8939_snoc_nodes,
- 	.num_nodes = ARRAY_SIZE(msm8939_snoc_nodes),
- 	.regmap_cfg = &msm8939_snoc_regmap_config,
-@@ -1309,6 +1310,7 @@ static const struct regmap_config msm8939_snoc_mm_regmap_config = {
- };
- 
- static struct qcom_icc_desc msm8939_snoc_mm = {
-+	.type = QCOM_ICC_NOC,
- 	.nodes = msm8939_snoc_mm_nodes,
- 	.num_nodes = ARRAY_SIZE(msm8939_snoc_mm_nodes),
- 	.regmap_cfg = &msm8939_snoc_mm_regmap_config,
-@@ -1336,9 +1338,9 @@ static const struct regmap_config msm8939_bimc_regmap_config = {
- };
- 
- static struct qcom_icc_desc msm8939_bimc = {
-+	.type = QCOM_ICC_BIMC,
- 	.nodes = msm8939_bimc_nodes,
- 	.num_nodes = ARRAY_SIZE(msm8939_bimc_nodes),
--	.is_bimc_node = true,
- 	.regmap_cfg = &msm8939_bimc_regmap_config,
- 	.qos_offset = 0x8000,
- };
-@@ -1407,6 +1409,7 @@ static const struct regmap_config msm8939_pcnoc_regmap_config = {
- };
- 
- static struct qcom_icc_desc msm8939_pcnoc = {
-+	.type = QCOM_ICC_NOC,
- 	.nodes = msm8939_pcnoc_nodes,
- 	.num_nodes = ARRAY_SIZE(msm8939_pcnoc_nodes),
- 	.regmap_cfg = &msm8939_pcnoc_regmap_config,
-diff --git a/drivers/interconnect/qcom/sdm660.c b/drivers/interconnect/qcom/sdm660.c
-index 471bb88f8828..274a7139fe1a 100644
---- a/drivers/interconnect/qcom/sdm660.c
-+++ b/drivers/interconnect/qcom/sdm660.c
-@@ -1513,6 +1513,7 @@ static const struct regmap_config sdm660_a2noc_regmap_config = {
- };
- 
- static struct qcom_icc_desc sdm660_a2noc = {
-+	.type = QCOM_ICC_NOC,
- 	.nodes = sdm660_a2noc_nodes,
- 	.num_nodes = ARRAY_SIZE(sdm660_a2noc_nodes),
- 	.clocks = bus_a2noc_clocks,
-@@ -1540,9 +1541,9 @@ static const struct regmap_config sdm660_bimc_regmap_config = {
- };
- 
- static struct qcom_icc_desc sdm660_bimc = {
-+	.type = QCOM_ICC_BIMC,
- 	.nodes = sdm660_bimc_nodes,
- 	.num_nodes = ARRAY_SIZE(sdm660_bimc_nodes),
--	.is_bimc_node = true,
- 	.regmap_cfg = &sdm660_bimc_regmap_config,
- };
- 
-@@ -1594,6 +1595,7 @@ static const struct regmap_config sdm660_cnoc_regmap_config = {
- };
- 
- static struct qcom_icc_desc sdm660_cnoc = {
-+	.type = QCOM_ICC_NOC,
- 	.nodes = sdm660_cnoc_nodes,
- 	.num_nodes = ARRAY_SIZE(sdm660_cnoc_nodes),
- 	.regmap_cfg = &sdm660_cnoc_regmap_config,
-@@ -1614,6 +1616,7 @@ static const struct regmap_config sdm660_gnoc_regmap_config = {
- };
- 
- static struct qcom_icc_desc sdm660_gnoc = {
-+	.type = QCOM_ICC_NOC,
- 	.nodes = sdm660_gnoc_nodes,
- 	.num_nodes = ARRAY_SIZE(sdm660_gnoc_nodes),
- 	.regmap_cfg = &sdm660_gnoc_regmap_config,
-@@ -1653,6 +1656,7 @@ static const struct regmap_config sdm660_mnoc_regmap_config = {
- };
- 
- static struct qcom_icc_desc sdm660_mnoc = {
-+	.type = QCOM_ICC_NOC,
- 	.nodes = sdm660_mnoc_nodes,
- 	.num_nodes = ARRAY_SIZE(sdm660_mnoc_nodes),
- 	.clocks = bus_mm_clocks,
-@@ -1689,6 +1693,7 @@ static const struct regmap_config sdm660_snoc_regmap_config = {
- };
- 
- static struct qcom_icc_desc sdm660_snoc = {
-+	.type = QCOM_ICC_NOC,
- 	.nodes = sdm660_snoc_nodes,
- 	.num_nodes = ARRAY_SIZE(sdm660_snoc_nodes),
- 	.regmap_cfg = &sdm660_snoc_regmap_config,
+ /**
 -- 
 2.17.1
 
