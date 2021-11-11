@@ -2,88 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F9544DA8F
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Nov 2021 17:36:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC16244DAEA
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Nov 2021 18:01:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233987AbhKKQi6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 11 Nov 2021 11:38:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57790 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233902AbhKKQi6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Nov 2021 11:38:58 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DCD0C061766
-        for <linux-pm@vger.kernel.org>; Thu, 11 Nov 2021 08:36:09 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id b68so6025536pfg.11
-        for <linux-pm@vger.kernel.org>; Thu, 11 Nov 2021 08:36:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=LfjMdYTkRtSg9vqoefxU1BZpX0CO1104WkyQpurjrWY=;
-        b=WXNvcv8XRto1O+lXQtJsWd0YOaNuqJ/LuV3eNp7Z7t2ZYyqYsvtoxaHh0SGvGISwzP
-         9xu/dFAVIEvyVBTYEwgWvt97MKxW0KqNpvOml79QxD/j4pHEHiwggPwZD8dvAPCLAZ7v
-         0ma860WdIZOrw531taynzpHpq71Mnq3kBp+Gw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=LfjMdYTkRtSg9vqoefxU1BZpX0CO1104WkyQpurjrWY=;
-        b=Z6BpOEKNDT42t4opHlZK4t9arrvbp5m4ndHTnPiRf6WHvgphzzy++3YijUFnlYg3p0
-         eZit5ZqtWLaWml5G8cPWx/pu6PaGWUDRDN6bY1hNhWDpqCAiITU6ddYz91GMdHgZPu9l
-         wyE71twEDamamIbuYRWRIeSnWbXNykw9jUgjhjjdba14mJCVXYoYBUnq192TB9KkP/pd
-         xXENea/xzG9+MUK82ZyP7lLKPRq7nq2c5HCmwb3yDoreYAsZfPi4gbf0VTKmAqltlrTL
-         ZPRMiggqs2oo/FCr1pZDJdk/GUP8CLzy58T/Pip/xdtORzVDSqIB/ftoyUZ1AUZOc/Kj
-         cqyg==
-X-Gm-Message-State: AOAM5336DgQrrmVYWZ6drBzhVTV4lqCHwUkTZ3Z3+9SynfEHoq7iKvWB
-        vlO6VvvaPHGmMq7VwY3E9Cn1Cw==
-X-Google-Smtp-Source: ABdhPJyf1ScnuC6QULfERaqTkSjsGJR+nT428EdPFKuVJCeg6JM6CMlZ66KTcnmUC2NJEIiCfnANLg==
-X-Received: by 2002:a63:d313:: with SMTP id b19mr5387847pgg.64.1636648568804;
-        Thu, 11 Nov 2021 08:36:08 -0800 (PST)
-Received: from localhost ([2620:15c:202:201:c0a9:ac53:7829:6af7])
-        by smtp.gmail.com with UTF8SMTPSA id v13sm4085560pfu.38.2021.11.11.08.36.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Nov 2021 08:36:08 -0800 (PST)
-Date:   Thu, 11 Nov 2021 08:36:07 -0800
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Steev Klimaszewski <steev@kali.org>
-Subject: Re: [PATCH 1/3][RESEND] cpufreq: qcom-cpufreq-hw: Avoid stack buffer
- for IRQ name
-Message-ID: <YY1Gd7qfRRU2UJ6h@google.com>
-References: <20211111154808.2024808-1-vladimir.zapolskiy@linaro.org>
- <20211111154808.2024808-2-vladimir.zapolskiy@linaro.org>
+        id S234310AbhKKRET (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 11 Nov 2021 12:04:19 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36408 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233392AbhKKRES (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 11 Nov 2021 12:04:18 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 08DA0611AD;
+        Thu, 11 Nov 2021 17:01:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1636650089;
+        bh=7xML4rDgA2TLL7fn3zKQoUH6jqOK2AsU521S4z+lE9k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Ljwzy+wdnP2MJ6TPaBMpYhvgvEhAGIgohBT8vSKH9BL8jy9do6gFFaZ5tDhChp8eR
+         WsaGttsYcDcxAahpBqCHikdKVozZJGEAaLdVe/gVYt5algdCDoz20I/62i1nqU+m5v
+         cjFocY/3mTmyRsHQqy68hn0sRta56dW00klr1/6zjTzrs73eXqjBnY38lAmrbPwxHY
+         jDJegt95x/7ibfemWF0/KbXCEvfkiNTBeF+levgqdP6xfbejCeej9cZCnl5JjMRDDm
+         S6881LFVEGsqsH2HSrDblL6YvY0r/KVtrVKCJz+v8koJI7xBHY+x+BeoWN3k2TFhXm
+         MDuTpL3HVGEAA==
+Date:   Thu, 11 Nov 2021 11:01:27 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Robert =?utf-8?B?xZp3acSZY2tp?= <robert@swiecki.net>
+Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH] pci: Don't call resume callback for nearly bound devices
+Message-ID: <20211111170127.GA1336355@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211111154808.2024808-2-vladimir.zapolskiy@linaro.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211110211905.GA1261732@bhelgaas>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Nov 11, 2021 at 05:48:06PM +0200, Vladimir Zapolskiy wrote:
-> From: Ard Biesheuvel <ardb@kernel.org>
+On Wed, Nov 10, 2021 at 03:19:05PM -0600, Bjorn Helgaas wrote:
+> On Wed, Nov 10, 2021 at 05:33:11PM +0100, Robert Święcki wrote:
+> > śr., 10 lis 2021 o 15:14 Bjorn Helgaas <helgaas@kernel.org> napisał(a):
+> > > On Tue, Nov 09, 2021 at 02:05:18PM -0600, Bjorn Helgaas wrote:
+> > > > On Tue, Nov 09, 2021 at 07:58:47PM +0100, Rafael J. Wysocki wrote:
+> > > > > On Tue, Nov 9, 2021 at 7:52 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > > > > > ...
+> > >
+> > > > > > So instead, we can drop the pm_runtime_get_sync() and
+> > > > > > pm_runtime_put_sync() from local_pci_probe() and pci_device_remove(),
+> > > > > > respectively, and add pm_runtine_get_noresume() to pci_pm_init(),
+> > > > > > which will prevent PM-runtime from touching the device until it has a
+> > > > > > driver that supports PM-runtime.
+> > > > > >
+> > > > > > We'll lose the theoretical ability to put unbound devices into D3 this
+> > > > > > way, but we learned some time ago that this isn't safe in all cases
+> > > > > > anyway.
+> > > > >
+> > > > > IOW, something like this (untested and most likely white-space-damaged).
+> > > >
+> > > > Thanks!  I applied this manually to for-linus in hopes of making the
+> > > > the next linux-next build.
+> > > >
+> > > > Please send any testing reports and corrections to the patch and
+> > > > commit log!
+> > >
+> > > Robert, I hate to ask even more of you, but if you have a chance, it
+> > > would be very helpful if you could test the patch below.  I'm pretty
+> > > sure it should fix the problem you saw, and I hope to ask Linus to
+> > > merge it today.
+> > 
+> > I think the most recent patch creates some timeouts and other problems
+> > in pci-related code? Things I haven't seen before. But, granted, my
+> > kernel testing approach is not with focus on details, so maybe I did
+> > sth wrong.
 > 
-> Registering an IRQ requires the string buffer containing the name to
-> remain allocated, as the name is not copied into another buffer.
+> Thank you very much for testing this.  The patch changed the way we
+> use runtime PM, and the dmesg snippets below look like they could be
+> related to runtime PM issues.
 > 
-> So let's add a irq_name field to the data struct instead, which is
-> guaranteed to have the appropriate lifetime.
+> I think the conclusion is that we need to revert these commits:
 > 
-> Cc: Thara Gopinath <thara.gopinath@linaro.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Andy Gross <agross@kernel.org>
-> Cc: linux-arm-msm@vger.kernel.org
-> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> Reviewed-by: Thara Gopinath <thara.gopinath@linaro.org>
-> Tested-by: Steev Klimaszewski <steev@kali.org>
-> Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+>   b5f9c644eb1b ("PCI: Remove struct pci_dev->driver")
+>   2a4d9408c9e8 ("PCI: Use to_pci_driver() instead of pci_dev->driver")
+> 
+> from Linus' tree.  I queued up those reverts on
+> https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/log/?h=for-linus
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+These reverts appeared in the Nov 11 linux-next tree.  Any chance you
+could verify that they solve the i2c_dw_pci_resume() issue?  If it's
+easier, you can apply them from:
+https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/log/?h=for-linus
+instead.
+
+Bjorn
