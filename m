@@ -2,226 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5988C44CE7C
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Nov 2021 01:45:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCABD44CEC2
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Nov 2021 02:25:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231688AbhKKAsb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Nov 2021 19:48:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42024 "EHLO
+        id S232733AbhKKB14 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Nov 2021 20:27:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230312AbhKKAsb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Nov 2021 19:48:31 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941E9C061766;
-        Wed, 10 Nov 2021 16:45:42 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id n12so483767lfe.1;
-        Wed, 10 Nov 2021 16:45:42 -0800 (PST)
+        with ESMTP id S232574AbhKKB14 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Nov 2021 20:27:56 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC03C061767
+        for <linux-pm@vger.kernel.org>; Wed, 10 Nov 2021 17:25:07 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id gx15-20020a17090b124f00b001a695f3734aso3377507pjb.0
+        for <linux-pm@vger.kernel.org>; Wed, 10 Nov 2021 17:25:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=SLa5LAv3g0vZmAbNhbQqIkrokBVJdiQBADDaDRRU2eg=;
-        b=IpuqKniykyjL/AAmIHakbJ1bvgdwv6bsHpBpgvkqVYImKTFXXrGnc+ecBkONCHABmX
-         1oX1fgNf+iK/T4AVlIo4brjR1fkf168+5sr9e3AUFtpcAlCU+d0SQ1N10dvHhI9yumbo
-         CE48o6Yx5pOU/FNhqEYGSwYaQEPZBjYmAlT8pHt4L1eiPmgsFVRg4PltXSnx9Nfmk/sg
-         xE5jposLqmwzU2rxRQyaDUQzq/VQY0TIuvqqwPUvxzDxE3KqAvhlShMJ2QCm7HFqUTZ7
-         zgYoH+F2mbsmtO5mvc1S1LknM7QMUGA6KCBS/25eoEnmkJ63KEhlIkTKYha66ei1Oouo
-         UCaQ==
+         :content-disposition:in-reply-to:user-agent;
+        bh=nWbslJ60ZPCanj2HYtzA6ZLWxe4Hhp7nGp3LzxZFt38=;
+        b=IXFXRaZfJ4nCndxstxP8bxiKUWIm4Wt4A6H5xsMg4TiWsNfFAA+vZ5KkIO9UACPT63
+         ifosOGyAyEBSysgvuM4SmXBxYsfqeQUzEychsoFuIR2FsiYsbyq6rCMgHwIMlwoycKS2
+         M5BiNXgtnhe+0A23d6bpVAFiW18+D6ftwvk84dJYq3CgLAPuNe5WOJ0/Y2x9VFEoZa/6
+         NEiBvIRIwlAcTIpoZFROZA7jaiPkgaxXAYzJtdpwWbixo/3cHR56jL08ho8Ut6dub+pe
+         bUf/FUPgYZvpmFRi3+Mir8XOENzazvNgN0xGnCJOkgOE4khmoYR5wEFdreIJCG/sx0e0
+         NzLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SLa5LAv3g0vZmAbNhbQqIkrokBVJdiQBADDaDRRU2eg=;
-        b=yL6toXd+8twBEpHIaNqynNnkNiS3dGpnZ9rTf7fPM1BDml/MgkyJWYHlwdeb7RjIHc
-         qQdDT9CygP6vRkdsSOMCNPWBqqbdxEwLOzAdlI6aYphB97eJwmaK7AhJp7HUc06AQqnp
-         BB0LHp/cURS++s52SRctrJT5Je83SABkRSmhmPmmWOHjZA7Dw2lpRuNYsQ3AGxe3Jjre
-         TbJIbxGwSPrnK6//EaaI+eMFlWoScLvWhvjo9tv5x0QcSkXywyfZ1DWtKAVp4ZvmGWzB
-         Irwh/yheiQQ6znRiWh08jGqcZ2mErR3BF7jm01/SOMuBE1BYJNkAURgAsPa++Xyp4BJn
-         tohg==
-X-Gm-Message-State: AOAM5330ew9lpDmbVvpn8I37k9DVrI0Y+wb0Ec9YhTMzrPhC4JVTK77P
-        MbSObbt58dMM8v/oi8GsamY=
-X-Google-Smtp-Source: ABdhPJxYpwyMSNl97ZXiwygBjXJAsSsluv+06/2OYXIzMXmoxWEzCRTKCC49FNzGbbWioJQuoN+0Jw==
-X-Received: by 2002:a05:6512:39c7:: with SMTP id k7mr3117189lfu.571.1636591540969;
-        Wed, 10 Nov 2021 16:45:40 -0800 (PST)
-Received: from lahvuun (93-76-191-141.kha.volia.net. [93.76.191.141])
-        by smtp.gmail.com with ESMTPSA id k16sm132665lfm.168.2021.11.10.16.45.39
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=nWbslJ60ZPCanj2HYtzA6ZLWxe4Hhp7nGp3LzxZFt38=;
+        b=A1cxUA5eTqrRzZl9zt1Wqd+cBD6Vf0EYi9McL0XXxZxQBsfComlWXL7CixUt54G8TU
+         jISm+cKfUcclRjKoH5/PRsdBNozEc4Elgmp6rq8prEOmW4hCrZBL8M6u8zx2nXKx3+Lq
+         alcFGvBUPZPIe5Kw7nitG5xw5EYTkI7X1/NH2E4G9hvbIEhd4UgdczjwUDtf9VyxzkVa
+         Uzh78TAmZ/3Iz5lVJP5njiOu1MgYMFYb3f4sRiCzmRd/v6D2NWihNzvNaJInDKVMQ5gT
+         UWOo7WqC7WgXM6C871i+H6mY5Ykb4IcJ3PpoZrIcw65ztMZUIZrlJ64es+qeOSj2pUtB
+         7cHQ==
+X-Gm-Message-State: AOAM532pzjDmE16wVc+L3v3LvJADIHCKMWluuqu/wKrLMzmO93+5xmk3
+        79ohuJcPewEItgJoekKcSO8QhQ==
+X-Google-Smtp-Source: ABdhPJyr75OcvjSZSdThMZRuLnUhVC6TaRHanJoEKMxWRqcV4KBA3sK7U08wDtERoltIKWx03tuShA==
+X-Received: by 2002:a17:90a:5b:: with SMTP id 27mr4084014pjb.148.1636593907401;
+        Wed, 10 Nov 2021 17:25:07 -0800 (PST)
+Received: from localhost ([223.226.77.81])
+        by smtp.gmail.com with ESMTPSA id h134sm823053pfe.67.2021.11.10.17.25.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Nov 2021 16:45:40 -0800 (PST)
-Date:   Thu, 11 Nov 2021 02:45:39 +0200
-From:   Ilya Trukhanov <lahvuun@gmail.com>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     stable@vger.kernel.org, regressions@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-pm@vger.kernel.org,
-        tzimmermann@suse.de, ardb@kernel.org, rafael@kernel.org,
-        len.brown@intel.com, pavel@ucw.cz,
-        dri-devel <dri-devel@lists.freedesktop.org>
-Subject: Re: [REGRESSION]: drivers/firmware: move x86 Generic System
- Framebuffers support
-Message-ID: <20211111004539.vd7nl3duciq72hkf@lahvuun>
-References: <20211110200253.rfudkt3edbd3nsyj@lahvuun>
- <627b6cd1-3446-5e55-ea38-5283a186af39@redhat.com>
+        Wed, 10 Nov 2021 17:25:06 -0800 (PST)
+Date:   Thu, 11 Nov 2021 06:55:03 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: qcom-hw: Fix exposed stack contents
+Message-ID: <20211111012503.rmz2kvcdzmht5rnw@vireshk-i7>
+References: <20211110152745.1868099-1-vladimir.zapolskiy@linaro.org>
+ <YYvn1CJBrWprEKCD@ripper>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <627b6cd1-3446-5e55-ea38-5283a186af39@redhat.com>
+In-Reply-To: <YYvn1CJBrWprEKCD@ripper>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Nov 11, 2021 at 12:07:19AM +0100, Javier Martinez Canillas wrote:
-> [ adding dri-devel mailing list as Cc ]
+On 10-11-21, 07:40, Bjorn Andersson wrote:
+> On Wed 10 Nov 07:27 PST 2021, Vladimir Zapolskiy wrote:
 > 
-> Hello Ilya,
-> 
-> On 11/10/21 21:02, Ilya Trukhanov wrote:
-> > Suspend-to-RAM with elogind under Wayland stopped working in 5.15.
+> > On irq request it is improper to pass its designated name, which is
+> > allocated on stack, because the irq name string is not copied, thus
+> > there is a risk of leaking partial stack contents to userspace.
 > > 
-> > This occurs with 5.15, 5.15.1 and latest master at
-> > 89d714ab6043bca7356b5c823f5335f5dce1f930. 5.14 and earlier releases work
-> > fine.
-> > 
-> > git bisect gives d391c58271072d0b0fad93c82018d495b2633448.
-> >
+> > Fixes: 275157b367f4 ("cpufreq: qcom-cpufreq-hw: Add dcvs interrupt support")
+> > Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
 > 
-> That's strange because this patch is just moving code around, there shouldn't
-> be any functional changes...
+> This was already proposed and reviewed at:
 > 
-> > To reproduce:
-> > - Use elogind and Linux 5.15.1 with CONFIG_SYSFB_SIMPLEFB=n.
-> > - Start a Wayland session. I tested sway and weston, neither worked.
-> > - In a terminal emulator (I used alacritty) execute `loginctl suspend`.
-> > 
-> > Normally after the last step the system would suspend, but it no longer
-> > does so after I upgraded to Linux 5.15. After running `loginctl suspend`
-> > in dmesg I get the following:
-> > [  103.098782] elogind-daemon[2357]: Suspending system...
-> > [  103.098794] PM: suspend entry (deep)
-> > [  103.124621] Filesystems sync: 0.025 seconds
-> > 
-> > But nothing happens afterwards.
-> > 
-> > Suspend works as expected if I do any of the following:
-> > - Revert d391c58271072d0b0fad93c82018d495b2633448.
-> > - Build with CONFIG_SYSFB_SIMPLEFB=y.
+> https://lore.kernel.org/all/20210901084732.943248-1-ardb@kernel.org/
 > 
-> Can you please share the kernel boot log for any of these cases too ?
+> Could Ard's patch please be picked up by the maintainers, preferably
+> with above Fixes added, so we get this backported onto v5.15 stable...
 
-revert dmesg: https://pastebin.com/BpnMvV2u
-CONFIG_SYSFB_SIMPLEFB=y dmesg: https://pastebin.com/qSUdQygt
+It never reached any of the PM guys unfortunately.
 
-> 
-> > - Suspend from tty, even if a Wayland session is running in parallel.
-> > - Suspend from under an X11 session.
-> > - Suspend with `echo mem > /sys/power/state`.
-> > 
-> > If I attach strace to the elogind-daemon process after running
-> > `loginctl suspend` then the system immediately suspends. However, if
-> > I attach strace *prior* to running `loginctl suspend` then no suspend,
-> > and the process gets stuck on a write syscall to `/sys/power/state`.
-> > 
-> > I "traced" a little bit with printk (sorry, I don't know of a better
-> > way) and the call chain is as follows:
-> > state_store -> pm_suspend -> enter_state -> suspend_prepare
-> > -> pm_prepare_console -> vt_move_to_console -> vt_waitactive
-> > -> __vt_event_wait
-> > 
-> > __vt_event_wait just waits until wait_event_interruptible completes, but
-> > it never does (not until I attach to elogind-daemon with strace, at
-> > least). I did not follow the chain further.
-> > 
-> > - Linux version 5.15.1 (lahvuun@lahvuun) (gcc (Gentoo 11.2.0 p1) 11.2.0,
-> >   GNU ld (Gentoo 2.37_p1 p0) 2.37) #51 SMP PREEMPT Tue Nov 9 23:39:25
-> >   EET 2021
-> > - Gentoo Linux 2.8
-> > - x86_64 AuthenticAMD
-> > - dmesg: https://pastebin.com/duj33bY8
-> > - .config: https://pastebin.com/7Hew1g0T
-> > 
-> 
-> Looking at your .config and dmesg output, my guess is that is related to the
-> fact that you have both CONFIG_FB_EFI=y and CONFIG_DRM_AMDGPU=y.
-> 
-> The code that adds the "efi-framebuffer" platform device used to be in the
-> arch/x86/kernel/sysfb.c file but now is in drivers/firmware/sysfb.c, and it
-> could affect the order in which the device <--> driver matching happens.
-> 
-> From your kernel boot log:
-> 
-> ...
-> [    0.375796] [drm] amdgpu kernel modesetting enabled.
-> [    0.375819] amdgpu: CRAT table disabled by module option
-> [    0.375823] amdgpu: Virtual CRAT table created for CPU
-> [    0.375831] amdgpu: Topology: Add CPU node
-> [    0.375865] amdgpu 0000:0a:00.0: vgaarb: deactivate vga console
-> [    0.375911] [drm] initializing kernel modesetting (VEGA10 0x1002:0x687F 0x1DA2:0xE376 0xC3).
-> ...
-> [    0.868997] fbcon: amdgpu (fb0) is primary device
-> [    1.004397] Console: switching to colour frame buffer device 240x67
-> [    1.017815] amdgpu 0000:0a:00.0: [drm] fb0: amdgpu frame buffer device
-> ...
-> [    1.133997] efifb: probing for efifb
-> [    1.134716] efifb: framebuffer at 0xe0000000, using 8100k, total 8100k
-> [    1.135438] efifb: mode is 1920x1080x32, linelength=7680, pages=1
-> [    1.136180] efifb: scrolling: redraw
-> [    1.136891] efifb: Truecolor: size=8:8:8:8, shift=24:16:8:0
-> [    1.137638] fb1: EFI VGA frame buffer device
-> 
-> Usually the efifb is to have early framebuffer output before the native DRM
-> driver probes, but in your case is the opposite. This wouldn't happen if the
-> amdpug driver was built as a module.
-> 
-> Probably before the mentioned commit, the efifb driver was probed earlier and
-> then the amdgpu driver would had removed the conflicting efifb framebuffer
-> before registering its DRM device. But that doesn't happen here and the efifb
-> framebuffer is still around since is registered after the one for the amdgpu.
-> 
-> Which would explain why also works with CONFIG_SYSFB_SIMPLEFB=y for you, since
-> in that case a "simple-framebuffer" platform device is added instead of an
-> "efi-framebuffer". But since neither CONFIG_FB_SIMPLE nor CONFIG_DRM_SIMPLEDRM
-> are enabled in your kernel config, no device driver will match that device.
-> 
-> This is just a guess though. Would be good if you could test following cases:
-> 
-> 1) CONFIG_FB_EFI not set
+Ard, can you please repost it again ?
 
-/proc/fb:
-0 amdgpu
-
-dmesg: https://pastebin.com/c1BcWLEh
-
-Suspend-to-RAM works.
-
-> 2) CONFIG_FB_EFI=y and CONFIG_DRM_AMDGPU=m
-
-/proc/fb before `modprobe amdgpu`:
-0 EFI VGA
-
-after:
-0 amdgpu
-
-dmesg: https://pastebin.com/vSsTw2Km
-
-Suspend-to-RAM works.
-
-> 3) CONFIG_SYSFB_SIMPLEFB=y and CONFIG_FB_SIMPLE=y
-
-/proc/fb:
-0 amdgpu
-1 simple
-
-dmesg: https://pastebin.com/ZSXnpLqQ
-
-Suspend-to-RAM fails.
-
-> 
-> And for each check /proc/fb, the kernel boot log, and if Suspend-to-RAM works.
-> 
-> If the explanation above is correct, then I would expect (1) and (2) to work and
-> (3) to also fail.
-> 
-> Best regards,
-> -- 
-> Javier Martinez Canillas
-> Linux Engineering
-> Red Hat
-> 
+-- 
+viresh
