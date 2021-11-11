@@ -2,141 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBE3E44D3DD
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Nov 2021 10:16:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B163344D3EB
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Nov 2021 10:19:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231576AbhKKJTW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 11 Nov 2021 04:19:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41766 "EHLO
+        id S232431AbhKKJV5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 11 Nov 2021 04:21:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbhKKJTV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Nov 2021 04:19:21 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78579C061767
-        for <linux-pm@vger.kernel.org>; Thu, 11 Nov 2021 01:16:32 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1ml6C5-00076p-3O; Thu, 11 Nov 2021 10:16:29 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1ml6C3-00079X-Dy; Thu, 11 Nov 2021 10:16:27 +0100
-Date:   Thu, 11 Nov 2021 10:16:27 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Michal =?utf-8?B?Vm9rw6HEjQ==?= <michal.vokac@ysoft.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, Petr Benes <petrben@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Amit Kucheria <amitk@kernel.org>, linux-kernel@vger.kernel.org,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        David Jander <david@protonic.nl>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2] thermal: imx: implement runtime PM support
-Message-ID: <20211111091627.GG12195@pengutronix.de>
-References: <20211019130809.21281-1-o.rempel@pengutronix.de>
- <20211020050459.GE16320@pengutronix.de>
- <CAPwXO5b=z1nhQCo55A_XuK-Es2o7TrL2Vj6AkRSXa3Wxh0s8sA@mail.gmail.com>
- <20211021172048.GE2298@pengutronix.de>
- <CAPwXO5bWoAvZgQLQHa6CsFmZ2bcUQ9pJQBBL3F+goppMeAKkFQ@mail.gmail.com>
- <8692108c-1b46-3d3d-6911-300ac27c2980@ysoft.com>
+        with ESMTP id S232475AbhKKJVx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Nov 2021 04:21:53 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEBC1C0613F5
+        for <linux-pm@vger.kernel.org>; Thu, 11 Nov 2021 01:19:03 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id e65so4671252pgc.5
+        for <linux-pm@vger.kernel.org>; Thu, 11 Nov 2021 01:19:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=W4oON9tVLzbGnMHdSvx5FpIn6WtCPoheg0Qx9WxWbPQ=;
+        b=LEI+Zjqvo5YR46BDk0UGfF0Z206KbIE5NfmIdD1sEs38gVeU/TXLHux/kPRlEhpwpm
+         CKnJNdTqjFVmVY7fu07F4vbbKnEpeJ2Bj16hCjCBZzOwas3FwxaISJe+xwjqMQMK5s+y
+         pn5aWxgxZxZi8BHfshdRinyy3kjTyvS01GXAK/49RSSdNZf/MtmU9QfX2oAXmZwfe/hu
+         UdzVBaFmyiNiYcmCL5HKtRanaJEGwvJsntBRkhIKEoM9iXFteOmnIX1xqzYBMHfQZN+8
+         ubPkn+Q3+swfnbA88+4LlBqwA0ms/McQxqxEuCObiQiZfQLL7SMnHiyPBRvgKD4NsMoV
+         x85Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=W4oON9tVLzbGnMHdSvx5FpIn6WtCPoheg0Qx9WxWbPQ=;
+        b=UzYBAJcn7s5dCbDLmJbBZ1dnjo3BUKKq70Tjg9dYh+1jFKM3SCZx2eMGaV+qmi7g4U
+         3o11F6LLPctLpinepf+WfLu1D202O5UCETnzVWeeknowLgNJUE63ZRVekMUkSC/Il8uG
+         Upiq37SXJ/DFz8thFdGcPZ1iiDtDxKAIpFxfZHY19eXpUEwOtWcsPMHJZs2AvYXNwGA4
+         hJK9LPKSb8o2QpmDgex7FE30GVCde5LZ4Rr6wOyX35HSO9MDA+RBW9do/KGjsJwiD20i
+         7OqmldW1Rnx+9oE8KbjJAS4EBH57idksjFuGqkz5HqivCUSoQ0KsMP/+yOXctHUEbaAb
+         ge5A==
+X-Gm-Message-State: AOAM530tiJGqDywQ74NTaUGS0jXNUe3xLo1iNdJ7YngC5huYQ5kgQWx7
+        x8XbqpVurB4mZXQfjEuTR7eMsw==
+X-Google-Smtp-Source: ABdhPJyAgSAhmt4zPqV47R/uN2HyIfaw0kvLLeTkHktBsw5JQz044Jif9nZJrLioItZgzYZiwiQepQ==
+X-Received: by 2002:a62:1c0e:0:b0:4a0:3492:37b5 with SMTP id c14-20020a621c0e000000b004a0349237b5mr5425509pfc.33.1636622343312;
+        Thu, 11 Nov 2021 01:19:03 -0800 (PST)
+Received: from dragon (80.251.214.228.16clouds.com. [80.251.214.228])
+        by smtp.gmail.com with ESMTPSA id u10sm2240141pfh.49.2021.11.11.01.19.00
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 11 Nov 2021 01:19:02 -0800 (PST)
+Date:   Thu, 11 Nov 2021 17:18:56 +0800
+From:   Shawn Guo <shawn.guo@linaro.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>
+Subject: Re: [PATCH 5/6] dt-bindings: interconnect: Add Qualcomm QCM2290 NoC
+ support
+Message-ID: <20211111091855.GK7231@dragon>
+References: <20211110120716.6401-1-shawn.guo@linaro.org>
+ <20211110120716.6401-6-shawn.guo@linaro.org>
+ <1636573460.901134.1783738.nullmailer@robh.at.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8692108c-1b46-3d3d-6911-300ac27c2980@ysoft.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 10:11:37 up 266 days, 12:35, 140 users,  load average: 0.23, 0.26,
- 0.30
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+In-Reply-To: <1636573460.901134.1783738.nullmailer@robh.at.kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 10, 2021 at 11:07:31AM +0100, Michal Vokáč wrote:
-> On 25. 10. 21 13:06, Petr Benes wrote:
-> > Hi Oleksij,
+On Wed, Nov 10, 2021 at 01:44:20PM -0600, Rob Herring wrote:
+> On Wed, 10 Nov 2021 20:07:15 +0800, Shawn Guo wrote:
+> > Add bindings for Qualcomm QCM2290 Network-On-Chip interconnect devices.
 > > 
-> > On Thu, 21 Oct 2021 at 19:21, Oleksij Rempel <o.rempel@pengutronix.de> wrote:
-> > > 
-> > > Hi Petr,
-> > > 
-> > > On Wed, Oct 20, 2021 at 05:53:03PM +0200, Petr Benes wrote:
-> > > > On Wed, 20 Oct 2021 at 07:05, Oleksij Rempel <o.rempel@pengutronix.de> wrote:
-> > > > > 
-> > > > > Hi Petr and Michal,
-> > > > > 
-> > > > > I forgot to add you for v2 in CC. Please test/review this version.
-> > > > 
-> > > > Hi Oleksij,
-> > > > 
-> > > > It works good. with PM as well as without PM. The only minor issue I found is,
-> > > > that the first temperature reading (when the driver probes) fails. That is
-> > > > (val & soc_data->temp_valid_mask) == 0) holds true. How does
-> > > > pm_runtime_resume_and_get() behave in imx_thermal_probe()?
-> > > > Does it go through imx_thermal_runtime_resume() with usleep_range()?
-> > > 
-> > > How exactly did you reproduce it? Even more or less understanding how
+> > Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+> > ---
+> >  .../bindings/interconnect/qcom,qcm2290.yaml   | 117 ++++++++++++++++++
+> >  .../dt-bindings/interconnect/qcom,qcm2290.h   |  94 ++++++++++++++
+> >  2 files changed, 211 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,qcm2290.yaml
+> >  create mode 100644 include/dt-bindings/interconnect/qcom,qcm2290.h
 > > 
-> > I just placed my debug print into get_temp()
-> > 
-> >      if ((val & soc_data->temp_valid_mask) == 0) {
-> >          dev_dbg(&tz->device, "temp measurement never finished\n");
-> >          printk("Wrong temperature reading!!!!!!\n");
-> >          return -EAGAIN;
-> >      }
-> > 
-> > > this can potentially happen, i never had this issue on my HW. Is it something
-> > > HW specific?
-> > 
-> > IMHO it is just product of the following sequence:
-> > 
-> > pm_runtime_set_active(&pdev->dev);
-> > pm_runtime_enable(data->dev);
-> > pm_runtime_resume_and_get(data->dev);
-> > thermal_zone_device_enable(data->tz);
-> > 
-> > With assumption imx_thermal_runtime_resume() didn't run,
-> > hence the sensor didn't get enough time to come up.
-> > 
-> > I didn't have time to spend it on and you have better knowledge of the
-> > area. If it is not that straightforward I can try to diagnose it better.
-> > 
-> Hi Oleksij,
-> Did you manage to further debug and reproduce this problem?
-> Do you plan to send the v3?
 > 
-> Regarding your question about the HW - this problem occured once we
-> upgraded the SoC on our SBC from i.MX6DL to i.MX6Q/QP. With the DualLite
-> we never had this problem but the Quad is getting hot quite fast.
-> We have pretty limited cooling options so the core is operated at its
-> upper temperature limits when fully loaded.
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> 
+> yamllint warnings/errors:
+> 
+> dtschema/dtc warnings/errors:
+> Documentation/devicetree/bindings/interconnect/qcom,qcm2290.example.dts:20:18: fatal error: dt-bindings/clock/qcom,gcc-qcm2290.h: No such file or directory
+>    20 |         #include <dt-bindings/clock/qcom,gcc-qcm2290.h>
+>       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Hi Michal,
+Thanks for the report!
 
-Sorry, I was busy and lost this topic from my radar. I was not able to
-reproduce it on my i.MX6Q and i.MX6QP died after other thermal voltage
-experiments. Please, if you able to reproduce it, try to investigate
-what is wrong, for example increasing wakeup time and/or and tracing
-sleap/wake/get sequences.
+The header has just landed on mainline tree.  But the binding actually
+doesn't need to include it.  I will drop it for the next posting.
 
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Shawn
