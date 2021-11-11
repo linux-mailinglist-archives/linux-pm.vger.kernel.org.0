@@ -2,104 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E74144D992
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Nov 2021 16:51:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26B1D44DA6D
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Nov 2021 17:28:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233937AbhKKPyF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 11 Nov 2021 10:54:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47104 "EHLO
+        id S234297AbhKKQbf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 11 Nov 2021 11:31:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234262AbhKKPx6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Nov 2021 10:53:58 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD569C06120B
-        for <linux-pm@vger.kernel.org>; Thu, 11 Nov 2021 07:51:08 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id l22so15176189lfg.7
-        for <linux-pm@vger.kernel.org>; Thu, 11 Nov 2021 07:51:08 -0800 (PST)
+        with ESMTP id S234312AbhKKQbc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Nov 2021 11:31:32 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77741C061767
+        for <linux-pm@vger.kernel.org>; Thu, 11 Nov 2021 08:28:43 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id y14-20020a17090a2b4e00b001a5824f4918so5013327pjc.4
+        for <linux-pm@vger.kernel.org>; Thu, 11 Nov 2021 08:28:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=VE8Mlr7JeF5rcTb8FIHtkH/fG/cfOojy0GSI5vjR3+0=;
-        b=H+ZXkEuBQ5Vpfh47y/8sRNqCH9aIJ06X+1pLMK+VG3qBZAKgcoNUTo8/PGSjIHrQ33
-         qfcqPwYEmsu6NWagagmbDm2Qwh7/kTqrW0qn3d5lgvoPIRSlYbQSgAi0Kh0TrJtG/Zu9
-         7OA0SdICHKYxk8v8pFNYzGzk/Kqwlh8htpsP6LH8kf/gEWw6dsq3lRbXDODvaPz3zVtG
-         +yX9zhp6IbsSIft3zxQAJ5Bcq7NN1dhVKdQNqlLvavmiRiDqnAayOda7Zi23Di0O+Olm
-         F8EhIakHcig7mBUxlyHB1yg5xip7+5SueiKcxHv8+WpXkUW//+CHGrWNyrGJoTYScq96
-         KKJw==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6uwHJ0xj6Hj2rrXqAR11u7gcbD2tfZJ3+Qe9XeCjUXY=;
+        b=gxsoNu5KAfKOnf0BCqoNqCUsYS7K7KAIoHyFACJkqyDRDjlgzDpPkaUohD/0pyxA6C
+         oB+5EhS1HfSzqvSZqZCTZuz3lFWxEhIFbOZ47nlLlUTRNnoTrYzDxrPOoZSxSTCiEYhL
+         gZASt6lhp4y1b/HYIz1pNXNSl7JmiOJ6qio1Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=VE8Mlr7JeF5rcTb8FIHtkH/fG/cfOojy0GSI5vjR3+0=;
-        b=7fnTtK4PCvV27xBVv6AuiHRs79R8Ie9zF0Id7opimlUPtuO4Gae2KqPkG8ybDhirx+
-         gB78P8ENC3g+J12fG+Lb6mLhD4kHe45ldFikWyQ0+GyG0tkLiuFHd3y9fpGaBL+gHf7n
-         qpse1KCApfVJhmUqnJ90UvPcniGN0jsnvL2hk79bKfVVtj6XWFTe9X1hFMzeik1fad0n
-         5PH1zIHFDpk6o/wDxxklccCaoBLOrrU/341O2cI1OD193diT0UbKESREj9pUbMned8rc
-         dapdJ4w2r35TKfZjlm+GlTb78pfYpcfI0lyxPjyX7zVM4ayZ+KbHfSya2bnS38x9pc6a
-         ISmw==
-X-Gm-Message-State: AOAM532ivJfWdducmey1s88GhkRmqWJQ2Z86X+St9ttohXxh6pqKNHoX
-        TKVrdeNTM+K5nlDGJBuJDP7f7M4KArx/lAQq
-X-Google-Smtp-Source: ABdhPJxJrli2k5aVSGjSNTAmCbWcGFBCpqr3QkIpR7jRH4fag3R5WyIQS712gnKcIsqjGZaQ75wemw==
-X-Received: by 2002:a05:6512:1023:: with SMTP id r3mr7364158lfr.47.1636645867088;
-        Thu, 11 Nov 2021 07:51:07 -0800 (PST)
-Received: from [192.168.1.102] (62-248-207-242.elisa-laajakaista.fi. [62.248.207.242])
-        by smtp.gmail.com with ESMTPSA id bu25sm315676lfb.229.2021.11.11.07.51.06
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6uwHJ0xj6Hj2rrXqAR11u7gcbD2tfZJ3+Qe9XeCjUXY=;
+        b=X4lut8l9ScrMKOCqqXSo6/Pitc6Pv/LGtJx5oIkyjqzzUVicC3Eh4Jfo5HzSebPiFi
+         49lwkZli++pgFKPdLlG9/i1JDlRujlsptshzo5NLOGoF5TidAfiar4KjUCAhacmdDhBj
+         1nj9ER1WbL+73Ff8OCsvTDkbcG8s+kVe3yRDH5H9H1iSzOdmPJuOJqmvA5sB/YD6mSKy
+         g7EkzO50iQR1xuyqlPXN7ww1qMq68+Bep4ls57xbzajNkMMCT97FGLxqfblouNtSV3uW
+         GxXKY8cfhW4uyU2mUm2C1vDGcvBJ5JPLLonEt3A8qOGVx3Q5klyaMMt35Py6ir1y2SY1
+         EkXg==
+X-Gm-Message-State: AOAM533lLAMVGt5Te7t97mTkJfT9F/uHQb1cLFYe2Bcl8yLd4cdlfb1a
+        lx7PbbW99zeE3CGocr44Fved1A==
+X-Google-Smtp-Source: ABdhPJw/2rwsi6QclL5CMqZM6PUv88aktvlbkW2ximdu8Axd6jFjT0wHrOApAuskCsUABKMwN/K2Yw==
+X-Received: by 2002:a17:90b:33d0:: with SMTP id lk16mr9587877pjb.66.1636648123027;
+        Thu, 11 Nov 2021 08:28:43 -0800 (PST)
+Received: from localhost ([2620:15c:202:201:c0a9:ac53:7829:6af7])
+        by smtp.gmail.com with UTF8SMTPSA id s2sm3861689pfk.198.2021.11.11.08.28.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Nov 2021 07:51:06 -0800 (PST)
-Subject: Re: [PATCH] cpufreq: qcom-hw: Fix exposed stack contents
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Thu, 11 Nov 2021 08:28:42 -0800 (PST)
+Date:   Thu, 11 Nov 2021 08:28:41 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Thara Gopinath <thara.gopinath@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20211110152745.1868099-1-vladimir.zapolskiy@linaro.org>
- <YYvn1CJBrWprEKCD@ripper> <20211111012503.rmz2kvcdzmht5rnw@vireshk-i7>
-From:   Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Message-ID: <3b340026-2fb0-a6f8-b0ea-a8010e2fbf72@linaro.org>
-Date:   Thu, 11 Nov 2021 17:50:59 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+Subject: Re: [PATCH 2/3] cpufreq: qcom-hw: Fix probable nested interrupt
+ handling
+Message-ID: <YY1EubypukOK3Ux4@google.com>
+References: <20211111154808.2024808-1-vladimir.zapolskiy@linaro.org>
+ <20211111154808.2024808-3-vladimir.zapolskiy@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <20211111012503.rmz2kvcdzmht5rnw@vireshk-i7>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211111154808.2024808-3-vladimir.zapolskiy@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Viresh,
-
-On 11/11/21 3:25 AM, Viresh Kumar wrote:
-> On 10-11-21, 07:40, Bjorn Andersson wrote:
->> On Wed 10 Nov 07:27 PST 2021, Vladimir Zapolskiy wrote:
->>
->>> On irq request it is improper to pass its designated name, which is
->>> allocated on stack, because the irq name string is not copied, thus
->>> there is a risk of leaking partial stack contents to userspace.
->>>
->>> Fixes: 275157b367f4 ("cpufreq: qcom-cpufreq-hw: Add dcvs interrupt support")
->>> Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
->>
->> This was already proposed and reviewed at:
->>
->> https://lore.kernel.org/all/20210901084732.943248-1-ardb@kernel.org/
->>
->> Could Ard's patch please be picked up by the maintainers, preferably
->> with above Fixes added, so we get this backported onto v5.15 stable...
+On Thu, Nov 11, 2021 at 05:48:07PM +0200, Vladimir Zapolskiy wrote:
+> Re-enabling an interrupt from its own interrupt handler may cause
+> an interrupt storm, if there is a pending interrupt and because its
+> handling is disabled due to already done entrance into the handler
+> above in the stack.
 > 
-> It never reached any of the PM guys unfortunately.
+> Also, apparently it is improper to lock a mutex in an interrupt contex.
 > 
-> Ard, can you please repost it again ?
-> 
+> Fixes: 275157b367f4 ("cpufreq: qcom-cpufreq-hw: Add dcvs interrupt support")
+> Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
 
-I've resent the rebased change under a series of new fixes:
-
-   https://lore.kernel.org/linux-pm/20211111154808.2024808-1-vladimir.zapolskiy@linaro.org/T/#m2bbf2c57686
-
---
-Best wishes,
-Vladimir
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
