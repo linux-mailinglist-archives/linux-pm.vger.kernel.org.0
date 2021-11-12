@@ -2,147 +2,205 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F7544E596
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Nov 2021 12:30:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 896DF44E5C5
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Nov 2021 12:53:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234656AbhKLLdU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 12 Nov 2021 06:33:20 -0500
-Received: from mail-bn1nam07on2080.outbound.protection.outlook.com ([40.107.212.80]:18756
-        "EHLO NAM02-BN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233619AbhKLLdT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 12 Nov 2021 06:33:19 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Kk5m4kyaWly0PUdVRfedDy50MfYMbGSQwTPtSe5hSqaFRRETFX4pii1avXHyuthhOeoCauOo6HEamlg7OuIdZn+22JRe12IzCNzSeFB/+euwtimuCs0KHtG/9lYI7vVzkTiFRtmXwUWC6zmh0WyXU99AGJ6ToEHuxmohRZZ3SqNWlj8qaEXTEduuZmHVB0j98I0rH+1vtg1SAGdR4SVo5UN4Sz+dePQRlWk9WSd7F0up97M7P1wEeSLhwU6II9ypUb/X/qKjl6LeZrHQXyuHLueO6mDE6YWGCobOo9GCe0zJiOUhjEn0hvp1r2I4VEGrmA/+yucu9XXajp/WNoAR7w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fOM9c7kSs/droLIMAw5RdA5nKDAUkULtkmO/P8GRjhM=;
- b=U3H4fDqCHKOjmS97Kl/MbefOQoofFAGT5F7kwcC5FDG/IfBj2Ffkg6ep03MntT4P7W/J9ix4liWKxpwah+XYi0TFTwCmeA1kJaCwGONwADqn6mnCIb6HKFHUU3PxklaVKTU4asutapGbd7oLZfWeQV+IdxfSDtrP7nN0Aq2zeJmtNY9JIWzjJXFtp1XJ8cTZnpR0taQbvZ2/yVjCdX17bUldfizuzMTk2J0uW9rwP3HxwRsjU7bpVQDAlD66vAieyEv4nDIOeKjOa8R5E2xS5kQh0LSPQinzIHj8qDUFoFfDToAFwHPhsfeRCybv+4pkpfT6UV2jPXnQqWo3D9OKtA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fOM9c7kSs/droLIMAw5RdA5nKDAUkULtkmO/P8GRjhM=;
- b=ItTk7Aq5tF6UCtJvZkev8SbKalfFTWoDg7Zj/oXGW6HfS5CULaDps/iWjkuuI4wWGQn8Orjn5Ao8jG68CFoDS9NF4AHDyhQV3nBcnH6E0oEUgBOnzneevPnOaSoflSFXIXOdj9LpeCgwRe1mfJ21IQQRUPbHrGMnXv8xA7bfb/rT74kKnmB+rGGpasDcDBcOPh4lD7qUcNOfLxdOs+9SPdLmFKQUUgmNYvG5jc55UhfFoC9HLXKUR0HdKy/rBskuW7n1zRCNKLAcy/abvkdljydqzKhHLvD46YTbYJX00blNT825gu0t+xxeAyRmstWU0zoBNefka9r6g+LMYYqj3Q==
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=nvidia.com;
-Received: from DM8PR12MB5445.namprd12.prod.outlook.com (2603:10b6:8:24::7) by
- DM4PR12MB5133.namprd12.prod.outlook.com (2603:10b6:5:390::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4669.15; Fri, 12 Nov 2021 11:30:26 +0000
-Received: from DM8PR12MB5445.namprd12.prod.outlook.com
- ([fe80::c884:b4ad:6c93:3f86]) by DM8PR12MB5445.namprd12.prod.outlook.com
- ([fe80::c884:b4ad:6c93:3f86%9]) with mapi id 15.20.4669.016; Fri, 12 Nov 2021
- 11:30:26 +0000
-Subject: Re: [PATCH 2/5] reset: tegra-bpmp: Handle errors in BPMP response
-To:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Mikko Perttunen <mperttunen@nvidia.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org, thierry.reding@gmail.com,
-        krzysztof.kozlowski@canonical.com, lorenzo.pieralisi@arm.com,
-        robh@kernel.org, kw@linux.com, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, amitk@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
-References: <20210915085517.1669675-1-mperttunen@nvidia.com>
- <20210915085517.1669675-2-mperttunen@nvidia.com>
- <397003f8-bf3c-68a4-828c-1254710f714b@nvidia.com>
- <276db30d95bf84cb31f9d9a6c029593fb0ccec21.camel@pengutronix.de>
-From:   Jon Hunter <jonathanh@nvidia.com>
-Message-ID: <07341b12-3624-5cbe-8574-908139e905b8@nvidia.com>
-Date:   Fri, 12 Nov 2021 11:30:18 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
-In-Reply-To: <276db30d95bf84cb31f9d9a6c029593fb0ccec21.camel@pengutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AM0PR03CA0085.eurprd03.prod.outlook.com
- (2603:10a6:208:69::26) To DM8PR12MB5445.namprd12.prod.outlook.com
- (2603:10b6:8:24::7)
+        id S234728AbhKLL4I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 12 Nov 2021 06:56:08 -0500
+Received: from mga02.intel.com ([134.134.136.20]:22763 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234666AbhKLL4H (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 12 Nov 2021 06:56:07 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10165"; a="220329825"
+X-IronPort-AV: E=Sophos;i="5.87,229,1631602800"; 
+   d="scan'208";a="220329825"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2021 03:53:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,229,1631602800"; 
+   d="scan'208";a="492976295"
+Received: from chenyu-desktop.sh.intel.com ([10.239.158.186])
+  by orsmga007.jf.intel.com with ESMTP; 12 Nov 2021 03:53:14 -0800
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     linux-pm@vger.kernel.org, Len Brown <lenb@kernel.org>
+Cc:     Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, linux-kernel@vger.kernel.org,
+        Chen Yu <yu.c.chen@intel.com>
+Subject: [PATCH 1/2] tools/power turbostat: Support thermal throttle count print
+Date:   Fri, 12 Nov 2021 19:51:59 +0800
+Message-Id: <20211112115159.725357-1-yu.c.chen@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Received: from [10.26.49.14] (195.110.77.193) by AM0PR03CA0085.eurprd03.prod.outlook.com (2603:10a6:208:69::26) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4690.15 via Frontend Transport; Fri, 12 Nov 2021 11:30:23 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c50834d9-d21d-4d79-3373-08d9a5cfd2d3
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5133:
-X-Microsoft-Antispam-PRVS: <DM4PR12MB5133076E64A6DB34A953CA62D9959@DM4PR12MB5133.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9bLTN1uOwZV8yR4AKrO+M4sBQZhfjH3ESx9oDe95vU6Tk4BNnsuleDT4fShFIhWFDcT3L4HF5Nzs6UWQPdrUUskmsKfjaUwX3CbjpGvqi4zyiKKc21l6pp13IdxSsPn8uEvdYglaVIc3PqprU2/4X5WhFaHBIyQIlLjHKSsT1QsSkEK6zpAE6OTVQyGZyAK9w5viDgenUHN8AHZijw0biSnKWhowUym2yPn+/GpBqjBpfeeexstcnjSGhPfSxjAQale1lD8vs5jASLgTtFOF/FTyifnRPcKcAtzV2CcqAXHitKE/bcKxSRJfQ51SJX0X0DKxLoakXG1NhIsSf5vQZPRslgi1K2UpL/TFCUTa3edGJRkU1lNfYdK9fApXCzLig3wfDLjxjlQsWxWgApnzDSZ46seHBK10wMLsV6xbRe5O/mhRoG0HvU7aLaI0/SfQN+3yEtUFzNVrn+z1gcGN+yi9Z4TYmmRFxaTUvPEJJEaL/UhynvlkBLE5GQ4kn0VbodEtGOAUKLfWVAR0yplc1shctSxdFy+ABEfs0gHMHG35KENr3uDzB6081/t0XfavA61lrnOk6SudJGyOpIa78DhlIQCzxJTyrsffCNulCnoRDnhd880dFGn0zTP4dfOO5fdfAZBdR0zq1icdwn1hq3ICM2eCXd3GDVrL5BkQMeRZyb+dAyd8bWsh3S9ToKC3502o5q4Ov1leT0N8DzDKqYLq29eh9vClslf/R+sc3Y7sMp2NfexcybTMU8HPJGsyDtILW0xGwmjFvcLZEMeeDA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5445.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(8676002)(6486002)(4744005)(16576012)(86362001)(4326008)(508600001)(7416002)(26005)(66556008)(66476007)(8936002)(2616005)(316002)(66946007)(36756003)(956004)(186003)(110136005)(6666004)(921005)(5660300002)(31686004)(38100700002)(2906002)(31696002)(55236004)(53546011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YjFoSWswcWREbTk2Y0dTZTVadXVIQ0hUSk9RWS8wa0h2WEJGL1BXejhvSnJY?=
- =?utf-8?B?VC8wc1VtRThRdDFnZGpyUVlRcWlRUjlocTMrRTB2bThJNnFYRHdEMytHOEM5?=
- =?utf-8?B?QkkzOWJMRGN2eldZN0pGOGxhWWtkVmdyQ2tJdEl1Ymw0c2Q3QTAvdGI0ZlRB?=
- =?utf-8?B?aUlzRGZWZjRaOGJIVUlOT2o5YzBJdVF4VEhmbjNMVGw0dnVPUituaTh6ZVZh?=
- =?utf-8?B?cjdJUlIyZnU0bVVrd1BMUmQ0OXVsSTNUaERpVzZaZEEwYmlzS3BNS1M1Q0VZ?=
- =?utf-8?B?YTduVFkwRzBjSXNJeGFGcFNvSndDblBlbDhVQ0xha2VBLzZyM2Exb3RGZHM2?=
- =?utf-8?B?c1JsbHp0OFZyRkNPN21BSGd4RmlOa1g0OGM4L1hmVVBoZmlpVTNPeFgxT1VV?=
- =?utf-8?B?V05kV0d4ZXRhOXZEclArSUI3UEtTWFd4bFdvUk9Cb0F2K0NsT2ZHWVlXMklH?=
- =?utf-8?B?dWJJQWVRa2ZBdDJ0anVsejU0YzNYZVdCMjBuLzNxYXJ6TEIxaUovZ1RFVGd0?=
- =?utf-8?B?MXIwN2hJcXJSQkliS3ZxWE04dVFlZU4rUzFON3RmMEp2R2NBRldHUHREbG5u?=
- =?utf-8?B?NXBuWWRqL2NqOWgxQzVzbCtRWitKL1V5RUt3WEV2Q0VBOG9Pek5kdnR6MHZq?=
- =?utf-8?B?QXEyTVlCWHlCYUNjbHBOWVV1YWhtamFFZ20vWGdBRlc4NUppNHNPSzU1YVcw?=
- =?utf-8?B?c0NxUGtTM3hwZkRlOFJjcDRPTWlmUWppNFlLc25kamQvcjl1Wm1RK2Y1UG51?=
- =?utf-8?B?TzJsTk9HazFveGc0Q1JoYWc3SGpNMzdVQXV1dzZIT21kZ2tueFNQS1FKUWJP?=
- =?utf-8?B?ZmwrTTRnYURaV29pR3g4Nms2OHBMbFpvYkZNME1LU3V6cmNkN2E5bUhJOHdl?=
- =?utf-8?B?WkZ2OUM4Q3llUnB4UjZBaXNxcDZyQytOc1A4cG03dTFuM1dHTUVSZ1FkME5q?=
- =?utf-8?B?Sk9GZWFTUUVkY2dUY0hOcG05aEdENkNMVW5XUWpmemVrcU9IdmJKYXpaR3E1?=
- =?utf-8?B?TG1jdmlzWkhJVEluQllKTjkzNS9VVWQvd0VFUUlUeXBRU2tmYzY3bzNYVndL?=
- =?utf-8?B?dVVMMkxRRzNBRjJkWHBDbkpieTdMbzJMc3BiM21oeWxKOGRzMVVEdHA0c2RK?=
- =?utf-8?B?eCtJaHV2bWh1L0tabnl6KzE4MlBaemRkQ2xleDRKbFRrd1FwazBqaWY5empl?=
- =?utf-8?B?ak00KzhpNE1RTU1HNUc4R0FReHpGeXNPSmZWaEpDSDlXZHNYK2dzVjF1QTd1?=
- =?utf-8?B?a244MlRNaUZsMUx1YzdDWG1zamQxby90T3hYK2xCb0FsK2JnM1JrOXVqQmdG?=
- =?utf-8?B?YVdqaFFkTXNSODFpV0F6czk3Mmw2NTFuUTltWGpDOXZVYkx2M1k3TEcxbGQy?=
- =?utf-8?B?ZUU4alVFK1Z5UlVJZTV2NVZYN1ZHWXdCLzNyNGlYODJGWGpUekhtUFpNY0Fl?=
- =?utf-8?B?YmdPV3RhNTBBUHRsQ2ljcmRWM2NlNWxuRlRXb05vTnZmZ3Z6M3lrSWNMK0dQ?=
- =?utf-8?B?UTBFSzFGSXlZV0lCQWdMOXM3dlVXWVpSNjRLbVdKVzg0V1pYYmUvWHRTL2hW?=
- =?utf-8?B?WWd4VUlFS21hazE5bmpyQllaYTdobmZkbjdPeUlndG9ZSzIwZnF6WmZnNHJX?=
- =?utf-8?B?VVVycnUwOHozTm1zclRGRlRYUkxwOStiRTlrTTJrbCtBMUZ1S1FWTGFUMGlL?=
- =?utf-8?B?TklUd1d5eWRiS1dRQ0ZocnEvYWdqV0VLMmhkakpublVQMXFvN0ljcGJpOXJm?=
- =?utf-8?B?UzFId1VRd0c0WnFhZXNKVTR2UnpjYlJlbnA0bkJPd2xlM2E5T0RLN3FwWmV6?=
- =?utf-8?B?SEw4bndDWkNMTE8rUDRFbG4vUllLWFhxQjRQaTBQejNEWm05K2YzcHRwTVpQ?=
- =?utf-8?B?T0hzRW9hOUF0eEJmUFVlcVoxd3FxdE9uSUZyQXRaVlJtQUN4UHNlWkVGdDdX?=
- =?utf-8?B?MWQwZjJXSFhUTGQwRDBkUEpIMHhmc283dFhJNE45aExKd01ocnQzYndtL0hO?=
- =?utf-8?B?c2toZ2xPSmN4REFzRDVubVM0OFZHTjl6ak85VDBWRUdWWURVRFNUVkh0YUdp?=
- =?utf-8?B?aktqRWkvRDlFeSt5V1pwbFM5OFUzWXYzbTdDQm5IY0tGS3MwTkF2SkE5Rkd2?=
- =?utf-8?B?cndlNzF0YlM1YmRkWU1MRldSUndmRU1XWUNqYkh4SEFVZkRuMDJOL3lvZC9E?=
- =?utf-8?Q?FuIx4TwlEL+FIoIVBl2iPuY=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c50834d9-d21d-4d79-3373-08d9a5cfd2d3
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5445.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Nov 2021 11:30:26.6811
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: e6aR8aR9H/+DVyDkHIC3ysgH5+Ba9VsphxzUyL8SKS554KrqTMhB/hwTN6+gNOx4S+SsDYFBw1+qJ+7fbtk72w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5133
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Philipp,
+The turbostat data is collected by end user for power evaluationit. However
+it looks like we are missing enough thermal context there. Already a couple of
+time we found that power management developer asking something like this:
+grep -r . /sys/devices/system/cpu/cpu*/thermal_throttle/*
 
-On 02/11/2021 13:10, Philipp Zabel wrote:
+Print the per core thermal throttle count so as to get suffificent thermal
+context.
 
-...
+turbostat -i 5 -s Core,CPU,CoreThr
+Core	CPU	CoreThr
+-	-	104
+0	0	61
+0	4
+1	1	0
+1	5
+2	2	104
+2	6
+3	3	7
+3	7
 
-> I'm sorry, I picked this up as a fix and went on vacation. Now that
-> v5.15 has already been released, could you send a revert for stable?
+Suggested-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+---
+ tools/power/x86/turbostat/turbostat.c | 43 +++++++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-No problem. I have sent a revert for this. If we could pull that into 
-the mainline for v5.16 that would be great. Then I will get it 
-backported to stable. We will undo this revert in the mainline once we 
-have sorted out the problem with the HDA driver.
-
-Thanks!
-Jon
-
+diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+index 47d3ba895d6d..b7908f1ee969 100644
+--- a/tools/power/x86/turbostat/turbostat.c
++++ b/tools/power/x86/turbostat/turbostat.c
+@@ -205,6 +205,7 @@ struct core_data {
+ 	unsigned int core_temp_c;
+ 	unsigned int core_energy;	/* MSR_CORE_ENERGY_STAT */
+ 	unsigned int core_id;
++	unsigned long long core_throt_cnt;
+ 	unsigned long long counter[MAX_ADDED_COUNTERS];
+ } *core_even, *core_odd;
+ 
+@@ -610,6 +611,7 @@ struct msr_counter bic[] = {
+ 	{ 0x0, "Die" },
+ 	{ 0x0, "GFXAMHz" },
+ 	{ 0x0, "IPC" },
++	{ 0x0, "CoreThr" },
+ };
+ 
+ #define MAX_BIC (sizeof(bic) / sizeof(struct msr_counter))
+@@ -666,6 +668,7 @@ struct msr_counter bic[] = {
+ #define	BIC_Die		(1ULL << 50)
+ #define	BIC_GFXACTMHz	(1ULL << 51)
+ #define	BIC_IPC		(1ULL << 52)
++#define	BIC_CORE_THROT_CNT	(1ULL << 53)
+ 
+ #define BIC_TOPOLOGY (BIC_Package | BIC_Node | BIC_CoreCnt | BIC_PkgCnt | BIC_Core | BIC_CPU | BIC_Die )
+ #define BIC_THERMAL_PWR ( BIC_CoreTmp | BIC_PkgTmp | BIC_PkgWatt | BIC_CorWatt | BIC_GFXWatt | BIC_RAMWatt | BIC_PKG__ | BIC_RAM__)
+@@ -872,6 +875,9 @@ void print_header(char *delim)
+ 	if (DO_BIC(BIC_CoreTmp))
+ 		outp += sprintf(outp, "%sCoreTmp", (printed++ ? delim : ""));
+ 
++	if (DO_BIC(BIC_CORE_THROT_CNT))
++		outp += sprintf(outp, "%sCoreThr", (printed++ ? delim : ""));
++
+ 	if (do_rapl && !rapl_joules) {
+ 		if (DO_BIC(BIC_CorWatt) && (do_rapl & RAPL_PER_CORE_ENERGY))
+ 			outp += sprintf(outp, "%sCorWatt", (printed++ ? delim : ""));
+@@ -1011,6 +1017,7 @@ int dump_counters(struct thread_data *t, struct core_data *c, struct pkg_data *p
+ 		outp += sprintf(outp, "c6: %016llX\n", c->c6);
+ 		outp += sprintf(outp, "c7: %016llX\n", c->c7);
+ 		outp += sprintf(outp, "DTS: %dC\n", c->core_temp_c);
++		outp += sprintf(outp, "cpu_throt_count: %016llX\n", c->core_throt_cnt);
+ 		outp += sprintf(outp, "Joules: %0X\n", c->core_energy);
+ 
+ 		for (i = 0, mp = sys.cp; mp; i++, mp = mp->next) {
+@@ -1225,6 +1232,10 @@ int format_counters(struct thread_data *t, struct core_data *c, struct pkg_data
+ 	if (DO_BIC(BIC_CoreTmp))
+ 		outp += sprintf(outp, "%s%d", (printed++ ? delim : ""), c->core_temp_c);
+ 
++	/* Core throttle count */
++	if (DO_BIC(BIC_CORE_THROT_CNT))
++		outp += sprintf(outp, "%s%lld", (printed++ ? delim : ""), c->core_throt_cnt);
++
+ 	for (i = 0, mp = sys.cp; mp; i++, mp = mp->next) {
+ 		if (mp->format == FORMAT_RAW) {
+ 			if (mp->width == 32)
+@@ -1311,6 +1322,7 @@ int format_counters(struct thread_data *t, struct core_data *c, struct pkg_data
+ 	if (DO_BIC(BIC_PkgWatt))
+ 		outp +=
+ 		    sprintf(outp, fmt8, (printed++ ? delim : ""), p->energy_pkg * rapl_energy_units / interval_float);
++
+ 	if (DO_BIC(BIC_CorWatt) && !(do_rapl & RAPL_PER_CORE_ENERGY))
+ 		outp +=
+ 		    sprintf(outp, fmt8, (printed++ ? delim : ""), p->energy_cores * rapl_energy_units / interval_float);
+@@ -1467,6 +1479,7 @@ void delta_core(struct core_data *new, struct core_data *old)
+ 	old->c6 = new->c6 - old->c6;
+ 	old->c7 = new->c7 - old->c7;
+ 	old->core_temp_c = new->core_temp_c;
++	old->core_throt_cnt = new->core_throt_cnt;
+ 	old->mc6_us = new->mc6_us - old->mc6_us;
+ 
+ 	DELTA_WRAP32(new->core_energy, old->core_energy);
+@@ -1626,6 +1639,7 @@ void clear_counters(struct thread_data *t, struct core_data *c, struct pkg_data
+ 	c->mc6_us = 0;
+ 	c->core_temp_c = 0;
+ 	c->core_energy = 0;
++	c->core_throt_cnt = 0;
+ 
+ 	p->pkg_wtd_core_c0 = 0;
+ 	p->pkg_any_core_c0 = 0;
+@@ -1710,6 +1724,7 @@ int sum_counters(struct thread_data *t, struct core_data *c, struct pkg_data *p)
+ 	average.cores.mc6_us += c->mc6_us;
+ 
+ 	average.cores.core_temp_c = MAX(average.cores.core_temp_c, c->core_temp_c);
++	average.cores.core_throt_cnt = MAX(average.cores.core_throt_cnt, c->core_throt_cnt);
+ 
+ 	average.cores.core_energy += c->core_energy;
+ 
+@@ -1987,6 +2002,26 @@ void get_apic_id(struct thread_data *t)
+ 		fprintf(outf, "cpu%d: BIOS BUG: apic 0x%x x2apic 0x%x\n", t->cpu_id, t->apic_id, t->x2apic_id);
+ }
+ 
++int get_core_throt_cnt(int cpu, unsigned long long *cnt)
++{
++	char path[128 + PATH_BYTES];
++	unsigned long long tmp;
++	FILE *fp;
++	int ret;
++
++	sprintf(path, "/sys/devices/system/cpu/cpu%d/thermal_throttle/core_throttle_count", cpu);
++	fp = fopen(path, "r");
++	if (!fp)
++		return -1;
++	ret = fscanf(fp, "%lld", &tmp);
++	if (ret != 1)
++		return -1;
++	fclose(fp);
++	*cnt = tmp;
++
++	return 0;
++}
++
+ /*
+  * get_counters(...)
+  * migrate to cpu
+@@ -2129,6 +2164,9 @@ int get_counters(struct thread_data *t, struct core_data *c, struct pkg_data *p)
+ 		c->core_temp_c = tj_max - ((msr >> 16) & 0x7F);
+ 	}
+ 
++	if (DO_BIC(BIC_CORE_THROT_CNT))
++		get_core_throt_cnt(cpu, &c->core_throt_cnt);
++
+ 	if (do_rapl & RAPL_AMD_F17H) {
+ 		if (get_msr(cpu, MSR_CORE_ENERGY_STAT, &msr))
+ 			return -14;
+@@ -5572,6 +5610,11 @@ void process_cpuid()
+ 	else
+ 		BIC_NOT_PRESENT(BIC_CPU_LPI);
+ 
++	if (!access("/sys/devices/system/cpu/cpu0/thermal_throttle/core_throttle_count", R_OK))
++		BIC_PRESENT(BIC_CORE_THROT_CNT);
++	else
++		BIC_NOT_PRESENT(BIC_CORE_THROT_CNT);
++
+ 	if (!access(sys_lpi_file_sysfs, R_OK)) {
+ 		sys_lpi_file = sys_lpi_file_sysfs;
+ 		BIC_PRESENT(BIC_SYS_LPI);
 -- 
-nvpublic
+2.25.1
+
