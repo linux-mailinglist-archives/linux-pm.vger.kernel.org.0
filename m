@@ -2,92 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 638E844EF20
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Nov 2021 23:14:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 106FD44EF24
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Nov 2021 23:18:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233116AbhKLWRs convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 12 Nov 2021 17:17:48 -0500
-Received: from smtp-fw-2101.amazon.com ([72.21.196.25]:6138 "EHLO
-        smtp-fw-2101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbhKLWRs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Nov 2021 17:17:48 -0500
-X-IronPort-AV: E=Sophos;i="5.87,230,1631577600"; 
-   d="scan'208";a="151654841"
-Subject: Re: correct source tree to make contributions to Linux thermal framework
-Thread-Topic: correct source tree to make contributions to Linux thermal framework
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-5feb294a.us-west-2.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-2101.iad2.amazon.com with ESMTP; 12 Nov 2021 22:14:57 +0000
-Received: from EX13MTAUWC001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2a-5feb294a.us-west-2.amazon.com (Postfix) with ESMTPS id BDC358C362;
-        Fri, 12 Nov 2021 22:14:55 +0000 (UTC)
-Received: from EX13D37UWC004.ant.amazon.com (10.43.162.212) by
- EX13MTAUWC001.ant.amazon.com (10.43.162.135) with Microsoft SMTP Server (TLS)
- id 15.0.1497.26; Fri, 12 Nov 2021 22:14:55 +0000
-Received: from EX13D19UWC002.ant.amazon.com (10.43.162.179) by
- EX13D37UWC004.ant.amazon.com (10.43.162.212) with Microsoft SMTP Server (TLS)
- id 15.0.1497.26; Fri, 12 Nov 2021 22:14:55 +0000
-Received: from EX13D19UWC002.ant.amazon.com ([10.43.162.179]) by
- EX13D19UWC002.ant.amazon.com ([10.43.162.179]) with mapi id 15.00.1497.026;
- Fri, 12 Nov 2021 22:14:55 +0000
-From:   "Balakrishnan, Anand" <anandbal@lab126.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "amit.kachhap@gmail.com" <amit.kachhap@gmail.com>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-        "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>
-CC:     "Healy, Christopher" <healych@amazon.com>
-Thread-Index: AQHX1yvWy3qyuzSbLUWobh1b1ZbZYqv+sO8AgAHFa+8=
-Date:   Fri, 12 Nov 2021 22:14:54 +0000
-Message-ID: <1636755294516.66191@lab126.com>
-References: <1636488946043.43408@lab126.com> <YYvuAU+d3TAS6fI7@kroah.com>
- <1636656130551.5237@lab126.com>,<5007f2fd-285c-73fd-21a9-ab0029578d4a@linaro.org>
-In-Reply-To: <5007f2fd-285c-73fd-21a9-ab0029578d4a@linaro.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.43.160.157]
-Content-Type: text/plain; charset="koi8-r"
-Content-Transfer-Encoding: 8BIT
+        id S233308AbhKLWVa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 12 Nov 2021 17:21:30 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47612 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229634AbhKLWVa (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 12 Nov 2021 17:21:30 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5C68B60F39;
+        Fri, 12 Nov 2021 22:18:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1636755519;
+        bh=DhXFMT1KLqTcH5COtcfvHWf9FguzMhzDabtIeMXMVNs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=u20aUoNk2od58CZROFvj9Am63JQ5jdMduWwVbcOcIbDW+5wZMT9NJ1XnlnSpwPvjl
+         fYzOPmWPjXYbDk4ydE/9pFhFyjVafONbeiq4Z3essGgokLBTK13lz1yXSue+hR0GDq
+         C8UjLRZK86BlP75hFqqjtVGWQtQDHM69CAUz3Li9ZzhZRN5tSXJN6Rp9/vovBTCuvo
+         wezorsKyZxeyxK0rRNIFvvGNtWnyIfzwq8xG+w8TxdCJG3yg1DQOeJfoHFzuaIXAG3
+         q+nqkbE/jWC0F3HiDM+C4KvkEpTPa5BPLQt83+BCvFOjhAq04WVrgA/Ps7cEkl6j+d
+         vx2ycasqma5Sw==
+Received: by mail-ed1-f51.google.com with SMTP id x15so43366483edv.1;
+        Fri, 12 Nov 2021 14:18:39 -0800 (PST)
+X-Gm-Message-State: AOAM530WmMLa6D+48P7ndfYjb+ams23DU7Egxgy9Ad1ddiwfiGbsp4Ha
+        viZiunrTZnTK0iRu2UUBSnPrpv7mATxMD70cpA==
+X-Google-Smtp-Source: ABdhPJwc7BH160DIpy5hpg4hp+ZHtrvQLVvSoB4NYT6QsrnMiQPj3pcMD++daWdjqam+ouDNZ/vGB/yp2r6zHETFW+A=
+X-Received: by 2002:a17:906:9941:: with SMTP id zm1mr23712816ejb.466.1636755517770;
+ Fri, 12 Nov 2021 14:18:37 -0800 (PST)
 MIME-Version: 1.0
+References: <20211102152207.11891-1-zajec5@gmail.com>
+In-Reply-To: <20211102152207.11891-1-zajec5@gmail.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Fri, 12 Nov 2021 16:18:25 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqL5qJZz8K7330cOhV8x86097LUE7oFNx5Qu3M4XLL+gMg@mail.gmail.com>
+Message-ID: <CAL_JsqL5qJZz8K7330cOhV8x86097LUE7oFNx5Qu3M4XLL+gMg@mail.gmail.com>
+Subject: Re: [PATCH RFC 0/3] reset: syscon-reboot: add "reg" property support
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        devicetree@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hey Daniel,
-
-Thank you for for the information. In the future, If I have to find this information by myself, is there a document for this?
-I was looking at https://www.kernel.org/doc/linux/MAINTAINERS and there are several references to thermal here, but I did not see any mention of the tree you pointed me to.
-
-Thanks,
-Anand
-________________________________________
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-Sent: Thursday, November 11, 2021 11:09 AM
-To: Balakrishnan, Anand; linux-pm@vger.kernel.org; amit.kachhap@gmail.com; viresh.kumar@linaro.org; amit.kucheria@verdurent.com
-Cc: Healy, Christopher
-Subject: RE: [EXTERNAL] correct source tree to make contributions to Linux thermal framework
-
-CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
-
-
-
-On 11/11/2021 19:42, Balakrishnan, Anand wrote:
-> Hello folks,
+On Tue, Nov 2, 2021 at 10:22 AM Rafa=C5=82 Mi=C5=82ecki <zajec5@gmail.com> =
+wrote:
 >
-> At our company, we maintain an internal thermal framework patch. We are exploring the option to up-stream this patch so we don't have to keep porting this from one Kernel version to the other. Looking for advise on the right device tree to get started.
-> Thermal framework code resides here: https://elixir.bootlin.com/linux/latest/source/drivers/thermal. What is the correct source tree we should use from https://git.kernel.org/??
+> From: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
+>
+> During my work on MFD binding for Broadcom's TWD block I received
+> comment from Rob saying that "syscon-reboot" should use "reg" property.
+> I'm not sure if my understanding & implementation are correct so I'm
+> sending this RFC.
+>
+> What bothers me is non-standard "reg" property usage. Treating it as a
+> simple (unsigned) integer number means different logic when it comes to
+> ranges.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/
+It shouldn't be. The idea is that 'reg' works like normal. See below.
 
-branch : next
+> Consider this example:
+>
+> timer@400 {
+>         compatible =3D "simple-mfd", "syscon";
+>         reg =3D <0x400 0x3c>;
+>         ranges;
 
+ranges =3D <0 0x400 0x100>; // Just guessing for size
 
+>
+>         #address-cells =3D <1>;
+>         #size-cells =3D <1>;
+>
+>         reboot@434 {
 
---
-<http://www.linaro.org/> Linaro.org Å Open source software for ARM SoCs
+reboot@34
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Just reading 'reg' is fine, but really, Linux should be either getting
+the translated address or have a function to get the offset from the
+parent base. IOW, it should also work if you just changed 'reg' to
+'<0x434 0x4>'.
+
+>                 compatible =3D "syscon-reboot";
+>                 reg =3D <0x34 0x4>;
+>                 mask =3D <0x1>;
+>         };
+> };
+>
+> I've reboot@434 node with reg 0x34. Also 0x4 is ignored but must be
+> present because of of MFD addressing.
+>
+> Please review this idea / binding / implementation.
+>
+> Rafa=C5=82 Mi=C5=82ecki (3):
+>   dt-bindings: power: reset: syscon-reboot: use non-deprecated example
+>   dt-bindings: power: reset: syscon-reboot: add "reg" property
+>   power: reset: syscon-reboot: support "reg" property
+>
+>  .../bindings/power/reset/syscon-reboot.yaml   | 28 +++++++++++++------
+>  drivers/power/reset/syscon-reboot.c           |  9 ++++--
+>  2 files changed, 26 insertions(+), 11 deletions(-)
+>
+> --
+> 2.31.1
+>
