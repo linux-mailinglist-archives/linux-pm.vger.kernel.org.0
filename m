@@ -2,153 +2,176 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E888644EAC6
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Nov 2021 16:44:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4148C44EC7A
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Nov 2021 19:10:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232194AbhKLPrY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 12 Nov 2021 10:47:24 -0500
-Received: from mail-oi1-f181.google.com ([209.85.167.181]:45897 "EHLO
-        mail-oi1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbhKLPrY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Nov 2021 10:47:24 -0500
-Received: by mail-oi1-f181.google.com with SMTP id 7so8427956oip.12;
-        Fri, 12 Nov 2021 07:44:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=46yHjAfatF/D8CH1ucT/f0z/BDG2VdW81V3VG4NmD5w=;
-        b=tiMGv2ZcBH64K9lgIEOo2ST5ZtbitEFyRr3RzIvC27+D3YV32wF804UYoBKp0SkCGP
-         l8eXVbm0Mq5Osrl/kv7QGnUqKJ9kBDpaZQHeLIdGsCOeVgJW/kxXUAvGEuTtnCzr2KRX
-         JARLPFAnLo/U0L5cXFpGDaeoL6VzZsX619h6xx14jqgOtprx1hVBCfLD07edjxWQY7KA
-         OZyZ8RlL1iIb0fPUX9I5BJjnrLFPjmNh7BgiNRgfJWwl6Fwif2iNWAhHbNFY79ZG719j
-         jVRhiUZNwlEUdy/w8vjVF/7RVrscETdl2yFDyJAzkUUhIXQ/qS3NGTLn4A5MAK0vwci8
-         W6Mg==
-X-Gm-Message-State: AOAM533uKnsABQlmXK2VohztciPa0Sj5s2ZuqUy62kas9ZkTComHdGRb
-        xcHJp/Hnqsa0Hg2DP9f8wFM2Lsx7GQ==
-X-Google-Smtp-Source: ABdhPJzISiTmfnExLax2+EFNIj/oeYrEwi+gF6RPWAGHPV+CFvjp6dIAlrmR/8HZH2dv7oS9uCUenw==
-X-Received: by 2002:a54:4f0d:: with SMTP id e13mr13376532oiy.110.1636731873392;
-        Fri, 12 Nov 2021 07:44:33 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id i16sm1398794oig.15.2021.11.12.07.44.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Nov 2021 07:44:32 -0800 (PST)
-Received: (nullmailer pid 2904445 invoked by uid 1000);
-        Fri, 12 Nov 2021 15:44:31 -0000
-Date:   Fri, 12 Nov 2021 09:44:31 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     "LH.Kuo" <lhjeff911@gmail.com>
-Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
-        rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        qinjian@cqplus1.com, wells.lu@sunplus.com,
-        "LH.Kuo" <lh.kuo@sunplus.com>
-Subject: Re: [PATCH 2/2] devicetree bindings THERMAL Add bindings doc for
- Sunplus SP7021
-Message-ID: <YY6L307obyk2XMx3@robh.at.kernel.org>
-References: <1635756310-25415-1-git-send-email-lh.kuo@sunplus.com>
- <1635756310-25415-3-git-send-email-lh.kuo@sunplus.com>
+        id S230137AbhKLSNi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 12 Nov 2021 13:13:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35904 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229892AbhKLSNi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Nov 2021 13:13:38 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10D94C061766;
+        Fri, 12 Nov 2021 10:10:47 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 32A6E1F469D8
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1636740645; bh=85FVMl3g8AFx7K6/SNFfbacSsCp+0ar+O3UGJFm0kGc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aoUucfWsw02yRnc74nEfHMokcWTmdjto+Q+lIFlmDdcH5Olj2yrHar9AQ46H85lXv
+         eNvx6weY65ST8xcN69QZnv1Zt2cluoNmuV6Y3stfYOsoQYr2IssugVOG5taWb2lVng
+         kEHyhjYupXf0ZhLgMUX+rW6oI08oLY3BXzS5fHkXLwJngYg6HG1ZyvRmT81aR2PC6P
+         greE5qWSEuhGYMEe3lSM96ck5rGOqoaTXMZloUgXkBKcYlb0ZAzDAsNZSGOaXvYhci
+         sBZpGr1EAIixIBFPcyeDXLisItw3AozZ9mYjFHYOebRA0TO8VhsIqvivB5d+GDg+25
+         qqz8OPUoKJQ2g==
+Received: by earth.universe (Postfix, from userid 1000)
+        id BB4703C0F95; Fri, 12 Nov 2021 19:10:42 +0100 (CET)
+Date:   Fri, 12 Nov 2021 19:10:42 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc:     linux-pm@vger.kernel.org, nicolopiazzalunga@gmail.com,
+        linrunner@gmx.net, platform-driver-x86@vger.kernel.org,
+        smclt30p@gmail.com
+Subject: Re: [RFC v2] standardized attributes for powersupply charge behaviour
+Message-ID: <20211112181042.jk63p5dm2ty3kxd5@earth.universe>
+References: <20211108192852.357473-1-linux@weissschuh.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5gdkoi7vapq7cgty"
 Content-Disposition: inline
-In-Reply-To: <1635756310-25415-3-git-send-email-lh.kuo@sunplus.com>
+In-Reply-To: <20211108192852.357473-1-linux@weissschuh.net>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 01, 2021 at 04:45:10PM +0800, LH.Kuo wrote:
-> Add devicetree bindings THERMAL Add bindings doc for Sunplus SP7021
 
-Not a complete sentence.
+--5gdkoi7vapq7cgty
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Write subject lines matching 'git log --oneline' of the 
-directory/subsystem your change is in.
+Hi,
 
-> 
-> Signed-off-by: LH.Kuo <lh.kuo@sunplus.com>
+On Mon, Nov 08, 2021 at 08:28:52PM +0100, Thomas Wei=DFschuh wrote:
+> This a revised version of
+> "[RFC] add standardized attributes for force_discharge and inhibit_charge=
+" [0],
+> incorporating discussion results.
+>=20
+> The biggest change is the switch from two boolean attributes to a single
+> enum attribute.
+>=20
+> [0] https://lore.kernel.org/platform-driver-x86/21569a89-8303-8573-05fb-c=
+2fec29983d1@gmail.com/
 > ---
->  .../bindings/thermal/sunplus_thermal.yaml          | 52 ++++++++++++++++++++++
->  MAINTAINERS                                        |  1 +
->  2 files changed, 53 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/sunplus_thermal.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/sunplus_thermal.yaml b/Documentation/devicetree/bindings/thermal/sunplus_thermal.yaml
-> new file mode 100644
-> index 0000000..1875d04
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/sunplus_thermal.yaml
-> @@ -0,0 +1,52 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +# Copyright (C) Sunplus Co., Ltd. 2021
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/sunplus_thermal.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>  Documentation/ABI/testing/sysfs-class-power | 14 ++++++++++++++
+>  drivers/power/supply/power_supply_sysfs.c   |  1 +
+>  include/linux/power_supply.h                |  7 +++++++
+>  3 files changed, 22 insertions(+)
+>=20
+> diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/=
+ABI/testing/sysfs-class-power
+> index ca830c6cd809..2f58cfc91420 100644
+> --- a/Documentation/ABI/testing/sysfs-class-power
+> +++ b/Documentation/ABI/testing/sysfs-class-power
+> @@ -455,6 +455,20 @@ Description:
+>  			      "Unknown", "Charging", "Discharging",
+>  			      "Not charging", "Full"
+> =20
+> +What:		/sys/class/power_supply/<supply_name>/charge_behaviour
+> +Date:		November 2021
+> +Contact:	linux-pm@vger.kernel.org
+> +Description:
+> +		Represents the charging behaviour.
 > +
-> +title: Sunplus Thermal controller
+> +		Access: Read, Write
 > +
-> +maintainers:
-> +  - lh.kuo <lh.kuo@sunplus.com>
+> +		Valid values:
+> +			=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+> +			auto:            Charge normally, respect thresholds
+> +			inhibit-charge:  Do not charge while AC is attached
+> +			force-discharge: Force discharge while AC is attached
 > +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - sunplus,sp7021-thermal
-> +
-> +  reg:
-> +    items:
-> +      - description: Base address and length of the Thermal registers
-> +      - description: Base address and length of the Thermal calibration registers
-> +
-> +  reg-names:
-> +    items:
-> +      - const: thermal_reg
-> +      - const: thermal_moon4
+>  What:		/sys/class/power_supply/<supply_name>/technology
+>  Date:		May 2007
+>  Contact:	linux-pm@vger.kernel.org
+> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/su=
+pply/power_supply_sysfs.c
+> index c3d7cbcd4fad..26c60587dca1 100644
+> --- a/drivers/power/supply/power_supply_sysfs.c
+> +++ b/drivers/power/supply/power_supply_sysfs.c
+> @@ -172,6 +172,7 @@ static struct power_supply_attr power_supply_attrs[] =
+=3D {
+>  	POWER_SUPPLY_ATTR(CHARGE_CONTROL_LIMIT_MAX),
+>  	POWER_SUPPLY_ATTR(CHARGE_CONTROL_START_THRESHOLD),
+>  	POWER_SUPPLY_ATTR(CHARGE_CONTROL_END_THRESHOLD),
+> +	POWER_SUPPLY_ENUM_ATTR(CHARGE_BEHAVIOUR),
+>  	POWER_SUPPLY_ATTR(INPUT_CURRENT_LIMIT),
+>  	POWER_SUPPLY_ATTR(INPUT_VOLTAGE_LIMIT),
+>  	POWER_SUPPLY_ATTR(INPUT_POWER_LIMIT),
 
-thermal_ is redundant.
+this is missing (and should not compile without it):
 
-> +
-> +  nvmem-cells:
-> +    maxItems: 1
-> +
-> +  nvmem-cell-names:
-> +    const: therm_calib
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - reg-names
-> +  - nvmem-cells
-> +  - nvmem-cell-names
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    thermal: serial@9c000280 {
+static const char * const POWER_SUPPLY_CHARGE_BEHAVIOUR_TEXT[] =3D { ... };
 
-Drop unused labels.
+Otherwise LGTM. But you need to send API changes with an API user (i.e. the
+patch updating acpi battery driver using this).
 
-> +        compatible = "sunplus,sp7021-thermal";
-> +        reg = <0x9c000280 0x80>, <0x9c000200 0x80>;
-> +        reg-names = "thermal_reg", "thermal_moon4";
-> +        nvmem-cells = <&therm_calib>;
-> +        nvmem-cell-names = "therm_calib";
-> +    };
-> +...
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index dff822b..2080b00 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17949,6 +17949,7 @@ SUNPLUS THERMAL DRIVER
->  M:	LH Kuo <lh.kuo@sunplus.com>
->  L:	linux-pm@vger.kernel.org
->  S:	Maintained
-> +F:	Documentation/devicetree/bindings/thermal/sunplus_thermal.yaml
->  F:	drivers/thermal/sunplus_thermal.c
->  
->  SUPERH
-> -- 
-> 2.7.4
-> 
-> 
+-- Sebastian
+
+> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+> index 9ca1f120a211..70c333e86293 100644
+> --- a/include/linux/power_supply.h
+> +++ b/include/linux/power_supply.h
+> @@ -132,6 +132,7 @@ enum power_supply_property {
+>  	POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX,
+>  	POWER_SUPPLY_PROP_CHARGE_CONTROL_START_THRESHOLD, /* in percents! */
+>  	POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD, /* in percents! */
+> +	POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR,
+>  	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
+>  	POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT,
+>  	POWER_SUPPLY_PROP_INPUT_POWER_LIMIT,
+> @@ -202,6 +203,12 @@ enum power_supply_usb_type {
+>  	POWER_SUPPLY_USB_TYPE_APPLE_BRICK_ID,	/* Apple Charging Method */
+>  };
+> =20
+> +enum power_supply_charge_behaviour {
+> +	POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO =3D 0,
+> +	POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE,
+> +	POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE,
+> +};
+> +
+>  enum power_supply_notifier_events {
+>  	PSY_EVENT_PROP_CHANGED,
+>  };
+>=20
+> base-commit: 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f
+> --=20
+> 2.33.1
+>=20
+
+--5gdkoi7vapq7cgty
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmGOrhkACgkQ2O7X88g7
++ppIzA//dU4xr70DB3Hf7a51yOvCJp/8wAq4sv3LDbdH9VCYpLJUJjPIhfRrvF35
+LLoReo1khkCo953xglWSP2kopFmBIDs8fPQ6yFqHZfnuK8Wl/9MmEgK+X7i916L2
+p2rLPqbvsSDoVEGqPY6Q5/cSBYgC+gKNBhirLOMe+9F9UfcJiQUzANXpOY5yRKiA
+NIu81oLuVme7eMnFuVm+rPuPQjENZGqZxhkyolS+fsaInF6nkq2WfYxa2+dhqten
+JSzXWIs98jWywf9zeZNYPaOQsmBbpSv8wVh6KKOYof53/7aunNMqjoNqZpGbVSd1
+umi83KJHlsyts01pRHNCIc4/wwP2z+giQ2PhGS4z4SUc94C1cPwkvb9pSuInkbzb
+RDW0VRsQG6q7SNaEVEXXkikjcGh0qlYat+hvu6jZ6bfwZMqGaz7o63EsXxPuFMbT
+c8kr87ay4OJvkjfsSUiGYOZk28D9+qUc/BlRJYxR6E0F7jOfq9NXfOnRcV4WJWcL
+F1ePyB3wtxUsikGx4vLqw6bYbeV/dn/cxZ+w3EzTDLPasX0VgpzBfakRqjnzd0HZ
+GfONpAADOq6qql0bHeLYjDIGB2rupQZUuZlOKwUY4aC7+UycJjAGm4vVyGWLtLfg
+nehQp+lPPCbORslqveIQnNh/5+Fc8Q/h+HwzkVvGFCf8vllgBpI=
+=js4S
+-----END PGP SIGNATURE-----
+
+--5gdkoi7vapq7cgty--
