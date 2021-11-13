@@ -2,125 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E54C44F1FA
-	for <lists+linux-pm@lfdr.de>; Sat, 13 Nov 2021 08:16:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6556644F229
+	for <lists+linux-pm@lfdr.de>; Sat, 13 Nov 2021 09:26:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235655AbhKMHTO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 13 Nov 2021 02:19:14 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:38600 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S235477AbhKMHTO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 13 Nov 2021 02:19:14 -0500
-X-UUID: c9fdb13129f344d0aaf5f2f878a08da0-20211113
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Date:MIME-Version:Content-Type:References:In-Reply-To:CC:To:From:Subject:Message-ID; bh=f5bv2fIAVTo8g215AUeOscF0bRtQ+IqfCg8Dqh6s7F8=;
-        b=kdLZry4v7A8F7v6va2LFOcn8nyFJZyqIyDIPFeKtSNyA9UU0ROB9efM+Mth7E8hzhxMVeszYpSnmozXxL7Kx2qYzbPyr1qU6GAA79O93yZrvz8atfoHB64qyW+qArP1RSuXxQAmhl58l+R1Jirsy4TuM+5WeRzxnQZTjXCQ2yYA=;
-X-UUID: c9fdb13129f344d0aaf5f2f878a08da0-20211113
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1848226455; Sat, 13 Nov 2021 15:16:19 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Sat, 13 Nov 2021 15:16:18 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 13 Nov 2021 15:16:17 +0800
-Message-ID: <6465d7110c8d7ecaec5aa48d9f45217f1ea0843b.camel@mediatek.com>
-Subject: Re: [PATCH v4 1/3] PM / wakeirq: support enabling wake-up irq
- after runtime_suspend called
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-CC:     Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Linux PM" <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-In-Reply-To: <CAJZ5v0gb6vN9kHeQbgjRQXvOCNaFK8ur7bLDeAVjDqdT2=a+-g@mail.gmail.com>
-References: <20211025070155.2995-1-chunfeng.yun@mediatek.com>
-         <CAJZ5v0gb6vN9kHeQbgjRQXvOCNaFK8ur7bLDeAVjDqdT2=a+-g@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S230482AbhKMI3h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 13 Nov 2021 03:29:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54452 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230095AbhKMI3g (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 13 Nov 2021 03:29:36 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4F7AC061766
+        for <linux-pm@vger.kernel.org>; Sat, 13 Nov 2021 00:26:44 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id p3-20020a05600c1d8300b003334fab53afso8765935wms.3
+        for <linux-pm@vger.kernel.org>; Sat, 13 Nov 2021 00:26:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=dKUfatl1miH+nLBpROPo1OzL2IGaJUPRrE+2ZNKXzx4=;
+        b=TSqOrtqFLLBtV0yHrvFGzaeIC0y4S6+GtpLfSORdEnEBcUpji9eQtm4GOeP9BjeC7F
+         XgBkEPNaMRRAqeT7xfO5sy9hr1sgkedXeihcVaFdyhJVac3+inoAnuVzjsYRNTlIrt/T
+         VC7QrXEbGTSXjWZCwNddtOKkep8CoR4Avd/SR3j85ljEGAn/U9LludDaoh7UdfqVUCUy
+         3AL636YmjZE+iK0Y5jp66b22J1W1SfLz1MYuEn8/hjA7mZ603qJtVdmdC0+n/DkPy8tQ
+         3b5+24X5vdAoR6xjUzFRBNRshaQJDKFcKQPhobao/29ZGEWM2l8hZoD1IFscccu3Olct
+         Llfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=dKUfatl1miH+nLBpROPo1OzL2IGaJUPRrE+2ZNKXzx4=;
+        b=cu/fHRpnb4ECxDzSi+fHUoVZDlNBo8zpg0Ihpg+NiINr7zmrasFug7IonWOZQQSqXm
+         EoM1MscXQgKgvQceJzr22C2+Qob/2PsHMEDZ4W2udhnmVNRhWiF15FS2J6HAY63mcWhO
+         AQDMNdxdzpDOMzSbfqdGZsOmejYMMlMdMHTILOR3VmcpwyuP3MDEIrdXGDzHnhzjQOW/
+         rn8bx2oEuzWFqLbsoVh8sQ9VGQtJ1iYCXNEnWt/dqoblvG9OFgezsPcUuubrfl5/B+l/
+         RwLMugzryfgBEu0j61/GECvD66VaPW6YrCevKEwy4L+Pp3ijduyww4GGXoJh6E3W0VBG
+         OzIQ==
+X-Gm-Message-State: AOAM530fI3vumcRiRC96OWVMyMD88CtAqEqiq983CAKFC5K6ph0+etJo
+        ohFiGIeL3l/v/1V3psA0Oglvdg==
+X-Google-Smtp-Source: ABdhPJxuhN7KN1zm35KUmYSGM69mJA6bDRrvTvWT+OmHObUfhhPq0uy1kDDH3hyFzuZIXRaw0viu9Q==
+X-Received: by 2002:a05:600c:3227:: with SMTP id r39mr44164293wmp.120.1636792003211;
+        Sat, 13 Nov 2021 00:26:43 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:90b:17fa:42f:1e9c? ([2a01:e34:ed2f:f020:90b:17fa:42f:1e9c])
+        by smtp.googlemail.com with ESMTPSA id n129sm3518478wmn.36.2021.11.13.00.26.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 13 Nov 2021 00:26:42 -0800 (PST)
+Subject: Re: correct source tree to make contributions to Linux thermal
+ framework
+To:     "Balakrishnan, Anand" <anandbal@lab126.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "amit.kachhap@gmail.com" <amit.kachhap@gmail.com>,
+        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
+        "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Healy, Christopher" <healych@amazon.com>
+References: <1636488946043.43408@lab126.com> <YYvuAU+d3TAS6fI7@kroah.com>
+ <1636656130551.5237@lab126.com>
+ <5007f2fd-285c-73fd-21a9-ab0029578d4a@linaro.org>
+ <1636755294516.66191@lab126.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <01d80851-f26b-0314-b1a4-2dbc3a620394@linaro.org>
+Date:   Sat, 13 Nov 2021 09:26:41 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Date:   Wed, 27 Oct 2021 17:29:52 +0800
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <1636755294516.66191@lab126.com>
+Content-Type: text/plain; charset=koi8-r
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-T24gVHVlLCAyMDIxLTEwLTI2IGF0IDE3OjM5ICswMjAwLCBSYWZhZWwgSi4gV3lzb2NraSB3cm90
-ZToNCj4gT24gTW9uLCBPY3QgMjUsIDIwMjEgYXQgOTowMiBBTSBDaHVuZmVuZyBZdW4gPA0KPiBj
-aHVuZmVuZy55dW5AbWVkaWF0ZWsuY29tPiB3cm90ZToNCj4gPiANCj4gPiBXaGVuIHRoZSBkZWRp
-Y2F0ZWQgd2FrZSBJUlEgaXMgbGV2ZWwgdHJpZ2dlciwgYW5kIGl0IHVzZXMgdGhlDQo+ID4gZGV2
-aWNlJ3MgbG93LXBvd2VyIHN0YXR1cyBhcyB0aGUgd2FrZXVwIHNvdXJjZSwgdGhhdCBtZWFucyBp
-ZiB0aGUNCj4gPiBkZXZpY2UgaXMgbm90IGluIGxvdy1wb3dlciBzdGF0ZSwgdGhlIHdha2UgSVJR
-IHdpbGwgYmUgdHJpZ2dlcmVkDQo+ID4gaWYgZW5hYmxlZDsgRm9yIHRoaXMgY2FzZSwgbmVlZCBl
-bmFibGUgdGhlIHdha2UgSVJRIGFmdGVyIHJ1bm5pbmcNCj4gPiB0aGUgZGV2aWNlJ3MgLT5ydW50
-aW1lX3N1c3BlbmQoKSB3aGljaCBtYWtlIGl0IGVudGVyIGxvdy1wb3dlcg0KPiA+IHN0YXRlLg0K
-PiA+IA0KPiA+IGUuZy4NCj4gPiBBc3N1bWUgdGhlIHdha2UgSVJRIGlzIGEgbG93IGxldmVsIHRy
-aWdnZXIgdHlwZSwgYW5kIHRoZSB3YWtldXANCj4gPiBzaWduYWwgY29tZXMgZnJvbSB0aGUgbG93
-LXBvd2VyIHN0YXR1cyBvZiB0aGUgZGV2aWNlLg0KPiA+IFRoZSB3YWtldXAgc2lnbmFsIGlzIGxv
-dyBsZXZlbCBhdCBydW5uaW5nIHRpbWUgKDApLCBhbmQgYmVjb21lcw0KPiA+IGhpZ2ggbGV2ZWwg
-d2hlbiB0aGUgZGV2aWNlIGVudGVycyBsb3ctcG93ZXIgc3RhdGUgKHJ1bnRpbWVfc3VzcGVuZA0K
-PiA+ICgxKSBpcyBjYWxsZWQpLCBhIHdha2V1cCBldmVudCBhdCAoMikgbWFrZSB0aGUgZGV2aWNl
-IGV4aXQgbG93LQ0KPiA+IHBvd2VyDQo+ID4gc3RhdGUsIHRoZW4gdGhlIHdha2V1cCBzaWduYWwg
-YWxzbyBiZWNvbWVzIGxvdyBsZXZlbC4NCj4gPiANCj4gPiAgICAgICAgICAgICAgICAgLS0tLS0t
-LS0tLS0tLS0tLS0tDQo+ID4gICAgICAgICAgICAgICAgfCAgICAgICAgICAgXiAgICAgXnwNCj4g
-PiAtLS0tLS0tLS0tLS0tLS0tICAgICAgICAgICB8ICAgICB8IC0tLS0tLS0tLS0tLS0tDQo+ID4g
-IHw8LS0tKDApLS0tPnw8LS0oMSktLXwgICAoMykgICAoMikgICAgKDQpDQo+ID4gDQo+ID4gaWYg
-ZW5hYmxlIHRoZSB3YWtlIElSUSBiZWZvcmUgcnVubmluZyBydW50aW1lX3N1c3BlbmQgZHVyaW5n
-ICgwKSwNCj4gPiBhIHdha2UgSVJRIHdpbGwgYXJpc2UsIGl0IGNhdXNlcyByZXN1bWUgaW1tZWRp
-YXRlbHk7DQo+ID4gaXQgd29ya3MgaWYgZW5hYmxlIHdha2UgSVJRICggZS5nLiBhdCAoMykgb3Ig
-KDQpKSBhZnRlciBydW5uaW5nDQo+ID4gLT5ydW50aW1lX3N1c3BlbmQoKS4NCj4gPiANCj4gPiBU
-aGlzIHBhdGNoIGludHJvZHVjZXMgYSBuZXcgc3RhdHVzIFdBS0VfSVJRX0RFRElDQVRFRF9SRVZF
-UlNFIHRvDQo+ID4gb3B0aW9uYWxseSBzdXBwb3J0IGVuYWJsaW5nIHdha2UgSVJRIGFmdGVyIHJ1
-bm5pbmcNCj4gPiAtPnJ1bnRpbWVfc3VzcGVuZCgpLg0KPiA+IA0KPiA+IFN1Z2dlc3RlZC1ieTog
-UmFmYWVsIEouIFd5c29ja2kgPHJhZmFlbC5qLnd5c29ja2lAaW50ZWwuY29tPg0KPiA+IFNpZ25l
-ZC1vZmYtYnk6IENodW5mZW5nIFl1biA8Y2h1bmZlbmcueXVuQG1lZGlhdGVrLmNvbT4NCj4gDQo+
-IEkgZG9uJ3QgcmVhbGx5IGhhdmUgYW55dGhpbmcgdG8gYWRkIHJlZ2FyZGluZyB0aGUgY29kZS4N
-Cj4gDQo+IFRoZSBrZXJuZWxkb2MgY29tbWVudHMgY291bGQgYmUgaW1wcm92ZWQsIGJ1dCBJIGNh
-biB0YWtlIGNhcmUgb2YgdGhpcw0KPiB3aGVuIGFwcGx5aW5nIHRoZSBwYXRjaC4NCk9rLCB0aGFu
-a3MNCj4gDQo+IFBsZWFzZSBjb2xsZWN0IEFDS3MgZm9yIHRoZSByZW1haW5pbmcgMiBwYXRjaGVz
-IGluIHRoZSBzZXJpZXMgYW5kIEkNCj4gd2lsbCBwaWNrIHVwIGFsbCB0aHJlZS4NClRoZSBmaWxl
-cyAobXR1M19wbGF0LmMsIHhoY2ktbXRrLmMpIG1vZGlmaWVkIGJ5IG90aGVyIDIgcGF0Y2hlcyBh
-cmUNCm1haW50YWluZWQgYnkgbXlzZWxmLCBwbGVhc2UgcGljayB1cCB0aGVtLCB0aGFua3MgYSBs
-b3QuDQoNCj4gDQo+IFRoYW5rcyENCj4gDQo+ID4gLS0tDQo+ID4gdjQ6IGNoYW5nZXMgYWNjb3Jk
-aW5nIHRvIFJhZmFlbCdzIHN1Z2dlc3Rpb25zDQo+ID4gICAgIDEuIHJlbmFtZSBuZXcgZmxhZyBh
-cyBXQUtFX0lSUV9ERURJQ0FURURfUkVWRVJTRTsNCj4gPiAgICAgMi4gYWRkIF9fZGV2X3BtX3Nl
-dF9kZWRpY2F0ZWRfd2FrZV9pcnEoKSB3aXRoIGZsYWcgcGFyYW1ldGVyLA0KPiA+IHRoZW4NCj4g
-PiAgICAgICAgcmVidWlsZCBkZXZfcG1fc2V0X2RlZGljYXRlZF93YWtlX2lycSgpIGFuZCBhZGQg
-bmV3IGFwaQ0KPiA+ICAgICAgICBkZXZfcG1fc2V0X2RlZGljYXRlZF93YWtlX2lycV9yZXZlcnNl
-KCk7DQo+ID4gICAgIDMuIHJlbmFtZSB0aGUgbmV3IGFkZGVkIHBhcmFtZXRlciBhcyBjb25kX2Rp
-c2FibGUgaW4NCj4gPiAgICAgICAgZGV2X3BtX2Rpc2FibGVfd2FrZV9pcnFfY2hlY2soKSwgYW5k
-IGFsc28gc2ltcGxpZnkgaXRzIGZsb3c7DQo+ID4gICAgIDQuIG1vZGlmeSBzb21lIGNvbW1lbnRz
-DQo+ID4gDQo+ID4gdjM6IGFkZCBuZXcgc3RhdHVzIHN1Z2dlc3RlZCBieSBSYWZhZWwNCj4gPiAN
-Cj4gPiB2MjogYWRkIG1vcmUgY29tbWl0IG1lc3NhZ2UNCj4gPiANCj4gPiAgIFVzZSB0aGUgZmFs
-bGluZyBlZGdlIHRyaWdnZXIgaW50ZXJydXB0IHN1Z2dlc3RlZCBieSBJa2pvb24gWzFdLA0KPiA+
-IGl0DQo+ID4gd29ya3Mgd2VsbCBhdCBmaXJzdGx5IHdoZW4gb25seSB1c2UgdGhpcyByZWxhdGVk
-IHdha2V1cCBzb3VyY2UsIGJ1dA0KPiA+IGVuY291bnRlciBpc3N1ZXMgaWYgdXNlIG90aGVyIHdh
-a2V1cCBzb3VyY2VzIHRvIHdha2V1cCBwbGF0Zm9ybSBhcw0KPiA+IGJlbG93IHN0ZXBzOg0KPiA+
-IDEuIHVzZSBhbm90aGVyIHdha2V1cCBzb3VyY2UgdG8gd2FrZSB1cCB0aGUgc3VzcGVuZGVkIHN5
-c3RlbTsNCj4gPiAyLiB0aGUgY29uc3VtZXIncyByZXN1bWUoKSB3aWxsIGJlIGNhbGxlZCwgYW5k
-IGV4aXRzIHNsZWVwIHN0YXRlOw0KPiA+IDMuIHRoZSBjb25zdW1lcidzIHdha2V1cCBzaWduYWwg
-d2lsbCBmYWxsIGludG8gbG93IGxldmVsLCBkdWUgdG8NCj4gPiAgICBjdXJyZW50bHkgdGhlIHdh
-a2V1cCBpcnEgaXMgZGlzYWJsZWQsIHRoZSB3YWtlLWlycSBpcyBwZW5kaW5nOw0KPiA+IDQuIHRo
-ZSBjb25zdW1lciB0cmllcyB0byBlbnRlciBydW50aW1lIHN1c3BlbmQsIGJ1dCB0aGVyZSBpcyBh
-DQo+ID4gICAgcGVuZGluZyB3YWtldXAgaXJxLCBzbyB3aWxsIHJlc3VtZSBhZ2FpbiwgdGhpcyB3
-aWxsIHJlcGVhdA0KPiA+ICAgIGVuZGxlc3NseS4NCj4gPiANCj4gPiAgIFNlbmQgb3V0IHRoZSBw
-YXRjaCBhZ2FpbiBmb3IgZnVydGhlciBkaXNjdXNzaW9uLg0KPiA+IA0KPiA+IFsxXTogaHR0cHM6
-Ly9wYXRjaHdvcmsua2VybmVsLm9yZy9wYXRjaC8xMjE5MDQwNw0KPiA+IA0KPiA+IC0tLQ0KPiA+
-ICBkcml2ZXJzL2Jhc2UvcG93ZXIvcG93ZXIuaCAgIHwgICA3ICsrLQ0KPiA+ICBkcml2ZXJzL2Jh
-c2UvcG93ZXIvcnVudGltZS5jIHwgICA2ICsrLQ0KPiA+ICBkcml2ZXJzL2Jhc2UvcG93ZXIvd2Fr
-ZWlycS5jIHwgMTAxICsrKysrKysrKysrKysrKysrKysrKysrKysrKy0tDQo+ID4gLS0tLS0tDQo+
-ID4gIGluY2x1ZGUvbGludXgvcG1fd2FrZWlycS5oICAgfCAgIDkgKysrLQ0KPiA+ICA0IGZpbGVz
-IGNoYW5nZWQsIDk2IGluc2VydGlvbnMoKyksIDI3IGRlbGV0aW9ucygtKQ0KWy4uLl0NCj4gPiAN
-Cg==
 
+[Cc: Rafael]
+
+Hi Anand,
+
+yeah, actually it is a bit fuzzy because we did a small reorg.
+
+You can either send to the tree pointed in the MAINTAINERS file or
+against the tree I pointed below. I would recommend to use the later. In
+any case it will be synced with the one in MAINTAINERS when we are close
+to the release.
+
+On 12/11/2021 23:14, Balakrishnan, Anand wrote:
+> Hey Daniel,
+> 
+> Thank you for for the information. In the future, If I have to find this information by myself, is there a document for this?
+> I was looking at https://www.kernel.org/doc/linux/MAINTAINERS and there are several references to thermal here, but I did not see any mention of the tree you pointed me to.
+> 
+> Thanks,
+> Anand
+> ________________________________________
+> From: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Sent: Thursday, November 11, 2021 11:09 AM
+> To: Balakrishnan, Anand; linux-pm@vger.kernel.org; amit.kachhap@gmail.com; viresh.kumar@linaro.org; amit.kucheria@verdurent.com
+> Cc: Healy, Christopher
+> Subject: RE: [EXTERNAL] correct source tree to make contributions to Linux thermal framework
+> 
+> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> 
+> 
+> 
+> On 11/11/2021 19:42, Balakrishnan, Anand wrote:
+>> Hello folks,
+>>
+>> At our company, we maintain an internal thermal framework patch. We are exploring the option to up-stream this patch so we don't have to keep porting this from one Kernel version to the other. Looking for advise on the right device tree to get started.
+>> Thermal framework code resides here: https://elixir.bootlin.com/linux/latest/source/drivers/thermal. What is the correct source tree we should use from https://git.kernel.org/??
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/
+> 
+> branch : next
+> 
+> 
+> 
+> --
+> <http://www.linaro.org/> Linaro.org Å Open source software for ARM SoCs
+> 
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
+> 
+
+
+-- 
+<http://www.linaro.org/> Linaro.org Å Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
