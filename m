@@ -2,151 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B21744F4A9
-	for <lists+linux-pm@lfdr.de>; Sat, 13 Nov 2021 19:55:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73E9744F5BC
+	for <lists+linux-pm@lfdr.de>; Sun, 14 Nov 2021 00:40:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236001AbhKMS6a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 13 Nov 2021 13:58:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49356 "EHLO
+        id S234009AbhKMXmz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 13 Nov 2021 18:42:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235999AbhKMS6a (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 13 Nov 2021 13:58:30 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC38FC061766
-        for <linux-pm@vger.kernel.org>; Sat, 13 Nov 2021 10:55:37 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id o83so25052197oif.4
-        for <linux-pm@vger.kernel.org>; Sat, 13 Nov 2021 10:55:37 -0800 (PST)
+        with ESMTP id S229988AbhKMXmz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 13 Nov 2021 18:42:55 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6804BC061766
+        for <linux-pm@vger.kernel.org>; Sat, 13 Nov 2021 15:40:02 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id h11so26539616ljk.1
+        for <linux-pm@vger.kernel.org>; Sat, 13 Nov 2021 15:40:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=aEaoQk4S2VEKJUWN86163Buqvqi3IEqLz/+vozzoOP4=;
-        b=TW/Ad79WaYF4EY3jQBBipTw3TfDqUwRUflKXpjIunx6UOui1ILIWRVQBUhVDCCm/et
-         +tJBp2SGpjrFmHJVw//MrMWKsGahuwAeSyNkqlV24EZt9YSwUi0Qpnn4+W3DIZERjNPb
-         ubrqU5qqTw4VP2j86wlzb188PRvKcudMgRncMNJXWtcfvQXm6Bk68/EA8Hyq5sH98mBi
-         NcAcCxW8G/JCVcJtC4kRIbgqkra0IbefUiCqN4eIovjHQfJUE2y6Dnr8AjOyQwkbp5Ys
-         Pwp/LitZ939vqRYOBD70ru9jttzvsR8sWt49Qcjr7tueohKYxD7rSnWQ84hSXUUjFBT1
-         POyQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CgtpJL2KosIvva4a54I1qU5hEr/AEJbe0JB99nx9vNw=;
+        b=MJ4tXif+1bu5mxjIYIn7VU4biXUFy6nur+reGgSmV8LcEsr11gTDvpBnC0Mp93BtT5
+         ThVQXSi0yvVz9eRfF5TRuggOi5f7JuWAvfbKkdZyzBn2afAHL2JgWi2kwsaJzbnKKnrW
+         cyuaVyFYcqrcZPzrTDkk2rTA+dxxVpJGZtVlV7QhnFcpSdG+czK6Kug+LstXZ+MEj28r
+         gwOws0AEJgqm2NwFlTjzsllWFUlbuxFSZ6gb2opY/TRd4AIxXH4uMPr74fQV+1BlOvfh
+         fWSlT68yIN/smOS/bFPUxYfWgF6ffMcCiZc6kbqstqhz54CVNkTphYTkzWud6TZ2qVK2
+         9Bfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=aEaoQk4S2VEKJUWN86163Buqvqi3IEqLz/+vozzoOP4=;
-        b=purXtEGWx4/ZkP1geUR+LKk20Y0LSuAlTc+i/hn7QcehSwbkK0ZLfc8g8k96Iz6sN7
-         y8Uor9/JLrUsVyH+cHeUz3/ukkF8gJzzx9TJEUnda5WtrGy70k3yDK9Z7wYeaoczH9Sp
-         xU8t1I9PTcvuyouLxwNq4KUQrv8WNNreg2HedTN1t+VSMNARWrOQEUe9SFj0JPwaWbU2
-         N+S9gBxPUlL6B0gapenyutH+aSjg9gPaSu7QRM8+ZAWMiHq4fm74kQuBF/i4E8nCAmOb
-         XePpECUtidsruuObMkWGwNEQbcM/GmmOU7+XX9Q154NPi84HebiRIgEriBJLmSC7KdyN
-         kESw==
-X-Gm-Message-State: AOAM530ZHgZB7CriQzSyNWGuMkebjeniUkDdiGj5gcxkDSLRHAjsd69O
-        dB92TO1MFJbG0VsX0DbCA5hj9g==
-X-Google-Smtp-Source: ABdhPJxPEAu48dyuGhj2JUv8X/eJPmCFi7hIHbunZ2UyNUnWMWOO3GwDSrehXn9dqGOnXR99HpouBQ==
-X-Received: by 2002:aca:b386:: with SMTP id c128mr35777005oif.161.1636829737116;
-        Sat, 13 Nov 2021 10:55:37 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id s2sm589548otr.69.2021.11.13.10.55.36
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CgtpJL2KosIvva4a54I1qU5hEr/AEJbe0JB99nx9vNw=;
+        b=1c0n8x9pzoqHqx1J3/bV2J14+CDl4Du7FbUTUM0vbUo05raBSTPs4zryeNHuYhiRdR
+         IIFPV5P/OrCvD4kcdGb6+vOCBY5qOekkYazzaDDT02oBkUCG8KlXgfBqSCm2HBAuAtDz
+         AcsMp+y7fBtXR8l/i3zs3KgOlnY+W3pQ7lVptPOc2R/bQCYMQYAF/GVfW0urfwrarXFj
+         iAk2OGC+QDjTkNl/Wp6cp7SqO/ny5A1BvD2QWY1TrykpjwxWTjF6Nu7J9d53HVi2gxVs
+         nPuz5Qeql5Kzd2V9ciImXO4dgLBcWrqvridbHl6UAIAfK7A8nJCIzvekPpnjiKeP5I6t
+         iURg==
+X-Gm-Message-State: AOAM5332toDnHpzgxhLASXCc9ifjFtlFlpXKJWGAtp5mzcWpPOsva0pb
+        PPh8vzyZi8DU/dXjMYaRwNVLshNz7jCF6Q==
+X-Google-Smtp-Source: ABdhPJzXNTqiSLvFv2QRg3nbvK/l6hTVmQ4GUTY2FjYvjq5JxipsXq6X/V/EeIpfk7prlMsihCZicA==
+X-Received: by 2002:a2e:9617:: with SMTP id v23mr26012275ljh.363.1636846800699;
+        Sat, 13 Nov 2021 15:40:00 -0800 (PST)
+Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
+        by smtp.gmail.com with ESMTPSA id br13sm980542lfb.61.2021.11.13.15.39.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Nov 2021 10:55:36 -0800 (PST)
-Date:   Sat, 13 Nov 2021 12:55:32 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Steev Klimaszewski <steev@kali.org>
-Subject: Re: [PATCH 1/3][RESEND] cpufreq: qcom-cpufreq-hw: Avoid stack buffer
- for IRQ name
-Message-ID: <YZAKJKEN5VejME5Z@builder.lan>
-References: <20211111154808.2024808-1-vladimir.zapolskiy@linaro.org>
- <20211111154808.2024808-2-vladimir.zapolskiy@linaro.org>
- <3711b990-a00a-9fce-0e08-657070d0a990@linaro.org>
+        Sat, 13 Nov 2021 15:39:59 -0800 (PST)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>
+Subject: [PATCH] power: supply: core: Use library interpolation
+Date:   Sun, 14 Nov 2021 00:37:50 +0100
+Message-Id: <20211113233750.1763820-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3711b990-a00a-9fce-0e08-657070d0a990@linaro.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri 12 Nov 14:16 CST 2021, Dmitry Baryshkov wrote:
+The power supply core appears to contain two open coded
+linear interpolations. Use the kernel fixpoint arithmetic
+interpolation library function instead.
 
-> On 11/11/2021 18:48, Vladimir Zapolskiy wrote:
-> > From: Ard Biesheuvel <ardb@kernel.org>
-> > 
-> > Registering an IRQ requires the string buffer containing the name to
-> > remain allocated, as the name is not copied into another buffer.
-> > 
-> > So let's add a irq_name field to the data struct instead, which is
-> > guaranteed to have the appropriate lifetime.
-> > 
-> > Cc: Thara Gopinath <thara.gopinath@linaro.org>
-> > Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > Cc: Andy Gross <agross@kernel.org>
-> > Cc: linux-arm-msm@vger.kernel.org
-> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> > Reviewed-by: Thara Gopinath <thara.gopinath@linaro.org>
-> > Tested-by: Steev Klimaszewski <steev@kali.org>
-> > Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-> > ---
-> > vzapolskiy: rebased, added all collected tags and resend the change from Ard
-> > 
-> >   drivers/cpufreq/qcom-cpufreq-hw.c | 8 ++++----
-> >   1 file changed, 4 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-> > index a2be0df7e174..3b5835336658 100644
-> > --- a/drivers/cpufreq/qcom-cpufreq-hw.c
-> > +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-> > @@ -46,6 +46,7 @@ struct qcom_cpufreq_data {
-> >   	 */
-> >   	struct mutex throttle_lock;
-> >   	int throttle_irq;
-> > +	char irq_name[15];
-> >   	bool cancel_throttle;
-> >   	struct delayed_work throttle_work;
-> >   	struct cpufreq_policy *policy;
-> > @@ -375,7 +376,6 @@ static int qcom_cpufreq_hw_lmh_init(struct cpufreq_policy *policy, int index)
-> >   {
-> >   	struct qcom_cpufreq_data *data = policy->driver_data;
-> >   	struct platform_device *pdev = cpufreq_get_driver_data();
-> > -	char irq_name[15];
-> >   	int ret;
-> >   	/*
-> > @@ -392,11 +392,11 @@ static int qcom_cpufreq_hw_lmh_init(struct cpufreq_policy *policy, int index)
-> >   	mutex_init(&data->throttle_lock);
-> >   	INIT_DEFERRABLE_WORK(&data->throttle_work, qcom_lmh_dcvs_poll);
-> > -	snprintf(irq_name, sizeof(irq_name), "dcvsh-irq-%u", policy->cpu);
-> > +	snprintf(data->irq_name, sizeof(data->irq_name), "dcvsh-irq-%u", policy->cpu);
-> 
-> It might be easier to use devm_kasprintf() here.
-> 
+Cc: Chunyan Zhang <chunyan.zhang@unisoc.com>
+Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+Chunyan: The sc27xx fuel gauge seems to be the only driver
+using this, so it'd be great if you could test this to make
+sure it works as intended.
+---
+ drivers/power/supply/power_supply_core.c | 55 ++++++++++++------------
+ 1 file changed, 27 insertions(+), 28 deletions(-)
 
-Yes, in itself that would be nice. But this function might be called > 1
-times per device, in which case we would end up with N unused copies of
-the string on the heap, until the device is removed.
+diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+index fc12a4f407f4..038e35ea7fbe 100644
+--- a/drivers/power/supply/power_supply_core.c
++++ b/drivers/power/supply/power_supply_core.c
+@@ -21,6 +21,7 @@
+ #include <linux/power_supply.h>
+ #include <linux/property.h>
+ #include <linux/thermal.h>
++#include <linux/fixp-arith.h>
+ #include "power_supply.h"
+ 
+ /* exported for the APM Power driver, APM emulation */
+@@ -783,26 +784,24 @@ EXPORT_SYMBOL_GPL(power_supply_put_battery_info);
+ int power_supply_temp2resist_simple(struct power_supply_resistance_temp_table *table,
+ 				    int table_len, int temp)
+ {
+-	int i, resist;
++	int i, high, low;
+ 
+ 	for (i = 0; i < table_len; i++)
+ 		if (temp > table[i].temp)
+ 			break;
+ 
+-	if (i > 0 && i < table_len) {
+-		int tmp;
+-
+-		tmp = (table[i - 1].resistance - table[i].resistance) *
+-			(temp - table[i].temp);
+-		tmp /= table[i - 1].temp - table[i].temp;
+-		resist = tmp + table[i].resistance;
+-	} else if (i == 0) {
+-		resist = table[0].resistance;
+-	} else {
+-		resist = table[table_len - 1].resistance;
+-	}
+-
+-	return resist;
++	/* The library function will deal with high == low */
++	if (i > 0)
++		high = i - 1;
++	else
++		high = i; /* i.e. i == 0 */
++	low = i;
++
++	return fixp_linear_interpolate(table[low].temp,
++				       table[low].resistance,
++				       table[high].temp,
++				       table[high].resistance,
++				       temp);
+ }
+ EXPORT_SYMBOL_GPL(power_supply_temp2resist_simple);
+ 
+@@ -821,24 +820,24 @@ EXPORT_SYMBOL_GPL(power_supply_temp2resist_simple);
+ int power_supply_ocv2cap_simple(struct power_supply_battery_ocv_table *table,
+ 				int table_len, int ocv)
+ {
+-	int i, cap, tmp;
++	int i, high, low;
+ 
+ 	for (i = 0; i < table_len; i++)
+ 		if (ocv > table[i].ocv)
+ 			break;
+ 
+-	if (i > 0 && i < table_len) {
+-		tmp = (table[i - 1].capacity - table[i].capacity) *
+-			(ocv - table[i].ocv);
+-		tmp /= table[i - 1].ocv - table[i].ocv;
+-		cap = tmp + table[i].capacity;
+-	} else if (i == 0) {
+-		cap = table[0].capacity;
+-	} else {
+-		cap = table[table_len - 1].capacity;
+-	}
+-
+-	return cap;
++	/* The library function will deal with high == low */
++	if (i > 0)
++		high = i - 1;
++	else
++		high = i; /* i.e. i == 0 */
++	low = i;
++
++	return fixp_linear_interpolate(table[low].ocv,
++				       table[low].capacity,
++				       table[high].ocv,
++				       table[high].capacity,
++				       ocv);
+ }
+ EXPORT_SYMBOL_GPL(power_supply_ocv2cap_simple);
+ 
+-- 
+2.31.1
 
-I'm working on some patches where these things are allocated at probe
-time, with those in place it makes more sense to just devm_kasprintf()
-this and "forget" about the pointer.
-
-Regards,
-Bjorn
-
-> >   	ret = request_threaded_irq(data->throttle_irq, NULL, qcom_lmh_dcvs_handle_irq,
-> > -				   IRQF_ONESHOT, irq_name, data);
-> > +				   IRQF_ONESHOT, data->irq_name, data);
-> >   	if (ret) {
-> > -		dev_err(&pdev->dev, "Error registering %s: %d\n", irq_name, ret);
-> > +		dev_err(&pdev->dev, "Error registering %s: %d\n", data->irq_name, ret);
-> >   		return 0;
-> >   	}
-> > 
-> 
-> 
-> -- 
-> With best wishes
-> Dmitry
