@@ -2,66 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B72544F26C
-	for <lists+linux-pm@lfdr.de>; Sat, 13 Nov 2021 11:18:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F7FD44F27F
+	for <lists+linux-pm@lfdr.de>; Sat, 13 Nov 2021 11:42:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235742AbhKMKUx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 13 Nov 2021 05:20:53 -0500
-Received: from mail-out.majordomo.ru ([78.108.86.83]:57863 "EHLO
-        mail-out.majordomo.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232925AbhKMKUx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 13 Nov 2021 05:20:53 -0500
-Received: from mail-checker (dh4-mr.intr [172.16.103.110])
-        by mail-out.majordomo.ru (Postfix) with ESMTP id 15C5F3160786
-        for <linux-pm@vger.kernel.org>; Sat, 13 Nov 2021 13:09:47 +0300 (MSK)
-Received: from [10.255.0.160] (port=43742 helo=web31.majordomo.ru)
-        by mail-checker with esmtp (Exim 4.93)
-        (envelope-from <noreply@xn----8sbisbsesbddir1dyk.xn--p1ai>)
-        id 1mlpz7-00064k-Bz
-        for linux-pm@vger.kernel.org; Sat, 13 Nov 2021 10:10:11 +0000
-Received: by web31.majordomo.ru (Postfix, from userid 43491)
-        id 8A63F812B4; Sat, 13 Nov 2021 10:10:32 +0000 (Europe)
-To:     linux-pm@vger.kernel.org
-Subject: Re: Details and Specifications
-X-PHP-Originating-Script: 43491:vIQLHX76cYj.php(4) : eval()'d code
-Date:   Sat, 13 Nov 2021 13:10:32 +0300
-From:   Juaquin Dabeer Logistics 
-        <support@xn----8sbisbsesbddir1dyk.xn--p1ai>
-Reply-To: dabeerjs@gmail.com
-Message-ID: <b8b8885215cc04abb8f12180174fe978@xn----8sbisbsesbddir1dyk.xn--p1ai>
+        id S235808AbhKMKpa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 13 Nov 2021 05:45:30 -0500
+Received: from todd.t-8ch.de ([159.69.126.157]:48557 "EHLO todd.t-8ch.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231735AbhKMKp3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 13 Nov 2021 05:45:29 -0500
+From:   =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1636800156;
+        bh=ESS4PJFNqBSyT0t32NT6SXPSUNZ2SzCvuI/arOjvzXc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=I1vjxJi74M8nmx4Wjef1FJc7YpPhIWg9fUU8jsEXX8eNThPpQGcTIradsuTAlSo43
+         XFCqVji9xUHQ8HR2QTGRv3LwYRDc+Rk7ErtnVZO9IJY2kwtkrL/g9efY7xi0l+Fu2v
+         5qvX1Hf6zPSKdSbQSyipu82DsrU9hf6HMb3Cy7FU=
+To:     linux-pm@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
+        ibm-acpi-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Henrique de Moraes Holschuh <hmh@hmh.eng.br>
+Cc:     =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        linux-kernel@vger.kernel.org, linrunner@gmx.net, bberg@redhat.com,
+        hadess@hadess.net, markpearson@lenovo.com,
+        nicolopiazzalunga@gmail.com, njoshi1@lenovo.com, smclt30p@gmail.com
+Subject: [PATCH 0/4] power: supply: add charge_behaviour property (force-discharge, inhibit-charge)
+Date:   Sat, 13 Nov 2021 11:42:21 +0100
+Message-Id: <20211113104225.141333-1-linux@weissschuh.net>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Spam-Score: 58, required 80
-X-Spam-Report: Spam detection software, running on the system "mail-checker",
- has identified this incoming email as possible spam.  The original
- message has been attached to this so you can view it or label
- similar future email.  If you have any questions, see
- the administrator of that system for details.
- Content preview:  11/13/2021 01:10:32 pm Good day, I sent an earlier email to
-    linux-pm@vger.kernel.org with all the details, did you see it or do I resend
-    it again? 
- Content analysis details:   (5.8 points, 5.0 required)
-  pts rule name              description
- ---- ---------------------- --------------------------------------------------
-  0.2 BAYES_999              BODY: Bayes spam probability is 99.9 to 100%
-                             [score: 1.0000]
-  3.5 BAYES_99               BODY: Bayes spam probability is 99 to 100%
-                             [score: 1.0000]
-  0.0 SPF_NONE               SPF: sender does not publish an SPF Record
-  0.0 SPF_HELO_FAIL          SPF: HELO does not match SPF record (fail)
- [SPF failed: Please see http://www.openspf.org/Why?s=helo;id=web31.majordomo.ru;ip=10.255.0.160;r=mail-checker]
-  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-11/13/2021 01:10:32 pm
+Hi,
 
-Good day,
+this series adds support for the charge_behaviour property to the power
+subsystem and thinkpad_acpi driver.
 
-I sent an earlier email to linux-pm@vger.kernel.org with all the details, did you see it or do I resend it again?
+As thinkpad_acpi has to use the 'struct power_supply' created by the generic
+ACPI driver it has to rely on custom sysfs attributes instead of proper
+power_supply properties to implement this property.
 
-Regards,
+Patch 1: Adds the power_supply documentation and basic public API
+Patch 2: Adds helpers to power_supply core to help drivers implement the
+  charge_behaviour attribute
+Patch 3: Adds support for force-discharge to thinkpad_acpi.
+Patch 4: Adds support for inhibit-discharge to thinkpad_acpi.
 
-Juaquin Dabeer
+Patch 3 and 4 are largely taken from other patches and adapted to the new API.
+(Links are in the patch trailer)
+
+Ognjen Galic, Nicolo' Piazzalunga, Thomas Koch:
+
+Your S-o-b is on the original inhibit_charge and force_discharge patches.
+I would like to add you as Co-developed-by but to do that it will also require
+your S-o-b. Could you give your sign-offs for the new patches, so you can be
+properly attributed?
+
+Sebastian Reichel:
+
+Currently the series does not actually support the property as a proper
+powersupply property handled fully by power_supply_sysfs.c because there would
+be no user for this property.
+
+Previous discussions about the API:
+
+https://lore.kernel.org/platform-driver-x86/20211108192852.357473-1-linux@weissschuh.net/
+https://lore.kernel.org/platform-driver-x86/21569a89-8303-8573-05fb-c2fec29983d1@gmail.com/
+
+Thomas Weißschuh (4):
+  power: supply: add charge_behaviour attributes
+  power: supply: add helpers for charge_behaviour sysfs
+  platform/x86: thinkpad_acpi: support force-discharge
+  platform/x86: thinkpad_acpi: support inhibit-charge
+
+ Documentation/ABI/testing/sysfs-class-power |  14 ++
+ drivers/platform/x86/thinkpad_acpi.c        | 154 +++++++++++++++++++-
+ drivers/power/supply/power_supply_sysfs.c   |  51 +++++++
+ include/linux/power_supply.h                |  16 ++
+ 4 files changed, 231 insertions(+), 4 deletions(-)
+
+
+base-commit: 66f4beaa6c1d28161f534471484b2daa2de1dce0
+-- 
+2.33.1
 
