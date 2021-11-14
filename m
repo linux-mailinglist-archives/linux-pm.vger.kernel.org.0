@@ -2,131 +2,190 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F211044F79C
-	for <lists+linux-pm@lfdr.de>; Sun, 14 Nov 2021 12:28:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCCCD44F936
+	for <lists+linux-pm@lfdr.de>; Sun, 14 Nov 2021 18:03:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbhKNLbt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 14 Nov 2021 06:31:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36544 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbhKNLbs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 14 Nov 2021 06:31:48 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC65C061746
-        for <linux-pm@vger.kernel.org>; Sun, 14 Nov 2021 03:28:54 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id i194so4331438yba.6
-        for <linux-pm@vger.kernel.org>; Sun, 14 Nov 2021 03:28:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=l2AjIcA200luhAvIV6Y4Gf8Evv6mr+gMr0zSOMeBGF0=;
-        b=h86VnA102Vu1evHSQ1R7Q819LtTvF+Qn61YfJ5qLxKgqAzec+K2QpazzBlceBUe+Y/
-         2Ngo4kmgRJshl6B2R234se9EdbFHDrp80AMGg8r7Nn7CyFK6daFYED4LOz5gH/lkRx1d
-         HeeU4C0f2L9M/upnPLE0mLVweJMtT2a+HSXyyNgwJFMb1askCn3D2CarW2P2R4HM8jDT
-         hFjRTMZBlTHnlC929IDL6BJHLfVUr856U2K7L2VRnUEEA3JMONLvE0h5tt/6tzIVtesb
-         l/yFNSaphop0dCpvEYPdP+/JsM96IwmEmrHmKyk3ufi81AVoQP67ffUuE8B00kvS/KUe
-         8pTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=l2AjIcA200luhAvIV6Y4Gf8Evv6mr+gMr0zSOMeBGF0=;
-        b=F1xW4e9e916PQo4KalE42EMPW1GecHLqqYILe+1SD8QzWd3O4pIz6bjMGRglxJTXtb
-         FvLP3D8HTy/S3AJ70R41g/ujUHTOq2f92z9zlOUjSeBNaQUkZKgHW0NhG5AHs2VaE4dZ
-         oVfXSDIC8z6oxPcN1P13kKPgLfmaSzeznBT9aHMSOMBpQEI4zRptMbZp2sl7Q+f7OTym
-         1DeumNH9VjSgTyjAyOpn3aYDJckIPPAQ5rOnbvzG49wfOR4kPV8yM4WuXDHGwW4BPKpx
-         +1PrubmNWy+gyzNkXjsOgGsy5u7DAiXAbhWpP2GszPzIX0nVEcl7C6w1Xpm4JjADa0WZ
-         gGcw==
-X-Gm-Message-State: AOAM531d+79GYQddZLbMRPhsw/J8WY0AcmK0bhMOnNM6vaeXi2uifcTV
-        aUUCNGAL/Kj8S7hikDrBrsFqdL8IQ/SQZdWhVVTpkqBNhCA=
-X-Google-Smtp-Source: ABdhPJwdCNR3IpyQzVEc/OrL5EeghBgvW1AwGH30eWoLDTn7NIDqFoaLswRT/Dj8jQDBKx+fG9svuct3SaXxfqQdKTA=
-X-Received: by 2002:a5b:d0e:: with SMTP id y14mr29193377ybp.23.1636889333351;
- Sun, 14 Nov 2021 03:28:53 -0800 (PST)
+        id S236142AbhKNRGq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 14 Nov 2021 12:06:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:29446 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233073AbhKNRGk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 14 Nov 2021 12:06:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1636909426;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=0CORimeqElOX/M4pFCvyzfpcvlAoEavGiWy4Y5391ao=;
+        b=M0yrbtyCXfd8WBKEZCJ+WAJRy6of9Uw7EP3iIpF3mw17c6ltvyOza5HrNPry6/hq5qxKhZ
+        pY1dpVdbPkFo3eg2yMZbNOQatf72lxHM3xI/IfrLyiJVLib096a0yd5x6hlk8g4FvRvGW4
+        tn2JLEvu0BgjCUEFZlRrlD3kfKBb7HQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-591-S46hBzzkM4ujprpMT6GTxQ-1; Sun, 14 Nov 2021 12:03:43 -0500
+X-MC-Unique: S46hBzzkM4ujprpMT6GTxQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4A6CC15720;
+        Sun, 14 Nov 2021 17:03:40 +0000 (UTC)
+Received: from x1.localdomain (unknown [10.39.192.93])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7220557CAD;
+        Sun, 14 Nov 2021 17:03:36 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>, Len Brown <lenb@kernel.org>,
+        linux-acpi@vger.kernel.org, Yauhen Kharuzhy <jekhor@gmail.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        platform-driver-x86@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-efi@vger.kernel.org
+Subject: [PATCH v2 00/20] power-suppy/i2c/extcon: Fix charger setup on Xiaomi Mi Pad 2 and Lenovo Yogabook
+Date:   Sun, 14 Nov 2021 18:03:15 +0100
+Message-Id: <20211114170335.66994-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-From:   Turritopsis Dohrnii Teo En Ming <ceo.teo.en.ming@gmail.com>
-Date:   Sun, 14 Nov 2021 19:28:49 +0800
-Message-ID: <CAMEJMGEetqxb7h5DEzci9vcBBxvS+9nJ=UF59HPqasNwmWLuXQ@mail.gmail.com>
-Subject: I discovered that Aruba Instant On 1930 24G 4SFP/SFP+ JL682A Switch
- is Running an Operating System with Linux Kernel 4.4.120!
-To:     linux-pm@vger.kernel.org
-Cc:     ceo@teo-en-ming-corp.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Subject: I discovered that Aruba Instant On 1930 24G 4SFP/SFP+ JL682A
-Switch is Running an Operating System with Linux Kernel 4.4.120!
+Hi All,
 
-Good day from Singapore,
+This is version 2 of my series previously titled:
+"[PATCH 00/13] power-suppy/i2c/extcon: Add support for cht-wc PMIC
+without USB-PD support".
 
-I discovered that Aruba Instant On 1930 24G 4SFP/SFP+ JL682A Switch is
-Running an Operating System with Linux Kernel 4.4.120!
+So far almost all the kernel code surrounding the Cherry Trail Whiskey Cove
+PMIC has been developed on the GPD win / pocket devices and it has various
+assumption based on that. In the mean time I've learned (and gotten access
+to) about 2 more designs and none of the 3 now known designs use a single
+standard setup for the charger, fuel-gauge and other chips surrounding the
+PMIC / charging+data USB port:
 
-INTRODUCTION
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+1. The GPD Win and GPD Pocket mini-laptops, these are really 2 models
+but the Pocket re-uses the GPD Win's design in a different housing:
 
-My name is Mr. Turritopsis Dohrnii Teo En Ming, 43 years old as of 14
-Nov 2021. I live in Singapore. Presently I am an IT Consultant with a
-Systems Integrator (SI)/computer firm in Singapore. I am also a Linux
-and open source software and information technology enthusiast.
+The WC PMIC is connected to a TI BQ24292i charger, paired with
+a Maxim MAX17047 fuelgauge + a FUSB302 USB Type-C Controller +
+a PI3USB30532 USB switch, for a fully functional Type-C port.
 
-You can read my autobiography on my redundant blogs. The title of my
-autobiography is:
+2. The Xiaomi Mi Pad 2:
 
-=E2=80=9CAutobiography of Singaporean Targeted Individual Mr. Turritopsis
-Dohrnii Teo En Ming (Very First Draft, Lots More to Add in Future)=E2=80=9D
+The WC PMIC is connected to a TI BQ25890 charger, paired with
+a TI BQ27520 fuelgauge, using the TI BQ25890 for BC1.2 charger type
+detection, for a USB-2 only Type-C port without PD.
 
-Links to my redundant blogs (Blogger and WordPress) can be found in my
-email signature below. These are my main blogs.
+3. The Lenovo Yoga Book YB1-X90 / Lenovo Yoga Book YB1-X91 series:
 
-I have three other redundant blogs, namely:
+The WC PMIC is connected to a TI BQ25892 charger, paired with
+a TI BQ27542 fuelgauge, using the WC PMIC for BC1.2 charger type
+detection and using the BQ25892's Mediatek Pump Express+ (1.0)
 
-https://teo-en-ming.tumblr.com/
+###
 
-https://teo-en-ming.medium.com/
+Unlike what is normal on X86 this diversity in designs is not handled /
+abstracted away by the ACPI tables.
 
-https://teo-en-ming.livejournal.com/
+This series takes care of making sure that charging and device/host mode
+switching also works on the Xiaomi Mi Pad 2 and the Lenovo Yogabook.
 
-Future/subsequent versions of my autobiography will be published on my
-redundant blogs.
+New in version 2 of this patch-set:
+- This is all about Whiskey Cove based designs, instead of going roundabout
+  and (ab)using drivers/platform/x86/touchscreen_dmi.c to add
+  device-properties on the WC I2C-dev and then check for that, just add a new
+  intel_cht_wc_get_model() helper to the intel_soc_pmic_chtwc.c MFD-driver.
+- Extend the series to not only fix things on the Mi Pad 2, but also on the
+  Lenovo Yogabook YB1-X90*/-X91* models.
 
-My Blog Books (in PDF format) are also available for download on my
-redundant blogs.
+Patches  1-13: Prepare the bq25890 power_supply driver to fully support
+               the Mi Pad 2 and the Yogabook
+               Note this includes a new version of the 3 bq25890 cleanup /
+               fixes patches send earlier by Yauhen Kharuzhy
+Patch 14:      Adds the intel_cht_wc_get_model() helper
+Patch 15:      Uses this intel_cht_wc_get_model() value to instantiate an
+               i2c-client with the right type and properties for the charger
+               IC used on the board (instead of harcoding the GPD values)
+Patches 16-20: Modify the extcon code to provide charger-detection results
+               to the charger driver and to take care of the Vbus boost
+               regulator control (for host-mode) and device/host mode
+               switching
 
-Over the years, I have published many guides, howtos, tutorials, and
-information technology articles on my redundant blogs. I hope that
-they are of use to information technology professionals.
+I've tried to keep the power_supply patches as generic as possible while
+focussing some of the special handling these boards need in the
+WC PMIC MFD and cell drivers, which will only get loaded on these boards.
 
-Thank you very much.
+Since some of the later patches depend on some of the power_supply changes;
+and since the Whiskey Cove MFD and cell drivers generally do not see much
+changes I believe that it would be best to merge the entire series through
+Sebastian's linux-power-supply tree.
+
+Lee, Wolfram and Chanwoo, may we please have your Ack for merging this
+entire series through Sebastian's linux-power-supply tree?
+
+Regards,
+
+Hans
 
 
+Hans de Goede (16):
+  power: supply: core: Refactor
+    power_supply_set_input_current_limit_from_supplier()
+  power: supply: bq25890: Add a bq25890_rw_init_data() helper
+  power: supply: bq25890: Add support to skip reset at probe() /
+    remove()
+  power: supply: bq25890: Add support to read back the settings from the
+    chip
+  power: supply: bq25890: Enable charging on boards where we skip reset
+  power: supply: bq25890: Drop dev->platform_data == NULL check
+  power: supply: bq25890: Add bq25890_set_otg_cfg() helper
+  power: supply: bq25890: Add support for registering the Vbus boost
+    converter as a regulator
+  power: supply: bq25890: On the bq25892 set the IINLIM based on
+    external charger detection
+  mfd: intel_soc_pmic_chtwc: Add intel_cht_wc_get_model() helper
+    function
+  i2c: cht-wc: Make charger i2c-client instantiation board/device-model
+    specific
+  extcon: intel-cht-wc: Use new intel_cht_wc_get_model() helper
+  extcon: intel-cht-wc: Support devs with Micro-B / USB-2 only Type-C
+    connectors
+  extcon: intel-cht-wc: Refactor cht_wc_extcon_get_charger()
+  extcon: intel-cht-wc: Add support for registering a power_supply
+    class-device
+  extcon: intel-cht-wc: Report RID_A for ACA adapters
 
+Yauhen Kharuzhy (4):
+  power: supply: bq25890: Fix ADC continuous conversion setting when
+    charging
+  power: supply: bq25890: Rename IILIM field to IINLIM
+  power: supply: bq25890: Reduce reported CONSTANT_CHARGE_CURRENT_MAX
+    for low temperatures
+  power: supply: bq25890: Support higher charging voltages through Pump
+    Express+ protocol
 
------BEGIN EMAIL SIGNATURE-----
+ drivers/extcon/Kconfig                   |   3 +-
+ drivers/extcon/extcon-intel-cht-wc.c     | 242 +++++++++++++--
+ drivers/i2c/busses/i2c-cht-wc.c          | 120 ++++++--
+ drivers/mfd/intel_soc_pmic_chtwc.c       |  46 +++
+ drivers/power/supply/bq24190_charger.c   |  10 +-
+ drivers/power/supply/bq25890_charger.c   | 374 +++++++++++++++++++----
+ drivers/power/supply/power_supply_core.c |  57 ++--
+ include/linux/mfd/intel_soc_pmic.h       |   9 +
+ include/linux/power/bq25890_charger.h    |  15 +
+ include/linux/power_supply.h             |   5 +-
+ 10 files changed, 744 insertions(+), 137 deletions(-)
+ create mode 100644 include/linux/power/bq25890_charger.h
 
-The Gospel for all Targeted Individuals (TIs):
+-- 
+2.31.1
 
-[The New York Times] Microwave Weapons Are Prime Suspect in Ills of
-U.S. Embassy Workers
-
-Link:
-https://www.nytimes.com/2018/09/01/science/sonic-attack-cuba-microwave.html
-
-***************************************************************************=
-*****************
-
-Singaporean Targeted Individual Mr. Turritopsis Dohrnii Teo En Ming's
-Academic Qualifications as at 14 Feb 2019 and refugee seeking attempts
-at the United Nations Refugee Agency Bangkok (21 Mar 2017), in Taiwan
-(5 Aug 2019) and Australia (25 Dec 2019 to 9 Jan 2020):
-
-[1] https://tdtemcerts.wordpress.com/
-
-[2] https://tdtemcerts.blogspot.sg/
-
-[3] https://www.scribd.com/user/270125049/Teo-En-Ming
-
------END EMAIL SIGNATURE-----
