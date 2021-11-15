@@ -2,131 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B591B4508C3
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Nov 2021 16:41:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA95C4508E5
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Nov 2021 16:48:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236557AbhKOPnw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Nov 2021 10:43:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:60665 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236588AbhKOPnv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Nov 2021 10:43:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1636990855;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jOlyV7EOyHv5WlsQP7dPeTU0BSFS3H/KIdZNLcVQqGM=;
-        b=NieGkXbqy5u4CXmaw4NE/4xFCg/8LckIvY9+ZmGa07I1eWQvFE9RgYu6tbce4UdaNlT+WS
-        +2BafqihTtIBFqeOzD2b4FWT3kYnx9dLctRPaKvyQgciEJvL/WWAmoVWmU6v4rWCmvwa1t
-        fD81ogl1D0pa3IzdPMlOXL4h2eL8rH8=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-375--HQ7-XPqPhWioeZW45QNFA-1; Mon, 15 Nov 2021 10:40:54 -0500
-X-MC-Unique: -HQ7-XPqPhWioeZW45QNFA-1
-Received: by mail-ed1-f72.google.com with SMTP id w13-20020a05640234cd00b003e2fde5ff8aso14304855edc.14
-        for <linux-pm@vger.kernel.org>; Mon, 15 Nov 2021 07:40:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=jOlyV7EOyHv5WlsQP7dPeTU0BSFS3H/KIdZNLcVQqGM=;
-        b=0jtcrISy1FUCKFmIgImhzmNBszFyh6B1EgNoWDkbGl9bZ/rG1N2sS8aOJYdd8ZJrYS
-         ZHMRM/YzbXlZeODmQyqlNjKGndjLXT0OHMInL4eHXm7HuYjU+Zyu15aw+3KPunUFHXYP
-         qGhtdNpT22ofr1wq25u5otKXv/yqC9sw6KPSzTGH8IdhAqC0xj2q2mSEzMGgHd756aGt
-         lxR0NoRKd2PA7zIhOJ09z0F+2yhz4BKq9EyD7cnZJyNo1gUNpLIBgRQm2kShREONIRhW
-         HSdSEgMZWqBNnIaJLcoQ0M0e7KCBgPqX90b/FTa72YetuXYov40LY0zKfXGtdcw/+Nti
-         AZsQ==
-X-Gm-Message-State: AOAM5304X3Hi4IrfkZ437ifRKSRxlbfQ8Td/QOzPUCQjySh+oW/1rB2i
-        uhxXUFx4y5JHGi9EzjSnf438BP79A8sYTN1O6i8FfjzlbM5p2MIJYWhzH3aQmEHeSLLcAnUPA7z
-        zcASIMo+cd3ZZUmxrZeo=
-X-Received: by 2002:a05:6402:5113:: with SMTP id m19mr57416008edd.306.1636990853170;
-        Mon, 15 Nov 2021 07:40:53 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwDPKyyEb11g+BKxLwXQwZFfVyv+tGgMUtQwlKJf4Z9WueZJD2cZ4u8Pyzde3iKzatd6+lNig==
-X-Received: by 2002:a05:6402:5113:: with SMTP id m19mr57415979edd.306.1636990852965;
-        Mon, 15 Nov 2021 07:40:52 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id gt18sm6918918ejc.46.2021.11.15.07.40.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Nov 2021 07:40:52 -0800 (PST)
-Message-ID: <facf6787-9ad2-c75f-8a0e-786093125a10@redhat.com>
-Date:   Mon, 15 Nov 2021 16:40:51 +0100
+        id S232375AbhKOPvW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Nov 2021 10:51:22 -0500
+Received: from li1434-30.members.linode.com ([45.33.107.30]:46206 "EHLO
+        node.akkea.ca" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232412AbhKOPvJ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 15 Nov 2021 10:51:09 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by node.akkea.ca (Postfix) with ESMTP id 22F145DE02D;
+        Mon, 15 Nov 2021 15:48:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akkea.ca; s=mail;
+        t=1636991291; bh=ac3GT/m2JxRJik/OdVDww38ZqHjRJjailk8SaFnQFAw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References;
+        b=uFdxBilAYAFRbRJD6urCr9FZ2B/Wku1J1Un9ztfy2/iHnsD6SSjLJsCpSq+d3FFAd
+         uUqEuXbXAg0SbSTiS609yZ2oo38WIY/cEAbp0/RY0xM9rskXwfwBH45pSwaan1KjJJ
+         0I6paF5d0uLGDH9KynjQG0BKf1sFx7BvXQ3dREpk=
+X-Virus-Scanned: Debian amavisd-new at mail.akkea.ca
+Received: from node.akkea.ca ([127.0.0.1])
+        by localhost (mail.akkea.ca [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ccp0qYPWq9XG; Mon, 15 Nov 2021 15:48:10 +0000 (UTC)
+Received: from www.akkea.ca (li1434-30.members.linode.com [45.33.107.30])
+        by node.akkea.ca (Postfix) with ESMTPSA id 53ADB5DE01D;
+        Mon, 15 Nov 2021 15:48:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akkea.ca; s=mail;
+        t=1636991290; bh=ac3GT/m2JxRJik/OdVDww38ZqHjRJjailk8SaFnQFAw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References;
+        b=wnaZjsSVRCX0xOdxnsZGnVLgeLL9h9vR5Ta2qT4zJSp5e3mIa37rNEpjEm4R4TYH0
+         P+4ytDRW6HGShmBCfSAjcI+YuCg8mqOfyBZrtFm6KI4BvBT4aJ6HTs2xrJS7/FpAUp
+         Tzfqr5w2jiiRADaXjqYlvxrCcyOtDvpcNcTXO41M=
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 4/4] bq25890_charger: Enable continuous conversion for ADC
- at charging
-Content-Language: en-US
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Yauhen Kharuzhy <jekhor@gmail.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211107202001.54579-1-jekhor@gmail.com>
- <20211107202001.54579-4-jekhor@gmail.com>
- <3414874a-3dd0-24b2-92be-f59392dba810@redhat.com>
- <20211115152313.5ls7asfwuj4eclzb@earth.universe>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20211115152313.5ls7asfwuj4eclzb@earth.universe>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
+Date:   Mon, 15 Nov 2021 07:48:10 -0800
+From:   Angus Ainslie <angus@akkea.ca>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@puri.sm
+Subject: Re: [PATCH] power: bq25890: temperature is also an adc value
+In-Reply-To: <20211115152221.izjh36qlmlw5mbf6@earth.universe>
+References: <20211110002440.71404-1-angus@akkea.ca>
+ <20211115152221.izjh36qlmlw5mbf6@earth.universe>
+Message-ID: <691151b347c64939bc0c407e8bf8bd75@akkea.ca>
+X-Sender: angus@akkea.ca
+User-Agent: Roundcube Webmail/1.3.6
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
-
-On 11/15/21 16:23, Sebastian Reichel wrote:
+On 2021-11-15 07:22, Sebastian Reichel wrote:
 > Hi,
 > 
-> On Sun, Nov 07, 2021 at 09:48:38PM +0100, Hans de Goede wrote:
->> Hi,
->>
->> On 11/7/21 21:20, Yauhen Kharuzhy wrote:
->>> Instead of one shot run of ADC at beginning of charging, run continuous
->>> conversion to ensure that all charging-related values are monitored
->>> properly (input voltage, input current, themperature etc.).
->>>
->>> Signed-off-by: Yauhen Kharuzhy <jekhor@gmail.com>
->>
->> Thank you for finding this! This explains why all the ADC returned
->> values like current_now where 0 when charging, I thought this was
->> just something which was only supported while not charging, heh.
->>
->> As before, the patch subject prefix should be: "power: supply: bq25890: "
->>
->> Otherwise the patch looks good to me:
->>
->> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
->>
->> Sebastian, this really is a pure bug-fix patch, any chance you
->> can pick this up for a future 5.16-rc# pull-req ? 
->>
->> Regards,
->>
->> Hans
+> On Tue, Nov 09, 2021 at 04:24:40PM -0800, Angus Ainslie wrote:
+>> Make sure that a conversion is forced when the power supply is offline 
+>> so
+>> the temperature is valid.
+>> 
+>> Signed-off-by: Angus Ainslie <angus@akkea.ca>
+>> ---
 > 
 > Thanks, queued to power-supply's fixes branch.
+> 
+> -- Sebastian
+> 
 
-Thank you.
+Thanks !
 
-Note I also added this to my:
+Angus
 
-[PATCH v2 00/20] power-suppy/i2c/extcon: Fix charger setup on Xiaomi Mi Pad 2 and Lenovo Yogabook
-
-Series, together with 2 of the 3 other patches from this series
-(with some minor fixes applied to one of them).
-
-So you can skip:
-
-[PATCH v2 02/20] power: supply: bq25890: Fix ADC continuous conversion setting when charging
-
-from that series (I reworded the commit msg subject a bit,
-but it is the exact same patch).
-
-If I end up doing a v3, I'll drop this patch.
-
-Regards,
-
-Hans
-
+>>  drivers/power/supply/bq25890_charger.c | 1 +
+>>  1 file changed, 1 insertion(+)
+>> 
+>> diff --git a/drivers/power/supply/bq25890_charger.c 
+>> b/drivers/power/supply/bq25890_charger.c
+>> index 945c3257ca93..23a91c5d1f9d 100644
+>> --- a/drivers/power/supply/bq25890_charger.c
+>> +++ b/drivers/power/supply/bq25890_charger.c
+>> @@ -388,6 +388,7 @@ static bool bq25890_is_adc_property(enum 
+>> power_supply_property psp)
+>>  	switch (psp) {
+>>  	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
+>>  	case POWER_SUPPLY_PROP_CURRENT_NOW:
+>> +	case POWER_SUPPLY_PROP_TEMP:
+>>  		return true;
+>> 
+>>  	default:
+>> --
+>> 2.25.1
+>> 
