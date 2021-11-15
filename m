@@ -2,33 +2,33 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE732450558
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Nov 2021 14:24:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 556054505CD
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Nov 2021 14:43:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbhKON1b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Nov 2021 08:27:31 -0500
-Received: from mga05.intel.com ([192.55.52.43]:46256 "EHLO mga05.intel.com"
+        id S236522AbhKONqT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Nov 2021 08:46:19 -0500
+Received: from mga02.intel.com ([134.134.136.20]:32909 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231627AbhKON12 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 15 Nov 2021 08:27:28 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10168"; a="319647404"
+        id S236447AbhKONnm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 15 Nov 2021 08:43:42 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10168"; a="220649226"
 X-IronPort-AV: E=Sophos;i="5.87,236,1631602800"; 
-   d="scan'208";a="319647404"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 05:23:08 -0800
+   d="scan'208";a="220649226"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 05:40:18 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,236,1631602800"; 
-   d="scan'208";a="734981986"
+   d="scan'208";a="471907598"
 Received: from spandruv-desk.jf.intel.com ([10.54.75.21])
-  by fmsmga005.fm.intel.com with ESMTP; 15 Nov 2021 05:23:08 -0800
+  by orsmga002.jf.intel.com with ESMTP; 15 Nov 2021 05:40:18 -0800
 From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 To:     rafael@kernel.org, viresh.kumar@linaro.org
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         stable@vger.kernel.org
-Subject: [PATCH] cpufreq: intel_pstate: Fix EPP restore after offline/online
-Date:   Mon, 15 Nov 2021 05:23:02 -0800
-Message-Id: <20211115132302.1257642-1-srinivas.pandruvada@linux.intel.com>
+Subject: [UPDATE][PATCH] cpufreq: intel_pstate: Fix EPP restore after offline/online
+Date:   Mon, 15 Nov 2021 05:40:17 -0800
+Message-Id: <20211115134017.1257932-1-srinivas.pandruvada@linux.intel.com>
 X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -63,21 +63,16 @@ Fixes: 4adcf2e5829f ("cpufreq: intel_pstate: Add ->offline and ->online callback
 Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 Cc: stable@vger.kernel.org # v5.9+
 ---
- drivers/cpufreq/intel_pstate.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+Update: Minor optimization to skip non performance policy code path
+
+ drivers/cpufreq/intel_pstate.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index 815df3daae9d..49ff24d2b0ea 100644
+index 815df3daae9d..6d7d73a0c66b 100644
 --- a/drivers/cpufreq/intel_pstate.c
 +++ b/drivers/cpufreq/intel_pstate.c
-@@ -930,17 +930,23 @@ static void intel_pstate_hwp_set(unsigned int cpu)
- {
- 	struct cpudata *cpu_data = all_cpu_data[cpu];
- 	int max, min;
-+	s16 epp = 0;
- 	u64 value;
--	s16 epp;
- 
+@@ -936,11 +936,17 @@ static void intel_pstate_hwp_set(unsigned int cpu)
  	max = cpu_data->max_perf_ratio;
  	min = cpu_data->min_perf_ratio;
  
@@ -86,11 +81,11 @@ index 815df3daae9d..49ff24d2b0ea 100644
 -
  	rdmsrl_on_cpu(cpu, MSR_HWP_REQUEST, &value);
  
-+	if (boot_cpu_has(X86_FEATURE_HWP_EPP))
-+		epp = (value >> 24) & 0xff;
-+
 +	if (cpu_data->policy == CPUFREQ_POLICY_PERFORMANCE) {
 +		min = max;
++		epp = 0;
++		if (boot_cpu_has(X86_FEATURE_HWP_EPP))
++			epp = (value >> 24) & 0xff;
 +		if (epp)
 +			cpu_data->epp_policy = 0;
 +	}
