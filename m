@@ -2,69 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93312450266
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Nov 2021 11:24:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE732450558
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Nov 2021 14:24:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230516AbhKOK13 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Nov 2021 05:27:29 -0500
-Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:41295 "EHLO
-        out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237566AbhKOK1D (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Nov 2021 05:27:03 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0UwcmVR2_1636971842;
-Received: from 30.21.164.14(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0UwcmVR2_1636971842)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 15 Nov 2021 18:24:02 +0800
-Message-ID: <cd74a6c0-b9c9-c174-dc14-29ea30c64bcc@linux.alibaba.com>
-Date:   Mon, 15 Nov 2021 18:24:49 +0800
+        id S229716AbhKON1b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Nov 2021 08:27:31 -0500
+Received: from mga05.intel.com ([192.55.52.43]:46256 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231627AbhKON12 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 15 Nov 2021 08:27:28 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10168"; a="319647404"
+X-IronPort-AV: E=Sophos;i="5.87,236,1631602800"; 
+   d="scan'208";a="319647404"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 05:23:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,236,1631602800"; 
+   d="scan'208";a="734981986"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.21])
+  by fmsmga005.fm.intel.com with ESMTP; 15 Nov 2021 05:23:08 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, viresh.kumar@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        stable@vger.kernel.org
+Subject: [PATCH] cpufreq: intel_pstate: Fix EPP restore after offline/online
+Date:   Mon, 15 Nov 2021 05:23:02 -0800
+Message-Id: <20211115132302.1257642-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] power: supply: core: Break capacity loop
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     linux-pm@vger.kernel.org, Chunyan Zhang <chunyan.zhang@unisoc.com>
-References: <20211114231207.1877495-1-linus.walleij@linaro.org>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20211114231207.1877495-1-linus.walleij@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+When using performance policy, EPP value is restored to non "performance"
+mode EPP after offline and online.
 
+For example:
+cat /sys/devices/system/cpu/cpu1/cpufreq/energy_performance_preference
+performance
+echo 0 > /sys/devices/system/cpu/cpu1/online
+echo 1 > /sys/devices/system/cpu/cpu1/online
+cat /sys/devices/system/cpu/cpu1/cpufreq/energy_performance_preference
+balance_performance
 
-On 2021/11/15 7:12, Linus Walleij wrote:
-> We should not go on looking for more capacity tables after
-> we realize we have looked at the last one in
-> power_supply_find_ocv2cap_table().
-> 
-> Fixes: 3afb50d7125b ("power: supply: core: Add some helpers to use the battery OCV capacity table")
-> Cc: Chunyan Zhang <chunyan.zhang@unisoc.com>
-> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+The commit 4adcf2e5829f ("cpufreq: intel_pstate: Add ->offline and ->online callbacks")
+optimized save restore path of the HWP request MSR, when there is no
+change in the policy. Also added special processing for performance mode
+EPP. If EPP has been set to "performance" by the active mode "performance"
+scaling algorithm, replace that value with the cached EPP. This ends up
+replacing with cached EPP during offline, which is restored during online
+again.
 
-LGTM.
-Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+So add a change which will set cpu_data->epp_policy to zero, when in
+performance policy and has non zero epp. In this way EPP is set to zero
+again.
 
-> ---
->   drivers/power/supply/power_supply_core.c | 4 ++++
->   1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
-> index 038e35ea7fbe..885c92dc0379 100644
-> --- a/drivers/power/supply/power_supply_core.c
-> +++ b/drivers/power/supply/power_supply_core.c
-> @@ -852,6 +852,10 @@ power_supply_find_ocv2cap_table(struct power_supply_battery_info *info,
->   		return NULL;
->   
->   	for (i = 0; i < POWER_SUPPLY_OCV_TEMP_MAX; i++) {
-> +		/* Out of capacity tables */
-> +		if (!info->ocv_table[i])
-> +			break;
-> +
->   		temp_diff = abs(info->ocv_temp[i] - temp);
->   
->   		if (temp_diff < best_temp_diff) {
-> 
+Fixes: 4adcf2e5829f ("cpufreq: intel_pstate: Add ->offline and ->online callbacks")
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: stable@vger.kernel.org # v5.9+
+---
+ drivers/cpufreq/intel_pstate.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+index 815df3daae9d..49ff24d2b0ea 100644
+--- a/drivers/cpufreq/intel_pstate.c
++++ b/drivers/cpufreq/intel_pstate.c
+@@ -930,17 +930,23 @@ static void intel_pstate_hwp_set(unsigned int cpu)
+ {
+ 	struct cpudata *cpu_data = all_cpu_data[cpu];
+ 	int max, min;
++	s16 epp = 0;
+ 	u64 value;
+-	s16 epp;
+ 
+ 	max = cpu_data->max_perf_ratio;
+ 	min = cpu_data->min_perf_ratio;
+ 
+-	if (cpu_data->policy == CPUFREQ_POLICY_PERFORMANCE)
+-		min = max;
+-
+ 	rdmsrl_on_cpu(cpu, MSR_HWP_REQUEST, &value);
+ 
++	if (boot_cpu_has(X86_FEATURE_HWP_EPP))
++		epp = (value >> 24) & 0xff;
++
++	if (cpu_data->policy == CPUFREQ_POLICY_PERFORMANCE) {
++		min = max;
++		if (epp)
++			cpu_data->epp_policy = 0;
++	}
++
+ 	value &= ~HWP_MIN_PERF(~0L);
+ 	value |= HWP_MIN_PERF(min);
+ 
+-- 
+2.17.1
+
