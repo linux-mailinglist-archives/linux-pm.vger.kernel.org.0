@@ -2,107 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD5AC450B57
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Nov 2021 18:21:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36A01450E5F
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Nov 2021 19:12:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236853AbhKORVk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Nov 2021 12:21:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38140 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236925AbhKORTv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Nov 2021 12:19:51 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2867C061208
-        for <linux-pm@vger.kernel.org>; Mon, 15 Nov 2021 09:13:24 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id y16so22386512ioc.8
-        for <linux-pm@vger.kernel.org>; Mon, 15 Nov 2021 09:13:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=L2es5dbHXRJPkreWY9KX+HP22ehmWI1e8VyeSPUZii4=;
-        b=oKeuZLodUAoDdRWVbHJJiXxXQNm2vFpXlYlgJwfX0fxFKVAkaq6H93Jm8MewHWtysM
-         sdcA1kOK108oSD8naCwAfMuczfWMhTXGpka/jzUMOcCCxRp3o64hvduPw0YdNozz0H2/
-         EeJlikZFNAg35BabEWnEAjtW5AC2cbAHWXZE4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=L2es5dbHXRJPkreWY9KX+HP22ehmWI1e8VyeSPUZii4=;
-        b=pG7q0eGpMdyS1lpMAj2q9Ccr04XS1jap4ec64sjvAZpGAMXz9U4DNPvbEt0qeC1iSu
-         xn/DpUk6QrclH4ZqPxzOY9+TdMvMnEs9PneTGUwZmVWhfljaFdQ25X7nItqsKIFnHE4r
-         11xK4uXctvUGoNTh/ZD4pY57C5MQcdhoEhErEO+9tCBhGbkMbEKH2cxVWxXnaqFFEpW5
-         xMWWlAUDOWupljCspDw06HKaJq/6/mcNsHgRfIjqrnD2/KsGBngKQKli2k/ayDAw7ZtF
-         h89f9SCHw/V6pQMkFAc5ltkSAcxu42kKulv/vBH0CGRIcZ1R93CL039LDtDQNnGy2ND+
-         SNIw==
-X-Gm-Message-State: AOAM533npf+2CBAHf4rwydMIW8Gq1W40fqv2/PbqklWgjI3mXIKhHd3V
-        Myx7bn/lJh/4Se8qffeCSuz8QGTx8HlZ/A==
-X-Google-Smtp-Source: ABdhPJxLAshAWAEXtQRLWMPlg/T8ZZOnc0vEYdBhbF5l1ZOm6iQ10C+K/zDZlsWLQRX4KAfzYQ8OqA==
-X-Received: by 2002:a05:6602:2d04:: with SMTP id c4mr295845iow.146.1636996403947;
-        Mon, 15 Nov 2021 09:13:23 -0800 (PST)
-Received: from mail-il1-f175.google.com (mail-il1-f175.google.com. [209.85.166.175])
-        by smtp.gmail.com with ESMTPSA id d137sm8201541iof.16.2021.11.15.09.13.23
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Nov 2021 09:13:23 -0800 (PST)
-Received: by mail-il1-f175.google.com with SMTP id s14so17453702ilv.10
-        for <linux-pm@vger.kernel.org>; Mon, 15 Nov 2021 09:13:23 -0800 (PST)
-X-Received: by 2002:a92:6910:: with SMTP id e16mr313484ilc.190.1636996403030;
- Mon, 15 Nov 2021 09:13:23 -0800 (PST)
+        id S239636AbhKOSOs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Nov 2021 13:14:48 -0500
+Received: from li1434-30.members.linode.com ([45.33.107.30]:46210 "EHLO
+        node.akkea.ca" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240160AbhKOSHS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 15 Nov 2021 13:07:18 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by node.akkea.ca (Postfix) with ESMTP id 88D335DE02D;
+        Mon, 15 Nov 2021 18:03:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akkea.ca; s=mail;
+        t=1636999420; bh=9sCbY7imwT613uSLoKvxs8EK+8sqFoPyR7kVkc6Shd0=;
+        h=From:To:Cc:Subject:Date;
+        b=QNqnQ7oJ14120oaF/kzkZdNRJjEnn+QSGTQGh2Lzecxn1II9641CdSv+VFjamg6Xd
+         BXUk0Ae1bUSd2fxDmk9hxGyCbvyfjWwVhAIrMk90Mhfd3viqQoUcyCMYKv0ldgfrk2
+         dzImt7eotAmDDngQ70Rj/WDj1h0zOczla9aTW0kY=
+X-Virus-Scanned: Debian amavisd-new at mail.akkea.ca
+Received: from node.akkea.ca ([127.0.0.1])
+        by localhost (mail.akkea.ca [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id RoW5SQ985ULO; Mon, 15 Nov 2021 18:03:39 +0000 (UTC)
+Received: from midas.localdomain (S0106788a2041785e.gv.shawcable.net [70.66.86.75])
+        by node.akkea.ca (Postfix) with ESMTPSA id 9BD815DE01D;
+        Mon, 15 Nov 2021 18:03:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akkea.ca; s=mail;
+        t=1636999419; bh=9sCbY7imwT613uSLoKvxs8EK+8sqFoPyR7kVkc6Shd0=;
+        h=From:To:Cc:Subject:Date;
+        b=CqdJV6Jd7cc8mKdNxMOjD52smx+PpyUT/N4O/qPa7JOWSFqiVbhJjAjdFxXl5z75e
+         dc2HGuh9L7xhHgALYsUtqgIQoOho/Zz0ZAOEMw6mxluMAEfOAu9OaygdXGsIJJl1Dt
+         z3xpKrzfHqh0vgLc6J+Z8YMSK9LSIxCxOQtY7b58=
+From:   Angus Ainslie <angus@akkea.ca>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@puri.sm, Angus Ainslie <angus@akkea.ca>
+Subject: [PATCH] power: bq25890: add POWER_SUPPLY_PROP_TEMP
+Date:   Mon, 15 Nov 2021 10:02:54 -0800
+Message-Id: <20211115180253.124271-1-angus@akkea.ca>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20211029122359.1.I1e23f382fbd8beb19fe1c06d70798b292012c57a@changeid>
-In-Reply-To: <20211029122359.1.I1e23f382fbd8beb19fe1c06d70798b292012c57a@changeid>
-From:   Evan Green <evgreen@chromium.org>
-Date:   Mon, 15 Nov 2021 09:12:47 -0800
-X-Gmail-Original-Message-ID: <CAE=gft4MRvq-VCBW4EX4dGfPi4s7Lco8h6Z_ejRH5A1e-K2-yA@mail.gmail.com>
-Message-ID: <CAE=gft4MRvq-VCBW4EX4dGfPi4s7Lco8h6Z_ejRH5A1e-K2-yA@mail.gmail.com>
-Subject: Re: [PATCH] PM / hibernate: Fix snapshot partial write lengths
-To:     Pavel Machek <pavel@ucw.cz>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     Len Brown <len.brown@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Gentle bump.
+Add the POWER_SUPPLY_PROP_TEMP and a NTC 10K percent VREGN to degrees LUT.
 
+Sorry I didn't realize this patch was not upstream yet and was just in our 
+tree. It should have been applied before:
 
-On Fri, Oct 29, 2021 at 12:24 PM Evan Green <evgreen@chromium.org> wrote:
->
-> snapshot_write() is inappropriately limiting the amount of data that can
-> be written in cases where a partial page has already been written. For
-> example, one would expect to be able to write 1 byte, then 4095 bytes to
-> the snapshot device, and have both of those complete fully (since now
-> we're aligned to a page again). But what ends up happening is we write 1
-> byte, then 4094/4095 bytes complete successfully.
->
-> The reason is that simple_write_to_buffer()'s second argument is the
-> total size of the buffer, not the size of the buffer minus the offset.
-> Since simple_write_to_buffer() accounts for the offset in its
-> implementation, snapshot_write() can just pass the full page size
-> directly down.
->
-> Signed-off-by: Evan Green <evgreen@chromium.org>
-> ---
->
->  kernel/power/user.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/kernel/power/user.c b/kernel/power/user.c
-> index 740723bb388524..ad241b4ff64c58 100644
-> --- a/kernel/power/user.c
-> +++ b/kernel/power/user.c
-> @@ -177,7 +177,7 @@ static ssize_t snapshot_write(struct file *filp, const char __user *buf,
->                 if (res <= 0)
->                         goto unlock;
->         } else {
-> -               res = PAGE_SIZE - pg_offp;
-> +               res = PAGE_SIZE;
->         }
->
->         if (!data_of(data->handle)) {
-> --
-> 2.31.0
->
+https://lore.kernel.org/linux-pm/20211110002440.71404-1-angus@akkea.ca/
+
+Signed-off-by: Angus Ainslie <angus@akkea.ca>
+---
+ drivers/power/supply/bq25890_charger.c | 36 +++++++++++++++++++++++++-
+ 1 file changed, 35 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
+index 945c3257ca93..7f52029f0702 100644
+--- a/drivers/power/supply/bq25890_charger.c
++++ b/drivers/power/supply/bq25890_charger.c
+@@ -266,6 +266,7 @@ enum bq25890_table_ids {
+ 	/* lookup tables */
+ 	TBL_TREG,
+ 	TBL_BOOSTI,
++	TBL_TSPCT,
+ };
+ 
+ /* Thermal Regulation Threshold lookup table, in degrees Celsius */
+@@ -280,6 +281,28 @@ static const u32 bq25890_boosti_tbl[] = {
+ 
+ #define BQ25890_BOOSTI_TBL_SIZE		ARRAY_SIZE(bq25890_boosti_tbl)
+ 
++/* NTC 10K temperature lookup table in thenths of a degree */
++static const u32 bq25890_tspct_tbl[] = {
++	850, 840, 830, 820, 810, 800, 790, 780,
++	770, 760, 750, 740, 730, 720, 710, 700,
++	690, 685, 680, 675, 670, 660, 650, 645,
++	640, 630, 620, 615, 610, 600, 590, 585,
++	580, 570, 565, 560, 550, 540, 535, 530,
++	520, 515, 510, 500, 495, 490, 480, 475,
++	470, 460, 455, 450, 440, 435, 430, 425,
++	420, 410, 405, 400, 390, 385, 380, 370,
++	365, 360, 355, 350, 340, 335, 330, 320,
++	310, 305, 300, 290, 285, 280, 275, 270,
++	260, 250, 245, 240, 230, 225, 220, 210,
++	205, 200, 190, 180, 175, 170, 160, 150,
++	145, 140, 130, 120, 115, 110, 100, 90,
++	80, 70, 60, 50, 40, 30, 20, 10,
++	0, -10, -20, -30, -40, -60, -70, -80,
++	-90, -10, -120, -140, -150, -170, -190, -210,
++};
++
++#define BQ25890_TSPCT_TBL_SIZE		ARRAY_SIZE(bq25890_tspct_tbl)
++
+ struct bq25890_range {
+ 	u32 min;
+ 	u32 max;
+@@ -308,7 +331,8 @@ static const union {
+ 
+ 	/* lookup tables */
+ 	[TBL_TREG] =	{ .lt = {bq25890_treg_tbl, BQ25890_TREG_TBL_SIZE} },
+-	[TBL_BOOSTI] =	{ .lt = {bq25890_boosti_tbl, BQ25890_BOOSTI_TBL_SIZE} }
++	[TBL_BOOSTI] =	{ .lt = {bq25890_boosti_tbl, BQ25890_BOOSTI_TBL_SIZE} },
++	[TBL_TSPCT] =	{ .lt = {bq25890_tspct_tbl, BQ25890_TSPCT_TBL_SIZE} }
+ };
+ 
+ static int bq25890_field_read(struct bq25890_device *bq,
+@@ -528,6 +552,15 @@ static int bq25890_power_supply_get_property(struct power_supply *psy,
+ 		val->intval = ret * -50000;
+ 		break;
+ 
++	case POWER_SUPPLY_PROP_TEMP:
++		ret = bq25890_field_read(bq, F_TSPCT);
++		if (ret < 0)
++			return ret;
++
++		/* convert TS percentage into rough temperature */
++		val->intval = bq25890_find_val(ret, TBL_TSPCT);
++		break;
++
+ 	default:
+ 		return -EINVAL;
+ 	}
+@@ -713,6 +746,7 @@ static const enum power_supply_property bq25890_power_supply_props[] = {
+ 	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
+ 	POWER_SUPPLY_PROP_VOLTAGE_NOW,
+ 	POWER_SUPPLY_PROP_CURRENT_NOW,
++	POWER_SUPPLY_PROP_TEMP,
+ };
+ 
+ static char *bq25890_charger_supplied_to[] = {
+-- 
+2.25.1
+
