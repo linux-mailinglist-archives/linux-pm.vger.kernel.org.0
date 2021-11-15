@@ -2,184 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48FC34507C5
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Nov 2021 16:02:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAFB345081F
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Nov 2021 16:19:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbhKOPFS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Nov 2021 10:05:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35226 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231668AbhKOPFS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Nov 2021 10:05:18 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62642C061570;
-        Mon, 15 Nov 2021 07:02:19 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id np3so13074323pjb.4;
-        Mon, 15 Nov 2021 07:02:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=d8PXUffPazSmYKKzNF/TGrdTUsuiK6Ny9wBNo2wwLbI=;
-        b=ZLjifqPVgG2iMUclzUkQFWnuYLDCosIK2s/DssPdmERUSiTTyhAQ2r9NczmX/DfRsJ
-         9uR/8NQOuM/qTdRd3gWcldBpnB1BtEkmf1PLyijjoRkYcvWVV7nV0VQHG2CoNXHp7/dA
-         e7+F0echaqpDANjSaIY8bpLY/q0wDIrsl86hDhhpnqPHPZnsP+XPEGfwSY05RZyXncKs
-         gK0g/QXWpzAD5PqJq65HQ+LfFhyGS8Cq+0hZKEoIRB9UFzyT2TEghyZBnYzN2CwL2m6G
-         TMRMaygYLovpTe3J+CoTHQt5mRAMgZ93E3/LJt917HDy3+cCf/vmSbCNFO6tXDu96i5W
-         4Xgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=d8PXUffPazSmYKKzNF/TGrdTUsuiK6Ny9wBNo2wwLbI=;
-        b=Q/yRsVk+749oTPkHMkf3nwKRNz6PcOML/BgEGng86fLLwFSlcsclYpkSi+MyAv2epL
-         gOhDr4F8ScVg9f4TwECeKcTnlaXdFvBnukaT2GG3sHQ2Zsz52oT2C22STNy9/OmjngFz
-         lpQ7PKAvFSyk8p4pvVKBDrCOWvOLh1afTWkli/2xbPm0ua1D8Vph00efzkGaVpIn56gm
-         BLd1xaXs1ImPdtShp+t2WAtcU3kuHNUHFU8ibJQ9Zv9aCYtz/LNzsy75evotVRBohBA5
-         ulD3/KBEAM06JJwU9Pqy3mbvo6ozJfuMrjkFpWph6edi6G+YAG3eww+Iq72uoCaJsjiA
-         m6FQ==
-X-Gm-Message-State: AOAM531LIWoZNEFKCyr0W2X9kpXSLkqW3uFZAGIX5Ra1/T5Z7YqCQAHF
-        TQ5bIKVF97lRhNoITAfd9EH1sx9WV2UfWUzhnqQ=
-X-Google-Smtp-Source: ABdhPJwkHtTTW3ES4uV67rzJ33QwTWk2CJ0+UlwIlbg7igYYS/+l83BQ0mb2AQZ2n9xhwKLRKCLDbQScz2TG7PWmHOs=
-X-Received: by 2002:a17:90a:7481:: with SMTP id p1mr26437282pjk.169.1636988538858;
- Mon, 15 Nov 2021 07:02:18 -0800 (PST)
+        id S231592AbhKOPWd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Nov 2021 10:22:33 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:53708 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236428AbhKOPW3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Nov 2021 10:22:29 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 62E941F44DC2
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1636989566; bh=/f2D4HEYv9ATPphu5W7lru65izbE6fXRJV2MzcFSrGA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=e7MwLAj5HzPRZ7/NPxCQQL0opmIL83Zz0JB7s02d7oIvoNg5mYod8RwkBtO+zIvSb
+         8upZ7wXL2y2QedDQ/p7qcliCOKkZfl0IjVwy0oUBJKiBOD/jgrRZhVSsfuqIvWaLnO
+         mHeztcRcs2kjJvVxhgaEFlgczXwYptJydD1kmNiTYXa9mM0pN/f3+mn1uBsO3C0gBy
+         IUc81dLn4UvUupxjFKYNnBDsWkPTBpBWObYdHtGDkHdub7RZ3VbBFhLB95TpxqTRnD
+         xZf3LRKxxmK/H9wV7d4BuzE1X6F+OtDen0q8cJAt6y4IuYfghjDiM9amKPzdxgvWGj
+         mTDWKXj72cu1w==
+Received: by earth.universe (Postfix, from userid 1000)
+        id 8D6033C0F95; Mon, 15 Nov 2021 16:19:23 +0100 (CET)
+Date:   Mon, 15 Nov 2021 16:19:23 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>, linux-pm@vger.kernel.org,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>
+Subject: Re: [PATCH] power: supply: core: Break capacity loop
+Message-ID: <20211115151923.tihkbpqhfd4fknuw@earth.universe>
+References: <20211114231207.1877495-1-linus.walleij@linaro.org>
+ <cd74a6c0-b9c9-c174-dc14-29ea30c64bcc@linux.alibaba.com>
 MIME-Version: 1.0
-References: <20211019130809.21281-1-o.rempel@pengutronix.de>
- <20211020050459.GE16320@pengutronix.de> <CAPwXO5b=z1nhQCo55A_XuK-Es2o7TrL2Vj6AkRSXa3Wxh0s8sA@mail.gmail.com>
- <20211021172048.GE2298@pengutronix.de> <CAPwXO5bWoAvZgQLQHa6CsFmZ2bcUQ9pJQBBL3F+goppMeAKkFQ@mail.gmail.com>
- <8692108c-1b46-3d3d-6911-300ac27c2980@ysoft.com> <20211111091627.GG12195@pengutronix.de>
-In-Reply-To: <20211111091627.GG12195@pengutronix.de>
-From:   Petr Benes <petrben@gmail.com>
-Date:   Mon, 15 Nov 2021 16:02:07 +0100
-Message-ID: <CAPwXO5anM809k+wuSYU9LR9vLAyutaMNo6kceCHOZHPmZUbnUw@mail.gmail.com>
-Subject: Re: [PATCH v2] thermal: imx: implement runtime PM support
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     =?UTF-8?B?TWljaGFsIFZva8OhxI0=?= <michal.vokac@ysoft.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Amit Kucheria <amitk@kernel.org>, linux-kernel@vger.kernel.org,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        David Jander <david@protonic.nl>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7d6qlckwfipe4lyq"
+Content-Disposition: inline
+In-Reply-To: <cd74a6c0-b9c9-c174-dc14-29ea30c64bcc@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Oleksij,
 
-On Thu, 11 Nov 2021 at 10:16, Oleksij Rempel <o.rempel@pengutronix.de> wrot=
-e:
->
-> On Wed, Nov 10, 2021 at 11:07:31AM +0100, Michal Vok=C3=A1=C4=8D wrote:
-> > On 25. 10. 21 13:06, Petr Benes wrote:
-> > > Hi Oleksij,
-> > >
-> > > On Thu, 21 Oct 2021 at 19:21, Oleksij Rempel <o.rempel@pengutronix.de=
-> wrote:
-> > > >
-> > > > Hi Petr,
-> > > >
-> > > > On Wed, Oct 20, 2021 at 05:53:03PM +0200, Petr Benes wrote:
-> > > > > On Wed, 20 Oct 2021 at 07:05, Oleksij Rempel <o.rempel@pengutroni=
-x.de> wrote:
-> > > > > >
-> > > > > > Hi Petr and Michal,
-> > > > > >
-> > > > > > I forgot to add you for v2 in CC. Please test/review this versi=
-on.
-> > > > >
-> > > > > Hi Oleksij,
-> > > > >
-> > > > > It works good. with PM as well as without PM. The only minor issu=
-e I found is,
-> > > > > that the first temperature reading (when the driver probes) fails=
-. That is
-> > > > > (val & soc_data->temp_valid_mask) =3D=3D 0) holds true. How does
-> > > > > pm_runtime_resume_and_get() behave in imx_thermal_probe()?
-> > > > > Does it go through imx_thermal_runtime_resume() with usleep_range=
-()?
-> > > >
-> > > > How exactly did you reproduce it? Even more or less understanding h=
-ow
-> > >
-> > > I just placed my debug print into get_temp()
-> > >
-> > >      if ((val & soc_data->temp_valid_mask) =3D=3D 0) {
-> > >          dev_dbg(&tz->device, "temp measurement never finished\n");
-> > >          printk("Wrong temperature reading!!!!!!\n");
-> > >          return -EAGAIN;
-> > >      }
-> > >
-> > > > this can potentially happen, i never had this issue on my HW. Is it=
- something
-> > > > HW specific?
-> > >
-> > > IMHO it is just product of the following sequence:
-> > >
-> > > pm_runtime_set_active(&pdev->dev);
-> > > pm_runtime_enable(data->dev);
-> > > pm_runtime_resume_and_get(data->dev);
-> > > thermal_zone_device_enable(data->tz);
-> > >
-> > > With assumption imx_thermal_runtime_resume() didn't run,
-> > > hence the sensor didn't get enough time to come up.
-> > >
-> > > I didn't have time to spend it on and you have better knowledge of th=
-e
-> > > area. If it is not that straightforward I can try to diagnose it bett=
-er.
-> > >
-> > Hi Oleksij,
-> > Did you manage to further debug and reproduce this problem?
-> > Do you plan to send the v3?
-> >
-> > Regarding your question about the HW - this problem occured once we
-> > upgraded the SoC on our SBC from i.MX6DL to i.MX6Q/QP. With the DualLit=
-e
-> > we never had this problem but the Quad is getting hot quite fast.
-> > We have pretty limited cooling options so the core is operated at its
-> > upper temperature limits when fully loaded.
->
-> Hi Michal,
->
-> Sorry, I was busy and lost this topic from my radar. I was not able to
-> reproduce it on my i.MX6Q and i.MX6QP died after other thermal voltage
-> experiments. Please, if you able to reproduce it, try to investigate
-> what is wrong, for example increasing wakeup time and/or and tracing
-> sleap/wake/get sequences.
+--7d6qlckwfipe4lyq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Seems it is just as easy as calling usleep_range(20, 50) when you switch on
-the sensor and enable temperature measurement in imx_thermal_probe().
-So, we are sure the sensor is configured and _ready_.
+Hi,
 
-You call pm_runtime_set_active(), pm_runtime_enable(), and
-pm_runtime_resume_and_get(). The last one doesn't call the resume
-callback (which correctly handles waiting for the sensor) as the device
-is already active.
+On Mon, Nov 15, 2021 at 06:24:49PM +0800, Baolin Wang wrote:
+>=20
+>=20
+> On 2021/11/15 7:12, Linus Walleij wrote:
+> > We should not go on looking for more capacity tables after
+> > we realize we have looked at the last one in
+> > power_supply_find_ocv2cap_table().
+> >=20
+> > Fixes: 3afb50d7125b ("power: supply: core: Add some helpers to use the =
+battery OCV capacity table")
+> > Cc: Chunyan Zhang <chunyan.zhang@unisoc.com>
+> > Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+> > Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+>=20
+> LGTM.
+> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 
-On some SoCs the timing leads to a failure of the temperature readout
-in thermal_zone_device_enable() which follows. I've seen it on i.MX6DL,
-but cannot reproduce it on i.MX6QP for example.
+Thanks, queued to fixes branch.
 
-Regards,
-Petr
+-- Sebastian
 
->
-> Regards,
-> Oleksij
-> --
-> Pengutronix e.K.                           |                             =
-|
-> Steuerwalder Str. 21                       | http://www.pengutronix.de/  =
-|
-> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    =
-|
-> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 =
-|
+> > ---
+> >   drivers/power/supply/power_supply_core.c | 4 ++++
+> >   1 file changed, 4 insertions(+)
+> >=20
+> > diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/s=
+upply/power_supply_core.c
+> > index 038e35ea7fbe..885c92dc0379 100644
+> > --- a/drivers/power/supply/power_supply_core.c
+> > +++ b/drivers/power/supply/power_supply_core.c
+> > @@ -852,6 +852,10 @@ power_supply_find_ocv2cap_table(struct power_suppl=
+y_battery_info *info,
+> >   		return NULL;
+> >   	for (i =3D 0; i < POWER_SUPPLY_OCV_TEMP_MAX; i++) {
+> > +		/* Out of capacity tables */
+> > +		if (!info->ocv_table[i])
+> > +			break;
+> > +
+> >   		temp_diff =3D abs(info->ocv_temp[i] - temp);
+> >   		if (temp_diff < best_temp_diff) {
+> >=20
+
+--7d6qlckwfipe4lyq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmGSelwACgkQ2O7X88g7
++poZmhAAgDVTgpp88Spda7DuJxyVHgoQ1XeP4WzXIEdPVj290BjFBb+bfh57IZX5
+RK9LxdDkhyKwhPWc5afrUgcYmqGkPkdzrDRbq4IjEylHCMHxoPLqtx/f20HMONvD
+IGb9ksmoVuGEzRsnTWIrmHoxEWhACMDghsvj+FXr7Qr0pIKbM8alVPH8ZBH41GnT
+C0+j52HU9XfpZNmawGbMtPJhc7QVXQnueqnKU5NtT7DMcwQ9vpg+JmKG5/bQLIoG
+crEpPENfaPc7v9+n/T/M8+Ytlx2LXrFBcbiaUGAYYKayUsnm6e92KrF68Ec9aeo6
+a51WffHUFYPuOeuQgeq5VCvcxTmm/wwvCj61Od+/N2InBqBoYdIBt2w8YlA/dsSj
+7ZtqcBUCpt5peG22GLNMr5RwEd++F8F8baCUyrnj/kN7EHpH2iE4YyBz5hpnkQSP
+7k8zTa5JmByE4wkJQwf0FLRiTlaxZNrbsB5qtdRWE3hf+2wQpjb7iajFrvxf1zLl
+ovaXnkaCje2h+K6tEfaMiAql0MkfHy5vgwCcXZoCl6OpFyg3mqdq6ey4jfIrdxYC
+f3Ij2LZyjyF/2n0vMejRSf8VzmTfZFyP4qT+EGoC+puBUMu86MjaC90NHqf6QpGM
+T5cEaLprMyBG++Re3MdesmeFbjaIX3CucbFRqtJoxf7J9aGwVWQ=
+=za7j
+-----END PGP SIGNATURE-----
+
+--7d6qlckwfipe4lyq--
