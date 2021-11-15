@@ -2,106 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3EDF450831
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Nov 2021 16:23:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B591B4508C3
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Nov 2021 16:41:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236567AbhKOP0S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Nov 2021 10:26:18 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:53734 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236562AbhKOP0L (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Nov 2021 10:26:11 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id F110C1F44DD6
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
-        t=1636989795; bh=96pwfBhib6AtAt1+NSZ8dfT793UJUl/HGScVnPW5RqU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=InkUKeJ8aRbJILrGO7p4UvygSiFVuq4lgsceJ/wInfPIOrGRpdmESSgXfTxFTgheW
-         +/fe2+zETZjJO1kRlzzxbYj0KcMoVXIfZp0Id5ZtykXqyMhtQP9T7U8FUnl7ywDUph
-         aAiDmTv5wmPWN9TpY3qIFfcP2EwRrGlkttRIff7pAI0bupu9n77Njqdv4Kl+OJoL61
-         r+naLVUTfEvw+EaBnETFSlV4ZNiuw/f4BG7TJXFaF4yx5hQQXbeYN1nq7RkJnvQxGK
-         tZV71opzDgXIQyS8Yv09hy1ZIzsiuhu1TD5aJWRzTVqY6PdKZZS+ICArhapedDth+K
-         v/dlnnUVSFk2w==
-Received: by earth.universe (Postfix, from userid 1000)
-        id 601CE3C0F95; Mon, 15 Nov 2021 16:23:13 +0100 (CET)
-Date:   Mon, 15 Nov 2021 16:23:13 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Hans de Goede <hdegoede@redhat.com>
+        id S236557AbhKOPnw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Nov 2021 10:43:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:60665 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236588AbhKOPnv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Nov 2021 10:43:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1636990855;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jOlyV7EOyHv5WlsQP7dPeTU0BSFS3H/KIdZNLcVQqGM=;
+        b=NieGkXbqy5u4CXmaw4NE/4xFCg/8LckIvY9+ZmGa07I1eWQvFE9RgYu6tbce4UdaNlT+WS
+        +2BafqihTtIBFqeOzD2b4FWT3kYnx9dLctRPaKvyQgciEJvL/WWAmoVWmU6v4rWCmvwa1t
+        fD81ogl1D0pa3IzdPMlOXL4h2eL8rH8=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-375--HQ7-XPqPhWioeZW45QNFA-1; Mon, 15 Nov 2021 10:40:54 -0500
+X-MC-Unique: -HQ7-XPqPhWioeZW45QNFA-1
+Received: by mail-ed1-f72.google.com with SMTP id w13-20020a05640234cd00b003e2fde5ff8aso14304855edc.14
+        for <linux-pm@vger.kernel.org>; Mon, 15 Nov 2021 07:40:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=jOlyV7EOyHv5WlsQP7dPeTU0BSFS3H/KIdZNLcVQqGM=;
+        b=0jtcrISy1FUCKFmIgImhzmNBszFyh6B1EgNoWDkbGl9bZ/rG1N2sS8aOJYdd8ZJrYS
+         ZHMRM/YzbXlZeODmQyqlNjKGndjLXT0OHMInL4eHXm7HuYjU+Zyu15aw+3KPunUFHXYP
+         qGhtdNpT22ofr1wq25u5otKXv/yqC9sw6KPSzTGH8IdhAqC0xj2q2mSEzMGgHd756aGt
+         lxR0NoRKd2PA7zIhOJ09z0F+2yhz4BKq9EyD7cnZJyNo1gUNpLIBgRQm2kShREONIRhW
+         HSdSEgMZWqBNnIaJLcoQ0M0e7KCBgPqX90b/FTa72YetuXYov40LY0zKfXGtdcw/+Nti
+         AZsQ==
+X-Gm-Message-State: AOAM5304X3Hi4IrfkZ437ifRKSRxlbfQ8Td/QOzPUCQjySh+oW/1rB2i
+        uhxXUFx4y5JHGi9EzjSnf438BP79A8sYTN1O6i8FfjzlbM5p2MIJYWhzH3aQmEHeSLLcAnUPA7z
+        zcASIMo+cd3ZZUmxrZeo=
+X-Received: by 2002:a05:6402:5113:: with SMTP id m19mr57416008edd.306.1636990853170;
+        Mon, 15 Nov 2021 07:40:53 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwDPKyyEb11g+BKxLwXQwZFfVyv+tGgMUtQwlKJf4Z9WueZJD2cZ4u8Pyzde3iKzatd6+lNig==
+X-Received: by 2002:a05:6402:5113:: with SMTP id m19mr57415979edd.306.1636990852965;
+        Mon, 15 Nov 2021 07:40:52 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id gt18sm6918918ejc.46.2021.11.15.07.40.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Nov 2021 07:40:52 -0800 (PST)
+Message-ID: <facf6787-9ad2-c75f-8a0e-786093125a10@redhat.com>
+Date:   Mon, 15 Nov 2021 16:40:51 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 4/4] bq25890_charger: Enable continuous conversion for ADC
+ at charging
+Content-Language: en-US
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
 Cc:     Yauhen Kharuzhy <jekhor@gmail.com>, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] bq25890_charger: Enable continuous conversion for
- ADC at charging
-Message-ID: <20211115152313.5ls7asfwuj4eclzb@earth.universe>
 References: <20211107202001.54579-1-jekhor@gmail.com>
  <20211107202001.54579-4-jekhor@gmail.com>
  <3414874a-3dd0-24b2-92be-f59392dba810@redhat.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5p4k55ebvfjneoh2"
-Content-Disposition: inline
-In-Reply-To: <3414874a-3dd0-24b2-92be-f59392dba810@redhat.com>
+ <20211115152313.5ls7asfwuj4eclzb@earth.universe>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20211115152313.5ls7asfwuj4eclzb@earth.universe>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
---5p4k55ebvfjneoh2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
 Hi,
 
-On Sun, Nov 07, 2021 at 09:48:38PM +0100, Hans de Goede wrote:
+On 11/15/21 16:23, Sebastian Reichel wrote:
 > Hi,
->=20
-> On 11/7/21 21:20, Yauhen Kharuzhy wrote:
-> > Instead of one shot run of ADC at beginning of charging, run continuous
-> > conversion to ensure that all charging-related values are monitored
-> > properly (input voltage, input current, themperature etc.).
-> >=20
-> > Signed-off-by: Yauhen Kharuzhy <jekhor@gmail.com>
->=20
-> Thank you for finding this! This explains why all the ADC returned
-> values like current_now where 0 when charging, I thought this was
-> just something which was only supported while not charging, heh.
->=20
-> As before, the patch subject prefix should be: "power: supply: bq25890: "
->=20
-> Otherwise the patch looks good to me:
->=20
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
->=20
-> Sebastian, this really is a pure bug-fix patch, any chance you
-> can pick this up for a future 5.16-rc# pull-req ?=20
->=20
-> Regards,
->=20
-> Hans
+> 
+> On Sun, Nov 07, 2021 at 09:48:38PM +0100, Hans de Goede wrote:
+>> Hi,
+>>
+>> On 11/7/21 21:20, Yauhen Kharuzhy wrote:
+>>> Instead of one shot run of ADC at beginning of charging, run continuous
+>>> conversion to ensure that all charging-related values are monitored
+>>> properly (input voltage, input current, themperature etc.).
+>>>
+>>> Signed-off-by: Yauhen Kharuzhy <jekhor@gmail.com>
+>>
+>> Thank you for finding this! This explains why all the ADC returned
+>> values like current_now where 0 when charging, I thought this was
+>> just something which was only supported while not charging, heh.
+>>
+>> As before, the patch subject prefix should be: "power: supply: bq25890: "
+>>
+>> Otherwise the patch looks good to me:
+>>
+>> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+>>
+>> Sebastian, this really is a pure bug-fix patch, any chance you
+>> can pick this up for a future 5.16-rc# pull-req ? 
+>>
+>> Regards,
+>>
+>> Hans
+> 
+> Thanks, queued to power-supply's fixes branch.
 
-Thanks, queued to power-supply's fixes branch.
+Thank you.
 
--- Sebastian
+Note I also added this to my:
 
---5p4k55ebvfjneoh2
-Content-Type: application/pgp-signature; name="signature.asc"
+[PATCH v2 00/20] power-suppy/i2c/extcon: Fix charger setup on Xiaomi Mi Pad 2 and Lenovo Yogabook
 
------BEGIN PGP SIGNATURE-----
+Series, together with 2 of the 3 other patches from this series
+(with some minor fixes applied to one of them).
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmGSe2EACgkQ2O7X88g7
-+prhAg/9EZFrg1lNoAOmRw7NjQ6TGZBWATtk3Oz8q/E6SV80NCJYm18u5ZzPdI/1
-2GJdMliZqPj9Nt8mHRuRDmQylFZresXkOaZb/yJmHXugU0H8ul2LkONYkdfOithF
-V7VLkM4MdNnXtAU5tmr2JilDVKNih6WT4GwvRQDwndU4pdjRnl2vwJ05NDry4cuA
-OEqI/FCo4S16HtjbX1CZ3JOCkNW23a7RoMuUD2fe/1mtHo0SaMdv391sbMzb4jHa
-uM1E/viJXYxaeBq+ftPegQILoLfkrSJX/KCJLHHPx0wQTZmGqd3zRnPtZkTBuNry
-I+nfLXDy8BmsOxO8qwZpBlXsrczDBpwMNjWZfLYcDPswIcZ9Re2KA6EEwdTIVBNr
-xiELKAww8M6Jr4Ii4Lf/OnmiV3UCoxh7tK1lG99pAI2nJIdsotgs87lVohvJl4rV
-/OOQmsLcMjDzk9UU30pyKn7jPMn1GxeRfHuqkfVNt1XzyWd6v81VlBMp+DRzK0yr
-S3XDPkjlyFpQRLID9ZDilxIRVAJvRUrecoY8F7OAHZ7Ak49d3Bl3qxc6DQqM3RYu
-3F3JgqrQJQj4hRBZrS7a65ZJXXzI0hKTEpx5NfsMHqOQVZLrytVPVKhzwZlBNKCE
-h06hPyU7unZp2+UA0hhlDIVBgJzD/aIXcmlSpMgy+SKCGeOJBGQ=
-=/hbq
------END PGP SIGNATURE-----
+So you can skip:
 
---5p4k55ebvfjneoh2--
+[PATCH v2 02/20] power: supply: bq25890: Fix ADC continuous conversion setting when charging
+
+from that series (I reworded the commit msg subject a bit,
+but it is the exact same patch).
+
+If I end up doing a v3, I'll drop this patch.
+
+Regards,
+
+Hans
+
