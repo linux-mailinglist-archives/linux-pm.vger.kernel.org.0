@@ -2,123 +2,184 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B2B845021D
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Nov 2021 11:12:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C95345023F
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Nov 2021 11:19:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237628AbhKOKOj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Nov 2021 05:14:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52786 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231127AbhKOKOP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Nov 2021 05:14:15 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B7CC061767;
-        Mon, 15 Nov 2021 02:11:18 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id b1so36244253lfs.13;
-        Mon, 15 Nov 2021 02:11:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=uxwfsA+44ef1b7hlksCPyj8IFexX6NAJcsqLHIbZtDw=;
-        b=ED1+rjMpnaWFy7IyLpgI4t6+NWjYrk9yvRsbDXQNO4edejFPeS5Fluo5T9eRA4iZWY
-         qyAtRjrCuhzRvbF7arz5giRx/1OyeHYOPGZ8idBnsCSX89Lz1hbrQoL1Q4hSMMvQY/vY
-         sRTdgNumGFp9+brp6ZmdJVdNJA1Y1oYxwd5Rsl/tcpXCmRMO0cstWd6ECUQhnVeqMk66
-         GMbaWu75HDQfPUtV03ha+oCfVVDZbuvVHXdBj/09cnQ8kjv4gtZmPvt4twaMUl5rf6qm
-         V6HQpYyJTgipoGQBWZki3AkHxRPM7Nafs76W5lF1USMKUixqfNtzgAZBYmtw1Ok/Tfkq
-         SMzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uxwfsA+44ef1b7hlksCPyj8IFexX6NAJcsqLHIbZtDw=;
-        b=yHDloWQsuFZ0WRGEVlzKfVhUrOFkWqSB1jeId550atKckqs5StOQKDkZx+YQsT5LAR
-         jnTDW12I9hSb6vaUsFwJIXzGEuXDSpxYKz/MwFYXHvUF0d6jA0ymje5W3mzhdgxFFxAk
-         HXnIj0jErpYzPktDUK52PFw6Ch2G+U7rcCMURsu2nwxPvgQjwlT5N9MOk/XRGzaWWvsw
-         f8NHhY315VT/xjjyzm7WFC+Z0JprD6X/JYLcztZFFljm+f5LihD4woqUwzdYaeVyM33B
-         QIK54OQX/P+CkPJhf+VJLYU1MxYLi7pYx6oDfGooDRwnZQWW2hLp9K3Ehq/FwIAJ+Gug
-         QNOw==
-X-Gm-Message-State: AOAM532nuAg4DbUHc5b0S+JUdX559GiByuNwTzUeruA4AUb+vzJ9LRZD
-        ZlNH1zf1gtcArplj4Xbngw8=
-X-Google-Smtp-Source: ABdhPJzzG0A94HwBEFevyB5R/o6ZsnhSI8DcBgN+Z4YhggnKS037qGfUrVTsqxrckLGnY2R6XXXm3w==
-X-Received: by 2002:a05:6512:2201:: with SMTP id h1mr33409940lfu.397.1636971076884;
-        Mon, 15 Nov 2021 02:11:16 -0800 (PST)
-Received: from localhost.localdomain ([178.127.153.223])
-        by smtp.gmail.com with ESMTPSA id f15sm1246622lfq.236.2021.11.15.02.11.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Nov 2021 02:11:16 -0800 (PST)
-Received: from jek by localhost.localdomain with local (Exim 4.95)
-        (envelope-from <jekhor@gmail.com>)
-        id 1mmYxH-001Bq1-5o;
-        Mon, 15 Nov 2021 13:11:15 +0300
-Date:   Mon, 15 Nov 2021 13:11:15 +0300
-From:   Yauhen Kharuzhy <jekhor@gmail.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org, Tsuchiya Yuto <kitakar@gmail.com>,
-        platform-driver-x86@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-efi@vger.kernel.org
-Subject: Re: [PATCH v2 10/20] power: supply: bq25890: Add
- bq25890_set_otg_cfg() helper
-Message-ID: <YZIyQ1BdJ0v8QTtj@jeknote.loshitsa1.net>
-References: <20211114170335.66994-1-hdegoede@redhat.com>
- <20211114170335.66994-11-hdegoede@redhat.com>
+        id S230519AbhKOKWX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Nov 2021 05:22:23 -0500
+Received: from foss.arm.com ([217.140.110.172]:53390 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231197AbhKOKWQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 15 Nov 2021 05:22:16 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B54FC1FB;
+        Mon, 15 Nov 2021 02:19:20 -0800 (PST)
+Received: from [192.168.1.16] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6E6853F70D;
+        Mon, 15 Nov 2021 02:19:19 -0800 (PST)
+Message-ID: <fe34da7f-7090-bc11-ae1a-5ab228d0cb05@arm.com>
+Date:   Mon, 15 Nov 2021 10:19:18 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211114170335.66994-11-hdegoede@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v1] cpufreq: CPPC: Fix performance/frequency conversion
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Ionela Voinescu <Ionela.Voinescu@arm.com>,
+        Lukasz Luba <Lukasz.Luba@arm.com>,
+        Morten Rasmussen <Morten.Rasmussen@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Dietmar Eggemann <Dietmar.Eggemann@arm.com>
+References: <20211022075057.10759-1-Pierre.Gondois@arm.com>
+ <CAJZ5v0g4RrpnRfTsBm_Qi2-JM8SQCAH9_7gTM9cB3Rmc0DG4Hg@mail.gmail.com>
+From:   Pierre Gondois <pierre.gondois@arm.com>
+In-Reply-To: <CAJZ5v0g4RrpnRfTsBm_Qi2-JM8SQCAH9_7gTM9cB3Rmc0DG4Hg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Nov 14, 2021 at 06:03:25PM +0100, Hans de Goede wrote:
-> Add a bq25890_set_otg_cfg() helper function, this is a preparation
-> patch for adding regulator support.
-> 
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-> ---
->  drivers/power/supply/bq25890_charger.c | 28 ++++++++++++++------------
->  1 file changed, 15 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
-> index 2bdfb58cda75..3c41fe86b3d3 100644
-> --- a/drivers/power/supply/bq25890_charger.c
-> +++ b/drivers/power/supply/bq25890_charger.c
-> @@ -801,6 +801,17 @@ static int bq25890_power_supply_init(struct bq25890_device *bq)
->  	return PTR_ERR_OR_ZERO(bq->charger);
->  }
->  
-> +static int bq25890_set_otg_cfg(struct bq25890_device *bq, u8 val)
-> +{
-> +	int ret;
-> +
-> +	ret = bq25890_field_write(bq, F_OTG_CFG, val);
-> +	if (ret < 0)
-> +		dev_err(bq->dev, "Error switching to boost/charger mode: %d\n", ret);
+Hello Rafael,
 
-Just a note: if a connected USB device has relative big capacitor
-at power wires inside, then a starting current pulse may be enough to
-overload the boost reguator and VBUS will not be powered. I met this
-at Yoga Book: the firmware set boost current limit to 1.4 A (default
-value for bq25892) but when USB hub connected, the BOOST_FAULT event
-appeared.
+On 11/5/21 15:40, Rafael J. Wysocki wrote:
+> On Fri, Oct 22, 2021 at 9:51 AM Pierre Gondois <Pierre.Gondois@arm.com> wrote:
+>> CPUfreq governors request CPU frequencies using information
+>> on current CPU usage. The CPPC driver converts them to
+>> performance requests. Frequency targets are computed as:
+>>   target_freq = (util / cpu_capacity) * max_freq
+>> target_freq is then clamped between [policy->min, policy->max].
+>>
+>> The CPPC driver converts performance values to frequencies
+>> (and vice-versa) using cppc_cpufreq_perf_to_khz() and
+>> cppc_cpufreq_khz_to_perf(). These functions both use two different
+>> factors depending on the range of the input value. For
+>> cppc_cpufreq_khz_to_perf():
+>> - (NOMINAL_PERF / NOMINAL_FREQ) or
+>> - (LOWEST_PERF / LOWEST_FREQ)
+>> and for cppc_cpufreq_perf_to_khz():
+>> - (NOMINAL_FREQ / NOMINAL_PERF) or
+>> - ((NOMINAL_PERF - LOWEST_FREQ) / (NOMINAL_PERF - LOWEST_PERF))
+>>
+>> This means the functions are not inverse for some values:
+>> (perf_to_khz(khz_to_perf(x)) != x)
+>>
+>> This patch makes use of one single conversion factor, being
+>> (MAX_PERF / MAX_FREQ).
+>>
+>> As LOWEST_FREQ is not used during conversion, the LOWEST_FREQ
+>> advertised through policy->cpuinfo.min_freq might be different
+>> from the LOWEST_FREQ value available in the CPPC object,
+>> but the conversion will be correct.
+> Well, this assumes that there is a linear perf <-> freq mapping which
+> is a change in behavior.
+The perf <-> freq relation is currently linear on 2 distinct segments.
 
-To avoid this, Lenovo uses following trick in its kernel: set a boost
-current limit to big value (2.1 A), wait some time (500 ms) and set
-the current limit to right value (1.4A). This provides enough current to
-charge capacitors in the connected device but saves desired long-time limit
-to prevent overloading if the device consumes too much power itself.
+The patch is also intending handle the case of CPUs whose frequency and
+performance values are not proportional.
 
+Example for the current code:
+  MAX_FREQ = 1.000.000
+  MIN_FREQ = 300.000
+  MAX_PERF = 100 ("nominal_perf" in the code)
+  MIN_PERF = 40  ("lowest_perf" in the code)
+With these values, frequencies and performances are not proportional as
+(MAX_FREQ / MAX_PERF) != (MIN_FREQ / MIN_PERF).
 
+A util of 40% gives:
+  target_freq = 40% * MAX_FREQ.
+cppc_cpufreq_khz_to_perf() then requests:
+  target_perf = target_freq * (MIN_PERF / MIN_FREQ)
+  target_perf = 40% * 1.000.000 * (40 / 300.000)
+  target_perf = 53.3
+A performance request of 40 would have been sufficient.
 
--- 
-Yauhen Kharuzhy
+The error comes from the utilization of 2 different factors.
+policy->max (frequency) is computed with this factor:
+- (MAX_FREQ / MAX_PERF)
+and frequency requests are mostly converted to performance
+values with this factor:
+- (MIN_PERF / MIN_FREQ)
+
+Using one single factor per conversion function, being
+(MAX_PERF / MAX_FREQ) for cppc_cpufreq_khz_to_perf():
+  target_perf = target_freq * (MAX_PERF / MAX_FREQ)
+  target_perf = 40% * 1.000.000 * (100 / 1.000.000)
+  target_perf = 40
+> While I agree that consistency is a good thing in general, won't this
+> cause the values visible via sysfs to change?  And if it does, won't
+> it confuse anyone or break anything in user space?
+Yes it changes the minimum frequency advertised on sysfs. It might
+effectively be confusing. It should be possible to still advertise the
+minimum frequency in the ACPI _CPC object while using one conversion
+factor, but this will require more changes.
+>> Suggested-by: Lukasz Luba <lukasz.luba@arm.com>
+>> Suggested-by: Morten Rasmussen <morten.rasmussen@arm.com>
+>> Signed-off-by: Pierre Gondois <Pierre.Gondois@arm.com>
+>> ---
+>>  drivers/cpufreq/cppc_cpufreq.c | 33 ++++++++++-----------------------
+>>  1 file changed, 10 insertions(+), 23 deletions(-)
+>>
+>> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+>> index d4c27022b9c9..d2ac74e7701e 100644
+>> --- a/drivers/cpufreq/cppc_cpufreq.c
+>> +++ b/drivers/cpufreq/cppc_cpufreq.c
+>> @@ -302,13 +302,10 @@ static u64 cppc_get_dmi_max_khz(void)
+>>  }
+>>
+>>  /*
+>> - * If CPPC lowest_freq and nominal_freq registers are exposed then we can
+>> - * use them to convert perf to freq and vice versa
+>> - *
+>> - * If the perf/freq point lies between Nominal and Lowest, we can treat
+>> - * (Low perf, Low freq) and (Nom Perf, Nom freq) as 2D co-ordinates of a line
+>> - * and extrapolate the rest
+>> - * For perf/freq > Nominal, we use the ratio perf:freq at Nominal for conversion
+>> + * The CPPC driver receives frequency requests and translates them to performance
+>> + * requests. Thus, frequency values are actually performance values on a frequency
+>> + * scale. The conversion is done as:
+>> + * target_freq = target_perf * (nominal_freq / nominal_perf)
+>>   */
+>>  static unsigned int cppc_cpufreq_perf_to_khz(struct cppc_cpudata *cpu_data,
+>>                                              unsigned int perf)
+>> @@ -317,14 +314,9 @@ static unsigned int cppc_cpufreq_perf_to_khz(struct cppc_cpudata *cpu_data,
+>>         static u64 max_khz;
+>>         u64 mul, div;
+>>
+>> -       if (caps->lowest_freq && caps->nominal_freq) {
+>> -               if (perf >= caps->nominal_perf) {
+>> -                       mul = caps->nominal_freq;
+>> -                       div = caps->nominal_perf;
+>> -               } else {
+>> -                       mul = caps->nominal_freq - caps->lowest_freq;
+>> -                       div = caps->nominal_perf - caps->lowest_perf;
+>> -               }
+>> +       if (caps->nominal_freq) {
+>> +               mul = caps->nominal_freq;
+>> +               div = caps->nominal_perf;
+>>         } else {
+>>                 if (!max_khz)
+>>                         max_khz = cppc_get_dmi_max_khz();
+>> @@ -341,14 +333,9 @@ static unsigned int cppc_cpufreq_khz_to_perf(struct cppc_cpudata *cpu_data,
+>>         static u64 max_khz;
+>>         u64  mul, div;
+>>
+>> -       if (caps->lowest_freq && caps->nominal_freq) {
+>> -               if (freq >= caps->nominal_freq) {
+>> -                       mul = caps->nominal_perf;
+>> -                       div = caps->nominal_freq;
+>> -               } else {
+>> -                       mul = caps->lowest_perf;
+>> -                       div = caps->lowest_freq;
+>> -               }
+>> +       if (caps->nominal_freq) {
+>> +               mul = caps->nominal_perf;
+>> +               div = caps->nominal_freq;
+>>         } else {
+>>                 if (!max_khz)
+>>                         max_khz = cppc_get_dmi_max_khz();
+>> --
+>> 2.17.1
+>>
