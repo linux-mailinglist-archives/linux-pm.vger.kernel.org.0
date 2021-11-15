@@ -2,97 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 556054505CD
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Nov 2021 14:43:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4835C45077A
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Nov 2021 15:49:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236522AbhKONqT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Nov 2021 08:46:19 -0500
-Received: from mga02.intel.com ([134.134.136.20]:32909 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236447AbhKONnm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 15 Nov 2021 08:43:42 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10168"; a="220649226"
-X-IronPort-AV: E=Sophos;i="5.87,236,1631602800"; 
-   d="scan'208";a="220649226"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 05:40:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,236,1631602800"; 
-   d="scan'208";a="471907598"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.21])
-  by orsmga002.jf.intel.com with ESMTP; 15 Nov 2021 05:40:18 -0800
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     rafael@kernel.org, viresh.kumar@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        stable@vger.kernel.org
-Subject: [UPDATE][PATCH] cpufreq: intel_pstate: Fix EPP restore after offline/online
-Date:   Mon, 15 Nov 2021 05:40:17 -0800
-Message-Id: <20211115134017.1257932-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.31.1
+        id S232079AbhKOOvf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Nov 2021 09:51:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60244 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231938AbhKOOvW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Nov 2021 09:51:22 -0500
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E77C061570
+        for <linux-pm@vger.kernel.org>; Mon, 15 Nov 2021 06:48:24 -0800 (PST)
+Received: by mail-io1-xd2e.google.com with SMTP id z26so21714453iod.10
+        for <linux-pm@vger.kernel.org>; Mon, 15 Nov 2021 06:48:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=9FCW6g5zB5F6uZTMJ8sDO6YWFUFBv4q++8NoxT2qhK8=;
+        b=CkfUiUStuyBAawZjXu0hBc0XZNUS5ri4Ch1WJxisZvRgIJ8UrkfF0V9wSR9uL8g//I
+         a9ok2WOENC2ms7OHlb9bB04em6xw6uRm1lJBEchWgSt9NUaeYup9WnUumcZSqDEDww5j
+         bhKHmyalkvbD651Cibh1Fg3lUlsZiwC4bTb2hq1br8HI64O+Cq2Khdy4DX9O2thSeeeJ
+         rTM+iG77En3zdsYQyUn8KnhpsOzq2YjeAhwLfuqNSAJvx/ypg7jDS0X2wqRl0YIPt2Zv
+         ewV8RcB95hWbT/HRjZbxjrMUCvmmFUFaWHkIdftBPrI26ov0pxAyVIiqg4NAF0zqAkMQ
+         u97g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=9FCW6g5zB5F6uZTMJ8sDO6YWFUFBv4q++8NoxT2qhK8=;
+        b=CTmbWUFdMWZLCLbnoKEs9mK+b6BqCzHuAkUGgZLT6SK6A4MTjzlTQvtRCRQKaGFc/D
+         4r+7LyPisbFSlnNAdpGdvBoZXQrlJBm2luxfTuu9QlZ+zDaFu3oDgAiIdSssco1UE+qd
+         uQLnNZJlXurtjUO5kSgHyrx7yKb6XoOp1ExsnCF6NkoUH505uDQY74qgKmKAR3Sy80UT
+         d3PCaKWeAf2lnz6ibkz5yiLSnjqBHEEK0yErwtLKXE5M7tsyYE0ONWN6E5idK2oCFy9f
+         SBJN/kWxwjNDKwnuUHkMrgu8i4LgvdDym2n3KOZYzWfCKKphhTlyO3c04HBIKTTBx6Jv
+         gjgQ==
+X-Gm-Message-State: AOAM532vZ2viIUUs8XlamjguqlkD31SILT8yCnWBrIqLNZbnFFuyN0iy
+        Q5b/qDpy8hN04PsZpGUlWYc8U7uaFjXFzvVWBjE=
+X-Google-Smtp-Source: ABdhPJwx/lyjSmArScE0iLpY/E1M4fYsxsq0itER3LvybWVVgWCxIip2jc2CvZcvlvC9+C6mbBcw+zeJxI1OaIzRRMU=
+X-Received: by 2002:a5e:da09:: with SMTP id x9mr26876017ioj.171.1636987703449;
+ Mon, 15 Nov 2021 06:48:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6e02:2143:0:0:0:0 with HTTP; Mon, 15 Nov 2021 06:48:23
+ -0800 (PST)
+Reply-To: mrsaishag45@gmail.com
+From:   Mrs Aisha Al-Qaddafi <mrsaishagaddafi488@gmail.com>
+Date:   Mon, 15 Nov 2021 06:48:23 -0800
+Message-ID: <CAOXivUre9xUzRHB0pYOQQfxoSRKXpu1-9BDJ4u5Fmb-srqtNEw@mail.gmail.com>
+Subject: Dear Friend,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When using performance policy, EPP value is restored to non "performance"
-mode EPP after offline and online.
+Dear Friend,
 
-For example:
-cat /sys/devices/system/cpu/cpu1/cpufreq/energy_performance_preference
-performance
-echo 0 > /sys/devices/system/cpu/cpu1/online
-echo 1 > /sys/devices/system/cpu/cpu1/online
-cat /sys/devices/system/cpu/cpu1/cpufreq/energy_performance_preference
-balance_performance
+I came across your e-mail contact prior a private search while in need
+of your assistance. My name is Aisha Gaddafi a single
 
-The commit 4adcf2e5829f ("cpufreq: intel_pstate: Add ->offline and ->online callbacks")
-optimized save restore path of the HWP request MSR, when there is no
-change in the policy. Also added special processing for performance mode
-EPP. If EPP has been set to "performance" by the active mode "performance"
-scaling algorithm, replace that value with the cached EPP. This ends up
-replacing with cached EPP during offline, which is restored during online
-again.
+Mother and a Widow with three Children. I am the only biological
+Daughter of late Libyan President (Late Colonel Muammar
 
-So add a change which will set cpu_data->epp_policy to zero, when in
-performance policy and has non zero epp. In this way EPP is set to zero
-again.
+Gaddafi).
 
-Fixes: 4adcf2e5829f ("cpufreq: intel_pstate: Add ->offline and ->online callbacks")
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: stable@vger.kernel.org # v5.9+
----
-Update: Minor optimization to skip non performance policy code path
+I have investment funds worth Twenty Seven Million Five Hundred
+Thousand United State Dollar ($27.500.000.00 ) and i need a
 
- drivers/cpufreq/intel_pstate.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+trusted investment Manager/Partner because of my current refugee
+status, however, I am interested in you for investment
 
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index 815df3daae9d..6d7d73a0c66b 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -936,11 +936,17 @@ static void intel_pstate_hwp_set(unsigned int cpu)
- 	max = cpu_data->max_perf_ratio;
- 	min = cpu_data->min_perf_ratio;
- 
--	if (cpu_data->policy == CPUFREQ_POLICY_PERFORMANCE)
--		min = max;
--
- 	rdmsrl_on_cpu(cpu, MSR_HWP_REQUEST, &value);
- 
-+	if (cpu_data->policy == CPUFREQ_POLICY_PERFORMANCE) {
-+		min = max;
-+		epp = 0;
-+		if (boot_cpu_has(X86_FEATURE_HWP_EPP))
-+			epp = (value >> 24) & 0xff;
-+		if (epp)
-+			cpu_data->epp_policy = 0;
-+	}
-+
- 	value &= ~HWP_MIN_PERF(~0L);
- 	value |= HWP_MIN_PERF(min);
- 
--- 
-2.17.1
+project assistance in your country, may be from there, we can build
+business relationship in the nearest future.
 
+I am willing to negotiate investment/business profit sharing ratio
+with you base on the future investment earning profits.
+Best Regards
+Mrs Aisha Al-Qaddafi
