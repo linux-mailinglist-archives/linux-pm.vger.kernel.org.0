@@ -2,194 +2,178 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36825453118
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Nov 2021 12:44:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0103745311E
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Nov 2021 12:46:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234880AbhKPLrm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Nov 2021 06:47:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:22822 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235179AbhKPLqr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Nov 2021 06:46:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1637063030;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4vRsoxvevCyhGVLcNeM2T5rbQ+V+SV53ugMJAEKfPsM=;
-        b=d4Stmr/lKZKcwUcZh/BWNgiVwPLQUgE+zkt6s0WW3NrwhsapVjawsq7JOdF+ZZwlZ24l0e
-        HOnkd/c6CGfDi5OWOW+tVK+bwSGbEDfDRa7Ano5tyyTATZdicQX/GQajpu6v/aHVR+ksjR
-        ZM5aE7pJKMzPVAiFp9o4LxPKvtiBhdU=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-543-7vxCEGNvO8Cb3EpVBR7BXw-1; Tue, 16 Nov 2021 06:43:49 -0500
-X-MC-Unique: 7vxCEGNvO8Cb3EpVBR7BXw-1
-Received: by mail-ed1-f69.google.com with SMTP id n11-20020aa7c68b000000b003e7d68e9874so3679071edq.8
-        for <linux-pm@vger.kernel.org>; Tue, 16 Nov 2021 03:43:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=4vRsoxvevCyhGVLcNeM2T5rbQ+V+SV53ugMJAEKfPsM=;
-        b=oKxWrouihd72Hcse9brjjp6ppB83E4Nr9184wKbPXYoJU7GgMzhARyHBAFbqvEFG6V
-         Q9breQxep4+0RsuKPj+ijjcUp+GzRbbDwF36dHw/eRC8fT6J80Qav2P5RnN6OE6fYZ/N
-         qzRk30CIs3rdp3Rjs+c8EtwXRYWkytMNPy3aUYvfK805CNylVU3gbgMdABNDeDrbJrYA
-         IfwnlrzRwStplO0bSTIItK/t/NFBaSeuXtE82sJ9BtMRtTqsO0anWqHsMFXFs+760UmB
-         LlXpqyAnmsG4J56pIi0rzDjhvMWttZQJ3Os/jSjoYrk0g9hjPqJs0hpPawtzZ7yqa9Ll
-         Q+Rg==
-X-Gm-Message-State: AOAM533faAfnk+1ytn0H11hyOxtNpJCaXyNTo0kxdcVU9/jkGtEGsB1T
-        IevRA2bMwEMTP4fLWkecyCg+0aJLtWD+qg3RNHSCoyLNdcD60jaKzPY1gPW/mRcgRXAJoGDf5sI
-        xFVo2YQBfEcAyO5fLHGI=
-X-Received: by 2002:a17:907:7f18:: with SMTP id qf24mr8846501ejc.568.1637063028302;
-        Tue, 16 Nov 2021 03:43:48 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxorjzDWIRAmEbvRgvpElkTkwaACQCtFfD0c4lURehHQt9+yRF5Gj7Kuw1B1DdECgMRMVOBtQ==
-X-Received: by 2002:a17:907:7f18:: with SMTP id qf24mr8846477ejc.568.1637063028124;
-        Tue, 16 Nov 2021 03:43:48 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id ig1sm7877234ejc.77.2021.11.16.03.43.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Nov 2021 03:43:47 -0800 (PST)
-Message-ID: <4e424077-6a7f-a86f-9c89-74a2028401c6@redhat.com>
-Date:   Tue, 16 Nov 2021 12:43:47 +0100
+        id S235397AbhKPLrv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Nov 2021 06:47:51 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:35868 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235111AbhKPLrL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Nov 2021 06:47:11 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 78C4A1F42CB5
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1637063051; bh=vVA/QdB0Ucp24f3kIvG7bRDoabhfxVW1tWo5G0+jflQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kc+t1Y+yYBRJDZyZqJ/6VaplAci4ENJ+C2eg/jpzlxCpcz31T1tdzomlkzsGv5D5w
+         OuR1ooR1hIQYIO/BJB4GjaFCY4Cj4V2v6LEj7rGgkGh54bAU00ZyYAoytkQFW/+tnJ
+         GKm5bvtfNJPLPJCVWYHNBFXwfQY+usQ8B8mkHouNz+A43M9zK5UKnjTZD8+wc4bYRV
+         v2CmcQbt+22PReI4pyUu+roiOqOWpT9eiAiiTV0q0ttjsp93EiCjERXmSGOY6SU3by
+         sqhkNcu/EyiwI6gWKNzkwRsOLaGqrAQKhmq1kFktlVOSXzSFVaeTlZsN9iw7qXJKPi
+         8cf7qD3VRXoSA==
+Received: by earth.universe (Postfix, from userid 1000)
+        id AC92B3C0F95; Tue, 16 Nov 2021 12:44:08 +0100 (CET)
+Date:   Tue, 16 Nov 2021 12:44:08 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Angus Ainslie <angus@akkea.ca>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@puri.sm
+Subject: Re: [PATCH] power: bq25890: add POWER_SUPPLY_PROP_TEMP
+Message-ID: <20211116114408.qqfiqtkgxkxorupu@earth.universe>
+References: <20211115180253.124271-1-angus@akkea.ca>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 14/20] mfd: intel_soc_pmic_chtwc: Add
- intel_cht_wc_get_model() helper function
-Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Yauhen Kharuzhy <jekhor@gmail.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>
-References: <20211114170335.66994-1-hdegoede@redhat.com>
- <20211114170335.66994-15-hdegoede@redhat.com>
- <CAHp75Ve=UkSF_fTjJSkAKgxV3hdzGbT5Hqzxi0ACu-Q-=rF3Qw@mail.gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CAHp75Ve=UkSF_fTjJSkAKgxV3hdzGbT5Hqzxi0ACu-Q-=rF3Qw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="d4chpmv5its2jbsn"
+Content-Disposition: inline
+In-Reply-To: <20211115180253.124271-1-angus@akkea.ca>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+
+--d4chpmv5its2jbsn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
 Hi,
 
-On 11/16/21 12:18, Andy Shevchenko wrote:
-> On Sun, Nov 14, 2021 at 7:04 PM Hans de Goede <hdegoede@redhat.com> wrote:
->>
->> Tablet / laptop designs using an Intel Cherry Trail x86 main SoC with
->> an Intel Whiskey Cove PMIC do not use a single standard setup for
-> 
-> does not
-> 
->> the charger, fuel-gauge and other chips surrounding the PMIC /
->> charging+data USB port.
->>
->> Unlike what is normal on X86 this diversity in designs is not handled
->> by the ACPI tables. On 2 of the 3 known designs there are no standard
->> (PNP0C0A) ACPI battery devices and on the 3th design the ACPI battery
->> device does not work under Linux due to it requiring non-standard
->> and undocumented ACPI behavior.
->>
->> So to make things work under Linux we use native charger and fuel-gauge
->> drivers on these devices, re-using the native drivers used on ARM boards
->> with the same charger / fuel-gauge ICs.
->>
->> This requires various MFD-cell drivers for the CHT-WC PMIC cells to
->> know which model they are exactly running on so that they can e.g.
->> instantiate an I2C-client for the right model charger-IC (the charger
->> is connected to an I2C-controller which is part of the PMIC).
->>
->> Rather then duplicating DMI-id matching to check which model we are
->> running on in each MFD-cell driver add a helper function for this
->> and make this id all 3 known models:
->>
->> 1. The GPD Win and GPD Pocket mini-laptops, these are really 2 models
->> but the Pocket re-uses the GPD Win's design in a different housing:
->>
->> The WC PMIC is connected to a TI BQ24292i charger, paired with
->> a Maxim MAX17047 fuelgauge + a FUSB302 USB Type-C Controller +
->> a PI3USB30532 USB switch, for a fully functional Type-C port.
->>
->> 2. The Xiaomi Mi Pad 2:
->>
->> The WC PMIC is connected to a TI BQ25890 charger, paired with
->> a TI BQ27520 fuelgauge, using the TI BQ25890 for BC1.2 charger type
->> detection, for a USB-2 only Type-C port without PD.
->>
->> 3. The Lenovo Yoga Book YB1-X90 / Lenovo Yoga Book YB1-X91 series:
->>
->> The WC PMIC is connected to a TI BQ25892 charger, paired with
->> a TI BQ27542 fuelgauge, using the WC PMIC for BC1.2 charger type
->> detection and using the BQ25892's Mediatek Pump Express+ (1.0)
->> support to enable charging with up to 12V through a micro-USB port.
-> 
-> ...
-> 
->> +               /*
->> +                * Note this may not seem like a very unique match, but in the
->> +                * 24000+ DMI decode dumps from linux-hardware.org only 42 have
-> 
-> Can you add https:// (or is it gopher? :)
+On Mon, Nov 15, 2021 at 10:02:54AM -0800, Angus Ainslie wrote:
+> Add the POWER_SUPPLY_PROP_TEMP and a NTC 10K percent VREGN to degrees LUT.
+>=20
+> Sorry I didn't realize this patch was not upstream yet and was just in ou=
+r=20
+> tree. It should have been applied before:
+>=20
+> https://lore.kernel.org/linux-pm/20211110002440.71404-1-angus@akkea.ca/
 
-linux-hardware.org is intended here as an identifier of the projects, not an
-URL. The DMI decode database lives here:
+Indeed. I dropped that patch from the fixes queue. Please squash it
+into this one and Cc Hans de Goede on your next submission, so that
+he can test on his hardware.
 
-https://github.com/linuxhw/DMI.git
+Thanks,
 
-But I don't believe that adding the exact URL in the comment is important,
-esp. since that may change over time.
+-- Sebastian
 
-> 
->> +                * a board_vendor value of "AMI Corporation" and of those 42
->> +                * only 1 (the GPD win/pocket entry) has a board_name of
->> +                * "Default string". Also very few devices have both board_ and
->> +                * product_name not set.
->> +                */
-> 
-> ...
-> 
->> +enum intel_cht_wc_models intel_cht_wc_get_model(void)
->> +{
->> +       const struct dmi_system_id *id;
->> +
->> +       id = dmi_first_match(cht_wc_model_dmi_ids);
->> +       if (!id)
->> +               return INTEL_CHT_WC_UNKNOWN;
->> +
->> +       return (long)id->driver_data;
-> 
-> Why not proper casting, i.e. (enum intel_...)?
+> Signed-off-by: Angus Ainslie <angus@akkea.ca>
+> ---
+>  drivers/power/supply/bq25890_charger.c | 36 +++++++++++++++++++++++++-
+>  1 file changed, 35 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/suppl=
+y/bq25890_charger.c
+> index 945c3257ca93..7f52029f0702 100644
+> --- a/drivers/power/supply/bq25890_charger.c
+> +++ b/drivers/power/supply/bq25890_charger.c
+> @@ -266,6 +266,7 @@ enum bq25890_table_ids {
+>  	/* lookup tables */
+>  	TBL_TREG,
+>  	TBL_BOOSTI,
+> +	TBL_TSPCT,
+>  };
+> =20
+>  /* Thermal Regulation Threshold lookup table, in degrees Celsius */
+> @@ -280,6 +281,28 @@ static const u32 bq25890_boosti_tbl[] =3D {
+> =20
+>  #define BQ25890_BOOSTI_TBL_SIZE		ARRAY_SIZE(bq25890_boosti_tbl)
+> =20
+> +/* NTC 10K temperature lookup table in thenths of a degree */
+> +static const u32 bq25890_tspct_tbl[] =3D {
+> +	850, 840, 830, 820, 810, 800, 790, 780,
+> +	770, 760, 750, 740, 730, 720, 710, 700,
+> +	690, 685, 680, 675, 670, 660, 650, 645,
+> +	640, 630, 620, 615, 610, 600, 590, 585,
+> +	580, 570, 565, 560, 550, 540, 535, 530,
+> +	520, 515, 510, 500, 495, 490, 480, 475,
+> +	470, 460, 455, 450, 440, 435, 430, 425,
+> +	420, 410, 405, 400, 390, 385, 380, 370,
+> +	365, 360, 355, 350, 340, 335, 330, 320,
+> +	310, 305, 300, 290, 285, 280, 275, 270,
+> +	260, 250, 245, 240, 230, 225, 220, 210,
+> +	205, 200, 190, 180, 175, 170, 160, 150,
+> +	145, 140, 130, 120, 115, 110, 100, 90,
+> +	80, 70, 60, 50, 40, 30, 20, 10,
+> +	0, -10, -20, -30, -40, -60, -70, -80,
+> +	-90, -10, -120, -140, -150, -170, -190, -210,
+> +};
+> +
+> +#define BQ25890_TSPCT_TBL_SIZE		ARRAY_SIZE(bq25890_tspct_tbl)
+> +
+>  struct bq25890_range {
+>  	u32 min;
+>  	u32 max;
+> @@ -308,7 +331,8 @@ static const union {
+> =20
+>  	/* lookup tables */
+>  	[TBL_TREG] =3D	{ .lt =3D {bq25890_treg_tbl, BQ25890_TREG_TBL_SIZE} },
+> -	[TBL_BOOSTI] =3D	{ .lt =3D {bq25890_boosti_tbl, BQ25890_BOOSTI_TBL_SIZE=
+} }
+> +	[TBL_BOOSTI] =3D	{ .lt =3D {bq25890_boosti_tbl, BQ25890_BOOSTI_TBL_SIZE=
+} },
+> +	[TBL_TSPCT] =3D	{ .lt =3D {bq25890_tspct_tbl, BQ25890_TSPCT_TBL_SIZE} }
+>  };
+> =20
+>  static int bq25890_field_read(struct bq25890_device *bq,
+> @@ -528,6 +552,15 @@ static int bq25890_power_supply_get_property(struct =
+power_supply *psy,
+>  		val->intval =3D ret * -50000;
+>  		break;
+> =20
+> +	case POWER_SUPPLY_PROP_TEMP:
+> +		ret =3D bq25890_field_read(bq, F_TSPCT);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		/* convert TS percentage into rough temperature */
+> +		val->intval =3D bq25890_find_val(ret, TBL_TSPCT);
+> +		break;
+> +
+>  	default:
+>  		return -EINVAL;
+>  	}
+> @@ -713,6 +746,7 @@ static const enum power_supply_property bq25890_power=
+_supply_props[] =3D {
+>  	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
+>  	POWER_SUPPLY_PROP_VOLTAGE_NOW,
+>  	POWER_SUPPLY_PROP_CURRENT_NOW,
+> +	POWER_SUPPLY_PROP_TEMP,
+>  };
+> =20
+>  static char *bq25890_charger_supplied_to[] =3D {
+> --=20
+> 2.25.1
+>=20
 
-Because sizeof(enum) != sizeof(void *) so then the compiler will
-complain. Where as sizeof(long) == sizeof(void *)
+--d4chpmv5its2jbsn
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> 
->> +}
->> +EXPORT_SYMBOL_GPL(intel_cht_wc_get_model);
-> 
-> Are you planning to use EXPORT_SYMBOL_GPL_NS()? If not, please consider it.
+-----BEGIN PGP SIGNATURE-----
 
-No I was not planning on this and it seems overkill for just a single
-exported symbol.
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmGTmXcACgkQ2O7X88g7
++ppwcQ//dc61BlxwVp//O9WWeuzLSaHFi0OitnNAUG3Qx1CWrP0T8de+cxJgb8SJ
+RIc2CsfbDodgk8w9PIVVw17RhliPeTvsQYkwuvOcCedoCp61iyhzc2w4dbMwfRyA
+FVqdFDeZgWoEzmKYlVjfTJTw3ncej+zsg1qwCPiUBtpLntsgASeqiW4TxLZEoraT
+0zH+75MoNoUEtVUn7GI3GhWuvb6RxknbW5mKerkO3lz6Plo80i2f1Cu4wwpJfUez
+1+Feih3C0jfehM01/g3tm6a/CwrZsAUmv6botjQ6y7f3zYgmMfXrc7C0dw9yazPI
+YlM3v5KxxVx+odBoGmAGFsnsr+HsHQQUBcZP7reE8CeHkXtSzjQ5XhYndfQ4UavE
+yXD7hv0O6UAxPd+2WEkoS8yR8aeTeQC+9evex/DaP8z6wl4GkZh0sesxdm8sjp/S
+SgcjiwZbBNoRQ6PWDvZUkhXys/TH8iI9yV3cJWZdzwqsz5T4SuG0/6uSVC/bLueq
+G0pgQ/3oiLyEullcD092PNC6refVY1B0+DFgwLIN7D+QhLP5iawx0s5X1ZMUNgIn
+lmSJdYZwTyv92lktiEYF4ZfDUgObmbWl+BHE2ex62iwK1+Tv6hr+ty2/i3bbfJzG
+BpEXNAA4b4tRp2pXk8I8q9qTqY5sXCLkFa8LZCgdyhf0sSV6hFY=
+=Z+CS
+-----END PGP SIGNATURE-----
 
-Regards,
-
-Hans
-
+--d4chpmv5its2jbsn--
