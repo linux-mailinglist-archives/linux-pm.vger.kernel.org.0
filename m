@@ -2,183 +2,323 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A999452839
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Nov 2021 04:09:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D49D34528B5
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Nov 2021 04:49:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239899AbhKPDMl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Nov 2021 22:12:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54824 "EHLO
+        id S235038AbhKPDwd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Nov 2021 22:52:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233345AbhKPDMj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Nov 2021 22:12:39 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E048C10E5C0
-        for <linux-pm@vger.kernel.org>; Mon, 15 Nov 2021 15:39:21 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id f20so16965909qtb.4
-        for <linux-pm@vger.kernel.org>; Mon, 15 Nov 2021 15:39:21 -0800 (PST)
+        with ESMTP id S235043AbhKPDwa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Nov 2021 22:52:30 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED01C14F5E9
+        for <linux-pm@vger.kernel.org>; Mon, 15 Nov 2021 16:20:01 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id l22so48111391lfg.7
+        for <linux-pm@vger.kernel.org>; Mon, 15 Nov 2021 16:20:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=VjOan0HHvAXW29wZl9JKtBMmoQg1ghG0Q36yMXfVU64=;
-        b=z7O4g9CGHwpEuKH5cAnHlOg6G99gl33JXSF84Bb7wMQab9d5VqGA/w5N4C72NcBzWZ
-         xhNFGu6LEh4uidgFDEw9VurubD66YGY/W09FZpVLhevmwSSxZqsJ+CkMlIm++AA4fkOl
-         dAiqWnJGcQitdHOXHOneEVTmIepqB6mo+06ASbIXkwsQ2xGzJU5mozB4jbFgMwMlrRmc
-         yDPYLTR6LA9irW50VSRip0QRlbK1K5m1GyU5WJVKo7400Qxejx4MphAQtomw81NHjKfa
-         7CSR2/vW8uZzJ1WNEgxLb+bN961TNtbd7+S7EJBzKta/B1/UoIbStQ/8rFZ5UzofFw91
-         J1Bw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CvoAn18WiYz6JLHQlIpriG0zOVARKw47MdipmQrpkC0=;
+        b=vaCCtwwv/D3C6QbNn9N0W464MgQv2hui3MVkvkE3E1lQgn8GdZJgTenJnLmWmUuSQY
+         jbaL7TYnMkDdKr/0rMeUE1fjTKyE0cV/BOMBcAJf9ePjCyzFm1bESWLaUavCXScbyOXh
+         W38PMCocZONpJczS9GPZg5iHJqzc++hByHrKya2wkAQYvNmiAkSuoxClcOgl/NwVx0XW
+         ohHldDSChxFtNP6kO8BPdPNZZx53/+2RSLIiFjFkzWpg4WoWfjHP3WfQxg3jdHJvQX7q
+         pZWbOAaxNEAcy8wewbTMOYx54dKAaPZvFyn79EHKFuTI9dZ0VLcXYl1fKgJ0CFCVscXo
+         zGLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=VjOan0HHvAXW29wZl9JKtBMmoQg1ghG0Q36yMXfVU64=;
-        b=HRWR03PU+wY4bmKDTA1dcc9YAX139wrNM/lcKXZeha8kVaREFf4zjv7fQd8dzPG4oJ
-         O1Hy8C+PEgbAiGw+onfrLgucga0reVcsoD02RiEWsIuVilP+yEdymAxGcZw0qunnvp2m
-         WVCAU0TVuPPkjTt0pHnRZQFFz/XICgVjxJ89ullCH032u3QQyfqQ/iJiipKEVq/y/JZx
-         1xWsNX4hcrb/WAkTvN3U8aeSboFdRE+szJ00n3RKM/u/sdOGPxSLMF7uVP1QJMBXo41J
-         0RwdNj1Is0bhPMvsT65ffyquHOqUQ/pjmj+rTvTI3sQpeyG1zcRF1rh+l6BHVnQ2VNMU
-         2WSQ==
-X-Gm-Message-State: AOAM531Arv5+qSxjWiOYwp9ZQXB6gHJkdvFfo6HfFXVn1p5bRE+lXkzD
-        XrvfcT+5gdLyntQnSWA1gInFdQ==
-X-Google-Smtp-Source: ABdhPJyxezWTWmmvW1KDWHOOrvvfcXtYji2aB5xcA7gZ+xS3WLO0N5mJvNfi06ORxKx8KHTYzmc2Lw==
-X-Received: by 2002:a05:622a:20b:: with SMTP id b11mr2992884qtx.25.1637019560498;
-        Mon, 15 Nov 2021 15:39:20 -0800 (PST)
-Received: from [192.168.1.93] (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
-        by smtp.gmail.com with ESMTPSA id e13sm2628260qte.56.2021.11.15.15.39.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Nov 2021 15:39:19 -0800 (PST)
-Subject: Re: [PATCH v4 4/5] cpufreq: qcom-cpufreq-hw: Use new thermal pressure
- update function
-From:   Thara Gopinath <thara.gopinath@linaro.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, steev@kali.org,
-        sudeep.holla@arm.com, will@kernel.org, catalin.marinas@arm.com,
-        linux@armlinux.org.uk, gregkh@linuxfoundation.org,
-        rafael@kernel.org, viresh.kumar@linaro.org, amitk@kernel.org,
-        daniel.lezcano@linaro.org, amit.kachhap@gmail.com,
-        bjorn.andersson@linaro.org, agross@kernel.org
-References: <20211109195714.7750-1-lukasz.luba@arm.com>
- <20211109195714.7750-5-lukasz.luba@arm.com>
- <02a848c8-a672-f3df-7144-979a9df71fcb@linaro.org>
-Message-ID: <911760d9-b137-5c79-d072-c2f473a3cc6a@linaro.org>
-Date:   Mon, 15 Nov 2021 18:39:18 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        bh=CvoAn18WiYz6JLHQlIpriG0zOVARKw47MdipmQrpkC0=;
+        b=58tlX6mCQPIOCzuEKvM7cTuRMd3QQKZJmpT0ChH6XEv+oY5/oc5H7jMWnaOjU7/SrP
+         p9m0Y0DfvF+mC0LdLGbFRYulCON2i2px1vMCoq7AjWVwPSyblDLjg8K1vPGNPqIit7sD
+         WDkAB5+jxVhslzqtK/rdYdO65QlNdcvRkIrmRwR/po8b7pVKRyinyv+J6XufOiR1nzpu
+         zJcxs3wKsDOGxYfCA/bfR2ICwKWVka+EQ4rLraYQO456g02Z36Zr9Kcr8Sj1LMlRI9o1
+         92m7S/PAFr1kBOAjSJ+JI+Ju4kRdBHdyaOK8rgUZprwJsJZtwKlNjm5YPCvyez+cMUy2
+         MGZA==
+X-Gm-Message-State: AOAM533SWa9MXDs5T8Dy18ySATF3T6HMEaTTYPRRff+JH4AfLtLS3xHL
+        sYDRK/iZ1EkQ4/af8nCJkL5Mkw==
+X-Google-Smtp-Source: ABdhPJykJyZwhzazbLNb4QhEKzKut7wOu8q5VFmDAEGYjMvJpZk/GVWv6W7v2ZMB8FrvR5e/+R1hJQ==
+X-Received: by 2002:a19:5e59:: with SMTP id z25mr2713788lfi.686.1637021999472;
+        Mon, 15 Nov 2021 16:19:59 -0800 (PST)
+Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
+        by smtp.gmail.com with ESMTPSA id d23sm1580621lfm.107.2021.11.15.16.19.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Nov 2021 16:19:58 -0800 (PST)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH v3] power: supply: core: Add kerneldoc to battery struct
+Date:   Tue, 16 Nov 2021 01:17:55 +0100
+Message-Id: <20211116001755.2132036-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <02a848c8-a672-f3df-7144-979a9df71fcb@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+This complements the struct power_supply_battery_info with
+extensive kerneldoc explaining the different semantics of the
+fields, including an overview of the CC/CV charging concepts
+implicit in some of the struct members.
 
+This is done to first establish semantics before I can
+add more charging methods by breaking out the CC/CV parameters
+to its own struct.
 
-On 11/15/21 3:57 PM, Thara Gopinath wrote:
-> 
-> 
-> On 11/9/21 2:57 PM, Lukasz Luba wrote:
->> Thermal pressure provides a new API, which allows to use CPU frequency
->> as an argument. That removes the need of local conversion to capacity.
->> Use this new API and remove old local conversion code.
->>
->> The new arch_update_thermal_pressure() also accepts boost frequencies,
->> which solves issue in the driver code with wrong reduced capacity
->> calculation. The reduced capacity was calculated wrongly due to
->> 'policy->cpuinfo.max_freq' used as a divider. The value present there was
->> actually the boost frequency. Thus, even a normal maximum frequency value
->> which corresponds to max CPU capacity (arch_scale_cpu_capacity(cpu_id))
->> is not able to remove the capping.
+Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ChangeLog v2->v3:
+- After reading the Rohm bd99954 I realized I put the trickle
+  charging at the end of the phase (as I like it to be) but
+  the one driver using it is putting it before pre-charge,
+  so we adapt to this fact. I will add new properties for
+  "maintenance charging" that happen after CV instead.
+- Matti, please check this so I don't make any more mistakes.
+ChangeLog v1->v2:
+- Fix some spelling error etc.
+---
+ include/linux/power_supply.h | 211 +++++++++++++++++++++++++++++++----
+ 1 file changed, 188 insertions(+), 23 deletions(-)
 
-Also I failed to mention that, currently freq_factor is initialized as 
-cpuinfo.max_freq / 1000 which means again all the issues you mentioned 
-below can be hit, if some cpufreq driver decides to set boost at init.
-I have sent a patch earlier today to fix this.
-
-https://lore.kernel.org/linux-arm-msm/20211115201010.68567-1-thara.gopinath@linaro.org/T/#u
-
+diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+index 9ca1f120a211..52ac70caa401 100644
+--- a/include/linux/power_supply.h
++++ b/include/linux/power_supply.h
+@@ -342,37 +342,202 @@ struct power_supply_resistance_temp_table {
+ 
+ #define POWER_SUPPLY_OCV_TEMP_MAX 20
+ 
+-/*
++/**
++ * struct power_supply_battery_info - information about batteries
++ * @technology: from the POWER_SUPPLY_TECHNOLOGY_* enum
++ * @energy_full_design_uwh: energy content when fully charged in microwatt
++ *   hours
++ * @charge_full_design_uah: charge content when fully charged in microampere
++ *   hours
++ * @voltage_min_design_uv: minimum voltage across the poles when the battery
++ *   is at minimum voltage level in microvolts. If the voltage drops below this
++ *   level the battery will need precharging when using CC/CV charging.
++ * @voltage_max_design_uv: voltage across the poles when the battery is fully
++ *   charged in microvolts. This is the "nominal voltage" i.e. the voltage
++ *   printed on the label of the battery.
++ * @tricklecharge_current_ua: the tricklecharge current used when trickle
++ *   charging the battery in microamperes. This is the charging phase when the
++ *   battery is completely empty and we need to carefully trickle in some
++ *   charge until we reach the precharging voltage.
++ * @precharge_current_ua: current to use in the precharge phase in microamperes,
++ *   the precharge rate is limited by limiting the current to this value.
++ * @precharge_voltage_max_uv: the maximum voltage allowed when precharging in
++ *   microvolts. When we pass this voltage we will nominally switch over to the
++ *   next charging phase defined by constant_charge_current_ua and
++ *   constant_charge_voltage_max_uv.
++ * @charge_term_current_ua: when the current in the CV (constant voltage)
++ *   charging phase drops below this value in microamperes the charging will
++ *   terminate completely and not restart until the voltage over the battery
++ *   poles reach charge_restart_voltage_uv unless we use maintenance charging.
++ * @charge_restart_voltage_uv: when the battery has been fully charged by
++ *   CC/CV charging and charging has been disabled, and the voltage subsequently
++ *   drops below this value in microvolts, the charging will be restarted
++ *   (typically using CV charging).
++ * @overvoltage_limit_uv: If the voltage exceeds the nominal voltage
++ *   voltage_max_design_uv and we reach this voltage level, all charging must
++ *   stop and emergency procedures take place, such as shutting down the system
++ *   in some cases.
++ * @constant_charge_current_max_ua: current in microamperes to use in the CC
++ *   (constant current) charging phase. The charging rate is limited
++ *   by this current. This is the main charging phase and as the current is
++ *   constant into the battery the voltage slowly ascends to
++ *   constant_charge_voltage_max_uv.
++ * @constant_charge_voltage_max_uv: voltage in microvolts signifying the end of
++ *   the CC (constant current) charging phase and the beginning of the CV
++ *   (constant voltage) charging phase.
++ * @factory_internal_resistance_uohm: the internal resistance of the battery
++ *   at fabrication time, expressed in microohms. This resistance will vary
++ *   depending on the lifetime and charge of the battery, so this is just a
++ *   nominal ballpark figure.
++ * @ocv_temp: array indicating the open circuit voltage (OCV) capacity
++ *   temperature indices. This is an array of temperatures in degrees Celsius
++ *   indicating which capacity table to use for a certain temperature, since
++ *   the capacity for reasons of chemistry will be different at different
++ *   temperatures. Determining capacity is a multivariate problem and the
++ *   temperature is the first variable we determine.
++ * @temp_ambient_alert_min: the battery will go outside of operating conditions
++ *   when the ambient temperature goes below this temperature in degrees
++ *   Celsius.
++ * @temp_ambient_alert_max: the battery will go outside of operating conditions
++ *   when the ambient temperature goes above this temperature in degrees
++ *   Celsius.
++ * @temp_alert_min: the battery should issue an alert if the internal
++ *   temperature goes below this temperature in degrees Celsius.
++ * @temp_alert_max: the battery should issue an alert if the internal
++ *   temperature goes above this temperature in degrees Celsius.
++ * @temp_min: the battery will go outside of operating conditions when
++ *   the internal temperature goes below this temperature in degrees Celsius.
++ *   Normally this means the system should shut down.
++ * @temp_max: the battery will go outside of operating conditions when
++ *   the internal temperature goes above this temperature in degrees Celsius.
++ *   Normally this means the system should shut down.
++ * @ocv_table: for each entry in ocv_temp there is a corresponding entry in
++ *   ocv_table and a size for each entry in ocv_table_size. These arrays
++ *   determine the capacity in percent in relation to the voltage in microvolts
++ *   at the indexed temperature.
++ * @ocv_table_size: for each entry in ocv_temp this array is giving the size of
++ *   each entry in the array of capacity arrays in ocv_table.
++ * @resist_table: this is a table that correlates a resistance to an internal
++ *   temperature of a battery. This can be achieved by a separate thermistor to
++ *   supply voltage on a third terminal on a battery which is the most
++ *   reliable. An external thermistor can also be used sometimes.
++ * @resist_table_size: the number of items in the resist table.
++ *
+  * This is the recommended struct to manage static battery parameters,
+  * populated by power_supply_get_battery_info(). Most platform drivers should
+  * use these for consistency.
++ *
+  * Its field names must correspond to elements in enum power_supply_property.
+  * The default field value is -EINVAL.
+- * Power supply class itself doesn't use this.
++ *
++ * The charging parameters here assume a CC/CV charging scheme. This method
++ * is most common with Lithium Ion batteries (other methods are possible) and
++ * looks as follows:
++ *
++ * ^ Battery voltage
++ * |                                               --- overvoltage_limit_uv
++ * |
++ * |                    ...................................................
++ * |                 .. constant_charge_voltage_max_uv
++ * |              ..
++ * |             .
++ * |            .
++ * |           .
++ * |          .
++ * |         .
++ * |     .. precharge_voltage_max_uv
++ * |  ..
++ * |. (trickle charging)
++ * +------------------------------------------------------------------> time
++ *
++ * ^ Current into the battery
++ * |
++ * |      ............. constant_charge_current_max_ua
++ * |      .            .
++ * |      .             .
++ * |      .              .
++ * |      .               .
++ * |      .                ..
++ * |      .                  ....
++ * |      .                       .....
++ * |    ... precharge_current_ua       .......  charge_term_current_ua
++ * |    .                                    .
++ * |    .                                    .
++ * |.... tricklecharge_current_ua            .
++ * |                                         .
++ * +-----------------------------------------------------------------> time
++ *
++ * These diagrams are synchronized on time and the voltage and current
++ * follow each other.
++ *
++ * With CC/CV charging commence over time like this for an empty battery:
++ *
++ * 1. When the battery is completely empty it may need to be charged with
++ *    an especially small current so that electrons just "trickle in",
++ *    this is the tricklecharge_current_ua.
++ *
++ * 2. Next a small initial pre-charge current (precharge_current_ua)
++ *    is applied if the voltage is below precharge_voltage_max_uv until we
++ *    reach precharge_voltage_max_uv. CAUTION: in some texts this is referred
++ *    to as "trickle charging" but the use in the Linux kernel is different
++ *    see below!
++ *
++ * 3. Then the main charging current is applied, which is called the constant
++ *    current (CC) phase. A current regulator is set up to allow
++ *    constant_charge_current_max_ua of current to flow into the battery.
++ *    The chemical reaction in the battery will make the voltage go up as
++ *    charge goes into the battery. This current is applied until we reach
++ *    the constant_charge_voltage_max_uv voltage.
++ *
++ * 4. At this voltage we switch over to the constant voltage (CV) phase. This
++ *    means we allow current to go into the battery, but we keep the voltage
++ *    fixed. This current will continue to charge the battery while keeping
++ *    the voltage the same. A chemical reaction in the battery goes on
++ *    storing energy without affecting the voltage. Over time the current
++ *    will slowly drop and when we reach charge_term_current_ua we will
++ *    end the constant voltage phase.
++ *
++ * After this the battery is fully charged, and if we do not support maintenance
++ * charging, the charging will not restart until power dissipation makes the
++ * voltage fall so that we reach charge_restart_voltage_uv and at this point
++ * we restart charging at the appropriate phase, usually this will be inside
++ * the CV phase.
++ *
++ * If we support maintenance charging the voltage is however kept high after
++ * the CV phase with a very low current. This is meant to let the same charge
++ * go in for usage while the charger is still connected, mainly for
++ * dissipation for the power consuming entity while connected to the
++ * charger.
++ *
++ * All charging MUST terminate if the overvoltage_limit_uv is ever reached.
++ * Overcharging Lithium Ion cells can be DANGEROUS and lead to fire or
++ * explosions.
++ *
++ * The power supply class itself doesn't use this struct as of now.
+  */
+ 
+ struct power_supply_battery_info {
+-	unsigned int technology;	    /* from the enum above */
+-	int energy_full_design_uwh;	    /* microWatt-hours */
+-	int charge_full_design_uah;	    /* microAmp-hours */
+-	int voltage_min_design_uv;	    /* microVolts */
+-	int voltage_max_design_uv;	    /* microVolts */
+-	int tricklecharge_current_ua;	    /* microAmps */
+-	int precharge_current_ua;	    /* microAmps */
+-	int precharge_voltage_max_uv;	    /* microVolts */
+-	int charge_term_current_ua;	    /* microAmps */
+-	int charge_restart_voltage_uv;	    /* microVolts */
+-	int overvoltage_limit_uv;	    /* microVolts */
+-	int constant_charge_current_max_ua; /* microAmps */
+-	int constant_charge_voltage_max_uv; /* microVolts */
+-	int factory_internal_resistance_uohm;   /* microOhms */
+-	int ocv_temp[POWER_SUPPLY_OCV_TEMP_MAX];/* celsius */
+-	int temp_ambient_alert_min;             /* celsius */
+-	int temp_ambient_alert_max;             /* celsius */
+-	int temp_alert_min;                     /* celsius */
+-	int temp_alert_max;                     /* celsius */
+-	int temp_min;                           /* celsius */
+-	int temp_max;                           /* celsius */
++	unsigned int technology;
++	int energy_full_design_uwh;
++	int charge_full_design_uah;
++	int voltage_min_design_uv;
++	int voltage_max_design_uv;
++	int tricklecharge_current_ua;
++	int precharge_current_ua;
++	int precharge_voltage_max_uv;
++	int charge_term_current_ua;
++	int charge_restart_voltage_uv;
++	int overvoltage_limit_uv;
++	int constant_charge_current_max_ua;
++	int constant_charge_voltage_max_uv;
++	int factory_internal_resistance_uohm;
++	int ocv_temp[POWER_SUPPLY_OCV_TEMP_MAX];
++	int temp_ambient_alert_min;
++	int temp_ambient_alert_max;
++	int temp_alert_min;
++	int temp_alert_max;
++	int temp_min;
++	int temp_max;
+ 	struct power_supply_battery_ocv_table *ocv_table[POWER_SUPPLY_OCV_TEMP_MAX];
+ 	int ocv_table_size[POWER_SUPPLY_OCV_TEMP_MAX];
+ 	struct power_supply_resistance_temp_table *resist_table;
 -- 
-Warm Regards
-Thara (She/Her/Hers)
-> 
-> Yes, although cpuinfo.max_freq does not reflect the boost frequency 
-> unless boost is enabled atleast once. I have sent a patch to fix this. 
-> But I agree that using cpuinfo.max_freq has issues you have mentioned in 
-> this patch if boost is enabled once.
-> 
-> So, for this patch
-> 
-> Reviewed-by: Thara Gopinath <thara.gopinath@linaro.org>
-> 
-> Warm Regards
-> Thara (She/Her/Hers)
->>
->> The second side effect which is solved is that the reduced frequency 
->> wasn't
->> properly translated into the right reduced capacity,
->> e.g.
->> boost frequency = 3000MHz (stored in policy->cpuinfo.max_freq)
->> max normal frequency = 2500MHz (which is 1024 capacity)
->> 2nd highest frequency = 2000MHz (which translates to 819 capacity)
->>
->> Then in a scenario when the 'throttled_freq' max allowed frequency was
->> 2000MHz the driver translated it into 682 capacity:
->> capacity = 1024 * 2000 / 3000 = 682
->> Then set the pressure value bigger than actually applied by the HW:
->> max_capacity - capacity => 1024 - 682 = 342 (<- thermal pressure)
->> Which was causing higher throttling and misleading task scheduler
->> about available CPU capacity.
->> A proper calculation in such case should be:
->> capacity = 1024 * 2000 / 2500 = 819
->> 1024 - 819 = 205 (<- thermal pressure)
->>
->> This patch relies on the new arch_update_thermal_pressure() handling
->> correctly such use case (with boost frequencies).
->>
->> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->> ---
->>   drivers/cpufreq/qcom-cpufreq-hw.c | 15 +++------------
->>   1 file changed, 3 insertions(+), 12 deletions(-)
->>
->> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c 
->> b/drivers/cpufreq/qcom-cpufreq-hw.c
->> index 0138b2ec406d..248135e5087e 100644
->> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
->> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
->> @@ -275,10 +275,10 @@ static unsigned int 
->> qcom_lmh_get_throttle_freq(struct qcom_cpufreq_data *data)
->>   static void qcom_lmh_dcvs_notify(struct qcom_cpufreq_data *data)
->>   {
->> -    unsigned long max_capacity, capacity, freq_hz, throttled_freq;
->>       struct cpufreq_policy *policy = data->policy;
->>       int cpu = cpumask_first(policy->cpus);
->>       struct device *dev = get_cpu_device(cpu);
->> +    unsigned long freq_hz, throttled_freq;
->>       struct dev_pm_opp *opp;
->>       unsigned int freq;
->> @@ -295,17 +295,8 @@ static void qcom_lmh_dcvs_notify(struct 
->> qcom_cpufreq_data *data)
->>       throttled_freq = freq_hz / HZ_PER_KHZ;
->> -    /* Update thermal pressure */
->> -
->> -    max_capacity = arch_scale_cpu_capacity(cpu);
->> -    capacity = mult_frac(max_capacity, throttled_freq, 
->> policy->cpuinfo.max_freq);
->> -
->> -    /* Don't pass boost capacity to scheduler */
->> -    if (capacity > max_capacity)
->> -        capacity = max_capacity;
->> -
->> -    arch_set_thermal_pressure(policy->related_cpus,
->> -                  max_capacity - capacity);
->> +    /* Update thermal pressure (the boost frequencies are accepted) */
->> +    arch_update_thermal_pressure(policy->related_cpus, throttled_freq);
->>       /*
->>        * In the unlikely case policy is unregistered do not enable
->>
-> 
+2.31.1
 
