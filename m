@@ -2,59 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D49D34528B5
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Nov 2021 04:49:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C8144528DB
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Nov 2021 04:57:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235038AbhKPDwd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Nov 2021 22:52:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35130 "EHLO
+        id S233508AbhKPEA0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Nov 2021 23:00:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235043AbhKPDwa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Nov 2021 22:52:30 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED01C14F5E9
-        for <linux-pm@vger.kernel.org>; Mon, 15 Nov 2021 16:20:01 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id l22so48111391lfg.7
-        for <linux-pm@vger.kernel.org>; Mon, 15 Nov 2021 16:20:01 -0800 (PST)
+        with ESMTP id S236648AbhKPEAX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Nov 2021 23:00:23 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CF4C076B3A
+        for <linux-pm@vger.kernel.org>; Mon, 15 Nov 2021 16:40:49 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id z8so39253422ljz.9
+        for <linux-pm@vger.kernel.org>; Mon, 15 Nov 2021 16:40:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=CvoAn18WiYz6JLHQlIpriG0zOVARKw47MdipmQrpkC0=;
-        b=vaCCtwwv/D3C6QbNn9N0W464MgQv2hui3MVkvkE3E1lQgn8GdZJgTenJnLmWmUuSQY
-         jbaL7TYnMkDdKr/0rMeUE1fjTKyE0cV/BOMBcAJf9ePjCyzFm1bESWLaUavCXScbyOXh
-         W38PMCocZONpJczS9GPZg5iHJqzc++hByHrKya2wkAQYvNmiAkSuoxClcOgl/NwVx0XW
-         ohHldDSChxFtNP6kO8BPdPNZZx53/+2RSLIiFjFkzWpg4WoWfjHP3WfQxg3jdHJvQX7q
-         pZWbOAaxNEAcy8wewbTMOYx54dKAaPZvFyn79EHKFuTI9dZ0VLcXYl1fKgJ0CFCVscXo
-         zGLA==
+        bh=OzfUgWFeDAk1c/moRTBky5GDnO4T98ewWNIznDjMvdY=;
+        b=isuzywhaP2OWfOPjlUlaG4o/ir+vBf/aFkNsbbg0snRBNGi480nrgCkUm5GaWZTL11
+         TwuKwdRWzpQbaPaCqidv3oFfJlmGognh3sRcgilaiaXLVeAXTkWLub1QkClVprwUwYMj
+         rpOd6+1x4saLE0gxltX4zUA4Oz0d1k6kqtUms334nCreLojd6Sp9nSxzjP1IsqfOdMld
+         BmMJ5ICnxpuNQvdPKWXz2HWAR+V7z/WBWpoeEexNrnSyU/qlPqn+NNLFlQViK+VP+d7U
+         zyCtC2Cs9yTpVeCdBymDrH3aPWM1phK6yJd1PYhR7XWkaqfAltDWbLrFIDf8CZM1SVbS
+         LZag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=CvoAn18WiYz6JLHQlIpriG0zOVARKw47MdipmQrpkC0=;
-        b=58tlX6mCQPIOCzuEKvM7cTuRMd3QQKZJmpT0ChH6XEv+oY5/oc5H7jMWnaOjU7/SrP
-         p9m0Y0DfvF+mC0LdLGbFRYulCON2i2px1vMCoq7AjWVwPSyblDLjg8K1vPGNPqIit7sD
-         WDkAB5+jxVhslzqtK/rdYdO65QlNdcvRkIrmRwR/po8b7pVKRyinyv+J6XufOiR1nzpu
-         zJcxs3wKsDOGxYfCA/bfR2ICwKWVka+EQ4rLraYQO456g02Z36Zr9Kcr8Sj1LMlRI9o1
-         92m7S/PAFr1kBOAjSJ+JI+Ju4kRdBHdyaOK8rgUZprwJsJZtwKlNjm5YPCvyez+cMUy2
-         MGZA==
-X-Gm-Message-State: AOAM533SWa9MXDs5T8Dy18ySATF3T6HMEaTTYPRRff+JH4AfLtLS3xHL
-        sYDRK/iZ1EkQ4/af8nCJkL5Mkw==
-X-Google-Smtp-Source: ABdhPJykJyZwhzazbLNb4QhEKzKut7wOu8q5VFmDAEGYjMvJpZk/GVWv6W7v2ZMB8FrvR5e/+R1hJQ==
-X-Received: by 2002:a19:5e59:: with SMTP id z25mr2713788lfi.686.1637021999472;
-        Mon, 15 Nov 2021 16:19:59 -0800 (PST)
+        bh=OzfUgWFeDAk1c/moRTBky5GDnO4T98ewWNIznDjMvdY=;
+        b=LBdZfMSxuOCngoSbC7i6itqov3fJ9mWkew7PixBKJdnYaADCifmbElUWffALNIzyZS
+         EIMP8wqiBuvwvw4Q+cw87qnYT3VhHICBvh2FXr1HRzvWMUhbx4Z46JEQEd2GVwVlR6aa
+         kbYnIDx7n/IdyMESefBnL4KEYEXzdvLrdZufPK2TyFAhRKarXp6jvXP01SS/v9r7XkVG
+         Ali1zQA7PrWUakgo1FjYs9OIg8KZ1vBfJnd5ENI4qm1DoQ7Sq7BjybMu0wgsEmWoM+LD
+         cdL45I+PuR8FKjIrCiI9PxivC8KwmCXOfFA9Z7f+7DSd+rX/A/PxaMEK9FNbzj2J3RgT
+         HF7A==
+X-Gm-Message-State: AOAM533h2h17X61HMsmfqMvAy0n+OOnLR3S9qwMnnKs+lCX+dGpJmZ4l
+        GrMYpcXAaBuSc29R6x1fqMqLv4YDrXUo9g==
+X-Google-Smtp-Source: ABdhPJyMtVm7ttaOBj38y+upczaIFYN1kGJyoofew6deDLsLEloD787YjQzt4c9JrDwhaxkQflvdew==
+X-Received: by 2002:a2e:bd82:: with SMTP id o2mr2836995ljq.96.1637023248033;
+        Mon, 15 Nov 2021 16:40:48 -0800 (PST)
 Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id d23sm1580621lfm.107.2021.11.15.16.19.57
+        by smtp.gmail.com with ESMTPSA id h6sm1585607lfv.202.2021.11.15.16.40.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Nov 2021 16:19:58 -0800 (PST)
+        Mon, 15 Nov 2021 16:40:47 -0800 (PST)
 From:   Linus Walleij <linus.walleij@linaro.org>
 To:     Sebastian Reichel <sre@kernel.org>
 Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH v3] power: supply: core: Add kerneldoc to battery struct
-Date:   Tue, 16 Nov 2021 01:17:55 +0100
-Message-Id: <20211116001755.2132036-1-linus.walleij@linaro.org>
+        Chunyan Zhang <chunyan.zhang@unisoc.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>
+Subject: [PATCH v2] power: supply: core: Use library interpolation
+Date:   Tue, 16 Nov 2021 01:38:44 +0100
+Message-Id: <20211116003844.2133683-1-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -62,263 +62,118 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This complements the struct power_supply_battery_info with
-extensive kerneldoc explaining the different semantics of the
-fields, including an overview of the CC/CV charging concepts
-implicit in some of the struct members.
+The power supply core appears to contain two open coded
+linear interpolations. Use the kernel fixpoint arithmetic
+interpolation library function instead.
 
-This is done to first establish semantics before I can
-add more charging methods by breaking out the CC/CV parameters
-to its own struct.
-
-Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Tested-by: Randy Dunlap <rdunlap@infradead.org>
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Chunyan Zhang <chunyan.zhang@unisoc.com>
+Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
-ChangeLog v2->v3:
-- After reading the Rohm bd99954 I realized I put the trickle
-  charging at the end of the phase (as I like it to be) but
-  the one driver using it is putting it before pre-charge,
-  so we adapt to this fact. I will add new properties for
-  "maintenance charging" that happen after CV instead.
-- Matti, please check this so I don't make any more mistakes.
 ChangeLog v1->v2:
-- Fix some spelling error etc.
----
- include/linux/power_supply.h | 211 +++++++++++++++++++++++++++++++----
- 1 file changed, 188 insertions(+), 23 deletions(-)
+- Break the table loop at table_len - 1 so we don't index
+  past the end of the table. (Thanks Baolin!)
 
-diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index 9ca1f120a211..52ac70caa401 100644
---- a/include/linux/power_supply.h
-+++ b/include/linux/power_supply.h
-@@ -342,37 +342,202 @@ struct power_supply_resistance_temp_table {
+Chunyan: The sc27xx fuel gauge seems to be the only driver
+using this, so it'd be great if you could test this to make
+sure it works as intended.
+---
+ drivers/power/supply/power_supply_core.c | 59 ++++++++++++------------
+ 1 file changed, 30 insertions(+), 29 deletions(-)
+
+diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+index fc12a4f407f4..2983466a4914 100644
+--- a/drivers/power/supply/power_supply_core.c
++++ b/drivers/power/supply/power_supply_core.c
+@@ -21,6 +21,7 @@
+ #include <linux/power_supply.h>
+ #include <linux/property.h>
+ #include <linux/thermal.h>
++#include <linux/fixp-arith.h>
+ #include "power_supply.h"
  
- #define POWER_SUPPLY_OCV_TEMP_MAX 20
+ /* exported for the APM Power driver, APM emulation */
+@@ -783,26 +784,25 @@ EXPORT_SYMBOL_GPL(power_supply_put_battery_info);
+ int power_supply_temp2resist_simple(struct power_supply_resistance_temp_table *table,
+ 				    int table_len, int temp)
+ {
+-	int i, resist;
++	int i, high, low;
  
--/*
-+/**
-+ * struct power_supply_battery_info - information about batteries
-+ * @technology: from the POWER_SUPPLY_TECHNOLOGY_* enum
-+ * @energy_full_design_uwh: energy content when fully charged in microwatt
-+ *   hours
-+ * @charge_full_design_uah: charge content when fully charged in microampere
-+ *   hours
-+ * @voltage_min_design_uv: minimum voltage across the poles when the battery
-+ *   is at minimum voltage level in microvolts. If the voltage drops below this
-+ *   level the battery will need precharging when using CC/CV charging.
-+ * @voltage_max_design_uv: voltage across the poles when the battery is fully
-+ *   charged in microvolts. This is the "nominal voltage" i.e. the voltage
-+ *   printed on the label of the battery.
-+ * @tricklecharge_current_ua: the tricklecharge current used when trickle
-+ *   charging the battery in microamperes. This is the charging phase when the
-+ *   battery is completely empty and we need to carefully trickle in some
-+ *   charge until we reach the precharging voltage.
-+ * @precharge_current_ua: current to use in the precharge phase in microamperes,
-+ *   the precharge rate is limited by limiting the current to this value.
-+ * @precharge_voltage_max_uv: the maximum voltage allowed when precharging in
-+ *   microvolts. When we pass this voltage we will nominally switch over to the
-+ *   next charging phase defined by constant_charge_current_ua and
-+ *   constant_charge_voltage_max_uv.
-+ * @charge_term_current_ua: when the current in the CV (constant voltage)
-+ *   charging phase drops below this value in microamperes the charging will
-+ *   terminate completely and not restart until the voltage over the battery
-+ *   poles reach charge_restart_voltage_uv unless we use maintenance charging.
-+ * @charge_restart_voltage_uv: when the battery has been fully charged by
-+ *   CC/CV charging and charging has been disabled, and the voltage subsequently
-+ *   drops below this value in microvolts, the charging will be restarted
-+ *   (typically using CV charging).
-+ * @overvoltage_limit_uv: If the voltage exceeds the nominal voltage
-+ *   voltage_max_design_uv and we reach this voltage level, all charging must
-+ *   stop and emergency procedures take place, such as shutting down the system
-+ *   in some cases.
-+ * @constant_charge_current_max_ua: current in microamperes to use in the CC
-+ *   (constant current) charging phase. The charging rate is limited
-+ *   by this current. This is the main charging phase and as the current is
-+ *   constant into the battery the voltage slowly ascends to
-+ *   constant_charge_voltage_max_uv.
-+ * @constant_charge_voltage_max_uv: voltage in microvolts signifying the end of
-+ *   the CC (constant current) charging phase and the beginning of the CV
-+ *   (constant voltage) charging phase.
-+ * @factory_internal_resistance_uohm: the internal resistance of the battery
-+ *   at fabrication time, expressed in microohms. This resistance will vary
-+ *   depending on the lifetime and charge of the battery, so this is just a
-+ *   nominal ballpark figure.
-+ * @ocv_temp: array indicating the open circuit voltage (OCV) capacity
-+ *   temperature indices. This is an array of temperatures in degrees Celsius
-+ *   indicating which capacity table to use for a certain temperature, since
-+ *   the capacity for reasons of chemistry will be different at different
-+ *   temperatures. Determining capacity is a multivariate problem and the
-+ *   temperature is the first variable we determine.
-+ * @temp_ambient_alert_min: the battery will go outside of operating conditions
-+ *   when the ambient temperature goes below this temperature in degrees
-+ *   Celsius.
-+ * @temp_ambient_alert_max: the battery will go outside of operating conditions
-+ *   when the ambient temperature goes above this temperature in degrees
-+ *   Celsius.
-+ * @temp_alert_min: the battery should issue an alert if the internal
-+ *   temperature goes below this temperature in degrees Celsius.
-+ * @temp_alert_max: the battery should issue an alert if the internal
-+ *   temperature goes above this temperature in degrees Celsius.
-+ * @temp_min: the battery will go outside of operating conditions when
-+ *   the internal temperature goes below this temperature in degrees Celsius.
-+ *   Normally this means the system should shut down.
-+ * @temp_max: the battery will go outside of operating conditions when
-+ *   the internal temperature goes above this temperature in degrees Celsius.
-+ *   Normally this means the system should shut down.
-+ * @ocv_table: for each entry in ocv_temp there is a corresponding entry in
-+ *   ocv_table and a size for each entry in ocv_table_size. These arrays
-+ *   determine the capacity in percent in relation to the voltage in microvolts
-+ *   at the indexed temperature.
-+ * @ocv_table_size: for each entry in ocv_temp this array is giving the size of
-+ *   each entry in the array of capacity arrays in ocv_table.
-+ * @resist_table: this is a table that correlates a resistance to an internal
-+ *   temperature of a battery. This can be achieved by a separate thermistor to
-+ *   supply voltage on a third terminal on a battery which is the most
-+ *   reliable. An external thermistor can also be used sometimes.
-+ * @resist_table_size: the number of items in the resist table.
-+ *
-  * This is the recommended struct to manage static battery parameters,
-  * populated by power_supply_get_battery_info(). Most platform drivers should
-  * use these for consistency.
-+ *
-  * Its field names must correspond to elements in enum power_supply_property.
-  * The default field value is -EINVAL.
-- * Power supply class itself doesn't use this.
-+ *
-+ * The charging parameters here assume a CC/CV charging scheme. This method
-+ * is most common with Lithium Ion batteries (other methods are possible) and
-+ * looks as follows:
-+ *
-+ * ^ Battery voltage
-+ * |                                               --- overvoltage_limit_uv
-+ * |
-+ * |                    ...................................................
-+ * |                 .. constant_charge_voltage_max_uv
-+ * |              ..
-+ * |             .
-+ * |            .
-+ * |           .
-+ * |          .
-+ * |         .
-+ * |     .. precharge_voltage_max_uv
-+ * |  ..
-+ * |. (trickle charging)
-+ * +------------------------------------------------------------------> time
-+ *
-+ * ^ Current into the battery
-+ * |
-+ * |      ............. constant_charge_current_max_ua
-+ * |      .            .
-+ * |      .             .
-+ * |      .              .
-+ * |      .               .
-+ * |      .                ..
-+ * |      .                  ....
-+ * |      .                       .....
-+ * |    ... precharge_current_ua       .......  charge_term_current_ua
-+ * |    .                                    .
-+ * |    .                                    .
-+ * |.... tricklecharge_current_ua            .
-+ * |                                         .
-+ * +-----------------------------------------------------------------> time
-+ *
-+ * These diagrams are synchronized on time and the voltage and current
-+ * follow each other.
-+ *
-+ * With CC/CV charging commence over time like this for an empty battery:
-+ *
-+ * 1. When the battery is completely empty it may need to be charged with
-+ *    an especially small current so that electrons just "trickle in",
-+ *    this is the tricklecharge_current_ua.
-+ *
-+ * 2. Next a small initial pre-charge current (precharge_current_ua)
-+ *    is applied if the voltage is below precharge_voltage_max_uv until we
-+ *    reach precharge_voltage_max_uv. CAUTION: in some texts this is referred
-+ *    to as "trickle charging" but the use in the Linux kernel is different
-+ *    see below!
-+ *
-+ * 3. Then the main charging current is applied, which is called the constant
-+ *    current (CC) phase. A current regulator is set up to allow
-+ *    constant_charge_current_max_ua of current to flow into the battery.
-+ *    The chemical reaction in the battery will make the voltage go up as
-+ *    charge goes into the battery. This current is applied until we reach
-+ *    the constant_charge_voltage_max_uv voltage.
-+ *
-+ * 4. At this voltage we switch over to the constant voltage (CV) phase. This
-+ *    means we allow current to go into the battery, but we keep the voltage
-+ *    fixed. This current will continue to charge the battery while keeping
-+ *    the voltage the same. A chemical reaction in the battery goes on
-+ *    storing energy without affecting the voltage. Over time the current
-+ *    will slowly drop and when we reach charge_term_current_ua we will
-+ *    end the constant voltage phase.
-+ *
-+ * After this the battery is fully charged, and if we do not support maintenance
-+ * charging, the charging will not restart until power dissipation makes the
-+ * voltage fall so that we reach charge_restart_voltage_uv and at this point
-+ * we restart charging at the appropriate phase, usually this will be inside
-+ * the CV phase.
-+ *
-+ * If we support maintenance charging the voltage is however kept high after
-+ * the CV phase with a very low current. This is meant to let the same charge
-+ * go in for usage while the charger is still connected, mainly for
-+ * dissipation for the power consuming entity while connected to the
-+ * charger.
-+ *
-+ * All charging MUST terminate if the overvoltage_limit_uv is ever reached.
-+ * Overcharging Lithium Ion cells can be DANGEROUS and lead to fire or
-+ * explosions.
-+ *
-+ * The power supply class itself doesn't use this struct as of now.
-  */
+-	for (i = 0; i < table_len; i++)
++	/* Break loop at table_len - 1 because that is the highest index */
++	for (i = 0; i < table_len - 1; i++)
+ 		if (temp > table[i].temp)
+ 			break;
  
- struct power_supply_battery_info {
--	unsigned int technology;	    /* from the enum above */
--	int energy_full_design_uwh;	    /* microWatt-hours */
--	int charge_full_design_uah;	    /* microAmp-hours */
--	int voltage_min_design_uv;	    /* microVolts */
--	int voltage_max_design_uv;	    /* microVolts */
--	int tricklecharge_current_ua;	    /* microAmps */
--	int precharge_current_ua;	    /* microAmps */
--	int precharge_voltage_max_uv;	    /* microVolts */
--	int charge_term_current_ua;	    /* microAmps */
--	int charge_restart_voltage_uv;	    /* microVolts */
--	int overvoltage_limit_uv;	    /* microVolts */
--	int constant_charge_current_max_ua; /* microAmps */
--	int constant_charge_voltage_max_uv; /* microVolts */
--	int factory_internal_resistance_uohm;   /* microOhms */
--	int ocv_temp[POWER_SUPPLY_OCV_TEMP_MAX];/* celsius */
--	int temp_ambient_alert_min;             /* celsius */
--	int temp_ambient_alert_max;             /* celsius */
--	int temp_alert_min;                     /* celsius */
--	int temp_alert_max;                     /* celsius */
--	int temp_min;                           /* celsius */
--	int temp_max;                           /* celsius */
-+	unsigned int technology;
-+	int energy_full_design_uwh;
-+	int charge_full_design_uah;
-+	int voltage_min_design_uv;
-+	int voltage_max_design_uv;
-+	int tricklecharge_current_ua;
-+	int precharge_current_ua;
-+	int precharge_voltage_max_uv;
-+	int charge_term_current_ua;
-+	int charge_restart_voltage_uv;
-+	int overvoltage_limit_uv;
-+	int constant_charge_current_max_ua;
-+	int constant_charge_voltage_max_uv;
-+	int factory_internal_resistance_uohm;
-+	int ocv_temp[POWER_SUPPLY_OCV_TEMP_MAX];
-+	int temp_ambient_alert_min;
-+	int temp_ambient_alert_max;
-+	int temp_alert_min;
-+	int temp_alert_max;
-+	int temp_min;
-+	int temp_max;
- 	struct power_supply_battery_ocv_table *ocv_table[POWER_SUPPLY_OCV_TEMP_MAX];
- 	int ocv_table_size[POWER_SUPPLY_OCV_TEMP_MAX];
- 	struct power_supply_resistance_temp_table *resist_table;
+-	if (i > 0 && i < table_len) {
+-		int tmp;
+-
+-		tmp = (table[i - 1].resistance - table[i].resistance) *
+-			(temp - table[i].temp);
+-		tmp /= table[i - 1].temp - table[i].temp;
+-		resist = tmp + table[i].resistance;
+-	} else if (i == 0) {
+-		resist = table[0].resistance;
+-	} else {
+-		resist = table[table_len - 1].resistance;
+-	}
+-
+-	return resist;
++	/* The library function will deal with high == low */
++	if (i > 0)
++		high = i - 1;
++	else
++		high = i; /* i.e. i == 0 */
++	low = i;
++
++	return fixp_linear_interpolate(table[low].temp,
++				       table[low].resistance,
++				       table[high].temp,
++				       table[high].resistance,
++				       temp);
+ }
+ EXPORT_SYMBOL_GPL(power_supply_temp2resist_simple);
+ 
+@@ -821,24 +821,25 @@ EXPORT_SYMBOL_GPL(power_supply_temp2resist_simple);
+ int power_supply_ocv2cap_simple(struct power_supply_battery_ocv_table *table,
+ 				int table_len, int ocv)
+ {
+-	int i, cap, tmp;
++	int i, high, low;
+ 
++	/* Break loop at table_len - 1 because that is the highest index */
+ 	for (i = 0; i < table_len; i++)
+ 		if (ocv > table[i].ocv)
+ 			break;
+ 
+-	if (i > 0 && i < table_len) {
+-		tmp = (table[i - 1].capacity - table[i].capacity) *
+-			(ocv - table[i].ocv);
+-		tmp /= table[i - 1].ocv - table[i].ocv;
+-		cap = tmp + table[i].capacity;
+-	} else if (i == 0) {
+-		cap = table[0].capacity;
+-	} else {
+-		cap = table[table_len - 1].capacity;
+-	}
+-
+-	return cap;
++	/* The library function will deal with high == low */
++	if (i > 0)
++		high = i - 1;
++	else
++		high = i; /* i.e. i == 0 */
++	low = i;
++
++	return fixp_linear_interpolate(table[low].ocv,
++				       table[low].capacity,
++				       table[high].ocv,
++				       table[high].capacity,
++				       ocv);
+ }
+ EXPORT_SYMBOL_GPL(power_supply_ocv2cap_simple);
+ 
 -- 
 2.31.1
 
