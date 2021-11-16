@@ -2,199 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2AA14535DA
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Nov 2021 16:33:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B53FD453717
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Nov 2021 17:16:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238278AbhKPPfA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Nov 2021 10:35:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54374 "EHLO
+        id S230100AbhKPQSo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Nov 2021 11:18:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238302AbhKPPe6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Nov 2021 10:34:58 -0500
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5A6C061570
-        for <linux-pm@vger.kernel.org>; Tue, 16 Nov 2021 07:32:01 -0800 (PST)
-Received: by mail-qk1-x730.google.com with SMTP id a11so14265003qkh.13
-        for <linux-pm@vger.kernel.org>; Tue, 16 Nov 2021 07:32:01 -0800 (PST)
+        with ESMTP id S230521AbhKPQSS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Nov 2021 11:18:18 -0500
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BDBDC061766
+        for <linux-pm@vger.kernel.org>; Tue, 16 Nov 2021 08:15:21 -0800 (PST)
+Received: by mail-ot1-x334.google.com with SMTP id x43-20020a056830246b00b00570d09d34ebso20860242otr.2
+        for <linux-pm@vger.kernel.org>; Tue, 16 Nov 2021 08:15:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=mF1aWu0JjOzyky5t42jJsAVlkltphNeGZXNSFiIsSXY=;
-        b=zo5BPGFpXF7PyojCnvUNbK9IEYkLv6Li9fwVBTAIectWMlVmUgDTpCFhW+O0mfKWSD
-         WzZrdBgb9rrlcs43MKa8FNU2G9Lr48o24jlyWxptW1FB0aFrh1Gz0ww38i7gGVsIf0s4
-         RxA3wav5s79zJlp6X14CxAP/jHQhVDXlAWnTTw/Skb1dBmWgE6gIfnzf7tMXmtgpiKUA
-         8/tT/gMSW/cO5Y6CakCqBGp+hf97wdVIDVrn43rWZ9Qxj0tWfK51vm/UtoGjzGmWtqlJ
-         qL/T130SgshZJGWchYERRxidEifVDDFTGlpWiayVDF7XGOIohDw5upSxx0aOdfOMzZtR
-         TxDA==
+        d=kali.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=u8ODN0+4ZsZI21CDbjGHvdgsAbFs7DziYyrEY5d6/hE=;
+        b=G1jAkmt7+aa4ykLjvXi8qFpGp96hjrkI/wz1mCqdEs5m2U2pD7jC/w03uhzLgVukro
+         dzAAHUCFJr7N+Hyse6cKOL7duDDdqDlezxd3hwWDMnIW0UQSd+ixeGZKKS4vuQG9g40V
+         ehTH/M6SbMzwHJdFPNuc9870p8kbXHyrvTAxYgaCccsMqKIPQOG0v6HmV2Zpc/TLMvge
+         vxZ7daoUgILZA3yjFpwkO2nAhucN7SHw3kW4HsCVDLjhxPsk4k+UpbbcGhDoXw2ZLvKp
+         ZCgVrHxhYgex1hrsjC6W1JibJB6bqzLvF/ZHNQuyeTHWW1RI1bH0O4XBxhiZdb6okng3
+         1mYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=mF1aWu0JjOzyky5t42jJsAVlkltphNeGZXNSFiIsSXY=;
-        b=XaSHECdlZFv4nKDVYKFmH/g6/wc0Z9yGY3SddvxO29fY5POB5RV1LNiJhNS7O/3A/B
-         GIma3FnjkE/idntMzwRUDOBHljCDv4d8YMlTM1eRgoG7VDzT3lzuJJXiEgrXZncXtg4l
-         seur5j9AITcrSW3dxJEpZ4mTNUr89hR2lHvtlWJDEdEwA/d2FLnLbTSLEVt8fEbFavn/
-         bIq9Kw2CIqbK435zfOoNrQ9ODUwc4OcPlGYb8N41IVnpYr/IS6k3LJBY7ETm1WkfTgox
-         WFoXg39ZVrvVBCCviOJJQWHkD+UTbt3ibp0sRXmpvorPS5JfaoQAUYOrin4s5TbVhpZR
-         QOVg==
-X-Gm-Message-State: AOAM530akj0FpEHf0uZqxTp3pEvTIpsMdEIps08lsNnrqHA5J1KYr6Zd
-        On1tyoJHo28iBhfGNE3uu8L1Qw==
-X-Google-Smtp-Source: ABdhPJzEeWsZmjQlzDlo9QmEf9qz1BasxVxQ5ozXbJznB2YN5rA4FXCJFv1ThHdM1E7oXsUbFIkF9A==
-X-Received: by 2002:a37:bc01:: with SMTP id m1mr6759398qkf.28.1637076720456;
-        Tue, 16 Nov 2021 07:32:00 -0800 (PST)
-Received: from [192.168.1.93] (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
-        by smtp.gmail.com with ESMTPSA id p18sm5038012qtk.54.2021.11.16.07.31.59
+        bh=u8ODN0+4ZsZI21CDbjGHvdgsAbFs7DziYyrEY5d6/hE=;
+        b=12Cav3Zqpvdcvz0QiY8FAONgE0DfDMrHxaOzGD2OhsZuW+jwklOxh+qzGrrCUmfCka
+         ZHCGfnp/TRc1MCf/YzGe1dtfYvpvtCHDEyaC+rV1PJVWMH8jqg6DSuH94sIaCvRNah99
+         rrDzvTPDfIIhbCnxhYSfnBd91BVXM442khmDgheX4LIJ2UvzlnEWYI21Fb72zz2ox7dI
+         HEY1Puwlr4IWmDRTr+KSjUPHJmADKZgmeoXJxBGaZ3T9TDmMyleyFtiRwiSndVgbDu6a
+         2X4mHaXHOoLsNZFep1sYsPedjx0ax3Rs8FQ8+kyMpK5r4QXmJ/eGHPHpHnAMVb5a30Nn
+         lLuw==
+X-Gm-Message-State: AOAM532r/hUhTmyKpKE0dvD5aK1aP0FBBAEbpHdOV0l9+MXEFYbZHSbt
+        Qj4sj8QRu2C3DZePX6jVZHP0GQ==
+X-Google-Smtp-Source: ABdhPJwfI5gxK4Wsb/24YL5rwx1Ho3QfHYo8lqtLJt5Q0y8LegTdikaa+/ftPZU9vxA2REgsKl46NA==
+X-Received: by 2002:a05:6830:19c8:: with SMTP id p8mr7366091otp.111.1637079320156;
+        Tue, 16 Nov 2021 08:15:20 -0800 (PST)
+Received: from [192.168.11.48] (cpe-173-173-107-246.satx.res.rr.com. [173.173.107.246])
+        by smtp.gmail.com with ESMTPSA id t14sm836630oth.81.2021.11.16.08.15.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Nov 2021 07:31:59 -0800 (PST)
+        Tue, 16 Nov 2021 08:15:19 -0800 (PST)
+Message-ID: <7b440c0f-57eb-e367-bcc7-91c731d360d5@kali.org>
+Date:   Tue, 16 Nov 2021 10:15:18 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.3.0
 Subject: Re: [PATCH] cpufreq: freq_table: Initialize cpuinfo.max_freq to
  correct max frequency.
-To:     Steev Klimaszewski <steev@kali.org>, rafael@kernel.org,
+Content-Language: en-US
+To:     Thara Gopinath <thara.gopinath@linaro.org>, rafael@kernel.org,
         viresh.kumar@linaro.org, bjorn.andersson@linaro.org
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
 References: <20211115195011.52999-1-thara.gopinath@linaro.org>
  <5ae2c644-4743-c62c-b17c-96945a0e6a01@kali.org>
-From:   Thara Gopinath <thara.gopinath@linaro.org>
-Message-ID: <1ceb5a9b-817b-a9ef-c378-be3bd0f7ff17@linaro.org>
-Date:   Tue, 16 Nov 2021 10:31:59 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <5ae2c644-4743-c62c-b17c-96945a0e6a01@kali.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+ <1ceb5a9b-817b-a9ef-c378-be3bd0f7ff17@linaro.org>
+From:   Steev Klimaszewski <steev@kali.org>
+In-Reply-To: <1ceb5a9b-817b-a9ef-c378-be3bd0f7ff17@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Steev,
 
-Thanks for testing this.
-
-On 11/15/21 8:23 PM, Steev Klimaszewski wrote:
-
---- snip
+On 11/16/21 9:31 AM, Thara Gopinath wrote:
+> Hi Steev,
+>
+> Thanks for testing this.
+>
+> On 11/15/21 8:23 PM, Steev Klimaszewski wrote:
+>
+> --- snip
+>>>
+>>> diff --git a/drivers/cpufreq/freq_table.c 
+>>> b/drivers/cpufreq/freq_table.c
+>>> index 67e56cf638ef..6784f94124df 100644
+>>> --- a/drivers/cpufreq/freq_table.c
+>>> +++ b/drivers/cpufreq/freq_table.c
+>>> @@ -35,11 +35,15 @@ int cpufreq_frequency_table_cpuinfo(struct 
+>>> cpufreq_policy *policy,
+>>>       struct cpufreq_frequency_table *pos;
+>>>       unsigned int min_freq = ~0;
+>>>       unsigned int max_freq = 0;
+>>> +    unsigned int cpuinfo_max_freq = 0;
+>>>       unsigned int freq;
+>>>       cpufreq_for_each_valid_entry(pos, table) {
+>>>           freq = pos->frequency;
+>>> +        if (freq > cpuinfo_max_freq)
+>>> +            cpuinfo_max_freq = freq;
+>>> +
+>>>           if (!cpufreq_boost_enabled()
+>>>               && (pos->flags & CPUFREQ_BOOST_FREQ))
+>>>               continue;
+>>> @@ -57,8 +61,8 @@ int cpufreq_frequency_table_cpuinfo(struct 
+>>> cpufreq_policy *policy,
+>>>        * If the driver has set its own cpuinfo.max_freq above 
+>>> max_freq, leave
+>>>        * it as is.
+>>>        */
+>>> -    if (policy->cpuinfo.max_freq < max_freq)
+>>> -        policy->max = policy->cpuinfo.max_freq = max_freq;
+>>> +    if (policy->cpuinfo.max_freq < cpuinfo_max_freq)
+>>> +        policy->cpuinfo.max_freq = cpuinfo_max_freq;
+>>>       if (policy->min == ~0)
+>>>           return -EINVAL;
 >>
->> diff --git a/drivers/cpufreq/freq_table.c b/drivers/cpufreq/freq_table.c
->> index 67e56cf638ef..6784f94124df 100644
->> --- a/drivers/cpufreq/freq_table.c
->> +++ b/drivers/cpufreq/freq_table.c
->> @@ -35,11 +35,15 @@ int cpufreq_frequency_table_cpuinfo(struct 
->> cpufreq_policy *policy,
->>       struct cpufreq_frequency_table *pos;
->>       unsigned int min_freq = ~0;
->>       unsigned int max_freq = 0;
->> +    unsigned int cpuinfo_max_freq = 0;
->>       unsigned int freq;
->>       cpufreq_for_each_valid_entry(pos, table) {
->>           freq = pos->frequency;
->> +        if (freq > cpuinfo_max_freq)
->> +            cpuinfo_max_freq = freq;
->> +
->>           if (!cpufreq_boost_enabled()
->>               && (pos->flags & CPUFREQ_BOOST_FREQ))
->>               continue;
->> @@ -57,8 +61,8 @@ int cpufreq_frequency_table_cpuinfo(struct 
->> cpufreq_policy *policy,
->>        * If the driver has set its own cpuinfo.max_freq above 
->> max_freq, leave
->>        * it as is.
->>        */
->> -    if (policy->cpuinfo.max_freq < max_freq)
->> -        policy->max = policy->cpuinfo.max_freq = max_freq;
->> +    if (policy->cpuinfo.max_freq < cpuinfo_max_freq)
->> +        policy->cpuinfo.max_freq = cpuinfo_max_freq;
->>       if (policy->min == ~0)
->>           return -EINVAL;
-> 
-> 
-> Something still isn't quite right...
-> 
-> The setup is that I have an rc.local of
-> 
-> #!/bin/sh
-> 
-> echo 1 > /sys/devices/system/cpu/cpufreq/boost
-> 
-> exit 0
-> 
-> 
-> After booting and logging in:
-> 
-> steev@limitless:~$ cat 
-> /sys/devices/system/cpu/cpufreq/policy4/stats/time_in_state
-> 825600 2499
-> <snip>
-> 2649600 38
-> 2745600 31
-> 2841600 1473
-> 2956800 0
+>>
+>> Something still isn't quite right...
+>>
+>> The setup is that I have an rc.local of
+>>
+>> #!/bin/sh
+>>
+>> echo 1 > /sys/devices/system/cpu/cpufreq/boost
+>>
+>> exit 0
+>>
+>>
+>> After booting and logging in:
+>>
+>> steev@limitless:~$ cat 
+>> /sys/devices/system/cpu/cpufreq/policy4/stats/time_in_state
+>> 825600 2499
+>> <snip>
+>> 2649600 38
+>> 2745600 31
+>> 2841600 1473
+>> 2956800 0
+>
+> Did you try debugging this ? As in did you read back boost and 
+> cpuinfo_max_freq at this point to ensure that everything is as expected ?
+>
+>
+Hi Thara,
 
-Did you try debugging this ? As in did you read back boost and 
-cpuinfo_max_freq at this point to ensure that everything is as expected ?
+I did - sorry I forgot to mention that boost does show 1 for enabled and 
+cpuinfo_max_freq is set to 2956800.  However, scaling_max_freq is still 
+listed as 2841600 and scaling_available_frequencies still shows 2841600 
+as the max available. scaling_boost_freqencies does also list 2956800.
 
-
--- 
-Warm Regards
-Thara (She/Her/Hers)
-> 
-> After running a "cargo build --release" in an alacritty git checkout:
-> 
-> teev@limitless:~$ cat 
-> /sys/devices/system/cpu/cpufreq/policy4/stats/time_in_state
-> 825600 11220
-> <snip>
-> 2649600 41
-> 2745600 35
-> 2841600 3065
-> 2956800 0
-> 
-> 
-> however...
-> 
-> If I then
-> 
-> steev@limitless:~$ echo 0 | sudo tee /sys/devices/system/cpu/cpufreq/boost
-> [sudo] password for steev:
-> 0
-> steev@limitless:~$ echo 1 | sudo tee /sys/devices/system/cpu/cpufreq/boost
-> 1
-> 
-> and run the build again...
-> 
-> steev@limitless:~$ cat 
-> /sys/devices/system/cpu/cpufreq/policy4/stats/time_in_state
-> 825600 21386
-> <snip>
-> 2649600 45
-> 2745600 38
-> 2841600 3326
-> 2956800 4815
-> 
-> As a workaround, I attempted to jiggle it 1-0-1 in rc.local, however 
-> that ends up giving
-> 
-> steev@limitless:~$ cat 
-> /sys/devices/system/cpu/cpufreq/policy4/stats/time_in_state
-> 825600 2902
-> <snip>
-> 2649600 36
-> 2745600 36
-> 2841600 6050
-> 2956800 13
-> 
-> And it doesn't go up, I even tried adding a sleep of 1 second between 
-> the echo 1/0/1 lines and while 2956800 goes up to 28 (but never uses it) 
-> it seems like, unless I do it manually once I've logged in, which I'm 
-> assuming is a lot slower than waiting 1 second between them, it's not 
-> quite giving us 2956800 "easily".
-> 
-> If the email wasn't clear, please let me know! I tried to explain as 
-> best I could what I am seeing here.
-> 
-> -- steev
-> 
+steev@limitless:~$ grep . /sys/devices/system/cpu/cpufreq/policy4/*
+/sys/devices/system/cpu/cpufreq/policy4/affected_cpus:4 5 6 7
+grep: /sys/devices/system/cpu/cpufreq/policy4/cpuinfo_cur_freq: 
+Permission denied
+/sys/devices/system/cpu/cpufreq/policy4/cpuinfo_max_freq:2956800
+/sys/devices/system/cpu/cpufreq/policy4/cpuinfo_min_freq:825600
+/sys/devices/system/cpu/cpufreq/policy4/cpuinfo_transition_latency:0
+/sys/devices/system/cpu/cpufreq/policy4/related_cpus:4 5 6 7
+/sys/devices/system/cpu/cpufreq/policy4/scaling_available_frequencies:825600 
+902400 979200 1056000 1209600 1286400 1363200 1459200 1536000 1612800 
+1689600 1766400 1843200 1920000 1996800 2092800 2169600 2246400 2323200 
+2400000 2476800 2553600 2649600 2745600 2841600
+/sys/devices/system/cpu/cpufreq/policy4/scaling_available_governors:ondemand 
+conservative powersave userspace performance schedutil
+/sys/devices/system/cpu/cpufreq/policy4/scaling_boost_frequencies:2956800
+/sys/devices/system/cpu/cpufreq/policy4/scaling_cur_freq:1920000
+/sys/devices/system/cpu/cpufreq/policy4/scaling_driver:qcom-cpufreq-hw
+/sys/devices/system/cpu/cpufreq/policy4/scaling_governor:schedutil
+/sys/devices/system/cpu/cpufreq/policy4/scaling_max_freq:2841600
+/sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq:825600
+/sys/devices/system/cpu/cpufreq/policy4/scaling_setspeed:<unsupported>
 
