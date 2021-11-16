@@ -2,96 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67C134539FC
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Nov 2021 20:18:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B791453A14
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Nov 2021 20:20:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239928AbhKPTVE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Nov 2021 14:21:04 -0500
-Received: from mail-oi1-f177.google.com ([209.85.167.177]:45880 "EHLO
-        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239898AbhKPTVB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Nov 2021 14:21:01 -0500
-Received: by mail-oi1-f177.google.com with SMTP id 7so662623oip.12;
-        Tue, 16 Nov 2021 11:18:03 -0800 (PST)
+        id S239351AbhKPTWq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Nov 2021 14:22:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50490 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239686AbhKPTWm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Nov 2021 14:22:42 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A42AC06122C
+        for <linux-pm@vger.kernel.org>; Tue, 16 Nov 2021 11:19:19 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id q17so20597plr.11
+        for <linux-pm@vger.kernel.org>; Tue, 16 Nov 2021 11:19:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=tC5c3ACpJcoxPsIIe7zhCBXUfWXlKqjNJoytfdemBJ8=;
+        b=ajDjV3U1riUV33g9Wnow9NB7j0INjE/wH52Izv7UzLmrMH0Iom5PkUvzCi+qYMYQPt
+         vgszkYAeLczDViLn7V3SD69HdAEpG3qmN3s7V9fZMabqc7Rw7YazN3I/d7LJv+vZQW6B
+         Ew8RPncyfFQqhVulXLN67gTXja1mHwGbKT7jeTmPdgSmeEnIw2gmc/p9L/5AXXWgB9Iw
+         preIfziqlJo1vw1M0E+f2KHsAtYtORY5XgBUAf+qABfnfdbgzMbasIVgzS2NbyGepgCz
+         W2Z19WPIbVMSW1sp6M9OFKMBdLJeK09GT9r/PsFRv18ZahHMZq/kDap5XG7mLXr78yk/
+         6Mgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TTvFtjePqYy8/bWJfKa4DKuObvTrDIUpJzc+4i5mPdA=;
-        b=ijJOTy66ik9RLn342zlGMn80178UfvFsv1KF4vW/7kLtj2aPZPZs42sAlOU1lMPr5U
-         2xgM4+q2eW7wRrncmf2U19RhlUzXgE/sOeayEAAgJK9DvCvNwbzWIVNqmVBIU5SXbrR4
-         gnVh+6RHxFG3qU+ZE8wmcL17hJIBrDN7EQNpGN1n41XUCZQh9WTMnWeBnUBEi0bkOssq
-         d58v7txzgjfU3CGdVq8YwNCbDCnRqGrZ56am9QUy8Mih+TV6ZRVJfiq8ck8h3FNXTqRn
-         v9ygf5MaGaPnKT7dmTUwEb4mXbJ8C1Hb3ISRZDY3XTUeIIhPrLeR7vsY0nnMTvGI6wm8
-         /DQg==
-X-Gm-Message-State: AOAM530S0RnfRuGjnnPhXpeYfR6SBRQNH32pn8PZzPQ2z1lC78rP4Uxt
-        YZTW46z7YYlXZhWXNrPCwJR5B3eNxRIo6ZpPvNs=
-X-Google-Smtp-Source: ABdhPJxYO+zq1DAU1AR3tPlnB/PzNYlAUBmjsYAsFucF3Qi06b/Ww8KfCP3VOpFHMSVyJ6uYzvInk4F+Gr1Ld0QeoDM=
-X-Received: by 2002:a05:6808:14c2:: with SMTP id f2mr8602093oiw.154.1637090283239;
- Tue, 16 Nov 2021 11:18:03 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=tC5c3ACpJcoxPsIIe7zhCBXUfWXlKqjNJoytfdemBJ8=;
+        b=ruIeyCA35dHSzxM3I9lHL25i3KR/oFptai13QEI94KirbspW6JoNeSHX+0VyTq7rfR
+         gBjqVSTS8I/T8AK6sN/Cyin95y/3RS4ovulou1MnQ5ONTBfOBKUC1xW0+/GK1wsX5Yaw
+         U7nwmoNJ2cy2ZyJxjz6YTAJ9s31Nwl4snuiH9ifdQcitNa3/RFaiJikghJivPCZ3vVf5
+         JUUJbeWFpJs2hy6UAwXYM7JuXWB9xCuR1mymwdMOSOM9tBgEnhNK4Bg6/kgx+A0CHYZt
+         Igso/tvA4z3IYXjA+cc8HKOFQgZDE810PuPXgLy1YWRKEcJ/YAvODhSkud5BwR4gzRXE
+         Gqng==
+X-Gm-Message-State: AOAM533IoQP3OL6jLMBL0Wl6lxbsns6B6u/W3HC1s2Il9r+EWRJdOZu0
+        G/jv/rdFqzOgrRbBoJmzoYmeVg==
+X-Google-Smtp-Source: ABdhPJwdxsecsS7P12+ceMD124mn1EmAjBuh35QZtabzAfaxeC61UvMDZa92lc1EPNZycnLp7Le6ug==
+X-Received: by 2002:a17:90b:38c7:: with SMTP id nn7mr1666619pjb.105.1637090358970;
+        Tue, 16 Nov 2021 11:19:18 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id c21sm21571271pfl.15.2021.11.16.11.19.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Nov 2021 11:19:18 -0800 (PST)
+Message-ID: <61940436.1c69fb81.77f51.c55c@mx.google.com>
+Date:   Tue, 16 Nov 2021 11:19:18 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20211108111347.3928294-1-arnd@kernel.org>
-In-Reply-To: <20211108111347.3928294-1-arnd@kernel.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 16 Nov 2021 20:17:52 +0100
-Message-ID: <CAJZ5v0iXCRMF+reCUy_OJRuYuxuJ=YOf5r_cozBg-BxZVfRtqQ@mail.gmail.com>
-Subject: Re: [PATCH] thermal/drivers/int340x: limit Kconfig to 64-bit
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v5.16-rc1-4-ge6ec93931387
+X-Kernelci-Report-Type: build
+Subject: pm/testing build: 6 builds: 0 failed, 6 passed,
+ 3 warnings (v5.16-rc1-4-ge6ec93931387)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 8, 2021 at 12:13 PM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> 32-bit processors cannot generally access 64-bit MMIO registers
-> atomically, and it is unknown in which order the two halves of
-> this registers would need to be read:
->
-> drivers/thermal/intel/int340x_thermal/processor_thermal_mbox.c: In function 'send_mbox_cmd':
-> drivers/thermal/intel/int340x_thermal/processor_thermal_mbox.c:79:37: error: implicit declaration of function 'readq'; did you mean 'readl'? [-Werror=implicit-function-declaration]
->    79 |                         *cmd_resp = readq((void __iomem *) (proc_priv->mmio_base + MBOX_OFFSET_DATA));
->       |                                     ^~~~~
->       |                                     readl
->
-> The driver already does not build for anything other than x86,
-> so limit it further to x86-64.
->
-> Fixes: aeb58c860dc5 ("thermal/drivers/int340x: processor_thermal: Suppot 64 bit RFIM responses")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/thermal/intel/int340x_thermal/Kconfig | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/thermal/intel/int340x_thermal/Kconfig b/drivers/thermal/intel/int340x_thermal/Kconfig
-> index 45c31f3d6054..5d046de96a5d 100644
-> --- a/drivers/thermal/intel/int340x_thermal/Kconfig
-> +++ b/drivers/thermal/intel/int340x_thermal/Kconfig
-> @@ -5,12 +5,12 @@
->
->  config INT340X_THERMAL
->         tristate "ACPI INT340X thermal drivers"
-> -       depends on X86 && ACPI && PCI
-> +       depends on X86_64 && ACPI && PCI
->         select THERMAL_GOV_USER_SPACE
->         select ACPI_THERMAL_REL
->         select ACPI_FAN
->         select INTEL_SOC_DTS_IOSF_CORE
-> -       select PROC_THERMAL_MMIO_RAPL if X86_64 && POWERCAP
-> +       select PROC_THERMAL_MMIO_RAPL if POWERCAP
->         help
->           Newer laptops and tablets that use ACPI may have thermal sensors and
->           other devices with thermal control capabilities outside the core
-> --
+pm/testing build: 6 builds: 0 failed, 6 passed, 3 warnings (v5.16-rc1-4-ge6=
+ec93931387)
 
-Applied as 5.16-rc2 material, thanks!
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+16-rc1-4-ge6ec93931387/
+
+Tree: pm
+Branch: testing
+Git Describe: v5.16-rc1-4-ge6ec93931387
+Git Commit: e6ec93931387b8ae43b72db2b66c54ba8e0ae524
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 6 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 3 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemen=
+ted [-Wcpp]
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
