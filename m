@@ -2,158 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B5FA453B6E
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Nov 2021 22:06:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0FEF453BAB
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Nov 2021 22:31:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231954AbhKPVJx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Nov 2021 16:09:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47036 "EHLO
+        id S229739AbhKPVec (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Nov 2021 16:34:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbhKPVJx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Nov 2021 16:09:53 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3700C061570
-        for <linux-pm@vger.kernel.org>; Tue, 16 Nov 2021 13:06:55 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id o14so267202plg.5
-        for <linux-pm@vger.kernel.org>; Tue, 16 Nov 2021 13:06:55 -0800 (PST)
+        with ESMTP id S229556AbhKPVeb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Nov 2021 16:34:31 -0500
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E46C061570
+        for <linux-pm@vger.kernel.org>; Tue, 16 Nov 2021 13:31:34 -0800 (PST)
+Received: by mail-ot1-x332.google.com with SMTP id b5-20020a9d60c5000000b0055c6349ff22so707440otk.13
+        for <linux-pm@vger.kernel.org>; Tue, 16 Nov 2021 13:31:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=nZhvbzsjCqtS42dLH2V0fPl3YTcwnbs+WH2x8zbaLQ0=;
-        b=0ezVRfwsF2XBorbRkpf1qFzyyYbYkVLLrhEVgh+YajBU6uNF0okf8Og9NmKwwbbWFM
-         UByenMCjL4+Te7WlffnlcqZtCDtCwkYElwAUQyQT/S2dUBXcvrChwWUqnBhvZMgECNEF
-         irv2s9/lFRY4uJ1QpBWnwOhQrMTX/Ty1p8TotgVFTHDqA0kl1no7EUW8y+T506PV0y7z
-         7Vs/R8NwQntI4+9zcO9NffGQyedK1kiET9N2r1OOrciocDT4QCfRzfFlYH6L9hXdBL0h
-         g/DUkmkjr28mwCPNlO/83s64alOhPswMfoGlT8QduGzcWnW/yznipURX9Um20BwOtQv1
-         R/Yg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mUi2v5p4busVJLwoRkcet3Kr3DkmjwiWgE3jP9exGZI=;
+        b=XzVvE71vl+/uwebLwTTcjU0nuAOByBIK1OSbB0dv3aXOzajShIPHUkgs3g4VgVcyng
+         bcLowqW2Y3qmXQ6gHBKTH0GNMtyG8YKRPwW2W/o6Abphg9CluzuMo0aXTT8lFCYJAhgZ
+         d5IMWj+KWKnQ780egwQJitQAKvLlLFzuPB5O0Lccy5ap/xs9/oUZPRRrz25pzRxFrT76
+         NXNCUj7gOz/jozdUgsPDDVYEIXJ4/ybthZBdh4ey6gmFKrBwuOZUds/E0s0bvkItPPjh
+         UwgqjcSdVAUMAFNsTTNrdzVp7qT/913sy1fshhilMXBtdEYt/RDWmgmMVEehKzz4JhP7
+         fEEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=nZhvbzsjCqtS42dLH2V0fPl3YTcwnbs+WH2x8zbaLQ0=;
-        b=UifX4WsVHk6drqpC14tn1fhxLoaMr7C0b3e0ktRXQ00xqEQjXTp8F8eBMt6rkeHTZT
-         RcOGbic8l4UG+P7Zpzp1T3r5fOJkq+SOiD9rjDYRBLfqqZ7Gl89E0PBPKSZJEYrLgRVC
-         BWRNvJzv11uPJy4+i/c7xgGfL2cY4fN8QOG8VKZq238nDMy0AQYm1kQvAkVVkUao++UB
-         /j/W4i1ygjkXxZXRcQBdCOygewp67hw2YuFSPttFz0M8Z4m6tsA302Z0L9D2ZmEaOyBw
-         1l/mMsRpbEXQybLteLZ2W+LlcMTZTP61GWa39Ah1rz0lrQlPW0iNgB58TmntFdXnjLzz
-         2rZg==
-X-Gm-Message-State: AOAM530yWCkteo1L6E64riW/bqJri0jdWo7nLsGQnRcNeyk/PXp4lM00
-        SFZBzT38YnWViSap+dy6dpXPWg==
-X-Google-Smtp-Source: ABdhPJzZjobgrMndTaM8CnJgIbSZ4KyBTKFvUa0qxkRfJuwONXYVsVkwLMgfBZLTMdPiUq9GjUOYJg==
-X-Received: by 2002:a17:90b:4d0c:: with SMTP id mw12mr2489740pjb.209.1637096815478;
-        Tue, 16 Nov 2021 13:06:55 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id l1sm3142297pjh.28.2021.11.16.13.06.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Nov 2021 13:06:55 -0800 (PST)
-Message-ID: <61941d6f.1c69fb81.7278.97e7@mx.google.com>
-Date:   Tue, 16 Nov 2021 13:06:55 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mUi2v5p4busVJLwoRkcet3Kr3DkmjwiWgE3jP9exGZI=;
+        b=RrHAcgQPlMIMcUMRAQyU5pBXVX7oGwj3NCCYJ1Zrai1nYOAwqXn6CcQYZ6VT6l7NWO
+         MYc/JGeq4JR4CqqafiMUGvG6lAStVPIITh5th0iMJdIJWMPsuokSL1tY7Z9llLP1kI4Q
+         1RNQt/uO0Fqaq86uEUFfNOH+WHkg+ZHq+9LULzMXD3xWtfuwK54t79LArtYOcdJZl+pt
+         6BGK/tX7L4nr1sqgmC23Q85D/Dz9nY8iqu86LiFc9hwNUqvEU6wFlnrIj+GwhNDIvtu5
+         wH0Grd3cn5DD5K1STWE6oxWfpcMa26g9aiPUW8eLaUPolrNQrH7j8VB9oPn1GiWGHxG8
+         JQvw==
+X-Gm-Message-State: AOAM533Vbn9fnwpR8Koyf9rk1Oc8jiIi39p+tXNXAJwXVrHKb3QoIakM
+        MFn8CUElu/jWI08YQZewl5jiO0FoLmyqMVqs57iSGIzWMVI=
+X-Google-Smtp-Source: ABdhPJxLFAncwhX8PDpQe+ru+yctBoqbExslQf02k4e4MTrcjW5GO/cM34WfLjGdb9QXg5ZZJX4TbyYBFiFQPCSf0DU=
+X-Received: by 2002:a9d:74d0:: with SMTP id a16mr8654921otl.237.1637098293843;
+ Tue, 16 Nov 2021 13:31:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v5.16-rc1-12-g273b3dc3453c
-X-Kernelci-Report-Type: build
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 3 warnings (v5.16-rc1-12-g273b3dc3453c)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <20211116001755.2132036-1-linus.walleij@linaro.org>
+ <bbaa93fe-8a10-7c80-2b5d-c36b0968429f@fi.rohmeurope.com> <CACRpkdYNe8cMo016ZCtgnOLs2b5JzHXUB34KkNR_dzBRZQh8nA@mail.gmail.com>
+ <e9458f4c-4520-4c13-13bf-a2c575fdbdfa@fi.rohmeurope.com>
+In-Reply-To: <e9458f4c-4520-4c13-13bf-a2c575fdbdfa@fi.rohmeurope.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 16 Nov 2021 22:31:21 +0100
+Message-ID: <CACRpkdb4FMqmVgJtwGdFmn3ZG4xy4qoYnNZPQEqfvTYGBDnwNQ@mail.gmail.com>
+Subject: Re: [PATCH v3] power: supply: core: Add kerneldoc to battery struct
+To:     "Vaittinen, Matti" <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 3 warnings (v5.16-rc1-12-g2=
-73b3dc3453c)
+On Tue, Nov 16, 2021 at 4:19 PM Vaittinen, Matti
+<Matti.Vaittinen@fi.rohmeurope.com> wrote:
+> [Me]
+> > here I add a table to interpolate the temperature from an NTC
+> > resistance to struct power_supply_battery_info.
+>
+> Yep. Thanks for sharing this. I'd just hoped there was Kelvins used
+> instead of Celsius. Would also allow using negative temperatures as
+> errors in functions like the *resist2temp*().
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-16-rc1-12-g273b3dc3453c/
+It's not really an issue with these functions since they can't fail
+and never return errors anyway.
 
-Tree: pm
-Branch: testing
-Git Describe: v5.16-rc1-12-g273b3dc3453c
-Git Commit: 273b3dc3453c1f8a58528a8c44d3bd8a973aba1b
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
+It'd be a bit thick to start to using Kelvin somewhere in the kernel
+when everyone and it's dog is using Celsius, including the
+sysfs ABI to IIO. Also the datasheets I've seen are using Celsius
+for operating conditions.
 
-Warnings Detected:
+If we need an error code it is better to pass the temperature
+out in a *pointer argument and add a proper return code.
 
-arc:
+> > Apart from this I want to add:
+> > maintainance charging A and B so essentially two voltage+current
+> > levels after CV charging has finished, each with a safety timer so
+> > 2 * 3 new properties to struct power_supply_battery_info.
+> > But I haven't coded it yet.
+>
+> Ok. This does not sound like a complete rework :) I'll keep on eye what
+> you cook up here ;)
 
-arm64:
+Nah. I was thinking of breaking out all the CC/CV charging params
+to its own struct, but it is better to do that when someone needs
+it. I.e. the day someone wants to charge something else than
+a Li-ion type battery, because e.g. a NiCd cell does not use CC/CV
+charging IIUC.
 
-arm:
+> I have two overlapping changes methinks. One is switch to fw_node - API
+> (not sure if it is useful), the other is not requiing the power_supply
+> to be registered prior parsing the battery info. That way the drivers
+> can truly use batinfo independently from (before registering to)
+> power-supply class.
 
-i386:
+Sounds harmless, just keep them coming.
 
-mips:
-    32r2el_defconfig (gcc-10): 3 warnings
+> Thanks :) I did re-spin the RFC - and already got reply from Rob's bots
+> :| It's odd how I _never_ get the bindings right...
 
-riscv:
+Nobody does. ;)
 
-x86_64:
-
-
-Warnings summary:
-
-    2    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemen=
-ted [-Wcpp]
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+Yours,
+Linus Walleij
