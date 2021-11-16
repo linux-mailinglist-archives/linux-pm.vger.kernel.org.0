@@ -2,78 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0696C452CCC
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Nov 2021 09:31:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7D6B452D77
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Nov 2021 10:01:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232134AbhKPIdb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Nov 2021 03:33:31 -0500
-Received: from foss.arm.com ([217.140.110.172]:41626 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231863AbhKPId2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 16 Nov 2021 03:33:28 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7D7D4D6E;
-        Tue, 16 Nov 2021 00:30:31 -0800 (PST)
-Received: from [10.57.28.207] (unknown [10.57.28.207])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7E2053F5A1;
-        Tue, 16 Nov 2021 00:30:27 -0800 (PST)
-Subject: Re: [PATCH v4 4/5] cpufreq: qcom-cpufreq-hw: Use new thermal pressure
- update function
-To:     Thara Gopinath <thara.gopinath@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, steev@kali.org,
-        sudeep.holla@arm.com, will@kernel.org, catalin.marinas@arm.com,
-        linux@armlinux.org.uk, gregkh@linuxfoundation.org,
-        rafael@kernel.org, viresh.kumar@linaro.org, amitk@kernel.org,
-        daniel.lezcano@linaro.org, amit.kachhap@gmail.com,
-        bjorn.andersson@linaro.org, agross@kernel.org
-References: <20211109195714.7750-1-lukasz.luba@arm.com>
- <20211109195714.7750-5-lukasz.luba@arm.com>
- <02a848c8-a672-f3df-7144-979a9df71fcb@linaro.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <8239b35e-8f51-e36c-96c6-4e5d986eebf9@arm.com>
-Date:   Tue, 16 Nov 2021 08:30:25 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S232761AbhKPJEe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Nov 2021 04:04:34 -0500
+Received: from mail.bizjoindeal.pl ([80.211.97.164]:57852 "EHLO
+        mail.bizjoindeal.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232720AbhKPJEZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Nov 2021 04:04:25 -0500
+Received: by mail.bizjoindeal.pl (Postfix, from userid 1001)
+        id 5B8FCA21EA; Tue, 16 Nov 2021 08:51:31 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=bizjoindeal.pl;
+        s=mail; t=1637052710;
+        bh=JZuQ1fK7zFtz2oeUB7Xfid9vb7kUywdmDd2OluR8ywA=;
+        h=Date:From:To:Subject:From;
+        b=hpRG16jzNGNth7JvOnR89ZWsH6jcli+1ZTkXql1U2Fd0Hz+HXpmPxnFqWc4G+Gi2u
+         EdXTNHGq7+cktuwiThsQJ1O8xUgCgN8X5rirlH3uk42NiNJJszkVrrOCU659ZzyXTi
+         WBbG+FCcMTg4tdmuoL96toCOsjkoiH2PZWKxNoQUs/Tx+0wDIqs3yGqqQHpDuKNyNk
+         hPxxgCCtdy8TgRKmkbEnVTef9REeA6Aupaw6+Xw2nLUvDfEXqgvSa8zYVMuVacpr8f
+         spgYcaeKIw0Ibh93dIVXU5z9uMX4b4OQl9K8A6fZice0EPfOH2fO8wBZ8qPLOeR1UA
+         oR63JAgo0XAmw==
+Received: by mail.bizjoindeal.pl for <linux-pm@vger.kernel.org>; Tue, 16 Nov 2021 08:51:12 GMT
+Message-ID: <20211116074500-0.1.60.f128.0.nzr3k2j3zi@bizjoindeal.pl>
+Date:   Tue, 16 Nov 2021 08:51:12 GMT
+From:   "Dorian Kwiatkowski" <dorian.kwiatkowski@bizjoindeal.pl>
+To:     <linux-pm@vger.kernel.org>
+Subject: Fotowoltaika dla firm
+X-Mailer: mail.bizjoindeal.pl
 MIME-Version: 1.0
-In-Reply-To: <02a848c8-a672-f3df-7144-979a9df71fcb@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Dzie=C5=84 dobry,
 
+kontaktuj=C4=99 si=C4=99 z Pa=C5=84stwem, poniewa=C5=BC dostrzegam mo=C5=BC=
+liwo=C5=9B=C4=87 redukcji op=C5=82at za pr=C4=85d.
 
-On 11/15/21 8:57 PM, Thara Gopinath wrote:
-> 
-> 
-> On 11/9/21 2:57 PM, Lukasz Luba wrote:
->> Thermal pressure provides a new API, which allows to use CPU frequency
->> as an argument. That removes the need of local conversion to capacity.
->> Use this new API and remove old local conversion code.
->>
->> The new arch_update_thermal_pressure() also accepts boost frequencies,
->> which solves issue in the driver code with wrong reduced capacity
->> calculation. The reduced capacity was calculated wrongly due to
->> 'policy->cpuinfo.max_freq' used as a divider. The value present there was
->> actually the boost frequency. Thus, even a normal maximum frequency value
->> which corresponds to max CPU capacity (arch_scale_cpu_capacity(cpu_id))
->> is not able to remove the capping.
-> 
-> Yes, although cpuinfo.max_freq does not reflect the boost frequency 
-> unless boost is enabled atleast once. I have sent a patch to fix this. 
-> But I agree that using cpuinfo.max_freq has issues you have mentioned in 
-> this patch if boost is enabled once.
-> 
-> So, for this patch
-> 
-> Reviewed-by: Thara Gopinath <thara.gopinath@linaro.org>
+Odpowiednio dobrana instalacja fotowoltaiczna to rozwi=C4=85zanie, kt=C3=B3=
+re pozwala wygenerowa=C4=87 spore oszcz=C4=99dno=C5=9Bci w skali roku.
 
-Thank you for the review!
+Chcia=C5=82bym porozmawia=C4=87 z Pa=C5=84stwem o tego typu rozwi=C4=85za=
+niu, a tak=C5=BCe przedstawi=C4=87 wst=C4=99pne kalkulacje.
 
-> 
-> Warm Regards
-> Thara (She/Her/Hers)
+Czy s=C4=85 Pa=C5=84stwo zainteresowani?
+
+Pozdrawiam,
+Dorian Kwiatkowski
