@@ -2,137 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 961D34538BF
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Nov 2021 18:47:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 534D84538DF
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Nov 2021 18:54:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233081AbhKPRuz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Nov 2021 12:50:55 -0500
-Received: from mail-oi1-f181.google.com ([209.85.167.181]:37808 "EHLO
-        mail-oi1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231666AbhKPRuy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Nov 2021 12:50:54 -0500
-Received: by mail-oi1-f181.google.com with SMTP id bj13so213439oib.4;
-        Tue, 16 Nov 2021 09:47:57 -0800 (PST)
+        id S239121AbhKPR41 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Nov 2021 12:56:27 -0500
+Received: from mail-oi1-f175.google.com ([209.85.167.175]:43655 "EHLO
+        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235838AbhKPR40 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Nov 2021 12:56:26 -0500
+Received: by mail-oi1-f175.google.com with SMTP id o4so171249oia.10;
+        Tue, 16 Nov 2021 09:53:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=u8e7hzTw8B2j6N2eJqtuT11zBVR9b0rrryuunla9JsI=;
-        b=4IIALVPc5cYSVp/vaAcDt/fMidapHGh2qhjZzL6UjTo3U2z8E4ozyMFOHMUHvNpevs
-         /ymKovHk8kbwkVgffi2C6dFrZpjeLLWSl7BlTGu96vtmvccdnQ0zZrx3qtpuN0nfIvrB
-         nVBPNjunTfZm8JZac2AtA/TlOq9qMifdadw+0POcZQ5nZd08ybWvEi0Ck31DuGP0dNWx
-         CiqyHyTrBeu57j3/UPrN9qO51N11mvv8U/gQIx6u9o+6YSHwMs46EGhZjwy5xPhTMJ13
-         AtsFtedEus2ywmFMbRAFJ6dZvDEHIP12TFbG6Sbz91u40cINLeK+PUKEJKd5zK+fXFbG
-         iJFQ==
-X-Gm-Message-State: AOAM532Sa7zTPjH38fUn+2ZT4A1H6EYU4Up3+fOOuTMiKkKiR2T2+3Zd
-        6YU5nlmx1aeTeIkT0ly5NdQTyb8Fo0kzzMwjF/biHL0tsJ4=
-X-Google-Smtp-Source: ABdhPJwiFE2QcWklcUZ1lmcx262LXQjyeJUNXjPVxiTg84yya3jCmcIvVEFwQgezqNmiDmcZ3x6MRiogMotvbtg/BiU=
-X-Received: by 2002:a05:6808:14c2:: with SMTP id f2mr8036609oiw.154.1637084876799;
- Tue, 16 Nov 2021 09:47:56 -0800 (PST)
+        bh=+AOLI+W/JpDfVVShrdJeTQ9AA6emXlOltLGyHRFz9ZM=;
+        b=AQVV2HTIwbM+Be8CNl2ToBPlSFQb5UK2ccvHVx/8QJEuxNU8LggPmHFzc2hFYazoGS
+         hLsBqGoRliTCURpN2XwzMQyKqQGNR/csQY9+jmILy4kc1wGYWSB97yB1Sv2DHhOquiIO
+         ikAsa9YxW87qjocITbWKXikyI5/v6d4psCLiHhvabkVIrjqACh2bjZFMDv7chRkUtVFC
+         KROEfREU4YGZHA4yFcG9CCbBdVe628xwo4/prv6EGPlWg1KX/isRObl3Cvv3T9xnz183
+         JzV0Wd8wUw7LQAglSWD2He8xeel+eO9MWfbn5X2n3tyw9pQnnJdxecr5nBQdwprsPmB4
+         Q3yg==
+X-Gm-Message-State: AOAM532SeeNxJuCNXHxxt9GIqlnsTHmpeIvvA3uccpO1uYVNN3diRpnB
+        iFzWW/IMObyyrrRUP6Ljw5ARfWBeEVaWSLkoc5w=
+X-Google-Smtp-Source: ABdhPJwoSwKbzjrWGSgNjMKh+u+JdJh4YXIcT9cLRq41Zo8vSQSHIRfVdJgImUbetg86JitSmEkqnYyIo424GQcI/3w=
+X-Received: by 2002:a05:6808:14c2:: with SMTP id f2mr8068053oiw.154.1637085209025;
+ Tue, 16 Nov 2021 09:53:29 -0800 (PST)
 MIME-Version: 1.0
-References: <20211115134017.1257932-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20211115134017.1257932-1-srinivas.pandruvada@linux.intel.com>
+References: <20211022075057.10759-1-Pierre.Gondois@arm.com>
+ <CAJZ5v0g4RrpnRfTsBm_Qi2-JM8SQCAH9_7gTM9cB3Rmc0DG4Hg@mail.gmail.com> <fe34da7f-7090-bc11-ae1a-5ab228d0cb05@arm.com>
+In-Reply-To: <fe34da7f-7090-bc11-ae1a-5ab228d0cb05@arm.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 16 Nov 2021 18:47:45 +0100
-Message-ID: <CAJZ5v0jk3KB6+uynpvdBAO+Q-Qr4HiCam=x4dxzT6NFWjROLzg@mail.gmail.com>
-Subject: Re: [UPDATE][PATCH] cpufreq: intel_pstate: Fix EPP restore after offline/online
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Date:   Tue, 16 Nov 2021 18:53:18 +0100
+Message-ID: <CAJZ5v0g6W_BuQz99YzVe=8kU4PkaaF4FUfDd65WpjMpQvwL8qA@mail.gmail.com>
+Subject: Re: [PATCH v1] cpufreq: CPPC: Fix performance/frequency conversion
+To:     Pierre Gondois <pierre.gondois@arm.com>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ionela Voinescu <Ionela.Voinescu@arm.com>,
+        Lukasz Luba <Lukasz.Luba@arm.com>,
+        Morten Rasmussen <Morten.Rasmussen@arm.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>
+        Dietmar Eggemann <Dietmar.Eggemann@arm.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 15, 2021 at 2:40 PM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
+On Mon, Nov 15, 2021 at 11:19 AM Pierre Gondois <pierre.gondois@arm.com> wrote:
 >
-> When using performance policy, EPP value is restored to non "performance"
-> mode EPP after offline and online.
+> Hello Rafael,
 >
-> For example:
-> cat /sys/devices/system/cpu/cpu1/cpufreq/energy_performance_preference
-> performance
-> echo 0 > /sys/devices/system/cpu/cpu1/online
-> echo 1 > /sys/devices/system/cpu/cpu1/online
-> cat /sys/devices/system/cpu/cpu1/cpufreq/energy_performance_preference
-> balance_performance
+> On 11/5/21 15:40, Rafael J. Wysocki wrote:
+> > On Fri, Oct 22, 2021 at 9:51 AM Pierre Gondois <Pierre.Gondois@arm.com> wrote:
+> >> CPUfreq governors request CPU frequencies using information
+> >> on current CPU usage. The CPPC driver converts them to
+> >> performance requests. Frequency targets are computed as:
+> >>   target_freq = (util / cpu_capacity) * max_freq
+> >> target_freq is then clamped between [policy->min, policy->max].
+> >>
+> >> The CPPC driver converts performance values to frequencies
+> >> (and vice-versa) using cppc_cpufreq_perf_to_khz() and
+> >> cppc_cpufreq_khz_to_perf(). These functions both use two different
+> >> factors depending on the range of the input value. For
+> >> cppc_cpufreq_khz_to_perf():
+> >> - (NOMINAL_PERF / NOMINAL_FREQ) or
+> >> - (LOWEST_PERF / LOWEST_FREQ)
+> >> and for cppc_cpufreq_perf_to_khz():
+> >> - (NOMINAL_FREQ / NOMINAL_PERF) or
+> >> - ((NOMINAL_PERF - LOWEST_FREQ) / (NOMINAL_PERF - LOWEST_PERF))
+> >>
+> >> This means the functions are not inverse for some values:
+> >> (perf_to_khz(khz_to_perf(x)) != x)
+> >>
+> >> This patch makes use of one single conversion factor, being
+> >> (MAX_PERF / MAX_FREQ).
+> >>
+> >> As LOWEST_FREQ is not used during conversion, the LOWEST_FREQ
+> >> advertised through policy->cpuinfo.min_freq might be different
+> >> from the LOWEST_FREQ value available in the CPPC object,
+> >> but the conversion will be correct.
+> > Well, this assumes that there is a linear perf <-> freq mapping which
+> > is a change in behavior.
+> The perf <-> freq relation is currently linear on 2 distinct segments.
 >
-> The commit 4adcf2e5829f ("cpufreq: intel_pstate: Add ->offline and ->online callbacks")
-> optimized save restore path of the HWP request MSR, when there is no
-> change in the policy. Also added special processing for performance mode
-> EPP. If EPP has been set to "performance" by the active mode "performance"
-> scaling algorithm, replace that value with the cached EPP. This ends up
-> replacing with cached EPP during offline, which is restored during online
-> again.
+> The patch is also intending handle the case of CPUs whose frequency and
+> performance values are not proportional.
 >
-> So add a change which will set cpu_data->epp_policy to zero, when in
-> performance policy and has non zero epp. In this way EPP is set to zero
-> again.
+> Example for the current code:
+>   MAX_FREQ = 1.000.000
+>   MIN_FREQ = 300.000
+>   MAX_PERF = 100 ("nominal_perf" in the code)
+>   MIN_PERF = 40  ("lowest_perf" in the code)
+> With these values, frequencies and performances are not proportional as
+> (MAX_FREQ / MAX_PERF) != (MIN_FREQ / MIN_PERF).
 >
-> Fixes: 4adcf2e5829f ("cpufreq: intel_pstate: Add ->offline and ->online callbacks")
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Cc: stable@vger.kernel.org # v5.9+
-> ---
-> Update: Minor optimization to skip non performance policy code path
+> A util of 40% gives:
+>   target_freq = 40% * MAX_FREQ.
+> cppc_cpufreq_khz_to_perf() then requests:
+>   target_perf = target_freq * (MIN_PERF / MIN_FREQ)
+>   target_perf = 40% * 1.000.000 * (40 / 300.000)
+>   target_perf = 53.3
+> A performance request of 40 would have been sufficient.
 >
->  drivers/cpufreq/intel_pstate.c | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
+> The error comes from the utilization of 2 different factors.
+> policy->max (frequency) is computed with this factor:
+> - (MAX_FREQ / MAX_PERF)
+> and frequency requests are mostly converted to performance
+> values with this factor:
+> - (MIN_PERF / MIN_FREQ)
 >
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> index 815df3daae9d..6d7d73a0c66b 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -936,11 +936,17 @@ static void intel_pstate_hwp_set(unsigned int cpu)
->         max = cpu_data->max_perf_ratio;
->         min = cpu_data->min_perf_ratio;
->
-> -       if (cpu_data->policy == CPUFREQ_POLICY_PERFORMANCE)
-> -               min = max;
-> -
->         rdmsrl_on_cpu(cpu, MSR_HWP_REQUEST, &value);
->
-> +       if (cpu_data->policy == CPUFREQ_POLICY_PERFORMANCE) {
-> +               min = max;
-> +               epp = 0;
-> +               if (boot_cpu_has(X86_FEATURE_HWP_EPP))
-> +                       epp = (value >> 24) & 0xff;
-> +               if (epp)
-> +                       cpu_data->epp_policy = 0;
-> +       }
+> Using one single factor per conversion function, being
+> (MAX_PERF / MAX_FREQ) for cppc_cpufreq_khz_to_perf():
+>   target_perf = target_freq * (MAX_PERF / MAX_FREQ)
+>   target_perf = 40% * 1.000.000 * (100 / 1.000.000)
+>   target_perf = 40
+> > While I agree that consistency is a good thing in general, won't this
+> > cause the values visible via sysfs to change?  And if it does, won't
+> > it confuse anyone or break anything in user space?
+> Yes it changes the minimum frequency advertised on sysfs. It might
+> effectively be confusing. It should be possible to still advertise the
+> minimum frequency in the ACPI _CPC object while using one conversion
+> factor, but this will require more changes.
 
-I understand the bug, but it should not be necessary to check this
-every time intel_pstate_hwp_set() runs.
-
-> +
->         value &= ~HWP_MIN_PERF(~0L);
->         value |= HWP_MIN_PERF(min);
->
-> --
-
-Isn't the following sufficient (modulo the gmail-induced whitespace damage)?
-
----
- drivers/cpufreq/intel_pstate.c |    6 ++++++
- 1 file changed, 6 insertions(+)
-
-Index: linux-pm/drivers/cpufreq/intel_pstate.c
-===================================================================
---- linux-pm.orig/drivers/cpufreq/intel_pstate.c
-+++ linux-pm/drivers/cpufreq/intel_pstate.c
-@@ -1006,6 +1006,12 @@ static void intel_pstate_hwp_offline(str
-          */
-         value &= ~GENMASK_ULL(31, 24);
-         value |= HWP_ENERGY_PERF_PREFERENCE(cpu->epp_cached);
-+        /*
-+         * However, make sure that EPP will be set to "performance" when
-+         * the CPU is brought back online again and the "performance"
-+         * scaling algorithm is still in effect.
-+         */
-+        cpu->epp_policy = CPUFREQ_POLICY_UNKNOWN;
-     }
-
-     /*
+So why don't we make them?
