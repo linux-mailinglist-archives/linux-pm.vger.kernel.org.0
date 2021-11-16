@@ -2,176 +2,197 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B09B1452E43
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Nov 2021 10:43:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3CCA452F9A
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Nov 2021 11:58:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233414AbhKPJqT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Nov 2021 04:46:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:54257 "EHLO
+        id S234486AbhKPLBT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Nov 2021 06:01:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:29380 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233418AbhKPJqL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Nov 2021 04:46:11 -0500
+        by vger.kernel.org with ESMTP id S230515AbhKPLBS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Nov 2021 06:01:18 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1637055794;
+        s=mimecast20190719; t=1637060301;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/gJI+/Lq5aRkarenKXwAKuBJuvK2Jwl6N6vyetwo1U0=;
-        b=Udi22WdAlc6UgluQl284mCihH/BSiekShAeAMcFhaWxk4qxbE61Pwd4iRiegwsDqcqcjbm
-        4cifjqwixyjcswaKq7V8p/8C0RW7vS2jGaKc4a+ITizvUDIVG2ALtHMr1rKR1q5cxVUJH1
-        6tYy94pFbQ/kMvZ3AhTrln0J9rEGUDs=
+        bh=kY0B8yGVYk8MaOQx8xvl+ZB1I0VF4H2dddqWO+tZ2pc=;
+        b=XdXnV8zWUe2u7QFcfv4ESqCbDuppkxfU1epWwpC2PSo47wtiUx/DtVWrl7z9op9YTmMGYk
+        1LAwpXz85tUV/axlSH2d1HnJk7u1V/6Pg0tRz0LRqEiRwwbdouCIUOcPDIuZ6pAsHTIagW
+        RndFcqnmnhsvSzOsebiw/7pNCQcHXkQ=
 Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
  [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-578-LyTzTihiNYmAjtganBLYkA-1; Tue, 16 Nov 2021 04:43:13 -0500
-X-MC-Unique: LyTzTihiNYmAjtganBLYkA-1
-Received: by mail-ed1-f72.google.com with SMTP id w18-20020a056402071200b003e61cbafdb4so8414692edx.4
-        for <linux-pm@vger.kernel.org>; Tue, 16 Nov 2021 01:43:13 -0800 (PST)
+ us-mta-298-gZZHgv5OPQG92wmoiegwMQ-1; Tue, 16 Nov 2021 05:58:19 -0500
+X-MC-Unique: gZZHgv5OPQG92wmoiegwMQ-1
+Received: by mail-ed1-f72.google.com with SMTP id f4-20020a50e084000000b003db585bc274so16774681edl.17
+        for <linux-pm@vger.kernel.org>; Tue, 16 Nov 2021 02:58:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=/gJI+/Lq5aRkarenKXwAKuBJuvK2Jwl6N6vyetwo1U0=;
-        b=y2vGnP3WbvHVUe81fhv8tzQOuFY5EGq7ZjRaYnZVH+wtYMwplsX9MZKmg83tj5e7sj
-         VnRH2m2znxYQUXWkXgYNf6FDWi+MOAYN1RxArTG+TDZjxdY/dvDOdWTAUZvV5IWMLzcV
-         0yTktVS282Zh5+k3cNedI9GshNybeQ35819l7y0MF0sdbuOTggZYwM+LLiCbwfu5DM+x
-         BM5f40s/4Un+6fVgQ18L2Jym1sXAe67kbfnz8S8dLu+gpo5MRU1gGKMi80euiEIVNcyQ
-         WFU2eC0A40nR/T7YAg68KTJaznzm/53Rbpv+kteV57vcQ72S2zWToO2Ft1w6WgqAy+e7
-         0kvg==
-X-Gm-Message-State: AOAM530PXYKPJYlJ9C4EMRlVRIkfa4mH60FbNokxc7AfCH3cWIfjJpNv
-        q8PAkMEmE+vKIahru3lBubaDVgONRhKBlT1eqTEbxxTLwhFjXDDbbeoy5Bb6i9LqRX38B/Uppe9
-        auM/Lp5pnqKK+WYKvj98=
-X-Received: by 2002:a17:906:52cf:: with SMTP id w15mr8021765ejn.122.1637055792470;
-        Tue, 16 Nov 2021 01:43:12 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw7mhtY4eET4LN9sV+SnCqEy35FazLPo2t3ghMXBr9Asn6lew1NgsN4r1t0Y/Krk0LJwKbExg==
-X-Received: by 2002:a17:906:52cf:: with SMTP id w15mr8021740ejn.122.1637055792248;
-        Tue, 16 Nov 2021 01:43:12 -0800 (PST)
+        bh=kY0B8yGVYk8MaOQx8xvl+ZB1I0VF4H2dddqWO+tZ2pc=;
+        b=Ictjszyp9Xhm414brPN7AfPpZE8lNTsM7W127GaQH+A/rYnMNyFgvEaSxh9Pw1BOsl
+         mXZEvIAHsV6VfR/2jRuYlj3+VeXQ+Gl3fxKLlUSDgMAqQMAmdQUsKets+S7ubuB7T5iT
+         Q88OErwFcs2VQ0+F/zUosUtkV6tbs1FkIaAmzH1RDxyLtgSBqybg4APz0gGzFOs9sLBO
+         0mPXjMcjxMnn+dV5LHQT8I4UW9YF78QakGwZU/2SFzBEH+7Ldx5kpuMwsuQQlTYAc+0x
+         WA6DoPwmLztgPNhhrX+jqaFb+h3RmjDGqqVRsw9U1dJJ0arPC25o9ETL3IIHdrxz+dYu
+         APxA==
+X-Gm-Message-State: AOAM5328GOXO4sa9YIS+SPMnk2uQepBjNNuwC9ms+CnJgn4iXCJSvvsy
+        1axXTG5aHsxpvJuMFjN54sUQ7DtvrjGr+ihvDCUrIpVf78mo7eU5neTauj5AAgK4FnjG6qy/mWj
+        z23Iq32MOe+V08UQzQa4=
+X-Received: by 2002:a17:907:2d0e:: with SMTP id gs14mr8757032ejc.249.1637060298615;
+        Tue, 16 Nov 2021 02:58:18 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxIEbJVQs6Ie/485xAX3626rJajgjdDhHYqVaN7DlmCbvpayCdiFexQj8i/fiIF/lTRfUn0LQ==
+X-Received: by 2002:a17:907:2d0e:: with SMTP id gs14mr8756992ejc.249.1637060298317;
+        Tue, 16 Nov 2021 02:58:18 -0800 (PST)
 Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id z25sm7548720ejd.80.2021.11.16.01.43.11
+        by smtp.gmail.com with ESMTPSA id bo20sm9304943edb.31.2021.11.16.02.58.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Nov 2021 01:43:11 -0800 (PST)
-Message-ID: <2314890c-cec3-7d1a-125d-47fc7b1d2625@redhat.com>
-Date:   Tue, 16 Nov 2021 10:43:10 +0100
+        Tue, 16 Nov 2021 02:58:18 -0800 (PST)
+Message-ID: <09a66da1-1a8b-a668-3179-81670303ea37@redhat.com>
+Date:   Tue, 16 Nov 2021 11:58:16 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.2.0
-Subject: Re: [PATCH v2 04/20] power: supply: bq25890: Reduce reported
- CONSTANT_CHARGE_CURRENT_MAX for low temperatures
+Subject: Re: [PATCH 4/4] platform/x86: thinkpad_acpi: support inhibit-charge
 Content-Language: en-US
-To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
+To:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
+        linux-pm@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
+        ibm-acpi-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org,
         Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        Yauhen Kharuzhy <jekhor@gmail.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        platform-driver-x86@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-efi@vger.kernel.org
-References: <20211114170335.66994-1-hdegoede@redhat.com>
- <20211114170335.66994-5-hdegoede@redhat.com>
+        Henrique de Moraes Holschuh <hmh@hmh.eng.br>
+Cc:     linux-kernel@vger.kernel.org, linrunner@gmx.net, bberg@redhat.com,
+        hadess@hadess.net, markpearson@lenovo.com,
+        nicolopiazzalunga@gmail.com, njoshi1@lenovo.com, smclt30p@gmail.com
+References: <20211113104225.141333-1-linux@weissschuh.net>
+ <20211113104225.141333-5-linux@weissschuh.net>
 From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20211114170335.66994-5-hdegoede@redhat.com>
+In-Reply-To: <20211113104225.141333-5-linux@weissschuh.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+Hi Thomas,
 
-On 11/14/21 18:03, Hans de Goede wrote:
-> From: Yauhen Kharuzhy <jekhor@gmail.com>
+Thank you for working on this!
+
+On 11/13/21 11:42, Thomas Weißschuh wrote:
+> This adds support for the inhibit-charge charge_behaviour through the
+> embedded controller of ThinkPads.
 > 
-> Take into account possible current reduction due to low-temperature when
-> reading POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX. As described in
-> the datasheet in cool (0-20° Celcius) conditions the current limit is
-> decreased to 20% or 50% of ICHG field value depended on JEITA_ISET field.
+> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 > 
-> Also add NTC_FAULT field value to the debug message in
-> bq25890_get_chip_state().
-> 
-> Changed by Hans de Goede:
-> - Fix reading F_CHG_FAULT instead of F_NTC_FIELD for state->ntc_fault
-> - Only read JEITA_ISET field if necessary
-> - Tweak commit message a bit
-> 
-> Signed-off-by: Yauhen Kharuzhy <jekhor@gmail.com>
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 > ---
->  drivers/power/supply/bq25890_charger.c | 33 +++++++++++++++++++++++---
->  1 file changed, 30 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
-> index b208cc2193b8..617a653221ab 100644
-> --- a/drivers/power/supply/bq25890_charger.c
-> +++ b/drivers/power/supply/bq25890_charger.c
-> @@ -94,6 +94,7 @@ struct bq25890_state {
->  	u8 vsys_status;
->  	u8 boost_fault;
->  	u8 bat_fault;
-> +	u8 ntc_fault;
+> This patch is based on https://lore.kernel.org/platform-driver-x86/d2808930-5840-6ffb-3a59-d235cdb1fe16@gmail.com/
+> ---
+>  drivers/platform/x86/thinkpad_acpi.c | 55 +++++++++++++++++++++++++++-
+>  1 file changed, 53 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/thinkpad_acpi.c b/drivers/platform/x86/thinkpad_acpi.c
+> index e8c98e9aff71..7cd6475240b2 100644
+> --- a/drivers/platform/x86/thinkpad_acpi.c
+> +++ b/drivers/platform/x86/thinkpad_acpi.c
+> @@ -9321,6 +9321,8 @@ static struct ibm_struct mute_led_driver_data = {
+>  #define SET_STOP	"BCSS"
+>  #define GET_DISCHARGE	"BDSG"
+>  #define SET_DISCHARGE	"BDSS"
+> +#define GET_INHIBIT	"PSSG"
+> +#define SET_INHIBIT	"BICS"
+>  
+>  enum {
+>  	BAT_ANY = 0,
+> @@ -9338,6 +9340,7 @@ enum {
+>  	THRESHOLD_START,
+>  	THRESHOLD_STOP,
+>  	FORCE_DISCHARGE,
+> +	INHIBIT_CHARGE,
 >  };
 >  
->  struct bq25890_device {
-> @@ -383,6 +384,14 @@ enum bq25890_chrg_fault {
->  	CHRG_FAULT_TIMER_EXPIRED,
->  };
->  
-> +enum bq25890_ntc_fault {
-> +	NTC_FAULT_NORMAL = 0,
-> +	NTC_FAULT_WARM = 2,
-> +	NTC_FAULT_COOL = 3,
-> +	NTC_FAULT_COLD = 5,
-> +	NTC_FAULT_HOT = 6,
-> +};
-> +
->  static bool bq25890_is_adc_property(enum power_supply_property psp)
->  {
->  	switch (psp) {
-> @@ -474,6 +483,18 @@ static int bq25890_power_supply_get_property(struct power_supply *psy,
->  
->  	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
->  		val->intval = bq25890_find_val(bq->init_data.ichg, TBL_ICHG);
-> +
-> +		/* When temperature is too low, charge current is decreased */
-> +		if (bq->state.ntc_fault == NTC_FAULT_COOL) {
-> +			ret = bq25890_field_read(bq, F_JEITA_ISET);
-> +			if (ret < 0)
-> +				return ret;
-> +
-> +			if (ret)
-> +				val->intval /= 5;
-> +			else
-> +				val->intval /= 2;
+>  struct tpacpi_battery_data {
+> @@ -9409,6 +9412,13 @@ static int tpacpi_battery_get(int what, int battery, int *ret)
+>  		/* The force discharge status is in bit 0 */
+>  		*ret = *ret & 0x01;
+>  		return 0;
+> +	case INHIBIT_CHARGE:
+> +		/* This is actually reading peak shift state, like tpacpi-bat does */
+> +		if ACPI_FAILURE(tpacpi_battery_acpi_eval(GET_INHIBIT, ret, battery))
+> +			return -ENODEV;
+> +		/* The inhibit charge status is in bit 0 */
+> +		*ret = *ret & 0x01;
+> +		return 0;
+>  	default:
+>  		pr_crit("wrong parameter: %d", what);
+>  		return -EINVAL;
+> @@ -9447,6 +9457,22 @@ static int tpacpi_battery_set(int what, int battery, int value)
+>  			return -ENODEV;
+>  		}
+>  		return 0;
+> +	case INHIBIT_CHARGE:
+> +		/* When setting inhibit charge, we set a default value of
+> +		 * always breaking on AC detach and the effective time is set to
+> +		 * be permanent.
+> +		 * The battery ID is in bits 4-5, 2 bits,
+> +		 * the effective time is in bits 8-23, 2 bytes.
+> +		 * A time of FFFF indicates forever.
+> +		 */
+> +		param = value;
+> +		param |= battery << 4;
+> +		param |= 0xFFFF << 8;
+> +		if (ACPI_FAILURE(tpacpi_battery_acpi_eval(SET_INHIBIT, &ret, param))) {
+> +			pr_err("failed to set inhibit charge on %d", battery);
+> +			return -ENODEV;
 > +		}
->  		break;
+> +		return 0;
+>  	default:
+>  		pr_crit("wrong parameter: %d", what);
+>  		return -EINVAL;
+> @@ -9467,6 +9493,8 @@ static int tpacpi_battery_probe(int battery)
+>  	 * 4) Check for support
+>  	 * 5) Get the current force discharge status
+>  	 * 6) Check for support
+> +	 * 7) Get the current inhibit charge status
+> +	 * 8) Check for support
+>  	 */
+>  	if (acpi_has_method(hkey_handle, GET_START)) {
+>  		if ACPI_FAILURE(tpacpi_battery_acpi_eval(GET_START, &ret, battery)) {
+> @@ -9513,6 +9541,16 @@ static int tpacpi_battery_probe(int battery)
+>  			battery_info.batteries[battery].charge_behaviours |=
+>  				BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE);
+>  	}
+> +	if (acpi_has_method(hkey_handle, GET_INHIBIT)) {
+> +		if (ACPI_FAILURE(tpacpi_battery_acpi_eval(GET_INHIBIT, &ret, battery))) {
+> +			pr_err("Error probing battery inhibit charge; %d\n", battery);
+> +			return -ENODEV;
+> +		}
+> +		/* Support is marked in bit 5 */
+> +		if (ret & BIT(5))
+> +			battery_info.batteries[battery].charge_behaviours |=
+> +				BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE);
+> +	}
 >  
->  	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
-> @@ -486,6 +507,10 @@ static int bq25890_power_supply_get_property(struct power_supply *psy,
->  		if (ret < 0)
->  			return ret;
->  
-> +		ret = bq25890_field_read(bq, F_JEITA_VSET);
-> +		if (ret < 0)
-> +			return ret;
-> +
->  		/* converted_val = 2.304V + ADC_val * 20mV (table 10.3.15) */
->  		val->intval = 2304000 + ret * 20000;
->  		break;
+>  	battery_info.batteries[battery].charge_behaviours |=
+>  		BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO);
+> @@ -9673,6 +9711,11 @@ static ssize_t charge_behaviour_show(struct device *dev,
+>  			return -ENODEV;
+>  		if (ret)
+>  			active = POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE;
+> +	} else if (available & BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE)) {
 
-Ugh, this should not be here. I guess this is a leftover from an attempt to
-also apply temperature correction to the POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE
-prop.
+The use of else-if here seems wrong, this suggests that batterys can never
+support both force-discharge and inhibit-charge behavior, which they can, so this
+means that active can now never get set to BEHAVIOUR_INHIBIT_CHARGE on
+batteries which support both.
 
-I'll drop this for v3 of the series. Note I'll first wait a week or so for
-other feedback.
+So AFAICT the else part of the else if should be dropped here, making this
+a new stand alone if block.
+
+For the other parts of the set lets wait and see what Sebastian has to say.
 
 Regards,
 
@@ -179,29 +200,35 @@ Hans
 
 
 
-
-> @@ -549,7 +574,8 @@ static int bq25890_get_chip_state(struct bq25890_device *bq,
->  		{F_VSYS_STAT,	&state->vsys_status},
->  		{F_BOOST_FAULT, &state->boost_fault},
->  		{F_BAT_FAULT,	&state->bat_fault},
-> -		{F_CHG_FAULT,	&state->chrg_fault}
-> +		{F_CHG_FAULT,	&state->chrg_fault},
-> +		{F_NTC_FAULT,	&state->ntc_fault}
->  	};
->  
->  	for (i = 0; i < ARRAY_SIZE(state_fields); i++) {
-> @@ -560,9 +586,10 @@ static int bq25890_get_chip_state(struct bq25890_device *bq,
->  		*state_fields[i].data = ret;
+> +		if (tpacpi_battery_get(INHIBIT_CHARGE, battery, &ret))
+> +			return -ENODEV;
+> +		if (ret)
+> +			active = POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE;
 >  	}
 >  
-> -	dev_dbg(bq->dev, "S:CHG/PG/VSYS=%d/%d/%d, F:CHG/BOOST/BAT=%d/%d/%d\n",
-> +	dev_dbg(bq->dev, "S:CHG/PG/VSYS=%d/%d/%d, F:CHG/BOOST/BAT/NTC=%d/%d/%d/%d\n",
->  		state->chrg_status, state->online, state->vsys_status,
-> -		state->chrg_fault, state->boost_fault, state->bat_fault);
-> +		state->chrg_fault, state->boost_fault, state->bat_fault,
-> +		state->ntc_fault);
->  
->  	return 0;
->  }
+>  	return power_supply_charge_behaviour_show(dev, available, active, buf);
+> @@ -9710,12 +9753,20 @@ static ssize_t charge_behaviour_store(struct device *dev,
+>  	switch (selected) {
+>  	case POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO:
+>  		ret = tpacpi_battery_set(FORCE_DISCHARGE, battery, 0);
+> -		if (ret < 0)
+> +		ret = tpacpi_battery_set(INHIBIT_CHARGE, battery, 0) || ret;
+> +		if (ret)
+>  			return ret;
+>  		break;
+>  	case POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE:
+>  		ret = tpacpi_battery_set(FORCE_DISCHARGE, battery, 1);
+> -		if (ret < 0)
+> +		ret = tpacpi_battery_set(INHIBIT_CHARGE, battery, 0) || ret;
+> +		if (ret)
+> +			return ret;
+> +		break;
+> +	case POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE:
+> +		ret = tpacpi_battery_set(FORCE_DISCHARGE, battery, 0);
+> +		ret = tpacpi_battery_set(INHIBIT_CHARGE, battery, 1) || ret;
+> +		if (ret)
+>  			return ret;
+>  		break;
+>  	default:
 > 
 
