@@ -2,200 +2,201 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C789F4523C4
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Nov 2021 02:27:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A58A44527C4
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Nov 2021 03:31:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353963AbhKPBaE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Nov 2021 20:30:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354284AbhKPB2E (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Nov 2021 20:28:04 -0500
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D61D9C08C30C;
-        Mon, 15 Nov 2021 15:10:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=7eaRSnO6DvJcmgSx4Jh9u88P+ZEa+bilmuFqzgTMEmA=; b=fnBzpsc64M38Z6WqKOeB2dosXj
-        eSKc5upq/AZOP2TtjbCP1cSDKf4JOovVIfz2FpIZ5TshxFjr76p3biNl5GX6Q154cO2lIM4Zsw1oR
-        zr5QGxBJrsOKHrJqCzDD2S3rlIMPYTUFukpe9cxUOJdA/L70GzieAkhJfS6AVyObDubo=;
-Received: from p200300ccff0ca2001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff0c:a200:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1mml77-00068e-IG; Tue, 16 Nov 2021 00:10:13 +0100
-Date:   Tue, 16 Nov 2021 00:10:10 +0100
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Alistair Francis <alistair@alistair23.me>
-Cc:     lee.jones@linaro.org, broonie@kernel.org, kernel@pengutronix.de,
-        lgirdwood@gmail.com, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        s.hauer@pengutronix.de, linux-hwmon@vger.kernel.org,
-        amitk@kernel.org, linux-pm@vger.kernel.org, linux-imx@nxp.com,
-        alistair23@gmail.com, shawnguo@kernel.org
-Subject: Re: [PATCH v15 3/8] mfd: simple-mfd-i2c: Enable support for the
- silergy,sy7636a
-Message-ID: <20211116000634.767dcdc0@aktux>
-In-Reply-To: <20211110122948.188683-4-alistair@alistair23.me>
-References: <20211110122948.188683-1-alistair@alistair23.me>
-        <20211110122948.188683-4-alistair@alistair23.me>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S1377764AbhKPCd5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Nov 2021 21:33:57 -0500
+Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:41012 "EHLO
+        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1346907AbhKPCbV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Nov 2021 21:31:21 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0Uwnk6wb_1637029701;
+Received: from 30.21.164.20(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0Uwnk6wb_1637029701)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 16 Nov 2021 10:28:22 +0800
+Message-ID: <4cf76c42-2357-c000-86d7-13b2abf5dcbb@linux.alibaba.com>
+Date:   Tue, 16 Nov 2021 10:29:09 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v2] power: supply: core: Use library interpolation
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, Chunyan Zhang <chunyan.zhang@unisoc.com>
+References: <20211116003844.2133683-1-linus.walleij@linaro.org>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20211116003844.2133683-1-linus.walleij@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Score: -1.0 (-)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+Hi Linus,
 
-this all creates a lot of question marks...
-One of my main question is whether sy7636a = sy7636 (at least the
-driver in the kobo vendor kernels does not have the "A" at the end,
-whic does not necessarily mean a difference).
-
-https://www.silergy.com/products/panel_pmic
-lists only a SY7636ARMC, so chances are good that the letters were just
-stripped away by the driver developers. Printing on chip package is
-cryptic so it is not that helpful. It is just "BWNBDA"
-
- On Wed, 10 Nov 2021 22:29:43 +1000
-Alistair Francis <alistair@alistair23.me> wrote:
-
-[...]
-> diff --git a/include/linux/mfd/sy7636a.h b/include/linux/mfd/sy7636a.h
-> new file mode 100644
-> index 000000000000..2797c22dabc2
-> --- /dev/null
-> +++ b/include/linux/mfd/sy7636a.h
-> @@ -0,0 +1,36 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Functions to access SY3686A power management chip.
-
-Typo? or is it really a SY3686A? So what we are talking about?
-
-> + *
-> + * Copyright (C) 2021 reMarkable AS - http://www.remarkable.com/
-> + */
+On 2021/11/16 8:38, Linus Walleij wrote:
+> The power supply core appears to contain two open coded
+> linear interpolations. Use the kernel fixpoint arithmetic
+> interpolation library function instead.
+> 
+> Cc: Chunyan Zhang <chunyan.zhang@unisoc.com>
+> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+> ChangeLog v1->v2:
+> - Break the table loop at table_len - 1 so we don't index
+>    past the end of the table. (Thanks Baolin!)
+> 
+> Chunyan: The sc27xx fuel gauge seems to be the only driver
+> using this, so it'd be great if you could test this to make
+> sure it works as intended.
+> ---
+>   drivers/power/supply/power_supply_core.c | 59 ++++++++++++------------
+>   1 file changed, 30 insertions(+), 29 deletions(-)
+> 
+> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+> index fc12a4f407f4..2983466a4914 100644
+> --- a/drivers/power/supply/power_supply_core.c
+> +++ b/drivers/power/supply/power_supply_core.c
+> @@ -21,6 +21,7 @@
+>   #include <linux/power_supply.h>
+>   #include <linux/property.h>
+>   #include <linux/thermal.h>
+> +#include <linux/fixp-arith.h>
+>   #include "power_supply.h"
+>   
+>   /* exported for the APM Power driver, APM emulation */
+> @@ -783,26 +784,25 @@ EXPORT_SYMBOL_GPL(power_supply_put_battery_info);
+>   int power_supply_temp2resist_simple(struct power_supply_resistance_temp_table *table,
+>   				    int table_len, int temp)
+>   {
+> -	int i, resist;
+> +	int i, high, low;
+>   
+> -	for (i = 0; i < table_len; i++)
+> +	/* Break loop at table_len - 1 because that is the highest index */
+> +	for (i = 0; i < table_len - 1; i++)
+>   		if (temp > table[i].temp)
+>   			break;
+>   
+> -	if (i > 0 && i < table_len) {
+> -		int tmp;
+> -
+> -		tmp = (table[i - 1].resistance - table[i].resistance) *
+> -			(temp - table[i].temp);
+> -		tmp /= table[i - 1].temp - table[i].temp;
+> -		resist = tmp + table[i].resistance;
+> -	} else if (i == 0) {
+> -		resist = table[0].resistance;
+> -	} else {
+> -		resist = table[table_len - 1].resistance;
+> -	}
+> -
+> -	return resist;
+> +	/* The library function will deal with high == low */
+> +	if (i > 0)
+> +		high = i - 1;
+> +	else
+> +		high = i; /* i.e. i == 0 */
+> +	low = i;
 > +
-> +#ifndef __MFD_SY7636A_H
-> +#define __MFD_SY7636A_H
+> +	return fixp_linear_interpolate(table[low].temp,
+> +				       table[low].resistance,
+> +				       table[high].temp,
+> +				       table[high].resistance,
+> +				       temp);
+Thanks for your patch, and overall looks good to me. But I still think 
+we should not do interpolation if the temperature is larger than the 
+maximum value of the table, we can just return the maximum value of the 
+table instead. Something like below untested code, how do you think?
+
+--- a/drivers/power/supply/power_supply_core.c
++++ b/drivers/power/supply/power_supply_core.c
+@@ -783,26 +783,27 @@ void power_supply_put_battery_info(struct 
+power_supply *psy,
+  int power_supply_temp2resist_simple(struct 
+power_supply_resistance_temp_table *table,
+                                     int table_len, int temp)
+  {
+-       int i, resist;
++       int i, high, low;
+
+         for (i = 0; i < table_len; i++)
+                 if (temp > table[i].temp)
+                         break;
+
+-       if (i > 0 && i < table_len) {
+-               int tmp;
+-
+-               tmp = (table[i - 1].resistance - table[i].resistance) *
+-                       (temp - table[i].temp);
+-               tmp /= table[i - 1].temp - table[i].temp;
+-               resist = tmp + table[i].resistance;
+-       } else if (i == 0) {
+-               resist = table[0].resistance;
+-       } else {
+-               resist = table[table_len - 1].resistance;
+-       }
+-
+-       return resist;
++       if (i == table_len)
++               return table[table_len - 1].resistance;
++
++       /* The library function will deal with high == low */
++       if (i > 0)
++               high = i - 1;
++       else
++               high = i; /* i.e. i == 0 */
++       low = i;
++
++       return fixp_linear_interpolate(table[low].temp,
++                                      table[low].resistance,
++                                      table[high].temp,
++                                      table[high].resistance,
++                                      temp);
+  }
+
+>   }
+>   EXPORT_SYMBOL_GPL(power_supply_temp2resist_simple);
+>   
+> @@ -821,24 +821,25 @@ EXPORT_SYMBOL_GPL(power_supply_temp2resist_simple);
+>   int power_supply_ocv2cap_simple(struct power_supply_battery_ocv_table *table,
+>   				int table_len, int ocv)
+>   {
+> -	int i, cap, tmp;
+> +	int i, high, low;
+>   
+> +	/* Break loop at table_len - 1 because that is the highest index */
+>   	for (i = 0; i < table_len; i++)
+>   		if (ocv > table[i].ocv)
+>   			break;
+>   
+> -	if (i > 0 && i < table_len) {
+> -		tmp = (table[i - 1].capacity - table[i].capacity) *
+> -			(ocv - table[i].ocv);
+> -		tmp /= table[i - 1].ocv - table[i].ocv;
+> -		cap = tmp + table[i].capacity;
+> -	} else if (i == 0) {
+> -		cap = table[0].capacity;
+> -	} else {
+> -		cap = table[table_len - 1].capacity;
+> -	}
+> -
+> -	return cap;
+> +	/* The library function will deal with high == low */
+> +	if (i > 0)
+> +		high = i - 1;
+> +	else
+> +		high = i; /* i.e. i == 0 */
+> +	low = i;
 > +
-> +#define SY7636A_REG_OPERATION_MODE_CRL		0x00
-> +#define SY7636A_OPERATION_MODE_CRL_VCOMCTL	BIT(6)
-
-hmm, this thing is called VCOM_MANUAL in the 4.1.15-based driver for the
-Kobos and in the 3.0.35 kernel for the Tolinos it is:
-
-// 1:controll the vcom by external VCOM_EN pin 
-#define SY7636_REG_OPM_VCOM_EXT_mask    0x1 //  
-#define SY7636_REG_OPM_VCOM_EXT_lsb             6 //  
-
-In both kernels, it is set if a gpio is used to control the regulator.
-That does not necessarily conflict with your usage. The gpio might just
-be hardwired to something in your device. Maybe just a comment about
-that issue.
- 
-> +#define SY7636A_OPERATION_MODE_CRL_ONOFF	BIT(7)
-> +#define SY7636A_REG_VCOM_ADJUST_CTRL_L		0x01
-> +#define SY7636A_REG_VCOM_ADJUST_CTRL_H		0x02
-> +#define SY7636A_REG_VCOM_ADJUST_CTRL_MASK	0x01ff
-> +#define SY7636A_REG_VLDO_VOLTAGE_ADJULST_CTRL	0x03
-> +#define SY7636A_REG_POWER_ON_DELAY_TIME		0x06
-> +#define SY7636A_REG_FAULT_FLAG			0x07
-> +#define SY7636A_FAULT_FLAG_PG			BIT(0)
-> +#define SY7636A_REG_TERMISTOR_READOUT		0x08
-> +
-> +#define SY7636A_REG_MAX				0x08
-> +
-> +#define VCOM_MIN		0
-> +#define VCOM_MAX		5000
-
-hmm, what does that maximum mean? What you can set without something
-freaking out just by setting it? Or the limit where the driver works
-reliably?
-> +
-> +#define VCOM_ADJUST_CTRL_MASK	0x1ff
-> +// Used to shift the high byte
-> +#define VCOM_ADJUST_CTRL_SHIFT	8
-> +// Used to scale from VCOM_ADJUST_CTRL to mv
-> +#define VCOM_ADJUST_CTRL_SCAL	10000
-> +
-> +#define FAULT_FLAG_SHIFT	1
-> +
-> +#endif /* __LINUX_MFD_SY7636A_H */
-
-Hmm, are that all defines you know about? I am fine with not including
-unused things now, but I am curious.
-For comparison, here is my "scratchpad" of all the information I could
-squeeze out of the sy7636 driver until now:
-
-OPMODE 0
-  RAILS_ON 7
-  VCOM_MANUAL 6
-  LIGHTNESS 5
-
-  VDDH_DISABLE 4
-  VEE_DISABLE 3
-  VPOS_DISABLE 2
-  VNEG_DISABLE 1
-  VCOM_DISABLE 0
-
-  -> combined as RAILS_DISABLE in code
-
-  VCOM: 10000 uV per step, accepts up to 2.75V (that is a bit contradictory)
-VCOM_ADJ1 1
-
-VCOM_ADJ2 2
-  VCOM2_B8 7
-  VDDH_EXT 0..4
-
-VLDO_ADJ 3
-  VLDO_ADJ = 5..7
-  VPDD_ADJ = 0..4 
-
-VPDD_LEN 4 
-  VPPD_LEN 0..4
-
-VEE_VP_EXT 5
-  VP_EXT 5..6
-  VEE_EXT 0..4
-
-PWRON_DLY = 6
-  TDLY4 = 6..7
-  TDLY3 = 4..5
-  TDLY2 = 2..3
-  TDLY1 = 0..1
-
-FAULTFLAGS 7
-  FAULS 1..4: to be read out after interrupt and cleared
-      0  no faults
-      1  UVP at VB rail
-      2  UVP at VN rail
-      3  UVP at VPOS rail
-      4  UVP at VNEG rail
-      5  UVP at VDDH rail
-      6  UVP at VEE rail
-      7  SCP at VB rail
-      8  SCP at VN rail
-      9  SCP at VPOS rail
-      A  SCP at VNEG rail
-      B  SCP at VDDH rail
-      C  SCP at VEE rail
-      D  SCP at VCOM rail
-      E  UVLO
-      F  Thermal shutdown
-
-  PG 0
-
-THERM 8
-
-Regards,
-Andreas
+> +	return fixp_linear_interpolate(table[low].ocv,
+> +				       table[low].capacity,
+> +				       table[high].ocv,
+> +				       table[high].capacity,
+> +				       ocv);
+>   }
+>   EXPORT_SYMBOL_GPL(power_supply_ocv2cap_simple);
+>   
+> 
