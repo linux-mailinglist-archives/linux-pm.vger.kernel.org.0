@@ -2,233 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3CCA452F9A
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Nov 2021 11:58:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9FAA452FA5
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Nov 2021 12:00:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234486AbhKPLBT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Nov 2021 06:01:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:29380 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230515AbhKPLBS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Nov 2021 06:01:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1637060301;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kY0B8yGVYk8MaOQx8xvl+ZB1I0VF4H2dddqWO+tZ2pc=;
-        b=XdXnV8zWUe2u7QFcfv4ESqCbDuppkxfU1epWwpC2PSo47wtiUx/DtVWrl7z9op9YTmMGYk
-        1LAwpXz85tUV/axlSH2d1HnJk7u1V/6Pg0tRz0LRqEiRwwbdouCIUOcPDIuZ6pAsHTIagW
-        RndFcqnmnhsvSzOsebiw/7pNCQcHXkQ=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-298-gZZHgv5OPQG92wmoiegwMQ-1; Tue, 16 Nov 2021 05:58:19 -0500
-X-MC-Unique: gZZHgv5OPQG92wmoiegwMQ-1
-Received: by mail-ed1-f72.google.com with SMTP id f4-20020a50e084000000b003db585bc274so16774681edl.17
-        for <linux-pm@vger.kernel.org>; Tue, 16 Nov 2021 02:58:19 -0800 (PST)
+        id S234534AbhKPLDp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Nov 2021 06:03:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48332 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230515AbhKPLDm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Nov 2021 06:03:42 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD73EC061570;
+        Tue, 16 Nov 2021 03:00:45 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id y13so10986917edd.13;
+        Tue, 16 Nov 2021 03:00:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mZYsLA03c0ESxUBqInit0nIdPnOqA/BXoaX/WaT1Xo0=;
+        b=qsMKMXQ3gqvfq5vm5Xf6kKGtzHl2sjvIqH1Gona6Hfq+inlnsBjP6WvPIKKuFZvHd6
+         /rzUb9Cbew5anK1AQxoFWqLS99sguSvNzIoEOCUVYUSPgk6V4fYa9ccVLhg6tBtmiQAf
+         rV8aNSozQxrftK7Srj92YJIgXthyLHX3yGVo0NBYMGH7gjfD1qyL9dA9oS/kac8yJIwf
+         viSXfcoavOU5yTotlfb2h1C0IA897ylObp8c7KTdGXB78lSs7BHxt++3+daIIz2jAKOs
+         JRjCh6S3UMndPpG7HiS9/qA/IUIO/UN/UVB2T/gQt/OyVBAvYxzHjZIM9s2F1hbpSJdR
+         HvKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=kY0B8yGVYk8MaOQx8xvl+ZB1I0VF4H2dddqWO+tZ2pc=;
-        b=Ictjszyp9Xhm414brPN7AfPpZE8lNTsM7W127GaQH+A/rYnMNyFgvEaSxh9Pw1BOsl
-         mXZEvIAHsV6VfR/2jRuYlj3+VeXQ+Gl3fxKLlUSDgMAqQMAmdQUsKets+S7ubuB7T5iT
-         Q88OErwFcs2VQ0+F/zUosUtkV6tbs1FkIaAmzH1RDxyLtgSBqybg4APz0gGzFOs9sLBO
-         0mPXjMcjxMnn+dV5LHQT8I4UW9YF78QakGwZU/2SFzBEH+7Ldx5kpuMwsuQQlTYAc+0x
-         WA6DoPwmLztgPNhhrX+jqaFb+h3RmjDGqqVRsw9U1dJJ0arPC25o9ETL3IIHdrxz+dYu
-         APxA==
-X-Gm-Message-State: AOAM5328GOXO4sa9YIS+SPMnk2uQepBjNNuwC9ms+CnJgn4iXCJSvvsy
-        1axXTG5aHsxpvJuMFjN54sUQ7DtvrjGr+ihvDCUrIpVf78mo7eU5neTauj5AAgK4FnjG6qy/mWj
-        z23Iq32MOe+V08UQzQa4=
-X-Received: by 2002:a17:907:2d0e:: with SMTP id gs14mr8757032ejc.249.1637060298615;
-        Tue, 16 Nov 2021 02:58:18 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxIEbJVQs6Ie/485xAX3626rJajgjdDhHYqVaN7DlmCbvpayCdiFexQj8i/fiIF/lTRfUn0LQ==
-X-Received: by 2002:a17:907:2d0e:: with SMTP id gs14mr8756992ejc.249.1637060298317;
-        Tue, 16 Nov 2021 02:58:18 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id bo20sm9304943edb.31.2021.11.16.02.58.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Nov 2021 02:58:18 -0800 (PST)
-Message-ID: <09a66da1-1a8b-a668-3179-81670303ea37@redhat.com>
-Date:   Tue, 16 Nov 2021 11:58:16 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mZYsLA03c0ESxUBqInit0nIdPnOqA/BXoaX/WaT1Xo0=;
+        b=7+jxa2UdH3+ke0vTe8+S57RS919OnDiCec9uH+HDavIinHtgqbpIZa4fCiuemk6WKN
+         JWPr8cFbyHciNxvLtF6hfDG8HWhhQZQ4GB9jm3b8eZZzu0dYhNfi5vf4NQ8yyjMMrhGU
+         FQvFIo8Lg2MYBdK7bnQDYnfB04cGypXVHKvbU4yj0EAhWBsIljwPhXRYNN0qCldVEQFj
+         +UPz9Nyn0Z6LZVI1/hSy8HHJURGUgpNloZ0T8sY6qaQiaiJ/AK6uhI6Zaf71ph1NiSJy
+         IlDViUPc5glBugEzkRgrbzskdbC3GhYN9vodoO0SLLCmc69PnkCuVexS2LU+W2Mdh84t
+         4ggw==
+X-Gm-Message-State: AOAM531zRv8TyoUTfqieMtn7AoJsGc8N3452dmFXBaaofkuAUj33L3sH
+        ky2d0SGzoacp5/Gd8+jIsYGFIDRHHHPB0vIL3o9SJT6qc8M=
+X-Google-Smtp-Source: ABdhPJy10veqr4r8kc5EiKNBhkcv6gYr2Kc2qm+82DyZ67lYKpyQ540qJr8Bgm1flhfPv1liIBqriGFL/Tu2lCppA5I=
+X-Received: by 2002:a50:9ec9:: with SMTP id a67mr8829518edf.238.1637060444315;
+ Tue, 16 Nov 2021 03:00:44 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 4/4] platform/x86: thinkpad_acpi: support inhibit-charge
-Content-Language: en-US
-To:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
-        linux-pm@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
-        ibm-acpi-devel@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org,
+References: <20211114170335.66994-1-hdegoede@redhat.com>
+In-Reply-To: <20211114170335.66994-1-hdegoede@redhat.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 16 Nov 2021 13:00:02 +0200
+Message-ID: <CAHp75Vf+0yw8Nb4Lxbf9ukYWw9xPnpy2C0OyaXJ+o5xsamP4qA@mail.gmail.com>
+Subject: Re: [PATCH v2 00/20] power-suppy/i2c/extcon: Fix charger setup on
+ Xiaomi Mi Pad 2 and Lenovo Yogabook
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
         Mark Gross <markgross@kernel.org>,
-        Henrique de Moraes Holschuh <hmh@hmh.eng.br>
-Cc:     linux-kernel@vger.kernel.org, linrunner@gmx.net, bberg@redhat.com,
-        hadess@hadess.net, markpearson@lenovo.com,
-        nicolopiazzalunga@gmail.com, njoshi1@lenovo.com, smclt30p@gmail.com
-References: <20211113104225.141333-1-linux@weissschuh.net>
- <20211113104225.141333-5-linux@weissschuh.net>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20211113104225.141333-5-linux@weissschuh.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        Andy Shevchenko <andy@infradead.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Yauhen Kharuzhy <jekhor@gmail.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Thomas,
+On Sun, Nov 14, 2021 at 7:03 PM Hans de Goede <hdegoede@redhat.com> wrote:
+>
+> Hi All,
+>
+> This is version 2 of my series previously titled:
+> "[PATCH 00/13] power-suppy/i2c/extcon: Add support for cht-wc PMIC
+> without USB-PD support".
+>
+> So far almost all the kernel code surrounding the Cherry Trail Whiskey Cove
+> PMIC has been developed on the GPD win / pocket devices and it has various
+> assumption based on that. In the mean time I've learned (and gotten access
+> to) about 2 more designs and none of the 3 now known designs use a single
+> standard setup for the charger, fuel-gauge and other chips surrounding the
+> PMIC / charging+data USB port:
+>
+> 1. The GPD Win and GPD Pocket mini-laptops, these are really 2 models
+> but the Pocket re-uses the GPD Win's design in a different housing:
+>
+> The WC PMIC is connected to a TI BQ24292i charger, paired with
+> a Maxim MAX17047 fuelgauge + a FUSB302 USB Type-C Controller +
+> a PI3USB30532 USB switch, for a fully functional Type-C port.
+>
+> 2. The Xiaomi Mi Pad 2:
+>
+> The WC PMIC is connected to a TI BQ25890 charger, paired with
+> a TI BQ27520 fuelgauge, using the TI BQ25890 for BC1.2 charger type
+> detection, for a USB-2 only Type-C port without PD.
+>
+> 3. The Lenovo Yoga Book YB1-X90 / Lenovo Yoga Book YB1-X91 series:
+>
+> The WC PMIC is connected to a TI BQ25892 charger, paired with
+> a TI BQ27542 fuelgauge, using the WC PMIC for BC1.2 charger type
+> detection and using the BQ25892's Mediatek Pump Express+ (1.0)
+>
+> ###
+>
+> Unlike what is normal on X86 this diversity in designs is not handled /
+> abstracted away by the ACPI tables.
 
-Thank you for working on this!
+I will briefly look into it, right now two observations (or nit-picks):
+- you may utilize Co-developed-by tag when it makes sense
+- I would rather see "x86/ACPI" in all texts (note small "x")
 
-On 11/13/21 11:42, Thomas Weißschuh wrote:
-> This adds support for the inhibit-charge charge_behaviour through the
-> embedded controller of ThinkPads.
-> 
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> 
-> ---
-> 
-> This patch is based on https://lore.kernel.org/platform-driver-x86/d2808930-5840-6ffb-3a59-d235cdb1fe16@gmail.com/
-> ---
->  drivers/platform/x86/thinkpad_acpi.c | 55 +++++++++++++++++++++++++++-
->  1 file changed, 53 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/platform/x86/thinkpad_acpi.c b/drivers/platform/x86/thinkpad_acpi.c
-> index e8c98e9aff71..7cd6475240b2 100644
-> --- a/drivers/platform/x86/thinkpad_acpi.c
-> +++ b/drivers/platform/x86/thinkpad_acpi.c
-> @@ -9321,6 +9321,8 @@ static struct ibm_struct mute_led_driver_data = {
->  #define SET_STOP	"BCSS"
->  #define GET_DISCHARGE	"BDSG"
->  #define SET_DISCHARGE	"BDSS"
-> +#define GET_INHIBIT	"PSSG"
-> +#define SET_INHIBIT	"BICS"
->  
->  enum {
->  	BAT_ANY = 0,
-> @@ -9338,6 +9340,7 @@ enum {
->  	THRESHOLD_START,
->  	THRESHOLD_STOP,
->  	FORCE_DISCHARGE,
-> +	INHIBIT_CHARGE,
->  };
->  
->  struct tpacpi_battery_data {
-> @@ -9409,6 +9412,13 @@ static int tpacpi_battery_get(int what, int battery, int *ret)
->  		/* The force discharge status is in bit 0 */
->  		*ret = *ret & 0x01;
->  		return 0;
-> +	case INHIBIT_CHARGE:
-> +		/* This is actually reading peak shift state, like tpacpi-bat does */
-> +		if ACPI_FAILURE(tpacpi_battery_acpi_eval(GET_INHIBIT, ret, battery))
-> +			return -ENODEV;
-> +		/* The inhibit charge status is in bit 0 */
-> +		*ret = *ret & 0x01;
-> +		return 0;
->  	default:
->  		pr_crit("wrong parameter: %d", what);
->  		return -EINVAL;
-> @@ -9447,6 +9457,22 @@ static int tpacpi_battery_set(int what, int battery, int value)
->  			return -ENODEV;
->  		}
->  		return 0;
-> +	case INHIBIT_CHARGE:
-> +		/* When setting inhibit charge, we set a default value of
-> +		 * always breaking on AC detach and the effective time is set to
-> +		 * be permanent.
-> +		 * The battery ID is in bits 4-5, 2 bits,
-> +		 * the effective time is in bits 8-23, 2 bytes.
-> +		 * A time of FFFF indicates forever.
-> +		 */
-> +		param = value;
-> +		param |= battery << 4;
-> +		param |= 0xFFFF << 8;
-> +		if (ACPI_FAILURE(tpacpi_battery_acpi_eval(SET_INHIBIT, &ret, param))) {
-> +			pr_err("failed to set inhibit charge on %d", battery);
-> +			return -ENODEV;
-> +		}
-> +		return 0;
->  	default:
->  		pr_crit("wrong parameter: %d", what);
->  		return -EINVAL;
-> @@ -9467,6 +9493,8 @@ static int tpacpi_battery_probe(int battery)
->  	 * 4) Check for support
->  	 * 5) Get the current force discharge status
->  	 * 6) Check for support
-> +	 * 7) Get the current inhibit charge status
-> +	 * 8) Check for support
->  	 */
->  	if (acpi_has_method(hkey_handle, GET_START)) {
->  		if ACPI_FAILURE(tpacpi_battery_acpi_eval(GET_START, &ret, battery)) {
-> @@ -9513,6 +9541,16 @@ static int tpacpi_battery_probe(int battery)
->  			battery_info.batteries[battery].charge_behaviours |=
->  				BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE);
->  	}
-> +	if (acpi_has_method(hkey_handle, GET_INHIBIT)) {
-> +		if (ACPI_FAILURE(tpacpi_battery_acpi_eval(GET_INHIBIT, &ret, battery))) {
-> +			pr_err("Error probing battery inhibit charge; %d\n", battery);
-> +			return -ENODEV;
-> +		}
-> +		/* Support is marked in bit 5 */
-> +		if (ret & BIT(5))
-> +			battery_info.batteries[battery].charge_behaviours |=
-> +				BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE);
-> +	}
->  
->  	battery_info.batteries[battery].charge_behaviours |=
->  		BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO);
-> @@ -9673,6 +9711,11 @@ static ssize_t charge_behaviour_show(struct device *dev,
->  			return -ENODEV;
->  		if (ret)
->  			active = POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE;
-> +	} else if (available & BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE)) {
-
-The use of else-if here seems wrong, this suggests that batterys can never
-support both force-discharge and inhibit-charge behavior, which they can, so this
-means that active can now never get set to BEHAVIOUR_INHIBIT_CHARGE on
-batteries which support both.
-
-So AFAICT the else part of the else if should be dropped here, making this
-a new stand alone if block.
-
-For the other parts of the set lets wait and see what Sebastian has to say.
-
-Regards,
-
-Hans
-
-
-
-> +		if (tpacpi_battery_get(INHIBIT_CHARGE, battery, &ret))
-> +			return -ENODEV;
-> +		if (ret)
-> +			active = POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE;
->  	}
->  
->  	return power_supply_charge_behaviour_show(dev, available, active, buf);
-> @@ -9710,12 +9753,20 @@ static ssize_t charge_behaviour_store(struct device *dev,
->  	switch (selected) {
->  	case POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO:
->  		ret = tpacpi_battery_set(FORCE_DISCHARGE, battery, 0);
-> -		if (ret < 0)
-> +		ret = tpacpi_battery_set(INHIBIT_CHARGE, battery, 0) || ret;
-> +		if (ret)
->  			return ret;
->  		break;
->  	case POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE:
->  		ret = tpacpi_battery_set(FORCE_DISCHARGE, battery, 1);
-> -		if (ret < 0)
-> +		ret = tpacpi_battery_set(INHIBIT_CHARGE, battery, 0) || ret;
-> +		if (ret)
-> +			return ret;
-> +		break;
-> +	case POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE:
-> +		ret = tpacpi_battery_set(FORCE_DISCHARGE, battery, 0);
-> +		ret = tpacpi_battery_set(INHIBIT_CHARGE, battery, 1) || ret;
-> +		if (ret)
->  			return ret;
->  		break;
->  	default:
-> 
-
+-- 
+With Best Regards,
+Andy Shevchenko
