@@ -2,83 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 013BB453451
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Nov 2021 15:36:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBDCF453582
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Nov 2021 16:17:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237383AbhKPOio (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Nov 2021 09:38:44 -0500
-Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:39016 "EHLO
-        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237484AbhKPOil (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Nov 2021 09:38:41 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0UwuY7op_1637073342;
-Received: from 30.39.231.61(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0UwuY7op_1637073342)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 16 Nov 2021 22:35:42 +0800
-Message-ID: <f1d55a78-8910-cfc2-c086-41443ccfa225@linux.alibaba.com>
-Date:   Tue, 16 Nov 2021 22:36:28 +0800
+        id S237906AbhKPPUz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Nov 2021 10:20:55 -0500
+Received: from relmlor1.renesas.com ([210.160.252.171]:29293 "EHLO
+        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S237778AbhKPPUy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Nov 2021 10:20:54 -0500
+X-IronPort-AV: E=Sophos;i="5.87,239,1631545200"; 
+   d="scan'208";a="100471786"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 17 Nov 2021 00:17:56 +0900
+Received: from localhost.localdomain (unknown [10.226.92.242])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 6367C40062CC;
+        Wed, 17 Nov 2021 00:17:53 +0900 (JST)
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH 0/5] Add Thermal support for RZ/G2L
+Date:   Tue, 16 Nov 2021 15:17:45 +0000
+Message-Id: <20211116151750.24857-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v2] power: supply: core: Use library interpolation
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>
-References: <20211116003844.2133683-1-linus.walleij@linaro.org>
- <4cf76c42-2357-c000-86d7-13b2abf5dcbb@linux.alibaba.com>
- <CACRpkdbVdU0S+cOZfDczxW+pNVDgc54cB75itFi-V9tjHkq-zA@mail.gmail.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <CACRpkdbVdU0S+cOZfDczxW+pNVDgc54cB75itFi-V9tjHkq-zA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+RZ/G2L SoC incorporates a thermal sensor unit (TSU) that measures
+the temperature inside the LSI.
+ 
+The thermal sensor in this unit measures temperatures in the range from
+−40°C to 125°C with an accuracy of ±3°C. The TSU repeats measurement at
+20-µs intervals, and automatically updates the results of measurement.
 
+The TSU has no external pins as well as no interrupts.
 
-On 2021/11/16 21:34, Linus Walleij wrote:
-> On Tue, Nov 16, 2021 at 3:28 AM Baolin Wang
-> <baolin.wang@linux.alibaba.com> wrote:
-> 
->> Thanks for your patch, and overall looks good to me. But I still think
->> we should not do interpolation if the temperature is larger than the
->> maximum value of the table, we can just return the maximum value of the
->> table instead. Something like below untested code, how do you think?
-> 
-> You are right, but if I understand correctly
-> fixp_linear_interpolate() already does what you want,
-> perhaps a bit unintuitively. See include/linux/fixp-arith.h:
-> 
-> static inline int fixp_linear_interpolate(int x0, int y0, int x1, int y1, int x)
-> {
->          if (y0 == y1 || x == x0)
->                  return y0;
->          if (x1 == x0 || x == x1)
->                  return y1;
-> 
->          return y0 + ((y1 - y0) * (x - x0) / (x1 - x0));
-> }
-> 
+This patch series aims to add TSU driver support for RZ/G2L SoC.
 
-Sorry for confusing, let me try to make it clear. Suppose we have a 
-temperature table as below, and try to get the resistance percent in the 
-temp=-20 Celsius.
+Biju Das (5):
+  clk: renesas: r9a07g044: Add TSU clock and reset entries
+  dt-bindings: thermal: Document Renesas RZ/G2L TSU
+  thermal/drivers: Add TSU driver for RZ/G2L
+  arm64: dts: renesas: r9a07g044: Add TSU node
+  arm64: dts: renesas: r9a07g044: Create thermal zone to support IPA
 
-resistance-temp-table = <20 100>, <10 90>, <0 80>, <(-10) 60>;
+ .../bindings/thermal/rzg2l-thermal.yaml       |  76 ++++++
+ arch/arm64/boot/dts/renesas/r9a07g044.dtsi    |  42 +++
+ drivers/clk/renesas/r9a07g044-cpg.c           |   3 +
+ drivers/thermal/Kconfig                       |   9 +
+ drivers/thermal/Makefile                      |   1 +
+ drivers/thermal/rzg2l_thermal.c               | 239 ++++++++++++++++++
+ 6 files changed, 370 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/thermal/rzg2l-thermal.yaml
+ create mode 100644 drivers/thermal/rzg2l_thermal.c
 
-With your patch, we will get i=table_len-1, which is 3. Then high=2 and 
-low=3.
+-- 
+2.17.1
 
-+	for (i = 0; i < table_len - 1; i++)
-  		if (temp > table[i].temp)
-  			break;
-
-So in fixp_linear_interpolate(): x0=-10, y0=60, x1=0, y1=80, x=-20, then 
-will return 60 + (80-60)*(-20-(-10))/(0-(-10)) = 40.
-
-But actually the -20 Celsius is less than (-10), which is the last 
-member in the array, we do not need the interpolation, return 60 
-directly if I understand correctly. Which means for any other lower 
-temperature points, the resistance of the baterry is always 60% of the 
-battery internal resistence in normal temperature.
