@@ -2,145 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 484B64529FF
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Nov 2021 06:46:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17829452A70
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Nov 2021 07:21:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236409AbhKPFtO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Nov 2021 00:49:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60130 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236290AbhKPFsi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Nov 2021 00:48:38 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C277AC04E203
-        for <linux-pm@vger.kernel.org>; Mon, 15 Nov 2021 19:59:39 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id gf14-20020a17090ac7ce00b001a7a2a0b5c3so1036853pjb.5
-        for <linux-pm@vger.kernel.org>; Mon, 15 Nov 2021 19:59:39 -0800 (PST)
+        id S230345AbhKPGYL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Nov 2021 01:24:11 -0500
+Received: from mail-db8eur05on2070.outbound.protection.outlook.com ([40.107.20.70]:2176
+        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230385AbhKPGYH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 16 Nov 2021 01:24:07 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LPmywwcEEjDNKnU7XSwB/PbtdprIOg9a4sQGahkP/cIZMFfZTexdtEKTZOCiuwW1wYIwXi2msT3ppv8+N5vbEp72M89EOkm43uYAk1dO2WCyPN2dTne/lx2Wjv8mbyLFktr7fe1Odo+5dsAwshFGaq3y+hpXIBq1LB/B05mDBSBHGeg049kQicU2xbSpWhZQNJRzeNfZgUx2HN6yz+YPdfKaI3a3QY12L9ISqrZ84snncuHYpQAyeyjhqIl0QRwr4BkfLqi1ndC20Vbq30iAdewMdn15Mzd5YLBzF3tRJP8r83Ie/gxMf3YKnKXTK0lvoWAdzmy72EkPbpbxQywouQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=u6AzlE3orQ1vz1uH4BkFhF9l/yTKYUtv8LYElQ/o4gA=;
+ b=HD+zz85Tewxv0o5MLYhAZWdRAdLPPhm6wbEAY9Ge5QgtSTMXPBFnkuPRW0vH60gtjosO+HEjdLNMeITwNoytkT7wGDF06AZyk1MbsHzDeADKDGASqSQT6MBcGOCBAkg5p+nEQyMdTtUAa+q0FeBSqTasgyvH/iHXNqpJKhg1N6SpfsQqtRlL7wG/gAp/NthKxAFXZn02QIwLLJMYm4l6NVhSj4tWjDmHn3zC7KOlCp+rRVEC0AZSp7xIlntHRr72RCwRXPvrpD9/g60tpWaIhvb08j/tK8G6LC9fnnv37g+SUGqvbZ7cdpAbZV4XpESReIc3XLe93QtiR5bhfS7xRA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fi.rohmeurope.com; dmarc=pass action=none
+ header.from=fi.rohmeurope.com; dkim=pass header.d=fi.rohmeurope.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=OD3I3LT4cd/NlKPjbaF84wzyVeqal/CYdheaDHtLVBQ=;
-        b=D9MB2cD5ZTkPvVciUtxG5JCdjR2f3TJaJMYV4Psbq6km1huVNqG90Z9WsVwtBhdtF1
-         pRMI2ngvEhfcNAykf2cSbWFTiawhSocFdkW7PyhJ0fujnACiPPsLtxnPDzVbQVmH9fZb
-         0ZCztGz76Gw8tS/4WQKcVnoG0VuQzoynuTlu2yKYzl3Z/xmf+kYDGDrhE+JZSnwwnQtg
-         RPJpIg9qUBdSsRlhxVEWhxVUi3VxECVoDYQHrmITOfoOm0hSUXirR4CbluK9+hFau0uh
-         c6ohN0DXxkW5yF2ysEYfuofWIaV8ZKHFx2SXBaVjXJyGG/RwVdmm6PW26nKgsAlDzAFF
-         FMkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=OD3I3LT4cd/NlKPjbaF84wzyVeqal/CYdheaDHtLVBQ=;
-        b=K2Z1g8i/ujilzKoA+nAvJKt4zbtVjXECLsJvNKHNbkIN1rxn0GwEj19Wn3B1R7Pciu
-         dLMi3wzzRJonBZnSgs60pGdLYGDnBM2TtMl7qCDpg1E39gDWo8Nts5X90XZmHwm5MpNg
-         mDW+LNOn1C5lR3CKrz8xflRyXHd50npRnA4JbvCDRaNUs/g1YwcnY6B4ek2aILlpk3m0
-         vIqORp2z28xpVfooOj/TEd5vm6+SoC6waHSexQN36+O8Ng68gj1iZdZvDX2pXa0ORktL
-         1+PnrEqqB3+LRlcxQGYgMi4wAgW2bsnlta4a97L5IYPNUBrvPZsXlfDIvFxXK9jip/Ox
-         loqg==
-X-Gm-Message-State: AOAM5307fhgchmsyw9H/YpRC93BER7m0tB7OHmi/0BqtK+hCXcLVk1aO
-        gUrQn+vsNnXUe+pELU6PIIj3BQ3OeDm6YA==
-X-Google-Smtp-Source: ABdhPJzxtLF3JUXA2rr0FEnL3UDohuQb6rtrfCfIfhUdDORN4CRvGDf9QXb8ooZiRKQLCrfECHUN/g==
-X-Received: by 2002:a17:90a:3045:: with SMTP id q5mr4961611pjl.58.1637035178534;
-        Mon, 15 Nov 2021 19:59:38 -0800 (PST)
-Received: from localhost ([223.226.77.81])
-        by smtp.gmail.com with ESMTPSA id n13sm16560345pfj.188.2021.11.15.19.59.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Nov 2021 19:59:37 -0800 (PST)
-Date:   Tue, 16 Nov 2021 09:29:35 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Steev Klimaszewski <steev@kali.org>
-Cc:     Thara Gopinath <thara.gopinath@linaro.org>, rafael@kernel.org,
-        bjorn.andersson@linaro.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: freq_table: Initialize cpuinfo.max_freq to
- correct max frequency.
-Message-ID: <20211116035935.wmazontuznhys6qu@vireshk-i7>
-References: <20211115195011.52999-1-thara.gopinath@linaro.org>
- <5ae2c644-4743-c62c-b17c-96945a0e6a01@kali.org>
+ d=rohmsemiconductoreurope.onmicrosoft.com;
+ s=selector1-rohmsemiconductoreurope-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=u6AzlE3orQ1vz1uH4BkFhF9l/yTKYUtv8LYElQ/o4gA=;
+ b=VOSOGkNZGsNAwufbi0q5hXSIPzo/RCrZTpNfsEYLaI+Igg9/ZNEJ/h/e9UzHHVYrk4TDdhHB21jlvTwn/SGPgLa9H8GjuKCmACrG1mdHHzdG1QCRZdb87UoSkZwDvK2wIm4gauXJd9u3l+SWwi9TidcCtfPGLPjXA5TLdKIP5/A=
+Received: from HE1PR03MB3162.eurprd03.prod.outlook.com (2603:10a6:7:55::20) by
+ HE1PR0301MB2329.eurprd03.prod.outlook.com (2603:10a6:3:67::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4690.27; Tue, 16 Nov 2021 06:21:07 +0000
+Received: from HE1PR03MB3162.eurprd03.prod.outlook.com
+ ([fe80::d535:e3e:baf4:2d60]) by HE1PR03MB3162.eurprd03.prod.outlook.com
+ ([fe80::d535:e3e:baf4:2d60%5]) with mapi id 15.20.4690.027; Tue, 16 Nov 2021
+ 06:21:07 +0000
+From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>
+CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v3] power: supply: core: Add kerneldoc to battery struct
+Thread-Topic: [PATCH v3] power: supply: core: Add kerneldoc to battery struct
+Thread-Index: AQHX2n+y2iIKcdsoDEGLqcFn5J628KwFr0iA
+Date:   Tue, 16 Nov 2021 06:21:07 +0000
+Message-ID: <bbaa93fe-8a10-7c80-2b5d-c36b0968429f@fi.rohmeurope.com>
+References: <20211116001755.2132036-1-linus.walleij@linaro.org>
+In-Reply-To: <20211116001755.2132036-1-linus.walleij@linaro.org>
+Accept-Language: fi-FI, en-US
+Content-Language: fi-FI
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fi.rohmeurope.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 3f4130a6-7e22-498c-86f0-08d9a8c9468f
+x-ms-traffictypediagnostic: HE1PR0301MB2329:
+x-microsoft-antispam-prvs: <HE1PR0301MB23292762AD0CC619E51D4A0AAD999@HE1PR0301MB2329.eurprd03.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ZpJ5MCi9hR+sSUObnRUqjc0peJi7TBWQehsjeCJYn1qzHVg06GmgzT/k1VVonXcZ2Lz7YCboff9sS/7NNY3j2NGvzS0uctg8KnK+ENZINDW8aTRhi0+TS5Rt2n24lkQnnGiNoPa9gnoGbjgClz+zrEaH+mqTsEb/aVDb8PZcbKqwsEx5XWz45ad+U/BDg7k+ogIk6e97uyO01cwOfTe+w5bnoPXM/Ic5jZ2m+Tq+v3QhFqKsb9DfXDTbSeE7D4F7j3B8A+pd9KI/L7bHX0rwqp4bSSdcOSotF1X9KsrkWO8NddK8V+oBawp0k4lelinBsCr6Ek2vI0e+j0K2f65lAKGD8rfNs+eXLFVts8pUUoGpknlul/cp87G/rMVfnCKpcI58YaI+hdUuwiSWCjmoZ7BG9ViS/py9HvFA1M0GH0WSgZx8wLkG1eGO32179LkExlt5jL2ZdTkPcdTaFhCFsM2/NAYFTtYHom5RkMnMXqjO6n4DRf0tEMoJRnFxv8RzppY3toUklTnmLMkR+D2eQfO4StpKYk4EbqAwxcDwpC47zZVvhXgDzXpI7KWtrSX5u7XqCvztAj+9kiRZkHb53Pr6ZEgRkUKeL/xTuMmPuHljYCNbJLPF9j7SJPNFlFT/PrfEeXF34xN+QhXOn7nvn10QyeJsas3XYXYVoPQ95j8Iz0UgjEWjNRkUV/BdOaqnm2V1Mw/DeMtIPq8jTQ1Rhyc6FndeRbYrxkFGg5S+CBM8PuOt1gn2NU9fqMh5Y/DfDfsr1D/q+zAUU4mGgWOQeA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR03MB3162.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(76116006)(66556008)(508600001)(2906002)(66946007)(8936002)(31696002)(186003)(4326008)(6486002)(38070700005)(66476007)(66446008)(110136005)(316002)(64756008)(6506007)(71200400001)(2616005)(122000001)(31686004)(6512007)(8676002)(86362001)(38100700002)(83380400001)(5660300002)(53546011)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RkNaRlRsOWhVS2JyVHJPbVpKMUpHWDZhcnJVNEk4M1M2UWs2SzNEb0xVYWY5?=
+ =?utf-8?B?U2RYWHNpZzcxNjdIZDJSVWl2dUVreHZGZ1RmL210TEI2UG9ESkhJUXRZK2xZ?=
+ =?utf-8?B?ZGhKL1UyaENITXdsTVphdHhGZ0Fmb0JQODhxY2dEVXBPcUlBTFhnUHF3VWxP?=
+ =?utf-8?B?ZFFyYitsaUtYbFlOallXbWMxVXZwOGI2SmJtU1lRQWNTNVZ6bXl0VVZJR2xl?=
+ =?utf-8?B?ZVFrb1Q1TmsyM1JOTUkycTZGb1RGcnpTMGtUWHNrNlZ6dGV0SklLaFB0NnNV?=
+ =?utf-8?B?RWozeXVxVWdYVXFTVUZUNVdaRTUvdFpKQmpMRSttNHBZTHpYem5VK0UxYm44?=
+ =?utf-8?B?bC9oVHlWL2lXNUtta002Rm1rM1ZOZm9maFNxMkIzSjRORjVXS0lFYk5JK0s2?=
+ =?utf-8?B?RlpCUmRjQ0UyRDlQc1p5WDl5TlhvOGdFL3hoT3pKWWJzYzZpOEFSUTJRajBS?=
+ =?utf-8?B?MHk1SFNiTDNacTMwRENKK3NnZjRMaVpGWnZDeUxob29rcTc4TzJaTmtmdkk5?=
+ =?utf-8?B?ZGZuVG5vMlpoc2RRSDJFZWFJMkUwbE00aGh6Y3RaQXF6YWlyZXpHb2ZLd3Fu?=
+ =?utf-8?B?UjNKTFgzOWpVK3VOZDdNbkFFY2gxcE53WmxlQ2NBSUYwNkI3c3MvOUE3RXZK?=
+ =?utf-8?B?QVF5S2g0MmtTcDN5cnVyUzlHMU10ZUtsZXh0MDVRblY5bnFBUDBkeGVsRExt?=
+ =?utf-8?B?dllYOFpBeWFnRWNJY25Ra0FDRnE1Ykk1ZDNVRHMwa0xha0FjTTZReit2Witk?=
+ =?utf-8?B?UzEwcEVKamlyc2w4QnJuODRzdFZwQWpsbHJORkpuNktiejEwaW9GVEN4NFU1?=
+ =?utf-8?B?NThRRDlmMnRzU3FENEU2bWJJRzI1U3dRT2N6L3BKTXRsYUhGSkI2cTNIUVNL?=
+ =?utf-8?B?WjkzWjZrTXBFYW1hcEh6c1ZWRGEvdXc4RFRWN3RtbU13SEE0SW1RLzlBakRt?=
+ =?utf-8?B?S3lQNzErY2JZaWp1Y2NmOXVwTjkydWFBVnNKYmNEVWpkWmdRWTc5M1FmSnFm?=
+ =?utf-8?B?WGNSVllJQkR5ZkkxUW9xckIxRm44K3RiTWl5Y0s2KzJGeFpaZlM1SlVabEJs?=
+ =?utf-8?B?MnlyRG5mZnJCTjRpUy9kQzJDM1ZTejZuUCtTQlFsejVlK0FmVGMyZnBQdTV6?=
+ =?utf-8?B?UXN5aGNlVVdyMTA3MmxZL21IZmEySmdyenVXblhkd3ZQZGxQMDR0YjFUUlBt?=
+ =?utf-8?B?VGJxRnIyUEV0R1FsaVkzdGR4Vit0UlJHWVJJeXhXd0tUQ2I5Y090dVVzVDlW?=
+ =?utf-8?B?RW5samE4WTU5ZWRVWmVFT1RtbHcyb0ZwYjhNbG02MjZSWFlpUVdlazZYcnNw?=
+ =?utf-8?B?a3YvTEcvdW12Q0lqUEQzaVN0ZVEveERvc2pTSGJnMTFPQ3NYM05jN1ByRXJL?=
+ =?utf-8?B?OGZQR3JBZ21DUmY0REVYRStXTzduNUMzWFNvTlhKVk1ZUGU1TG5nd00xZUdN?=
+ =?utf-8?B?d0tTRXB5aDYyOHlSYWNHdk85ZlNnM2RJNWlGRXdFWktGYlUxMEs2aEoraE5W?=
+ =?utf-8?B?MGhObVlSbkJ2Tyt0aWtLQ2licThKU2MyUlZKU2xveThXU3dDb0VDMHJJbUho?=
+ =?utf-8?B?QzNxS1ZIZUJrTnhvYXQvZVJGYWUxUERnZWhScE5USEpwa21yWVAxWmVMUXZv?=
+ =?utf-8?B?dnBQL2lsVi96MHlZUlNKOE9HVWRkdXE3OXQ1L1FUc1FSMHptRUVxY1B1M2t6?=
+ =?utf-8?B?OFJpL1FydFhjQ1RMSTlZWXl1TTJzN0dJWmRvS1pJZEthOHRtQ29GaHVTbm52?=
+ =?utf-8?B?OTNoRnd4eGh3UlM3Z2ZXZXh4WCsxUGtCT00zSk5mVi9hbzlLU2UyVGw0YWpV?=
+ =?utf-8?B?dVhuSi9MVi95V0s0WUUwN3hzeXBvTWVBQzlPZ1ZVa0FjWEpuMk5WSk9xSGtD?=
+ =?utf-8?B?YUNOUktJQVNlVUs4TE1Obm1yRGszYkRBM2NsU3VtejNrRWlrT0doSjBITTJ5?=
+ =?utf-8?B?M0lmTlVhdWsrYlQ5MU15b2JURFNCMTEzQ2N6Wk05Tzl4VGQ1U3pIbHBwTWps?=
+ =?utf-8?B?ZmtSTlV5SWZJZnZ1cUplQURSS1ZSVjNqZmJOYkdsell2L2lWWkNEd1N0aFVP?=
+ =?utf-8?B?dEcvMDlHLzBEcy9SQ084dXdZeFlzL3hKd0ZFVTlBZWZ2YTF3MWVFVUVMa2pO?=
+ =?utf-8?B?RCtvNzZxNHBwa0lMZUUzeGlMWlpqVk9RSjJFQ0ZXZGVXeXRnZXZ2YjI4SW9X?=
+ =?utf-8?B?NDlybEQrWWJ3VmloQ3R6MU5UbWQzWlB0Q3NBWWtWUE1oVVh3VnhFcUhNVmNu?=
+ =?utf-8?B?dm5ZY1JuRDNJY0UyN1NvbXB4clgxSm1RN3p0VHkrdFVybDFSVXJuaVdEWjl5?=
+ =?utf-8?B?R0IzV2JqVm41NjFFQlB0MTRsUkE4OEJEZ0x0TUN4enFEcGlwc1dwUT09?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <D0D52AC8FD80FD4F8775F42F66630E6E@eurprd03.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5ae2c644-4743-c62c-b17c-96945a0e6a01@kali.org>
-User-Agent: NeoMutt/20180716-391-311a52
+X-OriginatorOrg: fi.rohmeurope.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HE1PR03MB3162.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3f4130a6-7e22-498c-86f0-08d9a8c9468f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Nov 2021 06:21:07.4090
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 94f2c475-a538-4112-b5dd-63f17273d67a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: aNbRVP7p8r/fQ1yhjiPqQQGABEic/7GQeg2mgMGQNXG9sS/rDx2yD5XeLv9c0ez+doXIsTP0cKPHfyB46Bu6palZZdHz6gMPkgerxPb5f/gC1O5oHI6I3eFjzXWVxxIw
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR0301MB2329
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15-11-21, 19:23, Steev Klimaszewski wrote:
-> Hi Thara,
-> 
-> On 11/15/21 1:50 PM, Thara Gopinath wrote:
-> > cpuinfo.max_freq reflects the maximum supported frequency of cpus in a
-> > cpufreq policy. When cpus support boost frequency and if boost is disabled
-> > during boot up (which is the default), cpuinfo.max_freq does not reflect
-> > boost frequency as the maximum supported frequency till boost is explicitly
-> > enabled via sysfs interface later. This also means that policy reports two
-> > different cpuinfo.max_freq before and after turning on boost.  Fix this by
-> > separating out setting of policy->max and cpuinfo.max_freq in
-> > cpufreq_frequency_table_cpuinfo.
-> > 
-> > e.g. of the problem. Qualcomm sdm845 supports boost frequency for gold
-> > cluster (cpus 4-7). After boot up (boost disabled),
-> > 
-> > 1.  cat /sys/devices/system/cpu/cpufreq/policy4/cpuinfo_max_freq 2649600
-> > <- This is wrong because boost frequency is
-> > 
-> > 2.  echo 1 > /sys/devices/system/cpu/cpufreq/boost  <- Enable boost cat
-> > /sys/devices/system/cpu/cpufreq/policy4/cpuinfo_max_freq 2803200	<-
-> > max freq reflects boost freq.
-> > 
-> > 3.  echo 0 > /sys/devices/system/cpu/cpufreq/boost <- Disable boost cat
-> > /sys/devices/system/cpu/cpufreq/policy4/cpuinfo_max_freq 2803200	<-
-> > Discrepancy with step 1 as in both cases boost is disabled.
-> > 
-> > Note that the other way to fix this is to set cpuinfo.max_freq in Soc
-> > cpufreq driver during initialization. Fixing it in
-> > cpufreq_frequency_table_cpuinfo seems more generic solution
-> > 
-> > Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
-> > ---
-> >   drivers/cpufreq/freq_table.c | 8 ++++++--
-> >   1 file changed, 6 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/cpufreq/freq_table.c b/drivers/cpufreq/freq_table.c
-> > index 67e56cf638ef..6784f94124df 100644
-> > --- a/drivers/cpufreq/freq_table.c
-> > +++ b/drivers/cpufreq/freq_table.c
-> > @@ -35,11 +35,15 @@ int cpufreq_frequency_table_cpuinfo(struct cpufreq_policy *policy,
-> >   	struct cpufreq_frequency_table *pos;
-> >   	unsigned int min_freq = ~0;
-> >   	unsigned int max_freq = 0;
-> > +	unsigned int cpuinfo_max_freq = 0;
-> >   	unsigned int freq;
-> >   	cpufreq_for_each_valid_entry(pos, table) {
-> >   		freq = pos->frequency;
-> > +		if (freq > cpuinfo_max_freq)
-> > +			cpuinfo_max_freq = freq;
-> > +
-> >   		if (!cpufreq_boost_enabled()
-> >   		    && (pos->flags & CPUFREQ_BOOST_FREQ))
-> >   			continue;
-> > @@ -57,8 +61,8 @@ int cpufreq_frequency_table_cpuinfo(struct cpufreq_policy *policy,
-> >   	 * If the driver has set its own cpuinfo.max_freq above max_freq, leave
-> >   	 * it as is.
-> >   	 */
-> > -	if (policy->cpuinfo.max_freq < max_freq)
-> > -		policy->max = policy->cpuinfo.max_freq = max_freq;
-> > +	if (policy->cpuinfo.max_freq < cpuinfo_max_freq)
-> > +		policy->cpuinfo.max_freq = cpuinfo_max_freq;
-
-You need to keep the check of policy->max here and update policy->max,
-else you will never run at boost freq. I think this is what Steev
-reported as well ?
-
-So basically something like this:
-
-	if (policy->max < max_freq)
-		policy->max = max_freq;
-
-	if (policy->cpuinfo.max_freq < cpuinfo_max_freq)
-		policy->cpuinfo.max_freq = cpuinfo_max_freq;
-
--- 
-viresh
+SGkgZGVlZWUgSG8gTGludXMsDQoNCk9uIDExLzE2LzIxIDAyOjE3LCBMaW51cyBXYWxsZWlqIHdy
+b3RlOg0KPiBUaGlzIGNvbXBsZW1lbnRzIHRoZSBzdHJ1Y3QgcG93ZXJfc3VwcGx5X2JhdHRlcnlf
+aW5mbyB3aXRoDQo+IGV4dGVuc2l2ZSBrZXJuZWxkb2MgZXhwbGFpbmluZyB0aGUgZGlmZmVyZW50
+IHNlbWFudGljcyBvZiB0aGUNCj4gZmllbGRzLCBpbmNsdWRpbmcgYW4gb3ZlcnZpZXcgb2YgdGhl
+IENDL0NWIGNoYXJnaW5nIGNvbmNlcHRzDQo+IGltcGxpY2l0IGluIHNvbWUgb2YgdGhlIHN0cnVj
+dCBtZW1iZXJzLg0KPiANCj4gVGhpcyBpcyBkb25lIHRvIGZpcnN0IGVzdGFibGlzaCBzZW1hbnRp
+Y3MgYmVmb3JlIEkgY2FuDQo+IGFkZCBtb3JlIGNoYXJnaW5nIG1ldGhvZHMgYnkgYnJlYWtpbmcg
+b3V0IHRoZSBDQy9DViBwYXJhbWV0ZXJzDQo+IHRvIGl0cyBvd24gc3RydWN0Lg0KPiANCg0KSnVz
+dCBhIHJlcXVlc3QuLi4gVGhpcyBzb3VuZHMgbGlrZSB5b3UncmUgaGF2aW5nIHNvbWUgYmlnZ2Vy
+IGNoYW5nZXMgDQpjb21pbmcgaW4/IEFyZSB0aGUgY2hhbmdlcyB2aXNpYmxlIGFueXdoZXJlPw0K
+DQpJJ2QgYmUgaW50ZXJlc3RlZCBpbiBzZWVpbmcgd2hhdCB5b3UncmUgcGxhbm5pbmcgOikgSSd2
+ZSBoYWQgYSANCmZ1ZWwtZ2F1Z2UgUkZDIHNlcmllcyBzaXR0aW5nIGluIG15IG93biBnaXQgKGZv
+ciBhIGxvbmcgdGltZSkgd2FpdGluZyANCmZvciBtZSB0byBnZXQgaXQgbW9yZSBleHRlbnNpdmVs
+eSB0ZXN0ZWQgKGFuZCB3YWl0aW5nIGZvciBtZSB0byBsZWFybiANCmhvdyB0aGluZ3MgYXJlIGhh
+bmRsZWQgaW4gdXNlci1zcGFjZS4gRnVubnkgdGhhdCB3YWl0aW5nIGhhcyBub3QgDQppbmNyZWFz
+ZWQgbXkga25vd2xlZGdlIDpyb2xsZXllczopLg0KDQpJdCB3YXMganVzdCB5ZXN0ZXJkYXkgSSBk
+dWcgaXQgdXAgYW5kIHJlYmFzZWQgaXQgb250byA1LjE2LXJjMSBmb3IgYSANCnJlLXNwaW4uIEkn
+ZCBsaWtlIHRvIHNlZSBob3cgaXQgZml0cyBpbnRvIHdoYXQgeW91IGhhdmUgb24gbWluZCA6KSBJ
+IA0KbWlnaHQgZ2l2ZSBteSBzaW1wbGUtZ2F1Z2Ugc2VyaWVzIGEgZ28gYXMgUkZDdjMgbGF0ZXIg
+dG9kYXkuDQoNCkJlc3QgUmVnYXJkcw0KCU1hdHRpIFZhaXR0aW5lbg0K
