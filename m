@@ -2,93 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 550194529EB
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Nov 2021 06:39:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 484B64529FF
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Nov 2021 06:46:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235645AbhKPFmm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Nov 2021 00:42:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58988 "EHLO
+        id S236409AbhKPFtO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Nov 2021 00:49:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235504AbhKPFlx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Nov 2021 00:41:53 -0500
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EF60C0EEBC6
-        for <linux-pm@vger.kernel.org>; Mon, 15 Nov 2021 19:00:43 -0800 (PST)
-Received: by mail-oi1-x233.google.com with SMTP id n66so39123989oia.9
-        for <linux-pm@vger.kernel.org>; Mon, 15 Nov 2021 19:00:43 -0800 (PST)
+        with ESMTP id S236290AbhKPFsi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Nov 2021 00:48:38 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C277AC04E203
+        for <linux-pm@vger.kernel.org>; Mon, 15 Nov 2021 19:59:39 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id gf14-20020a17090ac7ce00b001a7a2a0b5c3so1036853pjb.5
+        for <linux-pm@vger.kernel.org>; Mon, 15 Nov 2021 19:59:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=o88lqLbXiByZSEm5Oe3EmBOSlVPhL0Q4BRAUKBtJ+uQ=;
-        b=K/OlInL0tAUwrXGjW3e7hdI1Qt+9UmNZVEpQgea9WXJXbENuBOLJJXO978bLVgPL09
-         frIs9LsU4LJ4YRMhIgJih/o6S1uai/SIAxRI01cA1OofrEg2xMjCE26bBzki7279KAON
-         hKVeoTTbJP6pKrQjFgTiDg1y548bOvJCEwYr3eYNwHX21KWkjWQwv4n2nLXbXSl1NDtW
-         2YlVgaf0hEE/JCQxTTnn5z87bT6Z7AiSM0jjgaH50T+a/5jfL/Fb5Kyyr7hTOmSYVo82
-         hgz8goirDLehCMGmD/tjKRW7/U+e3OkcaS2ju8jHpawV0ZiQnMWo0sX+iWh3ANKBUvE0
-         EfuA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=OD3I3LT4cd/NlKPjbaF84wzyVeqal/CYdheaDHtLVBQ=;
+        b=D9MB2cD5ZTkPvVciUtxG5JCdjR2f3TJaJMYV4Psbq6km1huVNqG90Z9WsVwtBhdtF1
+         pRMI2ngvEhfcNAykf2cSbWFTiawhSocFdkW7PyhJ0fujnACiPPsLtxnPDzVbQVmH9fZb
+         0ZCztGz76Gw8tS/4WQKcVnoG0VuQzoynuTlu2yKYzl3Z/xmf+kYDGDrhE+JZSnwwnQtg
+         RPJpIg9qUBdSsRlhxVEWhxVUi3VxECVoDYQHrmITOfoOm0hSUXirR4CbluK9+hFau0uh
+         c6ohN0DXxkW5yF2ysEYfuofWIaV8ZKHFx2SXBaVjXJyGG/RwVdmm6PW26nKgsAlDzAFF
+         FMkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=o88lqLbXiByZSEm5Oe3EmBOSlVPhL0Q4BRAUKBtJ+uQ=;
-        b=GLnwemsjrh5ottqg/H7kSGkUJukgyF3F0cmtnxn0K/Fx8T8gUXWh9w+DliK5GhloSh
-         2AhkbxRWTlFMtdEngF8VbH7mI+zKghBAxx8HsfsyXaBqvI6AYm3Gytk8jymfWLjLVrFk
-         mTywJi7AYYupqUQLwKBk7OaBKUvUQLjQP3ikvoCfm9Ds4W9nmELxeEgvsnX6g+aM3jYG
-         lV7D+8uBCEOBqcd0K5nOBYPZRL+iacZQfLrwci4piGELJtQiDMybMCem+Wq3GL3PeY0L
-         yew2jorB3ZqnKtziTmyrulmE9+YAnRS8IJvpb66VLlx6Z10jqJjYhatluc+zrUxb41yl
-         kRqA==
-X-Gm-Message-State: AOAM533F5kzizpvl6QOLvYFHUWzr1/OUUi6CahsAcOtso1naDS14y1TQ
-        4fOHP9FKQQYGsA/3nIgZnZwkyg==
-X-Google-Smtp-Source: ABdhPJxvP2FW2Cw2JHL4/3O5X2lE/MNb0RjTAl1y9dgNVehB47HDHZ69W5LnyJsjv575FrQUClNSkg==
-X-Received: by 2002:a05:6808:1814:: with SMTP id bh20mr49231251oib.31.1637031642978;
-        Mon, 15 Nov 2021 19:00:42 -0800 (PST)
-Received: from [192.168.11.48] (cpe-173-173-107-246.satx.res.rr.com. [173.173.107.246])
-        by smtp.gmail.com with ESMTPSA id g10sm3350916otg.10.2021.11.15.19.00.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Nov 2021 19:00:42 -0800 (PST)
-Message-ID: <43528a0b-678c-f1c1-c9af-ad8ea324cb85@kali.org>
-Date:   Mon, 15 Nov 2021 21:00:40 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=OD3I3LT4cd/NlKPjbaF84wzyVeqal/CYdheaDHtLVBQ=;
+        b=K2Z1g8i/ujilzKoA+nAvJKt4zbtVjXECLsJvNKHNbkIN1rxn0GwEj19Wn3B1R7Pciu
+         dLMi3wzzRJonBZnSgs60pGdLYGDnBM2TtMl7qCDpg1E39gDWo8Nts5X90XZmHwm5MpNg
+         mDW+LNOn1C5lR3CKrz8xflRyXHd50npRnA4JbvCDRaNUs/g1YwcnY6B4ek2aILlpk3m0
+         vIqORp2z28xpVfooOj/TEd5vm6+SoC6waHSexQN36+O8Ng68gj1iZdZvDX2pXa0ORktL
+         1+PnrEqqB3+LRlcxQGYgMi4wAgW2bsnlta4a97L5IYPNUBrvPZsXlfDIvFxXK9jip/Ox
+         loqg==
+X-Gm-Message-State: AOAM5307fhgchmsyw9H/YpRC93BER7m0tB7OHmi/0BqtK+hCXcLVk1aO
+        gUrQn+vsNnXUe+pELU6PIIj3BQ3OeDm6YA==
+X-Google-Smtp-Source: ABdhPJzxtLF3JUXA2rr0FEnL3UDohuQb6rtrfCfIfhUdDORN4CRvGDf9QXb8ooZiRKQLCrfECHUN/g==
+X-Received: by 2002:a17:90a:3045:: with SMTP id q5mr4961611pjl.58.1637035178534;
+        Mon, 15 Nov 2021 19:59:38 -0800 (PST)
+Received: from localhost ([223.226.77.81])
+        by smtp.gmail.com with ESMTPSA id n13sm16560345pfj.188.2021.11.15.19.59.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Nov 2021 19:59:37 -0800 (PST)
+Date:   Tue, 16 Nov 2021 09:29:35 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Steev Klimaszewski <steev@kali.org>
+Cc:     Thara Gopinath <thara.gopinath@linaro.org>, rafael@kernel.org,
+        bjorn.andersson@linaro.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
 Subject: Re: [PATCH] cpufreq: freq_table: Initialize cpuinfo.max_freq to
  correct max frequency.
-Content-Language: en-US
-From:   Steev Klimaszewski <steev@kali.org>
-To:     Thara Gopinath <thara.gopinath@linaro.org>, rafael@kernel.org,
-        viresh.kumar@linaro.org, bjorn.andersson@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
+Message-ID: <20211116035935.wmazontuznhys6qu@vireshk-i7>
 References: <20211115195011.52999-1-thara.gopinath@linaro.org>
  <5ae2c644-4743-c62c-b17c-96945a0e6a01@kali.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <5ae2c644-4743-c62c-b17c-96945a0e6a01@kali.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-On 11/15/21 7:23 PM, Steev Klimaszewski wrote:
+On 15-11-21, 19:23, Steev Klimaszewski wrote:
 > Hi Thara,
-> <snip>
->
-> And it doesn't go up, I even tried adding a sleep of 1 second between 
-> the echo 1/0/1 lines and while 2956800 goes up to 28 (but never uses 
-> it) it seems like, unless I do it manually once I've logged in, which 
-> I'm assuming is a lot slower than waiting 1 second between them, it's 
-> not quite giving us 2956800 "easily".
->
-> If the email wasn't clear, please let me know! I tried to explain as 
-> best I could what I am seeing here.
->
-> -- steev
->
-So after more testing... *sometimes* it works, with the jiggle, but not 
-always.  I'm really not sure why though, so if there's any guidance, I'm 
-all for it!
+> 
+> On 11/15/21 1:50 PM, Thara Gopinath wrote:
+> > cpuinfo.max_freq reflects the maximum supported frequency of cpus in a
+> > cpufreq policy. When cpus support boost frequency and if boost is disabled
+> > during boot up (which is the default), cpuinfo.max_freq does not reflect
+> > boost frequency as the maximum supported frequency till boost is explicitly
+> > enabled via sysfs interface later. This also means that policy reports two
+> > different cpuinfo.max_freq before and after turning on boost.  Fix this by
+> > separating out setting of policy->max and cpuinfo.max_freq in
+> > cpufreq_frequency_table_cpuinfo.
+> > 
+> > e.g. of the problem. Qualcomm sdm845 supports boost frequency for gold
+> > cluster (cpus 4-7). After boot up (boost disabled),
+> > 
+> > 1.  cat /sys/devices/system/cpu/cpufreq/policy4/cpuinfo_max_freq 2649600
+> > <- This is wrong because boost frequency is
+> > 
+> > 2.  echo 1 > /sys/devices/system/cpu/cpufreq/boost  <- Enable boost cat
+> > /sys/devices/system/cpu/cpufreq/policy4/cpuinfo_max_freq 2803200	<-
+> > max freq reflects boost freq.
+> > 
+> > 3.  echo 0 > /sys/devices/system/cpu/cpufreq/boost <- Disable boost cat
+> > /sys/devices/system/cpu/cpufreq/policy4/cpuinfo_max_freq 2803200	<-
+> > Discrepancy with step 1 as in both cases boost is disabled.
+> > 
+> > Note that the other way to fix this is to set cpuinfo.max_freq in Soc
+> > cpufreq driver during initialization. Fixing it in
+> > cpufreq_frequency_table_cpuinfo seems more generic solution
+> > 
+> > Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
+> > ---
+> >   drivers/cpufreq/freq_table.c | 8 ++++++--
+> >   1 file changed, 6 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/cpufreq/freq_table.c b/drivers/cpufreq/freq_table.c
+> > index 67e56cf638ef..6784f94124df 100644
+> > --- a/drivers/cpufreq/freq_table.c
+> > +++ b/drivers/cpufreq/freq_table.c
+> > @@ -35,11 +35,15 @@ int cpufreq_frequency_table_cpuinfo(struct cpufreq_policy *policy,
+> >   	struct cpufreq_frequency_table *pos;
+> >   	unsigned int min_freq = ~0;
+> >   	unsigned int max_freq = 0;
+> > +	unsigned int cpuinfo_max_freq = 0;
+> >   	unsigned int freq;
+> >   	cpufreq_for_each_valid_entry(pos, table) {
+> >   		freq = pos->frequency;
+> > +		if (freq > cpuinfo_max_freq)
+> > +			cpuinfo_max_freq = freq;
+> > +
+> >   		if (!cpufreq_boost_enabled()
+> >   		    && (pos->flags & CPUFREQ_BOOST_FREQ))
+> >   			continue;
+> > @@ -57,8 +61,8 @@ int cpufreq_frequency_table_cpuinfo(struct cpufreq_policy *policy,
+> >   	 * If the driver has set its own cpuinfo.max_freq above max_freq, leave
+> >   	 * it as is.
+> >   	 */
+> > -	if (policy->cpuinfo.max_freq < max_freq)
+> > -		policy->max = policy->cpuinfo.max_freq = max_freq;
+> > +	if (policy->cpuinfo.max_freq < cpuinfo_max_freq)
+> > +		policy->cpuinfo.max_freq = cpuinfo_max_freq;
 
--- steev
+You need to keep the check of policy->max here and update policy->max,
+else you will never run at boost freq. I think this is what Steev
+reported as well ?
 
+So basically something like this:
+
+	if (policy->max < max_freq)
+		policy->max = max_freq;
+
+	if (policy->cpuinfo.max_freq < cpuinfo_max_freq)
+		policy->cpuinfo.max_freq = cpuinfo_max_freq;
+
+-- 
+viresh
