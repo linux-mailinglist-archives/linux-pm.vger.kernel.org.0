@@ -2,95 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77B8C453E28
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Nov 2021 03:03:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8844C453E3D
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Nov 2021 03:09:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbhKQCGq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Nov 2021 21:06:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56942 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbhKQCGq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Nov 2021 21:06:46 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FBD1C061764
-        for <linux-pm@vger.kernel.org>; Tue, 16 Nov 2021 18:03:48 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id m14so1124776pfc.9
-        for <linux-pm@vger.kernel.org>; Tue, 16 Nov 2021 18:03:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dvd3jTzXB/DRs319D01wGFBaQbcq6WLKKY13sbAJ7xw=;
-        b=Gdme63th6UGhgjZrkJ6+vT/7LHFlh9yaVEwwCP+3IE+ckSVnS4zKeMhUJfV7lgMmCN
-         1BXVQ9oG4VVhFf+lBmt7OQbLKPvgxXYxFVZf9ZMVbqea/DYDTqw1ktU3ZBzJW3mKbxWe
-         9y/O/uCsISirvabA9blRtTKiqNsCYlvLZx2zw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dvd3jTzXB/DRs319D01wGFBaQbcq6WLKKY13sbAJ7xw=;
-        b=vFDWb5YyLzJul6clJKZmQuYOn1e9wFo3o6vS+DPRHO9C8oJepi1QjMiC4ye6fpZNvH
-         tW+S/nrrnLjqr9ZrUeei7AVzQjZ8flGwLNSbMKyqWdwBMjUTpjpXqsJTRXtp5j+EsWCW
-         Z2Rl0C1p4nJgrHUuWM4k2fd/dXfk4JvPRlWV0iDkhCIG4NOPZOAA8QEceHkliN7Mu+1K
-         wYp8IAcvRLLq2KVyrnj3VurCfXCdpf1p7+m9ftxxdkyVemFyT0GhtAExBVdk5DUqAzl0
-         vUJ1nQxxmHNXFGfXQO2rDrXPycntjX8+PJHz9z2x9uMwk602MOokGJV8jTofV/LVdm86
-         b3cg==
-X-Gm-Message-State: AOAM530PM3KzSLGwHE2SBtd3u8sl9VRa1+6103dUriMUgh5gVgUE/rEm
-        MvTHa9kx6t5SRylanuMCZ7A7Ng==
-X-Google-Smtp-Source: ABdhPJzpWbpbEWPoWC8osMQOghtahDqFjT7VArUcJ6XX3/bploZm9ZEMVTUF6cDj3D/ENk5amUtoCQ==
-X-Received: by 2002:aa7:9acc:0:b0:4a2:b8b5:8813 with SMTP id x12-20020aa79acc000000b004a2b8b58813mr3833019pfp.4.1637114628027;
-        Tue, 16 Nov 2021 18:03:48 -0800 (PST)
-Received: from smtp.gmail.com ([2620:15c:202:201:47f8:c08f:374a:a54e])
-        by smtp.gmail.com with ESMTPSA id h36sm16072370pgb.9.2021.11.16.18.03.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Nov 2021 18:03:47 -0800 (PST)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Thara Gopinath <thara.gopinath@linaro.org>
-Subject: [PATCH] cpufreq: qcom-hw: Use optional irq API
-Date:   Tue, 16 Nov 2021 18:03:46 -0800
-Message-Id: <20211117020346.4088302-1-swboyd@chromium.org>
-X-Mailer: git-send-email 2.34.0.rc2.393.gf8c9666880-goog
+        id S230434AbhKQCM1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Nov 2021 21:12:27 -0500
+Received: from mga01.intel.com ([192.55.52.88]:25221 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230211AbhKQCM1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 16 Nov 2021 21:12:27 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10170"; a="257628133"
+X-IronPort-AV: E=Sophos;i="5.87,239,1631602800"; 
+   d="scan'208";a="257628133"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2021 18:09:22 -0800
+X-IronPort-AV: E=Sophos;i="5.87,239,1631602800"; 
+   d="scan'208";a="645676624"
+Received: from dhrupadx-mobl1.gar.corp.intel.com ([10.215.188.156])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2021 18:09:19 -0800
+Message-ID: <adc7132c8655bd4d1c8b6129578e931a14fe1db2.camel@linux.intel.com>
+Subject: Re: [UPDATE][PATCH] cpufreq: intel_pstate: Fix EPP restore after
+ offline/online
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Stable <stable@vger.kernel.org>
+Date:   Tue, 16 Nov 2021 18:09:15 -0800
+In-Reply-To: <CAJZ5v0jk3KB6+uynpvdBAO+Q-Qr4HiCam=x4dxzT6NFWjROLzg@mail.gmail.com>
+References: <20211115134017.1257932-1-srinivas.pandruvada@linux.intel.com>
+         <CAJZ5v0jk3KB6+uynpvdBAO+Q-Qr4HiCam=x4dxzT6NFWjROLzg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.0-1 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use platform_get_irq_optional() to avoid a noisy error message when the
-irq isn't specified. The irq is definitely optional given that we only
-care about errors that are -EPROBE_DEFER here.
+On Tue, 2021-11-16 at 18:47 +0100, Rafael J. Wysocki wrote:
+> On Mon, Nov 15, 2021 at 2:40 PM Srinivas Pandruvada
+> <srinivas.pandruvada@linux.intel.com> wrote:
+> > 
+> > When using performance policy, EPP value is restored to non
+> > "performance"
+> > mode EPP after offline and online.
+> > 
+> > For example:
+> > cat
+> > /sys/devices/system/cpu/cpu1/cpufreq/energy_performance_preference
+> > performance
+> > echo 0 > /sys/devices/system/cpu/cpu1/online
+> > echo 1 > /sys/devices/system/cpu/cpu1/online
+> > cat
+> > /sys/devices/system/cpu/cpu1/cpufreq/energy_performance_preference
+> > balance_performance
+> > 
+> > The commit 4adcf2e5829f ("cpufreq: intel_pstate: Add ->offline and
+> > ->online callbacks")
+> > optimized save restore path of the HWP request MSR, when there is
+> > no
+> > change in the policy. Also added special processing for performance
+> > mode
+> > EPP. If EPP has been set to "performance" by the active mode
+> > "performance"
+> > scaling algorithm, replace that value with the cached EPP. This
+> > ends up
+> > replacing with cached EPP during offline, which is restored during
+> > online
+> > again.
+> > 
+> > So add a change which will set cpu_data->epp_policy to zero, when
+> > in
+> > performance policy and has non zero epp. In this way EPP is set to
+> > zero
+> > again.
+> > 
+> > Fixes: 4adcf2e5829f ("cpufreq: intel_pstate: Add ->offline and -
+> > >online callbacks")
+> > Signed-off-by: Srinivas Pandruvada <
+> > srinivas.pandruvada@linux.intel.com>
+> > Cc: stable@vger.kernel.org # v5.9+
+> > ---
+> > Update: Minor optimization to skip non performance policy code path
+> > 
+> >  drivers/cpufreq/intel_pstate.c | 12 +++++++++---
+> >  1 file changed, 9 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/cpufreq/intel_pstate.c
+> > b/drivers/cpufreq/intel_pstate.c
+> > index 815df3daae9d..6d7d73a0c66b 100644
+> > --- a/drivers/cpufreq/intel_pstate.c
+> > +++ b/drivers/cpufreq/intel_pstate.c
+> > @@ -936,11 +936,17 @@ static void intel_pstate_hwp_set(unsigned int
+> > cpu)
+> >         max = cpu_data->max_perf_ratio;
+> >         min = cpu_data->min_perf_ratio;
+> > 
+> > -       if (cpu_data->policy == CPUFREQ_POLICY_PERFORMANCE)
+> > -               min = max;
+> > -
+> >         rdmsrl_on_cpu(cpu, MSR_HWP_REQUEST, &value);
+> > 
+> > +       if (cpu_data->policy == CPUFREQ_POLICY_PERFORMANCE) {
+> > +               min = max;
+> > +               epp = 0;
+> > +               if (boot_cpu_has(X86_FEATURE_HWP_EPP))
+> > +                       epp = (value >> 24) & 0xff;
+> > +               if (epp)
+> > +                       cpu_data->epp_policy = 0;
+> > +       }
+> 
+> I understand the bug, but it should not be necessary to check this
+> every time intel_pstate_hwp_set() runs.
+> 
+> > +
+> >         value &= ~HWP_MIN_PERF(~0L);
+> >         value |= HWP_MIN_PERF(min);
+> > 
+> > --
+> 
+> Isn't the following sufficient (modulo the gmail-induced whitespace
+> damage)?
+> 
+> ---
+>  drivers/cpufreq/intel_pstate.c |    6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> Index: linux-pm/drivers/cpufreq/intel_pstate.c
+> ===================================================================
+> --- linux-pm.orig/drivers/cpufreq/intel_pstate.c
+> +++ linux-pm/drivers/cpufreq/intel_pstate.c
+> @@ -1006,6 +1006,12 @@ static void intel_pstate_hwp_offline(str
+>           */
+>          value &= ~GENMASK_ULL(31, 24);
+>          value |= HWP_ENERGY_PERF_PREFERENCE(cpu->epp_cached);
+> +        /*
+> +         * However, make sure that EPP will be set to "performance"
+> when
+> +         * the CPU is brought back online again and the
+> "performance"
+> +         * scaling algorithm is still in effect.
+> +         */
+> +        cpu->epp_policy = CPUFREQ_POLICY_UNKNOWN;
+>      }
+> 
+>      /*
+This works also.
 
-Cc: Thara Gopinath <thara.gopinath@linaro.org>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
- drivers/cpufreq/qcom-cpufreq-hw.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index a2be0df7e174..b442d4983a22 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -382,9 +382,11 @@ static int qcom_cpufreq_hw_lmh_init(struct cpufreq_policy *policy, int index)
- 	 * Look for LMh interrupt. If no interrupt line is specified /
- 	 * if there is an error, allow cpufreq to be enabled as usual.
- 	 */
--	data->throttle_irq = platform_get_irq(pdev, index);
--	if (data->throttle_irq <= 0)
--		return data->throttle_irq == -EPROBE_DEFER ? -EPROBE_DEFER : 0;
-+	data->throttle_irq = platform_get_irq_optional(pdev, index);
-+	if (data->throttle_irq == -ENXIO)
-+		return 0;
-+	if (data->throttle_irq < 0)
-+		return data->throttle_irq;
- 
- 	data->cancel_throttle = false;
- 	data->policy = policy;
-
-base-commit: fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf
--- 
-https://chromeos.dev
+Thanks,
+Srinivas
 
