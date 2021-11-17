@@ -2,111 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 707AE454F7C
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Nov 2021 22:40:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC7EC45506B
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Nov 2021 23:28:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240173AbhKQVnD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Nov 2021 16:43:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42814 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231839AbhKQVnB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Nov 2021 16:43:01 -0500
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46C33C061570;
-        Wed, 17 Nov 2021 13:40:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=JFZEUOPWf1/nxGeGtVRYuWseGaRsxvnuJVELp2zrJLw=; b=cI6tiWIw8UrB0NnC9bDlb7IRkj
-        9VyLjEXqJiZ+ikt0/0lKIZ2hFeU19SmbUsmRMKLCMLoGhhZVZv6d2n1qo0FaLeXNe7xo377hbPO1j
-        pfztujetrGwJ3qq+Ri2v4hSEzw143ca3BxZLu0Qq2wwK+beGN04s3lCP7b7BPRzVbxpU=;
-Received: from p200300ccff0ece001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff0e:ce00:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1mnSel-0004n2-UB; Wed, 17 Nov 2021 22:39:52 +0100
-Date:   Wed, 17 Nov 2021 22:39:50 +0100
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Alistair Francis <alistair@alistair23.me>
-Cc:     lee.jones@linaro.org, broonie@kernel.org, kernel@pengutronix.de,
-        lgirdwood@gmail.com, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        s.hauer@pengutronix.de, linux-hwmon@vger.kernel.org,
-        amitk@kernel.org, linux-pm@vger.kernel.org, linux-imx@nxp.com,
-        alistair23@gmail.com, shawnguo@kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v15 1/8] dt-bindings: mfd: Initial commit of
- silergy,sy7636a.yaml
-Message-ID: <20211117223950.3a7eaf7a@aktux>
-In-Reply-To: <20211110122948.188683-2-alistair@alistair23.me>
-References: <20211110122948.188683-1-alistair@alistair23.me>
-        <20211110122948.188683-2-alistair@alistair23.me>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S241236AbhKQWbi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Nov 2021 17:31:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:37202 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241233AbhKQWbg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Nov 2021 17:31:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1637188117;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=m5qu5e0Bmyi2YyXsZTCJ7FvtB46vdD6fod/tQPP96Gw=;
+        b=RR2VKKS2NxijkPYqJoaRomlbhJGhRaoIS6J7hMXMvNffgvt021N3LA/EgVVpOYspZBuDIt
+        ex1GeB/5qsPfkEzVM+C/GYUP+Tyys9rIcEa++QpXtjwY9awj9rp2aciFhe7tqUfllEAi1D
+        xexoCjWKeLJ1M8/0WrzRfuoQdFZ/2tI=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-581-JaqyMA-8PkO12vmLVSTx2Q-1; Wed, 17 Nov 2021 17:28:35 -0500
+X-MC-Unique: JaqyMA-8PkO12vmLVSTx2Q-1
+Received: by mail-ed1-f71.google.com with SMTP id c1-20020aa7c741000000b003e7bf1da4bcso3414076eds.21
+        for <linux-pm@vger.kernel.org>; Wed, 17 Nov 2021 14:28:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=m5qu5e0Bmyi2YyXsZTCJ7FvtB46vdD6fod/tQPP96Gw=;
+        b=qyZ7o50GEE2g8S1dcdZYZVFUm7ORxVUtQa+bCoiAieMOVu71ebu+BUDTvGBN/KRV/F
+         SG2d5UE/I9odcwAWuhL3J//wnGa7C01ERQwUUyQ8wpuiezqSsE5mHqVqvnY+6RcIv6yb
+         58Pv7YCV8Bp3uqi6rx9P/8Oq5YLsviB79lnNrErc/vh49gtHfN+WHuoikhpH/zsWtjpb
+         g7dfy5cHsQxjdS4abshdXfrqxcZQZymeDCdhSueOZjwIoZUYPVpHipootEdCMF+1T1bJ
+         7m5VRmET992pHXifXAcKGo9bF3LP4QDzz+dqlivzDtsDMHkGWzqOk6sd3TOFb/JyWt71
+         HICA==
+X-Gm-Message-State: AOAM533fTpLFmVWnZv3baUpWInhA9sW08HLs1jAeSi6dVr8TdQHJH+Tb
+        K57mJkXFU2/vAiHqMucU1raPMV5iZWnIFUcO/nee/F+bFrIQoN0aiWpNdwvjjqhsenZk7s/ABvX
+        p1m1DonMQaFYFSXbTqB0=
+X-Received: by 2002:a17:907:7b9b:: with SMTP id ne27mr26058726ejc.79.1637188114562;
+        Wed, 17 Nov 2021 14:28:34 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxXCOz8zE8sIXG+OzU8g75Ytk28xPrlKauEFcoiDMkcnmuf5MV+OAPoN5sFp5ENv9D9sTpHgQ==
+X-Received: by 2002:a17:907:7b9b:: with SMTP id ne27mr26058685ejc.79.1637188114280;
+        Wed, 17 Nov 2021 14:28:34 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id q14sm617090edj.42.2021.11.17.14.28.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Nov 2021 14:28:33 -0800 (PST)
+Message-ID: <380053ee-4a4a-963c-4f70-6b9dcfef1b98@redhat.com>
+Date:   Wed, 17 Nov 2021 23:28:32 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Score: -1.0 (-)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v2 16/20] extcon: intel-cht-wc: Use new
+ intel_cht_wc_get_model() helper
+Content-Language: en-US
+To:     Chanwoo Choi <cwchoi00@gmail.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        Yauhen Kharuzhy <jekhor@gmail.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        platform-driver-x86@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-efi@vger.kernel.org
+References: <20211114170335.66994-1-hdegoede@redhat.com>
+ <20211114170335.66994-17-hdegoede@redhat.com>
+ <5653c424-e12a-e889-1ae5-14a768dcf221@gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <5653c424-e12a-e889-1ae5-14a768dcf221@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 10 Nov 2021 22:29:41 +1000
-Alistair Francis <alistair@alistair23.me> wrote:
+Hi,
 
-> Initial support for the Silergy SY7636A Power Management chip
-> and regulator.
+On 11/17/21 07:47, Chanwoo Choi wrote:
+> On 21. 11. 15. 오전 2:03, Hans de Goede wrote:
+>> The CHT_WC_VBUS_GPIO_CTLO GPIO actually driving an external 5V Vboost
+>> converter for Vbus depends on the board on which the Cherry Trail -
+>> Whiskey Cove PMIC is actually used.
+>>
+>> Since the information about the exact PMIC setup is necessary in other
+>> places too, the drivers/mfd/intel_soc_pmic_chtwc.c code now has a new
+>> intel_cht_wc_get_model() helper.
+>>
+>> Only poke the CHT_WC_VBUS_GPIO_CTLO GPIO if this new helper returns
+>> INTEL_CHT_WC_GPD_WIN_POCKET, which indicates the Type-C (with PD and
+>> DP-altmode) setup used on the GPD pocket and GPD win; and on which
+>> this GPIO actually controls an external 5V Vboost converter.
+>>
+>> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+>> ---
+>>   drivers/extcon/extcon-intel-cht-wc.c | 35 +++++++++++++++++-----------
+>>   1 file changed, 21 insertions(+), 14 deletions(-)
+>>
+>> diff --git a/drivers/extcon/extcon-intel-cht-wc.c b/drivers/extcon/extcon-intel-cht-wc.c
+>> index 771f6f4cf92e..a5aeeecc44fb 100644
+>> --- a/drivers/extcon/extcon-intel-cht-wc.c
+>> +++ b/drivers/extcon/extcon-intel-cht-wc.c
+>> @@ -14,6 +14,7 @@
+>>   #include <linux/module.h>
+>>   #include <linux/mod_devicetable.h>
+>>   #include <linux/platform_device.h>
+>> +#include <linux/property.h>
+>>   #include <linux/regmap.h>
+>>   #include <linux/slab.h>
+>>   @@ -358,20 +359,26 @@ static int cht_wc_extcon_probe(struct platform_device *pdev)
+>>       if (IS_ERR(ext->edev))
+>>           return PTR_ERR(ext->edev);
+>>   -    /*
+>> -     * When a host-cable is detected the BIOS enables an external 5v boost
+>> -     * converter to power connected devices there are 2 problems with this:
+>> -     * 1) This gets seen by the external battery charger as a valid Vbus
+>> -     *    supply and it then tries to feed Vsys from this creating a
+>> -     *    feedback loop which causes aprox. 300 mA extra battery drain
+>> -     *    (and unless we drive the external-charger-disable pin high it
+>> -     *    also tries to charge the battery causing even more feedback).
+>> -     * 2) This gets seen by the pwrsrc block as a SDP USB Vbus supply
+>> -     * Since the external battery charger has its own 5v boost converter
+>> -     * which does not have these issues, we simply turn the separate
+>> -     * external 5v boost converter off and leave it off entirely.
+>> -     */
+>> -    cht_wc_extcon_set_5v_boost(ext, false);
+>> +    switch (intel_cht_wc_get_model()) {
 > 
-> Signed-off-by: Alistair Francis <alistair@alistair23.me>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
-> ---
->  .../bindings/mfd/silergy,sy7636a.yaml         | 79 +++++++++++++++++++
->  1 file changed, 79 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml
+> intel_cht_wc_get_model() is defined in driver/mfd/intel_soc_pmic_chtwc.c
 > 
-> diff --git a/Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml b/Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml
-> new file mode 100644
-> index 000000000000..0566f9498e2f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml
-[...]
-> +  regulators:
-> +    type: object
-> +
-> +    properties:
-> +      compatible:
-> +        const: silergy,sy7636a-regulator
-> +
-> +      vcom:
-> +        type: object
-> +        $ref: /schemas/regulator/regulator.yaml#
-> +        properties:
-> +          regulator-name:
-> +            const: vcom
-> +
-hmm, this is what? If I understand it correctly, vcom means some
-voltage for compensation. On other comparable pmics (e.g. TPS65185
-which has also a sane public datasheet, MAX17135) I have seen some
-methods to measure a voltage while the display is doing something
-defined and then program this voltage non-volatile for compensation
-during manufacturing.
+> Usually, mfd drivers share the data structure such as struct intel_soc_pmic. But, didn't call the exported function for only
+> specific driver between linux kernel framework (extcon vs. mfd).
+> 
+> So that I think that you better to update the mode information
+> to 'struct intel_soc_pmic' data structure and then use it
+> instead of using the exported function which may make the confusion.
 
-If I understand the code correctly all the bunch of voltages are
-powered up if this one is enabled.
-So at least a description should be suitable.
+That is a good idea, thanks.
 
-The other comparable PMICs have at least regulators named VCOM, DISPLAY
-(controls several regulators, started with delays configured via
-registers) and V3P3. MAX17135 source can be found in NXP kernels, 
-TPS65185 in Kobo vendor kernels.
-
-So I would expect to see something similar here and a description or at
-least not such a misleading name as vcom if it is for some reason not
-feasible to separate the regulators.
+I've implemented this suggestion for the upcoming v3 of the patch-set.
 
 Regards,
-Andreas
+
+Hans
+
+
+> 
+>> +    case INTEL_CHT_WC_GPD_WIN_POCKET:
+>> +        /*
+>> +         * When a host-cable is detected the BIOS enables an external 5v boost
+>> +         * converter to power connected devices there are 2 problems with this:
+>> +         * 1) This gets seen by the external battery charger as a valid Vbus
+>> +         *    supply and it then tries to feed Vsys from this creating a
+>> +         *    feedback loop which causes aprox. 300 mA extra battery drain
+>> +         *    (and unless we drive the external-charger-disable pin high it
+>> +         *    also tries to charge the battery causing even more feedback).
+>> +         * 2) This gets seen by the pwrsrc block as a SDP USB Vbus supply
+>> +         * Since the external battery charger has its own 5v boost converter
+>> +         * which does not have these issues, we simply turn the separate
+>> +         * external 5v boost converter off and leave it off entirely.
+>> +         */
+>> +        cht_wc_extcon_set_5v_boost(ext, false);
+>> +        break;
+>> +    default:
+>> +        break;
+>> +    }
+>>         /* Enable sw control */
+>>       ret = cht_wc_extcon_sw_control(ext, true);
+>>
+> 
+> 
+
