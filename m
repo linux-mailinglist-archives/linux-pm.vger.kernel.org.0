@@ -2,86 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AB1A454DB5
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Nov 2021 20:12:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75227454DD3
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Nov 2021 20:25:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240396AbhKQTPU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Nov 2021 14:15:20 -0500
-Received: from mail-ot1-f54.google.com ([209.85.210.54]:34601 "EHLO
-        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239360AbhKQTPR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Nov 2021 14:15:17 -0500
-Received: by mail-ot1-f54.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso6540410otj.1;
-        Wed, 17 Nov 2021 11:12:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MnAMjGLOXx6DvBCS9oZtgNlomICCRY8t0AJal7Xoa3A=;
-        b=FyvCu1QG+i4jTtgFWEMqJkp3cY4md8rIPysonCKmIiR6Etkh9wH3nEvvnwUWNZpoSu
-         bw/KqlBeRXJxa8nxYidWDzqRMyK2MAtpfi2rCG72b/N9Gntg3H9nVjRQeUJZ0Oxh9mrc
-         HiNTBo++HjKTgYYrzwZOLqwK6BU1OjzY/xeRXwPabOIRttsg4OugQhf+xDi21X2VXSym
-         w3sZIl6Xcf4cUkXn+6zQz1JMHu6rHXsLeThezlHR3TE1kSL+5vvKjHKkG3torPiWtMwu
-         Mmrx75NFKkrQ6ormJyIP3tC9wYMUhXGr8wAJQMGY1A6PuOF+YvJetSDV+CZXprbWEDpq
-         gROA==
-X-Gm-Message-State: AOAM533uVribdEnx+B/7AFMSh8wkNDA7bTtHUqH8HqP9Y2d+ic/ibE7I
-        G7In4YJDcyrZdfv98EPk+PSxV0EcN2J+dbX+VTE=
-X-Google-Smtp-Source: ABdhPJxFpvJcS8885hNPvt5g4wNk+Q3lLMHW4EiJcACCmIcqToTlQqF/jQ6RNx4yfFh7SYN8Qz7gX0Cee/Z/LrVRQvQ=
-X-Received: by 2002:a05:6830:348f:: with SMTP id c15mr15890840otu.254.1637176336374;
- Wed, 17 Nov 2021 11:12:16 -0800 (PST)
-MIME-Version: 1.0
-References: <20211112091657.9848-1-attofari@amazon.de>
-In-Reply-To: <20211112091657.9848-1-attofari@amazon.de>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 17 Nov 2021 20:12:05 +0100
-Message-ID: <CAJZ5v0i_hc8=uX_y=1z+FvOWR1-eZVbUAGf3VQ15k+gEcOrVpQ@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Add Ice Lake server to out-of-band IDs
-To:     Adamos Ttofari <attofari@amazon.de>
-Cc:     Hendrik Borghorst <hborghor@amazon.de>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Linux PM <linux-pm@vger.kernel.org>,
+        id S231366AbhKQT2b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Nov 2021 14:28:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40784 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230400AbhKQT2a (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Nov 2021 14:28:30 -0500
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3392FC061570;
+        Wed, 17 Nov 2021 11:25:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=Content-Transfer-Encoding:Content-Type:
+        References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-ID
+        :Content-Description; bh=YkneOjORI6FrURlrv+SQ8OZvWiyxno4QJH7uReiSLO0=; b=HRPU
+        UV3UU6dZ5n+4q/WD/aPWIiGQmVE4t6PMHzULIJ79eVqN9ZMaVVErqIyFvpOzm43wRPyCoamzndAEE
+        /mmFWCiwiWSpJPQMzdren2qSaeSLFUEXZAR+XxzU2i42a7q4sK/67/G8AyAqJgSTINiYXFRRUk/5y
+        ROr2fC9HxHy+XAvp78j8PiqN9LCO2Djhqtee5u7bQWaqr8hAjCQYNXcaxs54ImhaN/KXXAt45J6bB
+        AXie7FmEWXNSYeovhRXLm3M4qcgviDIRAy10AxAgSzLqDJnpmR8x1T0GLoaYviu7psFgfqH11UV3W
+        lHnNfsgxwpZKxz6Ej9+avQSWie51xw==;
+Received: from [81.174.171.191] (helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <john@metanate.com>)
+        id 1mnQYb-0004T4-FQ; Wed, 17 Nov 2021 19:25:21 +0000
+Date:   Wed, 17 Nov 2021 19:25:20 +0000
+From:   John Keeping <john@metanate.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v2] PM: runtime: avoid priority inversion on PREEMPT_RT
+Message-ID: <20211117192520.6b085a1e.john@metanate.com>
+In-Reply-To: <CAJZ5v0hgL6O6mCA4wf5NtmWi7kzA0Lyop4wH0TGDLMricdpiqA@mail.gmail.com>
+References: <20211117183709.1832925-1-john@metanate.com>
+        <CAJZ5v0hgL6O6mCA4wf5NtmWi7kzA0Lyop4wH0TGDLMricdpiqA@mail.gmail.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Authenticated: YES
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Nov 12, 2021 at 10:17 AM Adamos Ttofari <attofari@amazon.de> wrote:
->
-> Commit fbdc21e9b038 ("cpufreq: intel_pstate: Add Icelake servers support in
-> no-HWP mode") enabled the use of Intel P-State driver for Ice Lake servers.
-> But it doesn't cover the case when OS can't control P-States.
->
-> Therefore, for Ice Lake server, if MSR_MISC_PWR_MGMT bits 8 or 18 are
-> enabled, then the Intel P-State driver should exit as OS can't control
-> P-States.
->
-> Fixes: fbdc21e9b038 ("cpufreq: intel_pstate: Add Icelake servers support in no-HWP mode")
->
-> Signed-off-by: Adamos Ttofari <attofari@amazon.de>
-> Cc: Hendrik Borghorst <hborghor@amazon.de>
-> Cc: David Woodhouse <dwmw@amazon.co.uk>
-> ---
->  drivers/cpufreq/intel_pstate.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> index 815df3daae9d..1088ff350159 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -2353,6 +2353,7 @@ static const struct x86_cpu_id intel_pstate_cpu_oob_ids[] __initconst = {
->         X86_MATCH(BROADWELL_D,          core_funcs),
->         X86_MATCH(BROADWELL_X,          core_funcs),
->         X86_MATCH(SKYLAKE_X,            core_funcs),
-> +       X86_MATCH(ICELAKE_X,            core_funcs),
->         {}
->  };
->
-> --
+On Wed, 17 Nov 2021 19:53:47 +0100
+"Rafael J. Wysocki" <rafael@kernel.org> wrote:
 
-Applied as 5.16-rc material, thanks!
+> On Wed, Nov 17, 2021 at 7:37 PM John Keeping <john@metanate.com> wrote:
+> >
+> > With PREEMPT_RT the cpu_relax() loops in rpm_suspend and rpm_resume can
+> > cause unbounded latency if they preempt an asynchronous suspend.  The
+> > main scenario where this can happen is when a realtime thread resumes a
+> > device while it is asynchronously suspending on a worker thread.
+> >
+> > I'm not convinced this can actually happen in the rpm_suspend case, or
+> > at least it's a lot less likely for a synchronous suspend to run at the
+> > same time as an asynchronous suspend, but both functions are updated
+> > here for symmetry.
+> >
+> > For devices setting power.irq_safe, it is possible that RPM functions
+> > will be called with a spinlock held (for example in
+> > pl330_issue_pending()).  This means a normal call to schedule() can't be
+> > used, but to avoid the priority inversion it is necessary to wait and
+> > schedule.  schedule_rtlock() is only available when CONFIG_PREEMPT_RT is
+> > defined, so even though the logic is correct without any preprocessor
+> > guards around schedule_rtlock(), they are necessary for compilation.
+> >
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > Cc: Ingo Molnar <mingo@kernel.org>
+> > Signed-off-by: John Keeping <john@metanate.com>
+> > ---
+> > Changes since v1:
+> > - Use schedule_rtlock() instead of schedule() for PREEMPT_RT & irq_safe
+> > - Rewritten commit description
+> >
+> >  drivers/base/power/runtime.c | 18 ++++++++++++++----
+> >  1 file changed, 14 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+> > index f3de7bfc7f5b..fdf461bfae8c 100644
+> > --- a/drivers/base/power/runtime.c
+> > +++ b/drivers/base/power/runtime.c
+> > @@ -596,7 +596,7 @@ static int rpm_suspend(struct device *dev, int rpmflags)
+> >                         goto out;
+> >                 }
+> >
+> > -               if (dev->power.irq_safe) {
+> > +               if (dev->power.irq_safe && !IS_ENABLED(CONFIG_PREEMPT_RT)) {  
+> 
+> Please add a helper to avoid code duplication related to this (even
+> though there is a small amount of it).
+
+Ack.  I'd like some feedback on the schedule_rtlock() approach from the
+scheduler & RT people, so I'll wait a bit before sending a v3.
