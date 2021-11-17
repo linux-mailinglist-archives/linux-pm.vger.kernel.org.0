@@ -2,141 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1080454D74
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Nov 2021 19:54:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EA5E454D7E
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Nov 2021 19:56:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240253AbhKQS46 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Nov 2021 13:56:58 -0500
-Received: from mail-ot1-f42.google.com ([209.85.210.42]:39853 "EHLO
-        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230399AbhKQS46 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Nov 2021 13:56:58 -0500
-Received: by mail-ot1-f42.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso6393780ots.6;
-        Wed, 17 Nov 2021 10:53:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ak1jmoEOOGOhOFuQWlERnmy75zezwY/WEmUoAvtFZ1I=;
-        b=4961Gyl1UP9GXaADAl5Y+qliqzq/djmY70bpzxWX9gk/mhEz6APxZg/p3ninp+0G31
-         7b0ZPnMjVJpA4XcM8zANhnMJ9dZIUHOS8ZavHNJH0C/tHOJ6g8uG5mVQ9Rcm4f0J+CfH
-         2Dw/maFXHz6uX/RA6qgzA7Xhq1PAbi1sGjT/V6Mj1R1f/sfKhfVTQtwhkr0DS0YHlPeY
-         9q3Vr+d6tUULZKQX/NY5otQSjIJXQYh5rXEmuJzg8AHNN8PBXo7YibKSUtHBTclJYGH9
-         T/WGQb+JCfS38MhO7Bi+3ReKuHNjgzZlH16MX7CovAHE9w22zUA0pEYDfo4EZpLWPGgA
-         g77w==
-X-Gm-Message-State: AOAM533GaVF4HEiZLa7Oid3186efdcquDuPT88WC0Msqs2Gjik2e/yxv
-        YVhyQOld087HVBPp4JoCqYOaWdVjJJiRkOJ1fRU=
-X-Google-Smtp-Source: ABdhPJzIGHHnl8EoTZvUxHWYGTO/bN/uZEBx3VEccsmatzbLpcL0i+6UKJBZCjTmrJPNHIF81a/MlelW76M3M3+znjA=
-X-Received: by 2002:a05:6830:348f:: with SMTP id c15mr15779811otu.254.1637175238704;
- Wed, 17 Nov 2021 10:53:58 -0800 (PST)
+        id S231704AbhKQS7S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Nov 2021 13:59:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34184 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230105AbhKQS7S (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Nov 2021 13:59:18 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E13AC061570;
+        Wed, 17 Nov 2021 10:56:19 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 9B4F01F4504E
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1637175377; bh=pfW3r//hiTUpNl3AaVc51NsLpL5CHDHjWkEcoprBN2c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bbnJLmmNnqvWvLr9wHaL1mfpbN4RShrjRtTXKJVBBAo5YO6XNFtiN5ZbGsQ6/aW/G
+         fiAL9oiaawS8DOwJW0P6GJAdXDbU43Yl5zumMeMZAqauBrDkqo+VAqoB2mg2DuMbOm
+         q9fsb9WuE9mkjLxTOmNM3Wkv1uG72cekwaHb1yVfB4YQrW0FKo+4bLoxUQi2NPTo8g
+         KLcpLCo0ISj5xa3IaUuIPyBxhReiowDNustCg1ob3qr8UYUK/oCRJc8coRs6OtlH5v
+         VQXMwVzSAYwln00ZTW4i33Ea+MW3ExfWUp4qw/YcKKMJXM8uNL8ERIiltYwgzU5lZ4
+         oUbBMnM6c7frw==
+Received: by earth.universe (Postfix, from userid 1000)
+        id F17313C0F9E; Wed, 17 Nov 2021 19:56:15 +0100 (CET)
+Date:   Wed, 17 Nov 2021 19:56:15 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
+        linux-acpi@vger.kernel.org, Yauhen Kharuzhy <jekhor@gmail.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        platform-driver-x86@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-efi@vger.kernel.org
+Subject: Re: [PATCH v2 00/20] power-suppy/i2c/extcon: Fix charger setup on
+ Xiaomi Mi Pad 2 and Lenovo Yogabook
+Message-ID: <20211117185615.iqln2hhvkq5utefb@earth.universe>
+References: <20211114170335.66994-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-References: <20211117183709.1832925-1-john@metanate.com>
-In-Reply-To: <20211117183709.1832925-1-john@metanate.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 17 Nov 2021 19:53:47 +0100
-Message-ID: <CAJZ5v0hgL6O6mCA4wf5NtmWi7kzA0Lyop4wH0TGDLMricdpiqA@mail.gmail.com>
-Subject: Re: [PATCH v2] PM: runtime: avoid priority inversion on PREEMPT_RT
-To:     John Keeping <john@metanate.com>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jv4e474pzdvgweet"
+Content-Disposition: inline
+In-Reply-To: <20211114170335.66994-1-hdegoede@redhat.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 17, 2021 at 7:37 PM John Keeping <john@metanate.com> wrote:
->
-> With PREEMPT_RT the cpu_relax() loops in rpm_suspend and rpm_resume can
-> cause unbounded latency if they preempt an asynchronous suspend.  The
-> main scenario where this can happen is when a realtime thread resumes a
-> device while it is asynchronously suspending on a worker thread.
->
-> I'm not convinced this can actually happen in the rpm_suspend case, or
-> at least it's a lot less likely for a synchronous suspend to run at the
-> same time as an asynchronous suspend, but both functions are updated
-> here for symmetry.
->
-> For devices setting power.irq_safe, it is possible that RPM functions
-> will be called with a spinlock held (for example in
-> pl330_issue_pending()).  This means a normal call to schedule() can't be
-> used, but to avoid the priority inversion it is necessary to wait and
-> schedule.  schedule_rtlock() is only available when CONFIG_PREEMPT_RT is
-> defined, so even though the logic is correct without any preprocessor
-> guards around schedule_rtlock(), they are necessary for compilation.
->
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Cc: Ingo Molnar <mingo@kernel.org>
-> Signed-off-by: John Keeping <john@metanate.com>
-> ---
-> Changes since v1:
-> - Use schedule_rtlock() instead of schedule() for PREEMPT_RT & irq_safe
-> - Rewritten commit description
->
->  drivers/base/power/runtime.c | 18 ++++++++++++++----
->  1 file changed, 14 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-> index f3de7bfc7f5b..fdf461bfae8c 100644
-> --- a/drivers/base/power/runtime.c
-> +++ b/drivers/base/power/runtime.c
-> @@ -596,7 +596,7 @@ static int rpm_suspend(struct device *dev, int rpmflags)
->                         goto out;
->                 }
->
-> -               if (dev->power.irq_safe) {
-> +               if (dev->power.irq_safe && !IS_ENABLED(CONFIG_PREEMPT_RT)) {
 
-Please add a helper to avoid code duplication related to this (even
-though there is a small amount of it).
+--jv4e474pzdvgweet
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
->                         spin_unlock(&dev->power.lock);
->
->                         cpu_relax();
-> @@ -614,7 +614,12 @@ static int rpm_suspend(struct device *dev, int rpmflags)
->
->                         spin_unlock_irq(&dev->power.lock);
->
-> -                       schedule();
-> +#ifdef CONFIG_PREEMPT_RT
-> +                       if (dev->power.irq_safe)
-> +                               schedule_rtlock();
-> +                       else
-> +#endif
+Hi,
 
-Same here, and please use the #ifdet inside the helper.
+On Sun, Nov 14, 2021 at 06:03:15PM +0100, Hans de Goede wrote:
+> This is version 2 of my series previously titled:
+> "[PATCH 00/13] power-suppy/i2c/extcon: Add support for cht-wc PMIC
+> without USB-PD support". [...]
 
-> +                               schedule();
->
->                         spin_lock_irq(&dev->power.lock);
->                 }
-> @@ -779,7 +784,7 @@ static int rpm_resume(struct device *dev, int rpmflags)
->                         goto out;
->                 }
->
-> -               if (dev->power.irq_safe) {
-> +               if (dev->power.irq_safe && !IS_ENABLED(CONFIG_PREEMPT_RT)) {
->                         spin_unlock(&dev->power.lock);
->
->                         cpu_relax();
-> @@ -798,7 +803,12 @@ static int rpm_resume(struct device *dev, int rpmflags)
->
->                         spin_unlock_irq(&dev->power.lock);
->
-> -                       schedule();
-> +#ifdef CONFIG_PREEMPT_RT
-> +                       if (dev->power.irq_safe)
-> +                               schedule_rtlock();
-> +                       else
-> +#endif
-> +                               schedule();
->
->                         spin_lock_irq(&dev->power.lock);
->                 }
-> --
+Apart from the already pointed out things the power-supply changes LGTM.
+
+-- Sebastian
+
+--jv4e474pzdvgweet
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmGVUEMACgkQ2O7X88g7
++prLXQ/+M0HVd3+zx/Indeo+CsPNaNrCsjPQPMmXpWCFv+D+60jX1xElNK2MOdRY
+4nb82ca24uvIsawx85gUXPQJv0DAB0KQiqa3I7d7L/AswNarxha6bDcC8d6TlD85
+Kg/55YNaKB2mjqxGK7nZ7lAOYQMHQGgiJ19br2kVwlJiBywMHvso8lPSBHA0cR3f
+eJc57hpLvliqpW/1l7XzDMgdR1U+TUG7vICuC6uyV3DwWb0XdakFFJvQQvE14U1v
+to9otcNL1E2Wt2I0sQV52Je+/a3tP6qlWMR1AigfeNbLXTl/POcWIhbjSbxChgT2
+N3HVqKcN/JnBXAwRmSr+K5LVPJWEKiM6wLhD+Ua2ncXX51mcxABnA1pXiXuXBqZ6
+eIni/tmerqPcbLLmqGtvx/rD7m4Gcudu+66BrhplkgMEpDs+oZ2qIZMdPO/e+JTS
+rhwowA9g2ujDON5JeM/IBImnzJ/ggKUkba80GKbqGVQq5vpzjNuq4wIy1uMiNS3Q
+/LbrJnk+zun2i4ZNWsGBDymPMXeXkJ12JF3NFv2HsuAzHKjLMNpwvGpFn3UnntK0
+98yUoQkD8UqlXf/0BJ5hi4ACVdBTZQ88Z4ry/G0/ii2HNvgHfO7z2p7DmXa1QClu
+ZCzHvKRatNnEgs/bm8KHyoda4DNua9TFOlsiDwa3g/cIT/sPV28=
+=SyNY
+-----END PGP SIGNATURE-----
+
+--jv4e474pzdvgweet--
