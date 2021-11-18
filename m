@@ -2,102 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 034D0455280
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Nov 2021 03:10:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1875945528C
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Nov 2021 03:20:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242453AbhKRCNt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Nov 2021 21:13:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47140 "EHLO
+        id S241535AbhKRCW6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Nov 2021 21:22:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242449AbhKRCNs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Nov 2021 21:13:48 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0669C061764
-        for <linux-pm@vger.kernel.org>; Wed, 17 Nov 2021 18:10:48 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id r26so10766104oiw.5
-        for <linux-pm@vger.kernel.org>; Wed, 17 Nov 2021 18:10:48 -0800 (PST)
+        with ESMTP id S239811AbhKRCW5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Nov 2021 21:22:57 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20EF2C061570
+        for <linux-pm@vger.kernel.org>; Wed, 17 Nov 2021 18:19:58 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id b40so18095534lfv.10
+        for <linux-pm@vger.kernel.org>; Wed, 17 Nov 2021 18:19:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=L11A2mOS8Tgo1yhWUFCdOzNKfupx8X4+z4kUDHeJpBw=;
-        b=FdNXMBruj/r9N6yrmqT48ExTVw+K+yopdzlAbgEE0ZGOYRIAOogEpPZszLAHfQ7X45
-         CHFM2szFFgUK2ct/EF5fLRvYX6uUNRiDYimGLViO3CKNhO5nbSSR26nFbL5JsO8Cc3Xf
-         Z4KH4IkzDspl2Sgo0L+nj4hALSY4mnPXEGl6PDXzk763W+Vj+o1KegbVeB9sgAqHhoYH
-         KzfFCQCmV4zBOC8SOC5dkUovZPNcmzTWUCKtrvjacNOqS6HVz/Ods35S1TUxzCO8U/xO
-         EdbuA57crvyViKzx8hb2bWIhpNmc9aOMYh1H/CxGj//G+1m6EOBL4uJPIoScuG0NH1Bj
-         ZYQw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EZxmOzcc3LC/0N8q5QTBhk/vecbRNubeeedDXrYZLRE=;
+        b=xa/Ktx1Ul5LB8tNtvjJiWU3NrYqD9WC/q3pMaQ82Wner8JN5w95mEqpNVKc2L07dU3
+         nwvTWRkD71PjZiHwtDkG2GfHmbilcPLxBiNn+C/FY9ti5xnwY/03txrLAddMfYweZ5dW
+         KxmWbDymBJdZC8ju7pkxOO/tgYK8J17DauoW/KGSfqLILSlBR+O8twI5juw84TXqOFQb
+         S2JGUTY2v/Ed9yyrTp5R/uoVdoI7tlKvGgGq2e5aOdgqKQXRo50oQZGph9nXdisHR23Z
+         g706Jt/24bpyekK1UHtmhRr/DPq6rpvsKojkQ4PZjOARuQ41uOH9voSr/D1Q3r58c9H/
+         f4Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=L11A2mOS8Tgo1yhWUFCdOzNKfupx8X4+z4kUDHeJpBw=;
-        b=sibp9yV9dmU/qDf5F1I1cVNn5yTHSf2WL1WtF56AR8STvB8TC0RSguXEt2h7GZYwjY
-         lJpBT/LaMjR3CLyzVwjkwyXeYfpylNLqwdmnUDKA6qLfgagzlxDaSO50IRSVzMQ9bZgf
-         v74oWJLK5IBZmR4XRPR5xadsJIRPhrn1n42mLPXUHdNzJVWqWFzEjSoAvvkCSAp1BwJO
-         UIF04J28qMz5wrQ9XD6TXyXr8YC5WqDGt5ETzyrJSFa7v9GuCb2cNQDwF5gD4PrkRWbo
-         1thO5s0vc469+IRYPU4CmxjzoWZEBRd7GyvFU7oUI2RozDQSlKLBp+iA01aV3LZSjYVv
-         ikqQ==
-X-Gm-Message-State: AOAM530Q4vO9iq1PVkBDaASwN1jgxIQLIumgy92vh2dBVONDKTqih2rl
-        88RqmuyOOLRyIQNI3TztnXA9fb8kn8aK8C5Wf5C+LQ==
-X-Google-Smtp-Source: ABdhPJy5wey3xEBJ5eDd/vaFv5cCcdwwvIfzZLQfaPKixrO6IM4l6VlnrQv+Fl02j8QxpGX2pJrL+GpGW6QcwURvuDU=
-X-Received: by 2002:a05:6808:60e:: with SMTP id y14mr4354790oih.162.1637201448134;
- Wed, 17 Nov 2021 18:10:48 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1637061794.git.matti.vaittinen@fi.rohmeurope.com> <6123f62ac44e6513a498d15034a4b6b22abe5f5b.1637061794.git.matti.vaittinen@fi.rohmeurope.com>
-In-Reply-To: <6123f62ac44e6513a498d15034a4b6b22abe5f5b.1637061794.git.matti.vaittinen@fi.rohmeurope.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EZxmOzcc3LC/0N8q5QTBhk/vecbRNubeeedDXrYZLRE=;
+        b=owlFksokJJP4T60vDZ0Zy6xb8RhICaDFebMWG1XyOJQfi4GQw9HW/YFJXK/tqpGiSs
+         1kh0q0WQgit/OltrxH8cVihYPwExYL0a+BtuSeEp8KVYr6WIjB7zquPbdwl+hxJfzTtC
+         qTvY1NtHOdXlNLN7r85HdcDk45yLtkzoXIflvGHXgmeea+upTm/FGGjJRj9+hFQgIA7o
+         UjYEEZqT5H+J6vd8HNy3JbnoYQCfG2knQp33WqLB4Zzqg3yV+EvVP8TjUhsA17xCn+DK
+         KC/fhNjSeF/Sa5/6EfK19rHDcLdzZm80Dskon3jWG111MafgFJ4CLpQpyVIs8uPtDqdr
+         c0YQ==
+X-Gm-Message-State: AOAM531r+fWSC186IF2ciCe1k/8ytsV29dOwXAvMgmhWHgQGlwf8m2NC
+        6UieY3zu4sKSpI/++1uU+qgw3g==
+X-Google-Smtp-Source: ABdhPJyhOlfCEva0K+9B6q517QSDec5Fx/ygHsptbvI7EqzP2DtZDqMb7IbW714Wh5GDjtjg56KVww==
+X-Received: by 2002:a2e:bba0:: with SMTP id y32mr12484155lje.138.1637201995776;
+        Wed, 17 Nov 2021 18:19:55 -0800 (PST)
+Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
+        by smtp.gmail.com with ESMTPSA id j19sm165321lfe.120.2021.11.17.18.19.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Nov 2021 18:19:55 -0800 (PST)
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 18 Nov 2021 03:10:35 +0100
-Message-ID: <CACRpkdbKeW+pJ8SZ0fPD+9kEtgHgi2A9U=f6XyKTHogKU-9F9g@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 3/9] power: supply: Support DT originated
- temperature-capacity tables
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>, rostokus@gmail.com,
-        fan.chen@mediatek.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-power@fi.rohmeurope.com
-Content-Type: text/plain; charset="UTF-8"
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 00/16] AB8500 charger to use power_supply_battery_info
+Date:   Thu, 18 Nov 2021 03:17:36 +0100
+Message-Id: <20211118021752.2262818-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Nov 16, 2021 at 1:26 PM Matti Vaittinen
-<matti.vaittinen@fi.rohmeurope.com> wrote:
+This is the first set of patches starting to migrate the
+AB8500 charging code to use the struct power_supply_battery_info.
+We drop some cruft along the road.
 
-> Support obtaining the "capacity degradation by temperature" - tables
-> from device-tree to batinfo.
->
-> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+This series does not add anything to the struct, just reuse
+what is already there. Adding new stuff comes in the next
+patch series.
 
-Same questions as on the binding patch.
+The AB8500 charging code has not been in working condition for
+some time, but it is slowly getting there. Some of this is
+just regular maintenance.
 
-If we already support different degradation by temperature tables,
-why do we need a second mechanism for the same thing?
+Linus Walleij (16):
+  power: supply: ab8500: Use core battery parser
+  power: supply: ab8500: Sink current tables into charger code
+  power: supply: ab8500: Standardize operating temperature
+  power: supply: ab8500: Drop unused battery types
+  power: supply: ab8500: Use only one battery type
+  power: supply: ab8500: Standardize design capacity
+  power: supply: ab8500: Standardize technology
+  power: supply: ab8500: Standardize voltages
+  power: supply: ab8500_fg: Init battery data in bind()
+  power: supply: ab8500: Standardize internal resistance
+  power: supply: ab8500: Standardize termination current
+  power: supply: ab8500: Make recharge capacity a constant
+  power: supply: ab8500: Standardize CC current
+  power: supply: ab8500: Standardize CV voltage
+  power: supply: ab8500: Standardize temp res lookup
+  power: supply: ab8500: Standardize capacity lookup
 
-I'd just calculate a few tables per temperature and be done with
-it.
+ drivers/power/supply/ab8500-bm.h       | 121 +-----
+ drivers/power/supply/ab8500-chargalg.h |   8 +-
+ drivers/power/supply/ab8500_bmdata.c   | 566 ++++++-------------------
+ drivers/power/supply/ab8500_btemp.c    |  61 ++-
+ drivers/power/supply/ab8500_chargalg.c | 315 +++++++-------
+ drivers/power/supply/ab8500_charger.c  | 536 ++++++++++++-----------
+ drivers/power/supply/ab8500_fg.c       | 371 ++++++++--------
+ 7 files changed, 796 insertions(+), 1182 deletions(-)
 
-At least documentation needs to be updated to reflect that the two methods
-are exclusive and you can only use one of them.
+-- 
+2.31.1
 
-+ * Usually temperature impacts on battery capacity. For systems where it is
-+ * sufficient to describe capacity change as a series of temperature ranges
-+ * where the change is linear (Eg delta cap = temperature_change * constant +
-+ * offset) can be described by this structure.
-
-But what chemistry has this property? This seems to not be coming from
-the real physical world. I would perhaps accept differential equations
-but *linear* battery characteristics?
-
-If the intent is only for emulation of something that doesn't exist in
-reality I doubt how useful it is, all battery technologies I have seen
-have been nonlinear and hence we have the tables.
-
-If you want to simulate a linear discharge, then just write a few tables
-with linear dissipation progression, it's easier I think.
-
-Yours,
-Linus Walleij
