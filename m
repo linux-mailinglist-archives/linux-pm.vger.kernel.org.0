@@ -2,57 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FD76455295
+	by mail.lfdr.de (Postfix) with ESMTP id B54CC455298
 	for <lists+linux-pm@lfdr.de>; Thu, 18 Nov 2021 03:20:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242537AbhKRCXX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S242496AbhKRCXX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Wed, 17 Nov 2021 21:23:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49272 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242530AbhKRCXS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Nov 2021 21:23:18 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9463DC061570
-        for <linux-pm@vger.kernel.org>; Wed, 17 Nov 2021 18:20:18 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id t26so17987961lfk.9
-        for <linux-pm@vger.kernel.org>; Wed, 17 Nov 2021 18:20:18 -0800 (PST)
+        with ESMTP id S242492AbhKRCXU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Nov 2021 21:23:20 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4AD5C061764
+        for <linux-pm@vger.kernel.org>; Wed, 17 Nov 2021 18:20:20 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id b40so18100539lfv.10
+        for <linux-pm@vger.kernel.org>; Wed, 17 Nov 2021 18:20:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=OxNCjc7MAwItE0Quq7/jM51++0N9X+9SGKjcFevR0vs=;
-        b=NtJ3GsxjG6ca6VT0dZBFLYg2rZ/TLg3SgtIp/ZiA6DZNKQVkwNEA2C/7T6n9aGPYhX
-         s4yzZUAhbbd6XwuSuMyLP8AgGfeezuXcOMaQGXnRNI0/g4FRtctjPFcn+yn7pGo1gdFq
-         VCE7KC4JzPonJC2vf7LAPYrg+gyKa76YevK0ZSou/wGUfdXx75DQ+Knyc5sLbeEDGjb+
-         mjggsnbhzWr1xccr6FaifHau4DHDFIHTVtYlr9lfB4jBWW/TrS/ikrREvEB0brUzmrrX
-         uRvysnzpt01AOV93SudkJbBx5lZPMBThDO4ENsSZ2XK8h6NGPl8fuihwIyER3qxiGIYN
-         3a/Q==
+        bh=Z2SmpuYl2ABnUfey0UDONLQlUHk1m7GyEzeYLIiNTVc=;
+        b=Ye8/5x3879+HgQH6LM5rL2wntnqZQYdiCesoY39KeRHqi5R9tF3sxjZqi4kYa4hB1A
+         X/2dlNue3QATkm0myDYOqX6/MRzP6pFPMmqaRuFtGGpCSpJSuNuCO+wSm58g8lyHZInY
+         YDbdIAIV8SkJ+ulJqjCNPqIGQw5FAdFdMrIHCR6hDSkR8IXXv0EzJOmQjpZzhkEn+gRf
+         6XDjHIsfKzGRYYTqB4lrwYvLVVMuWMwff3jUOBOnrS1HkfNxNWnNilZD5gv3s23oZPQU
+         ut08/tBX4BEu0cZSWX3xFzu6gcvv34RSf6fHWhDEcPnJG/B7opZ1e3K68rLp0gA+5jAP
+         iYRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=OxNCjc7MAwItE0Quq7/jM51++0N9X+9SGKjcFevR0vs=;
-        b=LluLuoF2DljmYaU/1NoDd4AuDhIOvTUfb+pw0v30LDZ51FJ6Oo1lVx68Wz3DpQHLZ7
-         4wzz4qLDqDsoXrJL6G2P5AhTQAqrbXFzq5rFAH32W600tc0v4z8DMr2Z4CJ3cDe4Y63v
-         mQvjK530jThfYktod4ITvrt5GDo9u7tu5AUjx4GKB8pmJq9v96BynMrWAIGlkg/FscOE
-         wy+zvc4RQ684lALT/1o94OJrxmpyGk0hkUpBI9N171TFhYGRnVHqeLzlB5x1LHeEXRXT
-         CChtMDpTj4m9En19zugNc20KzwbXkpC36UwGeu+dnei5FA5LGlmL2BQuSeXr1NisfQer
-         PPqA==
-X-Gm-Message-State: AOAM531G7HihoH/Duwm5CF74G2njThwah1PV3Cw9OxtOGOYFoh1olM50
-        qPucnv/QYXRU7vzd36lWXW5XZg==
-X-Google-Smtp-Source: ABdhPJzxEs2+20rCekhCR2yvTq85HsNgYBf3/3jiosawMSQ1RkrWh7mo4rIjX3izYtk1Ua7vzT0Nzw==
-X-Received: by 2002:a05:6512:2304:: with SMTP id o4mr20392488lfu.543.1637202016994;
-        Wed, 17 Nov 2021 18:20:16 -0800 (PST)
+        bh=Z2SmpuYl2ABnUfey0UDONLQlUHk1m7GyEzeYLIiNTVc=;
+        b=f4SmZeqoWif5Qik2UqE7N8zOnV8f3BGO4I93NDcUIxxTL6UlSp9hARTbGVhYPuE/fk
+         x29o2mv3IQvWFsj5/62qHXXvLmQuctnFnJMil1KZqK5Yz72Zgy34pBQWwLkAXwqoXwU/
+         mNNsQrelKvoprR6uOv5viWDRxeUulshjCOvI2sm/+IxRLnWsMXxjEE24zMi4dYVZnNK2
+         iYuT6bjD/x3fFaRofYBYcKGiUtNCzgSiBsdSXh8t1KnDYJwW3h+2SHhiBGbpSXYJZKM4
+         AKXpD1fLwKOeaz1OEPDhr5EtilelFRq07NRL5dzMDzpJ7k7fzcYNlQ0FJH9I9EfbmBBl
+         uE3w==
+X-Gm-Message-State: AOAM532eYBCO5dt6oXsTZqto04LPzRvi1e8cm2kJYI5jHVy5EObrOWLl
+        taF0W+1aqcwNu6ZgOhC+y3DjCATCAwYLgg==
+X-Google-Smtp-Source: ABdhPJy0BtM9uM+piO8Hy74LjFy5Ass8s4CDaPpiCYp9v/cT29/7xzZCMuwnDqEyTI+9lskHIxrRZQ==
+X-Received: by 2002:a2e:9b47:: with SMTP id o7mr8519729ljj.346.1637202019118;
+        Wed, 17 Nov 2021 18:20:19 -0800 (PST)
 Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id j19sm165321lfe.120.2021.11.17.18.20.15
+        by smtp.gmail.com with ESMTPSA id j19sm165321lfe.120.2021.11.17.18.20.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Nov 2021 18:20:15 -0800 (PST)
+        Wed, 17 Nov 2021 18:20:18 -0800 (PST)
 From:   Linus Walleij <linus.walleij@linaro.org>
 To:     Sebastian Reichel <sre@kernel.org>
 Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 09/16] power: supply: ab8500_fg: Init battery data in bind()
-Date:   Thu, 18 Nov 2021 03:17:45 +0100
-Message-Id: <20211118021752.2262818-10-linus.walleij@linaro.org>
+Subject: [PATCH 10/16] power: supply: ab8500: Standardize internal resistance
+Date:   Thu, 18 Nov 2021 03:17:46 +0100
+Message-Id: <20211118021752.2262818-11-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211118021752.2262818-1-linus.walleij@linaro.org>
 References: <20211118021752.2262818-1-linus.walleij@linaro.org>
@@ -62,44 +62,59 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-We were assigning some battery data state in probe() but
-this is insecure as it depends on the proper probe order
-between the components: the charger must probe first so
-that the battery data is populated. Move the init to
-the bind() call which is certain to happen after the
-probe of the master and all components has happened.
+The nominal internal resistance isn't used by the AB8500
+charging code, instead this resistance is measured continuously,
+but we anyways migrate this to the standard property in
+struct power_supply_battery_info.
 
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- drivers/power/supply/ab8500_fg.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/power/supply/ab8500-bm.h     | 2 --
+ drivers/power/supply/ab8500_bmdata.c | 4 +++-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
-index ab6141faa798..daa008138b05 100644
---- a/drivers/power/supply/ab8500_fg.c
-+++ b/drivers/power/supply/ab8500_fg.c
-@@ -3023,6 +3023,10 @@ static int ab8500_fg_bind(struct device *dev, struct device *master,
- 		return -ENOMEM;
+diff --git a/drivers/power/supply/ab8500-bm.h b/drivers/power/supply/ab8500-bm.h
+index 233fa86f9b2f..e6c5c9f5d4c5 100644
+--- a/drivers/power/supply/ab8500-bm.h
++++ b/drivers/power/supply/ab8500-bm.h
+@@ -388,7 +388,6 @@ struct ab8500_maxim_parameters {
+  * @maint_b_chg_timer_h:	charge time in maintenance B state
+  * @low_high_cur_lvl:		charger current in temp low/high state in mA
+  * @low_high_vol_lvl:		charger voltage in temp low/high state in mV'
+- * @battery_resistance:		battery inner resistance in mOhm.
+  * @n_r_t_tbl_elements:		number of elements in r_to_t_tbl
+  * @r_to_t_tbl:			table containing resistance to temp points
+  * @n_v_cap_tbl_elements:	number of elements in v_to_cap_tbl
+@@ -411,7 +410,6 @@ struct ab8500_battery_type {
+ 	int maint_b_chg_timer_h;
+ 	int low_high_cur_lvl;
+ 	int low_high_vol_lvl;
+-	int battery_resistance;
+ 	int n_temp_tbl_elements;
+ 	const struct ab8500_res_to_temp *r_to_t_tbl;
+ 	int n_v_cap_tbl_elements;
+diff --git a/drivers/power/supply/ab8500_bmdata.c b/drivers/power/supply/ab8500_bmdata.c
+index 17df619cdf36..2532499afe5f 100644
+--- a/drivers/power/supply/ab8500_bmdata.c
++++ b/drivers/power/supply/ab8500_bmdata.c
+@@ -83,7 +83,6 @@ static const struct batres_vs_temp temp_to_batres_tbl_thermistor[] = {
+ static struct ab8500_battery_type bat_type_thermistor_unknown = {
+ 	.resis_high = 0,
+ 	.resis_low = 0,
+-	.battery_resistance = 300,
+ 	.termination_curr = 200,
+ 	.recharge_cap = 95,
+ 	.normal_cur_lvl = 400,
+@@ -204,6 +203,9 @@ int ab8500_bm_of_probe(struct power_supply *psy,
+ 		bi->overvoltage_limit_uv = 4050000;
  	}
  
-+	di->bat_cap.max_mah_design = di->bm->bi.charge_full_design_uah;
-+	di->bat_cap.max_mah = di->bat_cap.max_mah_design;
-+	di->vbat_nom_uv = di->bm->bi.voltage_max_design_uv;
++	if (bi->factory_internal_resistance_uohm < 0)
++		bi->factory_internal_resistance_uohm = 300000;
 +
- 	/* Start the coulomb counter */
- 	ab8500_fg_coulomb_counter(di, true);
- 	/* Run the FG algorithm */
-@@ -3082,10 +3086,6 @@ static int ab8500_fg_probe(struct platform_device *pdev)
- 	psy_cfg.num_supplicants = ARRAY_SIZE(supply_interface);
- 	psy_cfg.drv_data = di;
- 
--	di->bat_cap.max_mah_design = di->bm->bi.charge_full_design_uah;
--	di->bat_cap.max_mah = di->bat_cap.max_mah_design;
--	di->vbat_nom_uv = di->bm->bi.voltage_max_design_uv;
--
- 	di->init_capacity = true;
- 
- 	ab8500_fg_charge_state_to(di, AB8500_FG_CHARGE_INIT);
+ 	if (bi->temp_min == INT_MIN)
+ 		bi->temp_min = AB8500_TEMP_UNDER;
+ 	if (bi->temp_max == INT_MAX)
 -- 
 2.31.1
 
