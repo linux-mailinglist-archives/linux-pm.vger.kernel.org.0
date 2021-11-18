@@ -2,57 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C475455347
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Nov 2021 04:18:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E914455349
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Nov 2021 04:18:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241265AbhKRDVn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Nov 2021 22:21:43 -0500
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:42007 "EHLO
+        id S235654AbhKRDVp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Nov 2021 22:21:45 -0500
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:49687 "EHLO
         new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235654AbhKRDVn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Nov 2021 22:21:43 -0500
+        by vger.kernel.org with ESMTP id S239873AbhKRDVo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Nov 2021 22:21:44 -0500
 Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 8EA8558089F;
-        Wed, 17 Nov 2021 22:18:43 -0500 (EST)
+        by mailnew.nyi.internal (Postfix) with ESMTP id 675515808A2;
+        Wed, 17 Nov 2021 22:18:44 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Wed, 17 Nov 2021 22:18:43 -0500
+  by compute1.internal (MEProxy); Wed, 17 Nov 2021 22:18:44 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=fm1; bh=8t+BKJ/wTuG/sd5P+Si4jIM2be
-        U8XseaZWGylrCi2gk=; b=iMTNRNrT1YQKdV1G/Lb7jrpue6qZv3LK1rahicqqE/
-        WnoFGHxxhFUevG3lr+eKDquxr/SasNj9bwpNOLm3Tv0iyiAyR8E0mHqVAJAJ1p3k
-        rzOqTujgYMwxwHAsvgBG8alw/SLTB0gc76qYn9KHKYbSWbOQAReFH8R4Jm7Y1P/C
-        McT6g+46iKUt6cjrhf4YfPXR14YHg6PXKxn8Zrv8iACrhQMEvDLC6RQAGx0GvpoS
-        S5haLi0E9UQ2sy9rpVM86E4GXSe0T9RA6y+H+rszGSIchQIm/4xN7cC0muv1K0+7
-        8I+Kj0lPfa/iZUAP8ZH32vRVawug9cSoQO83E/M+IVkQ==
+        from:to:cc:subject:date:message-id:in-reply-to:references
+        :mime-version:content-transfer-encoding; s=fm1; bh=YohY0ULq+cZY3
+        n/h85Xt4ofAPSEuFUmFJOTXV6vVrMs=; b=UI4ZUzSuVecytvBeueEaydHEVUwmT
+        L5LqaSVwMJB52jS2cPzUlxkEYw4RvMvM1j8w1ONDnDLySN3JqN5ZzQfUXCVlyuWb
+        +7TB2c+zfcKHaw+knxam+rTgq8haZnIDXHmYEEtpmDBtWQFRHF8k0DibJqrhp4r8
+        yjBjdy2XwoDPYtrYPJRVDn3bhTjA6/Kg4EFWefCwrmQeR3The8vXI1LoooXjsC2J
+        7VcnBZwYLKBXG3UapqUNRExPPEK5WsgTRZxQSHN8Je08NVSuipPXi6CDLIXQ6Qzh
+        yDZO0/Cc3Rc3COUdEYkJXaVHvh0LKNOHF5XoxPnMasVlXVi+8GRZg7ZLg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=8t+BKJ/wTuG/sd5P+
-        Si4jIM2beU8XseaZWGylrCi2gk=; b=A3rOpNTnFjhG4YabCtF36zymC9H+KiSw/
-        3ndIC4NL+rJ0Euxpp5c5qVcKtbfbo2f3Pt9UDVyAvwKyTmmmH+ZdwsddIIwqZ1P8
-        gKvAfx0D8zMOQ0JAjzCzHypGBspcdWGFwzMELjVQwXWQh3qsGQl+sfktiNSNg0mX
-        R8K+YPj/6eJm1/5wGahOUsMY3nx6SMnyh7inedhdUyXRwqH6mOhCq51BXASzjyrn
-        7WkRYOfO7UOErJa8wP+Vl1h60BMEbEQ2zAr7Uuy9w4FI3iUt18hPNwLnnKUa9Q1G
-        xzrrD0jsB47bwUZHhCUZc8iTHlnmbYdE3fX7+XRqToZiCYAh84jsQ==
-X-ME-Sender: <xms:EsaVYXqzsPwNiQ4UgtWPTRyKJer55Ea_-as5A_S12Kk-T7CiBNsRvQ>
-    <xme:EsaVYRoj6uA0PHzaymYrtABSTKMsU9kFpaGJeqURav5gjiYS8ep2OwHnFI7SO7UuW
-    V6BwldEAAiVEc86ZQ>
-X-ME-Received: <xmr:EsaVYUOmkv4BOwrMwLWZRJnHVr8OUxUjowUzBKSpDpGC2E_V9JfxKAwLLaNaSIBsC-dcXDVJrbH_MD-DTqYK4rRSjFu-pIo-21ehMJsIAqJEviA5wjdZsQRsjz0m3yfoZS5-Kw>
+        :in-reply-to:message-id:mime-version:references:subject:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; bh=YohY0ULq+cZY3n/h85Xt4ofAPSEuFUmFJOTXV6vVrMs=; b=Lm9cPGMY
+        mOcbbCZkIdIB/RjUF5YI9tG9moEhDDoxxMfbh3OAYWFWl2/x+swBdt0zFHWIXPRO
+        s6wBbTSJutC/LKORZi5yTCyYd4JHKctlTtY13X2JX1mOuyZy5GTQ/2wnDdV12ke7
+        7m+t0iHqcYyiLRVWNtlvsTw20r5Fvb/6f43oOCtrk6aH9aSwTfFMAHeCt5M9HFq1
+        fQB+clRtE+hlYF8PkVycK934gL9//LDsoLooWGKxGuX5LuW5WppbtYGm4qaxFdjy
+        28I5EgF1GSwsVueBIzG8Uzc/t4QKe+SP/zRJPz/FcTOktcla4B3JYC+cGINhHKoH
+        2oUM6UH9dBjXbQ==
+X-ME-Sender: <xms:FMaVYTORSlczjQ_NqIO6VQDWISTo6EgxUv-DTEsh4f3-SkUwKdirfQ>
+    <xme:FMaVYd_ALYYP68nduvz7GrGi60JBQ-fxr1Isbn0J2RV-4YhgpMUJBQjrVuafmly8d
+    aqUitGTSUO-OSWBXQ>
+X-ME-Received: <xmr:FMaVYSTRt2MtWq24ZHLakd98ANxRg9qLRdlE9pqPOzN7isz1Mhu92okDfo5ioNVP_8IDTxCNx8mxAehAxNaju7ojdfIADgfil3XwrzJYPUJW944Yh3_YoK1rt3PuZyzMSFquWA>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrfeehgdehhecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvffufffkofgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghlucfj
-    ohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrfgrth
-    htvghrnhepieetkefhheduudfgledtudefjeejfeegveehkeeufffhhfejkeehiefftdev
-    tdevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsh
-    grmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:EsaVYa5oeMrZ1Ohb8a_Kq3zstkwB49pVp02-ceg985jiTFv1cMjEpA>
-    <xmx:EsaVYW6q_ANBJAU02OwbLiEUrKJqNrd7GjilXyxrHtU-LCG2ZJeXaQ>
-    <xmx:EsaVYSgBAraR_zJyu_DpvrNvJcEhEMN2Opj5wZLTC0y_Gu-52SdNzA>
-    <xmx:E8aVYeitOv_WVhGv9wdVnFFHuwuVle_Sw0_BzvsVmzExsCL6IHxmjA>
+    fjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghl
+    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrf
+    grthhtvghrnhepudfhjeefvdfhgfefheetgffhieeigfefhefgvddvveefgeejheejvdfg
+    jeehueeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:FMaVYXvQPeWMv42JWhGzfFwCuDL7BEGLVrGFGH14D5svyT5o96RByA>
+    <xmx:FMaVYbcKSDyLS3ojrBzblef-x2G4f6jOzRdSyKkXWCV8VR__zMcF_Q>
+    <xmx:FMaVYT2W53dl_tzqV-M38DenEBuh5o6bSjWazfvPi9MlGWPSnKm4RA>
+    <xmx:FMaVYZ01LJ5hnlrz099vEV3ex27Hcw2qCvPJDesAmNFQRuU1H1Nmew>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 17 Nov 2021 22:18:42 -0500 (EST)
+ 17 Nov 2021 22:18:43 -0500 (EST)
 From:   Samuel Holland <samuel@sholland.org>
 To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
@@ -63,69 +64,93 @@ To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Rob Herring <robh+dt@kernel.org>
 Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-pm@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Samuel Holland <samuel@sholland.org>
-Subject: [PATCH v3 0/6] DRAM devfreq support for Allwinner A64/H5
-Date:   Wed, 17 Nov 2021 21:18:35 -0600
-Message-Id: <20211118031841.42315-1-samuel@sholland.org>
+        linux-kernel@vger.kernel.org, Samuel Holland <samuel@sholland.org>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v3 1/6] dt-bindings: clock: sunxi: Export CLK_DRAM for devfreq
+Date:   Wed, 17 Nov 2021 21:18:36 -0600
+Message-Id: <20211118031841.42315-2-samuel@sholland.org>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20211118031841.42315-1-samuel@sholland.org>
+References: <20211118031841.42315-1-samuel@sholland.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This series adds a new devfreq driver for the MBUS/DRAM controller in
-some Allwinner SoCs, and enables it for the A64 and H5.
+The MBUS node needs to reference the CLK_DRAM clock, as the MBUS
+hardware implements memory dynamic frequency scaling using this clock.
 
-The binding and DTs are updated in patches 1-5. The MBUS nodes already
-existed, but were not bound to any driver before; they were only used
-for their dma-ranges property. Finally, the driver is added in patch 6.
+Export this clock for SoCs which will be getting a devfreq driver.
 
-I am not quite sure the best way to handle DRAM register range in the
-DT binding -- as a separate reg property, a separate node, or simply
-enlarging the MBUS register range. While the DRAM controller is a
-separate IP block, the MBUS hardware has the ability to double-buffer
-certain DRAM controller registers, and the hardware MDFS process writes
-to some DRAM controller registers as well. So they are rather tightly
-integrated.
-
-Like the driver commit description says, this driver could support
-additional SoCs: at least A33, A83T, and H3. I can send follow-up
-patches adding compatibles for these, but I cannot test A33 or A83T.
+Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
 
 Changes from v2:
-  - Remove unnecessary quotes from binding
-  - Fix issues with overall minItems/maxItems limits
-  - Added tags
+ - Remove unnecessary quotes from binding
+ - Fix issues with overall minItems/maxItems limits
 
-Changes from v1:
-  - Patch 1 was merged
-  - Drop patches 2-4 (support for devfreq drivers without OPPs)
-  - Convert the driver to use dynamic OPPs
+---
+ drivers/clk/sunxi-ng/ccu-sun50i-a64.h      | 2 --
+ drivers/clk/sunxi-ng/ccu-sun8i-h3.h        | 2 --
+ include/dt-bindings/clock/sun50i-a64-ccu.h | 2 +-
+ include/dt-bindings/clock/sun8i-h3-ccu.h   | 2 +-
+ 4 files changed, 2 insertions(+), 6 deletions(-)
 
-Samuel Holland (6):
-  dt-bindings: clock: sunxi: Export CLK_DRAM for devfreq
-  dt-bindings: arm: sunxi: Expand MBUS binding
-  dt-bindings: arm: sunxi: Add H5 MBUS compatible
-  ARM: dts: sunxi: h3/h5: Update MBUS node
-  arm64: dts: allwinner: a64: Update MBUS node
-  PM / devfreq: Add a driver for the sun8i/sun50i MBUS
-
- .../arm/sunxi/allwinner,sun4i-a10-mbus.yaml   |  91 +++-
- arch/arm/boot/dts/sun8i-h3.dtsi               |   4 +
- arch/arm/boot/dts/sunxi-h3-h5.dtsi            |  11 +-
- arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi |  10 +-
- arch/arm64/boot/dts/allwinner/sun50i-h5.dtsi  |   4 +
- drivers/clk/sunxi-ng/ccu-sun50i-a64.h         |   2 -
- drivers/clk/sunxi-ng/ccu-sun8i-h3.h           |   2 -
- drivers/devfreq/Kconfig                       |   8 +
- drivers/devfreq/Makefile                      |   1 +
- drivers/devfreq/sun8i-a33-mbus.c              | 511 ++++++++++++++++++
- include/dt-bindings/clock/sun50i-a64-ccu.h    |   2 +-
- include/dt-bindings/clock/sun8i-h3-ccu.h      |   2 +-
- 12 files changed, 634 insertions(+), 14 deletions(-)
- create mode 100644 drivers/devfreq/sun8i-a33-mbus.c
-
+diff --git a/drivers/clk/sunxi-ng/ccu-sun50i-a64.h b/drivers/clk/sunxi-ng/ccu-sun50i-a64.h
+index 54d1f96f4b68..a8c11c0b4e06 100644
+--- a/drivers/clk/sunxi-ng/ccu-sun50i-a64.h
++++ b/drivers/clk/sunxi-ng/ccu-sun50i-a64.h
+@@ -51,8 +51,6 @@
+ 
+ #define CLK_USB_OHCI1_12M		92
+ 
+-#define CLK_DRAM			94
+-
+ /* All the DRAM gates are exported */
+ 
+ /* And the DSI and GPU module clock is exported */
+diff --git a/drivers/clk/sunxi-ng/ccu-sun8i-h3.h b/drivers/clk/sunxi-ng/ccu-sun8i-h3.h
+index d8c38447e11b..e13f3c4b57d0 100644
+--- a/drivers/clk/sunxi-ng/ccu-sun8i-h3.h
++++ b/drivers/clk/sunxi-ng/ccu-sun8i-h3.h
+@@ -42,8 +42,6 @@
+ 
+ /* The first bunch of module clocks are exported */
+ 
+-#define CLK_DRAM		96
+-
+ /* All the DRAM gates are exported */
+ 
+ /* Some more module clocks are exported */
+diff --git a/include/dt-bindings/clock/sun50i-a64-ccu.h b/include/dt-bindings/clock/sun50i-a64-ccu.h
+index 318eb15c414c..175892189e9d 100644
+--- a/include/dt-bindings/clock/sun50i-a64-ccu.h
++++ b/include/dt-bindings/clock/sun50i-a64-ccu.h
+@@ -113,7 +113,7 @@
+ #define CLK_USB_OHCI0		91
+ 
+ #define CLK_USB_OHCI1		93
+-
++#define CLK_DRAM		94
+ #define CLK_DRAM_VE		95
+ #define CLK_DRAM_CSI		96
+ #define CLK_DRAM_DEINTERLACE	97
+diff --git a/include/dt-bindings/clock/sun8i-h3-ccu.h b/include/dt-bindings/clock/sun8i-h3-ccu.h
+index 30d2d15373a2..5d4ada2c22e6 100644
+--- a/include/dt-bindings/clock/sun8i-h3-ccu.h
++++ b/include/dt-bindings/clock/sun8i-h3-ccu.h
+@@ -126,7 +126,7 @@
+ #define CLK_USB_OHCI1		93
+ #define CLK_USB_OHCI2		94
+ #define CLK_USB_OHCI3		95
+-
++#define CLK_DRAM		96
+ #define CLK_DRAM_VE		97
+ #define CLK_DRAM_CSI		98
+ #define CLK_DRAM_DEINTERLACE	99
 -- 
 2.32.0
 
