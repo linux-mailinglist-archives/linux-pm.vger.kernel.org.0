@@ -2,120 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BECB4552F5
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Nov 2021 03:55:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C475455347
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Nov 2021 04:18:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242527AbhKRC6W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Nov 2021 21:58:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57074 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242519AbhKRC6T (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Nov 2021 21:58:19 -0500
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E917BC061766
-        for <linux-pm@vger.kernel.org>; Wed, 17 Nov 2021 18:55:19 -0800 (PST)
-Received: by mail-qv1-xf2e.google.com with SMTP id s9so3522637qvk.12
-        for <linux-pm@vger.kernel.org>; Wed, 17 Nov 2021 18:55:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=kWiOAOI7r4izu6h5VlKdS2Lb/oHkyFKg0ELscvXQ1wI=;
-        b=hJpdylaj3Mj9C8reUqg+M614ul/ESL0NUF+w4YCmGX/WadQ1th7ITOczm5lIZ7IZy9
-         rgJOd/6iHXMV5m8WJleM7d/edA1QSYpzYTTXD34NBWyxxh3qwxaMHn6NA2jAy8W5sUeb
-         OLZvgt1jpsVWYhrZHvSXPh5jwlcrDLSBdWzBx1IcHkh/1ZP4izJsKYcNBLswA9zywT4Q
-         OVb+x7u5Y1CM//vUAQlUx0N94+L2Jxy7WBvvDYNXThFNc6dwWjdcMa5OQk06P+kbohEt
-         spFdGgrSpKeXnaj2v9XamIykGdRbrg4RtxHEc5Iz/IgPEposElPsGP4WwZ1zwTWSP+a1
-         WP0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=kWiOAOI7r4izu6h5VlKdS2Lb/oHkyFKg0ELscvXQ1wI=;
-        b=PrEd0ClYPS5qFti8i1MJnr51+LEvwXWduL/XwIxsEm5C9Td6hJRNfEE62mh6hNusQd
-         H9CAOx6sm445X+ujJSohcIyDLjFLSd9XGNs2F2cPgvBZ1nDD3QlhfhCEE3Cx/kX6k1s+
-         1qfdEH+8taMpOH4JgpZmNZnkIt0j6YcEhujYZRkAtUfFgDEALtU4ERL3amsBJoMmG0Ht
-         BFn44geRwMOh+mR61QkZEzY69u/ZOlSpJCcgXEW/K4oYNZt1mJBxDmXFtlTfMwgxALVM
-         rUVygjksDmVJyYNyB6lnK8SCfrHlR5MNL4bmxCBS1cHDKFG09Eh0naYbDXnQLgLhMNev
-         T59w==
-X-Gm-Message-State: AOAM532bSPdSrm+bBvCmaNIPZgiY5uYx80qOtq/mHZ/rVzsV3vqpWr19
-        NcswS+WN1gD/Or74dkgXjy7EEBshp2TScg==
-X-Google-Smtp-Source: ABdhPJx511Llxs8jzWRybvtGDNoFOkV+sSOeHd47g7Td2oUCzsToJYqpJJ1fZHLnVBfhkQVLymeISw==
-X-Received: by 2002:a0c:eb90:: with SMTP id x16mr61264369qvo.41.1637204118630;
-        Wed, 17 Nov 2021 18:55:18 -0800 (PST)
-Received: from [192.168.1.93] (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
-        by smtp.gmail.com with ESMTPSA id i7sm1003069qkn.0.2021.11.17.18.55.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Nov 2021 18:55:17 -0800 (PST)
-Subject: Re: [PATCH] cpufreq: qcom-hw: Use optional irq API
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20211117020346.4088302-1-swboyd@chromium.org>
-From:   Thara Gopinath <thara.gopinath@linaro.org>
-Message-ID: <76b103ec-7034-e6c1-1ab4-174cf16f9fc8@linaro.org>
-Date:   Wed, 17 Nov 2021 21:55:17 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S241265AbhKRDVn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Nov 2021 22:21:43 -0500
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:42007 "EHLO
+        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235654AbhKRDVn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Nov 2021 22:21:43 -0500
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 8EA8558089F;
+        Wed, 17 Nov 2021 22:18:43 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Wed, 17 Nov 2021 22:18:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=fm1; bh=8t+BKJ/wTuG/sd5P+Si4jIM2be
+        U8XseaZWGylrCi2gk=; b=iMTNRNrT1YQKdV1G/Lb7jrpue6qZv3LK1rahicqqE/
+        WnoFGHxxhFUevG3lr+eKDquxr/SasNj9bwpNOLm3Tv0iyiAyR8E0mHqVAJAJ1p3k
+        rzOqTujgYMwxwHAsvgBG8alw/SLTB0gc76qYn9KHKYbSWbOQAReFH8R4Jm7Y1P/C
+        McT6g+46iKUt6cjrhf4YfPXR14YHg6PXKxn8Zrv8iACrhQMEvDLC6RQAGx0GvpoS
+        S5haLi0E9UQ2sy9rpVM86E4GXSe0T9RA6y+H+rszGSIchQIm/4xN7cC0muv1K0+7
+        8I+Kj0lPfa/iZUAP8ZH32vRVawug9cSoQO83E/M+IVkQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=8t+BKJ/wTuG/sd5P+
+        Si4jIM2beU8XseaZWGylrCi2gk=; b=A3rOpNTnFjhG4YabCtF36zymC9H+KiSw/
+        3ndIC4NL+rJ0Euxpp5c5qVcKtbfbo2f3Pt9UDVyAvwKyTmmmH+ZdwsddIIwqZ1P8
+        gKvAfx0D8zMOQ0JAjzCzHypGBspcdWGFwzMELjVQwXWQh3qsGQl+sfktiNSNg0mX
+        R8K+YPj/6eJm1/5wGahOUsMY3nx6SMnyh7inedhdUyXRwqH6mOhCq51BXASzjyrn
+        7WkRYOfO7UOErJa8wP+Vl1h60BMEbEQ2zAr7Uuy9w4FI3iUt18hPNwLnnKUa9Q1G
+        xzrrD0jsB47bwUZHhCUZc8iTHlnmbYdE3fX7+XRqToZiCYAh84jsQ==
+X-ME-Sender: <xms:EsaVYXqzsPwNiQ4UgtWPTRyKJer55Ea_-as5A_S12Kk-T7CiBNsRvQ>
+    <xme:EsaVYRoj6uA0PHzaymYrtABSTKMsU9kFpaGJeqURav5gjiYS8ep2OwHnFI7SO7UuW
+    V6BwldEAAiVEc86ZQ>
+X-ME-Received: <xmr:EsaVYUOmkv4BOwrMwLWZRJnHVr8OUxUjowUzBKSpDpGC2E_V9JfxKAwLLaNaSIBsC-dcXDVJrbH_MD-DTqYK4rRSjFu-pIo-21ehMJsIAqJEviA5wjdZsQRsjz0m3yfoZS5-Kw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrfeehgdehhecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvffufffkofgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghlucfj
+    ohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrfgrth
+    htvghrnhepieetkefhheduudfgledtudefjeejfeegveehkeeufffhhfejkeehiefftdev
+    tdevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsh
+    grmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:EsaVYa5oeMrZ1Ohb8a_Kq3zstkwB49pVp02-ceg985jiTFv1cMjEpA>
+    <xmx:EsaVYW6q_ANBJAU02OwbLiEUrKJqNrd7GjilXyxrHtU-LCG2ZJeXaQ>
+    <xmx:EsaVYSgBAraR_zJyu_DpvrNvJcEhEMN2Opj5wZLTC0y_Gu-52SdNzA>
+    <xmx:E8aVYeitOv_WVhGv9wdVnFFHuwuVle_Sw0_BzvsVmzExsCL6IHxmjA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 17 Nov 2021 22:18:42 -0500 (EST)
+From:   Samuel Holland <samuel@sholland.org>
+To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Samuel Holland <samuel@sholland.org>
+Subject: [PATCH v3 0/6] DRAM devfreq support for Allwinner A64/H5
+Date:   Wed, 17 Nov 2021 21:18:35 -0600
+Message-Id: <20211118031841.42315-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <20211117020346.4088302-1-swboyd@chromium.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Stephen,
+This series adds a new devfreq driver for the MBUS/DRAM controller in
+some Allwinner SoCs, and enables it for the A64 and H5.
 
-Thanks for the patch
+The binding and DTs are updated in patches 1-5. The MBUS nodes already
+existed, but were not bound to any driver before; they were only used
+for their dma-ranges property. Finally, the driver is added in patch 6.
 
-On 11/16/21 9:03 PM, Stephen Boyd wrote:
-> Use platform_get_irq_optional() to avoid a noisy error message when the
-> irq isn't specified. The irq is definitely optional given that we only
-> care about errors that are -EPROBE_DEFER here.
-> 
-> Cc: Thara Gopinath <thara.gopinath@linaro.org>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> ---
->   drivers/cpufreq/qcom-cpufreq-hw.c | 8 +++++---
->   1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-> index a2be0df7e174..b442d4983a22 100644
-> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
-> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-> @@ -382,9 +382,11 @@ static int qcom_cpufreq_hw_lmh_init(struct cpufreq_policy *policy, int index)
->   	 * Look for LMh interrupt. If no interrupt line is specified /
->   	 * if there is an error, allow cpufreq to be enabled as usual.
->   	 */
-> -	data->throttle_irq = platform_get_irq(pdev, index);
-> -	if (data->throttle_irq <= 0)
-> -		return data->throttle_irq == -EPROBE_DEFER ? -EPROBE_DEFER : 0;
-> +	data->throttle_irq = platform_get_irq_optional(pdev, index);
-> +	if (data->throttle_irq == -ENXIO)
-> +		return 0;
-> +	if (data->throttle_irq < 0)
-> +		return data->throttle_irq;
+I am not quite sure the best way to handle DRAM register range in the
+DT binding -- as a separate reg property, a separate node, or simply
+enlarging the MBUS register range. While the DRAM controller is a
+separate IP block, the MBUS hardware has the ability to double-buffer
+certain DRAM controller registers, and the hardware MDFS process writes
+to some DRAM controller registers as well. So they are rather tightly
+integrated.
 
-Here the idea is to return only -EPROBE_DEFER error. Else return a 0 , 
-so that cpufreq is enabled even if lmh interrupt is inaccessible. The 
-above check returns errors other than -EPROBE_DEFER as well. So I would 
-say make irq optional and keep the below check
+Like the driver commit description says, this driver could support
+additional SoCs: at least A33, A83T, and H3. I can send follow-up
+patches adding compatibles for these, but I cannot test A33 or A83T.
 
-if (data->throttle_irq <= 0)
-	return data->throttle_irq == -EPROBE_DEFER ? -EPROBE_DEFER : 0;
+Changes from v2:
+  - Remove unnecessary quotes from binding
+  - Fix issues with overall minItems/maxItems limits
+  - Added tags
 
->   
->   	data->cancel_throttle = false;
->   	data->policy = policy;
-> 
-> base-commit: fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf
-> 
+Changes from v1:
+  - Patch 1 was merged
+  - Drop patches 2-4 (support for devfreq drivers without OPPs)
+  - Convert the driver to use dynamic OPPs
+
+Samuel Holland (6):
+  dt-bindings: clock: sunxi: Export CLK_DRAM for devfreq
+  dt-bindings: arm: sunxi: Expand MBUS binding
+  dt-bindings: arm: sunxi: Add H5 MBUS compatible
+  ARM: dts: sunxi: h3/h5: Update MBUS node
+  arm64: dts: allwinner: a64: Update MBUS node
+  PM / devfreq: Add a driver for the sun8i/sun50i MBUS
+
+ .../arm/sunxi/allwinner,sun4i-a10-mbus.yaml   |  91 +++-
+ arch/arm/boot/dts/sun8i-h3.dtsi               |   4 +
+ arch/arm/boot/dts/sunxi-h3-h5.dtsi            |  11 +-
+ arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi |  10 +-
+ arch/arm64/boot/dts/allwinner/sun50i-h5.dtsi  |   4 +
+ drivers/clk/sunxi-ng/ccu-sun50i-a64.h         |   2 -
+ drivers/clk/sunxi-ng/ccu-sun8i-h3.h           |   2 -
+ drivers/devfreq/Kconfig                       |   8 +
+ drivers/devfreq/Makefile                      |   1 +
+ drivers/devfreq/sun8i-a33-mbus.c              | 511 ++++++++++++++++++
+ include/dt-bindings/clock/sun50i-a64-ccu.h    |   2 +-
+ include/dt-bindings/clock/sun8i-h3-ccu.h      |   2 +-
+ 12 files changed, 634 insertions(+), 14 deletions(-)
+ create mode 100644 drivers/devfreq/sun8i-a33-mbus.c
 
 -- 
-Warm Regards
-Thara (She/Her/Hers)
+2.32.0
+
