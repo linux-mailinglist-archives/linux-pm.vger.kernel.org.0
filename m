@@ -2,145 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 833F3456055
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Nov 2021 17:19:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C51A945608A
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Nov 2021 17:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233137AbhKRQWe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Nov 2021 11:22:34 -0500
-Received: from li1434-30.members.linode.com ([45.33.107.30]:46212 "EHLO
-        node.akkea.ca" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232656AbhKRQWe (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 18 Nov 2021 11:22:34 -0500
+        id S233438AbhKRQgJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 Nov 2021 11:36:09 -0500
+Received: from comms.puri.sm ([159.203.221.185]:39730 "EHLO comms.puri.sm"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233095AbhKRQgJ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 18 Nov 2021 11:36:09 -0500
 Received: from localhost (localhost [127.0.0.1])
-        by node.akkea.ca (Postfix) with ESMTP id BA2134E2006;
-        Thu, 18 Nov 2021 16:19:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akkea.ca; s=mail;
-        t=1637252373; bh=ACfjbTUZOE9dZ7d4RhaiULxwDF61C6EiIzM9lgp6nWQ=;
-        h=From:To:Cc:Subject:Date;
-        b=D/Vd4F7KWNqMas7ANp3EDjy1LJipJoaDJRIrmRtFXBflXtbLRx3sueeWeLjIjuutY
-         MsjlWqfQN11/urwPAiHsdcBq3B75DZGd3jaA1Y2arEup1WTELPYt/h2SCffi1C6q+0
-         8f2GTtBMGkGu6nJvWWM+3YlPTPTG1pqzo6K7gBeY=
-X-Virus-Scanned: Debian amavisd-new at mail.akkea.ca
-Received: from node.akkea.ca ([127.0.0.1])
-        by localhost (mail.akkea.ca [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id gLN4dSe4Q8uF; Thu, 18 Nov 2021 16:19:33 +0000 (UTC)
-Received: from midas.localdomain (S0106788a2041785e.gv.shawcable.net [24.108.106.191])
-        by node.akkea.ca (Postfix) with ESMTPSA id 192F0394043;
-        Thu, 18 Nov 2021 16:19:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akkea.ca; s=mail;
-        t=1637252373; bh=ACfjbTUZOE9dZ7d4RhaiULxwDF61C6EiIzM9lgp6nWQ=;
-        h=From:To:Cc:Subject:Date;
-        b=D/Vd4F7KWNqMas7ANp3EDjy1LJipJoaDJRIrmRtFXBflXtbLRx3sueeWeLjIjuutY
-         MsjlWqfQN11/urwPAiHsdcBq3B75DZGd3jaA1Y2arEup1WTELPYt/h2SCffi1C6q+0
-         8f2GTtBMGkGu6nJvWWM+3YlPTPTG1pqzo6K7gBeY=
-From:   Angus Ainslie <angus@akkea.ca>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@puri.sm, Angus Ainslie <angus@akkea.ca>
-Subject: [PATCH v2] power: bq25890: add POWER_SUPPLY_PROP_TEMP
-Date:   Thu, 18 Nov 2021 08:18:45 -0800
-Message-Id: <20211118161845.98767-1-angus@akkea.ca>
-X-Mailer: git-send-email 2.25.1
+        by comms.puri.sm (Postfix) with ESMTP id CBBDCDFAF7;
+        Thu, 18 Nov 2021 08:33:08 -0800 (PST)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 6MVWenE3JsnY; Thu, 18 Nov 2021 08:33:08 -0800 (PST)
+Message-ID: <c9e7799c4b02210c5be29d1c18c4eabd2fe0194b.camel@puri.sm>
+Subject: Re: [PATCH] media: i2c: dw9714: use pm_runtime_force_suspend/resume
+ for system suspend
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@puri.sm,
+        linux-pm@vger.kernel.org
+Date:   Thu, 18 Nov 2021 17:33:04 +0100
+In-Reply-To: <YZPqEu4W+JnY6LMY@paasikivi.fi.intel.com>
+References: <20211109125505.2682553-1-martin.kepplinger@puri.sm>
+         <YZPqEu4W+JnY6LMY@paasikivi.fi.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add the POWER_SUPPLY_PROP_TEMP and a NTC 10K percent VREGN to degrees LUT.
+Am Dienstag, dem 16.11.2021 um 19:27 +0200 schrieb Sakari Ailus:
+> Hi Martin,
+> 
+> On Tue, Nov 09, 2021 at 01:55:05PM +0100, Martin Kepplinger wrote:
+> > Using the same suspend function for runtime and system suspend
+> > doesn't
+> > work in this case (when controlling regulators and clocks).
+> > suspend() and
+> > resume() are clearly meant to stay balanced.
+> > 
+> > Use the pm_runtime_force_* helpers for system suspend and fix error
+> > like the
+> > following when transitioning to system suspend:
+> > 
+> > [  559.685921] dw9714 3-000c: I2C write fail
+> > [  559.685941] dw9714 3-000c: dw9714_vcm_suspend I2C failure: -5
+> > 
+> > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+> > ---
+> >  drivers/media/i2c/dw9714.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/media/i2c/dw9714.c
+> > b/drivers/media/i2c/dw9714.c
+> > index fcbebb3558b5..f6ddd7c4a1ff 100644
+> > --- a/drivers/media/i2c/dw9714.c
+> > +++ b/drivers/media/i2c/dw9714.c
+> > @@ -267,7 +267,8 @@ static const struct of_device_id
+> > dw9714_of_table[] = {
+> >  MODULE_DEVICE_TABLE(of, dw9714_of_table);
+> >  
+> >  static const struct dev_pm_ops dw9714_pm_ops = {
+> > -       SET_SYSTEM_SLEEP_PM_OPS(dw9714_vcm_suspend,
+> > dw9714_vcm_resume)
+> > +       SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
+> > +                               pm_runtime_force_resume)
+> >         SET_RUNTIME_PM_OPS(dw9714_vcm_suspend, dw9714_vcm_resume,
+> > NULL)
+> >  };
+> 
+> The purpose of the vcm suspend / resume callbacks is to gently move
+> the
+> lens to the resting position without hitting the stopper.
+> 
+> The problem currently appears to be that during system suspend, the
+> VCM may
+> well be powered off and the driver isn't checking for that. How about
+> adding that check?
+> 
 
-Make sure that a conversion is forced when the power supply is offline so
-the temperature is valid.
+thanks for having a look. Actually, I forgot to add support for a power
+supply regulator, so this patch (description) is wrong and I'll send a
+different one that adds optional vcc regulator support and splits up
+system/runtime suspend functions to handle the regulator correctly.
 
-Signed-off-by: Angus Ainslie <angus@akkea.ca>
----
- drivers/power/supply/bq25890_charger.c | 37 +++++++++++++++++++++++++-
- 1 file changed, 36 insertions(+), 1 deletion(-)
+thank you!
 
-diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
-index 945c3257ca93..0260c6efdcb2 100644
---- a/drivers/power/supply/bq25890_charger.c
-+++ b/drivers/power/supply/bq25890_charger.c
-@@ -266,6 +266,7 @@ enum bq25890_table_ids {
- 	/* lookup tables */
- 	TBL_TREG,
- 	TBL_BOOSTI,
-+	TBL_TSPCT,
- };
- 
- /* Thermal Regulation Threshold lookup table, in degrees Celsius */
-@@ -280,6 +281,28 @@ static const u32 bq25890_boosti_tbl[] = {
- 
- #define BQ25890_BOOSTI_TBL_SIZE		ARRAY_SIZE(bq25890_boosti_tbl)
- 
-+/* NTC 10K temperature lookup table in tenths of a degree */
-+static const u32 bq25890_tspct_tbl[] = {
-+	850, 840, 830, 820, 810, 800, 790, 780,
-+	770, 760, 750, 740, 730, 720, 710, 700,
-+	690, 685, 680, 675, 670, 660, 650, 645,
-+	640, 630, 620, 615, 610, 600, 590, 585,
-+	580, 570, 565, 560, 550, 540, 535, 530,
-+	520, 515, 510, 500, 495, 490, 480, 475,
-+	470, 460, 455, 450, 440, 435, 430, 425,
-+	420, 410, 405, 400, 390, 385, 380, 370,
-+	365, 360, 355, 350, 340, 335, 330, 320,
-+	310, 305, 300, 290, 285, 280, 275, 270,
-+	260, 250, 245, 240, 230, 225, 220, 210,
-+	205, 200, 190, 180, 175, 170, 160, 150,
-+	145, 140, 130, 120, 115, 110, 100, 90,
-+	80, 70, 60, 50, 40, 30, 20, 10,
-+	0, -10, -20, -30, -40, -60, -70, -80,
-+	-90, -10, -120, -140, -150, -170, -190, -210,
-+};
-+
-+#define BQ25890_TSPCT_TBL_SIZE		ARRAY_SIZE(bq25890_tspct_tbl)
-+
- struct bq25890_range {
- 	u32 min;
- 	u32 max;
-@@ -308,7 +331,8 @@ static const union {
- 
- 	/* lookup tables */
- 	[TBL_TREG] =	{ .lt = {bq25890_treg_tbl, BQ25890_TREG_TBL_SIZE} },
--	[TBL_BOOSTI] =	{ .lt = {bq25890_boosti_tbl, BQ25890_BOOSTI_TBL_SIZE} }
-+	[TBL_BOOSTI] =	{ .lt = {bq25890_boosti_tbl, BQ25890_BOOSTI_TBL_SIZE} },
-+	[TBL_TSPCT] =	{ .lt = {bq25890_tspct_tbl, BQ25890_TSPCT_TBL_SIZE} }
- };
- 
- static int bq25890_field_read(struct bq25890_device *bq,
-@@ -388,6 +412,7 @@ static bool bq25890_is_adc_property(enum power_supply_property psp)
- 	switch (psp) {
- 	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
- 	case POWER_SUPPLY_PROP_CURRENT_NOW:
-+	case POWER_SUPPLY_PROP_TEMP:
- 		return true;
- 
- 	default:
-@@ -528,6 +553,15 @@ static int bq25890_power_supply_get_property(struct power_supply *psy,
- 		val->intval = ret * -50000;
- 		break;
- 
-+	case POWER_SUPPLY_PROP_TEMP:
-+		ret = bq25890_field_read(bq, F_TSPCT);
-+		if (ret < 0)
-+			return ret;
-+
-+		/* convert TS percentage into rough temperature */
-+		val->intval = bq25890_find_val(ret, TBL_TSPCT);
-+		break;
-+
- 	default:
- 		return -EINVAL;
- 	}
-@@ -713,6 +747,7 @@ static const enum power_supply_property bq25890_power_supply_props[] = {
- 	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
- 	POWER_SUPPLY_PROP_VOLTAGE_NOW,
- 	POWER_SUPPLY_PROP_CURRENT_NOW,
-+	POWER_SUPPLY_PROP_TEMP,
- };
- 
- static char *bq25890_charger_supplied_to[] = {
--- 
-2.25.1
+                              martin
+
 
