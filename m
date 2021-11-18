@@ -2,57 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 413AD455293
+	by mail.lfdr.de (Postfix) with ESMTP id 9AC36455294
 	for <lists+linux-pm@lfdr.de>; Thu, 18 Nov 2021 03:20:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242491AbhKRCXT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Nov 2021 21:23:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49240 "EHLO
+        id S242495AbhKRCXV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Nov 2021 21:23:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242493AbhKRCXL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Nov 2021 21:23:11 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15CD2C061570
-        for <linux-pm@vger.kernel.org>; Wed, 17 Nov 2021 18:20:12 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id l22so17864092lfg.7
-        for <linux-pm@vger.kernel.org>; Wed, 17 Nov 2021 18:20:12 -0800 (PST)
+        with ESMTP id S242500AbhKRCXN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Nov 2021 21:23:13 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54DE1C061570
+        for <linux-pm@vger.kernel.org>; Wed, 17 Nov 2021 18:20:14 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id bi37so18050222lfb.5
+        for <linux-pm@vger.kernel.org>; Wed, 17 Nov 2021 18:20:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=9j/+9vNRUOuE2OUGHIWjiFJX54aRqGsYS2DHbcFsR74=;
-        b=bOu49EpG1z6ALVV4/cXJHXcvwA+h6l2/XujvF1+xwf7lfxqKheAdiseTR0c85ecnjh
-         1QAAg5jIHYC7mJacGY6DbUr/djnKrwcaqwjqdMyAZ1Ldh7KUE231PcVC4/4CFYdzuw0d
-         NLKTt/ZylmGR8e56X9sobV3O5xra0QY/BhDL7l6B/6k7dWgkOrU5t20TxboxKKFOiWAk
-         2sVRILXMQYn3Y41rVjh435GxlWlwbczEpSxjj17PqUevh31YN3UvGEPYRYgn7LkI9GTs
-         uaLy56cr29CpZ/DAIewud+U3oN1RPaZzFh0sU3IWvQTjjzMWt+4V3zuw8W5xPsGOSzZi
-         xbIQ==
+        bh=tYK5uoy8GHHO0OljX1X+VuD+Rv00GwqfTZX0VCYWrrQ=;
+        b=qg3y3xPH9unsP7I15/V2JYXcZo7bwZyjcpCchpkkbPr+LeXgG5n/9oZbiRjPpQ9lys
+         dZOax1IHBtnAeIcozwZFkGinAKUD0crpgC+WP7bEECqpt8fqZj4jbChTfX6yBV+MOIM2
+         BgpyTF+a+qQGvmogPTbKL5dInnHsODQxdItmSoq4Nu1FuSG0Wwc0+q1M9ZDEDyejrvl7
+         O81rRWxGkbnITFlXsoknh6cNmWerddSYwCgO56apP4XVQnzRhonth9KUzx2oHoLTvbU3
+         9w/jW+DtFDT6m3ZOG33LgQSPutirDXfWSHS37N3sEzOwM/JChW4DOs37vECzqxDWIUO8
+         miJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=9j/+9vNRUOuE2OUGHIWjiFJX54aRqGsYS2DHbcFsR74=;
-        b=jLcRHMzPdJhTCLt1+KST2sBRhnpCkLYPxJ6w3IkwNTmwZoosXIIme4dwSOMnuw4Z9o
-         FlWwEXjvZ9Mq8S/SwpjXVpA3b+SiY4bBv+itzT5ihICd0SlqtuEz4uN2+QKzf/U3pumD
-         E/p2P7H4F6abyBdJ/5e6Dkp3itKs/+LbXv/8oGdS1vIM5AU8rstvG4AQ0bU14RA7Shfa
-         Y2lyk0BdPmWSCpQbivzCVfKkUV/R2TWcYJNVHUvPeKdCutQMdNk7U0dNbx9cSMoo81gF
-         tyK1ceyKegKp+CfiaXdXTknY15rnbnM2q7G89I1wJXDxooC6HS4qvZdG+oBIEYP8A21N
-         FcJQ==
-X-Gm-Message-State: AOAM532e3MRyLIXEO6fAtNbIexM3eS2BL+uHXPkfjMaK8z2qY3LtoMlc
-        HVr2CyJJpJNzqKmU+t7DXKTDyw==
-X-Google-Smtp-Source: ABdhPJwWBe3Q+je0o/XZ3VD9hHvBEeY9DxkK2sCrD5JWBRFFobrBD3Nq/ag/t0uBNuuVxmmTCcxgvA==
-X-Received: by 2002:a2e:a696:: with SMTP id q22mr12656342lje.423.1637202010412;
-        Wed, 17 Nov 2021 18:20:10 -0800 (PST)
+        bh=tYK5uoy8GHHO0OljX1X+VuD+Rv00GwqfTZX0VCYWrrQ=;
+        b=n0s/pJhPLCVKKPNr4Qf1tiLBHHDdyiV4ymwD2EoGc4DiNHDLoN1rru31gnykQwKjcO
+         Ll9jY5stXlCdWvzwkkg9d3PI0ftumMBgpLKJfQBw4z43tDUQF24qe0xY5TLNTQvoGBCv
+         jRCxnsBs1nN6olZF+ZtPlfbCKzpZ5T9sbnAnlqfKgd252qf19ZcKhYlxiV5akgfKeXvM
+         wU7iPeTaXrGlP3xsSUoEXwbZdxUJhd0UJG9vAIyPY5S0iwTl/qu0ApVeb/ik/AbrTIiH
+         vxYfC54ECUNuv4tZV9py6/sPuWHHYIGnGw48hukGsVdX/AaHLG/NN7l6XfOplYE5g+4h
+         PMgw==
+X-Gm-Message-State: AOAM5310sFVd7MmavO/GkzlNOsi6HT7DwnUAL9OIYCcSS9j2ZR5s5dRg
+        TqY0RYfI8FV+gRtHDzhlRfNVcA==
+X-Google-Smtp-Source: ABdhPJxEh7XaC53Z34G3ER4omfS9DihjBWGSAi6zjpOzM/mcVOxPKS8VfGl/XoWGN5FsK9H4nEIgEQ==
+X-Received: by 2002:a05:6512:3763:: with SMTP id z3mr19705228lft.315.1637202012689;
+        Wed, 17 Nov 2021 18:20:12 -0800 (PST)
 Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id j19sm165321lfe.120.2021.11.17.18.20.08
+        by smtp.gmail.com with ESMTPSA id j19sm165321lfe.120.2021.11.17.18.20.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Nov 2021 18:20:09 -0800 (PST)
+        Wed, 17 Nov 2021 18:20:11 -0800 (PST)
 From:   Linus Walleij <linus.walleij@linaro.org>
 To:     Sebastian Reichel <sre@kernel.org>
 Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 06/16] power: supply: ab8500: Standardize design capacity
-Date:   Thu, 18 Nov 2021 03:17:42 +0100
-Message-Id: <20211118021752.2262818-7-linus.walleij@linaro.org>
+Subject: [PATCH 07/16] power: supply: ab8500: Standardize technology
+Date:   Thu, 18 Nov 2021 03:17:43 +0100
+Message-Id: <20211118021752.2262818-8-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211118021752.2262818-1-linus.walleij@linaro.org>
 References: <20211118021752.2262818-1-linus.walleij@linaro.org>
@@ -62,99 +62,96 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Now that we know that we have only one battery type to
-deal with we can proceed to transfer properties to
-struct power_supply_battery_info.
+The AB8500 custom battery type can be replaced by the
+corresponding struct power_supply_battery_info field.
 
-The designed capacity for the battery was in a custom field
-of the custom battery type in mAh, transfer this to the
-standard charge_full_design_uah property in
-struct power_supply_battery_info and augment the code
-accordingly.
+Remove the struct member and amend the code to use the
+standard property.
 
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
  drivers/power/supply/ab8500-bm.h     | 2 --
- drivers/power/supply/ab8500_bmdata.c | 5 ++++-
- drivers/power/supply/ab8500_fg.c     | 8 ++------
- 3 files changed, 6 insertions(+), 9 deletions(-)
+ drivers/power/supply/ab8500_bmdata.c | 1 -
+ drivers/power/supply/ab8500_btemp.c  | 6 +++---
+ drivers/power/supply/ab8500_fg.c     | 2 +-
+ 4 files changed, 4 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/power/supply/ab8500-bm.h b/drivers/power/supply/ab8500-bm.h
-index 9c96722f33d6..79c00808a372 100644
+index 79c00808a372..66fd6568942c 100644
 --- a/drivers/power/supply/ab8500-bm.h
 +++ b/drivers/power/supply/ab8500-bm.h
-@@ -375,7 +375,6 @@ struct ab8500_maxim_parameters {
-  * @name:			battery technology
+@@ -372,7 +372,6 @@ struct ab8500_maxim_parameters {
+ 
+ /**
+  * struct ab8500_battery_type - different batteries supported
+- * @name:			battery technology
   * @resis_high:			battery upper resistance limit
   * @resis_low:			battery lower resistance limit
-- * @charge_full_design:		Maximum battery capacity in mAh
   * @nominal_voltage:		Nominal voltage of the battery in mV
-  * @termination_vol:		max voltage upto which battery can be charged
-  * @termination_curr		battery charging termination current in mA
-@@ -404,7 +403,6 @@ struct ab8500_battery_type {
- 	int name;
+@@ -400,7 +399,6 @@ struct ab8500_maxim_parameters {
+  * @batres_tbl			battery internal resistance vs temperature table
+  */
+ struct ab8500_battery_type {
+-	int name;
  	int resis_high;
  	int resis_low;
--	int charge_full_design;
  	int nominal_voltage;
- 	int termination_vol;
- 	int termination_curr;
 diff --git a/drivers/power/supply/ab8500_bmdata.c b/drivers/power/supply/ab8500_bmdata.c
-index 17c9b8700883..6e876ba03956 100644
+index 6e876ba03956..a5e655d0761a 100644
 --- a/drivers/power/supply/ab8500_bmdata.c
 +++ b/drivers/power/supply/ab8500_bmdata.c
-@@ -85,7 +85,6 @@ static struct ab8500_battery_type bat_type_thermistor_unknown = {
+@@ -81,7 +81,6 @@ static const struct batres_vs_temp temp_to_batres_tbl_thermistor[] = {
+ 
+ /* Default battery type for reference designs is the unknown type */
+ static struct ab8500_battery_type bat_type_thermistor_unknown = {
+-	.name = POWER_SUPPLY_TECHNOLOGY_UNKNOWN,
  	.resis_high = 0,
  	.resis_low = 0,
  	.battery_resistance = 300,
--	.charge_full_design = 612,
- 	.nominal_voltage = 3700,
- 	.termination_vol = 4050,
- 	.termination_curr = 200,
-@@ -189,6 +188,10 @@ int ab8500_bm_of_probe(struct power_supply *psy,
- 		return ret;
- 	}
+diff --git a/drivers/power/supply/ab8500_btemp.c b/drivers/power/supply/ab8500_btemp.c
+index fbb58074efab..20253b8a7fe9 100644
+--- a/drivers/power/supply/ab8500_btemp.c
++++ b/drivers/power/supply/ab8500_btemp.c
+@@ -456,7 +456,7 @@ static int ab8500_btemp_measure_temp(struct ab8500_btemp *di)
+ 	int rbat, rntc, vntc;
  
-+	/* Fill in defaults for any data missing from the device tree */
-+	if (bi->charge_full_design_uah < 0)
-+		/* The default capacity is 612 mAh for unknown batteries */
-+		bi->charge_full_design_uah = 612000;
- 	if (bi->temp_min == INT_MIN)
- 		bi->temp_min = AB8500_TEMP_UNDER;
- 	if (bi->temp_max == INT_MAX)
+ 	if ((di->bm->adc_therm == AB8500_ADC_THERM_BATCTRL) &&
+-	    (di->bm->bat_type->name == POWER_SUPPLY_TECHNOLOGY_UNKNOWN)) {
++	    (di->bm->bi.technology == POWER_SUPPLY_TECHNOLOGY_UNKNOWN)) {
+ 
+ 		rbat = ab8500_btemp_get_batctrl_res(di);
+ 		if (rbat < 0) {
+@@ -540,7 +540,7 @@ static int ab8500_btemp_id(struct ab8500_btemp *di)
+ 	 * that need it.
+ 	 */
+ 	if ((di->bm->adc_therm == AB8500_ADC_THERM_BATCTRL) &&
+-	    (di->bm->bat_type->name == POWER_SUPPLY_TECHNOLOGY_LIPO) &&
++	    (di->bm->bi.technology == POWER_SUPPLY_TECHNOLOGY_LIPO) &&
+ 	    (res <= 53407) && (res >= 12500)) {
+ 		dev_dbg(di->dev, "Set BATCTRL current source to 20uA\n");
+ 		di->curr_source = BTEMP_BATCTRL_CURR_SRC_20UA;
+@@ -807,7 +807,7 @@ static int ab8500_btemp_get_property(struct power_supply *psy,
+ 			val->intval = 1;
+ 		break;
+ 	case POWER_SUPPLY_PROP_TECHNOLOGY:
+-		val->intval = di->bm->bat_type->name;
++		val->intval = di->bm->bi.technology;
+ 		break;
+ 	case POWER_SUPPLY_PROP_TEMP:
+ 		val->intval = ab8500_btemp_get_temp(di);
 diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
-index 2013db0118ee..4f8b3a76c565 100644
+index 4f8b3a76c565..c6237c4f4721 100644
 --- a/drivers/power/supply/ab8500_fg.c
 +++ b/drivers/power/supply/ab8500_fg.c
-@@ -38,7 +38,6 @@
+@@ -2233,7 +2233,7 @@ static int ab8500_fg_get_ext_psy_data(struct device *dev, void *data)
+ 			switch (ext->desc->type) {
+ 			case POWER_SUPPLY_TYPE_BATTERY:
+ 				if (!di->flags.batt_id_received &&
+-				    (di->bm->bat_type->name !=
++				    (di->bm->bi.technology !=
+ 				     POWER_SUPPLY_TECHNOLOGY_UNKNOWN)) {
+ 					const struct ab8500_battery_type *b;
  
- #include "ab8500-bm.h"
- 
--#define MILLI_TO_MICRO			1000
- #define FG_LSB_IN_MA			1627
- #define QLSB_NANO_AMP_HOURS_X10		1071
- #define INS_CURR_TIMEOUT		(3 * HZ)
-@@ -2243,8 +2242,7 @@ static int ab8500_fg_get_ext_psy_data(struct device *dev, void *data)
- 					di->flags.batt_id_received = true;
- 
- 					di->bat_cap.max_mah_design =
--						MILLI_TO_MICRO *
--						b->charge_full_design;
-+						di->bm->bi.charge_full_design_uah;
- 
- 					di->bat_cap.max_mah =
- 						di->bat_cap.max_mah_design;
-@@ -3078,9 +3076,7 @@ static int ab8500_fg_probe(struct platform_device *pdev)
- 	psy_cfg.num_supplicants = ARRAY_SIZE(supply_interface);
- 	psy_cfg.drv_data = di;
- 
--	di->bat_cap.max_mah_design = MILLI_TO_MICRO *
--		di->bm->bat_type->charge_full_design;
--
-+	di->bat_cap.max_mah_design = di->bm->bi.charge_full_design_uah;
- 	di->bat_cap.max_mah = di->bat_cap.max_mah_design;
- 
- 	di->vbat_nom = di->bm->bat_type->nominal_voltage;
 -- 
 2.31.1
 
