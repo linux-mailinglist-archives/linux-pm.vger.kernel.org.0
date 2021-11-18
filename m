@@ -2,57 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9207745529C
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Nov 2021 03:20:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5216145529D
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Nov 2021 03:20:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241589AbhKRCXh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Nov 2021 21:23:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49336 "EHLO
+        id S242494AbhKRCXk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Nov 2021 21:23:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242501AbhKRCXd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Nov 2021 21:23:33 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825A5C061764
-        for <linux-pm@vger.kernel.org>; Wed, 17 Nov 2021 18:20:32 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id b1so17825633lfs.13
-        for <linux-pm@vger.kernel.org>; Wed, 17 Nov 2021 18:20:32 -0800 (PST)
+        with ESMTP id S242503AbhKRCXe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Nov 2021 21:23:34 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7399C061570
+        for <linux-pm@vger.kernel.org>; Wed, 17 Nov 2021 18:20:34 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id y26so17982917lfa.11
+        for <linux-pm@vger.kernel.org>; Wed, 17 Nov 2021 18:20:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=xBgzA3ht73l6japkeYYBDH9TpjheShCwlXX6OzJoFMM=;
-        b=AIjI0bQIWRb97nmX3ZWmvIRk/gU8fmCj6HsajEa8F92V5qKceOvKEZmliK70ADO9se
-         hWHwNlfg7/xhIDpDrglC1jqtPHHOA9w7sriZb4O+VIQLyClhiRhGM7p2/AgpAtEx1ZXK
-         W2Rq5njKYtKLWoYpEDy39k/8IvFfpUozKuAgu++T1RQypQO3Ku1VyLu6NqhO5SZ7g4XT
-         dMqPwR8m81RJ702LPhEuZb8bGTUmtyztLNvs50YXQsuVfvshIiS+MCmxRfpSbg3kSGTM
-         vsipP9P98DI6aqIXWrwOIMZVkwkTHk2wPP8MOGsD2RX6MXyijTTq8g5z6tD2bKmpG3eA
-         ofLQ==
+        bh=0Famoh5iK69cg4/Y7eCq1AA1UA/L3y9Gage6izqzad4=;
+        b=aUh5qaoa6HI0YTwXVeQCfpCH1kOmBJCMaLKsIyRv7sj7gq9BaD9ld6p2d1Ges/0BJQ
+         YpzVKRumpfVs4B5yrpq6MQztS9lqh7TuvSnzKNnteOFYud2UBn+Oz43D33on00Zt3CuB
+         9aISaHWsBgMTxm96ZOLFslS7gkLitoFxKZvPgJUJqaBXL/BBT6epaDZXajgHrlC0wzr0
+         ta/ReFqyxYj0JlqPeFybeTv0wDL0zKo4+etpif0Jwq+595fwyzaOYFr4u+g+8Pb7DOXA
+         8hgpu8dBhJfqtL6l1t3XFGyohIgsUZJNnpr9MtvFJXk72a0YTUZk9UlZ8Vnbz5Z53oZM
+         sh8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=xBgzA3ht73l6japkeYYBDH9TpjheShCwlXX6OzJoFMM=;
-        b=HYSth0CDZ59PKyTzNZGf9uXJO5W08ASdhcq8zm9Qvd7xXdTHPZvuiOsHneRhgrT27l
-         v2mVMCZgbtvUPyD0qmHSU50J3H/ycZTHMjEazkx+qsm66knOfaMM9Hmzj+rpGcx267OM
-         ZoBPNvqRVIt48+5dDV1SS4oSWw5By8ittrT/qrBx1E+JhvIz1b5WCOrkn0CuNquv2IpL
-         xj2GphpRJuFxW9+sdj0+BMZv74RiwbH2pUw67zWfmtp82cTq+lnvNH0ItJAvajablN67
-         lWykHA1SIzCCo6e3eaKA/FcgF8N2rDTCfppefL9Hq6nuG7+1AUfkg+szmSeHuKBFL/C6
-         bkmQ==
-X-Gm-Message-State: AOAM5310xMwpLH3JbZHvLx+Ennn09GkvTylOXa2+x6wrx7Sx0MXJPyLL
-        ZUqAzhh4HPydQKJ9kP/IHAxEtQ==
-X-Google-Smtp-Source: ABdhPJyPCmefvWaH8hsX/BEvUaJz0jhPIb9evDw/SfW5JqdjIUJmqpboFUoY0VgEKElQtgt1Fv48Mg==
-X-Received: by 2002:a05:6512:15a7:: with SMTP id bp39mr20486163lfb.145.1637202030879;
-        Wed, 17 Nov 2021 18:20:30 -0800 (PST)
+        bh=0Famoh5iK69cg4/Y7eCq1AA1UA/L3y9Gage6izqzad4=;
+        b=4VjhVIaCdAsOcv15iSWA0zSaMoGsCKiPNywh+mKDQsUFaYnG7K7HqLReCp8a5fLZaN
+         VBbJJX7sMtf0gcpYqIIjwqnXKve5EQKBRjljajD/JfbB42Gp1zyJnYhYsyIMfp+dtQ52
+         QUXp7EwZWHsDezgJ4ncGNdYozBwAqET8rTCoNBcujY8ARBKCkBM4Slft5KXTpv/CCEZp
+         u9J6Jj0r4qmPC9i5Q1tOPkWh+B5WRiBqI69MlYJO1iNYYqJRdBnsi7w9kuriu/IuP4hM
+         33B3LXH4xPAM6Z0BR2G2Fv8dHZN3L2QkFoKAznBP6aEWroJuv/V0Uo5wjCrcMVhzrM1n
+         tUqQ==
+X-Gm-Message-State: AOAM531YsBSoS1SMTO6X+IlVgVr8Zgni6xXWGir3wfWKeveV2x9SoraN
+        MShHYLoMiteum9KIWNOComeYNg==
+X-Google-Smtp-Source: ABdhPJzp0/Gdi+e1edj+h6RUNrbYclH63T7gJYybKILmSvJqujB86VuWuiIQhEv/R3wglBvrOQjN/Q==
+X-Received: by 2002:a05:6512:104c:: with SMTP id c12mr19632147lfb.470.1637202033151;
+        Wed, 17 Nov 2021 18:20:33 -0800 (PST)
 Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id j19sm165321lfe.120.2021.11.17.18.20.29
+        by smtp.gmail.com with ESMTPSA id j19sm165321lfe.120.2021.11.17.18.20.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Nov 2021 18:20:29 -0800 (PST)
+        Wed, 17 Nov 2021 18:20:32 -0800 (PST)
 From:   Linus Walleij <linus.walleij@linaro.org>
 To:     Sebastian Reichel <sre@kernel.org>
 Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 15/16] power: supply: ab8500: Standardize temp res lookup
-Date:   Thu, 18 Nov 2021 03:17:51 +0100
-Message-Id: <20211118021752.2262818-16-linus.walleij@linaro.org>
+Subject: [PATCH 16/16] power: supply: ab8500: Standardize capacity lookup
+Date:   Thu, 18 Nov 2021 03:17:52 +0100
+Message-Id: <20211118021752.2262818-17-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211118021752.2262818-1-linus.walleij@linaro.org>
 References: <20211118021752.2262818-1-linus.walleij@linaro.org>
@@ -62,191 +62,722 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The lookup from battery temperature to internal resistance was
-using its own format. Rewrite this to use the table inside
-struct power_supply_battery_info:s resist_table.
+The AB8500 charger only has one capacity table with
+unspecified temperature, so we assume this capacity is given
+for 20 degrees Celsius.
 
-The supplied resistance table has to be rewritten to express
-the resistance in percent of the factory resistance as a
-side effect.
+Convert this table to use the OCV (open circuit voltage)
+tables in struct power_supply_battery_ocv_table.
 
-We can then rely on the library function
-power_supply_temp2resist_simple() to interpolate the internal
-resistance percent from the temperature.
+In the process, convert the fuel gauge driver to use
+microvolts and microamperes so we can use the same internals
+as the power supply subsystem without having to multiply
+and divide with 1000 in a few places.
+
+Also convert high_curr_threshold and lowbat_threshold to
+use microamperes and microvolts as these are closely
+related to these changes.
+
+Drop the unused overbat_threshold member in the custom
+struct ab8500_fg_parameters.
 
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- drivers/power/supply/ab8500-bm.h     | 15 ---------
- drivers/power/supply/ab8500_bmdata.c | 31 +++++++++++-------
- drivers/power/supply/ab8500_fg.c     | 47 +++++++++++-----------------
- 3 files changed, 38 insertions(+), 55 deletions(-)
+ drivers/power/supply/ab8500-bm.h     |  30 +--
+ drivers/power/supply/ab8500_bmdata.c |  63 +++---
+ drivers/power/supply/ab8500_fg.c     | 286 +++++++++++++--------------
+ 3 files changed, 173 insertions(+), 206 deletions(-)
 
 diff --git a/drivers/power/supply/ab8500-bm.h b/drivers/power/supply/ab8500-bm.h
-index 56bf70bc673a..fd85b54d5ec5 100644
+index fd85b54d5ec5..573f7a428f1f 100644
 --- a/drivers/power/supply/ab8500-bm.h
 +++ b/drivers/power/supply/ab8500-bm.h
-@@ -379,8 +379,6 @@ struct ab8500_maxim_parameters {
-  * @r_to_t_tbl:			table containing resistance to temp points
-  * @n_v_cap_tbl_elements:	number of elements in v_to_cap_tbl
-  * @v_to_cap_tbl:		Voltage to capacity (in %) table
-- * @n_batres_tbl_elements	number of elements in the batres_tbl
-- * @batres_tbl			battery internal resistance vs temperature table
-  */
- struct ab8500_battery_type {
- 	int resis_high;
-@@ -397,8 +395,6 @@ struct ab8500_battery_type {
- 	const struct ab8500_res_to_temp *r_to_t_tbl;
- 	int n_v_cap_tbl_elements;
- 	const struct ab8500_v_to_cap *v_to_cap_tbl;
--	int n_batres_tbl_elements;
--	const struct batres_vs_temp *batres_tbl;
- };
+@@ -196,8 +196,8 @@ enum bup_vch_sel {
+ #define BATT_OVV_TH_3P7			0x00
+ #define BATT_OVV_TH_4P75		0x01
  
- /**
-@@ -502,17 +498,6 @@ struct res_to_temp {
+-/* A value to indicate over voltage */
+-#define BATT_OVV_VALUE			4750
++/* A value to indicate over voltage (microvolts) */
++#define BATT_OVV_VALUE			4750000
+ 
+ /* VBUS OVV constants */
+ #define VBUS_OVV_SELECT_MASK		0x78
+@@ -284,16 +284,6 @@ struct ab8500_res_to_temp {
  	int resist;
  };
  
 -/**
-- * struct batres_vs_temp - defines one point in a temp vs battery internal
-- * resistance curve.
-- * @temp:			battery pack temperature in Celsius
-- * @resist:			battery internal reistance in mOhm
+- * struct ab8500_v_to_cap - Table for translating voltage to capacity
+- * @voltage:		Voltage in mV
+- * @capacity:		Capacity in percent
 - */
--struct batres_vs_temp {
--	int temp;
--	int resist;
+-struct ab8500_v_to_cap {
+-	int voltage;
+-	int capacity;
 -};
 -
  /* Forward declaration */
  struct ab8500_fg;
  
-diff --git a/drivers/power/supply/ab8500_bmdata.c b/drivers/power/supply/ab8500_bmdata.c
-index a41b9f3a88cb..8d85fcf4abe7 100644
---- a/drivers/power/supply/ab8500_bmdata.c
-+++ b/drivers/power/supply/ab8500_bmdata.c
-@@ -67,16 +67,17 @@ static const struct ab8500_res_to_temp temp_tbl[] = {
- 
- /*
-  * Note that the batres_vs_temp table must be strictly sorted by falling
-- * temperature values to work.
-+ * temperature values to work. Factory resistance is 300 mOhm and the
-+ * resistance values to the right are percentages of 300 mOhm.
+@@ -307,10 +297,9 @@ struct ab8500_fg;
+  * @init_total_time:		Total init time during startup
+  * @high_curr_time:		Time current has to be high to go to recovery
+  * @accu_charging:		FG accumulation time while charging
+- * @accu_high_curr:		FG accumulation time in high current mode
+- * @high_curr_threshold:	High current threshold, in mA
+- * @lowbat_threshold:		Low battery threshold, in mV
+- * @overbat_threshold:		Over battery threshold, in mV
++ * @accu_high_curr_ua:		FG accumulation time in high current mode
++ * @high_curr_threshold_ua:	High current threshold, in uA
++ * @lowbat_threshold_uv:	Low battery threshold, in uV
+  * @battok_falling_th_sel0	Threshold in mV for battOk signal sel0
+  *				Resolution in 50 mV step.
+  * @battok_raising_th_sel1	Threshold in mV for battOk signal sel1
+@@ -335,9 +324,8 @@ struct ab8500_fg_parameters {
+ 	int high_curr_time;
+ 	int accu_charging;
+ 	int accu_high_curr;
+-	int high_curr_threshold;
+-	int lowbat_threshold;
+-	int overbat_threshold;
++	int high_curr_threshold_ua;
++	int lowbat_threshold_uv;
+ 	int battok_falling_th_sel0;
+ 	int battok_raising_th_sel1;
+ 	int user_cap_limit;
+@@ -377,8 +365,6 @@ struct ab8500_maxim_parameters {
+  * @low_high_vol_lvl:		charger voltage in temp low/high state in mV'
+  * @n_r_t_tbl_elements:		number of elements in r_to_t_tbl
+  * @r_to_t_tbl:			table containing resistance to temp points
+- * @n_v_cap_tbl_elements:	number of elements in v_to_cap_tbl
+- * @v_to_cap_tbl:		Voltage to capacity (in %) table
   */
--static const struct batres_vs_temp temp_to_batres_tbl_thermistor[] = {
--	{ 40, 120},
--	{ 30, 135},
--	{ 20, 165},
--	{ 10, 230},
--	{ 00, 325},
--	{-10, 445},
--	{-20, 595},
-+static struct power_supply_resistance_temp_table temp_to_batres_tbl_thermistor[] = {
-+	{ .temp = 40, .resistance = 40 /* 120 mOhm */ },
-+	{ .temp = 30, .resistance = 45 /* 135 mOhm */ },
-+	{ .temp = 20, .resistance = 55 /* 165 mOhm */ },
-+	{ .temp = 10, .resistance = 77 /* 230 mOhm */ },
-+	{ .temp = 00, .resistance = 108 /* 325 mOhm */ },
-+	{ .temp = -10, .resistance = 158 /* 445 mOhm */ },
-+	{ .temp = -20, .resistance = 198 /* 595 mOhm */ },
+ struct ab8500_battery_type {
+ 	int resis_high;
+@@ -393,8 +379,6 @@ struct ab8500_battery_type {
+ 	int low_high_vol_lvl;
+ 	int n_temp_tbl_elements;
+ 	const struct ab8500_res_to_temp *r_to_t_tbl;
+-	int n_v_cap_tbl_elements;
+-	const struct ab8500_v_to_cap *v_to_cap_tbl;
  };
  
- /* Default battery type for reference designs is the unknown type */
-@@ -95,8 +96,6 @@ static struct ab8500_battery_type bat_type_thermistor_unknown = {
+ /**
+diff --git a/drivers/power/supply/ab8500_bmdata.c b/drivers/power/supply/ab8500_bmdata.c
+index 8d85fcf4abe7..890e6fd63f68 100644
+--- a/drivers/power/supply/ab8500_bmdata.c
++++ b/drivers/power/supply/ab8500_bmdata.c
+@@ -16,31 +16,31 @@
+ /* Default: temperature hysteresis */
+ #define AB8500_TEMP_HYSTERESIS	3
+ 
+-static const struct ab8500_v_to_cap cap_tbl[] = {
+-	{4186,	100},
+-	{4163,	 99},
+-	{4114,	 95},
+-	{4068,	 90},
+-	{3990,	 80},
+-	{3926,	 70},
+-	{3898,	 65},
+-	{3866,	 60},
+-	{3833,	 55},
+-	{3812,	 50},
+-	{3787,	 40},
+-	{3768,	 30},
+-	{3747,	 25},
+-	{3730,	 20},
+-	{3705,	 15},
+-	{3699,	 14},
+-	{3684,	 12},
+-	{3672,	  9},
+-	{3657,	  7},
+-	{3638,	  6},
+-	{3556,	  4},
+-	{3424,	  2},
+-	{3317,	  1},
+-	{3094,	  0},
++static struct power_supply_battery_ocv_table ocv_cap_tbl[] = {
++	{ .ocv = 4186000, .capacity = 100},
++	{ .ocv = 4163000, .capacity = 99},
++	{ .ocv = 4114000, .capacity = 95},
++	{ .ocv = 4068000, .capacity = 90},
++	{ .ocv = 3990000, .capacity = 80},
++	{ .ocv = 3926000, .capacity = 70},
++	{ .ocv = 3898000, .capacity = 65},
++	{ .ocv = 3866000, .capacity = 60},
++	{ .ocv = 3833000, .capacity = 55},
++	{ .ocv = 3812000, .capacity = 50},
++	{ .ocv = 3787000, .capacity = 40},
++	{ .ocv = 3768000, .capacity = 30},
++	{ .ocv = 3747000, .capacity = 25},
++	{ .ocv = 3730000, .capacity = 20},
++	{ .ocv = 3705000, .capacity = 15},
++	{ .ocv = 3699000, .capacity = 14},
++	{ .ocv = 3684000, .capacity = 12},
++	{ .ocv = 3672000, .capacity = 9},
++	{ .ocv = 3657000, .capacity = 7},
++	{ .ocv = 3638000, .capacity = 6},
++	{ .ocv = 3556000, .capacity = 4},
++	{ .ocv = 3424000, .capacity = 2},
++	{ .ocv = 3317000, .capacity = 1},
++	{ .ocv = 3094000, .capacity = 0},
+ };
+ 
+ /*
+@@ -94,8 +94,6 @@ static struct ab8500_battery_type bat_type_thermistor_unknown = {
+ 	.low_high_vol_lvl = 4000,
+ 	.n_temp_tbl_elements = ARRAY_SIZE(temp_tbl),
  	.r_to_t_tbl = temp_tbl,
- 	.n_v_cap_tbl_elements = ARRAY_SIZE(cap_tbl),
- 	.v_to_cap_tbl = cap_tbl,
--	.n_batres_tbl_elements = ARRAY_SIZE(temp_to_batres_tbl_thermistor),
--	.batres_tbl = temp_to_batres_tbl_thermistor,
+-	.n_v_cap_tbl_elements = ARRAY_SIZE(cap_tbl),
+-	.v_to_cap_tbl = cap_tbl,
  };
  
  static const struct ab8500_bm_capacity_levels cap_levels = {
-@@ -209,8 +208,16 @@ int ab8500_bm_of_probe(struct power_supply *psy,
- 		/* Charging stops when we drop below this current */
- 		bi->charge_term_current_ua = 200000;
+@@ -115,8 +113,8 @@ static const struct ab8500_fg_parameters fg = {
+ 	.high_curr_time = 60,
+ 	.accu_charging = 30,
+ 	.accu_high_curr = 30,
+-	.high_curr_threshold = 50,
+-	.lowbat_threshold = 3100,
++	.high_curr_threshold_ua = 50000,
++	.lowbat_threshold_uv = 3100000,
+ 	.battok_falling_th_sel0 = 2860,
+ 	.battok_raising_th_sel1 = 2860,
+ 	.maint_thres = 95,
+@@ -219,6 +217,13 @@ int ab8500_bm_of_probe(struct power_supply *psy,
+ 		bi->resist_table_size = ARRAY_SIZE(temp_to_batres_tbl_thermistor);
+ 	}
  
--	if (bi->factory_internal_resistance_uohm < 0)
-+	/*
-+	 * Internal resistance and factory resistance are tightly coupled
-+	 * so both MUST be defined or we fall back to defaults.
-+	 */
-+	if ((bi->factory_internal_resistance_uohm < 0) ||
-+	    !bi->resist_table) {
- 		bi->factory_internal_resistance_uohm = 300000;
-+		bi->resist_table = temp_to_batres_tbl_thermistor;
-+		bi->resist_table_size = ARRAY_SIZE(temp_to_batres_tbl_thermistor);
++	if (!bi->ocv_table[0]) {
++		/* Default capacity table at say 25 degrees Celsius */
++		bi->ocv_temp[0] = 25;
++		bi->ocv_table[0] = ocv_cap_tbl;
++		bi->ocv_table_size[0] = ARRAY_SIZE(ocv_cap_tbl);
 +	}
- 
++
  	if (bi->temp_min == INT_MIN)
  		bi->temp_min = AB8500_TEMP_UNDER;
+ 	if (bi->temp_max == INT_MAX)
 diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
-index daa008138b05..96bb81e539f0 100644
+index 96bb81e539f0..eb3e5c4ca44f 100644
 --- a/drivers/power/supply/ab8500_fg.c
 +++ b/drivers/power/supply/ab8500_fg.c
-@@ -901,44 +901,35 @@ static int ab8500_fg_uncomp_volt_to_capacity(struct ab8500_fg *di)
+@@ -156,10 +156,10 @@ struct inst_curr_result_list {
+  * @dev:		Pointer to the structure device
+  * @node:		a list of AB8500 FGs, hence prepared for reentrance
+  * @irq			holds the CCEOC interrupt number
+- * @vbat:		Battery voltage in mV
++ * @vbat_uv:		Battery voltage in uV
+  * @vbat_nom_uv:	Nominal battery voltage in uV
+- * @inst_curr:		Instantenous battery current in mA
+- * @avg_curr:		Average battery current in mA
++ * @inst_curr_ua:	Instantenous battery current in uA
++ * @avg_curr_ua:	Average battery current in uA
+  * @bat_temp		battery temperature
+  * @fg_samples:		Number of samples used in the FG accumulation
+  * @accu_charge:	Accumulated charge from the last conversion
+@@ -198,10 +198,10 @@ struct ab8500_fg {
+ 	struct device *dev;
+ 	struct list_head node;
+ 	int irq;
+-	int vbat;
++	int vbat_uv;
+ 	int vbat_nom_uv;
+-	int inst_curr;
+-	int avg_curr;
++	int inst_curr_ua;
++	int avg_curr_ua;
+ 	int bat_temp;
+ 	int fg_samples;
+ 	int accu_charge;
+@@ -265,84 +265,84 @@ static enum power_supply_property ab8500_fg_props[] = {
+ 
+ /*
+  * This array maps the raw hex value to lowbat voltage used by the AB8500
+- * Values taken from the UM0836
++ * Values taken from the UM0836, in microvolts.
+  */
+ static int ab8500_fg_lowbat_voltage_map[] = {
+-	2300 ,
+-	2325 ,
+-	2350 ,
+-	2375 ,
+-	2400 ,
+-	2425 ,
+-	2450 ,
+-	2475 ,
+-	2500 ,
+-	2525 ,
+-	2550 ,
+-	2575 ,
+-	2600 ,
+-	2625 ,
+-	2650 ,
+-	2675 ,
+-	2700 ,
+-	2725 ,
+-	2750 ,
+-	2775 ,
+-	2800 ,
+-	2825 ,
+-	2850 ,
+-	2875 ,
+-	2900 ,
+-	2925 ,
+-	2950 ,
+-	2975 ,
+-	3000 ,
+-	3025 ,
+-	3050 ,
+-	3075 ,
+-	3100 ,
+-	3125 ,
+-	3150 ,
+-	3175 ,
+-	3200 ,
+-	3225 ,
+-	3250 ,
+-	3275 ,
+-	3300 ,
+-	3325 ,
+-	3350 ,
+-	3375 ,
+-	3400 ,
+-	3425 ,
+-	3450 ,
+-	3475 ,
+-	3500 ,
+-	3525 ,
+-	3550 ,
+-	3575 ,
+-	3600 ,
+-	3625 ,
+-	3650 ,
+-	3675 ,
+-	3700 ,
+-	3725 ,
+-	3750 ,
+-	3775 ,
+-	3800 ,
+-	3825 ,
+-	3850 ,
+-	3850 ,
++	2300000,
++	2325000,
++	2350000,
++	2375000,
++	2400000,
++	2425000,
++	2450000,
++	2475000,
++	2500000,
++	2525000,
++	2550000,
++	2575000,
++	2600000,
++	2625000,
++	2650000,
++	2675000,
++	2700000,
++	2725000,
++	2750000,
++	2775000,
++	2800000,
++	2825000,
++	2850000,
++	2875000,
++	2900000,
++	2925000,
++	2950000,
++	2975000,
++	3000000,
++	3025000,
++	3050000,
++	3075000,
++	3100000,
++	3125000,
++	3150000,
++	3175000,
++	3200000,
++	3225000,
++	3250000,
++	3275000,
++	3300000,
++	3325000,
++	3350000,
++	3375000,
++	3400000,
++	3425000,
++	3450000,
++	3475000,
++	3500000,
++	3525000,
++	3550000,
++	3575000,
++	3600000,
++	3625000,
++	3650000,
++	3675000,
++	3700000,
++	3725000,
++	3750000,
++	3775000,
++	3800000,
++	3825000,
++	3850000,
++	3850000,
+ };
+ 
+-static u8 ab8500_volt_to_regval(int voltage)
++static u8 ab8500_volt_to_regval(int voltage_uv)
+ {
+ 	int i;
+ 
+-	if (voltage < ab8500_fg_lowbat_voltage_map[0])
++	if (voltage_uv < ab8500_fg_lowbat_voltage_map[0])
+ 		return 0;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(ab8500_fg_lowbat_voltage_map); i++) {
+-		if (voltage < ab8500_fg_lowbat_voltage_map[i])
++		if (voltage_uv < ab8500_fg_lowbat_voltage_map[i])
+ 			return (u8) i - 1;
+ 	}
+ 
+@@ -353,16 +353,16 @@ static u8 ab8500_volt_to_regval(int voltage)
+ /**
+  * ab8500_fg_is_low_curr() - Low or high current mode
+  * @di:		pointer to the ab8500_fg structure
+- * @curr:	the current to base or our decision on
++ * @curr_ua:	the current to base or our decision on in microampere
+  *
+  * Low current mode if the current consumption is below a certain threshold
+  */
+-static int ab8500_fg_is_low_curr(struct ab8500_fg *di, int curr)
++static int ab8500_fg_is_low_curr(struct ab8500_fg *di, int curr_ua)
+ {
+ 	/*
+ 	 * We want to know if we're in low current mode
+ 	 */
+-	if (curr > -di->bm->fg_params->high_curr_threshold)
++	if (curr_ua > -di->bm->fg_params->high_curr_threshold_ua)
+ 		return true;
+ 	else
+ 		return false;
+@@ -600,13 +600,13 @@ int ab8500_fg_inst_curr_done(struct ab8500_fg *di)
+ /**
+  * ab8500_fg_inst_curr_finalize() - battery instantaneous current
+  * @di:         pointer to the ab8500_fg structure
+- * @res:	battery instantenous current(on success)
++ * @curr_ua:	battery instantenous current in microampere (on success)
+  *
+  * Returns 0 or an error code
+  * Note: This is part "two" and has to be called at earliest 250 ms
+  * after ab8500_fg_inst_curr_start()
+  */
+-int ab8500_fg_inst_curr_finalize(struct ab8500_fg *di, int *res)
++int ab8500_fg_inst_curr_finalize(struct ab8500_fg *di, int *curr_ua)
+ {
+ 	u8 low, high;
+ 	int val;
+@@ -662,14 +662,13 @@ int ab8500_fg_inst_curr_finalize(struct ab8500_fg *di, int *res)
+ 	/*
+ 	 * Convert to unit value in mA
+ 	 * Full scale input voltage is
+-	 * 63.160mV => LSB = 63.160mV/(4096*res) = 1.542mA
++	 * 63.160mV => LSB = 63.160mV/(4096*res) = 1.542.000 uA
+ 	 * Given a 250ms conversion cycle time the LSB corresponds
+ 	 * to 107.1 nAh. Convert to current by dividing by the conversion
+ 	 * time in hours (250ms = 1 / (3600 * 4)h)
+ 	 * 107.1nAh assumes 10mOhm, but fg_res is in 0.1mOhm
+ 	 */
+-	val = (val * QLSB_NANO_AMP_HOURS_X10 * 36 * 4) /
+-		(1000 * di->bm->fg_res);
++	val = (val * QLSB_NANO_AMP_HOURS_X10 * 36 * 4) / di->bm->fg_res;
+ 
+ 	if (di->turn_off_fg) {
+ 		dev_dbg(di->dev, "%s Disable FG\n", __func__);
+@@ -687,7 +686,7 @@ int ab8500_fg_inst_curr_finalize(struct ab8500_fg *di, int *res)
+ 			goto fail;
+ 	}
+ 	mutex_unlock(&di->cc_lock);
+-	(*res) = val;
++	*curr_ua = val;
+ 
+ 	return 0;
+ fail:
+@@ -698,15 +697,15 @@ int ab8500_fg_inst_curr_finalize(struct ab8500_fg *di, int *res)
+ /**
+  * ab8500_fg_inst_curr_blocking() - battery instantaneous current
+  * @di:         pointer to the ab8500_fg structure
+- * @res:	battery instantenous current(on success)
+  *
+- * Returns 0 else error code
++ * Returns battery instantenous current in microampere (on success)
++ * else error code
+  */
+ int ab8500_fg_inst_curr_blocking(struct ab8500_fg *di)
+ {
+ 	int ret;
+ 	unsigned long timeout;
+-	int res = 0;
++	int curr_ua = 0;
+ 
+ 	ret = ab8500_fg_inst_curr_start(di);
+ 	if (ret) {
+@@ -729,14 +728,14 @@ int ab8500_fg_inst_curr_blocking(struct ab8500_fg *di)
+ 		}
+ 	}
+ 
+-	ret = ab8500_fg_inst_curr_finalize(di, &res);
++	ret = ab8500_fg_inst_curr_finalize(di, &curr_ua);
+ 	if (ret) {
+ 		dev_err(di->dev, "Failed to finalize fg_inst\n");
+ 		return 0;
+ 	}
+ 
+-	dev_dbg(di->dev, "%s instant current: %d", __func__, res);
+-	return res;
++	dev_dbg(di->dev, "%s instant current: %d uA", __func__, curr_ua);
++	return curr_ua;
+ fail:
+ 	disable_irq(di->irq);
+ 	mutex_unlock(&di->cc_lock);
+@@ -796,13 +795,12 @@ static void ab8500_fg_acc_cur_work(struct work_struct *work)
+ 		(100 * di->bm->fg_res);
+ 
+ 	/*
+-	 * Convert to unit value in mA
++	 * Convert to unit value in uA
+ 	 * by dividing by the conversion
+ 	 * time in hours (= samples / (3600 * 4)h)
+-	 * and multiply with 1000
+ 	 */
+-	di->avg_curr = (val * QLSB_NANO_AMP_HOURS_X10 * 36) /
+-		(1000 * di->bm->fg_res * (di->fg_samples / 4));
++	di->avg_curr_ua = (val * QLSB_NANO_AMP_HOURS_X10 * 36) /
++		(di->bm->fg_res * (di->fg_samples / 4));
+ 
+ 	di->flags.conv_done = true;
+ 
+@@ -824,7 +822,7 @@ static void ab8500_fg_acc_cur_work(struct work_struct *work)
+  * ab8500_fg_bat_voltage() - get battery voltage
   * @di:		pointer to the ab8500_fg structure
   *
-  * Returns battery inner resistance added with the fuel gauge resistor value
-- * to get the total resistance in the whole link from gnd to bat+ node.
-+ * to get the total resistance in the whole link from gnd to bat+ node
-+ * in milliohm.
+- * Returns battery voltage(on success) else error code
++ * Returns battery voltage in microvolts (on success) else error code
   */
- static int ab8500_fg_battery_resistance(struct ab8500_fg *di)
+ static int ab8500_fg_bat_voltage(struct ab8500_fg *di)
+ {
+@@ -839,6 +837,8 @@ static int ab8500_fg_bat_voltage(struct ab8500_fg *di)
+ 		return prev;
+ 	}
+ 
++	/* IIO returns millivolts but we want microvolts */
++	vbat *= 1000;
+ 	prev = vbat;
+ 	return vbat;
+ }
+@@ -846,41 +846,16 @@ static int ab8500_fg_bat_voltage(struct ab8500_fg *di)
+ /**
+  * ab8500_fg_volt_to_capacity() - Voltage based capacity
+  * @di:		pointer to the ab8500_fg structure
+- * @voltage:	The voltage to convert to a capacity
++ * @voltage_uv:	The voltage to convert to a capacity in microvolt
+  *
+  * Returns battery capacity in per mille based on voltage
+  */
+-static int ab8500_fg_volt_to_capacity(struct ab8500_fg *di, int voltage)
++static int ab8500_fg_volt_to_capacity(struct ab8500_fg *di, int voltage_uv)
  {
 -	int i, tbl_size;
--	const struct batres_vs_temp *tbl;
--	int resist = 0;
+-	const struct ab8500_v_to_cap *tbl;
+-	int cap = 0;
 -
--	tbl = di->bm->bat_type->batres_tbl;
--	tbl_size = di->bm->bat_type->n_batres_tbl_elements;
+-	tbl = di->bm->bat_type->v_to_cap_tbl;
+-	tbl_size = di->bm->bat_type->n_v_cap_tbl_elements;
 -
 -	for (i = 0; i < tbl_size; ++i) {
--		if (di->bat_temp / 10 > tbl[i].temp)
+-		if (voltage > tbl[i].voltage)
 -			break;
 -	}
-+	struct power_supply_battery_info *bi = &di->bm->bi;
-+	int resistance_percent = 0;
-+	int resistance;
- 
+-
 -	if ((i > 0) && (i < tbl_size)) {
--		resist = fixp_linear_interpolate(
--			tbl[i].temp,
--			tbl[i].resist,
--			tbl[i-1].temp,
--			tbl[i-1].resist,
--			di->bat_temp / 10);
+-		cap = fixp_linear_interpolate(
+-			tbl[i].voltage,
+-			tbl[i].capacity * 10,
+-			tbl[i-1].voltage,
+-			tbl[i-1].capacity * 10,
+-			voltage);
 -	} else if (i == 0) {
--		resist = tbl[0].resist;
+-		cap = 1000;
 -	} else {
--		resist = tbl[tbl_size - 1].resist;
+-		cap = 0;
 -	}
-+	resistance_percent = power_supply_temp2resist_simple(bi->resist_table,
-+						 bi->resist_table_size,
-+						 di->bat_temp / 10);
-+	/*
-+	 * We get a percentage of factory resistance here so first get
-+	 * the factory resistance in milliohms then calculate how much
-+	 * resistance we have at this temperature.
-+	 */
-+	resistance = (bi->factory_internal_resistance_uohm / 1000);
-+	resistance = resistance * resistance_percent / 100;
+-
+-	dev_dbg(di->dev, "%s Vbat: %d, Cap: %d per mille",
+-		__func__, voltage, cap);
++	struct power_supply_battery_info *bi = &di->bm->bi;
  
- 	dev_dbg(di->dev, "%s Temp: %d battery internal resistance: %d"
- 	    " fg resistance %d, total: %d (mOhm)\n",
--		__func__, di->bat_temp, resist, di->bm->fg_res / 10,
--		(di->bm->fg_res / 10) + resist);
-+		__func__, di->bat_temp, resistance, di->bm->fg_res / 10,
-+		(di->bm->fg_res / 10) + resistance);
- 
- 	/* fg_res variable is in 0.1mOhm */
--	resist += di->bm->fg_res / 10;
-+	resistance += di->bm->fg_res / 10;
- 
--	return resist;
-+	return resistance;
+-	return cap;
++	/* Multiply by 10 because the capacity is tracked in per mille */
++	return power_supply_batinfo_ocv2cap(bi, voltage_uv, di->bat_temp) *  10;
  }
  
  /**
+@@ -892,8 +867,8 @@ static int ab8500_fg_volt_to_capacity(struct ab8500_fg *di, int voltage)
+  */
+ static int ab8500_fg_uncomp_volt_to_capacity(struct ab8500_fg *di)
+ {
+-	di->vbat = ab8500_fg_bat_voltage(di);
+-	return ab8500_fg_volt_to_capacity(di, di->vbat);
++	di->vbat_uv = ab8500_fg_bat_voltage(di);
++	return ab8500_fg_volt_to_capacity(di, di->vbat_uv);
+ }
+ 
+ /**
+@@ -941,31 +916,34 @@ static int ab8500_fg_battery_resistance(struct ab8500_fg *di)
+  */
+ static int ab8500_fg_load_comp_volt_to_capacity(struct ab8500_fg *di)
+ {
+-	int vbat_comp, res;
++	int vbat_comp_uv, res;
+ 	int i = 0;
+-	int vbat = 0;
++	int vbat_uv = 0;
+ 
+ 	ab8500_fg_inst_curr_start(di);
+ 
+ 	do {
+-		vbat += ab8500_fg_bat_voltage(di);
++		vbat_uv += ab8500_fg_bat_voltage(di);
+ 		i++;
+ 		usleep_range(5000, 6000);
+ 	} while (!ab8500_fg_inst_curr_done(di));
+ 
+-	ab8500_fg_inst_curr_finalize(di, &di->inst_curr);
++	ab8500_fg_inst_curr_finalize(di, &di->inst_curr_ua);
+ 
+-	di->vbat = vbat / i;
++	di->vbat_uv = vbat_uv / i;
+ 	res = ab8500_fg_battery_resistance(di);
+ 
+-	/* Use Ohms law to get the load compensated voltage */
+-	vbat_comp = di->vbat - (di->inst_curr * res) / 1000;
++	/*
++	 * Use Ohms law to get the load compensated voltage.
++	 * Divide by 1000 to get from milliohms to ohms.
++	 */
++	vbat_comp_uv = di->vbat_uv - (di->inst_curr_ua * res) / 1000;
+ 
+-	dev_dbg(di->dev, "%s Measured Vbat: %dmV,Compensated Vbat %dmV, "
+-		"R: %dmOhm, Current: %dmA Vbat Samples: %d\n",
+-		__func__, di->vbat, vbat_comp, res, di->inst_curr, i);
++	dev_dbg(di->dev, "%s Measured Vbat: %d uV,Compensated Vbat %d uV, "
++		"R: %d mOhm, Current: %d uA Vbat Samples: %d\n",
++		__func__, di->vbat_uv, vbat_comp_uv, res, di->inst_curr_ua, i);
+ 
+-	return ab8500_fg_volt_to_capacity(di, vbat_comp);
++	return ab8500_fg_volt_to_capacity(di, vbat_comp_uv);
+ }
+ 
+ /**
+@@ -1052,8 +1030,8 @@ static int ab8500_fg_calc_cap_charging(struct ab8500_fg *di)
+ 		ab8500_fg_convert_mah_to_permille(di, di->bat_cap.mah);
+ 
+ 	/* We need to update battery voltage and inst current when charging */
+-	di->vbat = ab8500_fg_bat_voltage(di);
+-	di->inst_curr = ab8500_fg_inst_curr_blocking(di);
++	di->vbat_uv = ab8500_fg_bat_voltage(di);
++	di->inst_curr_ua = ab8500_fg_inst_curr_blocking(di);
+ 
+ 	return di->bat_cap.mah;
+ }
+@@ -1580,9 +1558,9 @@ static void ab8500_fg_algorithm_discharging(struct ab8500_fg *di)
+ 		 * RECOVERY_SLEEP if time left.
+ 		 * If high, go to READOUT
+ 		 */
+-		di->inst_curr = ab8500_fg_inst_curr_blocking(di);
++		di->inst_curr_ua = ab8500_fg_inst_curr_blocking(di);
+ 
+-		if (ab8500_fg_is_low_curr(di, di->inst_curr)) {
++		if (ab8500_fg_is_low_curr(di, di->inst_curr_ua)) {
+ 			if (di->recovery_cnt >
+ 				di->bm->fg_params->recovery_total_time) {
+ 				di->fg_samples = SEC_TO_SAMPLE(
+@@ -1615,9 +1593,9 @@ static void ab8500_fg_algorithm_discharging(struct ab8500_fg *di)
+ 		break;
+ 
+ 	case AB8500_FG_DISCHARGE_READOUT:
+-		di->inst_curr = ab8500_fg_inst_curr_blocking(di);
++		di->inst_curr_ua = ab8500_fg_inst_curr_blocking(di);
+ 
+-		if (ab8500_fg_is_low_curr(di, di->inst_curr)) {
++		if (ab8500_fg_is_low_curr(di, di->inst_curr_ua)) {
+ 			/* Detect mode change */
+ 			if (di->high_curr_mode) {
+ 				di->high_curr_mode = false;
+@@ -1763,9 +1741,9 @@ static void ab8500_fg_algorithm(struct ab8500_fg *di)
+ 		di->bat_cap.prev_mah,
+ 		di->bat_cap.prev_percent,
+ 		di->bat_cap.prev_level,
+-		di->vbat,
+-		di->inst_curr,
+-		di->avg_curr,
++		di->vbat_uv,
++		di->inst_curr_ua,
++		di->avg_curr_ua,
+ 		di->accu_charge,
+ 		di->flags.charging,
+ 		di->charge_state,
+@@ -1858,15 +1836,15 @@ static void ab8500_fg_check_hw_failure_work(struct work_struct *work)
+  */
+ static void ab8500_fg_low_bat_work(struct work_struct *work)
+ {
+-	int vbat;
++	int vbat_uv;
+ 
+ 	struct ab8500_fg *di = container_of(work, struct ab8500_fg,
+ 		fg_low_bat_work.work);
+ 
+-	vbat = ab8500_fg_bat_voltage(di);
++	vbat_uv = ab8500_fg_bat_voltage(di);
+ 
+ 	/* Check if LOW_BAT still fulfilled */
+-	if (vbat < di->bm->fg_params->lowbat_threshold) {
++	if (vbat_uv < di->bm->fg_params->lowbat_threshold_uv) {
+ 		/* Is it time to shut down? */
+ 		if (di->low_bat_cnt < 1) {
+ 			di->flags.low_bat = true;
+@@ -2096,15 +2074,15 @@ static int ab8500_fg_get_property(struct power_supply *psy,
+ 	switch (psp) {
+ 	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
+ 		if (di->flags.bat_ovv)
+-			val->intval = BATT_OVV_VALUE * 1000;
++			val->intval = BATT_OVV_VALUE;
+ 		else
+-			val->intval = di->vbat * 1000;
++			val->intval = di->vbat_uv;
+ 		break;
+ 	case POWER_SUPPLY_PROP_CURRENT_NOW:
+-		val->intval = di->inst_curr * 1000;
++		val->intval = di->inst_curr_ua;
+ 		break;
+ 	case POWER_SUPPLY_PROP_CURRENT_AVG:
+-		val->intval = di->avg_curr * 1000;
++		val->intval = di->avg_curr_ua;
+ 		break;
+ 	case POWER_SUPPLY_PROP_ENERGY_FULL_DESIGN:
+ 		val->intval = ab8500_fg_convert_mah_to_uwh(di,
+@@ -2310,7 +2288,7 @@ static int ab8500_fg_init_hw_registers(struct ab8500_fg *di)
+ 		AB8500_SYS_CTRL2_BLOCK,
+ 		AB8500_LOW_BAT_REG,
+ 		ab8500_volt_to_regval(
+-			di->bm->fg_params->lowbat_threshold) << 1 |
++			di->bm->fg_params->lowbat_threshold_uv) << 1 |
+ 		LOW_BAT_ENABLE);
+ 	if (ret) {
+ 		dev_err(di->dev, "%s write failed\n", __func__);
 -- 
 2.31.1
 
