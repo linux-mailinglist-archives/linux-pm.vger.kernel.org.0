@@ -2,55 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 021BB455271
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Nov 2021 02:57:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B7CB455276
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Nov 2021 03:02:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242402AbhKRCAk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Nov 2021 21:00:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44240 "EHLO
+        id S242419AbhKRCFi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Nov 2021 21:05:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242399AbhKRCAi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Nov 2021 21:00:38 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A6CC061764
-        for <linux-pm@vger.kernel.org>; Wed, 17 Nov 2021 17:57:38 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id t19so10746284oij.1
-        for <linux-pm@vger.kernel.org>; Wed, 17 Nov 2021 17:57:38 -0800 (PST)
+        with ESMTP id S242410AbhKRCFf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Nov 2021 21:05:35 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92B6FC061570
+        for <linux-pm@vger.kernel.org>; Wed, 17 Nov 2021 18:02:36 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id bf8so10718567oib.6
+        for <linux-pm@vger.kernel.org>; Wed, 17 Nov 2021 18:02:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=4GgIJU0V+ih5Gpji1Pi6wi66j+iNTVRk7nYTxCGKEII=;
-        b=R3NdEUcgp/SALb49E79HIfh/H9l6vgFtcPngo8gtuOL4QeM6wSmOrH2fKAMtc11F1O
-         uR8rQJ/5+9tqYbKiRXHMtALAW/b2OMnExwVlQqBRrIP/VPUDixGZpKtA5yjqESqc7shX
-         qanJvyIVLUlP7LtyYMPUttshh1V065F/X0ieYn89NahGTGvMh54DNL2wBAQvQ1+ql8nB
-         PbkTlM8rPIKD3eY9ZzcOgrAeEYImePXBTpjIkPVrc5eMnYQctQe3u89f9sVQQdvPCo3U
-         nnhhDXlOCxmUtF97Z7kIJaXu77l3Oh0Fd8DnW3JBmEEB/cHHTVWdpl57ofXo9ENm685C
-         VGZQ==
+        bh=T4vEYzrUdQk1oeWluRtVFd4gA0NW+gSa5GYl0JXALPI=;
+        b=E8ks+FYaKjwoUEBkFNIgVXYujlv33Jy4eCQXUKef9K5BygpRyQPjR0n5h0Nou62I3N
+         YmZMzj8zNGj4MVs9PTPjIxhyobDYPluFdgfiSDxD9DbqXY8WF9NrIQp1td96tqkd7kf1
+         218zor7Rl84nTSumlTJbTkUU11TFwZyUzKjaOTDEnlMxuhlB+6txsW2rO/MMJgWql3Qd
+         PUzlz8H9GhN9nhrnFJhi9j19fyT3folCuKz6Sk3xdEP6yz4jP8ka44k8QJOpMj8yOi4A
+         jN6VAVAeUwJ+3n6tLbsxvQoLto4VKluNT3TXVwm++fQeJL/d/NKiWmodasjP+J8umHi+
+         RSPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=4GgIJU0V+ih5Gpji1Pi6wi66j+iNTVRk7nYTxCGKEII=;
-        b=L+NEwh8YMgZgPW/5fyE+e4KI0aztZ0XVDz5Cp5tK6IkaxR5Kc75BiNys6zm5ohM4L+
-         w4vSL0GVCxngI4/0GRQXsoGbO4avnmr6pMPzx3+nj5//GCcq8sdZqyAiUeWbwBqZxld1
-         ur4yKPGJvbfC3XD121iTVE5y4BIZDX1WcmszrdeGuKdPhwuyBanqz9cvQfGSBJCdwnvs
-         ZrJ+pxKUJagSEcEsZhuzAok+0vtoyUVfCgsuXoRk0hGmbSvcdr8f6pIR/qQ62Yjz5CxO
-         zzYrrZ6vpzeE3ZV1w/UJjP27SZIWJ1vo/akWWgK/pIPLwdNAa3Ea7HuwK053/oz64/xr
-         6S8w==
-X-Gm-Message-State: AOAM532RtZNJs7uRW0JCsK8egoWz9dwRt/AKEx4JgKj8r2Q3R6iPGWQE
-        0oDdjiBRq0voBRJIn2qxxTt4URLCjbp7IDubQYDXJw==
-X-Google-Smtp-Source: ABdhPJwUZxZy+oDrVbVf3E8Uxu6BnHQNyTmrLqFBNwedah57MWTES9fU07YwFkjK4DKiKLrVOUn5MDF0Qc6cHwyKKO4=
-X-Received: by 2002:a54:4791:: with SMTP id o17mr4452519oic.114.1637200658149;
- Wed, 17 Nov 2021 17:57:38 -0800 (PST)
+        bh=T4vEYzrUdQk1oeWluRtVFd4gA0NW+gSa5GYl0JXALPI=;
+        b=atSYbEgvu1nNieWC4Y/6dgWP939SCJ0fMBe5dubgnPl3bVmSH2U+rILsukbELHcv0B
+         RvA/w8nRNhV9WnIn5AR8RWm9vGUTgF26BAsvk63mVKqu79PHOa9XWlpyoA2uh9WwUa3D
+         ckJwXXGOli6vbT5xg9e++KHr3EVb+y8u614jFe7YuvyT2OlhxqvL0TkNpHYjzCi4R5yc
+         GyDq0SzHyk1gtYwEr63CTHdCSkXXjkfeuKenTk/fgLq2p+SNyaZo1qAAVyOizYgaObPH
+         tCc+Rs0//DFmBZ4BA/107VYn/HuBbmXWYiEXtSlEHzAL8BjOAIIX3t9xphakTPvWlWq6
+         c6ew==
+X-Gm-Message-State: AOAM530yxVREajQGhjVWYcgvgWM/PCeWnCyRn3wG7Dt6BV5AH2L+8pK9
+        Nns6rs+r6ZZMpV0BdD3PPy5nVZpeTy2t9hRrSbp4LA==
+X-Google-Smtp-Source: ABdhPJxtEyJT5YCnLe0+SjmAkihWNaVOI0kR1WcFABR9rEURrQYpiEe8po9f0QaV1McXZZcL0mh51MAHZxSlrBcnV6U=
+X-Received: by 2002:a54:4791:: with SMTP id o17mr4479961oic.114.1637200954681;
+ Wed, 17 Nov 2021 18:02:34 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1637061794.git.matti.vaittinen@fi.rohmeurope.com> <740503b6b6439e01959016223f1ae464e82824c3.1637061794.git.matti.vaittinen@fi.rohmeurope.com>
-In-Reply-To: <740503b6b6439e01959016223f1ae464e82824c3.1637061794.git.matti.vaittinen@fi.rohmeurope.com>
+References: <cover.1637061794.git.matti.vaittinen@fi.rohmeurope.com> <20cfdc60b148646a0473640a8efdb056b207c56e.1637061794.git.matti.vaittinen@fi.rohmeurope.com>
+In-Reply-To: <20cfdc60b148646a0473640a8efdb056b207c56e.1637061794.git.matti.vaittinen@fi.rohmeurope.com>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 18 Nov 2021 02:57:23 +0100
-Message-ID: <CACRpkdYE1r6mYAJsaMB9XyZjjAK-bGw3-9jhOpUFASWgkXaQBQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 1/9] dt-bindings: battery: Add temperature-capacity
- degradation table
+Date:   Thu, 18 Nov 2021 03:02:21 +0100
+Message-ID: <CACRpkdZJ50Q94inqpNfo-x4ivEq50yiisP2KAFOu3hr1Y8+Yrg@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 2/9] power: supply: add cap2ocv batinfo helper
 To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
         Sebastian Reichel <sre@kernel.org>,
@@ -64,29 +63,53 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Nov 16, 2021 at 1:24 PM Matti Vaittinen
+On Tue, Nov 16, 2021 at 1:25 PM Matti Vaittinen
 <matti.vaittinen@fi.rohmeurope.com> wrote:
 
-> Some charger/battery vendors describe the temperature impact to
-> battery capacity by providing tables with capacity change at
-> given temperature. Support providing this temperature - capacity
-> dependency using the simple-battery DT nodes.
+> The power-supply core supports concept of OCV (Open Circuit Voltage) =>
+> SOC (State Of Charge) conversion tables. Usually these tables are used
+> to estimate SOC based on OCV. Some systems use so called "Zero Adjust"
+> where at the near end-of-battery condition the SOC from coulomb counter
+> is used to retrieve the OCV - and OCV and VSYS difference is used to
+> re-estimate the battery capacity.
+>
+> Add helper to do look-up the other-way around and also get the OCV
+> based on SOC
 >
 > Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 
-Since we already support providing the capacity at different
-temperatures using ocv-capacity-celsius and the array of
-arrays ocv-capacity-table-0, 1, 2... you are introducing a
-second parallel method of describing how capacity changes
-in accordance with temperature, right?
+It seems you will need this for your chargers indeed.
 
-What do you expect to happen if someone specifies both?
+> +int power_supply_dcap2ocv_simple(struct power_supply_battery_ocv_table *table,
+> +                               int table_len, int dcap)
+> +{
+> +       int i, ocv, tmp;
+> +
+> +       for (i = 0; i < table_len; i++)
+> +               if (dcap > table[i].capacity * 10)
+> +                       break;
+> +
+> +       if (i > 0 && i < table_len) {
+> +               tmp = (table[i - 1].ocv - table[i].ocv) *
+> +                     (dcap - table[i].capacity * 10);
+> +
+> +               tmp /= (table[i - 1].capacity - table[i].capacity) * 10;
+> +               ocv = tmp + table[i].ocv;
+> +       } else if (i == 0) {
+> +               ocv = table[0].ocv;
+> +       } else {
+> +               ocv = table[table_len - 1].ocv;
+> +       }
+> +
+> +       return ocv;
+> +}
+> +EXPORT_SYMBOL_GPL(power_supply_dcap2ocv_simple);
 
-If this is an either/or situation then the schema has to
-guarantee the exclusiveness for each.
+Rewrite this using the library fixpoint interpolation function but just
+copypasting from my patch:
+https://lore.kernel.org/linux-pm/20211116230233.2167104-1-linus.walleij@linaro.org/
 
-(I would probably just use the formula you have to calculate
-a few tables using the existing method but that's just me.)
+Other than that it looks good to me!
 
 Yours,
 Linus Walleij
