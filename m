@@ -2,60 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F9A145761B
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Nov 2021 18:57:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2150457645
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Nov 2021 19:18:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231134AbhKSSBA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 19 Nov 2021 13:01:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51462 "EHLO
+        id S233694AbhKSSVt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 19 Nov 2021 13:21:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230405AbhKSSA7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 Nov 2021 13:00:59 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A644DC061574
-        for <linux-pm@vger.kernel.org>; Fri, 19 Nov 2021 09:57:57 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id c32so46967520lfv.4
-        for <linux-pm@vger.kernel.org>; Fri, 19 Nov 2021 09:57:57 -0800 (PST)
+        with ESMTP id S233326AbhKSSVt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 Nov 2021 13:21:49 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C5EDC061574
+        for <linux-pm@vger.kernel.org>; Fri, 19 Nov 2021 10:18:47 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id b40so47224927lfv.10
+        for <linux-pm@vger.kernel.org>; Fri, 19 Nov 2021 10:18:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=wirenboard-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=74ddysQWlFD4zT5G6tuW4b+jVpIQ15CZsk8lP5EA6RQ=;
-        b=vYGhR+TskGCW8Z+0AwEfrnWuxFpBz5KNEqr8RW77rWPOlYqsU5AHoXQ1h5PGRtRk5X
-         o//BsDojZzjnfbXZnezK/YdCzi9oiZfQ8sKs5uAzxDLXH63q8m3OvvhZERXVf8PBAMPn
-         1UHpVB3q38cIOLlcQrOmipoKAJeObGviZdlB6y7kEz0pYX3y+QQOpfcuw4FKozH8oBil
-         Qbfw9/7ZCeJS3O+K5W/8XHbaTBUyqKOksWTkYfyyYJjG9VDZr00CyU/wlsjuO9xQrWI3
-         Y68Oun3XmTtF7r8FLeC+WYo4ImNwHA3S9c0E89nH9d56vY+HRgRsiIS1PYJb0f6NUztK
-         lXOA==
+        bh=C/g0rdWvTQxZyyLJRjfHS8Hj4b286itInuHRieekBvs=;
+        b=w0vLYU+Dp+O1fJ7H/up33qLWce4xYVnVA9NOO/ilSNLJ1KNfkOT+CeIMwK6NqPgKkX
+         R7ei9uyFszCIXLcRisO74UowwMim7vYUZYfB1VpLrX+ds6puWDFi6Lfr1ajjx4cMMqa3
+         xzlfmrF7SNhyTo2KEeXqQTs7K880Qa8Q+tHHCFEhetPsdJQHVWCJYhVjfycfn9Ow3Qii
+         SY8MfNE7ZBgxjjKO0ADm6u5lGVQ3No95N/cOnLD/Sz/gBsn5MfiWvHfToluXENbv6a9i
+         MnWYnPlwepN/19XNwsyqoR6tVqyhyl7G0Ur8N7X/9QVI/dwmLr8xDOuM7Rli0BH2GpUO
+         +RPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=74ddysQWlFD4zT5G6tuW4b+jVpIQ15CZsk8lP5EA6RQ=;
-        b=WmjQjmhzu9/UPfZyHpSDlNH10CTSr4vmQE4ULObQ56GozbhctKNU53oAQh2jtAMVd+
-         +vvYRCDQZzs4WiEeGLPh2v1oGy0oYiX/naCoPlEeCsLbghXNohkxpGZUUyQeqspELFE9
-         x05yagPIJv2OaEq1MKbGkpURkHTeuJLtcPksVFzKTZY4CwQBY6BNkPdYovJ/c0qzu53A
-         Pq8aW8/FkguzFupfbDxiwE+BCfx9cb2oRMQRhgZunNkBk7o3tGr/Acmpl/+CQ+zEXWQ0
-         QKIBRj64WK2zBLAuXt3VekLHzy9oGFmmBAJqqPgmDv/oq0VRbp2TwH/mDT1SaTMMdxPp
-         ogmw==
-X-Gm-Message-State: AOAM532/46XUk8RphoY3cROwVEEqot1NlSUDZybfDnedzKAnjtffsWSy
-        9Giy75r3nTPafWc2IMlL7czQweFVkI5pEg==
-X-Google-Smtp-Source: ABdhPJxE7b+J/utmW1QtRMXJ1iX45lTubxgcZ9yFK0MOQKfC3cfZCntuU6kl0zkbaeijrTl5ExGG3Q==
-X-Received: by 2002:a05:6512:3993:: with SMTP id j19mr35136216lfu.581.1637344675758;
-        Fri, 19 Nov 2021 09:57:55 -0800 (PST)
+        bh=C/g0rdWvTQxZyyLJRjfHS8Hj4b286itInuHRieekBvs=;
+        b=No1duyzkKBZu1CnuCW7U7GGc5d1TjqSHTsOSrjmrzlDvo+rCOnpX3Er79ufR6fmxEH
+         ua9gZFY82KS57QCvCJK/CKDoxTKKwgenNLy8NTCMDNVFEOj/vlUSIYYmthE8nKL3rzFU
+         VTYe+WwIYKLOkK0bIBZm+EoVMngC3AcHd0/jhe6PX2/o2GU1W3F23sWZDinIA5x93HE5
+         YlUMX0vawb4zillX5n26btUTpQ2dTMhPU2pZMhljXeGN0Yd1n/f1Y8bhB9JAtSVzt/xa
+         osl9E5y8iAbOdDBVcrakzsyk4vOpzj4hv952RYsEgzIvT2NRwrBfkjTZoJpJQ6QpNA//
+         7dcg==
+X-Gm-Message-State: AOAM531NwWtuF3wPBszeWy9sqasY/ppC8MgjHQH1YAEntoBERB4HcZ6j
+        1ZtoV3ML/6YAC77SfLdwollNGw==
+X-Google-Smtp-Source: ABdhPJzFtTiorJEdmD1qjvg9aRv8T627ylf7hh9uNOIYeqPrLXg6QFdVn74jfWvTzXy1UE+eCHLJ9A==
+X-Received: by 2002:a05:6512:1101:: with SMTP id l1mr15732178lfg.343.1637345925692;
+        Fri, 19 Nov 2021 10:18:45 -0800 (PST)
 Received: from boger-laptop.lan (81.5.99.121.dhcp.mipt-telecom.ru. [81.5.99.121])
-        by smtp.gmail.com with ESMTPSA id q6sm40226ljc.117.2021.11.19.09.57.54
+        by smtp.gmail.com with ESMTPSA id a1sm55281lfc.92.2021.11.19.10.18.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Nov 2021 09:57:55 -0800 (PST)
+        Fri, 19 Nov 2021 10:18:45 -0800 (PST)
 From:   Evgeny Boger <boger@wirenboard.com>
 To:     Chen-Yu Tsai <wens@csie.org>, linux-pm@vger.kernel.org,
         Quentin Schulz <foss@0leil.net>
 Cc:     Evgeny Boger <boger@wirenboard.com>,
         Sebastian Reichel <sre@kernel.org>,
         Hermann Lauer <Hermann.Lauer@iwr.uni-heidelberg.de>
-Subject: [PATCH] power: supply: axp20x_battery: set charging voltage via DT
-Date:   Fri, 19 Nov 2021 20:57:40 +0300
-Message-Id: <20211119175740.405446-1-boger@wirenboard.com>
+Subject: [PATCH] power: supply: axp20x_battery: properly report current when discharging
+Date:   Fri, 19 Nov 2021 21:18:35 +0300
+Message-Id: <20211119181835.441233-1-boger@wirenboard.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -63,35 +63,51 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The driver should use maximum constant charge voltage property
-from battery description provided by power supply core by default
-instead of fixed 4.2V. This value can be later changed at runtime.
+As stated in [1], negative current values are used for discharging
+batteries.
 
-The battery description is normally set via device tree, as described
-in Documentation/devicetree/bindings/power/supply/battery.yaml
+AXP PMICs internally have two different ADC channels for shunt current
+measurement: one used during charging and one during discharging.
+The values reported by these ADCs are unsigned.
+While the driver properly selects ADC channel to get the data from,
+it doesn't apply negative sign when reporting discharging current.
+
+[1] Documentation/ABI/testing/sysfs-class-power
 
 Signed-off-by: Evgeny Boger <boger@wirenboard.com>
 ---
- drivers/power/supply/axp20x_battery.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/power/supply/axp20x_battery.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/power/supply/axp20x_battery.c b/drivers/power/supply/axp20x_battery.c
-index 18a9db0df4b1..83c5ffa24bd1 100644
+index 18a9db0df4b1..4ed01777035b 100644
 --- a/drivers/power/supply/axp20x_battery.c
 +++ b/drivers/power/supply/axp20x_battery.c
-@@ -617,6 +617,12 @@ static int axp20x_power_probe(struct platform_device *pdev)
- 	if (!power_supply_get_battery_info(axp20x_batt->batt, &info)) {
- 		int vmin = info.voltage_min_design_uv;
- 		int ccc = info.constant_charge_current_max_ua;
-+		int vcv = info.constant_charge_voltage_max_uv;
-+
-+		if (vcv > 0 && axp20x_batt->data->set_max_voltage(axp20x_batt,
-+								  vcv))
-+			dev_err(&pdev->dev,
-+				"couldn't set charge constant voltage from DT");
+@@ -186,7 +186,6 @@ static int axp20x_battery_get_prop(struct power_supply *psy,
+ 				   union power_supply_propval *val)
+ {
+ 	struct axp20x_batt_ps *axp20x_batt = power_supply_get_drvdata(psy);
+-	struct iio_channel *chan;
+ 	int ret = 0, reg, val1;
  
- 		if (vmin > 0 && axp20x_set_voltage_min_design(axp20x_batt,
- 							      vmin))
+ 	switch (psp) {
+@@ -267,11 +266,11 @@ static int axp20x_battery_get_prop(struct power_supply *psy,
+ 			return ret;
+ 
+ 		if (reg & AXP20X_PWR_STATUS_BAT_CHARGING)
+-			chan = axp20x_batt->batt_chrg_i;
+-		else
+-			chan = axp20x_batt->batt_dischrg_i;
+-
+-		ret = iio_read_channel_processed(chan, &val->intval);
++			ret = iio_read_channel_processed(axp20x_batt->batt_chrg_i, &val->intval);
++		else {
++			ret = iio_read_channel_processed(axp20x_batt->batt_dischrg_i, &val1);
++			val->intval = -val1;
++		}
+ 		if (ret)
+ 			return ret;
+ 
 -- 
 2.25.1
 
