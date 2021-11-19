@@ -2,40 +2,41 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 648C1456D64
+	by mail.lfdr.de (Postfix) with ESMTP id 1C27D456D63
 	for <lists+linux-pm@lfdr.de>; Fri, 19 Nov 2021 11:32:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234725AbhKSKe7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S234717AbhKSKe7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Fri, 19 Nov 2021 05:34:59 -0500
-Received: from mail-dm6nam12on2049.outbound.protection.outlook.com ([40.107.243.49]:60513
-        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
+Received: from mail-bn8nam12on2069.outbound.protection.outlook.com ([40.107.237.69]:21761
+        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234711AbhKSKe5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 19 Nov 2021 05:34:57 -0500
+        id S234712AbhKSKe6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 19 Nov 2021 05:34:58 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ODAVKdr7N+r5HS7jzXcV9b+KEoYR/mNqb3RNXDiJ+jAale4jGbgGWzmeS9YMRwnQWm8t3pvhRhzlKcJoxuYlNuMI7ZXBp2nvSSRMP/jAvp4yvyzGdnn97B+YQvOTdP3cjdKpsOhHjotOUoSx0dv4Zo8iaqFaxf0qb/1DCXXVHMUkZADZw4yaiPewyOo909C68vCu018kqBtz0QV3r0LR2RX6Ys3jikTH9QpdchgaWZpjvQcrx5XjYsM+XqcEjkEkfy0DKeSuZ03OsL1bBc/imTRhk3/AYpc0YGLXwB+PmcF5EkQblXvS9oeFD+2dWInChiedt3zPF3h2m/2osAUYpA==
+ b=Q9OfQLA0AKA7JPHjeqkS3J8VG1K5lXyxWUMAkl4iBHWcUC/ZdPO7WOPzSR8mEVVRX2kRvf0P9jsbrAIg11+MwRXhcyxFVdZGg0EdF5Y7IkAj001bEKrxdsfWgmvwnVDNGwHN1IBljqKRs+HxVj2FotosSe8ZLgQFWmmLNKdE/t+9t14vRPxtq3797uZaqsDpsy6u2i0ztS7hhHhypCoitAI2P7uEvc5wtcetJQqEJlghY9wJ0wC4Vj/2e8fWepoadVx8naf1NQLQXIfo3zIMYmEjUhWQXR7NAM4+O6zm4r7eTSYGG+rOSfUyUWAqehRRs4qSfSyuCKcBrVN7IQHAmQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=E8kgyOkrddODGeP9fLYswG8P2mhNQkaTgXSoOqeB0ZY=;
- b=BbucXkI9LNXo9obaMB5Wv9f23R7AmY3g0ldiLzyxJLdtRGSoNZVCdEinKxUg86+C0Xhrhkz6o33y4DeDIbxvOOQIpzKmL+Nvw2AmCRXRwBGQrvQVP4c6yuE17mnjWyIpUPPJ3JzzNjLtN7DewEsG3Nn0JFfKlva3qKVDaksfvJhUssyAQ5W4jhBmR1j1SqN1SAhjKV04xD7r7TqgIU5gixfkMG4q4Xjd7GOWNjv9Bhrp2aSIsthkIyRFRTnQOBEMBcZiqfAwUHLf0mkrcGODICJFn5Mo51qqTDpcq/VlNxjNz1lBgnAZxjm+8Jj8cu4KRZE8tkzqJl7mhSFdebmuoQ==
+ bh=MyhG7Iwmktic/nhBTF3DsMsL1bvubDHmme8VkELaobE=;
+ b=TDiM/Fo+VH4xJ7/qEwNpa+YAjaQ66e7onjLe/gclPWsMsWyZNhwjEkwtwp6Az0h93otRGEOfqKmdpQZQJMsvcyj8qCoVHH5jSVz/lYUWDt3wO4Ok7dTFLv0Gr2UnE+SrrguzQ1nFOn4HJ7eR+QPMw70CkXp8STEGYzjH7qJs9KXydBB/csStitL8xuCO9z3fpr46w2wfcHDdRWY5/tPwx9WevLMMnkIcCf0TRKFlVNq8xegMZeUTAqgTKgJgKOyzDmYWlVsITKuZToLDAcne7xsipOuXk7rpDG4aNJ+p0xpiwa6KKMx2go0CqwflZPHsPzQZ3eCOZp5cYlDcyOlL7A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=E8kgyOkrddODGeP9fLYswG8P2mhNQkaTgXSoOqeB0ZY=;
- b=fNBfMepssFmIfDDH/qrAyupou3c15hWJpf4zbYy+1ggQWB6G+PBPYEPYwIv/NVBDnbFEwWnjzN9hMMGwbXqjGT8W/F5HVXRgZ0tv5+32bksSiWJdNDoc9Syc9Zd6Escfrm6Qg6kMgSXKb6MYgOXJQxKfxr9768cM6MbFWiIRQQY=
-Received: from DS7PR03CA0324.namprd03.prod.outlook.com (2603:10b6:8:2b::24) by
- MW2PR12MB2588.namprd12.prod.outlook.com (2603:10b6:907:a::19) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4713.22; Fri, 19 Nov 2021 10:31:51 +0000
-Received: from DM6NAM11FT003.eop-nam11.prod.protection.outlook.com
- (2603:10b6:8:2b:cafe::b3) by DS7PR03CA0324.outlook.office365.com
- (2603:10b6:8:2b::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4713.19 via Frontend
- Transport; Fri, 19 Nov 2021 10:31:51 +0000
+ bh=MyhG7Iwmktic/nhBTF3DsMsL1bvubDHmme8VkELaobE=;
+ b=CoWL2wp7PVM20aY6pi2gOML5uo1BQzzXV6vB7lH99nRvFQgp4v8+5ReErp+gRR4LB25dq4ONmo30UJz/EO0XDDmmF0fOJ/zOWB1S4T3uZSHLCY9Wx+9zT/VvGcXqolcwbj7qqYJxOWzbn1NUZRvJcMyaMYFrx5V6iBvlgD9oUG4=
+Received: from DS7PR05CA0016.namprd05.prod.outlook.com (2603:10b6:5:3b9::21)
+ by CH0PR12MB5122.namprd12.prod.outlook.com (2603:10b6:610:bd::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4690.27; Fri, 19 Nov
+ 2021 10:31:55 +0000
+Received: from DM6NAM11FT042.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3b9:cafe::2d) by DS7PR05CA0016.outlook.office365.com
+ (2603:10b6:5:3b9::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.7 via Frontend
+ Transport; Fri, 19 Nov 2021 10:31:55 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -43,13 +44,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT003.mail.protection.outlook.com (10.13.173.162) with Microsoft SMTP
+ DM6NAM11FT042.mail.protection.outlook.com (10.13.173.165) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4713.20 via Frontend Transport; Fri, 19 Nov 2021 10:31:50 +0000
+ 15.20.4713.20 via Frontend Transport; Fri, 19 Nov 2021 10:31:54 +0000
 Received: from hr-amd.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Fri, 19 Nov
- 2021 04:31:45 -0600
+ 2021 04:31:50 -0600
 From:   Huang Rui <ray.huang@amd.com>
 To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
@@ -68,9 +69,9 @@ CC:     Deepak Sharma <deepak.sharma@amd.com>,
         Xiaojian Du <Xiaojian.Du@amd.com>,
         <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
         Huang Rui <ray.huang@amd.com>
-Subject: [PATCH v4 02/22] x86/msr: add AMD CPPC MSR definitions
-Date:   Fri, 19 Nov 2021 18:30:42 +0800
-Message-ID: <20211119103102.88124-3-ray.huang@amd.com>
+Subject: [PATCH v4 03/22] ACPI: CPPC: implement support for SystemIO registers
+Date:   Fri, 19 Nov 2021 18:30:43 +0800
+Message-ID: <20211119103102.88124-4-ray.huang@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211119103102.88124-1-ray.huang@amd.com>
 References: <20211119103102.88124-1-ray.huang@amd.com>
@@ -82,66 +83,118 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9cd1db08-00f9-4df6-1809-08d9ab47cc34
-X-MS-TrafficTypeDiagnostic: MW2PR12MB2588:
-X-Microsoft-Antispam-PRVS: <MW2PR12MB25886BA52C3FEE2DB092EE55EC9C9@MW2PR12MB2588.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1107;
+X-MS-Office365-Filtering-Correlation-Id: a88f3334-6359-4eea-c1fa-08d9ab47cecb
+X-MS-TrafficTypeDiagnostic: CH0PR12MB5122:
+X-Microsoft-Antispam-PRVS: <CH0PR12MB51222CEFFE79847A2F519013EC9C9@CH0PR12MB5122.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3513;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8WXj9+0PHa3KpitbzlWNQh2F3BNiuGIHCuxNXFS44eCF8MBEhOoXFsbDMXCXIFmMYSvR4eFPe3nBCCHm9hm62z3Z/NPgxduZIJEa2jJ0ZbS417zVsfXy69+PWIaWJti6fWcB767Dcp1ShE0qTm9F5VU0GYuXfKGDg2Lxumg62JidWvoKC9VnbENk0vFH76HvvRTGw9Q6zw2OkOflj8Qy1urh14qXUId7P1XqlMuWwUfd/3yp4i4XKq6oMNLOZ0WBlM2ZbJClHVESsS30uW1yZym8s6NVaDcI6PtVHrUhnyOU0xJl9RWfFzz14/OwxclwLxSgdvXRREgBLEa5/wm+OLoKglURB4MJHYP9lAIOFHGJEKDtbsrzg1EpJT3qdYSppA7Gb33ivQb2iqcYp6J46FwZD64wOLBVTP67JHBG4pgn6+clBvHZdZME45Fy+MYs5p2qry/sPpWC1c7K5WN0hEaqMSEBfN/wv664nkFBZOpteMNyi9f9r3Ps6unhqWi8vFXBnzGm+FWZDoxgwW8mgEoEQ7eBbNkVS0qWJpxWRaYqP6Te0JMsRVoycWB0jpZQ/if/VhFH1KAXDQIe7Ku13+xmunH0r+Ta9A7qe5RH5YrrWe4kmpQ4ckzJGn/mukZNmgs0RSB5yHIXx+S0G4SD/SDDSTdSjhXDhWUVsj0r7rKzT/m2xvZjaHW48KYPc/X5UTJOgkgfASwivAlo4Jxcxckdaj0l3wE/pxPXmDZQkSE=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(86362001)(26005)(5660300002)(7696005)(186003)(36860700001)(2616005)(8936002)(4326008)(36756003)(16526019)(508600001)(2906002)(1076003)(8676002)(47076005)(6666004)(336012)(70586007)(70206006)(82310400003)(426003)(54906003)(81166007)(356005)(316002)(110136005)(7416002)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: sec3Ph0hX0/L54q2prOBNxlxzCQErJfU9HrNY4OrJMi9N+c3rttZdHsbZlZOQGRWogjg6AtznlLtAbC+tD5mR8R4H1l8uiPQ4pLCcxZygQGhNEzLQmQwAN7DdMicqnnKZDhoh2/PCXb+HMC3ZUbzD6day30+HaXkVE0cO7OtpuMsJ/wOThf5xEp16nIwX3sPHTja/0O9U4pOy2olF1FUE2Jpg+/tHB38uMJgcsSR+gusMatDToJ2xxgrmGnqDm2Qxjp2fFl8RGQQ0LWDdhv4y1nCfKHXEjtwO51k2b2K9qLXHjSko5Qgvn7SqVSWDMI9/LBNfNFkPgqj1YUa2c6nQnMbc6nazQuck6j05jIRIsyhDt5j6gk1lZ/ceF3N9slfgj0WBxFHYvtjMNA69BM6KgPQ/uonBC4EzypsuLax+p4lATXQOFcdJtpi9q32uKisxjc/bv/G7cPpM16a/Q9aAs2uTSgfmxeuU0BjF/9XxiadDebTTtdQbPTn6qWX5pWjGpJbMidhCh8D2XEHppUUNgUENlo52vjqoEL9YKmoJTLkp/GRLppgHEtwfpaKduJ8awAYIDHX3g0BQuv/c20r7nGTMLSIRykPrGBv0nE62yWVDzFrhS1sApMHbsiWxfmqj5A73LC93eYfU/ABuX6xDahiQkRba8QXp3d9Da31nL25DSYirHBSq4EFU0MpeCaOneu4/Ou4PipoQlD/5pKL8j/d2bWYZDQGNoiGpyXUEhA=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(426003)(16526019)(70586007)(8676002)(508600001)(2616005)(70206006)(54906003)(7696005)(1076003)(6666004)(316002)(4326008)(186003)(8936002)(36756003)(2906002)(110136005)(5660300002)(86362001)(81166007)(82310400003)(356005)(36860700001)(336012)(83380400001)(26005)(47076005)(7416002)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Nov 2021 10:31:50.5760
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Nov 2021 10:31:54.9353
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9cd1db08-00f9-4df6-1809-08d9ab47cc34
+X-MS-Exchange-CrossTenant-Network-Message-Id: a88f3334-6359-4eea-c1fa-08d9ab47cecb
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT003.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT042.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2PR12MB2588
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5122
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-AMD CPPC (Collaborative Processor Performance Control) function uses MSR
-registers to manage the performance hints. So add the MSR register macro
-here.
+From: Steven Noonan <steven@valvesoftware.com>
 
+According to the ACPI v6.2 (and later) specification, SystemIO can be
+used for _CPC registers. This teaches cppc_acpi how to handle such
+registers.
+
+This patch was tested using the amd_pstate driver on my Zephyrus G15
+(model GA503QS) using the current version 410 BIOS, which uses
+a SystemIO register for the HighestPerformance element in _CPC.
+
+Signed-off-by: Steven Noonan <steven@valvesoftware.com>
 Signed-off-by: Huang Rui <ray.huang@amd.com>
 ---
- arch/x86/include/asm/msr-index.h | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ drivers/acpi/cppc_acpi.c | 46 +++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 43 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-index 01e2650b9585..e7945ef6a8df 100644
---- a/arch/x86/include/asm/msr-index.h
-+++ b/arch/x86/include/asm/msr-index.h
-@@ -486,6 +486,23 @@
+diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+index a85c351589be..ca62c3dc9899 100644
+--- a/drivers/acpi/cppc_acpi.c
++++ b/drivers/acpi/cppc_acpi.c
+@@ -746,9 +746,24 @@ int acpi_cppc_processor_probe(struct acpi_processor *pr)
+ 						goto out_free;
+ 					cpc_ptr->cpc_regs[i-2].sys_mem_vaddr = addr;
+ 				}
++			} else if (gas_t->space_id == ACPI_ADR_SPACE_SYSTEM_IO) {
++				if (gas_t->access_width < 1 || gas_t->access_width > 3) {
++					/* 1 = 8-bit, 2 = 16-bit, and 3 = 32-bit. SystemIO doesn't
++					 * implement 64-bit registers.
++					 */
++					pr_debug("Invalid access width %d for SystemIO register\n",
++						gas_t->access_width);
++					goto out_free;
++				}
++				if (gas_t->address & ~0xFFFFULL) {
++					/* SystemIO registers use 16-bit integer addresses */
++					pr_debug("Invalid IO port %llu for SystemIO register\n",
++						gas_t->address);
++					goto out_free;
++				}
+ 			} else {
+ 				if (gas_t->space_id != ACPI_ADR_SPACE_FIXED_HARDWARE || !cpc_ffh_supported()) {
+-					/* Support only PCC ,SYS MEM and FFH type regs */
++					/* Support only PCC, SystemMemory, SystemIO, and FFH type regs. */
+ 					pr_debug("Unsupported register type: %d\n", gas_t->space_id);
+ 					goto out_free;
+ 				}
+@@ -923,7 +938,20 @@ static int cpc_read(int cpu, struct cpc_register_resource *reg_res, u64 *val)
+ 	}
  
- #define MSR_AMD64_VIRT_SPEC_CTRL	0xc001011f
+ 	*val = 0;
+-	if (reg->space_id == ACPI_ADR_SPACE_PLATFORM_COMM && pcc_ss_id >= 0)
++
++	if (reg->space_id == ACPI_ADR_SPACE_SYSTEM_IO) {
++		u32 width = 8 << (reg->access_width - 1);
++		acpi_status status;
++
++		status = acpi_os_read_port((acpi_io_address)reg->address, (u32 *)val, width);
++
++		if (status != AE_OK) {
++			pr_debug("Error: Failed to read SystemIO port %llx\n", reg->address);
++			return -EFAULT;
++		}
++
++		return 0;
++	} else if (reg->space_id == ACPI_ADR_SPACE_PLATFORM_COMM && pcc_ss_id >= 0)
+ 		vaddr = GET_PCC_VADDR(reg->address, pcc_ss_id);
+ 	else if (reg->space_id == ACPI_ADR_SPACE_SYSTEM_MEMORY)
+ 		vaddr = reg_res->sys_mem_vaddr;
+@@ -962,7 +990,19 @@ static int cpc_write(int cpu, struct cpc_register_resource *reg_res, u64 val)
+ 	int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpu);
+ 	struct cpc_reg *reg = &reg_res->cpc_entry.reg;
  
-+/* AMD Collaborative Processor Performance Control MSRs */
-+#define MSR_AMD_CPPC_CAP1		0xc00102b0
-+#define MSR_AMD_CPPC_ENABLE		0xc00102b1
-+#define MSR_AMD_CPPC_CAP2		0xc00102b2
-+#define MSR_AMD_CPPC_REQ		0xc00102b3
-+#define MSR_AMD_CPPC_STATUS		0xc00102b4
+-	if (reg->space_id == ACPI_ADR_SPACE_PLATFORM_COMM && pcc_ss_id >= 0)
++	if (reg->space_id == ACPI_ADR_SPACE_SYSTEM_IO) {
++		u32 width = 8 << (reg->access_width - 1);
++		acpi_status status;
 +
-+#define CAP1_LOWEST_PERF(x)	(((x) >> 0) & 0xff)
-+#define CAP1_LOWNONLIN_PERF(x)	(((x) >> 8) & 0xff)
-+#define CAP1_NOMINAL_PERF(x)	(((x) >> 16) & 0xff)
-+#define CAP1_HIGHEST_PERF(x)	(((x) >> 24) & 0xff)
++		status = acpi_os_write_port((acpi_io_address)reg->address, (u32)val, width);
 +
-+#define REQ_MAX_PERF(x)		(((x) & 0xff) << 0)
-+#define REQ_MIN_PERF(x)		(((x) & 0xff) << 8)
-+#define REQ_DES_PERF(x)		(((x) & 0xff) << 16)
-+#define REQ_ENERGY_PERF_PREF(x)	(((x) & 0xff) << 24)
++		if (status != AE_OK) {
++			pr_debug("Error: Failed to write SystemIO port %llx\n", reg->address);
++			return -EFAULT;
++		}
 +
- /* Fam 17h MSRs */
- #define MSR_F17H_IRPERF			0xc00000e9
- 
++		return 0;
++	} else if (reg->space_id == ACPI_ADR_SPACE_PLATFORM_COMM && pcc_ss_id >= 0)
+ 		vaddr = GET_PCC_VADDR(reg->address, pcc_ss_id);
+ 	else if (reg->space_id == ACPI_ADR_SPACE_SYSTEM_MEMORY)
+ 		vaddr = reg_res->sys_mem_vaddr;
 -- 
 2.25.1
 
