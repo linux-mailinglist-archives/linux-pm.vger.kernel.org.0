@@ -2,79 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0E78456920
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Nov 2021 05:23:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55064456976
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Nov 2021 06:18:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232107AbhKSE0g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Nov 2021 23:26:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35748 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232627AbhKSE02 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Nov 2021 23:26:28 -0500
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DFA5C061748
-        for <linux-pm@vger.kernel.org>; Thu, 18 Nov 2021 20:23:27 -0800 (PST)
-Received: by mail-io1-xd41.google.com with SMTP id z18so11194585iof.5
-        for <linux-pm@vger.kernel.org>; Thu, 18 Nov 2021 20:23:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=eTS1GK69RCI4oJxzikNG+dG1kEXvzkq40C70DiSwh3g=;
-        b=cQL4g+H2gJMJP3xWFQe/KzoyGqIo0AawlIVz6HOmgj7H+oswWn1JndJ03Ybadqh/iG
-         GFezuribER5iOwOrdhcpaLRDpEBug17B9goO8697VSiSH7/hueTiocUUiYuEl0npDX+N
-         7dyH4NYh7rX0U9rKSBeHM3T0tr/VTmzWLqZb6dR+9h3OxCcYEbSP6A9trr03z0AdHvvI
-         ahSumHf41Gk0/WiflEL2tp00pjSmNcuzmCnCLHtvda8y92IYt7+31MLaTkWsbzEryIp/
-         PD6PRbns5nLepTYC8LZKXr6gjYxNXB3IFy8QgwmShmHo9WUyNgKaHeXs5AvuxibzX411
-         sWzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=eTS1GK69RCI4oJxzikNG+dG1kEXvzkq40C70DiSwh3g=;
-        b=boRB8BHEDFNZvYwUR9KV/bCmMezTpUm5/ROYhh8L0UOfMffPfb7U0P3JswbizDnJfF
-         eiFiX+YMTu/iU0B2AW1hN1YvimyuEK/cU6Byqx6bN9AoLtIMVN4/YqJHQySRlsf7l/gM
-         HI7GQH3M0CuJubw6M+SqQP9W3NH0wQ8+99xyUZy4E3FH32Q2QhjmaAz4UU2BX4gOIkPk
-         +St+1QUexvSZfox/8dDFeSsarNDkWZtMgs120S0QDknAqKcGzVCm839tMjM24RLGa4Nn
-         aAYWCs5eC2IffLbJ32f3RJxP7SEzvWz7HvQCDt0p3ROLHTQwd0mwHYdkIyb6qCYtrv2f
-         Dy0w==
-X-Gm-Message-State: AOAM5333k61hCnlSiel8U0qVrnTHbsKJO2ClIwZn8W+56GcSBJMA9YSs
-        iur+WTLxnZM9riJhlrQpXimBL8EWBu2HPaims00=
-X-Google-Smtp-Source: ABdhPJyoJdpS7Kf9B+KrNKG19mDCqtighLiNuAqL2cgDQj7eZ+/CBh/r4yLZu32slWVXs7TOdIJDzf3XHUtHh6UYg8Y=
-X-Received: by 2002:a05:6602:164a:: with SMTP id y10mr3074210iow.123.1637295806431;
- Thu, 18 Nov 2021 20:23:26 -0800 (PST)
+        id S230296AbhKSFVI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 19 Nov 2021 00:21:08 -0500
+Received: from mga18.intel.com ([134.134.136.126]:43846 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229675AbhKSFVI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 19 Nov 2021 00:21:08 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10172"; a="221237583"
+X-IronPort-AV: E=Sophos;i="5.87,246,1631602800"; 
+   d="scan'208";a="221237583"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2021 21:18:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,246,1631602800"; 
+   d="scan'208";a="536999203"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.21])
+  by orsmga001.jf.intel.com with ESMTP; 18 Nov 2021 21:18:07 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     lenb@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        ricardo.neri@intel.com, tim.c.chen@intel.com, peterz@infradead.org,
+        Michael@MichaelLarabel.com, arjan@linux.intel.com,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH] cpufreq: intel_pstate: ITMT support for overclocked system
+Date:   Thu, 18 Nov 2021 21:18:01 -0800
+Message-Id: <20211119051801.1432724-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Received: by 2002:a05:6602:2f03:0:0:0:0 with HTTP; Thu, 18 Nov 2021 20:23:25
- -0800 (PST)
-Reply-To: anthonyrrobson@gmail.com
-From:   "Mr. Anthony Robson" <abcudday@gmail.com>
-Date:   Thu, 18 Nov 2021 20:23:25 -0800
-Message-ID: <CADXsGJFbR1Q52ZiBs8f3ijChf5RKGDYxHiXANAhCVcHdcbSS1A@mail.gmail.com>
-Subject: I look forward to hearing from you SOONEST!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Friend,
+On systems with overclocking enabled, CPPC Highest Performance can be
+hard coded to 0xff. In this case even if we have cores with different
+highest performance, ITMT can't be enabled as the current implementation
+depends on CPPC Highest Performance.
 
-Below is the email i sent to you.
+On such systems we can use MSR_HWP_CAPABILITIES maximum performance field
+when CPPC.Highest Performance is 0xff.
 
-I am so sorry for sending you this unsolicited and unexpected email.
+Due to legacy reasons, we can't solely depend on MSR_HWP_CAPABILITIES as
+in some older systems CPPC Highest Performance is the only way to identify
+different performing cores.
 
-I actually got your contact from your country website and i decided to
-contact you directly about this business venture.
+Reported-by: Michael Larabel <Michael@MichaelLarabel.com>
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+This patch was tested on one Alder Lake system by enabling Overclocking.
+Once overclocking is enabled, we see
+$cat /sys/devices/system/cpu/cpu*/acpi_cppc/highest_perf 
+255 (P-Cores)
+255 (P-Cores
+...
+...
+255 (E-Cores)
+255 (E-Cores)
+The real max performance for CPUs on this system was
+0x40 for P-cores and 0x26 for E-cores.
+With this change applied we will see
+$cat /proc/sys/kernel/sched_itmt_enabled 
+1
+The resultant ITMT priorities
+for P-core 0x40, P-core HT sibling 0x10 and E-core 0x26
 
-I am contacting you in good faith and this business investment
-proposal will be of mutual benefit for us. I have a business proposal
-in huge sum amount of US$800,000 000 00 (Eight Hundred  Million United
-state dollars only} to be transferred to any safe account with your
-assistance.
+ drivers/cpufreq/intel_pstate.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Contact me back via my email if you are interested in this business
-investment proposal and if you can be trusted for further briefing and
-details.
-I look forward to hearing from you SOONEST!
+diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+index 815df3daae9d..3106e62ffb25 100644
+--- a/drivers/cpufreq/intel_pstate.c
++++ b/drivers/cpufreq/intel_pstate.c
+@@ -338,6 +338,8 @@ static void intel_pstste_sched_itmt_work_fn(struct work_struct *work)
+ 
+ static DECLARE_WORK(sched_itmt_work, intel_pstste_sched_itmt_work_fn);
+ 
++#define CPPC_MAX_PERF	U8_MAX
++
+ static void intel_pstate_set_itmt_prio(int cpu)
+ {
+ 	struct cppc_perf_caps cppc_perf;
+@@ -348,6 +350,14 @@ static void intel_pstate_set_itmt_prio(int cpu)
+ 	if (ret)
+ 		return;
+ 
++	/*
++	 * On some systems with overclocking enabled, CPPC.highest_perf is hardcoded to 0xff.
++	 * In this case we can't use CPPC.highest_perf to enable ITMT.
++	 * In this case we can look at MSR_HWP_CAPABILITIES bits [8:0] to decide.
++	 */
++	if (cppc_perf.highest_perf == CPPC_MAX_PERF)
++		cppc_perf.highest_perf = HWP_HIGHEST_PERF(READ_ONCE(all_cpu_data[cpu]->hwp_cap_cached));
++
+ 	/*
+ 	 * The priorities can be set regardless of whether or not
+ 	 * sched_set_itmt_support(true) has been called and it is valid to
+-- 
+2.31.1
 
-Kind Regards.
-Mr. Anthony Robson.
