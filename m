@@ -2,148 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0460E4577FB
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Nov 2021 21:57:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99207457893
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Nov 2021 23:19:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235513AbhKSVAq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 19 Nov 2021 16:00:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35024 "EHLO
+        id S235348AbhKSWWt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 19 Nov 2021 17:22:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235393AbhKSVAp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 Nov 2021 16:00:45 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F32FC061574
-        for <linux-pm@vger.kernel.org>; Fri, 19 Nov 2021 12:57:43 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id w29so20166911wra.12
-        for <linux-pm@vger.kernel.org>; Fri, 19 Nov 2021 12:57:43 -0800 (PST)
+        with ESMTP id S235124AbhKSWWt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 Nov 2021 17:22:49 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD85C061574;
+        Fri, 19 Nov 2021 14:19:46 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id u3so49506980lfl.2;
+        Fri, 19 Nov 2021 14:19:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc
-         :references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=I4B5HFmy96F+nwrWPqo3yCY/gtnU/WqzBwP+duwHSo8=;
-        b=L0WK59nFYAx5D1sVOWtIE+pfcFj77YnZRRca6xSi6oRHtVLRet9kQTIE8d3Vz1MBkS
-         fVk+fBalwe4exDT+tgq4O10P9pO4O0NvTWIilEkcQruFmsOBmFgqGpXwHjaM2IwF9X/H
-         UBxhFDfu/FJnYvWtuUh0IZmvZq0lI0sin83XCFfm9uY96DAXgmx470ktEey5o07BkRsV
-         vwJRQzunIgehdNa+5fkMLujEBgqElBRnBMOaFrOEHi6BSdALFlHu7rXKTJubc4eyPhSP
-         I6ErWfPES5Z4jmDaRKhTwS2CYLBDJHyBWxOHEt2NT3iNlQwPVnzGQ/aaKbtVz2xHyoBV
-         wizA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=3Nzbg2EG61wjglaAUxjv2HbmVE4Xv+5yBzHM0E8IZsg=;
+        b=SXIbbN0574L4wXm6E218LgP9PFCcdFNYniGzSbU9VNCAmx4rys3EGBHB0pZtHXsQ0v
+         5DOopnAEeUruILLsRF8g4bP20PDOTcU0wmU2o0up/eJKzKA6q9hdklZxr3KyLgUaVEg6
+         6NSTCmJbJVh0y+ODheunQOEBX0frGj3FLSGAzBDKJEhO3vX6sRomDc5UQQNySOi72gDN
+         IASArMTWwqSSABu89oH+I5KnBR9FP8iJED9maZFRqpkjjAlK4XxhGKHSe3iLDPnnnq4Y
+         n5JnG9/mFVvF3hLwZPZ1ZiLmpDiUAB6/DXuNO1OgWAuZUbkYFzJI29kVF7DOD9YHUn3M
+         ctng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=I4B5HFmy96F+nwrWPqo3yCY/gtnU/WqzBwP+duwHSo8=;
-        b=wjCJI3jfZm9y4xSY31fsrSAujEE1slkjnqzhdlB5OTcoPSJ8Meffk9E0HuvHPwo9II
-         +5Crcr9y0vFzo40LXbtcSvbqClk9rSNHm9ye5vZlee+vVFXLRCyBafm182oEwlfURteT
-         dm6h6B0lGh86g2dyAACkIZeaVg1Bsrgl/MDAojNTWni/P/1tWv2G41eaouJiBmK0HRVA
-         Tse3J2pOnS6YukUe5MrSStnIg4iyDmudCwvzQO7Fo1/KbzcLFRuWbsgLikux1memkWiJ
-         Y8dqO36TPqHbjm97MrNOvC+qEDjYkas2TYy9roHfXJ95uPJIFOchlM1K+l8ZOLV5FC10
-         M6Iw==
-X-Gm-Message-State: AOAM532W0WkLlViV/YcYFh23y5LcbSgM+l54GDNtpCu9zY5O5bO8mLVc
-        uE4FuPutpONVefZRLE0S5kE=
-X-Google-Smtp-Source: ABdhPJxThqyWTf0egpTyNTCp6Gr7jhSgpzMj1B/CMXcoDPlLYGFSCSstGGEn/cT9MiTXSGpY9jdDTw==
-X-Received: by 2002:a5d:64c3:: with SMTP id f3mr10883281wri.321.1637355462123;
-        Fri, 19 Nov 2021 12:57:42 -0800 (PST)
-Received: from ?IPV6:2003:ea:8f1a:f00:e956:6e6f:f307:5861? (p200300ea8f1a0f00e9566e6ff3075861.dip0.t-ipconnect.de. [2003:ea:8f1a:f00:e956:6e6f:f307:5861])
-        by smtp.googlemail.com with ESMTPSA id n15sm14768925wmq.38.2021.11.19.12.57.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Nov 2021 12:57:41 -0800 (PST)
-Message-ID: <cf153c5c-e2f0-8d40-cdab-b893e63d2e9c@gmail.com>
-Date:   Fri, 19 Nov 2021 21:57:32 +0100
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=3Nzbg2EG61wjglaAUxjv2HbmVE4Xv+5yBzHM0E8IZsg=;
+        b=V/8FU6LqLkcn0Xigzkze/4prkZpIxCxjGNdvZOVg71hhxsUNUjYUGS3jyTC6c6SonX
+         5DevVwmenRpXHrx3rwG9L1iwi61FTGxv9/hXRWttrlbNX/Gng7PBTIEf37nBJ6n3deIA
+         tvLSkuIUYJPE61BAa47wb1pF5AOMgNjStlEj760bMLQ6GEV2wQ2EBVhSGJciDiD/Dmv4
+         HMr0kJmIxUwCZYerY0btJcIfy6wX4SMWX4VTO+nfGlpxx/N/rCQg3F9YgYQSMFcABjv1
+         qBrO37ctSSMwW6qws+HE43QWMPS9PpS8Wl80f87yF594Ss2D7+oKkd7DgUQqVDYdF7IA
+         XCEQ==
+X-Gm-Message-State: AOAM533ioegNT6EQlBib3NE7AAasTOPDQhDRcsMl9I0Y8988BNVPOmQw
+        rXVQjWM+Z1d15fJRfFivrCc=
+X-Google-Smtp-Source: ABdhPJwCGLjF1Tj7LtmDCAeHN04dyGLyvsGY7Z/Z0MX7Wq0wDJuM12LsICJS45mawjRFANUPQavgAA==
+X-Received: by 2002:a19:c3d6:: with SMTP id t205mr36620216lff.441.1637360384991;
+        Fri, 19 Nov 2021 14:19:44 -0800 (PST)
+Received: from localhost.localdomain (dsl-trebng21-58c18a-64.dhcp.inet.fi. [88.193.138.64])
+        by smtp.gmail.com with ESMTPSA id 76sm78150ljj.69.2021.11.19.14.19.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Nov 2021 14:19:44 -0800 (PST)
+From:   Juuso Alasuutari <juuso.alasuutari@gmail.com>
+To:     nafonten@amd.com
+Cc:     Jinzhou.Su@amd.com, Xiaojian.Du@amd.com, alexander.deucher@amd.com,
+        bp@suse.de, deepak.sharma@amd.com, ggherdovich@suse.cz,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        mario.limonciello@amd.com, mingo@kernel.org,
+        nathan.fontenot@amd.com, peterz@infradead.org,
+        rafael.j.wysocki@intel.com, ray.huang@amd.com,
+        skhan@linuxfoundation.org, steven@valvesoftware.com,
+        viresh.kumar@linaro.org, x86@kernel.org
+Subject: Re: [PATCH v4 16/22] cpupower: add the function to get the sysfs value from specific table
+Date:   Sat, 20 Nov 2021 00:19:43 +0200
+Message-Id: <20211119221943.92479-1-juuso.alasuutari@gmail.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <152fb29e-c558-ec2f-7ec6-65d7f62274b7@amd.com>
+References: <152fb29e-c558-ec2f-7ec6-65d7f62274b7@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Content-Language: en-US
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     alsa-devel@alsa-project.org, Linux PM <linux-pm@vger.kernel.org>
-References: <d9d76980-966a-e031-70d1-3254ba5be5eb@gmail.com>
- <s5hczmxgnm2.wl-tiwai@suse.de>
- <bc281416-e28d-4c18-2475-add92d38a554@gmail.com>
- <s5hczmwfe3x.wl-tiwai@suse.de>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: Warning due to "ALSA: hda: intel: More comprehensive PM runtime
- setup for controller driver"
-In-Reply-To: <s5hczmwfe3x.wl-tiwai@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19.11.2021 14:51, Takashi Iwai wrote:
-> On Thu, 18 Nov 2021 23:13:50 +0100,
-> Heiner Kallweit wrote:
->>
->> On 18.11.2021 22:28, Takashi Iwai wrote:
->>> On Thu, 18 Nov 2021 21:33:34 +0100,
->>> Heiner Kallweit wrote:
->>>>
->>>> I get the following warning caused by 4f66a9ef37d3 ("ALSA: hda: intel: More
->>>> comprehensive PM runtime setup for controller driver"):
->>>>
->>>> snd_hda_intel 0000:00:1f.3: Unbalanced pm_runtime_enable!
->>>>
->>>> Not sure how this patch was tested because the warning is obvious.
->>>> The patch doesn't consider what the PCI sub-system does with regard to
->>>> RPM. Have a look at pci_pm_init().
->>>>
->>>> I'd understand to add the call to pm_runtime_dont_use_autosuspend(),
->>>> but for all other added calls I see no justification.
->>>>
->>>> If being unsure about when to use which RPM call best involve
->>>> linux-pm@vger.kernel.org.
->>>
->>> Thanks for the notice.  It's been through Intel CI and tests on a few
->>> local machines, maybe we haven't checked carefully those errors but
->>> only concentrated on the other issues, as it seems.
->>>
->>> There were two problems: one was the runtime PM being kicked off even
->>> during the PCI driver remove call, and another was the proper runtime
->>> PM setup after re-binding.
->>>
->>
->> Having a look at the commit message of "ALSA: hda: fix general protection
->> fault in azx_runtime_idle" the following sounds weird:
->>
->>   - pci-driver.c:pm_runtime_put_sync() leads to a call
->>     to rpm_idle() which again calls azx_runtime_idle()
->>
->> rpm_idle() is only called if usage_count is 1 when entering
->> pm_runtime_put_sync. And this should not be the case.
->> pm_runtime_get_sync() increments the usage counter before remove()
->> is called, and remove() should also increment the usage counter.
->> This doesn't seem to happen. Maybe for whatever reason 
->> pm_runtime_get_noresume() isn't called in azx_free(), or azx_free()
->> isn't called from remove().
->> I think you should trace the call chain from the PCI core calling
->> remove() to pm_runtime_get_noresume() getting called or not.
+On Fri, 19 Nov 2021 14:38:58 -0600, Nathan Fontenot wrote:
+> On 11/19/21 4:30 AM, Huang Rui wrote:
+> > Expose the helper into cpufreq header, then cpufreq driver can use this
+> > function to get the sysfs value if it has any specific sysfs interfaces.
+> > 
+> > Signed-off-by: Huang Rui <ray.huang@amd.com>
+> > ---
+> >  tools/power/cpupower/lib/cpufreq.c | 21 +++++++++++++++------
+> >  tools/power/cpupower/lib/cpufreq.h | 12 ++++++++++++
+> >  2 files changed, 27 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/tools/power/cpupower/lib/cpufreq.c b/tools/power/cpupower/lib/cpufreq.c
+> > index c3b56db8b921..02719cc400a1 100644
+> > --- a/tools/power/cpupower/lib/cpufreq.c
+> > +++ b/tools/power/cpupower/lib/cpufreq.c
+> > @@ -83,20 +83,21 @@ static const char *cpufreq_value_files[MAX_CPUFREQ_VALUE_READ_FILES] = {
+> >  	[STATS_NUM_TRANSITIONS] = "stats/total_trans"
+> >  };
+> >  
+> > -
+> > -static unsigned long sysfs_cpufreq_get_one_value(unsigned int cpu,
+> > -						 enum cpufreq_value which)
+> > +unsigned long cpufreq_get_sysfs_value_from_table(unsigned int cpu,
+> > +						 const char **table,
+> > +						 unsigned index,
+> > +						 unsigned size)
+> >  {
+> >  	unsigned long value;
+> >  	unsigned int len;
+> >  	char linebuf[MAX_LINE_LEN];
+> >  	char *endp;
+> >  
+> > -	if (which >= MAX_CPUFREQ_VALUE_READ_FILES)
+> > +	if (!table && !table[index] && index >= size)
 > 
-> Neither of them, supposedly.  Now I took a deeper look at the code
-> around it and dug into the git log, and found that the likely problem
-> was the recent PCI core code refactoring (removal of pci->driver, etc)
-> that have been already reverted; that was why linux-next-20211109 was
-> broken and linux-next-20211110 worked.  With the leftover pci->driver,
-> the stale runtime PM callback was called at the pm_runtime_put_sync()
-> call in pci_device_remove().
+> Should you validate the index before accessing table[index]
 > 
-I also noticed that partially I was on the wrong path.
+>         if (!table && index >= size && !table[index])
 
-> In anyway, I'll drop the invalid calls of pm_runtime_enable() /
-> disable() & co.  Maybe keeping pm_runtime_forbid() and
-> pm_runtime_dont_use_autosuspend() at remove still makes some sense as
-> a counter-part for the probe calls, though.
-> 
-The call to pm_runtime_forbid() in pci_pm_init() is a heritage from
-early ACPI times when broken ACPI implementations had problems with RPM.
-There's a discussion (w/o result yet) to enable RPM per default for
-newer ACPI versions.
+The operator is wrong as well. I believe this is what was originally intended:
 
-Calling pm_runtime_forbid() in the driver removal path isn't strictly
-needed but it doesn't hurt.
+	if (!table || index >= size || !table[index])
 
-> 
-> thanks,
-> 
-> Takashi
-> 
-
+- Juuso
