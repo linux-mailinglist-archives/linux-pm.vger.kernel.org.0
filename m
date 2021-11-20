@@ -2,57 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E738457F1E
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Nov 2021 16:55:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C345D457F1F
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Nov 2021 16:55:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237290AbhKTP6s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 20 Nov 2021 10:58:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58090 "EHLO
+        id S237548AbhKTP6v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 20 Nov 2021 10:58:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231523AbhKTP6s (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 20 Nov 2021 10:58:48 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93EE2C061574
-        for <linux-pm@vger.kernel.org>; Sat, 20 Nov 2021 07:55:44 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id l22so57834840lfg.7
-        for <linux-pm@vger.kernel.org>; Sat, 20 Nov 2021 07:55:44 -0800 (PST)
+        with ESMTP id S231523AbhKTP6u (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 20 Nov 2021 10:58:50 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DACE0C061574
+        for <linux-pm@vger.kernel.org>; Sat, 20 Nov 2021 07:55:46 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id b40so58204934lfv.10
+        for <linux-pm@vger.kernel.org>; Sat, 20 Nov 2021 07:55:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=AOE19IUuZkgFZuqkdts/eH574SyOmJ6ioX0OCgMi7OI=;
-        b=Y8UoZatRTzSw4MWsz7PTqRYEOq0cvDJJwUG26tcieF2KYeiDWEZnSLnwBYCxQUnyAm
-         /nxnSDE84tptXZLjDOwGYKBCeD6P0/5teV2stVmfwKfSBnzkuAkYfwvgNEALgyG0eats
-         q1+ZrQmYaO9f3/fqULlVsqJcHrns3yKGlCOVSlo9Y4CDdqYVz+YpqADvP4xkuZ9w3ceN
-         Uh75/Wp+1SUwGcprz0XSHvukQcDSnWtx7RzA7lKe1HHgZIc9HX/kQ30+K+cjYwPFcJmO
-         UWJ8ESDJbOLj8YqAAWjdhtWxk6qxRf3NhuAPYzqoiTrBWxKKDP5KXekV/WrpIYlTYlip
-         5hcA==
+        bh=lO2GuLt3DdDJ4wv71iPoyrqonXMLK5fmNIVTy8GjvhY=;
+        b=JYtSqIgVCGDG4mRF4xwybZncCimjqUhQZGmwlu56l95SuTrsfxbXtvi+iu/mpvyrcc
+         XakOU5C8qPLzjPVfEUPEt1JDM6jutoIJLDbH3N/aDz2lwT/foRvx9IeVL34y8vm1y2Ni
+         xuVYp9q4QKjWW1h4iztLx7Oc7ZPbXXTzI1+8Qm1zlm30sAXlgyLMOFA81Ic20JomraTQ
+         qmdILT8PtTyY5d2tGGU+LwqF+GC0x7RXqy0W2jH5kR/n2vsGMFhIXCMOXiEFxW3nP1OE
+         grKojhyd0Ewa/IssHcVp5YOdyLowJr/XtHmVW+1dgbOBKuVRucvS+cTwDyd/FI22v28o
+         zwiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=AOE19IUuZkgFZuqkdts/eH574SyOmJ6ioX0OCgMi7OI=;
-        b=lDaX00+kE2b5F0H1gLDHBwWbo7IJ7ss1S5htFce/tynSJ1RuLFQgPdp3EPZzI6ZboJ
-         PVSfT2OynQ8oZ2odfXOmzzwj15oq/dfLM0CvbfKhC5cMVnSobeajG5HB4rFB4aNO6Fsm
-         higxlppu9DQ1aH8fEfEkFeLNmqw/B3D3sdLvySPeYK4h+lRedjKifl+LQnB1jbhNiPY+
-         HRmK/kH0WnYipxxm0s8RldqIGKkDrTu68f/589h0TtEfB/d1HhDmTXhBz0Of2MXzYE0t
-         8F10ZhuFEN6oU6p3BumzqRHe/WHFnHXsJmcE2aB41uc0GboU69z9WGnRLx/xNwTRriJz
-         m8WQ==
-X-Gm-Message-State: AOAM532C6FgliqtRKn4fB/djkNdmGUF7dbe16lvuD2/56dxYDdN+jnkX
-        V0QkHOiKoW77HHWG2bY7tXd5SjFc1TU0gQ==
-X-Google-Smtp-Source: ABdhPJxISKS0GF5RK47JVZeKF2GirshVjsHDp8DyfA7Mk3bR0KgjW8xnfjGcMlZHuogZc7NC5WsOuQ==
-X-Received: by 2002:a2e:918e:: with SMTP id f14mr34340011ljg.109.1637423742897;
-        Sat, 20 Nov 2021 07:55:42 -0800 (PST)
+        bh=lO2GuLt3DdDJ4wv71iPoyrqonXMLK5fmNIVTy8GjvhY=;
+        b=rA6nCZ3XQH+TenzV3M50RxyJNGCmsW7+4qSzXuRCactu2yG05WVY3GVTITIivhrXpP
+         gFCyvofCf9iRMJs0yXMefTqJjH33CNnNzWmfA+GJYjHw1UvJWrOdozEo3s5CV2qx/zLd
+         ayDXLdVyz2LVjrYFk4SbdszjfcvcVPwv9qQBCzaxkr4eYO8B0epHwUT8WHrdP6gNCmnh
+         VK3HykRN1Gk40kYfTQbTq/614U5fOdaLtrYm04fFe77TtJ2ccf5NFYFKkdUaGFwWGDdB
+         102DPCXXgus3hUFeoC850UsEs0UzaWZudDPDoyxwMQrxxpw4TwIhidbGaT7ek5YIgddI
+         e/mw==
+X-Gm-Message-State: AOAM530rtW8fNXXn92BOZ4UWYT4K2XH6EHN1LuHj0G6dIL9JIubf99jh
+        R8wNTPY3vH81aIc3OccUfy3Yc4SsIyMTAg==
+X-Google-Smtp-Source: ABdhPJzI9YEXk/tM2Quoyua3L4tpC8Kyjqhwj2wzw3r/sTwbF95q7JUw1fL4W+hWl9h3OQbwD2CjbQ==
+X-Received: by 2002:a2e:5d7:: with SMTP id 206mr35569587ljf.133.1637423745178;
+        Sat, 20 Nov 2021 07:55:45 -0800 (PST)
 Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id t12sm280922ljg.63.2021.11.20.07.55.41
+        by smtp.gmail.com with ESMTPSA id t12sm280922ljg.63.2021.11.20.07.55.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Nov 2021 07:55:41 -0800 (PST)
+        Sat, 20 Nov 2021 07:55:44 -0800 (PST)
 From:   Linus Walleij <linus.walleij@linaro.org>
 To:     Sebastian Reichel <sre@kernel.org>
 Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH v2 02/16] power: supply: ab8500: Sink current tables into charger code
-Date:   Sat, 20 Nov 2021 16:53:12 +0100
-Message-Id: <20211120155326.2891664-3-linus.walleij@linaro.org>
+Subject: [PATCH v2 03/16] power: supply: ab8500: Standardize operating temperature
+Date:   Sat, 20 Nov 2021 16:53:13 +0100
+Message-Id: <20211120155326.2891664-4-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211120155326.2891664-1-linus.walleij@linaro.org>
 References: <20211120155326.2891664-1-linus.walleij@linaro.org>
@@ -62,183 +62,234 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The two tables for input and output current translation from
-register values does not need to be passed around from the
-battery manager data. Just push it down into the charger code
-where it is used, like other tables in that code.
+Instead of storing the temperature limits in our custom
+struct struct ab8500_bm_data, make struct power_supply_battery_info
+a member of this and store the min and max temperatures inside
+that struct as the temp_min/temp_max and
+temp_alert_min/temp_alert_max respectively.
+
+The values can be assigned from the device tree, but if
+not present will be set to the same defaults as are currently
+in the code.
+
+This way we start to move over to using
+struct power_supply_battery_info and make it possible to move
+the data over to the device tree and we will move piece by
+piece toward using the standard info struct.
+
+Temperature hysteresis is currently not supported by the
+standard struct but we move the assignment here as well so
+that we have all parameterization in one spot.
 
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
 ChangeLog v1->v2:
-- Rebase on the other patches
+- Account for introducing power_supply_put_battery_info()
+  with a second remove() callback into bmdata.
 ---
- drivers/power/supply/ab8500-bm.h      |  8 ------
- drivers/power/supply/ab8500_bmdata.c  | 22 ----------------
- drivers/power/supply/ab8500_charger.c | 38 ++++++++++++++++++---------
- 3 files changed, 25 insertions(+), 43 deletions(-)
+ drivers/power/supply/ab8500-bm.h       | 12 +++----
+ drivers/power/supply/ab8500_bmdata.c   | 43 +++++++++++++++++++-------
+ drivers/power/supply/ab8500_chargalg.c | 20 ++++++------
+ drivers/power/supply/ab8500_charger.c  |  1 +
+ 4 files changed, 48 insertions(+), 28 deletions(-)
 
 diff --git a/drivers/power/supply/ab8500-bm.h b/drivers/power/supply/ab8500-bm.h
-index 33c7e15f5d96..bcb054810290 100644
+index bcb054810290..fe783610bc54 100644
 --- a/drivers/power/supply/ab8500-bm.h
 +++ b/drivers/power/supply/ab8500-bm.h
-@@ -484,10 +484,6 @@ struct ab8500_bm_charger_parameters {
-  * @interval_not_charging charge alg cycle period time when not charging (sec)
-  * @temp_hysteresis	temperature hysteresis
-  * @gnd_lift_resistance	Battery ground to phone ground resistance (mOhm)
-- * @n_chg_out_curr		number of elements in array chg_output_curr
-- * @n_chg_in_curr		number of elements in array chg_input_curr
-- * @chg_output_curr	charger output current level map
-- * @chg_input_curr		charger input current level map
-  * @maxi		maximization parameters
-  * @cap_levels		capacity in percent for the different capacity levels
-  * @bat_type		table of supported battery types
-@@ -519,10 +515,6 @@ struct ab8500_bm_data {
- 	int interval_not_charging;
- 	int temp_hysteresis;
- 	int gnd_lift_resistance;
--	int n_chg_out_curr;
--	int n_chg_in_curr;
--	int *chg_output_curr;
--	int *chg_input_curr;
- 	const struct ab8500_maxim_parameters *maxi;
- 	const struct ab8500_bm_capacity_levels *cap_levels;
- 	struct ab8500_battery_type *bat_type;
+@@ -460,10 +460,7 @@ struct ab8500_bm_charger_parameters {
+ 
+ /**
+  * struct ab8500_bm_data - ab8500 battery management data
+- * @temp_under		under this temp, charging is stopped
+- * @temp_low		between this temp and temp_under charging is reduced
+- * @temp_high		between this temp and temp_over charging is reduced
+- * @temp_over		over this temp, charging is stopped
++ * @bi			battery info from device tree
+  * @temp_now		present battery temperature
+  * @temp_interval_chg	temperature measurement interval in s when charging
+  * @temp_interval_nochg	temperature measurement interval in s when not charging
+@@ -491,10 +488,7 @@ struct ab8500_bm_charger_parameters {
+  * @fg_params		fuel gauge parameters
+  */
+ struct ab8500_bm_data {
+-	int temp_under;
+-	int temp_low;
+-	int temp_high;
+-	int temp_over;
++	struct power_supply_battery_info bi;
+ 	int temp_now;
+ 	int temp_interval_chg;
+ 	int temp_interval_nochg;
+@@ -564,6 +558,8 @@ int ab8500_fg_inst_curr_started(struct ab8500_fg *di);
+ int ab8500_fg_inst_curr_done(struct ab8500_fg *di);
+ int ab8500_bm_of_probe(struct power_supply *psy,
+ 		       struct ab8500_bm_data *bm);
++void ab8500_bm_of_remove(struct power_supply *psy,
++			 struct ab8500_bm_data *bm);
+ 
+ extern struct platform_driver ab8500_fg_driver;
+ extern struct platform_driver ab8500_btemp_driver;
 diff --git a/drivers/power/supply/ab8500_bmdata.c b/drivers/power/supply/ab8500_bmdata.c
-index a515dfad4c3f..6f6865c46926 100644
+index 6f6865c46926..41561b6adfd3 100644
 --- a/drivers/power/supply/ab8500_bmdata.c
 +++ b/drivers/power/supply/ab8500_bmdata.c
-@@ -436,24 +436,6 @@ static const struct ab8500_bm_charger_parameters chg = {
- 	.ac_curr_max		= 1500,
+@@ -5,6 +5,17 @@
+ 
+ #include "ab8500-bm.h"
+ 
++/* Default: under this temperature, charging is stopped */
++#define AB8500_TEMP_UNDER	3
++/* Default: between this temp and AB8500_TEMP_UNDER charging is reduced */
++#define AB8500_TEMP_LOW		8
++/* Default: between this temp and AB8500_TEMP_OVER charging is reduced */
++#define AB8500_TEMP_HIGH	43
++/* Default: over this temp, charging is stopped */
++#define AB8500_TEMP_OVER	48
++/* Default: temperature hysteresis */
++#define AB8500_TEMP_HYSTERESIS	3
++
+ /*
+  * These are the defined batteries that uses a NTC and ID resistor placed
+  * inside of the battery pack.
+@@ -437,10 +448,6 @@ static const struct ab8500_bm_charger_parameters chg = {
  };
  
--/*
-- * This array maps the raw hex value to charger output current used by the
-- * AB8500 values
-- */
--static int ab8500_charge_output_curr_map[] = {
--        100,    200,    300,    400,    500,    600,    700,    800,
--        900,    1000,   1100,   1200,   1300,   1400,   1500,   1500,
--};
--
--/*
-- * This array maps the raw hex value to charger input current used by the
-- * AB8500 values
-- */
--static int ab8500_charge_input_curr_map[] = {
--        50,     98,     193,    290,    380,    450,    500,    600,
--        700,    800,    900,    1000,   1100,   1300,   1400,   1500,
--};
--
  struct ab8500_bm_data ab8500_bm_data = {
- 	.temp_under             = 3,
- 	.temp_low               = 8,
-@@ -479,13 +461,9 @@ struct ab8500_bm_data ab8500_bm_data = {
+-	.temp_under             = 3,
+-	.temp_low               = 8,
+-	.temp_high              = 43,
+-	.temp_over              = 48,
+ 	.main_safety_tmr_h      = 4,
+ 	.temp_interval_chg      = 20,
+ 	.temp_interval_nochg    = 120,
+@@ -459,7 +466,6 @@ struct ab8500_bm_data ab8500_bm_data = {
+ 	.batt_id                = 0,
+ 	.interval_charging      = 5,
  	.interval_not_charging  = 120,
- 	.temp_hysteresis        = 3,
+-	.temp_hysteresis        = 3,
  	.gnd_lift_resistance    = 34,
--	.chg_output_curr        = ab8500_charge_output_curr_map,
--	.n_chg_out_curr         = ARRAY_SIZE(ab8500_charge_output_curr_map),
  	.maxi                   = &ab8500_maxi_params,
  	.chg_params             = &chg,
- 	.fg_params              = &fg,
--        .chg_input_curr         = ab8500_charge_input_curr_map,
--        .n_chg_in_curr          = ARRAY_SIZE(ab8500_charge_input_curr_map),
- };
+@@ -470,18 +476,29 @@ int ab8500_bm_of_probe(struct power_supply *psy,
+ 		       struct ab8500_bm_data *bm)
+ {
+ 	const struct batres_vs_temp *tmp_batres_tbl;
+-	struct power_supply_battery_info info;
++	struct power_supply_battery_info *bi = &bm->bi;
+ 	struct device *dev = &psy->dev;
+ 	int ret;
+ 	int i;
  
- int ab8500_bm_of_probe(struct power_supply *psy,
+-	ret = power_supply_get_battery_info(psy, &info);
++	ret = power_supply_get_battery_info(psy, bi);
+ 	if (ret) {
+ 		dev_err(dev, "cannot retrieve battery info\n");
+ 		return ret;
+ 	}
+ 
+-	if (info.technology == POWER_SUPPLY_TECHNOLOGY_LION) {
++	if (bi->temp_min == INT_MIN)
++		bi->temp_min = AB8500_TEMP_UNDER;
++	if (bi->temp_max == INT_MAX)
++		bi->temp_max = AB8500_TEMP_OVER;
++	if (bi->temp_alert_min == INT_MIN)
++		bi->temp_alert_min = AB8500_TEMP_LOW;
++	if (bi->temp_alert_max == INT_MAX)
++		bi->temp_alert_max = AB8500_TEMP_HIGH;
++	bm->temp_hysteresis = AB8500_TEMP_HYSTERESIS;
++
++
++	if (bi->technology == POWER_SUPPLY_TECHNOLOGY_LION) {
+ 		bm->no_maintenance  = true;
+ 		bm->chg_unknown_bat = true;
+ 		bm->bat_type[BATTERY_UNKNOWN].charge_full_design = 2600;
+@@ -492,7 +509,7 @@ int ab8500_bm_of_probe(struct power_supply *psy,
+ 	}
+ 
+ 	if (of_property_read_bool(psy->of_node, "thermistor-on-batctrl")) {
+-		if (info.technology == POWER_SUPPLY_TECHNOLOGY_LION)
++		if (bi->technology == POWER_SUPPLY_TECHNOLOGY_LION)
+ 			tmp_batres_tbl = temp_to_batres_tbl_9100;
+ 		else
+ 			tmp_batres_tbl = temp_to_batres_tbl_thermistor;
+@@ -507,7 +524,11 @@ int ab8500_bm_of_probe(struct power_supply *psy,
+ 	for (i = 0; i < bm->n_btypes; ++i)
+ 		bm->bat_type[i].batres_tbl = tmp_batres_tbl;
+ 
+-	power_supply_put_battery_info(psy, &info);
+-
+ 	return 0;
+ }
++
++void ab8500_bm_of_remove(struct power_supply *psy,
++			 struct ab8500_bm_data *bm)
++{
++	power_supply_put_battery_info(psy, &bm->bi);
++}
+diff --git a/drivers/power/supply/ab8500_chargalg.c b/drivers/power/supply/ab8500_chargalg.c
+index ff4b26b1ceca..9196434393e8 100644
+--- a/drivers/power/supply/ab8500_chargalg.c
++++ b/drivers/power/supply/ab8500_chargalg.c
+@@ -722,27 +722,29 @@ static void ab8500_chargalg_start_charging(struct ab8500_chargalg *di,
+  */
+ static void ab8500_chargalg_check_temp(struct ab8500_chargalg *di)
+ {
+-	if (di->batt_data.temp > (di->bm->temp_low + di->t_hyst_norm) &&
+-		di->batt_data.temp < (di->bm->temp_high - di->t_hyst_norm)) {
++	struct power_supply_battery_info *bi = &di->bm->bi;
++
++	if (di->batt_data.temp > (bi->temp_alert_min + di->t_hyst_norm) &&
++		di->batt_data.temp < (bi->temp_alert_max - di->t_hyst_norm)) {
+ 		/* Temp OK! */
+ 		di->events.btemp_underover = false;
+ 		di->events.btemp_lowhigh = false;
+ 		di->t_hyst_norm = 0;
+ 		di->t_hyst_lowhigh = 0;
+ 	} else {
+-		if (((di->batt_data.temp >= di->bm->temp_high) &&
++		if (((di->batt_data.temp >= bi->temp_alert_max) &&
+ 			(di->batt_data.temp <
+-				(di->bm->temp_over - di->t_hyst_lowhigh))) ||
++				(bi->temp_max - di->t_hyst_lowhigh))) ||
+ 			((di->batt_data.temp >
+-				(di->bm->temp_under + di->t_hyst_lowhigh)) &&
+-			(di->batt_data.temp <= di->bm->temp_low))) {
++				(bi->temp_min + di->t_hyst_lowhigh)) &&
++			(di->batt_data.temp <= bi->temp_alert_min))) {
+ 			/* TEMP minor!!!!! */
+ 			di->events.btemp_underover = false;
+ 			di->events.btemp_lowhigh = true;
+ 			di->t_hyst_norm = di->bm->temp_hysteresis;
+ 			di->t_hyst_lowhigh = 0;
+-		} else if (di->batt_data.temp <= di->bm->temp_under ||
+-			di->batt_data.temp >= di->bm->temp_over) {
++		} else if (di->batt_data.temp <= bi->temp_min ||
++			di->batt_data.temp >= bi->temp_max) {
+ 			/* TEMP major!!!!! */
+ 			di->events.btemp_underover = true;
+ 			di->events.btemp_lowhigh = false;
+@@ -1722,7 +1724,7 @@ static int ab8500_chargalg_get_property(struct power_supply *psy,
+ 		if (di->events.batt_ovv) {
+ 			val->intval = POWER_SUPPLY_HEALTH_OVERVOLTAGE;
+ 		} else if (di->events.btemp_underover) {
+-			if (di->batt_data.temp <= di->bm->temp_under)
++			if (di->batt_data.temp <= di->bm->bi.temp_min)
+ 				val->intval = POWER_SUPPLY_HEALTH_COLD;
+ 			else
+ 				val->intval = POWER_SUPPLY_HEALTH_OVERHEAT;
 diff --git a/drivers/power/supply/ab8500_charger.c b/drivers/power/supply/ab8500_charger.c
-index 59ca9c0b8012..32c2046ea6bb 100644
+index 32c2046ea6bb..7a151cd97399 100644
 --- a/drivers/power/supply/ab8500_charger.c
 +++ b/drivers/power/supply/ab8500_charger.c
-@@ -1025,21 +1025,33 @@ static int ab8500_voltage_to_regval(int voltage)
- 		return -1;
- }
+@@ -3709,6 +3709,7 @@ static int ab8500_charger_remove(struct platform_device *pdev)
+ 	component_master_del(&pdev->dev, &ab8500_charger_comp_ops);
  
-+/* This array maps the raw register value to charger input current */
-+static int ab8500_charge_input_curr_map[] = {
-+	50, 98, 193, 290, 380, 450, 500, 600,
-+	700, 800, 900, 1000, 1100, 1300, 1400, 1500,
-+};
-+
-+/* This array maps the raw register value to charger output current */
-+static int ab8500_charge_output_curr_map[] = {
-+	100, 200, 300, 400, 500, 600, 700, 800,
-+	900, 1000, 1100, 1200, 1300, 1400, 1500, 1500,
-+};
-+
- static int ab8500_current_to_regval(struct ab8500_charger *di, int curr)
- {
- 	int i;
- 
--	if (curr < di->bm->chg_output_curr[0])
-+	if (curr < ab8500_charge_output_curr_map[0])
- 		return 0;
- 
--	for (i = 0; i < di->bm->n_chg_out_curr; i++) {
--		if (curr < di->bm->chg_output_curr[i])
-+	for (i = 0; i < ARRAY_SIZE(ab8500_charge_output_curr_map); i++) {
-+		if (curr < ab8500_charge_output_curr_map[i])
- 			return i - 1;
- 	}
- 
- 	/* If not last element, return error */
--	i = di->bm->n_chg_out_curr - 1;
--	if (curr == di->bm->chg_output_curr[i])
-+	i =  ARRAY_SIZE(ab8500_charge_output_curr_map) - 1;
-+	if (curr == ab8500_charge_output_curr_map[i])
- 		return i;
- 	else
- 		return -1;
-@@ -1049,17 +1061,17 @@ static int ab8500_vbus_in_curr_to_regval(struct ab8500_charger *di, int curr)
- {
- 	int i;
- 
--	if (curr < di->bm->chg_input_curr[0])
-+	if (curr < ab8500_charge_input_curr_map[0])
- 		return 0;
- 
--	for (i = 0; i < di->bm->n_chg_in_curr; i++) {
--		if (curr < di->bm->chg_input_curr[i])
-+	for (i = 0; i < ARRAY_SIZE(ab8500_charge_input_curr_map); i++) {
-+		if (curr < ab8500_charge_input_curr_map[i])
- 			return i - 1;
- 	}
- 
- 	/* If not last element, return error */
--	i = di->bm->n_chg_in_curr - 1;
--	if (curr == di->bm->chg_input_curr[i])
-+	i =  ARRAY_SIZE(ab8500_charge_input_curr_map) - 1;
-+	if (curr == ab8500_charge_input_curr_map[i])
- 		return i;
- 	else
- 		return -1;
-@@ -2673,7 +2685,7 @@ static void ab8500_charger_vbus_drop_end_work(struct work_struct *work)
- 		return;
- 	}
- 
--	curr = di->bm->chg_input_curr[
-+	curr = ab8500_charge_input_curr_map[
- 		reg_value >> AUTO_VBUS_IN_CURR_LIM_SHIFT];
- 
- 	if (di->max_usb_in_curr.calculated_max != curr) {
-@@ -3503,7 +3515,7 @@ static int ab8500_charger_probe(struct platform_device *pdev)
- 	di->ac_chg.max_out_volt = ab8500_charger_voltage_map[
- 		ARRAY_SIZE(ab8500_charger_voltage_map) - 1];
- 	di->ac_chg.max_out_curr =
--		di->bm->chg_output_curr[di->bm->n_chg_out_curr - 1];
-+		ab8500_charge_output_curr_map[ARRAY_SIZE(ab8500_charge_output_curr_map) - 1];
- 	di->ac_chg.wdt_refresh = CHG_WD_INTERVAL;
- 	/*
- 	 * The AB8505 only supports USB charging. If we are not the
-@@ -3524,7 +3536,7 @@ static int ab8500_charger_probe(struct platform_device *pdev)
- 	di->usb_chg.max_out_volt = ab8500_charger_voltage_map[
- 		ARRAY_SIZE(ab8500_charger_voltage_map) - 1];
- 	di->usb_chg.max_out_curr =
--		di->bm->chg_output_curr[di->bm->n_chg_out_curr - 1];
-+		ab8500_charge_output_curr_map[ARRAY_SIZE(ab8500_charge_output_curr_map) - 1];
- 	di->usb_chg.wdt_refresh = CHG_WD_INTERVAL;
- 	di->usb_chg.external = false;
- 	di->usb_state.usb_current = -1;
+ 	usb_unregister_notifier(di->usb_phy, &di->nb);
++	ab8500_bm_of_remove(di->usb_chg.psy, di->bm);
+ 	usb_put_phy(di->usb_phy);
+ 	if (!di->ac_chg.enabled)
+ 		blocking_notifier_chain_unregister(
 -- 
 2.31.1
 
