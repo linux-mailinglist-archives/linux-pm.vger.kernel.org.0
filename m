@@ -2,57 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C345D457F1F
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Nov 2021 16:55:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F08D2457F20
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Nov 2021 16:55:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237548AbhKTP6v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 20 Nov 2021 10:58:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58100 "EHLO
+        id S237553AbhKTP6x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 20 Nov 2021 10:58:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231523AbhKTP6u (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 20 Nov 2021 10:58:50 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DACE0C061574
-        for <linux-pm@vger.kernel.org>; Sat, 20 Nov 2021 07:55:46 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id b40so58204934lfv.10
-        for <linux-pm@vger.kernel.org>; Sat, 20 Nov 2021 07:55:46 -0800 (PST)
+        with ESMTP id S231523AbhKTP6w (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 20 Nov 2021 10:58:52 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 239A9C061574
+        for <linux-pm@vger.kernel.org>; Sat, 20 Nov 2021 07:55:49 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id bu18so58329763lfb.0
+        for <linux-pm@vger.kernel.org>; Sat, 20 Nov 2021 07:55:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=lO2GuLt3DdDJ4wv71iPoyrqonXMLK5fmNIVTy8GjvhY=;
-        b=JYtSqIgVCGDG4mRF4xwybZncCimjqUhQZGmwlu56l95SuTrsfxbXtvi+iu/mpvyrcc
-         XakOU5C8qPLzjPVfEUPEt1JDM6jutoIJLDbH3N/aDz2lwT/foRvx9IeVL34y8vm1y2Ni
-         xuVYp9q4QKjWW1h4iztLx7Oc7ZPbXXTzI1+8Qm1zlm30sAXlgyLMOFA81Ic20JomraTQ
-         qmdILT8PtTyY5d2tGGU+LwqF+GC0x7RXqy0W2jH5kR/n2vsGMFhIXCMOXiEFxW3nP1OE
-         grKojhyd0Ewa/IssHcVp5YOdyLowJr/XtHmVW+1dgbOBKuVRucvS+cTwDyd/FI22v28o
-         zwiw==
+        bh=HQJHrneVLxLCKSJoG6T7ihoqvgYnDLkm9jiKufU6Rk4=;
+        b=rQd82RSD/APc/50LIMY/pYftzlN1DYbEu0YNTgdnbNZbs78APdEfvYTNrafpwz4+vb
+         UokPzE8b5pleAosxdAFJe9PinVs8X8gkRIm1X63kktZ20aQRSNEpNuKUrYzEJBczbw6b
+         ZWGIe631DiPrw70q7M1PQCdPHG7zvi+ZYrG6ZUoSbEdh6pzAifEOZUqPYjMywQkqdakI
+         T5xetKRLylmMjaFaIbzESV7X45Q5I7jXr31A4bUzfXSy7PpEwlFqfSek3nDNBaSB4N5f
+         XgnYDc0fSJUHh5UIot2r606tRL6264ZnByb8S/nFG5T3nyM8Ry/dACvezMQO7wLR1F7y
+         emSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=lO2GuLt3DdDJ4wv71iPoyrqonXMLK5fmNIVTy8GjvhY=;
-        b=rA6nCZ3XQH+TenzV3M50RxyJNGCmsW7+4qSzXuRCactu2yG05WVY3GVTITIivhrXpP
-         gFCyvofCf9iRMJs0yXMefTqJjH33CNnNzWmfA+GJYjHw1UvJWrOdozEo3s5CV2qx/zLd
-         ayDXLdVyz2LVjrYFk4SbdszjfcvcVPwv9qQBCzaxkr4eYO8B0epHwUT8WHrdP6gNCmnh
-         VK3HykRN1Gk40kYfTQbTq/614U5fOdaLtrYm04fFe77TtJ2ccf5NFYFKkdUaGFwWGDdB
-         102DPCXXgus3hUFeoC850UsEs0UzaWZudDPDoyxwMQrxxpw4TwIhidbGaT7ek5YIgddI
-         e/mw==
-X-Gm-Message-State: AOAM530rtW8fNXXn92BOZ4UWYT4K2XH6EHN1LuHj0G6dIL9JIubf99jh
-        R8wNTPY3vH81aIc3OccUfy3Yc4SsIyMTAg==
-X-Google-Smtp-Source: ABdhPJzI9YEXk/tM2Quoyua3L4tpC8Kyjqhwj2wzw3r/sTwbF95q7JUw1fL4W+hWl9h3OQbwD2CjbQ==
-X-Received: by 2002:a2e:5d7:: with SMTP id 206mr35569587ljf.133.1637423745178;
-        Sat, 20 Nov 2021 07:55:45 -0800 (PST)
+        bh=HQJHrneVLxLCKSJoG6T7ihoqvgYnDLkm9jiKufU6Rk4=;
+        b=w5hycx8aaOwty1iuNdblfikoyo63pKii6f3vOHJRfHZWi0FoR4YPgjynWw19VOm+lJ
+         hq9yq8QYUVYo73StJ7NEICFTgHWrFiPe1CJy/jAZAT4+hDXLxsw5OMAw4qX8NbEUYQh3
+         pfr/CVptFCaNphFqYbfvSXbOqYn0usxRu5HJuIloTTSECDZaoYogGGAcpEkaTE5nflsE
+         ILzchnskeHuJRWcXB1nX+hSCaO2QkmvN4vS427FVIgr99L1+a9NnYIX20i/f5dMI8ARH
+         +gbXWkejiaHhuliwILHJf861DqsG18IKDGnQq6tg+FMBvJzKmdIdSreuv9NDZGUlpQIl
+         odAw==
+X-Gm-Message-State: AOAM530vTZJ+VopICm85LbsP5Io06yadlHGNUtZ/SwAbFoW16MXg4ir8
+        ynjaVWiM+V7AySbk3+wdbRFy+QGf75zCpw==
+X-Google-Smtp-Source: ABdhPJwhom9UcOBJFoFC2JqUgnbeKLOw8Og0W1HQNb6VZbQkKD6K63doyvNqz8Oth/ZBDjvmBC0kqA==
+X-Received: by 2002:a05:6512:31c4:: with SMTP id j4mr42852663lfe.173.1637423747457;
+        Sat, 20 Nov 2021 07:55:47 -0800 (PST)
 Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id t12sm280922ljg.63.2021.11.20.07.55.43
+        by smtp.gmail.com with ESMTPSA id t12sm280922ljg.63.2021.11.20.07.55.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Nov 2021 07:55:44 -0800 (PST)
+        Sat, 20 Nov 2021 07:55:46 -0800 (PST)
 From:   Linus Walleij <linus.walleij@linaro.org>
 To:     Sebastian Reichel <sre@kernel.org>
 Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH v2 03/16] power: supply: ab8500: Standardize operating temperature
-Date:   Sat, 20 Nov 2021 16:53:13 +0100
-Message-Id: <20211120155326.2891664-4-linus.walleij@linaro.org>
+Subject: [PATCH v2 04/16] power: supply: ab8500: Drop unused battery types
+Date:   Sat, 20 Nov 2021 16:53:14 +0100
+Message-Id: <20211120155326.2891664-5-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211120155326.2891664-1-linus.walleij@linaro.org>
 References: <20211120155326.2891664-1-linus.walleij@linaro.org>
@@ -62,234 +62,267 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Instead of storing the temperature limits in our custom
-struct struct ab8500_bm_data, make struct power_supply_battery_info
-a member of this and store the min and max temperatures inside
-that struct as the temp_min/temp_max and
-temp_alert_min/temp_alert_max respectively.
+The code tries to detect a lot of battery variants on the reference
+designs, but we are not using the reference designs in practice, we
+are using real products such as Samsung Phones.
 
-The values can be assigned from the device tree, but if
-not present will be set to the same defaults as are currently
-in the code.
+The reference design with no battery plugged in will be detected as
+a LIPO battery with a thermistor on the batctrl pin so we will
+assume this and later on we can support other types through the
+device tree if we want, just like the products do.
 
-This way we start to move over to using
-struct power_supply_battery_info and make it possible to move
-the data over to the device tree and we will move piece by
-piece toward using the standard info struct.
+Drop the tables for external thermistor, only keep the internal
+thermistor tables that we will use as default.
 
-Temperature hysteresis is currently not supported by the
-standard struct but we move the assignment here as well so
-that we have all parameterization in one spot.
+We can delete the assignment of the temperature to resistance table
+since the default will be the only and correct option.
+
+Also get rid of some unused variables and unused exports.
 
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
 ChangeLog v1->v2:
-- Account for introducing power_supply_put_battery_info()
-  with a second remove() callback into bmdata.
+- Rebase on the other patches.
 ---
- drivers/power/supply/ab8500-bm.h       | 12 +++----
- drivers/power/supply/ab8500_bmdata.c   | 43 +++++++++++++++++++-------
- drivers/power/supply/ab8500_chargalg.c | 20 ++++++------
- drivers/power/supply/ab8500_charger.c  |  1 +
- 4 files changed, 48 insertions(+), 28 deletions(-)
+ drivers/power/supply/ab8500_bmdata.c | 180 +--------------------------
+ 1 file changed, 1 insertion(+), 179 deletions(-)
 
-diff --git a/drivers/power/supply/ab8500-bm.h b/drivers/power/supply/ab8500-bm.h
-index bcb054810290..fe783610bc54 100644
---- a/drivers/power/supply/ab8500-bm.h
-+++ b/drivers/power/supply/ab8500-bm.h
-@@ -460,10 +460,7 @@ struct ab8500_bm_charger_parameters {
- 
- /**
-  * struct ab8500_bm_data - ab8500 battery management data
-- * @temp_under		under this temp, charging is stopped
-- * @temp_low		between this temp and temp_under charging is reduced
-- * @temp_high		between this temp and temp_over charging is reduced
-- * @temp_over		over this temp, charging is stopped
-+ * @bi			battery info from device tree
-  * @temp_now		present battery temperature
-  * @temp_interval_chg	temperature measurement interval in s when charging
-  * @temp_interval_nochg	temperature measurement interval in s when not charging
-@@ -491,10 +488,7 @@ struct ab8500_bm_charger_parameters {
-  * @fg_params		fuel gauge parameters
-  */
- struct ab8500_bm_data {
--	int temp_under;
--	int temp_low;
--	int temp_high;
--	int temp_over;
-+	struct power_supply_battery_info bi;
- 	int temp_now;
- 	int temp_interval_chg;
- 	int temp_interval_nochg;
-@@ -564,6 +558,8 @@ int ab8500_fg_inst_curr_started(struct ab8500_fg *di);
- int ab8500_fg_inst_curr_done(struct ab8500_fg *di);
- int ab8500_bm_of_probe(struct power_supply *psy,
- 		       struct ab8500_bm_data *bm);
-+void ab8500_bm_of_remove(struct power_supply *psy,
-+			 struct ab8500_bm_data *bm);
- 
- extern struct platform_driver ab8500_fg_driver;
- extern struct platform_driver ab8500_btemp_driver;
 diff --git a/drivers/power/supply/ab8500_bmdata.c b/drivers/power/supply/ab8500_bmdata.c
-index 6f6865c46926..41561b6adfd3 100644
+index 41561b6adfd3..8235c984e724 100644
 --- a/drivers/power/supply/ab8500_bmdata.c
 +++ b/drivers/power/supply/ab8500_bmdata.c
-@@ -5,6 +5,17 @@
+@@ -39,10 +39,6 @@ const struct ab8500_res_to_temp ab8500_temp_tbl_a_thermistor[] = {
+ 	{60, 13437},
+ 	{65, 12500},
+ };
+-EXPORT_SYMBOL(ab8500_temp_tbl_a_thermistor);
+-
+-const int ab8500_temp_tbl_a_size = ARRAY_SIZE(ab8500_temp_tbl_a_thermistor);
+-EXPORT_SYMBOL(ab8500_temp_tbl_a_size);
  
- #include "ab8500-bm.h"
+ const struct ab8500_res_to_temp ab8500_temp_tbl_b_thermistor[] = {
+ 	{-5, 200000},
+@@ -61,10 +57,6 @@ const struct ab8500_res_to_temp ab8500_temp_tbl_b_thermistor[] = {
+ 	{60,  85461},
+ 	{65,  82869},
+ };
+-EXPORT_SYMBOL(ab8500_temp_tbl_b_thermistor);
+-
+-const int ab8500_temp_tbl_b_size = ARRAY_SIZE(ab8500_temp_tbl_b_thermistor);
+-EXPORT_SYMBOL(ab8500_temp_tbl_b_size);
  
-+/* Default: under this temperature, charging is stopped */
-+#define AB8500_TEMP_UNDER	3
-+/* Default: between this temp and AB8500_TEMP_UNDER charging is reduced */
-+#define AB8500_TEMP_LOW		8
-+/* Default: between this temp and AB8500_TEMP_OVER charging is reduced */
-+#define AB8500_TEMP_HIGH	43
-+/* Default: over this temp, charging is stopped */
-+#define AB8500_TEMP_OVER	48
-+/* Default: temperature hysteresis */
-+#define AB8500_TEMP_HYSTERESIS	3
-+
- /*
-  * These are the defined batteries that uses a NTC and ID resistor placed
-  * inside of the battery pack.
-@@ -437,10 +448,6 @@ static const struct ab8500_bm_charger_parameters chg = {
+ static const struct ab8500_v_to_cap cap_tbl_a_thermistor[] = {
+ 	{4171,	100},
+@@ -175,31 +167,6 @@ static const struct batres_vs_temp temp_to_batres_tbl_thermistor[] = {
+ 	{-20, 595},
  };
  
+-/*
+- * Note that the batres_vs_temp table must be strictly sorted by falling
+- * temperature values to work.
+- */
+-static const struct batres_vs_temp temp_to_batres_tbl_ext_thermistor[] = {
+-	{ 60, 300},
+-	{ 30, 300},
+-	{ 20, 300},
+-	{ 10, 300},
+-	{ 00, 300},
+-	{-10, 300},
+-	{-20, 300},
+-};
+-
+-/* battery resistance table for LI ION 9100 battery */
+-static const struct batres_vs_temp temp_to_batres_tbl_9100[] = {
+-	{ 60, 180},
+-	{ 30, 180},
+-	{ 20, 180},
+-	{ 10, 180},
+-	{ 00, 180},
+-	{-10, 180},
+-	{-20, 180},
+-};
+-
+ static struct ab8500_battery_type bat_type_thermistor[] = {
+ 	[BATTERY_UNKNOWN] = {
+ 		/* First element always represent the UNKNOWN battery */
+@@ -286,123 +253,6 @@ static struct ab8500_battery_type bat_type_thermistor[] = {
+ 	},
+ };
+ 
+-static struct ab8500_battery_type bat_type_ext_thermistor[] = {
+-	[BATTERY_UNKNOWN] = {
+-		/* First element always represent the UNKNOWN battery */
+-		.name = POWER_SUPPLY_TECHNOLOGY_UNKNOWN,
+-		.resis_high = 0,
+-		.resis_low = 0,
+-		.battery_resistance = 300,
+-		.charge_full_design = 612,
+-		.nominal_voltage = 3700,
+-		.termination_vol = 4050,
+-		.termination_curr = 200,
+-		.recharge_cap = 95,
+-		.normal_cur_lvl = 400,
+-		.normal_vol_lvl = 4100,
+-		.maint_a_cur_lvl = 400,
+-		.maint_a_vol_lvl = 4050,
+-		.maint_a_chg_timer_h = 60,
+-		.maint_b_cur_lvl = 400,
+-		.maint_b_vol_lvl = 4000,
+-		.maint_b_chg_timer_h = 200,
+-		.low_high_cur_lvl = 300,
+-		.low_high_vol_lvl = 4000,
+-		.n_temp_tbl_elements = ARRAY_SIZE(temp_tbl),
+-		.r_to_t_tbl = temp_tbl,
+-		.n_v_cap_tbl_elements = ARRAY_SIZE(cap_tbl),
+-		.v_to_cap_tbl = cap_tbl,
+-		.n_batres_tbl_elements = ARRAY_SIZE(temp_to_batres_tbl_thermistor),
+-		.batres_tbl = temp_to_batres_tbl_thermistor,
+-	},
+-/*
+- * These are the batteries that doesn't have an internal NTC resistor to measure
+- * its temperature. The temperature in this case is measure with a NTC placed
+- * near the battery but on the PCB.
+- */
+-	{
+-		.name = POWER_SUPPLY_TECHNOLOGY_LIPO,
+-		.resis_high = 76000,
+-		.resis_low = 53000,
+-		.battery_resistance = 300,
+-		.charge_full_design = 900,
+-		.nominal_voltage = 3700,
+-		.termination_vol = 4150,
+-		.termination_curr = 100,
+-		.recharge_cap = 95,
+-		.normal_cur_lvl = 700,
+-		.normal_vol_lvl = 4200,
+-		.maint_a_cur_lvl = 600,
+-		.maint_a_vol_lvl = 4150,
+-		.maint_a_chg_timer_h = 60,
+-		.maint_b_cur_lvl = 600,
+-		.maint_b_vol_lvl = 4100,
+-		.maint_b_chg_timer_h = 200,
+-		.low_high_cur_lvl = 300,
+-		.low_high_vol_lvl = 4000,
+-		.n_temp_tbl_elements = ARRAY_SIZE(temp_tbl),
+-		.r_to_t_tbl = temp_tbl,
+-		.n_v_cap_tbl_elements = ARRAY_SIZE(cap_tbl),
+-		.v_to_cap_tbl = cap_tbl,
+-		.n_batres_tbl_elements = ARRAY_SIZE(temp_to_batres_tbl_thermistor),
+-		.batres_tbl = temp_to_batres_tbl_thermistor,
+-	},
+-	{
+-		.name = POWER_SUPPLY_TECHNOLOGY_LION,
+-		.resis_high = 30000,
+-		.resis_low = 10000,
+-		.battery_resistance = 300,
+-		.charge_full_design = 950,
+-		.nominal_voltage = 3700,
+-		.termination_vol = 4150,
+-		.termination_curr = 100,
+-		.recharge_cap = 95,
+-		.normal_cur_lvl = 700,
+-		.normal_vol_lvl = 4200,
+-		.maint_a_cur_lvl = 600,
+-		.maint_a_vol_lvl = 4150,
+-		.maint_a_chg_timer_h = 60,
+-		.maint_b_cur_lvl = 600,
+-		.maint_b_vol_lvl = 4100,
+-		.maint_b_chg_timer_h = 200,
+-		.low_high_cur_lvl = 300,
+-		.low_high_vol_lvl = 4000,
+-		.n_temp_tbl_elements = ARRAY_SIZE(temp_tbl),
+-		.r_to_t_tbl = temp_tbl,
+-		.n_v_cap_tbl_elements = ARRAY_SIZE(cap_tbl),
+-		.v_to_cap_tbl = cap_tbl,
+-		.n_batres_tbl_elements = ARRAY_SIZE(temp_to_batres_tbl_thermistor),
+-		.batres_tbl = temp_to_batres_tbl_thermistor,
+-	},
+-	{
+-		.name = POWER_SUPPLY_TECHNOLOGY_LION,
+-		.resis_high = 95000,
+-		.resis_low = 76001,
+-		.battery_resistance = 300,
+-		.charge_full_design = 950,
+-		.nominal_voltage = 3700,
+-		.termination_vol = 4150,
+-		.termination_curr = 100,
+-		.recharge_cap = 95,
+-		.normal_cur_lvl = 700,
+-		.normal_vol_lvl = 4200,
+-		.maint_a_cur_lvl = 600,
+-		.maint_a_vol_lvl = 4150,
+-		.maint_a_chg_timer_h = 60,
+-		.maint_b_cur_lvl = 600,
+-		.maint_b_vol_lvl = 4100,
+-		.maint_b_chg_timer_h = 200,
+-		.low_high_cur_lvl = 300,
+-		.low_high_vol_lvl = 4000,
+-		.n_temp_tbl_elements = ARRAY_SIZE(temp_tbl),
+-		.r_to_t_tbl = temp_tbl,
+-		.n_v_cap_tbl_elements = ARRAY_SIZE(cap_tbl),
+-		.v_to_cap_tbl = cap_tbl,
+-		.n_batres_tbl_elements = ARRAY_SIZE(temp_to_batres_tbl_thermistor),
+-		.batres_tbl = temp_to_batres_tbl_thermistor,
+-	},
+-};
+-
+ static const struct ab8500_bm_capacity_levels cap_levels = {
+ 	.critical	= 2,
+ 	.low		= 10,
+@@ -447,6 +297,7 @@ static const struct ab8500_bm_charger_parameters chg = {
+ 	.ac_curr_max		= 1500,
+ };
+ 
++/* This is referenced directly in the charger code */
  struct ab8500_bm_data ab8500_bm_data = {
--	.temp_under             = 3,
--	.temp_low               = 8,
--	.temp_high              = 43,
--	.temp_over              = 48,
  	.main_safety_tmr_h      = 4,
  	.temp_interval_chg      = 20,
- 	.temp_interval_nochg    = 120,
-@@ -459,7 +466,6 @@ struct ab8500_bm_data ab8500_bm_data = {
- 	.batt_id                = 0,
- 	.interval_charging      = 5,
- 	.interval_not_charging  = 120,
--	.temp_hysteresis        = 3,
- 	.gnd_lift_resistance    = 34,
- 	.maxi                   = &ab8500_maxi_params,
- 	.chg_params             = &chg,
-@@ -470,18 +476,29 @@ int ab8500_bm_of_probe(struct power_supply *psy,
+@@ -475,11 +326,9 @@ struct ab8500_bm_data ab8500_bm_data = {
+ int ab8500_bm_of_probe(struct power_supply *psy,
  		       struct ab8500_bm_data *bm)
  {
- 	const struct batres_vs_temp *tmp_batres_tbl;
--	struct power_supply_battery_info info;
-+	struct power_supply_battery_info *bi = &bm->bi;
+-	const struct batres_vs_temp *tmp_batres_tbl;
+ 	struct power_supply_battery_info *bi = &bm->bi;
  	struct device *dev = &psy->dev;
  	int ret;
- 	int i;
+-	int i;
  
--	ret = power_supply_get_battery_info(psy, &info);
-+	ret = power_supply_get_battery_info(psy, bi);
+ 	ret = power_supply_get_battery_info(psy, bi);
  	if (ret) {
- 		dev_err(dev, "cannot retrieve battery info\n");
- 		return ret;
- 	}
+@@ -497,33 +346,6 @@ int ab8500_bm_of_probe(struct power_supply *psy,
+ 		bi->temp_alert_max = AB8500_TEMP_HIGH;
+ 	bm->temp_hysteresis = AB8500_TEMP_HYSTERESIS;
  
--	if (info.technology == POWER_SUPPLY_TECHNOLOGY_LION) {
-+	if (bi->temp_min == INT_MIN)
-+		bi->temp_min = AB8500_TEMP_UNDER;
-+	if (bi->temp_max == INT_MAX)
-+		bi->temp_max = AB8500_TEMP_OVER;
-+	if (bi->temp_alert_min == INT_MIN)
-+		bi->temp_alert_min = AB8500_TEMP_LOW;
-+	if (bi->temp_alert_max == INT_MAX)
-+		bi->temp_alert_max = AB8500_TEMP_HIGH;
-+	bm->temp_hysteresis = AB8500_TEMP_HYSTERESIS;
-+
-+
-+	if (bi->technology == POWER_SUPPLY_TECHNOLOGY_LION) {
- 		bm->no_maintenance  = true;
- 		bm->chg_unknown_bat = true;
- 		bm->bat_type[BATTERY_UNKNOWN].charge_full_design = 2600;
-@@ -492,7 +509,7 @@ int ab8500_bm_of_probe(struct power_supply *psy,
- 	}
- 
- 	if (of_property_read_bool(psy->of_node, "thermistor-on-batctrl")) {
--		if (info.technology == POWER_SUPPLY_TECHNOLOGY_LION)
-+		if (bi->technology == POWER_SUPPLY_TECHNOLOGY_LION)
- 			tmp_batres_tbl = temp_to_batres_tbl_9100;
- 		else
- 			tmp_batres_tbl = temp_to_batres_tbl_thermistor;
-@@ -507,7 +524,11 @@ int ab8500_bm_of_probe(struct power_supply *psy,
- 	for (i = 0; i < bm->n_btypes; ++i)
- 		bm->bat_type[i].batres_tbl = tmp_batres_tbl;
- 
--	power_supply_put_battery_info(psy, &info);
+-
+-	if (bi->technology == POWER_SUPPLY_TECHNOLOGY_LION) {
+-		bm->no_maintenance  = true;
+-		bm->chg_unknown_bat = true;
+-		bm->bat_type[BATTERY_UNKNOWN].charge_full_design = 2600;
+-		bm->bat_type[BATTERY_UNKNOWN].termination_vol    = 4150;
+-		bm->bat_type[BATTERY_UNKNOWN].recharge_cap       = 95;
+-		bm->bat_type[BATTERY_UNKNOWN].normal_cur_lvl     = 520;
+-		bm->bat_type[BATTERY_UNKNOWN].normal_vol_lvl     = 4200;
+-	}
+-
+-	if (of_property_read_bool(psy->of_node, "thermistor-on-batctrl")) {
+-		if (bi->technology == POWER_SUPPLY_TECHNOLOGY_LION)
+-			tmp_batres_tbl = temp_to_batres_tbl_9100;
+-		else
+-			tmp_batres_tbl = temp_to_batres_tbl_thermistor;
+-	} else {
+-		bm->n_btypes   = 4;
+-		bm->bat_type   = bat_type_ext_thermistor;
+-		bm->adc_therm  = AB8500_ADC_THERM_BATTEMP;
+-		tmp_batres_tbl = temp_to_batres_tbl_ext_thermistor;
+-	}
+-
+-	/* select the battery resolution table */
+-	for (i = 0; i < bm->n_btypes; ++i)
+-		bm->bat_type[i].batres_tbl = tmp_batres_tbl;
 -
  	return 0;
  }
-+
-+void ab8500_bm_of_remove(struct power_supply *psy,
-+			 struct ab8500_bm_data *bm)
-+{
-+	power_supply_put_battery_info(psy, &bm->bi);
-+}
-diff --git a/drivers/power/supply/ab8500_chargalg.c b/drivers/power/supply/ab8500_chargalg.c
-index ff4b26b1ceca..9196434393e8 100644
---- a/drivers/power/supply/ab8500_chargalg.c
-+++ b/drivers/power/supply/ab8500_chargalg.c
-@@ -722,27 +722,29 @@ static void ab8500_chargalg_start_charging(struct ab8500_chargalg *di,
-  */
- static void ab8500_chargalg_check_temp(struct ab8500_chargalg *di)
- {
--	if (di->batt_data.temp > (di->bm->temp_low + di->t_hyst_norm) &&
--		di->batt_data.temp < (di->bm->temp_high - di->t_hyst_norm)) {
-+	struct power_supply_battery_info *bi = &di->bm->bi;
-+
-+	if (di->batt_data.temp > (bi->temp_alert_min + di->t_hyst_norm) &&
-+		di->batt_data.temp < (bi->temp_alert_max - di->t_hyst_norm)) {
- 		/* Temp OK! */
- 		di->events.btemp_underover = false;
- 		di->events.btemp_lowhigh = false;
- 		di->t_hyst_norm = 0;
- 		di->t_hyst_lowhigh = 0;
- 	} else {
--		if (((di->batt_data.temp >= di->bm->temp_high) &&
-+		if (((di->batt_data.temp >= bi->temp_alert_max) &&
- 			(di->batt_data.temp <
--				(di->bm->temp_over - di->t_hyst_lowhigh))) ||
-+				(bi->temp_max - di->t_hyst_lowhigh))) ||
- 			((di->batt_data.temp >
--				(di->bm->temp_under + di->t_hyst_lowhigh)) &&
--			(di->batt_data.temp <= di->bm->temp_low))) {
-+				(bi->temp_min + di->t_hyst_lowhigh)) &&
-+			(di->batt_data.temp <= bi->temp_alert_min))) {
- 			/* TEMP minor!!!!! */
- 			di->events.btemp_underover = false;
- 			di->events.btemp_lowhigh = true;
- 			di->t_hyst_norm = di->bm->temp_hysteresis;
- 			di->t_hyst_lowhigh = 0;
--		} else if (di->batt_data.temp <= di->bm->temp_under ||
--			di->batt_data.temp >= di->bm->temp_over) {
-+		} else if (di->batt_data.temp <= bi->temp_min ||
-+			di->batt_data.temp >= bi->temp_max) {
- 			/* TEMP major!!!!! */
- 			di->events.btemp_underover = true;
- 			di->events.btemp_lowhigh = false;
-@@ -1722,7 +1724,7 @@ static int ab8500_chargalg_get_property(struct power_supply *psy,
- 		if (di->events.batt_ovv) {
- 			val->intval = POWER_SUPPLY_HEALTH_OVERVOLTAGE;
- 		} else if (di->events.btemp_underover) {
--			if (di->batt_data.temp <= di->bm->temp_under)
-+			if (di->batt_data.temp <= di->bm->bi.temp_min)
- 				val->intval = POWER_SUPPLY_HEALTH_COLD;
- 			else
- 				val->intval = POWER_SUPPLY_HEALTH_OVERHEAT;
-diff --git a/drivers/power/supply/ab8500_charger.c b/drivers/power/supply/ab8500_charger.c
-index 32c2046ea6bb..7a151cd97399 100644
---- a/drivers/power/supply/ab8500_charger.c
-+++ b/drivers/power/supply/ab8500_charger.c
-@@ -3709,6 +3709,7 @@ static int ab8500_charger_remove(struct platform_device *pdev)
- 	component_master_del(&pdev->dev, &ab8500_charger_comp_ops);
  
- 	usb_unregister_notifier(di->usb_phy, &di->nb);
-+	ab8500_bm_of_remove(di->usb_chg.psy, di->bm);
- 	usb_put_phy(di->usb_phy);
- 	if (!di->ac_chg.enabled)
- 		blocking_notifier_chain_unregister(
 -- 
 2.31.1
 
