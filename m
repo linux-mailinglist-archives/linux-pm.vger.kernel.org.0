@@ -2,251 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2542459521
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Nov 2021 19:52:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 989DB45987F
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Nov 2021 00:43:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231756AbhKVSz6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 Nov 2021 13:55:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36462 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233806AbhKVSz3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 22 Nov 2021 13:55:29 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 88DB660187;
-        Mon, 22 Nov 2021 18:52:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637607142;
-        bh=iSx3WxKNM78WB0szNiNtunoYOvJloAsNWxUjSZiBZro=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=WdtTZd+9UUe+o8uXecf4D7OaN6GKTom55Hc4+QV0yF/pBYieY5ek0UuEytw187NLF
-         pmAV4Qb/YKbtVQglYwvI5IDIpsk3wMKhIP07bIDP1JHCIpxE/EBgxLGGVc2g4jf6Z2
-         S73LzbrUoiKqQ1Glu1s9sNBBRUytLoaRtqO/44kmWz0wA5YXhVNMbMd9kXkujCF36z
-         vh40+c6v9JvbCdz3etHQD3wdJ06qD/uaBEVZYMzYndjYZrayDy2L1RT9CZmOA96ezm
-         HT3cTjTTnml6ZenDjYNnbmbfPsprCskSQod9IQQEVo3U6Ihpael/0eKYZyQGGk+7/e
-         DpcSB1tGmVF4g==
-Message-ID: <ef607d90-b10d-cb2c-b3c3-7784d1b7adb6@kernel.org>
-Date:   Mon, 22 Nov 2021 20:52:13 +0200
+        id S231590AbhKVXrD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 Nov 2021 18:47:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59998 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231572AbhKVXrD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Nov 2021 18:47:03 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9EBC061714
+        for <linux-pm@vger.kernel.org>; Mon, 22 Nov 2021 15:43:55 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id u3so86095367lfl.2
+        for <linux-pm@vger.kernel.org>; Mon, 22 Nov 2021 15:43:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WmsnRXd7lyuF3Jf8sjqL8Pz8nqSLYJNluDzxclQrw3M=;
+        b=ApJsIS1AD9DsujC4DiMxfHq0rqqLun4GGW8L+7+H+sMah+NV4cejlQ2gWbdqt6RST+
+         KoSRv9g9Z2j8hb9and7Pcorab16kXkVSxRCZ7rH+xmkqEZ2AztsDL3VuukiCE5da9CsK
+         rPhT2B5IIlEjQcM5RCOj+o5IaPtUhPKUSkkM8gh1voVbM3rJKpBn2g9JsIoPLIteC1Jk
+         W4yxc8j4u2y7iAfd22bnG6AjHW1iyrfx1w7yhoBsLoTAvz5ugsF3mwlVMxRafElP3a+O
+         w0Pb53vGzADJPQxr3mGnEkHhZNg4pVFcx2qqN6An4xX1Xy6YCGt1wk1awBpll+9XM10h
+         f4QQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WmsnRXd7lyuF3Jf8sjqL8Pz8nqSLYJNluDzxclQrw3M=;
+        b=EDgOKmfD+4AmZjckgq79O2JgPMxIR9vY0RW6QXKeL/3cfGq3PiIhM4TnW3tVivnKJr
+         SCiQYHjxuvcatI9tnth04QXt0Ksw6/bq/RSO+WKnfAaju9NlrqZgDoUOSJ3Ld850ZVAT
+         vo4AFFUhPHOEqqXul+5oPD0yk+fkAMWP6REEhib5+vR0ivZE9C/7oflpGifiQYJ+UAMJ
+         cXvgCOXAgzSNfpE2G1t3FHWggzy0wqubKAEXP226F6utCTMODPDW/X4owl4JyXYwg6AV
+         dG96eCuXuYTHrM/+2bWIOTeY96/Y2SLBOBSh7rQckfTQLRr8Ts7u/k4NAWUb6WCuescS
+         KMJA==
+X-Gm-Message-State: AOAM531BmJivfPeoPJJLBNcoscAHRVR8MM9lBfSpz7w53pWgUIw+97p3
+        PUz4STVFEqxRmAtIaWssTZPo8ti2oWh9ZQ==
+X-Google-Smtp-Source: ABdhPJy65fjy6zIfTz5DqA3S5Kqy9y0KH4E46khaz5rrSLT1kzSeV5ckaySwtX75VjpJ3CtOteYiRA==
+X-Received: by 2002:a05:6512:220b:: with SMTP id h11mr201231lfu.151.1637624633805;
+        Mon, 22 Nov 2021 15:43:53 -0800 (PST)
+Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
+        by smtp.gmail.com with ESMTPSA id b26sm1109311lff.148.2021.11.22.15.43.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Nov 2021 15:43:52 -0800 (PST)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Marcus Cooper <codekipper@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-pm@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 0/2] More AB8500 charging props
+Date:   Tue, 23 Nov 2021 00:41:39 +0100
+Message-Id: <20211122234141.3356340-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Subject: Re: [PATCH RESEND v5 4/5] interconnect: qcom: Add MSM8996
- interconnect provider driver
-Content-Language: en-US
-To:     Yassine Oudjana <y.oudjana@protonmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20211021132329.234942-1-y.oudjana@protonmail.com>
- <20211021132329.234942-5-y.oudjana@protonmail.com>
-From:   Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <20211021132329.234942-5-y.oudjana@protonmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Yassine,
+These two patches begin to put new stuff into the
+drivers/power/supply/ab8500_bmdata.c for:
 
-On 21.10.21 16:25, Yassine Oudjana wrote:
-> Add a driver for the MSM8996 NoCs. This chip is similar to SDM660 where
-> some busses are controlled by RPM, while others directly by the AP with
-> writes to QoS registers
-Thank you for working on this!
+A) battery temperature look-up and interpolation, and
+B) maintenance charging
 
-> 
-> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
-> ---
-> Changes since v4:
->   - Rebase on Dmitry's icc-rpm patches.
->   - Clean up qcom_icc_node structs by removing unused properties, moving links to external
->     arrays and using the same arrays for multiple nodes where possible.
->   - Add support for Aggregate 0 NoC (a0noc).
-> Changes since v3:
->   - Expand DEFINE_QNODE macros in msm8996.c.
->   - Commonize probe function.
->   - Code style fixes.
-> 
->   drivers/interconnect/qcom/Kconfig   |    9 +
->   drivers/interconnect/qcom/Makefile  |    2 +
->   drivers/interconnect/qcom/msm8996.c | 2113 +++++++++++++++++++++++++++
->   drivers/interconnect/qcom/msm8996.h |  149 ++
->   4 files changed, 2273 insertions(+)
->   create mode 100644 drivers/interconnect/qcom/msm8996.c
->   create mode 100644 drivers/interconnect/qcom/msm8996.h
-> 
-[..]
-> +
-> +static struct qcom_icc_node mas_ufs = {
-> +	.name = "mas_ufs",
-> +	.id = MSM8996_MASTER_UFS,
-> +	.buswidth = 8,
-> +	.mas_rpm_id = 68,
-> +	.slv_rpm_id = -1,
-> +	.qos.ap_owned = true,
-> +	.qos.qos_mode = NOC_QOS_MODE_FIXED,
-> +	.qos.areq_prio = 1,
-> +	.qos.prio_level = 1,
-> +	.qos.qos_port = 2,
-> +	.num_links = 1,
+Some design choices can be discussed, so I included some
+HWMON etc maintainers.
 
-This line should be removed, as we use ARRAY_SIZE below.
+NTC resistor:
 
-> +	.num_links = ARRAY_SIZE(mas_a2noc_common_links),
-> +	.links = mas_a2noc_common_links
-> +};
-> +
-> +static const u16 mas_apps_proc_links[] = {
-> +	MSM8996_SLAVE_BIMC_SNOC_1,
-> +	MSM8996_SLAVE_EBI_CH0,
-> +	MSM8996_SLAVE_BIMC_SNOC_0
-> +};
-> +
-[..]
-> +
-> +static struct qcom_icc_node mas_snoc_cnoc = {
-> +	.name = "mas_snoc_cnoc",
-> +	.id = MSM8996_MASTER_SNOC_CNOC,
-> +	.buswidth = 8,
-> +	.mas_rpm_id = 52,
-> +	.slv_rpm_id = -1,
-> +	.num_links = 37,
+For the battery NTC temperature we should note the existing NTC
+driver in drivers/hwmon/ntc_thermistor.c with bindings
+in Documentation/devicetree/bindings/hwmon/ntc-thermistor.yaml
+which is used for stand-alone NTC resistors.
 
-Ditto.
+It is probably possible to try to reuse the hwmon code but I
+wanted to see if we have buy-in from the hwmon maintainer first.
 
-> +	.num_links = ARRAY_SIZE(mas_snoc_cnoc_links),
-> +	.links = mas_snoc_cnoc_links
-> +};
-> +
-[..]
-> +static struct qcom_icc_node mas_sdcc_2 = {
-> +	.name = "mas_sdcc_2",
-> +	.id = MSM8996_MASTER_SDCC_2,
-> +	.buswidth = 8,
-> +	.mas_rpm_id = 35,
-> +	.slv_rpm_id = -1,
-> +	.num_links = 1,
+If yes, I will try to come up with some way of representing the
+NTC resistor in the device tree and use it in-tree from the
+charging drivers.
 
-Ditto.
+Maintenance charging:
 
-> +	.num_links = ARRAY_SIZE(mas_pnoc_a1noc_common_links),
-> +	.links = mas_pnoc_a1noc_common_links
-> +};
-> +
-> +static struct qcom_icc_node mas_sdcc_4 = {
-> +	.name = "mas_sdcc_4",
-> +	.id = MSM8996_MASTER_SDCC_4,
-> +	.buswidth = 8,
-> +	.mas_rpm_id = 36,
-> +	.slv_rpm_id = -1,
-> +	.num_links = 1,
+I included an infrastructure for maintenance "charging points"
+which constitute of a current, a voltage and a safety timer:
 
-Ditto.
+struct power_supply_maintenance_charge_table {
+       int charge_current_max_ua;
+       int charge_voltage_max_uv;
+       int charge_safety_timer_minutes;
+};
 
-> +	.num_links = ARRAY_SIZE(mas_pnoc_a1noc_common_links),
-> +	.links = mas_pnoc_a1noc_common_links
-> +};
-> +
-> +static struct qcom_icc_node mas_usb_hs = {
-> +	.name = "mas_usb_hs",
-> +	.id = MSM8996_MASTER_USB_HS,
-> +	.buswidth = 8,
-> +	.mas_rpm_id = 42,
-> +	.slv_rpm_id = -1,
-> +	.num_links = 1,
+This is all pretty straight-forward if just adding maintenance
+charging.
 
-Ditto.
+For the bigger picture, however, a charging point can also
+include the existing CC/CV current and voltage and the
+precharging current and voltage as two charging points,
+possibly without corresponding safety timer. If this is
+desired I will rework the patch to refactor the existing
+currents and voltages into charging points as well.
 
-> +	.num_links = ARRAY_SIZE(mas_pnoc_a1noc_common_links),
-> +	.links = mas_pnoc_a1noc_common_links
-> +};
-> +
-> +static struct qcom_icc_node mas_blsp_1 = {
-> +	.name = "mas_blsp_1",
-> +	.id = MSM8996_MASTER_BLSP_1,
-> +	.buswidth = 4,
-> +	.mas_rpm_id = 41,
-> +	.slv_rpm_id = -1,
-> +	.num_links = 1,
+Linus Walleij (2):
+  power: supply: ab8500: Standardize NTC battery temp
+  power: supply: ab8500: Standardize maintenance charging
 
-Ditto.
+ drivers/power/supply/ab8500-bm.h         | 30 --------
+ drivers/power/supply/ab8500_bmdata.c     | 68 +++++++++-------
+ drivers/power/supply/ab8500_btemp.c      | 45 +----------
+ drivers/power/supply/ab8500_chargalg.c   | 41 +++++++---
+ drivers/power/supply/power_supply_core.c | 63 +++++++++++++++
+ include/linux/power_supply.h             | 98 ++++++++++++++++++++++++
+ 6 files changed, 237 insertions(+), 108 deletions(-)
 
-> +	.num_links = ARRAY_SIZE(mas_pnoc_a1noc_common_links),
-> +	.links = mas_pnoc_a1noc_common_links
-> +};
-> +
-> +static struct qcom_icc_node mas_blsp_2 = {
-> +	.name = "mas_blsp_2",
-> +	.id = MSM8996_MASTER_BLSP_2,
-> +	.buswidth = 4,
-> +	.mas_rpm_id = 39,
-> +	.slv_rpm_id = -1,
-> +	.num_links = 1,
+-- 
+2.31.1
 
-Ditto.
-
-> +	.num_links = ARRAY_SIZE(mas_pnoc_a1noc_common_links),
-> +	.links = mas_pnoc_a1noc_common_links
-> +};
-> +
-> +static struct qcom_icc_node mas_tsif = {
-> +	.name = "mas_tsif",
-> +	.id = MSM8996_MASTER_TSIF,
-> +	.buswidth = 4,
-> +	.mas_rpm_id = 37,
-> +	.slv_rpm_id = -1,
-> +	.num_links = 1,
-
-Ditto.
-
-> +	.num_links = ARRAY_SIZE(mas_pnoc_a1noc_common_links),
-> +	.links = mas_pnoc_a1noc_common_links
-> +};
-> +
-[..]
-> +static struct qcom_icc_node slv_a2noc_snoc = {
-> +	.name = "slv_a2noc_snoc",
-> +	.id = MSM8996_SLAVE_A2NOC_SNOC,
-> +	.buswidth = 8,
-> +	.mas_rpm_id = -1,
-> +	.slv_rpm_id = 143,
-> +	.num_links = 1,
-
-Ditto.
-
-> +	.num_links = ARRAY_SIZE(slv_a2noc_snoc_links),
-> +	.links = slv_a2noc_snoc_links
-> +};
-> +
-[..]
-> +
-> +static const u16 slv_snoc_bimc_links[] = {
-> +	MSM8996_MASTER_SNOC_BIMC
-> +};
-> +
-> +static struct qcom_icc_node slv_snoc_bimc = {
-> +	.name = "slv_snoc_bimc",
-> +	.id = MSM8996_SLAVE_SNOC_BIMC,
-> +	.buswidth = 32,
-> +	.mas_rpm_id = -1,
-> +	.slv_rpm_id = 24,
-> +	.num_links = 1,
-
-Ditto.
-
-> +	.num_links = ARRAY_SIZE(slv_snoc_bimc_links),
-> +	.links = slv_snoc_bimc_links
-> +};
-> +
-[..]
-
-I have fixed the above issue and applied patches 1-4.
-
-Thanks,
-Georgi
