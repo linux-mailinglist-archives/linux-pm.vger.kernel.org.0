@@ -2,223 +2,251 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4EC74594CE
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Nov 2021 19:38:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2542459521
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Nov 2021 19:52:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240344AbhKVSl6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 Nov 2021 13:41:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46936 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235182AbhKVSl4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Nov 2021 13:41:56 -0500
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F65C061574;
-        Mon, 22 Nov 2021 10:38:49 -0800 (PST)
-Received: by mail-ot1-x333.google.com with SMTP id h16-20020a9d7990000000b0055c7ae44dd2so30098740otm.10;
-        Mon, 22 Nov 2021 10:38:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=UHFB4okDolhXrN2KtXNKGXY4xx9A6ENlJZJpcpYJSa4=;
-        b=iF32sjGrzSvaDDiDrzm4Jn8+gNbGxPrbBxZFxi4uCknK7CkuUHGcqoOD65h4RyWxyF
-         y+wOmbGDPKkCG8jIqPGxKaFK0D3GvGCi7E7vj/rSSTElZKQ4I+sO6sAsXlhvWm4LJdnp
-         2KvDVCusXICAOU/8p8E70quXduhRoLziMS5wtCLJdF0xE54KuxD1Hx/LXZJoPAM3DNL1
-         BkvRF4pmS6od3lYRUbwlZMx97PcjFnI9HdmkEczPsl3ta8bzsAye+LybTN6gfUn7gNW8
-         MLS92ARh+GguAjdL9uq+LetI8B96GaD9Vc3Ip4BN7Uy3BSXQIu3jgX7O1p5U0Obaav48
-         V51g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=UHFB4okDolhXrN2KtXNKGXY4xx9A6ENlJZJpcpYJSa4=;
-        b=wI6BKtLTjV71b36AuQa7eqeNpGoXyn1KTwsO+7skapVw+pmDbPKZmEh5H0sXecgQnt
-         yzJKt3KdhxBEAKbKcI8rSlhhEm/A4oZHuvvRZaObwtKQzlgvzMPHfGguy9imT/JcpjPs
-         I6XIlPCY8ETNjuOdWot9trq43v/2ZY4ki8uYzXC+qzEIgRO0AFRzV9hHjtkPA78ksFXK
-         futpmcQkacgTtsGbQt1gOephKyFO0eOGBW2j8cC8cild9soZ8YMcmBNn4Zk3rn1SOaxP
-         uPb25fsRYJ9hB3FsWqlRBxnxq6tUXiZRFaIAozbkbuoe0thxa6DODfQT+PD3xGAzWfQp
-         V3fw==
-X-Gm-Message-State: AOAM532lDdsUO3aNW37ss9kreDysmNYReVetgXnabQmUDkyYTfjx1cCb
-        yq2KAvvSNAzYtPgE/p1uNDk=
-X-Google-Smtp-Source: ABdhPJwfr5gWpFAYZtUOP0l+WeTUOCLuMHjoxvBl19lgRYsYRNjGQbRkBWj0P0bUDebnG/bzTCmu0Q==
-X-Received: by 2002:a9d:5190:: with SMTP id y16mr27309322otg.364.1637606329228;
-        Mon, 22 Nov 2021 10:38:49 -0800 (PST)
-Received: from [10.62.118.101] (cpe-24-31-246-181.kc.res.rr.com. [24.31.246.181])
-        by smtp.gmail.com with ESMTPSA id f18sm1729016otl.28.2021.11.22.10.38.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Nov 2021 10:38:48 -0800 (PST)
-Sender: Larry Finger <larry.finger@gmail.com>
-Message-ID: <a18f44bf-e590-0ebe-00c0-5658f3a51d86@lwfinger.net>
-Date:   Mon, 22 Nov 2021 12:38:41 -0600
+        id S231756AbhKVSz6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 Nov 2021 13:55:58 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36462 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233806AbhKVSz3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 22 Nov 2021 13:55:29 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 88DB660187;
+        Mon, 22 Nov 2021 18:52:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637607142;
+        bh=iSx3WxKNM78WB0szNiNtunoYOvJloAsNWxUjSZiBZro=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=WdtTZd+9UUe+o8uXecf4D7OaN6GKTom55Hc4+QV0yF/pBYieY5ek0UuEytw187NLF
+         pmAV4Qb/YKbtVQglYwvI5IDIpsk3wMKhIP07bIDP1JHCIpxE/EBgxLGGVc2g4jf6Z2
+         S73LzbrUoiKqQ1Glu1s9sNBBRUytLoaRtqO/44kmWz0wA5YXhVNMbMd9kXkujCF36z
+         vh40+c6v9JvbCdz3etHQD3wdJ06qD/uaBEVZYMzYndjYZrayDy2L1RT9CZmOA96ezm
+         HT3cTjTTnml6ZenDjYNnbmbfPsprCskSQod9IQQEVo3U6Ihpael/0eKYZyQGGk+7/e
+         DpcSB1tGmVF4g==
+Message-ID: <ef607d90-b10d-cb2c-b3c3-7784d1b7adb6@kernel.org>
+Date:   Mon, 22 Nov 2021 20:52:13 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH/RFC 17/17] rtw89: Use bitfield helpers
+Subject: Re: [PATCH RESEND v5 4/5] interconnect: qcom: Add MSM8996
+ interconnect provider driver
 Content-Language: en-US
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Tony Lindgren <tony@atomide.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Paul Walmsley <paul@pwsan.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>,
-        Benoit Parrot <bparrot@ti.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Ping-Ke Shih <pkshih@realtek.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-        alsa-devel@alsa-project.org
-References: <cover.1637592133.git.geert+renesas@glider.be>
- <f7b81122f7596fa004188bfae68f25a68c2d2392.1637592133.git.geert+renesas@glider.be>
-From:   Larry Finger <Larry.Finger@lwfinger.net>
-In-Reply-To: <f7b81122f7596fa004188bfae68f25a68c2d2392.1637592133.git.geert+renesas@glider.be>
+To:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <20211021132329.234942-1-y.oudjana@protonmail.com>
+ <20211021132329.234942-5-y.oudjana@protonmail.com>
+From:   Georgi Djakov <djakov@kernel.org>
+In-Reply-To: <20211021132329.234942-5-y.oudjana@protonmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11/22/21 09:54, Geert Uytterhoeven wrote:
-> Use the field_{get,prep}() helpers, instead of open-coding the same
-> operations.
+Hi Yassine,
+
+On 21.10.21 16:25, Yassine Oudjana wrote:
+> Add a driver for the MSM8996 NoCs. This chip is similar to SDM660 where
+> some busses are controlled by RPM, while others directly by the AP with
+> writes to QoS registers
+Thank you for working on this!
+
 > 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
 > ---
-> Compile-tested only.
-> Marked RFC, as this depends on [PATCH 01/17], but follows a different
-> path to upstream.
-> ---
->   drivers/net/wireless/realtek/rtw89/core.h | 38 ++++-------------------
->   1 file changed, 6 insertions(+), 32 deletions(-)
-
-Tested-by: Larry Finger <Larry,Finger@lwfinger.net>
-
-Larry
-
+> Changes since v4:
+>   - Rebase on Dmitry's icc-rpm patches.
+>   - Clean up qcom_icc_node structs by removing unused properties, moving links to external
+>     arrays and using the same arrays for multiple nodes where possible.
+>   - Add support for Aggregate 0 NoC (a0noc).
+> Changes since v3:
+>   - Expand DEFINE_QNODE macros in msm8996.c.
+>   - Commonize probe function.
+>   - Code style fixes.
 > 
-> diff --git a/drivers/net/wireless/realtek/rtw89/core.h b/drivers/net/wireless/realtek/rtw89/core.h
-> index c2885e4dd882f045..f9c0300ec373aaf2 100644
-> --- a/drivers/net/wireless/realtek/rtw89/core.h
-> +++ b/drivers/net/wireless/realtek/rtw89/core.h
-> @@ -2994,81 +2994,55 @@ rtw89_write32_clr(struct rtw89_dev *rtwdev, u32 addr, u32 bit)
->   static inline u32
->   rtw89_read32_mask(struct rtw89_dev *rtwdev, u32 addr, u32 mask)
->   {
-> -	u32 shift = __ffs(mask);
-> -	u32 orig;
-> -	u32 ret;
-> -
-> -	orig = rtw89_read32(rtwdev, addr);
-> -	ret = (orig & mask) >> shift;
-> -
-> -	return ret;
-> +	return field_get(mask, rtw89_read32(rtwdev, addr));
->   }
->   
->   static inline u16
->   rtw89_read16_mask(struct rtw89_dev *rtwdev, u32 addr, u32 mask)
->   {
-> -	u32 shift = __ffs(mask);
-> -	u32 orig;
-> -	u32 ret;
-> -
-> -	orig = rtw89_read16(rtwdev, addr);
-> -	ret = (orig & mask) >> shift;
-> -
-> -	return ret;
-> +	return field_get(mask, rtw89_read16(rtwdev, addr));
->   }
->   
->   static inline u8
->   rtw89_read8_mask(struct rtw89_dev *rtwdev, u32 addr, u32 mask)
->   {
-> -	u32 shift = __ffs(mask);
-> -	u32 orig;
-> -	u32 ret;
-> -
-> -	orig = rtw89_read8(rtwdev, addr);
-> -	ret = (orig & mask) >> shift;
-> -
-> -	return ret;
-> +	return field_get(mask, rtw89_read8(rtwdev, addr));
->   }
->   
->   static inline void
->   rtw89_write32_mask(struct rtw89_dev *rtwdev, u32 addr, u32 mask, u32 data)
->   {
-> -	u32 shift = __ffs(mask);
->   	u32 orig;
->   	u32 set;
->   
->   	WARN(addr & 0x3, "should be 4-byte aligned, addr = 0x%08x\n", addr);
->   
->   	orig = rtw89_read32(rtwdev, addr);
-> -	set = (orig & ~mask) | ((data << shift) & mask);
-> +	set = (orig & ~mask) | field_prep(mask, data);
->   	rtw89_write32(rtwdev, addr, set);
->   }
->   
->   static inline void
->   rtw89_write16_mask(struct rtw89_dev *rtwdev, u32 addr, u32 mask, u16 data)
->   {
-> -	u32 shift;
->   	u16 orig, set;
->   
->   	mask &= 0xffff;
-> -	shift = __ffs(mask);
->   
->   	orig = rtw89_read16(rtwdev, addr);
-> -	set = (orig & ~mask) | ((data << shift) & mask);
-> +	set = (orig & ~mask) | field_prep(mask, data);
->   	rtw89_write16(rtwdev, addr, set);
->   }
->   
->   static inline void
->   rtw89_write8_mask(struct rtw89_dev *rtwdev, u32 addr, u32 mask, u8 data)
->   {
-> -	u32 shift;
->   	u8 orig, set;
->   
->   	mask &= 0xff;
-> -	shift = __ffs(mask);
->   
->   	orig = rtw89_read8(rtwdev, addr);
-> -	set = (orig & ~mask) | ((data << shift) & mask);
-> +	set = (orig & ~mask) | field_prep(mask, data);
->   	rtw89_write8(rtwdev, addr, set);
->   }
->   
+>   drivers/interconnect/qcom/Kconfig   |    9 +
+>   drivers/interconnect/qcom/Makefile  |    2 +
+>   drivers/interconnect/qcom/msm8996.c | 2113 +++++++++++++++++++++++++++
+>   drivers/interconnect/qcom/msm8996.h |  149 ++
+>   4 files changed, 2273 insertions(+)
+>   create mode 100644 drivers/interconnect/qcom/msm8996.c
+>   create mode 100644 drivers/interconnect/qcom/msm8996.h
 > 
+[..]
+> +
+> +static struct qcom_icc_node mas_ufs = {
+> +	.name = "mas_ufs",
+> +	.id = MSM8996_MASTER_UFS,
+> +	.buswidth = 8,
+> +	.mas_rpm_id = 68,
+> +	.slv_rpm_id = -1,
+> +	.qos.ap_owned = true,
+> +	.qos.qos_mode = NOC_QOS_MODE_FIXED,
+> +	.qos.areq_prio = 1,
+> +	.qos.prio_level = 1,
+> +	.qos.qos_port = 2,
+> +	.num_links = 1,
 
+This line should be removed, as we use ARRAY_SIZE below.
+
+> +	.num_links = ARRAY_SIZE(mas_a2noc_common_links),
+> +	.links = mas_a2noc_common_links
+> +};
+> +
+> +static const u16 mas_apps_proc_links[] = {
+> +	MSM8996_SLAVE_BIMC_SNOC_1,
+> +	MSM8996_SLAVE_EBI_CH0,
+> +	MSM8996_SLAVE_BIMC_SNOC_0
+> +};
+> +
+[..]
+> +
+> +static struct qcom_icc_node mas_snoc_cnoc = {
+> +	.name = "mas_snoc_cnoc",
+> +	.id = MSM8996_MASTER_SNOC_CNOC,
+> +	.buswidth = 8,
+> +	.mas_rpm_id = 52,
+> +	.slv_rpm_id = -1,
+> +	.num_links = 37,
+
+Ditto.
+
+> +	.num_links = ARRAY_SIZE(mas_snoc_cnoc_links),
+> +	.links = mas_snoc_cnoc_links
+> +};
+> +
+[..]
+> +static struct qcom_icc_node mas_sdcc_2 = {
+> +	.name = "mas_sdcc_2",
+> +	.id = MSM8996_MASTER_SDCC_2,
+> +	.buswidth = 8,
+> +	.mas_rpm_id = 35,
+> +	.slv_rpm_id = -1,
+> +	.num_links = 1,
+
+Ditto.
+
+> +	.num_links = ARRAY_SIZE(mas_pnoc_a1noc_common_links),
+> +	.links = mas_pnoc_a1noc_common_links
+> +};
+> +
+> +static struct qcom_icc_node mas_sdcc_4 = {
+> +	.name = "mas_sdcc_4",
+> +	.id = MSM8996_MASTER_SDCC_4,
+> +	.buswidth = 8,
+> +	.mas_rpm_id = 36,
+> +	.slv_rpm_id = -1,
+> +	.num_links = 1,
+
+Ditto.
+
+> +	.num_links = ARRAY_SIZE(mas_pnoc_a1noc_common_links),
+> +	.links = mas_pnoc_a1noc_common_links
+> +};
+> +
+> +static struct qcom_icc_node mas_usb_hs = {
+> +	.name = "mas_usb_hs",
+> +	.id = MSM8996_MASTER_USB_HS,
+> +	.buswidth = 8,
+> +	.mas_rpm_id = 42,
+> +	.slv_rpm_id = -1,
+> +	.num_links = 1,
+
+Ditto.
+
+> +	.num_links = ARRAY_SIZE(mas_pnoc_a1noc_common_links),
+> +	.links = mas_pnoc_a1noc_common_links
+> +};
+> +
+> +static struct qcom_icc_node mas_blsp_1 = {
+> +	.name = "mas_blsp_1",
+> +	.id = MSM8996_MASTER_BLSP_1,
+> +	.buswidth = 4,
+> +	.mas_rpm_id = 41,
+> +	.slv_rpm_id = -1,
+> +	.num_links = 1,
+
+Ditto.
+
+> +	.num_links = ARRAY_SIZE(mas_pnoc_a1noc_common_links),
+> +	.links = mas_pnoc_a1noc_common_links
+> +};
+> +
+> +static struct qcom_icc_node mas_blsp_2 = {
+> +	.name = "mas_blsp_2",
+> +	.id = MSM8996_MASTER_BLSP_2,
+> +	.buswidth = 4,
+> +	.mas_rpm_id = 39,
+> +	.slv_rpm_id = -1,
+> +	.num_links = 1,
+
+Ditto.
+
+> +	.num_links = ARRAY_SIZE(mas_pnoc_a1noc_common_links),
+> +	.links = mas_pnoc_a1noc_common_links
+> +};
+> +
+> +static struct qcom_icc_node mas_tsif = {
+> +	.name = "mas_tsif",
+> +	.id = MSM8996_MASTER_TSIF,
+> +	.buswidth = 4,
+> +	.mas_rpm_id = 37,
+> +	.slv_rpm_id = -1,
+> +	.num_links = 1,
+
+Ditto.
+
+> +	.num_links = ARRAY_SIZE(mas_pnoc_a1noc_common_links),
+> +	.links = mas_pnoc_a1noc_common_links
+> +};
+> +
+[..]
+> +static struct qcom_icc_node slv_a2noc_snoc = {
+> +	.name = "slv_a2noc_snoc",
+> +	.id = MSM8996_SLAVE_A2NOC_SNOC,
+> +	.buswidth = 8,
+> +	.mas_rpm_id = -1,
+> +	.slv_rpm_id = 143,
+> +	.num_links = 1,
+
+Ditto.
+
+> +	.num_links = ARRAY_SIZE(slv_a2noc_snoc_links),
+> +	.links = slv_a2noc_snoc_links
+> +};
+> +
+[..]
+> +
+> +static const u16 slv_snoc_bimc_links[] = {
+> +	MSM8996_MASTER_SNOC_BIMC
+> +};
+> +
+> +static struct qcom_icc_node slv_snoc_bimc = {
+> +	.name = "slv_snoc_bimc",
+> +	.id = MSM8996_SLAVE_SNOC_BIMC,
+> +	.buswidth = 32,
+> +	.mas_rpm_id = -1,
+> +	.slv_rpm_id = 24,
+> +	.num_links = 1,
+
+Ditto.
+
+> +	.num_links = ARRAY_SIZE(slv_snoc_bimc_links),
+> +	.links = slv_snoc_bimc_links
+> +};
+> +
+[..]
+
+I have fixed the above issue and applied patches 1-4.
+
+Thanks,
+Georgi
