@@ -2,110 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC79A459321
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Nov 2021 17:34:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A6345933C
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Nov 2021 17:38:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238607AbhKVQhs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 Nov 2021 11:37:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46624 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230406AbhKVQhr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Nov 2021 11:37:47 -0500
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD44C061574;
-        Mon, 22 Nov 2021 08:34:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=kqBhSMWa3sOnZM39EObYBhGUKcC3oHWInrKZjV+i2aU=;
-        t=1637598880; x=1638808480; b=Vd8FhQmL61Y0EvCjXGWm8kG0KApfp/fZYqaIlYxLVXwe81z
-        ZOLVBFrXpjc1zjnQ42HuW4+1Y7vddCDBHaMVJ05M6a1Ho+movW3tYyrEZJL7Zx3GT0FQb+wxzt2OQ
-        zK51IhXzPgwLGlVQEiHPRU4p4CA2f54T6c/hpHY6H47T9awIhWE7f/wgBVviQUqN7kU7OX45CQJIA
-        hrQeaxvbmtUgFMam8WSqjMr5FcrDGAYMIh6JeLBOltFlknrN/3tgCamZn6QebQgzIcrzCL7p+F9Ph
-        PSqAhv0IcgdteNCDpYFCUbjDj2U/6dnqJiQEb6B/HOO1yFfv7eksixE/TsWih0PA==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.95)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1mpCFL-001MvE-3o;
-        Mon, 22 Nov 2021 17:32:47 +0100
-Message-ID: <01b44b38c087c151171f8d45a2090474c2559306.camel@sipsolutions.net>
-Subject: Re: [PATCH 01/17] bitfield: Add non-constant field_{prep,get}()
- helpers
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Tony Lindgren <tony@atomide.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Paul Walmsley <paul@pwsan.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>,
-        Benoit Parrot <bparrot@ti.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Ping-Ke Shih <pkshih@realtek.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Date:   Mon, 22 Nov 2021 17:32:43 +0100
-In-Reply-To: <3a54a6703879d10f08cf0275a2a69297ebd2b1d4.1637592133.git.geert+renesas@glider.be>
-References: <cover.1637592133.git.geert+renesas@glider.be>
-         <3a54a6703879d10f08cf0275a2a69297ebd2b1d4.1637592133.git.geert+renesas@glider.be>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.1 (3.42.1-1.fc35) 
+        id S240287AbhKVQl7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 Nov 2021 11:41:59 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:35594 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240038AbhKVQl6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Nov 2021 11:41:58 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 4CDF21F44C68
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1637599131; bh=9X4bhwm0j23IiOyBdPvQRq7wfOl6P4EjOM/oyJTdvko=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Vv9TQjW8rwFH1gUTLE36Wjs6QY9lsedmkK2vOBLVLCF1ZVOFLkhwTDnw3lmIJZ6c9
+         t9A6SUeE3Gc58b++IfzEFkIZjukyQWArUdZcIeR+MeAB2wQwQkzB5x++qKMDC5WNXj
+         XcqNFne97jVsi7NJSVvXGfHtFhVTx6I7+qQfrbmDL1VSWReWhMK5VKvO0o2LTrCx1h
+         ZFdNRtrnHbxc1uc10fPjlbSlHW9X2tsptq6M77TCX9gOGHL7ilql0Ra9CIfQhdGkUy
+         jDLA0nK8znJdsMqCrFpVSqZng+YMcCqg2JqXxf7Zsl9Cz9rrweCA/hfbw0w3qThBg6
+         qphwYA9AzWOhg==
+Received: by earth.universe (Postfix, from userid 1000)
+        id 773963C0F9E; Mon, 22 Nov 2021 17:38:48 +0100 (CET)
+Date:   Mon, 22 Nov 2021 17:38:48 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 00/16] AB8500 charger to use power_supply_battery_info
+Message-ID: <20211122163848.ivr3uehebusxrjnx@earth.universe>
+References: <20211120155326.2891664-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-malware-bazaar: not-scanned
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lsqrsjd33oisvsup"
+Content-Disposition: inline
+In-Reply-To: <20211120155326.2891664-1-linus.walleij@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 2021-11-22 at 16:53 +0100, Geert Uytterhoeven wrote:
-> The existing FIELD_{GET,PREP}() macros are limited to compile-time
-> constants.  However, it is very common to prepare or extract bitfield
-> elements where the bitfield mask is not a compile-time constant.
-> 
 
-I'm not sure it's really a good idea to add a third API here?
+--lsqrsjd33oisvsup
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-We have the upper-case (constant) versions, and already
-{u32,...}_get_bits()/etc.
+Hi,
 
-Also, you're using __ffs(), which doesn't work for 64-bit on 32-bit
-architectures (afaict), so that seems a bit awkward.
+On Sat, Nov 20, 2021 at 04:53:10PM +0100, Linus Walleij wrote:
+> This is the first set of patches starting to migrate the
+> AB8500 charging code to use the struct power_supply_battery_info.
+> We drop some cruft along the road.
+>=20
+> This series does not add anything to the struct, just reuse
+> what is already there. Adding new stuff comes in the next
+> patch series.
+>=20
+> The AB8500 charging code has not been in working condition for
+> some time, but it is slowly getting there. Some of this is
+> just regular maintenance.
+>=20
+> ChangeLog v1->v2:
+> - Fixed review comments on patch 1.
 
-Maybe we can make {u32,...}_get_bits() be doing compile-time only checks
-if it is indeed a constant? The __field_overflow() usage is already only
-done if __builtin_constant_p(v), so I guess we can do the same with
-__bad_mask()?
+Thanks, queued.
 
-johannes
+-- Sebastian
+
+> Linus Walleij (16):
+>   power: supply: ab8500: Use core battery parser
+>   power: supply: ab8500: Sink current tables into charger code
+>   power: supply: ab8500: Standardize operating temperature
+>   power: supply: ab8500: Drop unused battery types
+>   power: supply: ab8500: Use only one battery type
+>   power: supply: ab8500: Standardize design capacity
+>   power: supply: ab8500: Standardize technology
+>   power: supply: ab8500: Standardize voltages
+>   power: supply: ab8500_fg: Init battery data in bind()
+>   power: supply: ab8500: Standardize internal resistance
+>   power: supply: ab8500: Standardize termination current
+>   power: supply: ab8500: Make recharge capacity a constant
+>   power: supply: ab8500: Standardize CC current
+>   power: supply: ab8500: Standardize CV voltage
+>   power: supply: ab8500: Standardize temp res lookup
+>   power: supply: ab8500: Standardize capacity lookup
+>=20
+>  drivers/power/supply/ab8500-bm.h       | 123 ++----
+>  drivers/power/supply/ab8500-chargalg.h |   8 +-
+>  drivers/power/supply/ab8500_bmdata.c   | 572 ++++++-------------------
+>  drivers/power/supply/ab8500_btemp.c    |  61 ++-
+>  drivers/power/supply/ab8500_chargalg.c | 315 +++++++-------
+>  drivers/power/supply/ab8500_charger.c  | 536 ++++++++++++-----------
+>  drivers/power/supply/ab8500_fg.c       | 371 ++++++++--------
+>  7 files changed, 804 insertions(+), 1182 deletions(-)
+>=20
+> --=20
+> 2.31.1
+>=20
+
+--lsqrsjd33oisvsup
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmGbx5AACgkQ2O7X88g7
++po3uA/9FIih3f1qmCMK4JEQ6JJMTfjzWMkSVzyP7PaAa72GeNVbmRFOoQkgnWG7
+RlgDwPHtTJ9OOKTbR63MJBaiXsMzKNNUwNvpF66E/dkDFh8fhxW9DHjffv5jp87N
+l9lig0uTiC+O83ddNa0urjZz2MLlewid6fcSSotqUAgeZg6wQd5D2VvL0bglQJZu
+TLDptTtWUTVf7bmwdwvujv292df2eNAF7wMcX3ymmB7V+Xh5fuSzNpED6/O9NegB
+a1zCefzIgFkedAlIQGOQI7LEk3cBaCz1E78J6PsnDURI7Vec5tB0L3A43For9oDY
+uMwsWrRlDbeHWg3H4owM+icNRAkMnznd4Bd+BKP1FlORTqqYHAfsjZXZuRlUcwso
+w4y8n2s0w3drGbrYCWeJm33JHz+VB5iUV9LCKn4NYuyowY86fCydIAR/hnAQUC0U
+8i7dwLyXc/BBBPeAezN24i5WUioTWm9Zz+OjPefSNZtpvg9TM8Y3rGhKomxXzQ0u
++jOsuu/yF21F0XfTidbFPeJVyv779FovT8QDFn7oy6vBkuCdtQ6OQO3yjdh66DMy
+qacQRD0UD5899vR5j1SKnGQws9vjQ7az8aob9olvxHQMfPP3WEYcRfbS79KlTlrl
+Srd+FVq9Hyn5RGBOJHQIVro5+YJGRzLavHBeDd7VDoYEYbAGVdU=
+=yxQu
+-----END PGP SIGNATURE-----
+
+--lsqrsjd33oisvsup--
