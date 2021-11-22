@@ -2,192 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C90C459451
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Nov 2021 18:52:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81B0345949C
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Nov 2021 19:19:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234381AbhKVRzw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 Nov 2021 12:55:52 -0500
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:41975 "EHLO
-        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbhKVRzu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Nov 2021 12:55:50 -0500
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 2884840004;
-        Mon, 22 Nov 2021 17:52:36 +0000 (UTC)
-Date:   Mon, 22 Nov 2021 18:52:35 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Tony Lindgren <tony@atomide.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Paul Walmsley <paul@pwsan.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>,
-        Benoit Parrot <bparrot@ti.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Ping-Ke Shih <pkshih@realtek.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH/RFC 13/17] pinctl: ti: iodelay: Use bitfield helpers
-Message-ID: <YZvY4/FCgYMBMeDJ@piout.net>
-References: <cover.1637592133.git.geert+renesas@glider.be>
- <60257a3c5b567fb5b14d6f9adb770899bce88f7a.1637592133.git.geert+renesas@glider.be>
+        id S239698AbhKVSWq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 Nov 2021 13:22:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42508 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240277AbhKVSWp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Nov 2021 13:22:45 -0500
+Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A36DC06175C
+        for <linux-pm@vger.kernel.org>; Mon, 22 Nov 2021 10:19:32 -0800 (PST)
+Received: by mail-vk1-xa35.google.com with SMTP id t127so10777968vke.13
+        for <linux-pm@vger.kernel.org>; Mon, 22 Nov 2021 10:19:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=QCG68ObPoGQ126FjMJ8YjZpzkjBTmbsGv489REpxv3o=;
+        b=pv2bOboCqFI0fD3Ev7d0pZw72wKWF0W1k/5eIB2E0mQytV+QboKGJ5zC1K2saGKCar
+         2eJILiFK7GvjaTuR7cxd+ltICPHeHUsz6jBmVjnDNelm4iWzl+hwZ14NdcsnrHEY6RwK
+         /1EQ+bB6ir6nOtECdISkhPiMroiQhqmLEW5bLf3HLRRHpZRwBhOiTZF6+Bfco8NDxjsv
+         B3DendbKTtay0OP6xVUvLdKho9n2wxTwQlBivKWbnxeXhRdhLWXm8IOj9JgFrBhv9xyZ
+         e421qDxpVSIKZd9UvLKCPFReuHx9zpKfhX5OQNYBLDo6AKcThB2i6ZV5demy/OB6he8W
+         q9mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=QCG68ObPoGQ126FjMJ8YjZpzkjBTmbsGv489REpxv3o=;
+        b=ZAuMCI64PAeoR4GlEZ74gEP6ZnExRJkbuKqGjiRAuCrJ6ISoIc3e8S9J4j4H0zThF1
+         aNgB9KOt90SLZhDWLCQ61FbixzvtrhNf+/FL3Xk0ruFZRqzc4kMDUZSVYndQ/RsmnPeR
+         PdUldQW8GO0S4XQWobozNtrrZ3zDUztjOVCJ8SLXJ5qJ98chKB2jhpmfu3j1veshX9kp
+         JmqGqLHtHc1VejCNzBlwJP6gkUiQ7XdbE2muti2OgpEgcyatdTJ18sDrR892gukGpiGE
+         iVY4rw4lSCEJYesJIdbBHH8RNle2XccinaKKpIgXC943+NGC4df6EOF7SRgB/H6iBN//
+         YLYQ==
+X-Gm-Message-State: AOAM533HqFJb+Czh7AUD7+eF2O7gASbMn94frLI5RPih0zUFjX+Hge11
+        RLy8qwKouhcLis/729eIQyQoMBEpdJHgrBMKR4U=
+X-Google-Smtp-Source: ABdhPJxcwEhlPIOUrnifpUaQjsENBLflzRyOTN4yGLSWPaOwSJGoHqrVj3onTbmM1LFxO/kHbhdedSSY92zRkd4MIvM=
+X-Received: by 2002:a05:6122:50e:: with SMTP id x14mr165062917vko.7.1637605171127;
+ Mon, 22 Nov 2021 10:19:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <60257a3c5b567fb5b14d6f9adb770899bce88f7a.1637592133.git.geert+renesas@glider.be>
+Received: by 2002:a59:9081:0:b0:238:a7b0:77e7 with HTTP; Mon, 22 Nov 2021
+ 10:19:30 -0800 (PST)
+Reply-To: deborahkouassi011@gmail.com
+From:   Deborah Kouassi <dk22002211@gmail.com>
+Date:   Mon, 22 Nov 2021 18:19:30 +0000
+Message-ID: <CANMpKgNURLgNtPn_-5OxUwQh2hnYgn2-Jmmv3=QA953YiBcZsQ@mail.gmail.com>
+Subject: Hello Dear
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Geert,
+.
+I will like to disclose something very important to you,
+get back to me for more details please.
 
-There is a typo in pinctrl in the subject
-
-On 22/11/2021 16:54:06+0100, Geert Uytterhoeven wrote:
-> Use the field_{get,prep}() helpers, instead of defining a custom
-> function, or open-coding the same operations.
-> 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
-> Compile-tested only.
-> Marked RFC, as this depends on [PATCH 01/17], but follows a different
-> path to upstream.
-> ---
->  drivers/pinctrl/ti/pinctrl-ti-iodelay.c | 35 +++++++------------------
->  1 file changed, 10 insertions(+), 25 deletions(-)
-> 
-> diff --git a/drivers/pinctrl/ti/pinctrl-ti-iodelay.c b/drivers/pinctrl/ti/pinctrl-ti-iodelay.c
-> index 4e2382778d38f557..b220dcd9215520db 100644
-> --- a/drivers/pinctrl/ti/pinctrl-ti-iodelay.c
-> +++ b/drivers/pinctrl/ti/pinctrl-ti-iodelay.c
-> @@ -9,6 +9,7 @@
->   * warranty of any kind, whether express or implied.
->   */
->  
-> +#include <linux/bitfield.h>
->  #include <linux/err.h>
->  #include <linux/init.h>
->  #include <linux/io.h>
-> @@ -155,18 +156,6 @@ struct ti_iodelay_device {
->  	struct ti_iodelay_reg_values reg_init_conf_values;
->  };
->  
-> -/**
-> - * ti_iodelay_extract() - extract bits for a field
-> - * @val: Register value
-> - * @mask: Mask
-> - *
-> - * Return: extracted value which is appropriately shifted
-> - */
-> -static inline u32 ti_iodelay_extract(u32 val, u32 mask)
-> -{
-> -	return (val & mask) >> __ffs(mask);
-> -}
-> -
->  /**
->   * ti_iodelay_compute_dpe() - Compute equation for delay parameter
->   * @period: Period to use
-> @@ -233,10 +222,10 @@ static int ti_iodelay_pinconf_set(struct ti_iodelay_device *iod,
->  	}
->  
->  	reg_mask = reg->signature_mask;
-> -	reg_val = reg->signature_value << __ffs(reg->signature_mask);
-> +	reg_val = field_prep(reg->signature_mask, reg->signature_value);
->  
->  	reg_mask |= reg->binary_data_coarse_mask;
-> -	tmp_val = c_elements << __ffs(reg->binary_data_coarse_mask);
-> +	tmp_val = field_prep(reg->binary_data_coarse_mask, c_elements);
->  	if (tmp_val & ~reg->binary_data_coarse_mask) {
->  		dev_err(dev, "Masking overflow of coarse elements %08x\n",
->  			tmp_val);
-> @@ -245,7 +234,7 @@ static int ti_iodelay_pinconf_set(struct ti_iodelay_device *iod,
->  	reg_val |= tmp_val;
->  
->  	reg_mask |= reg->binary_data_fine_mask;
-> -	tmp_val = f_elements << __ffs(reg->binary_data_fine_mask);
-> +	tmp_val = field_prep(reg->binary_data_fine_mask, f_elements);
->  	if (tmp_val & ~reg->binary_data_fine_mask) {
->  		dev_err(dev, "Masking overflow of fine elements %08x\n",
->  			tmp_val);
-> @@ -260,7 +249,7 @@ static int ti_iodelay_pinconf_set(struct ti_iodelay_device *iod,
->  	 * impacting iodelay configuration. Use with care!
->  	 */
->  	reg_mask |= reg->lock_mask;
-> -	reg_val |= reg->unlock_val << __ffs(reg->lock_mask);
-> +	reg_val |= field_prep(reg->lock_mask, reg->unlock_val);
->  	r = regmap_update_bits(iod->regmap, cfg->offset, reg_mask, reg_val);
->  
->  	dev_dbg(dev, "Set reg 0x%x Delay(a: %d g: %d), Elements(C=%d F=%d)0x%x\n",
-> @@ -296,16 +285,14 @@ static int ti_iodelay_pinconf_init_dev(struct ti_iodelay_device *iod)
->  	r = regmap_read(iod->regmap, reg->reg_refclk_offset, &val);
->  	if (r)
->  		return r;
-> -	ival->ref_clk_period = ti_iodelay_extract(val, reg->refclk_period_mask);
-> +	ival->ref_clk_period = field_get(reg->refclk_period_mask, val);
->  	dev_dbg(dev, "refclk_period=0x%04x\n", ival->ref_clk_period);
->  
->  	r = regmap_read(iod->regmap, reg->reg_coarse_offset, &val);
->  	if (r)
->  		return r;
-> -	ival->coarse_ref_count =
-> -	    ti_iodelay_extract(val, reg->coarse_ref_count_mask);
-> -	ival->coarse_delay_count =
-> -	    ti_iodelay_extract(val, reg->coarse_delay_count_mask);
-> +	ival->coarse_ref_count = field_get(reg->coarse_ref_count_mask, val);
-> +	ival->coarse_delay_count = field_get(reg->coarse_delay_count_mask, val);
->  	if (!ival->coarse_delay_count) {
->  		dev_err(dev, "Invalid Coarse delay count (0) (reg=0x%08x)\n",
->  			val);
-> @@ -326,10 +313,8 @@ static int ti_iodelay_pinconf_init_dev(struct ti_iodelay_device *iod)
->  	r = regmap_read(iod->regmap, reg->reg_fine_offset, &val);
->  	if (r)
->  		return r;
-> -	ival->fine_ref_count =
-> -	    ti_iodelay_extract(val, reg->fine_ref_count_mask);
-> -	ival->fine_delay_count =
-> -	    ti_iodelay_extract(val, reg->fine_delay_count_mask);
-> +	ival->fine_ref_count = field_get(reg->fine_ref_count_mask, val);
-> +	ival->fine_delay_count = field_get(reg->fine_delay_count_mask, val);
->  	if (!ival->fine_delay_count) {
->  		dev_err(dev, "Invalid Fine delay count (0) (reg=0x%08x)\n",
->  			val);
-> -- 
-> 2.25.1
-> 
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards.
+Mrs Deborah Kouassi.
