@@ -2,49 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3422458AC3
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Nov 2021 09:51:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D280458AC7
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Nov 2021 09:51:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232708AbhKVIyl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 Nov 2021 03:54:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53484 "EHLO
+        id S238837AbhKVIyn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 Nov 2021 03:54:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232524AbhKVIyk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Nov 2021 03:54:40 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A07C061748
-        for <linux-pm@vger.kernel.org>; Mon, 22 Nov 2021 00:51:34 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id g28so14742451pgg.3
-        for <linux-pm@vger.kernel.org>; Mon, 22 Nov 2021 00:51:34 -0800 (PST)
+        with ESMTP id S238645AbhKVIym (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Nov 2021 03:54:42 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A67D2C061574
+        for <linux-pm@vger.kernel.org>; Mon, 22 Nov 2021 00:51:36 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id r130so15464520pfc.1
+        for <linux-pm@vger.kernel.org>; Mon, 22 Nov 2021 00:51:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=vN46N1+4oQ0oMJzswL8DTaFRap35wbWPoW8w+rqf+MQ=;
-        b=kHjZyfDVjJd+r/iCSVg6WzoW7vmtfsn6ulQrxELauq1RcJMmO60YU0oxsGzhs5cOfz
-         ckI52wnBlRYmxjp/rb6zI0yOoPz/426BYuox4D0FoFBdH3eRVASmVMJhYugvwrs2UeBX
-         kI3a4/uGUSjw85hanWUhvCLyKQnRUHUhCUoftgAmOSa0EyHx0tRndZDwSQKmG7O7cidp
-         yHCGrrnbVPjqKJ7uxq1LXtFQKgONnshfNgt59YhWLgne+HJ9xXQ/JxkE1XDR1BUil25w
-         iI4Y9ngCvNFNeREfDVcBtx9xgyGUXFHs4x6KQU3nhqqRCBC6UrJ0EBktW6oBKaQiP4z8
-         rmNQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=vrS5M6DytZl+EPmdclSiBMyMOC/Af23DduwHTH7/9D0=;
+        b=hV8vJ5Hhqe9f7G0mHN4gVdSc0X+ojLVAqcD0F4B7pY40g4acbTPLZgBKRjUdzSXpDd
+         f2c+MOaqaBadtc1VZSqaBemAtOZUSZIPf6kKQ8nNWTXdbj0zY5opkd2szs/EbvJTrI9A
+         lDGz4524IKwFllJWYzAjVH5d+ymmYbEcQqplndN0qlbNrUrQfjXi1Qrkh/sFFl6HZZO/
+         MVULtLcsTpEIXRqC5YnNP0wN+Mqu0mxY1idiKVjz81qTIMIh+Vfy1DcCpwjKawhuOu0U
+         h8+WIrfvGIUtN/b6P8ZzBz6pwG+XoMUDLQWs72Alw8yHYhdOmeiSGCaHctyoCnhFTvAP
+         Zsqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=vN46N1+4oQ0oMJzswL8DTaFRap35wbWPoW8w+rqf+MQ=;
-        b=BTj3H5zmzDFqjliZn6JqBYOcnj1pqNWTkqQBZVJHt0Q7e2dsrjl0aVwbnP3QHAa+5z
-         fNXfKaI1vu85YQa+W/AUMGm7pQ4DxpzPvv+X16zwBGPotQDCjBUcswb4YNUDCSbw+yPA
-         8xiTTcs64HEKQHwB8/61M/Ye9EHvEyrEfXkGy2/t4+cBnAaezPVvDP6eVUei1wwePRgR
-         XRxFOCzb1w+aDrtnUAcTKW+HgglnjkriBr8yktQL/AybrjenUQrfDrxOCK1J9AkhfZrT
-         hEVh8deZErD3eTGDKHtEXB52A3MjVcMRHBTCxi6YyPHCHDY8Vhd2D73ifvzA2EdYgadf
-         Dvsw==
-X-Gm-Message-State: AOAM532A2F85JdVD+iIg4ntwW6h9jT7l7hSrVYE0/HfqtqU0oNR1SblZ
-        cohU7FJhk0mE1fJE0CQGRVdI+zOz/qbopg==
-X-Google-Smtp-Source: ABdhPJwCjflmLnGpIAwZk/wazQD7KDeEQC25uzRlzJwNzKJxN6YsNC3e+imykdsoDhQvqjD4j7THeA==
-X-Received: by 2002:a62:ea10:0:b0:4a2:c7bc:c5ec with SMTP id t16-20020a62ea10000000b004a2c7bcc5ecmr43270685pfh.44.1637571093586;
-        Mon, 22 Nov 2021 00:51:33 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=vrS5M6DytZl+EPmdclSiBMyMOC/Af23DduwHTH7/9D0=;
+        b=Jpe3nuNuPrTciguj/xVvDgstE1v9LJpgJx+plZbrs87E0koLi+stwSGu5xLjOO9U3k
+         Ch0s4XOsRU7he/x6jUzuWB0PoJf9h1KKOq1s/U9j8m00GX4DZ+QpuYzkJCV/y7SVYND2
+         Du+XwyMd2wu4lDnxmGL9I5nmYC3V0BmWUBdPvZXpCijGQOVcfFvP7r6raZ3IoqCauh+q
+         LNrlEKOu0dqz4wcugcdQ2XUMqbixNXrKCoLMCIg+RuoIgF2t0avHB4RQA+3I86ubF7vM
+         E0TdkvUtErFc6TZOX6yftdEfzjM92rLTDHtIdEi7clYfti9qEamkR+HgzZ58K5n1hVVU
+         h1Vg==
+X-Gm-Message-State: AOAM533l4l0NCg29D2Gzg1m9Wll1QF39zY+gK20s5jJH/37IBRoeUjWG
+        DVuxZfyGltvd3gTCsIFYTl1x1Q==
+X-Google-Smtp-Source: ABdhPJyFOp3ta3lraSt0RfwgCwE1hkuUHMyTkhgAKHevDQ6z0cjghv2dIdmYyGdkYezWZojI9Y4+Hw==
+X-Received: by 2002:a63:1451:: with SMTP id 17mr32113745pgu.175.1637571096264;
+        Mon, 22 Nov 2021 00:51:36 -0800 (PST)
 Received: from localhost.localdomain (80.251.214.228.16clouds.com. [80.251.214.228])
-        by smtp.gmail.com with ESMTPSA id f8sm8445582pfv.135.2021.11.22.00.51.31
+        by smtp.gmail.com with ESMTPSA id f8sm8445582pfv.135.2021.11.22.00.51.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Nov 2021 00:51:33 -0800 (PST)
+        Mon, 22 Nov 2021 00:51:36 -0800 (PST)
 From:   Shawn Guo <shawn.guo@linaro.org>
 To:     Georgi Djakov <djakov@kernel.org>
 Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -53,45 +54,46 @@ Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Shawn Guo <shawn.guo@linaro.org>
-Subject: [PATCH v2 0/6] Add QCM2290 interconnect support
-Date:   Mon, 22 Nov 2021 16:51:17 +0800
-Message-Id: <20211122085123.21049-1-shawn.guo@linaro.org>
+Subject: [PATCH v2 1/6] interconnect: icc-rpm: Use NOC_QOS_MODE_INVALID for qos_mode check
+Date:   Mon, 22 Nov 2021 16:51:18 +0800
+Message-Id: <20211122085123.21049-2-shawn.guo@linaro.org>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20211122085123.21049-1-shawn.guo@linaro.org>
+References: <20211122085123.21049-1-shawn.guo@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The series begins with a separate cleanup on icc-rpm, followed by a few
-prep changes for QCM2290 support, and then adds bindings and
-interconnect driver for QCM2290 platform.
+Use NOC_QOS_MODE_INVALID for invalid qos_mode check to improve the
+readability.
 
-Changes for v2:
-- Drop unneeded include of <dt-bindings/clock/qcom,gcc-qcm2290.h> from
-  bindings.
+Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+---
+ drivers/interconnect/qcom/icc-rpm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Shawn Guo (6):
-  interconnect: icc-rpm: Use NOC_QOS_MODE_INVALID for qos_mode check
-  interconnect: icc-rpm: Define ICC device type
-  interconnect: icc-rpm: Add QNOC type QoS support
-  interconnect: icc-rpm: Support child NoC device probe
-  dt-bindings: interconnect: Add Qualcomm QCM2290 NoC support
-  interconnect: qcom: Add QCM2290 driver support
-
- .../bindings/interconnect/qcom,qcm2290.yaml   |  116 ++
- drivers/interconnect/qcom/Kconfig             |    9 +
- drivers/interconnect/qcom/Makefile            |    2 +
- drivers/interconnect/qcom/icc-rpm.c           |   56 +-
- drivers/interconnect/qcom/icc-rpm.h           |   14 +-
- drivers/interconnect/qcom/msm8916.c           |    4 +-
- drivers/interconnect/qcom/msm8939.c           |    5 +-
- drivers/interconnect/qcom/qcm2290.c           | 1363 +++++++++++++++++
- drivers/interconnect/qcom/sdm660.c            |    7 +-
- .../dt-bindings/interconnect/qcom,qcm2290.h   |   94 ++
- 10 files changed, 1657 insertions(+), 13 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,qcm2290.yaml
- create mode 100644 drivers/interconnect/qcom/qcm2290.c
- create mode 100644 include/dt-bindings/interconnect/qcom,qcm2290.h
-
+diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
+index ef7999a08c8b..35888721a690 100644
+--- a/drivers/interconnect/qcom/icc-rpm.c
++++ b/drivers/interconnect/qcom/icc-rpm.c
+@@ -76,7 +76,7 @@ static int qcom_icc_set_bimc_qos(struct icc_node *src, u64 max_bw)
+ 	provider = src->provider;
+ 	qp = to_qcom_provider(provider);
+ 
+-	if (qn->qos.qos_mode != -1)
++	if (qn->qos.qos_mode != NOC_QOS_MODE_INVALID)
+ 		mode = qn->qos.qos_mode;
+ 
+ 	/* QoS Priority: The QoS Health parameters are getting considered
+@@ -137,7 +137,7 @@ static int qcom_icc_set_noc_qos(struct icc_node *src, u64 max_bw)
+ 		return 0;
+ 	}
+ 
+-	if (qn->qos.qos_mode != -1)
++	if (qn->qos.qos_mode != NOC_QOS_MODE_INVALID)
+ 		mode = qn->qos.qos_mode;
+ 
+ 	if (mode == NOC_QOS_MODE_FIXED) {
 -- 
 2.17.1
 
