@@ -2,58 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09B7E4592C4
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Nov 2021 17:11:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A315459154
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Nov 2021 16:25:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239842AbhKVQOg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 Nov 2021 11:14:36 -0500
-Received: from mx08-00227901.pphosted.com ([91.207.212.184]:52378 "EHLO
-        mx08-00227901.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229955AbhKVQOf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Nov 2021 11:14:35 -0500
-Received: from pps.filterd (m0097674.ppops.net [127.0.0.1])
-        by mx08-.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1AJ7wixf018132;
-        Fri, 19 Nov 2021 10:27:13 +0100
-Received: from zbw2k16ex01.bardusch.net ([185.80.186.174])
-        by mx08-.pphosted.com (PPS) with ESMTPS id 3cdmdm1455-6
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Fri, 19 Nov 2021 10:27:13 +0100
-Received: from zbw2k16ex02.bardusch.net (172.25.1.2) by
- ZBW2K16EX01.bardusch.net (172.25.1.1) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.2308.20;
- Fri, 19 Nov 2021 10:27:11 +0100
-Received: from User (172.25.1.131) by zbw2k16ex02.bardusch.net (172.25.1.2)
- with Microsoft SMTP Server id 15.1.2308.20 via Frontend Transport; Fri, 19
- Nov 2021 10:27:00 +0100
-Reply-To: <josechoondak@gmail.com>
-From:   Joseph Choondak <info@ndd.co.mz>
-Subject: I hope this email finds you well.
-Date:   Fri, 19 Nov 2021 01:27:14 -0800
+        id S239932AbhKVP2Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 Nov 2021 10:28:25 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56312 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239945AbhKVP2U (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 22 Nov 2021 10:28:20 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0FD8D60230;
+        Mon, 22 Nov 2021 15:25:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637594709;
+        bh=GR8LyQtM0ZM0W2FoeSZ0IwjeQhHesgzQ9tX4AHyKytg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=poGol0emrDdzryc5UnGTptPoklyDE9E2uyhaJuvTRbxXW8bjb2r3pbcg2f6qau1ep
+         NLFh14w9Dxyb54cnIPZ0RuyoxpW7ARmyZCwj8OM8+REfiGWIj66BhiTCliSxcVEcn5
+         Md/FFwSgAejmmIvJas9wpPk2yd8yC5OXp4Nacn0F+i5+6+8OcXLc+LzpMm/XM2i2sn
+         GVTVuipPT1vCc4m1eBs7DAF9QQy0ssy4MjFbj2j2RY2c1xea76lmOb+LizkqKiIZDp
+         Mw6kPv8uOxZY1uhlcs4ucg8ArUdEADm+1GEGeBtsKAXnTzpLT8zcYEqNj7ctkI8MGn
+         edlM05akgLw2w==
+Message-ID: <1b9cdfba-6436-f2bd-d67b-7528758a6c35@kernel.org>
+Date:   Mon, 22 Nov 2021 17:25:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="Windows-1251"
+Subject: Re: [v8 2/3] interconnect: qcom: Add EPSS L3 support on SC7280
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Odelu Kukatla <okukatla@codeaurora.org>,
+        georgi.djakov@linaro.org
+Cc:     evgreen@google.com, Andy Gross <agross@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sboyd@kernel.org,
+        mdtipton@codeaurora.org, sibis@codeaurora.org,
+        saravanak@google.com, seansw@qti.qualcomm.com, elder@linaro.org,
+        linux-arm-msm-owner@vger.kernel.org
+References: <1634812857-10676-1-git-send-email-okukatla@codeaurora.org>
+ <1634812857-10676-3-git-send-email-okukatla@codeaurora.org>
+ <YZa9SStiYqfp6f7a@builder.lan>
+From:   Georgi Djakov <djakov@kernel.org>
+In-Reply-To: <YZa9SStiYqfp6f7a@builder.lan>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-ID: <e36b6b33-d3b3-4f08-8033-0aba2c4cece8@zbw2k16ex02.bardusch.net>
-To:     Undisclosed recipients:;
-X-Proofpoint-GUID: TLQLmM0KGMyKZ2pptUvqji1PrJ_tMJCL
-X-Proofpoint-ORIG-GUID: TLQLmM0KGMyKZ2pptUvqji1PrJ_tMJCL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-19_08,2021-11-17_01,2020-04-07_01
-X-Proofpoint-Spam-Reason: orgsafe
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-May I please ask with considerable urgency for your kind assistance with the following matter.
-I'm a financial person, I think  I have something huge you might be interested in.
+On 18.11.21 22:53, Bjorn Andersson wrote:
+> On Thu 21 Oct 05:40 CDT 2021, Odelu Kukatla wrote:
+> 
+>> Add Epoch Subsystem (EPSS) L3 interconnect provider support on
+>> SC7280 SoCs.
+>>
+> 
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Looking forward to hearing from you.
+Thanks!
 
+> @Georgi, do you intend to apply the two interconnect patches in this
+> series?
 
-Respectfully!!
-Joseph Choondak
-Account Executive.
+Yes, applied!
+
+BR,
+Georgi
+
+> 
+> Regards,
+> Bjorn
+> 
+>> Signed-off-by: Odelu Kukatla <okukatla@codeaurora.org>
+>> ---
+>>   drivers/interconnect/qcom/osm-l3.c | 20 +++++++++++++++++++-
+>>   drivers/interconnect/qcom/sc7280.h |  2 ++
+>>   2 files changed, 21 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/interconnect/qcom/osm-l3.c b/drivers/interconnect/qcom/osm-l3.c
+>> index c7af143..eec1309 100644
+>> --- a/drivers/interconnect/qcom/osm-l3.c
+>> +++ b/drivers/interconnect/qcom/osm-l3.c
+>> @@ -1,6 +1,6 @@
+>>   // SPDX-License-Identifier: GPL-2.0
+>>   /*
+>> - * Copyright (c) 2020, The Linux Foundation. All rights reserved.
+>> + * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
+>>    */
+>>   
+>>   #include <linux/bitfield.h>
+>> @@ -15,6 +15,7 @@
+>>   #include <dt-bindings/interconnect/qcom,osm-l3.h>
+>>   
+>>   #include "sc7180.h"
+>> +#include "sc7280.h"
+>>   #include "sc8180x.h"
+>>   #include "sdm845.h"
+>>   #include "sm8150.h"
+>> @@ -114,6 +115,22 @@ static const struct qcom_osm_l3_desc sc7180_icc_osm_l3 = {
+>>   	.reg_perf_state = OSM_REG_PERF_STATE,
+>>   };
+>>   
+>> +DEFINE_QNODE(sc7280_epss_apps_l3, SC7280_MASTER_EPSS_L3_APPS, 32, SC7280_SLAVE_EPSS_L3);
+>> +DEFINE_QNODE(sc7280_epss_l3, SC7280_SLAVE_EPSS_L3, 32);
+>> +
+>> +static const struct qcom_osm_l3_node *sc7280_epss_l3_nodes[] = {
+>> +	[MASTER_EPSS_L3_APPS] = &sc7280_epss_apps_l3,
+>> +	[SLAVE_EPSS_L3_SHARED] = &sc7280_epss_l3,
+>> +};
+>> +
+>> +static const struct qcom_osm_l3_desc sc7280_icc_epss_l3 = {
+>> +	.nodes = sc7280_epss_l3_nodes,
+>> +	.num_nodes = ARRAY_SIZE(sc7280_epss_l3_nodes),
+>> +	.lut_row_size = EPSS_LUT_ROW_SIZE,
+>> +	.reg_freq_lut = EPSS_REG_FREQ_LUT,
+>> +	.reg_perf_state = EPSS_REG_PERF_STATE,
+>> +};
+>> +
+>>   DEFINE_QNODE(sc8180x_osm_apps_l3, SC8180X_MASTER_OSM_L3_APPS, 32, SC8180X_SLAVE_OSM_L3);
+>>   DEFINE_QNODE(sc8180x_osm_l3, SC8180X_SLAVE_OSM_L3, 32);
+>>   
+>> @@ -326,6 +343,7 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
+>>   
+>>   static const struct of_device_id osm_l3_of_match[] = {
+>>   	{ .compatible = "qcom,sc7180-osm-l3", .data = &sc7180_icc_osm_l3 },
+>> +	{ .compatible = "qcom,sc7280-epss-l3", .data = &sc7280_icc_epss_l3 },
+>>   	{ .compatible = "qcom,sdm845-osm-l3", .data = &sdm845_icc_osm_l3 },
+>>   	{ .compatible = "qcom,sm8150-osm-l3", .data = &sm8150_icc_osm_l3 },
+>>   	{ .compatible = "qcom,sc8180x-osm-l3", .data = &sc8180x_icc_osm_l3 },
+>> diff --git a/drivers/interconnect/qcom/sc7280.h b/drivers/interconnect/qcom/sc7280.h
+>> index 175e400..1fb9839 100644
+>> --- a/drivers/interconnect/qcom/sc7280.h
+>> +++ b/drivers/interconnect/qcom/sc7280.h
+>> @@ -150,5 +150,7 @@
+>>   #define SC7280_SLAVE_PCIE_1			139
+>>   #define SC7280_SLAVE_QDSS_STM			140
+>>   #define SC7280_SLAVE_TCU			141
+>> +#define SC7280_MASTER_EPSS_L3_APPS		142
+>> +#define SC7280_SLAVE_EPSS_L3			143
+>>   
+>>   #endif
+>> -- 
+>> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+>> a Linux Foundation Collaborative Project
+>>
+
