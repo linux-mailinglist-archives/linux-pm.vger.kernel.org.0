@@ -2,139 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0827845A3BF
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Nov 2021 14:29:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D33145A4B5
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Nov 2021 15:10:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231682AbhKWNdE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Nov 2021 08:33:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48994 "EHLO
+        id S237463AbhKWON5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Nov 2021 09:13:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236277AbhKWNdA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Nov 2021 08:33:00 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3512C061756;
-        Tue, 23 Nov 2021 05:29:52 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id x6so6163855iol.13;
-        Tue, 23 Nov 2021 05:29:52 -0800 (PST)
+        with ESMTP id S237907AbhKWONw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Nov 2021 09:13:52 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F71C061714
+        for <linux-pm@vger.kernel.org>; Tue, 23 Nov 2021 06:10:44 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id q16so2747446pgq.10
+        for <linux-pm@vger.kernel.org>; Tue, 23 Nov 2021 06:10:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1mzzQH4LR8E9en0oLHeEKt75OwAJ6GPgE1N3vKIF5Ws=;
-        b=EIo2zpjMsvO81Q+EI8R8OfQZEXUoQwQClX2UVj0GR1MrfeNV9a2+iuM6IKMbfJesVu
-         5W++R+mfnHKAUBjb2m6wPb6Sfqmep6qhLW5scVdDgAqj3KvBsvWJ9c5XPr6tFEgvtpQV
-         e6nwS00xARewgIe5CpUn3IH9LWwEJ05wjGn8v7yaoRz9h8inoXZiIiq84LNAITBaJQpV
-         7K3P5Jp7/mXCjZuHeuaujwziT+pycwl9fWiyw5X8zWIxxcE8QOQHQujCuZwBbnVWt64V
-         7jXjBqcQATkgPpUKl/jNmU4MZRgd1ahChBNZ+dhDBnV44dn8DOUvmWaeGA68tZpWYOuP
-         LgYA==
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=wuv/KeDLS7Gf/pWTVxTWuzQ5sq4l+ohUEKuoWa75f94=;
+        b=zZLWh66XUGMwjyzMY2YK667z2of9+qoiWdW0htGZbyZ7lVz6xSGWaX1pCwuYVEpQX2
+         2gg8gupSC7ShawdciX0oHTJK/dofcHX7EaFxWA4MJujTnGNM58gB3bWbAgkHSV+ZKl1z
+         Q9pvo9O9d8BW99E39RyyjCvRy5an87uYTK/Hxj94Ql78lVGkTMFcvzbQ7CUWhbrYadIT
+         tlBRSejyKAat8VGvGf9t4WUI3O5MG/eaMOYsd2jlKex+4mO9wv7O7bEpeBHvVYXjgjOf
+         LitHQbvFLkrSeUFaKirOz/dYXQoG53rRiMrz+R1G+dfktX52cbqlEbD8+5wxJRkg39mR
+         BbOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1mzzQH4LR8E9en0oLHeEKt75OwAJ6GPgE1N3vKIF5Ws=;
-        b=r/tOiNxk5OdO67wrjgknl05LpEZs0nU3sF7A6MogsdEPq6eEgSn1dlvObQFLfkzZm/
-         G+cgjc+cApi2nqmm16OUcepfYo1iQ4H9BwY4ikCQdoaneds+ON5yqJXc6u7F33H3OLNI
-         huKj1NSlTrW2B6iPj5LGG04/khP5rg08ts2j7rHh7Uf1iGGUZOgA4yF5Rrc94L+lGTqW
-         MyO2tYAGjVOhyfvOnihOCZH0EIFguCSQLySMfAqLhLEO4Kw3D7usmc4TZEaUZiMQ/puq
-         lEknIJSZ++ygo17BKw4ooNYxG3RHdHUgcTXP+KDb+o0mI+JfVsJ9mwOUZh6+aTWunnKw
-         uLqg==
-X-Gm-Message-State: AOAM532bYFn0hJ+mmi7O7ddoMaF4QhIyUlmH08UBxXdi39ixOjkdtGwR
-        PpcIKSWwtHRFIT5jJABHi6NF8eVLfWFBHpOZnO8=
-X-Google-Smtp-Source: ABdhPJwMXgvkb/4JorRGYlbB9RBc9fTrr+yiBWVTdyS2Dguc9dZBlAvAFOrg/Q3ogahTOw2JtEq0LxkF6gaQvD7d6os=
-X-Received: by 2002:a6b:ea0a:: with SMTP id m10mr5581825ioc.91.1637674192312;
- Tue, 23 Nov 2021 05:29:52 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=wuv/KeDLS7Gf/pWTVxTWuzQ5sq4l+ohUEKuoWa75f94=;
+        b=tQxs+trDzFFsemVBn8o230hLWhRsP9ILKfOxd75mAbzELyYdwyeJcaX5E3oPTJYZaR
+         6VmW4GgpNiFK5inhndet/+pjPtSgsC8aKSmxiSsxZJa5e2M2zVnMG4OnJ32e48YcUlsh
+         8kDgo5M84wp79SnsOtQIXfmdSyNZV/MC7l7yEULwwTmDcyQ7r8exgVya3FuSIMmfjhU/
+         eCq8GYpFZqpERNokJMhD+Z0xgGyKo1T9Y0cajsZAeTdta9T9ACYUH0/zbkfxQ+vqW/UI
+         wIqdGS52yk+c1R+ZoGRV3VFWyhWXvfeQpwc4IyzmLFdNqSz+Sltrlq3J1pBO3baUY6kx
+         jEkg==
+X-Gm-Message-State: AOAM531Lit1mQdT3TpR9AJn3larS0dbTLbh4siMXn716TYSx46cuGb4F
+        UagylTLHIyKn40tFspXyR4YxMw==
+X-Google-Smtp-Source: ABdhPJyRi25RjR+/UpzhT6WcQLapK8TgldEO6Em0bdhshTQFXcQFRonlEushIs/dBR2X1Zw32MYufg==
+X-Received: by 2002:a63:2364:: with SMTP id u36mr3950702pgm.59.1637676644092;
+        Tue, 23 Nov 2021 06:10:44 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id g11sm9005797pgn.41.2021.11.23.06.10.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Nov 2021 06:10:43 -0800 (PST)
+Message-ID: <619cf663.1c69fb81.539a2.88b1@mx.google.com>
+Date:   Tue, 23 Nov 2021 06:10:43 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20211110122948.188683-1-alistair@alistair23.me>
- <20211110122948.188683-2-alistair@alistair23.me> <20211117223950.3a7eaf7a@aktux>
-In-Reply-To: <20211117223950.3a7eaf7a@aktux>
-From:   Alistair Francis <alistair23@gmail.com>
-Date:   Tue, 23 Nov 2021 23:29:26 +1000
-Message-ID: <CAKmqyKP_gQ1qSADMPwmyf-V0TqGOYf2GitzpDXsmBUO6_iqK7Q@mail.gmail.com>
-Subject: Re: [PATCH v15 1/8] dt-bindings: mfd: Initial commit of silergy,sy7636a.yaml
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     Alistair Francis <alistair@alistair23.me>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>, lgirdwood@gmail.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        rui.zhang@intel.com, devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-hwmon@vger.kernel.org, amitk@kernel.org,
-        linux-pm@vger.kernel.org, dl-linux-imx <linux-imx@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>, Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.16-rc2-9-gaf8757179e68
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 1 warning (v5.16-rc2-9-gaf8757179e68)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Nov 18, 2021 at 7:40 AM Andreas Kemnade <andreas@kemnade.info> wrote:
->
-> On Wed, 10 Nov 2021 22:29:41 +1000
-> Alistair Francis <alistair@alistair23.me> wrote:
->
-> > Initial support for the Silergy SY7636A Power Management chip
-> > and regulator.
-> >
-> > Signed-off-by: Alistair Francis <alistair@alistair23.me>
-> > Reviewed-by: Rob Herring <robh@kernel.org>
-> > Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
-> > ---
-> >  .../bindings/mfd/silergy,sy7636a.yaml         | 79 +++++++++++++++++++
-> >  1 file changed, 79 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml b/Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml
-> > new file mode 100644
-> > index 000000000000..0566f9498e2f
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml
-> [...]
-> > +  regulators:
-> > +    type: object
-> > +
-> > +    properties:
-> > +      compatible:
-> > +        const: silergy,sy7636a-regulator
-> > +
-> > +      vcom:
-> > +        type: object
-> > +        $ref: /schemas/regulator/regulator.yaml#
-> > +        properties:
-> > +          regulator-name:
-> > +            const: vcom
-> > +
-> hmm, this is what? If I understand it correctly, vcom means some
-> voltage for compensation. On other comparable pmics (e.g. TPS65185
-> which has also a sane public datasheet, MAX17135) I have seen some
-> methods to measure a voltage while the display is doing something
-> defined and then program this voltage non-volatile for compensation
-> during manufacturing.
->
-> If I understand the code correctly all the bunch of voltages are
-> powered up if this one is enabled.
-> So at least a description should be suitable.
->
-> The other comparable PMICs have at least regulators named VCOM, DISPLAY
-> (controls several regulators, started with delays configured via
-> registers) and V3P3. MAX17135 source can be found in NXP kernels,
-> TPS65185 in Kobo vendor kernels.
->
-> So I would expect to see something similar here and a description or at
-> least not such a misleading name as vcom if it is for some reason not
-> feasible to separate the regulators.
+pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.16-rc2-9-gaf8=
+757179e68)
 
-This is a vcom in the sense of voltage for compensation. We just
-currently don't support setting the vcom.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+16-rc2-9-gaf8757179e68/
 
-I had a look at the Kobo code and this is similar to
-https://github.com/akemnade/linux/blob/kobo/epdc-pmic-5.15/drivers/regulator/sy7636-regulator.c#L614
+Tree: pm
+Branch: testing
+Git Describe: v5.16-rc2-9-gaf8757179e68
+Git Commit: af8757179e68cbbc2e001e3acaddb4bdd9883cd9
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
-So I think that vcom is still the appropriate name for this.
+Warnings Detected:
 
-Alistair
+arc:
 
->
-> Regards,
-> Andreas
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+x86_64:
+
+
+Warnings summary:
+
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
