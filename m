@@ -2,102 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04B1C459FE9
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Nov 2021 11:16:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F248145A089
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Nov 2021 11:40:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235389AbhKWKTn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Nov 2021 05:19:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60330 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232307AbhKWKTn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Nov 2021 05:19:43 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B48FC061714
-        for <linux-pm@vger.kernel.org>; Tue, 23 Nov 2021 02:16:35 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id o19-20020a1c7513000000b0033a93202467so2111989wmc.2
-        for <linux-pm@vger.kernel.org>; Tue, 23 Nov 2021 02:16:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=+9ryz7vgzdzT6CvTKvKSjwgyGJQO+uKj904pYNg7wxo=;
-        b=bJPVpuq7XVHbUY1uVa9BDx32xiWj+E/dXiOA2K8YH0JsrSM/0Yz2DTxvdw3ukTYEjD
-         8PcKDlTpscb4fVjWbDuCeLB/myyS9GaJt8XWmMHg26cbZTp0mBd1sqAn/6b6+zryrP17
-         iIA93PwkXQZkHxhe0q05SuIfwd2tn8S+67pHHdxmubhtDPpguWKrJQGlB16DjSsbZQkK
-         w/UgohphraUfWeI/6HPWOw1WR80LddAOWEE1tPTgisQq1y+p5s3vuygoAmQ5EaMgd0Jd
-         VNC6bkUXpaCXt+XTLmLVlt3ZtrkgpT3zmz8/jWv4/At+JMOZ+gOD/5GE8uc5QTMZnFEN
-         yWxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+9ryz7vgzdzT6CvTKvKSjwgyGJQO+uKj904pYNg7wxo=;
-        b=dkjg4yaHC51wJ1QC/akCUOxCvtunQ4fUmQ1uIpLhcPjSkYxjGAxBtP/PTdGxX2plP2
-         KKhkjDL1aCo+yVSdxiYn6GiFOdNEuE/LtXm3CHJEMg4W1uLk0gSt32DlsDoXUfVXIVOp
-         R0iihj7O9w1nSx9iKfq+NrEJFMB5KdzfSoyjzoYu3l/s+c+gXwsKC/WQe1IwCm1qv0T+
-         FypGzlD+rgOOW0UUakwWE+esYYkv+AE9g8Co44AImQT4fJ3CWp5w317jBI8xShjCTG7W
-         oWS7/tPTevzw/wQzW/m3vR47m67XZsYo+nuRWD0VzU34M0jiWLXkN1Iz3TzkdFVV9b9o
-         dEQg==
-X-Gm-Message-State: AOAM530SCDzY+9RzcpU4RvRQFe0oNgH9y7iO+5Y8yui448zEgUjdNOQ8
-        5ss0dxljOq6iRmSmlTHSs9gdnQ==
-X-Google-Smtp-Source: ABdhPJyhwXTYNLFK5FtrMOjYw903pgiOyYbiwRL92lijRyE0DGper/vX/qmi2+7p0FV7FoSCovPedg==
-X-Received: by 2002:a05:600c:22d0:: with SMTP id 16mr1589838wmg.37.1637662593926;
-        Tue, 23 Nov 2021 02:16:33 -0800 (PST)
-Received: from localhost.localdomain ([2a01:e34:ed2f:f020:3c04:dd20:bbdc:7a85])
-        by smtp.gmail.com with ESMTPSA id v8sm11492662wrd.84.2021.11.23.02.16.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Nov 2021 02:16:33 -0800 (PST)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Daniel Lezcano <daniel.lezcano@kernel.org>
-Subject: [PATCH 2/2] powercap/drivers/dtpm: Reduce trace verbosity
-Date:   Tue, 23 Nov 2021 11:16:01 +0100
-Message-Id: <20211123101601.2433340-2-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211123101601.2433340-1-daniel.lezcano@linaro.org>
-References: <20211123101601.2433340-1-daniel.lezcano@linaro.org>
+        id S235725AbhKWKnu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Nov 2021 05:43:50 -0500
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:37795 "EHLO
+        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235743AbhKWKnm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Nov 2021 05:43:42 -0500
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.nyi.internal (Postfix) with ESMTP id D5D3E5806F4;
+        Tue, 23 Nov 2021 05:40:31 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Tue, 23 Nov 2021 05:40:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        from:to:cc:subject:date:message-id:in-reply-to:references
+        :mime-version:content-type:content-transfer-encoding; s=fm1; bh=
+        miDrV82J0ZsN0PQaRMwRlbgH8WiXcgAP1TpGLhAS3pg=; b=OTfa0K0azWXXhJFW
+        tmK/EtGED+HqhMEeAWNQluEOBFVRvyrFllTpQLPFIB4pTxbxwVSYwU88nlHf4eZi
+        TgxopEddekq8fWNkI1DPQ0yK2LEGv1v6AwtqQnOZa59z6M+reJTBzR5GQeCaXQk6
+        +nRnx0aSC3eAjSzQE6R7j4rkeMR0TDJw2Ne3vydXBtTCm0W71On24loYvfMCYK0q
+        cJzi5O/Zm24V2h8pxLJri0jQC6hjms8lGfmo5UKoa9IwZDZ3IimAVvpr4IreV4zd
+        IeYaJPfajwHFgxzjWgQIYDs1pYbgPa+TJjipKL0hanhPG7l8fsjmcgjaZqXP+KcE
+        vBaXgg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; bh=miDrV82J0ZsN0PQaRMwRlbgH8WiXcgAP1TpGLhAS3
+        pg=; b=mLx//qyfCZ2AETQRAQMHa7XOQe8419W2rz6Qeqjv1KODTYhdIIY4YmFGq
+        0l03/rvFo6+0kJFAKmYP31g3LAsvogRpdPEONT01eMhk1MrasP2l875rQhSLi1hf
+        VoXXNaJvPCi/+fGWAFLB4s8fo4SEm21JPiWuVTK3NG6SlXCzYOf30Kl4rf0JOWnL
+        z5UWcIk9lDxsbupfCNqo+joFF12kTMeSHhmckPYdorgAS1mKYsDXWGjCwoYEjsME
+        zTUw9/MYDiBuE1c6nLZ261879LUdjN1DNGzUf2YKvaADdFC7zx0gpmdsmgZKMwli
+        kGOKIQ6uyAqQiTMLf6sUm0srEoKBg==
+X-ME-Sender: <xms:H8WcYTQekQs51UCPQsW8Dc8xBvCuwy6LF92qQf24pnM-HMaoM1ID-Q>
+    <xme:H8WcYUyw0oVce9d7cU4D5rWozUGBkFNPYBfmVRxmDb7ze-uXl9CBVVzftg8-IuI4H
+    XhzyB75rfH1UmabZKg>
+X-ME-Received: <xmr:H8WcYY2wiarXNtoU-GrnzZlNeLTL4XPYlj_WgNRJ3ZYp5RLhf8zLMNu4fMchh7TKp6hCXyTuG-eXF3iim4zj_IRGK89B-cMDdHE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrgeeigddukecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvffufffkofgjfhggtgfgsehtkeertdertdejnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepjeeugfegkeffgfeuvedtvddufffhjeffjeejvddvudduteehhfefhfefgeei
+    keeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:H8WcYTBGHp6RL0ItdpFNIOkyB-JtiBaDKgcKuosya3JOFg3-_Q_PMA>
+    <xmx:H8WcYcjGdhYkRPkzmXUuvrUhgvWKFslXIX22Fx0pevc0y6PTEEZssw>
+    <xmx:H8WcYXrvcHhcqXED5qGBwooirw7yzQDB4bsGNtiYwACvUEzx0blyaQ>
+    <xmx:H8WcYbRkiKFow8Yrz5Obj0j4reTWMuRYZLWLCXZ8_x8MlO093CTGfw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 23 Nov 2021 05:40:30 -0500 (EST)
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Chen-Yu Tsai <wens@csie.org>, Maxime Ripard <mripard@kernel.org>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     Maxime Ripard <maxime@cerno.tech>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-pm@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: (subset) [PATCH v3 1/6] dt-bindings: clock: sunxi: Export CLK_DRAM for devfreq
+Date:   Tue, 23 Nov 2021 11:40:24 +0100
+Message-Id: <163766402024.90163.1862786187476595781.b4-ty@cerno.tech>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20211118031841.42315-2-samuel@sholland.org>
+References: <20211118031841.42315-1-samuel@sholland.org> <20211118031841.42315-2-samuel@sholland.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The traces when registering a powerzone is at the pr_info level and
-should be changed to pr_debug as requested by Greg-KH.
+On Wed, 17 Nov 2021 21:18:36 -0600, Samuel Holland wrote:
+> The MBUS node needs to reference the CLK_DRAM clock, as the MBUS
+> hardware implements memory dynamic frequency scaling using this clock.
+> 
+> Export this clock for SoCs which will be getting a devfreq driver.
+> 
+> 
 
-Cc: Greg KH <gregkh@linuxfoundation.org>
-Link: https://lkml.kernel.org/r/YGAnRx8SiZHFPpY6@kroah.com
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/powercap/dtpm.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Applied to sunxi/linux.git (sunxi/dt-for-5.17).
 
-diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
-index b9fac786246a..0fe70687c198 100644
---- a/drivers/powercap/dtpm.c
-+++ b/drivers/powercap/dtpm.c
-@@ -382,7 +382,7 @@ void dtpm_unregister(struct dtpm *dtpm)
- {
- 	powercap_unregister_zone(pct, &dtpm->zone);
- 
--	pr_info("Unregistered dtpm node '%s'\n", dtpm->zone.name);
-+	pr_debug("Unregistered dtpm node '%s'\n", dtpm->zone.name);
- }
- 
- /**
-@@ -453,8 +453,8 @@ int dtpm_register(const char *name, struct dtpm *dtpm, struct dtpm *parent)
- 		dtpm->power_limit = dtpm->power_max;
- 	}
- 
--	pr_info("Registered dtpm node '%s' / %llu-%llu uW, \n",
--		dtpm->zone.name, dtpm->power_min, dtpm->power_max);
-+	pr_debug("Registered dtpm node '%s' / %llu-%llu uW, \n",
-+		 dtpm->zone.name, dtpm->power_min, dtpm->power_max);
- 
- 	mutex_unlock(&dtpm_lock);
- 
--- 
-2.25.1
-
+Thanks!
+Maxime
