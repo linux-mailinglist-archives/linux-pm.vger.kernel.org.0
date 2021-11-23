@@ -2,145 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE62145AB84
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Nov 2021 19:49:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3F9745AC22
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Nov 2021 20:18:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237432AbhKWSwX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Nov 2021 13:52:23 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:42058 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236955AbhKWSwX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Nov 2021 13:52:23 -0500
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 3.0.1)
- id 6c1b712ec58d02be; Tue, 23 Nov 2021 19:49:13 +0100
-Received: from kreacher.localnet (unknown [213.134.175.133])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id CDA9666AC5B;
-        Tue, 23 Nov 2021 19:49:12 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: [PATCH 10/10] ACPI: EC: Relocate acpi_ec_create_query() and drop acpi_ec_delete_query()
-Date:   Tue, 23 Nov 2021 19:46:09 +0100
-Message-ID: <3418336.iIbC2pHGDl@kreacher>
-In-Reply-To: <11887969.O9o76ZdvQC@kreacher>
-References: <11887969.O9o76ZdvQC@kreacher>
+        id S231907AbhKWTV7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Nov 2021 14:21:59 -0500
+Received: from vie01a-dmta-pe04-2.mx.upcmail.net ([62.179.121.164]:57285 "EHLO
+        vie01a-dmta-pe04-2.mx.upcmail.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231732AbhKWTV6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Nov 2021 14:21:58 -0500
+Received: from [172.31.216.234] (helo=vie01a-pemc-psmtp-pe11.mail.upcmail.net)
+        by vie01a-dmta-pe04.mx.upcmail.net with esmtp (Exim 4.92)
+        (envelope-from <thomas.zeitlhofer+lkml@ze-it.at>)
+        id 1mpbJX-005Ncw-T4
+        for linux-pm@vger.kernel.org; Tue, 23 Nov 2021 20:18:47 +0100
+Received: from mr2 ([80.108.17.71])
+        by vie01a-pemc-psmtp-pe11.mail.upcmail.net with ESMTP
+        id pbJXmWvuk2A4vpbJXm0HWE; Tue, 23 Nov 2021 20:18:47 +0100
+X-Env-Mailfrom: thomas.zeitlhofer+lkml@ze-it.at
+X-Env-Rcptto: linux-pm@vger.kernel.org
+X-SourceIP: 80.108.17.71
+X-CNFS-Analysis: v=2.3 cv=bNRo382Z c=1 sm=1 tr=0
+ a=dwg5kdmUixIXdJRX1f/MsQ==:117 a=dwg5kdmUixIXdJRX1f/MsQ==:17
+ a=kj9zAlcOel0A:10 a=c1rmdDCgkvaRRWvxFoYA:9 a=CjuIK1q_8ugA:10
+Date:   Tue, 23 Nov 2021 20:18:43 +0100
+From:   Thomas Zeitlhofer <thomas.zeitlhofer+lkml@ze-it.at>
+To:     linux-pm@vger.kernel.org
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ye Bin <yebin10@huawei.com>
+Subject: [PATCH] PM: hibernate: use correct mode for swsusp_close()
+Message-ID: <YZ0+k4Vy7SJ1D8kH@x1.ze-it.at>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.175.133
-X-CLIENT-HOSTNAME: 213.134.175.133
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddrgeeigdduudejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvjeelgffhiedukedtleekkedvudfggefhgfegjefgueekjeelvefggfdvledutdenucfkphepvddufedrudefgedrudejhedrudeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddujeehrddufeefpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-CMAE-Envelope: MS4wfAHb0jGF07yZv3TJTeIvXA2B0i5C5HK2SAp/VDGyXpWQUijMAR3PsHPUZTaNdUZyseaH1DD00YEaihLlTBtXLKHpKzqiJ32lF0n+0CHUTqU1jIQw5tJ0
+ JhX/xPYAD2rOr36kpI15GHJ6DPxAMyaVttLi0usb7DtTRMFuWaAshu7a/BGuIWTwMQzvydB9gzkOVJeX19bRUnCGECyEQ+P43d2LMak3kryEyy5j6IzpaLZ8
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Commit 39fbef4b0f77 ("PM: hibernate: Get block device exclusively in
+swsusp_check()") changed the opening mode of the block device to
+(FMODE_READ | FMODE_EXCL).
 
-Move acpi_ec_create_query() after acpi_ec_event_processor(), drop the
-no longer needed forward declaration of the latter, and eliminate
-acpi_ec_delete_query() which isn't really necessary.
+In the corresponding calls to swsusp_close(), the mode is still just
+FMODE_READ which triggers the warning in blkdev_flush_mapping() on resume
+from hibernate.
 
-No intentional functional impact.
+So, use the mode (FMODE_READ | FMODE_EXCL) also when closing the device.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/ec.c |   54 +++++++++++++++++++++++-------------------------------
- 1 file changed, 23 insertions(+), 31 deletions(-)
+Fixes: 39fbef4b0f77 ("PM: hibernate: Get block device exclusively in swsusp_check()")
+Signed-off-by: Thomas Zeitlhofer <thomas.zeitlhofer+lkml@ze-it.at>
 
-Index: linux-pm/drivers/acpi/ec.c
-===================================================================
---- linux-pm.orig/drivers/acpi/ec.c
-+++ linux-pm/drivers/acpi/ec.c
-@@ -170,7 +170,6 @@ struct acpi_ec_query {
- static int acpi_ec_submit_query(struct acpi_ec *ec);
- static bool advance_transaction(struct acpi_ec *ec, bool interrupt);
- static void acpi_ec_event_handler(struct work_struct *work);
--static void acpi_ec_event_processor(struct work_struct *work);
+diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+index 559acef3fddb..b0888e9224da 100644
+--- a/kernel/power/hibernate.c
++++ b/kernel/power/hibernate.c
+@@ -691,7 +691,7 @@ static int load_image_and_restore(void)
+ 		goto Unlock;
  
- struct acpi_ec *first_ec;
- EXPORT_SYMBOL(first_ec);
-@@ -1134,33 +1133,6 @@ void acpi_ec_remove_query_handler(struct
- }
- EXPORT_SYMBOL_GPL(acpi_ec_remove_query_handler);
+ 	error = swsusp_read(&flags);
+-	swsusp_close(FMODE_READ);
++	swsusp_close(FMODE_READ | FMODE_EXCL);
+ 	if (!error)
+ 		error = hibernation_restore(flags & SF_PLATFORM_MODE);
  
--static struct acpi_ec_query *acpi_ec_create_query(struct acpi_ec *ec, u8 *pval)
--{
--	struct acpi_ec_query *q;
--	struct transaction *t;
--
--	q = kzalloc(sizeof (struct acpi_ec_query), GFP_KERNEL);
--	if (!q)
--		return NULL;
--
--	INIT_WORK(&q->work, acpi_ec_event_processor);
--	t = &q->transaction;
--	t->command = ACPI_EC_COMMAND_QUERY;
--	t->rdata = pval;
--	t->rlen = 1;
--	q->ec = ec;
--	return q;
--}
--
--static void acpi_ec_delete_query(struct acpi_ec_query *q)
--{
--	if (q) {
--		if (q->handler)
--			acpi_ec_put_query_handler(q->handler);
--		kfree(q);
--	}
--}
--
- static void acpi_ec_event_processor(struct work_struct *work)
- {
- 	struct acpi_ec_query *q = container_of(work, struct acpi_ec_query, work);
-@@ -1180,7 +1152,26 @@ static void acpi_ec_event_processor(stru
- 	ec->queries_in_progress--;
- 	spin_unlock_irq(&ec->lock);
+@@ -981,7 +981,7 @@ static int software_resume(void)
+ 	/* The snapshot device should not be opened while we're running */
+ 	if (!hibernate_acquire()) {
+ 		error = -EBUSY;
+-		swsusp_close(FMODE_READ);
++		swsusp_close(FMODE_READ | FMODE_EXCL);
+ 		goto Unlock;
+ 	}
  
--	acpi_ec_delete_query(q);
-+	acpi_ec_put_query_handler(handler);
-+	kfree(q);
-+}
-+
-+static struct acpi_ec_query *acpi_ec_create_query(struct acpi_ec *ec, u8 *pval)
-+{
-+	struct acpi_ec_query *q;
-+	struct transaction *t;
-+
-+	q = kzalloc(sizeof (struct acpi_ec_query), GFP_KERNEL);
-+	if (!q)
-+		return NULL;
-+
-+	INIT_WORK(&q->work, acpi_ec_event_processor);
-+	t = &q->transaction;
-+	t->command = ACPI_EC_COMMAND_QUERY;
-+	t->rdata = pval;
-+	t->rlen = 1;
-+	q->ec = ec;
-+	return q;
+@@ -1016,7 +1016,7 @@ static int software_resume(void)
+ 	pm_pr_dbg("Hibernation image not present or could not be loaded.\n");
+ 	return error;
+  Close_Finish:
+-	swsusp_close(FMODE_READ);
++	swsusp_close(FMODE_READ | FMODE_EXCL);
+ 	goto Finish;
  }
  
- static int acpi_ec_submit_query(struct acpi_ec *ec)
-@@ -1229,9 +1220,10 @@ static int acpi_ec_submit_query(struct a
- 
- 	spin_unlock_irq(&ec->lock);
- 
-+	return 0;
-+
- err_exit:
--	if (result)
--		acpi_ec_delete_query(q);
-+	kfree(q);
- 
- 	return result;
- }
-
-
-
