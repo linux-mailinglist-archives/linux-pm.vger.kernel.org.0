@@ -2,23 +2,26 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A89045B01C
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Nov 2021 00:27:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7278A45B015
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Nov 2021 00:27:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240485AbhKWXa1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Nov 2021 18:30:27 -0500
-Received: from todd.t-8ch.de ([159.69.126.157]:34209 "EHLO todd.t-8ch.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229987AbhKWXaY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 23 Nov 2021 18:30:24 -0500
+        id S240244AbhKWXaZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Nov 2021 18:30:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46396 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240237AbhKWXaU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Nov 2021 18:30:20 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60E6C061574;
+        Tue, 23 Nov 2021 15:27:11 -0800 (PST)
 From:   =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
         s=mail; t=1637710028;
-        bh=DXEan1BVutJvaFtIQ8/QKBvVBNA5i6qL83xM1aiBSJ0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=jEjFm9tfc6OX9MZ1mN0piWumgMyq4J1bCA6o7SiqRqVhbJPku5LCf0q9exz53x8EF
-         syQN4MYVysCQhaTrw1Z2O0Zp/7q++FtyF8qlpeV6GnF507NesmK1jHbvNVc99qm+IR
-         2AzpvorKO4STE/MEfOeP/8YhT1ETROIaUek/QU8g=
+        bh=SZYLz9pODZYhp1MPf438WzgYeqxIh6cyZNNo+eLNyiI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=hWN8rkyGx/czcemUfLKEY/DftrxEJYrMHZqBUsVqt91Ak4lgZ6b33Dg99Va0FwvId
+         5anYDVmzroeWtQeN8C2gkXn3faA6P8N7JWnykqxOc5n33wifVz0d+ujVTiv9LEV2XP
+         PUZWr7qcm8ZAOk59SUxd0d+d7rrjQLfMYU4WSovM=
 To:     linux-pm@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
         ibm-acpi-devel@lists.sourceforge.net,
         platform-driver-x86@vger.kernel.org,
@@ -29,85 +32,86 @@ Cc:     =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
         linux-kernel@vger.kernel.org, linrunner@gmx.net, bberg@redhat.com,
         hadess@hadess.net, markpearson@lenovo.com,
         nicolopiazzalunga@gmail.com, njoshi1@lenovo.com, smclt30p@gmail.com
-Subject: [PATCH 0/4] power: supply: add charge_behaviour property (force-discharge, inhibit-charge)
-Date:   Wed, 24 Nov 2021 00:27:00 +0100
-Message-Id: <20211123232704.25394-1-linux@weissschuh.net>
+Subject: [PATCH v2 1/4] power: supply: add charge_behaviour attributes
+Date:   Wed, 24 Nov 2021 00:27:01 +0100
+Message-Id: <20211123232704.25394-2-linux@weissschuh.net>
 X-Mailer: git-send-email 2.34.0
+In-Reply-To: <20211123232704.25394-1-linux@weissschuh.net>
+References: <20211123232704.25394-1-linux@weissschuh.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1637710019; l=2660; s=20211113; h=from:subject; bh=DXEan1BVutJvaFtIQ8/QKBvVBNA5i6qL83xM1aiBSJ0=; b=0LmThycKxhwYcG1jpf56ePTNBUnZn6vWy+bqkDvUJ/sE06MDjs6fx5MzROh7AxXBWy/q+P7SbI9D cjSXZMRzAGE3vOpcHaZovI4GS2vtuOZNtbjQt4l34WYopNyXbXeK
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1637710019; l=2492; s=20211113; h=from:subject; bh=SZYLz9pODZYhp1MPf438WzgYeqxIh6cyZNNo+eLNyiI=; b=wEL2amfTqT1FYd22a4d7WEiSv3LHb/lYYaZ7ZkQQhWQcBIuUWr92Dru0OR29hjho/e3lJMWFXUQR p6TSb02cDo2UtQok+PIrNP2zesS2ITVHAJU1u3lqwBsslWPDjf8O
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519; pk=9LP6KM4vD/8CwHW7nouRBhWLyQLcK1MkP6aTZbzUlj4=
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+This a revised version of
+"[RFC] add standardized attributes for force_discharge and inhibit_charge" [0],
+incorporating discussion results.
 
-this series adds support for the charge_behaviour property to the power
-subsystem and thinkpad_acpi driver.
+The biggest change is the switch from two boolean attributes to a single
+enum attribute.
 
-As thinkpad_acpi has to use the 'struct power_supply' created by the generic
-ACPI driver it has to rely on custom sysfs attributes instead of proper
-power_supply properties to implement this property.
+[0] https://lore.kernel.org/platform-driver-x86/21569a89-8303-8573-05fb-c2fec29983d1@gmail.com/
 
-Patch 1: Adds the power_supply documentation and basic public API
-Patch 2: Adds helpers to power_supply core to help drivers implement the
-  charge_behaviour attribute
-Patch 3: Adds support for force-discharge to thinkpad_acpi.
-Patch 4: Adds support for inhibit-discharge to thinkpad_acpi.
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ Documentation/ABI/testing/sysfs-class-power | 14 ++++++++++++++
+ include/linux/power_supply.h                |  7 +++++++
+ 2 files changed, 21 insertions(+)
 
-Patch 3 and 4 are largely taken from other patches and adapted to the new API.
-(Links are in the patch trailer)
-
-Ognjen Galic:
-
-Your S-o-b is on the original inhibit_charge and force_discharge patches.
-I would like to add you as Co-developed-by but to do that it will also require
-your S-o-b. Could you give your sign-offs for the new patches, so you can be
-properly attributed?
-
-Sebastian Reichel:
-
-Currently the series does not actually support the property as a proper
-powersupply property handled fully by power_supply_sysfs.c because there would
-be no user for this property.
-
-Previous discussions about the API:
-
-https://lore.kernel.org/platform-driver-x86/20211108192852.357473-1-linux@weissschuh.net/
-https://lore.kernel.org/platform-driver-x86/21569a89-8303-8573-05fb-c2fec29983d1@gmail.com/
-
-v1: https://lore.kernel.org/lkml/20211113104225.141333-1-linux@weissschuh.net/
-v1 -> v2:
-
-* Use sysfs_emit-APIs instead of plain sprintf
-* More cecks for actual feature availability
-* Validation of the written values
-* Read inhibit-charge via BICG instead of PSSG (peak shift state)
-* Don't mangle error numbers in charge_behaviour_store()
-
-Open points:
-
-Thomas Koch has observed that on a T450s with two batteries
-inhibit-charge on BAT0 will affect both batteries and for BAT1 it is ignored
-entirely, this seems to be a bug in the EC.
-On my T460s with two batteries it works correctly.
-
-Thomas Weißschuh (4):
-  power: supply: add charge_behaviour attributes
-  power: supply: add helpers for charge_behaviour sysfs
-  platform/x86: thinkpad_acpi: support force-discharge
-  platform/x86: thinkpad_acpi: support inhibit-charge
-
- Documentation/ABI/testing/sysfs-class-power |  14 ++
- drivers/platform/x86/thinkpad_acpi.c        | 191 +++++++++++++++++++-
- drivers/power/supply/power_supply_sysfs.c   |  51 ++++++
- include/linux/power_supply.h                |  16 ++
- 4 files changed, 268 insertions(+), 4 deletions(-)
-
-
-base-commit: 66f4beaa6c1d28161f534471484b2daa2de1dce0
+diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
+index f7904efc4cfa..cece094764f8 100644
+--- a/Documentation/ABI/testing/sysfs-class-power
++++ b/Documentation/ABI/testing/sysfs-class-power
+@@ -455,6 +455,20 @@ Description:
+ 			      "Unknown", "Charging", "Discharging",
+ 			      "Not charging", "Full"
+ 
++What:		/sys/class/power_supply/<supply_name>/charge_behaviour
++Date:		November 2021
++Contact:	linux-pm@vger.kernel.org
++Description:
++		Represents the charging behaviour.
++
++		Access: Read, Write
++
++		Valid values:
++			================ ====================================
++			auto:            Charge normally, respect thresholds
++			inhibit-charge:  Do not charge while AC is attached
++			force-discharge: Force discharge while AC is attached
++
+ What:		/sys/class/power_supply/<supply_name>/technology
+ Date:		May 2007
+ Contact:	linux-pm@vger.kernel.org
+diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+index 9ca1f120a211..70c333e86293 100644
+--- a/include/linux/power_supply.h
++++ b/include/linux/power_supply.h
+@@ -132,6 +132,7 @@ enum power_supply_property {
+ 	POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX,
+ 	POWER_SUPPLY_PROP_CHARGE_CONTROL_START_THRESHOLD, /* in percents! */
+ 	POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD, /* in percents! */
++	POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR,
+ 	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
+ 	POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT,
+ 	POWER_SUPPLY_PROP_INPUT_POWER_LIMIT,
+@@ -202,6 +203,12 @@ enum power_supply_usb_type {
+ 	POWER_SUPPLY_USB_TYPE_APPLE_BRICK_ID,	/* Apple Charging Method */
+ };
+ 
++enum power_supply_charge_behaviour {
++	POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO = 0,
++	POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE,
++	POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE,
++};
++
+ enum power_supply_notifier_events {
+ 	PSY_EVENT_PROP_CHANGED,
+ };
 -- 
 2.34.0
 
