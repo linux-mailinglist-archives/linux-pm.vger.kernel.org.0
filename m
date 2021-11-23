@@ -2,195 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C930345B017
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Nov 2021 00:27:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A9245B050
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Nov 2021 00:35:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240276AbhKWXa0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Nov 2021 18:30:26 -0500
-Received: from todd.t-8ch.de ([159.69.126.157]:48181 "EHLO todd.t-8ch.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240231AbhKWXaY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 23 Nov 2021 18:30:24 -0500
-From:   =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1637710029;
-        bh=qU9W2kmHIbsmZrsfsVtyjLYvoHKferUQSNYZI6CIAs4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uQQfHok7cpILqH8Ek2abRVvBX9IuxjCTbszBlViHa9ibngmrD1hm0cnIkG+PgaLbx
-         BktxrK0jsBJc3CCzpye3UQUJ7sjNMqK2bhVp9+8gwezeY/4RxIxIXpUOktorljvK/g
-         mKZb1hL4LEViC75sEj2o8nq9co9tDXdfnm8a32W0=
-To:     linux-pm@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
-        ibm-acpi-devel@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org,
-        Mark Gross <markgross@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Henrique de Moraes Holschuh <hmh@hmh.eng.br>
-Cc:     =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        linux-kernel@vger.kernel.org, linrunner@gmx.net, bberg@redhat.com,
-        hadess@hadess.net, markpearson@lenovo.com,
-        nicolopiazzalunga@gmail.com, njoshi1@lenovo.com, smclt30p@gmail.com
-Subject: [PATCH v2 4/4] platform/x86: thinkpad_acpi: support inhibit-charge
-Date:   Wed, 24 Nov 2021 00:27:04 +0100
-Message-Id: <20211123232704.25394-5-linux@weissschuh.net>
-X-Mailer: git-send-email 2.34.0
-In-Reply-To: <20211123232704.25394-1-linux@weissschuh.net>
-References: <20211123232704.25394-1-linux@weissschuh.net>
+        id S240562AbhKWXis (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Nov 2021 18:38:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48408 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240424AbhKWXiq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Nov 2021 18:38:46 -0500
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EEA6C061758
+        for <linux-pm@vger.kernel.org>; Tue, 23 Nov 2021 15:35:36 -0800 (PST)
+Received: by mail-ot1-x333.google.com with SMTP id x43-20020a056830246b00b00570d09d34ebso1349074otr.2
+        for <linux-pm@vger.kernel.org>; Tue, 23 Nov 2021 15:35:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Fmou/wuLUJUD4zJclGcPIdJu1KVjJ7yuzM0jDRLa/jU=;
+        b=M1kOjxYtgXgq09yG/Tpxoql00WqAEf+/obBrTLesDBofwRUa7GWFazzYfDKZsB30ME
+         LP42xJGdAe5cnwer5SKD8Etmug0Nt6ulXzhr/sIoE9xx2sYU5ALDWZXfWHpEvjhc83X4
+         /EddGPPSnA96tKQr0ixoO9Iif78PSZQtfyiC4pLlvI90GT05IGmxb/4bv7ckDscOFVa0
+         j8mh7s4sgr6HP2CGrSy/5EINAIynCtUbqRAKwELOEpj3OmmDipt7FyRZkcV3y0yyaOqi
+         RMMwVrDE6PwHAX73yXnvFMVjk1xx32TWcnMG5ytYScelO405R1gRZUvoyiVzX+mFaqbl
+         +gIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Fmou/wuLUJUD4zJclGcPIdJu1KVjJ7yuzM0jDRLa/jU=;
+        b=XS710mbamE/B7b4WUiTalUr3VBx20+EDynSOohHu1J54sA2Az7M6ZCDuJeYRBjUqV5
+         oHucb9UxqgFBb5A+Ko0F0a1KKS+fgDvfIQ13fRiiDbTwbn5Fz5Rv43xxUCzmzgh5BeJk
+         u+vFODRryZGL7kb/OdW+v9kaOjYaWVdxpveKx69Z/BYJ+Pv2H1tCqQ0XKiJxpUiQ4aKV
+         VrnjeYecvo5Ou1LGExrb/jgV5kDiniLEy4HrqHgojf2Ncfqn7e79gZ1ugZwXLawbvKQZ
+         5IgMdvTTl+KTRecpzE6yrDq91VLh/By7X+sJ2JaRVIovVw1RR6/q+oIAehKq0euUsUT1
+         Cbyw==
+X-Gm-Message-State: AOAM533gre/1DOFQYx33OEZKwVl4Z9eAPJTkxZVch1Zs9xCh7mBuTn6g
+        BdfJXaSHZozo4Zt4F477wXuHqpwKgmToDOK7B+zV0A==
+X-Google-Smtp-Source: ABdhPJzM/xqGhHncEHhl2AIgExbTLI27yZdnho4Z+I5VLuYNi5uSlNeNxRyIKiu1OCuHPC8HqiuPUo4+VogT8mYjGlE=
+X-Received: by 2002:a9d:74d0:: with SMTP id a16mr8027979otl.237.1637710535722;
+ Tue, 23 Nov 2021 15:35:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1637710019; l=5442; s=20211113; h=from:subject; bh=qU9W2kmHIbsmZrsfsVtyjLYvoHKferUQSNYZI6CIAs4=; b=ksoSvuT62RgYUS1iFKYKmvHRymOwZNCvPjLR9hfbyGS2g0nIP1vRZzThFutfXDQyTMXSTP125f6P /Z9LcK5TB9W77YtfUFazqgccF6hkT5AoaP4if7su7J+B47lSAf4j
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519; pk=9LP6KM4vD/8CwHW7nouRBhWLyQLcK1MkP6aTZbzUlj4=
-Content-Transfer-Encoding: 8bit
+References: <cover.1637592133.git.geert+renesas@glider.be> <afb895b597037a635acc4a1dc44b88598268a19b.1637592133.git.geert+renesas@glider.be>
+In-Reply-To: <afb895b597037a635acc4a1dc44b88598268a19b.1637592133.git.geert+renesas@glider.be>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 24 Nov 2021 00:35:23 +0100
+Message-ID: <CACRpkdZAA_XZQ7KXOsod8r5EZ0F9f1qaz3+FLsuyPfeD_mO5Dw@mail.gmail.com>
+Subject: Re: [PATCH/RFC 07/17] iio: st_sensors: Use bitfield helpers
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Tony Lindgren <tony@atomide.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Paul Walmsley <paul@pwsan.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>,
+        Benoit Parrot <bparrot@ti.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Ping-Ke Shih <pkshih@realtek.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Keerthy <j-keerthy@ti.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This adds support for the inhibit-charge charge_behaviour through the
-embedded controller of ThinkPads.
+On Mon, Nov 22, 2021 at 4:55 PM Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
 
-Co-developed-by: Thomas Koch <linrunner@gmx.net>
-Signed-off-by: Thomas Koch <linrunner@gmx.net>
-Co-developed-by: Nicolò Piazzalunga <nicolopiazzalunga@gmail.com>
-Signed-off-by: Nicolò Piazzalunga <nicolopiazzalunga@gmail.com>
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> Use the field_prep() helper, instead of open-coding the same operation.
+>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
----
+Clever!
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-This patch is based on https://lore.kernel.org/platform-driver-x86/d2808930-5840-6ffb-3a59-d235cdb1fe16@gmail.com/
----
- drivers/platform/x86/thinkpad_acpi.c | 64 +++++++++++++++++++++++++++-
- 1 file changed, 62 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/platform/x86/thinkpad_acpi.c b/drivers/platform/x86/thinkpad_acpi.c
-index e3567cc686fa..7f2f46c71482 100644
---- a/drivers/platform/x86/thinkpad_acpi.c
-+++ b/drivers/platform/x86/thinkpad_acpi.c
-@@ -9321,6 +9321,8 @@ static struct ibm_struct mute_led_driver_data = {
- #define SET_STOP	"BCSS"
- #define GET_DISCHARGE	"BDSG"
- #define SET_DISCHARGE	"BDSS"
-+#define GET_INHIBIT	"BICG"
-+#define SET_INHIBIT	"BICS"
- 
- enum {
- 	BAT_ANY = 0,
-@@ -9338,6 +9340,7 @@ enum {
- 	THRESHOLD_START,
- 	THRESHOLD_STOP,
- 	FORCE_DISCHARGE,
-+	INHIBIT_CHARGE,
- };
- 
- struct tpacpi_battery_data {
-@@ -9409,6 +9412,12 @@ static int tpacpi_battery_get(int what, int battery, int *ret)
- 		/* The force discharge status is in bit 0 */
- 		*ret = *ret & 0x01;
- 		return 0;
-+	case INHIBIT_CHARGE:
-+		if ACPI_FAILURE(tpacpi_battery_acpi_eval(GET_INHIBIT, ret, battery))
-+			return -ENODEV;
-+		/* The inhibit charge status is in bit 0 */
-+		*ret = *ret & 0x01;
-+		return 0;
- 	default:
- 		pr_crit("wrong parameter: %d", what);
- 		return -EINVAL;
-@@ -9447,6 +9456,22 @@ static int tpacpi_battery_set(int what, int battery, int value)
- 			return -ENODEV;
- 		}
- 		return 0;
-+	case INHIBIT_CHARGE:
-+		/* When setting inhibit charge, we set a default value of
-+		 * always breaking on AC detach and the effective time is set to
-+		 * be permanent.
-+		 * The battery ID is in bits 4-5, 2 bits,
-+		 * the effective time is in bits 8-23, 2 bytes.
-+		 * A time of FFFF indicates forever.
-+		 */
-+		param = value;
-+		param |= battery << 4;
-+		param |= 0xFFFF << 8;
-+		if (ACPI_FAILURE(tpacpi_battery_acpi_eval(SET_INHIBIT, &ret, param))) {
-+			pr_err("failed to set inhibit charge on %d", battery);
-+			return -ENODEV;
-+		}
-+		return 0;
- 	default:
- 		pr_crit("wrong parameter: %d", what);
- 		return -EINVAL;
-@@ -9494,6 +9519,8 @@ static int tpacpi_battery_probe(int battery)
- 	 * 4) Check for support
- 	 * 5) Get the current force discharge status
- 	 * 6) Check for support
-+	 * 7) Get the current inhibit charge status
-+	 * 8) Check for support
- 	 */
- 	if (acpi_has_method(hkey_handle, GET_START)) {
- 		if ACPI_FAILURE(tpacpi_battery_acpi_eval(GET_START, &ret, battery)) {
-@@ -9540,6 +9567,16 @@ static int tpacpi_battery_probe(int battery)
- 			battery_info.batteries[battery].charge_behaviours |=
- 				BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE);
- 	}
-+	if (acpi_has_method(hkey_handle, GET_INHIBIT)) {
-+		if (ACPI_FAILURE(tpacpi_battery_acpi_eval(GET_INHIBIT, &ret, battery))) {
-+			pr_err("Error probing battery inhibit charge; %d\n", battery);
-+			return -ENODEV;
-+		}
-+		/* Support is marked in bit 5 */
-+		if (ret & BIT(5))
-+			battery_info.batteries[battery].charge_behaviours |=
-+				BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE);
-+	}
- 
- 	battery_info.batteries[battery].charge_behaviours |=
- 		BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO);
-@@ -9698,10 +9735,22 @@ static ssize_t charge_behaviour_show(struct device *dev,
- 	if (available & BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE)) {
- 		if (tpacpi_battery_get(FORCE_DISCHARGE, battery, &ret))
- 			return -ENODEV;
--		if (ret)
-+		if (ret) {
- 			active = POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE;
-+			goto out;
-+		}
-+	}
-+
-+	if (available & BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE)) {
-+		if (tpacpi_battery_get(INHIBIT_CHARGE, battery, &ret))
-+			return -ENODEV;
-+		if (ret) {
-+			active = POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE;
-+			goto out;
-+		}
- 	}
- 
-+out:
- 	return power_supply_charge_behaviour_show(dev, available, active, buf);
- }
- 
-@@ -9738,11 +9787,22 @@ static ssize_t charge_behaviour_store(struct device *dev,
- 	case POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO:
- 		if (available & BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE))
- 			ret = tpacpi_battery_set_validate(FORCE_DISCHARGE, battery, 0);
-+		if (available & BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE))
-+			ret = min(ret, tpacpi_battery_set_validate(INHIBIT_CHARGE, battery, 0));
- 		if (ret < 0)
- 			return ret;
- 		break;
- 	case POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE:
--		ret = tpacpi_battery_set_validate(FORCE_DISCHARGE, battery, 1);
-+		if (available & BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE))
-+			ret = tpacpi_battery_set_validate(INHIBIT_CHARGE, battery, 0);
-+		ret = min(ret, tpacpi_battery_set_validate(FORCE_DISCHARGE, battery, 1));
-+		if (ret < 0)
-+			return ret;
-+		break;
-+	case POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE:
-+		if (available & BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE))
-+			ret = tpacpi_battery_set_validate(FORCE_DISCHARGE, battery, 0);
-+		ret = min(ret, tpacpi_battery_set_validate(INHIBIT_CHARGE, battery, 1));
- 		if (ret < 0)
- 			return ret;
- 		break;
--- 
-2.34.0
-
+Yours,
+Linus Walleij
