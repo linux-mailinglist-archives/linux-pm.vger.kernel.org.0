@@ -2,121 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B2F459DDF
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Nov 2021 09:24:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D50DC459E09
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Nov 2021 09:30:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231654AbhKWI1x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Nov 2021 03:27:53 -0500
-Received: from sauhun.de ([88.99.104.3]:47114 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230306AbhKWI1x (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 23 Nov 2021 03:27:53 -0500
-Received: from localhost (p5486ca86.dip0.t-ipconnect.de [84.134.202.134])
-        by pokefinder.org (Postfix) with ESMTPSA id 06C2B2C009E;
-        Tue, 23 Nov 2021 09:24:42 +0100 (CET)
-Date:   Tue, 23 Nov 2021 09:24:38 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org, Yauhen Kharuzhy <jekhor@gmail.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        platform-driver-x86@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-efi@vger.kernel.org
-Subject: Re: [PATCH v2 15/20] i2c: cht-wc: Make charger i2c-client
- instantiation board/device-model specific
-Message-ID: <YZylRkOQsj9LpG5U@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org, Yauhen Kharuzhy <jekhor@gmail.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        platform-driver-x86@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-efi@vger.kernel.org
-References: <20211114170335.66994-1-hdegoede@redhat.com>
- <20211114170335.66994-16-hdegoede@redhat.com>
+        id S234722AbhKWIdq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Nov 2021 03:33:46 -0500
+Received: from mail-pl1-f171.google.com ([209.85.214.171]:33687 "EHLO
+        mail-pl1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230516AbhKWIdp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Nov 2021 03:33:45 -0500
+Received: by mail-pl1-f171.google.com with SMTP id y7so16488285plp.0;
+        Tue, 23 Nov 2021 00:30:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tcMJT0SWmBGQBJ3SmOjoPLUb8FZNAvYeGhtoSVPIc5Y=;
+        b=VCwEKliL7vGRQmqGa4OMEbd1m3tRXMH4G3hTaAeVkGf6vCk+BkEwKON0qO4ojpIBu7
+         5S/RdfdBKMbTAP3mGoN+251WSN4Pwm8xoHQLwgCvGzqml9ewO+dTyZWiQV2YnuXx/Yhg
+         N7TZfP4FV0JTMOz0dfTOUmW8cZWl14TaywEiAwKhZfpsoXIpBKK3RGeNQbuwteft0deb
+         uGrSX4Ndb2OLiDQP3tKchxdSy4MxELRQmZz1QMt5WNHZY7m17ACOogdFlHjlR+G4H4aS
+         Sv0kDBU1DYI45fA1iO5iwjKbsy1aOvJLcVmgYavbHAFXvm6yuw/fsnK7EsoY6DqmYJdy
+         mo/Q==
+X-Gm-Message-State: AOAM533kPT0CAVTEBMKnvnV3a52WBPvXZ8G2ah3BroubBL9caLh/IMTz
+        Upra7T4xA08w3LqQso2MzT5FLDVYgcZlCg==
+X-Google-Smtp-Source: ABdhPJxqlamro1/ExJyGPSHWiNDEHJ4qDus6lyQwI/LLtsri6heukspgET3j/WYt8l2kuwABiNAxXw==
+X-Received: by 2002:a17:90b:4c4d:: with SMTP id np13mr724754pjb.233.1637656236892;
+        Tue, 23 Nov 2021 00:30:36 -0800 (PST)
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com. [209.85.215.171])
+        by smtp.gmail.com with ESMTPSA id ne7sm401026pjb.36.2021.11.23.00.30.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Nov 2021 00:30:36 -0800 (PST)
+Received: by mail-pg1-f171.google.com with SMTP id q12so17660815pgh.5;
+        Tue, 23 Nov 2021 00:30:36 -0800 (PST)
+X-Received: by 2002:a67:af0a:: with SMTP id v10mr5521182vsl.35.1637656225413;
+ Tue, 23 Nov 2021 00:30:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="WTi5NgaCbc4tZLlR"
-Content-Disposition: inline
-In-Reply-To: <20211114170335.66994-16-hdegoede@redhat.com>
+References: <cover.1637592133.git.geert+renesas@glider.be> <3a54a6703879d10f08cf0275a2a69297ebd2b1d4.1637592133.git.geert+renesas@glider.be>
+ <01b44b38c087c151171f8d45a2090474c2559306.camel@sipsolutions.net>
+In-Reply-To: <01b44b38c087c151171f8d45a2090474c2559306.camel@sipsolutions.net>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 23 Nov 2021 09:30:14 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUnBgFpqhgjf5AA0LH9MZOFALeC=YinZ4Tv_V+Y9hkRSg@mail.gmail.com>
+Message-ID: <CAMuHMdUnBgFpqhgjf5AA0LH9MZOFALeC=YinZ4Tv_V+Y9hkRSg@mail.gmail.com>
+Subject: Re: [PATCH 01/17] bitfield: Add non-constant field_{prep,get}() helpers
+To:     Johannes Berg <johannes@sipsolutions.net>
+Cc:     Tony Lindgren <tony@atomide.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Paul Walmsley <paul@pwsan.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>,
+        Benoit Parrot <bparrot@ti.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Ping-Ke Shih <pkshih@realtek.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Keerthy <j-keerthy@ti.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Johannes,
 
---WTi5NgaCbc4tZLlR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, Nov 22, 2021 at 5:33 PM Johannes Berg <johannes@sipsolutions.net> wrote:
+> On Mon, 2021-11-22 at 16:53 +0100, Geert Uytterhoeven wrote:
+> > The existing FIELD_{GET,PREP}() macros are limited to compile-time
+> > constants.  However, it is very common to prepare or extract bitfield
+> > elements where the bitfield mask is not a compile-time constant.
+> >
+>
+> I'm not sure it's really a good idea to add a third API here?
+>
+> We have the upper-case (constant) versions, and already
+> {u32,...}_get_bits()/etc.
 
-On Sun, Nov 14, 2021 at 06:03:30PM +0100, Hans de Goede wrote:
-> The i2c-controller on the Cherry Trail - Whiskey Cove PMIC is special
-> in that it is always connected to the I2C charger IC of the board on
-> which the PMIC is used; and the charger IC is not described in ACPI,
-> so the i2c-cht-wc code needs to instantiate an i2c-client for it itself.
->=20
-> So far this was hardcoded to instantiate an i2c-client for the
-> bq24292i, with all properties, etc. set to match how this charger
-> is used on the GPD win and GPD pcoket devices.
->=20
-> There is a rudimentary check to make sure the ACPI tables are at least
-> somewhat as expected, but this is far from accurate, leading to
-> a wrong i2c-client being instantiated for the charger on some boards.
->=20
-> Switch to the new DMI based intel_cht_wc_get_model() helper which is
-> exported by the MFD driver for the CHT Whiskey Cove PMIC to help PMIC
-> cell drivers like the i2c-cht-wc code reliably detect which board
-> they are running on.
->=20
-> And add board_info for the charger ICs as found on the other 2 known
-> boards with a Whisky Cove PMIC.
->=20
-> This has been tested on all 3 known boards.
->=20
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+These don't work for non-const masks.
 
-Here is my Ack to take this via some other tree:
+> Also, you're using __ffs(), which doesn't work for 64-bit on 32-bit
+> architectures (afaict), so that seems a bit awkward.
 
-Acked-by: Wolfram Sang <wsa@kernel.org>
+That's a valid comment. Can be fixed by using a wrapper macro
+that checks if typeof(mask) == u64, and uses an __ffs64() version when
+needed.
 
-No need to send further versions of this series to the i2c-list, I'd
-think.
+> Maybe we can make {u32,...}_get_bits() be doing compile-time only checks
+> if it is indeed a constant? The __field_overflow() usage is already only
+> done if __builtin_constant_p(v), so I guess we can do the same with
+> __bad_mask()?
 
+Are all compilers smart enough to replace the division by
+field_multiplier(field) by a shift?
 
---WTi5NgaCbc4tZLlR
-Content-Type: application/pgp-signature; name="signature.asc"
+Gr{oetje,eeting}s,
 
------BEGIN PGP SIGNATURE-----
+                        Geert
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGcpUEACgkQFA3kzBSg
-KbZSBA/9GZx4RHh20+JYopnxXgk1t0Q/HPhRtQbbQI3VO4mo4gy8ayNRmaDWhi2+
-SYeVFpAEaYJSlGATSM5JO6IaqcKM1TO1Jtuh0FH7vNPQMbqJmEA8nhKuM3Mf2pcP
-qt9PhNkeZdg2qsDUVyHFo6fKsXahznvsZXtj/U5TPfTKtnXxJMDQY7mI6i4YCDZT
-m4s8bjXxSaTd1uR/7URY+gtF9bKcyA9VZ6BKyV9sdutNSWkBkuP/RO0AEaPJMNzx
-fjtaP7mabpQIFKvqx2dPIagON+sy7zd/H2ImKCDQjs/DwVgro9PdQ+6II8ObL1gE
-74/dBRVIf0azQzYyxs1rtGftXf4vrsENGAKdzbOFzxwd4swg3BsLBrIcHZtc7bDb
-n9C//6dIcS28/SJRCyOVNRLg5U529XqCVJ6njL8j5QGmfiCUUcyO097JrZAUpyGI
-bsq01dw6I7ab9dgpLeLWVMKMRkrLgOeHgfzyONG17RKOofEC+8ZqNs8DW3WAwoad
-XUWVEYT666VcxO2kFK/wpuS35Oef44Jm7sXlhkP4vjFKAAkYe8bO86Jkz1s+oqwL
-h4g8dafZswiMZnrCq9wzc4lAVpgD3uRoKaFiTx9Qf2GNQ1mWWC9L1WnM90pODbWv
-7M+q3EuWlrR3qjqb0Zlbf6jyxOobdVhq6mzkWTl7TjE385NA1kI=
-=WAP4
------END PGP SIGNATURE-----
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
---WTi5NgaCbc4tZLlR--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
