@@ -2,109 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D2CF459F75
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Nov 2021 10:46:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A37EA459FE5
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Nov 2021 11:16:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233815AbhKWJtR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Nov 2021 04:49:17 -0500
-Received: from foss.arm.com ([217.140.110.172]:50180 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232003AbhKWJtQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 23 Nov 2021 04:49:16 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5D298ED1;
-        Tue, 23 Nov 2021 01:46:08 -0800 (PST)
-Received: from [10.57.23.185] (unknown [10.57.23.185])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6B16C3F73B;
-        Tue, 23 Nov 2021 01:46:04 -0800 (PST)
-Subject: Re: [PATCH v4 0/5] Refactor thermal pressure update to avoid code
- duplication
-To:     Viresh Kumar <viresh.kumar@linaro.org>
+        id S235369AbhKWKT3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Nov 2021 05:19:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60270 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235022AbhKWKT3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Nov 2021 05:19:29 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BBC6C061714
+        for <linux-pm@vger.kernel.org>; Tue, 23 Nov 2021 02:16:21 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id d24so38091377wra.0
+        for <linux-pm@vger.kernel.org>; Tue, 23 Nov 2021 02:16:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DZJ0pxIjHebOIgHJhAjt85uASRoyNqvHRW8sK2dJsck=;
+        b=bzqyFoJbju0H64NRMsrmMZPfpjr6ROaZo8mf5XCxAiGcJuX4YJOG31hfSbdILuooPS
+         U5geXhNTfP1fwUpGVfOXKvLgtt/l1Y66uautoDjwxrwLgfzzvcHrWVoAZQe49anNSmnf
+         aPulz+ANJc60ImWLf+pXusZJMViYjzYeKiaoNTk0u2Vyq+aaqa0Ce4RKxOEENp6AD6nx
+         ZeKT4bu959EfWnu+GcqjslmsECg72A//xZht1ScKMhUO0ymw1o+KwFbGPGC4jnNkPH19
+         gjUCFMkBdkgKu63HsoY/Xa9udovlA/QqAm4m0fbaCk/KdvMrzhGymh7F8L+Ty6Ts+SZa
+         krEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DZJ0pxIjHebOIgHJhAjt85uASRoyNqvHRW8sK2dJsck=;
+        b=jcEssYF2TfoXwuBn/UQVbRktGVcB8G5KWylkD8zvGxuyCORMP1+vISGxtQHjd6SGig
+         NshTBwOTxPro3NYMPMDPbJX+hlVklZrB+HTEQe/o+ngV641a7FtCiHw1QELJn6fFGyav
+         zC0cBaFVqqkhiG+r1Og7YfVrcRzM4fEsZBmUCZBWC1ULJkyScfu+dkK5LTBiv94wPxep
+         55fi6KTQpf00rCSG6mRrQK9i62MbMhEmZUrWW1kWPzkFeQJkQsUASUPYhrTC1z9SOkhj
+         KvlUX1s+LAMJjvkqLDvKxS36RXVSpFvEgYqqFWW+BiJ/VfqIGA1ePwFonGvLmGS52HP8
+         l6oQ==
+X-Gm-Message-State: AOAM530RcLyOGOpexqRKC37wNQf1RNG1SHjxzMJbKO4I+9QCmhH9tDWH
+        kUd0Sld5HCHc6f5S3pDZpvB9JA==
+X-Google-Smtp-Source: ABdhPJzqtQ0HmeHz2vTPiJcVo06FjcO174hKk/G8QqiqKsfPzWuVOiWRWIKAxLuj0ZtHtYrjs5mPGQ==
+X-Received: by 2002:adf:fed0:: with SMTP id q16mr6033330wrs.276.1637662579661;
+        Tue, 23 Nov 2021 02:16:19 -0800 (PST)
+Received: from localhost.localdomain ([2a01:e34:ed2f:f020:3c04:dd20:bbdc:7a85])
+        by smtp.gmail.com with ESMTPSA id v8sm11492662wrd.84.2021.11.23.02.16.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Nov 2021 02:16:19 -0800 (PST)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, steev@kali.org,
-        sudeep.holla@arm.com, will@kernel.org, catalin.marinas@arm.com,
-        linux@armlinux.org.uk, gregkh@linuxfoundation.org,
-        rafael@kernel.org, amitk@kernel.org, daniel.lezcano@linaro.org,
-        amit.kachhap@gmail.com, thara.gopinath@linaro.org,
-        bjorn.andersson@linaro.org, agross@kernel.org
-References: <20211109195714.7750-1-lukasz.luba@arm.com>
- <20211123094515.yeqlqsx6acj4sw7t@vireshk-i7>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <9f0c8d5c-7170-c6b8-33d6-cfc065c77972@arm.com>
-Date:   Tue, 23 Nov 2021 09:46:02 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        Daniel Lezcano <daniel.lezcano@kernel.org>
+Subject: [PATCH 1/2] powercap/drivers/dtpm: Remove unused function definition
+Date:   Tue, 23 Nov 2021 11:16:00 +0100
+Message-Id: <20211123101601.2433340-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20211123094515.yeqlqsx6acj4sw7t@vireshk-i7>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+The dtpm.h header file is exporting a function which is not
+implemented neither needed. Remove it.
 
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ include/linux/dtpm.h | 2 --
+ 1 file changed, 2 deletions(-)
 
-On 11/23/21 9:45 AM, Viresh Kumar wrote:
-> On 09-11-21, 19:57, Lukasz Luba wrote:
->> Hi all,
->>
->> This patch set v4 aims to refactor the thermal pressure update
->> code. There are already two clients which do similar thing:
->> convert the capped frequency value into the capacity of
->> affected CPU and call the 'set' function to store the
->> reduced capacity into the per-cpu variable.
->> There might be more than two of these users. In near future
->> it will be scmi-cpufreq driver, which receives notification
->> from FW about reduced frequency due to thermal. Other vendors
->> might follow. Let's avoid code duplication and potential
->> conversion bugs. Move the conversion code into the arch_topology.c
->> where the capacity calculation setup code and thermal pressure sit.
->>
->> Apart from that $subject patches, there is one patch (3/5) which fixes
->> issue in qcom-cpufreq-hw.c when the thermal pressure is not
->> updated for offline CPUs. It's similar fix that has been merged
->> recently for cpufreq_cooling.c:
->> 2ad8ccc17d1e4270cf65a3f2
->>
->> The patch 4/5 fixes also qcom-cpufreq-hw.c driver code which did
->> the translation from frequency to capacity wrongly when there
->> was a boost frequency available and stored in 'policy->cpuinfo.max_freq'.
->>
->> Changes:
->> v4:
->> - remove the warning when boost frequency is passed and set thermal
->>    pressure to 0 in that case, which means the capping is totally removed
->>    (issue reported by Steev)
->> - remove the check from patch 4/5 with
->>    'throttled_freq > policy->cpuinfo.max_freq' since it doesn't have
->>    effect; instead relay on new arch_update_thermal_pressure() handling
->>    correctly such use case; this would also fix an issue in that original
->>    driver code, where the reduced capacity was calculated wrongly due
->>    to 'policy->cpuinfo.max_freq' used as a divider
->> - adjusted comments stressing the fact that the boost frequencies are
->>    supported
-> 
->> Lukasz Luba (5):
->>    arch_topology: Introduce thermal pressure update function
->>    thermal: cpufreq_cooling: Use new thermal pressure update function
->>    cpufreq: qcom-cpufreq-hw: Update offline CPUs per-cpu thermal pressure
->>    cpufreq: qcom-cpufreq-hw: Use new thermal pressure update function
->>    arch_topology: Remove unused topology_set_thermal_pressure() and
->>      related
->>
->>   arch/arm/include/asm/topology.h   |  2 +-
->>   arch/arm64/include/asm/topology.h |  2 +-
->>   drivers/base/arch_topology.c      | 42 ++++++++++++++++++++++++++++---
->>   drivers/cpufreq/qcom-cpufreq-hw.c | 14 +++--------
->>   drivers/thermal/cpufreq_cooling.c |  6 +----
->>   include/linux/arch_topology.h     |  4 +--
->>   include/linux/sched/topology.h    |  6 ++---
->>   init/Kconfig                      |  2 +-
->>   8 files changed, 50 insertions(+), 28 deletions(-)
-> 
-> Applied. Thanks.
-> 
+diff --git a/include/linux/dtpm.h b/include/linux/dtpm.h
+index 2890f6370eb9..d37e5d06a357 100644
+--- a/include/linux/dtpm.h
++++ b/include/linux/dtpm.h
+@@ -70,6 +70,4 @@ void dtpm_unregister(struct dtpm *dtpm);
+ 
+ int dtpm_register(const char *name, struct dtpm *dtpm, struct dtpm *parent);
+ 
+-int dtpm_register_cpu(struct dtpm *parent);
+-
+ #endif
+-- 
+2.25.1
 
-Thank you!
