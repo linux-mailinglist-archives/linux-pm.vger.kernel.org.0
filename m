@@ -2,172 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7791F45A390
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Nov 2021 14:19:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0827845A3BF
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Nov 2021 14:29:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235733AbhKWNWx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Nov 2021 08:22:53 -0500
-Received: from mail-oo1-f46.google.com ([209.85.161.46]:43647 "EHLO
-        mail-oo1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233234AbhKWNWw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Nov 2021 08:22:52 -0500
-Received: by mail-oo1-f46.google.com with SMTP id w5-20020a4a2745000000b002c2649b8d5fso6966387oow.10;
-        Tue, 23 Nov 2021 05:19:44 -0800 (PST)
+        id S231682AbhKWNdE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Nov 2021 08:33:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48994 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236277AbhKWNdA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Nov 2021 08:33:00 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3512C061756;
+        Tue, 23 Nov 2021 05:29:52 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id x6so6163855iol.13;
+        Tue, 23 Nov 2021 05:29:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1mzzQH4LR8E9en0oLHeEKt75OwAJ6GPgE1N3vKIF5Ws=;
+        b=EIo2zpjMsvO81Q+EI8R8OfQZEXUoQwQClX2UVj0GR1MrfeNV9a2+iuM6IKMbfJesVu
+         5W++R+mfnHKAUBjb2m6wPb6Sfqmep6qhLW5scVdDgAqj3KvBsvWJ9c5XPr6tFEgvtpQV
+         e6nwS00xARewgIe5CpUn3IH9LWwEJ05wjGn8v7yaoRz9h8inoXZiIiq84LNAITBaJQpV
+         7K3P5Jp7/mXCjZuHeuaujwziT+pycwl9fWiyw5X8zWIxxcE8QOQHQujCuZwBbnVWt64V
+         7jXjBqcQATkgPpUKl/jNmU4MZRgd1ahChBNZ+dhDBnV44dn8DOUvmWaeGA68tZpWYOuP
+         LgYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=sxbm5nZuxDktECFOUcgXGTkmQEJlkXm+UQAvKfd0Kcw=;
-        b=mvIZSRRstoDDJUR3+mmLSzn8fqBURUL2JlI4/Frf4C5a1N1wjF+v56uIhWx1YQ6hIU
-         2dRlJni8qcx7RNXE/GL3pu+VAv4UTqUgv0o0BPxl1qPIMETntN/kFAcnpoZUrd76KegU
-         EKQW2pSud38zRmUCW7u3aRvEpqa57hx5kLNxJpFfSThGzmmlFeGfKmPN1gM2ntWdyv6r
-         2K2zy/YtYJXicIGjMq8lQO4aP9dlCmJCRrZ18lWH4dxrRs0a7kbT707/Ermt9GwlRTOZ
-         iHZj2FfFaNhu+t2/hEMpJXlTJejai2RmZvQ9M4xDAe0JogPrmv2xKN1LX2XKwKVhUUIN
-         EpOg==
-X-Gm-Message-State: AOAM531CX/cyV9bldIBySkzO0zA6rfPkTAyy3w7GuJYD/LNAvoOh+1Pk
-        WbbJ3XOnhaH2aQ5OION/ViKK3GF1OW9tVoWM0vM=
-X-Google-Smtp-Source: ABdhPJx4LJPjPNqz/sXcVDWL5tamzih4SOz6Sq7UGTbN97hIVt3zgoG90+osvpCrjRpDoZ3z/WaeE3Jdprr6Jm1J/tY=
-X-Received: by 2002:a4a:1d82:: with SMTP id 124mr2868847oog.91.1637673583839;
- Tue, 23 Nov 2021 05:19:43 -0800 (PST)
+        bh=1mzzQH4LR8E9en0oLHeEKt75OwAJ6GPgE1N3vKIF5Ws=;
+        b=r/tOiNxk5OdO67wrjgknl05LpEZs0nU3sF7A6MogsdEPq6eEgSn1dlvObQFLfkzZm/
+         G+cgjc+cApi2nqmm16OUcepfYo1iQ4H9BwY4ikCQdoaneds+ON5yqJXc6u7F33H3OLNI
+         huKj1NSlTrW2B6iPj5LGG04/khP5rg08ts2j7rHh7Uf1iGGUZOgA4yF5Rrc94L+lGTqW
+         MyO2tYAGjVOhyfvOnihOCZH0EIFguCSQLySMfAqLhLEO4Kw3D7usmc4TZEaUZiMQ/puq
+         lEknIJSZ++ygo17BKw4ooNYxG3RHdHUgcTXP+KDb+o0mI+JfVsJ9mwOUZh6+aTWunnKw
+         uLqg==
+X-Gm-Message-State: AOAM532bYFn0hJ+mmi7O7ddoMaF4QhIyUlmH08UBxXdi39ixOjkdtGwR
+        PpcIKSWwtHRFIT5jJABHi6NF8eVLfWFBHpOZnO8=
+X-Google-Smtp-Source: ABdhPJwMXgvkb/4JorRGYlbB9RBc9fTrr+yiBWVTdyS2Dguc9dZBlAvAFOrg/Q3ogahTOw2JtEq0LxkF6gaQvD7d6os=
+X-Received: by 2002:a6b:ea0a:: with SMTP id m10mr5581825ioc.91.1637674192312;
+ Tue, 23 Nov 2021 05:29:52 -0800 (PST)
 MIME-Version: 1.0
-References: <20210818060533.3569517-1-keescook@chromium.org> <20210818060533.3569517-13-keescook@chromium.org>
-In-Reply-To: <20210818060533.3569517-13-keescook@chromium.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 23 Nov 2021 14:19:25 +0100
-Message-ID: <CAJZ5v0iS3qMgdab1S-NzGfeLLXV=S6p5Qx8AaqJ50rsUngS=LA@mail.gmail.com>
-Subject: Re: [PATCH v2 12/63] thermal: intel: int340x_thermal: Use
- struct_group() for memcpy() region
-To:     Kees Cook <keescook@chromium.org>, Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "open list:NETWORKING DRIVERS (WIRELESS)" 
-        <linux-wireless@vger.kernel.org>, netdev <netdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-staging@lists.linux.dev, linux-block@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, clang-built-linux@googlegroups.com,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-hardening@vger.kernel.org
+References: <20211110122948.188683-1-alistair@alistair23.me>
+ <20211110122948.188683-2-alistair@alistair23.me> <20211117223950.3a7eaf7a@aktux>
+In-Reply-To: <20211117223950.3a7eaf7a@aktux>
+From:   Alistair Francis <alistair23@gmail.com>
+Date:   Tue, 23 Nov 2021 23:29:26 +1000
+Message-ID: <CAKmqyKP_gQ1qSADMPwmyf-V0TqGOYf2GitzpDXsmBUO6_iqK7Q@mail.gmail.com>
+Subject: Re: [PATCH v15 1/8] dt-bindings: mfd: Initial commit of silergy,sy7636a.yaml
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     Alistair Francis <alistair@alistair23.me>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>, lgirdwood@gmail.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        rui.zhang@intel.com, devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-hwmon@vger.kernel.org, amitk@kernel.org,
+        linux-pm@vger.kernel.org, dl-linux-imx <linux-imx@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>, Rob Herring <robh@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 18, 2021 at 8:08 AM Kees Cook <keescook@chromium.org> wrote:
+On Thu, Nov 18, 2021 at 7:40 AM Andreas Kemnade <andreas@kemnade.info> wrote:
 >
-> In preparation for FORTIFY_SOURCE performing compile-time and run-time
-> field bounds checking for memcpy(), avoid intentionally writing across
-> neighboring fields.
+> On Wed, 10 Nov 2021 22:29:41 +1000
+> Alistair Francis <alistair@alistair23.me> wrote:
 >
-> Use struct_group() in struct art around members weight, and ac[0-9]_max,
-> so they can be referenced together. This will allow memcpy() and sizeof()
-> to more easily reason about sizes, improve readability, and avoid future
-> warnings about writing beyond the end of weight.
+> > Initial support for the Silergy SY7636A Power Management chip
+> > and regulator.
+> >
+> > Signed-off-by: Alistair Francis <alistair@alistair23.me>
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+> > Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+> > ---
+> >  .../bindings/mfd/silergy,sy7636a.yaml         | 79 +++++++++++++++++++
+> >  1 file changed, 79 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml b/Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml
+> > new file mode 100644
+> > index 000000000000..0566f9498e2f
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml
+> [...]
+> > +  regulators:
+> > +    type: object
+> > +
+> > +    properties:
+> > +      compatible:
+> > +        const: silergy,sy7636a-regulator
+> > +
+> > +      vcom:
+> > +        type: object
+> > +        $ref: /schemas/regulator/regulator.yaml#
+> > +        properties:
+> > +          regulator-name:
+> > +            const: vcom
+> > +
+> hmm, this is what? If I understand it correctly, vcom means some
+> voltage for compensation. On other comparable pmics (e.g. TPS65185
+> which has also a sane public datasheet, MAX17135) I have seen some
+> methods to measure a voltage while the display is doing something
+> defined and then program this voltage non-volatile for compensation
+> during manufacturing.
 >
-> "pahole" shows no size nor member offset changes to struct art.
-> "objdump -d" shows no meaningful object code changes (i.e. only source
-> line number induced differences).
+> If I understand the code correctly all the bunch of voltages are
+> powered up if this one is enabled.
+> So at least a description should be suitable.
 >
-> Cc: Zhang Rui <rui.zhang@intel.com>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Amit Kucheria <amitk@kernel.org>
-> Cc: linux-pm@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+> The other comparable PMICs have at least regulators named VCOM, DISPLAY
+> (controls several regulators, started with delays configured via
+> registers) and V3P3. MAX17135 source can be found in NXP kernels,
+> TPS65185 in Kobo vendor kernels.
+>
+> So I would expect to see something similar here and a description or at
+> least not such a misleading name as vcom if it is for some reason not
+> feasible to separate the regulators.
 
-Rui, Srinivas, any comments here?
+This is a vcom in the sense of voltage for compensation. We just
+currently don't support setting the vcom.
 
-> ---
->  .../intel/int340x_thermal/acpi_thermal_rel.c  |  5 +-
->  .../intel/int340x_thermal/acpi_thermal_rel.h  | 48 ++++++++++---------
->  2 files changed, 29 insertions(+), 24 deletions(-)
+I had a look at the Kobo code and this is similar to
+https://github.com/akemnade/linux/blob/kobo/epdc-pmic-5.15/drivers/regulator/sy7636-regulator.c#L614
+
+So I think that vcom is still the appropriate name for this.
+
+Alistair
+
 >
-> diff --git a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
-> index a478cff8162a..e90690a234c4 100644
-> --- a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
-> +++ b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
-> @@ -250,8 +250,9 @@ static int fill_art(char __user *ubuf)
->                 get_single_name(arts[i].source, art_user[i].source_device);
->                 get_single_name(arts[i].target, art_user[i].target_device);
->                 /* copy the rest int data in addition to source and target */
-> -               memcpy(&art_user[i].weight, &arts[i].weight,
-> -                       sizeof(u64) * (ACPI_NR_ART_ELEMENTS - 2));
-> +               BUILD_BUG_ON(sizeof(art_user[i].data) !=
-> +                            sizeof(u64) * (ACPI_NR_ART_ELEMENTS - 2));
-> +               memcpy(&art_user[i].data, &arts[i].data, sizeof(art_user[i].data));
->         }
->
->         if (copy_to_user(ubuf, art_user, art_len))
-> diff --git a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.h b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.h
-> index 58822575fd54..78d942477035 100644
-> --- a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.h
-> +++ b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.h
-> @@ -17,17 +17,19 @@
->  struct art {
->         acpi_handle source;
->         acpi_handle target;
-> -       u64 weight;
-> -       u64 ac0_max;
-> -       u64 ac1_max;
-> -       u64 ac2_max;
-> -       u64 ac3_max;
-> -       u64 ac4_max;
-> -       u64 ac5_max;
-> -       u64 ac6_max;
-> -       u64 ac7_max;
-> -       u64 ac8_max;
-> -       u64 ac9_max;
-> +       struct_group(data,
-> +               u64 weight;
-> +               u64 ac0_max;
-> +               u64 ac1_max;
-> +               u64 ac2_max;
-> +               u64 ac3_max;
-> +               u64 ac4_max;
-> +               u64 ac5_max;
-> +               u64 ac6_max;
-> +               u64 ac7_max;
-> +               u64 ac8_max;
-> +               u64 ac9_max;
-> +       );
->  } __packed;
->
->  struct trt {
-> @@ -47,17 +49,19 @@ union art_object {
->         struct {
->                 char source_device[8]; /* ACPI single name */
->                 char target_device[8]; /* ACPI single name */
-> -               u64 weight;
-> -               u64 ac0_max_level;
-> -               u64 ac1_max_level;
-> -               u64 ac2_max_level;
-> -               u64 ac3_max_level;
-> -               u64 ac4_max_level;
-> -               u64 ac5_max_level;
-> -               u64 ac6_max_level;
-> -               u64 ac7_max_level;
-> -               u64 ac8_max_level;
-> -               u64 ac9_max_level;
-> +               struct_group(data,
-> +                       u64 weight;
-> +                       u64 ac0_max_level;
-> +                       u64 ac1_max_level;
-> +                       u64 ac2_max_level;
-> +                       u64 ac3_max_level;
-> +                       u64 ac4_max_level;
-> +                       u64 ac5_max_level;
-> +                       u64 ac6_max_level;
-> +                       u64 ac7_max_level;
-> +                       u64 ac8_max_level;
-> +                       u64 ac9_max_level;
-> +               );
->         };
->         u64 __data[ACPI_NR_ART_ELEMENTS];
->  };
-> --
-> 2.30.2
->
+> Regards,
+> Andreas
