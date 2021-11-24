@@ -2,40 +2,40 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AFD745C29E
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Nov 2021 14:28:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7343545C314
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Nov 2021 14:32:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351325AbhKXNar (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Nov 2021 08:30:47 -0500
-Received: from mail-oi1-f172.google.com ([209.85.167.172]:37481 "EHLO
-        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350767AbhKXN2g (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Nov 2021 08:28:36 -0500
-Received: by mail-oi1-f172.google.com with SMTP id bj13so5319286oib.4
-        for <linux-pm@vger.kernel.org>; Wed, 24 Nov 2021 05:25:27 -0800 (PST)
+        id S1352202AbhKXNfS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Nov 2021 08:35:18 -0500
+Received: from mail-oo1-f44.google.com ([209.85.161.44]:35790 "EHLO
+        mail-oo1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349686AbhKXNcX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Nov 2021 08:32:23 -0500
+Received: by mail-oo1-f44.google.com with SMTP id e17-20020a4a8291000000b002c5ee0645e7so922098oog.2
+        for <linux-pm@vger.kernel.org>; Wed, 24 Nov 2021 05:29:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=QZ7qfefsclB7CxTXIvwdiZVWAMNePt0cllRE7I51zkg=;
-        b=HvR/A/5RIF81DNWY4ZZV91/xXfiH16pUOO95jPP4qNr4DzSkFZEzDrg7g30LHTmSPr
-         PizF8SXE4uspI+hrxk/QVUrKb9BWoN/tLItn+UjN0DZ7jPJCnDL6PKA7oSppgwkIYsCh
-         92/GLYdKaw/AtceZizQD+Akx5KXA4iIqw4mmBv5oKeKAtvGafT/haITw9kpiFohsTOmx
-         TFAgfHw72U7BVbQ9Pyx0SUBcaqwolipwQ7Uvvz9sTojj72mNheUtOYDdmihmpzwCzhjl
-         XoSitESwnC6cI+Wcdx+25Hxv3rAapqlopnlCNIylUp5NLFWJpM3ACpCeQ0UXXjj0Pzi4
-         xBxg==
-X-Gm-Message-State: AOAM531jDqZAHEiLTeO4GoC0A6KI31Q+wavvZINg5nNfz/XxReJpWxXf
-        TQQJNAvPaH8m7i9GwK5xA4ztMNK/8e3XKRWCSU8=
-X-Google-Smtp-Source: ABdhPJzaJ04wmXyRH7UkZYBkCjgCBTmtJIDHXS15SBI/Prucjjy/bjUezTeZ52BX1Tc0lreY3MOu+PXvIeG7xf76cPA=
-X-Received: by 2002:a05:6808:14c3:: with SMTP id f3mr5988211oiw.51.1637760326777;
- Wed, 24 Nov 2021 05:25:26 -0800 (PST)
+        bh=akbRClLPhfXBbW/TufdVzTe9bZgbKW/SjUWywEYbIJo=;
+        b=3RyH1PAjcxJp1XOUTpD/eMt0sEILYY7RBo1jRWZIsvFjLoOThAIrw+8OXU7AE2fCKL
+         gpSqK4FlagmTEVS0wDelxJSUvnSTUXWjCshfZe7t/BLjrx+RMs1Ne5Dl2iurQTPOsHIX
+         W3sOyQF4UZ5nkqPyCntwrb0Kd3qlasFZOiDYt23bEdy3pKh7O+loXobltfmPjceBJZAO
+         GRyzjKA4Dr6XVImgXFwuZiAmtKzdR7FLv1kIHN4BBcIk1HPgRwU1Htdrlp+fBwqGazGt
+         vm2FHzsWoPufktWAv2j6vJM09zp4imSzk//9NY6LI5DHH1gD7L6JBunb43OId1kjrbGn
+         L22g==
+X-Gm-Message-State: AOAM5301jYZ8RQ6yhhEHjXtAIqjbQNBAmfElIyWeS2a2nVNlVSacyPgF
+        zp3ZLGFQ7s/vQN6KN4GbisPQ52OCG7jjfseXh5E=
+X-Google-Smtp-Source: ABdhPJzYLCh6wQAGRMvfLU/Z1QBhj7UYgT6IJKkeuIdVwA3M30/bIyU3u9vtJnyan6A1+w1KP1LNGNsvgxo+FEdgWa4=
+X-Received: by 2002:a05:6820:388:: with SMTP id r8mr8915911ooj.0.1637760553519;
+ Wed, 24 Nov 2021 05:29:13 -0800 (PST)
 MIME-Version: 1.0
-References: <20211027082237.26759-1-rui.zhang@intel.com>
-In-Reply-To: <20211027082237.26759-1-rui.zhang@intel.com>
+References: <20211027082237.26759-1-rui.zhang@intel.com> <20211027082237.26759-2-rui.zhang@intel.com>
+In-Reply-To: <20211027082237.26759-2-rui.zhang@intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 24 Nov 2021 14:25:15 +0100
-Message-ID: <CAJZ5v0gAdQBaXNM-QrobW+FB2Ug7U-xOycvf2BQYeWz_3ZbFgA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] intel_idle: cleanup code for handling with cpuidle framework
+Date:   Wed, 24 Nov 2021 14:29:02 +0100
+Message-ID: <CAJZ5v0hnPX13tFYjgT7PhY-MYjmYuipXPxCHoaLbPKREnhvX2A@mail.gmail.com>
+Subject: Re: [PATCH 2/3] intel_idle: cleanup cpuhotplug setup
 To:     Zhang Rui <rui.zhang@intel.com>
 Cc:     Linux PM <linux-pm@vger.kernel.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
@@ -47,121 +47,59 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 On Wed, Oct 27, 2021 at 10:07 AM Zhang Rui <rui.zhang@intel.com> wrote:
 >
-> Introduce two helper functions and move all the code that deals with
-> the cpuidle framework into them.
-
-So what exactly is the benefit?
-
-The role of intel_idle_cpuidle_devices_uninit() was to contain the
-loop over CPUs and now it is combined with the driver unregistration
-which looks confusing to me, because this function is only called in
-one place in the error patch of intel_idle_init().
-
-The existing code flow is easier to follow for me TBH and it is fewer
-lines of code.
-
-> No functional change in this patch.
+> Only limited number of CPUHP_AP_ONLINE_DYN callbacks can be registered,
+> thus cpuhp_remove_state() should be invoked to release the resource when
+> it is not used.
 >
+> Fixes: fb1013a01673 ("intel_idle: Convert to hotplug state machine")
 > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 > ---
->  drivers/idle/intel_idle.c | 67 ++++++++++++++++++++++-----------------
->  1 file changed, 38 insertions(+), 29 deletions(-)
+>  drivers/idle/intel_idle.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
 >
 > diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-> index e6c543b5ee1d..ae9d8c43e6a5 100644
+> index ae9d8c43e6a5..e7f2a5f85bf9 100644
 > --- a/drivers/idle/intel_idle.c
 > +++ b/drivers/idle/intel_idle.c
-> @@ -1677,14 +1677,46 @@ static int intel_idle_cpu_online(unsigned int cpu)
+> @@ -1676,6 +1676,8 @@ static int intel_idle_cpu_online(unsigned int cpu)
+>         return 0;
 >  }
 >
+> +static enum cpuhp_state intel_idle_cpuhp_state;
+> +
 >  /**
-> - * intel_idle_cpuidle_devices_uninit - Unregister all cpuidle devices.
-> + * intel_idle_cpuidle_unregister - unregister from cpuidle framework
+>   * intel_idle_cpuidle_unregister - unregister from cpuidle framework
 >   */
-> -static void __init intel_idle_cpuidle_devices_uninit(void)
-> +static void __init intel_idle_cpuidle_unregister(struct cpuidle_driver *drv)
+> @@ -1683,6 +1685,8 @@ static void __init intel_idle_cpuidle_unregister(struct cpuidle_driver *drv)
 >  {
 >         int i;
 >
+> +       if (intel_idle_cpuhp_state > 0)
+> +               cpuhp_remove_state(intel_idle_cpuhp_state);
+
+It would be more straightforward to do that directly in
+intel_idle_init(), because intel_idle_cpuhp_state could be a local
+variable in that function then.
+
 >         for_each_online_cpu(i)
 >                 cpuidle_unregister_device(per_cpu_ptr(intel_idle_cpuidle_devices, i));
-> +       cpuidle_unregister_driver(drv);
-> +       free_percpu(intel_idle_cpuidle_devices);
-> +}
-> +
-> +/**
-> + * intel_idle_cpuidle_register - register to cpuidle framework
-> + */
-> +static int __init intel_idle_cpuidle_register(struct cpuidle_driver *drv)
-> +{
-> +       int retval;
-> +
-> +       intel_idle_cpuidle_devices = alloc_percpu(struct cpuidle_device);
-> +       if (!intel_idle_cpuidle_devices)
-> +               return -ENOMEM;
-> +
-> +       retval = cpuidle_register_driver(drv);
-> +       if (retval) {
-> +               struct cpuidle_driver *drv = cpuidle_get_driver();
-> +
-> +               printk(KERN_DEBUG pr_fmt("intel_idle yielding to %s\n"),
-> +                       drv ? drv->name : "none");
-> +               free_percpu(intel_idle_cpuidle_devices);
-> +               return retval;
-> +       }
-> +
-> +       retval = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "idle/intel:online",
-> +                               intel_idle_cpu_online, NULL);
-> +       if (retval < 0) {
-> +               intel_idle_cpuidle_unregister(drv);
-> +               return retval;
-> +       }
-> +       return 0;
->  }
+>         cpuidle_unregister_driver(drv);
+> @@ -1710,11 +1714,11 @@ static int __init intel_idle_cpuidle_register(struct cpuidle_driver *drv)
+>                 return retval;
+>         }
 >
->  static int __init intel_idle_init(void)
-> @@ -1740,37 +1772,14 @@ static int __init intel_idle_init(void)
->         pr_debug("v" INTEL_IDLE_VERSION " model 0x%X\n",
->                  boot_cpu_data.x86_model);
->
-> -       intel_idle_cpuidle_devices = alloc_percpu(struct cpuidle_device);
-> -       if (!intel_idle_cpuidle_devices)
-> -               return -ENOMEM;
-> -
->         intel_idle_cpuidle_driver_init(&intel_idle_driver);
->
-> -       retval = cpuidle_register_driver(&intel_idle_driver);
-> -       if (retval) {
-> -               struct cpuidle_driver *drv = cpuidle_get_driver();
-> -               printk(KERN_DEBUG pr_fmt("intel_idle yielding to %s\n"),
-> -                      drv ? drv->name : "none");
-> -               goto init_driver_fail;
-> -       }
-> -
 > -       retval = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "idle/intel:online",
-> -                                  intel_idle_cpu_online, NULL);
-> -       if (retval < 0)
-> -               goto hp_setup_fail;
-> -
-> -       pr_debug("Local APIC timer is reliable in %s\n",
-> -                boot_cpu_has(X86_FEATURE_ARAT) ? "all C-states" : "C1");
-> +       retval = intel_idle_cpuidle_register(&intel_idle_driver);
-> +       if (!retval)
-> +               pr_debug("Local APIC timer is reliable in %s\n",
-> +                       boot_cpu_has(X86_FEATURE_ARAT) ? "all C-states" : "C1");
->
-> -       return 0;
-> -
-> -hp_setup_fail:
-> -       intel_idle_cpuidle_devices_uninit();
-> -       cpuidle_unregister_driver(&intel_idle_driver);
-> -init_driver_fail:
-> -       free_percpu(intel_idle_cpuidle_devices);
->         return retval;
-> -
+> -                               intel_idle_cpu_online, NULL);
+> -       if (retval < 0) {
+> +       intel_idle_cpuhp_state = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
+> +               "idle/intel:online", intel_idle_cpu_online, NULL);
+> +       if (intel_idle_cpuhp_state < 0) {
+>                 intel_idle_cpuidle_unregister(drv);
+> -               return retval;
+> +               return intel_idle_cpuhp_state;
+>         }
+>         return 0;
 >  }
->  device_initcall(intel_idle_init);
->
 > --
 > 2.17.1
 >
