@@ -2,145 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BE0D45B1D1
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Nov 2021 03:10:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8780345B571
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Nov 2021 08:34:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240656AbhKXCNg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Nov 2021 21:13:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54640 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238586AbhKXCNc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Nov 2021 21:13:32 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5C8C061574
-        for <linux-pm@vger.kernel.org>; Tue, 23 Nov 2021 18:10:23 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id np3so1127553pjb.4
-        for <linux-pm@vger.kernel.org>; Tue, 23 Nov 2021 18:10:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=+C4qmPrMSxtWstuLX2jfIVQDuK3KmBwkOx4UKk/idm0=;
-        b=xxwUY0LF3/kNpgOBWUyFg1akfeq9Z59W/wKS9iq3P6IAM+KaMeyPr8chTiJ2tomffp
-         O4t8ti2iTKuMwZOy077HqXSFwhp+OFkkVmMBfP/tsM6PuEqxJruYqUuFdkx91f+30/5m
-         I0NS6os1Y8h0GfQ3dLhEQnTiVUB/euEc5P0gawnDndQAR+XWs1NNF7i+h54+xK52O5n/
-         VZ9ohW4dYHdmwnTbMb0U9XFofEtJ1f2Omk3AmO0aVqwwvJJl3qACTtrGBZObOUp576fA
-         5cXC0znvC+fNpFN6OHmTRKnBoDpN8SJpk5BhhFfqGf3N266ljf+eBYI7N1kE1HEREhJ0
-         bMjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=+C4qmPrMSxtWstuLX2jfIVQDuK3KmBwkOx4UKk/idm0=;
-        b=KeIXPtAl9AXVXX2G9cJ9YsbK7BkQ74hWb+5LixiJHk1r+2XcG4rj/Ysq9hIHBUvO1w
-         gU2BMkQyfW/uADF0rhN7Vf8AKKsUbyzktlCgCteMm0m5KOqeyvhPA+RoRIhWG7Kjvjut
-         89jNjOUhrcPKrT734GDbx+Ft0PMQksk5t6r9lGr3XlJfD8CJz2F+MDpP8tdEi6pCgRyY
-         mYeUZNwNvAjck2VH8SIm96oH96P6xFA11B9AR9ZXVkXzZ4AG91DS0KoRFBAj938j8Dnd
-         9D7K4Y+VA/IB91DSlpLVNgDEAQi5WSMU29kx/5W+LoKEAeehjukJJ3ceqD9CdZiL8dSi
-         cnFg==
-X-Gm-Message-State: AOAM5323/sZFveHo/L66aPkY8YpJSL7neKnoj2OZBGstou/9s+8TVN70
-        Vz6QsGaJobLQlQgzA5AMaNbaGg==
-X-Google-Smtp-Source: ABdhPJw6tXPYRQSC7Si7Ae6a59m3/3CWURXykz2/K35awS9vDbFxWNgojoHL2XIsH0ynUIfZWbOhXg==
-X-Received: by 2002:a17:902:8d85:b0:142:892d:bfa with SMTP id v5-20020a1709028d8500b00142892d0bfamr13010388plo.76.1637719823482;
-        Tue, 23 Nov 2021 18:10:23 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id l21sm14486232pfu.213.2021.11.23.18.10.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Nov 2021 18:10:23 -0800 (PST)
-Message-ID: <619d9f0f.1c69fb81.43aa.8d33@mx.google.com>
-Date:   Tue, 23 Nov 2021 18:10:23 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S241131AbhKXHhr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Nov 2021 02:37:47 -0500
+Received: from marcansoft.com ([212.63.210.85]:52548 "EHLO mail.marcansoft.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234291AbhKXHhq (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 24 Nov 2021 02:37:46 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: hector@marcansoft.com)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 4D1ED4267B;
+        Wed, 24 Nov 2021 07:34:31 +0000 (UTC)
+From:   Hector Martin <marcan@marcan.st>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Hector Martin <marcan@marcan.st>, Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Johan Hovold <johan@kernel.org>, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: [PATCH v3 00/11] Apple SoC PMGR device power states driver
+Date:   Wed, 24 Nov 2021 16:34:10 +0900
+Message-Id: <20211124073419.181799-1-marcan@marcan.st>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.16-rc2-12-gf9efc61a2f28
-X-Kernelci-Report-Type: build
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing build: 6 builds: 0 failed, 6 passed,
- 1 warning (v5.16-rc2-12-gf9efc61a2f28)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 6 builds: 0 failed, 6 passed, 1 warning (v5.16-rc2-12-gf9=
-efc61a2f28)
+This series adds the driver for the Apple PMGR device power state
+registers. These registers can clockgate and (in some cases) powergate
+specific SoC blocks. They also control the reset line, and can have
+additional features such as automatic power management.
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-16-rc2-12-gf9efc61a2f28/
+The current driver supports only the lowest/highest power states,
+provided via the genpd framework, plus reset support provided via
+the reset subsystem.
 
-Tree: pm
-Branch: testing
-Git Describe: v5.16-rc2-12-gf9efc61a2f28
-Git Commit: f9efc61a2f28fa650741ece02d2c2d1901e519c5
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 6 unique architectures
+Apple's PMGRs (there are two in the T8103) have a uniform register
+bit layout (sometimes with varying features). To be able to support
+multiple SoC generations as well as express pd relationships
+dynamically, this binding describes each PMGR power state control
+as a single devicetree node. Future SoC generations are expected to
+retain backwards compatibility, allowing this driver to work on them
+with only DT changes.
 
-Warnings Detected:
+#1: MAINTAINERS updates, to go via the SoC tree to avert merge hell
+#2-#5: Adds power-domains properties to existing device bindings
+#6-#7: Adds the new pmgr device tree bindings
+#8: The driver itself.
+#9: Instantiates the driver in t8103.dtsi. This adds the entire PMGR
+    node tree and references the relevant nodes from existing devices.
+#7: Adds runtime-pm support to the Samsung UART driver, as a first
+    working consumer.
+#8: Instantiates a second UART, to more easily test this.
 
-arc:
+There are currently no consumers for the reset functionality, so
+it is untested, but we will be testing it soon with the NVMe driver
+(as it is required to allow driver re-binding to work properly).
 
-arm64:
+== Changes since v2 ==
+- DT schema review comments & patch order fix
+- Added the power-domains properties to devices that already mainlined
+- Now adds the entire PMGR tree. This turns off all devices we do not
+  currently instantiate, and adds power-domains to those we do. The
+  nodes were initially generated with [1] and manually tweaked. all
+  the labels match the ADT labels (lowercased), which might be used
+  by the bootloader in the future to conditionally disable nodes
+  based on hardware configuration.
+- Dropped apple,t8103-minipmgr, since I don't expect we will ever need
+  to tell apart multiple PMGR instances within a SoC, and added
+  apple,t6000-pmgr{-pwrstate} for the new SoCs.
+- Driver now unconditionally enables auto-PM for all devices. This
+  seems to be safe and should save power (it is not implemented for
+  all devices; if not implemented, the bit just doesn't exist and is
+  ignored).
+- If an always-on device is not powered on at boot, turn it on and
+  print a warning. This avoids the PM core complaining. We still
+  want to know if/when this happens, but let's not outright fail.
+- Other minor fixes (use PS names instead of offsets for messages,
+  do not spuriously clear flag bits).
 
-i386:
+On the way the parent node is handled: I've decided that these syscon
+nodes will only ever contain pwrstates and nothing else. We now size
+them based on the register range that contains pwrstate controls
+(rounded up to page size). t6000 has 3 PMGRs and t6001 has 4, and
+we shouldn't have to care about telling apart the multiple instances.
+Anything else PMGR does that needs a driver will be handled by
+entirely separate nodes in the future.
 
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
+Re t6001 and t6000 (and the rumored t6002), t6000 is basically a
+cut-down version of t6001 (and t6002 is rumored to be two t6001
+dies), down to the die floorplan, so I'm quite certain we won't need
+t6001/2-specific compatibles for anything shared. The t6000 devicetree
+will just #include the t6001 one and remove the missing devices.
+Hence, everything for this SoC series is going to have compatibles
+named apple,t6000-* (except the extra instances of some blocks in
+t6001 which look like they may have differences; PMGR isn't one of
+them, but some multimedia stuff might).
 
-riscv:
+[1] https://github.com/AsahiLinux/m1n1/blob/main/proxyclient/tools/pmgr_adt2dt.py
 
-x86_64:
+Hector Martin (11):
+  MAINTAINERS: Add PMGR power state files to ARM/APPLE MACHINE
+  dt-bindings: i2c: apple,i2c: Add power-domains property
+  dt-bindings: iommu: apple,dart: Add power-domains property
+  dt-bindings: pinctrl: apple,pinctrl: Add power-domains property
+  dt-bindings: interrupt-controller: apple,aic: Add power-domains
+    property
+  dt-bindings: power: Add apple,pmgr-pwrstate binding
+  dt-bindings: arm: apple: Add apple,pmgr binding
+  soc: apple: Add driver for Apple PMGR power state controls
+  arm64: dts: apple: t8103: Add PMGR nodes
+  tty: serial: samsung_tty: Support runtime PM
+  arm64: dts: apple: t8103: Add UART2
 
+ .../bindings/arm/apple/apple,pmgr.yaml        |  134 ++
+ .../devicetree/bindings/i2c/apple,i2c.yaml    |    3 +
+ .../interrupt-controller/apple,aic.yaml       |    3 +
+ .../devicetree/bindings/iommu/apple,dart.yaml |    3 +
+ .../bindings/pinctrl/apple,pinctrl.yaml       |    3 +
+ .../bindings/power/apple,pmgr-pwrstate.yaml   |   71 ++
+ MAINTAINERS                                   |    3 +
+ arch/arm64/boot/dts/apple/t8103-j274.dts      |    5 +
+ arch/arm64/boot/dts/apple/t8103-pmgr.dtsi     | 1136 +++++++++++++++++
+ arch/arm64/boot/dts/apple/t8103.dtsi          |   36 +
+ drivers/soc/Kconfig                           |    1 +
+ drivers/soc/Makefile                          |    1 +
+ drivers/soc/apple/Kconfig                     |   21 +
+ drivers/soc/apple/Makefile                    |    2 +
+ drivers/soc/apple/apple-pmgr-pwrstate.c       |  317 +++++
+ drivers/tty/serial/samsung_tty.c              |   93 +-
+ 16 files changed, 1798 insertions(+), 34 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/arm/apple/apple,pmgr.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/apple,pmgr-pwrstate.yaml
+ create mode 100644 arch/arm64/boot/dts/apple/t8103-pmgr.dtsi
+ create mode 100644 drivers/soc/apple/Kconfig
+ create mode 100644 drivers/soc/apple/Makefile
+ create mode 100644 drivers/soc/apple/apple-pmgr-pwrstate.c
 
-Warnings summary:
+-- 
+2.33.0
 
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
