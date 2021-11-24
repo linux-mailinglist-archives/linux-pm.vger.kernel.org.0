@@ -2,189 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4911645C879
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Nov 2021 16:19:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0B1C45C88D
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Nov 2021 16:21:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233961AbhKXPWQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Nov 2021 10:22:16 -0500
-Received: from mail-oi1-f176.google.com ([209.85.167.176]:41523 "EHLO
-        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231701AbhKXPWH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Nov 2021 10:22:07 -0500
-Received: by mail-oi1-f176.google.com with SMTP id u74so5975402oie.8;
-        Wed, 24 Nov 2021 07:18:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qit6Jz3QILsxBlB+d8BX6t8kVpsrltoBM47rPBs0iwg=;
-        b=jqpwwcupMl4wU2i/chzpntzERHIhpo35ThsU6ueiMNQgOEI/voKMqcRLaIQaJ8vGO1
-         34DM2HLZ29i7QJ+aD77mffiPARdUs2AnmMo/MfUZ/nwauL2qg1dv6/qa655+syfx3VA2
-         0kceWk+bEZ5QUerURcTCwisxJG2/qgKD9ugYka2EuCGgvtJYIyw5QAmYXrGEPtbKcL3k
-         5gxa2v8oxsm5t+um4oxijwmM1lia4UZPgccusOWoV1zW/psz+1TOiYsNdJH2amsqdC81
-         jai0VWSntiuMmBmm36OU1dekDoFqOgKGbFziQlRSQcq0LhyD5tfp2B9zILv+jff1tVi4
-         t2VQ==
-X-Gm-Message-State: AOAM532YAv2uuGg+aFIiEbVb/AaS0cxO0k7lFrzsKpX0ahVBrpMPJxV3
-        p4fKhRmM0as2s5qReiql/VAk6agzq+KlL9nkQQg=
-X-Google-Smtp-Source: ABdhPJxdQdCi4KvNdCX8SyvD94y9jIrYCmEDY9JM3repE7/DqtYebiGktELH63vCPHj5sYg+5V1GH0DuCoZIyBS7Qpo=
-X-Received: by 2002:a05:6808:14c2:: with SMTP id f2mr6829761oiw.154.1637767137290;
- Wed, 24 Nov 2021 07:18:57 -0800 (PST)
-MIME-Version: 1.0
-References: <20211106013312.26698-1-ricardo.neri-calderon@linux.intel.com> <20211106013312.26698-8-ricardo.neri-calderon@linux.intel.com>
-In-Reply-To: <20211106013312.26698-8-ricardo.neri-calderon@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 24 Nov 2021 16:18:46 +0100
-Message-ID: <CAJZ5v0j=+QSwmwVg8chcTchPAXdbt2h1g=4+tMbLpDxstfRq6A@mail.gmail.com>
-Subject: Re: [PATCH 7/7] thermal: intel: hfi: Notify user space for HFI events
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        id S234623AbhKXPYb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Nov 2021 10:24:31 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4159 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229866AbhKXPY3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Nov 2021 10:24:29 -0500
+Received: from fraeml739-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Hzl7x66WJz67x9G;
+        Wed, 24 Nov 2021 23:20:45 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml739-chm.china.huawei.com (10.206.15.220) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 24 Nov 2021 16:21:16 +0100
+Received: from localhost (10.52.122.252) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 24 Nov
+ 2021 15:21:14 +0000
+Date:   Wed, 24 Nov 2021 15:21:12 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+CC:     Tony Lindgren <tony@atomide.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Paul Walmsley <paul@pwsan.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Tero Kristo <kristo@kernel.org>,
+        "Jonathan Cameron" <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        "Lorenzo Bianconi" <lorenzo.bianconi83@gmail.com>,
+        Benoit Parrot <bparrot@ti.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Ping-Ke Shih <pkshih@realtek.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Keerthy <j-keerthy@ti.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        "Amit Kucheria" <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-omap@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
+        <linux-iio@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, <linux-aspeed@lists.ozlabs.org>,
+        <openbmc@lists.ozlabs.org>, <linux-wireless@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <alsa-devel@alsa-project.org>
+Subject: Re: [PATCH/RFC 08/17] iio: humidity: hts221: Use bitfield helpers
+Message-ID: <20211124152112.000078bf@Huawei.com>
+In-Reply-To: <c906f7449c0210cefba53eab2c2d87105d5c8599.1637592133.git.geert+renesas@glider.be>
+References: <cover.1637592133.git.geert+renesas@glider.be>
+        <c906f7449c0210cefba53eab2c2d87105d5c8599.1637592133.git.geert+renesas@glider.be>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.52.122.252]
+X-ClientProxiedBy: lhreml733-chm.china.huawei.com (10.201.108.84) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Nov 6, 2021 at 2:34 AM Ricardo Neri
-<ricardo.neri-calderon@linux.intel.com> wrote:
->
-> From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
->
-> When the hardware issues an HFI event, relay a notification to user space.
-> This allows user space to respond by reading performance and efficiency of
-> each CPU and take appropriate action.
->
-> For example, when performance and efficiency of a CPU is 0, user space can
-> either offline the CPU or inject idle. Also, if user space notices a
-> downward trend in performance, it may proactively adjust power limits to
-> avoid future situations in which performance drops to 0.
->
-> To avoid excessive notifications, the rate is limited by one HZ per event.
-> To limit netlink message size, parameters for only 16 CPUs at max are sent
-> in one message. If there are more than 16 CPUs, issue as many messages as
-> needed to notify the status of all CPUs.
->
-> Cc: Andi Kleen <ak@linux.intel.com>
-> Cc: Aubrey Li <aubrey.li@linux.intel.com>
-> Cc: Tim Chen <tim.c.chen@linux.intel.com>
-> Cc: "Ravi V. Shankar" <ravi.v.shankar@intel.com>
-> Reviewed-by: Len Brown <len.brown@intel.com>
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+On Mon, 22 Nov 2021 16:54:01 +0100
+Geert Uytterhoeven <geert+renesas@glider.be> wrote:
+
+> Use the field_prep() helper, instead of open-coding the same operation.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Hi Geert,
+
+If this should got forwards, looks like a nice cleanup for the two IIO
+ones, so I'll be happy to pick them up once infrastructure in place
+(ideally have the infrastructure an immutable branch to save having
+to revisit in 3+ months time!)
+
+Jonathan
+
 > ---
->  drivers/thermal/intel/Kconfig     |  1 +
->  drivers/thermal/intel/intel_hfi.c | 55 ++++++++++++++++++++++++++++++-
->  2 files changed, 55 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/thermal/intel/Kconfig b/drivers/thermal/intel/Kconfig
-> index d4c6bdcacddb..b6a1f777b8e7 100644
-> --- a/drivers/thermal/intel/Kconfig
-> +++ b/drivers/thermal/intel/Kconfig
-> @@ -104,6 +104,7 @@ config INTEL_HFI
->         bool "Intel Hardware Feedback Interface"
->         depends on CPU_SUP_INTEL
->         depends on SCHED_MC && X86_THERMAL_VECTOR
-> +       select THERMAL_NETLINK
->         help
->           Select this option to enable the Hardware Feedback Interface. If
->           selected, hardware provides guidance to the operating system on
-> diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-> index 1df24b39f2e6..c669a037704e 100644
-> --- a/drivers/thermal/intel/intel_hfi.c
-> +++ b/drivers/thermal/intel/intel_hfi.c
-> @@ -24,6 +24,7 @@
->  #include <linux/io.h>
->  #include <linux/slab.h>
->
-> +#include "../thermal_core.h"
->  #include "intel_hfi.h"
->
->  #define THERM_STATUS_CLEAR_PKG_MASK (BIT(1) | BIT(3) | BIT(5) | BIT(7) | \
-> @@ -124,6 +125,58 @@ static struct hfi_features hfi_features;
->  static DEFINE_MUTEX(hfi_lock);
->
->  #define HFI_UPDATE_INTERVAL    HZ
-> +#define HFI_MAX_THERM_NOTIFY_COUNT     16
-> +
-> +static int get_one_hfi_cap(struct hfi_instance *hfi_instance, int cpu,
-> +                          struct hfi_cpu_data *hfi_caps)
-> +{
-> +       struct hfi_cpu_data *caps;
-> +       unsigned long flags;
-> +       s16 index;
-> +
-> +       index = per_cpu(hfi_cpu_info, cpu).index;
-> +       if (index < 0)
-> +               return -EINVAL;
-
-When does this happen?
-
-Can the index become negative after this check?
-
-Could this check be done in the caller (so this function could be a void one)?
-
-> +
-> +       /* Find the capabilities of @cpu */
-> +       raw_spin_lock_irqsave(&hfi_instance->event_lock, flags);
-> +       caps = hfi_instance->data + index * hfi_features.cpu_stride;
-> +       memcpy(hfi_caps, caps, sizeof(*hfi_caps));
-> +       raw_spin_unlock_irqrestore(&hfi_instance->event_lock, flags);
-> +
-> +       return 0;
-> +}
-> +
-> +/*
-> + * Call update_capabilities() when there are changes in the HFI table.
-> + */
-> +static void update_capabilities(struct hfi_instance *hfi_instance)
-> +{
-> +       struct cpu_capability cpu_caps[HFI_MAX_THERM_NOTIFY_COUNT];
-> +       int i = 0, cpu;
-> +
-> +       for_each_cpu(cpu, hfi_instance->cpus) {
-> +               struct hfi_cpu_data caps;
-> +               int ret;
-> +
-> +               ret = get_one_hfi_cap(hfi_instance, cpu, &caps);
-> +               if (ret)
-> +                       continue;
-> +
-> +               cpu_caps[i].cpu = cpu;
-> +               cpu_caps[i].perf = caps.perf_cap;
-> +               cpu_caps[i].eff = caps.ee_cap;
-> +               ++i;
-> +               if (i >= HFI_MAX_THERM_NOTIFY_COUNT) {
-> +                       thermal_genl_cpu_capability_event(HFI_MAX_THERM_NOTIFY_COUNT,
-> +                                                         cpu_caps);
-> +                       i = 0;
-> +               }
-> +       }
-> +
-> +       if (i)
-> +               thermal_genl_cpu_capability_event(i, cpu_caps);
-> +}
->
->  static void hfi_update_work_fn(struct work_struct *work)
+> Compile-tested only.
+> Marked RFC, as this depends on [PATCH 01/17], but follows a different
+> path to upstream.
+> ---
+>  drivers/iio/humidity/hts221_core.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/iio/humidity/hts221_core.c b/drivers/iio/humidity/hts221_core.c
+> index 6a39615b696114cd..749aedc469ede5c1 100644
+> --- a/drivers/iio/humidity/hts221_core.c
+> +++ b/drivers/iio/humidity/hts221_core.c
+> @@ -7,6 +7,7 @@
+>   * Lorenzo Bianconi <lorenzo.bianconi@st.com>
+>   */
+>  
+> +#include <linux/bitfield.h>
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/device.h>
+> @@ -171,7 +172,7 @@ static int hts221_update_avg(struct hts221_hw *hw,
+>  			     u16 val)
 >  {
-> @@ -134,7 +187,7 @@ static void hfi_update_work_fn(struct work_struct *work)
->         if (!hfi_instance)
->                 return;
->
-> -       /* TODO: Consume update here. */
-> +       update_capabilities(hfi_instance);
->  }
->
->  void intel_hfi_process_event(__u64 pkg_therm_status_msr_val)
-> --
-> 2.17.1
->
+>  	const struct hts221_avg *avg = &hts221_avg_list[type];
+> -	int i, err, data;
+> +	int i, err;
+>  
+>  	for (i = 0; i < HTS221_AVG_DEPTH; i++)
+>  		if (avg->avg_avl[i] == val)
+> @@ -180,9 +181,8 @@ static int hts221_update_avg(struct hts221_hw *hw,
+>  	if (i == HTS221_AVG_DEPTH)
+>  		return -EINVAL;
+>  
+> -	data = ((i << __ffs(avg->mask)) & avg->mask);
+> -	err = regmap_update_bits(hw->regmap, avg->addr,
+> -				 avg->mask, data);
+> +	err = regmap_update_bits(hw->regmap, avg->addr, avg->mask,
+> +				 field_prep(avg->mask, i));
+>  	if (err < 0)
+>  		return err;
+>  
+
