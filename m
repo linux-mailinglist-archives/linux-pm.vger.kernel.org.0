@@ -2,129 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5366D45B632
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Nov 2021 09:04:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6554645B64B
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Nov 2021 09:11:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241059AbhKXIHp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Nov 2021 03:07:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47698 "EHLO
+        id S241237AbhKXIOs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Nov 2021 03:14:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233552AbhKXIHo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Nov 2021 03:07:44 -0500
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D5ACC061574;
-        Wed, 24 Nov 2021 00:04:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=A8apBARRFPbiSEW1ceN6aynN1mbMSw2kt4pRYV7bzUs=;
-        t=1637741075; x=1638950675; b=fOIugJ371/M3ZN3Jkyqas0ZROi7Mwh9OUvsSiN0uekx+Lw+
-        hrnOMtvjWKlMDr4UfmJSTwTkJQvgZQyijM3/YUstkBGgYIRqYx9qbJdenr/q9j4wL6SvNdu4k1gR6
-        mfdfeC7suQHGLHzOQE+mQHdaEABHb3cNkvYat3xVwnn/PNlJ/DLV+t1NGdIGZt9n88u4BnowfU97I
-        Z0hgJ6vpeuLSHtHp2DVhEDVGSzt4J/4fmEiY9LQNggHWOU60PKGn+6UAMV4kBFDMK86WBcezP/hFX
-        2r0Gi9h5YE7pNDQDrCeDqjaVyfnrzdjQ5KQLVwP1KgwPTxDaEYjiEGb0saU6Jl+Q==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.95)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1mpnFW-0027Gb-B2;
-        Wed, 24 Nov 2021 09:03:26 +0100
-Message-ID: <05d4673a0343bfd83824d307e9cf8bf92e3814a6.camel@sipsolutions.net>
-Subject: Re: [PATCH 01/17] bitfield: Add non-constant field_{prep,get}()
- helpers
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Paul Walmsley <paul@pwsan.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>,
-        Benoit Parrot <bparrot@ti.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Ping-Ke Shih <pkshih@realtek.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Date:   Wed, 24 Nov 2021 09:03:24 +0100
-In-Reply-To: <20211123154922.600fd3b5@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-References: <cover.1637592133.git.geert+renesas@glider.be>
-         <3a54a6703879d10f08cf0275a2a69297ebd2b1d4.1637592133.git.geert+renesas@glider.be>
-         <01b44b38c087c151171f8d45a2090474c2559306.camel@sipsolutions.net>
-         <20211122171739.03848154@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-         <CAMuHMdWAAGrQUZN18cnDTDUUhuPNTZTFkRMe2Sbf+s7CedPSxA@mail.gmail.com>
-         <637a4183861a1f2cdab52b7652bfa7ed33fbcdd2.camel@sipsolutions.net>
-         <20211123154922.600fd3b5@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.1 (3.42.1-1.fc35) 
+        with ESMTP id S238955AbhKXIOs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Nov 2021 03:14:48 -0500
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60332C061574;
+        Wed, 24 Nov 2021 00:11:39 -0800 (PST)
+Received: by mail-io1-xd2e.google.com with SMTP id m9so2194729iop.0;
+        Wed, 24 Nov 2021 00:11:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=2X5/LFLLoXcHwnJiEqimMyAM3gnORo1QfzmyY4+BjE4=;
+        b=npeCSbzYQg6nrUVVZQQ8tgSeTCGq09gYMzHWIG0nLkIXzBo5vgZx6H3/iEUg/F86HW
+         TXWRlrdMfyukSte1IudpCHD3Qs+RqObFVGnEo0PSRcJCdOVDMnfNEn5CrQQ2j9ldGs4m
+         2ycv4mNR6Um+nxdxUFga3qN7G/84kL/MHYOxzf6i4Yhws4gqzOHqlcHg9ZI0jqSLV2kR
+         n57OBWBuVQvVMDbIfM10hp5DLBApDFXngA4DKKZzPQVCnpTXRdfbI+VuZbgw73V5nRdU
+         8Q5S9kQJrihbPG0W1hddydAFBWPjhv2vAOX+YMO0/FYkifW4Rf1yxUAcqowzIHFeoQO8
+         HMtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=2X5/LFLLoXcHwnJiEqimMyAM3gnORo1QfzmyY4+BjE4=;
+        b=isHaDxOKb9A9RXFXyBHgGXo48HYkzdVyHhb3RDTGM7o5xHk9I5nKesLS3a/RBCaIkZ
+         LND015zHAc2GUlNSCYXRQE8ADWOysgWpoHubKs9M5RfenZsRgQFH1anilze1R+JZ2v0E
+         Y08NZHxlDvq8N1WIecFU+dsUk+O3c2UOnCgBrVnreq7jx/VjM7V/kiSorLP7/4T4mTH+
+         QhBJZslUq/KDIqGI1+qmsvubG856DQvwgfgojEtSLtqjMer461TQkmjoeS3/EyM8mdrU
+         1sYki9zPA3iwaKkifVzxc3MWXGoo2wlfNirfeOGquWTV4I8oGnma5HsxMCGSAyF3baTe
+         BH0Q==
+X-Gm-Message-State: AOAM531izeO/YzssB12zEwKphyIOD/lmIPLm0vdeqECybLDHliUxTp/d
+        XmJKzjG+hyHBU1cabJ0r3VHLOqlA8kjYHYO5YOU=
+X-Google-Smtp-Source: ABdhPJzW+77DXfhD6ZDT96Rg0Qdwq2dVRlgLowhSu0150wCdHrY0rjX6LZy9nWoS6+vd6IY7LS+U9jMgylZH7nxoqfs=
+X-Received: by 2002:a05:6638:32a2:: with SMTP id f34mr12973174jav.63.1637741498831;
+ Wed, 24 Nov 2021 00:11:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-malware-bazaar: not-scanned
+References: <20211110122948.188683-1-alistair@alistair23.me>
+ <20211110122948.188683-4-alistair@alistair23.me> <20211116000634.767dcdc0@aktux>
+ <CAKmqyKPFOqWD7t6tC1Act97CVcY+yazrhwMLLr3j_wOyH50GTA@mail.gmail.com> <00d68181-ad3b-17d2-0150-00029d399f0f@roeck-us.net>
+In-Reply-To: <00d68181-ad3b-17d2-0150-00029d399f0f@roeck-us.net>
+From:   Alistair Francis <alistair23@gmail.com>
+Date:   Wed, 24 Nov 2021 18:11:00 +1000
+Message-ID: <CAKmqyKNNGA4pOxayG5UZowC7cQj7cFyVJBbWLvFqEizEO7izyg@mail.gmail.com>
+Subject: Re: [PATCH v15 3/8] mfd: simple-mfd-i2c: Enable support for the silergy,sy7636a
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Andreas Kemnade <andreas@kemnade.info>,
+        Alistair Francis <alistair@alistair23.me>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>, lgirdwood@gmail.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        rui.zhang@intel.com, devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-hwmon@vger.kernel.org, amitk@kernel.org,
+        linux-pm@vger.kernel.org, dl-linux-imx <linux-imx@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 2021-11-23 at 15:49 -0800, Jakub Kicinski wrote:
-> On Tue, 23 Nov 2021 17:24:15 +0100 Johannes Berg wrote:
-> > > (*_replace_bits() seems to be useful, though)  
-> > 
-> > Indeed.
-> > 
-> > Also as I said in my other mail, the le32/be32/... variants are
-> > tremendously useful, and they fundamentally cannot be expressed with the
-> > FIELD_GET() or field_get() macros. IMHO this is a clear advantage to the
-> 
-> Can you elaborate?
+On Wed, Nov 24, 2021 at 1:39 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 11/23/21 4:14 AM, Alistair Francis wrote:
+> > On Tue, Nov 16, 2021 at 9:10 AM Andreas Kemnade <andreas@kemnade.info> =
+wrote:
+> >>
+> >> Hi,
+> >>
+> >> this all creates a lot of question marks...
+> >> One of my main question is whether sy7636a =3D sy7636 (at least the
+> >> driver in the kobo vendor kernels does not have the "A" at the end,
+> >> whic does not necessarily mean a difference).
+> >>
+> >> https://www.silergy.com/products/panel_pmic
+> >> lists only a SY7636ARMC, so chances are good that the letters were jus=
+t
+> >> stripped away by the driver developers. Printing on chip package is
+> >> cryptic so it is not that helpful. It is just "BWNBDA"
+> >
+> > I don't have a definite answer for you. But I think it's sy7636a
+> >
+> > The page you linked to above lists SY7636ARMC as well as SY7627RMC,
+> > SY7570RMC. That makes me think that the RMC is a generic suffix and
+> > this actual IC is the SY7636A.
+> >
+>
+> Almost all chips have an ordering suffix, indicating things like
+> temperature range or packaging. The datasheet says:
+>
+> Ordering Information
+> SY7636 =E2=96=A1(=E2=96=A1=E2=96=A1)=E2=96=A1
+>              | Temperature Code (C)
+>           | Package Code (RM)
+>         | Optional Spec Code (A)
+>
+> The datasheet otherwise refers to the chip as SY7636A.
 
-Well, the way I see it, the only advantage of FIELD_GET() is that it
-will auto-determine the type (based on the mask type.) This cannot work
-if you need be/le conversions, because the be/le type annotations are
-invisible to the compiler.
+To me this seems like SY7636A is the correct name then.
 
-So obviously you could write a BE32_FIELD_GET(), but then really that's
-equivalent to be32_get_bits() - note you you have to actually specify
-the type in the macro name. I guess in theory you could make macros
-where the type is an argument (like FIELD_GET_TYPE(be32, ...)), but I
-don't see how that gains anything.
+Alistair
 
-> > typed versions, and if you ask me we should get rid of the FIELD_GETand
-> > FIELD_PREP entirely - difficult now, but at least let's not propagate
-> > that?
-> 
-> I don't see why.
-
-Just for being more regular, in the spirit of "there's exactly one
-correct way of doing it" :)
-
-johannes
+>
+> Guenter
