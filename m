@@ -2,113 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FA4145C47E
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Nov 2021 14:47:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8AF445C50C
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Nov 2021 14:52:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351858AbhKXNtb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Nov 2021 08:49:31 -0500
-Received: from mga02.intel.com ([134.134.136.20]:35860 "EHLO mga02.intel.com"
+        id S1351585AbhKXNyo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Nov 2021 08:54:44 -0500
+Received: from foss.arm.com ([217.140.110.172]:38708 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351607AbhKXNrv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 24 Nov 2021 08:47:51 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10177"; a="222500121"
-X-IronPort-AV: E=Sophos;i="5.87,260,1631602800"; 
-   d="scan'208";a="222500121"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2021 05:43:09 -0800
-X-IronPort-AV: E=Sophos;i="5.87,260,1631602800"; 
-   d="scan'208";a="497677345"
-Received: from kaiwang3-mobl2.ccr.corp.intel.com ([10.249.172.130])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2021 05:43:07 -0800
-Message-ID: <4d8621a923adf4268a2120f517f0897fd4df6b80.camel@intel.com>
-Subject: Re: [PATCH 3/3] intel_idle: fix cpuidle_device unregistration
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-Date:   Wed, 24 Nov 2021 21:43:04 +0800
-In-Reply-To: <CAJZ5v0juUmxM5gRa5WW=fXo18idRrKGpYmNTF=JFVf5hmscW2Q@mail.gmail.com>
-References: <20211027082237.26759-1-rui.zhang@intel.com>
-         <20211027082237.26759-3-rui.zhang@intel.com>
-         <CAJZ5v0juUmxM5gRa5WW=fXo18idRrKGpYmNTF=JFVf5hmscW2Q@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
+        id S1352156AbhKXNwQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 24 Nov 2021 08:52:16 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 627C6ED1;
+        Wed, 24 Nov 2021 05:49:06 -0800 (PST)
+Received: from [10.57.56.56] (unknown [10.57.56.56])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 46E3F3F73B;
+        Wed, 24 Nov 2021 05:49:04 -0800 (PST)
+Message-ID: <bf994aa8-df18-22d0-e718-2c8b406a5cc8@arm.com>
+Date:   Wed, 24 Nov 2021 13:49:02 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH 2/5] arm64: dts: rockchip: Add powerzones definition for
+ rock960
+Content-Language: en-GB
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     robh@kernel.org, arnd@linaro.org, heiko@sntech.de,
+        ulf.hansson@linaro.org, rjw@rjwysocki.net,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, lukasz.luba@arm.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Johan Jonker <jbx6244@gmail.com>,
+        "moderated list:ARM/Rockchip SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC support" 
+        <linux-rockchip@lists.infradead.org>
+References: <20211124125506.2971069-1-daniel.lezcano@linaro.org>
+ <20211124125506.2971069-2-daniel.lezcano@linaro.org>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20211124125506.2971069-2-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 2021-11-24 at 14:20 +0100, Rafael J. Wysocki wrote:
-> On Wed, Oct 27, 2021 at 10:07 AM Zhang Rui <rui.zhang@intel.com>
-> wrote:
-> > 
-> > cpuidle_device is allocated as percpu data, and it is registered
-> > for every
-> > CPU that has ever been onlined.
-> > When unregistering, checking current online CPUs is not sufficient,
-> > because some cpu may be offlined later with its cpuidle_device
-> > registered.
+On 2021-11-24 12:55, Daniel Lezcano wrote:
+> Add the powerzones description. This first step introduces the big,
+> the little and the gpu as a powerzone place.
+
+These look more like SoC-level properties than board-level ones - should 
+they be in rk3399.dtsi?
+
+Robin.
+
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>   .../boot/dts/rockchip/rk3399-rock960.dts      | 45 +++++++++++++++++++
+>   1 file changed, 45 insertions(+)
 > 
-> But the unregistration happens only in the error code path of
-> intel_idle_init(), doesn't it?
-
-yes.
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3399-rock960.dts b/arch/arm64/boot/dts/rockchip/rk3399-rock960.dts
+> index 1a23e8f3cdf6..83540bdb64cd 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3399-rock960.dts
+> +++ b/arch/arm64/boot/dts/rockchip/rk3399-rock960.dts
+> @@ -61,6 +61,51 @@ bt_active_led: led-6 {
+>   		};
+>   	};
+>   
+> +	powerzones {
+> +
+> +		PKG_PZ: pkg {
+> +			#powerzone-cells = <0>;
+> +                        powerzone = <&SOC_PZ>;
+> +		};
+> +
+> +		SOC_PZ: soc {
+> +		};
+> +	};
+> +};
+> +
+> +&cpu_b0 {
+> +	#powerzone-cells = <0>;
+> +	powerzone = <&PKG_PZ>;
+> +};
+> +
+> +&cpu_b1 {
+> +	#powerzone-cells = <0>;
+> +	powerzone = <&PKG_PZ>;
+> +};
+> +
+> +&cpu_l0 {
+> +	#powerzone-cells = <0>;
+> +	powerzone = <&PKG_PZ>;
+> +};
+> +
+> +&cpu_l1 {
+> +	#powerzone-cells = <0>;
+> +	powerzone = <&PKG_PZ>;
+> +};
+> +
+> +&cpu_l2 {
+> +	#powerzone-cells = <0>;
+> +	powerzone = <&PKG_PZ>;
+> +};
+> +
+> +&cpu_l3 {
+> +	#powerzone-cells = <0>;
+> +	powerzone = <&PKG_PZ>;
+> +};
+> +
+> +&gpu {
+> +	#powerzone-cells = <0>;
+> +	powerzone = <&PKG_PZ>;
+>   };
+>   
+>   &cpu_alert0 {
 > 
-> While I agree that doing a for_each_present_cpu() walk for that is
-> more prudent', I'm not sure if that makes any difference in practice.
-
-And yes, exactly.
-This is not a problem as long as intel_idle driver can not be unloaded.
-
-There is no technical gap either to unregister the intel_idle cpuidle
-driver, or to unload the intel_idle module. And this potential issue
-will be exposed only when we decided to do so.
-
-If you prefer to describe this *potential* issue more precisely, I
-totally agree.
-If you want to fix it only when really needed, that's also okay to me.
-
-> 
-> > Fix this by using for_each_present_cpu() instead, and unregistering
-> > all
-> > the cpuidle_devices that have been registered.
-> > 
-> > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> > ---
-> >  drivers/idle/intel_idle.c | 9 +++++++--
-> >  1 file changed, 7 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-> > index e7f2a5f85bf9..9e916e2adc89 100644
-> > --- a/drivers/idle/intel_idle.c
-> > +++ b/drivers/idle/intel_idle.c
-> > @@ -1687,8 +1687,13 @@ static void __init
-> > intel_idle_cpuidle_unregister(struct cpuidle_driver *drv)
-> > 
-> >         if (intel_idle_cpuhp_state > 0)
-> >                 cpuhp_remove_state(intel_idle_cpuhp_state);
-> > -       for_each_online_cpu(i)
-> > -               cpuidle_unregister_device(per_cpu_ptr(intel_idle_cp
-> > uidle_devices, i));
-> > +       for_each_present_cpu(i) {
-> > +               struct cpuidle_device *dev;
-> > +
-> > +               dev = per_cpu_ptr(intel_idle_cpuidle_devices, i);
-> > +               if (dev->registered)
-> 
-> dev->registered is checked by cpuidle_unregister_device().
-
-right, this check is not needed.
-
-thanks,
-rui
-> 
-> > +                       cpuidle_unregister_device(dev);
-> > +       }
-> >         cpuidle_unregister_driver(drv);
-> >         free_percpu(intel_idle_cpuidle_devices);
-> >  }
-> > --
-
