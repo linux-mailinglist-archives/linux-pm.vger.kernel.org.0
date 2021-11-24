@@ -2,403 +2,256 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A21CE45C7F5
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Nov 2021 15:49:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1290345C812
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Nov 2021 15:55:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357768AbhKXOwW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Nov 2021 09:52:22 -0500
-Received: from mail-ot1-f53.google.com ([209.85.210.53]:38439 "EHLO
-        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355434AbhKXOwT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Nov 2021 09:52:19 -0500
-Received: by mail-ot1-f53.google.com with SMTP id n104-20020a9d2071000000b005799790cf0bso4626512ota.5;
-        Wed, 24 Nov 2021 06:49:08 -0800 (PST)
+        id S231582AbhKXO6Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Nov 2021 09:58:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54106 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241202AbhKXO6J (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Nov 2021 09:58:09 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB3AC06173E
+        for <linux-pm@vger.kernel.org>; Wed, 24 Nov 2021 06:54:59 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id i63so6069733lji.3
+        for <linux-pm@vger.kernel.org>; Wed, 24 Nov 2021 06:54:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=km+HRCa5z0uci/4KhX6h6LEcQDBUlCgOoz3g9Xg5t8k=;
+        b=dOCFo9RPivEWjVmkG4QLLeAK22dHFSXv+3xQd8DPTM/Gg7TfjvJX119AvpHntJp3pQ
+         24tfMNyhLIssVKGB4vxzDdMaXxyg9ljYwLvDDJU2UeO/5X8oNpRxxqrFrasviw0OTsLX
+         UAJou9WNA1wsljV8jXerimi9qesRdY4WVsLhyGYFrf7P74UevCA9Awy2WShRi0mpeVYT
+         Vq2Ifu5yOijstAf8i0OVQ8DzzKxd8fKSvLdhagHtpf9Z9Fl+DRXiAHFthsh72dJ0Wjk3
+         VzMGhz34Y+3ONeLoBgAnWigQrwS+T7a10J/ftyTsihDNsqjb+tYAV1/RqfjOL5S8g+Rd
+         dFKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=5h2MkUkIgHPwArm0+GJ3CbfzbFiEXBhUudQ1XJ0DkzI=;
-        b=yBj9Hf+Xa+GEXQb5OSNtZ2Pm6n+R/zXV0xlksc0yP10vm4OXeZBMGpVR1bLTXx9hO1
-         UGy/xiOQTHpnd+ST8Ln5wH0MhvZDr+T6hjQDG1LGTp+7yg6bXbU8kxLGEVbiU9OII/2i
-         UDxSvOO+3gSsVbfcWnuOFMqquuA4VfZCENj46z6taD6MgN50o9AIteRQRZOz0CE6wvHZ
-         lEHfAmUcyxSnNWNmsjY9vcSSa+03n0wm/HKgT9pSBoraXi8uBeveXMUF5hCUh+ZMqVK6
-         4KL1ydwjb0cDfi29V9HBjVMSnGF1G8r1qGOd2M5QqHBKnPlL7Yv5+NZJEZkEVLPJ/ZLW
-         TzbQ==
-X-Gm-Message-State: AOAM53002EER3fZxogHfI1dJZSZVCj7N8SfxtRiuhJ3tdyD8ngOSHpxv
-        qMqn+udVVvPK5gcO+UpOhG88LYpi0WWbJ4Rao3I=
-X-Google-Smtp-Source: ABdhPJzH/UfU3XcNeca+M+4PyntFMveF3EsitPjFTbqVk8NK6M7ad/PT8631J8X3vREiBkThUjnNIev8hrl6R5R2P2g=
-X-Received: by 2002:a05:6830:348f:: with SMTP id c15mr13761359otu.254.1637765340511;
- Wed, 24 Nov 2021 06:49:00 -0800 (PST)
+        bh=km+HRCa5z0uci/4KhX6h6LEcQDBUlCgOoz3g9Xg5t8k=;
+        b=SDkT0M8wb46aZ9oaBpl5XUd0YguXmgulXim5TifzmPQEjsI6x/ptjXD8g7/BQ1+1tM
+         2LWkULeTP5Gw8H22SOGl1gbthCnipwRBjvm17RgltgO8HOSVD69shgs7A3btus4J4qS8
+         eOy2s2/PeZwzqLZckS9MnNTs/wk4CxPe0ZttGLG9FHhJNbznTUAci3v+mx/zu7k/XH0a
+         L1s7vD+v0iGaEmkW0O7A+Oj0LcsMY4rpJVCJxlcm7KZ2If7acqENwf8T3qPUcS8l9+K0
+         WD4AonmFxYaUuteM219kk+KRiBkCpWUSWKQURGVOFBDHW7wCa6PFU/1AODv9V3fPqeig
+         0VRA==
+X-Gm-Message-State: AOAM53220IFb+mn3Db8HMQoyaBZUvLZSBmJRvQkOiIQOb9x6J+mQztX5
+        0BpivrtfowEJSOd4l6ukEU7FHvQv8QllRM7F+BV/LRlX1RWBPQ==
+X-Google-Smtp-Source: ABdhPJxjH3eSh0Yux3Et8YG13JuZrGmPGu4JiUQxhMt2rtPMbHYMWUNckkwzT7dPSFtWpzCrFRSekTyY3n27glQLRas=
+X-Received: by 2002:a2e:a22a:: with SMTP id i10mr16632870ljm.16.1637765697841;
+ Wed, 24 Nov 2021 06:54:57 -0800 (PST)
 MIME-Version: 1.0
-References: <20211106013312.26698-1-ricardo.neri-calderon@linux.intel.com> <20211106013312.26698-5-ricardo.neri-calderon@linux.intel.com>
-In-Reply-To: <20211106013312.26698-5-ricardo.neri-calderon@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 24 Nov 2021 15:48:49 +0100
-Message-ID: <CAJZ5v0gemmV1Lz3+9iKz1eiXtkyDc3+4+po4Eidchzk+J2=ceA@mail.gmail.com>
-Subject: Re: [PATCH 4/7] thermal: intel: hfi: Handle CPU hotplug events
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20211124125506.2971069-1-daniel.lezcano@linaro.org>
+In-Reply-To: <20211124125506.2971069-1-daniel.lezcano@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 24 Nov 2021 15:54:21 +0100
+Message-ID: <CAPDyKFpJHzAxGk=Y52VXcuVbAunwfMo2ErnwXMqnxzHPs6O30g@mail.gmail.com>
+Subject: Re: [PATCH 1/5] dt-bindings: Powerzone new bindings
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     robh@kernel.org, arnd@linaro.org, heiko@sntech.de,
+        rjw@rjwysocki.net, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        lukasz.luba@arm.com, Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Nov 6, 2021 at 2:34 AM Ricardo Neri
-<ricardo.neri-calderon@linux.intel.com> wrote:
+On Wed, 24 Nov 2021 at 13:55, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
 >
-> All CPUs in a package are represented in an HFI table. There exists an
-> HFI table per package. Thus, CPUs in a package need to coordinate to
-> initialize and access the table. Do such coordination during CPU hotplug.
-> Use the first CPU to come online in a package to initialize the HFI table
-> and the data structure representing it. Other CPUs in the same package need
-> only to register or unregister themselves in that data structure.
+> The proposed bindings are describing a set of powerzones.
 >
-> The HFI depends on both the package-level thermal management and the local
-> APIC thermal local vector. Thus, ensure that both are properly configured
-> before calling intel_hfi_online(). The CPU hotplug callbacks of the thermal
-> throttle events code already meet these conditions. Enable the HFI from
-> thermal_throttle_online().
+> A power zone is the logical name for a component which is capable of
+> power capping and where we can measure the power consumption.
 >
-> Cc: Andi Kleen <ak@linux.intel.com>
-> Cc: Aubrey Li <aubrey.li@linux.intel.com>
-> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Cc: Tim Chen <tim.c.chen@linux.intel.com>
-> Cc: "Ravi V. Shankar" <ravi.v.shankar@intel.com>
-> Reviewed-by: Len Brown <len.brown@intel.com>
-> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> A power zone can aggregate several power zones in terms of power
+> measurement and power limitations. That allows to apply power
+> constraint to a group of components and let the system balance the
+> allocated power in order to comply with the constraint.
+>
+> The ARM System Control and Management Interface (SCMI) can provide a
+> power zone description.
+>
+> The powerzone semantic is also found on the Intel platform with the
+> RAPL register.
+>
+> The Linux kernel powercap framework deals with the powerzones:
+>
+> https://www.kernel.org/doc/html/latest/power/powercap/powercap.html
+>
+> The powerzone can also represent a group of children powerzones, hence
+> the description can result on a hierarchy. Such hierarchy already
+> exists with the hardware or can be represented an computed from the
+> kernel.
+>
+> The hierarchical description was initially proposed but not desired
+> given there are other descriptions like the power domain proposing
+> almost the same description.
+>
+> https://lore.kernel.org/all/CAL_JsqLuLcHj7525tTUmh7pLqe7T2j6UcznyhV7joS8ipyb_VQ@mail.gmail.com/
+>
+> The description gives the power constraint dependencies to apply on a
+> specific group of logically or physically aggregated devices. They do
+> not represent the physical location or the power domains of the SoC
+> even if the description could be similar.
+>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 > ---
->  drivers/thermal/intel/intel_hfi.c   | 211 ++++++++++++++++++++++++++++
->  drivers/thermal/intel/intel_hfi.h   |   4 +
->  drivers/thermal/intel/therm_throt.c |   8 ++
->  3 files changed, 223 insertions(+)
+>  .../devicetree/bindings/power/powerzones.yaml | 95 +++++++++++++++++++
+>  1 file changed, 95 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/powerzones.yaml
 >
-> diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-> index edfe343507b3..6a3adfd57d72 100644
-> --- a/drivers/thermal/intel/intel_hfi.c
-> +++ b/drivers/thermal/intel/intel_hfi.c
-> @@ -21,6 +21,7 @@
->
->  #define pr_fmt(fmt)  "intel-hfi: " fmt
->
-> +#include <linux/io.h>
->  #include <linux/slab.h>
->
->  #include "intel_hfi.h"
-> @@ -52,16 +53,26 @@ struct hfi_hdr {
->
->  /**
->   * struct hfi_instance - Representation of an HFI instance (i.e., a table)
-> + * @table_base:                Base of the local copy of the HFI table
->   * @ts_counter:                Time stamp of the last update of the table
->   * @hdr:               Base address of the table header
->   * @data:              Base address of the table data
-> + * @die_id:            Logical die ID this HFI table instance
-> + * @cpus:              CPUs represented in this HFI table instance
-> + * @hw_table:          Pointer to the HFI table of this instance
-> + * @initialized:       True if this HFI instance has bee initialized
->   *
->   * A set of parameters to parse and navigate a specific HFI table.
->   */
->  struct hfi_instance {
-> +       void                    *table_base;
->         u64                     *ts_counter;
->         void                    *hdr;
->         void                    *data;
-> +       u16                     die_id;
-> +       struct cpumask          *cpus;
-> +       void                    *hw_table;
-> +       bool                    initialized;
->  };
->
->  /**
-> @@ -83,10 +94,210 @@ struct hfi_features {
->         bool            parsed;
->  };
->
-> +/**
-> + * struct hfi_cpu_info - Per-CPU attributes to consume HFI data
-> + * @index:             Row of this CPU in its HFI table
-> + * @hfi_instance:      Attributes of the HFI table to which this CPU belongs
-> + *
-> + * Parameters to link a logical processor to an HFI table and a row within it.
-> + */
-> +struct hfi_cpu_info {
-> +       s16                     index;
-> +       struct hfi_instance     *hfi_instance;
-> +};
+> diff --git a/Documentation/devicetree/bindings/power/powerzones.yaml b/Documentation/devicetree/bindings/power/powerzones.yaml
+> new file mode 100644
+> index 000000000000..1ae3f82ae29c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/powerzones.yaml
+> @@ -0,0 +1,95 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/powerzones.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +static DEFINE_PER_CPU(struct hfi_cpu_info, hfi_cpu_info) = { .index = -1 };
+> +title: Power zones description
 > +
->  static int max_hfi_instances;
->  static struct hfi_instance *hfi_instances;
->
->  static struct hfi_features hfi_features;
-> +static DEFINE_MUTEX(hfi_lock);
+> +maintainers:
+> +  - Daniel Lezcano <daniel.lezcano@linaro.org>
 > +
-> +static void init_hfi_cpu_index(unsigned int cpu)
+> +description: |+
+> +
+> +  A System on Chip contains a multitude of active components and each
+> +  of them is a source of heat. Even if a temperature sensor is not
+> +  present, a source of heat can be controlled by acting on the
+> +  consumed power via different techniques.
+> +
+> +  A powerzone describes a component or a group of components where we
+> +  can control the maximum power consumption. For instance, a group of
+> +  CPUs via the performance domain, a LCD screen via the brightness,
+> +  etc ...
+> +
+> +  Different components when they are used together can significantly
+> +  increase the overall temperature, so the description needs to
+> +  reflect this dependency in order to assign a power budget for a
+> +  group of powerzones.
+> +
+> +  This description is done via a hierarchy and the DT reflects it. It
+> +  does not represent the physical location or a topology, eg. on a
+> +  big.Little system, the little CPUs may not be represented as they do
+> +  not contribute significantly to the heat, however the GPU can be
+> +  tied with the big CPUs as they usually have a connection for
+> +  multimedia or game workloads.
+> +
+> +properties:
+> +  $nodename:
+> +    const: powerzones
+> +
 
-I would make this function take a (struct hfi_cpu_info *) argument
-instead of the CPU number.  It would be more concise then.
+Do we really need a top-node like this? Can't that be left as a
+platform/soc specific thing instead? Along the lines of how the last
+example below looks like? Maybe we can have both options? I guess Rob
+will tell us.
 
-> +{
-> +       s16 hfi_idx;
-> +       u32 edx;
-> +
-> +       /* Do not re-read @cpu's index if it has already been initialized. */
-> +       if (per_cpu(hfi_cpu_info, cpu).index > -1)
-> +               return;
-> +
-> +       edx = cpuid_edx(CPUID_HFI_LEAF);
-> +       hfi_idx = (edx & CPUID_HFI_CPU_INDEX_MASK) >> CPUID_HFI_CPU_INDEX_SHIFT;
-> +
-> +       per_cpu(hfi_cpu_info, cpu).index = hfi_idx;
-> +}
-> +
-> +/*
-> + * The format of the HFI table depends on the number of capabilities that the
-> + * hardware supports. Keep a data structure to navigate the table.
-> + */
-> +static void init_hfi_instance(struct hfi_instance *hfi_instance)
-> +{
-> +       /* The HFI time-stamp is located at the base of the table. */
-> +       hfi_instance->ts_counter = hfi_instance->table_base;
-> +
-> +       /* The HFI header is below the time-stamp. */
-> +       hfi_instance->hdr = hfi_instance->table_base +
-> +                           sizeof(*hfi_instance->ts_counter);
-> +
-> +       /* The HFI data starts below the header. */
-> +       hfi_instance->data = hfi_instance->hdr + hfi_features.hdr_size;
-> +}
-> +
-> +/**
-> + * intel_hfi_online() - Enable HFI on @cpu
-> + * @cpu:       CPU in which the HFI will be enabled
-> + *
-> + * Enable the HFI to be used in @cpu. The HFI is enabled at the die/package
-> + * level. The first CPU in the die/package to come online does the full HFI
-> + * initialization. Subsequent CPUs will just link themselves to the HFI
-> + * instance of their die/package.
-> + */
-> +void intel_hfi_online(unsigned int cpu)
-> +{
-> +       struct hfi_cpu_info *info = &per_cpu(hfi_cpu_info, cpu);
-> +       u16 die_id = topology_logical_die_id(cpu);
-> +       struct hfi_instance *hfi_instance;
-> +       phys_addr_t hw_table_pa;
-> +       u64 msr_val;
-> +
-> +       if (!boot_cpu_has(X86_FEATURE_INTEL_HFI))
-> +               return;
+Moreover, maybe we should put some constraints on the names of
+subnodes (provider nodes) with a "patternProperties". Something along
+the lines of below.
 
-IMO it is not useful to do anything below in this function if
-hfi_instances is NULL, so I would check it along with the above.
+patternProperties:
+  "^(powerzone)([@-].*)?$":
+    type: object
+    description:
+      Each node represents a powerzone.
+
+> +  "#powerzone-cells":
+> +    description:
+> +      Number of cells in powerzone specifier. Typically 0 for nodes
+> +      representing but it can be any number in the future to describe
+> +      parameters of the powerzone.
+> +
+> +  powerzone:
+
+Maybe "powerzones" instead of "powerzone". Unless we believe that we
+never need to allow multiple parent-zones for a child-zone.
+
+> +    description:
+> +      A phandle to a parent powerzone. If no powerzone attribute is set, the
+> +      described powerzone is the topmost in the hierarchy.
+> +
+
+We should probably state that the "#powerzone-cells"  are required. Like below:
+
+required:
+  - "#powerzone-cells"
+
+Moreover, we probably need to allow additional properties? At least it
+looks so from the last example below. Then:
+
+additionalProperties: true
+
+> +examples:
+> +  - |
+> +    powerzones {
+> +
+> +      SOC_PZ: soc {
+> +      };
+
+This looks odd to me.
+
+Why do we need an empty node? If this is the topmost power-zone, it
+should still have the #powerzone-cells specifier, I think.
 
 > +
-> +       init_hfi_cpu_index(cpu);
-> +
-> +       /*
-> +        * The HFI instance of this @cpu may exist already but they have not
-> +        * been linked to @cpu.
-> +        */
-> +       hfi_instance = info->hfi_instance;
-> +       if (!hfi_instance) {
-> +               if (!hfi_instances)
-> +                       return;
-> +
-> +               if (die_id >= 0 && die_id < max_hfi_instances)
-> +                       hfi_instance = &hfi_instances[die_id];
-> +
-> +               if (!hfi_instance)
-> +                       return;
+> +      PKG_PZ: pkg {
 
-And here I would do
+As I stated above, I would prefer some kind of common pattern of the
+subnode names. Maybe "pkg-powerzone"?
 
-if (die_id < 0 || die_id >= max_hfi_instances)
-        return;
+> +        #powerzone-cells = <0>;
+> +        powerzone = <&SOC_PZ>;
+> +      };
+> +
+> +      BIG_PZ: big {
+> +        #powerzone-cells = <0>;
+> +        powerzone = <&PKG_PZ>;
+> +      };
+> +
+> +      GPU_PZ: gpu {
+> +        #powerzone-cells = <0>;
+> +        powerzone = <&PKG_PZ>;
+> +      };
+> +
+> +      MULTIMEDIA_PZ: multimedia {
+> +        #powerzone-cells = <0>;
+> +        powerzone = <&SOC_PZ>;
+> +      };
+> +    };
+> +
+> +  - |
+> +    A57_0: big@0 {
+> +      compatible = "arm,cortex-a57";
+> +      reg = <0x0 0x0>;
+> +      device_type = "cpu";
+> +      #powerzone-cells = <0>;
+> +      powerzone = <&BIG_PZ>;
 
-hfi_instance = &hfi_instances[die_id];
+Just to make sure I understand correctly. The big@0 node is a
+powerzone provider too? Or did you mean to specify it as a consumer?
 
-which is one branch less and fewer LOC.
+> +    };
+> +
+> +    A57_1: big@1 {
+> +      compatible = "arm,cortex-a57";
+> +      reg = <0x0 0x0>;
+> +      device_type = "cpu";
+> +      #powerzone-cells = <0>;
+> +      powerzone = <&BIG_PZ>;
+> +    };
 
-> +       }
-> +
-> +       /*
-> +        * Now check if the HFI instance of the package/die of this CPU has
-> +        * been initialized. In such case, all we have to do is link @cpu's info
-> +        * to the HFI instance of its die/package.
-> +        */
-> +       mutex_lock(&hfi_lock);
-> +       if (hfi_instance->initialized) {
-> +               info->hfi_instance = hfi_instance;
-> +
-> +               /*
-> +                * @cpu is the first one in its die/package to come back online.
-> +                * Use it to track the CPUs in the die/package.
-> +                */
-> +               if (!hfi_instance->cpus)
-> +                       hfi_instance->cpus = topology_core_cpumask(cpu);
-> +
-> +               mutex_unlock(&hfi_lock);
-> +               return;
-> +       }
-> +
-> +       /*
-> +        * Hardware is programmed with the physical address of the first page
-> +        * frame of the table. Hence, the allocated memory must be page-aligned.
-> +        */
-> +       hfi_instance->hw_table = alloc_pages_exact(hfi_features.nr_table_pages,
-> +                                                  GFP_KERNEL | __GFP_ZERO);
-> +       if (!hfi_instance->hw_table)
-> +               goto err_out;
-> +
-> +       hw_table_pa = virt_to_phys(hfi_instance->hw_table);
-> +
-> +       hfi_instance->table_base = kzalloc(hfi_features.nr_table_pages << PAGE_SHIFT,
-> +                                          GFP_KERNEL);
-> +       if (!hfi_instance->table_base)
-> +               goto free_hw_table;
-> +
-> +       /*
-> +        * Program the address of the feedback table of this die/package. On
-> +        * some processors, hardware remembers the old address of the HFI table
-> +        * even after having been reprogrammed and re-enabled. Thus, do not free
-> +        * pages allocated for the table or reprogram the hardware with a new
-> +        * base address. Namely, program the hardware only once.
-> +        */
-> +       msr_val = hw_table_pa | HFI_PTR_VALID_BIT;
-> +       wrmsrl(MSR_IA32_HW_FEEDBACK_PTR, msr_val);
-> +
-> +       init_hfi_instance(hfi_instance);
-> +
-> +       hfi_instance->die_id = die_id;
-> +
-> +       /*
-> +        * We can use the core cpumask of any cpu in the die/package. Any of
-> +        * them will reflect all the CPUs the same package that are online.
-> +        */
-> +       hfi_instance->cpus = topology_core_cpumask(cpu);
-> +       info->hfi_instance = hfi_instance;
-> +       hfi_instance->initialized = true;
-> +
-> +       mutex_unlock(&hfi_lock);
-> +
-> +       return;
-> +
-> +free_hw_table:
-> +       free_pages_exact(hfi_instance->hw_table, hfi_features.nr_table_pages);
-> +err_out:
-> +       mutex_unlock(&hfi_lock);
-> +}
-> +
-> +/**
-> + * intel_hfi_offline() - Disable HFI on @cpu
-> + * @cpu:       CPU in which the HFI will be disabled
-> + *
-> + * Remove @cpu from those covered by its HFI instance.
-> + *
-> + * On some processors, hardware remembers previous programming settings even
-> + * after being reprogrammed. Thus, keep HFI enabled even if all CPUs in the
-> + * die/package of @cpu are offline. See note in intel_hfi_online().
-> + */
-> +void intel_hfi_offline(unsigned int cpu)
-> +{
-> +       struct cpumask *die_cpumask = topology_core_cpumask(cpu);
-> +       struct hfi_cpu_info *info = &per_cpu(hfi_cpu_info, cpu);
-> +       struct hfi_instance *hfi_instance;
-> +
-> +       if (!boot_cpu_has(X86_FEATURE_INTEL_HFI))
-> +               return;
-> +
-> +       hfi_instance = info->hfi_instance;
-> +       if (!hfi_instance)
-> +               return;
-> +
-> +       if (!hfi_instance->initialized)
-> +               return;
-> +
-> +       mutex_lock(&hfi_lock);
-> +
-> +       /*
-> +        * We were using the core cpumask of @cpu to track CPUs in the same
-> +        * die/package. Now it is going offline and we need to find another
-> +        * CPU we can use.
-> +        */
-> +       if (die_cpumask == hfi_instance->cpus) {
-> +               int new_cpu;
-> +
-> +               new_cpu = cpumask_any_but(hfi_instance->cpus, cpu);
-> +               if (new_cpu >= nr_cpu_ids)
-> +                       /* All other CPUs in the package are offline. */
-> +                       hfi_instance->cpus = NULL;
-> +               else
-> +                       hfi_instance->cpus = topology_core_cpumask(new_cpu);
-
-Hmmm.  Is topology_core_cpumask() updated when CPUs go offline and online?
-
-> +       }
-> +
-> +       mutex_unlock(&hfi_lock);
-> +}
->
->  static __init int hfi_parse_features(void)
->  {
-> diff --git a/drivers/thermal/intel/intel_hfi.h b/drivers/thermal/intel/intel_hfi.h
-> index 42529d3ac92d..d87c3823bb76 100644
-> --- a/drivers/thermal/intel/intel_hfi.h
-> +++ b/drivers/thermal/intel/intel_hfi.h
-> @@ -27,8 +27,12 @@
->
->  #if defined(CONFIG_INTEL_HFI)
->  void __init intel_hfi_init(void);
-> +void intel_hfi_online(unsigned int cpu);
-> +void intel_hfi_offline(unsigned int cpu);
->  #else
->  static inline void intel_hfi_init(void) { }
-> +static inline void intel_hfi_online(unsigned int cpu) { }
-> +static inline void intel_hfi_offline(unsigned int cpu) { }
->  #endif
->
->  #endif /* _INTEL_HFI_H */
-> diff --git a/drivers/thermal/intel/therm_throt.c b/drivers/thermal/intel/therm_throt.c
-> index ac408714d52b..2a79598a7f7a 100644
-> --- a/drivers/thermal/intel/therm_throt.c
-> +++ b/drivers/thermal/intel/therm_throt.c
-> @@ -480,6 +480,12 @@ static int thermal_throttle_online(unsigned int cpu)
->         l = apic_read(APIC_LVTTHMR);
->         apic_write(APIC_LVTTHMR, l & ~APIC_LVT_MASKED);
->
-> +       /*
-> +        * Enable the package-level HFI interrupt. By now the local APIC is
-> +        * ready to get thermal interrupts.
-> +        */
-> +       intel_hfi_online(cpu);
-> +
->         return thermal_throttle_add_dev(dev, cpu);
->  }
->
-> @@ -489,6 +495,8 @@ static int thermal_throttle_offline(unsigned int cpu)
->         struct device *dev = get_cpu_device(cpu);
->         u32 l;
->
-> +       intel_hfi_offline(cpu);
-> +
->         /* Mask the thermal vector before draining evtl. pending work */
->         l = apic_read(APIC_LVTTHMR);
->         apic_write(APIC_LVTTHMR, l | APIC_LVT_MASKED);
-> --
-> 2.17.1
->
+Kind regards
+Uffe
