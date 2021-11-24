@@ -2,152 +2,251 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F84445CC89
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Nov 2021 19:54:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE75B45CD0F
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Nov 2021 20:18:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244506AbhKXS5o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Nov 2021 13:57:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53442 "EHLO
+        id S243231AbhKXTVL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Nov 2021 14:21:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236702AbhKXS5o (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Nov 2021 13:57:44 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 975C0C061574
-        for <linux-pm@vger.kernel.org>; Wed, 24 Nov 2021 10:54:34 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id iq11so3258185pjb.3
-        for <linux-pm@vger.kernel.org>; Wed, 24 Nov 2021 10:54:34 -0800 (PST)
+        with ESMTP id S243234AbhKXTVK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Nov 2021 14:21:10 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB85CC061574
+        for <linux-pm@vger.kernel.org>; Wed, 24 Nov 2021 11:18:00 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id v15so7717896ljc.0
+        for <linux-pm@vger.kernel.org>; Wed, 24 Nov 2021 11:18:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=DWs+sfm73Co4/p8zjBCzjIJxKxd+hDr0lk1K3niMt+Q=;
-        b=UB1aBuY9pG3JXM7KhviI8oV7AGKwM25frnNIytTR0AXRvilwuGtphkGOcm+zxTZIxW
-         iiUHB7jncerMm/ggOc58ABA/RifoaDyZ7oVeBJSCyc4qqsorYDy7L6B8AK15wOxXk+nI
-         x0crA4mq1ectczaQ3vKMT2pVWXbzlRqrrvh6x0HLmj5WTjatV5HU1UW3/cZEkWeciVZ8
-         jEEcIGWhtCMAXaePzLPwltQx/Ul6Q8g2kUuSmeg4723LVKooMEiJ6yXrWJ6OEM94rghf
-         9DCojf0UAZDkRd9JrCTuBu20d+oHomKWaPMFfUQdhiu7XBw9UH0FUWVKyPvR063aURJS
-         wStA==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zUqoK2ixD21E+D4hhBpBUrQmEqbpxmZoYHvCytX0cYY=;
+        b=kZnmoNX3rRcJ4EMX/rtB0ZapeOvMiirq6qfNYFTgZ71QElfz/W+XGUpVGk7Ez6Yehi
+         /3BZUPOsv4yscOJTu3fx/AtLqIIk6R0ulXCjMZdDH6VzA/5U7tPEug79+wQ+HShR1T6h
+         2aBWdteIIVab8XEhCM0zKGeUc4kpbTXiA3NK46ErRfdUG2ggTsOqz6fGdWZI6LLhvVlB
+         SOUwkl1xuIMzpkFbBnodoPpL0uIsFrJEIGurLRbSUZ+QyJAijsL4D0gSP6LgIUbTnR1/
+         QiQmECdfdPBnmVpBMJfGPKKIxvVp8yCm3Mnmut2deYSE+vNiRleRvdMhOSudLTjohwFL
+         RGRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=DWs+sfm73Co4/p8zjBCzjIJxKxd+hDr0lk1K3niMt+Q=;
-        b=hbUSYN1nL4OhwUIoikIDtK0y6HwywBocsf6IXkdEDI9meV6PRuvF4UgYrMw7NPUgoU
-         DOSNXNtqExvxWd6mQQ0Fivh2wysNfvQmn9iSD74E2kUKEVTbArBvR/Pd0anQQ5uTJzb0
-         yemdz7QuIWcdCfQR/z9+2PBB+cFXoceTU5VnEngOIXfJ+N5O2JXHEyrX/f+VUhrPH9DN
-         RJVvo9MZJyDaRnoPZDDNV8tb9Dibw1o97Rt7pqbVmybNVqdx3SH5qu8S0NXAXH6sbYfQ
-         magev6zfcK9AXbRzm3uUFlMkzNuFD/RoFqGqx2PbrCdoX8lvbWxLlVeYRK4YXde+XSSX
-         J8kQ==
-X-Gm-Message-State: AOAM530dNANFxy0BOf8zjIuG5U6Fqxu3SRMRb92iqTE3kiWGl4qxiw6R
-        u2wxkEOcny5C9RRLTHrMmOpCpQ==
-X-Google-Smtp-Source: ABdhPJwthS/xAIcGAvNb8R7+YcSQetAa6Aw0kygtk7/45pU78xicADHbr/e0qcosMiCWd7/V1SKd3g==
-X-Received: by 2002:a17:902:9888:b0:142:8731:4b55 with SMTP id s8-20020a170902988800b0014287314b55mr21490931plp.51.1637780074160;
-        Wed, 24 Nov 2021 10:54:34 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id s38sm322629pga.40.2021.11.24.10.54.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Nov 2021 10:54:33 -0800 (PST)
-Message-ID: <619e8a69.1c69fb81.2d99.129b@mx.google.com>
-Date:   Wed, 24 Nov 2021 10:54:33 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zUqoK2ixD21E+D4hhBpBUrQmEqbpxmZoYHvCytX0cYY=;
+        b=nbrMdQpnGtZ557UMIu6AEGF5QFO7YvUdz0EcLbstcDDiht7pynaw8qcrtEB6W6JJvZ
+         BgLYpR5G19LUQdHMjaNPXNNLmFSXh6mngl3M4BV2fwImRpClymT9nRD7Sc+odfVRzaJS
+         KvaeY0k0IDve0IlCml1uy5akdzn1w20f90kvjzHlxuvDAQ2lYKqfTJFUpwY4IUHE+Fy5
+         EKY+sNbjwoY5PplEknc3zw9PvCkSV0PIDQuqrPZUj92ch9DOk2qPHOfH03z7Cjxh6dmX
+         /xR3UEWBpiTlP4a8thxi5PvYIob0AtYPPMkj65kzXdrAthHCjHLnuhtFF5CJUofVMHxQ
+         DLXQ==
+X-Gm-Message-State: AOAM531QMIPqxA5YRfLSnLdj4Mzm9WJquqv+E2a7cE2PTI4Y4RWQfRWs
+        ZusiMyQqugj6o7GiI9KmWfl+PVCumPJ2oKF9Ih/iKA==
+X-Google-Smtp-Source: ABdhPJy04wVilPDUWU7/CEEJbDm53QuY2yj3fXbaesD4ekIxse9qs8fdNe2qjREMrOII53Xxj6CkPWSksGBr0f4Duvo=
+X-Received: by 2002:a05:651c:10b1:: with SMTP id k17mr18484863ljn.463.1637781478997;
+ Wed, 24 Nov 2021 11:17:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.16-rc2-16-ga3f78507f993
-X-Kernelci-Report-Type: build
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 1 warning (v5.16-rc2-16-ga3f78507f993)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <20211124125506.2971069-1-daniel.lezcano@linaro.org>
+ <CAPDyKFpJHzAxGk=Y52VXcuVbAunwfMo2ErnwXMqnxzHPs6O30g@mail.gmail.com> <65873f24-46da-07f4-9661-e3f1001a4fa2@linaro.org>
+In-Reply-To: <65873f24-46da-07f4-9661-e3f1001a4fa2@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 24 Nov 2021 20:17:22 +0100
+Message-ID: <CAPDyKFpUG-gyt7_hF_jeuya6FWcKapKo=9MPXo0VzzBXnWOnNA@mail.gmail.com>
+Subject: Re: [PATCH 1/5] dt-bindings: Powerzone new bindings
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     robh@kernel.org, arnd@linaro.org, heiko@sntech.de,
+        rjw@rjwysocki.net, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        lukasz.luba@arm.com, Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.16-rc2-16-ga3=
-f78507f993)
+On Wed, 24 Nov 2021 at 17:26, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>
+>
+> Hi Ulf,
+>
+> thanks for the review
+>
+> On 24/11/2021 15:54, Ulf Hansson wrote:
+>
+> [ ... ]
+>
+> >> +  This description is done via a hierarchy and the DT reflects it. It
+> >> +  does not represent the physical location or a topology, eg. on a
+> >> +  big.Little system, the little CPUs may not be represented as they do
+> >> +  not contribute significantly to the heat, however the GPU can be
+> >> +  tied with the big CPUs as they usually have a connection for
+> >> +  multimedia or game workloads.
+> >> +
+> >> +properties:
+> >> +  $nodename:
+> >> +    const: powerzones
+> >> +
+> >
+> > Do we really need a top-node like this? Can't that be left as a
+> > platform/soc specific thing instead? Along the lines of how the last
+> > example below looks like? Maybe we can have both options? I guess Rob
+> > will tell us.
+>
+> Do you mean a compatible string?
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-16-rc2-16-ga3f78507f993/
+Yes, but there is no need to specify that part of the powerzone
+bindings, I think.
 
-Tree: pm
-Branch: testing
-Git Describe: v5.16-rc2-16-ga3f78507f993
-Git Commit: a3f78507f9931f5abe2f8273896e002b59eaeb90
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
+Although, let's see what Rob thinks here.
 
-Warnings Detected:
+>
+> > Moreover, maybe we should put some constraints on the names of
+> > subnodes (provider nodes) with a "patternProperties". Something along
+> > the lines of below.
+> >
+> > patternProperties:
+> >   "^(powerzone)([@-].*)?$":
+> >     type: object
+> >     description:
+> >       Each node represents a powerzone.
+>
+> Sure
+>
+> >> +  "#powerzone-cells":
+> >> +    description:
+> >> +      Number of cells in powerzone specifier. Typically 0 for nodes
+> >> +      representing but it can be any number in the future to describe
+> >> +      parameters of the powerzone.
+> >> +
+> >> +  powerzone:
+> >
+> > Maybe "powerzones" instead of "powerzone". Unless we believe that we
+> > never need to allow multiple parent-zones for a child-zone.
+>
+> May be that could be needed in the future. No objection to rename it to
+> 'powerzones'.
+>
+> >> +    description:
+> >> +      A phandle to a parent powerzone. If no powerzone attribute is set, the
+> >> +      described powerzone is the topmost in the hierarchy.
+> >> +
+> >
+> > We should probably state that the "#powerzone-cells"  are required. Like below:
+> >
+> > required:
+> >   - "#powerzone-cells"
+>
+> Ok
+>
+> > Moreover, we probably need to allow additional properties? At least it
+> > looks so from the last example below. Then:
+> >
+> > additionalProperties: true
+>
+> I was unsure about adding it. With the actual description what would be
+> the benefit ?
 
-arc:
+A powerzone provider node is then allowed to have other properties
+too. Like a compatible string, for example.
 
-arm64:
+Assuming I also have understood the additionalProperties thingy correctly. Rob?
 
-arm:
+>
+> >> +examples:
+> >> +  - |
+> >> +    powerzones {
+> >> +
+> >> +      SOC_PZ: soc {
+> >> +      };
+> >
+> > This looks odd to me.
+> >
+> > Why do we need an empty node? If this is the topmost power-zone,
+>
+> Yes it is
+>
+> > it
+> > should still have the #powerzone-cells specifier, I think.
+>
+> Ok, makes sense
+>
+> >> +
+> >> +      PKG_PZ: pkg {
+> >
+> > As I stated above, I would prefer some kind of common pattern of the
+> > subnode names. Maybe "pkg-powerzone"?
+>
+> Ok, may be 'powerzone-pkg' to be consistent with the power-domains pattern?
 
-i386:
+Sure, that seems reasonable.
 
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
+>
+> >> +        #powerzone-cells = <0>;
+> >> +        powerzone = <&SOC_PZ>;
+> >> +      };
+> >> +
+> >> +      BIG_PZ: big {
+> >> +        #powerzone-cells = <0>;
+> >> +        powerzone = <&PKG_PZ>;
+> >> +      };
+> >> +
+> >> +      GPU_PZ: gpu {
+> >> +        #powerzone-cells = <0>;
+> >> +        powerzone = <&PKG_PZ>;
+> >> +      };
+> >> +
+> >> +      MULTIMEDIA_PZ: multimedia {
+> >> +        #powerzone-cells = <0>;
+> >> +        powerzone = <&SOC_PZ>;
+> >> +      };
+> >> +    };
+> >> +
+> >> +  - |
+> >> +    A57_0: big@0 {
+> >> +      compatible = "arm,cortex-a57";
+> >> +      reg = <0x0 0x0>;
+> >> +      device_type = "cpu";
+> >> +      #powerzone-cells = <0>;
+> >> +      powerzone = <&BIG_PZ>;
+> >
+> > Just to make sure I understand correctly. The big@0 node is a
+> > powerzone provider too? Or did you mean to specify it as a consumer?
+>
+> I'm not sure 'provider' or 'consumer' make sense in this context.
+>
+> big@0 is a powerzone we can act on and its parent is the BIG_PZ powerzone.
 
-riscv:
+I see.
 
-x86_64:
+Then it seems like we shouldn't have the toplevel "powerzones" node,
+as it looks like a powerzone provider may very well be part of an
+existing node.
 
+>
+> However this description is correct but confusing.
+>
+> Given big@0 and big@1 belong to the big 'cluster' and when we act on the
+> performance state of big@0, big@1 is also changed, the correct
+> description would be:
+>
+>     A57_0: big@0 {
+>       compatible = "arm,cortex-a57";
+>       reg = <0x0 0x0>;
+>       device_type = "cpu";
+>       #powerzone-cells = <0>;
+>       powerzone = <&PKG_PZ>;
+>     };
+>
+>     A57_1: big@1 {
+>       compatible = "arm,cortex-a57";
+>       reg = <0x0 0x0>;
+>       device_type = "cpu";
+>       #powerzone-cells = <0>;
+>       powerzone = <&PKG_PZ>;
+>     };
+>
+> If in the future, there will be a performance domain per core, then the
+> former description above would make sense.
 
-Warnings summary:
+Okay, I see. Thanks for clarifying!
 
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+Kind regards
+Uffe
