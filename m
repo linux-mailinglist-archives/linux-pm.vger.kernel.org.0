@@ -2,89 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB51045C9FF
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Nov 2021 17:28:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D18AF45CA15
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Nov 2021 17:31:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233687AbhKXQbd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Nov 2021 11:31:33 -0500
-Received: from mail-oi1-f173.google.com ([209.85.167.173]:33501 "EHLO
-        mail-oi1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231560AbhKXQbc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Nov 2021 11:31:32 -0500
-Received: by mail-oi1-f173.google.com with SMTP id q25so6518525oiw.0;
-        Wed, 24 Nov 2021 08:28:23 -0800 (PST)
+        id S1348913AbhKXQe7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Nov 2021 11:34:59 -0500
+Received: from mail-ot1-f53.google.com ([209.85.210.53]:36533 "EHLO
+        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348932AbhKXQe7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Nov 2021 11:34:59 -0500
+Received: by mail-ot1-f53.google.com with SMTP id w6-20020a9d77c6000000b0055e804fa524so5130102otl.3;
+        Wed, 24 Nov 2021 08:31:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=wBEAh6TF3eaWQopmxjQ0UJdDXHvFAPQQfgLZKQTVie4=;
-        b=2ok5m8E5dHB66Dzj6edItHDkSUUHh/TS02QJWU4r9eAsTXambOEEOa+8r+aHu3ETlW
-         ZX3AblJm6jtuDAcO3LBatAzoe/uHpHQoA4hC9umpsWXV0Qcl2lS7yxXPoBs+kkcVx6uD
-         fUx+OwOcEAthQyEV9ulTW3CgVhVt8p30HeDPaZwpswuhraaIrwT4hCT1cbZq4S3o32UL
-         pfklL+tgJbd3znn3crvciq6NkbmZaRwzxYPZj0ucjBF5ZHG/+L0zOzCWOwqfO3qd/8gI
-         WalgR8iYqRJPi5auwKM4LF3xmlcMLw0Ixoqfg9OZb7+uveX+ajggB+78gcjxPUSDHiac
-         nSWg==
-X-Gm-Message-State: AOAM530FxoihdB1qNosCLfUuG7s5pbb4CcrutDLl1XlNLJbGuFJvLtGy
-        QsP8R9NbimsjYOIdGugDnQn8Uvaj+IwYcMP/ZsE=
-X-Google-Smtp-Source: ABdhPJw3lBx/1RQvn+Plm4HnYLdVYnQB1LXy/ZTQmx43D4+q1Bt4K9MBRHRXR5On1zrilsMNpnozdt4rza8o4dDdvq8=
-X-Received: by 2002:a05:6808:e90:: with SMTP id k16mr7374685oil.166.1637771302689;
- Wed, 24 Nov 2021 08:28:22 -0800 (PST)
+        bh=ClXsnWSXwelpafLarIuF6EqOtJknws1eom5YROE5yGw=;
+        b=LIoL5DzD+psM4DFD69uWxrLQZ5izULLPmDqxcZV0nCv0bD8o1iLNPO437B9MS+OUnq
+         FxxcH7CPok2baoMTeUCsMlzfEh6ly7h669ebS/Z7Vwj5PX4oo+mRJJmxjrUKq7dVMwG5
+         6zBhsiYKa+03eexoBWF1chCmQJX0lP9jw4NG8j1Yfp1TUnefxPScOOliYx1JEwrU5V72
+         6KSLFC/LIczha807eXIH7vjZij5ywYPo2Aj47FAHORyJtq5+lmmiZkg+vu+ab5Et+Cy2
+         C89VYFYhP+lPe+2Ph+kItfaLo4XGBgOfn0JZmh9a/EvhuT6+PPVIAfUB3b99QoK+x3JC
+         Ur5A==
+X-Gm-Message-State: AOAM532OgRAKpoeSzcvWMV+8Q/+hy2N1sZ4KS6rLWLpiJZ99scbrlS6T
+        47bFk43aKY86cOQWAs/BLJPpMyCfr0krqcLz1is=
+X-Google-Smtp-Source: ABdhPJzL6+eLQFBJS+bp7zsgoa/9Q0gwD/MaJbda+fKUekCsnEhaops5rZTIYt9/O/65HM537Wa8QQGwXQymT3EPQOk=
+X-Received: by 2002:a9d:4c10:: with SMTP id l16mr4144459otf.198.1637771508941;
+ Wed, 24 Nov 2021 08:31:48 -0800 (PST)
 MIME-Version: 1.0
-References: <20211112090946.9026-1-ran.jianping@zte.com.cn>
-In-Reply-To: <20211112090946.9026-1-ran.jianping@zte.com.cn>
+References: <20211113060618.220832-1-wangborong@cdjrlc.com>
+In-Reply-To: <20211113060618.220832-1-wangborong@cdjrlc.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 24 Nov 2021 17:28:11 +0100
-Message-ID: <CAJZ5v0i1mrj6gzsKxFoEhJLq-9_E+JupwcC2q7jyqVp8EFOVTg@mail.gmail.com>
-Subject: Re: [PATCH] tools/thermal: remove unneeded variable
-To:     cgel.zte@gmail.com
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>, ran.jianping@zte.com.cn,
+Date:   Wed, 24 Nov 2021 17:31:38 +0100
+Message-ID: <CAJZ5v0itn3ndomA1deOMZiV5pKTOptq02iG08vXpuEw5tgK6gw@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: menu: Fix typo in a comment
+To:     wangborong@cdjrlc.com
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Ingo Molnar <mingo@kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Zeal Robot <zealci@zte.com.cn>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Nov 12, 2021 at 10:09 AM <cgel.zte@gmail.com> wrote:
+On Sat, Nov 13, 2021 at 7:07 AM Jason Wang <wangborong@cdjrlc.com> wrote:
 >
-> From: ran jianping <ran.jianping@zte.com.cn>
+> The double word `these' in a comment is repeated, thus
+> one of them should be removed.
 >
-> Fix the following coccicheck review:
-> /tools/thermal/tmon/pid.c:57:5-8: Unneeded variable
->
-> Remove unneeded variable used to store return value.
->
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: ran jianping <ran.jianping@zte.com.cn>
+> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 > ---
->  tools/thermal/tmon/pid.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+>  drivers/cpuidle/governors/menu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/tools/thermal/tmon/pid.c b/tools/thermal/tmon/pid.c
-> index c54edb4f630c..296f69c00c57 100644
-> --- a/tools/thermal/tmon/pid.c
-> +++ b/tools/thermal/tmon/pid.c
-> @@ -54,7 +54,6 @@ static double xk_1, xk_2; /* input temperature x[k-#] */
->   */
->  int init_thermal_controller(void)
->  {
-> -       int ret = 0;
->
->         /* init pid params */
->         p_param.ts = ticktime;
-> @@ -65,7 +64,7 @@ int init_thermal_controller(void)
->
->         p_param.t_target = target_temp_user;
->
-> -       return ret;
-> +       return 0;
->  }
->
->  void controller_reset(void)
+> diff --git a/drivers/cpuidle/governors/menu.c b/drivers/cpuidle/governors/menu.c
+> index 2e5670446991..c4922684f305 100644
+> --- a/drivers/cpuidle/governors/menu.c
+> +++ b/drivers/cpuidle/governors/menu.c
+> @@ -34,7 +34,7 @@
+>   * 1) Energy break even point
+>   * 2) Performance impact
+>   * 3) Latency tolerance (from pmqos infrastructure)
+> - * These these three factors are treated independently.
+> + * These three factors are treated independently.
+>   *
+>   * Energy break even point
+>   * -----------------------
 > --
 
 Applied as 5.17 material, thanks!
