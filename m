@@ -2,103 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68BE145C785
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Nov 2021 15:35:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FA4145C47E
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Nov 2021 14:47:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356676AbhKXOiJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Nov 2021 09:38:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49232 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350936AbhKXOiF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Nov 2021 09:38:05 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B7EC1E9D8C;
-        Wed, 24 Nov 2021 05:33:50 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso4357929otf.0;
-        Wed, 24 Nov 2021 05:33:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=091FqIUggUob/ZEgOD1UGmSVx8eqHMlVt+VyvTQhn6A=;
-        b=5alA6/f+UhETRaXz3Ziw0Mbfo79WBHXEc9krzNgtd01IqyNVmRhY/0lZB/P6eLDJQW
-         eoZjcdR6rFE3pNseQfZ/D4cF20VQuAdK9siwpsGXViPdZGdSZj5I7hCVl20qAoKihTGU
-         9Y2cOZqzkmtsFqHF2VURZQn4cJm3wj70y+AFGjSq6Sge2gQczR5OFVvJJdJ6IFzUWzxq
-         IVi22hsX9WOChk0ReYeUTGW+sRirou0ll7bhp3yZtfxQJtiPER1ed37a6y9j3340xgjb
-         ErontMp+30VXcxUe44s8V4vCUHh05Mex6eQ39n7jGM/fHZcBKylMk53BPCN8cbtkTZqx
-         +ZjA==
-X-Gm-Message-State: AOAM531TyN2EynZbSlLf7LBYl1nok7NN7r4Hxj4bx77v+XJxg7AIKRGn
-        uytjIbBVqRFhWWLNCZpA+SzEgd93DpVRF3YhMW0=
-X-Google-Smtp-Source: ABdhPJzQoNI/Fsb1RYaYMIo8ITBU8mCa/gSsaWPVLoUcuICuMNXnffh1kRK/Zt6rxw8a35LfxbFQ+4vJZ0v59kljSMQ=
-X-Received: by 2002:a05:6830:348f:: with SMTP id c15mr13170421otu.254.1637760829265;
- Wed, 24 Nov 2021 05:33:49 -0800 (PST)
-MIME-Version: 1.0
-References: <20210818060533.3569517-1-keescook@chromium.org>
- <20210818060533.3569517-13-keescook@chromium.org> <CAJZ5v0iS3qMgdab1S-NzGfeLLXV=S6p5Qx8AaqJ50rsUngS=LA@mail.gmail.com>
- <c5d1ee1f3b59bf18591a164c185650c77ec8aba7.camel@linux.intel.com>
-In-Reply-To: <c5d1ee1f3b59bf18591a164c185650c77ec8aba7.camel@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 24 Nov 2021 14:33:38 +0100
-Message-ID: <CAJZ5v0i61F9SpwfER8o5J_Kf=J9dJUv-qd+bG9hcL42X2eMRtw@mail.gmail.com>
-Subject: Re: [PATCH v2 12/63] thermal: intel: int340x_thermal: Use
- struct_group() for memcpy() region
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "open list:NETWORKING DRIVERS (WIRELESS)" 
-        <linux-wireless@vger.kernel.org>, netdev <netdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-staging@lists.linux.dev, linux-block@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, clang-built-linux@googlegroups.com,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-hardening@vger.kernel.org
+        id S1351858AbhKXNtb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Nov 2021 08:49:31 -0500
+Received: from mga02.intel.com ([134.134.136.20]:35860 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1351607AbhKXNrv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 24 Nov 2021 08:47:51 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10177"; a="222500121"
+X-IronPort-AV: E=Sophos;i="5.87,260,1631602800"; 
+   d="scan'208";a="222500121"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2021 05:43:09 -0800
+X-IronPort-AV: E=Sophos;i="5.87,260,1631602800"; 
+   d="scan'208";a="497677345"
+Received: from kaiwang3-mobl2.ccr.corp.intel.com ([10.249.172.130])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2021 05:43:07 -0800
+Message-ID: <4d8621a923adf4268a2120f517f0897fd4df6b80.camel@intel.com>
+Subject: Re: [PATCH 3/3] intel_idle: fix cpuidle_device unregistration
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+Date:   Wed, 24 Nov 2021 21:43:04 +0800
+In-Reply-To: <CAJZ5v0juUmxM5gRa5WW=fXo18idRrKGpYmNTF=JFVf5hmscW2Q@mail.gmail.com>
+References: <20211027082237.26759-1-rui.zhang@intel.com>
+         <20211027082237.26759-3-rui.zhang@intel.com>
+         <CAJZ5v0juUmxM5gRa5WW=fXo18idRrKGpYmNTF=JFVf5hmscW2Q@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 24, 2021 at 12:53 AM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> On Tue, 2021-11-23 at 14:19 +0100, Rafael J. Wysocki wrote:
-> > On Wed, Aug 18, 2021 at 8:08 AM Kees Cook <keescook@chromium.org>
-> > wrote:
-> > >
-> > > In preparation for FORTIFY_SOURCE performing compile-time and run-
-> > > time
-> > > field bounds checking for memcpy(), avoid intentionally writing
-> > > across
-> > > neighboring fields.
-> > >
-> > > Use struct_group() in struct art around members weight, and ac[0-
-> > > 9]_max,
-> > > so they can be referenced together. This will allow memcpy() and
-> > > sizeof()
-> > > to more easily reason about sizes, improve readability, and avoid
-> > > future
-> > > warnings about writing beyond the end of weight.
-> > >
-> > > "pahole" shows no size nor member offset changes to struct art.
-> > > "objdump -d" shows no meaningful object code changes (i.e. only
-> > > source
-> > > line number induced differences).
-> > >
-> > > Cc: Zhang Rui <rui.zhang@intel.com>
-> > > Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> > > Cc: Amit Kucheria <amitk@kernel.org>
-> > > Cc: linux-pm@vger.kernel.org
-> > > Signed-off-by: Kees Cook <keescook@chromium.org>
-> >
-> > Rui, Srinivas, any comments here?
-> Looks good.
-> Reviewed-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+On Wed, 2021-11-24 at 14:20 +0100, Rafael J. Wysocki wrote:
+> On Wed, Oct 27, 2021 at 10:07 AM Zhang Rui <rui.zhang@intel.com>
+> wrote:
+> > 
+> > cpuidle_device is allocated as percpu data, and it is registered
+> > for every
+> > CPU that has ever been onlined.
+> > When unregistering, checking current online CPUs is not sufficient,
+> > because some cpu may be offlined later with its cpuidle_device
+> > registered.
+> 
+> But the unregistration happens only in the error code path of
+> intel_idle_init(), doesn't it?
 
-Applied as 5.17 material, thank you!
+yes.
+> 
+> While I agree that doing a for_each_present_cpu() walk for that is
+> more prudent', I'm not sure if that makes any difference in practice.
+
+And yes, exactly.
+This is not a problem as long as intel_idle driver can not be unloaded.
+
+There is no technical gap either to unregister the intel_idle cpuidle
+driver, or to unload the intel_idle module. And this potential issue
+will be exposed only when we decided to do so.
+
+If you prefer to describe this *potential* issue more precisely, I
+totally agree.
+If you want to fix it only when really needed, that's also okay to me.
+
+> 
+> > Fix this by using for_each_present_cpu() instead, and unregistering
+> > all
+> > the cpuidle_devices that have been registered.
+> > 
+> > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> > ---
+> >  drivers/idle/intel_idle.c | 9 +++++++--
+> >  1 file changed, 7 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+> > index e7f2a5f85bf9..9e916e2adc89 100644
+> > --- a/drivers/idle/intel_idle.c
+> > +++ b/drivers/idle/intel_idle.c
+> > @@ -1687,8 +1687,13 @@ static void __init
+> > intel_idle_cpuidle_unregister(struct cpuidle_driver *drv)
+> > 
+> >         if (intel_idle_cpuhp_state > 0)
+> >                 cpuhp_remove_state(intel_idle_cpuhp_state);
+> > -       for_each_online_cpu(i)
+> > -               cpuidle_unregister_device(per_cpu_ptr(intel_idle_cp
+> > uidle_devices, i));
+> > +       for_each_present_cpu(i) {
+> > +               struct cpuidle_device *dev;
+> > +
+> > +               dev = per_cpu_ptr(intel_idle_cpuidle_devices, i);
+> > +               if (dev->registered)
+> 
+> dev->registered is checked by cpuidle_unregister_device().
+
+right, this check is not needed.
+
+thanks,
+rui
+> 
+> > +                       cpuidle_unregister_device(dev);
+> > +       }
+> >         cpuidle_unregister_driver(drv);
+> >         free_percpu(intel_idle_cpuidle_devices);
+> >  }
+> > --
+
