@@ -2,114 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 724AE45CA8E
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Nov 2021 18:02:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D173845CABA
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Nov 2021 18:15:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349467AbhKXRFn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Nov 2021 12:05:43 -0500
-Received: from mail-m972.mail.163.com ([123.126.97.2]:47956 "EHLO
-        mail-m972.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349416AbhKXRFm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Nov 2021 12:05:42 -0500
-X-Greylist: delayed 913 seconds by postgrey-1.27 at vger.kernel.org; Wed, 24 Nov 2021 12:05:39 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=f7cxo
-        81Jyy/MlDMAZmvQHlwJdJ/bK+AjY9CliasYTAc=; b=Jw0jKPWRfT84gkTZrNC3t
-        W6e9i6tbvxXiLkoiHEQ1QTIqPv4hMZClRVoN0y2GogwVHBwsQy1VijP5Zightnp0
-        zp74VY/g+mw+0xHTldt4G/lc0wimgrPzYO3bgy7b5u6Y5C8Wbeb7eYrTgxkCiGqf
-        0gdrObnvmYXR+/6GgVoJ28=
-Received: from localhost.localdomain (unknown [218.106.182.227])
-        by smtp2 (Coremail) with SMTP id GtxpCgD3RCmEbJ5htkyJKQ--.4644S4;
-        Thu, 25 Nov 2021 00:47:11 +0800 (CST)
-From:   Jianglei Nie <niejianglei2021@163.com>
-To:     daniel.lezcano@kernel.org, rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jianglei Nie <niejianglei@gmail.com>
-Subject: [PATCH] powercap: DTPM: Fix reference leak in cpuhp_dtpm_cpu_offline()
-Date:   Thu, 25 Nov 2021 00:46:57 +0800
-Message-Id: <20211124164657.20519-1-niejianglei2021@163.com>
-X-Mailer: git-send-email 2.25.1
+        id S237088AbhKXRSZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Nov 2021 12:18:25 -0500
+Received: from vie01a-dmta-pe02-3.mx.upcmail.net ([62.179.121.159]:42883 "EHLO
+        vie01a-dmta-pe02-3.mx.upcmail.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236112AbhKXRSV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Nov 2021 12:18:21 -0500
+Received: from [172.31.216.234] (helo=vie01a-pemc-psmtp-pe11.mail.upcmail.net)
+        by vie01a-dmta-pe02.mx.upcmail.net with esmtp (Exim 4.92)
+        (envelope-from <thomas.zeitlhofer+lkml@ze-it.at>)
+        id 1mpvrR-005iZV-KW
+        for linux-pm@vger.kernel.org; Wed, 24 Nov 2021 18:15:09 +0100
+Received: from mr2 ([80.108.17.71])
+        by vie01a-pemc-psmtp-pe11.mail.upcmail.net with ESMTP
+        id pvrQmBDCy2A4vpvrRmAeQ3; Wed, 24 Nov 2021 18:15:09 +0100
+X-Env-Mailfrom: thomas.zeitlhofer+lkml@ze-it.at
+X-Env-Rcptto: linux-pm@vger.kernel.org
+X-SourceIP: 80.108.17.71
+X-CNFS-Analysis: v=2.3 cv=bNRo382Z c=1 sm=1 tr=0
+ a=dwg5kdmUixIXdJRX1f/MsQ==:117 a=dwg5kdmUixIXdJRX1f/MsQ==:17
+ a=kj9zAlcOel0A:10 a=2PhUSsPvBtUAQ8QcbhUA:9 a=CjuIK1q_8ugA:10
+Date:   Wed, 24 Nov 2021 18:15:05 +0100
+From:   Thomas Zeitlhofer <thomas.zeitlhofer+lkml@ze-it.at>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>, Ye Bin <yebin10@huawei.com>
+Subject: Re: [PATCH] PM: hibernate: use correct mode for swsusp_close()
+Message-ID: <YZ5zGXJbSsmV3xHJ@x1.ze-it.at>
+References: <YZ0+k4Vy7SJ1D8kH@x1.ze-it.at>
+ <CAJZ5v0i9RR2wEx2ktKLzt2ZaAWTVqWJwf+tO0c99CzcLD9Th0g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GtxpCgD3RCmEbJ5htkyJKQ--.4644S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW7AFyDXr1xWw48JFy5JF43KFg_yoW8Aw4Dpr
-        s8K3yav348tFWDK397J3WDXFyYvF92ya9YkrW3Gw1rZa43X3WFgw4DKryYqF1rCrn5Cw13
-        try5Xay8Jay5JFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07bOv3bUUUUU=
-X-Originating-IP: [218.106.182.227]
-X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/xtbBORxVjF-PKEzbggABsQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0i9RR2wEx2ktKLzt2ZaAWTVqWJwf+tO0c99CzcLD9Th0g@mail.gmail.com>
+X-CMAE-Envelope: MS4wfD6cXk6+l71k+UqT1HXsfBwLkvL4a8SMxkGpUMm3AHZaAFFcTHIrEsCP0yA3/R4i+Wte9cQANS6bzxBZn3IXwgY2ZJtyw6E3XGLGsHVrKVD3vAFDi3qx
+ 8fAx9ALtQX9SWsEKaTZk9KE8kcg3LBsw1VYo5CkUIVUXRz2ZtrTO2Gb6tm/e2GsDhHQ1qoqFkaK5xBYIw/Q7iOt4vPczukpfwulkl5rZCvAK1exGYJpJms28
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Jianglei Nie <niejianglei@gmail.com>
+Hello Rafael,
 
-In line 153 (#1), cpufreq_cpu_get() increments the kobject reference
-counter of the policy it returned on success. According to the
-document, the policy returned by cpufreq_cpu_get() has to be
-released with the help of cpufreq_cpu_put() to balance its kobject
-reference counter properly. Forgetting the cpufreq_cpu_put()
-operation will result in reference leak.
+On Wed, Nov 24, 2021 at 01:46:42PM +0100, Rafael J. Wysocki wrote:
+> On Tue, Nov 23, 2021 at 8:18 PM Thomas Zeitlhofer
+> <thomas.zeitlhofer+lkml@ze-it.at> wrote:
+> >
+> > Commit 39fbef4b0f77 ("PM: hibernate: Get block device exclusively in
+> > swsusp_check()") changed the opening mode of the block device to
+> > (FMODE_READ | FMODE_EXCL).
+> >
+> > In the corresponding calls to swsusp_close(), the mode is still just
+> > FMODE_READ which triggers the warning in blkdev_flush_mapping() on resume
+> > from hibernate.
+> >
+> > So, use the mode (FMODE_READ | FMODE_EXCL) also when closing the device.
+> >
+> > Fixes: 39fbef4b0f77 ("PM: hibernate: Get block device exclusively in swsusp_check()")
+> > Signed-off-by: Thomas Zeitlhofer <thomas.zeitlhofer+lkml@ze-it.at>
+> >
+> > diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+> > index 559acef3fddb..b0888e9224da 100644
+> > --- a/kernel/power/hibernate.c
+> > +++ b/kernel/power/hibernate.c
+> > @@ -691,7 +691,7 @@ static int load_image_and_restore(void)
+> >                 goto Unlock;
+> >
+> >         error = swsusp_read(&flags);
+> > -       swsusp_close(FMODE_READ);
+> > +       swsusp_close(FMODE_READ | FMODE_EXCL);
+> >         if (!error)
+> >                 error = hibernation_restore(flags & SF_PLATFORM_MODE);
+> >
+> > @@ -981,7 +981,7 @@ static int software_resume(void)
+> >         /* The snapshot device should not be opened while we're running */
+> >         if (!hibernate_acquire()) {
+> >                 error = -EBUSY;
+> > -               swsusp_close(FMODE_READ);
+> > +               swsusp_close(FMODE_READ | FMODE_EXCL);
+> >                 goto Unlock;
+> >         }
+> >
+> > @@ -1016,7 +1016,7 @@ static int software_resume(void)
+> >         pm_pr_dbg("Hibernation image not present or could not be loaded.\n");
+> >         return error;
+> >   Close_Finish:
+> > -       swsusp_close(FMODE_READ);
+> > +       swsusp_close(FMODE_READ | FMODE_EXCL);
+> >         goto Finish;
+> >  }
+> 
+> Applied as 5.16-rc material, thanks!
 
-We can fix it by calling cpufreq_cpu_put() before the function
-returns (#2, #3 and #4).
+it might also be useful for v5-stable kernels, as the mentioned commit
+also entered e.g. v5.15.3, which is where I noticed the warning.
 
-147 static int cpuhp_dtpm_cpu_offline(unsigned int cpu)
-148 {
-153     policy = cpufreq_cpu_get(cpu);
-        // #1: reference increment
+Thanks,
 
-155     if (!policy)
-156         return 0;
-
-158     pd = em_cpu_get(cpu);
-159     if (!pd)
-160         return -EINVAL; // #2: missing reference decrement
-
-166     if (cpumask_weight(policy->cpus) != 1)
-167         return 0; // #3: missing reference decrement
-
-174     return 0; // #4: missing reference decrement
-175 }
-
-Signed-off-by: Jianglei Nie <niejianglei@gmail.com>
----
- drivers/powercap/dtpm_cpu.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
-index 51c366938acd..182a07ee14b6 100644
---- a/drivers/powercap/dtpm_cpu.c
-+++ b/drivers/powercap/dtpm_cpu.c
-@@ -156,21 +156,26 @@ static int cpuhp_dtpm_cpu_offline(unsigned int cpu)
- 		return 0;
- 
- 	pd = em_cpu_get(cpu);
--	if (!pd)
-+	if (!pd) {
-+		cpufreq_cpu_put(policy);
- 		return -EINVAL;
-+	}
- 
- 	dtpm = per_cpu(dtpm_per_cpu, cpu);
- 
- 	power_sub(dtpm, pd);
- 
--	if (cpumask_weight(policy->cpus) != 1)
-+	if (cpumask_weight(policy->cpus) != 1) {
-+		cpufreq_cpu_put(policy);
- 		return 0;
-+	}
- 
- 	for_each_cpu(cpu, policy->related_cpus)
- 		per_cpu(dtpm_per_cpu, cpu) = NULL;
- 
- 	dtpm_unregister(dtpm);
- 
-+	cpufreq_cpu_put(policy);
- 	return 0;
- }
- 
--- 
-2.25.1
-
+Thomas
