@@ -2,144 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0B1C45C88D
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Nov 2021 16:21:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F90D45C90A
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Nov 2021 16:43:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234623AbhKXPYb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Nov 2021 10:24:31 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4159 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbhKXPY3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Nov 2021 10:24:29 -0500
-Received: from fraeml739-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Hzl7x66WJz67x9G;
-        Wed, 24 Nov 2021 23:20:45 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml739-chm.china.huawei.com (10.206.15.220) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 24 Nov 2021 16:21:16 +0100
-Received: from localhost (10.52.122.252) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 24 Nov
- 2021 15:21:14 +0000
-Date:   Wed, 24 Nov 2021 15:21:12 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-CC:     Tony Lindgren <tony@atomide.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Paul Walmsley <paul@pwsan.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Tero Kristo <kristo@kernel.org>,
-        "Jonathan Cameron" <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        "Lorenzo Bianconi" <lorenzo.bianconi83@gmail.com>,
-        Benoit Parrot <bparrot@ti.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Ping-Ke Shih <pkshih@realtek.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Amit Kucheria" <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-omap@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
-        <linux-iio@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>, <linux-aspeed@lists.ozlabs.org>,
-        <openbmc@lists.ozlabs.org>, <linux-wireless@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <alsa-devel@alsa-project.org>
-Subject: Re: [PATCH/RFC 08/17] iio: humidity: hts221: Use bitfield helpers
-Message-ID: <20211124152112.000078bf@Huawei.com>
-In-Reply-To: <c906f7449c0210cefba53eab2c2d87105d5c8599.1637592133.git.geert+renesas@glider.be>
-References: <cover.1637592133.git.geert+renesas@glider.be>
-        <c906f7449c0210cefba53eab2c2d87105d5c8599.1637592133.git.geert+renesas@glider.be>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        id S231615AbhKXPq3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Nov 2021 10:46:29 -0500
+Received: from m12-17.163.com ([220.181.12.17]:52167 "EHLO m12-17.163.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231626AbhKXPq3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 24 Nov 2021 10:46:29 -0500
+X-Greylist: delayed 951 seconds by postgrey-1.27 at vger.kernel.org; Wed, 24 Nov 2021 10:46:28 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=I8JCB
+        WetjmtrI9rwQYpyAle7v9jgI2MNc3ikcuPHxr0=; b=Hr6qe2dkAIt7/bplMW3M8
+        3vgi5byBttp4O64LC231sJ6J4sQZgBvwIbTpoin3bs+7IAlsZCRYMEba1N5MRzck
+        zR1V351A+Jig+QZSnP/iPYj1C9uyH2WH1fgzRqZS1AZdUpjdX2tXadOoQ0vKpr1e
+        BTv6VF3gsD0O+LbwV5qcGc=
+Received: from localhost.localdomain (unknown [124.115.222.149])
+        by smtp13 (Coremail) with SMTP id EcCowAAXHp6EWZ5hfBOLZg--.50622S4;
+        Wed, 24 Nov 2021 23:26:43 +0800 (CST)
+From:   Wentao_Liang <Wentao_Liang_g@163.com>
+To:     daniel.lezcano@kernel.org, rjw@rjwysocki.net
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wentao_Liang <Wentao_Liang_g@163.com>
+Subject: [PATCH] =?UTF-8?q?/drivers/powercap/dtpm=5Fcpu.c=EF=BC=9A=20fix?= =?UTF-8?q?=20policy=20reference=20leak=20in=20cpuhp=5Fdtpm=5Fcpu=5Fonline?= =?UTF-8?q?()?=
+Date:   Wed, 24 Nov 2021 23:25:53 +0800
+Message-Id: <20211124152553.3407-1-Wentao_Liang_g@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.52.122.252]
-X-ClientProxiedBy: lhreml733-chm.china.huawei.com (10.201.108.84) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: EcCowAAXHp6EWZ5hfBOLZg--.50622S4
+X-Coremail-Antispam: 1Uf129KBjvJXoW7tr4kGw1xJryfGw1rCFy5XFb_yoW8Kw4kpr
+        s8K34YvF18trZrJ3ySyFs5JFya9rZFyFyrGrWxGryrZ3W3XFnagr1qyryqqFn5ur1kCr1I
+        qay5Xa18CFWDCaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UzuWJUUUUU=
+X-Originating-IP: [124.115.222.149]
+X-CM-SenderInfo: xzhq3t5rboxtpqjbwqqrwthudrp/1tbiQxNVL1c7WLYwTgAAsW
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 22 Nov 2021 16:54:01 +0100
-Geert Uytterhoeven <geert+renesas@glider.be> wrote:
+In line 186(#1), 'policy = cpufreq_cpu_get(cpu)' will increase the kobject
+reference counter of the policy. The policy has to be released with the
+help of 'cpufreq_cpu_put()' to balance its kobject reference counter
+properly. However, the function returns without dropping the reference
+(#2,#3,#4,#5 and #6). It may result in a reference leak bug.
 
-> Use the field_prep() helper, instead of open-coding the same operation.
-> 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Hi Geert,
+It can be fixed by calling the function 'cpufreq_cpu_put()' before the
+function returns.
 
-If this should got forwards, looks like a nice cleanup for the two IIO
-ones, so I'll be happy to pick them up once infrastructure in place
-(ideally have the infrastructure an immutable branch to save having
-to revisit in 3+ months time!)
+178 static int cpuhp_dtpm_cpu_online(unsigned int cpu)
+179 {
+...
+186         policy = cpufreq_cpu_get(cpu);
+	      //#1 reference increase
+...
+191         if (!pd)
+192                 return -EINVAL;
+	      //#2 function returns without decrementing reference counter
+193
+194         dtpm_cpu = per_cpu(dtpm_per_cpu, cpu);
+195         if (dtpm_cpu)
+196                 return dtpm_update_power(&dtpm_cpu->dtpm);
+	      //#3 function returns without decrementing reference counter
+197
+198         dtpm_cpu = kzalloc(sizeof(*dtpm_cpu), GFP_KERNEL);
+199         if (!dtpm_cpu)
+200                 return -ENOMEM;
+	      //#4 function returns without decrementing reference counter
+...
+220         return 0;
+	      //#5 function returns without decrementing reference counter
+...
+226 out_kfree_dtpm_cpu:
+...
+231         return ret;
+	      //#6 function returns without decrementing reference counter
+232 }
 
-Jonathan
+Signed-off-by: Wentao_Liang <Wentao_Liang_g@163.com>
+---
+ drivers/powercap/dtpm_cpu.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-> ---
-> Compile-tested only.
-> Marked RFC, as this depends on [PATCH 01/17], but follows a different
-> path to upstream.
-> ---
->  drivers/iio/humidity/hts221_core.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/iio/humidity/hts221_core.c b/drivers/iio/humidity/hts221_core.c
-> index 6a39615b696114cd..749aedc469ede5c1 100644
-> --- a/drivers/iio/humidity/hts221_core.c
-> +++ b/drivers/iio/humidity/hts221_core.c
-> @@ -7,6 +7,7 @@
->   * Lorenzo Bianconi <lorenzo.bianconi@st.com>
->   */
->  
-> +#include <linux/bitfield.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/device.h>
-> @@ -171,7 +172,7 @@ static int hts221_update_avg(struct hts221_hw *hw,
->  			     u16 val)
->  {
->  	const struct hts221_avg *avg = &hts221_avg_list[type];
-> -	int i, err, data;
-> +	int i, err;
->  
->  	for (i = 0; i < HTS221_AVG_DEPTH; i++)
->  		if (avg->avg_avl[i] == val)
-> @@ -180,9 +181,8 @@ static int hts221_update_avg(struct hts221_hw *hw,
->  	if (i == HTS221_AVG_DEPTH)
->  		return -EINVAL;
->  
-> -	data = ((i << __ffs(avg->mask)) & avg->mask);
-> -	err = regmap_update_bits(hw->regmap, avg->addr,
-> -				 avg->mask, data);
-> +	err = regmap_update_bits(hw->regmap, avg->addr, avg->mask,
-> +				 field_prep(avg->mask, i));
->  	if (err < 0)
->  		return err;
->  
+diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
+index 51c366938acd..9330cfb31a62 100644
+--- a/drivers/powercap/dtpm_cpu.c
++++ b/drivers/powercap/dtpm_cpu.c
+@@ -189,16 +189,22 @@ static int cpuhp_dtpm_cpu_online(unsigned int cpu)
+ 		return 0;
+ 
+ 	pd = em_cpu_get(cpu);
+-	if (!pd)
++	if (!pd) {
++		cpufreq_cpu_put(policy);
+ 		return -EINVAL;
++	}
+ 
+ 	dtpm = per_cpu(dtpm_per_cpu, cpu);
+-	if (dtpm)
++	if (dtpm) {
++		cpufreq_cpu_put(policy);
+ 		return power_add(dtpm, pd);
++	}
+ 
+ 	dtpm = dtpm_alloc(&dtpm_ops);
+-	if (!dtpm)
++	if (!dtpm) {
++		cpufreq_cpu_put(policy);
+ 		return -EINVAL;
++	}
+ 
+ 	dtpm_cpu = kzalloc(sizeof(*dtpm_cpu), GFP_KERNEL);
+ 	if (!dtpm_cpu)
+@@ -226,6 +232,7 @@ static int cpuhp_dtpm_cpu_online(unsigned int cpu)
+ 	if (ret)
+ 		goto out_power_sub;
+ 
++	cpufreq_cpu_put(policy);
+ 	return 0;
+ 
+ out_power_sub:
+@@ -243,6 +250,7 @@ static int cpuhp_dtpm_cpu_online(unsigned int cpu)
+ 
+ out_kfree_dtpm:
+ 	kfree(dtpm);
++	cpufreq_cpu_put(policy);
+ 	return ret;
+ }
+ 
+-- 
+2.25.1
+
 
