@@ -2,102 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D173845CABA
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Nov 2021 18:15:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F84445CC89
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Nov 2021 19:54:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237088AbhKXRSZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Nov 2021 12:18:25 -0500
-Received: from vie01a-dmta-pe02-3.mx.upcmail.net ([62.179.121.159]:42883 "EHLO
-        vie01a-dmta-pe02-3.mx.upcmail.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236112AbhKXRSV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Nov 2021 12:18:21 -0500
-Received: from [172.31.216.234] (helo=vie01a-pemc-psmtp-pe11.mail.upcmail.net)
-        by vie01a-dmta-pe02.mx.upcmail.net with esmtp (Exim 4.92)
-        (envelope-from <thomas.zeitlhofer+lkml@ze-it.at>)
-        id 1mpvrR-005iZV-KW
-        for linux-pm@vger.kernel.org; Wed, 24 Nov 2021 18:15:09 +0100
-Received: from mr2 ([80.108.17.71])
-        by vie01a-pemc-psmtp-pe11.mail.upcmail.net with ESMTP
-        id pvrQmBDCy2A4vpvrRmAeQ3; Wed, 24 Nov 2021 18:15:09 +0100
-X-Env-Mailfrom: thomas.zeitlhofer+lkml@ze-it.at
-X-Env-Rcptto: linux-pm@vger.kernel.org
-X-SourceIP: 80.108.17.71
-X-CNFS-Analysis: v=2.3 cv=bNRo382Z c=1 sm=1 tr=0
- a=dwg5kdmUixIXdJRX1f/MsQ==:117 a=dwg5kdmUixIXdJRX1f/MsQ==:17
- a=kj9zAlcOel0A:10 a=2PhUSsPvBtUAQ8QcbhUA:9 a=CjuIK1q_8ugA:10
-Date:   Wed, 24 Nov 2021 18:15:05 +0100
-From:   Thomas Zeitlhofer <thomas.zeitlhofer+lkml@ze-it.at>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>, Ye Bin <yebin10@huawei.com>
-Subject: Re: [PATCH] PM: hibernate: use correct mode for swsusp_close()
-Message-ID: <YZ5zGXJbSsmV3xHJ@x1.ze-it.at>
-References: <YZ0+k4Vy7SJ1D8kH@x1.ze-it.at>
- <CAJZ5v0i9RR2wEx2ktKLzt2ZaAWTVqWJwf+tO0c99CzcLD9Th0g@mail.gmail.com>
+        id S244506AbhKXS5o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Nov 2021 13:57:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53442 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236702AbhKXS5o (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Nov 2021 13:57:44 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 975C0C061574
+        for <linux-pm@vger.kernel.org>; Wed, 24 Nov 2021 10:54:34 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id iq11so3258185pjb.3
+        for <linux-pm@vger.kernel.org>; Wed, 24 Nov 2021 10:54:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=DWs+sfm73Co4/p8zjBCzjIJxKxd+hDr0lk1K3niMt+Q=;
+        b=UB1aBuY9pG3JXM7KhviI8oV7AGKwM25frnNIytTR0AXRvilwuGtphkGOcm+zxTZIxW
+         iiUHB7jncerMm/ggOc58ABA/RifoaDyZ7oVeBJSCyc4qqsorYDy7L6B8AK15wOxXk+nI
+         x0crA4mq1ectczaQ3vKMT2pVWXbzlRqrrvh6x0HLmj5WTjatV5HU1UW3/cZEkWeciVZ8
+         jEEcIGWhtCMAXaePzLPwltQx/Ul6Q8g2kUuSmeg4723LVKooMEiJ6yXrWJ6OEM94rghf
+         9DCojf0UAZDkRd9JrCTuBu20d+oHomKWaPMFfUQdhiu7XBw9UH0FUWVKyPvR063aURJS
+         wStA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=DWs+sfm73Co4/p8zjBCzjIJxKxd+hDr0lk1K3niMt+Q=;
+        b=hbUSYN1nL4OhwUIoikIDtK0y6HwywBocsf6IXkdEDI9meV6PRuvF4UgYrMw7NPUgoU
+         DOSNXNtqExvxWd6mQQ0Fivh2wysNfvQmn9iSD74E2kUKEVTbArBvR/Pd0anQQ5uTJzb0
+         yemdz7QuIWcdCfQR/z9+2PBB+cFXoceTU5VnEngOIXfJ+N5O2JXHEyrX/f+VUhrPH9DN
+         RJVvo9MZJyDaRnoPZDDNV8tb9Dibw1o97Rt7pqbVmybNVqdx3SH5qu8S0NXAXH6sbYfQ
+         magev6zfcK9AXbRzm3uUFlMkzNuFD/RoFqGqx2PbrCdoX8lvbWxLlVeYRK4YXde+XSSX
+         J8kQ==
+X-Gm-Message-State: AOAM530dNANFxy0BOf8zjIuG5U6Fqxu3SRMRb92iqTE3kiWGl4qxiw6R
+        u2wxkEOcny5C9RRLTHrMmOpCpQ==
+X-Google-Smtp-Source: ABdhPJwthS/xAIcGAvNb8R7+YcSQetAa6Aw0kygtk7/45pU78xicADHbr/e0qcosMiCWd7/V1SKd3g==
+X-Received: by 2002:a17:902:9888:b0:142:8731:4b55 with SMTP id s8-20020a170902988800b0014287314b55mr21490931plp.51.1637780074160;
+        Wed, 24 Nov 2021 10:54:34 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id s38sm322629pga.40.2021.11.24.10.54.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Nov 2021 10:54:33 -0800 (PST)
+Message-ID: <619e8a69.1c69fb81.2d99.129b@mx.google.com>
+Date:   Wed, 24 Nov 2021 10:54:33 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0i9RR2wEx2ktKLzt2ZaAWTVqWJwf+tO0c99CzcLD9Th0g@mail.gmail.com>
-X-CMAE-Envelope: MS4wfD6cXk6+l71k+UqT1HXsfBwLkvL4a8SMxkGpUMm3AHZaAFFcTHIrEsCP0yA3/R4i+Wte9cQANS6bzxBZn3IXwgY2ZJtyw6E3XGLGsHVrKVD3vAFDi3qx
- 8fAx9ALtQX9SWsEKaTZk9KE8kcg3LBsw1VYo5CkUIVUXRz2ZtrTO2Gb6tm/e2GsDhHQ1qoqFkaK5xBYIw/Q7iOt4vPczukpfwulkl5rZCvAK1exGYJpJms28
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.16-rc2-16-ga3f78507f993
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 1 warning (v5.16-rc2-16-ga3f78507f993)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Rafael,
+pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.16-rc2-16-ga3=
+f78507f993)
 
-On Wed, Nov 24, 2021 at 01:46:42PM +0100, Rafael J. Wysocki wrote:
-> On Tue, Nov 23, 2021 at 8:18 PM Thomas Zeitlhofer
-> <thomas.zeitlhofer+lkml@ze-it.at> wrote:
-> >
-> > Commit 39fbef4b0f77 ("PM: hibernate: Get block device exclusively in
-> > swsusp_check()") changed the opening mode of the block device to
-> > (FMODE_READ | FMODE_EXCL).
-> >
-> > In the corresponding calls to swsusp_close(), the mode is still just
-> > FMODE_READ which triggers the warning in blkdev_flush_mapping() on resume
-> > from hibernate.
-> >
-> > So, use the mode (FMODE_READ | FMODE_EXCL) also when closing the device.
-> >
-> > Fixes: 39fbef4b0f77 ("PM: hibernate: Get block device exclusively in swsusp_check()")
-> > Signed-off-by: Thomas Zeitlhofer <thomas.zeitlhofer+lkml@ze-it.at>
-> >
-> > diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-> > index 559acef3fddb..b0888e9224da 100644
-> > --- a/kernel/power/hibernate.c
-> > +++ b/kernel/power/hibernate.c
-> > @@ -691,7 +691,7 @@ static int load_image_and_restore(void)
-> >                 goto Unlock;
-> >
-> >         error = swsusp_read(&flags);
-> > -       swsusp_close(FMODE_READ);
-> > +       swsusp_close(FMODE_READ | FMODE_EXCL);
-> >         if (!error)
-> >                 error = hibernation_restore(flags & SF_PLATFORM_MODE);
-> >
-> > @@ -981,7 +981,7 @@ static int software_resume(void)
-> >         /* The snapshot device should not be opened while we're running */
-> >         if (!hibernate_acquire()) {
-> >                 error = -EBUSY;
-> > -               swsusp_close(FMODE_READ);
-> > +               swsusp_close(FMODE_READ | FMODE_EXCL);
-> >                 goto Unlock;
-> >         }
-> >
-> > @@ -1016,7 +1016,7 @@ static int software_resume(void)
-> >         pm_pr_dbg("Hibernation image not present or could not be loaded.\n");
-> >         return error;
-> >   Close_Finish:
-> > -       swsusp_close(FMODE_READ);
-> > +       swsusp_close(FMODE_READ | FMODE_EXCL);
-> >         goto Finish;
-> >  }
-> 
-> Applied as 5.16-rc material, thanks!
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+16-rc2-16-ga3f78507f993/
 
-it might also be useful for v5-stable kernels, as the mentioned commit
-also entered e.g. v5.15.3, which is where I noticed the warning.
+Tree: pm
+Branch: testing
+Git Describe: v5.16-rc2-16-ga3f78507f993
+Git Commit: a3f78507f9931f5abe2f8273896e002b59eaeb90
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
-Thanks,
+Warnings Detected:
 
-Thomas
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+x86_64:
+
+
+Warnings summary:
+
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
