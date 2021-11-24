@@ -2,103 +2,213 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A8FA45BF79
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Nov 2021 13:55:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4715F45C741
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Nov 2021 15:27:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345293AbhKXM66 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Nov 2021 07:58:58 -0500
-Received: from mail-oi1-f178.google.com ([209.85.167.178]:41945 "EHLO
-        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344237AbhKXM52 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Nov 2021 07:57:28 -0500
-Received: by mail-oi1-f178.google.com with SMTP id u74so5120765oie.8;
-        Wed, 24 Nov 2021 04:54:18 -0800 (PST)
+        id S1352462AbhKXObB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Nov 2021 09:31:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47016 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349513AbhKXOa4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Nov 2021 09:30:56 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204E6C127921
+        for <linux-pm@vger.kernel.org>; Wed, 24 Nov 2021 04:55:17 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id b12so4058277wrh.4
+        for <linux-pm@vger.kernel.org>; Wed, 24 Nov 2021 04:55:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bcW/auQwhx7EDgaXPPuEkhw9cJVDl6vpI/ai2tX4Qwo=;
+        b=tTKzfWuTuwCkre9gsqU2sIqF551Xaz8JcKCOhq9JUBEbFEB+2G21uW/GpLRjN3DMfz
+         8VupRRQJzBx30JP3IDSUxPXXbvS1/0QHGBDeoIE41I1TNdYh2di6dkl7AHagMZqzPxvb
+         FUmJ1gixwftzrdtQRw58g3uG9Fsjy+Zc++7la8N962VtUWVmweugOaLmazVVW/fLxgtx
+         OJLGWQ5zs6AIMw03hW2LCXqO1NpKi3XZMr4XIstq39cuBe8SsZI3u+6PVr67QuVEx3bh
+         azboOnDk8Hk1yV7kWcr8COu9WGlKIFXx/JyLPo/VMr3Gw54c5cqvCPyWB0opx7U49qXT
+         ov5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ymQHNu/HcjKJIpfHdM0oTSjwIp52WV3gOdu73KDgh+k=;
-        b=TbA+dsYUdfwEEDYeOyEmRLu/ABtdSQtFS5lZ1NfODUR5Z4uT1ifMu3YRhC4LVnBXia
-         o9qgpsdi07bVTS7k3zhCn16UDFjP0YXIt0X7y1OwQ8NoK8/Y7MCFxmg16ZBaqgCS4f+y
-         5pWlB93tEKc9Vupih5bH9KB6PVyFJSZfMJgDhpl69Z/RyJ+qV5FRJOeuLo/h0MSFZU48
-         1bTO+wvQHwcb/aDzhvaczMQglimhNtloVPlvc3IDs7D2ljKC671rJbkYidrOMksBd7Go
-         rNPRMeKaY3LgludEqt1f2bwoc0xJ5vftEOhU0BJ5C8QMXHfZvTXJ/zNzwmsr1y3NUvds
-         Xbrw==
-X-Gm-Message-State: AOAM531P0HeFijrQ/uO/Sbbs1zDpSqz/7JrY9oc1/se6MZD+UE0LKxdD
-        xAmC7LTQfFxzvgTjRulii0rwvTu+B+68dc2VchwfAAR0
-X-Google-Smtp-Source: ABdhPJw8E05v+Ge/qWAiqStNgjc9LY7vhBX+bqhMNBggf0tDmC955iWPx13SsafQw0l17L4KnezEStGqa+pXGnh2Cno=
-X-Received: by 2002:a05:6808:14c2:: with SMTP id f2mr5635167oiw.154.1637758458448;
- Wed, 24 Nov 2021 04:54:18 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bcW/auQwhx7EDgaXPPuEkhw9cJVDl6vpI/ai2tX4Qwo=;
+        b=6Yu44rCiSfu2i4Pprxk+0LSZhPOdNJGBWfxiDLexTWe8cgWC0eojhdb6rbJHtjlAQ1
+         5IzxmRqFS9isypZlsDQK5KLf0hbMu+49CQp8G8mjf/63phG/cxIBm8ak/VqYYQFGdtRy
+         WnC/VTIbWYTx3c9XUVpnkXGXRZCb5MscXmRMHrKy0jBxnfunqqWtOq4Ev2+3KuA1hpIM
+         UURvvz7Mr6LYPxzZKH6II9Ec6OXQXOxVVwfZenEBsnCl/s3BzzTEsinnpzVv3Ltoaasl
+         5NwqXKf1ladmAZqXZJgEyXj3Dld5y9/bbXFXLmKw+R4zKVQ7wEQW0WmJh7aDerNq1x87
+         yG8w==
+X-Gm-Message-State: AOAM5326j+ovYpb9i+k3b6uE0KmsvPQ8lIOpQ9jdB2dHr9VPYnAyFWJb
+        Eu076lS8VrJLeTOJzxGbFj78UQ==
+X-Google-Smtp-Source: ABdhPJxzkg22K5gANey5i4Q2uPB/dHz/U2rDt3Pth6C79X87w3QfsCIYi8NjqR99oF7BndbrefSacQ==
+X-Received: by 2002:a5d:5303:: with SMTP id e3mr18330457wrv.73.1637758515555;
+        Wed, 24 Nov 2021 04:55:15 -0800 (PST)
+Received: from localhost.localdomain ([2a01:e34:ed2f:f020:3395:9073:b941:501e])
+        by smtp.gmail.com with ESMTPSA id v8sm14916443wrd.84.2021.11.24.04.55.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Nov 2021 04:55:15 -0800 (PST)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org
+Cc:     robh@kernel.org, arnd@linaro.org, heiko@sntech.de,
+        ulf.hansson@linaro.org, rjw@rjwysocki.net,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, lukasz.luba@arm.com,
+        Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh+dt@kernel.org>
+Subject: [PATCH 1/5] dt-bindings: Powerzone new bindings
+Date:   Wed, 24 Nov 2021 13:55:00 +0100
+Message-Id: <20211124125506.2971069-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20211029122359.1.I1e23f382fbd8beb19fe1c06d70798b292012c57a@changeid>
- <CAE=gft4MRvq-VCBW4EX4dGfPi4s7Lco8h6Z_ejRH5A1e-K2-yA@mail.gmail.com>
- <CAJZ5v0hsGFHxcTb8PUkGSm9oas1wdquB=euofS19zriRc1CXYw@mail.gmail.com> <CAE=gft6CjUhkcrmcjVEOp5S+rgqN1_ZGTKbK0DierTanu0d16A@mail.gmail.com>
-In-Reply-To: <CAE=gft6CjUhkcrmcjVEOp5S+rgqN1_ZGTKbK0DierTanu0d16A@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 24 Nov 2021 13:54:07 +0100
-Message-ID: <CAJZ5v0gamixc4dkBEXJjjw5zQynuz8BkQ9xv8YpbjkTkdMb2TQ@mail.gmail.com>
-Subject: Re: [PATCH] PM / hibernate: Fix snapshot partial write lengths
-To:     Evan Green <evgreen@chromium.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Nov 16, 2021 at 9:22 PM Evan Green <evgreen@chromium.org> wrote:
->
-> On Tue, Nov 16, 2021 at 9:54 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >
-> > On Mon, Nov 15, 2021 at 6:13 PM Evan Green <evgreen@chromium.org> wrote:
-> > >
-> > > Gentle bump.
-> > >
-> > >
-> > > On Fri, Oct 29, 2021 at 12:24 PM Evan Green <evgreen@chromium.org> wrote:
-> > > >
-> > > > snapshot_write() is inappropriately limiting the amount of data that can
-> > > > be written in cases where a partial page has already been written. For
-> > > > example, one would expect to be able to write 1 byte, then 4095 bytes to
-> > > > the snapshot device, and have both of those complete fully (since now
-> > > > we're aligned to a page again). But what ends up happening is we write 1
-> > > > byte, then 4094/4095 bytes complete successfully.
-> > > >
-> > > > The reason is that simple_write_to_buffer()'s second argument is the
-> > > > total size of the buffer, not the size of the buffer minus the offset.
-> > > > Since simple_write_to_buffer() accounts for the offset in its
-> > > > implementation, snapshot_write() can just pass the full page size
-> > > > directly down.
-> > > >
-> > > > Signed-off-by: Evan Green <evgreen@chromium.org>
-> > > > ---
-> > > >
-> > > >  kernel/power/user.c | 2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/kernel/power/user.c b/kernel/power/user.c
-> > > > index 740723bb388524..ad241b4ff64c58 100644
-> > > > --- a/kernel/power/user.c
-> > > > +++ b/kernel/power/user.c
-> > > > @@ -177,7 +177,7 @@ static ssize_t snapshot_write(struct file *filp, const char __user *buf,
-> > > >                 if (res <= 0)
-> > > >                         goto unlock;
-> > > >         } else {
-> > > > -               res = PAGE_SIZE - pg_offp;
-> > > > +               res = PAGE_SIZE;
-> > > >         }
-> > > >
-> > > >         if (!data_of(data->handle)) {
-> > > > --
-> >
-> > Do you actually see this problem in practice?
->
-> Yes. I may fire up another thread to explain why I'm stuck doing a
-> partial page write, and how I might be able to stop doing that in the
-> future with some kernel help. But either way, this is a bug.
+The proposed bindings are describing a set of powerzones.
 
-OK, patch applied as 5.16-rc material.
+A power zone is the logical name for a component which is capable of
+power capping and where we can measure the power consumption.
 
-I guess it should go into -stable kernels too?
+A power zone can aggregate several power zones in terms of power
+measurement and power limitations. That allows to apply power
+constraint to a group of components and let the system balance the
+allocated power in order to comply with the constraint.
+
+The ARM System Control and Management Interface (SCMI) can provide a
+power zone description.
+
+The powerzone semantic is also found on the Intel platform with the
+RAPL register.
+
+The Linux kernel powercap framework deals with the powerzones:
+
+https://www.kernel.org/doc/html/latest/power/powercap/powercap.html
+
+The powerzone can also represent a group of children powerzones, hence
+the description can result on a hierarchy. Such hierarchy already
+exists with the hardware or can be represented an computed from the
+kernel.
+
+The hierarchical description was initially proposed but not desired
+given there are other descriptions like the power domain proposing
+almost the same description.
+
+https://lore.kernel.org/all/CAL_JsqLuLcHj7525tTUmh7pLqe7T2j6UcznyhV7joS8ipyb_VQ@mail.gmail.com/
+
+The description gives the power constraint dependencies to apply on a
+specific group of logically or physically aggregated devices. They do
+not represent the physical location or the power domains of the SoC
+even if the description could be similar.
+
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ .../devicetree/bindings/power/powerzones.yaml | 95 +++++++++++++++++++
+ 1 file changed, 95 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/powerzones.yaml
+
+diff --git a/Documentation/devicetree/bindings/power/powerzones.yaml b/Documentation/devicetree/bindings/power/powerzones.yaml
+new file mode 100644
+index 000000000000..1ae3f82ae29c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/power/powerzones.yaml
+@@ -0,0 +1,95 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/power/powerzones.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Power zones description
++
++maintainers:
++  - Daniel Lezcano <daniel.lezcano@linaro.org>
++
++description: |+
++
++  A System on Chip contains a multitude of active components and each
++  of them is a source of heat. Even if a temperature sensor is not
++  present, a source of heat can be controlled by acting on the
++  consumed power via different techniques.
++
++  A powerzone describes a component or a group of components where we
++  can control the maximum power consumption. For instance, a group of
++  CPUs via the performance domain, a LCD screen via the brightness,
++  etc ...
++
++  Different components when they are used together can significantly
++  increase the overall temperature, so the description needs to
++  reflect this dependency in order to assign a power budget for a
++  group of powerzones.
++
++  This description is done via a hierarchy and the DT reflects it. It
++  does not represent the physical location or a topology, eg. on a
++  big.Little system, the little CPUs may not be represented as they do
++  not contribute significantly to the heat, however the GPU can be
++  tied with the big CPUs as they usually have a connection for
++  multimedia or game workloads.
++    
++properties:
++  $nodename:
++    const: powerzones
++      
++  "#powerzone-cells":
++    description:
++      Number of cells in powerzone specifier. Typically 0 for nodes
++      representing but it can be any number in the future to describe
++      parameters of the powerzone.
++
++  powerzone:
++    description:
++      A phandle to a parent powerzone. If no powerzone attribute is set, the
++      described powerzone is the topmost in the hierarchy.
++
++examples:
++  - |
++    powerzones {
++
++      SOC_PZ: soc {
++      };
++
++      PKG_PZ: pkg {
++        #powerzone-cells = <0>;
++        powerzone = <&SOC_PZ>;
++      };
++
++      BIG_PZ: big {
++        #powerzone-cells = <0>;
++        powerzone = <&PKG_PZ>;
++      };
++
++      GPU_PZ: gpu {
++        #powerzone-cells = <0>;
++        powerzone = <&PKG_PZ>;
++      };
++
++      MULTIMEDIA_PZ: multimedia {
++        #powerzone-cells = <0>;
++        powerzone = <&SOC_PZ>;
++      };
++    };
++
++  - |
++    A57_0: big@0 {
++      compatible = "arm,cortex-a57";
++      reg = <0x0 0x0>;
++      device_type = "cpu";
++      #powerzone-cells = <0>;
++      powerzone = <&BIG_PZ>;
++    };
++
++    A57_1: big@1 {
++      compatible = "arm,cortex-a57";
++      reg = <0x0 0x0>;
++      device_type = "cpu";
++      #powerzone-cells = <0>;
++      powerzone = <&BIG_PZ>;
++    };
++...
+-- 
+2.25.1
+
