@@ -2,66 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3095E45D7B5
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Nov 2021 10:54:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 211CA45D9E5
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Nov 2021 13:18:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353943AbhKYJ5O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Nov 2021 04:57:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54284 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347148AbhKYJzM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Nov 2021 04:55:12 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF807C061746;
-        Thu, 25 Nov 2021 01:52:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=q9W6nbk9qafMhLY0YqRYIwMk+JEbPSTqLUIMJBGlKXM=; b=Vhewe5zs4XI7v1oVNyYbif7pEw
-        2t4Pi0udOsuQt9qOg2C+Gs3R9B+ydbSzH1omWkU7bQn4/svrrVjabA9t0Xw7424n5NYfRiHiJy1so
-        4NUqjiZOTLLtSv5mB6w3m2C0BWhGSpB+XeSIL5gkyK5V3J5d2hnVF4vxOOtpfZYkc7q6BGVewUBFB
-        urbbXDaCb0oIqrDr1bOmAEuPcdUaLZiZCF5DIu4vItLA14h8/9LdUjuy/MxNlSel0tD6IavmFSWwJ
-        khr5Hm5XP5a9cYdwR33784oE2PSgyRBYKcvJjNcqST1JxT+wrpt6e9nYFmG12qTiNvA4+BbHCVvxh
-        uPHxiDwQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mqBPy-005mvF-Hb; Thu, 25 Nov 2021 09:51:51 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C3097300093;
-        Thu, 25 Nov 2021 10:51:50 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A8C6A2027B00C; Thu, 25 Nov 2021 10:51:50 +0100 (CET)
-Date:   Thu, 25 Nov 2021 10:51:50 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Maulik Shah <quic_mkshah@quicinc.com>
-Cc:     bjorn.andersson@linaro.org, rafael@kernel.org,
-        daniel.lezcano@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ulf.hansson@linaro.org, quic_lsrao@quicinc.com,
-        rnayak@codeaurora.org, Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: Re: [PATCH] sched/idle: Export cpu_idle_poll_ctrl() symbol
-Message-ID: <YZ9ctgCBYJEEjuwt@hirez.programming.kicks-ass.net>
-References: <1637831676-32737-1-git-send-email-quic_mkshah@quicinc.com>
+        id S238055AbhKYMVS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 25 Nov 2021 07:21:18 -0500
+Received: from [186.226.176.30] ([186.226.176.30]:49094 "EHLO
+        mail.serrinha.ba.gov.br" rhost-flags-FAIL-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1347956AbhKYMUg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Nov 2021 07:20:36 -0500
+X-Greylist: delayed 9404 seconds by postgrey-1.27 at vger.kernel.org; Thu, 25 Nov 2021 07:20:35 EST
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.serrinha.ba.gov.br (Postfix) with ESMTP id C1BB51BA92CE;
+        Thu, 25 Nov 2021 06:55:47 -0200 (BRST)
+X-Virus-Scanned: amavisd-new at mail.serrinha.ba.gov.br
+Received: from mail.serrinha.ba.gov.br ([127.0.0.1])
+        by localhost (mail.serrinha.ba.gov.br [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id HVvYa64MKaMA; Thu, 25 Nov 2021 06:55:47 -0200 (BRST)
+Received: from [209.127.184.115] (unknown [186.226.183.225])
+        by mail.serrinha.ba.gov.br (Postfix) with ESMTP id 3D9A71BA92C8;
+        Thu, 25 Nov 2021 06:55:45 -0200 (BRST)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1637831676-32737-1-git-send-email-quic_mkshah@quicinc.com>
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Re: Attn
+To:     Recipients <elsayedhamdy041@gmail.com>
+From:   "Hamdy Elsayed" <elsayedhamdy041@gmail.com>
+Date:   Thu, 25 Nov 2021 01:01:02 -0800
+Reply-To: hamdy5@pbefin.com
+Message-Id: <20211125085545.3D9A71BA92C8@mail.serrinha.ba.gov.br>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Nov 25, 2021 at 02:44:36PM +0530, Maulik Shah wrote:
-> Export cpu_idle_poll_ctrl() so that module drivers can use same.
+Hello,
 
-This does not seem like a really safe interface to expose to the
-world.
+How are you once again. I have been having difficulty reaching you. I
+have an important business transaction to discuss with you.
 
-Surely the better solution is to rework things to not rely on this. I'm
-fairly sure it's not hard to write a cpuidle driver that does much the
-same.
+There are funds available and ready for investment which we will need
+your assistance to invest.
+
+Do get back to me as soon as you can for more details.
+
+Regards,
+Hamdy Elsayed
