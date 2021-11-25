@@ -2,82 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D630F45F7BB
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Nov 2021 01:58:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D90FD45FBB5
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Nov 2021 03:12:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344599AbhK0BCH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 Nov 2021 20:02:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59566 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344257AbhK0BAG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Nov 2021 20:00:06 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8215BC06175D
-        for <linux-pm@vger.kernel.org>; Fri, 26 Nov 2021 16:56:05 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id o4so21773714oia.10
-        for <linux-pm@vger.kernel.org>; Fri, 26 Nov 2021 16:56:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TsYDLIp3SURoGlogh4l/OZ4ji0kGf43UvWJ/HDPp9uM=;
-        b=HqSKDi0cjlyrRMTJ1OJ2TaCzVUW0zw8IAjmBi8LvnDSXqq36qpbW0xVhoHS2O1wcOY
-         V9OoKyIB/Vz2FeHHOz2jZDndEbXOlNTBQbLxvDmonhxrk+k8K4gPxXkylROA+XbhP0pz
-         qAc801vn5n1HQyr1+eCwtFjXMfTHyfuIhDVguRFh979KQz8f98aDgWobZ+PHp89dOmyO
-         aiTPe3zFeOdI4ZlT0L74aoyLxfQ/UmeC6MWVbigLuO2H2KqUhcj66mk0vhBijZyqN5E2
-         +pWmjg2YqMLgDCiNU59b7dcj5xs8MybitoEScniznitePjt1uqYwuxeoaZVn+Y4Q6D66
-         Hacw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TsYDLIp3SURoGlogh4l/OZ4ji0kGf43UvWJ/HDPp9uM=;
-        b=pgSX7LfrnfkpG3k/EhRYW2OyHhNQDL1nBbZUPmKIK1cfrjVpS2visg0JWgx+jbHX3u
-         tBU82pRJn/zg/6B5PgS0WyxRfvbYmLaWGHRUPsdp1B3hYFzsmBMpfAeJNPZHQE8phBYb
-         ctuTPAySQUqqosAQB0TQSeE2PcTnzXzq06Tcfk8KbKXwtyybftB4lOBfYFdXqprou8wv
-         A+GlI3UZ5ANUxwg9Qs4tSCya7NADa8EfP8/adVrq7KHPGbZ/uSjg7mMUEKpvIC845ZAU
-         D8YadKvlDFi60E5gKQtGUUdgnnacOnMt4fZjlfpmJvTT0bgwjyCSBs0KE9oONSBbo7+g
-         HhWA==
-X-Gm-Message-State: AOAM530Bcf9uLX1AswQ5njEOnwqpu5+xFk8doKUxtPyJTbXdivuwSO3A
-        lhwZxOc2Cq0Lx8N15Z4e8GLoUTuVhwhwJeUm9xsUfQ==
-X-Google-Smtp-Source: ABdhPJyxv5KKxtYotJxpNvBo5p5sOOCrMcG3RfEH/cdZCtrFgzZb3V1sigF6lw0v79E8hVyzV7kIMFXHY9001AXgILE=
-X-Received: by 2002:a54:4791:: with SMTP id o17mr27567633oic.114.1637974564863;
- Fri, 26 Nov 2021 16:56:04 -0800 (PST)
+        id S1348773AbhK0CPu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 Nov 2021 21:15:50 -0500
+Received: from mail.daesangagung.co.id ([117.54.218.101]:44800 "EHLO
+        mail.daesangagung.co.id" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241891AbhK0CNq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Nov 2021 21:13:46 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.daesangagung.co.id (Postfix) with ESMTP id B11F180BC8355;
+        Fri, 26 Nov 2021 00:25:04 +0700 (WIB)
+Received: from mail.daesangagung.co.id ([127.0.0.1])
+        by localhost (mail.daesangagung.co.id [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id KP-98jJa8OIL; Fri, 26 Nov 2021 00:25:04 +0700 (WIB)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.daesangagung.co.id (Postfix) with ESMTP id 9CAE7809F6432;
+        Thu, 25 Nov 2021 20:16:56 +0700 (WIB)
+X-Virus-Scanned: amavisd-new at daesangagung.co.id
+Received: from mail.daesangagung.co.id ([127.0.0.1])
+        by localhost (mail.daesangagung.co.id [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id wLAkd3Q9MCXI; Thu, 25 Nov 2021 20:16:56 +0700 (WIB)
+Received: from User (_gateway [10.0.22.111])
+        by mail.daesangagung.co.id (Postfix) with SMTP id 335C4809F6434;
+        Thu, 25 Nov 2021 11:25:13 +0700 (WIB)
+Reply-To: <sarb_bnk086@meta.ua>
+From:   "Hsbc Bank London" <info@daesangagung.co.id>
+Subject: Your Approved Payment !
+Date:   Wed, 24 Nov 2021 20:25:30 -0800
 MIME-Version: 1.0
-References: <cover.1637061794.git.matti.vaittinen@fi.rohmeurope.com>
- <6123f62ac44e6513a498d15034a4b6b22abe5f5b.1637061794.git.matti.vaittinen@fi.rohmeurope.com>
- <CACRpkdbKeW+pJ8SZ0fPD+9kEtgHgi2A9U=f6XyKTHogKU-9F9g@mail.gmail.com>
- <7b34e88f-54f3-6d0a-293e-b2b411d1c5c2@fi.rohmeurope.com> <676253b9-ff69-7891-1f26-a8b5bb5a421b@fi.rohmeurope.com>
- <28df4678-345b-78e0-06f0-1fdcbaff455d@gmail.com>
-In-Reply-To: <28df4678-345b-78e0-06f0-1fdcbaff455d@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sat, 27 Nov 2021 01:55:53 +0100
-Message-ID: <CACRpkdZEmYWp+KtmYv9HXEH9ikNPB8sE5AuDVs=ipdLOWv9e0Q@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 3/9] power: supply: Support DT originated
- temperature-capacity tables
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     "Vaittinen, Matti" <matti.vaittinen@fi.rohmeurope.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        "rostokus@gmail.com" <rostokus@gmail.com>,
-        "fan.chen@mediatek.com" <fan.chen@mediatek.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-power <linux-power@fi.rohmeurope.com>,
-        "Mutanen, Mikko" <mikko.mutanen@fi.rohmeurope.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+        charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-Id: <20211125042513.335C4809F6434@mail.daesangagung.co.id>
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Nov 26, 2021 at 1:35 PM Matti Vaittinen
-<mazziesaccount@gmail.com> wrote:
+THE WORLDS LOCAL BANK
+International Banking
+FOREIGN EXCHANGE UNIT
 
-> Hope this did clarify. Afraid it didn't :)
+RE: MANDATORY RELEASE ORDER OF YOUR OVERDUE FUND
 
-I got it first time, I think. Or I just think I got it but didn't ;)
+Dear Valued Beneficiary:
 
-Yours,
-Linus Walleij
+We are pleased to inform you that we have finally concluded arrangement towards your refund/lottery pay out which has been delayed for a Long Period of time because of your Cooperation and Dealings with Wrong Officials and importers of banks as your fund returned back to us on the 4th of Jan 2021 when we confirmed the rate of delays and questionable activities that has been related by the previous administrative banks alongside with others that collaborated in delaying the release of your fund after all charges and payments demanded were paid.
+
+Recently, the Ministry of Finance of United Kingdom, Bank of England, HSBC Bank Plc UK and United Kingdom Inland Revenue Services held a meeting on how this fund will be released to the beneficiaries to their designated bank accounts in their country without further delay since we are in the first half of the economic year 2021 and it is now overdue to be released as the said funds belongs to them.
+
+We apologize for the delay of the payment and all the inconveniences that this might have caused you during this period of time. However we have instructed all the banks in the globe which we previously asked to help us pay out this fund to the general public to STOP the process of the release of the fund due to their incompetence and negligence of duty towards the release of this fund. After our findings, some were arrested and charged for theft according to Section 1 of the Theft Act 1978, as amended by the Theft (Amendment) Act 1996 law of the United Kingdom.
+
+The Bank of England Governor (Mr Andrew Bailey) has given serious warning and Instructions and ordered the Inland Revenue Services Department of England to quickly release all on hold funds which are in their escrow account to the sole beneficiaries which you are among those who will receive their Inheritance funds.
+
+Please contact ONLY the Executive member of the Monetary Policy Committee of South African Reserve Bank (Dr Rashad Cassim) on his email: sarb_bnk086@meta.ua to advise you on how to procure the certificate of claim as the law of South Africa demands that without it there will not be any payment whether pending loan amount, lottery fund, inheritance funds or whatsoever fund locally or internationally perhaps you have not yet received it.
+
+Provide below details to Dr Rashad Cassim for his clarification:
+
+Full Name....... Tel.................
+
+Address......... Amount..............
+
+City............ Country.............
+
+Copies of documents pertaining to the fund.
+
+Best Regards,
+Mr.James Emmett.
+Chief Executive Officer, HSBC Bank plc.
+United Kingdom
