@@ -2,103 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BC0B45DB29
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Nov 2021 14:33:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3068245DB31
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Nov 2021 14:36:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353754AbhKYNhH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Nov 2021 08:37:07 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:3253 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345755AbhKYNfH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Nov 2021 08:35:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1637847116; x=1669383116;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=M+sAp6FDBHNbmy+1ZLQA8pXhg95S6T7aLbPwagstLOM=;
-  b=F22MrwzAnm9wc2mhBnc5sRKP+9F7XDrq8sFTeqcdvWTzl+aAuPGzZmA+
-   AdlN48M3zgabCVWY6l2RPZMshbVcSh6hW79B47seCE9/8bZF9c3yHO4sS
-   K1I4R/j0NymLyimRg1ETS3k0qTMGISDEFfo+3b3HYFwf1QMvyONu0R5tR
-   4=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 25 Nov 2021 05:31:56 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 05:31:55 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 25 Nov 2021 05:31:55 -0800
-Received: from [10.216.32.234] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Thu, 25 Nov
- 2021 05:31:49 -0800
-Message-ID: <f7a1c6de-ae1d-1615-1212-bdb9bdcdbcbc@quicinc.com>
-Date:   Thu, 25 Nov 2021 19:01:44 +0530
+        id S1355384AbhKYNjL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Nov 2021 08:39:11 -0500
+Received: from mga14.intel.com ([192.55.52.115]:27603 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1345755AbhKYNhK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 25 Nov 2021 08:37:10 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10178"; a="235757964"
+X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
+   d="scan'208";a="235757964"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 05:33:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
+   d="scan'208";a="457869173"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 25 Nov 2021 05:33:38 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mqEsb-0006QE-F6; Thu, 25 Nov 2021 13:33:37 +0000
+Date:   Thu, 25 Nov 2021 21:32:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 9be6a635aefb6c24bd82b95d7705fb5d83a5195b
+Message-ID: <619f907f.VgjRR3iLEzzz1u0P%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH 2/4] sched/core: Export symbols used by cpuidle governors
-To:     Peter Zijlstra <peterz@infradead.org>
-CC:     <bjorn.andersson@linaro.org>, <rafael@kernel.org>,
-        <daniel.lezcano@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <ulf.hansson@linaro.org>, <quic_lsrao@quicinc.com>,
-        <rnayak@codeaurora.org>, Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        "Vincent Guittot" <vincent.guittot@linaro.org>
-References: <1637830481-21709-1-git-send-email-quic_mkshah@quicinc.com>
- <1637830481-21709-3-git-send-email-quic_mkshah@quicinc.com>
- <YZ9Y2w2xIrw39B/K@hirez.programming.kicks-ass.net>
-From:   Maulik Shah <quic_mkshah@quicinc.com>
-In-Reply-To: <YZ9Y2w2xIrw39B/K@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Peter,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 9be6a635aefb6c24bd82b95d7705fb5d83a5195b  Merge branch 'acpi-scan' into bleeding-edge
 
-On 11/25/2021 3:05 PM, Peter Zijlstra wrote:
-> On Thu, Nov 25, 2021 at 02:24:39PM +0530, Maulik Shah wrote:
->> Export symbols that are used by cpuidle menu governor in preparation
->> to allow cpuidle governors to be compiled as modules.
->>
->> Cc: Ingo Molnar <mingo@redhat.com>
->> Cc: Peter Zijlstra <peterz@infradead.org>
->> Cc: Juri Lelli <juri.lelli@redhat.com>
->> Cc: Vincent Guittot <vincent.guittot@linaro.org>
->> Signed-off-by: Maulik Shah <quic_mkshah@quicinc.com>
->> ---
->>   kernel/sched/core.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
->> index 8cffe31..1d031e0 100644
->> --- a/kernel/sched/core.c
->> +++ b/kernel/sched/core.c
->> @@ -5047,6 +5047,7 @@ unsigned int nr_iowait_cpu(int cpu)
->>   {
->>   	return atomic_read(&cpu_rq(cpu)->nr_iowait);
->>   }
->> +EXPORT_SYMBOL(nr_iowait_cpu);
-> NACK, that function is batshit insane, exporting it serves nobody.
-Thanks for the review.
-Exporting is to serve cpuidle menu governor when its compiled as module 
-(last patch in this series).
+elapsed time: 1175m
 
-otherwise we get below error during compilation,
-ERROR: modpost: "nr_iowait_cpu" [drivers/cpuidle/governors/menu.ko] 
-undefined!
+configs tested: 59
+configs skipped: 3
 
-Do you suggest to use something else instead of this?
-I think making this function inline and moving to linux/sched/stat.h 
-(along with dependent data structures) may help but yet to try.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Thanks,
-Maulik
+gcc tested configs:
+arm                              allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm64                               defconfig
+arm64                            allyesconfig
+i386                 randconfig-c001-20211125
+ia64                                defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+parisc                              defconfig
+s390                             allmodconfig
+s390                                defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+i386                             allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                              debian-10.3
+sparc                            allyesconfig
+nds32                             allnoconfig
+nios2                               defconfig
+arc                              allyesconfig
+mips                             allmodconfig
+mips                             allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+powerpc                          allyesconfig
+arc                  randconfig-r043-20211124
+riscv                randconfig-r042-20211124
+s390                 randconfig-r044-20211124
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                    rhel-8.3-kselftests
+
+clang tested configs:
+hexagon              randconfig-r041-20211124
+hexagon              randconfig-r045-20211124
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
