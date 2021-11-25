@@ -2,85 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 720D345D4FE
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Nov 2021 07:53:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BC5B45D57D
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Nov 2021 08:32:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347154AbhKYG4l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Nov 2021 01:56:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42522 "EHLO
+        id S232468AbhKYHfT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Nov 2021 02:35:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350498AbhKYGyk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Nov 2021 01:54:40 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B7FC0613F6
-        for <linux-pm@vger.kernel.org>; Wed, 24 Nov 2021 22:50:18 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id np3so4472634pjb.4
-        for <linux-pm@vger.kernel.org>; Wed, 24 Nov 2021 22:50:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=aLZTzdqAHN4njzqIicuAT3Ic+Y2XtUxhcUjJQMOb7xs=;
-        b=Oe/lr717vm9ZmunvbrWUJEHX1jGZvSJbm3Y05EH9Rhle3p07RjPuGDyL1eUzHS+TQH
-         Br7MfMZK4yoFD7yxQHBxKwjVcViyJhhnuRn3R1dTPbEuNGtwUcsuaSTNHp5vV6sxuzZe
-         LyyySc4RfViFjrPbn7zYCOfy03OhuDDOVqdV0/P4768viANopPp3Tj06bUjngyt59rIV
-         sJ+z6rzgZbh04cspJL2ZwpKbue3Ik9Pe4ZMFTddlEaQAHHR3AvLgItFMIWYmjHapvqEC
-         JwR0FDv2w2XJ0cXz5gXLKt1Mhks2DcagQMgGk8ydf0srGGbm2T9jkVZt3FxHhKC9vjur
-         TMqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=aLZTzdqAHN4njzqIicuAT3Ic+Y2XtUxhcUjJQMOb7xs=;
-        b=ZQq9h7JqEaCeyLN2KS/4j/5jb8ZiX27ykhHENWx1CjDpgXvcu8mcI4OEQty70/VS+1
-         51GPShNRSaCTYKI2bew9+XKOBaBQ2ia7OsAiUZzg5YghzJ/LMqrkN1oQJOvim2aGmeYl
-         486GpOyhhdC+3oVJ2rlZ4GKqp/UXoc21G5PbZvkOy8zUw9uEKPE5IJgwnk1x4WoTbK66
-         8Y/oM2MQ7ekgZ+jsRfRRkiNHRk11TxJfLmpb6eUHHMa5/CfGJCvp+OgjvB+Kmq5eb6Kx
-         jKu9yanood2+Wpy6bwIK+LGrBA4nfd+twZvSVgAD+Uda7WRvsATF1hE1wAaVSJvzZ6be
-         zucg==
-X-Gm-Message-State: AOAM531U8jHMKnFSXJF4r54MSI1NnP84shtQ4FB6wQ1lSWwilgVZkVuB
-        ueM9grraa9DFa4k6vENw5Axn9Q==
-X-Google-Smtp-Source: ABdhPJwUQbsuqcx0cjo2BNSLjskMS4com6gMFeSOWFH+slwNWFckXWeCVRDPV0yGUjpDLtzxQKmEsw==
-X-Received: by 2002:a17:902:e547:b0:141:ddbc:a8d6 with SMTP id n7-20020a170902e54700b00141ddbca8d6mr26876899plf.27.1637823017721;
-        Wed, 24 Nov 2021 22:50:17 -0800 (PST)
-Received: from localhost ([122.181.57.99])
-        by smtp.gmail.com with ESMTPSA id q17sm2154062pfu.117.2021.11.24.22.50.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Nov 2021 22:50:17 -0800 (PST)
-Date:   Thu, 25 Nov 2021 12:20:14 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 0/3] cpufreq: qcom-hw: a few fixes in qcom cpufreq driver
-Message-ID: <20211125065014.phkfugo2wptosrgv@vireshk-i7>
-References: <20211111154808.2024808-1-vladimir.zapolskiy@linaro.org>
+        with ESMTP id S232441AbhKYHdT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Nov 2021 02:33:19 -0500
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86271C06175B;
+        Wed, 24 Nov 2021 23:29:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=AoNS7IlrvP3Cw/y+6cNuB0NOoKwsJQac1U9nQY9aARk=; b=GOd7EmQhZ+dxfQMASMAE7rAhQf
+        m3TRHCjskVh6GiYaotc7iOhCoWLSQMKUXt8/toE3JABI0YuPccAyj9lIxF6LZPzlDPGNgrHkjWsKE
+        Hn14gNNSLAqvpiK6weqNaxhC//5EUbns3bDVMF4p2kDdSQdEoLL8Jsi4zSuk7AwBEjfc=;
+Received: from p200300ccff15b4001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff15:b400:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1mq9C0-0003Aj-6K; Thu, 25 Nov 2021 08:29:16 +0100
+Date:   Thu, 25 Nov 2021 08:29:15 +0100
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Alistair Francis <alistair23@gmail.com>,
+        Alistair Francis <alistair@alistair23.me>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>, lgirdwood@gmail.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        rui.zhang@intel.com, devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-hwmon@vger.kernel.org, amitk@kernel.org,
+        linux-pm@vger.kernel.org, dl-linux-imx <linux-imx@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>
+Subject: Re: [PATCH v15 3/8] mfd: simple-mfd-i2c: Enable support for the
+ silergy,sy7636a
+Message-ID: <20211125082915.534b99fc@aktux>
+In-Reply-To: <39b586c1-aba7-4d82-2c96-9f4ca9db4f11@roeck-us.net>
+References: <20211110122948.188683-1-alistair@alistair23.me>
+        <20211110122948.188683-4-alistair@alistair23.me>
+        <20211116000634.767dcdc0@aktux>
+        <CAKmqyKPFOqWD7t6tC1Act97CVcY+yazrhwMLLr3j_wOyH50GTA@mail.gmail.com>
+        <00d68181-ad3b-17d2-0150-00029d399f0f@roeck-us.net>
+        <20211124203532.30577a50@aktux>
+        <a2fd5089-14a5-e36e-63ce-d73be3cd99a2@roeck-us.net>
+        <20211124235041.2840a770@aktux>
+        <39b586c1-aba7-4d82-2c96-9f4ca9db4f11@roeck-us.net>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211111154808.2024808-1-vladimir.zapolskiy@linaro.org>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Score: -1.0 (-)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11-11-21, 17:48, Vladimir Zapolskiy wrote:
-> I find it essential to resend a fix from Ard and also add two more
-> lesser fixes to the set, review and comments are more than welcome.
-> 
-> Ard Biesheuvel (1):
->   cpufreq: qcom-cpufreq-hw: Avoid stack buffer for IRQ name
-> 
-> Vladimir Zapolskiy (2):
->   cpufreq: qcom-hw: Fix probable nested interrupt handling
->   cpufreq: qcom-hw: Set CPU affinity of dcvsh interrupts
-> 
->  drivers/cpufreq/qcom-cpufreq-hw.c | 17 +++++++++++------
->  1 file changed, 11 insertions(+), 6 deletions(-)
+Hi,
 
-Applied. Thanks.
+On Wed, 24 Nov 2021 14:56:46 -0800
+Guenter Roeck <linux@roeck-us.net> wrote:
 
--- 
-viresh
+[...]
+> >>>> Ordering Information
+> >>>> SY7636 =E2=96=A1(=E2=96=A1=E2=96=A1)=E2=96=A1
+> >>>>                | Temperature Code (C)
+> >>>>             | Package Code (RM)
+> >>>>           | Optional Spec Code (A)
+> >>>>
+> >>>> The datasheet otherwise refers to the chip as SY7636A.
+> >>>>    =20
+> >>> so there is no indication of something like this where the A really
+> >>> makes a difference:
+> >>>     =20
+> >>
+> >> I may be missing it, but I see nothing in the datasheet that would ind=
+icate
+> >> that or if the "A" has any relevance other than "Optional Spec Code",
+> >> and I do not see an explanation for that term either. =20
+> >=20
+> > well things seems to match with things I got from analysing the kobo
+> > sources. So at least the thing in the Kobo Libra H2O seems to be that
+> > one described in the datasheet, so we can have one sy7636a driver for
+> > it.
+> >=20
+> > BTW: If I search for a sy7636 on aliexpress I get some SO-8 lithium
+> > charger ICs.
+> >  =20
+>=20
+> The datasheet says "PMIC for Electronic Paper Display".
+>=20
+Correct. And we have the silergy vendor prefix in the dt compatible, so
+if some other company decides to call its chip sy7636, we can
+distinguish.
+
+Regards,
+Andreas
