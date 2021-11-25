@@ -2,117 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 675E245DC23
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Nov 2021 15:15:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9797D45DCDE
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Nov 2021 16:06:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350338AbhKYOTE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Nov 2021 09:19:04 -0500
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:6050 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239002AbhKYORD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Nov 2021 09:17:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1637849632; x=1669385632;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=9B1kagCGofhMafAlXRiDA3X0zfmqJUebEtDe625FPrc=;
-  b=FnP5F9nhO6KVaQL1aSUsoPwLmx0SOC0NHuZgBdjrTMpRwUfMSWjFqO2c
-   YbHep6FhUenwDPyu5S8P4XyHuFKVGyjYAP6iNn2CAd4YF2VikRO9LLzQA
-   fKBp+E0Vao1M42dpAoX2gCVPeQBhZ8LV0uSNxBbMq53qfCYPFPzyKCfnu
-   E=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 25 Nov 2021 06:13:52 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 06:13:52 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 25 Nov 2021 06:13:51 -0800
-Received: from [10.216.32.234] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Thu, 25 Nov
- 2021 06:13:45 -0800
-Message-ID: <687d97b6-347a-92c0-34ba-00331dfb6c82@quicinc.com>
-Date:   Thu, 25 Nov 2021 19:43:42 +0530
+        id S235366AbhKYPJN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Nov 2021 10:09:13 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:35160 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232933AbhKYPHN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Nov 2021 10:07:13 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id BC3C82193C;
+        Thu, 25 Nov 2021 15:04:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1637852640; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=77jlTeIrtkwCzy1kBCLb2SkHLxssS+UT50zrqiIuDCE=;
+        b=nB6wG5CTmkack7MIOO4HUjUSBi9EmPoIG+CyFjR6tLSnoSiMpX20EM+91hF71rKprFrPbu
+        DxcaHI7RN3xAstWtvfIR/CNhxu8zzIv2NyBpuIVN5qbIuFM3pcWzi6uWNjGyOxpWD7oWJ3
+        sF+T3fZGsiOoBkeznRXYFLLaojXE4iQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1637852640;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=77jlTeIrtkwCzy1kBCLb2SkHLxssS+UT50zrqiIuDCE=;
+        b=0H+ysMseQxltEVifW5+dcWbngxRFEsXHDOIOqUkzKUIrGrcWiIl7vGRIm87TBmGRj3hEDX
+        oseRP/AwU3S9LsDg==
+Received: from [10.163.29.78] (unknown [10.163.29.78])
+        by relay2.suse.de (Postfix) with ESMTP id 0D15DA3B87;
+        Thu, 25 Nov 2021 15:04:00 +0000 (UTC)
+Message-ID: <dbb61b3a2602150aa091d3b456c1866a580e3c53.camel@suse.cz>
+Subject: Re: [PATCH v4 06/22] cpufreq: amd: introduce a new amd pstate
+ driver to support future processors
+From:   Giovanni Gherdovich <ggherdovich@suse.cz>
+To:     Huang Rui <ray.huang@amd.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Borislav Petkov <bp@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>, linux-pm@vger.kernel.org
+Cc:     Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Steven Noonan <steven@valvesoftware.com>,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org
+Date:   Thu, 25 Nov 2021 16:03:58 +0100
+In-Reply-To: <20211119103102.88124-7-ray.huang@amd.com>
+References: <20211119103102.88124-1-ray.huang@amd.com>
+         <20211119103102.88124-7-ray.huang@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] sched/idle: Export cpu_idle_poll_ctrl() symbol
-To:     Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-CC:     <bjorn.andersson@linaro.org>, <rafael@kernel.org>,
-        <daniel.lezcano@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <ulf.hansson@linaro.org>, <quic_lsrao@quicinc.com>,
-        <rnayak@codeaurora.org>, Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        "Vincent Guittot" <vincent.guittot@linaro.org>
-References: <1637831676-32737-1-git-send-email-quic_mkshah@quicinc.com>
- <YZ9ctgCBYJEEjuwt@hirez.programming.kicks-ass.net>
-From:   Maulik Shah <quic_mkshah@quicinc.com>
-In-Reply-To: <YZ9ctgCBYJEEjuwt@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Peter,
-
-On 11/25/2021 3:21 PM, Peter Zijlstra wrote:
-> On Thu, Nov 25, 2021 at 02:44:36PM +0530, Maulik Shah wrote:
->> Export cpu_idle_poll_ctrl() so that module drivers can use same.
-> This does not seem like a really safe interface to expose to the
-> world.
-
-Thanks for the review.
-
-Keeping the cpuidle enabled from boot up may delay/increase the boot up 
-time.
-Below is our use case to force cpuidle to stay in cpu_idle_poll().
-
-We keep cpuidle disabled from boot up using "nohlt" option of kernel 
-command line which internally sets cpu_idle_force_poll = 1;
-and once the device bootup reaches till certain point (for example the 
-android homescreen is up) userspace may notify a
-vendor module driver which can invoke cpu_idle_poll_ctrl(false); to come 
-out of poll mode.
-So vendor module driver needs cpu_idle_poll_ctrl() exported symbol.
-
-We can not take PM-QoS from driver to prevent deep cpuidle since all the 
-vendor modules are kept in a separate partition and will be loaded only 
-after kernel boot up is done
-and by this time kernel already starts executing deep cpuidle modes.
+On Fri, 2021-11-19 at 18:30 +0800, Huang Rui wrote:
+> <snip>
 >
-> Surely the better solution is to rework things to not rely on this. I'm
-> fairly sure it's not hard to write a cpuidle driver that does much the
-> same.
-The other option i think is to pass cpuidle.off=1 in kernel command line 
-and then add enable_cpuidle() in drivers/cpuidle/cpuidle.c
-something similar as below which can be called by vendor module.
+> Performance Per Watt (PPW) Calculation:
+> 
+> The PPW calculation is referred by below paper:
+> https://software.intel.com/content/dam/develop/external/us/en/documents/performance-per-what-paper.pdf
+> 
+> Below formula is referred from below spec to measure the PPW:
+> 
+> (F / t) / P = F * t / (t * E) = F / E,
+> 
+> "F" is the number of frames per second.
+> "P" is power measured in watts.
+> "E" is energy measured in joules.
 
-void enable_cpuidle(void)
-{
-         off = 0;
-}
-EXPORT_SYMBOL_GPL(enable_cpuidle);
+Hello, I'd appreciate if you can remove the reference to the above paper and
+formula, because it is not really relevant to this context, and ends up being
+confusing.
 
-This may be a good option since we have already disable_cpuidle() but 
-not enable_cpuidle().
+It describes performance per watt tailored to graphics benchmarks, in the form
+of frames per joule. Nothing wrong with that, but it only works for tests that
+measure frames per second, and none of the tests below is of that type.
 
-void disable_cpuidle(void)
-{
-         off = 1;
-}
+You have:
 
-Hi Rafael/Daniel, can you please let me know your suggestion on 
-this/similar implementation?
+- tbench measures throughput (MB/sec)
+- gitsource, aka run the git test suite, measures elapsed time
+- speedometer, a web browser test that gives "runs per minute"
 
-Thanks,
-Maulik
+If you want performance per watt, you need to express your result as
+"operations per second", where "operations" is up to you to define. For
+tbench, one "operation" is moving a MB of data. For speedometer, one
+"operation" is one "run", as defined in the benchmark. Once you have op/sec
+(aka performance), divide by the average power measured over the entire
+duration of the benchmark.
+
+In cases like gitsource, where you have elapsed_time as a result, performance
+per watt is 1 / (elapsed_time * average_power).
+
+> We use the RAPL interface with "perf" tool to get the energy data of the
+> package power.
+> 
+> The data comparisons between amd-pstate and acpi-freq module are tested on
+> AMD Cezanne processor:
+> 
+> 1) TBench CPU benchmark:
+> 
+> +---------------------------------------------------------------------+
+> >                                                                     |
+> >               TBench (Performance Per Watt)                         |
+> >                                                    Higher is better |
+> +-------------------+------------------------+------------------------+
+> >                   |  Performance Per Watt  |  Performance Per Watt  |
+> >   Kernel Module   |       (Schedutil)      |       (Ondemand)       |
+> >                   |  Unit: MB / (s * J)    |  Unit: MB / (s * J)    |
+
+The unit "MB / (s * J)" doesn't really work, it should be "MB / (sec * watt)".
+Can you double check that you divided the performance result by the average
+power? Same for the other tests.
+
+It is also relevant to show performance, alongside with perf-per-watt.
+
+
+Thanks!
+Giovanni
+
