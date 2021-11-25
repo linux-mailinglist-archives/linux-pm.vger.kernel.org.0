@@ -2,107 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BC5B45D57D
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Nov 2021 08:32:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D118445D687
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Nov 2021 09:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232468AbhKYHfT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Nov 2021 02:35:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51008 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232441AbhKYHdT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Nov 2021 02:33:19 -0500
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86271C06175B;
-        Wed, 24 Nov 2021 23:29:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=AoNS7IlrvP3Cw/y+6cNuB0NOoKwsJQac1U9nQY9aARk=; b=GOd7EmQhZ+dxfQMASMAE7rAhQf
-        m3TRHCjskVh6GiYaotc7iOhCoWLSQMKUXt8/toE3JABI0YuPccAyj9lIxF6LZPzlDPGNgrHkjWsKE
-        Hn14gNNSLAqvpiK6weqNaxhC//5EUbns3bDVMF4p2kDdSQdEoLL8Jsi4zSuk7AwBEjfc=;
-Received: from p200300ccff15b4001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff15:b400:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1mq9C0-0003Aj-6K; Thu, 25 Nov 2021 08:29:16 +0100
-Date:   Thu, 25 Nov 2021 08:29:15 +0100
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Alistair Francis <alistair23@gmail.com>,
-        Alistair Francis <alistair@alistair23.me>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>, lgirdwood@gmail.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        rui.zhang@intel.com, devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-hwmon@vger.kernel.org, amitk@kernel.org,
-        linux-pm@vger.kernel.org, dl-linux-imx <linux-imx@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: Re: [PATCH v15 3/8] mfd: simple-mfd-i2c: Enable support for the
- silergy,sy7636a
-Message-ID: <20211125082915.534b99fc@aktux>
-In-Reply-To: <39b586c1-aba7-4d82-2c96-9f4ca9db4f11@roeck-us.net>
-References: <20211110122948.188683-1-alistair@alistair23.me>
-        <20211110122948.188683-4-alistair@alistair23.me>
-        <20211116000634.767dcdc0@aktux>
-        <CAKmqyKPFOqWD7t6tC1Act97CVcY+yazrhwMLLr3j_wOyH50GTA@mail.gmail.com>
-        <00d68181-ad3b-17d2-0150-00029d399f0f@roeck-us.net>
-        <20211124203532.30577a50@aktux>
-        <a2fd5089-14a5-e36e-63ce-d73be3cd99a2@roeck-us.net>
-        <20211124235041.2840a770@aktux>
-        <39b586c1-aba7-4d82-2c96-9f4ca9db4f11@roeck-us.net>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S1348855AbhKYJAZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Nov 2021 04:00:25 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:17462 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1347256AbhKYI6Y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Nov 2021 03:58:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1637830514; x=1669366514;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=r7GIIZvrFMco61k+OSGwSvJkeX/1O1fu0L7TKc0IwCs=;
+  b=c5Y3NmsQML31Uq0+IOddmHCeoRMgfehS6MoCXn4pGv/4U+ZYjHeOCXnV
+   feKNjlT6eM4SuLZ8kRHaG139uuFMS2vNvP5+hbhUfscjbMytV+jTn9AjK
+   Oi+HYng6qee7sq2kWH/SCGVnGjFlZQssM5MWoQcjvAoud5uU6Z9Tw1iv8
+   U=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 25 Nov 2021 00:55:13 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 00:55:13 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 25 Nov 2021 00:55:13 -0800
+Received: from mkshah-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 25 Nov 2021 00:55:09 -0800
+From:   Maulik Shah <quic_mkshah@quicinc.com>
+To:     <bjorn.andersson@linaro.org>, <rafael@kernel.org>,
+        <daniel.lezcano@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <ulf.hansson@linaro.org>,
+        <quic_lsrao@quicinc.com>, <rnayak@codeaurora.org>,
+        Maulik Shah <quic_mkshah@quicinc.com>
+Subject: [PATCH 0/4] Allow cpuidle governors to be compiled as modules
+Date:   Thu, 25 Nov 2021 14:24:37 +0530
+Message-ID: <1637830481-21709-1-git-send-email-quic_mkshah@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Score: -1.0 (-)
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+This series makes changes to allow cpuidle governors menu, ladder and teo
+to compiled as modules when building with allmodconfig.
 
-On Wed, 24 Nov 2021 14:56:46 -0800
-Guenter Roeck <linux@roeck-us.net> wrote:
+Patch 3 of the series is taken from [1] which brings back the change
+removed in Commit 83788c0caed3 ("cpuidle: remove unused exports").
 
-[...]
-> >>>> Ordering Information
-> >>>> SY7636 =E2=96=A1(=E2=96=A1=E2=96=A1)=E2=96=A1
-> >>>>                | Temperature Code (C)
-> >>>>             | Package Code (RM)
-> >>>>           | Optional Spec Code (A)
-> >>>>
-> >>>> The datasheet otherwise refers to the chip as SY7636A.
-> >>>>    =20
-> >>> so there is no indication of something like this where the A really
-> >>> makes a difference:
-> >>>     =20
-> >>
-> >> I may be missing it, but I see nothing in the datasheet that would ind=
-icate
-> >> that or if the "A" has any relevance other than "Optional Spec Code",
-> >> and I do not see an explanation for that term either. =20
-> >=20
-> > well things seems to match with things I got from analysing the kobo
-> > sources. So at least the thing in the Kobo Libra H2O seems to be that
-> > one described in the datasheet, so we can have one sy7636a driver for
-> > it.
-> >=20
-> > BTW: If I search for a sy7636 on aliexpress I get some SO-8 lithium
-> > charger ICs.
-> >  =20
->=20
-> The datasheet says "PMIC for Electronic Paper Display".
->=20
-Correct. And we have the silergy vendor prefix in the dt compatible, so
-if some other company decides to call its chip sy7636, we can
-distinguish.
+[1] https://lore.kernel.org/all/010101746fc98add-45e77496-d2d6-4bc1-a1ce-0692599a9a7a-000000@us-west-2.amazonses.com/
 
-Regards,
-Andreas
+Lina Iyer (1):
+  cpuidle: governor: export cpuidle governor functions
+
+Maulik Shah (3):
+  tick/sched: Export symbols used by cpuidle governors
+  sched/core: Export symbols used by cpuidle governors
+  cpuidle: governors: Allow the governors to be compiled as modules
+
+ drivers/cpuidle/Kconfig            | 6 +++---
+ drivers/cpuidle/governor.c         | 2 ++
+ drivers/cpuidle/governors/ladder.c | 4 ++++
+ drivers/cpuidle/governors/menu.c   | 4 ++++
+ drivers/cpuidle/governors/teo.c    | 4 ++++
+ kernel/sched/core.c                | 1 +
+ kernel/time/tick-sched.c           | 5 +++++
+ 7 files changed, 23 insertions(+), 3 deletions(-)
+
+-- 
+2.7.4
+
