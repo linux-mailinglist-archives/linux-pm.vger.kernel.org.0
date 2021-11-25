@@ -2,151 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C48A45DFFD
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Nov 2021 18:49:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F3BD45E083
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Nov 2021 19:25:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236265AbhKYRxH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Nov 2021 12:53:07 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55930 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242201AbhKYRvG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 25 Nov 2021 12:51:06 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C9DD6610F8;
-        Thu, 25 Nov 2021 17:47:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637862475;
-        bh=XpDIv730mgFE1qt/Qxxr4XwiiISkabpqqXicAdNUWXw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=d3cxN6e/BR+AWWg5G61DNnT/M6twroFnUFGdMJgWN/g9bUV9bAsMExx+N4LydMgB+
-         EbCsMGydcGljISBYAh61JdxpPqq/ANOfxf2Y7yV7jjpddUxjxWC1FQNuI4GgX3n003
-         QARwNe2+fjuGVAmgNbjqqtOYYdsA9idAIvrRNYHheYxtngRzU0D38O7/500+8XBVqS
-         bz6Qfz6MhPBAxMrldLyJJzCpjABmwRjPA01WESyfLHhPsbVEN23abRkCc5W2XiilWZ
-         DdU3H2XYlqCjYkVwINyx78HYD+ZVVlZPH8Mir2s9ZPusEwIZA1HOW6BI9h+b6IlywH
-         C/XVULDWSyleg==
-From:   Georgi Djakov <djakov@kernel.org>
-To:     djakov@kernel.org, quic_mdtipton@quicinc.com,
-        okukatla@codeaurora.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mike Tipton <mdtipton@codeaurora.org>
-Subject: [PATCH v3] interconnect: qcom: icc-rpmh: Add BCMs to commit list in pre_aggregate
-Date:   Thu, 25 Nov 2021 19:47:51 +0200
-Message-Id: <20211125174751.25317-1-djakov@kernel.org>
-X-Mailer: git-send-email 2.29.0
+        id S229592AbhKYS2m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Nov 2021 13:28:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55312 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233311AbhKYS0m (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Nov 2021 13:26:42 -0500
+X-Greylist: delayed 586 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 25 Nov 2021 10:14:22 PST
+Received: from vulcan.kevinlocke.name (vulcan.kevinlocke.name [IPv6:2001:19f0:5:727:1e84:17da:7c52:5ab4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4027DC06179B;
+        Thu, 25 Nov 2021 10:14:22 -0800 (PST)
+Received: from kevinolos.kevinlocke.name (2600-6c67-5000-3d1b-acf4-78ed-e050-e54b.res6.spectrum.com [IPv6:2600:6c67:5000:3d1b:acf4:78ed:e050:e54b])
+        (Authenticated sender: kevin@kevinlocke.name)
+        by vulcan.kevinlocke.name (Postfix) with ESMTPSA id 1B6C828D37FA;
+        Thu, 25 Nov 2021 18:04:34 +0000 (UTC)
+Received: by kevinolos.kevinlocke.name (Postfix, from userid 1000)
+        id DF4FB13003B1; Thu, 25 Nov 2021 11:04:32 -0700 (MST)
+Date:   Thu, 25 Nov 2021 11:04:32 -0700
+From:   Kevin Locke <kevin@kevinlocke.name>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc:     linux-pm@vger.kernel.org, ibm-acpi-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [ibm-acpi-devel] [PATCH 0/4] power: supply: add charge_behaviour
+ property (force-discharge, inhibit-charge)
+Message-ID: <YZ/QMNQIe04x/tkF@kevinlocke.name>
+Mail-Followup-To: Kevin Locke <kevin@kevinlocke.name>,
+        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+        linux-pm@vger.kernel.org, ibm-acpi-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211123232704.25394-1-linux@weissschuh.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211123232704.25394-1-linux@weissschuh.net>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Mike Tipton <mdtipton@codeaurora.org>
+On Wed, 2021-11-24 at 00:27 +0100, Thomas Weißschuh wrote:
+> this series adds support for the charge_behaviour property to the power
+> subsystem and thinkpad_acpi driver.
 
-We're only adding BCMs to the commit list in aggregate(), but there are
-cases where pre_aggregate() is called without subsequently calling
-aggregate(). In particular, in icc_sync_state() when a node with initial
-BW has zero requests. Since BCMs aren't added to the commit list in
-these cases, we don't actually send the zero BW request to HW. So the
-resources remain on unnecessarily.
+Wonderful!  Thanks for working on this.
 
-Add BCMs to the commit list in pre_aggregate() instead, which is always
-called even when there are no requests.
+I can confirm inhibit-charge and force-discharge states work with
+patch v2 on v5.16-rc2 on a T430 (2342-CTO) with BIOS G1ETC2WW (2.82 ),
+EC G1HT36WW and a single battery.  Most behavior is as expected:
 
-Signed-off-by: Mike Tipton <mdtipton@codeaurora.org>
-[georgi: remove icc_sync_state for platforms with incomplete support]
-Signed-off-by: Georgi Djakov <djakov@kernel.org>
----
-v3:
-* This patch lowers the power consumption of the boards that have
-  (almost) full interconnect support enabled in their client drivers.
-  This might cause however issues on platforms with very minimal
-  interconnect support that have the sync_state callback set.
-  We remove the sync_state callback for these platforms to prevent
-  them from turning off any interconnects that have no clients yet.
+- With force-discharge, status becomes "Discharging" and energy_now
+  drops over time while AC remains connected.
+- With inhibit-charge, status becomes "Unknown" and energy_now is
+  stable over time, even when not fully charged.
+- With auto, status becomes "Charging" and energy_now rises over time.
+- charge_behaviour takes precedence over
+  charge_control_{start,end}_threshold: status remains
+  Discharging/Unknown when below the start threshold, either due to
+  discharge or threshold change.
+- charge_behaviour is preserved over soft reboot.
+- inhibit-charge/auto are preserved across battery removal and
+  reinsertion.
+- inhibit-charge/auto are preserved across s2ram (S3).
+- With force-discharge, if the battery is removed, the machine
+  immediately powers off.
 
-v2: https://lore.kernel.org/lkml/20210721175432.2119-5-mdtipton@codeaurora.org/
+Some behavior is a little surprising:
 
- drivers/interconnect/qcom/icc-rpmh.c | 10 +++++-----
- drivers/interconnect/qcom/sm8150.c   |  1 -
- drivers/interconnect/qcom/sm8250.c   |  1 -
- drivers/interconnect/qcom/sm8350.c   |  1 -
- 4 files changed, 5 insertions(+), 8 deletions(-)
+- charge_behaviour can not be set to force-discharge if AC is
+  disconnected (EIO).  If charge_behaviour is force-discharge when AC
+  is disconnected, it changes to auto, unlike inhibit-charge.
+- charge_behavior force-discharge is not preserved across s2ram (S3),
+  unlike inhibit-charge.
+- charge_behaviour is not preserved across hard reset (unlike charge
+  thresholds).  Interestingly, it appears that inhibit-charge is
+  preserved across power-off (no charging is observed while powered
+  off) but not power-on, even though it is preserved across soft
+  reboot, as noted above.
 
-diff --git a/drivers/interconnect/qcom/icc-rpmh.c b/drivers/interconnect/qcom/icc-rpmh.c
-index 3eb7936d2cf6..2c8e12549804 100644
---- a/drivers/interconnect/qcom/icc-rpmh.c
-+++ b/drivers/interconnect/qcom/icc-rpmh.c
-@@ -21,13 +21,18 @@ void qcom_icc_pre_aggregate(struct icc_node *node)
- {
- 	size_t i;
- 	struct qcom_icc_node *qn;
-+	struct qcom_icc_provider *qp;
- 
- 	qn = node->data;
-+	qp = to_qcom_provider(node->provider);
- 
- 	for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
- 		qn->sum_avg[i] = 0;
- 		qn->max_peak[i] = 0;
- 	}
-+
-+	for (i = 0; i < qn->num_bcms; i++)
-+		qcom_icc_bcm_voter_add(qp->voter, qn->bcms[i]);
- }
- EXPORT_SYMBOL_GPL(qcom_icc_pre_aggregate);
- 
-@@ -45,10 +50,8 @@ int qcom_icc_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
- {
- 	size_t i;
- 	struct qcom_icc_node *qn;
--	struct qcom_icc_provider *qp;
- 
- 	qn = node->data;
--	qp = to_qcom_provider(node->provider);
- 
- 	if (!tag)
- 		tag = QCOM_ICC_TAG_ALWAYS;
-@@ -68,9 +71,6 @@ int qcom_icc_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
- 	*agg_avg += avg_bw;
- 	*agg_peak = max_t(u32, *agg_peak, peak_bw);
- 
--	for (i = 0; i < qn->num_bcms; i++)
--		qcom_icc_bcm_voter_add(qp->voter, qn->bcms[i]);
--
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(qcom_icc_aggregate);
-diff --git a/drivers/interconnect/qcom/sm8150.c b/drivers/interconnect/qcom/sm8150.c
-index 2a85f53802b5..745e3c36a61a 100644
---- a/drivers/interconnect/qcom/sm8150.c
-+++ b/drivers/interconnect/qcom/sm8150.c
-@@ -535,7 +535,6 @@ static struct platform_driver qnoc_driver = {
- 	.driver = {
- 		.name = "qnoc-sm8150",
- 		.of_match_table = qnoc_of_match,
--		.sync_state = icc_sync_state,
- 	},
- };
- module_platform_driver(qnoc_driver);
-diff --git a/drivers/interconnect/qcom/sm8250.c b/drivers/interconnect/qcom/sm8250.c
-index 8dfb5dea562a..aa707582ea01 100644
---- a/drivers/interconnect/qcom/sm8250.c
-+++ b/drivers/interconnect/qcom/sm8250.c
-@@ -551,7 +551,6 @@ static struct platform_driver qnoc_driver = {
- 	.driver = {
- 		.name = "qnoc-sm8250",
- 		.of_match_table = qnoc_of_match,
--		.sync_state = icc_sync_state,
- 	},
- };
- module_platform_driver(qnoc_driver);
-diff --git a/drivers/interconnect/qcom/sm8350.c b/drivers/interconnect/qcom/sm8350.c
-index 3e26a2175b28..c79f93a1ac73 100644
---- a/drivers/interconnect/qcom/sm8350.c
-+++ b/drivers/interconnect/qcom/sm8350.c
-@@ -531,7 +531,6 @@ static struct platform_driver qnoc_driver = {
- 	.driver = {
- 		.name = "qnoc-sm8350",
- 		.of_match_table = qnoc_of_match,
--		.sync_state = icc_sync_state,
- 	},
- };
- module_platform_driver(qnoc_driver);
+I assume the behavior is under the control of the EC, so these aren't
+criticisms of the patch.  Just some observations.
+
+Tested-by: Kevin Locke <kevin@kevinlocke.name>
+
+Thanks again,
+Kevin
