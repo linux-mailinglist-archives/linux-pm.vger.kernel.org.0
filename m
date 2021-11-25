@@ -2,125 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 673F945E275
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Nov 2021 22:28:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C174345E330
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Nov 2021 00:06:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343564AbhKYVbd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Nov 2021 16:31:33 -0500
-Received: from mail-oi1-f179.google.com ([209.85.167.179]:42654 "EHLO
-        mail-oi1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241687AbhKYV3c (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Nov 2021 16:29:32 -0500
-Received: by mail-oi1-f179.google.com with SMTP id n66so14913242oia.9;
-        Thu, 25 Nov 2021 13:26:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=G/HOoCkE7F4KtFddRguEHWeaPLGWRwjij7xDaewa9ig=;
-        b=cjKAjTBisuU4TabmtFy9doiPZ66PP9oF/tHPiZ7BzEVdfbt/spwhB67k1d/f0GuZqT
-         AAP2wsvR3oSH4BspI29vTMawDMhiI0fGrv/dZLWlC4lyXCcnPME9lWXNLTg0RaXrHYxp
-         m4mteMEmb2sOEoPTMaEIEqFzu3yDTuQppwpcBD8aN4QbB2zQ0zerovPZO09Osjh0pYNP
-         NkXKPgbpwIfiw/McNmWynEydGF8/dpEYeokavkcpTzRkuo1j+7yUNcE3Bu8s5B2If2Se
-         HefgsHY8H9AmlJ6AjGpRqGxkMYekI0atWwABU4h1P0SMZ7N7uQUiYPCQlhbFoNsEe34Z
-         phWg==
-X-Gm-Message-State: AOAM532O/oJ7Tfh3oKCo3UXHGQQ5JnLW9zIPNyBUvqLgOOonre5LIq6t
-        H0OwPDi5U0OM4vuY/dTUUzvxyQgb9A==
-X-Google-Smtp-Source: ABdhPJzppe2WKUD4k7V69gomdFEgKeo+K1tcz1FiRDpp4KvwAgBEkEW8CrnaQh4FKneeTrN151vVVA==
-X-Received: by 2002:a05:6808:1392:: with SMTP id c18mr18839736oiw.53.1637875580250;
-        Thu, 25 Nov 2021 13:26:20 -0800 (PST)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id s1sm650568ooo.11.2021.11.25.13.26.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Nov 2021 13:26:19 -0800 (PST)
-Received: (nullmailer pid 2858307 invoked by uid 1000);
-        Thu, 25 Nov 2021 21:26:02 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, lukasz.luba@arm.com,
-        ulf.hansson@linaro.org, arnd@linaro.org,
-        linux-kernel@vger.kernel.org, heiko@sntech.de,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, rjw@rjwysocki.net
-In-Reply-To: <20211124125506.2971069-1-daniel.lezcano@linaro.org>
-References: <20211124125506.2971069-1-daniel.lezcano@linaro.org>
-Subject: Re: [PATCH 1/5] dt-bindings: Powerzone new bindings
-Date:   Thu, 25 Nov 2021 14:26:02 -0700
-Message-Id: <1637875562.234693.2858306.nullmailer@robh.at.kernel.org>
+        id S1346596AbhKYXJy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Nov 2021 18:09:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59812 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234127AbhKYXHy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Nov 2021 18:07:54 -0500
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CDA0C06175C;
+        Thu, 25 Nov 2021 14:59:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=wQuHXlBFJqnlo5nDE5hfSpy5l/NqT3aDB+7JK7woqu4=; b=BhFtjZXvSCNH7azkiOJi+/qe1N
+        8y/UacMTEMpB4RGwUoM/uQHtKdYLx0D/6TBB2JdY9+ggh0kC7xU9XbzNjwNLfKXps25m87zwQkY3H
+        5pXEQd+7T2qnMojZ2L/pW7zNYrAKO4QYitZtCw4uGA2x9K1t36+h/r1jwwnm0vWbsbzI=;
+Received: from p200300ccff2cb1001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff2c:b100:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1mqNiK-0000SS-EK; Thu, 25 Nov 2021 23:59:36 +0100
+Date:   Thu, 25 Nov 2021 23:59:35 +0100
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     Alistair Francis <alistair23@gmail.com>
+Cc:     Alistair Francis <alistair@alistair23.me>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>, lgirdwood@gmail.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        rui.zhang@intel.com, devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-hwmon@vger.kernel.org, amitk@kernel.org,
+        linux-pm@vger.kernel.org, dl-linux-imx <linux-imx@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>, Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v15 1/8] dt-bindings: mfd: Initial commit of
+ silergy,sy7636a.yaml
+Message-ID: <20211125235935.5a1b7d33@aktux>
+In-Reply-To: <CAKmqyKP_gQ1qSADMPwmyf-V0TqGOYf2GitzpDXsmBUO6_iqK7Q@mail.gmail.com>
+References: <20211110122948.188683-1-alistair@alistair23.me>
+        <20211110122948.188683-2-alistair@alistair23.me>
+        <20211117223950.3a7eaf7a@aktux>
+        <CAKmqyKP_gQ1qSADMPwmyf-V0TqGOYf2GitzpDXsmBUO6_iqK7Q@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -1.0 (-)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 24 Nov 2021 13:55:00 +0100, Daniel Lezcano wrote:
-> The proposed bindings are describing a set of powerzones.
-> 
-> A power zone is the logical name for a component which is capable of
-> power capping and where we can measure the power consumption.
-> 
-> A power zone can aggregate several power zones in terms of power
-> measurement and power limitations. That allows to apply power
-> constraint to a group of components and let the system balance the
-> allocated power in order to comply with the constraint.
-> 
-> The ARM System Control and Management Interface (SCMI) can provide a
-> power zone description.
-> 
-> The powerzone semantic is also found on the Intel platform with the
-> RAPL register.
-> 
-> The Linux kernel powercap framework deals with the powerzones:
-> 
-> https://www.kernel.org/doc/html/latest/power/powercap/powercap.html
-> 
-> The powerzone can also represent a group of children powerzones, hence
-> the description can result on a hierarchy. Such hierarchy already
-> exists with the hardware or can be represented an computed from the
-> kernel.
-> 
-> The hierarchical description was initially proposed but not desired
-> given there are other descriptions like the power domain proposing
-> almost the same description.
-> 
-> https://lore.kernel.org/all/CAL_JsqLuLcHj7525tTUmh7pLqe7T2j6UcznyhV7joS8ipyb_VQ@mail.gmail.com/
-> 
-> The description gives the power constraint dependencies to apply on a
-> specific group of logically or physically aggregated devices. They do
-> not represent the physical location or the power domains of the SoC
-> even if the description could be similar.
-> 
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->  .../devicetree/bindings/power/powerzones.yaml | 95 +++++++++++++++++++
->  1 file changed, 95 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/powerzones.yaml
-> 
+On Tue, 23 Nov 2021 23:29:26 +1000
+Alistair Francis <alistair23@gmail.com> wrote:
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> On Thu, Nov 18, 2021 at 7:40 AM Andreas Kemnade <andreas@kemnade.info> wrote:
+> >
+> > On Wed, 10 Nov 2021 22:29:41 +1000
+> > Alistair Francis <alistair@alistair23.me> wrote:
+> >  
+> > > Initial support for the Silergy SY7636A Power Management chip
+> > > and regulator.
+> > >
+> > > Signed-off-by: Alistair Francis <alistair@alistair23.me>
+> > > Reviewed-by: Rob Herring <robh@kernel.org>
+> > > Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+> > > ---
+> > >  .../bindings/mfd/silergy,sy7636a.yaml         | 79 +++++++++++++++++++
+> > >  1 file changed, 79 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml b/Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml
+> > > new file mode 100644
+> > > index 000000000000..0566f9498e2f
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml  
+> > [...]  
+> > > +  regulators:
+> > > +    type: object
+> > > +
+> > > +    properties:
+> > > +      compatible:
+> > > +        const: silergy,sy7636a-regulator
+> > > +
+> > > +      vcom:
+> > > +        type: object
+> > > +        $ref: /schemas/regulator/regulator.yaml#
+> > > +        properties:
+> > > +          regulator-name:
+> > > +            const: vcom
+> > > +  
+> > hmm, this is what? If I understand it correctly, vcom means some
+> > voltage for compensation. On other comparable pmics (e.g. TPS65185
+> > which has also a sane public datasheet, MAX17135) I have seen some
+> > methods to measure a voltage while the display is doing something
+> > defined and then program this voltage non-volatile for compensation
+> > during manufacturing.
+> >
+> > If I understand the code correctly all the bunch of voltages are
+> > powered up if this one is enabled.
+> > So at least a description should be suitable.
+> >
+> > The other comparable PMICs have at least regulators named VCOM, DISPLAY
+> > (controls several regulators, started with delays configured via
+> > registers) and V3P3. MAX17135 source can be found in NXP kernels,
+> > TPS65185 in Kobo vendor kernels.
+> >
+> > So I would expect to see something similar here and a description or at
+> > least not such a misleading name as vcom if it is for some reason not
+> > feasible to separate the regulators.  
+> 
+> This is a vcom in the sense of voltage for compensation. We just
+> currently don't support setting the vcom.
+> 
+> I had a look at the Kobo code and this is similar to
+> https://github.com/akemnade/linux/blob/kobo/epdc-pmic-5.15/drivers/regulator/sy7636-regulator.c#L614
+> 
+> So I think that vcom is still the appropriate name for this.
+> 
+seems that you did not get me. If I understand the code behind it
+correctly, it turns on all power rails (the +-15V stuff, VEE and so on)
+with the defined delays, not just vcom because it sets
+SY7636A_OPERATION_MODE_CRL_ONOFF. Controlling VCOM separately is possible
+by using SY7636A_OPERATION_MODE_CRL_VCOMCTL in combintion with a
+vcom_en gpio.
 
-yamllint warnings/errors:
+I do not see a reason to turn on vcom only without the other higher
+voltage rails, so the behaviour is not necessarily wrong but if I read
+the binding documentation I would expect that just vcom is turned on.
+That is the mismatch I am talking about.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/powerzones.yaml: 'additionalProperties' is a required property
-	hint: A schema without a "$ref" to another schema must define all properties and use "additionalProperties"
-	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/powerzones.yaml: ignoring, error in schema: 
-warning: no schema found in file: ./Documentation/devicetree/bindings/power/powerzones.yaml
+If we agree on this idea that one regulator is enabling everything, I
+would adapt my EPDC drm driver and tps65185 driver (which are both in
+my clean up to be upstreamable-queue). 
 
-doc reference errors (make refcheckdocs):
+Just another thing to compare with:
+https://github.com/Freescale/linux-fslc/blob/4.1-2.0.x-imx/drivers/regulator/max17135-regulator.c
+that seems to be the starting point for kobo vendor kernel epd pmics.
+They seem to have taken the source and modified things. There we have
+regulators with empty ops for that step-up converted stuff, a separate
+vcom and a display regulator which really controls all of these step-up
+things.
 
-See https://patchwork.ozlabs.org/patch/1559118
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Regards,
+Andreas
