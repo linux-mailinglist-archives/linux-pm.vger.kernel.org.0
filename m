@@ -2,27 +2,27 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AE7145E648
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Nov 2021 04:01:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D10C145E64B
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Nov 2021 04:01:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243086AbhKZCue (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Nov 2021 21:50:34 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50268 "EHLO mail.kernel.org"
+        id S244007AbhKZCuf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Nov 2021 21:50:35 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51034 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1358957AbhKZCp0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 25 Nov 2021 21:45:26 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3CF36611B0;
-        Fri, 26 Nov 2021 02:36:22 +0000 (UTC)
+        id S1347140AbhKZCqM (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 25 Nov 2021 21:46:12 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 543AD61360;
+        Fri, 26 Nov 2021 02:36:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637894183;
-        bh=cUa1rjRlOgH3cNAuyeNmMadLMFU3Vu5drn9Z481Poio=;
+        s=k20201202; t=1637894208;
+        bh=N0rQCeL0XvL1EkFMKTp3WwvJePTceoLtNUNCB+7eYFY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nDsCO1c4hJDfT3+JJxKVd91I0X4u34yJwQgPEloE8xXe3C+6vNudGie4XQKTDCUVD
-         dhgsi33qUXGAKUR125gQc0GVc1G4/foCPbDQNEC4e+GcvM/HL7ks4WG7WaZsDbBYuC
-         rrd8leTd6IHL/N9hFV+BUQh3somP3qsKH+qcwAvGN6hxbcO15PULlGv50pfwXwRhb0
-         gKYfTEvoU0oPJpBKbHmDsPBDUxGKsL9T/gwf3eb1o0PI55L+K7VHhEVlfqy8dmYPJ2
-         NxNFWGfrwPz1Dx/WJPyAiL7DGY3gaG9LXawzjSB4X09U6ff7XjZM9qXSQ9jem2VTug
-         ylPSidgfkCM1w==
+        b=L5y0Sn+JssiVvaBs+NI8xJJ9P453XMC3oN2Mjr7RK8JlKc+YKL0s+zYC3sBRWKTZV
+         AP5rwg8eVYXBzfvDRDpIpCOg1wD4UpGt/5u5ViKHgGJM7+IyMPP/n2+9uuxrJ43YsD
+         mM+NwtV9VE2ULQ1wQ0megZu9dykjBEqsQJI0jSfabwnwLWJeSGFEkE2gkqccJ98yxb
+         kiY9B9vCq3U08fiCWogVzJ9qiaGVvaHzHwQJqK5g3rsxsOoEmh6LF/FYS+wcg1iUP3
+         XhdStAltCuyNphkCZU2Gj1FELN4Rvw4o0PP8ABhj45Etc0y4hviJ2IN7GJ4k7J1lWQ
+         j+fdgVaKN3ojA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Manaf Meethalavalappu Pallikunhi <manafm@codeaurora.org>,
@@ -30,12 +30,12 @@ Cc:     Manaf Meethalavalappu Pallikunhi <manafm@codeaurora.org>,
         "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>, rafael@kernel.org,
         daniel.lezcano@linaro.org, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 07/12] thermal: core: Reset previous low and high trip during thermal zone init
-Date:   Thu, 25 Nov 2021 21:36:03 -0500
-Message-Id: <20211126023611.443098-7-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 4/8] thermal: core: Reset previous low and high trip during thermal zone init
+Date:   Thu, 25 Nov 2021 21:36:36 -0500
+Message-Id: <20211126023640.443271-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211126023611.443098-1-sashal@kernel.org>
-References: <20211126023611.443098-1-sashal@kernel.org>
+In-Reply-To: <20211126023640.443271-1-sashal@kernel.org>
+References: <20211126023640.443271-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -73,10 +73,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+)
 
 diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 94820f25a15ff..8374b8078b7df 100644
+index 4c2dc3a59eb59..5ef30ba3b73a4 100644
 --- a/drivers/thermal/thermal_core.c
 +++ b/drivers/thermal/thermal_core.c
-@@ -457,6 +457,8 @@ static void thermal_zone_device_init(struct thermal_zone_device *tz)
+@@ -601,6 +601,8 @@ static void thermal_zone_device_init(struct thermal_zone_device *tz)
  {
  	struct thermal_instance *pos;
  	tz->temperature = THERMAL_TEMP_INVALID;
