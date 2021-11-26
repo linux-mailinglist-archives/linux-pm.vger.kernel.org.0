@@ -2,92 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32A6D45F2D2
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Nov 2021 18:24:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AFD145F352
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Nov 2021 19:01:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbhKZR1W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 Nov 2021 12:27:22 -0500
-Received: from mail-oi1-f169.google.com ([209.85.167.169]:39817 "EHLO
-        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233020AbhKZRZV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Nov 2021 12:25:21 -0500
-Received: by mail-oi1-f169.google.com with SMTP id bf8so20012925oib.6;
-        Fri, 26 Nov 2021 09:22:08 -0800 (PST)
+        id S235976AbhKZSEy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 Nov 2021 13:04:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53602 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231250AbhKZSCy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Nov 2021 13:02:54 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4858C0613F1
+        for <linux-pm@vger.kernel.org>; Fri, 26 Nov 2021 09:40:30 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id j140-20020a1c2392000000b003399ae48f58so11225606wmj.5
+        for <linux-pm@vger.kernel.org>; Fri, 26 Nov 2021 09:40:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=W8td6vEPKxADiJQFmlrhuwiA6Bp6UV5M0SX5QzKONIo=;
+        b=BfjoJUobqTMEq9KNZqO/G4e3eTzCqfn2c/zMsEGs8rQ/X/tDm2m7NrxstzLNg3Riux
+         LfyMk9cL1qjovsTfZY0HHxyZuCCAKwp73rX5NKILX4c8puU11FV4TRhZRwOAGuUjQvcQ
+         8PoxTHipOiU02voQDwN2amVe26qugqcy+18EFrkO9TXbNcp5ki1AW2nSOXdU/BcH3Cfq
+         xEgyQMgG1MXZbvjGd9dEvhZ2AKgFKHp9jgYO0o2/v72uU8wU8slXxpgd1SG88VlFb0Hx
+         2VjIHLHeJrE+dTwBCjsuXHY6Mk8FjhXW9BA3XW5L0doAzxJGkKKcid7rNcjuuTLoiHyD
+         yfOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zvQyGhC9jNKoHcK8q/CTH+eU4jPIt6zo0Ot+2Yqpxyo=;
-        b=fW42sNyUp53eV9tMrBvxuVwAI5HbvsdW8brkjJ2NrC2o9ZLwsa+wYiKQCqyqoqJzLI
-         xg5EmQwz+uPgFnpdZEMhhShoxt2eUi9Nt7R4XeeetlOtc6TVwQLY1gZ/G2JOoYkBrZ4X
-         Iai6WPxNJ/sfGqKoaz6tj/kgLSY2vytEnTgJypkDwxBd+aexXFaxJjlcd2iF3KuWVESP
-         9lPgpCHLIUKacqbhYHV9OQki0o83aeHzJCOp8OQTHuPBtibsfcbRBW5otLi0M6xK5JYj
-         QJFpFb6cbJBLNN13MyD2g5ZDKHAuQXWRwRfQAKnZzwKju/oQ6PTRGigau3Gln/FZMxus
-         6IXg==
-X-Gm-Message-State: AOAM532LqcpUHEo1FuSd5jCVXEZinFht2TZlvKl3jyfbpWpyWEeOPhWj
-        cNs9D/d7CDcQcuRMn+bUthuM/tPHpWIz6dBu0QY=
-X-Google-Smtp-Source: ABdhPJwLcV0kvSupFRnxz8RlbUGxq6S++mPRKq7N52fkhN7kg/LrTJJeiTs8xe1nIglW7SWSCcArVKgTQR8AU5+Fdhg=
-X-Received: by 2002:a05:6808:e90:: with SMTP id k16mr24130345oil.166.1637947328431;
- Fri, 26 Nov 2021 09:22:08 -0800 (PST)
-MIME-Version: 1.0
-References: <20210401183654.27214-1-daniel.lezcano@linaro.org>
- <20210401183654.27214-3-daniel.lezcano@linaro.org> <CAAYoRsURO1tf03nfiki1uaXYEmTKQyYKUeTyKW+vefrVzCO7jg@mail.gmail.com>
-In-Reply-To: <CAAYoRsURO1tf03nfiki1uaXYEmTKQyYKUeTyKW+vefrVzCO7jg@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 26 Nov 2021 18:21:57 +0100
-Message-ID: <CAJZ5v0hcuq0qriHbc=XHbCo8fJMAV1dbCBws3M9GktN17aCE_g@mail.gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=W8td6vEPKxADiJQFmlrhuwiA6Bp6UV5M0SX5QzKONIo=;
+        b=mUBtlWgNkTHfEtZBrxbX6VFYpMjTW1grHvaEAf5wPKOs5tLZ4R+vFfqSk6L3E4MQMR
+         HD+hA9YAOnIBml3JHz/aRAFFdhwI7AXpdb1Vdr4i4VrkboUxgS9OGt7m9eJ5fX/zEJv8
+         KYP8K29LScSnxx8HXCMX9rSTKnWgjT6gOdDzMkTMI+VNVTZQWfcdFbux7R+mlUHTFK9H
+         bz6+YEkAwRXTjUPP3s3FVzLto5AAMNJWh45c1eJF633P9gvmOHaz5f3cBTCa77Muvrle
+         5KR2fsK13/KAj+DhZhW/kpB5ScUfxrjOWheA/yC6feAJHu9uqEy4EYhXt54qQY5I+bYb
+         QhDg==
+X-Gm-Message-State: AOAM531UErMiU5u81LqZfY3LbV4wKjB04m9bhjvQ2aTnDlb2GBBpZf7B
+        def7IVjHgBWTElwCuIERX0ObKw==
+X-Google-Smtp-Source: ABdhPJyiejxvdKECGDvPJh9q3/ZB2Tt7wodvwW7t4tLf9B+VhlzIRvu6qs6lbZmkf/GEBfd7JZIEtA==
+X-Received: by 2002:a05:600c:501f:: with SMTP id n31mr16993345wmr.101.1637948429061;
+        Fri, 26 Nov 2021 09:40:29 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:70b:e5b5:f868:20cf? ([2a01:e34:ed2f:f020:70b:e5b5:f868:20cf])
+        by smtp.googlemail.com with ESMTPSA id l3sm8027009wmq.46.2021.11.26.09.40.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Nov 2021 09:40:28 -0800 (PST)
 Subject: Re: [PATCH v6 3/7] powercap/drivers/dtpm: Simplify the dtpm table
 To:     Doug Smythies <dsmythies@telus.net>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
+Cc:     Linux PM list <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+        lukasz.luba@arm.com, "Rafael J. Wysocki" <rafael@kernel.org>,
+        gregkh@linuxfoundation.org
+References: <20210401183654.27214-1-daniel.lezcano@linaro.org>
+ <20210401183654.27214-3-daniel.lezcano@linaro.org>
+ <CAAYoRsURO1tf03nfiki1uaXYEmTKQyYKUeTyKW+vefrVzCO7jg@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <1e75f7ff-4b1b-ff47-2344-903605067693@linaro.org>
+Date:   Fri, 26 Nov 2021 18:40:26 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+MIME-Version: 1.0
+In-Reply-To: <CAAYoRsURO1tf03nfiki1uaXYEmTKQyYKUeTyKW+vefrVzCO7jg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Doug,
-
-On Fri, Nov 26, 2021 at 6:08 PM Doug Smythies <dsmythies@telus.net> wrote:
->
+On 26/11/2021 18:08, Doug Smythies wrote:
 > Hi Daniel,
->
+> 
 > This patch introduces a regression, at least on my test system.
 > I can no longer change CPU frequency scaling drivers, for example
 > from intel_cpufreq (A.K.A intel_pstate in passive mode) to intel_pstate
 > (A.K.A. active mode). The task just hangs forever.
->
+> 
 > I bisected the kernel and got this commit as the result.
 > As a double check, I reverted this commit:
 > 7a89d7eacf8e84f2afb94db5ae9d9f9faa93f01c
 > on kernel 5.16-rc2 and the issue was resolved.
->
+> 
 > While your email is fairly old, I observe that it was only included as of
 > kernel 5.16-rc1.
->
+
+Could it be related to and fixed by:
+
+https://lore.kernel.org/all/20211108062345.273855-1-daniel.lezcano@linaro.org/
+
+?
+
 > Command Example that never completes:
->
+> 
 > $ echo passive | sudo tee /sys/devices/system/cpu/intel_pstate/status
->
+> 
 > syslog excerpt attached.
+> 
+> ... Doug
 
-This looks like it may be problematic:
 
-diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
-index f6076de39540..98841524a782 100644
---- a/drivers/powercap/dtpm_cpu.c
-+++ b/drivers/powercap/dtpm_cpu.c
-@@ -204,7 +204,7 @@ static int cpuhp_dtpm_cpu_online(unsigned int cpu)
-       return ret;
-}
 
--int dtpm_register_cpu(struct dtpm *parent)
-+static int __init dtpm_cpu_init(void)
-{
-       int ret;
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-so please try to remove the __init annotation from dtpm_cpu_init() and
-see if that helps.
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
