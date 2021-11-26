@@ -2,194 +2,182 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CED945EC34
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Nov 2021 12:08:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B67FF45ED2E
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Nov 2021 12:57:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231286AbhKZLLw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 Nov 2021 06:11:52 -0500
-Received: from comms.puri.sm ([159.203.221.185]:38200 "EHLO comms.puri.sm"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231490AbhKZLJw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 26 Nov 2021 06:09:52 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id A2E19E1252;
-        Fri, 26 Nov 2021 03:06:09 -0800 (PST)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id D8m_uiIACRvh; Fri, 26 Nov 2021 03:06:08 -0800 (PST)
-Message-ID: <8d72c895ece6dce7d8badb241eebcbe076a03f81.camel@puri.sm>
-Subject: Re: [PATCH v2] media: i2c: dw9714: add optional regulator support
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     mchehab@kernel.org, broonie@kernel.org, kernel@puri.sm,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-pm@vger.kernel.org, Angus Ainslie <angus@akkea.ca>
-Date:   Fri, 26 Nov 2021 12:06:03 +0100
-In-Reply-To: <YaC6nZIQOsrpBY8V@paasikivi.fi.intel.com>
-References: <20211126090107.1243558-1-martin.kepplinger@puri.sm>
-         <YaC6nZIQOsrpBY8V@paasikivi.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        id S1377171AbhKZMA0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 Nov 2021 07:00:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58466 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229924AbhKZL6Z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Nov 2021 06:58:25 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A44EC08EA4C
+        for <linux-pm@vger.kernel.org>; Fri, 26 Nov 2021 03:22:24 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id s13so17953740wrb.3
+        for <linux-pm@vger.kernel.org>; Fri, 26 Nov 2021 03:22:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=CH/BjpiBpZ/vu5u2YjAKcdVgEIZZP8RkoskTORrwc7k=;
+        b=W901Nj+xtSh1aiNfDE0AMKIOsC0ArWr80z7PJf34QwtvFBSITUMZJSslyGMx8aPwXY
+         HQfI4jtvf0PCFqM897iRWJdpPQ4XWSloTbGLYMFzxUZ1vcTn+L80wzKw8BdLfc9LiV2u
+         ewffAgUhVp48ltm6XiHTIVmMc8d95+6AmyqXpms7XlCf84xW7mXJD73hqyq8UNT4mNj7
+         uURucMcPRvMlkXf0FdFQMUzDogO2xGYu4s1rxMYMwUJTwJpTiRMkFs05fq0WULaP7Bx8
+         xRppUITefkkT5MNMHS60YpOb/6vEI3s1VHGY7meb8dAbqBvHy0YJsuxTad9hr1B6ULlc
+         rZOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=CH/BjpiBpZ/vu5u2YjAKcdVgEIZZP8RkoskTORrwc7k=;
+        b=AT9ueBGCfWXQg5nhLHFDKOJyYH1Ur9tAzaLIRJSPQcMZQIwB6TDfE3/eHEfl4A88ae
+         GdebqCmCMa49n7gkxI9H6QWsuNe2LCnBxoT6ALNhvptR2adZn3ddhurRZtN97yf4Wz9k
+         OpF0xAkFQH2UA9hKX5jKbVP36AdxiwdX5cStiMxYDtZVRBNYg5+0TVEYBoCqcI7x3zPx
+         K7xn3NHQ0yHOYuVhBAH0ZZLLFSAx38MI4cenu/57o9syP8RQS2IhOcJf5sem29pBhO5r
+         L1qf3hn5Oo0aTa8UcyIVYSxdemSe7gUrvoPQhBOg+UmJDmq0jLXGJXk7hPzyF4lA4YpW
+         aoWg==
+X-Gm-Message-State: AOAM530N+LMUFdlgiurfmEV1Zc/wRks3vyXnh5qyCQhgAvtDnur26qPF
+        1CV6nYe3qQDlvB3Mr+UhyXVECA==
+X-Google-Smtp-Source: ABdhPJybvJVDj9O9DJ2NwSgzjlWPPDKmXV88NtvDPWzA4oqWQr33oPSWf1DuSfpq0COI7AIp00Woiw==
+X-Received: by 2002:adf:e38d:: with SMTP id e13mr12839437wrm.402.1637925742716;
+        Fri, 26 Nov 2021 03:22:22 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:47ed:5339:c53f:6a8? ([2a01:e34:ed2f:f020:47ed:5339:c53f:6a8])
+        by smtp.googlemail.com with ESMTPSA id l11sm5101510wrp.61.2021.11.26.03.22.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Nov 2021 03:22:21 -0800 (PST)
+Subject: Re: [PATCH] sched/idle: Export cpu_idle_poll_ctrl() symbol
+To:     Maulik Shah <quic_mkshah@quicinc.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ulf.hansson@linaro.org, quic_lsrao@quicinc.com,
+        rnayak@codeaurora.org, Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+References: <1637831676-32737-1-git-send-email-quic_mkshah@quicinc.com>
+ <YZ9ctgCBYJEEjuwt@hirez.programming.kicks-ass.net>
+ <687d97b6-347a-92c0-34ba-00331dfb6c82@quicinc.com>
+ <0fb74083-e378-e1b4-624b-4f2076f237df@linaro.org>
+ <4427fe8d-c96d-d1f7-3ef2-674000b61b93@quicinc.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <444f74f7-43cc-fc48-7417-ccbcf8e176c8@linaro.org>
+Date:   Fri, 26 Nov 2021 12:22:20 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
+In-Reply-To: <4427fe8d-c96d-d1f7-3ef2-674000b61b93@quicinc.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Am Freitag, dem 26.11.2021 um 12:44 +0200 schrieb Sakari Ailus:
-> Hi Martin,
+On 26/11/2021 06:56, Maulik Shah wrote:
+> Hi Daniel,
 > 
-> On Fri, Nov 26, 2021 at 10:01:07AM +0100, Martin Kepplinger wrote:
-> > From: Angus Ainslie <angus@akkea.ca>
-> > 
-> > Allow the dw9714 to control a regulator and adjust suspend() and
-> > resume()
-> > to support both runtime and system pm.
-> > 
-> > Signed-off-by: Angus Ainslie <angus@akkea.ca>
-> > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-> > ---
-> > 
-> > revision history
-> > ----------------
-> > 
-> > v2: (thank you Mark)
-> >  * simplify the regulator_get_optional() error path
-> >  * fix regulator usage during probe()
-> > 
-> > v1:
-> > https://lore.kernel.org/linux-media/20211125080922.978583-1-martin.kepplinger@puri.sm/
-> > 
-> > 
-> > 
-> >  drivers/media/i2c/dw9714.c | 39
-> > ++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 39 insertions(+)
-> > 
-> > diff --git a/drivers/media/i2c/dw9714.c
-> > b/drivers/media/i2c/dw9714.c
-> > index 3863dfeb8293..e8cc19b89861 100644
-> > --- a/drivers/media/i2c/dw9714.c
-> > +++ b/drivers/media/i2c/dw9714.c
-> > @@ -5,6 +5,7 @@
-> >  #include <linux/i2c.h>
-> >  #include <linux/module.h>
-> >  #include <linux/pm_runtime.h>
-> > +#include <linux/regulator/consumer.h>
-> >  #include <media/v4l2-ctrls.h>
-> >  #include <media/v4l2-device.h>
-> >  #include <media/v4l2-event.h>
-> > @@ -36,6 +37,7 @@ struct dw9714_device {
-> >         struct v4l2_ctrl_handler ctrls_vcm;
-> >         struct v4l2_subdev sd;
-> >         u16 current_val;
-> > +       struct regulator *vcc;
-> >  };
-> >  
-> >  static inline struct dw9714_device *to_dw9714_vcm(struct v4l2_ctrl
-> > *ctrl)
-> > @@ -145,6 +147,21 @@ static int dw9714_probe(struct i2c_client
-> > *client)
-> >         if (dw9714_dev == NULL)
-> >                 return -ENOMEM;
-> >  
-> > +       dw9714_dev->vcc = devm_regulator_get_optional(&client->dev,
-> > "vcc");
+> On 11/25/2021 10:56 PM, Daniel Lezcano wrote:
+>> On 25/11/2021 15:13, Maulik Shah wrote:
+>>> Hi Peter,
+>>>
+>>> On 11/25/2021 3:21 PM, Peter Zijlstra wrote:
+>>>> On Thu, Nov 25, 2021 at 02:44:36PM +0530, Maulik Shah wrote:
+>>>>> Export cpu_idle_poll_ctrl() so that module drivers can use same.
+>>>> This does not seem like a really safe interface to expose to the
+>>>> world.
+>>> Thanks for the review.
+>>>
+>>> Keeping the cpuidle enabled from boot up may delay/increase the boot up
+>>> time.
+>>> Below is our use case to force cpuidle to stay in cpu_idle_poll().
+>>>
+>>> We keep cpuidle disabled from boot up using "nohlt" option of kernel
+>>> command line which internally sets cpu_idle_force_poll = 1;
+>>> and once the device bootup reaches till certain point (for example the
+>>> android homescreen is up) userspace may notify a
+>>> vendor module driver which can invoke cpu_idle_poll_ctrl(false); to come
+>>> out of poll mode.
+>>> So vendor module driver needs cpu_idle_poll_ctrl() exported symbol.
+>>>
+>>> We can not take PM-QoS from driver to prevent deep cpuidle since all the
+>>> vendor modules are kept in a separate partition and will be loaded only
+>>> after kernel boot up is done
+>>> and by this time kernel already starts executing deep cpuidle modes.
+>>>> Surely the better solution is to rework things to not rely on this. I'm
+>>>> fairly sure it's not hard to write a cpuidle driver that does much the
+>>>> same.
+>>> The other option i think is to pass cpuidle.off=1 in kernel command line
+>>> and then add enable_cpuidle() in drivers/cpuidle/cpuidle.c
+>>> something similar as below which can be called by vendor module.
+>>>
+>>> void enable_cpuidle(void)
+>>> {
+>>>          off = 0;
+>>> }
+>>> EXPORT_SYMBOL_GPL(enable_cpuidle);
+>>>
+>>> This may be a good option since we have already disable_cpuidle() but
+>>> not enable_cpuidle().
+>>>
+>>> void disable_cpuidle(void)
+>>> {
+>>>          off = 1;
+>>> }
+>>>
+>>> Hi Rafael/Daniel, can you please let me know your suggestion on
+>>> this/similar implementation?
+>> Did you try to use the QoS latency? Sounds like it is exactly for this
+>> purpose.
+>>
+>> Set it to zero to force cpuidle to choose the shallowest idle state and
+>> then INT_MAX to disable the constraint.
+>>
+>>   cpu_latency_qos_add_request();
+>>
+>> Hope that helps
+>>
+>>    -- Daniel
+> The PM-QoS is not helping here since all the vendor drivers are kept in
+> a separate partition
+> and will be loaded only after kernel boot up is done and by the time
+> vendor kernel modules are inserted
+> takes QoS, kernel/menu governor already starts executing deep cpuidle
+> modes.
 > 
-> You you used regular devm_regulator_get(), you could remove the error
-> handling below. If there's no regulator, you'll simply get a dummy
-> one.
+> kernel start (t0)---------Menu governor loads (t1)----------vendor
+> modules loaded (t2)----------Usespace ready(t3)
+> 
+> Untill (t2), its only core kernel/android kernel which don't have any
+> vendor driver which can take QoS.
+> If we take QoS, it can be taken only from point (t2) but CPUs still
+> enter deep idle state between (t1) to (t2).
+> 
+> So to prevent this passing "cpuidle.off=1" or "nohlt" in kernel command
+> line can keep deep cpuidle states disabled from boot up and
+> once vendor modules are ready at (t2) or (t3), it can either invoke
+> newly added enable_cpuidle() or cpu_idle_poll_ctrl(false);
+> to comeout of polling mode and start executing deep low power modes.
 
-ok thanks
+I understand. The approach is valid but I'm wondering if it should fall
+under a more global feature with a perf <-> power cursor
 
+If the goal is to be as fast as possible at boot time, the cursor should
+be set to 'perf and then changed to 'power' after the system has booted.
 
-> 
-> > +       if (IS_ERR(dw9714_dev->vcc)) {
-> > +               dev_dbg(&client->dev, "No vcc regulator found:
-> > %ld\n",
-> > +                       PTR_ERR(dw9714_dev->vcc));
-> > +               dw9714_dev->vcc = NULL;
-> > +       }
-> > +
-> > +       if (dw9714_dev->vcc) {
-> 
-> With (dummy) regulators, these checks become unnecessary.
-> 
-> > +               rval = regulator_enable(dw9714_dev->vcc);
-> > +               if (rval < 0) {
-> > +                       dev_err(&client->dev, "failed to enable
-> > vcc: %d\n", rval);
-> > +                       return rval;
-> > +               }
-> > +       }
-> > +
-> >         v4l2_i2c_subdev_init(&dw9714_dev->sd, client, &dw9714_ops);
-> >         dw9714_dev->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
-> >                                 V4L2_SUBDEV_FL_HAS_EVENTS;
-> > @@ -200,6 +217,9 @@ static int __maybe_unused
-> > dw9714_vcm_suspend(struct device *dev)
-> >         struct dw9714_device *dw9714_dev = sd_to_dw9714_vcm(sd);
-> >         int ret, val;
-> >  
-> > +       if (pm_runtime_suspended(&client->dev))
-> > +               return 0;
-> 
-> This can't take place in a runtime PM suspend callback. You'll need
-> to add
-> system suspend callback for this.
-
-but this function is both the system and runtime suspend callback.
-doesn't splitting up the callbacks just add lines of code
-unnecessarily?
-
-> 
-> > +
-> >         for (val = dw9714_dev->current_val & ~(DW9714_CTRL_STEPS -
-> > 1);
-> >              val >= 0; val -= DW9714_CTRL_STEPS) {
-> >                 ret = dw9714_i2c_write(client,
-> > @@ -208,6 +228,13 @@ static int __maybe_unused
-> > dw9714_vcm_suspend(struct device *dev)
-> >                         dev_err_once(dev, "%s I2C failure: %d",
-> > __func__, ret);
-> >                 usleep_range(DW9714_CTRL_DELAY_US,
-> > DW9714_CTRL_DELAY_US + 10);
-> >         }
-> > +
-> > +       if (dw9714_dev->vcc) {
-> > +               ret = regulator_disable(dw9714_dev->vcc);
-> > +               if (ret)
-> > +                       dev_err(dev, "Failed to disable vcc: %d\n",
-> > ret);
-> > +       }
-> > +
-> >         return 0;
-> >  }
-> >  
-> > @@ -224,6 +251,18 @@ static int  __maybe_unused
-> > dw9714_vcm_resume(struct device *dev)
-> >         struct dw9714_device *dw9714_dev = sd_to_dw9714_vcm(sd);
-> >         int ret, val;
-> >  
-> > +       if (pm_runtime_suspended(&client->dev))
-> 
-> Same for this one.
-> 
-> > +               return 0;
-> > +
-> > +       if (dw9714_dev->vcc) {
-> > +               ret = regulator_enable(dw9714_dev->vcc);
-> > +               if (ret) {
-> > +                       dev_err(dev, "Failed to enable vcc: %d\n",
-> > ret);
-> > +                       return ret;
-> > +               }
-> > +               usleep_range(1000, 2000);
-> > +       }
-> > +
-> >         for (val = dw9714_dev->current_val % DW9714_CTRL_STEPS;
-> >              val < dw9714_dev->current_val + DW9714_CTRL_STEPS - 1;
-> >              val += DW9714_CTRL_STEPS) {
-> 
+So not only cpuidle but also any other subsystems can skip the PM path
+or go the highest performance state (assuming the PM code is compiled-in
+for the devices).
 
 
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
