@@ -2,211 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DF1945FD59
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Nov 2021 09:00:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F85745FEDE
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Nov 2021 14:42:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352786AbhK0IEB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 27 Nov 2021 03:04:01 -0500
-Received: from mga02.intel.com ([134.134.136.20]:32639 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1350020AbhK0ICA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 27 Nov 2021 03:02:00 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10180"; a="222975557"
-X-IronPort-AV: E=Sophos;i="5.87,268,1631602800"; 
-   d="scan'208";a="222975557"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 23:58:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,268,1631602800"; 
-   d="scan'208";a="498677373"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 26 Nov 2021 23:58:44 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mqsbb-0009Et-Df; Sat, 27 Nov 2021 07:58:43 +0000
-Date:   Sat, 27 Nov 2021 15:58:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 7975c7f139bb692861600c15d89034a24e467aa9
-Message-ID: <61a1e519./uobgCy4gEBmsNC0%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1351128AbhK0NpQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 27 Nov 2021 08:45:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54472 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232663AbhK0NnQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 27 Nov 2021 08:43:16 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3F2C061574
+        for <linux-pm@vger.kernel.org>; Sat, 27 Nov 2021 05:40:01 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id i12so10388016wmq.4
+        for <linux-pm@vger.kernel.org>; Sat, 27 Nov 2021 05:40:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
+         :subject:content-transfer-encoding;
+        bh=2QZn4hTb2ishs/SY0rPb36iwH7LWCOG9bd8lEjPKULc=;
+        b=ooeCEuZlyXC2iVvayAQ474nBvF/GoVfzcSibGVcgCNk9kl+9eV45FtWM5YN0Bw6Tj3
+         osYGV4smhgtuQ0aExter8rWxInkYQSyBfveK/v55qm8Gz4jFN9iwdYRsmNH0TvYnJe6V
+         x0PINnKpa+RxMMnzyTIIRu88Y5wX0z0jDxAkb3Y+mcjjKONYMAYHcjVDZUpwozCkFQ86
+         E9CgywqfJfvK/ZE83y8GAEmf/CkGDwv5B1ki+MjGUxCGE/jSEHybI45MnNkZ1JPFjhhl
+         EnojfaQAJK3lD8V2SpsQ1e2fXIUioLO6uCy4CbWvCHUmLk5FyCeKvcYQBzxneT9zMl1E
+         IXAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:from:subject:content-transfer-encoding;
+        bh=2QZn4hTb2ishs/SY0rPb36iwH7LWCOG9bd8lEjPKULc=;
+        b=kle2fRKI71+Lo5zJ1Va4eKih1DTcNqh7qqgfyy7SSkwDY+WSY7FwfOhkbEPSGFz+5D
+         lju3VDfR/x+5Pkyexl05WaXi6dfil6Y/HI9Hw9W6tw9ouK4Pck+yVBHvCxtRtb7mfuWK
+         fAvpL+W3Hy0L4lQerRdZ74ZApWUK0aWyUnD5UB1c5aztyBcNQNQ6qcZOHuNbpn/L0axL
+         8PujKVCfmeY+pdEjkEFzhZvuZKEFGX/iKaSi7FU8H/2Q7XvO++ShAKPd7UIwgyyoh6/6
+         +yfIsA5yjQG7sE5hf0/m3LG/CB6iNY0FRyvXXEA1lkn+tdewxnwaSSCc2jvCRTj2zD9O
+         90Wg==
+X-Gm-Message-State: AOAM532aWQ6sadYzju2HoU+ChZfXZF9M2AY0eSGroQnTzuSDEhqE8KMG
+        WZTmt18z1XJa8fcaF95+MtivIUfN0wc=
+X-Google-Smtp-Source: ABdhPJz8050dfUBTy5yNjoTA6gyKh3arFVOUld8Qe1TH1wOxSIs9ZLWYDrAyJuGGBhEqI/xuSh0umQ==
+X-Received: by 2002:a05:600c:104b:: with SMTP id 11mr23382026wmx.54.1638020399751;
+        Sat, 27 Nov 2021 05:39:59 -0800 (PST)
+Received: from ?IPV6:2003:ea:8f1a:f00:7df6:9d34:4832:e4f1? (p200300ea8f1a0f007df69d344832e4f1.dip0.t-ipconnect.de. [2003:ea:8f1a:f00:7df6:9d34:4832:e4f1])
+        by smtp.googlemail.com with ESMTPSA id g4sm8310188wro.12.2021.11.27.05.39.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 27 Nov 2021 05:39:59 -0800 (PST)
+Message-ID: <4239b61f-f8c5-462f-2951-fbba2dec8b1d@gmail.com>
+Date:   Sat, 27 Nov 2021 14:39:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Content-Language: en-US
+To:     Shixin Liu <liushixin2@huawei.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+Subject: crypto: stm32: Broken RPM changes should be reverted
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 7975c7f139bb692861600c15d89034a24e467aa9  Merge branches 'acpi-power', 'acpi-dptf', 'acpi-processor' and 'acpi-scan' into linux-next
+When discussing whether pm_runtime_resume_and_get() should be annotated as
+__must_check, I became aware of RPM usage in crypto/stm32.
 
-elapsed time: 724m
+Following two patches replace usage of pm_runtime_get_sync() with
+pm_runtime_resume_and_get() w/o checking the return code.
 
-configs tested: 148
-configs skipped: 4
+747bf30fd944 ("crypto: stm32/cryp - Fix PM reference leak on stm32-cryp.c")
+1cb3ad701970 ("crypto: stm32/hash - Fix PM reference leak on stm32-hash.c")
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+This results in RPM usage like the following in stm32_hash_export():
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20211126
-powerpc              randconfig-c003-20211126
-mips                 randconfig-c004-20211126
-arm                            zeus_defconfig
-arm                  colibri_pxa300_defconfig
-arm                         lpc32xx_defconfig
-s390                       zfcpdump_defconfig
-arm                       omap2plus_defconfig
-powerpc                    adder875_defconfig
-arm                            dove_defconfig
-m68k                        m5272c3_defconfig
-arm                        spear3xx_defconfig
-i386                             alldefconfig
-powerpc                 mpc8272_ads_defconfig
-parisc                generic-32bit_defconfig
-powerpc                     akebono_defconfig
-powerpc                     mpc83xx_defconfig
-sh                        edosk7760_defconfig
-powerpc                 mpc8560_ads_defconfig
-m68k                          sun3x_defconfig
-arm                          ep93xx_defconfig
-arm                          simpad_defconfig
-sh                           se7705_defconfig
-powerpc               mpc834x_itxgp_defconfig
-powerpc                          g5_defconfig
-arm                        mvebu_v5_defconfig
-arm                            hisi_defconfig
-sh                           se7750_defconfig
-arm                         hackkit_defconfig
-sh                             sh03_defconfig
-powerpc                     ep8248e_defconfig
-sh                            titan_defconfig
-arm                            xcep_defconfig
-powerpc                    sam440ep_defconfig
-sh                           se7724_defconfig
-powerpc                       eiger_defconfig
-xtensa                              defconfig
-arm                        neponset_defconfig
-powerpc                     mpc5200_defconfig
-sh                           se7722_defconfig
-sh                          sdk7780_defconfig
-arm                          pcm027_defconfig
-powerpc                    gamecube_defconfig
-sh                          kfr2r09_defconfig
-arm                            lart_defconfig
-arm                       cns3420vb_defconfig
-arm                         mv78xx0_defconfig
-arm                          moxart_defconfig
-powerpc                 mpc832x_rdb_defconfig
-sparc                       sparc64_defconfig
-powerpc                  iss476-smp_defconfig
-m68k                         apollo_defconfig
-m68k                        m5407c3_defconfig
-arm                            pleb_defconfig
-xtensa                    smp_lx200_defconfig
-sh                         microdev_defconfig
-sh                        apsh4ad0a_defconfig
-sh                 kfr2r09-romimage_defconfig
-arm                     eseries_pxa_defconfig
-arc                 nsimosci_hs_smp_defconfig
-sh                           sh2007_defconfig
-arm                  randconfig-c002-20211126
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                             allnoconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a014-20211126
-x86_64               randconfig-a011-20211126
-x86_64               randconfig-a012-20211126
-x86_64               randconfig-a016-20211126
-x86_64               randconfig-a013-20211126
-x86_64               randconfig-a015-20211126
-i386                 randconfig-a016-20211126
-i386                 randconfig-a015-20211126
-i386                 randconfig-a012-20211126
-i386                 randconfig-a013-20211126
-i386                 randconfig-a014-20211126
-i386                 randconfig-a011-20211126
-arc                  randconfig-r043-20211126
-s390                 randconfig-r044-20211126
-riscv                randconfig-r042-20211126
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
+pm_runtime_resume_and_get(hdev->dev);
+...
+pm_runtime_mark_last_busy(hdev->dev);
+pm_runtime_put_autosuspend(hdev->dev);
 
-clang tested configs:
-s390                 randconfig-c005-20211126
-i386                 randconfig-c001-20211126
-powerpc              randconfig-c003-20211126
-riscv                randconfig-c006-20211126
-arm                  randconfig-c002-20211126
-x86_64               randconfig-c007-20211126
-mips                 randconfig-c004-20211126
-x86_64               randconfig-a001-20211126
-x86_64               randconfig-a003-20211126
-x86_64               randconfig-a006-20211126
-x86_64               randconfig-a004-20211126
-x86_64               randconfig-a005-20211126
-x86_64               randconfig-a002-20211126
-i386                 randconfig-a002-20211126
-i386                 randconfig-a001-20211126
-i386                 randconfig-a005-20211126
-i386                 randconfig-a006-20211126
-i386                 randconfig-a004-20211126
-i386                 randconfig-a003-20211126
-hexagon              randconfig-r045-20211126
-hexagon              randconfig-r041-20211126
+This is broken. After pm_runtime_resume_and_get() the usage count may be
+incremented or not. If not, then the call to pm_runtime_put_autosuspend()
+results in exactly the imbalance that the patch claims to fix.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Therefore I think both patches should be reverted, or the return code
+of pm_runtime_resume_and_get() has to be checked and properly handled
+in the driver logic.
