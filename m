@@ -2,91 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3927460A65
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Nov 2021 22:49:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67A86460A72
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Nov 2021 22:53:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238458AbhK1VwR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 28 Nov 2021 16:52:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47050 "EHLO
+        id S239466AbhK1V4Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 28 Nov 2021 16:56:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238346AbhK1VuP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 28 Nov 2021 16:50:15 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD800C06175B;
-        Sun, 28 Nov 2021 13:46:48 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id bu18so39531422lfb.0;
-        Sun, 28 Nov 2021 13:46:48 -0800 (PST)
+        with ESMTP id S241083AbhK1VyX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 28 Nov 2021 16:54:23 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070DCC061758;
+        Sun, 28 Nov 2021 13:50:57 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id u3so39434038lfl.2;
+        Sun, 28 Nov 2021 13:50:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aW1opc2XMj6ECBMk4QPmwKIgh0Lk59SgGVK29sQZpz4=;
-        b=R6llHYtE4v699Erxb4KgZm1YmXx0LPI6U6dhewPpQOeeGCMqroHi34e6Jyz1j+3vSq
-         AlLo2ZMQ8g871ClBCNIpid/YzJlH/bUsn9AI3CuIt2+3LjHzsrHdjKoKSAr8kEFwq6xo
-         Ap4TIreND/zXytshIK+kEI5vaHsuQ8pFp3R+2CE+Bt7LYnk4/jsNFr4UwdA2TDf3nezq
-         RN9YRx5sH92WWWKVveWumH6Wweb1ufhuVG+5duuj+e0vqzld8tRJBKAOX57akik8MAYq
-         i8Z/uFRQLaKyL1zqunSNCUUt5agrxipH4zb/0lg3rjvHRD+V+7KsUXIQ59G7KGkvtJtQ
-         SGhg==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=N7b1G8te/KH8djaz6IoJjV+icWZ0WR5IWmhcwgDYM7g=;
+        b=cJKuiSKXD/Xz29LntYrD2aoIGTLEp6NSbTYTps4hyyyHBMJ07t16EAS4ljWkWHkFJl
+         4pBL5oswWDaVW6Deh/kuPa6iFqv5yL/+nSOXmVzKpauwf261kWL7v3Yzsm8t9pnGhkPH
+         II30iutdYC15AzIYfT9bmx+g9g44j4coxb2C0FMMEo667F4UUjApKfEpim8ikD+MBjbk
+         V59xX8poIcqsCeuAwRz/0gti6J7hAfx0+FvH69DQZ4Fvkrgm87ULmgA9/gWF1Yh/CFUH
+         /klnhH7tvuAZNaELd0A9nxNibcPjnzNU9TnLUDeBZpECqf2b55e0bV9/1SSIkzXyTfmA
+         NVRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=aW1opc2XMj6ECBMk4QPmwKIgh0Lk59SgGVK29sQZpz4=;
-        b=x6PdRMxF0EysPMWmlUDSlmohGsXOa0ju/lUeYdijV2Wpwyx0UMCY/tRIAO6UFTwr0Y
-         VWWNGbt03jyHEzc2kC1eQS/PMTXhK95D7FVz88AV3sDZDcpNBeBEYcaX1MkSWXXOHSfH
-         Q+bP/Yqtl+RPwhs3opSQb7R3+wx5OUMqvkIvD9SZbL64JZMZ70QL7F5F/YtVtFmHb3Rf
-         MqF8pT/C5HRq1+TOPrVnDKsS1MUtZwysFWUXn+MwSttn63qAklIv6UZn6NnaE+MCtDKB
-         DaPsBfnxPr2kGyLNC6i4cx61pdEsMSEIykEOY+6XKbd5nOyfLFBMmU/D3N4X7fWoXcXr
-         gWiQ==
-X-Gm-Message-State: AOAM532VkZTBoErYcj4pzHG0yL1brqKHTVQMCEZdt+mUK2Emw9IkIjX6
-        cWcUAL/tfskr09knon5LgTU=
-X-Google-Smtp-Source: ABdhPJw+hMc6eQam/JZYRHF9HLZpoWjG0svgOEXOY73j15pplGTRFuZF1Wl0BSdOjtI9NRkNxvu2gg==
-X-Received: by 2002:ac2:4aca:: with SMTP id m10mr43666913lfp.437.1638136007089;
-        Sun, 28 Nov 2021 13:46:47 -0800 (PST)
-Received: from localhost.localdomain (h-155-4-221-129.NA.cust.bahnhof.se. [155.4.221.129])
-        by smtp.gmail.com with ESMTPSA id m24sm1111027lfc.208.2021.11.28.13.46.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Nov 2021 13:46:46 -0800 (PST)
-From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>
-Subject: [PATCH] thermal: intel_powerclamp: Constify static thermal_cooling_device_ops
-Date:   Sun, 28 Nov 2021 22:46:41 +0100
-Message-Id: <20211128214641.30953-1-rikard.falkeborn@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        bh=N7b1G8te/KH8djaz6IoJjV+icWZ0WR5IWmhcwgDYM7g=;
+        b=Ui9fdPQhRU2ITdBQkbuSulThaVkz54Tlnn55pL7L4Omnw5zYXAUJvaAe8niv6JJZIn
+         wHfCTtESuKDU85dmTRkRxCBmjWTtwxLKmDPCYwj+izxdu9LcHbStEVFkDyReStBaJYrX
+         p0xedsEYYU0/RVQhW9Ehc2+X8e7gX1V5HjQntPrwrt28WcJXotEAl63NQOFFEYH7E1HF
+         oIZ+e8zI8XmQE/h1LqtEkQQ1oLjiqfBNK/A6ZbCuHeKdIaN611OwbyCbMgON9YfqyseG
+         AkgUOW3h0rMOL5WiAWx98o1IQNrrlyg4ZjmIE0Jo1ntSSTyYUc+H0F8JzvA1XJP6N80E
+         ifHA==
+X-Gm-Message-State: AOAM530BPBSCqD9ottfgIgFfXbeEPvG5JUJA5T1WrtdTmL68aqcYHLx+
+        ewWJrs4BN3rTKiCRdbXfkHs=
+X-Google-Smtp-Source: ABdhPJxOEUHJJ9auAnJ/mU9Ts+B2Pn56ZsRiKYrw+w6nVmHBeiJe5hd9/65DDFm05AeOhvbxIB4qgg==
+X-Received: by 2002:a05:6512:3f05:: with SMTP id y5mr4862526lfa.139.1638136254960;
+        Sun, 28 Nov 2021 13:50:54 -0800 (PST)
+Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
+        by smtp.googlemail.com with ESMTPSA id s4sm1177053ljp.73.2021.11.28.13.50.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 28 Nov 2021 13:50:54 -0800 (PST)
+Subject: Re: [PATCH v15 12/39] drm/tegra: gr2d: Support generic power domain
+ and runtime PM
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Nishanth Menon <nm@ti.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-mmc@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-clk@vger.kernel.org, David Heidelberg <david@ixit.cz>
+References: <20211114193435.7705-1-digetx@gmail.com>
+ <20211114193435.7705-13-digetx@gmail.com> <YaMX89bRBlqh0MvB@qmqm.qmqm.pl>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <0adb89a9-4642-2104-1ba5-ebb86c7ac4fc@gmail.com>
+Date:   Mon, 29 Nov 2021 00:50:46 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
+In-Reply-To: <YaMX89bRBlqh0MvB@qmqm.qmqm.pl>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The only usage of powerclamp_cooling_ops is to pass its address to
-thermal_cooling_device_register(), which takes a pointer to const struct
-thermal_cooling_device_ops. Make it const to allow the compiler to put
-it in read-only memory.
+28.11.2021 08:47, Michał Mirosław пишет:
+> On Sun, Nov 14, 2021 at 10:34:08PM +0300, Dmitry Osipenko wrote:
+>> Add runtime power management and support generic power domains.
+> [...]
+>> @@ -104,10 +127,17 @@ static int gr2d_open_channel(struct tegra_drm_client *client,
+>>  			     struct tegra_drm_context *context)
+>>  {
+>>  	struct gr2d *gr2d = to_gr2d(client);
+>> +	int err;
+>> +
+>> +	err = pm_runtime_resume_and_get(client->base.dev);
+>> +	if (err)
+>> +		return err;
+>>  
+>>  	context->channel = host1x_channel_get(gr2d->channel);
+>> -	if (!context->channel)
+>> +	if (!context->channel) {
+>> +		pm_runtime_put(context->client->base.dev);
+> 
+> Could host1x_channel_get/put() handle pm_runtime* calls ? I would expect
+> this to be common code for the users.
 
-Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
----
- drivers/thermal/intel/intel_powerclamp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+We already have host1x code that manages runtime PM of the client
+drivers, but it does that only for the code path of the new UAPI.
 
-diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
-index 9b68489a2356..14256421d98c 100644
---- a/drivers/thermal/intel/intel_powerclamp.c
-+++ b/drivers/thermal/intel/intel_powerclamp.c
-@@ -641,7 +641,7 @@ static int powerclamp_set_cur_state(struct thermal_cooling_device *cdev,
- }
- 
- /* bind to generic thermal layer as cooling device*/
--static struct thermal_cooling_device_ops powerclamp_cooling_ops = {
-+static const struct thermal_cooling_device_ops powerclamp_cooling_ops = {
- 	.get_max_state = powerclamp_get_max_state,
- 	.get_cur_state = powerclamp_get_cur_state,
- 	.set_cur_state = powerclamp_set_cur_state,
--- 
-2.34.1
+In case of the older UAPI, seems we can move the RPM get/put into
+tegra/drm.c. I'll consider that change for v16, thank you.
 
+> BTW, pm_runtime_resume_and_get() uses different dev than
+> pm_runtime_put() in the error path - is this intended?
+
+These functions use the same dev. The context->client is redundant
+there, good catch.
