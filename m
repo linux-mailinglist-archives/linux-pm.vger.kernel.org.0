@@ -2,156 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D92F460A44
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Nov 2021 22:19:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3927460A65
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Nov 2021 22:49:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233073AbhK1VWj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 28 Nov 2021 16:22:39 -0500
-Received: from rere.qmqm.pl ([91.227.64.183]:45225 "EHLO rere.qmqm.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232065AbhK1VUg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 28 Nov 2021 16:20:36 -0500
-Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 4J2LsJ1Lcdz9y;
-        Sun, 28 Nov 2021 22:17:08 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1638134236; bh=AVVRrFppT2KXeoQ1knr4qxNAWz0fqZEqjSZX5XRty4k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qeLiiTlDKcoC3FvftCsYmUekeo8vu2N1pSF3fCD2tgheWVvyonhdof+qu+Ea9djoI
-         F0VfIqhNPcyB+IepSkiEVfWMkXITXgi5yRN5hDrKipQbOIN/UYPiCQ3ypFE5/lr3yX
-         t143o/oCoxAN5HQdJgLvzJt9p7M6RWXHGnJUqKSETKZD7q6dZ+W4qIz0kh2v3idXT1
-         jUvuN2o4SCcowRIIDi5HFtYotMwlOnPhdI33AjtMrxHoxjMEAOO/hdSLgu27razlyO
-         MB5TcQY9Ad3wE8nllR9aML4jKPT5UuRgghYO2j4ETJ73vP6/OvL2peMilDKCW68Ia0
-         6xDNHfFLM+f6A==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.103.3 at mail
-Date:   Sun, 28 Nov 2021 22:17:06 +0100
-From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee.jones@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
-        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v4 08/25] kernel: Add combined power-off+restart handler
- call chain API
-Message-ID: <YaPx0kY7poGpwCL9@qmqm.qmqm.pl>
-References: <20211126180101.27818-1-digetx@gmail.com>
- <20211126180101.27818-9-digetx@gmail.com>
- <YaLQqks8cB0vWp6Q@qmqm.qmqm.pl>
- <9213569e-0f40-0df1-4710-8dab564e12d6@gmail.com>
+        id S238458AbhK1VwR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 28 Nov 2021 16:52:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47050 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238346AbhK1VuP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 28 Nov 2021 16:50:15 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD800C06175B;
+        Sun, 28 Nov 2021 13:46:48 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id bu18so39531422lfb.0;
+        Sun, 28 Nov 2021 13:46:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aW1opc2XMj6ECBMk4QPmwKIgh0Lk59SgGVK29sQZpz4=;
+        b=R6llHYtE4v699Erxb4KgZm1YmXx0LPI6U6dhewPpQOeeGCMqroHi34e6Jyz1j+3vSq
+         AlLo2ZMQ8g871ClBCNIpid/YzJlH/bUsn9AI3CuIt2+3LjHzsrHdjKoKSAr8kEFwq6xo
+         Ap4TIreND/zXytshIK+kEI5vaHsuQ8pFp3R+2CE+Bt7LYnk4/jsNFr4UwdA2TDf3nezq
+         RN9YRx5sH92WWWKVveWumH6Wweb1ufhuVG+5duuj+e0vqzld8tRJBKAOX57akik8MAYq
+         i8Z/uFRQLaKyL1zqunSNCUUt5agrxipH4zb/0lg3rjvHRD+V+7KsUXIQ59G7KGkvtJtQ
+         SGhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aW1opc2XMj6ECBMk4QPmwKIgh0Lk59SgGVK29sQZpz4=;
+        b=x6PdRMxF0EysPMWmlUDSlmohGsXOa0ju/lUeYdijV2Wpwyx0UMCY/tRIAO6UFTwr0Y
+         VWWNGbt03jyHEzc2kC1eQS/PMTXhK95D7FVz88AV3sDZDcpNBeBEYcaX1MkSWXXOHSfH
+         Q+bP/Yqtl+RPwhs3opSQb7R3+wx5OUMqvkIvD9SZbL64JZMZ70QL7F5F/YtVtFmHb3Rf
+         MqF8pT/C5HRq1+TOPrVnDKsS1MUtZwysFWUXn+MwSttn63qAklIv6UZn6NnaE+MCtDKB
+         DaPsBfnxPr2kGyLNC6i4cx61pdEsMSEIykEOY+6XKbd5nOyfLFBMmU/D3N4X7fWoXcXr
+         gWiQ==
+X-Gm-Message-State: AOAM532VkZTBoErYcj4pzHG0yL1brqKHTVQMCEZdt+mUK2Emw9IkIjX6
+        cWcUAL/tfskr09knon5LgTU=
+X-Google-Smtp-Source: ABdhPJw+hMc6eQam/JZYRHF9HLZpoWjG0svgOEXOY73j15pplGTRFuZF1Wl0BSdOjtI9NRkNxvu2gg==
+X-Received: by 2002:ac2:4aca:: with SMTP id m10mr43666913lfp.437.1638136007089;
+        Sun, 28 Nov 2021 13:46:47 -0800 (PST)
+Received: from localhost.localdomain (h-155-4-221-129.NA.cust.bahnhof.se. [155.4.221.129])
+        by smtp.gmail.com with ESMTPSA id m24sm1111027lfc.208.2021.11.28.13.46.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Nov 2021 13:46:46 -0800 (PST)
+From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>
+Subject: [PATCH] thermal: intel_powerclamp: Constify static thermal_cooling_device_ops
+Date:   Sun, 28 Nov 2021 22:46:41 +0100
+Message-Id: <20211128214641.30953-1-rikard.falkeborn@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <9213569e-0f40-0df1-4710-8dab564e12d6@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 12:04:01AM +0300, Dmitry Osipenko wrote:
-> 28.11.2021 03:43, Michał Mirosław пишет:
-> > On Fri, Nov 26, 2021 at 09:00:44PM +0300, Dmitry Osipenko wrote:
-> >> SoC platforms often have multiple ways of how to perform system's
-> >> power-off and restart operations. Meanwhile today's kernel is limited to
-> >> a single option. Add combined power-off+restart handler call chain API,
-> >> which is inspired by the restart API. The new API provides both power-off
-> >> and restart functionality.
-> >>
-> >> The old pm_power_off method will be kept around till all users are
-> >> converted to the new API.
-> >>
-> >> Current restart API will be replaced by the new unified API since
-> >> new API is its superset. The restart functionality of the sys-off handler
-> >> API is built upon the existing restart-notifier APIs.
-> >>
-> >> In order to ease conversion to the new API, convenient helpers are added
-> >> for the common use-cases. They will reduce amount of boilerplate code and
-> >> remove global variables. These helpers preserve old behaviour for cases
-> >> where only one power-off handler is expected, this is what all existing
-> >> drivers want, and thus, they could be easily converted to the new API.
-> >> Users of the new API should explicitly enable power-off chaining by
-> >> setting corresponding flag of the power_handler structure.
-> > [...]
-> > 
-> > Hi,
-> > 
-> > A general question: do we really need three distinct chains for this?
-> 
-> Hello Michał,
-> 
-> At minimum this makes code easier to follow.
-> 
-> > Can't there be only one that chain of callbacks that get a stage
-> > (RESTART_PREPARE, RESTART, POWER_OFF_PREPARE, POWER_OFF) and can ignore
-> > them at will? Calling through POWER_OFF_PREPARE would also return
-> > whether that POWER_OFF is possible (for kernel_can_power_off()).
-> 
-> I'm having trouble with parsing this comment. Could you please try to
-> rephrase it? I don't see how you could check whether power-off handler
-> is available if you'll mix all handlers together.
+The only usage of powerclamp_cooling_ops is to pass its address to
+thermal_cooling_device_register(), which takes a pointer to const struct
+thermal_cooling_device_ops. Make it const to allow the compiler to put
+it in read-only memory.
 
-If notify_call_chain() would be fixed to return NOTIFY_OK if any call
-returned NOTIFY_OK, then this would be a clear way to gather the
-answer if any of the handlers will attempt the final action (reboot or
-power off).
+Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+---
+ drivers/thermal/intel/intel_powerclamp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> 
-> > I would also split this patch into preparation cleanups (like wrapping
-> > pm_power_off call with a function) and adding the notifier-based
-> > implementation.
-> 
-> What's the benefit of this split up will be? Are you suggesting that it
-> will ease reviewing of this patch or something else?
+diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
+index 9b68489a2356..14256421d98c 100644
+--- a/drivers/thermal/intel/intel_powerclamp.c
++++ b/drivers/thermal/intel/intel_powerclamp.c
+@@ -641,7 +641,7 @@ static int powerclamp_set_cur_state(struct thermal_cooling_device *cdev,
+ }
+ 
+ /* bind to generic thermal layer as cooling device*/
+-static struct thermal_cooling_device_ops powerclamp_cooling_ops = {
++static const struct thermal_cooling_device_ops powerclamp_cooling_ops = {
+ 	.get_max_state = powerclamp_get_max_state,
+ 	.get_cur_state = powerclamp_get_cur_state,
+ 	.set_cur_state = powerclamp_set_cur_state,
+-- 
+2.34.1
 
-Mainly to ease review, as the wrapping will be a no-op, but the addition
-of notifier chain changes semantics a bit.
-
-Best Regards
-Michał Mirosław
