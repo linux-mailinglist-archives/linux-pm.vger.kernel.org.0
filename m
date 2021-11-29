@@ -2,136 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA38A461109
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Nov 2021 10:26:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05C1546128E
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Nov 2021 11:39:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242850AbhK2J3S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Nov 2021 04:29:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57062 "EHLO
+        id S1344379AbhK2Km5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Nov 2021 05:42:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242868AbhK2J1S (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Nov 2021 04:27:18 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87DD1C061756
-        for <linux-pm@vger.kernel.org>; Mon, 29 Nov 2021 01:10:43 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id 137so8371637pgg.3
-        for <linux-pm@vger.kernel.org>; Mon, 29 Nov 2021 01:10:43 -0800 (PST)
+        with ESMTP id S231680AbhK2Kk5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Nov 2021 05:40:57 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B99BBC061D79
+        for <linux-pm@vger.kernel.org>; Mon, 29 Nov 2021 02:05:03 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id c6-20020a05600c0ac600b0033c3aedd30aso11951148wmr.5
+        for <linux-pm@vger.kernel.org>; Mon, 29 Nov 2021 02:05:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=mqZU7dB4c+Rw9JAiakkbCvFsmlXNXYUS7tOeUtIOfLQ=;
-        b=d6l5RiPebDIJXUvKHVE/UQhhHqwbzzNGJru/7cPRP2K6NvZcqgPXgOnpkyTzEQ4COG
-         L/GR90IS/yB2VOoHr1jO1sIBX3cKxV/H+CY57EW1fYfLnh6KSQFrgvGuC2uRf7EwSK0T
-         tfyU5G1B2m7aDmZOup9i9S7968vLpOgu6YRuTmf0rCOa41Rnw0JDzj03L4xfovujo+KS
-         4aRVX7E87YmWrVtmDe66eHLlyAM+I8BgnoRgjCjAW97iXAGAu4d0EAbfZbJUKQyOAxNu
-         GH4siRwuLdVmIyiwiPWXcLuJQYb2zrE4n6eYRCAx4rlfsa2FeCFrhYJpp+KrSh6E1PnH
-         lQ9A==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=j8YTcg+1dTFTO23r7MDGqSVdl1/KFj5U5/34hL1utAw=;
+        b=UpwehIOVZVYAMfZWJXe+6dKMpX2a955o0Am0NoH63zd/e+M2CRewQF5sSm7jEJDujD
+         AR8gelRmYTrnsgnx2/iHYOzL21xbS+QO19AbG9mChlHdcGXRduRcpQm0xv9FmpZ0bZvN
+         OHojwoyXklHSqZQDc++86N+vX4Cr30GJ11Cx65ovjDJU+dTKjV+SuqjGAn4z4JLJp2Kl
+         x9pFmcogARsG1r2Pflyrv1wlNXasT4UkK3V78s7g0SqCIIv7+71LGP6KhWPwHzAKmI/o
+         QoOwwuqamqsDvU8oxFfNEAz6J0UPn26l9Pq6C6AKgkh2CLoWUQyOnki9eYCf8tKYeLnq
+         u2qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=mqZU7dB4c+Rw9JAiakkbCvFsmlXNXYUS7tOeUtIOfLQ=;
-        b=mxo0381z12FFDHSCrvKFo5cifY63xDtTrz/0/OAMKSOp0vyM5ZAe72MuPjHNkY0Itb
-         F4JTnLM01sZl0haRSmXwidlruEutmXL21VDarqZiSR/evrBhvtKvzykueyJF58fG3XOO
-         jteru51cRplP31nuan2CEGirsDjZBqsue2bihJ6AcnUyE+8Tliap5zbEQG1Gt/+QTCp1
-         CcvB85UDsFkGtgFeOqF3101YQA+Jp7zJQb9M11Mge7tZDnCJd69KcCD2bzIxI3BuLScA
-         YP1j6ep5y06s9QXYtZ1QrUokAj+DkgWjBp5EMLhySejqWGs+WLn9owVW+86dLwkbDOn+
-         2xYQ==
-X-Gm-Message-State: AOAM5320SK5HH8l4omr4FDLXKOOJ3dFVsX45CW9vPg9tqh1x1gsTW40k
-        lREWCcl0trwcEPL+SI/cTQMRRrLPcH4jlw==
-X-Google-Smtp-Source: ABdhPJzZlt6748dnh3okRdnl0hdxTSnyx8TLAXDzcuEYGeCHx5b1L18l83I1H82Ht23zjtgvWm8tTA==
-X-Received: by 2002:a63:8b4a:: with SMTP id j71mr34782170pge.447.1638177043059;
-        Mon, 29 Nov 2021 01:10:43 -0800 (PST)
-Received: from localhost ([122.171.9.64])
-        by smtp.gmail.com with ESMTPSA id lt5sm12617490pjb.43.2021.11.29.01.10.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 01:10:42 -0800 (PST)
-Date:   Mon, 29 Nov 2021 14:40:39 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Xiongfeng Wang <wangxiongfeng2@huawei.com>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, guohanjun@huawei.com
-Subject: Re: [PATCH] cpufreq: Fix get_cpu_device() failed in
- add_cpu_dev_symlink()
-Message-ID: <20211129091039.s7bqq43o4ktuub6t@vireshk-i7>
-References: <20211129080248.46240-1-wangxiongfeng2@huawei.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=j8YTcg+1dTFTO23r7MDGqSVdl1/KFj5U5/34hL1utAw=;
+        b=mMzD9y9to7RnY7ssyf2BL4x9wcirumBSXw6QX3oJeaCPEIWRLIPqDQOOTMh1Hdi04u
+         TTU9ObWCWjqGLhQGXoVs56/0f0BtV2JbEN/BuZgoBLtCmlpgNYKnqLJfOEk+yd9gHN/0
+         dtvJhWKK4tFLf+0mk/uCKfiuHFfLMHqTSj5nYlOPgka3Q5AJXQpg5WIhyQ+nrH532L61
+         RktrdLWAw3QGjXWqamv6uEUjSjrB6D8BvOLdF8vKdqEzz+3v+rNV4UGvBNJxUrwj4ckj
+         g8pvS4YLiLXy0c5cKP/W0fBtr+9ZrGiE/4+75fH1zAUSngo+jIoyGGEuICUXrFR2gvSb
+         pZLg==
+X-Gm-Message-State: AOAM5315NIUMALkJo5cu55LtU1xLAJ/eBoH3qd/F9idrAHsBZPO5OPFn
+        pIAeFnEBvyeNV2h46/T/8mefkQ==
+X-Google-Smtp-Source: ABdhPJx0JDF6B1QQrjYMHL6ELjznLsIUZcaaPZWDgfQSZkTzGlJ8SC5q1ynvpOTzcoMdjWkEsLo/ng==
+X-Received: by 2002:a1c:3546:: with SMTP id c67mr34844121wma.43.1638180302107;
+        Mon, 29 Nov 2021 02:05:02 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:8236:a2e5:8d62:e9cd? ([2a01:e34:ed2f:f020:8236:a2e5:8d62:e9cd])
+        by smtp.googlemail.com with ESMTPSA id az15sm13729416wmb.0.2021.11.29.02.05.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Nov 2021 02:05:01 -0800 (PST)
+Subject: Re: [PATCH] thermal: intel_powerclamp: Constify static
+ thermal_cooling_device_ops
+To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211128214641.30953-1-rikard.falkeborn@gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <b1bf88bc-413f-c3fd-6246-111d69e9ed93@linaro.org>
+Date:   Mon, 29 Nov 2021 11:04:59 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211129080248.46240-1-wangxiongfeng2@huawei.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20211128214641.30953-1-rikard.falkeborn@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 29-11-21, 16:02, Xiongfeng Wang wrote:
-> When I hot added a CPU, I found 'cpufreq' directory is not created below
-> /sys/devices/system/cpu/cpuX/. It is because get_cpu_device() failed in
-> add_cpu_dev_symlink().
+On 28/11/2021 22:46, Rikard Falkeborn wrote:
+> The only usage of powerclamp_cooling_ops is to pass its address to
+> thermal_cooling_device_register(), which takes a pointer to const struct
+> thermal_cooling_device_ops. Make it const to allow the compiler to put
+> it in read-only memory.
 > 
-> cpufreq_add_dev() is the .add_dev callback of a CPU subsys interface. It
-> will be called when the CPU device registered into the system. The stack
-> is as follows.
->   register_cpu()
->   ->device_register()
->    ->device_add()
->     ->bus_probe_device()
->      ->cpufreq_add_dev()
-> 
-> But only after the CPU device has been registered, we can get the CPU
-> device by get_cpu_device(), otherwise it will return NULL. Since we
-> already have the CPU device in cpufreq_add_dev(), pass it to
-> add_cpu_dev_symlink(). I noticed that the 'kobj' of the cpu device has
-> been added into the system before cpufreq_add_dev().
-> 
-> Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+> Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+
+Applied, thanks
+
 > ---
->  drivers/cpufreq/cpufreq.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
+>  drivers/thermal/intel/intel_powerclamp.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index e338d2f010fe..22aa2793e4d2 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -1004,10 +1004,9 @@ static struct kobj_type ktype_cpufreq = {
->  	.release	= cpufreq_sysfs_release,
->  };
->  
-> -static void add_cpu_dev_symlink(struct cpufreq_policy *policy, unsigned int cpu)
-> +static void add_cpu_dev_symlink(struct cpufreq_policy *policy, unsigned int cpu,
-> +				struct device *dev)
->  {
-> -	struct device *dev = get_cpu_device(cpu);
-> -
->  	if (unlikely(!dev))
->  		return;
->  
-> @@ -1391,7 +1390,7 @@ static int cpufreq_online(unsigned int cpu)
->  	if (new_policy) {
->  		for_each_cpu(j, policy->related_cpus) {
->  			per_cpu(cpufreq_cpu_data, j) = policy;
-> -			add_cpu_dev_symlink(policy, j);
-> +			add_cpu_dev_symlink(policy, j, get_cpu_device(j));
->  		}
->  
->  		policy->min_freq_req = kzalloc(2 * sizeof(*policy->min_freq_req),
-> @@ -1565,7 +1564,7 @@ static int cpufreq_add_dev(struct device *dev, struct subsys_interface *sif)
->  	/* Create sysfs link on CPU registration */
->  	policy = per_cpu(cpufreq_cpu_data, cpu);
->  	if (policy)
-> -		add_cpu_dev_symlink(policy, cpu);
-> +		add_cpu_dev_symlink(policy, cpu, dev);
->  
->  	return 0;
+> diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
+> index 9b68489a2356..14256421d98c 100644
+> --- a/drivers/thermal/intel/intel_powerclamp.c
+> +++ b/drivers/thermal/intel/intel_powerclamp.c
+> @@ -641,7 +641,7 @@ static int powerclamp_set_cur_state(struct thermal_cooling_device *cdev,
 >  }
+>  
+>  /* bind to generic thermal layer as cooling device*/
+> -static struct thermal_cooling_device_ops powerclamp_cooling_ops = {
+> +static const struct thermal_cooling_device_ops powerclamp_cooling_ops = {
+>  	.get_max_state = powerclamp_get_max_state,
+>  	.get_cur_state = powerclamp_get_cur_state,
+>  	.set_cur_state = powerclamp_set_cur_state,
+> 
 
-Interesting that I never hit it earlier despite doing rigorous testing of
-hotplug stuff :(
-
-Anyway the patch is okay,
-
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
 -- 
-viresh
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
