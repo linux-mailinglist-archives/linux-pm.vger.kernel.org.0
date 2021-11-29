@@ -2,100 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 118D6461C35
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Nov 2021 17:53:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBE1E461D51
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Nov 2021 19:05:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346679AbhK2Q41 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Nov 2021 11:56:27 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:47072 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347315AbhK2Qy1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Nov 2021 11:54:27 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 61C3C6159F;
-        Mon, 29 Nov 2021 16:51:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28875C53FCD;
-        Mon, 29 Nov 2021 16:51:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638204668;
-        bh=LBTwJYqGilRyT+Hxq5AEXOnolHh3ORZnVoyMPoB8cLo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SZX21dHB7QH+DxrjuNi0zCW4QFGbg4wvVtvclE3kIxreCQ8q4ivLVhfPFPVQQRX4C
-         ERtcYSAOSVdSIP5zDJ7R2DJIOSDLhO1/feHAJHqcl0J7yhAbpArVpxs3PW/PSMXm1B
-         40Jw0wjYIo8+mH2wTjfzdOuJLp5CQiSTuDE6pimNBk4JXaTEdZTdCXzyNfIlwTBHd+
-         g+WWlXhGTB7H/Z2U4AZQR4u3X3fDQd8jUa1tR70g8EoJEJ3snSRU82cFrPuId3VtjR
-         oPhNfjdln6FHTi9y9VPSFmBvufROPkXGhWhueell7N1C7uFId4gLbYUyCOHwtZ5RKn
-         WGqkafC9kRETg==
-Date:   Mon, 29 Nov 2021 17:51:05 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Rajat Jain <rajatja@google.com>
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, dtor@google.com, rajatxjain@gmail.com,
-        dbasehore@chromium.org
-Subject: Re: [PATCH v2 1/3] i2c: designware: Enable async suspend / resume of
- designware devices
-Message-ID: <YaUE+Xks5MJm/UOK@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Rajat Jain <rajatja@google.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, dtor@google.com, rajatxjain@gmail.com,
-        dbasehore@chromium.org
-References: <20211025213532.2349161-1-rajatja@google.com>
- <20211025213532.2349161-2-rajatja@google.com>
+        id S242960AbhK2SIw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Nov 2021 13:08:52 -0500
+Received: from mga06.intel.com ([134.134.136.31]:3804 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243023AbhK2SGv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 29 Nov 2021 13:06:51 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="296844349"
+X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
+   d="scan'208";a="296844349"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 10:01:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
+   d="scan'208";a="459251126"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 29 Nov 2021 10:01:16 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mrkxo-000CCY-1J; Mon, 29 Nov 2021 18:01:16 +0000
+Date:   Tue, 30 Nov 2021 02:00:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     pandith.n@intel.com, djakov@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, mgross@linux.intel.com,
+        furong.zhou@intel.com, mallikarjunappa.sangannavar@intel.com,
+        lakshmi.bai.raja.subramanian@intel.com,
+        Pandith N <pandith.n@intel.com>
+Subject: Re: [PATCH V8 1/1] interconnect: intel: Add Keem Bay noc driver
+Message-ID: <202111300127.TJsMMckG-lkp@intel.com>
+References: <20211129154337.14398-1-pandith.n@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uw2LOSK9R7cPfqjH"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211025213532.2349161-2-rajatja@google.com>
+In-Reply-To: <20211129154337.14398-1-pandith.n@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi,
 
---uw2LOSK9R7cPfqjH
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I love your patch! Perhaps something to improve:
 
-On Mon, Oct 25, 2021 at 02:35:29PM -0700, Rajat Jain wrote:
-> Mark the designware devices for asynchronous suspend. With this, the
-> resume for designware devices does not get stuck behind other unrelated
-> devices (e.g. intel_backlight that takes hundreds of ms to resume,
-> waiting for its parent devices).
->=20
-> Signed-off-by: Rajat Jain <rajatja@google.com>
-> Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-> Tested-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.16-rc3 next-20211129]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Applied to for-next, thanks!
+url:    https://github.com/0day-ci/linux/commits/pandith-n-intel-com/interconnect-intel-Add-Keem-Bay-noc-driver/20211129-235117
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git d58071a8a76d779eedab38033ae4c821c30295a5
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20211130/202111300127.TJsMMckG-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/724e8829a62d4ae6908d011f927e0c3ae5b0a80c
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review pandith-n-intel-com/interconnect-intel-Add-Keem-Bay-noc-driver/20211129-235117
+        git checkout 724e8829a62d4ae6908d011f927e0c3ae5b0a80c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash drivers/interconnect/intel/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/interconnect/intel/keembay-bwmon.c:142: warning: expecting prototype for flexnoc_counterp_capture(). Prototype was for flexnoc_counter_capture() instead
 
 
---uw2LOSK9R7cPfqjH
-Content-Type: application/pgp-signature; name="signature.asc"
+vim +142 drivers/interconnect/intel/keembay-bwmon.c
 
------BEGIN PGP SIGNATURE-----
+   122	
+   123	/**
+   124	 * flexnoc_counterp_capture() - Capture the counter statistic values
+   125	 * @noc: NOC type to setup counters
+   126	 * @counter:  Counter number to capture statistics values for n and n+1
+   127	 * @value: statistics values read are returned in this address passed
+   128	 *
+   129	 * This function will return the statistics value of started counters.
+   130	 * When this function returns NOC_PROBE_COMPLETED, it is guaranteed that NOC
+   131	 * counters are idle and finished probing.
+   132	 * Algo : The values should not returned when counters are active/running.
+   133	 * Once the counter is frozen, the values are good to read. There is an
+   134	 * iteration logic implemented to check this. An maximum timeout config
+   135	 * is provided to for capture timeout - NOC_CAPTURE_TIMEOUT_MSEC
+   136	 *
+   137	 *  Returns NOC_PROBE_COMPLETED if the counters are stopped or
+   138	 *  NOC_PROBE_ERR_IN_PROGRESS if counters are still running
+   139	 */
+   140	enum noc_status flexnoc_counter_capture(enum noc_ss_type noc,
+   141						enum noc_counter counter, u32  *value)
+ > 142	{
+   143		unsigned long timeout;
+   144		u32 c0_0, c0_1;
+   145	
+   146		if (noc >= NOC_TYPE_MAX ||
+   147		    counter >= NOC_COUNTER_MAX  ||
+   148		    !value)
+   149			return NOC_PROBE_ERR_INVALID_ARGS;
+   150	
+   151		timeout = jiffies + msecs_to_jiffies(NOC_CAPTURE_TIMEOUT_MSEC);
+   152		do {
+   153			c0_0 = noc_readl((c_offset[counter] + C_VAL));
+   154			usleep_range(10000, 11000);
+   155			c0_1 = noc_readl((c_offset[counter] + C_VAL));
+   156			/* If mainctrl is zero , return error */
+   157			if (noc_readl(MAINCTL) == 0)
+   158				return NOC_PROBE_ERR_IN_PROGRESS;
+   159			/* If counters are zero, keep reading */
+   160			if (0 == c0_0 && 0 == c0_1) {
+   161				break;
+   162			} else if (c0_0 != c0_1) {
+   163				continue;
+   164			} else {
+   165				/* counters look good break the while */
+   166				break;
+   167			}
+   168		} while (time_before(jiffies, timeout));
+   169	
+   170		if (c0_0 != c0_1)
+   171			return NOC_PROBE_ERR_IN_PROGRESS;
+   172	
+   173		c0_0 = noc_readl((c_offset[counter] + C_VAL));
+   174		c0_1 = noc_readl((c_offset[counter + 1] + C_VAL));
+   175		*value = (c0_0 | (c0_1 << 16));
+   176	
+   177		return NOC_PROBE_COMPLETED;
+   178	}
+   179	
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGlBPkACgkQFA3kzBSg
-KbYSJRAAsCnE6yygwDLkWHETG6dkGl7h/QM8KiUBXnvpPNgsUnRBl+LgoqRtt1vN
-+BQBV43kwWsDtNZxoyDw1XUtJKtVeAOuDoZ1EIfcXONCYLU0Om3YeLaH/oLLpcJN
-EbrSb0Ph5eP72Waa3id+0p6xveT7OG5gBQ0vuzY+vE1Uo/Xd3kpQQlZlv4QVuTTd
-X9wn2GmY4aUgOhfiCbVHNif7XfWtsYhYg3PFmSZ8+ggPS3U/qfsomegALkWLTDPX
-WrXsUDwiS+pTIyNsAmLvq6pSo+3jZ9d26c8dZ8R0kv1HEoYbONiMNGodOHhtMvBQ
-FprK6L2f7PFND45AHNqpsc6B0sva9MPcfmOneNz8usdhM60QWPKlWo3ybPX+Vprv
-L5Mzgws5b3Pckgf6/ss33Ab8kxGPrtFYR3PDh3sdinL8fzELke7cwh6KrfJ5x5W6
-D6VcqHgmKg59sfCRLXogi6amzJMUmo/fUDWx2dkYRO4JLnmjJlVP7ZxPu960H/We
-OXn5M5Gyh7ElnYUb6Fh/wFLlK0rquq6vZJNPP2qfquBg1fMHlO+vjjpEyDrj/8Fz
-2ShPl1Qi3BalKEBF2OL8G8/bM7/mDbU/K9UulORQko+HQQhiON8VkrUZEC1WfGxe
-YWaJ7JJRxAdW7Rm44XPXX3lzcFV2n4bfq3tU2mbjc19NkLmX2Pg=
-=8+TH
------END PGP SIGNATURE-----
-
---uw2LOSK9R7cPfqjH--
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
