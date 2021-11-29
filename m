@@ -2,187 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9BAC461586
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Nov 2021 13:52:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36B36461592
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Nov 2021 13:55:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238415AbhK2MzM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Nov 2021 07:55:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45440 "EHLO
+        id S233002AbhK2M7B (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Nov 2021 07:59:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbhK2MxL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Nov 2021 07:53:11 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F352C08EC90;
-        Mon, 29 Nov 2021 03:34:53 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id l7so33801169lja.2;
-        Mon, 29 Nov 2021 03:34:52 -0800 (PST)
+        with ESMTP id S231244AbhK2M5B (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Nov 2021 07:57:01 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF6E8C08EB19;
+        Mon, 29 Nov 2021 03:42:14 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id c3so21024818iob.6;
+        Mon, 29 Nov 2021 03:42:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=euaa0MK3qpl38vu/xm/JZntaVOCHcXyS5pdHcr9Cv9Y=;
-        b=j7IepB0c7QsF+gZGn8sLWlXDCQr83Yhq9Uwq9fJmgvQdhWWCer0J3Db/gwAG0Blu3V
-         KLIiDLWANtPW2sX+O/m2jQqBDLC+4NfkDAxYnlnBfxi7qlePYrZZysw0Kj4NFPMagEe7
-         5Z58UnljUl1PUrtNNqQtNaR8rjEOAOjAptz9aZ81TzHnOGVzQL+Ka518l0o45nrM05c1
-         wTSb3kazkFWdVLhzdtamDwO56fb5XsgOF41m+pkkrOCbpYLS/NmBUtznRV2wcvObV+eX
-         /QUCocD7Th3AP/6bIoc90HuBDrH/5Le5nNAAFps88ziv0187Td+CIqcDZxoQmDkSEFJt
-         ILjw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8DiEIPxwmtabywojLIKrpLmvgw45b4iTNiO5soeMU6o=;
+        b=RlrcsJqmeIn1gVO9rhY2FMWwJ6HFT9bGSa6QJMg3W1zfgG3X6N29gUWBNoiRhMzR0H
+         OhxEEURqen1meCgpx2+/tCguWIy4qmdt6nLdr3k1jZ5KEgH9MuW3/WcQ9kUDWjL0Z5Vb
+         LZTRTNWJ+vw20DB/YX/DRkdCIctfmF+FBK19dKA4OOPAby5NuHOYnx3M2bPHMOxOoy8l
+         zeiPZPJelHREyqMNKB3VaUxahunobi9K/DleK4ipxolWqBpmCqDq1KgDE+CnhUnDjnrT
+         0Jq2Si7jcZBqaDE6WJ2P0wdTy4+Q/SQ3I2PP0MlrLorcL+mdD+MSAYdfTwx5jxcJJ+lY
+         O4HA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=euaa0MK3qpl38vu/xm/JZntaVOCHcXyS5pdHcr9Cv9Y=;
-        b=qeOnECNZ4xDsNz9FGkD6hyREQAwCMdetMa3EdzJZT5yyLOVxebwSvtA7x2pQVX0Vsj
-         miCTdtAOi2AW1ZySIUw8Ww+PHtwrET8A4I/mXVVqXQzHPwuWTZyockQBCwYu0MwfxhVr
-         Kw1oo1g57GcFYK9WsY4TXiw+spH2N5VcBPoqL+T5U8PQSPWD7AbBhS67MeOsmNPlI7oD
-         86egp/QBXMjix5587l5mC7JSZ/lYNuhe4TqmXnCTaGuBdu5e/pgm73yH9DfiXpPIZxTh
-         UJfQMQ2e5c893ix6oxcwr88jadGf/kPc4V1zA2H90RbZiC4N6sKnMefMtBY7ibF7zqzu
-         uF/w==
-X-Gm-Message-State: AOAM531PNlu4JHVWirBgteja+2xvrU5frJmbG/9PbyL4LaO5iNXbI9+N
-        HhqaQNHPYM1bhP4yT8wAf3ATaqPvCOY=
-X-Google-Smtp-Source: ABdhPJzVpycz41Q2saZagDnrHTPX3H5Cn8S9UMBEs5Q4UAjlx4ArmiP2PAHXWXd2FxMxn0TZfV9KEQ==
-X-Received: by 2002:a2e:814b:: with SMTP id t11mr47973901ljg.171.1638185691187;
-        Mon, 29 Nov 2021 03:34:51 -0800 (PST)
-Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.googlemail.com with ESMTPSA id n2sm131579ljq.30.2021.11.29.03.34.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Nov 2021 03:34:50 -0800 (PST)
-Subject: Re: [PATCH v4 05/25] reboot: Warn if restart handler has duplicated
- priority
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee.jones@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
-        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
-References: <20211126180101.27818-1-digetx@gmail.com>
- <20211126180101.27818-6-digetx@gmail.com> <YaLNOJTM+lVq+YNS@qmqm.qmqm.pl>
- <033ddf2a-6223-1a82-ec64-30f17c891f67@gmail.com>
- <YaQeQgbW+CjEdsqG@qmqm.qmqm.pl>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <091321ea-4919-0579-88a8-23d05871575d@gmail.com>
-Date:   Mon, 29 Nov 2021 14:34:40 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8DiEIPxwmtabywojLIKrpLmvgw45b4iTNiO5soeMU6o=;
+        b=sl07i1fD/WILNa7wDek/oTz7/tLb/vGptzxtwWlmsp69ruAiYbnrfCKPx03IpMhVnd
+         vuRHeYteMiQdFRc/hmMMlSWEVfSrodjXEQTQkycjHjnuK8PvnhfRY5sOopZScqIRP33n
+         cCCawonJyJVfqC9NBx+oDP+QKhysxeInyHsN24wPHyEQhBeRUm8eXLS4WdtyNc1xVE51
+         uU0OI5vgFH5ZrNOhyMSseMzFh2Rt4kWLtT3SCq28pRd89y7SrGTsD0Ha5iA6MJOa8Qzs
+         oZK1VJTzO2lwUtxpKKiqgNbuMWD8ZHda5FT7Sif522zX+ghGU7laZarR5+PltFkQlALN
+         WOtw==
+X-Gm-Message-State: AOAM532mbBopolcuKUPgEMtEZDi6GNpctUgrp3M8twf7NHYtP7Pahfw/
+        LiSmCk4Z1ifMQxixnBtYV4QrI856NkpMy/FXHwY=
+X-Google-Smtp-Source: ABdhPJxUPnrzd1fIgp0bQ0VcnIBdfu3Q8Kiyx+t/gkTv/ZX6M6t1J/JoW5a+5GXuOUyQJxaAnegpzFE5xO9ojxakKpk=
+X-Received: by 2002:a05:6638:32a2:: with SMTP id f34mr62596399jav.63.1638186134216;
+ Mon, 29 Nov 2021 03:42:14 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <YaQeQgbW+CjEdsqG@qmqm.qmqm.pl>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20211110122948.188683-1-alistair@alistair23.me>
+ <20211110122948.188683-2-alistair@alistair23.me> <20211117223950.3a7eaf7a@aktux>
+ <CAKmqyKP_gQ1qSADMPwmyf-V0TqGOYf2GitzpDXsmBUO6_iqK7Q@mail.gmail.com> <20211125235935.5a1b7d33@aktux>
+In-Reply-To: <20211125235935.5a1b7d33@aktux>
+From:   Alistair Francis <alistair23@gmail.com>
+Date:   Mon, 29 Nov 2021 21:41:48 +1000
+Message-ID: <CAKmqyKO-KUhfeeOTFtMzLrZ5MUiL2-5qov-g+VYZxC_8du=ksA@mail.gmail.com>
+Subject: Re: [PATCH v15 1/8] dt-bindings: mfd: Initial commit of silergy,sy7636a.yaml
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     Alistair Francis <alistair@alistair23.me>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>, lgirdwood@gmail.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        rui.zhang@intel.com, devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-hwmon@vger.kernel.org, amitk@kernel.org,
+        linux-pm@vger.kernel.org, dl-linux-imx <linux-imx@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>, Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-29.11.2021 03:26, Michał Mirosław пишет:
-> On Mon, Nov 29, 2021 at 12:06:19AM +0300, Dmitry Osipenko wrote:
->> 28.11.2021 03:28, Michał Mirosław пишет:
->>> On Fri, Nov 26, 2021 at 09:00:41PM +0300, Dmitry Osipenko wrote:
->>>> Add sanity check which ensures that there are no two restart handlers
->>>> registered with the same priority. Normally it's a direct sign of a
->>>> problem if two handlers use the same priority.
->>>
->>> The patch doesn't ensure the property that there are no duplicated-priority
->>> entries on the chain.
->>
->> It's not the exact point of this patch.
->>
->>> I'd rather see a atomic_notifier_chain_register_unique() that returns
->>> -EBUSY or something istead of adding an entry with duplicate priority.
->>> That way it would need only one list traversal unless you want to
->>> register the duplicate anyway (then you would call the older
->>> atomic_notifier_chain_register() after reporting the error).
->>
->> The point of this patch is to warn developers about the problem that
->> needs to be fixed. We already have such troubling drivers in mainline.
->>
->> It's not critical to register different handlers with a duplicated
->> priorities, but such cases really need to be corrected. We shouldn't
->> break users' machines during transition to the new API, meanwhile
->> developers should take action of fixing theirs drivers.
->>
->>> (Or you could return > 0 when a duplicate is registered in
->>> atomic_notifier_chain_register() if the callers are prepared
->>> for that. I don't really like this way, though.)
->>
->> I had a similar thought at some point before and decided that I'm not in
->> favor of this approach. It's nicer to have a dedicated function that
->> verifies the uniqueness, IMO.
-> 
-> I don't like the part that it traverses the list second time to check
-> the uniqueness. But actually you could avoid that if
-> notifier_chain_register() would always add equal-priority entries in
-> reverse order:
-> 
->  static int notifier_chain_register(struct notifier_block **nl,
->  		struct notifier_block *n)
->  {
->  	while ((*nl) != NULL) {
->  		if (unlikely((*nl) == n)) {
->  			WARN(1, "double register detected");
->  			return 0;
->  		}
-> -		if (n->priority > (*nl)->priority)
-> +		if (n->priority >= (*nl)->priority)
->  			break;
->  		nl = &((*nl)->next);
->  	}
->  	n->next = *nl;
->  	rcu_assign_pointer(*nl, n);
->  	return 0;
->  }
-> 
-> Then the check for uniqueness after adding would be:
-> 
->  WARN(nb->next && nb->priority == nb->next->priority);
+On Fri, Nov 26, 2021 at 8:59 AM Andreas Kemnade <andreas@kemnade.info> wrote:
+>
+> On Tue, 23 Nov 2021 23:29:26 +1000
+> Alistair Francis <alistair23@gmail.com> wrote:
+>
+> > On Thu, Nov 18, 2021 at 7:40 AM Andreas Kemnade <andreas@kemnade.info> wrote:
+> > >
+> > > On Wed, 10 Nov 2021 22:29:41 +1000
+> > > Alistair Francis <alistair@alistair23.me> wrote:
+> > >
+> > > > Initial support for the Silergy SY7636A Power Management chip
+> > > > and regulator.
+> > > >
+> > > > Signed-off-by: Alistair Francis <alistair@alistair23.me>
+> > > > Reviewed-by: Rob Herring <robh@kernel.org>
+> > > > Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+> > > > ---
+> > > >  .../bindings/mfd/silergy,sy7636a.yaml         | 79 +++++++++++++++++++
+> > > >  1 file changed, 79 insertions(+)
+> > > >  create mode 100644 Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml
+> > > >
+> > > > diff --git a/Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml b/Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml
+> > > > new file mode 100644
+> > > > index 000000000000..0566f9498e2f
+> > > > --- /dev/null
+> > > > +++ b/Documentation/devicetree/bindings/mfd/silergy,sy7636a.yaml
+> > > [...]
+> > > > +  regulators:
+> > > > +    type: object
+> > > > +
+> > > > +    properties:
+> > > > +      compatible:
+> > > > +        const: silergy,sy7636a-regulator
+> > > > +
+> > > > +      vcom:
+> > > > +        type: object
+> > > > +        $ref: /schemas/regulator/regulator.yaml#
+> > > > +        properties:
+> > > > +          regulator-name:
+> > > > +            const: vcom
+> > > > +
+> > > hmm, this is what? If I understand it correctly, vcom means some
+> > > voltage for compensation. On other comparable pmics (e.g. TPS65185
+> > > which has also a sane public datasheet, MAX17135) I have seen some
+> > > methods to measure a voltage while the display is doing something
+> > > defined and then program this voltage non-volatile for compensation
+> > > during manufacturing.
+> > >
+> > > If I understand the code correctly all the bunch of voltages are
+> > > powered up if this one is enabled.
+> > > So at least a description should be suitable.
+> > >
+> > > The other comparable PMICs have at least regulators named VCOM, DISPLAY
+> > > (controls several regulators, started with delays configured via
+> > > registers) and V3P3. MAX17135 source can be found in NXP kernels,
+> > > TPS65185 in Kobo vendor kernels.
+> > >
+> > > So I would expect to see something similar here and a description or at
+> > > least not such a misleading name as vcom if it is for some reason not
+> > > feasible to separate the regulators.
+> >
+> > This is a vcom in the sense of voltage for compensation. We just
+> > currently don't support setting the vcom.
+> >
+> > I had a look at the Kobo code and this is similar to
+> > https://github.com/akemnade/linux/blob/kobo/epdc-pmic-5.15/drivers/regulator/sy7636-regulator.c#L614
+> >
+> > So I think that vcom is still the appropriate name for this.
+> >
+> seems that you did not get me. If I understand the code behind it
+> correctly, it turns on all power rails (the +-15V stuff, VEE and so on)
+> with the defined delays, not just vcom because it sets
+> SY7636A_OPERATION_MODE_CRL_ONOFF. Controlling VCOM separately is possible
+> by using SY7636A_OPERATION_MODE_CRL_VCOMCTL in combintion with a
+> vcom_en gpio.
+>
+> I do not see a reason to turn on vcom only without the other higher
+> voltage rails, so the behaviour is not necessarily wrong but if I read
+> the binding documentation I would expect that just vcom is turned on.
+> That is the mismatch I am talking about.
 
-We can't just change the registration order because invocation order of
-the call chain depends on the registration order and some of current
-users may rely on that order. I'm pretty sure that changing the order
-will have unfortunate consequences.
+Ah! Ok I understand. I'll rename it to vdd then.
+
+Alistair
+
+>
+> If we agree on this idea that one regulator is enabling everything, I
+> would adapt my EPDC drm driver and tps65185 driver (which are both in
+> my clean up to be upstreamable-queue).
+>
+> Just another thing to compare with:
+> https://github.com/Freescale/linux-fslc/blob/4.1-2.0.x-imx/drivers/regulator/max17135-regulator.c
+> that seems to be the starting point for kobo vendor kernel epd pmics.
+> They seem to have taken the source and modified things. There we have
+> regulators with empty ops for that step-up converted stuff, a separate
+> vcom and a display regulator which really controls all of these step-up
+> things.
+>
+> Regards,
+> Andreas
