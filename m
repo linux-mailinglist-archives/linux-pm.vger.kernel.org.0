@@ -2,25 +2,24 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90563463AC2
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Nov 2021 16:58:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B76E463AC6
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Nov 2021 16:58:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234815AbhK3QBY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Nov 2021 11:01:24 -0500
+        id S243175AbhK3QB1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Nov 2021 11:01:27 -0500
 Received: from relmlor1.renesas.com ([210.160.252.171]:48449 "EHLO
         relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S240633AbhK3QBY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Nov 2021 11:01:24 -0500
+        by vger.kernel.org with ESMTP id S243182AbhK3QB0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Nov 2021 11:01:26 -0500
 X-IronPort-AV: E=Sophos;i="5.87,276,1631545200"; 
-   d="scan'208";a="101916626"
+   d="scan'208";a="101916634"
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 01 Dec 2021 00:58:03 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 01 Dec 2021 00:58:06 +0900
 Received: from localhost.localdomain (unknown [10.226.93.28])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 847E3400C440;
-        Wed,  1 Dec 2021 00:58:00 +0900 (JST)
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 1B238400C43C;
+        Wed,  1 Dec 2021 00:58:03 +0900 (JST)
 From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
+To:     Rob Herring <robh+dt@kernel.org>
 Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -32,48 +31,113 @@ Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
         Biju Das <biju.das@bp.renesas.com>,
         Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v3 0/2] Add Thermal support for RZ/G2L
-Date:   Tue, 30 Nov 2021 15:57:55 +0000
-Message-Id: <20211130155757.17837-1-biju.das.jz@bp.renesas.com>
+Subject: [PATCH v3 1/2] dt-bindings: thermal: Document Renesas RZ/G2L TSU
+Date:   Tue, 30 Nov 2021 15:57:56 +0000
+Message-Id: <20211130155757.17837-2-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211130155757.17837-1-biju.das.jz@bp.renesas.com>
+References: <20211130155757.17837-1-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-RZ/G2L SoC incorporates a thermal sensor unit (TSU) that measures
-the temperature inside the LSI.
- 
-The thermal sensor in this unit measures temperatures in the range from
-−40°C to 125°C with an accuracy of ±3°C. The TSU repeats measurement at
-20-µs intervals, and automatically updates the results of measurement.
+Document the Thermal Sensor Unit(TSU) in the RZ/G2L SoC.
 
-The TSU has no external pins as well as no interrupts.
-
-This patch series aims to add TSU driver support for RZ/G2L SoC.
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
 v2->v3:
- * Added Rb tag from Rob.
- * Updated commit description with technical description of the sensor
- * Included math.h and unit.h for round_up() and MILLIDEGREE_PER_DEGREE
- * Updated the comments.
+ * Add Rb tag from Rob.
 v1->v2:
- * Removed clk patch and dts pthes from this series
- * Removed devm_add_action_or_reset from probe.
-
-Biju Das (2):
-  dt-bindings: thermal: Document Renesas RZ/G2L TSU
-  thermal/drivers: Add TSU driver for RZ/G2L
-
- .../bindings/thermal/rzg2l-thermal.yaml       |  76 ++++++
- drivers/thermal/Kconfig                       |   9 +
- drivers/thermal/Makefile                      |   1 +
- drivers/thermal/rzg2l_thermal.c               | 240 ++++++++++++++++++
- 4 files changed, 326 insertions(+)
+ * No change
+---
+ .../bindings/thermal/rzg2l-thermal.yaml       | 76 +++++++++++++++++++
+ 1 file changed, 76 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/thermal/rzg2l-thermal.yaml
- create mode 100644 drivers/thermal/rzg2l_thermal.c
 
+diff --git a/Documentation/devicetree/bindings/thermal/rzg2l-thermal.yaml b/Documentation/devicetree/bindings/thermal/rzg2l-thermal.yaml
+new file mode 100644
+index 000000000000..ccab9511a042
+--- /dev/null
++++ b/Documentation/devicetree/bindings/thermal/rzg2l-thermal.yaml
+@@ -0,0 +1,76 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/thermal/rzg2l-thermal.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Renesas RZ/G2L Thermal Sensor Unit
++
++description:
++  On RZ/G2L SoCs, the thermal sensor unit (TSU) measures the
++  temperature(Tj) inside the LSI.
++
++maintainers:
++  - Biju Das <biju.das.jz@bp.renesas.com>
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - renesas,r9a07g044-tsu # RZ/G2{L,LC}
++      - const: renesas,rzg2l-tsu
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  power-domains:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++
++  "#thermal-sensor-cells":
++    const: 1
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - power-domains
++  - resets
++  - "#thermal-sensor-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/r9a07g044-cpg.h>
++
++    tsu: thermal@10059400 {
++            compatible = "renesas,r9a07g044-tsu",
++                         "renesas,rzg2l-tsu";
++            reg = <0x10059400 0x400>;
++            clocks = <&cpg CPG_MOD R9A07G044_TSU_PCLK>;
++            resets = <&cpg R9A07G044_TSU_PRESETN>;
++            power-domains = <&cpg>;
++            #thermal-sensor-cells = <1>;
++    };
++
++    thermal-zones {
++            cpu-thermal {
++                    polling-delay-passive = <250>;
++                    polling-delay = <1000>;
++                    thermal-sensors = <&tsu 0>;
++
++                    trips {
++                            sensor_crit: sensor-crit {
++                                    temperature = <125000>;
++                                    hysteresis = <1000>;
++                                    type = "critical";
++                            };
++                    };
++            };
++    };
 -- 
 2.17.1
 
