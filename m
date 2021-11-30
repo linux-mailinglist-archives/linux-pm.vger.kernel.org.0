@@ -2,207 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 524A74639AF
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Nov 2021 16:17:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76960463A47
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Nov 2021 16:39:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232627AbhK3PUk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Nov 2021 10:20:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38292 "EHLO
+        id S238787AbhK3PnJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Nov 2021 10:43:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244478AbhK3PSi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Nov 2021 10:18:38 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85FF8C0613D7
-        for <linux-pm@vger.kernel.org>; Tue, 30 Nov 2021 07:13:06 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id p18so17733646wmq.5
-        for <linux-pm@vger.kernel.org>; Tue, 30 Nov 2021 07:13:06 -0800 (PST)
+        with ESMTP id S237453AbhK3PnH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Nov 2021 10:43:07 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553B9C061748
+        for <linux-pm@vger.kernel.org>; Tue, 30 Nov 2021 07:39:48 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id f9so53876811ybq.10
+        for <linux-pm@vger.kernel.org>; Tue, 30 Nov 2021 07:39:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=IiS4gXcieiwHRh30CfBLD5DtuaajJ0EBlCiC0ifH9UE=;
-        b=S4bHKWWNsiRIbQrdnZkJeQwDDYj/eB6dkFyudT5wZl5zUv6G4RoAt1uTW/CoMpC77L
-         Xw66Ax43FuHN/EsOedhnUpsZVfX5YuYj/J34O24C67kjmPOOE4FtTZlP0uiiFQ2rdM2+
-         BuS+DphEsQLMWXvj+KPaITcYDyEHR8sciuYYw7DkPBgaozUYmZiZGZQYs2hgqfuoqYlu
-         6sFYCK9h6eFKxZ7cfqMz4DOggsnkAy7us2PjQQPEu5l9kJoqEJxPel6ClwQA3GppsezB
-         Gxl5xhA2iy35HkLwkMCQSs6OSx5XhrAD3h8a2nZOyt5TLrYBTiXRQXoq0L+XxGA6Mp7h
-         tJDg==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=T3wgXY2Ekf9Fmqil4jUmN2WNf0+9JZFWQQO9PifqT/A=;
+        b=DekP/nmyQgMPS6NwVdyleQ9FEWrJQzg+Ql/53uMPipsfgMgHcL5wq0ilpEC0W3U3I/
+         hv7EdljnZWp8paaD/rnCKFbRVoQafnnzTy7EYUYULBdr4OHshEAIcaQ1RrZupTLzXQqf
+         UDpdGa/tAoNZxM4h03lAFSp3sk0qnpLkXny5stX6a5Ruc9LX5ohr/PPEio9sjp7a2bn3
+         H/IvP8OJcSipnG0tiaLb7rrr8qvNwWp04MhGjHMVqAiIGFxsG8DCE+Zssp8Az7jG67Zf
+         FhDfuHDIgxL+c3YDGMCBf1Cs1f76a1MqMS/MmBlDygTihpfkrIxrWJRIAQwSxKKl09B+
+         JFQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=IiS4gXcieiwHRh30CfBLD5DtuaajJ0EBlCiC0ifH9UE=;
-        b=jeMXVOjMQldovHexXqSclZLuNujqPo6gtkKcFf485w3TS15Gw+LIdA9ByzDXBt7Qaz
-         LhcvMGXZP1YdYL73LJiK9cd7psiqXWNBHGnP+ixhyWNAN1lEQESq7IoCtsl9p9XndwNC
-         Mkvlqwj1HGGLRVprtSvKwp8BpkGVY/pV6do6k55rOeOHAXgulxkJFH24cz//+FxczBAH
-         uPguLGmxEdix9aiDcm/DXSOEknSAVKwGQr+RJ59Cu1+iTa28bcv3zl8l4EALJyhIOIb1
-         pKkWh0Hr4go6wpnramLxRYPI+i7HqGS0IEwxfS0Su2mVOL+nDr/cMHH4ebkOu9rubEDE
-         PUUA==
-X-Gm-Message-State: AOAM531B/JbHZmuGuOnNN10zOj8oTK1EvMFyJPCBOkXi5d6c4BPSgGbd
-        C6gUrmykURuni37Ap05e4fti8F1ZexoeAQ==
-X-Google-Smtp-Source: ABdhPJxVSAiBi7i5Qr1WSohC8Mr+dbuwKYwzM31nuLIOanvnl65+v/sEmGRaPG91oFjfdXjaD3ZKnA==
-X-Received: by 2002:a7b:c008:: with SMTP id c8mr5917393wmb.55.1638285184845;
-        Tue, 30 Nov 2021 07:13:04 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:7880:daae:2d50:bb5e? ([2a01:e34:ed2f:f020:7880:daae:2d50:bb5e])
-        by smtp.googlemail.com with ESMTPSA id q24sm2480860wmj.21.2021.11.30.07.13.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Nov 2021 07:13:04 -0800 (PST)
-Subject: Re: [PATCH] thermal: qoriq: Only enable sites that actually exist
-To:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
-        linux-pm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, kernel@puri.sm
-References: <20211129110252.1699112-1-sebastian.krzyszkowiak@puri.sm>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <4a470e25-b1fa-bf7b-18d2-d21cbfe4fb3a@linaro.org>
-Date:   Tue, 30 Nov 2021 16:13:02 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=T3wgXY2Ekf9Fmqil4jUmN2WNf0+9JZFWQQO9PifqT/A=;
+        b=fiT61d0XanKJySXb1QAWVoOHEgnGHYc0dMqn6LNa6p3M7quo12NJXnFk2/V0ecqV1x
+         zoXcudjWkv58HgM7RiIqbU7hVjpKeA9nLx5kt6N9MFd3ucEQob+nNTjvRHFNnALrlKgP
+         osEOHjndNWiKt3BL/Fc2GrcZNaijMVX9ZVlrgBaWqEWqZbpL7Z05xV4+Fu1jZleCkFLT
+         XVdIwihWwDAseLWwqjegFF7Rjd2fXlOEuXzNZWQM0cewkhGz6TQAQ840OcPNvGo5Da+o
+         ydDB5vxT6vZUkqGX73P0B7M/AtrJu06HKaUqaLuMqeZp+Tzl8cp3oftmS57J/DP+9PZ/
+         6x9w==
+X-Gm-Message-State: AOAM533nWtY8/PJS0JdvGC4TX0opWAOQhNdq4xGkR0bBmSoQi9KS3gN5
+        Mn4huB/9MbpCkl1fjbU29QgYjwbTaiTis4Oazmg=
+X-Google-Smtp-Source: ABdhPJyNPw9HKXhEQm3kynPVtD5MMpna9UkNNoZZn5cYzUe2PBPVzAgYhQ+Q/a5HaJSNcok2FnUqvCYrOEQVT8YNCYw=
+X-Received: by 2002:a25:50cf:: with SMTP id e198mr41512755ybb.508.1638286787297;
+ Tue, 30 Nov 2021 07:39:47 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20211129110252.1699112-1-sebastian.krzyszkowiak@puri.sm>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6900:46d:0:0:0:0 with HTTP; Tue, 30 Nov 2021 07:39:46
+ -0800 (PST)
+Reply-To: kk0142894@gmail.com
+From:   KIRA <diplomaticlogistice411@gmail.com>
+Date:   Tue, 30 Nov 2021 07:39:46 -0800
+Message-ID: <CA+pOX_v1RJ-eD7eaUqS2Qb9gu7w2PS=1gJTJ73JEYjyQzUySWg@mail.gmail.com>
+Subject: Funding Investment
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-Hi Sebastian,
-
-thanks for the fix.
-
-On 29/11/2021 12:02, Sebastian Krzyszkowiak wrote:
-> On i.MX8MQ, enabling monitoring sites that aren't connected to anything
-> can cause unwanted side effects on some units. This seems to happen
-> once some of these sites report out-of-range readings and results in
-> sensor misbehavior, such as thermal zone readings getting stuck or even
-> suddenly reporting an impossibly high value, triggering emergency
-> shutdowns.
-> 
-> The datasheet lists all non-existent sites as "reserved" and doesn't
-> make any guarantees about being able to enable them at all, so let's
-> not do that.
-
-The description of what does the patch is missing here.
-
-> Fixes: 45038e03d633 ("thermal: qoriq: Enable all sensors before registering them")
-> 
-> Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-> ---
->  drivers/thermal/qoriq_thermal.c | 63 ++++++++++++++++++++++-----------
->  1 file changed, 43 insertions(+), 20 deletions(-)
-> 
-> diff --git a/drivers/thermal/qoriq_thermal.c b/drivers/thermal/qoriq_thermal.c
-> index 73049f9bea25..ef0848849ee2 100644
-> --- a/drivers/thermal/qoriq_thermal.c
-> +++ b/drivers/thermal/qoriq_thermal.c
-> @@ -32,7 +32,6 @@
->  #define TMR_DISABLE	0x0
->  #define TMR_ME		0x80000000
->  #define TMR_ALPF	0x0c000000
-> -#define TMR_MSITE_ALL	GENMASK(15, 0)
->  
->  #define REGS_TMTMIR	0x008	/* Temperature measurement interval Register */
->  #define TMTMIR_DEFAULT	0x0000000f
-> @@ -129,33 +128,51 @@ static const struct thermal_zone_of_device_ops tmu_tz_ops = {
->  static int qoriq_tmu_register_tmu_zone(struct device *dev,
->  				       struct qoriq_tmu_data *qdata)
->  {
-> -	int id;
-> +	int ret = 0;
-> +	struct device_node *np, *child, *sensor_np;
->  
-> -	if (qdata->ver == TMU_VER1) {
-> -		regmap_write(qdata->regmap, REGS_TMR,
-> -			     TMR_MSITE_ALL | TMR_ME | TMR_ALPF);
-> -	} else {
-> -		regmap_write(qdata->regmap, REGS_V2_TMSR, TMR_MSITE_ALL);
-> -		regmap_write(qdata->regmap, REGS_TMR, TMR_ME | TMR_ALPF_V2);
-> -	}
-> +	np = of_find_node_by_name(NULL, "thermal-zones");
-> +	if (!np)
-> +		return -ENODEV;
-> +
-> +	sensor_np = of_node_get(dev->of_node);
->  
-> -	for (id = 0; id < SITES_MAX; id++) {
-> +	for_each_available_child_of_node(np, child) {
->  		struct thermal_zone_device *tzd;
-> -		struct qoriq_sensor *sensor = &qdata->sensor[id];
-> -		int ret;
-> +		struct qoriq_sensor *sensor;
-> +		int id, site;
-> +
-> +		ret = thermal_zone_of_get_sensor_id(child, sensor_np, &id);
-> +
-> +		if (ret < 0) {
-> +			dev_err(dev, "failed to get valid sensor id: %d\n", ret);
-> +			of_node_put(child);
-> +			break;
-> +		}
->  
-> +		sensor = &qdata->sensor[id];
->  		sensor->id = id;
->  
-> +		/* Enable monitoring */
-> +		if (qdata->ver == TMU_VER1) {
-> +			site = 0x1 << (15 - id);
-> +			regmap_update_bits(qdata->regmap, REGS_TMR,
-> +					   site | TMR_ME | TMR_ALPF,
-> +					   site | TMR_ME | TMR_ALPF);
-> +		} else {
-> +			site = 0x1 << id;
-> +			regmap_update_bits(qdata->regmap, REGS_V2_TMSR, site, site);
-> +			regmap_write(qdata->regmap, REGS_TMR, TMR_ME | TMR_ALPF_V2);
-> +		}
-
-Why not create the site mask in the loop and then call once the block
-above out this loop?
-
->  		tzd = devm_thermal_zone_of_sensor_register(dev, id,
->  							   sensor,
->  							   &tmu_tz_ops);
-> -		ret = PTR_ERR_OR_ZERO(tzd);
-> -		if (ret) {
-> -			if (ret == -ENODEV)
-> -				continue;
-> -
-> -			regmap_write(qdata->regmap, REGS_TMR, TMR_DISABLE);
-> -			return ret;
-> +		if (IS_ERR(tzd)) {
-> +			ret = PTR_ERR(tzd);
-> +			dev_err(dev, "failed to register thermal zone: %d\n", ret);
-> +			of_node_put(child);
-> +			break;
->  		}
->  
->  		if (devm_thermal_add_hwmon_sysfs(tzd))
-> @@ -164,7 +181,13 @@ static int qoriq_tmu_register_tmu_zone(struct device *dev,
->  
->  	}
->  
-> -	return 0;
-> +	of_node_put(sensor_np);
-> +	of_node_put(np);
-> +
-> +	if (ret)
-> +		regmap_write(qdata->regmap, REGS_TMR, TMR_DISABLE);
-> +
-> +	return ret;
->  }
->  
->  static int qoriq_tmu_calibration(struct device *dev,
-> 
+Greetings
 
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+I am Kira
+
+Am an  investment partnership officer under
+
+Global Investment Group Fze
+
+who are ready to fund projects outside
+
+UAE in the form of debt finance.
+
+We grant loan to both
+
+
+Corporate and private entities at a low interest rate of 3%
+
+
+ROI per annum.
+
+The terms are very flexible and
+
+
+interesting.Kindly revert back if you have projects that
+
+needs funding for further
+
+discussion and negotiation.
+
+For more
+
+
+information on how we operate kindly revert back to me.
+
+
+
+
+
+
+
+Email; kira@globalinvestments-fze.com
+
+
+
+
+
+
+.Warm Regards.
