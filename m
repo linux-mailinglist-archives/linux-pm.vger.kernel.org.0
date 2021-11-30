@@ -2,54 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 548ED462F7E
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Nov 2021 10:24:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43B77462FA5
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Nov 2021 10:29:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240133AbhK3J2A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Nov 2021 04:28:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40286 "EHLO
+        id S235044AbhK3JdJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Nov 2021 04:33:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240136AbhK3J2A (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Nov 2021 04:28:00 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24BA8C061746
-        for <linux-pm@vger.kernel.org>; Tue, 30 Nov 2021 01:24:41 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id d24so42968824wra.0
-        for <linux-pm@vger.kernel.org>; Tue, 30 Nov 2021 01:24:41 -0800 (PST)
+        with ESMTP id S234997AbhK3JdJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Nov 2021 04:33:09 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D510C061574
+        for <linux-pm@vger.kernel.org>; Tue, 30 Nov 2021 01:29:50 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id a18so42971463wrn.6
+        for <linux-pm@vger.kernel.org>; Tue, 30 Nov 2021 01:29:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=yB0eWfE4eeemBgIkAqSMbGTWDerG7jyNQ2dFqY6J6Iw=;
-        b=aWaKTO/tUiOdel7w7i49eEDCCTHBWt76TvmKCMvsR0kJu1ICOrGglzBYV7sJ4wAEVV
-         HEu4abOrsMHg7WjvjE5Alvwiiulpoo8fHfKhhon/0fexy5E3gSah9RWGYHELAuIWxuLM
-         9BC7mJ5eu/7hmjSfvd+XFgWCdfi0g6xqjUleWTfXKLx/FgfJSgGezhwwOFuAUzOAW6gK
-         rXHhJNN1ElK3jYJhK7mRTk6Cp3M6YVde80PMT1j66j5bpYhalj2l1b3faPPgnQP6ZGnW
-         fNLLpQaOU3Q6N0kJjWzOZEKmAey3XZ60BOnjgoeEDzW60NGNei/ApL0Jmh4oeWGdEYHS
-         JVVg==
+        bh=felncm1mZvr7zHi58upE9nlqocAVIX85FXINzUJHutc=;
+        b=peF/Q3t+jU7+66L7aIjXgQKez3slgg6ejeSkmnTsgfFXIDQHPystltw+vw1xGaTgtZ
+         uzgOiD6kqv4dmXisOnNDWPTHWD73dKb51iYt6ciFckQEs75XWaXilkZYk8OkkYlJ+8v/
+         BQ7KfU+PjssUenDe8sMJ9BMf3lBBsCdm+ayPfzXtDgLsY0+selgl/9qc1st2y1WV63Bm
+         7tWaNOakWezHwlsSoZYRH84No0kNnDuXqrsyJce8zlk//qh8wkWBx+/0DDBGPnU0rr5a
+         qZmEuiF53bqJ57LHQFEKnLE5EsYETRsM+JCoyTQLlJa8kLgDXyggDDiCVgbXoMKTqaLk
+         T4+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=yB0eWfE4eeemBgIkAqSMbGTWDerG7jyNQ2dFqY6J6Iw=;
-        b=tByMNL0SCu1iot4Nr0HkQovj53DxIpiq3l/lQmGprFEWF03pquf0L6ScISR05fOldO
-         ifNjPJ1jtsF3u9JwopNFPjjpcvjOHf7qbO7vWoKZkvsAhTaqweRacFSegw2rKKfmBSD6
-         cvEYuT1BSx4loCujk7az3h5n7+LREDwTEShOokYNA1DUud+DnUMTXvp/gd22LAL4pMg0
-         LVS5CLQGW+8GpkIUu+n9P/66LrqxqyEC8DblgPQNohR1qYQNzs8L06GPhdSUXYBd/t9d
-         dhqcMNkgGdkcxDjC+sgJLn4fVehjIa5YMOhMghCHPiZ5/7w6YoE7GxZNF1KqEyw/+Jng
-         NUqw==
-X-Gm-Message-State: AOAM533ITI9Er+5h5QcE2xnifKoSftzJ4RdgyWTqtDcnvRQ/dT36lllD
-        dM7rqhNSuDdN5s3JjdtByMm95apY8c3uCQ==
-X-Google-Smtp-Source: ABdhPJwtkbhBHUtQ/K6qf88p2EgqL4dRD3bgO+PKHEoiEabkzpxApR+DYjMi2jEb7cv2c7pNk4pFrw==
-X-Received: by 2002:adf:f151:: with SMTP id y17mr39346595wro.153.1638264279264;
-        Tue, 30 Nov 2021 01:24:39 -0800 (PST)
+        bh=felncm1mZvr7zHi58upE9nlqocAVIX85FXINzUJHutc=;
+        b=iriCPc/th5zERPEE1zs3//oXI9y4FOjWz7fx14HmoyV4/x9mPG7cNHvO1XOBo75Kkp
+         xSjaWyRAY2WghKFFqZjI8Ga22NMat9VoZ4mHyVOFlyWuok6q2FuHW/4LIJ/AXu2u9Zux
+         YUPmIF6oTvLS3TPVQeDqUe1tA5NpJjNa4GOxonZWAiG+Wys+sFbr8ysszaWtLxRol6Jj
+         EMWBvR32QNYqdnf5P0K3HUUjIEG5wHmqEcoiE0uoIxaUVhEpkutqTCv58Ph3jaQ9OSMR
+         uNvX7p226heQ6UQtXZqGD5nMK8zXMi6NaPwN7WZEM91d44pTVf5SQl/vXFgBZjeIYHoc
+         InVQ==
+X-Gm-Message-State: AOAM532Bks+PH3TTmoybdNb1GpaTlyOnVayOQsCe/llfU40eKFjJGzTM
+        WotVlDnPCTa+bV73XZxAxp+Ozg==
+X-Google-Smtp-Source: ABdhPJzdiFz+5CZ4OQ0z1EP7aGFuMzQ2lbjLZk1z+q3SiGtYY12xMl+QVZchUrsQWGDeKbUSf9Hv7A==
+X-Received: by 2002:adf:d1e3:: with SMTP id g3mr40618505wrd.300.1638264588653;
+        Tue, 30 Nov 2021 01:29:48 -0800 (PST)
 Received: from ?IPv6:2a01:e34:ed2f:f020:7880:daae:2d50:bb5e? ([2a01:e34:ed2f:f020:7880:daae:2d50:bb5e])
-        by smtp.googlemail.com with ESMTPSA id r8sm20090958wrz.43.2021.11.30.01.24.37
+        by smtp.googlemail.com with ESMTPSA id q24sm1714601wmj.21.2021.11.30.01.29.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Nov 2021 01:24:38 -0800 (PST)
-Subject: Re: [PATCH 1/7] x86/Documentation: Describe the Intel Hardware
- Feedback Interface
+        Tue, 30 Nov 2021 01:29:47 -0800 (PST)
+Subject: Re: [PATCH 6/7] thermal: netlink: Add a new event to notify CPU
+ capabilities change
 To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         linux-pm@vger.kernel.org
@@ -64,14 +64,14 @@ Cc:     x86@kernel.org, linux-doc@vger.kernel.org,
         Ricardo Neri <ricardo.neri@intel.com>,
         linux-kernel@vger.kernel.org
 References: <20211106013312.26698-1-ricardo.neri-calderon@linux.intel.com>
- <20211106013312.26698-2-ricardo.neri-calderon@linux.intel.com>
+ <20211106013312.26698-7-ricardo.neri-calderon@linux.intel.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <81bca26d-eac8-31ed-e5ec-81812664d671@linaro.org>
-Date:   Tue, 30 Nov 2021 10:24:36 +0100
+Message-ID: <b51c9b2a-40d2-6575-7746-3059eec53519@linaro.org>
+Date:   Tue, 30 Nov 2021 10:29:46 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <20211106013312.26698-2-ricardo.neri-calderon@linux.intel.com>
+In-Reply-To: <20211106013312.26698-7-ricardo.neri-calderon@linux.intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -79,132 +79,32 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Ricardo,
-
 On 06/11/2021 02:33, Ricardo Neri wrote:
-> Start a documentation file to describe the purpose and operation of Intel's
-> Hardware Feedback Interface. Describe how this interface is used in Linux
-> to relay performance and energy efficiency updates to userspace.
+> From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 > 
-> Cc: Andi Kleen <ak@linux.intel.com>
-> Cc: Aubrey Li <aubrey.li@linux.intel.com>
-> Cc: Tim Chen <tim.c.chen@linux.intel.com>
-> Cc: "Ravi V. Shankar" <ravi.v.shankar@intel.com>
-> Reviewed-by: Len Brown <len.brown@intel.com>
-> Suggested-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> ---
->  Documentation/x86/index.rst     |  1 +
->  Documentation/x86/intel-hfi.rst | 68 +++++++++++++++++++++++++++++++++
->  2 files changed, 69 insertions(+)
->  create mode 100644 Documentation/x86/intel-hfi.rst
+> Add a new netlink event to notify change in CPU capabilities in terms of
+> performance and efficiency.
 > 
-> diff --git a/Documentation/x86/index.rst b/Documentation/x86/index.rst
-> index 383048396336..f103821ee095 100644
-> --- a/Documentation/x86/index.rst
-> +++ b/Documentation/x86/index.rst
-> @@ -21,6 +21,7 @@ x86-specific Documentation
->     tlb
->     mtrr
->     pat
-> +   intel-hfi
->     intel-iommu
->     intel_txt
->     amd-memory-encryption
-> diff --git a/Documentation/x86/intel-hfi.rst b/Documentation/x86/intel-hfi.rst
-> new file mode 100644
-> index 000000000000..f5cb738170a5
-> --- /dev/null
-> +++ b/Documentation/x86/intel-hfi.rst
-> @@ -0,0 +1,68 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +============================================================
-> +Hardware-Feedback Interface for scheduling on Intel Hardware
-> +============================================================
-> +
-> +Overview
-> +--------
-> +
-> +Intel has described the Hardware Feedback Interface (HFI) in the Intel 64 and
-> +IA-32 Architectures Software Developer's Manual (Intel SDM) Volume 3 Section
-> +14.6 [1]_.
-> +
-> +The HFI gives the operating system a performance and energy efficiency
-> +capability data for each CPU in the system. Linux can use the information from
-> +the HFI to influence task placement decisions.
-> +
-> +The Hardware Feedback Interface
-> +-------------------------------
-> +
-> +The Hardware Feedback Interface provides to the operating system information
-> +about the performance and energy efficiency of each CPU in the system. Each
-> +capability is given as a unit-less quantity in the range [0-255]. Higher values
-> +indicate higher capability. Energy efficiency and performance are reported in
-> +separate capabilities.
-
-Are they linked together (eg. higher energy efficiency => lower
-performance)?
-
-> +These capabilities may change at runtime as a result of changes in the
-> +operating conditions of the system or the action of external factors.
-
-Is it possible to give examples?
-
-> The rate
-> +at which these capabilities are updated is specific to each processor model. On
-> +some models, capabilities are set at boot time and never change. On others,
-> +capabilities may change every tens of milliseconds.
-> +
-> +The kernel or a userspace policy daemon can use these capabilities to modify
-> +task placement decisions. For instance, if either the performance or energy
-> +capabilities of a given logical processor becomes zero, it is an indication that
-> +the hardware recommends to the operating system to not schedule any tasks on
-> +that processor for performance or energy efficiency reasons, respectively.
-
-How the userspace can be involved in these decisions? If the performance
-is impacted then that should be reflected in the CPU capacity. The
-scheduler will prevent to put task on CPU with a low capacity, no?
-
-I'm also worried about the overhead of the userspace notifications.
-
-That sounds like similar to the thermal pressure? Wouldn't make sense to
-create a generic component where HFI, cpufreq cooling, LMh, etc ... are
-the backend?
-
-
-
-> +Implementation details for Linux
-> +--------------------------------
-> +
-> +The infrastructure to handle thermal event interrupts has two parts. In the
-> +Local Vector Table of a CPU's local APIC, there exists a register for the
-> +Thermal Monitor Register. This register controls how interrupts are delivered
-> +to a CPU when the thermal monitor generates and interrupt. Further details
-> +can be found in the Intel SDM Vol. 3 Section 10.5 [1]_.
-> +
-> +The thermal monitor may generate interrupts per CPU or per package. The HFI
-> +generates package-level interrupts. This monitor is configured and initialized
-> +via a set of machine-specific registers. Specifically, the HFI interrupt and
-> +status are controlled via designated bits in the IA32_PACKAGE_THERM_INTERRUPT
-> +and IA32_PACKAGE_THERM_STATUS registers, respectively. There exists one HFI
-> +table per package. Further details can be found in the Intel SDM Vol. 3
-> +Section 14.9 [1]_.
-> +
-> +The hardware issues an HFI interrupt after updating the HFI table and is ready
-> +for the operating system to consume it. CPUs receive such interrupt via the
-> +thermal entry in the Local APIC's Local Vector Table.
-> +
-> +When servicing such interrupt, the HFI driver parses the updated table and
-> +relays the update to userspace using the thermal notification framework. Given
-> +that there may be many HFI updates every second, the updates relayed to
-> +userspace are throttled at a rate of CONFIG_HZ jiffies.
-> +
-> +References
-> +----------
-> +
-> +.. [1] https://www.intel.com/sdm
+> Firmware may change CPU capabilities as a result of thermal events in the
+> system or to account for changes in the TDP (thermal design power) level.
 > 
+> This notification type will allow user space to avoid running workloads
+> on certain CPUs or proactively adjust power limits to avoid future events.
+> 
+
+[ ... ]
+
+> +	[THERMAL_GENL_ATTR_CPU_CAPABILITY_ID]	= { .type = NLA_U32 },
+> +	[THERMAL_GENL_ATTR_CPU_CAPABILITY_PERF]	= { .type = NLA_U32 },
+> +	[THERMAL_GENL_ATTR_CPU_CAPABILITY_EFF]	= { .type = NLA_U32 },
+>  };
+
+AFAIU, 0 <= perf < 256 and 0 <= eff < 256, right?
+
+Is the following true?
+
+	0 <= perf + eff < 256
+
 
 
 -- 
