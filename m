@@ -2,89 +2,207 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8502A4638EC
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Nov 2021 16:03:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 524A74639AF
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Nov 2021 16:17:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244986AbhK3PGa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Nov 2021 10:06:30 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:59378 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242762AbhK3O5m (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Nov 2021 09:57:42 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 38097CE1A8D;
-        Tue, 30 Nov 2021 14:54:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BC35C53FCF;
-        Tue, 30 Nov 2021 14:54:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638284055;
-        bh=FffVs0YZYMlJiKC9drWO34HxJwSet7WBPs3qouGbUlE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VbWeH9QdF1ZE6BRbvfWhswIcqiO6DnUhDcCqZDNAdWfFPSrmI+W2yuKBY3je/5wdf
-         aeaD4FW9VV0rksm8NXQaRaDZgdn59ug3yF7OicaD/eVw3xRHsfgmGgraMgwa7kz0h0
-         U3Yl6wuR8CH+Wxk2cI6QMdCPyKizv4sy4DirUQ5p6llXhWuYnUpNp4cqJhGj4OqHlh
-         mLpwDZ9frGNcIc1PR4PiXZBZOKuiUVO4KhwVau2Xol+QkD4FCGsZZQn1VpGmScnYsc
-         ShFMAQZYhIy9V/4O0GiBq/O1OpjLeqjvcn7ctKpuDWgAkQ6f7EmnrCdu+/RxQnbnZi
-         zWzmMaGbXn6hQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Evan Green <evgreen@chromium.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Sasha Levin <sashal@kernel.org>, rafael@kernel.org,
-        pavel@ucw.cz, len.brown@intel.com, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 7/9] PM: hibernate: Fix snapshot partial write lengths
-Date:   Tue, 30 Nov 2021 09:54:00 -0500
-Message-Id: <20211130145402.947049-7-sashal@kernel.org>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211130145402.947049-1-sashal@kernel.org>
-References: <20211130145402.947049-1-sashal@kernel.org>
+        id S232627AbhK3PUk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Nov 2021 10:20:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38292 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244478AbhK3PSi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Nov 2021 10:18:38 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85FF8C0613D7
+        for <linux-pm@vger.kernel.org>; Tue, 30 Nov 2021 07:13:06 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id p18so17733646wmq.5
+        for <linux-pm@vger.kernel.org>; Tue, 30 Nov 2021 07:13:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=IiS4gXcieiwHRh30CfBLD5DtuaajJ0EBlCiC0ifH9UE=;
+        b=S4bHKWWNsiRIbQrdnZkJeQwDDYj/eB6dkFyudT5wZl5zUv6G4RoAt1uTW/CoMpC77L
+         Xw66Ax43FuHN/EsOedhnUpsZVfX5YuYj/J34O24C67kjmPOOE4FtTZlP0uiiFQ2rdM2+
+         BuS+DphEsQLMWXvj+KPaITcYDyEHR8sciuYYw7DkPBgaozUYmZiZGZQYs2hgqfuoqYlu
+         6sFYCK9h6eFKxZ7cfqMz4DOggsnkAy7us2PjQQPEu5l9kJoqEJxPel6ClwQA3GppsezB
+         Gxl5xhA2iy35HkLwkMCQSs6OSx5XhrAD3h8a2nZOyt5TLrYBTiXRQXoq0L+XxGA6Mp7h
+         tJDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=IiS4gXcieiwHRh30CfBLD5DtuaajJ0EBlCiC0ifH9UE=;
+        b=jeMXVOjMQldovHexXqSclZLuNujqPo6gtkKcFf485w3TS15Gw+LIdA9ByzDXBt7Qaz
+         LhcvMGXZP1YdYL73LJiK9cd7psiqXWNBHGnP+ixhyWNAN1lEQESq7IoCtsl9p9XndwNC
+         Mkvlqwj1HGGLRVprtSvKwp8BpkGVY/pV6do6k55rOeOHAXgulxkJFH24cz//+FxczBAH
+         uPguLGmxEdix9aiDcm/DXSOEknSAVKwGQr+RJ59Cu1+iTa28bcv3zl8l4EALJyhIOIb1
+         pKkWh0Hr4go6wpnramLxRYPI+i7HqGS0IEwxfS0Su2mVOL+nDr/cMHH4ebkOu9rubEDE
+         PUUA==
+X-Gm-Message-State: AOAM531B/JbHZmuGuOnNN10zOj8oTK1EvMFyJPCBOkXi5d6c4BPSgGbd
+        C6gUrmykURuni37Ap05e4fti8F1ZexoeAQ==
+X-Google-Smtp-Source: ABdhPJxVSAiBi7i5Qr1WSohC8Mr+dbuwKYwzM31nuLIOanvnl65+v/sEmGRaPG91oFjfdXjaD3ZKnA==
+X-Received: by 2002:a7b:c008:: with SMTP id c8mr5917393wmb.55.1638285184845;
+        Tue, 30 Nov 2021 07:13:04 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:7880:daae:2d50:bb5e? ([2a01:e34:ed2f:f020:7880:daae:2d50:bb5e])
+        by smtp.googlemail.com with ESMTPSA id q24sm2480860wmj.21.2021.11.30.07.13.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Nov 2021 07:13:04 -0800 (PST)
+Subject: Re: [PATCH] thermal: qoriq: Only enable sites that actually exist
+To:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
+        linux-pm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, kernel@puri.sm
+References: <20211129110252.1699112-1-sebastian.krzyszkowiak@puri.sm>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <4a470e25-b1fa-bf7b-18d2-d21cbfe4fb3a@linaro.org>
+Date:   Tue, 30 Nov 2021 16:13:02 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+In-Reply-To: <20211129110252.1699112-1-sebastian.krzyszkowiak@puri.sm>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Evan Green <evgreen@chromium.org>
 
-[ Upstream commit 88a5045f176b78c33a269a30a7b146e99c550bd9 ]
+Hi Sebastian,
 
-snapshot_write() is inappropriately limiting the amount of data that can
-be written in cases where a partial page has already been written. For
-example, one would expect to be able to write 1 byte, then 4095 bytes to
-the snapshot device, and have both of those complete fully (since now
-we're aligned to a page again). But what ends up happening is we write 1
-byte, then 4094/4095 bytes complete successfully.
+thanks for the fix.
 
-The reason is that simple_write_to_buffer()'s second argument is the
-total size of the buffer, not the size of the buffer minus the offset.
-Since simple_write_to_buffer() accounts for the offset in its
-implementation, snapshot_write() can just pass the full page size
-directly down.
+On 29/11/2021 12:02, Sebastian Krzyszkowiak wrote:
+> On i.MX8MQ, enabling monitoring sites that aren't connected to anything
+> can cause unwanted side effects on some units. This seems to happen
+> once some of these sites report out-of-range readings and results in
+> sensor misbehavior, such as thermal zone readings getting stuck or even
+> suddenly reporting an impossibly high value, triggering emergency
+> shutdowns.
+> 
+> The datasheet lists all non-existent sites as "reserved" and doesn't
+> make any guarantees about being able to enable them at all, so let's
+> not do that.
 
-Signed-off-by: Evan Green <evgreen@chromium.org>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- kernel/power/user.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The description of what does the patch is missing here.
 
-diff --git a/kernel/power/user.c b/kernel/power/user.c
-index f83c1876b39c0..67659e507747e 100644
---- a/kernel/power/user.c
-+++ b/kernel/power/user.c
-@@ -181,7 +181,7 @@ static ssize_t snapshot_write(struct file *filp, const char __user *buf,
- 		if (res <= 0)
- 			goto unlock;
- 	} else {
--		res = PAGE_SIZE - pg_offp;
-+		res = PAGE_SIZE;
- 	}
- 
- 	if (!data_of(data->handle)) {
+> Fixes: 45038e03d633 ("thermal: qoriq: Enable all sensors before registering them")
+> 
+> Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+> ---
+>  drivers/thermal/qoriq_thermal.c | 63 ++++++++++++++++++++++-----------
+>  1 file changed, 43 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/thermal/qoriq_thermal.c b/drivers/thermal/qoriq_thermal.c
+> index 73049f9bea25..ef0848849ee2 100644
+> --- a/drivers/thermal/qoriq_thermal.c
+> +++ b/drivers/thermal/qoriq_thermal.c
+> @@ -32,7 +32,6 @@
+>  #define TMR_DISABLE	0x0
+>  #define TMR_ME		0x80000000
+>  #define TMR_ALPF	0x0c000000
+> -#define TMR_MSITE_ALL	GENMASK(15, 0)
+>  
+>  #define REGS_TMTMIR	0x008	/* Temperature measurement interval Register */
+>  #define TMTMIR_DEFAULT	0x0000000f
+> @@ -129,33 +128,51 @@ static const struct thermal_zone_of_device_ops tmu_tz_ops = {
+>  static int qoriq_tmu_register_tmu_zone(struct device *dev,
+>  				       struct qoriq_tmu_data *qdata)
+>  {
+> -	int id;
+> +	int ret = 0;
+> +	struct device_node *np, *child, *sensor_np;
+>  
+> -	if (qdata->ver == TMU_VER1) {
+> -		regmap_write(qdata->regmap, REGS_TMR,
+> -			     TMR_MSITE_ALL | TMR_ME | TMR_ALPF);
+> -	} else {
+> -		regmap_write(qdata->regmap, REGS_V2_TMSR, TMR_MSITE_ALL);
+> -		regmap_write(qdata->regmap, REGS_TMR, TMR_ME | TMR_ALPF_V2);
+> -	}
+> +	np = of_find_node_by_name(NULL, "thermal-zones");
+> +	if (!np)
+> +		return -ENODEV;
+> +
+> +	sensor_np = of_node_get(dev->of_node);
+>  
+> -	for (id = 0; id < SITES_MAX; id++) {
+> +	for_each_available_child_of_node(np, child) {
+>  		struct thermal_zone_device *tzd;
+> -		struct qoriq_sensor *sensor = &qdata->sensor[id];
+> -		int ret;
+> +		struct qoriq_sensor *sensor;
+> +		int id, site;
+> +
+> +		ret = thermal_zone_of_get_sensor_id(child, sensor_np, &id);
+> +
+> +		if (ret < 0) {
+> +			dev_err(dev, "failed to get valid sensor id: %d\n", ret);
+> +			of_node_put(child);
+> +			break;
+> +		}
+>  
+> +		sensor = &qdata->sensor[id];
+>  		sensor->id = id;
+>  
+> +		/* Enable monitoring */
+> +		if (qdata->ver == TMU_VER1) {
+> +			site = 0x1 << (15 - id);
+> +			regmap_update_bits(qdata->regmap, REGS_TMR,
+> +					   site | TMR_ME | TMR_ALPF,
+> +					   site | TMR_ME | TMR_ALPF);
+> +		} else {
+> +			site = 0x1 << id;
+> +			regmap_update_bits(qdata->regmap, REGS_V2_TMSR, site, site);
+> +			regmap_write(qdata->regmap, REGS_TMR, TMR_ME | TMR_ALPF_V2);
+> +		}
+
+Why not create the site mask in the loop and then call once the block
+above out this loop?
+
+>  		tzd = devm_thermal_zone_of_sensor_register(dev, id,
+>  							   sensor,
+>  							   &tmu_tz_ops);
+> -		ret = PTR_ERR_OR_ZERO(tzd);
+> -		if (ret) {
+> -			if (ret == -ENODEV)
+> -				continue;
+> -
+> -			regmap_write(qdata->regmap, REGS_TMR, TMR_DISABLE);
+> -			return ret;
+> +		if (IS_ERR(tzd)) {
+> +			ret = PTR_ERR(tzd);
+> +			dev_err(dev, "failed to register thermal zone: %d\n", ret);
+> +			of_node_put(child);
+> +			break;
+>  		}
+>  
+>  		if (devm_thermal_add_hwmon_sysfs(tzd))
+> @@ -164,7 +181,13 @@ static int qoriq_tmu_register_tmu_zone(struct device *dev,
+>  
+>  	}
+>  
+> -	return 0;
+> +	of_node_put(sensor_np);
+> +	of_node_put(np);
+> +
+> +	if (ret)
+> +		regmap_write(qdata->regmap, REGS_TMR, TMR_DISABLE);
+> +
+> +	return ret;
+>  }
+>  
+>  static int qoriq_tmu_calibration(struct device *dev,
+> 
+
+
 -- 
-2.33.0
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
