@@ -2,126 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD04B4635BE
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Nov 2021 14:46:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC4BD4637D5
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Nov 2021 15:53:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232342AbhK3Ntl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Nov 2021 08:49:41 -0500
-Received: from mga11.intel.com ([192.55.52.93]:57964 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229379AbhK3Ntf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 30 Nov 2021 08:49:35 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="233716753"
-X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
-   d="scan'208";a="233716753"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 05:46:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
-   d="scan'208";a="744737168"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga006.fm.intel.com with ESMTP; 30 Nov 2021 05:46:14 -0800
-Date:   Tue, 30 Nov 2021 05:45:10 -0800
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 3/7] thermal: intel: hfi: Minimally initialize the
- Hardware Feedback Interface
-Message-ID: <20211130134510.GA27861@ranerica-svr.sc.intel.com>
-References: <20211106013312.26698-1-ricardo.neri-calderon@linux.intel.com>
- <20211106013312.26698-4-ricardo.neri-calderon@linux.intel.com>
- <CAJZ5v0gd5ZAs4nkbMA4ONt=9ULnrTPqxe_+3M78t9ZC9upEiXw@mail.gmail.com>
- <20211130032029.GA1371@ranerica-svr.sc.intel.com>
- <9a463228ef9f668618a4d1470eb9925f8d332465.camel@linux.intel.com>
+        id S237970AbhK3O42 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Nov 2021 09:56:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60026 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243178AbhK3Oyo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Nov 2021 09:54:44 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DD4C06137A;
+        Tue, 30 Nov 2021 06:49:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 3BC7CCE1A56;
+        Tue, 30 Nov 2021 14:49:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DA01C53FCF;
+        Tue, 30 Nov 2021 14:49:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638283762;
+        bh=3ZU4XvksUimkGRLrEk5UohMKNveSnLHq5HBAhjcZfBw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=fUbhCZN3tCaudzsq2OlJz15hyD2D+qviPXIq2bCdk9f2sy8Rj0+WKTK1OO3ZW5XIj
+         JP/oDnTBp1VzECuGniWR1RHtLCXVcWazCaM4TM8EpDVkJHW5K5tazk5BOoaW8TzS5S
+         ICF/XFsNH5DcPKis+Uc+8DOPFHlFp46GcqqHzvb8n+lkNGaHDb+9XxkpbGctCvY9Hx
+         rJ8ybabVelTu7+dI8qOir82bvEQ0KdnErpGn1d2yMrabQXqOpKoDSj0JhM2wQkD+cT
+         E0u4UuStzbWsnI9ozO9RDAighwk8/FzCtR50Mv/NmD0mb8mliXT3e3L5tRbiTYtjDL
+         rqTTLhxv2BlLQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Evan Green <evgreen@chromium.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Sasha Levin <sashal@kernel.org>, rafael@kernel.org,
+        len.brown@intel.com, pavel@ucw.cz, linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 54/68] PM: hibernate: Fix snapshot partial write lengths
+Date:   Tue, 30 Nov 2021 09:46:50 -0500
+Message-Id: <20211130144707.944580-54-sashal@kernel.org>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20211130144707.944580-1-sashal@kernel.org>
+References: <20211130144707.944580-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <9a463228ef9f668618a4d1470eb9925f8d332465.camel@linux.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 07:55:18PM -0800, Srinivas Pandruvada wrote:
-> On Mon, 2021-11-29 at 19:20 -0800, Ricardo Neri wrote:
-> > On Wed, Nov 24, 2021 at 03:09:20PM +0100, Rafael J. Wysocki wrote:
-> > > On Sat, Nov 6, 2021 at 2:34 AM Ricardo Neri
-> > > <ricardo.neri-calderon@linux.intel.com> wrote:
-> > > > 
-> > > > The Intel Hardware Feedback Interface provides guidance to the
-> > > > operating
-> > > > system about the performance and energy efficiency capabilities
-> > > > of each
-> > > > CPU in the system. Capabilities are numbers between 0 and 255
-> > > > where a
-> > > > higher number represents a higher capability. For each CPU,
-> > > > energy
-> > > > efficiency and performance are reported as separate capabilities.
-> > > > 
-> > > > Hardware computes these capabilities based on the operating
-> > > > conditions of
-> > > > the system such as power and thermal limits. These capabilities
-> > > > are shared
-> > > > with the operating system in a table resident in memory. Each
-> > > > package in
-> > > > the system has its own HFI instance. Every logical CPU in the
-> > > > package is
-> > > > represented in the table. More than one logical CPUs may be
-> > > > represented in
-> > > > a single table entry. When the hardware updates the table, it
-> > > > generates a
-> > > > package-level thermal interrupt.
-> > > > 
-> > > > The size and format of the HFI table depend on the supported
-> > > > features and
-> > > > can only be determined at runtime. To minimally initialize the
-> > > > HFI, parse
-> > > > its features and allocate one instance per package of a data
-> > > > structure with
-> > > > the necessary parameters to read and navigate individual HFI
-> > > > tables.
-> > > > 
-> > > > A subsequent changeset will provide per-CPU initialization and
-> > > > interrupt
-> > > > handling.
-> > > > 
-> 
-> [...]
-> 
-> > > > +       /*
-> > > > +        * If we are here we know that CPUID_HFI_LEAF exists.
-> > > > Parse the
-> > > > +        * supported capabilities and the size of the HFI table.
-> > > > +        */
-> > > > +       reg = cpuid_edx(CPUID_HFI_LEAF);
-> > > > +
-> > > > +       hfi_features.capabilities = reg & HFI_CAPABILITIES_MASK;
-> > > > +       if (!(hfi_features.capabilities &
-> > > > HFI_CAPABILITIES_PERFORMANCE)) {
-> > > > +               pr_err("Performance reporting not supported! Not
-> > > > using HFI\n");
-> > > 
-> > > This doesn't need to be pr_err().
-> > 
-> > Should it be a pr_warn() or perhaps pr_info()?
-> May be even pr_debug as we can always enable dynamic debug, where we
-> need to debug.
+From: Evan Green <evgreen@chromium.org>
 
-Fair enough. That sounds good. I will make the change.
+[ Upstream commit 88a5045f176b78c33a269a30a7b146e99c550bd9 ]
 
-Thanks and BR,
-Ricardo
+snapshot_write() is inappropriately limiting the amount of data that can
+be written in cases where a partial page has already been written. For
+example, one would expect to be able to write 1 byte, then 4095 bytes to
+the snapshot device, and have both of those complete fully (since now
+we're aligned to a page again). But what ends up happening is we write 1
+byte, then 4094/4095 bytes complete successfully.
+
+The reason is that simple_write_to_buffer()'s second argument is the
+total size of the buffer, not the size of the buffer minus the offset.
+Since simple_write_to_buffer() accounts for the offset in its
+implementation, snapshot_write() can just pass the full page size
+directly down.
+
+Signed-off-by: Evan Green <evgreen@chromium.org>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ kernel/power/user.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/power/user.c b/kernel/power/user.c
+index 740723bb38852..ad241b4ff64c5 100644
+--- a/kernel/power/user.c
++++ b/kernel/power/user.c
+@@ -177,7 +177,7 @@ static ssize_t snapshot_write(struct file *filp, const char __user *buf,
+ 		if (res <= 0)
+ 			goto unlock;
+ 	} else {
+-		res = PAGE_SIZE - pg_offp;
++		res = PAGE_SIZE;
+ 	}
+ 
+ 	if (!data_of(data->handle)) {
+-- 
+2.33.0
+
