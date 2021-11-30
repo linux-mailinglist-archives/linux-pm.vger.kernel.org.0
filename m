@@ -2,122 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6648E4632A5
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Nov 2021 12:42:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF925463339
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Nov 2021 12:47:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240910AbhK3Lpz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Nov 2021 06:45:55 -0500
-Received: from mail-oi1-f178.google.com ([209.85.167.178]:42730 "EHLO
-        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240909AbhK3Lpy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Nov 2021 06:45:54 -0500
-Received: by mail-oi1-f178.google.com with SMTP id n66so40666258oia.9;
-        Tue, 30 Nov 2021 03:42:35 -0800 (PST)
+        id S241350AbhK3Lus (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Nov 2021 06:50:48 -0500
+Received: from mail-oo1-f50.google.com ([209.85.161.50]:36481 "EHLO
+        mail-oo1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241436AbhK3LuL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Nov 2021 06:50:11 -0500
+Received: by mail-oo1-f50.google.com with SMTP id g11-20020a4a754b000000b002c679a02b18so6625853oof.3;
+        Tue, 30 Nov 2021 03:46:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=4Cob7MMgKwoqYxW2s32/u4cbUtlx4YeFwMg+KntbpTw=;
-        b=XdEiLb43hwViatzrOQLCuOFbjtk9y1h86Nc3zVroBzbNsG19nCFfH2NdjI65rHO1Rh
-         p3PF1O6SXE8o3WtM6lwYYz/L9Fpm88ZMdhcmQtjlSzU6K4B+c2dcgzkeghse3+Nqig/L
-         bmaRerVKwJa8SMW60nSRtypmf7qjzRfda+tTraushVmuUKoPXgsKRerGs/Hw/15lNC73
-         nLWvYGTH8I4Jjabj2Jcz/eYE3TlUchRn86e26mzGs8Zl6L2KJlSTqyCimr1JGePVJDqg
-         TFz1ZGOoPoJB3HRtGjrhJ7BZNcY6asHOCJaS2zZiBF8lrqD5a0JzFX6bV9ZrcWAMDOn9
-         EHVw==
-X-Gm-Message-State: AOAM5333miZlki+wuAjlEaYQSeNV+TQeuLH9qJfcUkyuv46mhuyhmlgS
-        3B6NnZnvzVWTKi1tMNdBAdcrpXh0dkdPcJN/uyA=
-X-Google-Smtp-Source: ABdhPJzagIOGTdiXvf37ZRObRT6oviV/n9CZzeGBiLgxrUTmhACShGEKbirVavcYmox8WYqdmOKa10DnyO6kzeZxKwg=
-X-Received: by 2002:a05:6808:14c2:: with SMTP id f2mr3494792oiw.154.1638272555405;
- Tue, 30 Nov 2021 03:42:35 -0800 (PST)
+        bh=WjMUthcTPIiga1LMGsJE+FmlQCkDz2Z0fHsgTYEAKpI=;
+        b=dSyP+BKAcc/IwjooLfDZUCInAu+i+htAhWOjO4l+mfRO1sYMVEdz4FH7MXKvQiCaVM
+         ocCnzBk82h6nZ//hKEEzgAi9+YT2zV0FZFXWmgtk84d4ZCBrbXsoIGkQAb3TXNchg6Pg
+         fmZwAoFtZRgV/vTh3GnYmDbC8YBLrCrDChRYItkk3sLXhf4TpwFGPz875qcDy1UEbgjQ
+         326Sd1RiDEiLeKUD5O7UfkC43GtOVNZYgclnZ1TC+TOhG+cTOoG/n8hxzAnwcrBEFHMv
+         JLy0wgrYrvk7Ts4AIUlZvghQpULKTw3FBXJFrRTQe/Mhq2dt+vAEkIPUPT+pJg99AAcb
+         OjVQ==
+X-Gm-Message-State: AOAM532SOX0MUxu9aJqmHvnKSgT0D0j4V+ZhXGJoYbJfE+RxNib4Uu45
+        9ZuyyzkhIT/G0Qrrg78sZ2NaixIPfNMTrEwwdmU=
+X-Google-Smtp-Source: ABdhPJzZz9fmKhAIzkZDOWBm78WYvwBLWziGXnbzHzeu/W7/mlQoZXyKxNxgTt1MZyDOKnFdVtL1bUeI6KZFAnpn6oc=
+X-Received: by 2002:a05:6820:388:: with SMTP id r8mr35255875ooj.0.1638272811661;
+ Tue, 30 Nov 2021 03:46:51 -0800 (PST)
 MIME-Version: 1.0
-References: <20211129080248.46240-1-wangxiongfeng2@huawei.com> <20211129091039.s7bqq43o4ktuub6t@vireshk-i7>
-In-Reply-To: <20211129091039.s7bqq43o4ktuub6t@vireshk-i7>
+References: <20211029122359.1.I1e23f382fbd8beb19fe1c06d70798b292012c57a@changeid>
+ <CAE=gft4MRvq-VCBW4EX4dGfPi4s7Lco8h6Z_ejRH5A1e-K2-yA@mail.gmail.com>
+ <CAJZ5v0hsGFHxcTb8PUkGSm9oas1wdquB=euofS19zriRc1CXYw@mail.gmail.com>
+ <CAE=gft6CjUhkcrmcjVEOp5S+rgqN1_ZGTKbK0DierTanu0d16A@mail.gmail.com>
+ <CAJZ5v0gamixc4dkBEXJjjw5zQynuz8BkQ9xv8YpbjkTkdMb2TQ@mail.gmail.com> <CAE=gft6o0JxhDgazPA5DVbL6hQ+36D_GkzgN-AuR3YA43NSqaw@mail.gmail.com>
+In-Reply-To: <CAE=gft6o0JxhDgazPA5DVbL6hQ+36D_GkzgN-AuR3YA43NSqaw@mail.gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 30 Nov 2021 12:42:18 +0100
-Message-ID: <CAJZ5v0hYskLTjSGOJgRRXD0cE0a5DMHh5qTvmgCmJh8bMicLzA@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: Fix get_cpu_device() failed in add_cpu_dev_symlink()
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
+Date:   Tue, 30 Nov 2021 12:46:34 +0100
+Message-ID: <CAJZ5v0ixOCnT_JyQ1gpvc9rdH_zK7gLrke0wJSLUagd=-qf0sA@mail.gmail.com>
+Subject: Re: [PATCH] PM / hibernate: Fix snapshot partial write lengths
+To:     Evan Green <evgreen@chromium.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hanjun Guo <guohanjun@huawei.com>
+        Stable <stable@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 10:10 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Mon, Nov 29, 2021 at 5:50 PM Evan Green <evgreen@chromium.org> wrote:
 >
-> On 29-11-21, 16:02, Xiongfeng Wang wrote:
-> > When I hot added a CPU, I found 'cpufreq' directory is not created below
-> > /sys/devices/system/cpu/cpuX/. It is because get_cpu_device() failed in
-> > add_cpu_dev_symlink().
+> On Wed, Nov 24, 2021 at 4:54 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
 > >
-> > cpufreq_add_dev() is the .add_dev callback of a CPU subsys interface. It
-> > will be called when the CPU device registered into the system. The stack
-> > is as follows.
-> >   register_cpu()
-> >   ->device_register()
-> >    ->device_add()
-> >     ->bus_probe_device()
-> >      ->cpufreq_add_dev()
+> > On Tue, Nov 16, 2021 at 9:22 PM Evan Green <evgreen@chromium.org> wrote:
+> > >
+> > > On Tue, Nov 16, 2021 at 9:54 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > > >
+> > > > On Mon, Nov 15, 2021 at 6:13 PM Evan Green <evgreen@chromium.org> wrote:
+> > > > >
+> > > > > Gentle bump.
+> > > > >
+> > > > >
+> > > > > On Fri, Oct 29, 2021 at 12:24 PM Evan Green <evgreen@chromium.org> wrote:
+> > > > > >
+> > > > > > snapshot_write() is inappropriately limiting the amount of data that can
+> > > > > > be written in cases where a partial page has already been written. For
+> > > > > > example, one would expect to be able to write 1 byte, then 4095 bytes to
+> > > > > > the snapshot device, and have both of those complete fully (since now
+> > > > > > we're aligned to a page again). But what ends up happening is we write 1
+> > > > > > byte, then 4094/4095 bytes complete successfully.
+> > > > > >
+> > > > > > The reason is that simple_write_to_buffer()'s second argument is the
+> > > > > > total size of the buffer, not the size of the buffer minus the offset.
+> > > > > > Since simple_write_to_buffer() accounts for the offset in its
+> > > > > > implementation, snapshot_write() can just pass the full page size
+> > > > > > directly down.
+> > > > > >
+> > > > > > Signed-off-by: Evan Green <evgreen@chromium.org>
+> > > > > > ---
+> > > > > >
+> > > > > >  kernel/power/user.c | 2 +-
+> > > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > > >
+> > > > > > diff --git a/kernel/power/user.c b/kernel/power/user.c
+> > > > > > index 740723bb388524..ad241b4ff64c58 100644
+> > > > > > --- a/kernel/power/user.c
+> > > > > > +++ b/kernel/power/user.c
+> > > > > > @@ -177,7 +177,7 @@ static ssize_t snapshot_write(struct file *filp, const char __user *buf,
+> > > > > >                 if (res <= 0)
+> > > > > >                         goto unlock;
+> > > > > >         } else {
+> > > > > > -               res = PAGE_SIZE - pg_offp;
+> > > > > > +               res = PAGE_SIZE;
+> > > > > >         }
+> > > > > >
+> > > > > >         if (!data_of(data->handle)) {
+> > > > > > --
+> > > >
+> > > > Do you actually see this problem in practice?
+> > >
+> > > Yes. I may fire up another thread to explain why I'm stuck doing a
+> > > partial page write, and how I might be able to stop doing that in the
+> > > future with some kernel help. But either way, this is a bug.
 > >
-> > But only after the CPU device has been registered, we can get the CPU
-> > device by get_cpu_device(), otherwise it will return NULL. Since we
-> > already have the CPU device in cpufreq_add_dev(), pass it to
-> > add_cpu_dev_symlink(). I noticed that the 'kobj' of the cpu device has
-> > been added into the system before cpufreq_add_dev().
+> > OK, patch applied as 5.16-rc material.
 > >
-> > Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
-> > ---
-> >  drivers/cpufreq/cpufreq.c | 9 ++++-----
-> >  1 file changed, 4 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > index e338d2f010fe..22aa2793e4d2 100644
-> > --- a/drivers/cpufreq/cpufreq.c
-> > +++ b/drivers/cpufreq/cpufreq.c
-> > @@ -1004,10 +1004,9 @@ static struct kobj_type ktype_cpufreq = {
-> >       .release        = cpufreq_sysfs_release,
-> >  };
-> >
-> > -static void add_cpu_dev_symlink(struct cpufreq_policy *policy, unsigned int cpu)
-> > +static void add_cpu_dev_symlink(struct cpufreq_policy *policy, unsigned int cpu,
-> > +                             struct device *dev)
-> >  {
-> > -     struct device *dev = get_cpu_device(cpu);
-> > -
-> >       if (unlikely(!dev))
-> >               return;
-> >
-> > @@ -1391,7 +1390,7 @@ static int cpufreq_online(unsigned int cpu)
-> >       if (new_policy) {
-> >               for_each_cpu(j, policy->related_cpus) {
-> >                       per_cpu(cpufreq_cpu_data, j) = policy;
-> > -                     add_cpu_dev_symlink(policy, j);
-> > +                     add_cpu_dev_symlink(policy, j, get_cpu_device(j));
-> >               }
-> >
-> >               policy->min_freq_req = kzalloc(2 * sizeof(*policy->min_freq_req),
-> > @@ -1565,7 +1564,7 @@ static int cpufreq_add_dev(struct device *dev, struct subsys_interface *sif)
-> >       /* Create sysfs link on CPU registration */
-> >       policy = per_cpu(cpufreq_cpu_data, cpu);
-> >       if (policy)
-> > -             add_cpu_dev_symlink(policy, cpu);
-> > +             add_cpu_dev_symlink(policy, cpu, dev);
-> >
-> >       return 0;
-> >  }
+> > I guess it should go into -stable kernels too?
 >
-> Interesting that I never hit it earlier despite doing rigorous testing of
-> hotplug stuff :(
+> Yes, putting it into -stable would make sense also. I should have CCed
+> them originally, doing that now.
 
-This is the real hot-add path which isn't tested on a regular basis.
+Well, you need to point them to the upstream commit to backport.
 
-> Anyway the patch is okay,
+In this particular case it would be
 
-It would be good to add a Fixes: tag to it, though.  Any idea about
-the commit this should point to?
+commit 88a5045f176b78c33a269a30a7b146e99c550bd9 (pm-sleep)
+Author: Evan Green <evgreen@chromium.org>
+Date:   Fri Oct 29 12:24:22 2021 -0700
 
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+   PM: hibernate: Fix snapshot partial write lengths
+
+I'll send an inclusion request for this.  I guess it should go into
+all of the applicable -stable series, right?
