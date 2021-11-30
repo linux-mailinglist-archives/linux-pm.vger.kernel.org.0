@@ -2,60 +2,34 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43B77462FA5
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Nov 2021 10:29:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DCA04630E6
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Nov 2021 11:20:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235044AbhK3JdJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Nov 2021 04:33:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41546 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234997AbhK3JdJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Nov 2021 04:33:09 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D510C061574
-        for <linux-pm@vger.kernel.org>; Tue, 30 Nov 2021 01:29:50 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id a18so42971463wrn.6
-        for <linux-pm@vger.kernel.org>; Tue, 30 Nov 2021 01:29:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=felncm1mZvr7zHi58upE9nlqocAVIX85FXINzUJHutc=;
-        b=peF/Q3t+jU7+66L7aIjXgQKez3slgg6ejeSkmnTsgfFXIDQHPystltw+vw1xGaTgtZ
-         uzgOiD6kqv4dmXisOnNDWPTHWD73dKb51iYt6ciFckQEs75XWaXilkZYk8OkkYlJ+8v/
-         BQ7KfU+PjssUenDe8sMJ9BMf3lBBsCdm+ayPfzXtDgLsY0+selgl/9qc1st2y1WV63Bm
-         7tWaNOakWezHwlsSoZYRH84No0kNnDuXqrsyJce8zlk//qh8wkWBx+/0DDBGPnU0rr5a
-         qZmEuiF53bqJ57LHQFEKnLE5EsYETRsM+JCoyTQLlJa8kLgDXyggDDiCVgbXoMKTqaLk
-         T4+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=felncm1mZvr7zHi58upE9nlqocAVIX85FXINzUJHutc=;
-        b=iriCPc/th5zERPEE1zs3//oXI9y4FOjWz7fx14HmoyV4/x9mPG7cNHvO1XOBo75Kkp
-         xSjaWyRAY2WghKFFqZjI8Ga22NMat9VoZ4mHyVOFlyWuok6q2FuHW/4LIJ/AXu2u9Zux
-         YUPmIF6oTvLS3TPVQeDqUe1tA5NpJjNa4GOxonZWAiG+Wys+sFbr8ysszaWtLxRol6Jj
-         EMWBvR32QNYqdnf5P0K3HUUjIEG5wHmqEcoiE0uoIxaUVhEpkutqTCv58Ph3jaQ9OSMR
-         uNvX7p226heQ6UQtXZqGD5nMK8zXMi6NaPwN7WZEM91d44pTVf5SQl/vXFgBZjeIYHoc
-         InVQ==
-X-Gm-Message-State: AOAM532Bks+PH3TTmoybdNb1GpaTlyOnVayOQsCe/llfU40eKFjJGzTM
-        WotVlDnPCTa+bV73XZxAxp+Ozg==
-X-Google-Smtp-Source: ABdhPJzdiFz+5CZ4OQ0z1EP7aGFuMzQ2lbjLZk1z+q3SiGtYY12xMl+QVZchUrsQWGDeKbUSf9Hv7A==
-X-Received: by 2002:adf:d1e3:: with SMTP id g3mr40618505wrd.300.1638264588653;
-        Tue, 30 Nov 2021 01:29:48 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:7880:daae:2d50:bb5e? ([2a01:e34:ed2f:f020:7880:daae:2d50:bb5e])
-        by smtp.googlemail.com with ESMTPSA id q24sm1714601wmj.21.2021.11.30.01.29.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Nov 2021 01:29:47 -0800 (PST)
-Subject: Re: [PATCH 6/7] thermal: netlink: Add a new event to notify CPU
- capabilities change
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        id S232037AbhK3KXp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Nov 2021 05:23:45 -0500
+Received: from mga12.intel.com ([192.55.52.136]:27165 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231216AbhK3KXo (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 30 Nov 2021 05:23:44 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="216202399"
+X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
+   d="scan'208";a="216202399"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 02:20:25 -0800
+X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
+   d="scan'208";a="676773337"
+Received: from svalluri-mobl.gar.corp.intel.com ([10.213.116.31])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 02:20:20 -0800
+Message-ID: <49299b089f553ef2878aaa7eaf60f8c3600b939d.camel@linux.intel.com>
+Subject: Re: [PATCH 1/7] x86/Documentation: Describe the Intel Hardware
+ Feedback Interface
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         linux-pm@vger.kernel.org
 Cc:     x86@kernel.org, linux-doc@vger.kernel.org,
         Len Brown <len.brown@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         Aubrey Li <aubrey.li@linux.intel.com>,
         Amit Kucheria <amitk@kernel.org>,
         Andi Kleen <ak@linux.intel.com>,
@@ -63,53 +37,161 @@ Cc:     x86@kernel.org, linux-doc@vger.kernel.org,
         "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
         Ricardo Neri <ricardo.neri@intel.com>,
         linux-kernel@vger.kernel.org
+Date:   Tue, 30 Nov 2021 02:20:16 -0800
+In-Reply-To: <81bca26d-eac8-31ed-e5ec-81812664d671@linaro.org>
 References: <20211106013312.26698-1-ricardo.neri-calderon@linux.intel.com>
- <20211106013312.26698-7-ricardo.neri-calderon@linux.intel.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <b51c9b2a-40d2-6575-7746-3059eec53519@linaro.org>
-Date:   Tue, 30 Nov 2021 10:29:46 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+         <20211106013312.26698-2-ricardo.neri-calderon@linux.intel.com>
+         <81bca26d-eac8-31ed-e5ec-81812664d671@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.0-1 
 MIME-Version: 1.0
-In-Reply-To: <20211106013312.26698-7-ricardo.neri-calderon@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 06/11/2021 02:33, Ricardo Neri wrote:
-> From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Hi Daniel,
+
+On Tue, 2021-11-30 at 10:24 +0100, Daniel Lezcano wrote:
+> Hi Ricardo,
+> > 
+
+[...]
+
+> > +The Hardware Feedback Interface
+> > +-------------------------------
+> > +
+> > +The Hardware Feedback Interface provides to the operating system
+> > information
+> > +about the performance and energy efficiency of each CPU in the
+> > system. Each
+> > +capability is given as a unit-less quantity in the range [0-255].
+> > Higher values
+> > +indicate higher capability. Energy efficiency and performance are
+> > reported in
+> > +separate capabilities.
 > 
-> Add a new netlink event to notify change in CPU capabilities in terms of
-> performance and efficiency.
+> Are they linked together (eg. higher energy efficiency => lower
+> performance)?
+
+Generally true.
+But for some workload and condition higher energy efficient point
+doesn't mean lower performance.
+
 > 
-> Firmware may change CPU capabilities as a result of thermal events in the
-> system or to account for changes in the TDP (thermal design power) level.
+> > +These capabilities may change at runtime as a result of changes in
+> > the
+> > +operating conditions of the system or the action of external
+> > factors.
 > 
-> This notification type will allow user space to avoid running workloads
-> on certain CPUs or proactively adjust power limits to avoid future events.
+> Is it possible to give examples?
+For example a server farm decide to save power by reduce cooling cost,
+by lowering TDP. This can be done remotely. This will result in
+notification of a lower performance value or even perf=eff=0 on some
+CPUs via HFI. Intel CPU has capability to change TDP level runtime.
+
+Or if the system is over heating the firmware can indicate lower
+performance, so OSPM can take action. 
+
+> 
+> > The rate
+> > +at which these capabilities are updated is specific to each
+> > processor model. On
+> > +some models, capabilities are set at boot time and never change.
+> > On others,
+> > +capabilities may change every tens of milliseconds.
+> > +
+> > +The kernel or a userspace policy daemon can use these capabilities
+> > to modify
+> > +task placement decisions. For instance, if either the performance
+> > or energy
+> > +capabilities of a given logical processor becomes zero, it is an
+> > indication that
+> > +the hardware recommends to the operating system to not schedule
+> > any tasks on
+> > +that processor for performance or energy efficiency reasons,
+> > respectively.
+> 
+> How the userspace can be involved in these decisions? If the
+> performance
+> is impacted then that should be reflected in the CPU capacity. The
+> scheduler will prevent to put task on CPU with a low capacity, no?
+> 
+> I'm also worried about the overhead of the userspace notifications.
+> 
+> That sounds like similar to the thermal pressure? Wouldn't make sense
+> to
+> create a generic component where HFI, cpufreq cooling, LMh, etc ...
+> are
+> the backend?
+
+The problem is treatment of perf/eff == 0 of a CPU, which we can
+indicate as capacity  = 0 to scheduler. But this doesn't prevent
+scheduler for using that CPU on a overloaded system. We can offline
+that CPU in kernel, which will be intrusive without notifying user
+space or may fail for CPU0. Tried cpu idle injection, remove from cpu
+sets. But doesn't work when interrupt are affined to that CPU, soft
+irqs or timer scheduled there.
+
+Here the notification are in order of several ms in order ( In reality
+they are in seconds for current use cases). These are not emergency
+events. Same as other thermal notifications, if something urgent FW can
+already force to lowest performance without even notifying user space.
+
+
+Thanks,
+Srinivas
+
+> 
+> 
+> 
+> > +Implementation details for Linux
+> > +--------------------------------
+> > +
+> > +The infrastructure to handle thermal event interrupts has two
+> > parts. In the
+> > +Local Vector Table of a CPU's local APIC, there exists a register
+> > for the
+> > +Thermal Monitor Register. This register controls how interrupts
+> > are delivered
+> > +to a CPU when the thermal monitor generates and interrupt. Further
+> > details
+> > +can be found in the Intel SDM Vol. 3 Section 10.5 [1]_.
+> > +
+> > +The thermal monitor may generate interrupts per CPU or per
+> > package. The HFI
+> > +generates package-level interrupts. This monitor is configured and
+> > initialized
+> > +via a set of machine-specific registers. Specifically, the HFI
+> > interrupt and
+> > +status are controlled via designated bits in the
+> > IA32_PACKAGE_THERM_INTERRUPT
+> > +and IA32_PACKAGE_THERM_STATUS registers, respectively. There
+> > exists one HFI
+> > +table per package. Further details can be found in the Intel SDM
+> > Vol. 3
+> > +Section 14.9 [1]_.
+> > +
+> > +The hardware issues an HFI interrupt after updating the HFI table
+> > and is ready
+> > +for the operating system to consume it. CPUs receive such
+> > interrupt via the
+> > +thermal entry in the Local APIC's Local Vector Table.
+> > +
+> > +When servicing such interrupt, the HFI driver parses the updated
+> > table and
+> > +relays the update to userspace using the thermal notification
+> > framework. Given
+> > +that there may be many HFI updates every second, the updates
+> > relayed to
+> > +userspace are throttled at a rate of CONFIG_HZ jiffies.
+> > +
+> > +References
+> > +----------
+> > +
+> > +.. [1] https://www.intel.com/sdm
+> > 
+> 
 > 
 
-[ ... ]
 
-> +	[THERMAL_GENL_ATTR_CPU_CAPABILITY_ID]	= { .type = NLA_U32 },
-> +	[THERMAL_GENL_ATTR_CPU_CAPABILITY_PERF]	= { .type = NLA_U32 },
-> +	[THERMAL_GENL_ATTR_CPU_CAPABILITY_EFF]	= { .type = NLA_U32 },
->  };
-
-AFAIU, 0 <= perf < 256 and 0 <= eff < 256, right?
-
-Is the following true?
-
-	0 <= perf + eff < 256
-
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
