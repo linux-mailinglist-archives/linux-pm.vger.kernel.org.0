@@ -2,354 +2,415 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E821463AC8
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Nov 2021 16:58:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26EBE463C19
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Nov 2021 17:43:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243192AbhK3QBe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Nov 2021 11:01:34 -0500
-Received: from relmlor2.renesas.com ([210.160.252.172]:34668 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S243220AbhK3QBd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Nov 2021 11:01:33 -0500
-X-IronPort-AV: E=Sophos;i="5.87,276,1631545200"; 
-   d="scan'208";a="102308008"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 01 Dec 2021 00:58:11 +0900
-Received: from localhost.localdomain (unknown [10.226.93.28])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 65195400C449;
-        Wed,  1 Dec 2021 00:58:07 +0900 (JST)
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v3 2/2] thermal/drivers: Add TSU driver for RZ/G2L
-Date:   Tue, 30 Nov 2021 15:57:57 +0000
-Message-Id: <20211130155757.17837-3-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211130155757.17837-1-biju.das.jz@bp.renesas.com>
-References: <20211130155757.17837-1-biju.das.jz@bp.renesas.com>
+        id S244276AbhK3QrD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Nov 2021 11:47:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59272 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244187AbhK3Qo6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Nov 2021 11:44:58 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B286AC061574
+        for <linux-pm@vger.kernel.org>; Tue, 30 Nov 2021 08:41:38 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id b40so55326323lfv.10
+        for <linux-pm@vger.kernel.org>; Tue, 30 Nov 2021 08:41:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Kyy5kcZ43sXFDm38rNaL9n+3ZdImIUU9HCZzZTva2pY=;
+        b=Ka0CXC3i9bvvecCDx9Z5im7sQPJIgugqFFi06WelJN+2Uq+b/sruqCcxGH+pjFeVuJ
+         NhrN9uu138xKic4RAIY4aHvvcFA46faRlzmks5aXdCGipYzgDv6pp/OKF35rxQ87Aknu
+         uwsrjCmZG+m1gA9Lfil7KQabYW983wOXTJDhjCLIgA9Y5Il5E4nI+1lVGKtcKmbtpqI4
+         EqNbq7vApHnJjSnyAEcxJN6QnI1o0SAbWvGs9+atXwho80F920BYMZ+Wj5USP5ql6pzp
+         P4b+XT+uPkeS2jFIdxuYvlnmWHNTxUbtRFg3SoNCNukj+dLHVjmzbAd+fwHkzQhTKx+d
+         oeMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Kyy5kcZ43sXFDm38rNaL9n+3ZdImIUU9HCZzZTva2pY=;
+        b=75iRStSlQE/UhYnqCM2CX2ijbvOJnJbaf7wfouyg0yiym6Xh/bT7+K/cducfi2rNUL
+         JtRxbA38bAJWb4VfyGeGUEfsjt5JC3WGpdRNYr3sOP9XAM1rp4pyWnDIwNgP3cOwUXoh
+         CHGYH38D1cm8uSIZ96t68yF/oCkTdvbsQj8gRdXA+YM2z6/bhoRs/7AXJ8JE491Ene+h
+         MiG7+wSzCdcu/6MtgEDDupkIkNJF0n7GstKi/5U51d6zxxOIfQl2qZ1mDuSka/b1uTjR
+         s/LO6Bs1VGJ8fr3vumJs8cOM55TBwpg+UR4AQsm8YUcCmdF9yrxA1fMvcR40g8MNveiJ
+         nC4A==
+X-Gm-Message-State: AOAM530Kc40rpGZv76WnDUdAIoo1CXtmYcB2sEnaIKzx0jJaoURpc1Xw
+        1ZL3jdDAe0wPI6omtYzriz+h8tB9YiGyOHw1vHL0Gw==
+X-Google-Smtp-Source: ABdhPJw5X3mByHXC2oiBcxJWG43NolC0aFwsW33SuY3Ig18um9KB4iN/lu0rxCAd4GTVjMO0qU3uF3o9NSejEI9/xzM=
+X-Received: by 2002:a05:6512:1113:: with SMTP id l19mr343838lfg.184.1638290496755;
+ Tue, 30 Nov 2021 08:41:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20211026222626.39222-1-ulf.hansson@linaro.org>
+ <CAJZ5v0hrTDsCUn4vgmFrTTgd6H=orh-Kb5b3+_H9St4n8fTxBw@mail.gmail.com>
+ <CAPDyKFre=tp4919FLoeU-wjLDJ02zmHaXY4wgTUmfmFbeaCadQ@mail.gmail.com>
+ <4380690.LvFx2qVVIh@kreacher> <CAPDyKFpyPov-faJ9dUszi38Q7-4OsowX=i8w=NCnTQ66_zooHg@mail.gmail.com>
+ <CAJZ5v0iEfE35Aig8XADKbQEJqb8PNmcghLnrVXHkemDjTOLr5g@mail.gmail.com>
+In-Reply-To: <CAJZ5v0iEfE35Aig8XADKbQEJqb8PNmcghLnrVXHkemDjTOLr5g@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 30 Nov 2021 17:41:00 +0100
+Message-ID: <CAPDyKFqVrYKyUjxoErPBuahcgDNX7esspWG4Vqi0q-8_u7MoFQ@mail.gmail.com>
+Subject: Re: [PATCH] PM: runtime: Allow rpm_resume() to succeed when runtime
+ PM is disabled
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Maulik Shah <mkshah@codeaurora.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The RZ/G2L SoC incorporates a thermal sensor unit (TSU) that measures the
-temperature inside the LSI.
+On Tue, 30 Nov 2021 at 14:02, Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Tue, Nov 30, 2021 at 12:58 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> >
+> > [...]
+> >
+> > > > > > > >
+> > > > > > > > Am I thinking correctly that this is mostly about working around the
+> > > > > > > > limitations of pm_runtime_force_suspend()?
+> > > > > > >
+> > > > > > > No, this isn't related at all.
+> > > > > > >
+> > > > > > > The cpuidle-psci driver doesn't have PM callbacks, thus using
+> > > > > > > pm_runtime_force_suspend() would not work here.
+> > > > > >
+> > > > > > Just wanted to send a ping on this to see if we can come to a
+> > > > > > conclusion. Or maybe we did? :-)
+> > > > > >
+> > > > > > I think in the end, what slightly bothers me, is that the behavior is
+> > > > > > a bit inconsistent. Although, maybe it's the best we can do.
+> > > > >
+> > > > > I've been thinking about this and it looks like we can do better, but
+> > > > > instead of talking about this I'd rather send a patch.
+> > > >
+> > > > Alright.
+> > > >
+> > > > I was thinking along the lines of make similar changes for
+> > > > rpm_idle|suspend(). That would make the behaviour even more
+> > > > consistent, I think.
+> > > >
+> > > > Perhaps that's what you have in mind? :-)
+> > >
+> > > Well, not exactly.
+> > >
+> > > The idea is to add another counter (called restrain_depth in the patch)
+> > > to prevent rpm_resume() from running the callback when that is potentially
+> > > problematic.  With that, it is possible to actually distinguish devices
+> > > with PM-runtime enabled and it allows the PM-runtime status to be checked
+> > > when it is still known to be meaningful.
+> >
+> > Hmm, I don't quite understand the benefit of introducing a new flag
+> > for this. rpm_resume() already checks the disable_depth to understand
+> > when it's safe to invoke the callback. Maybe there is a reason why
+> > that isn't sufficient?
+>
+> The problem is that disable_depth > 0 may very well mean that runtime
+> PM has not been enabled at all for the given device which IMO is a
+> problem.
+>
+> As it stands, it is necessary to make assumptions, like disable_depth
+> == 1 meaning that runtime PM is really enabled, but the PM core has
+> disabled it temporarily, which is somewhat questionable.
+>
+> Another problem with disabling is that it causes rpm_resume() to fail
+> even if the status is RPM_ACTIVE and it has to do that exactly because
+> it cannot know why runtime PM has been disabled.  If it has never been
+> enabled, rpm_resume() must fail, but if it has been disabled
+> temporarily, rpm_resume() may return 1 when the status is RPM_ACTIVE.
+>
+> The new count allows the "enabled in general, but temporarily disabled
+> at the moment" to be handled cleanly.
 
-The thermal sensor in this unit measures temperatures in the range from
-−40 degree Celsius to 125 degree Celsius with an accuracy of ±3°C. The
-TSU repeats measurement at 20 microseconds intervals and automatically
-updates the results of measurement.
+My overall comment is that I fail to understand why we need to
+distinguish between these two cases. To me, it shouldn't really
+matter, *why* runtime PM is (or have been) disabled for the device.
 
-The TSU has no interrupts as well as no external pins.
+The important point is that the default state for a device is
+RPM_SUSPENDED and someone has moved into RPM_ACTIVE, for whatever
+reason. That should be sufficient to allow rpm_resume() to return '1'
+when disable_depth > 0, shouldn't it?
 
-This patch adds Thermal Sensor Unit(TSU) driver for RZ/G2L SoC.
+>
+> > >
+> > > It requires quite a few changes, but is rather straightforward, unless I'm
+> > > missing something.
+> > >
+> > > Please see the patch below.  I've only checked that it builds on x86-64.
+> > >
+> > > ---
+> > >  drivers/base/power/main.c    |   18 +++----
+> > >  drivers/base/power/runtime.c |  105 ++++++++++++++++++++++++++++++++++++-------
+> > >  include/linux/pm.h           |    2
+> > >  include/linux/pm_runtime.h   |    2
+> > >  4 files changed, 101 insertions(+), 26 deletions(-)
+> > >
+> > > Index: linux-pm/include/linux/pm.h
+> > > ===================================================================
+> > > --- linux-pm.orig/include/linux/pm.h
+> > > +++ linux-pm/include/linux/pm.h
+> > > @@ -598,6 +598,7 @@ struct dev_pm_info {
+> > >         atomic_t                usage_count;
+> > >         atomic_t                child_count;
+> > >         unsigned int            disable_depth:3;
+> > > +       unsigned int            restrain_depth:3;       /* PM core private */
+> > >         unsigned int            idle_notification:1;
+> > >         unsigned int            request_pending:1;
+> > >         unsigned int            deferred_resume:1;
+> > > @@ -609,6 +610,7 @@ struct dev_pm_info {
+> > >         unsigned int            use_autosuspend:1;
+> > >         unsigned int            timer_autosuspends:1;
+> > >         unsigned int            memalloc_noio:1;
+> > > +       unsigned int            already_suspended:1;    /* PM core private */
+> > >         unsigned int            links_count;
+> > >         enum rpm_request        request;
+> > >         enum rpm_status         runtime_status;
+> > > Index: linux-pm/include/linux/pm_runtime.h
+> > > ===================================================================
+> > > --- linux-pm.orig/include/linux/pm_runtime.h
+> > > +++ linux-pm/include/linux/pm_runtime.h
+> > > @@ -46,6 +46,8 @@ extern void pm_runtime_enable(struct dev
+> > >  extern void __pm_runtime_disable(struct device *dev, bool check_resume);
+> > >  extern void pm_runtime_allow(struct device *dev);
+> > >  extern void pm_runtime_forbid(struct device *dev);
+> > > +extern void pm_runtime_restrain(struct device *dev);
+> > > +extern void pm_runtime_relinquish(struct device *dev);
+> > >  extern void pm_runtime_no_callbacks(struct device *dev);
+> > >  extern void pm_runtime_irq_safe(struct device *dev);
+> > >  extern void __pm_runtime_use_autosuspend(struct device *dev, bool use);
+> > > Index: linux-pm/drivers/base/power/runtime.c
+> > > ===================================================================
+> > > --- linux-pm.orig/drivers/base/power/runtime.c
+> > > +++ linux-pm/drivers/base/power/runtime.c
+> > > @@ -744,11 +744,11 @@ static int rpm_resume(struct device *dev
+> > >   repeat:
+> > >         if (dev->power.runtime_error)
+> > >                 retval = -EINVAL;
+> > > -       else if (dev->power.disable_depth == 1 && dev->power.is_suspended
+> > > -           && dev->power.runtime_status == RPM_ACTIVE)
+> > > -               retval = 1;
+> > >         else if (dev->power.disable_depth > 0)
+> > >                 retval = -EACCES;
+> > > +       else if (dev->power.restrain_depth > 0)
+> > > +               retval = dev->power.runtime_status == RPM_ACTIVE ? 1 : -EAGAIN;
+> > > +
+> > >         if (retval)
+> > >                 goto out;
+> > >
+> > > @@ -1164,9 +1164,9 @@ EXPORT_SYMBOL_GPL(pm_runtime_get_if_acti
+> > >   * @dev: Device to handle.
+> > >   * @status: New runtime PM status of the device.
+> > >   *
+> > > - * If runtime PM of the device is disabled or its power.runtime_error field is
+> > > - * different from zero, the status may be changed either to RPM_ACTIVE, or to
+> > > - * RPM_SUSPENDED, as long as that reflects the actual state of the device.
+> > > + * If runtime PM of the device is disabled or restrained, or its
+> > > + * power.runtime_error field is nonzero, the status may be changed either to
+> > > + * RPM_ACTIVE, or to RPM_SUSPENDED, as long as that reflects its actual state.
+> > >   * However, if the device has a parent and the parent is not active, and the
+> > >   * parent's power.ignore_children flag is unset, the device's status cannot be
+> > >   * set to RPM_ACTIVE, so -EBUSY is returned in that case.
+> > > @@ -1195,13 +1195,16 @@ int __pm_runtime_set_status(struct devic
+> > >         spin_lock_irq(&dev->power.lock);
+> > >
+> > >         /*
+> > > -        * Prevent PM-runtime from being enabled for the device or return an
+> > > -        * error if it is enabled already and working.
+> > > +        * Prevent PM-runtime from being used for the device or return an
+> > > +        * error if it is in use already.
+> > >          */
+> > > -       if (dev->power.runtime_error || dev->power.disable_depth)
+> > > -               dev->power.disable_depth++;
+> > > -       else
+> > > +       if (dev->power.runtime_error || dev->power.disable_depth ||
+> > > +           dev->power.restrain_depth) {
+> > > +               pm_runtime_get_noresume(dev);
+> >
+> > Why do we need to bump the usage count here? Except for balancing with
+> > pm_runtime_relinquish() a few lines below, of course?
+>
+> First off, I need the usage count to be greater than 0 to prevent the
+> runtime suspend callback from running while "restrained" (and the
+> suspend could check the restrain count, but that's one more check in
+> the suspend path which isn't necessary if the usage counter is always
+> bumped up upfront).
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
-v2->v3:
- * Updated commit description with technical description of the sensor
- * Included math.h and unit.h for round_up() and MILLIDEGREE_PER_DEGREE
- * Updated the comments.
- * dev_info replaced with dev_dbg in probe()
-v1->v2:
- * Removed devm_add_action_or_reset from probe.
----
- drivers/thermal/Kconfig         |   9 ++
- drivers/thermal/Makefile        |   1 +
- drivers/thermal/rzg2l_thermal.c | 240 ++++++++++++++++++++++++++++++++
- 3 files changed, 250 insertions(+)
- create mode 100644 drivers/thermal/rzg2l_thermal.c
+If disable_depth > 0 (or restrain_depth > 0), the runtime PM core
+should prevent the runtime suspend callback from being invoked, no
+matter whether the usage count has been bumped or not. Or did I get
+that wrong?
 
-diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-index d7f44deab5b1..e37691e0bf20 100644
---- a/drivers/thermal/Kconfig
-+++ b/drivers/thermal/Kconfig
-@@ -354,6 +354,15 @@ config RCAR_GEN3_THERMAL
- 	  Enable this to plug the R-Car Gen3 or RZ/G2 thermal sensor driver into
- 	  the Linux thermal framework.
- 
-+config RZG2L_THERMAL
-+	tristate "Renesas RZ/G2L thermal driver"
-+	depends on ARCH_RENESAS || COMPILE_TEST
-+	depends on HAS_IOMEM
-+	depends on OF
-+	help
-+	  Enable this to plug the RZ/G2L thermal sensor driver into the Linux
-+	  thermal framework.
-+
- config KIRKWOOD_THERMAL
- 	tristate "Temperature sensor on Marvell Kirkwood SoCs"
- 	depends on MACH_KIRKWOOD || COMPILE_TEST
-diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-index 82fc3e616e54..f0c36a1530d5 100644
---- a/drivers/thermal/Makefile
-+++ b/drivers/thermal/Makefile
-@@ -37,6 +37,7 @@ obj-$(CONFIG_SUN8I_THERMAL)     += sun8i_thermal.o
- obj-$(CONFIG_ROCKCHIP_THERMAL)	+= rockchip_thermal.o
- obj-$(CONFIG_RCAR_THERMAL)	+= rcar_thermal.o
- obj-$(CONFIG_RCAR_GEN3_THERMAL)	+= rcar_gen3_thermal.o
-+obj-$(CONFIG_RZG2L_THERMAL)	+= rzg2l_thermal.o
- obj-$(CONFIG_KIRKWOOD_THERMAL)  += kirkwood_thermal.o
- obj-y				+= samsung/
- obj-$(CONFIG_DOVE_THERMAL)  	+= dove_thermal.o
-diff --git a/drivers/thermal/rzg2l_thermal.c b/drivers/thermal/rzg2l_thermal.c
-new file mode 100644
-index 000000000000..d47d4a30cd6c
---- /dev/null
-+++ b/drivers/thermal/rzg2l_thermal.c
-@@ -0,0 +1,240 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Renesas RZ/G2L TSU Thermal Sensor Driver
-+ *
-+ * Copyright (C) 2021 Renesas Electronics Corporation
-+ */
-+#include <linux/delay.h>
-+#include <linux/err.h>
-+#include <linux/io.h>
-+#include <linux/iopoll.h>
-+#include <linux/math.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/reset.h>
-+#include <linux/thermal.h>
-+#include <linux/units.h>
-+
-+#include "thermal_hwmon.h"
-+
-+#define CTEMP_MASK	0xFFF
-+
-+/* default calibration values, if FUSE values are missing */
-+#define SW_CALIB0_VAL	3148
-+#define SW_CALIB1_VAL	503
-+
-+/* Register offsets */
-+#define TSU_SM		0x00
-+#define TSU_ST		0x04
-+#define TSU_SAD		0x0C
-+#define TSU_SS		0x10
-+
-+#define OTPTSUTRIM_REG(n)	(0x18 + ((n) * 0x4))
-+
-+/* Sensor Mode Register(TSU_SM) */
-+#define TSU_SM_EN_TS		BIT(0)
-+#define TSU_SM_ADC_EN_TS	BIT(1)
-+#define TSU_SM_NORMAL_MODE	(TSU_SM_EN_TS | TSU_SM_ADC_EN_TS)
-+
-+/* TSU_ST bits */
-+#define TSU_ST_START		BIT(0)
-+
-+#define TSU_SS_CONV_RUNNING	BIT(0)
-+
-+#define TS_CODE_AVE_SCALE(x)	((x) * 1000000)
-+#define MCELSIUS(temp)		((temp) * MILLIDEGREE_PER_DEGREE)
-+#define TS_CODE_CAP_TIMES	8	/* Capture  times */
-+
-+#define RZG2L_THERMAL_GRAN	500	/* milli Celsius */
-+#define RZG2L_TSU_SS_TIMEOUT_US	1000
-+
-+#define CURVATURE_CORRECTION_CONST	13
-+
-+struct rzg2l_thermal_priv {
-+	struct device *dev;
-+	void __iomem *base;
-+	struct thermal_zone_device *zone;
-+	struct reset_control *rstc;
-+	u32 calib0, calib1;
-+};
-+
-+static inline u32 rzg2l_thermal_read(struct rzg2l_thermal_priv *priv, u32 reg)
-+{
-+	return ioread32(priv->base + reg);
-+}
-+
-+static inline void rzg2l_thermal_write(struct rzg2l_thermal_priv *priv, u32 reg,
-+				       u32 data)
-+{
-+	iowrite32(data, priv->base + reg);
-+}
-+
-+static int rzg2l_thermal_get_temp(void *devdata, int *temp)
-+{
-+	struct rzg2l_thermal_priv *priv = devdata;
-+	u32 result = 0, dsensor, ts_code_ave;
-+	int val, i;
-+
-+	for (i = 0; i < TS_CODE_CAP_TIMES ; i++) {
-+		/* TSU repeats measurement at 20 microseconds intervals and
-+		 * automatically updates the results of measurement. As per
-+		 * the HW manual for measuring temperature we need to read 8
-+		 * values consecutively and then take the average.
-+		 * ts_code_ave = (ts_code[0] + ⋯ + ts_code[7]) / 8
-+		 */
-+		result += rzg2l_thermal_read(priv, TSU_SAD) & CTEMP_MASK;
-+		usleep_range(20, 30);
-+	}
-+
-+	ts_code_ave = result / TS_CODE_CAP_TIMES;
-+
-+	/* Calculate actual sensor value by applying curvature correction formula
-+	 * dsensor = ts_code_ave / (1 + ts_code_ave * 0.000013). Here we are doing
-+	 * integer calculation by scaling all the values by 1000000.
-+	 */
-+	dsensor = TS_CODE_AVE_SCALE(ts_code_ave) /
-+		(TS_CODE_AVE_SCALE(1) + (ts_code_ave * CURVATURE_CORRECTION_CONST));
-+
-+	/* The temperature Tj is calculated by the formula
-+	 * Tj = (dsensor − calib1) * 165/ (calib0 − calib1) − 40
-+	 * where calib0 and calib1 are the caliberation values.
-+	 */
-+	val = ((dsensor - priv->calib1) * (MCELSIUS(165) /
-+		(priv->calib0 - priv->calib1))) - MCELSIUS(40);
-+
-+	*temp = roundup(val, RZG2L_THERMAL_GRAN);
-+
-+	return 0;
-+}
-+
-+static const struct thermal_zone_of_device_ops rzg2l_tz_of_ops = {
-+	.get_temp = rzg2l_thermal_get_temp,
-+};
-+
-+static int rzg2l_thermal_init(struct rzg2l_thermal_priv *priv)
-+{
-+	u32 reg_val;
-+
-+	rzg2l_thermal_write(priv, TSU_SM, TSU_SM_NORMAL_MODE);
-+	rzg2l_thermal_write(priv, TSU_ST, 0);
-+
-+	/* Before setting the START bit, TSU should be in normal operating
-+	 * mode. As per the HW manual, it will take 60 µs to place the TSU
-+	 * into normal operating mode.
-+	 */
-+	usleep_range(60, 80);
-+
-+	reg_val = rzg2l_thermal_read(priv, TSU_ST);
-+	reg_val |= TSU_ST_START;
-+	rzg2l_thermal_write(priv, TSU_ST, reg_val);
-+
-+	return readl_poll_timeout(priv->base + TSU_SS, reg_val,
-+				  reg_val == TSU_SS_CONV_RUNNING, 50,
-+				  RZG2L_TSU_SS_TIMEOUT_US);
-+}
-+
-+static void rzg2l_thermal_reset_assert_pm_disable_put(struct platform_device *pdev)
-+{
-+	struct rzg2l_thermal_priv *priv = dev_get_drvdata(&pdev->dev);
-+
-+	pm_runtime_put(&pdev->dev);
-+	pm_runtime_disable(&pdev->dev);
-+	reset_control_assert(priv->rstc);
-+}
-+
-+static int rzg2l_thermal_remove(struct platform_device *pdev)
-+{
-+	struct rzg2l_thermal_priv *priv = dev_get_drvdata(&pdev->dev);
-+
-+	thermal_remove_hwmon_sysfs(priv->zone);
-+	rzg2l_thermal_reset_assert_pm_disable_put(pdev);
-+
-+	return 0;
-+}
-+
-+static int rzg2l_thermal_probe(struct platform_device *pdev)
-+{
-+	struct thermal_zone_device *zone;
-+	struct rzg2l_thermal_priv *priv;
-+	struct device *dev = &pdev->dev;
-+	int ret;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(priv->base))
-+		return PTR_ERR(priv->base);
-+
-+	priv->dev = dev;
-+	priv->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
-+	if (IS_ERR(priv->rstc))
-+		return dev_err_probe(dev, PTR_ERR(priv->rstc),
-+				     "failed to get cpg reset");
-+
-+	reset_control_deassert(priv->rstc);
-+
-+	pm_runtime_enable(dev);
-+	pm_runtime_get_sync(dev);
-+
-+	priv->calib0 = rzg2l_thermal_read(priv, OTPTSUTRIM_REG(0));
-+	if (!priv->calib0)
-+		priv->calib0 = SW_CALIB0_VAL;
-+
-+	priv->calib1 = rzg2l_thermal_read(priv, OTPTSUTRIM_REG(1));
-+	if (!priv->calib1)
-+		priv->calib1 = SW_CALIB1_VAL;
-+
-+	platform_set_drvdata(pdev, priv);
-+	ret = rzg2l_thermal_init(priv);
-+	if (ret) {
-+		dev_err(dev, "Failed to start TSU");
-+		goto err;
-+	}
-+
-+	zone = devm_thermal_zone_of_sensor_register(dev, 0, priv,
-+						    &rzg2l_tz_of_ops);
-+	if (IS_ERR(zone)) {
-+		dev_err(dev, "Can't register thermal zone");
-+		ret = PTR_ERR(zone);
-+		goto err;
-+	}
-+
-+	priv->zone = zone;
-+	priv->zone->tzp->no_hwmon = false;
-+	ret = thermal_add_hwmon_sysfs(priv->zone);
-+	if (ret)
-+		goto err;
-+
-+	dev_dbg(dev, "TSU probed with %s caliberation values",
-+		rzg2l_thermal_read(priv, OTPTSUTRIM_REG(0)) ?  "hw" : "sw");
-+
-+	return 0;
-+
-+err:
-+	rzg2l_thermal_reset_assert_pm_disable_put(pdev);
-+	return ret;
-+}
-+
-+static const struct of_device_id rzg2l_thermal_dt_ids[] = {
-+	{ .compatible = "renesas,rzg2l-tsu", },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, rzg2l_thermal_dt_ids);
-+
-+static struct platform_driver rzg2l_thermal_driver = {
-+	.driver = {
-+		.name = "rzg2l_thermal",
-+		.of_match_table = rzg2l_thermal_dt_ids,
-+	},
-+	.probe = rzg2l_thermal_probe,
-+	.remove = rzg2l_thermal_remove,
-+};
-+module_platform_driver(rzg2l_thermal_driver);
-+
-+MODULE_DESCRIPTION("Renesas RZ/G2L TSU Thermal Sensor Driver");
-+MODULE_AUTHOR("Biju Das <biju.das.jz@bp.renesas.com>");
-+MODULE_LICENSE("GPL v2");
--- 
-2.17.1
+>
+> Second, the PM core bumps up the usage counter during system-wide
+> suspend, so bumping it up again isn't strictly needed if this
+> "temporary disabling" is limited to the system-wide suspend-resume
+> paths, but I'm not sure if it should be limited this way.
+>
+> I would prefer the "temporarily unavailable" case to be clearly
+> different from the "disabled" one in any case, not just during
+> system-wide suspend-resume.
+>
+> > > +               dev->power.restrain_depth++;
+> > > +       } else {
+> > >                 error = -EAGAIN;
+> > > +       }
+> > >
+> > >         spin_unlock_irq(&dev->power.lock);
+> > >
+> > > @@ -1278,7 +1281,7 @@ int __pm_runtime_set_status(struct devic
+> > >                 device_links_read_unlock(idx);
+> > >         }
+> > >
+> > > -       pm_runtime_enable(dev);
+> > > +       pm_runtime_relinquish(dev);
+> > >
+> > >         return error;
+> > >  }
+> > > @@ -1513,6 +1516,72 @@ void pm_runtime_allow(struct device *dev
+> > >  EXPORT_SYMBOL_GPL(pm_runtime_allow);
+> > >
+> > >  /**
+> > > + * pm_runtime_restrain - Temporarily block runtime PM of a device.
+> > > + * @dev: Device to handle.
+> > > + *
+> > > + * Increase the device's usage count and its restrain_dpeth count.  If the
+> > > + * latter was 0 initially, cancel the runtime PM work for @dev if pending and
+> > > + * wait for all of the runtime PM operations on it in progress to complete.
+> > > + *
+> > > + * After this function has been called, attempts to runtime-suspend @dev will
+> > > + * fail with -EAGAIN and attempts to runtime-resume it will succeed if its
+> > > + * runtime PM status is RPM_ACTIVE and will fail with -EAGAIN otherwise.
+> > > + *
+> > > + * This function can only be called by the PM core.
+> > > + */
+> > > +void pm_runtime_restrain(struct device *dev)
+> > > +{
+> > > +       pm_runtime_get_noresume(dev);
+> > > +
+> > > +       spin_lock_irq(&dev->power.lock);
+> > > +
+> > > +       if (dev->power.restrain_depth++ > 0)
+> > > +               goto out;
+> > > +
+> > > +       if (dev->power.disable_depth > 0) {
+> > > +               dev->power.already_suspended = false;
+> > > +               goto out;
+> > > +       }
+> > > +
+> > > +       /* Update time accounting before blocking PM-runtime. */
+> > > +       update_pm_runtime_accounting(dev);
+> > > +
+> > > +       __pm_runtime_barrier(dev);
+> > > +
+> > > +       dev->power.already_suspended = pm_runtime_status_suspended(dev);
+> > > +
+> > > +out:
+> > > +       spin_unlock_irq(&dev->power.lock);
+> > > +}
+> >
+> > What if someone calls pm_runtime_disable() after the PM core has
+> > called pm_runtime_restrain() for a device? It looks like we may run
+> > another round of __pm_runtime_barrier() and
+> > update_pm_runtime_accounting(), does that really make sense?
+>
+> No, it doesn't, but it's a bug in the patch.  And there are other bugs in it ...
+>
+> In this particular case, __pm_runtime_disable() should check the
+> "restrain" count and do nothing when it is nonzero.
+>
+> > > +
+> > > +/**
+> > > + * pm_runtime_relinquish - Unblock runtime PM of a device.
+> > > + * @dev: Device to handle.
+> > > + *
+> > > + * Decrease the device's usage count and its restrain_dpeth count.
+> > > + *
+> > > + * This function can only be called by the PM core.
+> > > + */
+> > > +void pm_runtime_relinquish(struct device *dev)
+> > > +{
+> > > +       spin_lock_irq(&dev->power.lock);
+> > > +
+> > > +       if (dev->power.restrain_depth > 0) {
+> > > +               dev->power.restrain_depth--;
+> > > +
+> > > +               /* About to unbolck runtime PM, set accounting_timestamp to now */
+> > > +               if (!dev->power.restrain_depth && !dev->power.disable_depth)
+> > > +                       dev->power.accounting_timestamp = ktime_get_mono_fast_ns();
+> > > +       } else {
+> > > +               dev_warn(dev, "Unbalanced %s!\n", __func__);
+> > > +       }
+> > > +
+> > > +       spin_unlock_irq(&dev->power.lock);
+> > > +
+> > > +       pm_runtime_put_noidle(dev);
+> > > +}
+> > > +
+> > > +/**
+> > >   * pm_runtime_no_callbacks - Ignore runtime PM callbacks for a device.
+> > >   * @dev: Device to handle.
+> > >   *
+> > > @@ -1806,8 +1875,10 @@ int pm_runtime_force_suspend(struct devi
+> > >         int (*callback)(struct device *);
+> > >         int ret;
+> > >
+> > > -       pm_runtime_disable(dev);
+> > > -       if (pm_runtime_status_suspended(dev))
+> > > +       pm_runtime_restrain(dev);
+> > > +
+> > > +       /* No suspend if the device has already been suspended by PM-runtime. */
+> > > +       if (!dev->power.already_suspended)
+> >
+> > I assume you are looking at using pm_runtime_force_suspend|resume() to
+> > support my use case for the cpuidle-psci driver? In other words,
+> > replace pm_runtime_get_sync() and pm_runtime_put_sync_suspend() in
+> > __psci_enter_domain_idle_state(), right?
+>
+> Not really.  I've been looking at a general "temporarily unavailable"
+> vs "disabled" problem.
 
+Okay, so I understand that you want to distinguish between these two
+cases, but honestly I fail to understand *why* that is needed, sorry.
+
+>
+> > If so, that doesn't really fit well, I think. Not only because we
+> > don't have system suspend/resume callbacks available, which is really
+> > the proper place to call the pm_runtime_force_*() functions from, but
+> > also because we don't want to call __pm_runtime_barrier(), etc, every
+> > time in the idle path of a CPU. If anything, we should instead strive
+> > towards a more lightweight path than what we currently have.
+>
+> So IMO this can be done with the new counter in place, because for
+> anything called between device_suspend_late() and
+> device_resume_early(), PM-runtime would be restrained by the PM core
+> (it is disabled now), so rpm_resume() would return 1 for devices with
+> PM-runtime status equal to RPM_ACTIVE (it fails now, unless the usage
+> counter is exactly 1) and you resume the devices in question upfront,
+> so it would be always safe to call rpm_resume() and rpm_suspend() for
+> them during the noirq suspend and resume phases (it is now tricky,
+> because it depends on the exact usage counter value).
+>
+> Between dpm_suspend_noirq() and dpm_resume_noirq(), you need to switch
+> over to a different type of handling anyway, because all of the
+> devices are expected to be suspended then.
+
+Not sure I understand correctly, but I don't think I need to switch to
+another handling. The devices in __psci_enter_domain_idle_state() are
+managed as syscore devices with genpd, for the later system suspend
+phases, this works well.
+
+Perhaps you also saying that the goal with your change is to allow
+rpm_resume() to return 1, when the state is RPM_ACTIVE for the device
+and when the PM core has called pm_runtime_restrain() instead of
+__pm_runtime_disable()? Right?
+
+Kind regards
+Uffe
