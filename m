@@ -2,221 +2,244 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A6FE463E87
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Nov 2021 20:17:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC62C463F03
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Nov 2021 21:06:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343522AbhK3TUV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Nov 2021 14:20:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38130 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbhK3TT4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Nov 2021 14:19:56 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4830C061574;
-        Tue, 30 Nov 2021 11:16:34 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id u1so46672765wru.13;
-        Tue, 30 Nov 2021 11:16:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ef3pNAvFyeJjbNmdet3IMAdRtnds6OW8kq/F+gFt22k=;
-        b=CtVOjrOJO/4rb85gtmbkXVMXJA7w5ibhKEfc7HveyKmKxoyIZIho9u4IfdG7rkI4hd
-         IDuexFjBYgFiZRmz8K6ypPpB9p3umOb90vOeG6TY7Wwqtfp7ag3hIRYWB9PYproE66dr
-         cbxiVaMcSUF8LZm9691lf2QkszzSqaqjyHpWngi7BGVgY2ESMMpe3wVZ7u28A01rlosE
-         Er02wUZP6tWouAl6c7XraZlPSMeOf/8O6kW4PB8x/wDmh35onYaRmFrLnuL3U9f/O/E2
-         WfoRLVH18Z+adygcSXbc7lZjawn/obmxBc2dJM/CgFAXAerh/zukr5zqXR7ezqkfauc7
-         6xEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ef3pNAvFyeJjbNmdet3IMAdRtnds6OW8kq/F+gFt22k=;
-        b=l6mGTvFcoyVYiz6o69iBMXsy7+ztqCysr6qzJeAw9hUgVZ+29yTDRptSGcPl4FiafL
-         j8mxbKTdB2QDMmkLKJEYqToeJaiEFyEG7iKZkJs1wNtLUchMy9kyCLtEg9U6QIt0KWA2
-         0W9X14ukIH09cPiGEoVDP1L0lLjq6BwY1KCnDMKBAtLflY4ID5CPrdNyYJxLT/lSoXMV
-         dlVtVEMPYEToxkqR1G5YzjiAL7hBsbSFH6Brc0AN7DiyOGxtxI11RO8uJts8dZoOFeLh
-         mewy4Qwdz4/b2uUYvPpbiRVChbtO7bM71Ck4ZhM0+qK6omhA6cZnrV52qS/+UT1sh2LZ
-         dJFQ==
-X-Gm-Message-State: AOAM530oaWeNfXBvWbCbuXuXOe8cE4TysmKnE+upOBlOkw9w0hnPdhbi
-        ClVfPI19UIGeMt5jBBHUBdA=
-X-Google-Smtp-Source: ABdhPJyffvNw0qfX1lL78dpOYLQgp+oWkJkRGWN9lsL8P8CbfAHkgVc5i12qejLoXuHogvxwfAwnGg==
-X-Received: by 2002:adf:82d3:: with SMTP id 77mr928486wrc.377.1638299793299;
-        Tue, 30 Nov 2021 11:16:33 -0800 (PST)
-Received: from archbook.localnet (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
-        by smtp.gmail.com with ESMTPSA id o3sm3808644wms.10.2021.11.30.11.16.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 11:16:32 -0800 (PST)
-From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-To:     Chris Morgan <macromorgan@hotmail.com>
-Cc:     linux-rockchip@lists.infradead.org, lee.jones@linaro.org,
-        robh+dt@kernel.org, heiko@sntech.de, sre@kernel.org,
-        maccraft123mc@gmail.com, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, Chris Morgan <macroalpha82@gmail.com>
-Subject: Re: [PATCH v4 RESEND 0/4] power: supply: Add Support for RK817 Charger
-Date:   Tue, 30 Nov 2021 20:16:31 +0100
-Message-ID: <5790471.3iNxtBKjHZ@archbook>
-In-Reply-To: <SN6PR06MB5342DF2234B8F9599E1AF125A5679@SN6PR06MB5342.namprd06.prod.outlook.com>
-References: <20210916194208.10387-1-macroalpha82@gmail.com> <2197533.Eh1vGvx6NY@archbook> <SN6PR06MB5342DF2234B8F9599E1AF125A5679@SN6PR06MB5342.namprd06.prod.outlook.com>
+        id S240082AbhK3UJp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Nov 2021 15:09:45 -0500
+Received: from mail-eopbgr130045.outbound.protection.outlook.com ([40.107.13.45]:58018
+        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S236006AbhK3UJj (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 30 Nov 2021 15:09:39 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ALQi7G2yMQAqVaDMWZbYZOiGKWRobjiTPCXcCi82k2nLj/2vsT9DwIX9ubPhs5EhWkJqONNDGctaS8BdggJQvN4dCPYSAon1FMyqTV1CWLF1hWqsIHcH4X/ngxQY0Rk2GgBMp4opIcBdyqsbBWuUJbalH99vK/oAxVw3znY6c7APCiIIe5gb5tkItbvksGG/bh/V/QiBkMw3T+4ggFgzhenGySwb96EtB2Ohi4wu0Du6YvnRgaugPW/+7FPaD4h5ReHB3z1JWYiL65/b/l+uuVAb/JReU+JwOLD0/ncM9G8b3Hgcij4KiBVaVnWz0xgfeQ+YvI/S6oQ4WyBFvFPY1Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bNasSBEYOIBtk1j4Sxhu5Hmv2KYsod/FUdaXXNKbDaA=;
+ b=CPXhc3eXMvCMVDI2JtZQCp66mbu249M4EIScczFLLdRHkWCUH2gqstH0fG6fwDptw2bX9teViPkthYlulA5iKAmOnBn9B0yN39fLHkDYlWXREF+hvHDisrbmHdwxPrtzSIcPOvZ1B9qDb84vFkD0MtdPg1p2cb4MKGHQyw/h65SIU2UT4aoqQ9PoYvbMDuHTWQThKbdstYXGJr/buoan/5GYoHIYqup+1I6bYzveF9QkRFhvrPHPwSD8TNXgaFq7rdz1BANI7lu4e07NdjK9aUvDjgTaYA+4bgewogAVBFq7zGnKWhHtYkZE7Dt67qZHXugQ5gWWywGwkc+8XQY79A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bNasSBEYOIBtk1j4Sxhu5Hmv2KYsod/FUdaXXNKbDaA=;
+ b=bQGqGYgD9gzgyapygnVSanHdEf7L2i04uE8wLBCL7GTrPqVYKnF7Pay4iOMPurciJ0zq2eK22pZqXxcdN+6aABZF80mFs2aMi18c5ot5mlW3Fu2Y1bOJ8TyxL1ad7T8qOvJq5Vdf44zx399URMbGNY3Y9C5XqrolXKJebEO6xzs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB4688.eurprd04.prod.outlook.com (2603:10a6:803:6a::30)
+ by VI1PR04MB6014.eurprd04.prod.outlook.com (2603:10a6:803:c9::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Tue, 30 Nov
+ 2021 20:06:15 +0000
+Received: from VI1PR04MB4688.eurprd04.prod.outlook.com
+ ([fe80::4c4c:f2b2:addb:841]) by VI1PR04MB4688.eurprd04.prod.outlook.com
+ ([fe80::4c4c:f2b2:addb:841%5]) with mapi id 15.20.4734.024; Tue, 30 Nov 2021
+ 20:06:15 +0000
+Date:   Tue, 30 Nov 2021 22:06:12 +0200
+From:   Abel Vesa <abel.vesa@nxp.com>
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>
+Cc:     Rob Herring <robh@kernel.org>, Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Georgi Djakov <djakov@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-serial@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [RFC 06/19] devfreq: imx8m-ddrc: Add late system sleep PM ops
+Message-ID: <YaaENEqlQbW8W6PI@ryzen>
+References: <1631554694-9599-1-git-send-email-abel.vesa@nxp.com>
+ <1631554694-9599-7-git-send-email-abel.vesa@nxp.com>
+ <e9a3a64dcfec858e612037199df7627b77ececd9.camel@puri.sm>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e9a3a64dcfec858e612037199df7627b77ececd9.camel@puri.sm>
+X-ClientProxiedBy: VI1PR08CA0122.eurprd08.prod.outlook.com
+ (2603:10a6:800:d4::24) To VI1PR04MB4688.eurprd04.prod.outlook.com
+ (2603:10a6:803:6a::30)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Received: from ryzen (5.12.226.136) by VI1PR08CA0122.eurprd08.prod.outlook.com (2603:10a6:800:d4::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11 via Frontend Transport; Tue, 30 Nov 2021 20:06:14 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e2bdbbf7-d7c4-4611-eed0-08d9b43cdd57
+X-MS-TrafficTypeDiagnostic: VI1PR04MB6014:
+X-Microsoft-Antispam-PRVS: <VI1PR04MB601414BE02ABF20A5A5E1095F6679@VI1PR04MB6014.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rXGnPkrmPBVQRjJZLxjAqHTqyMlAeVieKx1M0b2HQkZ4lXGbhMR66fIC5g4S12sUHDET9KCYis6ehVQggQ9GuZ9Vg626c5tLcKCSuAeoXxwkyySBURl9BetsBSo9Mi8sKgCiu3ecL/67oJ2NfPCkrVRSyn1NXft1TrsIMQcA8deT7hzzuIRRRDcE0C1p3g9VxTKZypZ7Egm37jVa6czW7BtdxB4aKGGV2BUlQj37d1V6vAfXJqUKxxfEZcxVigSFnbXj7dVrlTnq9uekvL006fsjesJW6GjKyEWZtpESNx8GQHsDQY7GsKeKy0LxX8om1PIjgSKywQgC6ovNs1uoe59NhANV+7I1WVUH3cZH4DxTrL6u46gY37X2M694Pcogr7D494obAcOBRpNw6JGDUmZIAwFpHt6sQuBsrNGdiOxqnJf9KaUXYv8Rkz7wiZ/aFws2gsk89cT0Glx6ay14sh9FlRFeKyod6SA8bSd4+L0HTGj+g5F41+CodiK5dDhoLmwf3kcd0bhSPavjm4t9DJVgBbayPo9F2+ZXbsYOE4/4Jukg4MBF+UzrbWVli6faTxq2JVtYVxHWY59WRGjvatQpoNWqeliqtgBqUWHV8Pl6U43oObl4VZdFvndsQ+r5F+yXWbt6rVFbXZBPIMsp3LGLfsZKviHgIigu1GGFfhkMikAhNwO+DxUkO/aCvkM/xdoMFT0CpAPsGobEeGN0SqCOmA6U7DaCh7mup9lh2cs=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4688.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66946007)(8676002)(33716001)(86362001)(44832011)(66556008)(66476007)(9686003)(8936002)(55016003)(83380400001)(5660300002)(7416002)(956004)(52116002)(54906003)(38100700002)(26005)(6916009)(38350700002)(9576002)(4326008)(508600001)(316002)(2906002)(6496006)(186003)(53546011)(32563001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?oMHpj/srsaZcWflpd0NN/d+jAMZwRhDUIhzg1Lw5lWFDbJR3zauZPEcG0r?=
+ =?iso-8859-1?Q?PkZL1ga38xGoCjT4oVGWgE2RZjdjrXKlAIjwF2Dddg9qBacKHXDYCJyO+e?=
+ =?iso-8859-1?Q?HncdNApa56Z9LtZPBEMeC05q3fSRqzc2SVTvb0nUwKuqEtPtyDx+MFpVsS?=
+ =?iso-8859-1?Q?qedQXmrzMPBra48suMcC6mUS1XFKiJyh66j8wYVApmLycyK5Wc5VVkMzxp?=
+ =?iso-8859-1?Q?MicrHR/uPEvOHktxyrl7x92bMSs9/4N3jb2BQ3LSoLm7w506sTnJld0UFy?=
+ =?iso-8859-1?Q?qYTdPZOdcuRS1JV1teCbAjg3hhNgs8ak3SjOf7Ovih/pMZrY/SCz0cWP1o?=
+ =?iso-8859-1?Q?6r4TiyZvazg32Y93tCNdeOLPo5Ixo8iyn8P8KlESz5mmdtcIsP196+m9rv?=
+ =?iso-8859-1?Q?cCZ6XLbrxYYS+2LSu4KM+lfQhAjCq8JafvWX9b9cPgMZb6gS5luPaIJPX8?=
+ =?iso-8859-1?Q?0E0oR5Pbo5W4woYI1Ug5wqeaHL3E+SmRNg5M64zXlagrTnRKeeuxot2MQU?=
+ =?iso-8859-1?Q?9bUSHwYq8uCYOndVY45Z0cLWAE3i5qTe+niAqJ7JqGLMeEFHl37bXyZQ7R?=
+ =?iso-8859-1?Q?+n7z+YVUYzZHzJZB2n05u7QJ5bG3WtZjTPwPngFCtgxiluD+K3aOhbABA5?=
+ =?iso-8859-1?Q?d8LUR4vxPA5ZaYpeBXtxxJed+HVwJCmwDJxO4JRIVkDQtTac+seGZtPHar?=
+ =?iso-8859-1?Q?YBVJTKgL4lO0LBeIES68tJiAJlK8f1CjU0Lvyqh9jpxGFgW7LZN+TKSSVQ?=
+ =?iso-8859-1?Q?9vq4fewBlrIbSo/mv4E3boWNqwVa/r7V4TYsKlOdciADdMY8u9a5MogwUO?=
+ =?iso-8859-1?Q?B9Et3HBaIQP/gI6YLdlFIOzGXIW+PuwnTsRt0wop/Sm9B1uT+yDi0NNQBj?=
+ =?iso-8859-1?Q?2BdT5FwEYuUjf8E+usPtqCrqLJItrzJkzqfN7n/Q3UlAb9/dAtwRGIJqji?=
+ =?iso-8859-1?Q?XGhZLkZxjNOGoZ+jTZnV08q4/1ekBWGICW0l+Bbd2IrrOlLWCpqtuyH68A?=
+ =?iso-8859-1?Q?5oCQcpKDoYyJH281O+Q7HCe5bCUXnHCS2G5R1Swx95zLdKz5nBrUcKWfu5?=
+ =?iso-8859-1?Q?Ua0tjgvmWnuWoSacsWRNySX4Xd456zokH+78zm4wmc79IDgP02yD9Ry82t?=
+ =?iso-8859-1?Q?5V1nOlcRKiX0eW0n39OZJu3JbSa7xw0XNpmcTSjyRrVuP8SQ42UFv/GbdB?=
+ =?iso-8859-1?Q?yRvgvcNYUvwqHuPG4x0+0NW25VPKpsStOKIv2sxZd7+oolz2jK5513GS2w?=
+ =?iso-8859-1?Q?zf/hDNztEs2AYrlZN3rFtjsl6wxwZ+G+REr374ARi7JW9xC2q7DT+yQ+3+?=
+ =?iso-8859-1?Q?XnqGRarpMsTftkggGmoKpFnib59WoXKtgeRwunZse7l0HrYo6Ck2MpPCcZ?=
+ =?iso-8859-1?Q?cSuB3WJE1ikcFnUSLvc1xw0Y+QgFE532rsd6KF7gR9ZGtybY8DEahEzdQt?=
+ =?iso-8859-1?Q?QpGF0JEGNZXZeNClACySYTru28oDTDE5ulO2g35dJJKNjnU7pwmkaAjNl0?=
+ =?iso-8859-1?Q?lbjlSulEEIgJ2F+a7I7pwXhgGagybO2PONrVMa59F+lvmG1bq/rTQaulsf?=
+ =?iso-8859-1?Q?4rzV7MigVc4cKz5ekg+VyUy28MR1s2/zbRHh3XgA4uLPzMUK63nQjYM2WE?=
+ =?iso-8859-1?Q?Tm9yu24NNCDQ+zSRY+hdQSw8MR1Dc7VRznmcMvohI+0DCQJuEnFJ3co1+u?=
+ =?iso-8859-1?Q?2Vnyw9+fFpJivlKQpRI=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e2bdbbf7-d7c4-4611-eed0-08d9b43cdd57
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4688.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2021 20:06:15.6089
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JBHaZs1b1sS7xH93TUbO0OfMBBIRTlJqO2GqRKyvhxbo3X+ohJ6sDTR1M+nkdHI+XfQmHghrPjGyzMk9MlXZAg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6014
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Dienstag, 30. November 2021 19:33:02 CET you wrote:
-> On Tue, Nov 30, 2021 at 07:12:11PM +0100, Nicolas Frattaroli wrote:
-> > On Dienstag, 30. November 2021 17:10:21 CET Chris Morgan wrote:
-> > > On Tue, Nov 30, 2021 at 03:03:03AM +0100, Nicolas Frattaroli wrote:
-> > > > On Donnerstag, 16. September 2021 21:42:04 CET Chris Morgan wrote:
-> > > > > From: Chris Morgan <macromorgan@hotmail.com>
-> > > > > 
-> > > > > This series is to add support for the Rockchip rk817 battery charger
-> > > > > which is present in all Rockchip RK817 PMICs. The driver was written
-> > > > > as a joint effort by Maya Matuszczyk <maccraft123mc@gmail.com> and
-> > > > > myself Chris Morgan <macromorgan@hotmail.com>.
-> > > > 
-> > > > Hi Chris and Maya,
-> > > > 
-> > > > Gave this a whirl on my Quartz64 Model A. I noticed that this will
-> > > > happily let me discharge past voltage_min_design:
-> > > > 
-> > > >  $ cat /sys/class/power_supply/rk817-battery/voltage_min_design 
-> > > >  3625000
-> > > >  $ cat /sys/class/power_supply/rk817-battery/voltage_avg 
-> > > >  3381360
-> > > > 
-> > > > Is this normal? It went all the way to under 3V before the
-> > > > board finally locked up.
-> > > > 
-> > > > Does the minimum voltage not affect some sort of cutout on
-> > > > the RK817? Does it even have one? Is it the driver's job to
-> > > > do something here or not?
-> > 
-> > Hi Chris,
-> > 
-> > > It does not look like I coded that, but I can. The PMIC has a
-> > > selectable register (RK817_PMIC_SYS_CFG0 = 0xf1) to automatically shut
-> > > down the system at a certain voltage (between 2.7v and 3.4v in
-> > > increments of 100mv; bits 6-4), a register to set a low voltage value
-> > > (between 2.8v and 3.5v in increments of 100mv; bits 2-0), and a
-> > > register to set a low voltage action (either shut down the machine or
-> > > trigger an interrupt; bit 3 and then I believe the interrupt is read at
-> > > bit 7 of RK817_PMIC_INT_STS0 - 0xf8).
-> > 
-> > Excellent, I think shutting down the system is definitely the way to
-> > go here, as by reaching this voltage we can assume userspace has gone
-> > missing and we don't know if the kernel is still alive.
-> > 
-> > > I guess I just assumed userspace would handle it, but that's probably
-> > > a bad assumption.
-> > 
-> > Yes, I didn't have upower installed, but over discharge protection
-> > shouldn't be handled by userspace at all. Had I connected an unprotected
-> > cell that didn't cut out at below 3V, it would've been irreversibly
-> > damaged due to a simple forgotten package install. Even if unprotected
-> > batteries are a bad idea, I think we best assume the worst case
-> > situation here.
-> > 
-> > > What if I set the low voltage value to either 3.5v
-> > > or the min design voltage, whichever is less; and then set the low
-> > > voltage trigger to shut down the system? This would prevent your
-> > > battery from dropping below 3.5v or the min design voltage (whichever
-> > > is less, sadly 3.5v is as high as I can go for the minimum) in the
-> > > event userspace doesn't take action first? We could also set the
-> > > shutdown voltage to be 100mv less than the min design voltage and use
-> > > the low voltage interrupt to trigger an action, but I'm not sure what
-> > > action would be appropriate (and if userspace isn't listening it would
-> > > be moot anyway).
-> > 
-> > A very simple solution would be to simply set the shutoff point to the
-> > voltage reaching less than 3.1V. The RK817 only charges Lithium/Li-Po
-> > batteries, and they should generally not be discharged below 3.0V. Of
-> > the protected batteries I own, over-discharge protection generally
-> > kicks in at the 3V threshold.
-> > 
-> > This gets rid of a lot of logic that could lead to bugs by simply setting
-> > a known good value to begin with.
-> > 
-> > I think I can summarise how I understand this is supposed to work as
-> > follows:
-> > 
-> >  - if battery reaches 0% and the battery alarm is rang, userspace should
-> >    power down the system
-> >      - this prevents unclean shutdowns
-> >  - if the battery reaches a dangerously low voltage for its chemistry,
-> >    the PMIC should cut power to the system as instructed by the kernel
-> >      - last resort measure in case userspace is absent and the battery
-> >        happens to be unprotected
-> >  - there may or may not be battery protection which kicks in at 3V, but
-> >    we should not rely on this working
-> >       - some 18650 cases infamously aren't sized to fit cells with a
-> >         protection circuit connected to it. I shan't name names.
-> > 
-> > In a freak accident where the kernel is completely locked up and the
-> > battery is unprotected and being drained, I presume that having set
-> > this PMIC register will still make it kick in, which lets me sleep
-> > a little sounder at night.
-> > 
+On 21-11-10 13:15:26, Martin Kepplinger wrote:
+> Am Montag, dem 13.09.2021 um 20:38 +0300 schrieb Abel Vesa:
+> > Seems that, in order to be able to resume from suspend, the dram rate
+> > needs to be the highest one available. Therefore, add the late system
+> > suspend/resume PM ops which set the highest rate on suspend and the
+> > latest one used before suspending on resume.
 > 
-> Okay. The default value for automatic shutdown is 2.7v, but that's
-> probably too low. I'm wondering though if this should go in the main
-> MFD driver, rather than the battery driver? The reason why I ask is
-> that without a battery driver to raise the shutdown voltage to 3.1v,
-> the shutdown will not happen until 2.7v which risks damage to the
-> battery. This means devices in production today (such as anyone running
-> the Odroid Go Advance on a mainline kernel) on a battery will
-> experience this behavior. Setting that register value shouldn't do
-> anything harmful if you don't have a battery, so I assume if it's safe
-> to set it 100% of the time for battery users it's safe to set 100% of
-> the time in total. Which also begs the question, if this is such a
-> danger to the hardware, should we even be doing it in Linux? We could
-> be setting it in U-Boot, because if the MFD driver fails to load or the
-> kernel freezes before the MFD driver loads there is STILL the risk you
-> could undervolt the battery, regardless of fixing this in the MFD driver
-> or the battery driver.
-
-I believe 2.7V is still fine. The protection circuits may cut off before
-that because they want to keep the longevity of the battery and there
-isn't much juice left between 2.7V and 3.0V anyway. If the PMIC always
-shuts down at 2.7V then there isn't anything to fear really, that's
-still above the 2.5V that Wikipedia states as being the lower end of
-the safe voltage range. While that's not the source to end all sources,
-the PMIC having a lower cutoff probably means that some engineer did
-think of this and pulled up the correct numbers.
-
-Now that I've learned of this, I suspect there isn't really an issue
-at all here. If we shut off at 2.7V we're good. Userspace should shut
-down before then, and if there's battery protection that kicks in
-before that, it makes really no difference to the end result, as
-long as there is some cutoff somewhere
-
-Thanks for your quick responses, my concerns regarding this are
-alleviated. Devices that are already out there should be fine
-in this regard.
-
-> 
-> Thank you.
-> 
-> > Regards,
-> > Nicolas Frattaroli
-> > 
-> > > 
-> > > Thank you.
-> > > 
-> > > > 
-> > > > Regards,
-> > > > Nicolas Frattaroli
-> > > > 
-> > > > 
-> > > 
-> > 
-> > 
-> > 
-> > 
+> Hi Abel, wouldn't this mean that s2idle / freeze would be kind of
+> broken by this?
 > 
 
+Nope. Only the DDR rate needs to be raised at 800M before suspending.
+Everything else stays the same.
 
+> Does is make sense to test the lowest rate? How would I force that
+> here? (just for testing)
 
+You can try, but it will surely freeze. See [1] what you need to change
+for testing.
+> 
+> Also, you could think about splitting this series up a bit and do this
+> patch seperately onto mainline (before or after the other work).
+> 
 
+Well, I sent as RFC until now. Seems there are no big issues with the
+approach. So I'll split the patches between subsystems on the next
+iteration.
+
+> thank you
+>                           martin
+> 
+> 
+> > 
+> > Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+> > ---
+> >  drivers/devfreq/imx8m-ddrc.c | 28 +++++++++++++++++++++++++++-
+> >  1 file changed, 27 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/devfreq/imx8m-ddrc.c b/drivers/devfreq/imx8m-
+> > ddrc.c
+> > index f18a5c3c1c03..f39741b4a0b0 100644
+> > --- a/drivers/devfreq/imx8m-ddrc.c
+> > +++ b/drivers/devfreq/imx8m-ddrc.c
+> > @@ -72,6 +72,8 @@ struct imx8m_ddrc {
+> >         struct clk *dram_alt;
+> >         struct clk *dram_apb;
+> >  
+> > +       unsigned long suspend_rate;
+> > +       unsigned long resume_rate;
+> >         int freq_count;
+> >         struct imx8m_ddrc_freq freq_table[IMX8M_DDRC_MAX_FREQ_COUNT];
+> >  };
+> > @@ -271,6 +273,22 @@ static int imx8m_ddrc_target(struct device *dev,
+> > unsigned long *freq, u32 flags)
+> >         return ret;
+> >  }
+> >  
+> > +static int imx8m_ddrc_suspend(struct device *dev)
+> > +{
+> > +       struct imx8m_ddrc *priv = dev_get_drvdata(dev);
+> > +
+> > +       priv->resume_rate = clk_get_rate(priv->dram_core);
+> > +
+> > +       return imx8m_ddrc_target(dev, &priv->suspend_rate, 0);
+> > +}
+> > +
+> > +static int imx8m_ddrc_resume(struct device *dev)
+> > +{
+> > +       struct imx8m_ddrc *priv = dev_get_drvdata(dev);
+> > +
+> > +       return imx8m_ddrc_target(dev, &priv->resume_rate, 0);
+> > +}
+> > +
+> >  static int imx8m_ddrc_get_cur_freq(struct device *dev, unsigned long
+> > *freq)
+> >  {
+> >         struct imx8m_ddrc *priv = dev_get_drvdata(dev);
+> > @@ -324,6 +342,9 @@ static int imx8m_ddrc_init_freq_info(struct
+> > device *dev)
+> >  
+> >                 if (dev_pm_opp_add(dev, freq->rate * 250000, 0))
+> >                         return -ENODEV;
+> > +
+> > +               if (index ==  0)
+
+[1] Change this line to:
+		    if (index == 1)
+
+It will select the 166935483 freq for suspending.
+
+> > +                       priv->suspend_rate = freq->rate * 250000;
+> >         }
+> >  
+> >         return 0;
+> > @@ -399,11 +420,16 @@ static const struct of_device_id
+> > imx8m_ddrc_of_match[] = {
+> >  };
+> >  MODULE_DEVICE_TABLE(of, imx8m_ddrc_of_match);
+> >  
+> > +static const struct dev_pm_ops imx8m_ddrc_pm_ops = {
+> > +       SET_LATE_SYSTEM_SLEEP_PM_OPS(imx8m_ddrc_suspend,
+> > imx8m_ddrc_resume)
+> > +};
+> > +
+> >  static struct platform_driver imx8m_ddrc_platdrv = {
+> >         .probe          = imx8m_ddrc_probe,
+> >         .driver = {
+> >                 .name   = "imx8m-ddrc-devfreq",
+> > -               .of_match_table = imx8m_ddrc_of_match,
+> > +               .pm = &imx8m_ddrc_pm_ops,
+> > +               .of_match_table = of_match_ptr(imx8m_ddrc_of_match),
+> >         },
+> >  };
+> >  module_platform_driver(imx8m_ddrc_platdrv);
+> 
+>
