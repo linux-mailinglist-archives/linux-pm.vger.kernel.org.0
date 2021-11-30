@@ -2,75 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FFC4463723
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Nov 2021 15:48:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F24514638ED
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Nov 2021 16:03:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242500AbhK3OvZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Nov 2021 09:51:25 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:16327 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242457AbhK3OvO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Nov 2021 09:51:14 -0500
-Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4J3Q6c2jGMz91Mh;
-        Tue, 30 Nov 2021 22:47:20 +0800 (CST)
-Received: from dggpeml500006.china.huawei.com (7.185.36.76) by
- dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 30 Nov 2021 22:47:52 +0800
-Received: from huawei.com (10.175.100.227) by dggpeml500006.china.huawei.com
- (7.185.36.76) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Tue, 30 Nov
- 2021 22:47:46 +0800
-From:   Tang Yizhou <tangyizhou@huawei.com>
-To:     <viresh.kumar@linaro.org>, <rafael.j.wysocki@intel.com>,
-        <rafael@kernel.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Tang Yizhou <tangyizhou@huawei.com>
-Subject: [PATCH 2/2] doc/cpufreq: Update core.rst
-Date:   Tue, 30 Nov 2021 23:15:26 +0800
-Message-ID: <20211130151526.949-3-tangyizhou@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211130151526.949-1-tangyizhou@huawei.com>
-References: <20211130151526.949-1-tangyizhou@huawei.com>
+        id S245026AbhK3PGb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Nov 2021 10:06:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33906 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244205AbhK3PAb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Nov 2021 10:00:31 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F59EC08C5CD;
+        Tue, 30 Nov 2021 06:52:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9D269CE1A50;
+        Tue, 30 Nov 2021 14:52:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB839C8D184;
+        Tue, 30 Nov 2021 14:52:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638283956;
+        bh=NnAPbCD7mBQ1Qzi/AdkZz0qT1lf82Yd1rb55YQRD8t4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Uqj0FKY7KmEfqFbOtieB+BSkUcWE7YGKaZzqXih+GlckLdv3Q6+5zwbDrIXVvgwXE
+         Y9GceiszGtFD+UFXsBDD88hBu5Uo1nhCXdjs3W9V3XixCnUSgv2Fqulv1ETeM//P71
+         7GilUJQ/lk++9avJ+NGkku/uBJd0CAf7oY5E0uvSHi7ocUxEFT6qiL6Md9FWYfuomu
+         g7V+midFv/U/o3zb5fYZqaCw2yYF6+ZtM0BxVrUuQ2rNsR7m8uFNTZSeC+xsX/TCb4
+         22l+jDw0OjdGwCR2McWRsULAQPyhm9xcIzvb/eBDx+FRzYpLK0kyhePwB1rv27jPvK
+         dk1LOYUzBrN8w==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Evan Green <evgreen@chromium.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Sasha Levin <sashal@kernel.org>, rafael@kernel.org,
+        pavel@ucw.cz, len.brown@intel.com, linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 22/25] PM: hibernate: Fix snapshot partial write lengths
+Date:   Tue, 30 Nov 2021 09:51:52 -0500
+Message-Id: <20211130145156.946083-22-sashal@kernel.org>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20211130145156.946083-1-sashal@kernel.org>
+References: <20211130145156.946083-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.100.227]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500006.china.huawei.com (7.185.36.76)
-X-CFilter-Loop: Reflected
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-As the definition of struct cpufreq_freqs has changed, update core.rst
-with the new first member of struct cpufreq_freqs.
+From: Evan Green <evgreen@chromium.org>
 
-Signed-off-by: Tang Yizhou <tangyizhou@huawei.com>
+[ Upstream commit 88a5045f176b78c33a269a30a7b146e99c550bd9 ]
+
+snapshot_write() is inappropriately limiting the amount of data that can
+be written in cases where a partial page has already been written. For
+example, one would expect to be able to write 1 byte, then 4095 bytes to
+the snapshot device, and have both of those complete fully (since now
+we're aligned to a page again). But what ends up happening is we write 1
+byte, then 4094/4095 bytes complete successfully.
+
+The reason is that simple_write_to_buffer()'s second argument is the
+total size of the buffer, not the size of the buffer minus the offset.
+Since simple_write_to_buffer() accounts for the offset in its
+implementation, snapshot_write() can just pass the full page size
+directly down.
+
+Signed-off-by: Evan Green <evgreen@chromium.org>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/cpu-freq/core.rst | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ kernel/power/user.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/cpu-freq/core.rst b/Documentation/cpu-freq/core.rst
-index 33cb90bd1d8f..4ceef8e7217c 100644
---- a/Documentation/cpu-freq/core.rst
-+++ b/Documentation/cpu-freq/core.rst
-@@ -73,12 +73,12 @@ CPUFREQ_POSTCHANGE.
- The third argument is a struct cpufreq_freqs with the following
- values:
+diff --git a/kernel/power/user.c b/kernel/power/user.c
+index 77438954cc2b0..8f678cd567a62 100644
+--- a/kernel/power/user.c
++++ b/kernel/power/user.c
+@@ -180,7 +180,7 @@ static ssize_t snapshot_write(struct file *filp, const char __user *buf,
+ 		if (res <= 0)
+ 			goto unlock;
+ 	} else {
+-		res = PAGE_SIZE - pg_offp;
++		res = PAGE_SIZE;
+ 	}
  
--=====	===========================
--cpu	number of the affected CPU
-+======	======================================
-+policy	a pointer to the struct cpufreq_policy
- old	old frequency
- new	new frequency
- flags	flags of the cpufreq driver
--=====	===========================
-+======	======================================
- 
- 3. CPUFreq Table Generation with Operating Performance Point (OPP)
- ==================================================================
+ 	if (!data_of(data->handle)) {
 -- 
-2.17.1
+2.33.0
 
