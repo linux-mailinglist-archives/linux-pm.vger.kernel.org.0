@@ -2,421 +2,338 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1A964633B3
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Nov 2021 12:58:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 439C3463466
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Nov 2021 13:35:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232281AbhK3MBx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Nov 2021 07:01:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48454 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232128AbhK3MBx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Nov 2021 07:01:53 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABDE0C061746
-        for <linux-pm@vger.kernel.org>; Tue, 30 Nov 2021 03:58:33 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id r26so53089630lfn.8
-        for <linux-pm@vger.kernel.org>; Tue, 30 Nov 2021 03:58:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XUI7lM6j0yVUXU/VQOfLGrMpPkFmHjF6wGiG0cDhsTs=;
-        b=x9ezhQOPHYQdWlV4CTr+LvYyiXx2M7u/DkIro3z9WfP3lNpoIcySTTh8sc5GjHqfSM
-         EuQRSHBP8C14wqbXUJke0Nk/o7OvRr99fGATa6lZj7DevsDPiVEVveEYoX3jzr/WE3RR
-         pZ82w7p8JuFg/i2VwBFlkY+Qm26c42Zh3uY54F2ttS+OoSdSiV28Xqi5L96BgKOhRvRI
-         vYz2pPwgj1SIn7dhJbv3jMHoqSz0tFJyYFE0Y8LlOamAWqBdCNpq4ROS7pOJ6ctmtQy1
-         wJUNRS1YOiiAIC9cP/Y61yDhwpgcJKxj7CU9rQPrbW8eowdx7fIon2IDRrl6VhgKvUsz
-         Un1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XUI7lM6j0yVUXU/VQOfLGrMpPkFmHjF6wGiG0cDhsTs=;
-        b=6VCgizN9vUNIZGQhC+RFF/WevLVpTGfxaBtvhMo36THFpYOG7OPJUNvC4lyUTI6xXq
-         5DITocP5nXsYOT9JJBtC1SJFcSZov3Pw2HVJIPIo6v8p1r+g4+fDtwrvGkctB1k/zGYV
-         OCT/YwgbkXbkqTyUtqqcnWhakpXsIODsRFEHrG4qp7iy/s96PLoGD+qJCkGz9Kjva7+i
-         zWaTZWkj2T3h/gx+8H+61l8QLRWUuFQmox7tSBriGbHvOaj1KkJC4KP7hZc5FdMxKQg1
-         MAm0DQapAwqczzdburzt2AiWMZs3Mz1TOyZatpnADVIJ1rlg5pJK/R6GFtTACCiduwvZ
-         xa0g==
-X-Gm-Message-State: AOAM532ykES1z7fgrvXNe8zunHLKaSkmHeketm2Nn8JV8cnGaX1z5Bt2
-        y67Kg77yk40xgMo8hnofWydto+Og/fy4ZQKMOipC9w==
-X-Google-Smtp-Source: ABdhPJy6Zdo52M/SOZZJ/k4UuqwWnemrqF06kHPE0HL8jOXAAeEcgsHsoa4EepIkyV2I+HXG3ABLmjBXjW0gDbC4lIo=
-X-Received: by 2002:a05:6512:3d07:: with SMTP id d7mr54730420lfv.233.1638273511788;
- Tue, 30 Nov 2021 03:58:31 -0800 (PST)
+        id S230110AbhK3Mio (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Nov 2021 07:38:44 -0500
+Received: from mail-tycjpn01on2139.outbound.protection.outlook.com ([40.107.114.139]:42629
+        "EHLO JPN01-TYC-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229638AbhK3Min (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 30 Nov 2021 07:38:43 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HenlSdPU/YJ6AjkoBLyi8cLykQj4zv5px+6tZloFKYnGhCnXStpS8EKvJ8oo9GJVGy+EaBFGXIPQRryO1kFrfXAEOP21d+UqJPd/KHZivdME1wkKxfo20LWC7aqzfjrO2S1hbPz7BLIiJ1HLBmJvi7imLbkAzD7wqTAdQEXWL5SppnYpRFIpdSfSBQDHnRyXvlkLJ6vuBvB2R+2KzWw6Ah0rVnLg5NB//q5uZSleuFhbTJEeDwwQ3cUvfWZQntUYwyNvN6RCe2tHdfLGkb9TS7GKpog9h2SbYXsSD/Trq1bd3BE4LnOsN+F4fTLVOPExK45w8QwJlYqttuVnaRPgQw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fIzpEc81zRZERIrKJAObhrd8sO/OcFjo9j3HwgHaDWc=;
+ b=jWMQepIyElXcGegOdEtv1+3DrANqkBSJXGNGx+wdg47Enb86DCgyLIQateycYR41o92nIsLRntz5WhZYqxSZzxQyyjqW1GWDy8sAkh8YD9Jw0niSUaz8mAvIZGRaYl2rPts+J7OYHW5xjbyLpX55SIUEkp+idZLI0CWtWaKE6XdoCDhfXgo0kzukb2HWT5lg4TQARWsjDwTeJXTloc+EPRM3MaAADCso3Yt5nQBrrbQHslg9Wi/Fp/A9SX7v1AdpRIEaWyMPULnF3bQ3wgtRdAW58Pb4LTBQYxzvlG9jsovZf4933SfHVHSefHKFhpY15Wcp4Xj7NJBEQJ4EyT1FTQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
+ header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fIzpEc81zRZERIrKJAObhrd8sO/OcFjo9j3HwgHaDWc=;
+ b=FvklyB2Bgx1twfcWgm/02FegzsBD6nQPWM2lESRp0zQFBZ0fXPEw4VrJO4WhMYY/TjAExhAjB0pN4UoLZUxw4ZU5KzSXblAwkmQPw2eRM7/gTWGrslVMnCLzmw/FSUa3OrnqaVYmhCjEU79fx0wwuO1v5LvnmLL1/ZkIO7du2+Q=
+Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
+ by OSAPR01MB3732.jpnprd01.prod.outlook.com (2603:1096:604:52::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.22; Tue, 30 Nov
+ 2021 12:35:21 +0000
+Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
+ ([fe80::c0bd:405a:cdd3:f153]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
+ ([fe80::c0bd:405a:cdd3:f153%9]) with mapi id 15.20.4734.024; Tue, 30 Nov 2021
+ 12:35:21 +0000
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+Subject: RE: [PATCH v2 2/2] thermal/drivers: Add TSU driver for RZ/G2L
+Thread-Topic: [PATCH v2 2/2] thermal/drivers: Add TSU driver for RZ/G2L
+Thread-Index: AQHX3kdxDCUJ6ZnZ50CX88vnkqhZK6wb9A0AgAAQe0A=
+Date:   Tue, 30 Nov 2021 12:35:20 +0000
+Message-ID: <OS0PR01MB59229A81D2D8D07332FAB79486679@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+References: <20211120194711.9073-1-biju.das.jz@bp.renesas.com>
+ <20211120194711.9073-3-biju.das.jz@bp.renesas.com>
+ <824a8949-d643-6938-6e58-6dfb20d62f70@linaro.org>
+In-Reply-To: <824a8949-d643-6938-6e58-6dfb20d62f70@linaro.org>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=bp.renesas.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 2ebe5d34-25c1-4e7e-b5c7-08d9b3fddfbb
+x-ms-traffictypediagnostic: OSAPR01MB3732:
+x-microsoft-antispam-prvs: <OSAPR01MB3732652388D32B836CAD7B8486679@OSAPR01MB3732.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:525;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 4Sf0Prk/cZUXDOLAyg0UCDfZNHlWrrbUgVruxlAhJqO7CNMW1IlSIFQJsz5o+XbQS3vYAmsr2heSyUFpgVY6O7hd/9OGztKwgEZw6QAeTKJo6Og96/bt5Wh95HTWZXjJ/EHWGa5w4JofodDUwY5jgspl4FH4wn5naynPJKD3giAQo620oDv8Q7NsNFD5MUCbssHF3aqpD3lifbYeEdyMiHAouew2gJSb00mHRicE2Wp1dvwQochTiCbrTlgtzDly6tzgrGBcP1WFs6PubtrIOTpUZWRNmX+2nwfhmCN+75cOP4/UgT3L8NDdeTcD10NtZu2/2ZAUmuNWKsJ8iCbMlmr5MGss2lny/ml3gaXt5ECr4bLxvsJPQ0vMDQriFhBPEVed+TjbYDBEAy4aBkfeFwlJ/9Br5iZTShI+8yWONgketTAJTRWNr18XF9ExAcLfkZpWT42tdBHhPzM9bxy4WSRVTzUjKGGEB6eCaTVZfNQn0mSKpMlU2rOMiVcj6G+Uwkz5PhZbcnSfHicTSZ/PwYq15ZlGr+1kYeSyXcfYugpZhIm/t0s2ALe2VIxu7ghOwaIyLepkoMMO+CpYQMo2RcPSvBaEinklAOhxjWpurjcjxIOlsuh1fQbOqbvL0e7QtSwedxggm1vvo5vZs2Kt3UTkZrbg71yE5lJ4/tjCVwag/vxQXzQHOTmJVg+/1rCyunbVpcUtKu7OY3Tyh0OzZA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(86362001)(110136005)(33656002)(54906003)(316002)(53546011)(9686003)(66556008)(122000001)(8936002)(64756008)(66446008)(186003)(66476007)(66946007)(71200400001)(8676002)(4326008)(508600001)(2906002)(52536014)(38100700002)(7696005)(30864003)(38070700005)(83380400001)(5660300002)(55016003)(76116006)(6506007)(26005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cDA0d2M2MS9HejhqREVtME5mcGpya1g4MXNCVWd6Nkpra3ZaU29NMjhlSEMz?=
+ =?utf-8?B?dXhtaG4zQzRPL2pRcEExOWdobjlxMWNSUzN4OU5ML25RSTZzVXZIdUMwUC9r?=
+ =?utf-8?B?cjBCNzRYK0FTTmc1cTBTL3JwTEh2Sm9uSnJOZzNIeVVlajBZNHc3aURaL1Y5?=
+ =?utf-8?B?dHI3TkducCtMRXZGSnZ2SU1MeWQ4NGlMUm8zV0Iwa2ZGdGg5NmF6SHVIRDNQ?=
+ =?utf-8?B?ODUweExWRzREYlNPZXdWZ3Vjd0NEZEcwRlovcGt6Q09pNGJ0aFAxWnVkMHFT?=
+ =?utf-8?B?dFdlWHMwYXJYdGhrWkl4aXZVMC8yVjJMV3REaC9GaU5ueTZlUHpKZHhXQ0lG?=
+ =?utf-8?B?ckNJR09VdFZFWlZEemJWODFNWTdqTzBUOFV2Q3VyUi9MMTJUUDg3RjIxbnVW?=
+ =?utf-8?B?THhKbXIrNjdmSjRMalNOOU5qc3g5QkZRTVZtYjU3QlYxbFRJY1hYdThuSmI2?=
+ =?utf-8?B?OFpNYnh0bGVYSW1zL2w0am4xbVlGcWRYWVFMWWRVVVZLM1piTXRFMzl0S0xW?=
+ =?utf-8?B?WjhPYjVod1N6eGVDVGZvUGc3Q0VTYjhvWG13K09vSVRISzQ4cUdOUUJGMXp3?=
+ =?utf-8?B?bTVDblJKa09qTjVSMGVwWVRDMEI2UTdSRVBiNkc3c0wrV0xnNFE4ZUx2ZElO?=
+ =?utf-8?B?ZHZwaElPUUpWc3d6RFpPcUJXME9ub1lOc2tkT0QzZXhMWFpwV3dpQXZWMmZk?=
+ =?utf-8?B?WC8rUFplVzhxZ2RveklNeDA3WGNwWmYwSmhleE03ai8xKzlxZE5TVVB5SjB3?=
+ =?utf-8?B?RzdRN3pMRkFxT2JFUHBaNTVzNThkUjIrOGErZEtqaVV5QklTZzJIS2wrS1J1?=
+ =?utf-8?B?OUMxN0RteVU0ZnhpK2YxdHg3TDF4UERFMDgvcUhZQmpXbnhUVDg3SldtUXBJ?=
+ =?utf-8?B?cG1MeTl0VE1DSndKcmRaSGN1a0FzaEFOaEhnNjltOVpueTFQaEY1MFNQTkhZ?=
+ =?utf-8?B?VW1CN3RuaGdwWDlWalh2ckM2Tmt2QXFWeHdBZHZRdnVzVWVqOWhOU21rYmxP?=
+ =?utf-8?B?Wis4d3hHeUdJSUk5UHBIbXFjNGlpc1pKc1VmcFJKTzRMYmR0NUIybnFodUtF?=
+ =?utf-8?B?OXdFZCtSTXBMMC9ibm5wSTBvTHFFMlF1azJBcmQxaGp6UitaVUhYRFQ0ZWsy?=
+ =?utf-8?B?VEluM0V6Nm9IMnhsZ0NrS1pBMmZiaGU3OEQzV1h4dWZDc0xSNks1bGJhT0Fr?=
+ =?utf-8?B?a3Z0UVl1M25JTHIzaG43YnFPRkhxVW1ENGNJRUJHb3NxOU9tZ0FNcWlWeGRF?=
+ =?utf-8?B?bzlvSFozR2ViRUZMSU8vK3ZmZk51QS9McE5hc2Q4YnJ6dVpsaFB2N0lZQkdB?=
+ =?utf-8?B?NkMySUorVjZvd0x2RUx3V0p4cVVMRmF5RlY5TXVwZHMxWG13M1FqaFRWQlhP?=
+ =?utf-8?B?VWp3MHNSL1hPWWxhMjBLODJaYVAyQkk5ZEJQK3JUZm9MUjllNC9WNHp3RGlU?=
+ =?utf-8?B?ZVlUTUFEUXhWWEQzWnNNZW84SDRDc3I0NllnVk5tUWROT3Q4cUlSWGQ3SFNU?=
+ =?utf-8?B?Qlh2RnN3T2FaT1VoQTNuVnFpQnUweWp0dGJqNkRRT0ZKSFdOVVZuNlJwM1Ux?=
+ =?utf-8?B?K0lZYU5xUFNDdzFrU01lTW03andBZFppQTNJWlhlV0N5T3hVL3kveXRUNk12?=
+ =?utf-8?B?bWU3dHNiREYvUHc1QThMNmRMa3F2OGxaNk02dTQ3KzVoM05aYlZGR016YzAv?=
+ =?utf-8?B?ZjF5dHQ2UCtGclZTMnYzcjh1Uk9FcGlHbGdYWjlmMlJDUVEzOWdndzM1Yjh3?=
+ =?utf-8?B?dHFUVHNCcVlGNmFjaWlaL21JTVc0dlR3eGV3b1V6SFA2UGkvbEp6eWljWHRL?=
+ =?utf-8?B?dDhzVGRPUHNMaU9yVkk1NmVuL3pPYXBpeWRkZ1BrZDg4dmQxSDNDcUZ1Y2RF?=
+ =?utf-8?B?eXZ6dHd4a3daWXlJZXc5WG0wV01XeWhXamw3NUtkOXYzdUsra0RLakZGZG9I?=
+ =?utf-8?B?V0p5djN6SGRpUWxIRzdCRHR6MnFxMHVpU2o1SVl0QzNBSnQ1YW81L2FUYVlt?=
+ =?utf-8?B?SzY4TkZCcEpqQ25RY2JLR1pRQ3k2U3RrWjI3d1B5WTZsM2EzSFI0UzBqcWM1?=
+ =?utf-8?B?WU9ETkcwTmlWc2QxZmV0a1NkdmhDNzFSNzlQL0FIS3BWNFhobjdFTGFWNEFh?=
+ =?utf-8?B?SVZEYjRnWTYzc1JYMG9uK003QkZmNitPNzkzRkpPWFFxNSszR2NYVnVZaXMy?=
+ =?utf-8?B?NHc3d1FPRUFGdW1rQnI5NHFndWtPVVdsWDJvc0dsSkRaL1E0NERqZmFObFBJ?=
+ =?utf-8?B?WW93M3dZQlZ4WTNQNTZYNHF5UVZnPT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20211026222626.39222-1-ulf.hansson@linaro.org>
- <CAJZ5v0hrTDsCUn4vgmFrTTgd6H=orh-Kb5b3+_H9St4n8fTxBw@mail.gmail.com>
- <CAPDyKFre=tp4919FLoeU-wjLDJ02zmHaXY4wgTUmfmFbeaCadQ@mail.gmail.com> <4380690.LvFx2qVVIh@kreacher>
-In-Reply-To: <4380690.LvFx2qVVIh@kreacher>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 30 Nov 2021 12:57:55 +0100
-Message-ID: <CAPDyKFpyPov-faJ9dUszi38Q7-4OsowX=i8w=NCnTQ66_zooHg@mail.gmail.com>
-Subject: Re: [PATCH] PM: runtime: Allow rpm_resume() to succeed when runtime
- PM is disabled
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Maulik Shah <mkshah@codeaurora.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: bp.renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2ebe5d34-25c1-4e7e-b5c7-08d9b3fddfbb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Nov 2021 12:35:20.9154
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ZXqMWsocbXABiM6wkSuJkTTRLgAWo8fV/fTSdx5/o1V0x+S7cSt8Wjp/879zF1XoLvWAqtflHnRCB2V6rNJKi1hi3QOFm/X+QT3VZFhbdEE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSAPR01MB3732
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[...]
-
-> > > > > >
-> > > > > > Am I thinking correctly that this is mostly about working around the
-> > > > > > limitations of pm_runtime_force_suspend()?
-> > > > >
-> > > > > No, this isn't related at all.
-> > > > >
-> > > > > The cpuidle-psci driver doesn't have PM callbacks, thus using
-> > > > > pm_runtime_force_suspend() would not work here.
-> > > >
-> > > > Just wanted to send a ping on this to see if we can come to a
-> > > > conclusion. Or maybe we did? :-)
-> > > >
-> > > > I think in the end, what slightly bothers me, is that the behavior is
-> > > > a bit inconsistent. Although, maybe it's the best we can do.
-> > >
-> > > I've been thinking about this and it looks like we can do better, but
-> > > instead of talking about this I'd rather send a patch.
-> >
-> > Alright.
-> >
-> > I was thinking along the lines of make similar changes for
-> > rpm_idle|suspend(). That would make the behaviour even more
-> > consistent, I think.
-> >
-> > Perhaps that's what you have in mind? :-)
->
-> Well, not exactly.
->
-> The idea is to add another counter (called restrain_depth in the patch)
-> to prevent rpm_resume() from running the callback when that is potentially
-> problematic.  With that, it is possible to actually distinguish devices
-> with PM-runtime enabled and it allows the PM-runtime status to be checked
-> when it is still known to be meaningful.
-
-Hmm, I don't quite understand the benefit of introducing a new flag
-for this. rpm_resume() already checks the disable_depth to understand
-when it's safe to invoke the callback. Maybe there is a reason why
-that isn't sufficient?
-
->
-> It requires quite a few changes, but is rather straightforward, unless I'm
-> missing something.
->
-> Please see the patch below.  I've only checked that it builds on x86-64.
->
-> ---
->  drivers/base/power/main.c    |   18 +++----
->  drivers/base/power/runtime.c |  105 ++++++++++++++++++++++++++++++++++++-------
->  include/linux/pm.h           |    2
->  include/linux/pm_runtime.h   |    2
->  4 files changed, 101 insertions(+), 26 deletions(-)
->
-> Index: linux-pm/include/linux/pm.h
-> ===================================================================
-> --- linux-pm.orig/include/linux/pm.h
-> +++ linux-pm/include/linux/pm.h
-> @@ -598,6 +598,7 @@ struct dev_pm_info {
->         atomic_t                usage_count;
->         atomic_t                child_count;
->         unsigned int            disable_depth:3;
-> +       unsigned int            restrain_depth:3;       /* PM core private */
->         unsigned int            idle_notification:1;
->         unsigned int            request_pending:1;
->         unsigned int            deferred_resume:1;
-> @@ -609,6 +610,7 @@ struct dev_pm_info {
->         unsigned int            use_autosuspend:1;
->         unsigned int            timer_autosuspends:1;
->         unsigned int            memalloc_noio:1;
-> +       unsigned int            already_suspended:1;    /* PM core private */
->         unsigned int            links_count;
->         enum rpm_request        request;
->         enum rpm_status         runtime_status;
-> Index: linux-pm/include/linux/pm_runtime.h
-> ===================================================================
-> --- linux-pm.orig/include/linux/pm_runtime.h
-> +++ linux-pm/include/linux/pm_runtime.h
-> @@ -46,6 +46,8 @@ extern void pm_runtime_enable(struct dev
->  extern void __pm_runtime_disable(struct device *dev, bool check_resume);
->  extern void pm_runtime_allow(struct device *dev);
->  extern void pm_runtime_forbid(struct device *dev);
-> +extern void pm_runtime_restrain(struct device *dev);
-> +extern void pm_runtime_relinquish(struct device *dev);
->  extern void pm_runtime_no_callbacks(struct device *dev);
->  extern void pm_runtime_irq_safe(struct device *dev);
->  extern void __pm_runtime_use_autosuspend(struct device *dev, bool use);
-> Index: linux-pm/drivers/base/power/runtime.c
-> ===================================================================
-> --- linux-pm.orig/drivers/base/power/runtime.c
-> +++ linux-pm/drivers/base/power/runtime.c
-> @@ -744,11 +744,11 @@ static int rpm_resume(struct device *dev
->   repeat:
->         if (dev->power.runtime_error)
->                 retval = -EINVAL;
-> -       else if (dev->power.disable_depth == 1 && dev->power.is_suspended
-> -           && dev->power.runtime_status == RPM_ACTIVE)
-> -               retval = 1;
->         else if (dev->power.disable_depth > 0)
->                 retval = -EACCES;
-> +       else if (dev->power.restrain_depth > 0)
-> +               retval = dev->power.runtime_status == RPM_ACTIVE ? 1 : -EAGAIN;
-> +
->         if (retval)
->                 goto out;
->
-> @@ -1164,9 +1164,9 @@ EXPORT_SYMBOL_GPL(pm_runtime_get_if_acti
->   * @dev: Device to handle.
->   * @status: New runtime PM status of the device.
->   *
-> - * If runtime PM of the device is disabled or its power.runtime_error field is
-> - * different from zero, the status may be changed either to RPM_ACTIVE, or to
-> - * RPM_SUSPENDED, as long as that reflects the actual state of the device.
-> + * If runtime PM of the device is disabled or restrained, or its
-> + * power.runtime_error field is nonzero, the status may be changed either to
-> + * RPM_ACTIVE, or to RPM_SUSPENDED, as long as that reflects its actual state.
->   * However, if the device has a parent and the parent is not active, and the
->   * parent's power.ignore_children flag is unset, the device's status cannot be
->   * set to RPM_ACTIVE, so -EBUSY is returned in that case.
-> @@ -1195,13 +1195,16 @@ int __pm_runtime_set_status(struct devic
->         spin_lock_irq(&dev->power.lock);
->
->         /*
-> -        * Prevent PM-runtime from being enabled for the device or return an
-> -        * error if it is enabled already and working.
-> +        * Prevent PM-runtime from being used for the device or return an
-> +        * error if it is in use already.
->          */
-> -       if (dev->power.runtime_error || dev->power.disable_depth)
-> -               dev->power.disable_depth++;
-> -       else
-> +       if (dev->power.runtime_error || dev->power.disable_depth ||
-> +           dev->power.restrain_depth) {
-> +               pm_runtime_get_noresume(dev);
-
-Why do we need to bump the usage count here? Except for balancing with
-pm_runtime_relinquish() a few lines below, of course?
-
-> +               dev->power.restrain_depth++;
-> +       } else {
->                 error = -EAGAIN;
-> +       }
->
->         spin_unlock_irq(&dev->power.lock);
->
-> @@ -1278,7 +1281,7 @@ int __pm_runtime_set_status(struct devic
->                 device_links_read_unlock(idx);
->         }
->
-> -       pm_runtime_enable(dev);
-> +       pm_runtime_relinquish(dev);
->
->         return error;
->  }
-> @@ -1513,6 +1516,72 @@ void pm_runtime_allow(struct device *dev
->  EXPORT_SYMBOL_GPL(pm_runtime_allow);
->
->  /**
-> + * pm_runtime_restrain - Temporarily block runtime PM of a device.
-> + * @dev: Device to handle.
-> + *
-> + * Increase the device's usage count and its restrain_dpeth count.  If the
-> + * latter was 0 initially, cancel the runtime PM work for @dev if pending and
-> + * wait for all of the runtime PM operations on it in progress to complete.
-> + *
-> + * After this function has been called, attempts to runtime-suspend @dev will
-> + * fail with -EAGAIN and attempts to runtime-resume it will succeed if its
-> + * runtime PM status is RPM_ACTIVE and will fail with -EAGAIN otherwise.
-> + *
-> + * This function can only be called by the PM core.
-> + */
-> +void pm_runtime_restrain(struct device *dev)
-> +{
-> +       pm_runtime_get_noresume(dev);
-> +
-> +       spin_lock_irq(&dev->power.lock);
-> +
-> +       if (dev->power.restrain_depth++ > 0)
-> +               goto out;
-> +
-> +       if (dev->power.disable_depth > 0) {
-> +               dev->power.already_suspended = false;
-> +               goto out;
-> +       }
-> +
-> +       /* Update time accounting before blocking PM-runtime. */
-> +       update_pm_runtime_accounting(dev);
-> +
-> +       __pm_runtime_barrier(dev);
-> +
-> +       dev->power.already_suspended = pm_runtime_status_suspended(dev);
-> +
-> +out:
-> +       spin_unlock_irq(&dev->power.lock);
-> +}
-
-What if someone calls pm_runtime_disable() after the PM core has
-called pm_runtime_restrain() for a device? It looks like we may run
-another round of __pm_runtime_barrier() and
-update_pm_runtime_accounting(), does that really make sense?
-
-> +
-> +/**
-> + * pm_runtime_relinquish - Unblock runtime PM of a device.
-> + * @dev: Device to handle.
-> + *
-> + * Decrease the device's usage count and its restrain_dpeth count.
-> + *
-> + * This function can only be called by the PM core.
-> + */
-> +void pm_runtime_relinquish(struct device *dev)
-> +{
-> +       spin_lock_irq(&dev->power.lock);
-> +
-> +       if (dev->power.restrain_depth > 0) {
-> +               dev->power.restrain_depth--;
-> +
-> +               /* About to unbolck runtime PM, set accounting_timestamp to now */
-> +               if (!dev->power.restrain_depth && !dev->power.disable_depth)
-> +                       dev->power.accounting_timestamp = ktime_get_mono_fast_ns();
-> +       } else {
-> +               dev_warn(dev, "Unbalanced %s!\n", __func__);
-> +       }
-> +
-> +       spin_unlock_irq(&dev->power.lock);
-> +
-> +       pm_runtime_put_noidle(dev);
-> +}
-> +
-> +/**
->   * pm_runtime_no_callbacks - Ignore runtime PM callbacks for a device.
->   * @dev: Device to handle.
->   *
-> @@ -1806,8 +1875,10 @@ int pm_runtime_force_suspend(struct devi
->         int (*callback)(struct device *);
->         int ret;
->
-> -       pm_runtime_disable(dev);
-> -       if (pm_runtime_status_suspended(dev))
-> +       pm_runtime_restrain(dev);
-> +
-> +       /* No suspend if the device has already been suspended by PM-runtime. */
-> +       if (!dev->power.already_suspended)
-
-I assume you are looking at using pm_runtime_force_suspend|resume() to
-support my use case for the cpuidle-psci driver? In other words,
-replace pm_runtime_get_sync() and pm_runtime_put_sync_suspend() in
-__psci_enter_domain_idle_state(), right?
-
-If so, that doesn't really fit well, I think. Not only because we
-don't have system suspend/resume callbacks available, which is really
-the proper place to call the pm_runtime_force_*() functions from, but
-also because we don't want to call __pm_runtime_barrier(), etc, every
-time in the idle path of a CPU. If anything, we should instead strive
-towards a more lightweight path than what we currently have.
-
->                 return 0;
->
->         callback = RPM_GET_CALLBACK(dev, runtime_suspend);
-> @@ -1832,7 +1903,7 @@ int pm_runtime_force_suspend(struct devi
->         return 0;
->
->  err:
-> -       pm_runtime_enable(dev);
-> +       pm_runtime_relinquish(dev);
->         return ret;
->  }
->  EXPORT_SYMBOL_GPL(pm_runtime_force_suspend);
-> @@ -1854,7 +1925,7 @@ int pm_runtime_force_resume(struct devic
->         int (*callback)(struct device *);
->         int ret = 0;
->
-> -       if (!pm_runtime_status_suspended(dev) || !dev->power.needs_force_resume)
-> +       if (!dev->power.already_suspended || !dev->power.needs_force_resume)
->                 goto out;
->
->         /*
-> @@ -1874,7 +1945,7 @@ int pm_runtime_force_resume(struct devic
->         pm_runtime_mark_last_busy(dev);
->  out:
->         dev->power.needs_force_resume = 0;
-> -       pm_runtime_enable(dev);
-> +       pm_runtime_relinquish(dev);
->         return ret;
->  }
->  EXPORT_SYMBOL_GPL(pm_runtime_force_resume);
-> Index: linux-pm/drivers/base/power/main.c
-> ===================================================================
-> --- linux-pm.orig/drivers/base/power/main.c
-> +++ linux-pm/drivers/base/power/main.c
-> @@ -809,7 +809,7 @@ Skip:
->  Out:
->         TRACE_RESUME(error);
->
-> -       pm_runtime_enable(dev);
-> +       pm_runtime_relinquish(dev);
->         complete_all(&dev->power.completion);
->         return error;
->  }
-> @@ -907,8 +907,8 @@ static int device_resume(struct device *
->                 goto Complete;
->
->         if (dev->power.direct_complete) {
-> -               /* Match the pm_runtime_disable() in __device_suspend(). */
-> -               pm_runtime_enable(dev);
-> +               /* Match the pm_runtime_restrict() in __device_suspend(). */
-> +               pm_runtime_relinquish(dev);
->                 goto Complete;
->         }
->
-> @@ -1392,7 +1392,7 @@ static int __device_suspend_late(struct
->         TRACE_DEVICE(dev);
->         TRACE_SUSPEND(0);
->
-> -       __pm_runtime_disable(dev, false);
-> +       pm_runtime_restrain(dev);
->
->         dpm_wait_for_subordinate(dev, async);
->
-> @@ -1627,9 +1627,9 @@ static int __device_suspend(struct devic
->          * callbacks for it.
->          *
->          * If the system-wide suspend callbacks below change the configuration
-> -        * of the device, they must disable runtime PM for it or otherwise
-> -        * ensure that its runtime-resume callbacks will not be confused by that
-> -        * change in case they are invoked going forward.
-> +        * of the device, they must ensure that its runtime-resume callbacks
-> +        * will not be confused by that change in case they are invoked going
-> +        * forward.
->          */
->         pm_runtime_barrier(dev);
->
-> @@ -1648,13 +1648,13 @@ static int __device_suspend(struct devic
->
->         if (dev->power.direct_complete) {
->                 if (pm_runtime_status_suspended(dev)) {
-> -                       pm_runtime_disable(dev);
-> +                       pm_runtime_restrain(dev);
->                         if (pm_runtime_status_suspended(dev)) {
->                                 pm_dev_dbg(dev, state, "direct-complete ");
->                                 goto Complete;
->                         }
->
-> -                       pm_runtime_enable(dev);
-> +                       pm_runtime_relinquish(dev);
->                 }
->                 dev->power.direct_complete = false;
->         }
->
->
->
-
-Kind regards
-Uffe
+SGkgRGFuaWVsIExlemNhbm8sDQoNClRoYW5rcyBmb3IgdGhlIHJldmlldy4NCg0KPiBTdWJqZWN0
+OiBSZTogW1BBVENIIHYyIDIvMl0gdGhlcm1hbC9kcml2ZXJzOiBBZGQgVFNVIGRyaXZlciBmb3Ig
+UlovRzJMDQo+IA0KPiBPbiAyMC8xMS8yMDIxIDIwOjQ3LCBCaWp1IERhcyB3cm90ZToNCj4gPiBB
+ZGQgVGhlcm1hbCBTZW5zb3IgVW5pdChUU1UpIGRyaXZlciBmb3IgUlovRzJMIFNvQy4NCj4gDQo+
+IFBsZWFzZSBnaXZlIGEgdGVjaG5pY2FsIGRlc2NyaXB0aW9uIG9mIHRoZSBzZW5zb3IgYXMgaXQg
+aXMgdGhlIGZpcnN0DQo+IHN1Ym1pc3Npb24uDQoNCkFncmVlZC4gV2lsbCBkby4NCg0KDQo+IA0K
+PiA+IFNpZ25lZC1vZmYtYnk6IEJpanUgRGFzIDxiaWp1LmRhcy5qekBicC5yZW5lc2FzLmNvbT4N
+Cj4gPiBSZXZpZXdlZC1ieTogTGFkIFByYWJoYWthciA8cHJhYmhha2FyLm1haGFkZXYtbGFkLnJq
+QGJwLnJlbmVzYXMuY29tPg0KPiA+IC0tLQ0KPiA+IHYxLT52MjoNCj4gPiAgKiBSZW1vdmVkIGRl
+dm1fYWRkX2FjdGlvbl9vcl9yZXNldCBmcm9tIHByb2JlLg0KPiA+IC0tLQ0KPiA+ICBkcml2ZXJz
+L3RoZXJtYWwvS2NvbmZpZyAgICAgICAgIHwgICA5ICsrDQo+ID4gIGRyaXZlcnMvdGhlcm1hbC9N
+YWtlZmlsZSAgICAgICAgfCAgIDEgKw0KPiA+ICBkcml2ZXJzL3RoZXJtYWwvcnpnMmxfdGhlcm1h
+bC5jIHwgMjM1DQo+ID4gKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysNCj4gPiAgMyBm
+aWxlcyBjaGFuZ2VkLCAyNDUgaW5zZXJ0aW9ucygrKQ0KPiA+ICBjcmVhdGUgbW9kZSAxMDA2NDQg
+ZHJpdmVycy90aGVybWFsL3J6ZzJsX3RoZXJtYWwuYw0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL2Ry
+aXZlcnMvdGhlcm1hbC9LY29uZmlnIGIvZHJpdmVycy90aGVybWFsL0tjb25maWcgaW5kZXgNCj4g
+PiBkN2Y0NGRlYWI1YjEuLmUzNzY5MWUwYmYyMCAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL3Ro
+ZXJtYWwvS2NvbmZpZw0KPiA+ICsrKyBiL2RyaXZlcnMvdGhlcm1hbC9LY29uZmlnDQo+ID4gQEAg
+LTM1NCw2ICszNTQsMTUgQEAgY29uZmlnIFJDQVJfR0VOM19USEVSTUFMDQo+ID4gIAkgIEVuYWJs
+ZSB0aGlzIHRvIHBsdWcgdGhlIFItQ2FyIEdlbjMgb3IgUlovRzIgdGhlcm1hbCBzZW5zb3IgZHJp
+dmVyDQo+IGludG8NCj4gPiAgCSAgdGhlIExpbnV4IHRoZXJtYWwgZnJhbWV3b3JrLg0KPiA+DQo+
+ID4gK2NvbmZpZyBSWkcyTF9USEVSTUFMDQo+ID4gKwl0cmlzdGF0ZSAiUmVuZXNhcyBSWi9HMkwg
+dGhlcm1hbCBkcml2ZXIiDQo+ID4gKwlkZXBlbmRzIG9uIEFSQ0hfUkVORVNBUyB8fCBDT01QSUxF
+X1RFU1QNCj4gPiArCWRlcGVuZHMgb24gSEFTX0lPTUVNDQo+ID4gKwlkZXBlbmRzIG9uIE9GDQo+
+ID4gKwloZWxwDQo+ID4gKwkgIEVuYWJsZSB0aGlzIHRvIHBsdWcgdGhlIFJaL0cyTCB0aGVybWFs
+IHNlbnNvciBkcml2ZXIgaW50byB0aGUNCj4gTGludXgNCj4gPiArCSAgdGhlcm1hbCBmcmFtZXdv
+cmsuDQo+ID4gKw0KPiA+ICBjb25maWcgS0lSS1dPT0RfVEhFUk1BTA0KPiA+ICAJdHJpc3RhdGUg
+IlRlbXBlcmF0dXJlIHNlbnNvciBvbiBNYXJ2ZWxsIEtpcmt3b29kIFNvQ3MiDQo+ID4gIAlkZXBl
+bmRzIG9uIE1BQ0hfS0lSS1dPT0QgfHwgQ09NUElMRV9URVNUIGRpZmYgLS1naXQNCj4gPiBhL2Ry
+aXZlcnMvdGhlcm1hbC9NYWtlZmlsZSBiL2RyaXZlcnMvdGhlcm1hbC9NYWtlZmlsZSBpbmRleA0K
+PiA+IDgyZmMzZTYxNmU1NC4uZjBjMzZhMTUzMGQ1IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMv
+dGhlcm1hbC9NYWtlZmlsZQ0KPiA+ICsrKyBiL2RyaXZlcnMvdGhlcm1hbC9NYWtlZmlsZQ0KPiA+
+IEBAIC0zNyw2ICszNyw3IEBAIG9iai0kKENPTkZJR19TVU44SV9USEVSTUFMKSAgICAgKz0gc3Vu
+OGlfdGhlcm1hbC5vDQo+ID4gIG9iai0kKENPTkZJR19ST0NLQ0hJUF9USEVSTUFMKQkrPSByb2Nr
+Y2hpcF90aGVybWFsLm8NCj4gPiAgb2JqLSQoQ09ORklHX1JDQVJfVEhFUk1BTCkJKz0gcmNhcl90
+aGVybWFsLm8NCj4gPiAgb2JqLSQoQ09ORklHX1JDQVJfR0VOM19USEVSTUFMKQkrPSByY2FyX2dl
+bjNfdGhlcm1hbC5vDQo+ID4gK29iai0kKENPTkZJR19SWkcyTF9USEVSTUFMKQkrPSByemcybF90
+aGVybWFsLm8NCj4gPiAgb2JqLSQoQ09ORklHX0tJUktXT09EX1RIRVJNQUwpICArPSBraXJrd29v
+ZF90aGVybWFsLm8NCj4gPiAgb2JqLXkJCQkJKz0gc2Ftc3VuZy8NCj4gPiAgb2JqLSQoQ09ORklH
+X0RPVkVfVEhFUk1BTCkgIAkrPSBkb3ZlX3RoZXJtYWwubw0KPiA+IGRpZmYgLS1naXQgYS9kcml2
+ZXJzL3RoZXJtYWwvcnpnMmxfdGhlcm1hbC5jDQo+ID4gYi9kcml2ZXJzL3RoZXJtYWwvcnpnMmxf
+dGhlcm1hbC5jIG5ldyBmaWxlIG1vZGUgMTAwNjQ0IGluZGV4DQo+ID4gMDAwMDAwMDAwMDAwLi5l
+YTgyOGMxNWRkMWUNCj4gPiAtLS0gL2Rldi9udWxsDQo+ID4gKysrIGIvZHJpdmVycy90aGVybWFs
+L3J6ZzJsX3RoZXJtYWwuYw0KPiA+IEBAIC0wLDAgKzEsMjM1IEBADQo+ID4gKy8vIFNQRFgtTGlj
+ZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wDQo+ID4gKy8qDQo+ID4gKyAqIFJlbmVzYXMgUlovRzJM
+IFRTVSBUaGVybWFsIFNlbnNvciBEcml2ZXINCj4gPiArICoNCj4gPiArICogQ29weXJpZ2h0IChD
+KSAyMDIxIFJlbmVzYXMgRWxlY3Ryb25pY3MgQ29ycG9yYXRpb24gICovICNpbmNsdWRlDQo+ID4g
+KzxsaW51eC9kZWxheS5oPiAjaW5jbHVkZSA8bGludXgvZXJyLmg+ICNpbmNsdWRlIDxsaW51eC9p
+by5oPiAjaW5jbHVkZQ0KPiA+ICs8bGludXgvaW9wb2xsLmg+ICNpbmNsdWRlIDxsaW51eC9tb2R1
+bGUuaD4gI2luY2x1ZGUNCj4gPiArPGxpbnV4L29mX2RldmljZS5oPiAjaW5jbHVkZSA8bGludXgv
+cGxhdGZvcm1fZGV2aWNlLmg+ICNpbmNsdWRlDQo+ID4gKzxsaW51eC9wbV9ydW50aW1lLmg+ICNp
+bmNsdWRlIDxsaW51eC9yZXNldC5oPiAjaW5jbHVkZQ0KPiA+ICs8bGludXgvdGhlcm1hbC5oPg0K
+PiA+ICsNCj4gPiArI2luY2x1ZGUgInRoZXJtYWxfaHdtb24uaCINCj4gPiArDQo+ID4gKyNkZWZp
+bmUgQ1RFTVBfTUFTSwkweEZGRg0KPiA+ICsNCj4gPiArLyogZGVmYXVsdCBjYWxpYnJhdGlvbiB2
+YWx1ZXMsIGlmIEZVU0UgdmFsdWVzIGFyZSBtaXNzaW5nICovDQo+ID4gKyNkZWZpbmUgU1dfQ0FM
+SUIwX1ZBTAkzMTQ4DQo+ID4gKyNkZWZpbmUgU1dfQ0FMSUIxX1ZBTAk1MDMNCj4gPiArDQo+ID4g
+Ky8qIFJlZ2lzdGVyIG9mZnNldHMgKi8NCj4gPiArI2RlZmluZSBUU1VfU00JCTB4MDANCj4gPiAr
+I2RlZmluZSBUU1VfU1QJCTB4MDQNCj4gPiArI2RlZmluZSBUU1VfU0FECQkweDBDDQo+ID4gKyNk
+ZWZpbmUgVFNVX1NTCQkweDEwDQo+ID4gKw0KPiA+ICsjZGVmaW5lIE9UUFRTVVRSSU1fUkVHKG4p
+CSgweDE4ICsgKChuKSAqIDB4NCkpDQo+ID4gKw0KPiA+ICsvKiBTZW5zb3IgTW9kZSBSZWdpc3Rl
+cihUU1VfU00pICovDQo+ID4gKyNkZWZpbmUgVFNVX1NNX0VOX1RTCQlCSVQoMCkNCj4gPiArI2Rl
+ZmluZSBUU1VfU01fQURDX0VOX1RTCUJJVCgxKQ0KPiA+ICsjZGVmaW5lIFRTVV9TTV9OT1JNQUxf
+TU9ERQkoVFNVX1NNX0VOX1RTIHwgVFNVX1NNX0FEQ19FTl9UUykNCj4gPiArDQo+ID4gKy8qIFRT
+VV9TVCBiaXRzICovDQo+ID4gKyNkZWZpbmUgVFNVX1NUX1NUQVJUCQlCSVQoMCkNCj4gPiArDQo+
+ID4gKyNkZWZpbmUgVFNVX1NTX0NPTlZfUlVOTklORwlCSVQoMCkNCj4gPiArDQo+ID4gKyNkZWZp
+bmUgVFNfQ09ERV9BVkVfU0NBTEUoeCkJKCh4KSAqIDEwMDAwMDApDQo+ID4gKyNkZWZpbmUgTUNF
+TFNJVVModGVtcCkJCSgodGVtcCkgKiAxMDAwKQ0KPiANCj4gY2YuIGluY2x1ZGUvbGludXgvdW5p
+dHMuaA0KDQoNClRoZSB2YWx1ZSB3ZSBnZXQgaXMgQ2Vsc2l1cywgd2hpY2ggd2UgYXJlIGNvbnZl
+cnRpbmcgaXQgdG8gbWlsbGkgQ2Vsc2l1cywNClNvIHRoYXQgd2UgY2FuIHVwZGF0ZSB3aXRoIDAu
+NSBkZWdyZWUoNTAwIG1pbGxpIENlbHNpdXMpIGdyYW51bGFyaXR5Lg0KDQpPayB3aWxsIHJlcGxh
+Y2UgIjEwMDAiIHdpdGggIk1JTExJREVHUkVFX1BFUl9ERUdSRUUiDQpEZWZpbmVkIGluIGluY2x1
+ZGUvbGludXgvdW5pdHMuaA0KDQo+IA0KPiA+ICsjZGVmaW5lIFRTX0NPREVfQ0FQX1RJTUVTCTgJ
+LyogQ2FwdHVyZSAgdGltZXMgKi8NCj4gPiArI2RlZmluZSBSWkcyTF9USEVSTUFMX0dSQU4JNTAw
+CS8qIG1pbGxpIENlbHNpdXMgKi8NCj4gPiArDQo+ID4gKyNkZWZpbmUgUlpHMkxfVFNVX1NTX1RJ
+TUVPVVRfVVMJMTAwMA0KPiA+ICsNCj4gPiArc3RydWN0IHJ6ZzJsX3RoZXJtYWxfcHJpdiB7DQo+
+ID4gKwlzdHJ1Y3QgZGV2aWNlICpkZXY7DQo+ID4gKwl2b2lkIF9faW9tZW0gKmJhc2U7DQo+ID4g
+KwlzdHJ1Y3QgdGhlcm1hbF96b25lX2RldmljZSAqem9uZTsNCj4gPiArCXN0cnVjdCByZXNldF9j
+b250cm9sICpyc3RjOw0KPiA+ICsJdTMyIGNhbGliMCwgY2FsaWIxOw0KPiA+ICt9Ow0KPiA+ICsN
+Cj4gPiArc3RhdGljIGlubGluZSB1MzIgcnpnMmxfdGhlcm1hbF9yZWFkKHN0cnVjdCByemcybF90
+aGVybWFsX3ByaXYgKnByaXYsDQo+ID4gK3UzMiByZWcpIHsNCj4gPiArCXJldHVybiBpb3JlYWQz
+Mihwcml2LT5iYXNlICsgcmVnKTsNCj4gPiArfQ0KPiA+ICsNCj4gPiArc3RhdGljIGlubGluZSB2
+b2lkIHJ6ZzJsX3RoZXJtYWxfd3JpdGUoc3RydWN0IHJ6ZzJsX3RoZXJtYWxfcHJpdiAqcHJpdiwN
+Cj4gdTMyIHJlZywNCj4gPiArCQkJCSAgICAgICB1MzIgZGF0YSkNCj4gPiArew0KPiA+ICsJaW93
+cml0ZTMyKGRhdGEsIHByaXYtPmJhc2UgKyByZWcpOw0KPiA+ICt9DQo+ID4gKw0KPiA+ICtzdGF0
+aWMgaW50IHJ6ZzJsX3RoZXJtYWxfcm91bmQoaW50IHRlbXApIHsNCj4gPiArCWludCByZXN1bHQs
+IHJvdW5kX29mZnM7DQo+ID4gKw0KPiA+ICsJcm91bmRfb2ZmcyA9IHRlbXAgPj0gMCA/IFJaRzJM
+X1RIRVJNQUxfR1JBTiAvIDIgOiAtDQo+IFJaRzJMX1RIRVJNQUxfR1JBTiAvIDI7DQo+ID4gKwly
+ZXN1bHQgPSAodGVtcCArIHJvdW5kX29mZnMpIC8gUlpHMkxfVEhFUk1BTF9HUkFOOw0KPiA+ICsN
+Cj4gPiArCXJldHVybiByZXN1bHQgKiBSWkcyTF9USEVSTUFMX0dSQU47DQo+ID4gK30NCj4gDQo+
+IHJvdW5kdXAoKSB8IHJvdW5kZG93bigpID8gKGNmIG1hdGguaCkNCg0KT0sgd2lsbCB1c2Ugcm91
+bmR1cCBvcGVyYXRpb24uDQo+IA0KPiA+ICsNCj4gPiArc3RhdGljIGludCByemcybF90aGVybWFs
+X2dldF90ZW1wKHZvaWQgKmRldmRhdGEsIGludCAqdGVtcCkgew0KPiA+ICsJc3RydWN0IHJ6ZzJs
+X3RoZXJtYWxfcHJpdiAqcHJpdiA9IGRldmRhdGE7DQo+ID4gKwl1MzIgcmVzdWx0LCBkc2Vuc29y
+LCB0c19jb2RlX2F2ZTsNCj4gPiArCWludCB2YWwsIGk7DQo+ID4gKw0KPiA+ICsJcmVzdWx0ID0g
+MDsNCj4gDQo+IEluaXQgaW4gdGhlIGRlY2xhcmF0aW9uDQoNCk9LLg0KDQo+IFdoYXQgdW5pdCBp
+cyB0aGUgdmFsdWUgcmV0dXJuZWQgPw0KDQpWYWx1ZSBmcm9tIHRoZSBzZW5zb3IgaXMgcG9zaXRp
+dmUuDQpBY3R1YWwgc2Vuc29yIHZhbHVlIGlzIHRoZSB2YWx1ZSBhZnRlciBhcHBseWluZyBjdXJ2
+YXR1cmUgY29ycmVjdGlvbi4NCg0KVGhlbiB3ZSBhcHBseSB0aGUgY2FsaWJyYXRpb24gY29uc3Rh
+bnRzIHRvIHRoZSBhYm92ZSB2YWx1ZSB0byBjb21wdXRlIFRqLCB0aGF0IHZhbHVlDQpjYW4gYmUg
+bmVnYXRpdmUuDQoNCkJhc2ljYWxseSwNClRqIERlZ3JlZSBDZWxzaXVzID0gY3VydmF0dXJlX2Nv
+cnJlY3Rpb24odmFsKSAqIGNhbGliZXJhdGlvbiBjb25zdGFudHMgLSA0MA0KDQo+IA0KPiA+ICsJ
+LyogIFJlYWQgdGhlIEFEQyB2YWx1ZSA4IHRpbWVzIHdpdGggYW4gaW50ZXJ2YWwgb2YgMjAgbWlj
+cm9zZWNzICovDQo+IA0KPiBXaHkgZG8geW91IGhhdmUgdG8gZG8gdGhhdCA/ICsgY29tbWVudCBm
+b3JtYXQNCg0KVFNVIHJlcGVhdHMgbWVhc3VyZW1lbnQgYXQgMjAgbWljcm8gc2Vjb25kcyBpbnRl
+cnZhbHMgYW5kIGF1dG9tYXRpY2FsbHkgdXBkYXRlcw0KdGhlIHJlc3VsdHMgb2YgbWVhc3VyZW1l
+bnQuDQoNCkFzIHBlciBIVyBtYW51YWwgcHJvY2VkdXJlIGZvciBtZWFzdXJpbmcgdGhlIHRlbXBl
+cmF0dXJlLCBpdCByZWNvbW1lbmRzIHRvDQpSZWFkIDggdmFsdWVzIGNvbnNlY3V0aXZlbHkgZXZl
+cnkgMjAgbWljcm8gc2Vjb25kcyBhbmQgdGFrZSB0aGUgYXZlcmFnZS4NCg0KPiANCj4gLyoNCj4g
+ICoNCj4gICovDQo+IA0KPiANCj4gPiArCWZvciAoaSA9IDA7IGkgPCBUU19DT0RFX0NBUF9USU1F
+UyA7IGkrKykgew0KPiA+ICsJCXJlc3VsdCArPSByemcybF90aGVybWFsX3JlYWQocHJpdiwgVFNV
+X1NBRCkgJiBDVEVNUF9NQVNLOw0KPiA+ICsJCXVzbGVlcF9yYW5nZSgyMCwgMzApOw0KPiA+ICsJ
+fQ0KPiA+ICsNCj4gPiArCS8qIENhbGN1bGF0ZSB0aGUgYXZlcmFnZSB2YWx1ZSAqLw0KPiANCj4g
+V2l0aCBhIHByb3BlciBjb21tZW50IGluIHRoZSBsb29wLCBubyBuZWVkIHRvIGFkZCB0aGlzIG9u
+ZQ0KT0suDQoNCj4gDQo+ID4gKwl0c19jb2RlX2F2ZSA9IHJlc3VsdCAvIFRTX0NPREVfQ0FQX1RJ
+TUVTOw0KPiANCj4gPiArCS8qIEN1cnZhdHVyZSBjb3JyZWN0aW9uICovDQo+IA0KPiBXaGF0IGlz
+IGl0PyArIGNvbW1lbnQgZm9ybWF0DQoNClNlbnNvciB2YWx1ZSBtYXkgaGF2ZSBkcmlmdHMsIHRv
+IGNvbXBlbnNhdGUgdGhhdCBhcHBseSBjdXJ2YXR1cmUgY29ycmVjdGlvbg0KQmFzZWQgb24gdGhp
+cyBmb3JtdWxhLg0KDQo+IA0KPiA+ICsJZHNlbnNvciA9IFRTX0NPREVfQVZFX1NDQUxFKHRzX2Nv
+ZGVfYXZlKSAvDQo+ID4gKwkJKFRTX0NPREVfQVZFX1NDQUxFKDEpICsgKHRzX2NvZGVfYXZlICog
+MTMpKTsNCj4gPiArDQo+IA0KPiBObyBsaXR0ZXJhbCwgcy8xMy9hX21hY3JvLw0KT0sNCg0KPiAN
+Cj4gPiArCS8qIFRlbXBlcmF0dXJlIGNhbGN1bGF0aW9uICovDQo+ID4gKwl2YWwgPSAoKGRzZW5z
+b3IgLSBwcml2LT5jYWxpYjEpICogKE1DRUxTSVVTKDE2NSkgLw0KPiA+ICsJCShwcml2LT5jYWxp
+YjAgLSBwcml2LT5jYWxpYjEpKSkgLSBNQ0VMU0lVUyg0MCk7DQo+IA0KPiBFbGFib3JhdGUgcGxl
+YXNlICsgY29tbWVudCBmb3JtYXQNCk9LIHdpbGwgZG8uDQpCYXNpY2FsbHksDQpUaiBEZWdyZWUg
+Q2Vsc2l1cyA9IGN1cnZhdHVyZV9jb3JyZWN0aW9uKHZhbCkgKiBjYWxpYmVyYXRpb24gY29uc3Rh
+bnRzIC0gNDANCg0KPiANCj4gPiArDQo+ID4gKwkvKiBSb3VuZCB2YWx1ZSB0byBkZXZpY2UgZ3Jh
+bnVsYXJpdHkgc2V0dGluZyAqLw0KPiANCj4gQ29tbWVudCBmb3JtYXQNCg0KT0suIFdpbGwgdXBk
+YXRlLg0KDQo+IA0KPiA+ICsJKnRlbXAgPSByemcybF90aGVybWFsX3JvdW5kKHZhbCk7DQo+ID4g
+Kw0KPiA+ICsJcmV0dXJuIDA7DQo+ID4gK30NCj4gPiArDQo+ID4gK3N0YXRpYyBjb25zdCBzdHJ1
+Y3QgdGhlcm1hbF96b25lX29mX2RldmljZV9vcHMgcnpnMmxfdHpfb2Zfb3BzID0gew0KPiA+ICsJ
+LmdldF90ZW1wID0gcnpnMmxfdGhlcm1hbF9nZXRfdGVtcCwNCj4gPiArfTsNCj4gPiArDQo+ID4g
+K3N0YXRpYyBpbnQgcnpnMmxfdGhlcm1hbF9pbml0KHN0cnVjdCByemcybF90aGVybWFsX3ByaXYg
+KnByaXYpIHsNCj4gPiArCXUzMiByZWdfdmFsOw0KPiA+ICsNCj4gPiArCXJ6ZzJsX3RoZXJtYWxf
+d3JpdGUocHJpdiwgVFNVX1NNLCBUU1VfU01fTk9STUFMX01PREUpOw0KPiA+ICsJcnpnMmxfdGhl
+cm1hbF93cml0ZShwcml2LCBUU1VfU1QsIDApOw0KPiA+ICsNCj4gPiArCS8qIEJlZm9yZSBzZXR0
+aW5nIFNUQVJUIGJpdCwgV2FpdCBmb3IgNjAgwrVzICovDQo+IA0KPiBXaHkgKyBjb21tZW50IGZv
+cm1hdC4gVGhlIGNvbW1lbnQgc2hvdWxkIG5vdCBkZXNjcmliZSB3aGF0IGlzIGRvaW5nIHRoZQ0K
+PiBjb2RlIGJ1dCAqd2h5Ki4gSXQgaXMgb2J2aW91cyB1c2xlZXAoNjApIHdhaXRzIDYwdXMNCg0K
+T0ssIGl0IHdpbGwgdGFrZSA2MCBtaWNybyBzZWNvbmRzIHRvIHBsYWNlIHNlbnNvciBpbiB0aGVy
+bWFsIG1vZGUuDQpBZnRlciBzZW5zb3IgaW4gbm9ybWFsIG1vZGUgb25seSB3ZSBzaG91bGQgc2V0
+IHRoZSBzdGFydCBiaXQuDQoNCldpbGwgdXBkYXRlIGNvbW1lbnQgd2l0aCBzdWdnZXN0ZWQgZm9y
+bWF0Lg0KDQo+IA0KPiA+ICsJdXNsZWVwX3JhbmdlKDYwLCA4MCk7DQo+ID4gKw0KPiA+ICsJcmVn
+X3ZhbCA9IHJ6ZzJsX3RoZXJtYWxfcmVhZChwcml2LCBUU1VfU1QpOw0KPiA+ICsJcmVnX3ZhbCB8
+PSBUU1VfU1RfU1RBUlQ7DQo+ID4gKwlyemcybF90aGVybWFsX3dyaXRlKHByaXYsIFRTVV9TVCwg
+cmVnX3ZhbCk7DQo+ID4gKw0KPiA+ICsJcmV0dXJuIHJlYWRsX3BvbGxfdGltZW91dChwcml2LT5i
+YXNlICsgVFNVX1NTLCByZWdfdmFsLA0KPiA+ICsJCQkJICByZWdfdmFsID09IFRTVV9TU19DT05W
+X1JVTk5JTkcsIDUwLA0KPiA+ICsJCQkJICBSWkcyTF9UU1VfU1NfVElNRU9VVF9VUyk7DQo+ID4g
+K30NCj4gPiArDQo+ID4gK3N0YXRpYyB2b2lkIHJ6ZzJsX3RoZXJtYWxfcmVzZXRfYXNzZXJ0X3Bt
+X2Rpc2FibGVfcHV0KHN0cnVjdA0KPiA+ICtwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpIHsNCj4gPiAr
+CXN0cnVjdCByemcybF90aGVybWFsX3ByaXYgKnByaXYgPSBkZXZfZ2V0X2RydmRhdGEoJnBkZXYt
+PmRldik7DQo+ID4gKw0KPiA+ICsJcG1fcnVudGltZV9wdXQoJnBkZXYtPmRldik7DQo+ID4gKwlw
+bV9ydW50aW1lX2Rpc2FibGUoJnBkZXYtPmRldik7DQo+ID4gKwlyZXNldF9jb250cm9sX2Fzc2Vy
+dChwcml2LT5yc3RjKTsNCj4gPiArfQ0KPiA+ICsNCj4gPiArc3RhdGljIGludCByemcybF90aGVy
+bWFsX3JlbW92ZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KSB7DQo+ID4gKwlzdHJ1Y3Qg
+cnpnMmxfdGhlcm1hbF9wcml2ICpwcml2ID0gZGV2X2dldF9kcnZkYXRhKCZwZGV2LT5kZXYpOw0K
+PiA+ICsNCj4gPiArCXRoZXJtYWxfcmVtb3ZlX2h3bW9uX3N5c2ZzKHByaXYtPnpvbmUpOw0KPiA+
+ICsJcnpnMmxfdGhlcm1hbF9yZXNldF9hc3NlcnRfcG1fZGlzYWJsZV9wdXQocGRldik7DQo+ID4g
+Kw0KPiA+ICsJcmV0dXJuIDA7DQo+ID4gK30NCj4gPiArDQo+ID4gK3N0YXRpYyBpbnQgcnpnMmxf
+dGhlcm1hbF9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KSB7DQo+ID4gKwlzdHJ1
+Y3QgdGhlcm1hbF96b25lX2RldmljZSAqem9uZTsNCj4gPiArCXN0cnVjdCByemcybF90aGVybWFs
+X3ByaXYgKnByaXY7DQo+ID4gKwlzdHJ1Y3QgZGV2aWNlICpkZXYgPSAmcGRldi0+ZGV2Ow0KPiA+
+ICsJaW50IHJldDsNCj4gPiArDQo+ID4gKwlwcml2ID0gZGV2bV9remFsbG9jKGRldiwgc2l6ZW9m
+KCpwcml2KSwgR0ZQX0tFUk5FTCk7DQo+ID4gKwlpZiAoIXByaXYpDQo+ID4gKwkJcmV0dXJuIC1F
+Tk9NRU07DQo+ID4gKw0KPiA+ICsJcHJpdi0+YmFzZSA9IGRldm1fcGxhdGZvcm1faW9yZW1hcF9y
+ZXNvdXJjZShwZGV2LCAwKTsNCj4gPiArCWlmIChJU19FUlIocHJpdi0+YmFzZSkpDQo+ID4gKwkJ
+cmV0dXJuIFBUUl9FUlIocHJpdi0+YmFzZSk7DQo+ID4gKw0KPiA+ICsJcHJpdi0+ZGV2ID0gZGV2
+Ow0KPiA+ICsJcHJpdi0+cnN0YyA9IGRldm1fcmVzZXRfY29udHJvbF9nZXRfZXhjbHVzaXZlKCZw
+ZGV2LT5kZXYsIE5VTEwpOw0KPiA+ICsJaWYgKElTX0VSUihwcml2LT5yc3RjKSkNCj4gPiArCQly
+ZXR1cm4gZGV2X2Vycl9wcm9iZShkZXYsIFBUUl9FUlIocHJpdi0+cnN0YyksDQo+ID4gKwkJCQkg
+ICAgICJmYWlsZWQgdG8gZ2V0IGNwZyByZXNldCIpOw0KPiA+ICsNCj4gPiArCXJlc2V0X2NvbnRy
+b2xfZGVhc3NlcnQocHJpdi0+cnN0Yyk7DQo+ID4gKw0KPiA+ICsJcG1fcnVudGltZV9lbmFibGUo
+ZGV2KTsNCj4gPiArCXBtX3J1bnRpbWVfZ2V0X3N5bmMoZGV2KTsNCj4gPiArDQo+ID4gKwlwcml2
+LT5jYWxpYjAgPSByemcybF90aGVybWFsX3JlYWQocHJpdiwgT1RQVFNVVFJJTV9SRUcoMCkpOw0K
+PiA+ICsJaWYgKCFwcml2LT5jYWxpYjApDQo+ID4gKwkJcHJpdi0+Y2FsaWIwID0gU1dfQ0FMSUIw
+X1ZBTDsNCj4gPiArDQo+ID4gKwlwcml2LT5jYWxpYjEgPSByemcybF90aGVybWFsX3JlYWQocHJp
+diwgT1RQVFNVVFJJTV9SRUcoMSkpOw0KPiA+ICsJaWYgKCFwcml2LT5jYWxpYjEpDQo+ID4gKwkJ
+cHJpdi0+Y2FsaWIxID0gU1dfQ0FMSUIxX1ZBTDsNCj4gPiArDQo+ID4gKwlwbGF0Zm9ybV9zZXRf
+ZHJ2ZGF0YShwZGV2LCBwcml2KTsNCj4gPiArCXJldCA9IHJ6ZzJsX3RoZXJtYWxfaW5pdChwcml2
+KTsNCj4gPiArCWlmIChyZXQpIHsNCj4gPiArCQlkZXZfZXJyKGRldiwgIkZhaWxlZCB0byBzdGFy
+dCBUU1UiKTsNCj4gPiArCQlnb3RvIGVycjsNCj4gPiArCX0NCj4gPiArDQo+ID4gKwl6b25lID0g
+ZGV2bV90aGVybWFsX3pvbmVfb2Zfc2Vuc29yX3JlZ2lzdGVyKGRldiwgMCwgcHJpdiwNCj4gPiAr
+CQkJCQkJICAgICZyemcybF90el9vZl9vcHMpOw0KPiA+ICsJaWYgKElTX0VSUih6b25lKSkgew0K
+PiA+ICsJCWRldl9lcnIoZGV2LCAiQ2FuJ3QgcmVnaXN0ZXIgdGhlcm1hbCB6b25lIik7DQo+ID4g
+KwkJcmV0ID0gUFRSX0VSUih6b25lKTsNCj4gDQo+IAkJZGV2X2VycihkZXYsICJDYW4ndCByZWdp
+c3RlciB0aGVybWFsIHpvbmU6ICVkIiwgcmV0KTsNCj4gDQo+ID4gKwkJZ290byBlcnI7DQo+ID4g
+Kwl9DQo+ID4gKw0KPiA+ICsJcHJpdi0+em9uZSA9IHpvbmU7DQo+ID4gKwlwcml2LT56b25lLT50
+enAtPm5vX2h3bW9uID0gZmFsc2U7DQo+ID4gKwlyZXQgPSB0aGVybWFsX2FkZF9od21vbl9zeXNm
+cyhwcml2LT56b25lKTsNCj4gPiArCWlmIChyZXQpDQo+ID4gKwkJZ290byBlcnI7DQo+ID4gKw0K
+PiA+ICsJZGV2X2luZm8oZGV2LCAiVFNVIHByb2JlZCB3aXRoICVzIGNhbGliZXJhdGlvbiB2YWx1
+ZXMiLA0KPiA+ICsJCSByemcybF90aGVybWFsX3JlYWQocHJpdiwgT1RQVFNVVFJJTV9SRUcoMCkp
+ID8gICJodyIgOiAic3ciKTsNCj4gDQo+IAlzL2Rldl9pbmZvL2Rldl9kZWJ1Zy8NCk9LLg0KDQpS
+ZWdhcmRzLA0KQmlqdQ0KDQo+IA0KPiA+ICsJcmV0dXJuIDA7DQo+ID4gKw0KPiA+ICtlcnI6DQo+
+ID4gKwlyemcybF90aGVybWFsX3Jlc2V0X2Fzc2VydF9wbV9kaXNhYmxlX3B1dChwZGV2KTsNCj4g
+PiArCXJldHVybiByZXQ7DQo+ID4gK30NCj4gPiArDQo+ID4gK3N0YXRpYyBjb25zdCBzdHJ1Y3Qg
+b2ZfZGV2aWNlX2lkIHJ6ZzJsX3RoZXJtYWxfZHRfaWRzW10gPSB7DQo+ID4gKwl7IC5jb21wYXRp
+YmxlID0gInJlbmVzYXMscnpnMmwtdHN1IiwgfSwNCj4gPiArCXsgLyogc2VudGluZWwgKi8gfQ0K
+PiA+ICt9Ow0KPiA+ICtNT0RVTEVfREVWSUNFX1RBQkxFKG9mLCByemcybF90aGVybWFsX2R0X2lk
+cyk7DQo+ID4gKw0KPiA+ICtzdGF0aWMgc3RydWN0IHBsYXRmb3JtX2RyaXZlciByemcybF90aGVy
+bWFsX2RyaXZlciA9IHsNCj4gPiArCS5kcml2ZXIgPSB7DQo+ID4gKwkJLm5hbWUgPSAicnpnMmxf
+dGhlcm1hbCIsDQo+ID4gKwkJLm9mX21hdGNoX3RhYmxlID0gcnpnMmxfdGhlcm1hbF9kdF9pZHMs
+DQo+ID4gKwl9LA0KPiA+ICsJLnByb2JlID0gcnpnMmxfdGhlcm1hbF9wcm9iZSwNCj4gPiArCS5y
+ZW1vdmUgPSByemcybF90aGVybWFsX3JlbW92ZSwNCj4gPiArfTsNCj4gPiArbW9kdWxlX3BsYXRm
+b3JtX2RyaXZlcihyemcybF90aGVybWFsX2RyaXZlcik7DQo+ID4gKw0KPiA+ICtNT0RVTEVfREVT
+Q1JJUFRJT04oIlJlbmVzYXMgUlovRzJMIFRTVSBUaGVybWFsIFNlbnNvciBEcml2ZXIiKTsNCj4g
+PiArTU9EVUxFX0FVVEhPUigiQmlqdSBEYXMgPGJpanUuZGFzLmp6QGJwLnJlbmVzYXMuY29tPiIp
+Ow0KPiA+ICtNT0RVTEVfTElDRU5TRSgiR1BMIHYyIik7DQo=
