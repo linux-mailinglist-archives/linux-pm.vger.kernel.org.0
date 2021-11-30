@@ -2,121 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D464A4631C5
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Nov 2021 12:03:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6648E4632A5
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Nov 2021 12:42:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236684AbhK3LG4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Nov 2021 06:06:56 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:51900 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236890AbhK3LG4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Nov 2021 06:06:56 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 58B1A1F44BD9
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
-        t=1638270216; bh=ZCcAJm8XMTByN8/s2WCB4XZxCSS3MKuWYhisPzrM2CI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jD5LhWuHDWI7252zmLEAakU/zbisVktPIU6kqg/dz7Pp2fdaeR6MJhYG885EPIIz3
-         GE/Ffto9bBL62uX83laQmUotIQiBJ6d4MLQy+Zf74/SBsTdaE5qn5eAis9Q0gKMWwt
-         VUPzrTazexBGWkRa2qvm7MpYzd0NYXKr74IHb9eGiCIZE/te0AkG42TM8Rk31AO66J
-         OXq9Z6aKGzP4Qbg12yBbtvGqT5FVp8EQnRAJrtu021pyHQOoRNoihvu82veyx06WaP
-         w39PEcrsjUuT7B8MeFn7AWHhX7BGwApNBegpID4NO/LPtK+avSWdXonpEqJOnjzK24
-         rE4+eKoapA10g==
-Received: by earth.universe (Postfix, from userid 1000)
-        id 985443C0CA8; Tue, 30 Nov 2021 12:03:34 +0100 (CET)
-Date:   Tue, 30 Nov 2021 12:03:34 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/7] power: supply: qcom_smbb: support pm8226
-Message-ID: <20211130110334.egzcne2l7mgmqjfg@earth.universe>
-References: <20211118210210.160895-1-luca@z3ntu.xyz>
- <20211118210210.160895-2-luca@z3ntu.xyz>
+        id S240910AbhK3Lpz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Nov 2021 06:45:55 -0500
+Received: from mail-oi1-f178.google.com ([209.85.167.178]:42730 "EHLO
+        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240909AbhK3Lpy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Nov 2021 06:45:54 -0500
+Received: by mail-oi1-f178.google.com with SMTP id n66so40666258oia.9;
+        Tue, 30 Nov 2021 03:42:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4Cob7MMgKwoqYxW2s32/u4cbUtlx4YeFwMg+KntbpTw=;
+        b=XdEiLb43hwViatzrOQLCuOFbjtk9y1h86Nc3zVroBzbNsG19nCFfH2NdjI65rHO1Rh
+         p3PF1O6SXE8o3WtM6lwYYz/L9Fpm88ZMdhcmQtjlSzU6K4B+c2dcgzkeghse3+Nqig/L
+         bmaRerVKwJa8SMW60nSRtypmf7qjzRfda+tTraushVmuUKoPXgsKRerGs/Hw/15lNC73
+         nLWvYGTH8I4Jjabj2Jcz/eYE3TlUchRn86e26mzGs8Zl6L2KJlSTqyCimr1JGePVJDqg
+         TFz1ZGOoPoJB3HRtGjrhJ7BZNcY6asHOCJaS2zZiBF8lrqD5a0JzFX6bV9ZrcWAMDOn9
+         EHVw==
+X-Gm-Message-State: AOAM5333miZlki+wuAjlEaYQSeNV+TQeuLH9qJfcUkyuv46mhuyhmlgS
+        3B6NnZnvzVWTKi1tMNdBAdcrpXh0dkdPcJN/uyA=
+X-Google-Smtp-Source: ABdhPJzagIOGTdiXvf37ZRObRT6oviV/n9CZzeGBiLgxrUTmhACShGEKbirVavcYmox8WYqdmOKa10DnyO6kzeZxKwg=
+X-Received: by 2002:a05:6808:14c2:: with SMTP id f2mr3494792oiw.154.1638272555405;
+ Tue, 30 Nov 2021 03:42:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4bgpwtsgwzqugjwz"
-Content-Disposition: inline
-In-Reply-To: <20211118210210.160895-2-luca@z3ntu.xyz>
+References: <20211129080248.46240-1-wangxiongfeng2@huawei.com> <20211129091039.s7bqq43o4ktuub6t@vireshk-i7>
+In-Reply-To: <20211129091039.s7bqq43o4ktuub6t@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 30 Nov 2021 12:42:18 +0100
+Message-ID: <CAJZ5v0hYskLTjSGOJgRRXD0cE0a5DMHh5qTvmgCmJh8bMicLzA@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: Fix get_cpu_device() failed in add_cpu_dev_symlink()
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hanjun Guo <guohanjun@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Mon, Nov 29, 2021 at 10:10 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 29-11-21, 16:02, Xiongfeng Wang wrote:
+> > When I hot added a CPU, I found 'cpufreq' directory is not created below
+> > /sys/devices/system/cpu/cpuX/. It is because get_cpu_device() failed in
+> > add_cpu_dev_symlink().
+> >
+> > cpufreq_add_dev() is the .add_dev callback of a CPU subsys interface. It
+> > will be called when the CPU device registered into the system. The stack
+> > is as follows.
+> >   register_cpu()
+> >   ->device_register()
+> >    ->device_add()
+> >     ->bus_probe_device()
+> >      ->cpufreq_add_dev()
+> >
+> > But only after the CPU device has been registered, we can get the CPU
+> > device by get_cpu_device(), otherwise it will return NULL. Since we
+> > already have the CPU device in cpufreq_add_dev(), pass it to
+> > add_cpu_dev_symlink(). I noticed that the 'kobj' of the cpu device has
+> > been added into the system before cpufreq_add_dev().
+> >
+> > Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+> > ---
+> >  drivers/cpufreq/cpufreq.c | 9 ++++-----
+> >  1 file changed, 4 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > index e338d2f010fe..22aa2793e4d2 100644
+> > --- a/drivers/cpufreq/cpufreq.c
+> > +++ b/drivers/cpufreq/cpufreq.c
+> > @@ -1004,10 +1004,9 @@ static struct kobj_type ktype_cpufreq = {
+> >       .release        = cpufreq_sysfs_release,
+> >  };
+> >
+> > -static void add_cpu_dev_symlink(struct cpufreq_policy *policy, unsigned int cpu)
+> > +static void add_cpu_dev_symlink(struct cpufreq_policy *policy, unsigned int cpu,
+> > +                             struct device *dev)
+> >  {
+> > -     struct device *dev = get_cpu_device(cpu);
+> > -
+> >       if (unlikely(!dev))
+> >               return;
+> >
+> > @@ -1391,7 +1390,7 @@ static int cpufreq_online(unsigned int cpu)
+> >       if (new_policy) {
+> >               for_each_cpu(j, policy->related_cpus) {
+> >                       per_cpu(cpufreq_cpu_data, j) = policy;
+> > -                     add_cpu_dev_symlink(policy, j);
+> > +                     add_cpu_dev_symlink(policy, j, get_cpu_device(j));
+> >               }
+> >
+> >               policy->min_freq_req = kzalloc(2 * sizeof(*policy->min_freq_req),
+> > @@ -1565,7 +1564,7 @@ static int cpufreq_add_dev(struct device *dev, struct subsys_interface *sif)
+> >       /* Create sysfs link on CPU registration */
+> >       policy = per_cpu(cpufreq_cpu_data, cpu);
+> >       if (policy)
+> > -             add_cpu_dev_symlink(policy, cpu);
+> > +             add_cpu_dev_symlink(policy, cpu, dev);
+> >
+> >       return 0;
+> >  }
+>
+> Interesting that I never hit it earlier despite doing rigorous testing of
+> hotplug stuff :(
 
---4bgpwtsgwzqugjwz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This is the real hot-add path which isn't tested on a regular basis.
 
-Hi,
+> Anyway the patch is okay,
 
-On Thu, Nov 18, 2021 at 10:02:05PM +0100, Luca Weiss wrote:
-> PM8226 (used in MSM8226) has v1 smbb hardware and works fine with the
-> current driver.
->=20
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> ---
+It would be good to add a Fixes: tag to it, though.  Any idea about
+the commit this should point to?
 
-Thanks, queued.
-
--- Sebastian
-
->  drivers/power/supply/qcom_smbb.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/power/supply/qcom_smbb.c b/drivers/power/supply/qcom=
-_smbb.c
-> index 84cc9fba029d..bd50124eef9f 100644
-> --- a/drivers/power/supply/qcom_smbb.c
-> +++ b/drivers/power/supply/qcom_smbb.c
-> @@ -863,8 +863,8 @@ static int smbb_charger_probe(struct platform_device =
-*pdev)
->  	}
-> =20
->  	chg->revision +=3D 1;
-> -	if (chg->revision !=3D 2 && chg->revision !=3D 3) {
-> -		dev_err(&pdev->dev, "v1 hardware not supported\n");
-> +	if (chg->revision !=3D 1 && chg->revision !=3D 2 && chg->revision !=3D =
-3) {
-> +		dev_err(&pdev->dev, "v%d hardware not supported\n", chg->revision);
->  		return -ENODEV;
->  	}
->  	dev_info(&pdev->dev, "Initializing SMBB rev %u", chg->revision);
-> @@ -1012,6 +1012,7 @@ static int smbb_charger_remove(struct platform_devi=
-ce *pdev)
->  }
-> =20
->  static const struct of_device_id smbb_charger_id_table[] =3D {
-> +	{ .compatible =3D "qcom,pm8226-charger" },
->  	{ .compatible =3D "qcom,pm8941-charger" },
->  	{ }
->  };
-> --=20
-> 2.34.0
->=20
-
---4bgpwtsgwzqugjwz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmGmBQYACgkQ2O7X88g7
-+ppn1A/9GOI9SeAReTku+iJlF65N2VycqAlNWdy4zCDMpjs4Vet1y6qbHfJXWbrW
-bnS/xrj2zClX8bp2vOlkhR8u5qX+YMjpHtFl+QITk9/D/cWcN42VviQqm9sq6YMa
-bQ+NoyygoRAOAbL25dJlv+hZVTke3Kmc4g2F1ULWQ4gvMbnAEzUx8bXCD8o2amLk
-86vwmcGVKsIvKujrx/luu8dr8Y8/UHnSaGVULYVCX4N7wJkDsKMp6nfkYYmoyYxU
-X0YfJ8839IZpQ7qOQUuMgVHQzDBt0707olfj5TB1dFlarx+eQq912EVACDN4ZbEA
-nQ2iVF+4jUhoG46XyyOFqLp0Vc/nSVfSSeeh3IxjLTl0D6SRUe1SToyGbV1slNvV
-YvEpGsFx9Zb23C/SiucxQi8eMUPyK2KFYi1wIuYVMo6D9QUMiJ+CKnpT2RyXXye1
-GW4d4Wx2Y/oKlo/4NNDBieCT8kJPlNB5DT1LFjz/ZVB+eneyBHTcjIRkwO8tq6wR
-pEmuxa0IbecYXNI9d8GUdwVwILyQsN9JRt3IP9nxb40dyKv9GM42GZ2pwXNHF/EG
-/YwsVd2Mjvl/LkL60eTVOJ/zIgigiDR+wpwt4QEuYT1unqMh6HJAaw0NODbCpzPg
-n5Gve9cZO9rd4mdDYC645gysMW04mSjYawIpZt9yEyWMRyKcBcE=
-=0Lrx
------END PGP SIGNATURE-----
-
---4bgpwtsgwzqugjwz--
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
