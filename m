@@ -2,338 +2,357 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 439C3463466
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Nov 2021 13:35:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C43B463479
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Nov 2021 13:37:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbhK3Mio (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Nov 2021 07:38:44 -0500
-Received: from mail-tycjpn01on2139.outbound.protection.outlook.com ([40.107.114.139]:42629
-        "EHLO JPN01-TYC-obe.outbound.protection.outlook.com"
+        id S229886AbhK3Mka (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Nov 2021 07:40:30 -0500
+Received: from mail-co1nam11on2085.outbound.protection.outlook.com ([40.107.220.85]:53312
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229638AbhK3Min (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 30 Nov 2021 07:38:43 -0500
+        id S231927AbhK3Mk3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 30 Nov 2021 07:40:29 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HenlSdPU/YJ6AjkoBLyi8cLykQj4zv5px+6tZloFKYnGhCnXStpS8EKvJ8oo9GJVGy+EaBFGXIPQRryO1kFrfXAEOP21d+UqJPd/KHZivdME1wkKxfo20LWC7aqzfjrO2S1hbPz7BLIiJ1HLBmJvi7imLbkAzD7wqTAdQEXWL5SppnYpRFIpdSfSBQDHnRyXvlkLJ6vuBvB2R+2KzWw6Ah0rVnLg5NB//q5uZSleuFhbTJEeDwwQ3cUvfWZQntUYwyNvN6RCe2tHdfLGkb9TS7GKpog9h2SbYXsSD/Trq1bd3BE4LnOsN+F4fTLVOPExK45w8QwJlYqttuVnaRPgQw==
+ b=WGrSRwXM6Eqh0whi9XCuIqJpRJYwW23AWNHxkvcKi/FXd4Zfe3N3ZOkVBAExZ1ZZq2A977fT+S9MGqk4dgZzbs2pzT+TG4i9Tq5oHLCiD1BvGYOU4g3g7CDbhI15FN4v95oFCoRpC2Cb10LnDCJnX0lTqi7oE2N9Lz8GNXNx3Z9dzjGuY2JyjiCMQ20SRBhm/e7AkK2v3x/4YjEosAmKAjyqNBBn9bchLmsz/dygZvTNxRSNKbxjcGMgruUT8Yk4xBoMZiF8K4QhVNu/fjVt4lE1bRpVH43xzaezt0Jjp6qbm6JFOYL5y8WC3InZnodmJQQySdkkzUICqc5Toimytg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fIzpEc81zRZERIrKJAObhrd8sO/OcFjo9j3HwgHaDWc=;
- b=jWMQepIyElXcGegOdEtv1+3DrANqkBSJXGNGx+wdg47Enb86DCgyLIQateycYR41o92nIsLRntz5WhZYqxSZzxQyyjqW1GWDy8sAkh8YD9Jw0niSUaz8mAvIZGRaYl2rPts+J7OYHW5xjbyLpX55SIUEkp+idZLI0CWtWaKE6XdoCDhfXgo0kzukb2HWT5lg4TQARWsjDwTeJXTloc+EPRM3MaAADCso3Yt5nQBrrbQHslg9Wi/Fp/A9SX7v1AdpRIEaWyMPULnF3bQ3wgtRdAW58Pb4LTBQYxzvlG9jsovZf4933SfHVHSefHKFhpY15Wcp4Xj7NJBEQJ4EyT1FTQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
+ bh=rIpbH+SLTm2fk1gHi+HZy7BwdvV0kncyBGazQnXUIfk=;
+ b=Vlj5qlPcNLP4TGqThmkr0qGC7NMJbzFbLa1CZva1ggYOml9penuiXrWmFya+/GSKIFgjnXJTg5bD8tjZHaWWjgwGttCie2XOURhnibsngQhMH0uOorbAW8AE0zWbCnSC9r9loKTiF12sOYqB2TL29NE324K6d1j/e9V1dhxzn7+p2xumAqSKo0r4PXIHeTNvclpwhfBnw9IlUgH5F5InCGmfE/dJImT52g0I7Vf/ZYIDjUUmVThg76PVyNEx+HH8IdCgJqvhh4UGj3eW/cmZL9lJyD/u9bnm9Uav46ymF+Haqk6l7n/JUJdwb/zPHOP7su4u7QpcJrdZdEvFGC11sA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fIzpEc81zRZERIrKJAObhrd8sO/OcFjo9j3HwgHaDWc=;
- b=FvklyB2Bgx1twfcWgm/02FegzsBD6nQPWM2lESRp0zQFBZ0fXPEw4VrJO4WhMYY/TjAExhAjB0pN4UoLZUxw4ZU5KzSXblAwkmQPw2eRM7/gTWGrslVMnCLzmw/FSUa3OrnqaVYmhCjEU79fx0wwuO1v5LvnmLL1/ZkIO7du2+Q=
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
- by OSAPR01MB3732.jpnprd01.prod.outlook.com (2603:1096:604:52::21) with
+ bh=rIpbH+SLTm2fk1gHi+HZy7BwdvV0kncyBGazQnXUIfk=;
+ b=yv6DgyQPo7uGQ5Vhi+8D4Cz6vZcIl4MifqeAppk55kPpreuIUTuuG5lrLbJOHEG6wIjygWBctJvgRVzET7eTWrZNNA3urbsBOXDI3Ky/IXeGE4aAIDnnzU87MOjduQzCdx54sX74gVQI7DP+cBcSxx9ysG1ksUD/WhAx7Id0tko=
+Received: from BN6PR20CA0071.namprd20.prod.outlook.com (2603:10b6:404:151::33)
+ by MN2PR12MB4440.namprd12.prod.outlook.com (2603:10b6:208:26e::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.22; Tue, 30 Nov
- 2021 12:35:21 +0000
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::c0bd:405a:cdd3:f153]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::c0bd:405a:cdd3:f153%9]) with mapi id 15.20.4734.024; Tue, 30 Nov 2021
- 12:35:21 +0000
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: RE: [PATCH v2 2/2] thermal/drivers: Add TSU driver for RZ/G2L
-Thread-Topic: [PATCH v2 2/2] thermal/drivers: Add TSU driver for RZ/G2L
-Thread-Index: AQHX3kdxDCUJ6ZnZ50CX88vnkqhZK6wb9A0AgAAQe0A=
-Date:   Tue, 30 Nov 2021 12:35:20 +0000
-Message-ID: <OS0PR01MB59229A81D2D8D07332FAB79486679@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-References: <20211120194711.9073-1-biju.das.jz@bp.renesas.com>
- <20211120194711.9073-3-biju.das.jz@bp.renesas.com>
- <824a8949-d643-6938-6e58-6dfb20d62f70@linaro.org>
-In-Reply-To: <824a8949-d643-6938-6e58-6dfb20d62f70@linaro.org>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2ebe5d34-25c1-4e7e-b5c7-08d9b3fddfbb
-x-ms-traffictypediagnostic: OSAPR01MB3732:
-x-microsoft-antispam-prvs: <OSAPR01MB3732652388D32B836CAD7B8486679@OSAPR01MB3732.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:525;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 4Sf0Prk/cZUXDOLAyg0UCDfZNHlWrrbUgVruxlAhJqO7CNMW1IlSIFQJsz5o+XbQS3vYAmsr2heSyUFpgVY6O7hd/9OGztKwgEZw6QAeTKJo6Og96/bt5Wh95HTWZXjJ/EHWGa5w4JofodDUwY5jgspl4FH4wn5naynPJKD3giAQo620oDv8Q7NsNFD5MUCbssHF3aqpD3lifbYeEdyMiHAouew2gJSb00mHRicE2Wp1dvwQochTiCbrTlgtzDly6tzgrGBcP1WFs6PubtrIOTpUZWRNmX+2nwfhmCN+75cOP4/UgT3L8NDdeTcD10NtZu2/2ZAUmuNWKsJ8iCbMlmr5MGss2lny/ml3gaXt5ECr4bLxvsJPQ0vMDQriFhBPEVed+TjbYDBEAy4aBkfeFwlJ/9Br5iZTShI+8yWONgketTAJTRWNr18XF9ExAcLfkZpWT42tdBHhPzM9bxy4WSRVTzUjKGGEB6eCaTVZfNQn0mSKpMlU2rOMiVcj6G+Uwkz5PhZbcnSfHicTSZ/PwYq15ZlGr+1kYeSyXcfYugpZhIm/t0s2ALe2VIxu7ghOwaIyLepkoMMO+CpYQMo2RcPSvBaEinklAOhxjWpurjcjxIOlsuh1fQbOqbvL0e7QtSwedxggm1vvo5vZs2Kt3UTkZrbg71yE5lJ4/tjCVwag/vxQXzQHOTmJVg+/1rCyunbVpcUtKu7OY3Tyh0OzZA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(86362001)(110136005)(33656002)(54906003)(316002)(53546011)(9686003)(66556008)(122000001)(8936002)(64756008)(66446008)(186003)(66476007)(66946007)(71200400001)(8676002)(4326008)(508600001)(2906002)(52536014)(38100700002)(7696005)(30864003)(38070700005)(83380400001)(5660300002)(55016003)(76116006)(6506007)(26005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cDA0d2M2MS9HejhqREVtME5mcGpya1g4MXNCVWd6Nkpra3ZaU29NMjhlSEMz?=
- =?utf-8?B?dXhtaG4zQzRPL2pRcEExOWdobjlxMWNSUzN4OU5ML25RSTZzVXZIdUMwUC9r?=
- =?utf-8?B?cjBCNzRYK0FTTmc1cTBTL3JwTEh2Sm9uSnJOZzNIeVVlajBZNHc3aURaL1Y5?=
- =?utf-8?B?dHI3TkducCtMRXZGSnZ2SU1MeWQ4NGlMUm8zV0Iwa2ZGdGg5NmF6SHVIRDNQ?=
- =?utf-8?B?ODUweExWRzREYlNPZXdWZ3Vjd0NEZEcwRlovcGt6Q09pNGJ0aFAxWnVkMHFT?=
- =?utf-8?B?dFdlWHMwYXJYdGhrWkl4aXZVMC8yVjJMV3REaC9GaU5ueTZlUHpKZHhXQ0lG?=
- =?utf-8?B?ckNJR09VdFZFWlZEemJWODFNWTdqTzBUOFV2Q3VyUi9MMTJUUDg3RjIxbnVW?=
- =?utf-8?B?THhKbXIrNjdmSjRMalNOOU5qc3g5QkZRTVZtYjU3QlYxbFRJY1hYdThuSmI2?=
- =?utf-8?B?OFpNYnh0bGVYSW1zL2w0am4xbVlGcWRYWVFMWWRVVVZLM1piTXRFMzl0S0xW?=
- =?utf-8?B?WjhPYjVod1N6eGVDVGZvUGc3Q0VTYjhvWG13K09vSVRISzQ4cUdOUUJGMXp3?=
- =?utf-8?B?bTVDblJKa09qTjVSMGVwWVRDMEI2UTdSRVBiNkc3c0wrV0xnNFE4ZUx2ZElO?=
- =?utf-8?B?ZHZwaElPUUpWc3d6RFpPcUJXME9ub1lOc2tkT0QzZXhMWFpwV3dpQXZWMmZk?=
- =?utf-8?B?WC8rUFplVzhxZ2RveklNeDA3WGNwWmYwSmhleE03ai8xKzlxZE5TVVB5SjB3?=
- =?utf-8?B?RzdRN3pMRkFxT2JFUHBaNTVzNThkUjIrOGErZEtqaVV5QklTZzJIS2wrS1J1?=
- =?utf-8?B?OUMxN0RteVU0ZnhpK2YxdHg3TDF4UERFMDgvcUhZQmpXbnhUVDg3SldtUXBJ?=
- =?utf-8?B?cG1MeTl0VE1DSndKcmRaSGN1a0FzaEFOaEhnNjltOVpueTFQaEY1MFNQTkhZ?=
- =?utf-8?B?VW1CN3RuaGdwWDlWalh2ckM2Tmt2QXFWeHdBZHZRdnVzVWVqOWhOU21rYmxP?=
- =?utf-8?B?Wis4d3hHeUdJSUk5UHBIbXFjNGlpc1pKc1VmcFJKTzRMYmR0NUIybnFodUtF?=
- =?utf-8?B?OXdFZCtSTXBMMC9ibm5wSTBvTHFFMlF1azJBcmQxaGp6UitaVUhYRFQ0ZWsy?=
- =?utf-8?B?VEluM0V6Nm9IMnhsZ0NrS1pBMmZiaGU3OEQzV1h4dWZDc0xSNks1bGJhT0Fr?=
- =?utf-8?B?a3Z0UVl1M25JTHIzaG43YnFPRkhxVW1ENGNJRUJHb3NxOU9tZ0FNcWlWeGRF?=
- =?utf-8?B?bzlvSFozR2ViRUZMSU8vK3ZmZk51QS9McE5hc2Q4YnJ6dVpsaFB2N0lZQkdB?=
- =?utf-8?B?NkMySUorVjZvd0x2RUx3V0p4cVVMRmF5RlY5TXVwZHMxWG13M1FqaFRWQlhP?=
- =?utf-8?B?VWp3MHNSL1hPWWxhMjBLODJaYVAyQkk5ZEJQK3JUZm9MUjllNC9WNHp3RGlU?=
- =?utf-8?B?ZVlUTUFEUXhWWEQzWnNNZW84SDRDc3I0NllnVk5tUWROT3Q4cUlSWGQ3SFNU?=
- =?utf-8?B?Qlh2RnN3T2FaT1VoQTNuVnFpQnUweWp0dGJqNkRRT0ZKSFdOVVZuNlJwM1Ux?=
- =?utf-8?B?K0lZYU5xUFNDdzFrU01lTW03andBZFppQTNJWlhlV0N5T3hVL3kveXRUNk12?=
- =?utf-8?B?bWU3dHNiREYvUHc1QThMNmRMa3F2OGxaNk02dTQ3KzVoM05aYlZGR016YzAv?=
- =?utf-8?B?ZjF5dHQ2UCtGclZTMnYzcjh1Uk9FcGlHbGdYWjlmMlJDUVEzOWdndzM1Yjh3?=
- =?utf-8?B?dHFUVHNCcVlGNmFjaWlaL21JTVc0dlR3eGV3b1V6SFA2UGkvbEp6eWljWHRL?=
- =?utf-8?B?dDhzVGRPUHNMaU9yVkk1NmVuL3pPYXBpeWRkZ1BrZDg4dmQxSDNDcUZ1Y2RF?=
- =?utf-8?B?eXZ6dHd4a3daWXlJZXc5WG0wV01XeWhXamw3NUtkOXYzdUsra0RLakZGZG9I?=
- =?utf-8?B?V0p5djN6SGRpUWxIRzdCRHR6MnFxMHVpU2o1SVl0QzNBSnQ1YW81L2FUYVlt?=
- =?utf-8?B?SzY4TkZCcEpqQ25RY2JLR1pRQ3k2U3RrWjI3d1B5WTZsM2EzSFI0UzBqcWM1?=
- =?utf-8?B?WU9ETkcwTmlWc2QxZmV0a1NkdmhDNzFSNzlQL0FIS3BWNFhobjdFTGFWNEFh?=
- =?utf-8?B?SVZEYjRnWTYzc1JYMG9uK003QkZmNitPNzkzRkpPWFFxNSszR2NYVnVZaXMy?=
- =?utf-8?B?NHc3d1FPRUFGdW1rQnI5NHFndWtPVVdsWDJvc0dsSkRaL1E0NERqZmFObFBJ?=
- =?utf-8?B?WW93M3dZQlZ4WTNQNTZYNHF5UVZnPT0=?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Tue, 30 Nov
+ 2021 12:37:03 +0000
+Received: from BN8NAM11FT037.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:404:151:cafe::26) by BN6PR20CA0071.outlook.office365.com
+ (2603:10b6:404:151::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23 via Frontend
+ Transport; Tue, 30 Nov 2021 12:37:06 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT037.mail.protection.outlook.com (10.13.177.182) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4734.22 via Frontend Transport; Tue, 30 Nov 2021 12:37:06 +0000
+Received: from hr-amd.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Tue, 30 Nov
+ 2021 06:36:58 -0600
+From:   Huang Rui <ray.huang@amd.com>
+To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        "Borislav Petkov" <bp@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        <linux-pm@vger.kernel.org>
+CC:     Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Steven Noonan <steven@valvesoftware.com>,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
+        Huang Rui <ray.huang@amd.com>
+Subject: [PATCH v5 00/22] cpufreq: introduce a new AMD CPU frequency control mechanism
+Date:   Tue, 30 Nov 2021 20:36:19 +0800
+Message-ID: <20211130123641.1449041-1-ray.huang@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2ebe5d34-25c1-4e7e-b5c7-08d9b3fddfbb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Nov 2021 12:35:20.9154
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 86041cd6-e5db-4b8c-ea31-08d9b3fe1ead
+X-MS-TrafficTypeDiagnostic: MN2PR12MB4440:
+X-Microsoft-Antispam-PRVS: <MN2PR12MB444050156D1128905DA440CCEC679@MN2PR12MB4440.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SZ3VrqH/DPcV+MBJCb+6/SG1a5wLhgQRB7dTz2dtFGFJ/ltETJOtLklPTl7iLliL5y3YK+J1orDzByVXIJdYMSdTKVD7M1bC8jZoVMT4qLfU9ZjYVXJ8S6qxrNMabsS73V5kZEDnwW47pMPRXYqAWqBT4pnQOoDlmyCe8izosF2O1LiCDIM1uBRJyXI7YUWrjpog495zKqZkg9j5Klc7L/HcuSKMOXK5HG8XYl5R1QlZADADhPmZlLjv6r7KuV013Au1H+/cQMqThTD8zWbtQS0RSrnO2H26Vr49h9x2JZ1wHrVbYp794fqgkwsm/6Ldzf1+bASvlJ+I/AbGQoPHtohoeTiv+3m6A17pghVaQ6k5i3UGAL5GYAZWtajIPjLkrXgJ//b3IccqKcbdz59J06scN+vA1NAs+G5D0WfYCfjOFDfnrKUQ63SYVcEXC65Hho2pa7n0959PBPrm9Zj5+P2E7/lf75qzcCbvV2FrqgsHWN249TEY0G4wGsxs1L6CygqGsYISYU3CuFIvMjhEtNVMaNRCeX+163i31zvvXp2B5JorUwibKtoucD/C8Up/WdjSAyXUtjVjMDne9yNm7j7kU051PqK/IydGjPw4cxnN+/rwXLPlw7NWhwOkLi2qlyuXNICPivaCcpa67GIxkWZvbBBbG+W2O+H8AxQ8TSKXnJFYe1D2hVMQwyMvbQdsOey+54rqiskpPViwROUWWL0MGIuFQObop7YmRKjGuivhXeme8+PtajcdAz1qtEp+jalQguHGXM9pDIul2RQuxhf+Zg7IcZvVa9RzhLaVIAczV5Qo9EC+vBDb8rgfnx+nLNtHN5/S0pBg6OcwXY+Gqnmo/UATd3EeMPTcXxwbMyGgPWK6nFp1AjXhFYI9CXmqeBur94benwxaUD6PB0/Hzp4e/mhO+YJ71zML/sw968k=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700001)(83380400001)(316002)(45080400002)(110136005)(36860700001)(47076005)(81166007)(30864003)(356005)(86362001)(2906002)(1076003)(8676002)(508600001)(966005)(54906003)(36756003)(5660300002)(7696005)(2616005)(186003)(26005)(70206006)(8936002)(70586007)(16526019)(336012)(7416002)(4326008)(6666004)(426003)(82310400004)(40460700001)(45954011)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2021 12:37:06.6027
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ZXqMWsocbXABiM6wkSuJkTTRLgAWo8fV/fTSdx5/o1V0x+S7cSt8Wjp/879zF1XoLvWAqtflHnRCB2V6rNJKi1hi3QOFm/X+QT3VZFhbdEE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSAPR01MB3732
+X-MS-Exchange-CrossTenant-Network-Message-Id: 86041cd6-e5db-4b8c-ea31-08d9b3fe1ead
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT037.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4440
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGkgRGFuaWVsIExlemNhbm8sDQoNClRoYW5rcyBmb3IgdGhlIHJldmlldy4NCg0KPiBTdWJqZWN0
-OiBSZTogW1BBVENIIHYyIDIvMl0gdGhlcm1hbC9kcml2ZXJzOiBBZGQgVFNVIGRyaXZlciBmb3Ig
-UlovRzJMDQo+IA0KPiBPbiAyMC8xMS8yMDIxIDIwOjQ3LCBCaWp1IERhcyB3cm90ZToNCj4gPiBB
-ZGQgVGhlcm1hbCBTZW5zb3IgVW5pdChUU1UpIGRyaXZlciBmb3IgUlovRzJMIFNvQy4NCj4gDQo+
-IFBsZWFzZSBnaXZlIGEgdGVjaG5pY2FsIGRlc2NyaXB0aW9uIG9mIHRoZSBzZW5zb3IgYXMgaXQg
-aXMgdGhlIGZpcnN0DQo+IHN1Ym1pc3Npb24uDQoNCkFncmVlZC4gV2lsbCBkby4NCg0KDQo+IA0K
-PiA+IFNpZ25lZC1vZmYtYnk6IEJpanUgRGFzIDxiaWp1LmRhcy5qekBicC5yZW5lc2FzLmNvbT4N
-Cj4gPiBSZXZpZXdlZC1ieTogTGFkIFByYWJoYWthciA8cHJhYmhha2FyLm1haGFkZXYtbGFkLnJq
-QGJwLnJlbmVzYXMuY29tPg0KPiA+IC0tLQ0KPiA+IHYxLT52MjoNCj4gPiAgKiBSZW1vdmVkIGRl
-dm1fYWRkX2FjdGlvbl9vcl9yZXNldCBmcm9tIHByb2JlLg0KPiA+IC0tLQ0KPiA+ICBkcml2ZXJz
-L3RoZXJtYWwvS2NvbmZpZyAgICAgICAgIHwgICA5ICsrDQo+ID4gIGRyaXZlcnMvdGhlcm1hbC9N
-YWtlZmlsZSAgICAgICAgfCAgIDEgKw0KPiA+ICBkcml2ZXJzL3RoZXJtYWwvcnpnMmxfdGhlcm1h
-bC5jIHwgMjM1DQo+ID4gKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysNCj4gPiAgMyBm
-aWxlcyBjaGFuZ2VkLCAyNDUgaW5zZXJ0aW9ucygrKQ0KPiA+ICBjcmVhdGUgbW9kZSAxMDA2NDQg
-ZHJpdmVycy90aGVybWFsL3J6ZzJsX3RoZXJtYWwuYw0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL2Ry
-aXZlcnMvdGhlcm1hbC9LY29uZmlnIGIvZHJpdmVycy90aGVybWFsL0tjb25maWcgaW5kZXgNCj4g
-PiBkN2Y0NGRlYWI1YjEuLmUzNzY5MWUwYmYyMCAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL3Ro
-ZXJtYWwvS2NvbmZpZw0KPiA+ICsrKyBiL2RyaXZlcnMvdGhlcm1hbC9LY29uZmlnDQo+ID4gQEAg
-LTM1NCw2ICszNTQsMTUgQEAgY29uZmlnIFJDQVJfR0VOM19USEVSTUFMDQo+ID4gIAkgIEVuYWJs
-ZSB0aGlzIHRvIHBsdWcgdGhlIFItQ2FyIEdlbjMgb3IgUlovRzIgdGhlcm1hbCBzZW5zb3IgZHJp
-dmVyDQo+IGludG8NCj4gPiAgCSAgdGhlIExpbnV4IHRoZXJtYWwgZnJhbWV3b3JrLg0KPiA+DQo+
-ID4gK2NvbmZpZyBSWkcyTF9USEVSTUFMDQo+ID4gKwl0cmlzdGF0ZSAiUmVuZXNhcyBSWi9HMkwg
-dGhlcm1hbCBkcml2ZXIiDQo+ID4gKwlkZXBlbmRzIG9uIEFSQ0hfUkVORVNBUyB8fCBDT01QSUxF
-X1RFU1QNCj4gPiArCWRlcGVuZHMgb24gSEFTX0lPTUVNDQo+ID4gKwlkZXBlbmRzIG9uIE9GDQo+
-ID4gKwloZWxwDQo+ID4gKwkgIEVuYWJsZSB0aGlzIHRvIHBsdWcgdGhlIFJaL0cyTCB0aGVybWFs
-IHNlbnNvciBkcml2ZXIgaW50byB0aGUNCj4gTGludXgNCj4gPiArCSAgdGhlcm1hbCBmcmFtZXdv
-cmsuDQo+ID4gKw0KPiA+ICBjb25maWcgS0lSS1dPT0RfVEhFUk1BTA0KPiA+ICAJdHJpc3RhdGUg
-IlRlbXBlcmF0dXJlIHNlbnNvciBvbiBNYXJ2ZWxsIEtpcmt3b29kIFNvQ3MiDQo+ID4gIAlkZXBl
-bmRzIG9uIE1BQ0hfS0lSS1dPT0QgfHwgQ09NUElMRV9URVNUIGRpZmYgLS1naXQNCj4gPiBhL2Ry
-aXZlcnMvdGhlcm1hbC9NYWtlZmlsZSBiL2RyaXZlcnMvdGhlcm1hbC9NYWtlZmlsZSBpbmRleA0K
-PiA+IDgyZmMzZTYxNmU1NC4uZjBjMzZhMTUzMGQ1IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMv
-dGhlcm1hbC9NYWtlZmlsZQ0KPiA+ICsrKyBiL2RyaXZlcnMvdGhlcm1hbC9NYWtlZmlsZQ0KPiA+
-IEBAIC0zNyw2ICszNyw3IEBAIG9iai0kKENPTkZJR19TVU44SV9USEVSTUFMKSAgICAgKz0gc3Vu
-OGlfdGhlcm1hbC5vDQo+ID4gIG9iai0kKENPTkZJR19ST0NLQ0hJUF9USEVSTUFMKQkrPSByb2Nr
-Y2hpcF90aGVybWFsLm8NCj4gPiAgb2JqLSQoQ09ORklHX1JDQVJfVEhFUk1BTCkJKz0gcmNhcl90
-aGVybWFsLm8NCj4gPiAgb2JqLSQoQ09ORklHX1JDQVJfR0VOM19USEVSTUFMKQkrPSByY2FyX2dl
-bjNfdGhlcm1hbC5vDQo+ID4gK29iai0kKENPTkZJR19SWkcyTF9USEVSTUFMKQkrPSByemcybF90
-aGVybWFsLm8NCj4gPiAgb2JqLSQoQ09ORklHX0tJUktXT09EX1RIRVJNQUwpICArPSBraXJrd29v
-ZF90aGVybWFsLm8NCj4gPiAgb2JqLXkJCQkJKz0gc2Ftc3VuZy8NCj4gPiAgb2JqLSQoQ09ORklH
-X0RPVkVfVEhFUk1BTCkgIAkrPSBkb3ZlX3RoZXJtYWwubw0KPiA+IGRpZmYgLS1naXQgYS9kcml2
-ZXJzL3RoZXJtYWwvcnpnMmxfdGhlcm1hbC5jDQo+ID4gYi9kcml2ZXJzL3RoZXJtYWwvcnpnMmxf
-dGhlcm1hbC5jIG5ldyBmaWxlIG1vZGUgMTAwNjQ0IGluZGV4DQo+ID4gMDAwMDAwMDAwMDAwLi5l
-YTgyOGMxNWRkMWUNCj4gPiAtLS0gL2Rldi9udWxsDQo+ID4gKysrIGIvZHJpdmVycy90aGVybWFs
-L3J6ZzJsX3RoZXJtYWwuYw0KPiA+IEBAIC0wLDAgKzEsMjM1IEBADQo+ID4gKy8vIFNQRFgtTGlj
-ZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wDQo+ID4gKy8qDQo+ID4gKyAqIFJlbmVzYXMgUlovRzJM
-IFRTVSBUaGVybWFsIFNlbnNvciBEcml2ZXINCj4gPiArICoNCj4gPiArICogQ29weXJpZ2h0IChD
-KSAyMDIxIFJlbmVzYXMgRWxlY3Ryb25pY3MgQ29ycG9yYXRpb24gICovICNpbmNsdWRlDQo+ID4g
-KzxsaW51eC9kZWxheS5oPiAjaW5jbHVkZSA8bGludXgvZXJyLmg+ICNpbmNsdWRlIDxsaW51eC9p
-by5oPiAjaW5jbHVkZQ0KPiA+ICs8bGludXgvaW9wb2xsLmg+ICNpbmNsdWRlIDxsaW51eC9tb2R1
-bGUuaD4gI2luY2x1ZGUNCj4gPiArPGxpbnV4L29mX2RldmljZS5oPiAjaW5jbHVkZSA8bGludXgv
-cGxhdGZvcm1fZGV2aWNlLmg+ICNpbmNsdWRlDQo+ID4gKzxsaW51eC9wbV9ydW50aW1lLmg+ICNp
-bmNsdWRlIDxsaW51eC9yZXNldC5oPiAjaW5jbHVkZQ0KPiA+ICs8bGludXgvdGhlcm1hbC5oPg0K
-PiA+ICsNCj4gPiArI2luY2x1ZGUgInRoZXJtYWxfaHdtb24uaCINCj4gPiArDQo+ID4gKyNkZWZp
-bmUgQ1RFTVBfTUFTSwkweEZGRg0KPiA+ICsNCj4gPiArLyogZGVmYXVsdCBjYWxpYnJhdGlvbiB2
-YWx1ZXMsIGlmIEZVU0UgdmFsdWVzIGFyZSBtaXNzaW5nICovDQo+ID4gKyNkZWZpbmUgU1dfQ0FM
-SUIwX1ZBTAkzMTQ4DQo+ID4gKyNkZWZpbmUgU1dfQ0FMSUIxX1ZBTAk1MDMNCj4gPiArDQo+ID4g
-Ky8qIFJlZ2lzdGVyIG9mZnNldHMgKi8NCj4gPiArI2RlZmluZSBUU1VfU00JCTB4MDANCj4gPiAr
-I2RlZmluZSBUU1VfU1QJCTB4MDQNCj4gPiArI2RlZmluZSBUU1VfU0FECQkweDBDDQo+ID4gKyNk
-ZWZpbmUgVFNVX1NTCQkweDEwDQo+ID4gKw0KPiA+ICsjZGVmaW5lIE9UUFRTVVRSSU1fUkVHKG4p
-CSgweDE4ICsgKChuKSAqIDB4NCkpDQo+ID4gKw0KPiA+ICsvKiBTZW5zb3IgTW9kZSBSZWdpc3Rl
-cihUU1VfU00pICovDQo+ID4gKyNkZWZpbmUgVFNVX1NNX0VOX1RTCQlCSVQoMCkNCj4gPiArI2Rl
-ZmluZSBUU1VfU01fQURDX0VOX1RTCUJJVCgxKQ0KPiA+ICsjZGVmaW5lIFRTVV9TTV9OT1JNQUxf
-TU9ERQkoVFNVX1NNX0VOX1RTIHwgVFNVX1NNX0FEQ19FTl9UUykNCj4gPiArDQo+ID4gKy8qIFRT
-VV9TVCBiaXRzICovDQo+ID4gKyNkZWZpbmUgVFNVX1NUX1NUQVJUCQlCSVQoMCkNCj4gPiArDQo+
-ID4gKyNkZWZpbmUgVFNVX1NTX0NPTlZfUlVOTklORwlCSVQoMCkNCj4gPiArDQo+ID4gKyNkZWZp
-bmUgVFNfQ09ERV9BVkVfU0NBTEUoeCkJKCh4KSAqIDEwMDAwMDApDQo+ID4gKyNkZWZpbmUgTUNF
-TFNJVVModGVtcCkJCSgodGVtcCkgKiAxMDAwKQ0KPiANCj4gY2YuIGluY2x1ZGUvbGludXgvdW5p
-dHMuaA0KDQoNClRoZSB2YWx1ZSB3ZSBnZXQgaXMgQ2Vsc2l1cywgd2hpY2ggd2UgYXJlIGNvbnZl
-cnRpbmcgaXQgdG8gbWlsbGkgQ2Vsc2l1cywNClNvIHRoYXQgd2UgY2FuIHVwZGF0ZSB3aXRoIDAu
-NSBkZWdyZWUoNTAwIG1pbGxpIENlbHNpdXMpIGdyYW51bGFyaXR5Lg0KDQpPayB3aWxsIHJlcGxh
-Y2UgIjEwMDAiIHdpdGggIk1JTExJREVHUkVFX1BFUl9ERUdSRUUiDQpEZWZpbmVkIGluIGluY2x1
-ZGUvbGludXgvdW5pdHMuaA0KDQo+IA0KPiA+ICsjZGVmaW5lIFRTX0NPREVfQ0FQX1RJTUVTCTgJ
-LyogQ2FwdHVyZSAgdGltZXMgKi8NCj4gPiArI2RlZmluZSBSWkcyTF9USEVSTUFMX0dSQU4JNTAw
-CS8qIG1pbGxpIENlbHNpdXMgKi8NCj4gPiArDQo+ID4gKyNkZWZpbmUgUlpHMkxfVFNVX1NTX1RJ
-TUVPVVRfVVMJMTAwMA0KPiA+ICsNCj4gPiArc3RydWN0IHJ6ZzJsX3RoZXJtYWxfcHJpdiB7DQo+
-ID4gKwlzdHJ1Y3QgZGV2aWNlICpkZXY7DQo+ID4gKwl2b2lkIF9faW9tZW0gKmJhc2U7DQo+ID4g
-KwlzdHJ1Y3QgdGhlcm1hbF96b25lX2RldmljZSAqem9uZTsNCj4gPiArCXN0cnVjdCByZXNldF9j
-b250cm9sICpyc3RjOw0KPiA+ICsJdTMyIGNhbGliMCwgY2FsaWIxOw0KPiA+ICt9Ow0KPiA+ICsN
-Cj4gPiArc3RhdGljIGlubGluZSB1MzIgcnpnMmxfdGhlcm1hbF9yZWFkKHN0cnVjdCByemcybF90
-aGVybWFsX3ByaXYgKnByaXYsDQo+ID4gK3UzMiByZWcpIHsNCj4gPiArCXJldHVybiBpb3JlYWQz
-Mihwcml2LT5iYXNlICsgcmVnKTsNCj4gPiArfQ0KPiA+ICsNCj4gPiArc3RhdGljIGlubGluZSB2
-b2lkIHJ6ZzJsX3RoZXJtYWxfd3JpdGUoc3RydWN0IHJ6ZzJsX3RoZXJtYWxfcHJpdiAqcHJpdiwN
-Cj4gdTMyIHJlZywNCj4gPiArCQkJCSAgICAgICB1MzIgZGF0YSkNCj4gPiArew0KPiA+ICsJaW93
-cml0ZTMyKGRhdGEsIHByaXYtPmJhc2UgKyByZWcpOw0KPiA+ICt9DQo+ID4gKw0KPiA+ICtzdGF0
-aWMgaW50IHJ6ZzJsX3RoZXJtYWxfcm91bmQoaW50IHRlbXApIHsNCj4gPiArCWludCByZXN1bHQs
-IHJvdW5kX29mZnM7DQo+ID4gKw0KPiA+ICsJcm91bmRfb2ZmcyA9IHRlbXAgPj0gMCA/IFJaRzJM
-X1RIRVJNQUxfR1JBTiAvIDIgOiAtDQo+IFJaRzJMX1RIRVJNQUxfR1JBTiAvIDI7DQo+ID4gKwly
-ZXN1bHQgPSAodGVtcCArIHJvdW5kX29mZnMpIC8gUlpHMkxfVEhFUk1BTF9HUkFOOw0KPiA+ICsN
-Cj4gPiArCXJldHVybiByZXN1bHQgKiBSWkcyTF9USEVSTUFMX0dSQU47DQo+ID4gK30NCj4gDQo+
-IHJvdW5kdXAoKSB8IHJvdW5kZG93bigpID8gKGNmIG1hdGguaCkNCg0KT0sgd2lsbCB1c2Ugcm91
-bmR1cCBvcGVyYXRpb24uDQo+IA0KPiA+ICsNCj4gPiArc3RhdGljIGludCByemcybF90aGVybWFs
-X2dldF90ZW1wKHZvaWQgKmRldmRhdGEsIGludCAqdGVtcCkgew0KPiA+ICsJc3RydWN0IHJ6ZzJs
-X3RoZXJtYWxfcHJpdiAqcHJpdiA9IGRldmRhdGE7DQo+ID4gKwl1MzIgcmVzdWx0LCBkc2Vuc29y
-LCB0c19jb2RlX2F2ZTsNCj4gPiArCWludCB2YWwsIGk7DQo+ID4gKw0KPiA+ICsJcmVzdWx0ID0g
-MDsNCj4gDQo+IEluaXQgaW4gdGhlIGRlY2xhcmF0aW9uDQoNCk9LLg0KDQo+IFdoYXQgdW5pdCBp
-cyB0aGUgdmFsdWUgcmV0dXJuZWQgPw0KDQpWYWx1ZSBmcm9tIHRoZSBzZW5zb3IgaXMgcG9zaXRp
-dmUuDQpBY3R1YWwgc2Vuc29yIHZhbHVlIGlzIHRoZSB2YWx1ZSBhZnRlciBhcHBseWluZyBjdXJ2
-YXR1cmUgY29ycmVjdGlvbi4NCg0KVGhlbiB3ZSBhcHBseSB0aGUgY2FsaWJyYXRpb24gY29uc3Rh
-bnRzIHRvIHRoZSBhYm92ZSB2YWx1ZSB0byBjb21wdXRlIFRqLCB0aGF0IHZhbHVlDQpjYW4gYmUg
-bmVnYXRpdmUuDQoNCkJhc2ljYWxseSwNClRqIERlZ3JlZSBDZWxzaXVzID0gY3VydmF0dXJlX2Nv
-cnJlY3Rpb24odmFsKSAqIGNhbGliZXJhdGlvbiBjb25zdGFudHMgLSA0MA0KDQo+IA0KPiA+ICsJ
-LyogIFJlYWQgdGhlIEFEQyB2YWx1ZSA4IHRpbWVzIHdpdGggYW4gaW50ZXJ2YWwgb2YgMjAgbWlj
-cm9zZWNzICovDQo+IA0KPiBXaHkgZG8geW91IGhhdmUgdG8gZG8gdGhhdCA/ICsgY29tbWVudCBm
-b3JtYXQNCg0KVFNVIHJlcGVhdHMgbWVhc3VyZW1lbnQgYXQgMjAgbWljcm8gc2Vjb25kcyBpbnRl
-cnZhbHMgYW5kIGF1dG9tYXRpY2FsbHkgdXBkYXRlcw0KdGhlIHJlc3VsdHMgb2YgbWVhc3VyZW1l
-bnQuDQoNCkFzIHBlciBIVyBtYW51YWwgcHJvY2VkdXJlIGZvciBtZWFzdXJpbmcgdGhlIHRlbXBl
-cmF0dXJlLCBpdCByZWNvbW1lbmRzIHRvDQpSZWFkIDggdmFsdWVzIGNvbnNlY3V0aXZlbHkgZXZl
-cnkgMjAgbWljcm8gc2Vjb25kcyBhbmQgdGFrZSB0aGUgYXZlcmFnZS4NCg0KPiANCj4gLyoNCj4g
-ICoNCj4gICovDQo+IA0KPiANCj4gPiArCWZvciAoaSA9IDA7IGkgPCBUU19DT0RFX0NBUF9USU1F
-UyA7IGkrKykgew0KPiA+ICsJCXJlc3VsdCArPSByemcybF90aGVybWFsX3JlYWQocHJpdiwgVFNV
-X1NBRCkgJiBDVEVNUF9NQVNLOw0KPiA+ICsJCXVzbGVlcF9yYW5nZSgyMCwgMzApOw0KPiA+ICsJ
-fQ0KPiA+ICsNCj4gPiArCS8qIENhbGN1bGF0ZSB0aGUgYXZlcmFnZSB2YWx1ZSAqLw0KPiANCj4g
-V2l0aCBhIHByb3BlciBjb21tZW50IGluIHRoZSBsb29wLCBubyBuZWVkIHRvIGFkZCB0aGlzIG9u
-ZQ0KT0suDQoNCj4gDQo+ID4gKwl0c19jb2RlX2F2ZSA9IHJlc3VsdCAvIFRTX0NPREVfQ0FQX1RJ
-TUVTOw0KPiANCj4gPiArCS8qIEN1cnZhdHVyZSBjb3JyZWN0aW9uICovDQo+IA0KPiBXaGF0IGlz
-IGl0PyArIGNvbW1lbnQgZm9ybWF0DQoNClNlbnNvciB2YWx1ZSBtYXkgaGF2ZSBkcmlmdHMsIHRv
-IGNvbXBlbnNhdGUgdGhhdCBhcHBseSBjdXJ2YXR1cmUgY29ycmVjdGlvbg0KQmFzZWQgb24gdGhp
-cyBmb3JtdWxhLg0KDQo+IA0KPiA+ICsJZHNlbnNvciA9IFRTX0NPREVfQVZFX1NDQUxFKHRzX2Nv
-ZGVfYXZlKSAvDQo+ID4gKwkJKFRTX0NPREVfQVZFX1NDQUxFKDEpICsgKHRzX2NvZGVfYXZlICog
-MTMpKTsNCj4gPiArDQo+IA0KPiBObyBsaXR0ZXJhbCwgcy8xMy9hX21hY3JvLw0KT0sNCg0KPiAN
-Cj4gPiArCS8qIFRlbXBlcmF0dXJlIGNhbGN1bGF0aW9uICovDQo+ID4gKwl2YWwgPSAoKGRzZW5z
-b3IgLSBwcml2LT5jYWxpYjEpICogKE1DRUxTSVVTKDE2NSkgLw0KPiA+ICsJCShwcml2LT5jYWxp
-YjAgLSBwcml2LT5jYWxpYjEpKSkgLSBNQ0VMU0lVUyg0MCk7DQo+IA0KPiBFbGFib3JhdGUgcGxl
-YXNlICsgY29tbWVudCBmb3JtYXQNCk9LIHdpbGwgZG8uDQpCYXNpY2FsbHksDQpUaiBEZWdyZWUg
-Q2Vsc2l1cyA9IGN1cnZhdHVyZV9jb3JyZWN0aW9uKHZhbCkgKiBjYWxpYmVyYXRpb24gY29uc3Rh
-bnRzIC0gNDANCg0KPiANCj4gPiArDQo+ID4gKwkvKiBSb3VuZCB2YWx1ZSB0byBkZXZpY2UgZ3Jh
-bnVsYXJpdHkgc2V0dGluZyAqLw0KPiANCj4gQ29tbWVudCBmb3JtYXQNCg0KT0suIFdpbGwgdXBk
-YXRlLg0KDQo+IA0KPiA+ICsJKnRlbXAgPSByemcybF90aGVybWFsX3JvdW5kKHZhbCk7DQo+ID4g
-Kw0KPiA+ICsJcmV0dXJuIDA7DQo+ID4gK30NCj4gPiArDQo+ID4gK3N0YXRpYyBjb25zdCBzdHJ1
-Y3QgdGhlcm1hbF96b25lX29mX2RldmljZV9vcHMgcnpnMmxfdHpfb2Zfb3BzID0gew0KPiA+ICsJ
-LmdldF90ZW1wID0gcnpnMmxfdGhlcm1hbF9nZXRfdGVtcCwNCj4gPiArfTsNCj4gPiArDQo+ID4g
-K3N0YXRpYyBpbnQgcnpnMmxfdGhlcm1hbF9pbml0KHN0cnVjdCByemcybF90aGVybWFsX3ByaXYg
-KnByaXYpIHsNCj4gPiArCXUzMiByZWdfdmFsOw0KPiA+ICsNCj4gPiArCXJ6ZzJsX3RoZXJtYWxf
-d3JpdGUocHJpdiwgVFNVX1NNLCBUU1VfU01fTk9STUFMX01PREUpOw0KPiA+ICsJcnpnMmxfdGhl
-cm1hbF93cml0ZShwcml2LCBUU1VfU1QsIDApOw0KPiA+ICsNCj4gPiArCS8qIEJlZm9yZSBzZXR0
-aW5nIFNUQVJUIGJpdCwgV2FpdCBmb3IgNjAgwrVzICovDQo+IA0KPiBXaHkgKyBjb21tZW50IGZv
-cm1hdC4gVGhlIGNvbW1lbnQgc2hvdWxkIG5vdCBkZXNjcmliZSB3aGF0IGlzIGRvaW5nIHRoZQ0K
-PiBjb2RlIGJ1dCAqd2h5Ki4gSXQgaXMgb2J2aW91cyB1c2xlZXAoNjApIHdhaXRzIDYwdXMNCg0K
-T0ssIGl0IHdpbGwgdGFrZSA2MCBtaWNybyBzZWNvbmRzIHRvIHBsYWNlIHNlbnNvciBpbiB0aGVy
-bWFsIG1vZGUuDQpBZnRlciBzZW5zb3IgaW4gbm9ybWFsIG1vZGUgb25seSB3ZSBzaG91bGQgc2V0
-IHRoZSBzdGFydCBiaXQuDQoNCldpbGwgdXBkYXRlIGNvbW1lbnQgd2l0aCBzdWdnZXN0ZWQgZm9y
-bWF0Lg0KDQo+IA0KPiA+ICsJdXNsZWVwX3JhbmdlKDYwLCA4MCk7DQo+ID4gKw0KPiA+ICsJcmVn
-X3ZhbCA9IHJ6ZzJsX3RoZXJtYWxfcmVhZChwcml2LCBUU1VfU1QpOw0KPiA+ICsJcmVnX3ZhbCB8
-PSBUU1VfU1RfU1RBUlQ7DQo+ID4gKwlyemcybF90aGVybWFsX3dyaXRlKHByaXYsIFRTVV9TVCwg
-cmVnX3ZhbCk7DQo+ID4gKw0KPiA+ICsJcmV0dXJuIHJlYWRsX3BvbGxfdGltZW91dChwcml2LT5i
-YXNlICsgVFNVX1NTLCByZWdfdmFsLA0KPiA+ICsJCQkJICByZWdfdmFsID09IFRTVV9TU19DT05W
-X1JVTk5JTkcsIDUwLA0KPiA+ICsJCQkJICBSWkcyTF9UU1VfU1NfVElNRU9VVF9VUyk7DQo+ID4g
-K30NCj4gPiArDQo+ID4gK3N0YXRpYyB2b2lkIHJ6ZzJsX3RoZXJtYWxfcmVzZXRfYXNzZXJ0X3Bt
-X2Rpc2FibGVfcHV0KHN0cnVjdA0KPiA+ICtwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpIHsNCj4gPiAr
-CXN0cnVjdCByemcybF90aGVybWFsX3ByaXYgKnByaXYgPSBkZXZfZ2V0X2RydmRhdGEoJnBkZXYt
-PmRldik7DQo+ID4gKw0KPiA+ICsJcG1fcnVudGltZV9wdXQoJnBkZXYtPmRldik7DQo+ID4gKwlw
-bV9ydW50aW1lX2Rpc2FibGUoJnBkZXYtPmRldik7DQo+ID4gKwlyZXNldF9jb250cm9sX2Fzc2Vy
-dChwcml2LT5yc3RjKTsNCj4gPiArfQ0KPiA+ICsNCj4gPiArc3RhdGljIGludCByemcybF90aGVy
-bWFsX3JlbW92ZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KSB7DQo+ID4gKwlzdHJ1Y3Qg
-cnpnMmxfdGhlcm1hbF9wcml2ICpwcml2ID0gZGV2X2dldF9kcnZkYXRhKCZwZGV2LT5kZXYpOw0K
-PiA+ICsNCj4gPiArCXRoZXJtYWxfcmVtb3ZlX2h3bW9uX3N5c2ZzKHByaXYtPnpvbmUpOw0KPiA+
-ICsJcnpnMmxfdGhlcm1hbF9yZXNldF9hc3NlcnRfcG1fZGlzYWJsZV9wdXQocGRldik7DQo+ID4g
-Kw0KPiA+ICsJcmV0dXJuIDA7DQo+ID4gK30NCj4gPiArDQo+ID4gK3N0YXRpYyBpbnQgcnpnMmxf
-dGhlcm1hbF9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KSB7DQo+ID4gKwlzdHJ1
-Y3QgdGhlcm1hbF96b25lX2RldmljZSAqem9uZTsNCj4gPiArCXN0cnVjdCByemcybF90aGVybWFs
-X3ByaXYgKnByaXY7DQo+ID4gKwlzdHJ1Y3QgZGV2aWNlICpkZXYgPSAmcGRldi0+ZGV2Ow0KPiA+
-ICsJaW50IHJldDsNCj4gPiArDQo+ID4gKwlwcml2ID0gZGV2bV9remFsbG9jKGRldiwgc2l6ZW9m
-KCpwcml2KSwgR0ZQX0tFUk5FTCk7DQo+ID4gKwlpZiAoIXByaXYpDQo+ID4gKwkJcmV0dXJuIC1F
-Tk9NRU07DQo+ID4gKw0KPiA+ICsJcHJpdi0+YmFzZSA9IGRldm1fcGxhdGZvcm1faW9yZW1hcF9y
-ZXNvdXJjZShwZGV2LCAwKTsNCj4gPiArCWlmIChJU19FUlIocHJpdi0+YmFzZSkpDQo+ID4gKwkJ
-cmV0dXJuIFBUUl9FUlIocHJpdi0+YmFzZSk7DQo+ID4gKw0KPiA+ICsJcHJpdi0+ZGV2ID0gZGV2
-Ow0KPiA+ICsJcHJpdi0+cnN0YyA9IGRldm1fcmVzZXRfY29udHJvbF9nZXRfZXhjbHVzaXZlKCZw
-ZGV2LT5kZXYsIE5VTEwpOw0KPiA+ICsJaWYgKElTX0VSUihwcml2LT5yc3RjKSkNCj4gPiArCQly
-ZXR1cm4gZGV2X2Vycl9wcm9iZShkZXYsIFBUUl9FUlIocHJpdi0+cnN0YyksDQo+ID4gKwkJCQkg
-ICAgICJmYWlsZWQgdG8gZ2V0IGNwZyByZXNldCIpOw0KPiA+ICsNCj4gPiArCXJlc2V0X2NvbnRy
-b2xfZGVhc3NlcnQocHJpdi0+cnN0Yyk7DQo+ID4gKw0KPiA+ICsJcG1fcnVudGltZV9lbmFibGUo
-ZGV2KTsNCj4gPiArCXBtX3J1bnRpbWVfZ2V0X3N5bmMoZGV2KTsNCj4gPiArDQo+ID4gKwlwcml2
-LT5jYWxpYjAgPSByemcybF90aGVybWFsX3JlYWQocHJpdiwgT1RQVFNVVFJJTV9SRUcoMCkpOw0K
-PiA+ICsJaWYgKCFwcml2LT5jYWxpYjApDQo+ID4gKwkJcHJpdi0+Y2FsaWIwID0gU1dfQ0FMSUIw
-X1ZBTDsNCj4gPiArDQo+ID4gKwlwcml2LT5jYWxpYjEgPSByemcybF90aGVybWFsX3JlYWQocHJp
-diwgT1RQVFNVVFJJTV9SRUcoMSkpOw0KPiA+ICsJaWYgKCFwcml2LT5jYWxpYjEpDQo+ID4gKwkJ
-cHJpdi0+Y2FsaWIxID0gU1dfQ0FMSUIxX1ZBTDsNCj4gPiArDQo+ID4gKwlwbGF0Zm9ybV9zZXRf
-ZHJ2ZGF0YShwZGV2LCBwcml2KTsNCj4gPiArCXJldCA9IHJ6ZzJsX3RoZXJtYWxfaW5pdChwcml2
-KTsNCj4gPiArCWlmIChyZXQpIHsNCj4gPiArCQlkZXZfZXJyKGRldiwgIkZhaWxlZCB0byBzdGFy
-dCBUU1UiKTsNCj4gPiArCQlnb3RvIGVycjsNCj4gPiArCX0NCj4gPiArDQo+ID4gKwl6b25lID0g
-ZGV2bV90aGVybWFsX3pvbmVfb2Zfc2Vuc29yX3JlZ2lzdGVyKGRldiwgMCwgcHJpdiwNCj4gPiAr
-CQkJCQkJICAgICZyemcybF90el9vZl9vcHMpOw0KPiA+ICsJaWYgKElTX0VSUih6b25lKSkgew0K
-PiA+ICsJCWRldl9lcnIoZGV2LCAiQ2FuJ3QgcmVnaXN0ZXIgdGhlcm1hbCB6b25lIik7DQo+ID4g
-KwkJcmV0ID0gUFRSX0VSUih6b25lKTsNCj4gDQo+IAkJZGV2X2VycihkZXYsICJDYW4ndCByZWdp
-c3RlciB0aGVybWFsIHpvbmU6ICVkIiwgcmV0KTsNCj4gDQo+ID4gKwkJZ290byBlcnI7DQo+ID4g
-Kwl9DQo+ID4gKw0KPiA+ICsJcHJpdi0+em9uZSA9IHpvbmU7DQo+ID4gKwlwcml2LT56b25lLT50
-enAtPm5vX2h3bW9uID0gZmFsc2U7DQo+ID4gKwlyZXQgPSB0aGVybWFsX2FkZF9od21vbl9zeXNm
-cyhwcml2LT56b25lKTsNCj4gPiArCWlmIChyZXQpDQo+ID4gKwkJZ290byBlcnI7DQo+ID4gKw0K
-PiA+ICsJZGV2X2luZm8oZGV2LCAiVFNVIHByb2JlZCB3aXRoICVzIGNhbGliZXJhdGlvbiB2YWx1
-ZXMiLA0KPiA+ICsJCSByemcybF90aGVybWFsX3JlYWQocHJpdiwgT1RQVFNVVFJJTV9SRUcoMCkp
-ID8gICJodyIgOiAic3ciKTsNCj4gDQo+IAlzL2Rldl9pbmZvL2Rldl9kZWJ1Zy8NCk9LLg0KDQpS
-ZWdhcmRzLA0KQmlqdQ0KDQo+IA0KPiA+ICsJcmV0dXJuIDA7DQo+ID4gKw0KPiA+ICtlcnI6DQo+
-ID4gKwlyemcybF90aGVybWFsX3Jlc2V0X2Fzc2VydF9wbV9kaXNhYmxlX3B1dChwZGV2KTsNCj4g
-PiArCXJldHVybiByZXQ7DQo+ID4gK30NCj4gPiArDQo+ID4gK3N0YXRpYyBjb25zdCBzdHJ1Y3Qg
-b2ZfZGV2aWNlX2lkIHJ6ZzJsX3RoZXJtYWxfZHRfaWRzW10gPSB7DQo+ID4gKwl7IC5jb21wYXRp
-YmxlID0gInJlbmVzYXMscnpnMmwtdHN1IiwgfSwNCj4gPiArCXsgLyogc2VudGluZWwgKi8gfQ0K
-PiA+ICt9Ow0KPiA+ICtNT0RVTEVfREVWSUNFX1RBQkxFKG9mLCByemcybF90aGVybWFsX2R0X2lk
-cyk7DQo+ID4gKw0KPiA+ICtzdGF0aWMgc3RydWN0IHBsYXRmb3JtX2RyaXZlciByemcybF90aGVy
-bWFsX2RyaXZlciA9IHsNCj4gPiArCS5kcml2ZXIgPSB7DQo+ID4gKwkJLm5hbWUgPSAicnpnMmxf
-dGhlcm1hbCIsDQo+ID4gKwkJLm9mX21hdGNoX3RhYmxlID0gcnpnMmxfdGhlcm1hbF9kdF9pZHMs
-DQo+ID4gKwl9LA0KPiA+ICsJLnByb2JlID0gcnpnMmxfdGhlcm1hbF9wcm9iZSwNCj4gPiArCS5y
-ZW1vdmUgPSByemcybF90aGVybWFsX3JlbW92ZSwNCj4gPiArfTsNCj4gPiArbW9kdWxlX3BsYXRm
-b3JtX2RyaXZlcihyemcybF90aGVybWFsX2RyaXZlcik7DQo+ID4gKw0KPiA+ICtNT0RVTEVfREVT
-Q1JJUFRJT04oIlJlbmVzYXMgUlovRzJMIFRTVSBUaGVybWFsIFNlbnNvciBEcml2ZXIiKTsNCj4g
-PiArTU9EVUxFX0FVVEhPUigiQmlqdSBEYXMgPGJpanUuZGFzLmp6QGJwLnJlbmVzYXMuY29tPiIp
-Ow0KPiA+ICtNT0RVTEVfTElDRU5TRSgiR1BMIHYyIik7DQo=
+Hi all,
+
+We would like to introduce a new AMD CPU frequency control mechanism as the
+"amd-pstate" driver for modern AMD Zen based CPU series in Linux Kernel.
+The new mechanism is based on Collaborative processor performance control
+(CPPC) which is finer grain frequency management than legacy ACPI hardware
+P-States. Current AMD CPU platforms are using the ACPI P-states driver to
+manage CPU frequency and clocks with switching only in 3 P-states. AMD
+P-States is to replace the ACPI P-states controls, allows a flexible,
+low-latency interface for the Linux kernel to directly communicate the
+performance hints to hardware.
+
+"amd-pstate" leverages the Linux kernel governors such as *schedutil*,
+*ondemand*, etc. to manage the performance hints which are provided by CPPC
+hardware functionality. The first version for amd-pstate is to support one
+of the Zen3 processors, and we will support more in future after we verify
+the hardware and SBIOS functionalities.
+
+There are two types of hardware implementations for amd-pstate: one is full
+MSR support and another is shared memory support. It can use
+X86_FEATURE_CPPC feature flag to distinguish the different types. 
+
+Using the new AMD P-States method + kernel governors (*schedutil*,
+*ondemand*, ...) to manage the frequency update is the most appropriate
+bridge between AMD Zen based hardware processor and Linux kernel, the
+processor is able to adjust to the most efficiency frequency according to
+the kernel scheduler loading.
+
+Please check the detailed CPU feature and MSR register description in
+Processor Programming Reference (PPR) for AMD Family 19h Model 51h,
+Revision A1 Processors:
+
+https://www.amd.com/system/files/TechDocs/56569-A1-PUB.zip
+
+Performance Per Watt (PPW) Calculation:
+
+We use the RAPL interface with "perf" tool to get the energy data of the
+package power.
+
+The data comparisons between amd-pstate and acpi-freq module are tested on
+AMD Cezanne processor (mobile CPU):
+
+1) TBench CPU benchmark:
+
++----------------------------------------------------------------------------------------------+
+|                                                                                              |
+|                               TBench4 (Performance Per Watt)                                 |
+|                                                                             Higher is better |
++-------------------+------------------------+------------------------+------------------------+
+|                   |  Performance Per Watt  |  Performance Per Watt  |  Performance Per Watt  |
+|   Kernel Module   |       (Schedutil)      |       (Ondemand)       |       (Performance)    |
+|                   |       Unit: MB / J     |       Unit: MB / J     |       Unit: MB / J     |
++-------------------+------------------------+------------------------+------------------------+
+|                   |                        |                        |                        |
+|    acpi-cpufreq   |         48.56          |        48.89           |        47.81           |
+|                   |                        |                        |                        |
++-------------------+------------------------+------------------------+------------------------+
+|                   |                        |                        |                        |
+|     amd-pstate    |         48.38          |        47.38           |        48.77           |
+|                   |                        |                        |                        |
++-------------------+------------------------+------------------------+------------------------+
+
+Note: The previous data was based on TBench2, as align with Suse, we use
+TBench4 to re-test it. The PPW is very closed to acpi-cpufreq. And we are
+still re-runing other tests.
+
+Steam Game Demo on Ryzen 5900X (12 core 24 threads):
+
+The picture to compare acpi-cpufreq vs amd-pstate:
+https://drive.google.com/file/d/1PvSduykJn9U5MMOhzFWycnbmGmznalM3/view?usp=sharing
+
+Two videos:
+https://drive.google.com/file/d/1nQQEteL-v_zQxnOJpyW8JqvRW2FFDN2Z/view?usp=sharing
+https://drive.google.com/file/d/1heuPgFG71SQHvGb6wfedrQciBfE2rhnu/view?usp=sharing
+
+Actually, the amd-pstate driver doesn't change the physical maximum
+frequency capacity in the processor. But it's able to provide the finer
+grain performance control range instead of legacy 3 P-States. It has a
+better performance and power efficiency than before. We will continue
+optimize amd-pstate function on kernel governors to support different types
+of processors such as mobile latop, performance desktop, and etc.
+
+See patch series in below git repo:
+V1: https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git/log/?h=amd-pstate-dev-v1
+V2: https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git/log/?h=amd-pstate-dev-v2
+V3: https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git/log/?h=amd-pstate-dev-v3
+V4: https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git/log/?h=amd-pstate-dev-v4
+V5: https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git/log/?h=amd-pstate-dev-v5
+
+For details introduction, please see the patch 22.
+
+Changes from V1 -> V2:
+- cpufreq:
+- - Add detailed description in the commit log.
+- - Clean up the "extension" postfix in the x86 feature flag.
+- - Revise cppc_set_enable helper.
+- - Add a fix to check online cpus in cppc_acpi.
+- - Use static calls to avoid retpolines.
+- - Revise the comment style.
+- - Remove amd_pstate_boost_supported() function.
+- - Revise the return value in sysfs attribute functions.
+- cpupower:
+- - Refine the commit log for cpupower patches.
+- - Expose a function to get the sysfs value from specific table.
+- - Move amd-pstate sysfs definitions and functions into amd helper file.
+- - Move the boost init function into amd helper file and explain the
+  details in the commit log.
+- - Remove the amd_pstate_get_data in the lib/cpufreq.c to keep the lib as
+  common operations.
+- - Move print_speed function into misc helper file.
+- - Add amd_pstate_show_perf_and_freq() function in amd helper for
+  cpufreq-info print.
+
+Changes from V2 -> V3:
+- cpufreq:
+- - Add a patch from Steven to add systemio register in cppc lib. (Thanks
+  to verify the driver in his platform)
+- - Update online cpu mask to present cpu.
+- - Enhance cppc_set_enable to cover all valid use cases.
+- - Add more description in the Kconfig definition.
+- - Clean up some redundance functions and data members.
+- - Revise amd-pstate trace event prints.
+- - Move the amd-pstate traces into power trace system and set the driver
+  as build-in instead of module.
+- - Clean up the duplicated sysfs with core cpufreq driver.
+- - Revise the amd-pstate RST documentation.
+- cpupower:
+- - Revise the cpupower_amd_pstate_enabled() function to use
+  cpufreq_get_driver helper instead of read sysfs.
+- - Clean up the amd-pstate max/min frequency APIs, because they are
+  actually the same with cpufreq info sysfs.
+
+Changes from V3 -> V4:
+- cpufreq:
+- - Rebase the whole series to Rafael's pm branch (5.15)
+- - Fix the typo in the commit message and comment.
+- - Clean up function implementation.
+- - Clean up freq&perf sysfs APIs.
+- - Fall back to move amd-pstate traces out of power trace system, because
+  it's flexible to debug and fine tune processors with the shared memory
+  solution.
+- - Add a kernel param to disable shared memory on amd-pstate, it can be
+  enabled manually.
+- cpupower:
+- - Introduce acpi cppc library support.
+- - Clean up the duplicated amd specific perf/frequency.
+
+We received two issues that reported on the processors with shared memory
+solution from the community. 
+
+First one:
+https://lore.kernel.org/linux-pm/a0e932477e9b826c0781dda1d0d2953e57f904cc.camel@suse.cz/ 
+
+Thanks Giovanni's support and suggestions, we corrected the calculation
+method and duplicated the performance issue in a 64 cores / 128 threads
+threadripper which is similiar with EPYC 7713. Check with firmware guy, the
+sample rate is about 1 ms that the hardware responds the frequency change.
+We are working to simulate the acpi pstates with cppc api and checking
+where is the gap with acpi-cpufreq. Will share you the status later.
+
+Second one:
+https://lore.kernel.org/linux-pm/f9323c6fddd4a55d8ca4191a9539ebd056221045.camel@gmail.com/
+
+Thanks Matt to help us reproduce this issue in our side with Ryzen 5900X.
+Below is the video to compare with amd-pstate and acpi-cpufreq on "Control"
+steam games. The FPS can be increased as well. It is probably something
+wrong in the SBIOS.
+https://lore.kernel.org/linux-pm/DM4PR12MB5136084E5DC1809FBB578075F1959@DM4PR12MB5136.namprd12.prod.outlook.com/
+
+Due to some issues on shared memory solution, so we fallback to build as a
+module and add a parameter "shared_mem" to disable amd-pstate on processors
+with shared memory solution for the moment till we complete tunning on this
+function.
+
+Changes from V4 -> V5:
+- cpufreq:
+- - Fix subject typo.
+- - Fix Clang-13 build warning.
+- - Update RST documentation for the latest update.
+- cpupower:
+- - Fix the table check condition at cpufreq_get_sysfs_value_from_table.
+
+Thanks,
+Ray
+
+
+Huang Rui (19):
+  x86/cpufeatures: add AMD Collaborative Processor Performance Control
+    feature flag
+  x86/msr: add AMD CPPC MSR definitions
+  cpufreq: amd: introduce a new amd pstate driver to support future
+    processors
+  cpufreq: amd: add fast switch function for amd-pstate
+  cpufreq: amd: introduce the support for the processors with shared
+    memory solution
+  cpufreq: amd: add trace for amd-pstate module
+  cpufreq: amd: add boost mode support for amd-pstate
+  cpufreq: amd: add amd-pstate frequencies attributes
+  cpufreq: amd: add amd-pstate performance attributes
+  cpupower: add AMD P-state capability flag
+  cpupower: add the function to check amd-pstate enabled
+  cpupower: initial AMD P-state capability
+  cpupower: add the function to get the sysfs value from specific table
+  cpupower: introduce acpi cppc library
+  cpupower: add amd-pstate sysfs definition and access helper
+  cpupower: enable boost state support for amd-pstate module
+  cpupower: move print_speed function into misc helper
+  cpupower: print amd-pstate information on cpupower
+  Documentation: amd-pstate: add amd-pstate driver introduction
+
+Jinzhou Su (1):
+  ACPI: CPPC: add cppc enable register function
+
+Mario Limonciello (1):
+  ACPI: CPPC: Check present CPUs for determining _CPC is valid
+
+Steven Noonan (1):
+  ACPI: CPPC: implement support for SystemIO registers
+
+ Documentation/admin-guide/acpi/cppc_sysfs.rst |   2 +
+ Documentation/admin-guide/pm/amd-pstate.rst   | 383 +++++++++++
+ .../admin-guide/pm/working-state.rst          |   1 +
+ arch/x86/include/asm/cpufeatures.h            |   1 +
+ arch/x86/include/asm/msr-index.h              |  17 +
+ drivers/acpi/cppc_acpi.c                      |  93 ++-
+ drivers/cpufreq/Kconfig.x86                   |  17 +
+ drivers/cpufreq/Makefile                      |   5 +
+ drivers/cpufreq/amd-pstate-trace.c            |   2 +
+ drivers/cpufreq/amd-pstate-trace.h            |  77 +++
+ drivers/cpufreq/amd-pstate.c                  | 609 ++++++++++++++++++
+ include/acpi/cppc_acpi.h                      |   5 +
+ tools/power/cpupower/Makefile                 |   6 +-
+ tools/power/cpupower/lib/acpi_cppc.c          |  59 ++
+ tools/power/cpupower/lib/acpi_cppc.h          |  21 +
+ tools/power/cpupower/lib/cpufreq.c            |  21 +-
+ tools/power/cpupower/lib/cpufreq.h            |  12 +
+ tools/power/cpupower/utils/cpufreq-info.c     |  68 +-
+ tools/power/cpupower/utils/helpers/amd.c      |  76 +++
+ tools/power/cpupower/utils/helpers/cpuid.c    |  13 +
+ tools/power/cpupower/utils/helpers/helpers.h  |  22 +
+ tools/power/cpupower/utils/helpers/misc.c     |  62 ++
+ 22 files changed, 1508 insertions(+), 64 deletions(-)
+ create mode 100644 Documentation/admin-guide/pm/amd-pstate.rst
+ create mode 100644 drivers/cpufreq/amd-pstate-trace.c
+ create mode 100644 drivers/cpufreq/amd-pstate-trace.h
+ create mode 100644 drivers/cpufreq/amd-pstate.c
+ create mode 100644 tools/power/cpupower/lib/acpi_cppc.c
+ create mode 100644 tools/power/cpupower/lib/acpi_cppc.h
+
+-- 
+2.25.1
+
