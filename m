@@ -2,120 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6031B4629D1
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Nov 2021 02:34:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76093462A1E
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Nov 2021 03:03:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236534AbhK3BiB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Nov 2021 20:38:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47724 "EHLO
+        id S237214AbhK3CGZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Nov 2021 21:06:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236537AbhK3BiA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Nov 2021 20:38:00 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2249C061574
-        for <linux-pm@vger.kernel.org>; Mon, 29 Nov 2021 17:34:41 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id bj13so38170231oib.4
-        for <linux-pm@vger.kernel.org>; Mon, 29 Nov 2021 17:34:41 -0800 (PST)
+        with ESMTP id S231586AbhK3CGY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Nov 2021 21:06:24 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46271C061574;
+        Mon, 29 Nov 2021 18:03:06 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id i8-20020a7bc948000000b0030db7b70b6bso18286251wml.1;
+        Mon, 29 Nov 2021 18:03:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jlAlW8lzEiwMilapgFJ9XcVfAOd8fce3a/oZQ90BQPU=;
-        b=fncGRT3xZrQM0eMsLHETx9uok4uUmgxob4q2WDOg/zAZGZTgK9XgbV6AhGDTtAZV1M
-         dnJ42UowfZnxY0PNQvFaPxDmttQX4zfddVCqyRkzYHtEyh3J6HfhU3ogVh6PX8vt0iCY
-         jkfAb7LlRrvpI/Sn0v27MyDpQhG1MoZiAN9p0jv6rVKBlbppOhYccyXV+lMOleoV0riX
-         nXX6B4ndA0AJaQlyDAdUWG74TMUbXRYVBDLaN846lYl8Wd2jfM+aOb0V/kBel7ZZdR1i
-         GLPIQ23Bmcg7+PdePjV00uwqnw3IRFTiP1o+EEQvcwoHA5eIKu3da2kI8XPSmEeo/goT
-         a95Q==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=oNAyLgnuZABX+bMA51k+CzRNb1OQiDBReWGxpwrvkAA=;
+        b=ESmty3TuZqmk8BEd9I61fOy+QGqtPAfmBTZAQxLblWJkEazUKnzIJQP4TnVikuDtC9
+         7ZY6nXEbueVbMMdm4go2LwFHT81DXrY6uIPH6mM63PLILkBr0tY5MJ//ftbQ4KlcalaV
+         eHmWVrT5HLMFmzGEaQPGhjhrrfVbaq0aQZKBRha8quIazJEIq+p+3Igi/XBmsNNwbVte
+         thYYLn4z1Kq9cwUirUkdM3+a9dg/lMftgcrbxJU+U4jNG0MkYPhPZ4WSHasIw8MlZs+S
+         oLUNKjqWrz7iFKtwladsdT07nHOCFJ+cM8mMRUlr0PAu/TTUDz9txkZFeYd84x8iM8WP
+         wSqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jlAlW8lzEiwMilapgFJ9XcVfAOd8fce3a/oZQ90BQPU=;
-        b=mhAyTedu1NhtS97LURyFMCkt/mYuFCNePnGg+F/YYjvUzIlxCpZyfu70VKVUHTUsv8
-         5k7MBkfuywYtSwh+l//Ne7XF1N550Lx70XhTCfOIH+DCRZGP7KD0GsR6XQtfIP1SQZhS
-         I3QEybawsVZcrfUS9BheCvnpCFeGDaOsWpxQ+wVMDVEUw7XUcrtrrsrfZZcTFRKDBNd5
-         Lvem9Z7Mo0VsQI9lUsIhw4K9nAWcywKibseUvoFz1BEG4+MuWRUSMjfZNh6ojRczaJ6C
-         iVHyJ2+cEdwaieDx0fYyBeOH9qWUUDvkQM1Imive1BeKYFbXTgu5mgPtk5m8Q4RkLwDI
-         s+xg==
-X-Gm-Message-State: AOAM530S6zGL5c8+9o6poO05L+Xcx7AEnUPKbkIPdJChUZ6j/pmhMLeS
-        MvTSPCDXiKqMFnqpG2L+ge4CFLHx2Za3pXnPsmITkQ==
-X-Google-Smtp-Source: ABdhPJyAuUEjDcA9GzFX3njqloe8SERPQYlO82Dy2P7l1F4bCJEdMiSuXAzx7o2eFssirsvu4ANhvlkzXemDlIxSVwQ=
-X-Received: by 2002:a54:4791:: with SMTP id o17mr1605375oic.114.1638236079803;
- Mon, 29 Nov 2021 17:34:39 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=oNAyLgnuZABX+bMA51k+CzRNb1OQiDBReWGxpwrvkAA=;
+        b=kUaIECIAU2WJHTtYWd/ZJOtdNI+LUCLl9XbbKFM+MwvOrwxpDl4hebp9lyYN9Phf5+
+         sdkrG9f6D3uWN1wHnki9GK8HoWp/WLOul2l0/lkLe4NvfWzpUHWqen3w1pQ4pPbo02fi
+         AvPcLeK5HV+7F5dCs8MutexKJdNYAvKtEP6Gllljrva3kXsPj64I2+2jkxOo+0lsQlrO
+         9DGIoA5IY1ysltLIjoredU0zYf7eGgy2+6IxJOLol3NvtWju/J9Evpi69GNvSGZZ8XwL
+         6OfSbSpNKXG7MCdhL8d3laiOHaYNjyNKeUCy33JDe/eu6hlSnB4OxoabTFvhYbHqL88b
+         BQKA==
+X-Gm-Message-State: AOAM53087zGuVs5GyjOU3Cl+PzfReGQhlIzsrVy0DhPDMuqrH11Aiery
+        AonjqiBPmAjXXjGzmwWREwU=
+X-Google-Smtp-Source: ABdhPJyoyZIn7vYgj4XrwOEkc0ib3WyviLwl6D1rFwxG20nXGR+6JZAT3PPQpF9WiXhUbOxMA4Dcnw==
+X-Received: by 2002:a05:600c:221a:: with SMTP id z26mr1871268wml.20.1638237784953;
+        Mon, 29 Nov 2021 18:03:04 -0800 (PST)
+Received: from archbook.localnet (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
+        by smtp.gmail.com with ESMTPSA id r17sm983950wmq.5.2021.11.29.18.03.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 18:03:04 -0800 (PST)
+From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+To:     linux-rockchip@lists.infradead.org
+Cc:     lee.jones@linaro.org, robh+dt@kernel.org, heiko@sntech.de,
+        sre@kernel.org, maccraft123mc@gmail.com,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Chris Morgan <macroalpha82@gmail.com>
+Subject: Re: [PATCH v4 RESEND 0/4] power: supply: Add Support for RK817 Charger
+Date:   Tue, 30 Nov 2021 03:03:03 +0100
+Message-ID: <2759402.V8G6Gt6Xmj@archbook>
+In-Reply-To: <20210916194208.10387-1-macroalpha82@gmail.com>
+References: <20210916194208.10387-1-macroalpha82@gmail.com>
 MIME-Version: 1.0
-References: <cover.1637061794.git.matti.vaittinen@fi.rohmeurope.com>
- <6123f62ac44e6513a498d15034a4b6b22abe5f5b.1637061794.git.matti.vaittinen@fi.rohmeurope.com>
- <CACRpkdbKeW+pJ8SZ0fPD+9kEtgHgi2A9U=f6XyKTHogKU-9F9g@mail.gmail.com>
- <7b34e88f-54f3-6d0a-293e-b2b411d1c5c2@fi.rohmeurope.com> <676253b9-ff69-7891-1f26-a8b5bb5a421b@fi.rohmeurope.com>
- <CACRpkdZXhw9+txdLv-k01nzH3+GvGivyAoCO1JCf2VyYK96CnQ@mail.gmail.com> <57f97c5f-aedb-7f7e-d269-90bd97bbba09@fi.rohmeurope.com>
-In-Reply-To: <57f97c5f-aedb-7f7e-d269-90bd97bbba09@fi.rohmeurope.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 30 Nov 2021 02:34:27 +0100
-Message-ID: <CACRpkdZ9EEmWSb4mq7WJywma4dFCms+Z3BAKfntcsb9y_1THNQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 3/9] power: supply: Support DT originated
- temperature-capacity tables
-To:     "Vaittinen, Matti" <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        "rostokus@gmail.com" <rostokus@gmail.com>,
-        "fan.chen@mediatek.com" <fan.chen@mediatek.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-power <linux-power@fi.rohmeurope.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Matti,
+On Donnerstag, 16. September 2021 21:42:04 CET Chris Morgan wrote:
+> From: Chris Morgan <macromorgan@hotmail.com>
+> 
+> This series is to add support for the Rockchip rk817 battery charger
+> which is present in all Rockchip RK817 PMICs. The driver was written
+> as a joint effort by Maya Matuszczyk <maccraft123mc@gmail.com> and
+> myself Chris Morgan <macromorgan@hotmail.com>.
 
-not so much time so trying to answer the central question here!
+Hi Chris and Maya,
 
-On Sun, Nov 28, 2021 at 9:51 AM Vaittinen, Matti
-<Matti.Vaittinen@fi.rohmeurope.com> wrote:
+Gave this a whirl on my Quartz64 Model A. I noticed that this will
+happily let me discharge past voltage_min_design:
 
-> I am pretty
-> sure the current power-supply framework allows us to expose the current
-> full_cap to userlans - so building your Tesla example with the star
-> should be doable - if the drivers can somehow get the information about
-> the absolute capacity drop.
+ $ cat /sys/class/power_supply/rk817-battery/voltage_min_design 
+ 3625000
+ $ cat /sys/class/power_supply/rk817-battery/voltage_avg 
+ 3381360
 
-To do this we would need to export a capacity at current temperature
-and capacity at nominal temperature (which is usually 25 deg C)
-so you can scale to something. This isn't in sysfs today but we could
-probably add it (and then the world of UI:s battery icons need to change
-in response).
+Is this normal? It went all the way to under 3V before the
+board finally locked up.
 
-> > Then the question is: is the method used by Rohm universal and
-> > well-known and something many chargers will do exactly this
-> > way, so it should be in the core, or is it a particularity that should
-> > be in your driver?
->
-> I am not sure this is the correct question. I'd rephrase it to: Would it
-> be beneficial for drivers to come if the core did support this
-> functionality - or is the feature unnecessary, or are there better
-> alternatives. If core does not provide the support - then it is a high
-> mountain for one to climb if he wants to use such improvement.
+Does the minimum voltage not affect some sort of cutout on
+the RK817? Does it even have one? Is it the driver's job to
+do something here or not?
 
-I think we need this.
+Regards,
+Nicolas Frattaroli
 
-> I think that the agreement we can do is that the OCV+temperature => SOC
-> tables do not provide quite same information as the suggested
-> temperature => capacity-drop tables would. Whether there are better
-> alternatives - or if this is generally useful remains to be discussed -
-> and this is something where I _do_ appreciate your (and everyone else's)
-> input!
 
-temperature + OCV => SOC isn't enough I think.
-
-We probably need something to tell us what the total usable
-capacity will be under different temperatures. I suspect an
-interpolated table is best though, this is going to be quite
-nonlinear in practice.
-
-Yours,
-Linus Walleij
