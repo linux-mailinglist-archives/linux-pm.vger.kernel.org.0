@@ -2,366 +2,367 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E6A346350D
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Nov 2021 14:02:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A9F463552
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Nov 2021 14:22:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232134AbhK3NFb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Nov 2021 08:05:31 -0500
-Received: from mail-oi1-f169.google.com ([209.85.167.169]:39800 "EHLO
-        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232488AbhK3NFa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Nov 2021 08:05:30 -0500
-Received: by mail-oi1-f169.google.com with SMTP id bf8so41113357oib.6;
-        Tue, 30 Nov 2021 05:02:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Netrg1vphv0v9ofZ42aXf72liuzzpVjyznAzdB5yVi8=;
-        b=wMk41JN5W3YnPnxCSOkLN5CoEW5b6gTnGxj/dNO9qRERPYjBCtgJSmtYKZElRJMmou
-         /XVR2EwTRwANVthnYAxAa+6Mn1U9HvQ55dmtP4zPXo6Ka7xz27vB0NNqeFdFh5JgFxgU
-         Bztn/hKbm03G/YuP7MMy44pUzzXmLWuQhGAhayUf0tIIJHMdv2jRUCs8AMRH+ng7YN0R
-         ZsUv0zCdrO3Lmo4tlKBlHUX5hYkZ+nqyXWtqFDTjb570RoPloI1Kdu8bDB18qQjBdQZl
-         glnPzPHE4VzOxgcbf+FZmaK416peuyIm+iaBSzzGKjj8hQ5Hu164saZo4XnXVNPo5z8y
-         N5MA==
-X-Gm-Message-State: AOAM532OBfpX+dUxjpqXuFAkiL4TW/gVdAmc5W/GdXkd3vCCyHB3V2iS
-        3vtKOUx6Rqlo5d6F+YxwAQETRKFCe/4maCtKJzk=
-X-Google-Smtp-Source: ABdhPJwbSu7Uk+/LGZKl0/Dz5l3WFQlS0q9Gdwa+EcNI/iAjvynAH6EXkNbQk5MkF4Fj3k68PFHmbSCSftphoZGU1Tw=
-X-Received: by 2002:a05:6808:14c3:: with SMTP id f3mr3922393oiw.51.1638277330822;
- Tue, 30 Nov 2021 05:02:10 -0800 (PST)
-MIME-Version: 1.0
-References: <20211026222626.39222-1-ulf.hansson@linaro.org>
- <CAJZ5v0hrTDsCUn4vgmFrTTgd6H=orh-Kb5b3+_H9St4n8fTxBw@mail.gmail.com>
- <CAPDyKFre=tp4919FLoeU-wjLDJ02zmHaXY4wgTUmfmFbeaCadQ@mail.gmail.com>
- <4380690.LvFx2qVVIh@kreacher> <CAPDyKFpyPov-faJ9dUszi38Q7-4OsowX=i8w=NCnTQ66_zooHg@mail.gmail.com>
-In-Reply-To: <CAPDyKFpyPov-faJ9dUszi38Q7-4OsowX=i8w=NCnTQ66_zooHg@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 30 Nov 2021 14:01:53 +0100
-Message-ID: <CAJZ5v0iEfE35Aig8XADKbQEJqb8PNmcghLnrVXHkemDjTOLr5g@mail.gmail.com>
-Subject: Re: [PATCH] PM: runtime: Allow rpm_resume() to succeed when runtime
- PM is disabled
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
+        id S232830AbhK3N0C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Nov 2021 08:26:02 -0500
+Received: from mga18.intel.com ([134.134.136.126]:43368 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229492AbhK3N0B (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 30 Nov 2021 08:26:01 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="223093636"
+X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
+   d="scan'208";a="223093636"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 05:22:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
+   d="scan'208";a="654174419"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by fmsmga001.fm.intel.com with ESMTP; 30 Nov 2021 05:22:41 -0800
+Date:   Tue, 30 Nov 2021 05:21:37 -0800
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Maulik Shah <mkshah@codeaurora.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH 4/7] thermal: intel: hfi: Handle CPU hotplug events
+Message-ID: <20211130132137.GA25524@ranerica-svr.sc.intel.com>
+References: <20211106013312.26698-1-ricardo.neri-calderon@linux.intel.com>
+ <20211106013312.26698-5-ricardo.neri-calderon@linux.intel.com>
+ <CAJZ5v0gemmV1Lz3+9iKz1eiXtkyDc3+4+po4Eidchzk+J2=ceA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0gemmV1Lz3+9iKz1eiXtkyDc3+4+po4Eidchzk+J2=ceA@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 12:58 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> [...]
->
-> > > > > > >
-> > > > > > > Am I thinking correctly that this is mostly about working around the
-> > > > > > > limitations of pm_runtime_force_suspend()?
-> > > > > >
-> > > > > > No, this isn't related at all.
-> > > > > >
-> > > > > > The cpuidle-psci driver doesn't have PM callbacks, thus using
-> > > > > > pm_runtime_force_suspend() would not work here.
-> > > > >
-> > > > > Just wanted to send a ping on this to see if we can come to a
-> > > > > conclusion. Or maybe we did? :-)
-> > > > >
-> > > > > I think in the end, what slightly bothers me, is that the behavior is
-> > > > > a bit inconsistent. Although, maybe it's the best we can do.
-> > > >
-> > > > I've been thinking about this and it looks like we can do better, but
-> > > > instead of talking about this I'd rather send a patch.
-> > >
-> > > Alright.
-> > >
-> > > I was thinking along the lines of make similar changes for
-> > > rpm_idle|suspend(). That would make the behaviour even more
-> > > consistent, I think.
-> > >
-> > > Perhaps that's what you have in mind? :-)
+On Wed, Nov 24, 2021 at 03:48:49PM +0100, Rafael J. Wysocki wrote:
+> On Sat, Nov 6, 2021 at 2:34 AM Ricardo Neri
+> <ricardo.neri-calderon@linux.intel.com> wrote:
 > >
-> > Well, not exactly.
+> > All CPUs in a package are represented in an HFI table. There exists an
+> > HFI table per package. Thus, CPUs in a package need to coordinate to
+> > initialize and access the table. Do such coordination during CPU hotplug.
+> > Use the first CPU to come online in a package to initialize the HFI table
+> > and the data structure representing it. Other CPUs in the same package need
+> > only to register or unregister themselves in that data structure.
 > >
-> > The idea is to add another counter (called restrain_depth in the patch)
-> > to prevent rpm_resume() from running the callback when that is potentially
-> > problematic.  With that, it is possible to actually distinguish devices
-> > with PM-runtime enabled and it allows the PM-runtime status to be checked
-> > when it is still known to be meaningful.
->
-> Hmm, I don't quite understand the benefit of introducing a new flag
-> for this. rpm_resume() already checks the disable_depth to understand
-> when it's safe to invoke the callback. Maybe there is a reason why
-> that isn't sufficient?
-
-The problem is that disable_depth > 0 may very well mean that runtime
-PM has not been enabled at all for the given device which IMO is a
-problem.
-
-As it stands, it is necessary to make assumptions, like disable_depth
-== 1 meaning that runtime PM is really enabled, but the PM core has
-disabled it temporarily, which is somewhat questionable.
-
-Another problem with disabling is that it causes rpm_resume() to fail
-even if the status is RPM_ACTIVE and it has to do that exactly because
-it cannot know why runtime PM has been disabled.  If it has never been
-enabled, rpm_resume() must fail, but if it has been disabled
-temporarily, rpm_resume() may return 1 when the status is RPM_ACTIVE.
-
-The new count allows the "enabled in general, but temporarily disabled
-at the moment" to be handled cleanly.
-
+> > The HFI depends on both the package-level thermal management and the local
+> > APIC thermal local vector. Thus, ensure that both are properly configured
+> > before calling intel_hfi_online(). The CPU hotplug callbacks of the thermal
+> > throttle events code already meet these conditions. Enable the HFI from
+> > thermal_throttle_online().
 > >
-> > It requires quite a few changes, but is rather straightforward, unless I'm
-> > missing something.
-> >
-> > Please see the patch below.  I've only checked that it builds on x86-64.
-> >
+> > Cc: Andi Kleen <ak@linux.intel.com>
+> > Cc: Aubrey Li <aubrey.li@linux.intel.com>
+> > Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> > Cc: Tim Chen <tim.c.chen@linux.intel.com>
+> > Cc: "Ravi V. Shankar" <ravi.v.shankar@intel.com>
+> > Reviewed-by: Len Brown <len.brown@intel.com>
+> > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 > > ---
-> >  drivers/base/power/main.c    |   18 +++----
-> >  drivers/base/power/runtime.c |  105 ++++++++++++++++++++++++++++++++++++-------
-> >  include/linux/pm.h           |    2
-> >  include/linux/pm_runtime.h   |    2
-> >  4 files changed, 101 insertions(+), 26 deletions(-)
+> >  drivers/thermal/intel/intel_hfi.c   | 211 ++++++++++++++++++++++++++++
+> >  drivers/thermal/intel/intel_hfi.h   |   4 +
+> >  drivers/thermal/intel/therm_throt.c |   8 ++
+> >  3 files changed, 223 insertions(+)
 > >
-> > Index: linux-pm/include/linux/pm.h
-> > ===================================================================
-> > --- linux-pm.orig/include/linux/pm.h
-> > +++ linux-pm/include/linux/pm.h
-> > @@ -598,6 +598,7 @@ struct dev_pm_info {
-> >         atomic_t                usage_count;
-> >         atomic_t                child_count;
-> >         unsigned int            disable_depth:3;
-> > +       unsigned int            restrain_depth:3;       /* PM core private */
-> >         unsigned int            idle_notification:1;
-> >         unsigned int            request_pending:1;
-> >         unsigned int            deferred_resume:1;
-> > @@ -609,6 +610,7 @@ struct dev_pm_info {
-> >         unsigned int            use_autosuspend:1;
-> >         unsigned int            timer_autosuspends:1;
-> >         unsigned int            memalloc_noio:1;
-> > +       unsigned int            already_suspended:1;    /* PM core private */
-> >         unsigned int            links_count;
-> >         enum rpm_request        request;
-> >         enum rpm_status         runtime_status;
-> > Index: linux-pm/include/linux/pm_runtime.h
-> > ===================================================================
-> > --- linux-pm.orig/include/linux/pm_runtime.h
-> > +++ linux-pm/include/linux/pm_runtime.h
-> > @@ -46,6 +46,8 @@ extern void pm_runtime_enable(struct dev
-> >  extern void __pm_runtime_disable(struct device *dev, bool check_resume);
-> >  extern void pm_runtime_allow(struct device *dev);
-> >  extern void pm_runtime_forbid(struct device *dev);
-> > +extern void pm_runtime_restrain(struct device *dev);
-> > +extern void pm_runtime_relinquish(struct device *dev);
-> >  extern void pm_runtime_no_callbacks(struct device *dev);
-> >  extern void pm_runtime_irq_safe(struct device *dev);
-> >  extern void __pm_runtime_use_autosuspend(struct device *dev, bool use);
-> > Index: linux-pm/drivers/base/power/runtime.c
-> > ===================================================================
-> > --- linux-pm.orig/drivers/base/power/runtime.c
-> > +++ linux-pm/drivers/base/power/runtime.c
-> > @@ -744,11 +744,11 @@ static int rpm_resume(struct device *dev
-> >   repeat:
-> >         if (dev->power.runtime_error)
-> >                 retval = -EINVAL;
-> > -       else if (dev->power.disable_depth == 1 && dev->power.is_suspended
-> > -           && dev->power.runtime_status == RPM_ACTIVE)
-> > -               retval = 1;
-> >         else if (dev->power.disable_depth > 0)
-> >                 retval = -EACCES;
-> > +       else if (dev->power.restrain_depth > 0)
-> > +               retval = dev->power.runtime_status == RPM_ACTIVE ? 1 : -EAGAIN;
-> > +
-> >         if (retval)
-> >                 goto out;
+> > diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
+> > index edfe343507b3..6a3adfd57d72 100644
+> > --- a/drivers/thermal/intel/intel_hfi.c
+> > +++ b/drivers/thermal/intel/intel_hfi.c
+> > @@ -21,6 +21,7 @@
 > >
-> > @@ -1164,9 +1164,9 @@ EXPORT_SYMBOL_GPL(pm_runtime_get_if_acti
-> >   * @dev: Device to handle.
-> >   * @status: New runtime PM status of the device.
-> >   *
-> > - * If runtime PM of the device is disabled or its power.runtime_error field is
-> > - * different from zero, the status may be changed either to RPM_ACTIVE, or to
-> > - * RPM_SUSPENDED, as long as that reflects the actual state of the device.
-> > + * If runtime PM of the device is disabled or restrained, or its
-> > + * power.runtime_error field is nonzero, the status may be changed either to
-> > + * RPM_ACTIVE, or to RPM_SUSPENDED, as long as that reflects its actual state.
-> >   * However, if the device has a parent and the parent is not active, and the
-> >   * parent's power.ignore_children flag is unset, the device's status cannot be
-> >   * set to RPM_ACTIVE, so -EBUSY is returned in that case.
-> > @@ -1195,13 +1195,16 @@ int __pm_runtime_set_status(struct devic
-> >         spin_lock_irq(&dev->power.lock);
+> >  #define pr_fmt(fmt)  "intel-hfi: " fmt
 > >
-> >         /*
-> > -        * Prevent PM-runtime from being enabled for the device or return an
-> > -        * error if it is enabled already and working.
-> > +        * Prevent PM-runtime from being used for the device or return an
-> > +        * error if it is in use already.
-> >          */
-> > -       if (dev->power.runtime_error || dev->power.disable_depth)
-> > -               dev->power.disable_depth++;
-> > -       else
-> > +       if (dev->power.runtime_error || dev->power.disable_depth ||
-> > +           dev->power.restrain_depth) {
-> > +               pm_runtime_get_noresume(dev);
->
-> Why do we need to bump the usage count here? Except for balancing with
-> pm_runtime_relinquish() a few lines below, of course?
-
-First off, I need the usage count to be greater than 0 to prevent the
-runtime suspend callback from running while "restrained" (and the
-suspend could check the restrain count, but that's one more check in
-the suspend path which isn't necessary if the usage counter is always
-bumped up upfront).
-
-Second, the PM core bumps up the usage counter during system-wide
-suspend, so bumping it up again isn't strictly needed if this
-"temporary disabling" is limited to the system-wide suspend-resume
-paths, but I'm not sure if it should be limited this way.
-
-I would prefer the "temporarily unavailable" case to be clearly
-different from the "disabled" one in any case, not just during
-system-wide suspend-resume.
-
-> > +               dev->power.restrain_depth++;
-> > +       } else {
-> >                 error = -EAGAIN;
-> > +       }
+> > +#include <linux/io.h>
+> >  #include <linux/slab.h>
 > >
-> >         spin_unlock_irq(&dev->power.lock);
-> >
-> > @@ -1278,7 +1281,7 @@ int __pm_runtime_set_status(struct devic
-> >                 device_links_read_unlock(idx);
-> >         }
-> >
-> > -       pm_runtime_enable(dev);
-> > +       pm_runtime_relinquish(dev);
-> >
-> >         return error;
-> >  }
-> > @@ -1513,6 +1516,72 @@ void pm_runtime_allow(struct device *dev
-> >  EXPORT_SYMBOL_GPL(pm_runtime_allow);
+> >  #include "intel_hfi.h"
+> > @@ -52,16 +53,26 @@ struct hfi_hdr {
 > >
 > >  /**
-> > + * pm_runtime_restrain - Temporarily block runtime PM of a device.
-> > + * @dev: Device to handle.
-> > + *
-> > + * Increase the device's usage count and its restrain_dpeth count.  If the
-> > + * latter was 0 initially, cancel the runtime PM work for @dev if pending and
-> > + * wait for all of the runtime PM operations on it in progress to complete.
-> > + *
-> > + * After this function has been called, attempts to runtime-suspend @dev will
-> > + * fail with -EAGAIN and attempts to runtime-resume it will succeed if its
-> > + * runtime PM status is RPM_ACTIVE and will fail with -EAGAIN otherwise.
-> > + *
-> > + * This function can only be called by the PM core.
-> > + */
-> > +void pm_runtime_restrain(struct device *dev)
-> > +{
-> > +       pm_runtime_get_noresume(dev);
-> > +
-> > +       spin_lock_irq(&dev->power.lock);
-> > +
-> > +       if (dev->power.restrain_depth++ > 0)
-> > +               goto out;
-> > +
-> > +       if (dev->power.disable_depth > 0) {
-> > +               dev->power.already_suspended = false;
-> > +               goto out;
-> > +       }
-> > +
-> > +       /* Update time accounting before blocking PM-runtime. */
-> > +       update_pm_runtime_accounting(dev);
-> > +
-> > +       __pm_runtime_barrier(dev);
-> > +
-> > +       dev->power.already_suspended = pm_runtime_status_suspended(dev);
-> > +
-> > +out:
-> > +       spin_unlock_irq(&dev->power.lock);
-> > +}
->
-> What if someone calls pm_runtime_disable() after the PM core has
-> called pm_runtime_restrain() for a device? It looks like we may run
-> another round of __pm_runtime_barrier() and
-> update_pm_runtime_accounting(), does that really make sense?
-
-No, it doesn't, but it's a bug in the patch.  And there are other bugs in it ...
-
-In this particular case, __pm_runtime_disable() should check the
-"restrain" count and do nothing when it is nonzero.
-
-> > +
-> > +/**
-> > + * pm_runtime_relinquish - Unblock runtime PM of a device.
-> > + * @dev: Device to handle.
-> > + *
-> > + * Decrease the device's usage count and its restrain_dpeth count.
-> > + *
-> > + * This function can only be called by the PM core.
-> > + */
-> > +void pm_runtime_relinquish(struct device *dev)
-> > +{
-> > +       spin_lock_irq(&dev->power.lock);
-> > +
-> > +       if (dev->power.restrain_depth > 0) {
-> > +               dev->power.restrain_depth--;
-> > +
-> > +               /* About to unbolck runtime PM, set accounting_timestamp to now */
-> > +               if (!dev->power.restrain_depth && !dev->power.disable_depth)
-> > +                       dev->power.accounting_timestamp = ktime_get_mono_fast_ns();
-> > +       } else {
-> > +               dev_warn(dev, "Unbalanced %s!\n", __func__);
-> > +       }
-> > +
-> > +       spin_unlock_irq(&dev->power.lock);
-> > +
-> > +       pm_runtime_put_noidle(dev);
-> > +}
-> > +
-> > +/**
-> >   * pm_runtime_no_callbacks - Ignore runtime PM callbacks for a device.
-> >   * @dev: Device to handle.
+> >   * struct hfi_instance - Representation of an HFI instance (i.e., a table)
+> > + * @table_base:                Base of the local copy of the HFI table
+> >   * @ts_counter:                Time stamp of the last update of the table
+> >   * @hdr:               Base address of the table header
+> >   * @data:              Base address of the table data
+> > + * @die_id:            Logical die ID this HFI table instance
+> > + * @cpus:              CPUs represented in this HFI table instance
+> > + * @hw_table:          Pointer to the HFI table of this instance
+> > + * @initialized:       True if this HFI instance has bee initialized
 > >   *
-> > @@ -1806,8 +1875,10 @@ int pm_runtime_force_suspend(struct devi
-> >         int (*callback)(struct device *);
-> >         int ret;
+> >   * A set of parameters to parse and navigate a specific HFI table.
+> >   */
+> >  struct hfi_instance {
+> > +       void                    *table_base;
+> >         u64                     *ts_counter;
+> >         void                    *hdr;
+> >         void                    *data;
+> > +       u16                     die_id;
+> > +       struct cpumask          *cpus;
+> > +       void                    *hw_table;
+> > +       bool                    initialized;
+> >  };
 > >
-> > -       pm_runtime_disable(dev);
-> > -       if (pm_runtime_status_suspended(dev))
-> > +       pm_runtime_restrain(dev);
+> >  /**
+> > @@ -83,10 +94,210 @@ struct hfi_features {
+> >         bool            parsed;
+> >  };
+> >
+> > +/**
+> > + * struct hfi_cpu_info - Per-CPU attributes to consume HFI data
+> > + * @index:             Row of this CPU in its HFI table
+> > + * @hfi_instance:      Attributes of the HFI table to which this CPU belongs
+> > + *
+> > + * Parameters to link a logical processor to an HFI table and a row within it.
+> > + */
+> > +struct hfi_cpu_info {
+> > +       s16                     index;
+> > +       struct hfi_instance     *hfi_instance;
+> > +};
 > > +
-> > +       /* No suspend if the device has already been suspended by PM-runtime. */
-> > +       if (!dev->power.already_suspended)
+> > +static DEFINE_PER_CPU(struct hfi_cpu_info, hfi_cpu_info) = { .index = -1 };
+> > +
+> >  static int max_hfi_instances;
+> >  static struct hfi_instance *hfi_instances;
+> >
+> >  static struct hfi_features hfi_features;
+> > +static DEFINE_MUTEX(hfi_lock);
+> > +
+> > +static void init_hfi_cpu_index(unsigned int cpu)
+> 
+> I would make this function take a (struct hfi_cpu_info *) argument
+> instead of the CPU number.  It would be more concise then.
+
+Sure Rafael, it would be more concise. I will make the change.
+> 
+> > +{
+> > +       s16 hfi_idx;
+> > +       u32 edx;
+> > +
+> > +       /* Do not re-read @cpu's index if it has already been initialized. */
+> > +       if (per_cpu(hfi_cpu_info, cpu).index > -1)
+> > +               return;
+> > +
+> > +       edx = cpuid_edx(CPUID_HFI_LEAF);
+> > +       hfi_idx = (edx & CPUID_HFI_CPU_INDEX_MASK) >> CPUID_HFI_CPU_INDEX_SHIFT;
+> > +
+> > +       per_cpu(hfi_cpu_info, cpu).index = hfi_idx;
+> > +}
+> > +
+> > +/*
+> > + * The format of the HFI table depends on the number of capabilities that the
+> > + * hardware supports. Keep a data structure to navigate the table.
+> > + */
+> > +static void init_hfi_instance(struct hfi_instance *hfi_instance)
+> > +{
+> > +       /* The HFI time-stamp is located at the base of the table. */
+> > +       hfi_instance->ts_counter = hfi_instance->table_base;
+> > +
+> > +       /* The HFI header is below the time-stamp. */
+> > +       hfi_instance->hdr = hfi_instance->table_base +
+> > +                           sizeof(*hfi_instance->ts_counter);
+> > +
+> > +       /* The HFI data starts below the header. */
+> > +       hfi_instance->data = hfi_instance->hdr + hfi_features.hdr_size;
+> > +}
+> > +
+> > +/**
+> > + * intel_hfi_online() - Enable HFI on @cpu
+> > + * @cpu:       CPU in which the HFI will be enabled
+> > + *
+> > + * Enable the HFI to be used in @cpu. The HFI is enabled at the die/package
+> > + * level. The first CPU in the die/package to come online does the full HFI
+> > + * initialization. Subsequent CPUs will just link themselves to the HFI
+> > + * instance of their die/package.
+> > + */
+> > +void intel_hfi_online(unsigned int cpu)
+> > +{
+> > +       struct hfi_cpu_info *info = &per_cpu(hfi_cpu_info, cpu);
+> > +       u16 die_id = topology_logical_die_id(cpu);
+> > +       struct hfi_instance *hfi_instance;
+> > +       phys_addr_t hw_table_pa;
+> > +       u64 msr_val;
+> > +
+> > +       if (!boot_cpu_has(X86_FEATURE_INTEL_HFI))
+> > +               return;
+> 
+> IMO it is not useful to do anything below in this function if
+> hfi_instances is NULL, so I would check it along with the above.
+
+Indeed, there is no point on keep going it we didn't find memory for
+hfi_instances. I will make the change.
+
+> > +
+> > +       init_hfi_cpu_index(cpu);
+> > +
+> > +       /*
+> > +        * The HFI instance of this @cpu may exist already but they have not
+> > +        * been linked to @cpu.
+> > +        */
+> > +       hfi_instance = info->hfi_instance;
+> > +       if (!hfi_instance) {
+> > +               if (!hfi_instances)
+> > +                       return;
+> > +
+> > +               if (die_id >= 0 && die_id < max_hfi_instances)
+> > +                       hfi_instance = &hfi_instances[die_id];
+> > +
+> > +               if (!hfi_instance)
+> > +                       return;
+> 
+> And here I would do
+> 
+> if (die_id < 0 || die_id >= max_hfi_instances)
+>         return;
+> 
+> hfi_instance = &hfi_instances[die_id];
+> 
+> which is one branch less and fewer LOC.
 >
-> I assume you are looking at using pm_runtime_force_suspend|resume() to
-> support my use case for the cpuidle-psci driver? In other words,
-> replace pm_runtime_get_sync() and pm_runtime_put_sync_suspend() in
-> __psci_enter_domain_idle_state(), right?
 
-Not really.  I've been looking at a general "temporarily unavailable"
-vs "disabled" problem.
+Thanks Rafael, this looks better.
 
-> If so, that doesn't really fit well, I think. Not only because we
-> don't have system suspend/resume callbacks available, which is really
-> the proper place to call the pm_runtime_force_*() functions from, but
-> also because we don't want to call __pm_runtime_barrier(), etc, every
-> time in the idle path of a CPU. If anything, we should instead strive
-> towards a more lightweight path than what we currently have.
+> > +       }
+> > +
+> > +       /*
+> > +        * Now check if the HFI instance of the package/die of this CPU has
+> > +        * been initialized. In such case, all we have to do is link @cpu's info
+> > +        * to the HFI instance of its die/package.
+> > +        */
+> > +       mutex_lock(&hfi_lock);
+> > +       if (hfi_instance->initialized) {
+> > +               info->hfi_instance = hfi_instance;
+> > +
+> > +               /*
+> > +                * @cpu is the first one in its die/package to come back online.
+> > +                * Use it to track the CPUs in the die/package.
+> > +                */
+> > +               if (!hfi_instance->cpus)
+> > +                       hfi_instance->cpus = topology_core_cpumask(cpu);
+> > +
+> > +               mutex_unlock(&hfi_lock);
+> > +               return;
+> > +       }
+> > +
+> > +       /*
+> > +        * Hardware is programmed with the physical address of the first page
+> > +        * frame of the table. Hence, the allocated memory must be page-aligned.
+> > +        */
+> > +       hfi_instance->hw_table = alloc_pages_exact(hfi_features.nr_table_pages,
+> > +                                                  GFP_KERNEL | __GFP_ZERO);
+> > +       if (!hfi_instance->hw_table)
+> > +               goto err_out;
+> > +
+> > +       hw_table_pa = virt_to_phys(hfi_instance->hw_table);
+> > +
+> > +       hfi_instance->table_base = kzalloc(hfi_features.nr_table_pages << PAGE_SHIFT,
+> > +                                          GFP_KERNEL);
+> > +       if (!hfi_instance->table_base)
+> > +               goto free_hw_table;
+> > +
+> > +       /*
+> > +        * Program the address of the feedback table of this die/package. On
+> > +        * some processors, hardware remembers the old address of the HFI table
+> > +        * even after having been reprogrammed and re-enabled. Thus, do not free
+> > +        * pages allocated for the table or reprogram the hardware with a new
+> > +        * base address. Namely, program the hardware only once.
+> > +        */
+> > +       msr_val = hw_table_pa | HFI_PTR_VALID_BIT;
+> > +       wrmsrl(MSR_IA32_HW_FEEDBACK_PTR, msr_val);
+> > +
+> > +       init_hfi_instance(hfi_instance);
+> > +
+> > +       hfi_instance->die_id = die_id;
+> > +
+> > +       /*
+> > +        * We can use the core cpumask of any cpu in the die/package. Any of
+> > +        * them will reflect all the CPUs the same package that are online.
+> > +        */
+> > +       hfi_instance->cpus = topology_core_cpumask(cpu);
+> > +       info->hfi_instance = hfi_instance;
+> > +       hfi_instance->initialized = true;
+> > +
+> > +       mutex_unlock(&hfi_lock);
+> > +
+> > +       return;
+> > +
+> > +free_hw_table:
+> > +       free_pages_exact(hfi_instance->hw_table, hfi_features.nr_table_pages);
+> > +err_out:
+> > +       mutex_unlock(&hfi_lock);
+> > +}
+> > +
+> > +/**
+> > + * intel_hfi_offline() - Disable HFI on @cpu
+> > + * @cpu:       CPU in which the HFI will be disabled
+> > + *
+> > + * Remove @cpu from those covered by its HFI instance.
+> > + *
+> > + * On some processors, hardware remembers previous programming settings even
+> > + * after being reprogrammed. Thus, keep HFI enabled even if all CPUs in the
+> > + * die/package of @cpu are offline. See note in intel_hfi_online().
+> > + */
+> > +void intel_hfi_offline(unsigned int cpu)
+> > +{
+> > +       struct cpumask *die_cpumask = topology_core_cpumask(cpu);
+> > +       struct hfi_cpu_info *info = &per_cpu(hfi_cpu_info, cpu);
+> > +       struct hfi_instance *hfi_instance;
+> > +
+> > +       if (!boot_cpu_has(X86_FEATURE_INTEL_HFI))
+> > +               return;
+> > +
+> > +       hfi_instance = info->hfi_instance;
+> > +       if (!hfi_instance)
+> > +               return;
+> > +
+> > +       if (!hfi_instance->initialized)
+> > +               return;
+> > +
+> > +       mutex_lock(&hfi_lock);
+> > +
+> > +       /*
+> > +        * We were using the core cpumask of @cpu to track CPUs in the same
+> > +        * die/package. Now it is going offline and we need to find another
+> > +        * CPU we can use.
+> > +        */
+> > +       if (die_cpumask == hfi_instance->cpus) {
+> > +               int new_cpu;
+> > +
+> > +               new_cpu = cpumask_any_but(hfi_instance->cpus, cpu);
+> > +               if (new_cpu >= nr_cpu_ids)
+> > +                       /* All other CPUs in the package are offline. */
+> > +                       hfi_instance->cpus = NULL;
+> > +               else
+> > +                       hfi_instance->cpus = topology_core_cpumask(new_cpu);
+> 
+> Hmmm.  Is topology_core_cpumask() updated when CPUs go offline and online?
 
-So IMO this can be done with the new counter in place, because for
-anything called between device_suspend_late() and
-device_resume_early(), PM-runtime would be restrained by the PM core
-(it is disabled now), so rpm_resume() would return 1 for devices with
-PM-runtime status equal to RPM_ACTIVE (it fails now, unless the usage
-counter is exactly 1) and you resume the devices in question upfront,
-so it would be always safe to call rpm_resume() and rpm_suspend() for
-them during the noirq suspend and resume phases (it is now tricky,
-because it depends on the exact usage counter value).
+Yes. A CPU going offline is cleared from its siblings' cpumask [1] and its own [2]
+in remove_siblinginfo() via cpu_disable_common(). A CPU going online is set
+in its siblings' cpumask and its own in set_cpu_sibling_map() [3].
 
-Between dpm_suspend_noirq() and dpm_resume_noirq(), you need to switch
-over to a different type of handling anyway, because all of the
-devices are expected to be suspended then.
+
+Thanks and BR,
+Ricardo
+
+[1]. https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/kernel/smpboot.c?h=v5.16-rc3#n1592
+[2]. https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/kernel/smpboot.c?h=v5.16-rc3#n1617
+[3]. https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/kernel/smpboot.c?h=v5.16-rc3#n657
+> 
