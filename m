@@ -2,150 +2,263 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B052462AB3
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Nov 2021 03:50:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D481462B01
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Nov 2021 04:21:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230500AbhK3CxW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Nov 2021 21:53:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36544 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbhK3CxV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Nov 2021 21:53:21 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B03C061746
-        for <linux-pm@vger.kernel.org>; Mon, 29 Nov 2021 18:50:03 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id m15so18138060pgu.11
-        for <linux-pm@vger.kernel.org>; Mon, 29 Nov 2021 18:50:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=koRfBp4VpgjWJfC/0JEHPzq77c2QcCg2LBZMxLjnjcw=;
-        b=kQdAJbtUSkt+KdGki/UVNknRsYpeAsuwfQb3rAWIfM/9m5HPZP1V9zmEUkwQ5/1bmO
-         Jz3hr8zFnabd78Zfx78i4DVoKT2M/QtpXhli2BpQg72FdVprlDAM4ubbXONmGGM9HRfy
-         EGjEQvWf+FdzCSqc+emgqogNFUZjawAzyD2OJrrU+HCvq2f8iX6kHLhzre9LlvLotyLT
-         lmIMmypRFciVvQm2fKZr15w3kOBd/KawzHHRBy95FbjzT1x+1O48Qkpj3DYebbXNFwic
-         LitZr57k3GCQXjMirxVqTKx6/r9QKwJooGvOaVBrjGzWcDDLRC/3j+RNwY7XmMXQcSMJ
-         o0Zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=koRfBp4VpgjWJfC/0JEHPzq77c2QcCg2LBZMxLjnjcw=;
-        b=iCImRVSYF3xa7cesVQ++FSWAXgx5rdgFqNiT5GHEiORy7bBvITskS3/X5jn58z2BV6
-         Z6Nb9jPvm3SJxt4fhPQKew1Fd38RP2sAv7wbXRdU6iDCWmg4geTN3QOB9fyUkd7NGZ7n
-         lkzY+O4F9hWbBwiihVX6G5H0buFzDOoGZ5KScHS+gg1GFSOEiNuArtbBrsEiXhwLwRbs
-         FI67b7Y6Pe1JDoEPceJyWBj8cZ+mCqB/Axpm9pqkLVzW0HnSchXtAUGbVe7oarQhPTK+
-         t4LSelPaocwoMxet7CusjD3RV6lkl3PuO/rBURQl19fcsnfJElEFaZ8a1G6UZIkzchTN
-         g0jw==
-X-Gm-Message-State: AOAM5319WBe1sCF5VDt0Uy8AANaarUnkcp/3g4amQ9Sx1taog/fQndIK
-        KkmcHRwE5wTScq+i2qqGcdzcXA==
-X-Google-Smtp-Source: ABdhPJxEIkpoVr0R7RjxZ1wJ3uZ+NmxlaVH6sjBftFGnmD94mx15PURSCA1UMDwmChno3ARXM54o9A==
-X-Received: by 2002:a05:6a00:1145:b0:4a2:6a03:c592 with SMTP id b5-20020a056a00114500b004a26a03c592mr42467227pfm.65.1638240602819;
-        Mon, 29 Nov 2021 18:50:02 -0800 (PST)
-Received: from dragon (80.251.214.228.16clouds.com. [80.251.214.228])
-        by smtp.gmail.com with ESMTPSA id e29sm9354659pge.17.2021.11.29.18.50.00
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 29 Nov 2021 18:50:02 -0800 (PST)
-Date:   Tue, 30 Nov 2021 10:49:57 +0800
-From:   Shawn Guo <shawn.guo@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Georgi Djakov <djakov@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 5/6] dt-bindings: interconnect: Add Qualcomm QCM2290
- NoC support
-Message-ID: <20211130024956.GE10105@dragon>
-References: <20211122085123.21049-1-shawn.guo@linaro.org>
- <20211122085123.21049-6-shawn.guo@linaro.org>
- <YaWLGAvZJ1dZwWNj@robh.at.kernel.org>
+        id S237829AbhK3DYx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Nov 2021 22:24:53 -0500
+Received: from mga06.intel.com ([134.134.136.31]:29829 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237827AbhK3DYw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 29 Nov 2021 22:24:52 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="296937878"
+X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
+   d="scan'208";a="296937878"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 19:21:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
+   d="scan'208";a="458674461"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by orsmga003.jf.intel.com with ESMTP; 29 Nov 2021 19:21:33 -0800
+Date:   Mon, 29 Nov 2021 19:20:29 -0800
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 3/7] thermal: intel: hfi: Minimally initialize the
+ Hardware Feedback Interface
+Message-ID: <20211130032029.GA1371@ranerica-svr.sc.intel.com>
+References: <20211106013312.26698-1-ricardo.neri-calderon@linux.intel.com>
+ <20211106013312.26698-4-ricardo.neri-calderon@linux.intel.com>
+ <CAJZ5v0gd5ZAs4nkbMA4ONt=9ULnrTPqxe_+3M78t9ZC9upEiXw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YaWLGAvZJ1dZwWNj@robh.at.kernel.org>
+In-Reply-To: <CAJZ5v0gd5ZAs4nkbMA4ONt=9ULnrTPqxe_+3M78t9ZC9upEiXw@mail.gmail.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 08:23:20PM -0600, Rob Herring wrote:
-> On Mon, Nov 22, 2021 at 04:51:22PM +0800, Shawn Guo wrote:
-> > Add bindings for Qualcomm QCM2290 Network-On-Chip interconnect devices.
-> > 
-> > Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+On Wed, Nov 24, 2021 at 03:09:20PM +0100, Rafael J. Wysocki wrote:
+> On Sat, Nov 6, 2021 at 2:34 AM Ricardo Neri
+> <ricardo.neri-calderon@linux.intel.com> wrote:
+> >
+> > The Intel Hardware Feedback Interface provides guidance to the operating
+> > system about the performance and energy efficiency capabilities of each
+> > CPU in the system. Capabilities are numbers between 0 and 255 where a
+> > higher number represents a higher capability. For each CPU, energy
+> > efficiency and performance are reported as separate capabilities.
+> >
+> > Hardware computes these capabilities based on the operating conditions of
+> > the system such as power and thermal limits. These capabilities are shared
+> > with the operating system in a table resident in memory. Each package in
+> > the system has its own HFI instance. Every logical CPU in the package is
+> > represented in the table. More than one logical CPUs may be represented in
+> > a single table entry. When the hardware updates the table, it generates a
+> > package-level thermal interrupt.
+> >
+> > The size and format of the HFI table depend on the supported features and
+> > can only be determined at runtime. To minimally initialize the HFI, parse
+> > its features and allocate one instance per package of a data structure with
+> > the necessary parameters to read and navigate individual HFI tables.
+> >
+> > A subsequent changeset will provide per-CPU initialization and interrupt
+> > handling.
+> >
+> > Cc: Andi Kleen <ak@linux.intel.com>
+> > Cc: Aubrey Li <aubrey.li@linux.intel.com>
+> > Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> > Cc: Tim Chen <tim.c.chen@linux.intel.com>
+> > Cc: "Ravi V. Shankar" <ravi.v.shankar@intel.com>
+> > Reviewed-by: Len Brown <len.brown@intel.com>
+> > Co-developed by: Aubrey Li <aubrey.li@linux.intel.com>
+> > Signed-off-by: Aubrey Li <aubrey.li@linux.intel.com>
+> > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 > > ---
-> >  .../bindings/interconnect/qcom,qcm2290.yaml   | 116 ++++++++++++++++++
-> >  .../dt-bindings/interconnect/qcom,qcm2290.h   |  94 ++++++++++++++
-> >  2 files changed, 210 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,qcm2290.yaml
-> >  create mode 100644 include/dt-bindings/interconnect/qcom,qcm2290.h
-> > 
-> > diff --git a/Documentation/devicetree/bindings/interconnect/qcom,qcm2290.yaml b/Documentation/devicetree/bindings/interconnect/qcom,qcm2290.yaml
+> >  drivers/thermal/intel/Kconfig       |  12 +++
+> >  drivers/thermal/intel/Makefile      |   1 +
+> >  drivers/thermal/intel/intel_hfi.c   | 155 ++++++++++++++++++++++++++++
+> >  drivers/thermal/intel/intel_hfi.h   |  34 ++++++
+> >  drivers/thermal/intel/therm_throt.c |   3 +
+> >  5 files changed, 205 insertions(+)
+> >  create mode 100644 drivers/thermal/intel/intel_hfi.c
+> >  create mode 100644 drivers/thermal/intel/intel_hfi.h
+> >
+> > diff --git a/drivers/thermal/intel/Kconfig b/drivers/thermal/intel/Kconfig
+> > index c83ea5d04a1d..d4c6bdcacddb 100644
+> > --- a/drivers/thermal/intel/Kconfig
+> > +++ b/drivers/thermal/intel/Kconfig
+> > @@ -99,3 +99,15 @@ config INTEL_MENLOW
+> >           Intel Menlow platform.
+> >
+> >           If unsure, say N.
+> > +
+> > +config INTEL_HFI
+> > +       bool "Intel Hardware Feedback Interface"
+> > +       depends on CPU_SUP_INTEL
+> > +       depends on SCHED_MC && X86_THERMAL_VECTOR
+> > +       help
+> > +         Select this option to enable the Hardware Feedback Interface. If
+> > +         selected, hardware provides guidance to the operating system on
+> > +         the performance and energy efficiency capabilities of each CPU.
+> > +         These capabilities may change as a result of changes in the operating
+> > +         conditions of the system such power and thermal limits. If selected,
+> > +         the kernel relays updates in CPUs' capabilities to userspace.
+> > diff --git a/drivers/thermal/intel/Makefile b/drivers/thermal/intel/Makefile
+> > index 960b56268b4a..1a80bffcd699 100644
+> > --- a/drivers/thermal/intel/Makefile
+> > +++ b/drivers/thermal/intel/Makefile
+> > @@ -13,3 +13,4 @@ obj-$(CONFIG_INTEL_PCH_THERMAL)       += intel_pch_thermal.o
+> >  obj-$(CONFIG_INTEL_TCC_COOLING)        += intel_tcc_cooling.o
+> >  obj-$(CONFIG_X86_THERMAL_VECTOR) += therm_throt.o
+> >  obj-$(CONFIG_INTEL_MENLOW)     += intel_menlow.o
+> > +obj-$(CONFIG_INTEL_HFI) += intel_hfi.o
+> > diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
 > > new file mode 100644
-> > index 000000000000..fb5e62196d9a
+> > index 000000000000..edfe343507b3
 > > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/interconnect/qcom,qcm2290.yaml
-> > @@ -0,0 +1,116 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/interconnect/qcom,qcm2290.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +++ b/drivers/thermal/intel/intel_hfi.c
+> > @@ -0,0 +1,155 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Hardware Feedback Interface Driver
+> > + *
+> > + * Copyright (c) 2021, Intel Corporation.
+> > + *
+> > + * Authors: Aubrey Li <aubrey.li@linux.intel.com>
+> > + *          Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> > + *
+> > + *
+> > + * The Hardware Feedback Interface provides a performance and energy efficiency
+> > + * capability information for each CPU in the system. Depending on the processor
+> > + * model, hardware may periodically update these capabilities as a result of
+> > + * changes in the operating conditions (e.g., power limits or thermal
+> > + * constraints). On other processor models, there is a single HFI update
+> > + * at boot.
+> > + *
+> > + * This file provides functionality to process HFI updates and relay these
+> > + * updates to userspace.
+> > + */
 > > +
-> > +title: Qualcomm QCM2290 Network-On-Chip interconnect
+> > +#define pr_fmt(fmt)  "intel-hfi: " fmt
 > > +
-> > +maintainers:
-> > +  - Shawn Guo <shawn.guo@linaro.org>
+> > +#include <linux/slab.h>
 > > +
-> > +description: |
-> > +  The Qualcomm QCM2290 interconnect providers support adjusting the
-> > +  bandwidth requirements between the various NoC fabrics.
+> > +#include "intel_hfi.h"
 > > +
-> > +properties:
-> > +  reg:
-> > +    maxItems: 1
+> > +/**
+> > + * struct hfi_cpu_data - HFI capabilities per CPU
+> > + * @perf_cap:          Performance capability
+> > + * @ee_cap:            Energy efficiency capability
+> > + *
+> > + * Capabilities of a logical processor in the HFI table. These capabilities are
+> > + * unitless.
+> > + */
+> > +struct hfi_cpu_data {
+> > +       u8      perf_cap;
+> > +       u8      ee_cap;
+> > +} __packed;
 > > +
-> > +  compatible:
-> > +    enum:
-> > +      - qcom,qcm2290-bimc
-> > +      - qcom,qcm2290-cnoc
-> > +      - qcom,qcm2290-snoc
-> > +      - qcom,qcm2290-qup-virt
-> > +      - qcom,qcm2290-mmrt-virt
-> > +      - qcom,qcm2290-mmnrt-virt
+> > +/**
+> > + * struct hfi_hdr - Header of the HFI table
+> > + * @perf_updated:      Hardware updated performance capabilities
+> > + * @ee_updated:                Hardware updated energy efficiency capabilities
+> > + *
+> > + * Properties of the data in an HFI table.
+> > + */
+> > +struct hfi_hdr {
+> > +       u8 perf_updated;
+> > +       u8 ee_updated;
+> > +} __packed;
 > > +
-> > +  '#interconnect-cells':
-> > +    const: 1
+> > +/**
+> > + * struct hfi_instance - Representation of an HFI instance (i.e., a table)
+> > + * @ts_counter:                Time stamp of the last update of the table
+> > + * @hdr:               Base address of the table header
+> > + * @data:              Base address of the table data
+> > + *
+> > + * A set of parameters to parse and navigate a specific HFI table.
+> > + */
+> > +struct hfi_instance {
+> > +       u64                     *ts_counter;
+> > +       void                    *hdr;
+> > +       void                    *data;
+> > +};
 > > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: bus
-> > +      - const: bus_a
-> > +
-> > +  clocks:
-> > +    items:
-> > +      - description: Bus Clock
-> > +      - description: Bus A Clock
-> > +
-> > +required:
-> > +  - compatible
-> > +  - '#interconnect-cells'
-> > +  - clock-names
-> > +  - clocks
-> > +
-> > +additionalProperties: true
+> > +/**
+> > + * struct hfi_features - Supported HFI features
+> > + * @capabilities:      Bitmask of supported capabilities
+> > + * @nr_table_pages:    Size of the HFI table in 4KB pages
+> > + * @cpu_stride:                Stride size to locate capability data of a logical
+> > + *                     processor within the table (i.e., row stride)
+> > + * @hdr_size:          Size of table header
+> > + * @parsed:            True if HFI features have been parsed
+> > + *
+> > + * Parameters and supported features that are common to all HFI instances
+> > + */
+> > +struct hfi_features {
+> > +       unsigned long   capabilities;
+> > +       unsigned int    nr_table_pages;
+> > +       unsigned int    cpu_stride;
+> > +       unsigned int    hdr_size;
+> > +       bool            parsed;
+
+Thank you very much for your feedback, Rafael!
 > 
-> Nope. You have to define the child nodes.
+> I'm not sure why this field is needed.
+> 
+> It looks like it is only checked by hfi_parse_features() which is only
+> called by intel_hfi_init() which is invoked by
+> thermal_throttle_init_device() which can happen only once if I'm not
+> mistaken.
 
-Thanks for spotting it!  Will fix.
+This is very true. It is not needed. I will remove it.
 
-> Though the 'virt' looks 
-> suspicious. 
+> > +};
+> > +
+> > +static int max_hfi_instances;
+> > +static struct hfi_instance *hfi_instances;
+> > +
+> > +static struct hfi_features hfi_features;
+> > +
+> > +static __init int hfi_parse_features(void)
+> > +{
+> > +       unsigned int nr_capabilities, reg;
+> > +
+> > +       if (!boot_cpu_has(X86_FEATURE_INTEL_HFI))
+> > +               return -ENODEV;
+> > +
+> > +       if (hfi_features.parsed)
+> > +               return 0;
+> > +
+> > +       /*
+> > +        * If we are here we know that CPUID_HFI_LEAF exists. Parse the
+> > +        * supported capabilities and the size of the HFI table.
+> > +        */
+> > +       reg = cpuid_edx(CPUID_HFI_LEAF);
+> > +
+> > +       hfi_features.capabilities = reg & HFI_CAPABILITIES_MASK;
+> > +       if (!(hfi_features.capabilities & HFI_CAPABILITIES_PERFORMANCE)) {
+> > +               pr_err("Performance reporting not supported! Not using HFI\n");
+> 
+> This doesn't need to be pr_err().
 
-They are interconnect providers which do not have a separate QoS
-register space, but do have corresponding bus clocks to scale.  They are
-named as 'virt' by following downstream and qcom,rpmh.yaml binding.
+Should it be a pr_warn() or perhaps pr_info()?
 
-Shawn
+Thanks and BR,
+Ricardo
+
