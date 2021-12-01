@@ -2,47 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA13C464E88
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Dec 2021 14:08:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 231EC464EA2
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Dec 2021 14:14:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349496AbhLANMM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Dec 2021 08:12:12 -0500
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.52]:9000 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349493AbhLANMM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Dec 2021 08:12:12 -0500
+        id S238755AbhLANSQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Dec 2021 08:18:16 -0500
+Received: from mo4-p02-ob.smtp.rzone.de ([81.169.146.171]:19370 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349514AbhLANSC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Dec 2021 08:18:02 -0500
+X-Greylist: delayed 356 seconds by postgrey-1.27 at vger.kernel.org; Wed, 01 Dec 2021 08:18:02 EST
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1638364111;
     s=strato-dkim-0002; d=gerhold.net;
     h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=6Z3g1/mwk77gEhWZbS8sZveQKgDd8C79HMRf2V9exqM=;
-    b=mzoJ827xSG7tLJMh7/svtTNeVbV05vR3GXfbUkj9vhHvGZ1dh2K2Av07ftZBKqp/3v
-    xUuB4P090wp1BKLjJiBuaOxckktKNl+amRWDT7ByfyNd72FvakTU+ZAQB3r4YHlTmeUQ
-    xVIpkDULfWhfxfDP4W9zkMNa6mRayObvaVGAOArxprEee5KCRlWl6xwH1Ri6aWhELj73
-    qTghQ9D9HLMsua9DLeHtodmm+kILitB/H08XaB08+uSNTAT1Sxki32Yt51EFalYX7MW1
-    /le1KwX1HsT8vykAgTMOVv/gWpJ2dG3CP8pypH0rztF5UeD0VDqRpRlllJ94V9CBMt5D
-    AfhQ==
+    bh=JnP/Wl21+4EvDLPKqREmvF/JLem8oluj3pulm3BeyTo=;
+    b=KxB5czbB+L5BgYZcT+1sDJbBdjW3OwmWBLPkgSXAr2YeXJPbacIBlfOLeGesG7ANl9
+    0aXDsfHGO4D/L/3lOxslnui6UiPMcMSQeJNRXaqAx1D1JQ+aty501kl8Yc2OMfYjTl1g
+    4C6fqy0xB3qmIRmbJeJxqQ+cbEkfbhjp6SlcgEQ1SZJ47S1Ura2H7deMB7PVM4JjMm3d
+    CthHD6o9HHVP+EIcyAZGWY8yc6J2aJxl+bsRJaLEtt84KaWDjSxXErhRGdz6rG3XEFb4
+    lr0BR7GK1T4DCuLH8zPnYwsc3q6xloNXxm2uIuxOXi2bEAp8dyUA5+notV9suFr2IHXA
+    YyLg==
 Authentication-Results: strato.com;
     dkim=none
 X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVORvLd4SsytBXQ7UOGqRde+a0fyL2moo2"
 X-RZG-CLASS-ID: mo00
 Received: from droid..
     by smtp.strato.de (RZmta 47.34.10 AUTH)
-    with ESMTPSA id j03bcbxB1D8Ughl
+    with ESMTPSA id j03bcbxB1D8Vghm
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-    Wed, 1 Dec 2021 14:08:30 +0100 (CET)
+    Wed, 1 Dec 2021 14:08:31 +0100 (CET)
 From:   Stephan Gerhold <stephan@gerhold.net>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>
 Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         linux-arm-msm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
         Arnd Bergmann <arnd@arndb.de>, Andy Gross <agross@kernel.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Subject: [PATCH v3 1/4] cpuidle: qcom-spm: Check if any CPU is managed by SPM
-Date:   Wed,  1 Dec 2021 14:05:02 +0100
-Message-Id: <20211201130505.257379-2-stephan@gerhold.net>
+        Stephan Gerhold <stephan@gerhold.net>
+Subject: [PATCH v3 2/4] firmware: qcom: scm: Simplify set_cold/warm_boot_addr()
+Date:   Wed,  1 Dec 2021 14:05:03 +0100
+Message-Id: <20211201130505.257379-3-stephan@gerhold.net>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211201130505.257379-1-stephan@gerhold.net>
 References: <20211201130505.257379-1-stephan@gerhold.net>
@@ -52,77 +52,186 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-At the moment, the "qcom-spm-cpuidle" platform device is always created,
-even if none of the CPUs is actually managed by the SPM. On non-qcom
-platforms this will result in infinite probe-deferral due to the
-failing qcom_scm_is_available() call.
+The qcom_scm_set_cold/warm_boot_addr() implementations have a lot of
+functionality that is actually not used.
 
-To avoid this, look through the CPU DT nodes and check if there is
-actually any CPU managed by a SPM (as indicated by the qcom,saw property).
-It should also be available because e.g. MSM8916 has qcom,saw defined
-but it's typically not enabled with ARM64/PSCI firmwares.
+For example, set_warm_boot_addr() caches the last used entry address
+and skips making the SCM call when the entry address is unchanged.
+But there is actually just a single call of qcom_scm_set_warm_boot_addr()
+in the whole kernel tree, which always configures the entry address
+to cpu_resume_arm().
 
-This is needed in preparation of a follow-up change that calls
-qcom_scm_set_warm_boot_addr() a single time before registering any
-cpuidle drivers. Otherwise this call might be made even on devices
-that have this driver enabled but actually make use of PSCI.
+Simplify this by having a single qcom_scm_set_boot_addr() function
+for both cold and warm boot address. This is totally sufficient for
+the functionality supported in the mainline tree.
 
-Fixes: 60f3692b5f0b ("cpuidle: qcom_spm: Detach state machine from main SPM handling")
-Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Link: https://lore.kernel.org/r/86e3e09f-a8d7-3dff-3fc6-ddd7d30c5d78@samsung.com/
 Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
 ---
-Daniel, would be great if you could ack this patch and PATCH 3/4
-(the cpuidle part) if they look good to you. I think it's easiest if Bjorn
-takes them together with the qcom_scm changes through the qcom tree.
+ drivers/firmware/qcom_scm.c | 105 +++++++++---------------------------
+ drivers/firmware/qcom_scm.h |   1 +
+ 2 files changed, 27 insertions(+), 79 deletions(-)
 
-Marek had an alternative fix for this [1], the difference in this patch is
-that it avoids creating the platform device entirely if no CPU is managed
-by a SPM.
-
-[1]: https://lore.kernel.org/r/20211020120643.28231-1-m.szyprowski@samsung.com/
----
- drivers/cpuidle/cpuidle-qcom-spm.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
-
-diff --git a/drivers/cpuidle/cpuidle-qcom-spm.c b/drivers/cpuidle/cpuidle-qcom-spm.c
-index 01e77913a414..5f27dcc6c110 100644
---- a/drivers/cpuidle/cpuidle-qcom-spm.c
-+++ b/drivers/cpuidle/cpuidle-qcom-spm.c
-@@ -155,6 +155,22 @@ static struct platform_driver spm_cpuidle_driver = {
- 	},
+diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+index 7db8066b19fd..e0fca80bf6fc 100644
+--- a/drivers/firmware/qcom_scm.c
++++ b/drivers/firmware/qcom_scm.c
+@@ -49,26 +49,12 @@ struct qcom_scm_mem_map_info {
+ 	__le64 mem_size;
  };
  
-+static bool __init qcom_spm_find_any_cpu(void)
-+{
-+	struct device_node *cpu_node, *saw_node;
-+
-+	for_each_of_cpu_node(cpu_node) {
-+		saw_node = of_parse_phandle(cpu_node, "qcom,saw", 0);
-+		if (of_device_is_available(saw_node)) {
-+			of_node_put(saw_node);
-+			of_node_put(cpu_node);
-+			return true;
-+		}
-+		of_node_put(saw_node);
-+	}
-+	return false;
-+}
-+
- static int __init qcom_spm_cpuidle_init(void)
- {
- 	struct platform_device *pdev;
-@@ -164,6 +180,10 @@ static int __init qcom_spm_cpuidle_init(void)
- 	if (ret)
- 		return ret;
+-#define QCOM_SCM_FLAG_COLDBOOT_CPU0	0x00
+-#define QCOM_SCM_FLAG_COLDBOOT_CPU1	0x01
+-#define QCOM_SCM_FLAG_COLDBOOT_CPU2	0x08
+-#define QCOM_SCM_FLAG_COLDBOOT_CPU3	0x20
+-
+-#define QCOM_SCM_FLAG_WARMBOOT_CPU0	0x04
+-#define QCOM_SCM_FLAG_WARMBOOT_CPU1	0x02
+-#define QCOM_SCM_FLAG_WARMBOOT_CPU2	0x10
+-#define QCOM_SCM_FLAG_WARMBOOT_CPU3	0x40
+-
+-struct qcom_scm_wb_entry {
+-	int flag;
+-	void *entry;
++/* Each bit configures cold/warm boot address for one of the 4 CPUs */
++static const u8 qcom_scm_cpu_cold_bits[QCOM_SCM_BOOT_MAX_CPUS] = {
++	0, BIT(0), BIT(3), BIT(5)
+ };
+-
+-static struct qcom_scm_wb_entry qcom_scm_wb[] = {
+-	{ .flag = QCOM_SCM_FLAG_WARMBOOT_CPU0 },
+-	{ .flag = QCOM_SCM_FLAG_WARMBOOT_CPU1 },
+-	{ .flag = QCOM_SCM_FLAG_WARMBOOT_CPU2 },
+-	{ .flag = QCOM_SCM_FLAG_WARMBOOT_CPU3 },
++static const u8 qcom_scm_cpu_warm_bits[QCOM_SCM_BOOT_MAX_CPUS] = {
++	BIT(2), BIT(1), BIT(4), BIT(6)
+ };
  
-+	/* Make sure there is actually any CPU managed by the SPM */
-+	if (!qcom_spm_find_any_cpu())
-+		return 0;
-+
- 	pdev = platform_device_register_simple("qcom-spm-cpuidle",
- 					       -1, NULL, 0);
- 	if (IS_ERR(pdev)) {
+ static const char * const qcom_scm_convention_names[] = {
+@@ -260,49 +246,41 @@ static bool __qcom_scm_is_call_available(struct device *dev, u32 svc_id,
+ 	return ret ? false : !!res.result[0];
+ }
+ 
+-/**
+- * qcom_scm_set_warm_boot_addr() - Set the warm boot address for cpus
+- * @entry: Entry point function for the cpus
+- * @cpus: The cpumask of cpus that will use the entry point
+- *
+- * Set the Linux entry point for the SCM to transfer control to when coming
+- * out of a power down. CPU power down may be executed on cpuidle or hotplug.
+- */
+-int qcom_scm_set_warm_boot_addr(void *entry, const cpumask_t *cpus)
++static int qcom_scm_set_boot_addr(void *entry, const cpumask_t *cpus,
++				  const u8 *cpu_bits)
+ {
+-	int ret;
+-	int flags = 0;
+ 	int cpu;
++	unsigned int flags = 0;
+ 	struct qcom_scm_desc desc = {
+ 		.svc = QCOM_SCM_SVC_BOOT,
+ 		.cmd = QCOM_SCM_BOOT_SET_ADDR,
+ 		.arginfo = QCOM_SCM_ARGS(2),
++		.owner = ARM_SMCCC_OWNER_SIP,
+ 	};
+ 
+-	/*
+-	 * Reassign only if we are switching from hotplug entry point
+-	 * to cpuidle entry point or vice versa.
+-	 */
+ 	for_each_cpu(cpu, cpus) {
+-		if (entry == qcom_scm_wb[cpu].entry)
+-			continue;
+-		flags |= qcom_scm_wb[cpu].flag;
++		if (cpu >= QCOM_SCM_BOOT_MAX_CPUS)
++			return -EINVAL;
++		flags |= cpu_bits[cpu];
+ 	}
+ 
+-	/* No change in entry function */
+-	if (!flags)
+-		return 0;
+-
+ 	desc.args[0] = flags;
+ 	desc.args[1] = virt_to_phys(entry);
+ 
+-	ret = qcom_scm_call(__scm->dev, &desc, NULL);
+-	if (!ret) {
+-		for_each_cpu(cpu, cpus)
+-			qcom_scm_wb[cpu].entry = entry;
+-	}
++	return qcom_scm_call_atomic(__scm ? __scm->dev : NULL, &desc, NULL);
++}
+ 
+-	return ret;
++/**
++ * qcom_scm_set_warm_boot_addr() - Set the warm boot address for cpus
++ * @entry: Entry point function for the cpus
++ * @cpus: The cpumask of cpus that will use the entry point
++ *
++ * Set the Linux entry point for the SCM to transfer control to when coming
++ * out of a power down. CPU power down may be executed on cpuidle or hotplug.
++ */
++int qcom_scm_set_warm_boot_addr(void *entry, const cpumask_t *cpus)
++{
++	return qcom_scm_set_boot_addr(entry, cpus, qcom_scm_cpu_warm_bits);
+ }
+ EXPORT_SYMBOL(qcom_scm_set_warm_boot_addr);
+ 
+@@ -310,41 +288,10 @@ EXPORT_SYMBOL(qcom_scm_set_warm_boot_addr);
+  * qcom_scm_set_cold_boot_addr() - Set the cold boot address for cpus
+  * @entry: Entry point function for the cpus
+  * @cpus: The cpumask of cpus that will use the entry point
+- *
+- * Set the cold boot address of the cpus. Any cpu outside the supported
+- * range would be removed from the cpu present mask.
+  */
+ int qcom_scm_set_cold_boot_addr(void *entry, const cpumask_t *cpus)
+ {
+-	int flags = 0;
+-	int cpu;
+-	int scm_cb_flags[] = {
+-		QCOM_SCM_FLAG_COLDBOOT_CPU0,
+-		QCOM_SCM_FLAG_COLDBOOT_CPU1,
+-		QCOM_SCM_FLAG_COLDBOOT_CPU2,
+-		QCOM_SCM_FLAG_COLDBOOT_CPU3,
+-	};
+-	struct qcom_scm_desc desc = {
+-		.svc = QCOM_SCM_SVC_BOOT,
+-		.cmd = QCOM_SCM_BOOT_SET_ADDR,
+-		.arginfo = QCOM_SCM_ARGS(2),
+-		.owner = ARM_SMCCC_OWNER_SIP,
+-	};
+-
+-	if (!cpus || cpumask_empty(cpus))
+-		return -EINVAL;
+-
+-	for_each_cpu(cpu, cpus) {
+-		if (cpu < ARRAY_SIZE(scm_cb_flags))
+-			flags |= scm_cb_flags[cpu];
+-		else
+-			set_cpu_present(cpu, false);
+-	}
+-
+-	desc.args[0] = flags;
+-	desc.args[1] = virt_to_phys(entry);
+-
+-	return qcom_scm_call_atomic(__scm ? __scm->dev : NULL, &desc, NULL);
++	return qcom_scm_set_boot_addr(entry, cpus, qcom_scm_cpu_cold_bits);
+ }
+ EXPORT_SYMBOL(qcom_scm_set_cold_boot_addr);
+ 
+diff --git a/drivers/firmware/qcom_scm.h b/drivers/firmware/qcom_scm.h
+index d92156ceb3ac..fd7d2a5f3e70 100644
+--- a/drivers/firmware/qcom_scm.h
++++ b/drivers/firmware/qcom_scm.h
+@@ -80,6 +80,7 @@ extern int scm_legacy_call(struct device *dev, const struct qcom_scm_desc *desc,
+ #define QCOM_SCM_BOOT_SET_DLOAD_MODE	0x10
+ #define QCOM_SCM_BOOT_SET_REMOTE_STATE	0x0a
+ #define QCOM_SCM_FLUSH_FLAG_MASK	0x3
++#define QCOM_SCM_BOOT_MAX_CPUS		4
+ 
+ #define QCOM_SCM_SVC_PIL		0x02
+ #define QCOM_SCM_PIL_PAS_INIT_IMAGE	0x01
 -- 
 2.34.1
 
