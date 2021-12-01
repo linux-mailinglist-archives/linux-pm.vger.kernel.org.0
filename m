@@ -2,65 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 340F2465439
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Dec 2021 18:47:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F6946547E
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Dec 2021 18:58:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231442AbhLARut (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Dec 2021 12:50:49 -0500
-Received: from mail-ot1-f47.google.com ([209.85.210.47]:38427 "EHLO
-        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232097AbhLARur (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Dec 2021 12:50:47 -0500
-Received: by mail-ot1-f47.google.com with SMTP id n104-20020a9d2071000000b005799790cf0bso36327230ota.5
-        for <linux-pm@vger.kernel.org>; Wed, 01 Dec 2021 09:47:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=s4hP6IUEN212XufAWm335Ms/+849s7av17sQ+wPJ4r4=;
-        b=ejxObpIYAlAyC7KDkH4AzRbrUu+rZmjBqxg5Clbvxb/N4NBF/UwTr+yQu+fiHDp/W6
-         6QIol7ySWqCeEkkH9dloVmuSkZv0zXmj6WKqf13KiOaVBWDGClhtMNdb+lVRtX0TCNO7
-         14CLQVvBfyHX1henqgwkEOsD6KRQOmV3QpVRokfaxkDJmFvST6AhhkAqgvnj+Yrm64/r
-         TNmEqMSWn2bP5sUtqZKWyfuNulE8WbRBcJ0SgklMhvz7Tzup734WDf5Vh1p6sdxd3Zoi
-         tcrHcTKo8EXHhINN5YLlZxmE/3JBDcrKgPqOoSEZt6ZOGtqt2JgzIcUYeK/B8MB3sydC
-         Ukqw==
-X-Gm-Message-State: AOAM5326QR0EPGzKIQs5JyO/l1xo4YCsa6mH1mv9gi0D02GvAoSFwv2u
-        NNWwXPBNOZMq17boCWwI6KVJjGQ4J0KWIyd3aFQM5IxR
-X-Google-Smtp-Source: ABdhPJzrQbOVWhQb9wehJnlqz2h6eddy0wrx4J8wYApB9IYqLYYYjB2L832emuxbJ+GPtlKixkKkRnsf41dSYgf9jTk=
-X-Received: by 2002:a05:6830:1e57:: with SMTP id e23mr6952361otj.16.1638380845748;
- Wed, 01 Dec 2021 09:47:25 -0800 (PST)
+        id S1351980AbhLASBU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Dec 2021 13:01:20 -0500
+Received: from relay6-d.mail.gandi.net ([217.70.183.198]:47819 "EHLO
+        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352134AbhLASA7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Dec 2021 13:00:59 -0500
+X-Greylist: delayed 28431 seconds by postgrey-1.27 at vger.kernel.org; Wed, 01 Dec 2021 13:00:59 EST
+Received: (Authenticated sender: foss@0leil.net)
+        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id E8660C0007;
+        Wed,  1 Dec 2021 17:57:31 +0000 (UTC)
+Date:   Wed, 1 Dec 2021 18:57:28 +0100
+From:   Quentin Schulz <foss@0leil.net>
+To:     Evgeny Boger <boger@wirenboard.com>
+Cc:     Chen-Yu Tsai <wens@csie.org>, linux-pm@vger.kernel.org,
+        Sebastian Reichel <sre@kernel.org>,
+        Hermann Lauer <Hermann.Lauer@iwr.uni-heidelberg.de>
+Subject: Re: [PATCH] power: supply: axp20x_battery: set charging voltage via
+ DT
+Message-ID: <20211201175728.ja7a5iilm23vyblr@fiqs>
+References: <20211119175740.405446-1-boger@wirenboard.com>
 MIME-Version: 1.0
-References: <BF9F1078-8789-42F6-92B8-CFC4A0A7895C@getmailspring.com>
-In-Reply-To: <BF9F1078-8789-42F6-92B8-CFC4A0A7895C@getmailspring.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 1 Dec 2021 18:47:14 +0100
-Message-ID: <CAJZ5v0gPCc++kkt-=zhmXWBnXcqtwm2OM1PgC2YeOhkkCjkYEg@mail.gmail.com>
-Subject: Re: Thinkbook 13s-IWL issues
-To:     Florian Dollinger <dollinger.florian@gmx.de>
-Cc:     linux-pm <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211119175740.405446-1-boger@wirenboard.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Dec 1, 2021 at 4:56 PM Florian Dollinger
-<dollinger.florian@gmx.de> wrote:
->
-> I am facing a rather weird issue on my Thinkbook 13s-IWL laptop. On an
-> arbitrary basis the device is trying to reach the suspend mode, but
-> after turning black the display it does not, as one would expect, turn
-> off the keyboard lights and starts flashing the power button. Instead it
-> reboots the system after a while. I am using the lastest UEFI version btw.
->
-> Anyway, I was able to find out the following:
->
-> * `pm-suspend` works flawlessly, I have tried a hundred times now and it
-> never crashed
-> * `systemctl suspend` instead, is crashing my system every once in a while
->
-> I would like to dig deeper there but I thought both commands do the same thing?
-> Looks like both are trying to reach the s2idle mode, right?
+Hi Evgeny,
 
-I would think so, but you may need to double check.
+On Fri, Nov 19, 2021 at 08:57:40PM +0300, Evgeny Boger wrote:
+> The driver should use maximum constant charge voltage property
+> from battery description provided by power supply core by default
+> instead of fixed 4.2V. This value can be later changed at runtime.
+> 
+> The battery description is normally set via device tree, as described
+> in Documentation/devicetree/bindings/power/supply/battery.yaml
+> 
+> Signed-off-by: Evgeny Boger <boger@wirenboard.com>
+> ---
+>  drivers/power/supply/axp20x_battery.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/power/supply/axp20x_battery.c b/drivers/power/supply/axp20x_battery.c
+> index 18a9db0df4b1..83c5ffa24bd1 100644
+> --- a/drivers/power/supply/axp20x_battery.c
+> +++ b/drivers/power/supply/axp20x_battery.c
+> @@ -617,6 +617,12 @@ static int axp20x_power_probe(struct platform_device *pdev)
+>  	if (!power_supply_get_battery_info(axp20x_batt->batt, &info)) {
+>  		int vmin = info.voltage_min_design_uv;
+>  		int ccc = info.constant_charge_current_max_ua;
+> +		int vcv = info.constant_charge_voltage_max_uv;
+> +
+> +		if (vcv > 0 && axp20x_batt->data->set_max_voltage(axp20x_batt,
+> +								  vcv))
+> +			dev_err(&pdev->dev,
+> +				"couldn't set charge constant voltage from DT");
+>  
 
-What's there in /sys/power/mem_sleep on that system?
+The issue here is that only specific values are possible. e.g. for
+axp20x: 4.1 4.15 4.2V, axp22x 4.1 4.2V, there's nothing in-between.
+
+I don't think the battery node should know what the PMIC is capable of
+outputting.
+
+Would it make sense to find the closest value to the one appropriate for
+the battery that is supported by the PMIC (lesser or equal to the one
+specified by the battery obviously)?
+
+Otherwise, I would imagine this function would fail most of the time
+because it's not the exact voltage supported by the PMIC?
+
+Completely off-topic, but I also see that batteries now support
+specifying which technology they use so it should be safe to raise the
+maximum for some technologies above what we currently support in the
+driver. e.g. axp22x supports 4.22 and 4.24V too but they aren't
+selectable at the moment.
+
+Cheers,
+Quentin
