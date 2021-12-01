@@ -2,85 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46E6E465114
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Dec 2021 16:13:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22F75465152
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Dec 2021 16:19:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234234AbhLAPQa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Dec 2021 10:16:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55654 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237867AbhLAPQ3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Dec 2021 10:16:29 -0500
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37038C061574
-        for <linux-pm@vger.kernel.org>; Wed,  1 Dec 2021 07:13:08 -0800 (PST)
-Received: by mail-ot1-x32c.google.com with SMTP id v15-20020a9d604f000000b0056cdb373b82so35568257otj.7
-        for <linux-pm@vger.kernel.org>; Wed, 01 Dec 2021 07:13:08 -0800 (PST)
+        id S243428AbhLAPWd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Dec 2021 10:22:33 -0500
+Received: from mx1.tq-group.com ([93.104.207.81]:35915 "EHLO mx1.tq-group.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1350464AbhLAPWb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 1 Dec 2021 10:22:31 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=/TJQig8oXy6tycDnyj0TV6wADrRCQncxZIkXq353b8s=;
-        b=bJtsabtm8utUQlm1L/OXiWPn6QbVRzwGpsePeCFDAkBHtCI50LMa/76QoOMyQaUJ9U
-         /L6bgeyF7+4pZzg/T82qJHh3jKgn9Dm7yrD+5B1mdDvd/SaD/q9A9A0AZev1k01cXjnT
-         1Y7kFX6srovS5cyAiVrlomx4vzqT6hIdcqkdgUlV91/NUDiZ5eqTgYNpTWM+nMZu504a
-         p+/xck6enG8asZJ9+lbP5Hd6kZgPrkOnzmOdHsyhSQJPn3l1PY829xM/5FsRKzB818bS
-         4zM/fQexufqG7TaSKF82dPGwbJoyw22z8px2cHMYy1Ayl0IyrHO5O4SYGiaGqTzzSy4E
-         dh5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/TJQig8oXy6tycDnyj0TV6wADrRCQncxZIkXq353b8s=;
-        b=0P3B50jP2YDHLPDiccj15m3lAgnCfOAKL/1M39bDr/AuQpJYnhI+rFPe2VM6alpgSn
-         YTqtk8q4bWhAcAIvmaNZKFSy7OzsG+HGpUDl+j1BB1uVI3rWrD0tr96lgtcDEy+3bUF5
-         Kr39ZPK0uFolCc4cxdKPvv8Qc8QfQqAKbcbQoT9uibLdvm/jUzgMyJihECEMDAC36vve
-         E5FibN73AKSJLZMRXhjaiQdgxhDtBUehp2/NCckazId9jspT0xysjA5qdT5Lw1rGwxcW
-         Pd9AE4L++/VipoFldQMB5o4kUsUJotBz2UH9sxcbw3/wn8nb3c5sD4z9SUTigYir1GKw
-         uyuw==
-X-Gm-Message-State: AOAM530X7JkbL9ggO2p381+BXN5ZyAOLKcdFcX37xlHyBPr2lnKfW2Js
-        Ar/dK+uZcvamJbAfFyhN9hhS5Q==
-X-Google-Smtp-Source: ABdhPJxTHKffZfky0PlNyrW4xJRCnJFdiTB35Rhb5VWa8XaX25nM+RziFDi+fyGK6UlR39SuJ+9wZA==
-X-Received: by 2002:a05:6830:12c3:: with SMTP id a3mr6245067otq.24.1638371587529;
-        Wed, 01 Dec 2021 07:13:07 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id be12sm33933oib.50.2021.12.01.07.13.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 07:13:07 -0800 (PST)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     cgel.zte@gmail.com, nks@flawful.org
-Cc:     linux-arm-msm@vger.kernel.org,
-        Changcheng Deng <deng.changcheng@zte.com.cn>,
-        agross@kernel.org, Zeal Robot <zealci@zte.com.cn>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: (subset) [PATCH] PM: AVS: Use div64_ul instead of do_div
-Date:   Wed,  1 Dec 2021 09:12:54 -0600
-Message-Id: <163837153033.1905338.11827661967999278324.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211125014311.45942-1-deng.changcheng@zte.com.cn>
-References: <20211125014311.45942-1-deng.changcheng@zte.com.cn>
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1638371950; x=1669907950;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=zGVC8wVHSH9HAuJ7vjpVU4Ne9Eidx6zcHD43QCrtk7A=;
+  b=BG01s2bFDUExfiezt5U6CSTe9SLqf+IxmAsPtmI051Uf56QVjKBID6Cw
+   4P0cbwu/TDogWjawr9r2A7zk/yNxf08m4fjBYT4fqC7b5iHpISWV3++ON
+   ZioN9y1IMySrDUE/soHgdzP5HnVyNQia6G2aOR1hpvK2+ekJlPvlUBorr
+   nr3JiKO1k0YNZ7ATUr8TAVFEGlXAVT1zXT4ixC6YHHnLk/xXEfYHiq7Sa
+   PRUHciSbnrlO9X8I43gFo2Y5PCXljsRsJFDQu3SGOPCRSTqEDS19d4ZJ4
+   9xxfW3F5AR3oaokVWVHnOhYBNUMumTneQf4JV/k99y0n6Jn1l+T19kbbO
+   A==;
+X-IronPort-AV: E=Sophos;i="5.87,278,1631570400"; 
+   d="scan'208";a="20789565"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 01 Dec 2021 16:19:06 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Wed, 01 Dec 2021 16:19:06 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Wed, 01 Dec 2021 16:19:06 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1638371946; x=1669907946;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=zGVC8wVHSH9HAuJ7vjpVU4Ne9Eidx6zcHD43QCrtk7A=;
+  b=azSSEmaimOIG/US1xH/JXkBUM4vrbqy1M05LiiRCScvRBVuQTAbSrS1X
+   +of6hOrf3rvXXSbRjkt0P83JnxXS5dRfNVtkaCe80GstFtTLd/PikM8Qv
+   8d4xndZlt6mCAFv6io7SHeot6gtV0zt1XH+r0lom6lE/k6dyjGLk5DD+Y
+   qMqguOBCMv2hUfhfP/z5fQ6hkSbIMCub61ODUGIYVCn4gelAZWFYNFiZa
+   ka83UPiXp2LZWUF3W4J1QDlw32vUSPIzNbD5cVMfYzgjnYMZHLX6mN4fc
+   sYy1DFqHOs5lPFuhdSRrm48R7qqSOzXU2c3fE8KAny38Caru4L4pYj8b7
+   g==;
+X-IronPort-AV: E=Sophos;i="5.87,278,1631570400"; 
+   d="scan'208";a="20789564"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 01 Dec 2021 16:19:06 +0100
+Received: from steina-w (unknown [10.123.49.12])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 1B46E280065;
+        Wed,  1 Dec 2021 16:19:06 +0100 (CET)
+Message-ID: <3e01ffc0c938cd4f952c36051805d132af820afe.camel@ew.tq-group.com>
+Subject: Re: (EXT) Re: (EXT) Re: [PATCH 1/1] thermal: imx8mm: enable ADC
+ when enabling monitor
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>
+Cc:     Paul Gerber <Paul.Gerber@tq-group.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Date:   Wed, 01 Dec 2021 16:19:03 +0100
+In-Reply-To: <f3248b92-c6db-c3a3-f26a-65a2fd272d4c@linaro.org>
+References: <20211122114225.196280-1-alexander.stein@ew.tq-group.com>
+         <2786750e-0556-a1b8-e464-30de05ce7cf2@linaro.org>
+         <ea1af2b2091c0cab822c9ef5810db6936365d7ef.camel@ew.tq-group.com>
+         <f3248b92-c6db-c3a3-f26a-65a2fd272d4c@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 25 Nov 2021 01:43:11 +0000, cgel.zte@gmail.com wrote:
-> From: Changcheng Deng <deng.changcheng@zte.com.cn>
+Am Mittwoch, dem 01.12.2021 um 15:52 +0100 schrieb Daniel Lezcano:
+> On 01/12/2021 15:45, Alexander Stein wrote:
+> > Am Dienstag, dem 30.11.2021 um 15:49 +0100 schrieb Daniel Lezcano:
+> > > On 22/11/2021 12:42, Alexander Stein wrote:
+> > > > From: Paul Gerber <
+> > > > Paul.Gerber@tq-group.com
+> > > > 
+> > > > 
+> > > > The i.MX 8MP has a ADC_PD bit in the TMU_TER register that
+> > > > controls
+> > > > the
+> > > > operating mode of the ADC:
+> > > > * 0 means normal operating mode
+> > > > * 1 means power down mode
+> > > > 
+> > > > When enabling/disabling the TMU, the ADC operating mode must be
+> > > > set
+> > > > accordingly.
+> > > > 
+> > > > i.MX 8M Mini & Nano are lacking this bit.
+> > > > 
+> > > > Signed-off-by: Paul Gerber <
+> > > > Paul.Gerber@tq-group.com
+> > > > 
+> > > > 
+> > > > Signed-off-by: Alexander Stein <
+> > > > alexander.stein@ew.tq-group.com
+> > > > 
+> > > > 
+> > > > ---
+> > > > Often this bit is set already by the bootloader, but in case
+> > > > this
+> > > > is not
+> > > > done, the file /sys/class/thermal/thermal_zone0/temp will
+> > > > always
+> > > > return
+> > > > -EAGAIN.
+> > > 
+> > > Does it deserve a Fixes tag?
+> > 
+> > The more I think about it, the more I'm inclined to add one.
+> > Please tell me if I shall iterate v2 adding a Fixes tag (or other
+> > changes)
 > 
-> do_div() does a 64-by-32 division. Here the divisor is an unsigned long
-> which on some platforms is 64 bit wide. So use div64_ul instead of do_div
-> to avoid a possible truncation.
-> 
-> 
-> [...]
+> It is not necessary to send a V2 as the commit log will have a link
+> to
+> this thread. Just answer with the Fixes tag, I'll add it myself to
+> the
+> change log.
 
-Applied, thanks!
+Thanks.
 
-[1/1] PM: AVS: Use div64_ul instead of do_div
-      commit: e07a98b28decb21f7bdbcb05bf2acc58ea03b1e4
+Fixes: 2b8f1f0337c5 ("thermal: imx8mm: Add i.MX8MP support")
+
+imx8mm_tmu_enable() was introduced in this commit and the fix is about
+i.MX8MP as well, so this seems even more reasonable to me.
 
 Best regards,
--- 
-Bjorn Andersson <bjorn.andersson@linaro.org>
+Alexander
+
+
