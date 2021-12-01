@@ -2,219 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3BF24651FB
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Dec 2021 16:46:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE3DC46522D
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Dec 2021 16:56:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351135AbhLAPtb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Dec 2021 10:49:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35256 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351103AbhLAPtQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Dec 2021 10:49:16 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FAA8C06174A
-        for <linux-pm@vger.kernel.org>; Wed,  1 Dec 2021 07:45:48 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id t26so63979709lfk.9
-        for <linux-pm@vger.kernel.org>; Wed, 01 Dec 2021 07:45:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=wirenboard-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=OE61jU/zTchzfCMCFpCpoIPbZYfQ/f0z3uvdC3qRv3Y=;
-        b=jsCkKYayWuWpBldra8IM1e7mKcm43aeTjAm/Tv5v73w2g0eb7/keT9HN+yMTx9wb+s
-         4zSE2NyRFOSZEsj5j4HGN0kmZGbV4zHlrFHEZp6LST5FO4vuQvK9qqq/yhvDplL52DgV
-         g9CMbaQakPWgDox/9WkR9d3dlOh6voZO2vvrNCF3JsazB8brY4Nk81uq1NdXNH1SSLyy
-         Fxhgd7qSiKG5MwzmGVkIYI+d4bp37alwgbM1u3LBcHHHK5G6gn65xJ/EqXpunw0Hu4Qn
-         i0l7PDdnb/9ddafGZSQKU8ROgjZ4Hy1ZL/lLNNZ5aqc6X5nNIOP5cpgAipKENW0OE30X
-         I1ZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=OE61jU/zTchzfCMCFpCpoIPbZYfQ/f0z3uvdC3qRv3Y=;
-        b=EyHjAFgBqA64MpmmQz1Ft3oPL+WRMGIhyIH1ehNRLXeMZ+8E26kk9TComKSJZMKAx8
-         JeARgYMjvbKG5fbhvPf2ti1RQr6PB8/cptbOpXUwKToCv4+uQ684CQ0f6O3FGRzpqBSq
-         FFJ5OvpTLccIT9tOZLYX+ku+9BW/zBVE4rv3U1USOYkvz4G+By8cRepY+giH72kc+V4D
-         qzYFlrBfu8hHYOauMk80D1N42vcCZIGCd3rebPz0Ag/vPZ3O8PDC7LnuuVCTZwAMSQq8
-         uKjjuhnfWQpGrxOGStTcxd5kNafdpb+WzWvRasqqiy4P0UV1wEV3w/zhpULNaoB91kNE
-         +wAQ==
-X-Gm-Message-State: AOAM5334p77Ikzmz79kdR9yqtSsoU8cb2NKveCpYiHdDzEbkHv6GleYv
-        9wdUUNXPtBYZgnyB5vMcMANVab9XRIbBng==
-X-Google-Smtp-Source: ABdhPJxkv1Hau/UVnCEPDjYxLIx6b4nKUZ188bkpdJ5MvnRMwpUT8DFScEjiy54Z4Nf+5BkeSe/jpA==
-X-Received: by 2002:a19:f10a:: with SMTP id p10mr6502817lfh.487.1638373545727;
-        Wed, 01 Dec 2021 07:45:45 -0800 (PST)
-Received: from [192.168.0.145] (81.5.119.169.dhcp.mipt-telecom.ru. [81.5.119.169])
-        by smtp.googlemail.com with ESMTPSA id n17sm18689ljg.128.2021.12.01.07.45.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Dec 2021 07:45:45 -0800 (PST)
-Subject: Re: [PATCH 2/2] dt-bindings: iio: adc: document TS voltage in AXP
- PMICs
-To:     Quentin Schulz <foss+kernel@0leil.net>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Maxime Ripard <maxime@cerno.tech>, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-sunxi@lists.linux.dev, Sebastian Reichel <sre@kernel.org>,
-        linux-pm@vger.kernel.org
-References: <20211118141233.247907-1-boger@wirenboard.com>
- <20211118141233.247907-3-boger@wirenboard.com>
- <20211122104915.zism6uadgwxjz5d2@gilmour>
- <d1a18116-e198-1b26-d73a-36fbf31aaa81@wirenboard.com>
- <35630e89-4988-a6a9-b801-0e9e44419684@sholland.org>
- <206c2a66-42b9-7e07-66c3-6007b010c996@wirenboard.com>
- <20211201110241.kts5caycdmzqtp3i@fiqs>
-From:   Evgeny Boger <boger@wirenboard.com>
-Message-ID: <4fd167ed-d5dc-358a-00f5-6590f4c20a68@wirenboard.com>
-Date:   Wed, 1 Dec 2021 18:45:44 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S1350846AbhLAP7w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Dec 2021 10:59:52 -0500
+Received: from mout.gmx.net ([212.227.17.21]:51745 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1350986AbhLAP7w (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 1 Dec 2021 10:59:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1638374190;
+        bh=qQizQUwSZXDhRMLfD37oULKezH6m0NaTVPJYxHw4yGY=;
+        h=X-UI-Sender-Class:Date:From:To:Subject;
+        b=AOcHbkonrhE0ifToUjQzRkswOMJSWXfBZeIpD4tDakQn6SeaQqlMt0NIsw32Cgwhj
+         yZofJm+/Ygqzjgq3+NuKvoYrONN4Gq9IRVF/GpIukXOH9af7fLbwdFB3oPqF3MdGtY
+         PaGJ/28b+ySpGiHXL54p0GLqKg2pdgv2Wmr/9jkQ=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from flodo-tb13 ([37.5.248.227]) by mail.gmx.net (mrgmx104
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MWRVb-1n76AQ2pRr-00XpzL for
+ <linux-pm@vger.kernel.org>; Wed, 01 Dec 2021 16:56:29 +0100
+Date:   Wed, 1 Dec 2021 16:56:28 +0100
+From:   Florian Dollinger <dollinger.florian@gmx.de>
+To:     linux-pm <linux-pm@vger.kernel.org>
+Message-ID: <BF9F1078-8789-42F6-92B8-CFC4A0A7895C@getmailspring.com>
+Subject: Thinkbook 13s-IWL issues
+X-Mailer: Mailspring
 MIME-Version: 1.0
-In-Reply-To: <20211201110241.kts5caycdmzqtp3i@fiqs>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-GB
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+X-Provags-ID: V03:K1:Bo2/8ZBQO59wpxc2fJucySy1PnqHw0f4CcUeIvDRkO0uoU2IYrV
+ minHdqSfuMMGoU1E+uH7DYxC6cD11XMRzYwKQRbjKE3/Nibqg/rfCNCx4M6o8NHFfQaFqWK
+ aLUTiWBFeLaoDub+abXXSBfTLaieobY+VmFmiTrBokJvWAxcWXRfdQLGU5aJsLW3eNsA27q
+ c1imIfx0Sa3EcrUv4EJTQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:/55+eTMtZTc=:sKndgKpPjMC3IZmSRC/X0O
+ RpreRPmdOuPGRS0SBXpwL2JswgPvg3ZuWJeLaRdTzuZCMMh/SrOaQPYwVrbTj1BlI7evoDRKP
+ UJzTIMllKNLYe1o+h760E+qE6HoLVFEifpzasjjbR9omvAfE382AUvYENe8o9CvibdElQjofJ
+ zHAgsG/JWKm2KEiHMgBCUqHMtHEGJrYp+0M9dmo1EaiA2xyojsjn0qm2k4LXGjZXuuBC6lpIm
+ NHeSHQMHGxtXCpFRX7jQsUoG9sO5KYBl2Kxwkax6PH2SE+gzRUkMqsvOAkGwBbiwcjCcbxbjM
+ agTwaNpGsSOPT/80o45C/IhdESDodMsG4BiIAJt3bPTKCzx0eIFpxc2mEUauvRMT/pm2/q5pz
+ Xf7gfROK5Jf2ISjwGAOxl+4w2G59r3TcIBHJbVUznryOxAEPFJmteide78BMqrycm8r52egKW
+ 8Q7mgFwdZEaxqiynysbsRy2AO2pFJdWtfn/K2MWuHC91Q7fP0vkop9mgQdBfPaanJbbj29Wyb
+ mjPjstmT6hqIJcaztIjxuxLalhGTEF6nLYpX255c3yRw4i47OMZ8mG8PgcRWxUItH2m2NL//n
+ dFW/Y4M1z1aK5duVL/0gv9dAOYTqPkUgVwLXN2ig+kTdrq5vbn4pIA0ta+0vk5uTCIsi1DlyI
+ YhFTq13ukib2/Zt4It/D2rE+4FSds+Re0+67F+J18mByNGVeuM76LJxB1mzgRbihtRUpeXQ+/
+ SD8XmIMWeojJ6aDnYLzW03jLqyzImv0pE0Mmh0sYHXEmO8DKbUeXiMUr5cXf2hVcRwIvbIZp1
+ YrA5oRzh8DDsnOmiSSejq34v+Y6kiMs5hIsy/W/Rve7BStdKTWJm08lz67CzBNWMu/vHL+RVK
+ 133+E4qWLlPNehLM+2GmU7kTK5wZzrPutwERcxCoxPZkl24xjdaZYOc3krUldZ3svt5Soq0Gb
+ DjSjgKzUlyuh2ctZHINv2V0x8jMA+bkpvq6LZ5hoM5N4yfIHl078w4qo0iQMZKvvEAPH95FBX
+ evo2XoIoqxCAT3fg+u5Etg4LvrfbvPRjv2a3RusjHBEs03DoJR0v7EdU+yX6wbw7xUJaGczdW
+ 18F7zyrprb7wXo=
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Quentin,
+I am facing a rather weird issue on my Thinkbook 13s-IWL laptop. On an
+arbitrary basis the device is trying to reach the suspend mode, but
+after turning black the display it does not, as one would expect, turn
+off the keyboard lights and starts flashing the power button. Instead it
+reboots the system after a while. I am using the lastest UEFI version btw.
 
-thank you for the feedback!
+Anyway, I was able to find out the following:
 
-01.12.2021 14:02, Quentin Schulz пишет:
-> Hi all,
->
-> On Tue, Nov 30, 2021 at 02:58:23AM +0300, Evgeny Boger wrote:
->> (added linux-pm@ list and maintainers)
->>
->>
->> Actually, on second though, I think it might be doable to add voltage to
->> temperature conversion to this driver.
->>
->> I think since the NTC thermistor belongs to the battery, not charger, the
->> thermistor should be described in monitored battery node.
->> So I propose to extend battery node (power/supply/battery.yaml) by adding
->> something like:
->>
->> thermistor-resistance-temp-table = <25 10000>, <35 6530>, ...;
->>
->> This driver will then interpolate between points to report temperature.
->>
-> I disagree, I think it does not make much sense. This is already done by
-> the NTC thermistor driver.
-> The battery "subsystem" already provides operating-range-celsius and
-> alert-celsius properties for that.
-> Since the battery is linked to the AXP, all we need is to be able to ask
-> the NTC thermistor driver to do the conversion from temperature to
-> voltage of the two voltage values we get from the battery and use the
-> result as threshold in the AXP registers.
-> I wouldn't want to have the extrapolation done in two different places.
->
-> I can see two ways of specifying that interation:
->
-> battery -------------------> axp --------------------> ntc
-> 	min/max °C			request °C to V
-> 				 <--------------------
-> 					response V
->
-> This however would require a phandle in the AXP to the NTC thermistor
-> driver and I don't feel like it's that good of an idea?
->
-> Another way would be to use the battery as a proxy for the voltage
-> request to ntc.
->
-> 		     battery --------------------> axp
-> 				min/max °C
-> ntc <--------------- 	     <--------------------
-> 	request °C to V		request °C to V
->      --------------->	     --------------------->
-> 	response V		response V
->
-> This would require a phandle to the ntc thermistor in the battery node,
-> which kind of makes sense to me. And since the AXP already has knowledge
-> of the battery, it can request the appropriate value to the battery
-> which then proxies it to and back from the ntc.
->
-> Forgive me for my poor ASCII drawing skills :) hopefully it's good
-> enough to convey my thoughts.
-I see quite a few problems with NTC driver approach.
+* `pm-suspend` works flawlessly, I have tried a hundred times now and it
+never crashed
+* `systemctl suspend` instead, is crashing my system every once in a while
 
-The problem is, I don't know any suitable subsystem for that. NTC is not 
-a subsystem,
-NTC in kernel is a mere hwmon driver, and also is quite an old one.
+I would like to dig deeper there but I thought both commands do the same thing?
+Looks like both are trying to reach the s2idle mode, right?
 
-Also, we already have iio-afe, which, in a sense, already does pretty 
-much the same as NTC
-hwmon driver. Maybe using iio-afe is the better idea?
-But then, I think that's a very complicated interaction for a simple 
-interpolation between points.
-
-Another thing is, in our design we ended up using not a simple 10k NTC 
-thermistor, but a 10k NTC is series with fixed 2.2k.
-The reason why it's needed is that AXP NTC voltage thresholds are fixed 
-at startup time, and if we somehow have to deal
-with default thresholds to get different behaviour.  So the 
-resistance-temperature curve in our case is different from any standard
-NTC. Speaking of "standard" NTC, our supplier has like 15 different 
-models for *each* resistance, which slightly differ in
-resistance-temperature curve. Adding them all into a driver would be 
-strange.
-
-Personally, I think better approach with NTCs is to place the 
-resistance-temperature tables for bunch of models to .dtsi
-files, describe the thermistor node in DT and then make all drivers 
-(hwmon NTC, iio-afe, this one) to use this data in the same way
-it's done with monitored-battery node.
-
-
->
->> We can also adjust PMIC voltage thresholds based on this table and
->> "alert-celsius" property already described in battery.yaml.
->>
->> I think the driver should report raw TS voltage as well, because the TS pin
->> can also be used as general-purpose ADC pin.
->>
-> Since the ntc anyway needs this raw TS voltage and that patch does that,
-> I think it's fine. Specifically, re-using this pin as a general-purpose
-> ADC won't impact the current patchset.
->
-> What we'll need is to have a pinctrl driver for the few pins in the AXP
-> which have multiple functions. But that's outside of the scope of this
-> patchset.
-Should it really be pinctrl, though? Unfortunately the choice will alter 
-other
-functions as well. Say, if we use TS pin in GPADC mode, we'll have to 
-disable
-temperature thresholds and current injection.
->
-> Regarding the injected current, I don't have enough knowledge in
-> electronics to understand how this will change things in the thermistor
-> since in the NTC thermistor driver there's no logic related to the
-> actual current being injected. Maybe it is related to some operating
-> value required by the NTC? I can't say unfortunately.
-It's basically Ohm's law, so it's not related to the NTC thermistor itself,
-but more to the voltage across NTC that the AXP can measure.
-Say, if maximum measurable voltage is 3.3V, than the maximum measurable 
-resistance
-at the given current would be 3.3V/80uA = 41 kOhm. In case of 10k NTC 
-it's about -5C or so.
-
-But again, one can't really alter startup voltage thresholds of the AXP. 
-And also, regardless of
-settings, at least AXP221s will completely disable TS-based protection 
-if voltage on TS pin is below 0.2V.
-So at the end, unfortunately, there are not so many options when it 
-comes to the thermistor and the injection current.
->
-> We can continue this discussion but I don't think this should block this
-> patch as I don't see the outcome of this discussion change anything in
-> this patchset.
->
-> Reviewed-by: Quentin Schulz <foss+kernel@0leil.net>
->
-> Thanks!
-> Quentin
+Thanks, Florian Dollinger
 
