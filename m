@@ -2,22 +2,19 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 999D4464B4D
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Dec 2021 11:10:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51AA8464C49
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Dec 2021 12:02:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242540AbhLAKNq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Dec 2021 05:13:46 -0500
-Received: from mslow1.mail.gandi.net ([217.70.178.240]:56303 "EHLO
-        mslow1.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237392AbhLAKNq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Dec 2021 05:13:46 -0500
-Received: from relay6-d.mail.gandi.net (unknown [217.70.183.198])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id D3A48D1424;
-        Wed,  1 Dec 2021 10:04:04 +0000 (UTC)
+        id S1346106AbhLALGI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Dec 2021 06:06:08 -0500
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:47045 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229696AbhLALGI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Dec 2021 06:06:08 -0500
 Received: (Authenticated sender: foss@0leil.net)
-        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 19582C0015;
-        Wed,  1 Dec 2021 10:03:35 +0000 (UTC)
-Date:   Wed, 1 Dec 2021 11:03:33 +0100
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 529F11C0015;
+        Wed,  1 Dec 2021 11:02:43 +0000 (UTC)
+Date:   Wed, 1 Dec 2021 12:02:41 +0100
 From:   Quentin Schulz <foss+kernel@0leil.net>
 To:     Evgeny Boger <boger@wirenboard.com>
 Cc:     Samuel Holland <samuel@sholland.org>,
@@ -30,7 +27,7 @@ Cc:     Samuel Holland <samuel@sholland.org>,
         linux-pm@vger.kernel.org
 Subject: Re: [PATCH 2/2] dt-bindings: iio: adc: document TS voltage in AXP
  PMICs
-Message-ID: <20211201100333.lwvxi5aluibm4iue@fiqs>
+Message-ID: <20211201110241.kts5caycdmzqtp3i@fiqs>
 References: <20211118141233.247907-1-boger@wirenboard.com>
  <20211118141233.247907-3-boger@wirenboard.com>
  <20211122104915.zism6uadgwxjz5d2@gilmour>
@@ -46,7 +43,7 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Evgeny,
+Hi all,
 
 On Tue, Nov 30, 2021 at 02:58:23AM +0300, Evgeny Boger wrote:
 > (added linux-pm@ list and maintainers)
@@ -57,11 +54,6 @@ On Tue, Nov 30, 2021 at 02:58:23AM +0300, Evgeny Boger wrote:
 > 
 > I think since the NTC thermistor belongs to the battery, not charger, the
 > thermistor should be described in monitored battery node.
-
-Then we would duplicate the code in ntc thermistor driver and battery
-subsystem (or simple-battery driver I assume), instead of reusing the
-ntc thermistor driver.
-
 > So I propose to extend battery node (power/supply/battery.yaml) by adding
 > something like:
 > 
@@ -70,45 +62,43 @@ ntc thermistor driver.
 > This driver will then interpolate between points to report temperature.
 > 
 
-Not sure this makes sense, that's the point of the ntc thermistor driver
-which does all of this already AFAICT.
+I disagree, I think it does not make much sense. This is already done by
+the NTC thermistor driver.
+The battery "subsystem" already provides operating-range-celsius and
+alert-celsius properties for that.
+Since the battery is linked to the AXP, all we need is to be able to ask
+the NTC thermistor driver to do the conversion from temperature to
+voltage of the two voltage values we get from the battery and use the
+result as threshold in the AXP registers.
+I wouldn't want to have the extrapolation done in two different places.
 
-The battery node already supports operating-range-celsius and
-alert-celsius. This driver should read that and then ask the ntc
-thermistor driver what's the voltage of the thermistor associated with
-this temperature and then set the register to this value.
+I can see two ways of specifying that interation:
 
-What's missing in the ntc thermistor driver and/or its subsystem is the
-ability to request a specific temperature to voltage conversion,
-unrelated to the current value of the NTC thermistor.
+battery -------------------> axp --------------------> ntc
+	min/max °C			request °C to V
+				 <--------------------
+					response V
 
-In my head I picture the following:
+This however would require a phandle in the AXP to the NTC thermistor
+driver and I don't feel like it's that good of an idea?
 
-battery node ----------> axp -------------------------------> ntc
-             max/min °C		request °C to V for max/min
-			     <-------------------------------
-				V for max/min °C
+Another way would be to use the battery as a proxy for the voltage
+request to ntc.
 
-The issue I see in this is that the axp needs to have a phandle to the
-ntc thermistor... which does not make much sense from DTS point of view
-IMO.
-
-Now.. we could also have the following instead by extending the battery
-subsystem:
-
-		battery node --------------> axp
-				max/min °C
-ntc <----------		     <-------------
+		     battery --------------------> axp
+				min/max °C
+ntc <--------------- 	     <--------------------
 	request °C to V		request °C to V
-    ---------->		     -------------->
-	V for max/min °C	V for max/min °C
+    --------------->	     --------------------->
+	response V		response V
 
-which means the battery driver/susbystem would have a phandle to the ntc
-thermistor and proxy the °C to V conversionr equest from axp to ntc and
-the answer back to the axp.
+This would require a phandle to the ntc thermistor in the battery node,
+which kind of makes sense to me. And since the AXP already has knowledge
+of the battery, it can request the appropriate value to the battery
+which then proxies it to and back from the ntc.
 
-Obviously, ntc would still be a consumer of axp ts iio channel to
-report the battery temp to userspace.
+Forgive me for my poor ASCII drawing skills :) hopefully it's good
+enough to convey my thoughts.
 
 > We can also adjust PMIC voltage thresholds based on this table and
 > "alert-celsius" property already described in battery.yaml.
@@ -117,28 +107,25 @@ report the battery temp to userspace.
 > can also be used as general-purpose ADC pin.
 > 
 
-Raw TS voltage is still reported with your first patch so that's fine.
+Since the ntc anyway needs this raw TS voltage and that patch does that,
+I think it's fine. Specifically, re-using this pin as a general-purpose
+ADC won't impact the current patchset.
 
-We'd need to create a pinctrl driver for the AXP to handle the few pins
-with multiple fonctions, but it's outside of the scope of this patch
-series :)
+What we'll need is to have a pinctrl driver for the few pins in the AXP
+which have multiple functions. But that's outside of the scope of this
+patchset.
 
 Regarding the injected current, I don't have enough knowledge in
-electronics to understand what exactly would happen to the NTC
-thermistor here since it seems the current is not used anywhere in the
-formula to get the ohm of the resistor which is then converted to the
-actual temperature. At least in the ntc thermistor driver. Also not sure
-where this injected current should be declared in the device tree, is it
-a limitation of the NTC thermistor (some kind of operating range?) which
-should be propagated to the AXP to make it inject more/less current
-depending on the NTC thermistor?
+electronics to understand how this will change things in the thermistor
+since in the NTC thermistor driver there's no logic related to the
+actual current being injected. Maybe it is related to some operating
+value required by the NTC? I can't say unfortunately.
 
-This patch is fine in itself since it's required for doing anything more
-that is currently discussed in this thread. We can continue discussing
-this but I don't think it is preventing this patch to continue its
-normal life and be merged :)
+We can continue this discussion but I don't think this should block this
+patch as I don't see the outcome of this discussion change anything in
+this patchset.
 
 Reviewed-by: Quentin Schulz <foss+kernel@0leil.net>
 
-Cheers,
+Thanks!
 Quentin
