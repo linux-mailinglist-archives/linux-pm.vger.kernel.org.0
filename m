@@ -2,160 +2,301 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D31C14659CE
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Dec 2021 00:28:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51085465ABD
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Dec 2021 01:23:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244944AbhLAXb0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Dec 2021 18:31:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57868 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240449AbhLAXb0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Dec 2021 18:31:26 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723B1C061574
-        for <linux-pm@vger.kernel.org>; Wed,  1 Dec 2021 15:28:04 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id r26so66970959lfn.8
-        for <linux-pm@vger.kernel.org>; Wed, 01 Dec 2021 15:28:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=wirenboard-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=LeyEF1zcSCFvkWnHQ8wu4JHy/Zqkfo33MAcKgNTAK/E=;
-        b=aVuWwiQyh7ZSoUp8jnZSxwKMrHJDz5nRlYjzLpGtAxPbv7e/Zz3j8CYORWQLxnh/yI
-         C9zABzlOJcTqCW78rw0dEOW/9DeIWMWYrN3vk8al+OoyqGmPdppWj0Hi0zc33DNzLA+z
-         ZJq6xjMO4E3CL11N0J1ZK+iErbHrMlmuEm4zOaW3C/0LnAzKpz5+oGfMvhmsEbGJ8hkw
-         8UAbjLmrLeMwgQT/SMZRXoSWaux3YL6gRJ7LtH9LNgdE/RxZ6z8kX8jDPs7oBztoFftt
-         mD7Q8RAXSyXO4scUHLNAk9ea3XH+0nNy78RNgMnY0LD8tX9UqvJVwi3pwlT1FXPB7gpx
-         fDrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=LeyEF1zcSCFvkWnHQ8wu4JHy/Zqkfo33MAcKgNTAK/E=;
-        b=DkcSaUZ+Htmhz5qnG7SNlcQuO5R1YV4IiR8shsFwMEc0uV8cdMHj3MxyLNYtQSXSBg
-         bk4sJkimkbnOu1RoJvkasXe8jWRqJpcRrL9YcGCunXP1bTAtG/U1ngwuWJ4adMTeeNM0
-         nFfbno4BZB3AVAUeQgRBj+1LcqiYGYvvppZt8/1Rfyr0efn56PE+PQ1PfxvpOFPsynQP
-         7buFwDGcM1QigKGc1eXrfJFOXHZ8IfB7UfBi9mL39PsBa4CXexa9Ep2WT8xqyQuHmMas
-         H94InVgyHx35HMyZQv4gcxZi619vYrJdyi5k5f1qtXop6v/4Y2J94M8fjSZFy74cpFu6
-         rmEw==
-X-Gm-Message-State: AOAM530aPRosu89cu+JIy8E1F7thMIKaHY/55TtuzTompxIbe7suUipo
-        scxMw1PBVRM5bGlqMhsp3nNsXhZ2wBbOtA==
-X-Google-Smtp-Source: ABdhPJxxCsdpj9pYR1QKLPUT8OMOyNtB7lCq6wQZcopIKtYNcV2e0DBUxlD/1ZxYfuXqIhI4XqTieQ==
-X-Received: by 2002:a05:6512:3d10:: with SMTP id d16mr8451558lfv.78.1638401282667;
-        Wed, 01 Dec 2021 15:28:02 -0800 (PST)
-Received: from [192.168.1.213] (81.5.99.121.dhcp.mipt-telecom.ru. [81.5.99.121])
-        by smtp.googlemail.com with ESMTPSA id u23sm131850lfo.35.2021.12.01.15.28.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Dec 2021 15:28:02 -0800 (PST)
-Subject: Re: [PATCH] power: supply: axp20x_battery: set charging voltage via
- DT
-To:     Quentin Schulz <foss@0leil.net>
-Cc:     Chen-Yu Tsai <wens@csie.org>, linux-pm@vger.kernel.org,
-        Sebastian Reichel <sre@kernel.org>,
-        Hermann Lauer <Hermann.Lauer@iwr.uni-heidelberg.de>
-References: <20211119175740.405446-1-boger@wirenboard.com>
- <20211201175728.ja7a5iilm23vyblr@fiqs>
-From:   Evgeny Boger <boger@wirenboard.com>
-Message-ID: <5bb5f0a6-17c5-ea1a-dbed-82c7d1317640@wirenboard.com>
-Date:   Thu, 2 Dec 2021 02:28:01 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S244225AbhLBA04 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Dec 2021 19:26:56 -0500
+Received: from esa2.hgst.iphmx.com ([68.232.143.124]:37396 "EHLO
+        esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354459AbhLBA0A (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Dec 2021 19:26:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1638404558; x=1669940558;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=dnRwlM2g208wpzcQ1fHoMh5ABTusv5pFo5cTKx90whg=;
+  b=kncdNOxYf208rZVjZrcZg30qfZKMFiEZv/74daCnx8/yXDiXpyYFuqrS
+   huHp1zfQneudO79BLpDrQNEAKFbZO5fneZT5Zmb4P3+Dn7/3MClL/97/Q
+   5NbjuLuipqQF2jVM75WkWJFNNsv0N+cnV+d5AQLsHKJNxphqjxdbv9Ftz
+   f/SkE8AA81kPEGAHuu4EEy5+2cqabiWxUb92Ziw5bgmayDUTHTFxrBcH6
+   pP+BFiKPnPk6DD0g1pXVLk/uoyaSb+vetEW3yMFdeiNqAmrwGt0rBVslo
+   GVJMCfPkrfVtQLYiNhl/lpK5smauJfTq1ILmV8YfeqKsXd2H+KBPoVwKB
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.87,280,1631548800"; 
+   d="scan'208";a="291192492"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 02 Dec 2021 08:11:51 +0800
+IronPort-SDR: ZHEwQSl4PePNCIY/hOl2cKuzPkmQ6ehHumgcBxoxi3XK8nQ7YUzWHDzV72H8IOmSlxBbWYu6Pi
+ HtvrC9kAi01aaVBRBNgJHGIC+kCaanKgAEu+K0tKhLV2tMZonUIK8DqqQVjvz5UzLD7zwbNugc
+ qWszMp8lbVETNUFSSKt+aPAuSF+qQKPbgheVxg/RpNUFAiy/GNltc+4WWjgiAl/7QxT5+M2kr4
+ XCYgTj5c1bEGjd4nmmDvSPU/r5uumJHzUrUSA4YW3V6MFXEPkGEnFT4JKHVPn4tFi+g8ZQaIl0
+ TMcJaHsTu1gY3vh5YFQj0TMC
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 15:46:34 -0800
+IronPort-SDR: PgLlZ0Aag+aDCJ+wa6iot+CAR9E2yBmUSR+MU5J6TPONNcqrR6/H4oB02qX2PrZv/XD41LJp7S
+ DdaLeF8eayyHp2aK/9y+G9lQoXK0z5gi1xWdLoHWSba5pHsfKZ1V7/AVjk6W2TmHihzRGp0Kn3
+ RxS42Ek7vzBXGXvaFWoUdoTCaxROiJXIOPPylGkOSvciBgDEHE1wCPEwUavbS5rqjiZS0cEv74
+ wRmO76xa42wEX1VLMrSSwvsmINFWbYQCZ8FFlydPzNkHGH779ApfPD+AZzxT9YvD+n0g0jAKH8
+ h18=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 16:11:50 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4J4GHn3XNdz1RtVn
+        for <linux-pm@vger.kernel.org>; Wed,  1 Dec 2021 15:58:13 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1638403091; x=1640995092; bh=dnRwlM2g208wpzcQ1fHoMh5ABTusv5pFo5c
+        TKx90whg=; b=Smg8tZ+TvJgoqFK7osdFry7pC21BK7S3yr15mJQjwB/VT9nSMYr
+        7iIvDU9l8vFruHz8R0A0SVuly46XttI5hP7+kfC5nbW0dAzvHaZXyz4ZDsmfd3qB
+        D0Ph8lgqh06/wHt+lro2VpDTfjRFCGMvRHXyhklU38zB6iPfugAApaDMw29xaH6x
+        Pocm/LRy1wZ1rAlLDlzn9u7axyibnyRJDEalhSezz+2Wqhp77ULG7HlRPACEG+Q7
+        fSVIANXzSmOc7Dv7ZW8aIyMLJPlNNQjybxvXCKMmPtm/7CIV298EqCCQ+BEWWo6h
+        LcJe0ZNh1pNmkNb9fwaGI9bsqmnIs91czqw==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id UN94xf4UbPXx for <linux-pm@vger.kernel.org>;
+        Wed,  1 Dec 2021 15:58:11 -0800 (PST)
+Received: from [10.225.54.48] (unknown [10.225.54.48])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4J4GHc4pQzz1RtVl;
+        Wed,  1 Dec 2021 15:58:04 -0800 (PST)
+Message-ID: <0cbaad0b-bab0-177e-48ef-5c4f6dd4391a@opensource.wdc.com>
+Date:   Thu, 2 Dec 2021 08:58:03 +0900
 MIME-Version: 1.0
-In-Reply-To: <20211201175728.ja7a5iilm23vyblr@fiqs>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-GB
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.3.2
+Subject: Re: [PATCH 12/14] dt-bindings: ata: Convert Broadcom SATA to YAML
+Content-Language: en-US
+To:     Florian Fainelli <f.fainelli@gmail.com>, devicetree@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Gregory Fong <gregory.0xf0@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Al Cooper <alcooperx@gmail.com>,
+        Doug Berger <opendmb@gmail.com>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:MULTIMEDIA CARD (MMC), SECURE DIGITAL (SD) AND..." 
+        <linux-mmc@vger.kernel.org>,
+        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
+References: <20211201205110.41656-1-f.fainelli@gmail.com>
+ <20211201205110.41656-13-f.fainelli@gmail.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital
+In-Reply-To: <20211201205110.41656-13-f.fainelli@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Quentin,
-again, thank you for the feedback!
+On 2021/12/02 5:51, Florian Fainelli wrote:
+> Convert the Broadcom SATA3 AHCI controller Device Tree binding to YAML
+> to help with validation.
+> 
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
+>  .../bindings/ata/brcm,sata-brcm.txt           | 45 ---------
+>  .../bindings/ata/brcm,sata-brcm.yaml          | 91 +++++++++++++++++++
+>  2 files changed, 91 insertions(+), 45 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/ata/brcm,sata-brcm.txt
+>  create mode 100644 Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/ata/brcm,sata-brcm.txt b/Documentation/devicetree/bindings/ata/brcm,sata-brcm.txt
+> deleted file mode 100644
+> index b9ae4ce4a0a0..000000000000
+> --- a/Documentation/devicetree/bindings/ata/brcm,sata-brcm.txt
+> +++ /dev/null
+> @@ -1,45 +0,0 @@
+> -* Broadcom SATA3 AHCI Controller
+> -
+> -SATA nodes are defined to describe on-chip Serial ATA controllers.
+> -Each SATA controller should have its own node.
+> -
+> -Required properties:
+> -- compatible         : should be one or more of
+> -			"brcm,bcm7216-ahci"
+> -			"brcm,bcm7425-ahci"
+> -			"brcm,bcm7445-ahci"
+> -			"brcm,bcm-nsp-ahci"
+> -			"brcm,sata3-ahci"
+> -			"brcm,bcm63138-ahci"
+> -- reg                : register mappings for AHCI and SATA_TOP_CTRL
+> -- reg-names          : "ahci" and "top-ctrl"
+> -- interrupts         : interrupt mapping for SATA IRQ
+> -
+> -Optional properties:
+> -
+> -- reset: for "brcm,bcm7216-ahci" must be a valid reset phandle
+> -  pointing to the RESCAL reset controller provider node.
+> -- reset-names: for "brcm,bcm7216-ahci", must be "rescal".
+> -
+> -Also see ahci-platform.txt.
+> -
+> -Example:
+> -
+> -	sata@f045a000 {
+> -		compatible = "brcm,bcm7445-ahci", "brcm,sata3-ahci";
+> -		reg = <0xf045a000 0xa9c>, <0xf0458040 0x24>;
+> -		reg-names = "ahci", "top-ctrl";
+> -		interrupts = <0 30 0>;
+> -		#address-cells = <1>;
+> -		#size-cells = <0>;
+> -
+> -		sata0: sata-port@0 {
+> -			reg = <0>;
+> -			phys = <&sata_phy 0>;
+> -		};
+> -
+> -		sata1: sata-port@1 {
+> -			reg = <1>;
+> -			phys = <&sata_phy 1>;
+> -		};
+> -	};
+> diff --git a/Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml b/Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
+> new file mode 100644
+> index 000000000000..4098d56872ae
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
+> @@ -0,0 +1,91 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/ata/brcm,sata-brcm.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Broadcom SATA3 AHCI Controller
+> +
+> +description:
+> +  SATA nodes are defined to describe on-chip Serial ATA controllers.
+> +  Each SATA controller should have its own node.
+> +
+> +maintainers:
+> +  - Florian Fainelli <f.fainelli@gmail.com>
+> +
+> +allOf:
+> +  - $ref: sata-common.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - brcm,bcm7216-ahci
+> +          - const: brcm,sata3-ahci
+> +      - items:
+> +          - enum:
+> +              - brcm,bcm7445-ahci
+> +          - const: brcm,sata3-ahci
+> +      - items:
+> +          - enum:
+> +              - brcm,bcm7425-ahci
+> +          - const: brcm,sata3-ahci
+> +      - items:
+> +          - const: brcm,bcm-nsp-ahci
+> +      - items:
+> +          - const: brcm,bcm63138-ahci
+> +
+> +  reg:
+> +    minItems: 2
+> +    maxItems: 2
+> +
+> +  reg-names:
+> +    items:
+> +      - const: ahci
+> +      - const: top-ctrl
+> +
+> +  interrupts: true
+> +
+> +if:
+> +  properties:
+> +    compatible:
+> +      contains:
+> +        enum:
+> +          - brcm,bcm7216-ahci
+> +then:
+> +  properties:
+> +    resets: true
+> +    reset-names:
+> +      items:
+> +        - const: rescal
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - "#address-cells"
+> +  - "#size-cells"
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    sata@f045a000 {
+> +        compatible = "brcm,bcm7445-ahci", "brcm,sata3-ahci";
+> +        reg = <0xf045a000 0xa9c>, <0xf0458040 0x24>;
+> +        reg-names = "ahci", "top-ctrl";
+> +        interrupts = <0 30 0>;
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        sata0: sata-port@0 {
+> +            reg = <0>;
+> +            phys = <&sata_phy 0>;
+> +        };
+> +
+> +        sata1: sata-port@1 {
+> +            reg = <1>;
+> +            phys = <&sata_phy 1>;
+> +        };
+> +    };
+> 
 
-01.12.2021 20:57, Quentin Schulz пишет:
-> Hi Evgeny,
->
-> On Fri, Nov 19, 2021 at 08:57:40PM +0300, Evgeny Boger wrote:
->> The driver should use maximum constant charge voltage property
->> from battery description provided by power supply core by default
->> instead of fixed 4.2V. This value can be later changed at runtime.
->>
->> The battery description is normally set via device tree, as described
->> in Documentation/devicetree/bindings/power/supply/battery.yaml
->>
->> Signed-off-by: Evgeny Boger <boger@wirenboard.com>
->> ---
->>   drivers/power/supply/axp20x_battery.c | 6 ++++++
->>   1 file changed, 6 insertions(+)
->>
->> diff --git a/drivers/power/supply/axp20x_battery.c b/drivers/power/supply/axp20x_battery.c
->> index 18a9db0df4b1..83c5ffa24bd1 100644
->> --- a/drivers/power/supply/axp20x_battery.c
->> +++ b/drivers/power/supply/axp20x_battery.c
->> @@ -617,6 +617,12 @@ static int axp20x_power_probe(struct platform_device *pdev)
->>   	if (!power_supply_get_battery_info(axp20x_batt->batt, &info)) {
->>   		int vmin = info.voltage_min_design_uv;
->>   		int ccc = info.constant_charge_current_max_ua;
->> +		int vcv = info.constant_charge_voltage_max_uv;
->> +
->> +		if (vcv > 0 && axp20x_batt->data->set_max_voltage(axp20x_batt,
->> +								  vcv))
->> +			dev_err(&pdev->dev,
->> +				"couldn't set charge constant voltage from DT");
->>   
-> The issue here is that only specific values are possible. e.g. for
-> axp20x: 4.1 4.15 4.2V, axp22x 4.1 4.2V, there's nothing in-between.
->
-> I don't think the battery node should know what the PMIC is capable of
-> outputting.
-Well, in a sense it should. I mean a hardware designer for sure would 
-design a board in a way
-that a battery and PMIC are compatible. So it would be strange to 
-declare an unsupported charging
-voltage in battery node.
->
-> Would it make sense to find the closest value to the one appropriate for
-> the battery that is supported by the PMIC (lesser or equal to the one
-> specified by the battery obviously)?
-but yes, I think it makes sense. Probably the same should work for 
-userspace too.
-By the way, I've just realized that the driver probably uses 
-POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN
-incorrectly to set charging voltage. I think it should be 
-POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE
-instead?
+Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
->
-> Otherwise, I would imagine this function would fail most of the time
-> because it's not the exact voltage supported by the PMIC?
->
-> Completely off-topic, but I also see that batteries now support
-> specifying which technology they use so it should be safe to raise the
-> maximum for some technologies above what we currently support in the
-> driver. e.g. axp22x supports 4.22 and 4.24V too but they aren't
-> selectable at the moment.
-well, they are all lithium-ion. Even the ones with 4.35V are 
-lithium-ion, just a better quality ones.
-And then, on the other hand, at wirenboard we limit the charging voltage 
-to 4.1V on perfectly 4.2V-capable battery
-to prolong the battery lifetime in exchange for some available capacity.
+Rob,
 
-So I think not supporting voltages higher than 4.2V in PMIC is a bit 
-strange. I think it's better not to allow setting
-the voltage higher than battery maximum via userspace, but it should be 
-allowed to set whatever voltage the board
-designer want via the device tree.
-
->
-> Cheers,
-> Quentin
-
+Will take this through your tree ?
 
 -- 
-С уважением,
-     Евгений Богер / Evgeny Boger
-     CTO, Wiren Board Team
-     https://wirenboard.com/ru
-     +7 495 150 66 19 (# 33)
-
+Damien Le Moal
+Western Digital Research
