@@ -2,255 +2,199 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E27F2464A82
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Dec 2021 10:24:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F6D4464AC2
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Dec 2021 10:36:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348178AbhLAJ1p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Dec 2021 04:27:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60408 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348176AbhLAJ1n (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Dec 2021 04:27:43 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F29E3C061748
-        for <linux-pm@vger.kernel.org>; Wed,  1 Dec 2021 01:24:22 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id z8so46846805ljz.9
-        for <linux-pm@vger.kernel.org>; Wed, 01 Dec 2021 01:24:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gM/Yc8EtoWbZo84DxZuXQbB3MA0/ZTzJxXksQrQpskM=;
-        b=p0dwxIjabirFBsABSCPUCdkrccuD7bMLwdD4o3pXTKDnOL7itEU05FMhOJ4P5Cczbe
-         YMkOAsr9pm1L5ZEBq+GRMkfQLJzMFQXHpx1gn+FfC+Yby0x6O0xJlQJYXkJEpX6/gLsB
-         uw39A6zuQFLKWeMvuPdZNv2n5KmluPqgqBeDrNiAYIQXVO7rN9+cM48vaEaL8yHmZXq4
-         KwW70P8SK2mKjC4fimwiq+5Trt4X1Wr5+Vq/wxB9Y69CmhKn/AKmqFK7w3FYGM2t/gRz
-         GMh4iKOHldz8EIESw9VNJonRILxub3nUP3bqzCm1ruMA32xgMG2bbxgcFH9PpCElxsda
-         dYHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gM/Yc8EtoWbZo84DxZuXQbB3MA0/ZTzJxXksQrQpskM=;
-        b=BFsCmbzBk6p2P8raAnTJQTFmUMQtSt0GZCHreEoq2+i8y7jUS9giAXbvODQtPKwReG
-         QdmiPkn/pcCpY1kJowIYiQaBtNU6jAQa6o6Z0Pu2pst+chEGDx9zseaaqGTIEEq9l8+V
-         XvHoCZvkMQIoznCQYjn/Y2mNQ7xYUSGwCbdIVuqnhjF7/ffyS3Kt4eSlluEu4kxiW71Y
-         21x+EgZo3uGcaYVw5YdPYKUuHzQOKcNqGFFn6BpLJvPawDd0Df9zHn4j7WBeuneEA4W5
-         pha193jfuZ4QoFQf8WFBni7jM0UlX1MOGI9yD0xX7wdLo5cFGz05pUt6DSSUpsTNaxe0
-         HSEw==
-X-Gm-Message-State: AOAM530if3AtyR5tIn+EO0fwXDTx9ih5WBiLs+IqgHv2DDFqkH3ciet8
-        bJKB1k73IbQbzx4wTySG1gjQSth9r2blwzGZaPGoGQ==
-X-Google-Smtp-Source: ABdhPJxdaXt+eWtKhQK6uoSvHNyf0JqYJR7quIKd3xMMBh2XBIfik0f8Mkp/IN428brlJT7cIaRLCtFx1oF74H8xIBc=
-X-Received: by 2002:a2e:93c4:: with SMTP id p4mr4553125ljh.367.1638350661085;
- Wed, 01 Dec 2021 01:24:21 -0800 (PST)
-MIME-Version: 1.0
-References: <20211126181500.3404129-1-daniel.lezcano@linaro.org>
-In-Reply-To: <20211126181500.3404129-1-daniel.lezcano@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 1 Dec 2021 10:23:44 +0100
-Message-ID: <CAPDyKFoZo4p93JZUm4CUqO4DfrL8_YbyomqBzC59C0eTwa60CA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/5] dt-bindings: Powerzone new bindings
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     robh@kernel.org, arnd@linaro.org, heiko@sntech.de,
-        rjw@rjwysocki.net, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        lukasz.luba@arm.com, Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>
+        id S1348151AbhLAJjv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Dec 2021 04:39:51 -0500
+Received: from comms.puri.sm ([159.203.221.185]:38332 "EHLO comms.puri.sm"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237675AbhLAJju (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 1 Dec 2021 04:39:50 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id 06F3FE1252;
+        Wed,  1 Dec 2021 01:36:00 -0800 (PST)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id u2HVHb4u-Iec; Wed,  1 Dec 2021 01:35:59 -0800 (PST)
+Message-ID: <f18b5b0329e8963f277014e38aaf887245f0e1a7.camel@puri.sm>
+Subject: Re: [RFC 06/19] devfreq: imx8m-ddrc: Add late system sleep PM ops
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     Abel Vesa <abel.vesa@nxp.com>
+Cc:     Rob Herring <robh@kernel.org>, Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Georgi Djakov <djakov@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-serial@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Date:   Wed, 01 Dec 2021 10:35:51 +0100
+In-Reply-To: <YaaENEqlQbW8W6PI@ryzen>
+References: <1631554694-9599-1-git-send-email-abel.vesa@nxp.com>
+         <1631554694-9599-7-git-send-email-abel.vesa@nxp.com>
+         <e9a3a64dcfec858e612037199df7627b77ececd9.camel@puri.sm>
+         <YaaENEqlQbW8W6PI@ryzen>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 26 Nov 2021 at 19:15, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->
-> The proposed bindings are describing a set of powerzones.
->
-> A power zone is the logical name for a component which is capable of
-> power capping and where we can measure the power consumption.
->
-> A power zone can aggregate several power zones in terms of power
-> measurement and power limitations. That allows to apply power
-> constraint to a group of components and let the system balance the
-> allocated power in order to comply with the constraint.
->
-> The ARM System Control and Management Interface (SCMI) can provide a
-> power zone description.
->
-> The powerzone semantic is also found on the Intel platform with the
-> RAPL register.
->
-> The Linux kernel powercap framework deals with the powerzones:
->
-> https://www.kernel.org/doc/html/latest/power/powercap/powercap.html
->
-> The powerzone can also represent a group of children powerzones, hence
-> the description can result on a hierarchy. Such hierarchy already
-> exists with the hardware or can be represented an computed from the
-> kernel.
->
-> The hierarchical description was initially proposed but not desired
-> given there are other descriptions like the power domain proposing
-> almost the same description.
->
-> https://lore.kernel.org/all/CAL_JsqLuLcHj7525tTUmh7pLqe7T2j6UcznyhV7joS8ipyb_VQ@mail.gmail.com/
->
-> The description gives the power constraint dependencies to apply on a
-> specific group of logically or physically aggregated devices. They do
-> not represent the physical location or the power domains of the SoC
-> even if the description could be similar.
->
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->    V1: Initial post
->    V2:
->      - Added pattern properties and stick to powerzone-*
->      - Added required property compatible and powerzone-cells
->      - Added additionnal property
->      - Added compatible
->      - Renamed to 'powerzones'
->      - Added missing powerzone-cells to the topmost node
->      - Fixed errors reported by 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> ---
->  .../devicetree/bindings/power/powerzones.yaml | 109 ++++++++++++++++++
->  1 file changed, 109 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/powerzones.yaml
->
-> diff --git a/Documentation/devicetree/bindings/power/powerzones.yaml b/Documentation/devicetree/bindings/power/powerzones.yaml
-> new file mode 100644
-> index 000000000000..6e63bbc750c6
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/powerzones.yaml
-> @@ -0,0 +1,109 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/powerzones.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Power zones description
-> +
-> +maintainers:
-> +  - Daniel Lezcano <daniel.lezcano@linaro.org>
-> +
-> +description: |+
-> +
-> +  A System on Chip contains a multitude of active components and each
-> +  of them is a source of heat. Even if a temperature sensor is not
-> +  present, a source of heat can be controlled by acting on the
-> +  consumed power via different techniques.
-> +
-> +  A powerzone describes a component or a group of components where we
-> +  can control the maximum power consumption. For instance, a group of
-> +  CPUs via the performance domain, a LCD screen via the brightness,
-> +  etc ...
-> +
-> +  Different components when they are used together can significantly
-> +  increase the overall temperature, so the description needs to
-> +  reflect this dependency in order to assign a power budget for a
-> +  group of powerzones.
-> +
-> +  This description is done via a hierarchy and the DT reflects it. It
-> +  does not represent the physical location or a topology, eg. on a
-> +  big.Little system, the little CPUs may not be represented as they do
-> +  not contribute significantly to the heat, however the GPU can be
-> +  tied with the big CPUs as they usually have a connection for
-> +  multimedia or game workloads.
-> +
-> +properties:
-> +  $nodename:
-> +    const: powerzones
-> +
-> +  compatible:
-> +    const: powerzones
+Am Dienstag, dem 30.11.2021 um 22:06 +0200 schrieb Abel Vesa:
+> On 21-11-10 13:15:26, Martin Kepplinger wrote:
+> > Am Montag, dem 13.09.2021 um 20:38 +0300 schrieb Abel Vesa:
+> > > Seems that, in order to be able to resume from suspend, the dram
+> > > rate
+> > > needs to be the highest one available. Therefore, add the late
+> > > system
+> > > suspend/resume PM ops which set the highest rate on suspend and
+> > > the
+> > > latest one used before suspending on resume.
+> > 
+> > Hi Abel, wouldn't this mean that s2idle / freeze would be kind of
+> > broken by this?
+> > 
+> 
+> Nope. Only the DDR rate needs to be raised at 800M before suspending.
+> Everything else stays the same.
 
-This looks odd. Why do we need const compatible string? Shouldn't this
-be allowed to be an SoC-powerzone specific compatible?
+well, for s2idle, linux stays running, so no calling out to atf (dram
+retention...) is happening, so it'll stay at 800M *during* being
+suspended.
 
-> +
-> +patternProperties:
-> +  "^(powerzone)([@-].*)?$":
-> +    type: object
-> +    description:
-> +      A node representing a powerzone acting as an aggregator for all
-> +      its children powerzones.
-> +
-> +    properties:
-> +      "#powerzone-cells":
-> +        description:
-> +          Number of cells in powerzone specifier. Typically 0 for nodes
-> +          representing but it can be any number in the future to
-> +          describe parameters of the powerzone.
-> +
-> +      powerzones:
-> +        description:
-> +          A phandle to a parent powerzone. If no powerzone attribute is
-> +          set, the described powerzone is the topmost in the hierarchy.
-> +
-> +    required:
-> +      - "#powerzone-cells"
-> +
-> +required:
-> +  - compatible
-> +
-> +additionalProperties: true
-> +
-> +examples:
-> +  - |
-> +    powerzones {
-> +
-> +      compatible = "powerzones";
-> +
-> +      #powerzone-cells = <0>;
-> +
-> +      SOC_PZ: powerzone-soc {
-> +        #powerzone-cells = <0>;
-> +      };
-> +
-> +      PKG_PZ: powerzone-pkg {
-> +        #powerzone-cells = <0>;
-> +        powerzones = <&SOC_PZ>;
-> +      };
-> +
-> +      GPU_PZ: powerzone-gpu {
-> +        #powerzone-cells = <0>;
-> +        powerzones = <&PKG_PZ>;
-> +      };
-> +    };
-> +
-> +  - |
-> +    A57_0: big@0 {
-> +      compatible = "arm,cortex-a57";
-> +      reg = <0x0 0x0>;
-> +      device_type = "cpu";
-> +      #powerzone-cells = <0>;
-> +      powerzones = <&PKG_PZ>;
-> +    };
+I tested that by observing power consumption of the system - although
+for now without the cpu-sleep state (via your workaround) due to
+https://lore.kernel.org/linux-arm-kernel/6ca0bcabfa3b6643f9ab7e311cd8697df223c5cb.camel@puri.sm/
 
-I think we discussed this in the earlier version too...
 
-The above example describes a powerzone provider, but it doesn't
-really conform to the binding. That's because the binding states that
-powerzone providers should be inside a top-level "powerzone {" node.
+> 
+> > Does is make sense to test the lowest rate? How would I force that
+> > here? (just for testing)
+> 
+> You can try, but it will surely freeze. See [1] what you need to
+> change
+> for testing.
 
-I am wondering if we really need the toplevel "powerzone" node.
+thanks, that looks nicer than forcing 50M.
 
-> +
-> +    A57_1: big@1 {
-> +      compatible = "arm,cortex-a57";
-> +      reg = <0x0 0x0>;
-> +      device_type = "cpu";
-> +      #powerzone-cells = <0>;
-> +      powerzones = <&PKG_PZ>;
-> +    };
-> +...
-> --
-> 2.25.1
->
+> > 
+> > Also, you could think about splitting this series up a bit and do
+> > this
+> > patch seperately onto mainline (before or after the other work).
+> > 
+> 
+> Well, I sent as RFC until now. Seems there are no big issues with the
+> approach. So I'll split the patches between subsystems on the next
+> iteration.
 
-No further comments from my side.
+great, looking forward to it!
 
-Kind regards
-Uffe
+> 
+> > thank you
+> >                           martin
+> > 
+> > 
+> > > 
+> > > Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+> > > ---
+> > >  drivers/devfreq/imx8m-ddrc.c | 28 +++++++++++++++++++++++++++-
+> > >  1 file changed, 27 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/devfreq/imx8m-ddrc.c
+> > > b/drivers/devfreq/imx8m-
+> > > ddrc.c
+> > > index f18a5c3c1c03..f39741b4a0b0 100644
+> > > --- a/drivers/devfreq/imx8m-ddrc.c
+> > > +++ b/drivers/devfreq/imx8m-ddrc.c
+> > > @@ -72,6 +72,8 @@ struct imx8m_ddrc {
+> > >         struct clk *dram_alt;
+> > >         struct clk *dram_apb;
+> > >  
+> > > +       unsigned long suspend_rate;
+> > > +       unsigned long resume_rate;
+> > >         int freq_count;
+> > >         struct imx8m_ddrc_freq
+> > > freq_table[IMX8M_DDRC_MAX_FREQ_COUNT];
+> > >  };
+> > > @@ -271,6 +273,22 @@ static int imx8m_ddrc_target(struct device
+> > > *dev,
+> > > unsigned long *freq, u32 flags)
+> > >         return ret;
+> > >  }
+> > >  
+> > > +static int imx8m_ddrc_suspend(struct device *dev)
+> > > +{
+> > > +       struct imx8m_ddrc *priv = dev_get_drvdata(dev);
+> > > +
+> > > +       priv->resume_rate = clk_get_rate(priv->dram_core);
+> > > +
+> > > +       return imx8m_ddrc_target(dev, &priv->suspend_rate, 0);
+> > > +}
+> > > +
+> > > +static int imx8m_ddrc_resume(struct device *dev)
+> > > +{
+> > > +       struct imx8m_ddrc *priv = dev_get_drvdata(dev);
+> > > +
+> > > +       return imx8m_ddrc_target(dev, &priv->resume_rate, 0);
+> > > +}
+> > > +
+> > >  static int imx8m_ddrc_get_cur_freq(struct device *dev, unsigned
+> > > long
+> > > *freq)
+> > >  {
+> > >         struct imx8m_ddrc *priv = dev_get_drvdata(dev);
+> > > @@ -324,6 +342,9 @@ static int imx8m_ddrc_init_freq_info(struct
+> > > device *dev)
+> > >  
+> > >                 if (dev_pm_opp_add(dev, freq->rate * 250000, 0))
+> > >                         return -ENODEV;
+> > > +
+> > > +               if (index ==  0)
+> 
+> [1] Change this line to:
+>                     if (index == 1)
+> 
+> It will select the 166935483 freq for suspending.
+> 
+> > > +                       priv->suspend_rate = freq->rate * 250000;
+> > >         }
+> > >  
+> > >         return 0;
+> > > @@ -399,11 +420,16 @@ static const struct of_device_id
+> > > imx8m_ddrc_of_match[] = {
+> > >  };
+> > >  MODULE_DEVICE_TABLE(of, imx8m_ddrc_of_match);
+> > >  
+> > > +static const struct dev_pm_ops imx8m_ddrc_pm_ops = {
+> > > +       SET_LATE_SYSTEM_SLEEP_PM_OPS(imx8m_ddrc_suspend,
+> > > imx8m_ddrc_resume)
+> > > +};
+> > > +
+> > >  static struct platform_driver imx8m_ddrc_platdrv = {
+> > >         .probe          = imx8m_ddrc_probe,
+> > >         .driver = {
+> > >                 .name   = "imx8m-ddrc-devfreq",
+> > > -               .of_match_table = imx8m_ddrc_of_match,
+> > > +               .pm = &imx8m_ddrc_pm_ops,
+> > > +               .of_match_table =
+> > > of_match_ptr(imx8m_ddrc_of_match),
+> > >         },
+> > >  };
+> > >  module_platform_driver(imx8m_ddrc_platdrv);
+> > 
+> > 
+
+
