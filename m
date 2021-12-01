@@ -2,294 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDE3846504B
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Dec 2021 15:45:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BDDA46504D
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Dec 2021 15:46:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350743AbhLAOso (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Dec 2021 09:48:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48522 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350583AbhLAOrP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Dec 2021 09:47:15 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B43C061574
-        for <linux-pm@vger.kernel.org>; Wed,  1 Dec 2021 06:43:51 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id f18so63496081lfv.6
-        for <linux-pm@vger.kernel.org>; Wed, 01 Dec 2021 06:43:51 -0800 (PST)
+        id S1351126AbhLAOtL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Dec 2021 09:49:11 -0500
+Received: from mx1.tq-group.com ([93.104.207.81]:17617 "EHLO mx1.tq-group.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1350575AbhLAOsw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 1 Dec 2021 09:48:52 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gxTGNH4RjZnXC09mFHvXZGKvlJs0ViDxwUF13VP4Qnc=;
-        b=j1sE7JdBShi/drRIhEhZBO6Hp8GoxIqTZ6X76Z4WdL4ClkjzJQawZwwxSyHJvThbkQ
-         ZkA05uk98Wr8NHK3d8DBM0PVbPx1pa1hg5zXgKJEo+k1LSud82VtG94R67OuXuXZEkcw
-         A+IOdOXLToG3/WZ0yYJHn0q8H1NuD5Uiuhzi7J87S9U3rIVekTdWElUcXELCpas/s3PR
-         TOT7jsRHpS6bMNxCKwv6t3IyPcuYn+A3U3trC4B9K1XlFN+eQHd2jfXkOzEBxb5npEln
-         ZPgC6y1dYfkjYJABVbOhiPiFn3SlidHHhD05wboAlT29k+UajlBI0t13iz9+wcaNsSfO
-         DspA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gxTGNH4RjZnXC09mFHvXZGKvlJs0ViDxwUF13VP4Qnc=;
-        b=FgAnceeqc9WK/PGSRoLYRVzrvfWf7iurT8yJFIf5BjvEcg5R+hWANwHheb43YS0G7l
-         HC3+W8jQEjrU6QgIvK5op7NCEjI9TX3wOy1OpxSiliJMGfny2aEPMDBeXTOX661RsnFq
-         ErOCu32F7KVZa3rY+QQAowG630Gsq2L+7Amf4102F55tmr7xgKdH2BNk2CN7fsNXEzfY
-         H/xkGQu4avBCNstyPpnMSYrcJbhDpQh5DCg0OwbBeSgzLSHhMZx2jSgCXvH8t/TLyOBZ
-         i6opx1ycgkyfCl82vgPUbAOtal8/szwkJqHb5TyLphIPKXLlxRCyyXQRFn/4YON6QmX9
-         iGMQ==
-X-Gm-Message-State: AOAM533MnNseY8NHQ4LK4cWrB4jeJVtgLLLHlYA1/1k9E5+8fIUxwr3N
-        qnNLOCv8kLd1hQy0oiNI6Q9zd4sZtjWC6I6U+7jkrQ==
-X-Google-Smtp-Source: ABdhPJxVYx2b3NkGS8YC0h/FYV805PvlFm04JQsMyVC9RHmRfwgvzlv9TZ9QEWvSvv5Kz90my11HVJhsXcHlNDrWXa4=
-X-Received: by 2002:ac2:4bc1:: with SMTP id o1mr6344492lfq.254.1638369829729;
- Wed, 01 Dec 2021 06:43:49 -0800 (PST)
-MIME-Version: 1.0
-References: <20211126181500.3404129-1-daniel.lezcano@linaro.org> <CAPDyKFoZo4p93JZUm4CUqO4DfrL8_YbyomqBzC59C0eTwa60CA@mail.gmail.com>
-In-Reply-To: <CAPDyKFoZo4p93JZUm4CUqO4DfrL8_YbyomqBzC59C0eTwa60CA@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 1 Dec 2021 15:43:13 +0100
-Message-ID: <CAPDyKFoY3b=sbFffDRTAwnXc7OJ9w_B8t337BPbnU66SB-xQjg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/5] dt-bindings: Powerzone new bindings
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     robh@kernel.org, arnd@linaro.org, heiko@sntech.de,
-        rjw@rjwysocki.net, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        lukasz.luba@arm.com, Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1638369931; x=1669905931;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=+m9wSZu9/s7I3SjswpXETp+qN4xor9JvYjd0U3he9pU=;
+  b=eiCfmf60MGLCylSmQCmhb42fynXUPy+0tIdGUGQooLc0JVHu3Uu2xfuL
+   6YfarSkqHFAXMOz68E9oMB5ZFlVFtcjUM4AsvmMrqxBSkxOdwFVtrinHp
+   oxWNKRibkHWy0QkvkX8UPP58JW5uXkpWxX3mW6iAhT1b6kgfeuXmtP+pj
+   0TO7c1lfxwY94/I9G7wM8KXio+KJ9TpqH+krWGLP4AZ+SFxt2G2khoj4X
+   oZBySxFp1qJuTMz5jxlYdSbfxFXgowI8GjKQ4kaUIpMZMHK3gESmc6Ytl
+   YWb8E5u9avxL33WlETC7CQhgq7sI0bsQgL5cXPzsiLQiQg5vckQAMohQX
+   g==;
+X-IronPort-AV: E=Sophos;i="5.87,278,1631570400"; 
+   d="scan'208";a="20788362"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 01 Dec 2021 15:45:24 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Wed, 01 Dec 2021 15:45:24 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Wed, 01 Dec 2021 15:45:24 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1638369924; x=1669905924;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=+m9wSZu9/s7I3SjswpXETp+qN4xor9JvYjd0U3he9pU=;
+  b=GlTEb95sFaVn0TWE78NK41I1IAyq2DOlbHeVMT2j4OA00W6q06hiKZxk
+   RdSyxA4Tf939oZXaqKztG8Bc5mCzwwmdpP4vBC/by9PoqOkNVMAwwD6b2
+   h4jwckFuatXLjsqGYioSXl/S59+1LcMFudNy6nDOBdXP/LhZJTayPC5BL
+   HK/fW7Hiwd2Iky6TJ+whKCTQA1ovCfdGKarntgSIQpBpNkdZZkMNk42yK
+   84dY4Qk1vSXPN1y2+OAFCxkymtbomDoBGZii2d0W9c3pNKCgUIerFeqUb
+   OHfrsS4toeCd+5u6M1KTCj7N3sC2Tc4VlXsvTEulcshY1LWwBIv1zYO/u
+   g==;
+X-IronPort-AV: E=Sophos;i="5.87,278,1631570400"; 
+   d="scan'208";a="20788361"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 01 Dec 2021 15:45:24 +0100
+Received: from steina-w (unknown [10.123.49.12])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 0B661280065;
+        Wed,  1 Dec 2021 15:45:23 +0100 (CET)
+Message-ID: <ea1af2b2091c0cab822c9ef5810db6936365d7ef.camel@ew.tq-group.com>
+Subject: Re: (EXT) Re: [PATCH 1/1] thermal: imx8mm: enable ADC when enabling
+ monitor
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>
+Cc:     Paul Gerber <Paul.Gerber@tq-group.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Date:   Wed, 01 Dec 2021 15:45:21 +0100
+In-Reply-To: <2786750e-0556-a1b8-e464-30de05ce7cf2@linaro.org>
+References: <20211122114225.196280-1-alexander.stein@ew.tq-group.com>
+         <2786750e-0556-a1b8-e464-30de05ce7cf2@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 1 Dec 2021 at 10:23, Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> On Fri, 26 Nov 2021 at 19:15, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
-> >
-> > The proposed bindings are describing a set of powerzones.
-> >
-> > A power zone is the logical name for a component which is capable of
-> > power capping and where we can measure the power consumption.
-> >
-> > A power zone can aggregate several power zones in terms of power
-> > measurement and power limitations. That allows to apply power
-> > constraint to a group of components and let the system balance the
-> > allocated power in order to comply with the constraint.
-> >
-> > The ARM System Control and Management Interface (SCMI) can provide a
-> > power zone description.
-> >
-> > The powerzone semantic is also found on the Intel platform with the
-> > RAPL register.
-> >
-> > The Linux kernel powercap framework deals with the powerzones:
-> >
-> > https://www.kernel.org/doc/html/latest/power/powercap/powercap.html
-> >
-> > The powerzone can also represent a group of children powerzones, hence
-> > the description can result on a hierarchy. Such hierarchy already
-> > exists with the hardware or can be represented an computed from the
-> > kernel.
-> >
-> > The hierarchical description was initially proposed but not desired
-> > given there are other descriptions like the power domain proposing
-> > almost the same description.
-> >
-> > https://lore.kernel.org/all/CAL_JsqLuLcHj7525tTUmh7pLqe7T2j6UcznyhV7joS8ipyb_VQ@mail.gmail.com/
-> >
-> > The description gives the power constraint dependencies to apply on a
-> > specific group of logically or physically aggregated devices. They do
-> > not represent the physical location or the power domains of the SoC
-> > even if the description could be similar.
-> >
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> > Cc: Rob Herring <robh+dt@kernel.org>
-> > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Am Dienstag, dem 30.11.2021 um 15:49 +0100 schrieb Daniel Lezcano:
+> On 22/11/2021 12:42, Alexander Stein wrote:
+> > From: Paul Gerber <
+> > Paul.Gerber@tq-group.com
+> > >
+> > 
+> > The i.MX 8MP has a ADC_PD bit in the TMU_TER register that controls
+> > the
+> > operating mode of the ADC:
+> > * 0 means normal operating mode
+> > * 1 means power down mode
+> > 
+> > When enabling/disabling the TMU, the ADC operating mode must be set
+> > accordingly.
+> > 
+> > i.MX 8M Mini & Nano are lacking this bit.
+> > 
+> > Signed-off-by: Paul Gerber <
+> > Paul.Gerber@tq-group.com
+> > >
+> > Signed-off-by: Alexander Stein <
+> > alexander.stein@ew.tq-group.com
+> > >
 > > ---
-> >    V1: Initial post
-> >    V2:
-> >      - Added pattern properties and stick to powerzone-*
-> >      - Added required property compatible and powerzone-cells
-> >      - Added additionnal property
-> >      - Added compatible
-> >      - Renamed to 'powerzones'
-> >      - Added missing powerzone-cells to the topmost node
-> >      - Fixed errors reported by 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> > ---
-> >  .../devicetree/bindings/power/powerzones.yaml | 109 ++++++++++++++++++
-> >  1 file changed, 109 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/power/powerzones.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/power/powerzones.yaml b/Documentation/devicetree/bindings/power/powerzones.yaml
-> > new file mode 100644
-> > index 000000000000..6e63bbc750c6
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/power/powerzones.yaml
-> > @@ -0,0 +1,109 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/power/powerzones.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Power zones description
-> > +
-> > +maintainers:
-> > +  - Daniel Lezcano <daniel.lezcano@linaro.org>
-> > +
-> > +description: |+
-> > +
-> > +  A System on Chip contains a multitude of active components and each
-> > +  of them is a source of heat. Even if a temperature sensor is not
-> > +  present, a source of heat can be controlled by acting on the
-> > +  consumed power via different techniques.
-> > +
-> > +  A powerzone describes a component or a group of components where we
-> > +  can control the maximum power consumption. For instance, a group of
-> > +  CPUs via the performance domain, a LCD screen via the brightness,
-> > +  etc ...
-> > +
-> > +  Different components when they are used together can significantly
-> > +  increase the overall temperature, so the description needs to
-> > +  reflect this dependency in order to assign a power budget for a
-> > +  group of powerzones.
-> > +
-> > +  This description is done via a hierarchy and the DT reflects it. It
-> > +  does not represent the physical location or a topology, eg. on a
-> > +  big.Little system, the little CPUs may not be represented as they do
-> > +  not contribute significantly to the heat, however the GPU can be
-> > +  tied with the big CPUs as they usually have a connection for
-> > +  multimedia or game workloads.
-> > +
-> > +properties:
-> > +  $nodename:
-> > +    const: powerzones
-> > +
-> > +  compatible:
-> > +    const: powerzones
->
-> This looks odd. Why do we need const compatible string? Shouldn't this
-> be allowed to be an SoC-powerzone specific compatible?
+> > Often this bit is set already by the bootloader, but in case this
+> > is not
+> > done, the file /sys/class/thermal/thermal_zone0/temp will always
+> > return
+> > -EAGAIN.
+> 
+> Does it deserve a Fixes tag?
 
-Alright, after our recent discussions offlist, I believe the
-compatible property should be entirely removed.
+The more I think about it, the more I'm inclined to add one.
+Please tell me if I shall iterate v2 adding a Fixes tag (or other
+changes)
 
->
-> > +
-> > +patternProperties:
-> > +  "^(powerzone)([@-].*)?$":
-> > +    type: object
-> > +    description:
-> > +      A node representing a powerzone acting as an aggregator for all
-> > +      its children powerzones.
-> > +
-> > +    properties:
-> > +      "#powerzone-cells":
-> > +        description:
-> > +          Number of cells in powerzone specifier. Typically 0 for nodes
-> > +          representing but it can be any number in the future to
-> > +          describe parameters of the powerzone.
-> > +
-> > +      powerzones:
-> > +        description:
-> > +          A phandle to a parent powerzone. If no powerzone attribute is
-> > +          set, the described powerzone is the topmost in the hierarchy.
-> > +
-> > +    required:
-> > +      - "#powerzone-cells"
-> > +
-> > +required:
-> > +  - compatible
+Best regards,
+Alexander
 
-This should be removed too, of course.
 
-> > +
-> > +additionalProperties: true
-
-This should be set to "false", I think. There is no need for any
-additional properties besides those that are being part of the binding
-above.
-
-> > +
-> > +examples:
-> > +  - |
-> > +    powerzones {
-> > +
-> > +      compatible = "powerzones";
-> > +
-> > +      #powerzone-cells = <0>;
-
-This toplevel "powerzones" node, should neither contain a compatible
-nor a #powerzone-cells. Please drop this.
-
-Instead we only need to describe the topology by using child nodes, as
-in the example below.
-
-> > +
-> > +      SOC_PZ: powerzone-soc {
-> > +        #powerzone-cells = <0>;
-> > +      };
-> > +
-> > +      PKG_PZ: powerzone-pkg {
-> > +        #powerzone-cells = <0>;
-> > +        powerzones = <&SOC_PZ>;
-> > +      };
-> > +
-> > +      GPU_PZ: powerzone-gpu {
-> > +        #powerzone-cells = <0>;
-> > +        powerzones = <&PKG_PZ>;
-> > +      };
-> > +    };
-> > +
-> > +  - |
-> > +    A57_0: big@0 {
-> > +      compatible = "arm,cortex-a57";
-> > +      reg = <0x0 0x0>;
-> > +      device_type = "cpu";
-> > +      #powerzone-cells = <0>;
-> > +      powerzones = <&PKG_PZ>;
-> > +    };
->
-> I think we discussed this in the earlier version too...
->
-> The above example describes a powerzone provider, but it doesn't
-> really conform to the binding. That's because the binding states that
-> powerzone providers should be inside a top-level "powerzone {" node.
-
-From our offlist discussion, it seems like the cpu nodes should not
-have a #powerzone-cells. Instead, the powerzones property should be
-sufficient, as it allows you to describe what powerzone(s) the cpu
-belongs to, which is exactly what you need.
-
-This also means that we need to extend the DT bindings for CPUs
-(Documentation/devicetree/bindings/arm/cpus.yaml), to allow cpu nodes
-to have a "powerzones" property. I believe we can do that separately,
-on top of $subject patch, as cpus.yaml has "additionalProperties:
-true".
-
->
-> I am wondering if we really need the toplevel "powerzone" node.
-
-Please ignore this comment. It has become clear to me that the
-toplevel node serves a purpose.
-
->
-> > +
-> > +    A57_1: big@1 {
-> > +      compatible = "arm,cortex-a57";
-> > +      reg = <0x0 0x0>;
-> > +      device_type = "cpu";
-> > +      #powerzone-cells = <0>;
-
-Ditto.
-
-> > +      powerzones = <&PKG_PZ>;
-> > +    };
-> > +...
-> > --
-> > 2.25.1
-> >
->
-
-Kind regards
-Uffe
