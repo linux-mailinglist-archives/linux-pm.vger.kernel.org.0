@@ -2,143 +2,245 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22F75465152
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Dec 2021 16:19:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D476465174
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Dec 2021 16:23:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243428AbhLAPWd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Dec 2021 10:22:33 -0500
-Received: from mx1.tq-group.com ([93.104.207.81]:35915 "EHLO mx1.tq-group.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1350464AbhLAPWb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 1 Dec 2021 10:22:31 -0500
+        id S1350881AbhLAP01 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Dec 2021 10:26:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58226 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350839AbhLAP0Z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Dec 2021 10:26:25 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820EFC061574
+        for <linux-pm@vger.kernel.org>; Wed,  1 Dec 2021 07:23:04 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id t26so63792512lfk.9
+        for <linux-pm@vger.kernel.org>; Wed, 01 Dec 2021 07:23:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1638371950; x=1669907950;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=zGVC8wVHSH9HAuJ7vjpVU4Ne9Eidx6zcHD43QCrtk7A=;
-  b=BG01s2bFDUExfiezt5U6CSTe9SLqf+IxmAsPtmI051Uf56QVjKBID6Cw
-   4P0cbwu/TDogWjawr9r2A7zk/yNxf08m4fjBYT4fqC7b5iHpISWV3++ON
-   ZioN9y1IMySrDUE/soHgdzP5HnVyNQia6G2aOR1hpvK2+ekJlPvlUBorr
-   nr3JiKO1k0YNZ7ATUr8TAVFEGlXAVT1zXT4ixC6YHHnLk/xXEfYHiq7Sa
-   PRUHciSbnrlO9X8I43gFo2Y5PCXljsRsJFDQu3SGOPCRSTqEDS19d4ZJ4
-   9xxfW3F5AR3oaokVWVHnOhYBNUMumTneQf4JV/k99y0n6Jn1l+T19kbbO
-   A==;
-X-IronPort-AV: E=Sophos;i="5.87,278,1631570400"; 
-   d="scan'208";a="20789565"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 01 Dec 2021 16:19:06 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Wed, 01 Dec 2021 16:19:06 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Wed, 01 Dec 2021 16:19:06 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1638371946; x=1669907946;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=zGVC8wVHSH9HAuJ7vjpVU4Ne9Eidx6zcHD43QCrtk7A=;
-  b=azSSEmaimOIG/US1xH/JXkBUM4vrbqy1M05LiiRCScvRBVuQTAbSrS1X
-   +of6hOrf3rvXXSbRjkt0P83JnxXS5dRfNVtkaCe80GstFtTLd/PikM8Qv
-   8d4xndZlt6mCAFv6io7SHeot6gtV0zt1XH+r0lom6lE/k6dyjGLk5DD+Y
-   qMqguOBCMv2hUfhfP/z5fQ6hkSbIMCub61ODUGIYVCn4gelAZWFYNFiZa
-   ka83UPiXp2LZWUF3W4J1QDlw32vUSPIzNbD5cVMfYzgjnYMZHLX6mN4fc
-   sYy1DFqHOs5lPFuhdSRrm48R7qqSOzXU2c3fE8KAny38Caru4L4pYj8b7
-   g==;
-X-IronPort-AV: E=Sophos;i="5.87,278,1631570400"; 
-   d="scan'208";a="20789564"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 01 Dec 2021 16:19:06 +0100
-Received: from steina-w (unknown [10.123.49.12])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 1B46E280065;
-        Wed,  1 Dec 2021 16:19:06 +0100 (CET)
-Message-ID: <3e01ffc0c938cd4f952c36051805d132af820afe.camel@ew.tq-group.com>
-Subject: Re: (EXT) Re: (EXT) Re: [PATCH 1/1] thermal: imx8mm: enable ADC
- when enabling monitor
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>
-Cc:     Paul Gerber <Paul.Gerber@tq-group.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Date:   Wed, 01 Dec 2021 16:19:03 +0100
-In-Reply-To: <f3248b92-c6db-c3a3-f26a-65a2fd272d4c@linaro.org>
-References: <20211122114225.196280-1-alexander.stein@ew.tq-group.com>
-         <2786750e-0556-a1b8-e464-30de05ce7cf2@linaro.org>
-         <ea1af2b2091c0cab822c9ef5810db6936365d7ef.camel@ew.tq-group.com>
-         <f3248b92-c6db-c3a3-f26a-65a2fd272d4c@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=h/UE9GmYow1k1PWf3LBN8TNIf82lFPT5QQxXcHxr6sY=;
+        b=ueCE0K3Oz0C/stDYYeR8j4byYg1FkjSsltBv05sGeHwPlW8hG1TA/zP5t6duumyZKP
+         QE3YmJ19ZKn7QF3qsPGtvE79QXiL8diKGI89PXHCdj7nUpPHNr3KnHCZPCvEwr2/Ads0
+         0w+/lk7HDptb74TDWsmCrD/PMhRDxUuW4ux15jWwJBlD1re1PJs69jf8N9GTE/PFVN9d
+         Mh4OY1CFRMJuy3zZdVV0sZO7L0HSpQLApbpQYts6qw8YW3aZmLwdv8HFdsZrO9n6xLuW
+         CPOpyCuLKKW2n2OodLJaIpuaQQTcSAgE0kLHACP1gCK4+HX90OyDNDNylHs6k51BFfE8
+         L2Gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=h/UE9GmYow1k1PWf3LBN8TNIf82lFPT5QQxXcHxr6sY=;
+        b=OpmnyG6zV+VKFhhbqyGDLcipIZQW/X7XCQC0DIEznyHIll00klDrMQlR46ZSUYkI6F
+         vrFkcUP3tVlGt46VNOEqbd/hlevyyy9zN233smFzzZ7zzySyx0NtdGRQDYNRB2vd5Am+
+         IJf/mfBclfZDgeMNRWphRPbrP/8FjdoHI+9XkQ6uSJcvcz7+P2YpTHJRrsTeDnKYSxz4
+         JERk68cO+H6nNBw/V15fbNbtE9QxacQXP1fHaBEbP+BlXGNCM8thTB8g79Schf20dM3g
+         GJQzYuKxFAKKvaJn9/Zf3cErpszNHpdv2MV4XQtWkZx6KpJNjnSuUb3CxX9zetDzd8HA
+         GIlg==
+X-Gm-Message-State: AOAM532J/3EDbRajvn90MJf/x+yXrgFq8B8hvJOD2hFvCT7P2/VR8Q65
+        4OeZmOjnUg+HJeEOiEVoRo0mSO8FWP784drYPShUYtwN7ulQQw==
+X-Google-Smtp-Source: ABdhPJzMT+0MoupztBbQCqirwFNEbtmJDhlZUAXMZjKiFV15UfYUsYspFuhcUJaiDr1PX/c1Gyn2QW9SB9Q7HuNCW0s=
+X-Received: by 2002:ac2:4bc1:: with SMTP id o1mr6564852lfq.254.1638372182687;
+ Wed, 01 Dec 2021 07:23:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <20211026222626.39222-1-ulf.hansson@linaro.org>
+ <CAJZ5v0hrTDsCUn4vgmFrTTgd6H=orh-Kb5b3+_H9St4n8fTxBw@mail.gmail.com>
+ <CAPDyKFre=tp4919FLoeU-wjLDJ02zmHaXY4wgTUmfmFbeaCadQ@mail.gmail.com>
+ <4380690.LvFx2qVVIh@kreacher> <CAPDyKFpyPov-faJ9dUszi38Q7-4OsowX=i8w=NCnTQ66_zooHg@mail.gmail.com>
+ <CAJZ5v0iEfE35Aig8XADKbQEJqb8PNmcghLnrVXHkemDjTOLr5g@mail.gmail.com>
+ <CAPDyKFqVrYKyUjxoErPBuahcgDNX7esspWG4Vqi0q-8_u7MoFQ@mail.gmail.com>
+ <CAJZ5v0jV5QS6yxBgK0OHJ_7ivDPs7tL7Ms19dNBTUAYSfKDkCg@mail.gmail.com>
+ <CAPDyKFp+eWx3BHuPw1-GRp0uUAusNBLkhKpRkY3G+8zjXn5FZw@mail.gmail.com> <CAJZ5v0j+NOmatva7zf6Pet9ecv3qLyrMBV2-DG86r8eaW=aSJg@mail.gmail.com>
+In-Reply-To: <CAJZ5v0j+NOmatva7zf6Pet9ecv3qLyrMBV2-DG86r8eaW=aSJg@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 1 Dec 2021 16:22:26 +0100
+Message-ID: <CAPDyKFrFdt_U7By_bqk4DBHxCBLpDe00aRb6P6BmwR4MYM2OmQ@mail.gmail.com>
+Subject: Re: [PATCH] PM: runtime: Allow rpm_resume() to succeed when runtime
+ PM is disabled
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Maulik Shah <mkshah@codeaurora.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Am Mittwoch, dem 01.12.2021 um 15:52 +0100 schrieb Daniel Lezcano:
-> On 01/12/2021 15:45, Alexander Stein wrote:
-> > Am Dienstag, dem 30.11.2021 um 15:49 +0100 schrieb Daniel Lezcano:
-> > > On 22/11/2021 12:42, Alexander Stein wrote:
-> > > > From: Paul Gerber <
-> > > > Paul.Gerber@tq-group.com
-> > > > 
-> > > > 
-> > > > The i.MX 8MP has a ADC_PD bit in the TMU_TER register that
-> > > > controls
-> > > > the
-> > > > operating mode of the ADC:
-> > > > * 0 means normal operating mode
-> > > > * 1 means power down mode
-> > > > 
-> > > > When enabling/disabling the TMU, the ADC operating mode must be
-> > > > set
-> > > > accordingly.
-> > > > 
-> > > > i.MX 8M Mini & Nano are lacking this bit.
-> > > > 
-> > > > Signed-off-by: Paul Gerber <
-> > > > Paul.Gerber@tq-group.com
-> > > > 
-> > > > 
-> > > > Signed-off-by: Alexander Stein <
-> > > > alexander.stein@ew.tq-group.com
-> > > > 
-> > > > 
-> > > > ---
-> > > > Often this bit is set already by the bootloader, but in case
-> > > > this
-> > > > is not
-> > > > done, the file /sys/class/thermal/thermal_zone0/temp will
-> > > > always
-> > > > return
-> > > > -EAGAIN.
-> > > 
-> > > Does it deserve a Fixes tag?
-> > 
-> > The more I think about it, the more I'm inclined to add one.
-> > Please tell me if I shall iterate v2 adding a Fixes tag (or other
-> > changes)
-> 
-> It is not necessary to send a V2 as the commit log will have a link
-> to
-> this thread. Just answer with the Fixes tag, I'll add it myself to
-> the
-> change log.
+On Wed, 1 Dec 2021 at 14:49, Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Wed, Dec 1, 2021 at 10:02 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> >
+> > On Tue, 30 Nov 2021 at 18:26, Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > >
+> > > On Tue, Nov 30, 2021 at 5:41 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > > >
+> > > > On Tue, 30 Nov 2021 at 14:02, Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > > > >
+> > > > > On Tue, Nov 30, 2021 at 12:58 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > > > > >
+> > > > > > [...]
+> > > > > >
+> > > > > > > > > > > >
+> > > > > > > > > > > > Am I thinking correctly that this is mostly about working around the
+> > > > > > > > > > > > limitations of pm_runtime_force_suspend()?
+> > > > > > > > > > >
+> > > > > > > > > > > No, this isn't related at all.
+> > > > > > > > > > >
+> > > > > > > > > > > The cpuidle-psci driver doesn't have PM callbacks, thus using
+> > > > > > > > > > > pm_runtime_force_suspend() would not work here.
+> > > > > > > > > >
+> > > > > > > > > > Just wanted to send a ping on this to see if we can come to a
+> > > > > > > > > > conclusion. Or maybe we did? :-)
+> > > > > > > > > >
+> > > > > > > > > > I think in the end, what slightly bothers me, is that the behavior is
+> > > > > > > > > > a bit inconsistent. Although, maybe it's the best we can do.
+> > > > > > > > >
+> > > > > > > > > I've been thinking about this and it looks like we can do better, but
+> > > > > > > > > instead of talking about this I'd rather send a patch.
+> > > > > > > >
+> > > > > > > > Alright.
+> > > > > > > >
+> > > > > > > > I was thinking along the lines of make similar changes for
+> > > > > > > > rpm_idle|suspend(). That would make the behaviour even more
+> > > > > > > > consistent, I think.
+> > > > > > > >
+> > > > > > > > Perhaps that's what you have in mind? :-)
+> > > > > > >
+> > > > > > > Well, not exactly.
+> > > > > > >
+> > > > > > > The idea is to add another counter (called restrain_depth in the patch)
+> > > > > > > to prevent rpm_resume() from running the callback when that is potentially
+> > > > > > > problematic.  With that, it is possible to actually distinguish devices
+> > > > > > > with PM-runtime enabled and it allows the PM-runtime status to be checked
+> > > > > > > when it is still known to be meaningful.
+> > > > > >
+> > > > > > Hmm, I don't quite understand the benefit of introducing a new flag
+> > > > > > for this. rpm_resume() already checks the disable_depth to understand
+> > > > > > when it's safe to invoke the callback. Maybe there is a reason why
+> > > > > > that isn't sufficient?
+> > > > >
+> > > > > The problem is that disable_depth > 0 may very well mean that runtime
+> > > > > PM has not been enabled at all for the given device which IMO is a
+> > > > > problem.
+> > > > >
+> > > > > As it stands, it is necessary to make assumptions, like disable_depth
+> > > > > == 1 meaning that runtime PM is really enabled, but the PM core has
+> > > > > disabled it temporarily, which is somewhat questionable.
+> > > > >
+> > > > > Another problem with disabling is that it causes rpm_resume() to fail
+> > > > > even if the status is RPM_ACTIVE and it has to do that exactly because
+> > > > > it cannot know why runtime PM has been disabled.  If it has never been
+> > > > > enabled, rpm_resume() must fail, but if it has been disabled
+> > > > > temporarily, rpm_resume() may return 1 when the status is RPM_ACTIVE.
+> > > > >
+> > > > > The new count allows the "enabled in general, but temporarily disabled
+> > > > > at the moment" to be handled cleanly.
+> > > >
+> > > > My overall comment is that I fail to understand why we need to
+> > > > distinguish between these two cases. To me, it shouldn't really
+> > > > matter, *why* runtime PM is (or have been) disabled for the device.
+> > >
+> > > It matters if you want to trust the status, because "disabled" means
+> > > "the status doesn't matter".
+> >
+> > Well, that doesn't really match how the runtime PM interface is being
+> > used today.
+>
+> Well, I clearly disagree.
 
-Thanks.
+Alright, then we can agree to disagree. :-)
 
-Fixes: 2b8f1f0337c5 ("thermal: imx8mm: Add i.MX8MP support")
+>
+> > For example, we have a whole bunch of helper functions, allowing us to
+> > update and check the runtime PM state of the device, even when the
+> > disable_depth > 0. Some functions, like pm_runtime_set_active() for
+> > example, even take parents and device-links into account.
+>
+> That's true, but that's for a purpose.
+>
+> If runtime PM becomes enabled after using pm_runtime_set_active(), the
+> status should better be consistent with the settings of the parent
+> etc.
+>
+> > >
+> > > If you want the status to stay meaningful, but prevent callbacks from
+> > > running, you need something else.
+> > >
+> > > > The important point is that the default state for a device is
+> > > > RPM_SUSPENDED and someone has moved into RPM_ACTIVE, for whatever
+> > > > reason. That should be sufficient to allow rpm_resume() to return '1'
+> > > > when disable_depth > 0, shouldn't it?
+> > >
+> > > No, because there is no rule by which the status of devices with
+> > > PM-runtime disabled must be RPM_SUSPENDED.
+> >
+> > That's not what I was trying to say.
+> >
+> > The initial/default runtime PM state for a device is RPM_SUSPENDED,
+> > which is being set in pm_runtime_init(). Although, I agree that it
+> > can't be trusted that this state actually reflects the state of the
+> > HW, it's still a valid state for the device from a runtime PM point of
+> > view.
+>
+> No, it is not.  It's just the default.
+>
+> > However, and more importantly, if the state has moved to RPM_ACTIVE,
+> > someone must have deliberately moved the device into that state.
+>
+> Sure, but it cannot be regarded as an indication on whether or not
+> runtime PM is supported and has ever been enabled for the given
+> device.
+>
+> Again, there is no rule regarding the status value for devices with
+> runtime PM disabled, either way.
 
-imx8mm_tmu_enable() was introduced in this commit and the fix is about
-i.MX8MP as well, so this seems even more reasonable to me.
+If I understand correctly, that means you think the
+pm_runtime_status_suspended() should really be converted to an
+internal runtime PM interface, not being exported to users outside.
+Right?
 
-Best regards,
-Alexander
+When it comes to the pm_runtime_active() interface, I noticed that
+it's actually completely broken, as it returns "true" when runtime PM
+has been disabled for the device - no matter whether the state is
+RPM_ACTIVE or not. It's quite heavily used, so I guess the behaviour
+is what the callers expect?
 
+>
+> > For this reason, I believe it seems reasonable to trust it, both from HW
+> > point of view, but definitely also from a runtime PM point of view. If
+> > not, then what should we do?
+>
+> Trust it only when runtime PM is enabled, ie. dev->power.disable_depth == 0.
+>
+> That's exactly the reason why pm_runtime_suspended() returns false if
+> runtime PM is disabled for the target device and if
+> pm_runtime_suspended() is called during system-wide suspend and
+> resume, it is not clear how to interpret its return value.
 
+To me, I don't think there is a problem interpreting
+pm_runtime_suspended()'s return value. As you said, it tells whether
+runtime PM has been enabled and whether the state is RPM_SUSPENDED.
+
+For those that want to know the state when runtime PM has been
+disabled, they can use pm_runtime_status_suspended().
+
+What's the issue?
+
+>
+> If it returns true outside the system suspend-resume code path, that
+> means "runtime PM has been enabled and the device has been
+> runtime-suspended" and I want it to mean exactly the same thing during
+> system-wide suspend and resume, so people don't need to wonder about
+> the context in which the code is running.
+
+Well, even if this seems nice, I wonder how useful this would be in the end.
+
+Perhaps you have some concrete examples where this could improve things?
+
+Kind regards
+Uffe
