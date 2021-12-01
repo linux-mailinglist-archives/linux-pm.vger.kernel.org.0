@@ -2,155 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 908A5464EA0
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Dec 2021 14:14:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DEB0464E97
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Dec 2021 14:13:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242786AbhLANSQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Dec 2021 08:18:16 -0500
-Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.81]:10385 "EHLO
-        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349530AbhLANR6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Dec 2021 08:17:58 -0500
-X-Greylist: delayed 346 seconds by postgrey-1.27 at vger.kernel.org; Wed, 01 Dec 2021 08:17:57 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1638364112;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=rFXIorNh5oBlYtvbj4+okXJBlT5MTSDKjJOgJyvnjT8=;
-    b=Iyqro4gziV2dvOcOqkcjNsQSzQYiSfmEcuV858zuA/qa4PgPl6cpIbzv0kwINCGyt5
-    8cU8LepMGYLyMRriFWDPDNWIOezBjjFoVBc7FsWCXc8OQqpin52dAoiJmWvkcNf76dn+
-    twdMiFxDSl9rXkY0vqIKkjuTy6eRT0j8GoDE3DRyKUo4dkVBuyhijyuW2jsAWwhlQbHw
-    QYPFU0iB31eYbiUg3ZuHUMPzK+6nJGy6oYpLMUnA8hWAaopxnOd+Y1ADJmvS+mdRVugr
-    hlcuZsDnTgj3YuXqnRjPqDEQ5LnNBRVTrRCThvzLbFT0Y7x2wcqCxC6ttqt+2q6aua8w
-    lXuw==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVORvLd4SsytBXQ7UOGqRde+a0fyL2moo2"
-X-RZG-CLASS-ID: mo00
-Received: from droid..
-    by smtp.strato.de (RZmta 47.34.10 AUTH)
-    with ESMTPSA id j03bcbxB1D8Wgho
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Wed, 1 Dec 2021 14:08:32 +0100 (CET)
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, Andy Gross <agross@kernel.org>,
-        Stephan Gerhold <stephan@gerhold.net>
-Subject: [PATCH v3 4/4] firmware: qcom: scm: Add support for MC boot address API
-Date:   Wed,  1 Dec 2021 14:05:05 +0100
-Message-Id: <20211201130505.257379-5-stephan@gerhold.net>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211201130505.257379-1-stephan@gerhold.net>
-References: <20211201130505.257379-1-stephan@gerhold.net>
+        id S239722AbhLANRE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Dec 2021 08:17:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55962 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241389AbhLANQQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Dec 2021 08:16:16 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E4B9C06174A;
+        Wed,  1 Dec 2021 05:12:55 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id a18so52244078wrn.6;
+        Wed, 01 Dec 2021 05:12:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yIEUlYwwjZhie4WfBlBG/NpfH8otfmo5HsnuybLMve8=;
+        b=mQ+FnalR6SWQF6pzza1008JsmNoEsDmM6KSjX6hjpKVYN4zo7BQD4f1ZhFl3dysd9C
+         RhSL+5oIKBeUAUm585UhYPMP/NSY1CLyk9p/Vbp4lm22tR6j0VQB7EltAssqee6w9SeG
+         8bGCknAIghrY15aM1KECmyi4oIrYOshsFWEavkt1geVXpqrp3VsgDtzZmlUGVVeCQwk7
+         4oPWbtYC3j5mhmhUUrEH0e/LSncnX+uOFs0bCsJ5FC91gnTLylYSXrXnl5AdE6ov0MSw
+         BALHZI14w5H8gnApeAb9LGED401tsPKAyh7kxWEfmZ+ccouLdrZN/fuZqNFK0oNsOtKC
+         B2vA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yIEUlYwwjZhie4WfBlBG/NpfH8otfmo5HsnuybLMve8=;
+        b=OPULV8FTFN6Bt3UQvsXTPFkAuyVY8OZmJC75lD7o4ngBz0h0XhYt2jIGDGJ+iUj2BQ
+         wNpvvsuuWDTl8PMWuU3c9oEoRhd0atig2W2zfg0ydtGKF1WmQ1WRCyImyGknx7VA6D/M
+         YJ7aRYrNKrA7HNdKzCc+CHfWEDVAkO6C6Z8eYXsWsm8KM/uPeEay/DHNR4W0clG6EmBW
+         RNHBk7wZyKLMbXjMvy1tquvPossYQQlWMG1Elm9fu6kQt0UQrilAxp3rdxsml9RLB+NR
+         +gCY1Tm7lRNFFh1M+m1L2viqzLC+6lN9cil7kP0qXIkR4C3C6M6/OEHpnFHqzM53D3RC
+         /TLg==
+X-Gm-Message-State: AOAM533lAughAtNmbhYoaFw3z8nfFu9sNmHOrUJmFYpeToLARc/jRSA/
+        hnwSXM0+jvP8oBEjBc4r8unJ7VIJyGhJ1nfk
+X-Google-Smtp-Source: ABdhPJzzhQEWcLY07TGwbBoaHSNvvx7vNfJqwOhbqX02sgXx9TS5NAfLLtksTpCUdGiS4CpLg+TUFg==
+X-Received: by 2002:adf:a285:: with SMTP id s5mr6879766wra.468.1638364373828;
+        Wed, 01 Dec 2021 05:12:53 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id t11sm19689819wrz.97.2021.12.01.05.12.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Dec 2021 05:12:53 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org
+Subject: [PATCH][next] thermal/drivers: Fix spelling mistake "caliberation" -> "calibration"
+Date:   Wed,  1 Dec 2021 13:12:52 +0000
+Message-Id: <20211201131252.135535-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-It looks like the old QCOM_SCM_BOOT_SET_ADDR API is broken on some
-MSM8916 firmware versions that implement the newer SMC32 calling
-convention. It just returns -EINVAL no matter which arguments are
-being passed.
+There are spelling mistakes in a comment and a dev_dbg message. Fix them.
 
-This does not cause any problems downstream because it first tries
-to use the new multi-cluster API replacement which is working fine.
-
-Implement support for the multi-cluster variant of the SCM call
-by attempting it first but still fallback to the old call in case
-of an error. Also, to be absolutely sure only use the multi-cluster
-variant with the SMC calling convention since older platforms should
-not need this.
-
-Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
-Changes in v3:
-  - Avoid all build testing problems by setting the entry address for
-    all CPUs in all affinity levels (~0ULL).
----
- drivers/firmware/qcom_scm.c | 32 ++++++++++++++++++++++++++++++--
- drivers/firmware/qcom_scm.h |  4 ++++
- 2 files changed, 34 insertions(+), 2 deletions(-)
+ drivers/thermal/rzg2l_thermal.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-index e89be2f0cdec..7c50169f6465 100644
---- a/drivers/firmware/qcom_scm.c
-+++ b/drivers/firmware/qcom_scm.c
-@@ -269,6 +269,28 @@ static int qcom_scm_set_boot_addr(void *entry, const u8 *cpu_bits)
- 	return qcom_scm_call_atomic(__scm ? __scm->dev : NULL, &desc, NULL);
- }
+diff --git a/drivers/thermal/rzg2l_thermal.c b/drivers/thermal/rzg2l_thermal.c
+index d47d4a30cd6c..8d55e401d185 100644
+--- a/drivers/thermal/rzg2l_thermal.c
++++ b/drivers/thermal/rzg2l_thermal.c
+@@ -99,7 +99,7 @@ static int rzg2l_thermal_get_temp(void *devdata, int *temp)
  
-+static int qcom_scm_set_boot_addr_mc(void *entry, unsigned int flags)
-+{
-+	struct qcom_scm_desc desc = {
-+		.svc = QCOM_SCM_SVC_BOOT,
-+		.cmd = QCOM_SCM_BOOT_SET_ADDR_MC,
-+		.owner = ARM_SMCCC_OWNER_SIP,
-+		.arginfo = QCOM_SCM_ARGS(6),
-+		.args = {
-+			virt_to_phys(entry),
-+			/* Apply to all CPUs in all affinity levels */
-+			~0ULL, ~0ULL, ~0ULL, ~0ULL,
-+			flags,
-+		},
-+	};
-+
-+	/* Need a device for DMA of the additional arguments */
-+	if (!__scm || __get_convention() == SMC_CONVENTION_LEGACY)
-+		return -EOPNOTSUPP;
-+
-+	return qcom_scm_call(__scm->dev, &desc, NULL);
-+}
-+
- /**
-  * qcom_scm_set_warm_boot_addr() - Set the warm boot address for all cpus
-  * @entry: Entry point function for the cpus
-@@ -278,7 +300,10 @@ static int qcom_scm_set_boot_addr(void *entry, const u8 *cpu_bits)
-  */
- int qcom_scm_set_warm_boot_addr(void *entry)
- {
--	return qcom_scm_set_boot_addr(entry, qcom_scm_cpu_warm_bits);
-+	if (qcom_scm_set_boot_addr_mc(entry, QCOM_SCM_BOOT_MC_FLAG_WARMBOOT))
-+		/* Fallback to old SCM call */
-+		return qcom_scm_set_boot_addr(entry, qcom_scm_cpu_warm_bits);
-+	return 0;
- }
- EXPORT_SYMBOL(qcom_scm_set_warm_boot_addr);
+ 	/* The temperature Tj is calculated by the formula
+ 	 * Tj = (dsensor − calib1) * 165/ (calib0 − calib1) − 40
+-	 * where calib0 and calib1 are the caliberation values.
++	 * where calib0 and calib1 are the calibration values.
+ 	 */
+ 	val = ((dsensor - priv->calib1) * (MCELSIUS(165) /
+ 		(priv->calib0 - priv->calib1))) - MCELSIUS(40);
+@@ -209,7 +209,7 @@ static int rzg2l_thermal_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto err;
  
-@@ -288,7 +313,10 @@ EXPORT_SYMBOL(qcom_scm_set_warm_boot_addr);
-  */
- int qcom_scm_set_cold_boot_addr(void *entry)
- {
--	return qcom_scm_set_boot_addr(entry, qcom_scm_cpu_cold_bits);
-+	if (qcom_scm_set_boot_addr_mc(entry, QCOM_SCM_BOOT_MC_FLAG_COLDBOOT))
-+		/* Fallback to old SCM call */
-+		return qcom_scm_set_boot_addr(entry, qcom_scm_cpu_cold_bits);
-+	return 0;
- }
- EXPORT_SYMBOL(qcom_scm_set_cold_boot_addr);
+-	dev_dbg(dev, "TSU probed with %s caliberation values",
++	dev_dbg(dev, "TSU probed with %s calibration values",
+ 		rzg2l_thermal_read(priv, OTPTSUTRIM_REG(0)) ?  "hw" : "sw");
  
-diff --git a/drivers/firmware/qcom_scm.h b/drivers/firmware/qcom_scm.h
-index fd7d2a5f3e70..83d6885fb71c 100644
---- a/drivers/firmware/qcom_scm.h
-+++ b/drivers/firmware/qcom_scm.h
-@@ -78,9 +78,13 @@ extern int scm_legacy_call(struct device *dev, const struct qcom_scm_desc *desc,
- #define QCOM_SCM_BOOT_SET_ADDR		0x01
- #define QCOM_SCM_BOOT_TERMINATE_PC	0x02
- #define QCOM_SCM_BOOT_SET_DLOAD_MODE	0x10
-+#define QCOM_SCM_BOOT_SET_ADDR_MC	0x11
- #define QCOM_SCM_BOOT_SET_REMOTE_STATE	0x0a
- #define QCOM_SCM_FLUSH_FLAG_MASK	0x3
- #define QCOM_SCM_BOOT_MAX_CPUS		4
-+#define QCOM_SCM_BOOT_MC_FLAG_AARCH64	BIT(0)
-+#define QCOM_SCM_BOOT_MC_FLAG_COLDBOOT	BIT(1)
-+#define QCOM_SCM_BOOT_MC_FLAG_WARMBOOT	BIT(2)
- 
- #define QCOM_SCM_SVC_PIL		0x02
- #define QCOM_SCM_PIL_PAS_INIT_IMAGE	0x01
+ 	return 0;
 -- 
-2.34.1
+2.33.1
 
