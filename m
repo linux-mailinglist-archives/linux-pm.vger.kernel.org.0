@@ -2,34 +2,33 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 231EC464EA2
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Dec 2021 14:14:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 507F5464EA1
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Dec 2021 14:14:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238755AbhLANSQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S243870AbhLANSQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Wed, 1 Dec 2021 08:18:16 -0500
-Received: from mo4-p02-ob.smtp.rzone.de ([81.169.146.171]:19370 "EHLO
+Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.80]:32356 "EHLO
         mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349514AbhLANSC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Dec 2021 08:18:02 -0500
-X-Greylist: delayed 356 seconds by postgrey-1.27 at vger.kernel.org; Wed, 01 Dec 2021 08:18:02 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1638364111;
+        with ESMTP id S244614AbhLANR6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Dec 2021 08:17:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1638364112;
     s=strato-dkim-0002; d=gerhold.net;
     h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=JnP/Wl21+4EvDLPKqREmvF/JLem8oluj3pulm3BeyTo=;
-    b=KxB5czbB+L5BgYZcT+1sDJbBdjW3OwmWBLPkgSXAr2YeXJPbacIBlfOLeGesG7ANl9
-    0aXDsfHGO4D/L/3lOxslnui6UiPMcMSQeJNRXaqAx1D1JQ+aty501kl8Yc2OMfYjTl1g
-    4C6fqy0xB3qmIRmbJeJxqQ+cbEkfbhjp6SlcgEQ1SZJ47S1Ura2H7deMB7PVM4JjMm3d
-    CthHD6o9HHVP+EIcyAZGWY8yc6J2aJxl+bsRJaLEtt84KaWDjSxXErhRGdz6rG3XEFb4
-    lr0BR7GK1T4DCuLH8zPnYwsc3q6xloNXxm2uIuxOXi2bEAp8dyUA5+notV9suFr2IHXA
-    YyLg==
+    bh=e/hPvzPGZcI+sVgz2Roj2+S/UwQDvzs55NReIYR6KFc=;
+    b=DoRcha2EIjcjpPjh8mVueOuUcRRg/8cJOinvrr4PBe7RYRWW6SrTwjg4O/VdPHGBqg
+    0ywAL+ieALjHjnDe/lxrX1f7CaVnUEkfR5pnuMySGyCuCXp/jjWUBpB9BjbGt4tJuwFd
+    C3OkVMNHM+AhpB0o9AQdSB+RGrVRsPMSKmeX7w2Uew9MB9Ktyz2HDObcctZ5Y2i7dPLH
+    qotzU/Au4apmik1oe65hngeseQoKMbYIvS1gLbrsv3IdogXT/pT/UElng0X6AX3X9D1d
+    GaDA0z70Ih1TP5ok5XuQ7Q0xPS7Jp9p7+y8UXCw6xKcEgLG3IrKJYuUbcj1cQnS56g2Z
+    N1dA==
 Authentication-Results: strato.com;
     dkim=none
 X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVORvLd4SsytBXQ7UOGqRde+a0fyL2moo2"
 X-RZG-CLASS-ID: mo00
 Received: from droid..
     by smtp.strato.de (RZmta 47.34.10 AUTH)
-    with ESMTPSA id j03bcbxB1D8Vghm
+    with ESMTPSA id j03bcbxB1D8Vghn
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
     Wed, 1 Dec 2021 14:08:31 +0100 (CET)
@@ -40,9 +39,9 @@ Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
         Arnd Bergmann <arnd@arndb.de>, Andy Gross <agross@kernel.org>,
         Stephan Gerhold <stephan@gerhold.net>
-Subject: [PATCH v3 2/4] firmware: qcom: scm: Simplify set_cold/warm_boot_addr()
-Date:   Wed,  1 Dec 2021 14:05:03 +0100
-Message-Id: <20211201130505.257379-3-stephan@gerhold.net>
+Subject: [PATCH v3 3/4] firmware: qcom: scm: Drop cpumask parameter from set_boot_addr()
+Date:   Wed,  1 Dec 2021 14:05:04 +0100
+Message-Id: <20211201130505.257379-4-stephan@gerhold.net>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211201130505.257379-1-stephan@gerhold.net>
 References: <20211201130505.257379-1-stephan@gerhold.net>
@@ -52,186 +51,137 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The qcom_scm_set_cold/warm_boot_addr() implementations have a lot of
-functionality that is actually not used.
+qcom_scm_set_cold/warm_boot_addr() currently take a cpumask parameter,
+but it's not very useful because at the end we always set the same entry
+address for all CPUs. This also allows speeding up probe of
+cpuidle-qcom-spm a bit because only one SCM call needs to be made to
+the TrustZone firmware, instead of one per CPU.
 
-For example, set_warm_boot_addr() caches the last used entry address
-and skips making the SCM call when the entry address is unchanged.
-But there is actually just a single call of qcom_scm_set_warm_boot_addr()
-in the whole kernel tree, which always configures the entry address
-to cpu_resume_arm().
-
-Simplify this by having a single qcom_scm_set_boot_addr() function
-for both cold and warm boot address. This is totally sufficient for
-the functionality supported in the mainline tree.
+The main reason for this change is that it allows implementing the
+"multi-cluster" variant of the set_boot_addr() call more easily
+without having to rely on functions that break in certain build
+configurations or that are not exported to modules.
 
 Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
 ---
- drivers/firmware/qcom_scm.c | 105 +++++++++---------------------------
- drivers/firmware/qcom_scm.h |   1 +
- 2 files changed, 27 insertions(+), 79 deletions(-)
+ arch/arm/mach-qcom/platsmp.c       |  3 +--
+ drivers/cpuidle/cpuidle-qcom-spm.c |  8 ++++----
+ drivers/firmware/qcom_scm.c        | 19 ++++++++-----------
+ include/linux/qcom_scm.h           |  4 ++--
+ 4 files changed, 15 insertions(+), 19 deletions(-)
 
+diff --git a/arch/arm/mach-qcom/platsmp.c b/arch/arm/mach-qcom/platsmp.c
+index 58a4228455ce..65a0d5ce2bb3 100644
+--- a/arch/arm/mach-qcom/platsmp.c
++++ b/arch/arm/mach-qcom/platsmp.c
+@@ -357,8 +357,7 @@ static void __init qcom_smp_prepare_cpus(unsigned int max_cpus)
+ {
+ 	int cpu;
+ 
+-	if (qcom_scm_set_cold_boot_addr(secondary_startup_arm,
+-					cpu_present_mask)) {
++	if (qcom_scm_set_cold_boot_addr(secondary_startup_arm)) {
+ 		for_each_present_cpu(cpu) {
+ 			if (cpu == smp_processor_id())
+ 				continue;
+diff --git a/drivers/cpuidle/cpuidle-qcom-spm.c b/drivers/cpuidle/cpuidle-qcom-spm.c
+index 5f27dcc6c110..beedf22cbe78 100644
+--- a/drivers/cpuidle/cpuidle-qcom-spm.c
++++ b/drivers/cpuidle/cpuidle-qcom-spm.c
+@@ -122,10 +122,6 @@ static int spm_cpuidle_register(struct device *cpuidle_dev, int cpu)
+ 	if (ret <= 0)
+ 		return ret ? : -ENODEV;
+ 
+-	ret = qcom_scm_set_warm_boot_addr(cpu_resume_arm, cpumask_of(cpu));
+-	if (ret)
+-		return ret;
+-
+ 	return cpuidle_register(&data->cpuidle_driver, NULL);
+ }
+ 
+@@ -136,6 +132,10 @@ static int spm_cpuidle_drv_probe(struct platform_device *pdev)
+ 	if (!qcom_scm_is_available())
+ 		return -EPROBE_DEFER;
+ 
++	ret = qcom_scm_set_warm_boot_addr(cpu_resume_arm);
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret, "set warm boot addr failed");
++
+ 	for_each_possible_cpu(cpu) {
+ 		ret = spm_cpuidle_register(&pdev->dev, cpu);
+ 		if (ret && ret != -ENODEV) {
 diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-index 7db8066b19fd..e0fca80bf6fc 100644
+index e0fca80bf6fc..e89be2f0cdec 100644
 --- a/drivers/firmware/qcom_scm.c
 +++ b/drivers/firmware/qcom_scm.c
-@@ -49,26 +49,12 @@ struct qcom_scm_mem_map_info {
- 	__le64 mem_size;
- };
- 
--#define QCOM_SCM_FLAG_COLDBOOT_CPU0	0x00
--#define QCOM_SCM_FLAG_COLDBOOT_CPU1	0x01
--#define QCOM_SCM_FLAG_COLDBOOT_CPU2	0x08
--#define QCOM_SCM_FLAG_COLDBOOT_CPU3	0x20
--
--#define QCOM_SCM_FLAG_WARMBOOT_CPU0	0x04
--#define QCOM_SCM_FLAG_WARMBOOT_CPU1	0x02
--#define QCOM_SCM_FLAG_WARMBOOT_CPU2	0x10
--#define QCOM_SCM_FLAG_WARMBOOT_CPU3	0x40
--
--struct qcom_scm_wb_entry {
--	int flag;
--	void *entry;
-+/* Each bit configures cold/warm boot address for one of the 4 CPUs */
-+static const u8 qcom_scm_cpu_cold_bits[QCOM_SCM_BOOT_MAX_CPUS] = {
-+	0, BIT(0), BIT(3), BIT(5)
- };
--
--static struct qcom_scm_wb_entry qcom_scm_wb[] = {
--	{ .flag = QCOM_SCM_FLAG_WARMBOOT_CPU0 },
--	{ .flag = QCOM_SCM_FLAG_WARMBOOT_CPU1 },
--	{ .flag = QCOM_SCM_FLAG_WARMBOOT_CPU2 },
--	{ .flag = QCOM_SCM_FLAG_WARMBOOT_CPU3 },
-+static const u8 qcom_scm_cpu_warm_bits[QCOM_SCM_BOOT_MAX_CPUS] = {
-+	BIT(2), BIT(1), BIT(4), BIT(6)
- };
- 
- static const char * const qcom_scm_convention_names[] = {
-@@ -260,49 +246,41 @@ static bool __qcom_scm_is_call_available(struct device *dev, u32 svc_id,
+@@ -246,8 +246,7 @@ static bool __qcom_scm_is_call_available(struct device *dev, u32 svc_id,
  	return ret ? false : !!res.result[0];
  }
  
--/**
-- * qcom_scm_set_warm_boot_addr() - Set the warm boot address for cpus
-- * @entry: Entry point function for the cpus
-- * @cpus: The cpumask of cpus that will use the entry point
-- *
-- * Set the Linux entry point for the SCM to transfer control to when coming
-- * out of a power down. CPU power down may be executed on cpuidle or hotplug.
-- */
--int qcom_scm_set_warm_boot_addr(void *entry, const cpumask_t *cpus)
-+static int qcom_scm_set_boot_addr(void *entry, const cpumask_t *cpus,
-+				  const u8 *cpu_bits)
+-static int qcom_scm_set_boot_addr(void *entry, const cpumask_t *cpus,
+-				  const u8 *cpu_bits)
++static int qcom_scm_set_boot_addr(void *entry, const u8 *cpu_bits)
  {
--	int ret;
--	int flags = 0;
  	int cpu;
-+	unsigned int flags = 0;
- 	struct qcom_scm_desc desc = {
- 		.svc = QCOM_SCM_SVC_BOOT,
- 		.cmd = QCOM_SCM_BOOT_SET_ADDR,
- 		.arginfo = QCOM_SCM_ARGS(2),
-+		.owner = ARM_SMCCC_OWNER_SIP,
+ 	unsigned int flags = 0;
+@@ -258,7 +257,7 @@ static int qcom_scm_set_boot_addr(void *entry, const cpumask_t *cpus,
+ 		.owner = ARM_SMCCC_OWNER_SIP,
  	};
  
--	/*
--	 * Reassign only if we are switching from hotplug entry point
--	 * to cpuidle entry point or vice versa.
--	 */
- 	for_each_cpu(cpu, cpus) {
--		if (entry == qcom_scm_wb[cpu].entry)
--			continue;
--		flags |= qcom_scm_wb[cpu].flag;
-+		if (cpu >= QCOM_SCM_BOOT_MAX_CPUS)
-+			return -EINVAL;
-+		flags |= cpu_bits[cpu];
- 	}
+-	for_each_cpu(cpu, cpus) {
++	for_each_present_cpu(cpu) {
+ 		if (cpu >= QCOM_SCM_BOOT_MAX_CPUS)
+ 			return -EINVAL;
+ 		flags |= cpu_bits[cpu];
+@@ -271,27 +270,25 @@ static int qcom_scm_set_boot_addr(void *entry, const cpumask_t *cpus,
+ }
  
--	/* No change in entry function */
--	if (!flags)
--		return 0;
--
- 	desc.args[0] = flags;
- 	desc.args[1] = virt_to_phys(entry);
- 
--	ret = qcom_scm_call(__scm->dev, &desc, NULL);
--	if (!ret) {
--		for_each_cpu(cpu, cpus)
--			qcom_scm_wb[cpu].entry = entry;
--	}
-+	return qcom_scm_call_atomic(__scm ? __scm->dev : NULL, &desc, NULL);
-+}
- 
--	return ret;
-+/**
-+ * qcom_scm_set_warm_boot_addr() - Set the warm boot address for cpus
-+ * @entry: Entry point function for the cpus
-+ * @cpus: The cpumask of cpus that will use the entry point
-+ *
-+ * Set the Linux entry point for the SCM to transfer control to when coming
-+ * out of a power down. CPU power down may be executed on cpuidle or hotplug.
-+ */
-+int qcom_scm_set_warm_boot_addr(void *entry, const cpumask_t *cpus)
-+{
-+	return qcom_scm_set_boot_addr(entry, cpus, qcom_scm_cpu_warm_bits);
+ /**
+- * qcom_scm_set_warm_boot_addr() - Set the warm boot address for cpus
++ * qcom_scm_set_warm_boot_addr() - Set the warm boot address for all cpus
+  * @entry: Entry point function for the cpus
+- * @cpus: The cpumask of cpus that will use the entry point
+  *
+  * Set the Linux entry point for the SCM to transfer control to when coming
+  * out of a power down. CPU power down may be executed on cpuidle or hotplug.
+  */
+-int qcom_scm_set_warm_boot_addr(void *entry, const cpumask_t *cpus)
++int qcom_scm_set_warm_boot_addr(void *entry)
+ {
+-	return qcom_scm_set_boot_addr(entry, cpus, qcom_scm_cpu_warm_bits);
++	return qcom_scm_set_boot_addr(entry, qcom_scm_cpu_warm_bits);
  }
  EXPORT_SYMBOL(qcom_scm_set_warm_boot_addr);
  
-@@ -310,41 +288,10 @@ EXPORT_SYMBOL(qcom_scm_set_warm_boot_addr);
-  * qcom_scm_set_cold_boot_addr() - Set the cold boot address for cpus
+ /**
+- * qcom_scm_set_cold_boot_addr() - Set the cold boot address for cpus
++ * qcom_scm_set_cold_boot_addr() - Set the cold boot address for all cpus
   * @entry: Entry point function for the cpus
-  * @cpus: The cpumask of cpus that will use the entry point
-- *
-- * Set the cold boot address of the cpus. Any cpu outside the supported
-- * range would be removed from the cpu present mask.
+- * @cpus: The cpumask of cpus that will use the entry point
   */
- int qcom_scm_set_cold_boot_addr(void *entry, const cpumask_t *cpus)
+-int qcom_scm_set_cold_boot_addr(void *entry, const cpumask_t *cpus)
++int qcom_scm_set_cold_boot_addr(void *entry)
  {
--	int flags = 0;
--	int cpu;
--	int scm_cb_flags[] = {
--		QCOM_SCM_FLAG_COLDBOOT_CPU0,
--		QCOM_SCM_FLAG_COLDBOOT_CPU1,
--		QCOM_SCM_FLAG_COLDBOOT_CPU2,
--		QCOM_SCM_FLAG_COLDBOOT_CPU3,
--	};
--	struct qcom_scm_desc desc = {
--		.svc = QCOM_SCM_SVC_BOOT,
--		.cmd = QCOM_SCM_BOOT_SET_ADDR,
--		.arginfo = QCOM_SCM_ARGS(2),
--		.owner = ARM_SMCCC_OWNER_SIP,
--	};
--
--	if (!cpus || cpumask_empty(cpus))
--		return -EINVAL;
--
--	for_each_cpu(cpu, cpus) {
--		if (cpu < ARRAY_SIZE(scm_cb_flags))
--			flags |= scm_cb_flags[cpu];
--		else
--			set_cpu_present(cpu, false);
--	}
--
--	desc.args[0] = flags;
--	desc.args[1] = virt_to_phys(entry);
--
--	return qcom_scm_call_atomic(__scm ? __scm->dev : NULL, &desc, NULL);
-+	return qcom_scm_set_boot_addr(entry, cpus, qcom_scm_cpu_cold_bits);
+-	return qcom_scm_set_boot_addr(entry, cpus, qcom_scm_cpu_cold_bits);
++	return qcom_scm_set_boot_addr(entry, qcom_scm_cpu_cold_bits);
  }
  EXPORT_SYMBOL(qcom_scm_set_cold_boot_addr);
  
-diff --git a/drivers/firmware/qcom_scm.h b/drivers/firmware/qcom_scm.h
-index d92156ceb3ac..fd7d2a5f3e70 100644
---- a/drivers/firmware/qcom_scm.h
-+++ b/drivers/firmware/qcom_scm.h
-@@ -80,6 +80,7 @@ extern int scm_legacy_call(struct device *dev, const struct qcom_scm_desc *desc,
- #define QCOM_SCM_BOOT_SET_DLOAD_MODE	0x10
- #define QCOM_SCM_BOOT_SET_REMOTE_STATE	0x0a
- #define QCOM_SCM_FLUSH_FLAG_MASK	0x3
-+#define QCOM_SCM_BOOT_MAX_CPUS		4
+diff --git a/include/linux/qcom_scm.h b/include/linux/qcom_scm.h
+index 81cad9e1e412..048d09e1965b 100644
+--- a/include/linux/qcom_scm.h
++++ b/include/linux/qcom_scm.h
+@@ -63,8 +63,8 @@ enum qcom_scm_ice_cipher {
  
- #define QCOM_SCM_SVC_PIL		0x02
- #define QCOM_SCM_PIL_PAS_INIT_IMAGE	0x01
+ extern bool qcom_scm_is_available(void);
+ 
+-extern int qcom_scm_set_cold_boot_addr(void *entry, const cpumask_t *cpus);
+-extern int qcom_scm_set_warm_boot_addr(void *entry, const cpumask_t *cpus);
++extern int qcom_scm_set_cold_boot_addr(void *entry);
++extern int qcom_scm_set_warm_boot_addr(void *entry);
+ extern void qcom_scm_cpu_power_down(u32 flags);
+ extern int qcom_scm_set_remote_state(u32 state, u32 id);
+ 
 -- 
 2.34.1
 
