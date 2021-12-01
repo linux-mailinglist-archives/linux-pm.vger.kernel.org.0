@@ -2,167 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54F06464300
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Dec 2021 00:25:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAA0446447D
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Dec 2021 02:29:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345378AbhK3X3O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Nov 2021 18:29:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39130 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345470AbhK3X14 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Nov 2021 18:27:56 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 406B0C06175C;
-        Tue, 30 Nov 2021 15:24:35 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id z7so23591530lfi.11;
-        Tue, 30 Nov 2021 15:24:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Ops+ixvINP38o4nA4ikQm5GyykwXVWsU0qQPTLJ2ovo=;
-        b=YMJPx1WkfQ4OtvgoHiEOjNWPEVjmn3npVavgDBfRcNtJDkNDsT+oIhWmoM6O2vWsFz
-         kDfpD5FcITyBnC2WuMVLxKEi13AvMRCTzq0ziSJJ3GMHqJ1GZeh8mmMiENZw293W3hoh
-         mbjG8N3cb1e8+k4AUPL9nxcldnvXDRrUQDXPA3FfG9zQRX7TFmzQA3LU3Pn+zelGrqP8
-         fv2bDd75irm5uKgrOxMJjI+jzBDGrK+24gXvFS/BW4cpb9k9r83dMlJxIcZqWCHapD78
-         iKuBfdBjVqeMBg+gCfa2Vok8CbbEsYlGoOkCBJ4lOIKW2mr0wPEl0jmVvU8ud2k8B4w1
-         eM8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Ops+ixvINP38o4nA4ikQm5GyykwXVWsU0qQPTLJ2ovo=;
-        b=Abqyu988mDzSCna70Gtbr9nclNj1MJbFOddNxUmfjsFL2qK/bO/hjt+y/1Y0UuDInJ
-         mMWUCl1kMxxPpiz57lkwQUF0fsV+WjZ+J3cSGg9LkX5ZFcT2mge+w+kyCxtOB418J0cG
-         izsPJpmxA/7z/cQLp65wpnhKmCSo0jgIjllU4DAMfddN/neFRfAG6wG3wHFuql/U9DcS
-         nYWlaLYhmat2Xcv0nzn7/IN0kAaUJizLpnSmURT5h+HBvLQxqcVQXgm5UNBmDAaubXm1
-         mGZUJzItGhYKPt7VvJPvxmweNSv04JF8+zE4h+yQ8JCiuLfIbTGubD3GdlQadNT9u1vH
-         3QKA==
-X-Gm-Message-State: AOAM531WaB0BUy6dIOxPLpIr1KyyLSMTsipzWUkRCJHSg0tkAwHsP5SD
-        xTzsIWf+FOcC2+rx9Wu2s3AZEFsjZtA=
-X-Google-Smtp-Source: ABdhPJwYhMt2gMhwNZLB8J5sGborl43HOmKpzseUac+5sucFsKDv4qipP1jfRU2yxx/VOb5FtiCQaA==
-X-Received: by 2002:ac2:491e:: with SMTP id n30mr2284370lfi.97.1638314673603;
-        Tue, 30 Nov 2021 15:24:33 -0800 (PST)
-Received: from localhost.localdomain (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.gmail.com with ESMTPSA id x199sm1860735lff.284.2021.11.30.15.24.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 15:24:33 -0800 (PST)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>
-Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-mmc@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-clk@vger.kernel.org, David Heidelberg <david@ixit.cz>
-Subject: [PATCH v16 40/40] ARM: tegra20/30: Disable unused host1x hardware
-Date:   Wed,  1 Dec 2021 02:23:47 +0300
-Message-Id: <20211130232347.950-41-digetx@gmail.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211130232347.950-1-digetx@gmail.com>
-References: <20211130232347.950-1-digetx@gmail.com>
+        id S230476AbhLABdB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Nov 2021 20:33:01 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:14999 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230044AbhLABdA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Nov 2021 20:33:00 -0500
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4J3hJd2CkKzZdHM;
+        Wed,  1 Dec 2021 09:26:57 +0800 (CST)
+Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 1 Dec 2021 09:29:38 +0800
+Received: from [10.174.179.5] (10.174.179.5) by dggpemm500002.china.huawei.com
+ (7.185.36.229) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 1 Dec
+ 2021 09:29:37 +0800
+Subject: Re: [PATCH] cpufreq: Fix get_cpu_device() failed in
+ add_cpu_dev_symlink()
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+CC:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hanjun Guo <guohanjun@huawei.com>
+References: <20211129080248.46240-1-wangxiongfeng2@huawei.com>
+ <20211129091039.s7bqq43o4ktuub6t@vireshk-i7>
+ <CAJZ5v0hYskLTjSGOJgRRXD0cE0a5DMHh5qTvmgCmJh8bMicLzA@mail.gmail.com>
+From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Message-ID: <558439df-9f0e-9c2a-6332-64e3e2a5c823@huawei.com>
+Date:   Wed, 1 Dec 2021 09:29:37 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0hYskLTjSGOJgRRXD0cE0a5DMHh5qTvmgCmJh8bMicLzA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.5]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500002.china.huawei.com (7.185.36.229)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-MPE, VI, EPP and ISP were never used and we don't have drivers for them.
-Since these modules are enabled by default in a device-tree, a device is
-created for them, blocking voltage scaling because there is no driver to
-bind, and thus, state of PMC driver is never synced. Disable them.
+Hi,
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- arch/arm/boot/dts/tegra20.dtsi | 4 ++++
- arch/arm/boot/dts/tegra30.dtsi | 8 ++++++++
- 2 files changed, 12 insertions(+)
+On 2021/11/30 19:42, Rafael J. Wysocki wrote:
+> On Mon, Nov 29, 2021 at 10:10 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>>
+>> On 29-11-21, 16:02, Xiongfeng Wang wrote:
+>>> When I hot added a CPU, I found 'cpufreq' directory is not created below
+>>> /sys/devices/system/cpu/cpuX/. It is because get_cpu_device() failed in
+>>> add_cpu_dev_symlink().
+>>>
+>>> cpufreq_add_dev() is the .add_dev callback of a CPU subsys interface. It
+>>> will be called when the CPU device registered into the system. The stack
+>>> is as follows.
+>>>   register_cpu()
+>>>   ->device_register()
+>>>    ->device_add()
+>>>     ->bus_probe_device()
+>>>      ->cpufreq_add_dev()
+>>>
+>>> But only after the CPU device has been registered, we can get the CPU
+>>> device by get_cpu_device(), otherwise it will return NULL. Since we
+>>> already have the CPU device in cpufreq_add_dev(), pass it to
+>>> add_cpu_dev_symlink(). I noticed that the 'kobj' of the cpu device has
+>>> been added into the system before cpufreq_add_dev().
+>>>
+>>> Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+>>> ---
+>>>  drivers/cpufreq/cpufreq.c | 9 ++++-----
+>>>  1 file changed, 4 insertions(+), 5 deletions(-)
+>>>
+>>> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+>>> index e338d2f010fe..22aa2793e4d2 100644
+>>> --- a/drivers/cpufreq/cpufreq.c
+>>> +++ b/drivers/cpufreq/cpufreq.c
+>>> @@ -1004,10 +1004,9 @@ static struct kobj_type ktype_cpufreq = {
+>>>       .release        = cpufreq_sysfs_release,
+>>>  };
+>>>
+>>> -static void add_cpu_dev_symlink(struct cpufreq_policy *policy, unsigned int cpu)
+>>> +static void add_cpu_dev_symlink(struct cpufreq_policy *policy, unsigned int cpu,
+>>> +                             struct device *dev)
+>>>  {
+>>> -     struct device *dev = get_cpu_device(cpu);
+>>> -
+>>>       if (unlikely(!dev))
+>>>               return;
+>>>
+>>> @@ -1391,7 +1390,7 @@ static int cpufreq_online(unsigned int cpu)
+>>>       if (new_policy) {
+>>>               for_each_cpu(j, policy->related_cpus) {
+>>>                       per_cpu(cpufreq_cpu_data, j) = policy;
+>>> -                     add_cpu_dev_symlink(policy, j);
+>>> +                     add_cpu_dev_symlink(policy, j, get_cpu_device(j));
+>>>               }
+>>>
+>>>               policy->min_freq_req = kzalloc(2 * sizeof(*policy->min_freq_req),
+>>> @@ -1565,7 +1564,7 @@ static int cpufreq_add_dev(struct device *dev, struct subsys_interface *sif)
+>>>       /* Create sysfs link on CPU registration */
+>>>       policy = per_cpu(cpufreq_cpu_data, cpu);
+>>>       if (policy)
+>>> -             add_cpu_dev_symlink(policy, cpu);
+>>> +             add_cpu_dev_symlink(policy, cpu, dev);
+>>>
+>>>       return 0;
+>>>  }
+>>
+>> Interesting that I never hit it earlier despite doing rigorous testing of
+>> hotplug stuff :(
+> 
+> This is the real hot-add path which isn't tested on a regular basis.
+> 
+>> Anyway the patch is okay,
+> 
+> It would be good to add a Fixes: tag to it, though.  Any idea about
+> the commit this should point to?
 
-diff --git a/arch/arm/boot/dts/tegra20.dtsi b/arch/arm/boot/dts/tegra20.dtsi
-index 7b69ffc57abe..8010b40d7377 100644
---- a/arch/arm/boot/dts/tegra20.dtsi
-+++ b/arch/arm/boot/dts/tegra20.dtsi
-@@ -59,6 +59,7 @@ mpe@54040000 {
- 			reset-names = "mpe";
- 			power-domains = <&pd_mpe>;
- 			operating-points-v2 = <&mpe_dvfs_opp_table>;
-+			status = "disabled";
- 		};
- 
- 		vi@54080000 {
-@@ -70,6 +71,7 @@ vi@54080000 {
- 			reset-names = "vi";
- 			power-domains = <&pd_venc>;
- 			operating-points-v2 = <&vi_dvfs_opp_table>;
-+			status = "disabled";
- 		};
- 
- 		epp@540c0000 {
-@@ -81,6 +83,7 @@ epp@540c0000 {
- 			reset-names = "epp";
- 			power-domains = <&pd_core>;
- 			operating-points-v2 = <&epp_dvfs_opp_table>;
-+			status = "disabled";
- 		};
- 
- 		isp@54100000 {
-@@ -91,6 +94,7 @@ isp@54100000 {
- 			resets = <&tegra_car 23>;
- 			reset-names = "isp";
- 			power-domains = <&pd_venc>;
-+			status = "disabled";
- 		};
- 
- 		gr2d@54140000 {
-diff --git a/arch/arm/boot/dts/tegra30.dtsi b/arch/arm/boot/dts/tegra30.dtsi
-index 96d1c5688248..c8b22ec30ef0 100644
---- a/arch/arm/boot/dts/tegra30.dtsi
-+++ b/arch/arm/boot/dts/tegra30.dtsi
-@@ -145,6 +145,8 @@ mpe@54040000 {
- 			operating-points-v2 = <&mpe_dvfs_opp_table>;
- 
- 			iommus = <&mc TEGRA_SWGROUP_MPE>;
-+
-+			status = "disabled";
- 		};
- 
- 		vi@54080000 {
-@@ -158,6 +160,8 @@ vi@54080000 {
- 			operating-points-v2 = <&vi_dvfs_opp_table>;
- 
- 			iommus = <&mc TEGRA_SWGROUP_VI>;
-+
-+			status = "disabled";
- 		};
- 
- 		epp@540c0000 {
-@@ -171,6 +175,8 @@ epp@540c0000 {
- 			operating-points-v2 = <&epp_dvfs_opp_table>;
- 
- 			iommus = <&mc TEGRA_SWGROUP_EPP>;
-+
-+			status = "disabled";
- 		};
- 
- 		isp@54100000 {
-@@ -183,6 +189,8 @@ isp@54100000 {
- 			power-domains = <&pd_venc>;
- 
- 			iommus = <&mc TEGRA_SWGROUP_ISP>;
-+
-+			status = "disabled";
- 		};
- 
- 		gr2d@54140000 {
--- 
-2.33.1
+When I look up the commit history, I found this one.
+   2f0ba790df51 ("cpufreq: Fix creation of symbolic links to policy directories")
+Before this commit, the 'dev' is passed to add_cpu_dev_symlink() in
+cpufreq_add_dev(). Maybe we can point to this one.
 
+> 
+>> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> .
+> 
