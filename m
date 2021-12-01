@@ -2,120 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BDDA46504D
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Dec 2021 15:46:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 511FF465059
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Dec 2021 15:47:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351126AbhLAOtL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Dec 2021 09:49:11 -0500
-Received: from mx1.tq-group.com ([93.104.207.81]:17617 "EHLO mx1.tq-group.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1350575AbhLAOsw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 1 Dec 2021 09:48:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1638369931; x=1669905931;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=+m9wSZu9/s7I3SjswpXETp+qN4xor9JvYjd0U3he9pU=;
-  b=eiCfmf60MGLCylSmQCmhb42fynXUPy+0tIdGUGQooLc0JVHu3Uu2xfuL
-   6YfarSkqHFAXMOz68E9oMB5ZFlVFtcjUM4AsvmMrqxBSkxOdwFVtrinHp
-   oxWNKRibkHWy0QkvkX8UPP58JW5uXkpWxX3mW6iAhT1b6kgfeuXmtP+pj
-   0TO7c1lfxwY94/I9G7wM8KXio+KJ9TpqH+krWGLP4AZ+SFxt2G2khoj4X
-   oZBySxFp1qJuTMz5jxlYdSbfxFXgowI8GjKQ4kaUIpMZMHK3gESmc6Ytl
-   YWb8E5u9avxL33WlETC7CQhgq7sI0bsQgL5cXPzsiLQiQg5vckQAMohQX
-   g==;
-X-IronPort-AV: E=Sophos;i="5.87,278,1631570400"; 
-   d="scan'208";a="20788362"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 01 Dec 2021 15:45:24 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Wed, 01 Dec 2021 15:45:24 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Wed, 01 Dec 2021 15:45:24 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1638369924; x=1669905924;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=+m9wSZu9/s7I3SjswpXETp+qN4xor9JvYjd0U3he9pU=;
-  b=GlTEb95sFaVn0TWE78NK41I1IAyq2DOlbHeVMT2j4OA00W6q06hiKZxk
-   RdSyxA4Tf939oZXaqKztG8Bc5mCzwwmdpP4vBC/by9PoqOkNVMAwwD6b2
-   h4jwckFuatXLjsqGYioSXl/S59+1LcMFudNy6nDOBdXP/LhZJTayPC5BL
-   HK/fW7Hiwd2Iky6TJ+whKCTQA1ovCfdGKarntgSIQpBpNkdZZkMNk42yK
-   84dY4Qk1vSXPN1y2+OAFCxkymtbomDoBGZii2d0W9c3pNKCgUIerFeqUb
-   OHfrsS4toeCd+5u6M1KTCj7N3sC2Tc4VlXsvTEulcshY1LWwBIv1zYO/u
-   g==;
-X-IronPort-AV: E=Sophos;i="5.87,278,1631570400"; 
-   d="scan'208";a="20788361"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 01 Dec 2021 15:45:24 +0100
-Received: from steina-w (unknown [10.123.49.12])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 0B661280065;
-        Wed,  1 Dec 2021 15:45:23 +0100 (CET)
-Message-ID: <ea1af2b2091c0cab822c9ef5810db6936365d7ef.camel@ew.tq-group.com>
-Subject: Re: (EXT) Re: [PATCH 1/1] thermal: imx8mm: enable ADC when enabling
- monitor
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>
-Cc:     Paul Gerber <Paul.Gerber@tq-group.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Date:   Wed, 01 Dec 2021 15:45:21 +0100
-In-Reply-To: <2786750e-0556-a1b8-e464-30de05ce7cf2@linaro.org>
-References: <20211122114225.196280-1-alexander.stein@ew.tq-group.com>
-         <2786750e-0556-a1b8-e464-30de05ce7cf2@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        id S245328AbhLAOuk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Dec 2021 09:50:40 -0500
+Received: from mail-oi1-f172.google.com ([209.85.167.172]:40529 "EHLO
+        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351461AbhLAOuA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Dec 2021 09:50:00 -0500
+Received: by mail-oi1-f172.google.com with SMTP id bk14so48964854oib.7;
+        Wed, 01 Dec 2021 06:46:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kHlQKFdRmHGrGusvRZxAIIy9u1JQqYfGD9T6CB33KYM=;
+        b=3FiezFslMLAtKuir2T298DE4MhwryGsZ/M5M9ds61Tzhli/GMYKbxVHv65eVx3r0HY
+         OSRvD+vbAay6A0oyN896oltHs7WFnZThvCAdhhjzo7y8FPoSON4QQWLqXMdGyLJf5EWm
+         sJTRfETMVE1wSylVuLr12mk4Pj/bzt9ipS8wr1Oj3sPrKlSE3LjVDXoUMQDbWj/Dl1XV
+         x6dyCziakOnGcLzM9hsHOAEQlXe9JvfCBk6qeesEkX87zl/LjqTgWOdGUfe+EIKeK8s8
+         kcB0Kk4LVMCQkDJe9StFFQCMB7yZMMTah379p6SWlyjDVWUxPaRyyvmz3BrPOyP24grl
+         tmxQ==
+X-Gm-Message-State: AOAM530O7x0eUwd/fyRhUCBiswrabO2J2iGWb7BdVJulxRuodn4VE9eT
+        kROYyaaSQTrtRpzIkQlf1sYPw8pGM18yCccNtmg=
+X-Google-Smtp-Source: ABdhPJz3iqJlu25kel8NkDOAqEIDYIppOuUIXsOo5T5so4K6B2b9xfKsnjrS2jUAwAhaYdj1u6BcVDTz+x0ayz8Ocfo=
+X-Received: by 2002:aca:eb0b:: with SMTP id j11mr6381292oih.51.1638369999775;
+ Wed, 01 Dec 2021 06:46:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <4239b61f-f8c5-462f-2951-fbba2dec8b1d@gmail.com> <20211201063041.GC684@gondor.apana.org.au>
+In-Reply-To: <20211201063041.GC684@gondor.apana.org.au>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 1 Dec 2021 15:46:28 +0100
+Message-ID: <CAJZ5v0iEFye=BJjqUQUDP+e3r_fSWxj-bv=W7aaJO7fuk5wyZg@mail.gmail.com>
+Subject: Re: crypto: stm32 - Revert broken pm_runtime_resume_and_get changes
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Shixin Liu <liushixin2@huawei.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Am Dienstag, dem 30.11.2021 um 15:49 +0100 schrieb Daniel Lezcano:
-> On 22/11/2021 12:42, Alexander Stein wrote:
-> > From: Paul Gerber <
-> > Paul.Gerber@tq-group.com
-> > >
-> > 
-> > The i.MX 8MP has a ADC_PD bit in the TMU_TER register that controls
-> > the
-> > operating mode of the ADC:
-> > * 0 means normal operating mode
-> > * 1 means power down mode
-> > 
-> > When enabling/disabling the TMU, the ADC operating mode must be set
-> > accordingly.
-> > 
-> > i.MX 8M Mini & Nano are lacking this bit.
-> > 
-> > Signed-off-by: Paul Gerber <
-> > Paul.Gerber@tq-group.com
-> > >
-> > Signed-off-by: Alexander Stein <
-> > alexander.stein@ew.tq-group.com
-> > >
-> > ---
-> > Often this bit is set already by the bootloader, but in case this
-> > is not
-> > done, the file /sys/class/thermal/thermal_zone0/temp will always
-> > return
-> > -EAGAIN.
-> 
-> Does it deserve a Fixes tag?
+On Wed, Dec 1, 2021 at 7:30 AM Herbert Xu <herbert@gondor.apana.org.au> wrote:
+>
+> On Sat, Nov 27, 2021 at 02:39:52PM +0100, Heiner Kallweit wrote:
+> > When discussing whether pm_runtime_resume_and_get() should be annotated as
+> > __must_check, I became aware of RPM usage in crypto/stm32.
+> >
+> > Following two patches replace usage of pm_runtime_get_sync() with
+> > pm_runtime_resume_and_get() w/o checking the return code.
+> >
+> > 747bf30fd944 ("crypto: stm32/cryp - Fix PM reference leak on stm32-cryp.c")
+> > 1cb3ad701970 ("crypto: stm32/hash - Fix PM reference leak on stm32-hash.c")
+> >
+> > This results in RPM usage like the following in stm32_hash_export():
+> >
+> > pm_runtime_resume_and_get(hdev->dev);
+> > ...
+> > pm_runtime_mark_last_busy(hdev->dev);
+> > pm_runtime_put_autosuspend(hdev->dev);
+> >
+> > This is broken. After pm_runtime_resume_and_get() the usage count may be
+> > incremented or not. If not, then the call to pm_runtime_put_autosuspend()
+> > results in exactly the imbalance that the patch claims to fix.
+> >
+> > Therefore I think both patches should be reverted, or the return code
+> > of pm_runtime_resume_and_get() has to be checked and properly handled
+> > in the driver logic.
+>
+> I agree.  But we can't revert them completely because it does
+> fix some genuine issues with the ones where we do check the error
+> code.  What about this patch?
+>
+> ---8<---
+> We should not call pm_runtime_resume_and_get where the reference
+> count is expected to be incremented unconditionally.  This patch
+> reverts these calls to the original unconditional get_sync call.
 
-The more I think about it, the more I'm inclined to add one.
-Please tell me if I shall iterate v2 adding a Fixes tag (or other
-changes)
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Best regards,
-Alexander
+The rule of thumb is to use pm_runtime_resume_and_get() if you want to
+check the return value (and act on it) and pm_runtime_get_sync()
+otherwise.
 
-
+> Reported-by: Heiner Kallweit <hkallweit1@gmail.com>
+> Fixes: 747bf30fd944 ("crypto: stm32/cryp - Fix PM reference leak...")
+> Fixes: 1cb3ad701970 ("crypto: stm32/hash - Fix PM reference leak...")
+> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+>
+> diff --git a/drivers/crypto/stm32/stm32-cryp.c b/drivers/crypto/stm32/stm32-cryp.c
+> index 7389a0536ff0..05087831e199 100644
+> --- a/drivers/crypto/stm32/stm32-cryp.c
+> +++ b/drivers/crypto/stm32/stm32-cryp.c
+> @@ -542,7 +542,7 @@ static int stm32_cryp_hw_init(struct stm32_cryp *cryp)
+>         int ret;
+>         u32 cfg, hw_mode;
+>
+> -       pm_runtime_resume_and_get(cryp->dev);
+> +       pm_runtime_get_sync(cryp->dev);
+>
+>         /* Disable interrupt */
+>         stm32_cryp_write(cryp, CRYP_IMSCR, 0);
+> diff --git a/drivers/crypto/stm32/stm32-hash.c b/drivers/crypto/stm32/stm32-hash.c
+> index 389de9e3302d..d33006d43f76 100644
+> --- a/drivers/crypto/stm32/stm32-hash.c
+> +++ b/drivers/crypto/stm32/stm32-hash.c
+> @@ -813,7 +813,7 @@ static void stm32_hash_finish_req(struct ahash_request *req, int err)
+>  static int stm32_hash_hw_init(struct stm32_hash_dev *hdev,
+>                               struct stm32_hash_request_ctx *rctx)
+>  {
+> -       pm_runtime_resume_and_get(hdev->dev);
+> +       pm_runtime_get_sync(hdev->dev);
+>
+>         if (!(HASH_FLAGS_INIT & hdev->flags)) {
+>                 stm32_hash_write(hdev, HASH_CR, HASH_CR_INIT);
+> @@ -962,7 +962,7 @@ static int stm32_hash_export(struct ahash_request *req, void *out)
+>         u32 *preg;
+>         unsigned int i;
+>
+> -       pm_runtime_resume_and_get(hdev->dev);
+> +       pm_runtime_get_sync(hdev->dev);
+>
+>         while ((stm32_hash_read(hdev, HASH_SR) & HASH_SR_BUSY))
+>                 cpu_relax();
+> @@ -1000,7 +1000,7 @@ static int stm32_hash_import(struct ahash_request *req, const void *in)
+>
+>         preg = rctx->hw_context;
+>
+> -       pm_runtime_resume_and_get(hdev->dev);
+> +       pm_runtime_get_sync(hdev->dev);
+>
+>         stm32_hash_write(hdev, HASH_IMR, *preg++);
+>         stm32_hash_write(hdev, HASH_STR, *preg++);
+> --
+> Email: Herbert Xu <herbert@gondor.apana.org.au>
+> Home Page: http://gondor.apana.org.au/~herbert/
+> PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
