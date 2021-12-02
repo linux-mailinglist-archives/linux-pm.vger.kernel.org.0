@@ -2,142 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F23DD465BE6
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Dec 2021 02:57:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B612465C6B
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Dec 2021 04:05:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238595AbhLBCAw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Dec 2021 21:00:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35982 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234183AbhLBCAt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Dec 2021 21:00:49 -0500
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768AAC061574
-        for <linux-pm@vger.kernel.org>; Wed,  1 Dec 2021 17:57:28 -0800 (PST)
-Received: by mail-ot1-x32d.google.com with SMTP id 47-20020a9d0332000000b005798ac20d72so37858393otv.9
-        for <linux-pm@vger.kernel.org>; Wed, 01 Dec 2021 17:57:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5lCMYrhm5t5lva25mCfOVtAtdQc5BhH6E74NoPZjUbA=;
-        b=kbN5VAd3EWzVITSWCiuAVlnCBYntE1oSbkRiiStHk1SRl2vjP37dW0UwV64k66adwJ
-         24qzE5a2BByZfzxyqgIhnICyaWuBh3cNZ5C2z6mXlOayvRTACgLiuXA2g1/BUZ4WjJjP
-         ojly8x07Q/pDR4d7mbyPlm0peu5bCtQRY1yo7pNSbQOgeTiMjPX3e609cubVq0Yy5XRs
-         /EaM+/1qFkCc26ZrmY3ZLJlq41thk/SL4G6sL10fSD9B3Lg/opEU9nQ1gbDZ0cOIObaI
-         eOQVGa52Q1VpEo7UqP0Qn6gBg/OrwMUeNvDtUUUNxlEGcjlLoy4/zF1yznZldgc1Su1Y
-         2C6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5lCMYrhm5t5lva25mCfOVtAtdQc5BhH6E74NoPZjUbA=;
-        b=bXWmNprGHpUJBhFfW4ty1fsUqrTxKg/wnKDfQgcRztLRyFGpvUQBHk7mNAMgTF7i+z
-         zqB/G4ZI00j9IqIPP0ilNA4xwKl0EQqwpF4DhrWamwsz0OrAgNGyE+R3BIJ5QBImvC7+
-         WyLchfg11g+Rlv2CeEkJqNeNEc7oFMWFrpidp3pokuh+3kpO8J9rdkyFKVQuUh/mrkYG
-         n/UOG0N6q5ZDKljElR0Gu7R2+OpDi4MxvF6mJKQzJC1vaJNiSec5NUo/G/03AIo0WLgR
-         pg3FS5uixNDKLP9KaOsMm3Bse020aCx/aIDtCUvUS71YSYUogSidXeGElrXMKvQnSsM/
-         MhOA==
-X-Gm-Message-State: AOAM531zLh3jtfdMdGMFBQTS/dvXRMucU/7Aixl0lw0WRix/T6f5iTfd
-        rHoiusOiX16KpVHVnDODYTbzKBMwXZ+utIG8SyfZOA==
-X-Google-Smtp-Source: ABdhPJyuIlyp15f6FFJnwyRvnSdZY2wzuaWptSL7NkR9cG64eNxcHaqNqhS0ll24px3A6oDmh6YoPPsJyo6JDsiPOz0=
-X-Received: by 2002:a9d:74d0:: with SMTP id a16mr8829373otl.237.1638410247820;
- Wed, 01 Dec 2021 17:57:27 -0800 (PST)
+        id S237396AbhLBDJD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Dec 2021 22:09:03 -0500
+Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:50420
+        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235861AbhLBDJA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Dec 2021 22:09:00 -0500
+Received: from localhost.localdomain (unknown [10.101.196.174])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 06DAD40078;
+        Thu,  2 Dec 2021 03:05:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1638414337;
+        bh=Ie+b2r1u5uIazpBAlpisU1cFz7IeUiJ95ouwCQDSAKw=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=pQU7iIs7kvBxS2bzEaRke+AbEvwgRGBRnI2hcmz3HHXBOq+LTMAhvRJVQtCLqd5+v
+         BRhSvdHdQcykZ5/L/mac+1R3MAAJoMMRfyaTjMkhRH6OeE/LisCItFDnP/o+Vs696r
+         giuZ3b/wcRJFF7jFiY09K3TfEWAmjurroKFUQk0S290AaWKrTLoR9/g5drW0pLYIHL
+         4mcKhUlTfvZ8FGUQYxhPkHKjqpYRBWdmuBTn38lL5SbPTIU6EjfJ8ZXyNBbMXZFHMC
+         z8bMk6uBqUicaecFuV6JWu0KEmhfhIMdTuGvQeXsFIYTUz7YeEIBjyh/BVxVY3kFLc
+         rd/kIwmTvQgeg==
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     bhelgaas@google.com
+Cc:     linux-pm@vger.kernel.org,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Nirmal Patel <nirmal.patel@linux.intel.com>,
+        Jonathan Derrick <jonathan.derrick@linux.dev>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] PCI: vmd: Honor ACPI _OSC on PCIe features
+Date:   Thu,  2 Dec 2021 11:04:49 +0800
+Message-Id: <20211202030450.1355821-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <cover.1637061794.git.matti.vaittinen@fi.rohmeurope.com>
- <6123f62ac44e6513a498d15034a4b6b22abe5f5b.1637061794.git.matti.vaittinen@fi.rohmeurope.com>
- <CACRpkdbKeW+pJ8SZ0fPD+9kEtgHgi2A9U=f6XyKTHogKU-9F9g@mail.gmail.com>
- <7b34e88f-54f3-6d0a-293e-b2b411d1c5c2@fi.rohmeurope.com> <676253b9-ff69-7891-1f26-a8b5bb5a421b@fi.rohmeurope.com>
- <CACRpkdZXhw9+txdLv-k01nzH3+GvGivyAoCO1JCf2VyYK96CnQ@mail.gmail.com>
- <57f97c5f-aedb-7f7e-d269-90bd97bbba09@fi.rohmeurope.com> <CACRpkdZ9EEmWSb4mq7WJywma4dFCms+Z3BAKfntcsb9y_1THNQ@mail.gmail.com>
- <d14580b3-1647-5105-4770-2cd8751d9fe5@fi.rohmeurope.com>
-In-Reply-To: <d14580b3-1647-5105-4770-2cd8751d9fe5@fi.rohmeurope.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 2 Dec 2021 02:57:16 +0100
-Message-ID: <CACRpkdYvi7__DJNWRRHgL=4QcA0XV2uXXbW+boVU8dy10rEuVw@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 3/9] power: supply: Support DT originated
- temperature-capacity tables
-To:     "Vaittinen, Matti" <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        "rostokus@gmail.com" <rostokus@gmail.com>,
-        "fan.chen@mediatek.com" <fan.chen@mediatek.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-power <linux-power@fi.rohmeurope.com>,
-        =?UTF-8?B?c2hpbWkgPj4g5riF5rC0IOW0h+W8mA==?= 
-        <shimizu394@lapis-tech.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 7:33 AM Vaittinen, Matti
-<Matti.Vaittinen@fi.rohmeurope.com> wrote:
+When Samsung PCIe Gen4 NVMe is connected to Intel ADL VMD, the
+combination causes AER message flood and drags the system performance
+down.
 
-> Hmm. Fair enough. Maybe instead of providing 'temperature range where
-> degradation is constant' we should simply support providing the
-> data-points. Eg, an array of known
-> temperature-[degradation/change]-from-[designed/full]-capacity pairs and
-> leave selecting the best fitting model to the software. Linear
-> interpolation is simple, and may suffice for cases where we have enough
-> of data-points - but you are correct that there probably are better
-> alternatives. Nice thing is software is that it can be changed over time
-> - so even implementing it with linear approach means opening a room for
-> further improvements ;)
+The issue doesn't happen when VMD mode is disabled in BIOS, since AER
+isn't enabled by acpi_pci_root_create() . When VMD mode is enabled, AER
+is enabled regardless of _OSC:
+[    0.410076] acpi PNP0A08:00: _OSC: platform does not support [AER]
+...
+[    1.486704] pcieport 10000:e0:06.0: AER: enabled with IRQ 146
 
-Yeah someone will implement spline interpolation in the kernel one
-day I bet...
+Since VMD is an aperture to regular PCIe root ports, honor ACPI _OSC to
+disable PCIe features accordingly to resolve the issue.
 
-> Well, I don't know how constant such degradation is over time. I just
-> guess it is not constant but might be proportional to age-compensated
-> capacity rather than the designed capacity. It'd be nice to use correct
-> approximation of reality in device-tree...
+Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215027
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+---
+v2:
+ - Use pci_find_host_bridge() instead of open coding.
 
-IIUC the degradation of a battery is related to number of full charge cycles,
-i.e. the times that the battery has been emptied and recharged fully.
-This is of course never happening in practice, so e.g. two recharge cycles
-from 50% to 100% is one full charge cycle. So you integrate this
-over time (needs to be saved in a file system or flash if the battery does
-not say it itself).
+ drivers/pci/controller/vmd.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-This measures how much the lithium ions have moved around in the
-electrolyte and thus how much chemical interaction the battery has
-seen.
+diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
+index a45e8e59d3d48..acf847cb825c0 100644
+--- a/drivers/pci/controller/vmd.c
++++ b/drivers/pci/controller/vmd.c
+@@ -671,6 +671,7 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+ 	resource_size_t offset[2] = {0};
+ 	resource_size_t membar2_offset = 0x2000;
+ 	struct pci_bus *child;
++	struct pci_host_bridge *root_bridge, *vmd_bridge;
+ 	int ret;
+ 
+ 	/*
+@@ -798,6 +799,17 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+ 		return -ENODEV;
+ 	}
+ 
++	vmd_bridge = to_pci_host_bridge(vmd->bus->bridge);
++
++	root_bridge = pci_find_host_bridge(vmd->dev->bus);
++
++	vmd_bridge->native_pcie_hotplug = root_bridge->native_pcie_hotplug;
++	vmd_bridge->native_shpc_hotplug = root_bridge->native_shpc_hotplug;
++	vmd_bridge->native_aer = root_bridge->native_aer;
++	vmd_bridge->native_pme = root_bridge->native_pme;
++	vmd_bridge->native_ltr = root_bridge->native_ltr;
++	vmd_bridge->native_dpc = root_bridge->native_dpc;
++
+ 	vmd_attach_resources(vmd);
+ 	if (vmd->irq_domain)
+ 		dev_set_msi_domain(&vmd->bus->dev, vmd->irq_domain);
+-- 
+2.32.0
 
-Then the relationship between complete charge cycles and capacity
-degradation is certainly also going to be something nonlinear so it
-needs manufacturer data for the battery.
-
-> By the way, I was reading the ab8500 fuel-gauge driver as you suggested.
-> So, if I am correct, you used the battery internal resistance + current
-> to compute the voltage-drop caused by battery internal resistance. This
-> for sure improves the accuracy when we assume VBAT can be used as OCV.
-
-Yes this is how it is done. With a few measurements averaged to
-iron out the noise.
-
-> Epilogue:
-> In general, I see bunch of power-supply drivers scheduling work for
-> running some battery-measurements. Some do this periodically (I think
-> the ab8500 did this although I lost the track when I tried to see in
-> which case the periodic work was not scheduled - and maybe for
-> fuel-gauging) or after an IRQ is triggered (for example to see if change
-> indication should be sent).
-
-Yes there is some tight community of electronic engineers who read the
-right articles and design these things. We don't know them :(
-
-> I think we could simplify a few drivers if the core provided some helper
-> thread (like the simple-gauge) which could be woken by drivers (to do
-> fuel-gauge operations, or to just conditionally send the change
-> notification).
-
-I think so too, I don't think they are very rocket science once the
-right abstractions fall out.
-
-Yours,
-Linus Walleij
