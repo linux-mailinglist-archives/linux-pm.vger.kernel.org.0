@@ -2,152 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AE36465AC4
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Dec 2021 01:24:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F23DD465BE6
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Dec 2021 02:57:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233617AbhLBA2E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Dec 2021 19:28:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42866 "EHLO
+        id S238595AbhLBCAw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Dec 2021 21:00:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232372AbhLBA2D (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Dec 2021 19:28:03 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D263EC061574
-        for <linux-pm@vger.kernel.org>; Wed,  1 Dec 2021 16:24:41 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id fv9-20020a17090b0e8900b001a6a5ab1392so3177945pjb.1
-        for <linux-pm@vger.kernel.org>; Wed, 01 Dec 2021 16:24:41 -0800 (PST)
+        with ESMTP id S234183AbhLBCAt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Dec 2021 21:00:49 -0500
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768AAC061574
+        for <linux-pm@vger.kernel.org>; Wed,  1 Dec 2021 17:57:28 -0800 (PST)
+Received: by mail-ot1-x32d.google.com with SMTP id 47-20020a9d0332000000b005798ac20d72so37858393otv.9
+        for <linux-pm@vger.kernel.org>; Wed, 01 Dec 2021 17:57:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=3osnKl+f0AiHbBwDb1J4V+an3OPcXXZMm9tDEWVgniM=;
-        b=A6YeoRyfnGWLs1x6wSTzsIW35Ev2sXO6PG/RQ9/oAJvvk3inYDF9I6TCz9MNQ/a043
-         3Xuie/781/cen6fAcYVK2LpmBzkdJQMdVFiZFtesQEsc27QuNu7JezG0ZJnmvdL4gIT8
-         vr/qc9N6WuexUfbyVr8NEGQ7tYXn5hwyvSI4c0IjMIbDSLaMkTVBoBLhM5kHIEO4fWQD
-         0h0jgpezMrZa3Lwv1SKYiDC0XZZY/K296IIFbczzwkxsXnvlx0pzwPDD5Wp5qK1vo9B4
-         2deUTw3B07wCxvkIUl9BoKXj+4StUjf7CSkQ1/lPXgo4+sW6na8rsFqsgMYTpoiiA/hi
-         XlEA==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5lCMYrhm5t5lva25mCfOVtAtdQc5BhH6E74NoPZjUbA=;
+        b=kbN5VAd3EWzVITSWCiuAVlnCBYntE1oSbkRiiStHk1SRl2vjP37dW0UwV64k66adwJ
+         24qzE5a2BByZfzxyqgIhnICyaWuBh3cNZ5C2z6mXlOayvRTACgLiuXA2g1/BUZ4WjJjP
+         ojly8x07Q/pDR4d7mbyPlm0peu5bCtQRY1yo7pNSbQOgeTiMjPX3e609cubVq0Yy5XRs
+         /EaM+/1qFkCc26ZrmY3ZLJlq41thk/SL4G6sL10fSD9B3Lg/opEU9nQ1gbDZ0cOIObaI
+         eOQVGa52Q1VpEo7UqP0Qn6gBg/OrwMUeNvDtUUUNxlEGcjlLoy4/zF1yznZldgc1Su1Y
+         2C6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=3osnKl+f0AiHbBwDb1J4V+an3OPcXXZMm9tDEWVgniM=;
-        b=IjDVH6VB9jZaTfG3Li1r1Sg137mctFU5yqHSVcdkOTfig+yHFAgNCoxUsF86BtR1kZ
-         07fY5CvBOjTQnpC79On183K+h9DB8Pa0SqakqBSv1dXYze9GrVhtQ+/kfBYoEYm4mr1Y
-         7NVEzArpOFHevigYEq5sFgCNRSFuZCrKC+EgvkGGl5UdwRJomR2VkZl1MNlSr2aJ3e8o
-         TtXNy7GtzZFeKO0bVox9IHc2tq4VSHzEOfacV/7Uwh1VfxZOx96JhgUnYVmX9KbjlFB5
-         orS1Za3qVwd4BEXykuDykpRkzx95RylbgwcVw1uLF9gYmBw2gClaDUv7y425ZFBdsxB8
-         0Tyg==
-X-Gm-Message-State: AOAM532CD7BpMXIPfvIoDbJjhbKynl7TdaNM3ZjOCHFlxAeFWuJkVYbY
-        E3ouwY5qq5G3ZCmwyDcpdleNDoEHhoHEdW9f
-X-Google-Smtp-Source: ABdhPJw/GfSkxMdQnj0bnVv6xa34kvcwcmGw/AivDaa67FKLpRLhOuBjl6s90aJ66qXfsluEffhRMQ==
-X-Received: by 2002:a17:90a:d70a:: with SMTP id y10mr2021243pju.36.1638404681406;
-        Wed, 01 Dec 2021 16:24:41 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id m15sm406169pjc.35.2021.12.01.16.24.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 16:24:41 -0800 (PST)
-Message-ID: <61a81249.1c69fb81.ddb0d.20a0@mx.google.com>
-Date:   Wed, 01 Dec 2021 16:24:41 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5lCMYrhm5t5lva25mCfOVtAtdQc5BhH6E74NoPZjUbA=;
+        b=bXWmNprGHpUJBhFfW4ty1fsUqrTxKg/wnKDfQgcRztLRyFGpvUQBHk7mNAMgTF7i+z
+         zqB/G4ZI00j9IqIPP0ilNA4xwKl0EQqwpF4DhrWamwsz0OrAgNGyE+R3BIJ5QBImvC7+
+         WyLchfg11g+Rlv2CeEkJqNeNEc7oFMWFrpidp3pokuh+3kpO8J9rdkyFKVQuUh/mrkYG
+         n/UOG0N6q5ZDKljElR0Gu7R2+OpDi4MxvF6mJKQzJC1vaJNiSec5NUo/G/03AIo0WLgR
+         pg3FS5uixNDKLP9KaOsMm3Bse020aCx/aIDtCUvUS71YSYUogSidXeGElrXMKvQnSsM/
+         MhOA==
+X-Gm-Message-State: AOAM531zLh3jtfdMdGMFBQTS/dvXRMucU/7Aixl0lw0WRix/T6f5iTfd
+        rHoiusOiX16KpVHVnDODYTbzKBMwXZ+utIG8SyfZOA==
+X-Google-Smtp-Source: ABdhPJyuIlyp15f6FFJnwyRvnSdZY2wzuaWptSL7NkR9cG64eNxcHaqNqhS0ll24px3A6oDmh6YoPPsJyo6JDsiPOz0=
+X-Received: by 2002:a9d:74d0:: with SMTP id a16mr8829373otl.237.1638410247820;
+ Wed, 01 Dec 2021 17:57:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v5.16-rc3-24-g44e0749b647e4
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 1 warning (v5.16-rc3-24-g44e0749b647e4)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <cover.1637061794.git.matti.vaittinen@fi.rohmeurope.com>
+ <6123f62ac44e6513a498d15034a4b6b22abe5f5b.1637061794.git.matti.vaittinen@fi.rohmeurope.com>
+ <CACRpkdbKeW+pJ8SZ0fPD+9kEtgHgi2A9U=f6XyKTHogKU-9F9g@mail.gmail.com>
+ <7b34e88f-54f3-6d0a-293e-b2b411d1c5c2@fi.rohmeurope.com> <676253b9-ff69-7891-1f26-a8b5bb5a421b@fi.rohmeurope.com>
+ <CACRpkdZXhw9+txdLv-k01nzH3+GvGivyAoCO1JCf2VyYK96CnQ@mail.gmail.com>
+ <57f97c5f-aedb-7f7e-d269-90bd97bbba09@fi.rohmeurope.com> <CACRpkdZ9EEmWSb4mq7WJywma4dFCms+Z3BAKfntcsb9y_1THNQ@mail.gmail.com>
+ <d14580b3-1647-5105-4770-2cd8751d9fe5@fi.rohmeurope.com>
+In-Reply-To: <d14580b3-1647-5105-4770-2cd8751d9fe5@fi.rohmeurope.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 2 Dec 2021 02:57:16 +0100
+Message-ID: <CACRpkdYvi7__DJNWRRHgL=4QcA0XV2uXXbW+boVU8dy10rEuVw@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 3/9] power: supply: Support DT originated
+ temperature-capacity tables
+To:     "Vaittinen, Matti" <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        "rostokus@gmail.com" <rostokus@gmail.com>,
+        "fan.chen@mediatek.com" <fan.chen@mediatek.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-power <linux-power@fi.rohmeurope.com>,
+        =?UTF-8?B?c2hpbWkgPj4g5riF5rC0IOW0h+W8mA==?= 
+        <shimizu394@lapis-tech.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.16-rc3-24-g44=
-e0749b647e4)
+On Tue, Nov 30, 2021 at 7:33 AM Vaittinen, Matti
+<Matti.Vaittinen@fi.rohmeurope.com> wrote:
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-16-rc3-24-g44e0749b647e4/
+> Hmm. Fair enough. Maybe instead of providing 'temperature range where
+> degradation is constant' we should simply support providing the
+> data-points. Eg, an array of known
+> temperature-[degradation/change]-from-[designed/full]-capacity pairs and
+> leave selecting the best fitting model to the software. Linear
+> interpolation is simple, and may suffice for cases where we have enough
+> of data-points - but you are correct that there probably are better
+> alternatives. Nice thing is software is that it can be changed over time
+> - so even implementing it with linear approach means opening a room for
+> further improvements ;)
 
-Tree: pm
-Branch: testing
-Git Describe: v5.16-rc3-24-g44e0749b647e4
-Git Commit: 44e0749b647e4086b658e8595add05150f1a167a
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
+Yeah someone will implement spline interpolation in the kernel one
+day I bet...
 
-Warnings Detected:
+> Well, I don't know how constant such degradation is over time. I just
+> guess it is not constant but might be proportional to age-compensated
+> capacity rather than the designed capacity. It'd be nice to use correct
+> approximation of reality in device-tree...
 
-arc:
+IIUC the degradation of a battery is related to number of full charge cycles,
+i.e. the times that the battery has been emptied and recharged fully.
+This is of course never happening in practice, so e.g. two recharge cycles
+from 50% to 100% is one full charge cycle. So you integrate this
+over time (needs to be saved in a file system or flash if the battery does
+not say it itself).
 
-arm64:
+This measures how much the lithium ions have moved around in the
+electrolyte and thus how much chemical interaction the battery has
+seen.
 
-arm:
+Then the relationship between complete charge cycles and capacity
+degradation is certainly also going to be something nonlinear so it
+needs manufacturer data for the battery.
 
-i386:
+> By the way, I was reading the ab8500 fuel-gauge driver as you suggested.
+> So, if I am correct, you used the battery internal resistance + current
+> to compute the voltage-drop caused by battery internal resistance. This
+> for sure improves the accuracy when we assume VBAT can be used as OCV.
 
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
+Yes this is how it is done. With a few measurements averaged to
+iron out the noise.
 
-riscv:
+> Epilogue:
+> In general, I see bunch of power-supply drivers scheduling work for
+> running some battery-measurements. Some do this periodically (I think
+> the ab8500 did this although I lost the track when I tried to see in
+> which case the periodic work was not scheduled - and maybe for
+> fuel-gauging) or after an IRQ is triggered (for example to see if change
+> indication should be sent).
 
-x86_64:
+Yes there is some tight community of electronic engineers who read the
+right articles and design these things. We don't know them :(
 
+> I think we could simplify a few drivers if the core provided some helper
+> thread (like the simple-gauge) which could be woken by drivers (to do
+> fuel-gauge operations, or to just conditionally send the change
+> notification).
 
-Warnings summary:
+I think so too, I don't think they are very rocket science once the
+right abstractions fall out.
 
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+Yours,
+Linus Walleij
