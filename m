@@ -2,132 +2,184 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49999466907
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Dec 2021 18:23:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3A8F466929
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Dec 2021 18:31:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376290AbhLBR0s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Dec 2021 12:26:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48760 "EHLO
+        id S1376404AbhLBRer (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Dec 2021 12:34:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233690AbhLBR0q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Dec 2021 12:26:46 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C47E8C06174A;
-        Thu,  2 Dec 2021 09:23:23 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id u3so242210lfl.2;
-        Thu, 02 Dec 2021 09:23:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=QEgwvnQKAaoulGSkuVxazWLI6dtVB713e++3sOrQ19c=;
-        b=M997yKrMNeXKYYUjvbXDCLnImkWG2T8IjysVo6bsm8xP8MQIgPwX3EPDnLNY6XXE8n
-         nQbmNAhhP06dQ08TtQSCRrPB2bCciwLe2ShcXXJweUc1hCWdSJO19KP9NzxYe3zkVmKA
-         c021M/qrdlJw35RA4c2vBCrphKuAIZWbCC1RAoYCNXGKx3i1cWzEG+DCWJNj6KzjAdWe
-         Nf17L6FGk5GpsfIgVqjcK9Rgd5qBOF/EwZ2oyYOpF8mR5rBLymOrxT5fCkY18WBApBK+
-         dq+cKwI3ThX1zQgzZjj/0MHZfoPHiZfa+WxC6mBuovnIDHO2JRZ6roYPmBJb02AWsMJw
-         KuDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=QEgwvnQKAaoulGSkuVxazWLI6dtVB713e++3sOrQ19c=;
-        b=xFFhC2sndMPYoglL6hMRBpr3TOiAhhMy/65Sjw4DJh+XLsyOR/BHP9IT2GNjhwUh65
-         a3ypElrkgXXH9O3AoPGFLbK5x4OsJRSlRdtnooHdwp+qxV2uWpQ0h+A38XmXGy7z2iuu
-         jFYM6dObWChygP8g0CPT8fDzC5u0y2/C1NFYZSyN63Uxsssq2eocFygl5+DmTGgaMl++
-         H5/kI+jF3ORgyCr+7IAa3fHT+wZ6ia6zXT9fnNf0QuQ9TVwzz+yuIVVE/KKEOfYF7PF7
-         HQ/EihnC+bcyPtGu6FxMaJsI0otlIuALR0AETShAolMntO3xgHw2PBl5OXx6lAuZ/8V1
-         i85A==
-X-Gm-Message-State: AOAM531gJRs3ryo4rPTco6Ero8cFkfmorYfRSZqfLZSKCwd2CQomBFiY
-        Yf4k2gqc0Ima7qE33XBdHCw=
-X-Google-Smtp-Source: ABdhPJzEuYGQ/nZwZXYixgdn3Ak1Ri9mhy8i8z0AVsP4geMg2s8SJI1Kk7Hs3N8Ieoj90p8YvB/JTg==
-X-Received: by 2002:ac2:5091:: with SMTP id f17mr13339327lfm.206.1638465802090;
-        Thu, 02 Dec 2021 09:23:22 -0800 (PST)
-Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.googlemail.com with ESMTPSA id n14sm45126lji.28.2021.12.02.09.23.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Dec 2021 09:23:21 -0800 (PST)
-Message-ID: <b95213ca-2597-fd27-7e0c-50250e645d48@gmail.com>
-Date:   Thu, 2 Dec 2021 18:23:19 +0100
+        with ESMTP id S1376359AbhLBRen (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Dec 2021 12:34:43 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AADEC0613ED;
+        Thu,  2 Dec 2021 09:31:18 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 166081F469C4
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1638466277; bh=xfPaEkyWPuZigLwuT2Vxs/NNQF1i5jWjPiABdDVK4os=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AT17cv7vtGXTwf/s5899/I7VUDRxLqCJxolPVE+Qqdu/nnaTrDWWY0DsgbN25atLq
+         hbQ0WIZN4ryihFtqXLVhdmMpiAsXHIt6D2112KlxrzbeN73C87i3FO/fFuBGo2wvtD
+         LFk6P9cg+rRPduzbDAIuPzrCcp3Tvps6Pmu7lDP9eBF1CweAkHLzfvZ+yHVoO4suJY
+         2uLynDai45O5TSmbnzqGrTrCRHw+9xUEIPDZZH3GLrZpeQ7bCmioTTtco2Q9OpOohX
+         doVYbl85HnhX26DxE9qjBv6eTSyiN2gILLFTrjl25jG4q13AOroe//kEgaIdvDG4LU
+         1HHF0mibKSqEw==
+Received: by earth.universe (Postfix, from userid 1000)
+        id DF82F3C0CA8; Thu,  2 Dec 2021 18:31:14 +0100 (CET)
+Date:   Thu, 2 Dec 2021 18:31:14 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Angus Ainslie <angus@akkea.ca>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@puri.sm
+Subject: Re: [PATCH v2] power: bq25890: add POWER_SUPPLY_PROP_TEMP
+Message-ID: <20211202173114.mldcwy6aydccp54n@earth.universe>
+References: <20211118161845.98767-1-angus@akkea.ca>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:95.0) Gecko/20100101
- Thunderbird/95.0
-Subject: Re: [PATCH RFC 0/3] reset: syscon-reboot: add "reg" property support
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        devicetree@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-References: <20211102152207.11891-1-zajec5@gmail.com>
- <CAL_JsqL5qJZz8K7330cOhV8x86097LUE7oFNx5Qu3M4XLL+gMg@mail.gmail.com>
- <8f02af47-d9dc-a29d-b839-e10969a448d0@gmail.com>
- <CAL_JsqJB+KneifCaybF7ng0KuwbLgtYk3UMKjkFNOL5Bj8U2pg@mail.gmail.com>
- <20211202172143.44bwtgiiagczfqlr@earth.universe>
-From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-In-Reply-To: <20211202172143.44bwtgiiagczfqlr@earth.universe>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5pwtuxgxpu5szigg"
+Content-Disposition: inline
+In-Reply-To: <20211118161845.98767-1-angus@akkea.ca>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+
+--5pwtuxgxpu5szigg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
 Hi,
 
-On 02.12.2021 18:21, Sebastian Reichel wrote:
-> On Fri, Nov 12, 2021 at 04:32:48PM -0600, Rob Herring wrote:
->> On Fri, Nov 12, 2021 at 4:23 PM Rafał Miłecki <zajec5@gmail.com> wrote:
->>>
->>> On 12.11.2021 23:18, Rob Herring wrote:
->>>> On Tue, Nov 2, 2021 at 10:22 AM Rafał Miłecki <zajec5@gmail.com> wrote:
->>>>>
->>>>> From: Rafał Miłecki <rafal@milecki.pl>
->>>>>
->>>>> During my work on MFD binding for Broadcom's TWD block I received
->>>>> comment from Rob saying that "syscon-reboot" should use "reg" property.
->>>>> I'm not sure if my understanding & implementation are correct so I'm
->>>>> sending this RFC.
->>>>>
->>>>> What bothers me is non-standard "reg" property usage. Treating it as a
->>>>> simple (unsigned) integer number means different logic when it comes to
->>>>> ranges.
->>>>
->>>> It shouldn't be. The idea is that 'reg' works like normal. See below.
->>>>
->>>>> Consider this example:
->>>>>
->>>>> timer@400 {
->>>>>           compatible = "simple-mfd", "syscon";
->>>>>           reg = <0x400 0x3c>;
->>>>>           ranges;
->>>>
->>>> ranges = <0 0x400 0x100>; // Just guessing for size
->>>>
->>>>>
->>>>>           #address-cells = <1>;
->>>>>           #size-cells = <1>;
->>>>>
->>>>>           reboot@434 {
->>>>
->>>> reboot@34
->>>>
->>>> Just reading 'reg' is fine, but really, Linux should be either getting
->>>> the translated address or have a function to get the offset from the
->>>> parent base. IOW, it should also work if you just changed 'reg' to
->>>> '<0x434 0x4>'.
->>>
->>> Are you aware of anyone working on support for getting translated
->>> address? Do you recall any efforts on implementing such a helper?
->>
->> All the DT address functions give you translated addresses. It's the
->> latter that doesn't exist that I'm aware of offhand. It's just
->> of_address_to_resource() on the child and parent nodes and then
->> calculate the offset.
-> 
-> Has a new version beent sent with this change, that I missed?
+On Thu, Nov 18, 2021 at 08:18:45AM -0800, Angus Ainslie wrote:
+> Add the POWER_SUPPLY_PROP_TEMP and a NTC 10K percent VREGN to degrees LUT.
+>=20
+> Make sure that a conversion is forced when the power supply is offline so
+> the temperature is valid.
+>=20
+> Signed-off-by: Angus Ainslie <angus@akkea.ca>
+> ---
 
-Not yet, I was sidetracked by pinctrl & OpenWrt stuff.
+Thanks, queued.
+
+-- Sebastian
+
+>  drivers/power/supply/bq25890_charger.c | 37 +++++++++++++++++++++++++-
+>  1 file changed, 36 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/suppl=
+y/bq25890_charger.c
+> index 945c3257ca93..0260c6efdcb2 100644
+> --- a/drivers/power/supply/bq25890_charger.c
+> +++ b/drivers/power/supply/bq25890_charger.c
+> @@ -266,6 +266,7 @@ enum bq25890_table_ids {
+>  	/* lookup tables */
+>  	TBL_TREG,
+>  	TBL_BOOSTI,
+> +	TBL_TSPCT,
+>  };
+> =20
+>  /* Thermal Regulation Threshold lookup table, in degrees Celsius */
+> @@ -280,6 +281,28 @@ static const u32 bq25890_boosti_tbl[] =3D {
+> =20
+>  #define BQ25890_BOOSTI_TBL_SIZE		ARRAY_SIZE(bq25890_boosti_tbl)
+> =20
+> +/* NTC 10K temperature lookup table in tenths of a degree */
+> +static const u32 bq25890_tspct_tbl[] =3D {
+> +	850, 840, 830, 820, 810, 800, 790, 780,
+> +	770, 760, 750, 740, 730, 720, 710, 700,
+> +	690, 685, 680, 675, 670, 660, 650, 645,
+> +	640, 630, 620, 615, 610, 600, 590, 585,
+> +	580, 570, 565, 560, 550, 540, 535, 530,
+> +	520, 515, 510, 500, 495, 490, 480, 475,
+> +	470, 460, 455, 450, 440, 435, 430, 425,
+> +	420, 410, 405, 400, 390, 385, 380, 370,
+> +	365, 360, 355, 350, 340, 335, 330, 320,
+> +	310, 305, 300, 290, 285, 280, 275, 270,
+> +	260, 250, 245, 240, 230, 225, 220, 210,
+> +	205, 200, 190, 180, 175, 170, 160, 150,
+> +	145, 140, 130, 120, 115, 110, 100, 90,
+> +	80, 70, 60, 50, 40, 30, 20, 10,
+> +	0, -10, -20, -30, -40, -60, -70, -80,
+> +	-90, -10, -120, -140, -150, -170, -190, -210,
+> +};
+> +
+> +#define BQ25890_TSPCT_TBL_SIZE		ARRAY_SIZE(bq25890_tspct_tbl)
+> +
+>  struct bq25890_range {
+>  	u32 min;
+>  	u32 max;
+> @@ -308,7 +331,8 @@ static const union {
+> =20
+>  	/* lookup tables */
+>  	[TBL_TREG] =3D	{ .lt =3D {bq25890_treg_tbl, BQ25890_TREG_TBL_SIZE} },
+> -	[TBL_BOOSTI] =3D	{ .lt =3D {bq25890_boosti_tbl, BQ25890_BOOSTI_TBL_SIZE=
+} }
+> +	[TBL_BOOSTI] =3D	{ .lt =3D {bq25890_boosti_tbl, BQ25890_BOOSTI_TBL_SIZE=
+} },
+> +	[TBL_TSPCT] =3D	{ .lt =3D {bq25890_tspct_tbl, BQ25890_TSPCT_TBL_SIZE} }
+>  };
+> =20
+>  static int bq25890_field_read(struct bq25890_device *bq,
+> @@ -388,6 +412,7 @@ static bool bq25890_is_adc_property(enum power_supply=
+_property psp)
+>  	switch (psp) {
+>  	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
+>  	case POWER_SUPPLY_PROP_CURRENT_NOW:
+> +	case POWER_SUPPLY_PROP_TEMP:
+>  		return true;
+> =20
+>  	default:
+> @@ -528,6 +553,15 @@ static int bq25890_power_supply_get_property(struct =
+power_supply *psy,
+>  		val->intval =3D ret * -50000;
+>  		break;
+> =20
+> +	case POWER_SUPPLY_PROP_TEMP:
+> +		ret =3D bq25890_field_read(bq, F_TSPCT);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		/* convert TS percentage into rough temperature */
+> +		val->intval =3D bq25890_find_val(ret, TBL_TSPCT);
+> +		break;
+> +
+>  	default:
+>  		return -EINVAL;
+>  	}
+> @@ -713,6 +747,7 @@ static const enum power_supply_property bq25890_power=
+_supply_props[] =3D {
+>  	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
+>  	POWER_SUPPLY_PROP_VOLTAGE_NOW,
+>  	POWER_SUPPLY_PROP_CURRENT_NOW,
+> +	POWER_SUPPLY_PROP_TEMP,
+>  };
+> =20
+>  static char *bq25890_charger_supplied_to[] =3D {
+> --=20
+> 2.25.1
+>=20
+
+--5pwtuxgxpu5szigg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmGpAuIACgkQ2O7X88g7
++poNsA/9HW/NKIUNKi4lPbuPSpeJsCO16z0gtfe9/fqT3hQqGdwirvqO0V/dmRA+
+83O9/F3U7f6YsDrAUutbOFRGXuqOsO+LyYbUEf9/MfVG3h6ZZ7nm4OW6M0OrP+IB
+IOr1Ek0avtHJlOtgntzpraDPMkY6Ehb4gbduDgtRrrCr88PQAcrvUdJMA279O+b6
+Kx7ChQDWpRp8rXxnh71liMb41XAwGmDEFX7uCnDgSt6YVMDVxkIbfhU20As+nb6Z
+uGos+kQVDslpKB6X2XrfpNfHcYqKTCRAWhFFJHEuL5O+LcPmgwbIGWWcNHkZvFUj
+JfJx11BWvceOT6llOgYJSLhiYORIiErlpjfNBasRySuzX9YeZRwdByAWdH1cezdP
+Zh5xycSAaGbX/lfBwPKBlY3xFLbyPo7eNWIhjpfakDza1r+zSWkG/MoVwdkwppEt
+T7VUp9WM0XrZDUlUknkEY+GB+IFnttlqNbkEtMToIO78KU39AeG4ixB8CXWnd8fo
+C3V19t0COxE/8uO15gSOs7s+vTtOEh/VZ5YSiL+bye/sHl89h2E/Cv6tw8lZt3G0
+xpjHxq3A+vQQI6p4xFdZutKyW6c90UKHqngH+GUY5UdhZPDzu4fmIWhCQmvG21OP
+EVmDW5iG0dh7yYi5imsIlccMJZIBY21zkzWP8t7cJ6dIFixzqbU=
+=GSX/
+-----END PGP SIGNATURE-----
+
+--5pwtuxgxpu5szigg--
