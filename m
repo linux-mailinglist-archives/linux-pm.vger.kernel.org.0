@@ -2,92 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B32E465E7B
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Dec 2021 07:58:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0A3E465EAB
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Dec 2021 08:28:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350286AbhLBHCU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Dec 2021 02:02:20 -0500
-Received: from relay2.uni-heidelberg.de ([129.206.119.212]:53813 "EHLO
-        relay2.uni-heidelberg.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230521AbhLBHCT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Dec 2021 02:02:19 -0500
-X-Greylist: delayed 429 seconds by postgrey-1.27 at vger.kernel.org; Thu, 02 Dec 2021 02:02:19 EST
-X-IPAS-Result: =?us-ascii?q?A2BHBQDDa6hh/1BqzoFagQmFUYUzkRaeRQEBAQEBAQEBA?=
- =?us-ascii?q?Qk+AQIEAQGFBYMHAiU4EwECBAEBAQEDAgMBAQEBAQEDAQEGAQEBAQEGBIEch?=
- =?us-ascii?q?XWGQgEBBAEjVgULCw4KAgImAgIUKCGFeyGzL3qBMYEBiCyBKiOBECqMCYJQg?=
- =?us-ascii?q?imBFYMqPoQCJREqgns3gi4EkHuCH4IdvxcHojAEFjKVfZE5LZMjgk6mO4F4T?=
- =?us-ascii?q?4EuMz6DOVAZD5xxQ2gCBgsBAQMJhUcBAY0IAQE?=
-IronPort-Data: A9a23:j1Wncqvr3B7nAI+MVQH0Ix0CSefnVJVeMUV32f8akzHdYApBsoF/q
- tZmKW2EPamKZzHzf4h3aoW3pBsGuJ6BztZmT1c/qntnEikUgMeUXt7xwmXYZn7NdJ2dECqLz
- Cm8hv3odp1coqr0/0/1WlTZQP0VOZigHtIQMsacUsxKbVIiGHhJZS5LwbZj29cy2YLhWmthh
- PuryyHhEA79s9JLGj9Mg06zgEsHUCPa4W5wUvQWPJinjXeG/5UnJMt3yZKZdxMUdrJp8tuSH
- I4v+l0ZElTxpH/BAvv9+lryn9ZjrrT6ZWBigVIOM0Sub4QrSiEais4G2PQghUh/mSeJlNZc2
- eR2kbOUeDl2O/L9uNkxXEwNe81+FfUuFL7vJXW6tsrVzlLcNWbqwrBuAUA6MIkS9/x4R21Dn
- RAaAGlXP1bZ37zwmerlDLk07iggBJCD0Ic3unVp0DzDJfIrRJfFBaTV/5lF2jZ1hs1PEfvab
- ccDZnxjYXwsZjUWYQ1NU81jzLjAan/XK2FjjnnKrq0LySvz3QdX6rfQIuiEdYnfLSlSth3E+
- D6cpjyR7gshHNKY0iGtqnahh+uJmy7nMKoYE7K17NZ1gUeewGYUAQcaE1C8pJGRlUO4QPpUM
- E0ZvC00osAa8E2tU8m4RxiQvnGJpFgfVsBWHul87xuCooLP+QuxBWUeSDNFLts8u6cLqScC0
- lKMmNWvBCN19qCTSDed+7aYoDe4NDIaa2MPDcMZcecby8vxoIo1owP+dfJMNJ+L0diqKBHN7
- z/f+UDSmI4vpcIM0qy6+3XOjDStuoXFQ2YJCuP/AzrNAuRROd/NWmC41bTIxaoRcN/BETFtq
- FBUxZjGtYjiGLnXzESwrPMx8KaBy9vt3Nf0oVNuE5Ql/Tm39BZPlqgOsWgkfC+F3u4ucDPkZ
- grsEtdL+INeOXGnd6AfXm5QNyjI5fK/fTgGfqmKBjarXnSWXFbblByCnWbKgwjQfLEEyMnS+
- f6zKK5A90oyB6V91yaRTOwAy7ItzS1W7TqNHsCgn0/7ieDHOyb9pVI53L2mMLhRAESs/lq9z
- jqjH5vRo/mieLemM3SMr9Z7wa4idCNlWcGeRzNrmh6reVY4RDt4U5c9MJsrdoh6gqkdi+HJ4
- HynQU5E2RL5iGHYLh+JAk2Pm5uwNauSbBsTY0QRALpf8yR5PNv0sv5AL8BfkHtO3LUL8MOYh
- sItI62oasmjgByck9jBRfERdLBfSSk=
-IronPort-HdrOrdr: A9a23:Ei6uQalQqRpzZOddlp1dJ61ZP2rpDfI33DAbv31ZSRFFG/Fwwf
- rBoB19726WtN9xYhEdcL+7UpVoLUmwyXcX2+gs1MmZLWvbUQKTRekI0WKI+VHd8kPFmdJg6Q
- ==
-X-IronPort-Anti-Spam-Filtered: true
-Received: from lemon.iwr.uni-heidelberg.de ([129.206.106.80])
-  by relay2.uni-heidelberg.de with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 02 Dec 2021 07:51:47 +0100
-Received: from hlauer by lemon.iwr.uni-heidelberg.de with local (Exim 4.92)
-        (envelope-from <hlauer@lemon.iwr.uni-heidelberg.de>)
-        id 1msfwZ-0002mX-E5; Thu, 02 Dec 2021 07:51:47 +0100
-Date:   Thu, 2 Dec 2021 07:51:47 +0100
-From:   Hermann.Lauer@uni-heidelberg.de
-To:     Quentin Schulz <foss@0leil.net>
-Cc:     Evgeny Boger <boger@wirenboard.com>, Chen-Yu Tsai <wens@csie.org>,
-        linux-pm@vger.kernel.org, Sebastian Reichel <sre@kernel.org>
-Subject: Re: Re: [PATCH] power: supply: axp20x_battery: set charging voltage
- via DT
-Message-ID: <20211202065147.GA10665@lemon.iwr.uni-heidelberg.de>
-References: <20211119175740.405446-1-boger@wirenboard.com>
- <20211201175728.ja7a5iilm23vyblr@fiqs>
+        id S1345278AbhLBHbV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Dec 2021 02:31:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235587AbhLBHbU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Dec 2021 02:31:20 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A333AC06174A
+        for <linux-pm@vger.kernel.org>; Wed,  1 Dec 2021 23:27:58 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id g17so70702512ybe.13
+        for <linux-pm@vger.kernel.org>; Wed, 01 Dec 2021 23:27:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=1Br/N6WhyVMlujnGsxiPG2oa5QW+rtf7KlXAbdHBbwA=;
+        b=bX12kl0UA+gxJNGJzN5Z2hwHttYJD+QIqIbcNFI3HcMbajXz3Ca6bv232+abkgDwE/
+         pAmRbG9zuxbcAAH7ivTEYL2uEAzfNypLs87qnDfWVwg6PD24iYynHbV6OqnfsZiftjDY
+         Bw5mEenELSk+ZaXVcubyam1lHWH3T+ax8Gid/pYPb1BH94TCG35sHI9Eu3izJydK7F+t
+         vW+w1Q5/NKnlpcKvWWPAHxs4uhb3oDa10YsbaJBgiJYx8uUCcc2Tvc/1+YkRGKi7H7tB
+         ZpJKfCqWX/myX0GhV5O3q4Lx2UKAsngb7bbQkLzWMtTY7DkBgIFKCPpJ+xvWbsh+li5j
+         VLCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=1Br/N6WhyVMlujnGsxiPG2oa5QW+rtf7KlXAbdHBbwA=;
+        b=gkn8pD54U2hp1Zgm7xOgjOUeZHNjdXVVvixcpiqaK+Tl8u5BmJ/RPM6Sd/7m25rhLb
+         NV6T+H/HceLePe4eBxFltXJOEvsg+Nw5g8v7bP4bfLDIltDZDWeKX14QP9FdHf9f5rgh
+         E2f/u58w/nyRe2SdFttFAavS1ESKfEnaTSAhcF5OfaxBtgjY3d96nlTrVFemUAm1Ad/x
+         v5wx+01PmmYc09G/vnyxz39d8xLHwGE17D+ugWuXNqNUxKjZXFVKcvTOEl2EHOipo87a
+         x887rHpzo6cF+12Mg4s410Ws/+1Uaw1BMZ3p3O/CuQf4awidsbn4pXDWAj2DdtVYaxX4
+         ci0w==
+X-Gm-Message-State: AOAM531S6qT41Nk/21A7/YLnm+g7PHp9hDfwhqCr9S27yR8j268Lc0SD
+        UL3PnQw+lhekXhINyZ/Uk4meOCkz7/m8tCej318=
+X-Google-Smtp-Source: ABdhPJwUquWIPhmcZ8Rmu/ZRyH6MlZemkTVvi0xUQLMsXFKDWaYYXZ8wszGSG9Y7ed9FcHA8ctB9cRyjG+wsQHeaa54=
+X-Received: by 2002:a25:d292:: with SMTP id j140mr14012420ybg.637.1638430077924;
+ Wed, 01 Dec 2021 23:27:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211201175728.ja7a5iilm23vyblr@fiqs>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: by 2002:a05:7110:7184:b0:103:1474:3411 with HTTP; Wed, 1 Dec 2021
+ 23:27:57 -0800 (PST)
+Reply-To: mrsbillchantallawrence58@gmail.com
+From:   mrsbillchantal <msrjutconpolamcompola888@gmail.com>
+Date:   Thu, 2 Dec 2021 08:27:57 +0100
+Message-ID: <CABt-Z7FGdS84r6epsOMSPP=W7weBtyMaBZ-xgXJPPk588KwQWA@mail.gmail.com>
+Subject: Dear Friend, My present internet connection is very slow in case you
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+hello....
 
-On Wed, Dec 01, 2021 at 06:57:28PM +0100, Quentin Schulz wrote:
-> The issue here is that only specific values are possible. e.g. for
-> axp20x: 4.1 4.15 4.2V, axp22x 4.1 4.2V, there's nothing in-between.
-...
-> Would it make sense to find the closest value to the one appropriate for
-> the battery that is supported by the PMIC (lesser or equal to the one
-> specified by the battery obviously)?
-> 
-> Otherwise, I would imagine this function would fail most of the time
-> because it's not the exact voltage supported by the PMIC?
+You have been compensated with the sum of 5.5 million dollars in this
+united nation the payment will be issue into atm visa card and send to
+you from the santander bank we need your address and your  Whatsapp
+this my email.ID (  mrsbillchantallawrence58@gmail.com)  contact  me
 
-You have to add the values to all device trees for every board an it may
-produce more devicetree entries when the same board have a different battery
-attached. OTOH, this allows more flexibility with devicetree overlays.
+Thanks my
 
-> Completely off-topic, but I also see that batteries now support
-> specifying which technology they use so it should be safe to raise the
-> maximum for some technologies above what we currently support in the
-> driver. e.g. axp22x supports 4.22 and 4.24V too but they aren't
-> selectable at the moment.
-
-At least axp209 additionaly allows 4.36V, although that may be used only
-in hand crafted setups. At the moment I'm switching on that from u-boot. 
-
-Greetings
-  Hermann
+mrs chantal
