@@ -2,261 +2,355 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCBED465F36
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Dec 2021 09:16:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A61F9466256
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Dec 2021 12:29:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356082AbhLBIUD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Dec 2021 03:20:03 -0500
-Received: from mga03.intel.com ([134.134.136.65]:42611 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1356065AbhLBIUB (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 2 Dec 2021 03:20:01 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="236594211"
-X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
-   d="scan'208";a="236594211"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 00:16:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
-   d="scan'208";a="602636502"
-Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.76]) ([10.237.72.76])
-  by fmsmga002.fm.intel.com with ESMTP; 02 Dec 2021 00:16:33 -0800
-Subject: Re: [PATCH v16 22/40] mmc: sdhci-tegra: Add runtime PM and OPP
- support
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Nishanth Menon <nm@ti.com>,
-        Michael Turquette <mturquette@baylibre.com>
-Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-mmc@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-clk@vger.kernel.org, David Heidelberg <david@ixit.cz>
-References: <20211130232347.950-1-digetx@gmail.com>
- <20211130232347.950-23-digetx@gmail.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Message-ID: <fc60f593-cd74-558d-785f-5f0d2ba179cf@intel.com>
-Date:   Thu, 2 Dec 2021 10:16:32 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.13.0
+        id S1357321AbhLBLcf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Dec 2021 06:32:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51480 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346365AbhLBLce (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Dec 2021 06:32:34 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E0C4C06174A
+        for <linux-pm@vger.kernel.org>; Thu,  2 Dec 2021 03:29:12 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id r26so70704485lfn.8
+        for <linux-pm@vger.kernel.org>; Thu, 02 Dec 2021 03:29:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nzMdpoiSDYy1S+tN/eZJh/jQGPt48t1dJt5w7vNmEwk=;
+        b=cogcAx+WNBNNhj0Sktbs5cF/JNyo9NkV+RVag7XRsYpXd5qY+qkeFHHyIA/VjN9uqD
+         cH2WL+D3k3QUNyh7NuL2GPXlFCyMSFKwuEgihUFxuKyoKBrX7htbbZwt2NBtguexA1qP
+         eD88OxNB+yt6rwxv7GQ/ZSzYeLWRSUEHHundqDBeUtaahRcayhfGAvGCv3ZMJLD4Ydmd
+         VjQSGZF8XljoyoeLubSsQv3NsBCcvHoBlAkuF8oTgdy8pVQkxxWZTpCVVFEpgJmdyaDh
+         39M9H/GbIAekjE8VrWmrYBcwhRY9ONAp13de6zrAgheIFl2246vKh8PUA6BPXiTPLNu9
+         wTKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nzMdpoiSDYy1S+tN/eZJh/jQGPt48t1dJt5w7vNmEwk=;
+        b=C8SvTJlYZnf+7/4hQWWrygx/3R9fQTuNxPIZD/TAiOrMcYujwmjPJDVZDS0gwJHrMp
+         8tVhEzjRrmobinJkrDpro+WFsameaqXdAV4I9aZGZ7Zr6yfQ+t/hScRBlir+0UiT77WX
+         h6zN4zAvBXDVf2xLRlSlfqk7JgKT/zRH8w5PCQ5RRA0NojC9qU5cnJNCC2HgiNg4ot5P
+         izYHep/E9o49V0i7pZ5zKJ/KWYlax7Lgt5XcocLkG9oPolHOwdIpxWpA6bQte6YiA//B
+         +qD8NvaqFI1i7w2Ei2i5YoacJ1ieDxntG1jULg136wSUkxETEg44ABJArh6y54r7K97U
+         m/Yw==
+X-Gm-Message-State: AOAM53310ej9ypyQZ2LkgqZ8pdv4NsVDqf4cRLF0i+3Cna0cd+/V5Ev4
+        E8KH+LqxNJ/I9CWTMgPUWafXA+fb8sHnngcY9piq7g==
+X-Google-Smtp-Source: ABdhPJyeQ1CtpmSdIk2va/kf4k8XEb9PfnsCkpEVgsr8dw8DnigwNt+tA4zCFH+DVJEm2MCNiw4wC0w8qwY7ANxeWas=
+X-Received: by 2002:a05:6512:3e04:: with SMTP id i4mr11941195lfv.167.1638444550357;
+ Thu, 02 Dec 2021 03:29:10 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20211130232347.950-23-digetx@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20211026222626.39222-1-ulf.hansson@linaro.org>
+ <CAPDyKFrFdt_U7By_bqk4DBHxCBLpDe00aRb6P6BmwR4MYM2OmQ@mail.gmail.com>
+ <CAJZ5v0i6WPVCf4pf9uTx5vjutw0cbD+omL_FNtw6DrxYDhyYEA@mail.gmail.com> <5794197.lOV4Wx5bFT@kreacher>
+In-Reply-To: <5794197.lOV4Wx5bFT@kreacher>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 2 Dec 2021 12:28:33 +0100
+Message-ID: <CAPDyKFrPC=8cAKGWQ4cDEcD934gi-012CWXu+uh-B_pqX+0RYQ@mail.gmail.com>
+Subject: Re: [PATCH] PM: runtime: Allow rpm_resume() to succeed when runtime
+ PM is disabled
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Maulik Shah <mkshah@codeaurora.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01/12/2021 01:23, Dmitry Osipenko wrote:
-> The SDHCI on Tegra belongs to the core power domain and we're going to
-> enable GENPD support for the core domain. Now SDHCI must be resumed using
-> runtime PM API in order to initialize the SDHCI power state. The SDHCI
-> clock rate must be changed using OPP API that will reconfigure the power
-> domain performance state in accordance to the rate. Add runtime PM and OPP
-> support to the SDHCI driver.
-> 
-> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+On Wed, 1 Dec 2021 at 21:11, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+>
+> On Wednesday, December 1, 2021 6:44:08 PM CET Rafael J. Wysocki wrote:
+> > On Wed, Dec 1, 2021 at 4:23 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > >
+> > > On Wed, 1 Dec 2021 at 14:49, Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > > >
+> > > > On Wed, Dec 1, 2021 at 10:02 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > > > >
+> > > > > On Tue, 30 Nov 2021 at 18:26, Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > > > > >
+> > > > > > On Tue, Nov 30, 2021 at 5:41 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > > > > > >
+> > > > > > > On Tue, 30 Nov 2021 at 14:02, Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > > > > > > >
+> > > > > > > > On Tue, Nov 30, 2021 at 12:58 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > > > > > > > >
+> > > > > > > > > [...]
+> > > > > > > > >
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > Am I thinking correctly that this is mostly about working around the
+> > > > > > > > > > > > > > > limitations of pm_runtime_force_suspend()?
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > No, this isn't related at all.
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > The cpuidle-psci driver doesn't have PM callbacks, thus using
+> > > > > > > > > > > > > > pm_runtime_force_suspend() would not work here.
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > Just wanted to send a ping on this to see if we can come to a
+> > > > > > > > > > > > > conclusion. Or maybe we did? :-)
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > I think in the end, what slightly bothers me, is that the behavior is
+> > > > > > > > > > > > > a bit inconsistent. Although, maybe it's the best we can do.
+> > > > > > > > > > > >
+> > > > > > > > > > > > I've been thinking about this and it looks like we can do better, but
+> > > > > > > > > > > > instead of talking about this I'd rather send a patch.
+> > > > > > > > > > >
+> > > > > > > > > > > Alright.
+> > > > > > > > > > >
+> > > > > > > > > > > I was thinking along the lines of make similar changes for
+> > > > > > > > > > > rpm_idle|suspend(). That would make the behaviour even more
+> > > > > > > > > > > consistent, I think.
+> > > > > > > > > > >
+> > > > > > > > > > > Perhaps that's what you have in mind? :-)
+> > > > > > > > > >
+> > > > > > > > > > Well, not exactly.
+> > > > > > > > > >
+> > > > > > > > > > The idea is to add another counter (called restrain_depth in the patch)
+> > > > > > > > > > to prevent rpm_resume() from running the callback when that is potentially
+> > > > > > > > > > problematic.  With that, it is possible to actually distinguish devices
+> > > > > > > > > > with PM-runtime enabled and it allows the PM-runtime status to be checked
+> > > > > > > > > > when it is still known to be meaningful.
+> > > > > > > > >
+> > > > > > > > > Hmm, I don't quite understand the benefit of introducing a new flag
+> > > > > > > > > for this. rpm_resume() already checks the disable_depth to understand
+> > > > > > > > > when it's safe to invoke the callback. Maybe there is a reason why
+> > > > > > > > > that isn't sufficient?
+> > > > > > > >
+> > > > > > > > The problem is that disable_depth > 0 may very well mean that runtime
+> > > > > > > > PM has not been enabled at all for the given device which IMO is a
+> > > > > > > > problem.
+> > > > > > > >
+> > > > > > > > As it stands, it is necessary to make assumptions, like disable_depth
+> > > > > > > > == 1 meaning that runtime PM is really enabled, but the PM core has
+> > > > > > > > disabled it temporarily, which is somewhat questionable.
+> > > > > > > >
+> > > > > > > > Another problem with disabling is that it causes rpm_resume() to fail
+> > > > > > > > even if the status is RPM_ACTIVE and it has to do that exactly because
+> > > > > > > > it cannot know why runtime PM has been disabled.  If it has never been
+> > > > > > > > enabled, rpm_resume() must fail, but if it has been disabled
+> > > > > > > > temporarily, rpm_resume() may return 1 when the status is RPM_ACTIVE.
+> > > > > > > >
+> > > > > > > > The new count allows the "enabled in general, but temporarily disabled
+> > > > > > > > at the moment" to be handled cleanly.
+> > > > > > >
+> > > > > > > My overall comment is that I fail to understand why we need to
+> > > > > > > distinguish between these two cases. To me, it shouldn't really
+> > > > > > > matter, *why* runtime PM is (or have been) disabled for the device.
+> > > > > >
+> > > > > > It matters if you want to trust the status, because "disabled" means
+> > > > > > "the status doesn't matter".
+> > > > >
+> > > > > Well, that doesn't really match how the runtime PM interface is being
+> > > > > used today.
+> > > >
+> > > > Well, I clearly disagree.
+> > >
+> > > Alright, then we can agree to disagree. :-)
+> > >
+> > > >
+> > > > > For example, we have a whole bunch of helper functions, allowing us to
+> > > > > update and check the runtime PM state of the device, even when the
+> > > > > disable_depth > 0. Some functions, like pm_runtime_set_active() for
+> > > > > example, even take parents and device-links into account.
+> > > >
+> > > > That's true, but that's for a purpose.
+> > > >
+> > > > If runtime PM becomes enabled after using pm_runtime_set_active(), the
+> > > > status should better be consistent with the settings of the parent
+> > > > etc.
+> > > >
+> > > > > >
+> > > > > > If you want the status to stay meaningful, but prevent callbacks from
+> > > > > > running, you need something else.
+> > > > > >
+> > > > > > > The important point is that the default state for a device is
+> > > > > > > RPM_SUSPENDED and someone has moved into RPM_ACTIVE, for whatever
+> > > > > > > reason. That should be sufficient to allow rpm_resume() to return '1'
+> > > > > > > when disable_depth > 0, shouldn't it?
+> > > > > >
+> > > > > > No, because there is no rule by which the status of devices with
+> > > > > > PM-runtime disabled must be RPM_SUSPENDED.
+> > > > >
+> > > > > That's not what I was trying to say.
+> > > > >
+> > > > > The initial/default runtime PM state for a device is RPM_SUSPENDED,
+> > > > > which is being set in pm_runtime_init(). Although, I agree that it
+> > > > > can't be trusted that this state actually reflects the state of the
+> > > > > HW, it's still a valid state for the device from a runtime PM point of
+> > > > > view.
+> > > >
+> > > > No, it is not.  It's just the default.
+> > > >
+> > > > > However, and more importantly, if the state has moved to RPM_ACTIVE,
+> > > > > someone must have deliberately moved the device into that state.
+> > > >
+> > > > Sure, but it cannot be regarded as an indication on whether or not
+> > > > runtime PM is supported and has ever been enabled for the given
+> > > > device.
+> > > >
+> > > > Again, there is no rule regarding the status value for devices with
+> > > > runtime PM disabled, either way.
+> > >
+> > > If I understand correctly, that means you think the
+> > > pm_runtime_status_suspended() should really be converted to an
+> > > internal runtime PM interface, not being exported to users outside.
+> > > Right?
+> >
+> > Not really.
+> >
+> > I'm just saying that its usefulness is limited.
+> >
+> > My basic concern is that system-wide PM transitions must always invoke
+> > callbacks for devices with PM-runtime disabled, because they may (or
+> > may not) be functional regardless of the PM-runtime status and if they
+> > are functional, they must be suspended.  And note that supporting
+> > system-wide PM is not optional and the only way to kind of disable it
+> > is to return an error from a device suspend callback (but that's nasty
+> > for some use cases).
+> >
+> > So the "Has PM-runtime been enabled?" question is really fundamental
+> > for system-wide PM and it is not sufficient to look at the PM-runtime
+> > status to find out, but if the PM-core itself disables PM-runtime
+> > (which is has to do at one point to prevent PM-runtime from racing
+> > with system-wide PM), it is hard to answer definitely in general.
+> >
+> > IMO the only way to make it possible to find that out in all cases is
+> > to make the PM core retain the power.disable_depth value and that can
+> > be done by making it use a different mechanism to prevent PM-runtime
+> > callbacks from being run.
+> >
+> > Alternatively, the current PM-runtime status could be "latched" during
+> > the PM-runtime disable operation if power.disable_depth is 0 (and that
+> > "latched" value would be initialized to "invalid" in case PM-runtime
+> > is never enabled).
+>
+> Which would be something like the patch below (which additionally cleans up
+> pm_runtime_enable() while at it).
+>
+> The idea being that if the status was RPM_ACTIVE last time when
+> power.disable_depth was changing from 0 to 1 and it is still RPM_ACTIVE, it
+> can be assumed to reflect what happened to the device last time when it was
+> using PM-runtime.
 
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+Alright, this sounds reasonable to me. I have also looked at the code
+below and it looks good to me.
 
+Do you intend to post a formal patch? In any case, feel free to add my
+reviewed-by tag.
+
+Kind regards
+Uffe
+
+>
 > ---
->  drivers/mmc/host/sdhci-tegra.c | 81 +++++++++++++++++++++++++++-------
->  1 file changed, 65 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/mmc/host/sdhci-tegra.c b/drivers/mmc/host/sdhci-tegra.c
-> index a5001875876b..6435a75142a6 100644
-> --- a/drivers/mmc/host/sdhci-tegra.c
-> +++ b/drivers/mmc/host/sdhci-tegra.c
-> @@ -15,6 +15,8 @@
->  #include <linux/of.h>
->  #include <linux/of_device.h>
->  #include <linux/pinctrl/consumer.h>
-> +#include <linux/pm_opp.h>
-> +#include <linux/pm_runtime.h>
->  #include <linux/regulator/consumer.h>
->  #include <linux/reset.h>
->  #include <linux/mmc/card.h>
-> @@ -24,6 +26,8 @@
->  #include <linux/gpio/consumer.h>
->  #include <linux/ktime.h>
->  
-> +#include <soc/tegra/common.h>
+>  drivers/base/power/runtime.c |   38 ++++++++++++++++++++------------------
+>  include/linux/pm.h           |    2 ++
+>  2 files changed, 22 insertions(+), 18 deletions(-)
+>
+> Index: linux-pm/drivers/base/power/runtime.c
+> ===================================================================
+> --- linux-pm.orig/drivers/base/power/runtime.c
+> +++ linux-pm/drivers/base/power/runtime.c
+> @@ -744,11 +744,10 @@ static int rpm_resume(struct device *dev
+>   repeat:
+>         if (dev->power.runtime_error)
+>                 retval = -EINVAL;
+> -       else if (dev->power.disable_depth == 1 && dev->power.is_suspended
+> -           && dev->power.runtime_status == RPM_ACTIVE)
+> -               retval = 1;
+>         else if (dev->power.disable_depth > 0)
+> -               retval = -EACCES;
+> +               retval = dev->power.runtime_status == RPM_ACTIVE &&
+> +                        dev->power.last_status == RPM_ACTIVE ? 1 : -EACCES;
 > +
->  #include "sdhci-pltfm.h"
->  #include "cqhci.h"
->  
-> @@ -760,7 +764,9 @@ static void tegra_sdhci_set_clock(struct sdhci_host *host, unsigned int clock)
->  {
->  	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
->  	struct sdhci_tegra *tegra_host = sdhci_pltfm_priv(pltfm_host);
-> +	struct device *dev = mmc_dev(host->mmc);
->  	unsigned long host_clk;
-> +	int err;
->  
->  	if (!clock)
->  		return sdhci_set_clock(host, clock);
-> @@ -778,7 +784,12 @@ static void tegra_sdhci_set_clock(struct sdhci_host *host, unsigned int clock)
->  	 * from clk_get_rate() is used.
->  	 */
->  	host_clk = tegra_host->ddr_signaling ? clock * 2 : clock;
-> -	clk_set_rate(pltfm_host->clk, host_clk);
+>         if (retval)
+>                 goto out;
+>
+> @@ -1410,8 +1409,10 @@ void __pm_runtime_disable(struct device
+>         /* Update time accounting before disabling PM-runtime. */
+>         update_pm_runtime_accounting(dev);
+>
+> -       if (!dev->power.disable_depth++)
+> +       if (!dev->power.disable_depth++) {
+>                 __pm_runtime_barrier(dev);
+> +               dev->power.last_status = dev->power.runtime_status;
+> +       }
+>
+>   out:
+>         spin_unlock_irq(&dev->power.lock);
+> @@ -1428,23 +1429,23 @@ void pm_runtime_enable(struct device *de
+>
+>         spin_lock_irqsave(&dev->power.lock, flags);
+>
+> -       if (dev->power.disable_depth > 0) {
+> -               dev->power.disable_depth--;
+> -
+> -               /* About to enable runtime pm, set accounting_timestamp to now */
+> -               if (!dev->power.disable_depth)
+> -                       dev->power.accounting_timestamp = ktime_get_mono_fast_ns();
+> -       } else {
+> +       if (!dev->power.disable_depth) {
+>                 dev_warn(dev, "Unbalanced %s!\n", __func__);
+> +               goto out;
+>         }
+>
+> -       WARN(!dev->power.disable_depth &&
+> -            dev->power.runtime_status == RPM_SUSPENDED &&
+> -            !dev->power.ignore_children &&
+> -            atomic_read(&dev->power.child_count) > 0,
+> -            "Enabling runtime PM for inactive device (%s) with active children\n",
+> -            dev_name(dev));
+> +       if (--dev->power.disable_depth > 0)
+> +               goto out;
 > +
-> +	err = dev_pm_opp_set_rate(dev, host_clk);
-> +	if (err)
-> +		dev_err(dev, "failed to set clk rate to %luHz: %d\n",
-> +			host_clk, err);
+> +       dev->power.last_status = RPM_INVALID;
+> +       dev->power.accounting_timestamp = ktime_get_mono_fast_ns();
 > +
->  	tegra_host->curr_clk_rate = host_clk;
->  	if (tegra_host->ddr_signaling)
->  		host->max_clk = host_clk;
-> @@ -1705,7 +1716,6 @@ static int sdhci_tegra_probe(struct platform_device *pdev)
->  				   "failed to get clock\n");
->  		goto err_clk_get;
->  	}
-> -	clk_prepare_enable(clk);
->  	pltfm_host->clk = clk;
->  
->  	tegra_host->rst = devm_reset_control_get_exclusive(&pdev->dev,
-> @@ -1716,15 +1726,24 @@ static int sdhci_tegra_probe(struct platform_device *pdev)
->  		goto err_rst_get;
->  	}
->  
-> -	rc = reset_control_assert(tegra_host->rst);
-> +	rc = devm_tegra_core_dev_init_opp_table_common(&pdev->dev);
->  	if (rc)
->  		goto err_rst_get;
->  
-> +	pm_runtime_enable(&pdev->dev);
-> +	rc = pm_runtime_resume_and_get(&pdev->dev);
-> +	if (rc)
-> +		goto err_pm_get;
-> +
-> +	rc = reset_control_assert(tegra_host->rst);
-> +	if (rc)
-> +		goto err_rst_assert;
-> +
->  	usleep_range(2000, 4000);
->  
->  	rc = reset_control_deassert(tegra_host->rst);
->  	if (rc)
-> -		goto err_rst_get;
-> +		goto err_rst_assert;
->  
->  	usleep_range(2000, 4000);
->  
-> @@ -1736,8 +1755,11 @@ static int sdhci_tegra_probe(struct platform_device *pdev)
->  
->  err_add_host:
->  	reset_control_assert(tegra_host->rst);
-> +err_rst_assert:
-> +	pm_runtime_put_sync_suspend(&pdev->dev);
-> +err_pm_get:
-> +	pm_runtime_disable(&pdev->dev);
->  err_rst_get:
-> -	clk_disable_unprepare(pltfm_host->clk);
->  err_clk_get:
->  	clk_disable_unprepare(tegra_host->tmclk);
->  err_power_req:
-> @@ -1756,19 +1778,38 @@ static int sdhci_tegra_remove(struct platform_device *pdev)
->  
->  	reset_control_assert(tegra_host->rst);
->  	usleep_range(2000, 4000);
-> -	clk_disable_unprepare(pltfm_host->clk);
-> -	clk_disable_unprepare(tegra_host->tmclk);
->  
-> +	pm_runtime_put_sync_suspend(&pdev->dev);
-> +	pm_runtime_force_suspend(&pdev->dev);
-> +
-> +	clk_disable_unprepare(tegra_host->tmclk);
->  	sdhci_pltfm_free(pdev);
->  
->  	return 0;
+> +       if (dev->power.runtime_status == RPM_SUSPENDED &&
+> +           !dev->power.ignore_children &&
+> +           atomic_read(&dev->power.child_count) > 0)
+> +               dev_warn(dev, "Enabling runtime PM for inactive device with active children\n");
+>
+> +out:
+>         spin_unlock_irqrestore(&dev->power.lock, flags);
 >  }
->  
-> -#ifdef CONFIG_PM_SLEEP
-> -static int __maybe_unused sdhci_tegra_suspend(struct device *dev)
-> +static int __maybe_unused sdhci_tegra_runtime_suspend(struct device *dev)
+>  EXPORT_SYMBOL_GPL(pm_runtime_enable);
+> @@ -1640,6 +1641,7 @@ EXPORT_SYMBOL_GPL(__pm_runtime_use_autos
+>  void pm_runtime_init(struct device *dev)
 >  {
->  	struct sdhci_host *host = dev_get_drvdata(dev);
->  	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
-> +
-> +	clk_disable_unprepare(pltfm_host->clk);
-> +
-> +	return 0;
-> +}
-> +
-> +static int __maybe_unused sdhci_tegra_runtime_resume(struct device *dev)
-> +{
-> +	struct sdhci_host *host = dev_get_drvdata(dev);
-> +	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
-> +
-> +	return clk_prepare_enable(pltfm_host->clk);
-> +}
-> +
-> +#ifdef CONFIG_PM_SLEEP
-> +static int sdhci_tegra_suspend(struct device *dev)
-> +{
-> +	struct sdhci_host *host = dev_get_drvdata(dev);
->  	int ret;
->  
->  	if (host->mmc->caps2 & MMC_CAP2_CQE) {
-> @@ -1783,17 +1824,22 @@ static int __maybe_unused sdhci_tegra_suspend(struct device *dev)
->  		return ret;
->  	}
->  
-> -	clk_disable_unprepare(pltfm_host->clk);
-> +	ret = pm_runtime_force_suspend(dev);
-> +	if (ret) {
-> +		sdhci_resume_host(host);
-> +		cqhci_resume(host->mmc);
-> +		return ret;
-> +	}
-> +
->  	return 0;
->  }
->  
-> -static int __maybe_unused sdhci_tegra_resume(struct device *dev)
-> +static int sdhci_tegra_resume(struct device *dev)
->  {
->  	struct sdhci_host *host = dev_get_drvdata(dev);
-> -	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
->  	int ret;
->  
-> -	ret = clk_prepare_enable(pltfm_host->clk);
-> +	ret = pm_runtime_force_resume(dev);
->  	if (ret)
->  		return ret;
->  
-> @@ -1812,13 +1858,16 @@ static int __maybe_unused sdhci_tegra_resume(struct device *dev)
->  suspend_host:
->  	sdhci_suspend_host(host);
->  disable_clk:
-> -	clk_disable_unprepare(pltfm_host->clk);
-> +	pm_runtime_force_suspend(dev);
->  	return ret;
->  }
->  #endif
->  
-> -static SIMPLE_DEV_PM_OPS(sdhci_tegra_dev_pm_ops, sdhci_tegra_suspend,
-> -			 sdhci_tegra_resume);
-> +static const struct dev_pm_ops sdhci_tegra_dev_pm_ops = {
-> +	SET_RUNTIME_PM_OPS(sdhci_tegra_runtime_suspend, sdhci_tegra_runtime_resume,
-> +			   NULL)
-> +	SET_SYSTEM_SLEEP_PM_OPS(sdhci_tegra_suspend, sdhci_tegra_resume)
-> +};
->  
->  static struct platform_driver sdhci_tegra_driver = {
->  	.driver		= {
-> 
-
+>         dev->power.runtime_status = RPM_SUSPENDED;
+> +       dev->power.last_status = RPM_INVALID;
+>         dev->power.idle_notification = false;
+>
+>         dev->power.disable_depth = 1;
+> Index: linux-pm/include/linux/pm.h
+> ===================================================================
+> --- linux-pm.orig/include/linux/pm.h
+> +++ linux-pm/include/linux/pm.h
+> @@ -499,6 +499,7 @@ const struct dev_pm_ops __maybe_unused n
+>   */
+>
+>  enum rpm_status {
+> +       RPM_INVALID = -1,
+>         RPM_ACTIVE = 0,
+>         RPM_RESUMING,
+>         RPM_SUSPENDED,
+> @@ -612,6 +613,7 @@ struct dev_pm_info {
+>         unsigned int            links_count;
+>         enum rpm_request        request;
+>         enum rpm_status         runtime_status;
+> +       enum rpm_status         last_status;
+>         int                     runtime_error;
+>         int                     autosuspend_delay;
+>         u64                     last_busy;
+>
+>
+>
