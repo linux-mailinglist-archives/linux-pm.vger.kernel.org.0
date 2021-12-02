@@ -2,238 +2,172 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB2DC466589
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Dec 2021 15:42:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EA194665B2
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Dec 2021 15:46:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355465AbhLBOqN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Dec 2021 09:46:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39716 "EHLO
+        id S1358749AbhLBOtf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Dec 2021 09:49:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234655AbhLBOqN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Dec 2021 09:46:13 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC48FC061758
-        for <linux-pm@vger.kernel.org>; Thu,  2 Dec 2021 06:42:50 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id bu18so72123793lfb.0
-        for <linux-pm@vger.kernel.org>; Thu, 02 Dec 2021 06:42:50 -0800 (PST)
+        with ESMTP id S1358741AbhLBOte (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Dec 2021 09:49:34 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A026C061758
+        for <linux-pm@vger.kernel.org>; Thu,  2 Dec 2021 06:46:11 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id i63so175846lji.3
+        for <linux-pm@vger.kernel.org>; Thu, 02 Dec 2021 06:46:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=1gVv0etm4GE993dQO3eB/dIS4SnHr6m6vfiEpAtF7aU=;
-        b=JJXN9sqOBx56Tsg/1u+/d0K/NEyFTzBSxlXbFhXTiSyyDTZ3K0D88ask1mVp0D2b7Q
-         EiJ3/q4CDQkF+G+sArHeIV5aqEOsFcx1o1lSEWXru1qW48nQRaEUiaOPiDIT3KFAHpii
-         Ao1PDWWiVPmTPo/hqnqYbO0DTKW+JTR6aGKa6exbGN2hWTW6/5kMRPSm0qTbxVPCSIpA
-         ZDMN4dfehwZtK7DprJ/msGh167OncvlS2LWw0ZIG6EV0+/mpPZbbKFwll6FEpIquTBic
-         4xYGux6CnibaxDUucOYhcoY9r95PScTcHZ4iYW2xAiQuC0gFf1yE0MycHKnHI5A+EA7y
-         yKbw==
+        bh=BxPnHdJ+aJ9D33iSxb5HbYdKxpIsMl+fKEKkdpainPE=;
+        b=mIeUQBnIwa+LR+DWD6zB8iXWvNe82vquVBzQ/4uKsPN/cV3MyjJG29z+LW1R/v+qG1
+         +SxMk6tTwmfOd1hDqDr0LpEtlsimwo1hudzbVrN9UIXHTJQY+zgrD2qBc+nlAxNKIn/a
+         C+F2KxKjS7AKpWw7EkLE9zH8r+0zp990VkAu26nwz0wJZLTRZyEQmcQlKHHDRj7jv/QV
+         +7m5sI6HWXCWS4Yq/kn4PP9/CB5yQEAYVF+4RcO37o2w52wX6qIl0Ev+Ktvqzajuw16o
+         sjfHXUlw1XQQQXrhXQtR6dTlFA3bW/LuS31w7jyu/ENVQLSi/kx3iUJBr9esEdWQgl5z
+         Tnrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=1gVv0etm4GE993dQO3eB/dIS4SnHr6m6vfiEpAtF7aU=;
-        b=HDOTakY528mlacdRwBHPr6Hvh4se3wo2Glk2X22iwuEXMraWFJcVAaIfjG12BCjDvT
-         vISFgiTtu6bWgskxS9yMKjuflO8QWWX6L76CT2BeW/BS9IVFOMaXMKM/5CYNaXTS24W1
-         Y1dM9BoSdSUxskPRXIOvrdAV1bjrZmdaKezNe9NERgKWP7RHF1wZyMFuCU/cfk/TEkLE
-         TQiV0kzTW4Ti1bv5SYY9upAmc/B+e2tYUBLFDPGHG/BuDWR3ISHH6NYyf9ipcwfO/EIU
-         OCpu7t85EZpgT7f1aKyKXamB7vG1TYoCZdWhx1VHFTvFj/WBvwnf/O2UEkSR4hoJpvSD
-         X4Xg==
-X-Gm-Message-State: AOAM5336NWvdVHs4o52GZFqV/6tRALyn6lg3BrTB3uVUtMamGnophiLg
-        cAiWltSRU/pv5mnIbvFNZH9BkPV1synpqLzyXn0vvA==
-X-Google-Smtp-Source: ABdhPJyrT9kMPeIIlRKi/Kp/85yxnQAc1+U0bxMck/R189/VGs3/nm3pgYCLFcvlAVpI0ZHqgRVlrV/YSDOzUxfz8JE=
-X-Received: by 2002:a05:6512:3e04:: with SMTP id i4mr12793780lfv.167.1638456168960;
- Thu, 02 Dec 2021 06:42:48 -0800 (PST)
+        bh=BxPnHdJ+aJ9D33iSxb5HbYdKxpIsMl+fKEKkdpainPE=;
+        b=fSg4tOaOPIUtR14Yh2TcqMgs11uMAQQ7BuPnWqLaOgNSmVMIQAbhlA1+ExXSA1AW7Z
+         NqxXhh5dYAG/TotQeqB05SdzK1sJ75EwncudMnonU2zVidSdrKp55BCoe6xl7PuvJ1oi
+         yfdGdjavfGAMe2OZxfbn2lu7Z2cKUasKTuOm5kav9m/q2KDPhNlEnBxuJRDLb8OPC7up
+         6maJRFZeoz/oQK4O5DJM3ueOhAMKH8bUkxhn4riTH+p7xAqf2fFLX4UTBbVXwAG1nlBk
+         NgFtSGLogfyFNGgjbc8aijsQaHkHYIkTwtwIMOnbi3smFnMkHmE98FLE0yLRGCa8IBwL
+         4imw==
+X-Gm-Message-State: AOAM531ek31bOX8CfnrI8KpOeTbgQC2r8ny9+GcCssE80HGwM0a5IPHg
+        iRcLfGCNXt5bM0kVt47VUciW4+woZiSMwUeRaFgVAA==
+X-Google-Smtp-Source: ABdhPJyQIM753aEFPLW9JOZqu+gb1592ytFHS/P+BaHRLTTB+e5vALHEOang9gu8VNBPTccwpNku8gvj4H03BAXaHbM=
+X-Received: by 2002:a2e:b6d1:: with SMTP id m17mr12082827ljo.273.1638456369776;
+ Thu, 02 Dec 2021 06:46:09 -0800 (PST)
 MIME-Version: 1.0
-References: <20211201163856.41419-1-daniel.lezcano@linaro.org>
-In-Reply-To: <20211201163856.41419-1-daniel.lezcano@linaro.org>
+References: <20211201163856.41419-1-daniel.lezcano@linaro.org> <20211201163856.41419-2-daniel.lezcano@linaro.org>
+In-Reply-To: <20211201163856.41419-2-daniel.lezcano@linaro.org>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 2 Dec 2021 15:42:13 +0100
-Message-ID: <CAPDyKFor=OCOYqY2K9WyOa5FrM+tCE8KR8CuBOxHdz-ch9Tzkg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/5] dt-bindings: Powerzone new bindings
+Date:   Thu, 2 Dec 2021 15:45:33 +0100
+Message-ID: <CAPDyKFrx4vyiv6evTPn-j5zn_g1Rc2Azd_XX5NnXzN19NOdHQw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/5] arm64: dts: rockchip: Add powerzones definition
+ for rock960
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     robh@kernel.org, arnd@linaro.org, heiko@sntech.de,
         rjw@rjwysocki.net, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        lukasz.luba@arm.com, Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>
+        lukasz.luba@arm.com, Robin Murphy <robin.murphy@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Helen Koike <helen.koike@collabora.com>,
+        Brian Norris <briannorris@chromium.org>,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        "moderated list:ARM/Rockchip SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC support" 
+        <linux-rockchip@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 1 Dec 2021 at 17:41, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+On Wed, 1 Dec 2021 at 17:42, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
 >
-> The proposed bindings are describing a set of powerzones.
+> Add the powerzones description. This first step introduces the big,
+> the little as powerzone places.
 >
-> A power zone is the logical name for a component which is capable of
-> power capping and where we can measure the power consumption.
->
-> A power zone can aggregate several power zones in terms of power
-> measurement and power limitations. That allows to apply power
-> constraint to a group of components and let the system balance the
-> allocated power in order to comply with the constraint.
->
-> The ARM System Control and Management Interface (SCMI) can provide a
-> power zone description.
->
-> The powerzone semantic is also found on the Intel platform with the
-> RAPL register.
->
-> The Linux kernel powercap framework deals with the powerzones:
->
-> https://www.kernel.org/doc/html/latest/power/powercap/powercap.html
->
-> The powerzone can also represent a group of children powerzones, hence
-> the description can result on a hierarchy. Such hierarchy already
-> exists with the hardware or can be represented and computed from the
-> kernel.
->
-> The hierarchical description was initially proposed but not desired
-> given there are other descriptions like the power domain proposing
-> almost the same description.
->
-> https://lore.kernel.org/all/CAL_JsqLuLcHj7525tTUmh7pLqe7T2j6UcznyhV7joS8ipyb_VQ@mail.gmail.com/
->
-> The description gives the power constraint dependencies to apply on a
-> specific group of logically or physically aggregated devices. They do
-> not represent the physical location or the power domains of the SoC
-> even if the description could be similar.
->
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Robin Murphy <robin.murphy@arm.com>
 > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>    V3:
+>      - Remove GPU section as no power is available (yet)
+>      - Remove '#powerzone-cells' conforming to the bindings change
+>    V2:
+>      - Move description in the SoC dtsi specific file
+>    V1: Initial post
+> ---
+>  arch/arm64/boot/dts/rockchip/rk3399.dtsi | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3399.dtsi b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+> index d3cdf6f42a30..c41b20888a44 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+> +++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+> @@ -76,6 +76,7 @@ cpu_l0: cpu@0 {
+>                         #cooling-cells = <2>; /* min followed by max */
+>                         dynamic-power-coefficient = <100>;
+>                         cpu-idle-states = <&CPU_SLEEP &CLUSTER_SLEEP>;
+> +                       powerzone = <&PKG_PZ>;
+>                 };
+>
+>                 cpu_l1: cpu@1 {
+> @@ -88,6 +89,7 @@ cpu_l1: cpu@1 {
+>                         #cooling-cells = <2>; /* min followed by max */
+>                         dynamic-power-coefficient = <100>;
+>                         cpu-idle-states = <&CPU_SLEEP &CLUSTER_SLEEP>;
+> +                       powerzone = <&PKG_PZ>;
+>                 };
+>
+>                 cpu_l2: cpu@2 {
+> @@ -100,6 +102,7 @@ cpu_l2: cpu@2 {
+>                         #cooling-cells = <2>; /* min followed by max */
+>                         dynamic-power-coefficient = <100>;
+>                         cpu-idle-states = <&CPU_SLEEP &CLUSTER_SLEEP>;
+> +                       powerzone = <&PKG_PZ>;
+>                 };
+>
+>                 cpu_l3: cpu@3 {
+> @@ -112,6 +115,7 @@ cpu_l3: cpu@3 {
+>                         #cooling-cells = <2>; /* min followed by max */
+>                         dynamic-power-coefficient = <100>;
+>                         cpu-idle-states = <&CPU_SLEEP &CLUSTER_SLEEP>;
+> +                       powerzone = <&PKG_PZ>;
+>                 };
+>
+>                 cpu_b0: cpu@100 {
+> @@ -124,6 +128,7 @@ cpu_b0: cpu@100 {
+>                         #cooling-cells = <2>; /* min followed by max */
+>                         dynamic-power-coefficient = <436>;
+>                         cpu-idle-states = <&CPU_SLEEP &CLUSTER_SLEEP>;
+> +                       powerzone = <&PKG_PZ>;
+>
+>                         thermal-idle {
+>                                 #cooling-cells = <2>;
+> @@ -142,6 +147,7 @@ cpu_b1: cpu@101 {
+>                         #cooling-cells = <2>; /* min followed by max */
+>                         dynamic-power-coefficient = <436>;
+>                         cpu-idle-states = <&CPU_SLEEP &CLUSTER_SLEEP>;
+> +                       powerzone = <&PKG_PZ>;
+>
+>                         thermal-idle {
+>                                 #cooling-cells = <2>;
+> @@ -791,6 +797,17 @@ spi5: spi@ff200000 {
+>                 status = "disabled";
+>         };
+>
+> +       powerzones {
+> +
+> +               PKG_PZ: pkg {
+> +                       #powerzone-cells = <0>;
+> +                        powerzone = <&SOC_PZ>;
+> +               };
+> +
+> +               SOC_PZ: soc {
 
-This looks good to me, feel free to add:
+This needs "#powerzone-cells = <0>;"
+
+> +               };
+> +       };
+> +
+>         thermal_zones: thermal-zones {
+>                 cpu_thermal: cpu-thermal {
+>                         polling-delay-passive = <100>;
+> --
+> 2.25.1
+>
+
+Other than the minor thing above, feel free to add:
 
 Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
 Kind regards
 Uffe
-
-> ---
->    V3:
->      - Removed required property 'compatible'
->      - Removed powerzone-cells from the topmost node
->      - Removed powerzone-cells from cpus 'consumers' in example
->      - Set additionnal property to false
->    V2:
->      - Added pattern properties and stick to powerzone-*
->      - Added required property compatible and powerzone-cells
->      - Added additionnal property
->      - Added compatible
->      - Renamed to 'powerzones'
->      - Added missing powerzone-cells to the topmost node
->      - Fixed errors reported by 'make DT_CHECKER_FLAGS=-m dt_binding_check'
->    V1: Initial post
-> ---
->  .../devicetree/bindings/power/powerzones.yaml | 97 +++++++++++++++++++
->  1 file changed, 97 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/powerzones.yaml
->
-> diff --git a/Documentation/devicetree/bindings/power/powerzones.yaml b/Documentation/devicetree/bindings/power/powerzones.yaml
-> new file mode 100644
-> index 000000000000..ddb790acfea6
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/powerzones.yaml
-> @@ -0,0 +1,97 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/powerzones.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Power zones description
-> +
-> +maintainers:
-> +  - Daniel Lezcano <daniel.lezcano@linaro.org>
-> +
-> +description: |+
-> +
-> +  A System on Chip contains a multitude of active components and each
-> +  of them is a source of heat. Even if a temperature sensor is not
-> +  present, a source of heat can be controlled by acting on the
-> +  consumed power via different techniques.
-> +
-> +  A powerzone describes a component or a group of components where we
-> +  can control the maximum power consumption. For instance, a group of
-> +  CPUs via the performance domain, a LCD screen via the brightness,
-> +  etc ...
-> +
-> +  Different components when they are used together can significantly
-> +  increase the overall temperature, so the description needs to
-> +  reflect this dependency in order to assign a power budget for a
-> +  group of powerzones.
-> +
-> +  This description is done via a hierarchy and the DT reflects it. It
-> +  does not represent the physical location or a topology, eg. on a
-> +  big.Little system, the little CPUs may not be represented as they do
-> +  not contribute significantly to the heat, however the GPU can be
-> +  tied with the big CPUs as they usually have a connection for
-> +  multimedia or game workloads.
-> +
-> +properties:
-> +  $nodename:
-> +    const: powerzones
-> +
-> +patternProperties:
-> +  "^(powerzone)([@-].*)?$":
-> +    type: object
-> +    description:
-> +      A node representing a powerzone acting as an aggregator for all
-> +      its children powerzones.
-> +
-> +    properties:
-> +      "#powerzone-cells":
-> +        description:
-> +          Number of cells in powerzone specifier. Typically 0 for nodes
-> +          representing but it can be any number in the future to
-> +          describe parameters of the powerzone.
-> +
-> +      powerzones:
-> +        description:
-> +          A phandle to a parent powerzone. If no powerzone attribute is
-> +          set, the described powerzone is the topmost in the hierarchy.
-> +
-> +    required:
-> +      - "#powerzone-cells"
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    powerzones {
-> +
-> +      SOC_PZ: powerzone-soc {
-> +        #powerzone-cells = <0>;
-> +      };
-> +
-> +      PKG_PZ: powerzone-pkg {
-> +        #powerzone-cells = <0>;
-> +        powerzones = <&SOC_PZ>;
-> +      };
-> +
-> +      GPU_PZ: powerzone-gpu {
-> +        #powerzone-cells = <0>;
-> +        powerzones = <&PKG_PZ>;
-> +      };
-> +    };
-> +
-> +  - |
-> +    A57_0: big@0 {
-> +      compatible = "arm,cortex-a57";
-> +      reg = <0x0 0x0>;
-> +      device_type = "cpu";
-> +      powerzones = <&PKG_PZ>;
-> +    };
-> +
-> +    A57_1: big@1 {
-> +      compatible = "arm,cortex-a57";
-> +      reg = <0x0 0x0>;
-> +      device_type = "cpu";
-> +      powerzones = <&PKG_PZ>;
-> +    };
-> +...
-> --
-> 2.25.1
->
