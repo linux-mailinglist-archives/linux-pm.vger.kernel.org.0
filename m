@@ -2,89 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78176466D09
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Dec 2021 23:38:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EB3E466DFA
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Dec 2021 00:45:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377455AbhLBWli (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Dec 2021 17:41:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35014 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377280AbhLBWla (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Dec 2021 17:41:30 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 355D4C06175A
-        for <linux-pm@vger.kernel.org>; Thu,  2 Dec 2021 14:38:07 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id m25so1364904qtq.13
-        for <linux-pm@vger.kernel.org>; Thu, 02 Dec 2021 14:38:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=/YgkxkUgYa3cGXFN75ZNVpxqudNeMPhQu2Vflsaslk8=;
-        b=kXDO6ZiBZCIi/mnCweRXGLA2xMwJarSMYy8jU8Z8J97OsNm9qT9phk279CqJLkXe6C
-         5DZfMIaCv0yJnDUQC1GhxA9g+q2wTyOiTURiMqwAqAmMLBMnlrXu8UOsTSKS14GWUisV
-         2w/D3o4NV3RxmAFx2gxN4xub2KfvmqX/rbRQRbewW+bHRa/aEvsgl56iTkPKQrIZyrNe
-         P5ZX4ntuJFRUFY5HC1ZTXzSVx+/jvgFWCC74+7oCctqssZ+zC3vV/VqF9amWg8tkWiFB
-         n0+ZJmcNgWxSoxD2JmOboNsMenMN+6zrbu4iD/TWCEcy+kXDlJY8zzPNYl2olhOZ6D/B
-         DEfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/YgkxkUgYa3cGXFN75ZNVpxqudNeMPhQu2Vflsaslk8=;
-        b=egNoyQBBKX+0Gv2DXNcZCLHcZNP9tdb827lEZzfg9VyjQaMbavi+e8nvtC1p1BOiT5
-         z3/VTyk6xK5vjySbJd63am0g590ozFLLbDncj0BxeQDCgHXW1DyjaopuzvsIZx4+Wr1E
-         YiQZmv+qsu1kNml4/tE+SUyLfv6yIOLEAB7C5PXA+p9gqQMemLlo3h9ISLPsRSEvyNZ0
-         tR4mTGlNDFCJqJozlo1yZUaFjO4KE96y4t+MMGSwWeKKYvkGK2vtAW6GhQnkx4y3Fmdk
-         Q2EOXAQqTR+5/T/2NouzrL9oHsW9f/rvpmHrosYK8fUjb4eiCjGWkU7M1UOXlgrhVzeW
-         YLgg==
-X-Gm-Message-State: AOAM531d5TsO8KPptNWyM1sO2sy/32hZIisM5nu9KByQyTmifAAe6N53
-        jswyIzsylu0p4Lfia0mctkVq0Q==
-X-Google-Smtp-Source: ABdhPJw5thbB/dwtKRrrsemIkR0hgl49PqQvYWmXUWSSKHPwBpOe14Uc2RUufrjd5T2vkX1MAo4jAg==
-X-Received: by 2002:ac8:5c53:: with SMTP id j19mr16615598qtj.40.1638484686382;
-        Thu, 02 Dec 2021 14:38:06 -0800 (PST)
-Received: from pop-os.fios-router.home (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
-        by smtp.googlemail.com with ESMTPSA id h3sm961152qko.78.2021.12.02.14.38.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Dec 2021 14:38:06 -0800 (PST)
-From:   Thara Gopinath <thara.gopinath@linaro.org>
-To:     agross@kernel.org, bjorn.andersson@linaro.org,
-        daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
-        robh+dt@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] dt-bindings: thermal: Add sm8150 compatible string for LMh
-Date:   Thu,  2 Dec 2021 17:38:02 -0500
-Message-Id: <20211202223802.382068-4-thara.gopinath@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211202223802.382068-1-thara.gopinath@linaro.org>
-References: <20211202223802.382068-1-thara.gopinath@linaro.org>
+        id S1377573AbhLBXro (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Dec 2021 18:47:44 -0500
+Received: from mga18.intel.com ([134.134.136.126]:54125 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232981AbhLBXro (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 2 Dec 2021 18:47:44 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="223745010"
+X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
+   d="scan'208";a="223745010"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 15:44:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
+   d="scan'208";a="561399309"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by fmsmga008.fm.intel.com with ESMTP; 02 Dec 2021 15:44:13 -0800
+Date:   Thu, 2 Dec 2021 15:43:07 -0800
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 4/7] thermal: intel: hfi: Handle CPU hotplug events
+Message-ID: <20211202234307.GA334@ranerica-svr.sc.intel.com>
+References: <20211106013312.26698-1-ricardo.neri-calderon@linux.intel.com>
+ <20211106013312.26698-5-ricardo.neri-calderon@linux.intel.com>
+ <CAJZ5v0gemmV1Lz3+9iKz1eiXtkyDc3+4+po4Eidchzk+J2=ceA@mail.gmail.com>
+ <20211130132137.GA25524@ranerica-svr.sc.intel.com>
+ <CAJZ5v0iXBn1o9ZFzNaYU4ft=JcRfNv7AJ8Sq-9HbBJbp60LpWQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0iXBn1o9ZFzNaYU4ft=JcRfNv7AJ8Sq-9HbBJbp60LpWQ@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Extend the LMh dt binding document to include compatible string
-supporting sm8150 SoC.
+On Tue, Nov 30, 2021 at 02:32:42PM +0100, Rafael J. Wysocki wrote:
+> On Tue, Nov 30, 2021 at 2:22 PM Ricardo Neri
+> <ricardo.neri-calderon@linux.intel.com> wrote:
+> >
+> > On Wed, Nov 24, 2021 at 03:48:49PM +0100, Rafael J. Wysocki wrote:
+> > > On Sat, Nov 6, 2021 at 2:34 AM Ricardo Neri
+> > > <ricardo.neri-calderon@linux.intel.com> wrote:
+> 
+> [cut]
+> 
+> > > > +/**
+> > > > + * intel_hfi_offline() - Disable HFI on @cpu
+> > > > + * @cpu:       CPU in which the HFI will be disabled
+> > > > + *
+> > > > + * Remove @cpu from those covered by its HFI instance.
+> > > > + *
+> > > > + * On some processors, hardware remembers previous programming settings even
+> > > > + * after being reprogrammed. Thus, keep HFI enabled even if all CPUs in the
+> > > > + * die/package of @cpu are offline. See note in intel_hfi_online().
+> > > > + */
+> > > > +void intel_hfi_offline(unsigned int cpu)
+> > > > +{
+> > > > +       struct cpumask *die_cpumask = topology_core_cpumask(cpu);
+> > > > +       struct hfi_cpu_info *info = &per_cpu(hfi_cpu_info, cpu);
+> > > > +       struct hfi_instance *hfi_instance;
+> > > > +
+> > > > +       if (!boot_cpu_has(X86_FEATURE_INTEL_HFI))
+> > > > +               return;
+> > > > +
+> > > > +       hfi_instance = info->hfi_instance;
+> > > > +       if (!hfi_instance)
+> > > > +               return;
+> > > > +
+> > > > +       if (!hfi_instance->initialized)
+> > > > +               return;
+> > > > +
+> > > > +       mutex_lock(&hfi_lock);
+> > > > +
+> > > > +       /*
+> > > > +        * We were using the core cpumask of @cpu to track CPUs in the same
+> > > > +        * die/package. Now it is going offline and we need to find another
+> > > > +        * CPU we can use.
+> > > > +        */
+> > > > +       if (die_cpumask == hfi_instance->cpus) {
+> > > > +               int new_cpu;
+> > > > +
+> > > > +               new_cpu = cpumask_any_but(hfi_instance->cpus, cpu);
+> > > > +               if (new_cpu >= nr_cpu_ids)
+> > > > +                       /* All other CPUs in the package are offline. */
+> > > > +                       hfi_instance->cpus = NULL;
+> > > > +               else
+> > > > +                       hfi_instance->cpus = topology_core_cpumask(new_cpu);
+> > >
+> > > Hmmm.  Is topology_core_cpumask() updated when CPUs go offline and online?
+> >
+> > Yes. A CPU going offline is cleared from its siblings' cpumask [1] and its own [2]
+> > in remove_siblinginfo() via cpu_disable_common(). A CPU going online is set
+> > in its siblings' cpumask and its own in set_cpu_sibling_map() [3].
+> 
+> OK, so it is necessary to ensure that intel_hfi_offline() will always
+> run after remove_siblinginfo() so it sees the updated mask.  How do we
+> ensure that?
 
-Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
----
- Documentation/devicetree/bindings/thermal/qcom-lmh.yaml | 1 +
- 1 file changed, 1 insertion(+)
+I don't think that is possible. remove_siblinginfo() is called from
+CPUHP_TEARDOWN_CPU, which always happens after CPUHP_AP_OFFLINE, if I
+understand correctly.
 
-diff --git a/Documentation/devicetree/bindings/thermal/qcom-lmh.yaml b/Documentation/devicetree/bindings/thermal/qcom-lmh.yaml
-index 289e9a845600..a9b7388ca9ac 100644
---- a/Documentation/devicetree/bindings/thermal/qcom-lmh.yaml
-+++ b/Documentation/devicetree/bindings/thermal/qcom-lmh.yaml
-@@ -19,6 +19,7 @@ properties:
-   compatible:
-     enum:
-       - qcom,sdm845-lmh
-+      - qcom,sm8150-lmh
- 
-   reg:
-     items:
--- 
-2.25.1
+I guess that I will need to use a local cpumask as other drivers do.
 
+Thanks and BR,
+Ricardo
