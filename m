@@ -2,127 +2,238 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AD81466568
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Dec 2021 15:37:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB2DC466589
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Dec 2021 15:42:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358630AbhLBOlJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Dec 2021 09:41:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38464 "EHLO
+        id S1355465AbhLBOqN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Dec 2021 09:46:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358626AbhLBOlI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Dec 2021 09:41:08 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5EC2C06174A;
-        Thu,  2 Dec 2021 06:37:45 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id 13so36719ljj.11;
-        Thu, 02 Dec 2021 06:37:45 -0800 (PST)
+        with ESMTP id S234655AbhLBOqN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Dec 2021 09:46:13 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC48FC061758
+        for <linux-pm@vger.kernel.org>; Thu,  2 Dec 2021 06:42:50 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id bu18so72123793lfb.0
+        for <linux-pm@vger.kernel.org>; Thu, 02 Dec 2021 06:42:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=j3+uRqlfOdJ9gdXpk4Ag6b50mCMEDFtsf4SbSiWu+Vc=;
-        b=Ui2nu3+p4GaXUqPr7aBujCoNJtOGWsaecqehONsKBBfp4C1702TzgwbtHky2ba+8Tv
-         YcEYpw1vl83gkFX61plvk6MDupATnQPdzYqgkue1hih7Tu3pT3fU1Ex43b4zo6spwRXE
-         TdJSWDW+Aj5deDYvgHDoE92U8hoetG0xD3WtcesJ2iAV46jWIFIHnklnL43gzTi1057i
-         j71ySM1u/HzdeCsXFgbd81WGZsHRgwe0bxpJjVX02QejZfjyqODpSiIjg1SASXW4IzNv
-         rr9s4mG8y0oQvHNctC0d/K02VIYZQW0w5S5dmO2w3vUuip8IuAj18nugWIPHjcZ0fJGd
-         IaZA==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1gVv0etm4GE993dQO3eB/dIS4SnHr6m6vfiEpAtF7aU=;
+        b=JJXN9sqOBx56Tsg/1u+/d0K/NEyFTzBSxlXbFhXTiSyyDTZ3K0D88ask1mVp0D2b7Q
+         EiJ3/q4CDQkF+G+sArHeIV5aqEOsFcx1o1lSEWXru1qW48nQRaEUiaOPiDIT3KFAHpii
+         Ao1PDWWiVPmTPo/hqnqYbO0DTKW+JTR6aGKa6exbGN2hWTW6/5kMRPSm0qTbxVPCSIpA
+         ZDMN4dfehwZtK7DprJ/msGh167OncvlS2LWw0ZIG6EV0+/mpPZbbKFwll6FEpIquTBic
+         4xYGux6CnibaxDUucOYhcoY9r95PScTcHZ4iYW2xAiQuC0gFf1yE0MycHKnHI5A+EA7y
+         yKbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=j3+uRqlfOdJ9gdXpk4Ag6b50mCMEDFtsf4SbSiWu+Vc=;
-        b=mtwNchX5gO6UvV7ebNKDeHqm+UnnqSpK0Ot25gXyonNZT6jEuRsByMwIHkTbcaJTnp
-         i8HhkB6JM9Qj4KQcghrywNRCqQ1ZGsLiUTSQipUPvj8cowmyuiRSmHaeiaUMJwrMW4Df
-         Y4r/EkTNZTAYLo2fgM2RAr+csyTh+2jY06y6wmpA9FwH43B6C9J1N5sziH8IG3YZQ4DQ
-         gzlASHvFRVkrFdEG76gGn/+LWaFHyTustuAS5WRkofzV3gYt8/K+7+OmLcCcVbrlYGLl
-         BEvTOZDSnEdGAV1GgIUxXsM3E5bvfEGcDFqhC3t/gOdxqGOmlyf8jRJNzqgMvC1Ecw+m
-         G4QA==
-X-Gm-Message-State: AOAM5334o5EETUACi+/WeSD2Q5vqCU8OgSQv1mVwqeprBtc9I9x+XG0i
-        9XwoGT4PjVE261R9Xts+U9s=
-X-Google-Smtp-Source: ABdhPJwvY8mbcLlIfE3pEzBVN9nFXr0lE8mxAcn3TUVpblULI1egT//PrBCue4QhcsJBN9IUBDImeg==
-X-Received: by 2002:a2e:3518:: with SMTP id z24mr12151763ljz.293.1638455864176;
-        Thu, 02 Dec 2021 06:37:44 -0800 (PST)
-Received: from localhost.localdomain (h-155-4-221-129.NA.cust.bahnhof.se. [155.4.221.129])
-        by smtp.gmail.com with ESMTPSA id f19sm368976lfm.119.2021.12.02.06.37.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Dec 2021 06:37:43 -0800 (PST)
-From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
-To:     Daniel Lezcano <daniel.lezcano@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>
-Subject: [PATCH 2/2] powercap/drivers/dtpm: Constify dtpm_ops
-Date:   Thu,  2 Dec 2021 15:37:34 +0100
-Message-Id: <20211202143734.101760-3-rikard.falkeborn@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211202143734.101760-1-rikard.falkeborn@gmail.com>
-References: <20211202143734.101760-1-rikard.falkeborn@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1gVv0etm4GE993dQO3eB/dIS4SnHr6m6vfiEpAtF7aU=;
+        b=HDOTakY528mlacdRwBHPr6Hvh4se3wo2Glk2X22iwuEXMraWFJcVAaIfjG12BCjDvT
+         vISFgiTtu6bWgskxS9yMKjuflO8QWWX6L76CT2BeW/BS9IVFOMaXMKM/5CYNaXTS24W1
+         Y1dM9BoSdSUxskPRXIOvrdAV1bjrZmdaKezNe9NERgKWP7RHF1wZyMFuCU/cfk/TEkLE
+         TQiV0kzTW4Ti1bv5SYY9upAmc/B+e2tYUBLFDPGHG/BuDWR3ISHH6NYyf9ipcwfO/EIU
+         OCpu7t85EZpgT7f1aKyKXamB7vG1TYoCZdWhx1VHFTvFj/WBvwnf/O2UEkSR4hoJpvSD
+         X4Xg==
+X-Gm-Message-State: AOAM5336NWvdVHs4o52GZFqV/6tRALyn6lg3BrTB3uVUtMamGnophiLg
+        cAiWltSRU/pv5mnIbvFNZH9BkPV1synpqLzyXn0vvA==
+X-Google-Smtp-Source: ABdhPJyrT9kMPeIIlRKi/Kp/85yxnQAc1+U0bxMck/R189/VGs3/nm3pgYCLFcvlAVpI0ZHqgRVlrV/YSDOzUxfz8JE=
+X-Received: by 2002:a05:6512:3e04:: with SMTP id i4mr12793780lfv.167.1638456168960;
+ Thu, 02 Dec 2021 06:42:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211201163856.41419-1-daniel.lezcano@linaro.org>
+In-Reply-To: <20211201163856.41419-1-daniel.lezcano@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 2 Dec 2021 15:42:13 +0100
+Message-ID: <CAPDyKFor=OCOYqY2K9WyOa5FrM+tCE8KR8CuBOxHdz-ch9Tzkg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/5] dt-bindings: Powerzone new bindings
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     robh@kernel.org, arnd@linaro.org, heiko@sntech.de,
+        rjw@rjwysocki.net, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        lukasz.luba@arm.com, Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-dtpm_ops is never modified, so update functions and structs to reflect
-that, and constify the one static instance to allow the compiler to put
-it in read-only memory.
+On Wed, 1 Dec 2021 at 17:41, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>
+> The proposed bindings are describing a set of powerzones.
+>
+> A power zone is the logical name for a component which is capable of
+> power capping and where we can measure the power consumption.
+>
+> A power zone can aggregate several power zones in terms of power
+> measurement and power limitations. That allows to apply power
+> constraint to a group of components and let the system balance the
+> allocated power in order to comply with the constraint.
+>
+> The ARM System Control and Management Interface (SCMI) can provide a
+> power zone description.
+>
+> The powerzone semantic is also found on the Intel platform with the
+> RAPL register.
+>
+> The Linux kernel powercap framework deals with the powerzones:
+>
+> https://www.kernel.org/doc/html/latest/power/powercap/powercap.html
+>
+> The powerzone can also represent a group of children powerzones, hence
+> the description can result on a hierarchy. Such hierarchy already
+> exists with the hardware or can be represented and computed from the
+> kernel.
+>
+> The hierarchical description was initially proposed but not desired
+> given there are other descriptions like the power domain proposing
+> almost the same description.
+>
+> https://lore.kernel.org/all/CAL_JsqLuLcHj7525tTUmh7pLqe7T2j6UcznyhV7joS8ipyb_VQ@mail.gmail.com/
+>
+> The description gives the power constraint dependencies to apply on a
+> specific group of logically or physically aggregated devices. They do
+> not represent the physical location or the power domains of the SoC
+> even if the description could be similar.
+>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
----
- drivers/powercap/dtpm.c     | 2 +-
- drivers/powercap/dtpm_cpu.c | 2 +-
- include/linux/dtpm.h        | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
+This looks good to me, feel free to add:
 
-diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
-index d7ac5e79fee1..07e4dec604de 100644
---- a/drivers/powercap/dtpm.c
-+++ b/drivers/powercap/dtpm.c
-@@ -361,7 +361,7 @@ static const struct powercap_zone_ops zone_ops = {
-  * @dtpm: The dtpm struct pointer to be initialized
-  * @ops: The dtpm device specific ops, NULL for a virtual node
-  */
--void dtpm_init(struct dtpm *dtpm, struct dtpm_ops *ops)
-+void dtpm_init(struct dtpm *dtpm, const struct dtpm_ops *ops)
- {
- 	if (dtpm) {
- 		INIT_LIST_HEAD(&dtpm->children);
-diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
-index b740866b228d..2eeff292ffbe 100644
---- a/drivers/powercap/dtpm_cpu.c
-+++ b/drivers/powercap/dtpm_cpu.c
-@@ -157,7 +157,7 @@ static void pd_release(struct dtpm *dtpm)
- 	kfree(dtpm_cpu);
- }
- 
--static struct dtpm_ops dtpm_ops = {
-+static const struct dtpm_ops dtpm_ops = {
- 	.set_power_uw	 = set_pd_power_limit,
- 	.get_power_uw	 = get_pd_power_uw,
- 	.update_power_uw = update_pd_power_uw,
-diff --git a/include/linux/dtpm.h b/include/linux/dtpm.h
-index 2890f6370eb9..883f5ab213f3 100644
---- a/include/linux/dtpm.h
-+++ b/include/linux/dtpm.h
-@@ -17,7 +17,7 @@ struct dtpm {
- 	struct dtpm *parent;
- 	struct list_head sibling;
- 	struct list_head children;
--	struct dtpm_ops *ops;
-+	const struct dtpm_ops *ops;
- 	unsigned long flags;
- 	u64 power_limit;
- 	u64 power_max;
-@@ -64,7 +64,7 @@ int dtpm_update_power(struct dtpm *dtpm);
- 
- int dtpm_release_zone(struct powercap_zone *pcz);
- 
--void dtpm_init(struct dtpm *dtpm, struct dtpm_ops *ops);
-+void dtpm_init(struct dtpm *dtpm, const struct dtpm_ops *ops);
- 
- void dtpm_unregister(struct dtpm *dtpm);
- 
--- 
-2.34.1
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
+Kind regards
+Uffe
+
+> ---
+>    V3:
+>      - Removed required property 'compatible'
+>      - Removed powerzone-cells from the topmost node
+>      - Removed powerzone-cells from cpus 'consumers' in example
+>      - Set additionnal property to false
+>    V2:
+>      - Added pattern properties and stick to powerzone-*
+>      - Added required property compatible and powerzone-cells
+>      - Added additionnal property
+>      - Added compatible
+>      - Renamed to 'powerzones'
+>      - Added missing powerzone-cells to the topmost node
+>      - Fixed errors reported by 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+>    V1: Initial post
+> ---
+>  .../devicetree/bindings/power/powerzones.yaml | 97 +++++++++++++++++++
+>  1 file changed, 97 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/powerzones.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/power/powerzones.yaml b/Documentation/devicetree/bindings/power/powerzones.yaml
+> new file mode 100644
+> index 000000000000..ddb790acfea6
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/powerzones.yaml
+> @@ -0,0 +1,97 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/powerzones.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Power zones description
+> +
+> +maintainers:
+> +  - Daniel Lezcano <daniel.lezcano@linaro.org>
+> +
+> +description: |+
+> +
+> +  A System on Chip contains a multitude of active components and each
+> +  of them is a source of heat. Even if a temperature sensor is not
+> +  present, a source of heat can be controlled by acting on the
+> +  consumed power via different techniques.
+> +
+> +  A powerzone describes a component or a group of components where we
+> +  can control the maximum power consumption. For instance, a group of
+> +  CPUs via the performance domain, a LCD screen via the brightness,
+> +  etc ...
+> +
+> +  Different components when they are used together can significantly
+> +  increase the overall temperature, so the description needs to
+> +  reflect this dependency in order to assign a power budget for a
+> +  group of powerzones.
+> +
+> +  This description is done via a hierarchy and the DT reflects it. It
+> +  does not represent the physical location or a topology, eg. on a
+> +  big.Little system, the little CPUs may not be represented as they do
+> +  not contribute significantly to the heat, however the GPU can be
+> +  tied with the big CPUs as they usually have a connection for
+> +  multimedia or game workloads.
+> +
+> +properties:
+> +  $nodename:
+> +    const: powerzones
+> +
+> +patternProperties:
+> +  "^(powerzone)([@-].*)?$":
+> +    type: object
+> +    description:
+> +      A node representing a powerzone acting as an aggregator for all
+> +      its children powerzones.
+> +
+> +    properties:
+> +      "#powerzone-cells":
+> +        description:
+> +          Number of cells in powerzone specifier. Typically 0 for nodes
+> +          representing but it can be any number in the future to
+> +          describe parameters of the powerzone.
+> +
+> +      powerzones:
+> +        description:
+> +          A phandle to a parent powerzone. If no powerzone attribute is
+> +          set, the described powerzone is the topmost in the hierarchy.
+> +
+> +    required:
+> +      - "#powerzone-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    powerzones {
+> +
+> +      SOC_PZ: powerzone-soc {
+> +        #powerzone-cells = <0>;
+> +      };
+> +
+> +      PKG_PZ: powerzone-pkg {
+> +        #powerzone-cells = <0>;
+> +        powerzones = <&SOC_PZ>;
+> +      };
+> +
+> +      GPU_PZ: powerzone-gpu {
+> +        #powerzone-cells = <0>;
+> +        powerzones = <&PKG_PZ>;
+> +      };
+> +    };
+> +
+> +  - |
+> +    A57_0: big@0 {
+> +      compatible = "arm,cortex-a57";
+> +      reg = <0x0 0x0>;
+> +      device_type = "cpu";
+> +      powerzones = <&PKG_PZ>;
+> +    };
+> +
+> +    A57_1: big@1 {
+> +      compatible = "arm,cortex-a57";
+> +      reg = <0x0 0x0>;
+> +      device_type = "cpu";
+> +      powerzones = <&PKG_PZ>;
+> +    };
+> +...
+> --
+> 2.25.1
+>
