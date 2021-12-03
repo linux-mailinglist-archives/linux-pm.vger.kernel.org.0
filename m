@@ -2,126 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB3E466DFA
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Dec 2021 00:45:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D6DF466EF9
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Dec 2021 02:08:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377573AbhLBXro (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Dec 2021 18:47:44 -0500
-Received: from mga18.intel.com ([134.134.136.126]:54125 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232981AbhLBXro (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 2 Dec 2021 18:47:44 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="223745010"
-X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
-   d="scan'208";a="223745010"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 15:44:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
-   d="scan'208";a="561399309"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga008.fm.intel.com with ESMTP; 02 Dec 2021 15:44:13 -0800
-Date:   Thu, 2 Dec 2021 15:43:07 -0800
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 4/7] thermal: intel: hfi: Handle CPU hotplug events
-Message-ID: <20211202234307.GA334@ranerica-svr.sc.intel.com>
-References: <20211106013312.26698-1-ricardo.neri-calderon@linux.intel.com>
- <20211106013312.26698-5-ricardo.neri-calderon@linux.intel.com>
- <CAJZ5v0gemmV1Lz3+9iKz1eiXtkyDc3+4+po4Eidchzk+J2=ceA@mail.gmail.com>
- <20211130132137.GA25524@ranerica-svr.sc.intel.com>
- <CAJZ5v0iXBn1o9ZFzNaYU4ft=JcRfNv7AJ8Sq-9HbBJbp60LpWQ@mail.gmail.com>
+        id S229479AbhLCBLu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Dec 2021 20:11:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40970 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230346AbhLCBLt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Dec 2021 20:11:49 -0500
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E594C061757
+        for <linux-pm@vger.kernel.org>; Thu,  2 Dec 2021 17:08:26 -0800 (PST)
+Received: by mail-qv1-xf31.google.com with SMTP id gu12so1275113qvb.6
+        for <linux-pm@vger.kernel.org>; Thu, 02 Dec 2021 17:08:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fireburn-co-uk.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sPKUxsZ6IaUG10a4mQx/Ajtc5nLWYraUFCqu8NpUt0E=;
+        b=MYNA9pJhs096o+/3y9KNFMGK6bMN8q34SlTOaaa8ODXJIGaIm9Vz064wclZwzZ8ZV5
+         2/xvV6/QFY2dqB1oDXvPn7Bnrxm82rVQjMYg53hukhmZlOUiePZaRFfa/zLLLOJ/Eiw5
+         g7VgE0s/qV5ndemPjxFv40ivn3Cx+unbyebhh+gTO+beKp9nJmJeXMfTXh1EMdwjX4i9
+         E9X9I4b8qmBkj5W3yDmRxIBQe8rLMS6h/z6XZqbLJLXBcRVQEthwhJVjnGXcQrtrUs/V
+         jh4hUHZAEAa/vR4fSOu7BLucRs3BpPrSIu657QTG2oxJ1hWpfW2FN0gI9D1b0meoFTGO
+         eXrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sPKUxsZ6IaUG10a4mQx/Ajtc5nLWYraUFCqu8NpUt0E=;
+        b=ISwaJXENey3TSxJom0SoAnJThsNP8PknRV4XeP+B79EFvhwB1eOXf1FLr/tNWhExXG
+         jUcoRKm12cr2HcUAVFbBZ8z/LcMUmnuTRGucEW/KHiui79Thl6KqrDa3PonMPMEsQOTz
+         O0L00x54/s+Id4hDEoiY2PDcJfLPoN4Zw9puhi60iQ9zceoSVsBfy8slWrVvxkrbUYEU
+         bZChVF6uYPw/b5jAyGS1iw/8WuzJAMwaPMGntAPGjhKtxbxYtqadIGsQA3xBj9ffuoID
+         C5uIMS+GiCSNx39b5tcrwOOkBzlJvi1O9FHzbbbntAoxBMKJOcJGT62La5hDDX/O0ygz
+         Yi5w==
+X-Gm-Message-State: AOAM531ZW+WUnWexhPDDFc2EMJLwfmuwW2kub/Kl9BQvnGLrbREJctpm
+        iswYNatPgnHtoS4Mu/wx7cPsX4OxsiXdCp/Dl7vvmGEYCjY=
+X-Google-Smtp-Source: ABdhPJxBuNgJi00NEV4uwY2YXzEFZyyq/AddAmN7r5+588FiT32RnS0i5eaQsuJS45BRQg2lcOe9Nsu/73+p99cPVuk=
+X-Received: by 2002:a05:6214:1513:: with SMTP id e19mr16872895qvy.124.1638493705407;
+ Thu, 02 Dec 2021 17:08:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0iXBn1o9ZFzNaYU4ft=JcRfNv7AJ8Sq-9HbBJbp60LpWQ@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <CAHbf0-GPqod-W5exGt4c63YYVG27M4qdSi25wwqmFfC_ypTFyw@mail.gmail.com>
+ <YZzRW3pjIoJ4k4O4@hr-amd> <CAHbf0-HnJzS7+DaX5o2v4bruVRgpSynDeUvSBhrZnn0NYGkRRw@mail.gmail.com>
+ <YZ22dYQ8dgQTwqnh@amd.com> <CAHbf0-FnFpkmZ2bkfS2S=Cw_RLbK1y7eSHySAFGVecs+t+-aVg@mail.gmail.com>
+ <CAHbf0-F2v_tziWORHFkAOBS0oRK15XcPZpTkDbxsOp4ibTX+wQ@mail.gmail.com>
+ <DM4PR12MB513676A292976E478227E133F1639@DM4PR12MB5136.namprd12.prod.outlook.com>
+ <CAHbf0-G7LEUuEtsh7XsK0Nv4xcKJQQbV9DAzUxxeJUvkhky9JA@mail.gmail.com>
+ <YaYB6UoC1iqsNuJL@amd.com> <CAHbf0-EWVeD8xehHZc8ff-4vYbXC69z=kMf0_=RXJsHKG_2M7Q@mail.gmail.com>
+ <YacbY0XD+p6d70Mj@amd.com>
+In-Reply-To: <YacbY0XD+p6d70Mj@amd.com>
+From:   Mike Lothian <mike@fireburn.co.uk>
+Date:   Fri, 3 Dec 2021 01:08:14 +0000
+Message-ID: <CAHbf0-HBag=RBi_=FJ==0CGxsF456y3M13EvhtGpsuxc=+AtEQ@mail.gmail.com>
+Subject: Re: AMD Pstate
+To:     Huang Rui <ray.huang@amd.com>
+Cc:     "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 02:32:42PM +0100, Rafael J. Wysocki wrote:
-> On Tue, Nov 30, 2021 at 2:22 PM Ricardo Neri
-> <ricardo.neri-calderon@linux.intel.com> wrote:
-> >
-> > On Wed, Nov 24, 2021 at 03:48:49PM +0100, Rafael J. Wysocki wrote:
-> > > On Sat, Nov 6, 2021 at 2:34 AM Ricardo Neri
-> > > <ricardo.neri-calderon@linux.intel.com> wrote:
-> 
-> [cut]
-> 
-> > > > +/**
-> > > > + * intel_hfi_offline() - Disable HFI on @cpu
-> > > > + * @cpu:       CPU in which the HFI will be disabled
-> > > > + *
-> > > > + * Remove @cpu from those covered by its HFI instance.
-> > > > + *
-> > > > + * On some processors, hardware remembers previous programming settings even
-> > > > + * after being reprogrammed. Thus, keep HFI enabled even if all CPUs in the
-> > > > + * die/package of @cpu are offline. See note in intel_hfi_online().
-> > > > + */
-> > > > +void intel_hfi_offline(unsigned int cpu)
-> > > > +{
-> > > > +       struct cpumask *die_cpumask = topology_core_cpumask(cpu);
-> > > > +       struct hfi_cpu_info *info = &per_cpu(hfi_cpu_info, cpu);
-> > > > +       struct hfi_instance *hfi_instance;
-> > > > +
-> > > > +       if (!boot_cpu_has(X86_FEATURE_INTEL_HFI))
-> > > > +               return;
-> > > > +
-> > > > +       hfi_instance = info->hfi_instance;
-> > > > +       if (!hfi_instance)
-> > > > +               return;
-> > > > +
-> > > > +       if (!hfi_instance->initialized)
-> > > > +               return;
-> > > > +
-> > > > +       mutex_lock(&hfi_lock);
-> > > > +
-> > > > +       /*
-> > > > +        * We were using the core cpumask of @cpu to track CPUs in the same
-> > > > +        * die/package. Now it is going offline and we need to find another
-> > > > +        * CPU we can use.
-> > > > +        */
-> > > > +       if (die_cpumask == hfi_instance->cpus) {
-> > > > +               int new_cpu;
-> > > > +
-> > > > +               new_cpu = cpumask_any_but(hfi_instance->cpus, cpu);
-> > > > +               if (new_cpu >= nr_cpu_ids)
-> > > > +                       /* All other CPUs in the package are offline. */
-> > > > +                       hfi_instance->cpus = NULL;
-> > > > +               else
-> > > > +                       hfi_instance->cpus = topology_core_cpumask(new_cpu);
-> > >
-> > > Hmmm.  Is topology_core_cpumask() updated when CPUs go offline and online?
-> >
-> > Yes. A CPU going offline is cleared from its siblings' cpumask [1] and its own [2]
-> > in remove_siblinginfo() via cpu_disable_common(). A CPU going online is set
-> > in its siblings' cpumask and its own in set_cpu_sibling_map() [3].
-> 
-> OK, so it is necessary to ensure that intel_hfi_offline() will always
-> run after remove_siblinginfo() so it sees the updated mask.  How do we
-> ensure that?
+On Wed, 1 Dec 2021 at 06:51, Huang Rui <ray.huang@amd.com> wrote:
+>
+> On Wed, Dec 01, 2021 at 01:40:52PM +0800, Mike Lothian wrote:
+> >    I've just tested v5 of the patchset, the warnings are gone, kconfig
+> >    looks good and shedutil seems to be behaving
+> >    Would it still be useful to get the above trace?
+>
+> Is the previous issue that the cpu clock stuck on 1 GHz still existed on
+> V5?
+>
+> Thanks,
+> Ray
+>
 
-I don't think that is possible. remove_siblinginfo() is called from
-CPUHP_TEARDOWN_CPU, which always happens after CPUHP_AP_OFFLINE, if I
-understand correctly.
+ Hi
 
-I guess that I will need to use a local cpumask as other drivers do.
+No the issue appears to be resolved, schedutil is now going to the
+maximum frequency - it appears to be behaving now
 
-Thanks and BR,
-Ricardo
+Thanks
