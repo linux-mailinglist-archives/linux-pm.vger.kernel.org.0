@@ -2,65 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 335E54674BA
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Dec 2021 11:24:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23B714678F7
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Dec 2021 15:00:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379861AbhLCK1u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Dec 2021 05:27:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53026 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243470AbhLCK1u (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Dec 2021 05:27:50 -0500
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 873DDC06173E
-        for <linux-pm@vger.kernel.org>; Fri,  3 Dec 2021 02:24:26 -0800 (PST)
-Received: by mail-yb1-xb42.google.com with SMTP id f186so7960043ybg.2
-        for <linux-pm@vger.kernel.org>; Fri, 03 Dec 2021 02:24:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=esxAadU3+UzyTWgJKT1bUwFTK6KpmX9nIkgAaCqEFJ8=;
-        b=BR1WoSXsqdgfYoB4Zgy6Q829Ojihn2JidNvIcnEUAdb1oH2lzEUHsLrimmFZq9UsAo
-         O+4vzjLcbrWJVAoytCsvBMUI1aM49Nil3I/zFaHmLyeE5WNTi1OSE/nj83zK9fpSq1kJ
-         B6Hdw/L42RfsUU0Es/BCmSVULPXTLVzuZXBtKdZXhaH+CKTx0nw6eeCTPZRzIh8CJ5CE
-         9/+4cKN94JulvEwjv9FtopRPAYSaIPMyQiqz0TY7BZhnY2iZxMnmxoS2ibA7QYEpYNTB
-         E4EVjfJrymgyzbB1xdz7xp8VYGu3XXdsQmY79aSF8gLBu3jykMKgd1dJ4mWUNUQi21L2
-         8Ykw==
+        id S1381302AbhLCOEC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Dec 2021 09:04:02 -0500
+Received: from mail-oi1-f173.google.com ([209.85.167.173]:44729 "EHLO
+        mail-oi1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352843AbhLCOEC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Dec 2021 09:04:02 -0500
+Received: by mail-oi1-f173.google.com with SMTP id be32so5911496oib.11;
+        Fri, 03 Dec 2021 06:00:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=esxAadU3+UzyTWgJKT1bUwFTK6KpmX9nIkgAaCqEFJ8=;
-        b=C/kxgWfBdB9rP9WuWIOFqp1gEA1uOBHEe/96MQ5HI5AcBQq7RfWaWjrAYCIjRfmNpn
-         bHkFlGDi+FOaif2ouhtb7cCg2wnwu5SKVQmXJDonf1Nbqg7h5D2zrQfKe/YpcdSEqQtP
-         yRrsHhqxsGV3fg8Moe3e1jByFItp584Nc7alXAtJWY/u22bKqnNYxKouhKAAvtASYzLl
-         7KpVgyNeE2D+kxjFK2drGOUyt5FCGkoXaLLml5S8MPnzFGTv7+rW3y60c0M+uxF+v0Gf
-         iL9h4DqCA7wAAvXMjuBY1tXCwQmm+wxTQfjJDNedcSiypBPdSW5XK2Vo+4dfV0GN4Cz3
-         Hn7A==
-X-Gm-Message-State: AOAM532BSqLDiiZGSwRRqN88vTaLAuuZoazrnW4IMJG1HXVKB6eT9+PN
-        DKNMhZgbRi4hdvnLxxESgrfFSgtUnpHaNU1Esws=
-X-Google-Smtp-Source: ABdhPJxAhSDz3mHZUJyi+R9z7SEcqxDe93eIGbLBzOgb0oyXcciDJQiNLORQXZyxZB2qAE7H6eJpngTnn0IjCL84iW8=
-X-Received: by 2002:a25:b3c2:: with SMTP id x2mr20852430ybf.565.1638527065679;
- Fri, 03 Dec 2021 02:24:25 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jqRgFTDUNv+vk88WWxS+gLyfj0EmvwrZNO1+l4H+s28=;
+        b=xFFVK+AwaRAwx0mVsO7+qitJHMPOYBdgFbH/KEfsSRUHJGf23R0BtV8z2/jiz/yelV
+         Vn9ueimuhgmlyqL8HkMGA3oOeZSt5YwmJJizE2pG58GzW/qmg9js0vXsyA1eZppVvsBt
+         D5+jyZOdtkMs1r5APFW4A+maBAjmrBxR/7ER4qMYQZQYqVNiuNp99nJqU9GGWH6w/qny
+         cA97jAwwqoCh57919Gd7ovqn+zD2V32HugpkmuRrTNYZo15jZbpbot/1S3eSVXCclXPK
+         zxI4/dJgvANCTTOiXq3tp0B25V204HTyrVIIpnHAtxuUUSXoTg/L10bRhRhvJHYv2EF3
+         LVrw==
+X-Gm-Message-State: AOAM531vhxnGw+1Nb9RNGU9Nip7Pmxta3PLLHZSodzM/UcYkg6V+nnwB
+        y6BwKFdcUlYzwkGyuNEP1475aAORRI0YB/Y0LXs=
+X-Google-Smtp-Source: ABdhPJyPrO3jM6MZMOz7vxO0EJn/Cia/2T6cQ8bgT83DHbGR/GRB4cWEnuf82PvmzLDs3OeZr9pvRtA3OCUxKCNRqWE=
+X-Received: by 2002:a05:6808:14c2:: with SMTP id f2mr9914172oiw.154.1638540037639;
+ Fri, 03 Dec 2021 06:00:37 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:7010:4e09:b0:1e3:ae3b:7326 with HTTP; Fri, 3 Dec 2021
- 02:24:25 -0800 (PST)
-Reply-To: jp2888322@gmail.com
-From:   Maria-Elisabeth_Schaeffler <chemwokwilliam60@gmail.com>
-Date:   Fri, 3 Dec 2021 13:24:25 +0300
-Message-ID: <CAD9ZAqiK6A3dbQRGGm1yAgmMkKP45bEyxvRDLShrSfyx00Sr8g@mail.gmail.com>
-Subject: Re
-To:     undisclosed-recipients:;
+References: <20211203031541.1428904-1-kai.heng.feng@canonical.com>
+In-Reply-To: <20211203031541.1428904-1-kai.heng.feng@canonical.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 3 Dec 2021 15:00:25 +0100
+Message-ID: <CAJZ5v0j=Et0NraqrPvEH6i_uUxyZ=gUW4CmXQKtPRiuXrLaKTQ@mail.gmail.com>
+Subject: Re: [PATCH v3] PCI: vmd: Honor ACPI _OSC on PCIe features
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Nirmal Patel <nirmal.patel@linux.intel.com>,
+        Jonathan Derrick <jonathan.derrick@linux.dev>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---=20
-Ich bin Maria Elisabeth Schaeffler, ich habe eine Spende f=C3=BCr Sie,
-E-Mail f=C3=BCr weitere Informationen.
+On Fri, Dec 3, 2021 at 4:16 AM Kai-Heng Feng
+<kai.heng.feng@canonical.com> wrote:
+>
+> When Samsung PCIe Gen4 NVMe is connected to Intel ADL VMD, the
+> combination causes AER message flood and drags the system performance
+> down.
+>
+> The issue doesn't happen when VMD mode is disabled in BIOS, since AER
+> isn't enabled by acpi_pci_root_create() . When VMD mode is enabled, AER
+> is enabled regardless of _OSC:
+> [    0.410076] acpi PNP0A08:00: _OSC: platform does not support [AER]
+> ...
+> [    1.486704] pcieport 10000:e0:06.0: AER: enabled with IRQ 146
+>
+> Since VMD is an aperture to regular PCIe root ports, honor ACPI _OSC to
+> disable PCIe features accordingly to resolve the issue.
+>
+> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215027
+> Suggested-by: Rafael J. Wysocki <rafael@kernel.org>
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> ---
+> v3:
+>  - Use a new helper function.
+>
+> v2:
+>  - Use pci_find_host_bridge() instead of open coding.
+>
+>  drivers/pci/controller/vmd.c | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+>
+> diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
+> index a45e8e59d3d48..691765e6c12aa 100644
+> --- a/drivers/pci/controller/vmd.c
+> +++ b/drivers/pci/controller/vmd.c
+> @@ -661,6 +661,21 @@ static int vmd_alloc_irqs(struct vmd_dev *vmd)
+>         return 0;
+>  }
+>
+> +/*
+> + * Since VMD is an aperture to regular PCIe root ports, only allow it to
+> + * control features that the OS is allowed to control on the physical PCI bus.
+> + */
 
-Gr=C3=BC=C3=9Fe
-Maria-Elisabeth_Schaeffler
+I'd put the comment inside the function, but nevertheless
+
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+> +static void vmd_copy_host_bridge_flags(struct pci_host_bridge *root_bridge,
+> +                                      struct pci_host_bridge *vmd_bridge)
+> +{
+> +       vmd_bridge->native_pcie_hotplug = root_bridge->native_pcie_hotplug;
+> +       vmd_bridge->native_shpc_hotplug = root_bridge->native_shpc_hotplug;
+> +       vmd_bridge->native_aer = root_bridge->native_aer;
+> +       vmd_bridge->native_pme = root_bridge->native_pme;
+> +       vmd_bridge->native_ltr = root_bridge->native_ltr;
+> +       vmd_bridge->native_dpc = root_bridge->native_dpc;
+> +}
+> +
+>  static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+>  {
+>         struct pci_sysdata *sd = &vmd->sysdata;
+> @@ -798,6 +813,9 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+>                 return -ENODEV;
+>         }
+>
+> +       vmd_copy_host_bridge_flags(pci_find_host_bridge(vmd->dev->bus),
+> +                                  to_pci_host_bridge(vmd->bus->bridge));
+> +
+>         vmd_attach_resources(vmd);
+>         if (vmd->irq_domain)
+>                 dev_set_msi_domain(&vmd->bus->dev, vmd->irq_domain);
+> --
+> 2.32.0
+>
