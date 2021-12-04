@@ -2,79 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36AB7468517
-	for <lists+linux-pm@lfdr.de>; Sat,  4 Dec 2021 14:42:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6288446851D
+	for <lists+linux-pm@lfdr.de>; Sat,  4 Dec 2021 14:44:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355050AbhLDNqJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 4 Dec 2021 08:46:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51812 "EHLO
+        id S1385083AbhLDNsP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 4 Dec 2021 08:48:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243209AbhLDNqJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 4 Dec 2021 08:46:09 -0500
-X-Greylist: delayed 477 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 04 Dec 2021 05:42:43 PST
-Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [IPv6:2001:4b7a:2000:18::165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F14C061751
-        for <linux-pm@vger.kernel.org>; Sat,  4 Dec 2021 05:42:43 -0800 (PST)
-Received: from [192.168.1.101] (83.6.167.217.neoplus.adsl.tpnet.pl [83.6.167.217])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id B1BC320153;
-        Sat,  4 Dec 2021 14:34:41 +0100 (CET)
-Message-ID: <f0ae3d36-8317-b297-cc99-645adca1f25c@somainline.org>
-Date:   Sat, 4 Dec 2021 14:34:40 +0100
+        with ESMTP id S240119AbhLDNsP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 4 Dec 2021 08:48:15 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88CC5C061751;
+        Sat,  4 Dec 2021 05:44:49 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id 133so4647424wme.0;
+        Sat, 04 Dec 2021 05:44:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=II3JUmnxlDylRM1/KBirxDwNPlaDfNA2La0jNZX/n04=;
+        b=dBMj39/SqYigfA7mctGBjob/wu6o9t+8AKP91V/QpvpKfqFTKi6otEMaXPTqHIibRM
+         Rq3U2VzD/QmUO9RLa6lSdFV25+j0A5wveQ1H1NThW6LW0nwWB9hFXkq9Vstb7XWdIgUl
+         mo6NaEwi2Zdy/TTSPezhYmTqDiS/S7TFb17CBFYG39jiodbvCyfFVnB8quG57KhblfbW
+         BnmbGKQMCrFPhtJAgn+r579bl69uAj0M7RrDnmdTMxsvb2nHJrUFsToq/TqafI6O9G4N
+         2hSczmilr0EzQitOgC9t2h9lkvcsd/7t2lqSYljHps99qhnD8UmpF/KXIXUL63zyOS7K
+         AisQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=II3JUmnxlDylRM1/KBirxDwNPlaDfNA2La0jNZX/n04=;
+        b=zb5xN1cKPcA57st/TWLkcsbtDAgRkjsqpxU1IPh2nWXWeiUiFvHca230VLKkO3JUV0
+         leusFd54rZu9GZJz1a9EO3tjCk+8VsHwHHT4b9T2ysa6179uD/IE0fiyN7AOF34wrvHm
+         8VoIjJIepicosUQr/YjjprfYi+qz96Zdm2z9zlzjutHmElB3SCfTn2ZYXaBkL5KlsF6k
+         c54nUhsEtQ/VRklEiCU4uhEKiOD8gbkliCXzbZprN5PyrVIhGAbiUstEOTkZ7oFALP+z
+         XoANAC5J8cshuiHQa15YXtgEJ32vnbT5E84dkO+5Bc+GKv+QpZik6gA61kcz/2e0o23v
+         5xwA==
+X-Gm-Message-State: AOAM533Lfeb3YWevZJunot++TLNLKTU5UwESmyZv2xMDPjjvyZGOUBaq
+        WjfdfbV5cUAIjQftJUJ8DLxUGX5d03ojvQ==
+X-Google-Smtp-Source: ABdhPJzTHlAFoQ+zevciQOeZpVCZrOY7a1FT7UjBymV4cxxy4DQpiQ4CqBwI/lphLsLrDeIovoB5UQ==
+X-Received: by 2002:a1c:43c1:: with SMTP id q184mr23355584wma.153.1638625488225;
+        Sat, 04 Dec 2021 05:44:48 -0800 (PST)
+Received: from fedora.domain.name ([95.70.244.110])
+        by smtp.googlemail.com with ESMTPSA id r8sm7132139wrz.43.2021.12.04.05.44.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Dec 2021 05:44:47 -0800 (PST)
+From:   Onur Ozkan <onurozkan.dev@gmail.com>
+X-Google-Original-From: Onur Ozkan <work@onurozkan.dev>
+To:     trenn@suse.com
+Cc:     shuah@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Onur Ozkan <work@onurozkan.dev>
+Subject: [PATCH] tools/power/cpupower/{ToDo => TODO}: Rename the todo file
+Date:   Sat,  4 Dec 2021 16:44:39 +0300
+Message-Id: <20211204134439.79754-1-work@onurozkan.dev>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH 1/3] thermal: qcom: lmh: Add support for sm8150
-Content-Language: en-US
-To:     Thara Gopinath <thara.gopinath@linaro.org>, agross@kernel.org,
-        bjorn.andersson@linaro.org, daniel.lezcano@linaro.org,
-        rafael@kernel.org, rui.zhang@intel.com, robh+dt@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211202223802.382068-1-thara.gopinath@linaro.org>
- <20211202223802.382068-2-thara.gopinath@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20211202223802.382068-2-thara.gopinath@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+Renamed the to-do file to 'TODO' instead of 'ToDo' to
+comply with the naming standard.
 
-On 02.12.2021 23:38, Thara Gopinath wrote:
-> Add compatible to support LMh for sm8150 SoC.
-> sm8150 does not require explicit enabling for various LMh subsystems.
-> Move this piece of code under condition that it is executed only
-> for sdm845 SoC.
->
-> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
-> ---
->  drivers/thermal/qcom/lmh.c | 61 ++++++++++++++++++++------------------
->  1 file changed, 32 insertions(+), 29 deletions(-)
+Signed-off-by: Onur Ozkan <work@onurozkan.dev>
+---
+ tools/power/cpupower/{ToDo => TODO} | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename tools/power/cpupower/{ToDo => TODO} (100%)
 
-[...]
-
-
-> -		return ret;
-> +	if (of_device_is_compatible(np, "qcom,sdm845-lmh")) {
-> +		if (!qcom_scm_lmh_dcvsh_available())
-> +			return -EINVAL;
-
-I don't believe this is the correct approach, as different SoCs may
-
-require different sequences of these writes (for example SDM660/MSM8998
-
-seems to only enable the thermal algorithm), and there will (hopefully) be interest
-
-in adding LMH support for more platforms, so perhaps separating this somehow
-
-could keep this a bit cleaner and easier to work with for the next person..
-
-
-
-Konrad
+diff --git a/tools/power/cpupower/ToDo b/tools/power/cpupower/TODO
+similarity index 100%
+rename from tools/power/cpupower/ToDo
+rename to tools/power/cpupower/TODO
+-- 
+2.33.1
 
