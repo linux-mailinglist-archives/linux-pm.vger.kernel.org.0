@@ -2,79 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E88704687FD
-	for <lists+linux-pm@lfdr.de>; Sat,  4 Dec 2021 23:01:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D680468800
+	for <lists+linux-pm@lfdr.de>; Sat,  4 Dec 2021 23:02:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240837AbhLDWEp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 4 Dec 2021 17:04:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48214 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235194AbhLDWEo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 4 Dec 2021 17:04:44 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78F6C0613F8
-        for <linux-pm@vger.kernel.org>; Sat,  4 Dec 2021 14:01:17 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id y12so26253801eda.12
-        for <linux-pm@vger.kernel.org>; Sat, 04 Dec 2021 14:01:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PrArc/ifsgPokgBSC+Ea7AYzh1AFMkX0pvs51A3I4u4=;
-        b=RbFJlew0CJwUua0mcM+UwWlLfDB+SvHq+bCujY26qJe03tLD8T4/o4D3aQzet0lIxM
-         H3P8ImGLhgxwRq6PMV/CnAHDQrV+LCLwuv5vpralfCkN3myC7aKDAR4fCTef9EthYPV4
-         Xb49U5ntDeqmLcYHi3cs9bqWUa1oiHprIOu0E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PrArc/ifsgPokgBSC+Ea7AYzh1AFMkX0pvs51A3I4u4=;
-        b=CjM3s3pjytd0iafrct/XccVD1Vf6wFYIsbXcCpvDYqAm4ZUvYJRkXhsjRH60xVL5Iq
-         J3v5CNGC0h+LnH73D0o2zzx4/TX4n3nAHjs2hC8qpWFsvrH1VKgrZKt6pzaysN09YC78
-         dhXkGCtzc+y1NDs/8ppQ1upJW2fPM+alcpZr/FO8e66t6lJaLHDbjSPh4ArGSDFJcAA/
-         dNYVDX82aLz/iOTw0Bnp8KVJQkuOA3D+kz+HRsHgBoPFuM8ecu1rWU5zusKQ6eNXkx4F
-         8/S1vXUN8zzycYUgm45F7Yhg/ecYIxRXD+nWz9v/j36wfpH6gV1tRZI97Kr9O90NlCea
-         qeLw==
-X-Gm-Message-State: AOAM531CQCxa8ybfEiO+rIrkGyU3ooJYBBKZTNXf9ETKzsT65LEfAmMr
-        DW86G4WdbCv0zhOWZQHuGnuvbvNevxEA2Wsu
-X-Google-Smtp-Source: ABdhPJwr0jQIb94Ywb2hVfaUtCUEAv+McBaygLdosfhhJnSA84EwyUN8y0+rVDJOzHFA2m5BEVrK+g==
-X-Received: by 2002:a05:6402:5cc:: with SMTP id n12mr39281131edx.246.1638655276066;
-        Sat, 04 Dec 2021 14:01:16 -0800 (PST)
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com. [209.85.221.53])
-        by smtp.gmail.com with ESMTPSA id qz24sm4189970ejc.29.2021.12.04.14.01.14
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 04 Dec 2021 14:01:15 -0800 (PST)
-Received: by mail-wr1-f53.google.com with SMTP id i5so13735876wrb.2
-        for <linux-pm@vger.kernel.org>; Sat, 04 Dec 2021 14:01:14 -0800 (PST)
-X-Received: by 2002:adf:f8c3:: with SMTP id f3mr31503846wrq.495.1638655273990;
- Sat, 04 Dec 2021 14:01:13 -0800 (PST)
+        id S232509AbhLDWGW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 4 Dec 2021 17:06:22 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:42190 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229490AbhLDWGW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 4 Dec 2021 17:06:22 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D2E7A60F38;
+        Sat,  4 Dec 2021 22:02:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B32DC341C0;
+        Sat,  4 Dec 2021 22:02:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638655375;
+        bh=N+VlrsEr9aiqHPnnvtl2aMDzbtaf9aBfb7J7GIVJvYc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MQlsaFk2Yz9w8F/ow/TDwbNpXynefUCUqcMBiOShR/YvcciaPI/kVw3GGFGISK+3L
+         bJ9ZgDDxHAoxo69VaePdO65LCcqNSA1QGvhgF2yv27OuUCJ6tfnifJAWWgEpBC/tVT
+         AV8Fw18TrsLOLP9q4xHuiEOnFAHeJPgqkbDdbinasDWS0hSqR/Qcf2BBtxT13hMk42
+         wIAl1m/RkRuAtDrJdmOmPBq/3R9qBQeLqdHlh/Ye+c67uPeZ7vFAcDlSn1quC8O0b+
+         SLAjXG6WPd4QZ1Az4BLuW1P6Oyy7A/WVYwanXpOisIOSVQJ95wUkLoFqL1AFmpmsq0
+         CMuv2NwwAYrXw==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Sebastian Reichel <sre@kernel.org>,
+        =?UTF-8?q?Ren=C3=A9=20Moll?= <Rene.Moll@xsens.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH] power: reset: ltc2952: fix float conversion error
+Date:   Sat,  4 Dec 2021 23:01:49 +0100
+Message-Id: <20211204220249.591482-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-References: <CAJZ5v0hQaF-ANLc4JO=Ub_JMsqLFpZev_gmpb=NPpg=zmqcauA@mail.gmail.com>
- <CAHk-=wiGbtmc+FoUjcgaQRavL=B=rfTmA_VhTtGpmhmk2873cA@mail.gmail.com> <CAJZ5v0janj--CTeVndJAwiaset5tP8XYdXmeW1hHREcO4BefZw@mail.gmail.com>
-In-Reply-To: <CAJZ5v0janj--CTeVndJAwiaset5tP8XYdXmeW1hHREcO4BefZw@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 4 Dec 2021 14:00:57 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjeN0FO7s+o=ZhxjCwTU6N17oT1h1WHRXtiysRRx5A1Uw@mail.gmail.com>
-Message-ID: <CAHk-=wjeN0FO7s+o=ZhxjCwTU6N17oT1h1WHRXtiysRRx5A1Uw@mail.gmail.com>
-Subject: Re: [GIT PULL] ACPI fixes for v5.16-rc3
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Dec 4, 2021 at 12:11 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> but it is interesting that you can reproduce it.  I thought it would
-> be rather theoretical.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Well, "reproduce it" may be putting it a bit strong...
+clang-14 does not like the way this driver converts a 'long double'
+to an integer when the target architecture disables floating point
+support:
 
-It happened this morning, and after that suspend/resume was broken
-until a reboot. But I've only ever seen it that one time.
+drivers/power/reset/ltc2952-poweroff.c:162:28: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux' does not support it
+        data->wde_interval = 300L * 1E6L;
+                                  ^
 
-              Linus
+Turn this into pure integer math and make it more readable at the
+same time using the NSEC_PER_MSEC macro instead.
+
+Fixes: 6647156c00cc ("power: reset: add LTC2952 poweroff driver")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/power/reset/ltc2952-poweroff.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/power/reset/ltc2952-poweroff.c b/drivers/power/reset/ltc2952-poweroff.c
+index fbb344353fe4..9fc88a9f244c 100644
+--- a/drivers/power/reset/ltc2952-poweroff.c
++++ b/drivers/power/reset/ltc2952-poweroff.c
+@@ -159,8 +159,8 @@ static void ltc2952_poweroff_kill(void)
+ 
+ static void ltc2952_poweroff_default(struct ltc2952_poweroff *data)
+ {
+-	data->wde_interval = 300L * 1E6L;
+-	data->trigger_delay = ktime_set(2, 500L*1E6L);
++	data->wde_interval = 300 * NSEC_PER_MSEC;
++	data->trigger_delay = ktime_set(2, 500 * NSEC_PER_MSEC);
+ 
+ 	hrtimer_init(&data->timer_trigger, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+ 	data->timer_trigger.function = ltc2952_poweroff_timer_trigger;
+-- 
+2.29.2
+
