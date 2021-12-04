@@ -2,79 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6288446851D
-	for <lists+linux-pm@lfdr.de>; Sat,  4 Dec 2021 14:44:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C8C846852F
+	for <lists+linux-pm@lfdr.de>; Sat,  4 Dec 2021 14:56:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385083AbhLDNsP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 4 Dec 2021 08:48:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52290 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240119AbhLDNsP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 4 Dec 2021 08:48:15 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88CC5C061751;
-        Sat,  4 Dec 2021 05:44:49 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id 133so4647424wme.0;
-        Sat, 04 Dec 2021 05:44:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=II3JUmnxlDylRM1/KBirxDwNPlaDfNA2La0jNZX/n04=;
-        b=dBMj39/SqYigfA7mctGBjob/wu6o9t+8AKP91V/QpvpKfqFTKi6otEMaXPTqHIibRM
-         Rq3U2VzD/QmUO9RLa6lSdFV25+j0A5wveQ1H1NThW6LW0nwWB9hFXkq9Vstb7XWdIgUl
-         mo6NaEwi2Zdy/TTSPezhYmTqDiS/S7TFb17CBFYG39jiodbvCyfFVnB8quG57KhblfbW
-         BnmbGKQMCrFPhtJAgn+r579bl69uAj0M7RrDnmdTMxsvb2nHJrUFsToq/TqafI6O9G4N
-         2hSczmilr0EzQitOgC9t2h9lkvcsd/7t2lqSYljHps99qhnD8UmpF/KXIXUL63zyOS7K
-         AisQ==
+        id S236142AbhLDN73 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 4 Dec 2021 08:59:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:53848 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233492AbhLDN73 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 4 Dec 2021 08:59:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638626163;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3DklwqLIbhF70738BmmNkWjzvOd8rpPIg3v//EXAr9M=;
+        b=HB1CnTnoEntHBO719lxhyuVtu9v5jDv8IHllrkTFHkslPDaV2vhFGN0jWiDx+PtX7PHY3v
+        QwrT9st8YAXe49iUNELqK10AGGuDfxMs9KqcZlEAcCLhhOcDz6RKRDFxhX6eVqil0f2/Rr
+        hvHe5fzlxFndCBiimc8hJrBr4V5QPB0=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-169-qLI3yy7tN_apnNGfvqDlHg-1; Sat, 04 Dec 2021 08:56:02 -0500
+X-MC-Unique: qLI3yy7tN_apnNGfvqDlHg-1
+Received: by mail-ed1-f70.google.com with SMTP id m17-20020aa7d351000000b003e7c0bc8523so4870266edr.1
+        for <linux-pm@vger.kernel.org>; Sat, 04 Dec 2021 05:56:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=II3JUmnxlDylRM1/KBirxDwNPlaDfNA2La0jNZX/n04=;
-        b=zb5xN1cKPcA57st/TWLkcsbtDAgRkjsqpxU1IPh2nWXWeiUiFvHca230VLKkO3JUV0
-         leusFd54rZu9GZJz1a9EO3tjCk+8VsHwHHT4b9T2ysa6179uD/IE0fiyN7AOF34wrvHm
-         8VoIjJIepicosUQr/YjjprfYi+qz96Zdm2z9zlzjutHmElB3SCfTn2ZYXaBkL5KlsF6k
-         c54nUhsEtQ/VRklEiCU4uhEKiOD8gbkliCXzbZprN5PyrVIhGAbiUstEOTkZ7oFALP+z
-         XoANAC5J8cshuiHQa15YXtgEJ32vnbT5E84dkO+5Bc+GKv+QpZik6gA61kcz/2e0o23v
-         5xwA==
-X-Gm-Message-State: AOAM533Lfeb3YWevZJunot++TLNLKTU5UwESmyZv2xMDPjjvyZGOUBaq
-        WjfdfbV5cUAIjQftJUJ8DLxUGX5d03ojvQ==
-X-Google-Smtp-Source: ABdhPJzTHlAFoQ+zevciQOeZpVCZrOY7a1FT7UjBymV4cxxy4DQpiQ4CqBwI/lphLsLrDeIovoB5UQ==
-X-Received: by 2002:a1c:43c1:: with SMTP id q184mr23355584wma.153.1638625488225;
-        Sat, 04 Dec 2021 05:44:48 -0800 (PST)
-Received: from fedora.domain.name ([95.70.244.110])
-        by smtp.googlemail.com with ESMTPSA id r8sm7132139wrz.43.2021.12.04.05.44.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Dec 2021 05:44:47 -0800 (PST)
-From:   Onur Ozkan <onurozkan.dev@gmail.com>
-X-Google-Original-From: Onur Ozkan <work@onurozkan.dev>
-To:     trenn@suse.com
-Cc:     shuah@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Onur Ozkan <work@onurozkan.dev>
-Subject: [PATCH] tools/power/cpupower/{ToDo => TODO}: Rename the todo file
-Date:   Sat,  4 Dec 2021 16:44:39 +0300
-Message-Id: <20211204134439.79754-1-work@onurozkan.dev>
-X-Mailer: git-send-email 2.33.1
+        bh=3DklwqLIbhF70738BmmNkWjzvOd8rpPIg3v//EXAr9M=;
+        b=aRgsmHCGub1KPpFqeWFRqEmo35vGhp5fFd95uI4CoBe2+D158vP41xkYRoiP9626pk
+         yRzsKlDnRqVvCHo46XPAvzcA/D6X9hIdMBf8CJvz8npYWkq3xOopjirq/vChjEXgzNK4
+         7vgd1HpmBA/NCkHvb4yyZRfpupEny+8SiLvUp+PzDN10/FaUY8136KHqdG3a6BCRALXF
+         YEDHuPQeJd/nsohlhbpUeur8toqooCco0+nFmE0RIaZ94zOSoAiaAfNy1tMBEz7GUE7T
+         O+L9loBMV89wR+pi+nkubhL3z8rS2rqwbfLK7TvpplRg69/j26TZuEn/CKJgxLrwFxgX
+         dzrw==
+X-Gm-Message-State: AOAM532b5+Ai7nxUB5t2QQetsBD02Qqu9N1PHs8GrCZtw/YE8QCdfENn
+        hpk9C+bjzGBkM12GmNahrk0/0StEYUf/QYngpSSO+W5WbjcUuF6ro11q2U1AhV+7pC96FjTDHYE
+        DPoJ0qCMg4ZpXOUXdi8M=
+X-Received: by 2002:a05:6402:100e:: with SMTP id c14mr36308606edu.196.1638626161379;
+        Sat, 04 Dec 2021 05:56:01 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy720jlD8y093U5xCfFPqtufnO7SYwJMPNYXI69mU0Ze3KrgsMlDFozoRuc1r8FLrioVjtByg==
+X-Received: by 2002:a05:6402:100e:: with SMTP id c14mr36308579edu.196.1638626161173;
+        Sat, 04 Dec 2021 05:56:01 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id ho17sm3820836ejc.111.2021.12.04.05.56.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 04 Dec 2021 05:56:00 -0800 (PST)
+Message-ID: <015913c3-171f-3ecb-2813-54404d6db273@redhat.com>
+Date:   Sat, 4 Dec 2021 14:56:00 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH 0/4] power: supply: add charge_behaviour property
+ (force-discharge, inhibit-charge)
+Content-Language: en-US
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>
+Cc:     linux-pm@vger.kernel.org, ibm-acpi-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org,
+        Mark Gross <markgross@kernel.org>,
+        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
+        linux-kernel@vger.kernel.org, linrunner@gmx.net, bberg@redhat.com,
+        hadess@hadess.net, markpearson@lenovo.com,
+        nicolopiazzalunga@gmail.com, njoshi1@lenovo.com, smclt30p@gmail.com
+References: <20211123232704.25394-1-linux@weissschuh.net>
+ <20211203213305.dfjedjj3b25ftj2z@earth.universe>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20211203213305.dfjedjj3b25ftj2z@earth.universe>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Renamed the to-do file to 'TODO' instead of 'ToDo' to
-comply with the naming standard.
+Hi,
 
-Signed-off-by: Onur Ozkan <work@onurozkan.dev>
----
- tools/power/cpupower/{ToDo => TODO} | 0
- 1 file changed, 0 insertions(+), 0 deletions(-)
- rename tools/power/cpupower/{ToDo => TODO} (100%)
+On 12/3/21 22:33, Sebastian Reichel wrote:
+> Hi,
+> 
+> On Wed, Nov 24, 2021 at 12:27:00AM +0100, Thomas Weißschuh wrote:
+>> This series adds support for the charge_behaviour property to the power
+>> subsystem and thinkpad_acpi driver.
+>>
+>> As thinkpad_acpi has to use the 'struct power_supply' created by the generic
+>> ACPI driver it has to rely on custom sysfs attributes instead of proper
+>> power_supply properties to implement this property.
+>>
+>> Patch 1: Adds the power_supply documentation and basic public API
+>> Patch 2: Adds helpers to power_supply core to help drivers implement the
+>>   charge_behaviour attribute
+>> Patch 3: Adds support for force-discharge to thinkpad_acpi.
+>> Patch 4: Adds support for inhibit-discharge to thinkpad_acpi.
+>>
+>> Patch 3 and 4 are largely taken from other patches and adapted to the new API.
+>> (Links are in the patch trailer)
+>>
+>> Ognjen Galic:
+>>
+>> Your S-o-b is on the original inhibit_charge and force_discharge patches.
+>> I would like to add you as Co-developed-by but to do that it will also require
+>> your S-o-b. Could you give your sign-offs for the new patches, so you can be
+>> properly attributed?
+>>
+>> Sebastian Reichel:
+>>
+>> Currently the series does not actually support the property as a proper
+>> powersupply property handled fully by power_supply_sysfs.c because there would
+>> be no user for this property.
+> 
+> I'm not too happy how the acpi-battery hooks work, but that's not
+> your fault and this patchset does not really make the situation
+> worse. So:
+> 
+> Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-diff --git a/tools/power/cpupower/ToDo b/tools/power/cpupower/TODO
-similarity index 100%
-rename from tools/power/cpupower/ToDo
-rename to tools/power/cpupower/TODO
--- 
-2.33.1
+I haven't looked at the thinkpad_apci.c bits closely yet (for this new version),
+but assuming those are ready for merging too, we need to discuss about how
+to merge this.
+
+The thinkpad_acpi code has already seen quite a lot of changes in -next,
+so I would like the thinkpad_acpi changes to go upstream through the
+platform-drivers-x86.git tree to avoid conflicts.
+
+As such I think it is best if you (Sebastian) can prepare an immutable
+branch with patch 1 + 2 for me to merge. Then even if patch 3 + 4 need
+more work, Thomas can just respin those on top of the immutable branch.
+
+Alternatively I can take the entire series upstream through the
+platform-drivers-x86.git tree if that is ok with you (Sebastian).
+
+Either way please let me know how you want to proceed with this.
+
+Regards,
+
+Hans
+
+
+
+>> Previous discussions about the API:
+>>
+>> https://lore.kernel.org/platform-driver-x86/20211108192852.357473-1-linux@weissschuh.net/
+>> https://lore.kernel.org/platform-driver-x86/21569a89-8303-8573-05fb-c2fec29983d1@gmail.com/
+>>
+>> v1: https://lore.kernel.org/lkml/20211113104225.141333-1-linux@weissschuh.net/
+>> v1 -> v2:
+>>
+>> * Use sysfs_emit-APIs instead of plain sprintf
+>> * More cecks for actual feature availability
+>> * Validation of the written values
+>> * Read inhibit-charge via BICG instead of PSSG (peak shift state)
+>> * Don't mangle error numbers in charge_behaviour_store()
+>>
+>> Open points:
+>>
+>> Thomas Koch has observed that on a T450s with two batteries
+>> inhibit-charge on BAT0 will affect both batteries and for BAT1 it is ignored
+>> entirely, this seems to be a bug in the EC.
+>> On my T460s with two batteries it works correctly.
+>>
+>> Thomas Weißschuh (4):
+>>   power: supply: add charge_behaviour attributes
+>>   power: supply: add helpers for charge_behaviour sysfs
+>>   platform/x86: thinkpad_acpi: support force-discharge
+>>   platform/x86: thinkpad_acpi: support inhibit-charge
+>>
+>>  Documentation/ABI/testing/sysfs-class-power |  14 ++
+>>  drivers/platform/x86/thinkpad_acpi.c        | 191 +++++++++++++++++++-
+>>  drivers/power/supply/power_supply_sysfs.c   |  51 ++++++
+>>  include/linux/power_supply.h                |  16 ++
+>>  4 files changed, 268 insertions(+), 4 deletions(-)
+>>
+>>
+>> base-commit: 66f4beaa6c1d28161f534471484b2daa2de1dce0
+>> -- 
+>> 2.34.0
+>>
 
