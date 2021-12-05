@@ -2,121 +2,232 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1695468D6C
-	for <lists+linux-pm@lfdr.de>; Sun,  5 Dec 2021 22:08:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F3AD468E03
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Dec 2021 00:16:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239258AbhLEVL0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 5 Dec 2021 16:11:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37644 "EHLO
+        id S237314AbhLEXTx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 5 Dec 2021 18:19:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239250AbhLEVLZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Dec 2021 16:11:25 -0500
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8448C061714;
-        Sun,  5 Dec 2021 13:07:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=lwUO7B9IFC6cJheRa4VatEkY0oxyKYXIKpddYrNMofc=; b=FolUdYW39rQxjwC5tRDQxRQ51c
-        VWFHqivr6fPYc/vLI5VdPJ+YUB/J5bJB7OlZanGKarAmU4pks3KHyjpNQ+6iK4dQBFVATpGJBKPj+
-        3gGkCh7wV8b7Fvy0LuH8A9v/gbMWMSWA9hrnJaada5mGBx2Vf/uqDd9y+3JgBT4lxqoI=;
-Received: from p200300ccff4cbc001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff4c:bc00:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1mtyjZ-00064v-PO; Sun, 05 Dec 2021 22:07:46 +0100
-Date:   Sun, 5 Dec 2021 22:07:44 +0100
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Alistair Francis <alistair@alistair23.me>
-Cc:     kernel@pengutronix.de, robh+dt@kernel.org, lee.jones@linaro.org,
-        lgirdwood@gmail.com, broonie@kernel.org,
-        linux-arm-kernel@lists.infradead.org, alistair23@gmail.com,
-        linux-hwmon@vger.kernel.org, s.hauer@pengutronix.de,
+        with ESMTP id S236903AbhLEXTu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Dec 2021 18:19:50 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5D0C061354
+        for <linux-pm@vger.kernel.org>; Sun,  5 Dec 2021 15:16:22 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id p18so6786768wmq.5
+        for <linux-pm@vger.kernel.org>; Sun, 05 Dec 2021 15:16:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+c/CHs8+P5F4ROQuUBwTx+ZVLn3ISFq8kc+Oou9iGQ8=;
+        b=dAGmoX48rPq8f8yClhp/9pEBKE0wneGWphnEqgy9lL9akQfNz1quxO3SJXvAPC8zg/
+         x2Q2plsEBr2kV7BHv1UEvnXXkBMGxSgMfVzkc3C0VmBaF5KMy90UdfvlKeOHPLE40z6V
+         JnMUS2kBXX1WsANtZ9RL2L3Coxtr8ZYXnJW8ax5y0uIyshFKzOkKxgAQwVNl5BV492H1
+         rwWz3uNPyOPA4ImcMf70NOhDMrVVZRHLwBUGwLkfSnZbRzLyKtmCT/zsBeCpP+eMjl1q
+         geYTAh/A5NKsNyyWAqO/zqdTiSba/3wI73QySpp8q1d3ikrFKdz0P59jkcL8ySwYQ2s4
+         uDcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+c/CHs8+P5F4ROQuUBwTx+ZVLn3ISFq8kc+Oou9iGQ8=;
+        b=E+tMwKhVYJ/agVvTUofPmL4VrmLsr1hFQckyN5nJF3787hwEf2CTusTCuh1WbEWZpf
+         /SlD8s311h0/9Khk/58A67tPnxWHiQ7OrWRHrYQCWjBG+BFo1edZP31ZhSGLpLK7hx29
+         ligGjIrzALC+xhyI1gWqa7qo/9tKPFWSgf1BxZ8XH4vkIjFdEispJt8XLU8NwryjNlVH
+         fthiQapKcV3/daTPIAIo4BDtYjiiv/1A/2/k+8fmmtj7RXshTWEGz+etN11b0BA7oJfj
+         zab4NwYXxsjN28QrjghxWKfCbmMYzpYQ7Dht4ZCYcCRdwR9g9lLJpKfrSp0Rr2TAmqaA
+         mfIg==
+X-Gm-Message-State: AOAM532tDtk+qg/pH9oNh2icl0WIsANq/2r6mhzHe5nNmaojxeovRZXa
+        9O3sLUd8K2BaJLQ0qLnhWlDZ027qsjO7Ow==
+X-Google-Smtp-Source: ABdhPJwljnwNzc2F5v5ySS4bugsbhLnbG29KOvP4c+1SZcp8/mX3i1Lh4VIFKqoqSuN1Kwhy4cWsRA==
+X-Received: by 2002:a1c:ed0a:: with SMTP id l10mr33951514wmh.140.1638746180791;
+        Sun, 05 Dec 2021 15:16:20 -0800 (PST)
+Received: from localhost.localdomain ([2a01:e34:ed2f:f020:1cec:4235:bb04:b944])
+        by smtp.gmail.com with ESMTPSA id c10sm10715312wrb.81.2021.12.05.15.16.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Dec 2021 15:16:18 -0800 (PST)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, robh@kernel.org
+Cc:     arnd@linaro.org, heiko@sntech.de, ulf.hansson@linaro.org,
+        rjw@rjwysocki.net, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rui.zhang@intel.com, linux-imx@nxp.com, devicetree@vger.kernel.org,
-        amitk@kernel.org, shawnguo@kernel.org
-Subject: Re: [PATCH v16 8/8] ARM: dts: imx7d: remarkable2: Enable lcdif
-Message-ID: <20211205220744.18534b50@aktux>
-In-Reply-To: <20211202120758.41478-9-alistair@alistair23.me>
-References: <20211202120758.41478-1-alistair@alistair23.me>
-        <20211202120758.41478-9-alistair@alistair23.me>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        lukasz.luba@arm.com, Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: [PATCH v4 1/5] dt-bindings: Powerzone new bindings
+Date:   Mon,  6 Dec 2021 00:15:53 +0100
+Message-Id: <20211205231558.779698-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Score: -1.0 (-)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu,  2 Dec 2021 22:07:58 +1000
-Alistair Francis <alistair@alistair23.me> wrote:
+The proposed bindings are describing a set of powerzones.
 
-> Connect the dispaly on the reMarkable2.
-> 
-> Signed-off-by: Alistair Francis <alistair@alistair23.me>
-> ---
->  arch/arm/boot/dts/imx7d-remarkable2.dts | 73 +++++++++++++++++++++++++
->  1 file changed, 73 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
-> index b66d28b30d75..bb0c68d24583 100644
-> --- a/arch/arm/boot/dts/imx7d-remarkable2.dts
-> +++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
-[...]
+A power zone is the logical name for a component which is capable of
+power capping and where we can measure the power consumption.
 
-> @@ -187,6 +221,45 @@ MX7D_PAD_I2C4_SCL__I2C4_SCL		0x4000007f
->  		>;  
->  	};
->  
-> +	pinctrl_lcdif: lcdifgrp {
-> +		fsl,pins = <
-> +			MX7D_PAD_LCD_DATA00__LCD_DATA0		0x79
-> +			MX7D_PAD_LCD_DATA01__LCD_DATA1		0x79
-> +			MX7D_PAD_LCD_DATA02__LCD_DATA2		0x79
-> +			MX7D_PAD_LCD_DATA03__LCD_DATA3		0x79
-> +			MX7D_PAD_LCD_DATA04__LCD_DATA4		0x79
-> +			MX7D_PAD_LCD_DATA05__LCD_DATA5		0x79
-> +			MX7D_PAD_LCD_DATA06__LCD_DATA6		0x79
-> +			MX7D_PAD_LCD_DATA07__LCD_DATA7		0x79
-> +			MX7D_PAD_LCD_DATA08__LCD_DATA8		0x79
-> +			MX7D_PAD_LCD_DATA09__LCD_DATA9		0x79
-> +			MX7D_PAD_LCD_DATA10__LCD_DATA10		0x79
-> +			MX7D_PAD_LCD_DATA11__LCD_DATA11		0x79
-> +			MX7D_PAD_LCD_DATA12__LCD_DATA12		0x79
-> +			MX7D_PAD_LCD_DATA13__LCD_DATA13		0x79
-> +			MX7D_PAD_LCD_DATA14__LCD_DATA14		0x79
-> +			MX7D_PAD_LCD_DATA15__LCD_DATA15		0x79
-> +
-> +			MX7D_PAD_LCD_DATA17__LCD_DATA17		0x79
-> +			MX7D_PAD_LCD_DATA18__LCD_DATA18		0x79
-> +			MX7D_PAD_LCD_DATA19__LCD_DATA19		0x79
-> +			MX7D_PAD_LCD_DATA20__LCD_DATA20		0x79
-> +			MX7D_PAD_LCD_DATA21__LCD_DATA21		0x79
-> +
-> +			MX7D_PAD_LCD_DATA23__LCD_DATA23		0x79
-> +			MX7D_PAD_LCD_CLK__LCD_CLK		0x79
-> +			MX7D_PAD_LCD_ENABLE__LCD_ENABLE		0x79
-> +			MX7D_PAD_LCD_VSYNC__LCD_VSYNC		0x79
-> +			MX7D_PAD_LCD_HSYNC__LCD_HSYNC		0x79
-> +			MX7D_PAD_LCD_RESET__LCD_RESET		0x79
-> +		>;
-> +	};
+A power zone can aggregate several power zones in terms of power
+measurement and power limitations. That allows to apply power
+constraint to a group of components and let the system balance the
+allocated power in order to comply with the constraint.
 
-shouldn't this belong into the upper list:
-> +
-> +		fsl,pins = <
-> +			MX7D_PAD_LCD_DATA22__GPIO3_IO27		0x74
-> +		>;
-> +	};
-> +
+The ARM System Control and Management Interface (SCMI) can provide a
+power zone description.
 
-probably some rebase or merge accident. If I submit non-trivial things,
-I usually apply my patches to a separate git tree and do a final
-compile, that might help to reduce some trouble.
+The powerzone semantic is also found on the Intel platform with the
+RAPL register.
 
-Regards,
-Andreas
+The Linux kernel powercap framework deals with the powerzones:
+
+https://www.kernel.org/doc/html/latest/power/powercap/powercap.html
+
+The powerzone can also represent a group of children powerzones, hence
+the description can result on a hierarchy. Such hierarchy already
+exists with the hardware or can be represented and computed from the
+kernel.
+
+The hierarchical description was initially proposed but not desired
+given there are other descriptions like the power domain proposing
+almost the same description.
+
+https://lore.kernel.org/all/CAL_JsqLuLcHj7525tTUmh7pLqe7T2j6UcznyhV7joS8ipyb_VQ@mail.gmail.com/
+
+The description gives the power constraint dependencies to apply on a
+specific group of logically or physically aggregated devices. They do
+not represent the physical location or the power domains of the SoC
+even if the description could be similar.
+
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Rob Herring <robh+dt@kernel.org>
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+   V3:
+     - Removed required property 'compatible'
+     - Removed powerzone-cells from the topmost node
+     - Removed powerzone-cells from cpus 'consumers' in example
+     - Set additionnal property to false
+   V2:
+     - Added pattern properties and stick to powerzone-*
+     - Added required property compatible and powerzone-cells
+     - Added additionnal property
+     - Added compatible
+     - Renamed to 'powerzones'
+     - Added missing powerzone-cells to the topmost node
+     - Fixed errors reported by 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+   V1: Initial post
+---
+ .../devicetree/bindings/power/powerzones.yaml | 97 +++++++++++++++++++
+ 1 file changed, 97 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/powerzones.yaml
+
+diff --git a/Documentation/devicetree/bindings/power/powerzones.yaml b/Documentation/devicetree/bindings/power/powerzones.yaml
+new file mode 100644
+index 000000000000..ddb790acfea6
+--- /dev/null
++++ b/Documentation/devicetree/bindings/power/powerzones.yaml
+@@ -0,0 +1,97 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/power/powerzones.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Power zones description
++
++maintainers:
++  - Daniel Lezcano <daniel.lezcano@linaro.org>
++
++description: |+
++
++  A System on Chip contains a multitude of active components and each
++  of them is a source of heat. Even if a temperature sensor is not
++  present, a source of heat can be controlled by acting on the
++  consumed power via different techniques.
++
++  A powerzone describes a component or a group of components where we
++  can control the maximum power consumption. For instance, a group of
++  CPUs via the performance domain, a LCD screen via the brightness,
++  etc ...
++
++  Different components when they are used together can significantly
++  increase the overall temperature, so the description needs to
++  reflect this dependency in order to assign a power budget for a
++  group of powerzones.
++
++  This description is done via a hierarchy and the DT reflects it. It
++  does not represent the physical location or a topology, eg. on a
++  big.Little system, the little CPUs may not be represented as they do
++  not contribute significantly to the heat, however the GPU can be
++  tied with the big CPUs as they usually have a connection for
++  multimedia or game workloads.
++    
++properties:
++  $nodename:
++    const: powerzones
++
++patternProperties:
++  "^(powerzone)([@-].*)?$":
++    type: object
++    description:
++      A node representing a powerzone acting as an aggregator for all
++      its children powerzones.
++
++    properties:
++      "#powerzone-cells":
++        description:
++          Number of cells in powerzone specifier. Typically 0 for nodes
++          representing but it can be any number in the future to
++          describe parameters of the powerzone.
++
++      powerzones:
++        description:
++          A phandle to a parent powerzone. If no powerzone attribute is
++          set, the described powerzone is the topmost in the hierarchy.
++
++    required:
++      - "#powerzone-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    powerzones {
++
++      SOC_PZ: powerzone-soc {
++        #powerzone-cells = <0>;
++      };
++
++      PKG_PZ: powerzone-pkg {
++        #powerzone-cells = <0>;
++        powerzones = <&SOC_PZ>;
++      };
++
++      GPU_PZ: powerzone-gpu {
++        #powerzone-cells = <0>;
++        powerzones = <&PKG_PZ>;
++      };
++    };
++
++  - |
++    A57_0: big@0 {
++      compatible = "arm,cortex-a57";
++      reg = <0x0 0x0>;
++      device_type = "cpu";
++      powerzones = <&PKG_PZ>;
++    };
++
++    A57_1: big@1 {
++      compatible = "arm,cortex-a57";
++      reg = <0x0 0x0>;
++      device_type = "cpu";
++      powerzones = <&PKG_PZ>;
++    };
++...
+-- 
+2.25.1
+
