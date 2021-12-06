@@ -2,191 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A1C84695C6
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Dec 2021 13:34:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3C474695FC
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Dec 2021 13:52:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243195AbhLFMiA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Dec 2021 07:38:00 -0500
-Received: from comms.puri.sm ([159.203.221.185]:46758 "EHLO comms.puri.sm"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243141AbhLFMiA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 6 Dec 2021 07:38:00 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 73221DFE86;
-        Mon,  6 Dec 2021 04:34:01 -0800 (PST)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id qeknyWjfx8Rb; Mon,  6 Dec 2021 04:34:00 -0800 (PST)
-Message-ID: <f9537e3b0019677a8e73ab59a215094262f84dd6.camel@puri.sm>
-Subject: Re: [RFC 06/19] devfreq: imx8m-ddrc: Add late system sleep PM ops
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-To:     Abel Vesa <abel.vesa@nxp.com>
-Cc:     Rob Herring <robh@kernel.org>, Dong Aisheng <aisheng.dong@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Georgi Djakov <djakov@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-serial@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Date:   Mon, 06 Dec 2021 13:33:52 +0100
-In-Reply-To: <YaaENEqlQbW8W6PI@ryzen>
-References: <1631554694-9599-1-git-send-email-abel.vesa@nxp.com>
-         <1631554694-9599-7-git-send-email-abel.vesa@nxp.com>
-         <e9a3a64dcfec858e612037199df7627b77ececd9.camel@puri.sm>
-         <YaaENEqlQbW8W6PI@ryzen>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        id S241743AbhLFMzr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Dec 2021 07:55:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50040 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232664AbhLFMzr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Dec 2021 07:55:47 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755B1C061746;
+        Mon,  6 Dec 2021 04:52:18 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id z18so12721566iof.5;
+        Mon, 06 Dec 2021 04:52:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kWJMdo59yTSqgJcYQGuTdjoYwCvGkhFPo9VMwlZW8Wc=;
+        b=poA4Fh2eLuxpzHYdkWnPujX6m/BcXB3qWs3e/llhbBL1groISYuSuPm59BCl7UU7DG
+         dBDenGke/eNaiyVOAG3VEeif1lnxPrdNoDt61HEjR8508yyw3GZCsmRYxI9c/gRWFZxm
+         3FnirNabC4Lx/J8Gw33Y2T9trHssa80s4v0stAR1nGkDfOkQWaJeolnArKQkKJUd96jY
+         CZ+uD0zOJpJILfdqHqcu9gzh9kPasSeKLC02KbgQ7Yh5pZLQ4dlTS217MKyKsmyVEbDL
+         x5pc81JOSTVXItRYok887CdqvVUsOGOHOiUSdLzhD/4JldW00jLDWG26j3utAA5VFX2b
+         vyLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kWJMdo59yTSqgJcYQGuTdjoYwCvGkhFPo9VMwlZW8Wc=;
+        b=I5vGZGgl+whNH91kR3kTQroK49tCgdawkklMC4yBBwWS4D+/qhZQ51bWCTjniFeMA6
+         JCOR64XLYlEW3+XPXJxFBFMjbQEk+PEFLDxQWYwXNlBBzFzZ14rhus2jxH62PEh1NvoC
+         qDzVidppx6FmA/4Z2ndKtv4f9YKrOr+qUh4OLDcCh9/Hse9PYswWqat/c/wceLWFqY0t
+         aau/vn4OniwQXCBBcKaxIasUxsydhQkHJobALJheNbepAuKeiPOvXtkPUL/aK2Nc7Iec
+         CV9KnyCgEwITCY2WuAPYgkGAR8WO6Z/98bARWv39NCi7xcHgaEoUsYoUIrAba+fFHfzS
+         /XIA==
+X-Gm-Message-State: AOAM531+vB5bY6XpdCYXaGnVpeeej/mFhBbPWWuGNPAbPSEH+jtQ9su6
+        TAm64K0QDzKGPckqWHMaFR0Bws5ZYcyW6XyeTcg=
+X-Google-Smtp-Source: ABdhPJwt3qZlkLSpxVG/nChwiA3yPio+t4NQvFW9uo5vaNbMypcBavzm9Rc8k9CZTHIPe0VQ8b3hrpeDhkr+ufQv6Sw=
+X-Received: by 2002:a05:6602:1487:: with SMTP id a7mr32334878iow.57.1638795137663;
+ Mon, 06 Dec 2021 04:52:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211202120758.41478-1-alistair@alistair23.me>
+ <20211202120758.41478-9-alistair@alistair23.me> <20211205220744.18534b50@aktux>
+In-Reply-To: <20211205220744.18534b50@aktux>
+From:   Alistair Francis <alistair23@gmail.com>
+Date:   Mon, 6 Dec 2021 22:51:51 +1000
+Message-ID: <CAKmqyKPCt0a5_6=Ezc87SK4jLWrh=-D1a2bXnyLjgd9OH3A-bg@mail.gmail.com>
+Subject: Re: [PATCH v16 8/8] ARM: dts: imx7d: remarkable2: Enable lcdif
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     Alistair Francis <alistair@alistair23.me>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>, lgirdwood@gmail.com,
+        Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-hwmon@vger.kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pm@vger.kernel.org, rui.zhang@intel.com,
+        dl-linux-imx <linux-imx@nxp.com>,
+        devicetree <devicetree@vger.kernel.org>, amitk@kernel.org,
+        Shawn Guo <shawnguo@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Am Dienstag, dem 30.11.2021 um 22:06 +0200 schrieb Abel Vesa:
-> On 21-11-10 13:15:26, Martin Kepplinger wrote:
-> > Am Montag, dem 13.09.2021 um 20:38 +0300 schrieb Abel Vesa:
-> > > Seems that, in order to be able to resume from suspend, the dram
-> > > rate
-> > > needs to be the highest one available. Therefore, add the late
-> > > system
-> > > suspend/resume PM ops which set the highest rate on suspend and
-> > > the
-> > > latest one used before suspending on resume.
-> > 
-> > Hi Abel, wouldn't this mean that s2idle / freeze would be kind of
-> > broken by this?
-> > 
-> 
-> Nope. Only the DDR rate needs to be raised at 800M before suspending.
-> Everything else stays the same.
+On Mon, Dec 6, 2021 at 7:07 AM Andreas Kemnade <andreas@kemnade.info> wrote:
+>
+> On Thu,  2 Dec 2021 22:07:58 +1000
+> Alistair Francis <alistair@alistair23.me> wrote:
+>
+> > Connect the dispaly on the reMarkable2.
+> >
+> > Signed-off-by: Alistair Francis <alistair@alistair23.me>
+> > ---
+> >  arch/arm/boot/dts/imx7d-remarkable2.dts | 73 +++++++++++++++++++++++++
+> >  1 file changed, 73 insertions(+)
+> >
+> > diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
+> > index b66d28b30d75..bb0c68d24583 100644
+> > --- a/arch/arm/boot/dts/imx7d-remarkable2.dts
+> > +++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
+> [...]
+>
+> > @@ -187,6 +221,45 @@ MX7D_PAD_I2C4_SCL__I2C4_SCL              0x4000007f
+> >               >;
+> >       };
+> >
+> > +     pinctrl_lcdif: lcdifgrp {
+> > +             fsl,pins = <
+> > +                     MX7D_PAD_LCD_DATA00__LCD_DATA0          0x79
+> > +                     MX7D_PAD_LCD_DATA01__LCD_DATA1          0x79
+> > +                     MX7D_PAD_LCD_DATA02__LCD_DATA2          0x79
+> > +                     MX7D_PAD_LCD_DATA03__LCD_DATA3          0x79
+> > +                     MX7D_PAD_LCD_DATA04__LCD_DATA4          0x79
+> > +                     MX7D_PAD_LCD_DATA05__LCD_DATA5          0x79
+> > +                     MX7D_PAD_LCD_DATA06__LCD_DATA6          0x79
+> > +                     MX7D_PAD_LCD_DATA07__LCD_DATA7          0x79
+> > +                     MX7D_PAD_LCD_DATA08__LCD_DATA8          0x79
+> > +                     MX7D_PAD_LCD_DATA09__LCD_DATA9          0x79
+> > +                     MX7D_PAD_LCD_DATA10__LCD_DATA10         0x79
+> > +                     MX7D_PAD_LCD_DATA11__LCD_DATA11         0x79
+> > +                     MX7D_PAD_LCD_DATA12__LCD_DATA12         0x79
+> > +                     MX7D_PAD_LCD_DATA13__LCD_DATA13         0x79
+> > +                     MX7D_PAD_LCD_DATA14__LCD_DATA14         0x79
+> > +                     MX7D_PAD_LCD_DATA15__LCD_DATA15         0x79
+> > +
+> > +                     MX7D_PAD_LCD_DATA17__LCD_DATA17         0x79
+> > +                     MX7D_PAD_LCD_DATA18__LCD_DATA18         0x79
+> > +                     MX7D_PAD_LCD_DATA19__LCD_DATA19         0x79
+> > +                     MX7D_PAD_LCD_DATA20__LCD_DATA20         0x79
+> > +                     MX7D_PAD_LCD_DATA21__LCD_DATA21         0x79
+> > +
+> > +                     MX7D_PAD_LCD_DATA23__LCD_DATA23         0x79
+> > +                     MX7D_PAD_LCD_CLK__LCD_CLK               0x79
+> > +                     MX7D_PAD_LCD_ENABLE__LCD_ENABLE         0x79
+> > +                     MX7D_PAD_LCD_VSYNC__LCD_VSYNC           0x79
+> > +                     MX7D_PAD_LCD_HSYNC__LCD_HSYNC           0x79
+> > +                     MX7D_PAD_LCD_RESET__LCD_RESET           0x79
+> > +             >;
+> > +     };
+>
+> shouldn't this belong into the upper list:
+> > +
+> > +             fsl,pins = <
+> > +                     MX7D_PAD_LCD_DATA22__GPIO3_IO27         0x74
+> > +             >;
+> > +     };
+> > +
+>
+> probably some rebase or merge accident. If I submit non-trivial things,
+> I usually apply my patches to a separate git tree and do a final
+> compile, that might help to reduce some trouble.
 
-fyi I just tested this and you're right. freezes when not at 800M. So
-for this patchset, I think this is fine as it enables and fixes stuff.
+Yeah, it was a rebase error. I split these patches out from my working tree.
 
-It would not hurt to mention s2idle at least, where of course 800M
-should not be selected, as no userspace is running at all. But I'd be
-fine with looking at that later.
+Alistair
 
-> 
-> > Does is make sense to test the lowest rate? How would I force that
-> > here? (just for testing)
-> 
-> You can try, but it will surely freeze. See [1] what you need to
-> change
-> for testing.
-> > 
-> > Also, you could think about splitting this series up a bit and do
-> > this
-> > patch seperately onto mainline (before or after the other work).
-> > 
-> 
-> Well, I sent as RFC until now. Seems there are no big issues with the
-> approach. So I'll split the patches between subsystems on the next
-> iteration.
-> 
-> > thank you
-> >                           martin
-> > 
-> > 
-> > > 
-> > > Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-> > > ---
-> > >  drivers/devfreq/imx8m-ddrc.c | 28 +++++++++++++++++++++++++++-
-> > >  1 file changed, 27 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/devfreq/imx8m-ddrc.c
-> > > b/drivers/devfreq/imx8m-
-> > > ddrc.c
-> > > index f18a5c3c1c03..f39741b4a0b0 100644
-> > > --- a/drivers/devfreq/imx8m-ddrc.c
-> > > +++ b/drivers/devfreq/imx8m-ddrc.c
-> > > @@ -72,6 +72,8 @@ struct imx8m_ddrc {
-> > >         struct clk *dram_alt;
-> > >         struct clk *dram_apb;
-> > >  
-> > > +       unsigned long suspend_rate;
-> > > +       unsigned long resume_rate;
-> > >         int freq_count;
-> > >         struct imx8m_ddrc_freq
-> > > freq_table[IMX8M_DDRC_MAX_FREQ_COUNT];
-> > >  };
-> > > @@ -271,6 +273,22 @@ static int imx8m_ddrc_target(struct device
-> > > *dev,
-> > > unsigned long *freq, u32 flags)
-> > >         return ret;
-> > >  }
-> > >  
-> > > +static int imx8m_ddrc_suspend(struct device *dev)
-> > > +{
-> > > +       struct imx8m_ddrc *priv = dev_get_drvdata(dev);
-> > > +
-> > > +       priv->resume_rate = clk_get_rate(priv->dram_core);
-> > > +
-> > > +       return imx8m_ddrc_target(dev, &priv->suspend_rate, 0);
-> > > +}
-> > > +
-> > > +static int imx8m_ddrc_resume(struct device *dev)
-> > > +{
-> > > +       struct imx8m_ddrc *priv = dev_get_drvdata(dev);
-> > > +
-> > > +       return imx8m_ddrc_target(dev, &priv->resume_rate, 0);
-> > > +}
-> > > +
-> > >  static int imx8m_ddrc_get_cur_freq(struct device *dev, unsigned
-> > > long
-> > > *freq)
-> > >  {
-> > >         struct imx8m_ddrc *priv = dev_get_drvdata(dev);
-> > > @@ -324,6 +342,9 @@ static int imx8m_ddrc_init_freq_info(struct
-> > > device *dev)
-> > >  
-> > >                 if (dev_pm_opp_add(dev, freq->rate * 250000, 0))
-> > >                         return -ENODEV;
-> > > +
-> > > +               if (index ==  0)
-> 
-> [1] Change this line to:
->                     if (index == 1)
-> 
-> It will select the 166935483 freq for suspending.
-> 
-> > > +                       priv->suspend_rate = freq->rate * 250000;
-> > >         }
-> > >  
-> > >         return 0;
-> > > @@ -399,11 +420,16 @@ static const struct of_device_id
-> > > imx8m_ddrc_of_match[] = {
-> > >  };
-> > >  MODULE_DEVICE_TABLE(of, imx8m_ddrc_of_match);
-> > >  
-> > > +static const struct dev_pm_ops imx8m_ddrc_pm_ops = {
-> > > +       SET_LATE_SYSTEM_SLEEP_PM_OPS(imx8m_ddrc_suspend,
-> > > imx8m_ddrc_resume)
-> > > +};
-> > > +
-> > >  static struct platform_driver imx8m_ddrc_platdrv = {
-> > >         .probe          = imx8m_ddrc_probe,
-> > >         .driver = {
-> > >                 .name   = "imx8m-ddrc-devfreq",
-> > > -               .of_match_table = imx8m_ddrc_of_match,
-> > > +               .pm = &imx8m_ddrc_pm_ops,
-> > > +               .of_match_table =
-> > > of_match_ptr(imx8m_ddrc_of_match),
-> > >         },
-> > >  };
-> > >  module_platform_driver(imx8m_ddrc_platdrv);
-> > 
-> > 
-
-
+>
+> Regards,
+> Andreas
