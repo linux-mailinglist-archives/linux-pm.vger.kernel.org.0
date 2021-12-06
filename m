@@ -2,145 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3C474695FC
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Dec 2021 13:52:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85FDA469899
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Dec 2021 15:22:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241743AbhLFMzr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Dec 2021 07:55:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50040 "EHLO
+        id S231756AbhLFOZy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Dec 2021 09:25:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232664AbhLFMzr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Dec 2021 07:55:47 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755B1C061746;
-        Mon,  6 Dec 2021 04:52:18 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id z18so12721566iof.5;
-        Mon, 06 Dec 2021 04:52:18 -0800 (PST)
+        with ESMTP id S242034AbhLFOZw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Dec 2021 09:25:52 -0500
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90930C061746
+        for <linux-pm@vger.kernel.org>; Mon,  6 Dec 2021 06:22:23 -0800 (PST)
+Received: by mail-qk1-x732.google.com with SMTP id b67so11227890qkg.6
+        for <linux-pm@vger.kernel.org>; Mon, 06 Dec 2021 06:22:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kWJMdo59yTSqgJcYQGuTdjoYwCvGkhFPo9VMwlZW8Wc=;
-        b=poA4Fh2eLuxpzHYdkWnPujX6m/BcXB3qWs3e/llhbBL1groISYuSuPm59BCl7UU7DG
-         dBDenGke/eNaiyVOAG3VEeif1lnxPrdNoDt61HEjR8508yyw3GZCsmRYxI9c/gRWFZxm
-         3FnirNabC4Lx/J8Gw33Y2T9trHssa80s4v0stAR1nGkDfOkQWaJeolnArKQkKJUd96jY
-         CZ+uD0zOJpJILfdqHqcu9gzh9kPasSeKLC02KbgQ7Yh5pZLQ4dlTS217MKyKsmyVEbDL
-         x5pc81JOSTVXItRYok887CdqvVUsOGOHOiUSdLzhD/4JldW00jLDWG26j3utAA5VFX2b
-         vyLw==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=kRncryoplbgaJpeV0eEsttn1Wbr7ZCHuVrWpcBNe94w=;
+        b=Xnyjr/h4PKcJrMEYIfxGKzmK2zKxryeOFNIVXSFxZj1awPEotWBG2ePd3id51lK/d8
+         msHza8noDMbrkBQqEHD1FfRPgLaMw7sSBB5O9CTpQcuPqFuqvPQBtspoo12K9UHUImpa
+         bcH7jUckFJCA4E+luCE8qjRMdWYWs7wPMwwyNA1BG7DHP3SmPhjENDR2+CM4VRbsUZ+g
+         WLnVR/XTHKDm+G9bDKskNNtkSz1e3a2sjxZAb08Ytxs81iydwUrOtUGLitZSsBF4Zk9M
+         OQzVSA6iu14FVK0roN0sKmIgJaYYY+XgU0V997ylxWGPaqUFaoP3jf4eIddtPMoLz6dy
+         h9Ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kWJMdo59yTSqgJcYQGuTdjoYwCvGkhFPo9VMwlZW8Wc=;
-        b=I5vGZGgl+whNH91kR3kTQroK49tCgdawkklMC4yBBwWS4D+/qhZQ51bWCTjniFeMA6
-         JCOR64XLYlEW3+XPXJxFBFMjbQEk+PEFLDxQWYwXNlBBzFzZ14rhus2jxH62PEh1NvoC
-         qDzVidppx6FmA/4Z2ndKtv4f9YKrOr+qUh4OLDcCh9/Hse9PYswWqat/c/wceLWFqY0t
-         aau/vn4OniwQXCBBcKaxIasUxsydhQkHJobALJheNbepAuKeiPOvXtkPUL/aK2Nc7Iec
-         CV9KnyCgEwITCY2WuAPYgkGAR8WO6Z/98bARWv39NCi7xcHgaEoUsYoUIrAba+fFHfzS
-         /XIA==
-X-Gm-Message-State: AOAM531+vB5bY6XpdCYXaGnVpeeej/mFhBbPWWuGNPAbPSEH+jtQ9su6
-        TAm64K0QDzKGPckqWHMaFR0Bws5ZYcyW6XyeTcg=
-X-Google-Smtp-Source: ABdhPJwt3qZlkLSpxVG/nChwiA3yPio+t4NQvFW9uo5vaNbMypcBavzm9Rc8k9CZTHIPe0VQ8b3hrpeDhkr+ufQv6Sw=
-X-Received: by 2002:a05:6602:1487:: with SMTP id a7mr32334878iow.57.1638795137663;
- Mon, 06 Dec 2021 04:52:17 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=kRncryoplbgaJpeV0eEsttn1Wbr7ZCHuVrWpcBNe94w=;
+        b=T+y5CaiM5dnzIqqg4ZkGwi3AR3fJppfuAiNcQ7R4e89+gzMxeO6raFkOSz4sG0pZE/
+         u1NydnNJ4BBhkbU4RSb8QM2bbY0i/Tel5bva6mLvHQA66yME1vx4pdTdPw786Ou8zLqF
+         q5X1J8RPAoyB5deqv8F2JyuylwQyZCmx8kpvHY2toPOXO85wuMhesqFeJ4o40Lls2IuD
+         fRp4oVUvVm/rM4E39+BZANgob+6OjuZn7zoX0Gzz/2y6glL4in+jigXrCXNQAFxH9tdW
+         WRGtwyAi5uh6Rogf/A0spqS5WCxkK/VB+XDGzlYzY/meGNLbQ8b6YP45l5SsKpGvZiZK
+         v/+A==
+X-Gm-Message-State: AOAM530gdZNjZ4FUanz063UjSslOJmGT8fT66+NuwMM8zBEx3VuzOEuJ
+        j2nBh2tql+OvnqyJ5SZ9up1WkA==
+X-Google-Smtp-Source: ABdhPJzqbwIJbL1QNoOo2PSy4XdmW3rAvUfZaFujGIJX62m6SEIXm+R9F5DJOTut1jzGyZ7SctFg2g==
+X-Received: by 2002:a37:f619:: with SMTP id y25mr33578687qkj.201.1638800542654;
+        Mon, 06 Dec 2021 06:22:22 -0800 (PST)
+Received: from [192.168.1.93] (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
+        by smtp.gmail.com with ESMTPSA id f1sm7653268qtf.74.2021.12.06.06.22.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Dec 2021 06:22:22 -0800 (PST)
+Subject: Re: [PATCH 1/3] thermal: qcom: lmh: Add support for sm8150
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>, agross@kernel.org,
+        bjorn.andersson@linaro.org, daniel.lezcano@linaro.org,
+        rafael@kernel.org, rui.zhang@intel.com, robh+dt@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211202223802.382068-1-thara.gopinath@linaro.org>
+ <20211202223802.382068-2-thara.gopinath@linaro.org>
+ <f0ae3d36-8317-b297-cc99-645adca1f25c@somainline.org>
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+Message-ID: <6771fdd4-b863-6a63-8cf5-441e866f771c@linaro.org>
+Date:   Mon, 6 Dec 2021 09:22:21 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-References: <20211202120758.41478-1-alistair@alistair23.me>
- <20211202120758.41478-9-alistair@alistair23.me> <20211205220744.18534b50@aktux>
-In-Reply-To: <20211205220744.18534b50@aktux>
-From:   Alistair Francis <alistair23@gmail.com>
-Date:   Mon, 6 Dec 2021 22:51:51 +1000
-Message-ID: <CAKmqyKPCt0a5_6=Ezc87SK4jLWrh=-D1a2bXnyLjgd9OH3A-bg@mail.gmail.com>
-Subject: Re: [PATCH v16 8/8] ARM: dts: imx7d: remarkable2: Enable lcdif
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     Alistair Francis <alistair@alistair23.me>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>, lgirdwood@gmail.com,
-        Mark Brown <broonie@kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-hwmon@vger.kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pm@vger.kernel.org, rui.zhang@intel.com,
-        dl-linux-imx <linux-imx@nxp.com>,
-        devicetree <devicetree@vger.kernel.org>, amitk@kernel.org,
-        Shawn Guo <shawnguo@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <f0ae3d36-8317-b297-cc99-645adca1f25c@somainline.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Dec 6, 2021 at 7:07 AM Andreas Kemnade <andreas@kemnade.info> wrote:
->
-> On Thu,  2 Dec 2021 22:07:58 +1000
-> Alistair Francis <alistair@alistair23.me> wrote:
->
-> > Connect the dispaly on the reMarkable2.
-> >
-> > Signed-off-by: Alistair Francis <alistair@alistair23.me>
-> > ---
-> >  arch/arm/boot/dts/imx7d-remarkable2.dts | 73 +++++++++++++++++++++++++
-> >  1 file changed, 73 insertions(+)
-> >
-> > diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
-> > index b66d28b30d75..bb0c68d24583 100644
-> > --- a/arch/arm/boot/dts/imx7d-remarkable2.dts
-> > +++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
+Hi Konrad,
+
+Thanks for the review.
+
+On 12/4/21 8:34 AM, Konrad Dybcio wrote:
+> Hi,
+> 
+> On 02.12.2021 23:38, Thara Gopinath wrote:
+>> Add compatible to support LMh for sm8150 SoC.
+>> sm8150 does not require explicit enabling for various LMh subsystems.
+>> Move this piece of code under condition that it is executed only
+>> for sdm845 SoC.
+>>
+>> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
+>> ---
+>>   drivers/thermal/qcom/lmh.c | 61 ++++++++++++++++++++------------------
+>>   1 file changed, 32 insertions(+), 29 deletions(-)
+> 
 > [...]
->
-> > @@ -187,6 +221,45 @@ MX7D_PAD_I2C4_SCL__I2C4_SCL              0x4000007f
-> >               >;
-> >       };
-> >
-> > +     pinctrl_lcdif: lcdifgrp {
-> > +             fsl,pins = <
-> > +                     MX7D_PAD_LCD_DATA00__LCD_DATA0          0x79
-> > +                     MX7D_PAD_LCD_DATA01__LCD_DATA1          0x79
-> > +                     MX7D_PAD_LCD_DATA02__LCD_DATA2          0x79
-> > +                     MX7D_PAD_LCD_DATA03__LCD_DATA3          0x79
-> > +                     MX7D_PAD_LCD_DATA04__LCD_DATA4          0x79
-> > +                     MX7D_PAD_LCD_DATA05__LCD_DATA5          0x79
-> > +                     MX7D_PAD_LCD_DATA06__LCD_DATA6          0x79
-> > +                     MX7D_PAD_LCD_DATA07__LCD_DATA7          0x79
-> > +                     MX7D_PAD_LCD_DATA08__LCD_DATA8          0x79
-> > +                     MX7D_PAD_LCD_DATA09__LCD_DATA9          0x79
-> > +                     MX7D_PAD_LCD_DATA10__LCD_DATA10         0x79
-> > +                     MX7D_PAD_LCD_DATA11__LCD_DATA11         0x79
-> > +                     MX7D_PAD_LCD_DATA12__LCD_DATA12         0x79
-> > +                     MX7D_PAD_LCD_DATA13__LCD_DATA13         0x79
-> > +                     MX7D_PAD_LCD_DATA14__LCD_DATA14         0x79
-> > +                     MX7D_PAD_LCD_DATA15__LCD_DATA15         0x79
-> > +
-> > +                     MX7D_PAD_LCD_DATA17__LCD_DATA17         0x79
-> > +                     MX7D_PAD_LCD_DATA18__LCD_DATA18         0x79
-> > +                     MX7D_PAD_LCD_DATA19__LCD_DATA19         0x79
-> > +                     MX7D_PAD_LCD_DATA20__LCD_DATA20         0x79
-> > +                     MX7D_PAD_LCD_DATA21__LCD_DATA21         0x79
-> > +
-> > +                     MX7D_PAD_LCD_DATA23__LCD_DATA23         0x79
-> > +                     MX7D_PAD_LCD_CLK__LCD_CLK               0x79
-> > +                     MX7D_PAD_LCD_ENABLE__LCD_ENABLE         0x79
-> > +                     MX7D_PAD_LCD_VSYNC__LCD_VSYNC           0x79
-> > +                     MX7D_PAD_LCD_HSYNC__LCD_HSYNC           0x79
-> > +                     MX7D_PAD_LCD_RESET__LCD_RESET           0x79
-> > +             >;
-> > +     };
->
-> shouldn't this belong into the upper list:
-> > +
-> > +             fsl,pins = <
-> > +                     MX7D_PAD_LCD_DATA22__GPIO3_IO27         0x74
-> > +             >;
-> > +     };
-> > +
->
-> probably some rebase or merge accident. If I submit non-trivial things,
-> I usually apply my patches to a separate git tree and do a final
-> compile, that might help to reduce some trouble.
+> 
+> 
+>> -		return ret;
+>> +	if (of_device_is_compatible(np, "qcom,sdm845-lmh")) {
+>> +		if (!qcom_scm_lmh_dcvsh_available())
+>> +			return -EINVAL;
+> 
+> I don't believe this is the correct approach, as different SoCs may
+> 
+> require different sequences of these writes (for example SDM660/MSM8998
+> 
+> seems to only enable the thermal algorithm), and there will (hopefully) be interest
+> 
+> in adding LMH support for more platforms, so perhaps separating this somehow
+> 
+> could keep this a bit cleaner and easier to work with for the next person..
 
-Yeah, it was a rebase error. I split these patches out from my working tree.
+I have not looked at SDM660/MSM8998. Are you telling me that these SoCs 
+don't enable the current and BCL portion of LMh. Maybe they have an 
+earlier version of Lmh which does not support all the features. The 
+right approach in this case will be to add a match table with flags for 
+init based on SoC. I can send v2, adding a match table with a flag to 
+specify whether to do the init sequence or not. Since I am not adding 
+the support for any other SoC at the moment, I cannot put in flags 
+separating out thermal , current and BCL init.
 
-Alistair
+> 
+> 
+> 
+> Konrad
+> 
 
->
-> Regards,
-> Andreas
+-- 
+Warm Regards
+Thara (She/Her/Hers)
