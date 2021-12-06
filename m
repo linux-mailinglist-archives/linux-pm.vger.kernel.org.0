@@ -2,117 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97EA34692D0
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Dec 2021 10:36:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7EA4469501
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Dec 2021 12:27:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241460AbhLFJj0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Dec 2021 04:39:26 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:48181 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241187AbhLFJjJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Dec 2021 04:39:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638783338;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UJ60w9l5x9z7ezkDeL8gMwQfAMNkzdnrdHE2RsyKQDs=;
-        b=Zq68SlMRqSsV1iNjZv0DDKS+bP7NQKR3uzMpA06tcA80NYEVp+Z/pVAQpVduJGdTqsvDz6
-        VujJbkW3JDtHcX0nx7kcUq7fazyEO1DWWba8m4tks3f4k4H+zI1BQDOmB/X1Tdmm5wRwCN
-        yiggsH1hfqa1CPl3JlX1YbUVsIU7f/c=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-215-wAupVm9qOCuQ-sKq7nCHaA-1; Mon, 06 Dec 2021 04:35:34 -0500
-X-MC-Unique: wAupVm9qOCuQ-sKq7nCHaA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9E585835B47;
-        Mon,  6 Dec 2021 09:35:31 +0000 (UTC)
-Received: from x1.localdomain.com (unknown [10.39.194.76])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 184D75DAA5;
-        Mon,  6 Dec 2021 09:35:27 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org, Yauhen Kharuzhy <jekhor@gmail.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org
-Subject: [PATCH v4 20/20] extcon: intel-cht-wc: Report RID_A for ACA adapters
-Date:   Mon,  6 Dec 2021 10:33:18 +0100
-Message-Id: <20211206093318.45214-21-hdegoede@redhat.com>
-In-Reply-To: <20211206093318.45214-1-hdegoede@redhat.com>
-References: <20211206093318.45214-1-hdegoede@redhat.com>
+        id S242134AbhLFLa7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Dec 2021 06:30:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58958 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236397AbhLFLa6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Dec 2021 06:30:58 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4C3C061746
+        for <linux-pm@vger.kernel.org>; Mon,  6 Dec 2021 03:27:29 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id d10so4525976lfg.6
+        for <linux-pm@vger.kernel.org>; Mon, 06 Dec 2021 03:27:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=c9l63LtAsEZ6fYHmNhW8V7RRUrW8tCaNYojj6Fpbnsc=;
+        b=uhNWdOyxLAH1Gc7+kfxaRvlBBxUi+OUvBxT5uZ0MOKxizvOmvT318NzaXaxpgw/j12
+         7lRwLYKdcc5KUs9Fc50Fq8DKy/A7KKAeq8cff7oh8663DfqPnV2vwd4HJV2xgc85tANm
+         J2BclrLK3nrm+2VdoUwNv+J9IfzZ9sBQpnaagZJ7SDnMJqTOQBFLVuLc0qihXmhluHPf
+         Ty1PfL08Bau65qVKyF/4HKxHZgtOeH0/EXHXFObc9F0SvFeSEFerQLHFdTm4wp+ULNww
+         VsVL16KfxarQ+zyZ4j+WJjHKFlA8res7tCsbIob1g/eJkCUTNHAKc2oJUIN1JAcNRgcw
+         cc3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=c9l63LtAsEZ6fYHmNhW8V7RRUrW8tCaNYojj6Fpbnsc=;
+        b=S2QECEKVQp/lU21jgxiiBoBydj5PupUcH+xxQI9VD91yN2aubr/Glq0me9VDkHC2iP
+         qb3vZj/lFMndqORm5MiWxI3lCYvbj/jmu/PoEnqCHti6eokJ7yafitd4Vnxy9TJUDg+0
+         zVuNWYUfEaU8Oi6acxX04q2KZRgAy4PBT5v/7sXyrUsGbkq/ViNwU5SNW5QvgFgfAhAH
+         TpWsS/+odsRjn36XE7C0hQYSonUMSH9UnfEM8KLdcEayDAfUXKTuLeaA5JMy/KnvQ87P
+         uQ5gg7MGhLyMjq2j+LPFy1dV5eIJnueGT9TG5tybs+YVDi5VLMCRFSEDN/dtM57S3LLy
+         Rvig==
+X-Gm-Message-State: AOAM533WSG5BJ+b6NmeYJUaIbVqVKMMX4SuKHUDww79GCygt/QPdlkfY
+        HlZ0z+lthq09eFDzo8QqmBc8oicFYaxp4/YlB19PYw==
+X-Google-Smtp-Source: ABdhPJwdIQ1dnfeDSo3UmRCh16RMfUAdPKZVinqmUpBJqmAuCFq6pTZ0DBJ+jHVBxeOd5eeEcWhJfajHk8NyYduX3rE=
+X-Received: by 2002:a05:6512:3d07:: with SMTP id d7mr35870671lfv.233.1638790048200;
+ Mon, 06 Dec 2021 03:27:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+References: <2633024.mvXUDI8C0e@kreacher>
+In-Reply-To: <2633024.mvXUDI8C0e@kreacher>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 6 Dec 2021 12:26:52 +0100
+Message-ID: <CAPDyKFq4KPbrQM7B79NsE1MjiOJ-3rRNt8ZEN+JvW=_pS-1JbQ@mail.gmail.com>
+Subject: Re: [PATCH] PM: runtime: Fix pm_runtime_active() kerneldoc comment
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Make cht_wc_extcon_get_id() report RID_A for ACA adapters, instead of
-reporting ID_FLOAT.
+On Fri, 3 Dec 2021 at 17:19, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+>
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> The kerneldoc comment of pm_runtime_active() does not reflect the
+> behavior of the function, so update it accordingly.
+>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-According to the spec. we should read the USB-ID pin ADC value
-to determine the resistance of the used pull-down resister and
-then return RID_A / RID_B / RID_C based on this. But all "Accessory
-Charger Adapter"s (ACAs) which users can actually buy always use
-a combination of a charging port with one or more USB-A ports, so
-they should always use a resistor indicating RID_A. But the spec
-is hard to read / badly-worded so some of them actually indicate
-they are a RID_B ACA even though they clearly are a RID_A ACA.
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-To workaround this simply always return INTEL_USB_RID_A, which
-matches all the ACAs which users can actually buy.
+Kind regards
+Uffe
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- drivers/extcon/extcon-intel-cht-wc.c | 18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/extcon/extcon-intel-cht-wc.c b/drivers/extcon/extcon-intel-cht-wc.c
-index 144cb5d8cd47..2a8d41cbf41c 100644
---- a/drivers/extcon/extcon-intel-cht-wc.c
-+++ b/drivers/extcon/extcon-intel-cht-wc.c
-@@ -121,13 +121,21 @@ static int cht_wc_extcon_get_id(struct cht_wc_extcon_data *ext, int pwrsrc_sts)
- 		return INTEL_USB_ID_GND;
- 	case CHT_WC_PWRSRC_RID_FLOAT:
- 		return INTEL_USB_ID_FLOAT;
-+	/*
-+	 * According to the spec. we should read the USB-ID pin ADC value here
-+	 * to determine the resistance of the used pull-down resister and then
-+	 * return RID_A / RID_B / RID_C based on this. But all "Accessory
-+	 * Charger Adapter"s (ACAs) which users can actually buy always use
-+	 * a combination of a charging port with one or more USB-A ports, so
-+	 * they should always use a resistor indicating RID_A. But the spec
-+	 * is hard to read / badly-worded so some of them actually indicate
-+	 * they are a RID_B ACA evnen though they clearly are a RID_A ACA.
-+	 * To workaround this simply always return INTEL_USB_RID_A, which
-+	 * matches all the ACAs which users can actually buy.
-+	 */
- 	case CHT_WC_PWRSRC_RID_ACA:
-+		return INTEL_USB_RID_A;
- 	default:
--		/*
--		 * Once we have IIO support for the GPADC we should read
--		 * the USBID GPADC channel here and determine ACA role
--		 * based on that.
--		 */
- 		return INTEL_USB_ID_FLOAT;
- 	}
- }
--- 
-2.33.1
-
+> ---
+>  include/linux/pm_runtime.h |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> Index: linux-pm/include/linux/pm_runtime.h
+> ===================================================================
+> --- linux-pm.orig/include/linux/pm_runtime.h
+> +++ linux-pm/include/linux/pm_runtime.h
+> @@ -129,7 +129,7 @@ static inline bool pm_runtime_suspended(
+>   * pm_runtime_active - Check whether or not a device is runtime-active.
+>   * @dev: Target device.
+>   *
+> - * Return %true if runtime PM is enabled for @dev and its runtime PM status is
+> + * Return %true if runtime PM is disabled for @dev or its runtime PM status is
+>   * %RPM_ACTIVE, or %false otherwise.
+>   *
+>   * Note that the return value of this function can only be trusted if it is
+>
+>
+>
