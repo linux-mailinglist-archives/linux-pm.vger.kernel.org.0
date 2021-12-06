@@ -2,217 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7620446A434
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Dec 2021 19:27:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A723646A660
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Dec 2021 20:58:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347599AbhLFSag (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Dec 2021 13:30:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47482 "EHLO
+        id S1349505AbhLFUBV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Dec 2021 15:01:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347423AbhLFSaS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Dec 2021 13:30:18 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BAB9C061746;
-        Mon,  6 Dec 2021 10:26:49 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id l64so5744411pgl.9;
-        Mon, 06 Dec 2021 10:26:49 -0800 (PST)
+        with ESMTP id S1349551AbhLFUBC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Dec 2021 15:01:02 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674A6C0698C3;
+        Mon,  6 Dec 2021 11:57:32 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id z5so48110916edd.3;
+        Mon, 06 Dec 2021 11:57:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=JUJ+46P2lZKqa9GcjTNExLZ59H82MAk46ZsUw+ykybM=;
-        b=kU99L9Y51Kn0GGffgfdtTjU/trqWSkETe6sPE8NiMvNFQNV2DltAKs5XPjrhg+Jjdu
-         exnXIWjBG2i4J4LI3YfCX6rl84hDrkLokZvi2WeNmCIw2OzDExSBZNa54ZJ14bH+cRe/
-         a2h61/lL/Pcm1Fy2cqut2yGHOOFNKDqyUOsTTucu/ezxcRk8KbWcuDijMq0EuDx7RxvX
-         Wk+Wy+HfxzPlh5PcKFH0qmcbxMVrAmvOvu8AXclMUXKqWG7P2xu0SlzXjmxYYkpmgkj2
-         yU6HRKB/d5Gw+X17XbYZBqwI713hQgUqw8L2s1tyqIhWFfKnzFLRo3eygriopY6SPs1V
-         CJGA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MDbD429x7EGhGMhsVDh9494mFqKE/H+dYpI7efBswy4=;
+        b=qyHAG2uEzGWAT0b3t0AT1UWTaT7NTaH8qGdIPfOphRXY0HMHmVtRT9PMuxqeZU4i7t
+         vDUVGwg+8WtDOjZ2/hghyXXhffb6oVw184AaM/Ib4u3T3hPhXJAaS/0cdsWUI3xGT3hX
+         BfZ0/qeiHd3FOLdK4PIe3izOUqYYK2W+bnY1/FKdscbcvQ9gt/vXZay3kbkZwuRArqPD
+         upUx6fnXzcThe1hfrh+04gD60srBXbRI5Xt4MERGIvIlYxKLC3lXPac+Tw7Wg6WrrjJj
+         e1cRzJcTYVtillCjhTHiFqHhs+fehdvFPxUtI6qbT7Naf1Ph9v0PCawauveywl8bfngc
+         F/Lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=JUJ+46P2lZKqa9GcjTNExLZ59H82MAk46ZsUw+ykybM=;
-        b=VBSE6auKRm98cbTtPJeVtdnJ4kthb/4nGfliom7PpaCzXo0Dbou3fQNBeLHNlvfLcf
-         ybdB28r6u5zgPx96BilTJ0DUs94MpTsuvpUvgYmaCGmGEYLJabfW7eBeFpbYdSxSEY+f
-         9iYYen8z31C7/3Yz6BXm7XaHM+DhEeJQdrHtLIiX/DgwzSZOOAPg6V7TRdps735hCZZa
-         2CgGu5SU22EwjqaKE13sP8oaMGWZdLasZSE3H6eAMRDM6c+Rj9fbYNMRPIzvLGKbKf1P
-         S44y2cCPu6JYx+eOtOPeLZ0GVmqhXm8NMwj+ncW7eKwADol0BLAd3H4/L3Dyhnj44GN5
-         M6YQ==
-X-Gm-Message-State: AOAM533sokH1jIbPgKbyVFDla6TFcnAbme73VtHGdbaXaxX4FfQoRHAL
-        YLrvyTZGbaInpzrJEQy8Yn0b78U3Seg=
-X-Google-Smtp-Source: ABdhPJyigbdo9ZoRF96SOLo/9a6fD0t0h/AKLi0RxRvpjjnuQwdBtTHDjlTwh+2xmgk5SXv2yxaa1Q==
-X-Received: by 2002:a05:6a00:1ac9:b0:49f:b38d:fe7 with SMTP id f9-20020a056a001ac900b0049fb38d0fe7mr38788631pfv.63.1638815208600;
-        Mon, 06 Dec 2021 10:26:48 -0800 (PST)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id a22sm12773097pfh.111.2021.12.06.10.26.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 10:26:48 -0800 (PST)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     devicetree@vger.kernel.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        bcm-kernel-feedback-list@broadcom.com (maintainer:BROADCOM BCM7XXX ARM
-        ARCHITECTURE), Gregory Fong <gregory.0xf0@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Al Cooper <alcooperx@gmail.com>,
-        Doug Berger <opendmb@gmail.com>,
-        linux-ide@vger.kernel.org (open list:LIBATA SUBSYSTEM (Serial and
-        Parallel ATA drivers)), linux-kernel@vger.kernel.org (open list),
-        linux-gpio@vger.kernel.org (open list:GPIO SUBSYSTEM),
-        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM BCM7XXX
-        ARM ARCHITECTURE),
-        linux-mmc@vger.kernel.org (open list:MULTIMEDIA CARD (MMC), SECURE
-        DIGITAL (SD) AND...),
-        linux-pwm@vger.kernel.org (open list:PWM SUBSYSTEM),
-        linux-crypto@vger.kernel.org (open list:HARDWARE RANDOM NUMBER
-        GENERATOR CORE),
-        linux-rtc@vger.kernel.org (open list:REAL TIME CLOCK (RTC) SUBSYSTEM),
-        linux-pm@vger.kernel.org (open list:THERMAL),
-        linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
-Subject: [PATCH v2 14/14] dt-bindings: usb: Convert BDC to YAML
-Date:   Mon,  6 Dec 2021 10:26:16 -0800
-Message-Id: <20211206182616.2089677-15-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211206182616.2089677-1-f.fainelli@gmail.com>
-References: <20211206182616.2089677-1-f.fainelli@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MDbD429x7EGhGMhsVDh9494mFqKE/H+dYpI7efBswy4=;
+        b=AP9qe8mARfaLgXHIeGMyyastGGGZS/R+llUvtlBAW3OLyIPLV8l9GLyMgSqkxeg4CQ
+         OeSmKYNDzRw4T9LEN3zxCcEJ/Un3/Ei/7LGurhr6G/zeORiwVVM29SKAzV+IPDL16nI1
+         tTmSaJRK35F9AlWbN2SUIQt4uD4lhFlgSGEuTLiJ5xYPofwzFFW9DMPxOVjoq7Okb4AD
+         jwMAi1KHuAuN02fcAKRlbcXUDvHXGe34PsS+HVSaubyNxew7R41+51fTifpTvUcbZ2Cp
+         7vopiLZC+tv42YCVLc0fpPiqAADdP28FSp9Z+WtDKx72u97TPwAN811MaYXDJ3agPPxp
+         ifEA==
+X-Gm-Message-State: AOAM532HDfRr2DV8ZlArgJvF9H4NYxLjUY8CNp3ycr2vDgZCXDux3Ee8
+        TdlGbdk6+gLBOu14PSKdUjilEsmSO48nb5EqBas=
+X-Google-Smtp-Source: ABdhPJzWAtk+egcPYv+YJzS0Q5UW6JXgWqCbk4YgT7bZZlKPZAsHB+shis4xeMBPhZKqn9hbkv+BiK/vOUsqe4ZlBEg=
+X-Received: by 2002:a17:907:869e:: with SMTP id qa30mr45495850ejc.356.1638820650915;
+ Mon, 06 Dec 2021 11:57:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211206093318.45214-1-hdegoede@redhat.com> <20211206093318.45214-15-hdegoede@redhat.com>
+In-Reply-To: <20211206093318.45214-15-hdegoede@redhat.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 6 Dec 2021 21:55:56 +0200
+Message-ID: <CAHp75Vc+z0nqUXbqrX9YXi2+rzz4BKT7maFipyB8QgOEKQ9SPw@mail.gmail.com>
+Subject: Re: [PATCH v4 14/20] mfd: intel_soc_pmic_chtwc: Add cht_wc_model data
+ to struct intel_soc_pmic
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Yauhen Kharuzhy <jekhor@gmail.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Convert the Broadcom BDC device controller Device Tree binding to YAML
-to help with validation.
+On Mon, Dec 6, 2021 at 11:35 AM Hans de Goede <hdegoede@redhat.com> wrote:
+>
+> Tablet / laptop designs using an Intel Cherry Trail x86 main SoC with
+> an Intel Whiskey Cove PMIC do not use a single standard setup for
+> the charger, fuel-gauge and other chips surrounding the PMIC /
+> charging+data USB port.
+>
+> Unlike what is normal on x86 this diversity in designs is not handled
+> by the ACPI tables. On 2 of the 3 known designs there are no standard
+> (PNP0C0A) ACPI battery devices and on the 3th design the ACPI battery
+> device does not work under Linux due to it requiring non-standard
+> and undocumented ACPI behavior.
+>
+> So to make things work under Linux we use native charger and fuel-gauge
+> drivers on these devices, re-using the native drivers used on ARM boards
+> with the same charger / fuel-gauge ICs.
+>
+> This requires various MFD-cell drivers for the CHT-WC PMIC cells to
+> know which model they are exactly running on so that they can e.g.
+> instantiate an I2C-client for the right model charger-IC (the charger
+> is connected to an I2C-controller which is part of the PMIC).
+>
+> Rather then duplicating DMI-id matching to check which model we are
+> running on in each MFD-cell driver, add a check for this to the
+> shared drivers/mfd/intel_soc_pmic_chtwc.c code by using a
+> DMI table for all 3 known models:
+>
+> 1. The GPD Win and GPD Pocket mini-laptops, these are really 2 models
+> but the Pocket re-uses the GPD Win's design in a different housing:
+>
+> The WC PMIC is connected to a TI BQ24292i charger, paired with
+> a Maxim MAX17047 fuelgauge + a FUSB302 USB Type-C Controller +
+> a PI3USB30532 USB switch, for a fully functional Type-C port.
+>
+> 2. The Xiaomi Mi Pad 2:
+>
+> The WC PMIC is connected to a TI BQ25890 charger, paired with
+> a TI BQ27520 fuelgauge, using the TI BQ25890 for BC1.2 charger type
+> detection, for a USB-2 only Type-C port without PD.
+>
+> 3. The Lenovo Yoga Book YB1-X90 / Lenovo Yoga Book YB1-X91 series:
+>
+> The WC PMIC is connected to a TI BQ25892 charger, paired with
+> a TI BQ27542 fuelgauge, using the WC PMIC for BC1.2 charger type
+> detection and using the BQ25892's Mediatek Pump Express+ (1.0)
+> support to enable charging with up to 12V through a micro-USB port.
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- .../devicetree/bindings/usb/brcm,bdc.txt      | 29 ------------
- .../devicetree/bindings/usb/brcm,bdc.yaml     | 46 +++++++++++++++++++
- MAINTAINERS                                   |  2 +-
- 3 files changed, 47 insertions(+), 30 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/usb/brcm,bdc.txt
- create mode 100644 Documentation/devicetree/bindings/usb/brcm,bdc.yaml
+...
 
-diff --git a/Documentation/devicetree/bindings/usb/brcm,bdc.txt b/Documentation/devicetree/bindings/usb/brcm,bdc.txt
-deleted file mode 100644
-index c9f52b97cef1..000000000000
---- a/Documentation/devicetree/bindings/usb/brcm,bdc.txt
-+++ /dev/null
-@@ -1,29 +0,0 @@
--Broadcom USB Device Controller (BDC)
--====================================
--
--Required properties:
--
--- compatible: must be one of:
--                "brcm,bdc-udc-v2"
--                "brcm,bdc"
--- reg: the base register address and length
--- interrupts: the interrupt line for this controller
--
--Optional properties:
--
--On Broadcom STB platforms, these properties are required:
--
--- phys: phandle to one or two USB PHY blocks
--        NOTE: Some SoC's have a single phy and some have
--        USB 2.0 and USB 3.0 phys
--- clocks: phandle to the functional clock of this block
--
--Example:
--
--        bdc@f0b02000 {
--                compatible = "brcm,bdc-udc-v2";
--                reg = <0xf0b02000 0xfc4>;
--                interrupts = <0x0 0x60 0x0>;
--                phys = <&usbphy_0 0x0>;
--                clocks = <&sw_usbd>;
--        };
-diff --git a/Documentation/devicetree/bindings/usb/brcm,bdc.yaml b/Documentation/devicetree/bindings/usb/brcm,bdc.yaml
-new file mode 100644
-index 000000000000..48831b62ab31
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/brcm,bdc.yaml
-@@ -0,0 +1,46 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/brcm,bdc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Broadcom USB Device Controller (BDC)
-+
-+maintainers:
-+  - Al Cooper <alcooperx@gmail.com>
-+  - Florian Fainelli <f.fainelli@gmail.com>
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - brcm,bdc-udc-v2
-+          - brcm,bdc
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts: true
-+
-+  phys:
-+    $ref: "/schemas/types.yaml#/definitions/phandle-array"
-+
-+  clocks:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+        bdc@f0b02000 {
-+                compatible = "brcm,bdc-udc-v2";
-+                reg = <0xf0b02000 0xfc4>;
-+                interrupts = <0x0 0x60 0x0>;
-+                phys = <&usbphy_0 0x0>;
-+                clocks = <&sw_usbd>;
-+        };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 2109b6fe8ea3..b18c7fa42a4f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3679,7 +3679,7 @@ M:	Al Cooper <alcooperx@gmail.com>
- L:	linux-usb@vger.kernel.org
- L:	bcm-kernel-feedback-list@broadcom.com
- S:	Maintained
--F:	Documentation/devicetree/bindings/usb/brcm,bdc.txt
-+F:	Documentation/devicetree/bindings/usb/brcm,bdc.yaml
- F:	drivers/usb/gadget/udc/bdc/
- 
- BROADCOM BMIPS CPUFREQ DRIVER
+> +enum intel_cht_wc_models {
+> +       INTEL_CHT_WC_UNKNOWN,
+> +       INTEL_CHT_WC_GPD_WIN_POCKET,
+> +       INTEL_CHT_WC_XIAOMI_MIPAD2,
+> +       INTEL_CHT_WC_LENOVO_YOGABOOK1,
+> +};
+
+...
+
+> +       enum intel_cht_wc_models cht_wc_model;
+
+I'm wondering what will you do when something similar will be needed
+for another PMIC?
+
+I see possible solutions to eliminate additional churn:
+- make just one enum for all models (can be done now, can be renamed later)
+- make a union if we have such situation
+
+because I wouldn't like to have another field for each possible
+variant of PMIC in the generic structure.
+
+Hence the question, does it make sense to just name it (enum and
+member) less cht_wc oriented?
+
 -- 
-2.25.1
-
+With Best Regards,
+Andy Shevchenko
