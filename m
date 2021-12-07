@@ -2,117 +2,228 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CE1146C304
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Dec 2021 19:41:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4946446C332
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Dec 2021 19:54:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240646AbhLGSpH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Dec 2021 13:45:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49494 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240634AbhLGSpH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Dec 2021 13:45:07 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0CD1C061574
-        for <linux-pm@vger.kernel.org>; Tue,  7 Dec 2021 10:41:36 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id b1so326977lfs.13
-        for <linux-pm@vger.kernel.org>; Tue, 07 Dec 2021 10:41:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sNKguMW+u5SvzONn4ivanKXtsjFVQkC6LMddUtJSEUk=;
-        b=aDIAN17BKGq0GIN+YPIlQpFEpU4IUGBEknSlUTURp1gnh6I71NueXG/IAR3kdGGdnb
-         LXMkE3sM3iS1y3vT4KBCqNdcAzBh0GwpFSY5BZemA+TV9dieQBcMWd4/UUeLInNlkuQW
-         Bf+QMp2p6J6HDkVKgrVYIl6fLaEjWgoqLxuWNHZp7QGVxyaXHU2M2pLj7KRcT6w9jvpe
-         O5LW/kXKV27CBR25kEBseIpFQxdPcpxkMwlMKja49bqU9dOWidyseQGcyzsz6F4R1qO8
-         wHM04ZWGdvFpC4HyJWrMHKaz3QULjsP6DkWcM+Q/H1pkgRGltpi1JaMR6nA+D/q3r45P
-         tNuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sNKguMW+u5SvzONn4ivanKXtsjFVQkC6LMddUtJSEUk=;
-        b=bY8PqvGrAaV7r+5hFFUb1qjsddkFXqQRGiKeLevkr3F1/oZ/jprzCTRwmseYg/hunV
-         dLmE4NE2fQKMxyhIUFrMFtsO7mWMEGNOz9w+c7pNdGVZ9edn8Div+1zqCkw4LZjWo8pO
-         /rwVohYKWM2/+sHncwee9mrZUo8KMi3onUY1wriLjkgO3yvBot+P3Jq0F5928AbXGrTM
-         VjcCG3J2+o+9Ppl2RbF6Oprq22aTZkxxgPvEwJdfRTMyqpF0gv7kTBAndzaBEjI9lzTw
-         wBWnGKBeyTr7fM0/We3Z9uECkDBn0WQjenVQWCThCTM9NitbCA28bLc/P0wynMCNxZcx
-         JGPg==
-X-Gm-Message-State: AOAM5334CIJfmNVe1BRbULLXMEqQL07i30a5WCOesLhwunK1MCRnliPO
-        igYA9co5aChPdyGhUV5bmxeWrhXA0JNgIx1CswPMNZ32jkwltw==
-X-Google-Smtp-Source: ABdhPJyeHj3lrlUlDby3ennl3ufCpDgdCUvs6c7j5SLDxK90H6tLe6REyxb4vxCtSTv4FGgP01zjRMahD5LyaHn+DeQ=
-X-Received: by 2002:a05:6512:3d16:: with SMTP id d22mr41550500lfv.523.1638902494780;
- Tue, 07 Dec 2021 10:41:34 -0800 (PST)
+        id S236177AbhLGS6G (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Dec 2021 13:58:06 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:42094 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231778AbhLGS6F (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Dec 2021 13:58:05 -0500
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 3.0.1)
+ id 069b2043b9497aaa; Tue, 7 Dec 2021 19:54:33 +0100
+Received: from kreacher.localnet (unknown [213.134.187.84])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id D953B66ADAB;
+        Tue,  7 Dec 2021 19:54:32 +0100 (CET)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     Kevin Hilman <khilman@kernel.org>,
+        Maulik Shah <mkshah@codeaurora.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] PM: runtime: Capture device status before disabling runtime PM
+Date:   Tue, 07 Dec 2021 19:54:32 +0100
+Message-ID: <2613374.mvXUDI8C0e@kreacher>
 MIME-Version: 1.0
-References: <20211204220249.591482-1-arnd@kernel.org>
-In-Reply-To: <20211204220249.591482-1-arnd@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 7 Dec 2021 10:41:24 -0800
-Message-ID: <CAKwvOdnZSyfZaa1crQ15DGNNj8JBspnM0xxOF3D2mTt96Ftfgw@mail.gmail.com>
-Subject: Re: [PATCH] power: reset: ltc2952: fix float conversion error
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        =?UTF-8?Q?Ren=C3=A9_Moll?= <Rene.Moll@xsens.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.187.84
+X-CLIENT-HOSTNAME: 213.134.187.84
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddrjeehgdduvddtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvvefgteeuteehkeduuedvudetleevffdtffdtjeejueekffetieekgfeigfehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedvudefrddufeegrddukeejrdekgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukeejrdekgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehkhhhilhhmrghnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmkhhshhgrhhestghouggvrghurhhorhgrrdhorhhgpdhrtghpthhtohepshhtvghrnhesrhhofihlrghnugdrhhgrrhhvrghrugdrvgguuhdprhgtphhtthhopehulhhfrdhh
+ rghnshhsohhnsehlihhnrghrohdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Dec 4, 2021 at 2:02 PM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> clang-14 does not like the way this driver converts a 'long double'
-> to an integer when the target architecture disables floating point
-> support:
->
-> drivers/power/reset/ltc2952-poweroff.c:162:28: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux' does not support it
->         data->wde_interval = 300L * 1E6L;
->                                   ^
->
-> Turn this into pure integer math and make it more readable at the
-> same time using the NSEC_PER_MSEC macro instead.
->
-> Fixes: 6647156c00cc ("power: reset: add LTC2952 poweroff driver")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Thanks for the patch! The change in clang-14 (ToT) that triggered this
-has had another patch on top reverting these diagnostics.
-https://reviews.llvm.org/D114162
+In some cases (for example, during system-wide suspend and resume of
+devices) it is useful to know whether or not runtime PM has ever been
+enabled for a given device and, if so, what the runtime PM status of
+it had been right before runtime PM was disabled for it last time.
 
-That said, this change is still worthwhile for the improved semantics, IMO.
+For this reason, introduce a new struct dev_pm_info field called
+last_status that will be used for capturing the runtime PM status of
+the device when its power.disable_depth counter changes from 0 to 1.
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1497
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+The new field will be set to RPM_INVALID to start with and whenever
+power.disable_depth changes from 1 to 0, so it will be valid only
+when runtime PM of the device is currently disabled, but it has been
+enabled at least once.
 
-> ---
->  drivers/power/reset/ltc2952-poweroff.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/power/reset/ltc2952-poweroff.c b/drivers/power/reset/ltc2952-poweroff.c
-> index fbb344353fe4..9fc88a9f244c 100644
-> --- a/drivers/power/reset/ltc2952-poweroff.c
-> +++ b/drivers/power/reset/ltc2952-poweroff.c
-> @@ -159,8 +159,8 @@ static void ltc2952_poweroff_kill(void)
->
->  static void ltc2952_poweroff_default(struct ltc2952_poweroff *data)
->  {
-> -       data->wde_interval = 300L * 1E6L;
-> -       data->trigger_delay = ktime_set(2, 500L*1E6L);
-> +       data->wde_interval = 300 * NSEC_PER_MSEC;
-> +       data->trigger_delay = ktime_set(2, 500 * NSEC_PER_MSEC);
->
->         hrtimer_init(&data->timer_trigger, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
->         data->timer_trigger.function = ltc2952_poweroff_timer_trigger;
-> --
-> 2.29.2
->
+Immediately use power.last_status in rpm_resume() to make it handle
+the case when PM runtime is disabled for the device, but its runtime
+PM status is RPM_ACTIVE more consistently.  Namely, make it return 1
+if power.last_status is also equal to RPM_ACTIVE in that case (the
+idea being that if the status was RPM_ACTIVE last time when
+power.disable_depth was changing from 0 to 1 and it is still
+RPM_ACTIVE, it can be assumed to reflect what happened to the device
+last time when it was using runtime PM) and -EACCES otherwise.
+
+Update the documentation to provide a description of last_status and
+change the description of pm_runtime_resume() in it to reflect the
+new behavior of rpm_active().
+
+While at it, rearrange the code in pm_runtime_enable() to be more
+straightforward and replace the WARN() macro in it with a pr_warn()
+invocation which is less disruptive.
+
+Link: https://lore.kernel.org/linux-pm/20211026222626.39222-1-ulf.hansson@linaro.org/t/#u
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+
+-> v2: Avoid using the ternary operator in rpm_resume() (Alan).
+
+---
+ Documentation/power/runtime_pm.rst |   14 ++++++++---
+ drivers/base/power/runtime.c       |   45 ++++++++++++++++++++-----------------
+ include/linux/pm.h                 |    2 +
+ 3 files changed, 37 insertions(+), 24 deletions(-)
+
+Index: linux-pm/drivers/base/power/runtime.c
+===================================================================
+--- linux-pm.orig/drivers/base/power/runtime.c
++++ linux-pm/drivers/base/power/runtime.c
+@@ -742,13 +742,15 @@ static int rpm_resume(struct device *dev
+ 	trace_rpm_resume_rcuidle(dev, rpmflags);
+ 
+  repeat:
+-	if (dev->power.runtime_error)
++	if (dev->power.runtime_error) {
+ 		retval = -EINVAL;
+-	else if (dev->power.disable_depth == 1 && dev->power.is_suspended
+-	    && dev->power.runtime_status == RPM_ACTIVE)
+-		retval = 1;
+-	else if (dev->power.disable_depth > 0)
+-		retval = -EACCES;
++	} else if (dev->power.disable_depth > 0) {
++		if (dev->power.runtime_status == RPM_ACTIVE &&
++		    dev->power.last_status == RPM_ACTIVE)
++			retval = 1;
++		else
++			retval = -EACCES;
++	}
+ 	if (retval)
+ 		goto out;
+ 
+@@ -1410,8 +1412,10 @@ void __pm_runtime_disable(struct device
+ 	/* Update time accounting before disabling PM-runtime. */
+ 	update_pm_runtime_accounting(dev);
+ 
+-	if (!dev->power.disable_depth++)
++	if (!dev->power.disable_depth++) {
+ 		__pm_runtime_barrier(dev);
++		dev->power.last_status = dev->power.runtime_status;
++	}
+ 
+  out:
+ 	spin_unlock_irq(&dev->power.lock);
+@@ -1428,23 +1432,23 @@ void pm_runtime_enable(struct device *de
+ 
+ 	spin_lock_irqsave(&dev->power.lock, flags);
+ 
+-	if (dev->power.disable_depth > 0) {
+-		dev->power.disable_depth--;
+-
+-		/* About to enable runtime pm, set accounting_timestamp to now */
+-		if (!dev->power.disable_depth)
+-			dev->power.accounting_timestamp = ktime_get_mono_fast_ns();
+-	} else {
++	if (!dev->power.disable_depth) {
+ 		dev_warn(dev, "Unbalanced %s!\n", __func__);
++		goto out;
+ 	}
+ 
+-	WARN(!dev->power.disable_depth &&
+-	     dev->power.runtime_status == RPM_SUSPENDED &&
+-	     !dev->power.ignore_children &&
+-	     atomic_read(&dev->power.child_count) > 0,
+-	     "Enabling runtime PM for inactive device (%s) with active children\n",
+-	     dev_name(dev));
++	if (--dev->power.disable_depth > 0)
++		goto out;
++
++	dev->power.last_status = RPM_INVALID;
++	dev->power.accounting_timestamp = ktime_get_mono_fast_ns();
++
++	if (dev->power.runtime_status == RPM_SUSPENDED &&
++	    !dev->power.ignore_children &&
++	    atomic_read(&dev->power.child_count) > 0)
++		dev_warn(dev, "Enabling runtime PM for inactive device with active children\n");
+ 
++out:
+ 	spin_unlock_irqrestore(&dev->power.lock, flags);
+ }
+ EXPORT_SYMBOL_GPL(pm_runtime_enable);
+@@ -1640,6 +1644,7 @@ EXPORT_SYMBOL_GPL(__pm_runtime_use_autos
+ void pm_runtime_init(struct device *dev)
+ {
+ 	dev->power.runtime_status = RPM_SUSPENDED;
++	dev->power.last_status = RPM_INVALID;
+ 	dev->power.idle_notification = false;
+ 
+ 	dev->power.disable_depth = 1;
+Index: linux-pm/include/linux/pm.h
+===================================================================
+--- linux-pm.orig/include/linux/pm.h
++++ linux-pm/include/linux/pm.h
+@@ -499,6 +499,7 @@ const struct dev_pm_ops __maybe_unused n
+  */
+ 
+ enum rpm_status {
++	RPM_INVALID = -1,
+ 	RPM_ACTIVE = 0,
+ 	RPM_RESUMING,
+ 	RPM_SUSPENDED,
+@@ -612,6 +613,7 @@ struct dev_pm_info {
+ 	unsigned int		links_count;
+ 	enum rpm_request	request;
+ 	enum rpm_status		runtime_status;
++	enum rpm_status		last_status;
+ 	int			runtime_error;
+ 	int			autosuspend_delay;
+ 	u64			last_busy;
+Index: linux-pm/Documentation/power/runtime_pm.rst
+===================================================================
+--- linux-pm.orig/Documentation/power/runtime_pm.rst
++++ linux-pm/Documentation/power/runtime_pm.rst
+@@ -265,6 +265,10 @@ defined in include/linux/pm.h:
+       RPM_SUSPENDED, which means that each device is initially regarded by the
+       PM core as 'suspended', regardless of its real hardware status
+ 
++  `enum rpm_status last_status;`
++    - the last runtime PM status of the device captured before disabling runtime
++      PM for it (invalid initially and when disable_depth is 0)
++
+   `unsigned int runtime_auto;`
+     - if set, indicates that the user space has allowed the device driver to
+       power manage the device at run time via the /sys/devices/.../power/control
+@@ -333,10 +337,12 @@ drivers/base/power/runtime.c and include
+ 
+   `int pm_runtime_resume(struct device *dev);`
+     - execute the subsystem-level resume callback for the device; returns 0 on
+-      success, 1 if the device's runtime PM status was already 'active' or
+-      error code on failure, where -EAGAIN means it may be safe to attempt to
+-      resume the device again in future, but 'power.runtime_error' should be
+-      checked additionally, and -EACCES means that 'power.disable_depth' is
++      success, 1 if the device's runtime PM status is already 'active' (also if
++      'power.disable_depth' is nonzero, but the status was 'active' when it was
++      changing from 0 to 1) or error code on failure, where -EAGAIN means it may
++      be safe to attempt to resume the device again in future, but
++      'power.runtime_error' should be checked additionally, and -EACCES means
++      that the callback could not be run, because 'power.disable_depth' was
+       different from 0
+ 
+   `int pm_runtime_resume_and_get(struct device *dev);`
 
 
--- 
-Thanks,
-~Nick Desaulniers
+
