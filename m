@@ -2,152 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EC5646BD0A
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Dec 2021 14:56:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE89946BE6F
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Dec 2021 15:59:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237407AbhLGOAO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Dec 2021 09:00:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36718 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233006AbhLGOAO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Dec 2021 09:00:14 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E8CC061574
-        for <linux-pm@vger.kernel.org>; Tue,  7 Dec 2021 05:56:44 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id g19so13553802pfb.8
-        for <linux-pm@vger.kernel.org>; Tue, 07 Dec 2021 05:56:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=hAvyi+spPmg68xAq95o9TIFWNnvNCb1DDFqYvtVgI9w=;
-        b=JNLzw+Ek0GHpkT8f+0YpMABN5rjxUHT3BTndz5VU5/ZkKeoyTx2XJTkRk4duuPgEOK
-         LTq0Tv6ICNnegMQtFSegYLvQ/Y66+UUVXndoT2UFIpOZsL2BoMf3qZOf+JuRBXtVie0s
-         HyIjqyKccJnnHxsUMRClpiER/jfG+a5PMzbIdxLrs35PmSy2h6jhIWue02+rIKYVCiAy
-         2tx/KEnUnr171mnhzBc3e4bSHN3vcTQtH/HPGVecvI9huUkiz4oL8487aCedqbJLyYxA
-         l5dB1eo4fDrj21kJzWJXHVSUBwokmyoWCrt4q76XYYUxuc3fEWN7tg1hLEd5R7GZQ4BO
-         Bd9g==
+        id S238408AbhLGPB4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Dec 2021 10:01:56 -0500
+Received: from mail-oi1-f177.google.com ([209.85.167.177]:42771 "EHLO
+        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238379AbhLGPBx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Dec 2021 10:01:53 -0500
+Received: by mail-oi1-f177.google.com with SMTP id n66so28109787oia.9;
+        Tue, 07 Dec 2021 06:58:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=hAvyi+spPmg68xAq95o9TIFWNnvNCb1DDFqYvtVgI9w=;
-        b=b1kvWVeWzhsQF+mgJhhwDDUQdWkcwfzpmaKoLAgHCPJVLxX5nVo46HaYfmW2QByFte
-         7Qszyqq124x3STUpLQp+H5IdllBfD1XOXPHe9xYCzfFJIZ4RdEMzra1abwUsijV0h3jY
-         DzkWEER+dvKKi4QilxMJZ2tpXXD4PpjEVhyUc4BZpJg0mxAgai+eqh7rhMg0n3E3V4L6
-         obogFEaT5KQVbKZPlXrMgbc/Va+Akey8imdgJrHQ3PuHpHWjY/G36n4d6a+fUIvfJx8V
-         v+9A+t/QFhgJ5Lr0f/+gXgA7ksmshtXeBMbDIPBVgnHuZW2Rywjmn69IlT2LU6JXD7On
-         JvxA==
-X-Gm-Message-State: AOAM530LsyIZxjm5zhaq9eWI1YOkfBHXwEd2D+o67Au6qJM4IVSZPd1y
-        aCyGiz4OFHzTTAov8gBxfDGRlg==
-X-Google-Smtp-Source: ABdhPJxV6LnSiDJqjynvB/fWtlbkUqHMmQrQNmdGnMCb1XuFNK/UTeNYxmG//sN+NF3X6ySpyv3VrQ==
-X-Received: by 2002:a05:6a00:1a4f:b0:4a3:3c4a:b708 with SMTP id h15-20020a056a001a4f00b004a33c4ab708mr43064586pfv.29.1638885403419;
-        Tue, 07 Dec 2021 05:56:43 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id g22sm17414407pfj.29.2021.12.07.05.56.43
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=+5Z+s+qZr/dqYuPrhwxEsfm4VoIv7raKxg2fSVPXZ1s=;
+        b=xHQOICTa9TFDdai7dyn7nNyifSpUKGxOiCiW3C2SPZoYHQ+RXcnFJ9syWxKMqNP3dc
+         nvj6KKiAphfkzpfoiy4y2YlBQ0P5a+03m4PnZ3xxho5SDcmoNTX1BU80dpRc0CwfvE1g
+         Zl7f0yUp4174Or9MbhiaGVDyO6ehhjIKGoj2Q02m1SC33vwbDfDdwCoNAbgxlyjpUEWn
+         6HJSkQptPRJY7vS9LnStrr8ph1AJNl/feYoHqnY+tEcd4uoCr277e3BoCyD0aD8We4Ok
+         LfE479Ik4GyC7ZZcG4MtUTFgXyZhoLkvcUO8NvIx26+6Jtal82au5ONlY8S/swruJ1bD
+         kCKw==
+X-Gm-Message-State: AOAM5324MyjTZfuHjYcnkULfJZv3SzXU+xoBzPIEx1iVsJO8JQPsCvPZ
+        jDMTFAdwkfIJxOxt3bnjoQ==
+X-Google-Smtp-Source: ABdhPJyPQz8MGdEnpy+dfjpiUez2RQSbPKGqr/ncBa0qgl3Qa9MdN4Hom3+TzcbiAkTw6HJamzmPOA==
+X-Received: by 2002:a54:4104:: with SMTP id l4mr5476582oic.17.1638889102302;
+        Tue, 07 Dec 2021 06:58:22 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id be12sm3524103oib.50.2021.12.07.06.58.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 05:56:43 -0800 (PST)
-Message-ID: <61af681b.1c69fb81.90589.0412@mx.google.com>
-Date:   Tue, 07 Dec 2021 05:56:43 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v5.16-rc4-36-g3a18d25cb836
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 1 warning (v5.16-rc4-36-g3a18d25cb836)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+        Tue, 07 Dec 2021 06:58:21 -0800 (PST)
+Received: (nullmailer pid 5804 invoked by uid 1000);
+        Tue, 07 Dec 2021 14:58:10 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-pwm@vger.kernel.org,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-gpio@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        linux-rtc@vger.kernel.org,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Marc Zyngier <maz@kernel.org>,
+        Doug Berger <opendmb@gmail.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Al Cooper <alcooperx@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-arm-kernel@lists.infradead.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-usb@vger.kernel.org, linux-mmc@vger.kernel.org,
+        Ray Jui <rjui@broadcom.com>, linux-pm@vger.kernel.org,
+        Markus Mayer <mmayer@broadcom.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Zhang Rui <rui.zhang@intel.com>, linux-ide@vger.kernel.org,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>, devicetree@vger.kernel.org,
+        Gregory Fong <gregory.0xf0@gmail.com>,
+        linux-crypto@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Scott Branden <sbranden@broadcom.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>
+In-Reply-To: <20211206182616.2089677-13-f.fainelli@gmail.com>
+References: <20211206182616.2089677-1-f.fainelli@gmail.com> <20211206182616.2089677-13-f.fainelli@gmail.com>
+Subject: Re: [PATCH v2 12/14] dt-bindings: ata: Convert Broadcom SATA to YAML
+Date:   Tue, 07 Dec 2021 08:58:10 -0600
+Message-Id: <1638889090.722845.5803.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.16-rc4-36-g3a=
-18d25cb836)
+On Mon, 06 Dec 2021 10:26:14 -0800, Florian Fainelli wrote:
+> Convert the Broadcom SATA3 AHCI controller Device Tree binding to YAML
+> to help with validation.
+> 
+> Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
+>  .../bindings/ata/brcm,sata-brcm.txt           | 45 ---------
+>  .../bindings/ata/brcm,sata-brcm.yaml          | 91 +++++++++++++++++++
+>  2 files changed, 91 insertions(+), 45 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/ata/brcm,sata-brcm.txt
+>  create mode 100644 Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
+> 
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-16-rc4-36-g3a18d25cb836/
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-Tree: pm
-Branch: testing
-Git Describe: v5.16-rc4-36-g3a18d25cb836
-Git Commit: 3a18d25cb8362cb785028df7691a63325aaba356
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
 
-Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-
-riscv:
-
-x86_64:
+Full log is available here: https://patchwork.ozlabs.org/patch/1564108
 
 
-Warnings summary:
+ahci@41000: $nodename:0: 'ahci@41000' does not match '^sata(@.*)?$'
+	arch/arm/boot/dts/bcm958522er.dt.yaml
+	arch/arm/boot/dts/bcm958525er.dt.yaml
+	arch/arm/boot/dts/bcm958525xmc.dt.yaml
+	arch/arm/boot/dts/bcm958622hr.dt.yaml
+	arch/arm/boot/dts/bcm958623hr.dt.yaml
+	arch/arm/boot/dts/bcm958625hr.dt.yaml
+	arch/arm/boot/dts/bcm958625k.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx64-a0.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx64.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx64w-a0.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx64w.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx65.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx65w.dt.yaml
+	arch/arm/boot/dts/bcm988312hr.dt.yaml
 
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
+ahci@41000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'dma-coherent', 'sata-port@0', 'sata-port@1' were unexpected)
+	arch/arm/boot/dts/bcm958522er.dt.yaml
+	arch/arm/boot/dts/bcm958525er.dt.yaml
+	arch/arm/boot/dts/bcm958525xmc.dt.yaml
+	arch/arm/boot/dts/bcm958622hr.dt.yaml
+	arch/arm/boot/dts/bcm958623hr.dt.yaml
+	arch/arm/boot/dts/bcm958625hr.dt.yaml
+	arch/arm/boot/dts/bcm958625k.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx64.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx64w.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx65.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx65w.dt.yaml
+	arch/arm/boot/dts/bcm988312hr.dt.yaml
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
+ahci@41000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'sata-port@0', 'sata-port@1' were unexpected)
+	arch/arm/boot/dts/bcm958625-meraki-mx64-a0.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx64w-a0.dt.yaml
 
-Detailed per-defconfig build reports:
+sata@a000: compatible: 'oneOf' conditional failed, one must be fixed:
+	arch/arm/boot/dts/bcm963138dvt.dt.yaml
 
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
