@@ -2,171 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2343C46C2FE
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Dec 2021 19:41:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CE1146C304
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Dec 2021 19:41:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240620AbhLGSot (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Dec 2021 13:44:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49402 "EHLO
+        id S240646AbhLGSpH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Dec 2021 13:45:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231241AbhLGSos (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Dec 2021 13:44:48 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB78BC061574;
-        Tue,  7 Dec 2021 10:41:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 23697CE1D90;
-        Tue,  7 Dec 2021 18:41:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50A5CC341CA;
-        Tue,  7 Dec 2021 18:41:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638902474;
-        bh=BD7y6nHDHYvwF8F0ey/Mk8ZBpokO5pKuXGZlYMItmjk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=XYRyupyxYqJ1J2Xzzy1fbDAcK8U9EmRcrld67xacdQOCmUHzbODW7peeYiDwZrj3u
-         AAkkDDnUYN3tbSBkG8UlHGdxboK6IuLb2BAQQASbgdWxGCFISUaZRIGDhgLbnG48cz
-         siNPn1nu/axEkF9uldG4y4g9XdJ7SG3qoGjVeK/8chFCXZ8bMNRTKgdW1BAny1jfzx
-         EcrXYOZj3qZrX28TtJJ+5tU4GTVkhF0tWH7ald/YdXYQWmXgLM05MTqOf7Eb+8HuTo
-         8xt6IKmU4dJOc//poaAiHnlFV10RNIqgr6tpoX5NFDhg2CZOq3jm7pIxEq/uR2U41l
-         M3la7iG9doIFQ==
-Received: by mail-ed1-f46.google.com with SMTP id l25so60416874eda.11;
-        Tue, 07 Dec 2021 10:41:14 -0800 (PST)
-X-Gm-Message-State: AOAM530KQYWFwmBU5pWod420bFn9iDmSk7C+yt2KI+6x2mKc+lM015v8
-        hT0J9rUvi3YSuKvIWJVPzMho5DNOmNGEYU/FcA==
-X-Google-Smtp-Source: ABdhPJzcwDO/upO0y0Heow+dDIweLmSN4XLEBMezQBu999RnN0nYR8CEhaX/FQ9NPwIz30CbYJUz7q1kPpylgv6jWiU=
-X-Received: by 2002:a17:906:5e14:: with SMTP id n20mr1338660eju.466.1638902472240;
- Tue, 07 Dec 2021 10:41:12 -0800 (PST)
+        with ESMTP id S240634AbhLGSpH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Dec 2021 13:45:07 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0CD1C061574
+        for <linux-pm@vger.kernel.org>; Tue,  7 Dec 2021 10:41:36 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id b1so326977lfs.13
+        for <linux-pm@vger.kernel.org>; Tue, 07 Dec 2021 10:41:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sNKguMW+u5SvzONn4ivanKXtsjFVQkC6LMddUtJSEUk=;
+        b=aDIAN17BKGq0GIN+YPIlQpFEpU4IUGBEknSlUTURp1gnh6I71NueXG/IAR3kdGGdnb
+         LXMkE3sM3iS1y3vT4KBCqNdcAzBh0GwpFSY5BZemA+TV9dieQBcMWd4/UUeLInNlkuQW
+         Bf+QMp2p6J6HDkVKgrVYIl6fLaEjWgoqLxuWNHZp7QGVxyaXHU2M2pLj7KRcT6w9jvpe
+         O5LW/kXKV27CBR25kEBseIpFQxdPcpxkMwlMKja49bqU9dOWidyseQGcyzsz6F4R1qO8
+         wHM04ZWGdvFpC4HyJWrMHKaz3QULjsP6DkWcM+Q/H1pkgRGltpi1JaMR6nA+D/q3r45P
+         tNuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sNKguMW+u5SvzONn4ivanKXtsjFVQkC6LMddUtJSEUk=;
+        b=bY8PqvGrAaV7r+5hFFUb1qjsddkFXqQRGiKeLevkr3F1/oZ/jprzCTRwmseYg/hunV
+         dLmE4NE2fQKMxyhIUFrMFtsO7mWMEGNOz9w+c7pNdGVZ9edn8Div+1zqCkw4LZjWo8pO
+         /rwVohYKWM2/+sHncwee9mrZUo8KMi3onUY1wriLjkgO3yvBot+P3Jq0F5928AbXGrTM
+         VjcCG3J2+o+9Ppl2RbF6Oprq22aTZkxxgPvEwJdfRTMyqpF0gv7kTBAndzaBEjI9lzTw
+         wBWnGKBeyTr7fM0/We3Z9uECkDBn0WQjenVQWCThCTM9NitbCA28bLc/P0wynMCNxZcx
+         JGPg==
+X-Gm-Message-State: AOAM5334CIJfmNVe1BRbULLXMEqQL07i30a5WCOesLhwunK1MCRnliPO
+        igYA9co5aChPdyGhUV5bmxeWrhXA0JNgIx1CswPMNZ32jkwltw==
+X-Google-Smtp-Source: ABdhPJyeHj3lrlUlDby3ennl3ufCpDgdCUvs6c7j5SLDxK90H6tLe6REyxb4vxCtSTv4FGgP01zjRMahD5LyaHn+DeQ=
+X-Received: by 2002:a05:6512:3d16:: with SMTP id d22mr41550500lfv.523.1638902494780;
+ Tue, 07 Dec 2021 10:41:34 -0800 (PST)
 MIME-Version: 1.0
-References: <20211126181500.3404129-1-daniel.lezcano@linaro.org> <20211126181500.3404129-2-daniel.lezcano@linaro.org>
-In-Reply-To: <20211126181500.3404129-2-daniel.lezcano@linaro.org>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 7 Dec 2021 12:41:00 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqK1tsOqUYrLkZCo95BC=AXwZxai947x41zYpeHbodvwFg@mail.gmail.com>
-Message-ID: <CAL_JsqK1tsOqUYrLkZCo95BC=AXwZxai947x41zYpeHbodvwFg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/5] arm64: dts: rockchip: Add powerzones definition
- for rock960
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     arnd@linaro.org, heiko@sntech.de, ulf.hansson@linaro.org,
-        rjw@rjwysocki.net, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        lukasz.luba@arm.com, Robin Murphy <robin.murphy@arm.com>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Helen Koike <helen.koike@collabora.com>,
-        Brian Norris <briannorris@chromium.org>,
-        Shunqian Zheng <zhengsq@rock-chips.com>,
-        Elaine Zhang <zhangqing@rock-chips.com>,
-        "moderated list:ARM/Rockchip SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC support" 
-        <linux-rockchip@lists.infradead.org>
+References: <20211204220249.591482-1-arnd@kernel.org>
+In-Reply-To: <20211204220249.591482-1-arnd@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 7 Dec 2021 10:41:24 -0800
+Message-ID: <CAKwvOdnZSyfZaa1crQ15DGNNj8JBspnM0xxOF3D2mTt96Ftfgw@mail.gmail.com>
+Subject: Re: [PATCH] power: reset: ltc2952: fix float conversion error
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        =?UTF-8?Q?Ren=C3=A9_Moll?= <Rene.Moll@xsens.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Nov 26, 2021 at 12:15 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
+On Sat, Dec 4, 2021 at 2:02 PM Arnd Bergmann <arnd@kernel.org> wrote:
 >
-> Add the powerzones description. This first step introduces the big,
-> the little and the gpu as a powerzone place.
+> From: Arnd Bergmann <arnd@arndb.de>
 >
-> Cc: Robin Murphy <robin.murphy@arm.com>
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->    V1: Initial post
->    V2:
->      - Move description in the SoC dtsi specific file
-> ---
->  arch/arm64/boot/dts/rockchip/rk3399.dtsi | 25 ++++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
+> clang-14 does not like the way this driver converts a 'long double'
+> to an integer when the target architecture disables floating point
+> support:
 >
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3399.dtsi b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-> index d3cdf6f42a30..3c0dbc0cb2bc 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-> +++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-> @@ -76,6 +76,8 @@ cpu_l0: cpu@0 {
->                         #cooling-cells = <2>; /* min followed by max */
->                         dynamic-power-coefficient = <100>;
->                         cpu-idle-states = <&CPU_SLEEP &CLUSTER_SLEEP>;
-> +                       #powerzone-cells = <0>;
-> +                       powerzone = <&PKG_PZ>;
->                 };
+> drivers/power/reset/ltc2952-poweroff.c:162:28: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux' does not support it
+>         data->wde_interval = 300L * 1E6L;
+>                                   ^
 >
->                 cpu_l1: cpu@1 {
-> @@ -88,6 +90,8 @@ cpu_l1: cpu@1 {
->                         #cooling-cells = <2>; /* min followed by max */
->                         dynamic-power-coefficient = <100>;
->                         cpu-idle-states = <&CPU_SLEEP &CLUSTER_SLEEP>;
-> +                       #powerzone-cells = <0>;
-> +                       powerzone = <&PKG_PZ>;
->                 };
+> Turn this into pure integer math and make it more readable at the
+> same time using the NSEC_PER_MSEC macro instead.
 >
->                 cpu_l2: cpu@2 {
-> @@ -100,6 +104,8 @@ cpu_l2: cpu@2 {
->                         #cooling-cells = <2>; /* min followed by max */
->                         dynamic-power-coefficient = <100>;
->                         cpu-idle-states = <&CPU_SLEEP &CLUSTER_SLEEP>;
-> +                       #powerzone-cells = <0>;
-> +                       powerzone = <&PKG_PZ>;
->                 };
->
->                 cpu_l3: cpu@3 {
-> @@ -112,6 +118,8 @@ cpu_l3: cpu@3 {
->                         #cooling-cells = <2>; /* min followed by max */
->                         dynamic-power-coefficient = <100>;
->                         cpu-idle-states = <&CPU_SLEEP &CLUSTER_SLEEP>;
-> +                       #powerzone-cells = <0>;
-> +                       powerzone = <&PKG_PZ>;
->                 };
->
->                 cpu_b0: cpu@100 {
-> @@ -124,6 +132,8 @@ cpu_b0: cpu@100 {
->                         #cooling-cells = <2>; /* min followed by max */
->                         dynamic-power-coefficient = <436>;
->                         cpu-idle-states = <&CPU_SLEEP &CLUSTER_SLEEP>;
-> +                       #powerzone-cells = <0>;
-> +                       powerzone = <&PKG_PZ>;
->
->                         thermal-idle {
->                                 #cooling-cells = <2>;
-> @@ -142,6 +152,8 @@ cpu_b1: cpu@101 {
->                         #cooling-cells = <2>; /* min followed by max */
->                         dynamic-power-coefficient = <436>;
->                         cpu-idle-states = <&CPU_SLEEP &CLUSTER_SLEEP>;
-> +                       #powerzone-cells = <0>;
-> +                       powerzone = <&PKG_PZ>;
->
->                         thermal-idle {
->                                 #cooling-cells = <2>;
-> @@ -791,6 +803,17 @@ spi5: spi@ff200000 {
->                 status = "disabled";
->         };
->
-> +       powerzones {
-> +
-> +               PKG_PZ: pkg {
-> +                       #powerzone-cells = <0>;
-> +                        powerzone = <&SOC_PZ>;
-> +               };
-> +
-> +               SOC_PZ: soc {
-> +               };
-> +       };
-> +
->         thermal_zones: thermal-zones {
->                 cpu_thermal: cpu-thermal {
->                         polling-delay-passive = <100>;
-> @@ -2027,6 +2050,8 @@ gpu: gpu@ff9a0000 {
->                 clocks = <&cru ACLK_GPU>;
->                 #cooling-cells = <2>;
->                 power-domains = <&power RK3399_PD_GPU>;
-> +               #powerzone-cells = <0>;
-> +               powerzone = <&PKG_PZ>;
+> Fixes: 6647156c00cc ("power: reset: add LTC2952 poweroff driver")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Every CPU and the GPU are in the same powerzone. What is the point? Do
-you really have to be told that CPUs and GPU are a source of heat and
-might need to be limited?
+Thanks for the patch! The change in clang-14 (ToT) that triggered this
+has had another patch on top reverting these diagnostics.
+https://reviews.llvm.org/D114162
 
-Rob
+That said, this change is still worthwhile for the improved semantics, IMO.
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/1497
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+> ---
+>  drivers/power/reset/ltc2952-poweroff.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/power/reset/ltc2952-poweroff.c b/drivers/power/reset/ltc2952-poweroff.c
+> index fbb344353fe4..9fc88a9f244c 100644
+> --- a/drivers/power/reset/ltc2952-poweroff.c
+> +++ b/drivers/power/reset/ltc2952-poweroff.c
+> @@ -159,8 +159,8 @@ static void ltc2952_poweroff_kill(void)
+>
+>  static void ltc2952_poweroff_default(struct ltc2952_poweroff *data)
+>  {
+> -       data->wde_interval = 300L * 1E6L;
+> -       data->trigger_delay = ktime_set(2, 500L*1E6L);
+> +       data->wde_interval = 300 * NSEC_PER_MSEC;
+> +       data->trigger_delay = ktime_set(2, 500 * NSEC_PER_MSEC);
+>
+>         hrtimer_init(&data->timer_trigger, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+>         data->timer_trigger.function = ltc2952_poweroff_timer_trigger;
+> --
+> 2.29.2
+>
+
+
+-- 
+Thanks,
+~Nick Desaulniers
