@@ -2,175 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C373546B262
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Dec 2021 06:30:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5690046B2D5
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Dec 2021 07:22:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234263AbhLGFe0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Dec 2021 00:34:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59082 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232346AbhLGFeZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Dec 2021 00:34:25 -0500
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A27C061746;
-        Mon,  6 Dec 2021 21:30:55 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id A87FF41EF0;
-        Tue,  7 Dec 2021 05:30:49 +0000 (UTC)
-Subject: Re: [PATCH v3 00/11] Apple SoC PMGR device power states driver
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Marc Zyngier <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Johan Hovold <johan@kernel.org>, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org
-References: <20211124073419.181799-1-marcan@marcan.st>
-From:   Hector Martin <marcan@marcan.st>
-Message-ID: <8fdf7a68-1a24-89eb-96d6-93c3f334621c@marcan.st>
-Date:   Tue, 7 Dec 2021 14:30:46 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
-MIME-Version: 1.0
-In-Reply-To: <20211124073419.181799-1-marcan@marcan.st>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: es-ES
+        id S231561AbhLGG0C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Dec 2021 01:26:02 -0500
+Received: from mga18.intel.com ([134.134.136.126]:5572 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230027AbhLGG0C (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 7 Dec 2021 01:26:02 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="224376750"
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="224376750"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 22:22:32 -0800
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="515141253"
+Received: from yli76-mobl.ccr.corp.intel.com ([10.255.28.216])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 22:22:31 -0800
+Message-ID: <12a4f14dcec84c9492138126c719a3547cfc1d2e.camel@intel.com>
+Subject: Re: [PATCH 2/3] intel_idle: cleanup cpuhotplug setup
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+Date:   Tue, 07 Dec 2021 14:22:28 +0800
+In-Reply-To: <CAJZ5v0hnPX13tFYjgT7PhY-MYjmYuipXPxCHoaLbPKREnhvX2A@mail.gmail.com>
+References: <20211027082237.26759-1-rui.zhang@intel.com>
+         <20211027082237.26759-2-rui.zhang@intel.com>
+         <CAJZ5v0hnPX13tFYjgT7PhY-MYjmYuipXPxCHoaLbPKREnhvX2A@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 24/11/2021 16.34, Hector Martin wrote:
-> This series adds the driver for the Apple PMGR device power state
-> registers. These registers can clockgate and (in some cases) powergate
-> specific SoC blocks. They also control the reset line, and can have
-> additional features such as automatic power management.
+On Wed, 2021-11-24 at 14:29 +0100, Rafael J. Wysocki wrote:
+> On Wed, Oct 27, 2021 at 10:07 AM Zhang Rui <rui.zhang@intel.com>
+> wrote:
+> > 
+> > Only limited number of CPUHP_AP_ONLINE_DYN callbacks can be
+> > registered,
+> > thus cpuhp_remove_state() should be invoked to release the resource
+> > when
+> > it is not used.
+> > 
+> > Fixes: fb1013a01673 ("intel_idle: Convert to hotplug state
+> > machine")
+> > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> > ---
+> >  drivers/idle/intel_idle.c | 12 ++++++++----
+> >  1 file changed, 8 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+> > index ae9d8c43e6a5..e7f2a5f85bf9 100644
+> > --- a/drivers/idle/intel_idle.c
+> > +++ b/drivers/idle/intel_idle.c
+> > @@ -1676,6 +1676,8 @@ static int intel_idle_cpu_online(unsigned int
+> > cpu)
+> >         return 0;
+> >  }
+> > 
+> > +static enum cpuhp_state intel_idle_cpuhp_state;
+> > +
+> >  /**
+> >   * intel_idle_cpuidle_unregister - unregister from cpuidle
+> > framework
+> >   */
+> > @@ -1683,6 +1685,8 @@ static void __init
+> > intel_idle_cpuidle_unregister(struct cpuidle_driver *drv)
+> >  {
+> >         int i;
+> > 
+> > +       if (intel_idle_cpuhp_state > 0)
+> > +               cpuhp_remove_state(intel_idle_cpuhp_state);
 > 
-> The current driver supports only the lowest/highest power states,
-> provided via the genpd framework, plus reset support provided via
-> the reset subsystem.
-> 
-> Apple's PMGRs (there are two in the T8103) have a uniform register
-> bit layout (sometimes with varying features). To be able to support
-> multiple SoC generations as well as express pd relationships
-> dynamically, this binding describes each PMGR power state control
-> as a single devicetree node. Future SoC generations are expected to
-> retain backwards compatibility, allowing this driver to work on them
-> with only DT changes.
-> 
-> #1: MAINTAINERS updates, to go via the SoC tree to avert merge hell
-> #2-#5: Adds power-domains properties to existing device bindings
-> #6-#7: Adds the new pmgr device tree bindings
-> #8: The driver itself.
-> #9: Instantiates the driver in t8103.dtsi. This adds the entire PMGR
->      node tree and references the relevant nodes from existing devices.
-> #7: Adds runtime-pm support to the Samsung UART driver, as a first
->      working consumer.
-> #8: Instantiates a second UART, to more easily test this.
-> 
-> There are currently no consumers for the reset functionality, so
-> it is untested, but we will be testing it soon with the NVMe driver
-> (as it is required to allow driver re-binding to work properly).
-> 
-> == Changes since v2 ==
-> - DT schema review comments & patch order fix
-> - Added the power-domains properties to devices that already mainlined
-> - Now adds the entire PMGR tree. This turns off all devices we do not
->    currently instantiate, and adds power-domains to those we do. The
->    nodes were initially generated with [1] and manually tweaked. all
->    the labels match the ADT labels (lowercased), which might be used
->    by the bootloader in the future to conditionally disable nodes
->    based on hardware configuration.
-> - Dropped apple,t8103-minipmgr, since I don't expect we will ever need
->    to tell apart multiple PMGR instances within a SoC, and added
->    apple,t6000-pmgr{-pwrstate} for the new SoCs.
-> - Driver now unconditionally enables auto-PM for all devices. This
->    seems to be safe and should save power (it is not implemented for
->    all devices; if not implemented, the bit just doesn't exist and is
->    ignored).
-> - If an always-on device is not powered on at boot, turn it on and
->    print a warning. This avoids the PM core complaining. We still
->    want to know if/when this happens, but let's not outright fail.
-> - Other minor fixes (use PS names instead of offsets for messages,
->    do not spuriously clear flag bits).
-> 
-> On the way the parent node is handled: I've decided that these syscon
-> nodes will only ever contain pwrstates and nothing else. We now size
-> them based on the register range that contains pwrstate controls
-> (rounded up to page size). t6000 has 3 PMGRs and t6001 has 4, and
-> we shouldn't have to care about telling apart the multiple instances.
-> Anything else PMGR does that needs a driver will be handled by
-> entirely separate nodes in the future.
-> 
-> Re t6001 and t6000 (and the rumored t6002), t6000 is basically a
-> cut-down version of t6001 (and t6002 is rumored to be two t6001
-> dies), down to the die floorplan, so I'm quite certain we won't need
-> t6001/2-specific compatibles for anything shared. The t6000 devicetree
-> will just #include the t6001 one and remove the missing devices.
-> Hence, everything for this SoC series is going to have compatibles
-> named apple,t6000-* (except the extra instances of some blocks in
-> t6001 which look like they may have differences; PMGR isn't one of
-> them, but some multimedia stuff might).
-> 
-> [1] https://github.com/AsahiLinux/m1n1/blob/main/proxyclient/tools/pmgr_adt2dt.py
-> 
-> Hector Martin (11):
->    MAINTAINERS: Add PMGR power state files to ARM/APPLE MACHINE
->    dt-bindings: i2c: apple,i2c: Add power-domains property
->    dt-bindings: iommu: apple,dart: Add power-domains property
->    dt-bindings: pinctrl: apple,pinctrl: Add power-domains property
->    dt-bindings: interrupt-controller: apple,aic: Add power-domains
->      property
->    dt-bindings: power: Add apple,pmgr-pwrstate binding
->    dt-bindings: arm: apple: Add apple,pmgr binding
->    soc: apple: Add driver for Apple PMGR power state controls
->    arm64: dts: apple: t8103: Add PMGR nodes
->    tty: serial: samsung_tty: Support runtime PM
->    arm64: dts: apple: t8103: Add UART2
-> 
->   .../bindings/arm/apple/apple,pmgr.yaml        |  134 ++
->   .../devicetree/bindings/i2c/apple,i2c.yaml    |    3 +
->   .../interrupt-controller/apple,aic.yaml       |    3 +
->   .../devicetree/bindings/iommu/apple,dart.yaml |    3 +
->   .../bindings/pinctrl/apple,pinctrl.yaml       |    3 +
->   .../bindings/power/apple,pmgr-pwrstate.yaml   |   71 ++
->   MAINTAINERS                                   |    3 +
->   arch/arm64/boot/dts/apple/t8103-j274.dts      |    5 +
->   arch/arm64/boot/dts/apple/t8103-pmgr.dtsi     | 1136 +++++++++++++++++
->   arch/arm64/boot/dts/apple/t8103.dtsi          |   36 +
->   drivers/soc/Kconfig                           |    1 +
->   drivers/soc/Makefile                          |    1 +
->   drivers/soc/apple/Kconfig                     |   21 +
->   drivers/soc/apple/Makefile                    |    2 +
->   drivers/soc/apple/apple-pmgr-pwrstate.c       |  317 +++++
->   drivers/tty/serial/samsung_tty.c              |   93 +-
->   16 files changed, 1798 insertions(+), 34 deletions(-)
->   create mode 100644 Documentation/devicetree/bindings/arm/apple/apple,pmgr.yaml
->   create mode 100644 Documentation/devicetree/bindings/power/apple,pmgr-pwrstate.yaml
->   create mode 100644 arch/arm64/boot/dts/apple/t8103-pmgr.dtsi
->   create mode 100644 drivers/soc/apple/Kconfig
->   create mode 100644 drivers/soc/apple/Makefile
->   create mode 100644 drivers/soc/apple/apple-pmgr-pwrstate.c
-> 
+> It would be more straightforward to do that directly in
+> intel_idle_init(), because intel_idle_cpuhp_state could be a local
+> variable in that function then.
 
-Applied everything except the samsung_tty change to asahi-soc/dt (DT 
-changes) and asahi-soc/pmgr (just the driver). Thanks everyone for the 
-reviews!
+I rechecked the code.
+in intel_idle_init(), cpuhp_setup_state() is the last step, so either
+it succeeds and we never unload the driver, or it fails and the
+intel_idle_init() fails directly.
+So nothing needs to be fixed if we don't support intel_idle driver
+module unload.
 
-Krzysztof: feel free to take that patch through tty if you think it's in 
-good shape. I'm not sure how much power UART runtime-pm will save us, 
-but at least it's a decent test case, so it's probably worth having.
+thanks,
+rui
+> 
+> >         for_each_online_cpu(i)
+> >                 cpuidle_unregister_device(per_cpu_ptr(intel_idle_cp
+> > uidle_devices, i));
+> >         cpuidle_unregister_driver(drv);
+> > @@ -1710,11 +1714,11 @@ static int __init
+> > intel_idle_cpuidle_register(struct cpuidle_driver *drv)
+> >                 return retval;
+> >         }
+> > 
+> > -       retval = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
+> > "idle/intel:online",
+> > -                               intel_idle_cpu_online, NULL);
+> > -       if (retval < 0) {
+> > +       intel_idle_cpuhp_state =
+> > cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
+> > +               "idle/intel:online", intel_idle_cpu_online, NULL);
+> > +       if (intel_idle_cpuhp_state < 0) {
+> >                 intel_idle_cpuidle_unregister(drv);
+> > -               return retval;
+> > +               return intel_idle_cpuhp_state;
+> >         }
+> >         return 0;
+> >  }
+> > --
+> > 2.17.1
+> > 
 
--- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
