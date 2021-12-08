@@ -2,152 +2,330 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BC1346DA51
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Dec 2021 18:46:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25B8546DB15
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Dec 2021 19:29:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbhLHRtb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Dec 2021 12:49:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59990 "EHLO
+        id S238898AbhLHSdU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Dec 2021 13:33:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233461AbhLHRtb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Dec 2021 12:49:31 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05653C061746
-        for <linux-pm@vger.kernel.org>; Wed,  8 Dec 2021 09:45:59 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id w33-20020a17090a6ba400b001a722a06212so4466433pjj.0
-        for <linux-pm@vger.kernel.org>; Wed, 08 Dec 2021 09:45:59 -0800 (PST)
+        with ESMTP id S234866AbhLHSdU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Dec 2021 13:33:20 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6652FC061746
+        for <linux-pm@vger.kernel.org>; Wed,  8 Dec 2021 10:29:47 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id i12so2425993wmq.4
+        for <linux-pm@vger.kernel.org>; Wed, 08 Dec 2021 10:29:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=er08tZoeYaCQ6Xik97/bRHhFv4Up3gz8A6vxwNo3jbY=;
-        b=Kr5BKPXJwZDgbvz2+SVMdh2iehNg7hM/3cQmyR6meCMeK7TWeXbfpSGBvcfz5Y5O72
-         Ea1iJClySG76DbW5P9omWz2Qbt6c/8icHgwRBv8GpRR/7Z1YTnzimQpri+ePdzsjfScG
-         WAoltqHwy3gKSvroHeRDs9wr1ffZSUJ3rze1rdGYT8/QNithiAm5tlM1rfp/YjOp+Ep1
-         tveGT7kkPTgeCY7X6Cp+3xEncWF+uMSOB4R9q9e6e42ueF4sKPjH1FBl4SJeh1nONh3s
-         4+vh1O0J8yl0/OW1YPscHD3BwVpxmgQqkOM+YugXMHS5PbKTqW/jMoOH1hQY1soEPXxG
-         T9oQ==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=g4sFNhovUglXvlR4AfEFcmvmuAeEZqhIvv1BAUKDmJI=;
+        b=wFQGzF4w0zTNVutgJFOE4CkYAOmC/PNqOaUx8RAbXbvJ6dVXcO11ui3AYaD7gVzFwk
+         TaNi2p9o5z//6ugGJRLJcNzlxMk93grhsuo5a9F1kFf0KHh7stVOgoAMu+HdXRzk4o0K
+         0OGss3iig3NYeMff+CybClm/8uDZQ0JZQFduaHLY1L3Hvh3dZa3AfFyT6+q5rjUWtlCV
+         otrCevvfLb1lUXoSXRVFf7KOOVArIT5yE6pchyrAYPqeq4ZqVgY309mADJXN+S5FT6/1
+         sze5pnzwkX9H/s0WtsCSiFZUzs+xZJafgQljppt1nrtxhKRV35ZqUcoAta/m35+iC6Ql
+         gwYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=er08tZoeYaCQ6Xik97/bRHhFv4Up3gz8A6vxwNo3jbY=;
-        b=Wg9SLXRFsYqxAK5jHiZBjSF4pWwVsKgguXzWLUSsj9uHSiCavlyGNmiqEKWQS4KCVq
-         Td0hqNN4dz/lhm4xOwNRcpPX+4mqga/XbGsa62DyQV3CqY58RShJOpIn6YjTJLy+J9FX
-         lNf3jZ2WqWXYNBCGsD3WumHK2yZkcWxMqIN8LbnABB1RgesoZR6HLBr7rWVpWNk/RjR/
-         AokscvE+0e4QHe2NSST32zZS6Nrx/dYl1aIqavRcQabiaDfyTa7v+EoR9n+mNsUwmrbv
-         3OOM4TeqI4AytixwZenod4Iv5qgAjh8EhTuIruEkm0VWU3MUOCMDeT40+dUfent2IMKp
-         6zwA==
-X-Gm-Message-State: AOAM5309k9ivWDAXr4FNZOf1yVphuOXv7f779e4yQuwTRFtSiBuMkyvs
-        z4vCpkDArlQ1F+k1roJEvFKUbg==
-X-Google-Smtp-Source: ABdhPJzv6MH496cqldJdtC5u9n+8uj/WWocFk75c1Bcj84XTczfn0DawTnQiv9VcmuggdosL3kNO2g==
-X-Received: by 2002:a17:903:410b:b0:142:497b:7209 with SMTP id r11-20020a170903410b00b00142497b7209mr61884833pld.9.1638985558558;
-        Wed, 08 Dec 2021 09:45:58 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id s14sm4460102pfk.65.2021.12.08.09.45.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 09:45:58 -0800 (PST)
-Message-ID: <61b0ef56.1c69fb81.c2062.cc62@mx.google.com>
-Date:   Wed, 08 Dec 2021 09:45:58 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=g4sFNhovUglXvlR4AfEFcmvmuAeEZqhIvv1BAUKDmJI=;
+        b=lbXII2x5UeUsVdJf5xhfbNKjlJzYBBts0BgdOmz4yQJIWCYKIKXeTso/J79kIVq2Lj
+         bOShrCMBKipLBOmsNg1RAwKcP1WE2a3MlyWSLlS2ArCntac1ncJJj2XLg2FWuEdyZ47g
+         oz+JgC3GFJo8jitVhQen8Ayp9b3o0Y/XKnUztNFbj/gvoWFRu8WLZwqsR01RnxpPXok+
+         Zk5sl9qW/XZE3alh2OvkOrYOq2TLzYDB3OHFAuMjtedPL+6n+mz2olSTDgcRPw3ONLW0
+         vp91vuDIv/yxCDKw8+GEHuaWpSLdcphw/5AbRPRbLJl+xH+g2FgHEf8byHZ1J6vec3iV
+         pEjw==
+X-Gm-Message-State: AOAM532pu8ggVzp94rl2SdaRwfBNg3Jkm+P/eK+ZOfNAS/vnQYC73ZbU
+        lz67zyHGKm0zTbHmobW8npO1Mg==
+X-Google-Smtp-Source: ABdhPJx/nEvhPuXQtJNG519q1+BbnasBvjDSUx/PHl3HELepooDtGhF6bh5cRg5tFr6+BnKrHVpVmQ==
+X-Received: by 2002:a1c:4b17:: with SMTP id y23mr458138wma.135.1638988185737;
+        Wed, 08 Dec 2021 10:29:45 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:8ae8:ca1f:ff1a:a23d? ([2a01:e34:ed2f:f020:8ae8:ca1f:ff1a:a23d])
+        by smtp.googlemail.com with ESMTPSA id d2sm6970935wmb.24.2021.12.08.10.29.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Dec 2021 10:29:45 -0800 (PST)
+Subject: Re: [PATCH v4 1/5] dt-bindings: Powerzone new bindings
+To:     Rob Herring <robh@kernel.org>
+Cc:     arnd@linaro.org, heiko@sntech.de, ulf.hansson@linaro.org,
+        rjw@rjwysocki.net, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        lukasz.luba@arm.com, Arnd Bergmann <arnd@arndb.de>
+References: <20211205231558.779698-1-daniel.lezcano@linaro.org>
+ <CAL_Jsq+JgudbhJVyGWB0RJ2LPQ6xZFJ7TxWzjNtWXky-kCxA4Q@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <1cdd9874-9ea7-ad1c-1351-8729453cd478@linaro.org>
+Date:   Wed, 8 Dec 2021 19:29:43 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v5.16-rc4-42-gc4f4801e994a
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 1 warning (v5.16-rc4-42-gc4f4801e994a)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <CAL_Jsq+JgudbhJVyGWB0RJ2LPQ6xZFJ7TxWzjNtWXky-kCxA4Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.16-rc4-42-gc4=
-f4801e994a)
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-16-rc4-42-gc4f4801e994a/
+Hi Rob,
 
-Tree: pm
-Branch: testing
-Git Describe: v5.16-rc4-42-gc4f4801e994a
-Git Commit: c4f4801e994a1697de4c30ac9afb749c396e1c2e
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
+thanks for taking the time to review the bindings.
 
-Warnings Detected:
+On 07/12/2021 20:58, Rob Herring wrote:
+> On Sun, Dec 5, 2021 at 5:16 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>>
+>> The proposed bindings are describing a set of powerzones.
+>>
+>> A power zone is the logical name for a component which is capable of
+>> power capping and where we can measure the power consumption.
+> 
+> How is the power consumption measured? I don't see anything in the
+> binding allowing for that.
 
-arc:
+Mmh, good point.
 
-arm64:
+It is based on the energy model which is built from the
+"dynamic-power-coefficient" but this one provides only for CPUs and GPUs
+ATM.
 
-arm:
+In the future, SCMI will provide get/set power/level
 
-i386:
+What would you suggest?
 
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
+>> A power zone can aggregate several power zones in terms of power
+>> measurement and power limitations. That allows to apply power
+>> constraint to a group of components and let the system balance the
+>> allocated power in order to comply with the constraint.
+>>
+>> The ARM System Control and Management Interface (SCMI) can provide a
+>> power zone description.
+> 
+> Instead of DT?
 
-riscv:
+It can use DT or SCMI protocol. That is what I understood from the white
+paper [1] page 6
 
-x86_64:
+Lukasz may confirm / elaborate ?
 
 
-Warnings summary:
+>> The powerzone semantic is also found on the Intel platform with the
+>> RAPL register.
+> 
+> That means nothing to me...
 
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
+The Running Average Power Limit [2]. Each powerzone has a RAPL register
+where you can read the power and set the power limit.
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
+>> The Linux kernel powercap framework deals with the powerzones:
+>>
+>> https://www.kernel.org/doc/html/latest/power/powercap/powercap.html
+>>
+>> The powerzone can also represent a group of children powerzones, hence
+>> the description can result on a hierarchy. Such hierarchy already
+>> exists with the hardware or can be represented and computed from the
+>> kernel.
+>>
+>> The hierarchical description was initially proposed but not desired
+>> given there are other descriptions like the power domain proposing
+>> almost the same description.
+>>
+>> https://lore.kernel.org/all/CAL_JsqLuLcHj7525tTUmh7pLqe7T2j6UcznyhV7joS8ipyb_VQ@mail.gmail.com/
+>>
+>> The description gives the power constraint dependencies to apply on a
+>> specific group of logically or physically aggregated devices. They do
+>> not represent the physical location or the power domains of the SoC
+>> even if the description could be similar.
+>>
+>> Cc: Arnd Bergmann <arnd@arndb.de>
+>> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+>> Cc: Rob Herring <robh+dt@kernel.org>
+>> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> ---
+>>    V3:
+>>      - Removed required property 'compatible'
+>>      - Removed powerzone-cells from the topmost node
+>>      - Removed powerzone-cells from cpus 'consumers' in example
+>>      - Set additionnal property to false
+>>    V2:
+>>      - Added pattern properties and stick to powerzone-*
+>>      - Added required property compatible and powerzone-cells
+>>      - Added additionnal property
+>>      - Added compatible
+>>      - Renamed to 'powerzones'
+>>      - Added missing powerzone-cells to the topmost node
+>>      - Fixed errors reported by 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+>>    V1: Initial post
+>> ---
+>>  .../devicetree/bindings/power/powerzones.yaml | 97 +++++++++++++++++++
+>>  1 file changed, 97 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/power/powerzones.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/power/powerzones.yaml b/Documentation/devicetree/bindings/power/powerzones.yaml
+>> new file mode 100644
+>> index 000000000000..ddb790acfea6
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/power/powerzones.yaml
+>> @@ -0,0 +1,97 @@
+>> +# SPDX-License-Identifier: GPL-2.0
+> 
+> New bindings should be dual licensed (add BSD-2-Clause).
+> 
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/power/powerzones.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Power zones description
+>> +
+>> +maintainers:
+>> +  - Daniel Lezcano <daniel.lezcano@linaro.org>
+>> +
+>> +description: |+
+>> +
+>> +  A System on Chip contains a multitude of active components and each
+>> +  of them is a source of heat. Even if a temperature sensor is not
+>> +  present, a source of heat can be controlled by acting on the
+>> +  consumed power via different techniques.
+>> +
+>> +  A powerzone describes a component or a group of components where we
+>> +  can control the maximum power consumption. For instance, a group of
+>> +  CPUs via the performance domain, a LCD screen via the brightness,
+>> +  etc ...
+>> +
+>> +  Different components when they are used together can significantly
+>> +  increase the overall temperature, so the description needs to
+>> +  reflect this dependency in order to assign a power budget for a
+>> +  group of powerzones.
+>> +
+>> +  This description is done via a hierarchy and the DT reflects it. It
+>> +  does not represent the physical location or a topology, eg. on a
+>> +  big.Little system, the little CPUs may not be represented as they do
+>> +  not contribute significantly to the heat, however the GPU can be
+>> +  tied with the big CPUs as they usually have a connection for
+>> +  multimedia or game workloads.
+> 
+> Can't most of this just be assumed. We have some DT data already for
+> capacity and power per mhz along with opp tables. Isn't that enough
+> information?
 
-Detailed per-defconfig build reports:
+We have a lot of information already and that is the reason why there is
+few information in the description ATM. We need to describe what is a
+powerzone and the constraints hierarchy between the powerzones.
 
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
+The hierarchy could be in the hardware and immutable like the RAPL as
+described above which has a RAPL per package, per memory and one on top
+of them reporting their energy consumption.
 
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
+Here we want to describe how we want to aggregate the powerzones, so the
+power constraints will be hierarchically described.
 
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+> The correlation with CPU and GPU usage is totally workload dependent
+> which has nothing to do with DT. 
 
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+I was probably unclear, IMO it is platform specific.
 
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
+For example, let's imagine we have a *thermal* sensor between the Bigs
+and the GPU. There is no way to know which one is contributing and how
+to mitigate them.
 
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
+But if we know the sustainable power for the big+gpu is eg. 5000mW, then
+we can group them under the same powerzone parent and set its power to
+the sustainable one. From there it is possible to ensure the power limit
+and act on the power for each of them.
 
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
+> Nor it is platform specific really.
 
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
+The problem is we have devices which are powerzones (CPU, GPU, screen
+backlight, memory, DSP, ...) and AFAICT they can be described in the DT
+as such (may be just with a property), right?
 
----
-For more info write to <info@kernelci.org>
+Unfortunately, we have only a part of the description because we don't
+have the relationship between them. Can this relationship be described
+in the DT?
+
+  -- D.
+
+[1]
+https://developer.arm.com/-/media/Arm%20Developer%20Community/PDF/Arm_Power_and_Performance_Management_SCMI_White_Paper.pdf?revision=15e9d3dd-ecc6-40ab-a8c5-6bb4fa3fc060
+
+[2] https://01.org/blogs/2014/running-average-power-limit-%E2%80%93-rapl
+
+>> +
+>> +properties:
+>> +  $nodename:
+>> +    const: powerzones
+>> +
+>> +patternProperties:
+>> +  "^(powerzone)([@-].*)?$":
+>> +    type: object
+>> +    description:
+>> +      A node representing a powerzone acting as an aggregator for all
+>> +      its children powerzones.
+>> +
+>> +    properties:
+>> +      "#powerzone-cells":
+>> +        description:
+>> +          Number of cells in powerzone specifier. Typically 0 for nodes
+>> +          representing but it can be any number in the future to
+>> +          describe parameters of the powerzone.
+>> +
+>> +      powerzones:
+>> +        description:
+>> +          A phandle to a parent powerzone. If no powerzone attribute is
+>> +          set, the described powerzone is the topmost in the hierarchy.
+>> +
+>> +    required:
+>> +      - "#powerzone-cells"
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    powerzones {
+>> +
+>> +      SOC_PZ: powerzone-soc {
+>> +        #powerzone-cells = <0>;
+>> +      };
+>> +
+>> +      PKG_PZ: powerzone-pkg {
+>> +        #powerzone-cells = <0>;
+>> +        powerzones = <&SOC_PZ>;
+>> +      };
+>> +
+>> +      GPU_PZ: powerzone-gpu {
+>> +        #powerzone-cells = <0>;
+>> +        powerzones = <&PKG_PZ>;
+>> +      };
+>> +    };
+>> +
+>> +  - |
+>> +    A57_0: big@0 {
+>> +      compatible = "arm,cortex-a57";
+>> +      reg = <0x0 0x0>;
+>> +      device_type = "cpu";
+>> +      powerzones = <&PKG_PZ>;
+>> +    };
+>> +
+>> +    A57_1: big@1 {
+>> +      compatible = "arm,cortex-a57";
+>> +      reg = <0x0 0x0>;
+>> +      device_type = "cpu";
+>> +      powerzones = <&PKG_PZ>;
+>> +    };
+>> +...
+>> --
+>> 2.25.1
+>>
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
