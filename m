@@ -2,131 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B7B546D49E
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Dec 2021 14:44:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C29B346D5AE
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Dec 2021 15:31:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234622AbhLHNsJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Dec 2021 08:48:09 -0500
-Received: from mail-oi1-f170.google.com ([209.85.167.170]:37831 "EHLO
-        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234398AbhLHNsH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Dec 2021 08:48:07 -0500
-Received: by mail-oi1-f170.google.com with SMTP id bj13so4210216oib.4;
-        Wed, 08 Dec 2021 05:44:35 -0800 (PST)
+        id S235130AbhLHOem (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Dec 2021 09:34:42 -0500
+Received: from mail-ot1-f42.google.com ([209.85.210.42]:44812 "EHLO
+        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235127AbhLHOel (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Dec 2021 09:34:41 -0500
+Received: by mail-ot1-f42.google.com with SMTP id u18-20020a9d7212000000b00560cb1dc10bso2867966otj.11;
+        Wed, 08 Dec 2021 06:31:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=AZBxD1twEMvgqXTIpZvt6tYC7fmZq91YhBKnG1gw4/g=;
-        b=Ctio7YKmVOvmIo2alUmlLxrFwZj+5ThytJlAoYT5Eo2vB6Up7mCWUAWVCnSAqL1AoZ
-         kUGHlUiaeCqqeS9NohO8VS8NukDe1VihtmfdtUlB1QWFhJtglT0HmZxTxxt/JcaNsm7Q
-         lEVx6lDOYwfxLq5Mlh3nu4bGh+QPxTQ0JRYAAXSwL5AKWQWxQRxRAOh8D5N00O1ksmph
-         TKWrv+sm79hKOoVTTgEI41xSQqy7ef4vaq+5UrJROGhJRiybacJx0Z4/szbp3zDzvS/m
-         LVYgEtjjKcAWqtuD6QFftT8/nWm1uTf+sIMJR7XRxdL3Bbrp546bqDxwndZq3dy5ek+/
-         RLWA==
-X-Gm-Message-State: AOAM530Dv2Chsg2D8+cKegheS8aOl9Sniucup+UxiPFzPAHAipNcX8sf
-        D5owCTKIxu2mCaglG/wWSA==
-X-Google-Smtp-Source: ABdhPJw4CWIcu/zTZI0dRGziIGXUDpc471o4rTBw285IjDnHYfSE7mTOtDyDKGZQGTPSbpBTZ+LVug==
-X-Received: by 2002:a05:6808:124d:: with SMTP id o13mr11998548oiv.91.1638971074539;
-        Wed, 08 Dec 2021 05:44:34 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id n189sm602044oif.33.2021.12.08.05.44.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 05:44:33 -0800 (PST)
-Received: (nullmailer pid 3857736 invoked by uid 1000);
-        Wed, 08 Dec 2021 13:44:28 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-pwm@vger.kernel.org,
-        linux-mmc@vger.kernel.org, Markus Mayer <mmayer@broadcom.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Ray Jui <rjui@broadcom.com>, Amit Kucheria <amitk@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org, Doug Berger <opendmb@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-ide@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Scott Branden <sbranden@broadcom.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Al Cooper <alcooperx@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OU8Tfo1Ya6ArgVKO7nt7tfp7sawO6L+cjBdMbs7fvWw=;
+        b=tX2J9ut6PsEE4GWnsPJzi0hiu/qMQ39tk3M9o0T5w4yYOI9Z1EkaI5HSaRVUPXO6ey
+         KDcRgQ1GXoOVYyPrM42WJYHqEC9STRx+sFrk1Gohl1+DHteKBOQpOTvz/tbaLBN7Iy50
+         mz6o0PYvZppXIhmNEAId1/ISy+QgMr24KuL4ZbYiNY3Ko7rxYW85F8I/coLOxMp+TdJ4
+         JdnJVzoyrJLJGASFhj1u/3MzRRLg3AaFglAwtMGZ0MBfwiclgiBbl2ga9YNYb7TfPjr7
+         qdPa36BFaiTFIlTQTXb4gZ9Hmxctep7wwNwqB/Dq12gMcRL2eEeZsgFkr50k+NQl1QEE
+         /0bQ==
+X-Gm-Message-State: AOAM533D9TeBEF7pE+wIiDXcyxtsMkn7BzhijF5Jr6TfhfFgwAyOqgXb
+        NTyWjHqSX6IqceNWh1jPkVQd2cWm2Mwh7B5q5yViIOzi
+X-Google-Smtp-Source: ABdhPJyaDlGsqAFyvGhaBefHZNLmTqz43e9r++yA7ID3Jltq+rjgyGzAsuMOS7SfCQTBZc4WR5BIEmCEvmKGd+2PdhY=
+X-Received: by 2002:a9d:4c10:: with SMTP id l16mr41363239otf.198.1638973869376;
+ Wed, 08 Dec 2021 06:31:09 -0800 (PST)
+MIME-Version: 1.0
+References: <20211207123539.17346-1-sumeet.r.pawnikar@intel.com>
+In-Reply-To: <20211207123539.17346-1-sumeet.r.pawnikar@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 8 Dec 2021 15:30:58 +0100
+Message-ID: <CAJZ5v0jwjW_HAuEpFdj0+q0ybSck6JDArBxDNatghMMQhDch9g@mail.gmail.com>
+Subject: Re: [PATCH] thermal/drivers/int340x: fix: update VCoRefLow MMIO bit
+ offset for read
+To:     Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Gregory Fong <gregory.0xf0@gmail.com>,
-        linux-rtc@vger.kernel.org,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        devicetree@vger.kernel.org
-In-Reply-To: <20211208003727.3596577-14-f.fainelli@gmail.com>
-References: <20211208003727.3596577-1-f.fainelli@gmail.com> <20211208003727.3596577-14-f.fainelli@gmail.com>
-Subject: Re: [PATCH v3 13/15] dt-bindings: ata: Convert Broadcom SATA to YAML
-Date:   Wed, 08 Dec 2021 07:44:28 -0600
-Message-Id: <1638971068.770579.3857735.nullmailer@robh.at.kernel.org>
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 07 Dec 2021 16:37:24 -0800, Florian Fainelli wrote:
-> Convert the Broadcom SATA3 AHCI controller Device Tree binding to YAML
-> to help with validation.
-> 
-> Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+On Tue, Dec 7, 2021 at 1:36 PM Sumeet Pawnikar
+<sumeet.r.pawnikar@intel.com> wrote:
+>
+> As part of RFIM validation, found that the register definition VCoRefLow
+> of the CPU FIVR registers are different. Current implementation reads it
+> from MMIO offset 0x5A18 and bit offset [12:14]. But the actual correct
+> register definition is from bit offset [11:13]. Updated to the correct
+> bit offset.
+>
+> Fixes: 473be51142ad ("thermal: int340x: processor_thermal: Add RFIM driver")
+> Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+> Cc: stable@vger.kernel.org # 5.14+
 > ---
->  .../bindings/ata/brcm,sata-brcm.txt           | 45 ---------
->  .../bindings/ata/brcm,sata-brcm.yaml          | 98 +++++++++++++++++++
->  2 files changed, 98 insertions(+), 45 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/ata/brcm,sata-brcm.txt
->  create mode 100644 Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
-> 
+>  drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
+> index b25b54d4bac1..e693ec8234fb 100644
+> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
+> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
+> @@ -29,7 +29,7 @@ static const char * const fivr_strings[] = {
+>  };
+>
+>  static const struct mmio_reg tgl_fivr_mmio_regs[] = {
+> -       { 0, 0x5A18, 3, 0x7, 12}, /* vco_ref_code_lo */
+> +       { 0, 0x5A18, 3, 0x7, 11}, /* vco_ref_code_lo */
+>         { 0, 0x5A18, 8, 0xFF, 16}, /* vco_ref_code_hi */
+>         { 0, 0x5A08, 8, 0xFF, 0}, /* spread_spectrum_pct */
+>         { 0, 0x5A08, 1, 0x1, 8}, /* spread_spectrum_clk_enable */
+> --
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
-
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
-
-Full log is available here: https://patchwork.ozlabs.org/patch/1565011
-
-
-ahci@41000: $nodename:0: 'ahci@41000' does not match '^sata(@.*)?$'
-	arch/arm/boot/dts/bcm958522er.dt.yaml
-	arch/arm/boot/dts/bcm958525er.dt.yaml
-	arch/arm/boot/dts/bcm958525xmc.dt.yaml
-	arch/arm/boot/dts/bcm958622hr.dt.yaml
-	arch/arm/boot/dts/bcm958623hr.dt.yaml
-	arch/arm/boot/dts/bcm958625hr.dt.yaml
-	arch/arm/boot/dts/bcm958625k.dt.yaml
-	arch/arm/boot/dts/bcm958625-meraki-mx64-a0.dt.yaml
-	arch/arm/boot/dts/bcm958625-meraki-mx64.dt.yaml
-	arch/arm/boot/dts/bcm958625-meraki-mx64w-a0.dt.yaml
-	arch/arm/boot/dts/bcm958625-meraki-mx64w.dt.yaml
-	arch/arm/boot/dts/bcm958625-meraki-mx65.dt.yaml
-	arch/arm/boot/dts/bcm958625-meraki-mx65w.dt.yaml
-	arch/arm/boot/dts/bcm988312hr.dt.yaml
-
-ahci@41000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'sata-port@0', 'sata-port@1' were unexpected)
-	arch/arm/boot/dts/bcm958522er.dt.yaml
-	arch/arm/boot/dts/bcm958525er.dt.yaml
-	arch/arm/boot/dts/bcm958525xmc.dt.yaml
-	arch/arm/boot/dts/bcm958622hr.dt.yaml
-	arch/arm/boot/dts/bcm958623hr.dt.yaml
-	arch/arm/boot/dts/bcm958625hr.dt.yaml
-	arch/arm/boot/dts/bcm958625k.dt.yaml
-	arch/arm/boot/dts/bcm958625-meraki-mx64-a0.dt.yaml
-	arch/arm/boot/dts/bcm958625-meraki-mx64.dt.yaml
-	arch/arm/boot/dts/bcm958625-meraki-mx64w-a0.dt.yaml
-	arch/arm/boot/dts/bcm958625-meraki-mx64w.dt.yaml
-	arch/arm/boot/dts/bcm958625-meraki-mx65.dt.yaml
-	arch/arm/boot/dts/bcm958625-meraki-mx65w.dt.yaml
-	arch/arm/boot/dts/bcm988312hr.dt.yaml
-
+Applied (with edits in the subject and changelog) as 5.16-rc material, thanks!
