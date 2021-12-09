@@ -2,94 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C493F46E5C1
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Dec 2021 10:42:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6950846E701
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Dec 2021 11:49:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230439AbhLIJpj convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 9 Dec 2021 04:45:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51230 "EHLO
+        id S235761AbhLIKxP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Dec 2021 05:53:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230525AbhLIJpj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Dec 2021 04:45:39 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA843C0617A1
-        for <linux-pm@vger.kernel.org>; Thu,  9 Dec 2021 01:42:05 -0800 (PST)
-Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1mvFvk-0001TL-1T; Thu, 09 Dec 2021 10:41:36 +0100
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1mvFve-0004Ge-0z; Thu, 09 Dec 2021 10:41:30 +0100
-Message-ID: <ab45adc2e305c79286f6b63fa42cfd78983cb757.camel@pengutronix.de>
-Subject: Re: [PATCH v3 02/15] dt-bindings: reset: Convert Broadcom STB reset
- to YAML
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Florian Fainelli <f.fainelli@gmail.com>, devicetree@vger.kernel.org
-Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Gregory Fong <gregory.0xf0@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Al Cooper <alcooperx@gmail.com>,
-        Doug Berger <opendmb@gmail.com>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:MULTIMEDIA CARD (MMC), SECURE DIGITAL (SD) AND..." 
-        <linux-mmc@vger.kernel.org>,
-        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
-Date:   Thu, 09 Dec 2021 10:41:29 +0100
-In-Reply-To: <20211208003727.3596577-3-f.fainelli@gmail.com>
-References: <20211208003727.3596577-1-f.fainelli@gmail.com>
-         <20211208003727.3596577-3-f.fainelli@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
+        with ESMTP id S234661AbhLIKxO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Dec 2021 05:53:14 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C03C061746;
+        Thu,  9 Dec 2021 02:49:41 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id x15so18305115edv.1;
+        Thu, 09 Dec 2021 02:49:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Rn5yiHEVIcPf8apFH8WOG/o386JPX61QJAV5CIBGr5o=;
+        b=SceT5lGxXiYZEVyNTiTvxpynV6odUf/rM3ek99juOQusZAe0MnwqtotI/GjRMXc8WC
+         t/K94bZZr9Kf2T1NkpDkI0mq+u9cAGAQ0skR7sY0DWu6JMTDxFaUFRx3YgyRNSiWSB1t
+         D0Fg+JS354vAwJjvr5WPxEDduxeOxsA8vgUosDeahAhRmWEvfLywmn4Wonf2ic8RZ865
+         0HTBy6meUvnwB4r2ZJHAcaqhvpezaGhk1UGVBFOyPGcERDplhk+2Mllr6DoqYKN79H+1
+         yWFi3JLEA9RRXUDwEu3ZmaDsIlToImzSzYtXp+iQ1/W6XZOoIVnaP/PP7SdK8ywoYpxG
+         Vzew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Rn5yiHEVIcPf8apFH8WOG/o386JPX61QJAV5CIBGr5o=;
+        b=iG0e0WOqOK/44Ga/TGHSYCTlctNeuwTZ6gwDk4JhW/EHaEOe1emHsmkQssgPTYScvm
+         AZbmedcP2E+tjxODPDMmKofed/f21JhJDxYT8hYZc9UrP3L4QALbRiDlAs0HbQBAz5oQ
+         xax/XxfJdxsVK2uQP5kMhO4CxulDMj8Nrbf0VIqofPACyRBes8R62GpsUFtccbbmmcTP
+         BBktRUHQLEyu/jAkYOJdqwsu72Q2kgEuBctMTBVWh+OuWdVQjalOl/X7xyKB/EeqUlLH
+         JMBREzB4oXpGCw+umXfJolE6Uw6FOWgw1yyESZ8Ypl8qUDjD8ESyqzV5CPGd6W5Zqxdw
+         66Kw==
+X-Gm-Message-State: AOAM530URH+2F8xe611q/muhM7Ke5BpNtz/ITONWY/v8mXKcM4X2in1H
+        gxBaAEugXd1sqhWNB0ciu9I4vFiQMdUzshoF86Q=
+X-Google-Smtp-Source: ABdhPJxlRS6j6rkvUOvm4x+7k8ZlYSH6E7d9IqpkhN2VYrbnf2Ir6tr8DLFWXU0HKJiIwY9yqWcQeXDz5qcn4YRzYaQ=
+X-Received: by 2002:a17:906:ecac:: with SMTP id qh12mr14231892ejb.377.1639046979775;
+ Thu, 09 Dec 2021 02:49:39 -0800 (PST)
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+References: <20211124073419.181799-1-marcan@marcan.st> <20211124074625.182815-11-marcan@marcan.st>
+ <78ce61a9-b345-437a-df02-49951eb3f31e@canonical.com>
+In-Reply-To: <78ce61a9-b345-437a-df02-49951eb3f31e@canonical.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 9 Dec 2021 12:48:06 +0200
+Message-ID: <CAHp75VetdyXbeQ7hie2Oae6J0qn+fMmz+YN2zYXK+X0vppapEQ@mail.gmail.com>
+Subject: Re: [PATCH v3 10/11] tty: serial: samsung_tty: Support runtime PM
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Hector Martin <marcan@marcan.st>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 2021-12-07 at 16:37 -0800, Florian Fainelli wrote:
-> Convert the Broadcom STB SW_INIT style reset controller binding to YAML.
-> 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+On Tue, Dec 7, 2021 at 4:39 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
+> On 24/11/2021 08:46, Hector Martin wrote:
+> > This allows idle UART devices to be suspended using the standard
+> > runtime-PM framework. The logic is modeled after stm32-usart.
 
-Acked-by: Philipp Zabel <p.zabel@pengutronix.de>
+Guys, have you seen this activity:
+https://lore.kernel.org/linux-serial/YbGyNW2EQlA%2F+VIg@atomide.com/T/#t?
 
-regards
-Philipp
+The idea eventually is to bring the serial core to do this for us. Can
+you test that series and see if it has a use in your case?
+
+-- 
+With Best Regards,
+Andy Shevchenko
