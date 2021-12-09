@@ -2,144 +2,252 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EF1846DB75
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Dec 2021 19:44:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F35C46DFA9
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Dec 2021 01:46:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239264AbhLHSry (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Dec 2021 13:47:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45648 "EHLO
+        id S235649AbhLIAua (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Dec 2021 19:50:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbhLHSrx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Dec 2021 13:47:53 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB18C061746
-        for <linux-pm@vger.kernel.org>; Wed,  8 Dec 2021 10:44:21 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id 71so2825045pgb.4
-        for <linux-pm@vger.kernel.org>; Wed, 08 Dec 2021 10:44:21 -0800 (PST)
+        with ESMTP id S229846AbhLIAu3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Dec 2021 19:50:29 -0500
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B73C061746
+        for <linux-pm@vger.kernel.org>; Wed,  8 Dec 2021 16:46:57 -0800 (PST)
+Received: by mail-ot1-x32b.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso4565030ots.6
+        for <linux-pm@vger.kernel.org>; Wed, 08 Dec 2021 16:46:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=1TGy/xy7xbhEqCj701hTYswxxgXxk3dPMwxA/z1Apy0=;
-        b=MsokQv8S2j2I9sdnMqxnvu+7xxRraFdmo4i7QFpb8e8YGAjNwQRgXWN8mXD6r8G3L2
-         nwWeecpcXA0Wvv25Q0RtKack63EOCz7saviAQygr4t+eyUJDdKkJYWZIgrOCGmMMNqvg
-         w5Qx58LUwJtXz+VcpM8TR8myIsEcQ1eMD8rN4tkRO5Unlgp9F5b5kXARDmCU4Su7WbnN
-         00bllGdCswSgKmE5NSoqf1EfJoSfvb4pDUgZ/Yt3nmRlo4fLV8se6Rn2w/aODLr4gQP/
-         oNAlx6+NxsQbbs7ZErkr4GJvQ+STFJkwSxxQ5g28cFBe4vM412pmlQk4p9DHXmwM4T9c
-         QJpA==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zpoW87iA/iIxPhsnuawuVDx5Awiyx2eb9RPl0Kppvx0=;
+        b=MLpSXh51BETWUCIuGtrwMQvEb3dtdGrOnsDM8r0JyFSTvG5kqBFSU3P8OVbl9mHq+W
+         t4KiyuPMoirJeZ3JcUYMPuq0LrcWDscMG0zmu58vsCspsKoAhtWASwil0bSaLF3n8ETN
+         lQhquRjw4PIs0qnoRwNSKbXpJKFa78lo6rcK+u2KEwsW7/C7pGwAoUjRv5DEhIHgc4vr
+         ZKUvaAffEhWrcOf6/DRLuYNbNCgHLlJ/+zeGpVG9jcHrD/6/GtmYJAX2ncxtCABYkiOn
+         kUc8zCUv03NwtMXSfabLMeasQghM0hxbYNTYnJ5Bm44KQTPNFIiT2Y5T/FGdOlCylub6
+         r4Pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=1TGy/xy7xbhEqCj701hTYswxxgXxk3dPMwxA/z1Apy0=;
-        b=UvaOgcNjbcKQ6Pn56VE2zvSFGW8earGAZKcahDeGo6xjjLyMuzoDFUsv0x6bxru35a
-         Nxwn8f1XNB1M5o///aH2m6pEKJw6Xoo1IqwmUruZr2beWfELH2Ki/08I1VYo+KEYLZAu
-         Aa7YY0avmTFsN7tQn+gRncdNDpcVR2W7SjfChwqW54kIm0cWWH7qKvOUl+Wzl97JF4Ge
-         lEOihnZOpxnS5badsnAbSEN+jbI+xp45Ww7w8FSS2SAuqlrUdemIM03Sn0IvUUkxRAvf
-         PKNpPm3CcM6t7gThCP2Rdj1ZSxweA0fjOSc9h+xJeTT0EbTQZmiOKPopGmurQgLKnZM+
-         34XA==
-X-Gm-Message-State: AOAM530CnG+XaHyagTzmOiDfJY3mb+V7uVxMb7jk+AbltAv2ZvttTDTL
-        H/e+0ybTwoMUI5gjSxB5y5KhwA==
-X-Google-Smtp-Source: ABdhPJy1ypuGp6+6lGMbkO5xtbu76X8HlBJUrR5GnjGoreQ52eGxyi5EWE1JGq8Jw9EZjU7485HplA==
-X-Received: by 2002:a05:6a00:a82:b0:4ae:d8bb:a8e0 with SMTP id b2-20020a056a000a8200b004aed8bba8e0mr7107012pfl.28.1638989061189;
-        Wed, 08 Dec 2021 10:44:21 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id v38sm3183913pgl.38.2021.12.08.10.44.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 10:44:20 -0800 (PST)
-Message-ID: <61b0fd04.1c69fb81.d0030.94c5@mx.google.com>
-Date:   Wed, 08 Dec 2021 10:44:20 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zpoW87iA/iIxPhsnuawuVDx5Awiyx2eb9RPl0Kppvx0=;
+        b=eHYOnHXEynx0p+xglPR/gq0hZccO9VjUz6mKbUbQogQkplrpO9KbNCNSNsa5UdOXqX
+         bMVnB27HsEabaGBXnaQsWeEZIDavZihc9VBWhUFslCOh+d8+x7fiWr8hoiB1xsN4dyHV
+         WAy7PPdnlVP7lpQie78IdniayT4D/Z7mdJS1vdJkXzifqF8gqO1/u3SUUzvRzf15E0P5
+         dxjngoMXvWKJXCGAeBPRqMi47+XmE8lY6bH390vM5cK5ywnYM0FimAHYHko/EwRFVhRX
+         saM34bR+iM8FXDDdAIuHA7Qapa8Of31jgsyzjpIcFn+kndFxzcd4WyCPGUoYpkDApqJI
+         5HKg==
+X-Gm-Message-State: AOAM532vin+2ecX3AgE6HW6TJE9iHzUraalPYIZIlQ2ZfyYQNuJwm8wZ
+        x6aISw4G/xDJ1ItcW9p1A8BurPahDzppxbtTJLD1qOqf37eqww==
+X-Google-Smtp-Source: ABdhPJyJ03Px+d9J/Z7BrIrMplsbSdHaHj/IVMdh+9NqWn61rL07ZfWnZNeWO8ZDw5GjAPy+KL4pSH5DeArnl2qUFGU=
+X-Received: by 2002:a9d:74d0:: with SMTP id a16mr2585658otl.237.1639010816325;
+ Wed, 08 Dec 2021 16:46:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.16-rc4-42-gc4f4801e994a
-Subject: pm/testing sleep: 3 runs, 1 regressions (v5.16-rc4-42-gc4f4801e994a)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <20211206000651.4168035-1-linus.walleij@linaro.org> <7228bbd0-4428-18d2-8cef-df9a9c789d41@gmail.com>
+In-Reply-To: <7228bbd0-4428-18d2-8cef-df9a9c789d41@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 9 Dec 2021 01:46:44 +0100
+Message-ID: <CACRpkdaKmZp62DSB7oMbESRjXAH8ncfLyc3KioSDx2z-_JOK8A@mail.gmail.com>
+Subject: Re: [PATCH v2] power: supply_core: Pass pointer to battery info
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 3 runs, 1 regressions (v5.16-rc4-42-gc4f4801e994a)
+On Wed, Dec 8, 2021 at 7:46 AM Matti Vaittinen <mazziesaccount@gmail.com> wrote:
 
-Regressions Summary
--------------------
+> Hmm.. LKML skipped on purpose(?)
 
-platform            | arch | lab           | compiler | defconfig          =
-| regressions
---------------------+------+---------------+----------+--------------------=
-+------------
-rk3288-rock2-square | arm  | lab-collabora | gcc-10   | multi_v7_defconfig =
-| 1          =
+Yeah, MAINTAINERS says this:
 
+POWER SUPPLY CLASS/SUBSYSTEM and DRIVERS
+M:      Sebastian Reichel <sre@kernel.org>
+L:      linux-pm@vger.kernel.org
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.16-rc=
-4-42-gc4f4801e994a/plan/sleep/
+LKML is only the bin where we put everything that doesn't have a proper
+maintenance mailing list.
 
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.16-rc4-42-gc4f4801e994a
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      c4f4801e994a1697de4c30ac9afb749c396e1c2e =
+> On 12/6/21 02:06, Linus Walleij wrote:
 
+> > This is awkward since I want to support tables of static battery
+> > info by just assigning a pointer to all info based on e.g. a
+> > compatible value in the device tree.
+>
+> Do you have a case where you have battery data in multiple DT nodes?
+> Some kind of multi-battery use-case?
 
+No it is a single battery. But the data is kept in the kernel and matched
+per-battery, I pushed the latest code from my desk so you can see how
+it looks in practice:
+https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git/commit/?h=ux500-href-charging-v5.16-rc1
 
-Test Regressions
----------------- =
+> I'd like to understand how you plan
+> to do mapping to compatibles - AFAIR, at the moment the compatible must
+> be "simple-battery".
 
+This is for the Samsung batteries using these bindings:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/power/supply/samsung,battery.yaml
 
+> Do you plan to have multiple compatibles in the DT,
+> one of them matching the "simple-battery", rest being used as a key? Or
+> do you plan to use the charger compatible (charger which references the
+> battery with the monitored-battery as a key? My initial feeling is that
+> it kind of makes sense).
 
-platform            | arch | lab           | compiler | defconfig          =
-| regressions
---------------------+------+---------------+----------+--------------------=
-+------------
-rk3288-rock2-square | arm  | lab-collabora | gcc-10   | multi_v7_defconfig =
-| 1          =
+The Samsung battery bindings are already in use, I used them for
+example in these:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm/boot/dts/ste-ux500-samsung-janice.dts
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm/boot/dts/ste-ab8500.dtsi
 
+It's very simplistic:
 
-  Details:     https://kernelci.org/test/plan/id/61b0ef790f477d9f520737bc
+battery: battery {
+    compatible = "samsung,eb535151vu";
+};
+(...)
 
-  Results:     2 PASS, 11 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.16-rc4-42-gc4f48=
-01e994a/arm/multi_v7_defconfig/gcc-10/lab-collabora/sleep-rk3288-rock2-squa=
-re.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.16-rc4-42-gc4f48=
-01e994a/arm/multi_v7_defconfig/gcc-10/lab-collabora/sleep-rk3288-rock2-squa=
-re.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye/20=
-211203.0/armhf/rootfs.cpio.gz =
+ab8500 {
+   compatible = "stericsson,ab8500";
+(...)
+  ab8500_charger {
+     compatible = "stericsson,ab8500-charger";
+(...)
+       monitored-battery = <&battery>;
 
+> I was wondering how it would work out if the battery info was splitted
+> to smaller (optional) pieces instead of being just one big struct? It
+> kind of makes no sense to always reserve space for all of the
+> calibration data arrays when some of them are likely to be missing...(?)
 
+I suppose if footprint becomes a problem one can just split the
+battery data into smaller files, and compile each one with a
+KConfig.
 
-  * sleep.rtcwake-mem-4: https://kernelci.org/test/case/id/61b0ef790f477d9f=
-520737c5
-        new failure (last pass: v5.16-rc4-36-g3a18d25cb836)
+As you can see in my example the Samsung batteries actually
+share the same capacity table across three different batteries
+so they actually benefit from being defined together when we
+want to support all (which we do).
 
-    2021-12-08T17:46:11.377926  rtcwake: assuming RTC uses UTC ...
-    2021-12-08T17:46:11.425624  rtcwake: read rt<4>[   18.195069] rtc-hym85=
-63 0-0051: no valid clock/calendar values available
-    2021-12-08T17:46:11.426129  c time failed: Invalid argument
-    2021-12-08T17:46:11.426874  _ID=3Drtcwake-mem-1 RESULT=3Dfail>
-    2021-12-08T17:46:11.427215  rtcwake: assuming RTC uses UTC .<4>[   18.2=
-28258] rtc-hym8563 0-0051: no valid clock/calendar values available
-    2021-12-08T17:46:11.427553  ..
-    2021-12-08T17:46:11.428442  rtcwake: read rtc time failed: Invalid argu=
-ment
-    2021-12-08T17:46:11.473744  L_TESTCASE TEST_CASE_ID=3Drtcwake-mem-2 RES=
-ULT=3Dfail>
-    2021-12-08T17:46:11.474313  rtcwake: assuming RTC uses UTC ...
-    2021-12-08T17:46:11.474703  rtcwake: read rtc time failed: Invalid a<4>=
-[   18.257103] rtc-hym8563 0-0051: no valid clock/calendar values available =
+> something like:
+>
+> struct static_batinfo static_info;
+> struct dynamic_batinfo *dynamic_info;
+>
+> power_supply_get_battery_info(bd->charger, &static_info, &dynamic_info)
+>
+> dynamic_info can be NULL if it is not expected.
+> dynamic_info will be NULL'ed by call if it is not populated
+> dynamic_info will be allocated if it is not NULL when called and if
+> dynamic data is found from the firmware.
 
-    ... (5 line(s) more)  =
+But we already (partly) do that, look in power_supply_get_battery_info()
+as touched by this patch:
 
- =20
+(...)
+        list = of_get_property(battery_np, "resistance-temp-table", &len);
+        if (!list || !len)
+                goto out_ret_pointer;
+
+        info->resist_table_size = len / (2 * sizeof(__be32));
+        resist_table = info->resist_table = devm_kcalloc(&psy->dev,
+
+info->resist_table_size,
+                                                         sizeof(*resist_table),
+                                                         GFP_KERNEL);
+
+Notice the goto out_ret_pointer; we return the pointer without
+allocating any resistance-temp-table if it is not present in the
+device tree. The same can be done with static data and
+consumers need to cope with some members being NULL.
+
+I don't see the usecase for mixing static and dynamic info
+really, I think we have two cases:
+
+- All information about the battery obtained from one single
+  key such as the compatible string (as for the Samsung
+  SDI batteries)
+
+- All information about the battery contained in the device
+  tree (as for simple-battery)
+
+The way discussion has been going in the device tree
+community the "define it all in devicetree" approach is
+kind of soft discouraged.
+
+The simple-battery IMO should be for
+things like prototypes or devices where you don't really
+know which battery is connected so you will have some
+locally modified device trees for them.
+
+In the Samsung case, these phones are mechanically
+designed to just fit with one battery, and this seems to
+be what Samsung does consistently: a battery with one
+physical characteristic should not fit physically in the
+slot of a device with different requirements.
+
+That said I see what you're doing with the init data in
+the bd99954 charger driver and it is similar to what the
+regulator subsystem does too.
+
+> The dynamic data must be freed by (keep put batttery info API or just
+> allow user to kfree?)
+
+The way the drivers use it is that some just call
+power_supply_get_battery_info() copy some values from the
+struct power_supply_battery_info into its own structs and then
+just call power_supply_put_battery_info() and get rid of it all
+again, and then the use is zero. (bd99954 for example)
+
+Other drivers keep it around and reference it but it is
+lifecycled with devres to the psy so it goes away when
+removing the module (etc).
+
+Either way works I guess, I just have a habit of using the
+kernel structs as-is.
+
+> Or is this just adding a lot of extra complexity in order to save few
+> bytes?
+
+On a general note the footprint discussion is kind of dead because
+the community does not really prioritize that. Nicolas Pitre
+invested lots of time to make the kernel configurable and
+strippable with the goal of using it for IoT targets in 2018, and there
+just wasn't interest. But anyone can drive such change of course.
+
+The power supply core isn't really the worst offender though.
+
+> For me it is just
+> troubling to always have all the arrays in battery data - and I still do
+> like the ability to avoid dynamic allocation when we don't have much of
+> the info in the DT.
+
+I will probably need to add more entries to it as well and then I expect
+to make them optional not compulsory, like what we do for resistance
+already.
+
+> > In the bd99954 charger driver we need to stop issuing
+> > power_supply_put_battery_info() at the end of the probe since
+> > the struct continues to be used after probe().
+>
+> Hm. Are you sure?
+
+This driver was a challenge so no :) it uses the info
+differently from all others.
+
+I looked over your comments and I missed how the init
+data is used and then discarded. I will respin the patch
+and fix this.
+
+Also I would love if you could test v2 on hardware!
+
+> The patch didn't apply on v5.16-rc4
+
+It's based on Sebastians tree so you need to use that, or just
+grab my branch (should be possible to merge in v5.16-rc4
+if you need)
+
+Yours,
+Linus Walleij
