@@ -2,113 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AA2C46F241
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Dec 2021 18:40:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8193346F761
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Dec 2021 00:25:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243125AbhLIRng (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Dec 2021 12:43:36 -0500
-Received: from mga07.intel.com ([134.134.136.100]:26441 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243127AbhLIRng (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 9 Dec 2021 12:43:36 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="301546983"
-X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
-   d="scan'208";a="301546983"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 09:40:02 -0800
-X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
-   d="scan'208";a="516405372"
-Received: from braj-mobl.gar.corp.intel.com ([10.251.50.179])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 09:39:57 -0800
-Message-ID: <10f257b0546690983a1ca7d3c3e8842c9fd98308.camel@linux.intel.com>
-Subject: Re: [PATCH 6/7] thermal: netlink: Add a new event to notify CPU
- capabilities change
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pm@vger.kernel.org, x86@kernel.org,
-        linux-doc@vger.kernel.org, Len Brown <len.brown@intel.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
+        id S234322AbhLIX3F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Dec 2021 18:29:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48736 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229760AbhLIX3E (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Dec 2021 18:29:04 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89849C061746;
+        Thu,  9 Dec 2021 15:25:30 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id k64so6813759pfd.11;
+        Thu, 09 Dec 2021 15:25:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=yhEn+HsKVEOR2ZpkrPt9obsTlAm0mNe3CjhrGQZngwI=;
+        b=HNCXaHWJiaTGGztOMHPy+t3lPvmxmOLZT3uIKev1QNrU/rHBQK6Z6olmY8gekpBQyn
+         nM1hmrtkgpu3l6PQJ0ErWY6cPQMGA5AVFY4N2FIVs6zD7QxnUTAF+wzB8+qdCA2npE/4
+         Sh2CPMx6cjHIAE+x6nwrjVE4pdIfSFxbaPeQFkM7+tWdx5bJtbJaXBgfSD+ZiTmGBloX
+         ECruT7f5A1ixZ6eJh/E3/iESO/kANeYPYTSjz2n7rNxBqJrU0q5Yb5reVV3Osm8ovTqd
+         8a8FczZJ2PuzPGnjzoukH1pRiitGz4Ly75J/47dUXxUHI/xgKbBAFEHBU/uO3asB39pe
+         Judw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=yhEn+HsKVEOR2ZpkrPt9obsTlAm0mNe3CjhrGQZngwI=;
+        b=Ckl74ZAVXtT1OKsc2lBcPGu/llNTZNRJdoezVlQ4FwF4+4YOVrMs4A4S9SQcKDEYEU
+         ZnhNuiIz/aG4YFjnjcAVqEkRK4FirT4Cl4qtWHzdBIhcyOretfSqcfsB4f3s1ZLIP+oI
+         vRWkP0Ypf/9d3z6T4pu9N0WbQRM3LTWaCky3pbaAQNBU60HgPSKWbcX3oE2WJQeQ6jNK
+         wiR/bOO4zHNWbCLXLYcZEw+RXPxeANScp/hLEq7nAQTFhWIqX8rV61fGxL3ZBj2gYz0J
+         Kz1ab/vLsqMAiCqzchyrkCoDANfMW2yEF1ZZsCngRfDZhRnm933NvLtruwPtL97I3Pdx
+         MXvQ==
+X-Gm-Message-State: AOAM532FUVXVAn1DwJ+rESUWEBXLYNQpiJYP++h4+k1gnVg8bD67ngSE
+        HjOV980yDQ6s4q9QQ7SqV1bl/sIfV40=
+X-Google-Smtp-Source: ABdhPJwyRsGr6WPGru0RwXtRfzS/xGpPNhtpJ1LzcXxk2gAonJHkTvUA09py2j6SL/Ur7wRnrcBw2Q==
+X-Received: by 2002:a65:58cc:: with SMTP id e12mr33921891pgu.59.1639092329633;
+        Thu, 09 Dec 2021 15:25:29 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id y18sm703960pfp.190.2021.12.09.15.25.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 15:25:29 -0800 (PST)
+Subject: Re: [PATCH v3 02/15] dt-bindings: reset: Convert Broadcom STB reset
+ to YAML
+To:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        devicetree@vger.kernel.org
+Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Gregory Fong <gregory.0xf0@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Amit Kucheria <amitk@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 09 Dec 2021 09:39:53 -0800
-In-Reply-To: <f31278f5-7d23-b213-0b5b-321a0d7a048a@linaro.org>
-References: <20211106013312.26698-1-ricardo.neri-calderon@linux.intel.com>
-         <20211106013312.26698-7-ricardo.neri-calderon@linux.intel.com>
-         <b51c9b2a-40d2-6575-7746-3059eec53519@linaro.org>
-         <20211209160346.GA7692@ranerica-svr.sc.intel.com>
-         <f31278f5-7d23-b213-0b5b-321a0d7a048a@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.0-1 
+        Zhang Rui <rui.zhang@intel.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Al Cooper <alcooperx@gmail.com>,
+        Doug Berger <opendmb@gmail.com>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:MULTIMEDIA CARD (MMC), SECURE DIGITAL (SD) AND..." 
+        <linux-mmc@vger.kernel.org>,
+        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
+References: <20211208003727.3596577-1-f.fainelli@gmail.com>
+ <20211208003727.3596577-3-f.fainelli@gmail.com>
+ <ab45adc2e305c79286f6b63fa42cfd78983cb757.camel@pengutronix.de>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <d68a6115-b076-1eb8-77c1-e0728e8e82dd@gmail.com>
+Date:   Thu, 9 Dec 2021 15:25:24 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <ab45adc2e305c79286f6b63fa42cfd78983cb757.camel@pengutronix.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 2021-12-09 at 17:57 +0100, Daniel Lezcano wrote:
-> On 09/12/2021 17:03, Ricardo Neri wrote:
-> > On Tue, Nov 30, 2021 at 10:29:46AM +0100, Daniel Lezcano wrote:
-> > > On 06/11/2021 02:33, Ricardo Neri wrote:
-> > > > From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> > > > 
-> > > > Add a new netlink event to notify change in CPU capabilities in
-> > > > terms of
-> > > > performance and efficiency.
-> > > > 
-> > > > Firmware may change CPU capabilities as a result of thermal
-> > > > events in the
-> > > > system or to account for changes in the TDP (thermal design
-> > > > power) level.
-> > > > 
-> > > > This notification type will allow user space to avoid running
-> > > > workloads
-> > > > on certain CPUs or proactively adjust power limits to avoid
-> > > > future events.
-> > > > 
-> > > 
-> > > [ ... ]
-> > > 
-> > > > +       [THERMAL_GENL_ATTR_CPU_CAPABILITY_ID]   = { .type =
-> > > > NLA_U32 },
-> > > > +       [THERMAL_GENL_ATTR_CPU_CAPABILITY_PERF] = { .type =
-> > > > NLA_U32 },
-> > > > +       [THERMAL_GENL_ATTR_CPU_CAPABILITY_EFF]  = { .type =
-> > > > NLA_U32 },
-> > > >  };
-> > > 
-> > > AFAIU, 0 <= perf < 256 and 0 <= eff < 256, right?
-> > > 
-> > > Is the following true?
-> > > 
-> > >         0 <= perf + eff < 256
-> > 
-> > No, they are not. They are set independently.
+On 12/9/21 1:41 AM, Philipp Zabel wrote:
+> On Tue, 2021-12-07 at 16:37 -0800, Florian Fainelli wrote:
+>> Convert the Broadcom STB SW_INIT style reset controller binding to YAML.
+>>
+>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 > 
-> I understand they can be set independently but is the constraint
-> above
-> correct? For example, can the system send perf=255 and eff=255 or
-> perf=0
-> and eff=0 ?
-perf = 0 and eff = 0 is already the case in the current processors.
-Both FF is not the case as the current generation use real performance
-which can't be FF. Also it is unlikely that at max performance you have
-max efficiency.
+> Acked-by: Philipp Zabel <p.zabel@pengutronix.de>
 
-Thanks,
-Srinivas
-
-> 
-> May be I misunderstood but I was expecting at least some kind of
-> connection between perf and eff (when eff is high, perf is low and
-> the
-> opposite).
-> 
-> 
-
-
+Thanks, sorry for not carrying your Ack that you provided in v2 already.
+-- 
+Florian
