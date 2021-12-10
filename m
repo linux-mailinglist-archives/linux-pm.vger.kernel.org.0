@@ -2,88 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60E73470E23
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Dec 2021 23:43:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB32A470E2D
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Dec 2021 23:46:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344621AbhLJWqm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Dec 2021 17:46:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60222 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344652AbhLJWql (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Dec 2021 17:46:41 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E32C061746
-        for <linux-pm@vger.kernel.org>; Fri, 10 Dec 2021 14:43:05 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id t5so33972020edd.0
-        for <linux-pm@vger.kernel.org>; Fri, 10 Dec 2021 14:43:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=uNvZHe6DHRkF+xFR2MjDNEoC+neS0KSxMQQUcva/BLo=;
-        b=grQgQcg5MH+iX7Jw2TpSklrJNA/RSRHJETmDcYrXbXsk3YGdRDRXXoXauSP5q327/M
-         xnSxXPjy36NvjVKp/+pXBFy44pq100Dyqgg4i1t+JBgHycd6Pm2Pscz/QIMcHcnjx4Tg
-         1fVwhoeVi7wK76k1Y6Oypx+EYeaQ8bJnJMo3g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=uNvZHe6DHRkF+xFR2MjDNEoC+neS0KSxMQQUcva/BLo=;
-        b=yzcfx0fdUeWlxYIep89PMxBCxfe4KfzhhqjOQLgkZsUm9ROFai36vwpFsEH78YAna3
-         i+1kFgRi0w+2hr+t/0F2B1Fanb0X5m1xeJcW6+BRwVJlylCpP7Bm9oaHtS/u3zE2NyOe
-         2jmLCSnQw6N6CHpfyzCz0Wx9xHckrmWgJVB1tF++shtNfUU6E2Y1HgX8zHYe3/Y4aNdd
-         iZSXoiLGrVNVYuokwOgNrY8SzuhlVoZrC1HK39DDq9SfSWH3BFfLhmQ8x4y+bCXNm7FJ
-         Dhz5KE00+IH883ri8vgv/KFfuvmWKc3oTNRYfDUb4Jvjkymm0/GbY/rkv6NBdBObuihy
-         JVig==
-X-Gm-Message-State: AOAM531BxGN4MUSzIQwqEc9ilD9ElIKvafNmCyne1xPgE1sjTJYxlaBt
-        Lt6JugUt9ckJIyVr8TuVTkXDAxKg1pma87TpWfk=
-X-Google-Smtp-Source: ABdhPJyaTqWeKdvVJhbniS18gc/bl6guBGlD7Mstvq67VKNHNaEVRgxSsDz72qQfFDWrj20BoD1Hkw==
-X-Received: by 2002:a50:becf:: with SMTP id e15mr42147627edk.114.1639176184260;
-        Fri, 10 Dec 2021 14:43:04 -0800 (PST)
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com. [209.85.221.44])
-        by smtp.gmail.com with ESMTPSA id gs17sm2088712ejc.28.2021.12.10.14.43.02
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Dec 2021 14:43:03 -0800 (PST)
-Received: by mail-wr1-f44.google.com with SMTP id t18so17295958wrg.11
-        for <linux-pm@vger.kernel.org>; Fri, 10 Dec 2021 14:43:02 -0800 (PST)
-X-Received: by 2002:adf:cc8d:: with SMTP id p13mr17138267wrj.274.1639176181996;
- Fri, 10 Dec 2021 14:43:01 -0800 (PST)
-MIME-Version: 1.0
-References: <CAJZ5v0hpgZ76wUgAuuzcjCdxjpBWAEtruTtXN6eqsDdYdpS8Hw@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hpgZ76wUgAuuzcjCdxjpBWAEtruTtXN6eqsDdYdpS8Hw@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 10 Dec 2021 14:42:45 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgMh42qQSUW_DYkCOsjku401B9210MGmFGCixJFDWCeEA@mail.gmail.com>
-Message-ID: <CAHk-=wgMh42qQSUW_DYkCOsjku401B9210MGmFGCixJFDWCeEA@mail.gmail.com>
-Subject: Re: [GIT PULL] Thermal control fix for v5.16-rc5
-To:     =?UTF-8?Q?Rafa=C5=82_Wysocki?= <rjwysocki@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        id S1344792AbhLJWu0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Dec 2021 17:50:26 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:43616 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344774AbhLJWuZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Dec 2021 17:50:25 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BB42DB82A15;
+        Fri, 10 Dec 2021 22:46:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7046AC341CB;
+        Fri, 10 Dec 2021 22:46:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639176407;
+        bh=PmchJ/JxMHv2x/LMg559G1GV1/yJSIznik9Uu2h80O8=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=J9hqv/Atp7577TftFUB0j25ay/DXuB5rhouT2svHcNTgCVF8/jLu2LZd2O0brRI1f
+         kEaNxQA31kFAREKaKORph2HmIdutblz964gr5LJbS23vlvO17UoBpHm3HYcD6dsIvu
+         NFhuFnUaMkLs2QG/ZuBGGXGvDFpcs8UA2IXVe6GtGRcALteIjQZLxbzUdnCqeoHKh0
+         cIesakElVdr/oNF1OobnioOVIPS7PAR4VSQIjqtuD87cCqkM9lCVvnEumiztybCFWk
+         DIOojP6fvTOWnNs7/wECk51eeEeM2iuRXJSLW4FPnqQjTEDdCrvU/qLNwOy5uVY1nz
+         ME1SOTByM+EmQ==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 5071E609EB;
+        Fri, 10 Dec 2021 22:46:47 +0000 (UTC)
+Subject: Re: [GIT PULL] Power management fix for v5.16-rc5
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0j+7Kz6n_WfjJuVaxt+MNVo77KikSPKQDB-4iT8ozGfww@mail.gmail.com>
+References: <CAJZ5v0j+7Kz6n_WfjJuVaxt+MNVo77KikSPKQDB-4iT8ozGfww@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0j+7Kz6n_WfjJuVaxt+MNVo77KikSPKQDB-4iT8ozGfww@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.16-rc5
+X-PR-Tracked-Commit-Id: 444dd878e85fb33fcfb2682cfdab4c236f33ea3e
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: d46bca632ca4ce27621cacbc0d838d042041220e
+Message-Id: <163917640732.4787.13605718698872065798.pr-tracker-bot@kernel.org>
+Date:   Fri, 10 Dec 2021 22:46:47 +0000
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 12:11 PM Rafa=C5=82 Wysocki <rjwysocki@gmail.com> w=
-rote:
->
-> This fixes the definition of one of the Tiger Lake MMIO registers
-> in the int340x thermal driver (Sumeet Pawnikar).
+The pull request you sent on Fri, 10 Dec 2021 20:51:22 +0100:
 
-Funky.
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.16-rc5
 
-You sent me three pull requests, and two of them came with your normal
-address, and now the third from a new gmail one that I've never seen
-before.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/d46bca632ca4ce27621cacbc0d838d042041220e
 
-I also note that this one uses the proper utf-8 "Rafa=C5=82" rather than
-"Rafael" - is that your preferred spelling?
+Thank you!
 
-I see the signed tag, and I notice that you do have this gmail address
-in your key, so this is all fine, but now I'm not sure how to spell
-your name any more ;)
-
-              Linus
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
