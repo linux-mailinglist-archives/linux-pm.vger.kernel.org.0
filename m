@@ -2,112 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3251546FB6C
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Dec 2021 08:29:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 409244703CA
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Dec 2021 16:23:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237623AbhLJHdP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Dec 2021 02:33:15 -0500
-Received: from mail-m974.mail.163.com ([123.126.97.4]:16974 "EHLO
-        mail-m974.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237562AbhLJHdG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Dec 2021 02:33:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=8Y9qB
-        xZHdV969AvXdKfGOYRlIcUpg6gF/jWC9ccmJzY=; b=Ag6/PlPIUXY5qZLRqv2Bx
-        hu5fDdvUaEks0/UkVY9Xo94TsptAaC6MkdLhDmc1vkDw8C8rW8Ox2N0g/Rzek22z
-        kZDS5o8/KQDPP+fFKxpfcd5OcyVTX7EOXAfve4e1ABNdxNp5s1s8hi+L5VR1X3Xu
-        zzCpW4J/bwBsIvsvfH4g4g=
-Received: from localhost.localdomain (unknown [36.112.214.113])
-        by smtp4 (Coremail) with SMTP id HNxpCgCn16u7AbNhasGzAw--.58303S4;
-        Fri, 10 Dec 2021 15:29:20 +0800 (CST)
-From:   Jianglei Nie <niejianglei2021@163.com>
-To:     daniel.lezcano@kernel.org, rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jianglei Nie <niejianglei2021@163.com>
-Subject: [PATCH] powercap: DTPM: Fix reference leak in cpuhp_dtpm_cpu_offline()
-Date:   Fri, 10 Dec 2021 15:28:58 +0800
-Message-Id: <20211210072858.20471-1-niejianglei2021@163.com>
-X-Mailer: git-send-email 2.25.1
+        id S242832AbhLJP1D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Dec 2021 10:27:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40466 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242854AbhLJP1C (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Dec 2021 10:27:02 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68524C061D5F
+        for <linux-pm@vger.kernel.org>; Fri, 10 Dec 2021 07:23:25 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id r11so30484938edd.9
+        for <linux-pm@vger.kernel.org>; Fri, 10 Dec 2021 07:23:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CaWHeGP0DuwfkbKXUdYIJmX8F+biVrGWME72+JdzhqU=;
+        b=MgLv3YrA9NlwpapqjGWsPaT057Lv4NTkMge5x9aYIzLu/EWTNZl9PQJ3i9HcLMOx6B
+         B9IguP3K+gzGh6KfKbYSO8oxGj7MjYa00frl0BCd7lnk7OkZoOhbnGk36UU3KzWuB3In
+         ZXMjkVs8K5nE10yvrBZiB/8HDzocgX7Too6WWjeeDpdcoaRlxj/sgAghwl/0IvTuGbeh
+         fAFYqtmGZZZiSOSvOT+oAtgE4HrF1eec+d4mRi7xCG+BmEL2kk0ZRTS2b7waN3H1I0k/
+         3ly7VwemPgrnfSjfL1C507DwBcuWSj3OL9qXJWKAX4/7OLRZbrfLo/DTY1QGnfnvK/nI
+         rVzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CaWHeGP0DuwfkbKXUdYIJmX8F+biVrGWME72+JdzhqU=;
+        b=RTaqIYTKveJtj/S3fa1kEjy7ZddMtxb/rM0vssCGpLnMh5unM+12qAj2CICL1HKjDA
+         zEPkqh81/Ceqgfw3AfdMqcJ1Df7wAuAabGgCqeBz0nIhqLPlg3zX7IMa4gUlKFp82ALP
+         K8EcU62snH4BffzStKDQbNJXvUyzXSulIIMRRceQ6J4O5pIzNi+POrhMj65dCQh2bfWK
+         TqoehBSX0k7QJ+xe+ROjluXs4/qwIWZwifZURt4D2cULSTc6LrflgLhrUOJOUm5Rdcvl
+         PzcOthT8EDdjbyyhhRlDCHxflVn+Grjn2WfRtBFbRBpHN5uD0oJmmAdzfUrHjcnwaHjQ
+         NRcg==
+X-Gm-Message-State: AOAM531eYiqnJvHzeYW568Wan65dwS6fN74RANUjlSh83uPavmUxTEq1
+        JVD4o8FSOM1TE5qPwrxw/gJpsZoYkySs3YrQv3PQnQ==
+X-Google-Smtp-Source: ABdhPJzwyJoQo5zS+XCmbkGk9eGVm61YMp0R/nIUhpMaAI0dyZLbksovDhkrc3SVhNC+OXjC0RSzQ3wiLRH8X7JDAvI=
+X-Received: by 2002:a05:6402:2805:: with SMTP id h5mr38690255ede.267.1639149780836;
+ Fri, 10 Dec 2021 07:23:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: HNxpCgCn16u7AbNhasGzAw--.58303S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW7AFyDXr1xWFy8Cw4Dtw48Crg_yoW8Cr4fpr
-        s8K34Yv348tFWDG397J3WkXFyav3sFva9Ykry3Gr1rZa43JF1Fgw4DKryjqF1rCr1kCw13
-        try5Xay8Gay5JFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jqLvtUUUUU=
-X-Originating-IP: [36.112.214.113]
-X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/1tbiWxBljFSIsgJsFAAAs2
+References: <20211208003727.3596577-1-f.fainelli@gmail.com> <20211208003727.3596577-6-f.fainelli@gmail.com>
+In-Reply-To: <20211208003727.3596577-6-f.fainelli@gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Fri, 10 Dec 2021 16:22:50 +0100
+Message-ID: <CAMRc=MdmP5UCi2SJq9Ybhe9evUmM_PhpSUfzRF24yYUiRG+MNg@mail.gmail.com>
+Subject: Re: [PATCH v3 05/15] dt-bindings: gpio: Convert Broadcom STB GPIO to YAML
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     devicetree <devicetree@vger.kernel.org>,
+        Gregory Fong <gregory.0xf0@gmail.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Al Cooper <alcooperx@gmail.com>,
+        Doug Berger <opendmb@gmail.com>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:MULTIMEDIA CARD (MMC), SECURE DIGITAL (SD) AND..." 
+        <linux-mmc@vger.kernel.org>,
+        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In line 153 (#1), cpufreq_cpu_get() increments the kobject reference
-counter of the policy it returned on success. According to the
-document, the policy returned by cpufreq_cpu_get() has to be
-released with the help of cpufreq_cpu_put() to balance its kobject
-reference counter properly. Forgetting the cpufreq_cpu_put()
-operation will result in reference leak.This bug influences all
-stable versions from v5.15 to v5.15.7.
+On Wed, Dec 8, 2021 at 1:37 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>
+> Convert the Broadcom STB GPIO Device Tree binding to YAML to help with
+> validation.
+>
+> Acked-by: Gregory Fong <gregory.0xf0@gmail.com>
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
 
-We can fix it by calling cpufreq_cpu_put() before the function
-returns (#2, #3 and #4).
-
-147 static int cpuhp_dtpm_cpu_offline(unsigned int cpu)
-148 {
-153     policy = cpufreq_cpu_get(cpu);
-        // #1: reference increment
-
-155     if (!policy)
-156         return 0;
-
-158     pd = em_cpu_get(cpu);
-159     if (!pd)
-160         return -EINVAL; // #2: missing reference decrement
-
-166     if (cpumask_weight(policy->cpus) != 1)
-167         return 0; // #3: missing reference decrement
-
-174     return 0; // #4: missing reference decrement
-175 }
-
-Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
----
- drivers/powercap/dtpm_cpu.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
-index 51c366938acd..6c94515b21ef 100644
---- a/drivers/powercap/dtpm_cpu.c
-+++ b/drivers/powercap/dtpm_cpu.c
-@@ -156,21 +156,25 @@ static int cpuhp_dtpm_cpu_offline(unsigned int cpu)
- 		return 0;
- 
- 	pd = em_cpu_get(cpu);
--	if (!pd)
-+	if (!pd) {
-+		cpufreq_cpu_put(policy);
- 		return -EINVAL;
-+	}
- 
- 	dtpm = per_cpu(dtpm_per_cpu, cpu);
- 
- 	power_sub(dtpm, pd);
- 
--	if (cpumask_weight(policy->cpus) != 1)
-+	if (cpumask_weight(policy->cpus) != 1) {
-+		cpufreq_cpu_put(policy);
- 		return 0;
-+	}
- 
- 	for_each_cpu(cpu, policy->related_cpus)
- 		per_cpu(dtpm_per_cpu, cpu) = NULL;
- 
- 	dtpm_unregister(dtpm);
--
-+	cpufreq_cpu_put(policy);
- 	return 0;
- }
- 
--- 
-2.25.1
-
+Acked-by: Bartosz Golaszewski <brgl@bgdev.pl>
