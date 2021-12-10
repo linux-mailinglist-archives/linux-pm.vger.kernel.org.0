@@ -2,28 +2,28 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD6FF46F9DB
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Dec 2021 05:29:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96A6F46F9E0
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Dec 2021 05:30:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236621AbhLJEcp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Dec 2021 23:32:45 -0500
-Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:49759 "EHLO
-        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234318AbhLJEco (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Dec 2021 23:32:44 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0V-7Yjgd_1639110530;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V-7Yjgd_1639110530)
+        id S234499AbhLJEeG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Dec 2021 23:34:06 -0500
+Received: from out30-132.freemail.mail.aliyun.com ([115.124.30.132]:48663 "EHLO
+        out30-132.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232860AbhLJEeG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Dec 2021 23:34:06 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R741e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0V-78H3N_1639110627;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V-78H3N_1639110627)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 10 Dec 2021 12:29:08 +0800
+          Fri, 10 Dec 2021 12:30:29 +0800
 From:   Yang Li <yang.lee@linux.alibaba.com>
 To:     rafael@kernel.org, agross@kernel.org, bjorn.andersson@linaro.org,
         daniel.lezcano@linaro.org
 Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
         Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next 1/2] cpuidle: Fix kernel-doc
-Date:   Fri, 10 Dec 2021 12:28:48 +0800
-Message-Id: <20211210042849.79924-1-yang.lee@linux.alibaba.com>
+Subject: [PATCH -next 2/2] cpuidle: add put_device() after of_find_device_by_node()
+Date:   Fri, 10 Dec 2021 12:30:24 +0800
+Message-Id: <20211210043024.80884-1-yang.lee@linux.alibaba.com>
 X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -31,33 +31,29 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Fix function name in sysfs.c kernel-doc comment
-to remove a warning found by running scripts/kernel-doc,
-which is caused by using 'make W=1'.
-
-drivers/cpuidle/sysfs.c:512: warning: expecting prototype for
-cpuidle_remove_driver_sysfs(). Prototype was for
-cpuidle_remove_state_sysfs() instead
+This was found by coccicheck:
+./drivers/cpuidle/cpuidle-qcom-spm.c:129:1-7: ERROR: missing put_device;
+call of_find_device_by_node on line 103, but without a corresponding
+object release within this function.
 
 Reported-by: Abaci Robot <abaci@linux.alibaba.com>
 Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 ---
- drivers/cpuidle/sysfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/cpuidle/cpuidle-qcom-spm.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/cpuidle/sysfs.c b/drivers/cpuidle/sysfs.c
-index 469e18547d06..e708e593db88 100644
---- a/drivers/cpuidle/sysfs.c
-+++ b/drivers/cpuidle/sysfs.c
-@@ -505,7 +505,7 @@ static int cpuidle_add_state_sysfs(struct cpuidle_device *device)
- }
+diff --git a/drivers/cpuidle/cpuidle-qcom-spm.c b/drivers/cpuidle/cpuidle-qcom-spm.c
+index 01e77913a414..3952ea600122 100644
+--- a/drivers/cpuidle/cpuidle-qcom-spm.c
++++ b/drivers/cpuidle/cpuidle-qcom-spm.c
+@@ -111,6 +111,7 @@ static int spm_cpuidle_register(struct device *cpuidle_dev, int cpu)
+ 		return -ENOMEM;
  
- /**
-- * cpuidle_remove_driver_sysfs - removes the cpuidle states sysfs attributes
-+ * cpuidle_remove_state_sysfs - removes the cpuidle states sysfs attributes
-  * @device: the target device
-  */
- static void cpuidle_remove_state_sysfs(struct cpuidle_device *device)
+ 	data->spm = dev_get_drvdata(&pdev->dev);
++	put_device(&pdev->dev);
+ 	if (!data->spm)
+ 		return -EINVAL;
+ 
 -- 
 2.20.1.7.g153144c
 
