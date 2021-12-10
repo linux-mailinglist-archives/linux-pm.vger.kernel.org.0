@@ -2,65 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB32A470E2D
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Dec 2021 23:46:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7A1E470E7B
+	for <lists+linux-pm@lfdr.de>; Sat, 11 Dec 2021 00:17:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344792AbhLJWu0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Dec 2021 17:50:26 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:43616 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344774AbhLJWuZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Dec 2021 17:50:25 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BB42DB82A15;
-        Fri, 10 Dec 2021 22:46:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7046AC341CB;
-        Fri, 10 Dec 2021 22:46:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639176407;
-        bh=PmchJ/JxMHv2x/LMg559G1GV1/yJSIznik9Uu2h80O8=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=J9hqv/Atp7577TftFUB0j25ay/DXuB5rhouT2svHcNTgCVF8/jLu2LZd2O0brRI1f
-         kEaNxQA31kFAREKaKORph2HmIdutblz964gr5LJbS23vlvO17UoBpHm3HYcD6dsIvu
-         NFhuFnUaMkLs2QG/ZuBGGXGvDFpcs8UA2IXVe6GtGRcALteIjQZLxbzUdnCqeoHKh0
-         cIesakElVdr/oNF1OobnioOVIPS7PAR4VSQIjqtuD87cCqkM9lCVvnEumiztybCFWk
-         DIOojP6fvTOWnNs7/wECk51eeEeM2iuRXJSLW4FPnqQjTEDdCrvU/qLNwOy5uVY1nz
-         ME1SOTByM+EmQ==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 5071E609EB;
-        Fri, 10 Dec 2021 22:46:47 +0000 (UTC)
-Subject: Re: [GIT PULL] Power management fix for v5.16-rc5
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0j+7Kz6n_WfjJuVaxt+MNVo77KikSPKQDB-4iT8ozGfww@mail.gmail.com>
-References: <CAJZ5v0j+7Kz6n_WfjJuVaxt+MNVo77KikSPKQDB-4iT8ozGfww@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0j+7Kz6n_WfjJuVaxt+MNVo77KikSPKQDB-4iT8ozGfww@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.16-rc5
-X-PR-Tracked-Commit-Id: 444dd878e85fb33fcfb2682cfdab4c236f33ea3e
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: d46bca632ca4ce27621cacbc0d838d042041220e
-Message-Id: <163917640732.4787.13605718698872065798.pr-tracker-bot@kernel.org>
-Date:   Fri, 10 Dec 2021 22:46:47 +0000
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        id S231804AbhLJXV2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 10 Dec 2021 18:21:28 -0500
+Received: from mail-ot1-f41.google.com ([209.85.210.41]:37623 "EHLO
+        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231503AbhLJXV2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Dec 2021 18:21:28 -0500
+Received: by mail-ot1-f41.google.com with SMTP id h19-20020a9d3e53000000b0056547b797b2so11161207otg.4;
+        Fri, 10 Dec 2021 15:17:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=OO20A+zOl/DyD3c13V07SAG8BSX+P3+ych6htZ+qir8=;
+        b=4qSKAt+uNasvYmcMFuwSSOXDhIl1w2N+uZg2DSRNb8MQWDcXmFdJBympCvWoEC8EQT
+         Q00nYiiT6DYxsmZYr8wFMNJBHSoVW1hMmJ2x2mnlWfRq+63IfAtM3RnWFMX/KRbEpSMH
+         +sHUg6S0D4Bm1ednjV51aC1D0mqJC6R5a7JHL5UM7xICF/hk7rn+ByWF02O8ECLDFx7e
+         D3F480hvLggUarnqm2BdB0X1ScONcrx8r3dJ5/91RJ6fobGIreAFak0g+9yM1YB2T1gH
+         9faQrQV3R1v1Y+LOoU4UsYeroDUSDsUEhFmmaQtgRHBYYkDRy5K4807P36084Zsz5Rqn
+         weXg==
+X-Gm-Message-State: AOAM533By6E/4uXz7pJJXrH1npL3VMv7l4vImpI0Q8YWXj6FwBOuYsds
+        wy8DofZjUzsGuAdRy9Ax+86enOMpk3S5NEqN9pA=
+X-Google-Smtp-Source: ABdhPJzTit5XCU1S+0nSx25sM9IOdEB8XGwB1PGdyVaTlrN3aRY5hHNjhwSjH6U4PqWhyUkJakGcgYk8ywveLYye8mc=
+X-Received: by 2002:a05:6830:1e57:: with SMTP id e23mr13425908otj.16.1639178272575;
+ Fri, 10 Dec 2021 15:17:52 -0800 (PST)
+MIME-Version: 1.0
+References: <CAJZ5v0hpgZ76wUgAuuzcjCdxjpBWAEtruTtXN6eqsDdYdpS8Hw@mail.gmail.com>
+ <CAHk-=wgMh42qQSUW_DYkCOsjku401B9210MGmFGCixJFDWCeEA@mail.gmail.com>
+In-Reply-To: <CAHk-=wgMh42qQSUW_DYkCOsjku401B9210MGmFGCixJFDWCeEA@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sat, 11 Dec 2021 00:17:41 +0100
+Message-ID: <CAJZ5v0geXVeUqxXZxBB9Y93MhzUCRT+Tsh8XEnZ0r4MEeAy2uQ@mail.gmail.com>
+Subject: Re: [GIT PULL] Thermal control fix for v5.16-rc5
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Fri, 10 Dec 2021 20:51:22 +0100:
+On Fri, Dec 10, 2021 at 11:43 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Fri, Dec 10, 2021 at 12:11 PM Rafał Wysocki <rjwysocki@gmail.com> wrote:
+> >
+> > This fixes the definition of one of the Tiger Lake MMIO registers
+> > in the int340x thermal driver (Sumeet Pawnikar).
+>
+> Funky.
+>
+> You sent me three pull requests, and two of them came with your normal
+> address, and now the third from a new gmail one that I've never seen
+> before.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.16-rc5
+Well, I had used that address before I started to use the kernel.org
+one.  Now I'm using it for personal stuff, but sometimes it slips
+through.  Sorry for the confusion.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/d46bca632ca4ce27621cacbc0d838d042041220e
+> I also note that this one uses the proper utf-8 "Rafał" rather than
+> "Rafael" - is that your preferred spelling?
 
-Thank you!
+It's Rafael in the English-speaking part of the world.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+> I see the signed tag, and I notice that you do have this gmail address
+> in your key, so this is all fine, but now I'm not sure how to spell
+> your name any more ;)
+
+It actually is fine both ways as far as I'm concerned. :-)
+
+That said the people on the mailing lists are used to the Rafael one
+so I'd rather stick to using it here.
+
+Cheers!
