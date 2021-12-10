@@ -2,112 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD3A046FAF6
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Dec 2021 07:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3251546FB6C
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Dec 2021 08:29:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237423AbhLJHA6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Dec 2021 02:00:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35580 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237409AbhLJHAu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Dec 2021 02:00:50 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16ABCC0698CD;
-        Thu,  9 Dec 2021 22:57:07 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id y8so5674944plg.1;
-        Thu, 09 Dec 2021 22:57:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=kR78Vf9G/BpR7pM6V254GxdHt+F2Tbo/465DsK1qwKE=;
-        b=IFsqpF0iQ2yOjzbxp5S4JHaKVkeqOG4VTmlNuqN+jfmsljTZbfrMD/cJxRhBLvxi2a
-         9K+6vhZRqofHqd7+ko6vYbnQABBIhEykYsTJ4olKQsu2gnm03Jd9Qb2WSG1Pj0fdeVh4
-         ZIBAhnX0oC5/47PiOn4yuvxDXUrRNXvYI1Wheg7aveZD2YD/cQUArZvvQOZYUNq+XrkS
-         3Hhkixu+Ugb+FuXK7kDYBrhOAsCMj5ybstU0moOAUeGO2LuEJ06nHEHgEbsBMWTe0sh1
-         xLdNnvMVa7Sstb9nctQerCvPj2Z191aZFTfN91ywKuaEZRzF088NOe1Mjrsok476dDcZ
-         dOIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=kR78Vf9G/BpR7pM6V254GxdHt+F2Tbo/465DsK1qwKE=;
-        b=VU/LdqW7Hmn3SJxmUJqmHdjDXSza5KxKwELvWifzBk/vk/uq/1+sDvFP0T8ZoUn+ZU
-         YU35LQk7xf3d/5TCbp1eKPbOjE50+35vSG3UtiJ04+im1A2VdX+GFWBIHxAXNzUUloNd
-         xxA26ct3oauYgBU7g5lR1NE9QbnorB/7+tsjCrtKwbYxydSlLaiVbEn+HyP8GvpmlKxM
-         z25PHUL0h/J5ucvxDxg4zPOtW/aiG+iSdjZ/0FRVp5XgnJIyhZKa9CfIlvSNGnfeKRDt
-         qsoObEv6XwkuJklEqFoBbLB6QA+UsZnPDh2p37+SSbXjZXsOzcQt+CMjGEAbhhX7UzkS
-         kLAQ==
-X-Gm-Message-State: AOAM530qpD9mtiFOfSplOfbPbTT0U3Mu4wq+c10cEGRHnBs7FimakjUQ
-        ZpIhVPdBlqsltGPGJR/bQTPHDhnYz5U=
-X-Google-Smtp-Source: ABdhPJzQqiZpOZPRrLmfyUo+pIckIWEO48+EG7ury7tg1kbEr0hT0s/WZydwAB+KsAjlmhJlrwMUgA==
-X-Received: by 2002:a17:902:e0d4:b0:142:8897:94e2 with SMTP id e20-20020a170902e0d400b00142889794e2mr73277767pla.58.1639119426164;
-        Thu, 09 Dec 2021 22:57:06 -0800 (PST)
-Received: from [172.30.1.18] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id i191sm1571372pgd.90.2021.12.09.22.57.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 22:57:05 -0800 (PST)
-Subject: Re: [PATCH v3 6/6] PM / devfreq: Add a driver for the sun8i/sun50i
- MBUS
-To:     Samuel Holland <samuel@sholland.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20211118031841.42315-1-samuel@sholland.org>
- <20211118031841.42315-7-samuel@sholland.org>
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-Message-ID: <21922806-e64c-1c41-1373-55603604cf34@gmail.com>
-Date:   Fri, 10 Dec 2021 15:57:00 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S237623AbhLJHdP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Dec 2021 02:33:15 -0500
+Received: from mail-m974.mail.163.com ([123.126.97.4]:16974 "EHLO
+        mail-m974.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237562AbhLJHdG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Dec 2021 02:33:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=8Y9qB
+        xZHdV969AvXdKfGOYRlIcUpg6gF/jWC9ccmJzY=; b=Ag6/PlPIUXY5qZLRqv2Bx
+        hu5fDdvUaEks0/UkVY9Xo94TsptAaC6MkdLhDmc1vkDw8C8rW8Ox2N0g/Rzek22z
+        kZDS5o8/KQDPP+fFKxpfcd5OcyVTX7EOXAfve4e1ABNdxNp5s1s8hi+L5VR1X3Xu
+        zzCpW4J/bwBsIvsvfH4g4g=
+Received: from localhost.localdomain (unknown [36.112.214.113])
+        by smtp4 (Coremail) with SMTP id HNxpCgCn16u7AbNhasGzAw--.58303S4;
+        Fri, 10 Dec 2021 15:29:20 +0800 (CST)
+From:   Jianglei Nie <niejianglei2021@163.com>
+To:     daniel.lezcano@kernel.org, rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jianglei Nie <niejianglei2021@163.com>
+Subject: [PATCH] powercap: DTPM: Fix reference leak in cpuhp_dtpm_cpu_offline()
+Date:   Fri, 10 Dec 2021 15:28:58 +0800
+Message-Id: <20211210072858.20471-1-niejianglei2021@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20211118031841.42315-7-samuel@sholland.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: HNxpCgCn16u7AbNhasGzAw--.58303S4
+X-Coremail-Antispam: 1Uf129KBjvJXoW7AFyDXr1xWFy8Cw4Dtw48Crg_yoW8Cr4fpr
+        s8K34Yv348tFWDG397J3WkXFyav3sFva9Ykry3Gr1rZa43JF1Fgw4DKryjqF1rCr1kCw13
+        try5Xay8Gay5JFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jqLvtUUUUU=
+X-Originating-IP: [36.112.214.113]
+X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/1tbiWxBljFSIsgJsFAAAs2
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21. 11. 18. 오후 12:18, Samuel Holland wrote:
-> This driver works by adjusting the divider on the DRAM controller's
-> module clock. Thus there is no fixed set of OPPs, only "full speed" down
-> to "quarter speed" (or whatever the maximum divider is on that variant).
-> 
-> It makes use of the MDFS hardware in the MBUS, in "DFS" mode, which
-> takes care of updating registers during the critical section while DRAM
-> is inaccessible.
-> 
-> This driver should support several sunxi SoCs, starting with the A33,
-> which have a DesignWare DDR3 controller with merged PHY register space
-> and the matching MBUS register layout (so not A63 or later). However,
-> the driver has only been tested on the A64/H5, so those are the only
-> compatibles enabled for now.
-> 
-> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
->   drivers/devfreq/Kconfig          |   8 +
->   drivers/devfreq/Makefile         |   1 +
->   drivers/devfreq/sun8i-a33-mbus.c | 511 +++++++++++++++++++++++++++++++
->   3 files changed, 520 insertions(+)
->   create mode 100644 drivers/devfreq/sun8i-a33-mbus.c
-> 
+In line 153 (#1), cpufreq_cpu_get() increments the kobject reference
+counter of the policy it returned on success. According to the
+document, the policy returned by cpufreq_cpu_get() has to be
+released with the help of cpufreq_cpu_put() to balance its kobject
+reference counter properly. Forgetting the cpufreq_cpu_put()
+operation will result in reference leak.This bug influences all
+stable versions from v5.15 to v5.15.7.
 
-(snip)
+We can fix it by calling cpufreq_cpu_put() before the function
+returns (#2, #3 and #4).
 
-Applied it. Thanks.
+147 static int cpuhp_dtpm_cpu_offline(unsigned int cpu)
+148 {
+153     policy = cpufreq_cpu_get(cpu);
+        // #1: reference increment
 
+155     if (!policy)
+156         return 0;
 
+158     pd = em_cpu_get(cpu);
+159     if (!pd)
+160         return -EINVAL; // #2: missing reference decrement
+
+166     if (cpumask_weight(policy->cpus) != 1)
+167         return 0; // #3: missing reference decrement
+
+174     return 0; // #4: missing reference decrement
+175 }
+
+Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+---
+ drivers/powercap/dtpm_cpu.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
+index 51c366938acd..6c94515b21ef 100644
+--- a/drivers/powercap/dtpm_cpu.c
++++ b/drivers/powercap/dtpm_cpu.c
+@@ -156,21 +156,25 @@ static int cpuhp_dtpm_cpu_offline(unsigned int cpu)
+ 		return 0;
+ 
+ 	pd = em_cpu_get(cpu);
+-	if (!pd)
++	if (!pd) {
++		cpufreq_cpu_put(policy);
+ 		return -EINVAL;
++	}
+ 
+ 	dtpm = per_cpu(dtpm_per_cpu, cpu);
+ 
+ 	power_sub(dtpm, pd);
+ 
+-	if (cpumask_weight(policy->cpus) != 1)
++	if (cpumask_weight(policy->cpus) != 1) {
++		cpufreq_cpu_put(policy);
+ 		return 0;
++	}
+ 
+ 	for_each_cpu(cpu, policy->related_cpus)
+ 		per_cpu(dtpm_per_cpu, cpu) = NULL;
+ 
+ 	dtpm_unregister(dtpm);
+-
++	cpufreq_cpu_put(policy);
+ 	return 0;
+ }
+ 
 -- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
+2.25.1
+
