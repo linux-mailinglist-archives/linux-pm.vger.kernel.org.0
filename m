@@ -2,123 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8193346F761
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Dec 2021 00:25:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1C7E46F870
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Dec 2021 02:26:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234322AbhLIX3F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Dec 2021 18:29:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48736 "EHLO
+        id S235378AbhLJB3q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Dec 2021 20:29:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbhLIX3E (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Dec 2021 18:29:04 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89849C061746;
-        Thu,  9 Dec 2021 15:25:30 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id k64so6813759pfd.11;
-        Thu, 09 Dec 2021 15:25:30 -0800 (PST)
+        with ESMTP id S230304AbhLJB3q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Dec 2021 20:29:46 -0500
+Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151B4C0617A1
+        for <linux-pm@vger.kernel.org>; Thu,  9 Dec 2021 17:26:12 -0800 (PST)
+Received: by mail-vk1-xa36.google.com with SMTP id u68so5031010vke.11
+        for <linux-pm@vger.kernel.org>; Thu, 09 Dec 2021 17:26:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=yhEn+HsKVEOR2ZpkrPt9obsTlAm0mNe3CjhrGQZngwI=;
-        b=HNCXaHWJiaTGGztOMHPy+t3lPvmxmOLZT3uIKev1QNrU/rHBQK6Z6olmY8gekpBQyn
-         nM1hmrtkgpu3l6PQJ0ErWY6cPQMGA5AVFY4N2FIVs6zD7QxnUTAF+wzB8+qdCA2npE/4
-         Sh2CPMx6cjHIAE+x6nwrjVE4pdIfSFxbaPeQFkM7+tWdx5bJtbJaXBgfSD+ZiTmGBloX
-         ECruT7f5A1ixZ6eJh/E3/iESO/kANeYPYTSjz2n7rNxBqJrU0q5Yb5reVV3Osm8ovTqd
-         8a8FczZJ2PuzPGnjzoukH1pRiitGz4Ly75J/47dUXxUHI/xgKbBAFEHBU/uO3asB39pe
-         Judw==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=LEc7NFqr3FKAIjT7OCYf7cUapdW8bqBPdFrn2WI98Kc=;
+        b=XHZGhu2uF6v/k+oyyzkTFxAkOlOn5qtzzl+GdvbHobSj3l/bfr9w9jM6AxVODFXpQt
+         PIjpBvOw+jDjKTI8d+IWhd3ipzehg7CDbPX6tN+UOnn+usSoW4HEYaQ08ECAkUNhLV5C
+         qQZIxaq962KBQcf+z9Y+SRmPZZGfmd67IjbEKnJ5bJR7pzCX4KUmkSMsUotnXB2yY+mG
+         pQ6Ss61jvUmWdk4WkzCMJFMm1BsvujJfuEwg8Phb0+kzHqPmXG8VUjpApG8+m5ANvU2S
+         u3NxJJzgS0GXxk9u8LpTFDDvDcCCgDzS9DmZcGV4vOmljyO3ZvYPvlz6O8hYFdfEHGCY
+         O3pA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=yhEn+HsKVEOR2ZpkrPt9obsTlAm0mNe3CjhrGQZngwI=;
-        b=Ckl74ZAVXtT1OKsc2lBcPGu/llNTZNRJdoezVlQ4FwF4+4YOVrMs4A4S9SQcKDEYEU
-         ZnhNuiIz/aG4YFjnjcAVqEkRK4FirT4Cl4qtWHzdBIhcyOretfSqcfsB4f3s1ZLIP+oI
-         vRWkP0Ypf/9d3z6T4pu9N0WbQRM3LTWaCky3pbaAQNBU60HgPSKWbcX3oE2WJQeQ6jNK
-         wiR/bOO4zHNWbCLXLYcZEw+RXPxeANScp/hLEq7nAQTFhWIqX8rV61fGxL3ZBj2gYz0J
-         Kz1ab/vLsqMAiCqzchyrkCoDANfMW2yEF1ZZsCngRfDZhRnm933NvLtruwPtL97I3Pdx
-         MXvQ==
-X-Gm-Message-State: AOAM532FUVXVAn1DwJ+rESUWEBXLYNQpiJYP++h4+k1gnVg8bD67ngSE
-        HjOV980yDQ6s4q9QQ7SqV1bl/sIfV40=
-X-Google-Smtp-Source: ABdhPJwyRsGr6WPGru0RwXtRfzS/xGpPNhtpJ1LzcXxk2gAonJHkTvUA09py2j6SL/Ur7wRnrcBw2Q==
-X-Received: by 2002:a65:58cc:: with SMTP id e12mr33921891pgu.59.1639092329633;
-        Thu, 09 Dec 2021 15:25:29 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id y18sm703960pfp.190.2021.12.09.15.25.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 15:25:29 -0800 (PST)
-Subject: Re: [PATCH v3 02/15] dt-bindings: reset: Convert Broadcom STB reset
- to YAML
-To:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        devicetree@vger.kernel.org
-Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Gregory Fong <gregory.0xf0@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Al Cooper <alcooperx@gmail.com>,
-        Doug Berger <opendmb@gmail.com>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:MULTIMEDIA CARD (MMC), SECURE DIGITAL (SD) AND..." 
-        <linux-mmc@vger.kernel.org>,
-        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
-References: <20211208003727.3596577-1-f.fainelli@gmail.com>
- <20211208003727.3596577-3-f.fainelli@gmail.com>
- <ab45adc2e305c79286f6b63fa42cfd78983cb757.camel@pengutronix.de>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <d68a6115-b076-1eb8-77c1-e0728e8e82dd@gmail.com>
-Date:   Thu, 9 Dec 2021 15:25:24 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=LEc7NFqr3FKAIjT7OCYf7cUapdW8bqBPdFrn2WI98Kc=;
+        b=6qe81AXMZSuI8CCZSvdtzErHVB+QfVbSTKP71rkpmcXIMJBYtNiODe6omBxIEUksPM
+         Be3YyYM18ckYLCom0MDnKzSlmB2OTjH7xlSrygMO1emq9v02ZvLT9VSdGw13OHZZQ/m/
+         MzqYiJ2+12ZrKmr5Nx6pqf2LE2+SaHFnrW6pKbH8rFe90BjgPqrwiNvb12sAU+FDCsM2
+         s/nC/YwhLuvK4L4ChUYq/TX1OlvZ3bzVioJjsbHMGoL0N8y6se7WjJd1b6e56e0WFWvJ
+         mVz0KA4AcUzdkJMcdnF3zLN7LsbWwhxb4518wTHt11lu1r5mx4eYYuvaMNTTLqsRQN5z
+         MKvw==
+X-Gm-Message-State: AOAM532dJPPRIEEwxP0bZL5k7bEyPV0c0xLFsR77tA69pExSXzBnNJYG
+        0XgXPpaB0cdca8K2b4xBoMB3VL1CtwlvscBiWuw=
+X-Google-Smtp-Source: ABdhPJxg8sKC7NfDG/pJN8z6JKOVWtWgnEuYFbiN/MGpWKev72FGSedPWn8X/oRr8+eMZxoWnLWmKwiQk8df4HV97Pk=
+X-Received: by 2002:a05:6122:99b:: with SMTP id g27mr14855291vkd.14.1639099571129;
+ Thu, 09 Dec 2021 17:26:11 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <ab45adc2e305c79286f6b63fa42cfd78983cb757.camel@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a05:6130:395:0:0:0:0 with HTTP; Thu, 9 Dec 2021 17:26:10
+ -0800 (PST)
+Reply-To: payenjane100@gmail.com
+From:   payen jane <io452404@gmail.com>
+Date:   Thu, 9 Dec 2021 17:26:10 -0800
+Message-ID: <CAA+kqzz8aAp+hvChs_07sOyehQBMGha1u7MR=0w+0rwbQsQdmw@mail.gmail.com>
+Subject: =?UTF-8?B?5oiR6ZyA6KaB5L2g55qE5biu5Yqp?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/9/21 1:41 AM, Philipp Zabel wrote:
-> On Tue, 2021-12-07 at 16:37 -0800, Florian Fainelli wrote:
->> Convert the Broadcom STB SW_INIT style reset controller binding to YAML.
->>
->> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> 
-> Acked-by: Philipp Zabel <p.zabel@pengutronix.de>
-
-Thanks, sorry for not carrying your Ack that you provided in v2 already.
--- 
-Florian
+5oiR5biM5pyb5L2g6IO955CG6Kej6L+Z5p2h5L+h5oGv77yM5Zug5Li65oiR5q2j5Zyo5Yip55So
+57+76K+R57uZ5L2g5YaZ5L+h44CCDQoNCuaIkeaYr+WIqeS6muWnhsK35L2p5oGp5Lit5aOr5aSr
+5Lq644CCDQrlnKjnvo7lm73pmYblhpvnmoTlhpvkuovpg6jpl6jjgILnvo7lm73vvIzkuIDlkI3k
+uK3lo6vvvIwzMiDlsoHvvIzmiJHljZXouqvvvIzmnaXoh6rnvo7lm73nlLDnurPopb/lt57lhYvl
+iKnlpKvlhbDvvIznm67liY3pqbvmiY7lnKjlj5nliKnkuprvvIzkuI7mgZDmgJbkuLvkuYnkvZzm
+iJjjgILmiJHnmoTljZXkvY3mmK/nrKw05oqk55CG6Zif56ysNzgy5peF5L+d6Zqc6JCl44CCDQoN
+CuaIkeaYr+S4gOS4quWFhea7oeeIseW/g+OAgeivmuWunuWSjOa3seaDheeahOS6uu+8jOWFt+ac
+ieiJr+WlveeahOW5vem7mOaEn++8jOaIkeWWnOasoue7k+ivhuaWsOaci+WPi+W5tuS6huino+S7
+luS7rOeahOeUn+a0u+aWueW8j++8jOaIkeWWnOasoueci+WIsOWkp+a1t+eahOazoua1quWSjOWx
+seiEieeahOe+juS4veS7peWPiuWkp+iHqueEtuaJgOaLpeacieeahOS4gOWIh+aPkOS+m+OAguW+
+iOmrmOWFtOiDveabtOWkmuWcsOS6huino+aCqO+8jOaIkeiupOS4uuaIkeS7rOWPr+S7peW7uuer
+i+iJr+WlveeahOWVhuS4muWPi+iwiuOAgg0KDQrmiJHkuIDnm7TlvojkuI3lvIDlv4PvvIzlm6Dk
+uLrov5nkupvlubTmnaXnlJ/mtLvlr7nmiJHkuI3lhazlubPvvJvmiJHlpLHljrvkuobniLbmr43v
+vIzpgqPlubTmiJEgMjENCuWygeOAguaIkeeItuS6suWPq+S5lOWwlMK35L2p5oGp77yM5q+N5Lqy
+5Y+r546b5Li9wrfkvanmganjgILmsqHmnInkurrluK7liqnmiJHvvIzkvYblvojpq5jlhbTmiJHn
+u4jkuo7lnKjnvo7lhpvkuK3mib7liLDkuoboh6rlt7HjgIINCg0K5oiR57uT5ama55Sf5LqG5a2p
+5a2Q77yM5L2G5LuW5q275LqG77yM5LiN5LmF5oiR5LiI5aSr5byA5aeL5qy66aqX5oiR77yM5omA
+5Lul5oiR5LiN5b6X5LiN5pS+5byD5ama5ae744CCDQoNCuaIkeS5n+W+iOW5uOi/kO+8jOWcqOaI
+keeahOWbveWutuOAgee+juWbveWSjOWPmeWIqeS6mui/memHjO+8jOaLpeacieaIkeeUn+a0u+S4
+remcgOimgeeahOS4gOWIh++8jOS9huayoeacieS6uue7meaIkeW7uuiuruOAguaIkemcgOimgeS4
+gOS4quivmuWunueahOS6uuadpeS/oeS7u++8jOS7luS5n+S8muWwseWmguS9leaKlei1hOWQkeaI
+keaPkOS+m+W7uuiuruOAguWboOS4uuaIkeaYr+aIkeeItuavjeWcqOS7luS7rOWOu+S4luWJjeeU
+n+S4i+eahOWUr+S4gOWls+WtqeOAgg0KDQrmiJHkuI3orqTor4bkvaDmnKzkurrvvIzkvYbmiJHo
+rqTkuLrmnInkuIDkuKrlgLzlvpfkv6HotZbnmoTlpb3kurrvvIzku5blj6/ku6Xlu7rnq4vnnJ/m
+raPnmoTkv6Hku7vlkozoia/lpb3nmoTllYbkuJrlj4vosIrvvIzlpoLmnpzkvaDnnJ/nmoTmnInk
+uIDkuKror5rlrp7nmoTlkI3lrZfvvIzmiJHkuZ/mnInkuIDkupvkuJzopb/opoHlkozkvaDliIbk
+uqvnm7jkv6HjgILlnKjkvaDouqvkuIrvvIzlm6DkuLrmiJHpnIDopoHkvaDnmoTluK7liqnjgILm
+iJHmi6XmnInmiJHlnKjlj5nliKnkuprov5nph4zotZrliLDnmoTmgLvpop3vvIg1NTANCuS4h+e+
+juWFg++8ieOAguaIkeS8muWcqOS4i+S4gOWwgeeUteWtkOmCruS7tuS4reWRiuivieS9oOaIkeaY
+r+WmguS9leWBmuWIsOeahO+8jOS4jeimgeaDiuaFjO+8jOS7luS7rOaYr+aXoOmjjumZqeeahO+8
+jOaIkei/mOWcqOS4jiBSZWQNCuacieiBlOezu+eahOS6uumBk+S4u+S5ieWMu+eUn+eahOW4ruWK
+qeS4i+Wwhui/meeslOmSseWtmOWFpeS6humTtuihjOOAguaIkeW4jOacm+aCqOWwhuiHquW3seS9
+nOS4uuaIkeeahOWPl+ebiuS6uuadpeaOpeaUtuWfuumHkeW5tuWcqOaIkeWcqOi/memHjOWujOaI
+kOWQjuehruS/neWug+eahOWuieWFqOW5tuiOt+W+l+aIkeeahOWGm+S6i+mAmuihjOivgeS7peWc
+qOaCqOeahOWbveWutuS4juaCqOS8mumdou+8m+S4jeimgeWus+aAlemTtuihjOS8muWwhui1hOmH
+keWtmOWCqOWcqA0KQVRNIFZJU0Eg5Y2h5Lit77yM6L+Z5a+55oiR5Lus5p2l6K+05piv5a6J5YWo
+5LiU5b+r5o2355qE44CCDQoNCueslOiusDvmiJHkuI3nn6XpgZPmiJHku6zopoHlnKjov5nph4zl
+kYblpJrkuYXvvIzmiJHnmoTlkb3ov5DvvIzlm6DkuLrmiJHlnKjov5nph4zkuKTmrKHngrjlvLno
+oq3lh7vkuK3lubjlrZjkuIvmnaXvvIzov5nlr7zoh7TmiJHlr7vmib7kuIDkuKrlgLzlvpfkv6Ho
+tZbnmoTkurrmnaXluK7liqnmiJHmjqXmlLblkozmipXotYTln7rph5HvvIzlm6DkuLrmiJHlsIbm
+naXliLDkvaDku6znmoTlm73lrrblh7rouqvmipXotYTvvIzlvIDlp4vmlrDnlJ/mtLvvvIzkuI3l
+ho3lvZPlhbXjgIINCg0K5aaC5p6c5oKo5oS/5oSP6LCo5oWO5aSE55CG77yM6K+35Zue5aSN5oiR
+44CC5oiR5Lya5ZGK6K+J5L2g5LiL5LiA5q2l55qE5rWB56iL77yM5bm257uZ5L2g5Y+R6YCB5pu0
+5aSa5YWz5LqO5Z+66YeR5a2Y5YWl6ZO26KGM55qE5L+h5oGv44CC5Lul5Y+K6ZO26KGM5bCG5aaC
+5L2V5biu5Yqp5oiR5Lus6YCa6L+HIEFUTSBWSVNBDQpDQVJEIOWwhui1hOmHkei9rOenu+WIsOaC
+qOeahOWbveWuti/lnLDljLrjgILlpoLmnpzkvaDmnInlhbTotqPvvIzor7fkuI7miJHogZTns7vj
+gIINCg==
