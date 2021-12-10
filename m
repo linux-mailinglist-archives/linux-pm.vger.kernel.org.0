@@ -2,109 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 409244703CA
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Dec 2021 16:23:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D73C470559
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Dec 2021 17:10:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242832AbhLJP1D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Dec 2021 10:27:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40466 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242854AbhLJP1C (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Dec 2021 10:27:02 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68524C061D5F
-        for <linux-pm@vger.kernel.org>; Fri, 10 Dec 2021 07:23:25 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id r11so30484938edd.9
-        for <linux-pm@vger.kernel.org>; Fri, 10 Dec 2021 07:23:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CaWHeGP0DuwfkbKXUdYIJmX8F+biVrGWME72+JdzhqU=;
-        b=MgLv3YrA9NlwpapqjGWsPaT057Lv4NTkMge5x9aYIzLu/EWTNZl9PQJ3i9HcLMOx6B
-         B9IguP3K+gzGh6KfKbYSO8oxGj7MjYa00frl0BCd7lnk7OkZoOhbnGk36UU3KzWuB3In
-         ZXMjkVs8K5nE10yvrBZiB/8HDzocgX7Too6WWjeeDpdcoaRlxj/sgAghwl/0IvTuGbeh
-         fAFYqtmGZZZiSOSvOT+oAtgE4HrF1eec+d4mRi7xCG+BmEL2kk0ZRTS2b7waN3H1I0k/
-         3ly7VwemPgrnfSjfL1C507DwBcuWSj3OL9qXJWKAX4/7OLRZbrfLo/DTY1QGnfnvK/nI
-         rVzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CaWHeGP0DuwfkbKXUdYIJmX8F+biVrGWME72+JdzhqU=;
-        b=RTaqIYTKveJtj/S3fa1kEjy7ZddMtxb/rM0vssCGpLnMh5unM+12qAj2CICL1HKjDA
-         zEPkqh81/Ceqgfw3AfdMqcJ1Df7wAuAabGgCqeBz0nIhqLPlg3zX7IMa4gUlKFp82ALP
-         K8EcU62snH4BffzStKDQbNJXvUyzXSulIIMRRceQ6J4O5pIzNi+POrhMj65dCQh2bfWK
-         TqoehBSX0k7QJ+xe+ROjluXs4/qwIWZwifZURt4D2cULSTc6LrflgLhrUOJOUm5Rdcvl
-         PzcOthT8EDdjbyyhhRlDCHxflVn+Grjn2WfRtBFbRBpHN5uD0oJmmAdzfUrHjcnwaHjQ
-         NRcg==
-X-Gm-Message-State: AOAM531eYiqnJvHzeYW568Wan65dwS6fN74RANUjlSh83uPavmUxTEq1
-        JVD4o8FSOM1TE5qPwrxw/gJpsZoYkySs3YrQv3PQnQ==
-X-Google-Smtp-Source: ABdhPJzwyJoQo5zS+XCmbkGk9eGVm61YMp0R/nIUhpMaAI0dyZLbksovDhkrc3SVhNC+OXjC0RSzQ3wiLRH8X7JDAvI=
-X-Received: by 2002:a05:6402:2805:: with SMTP id h5mr38690255ede.267.1639149780836;
- Fri, 10 Dec 2021 07:23:00 -0800 (PST)
-MIME-Version: 1.0
-References: <20211208003727.3596577-1-f.fainelli@gmail.com> <20211208003727.3596577-6-f.fainelli@gmail.com>
-In-Reply-To: <20211208003727.3596577-6-f.fainelli@gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 10 Dec 2021 16:22:50 +0100
-Message-ID: <CAMRc=MdmP5UCi2SJq9Ybhe9evUmM_PhpSUfzRF24yYUiRG+MNg@mail.gmail.com>
-Subject: Re: [PATCH v3 05/15] dt-bindings: gpio: Convert Broadcom STB GPIO to YAML
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     devicetree <devicetree@vger.kernel.org>,
-        Gregory Fong <gregory.0xf0@gmail.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
+        id S238157AbhLJQNw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Dec 2021 11:13:52 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:43522 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240110AbhLJQNv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Dec 2021 11:13:51 -0500
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 3.0.1)
+ id 67377897416ad859; Fri, 10 Dec 2021 17:10:15 +0100
+Received: from kreacher.localnet (unknown [213.134.162.58])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 78DEB66AD3B;
+        Fri, 10 Dec 2021 17:10:14 +0100 (CET)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Al Cooper <alcooperx@gmail.com>,
-        Doug Berger <opendmb@gmail.com>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:MULTIMEDIA CARD (MMC), SECURE DIGITAL (SD) AND..." 
-        <linux-mmc@vger.kernel.org>,
-        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH] PM: runtime: Add safety net to supplier device release
+Date:   Fri, 10 Dec 2021 17:10:13 +0100
+Message-ID: <11889065.O9o76ZdvQC@kreacher>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.162.58
+X-CLIENT-HOSTNAME: 213.134.162.58
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddrkedvgdekhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhephfegtdffjeehkeegleejveevtdeugfffieeijeduuddtkefgjedvheeujeejtedvnecukfhppedvudefrddufeegrdduiedvrdehkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduiedvrdehkedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehpvghtvghriiesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehulhhfrdhhrghnshhsohhnsehlihhnrghrohdrohhrghdprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurght
+ ihhonhdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Dec 8, 2021 at 1:37 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
->
-> Convert the Broadcom STB GPIO Device Tree binding to YAML to help with
-> validation.
->
-> Acked-by: Gregory Fong <gregory.0xf0@gmail.com>
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Acked-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Because refcount_dec_not_one() returns true if the target refcount
+becomes saturated, it is generally unsafe to use its return value as
+a loop termination condition, but that is what happens when a device
+link's supplier device is released during runtime PM suspend
+operations and on device link removal.
+
+To address this, introduce pm_runtime_release_supplier() to be used
+in the above cases which will check the supplier device's runtime
+PM usage counter in addition to the refcount_dec_not_one() return
+value, so the loop can be terminated in case the rpm_active refcount
+value becomes invalid, and update the code in question to use it as
+appropriate.
+
+This change is not expected to have any visible functional impact.
+
+Reported-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/base/core.c          |    3 +--
+ drivers/base/power/runtime.c |   41 ++++++++++++++++++++++++++++++-----------
+ include/linux/pm_runtime.h   |    3 +++
+ 3 files changed, 34 insertions(+), 13 deletions(-)
+
+Index: linux-pm/drivers/base/power/runtime.c
+===================================================================
+--- linux-pm.orig/drivers/base/power/runtime.c
++++ linux-pm/drivers/base/power/runtime.c
+@@ -305,19 +305,40 @@ static int rpm_get_suppliers(struct devi
+ 	return 0;
+ }
+ 
++/**
++ * pm_runtime_release_supplier - Drop references to device link's supplier.
++ * @link: Target device link.
++ * @check_idle: Whether or not to check if the supplier device is idle.
++ *
++ * Drop all runtime PM references associated with @link to its supplier device
++ * and if @check_idle is set, check if that device is idle (and so it can be
++ * suspended).
++ */
++void pm_runtime_release_supplier(struct device_link *link, bool check_idle)
++{
++	struct device *supplier = link->supplier;
++
++	/*
++	 * The additional power.usage_count check is a safety net in case
++	 * the rpm_active refcount becomes saturated, in which case
++	 * refcount_dec_not_one() would return true forever, but it is not
++	 * strictly necessary.
++	 */
++	while (refcount_dec_not_one(&link->rpm_active) &&
++	       atomic_read(&supplier->power.usage_count) > 0)
++		pm_runtime_put_noidle(supplier);
++
++	if (check_idle)
++		pm_request_idle(supplier);
++}
++
+ static void __rpm_put_suppliers(struct device *dev, bool try_to_suspend)
+ {
+ 	struct device_link *link;
+ 
+ 	list_for_each_entry_rcu(link, &dev->links.suppliers, c_node,
+-				device_links_read_lock_held()) {
+-
+-		while (refcount_dec_not_one(&link->rpm_active))
+-			pm_runtime_put_noidle(link->supplier);
+-
+-		if (try_to_suspend)
+-			pm_request_idle(link->supplier);
+-	}
++				device_links_read_lock_held())
++		pm_runtime_release_supplier(link, try_to_suspend);
+ }
+ 
+ static void rpm_put_suppliers(struct device *dev)
+@@ -1777,9 +1798,7 @@ void pm_runtime_drop_link(struct device_
+ 		return;
+ 
+ 	pm_runtime_drop_link_count(link->consumer);
+-
+-	while (refcount_dec_not_one(&link->rpm_active))
+-		pm_runtime_put(link->supplier);
++	pm_runtime_release_supplier(link, true);
+ }
+ 
+ static bool pm_runtime_need_not_resume(struct device *dev)
+Index: linux-pm/include/linux/pm_runtime.h
+===================================================================
+--- linux-pm.orig/include/linux/pm_runtime.h
++++ linux-pm/include/linux/pm_runtime.h
+@@ -58,6 +58,7 @@ extern void pm_runtime_get_suppliers(str
+ extern void pm_runtime_put_suppliers(struct device *dev);
+ extern void pm_runtime_new_link(struct device *dev);
+ extern void pm_runtime_drop_link(struct device_link *link);
++extern void pm_runtime_release_supplier(struct device_link *link, bool check_idle);
+ 
+ extern int devm_pm_runtime_enable(struct device *dev);
+ 
+@@ -283,6 +284,8 @@ static inline void pm_runtime_get_suppli
+ static inline void pm_runtime_put_suppliers(struct device *dev) {}
+ static inline void pm_runtime_new_link(struct device *dev) {}
+ static inline void pm_runtime_drop_link(struct device_link *link) {}
++static inline void pm_runtime_release_supplier(struct device_link *link,
++					       bool check_idle) {}
+ 
+ #endif /* !CONFIG_PM */
+ 
+Index: linux-pm/drivers/base/core.c
+===================================================================
+--- linux-pm.orig/drivers/base/core.c
++++ linux-pm/drivers/base/core.c
+@@ -485,8 +485,7 @@ static void device_link_release_fn(struc
+ 	/* Ensure that all references to the link object have been dropped. */
+ 	device_link_synchronize_removal();
+ 
+-	while (refcount_dec_not_one(&link->rpm_active))
+-		pm_runtime_put(link->supplier);
++	pm_runtime_release_supplier(link, true);
+ 
+ 	put_device(link->consumer);
+ 	put_device(link->supplier);
+
+
+
