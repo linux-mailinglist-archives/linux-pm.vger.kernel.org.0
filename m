@@ -2,154 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68350470BB2
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Dec 2021 21:16:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F753470DF5
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Dec 2021 23:34:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343867AbhLJUUM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Dec 2021 15:20:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54940 "EHLO
+        id S237071AbhLJWiH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Dec 2021 17:38:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234979AbhLJUUJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Dec 2021 15:20:09 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E1BFC0617A1;
-        Fri, 10 Dec 2021 12:16:34 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id l22so20022448lfg.7;
-        Fri, 10 Dec 2021 12:16:34 -0800 (PST)
+        with ESMTP id S236537AbhLJWiH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Dec 2021 17:38:07 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4FF5C061746
+        for <linux-pm@vger.kernel.org>; Fri, 10 Dec 2021 14:34:31 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id n26so9706457pff.3
+        for <linux-pm@vger.kernel.org>; Fri, 10 Dec 2021 14:34:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=3TjXmEXDJ/+bmC4Ps/ax4TtRHBZzHR+/4MLS5Bo5vyY=;
-        b=pA5gJzqpb6DuYCThgFEy/8I55Q/DWCaUg3a+PUCGAi7titTHPZavt9HNjzNTaNOdtA
-         W9bvYLeTFtb26OuFlSespYNsQjEuRbN74aib6efdQf4sRvk0jZOXEyR7Ry1SlPtvny3V
-         dHFm88kS0utx46N/B1V95jCju3EdX/3tioPOW0AUjL07+k8WzDTAaYKBNQJxB0pggImt
-         zxKY302IiWihQZ6zPY6n4S1ZYz2akRfe0TTR5ci41YrCJJyH8fb1pqNG9DRsK91AXeR3
-         4OlRlbRYehYwacP4ScBqgyVswzojoT/ol0CB6bk5gTERql84YP9I/T1kujCvte5MFcNM
-         x95w==
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=AmYCLZ6IWMsUZlDKqVTULubsbwDnRek5rFHq4l51GsQ=;
+        b=AeD+0XAimehTAkgwrIjSyimWbU4GZcAI8uhY2edcmZU4p5JscJcuHz6tRsSlhE+uh+
+         nnGLOuVV82k8aozelYFx3iIYobnnJncKcDsNzTEzlbie1qfe8PDPLrnBgPBgagSeL+GW
+         NKfB3rmxJQPuQoZBlwsmx8l2t9Xv93vCJ8EZ3Ni9apUZNA6XTzRbBH3LXPHuPfZXymKn
+         qVz6wmGmd0qzX9udFDlVUDi1JWN2Ngb6QL0OCNgEd08XRkJDTy+3H2r9xRbt89rVPIRp
+         +QVQrS8cA/fc4nbuv9pN9MbVO6mkIKxxCxF8SDPRbankDAOjCOwYSSIXcpRgoYnJFZo9
+         76pA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=3TjXmEXDJ/+bmC4Ps/ax4TtRHBZzHR+/4MLS5Bo5vyY=;
-        b=Z5E4HwNMYLLTdBmn8mNTFzzPDV6OmszU6ADD7WYc0CmUjohhIsXZHhioXuT7G4v4J+
-         v711hHi8OWaYIOzfPpQONluZYFWoGkOWFIVbuWStC1qKlnlCeGSOg7Sf4Syk0yqfk/By
-         Eb/7K9IM10/HIb6ondKHyeo//uP87oooICuBf7sKFXdpppYHStx7blbMAKfzHq7vN+y4
-         Djkzam3+DVV2ljUxI4J6Rz+WUmuxQjz/mdXIsnlzyeUT8533gyhGT8om8q5PUMr5Dwhi
-         xqwK/aoW/SdKWhykVtG645rYKLYc0Kj1sXpg2JnoKMHe/i2uz35DuxFLJzw4jXd6kxt4
-         KM1w==
-X-Gm-Message-State: AOAM530aCh6insR5DZasI1/ehhHZ8aar+QI+dJq/YoqY7tAC5Oym8LMv
-        4ntSwcR2cbdYbuPpH62GAQALanUtGUM=
-X-Google-Smtp-Source: ABdhPJwE5tZeH/HHL0CnlLb6JayzZfWyUFquo/I1vHYJYjJlUN8IQfec3+fnfy4fMkF6dVQvXojbFQ==
-X-Received: by 2002:a05:6512:2292:: with SMTP id f18mr14265704lfu.18.1639167392050;
-        Fri, 10 Dec 2021 12:16:32 -0800 (PST)
-Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.googlemail.com with ESMTPSA id z23sm409427ljn.23.2021.12.10.12.16.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Dec 2021 12:16:31 -0800 (PST)
-Subject: Re: [PATCH v4 03/25] notifier: Add
- atomic/blocking_notifier_has_unique_priority()
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee.jones@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
-        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv@lists.infradead.org,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        xen-devel@lists.xenproject.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-References: <20211126180101.27818-1-digetx@gmail.com>
- <20211126180101.27818-4-digetx@gmail.com>
- <CAJZ5v0jTJ3f7oUUR690PGaPJsxA8yzua9XDa8MONBHMzHnDfOQ@mail.gmail.com>
- <e6ff1cea-a168-1cb0-25c5-fb16c681cf4a@gmail.com>
- <CAJZ5v0gwnY07vg71_NB8RDWyv84FtMsmx7UTDd8TkUd7vFzc6A@mail.gmail.com>
- <fd158245-aa9a-2e48-0145-004f30005a66@gmail.com>
-Message-ID: <218e67e2-1d8c-5727-3862-8884d74aa63e@gmail.com>
-Date:   Fri, 10 Dec 2021 23:16:29 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=AmYCLZ6IWMsUZlDKqVTULubsbwDnRek5rFHq4l51GsQ=;
+        b=eOXOdLepd6nMbapCNqtvy/slVAIjTlmuQVe2GD7yGZc0xNyyZ72oeqzcUz2zhnFp3I
+         G36APFQC8/uwIk1D3NacH/QLD6Cl/s9UceNNzdL/74VsS+mvefl+PLEtA0w0vW69SvTe
+         +cKmN3nuL82Bul/3hirmmLv/3mQgnLPnvQ0sStyqeoYnRh9ErXlkdly5gxBJMWkDIXFo
+         A2Jtp/NOFhklmiSFIDKYB+cfUfxIo5AZIrQETDkh+g/6pZf4PYGpA1CESiPSG4bVR/f6
+         F7Z7mgKFjmup/VPEzN3vmTzg+385HcKp90x3l1PGsIyAMtymn3vts7kXIe6yNyOjNnLz
+         Qeew==
+X-Gm-Message-State: AOAM530/hL4AMxvp53ryo7cu9pZFegr2apFGbirXqamrW6pLHo4ZVO9U
+        8nRGm2chRLJzyG0zgeMx9QIwRQ==
+X-Google-Smtp-Source: ABdhPJwu0XbWAZBXpgygoOmtj29B0mtHnPUDPVL923k/hoChTjqIEFAQvBwpiLYxX/w7fKZLswnX3Q==
+X-Received: by 2002:a63:2cd8:: with SMTP id s207mr8103633pgs.231.1639175671451;
+        Fri, 10 Dec 2021 14:34:31 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id lt5sm29257pjb.43.2021.12.10.14.34.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Dec 2021 14:34:31 -0800 (PST)
+Message-ID: <61b3d5f7.1c69fb81.2c960.0211@mx.google.com>
+Date:   Fri, 10 Dec 2021 14:34:31 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <fd158245-aa9a-2e48-0145-004f30005a66@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: thermal-5.16-rc5-48-gf1f42573b6f3
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 1 warning (thermal-5.16-rc5-48-gf1f42573b6f3)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-10.12.2021 22:33, Dmitry Osipenko пишет:
->> Not really, they only prevent the race from occurring while
->> notifier_has_unique_priority() is running.
->>
->> If anyone depends on this check for correctness, they need to lock the
->> rwsem, do the check, do the thing depending on the check while holding
->> the rwsem and then release the rwsem.  Otherwise it is racy.
->>
-> It's fine that it's a bit "racy" since in the context of this series. We
-> always do the check after adding new entry, so it's not a problem.
-> 
-> There are two options:
-> 
-> 1. Use blocking_notifier_has_unique_priority() like it's done in this
-> patchset. Remove it after all drivers are converted to the new API and
-> add blocking_notifier_chain_register_unique().
-> 
-> 2. Add blocking_notifier_chain_register_unique(), but don't let it fail
-> the registration of non-unique entries until all drivers are converted
-> to the new API.
+pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (thermal-5.16-rc5=
+-48-gf1f42573b6f3)
 
-There is third, perhaps the best option:
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/the=
+rmal-5.16-rc5-48-gf1f42573b6f3/
 
-3. Add blocking_notifier_chain_register_unique() and fall back to
-blocking_notifier_chain_register() if unique fails, do it until all
-drivers are converted to the new API.
+Tree: pm
+Branch: testing
+Git Describe: thermal-5.16-rc5-48-gf1f42573b6f3
+Git Commit: f1f42573b6f39aa35a5d07079189c5c242180687
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+x86_64:
+
+
+Warnings summary:
+
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
