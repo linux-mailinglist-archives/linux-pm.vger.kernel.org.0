@@ -2,38 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E854470B17
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Dec 2021 20:54:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9A31470B9B
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Dec 2021 21:11:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343850AbhLJT6A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Dec 2021 14:58:00 -0500
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:34645 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343809AbhLJT54 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Dec 2021 14:57:56 -0500
-Received: by mail-ot1-f43.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso10721885otj.1;
-        Fri, 10 Dec 2021 11:54:20 -0800 (PST)
+        id S1344094AbhLJUPV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Dec 2021 15:15:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53858 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237391AbhLJUPV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Dec 2021 15:15:21 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 368DBC061746;
+        Fri, 10 Dec 2021 12:11:46 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id be32so14677411oib.11;
+        Fri, 10 Dec 2021 12:11:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=y8dMmkuyWBxEw+uQhTxZh8vd7mO4Vqr5QSAk8M5BMAA=;
+        b=CjOoay5crVqV1vxxDfK3lnWac3+Y1ui+hgrbOZFRtP6hWKRZgHhRAssqYB1nju3Bu9
+         xTuCQ75C9s5Yrt4Qxv2E46VoE4Uamekznbe8wRzghL/OAbWWod7k/0rguBN8gRik3YPP
+         QXNAi7iBXrJ5WXoA7GtfoWY/zm9rSThCV0erYqK6pqevxwjDNVuQ4c0lBfvX0ke1MvjI
+         YowkgFXqE3ANMwe1X6ctya7BVAsp3AxWfQ3nCFRFY5FoStwKM1sM8fYe+FdB8AXAJWXt
+         NOs7ElELrubZSZSujpLuKpVCn8+7MfwJFebOectp/vSX1dUrwW+SrpTsvLlkkc4r4snf
+         NhZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
         bh=y8dMmkuyWBxEw+uQhTxZh8vd7mO4Vqr5QSAk8M5BMAA=;
-        b=uVxJss+/mqfPblCik7IK6igcfJ44u/5s32762oNYjqz46nUozmExku9uqnym8LL911
-         rSe4ppgPmzPT6iTAx/qyt5FaFk3umbtSOG6/8VOTSINAx4WG0cgAs5rvZOg/dyj5xyA1
-         tGVX98EIQEqanHSdmWJaAHxBXXPGyAV0c1T55b0wKudWXz7TwZgDP0AVwL3p4mZK9E64
-         pqabTuE3DOnZAxC4hjzf7euMfq0orXsnL+BLwaodOVXNWhRkFsnTUoES+hkr9dQDCSvN
-         Hqw5CHx2U9ISo2tq58pQtNBmZ1Sl3LARQuzSUe7ja6EM1nafBy+NhzJqMF0//7D/GIks
-         rc3A==
-X-Gm-Message-State: AOAM532zB71HPkIo4cvRtWRtlL7Z6QKSna3xmQjlU6ER3dywLaJzic0K
-        lM9t4eRmlx5MQs4hFK2u73WIV71TrSfT2mocmcP+JB4pVPA=
-X-Google-Smtp-Source: ABdhPJxao1cGmZ4+P4fad/nTr+Q66pNXl14J67d+7ioY5YFM+slNF+siELGwwYlW4kgYku1xqwbq+aQGB4IxI/ax3Wg=
-X-Received: by 2002:a9d:4c10:: with SMTP id l16mr12849514otf.198.1639166060337;
- Fri, 10 Dec 2021 11:54:20 -0800 (PST)
+        b=yJP84CYQDR5VYWjfFV02KA8ZTccSIJe7YfJB5VcFcKK10eli5Vms8iiH3rbGaK3w+u
+         Z4P+RtKTXy176eOUj33emNogRWkjkItCVxwcA/AOfAI2xFb1PprjUYk9NfpuVTMsBmLb
+         awzqV7iMGS4p7Gs1c2n9F+BLCKTgj9+T1pI2bBuox3qjSUjtrUei/4aXchPAbry4pgJb
+         Nx5881rGmfJ0jRUyDqWAlMqMr4OgFStjTpS8YeV8/dJyYT1dB+bXyucrdEt7DbsMxn/1
+         AWuFA20QaWi++dZIC07iczSZiYgZeYkqjSdcCZZL/CwXkSkvuG9pGzC8xr3HDxoffrLn
+         nBWw==
+X-Gm-Message-State: AOAM530SC/vXVQ/h5oliBGgiV8YJRjC2d0ahQiMtWw2zdJicZOViItGz
+        voRfkkj16LCsbQ9P/ckk0UmaYURNJCrfKBD01K5HId1g7fA=
+X-Google-Smtp-Source: ABdhPJztF744mwWdIFiEKqgTD0jWuQ1T/Vuck5Bxl6AgZf6KDTPmubHA9sOWQUDrMuZvT/zgzzvd10lz0D5OXk/Wu3M=
+X-Received: by 2002:a05:6808:1454:: with SMTP id x20mr14186735oiv.166.1639167105651;
+ Fri, 10 Dec 2021 12:11:45 -0800 (PST)
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 10 Dec 2021 20:54:09 +0100
-Message-ID: <CAJZ5v0jqjgDHtBsdZuuEZjE=DRKq+5cWv9Eq35V8V1bLH4nscQ@mail.gmail.com>
+From:   =?UTF-8?Q?Rafa=C5=82_Wysocki?= <rjwysocki@gmail.com>
+Date:   Fri, 10 Dec 2021 21:11:34 +0100
+Message-ID: <CAJZ5v0hpgZ76wUgAuuzcjCdxjpBWAEtruTtXN6eqsDdYdpS8Hw@mail.gmail.com>
 Subject: [GIT PULL] Thermal control fix for v5.16-rc5
-To:     Linux PM <linux-pm@vger.kernel.org>,
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
