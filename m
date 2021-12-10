@@ -2,94 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1599847055E
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Dec 2021 17:12:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1485E47056E
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Dec 2021 17:17:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239094AbhLJQP4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Dec 2021 11:15:56 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:52546 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236753AbhLJQP4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Dec 2021 11:15:56 -0500
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 3.0.1)
- id f00c592c3ba2d407; Fri, 10 Dec 2021 17:12:20 +0100
-Received: from kreacher.localnet (unknown [213.134.162.58])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        id S240482AbhLJQU7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Dec 2021 11:20:59 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:44390 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240454AbhLJQU7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Dec 2021 11:20:59 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id C5C0666AD3B;
-        Fri, 10 Dec 2021 17:12:19 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH] cpufreq: intel_pstate: Drop redundant intel_pstate_get_hwp_cap() call
-Date:   Fri, 10 Dec 2021 17:12:18 +0100
-Message-ID: <5782812.lOV4Wx5bFT@kreacher>
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1BBB9CE211C;
+        Fri, 10 Dec 2021 16:17:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92988C00446;
+        Fri, 10 Dec 2021 16:17:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639153041;
+        bh=eEOzoZqVJMKv25tFyw1dzqbBRMrJAuuCYvvNkluR5nc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vDtkTvK7+i80796F890FjPoOL0Th8QL2gk+G+CjlfOpZ0rjkKWybTOCW9jbf9cOZL
+         guJ7WjobyeR51iKYvMZk4G44WxVXru25cMxa2dkCRA0xVwSKR83EPexneplgh5KKqO
+         KM41udNCHj1Y7rlG3m2IsSe3XRwxplOOPkdauxRI=
+Date:   Fri, 10 Dec 2021 17:17:18 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: Re: [PATCH] PM: runtime: Add safety net to supplier device release
+Message-ID: <YbN9jtlcKYG/WObw@kroah.com>
+References: <11889065.O9o76ZdvQC@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.162.58
-X-CLIENT-HOSTNAME: 213.134.162.58
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddrkedvgdekiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhephfegtdffjeehkeegleejveevtdeugfffieeijeduuddtkefgjedvheeujeejtedvnecukfhppedvudefrddufeegrdduiedvrdehkeenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduiedvrdehkedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <11889065.O9o76ZdvQC@kreacher>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Fri, Dec 10, 2021 at 05:10:13PM +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Because refcount_dec_not_one() returns true if the target refcount
+> becomes saturated, it is generally unsafe to use its return value as
+> a loop termination condition, but that is what happens when a device
+> link's supplier device is released during runtime PM suspend
+> operations and on device link removal.
+> 
+> To address this, introduce pm_runtime_release_supplier() to be used
+> in the above cases which will check the supplier device's runtime
+> PM usage counter in addition to the refcount_dec_not_one() return
+> value, so the loop can be terminated in case the rpm_active refcount
+> value becomes invalid, and update the code in question to use it as
+> appropriate.
+> 
+> This change is not expected to have any visible functional impact.
+> 
+> Reported-by: Peter Zijlstra <peterz@infradead.org>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/base/core.c          |    3 +--
+>  drivers/base/power/runtime.c |   41 ++++++++++++++++++++++++++++++-----------
+>  include/linux/pm_runtime.h   |    3 +++
+>  3 files changed, 34 insertions(+), 13 deletions(-)
+> 
 
-It is not necessary to call intel_pstate_get_hwp_cap() from
-intel_pstate_update_perf_limits(), because it gets called from
-intel_pstate_verify_cpu_policy() which is either invoked directly
-right before intel_pstate_update_perf_limits(), in
-intel_cpufreq_verify_policy() in the passive mode, or called
-from driver callbacks in a sequence that causes it to be followed
-by an immediate intel_pstate_update_perf_limits().
-
-Namely, in the active mode intel_cpufreq_verify_policy() is called
-by intel_pstate_verify_policy() which is the ->verify() callback
-routine of intel_pstate and gets called by the cpufreq core right
-before intel_pstate_set_policy(), which is the driver's ->setoplicy()
-callback routine, where intel_pstate_update_perf_limits() is called.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/cpufreq/intel_pstate.c |   18 +++++++-----------
- 1 file changed, 7 insertions(+), 11 deletions(-)
-
-Index: linux-pm/drivers/cpufreq/intel_pstate.c
-===================================================================
---- linux-pm.orig/drivers/cpufreq/intel_pstate.c
-+++ linux-pm/drivers/cpufreq/intel_pstate.c
-@@ -2486,18 +2486,14 @@ static void intel_pstate_update_perf_lim
- 	 * HWP needs some special consideration, because HWP_REQUEST uses
- 	 * abstract values to represent performance rather than pure ratios.
- 	 */
--	if (hwp_active) {
--		intel_pstate_get_hwp_cap(cpu);
-+	if (hwp_active && cpu->pstate.scaling != perf_ctl_scaling) {
-+		int scaling = cpu->pstate.scaling;
-+		int freq;
- 
--		if (cpu->pstate.scaling != perf_ctl_scaling) {
--			int scaling = cpu->pstate.scaling;
--			int freq;
--
--			freq = max_policy_perf * perf_ctl_scaling;
--			max_policy_perf = DIV_ROUND_UP(freq, scaling);
--			freq = min_policy_perf * perf_ctl_scaling;
--			min_policy_perf = DIV_ROUND_UP(freq, scaling);
--		}
-+		freq = max_policy_perf * perf_ctl_scaling;
-+		max_policy_perf = DIV_ROUND_UP(freq, scaling);
-+		freq = min_policy_perf * perf_ctl_scaling;
-+		min_policy_perf = DIV_ROUND_UP(freq, scaling);
- 	}
- 
- 	pr_debug("cpu:%d min_policy_perf:%d max_policy_perf:%d\n",
-
-
-
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
