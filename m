@@ -2,152 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F753470DF5
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Dec 2021 23:34:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60E73470E23
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Dec 2021 23:43:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237071AbhLJWiH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Dec 2021 17:38:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
+        id S1344621AbhLJWqm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Dec 2021 17:46:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236537AbhLJWiH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Dec 2021 17:38:07 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4FF5C061746
-        for <linux-pm@vger.kernel.org>; Fri, 10 Dec 2021 14:34:31 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id n26so9706457pff.3
-        for <linux-pm@vger.kernel.org>; Fri, 10 Dec 2021 14:34:31 -0800 (PST)
+        with ESMTP id S1344652AbhLJWql (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Dec 2021 17:46:41 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E32C061746
+        for <linux-pm@vger.kernel.org>; Fri, 10 Dec 2021 14:43:05 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id t5so33972020edd.0
+        for <linux-pm@vger.kernel.org>; Fri, 10 Dec 2021 14:43:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=AmYCLZ6IWMsUZlDKqVTULubsbwDnRek5rFHq4l51GsQ=;
-        b=AeD+0XAimehTAkgwrIjSyimWbU4GZcAI8uhY2edcmZU4p5JscJcuHz6tRsSlhE+uh+
-         nnGLOuVV82k8aozelYFx3iIYobnnJncKcDsNzTEzlbie1qfe8PDPLrnBgPBgagSeL+GW
-         NKfB3rmxJQPuQoZBlwsmx8l2t9Xv93vCJ8EZ3Ni9apUZNA6XTzRbBH3LXPHuPfZXymKn
-         qVz6wmGmd0qzX9udFDlVUDi1JWN2Ngb6QL0OCNgEd08XRkJDTy+3H2r9xRbt89rVPIRp
-         +QVQrS8cA/fc4nbuv9pN9MbVO6mkIKxxCxF8SDPRbankDAOjCOwYSSIXcpRgoYnJFZo9
-         76pA==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=uNvZHe6DHRkF+xFR2MjDNEoC+neS0KSxMQQUcva/BLo=;
+        b=grQgQcg5MH+iX7Jw2TpSklrJNA/RSRHJETmDcYrXbXsk3YGdRDRXXoXauSP5q327/M
+         xnSxXPjy36NvjVKp/+pXBFy44pq100Dyqgg4i1t+JBgHycd6Pm2Pscz/QIMcHcnjx4Tg
+         1fVwhoeVi7wK76k1Y6Oypx+EYeaQ8bJnJMo3g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=AmYCLZ6IWMsUZlDKqVTULubsbwDnRek5rFHq4l51GsQ=;
-        b=eOXOdLepd6nMbapCNqtvy/slVAIjTlmuQVe2GD7yGZc0xNyyZ72oeqzcUz2zhnFp3I
-         G36APFQC8/uwIk1D3NacH/QLD6Cl/s9UceNNzdL/74VsS+mvefl+PLEtA0w0vW69SvTe
-         +cKmN3nuL82Bul/3hirmmLv/3mQgnLPnvQ0sStyqeoYnRh9ErXlkdly5gxBJMWkDIXFo
-         A2Jtp/NOFhklmiSFIDKYB+cfUfxIo5AZIrQETDkh+g/6pZf4PYGpA1CESiPSG4bVR/f6
-         F7Z7mgKFjmup/VPEzN3vmTzg+385HcKp90x3l1PGsIyAMtymn3vts7kXIe6yNyOjNnLz
-         Qeew==
-X-Gm-Message-State: AOAM530/hL4AMxvp53ryo7cu9pZFegr2apFGbirXqamrW6pLHo4ZVO9U
-        8nRGm2chRLJzyG0zgeMx9QIwRQ==
-X-Google-Smtp-Source: ABdhPJwu0XbWAZBXpgygoOmtj29B0mtHnPUDPVL923k/hoChTjqIEFAQvBwpiLYxX/w7fKZLswnX3Q==
-X-Received: by 2002:a63:2cd8:: with SMTP id s207mr8103633pgs.231.1639175671451;
-        Fri, 10 Dec 2021 14:34:31 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id lt5sm29257pjb.43.2021.12.10.14.34.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 14:34:31 -0800 (PST)
-Message-ID: <61b3d5f7.1c69fb81.2c960.0211@mx.google.com>
-Date:   Fri, 10 Dec 2021 14:34:31 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=uNvZHe6DHRkF+xFR2MjDNEoC+neS0KSxMQQUcva/BLo=;
+        b=yzcfx0fdUeWlxYIep89PMxBCxfe4KfzhhqjOQLgkZsUm9ROFai36vwpFsEH78YAna3
+         i+1kFgRi0w+2hr+t/0F2B1Fanb0X5m1xeJcW6+BRwVJlylCpP7Bm9oaHtS/u3zE2NyOe
+         2jmLCSnQw6N6CHpfyzCz0Wx9xHckrmWgJVB1tF++shtNfUU6E2Y1HgX8zHYe3/Y4aNdd
+         iZSXoiLGrVNVYuokwOgNrY8SzuhlVoZrC1HK39DDq9SfSWH3BFfLhmQ8x4y+bCXNm7FJ
+         Dhz5KE00+IH883ri8vgv/KFfuvmWKc3oTNRYfDUb4Jvjkymm0/GbY/rkv6NBdBObuihy
+         JVig==
+X-Gm-Message-State: AOAM531BxGN4MUSzIQwqEc9ilD9ElIKvafNmCyne1xPgE1sjTJYxlaBt
+        Lt6JugUt9ckJIyVr8TuVTkXDAxKg1pma87TpWfk=
+X-Google-Smtp-Source: ABdhPJyaTqWeKdvVJhbniS18gc/bl6guBGlD7Mstvq67VKNHNaEVRgxSsDz72qQfFDWrj20BoD1Hkw==
+X-Received: by 2002:a50:becf:: with SMTP id e15mr42147627edk.114.1639176184260;
+        Fri, 10 Dec 2021 14:43:04 -0800 (PST)
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com. [209.85.221.44])
+        by smtp.gmail.com with ESMTPSA id gs17sm2088712ejc.28.2021.12.10.14.43.02
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Dec 2021 14:43:03 -0800 (PST)
+Received: by mail-wr1-f44.google.com with SMTP id t18so17295958wrg.11
+        for <linux-pm@vger.kernel.org>; Fri, 10 Dec 2021 14:43:02 -0800 (PST)
+X-Received: by 2002:adf:cc8d:: with SMTP id p13mr17138267wrj.274.1639176181996;
+ Fri, 10 Dec 2021 14:43:01 -0800 (PST)
 MIME-Version: 1.0
+References: <CAJZ5v0hpgZ76wUgAuuzcjCdxjpBWAEtruTtXN6eqsDdYdpS8Hw@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hpgZ76wUgAuuzcjCdxjpBWAEtruTtXN6eqsDdYdpS8Hw@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 10 Dec 2021 14:42:45 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgMh42qQSUW_DYkCOsjku401B9210MGmFGCixJFDWCeEA@mail.gmail.com>
+Message-ID: <CAHk-=wgMh42qQSUW_DYkCOsjku401B9210MGmFGCixJFDWCeEA@mail.gmail.com>
+Subject: Re: [GIT PULL] Thermal control fix for v5.16-rc5
+To:     =?UTF-8?Q?Rafa=C5=82_Wysocki?= <rjwysocki@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: thermal-5.16-rc5-48-gf1f42573b6f3
-X-Kernelci-Report-Type: build
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 1 warning (thermal-5.16-rc5-48-gf1f42573b6f3)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (thermal-5.16-rc5=
--48-gf1f42573b6f3)
+On Fri, Dec 10, 2021 at 12:11 PM Rafa=C5=82 Wysocki <rjwysocki@gmail.com> w=
+rote:
+>
+> This fixes the definition of one of the Tiger Lake MMIO registers
+> in the int340x thermal driver (Sumeet Pawnikar).
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/the=
-rmal-5.16-rc5-48-gf1f42573b6f3/
+Funky.
 
-Tree: pm
-Branch: testing
-Git Describe: thermal-5.16-rc5-48-gf1f42573b6f3
-Git Commit: f1f42573b6f39aa35a5d07079189c5c242180687
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
+You sent me three pull requests, and two of them came with your normal
+address, and now the third from a new gmail one that I've never seen
+before.
 
-Warnings Detected:
+I also note that this one uses the proper utf-8 "Rafa=C5=82" rather than
+"Rafael" - is that your preferred spelling?
 
-arc:
+I see the signed tag, and I notice that you do have this gmail address
+in your key, so this is all fine, but now I'm not sure how to spell
+your name any more ;)
 
-arm64:
-
-arm:
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-
-riscv:
-
-x86_64:
-
-
-Warnings summary:
-
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+              Linus
