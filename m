@@ -2,38 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1485E47056E
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Dec 2021 17:17:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D84A04705BE
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Dec 2021 17:30:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240482AbhLJQU7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Dec 2021 11:20:59 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:44390 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240454AbhLJQU7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Dec 2021 11:20:59 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1BBB9CE211C;
-        Fri, 10 Dec 2021 16:17:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92988C00446;
-        Fri, 10 Dec 2021 16:17:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639153041;
-        bh=eEOzoZqVJMKv25tFyw1dzqbBRMrJAuuCYvvNkluR5nc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vDtkTvK7+i80796F890FjPoOL0Th8QL2gk+G+CjlfOpZ0rjkKWybTOCW9jbf9cOZL
-         guJ7WjobyeR51iKYvMZk4G44WxVXru25cMxa2dkCRA0xVwSKR83EPexneplgh5KKqO
-         KM41udNCHj1Y7rlG3m2IsSe3XRwxplOOPkdauxRI=
-Date:   Fri, 10 Dec 2021 17:17:18 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        id S237575AbhLJQeX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Dec 2021 11:34:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56816 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237584AbhLJQeX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Dec 2021 11:34:23 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DDB8C061746;
+        Fri, 10 Dec 2021 08:30:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=2+bdmvJdEvPYzTwSQ6+YZVVgXjBRdV07Ohd2Ex/cYo0=; b=ve6q2IhNsKn1dgrmkvXroLy59P
+        REzND4EWEnPkECYGxlGztoqCGt0OTU8A7fXmzz2fpSb0KTTJAeeGTeVp3+n6QX7bHeBA1spr2K/cG
+        +DgpyISPfyrdVA3ccE1mQ8RwlponI+wCT4WFJVZCSO39BCARSk4mVylKqJfcT0bXtHctWVL/Gw1Y8
+        VmZrN9yMcoERrvvQfueXN4yxfMGazwLMHCck81ZkzGSqA52N+bXwhtK4ooz/Nr6zMeIbDhtXB2Rti
+        fUl7lPWBfBiAaImw/Gy0fclEmQa8//Sj/LTtqkPDNopEHaP3gHSlGtbLnMf5trgpar0ugcLKykhb5
+        kfBFAxNw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mvinF-00AUEi-7t; Fri, 10 Dec 2021 16:30:46 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5D39B3000E6;
+        Fri, 10 Dec 2021 17:30:45 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 3ED312BF8DA3A; Fri, 10 Dec 2021 17:30:45 +0100 (CET)
+Date:   Fri, 10 Dec 2021 17:30:45 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
 To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
 Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Subject: Re: [PATCH] PM: runtime: Add safety net to supplier device release
-Message-ID: <YbN9jtlcKYG/WObw@kroah.com>
+Message-ID: <YbOAtbjF2MdtPCRc@hirez.programming.kicks-ass.net>
 References: <11889065.O9o76ZdvQC@kreacher>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -63,11 +73,7 @@ On Fri, Dec 10, 2021 at 05:10:13PM +0100, Rafael J. Wysocki wrote:
 > 
 > Reported-by: Peter Zijlstra <peterz@infradead.org>
 > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  drivers/base/core.c          |    3 +--
->  drivers/base/power/runtime.c |   41 ++++++++++++++++++++++++++++++-----------
->  include/linux/pm_runtime.h   |    3 +++
->  3 files changed, 34 insertions(+), 13 deletions(-)
-> 
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Thanks!
+
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
