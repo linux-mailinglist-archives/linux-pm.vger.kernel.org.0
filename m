@@ -2,56 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E591D4719C1
-	for <lists+linux-pm@lfdr.de>; Sun, 12 Dec 2021 12:20:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 859444719C3
+	for <lists+linux-pm@lfdr.de>; Sun, 12 Dec 2021 12:20:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbhLLLUi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 12 Dec 2021 06:20:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57106 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230155AbhLLLUh (ORCPT
+        id S230160AbhLLLUj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 12 Dec 2021 06:20:39 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:57770 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229622AbhLLLUh (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Sun, 12 Dec 2021 06:20:37 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F20C0613F8
-        for <linux-pm@vger.kernel.org>; Sun, 12 Dec 2021 03:20:37 -0800 (PST)
-Date:   Sun, 12 Dec 2021 11:20:34 -0000
+Date:   Sun, 12 Dec 2021 11:20:35 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639308035;
+        s=2020; t=1639308036;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=F9lD2sk9EYibliNff2r6+rl1Rz/hmmGUy+iovuZTPMI=;
-        b=GMM2S1z25LHZ/EUG7S0dno1TewIngIXXfYOtzIehWaRnjOoWDxYppF7tip9Kw+k0XhVpxf
-        zCyeRXf15FA26H7BIeOnU9iFemgJifqUGITmm0l2ArHKhk1rZKB7h+YIA5Z/HXZwkj/bK7
-        0qmLgsS/Zn4ffjNWo43D9rAIYtExF/kD6d5tozINhp/mjgJo5Tu+llzonVoHp6NzjUO/Aa
-        eU8NLQhwvZACrbMWYEx6hasv4vy37u0deNMg6A+Y49UKGEQ4DXZZvNpPkl3tBtB/5T8tqq
-        462YeYMZV9RC84gnj3jCvN68cAuHqOKHJCOFY4mUTkiS4vbo/BLVn2LQSvx2Qw==
+        bh=JGLaRYQuITBP7WyEaR88+/eVqc4pQ87kl6EIZ9Tpi34=;
+        b=s2TRmsDrnjEAN94xaVQlJLPpCghde7nhFhJYqxlOgRkuwEWeA+2WIu9AdciJJj5S6EXHA5
+        A4TdLYKA0WQfloaFTCqxC77PKD7Z4lwDe5ymDpj7eTYux3GikYWJ9mRTjUG4az5l4UqhCg
+        5P7yUCI25JAJu5neQdRCQQ+Dm1WtfPxZEIsgwGDD4YDF8IWYQsJ4BW9S65p5BPH2tmEFSw
+        3hoxSywkckKiDYodq35zNN5cED4FWkGzdDi+fKfxhlnoLaVK1YZux2KVys6DySLCZIBMYm
+        LnXRorxccxQ3h5U8uF6ScdvKcwOBkhz0SNAd5wh7g6DlCs3sj9gcg6xrS5OQnQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639308035;
+        s=2020e; t=1639308036;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=F9lD2sk9EYibliNff2r6+rl1Rz/hmmGUy+iovuZTPMI=;
-        b=BcEG7HGqp2WwkFCowYcNGdoAaHMLwGuwMvDL9BeV/gOYdi2HtMwk7HgzRWIuUKZ2xMf6jK
-        NsKvdRzBN2X0rjDg==
-From:   "thermal-bot for Paul Gerber" <tip-bot2@linutronix.de>
+        bh=JGLaRYQuITBP7WyEaR88+/eVqc4pQ87kl6EIZ9Tpi34=;
+        b=yt2hoZ3UhJxnYZVlzSRgkT91P5IDSvpPwuZ777mA8wRQWjrSPEFhO+LB5SBHLNONAwtt80
+        eylm0QUe4KdTvfBw==
+From:   "thermal-bot for Biju Das" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/drivers/imx8mm: Enable ADC when
- enabling monitor
-Cc:     Paul Gerber <Paul.Gerber@tq-group.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
+Subject: [thermal: thermal/next] dt-bindings: thermal: Document Renesas RZ/G2L TSU
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Rob Herring <robh@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20211122114225.196280-1-alexander.stein@ew.tq-group.com>
-References: <20211122114225.196280-1-alexander.stein@ew.tq-group.com>
+In-Reply-To: <20211130155757.17837-2-biju.das.jz@bp.renesas.com>
+References: <20211130155757.17837-2-biju.das.jz@bp.renesas.com>
 MIME-Version: 1.0
-Message-ID: <163930803412.23020.11036902330313833239.tip-bot2@tip-bot2>
+Message-ID: <163930803580.23020.16954701211179962674.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -62,52 +59,106 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     3de89d8842a2b5d3dd22ebf97dd561ae0a330948
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//3de89d8842a2b5d3dd22ebf97dd561ae0a330948
-Author:        Paul Gerber <Paul.Gerber@tq-group.com>
-AuthorDate:    Mon, 22 Nov 2021 12:42:25 +01:00
+Commit-ID:     9460347192add5644236d492f79ecab6d83504d4
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//9460347192add5644236d492f79ecab6d83504d4
+Author:        Biju Das <biju.das.jz@bp.renesas.com>
+AuthorDate:    Tue, 30 Nov 2021 15:57:56 
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Thu, 02 Dec 2021 11:12:24 +01:00
+CommitterDate: Tue, 30 Nov 2021 17:27:45 +01:00
 
-thermal/drivers/imx8mm: Enable ADC when enabling monitor
+dt-bindings: thermal: Document Renesas RZ/G2L TSU
 
-The i.MX 8MP has a ADC_PD bit in the TMU_TER register that controls the
-operating mode of the ADC:
-* 0 means normal operating mode
-* 1 means power down mode
+Document the Thermal Sensor Unit(TSU) in the RZ/G2L SoC.
 
-When enabling/disabling the TMU, the ADC operating mode must be set
-accordingly.
-
-i.MX 8M Mini & Nano are lacking this bit.
-
-Signed-off-by: Paul Gerber <Paul.Gerber@tq-group.com>
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-Fixes: 2b8f1f0337c5 ("thermal: imx8mm: Add i.MX8MP support")
-Link: https://lore.kernel.org/r/20211122114225.196280-1-alexander.stein@ew.tq-group.com
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Link: https://lore.kernel.org/r/20211130155757.17837-2-biju.das.jz@bp.renesas.com
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/imx8mm_thermal.c | 3 +++
- 1 file changed, 3 insertions(+)
+ Documentation/devicetree/bindings/thermal/rzg2l-thermal.yaml | 76 +++++++-
+ 1 file changed, 76 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/thermal/rzg2l-thermal.yaml
 
-diff --git a/drivers/thermal/imx8mm_thermal.c b/drivers/thermal/imx8mm_thermal.c
-index 7442e01..af666bd 100644
---- a/drivers/thermal/imx8mm_thermal.c
-+++ b/drivers/thermal/imx8mm_thermal.c
-@@ -21,6 +21,7 @@
- #define TPS			0x4
- #define TRITSR			0x20	/* TMU immediate temp */
- 
-+#define TER_ADC_PD		BIT(30)
- #define TER_EN			BIT(31)
- #define TRITSR_TEMP0_VAL_MASK	0xff
- #define TRITSR_TEMP1_VAL_MASK	0xff0000
-@@ -113,6 +114,8 @@ static void imx8mm_tmu_enable(struct imx8mm_tmu *tmu, bool enable)
- 
- 	val = readl_relaxed(tmu->base + TER);
- 	val = enable ? (val | TER_EN) : (val & ~TER_EN);
-+	if (tmu->socdata->version == TMU_VER2)
-+		val = enable ? (val & ~TER_ADC_PD) : (val | TER_ADC_PD);
- 	writel_relaxed(val, tmu->base + TER);
- }
- 
+diff --git a/Documentation/devicetree/bindings/thermal/rzg2l-thermal.yaml b/Documentation/devicetree/bindings/thermal/rzg2l-thermal.yaml
+new file mode 100644
+index 0000000..ccab951
+--- /dev/null
++++ b/Documentation/devicetree/bindings/thermal/rzg2l-thermal.yaml
+@@ -0,0 +1,76 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/thermal/rzg2l-thermal.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Renesas RZ/G2L Thermal Sensor Unit
++
++description:
++  On RZ/G2L SoCs, the thermal sensor unit (TSU) measures the
++  temperature(Tj) inside the LSI.
++
++maintainers:
++  - Biju Das <biju.das.jz@bp.renesas.com>
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - renesas,r9a07g044-tsu # RZ/G2{L,LC}
++      - const: renesas,rzg2l-tsu
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  power-domains:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++
++  "#thermal-sensor-cells":
++    const: 1
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - power-domains
++  - resets
++  - "#thermal-sensor-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/r9a07g044-cpg.h>
++
++    tsu: thermal@10059400 {
++            compatible = "renesas,r9a07g044-tsu",
++                         "renesas,rzg2l-tsu";
++            reg = <0x10059400 0x400>;
++            clocks = <&cpg CPG_MOD R9A07G044_TSU_PCLK>;
++            resets = <&cpg R9A07G044_TSU_PRESETN>;
++            power-domains = <&cpg>;
++            #thermal-sensor-cells = <1>;
++    };
++
++    thermal-zones {
++            cpu-thermal {
++                    polling-delay-passive = <250>;
++                    polling-delay = <1000>;
++                    thermal-sensors = <&tsu 0>;
++
++                    trips {
++                            sensor_crit: sensor-crit {
++                                    temperature = <125000>;
++                                    hysteresis = <1000>;
++                                    type = "critical";
++                            };
++                    };
++            };
++    };
