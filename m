@@ -2,115 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56BA347227E
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Dec 2021 09:27:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4CCF47229A
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Dec 2021 09:27:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbhLMI1M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Dec 2021 03:27:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38152 "EHLO
+        id S233076AbhLMI1e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Dec 2021 03:27:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbhLMI1M (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Dec 2021 03:27:12 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99BF5C061756
-        for <linux-pm@vger.kernel.org>; Mon, 13 Dec 2021 00:27:11 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id e3so50049870edu.4
-        for <linux-pm@vger.kernel.org>; Mon, 13 Dec 2021 00:27:11 -0800 (PST)
+        with ESMTP id S231717AbhLMI1T (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Dec 2021 03:27:19 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D61C061D7E
+        for <linux-pm@vger.kernel.org>; Mon, 13 Dec 2021 00:27:17 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id r11so48767853edd.9
+        for <linux-pm@vger.kernel.org>; Mon, 13 Dec 2021 00:27:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=fairphone.com; s=fair;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9qNVJJUEkc7Dcqq+w3jXBP/JOAXOW45KnRjiowBHvGk=;
-        b=lGsG+RSK6fKMObsJQ7Iti5lpYgJ6YDHFJh2yVwO4XuHD8dveHSTYe/H5vctCR3EceI
-         XqKuogxu2fO0A5lqmYqIOpALu/ZAlwyN5MpiGyuxrhGT4dFdyWMvGpLMx8bvZsddP9hp
-         uygNMnJ/yqA/HLuo9RxL3P+UaNjwUw8FVJxoH5ME1qus3y9LosZQt6MPD+Go9ivr+x+I
-         5NBCzSlBofWA0sfijE46EUYppcRu4UKN9UbgQuwQlhr8/MVWSyaIoK6EGtTLTPMvbQQ1
-         YS5aqS6H4kpadwXpvOh44y1zf//CCrxgItwxZNG/CI17aEzqwFI/8ITqQJIsV4zBY6wg
-         c6OA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=taFnq99zQAi88G74QKTyCZlH6WvgNqJiCDDQ9L4lFX4=;
+        b=HzaB8tg68t34rQqDwLi/Z0nDC1TwlNT64YkiMFS6334hVjCHxGZQ+hNJhL3DCP+Xvz
+         dMNw7ZlpvZHmZ8ofZkC/pAedq748nbWyEXfThYMGp5/+8T77Cx3ON6i5PKn6R/bdTzZL
+         HWDxL/cLbG7mFeMf2SqRWEG/VOoZHZjlIIhLVghuyExJhBcwjNfFIiVg8+0c5GTiFtpE
+         Tp1QnU81DfUys/j4zxEKG1TZGYVTmjbcMAPwziGrXa3C1SkZvPrNyVVlcnUv7GR8hCac
+         olqo7kllB2KNEtA5glyULFG9dpa7eRsvB+r5EvgwK87G7PnsGp9dReo4nCoHeOJy+9ei
+         qt+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9qNVJJUEkc7Dcqq+w3jXBP/JOAXOW45KnRjiowBHvGk=;
-        b=fBReH8OLg54T6VRs8jHfuqQ0/HUvpforE8aKHoS1Cdvt6U4eg7y2wUeenUnrUSpis6
-         r9cSDp4n0DmgVb1UNOuRUfXB2Ywkw2ECFLrQRxYzKnr8/NIJ0OSv5BUEqfWbJAp8e7QY
-         aBotgy65erV+U4MKNtxjOMKOVwTnDFxoDTjajCN1PM8ARJlFIY/dEMgSdAr1BSWdCVl6
-         DuKQPf/GUvfJ11nwiaIViyeGPCjhAZ2z2NaJY0z21jC2PXYRn+iaZQ0YttjoOgtPMjEi
-         p11ZQ6M/na40F1mpKA79aa/Q+7j2zxyh+9LF6lIHpmZDBr0eD92L8dhTjZepHbf9x7dL
-         jGVQ==
-X-Gm-Message-State: AOAM531wnFkv8DPanUjjJtaRJAwsQ6iujyewnVWjAGAlGcr2URdRzs6+
-        RnmQ6YQN6t2cj57Blb7JwYlYEQ==
-X-Google-Smtp-Source: ABdhPJzJQzH9IbD0iKwzxP+OhiHo4OBp+NQ23YW0riJPC6Agdl1/DHF8upIV5V9+Kb8bNnWCgPyEyg==
-X-Received: by 2002:a17:907:608f:: with SMTP id ht15mr41645248ejc.300.1639384030231;
-        Mon, 13 Dec 2021 00:27:10 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=taFnq99zQAi88G74QKTyCZlH6WvgNqJiCDDQ9L4lFX4=;
+        b=jQQmiojIVaFTDlaKbnDF52x55uQD1OXp7D8CLN0GGsziWW+N6DrlY+u+C6zvIgXm0s
+         ExWh7iWEutYO3gGKO9pswutleIgg0sjrmG1zodwYmdqyyt+x4CDTpK9BMunOSTdHyDU7
+         aK164moK2uttZt5P6cGzJvnPqXaMzqn+7oLrWDUyzjPSgPE3ReWAiVoeDVlG2EMAqVyq
+         kRkW5UQiv5GlWOKs0o+XBlES/ElHKv/nJ9pFBu14bZXyVTEuqjN3iffsb9zEDSxaZPt3
+         UdYMhnKIA7MIeEShpao/9vnmiJV32e63zOPawAwWdyoWTa5wPdWIF1dhSgcSeW2kaf1I
+         G3Uw==
+X-Gm-Message-State: AOAM531ipJq7/7enDC+YOOQ9Q/PZ+racfk7B6ugwBIojAzsAbGcWHzxf
+        +zJxWn3eif1T5RTWhcWo/DwUMw==
+X-Google-Smtp-Source: ABdhPJyn/Tqd/Phv4lVk2MwK9UiR50FkW82/th2caR0i+Xc//17eqt7fQmEBRZ33ysREXZYTWqwk0Q==
+X-Received: by 2002:a50:cdc8:: with SMTP id h8mr63090815edj.87.1639384035701;
+        Mon, 13 Dec 2021 00:27:15 -0800 (PST)
 Received: from localhost.localdomain ([2a02:a210:20c5:8c80:7d0a:cd68:c339:f426])
-        by smtp.gmail.com with ESMTPSA id b11sm6062432ede.62.2021.12.13.00.27.09
+        by smtp.gmail.com with ESMTPSA id b11sm6062432ede.62.2021.12.13.00.27.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 00:27:09 -0800 (PST)
+        Mon, 13 Dec 2021 00:27:15 -0800 (PST)
 From:   Luca Weiss <luca.weiss@fairphone.com>
 To:     linux-arm-msm@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         Luca Weiss <luca.weiss@fairphone.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        de Goede <hdegoede@redhat.com>, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        Rishabh Bhatnagar <rishabhb@codeaurora.org>,
-        Rob Herring <robh@kernel.org>, Zhang Rui <rui.zhang@intel.com>
-Subject: [PATCH 00/10] dt-binding patches for sm6350
-Date:   Mon, 13 Dec 2021 09:26:01 +0100
-Message-Id: <20211213082614.22651-1-luca.weiss@fairphone.com>
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 05/10] dt-bindings: thermal: tsens: Add SM6350 compatible
+Date:   Mon, 13 Dec 2021 09:26:06 +0100
+Message-Id: <20211213082614.22651-6-luca.weiss@fairphone.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20211213082614.22651-1-luca.weiss@fairphone.com>
+References: <20211213082614.22651-1-luca.weiss@fairphone.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This series adds compatibles to the dt-bindings documentation where it
-was missed before.
+Add devicetree compatible for tsens on SM6350 SoC.
 
-Finally, the last patch solves some further dtbs_check errors by
-modifying the sm6350.dtsi to match the binding docs more closely.
+Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+Acked-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+---
+ Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-Please note, that the first patch from Konrad is a resend that wasn't
-picked up when sent to the lists in August 2021.
-
-Konrad Dybcio (1):
-  dt-bindings: arm: msm: Add LLCC for SM6350
-
-Luca Weiss (9):
-  dt-bindings: firmware: scm: Add SM6350 compatible
-  dt-bindings: qcom,pdc: Add SM6350 compatible
-  dt-bindings: phy: qcom,qusb2: Add SM6350 compatible
-  dt-bindings: thermal: tsens: Add SM6350 compatible
-  dt-bindings: usb: qcom,dwc3: Add SM6350 compatible
-  dt-bindings: watchdog: Add SM6350 and SM8250 compatible
-  dt-bindings: arm: msm: Don't mark LLCC interrupt as required
-  dt-bindings: simple-framebuffer: allow standalone compatible
-  arm64: dts: qcom: sm6350: Fix validation errors
-
- .../devicetree/bindings/arm/msm/qcom,llcc.yaml   |  2 +-
- .../bindings/display/simple-framebuffer.yaml     | 12 +++++++-----
- .../devicetree/bindings/firmware/qcom,scm.txt    |  1 +
- .../bindings/interrupt-controller/qcom,pdc.txt   |  5 +++--
- .../devicetree/bindings/phy/qcom,qusb2-phy.yaml  |  1 +
- .../devicetree/bindings/thermal/qcom-tsens.yaml  |  1 +
- .../devicetree/bindings/usb/qcom,dwc3.yaml       |  1 +
- .../devicetree/bindings/watchdog/qcom-wdt.yaml   |  2 ++
- arch/arm64/boot/dts/qcom/sm6350.dtsi             | 16 ++++++++--------
- 9 files changed, 25 insertions(+), 16 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+index d3b9e9b600a2..6d48c5ff6bda 100644
+--- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
++++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+@@ -50,6 +50,7 @@ properties:
+               - qcom,sc8180x-tsens
+               - qcom,sdm630-tsens
+               - qcom,sdm845-tsens
++              - qcom,sm6350-tsens
+               - qcom,sm8150-tsens
+               - qcom,sm8250-tsens
+               - qcom,sm8350-tsens
 -- 
 2.34.1
 
