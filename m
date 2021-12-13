@@ -2,224 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 697C44723AF
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Dec 2021 10:23:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5010A4723AB
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Dec 2021 10:23:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233677AbhLMJXk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 13 Dec 2021 04:23:40 -0500
-Received: from mail-vk1-f179.google.com ([209.85.221.179]:38527 "EHLO
-        mail-vk1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233673AbhLMJXh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Dec 2021 04:23:37 -0500
-Received: by mail-vk1-f179.google.com with SMTP id s17so9966812vka.5;
-        Mon, 13 Dec 2021 01:23:36 -0800 (PST)
+        id S229485AbhLMJXj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Dec 2021 04:23:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51720 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233666AbhLMJXg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Dec 2021 04:23:36 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA204C061574
+        for <linux-pm@vger.kernel.org>; Mon, 13 Dec 2021 01:23:35 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id u3so29648881lfl.2
+        for <linux-pm@vger.kernel.org>; Mon, 13 Dec 2021 01:23:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:from:to:cc
+         :references:subject:in-reply-to:content-transfer-encoding;
+        bh=iqm6xEHR24DEGP71Dw334SXtVnwmbVG6/wYj4wQS+wE=;
+        b=K6ue4cRbEnf4K5nRsqCgIGj1VWcCXDeTq27Y5sQ5YLxj48mPUpe6Qo0lwzlQPtbMWx
+         uAMY8L7KWFrEh/HEB49Teuodid10F9hIbRPcQAwEoDLZdCijlxBLVgxVs/MR+WVw1ljp
+         p5qkPFokEk/Z6Oc+3ZUk87bP4hZGeIbQTb/YLgx5l1yj3C5EWbOlldWA2Io9RBwu5P3a
+         tUDan4h8JzHfweChDkcvX/Zu4lDAuletFpOyJf/Tdtf0L8pznrxmhnfxJtgZH1BeUrHz
+         V2t//XOGwua0P4ICi4MXIqKpB6+2gW/qDeV629ZBpaDm+r+gb4yVKktdilm9Mc55Fppy
+         41OA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=7JQ6xhDuC8UGs/jm3YR6x8QoCCs8KyehtdxluDCRZKo=;
-        b=s1vr4fKxoqXExk3EECIfYm4XnjnYCI9FntQ4nfRSKG1qDpqNF9Ln+oyQ+8AlkOmNZY
-         4VKiBsJuu+BAAMm6QtPPMfTP8l403QFB9Uc1hR/hLkkeUmz4NOq9DyGh796m9mNutLIJ
-         9dmGJIbRxcCMcWHcqcjslDyjrICWEIGHiLxUaU8S5YF6QkMz/C+jXeqnTPmQjjJqG5dJ
-         DmyRVHmFe1uRt/Nbgr8f/fqhsR3JckM0CbT/qJL8nxByU6P2aCObAAE9k9LrHm8V4BZI
-         O4fstT3MvC/FSeM0K6PLkHUslGnIIUAADonm70KDKHyXKuxJLmFh91rJ3HnUgrPDo6BS
-         4mKQ==
-X-Gm-Message-State: AOAM5329nOcx31Hc48LnBiGEsDoJpYJbc+mLykjJXH6bvW5Y9lmtzdhi
-        W+mLuBR5yt3KD2Q9Z9wXEnGVb9ZOGT4H6g==
-X-Google-Smtp-Source: ABdhPJy36iwzFCGQ3/LfaGF4Odlhfj2OLNrCWA4IlVb15gm8DIeNRZjtFj9sldbBl2GYTgKVUkSP6A==
-X-Received: by 2002:a05:6122:20a7:: with SMTP id i39mr29371339vkd.15.1639387415861;
-        Mon, 13 Dec 2021 01:23:35 -0800 (PST)
-Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com. [209.85.222.49])
-        by smtp.gmail.com with ESMTPSA id t20sm3875484vsj.27.2021.12.13.01.23.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Dec 2021 01:23:35 -0800 (PST)
-Received: by mail-ua1-f49.google.com with SMTP id ay21so27952890uab.12;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:from:to:cc:references:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=iqm6xEHR24DEGP71Dw334SXtVnwmbVG6/wYj4wQS+wE=;
+        b=gkvc8u6AQwEGshpoGoNg4AyLTo9+BuOJdE2c/36raSQAiM1rNYCgG+vzzcpD83bzNX
+         B4v2U7dhmVdqz8FJVDFTqHAe78qwr9tDQjstNf9/ma9x/ACjScwT9cuSu+tjLPH6owlD
+         9VNQD7GxyrpbclF5Iot8ZMoIb7ZMlLJAKk5g5UaQP4pyfqwNdlKJ/oDU4fP1mGTqXK3q
+         3ubuuw6rC7AqAy2jC6FeuyBsSWwVfctSVGfEMImRTyexeDTbUinxYzMh8rhiUYp1RA17
+         qQ9Sw1GMxIVwAyMYhReXV5NNOTQ6Ymx22xucuAeHGN0FSpYSmY0bOa0N0Bj+i2K+Z4VG
+         OD7w==
+X-Gm-Message-State: AOAM530AqhUaZ3iclusWOzfZQnYZ8E+DzLbaheVl+FZ8zUlgxVz9AAUa
+        vvfUX9B9xNQ2K2dm0RCk77N+avKUwMc=
+X-Google-Smtp-Source: ABdhPJz3yQb8czWyZbqcq6xsJPWZMRtIJM2+Q7wEuJgnrxpO8Z76YMeIHjh5XDO3CzNKcfUeu8Erow==
+X-Received: by 2002:ac2:5df6:: with SMTP id z22mr27151245lfq.230.1639387414146;
         Mon, 13 Dec 2021 01:23:34 -0800 (PST)
-X-Received: by 2002:a67:c106:: with SMTP id d6mr26074577vsj.77.1639387403608;
- Mon, 13 Dec 2021 01:23:23 -0800 (PST)
+Received: from ?IPV6:2001:14ba:16ee:fa00::4? (dc73szyyyyyyyyyyyyycy-3.rev.dnainternet.fi. [2001:14ba:16ee:fa00::4])
+        by smtp.gmail.com with ESMTPSA id n7sm1390614ljg.113.2021.12.13.01.23.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Dec 2021 01:23:33 -0800 (PST)
+Message-ID: <d4478fbf-1ec8-5659-c77d-f412c351e497@gmail.com>
+Date:   Mon, 13 Dec 2021 11:23:32 +0200
 MIME-Version: 1.0
-References: <20211126180101.27818-1-digetx@gmail.com> <20211126180101.27818-6-digetx@gmail.com>
- <YaLNOJTM+lVq+YNS@qmqm.qmqm.pl> <033ddf2a-6223-1a82-ec64-30f17c891f67@gmail.com>
- <YaQeQgbW+CjEdsqG@qmqm.qmqm.pl> <091321ea-4919-0579-88a8-23d05871575d@gmail.com>
- <CAJZ5v0jMvdhfBqjY+V9h_Z6EH1ohuJH+KjuGiOw_Jor1Tnp7vg@mail.gmail.com>
- <45025b2d-4be1-f694-be61-31903795cf5d@gmail.com> <CAJZ5v0ieTwnBVjW8R_VTdPFH3yr5AwLc+ZEG5N3KrpTH+j8qZw@mail.gmail.com>
-In-Reply-To: <CAJZ5v0ieTwnBVjW8R_VTdPFH3yr5AwLc+ZEG5N3KrpTH+j8qZw@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 13 Dec 2021 10:23:12 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXW1bCLkJhC1Jnf2rkS1rBnXsMX=4LMVdXDvMV5HOzrLw@mail.gmail.com>
-Message-ID: <CAMuHMdXW1bCLkJhC1Jnf2rkS1rBnXsMX=4LMVdXDvMV5HOzrLw@mail.gmail.com>
-Subject: Re: [PATCH v4 05/25] reboot: Warn if restart handler has duplicated priority
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee.jones@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
-        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv@lists.infradead.org,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        xen-devel@lists.xenproject.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Content-Language: en-US
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+References: <20211206000651.4168035-1-linus.walleij@linaro.org>
+ <7228bbd0-4428-18d2-8cef-df9a9c789d41@gmail.com>
+ <CACRpkdaKmZp62DSB7oMbESRjXAH8ncfLyc3KioSDx2z-_JOK8A@mail.gmail.com>
+ <CANhJrGMHr=VLAwe-Tvyg70nN4ArjHa8UHKZODwrufK1r+rRNcA@mail.gmail.com>
+Subject: Re: [PATCH v2] power: supply_core: Pass pointer to battery info
+In-Reply-To: <CANhJrGMHr=VLAwe-Tvyg70nN4ArjHa8UHKZODwrufK1r+rRNcA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 8:14 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> On Fri, Dec 10, 2021 at 8:04 PM Dmitry Osipenko <digetx@gmail.com> wrote:
-> > 10.12.2021 21:27, Rafael J. Wysocki пишет:
-> > > On Mon, Nov 29, 2021 at 12:34 PM Dmitry Osipenko <digetx@gmail.com> wrote:
-> > >> 29.11.2021 03:26, Michał Mirosław пишет:
-> > >>> On Mon, Nov 29, 2021 at 12:06:19AM +0300, Dmitry Osipenko wrote:
-> > >>>> 28.11.2021 03:28, Michał Mirosław пишет:
-> > >>>>> On Fri, Nov 26, 2021 at 09:00:41PM +0300, Dmitry Osipenko wrote:
-> > >>>>>> Add sanity check which ensures that there are no two restart handlers
-> > >>>>>> registered with the same priority. Normally it's a direct sign of a
-> > >>>>>> problem if two handlers use the same priority.
-> > >>>>>
-> > >>>>> The patch doesn't ensure the property that there are no duplicated-priority
-> > >>>>> entries on the chain.
-> > >>>>
-> > >>>> It's not the exact point of this patch.
-> > >>>>
-> > >>>>> I'd rather see a atomic_notifier_chain_register_unique() that returns
-> > >>>>> -EBUSY or something istead of adding an entry with duplicate priority.
-> > >>>>> That way it would need only one list traversal unless you want to
-> > >>>>> register the duplicate anyway (then you would call the older
-> > >>>>> atomic_notifier_chain_register() after reporting the error).
-> > >>>>
-> > >>>> The point of this patch is to warn developers about the problem that
-> > >>>> needs to be fixed. We already have such troubling drivers in mainline.
-> > >>>>
-> > >>>> It's not critical to register different handlers with a duplicated
-> > >>>> priorities, but such cases really need to be corrected. We shouldn't
-> > >>>> break users' machines during transition to the new API, meanwhile
-> > >>>> developers should take action of fixing theirs drivers.
-> > >>>>
-> > >>>>> (Or you could return > 0 when a duplicate is registered in
-> > >>>>> atomic_notifier_chain_register() if the callers are prepared
-> > >>>>> for that. I don't really like this way, though.)
-> > >>>>
-> > >>>> I had a similar thought at some point before and decided that I'm not in
-> > >>>> favor of this approach. It's nicer to have a dedicated function that
-> > >>>> verifies the uniqueness, IMO.
-> > >>>
-> > >>> I don't like the part that it traverses the list second time to check
-> > >>> the uniqueness. But actually you could avoid that if
-> > >>> notifier_chain_register() would always add equal-priority entries in
-> > >>> reverse order:
-> > >>>
-> > >>>  static int notifier_chain_register(struct notifier_block **nl,
-> > >>>               struct notifier_block *n)
-> > >>>  {
-> > >>>       while ((*nl) != NULL) {
-> > >>>               if (unlikely((*nl) == n)) {
-> > >>>                       WARN(1, "double register detected");
-> > >>>                       return 0;
-> > >>>               }
-> > >>> -             if (n->priority > (*nl)->priority)
-> > >>> +             if (n->priority >= (*nl)->priority)
-> > >>>                       break;
-> > >>>               nl = &((*nl)->next);
-> > >>>       }
-> > >>>       n->next = *nl;
-> > >>>       rcu_assign_pointer(*nl, n);
-> > >>>       return 0;
-> > >>>  }
-> > >>>
-> > >>> Then the check for uniqueness after adding would be:
-> > >>>
-> > >>>  WARN(nb->next && nb->priority == nb->next->priority);
-> > >>
-> > >> We can't just change the registration order because invocation order of
-> > >> the call chain depends on the registration order
-> > >
-> > > It doesn't if unique priorities are required and isn't that what you want?
-> > >
-> > >> and some of current
-> > >> users may rely on that order. I'm pretty sure that changing the order
-> > >> will have unfortunate consequences.
-> > >
-> > > Well, the WARN() doesn't help much then.
-> > >
-> > > Either you can make all of the users register with unique priorities,
-> > > and then you can make the registration reject non-unique ones, or you
-> > > cannot assume them to be unique.
-> >
-> > There is no strong requirement for priorities to be unique, the reboot.c
-> > code will work properly.
->
-> In which case adding the WARN() is not appropriate IMV.
->
-> Also I've looked at the existing code and at least in some cases the
-> order in which the notifiers run doesn't matter.  I'm not sure what
-> the purpose of this patch is TBH.
->
-> > The potential problem is on the user's side and the warning is intended
-> > to aid the user.
->
-> Unless somebody has the panic_on_warn mentioned previously set and
-> really the user need not understand what the WARN() is about.  IOW,
-> WARN() helps developers, not users.
+On 12/10/21 07:57, Matti Vaittinen wrote:
+> On Thu, Dec 9, 2021 at 2:46 AM Linus Walleij <linus.walleij@linaro.org> wrote:
 
-Do panic_on_warn and reboot_on_panic play well with having a WARN()
-in the reboot notifier handling?
+>> Also I would love if you could test v2 on hardware!
+> 
+> I don't have a real device with battery connected - but I thinkI do
+> have a break-out board with BD99954 lying around somewhere. I'll see
+> if I remember how to wire it to a beagle-bone - and if I do, then I
+> can try some very limited testing. Adding automated tests for the
+> BD99954 is still on my TODO-list, somewhere at the bottom of it... :(
 
-Gr{oetje,eeting}s,
+I have good and not-so-good news. Good news is that I did indeed find a 
+BD99954 evaluation board from my collection PCBs I have "temporarily" 
+stored in a box under my bed XD
 
-                        Geert
+The not-so-good news is that I thought I do remember how to connect the 
+board - but it seems I did not. As a result my beaglebone said "Zzzzap!" 
+- and lost the magic smoke which kept it operational. I have only one 
+spare board left - and I do noeed it for bunch of tasks - so I am afraid 
+I can't re-try testing untill I have ordered and received few 
+replacement boards... So sorry - no testing to be done in the next few 
+days - potentially no testing until year 2022 :(
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Best Regards
+	--Matti Vaittinen
