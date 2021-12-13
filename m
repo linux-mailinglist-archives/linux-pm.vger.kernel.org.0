@@ -2,117 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29D0B472AEF
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Dec 2021 12:11:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E3EB472C63
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Dec 2021 13:39:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231157AbhLMLLK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Dec 2021 06:11:10 -0500
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:32425 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229836AbhLMLLK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Dec 2021 06:11:10 -0500
+        id S232560AbhLMMjA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Dec 2021 07:39:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41616 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233776AbhLMMi7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Dec 2021 07:38:59 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF61C061574
+        for <linux-pm@vger.kernel.org>; Mon, 13 Dec 2021 04:38:58 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id k23so23521442lje.1
+        for <linux-pm@vger.kernel.org>; Mon, 13 Dec 2021 04:38:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1639393870; x=1670929870;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=5YidXyIgQI0E20XN+ohYDbgdQ4PIMU4JJRYFHx89oE8=;
-  b=KDTObcZgeUBgX5pdS6MRxVHXoOGUCif3vFLXR8NStYXXpk39M5ryOOBI
-   bo0sAGQ8WXHVXvpbvXJk3ks3kpXsNIR5A+gS53tl7zowqPgvJ1+EjBYDq
-   TqVXQfjjduRSn/IYSgdSS/QWldQs+d0qX4tRPL+hx6uRch67l/jzuT1kK
-   o=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 13 Dec 2021 03:11:09 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 03:11:01 -0800
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Mon, 13 Dec 2021 03:11:02 -0800
-Received: from codeaurora.org (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 13 Dec
- 2021 03:10:59 -0800
-From:   Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-To:     Sebastian Reichel <sre@kernel.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        David Collins <quic_collinsd@quicinc.com>,
-        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
-        Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-Subject: [PATCH] power_supply: Register cooling device outside of probe
-Date:   Mon, 13 Dec 2021 16:40:41 +0530
-Message-ID: <1639393841-17444-1-git-send-email-quic_manafm@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=wjLhM+axYn/vtzg0KhMiXODf8Dfp0SkV/grbjvJnums=;
+        b=niG85kqhYcwQvy5vAZgMnn2XNaQ5u+uT997pcWiqZowvU01ZNVxAvycqyJ2Ogrw7TN
+         4Wa+W7y8ZdZLViWI2onxiYdljJcwsF3bF9zvxXFm3X1tXToYMIAaAmDPoUEELdEt6Dw0
+         xWPcLlG+u0Il7Hh9KZfgV8mezI9XGYuAbFLLoJMztha+ecUh2ZQ17Om7ZSlcDGBbTDoU
+         0zZuh0cQsQxEjesYNQHpNYlJ76Nmy6EvmQfAUZGMHayPhJFKnSrIdCKIaQrgkhmbaNQV
+         leYNpIHCYzM5CaH7Ls1XROUFbUxLZfFopBVtqg0m3cXMdCe35yvL9EyKAWQj7jGYo9T4
+         uWEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=wjLhM+axYn/vtzg0KhMiXODf8Dfp0SkV/grbjvJnums=;
+        b=4qcuDOo3mXVxrUfvCKCII+8X/9gcRoje9gBA4hAXHX7zKAmHYqbxRHKXiy7O6abkvU
+         ONvbVSNgD0Z6iMaNgreQhQaBrUAYd+XsS2VX9VH2juR9D2wtcTb4+RpQmr0QTIyuMuuy
+         +WBJwOC6F3U4Ww7CTOK4nAUwsIi75tDTY1LnWHUEhlS+DWVe2rwcQaU7wVX7Rq0KUEZ8
+         stFvDie/38LklJKWZG2ZXhwveleao3wQhbm590Mq8cfnKYDbMIYGXIIZEkkEG+uxNuvj
+         fq2xLnMDjIvqIo9FToSMEd3eoDWTQgNBKtaljFtsPHDXA+AV17EkbFr4zfbitbHLP/A9
+         E8DA==
+X-Gm-Message-State: AOAM532TfTB7PQaDRFV6GfSTMmoWWY9s+kD5kpzuUKpQRrGD8IFrkbCP
+        AEqFsKNblQZgDK9PzprkgIRMxgpM2wMIsz4+9Uc=
+X-Google-Smtp-Source: ABdhPJyVcZQZxLwJCdaApMM9HgVoB36eixBV9BcRrUn6dP4YPIjrsrAwi0hEWQPn+7+DZ0s+QquIYgqvDoOahmVmihc=
+X-Received: by 2002:a2e:b88c:: with SMTP id r12mr28106788ljp.204.1639399136981;
+ Mon, 13 Dec 2021 04:38:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
+Received: by 2002:a05:6512:2209:0:0:0:0 with HTTP; Mon, 13 Dec 2021 04:38:56
+ -0800 (PST)
+Reply-To: dwilliamssdavid@gmail.com
+From:   "Mr.David Williams" <chrisolukolade11@gmail.com>
+Date:   Mon, 13 Dec 2021 13:38:56 +0100
+Message-ID: <CA+hQ6Pow4nzrc3tMRsgosxVuf_5wUofyELukv20_+wG8EPUepw@mail.gmail.com>
+Subject: Did you authorize Mr. Liu Kong Nam
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Registering the cooling device from the probe can result in the
-execution of get_property() function before it gets initialized.
-
-To avoid this, register the cooling device from a workqueue
-instead of registering in the probe.
-
-Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
----
- drivers/power/supply/power_supply_core.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
-index 10a357a..c306b9d 100644
---- a/drivers/power/supply/power_supply_core.c
-+++ b/drivers/power/supply/power_supply_core.c
-@@ -132,6 +132,7 @@ void power_supply_changed(struct power_supply *psy)
- }
- EXPORT_SYMBOL_GPL(power_supply_changed);
- 
-+static int psy_register_cooler(struct device *dev, struct power_supply *psy);
- /*
-  * Notify that power supply was registered after parent finished the probing.
-  *
-@@ -139,6 +140,8 @@ EXPORT_SYMBOL_GPL(power_supply_changed);
-  * calling power_supply_changed() directly from power_supply_register()
-  * would lead to execution of get_property() function provided by the driver
-  * too early - before the probe ends.
-+ * Also, registering cooling device from the probe will execute the
-+ * get_property() function. So register the cooling device after the probe.
-  *
-  * Avoid that by waiting on parent's mutex.
-  */
-@@ -156,6 +159,7 @@ static void power_supply_deferred_register_work(struct work_struct *work)
- 	}
- 
- 	power_supply_changed(psy);
-+	psy_register_cooler(psy->dev.parent, psy);
- 
- 	if (psy->dev.parent)
- 		mutex_unlock(&psy->dev.parent->mutex);
-@@ -1257,10 +1261,6 @@ __power_supply_register(struct device *parent,
- 	if (rc)
- 		goto register_thermal_failed;
- 
--	rc = psy_register_cooler(psy);
--	if (rc)
--		goto register_cooler_failed;
--
- 	rc = power_supply_create_triggers(psy);
- 	if (rc)
- 		goto create_triggers_failed;
-@@ -1290,8 +1290,6 @@ __power_supply_register(struct device *parent,
- add_hwmon_sysfs_failed:
- 	power_supply_remove_triggers(psy);
- create_triggers_failed:
--	psy_unregister_cooler(psy);
--register_cooler_failed:
- 	psy_unregister_thermal(psy);
- register_thermal_failed:
- 	device_del(dev);
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Hello ,
 
+Did you authorize Mr. Liu Kong Nam of Kemuning Ray Street
+NO.8,Tomang.Jakarta, Indonesia to pay the pending wire transfer
+activation charges and claim your WORLD BANK/IMF compensation payment
+the sum of Seven million two hundred thousand US dollars?.
+
+Get back to me with your details.
+
+Regards
+Mr. David Williams
