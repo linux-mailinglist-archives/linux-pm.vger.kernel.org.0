@@ -2,71 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50F0547374D
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Dec 2021 23:15:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DCF2473771
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Dec 2021 23:28:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243535AbhLMWPC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Dec 2021 17:15:02 -0500
-Received: from mail-oi1-f170.google.com ([209.85.167.170]:35784 "EHLO
-        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243347AbhLMWPB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Dec 2021 17:15:01 -0500
-Received: by mail-oi1-f170.google.com with SMTP id m6so25062947oim.2;
-        Mon, 13 Dec 2021 14:15:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mu42qC6e/b13OlMfAY+RMpoCTsW3jVo6uDEQYi3s+Mc=;
-        b=MgSeJyhOB3YPgKkssrOEXbSK/a4INdOX3Bd7bUm5fivUXM2jiaRHAUyz4bOdMq8UI6
-         tZSfwuudu4nP6ovePft5d+6OfGmykwtPc4KKrI5ukcBDuR2XQd5W/HPgy+9GCBDqGxfK
-         F4q44tq8k6hfmw/WqOXrZa9DPpghCWpnrv/myJjQ4SguIJIHLOS2JTCvBT0Ovrj9M9p+
-         QXxNkwOW2q2pNFFZviwmxcqh8TUGO0GzPYbFjQP/3HAlJq32L9Us4YJTWuodVBDi9fCd
-         NhcYf+7PVj77pvaOWPdvtF6n9dE3HvMSkTemNqn4NwoTvaAohh9LIxRtpUZqaPYtd5AS
-         eK8g==
-X-Gm-Message-State: AOAM533EZh8q3IaugxH6agUdjynUYLy55dTUsUKlVhgw2z4tmAsVYDBB
-        yB2gCPAfl/FlHBmMyY87+g==
-X-Google-Smtp-Source: ABdhPJx+pt+BNQa1mhKy+lgULIoGZqIEx6waiYJm+71G8X5KraLyAXzEugflHbw/AVD2dEvugr1VsA==
-X-Received: by 2002:a05:6808:199c:: with SMTP id bj28mr30869070oib.98.1639433700806;
-        Mon, 13 Dec 2021 14:15:00 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id t13sm2920370oiw.30.2021.12.13.14.14.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 14:15:00 -0800 (PST)
-Received: (nullmailer pid 1673094 invoked by uid 1000);
-        Mon, 13 Dec 2021 22:14:59 -0000
-Date:   Mon, 13 Dec 2021 16:14:59 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Shawn Guo <shawn.guo@linaro.org>
-Cc:     linux-pm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 5/6] dt-bindings: interconnect: Add Qualcomm QCM2290
- NoC support
-Message-ID: <YbfF4/F4B8dZ1s5M@robh.at.kernel.org>
-References: <20211206075808.18124-1-shawn.guo@linaro.org>
- <20211206075808.18124-6-shawn.guo@linaro.org>
+        id S243569AbhLMW2y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Dec 2021 17:28:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39980 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239112AbhLMW2x (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Dec 2021 17:28:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1B3C061574;
+        Mon, 13 Dec 2021 14:28:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 06ACDB80499;
+        Mon, 13 Dec 2021 22:28:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D8D1C34600;
+        Mon, 13 Dec 2021 22:28:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639434530;
+        bh=6ZHHElkpTM3plJJ+I8iwEra/ETUWjpU6A2mPMoWT/H0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=glzDrBZ3Vk0WvTyoNLzRduZlDCT6i0QGDRX/AM1/F7UFKcRWeanc1auT1wEWmmomv
+         OOeZvjIhbVNm5qM90rmdq8eggRkSRyq/GCC4ZVvUwJRmp9p6P8KmYv6hyouKGyIVdP
+         YUaqaroaGCfFOVHoBkG3ZMsAfMx4KqlChkcIoaZXCywfnVSa5qsfKsHOC+Vw0RP7qw
+         rxvo7Op+LZzHRnJ1UrYXwehxQWnmbxlf0ufaTO9T2A2ZPFr4GdQb6x1DoOLlrDZYGD
+         fdXstLhtlnkcGzNdMKeaiGeA2K/M30VLj216x068TNEVXNer5O+/E90VIINGUkrcPh
+         /5yRJ8tXKpwag==
+Message-ID: <be465db1-ed27-6111-71fb-9ef86b6ed6c0@kernel.org>
+Date:   Tue, 14 Dec 2021 00:28:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211206075808.18124-6-shawn.guo@linaro.org>
+Subject: Re: [PATCH v3 0/6] Add QCM2290 interconnect support
+Content-Language: en-US
+To:     Shawn Guo <shawn.guo@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211206075808.18124-1-shawn.guo@linaro.org>
+From:   Georgi Djakov <djakov@kernel.org>
+In-Reply-To: <20211206075808.18124-1-shawn.guo@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 06 Dec 2021 15:58:07 +0800, Shawn Guo wrote:
-> Add bindings for Qualcomm QCM2290 Network-On-Chip interconnect devices.
+Hi Shawn,
+
+On 6.12.21 9:58, Shawn Guo wrote:
+> The series begins with a separate cleanup on icc-rpm, followed by a few
+> prep changes for QCM2290 support, and then adds bindings and
+> interconnect driver for QCM2290 platform.
+
+Thanks for working on this! I have applied patch 1/6. Please rebase the
+rest on linux-next.
+
+BR,
+Georgi
+
+> Changes for v3:
+> - Update bindings to define child interconnect provider nodes
 > 
-> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
-> ---
->  .../bindings/interconnect/qcom,qcm2290.yaml   | 137 ++++++++++++++++++
->  .../dt-bindings/interconnect/qcom,qcm2290.h   |  94 ++++++++++++
->  2 files changed, 231 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,qcm2290.yaml
->  create mode 100644 include/dt-bindings/interconnect/qcom,qcm2290.h
+> Changes for v2:
+> - Drop unneeded include of <dt-bindings/clock/qcom,gcc-qcm2290.h> from
+>    bindings.
+> 
+> Shawn Guo (6):
+>    interconnect: icc-rpm: Use NOC_QOS_MODE_INVALID for qos_mode check
+>    interconnect: icc-rpm: Define ICC device type
+>    interconnect: icc-rpm: Add QNOC type QoS support
+>    interconnect: icc-rpm: Support child NoC device probe
+>    dt-bindings: interconnect: Add Qualcomm QCM2290 NoC support
+>    interconnect: qcom: Add QCM2290 driver support
+> 
+>   .../bindings/interconnect/qcom,qcm2290.yaml   |  137 ++
+>   drivers/interconnect/qcom/Kconfig             |    9 +
+>   drivers/interconnect/qcom/Makefile            |    2 +
+>   drivers/interconnect/qcom/icc-rpm.c           |   56 +-
+>   drivers/interconnect/qcom/icc-rpm.h           |   14 +-
+>   drivers/interconnect/qcom/msm8916.c           |    4 +-
+>   drivers/interconnect/qcom/msm8939.c           |    5 +-
+>   drivers/interconnect/qcom/qcm2290.c           | 1363 +++++++++++++++++
+>   drivers/interconnect/qcom/sdm660.c            |    7 +-
+>   .../dt-bindings/interconnect/qcom,qcm2290.h   |   94 ++
+>   10 files changed, 1678 insertions(+), 13 deletions(-)
+>   create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,qcm2290.yaml
+>   create mode 100644 drivers/interconnect/qcom/qcm2290.c
+>   create mode 100644 include/dt-bindings/interconnect/qcom,qcm2290.h
 > 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
