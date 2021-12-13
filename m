@@ -2,96 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D331B4723AA
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Dec 2021 10:23:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29D0B472AEF
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Dec 2021 12:11:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230357AbhLMJXg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Dec 2021 04:23:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51718 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233666AbhLMJXf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Dec 2021 04:23:35 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332D0C061574
-        for <linux-pm@vger.kernel.org>; Mon, 13 Dec 2021 01:23:35 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id d10so29595918lfg.6
-        for <linux-pm@vger.kernel.org>; Mon, 13 Dec 2021 01:23:35 -0800 (PST)
+        id S231157AbhLMLLK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Dec 2021 06:11:10 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:32425 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229836AbhLMLLK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Dec 2021 06:11:10 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:from:to:cc
-         :references:subject:in-reply-to:content-transfer-encoding;
-        bh=iqm6xEHR24DEGP71Dw334SXtVnwmbVG6/wYj4wQS+wE=;
-        b=AeZAqxLdDTlTNEkoMHgl9Bs90sMDvs+wcGUnOtweBW0Uj0KNikARKCMyGRad3rtkus
-         XfRwuH6Nir5cGLvC9BLzy/GA4flYdV+CASqUrIsQ2NKrDBlqlIJMjtsLeQI3ExFc2UPT
-         eSRhGcIE54/GKhWfCgWnhKVWu45s37gUjoUwTM4rWhel4fK91bF+E8GSzfPSFzeuSVmK
-         /e5ADB7bbqxWd0IWDeDvaf95iyre/99aqSRe1BDW1pHz1orAftCu5xpe98EAea/5f3Fp
-         34Fjc1hnlixHubvB5jXp0P8zsVWHQz/t5oKXafK2SsEnKWQvURCYKGZw0oVaV2Iyejgg
-         yBuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:from:to:cc:references:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=iqm6xEHR24DEGP71Dw334SXtVnwmbVG6/wYj4wQS+wE=;
-        b=Lwb17fSmX/PPW0rrDhp+/rC+i/zYU40EsvvrLnHuB/wJ5NXO2UcC0hrtk1POHr69pO
-         nu6yl50m2xtFG0/htniWKtd4NqWNN5tFKPlqHKlXchCQfCh9tuiusnTLm4kOcCkDM2mD
-         O/oxzsW/j9twTLpBXA0ZkFs8mqgNf3Cikds8DJmeD+Jn+a5Gk9nP3hz/d4z0tWqfISvB
-         abABHPPyf6NAOGxcN73YY4ghb5jiaig+xssprHhJiUyv6QmjkvK2wKmU/4rxpCGBC3sU
-         7A3FznisLrPbsNQCi6L0ZCddWyz24xyXRrwG2Pp0k1RLrQCpMstmZwKgm6jGLYqUHJS5
-         yqeg==
-X-Gm-Message-State: AOAM5324aYcQOkA+Gfsf6FoYZIffpxnVZE5459O9NeY3U00JjFnAmBTF
-        MTLlcbAhZ7KgAaN8Kgof2Es=
-X-Google-Smtp-Source: ABdhPJxldbZ5cIUlTnkjszQZmbp7FIFxxOdp1TKY5MtYo4lObdF9CAJ0LWRe92FpGO7acS+HzNJNNQ==
-X-Received: by 2002:a05:6512:6c7:: with SMTP id u7mr28008802lff.261.1639387413449;
-        Mon, 13 Dec 2021 01:23:33 -0800 (PST)
-Received: from ?IPV6:2001:14ba:16ee:fa00::4? (dc73szyyyyyyyyyyyyycy-3.rev.dnainternet.fi. [2001:14ba:16ee:fa00::4])
-        by smtp.gmail.com with ESMTPSA id p3sm1349039lfg.205.2021.12.13.01.23.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Dec 2021 01:23:32 -0800 (PST)
-Message-ID: <881a158e-4d2d-b09b-621f-12bfbaf671cd@gmail.com>
-Date:   Mon, 13 Dec 2021 11:23:32 +0200
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1639393870; x=1670929870;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=5YidXyIgQI0E20XN+ohYDbgdQ4PIMU4JJRYFHx89oE8=;
+  b=KDTObcZgeUBgX5pdS6MRxVHXoOGUCif3vFLXR8NStYXXpk39M5ryOOBI
+   bo0sAGQ8WXHVXvpbvXJk3ks3kpXsNIR5A+gS53tl7zowqPgvJ1+EjBYDq
+   TqVXQfjjduRSn/IYSgdSS/QWldQs+d0qX4tRPL+hx6uRch67l/jzuT1kK
+   o=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 13 Dec 2021 03:11:09 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 03:11:01 -0800
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Mon, 13 Dec 2021 03:11:02 -0800
+Received: from codeaurora.org (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 13 Dec
+ 2021 03:10:59 -0800
+From:   Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+To:     Sebastian Reichel <sre@kernel.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        David Collins <quic_collinsd@quicinc.com>,
+        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
+        Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+Subject: [PATCH] power_supply: Register cooling device outside of probe
+Date:   Mon, 13 Dec 2021 16:40:41 +0530
+Message-ID: <1639393841-17444-1-git-send-email-quic_manafm@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.0
-Content-Language: en-US
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-References: <20211206000651.4168035-1-linus.walleij@linaro.org>
- <7228bbd0-4428-18d2-8cef-df9a9c789d41@gmail.com>
- <CACRpkdaKmZp62DSB7oMbESRjXAH8ncfLyc3KioSDx2z-_JOK8A@mail.gmail.com>
- <CANhJrGMHr=VLAwe-Tvyg70nN4ArjHa8UHKZODwrufK1r+rRNcA@mail.gmail.com>
-Subject: Re: [PATCH v2] power: supply_core: Pass pointer to battery info
-In-Reply-To: <CANhJrGMHr=VLAwe-Tvyg70nN4ArjHa8UHKZODwrufK1r+rRNcA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/10/21 07:57, Matti Vaittinen wrote:
-> On Thu, Dec 9, 2021 at 2:46 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+Registering the cooling device from the probe can result in the
+execution of get_property() function before it gets initialized.
 
->> Also I would love if you could test v2 on hardware!
-> 
-> I don't have a real device with battery connected - but I thinkI do
-> have a break-out board with BD99954 lying around somewhere. I'll see
-> if I remember how to wire it to a beagle-bone - and if I do, then I
-> can try some very limited testing. Adding automated tests for the
-> BD99954 is still on my TODO-list, somewhere at the bottom of it... :(
+To avoid this, register the cooling device from a workqueue
+instead of registering in the probe.
 
-I have good and not-so-good news. Good news is that I did indeed find a 
-BD99954 evaluation board from my collection PCBs I have "temporarily" 
-stored in a box under my bed XD
+Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+---
+ drivers/power/supply/power_supply_core.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-The not-so-good news is that I thought I do remember how to connect the 
-board - but it seems I did not. As a result my beaglebone said "Zzzzap!" 
-- and lost the magic smoke which kept it operational. I have only one 
-spare board left - and I do noeed it for bunch of tasks - so I am afraid 
-I can't re-try testing untill I have ordered and received few 
-replacement boards... So sorry - no testing to be done in the next few 
-days - potentially no testing until year 2022 :(
+diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+index 10a357a..c306b9d 100644
+--- a/drivers/power/supply/power_supply_core.c
++++ b/drivers/power/supply/power_supply_core.c
+@@ -132,6 +132,7 @@ void power_supply_changed(struct power_supply *psy)
+ }
+ EXPORT_SYMBOL_GPL(power_supply_changed);
+ 
++static int psy_register_cooler(struct device *dev, struct power_supply *psy);
+ /*
+  * Notify that power supply was registered after parent finished the probing.
+  *
+@@ -139,6 +140,8 @@ EXPORT_SYMBOL_GPL(power_supply_changed);
+  * calling power_supply_changed() directly from power_supply_register()
+  * would lead to execution of get_property() function provided by the driver
+  * too early - before the probe ends.
++ * Also, registering cooling device from the probe will execute the
++ * get_property() function. So register the cooling device after the probe.
+  *
+  * Avoid that by waiting on parent's mutex.
+  */
+@@ -156,6 +159,7 @@ static void power_supply_deferred_register_work(struct work_struct *work)
+ 	}
+ 
+ 	power_supply_changed(psy);
++	psy_register_cooler(psy->dev.parent, psy);
+ 
+ 	if (psy->dev.parent)
+ 		mutex_unlock(&psy->dev.parent->mutex);
+@@ -1257,10 +1261,6 @@ __power_supply_register(struct device *parent,
+ 	if (rc)
+ 		goto register_thermal_failed;
+ 
+-	rc = psy_register_cooler(psy);
+-	if (rc)
+-		goto register_cooler_failed;
+-
+ 	rc = power_supply_create_triggers(psy);
+ 	if (rc)
+ 		goto create_triggers_failed;
+@@ -1290,8 +1290,6 @@ __power_supply_register(struct device *parent,
+ add_hwmon_sysfs_failed:
+ 	power_supply_remove_triggers(psy);
+ create_triggers_failed:
+-	psy_unregister_cooler(psy);
+-register_cooler_failed:
+ 	psy_unregister_thermal(psy);
+ register_thermal_failed:
+ 	device_del(dev);
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
-Best Regards
-	--Matti Vaittinen
