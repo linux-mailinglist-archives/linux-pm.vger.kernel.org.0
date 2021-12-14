@@ -2,216 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1627F474BB9
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Dec 2021 20:17:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27C52474BE7
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Dec 2021 20:30:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237365AbhLNTQz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Dec 2021 14:16:55 -0500
-Received: from mail-oo1-f41.google.com ([209.85.161.41]:41833 "EHLO
-        mail-oo1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232433AbhLNTQy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Dec 2021 14:16:54 -0500
-Received: by mail-oo1-f41.google.com with SMTP id a11-20020a4ad1cb000000b002c2657270a0so5190268oos.8;
-        Tue, 14 Dec 2021 11:16:53 -0800 (PST)
+        id S237425AbhLNTaU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Dec 2021 14:30:20 -0500
+Received: from mail-ot1-f51.google.com ([209.85.210.51]:39785 "EHLO
+        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237426AbhLNTaT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Dec 2021 14:30:19 -0500
+Received: by mail-ot1-f51.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso22052819ots.6;
+        Tue, 14 Dec 2021 11:30:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=89n65Un8cdRTY4y4wD+F3ML7dLYicStqDZBe3YLsEnU=;
-        b=3LDLW0Vh3XUcgyrKEsXwIVdt3SJ3946Km/cu7KtINDmL52qMjykOxTPOk0rP6N9pv7
-         dK24pHXwI/T1KxxZzDa7uaOVW0qCp3Hr4cQqSaMbX/4zo4mlKBBY4p+H9G2jl2R6sS7c
-         IuC23Nf7hZzFcdQ1ExmORpwLGjppXnObe5R6ek0pA5v/DTSWTKGQzinABd7Fmw/eWgQn
-         iwV+n+REcYRuAkYzHA8WDltqO7XDbDkOol/Gf7DfaVqrtMtel8iqEcZ+aeC3pyZY2bWC
-         YUHrcDiQLrL63coSgSNKGAQI9ZOYmKg/DVIMECxjrEvjvGStg+K/8SylpsIGDlVKBVzy
-         zV9Q==
-X-Gm-Message-State: AOAM532UdzsUnPw8juIT5mj6iN64DEp5YAfDSMBs8JKNQkFzP8H8bLdH
-        rIjwlqPSxbdsSx5TW++uBQ==
-X-Google-Smtp-Source: ABdhPJyeCEbnQ7XaJPNry6GKTjo/HWhUc4nu6pM+aJJIYgeHF6KaJ85nlYancGJ9nuUHNIqHKd9Rng==
-X-Received: by 2002:a4a:88cc:: with SMTP id q12mr4719066ooh.29.1639509413108;
-        Tue, 14 Dec 2021 11:16:53 -0800 (PST)
+        bh=FxadU1/B3hG1ERlyc6s8PV2oHrL3i2+weA1380zY5gg=;
+        b=c4AliRva6SzNam7NAiOBgRjZTRI3La4mIPnUrTgN2p2AihBWEK1cMxlkeR/hsCfXTi
+         jo24vNERh6+Vswk3JS+57Mvu9yylCmD5FcSvs0iH1kcu1iShIR9znjQHm71fS+5V//iq
+         agHmAjbIztY5WCvTyDOyDjfsQI/EU+IsoGbJaNrjubEWx2Wiw/nE+AOTN5ss1+PZ5MMh
+         8xgLYu6CrYArlm2AdcCHpOp6QcUeAl1yc+Gaf4b0mI2tIl7q/Y2oReWTHY4lUFjELQdT
+         EmaDz+NdxdwAUoloYfBr/Bu+anJrqafIEpZhQY/PU5q6zdIdHLLvMacZH0mS6qFCrTNb
+         7z5A==
+X-Gm-Message-State: AOAM533vAgd/Q3jR5UEORBgkZZPtji5J8g0keFqWYSkJmyS0IfxGn0e0
+        Z7gZHDWzq9SaCIlBTafhHw==
+X-Google-Smtp-Source: ABdhPJyy83QBBDa63Zn4SC3BXDh425tvhOE4LY1Lv9kN+26nFmi8Y4MBIQ6lGz6Bl/CP6sNRGA1Vyw==
+X-Received: by 2002:a05:6830:3113:: with SMTP id b19mr5874123ots.9.1639510218587;
+        Tue, 14 Dec 2021 11:30:18 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id o10sm140154oom.32.2021.12.14.11.16.51
+        by smtp.gmail.com with ESMTPSA id d12sm130694otq.67.2021.12.14.11.30.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 11:16:52 -0800 (PST)
-Received: (nullmailer pid 3751604 invoked by uid 1000);
-        Tue, 14 Dec 2021 19:16:50 -0000
-Date:   Tue, 14 Dec 2021 13:16:50 -0600
+        Tue, 14 Dec 2021 11:30:18 -0800 (PST)
+Received: (nullmailer pid 3771282 invoked by uid 1000);
+        Tue, 14 Dec 2021 19:30:16 -0000
+Date:   Tue, 14 Dec 2021 13:30:16 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     devicetree@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Gregory Fong <gregory.0xf0@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Al Cooper <alcooperx@gmail.com>,
-        Doug Berger <opendmb@gmail.com>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:MULTIMEDIA CARD (MMC), SECURE DIGITAL (SD) AND..." 
-        <linux-mmc@vger.kernel.org>,
-        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH v3 15/15] dt-bindings: usb: Convert BDC to YAML
-Message-ID: <Ybjtoj8/wAllmxP5@robh.at.kernel.org>
-References: <20211208003727.3596577-1-f.fainelli@gmail.com>
- <20211208003727.3596577-16-f.fainelli@gmail.com>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, viveka@codeaurora.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Odelu Kukatla <okukatla@codeaurora.org>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: interconnect: Add Qualcomm SM8450 DT
+ bindings
+Message-ID: <YbjwyGArB/aqsjpW@robh.at.kernel.org>
+References: <20211209084842.189627-1-vkoul@kernel.org>
+ <20211209084842.189627-2-vkoul@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211208003727.3596577-16-f.fainelli@gmail.com>
+In-Reply-To: <20211209084842.189627-2-vkoul@kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 04:37:26PM -0800, Florian Fainelli wrote:
-> Convert the Broadcom BDC device controller Device Tree binding to YAML
-> to help with validation.
+On Thu, 09 Dec 2021 14:18:41 +0530, Vinod Koul wrote:
+> The Qualcomm SM8450 SoC has several bus fabrics that could be
+> controlled and tuned dynamically according to the bandwidth demand
 > 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
 > ---
->  .../devicetree/bindings/usb/brcm,bdc.txt      | 29 ------------
->  .../devicetree/bindings/usb/brcm,bdc.yaml     | 46 +++++++++++++++++++
->  MAINTAINERS                                   |  2 +-
->  3 files changed, 47 insertions(+), 30 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/usb/brcm,bdc.txt
->  create mode 100644 Documentation/devicetree/bindings/usb/brcm,bdc.yaml
+>  .../bindings/interconnect/qcom,rpmh.yaml      |  11 ++
+>  .../dt-bindings/interconnect/qcom,sm8450.h    | 171 ++++++++++++++++++
+>  2 files changed, 182 insertions(+)
+>  create mode 100644 include/dt-bindings/interconnect/qcom,sm8450.h
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/brcm,bdc.txt b/Documentation/devicetree/bindings/usb/brcm,bdc.txt
-> deleted file mode 100644
-> index c9f52b97cef1..000000000000
-> --- a/Documentation/devicetree/bindings/usb/brcm,bdc.txt
-> +++ /dev/null
-> @@ -1,29 +0,0 @@
-> -Broadcom USB Device Controller (BDC)
-> -====================================
-> -
-> -Required properties:
-> -
-> -- compatible: must be one of:
-> -                "brcm,bdc-udc-v2"
-> -                "brcm,bdc"
-> -- reg: the base register address and length
-> -- interrupts: the interrupt line for this controller
-> -
-> -Optional properties:
-> -
-> -On Broadcom STB platforms, these properties are required:
-> -
-> -- phys: phandle to one or two USB PHY blocks
-> -        NOTE: Some SoC's have a single phy and some have
-> -        USB 2.0 and USB 3.0 phys
-> -- clocks: phandle to the functional clock of this block
-> -
-> -Example:
-> -
-> -        bdc@f0b02000 {
-> -                compatible = "brcm,bdc-udc-v2";
-> -                reg = <0xf0b02000 0xfc4>;
-> -                interrupts = <0x0 0x60 0x0>;
-> -                phys = <&usbphy_0 0x0>;
-> -                clocks = <&sw_usbd>;
-> -        };
-> diff --git a/Documentation/devicetree/bindings/usb/brcm,bdc.yaml b/Documentation/devicetree/bindings/usb/brcm,bdc.yaml
-> new file mode 100644
-> index 000000000000..48831b62ab31
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/brcm,bdc.yaml
-> @@ -0,0 +1,46 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/brcm,bdc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Broadcom USB Device Controller (BDC)
-> +
-> +maintainers:
-> +  - Al Cooper <alcooperx@gmail.com>
-> +  - Florian Fainelli <f.fainelli@gmail.com>
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - brcm,bdc-udc-v2
-> +          - brcm,bdc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts: true
-> +
-> +  phys:
-> +    $ref: "/schemas/types.yaml#/definitions/phandle-array"
 
-Already has a type. And we've lost how many and what each one is.
-
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +        bdc@f0b02000 {
-
-usb@...
-
-> +                compatible = "brcm,bdc-udc-v2";
-> +                reg = <0xf0b02000 0xfc4>;
-> +                interrupts = <0x0 0x60 0x0>;
-> +                phys = <&usbphy_0 0x0>;
-> +                clocks = <&sw_usbd>;
-> +        };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 2109b6fe8ea3..b18c7fa42a4f 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -3679,7 +3679,7 @@ M:	Al Cooper <alcooperx@gmail.com>
->  L:	linux-usb@vger.kernel.org
->  L:	bcm-kernel-feedback-list@broadcom.com
->  S:	Maintained
-> -F:	Documentation/devicetree/bindings/usb/brcm,bdc.txt
-> +F:	Documentation/devicetree/bindings/usb/brcm,bdc.yaml
->  F:	drivers/usb/gadget/udc/bdc/
->  
->  BROADCOM BMIPS CPUFREQ DRIVER
-> -- 
-> 2.25.1
-> 
-> 
+Acked-by: Rob Herring <robh@kernel.org>
