@@ -2,102 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A50EB473D34
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Dec 2021 07:28:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70FDA473D3A
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Dec 2021 07:31:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230503AbhLNG2a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Dec 2021 01:28:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35328 "EHLO
+        id S231138AbhLNGbK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Dec 2021 01:31:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230314AbhLNG2a (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Dec 2021 01:28:30 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B32C6C061574;
-        Mon, 13 Dec 2021 22:28:29 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id z8so26848152ljz.9;
-        Mon, 13 Dec 2021 22:28:29 -0800 (PST)
+        with ESMTP id S230314AbhLNGbJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Dec 2021 01:31:09 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1C6C061574
+        for <linux-pm@vger.kernel.org>; Mon, 13 Dec 2021 22:31:09 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id p133-20020a255b8b000000b006086e19f89fso16141670ybb.19
+        for <linux-pm@vger.kernel.org>; Mon, 13 Dec 2021 22:31:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=7Qe23kprRPn15Qn9MlkcTQ60k8cJNysIu/IrgKrQFE8=;
-        b=Cng1NsrqT214GmKegZwoXMErHG1XberzdF7SZ7bfQxLzqqqJAF+dWQq+RBi58/6GLR
-         6vg0eb7oNky+q6kOBcMIT7Li4m9Lsi27/2wPOeidCDtYftpRdiy4gTGb554lgG1a8Lwf
-         1VXAze3bErCnJiaxwiQn/7UTPma5mQbCMKGflVw4YVX99vWEtIIP31sO9QyQV5w9ybml
-         bmAYdPX1p9nNuSNlxzr0h0H2xcSRL3lhGV/L6OY8yr2LiHolfmA5tqndp37IhsAW7aEP
-         h+/n9MmftXuUyYrwSICBA4sFQCztqr0wZqjexr7QILWTleNV08oOthvwAV8D8vipQrD1
-         CCdw==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=4aquuHkNhx64QCRmus/ZeD4x0c+Y/d9J8MF5XvaCktU=;
+        b=ChGuty2N/2029CJlfZ+b7EeyPWo1ibktr/pXOop6SSbwrEsyTKAZo4fNQ1rjIL4mzo
+         kxTAC37PIbQXPgeISetIsa9bLRnuk4NgPjNGKuHsFJlYYLmlNZ6k/O4CpL1fO26F2+r+
+         fx3otRciq3fCpupcTvUU2pgxQ2eIG1AykjvVvGMHXK/4b4k1LYJoFJxUW1NlNkIYaqRp
+         AAkXb32euLE1+CGBBWu4zVtoHP1iWICGAakwBY3YVEQab74aDD8eWMBvJRTJh4Lrqen7
+         Wf0UZgVG9JPYIL6gbpOkLm3kYZo5GwVTbddtf72rSJP/Evv3uGOD9g/5ZMvniHk2fEXB
+         3CrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=7Qe23kprRPn15Qn9MlkcTQ60k8cJNysIu/IrgKrQFE8=;
-        b=og2rE0AFA7KqxXYGKzXpla+asye6iu6YEWcHZFm5wzSumrEc5GKkVnOojt3xnR29x5
-         96NQWCthKEB5Ax9/PL6MnCO2TnMsscgtknkF3g2Fxduy/te3lQiM6adECEDszK5KJew9
-         QNoAK9vxdFDjQlyaFiIZk+itbVKWL3MjV2ncarBkNnS0WUNyP70SlX0e9kHlH8OZ2dMt
-         07owPdpx2f2f/W+O7i3jyYq/0Kz0WbOtdcbOubL5ua/mtNCVIJiGCNIIpP3vg/jkVSsD
-         1Gl4p3dOSZD5JFf5uO42Vd8jh9Qik8TFFPCCy0pcbkNfqW/wssgTvSXXPdJlA/RU7Ech
-         Y/Jw==
-X-Gm-Message-State: AOAM53089svImQwgwLuNx2PjKkBEyvL+AHIfZ5aLtPSorza944SKEw3+
-        i5BFtzK+72iBrHgeiK0VQ4AYD6LUhT4=
-X-Google-Smtp-Source: ABdhPJw5lks3O7sQuk+B+k3101CPYXFP98k09hURVGzhxtsLlNzyxbkJlo7tEMo5LHxb8Lknbv7+1A==
-X-Received: by 2002:a2e:a795:: with SMTP id c21mr3113631ljf.239.1639463307855;
-        Mon, 13 Dec 2021 22:28:27 -0800 (PST)
-Received: from [192.168.2.145] (94-29-63-156.dynamic.spd-mgts.ru. [94.29.63.156])
-        by smtp.googlemail.com with ESMTPSA id i3sm1709217lfu.156.2021.12.13.22.28.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Dec 2021 22:28:27 -0800 (PST)
-Subject: Re: [PATCH] cpuidle: tegra: fix typo in a comment
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Jason Wang <wangborong@cdjrlc.com>, daniel.lezcano@linaro.org
-Cc:     rafael@kernel.org, thierry.reding@gmail.com, jonathanh@nvidia.com,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211212033130.64032-1-wangborong@cdjrlc.com>
- <be88a80f-251f-638d-bf29-a0423db53e06@gmail.com>
-Message-ID: <1249c2ae-a7f0-3313-5fb1-06840a4f703b@gmail.com>
-Date:   Tue, 14 Dec 2021 09:28:27 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <be88a80f-251f-638d-bf29-a0423db53e06@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=4aquuHkNhx64QCRmus/ZeD4x0c+Y/d9J8MF5XvaCktU=;
+        b=nXqqvArHxg10Q32LKQks5g/N5ylWUPoDCo8Cbl4urhBSttQEFms0qCKAO3f4egyEWh
+         QyrZZBJnnKcO4NOzyXe92odoSYwUj4wPE6z3yvIaoyjYPvWo9ciRvr+3hGbVuZ7lWk3O
+         IYeyH3UAKuMGRmNsxHUhs8Jg7WxJZfweQ2/jyE8Bu090C0t4bGaNOarIKvOw9poSBy1s
+         g5+RAgfTtShycsNUG4aohogg+jkomgnjr7tqNusXzRt8hXU9XeFeji4zjyzCnMX/oXYO
+         K5RqMzGGu75Z2vQv8vJEzFnKwsOXNBUzpszcEZzRbhScvF1wXR9eyrpkPk742zG7OyuM
+         Lk4w==
+X-Gm-Message-State: AOAM530Iro1fpubgv2QJNCMbP5KiEjSnhMjaGQIxUV8Pxf71W+Zc8lTd
+        BA0acQISAaMX2rU04o2R7Hu86BCfMZ8G
+X-Google-Smtp-Source: ABdhPJxPW5uDWSyJXd72mpZ7iA9irUszeWyKPlK6PbbABP1omAcy9nbX7bW/uXhth/GzZvF1756E/gSqeGzC
+X-Received: from tzungbi-z840.tpe.corp.google.com ([2401:fa00:1:10:16cc:acbf:e9c5:6393])
+ (user=tzungbi job=sendgmr) by 2002:a25:38cb:: with SMTP id
+ f194mr4103910yba.446.1639463468788; Mon, 13 Dec 2021 22:31:08 -0800 (PST)
+Date:   Tue, 14 Dec 2021 14:31:00 +0800
+Message-Id: <20211214063100.3066579-1-tzungbi@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
+Subject: [PATCH] PM / devfreq: Reduce log severity for informative message
+From:   Tzung-Bi Shih <tzungbi@google.com>
+To:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        cw00.choi@samsung.com
+Cc:     linux-pm@vger.kernel.org, tzungbi@google.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-14.12.2021 09:02, Dmitry Osipenko пишет:
-> 12.12.2021 06:31, Jason Wang пишет:
->> The double `that' in the comment in line 275 is repeated. Remove one
->> of them from the comment.
->>
->> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
->> ---
->>  drivers/cpuidle/cpuidle-tegra.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/cpuidle/cpuidle-tegra.c b/drivers/cpuidle/cpuidle-tegra.c
->> index 9845629aeb6d..93ed4b8e164a 100644
->> --- a/drivers/cpuidle/cpuidle-tegra.c
->> +++ b/drivers/cpuidle/cpuidle-tegra.c
->> @@ -272,7 +272,7 @@ static int tegra114_enter_s2idle(struct cpuidle_device *dev,
->>   * LP2 | C7	(CPU core power gating)
->>   * LP2 | CC6	(CPU cluster power gating)
->>   *
->> - * Note that that the older CPUIDLE driver versions didn't explicitly
->> + * Note that the older CPUIDLE driver versions didn't explicitly
->>   * differentiate the LP2 states because these states either used the same
->>   * code path or because CC6 wasn't supported.
->>   */
->>
-> 
-> This might be a candidate for <trivial@kernel.org>.
-> 
-> https://www.kernel.org/doc/html/latest/process/submitting-patches.html#select-the-recipients-for-your-patch
-> 
+Suppose devfreq_update_status() failure in devfreq_set_target() is not a
+critical error, reduces the log severity.
 
-Although, probably not, because documentation should mean only
-Documentation/.
+Signed-off-by: Tzung-Bi Shih <tzungbi@google.com>
+---
+ drivers/devfreq/devfreq.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+index 7906220d025c..a525a609dfc6 100644
+--- a/drivers/devfreq/devfreq.c
++++ b/drivers/devfreq/devfreq.c
+@@ -382,8 +382,8 @@ static int devfreq_set_target(struct devfreq *devfreq, unsigned long new_freq,
+ 	devfreq_notify_transition(devfreq, &freqs, DEVFREQ_POSTCHANGE);
+ 
+ 	if (devfreq_update_status(devfreq, new_freq))
+-		dev_err(&devfreq->dev,
+-			"Couldn't update frequency transition information.\n");
++		dev_warn(&devfreq->dev,
++			 "Couldn't update frequency transition information.\n");
+ 
+ 	devfreq->previous_freq = new_freq;
+ 
+-- 
+2.34.1.173.g76aa8bc2d0-goog
+
