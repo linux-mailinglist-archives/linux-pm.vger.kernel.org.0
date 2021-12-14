@@ -2,59 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42036473F6E
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Dec 2021 10:30:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B51D473F73
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Dec 2021 10:30:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232428AbhLNJad (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Dec 2021 04:30:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48056 "EHLO
+        id S232447AbhLNJai (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Dec 2021 04:30:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232417AbhLNJac (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Dec 2021 04:30:32 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBFCC0613FE
-        for <linux-pm@vger.kernel.org>; Tue, 14 Dec 2021 01:30:30 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id r138so16840993pgr.13
-        for <linux-pm@vger.kernel.org>; Tue, 14 Dec 2021 01:30:30 -0800 (PST)
+        with ESMTP id S232426AbhLNJad (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Dec 2021 04:30:33 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D41BC061748
+        for <linux-pm@vger.kernel.org>; Tue, 14 Dec 2021 01:30:33 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id l18so12174607pgj.9
+        for <linux-pm@vger.kernel.org>; Tue, 14 Dec 2021 01:30:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=0LCleeVgPddpywZvy/2C5sZ89uWkTFhzpdgxSPbdXrM=;
-        b=bl5JSWLsZJyCmMKDJ+TcmDiRa50ORayGlyfY/W2DQ+jtbVE8Jci8hhIQJp3yhOhBZ3
-         pSMGX6FD25QzfXyKzD7mo3HJSm/HsALJGIerPGJTmQlKmzdwUY+a8dCbrQlpXnWQaKNv
-         N/oax51MdgUzsNOovQw5IavIyybFclMc6+zTCM29o3k0qY+9IhxXMfOrANrlkxV2EIhU
-         bIHZcf2iIflekoc9lsvxNwOMTI//4Rabp0dVhLSQS6rnxcEV9/bNoaggzFt6Aj/qKC/y
-         Vr7WzIDvXU1CP8nWyzY3h/f5N86ou0Da99lIJhh0sAjI4jLdkYhTm4EXSi8uR1LzsFuy
-         2TOA==
+        bh=p7Abiu5YPTk6mF9OJXvuGojCIqoc3uKd3FHkRhinETw=;
+        b=p8vdgF5KZqov5buBQFXcZ3oNPtizjR3s6ruseI+Ik5xx17v1dfmyaAQjSS/XSeQkO1
+         RaOUAZPFgaIjjO2VWwl7Cz2cpVL6wk6K0mgOWVqM6jiYCSkJ3fMjRD3NYNCq9YrAXqrQ
+         nV9pEp2Jdo+O6Oxih7+J0CqHCSMjFy8frjRe1BcyNjUBqODVh6FSc2guug/8lJa+7bLL
+         DIsaJFYDmlalvmlYGT6hZNxJ0Nq52YnFJd8duu7Kh2kU62r6g7IL/0Tt4axJcFuiMvlz
+         PCiAocIl8sVjCqKvMtAaTJWsnUFJWE269tlJFAIWJ+PUdc4BZfxxlx7pyq0MyjnmA5pQ
+         NWIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=0LCleeVgPddpywZvy/2C5sZ89uWkTFhzpdgxSPbdXrM=;
-        b=BjbJIJBZgKYqZhBwALmERRhNSYwSHWVDH6I1t1xlzPi7OeHw81TtN3nnL8ZDT6Vimi
-         CGZk24xJLaZkhIO5vNfw/bvHMnzHDD/7pzjAcSYC+8gzv9IOunyHpov3PEQCJv8tJZOD
-         UyI/c1GpIFFciRz+5M/fEeR5A70nHnOhJmwxeAFKkmSReM+QZcAx3m2B/1VXymAJq0ZB
-         iC1ZRtHBh2jsmW4Gt9BAd4QSVcIFpHTDqm9Ml8OdEiBGKKAQQePf84hOHwpSl1jvMROW
-         JChEAbRb5D7ITZYteebuW0KBNsmlg31oU5rCKXO7w9b01Y9PPT4PtNCHoeBpJ4cArz3h
-         DvHw==
-X-Gm-Message-State: AOAM530gGgo9zJRQSCHhJv9vziSfktzAm1GSflUMWoT3qfKPk4R1BQFK
-        VraA50pIUihbzljtwfFseawGHg==
-X-Google-Smtp-Source: ABdhPJwrY09DEyT9oESBH/vqzAaqdo3Zc2PSMBovbFXHYO7yCruw2kaTsqNgQhewA8/N3cRiLos4XA==
-X-Received: by 2002:a05:6a00:2444:b0:4ab:15b9:20e5 with SMTP id d4-20020a056a00244400b004ab15b920e5mr3178697pfj.0.1639474230148;
-        Tue, 14 Dec 2021 01:30:30 -0800 (PST)
+        bh=p7Abiu5YPTk6mF9OJXvuGojCIqoc3uKd3FHkRhinETw=;
+        b=qR7lqg0gJWHdNh+58SuOtu71aW9TEbcu1Afi1PuR0VmbONb1Gt528avL1mgdF7C3w/
+         CfI3AMQ/LvPWggicSkEgiPxQLMeb5Q8ZZ+CfwXFDDUIdBz8ZiReSmB4nGoD445r0kYjc
+         ETnkZ8DaBvOJGVcBRVjYvYTfSEEC/0aPMQR9763lVAO6P7qoaaoI0OFBtCCpVEkqNM/r
+         av2YIduKwwJ0zwepXDtoqi7JrnoEUX0co1B+CCZgwuAThjbw9gJO8PypLuuqaTYUWtIt
+         CPg//WmhWco/ObzV1ZbvK06dHr6SBq7rX5FA25aIkEos11RvZxKcuuqCZjRMqeZV5SPj
+         SHFA==
+X-Gm-Message-State: AOAM533yS/8H5yyWCkEMufMf6ReXvBpBL9rq5RurlQglLb/zYoE0nDyC
+        g0WtFzarPLLp33AA7JRFSgt/Zw==
+X-Google-Smtp-Source: ABdhPJxfVSB/25cJtKVzJCFaOZZPgLuUW7D0lmA8dFk7+RIGERxohCwOBEFexsYdH/nf9AGtNw9bqA==
+X-Received: by 2002:a63:fc58:: with SMTP id r24mr2851921pgk.342.1639474232507;
+        Tue, 14 Dec 2021 01:30:32 -0800 (PST)
 Received: from localhost.localdomain (80.251.214.228.16clouds.com. [80.251.214.228])
-        by smtp.gmail.com with ESMTPSA id c21sm15143184pfl.138.2021.12.14.01.30.28
+        by smtp.gmail.com with ESMTPSA id c21sm15143184pfl.138.2021.12.14.01.30.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 01:30:29 -0800 (PST)
+        Tue, 14 Dec 2021 01:30:32 -0800 (PST)
 From:   Shawn Guo <shawn.guo@linaro.org>
 To:     Georgi Djakov <djakov@kernel.org>
 Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Loic Poulain <loic.poulain@linaro.org>,
         linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org, Shawn Guo <shawn.guo@linaro.org>
-Subject: [PATCH v3 RESEND 3/5] interconnect: icc-rpm: Support child NoC device probe
-Date:   Tue, 14 Dec 2021 17:30:09 +0800
-Message-Id: <20211214093011.19775-4-shawn.guo@linaro.org>
+Subject: [PATCH v3 RESEND 4/5] dt-bindings: interconnect: Add Qualcomm QCM2290 NoC support
+Date:   Tue, 14 Dec 2021 17:30:10 +0800
+Message-Id: <20211214093011.19775-5-shawn.guo@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211214093011.19775-1-shawn.guo@linaro.org>
 References: <20211214093011.19775-1-shawn.guo@linaro.org>
@@ -62,63 +62,260 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-As shown in downstream DT[1], the System NoC of QCM2290 is modelled
-using 4 fab/noc devices: sys_noc + qup_virt + mmnrt_virt + mmrt_virt.
-Among those 3 virtual devices, qup is owned by RPM and has no regmap
-resource, while mmnrt and mmrt are owned by AP and share the same
-regmap as sys_noc.  So it's logical to represent these virtual devices
-as child nodes of sys_noc in DT, so that such configuration can be
-supported with a couple of changes on qnoc_probe():
-
-- If there are child nodes, populate them.
-- If the device descriptor has .regmap_cfg but there is no IOMEM
-  resource for the device, use parent's regmap.
-
-[1] https://android.googlesource.com/kernel/msm-extra/devicetree/+/refs/tags/android-11.0.0_r0.56/qcom/scuba-bus.dtsi
+Add bindings for Qualcomm QCM2290 Network-On-Chip interconnect devices.
 
 Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- drivers/interconnect/qcom/icc-rpm.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ .../bindings/interconnect/qcom,qcm2290.yaml   | 137 ++++++++++++++++++
+ .../dt-bindings/interconnect/qcom,qcm2290.h   |  94 ++++++++++++
+ 2 files changed, 231 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,qcm2290.yaml
+ create mode 100644 include/dt-bindings/interconnect/qcom,qcm2290.h
 
-diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-index d8ea9bb479b1..34125e8f8b60 100644
---- a/drivers/interconnect/qcom/icc-rpm.c
-+++ b/drivers/interconnect/qcom/icc-rpm.c
-@@ -349,8 +349,13 @@ int qnoc_probe(struct platform_device *pdev)
- 		void __iomem *mmio;
- 
- 		res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--		if (!res)
-+		if (!res) {
-+			/* Try parent's regmap */
-+			qp->regmap = dev_get_regmap(dev->parent, NULL);
-+			if (qp->regmap)
-+				goto regmap_done;
- 			return -ENODEV;
-+		}
- 
- 		mmio = devm_ioremap_resource(dev, res);
- 
-@@ -366,6 +371,7 @@ int qnoc_probe(struct platform_device *pdev)
- 		}
- 	}
- 
-+regmap_done:
- 	ret = devm_clk_bulk_get(dev, qp->num_clks, qp->bus_clks);
- 	if (ret)
- 		return ret;
-@@ -417,6 +423,10 @@ int qnoc_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, qp);
- 
-+	/* Populate child NoC devices if any */
-+	if (of_get_child_count(dev->of_node) > 0)
-+		return of_platform_populate(dev->of_node, NULL, NULL, dev);
+diff --git a/Documentation/devicetree/bindings/interconnect/qcom,qcm2290.yaml b/Documentation/devicetree/bindings/interconnect/qcom,qcm2290.yaml
+new file mode 100644
+index 000000000000..f65a2fe846de
+--- /dev/null
++++ b/Documentation/devicetree/bindings/interconnect/qcom,qcm2290.yaml
+@@ -0,0 +1,137 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/interconnect/qcom,qcm2290.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- 	return 0;
- err:
- 	icc_nodes_remove(provider);
++title: Qualcomm QCM2290 Network-On-Chip interconnect
++
++maintainers:
++  - Shawn Guo <shawn.guo@linaro.org>
++
++description: |
++  The Qualcomm QCM2290 interconnect providers support adjusting the
++  bandwidth requirements between the various NoC fabrics.
++
++properties:
++  reg:
++    maxItems: 1
++
++  compatible:
++    enum:
++      - qcom,qcm2290-bimc
++      - qcom,qcm2290-cnoc
++      - qcom,qcm2290-snoc
++
++  '#interconnect-cells':
++    const: 1
++
++  clock-names:
++    items:
++      - const: bus
++      - const: bus_a
++
++  clocks:
++    items:
++      - description: Bus Clock
++      - description: Bus A Clock
++
++# Child node's properties
++patternProperties:
++  '^interconnect-[a-z0-9]+$':
++    type: object
++    description:
++      The interconnect providers do not have a separate QoS register space,
++      but share parent's space.
++
++    properties:
++      compatible:
++        enum:
++          - qcom,qcm2290-qup-virt
++          - qcom,qcm2290-mmrt-virt
++          - qcom,qcm2290-mmnrt-virt
++
++      '#interconnect-cells':
++        const: 1
++
++      clock-names:
++        items:
++          - const: bus
++          - const: bus_a
++
++      clocks:
++        items:
++          - description: Bus Clock
++          - description: Bus A Clock
++
++    required:
++      - compatible
++      - '#interconnect-cells'
++      - clock-names
++      - clocks
++
++    additionalProperties: false
++
++required:
++  - compatible
++  - reg
++  - '#interconnect-cells'
++  - clock-names
++  - clocks
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/qcom,rpmcc.h>
++
++    snoc: interconnect@1880000 {
++        compatible = "qcom,qcm2290-snoc";
++        reg = <0x01880000 0x60200>;
++        #interconnect-cells = <1>;
++        clock-names = "bus", "bus_a";
++        clocks = <&rpmcc RPM_SMD_SNOC_CLK>,
++                 <&rpmcc RPM_SMD_SNOC_A_CLK>;
++
++        qup_virt: interconnect-qup {
++            compatible = "qcom,qcm2290-qup-virt";
++            #interconnect-cells = <1>;
++            clock-names = "bus", "bus_a";
++            clocks = <&rpmcc RPM_SMD_QUP_CLK>,
++                     <&rpmcc RPM_SMD_QUP_A_CLK>;
++        };
++
++        mmnrt_virt: interconnect-mmnrt {
++            compatible = "qcom,qcm2290-mmnrt-virt";
++            #interconnect-cells = <1>;
++            clock-names = "bus", "bus_a";
++            clocks = <&rpmcc RPM_SMD_MMNRT_CLK>,
++                     <&rpmcc RPM_SMD_MMNRT_A_CLK>;
++        };
++
++        mmrt_virt: interconnect-mmrt {
++            compatible = "qcom,qcm2290-mmrt-virt";
++            #interconnect-cells = <1>;
++            clock-names = "bus", "bus_a";
++            clocks = <&rpmcc RPM_SMD_MMRT_CLK>,
++                     <&rpmcc RPM_SMD_MMRT_A_CLK>;
++        };
++    };
++
++    cnoc: interconnect@1900000 {
++        compatible = "qcom,qcm2290-cnoc";
++        reg = <0x01900000 0x8200>;
++        #interconnect-cells = <1>;
++        clock-names = "bus", "bus_a";
++        clocks = <&rpmcc RPM_SMD_CNOC_CLK>,
++                 <&rpmcc RPM_SMD_CNOC_A_CLK>;
++    };
++
++    bimc: interconnect@4480000 {
++        compatible = "qcom,qcm2290-bimc";
++        reg = <0x04480000 0x80000>;
++        #interconnect-cells = <1>;
++        clock-names = "bus", "bus_a";
++        clocks = <&rpmcc RPM_SMD_BIMC_CLK>,
++                 <&rpmcc RPM_SMD_BIMC_A_CLK>;
++    };
+diff --git a/include/dt-bindings/interconnect/qcom,qcm2290.h b/include/dt-bindings/interconnect/qcom,qcm2290.h
+new file mode 100644
+index 000000000000..6cbbb7fe0bd3
+--- /dev/null
++++ b/include/dt-bindings/interconnect/qcom,qcm2290.h
+@@ -0,0 +1,94 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* QCM2290 interconnect IDs */
++
++#ifndef __DT_BINDINGS_INTERCONNECT_QCOM_QCM2290_H
++#define __DT_BINDINGS_INTERCONNECT_QCOM_QCM2290_H
++
++/* BIMC */
++#define MASTER_APPSS_PROC		0
++#define MASTER_SNOC_BIMC_RT		1
++#define MASTER_SNOC_BIMC_NRT		2
++#define MASTER_SNOC_BIMC		3
++#define MASTER_TCU_0			4
++#define MASTER_GFX3D			5
++#define SLAVE_EBI1			6
++#define SLAVE_BIMC_SNOC			7
++
++/* CNOC */
++#define MASTER_SNOC_CNOC		0
++#define MASTER_QDSS_DAP			1
++#define SLAVE_BIMC_CFG			2
++#define SLAVE_CAMERA_NRT_THROTTLE_CFG	3
++#define SLAVE_CAMERA_RT_THROTTLE_CFG	4
++#define SLAVE_CAMERA_CFG		5
++#define SLAVE_CLK_CTL			6
++#define SLAVE_CRYPTO_0_CFG		7
++#define SLAVE_DISPLAY_CFG		8
++#define SLAVE_DISPLAY_THROTTLE_CFG	9
++#define SLAVE_GPU_CFG			10
++#define SLAVE_HWKM			11
++#define SLAVE_IMEM_CFG			12
++#define SLAVE_IPA_CFG			13
++#define SLAVE_LPASS			14
++#define SLAVE_MESSAGE_RAM		15
++#define SLAVE_PDM			16
++#define SLAVE_PIMEM_CFG			17
++#define SLAVE_PKA_WRAPPER		18
++#define SLAVE_PMIC_ARB			19
++#define SLAVE_PRNG			20
++#define SLAVE_QDSS_CFG			21
++#define SLAVE_QM_CFG			22
++#define SLAVE_QM_MPU_CFG		23
++#define SLAVE_QPIC			24
++#define SLAVE_QUP_0			25
++#define SLAVE_SDCC_1			26
++#define SLAVE_SDCC_2			27
++#define SLAVE_SNOC_CFG			28
++#define SLAVE_TCSR			29
++#define SLAVE_USB3			30
++#define SLAVE_VENUS_CFG			31
++#define SLAVE_VENUS_THROTTLE_CFG	32
++#define SLAVE_VSENSE_CTRL_CFG		33
++#define SLAVE_SERVICE_CNOC		34
++
++/* SNOC */
++#define MASTER_CRYPTO_CORE0		0
++#define MASTER_SNOC_CFG			1
++#define MASTER_TIC			2
++#define MASTER_ANOC_SNOC		3
++#define MASTER_BIMC_SNOC		4
++#define MASTER_PIMEM			5
++#define MASTER_QDSS_BAM			6
++#define MASTER_QUP_0			7
++#define MASTER_IPA			8
++#define MASTER_QDSS_ETR			9
++#define MASTER_SDCC_1			10
++#define MASTER_SDCC_2			11
++#define MASTER_QPIC			12
++#define MASTER_USB3_0			13
++#define SLAVE_APPSS			14
++#define SLAVE_SNOC_CNOC			15
++#define SLAVE_IMEM			16
++#define SLAVE_PIMEM			17
++#define SLAVE_SNOC_BIMC			18
++#define SLAVE_SERVICE_SNOC		19
++#define SLAVE_QDSS_STM			20
++#define SLAVE_TCU			21
++#define SLAVE_ANOC_SNOC			22
++
++/* QUP Virtual */
++#define MASTER_QUP_CORE_0		0
++#define SLAVE_QUP_CORE_0		1
++
++/* MMNRT Virtual */
++#define MASTER_CAMNOC_SF		0
++#define MASTER_VIDEO_P0			1
++#define MASTER_VIDEO_PROC		2
++#define SLAVE_SNOC_BIMC_NRT		3
++
++/* MMRT Virtual */
++#define MASTER_CAMNOC_HF		0
++#define MASTER_MDP0			1
++#define SLAVE_SNOC_BIMC_RT		2
++
++#endif
 -- 
 2.17.1
 
