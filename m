@@ -2,91 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5C2C474484
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Dec 2021 15:08:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5895747464D
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Dec 2021 16:21:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232553AbhLNOIt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Dec 2021 09:08:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56006 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232502AbhLNOIs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Dec 2021 09:08:48 -0500
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C74C061574
-        for <linux-pm@vger.kernel.org>; Tue, 14 Dec 2021 06:08:48 -0800 (PST)
-Received: by mail-ed1-x542.google.com with SMTP id t5so63208256edd.0
-        for <linux-pm@vger.kernel.org>; Tue, 14 Dec 2021 06:08:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=KzLgDz7d2Gll4mrNvllKXj4KFgN8S+Ovisil7/bb6fs=;
-        b=AaLyoTuKjBaQHDloUM16TygWglN0uT0CMrjpm5ZbFcAKRHo6eBv4Tc7NbHyhOqnH4e
-         6CyEOQe5Vpzpak9fxK4mQq4Gd5T1WUE1dttlmnJ7Zv3QAlDprh0ws6zzdeHt7f7GallN
-         Ep7x3ZdnLeceEf8/+aOFcU8twC/T38lhN6n9qMOsoxBdxLvgpd0unr0hmcKsW290QylQ
-         r5UytVGDMQRrU2lYw5TIYgDi85a1DWNAOOrNdRgfx4mSTYhjgF1yMe03rnWOe70ZHpIw
-         VbtpwcxaftwDj4YFZ5nd8BIJewUmuZz0JfQIArUb57NDIt6WUBzleaGVKXbDOoTXcL76
-         EtDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=KzLgDz7d2Gll4mrNvllKXj4KFgN8S+Ovisil7/bb6fs=;
-        b=Kxhy+eaYUoIWdUjOHiJKZHq+5Vy7w4DqNb/bb1dq+Q3TV8eIqz8YO9XdzQdz4j17KZ
-         +HjemQyVsb4Ee1Qzq7D8yYV85ofB6v9sqc0/bAjFVUJxfs+VsOxAFwtY6+BNKuDYQq9P
-         MssfhBZrRHuzp3msw3YVKzawc1GEPZqdw8/T1rcQwcsTuu7LIt10iB/SInRi8cUxD2XC
-         OOdPSHEKIqQU7Cqb7/tt3shmaPTZwGH2GqQ1LQUd+CTET3j4m333CiPs3n521n0Ff3ZI
-         YOGhBSZ1hH4oW7tnFPjQu3si9xDqAwHdpQRXAsdgcsmYm5iRZFMIIRuGalMqFjIiyiEZ
-         XsAw==
-X-Gm-Message-State: AOAM530MOkNcvkQt8GOuJP98/qBIoVsoVxL9rRodYjHFTsUmOAp7JvnT
-        DFbc+nu2RKzhO+7rx1lQkdVLkqGLIkoV101CLYA=
-X-Google-Smtp-Source: ABdhPJzODXbhdNat8LqO8F3BcK7fQu2CQkKpXfMdCT6jCFReeU5SjExpyUGmpzhUo2Yr6ZmGdKRD0SxY57mNV42RwhA=
-X-Received: by 2002:a17:906:d54c:: with SMTP id cr12mr6221189ejc.56.1639490923527;
- Tue, 14 Dec 2021 06:08:43 -0800 (PST)
+        id S232942AbhLNPV0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Dec 2021 10:21:26 -0500
+Received: from mga04.intel.com ([192.55.52.120]:23843 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232651AbhLNPVZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 14 Dec 2021 10:21:25 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="237735217"
+X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
+   d="scan'208";a="237735217"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 07:21:11 -0800
+X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
+   d="scan'208";a="614311910"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 07:21:09 -0800
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id 7F2A220462;
+        Tue, 14 Dec 2021 17:21:07 +0200 (EET)
+Date:   Tue, 14 Dec 2021 17:21:07 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>
+Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@puri.sm
+Subject: Re: [PATCH v1 0/2] media: i2c: hi846: minor PM fixes
+Message-ID: <Ybi2Yylo718i8SLl@paasikivi.fi.intel.com>
+References: <20211109131013.2684058-1-martin.kepplinger@puri.sm>
+ <f08075656c83ff43947942c6f754936ced63dc01.camel@puri.sm>
 MIME-Version: 1.0
-Received: by 2002:a54:3842:0:0:0:0:0 with HTTP; Tue, 14 Dec 2021 06:08:42
- -0800 (PST)
-Reply-To: uchennailobitenone@gmail.com
-From:   uchenna <okeyyoyopa@gmail.com>
-Date:   Tue, 14 Dec 2021 06:08:43 -0800
-Message-ID: <CAHTws=+nuGrJb8M_td9Zz3zbvYHcgxABK52-bDndXQe_O4dQVA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f08075656c83ff43947942c6f754936ced63dc01.camel@puri.sm>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-May the Almighty Lord be with you....
-Am A WIDOW TO LATE MR David HOLLAND,  I AM 59 .YEARS OLD. My name is
-Josephine HOLLAND.  I am married to Late Mr. David HOLLAND, who worked
-in the France Embassy a here in Lome -Togo West Africa for nine years
-before he died in the
-year 2019.
+On Tue, Dec 14, 2021 at 02:44:41PM +0100, Martin Kepplinger wrote:
+> Am Dienstag, dem 09.11.2021 um 14:10 +0100 schrieb Martin Kepplinger:
+> > hi Saraki and all,
+> > 
+> > Here are minor PM fixes for the hi846 sensor while testing system
+> > suspend:
+> > 
+> > thank you very much for your time,
+> > 
+> >                              martin
+> > 
+> > 
+> > Martin Kepplinger (2):
+> >   media: i2c: hi846: check return value of regulator_bulk_disable()
+> >   media: i2c: hi846: use pm_runtime_force_suspend/resume for system
+> >     suspend
+> > 
+> >  drivers/media/i2c/hi846.c | 14 ++++++++------
+> >  1 file changed, 8 insertions(+), 6 deletions(-)
+> > 
+> 
+> hi all. Any objection or other thoughts about this? This fixes system
+> suspend.
 
-You are chosen to Receive A Donation Cash Grant of my late husband
-that funds $5.7,000,  000,00 (Five Million Seven Hundred Thousand
-United States Dollars) to help the poor and orphanages through your
-sincere help before my death. I am suffering from long time cancer of
-the Breast, from all indication my conditions is really deteriorating
-and it is quite obvious that I wouldn't live any more longer according
-to my doctor because the cancer has gotten to a very bad stage that no
-hope for me to be a living person again, All i need from you is your
-sincerity to use this funds to do this project as i desired and I need
-your information as where My Bank will be sending the funds,
+Thanks for the ping, Martin.
 
-such as:
-Receiver's name:_ Address:_ Phone
-number:_ Country:_
+The patches are in my tree now.
 
-Please do not be offended by the way or manner I came to you as a
-stranger to do this, it is about the only way I could get to you after
-going through your contacts Id. I shall give you the contacts of the
-bank. For legitimacy with  a letter of authority that will establish
-you as my appointed beneficiary of this money.
-
-I am waiting for your reply.
-From Sister Josephine HOLLAND.
-
-You should contact me through my private email address:
-
-mrsjosephineoneholland@gmail.com
+-- 
+Sakari Ailus
