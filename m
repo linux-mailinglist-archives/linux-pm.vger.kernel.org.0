@@ -2,74 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B88E84762BF
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Dec 2021 21:10:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62A244765A7
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Dec 2021 23:27:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234799AbhLOUK0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Dec 2021 15:10:26 -0500
-Received: from mail-ot1-f50.google.com ([209.85.210.50]:37706 "EHLO
-        mail-ot1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234820AbhLOUKW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Dec 2021 15:10:22 -0500
-Received: by mail-ot1-f50.google.com with SMTP id h19-20020a9d3e53000000b0056547b797b2so26250382otg.4;
-        Wed, 15 Dec 2021 12:10:21 -0800 (PST)
+        id S231342AbhLOW1u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Dec 2021 17:27:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50144 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231311AbhLOW1t (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Dec 2021 17:27:49 -0500
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09CBC061401
+        for <linux-pm@vger.kernel.org>; Wed, 15 Dec 2021 14:27:48 -0800 (PST)
+Received: by mail-ot1-x32c.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so26695733otl.8
+        for <linux-pm@vger.kernel.org>; Wed, 15 Dec 2021 14:27:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=dIqIom+6jORRTxpmI0psBmUBPM2tyjb0zli2DVcltbs=;
+        b=v3ER2xjV23bBf34X2L2KBXPBzhIy9SFNBuwoR9+Cvf+FxslgIDIjKVXZUv/qHNRFuL
+         A/JzCe87bLGAgK/L7ukIXC7LhZClCkRLnwTI+g5yUeXu901ZIMoZovxy0TFO4OUr2b34
+         +CAHXbj0H2PxHhrKs2OBZ1vIKRO5ZwBxVelYoQZkY4UJ2WSa+h581FVgwT8nf6alcIiY
+         t8iXPhYfuOiKTBLa9PzRy5IX7wQZyoHNlajf99RtcKkuyZVjWsMhBE2xmjHP5nxR9mjP
+         DuTTUEfd0lBgdn7Ees8npXyIj1UjXs2o4YmP43Iah1uRAPxujRGPk6bKCxaFz+/VgdCq
+         vTOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9dQsPLO1RryQ4GS3Rm7QCSUiqYwX3BoVD7lWW/1WJiQ=;
-        b=0ii17zgNfSt6NdhJmFx5/r/gCMUytNGZv943PLyNN75GxKOqGESKy2Mq1IE6CLPMOe
-         q1+Ufp7QD/YGIM5Jr/m1BFx92K0n2LnBBvPsa7wkt/UgYgyZj/uuqJfTlSPV58PMTe1x
-         0RoT00NSEQ0oOPcpGifYz406ziDoFizYS09VQkpbLJHIWKmPBkGCbeb43Zl+KqiXxVcy
-         rV/4AiXSC8OryrI6Fy/CoQN7qmb8KArpxPHsaHIH8s07Vdd9b/odxQ3B4mEC/nIVLXoU
-         ugEGgUW0YS7ipA+SL/GHn0U11U/xd7NZ43ze8OkPPoCLK7TMaJENKKGlQ5ks3khFjI8h
-         VCTg==
-X-Gm-Message-State: AOAM531vOwDHyY80rNpIoi1qa7Oz0kw1ZzNwIa9nFVkFcF0gOgctoBxW
-        DqvBzXdbXiUgRYMf1AyevQ==
-X-Google-Smtp-Source: ABdhPJyORXC1nAXqh3AJEH7Pbin5z5ZEM+t9Sjf4WCm0RcuQowCym0RA1G6XsPG/wRakCEJiRLmOOw==
-X-Received: by 2002:a05:6830:1301:: with SMTP id p1mr10019266otq.337.1639599021230;
-        Wed, 15 Dec 2021 12:10:21 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id o6sm621244oou.41.2021.12.15.12.10.20
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=dIqIom+6jORRTxpmI0psBmUBPM2tyjb0zli2DVcltbs=;
+        b=Dd61d+hRXskXcLCXw9WO+GH9nt8gMiDmn/Okaz67Pzdb7QEyTSCjix/HLiHNBWw3kg
+         HjVC7GV2f1YOID9uUrhmkmPYWOK/eO1DAKCtyy4HjrLWUU3JLld1QrDbihooIDE7iWM9
+         pLiq0AztJO/WQZCVjsWSjCStwTIXcVp6Uj/Ts5cHrmjDSfid90SdJ09G8yZDubRfXA/7
+         lvcQsenNFExbhYBWphsJmh0u8tC74prl34cMdebW20htcZP02gaKzBWSlswHhtcky2Um
+         loqhsILjvECMqSqwWg4SFyMLiSOEvh+LEbiGjyvum5j37o6Kgpvx8k7s6Waax6ZY+M87
+         3DGw==
+X-Gm-Message-State: AOAM530qDqllm7xl6xsdzO/eJHDbfa2aH1J/2iSYNzw6cJB5ndY/82en
+        E5S4qCz5qXaLEonnokMVvxcCaw==
+X-Google-Smtp-Source: ABdhPJzrOMqt+icTtTZcyUIkwkwGfQe+HYzLL7ff67WDZyGhsplapFWooR+59CLml9IBdkHvC4Ah6w==
+X-Received: by 2002:a05:6830:1be9:: with SMTP id k9mr10310267otb.123.1639607268004;
+        Wed, 15 Dec 2021 14:27:48 -0800 (PST)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id t14sm700500oth.81.2021.12.15.14.27.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 12:10:20 -0800 (PST)
-Received: (nullmailer pid 1754734 invoked by uid 1000);
-        Wed, 15 Dec 2021 20:10:19 -0000
-Date:   Wed, 15 Dec 2021 14:10:19 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Luca Weiss <luca.weiss@fairphone.com>
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Wed, 15 Dec 2021 14:27:47 -0800 (PST)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Thara Gopinath <thara.gopinath@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        linux-arm-msm@vger.kernel.org,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, devicetree@vger.kernel.org,
-        Thara Gopinath <thara.gopinath@linaro.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>
-Subject: Re: [PATCH 05/10] dt-bindings: thermal: tsens: Add SM6350 compatible
-Message-ID: <YbpLqwFJI/nfvxd9@robh.at.kernel.org>
-References: <20211213082614.22651-1-luca.weiss@fairphone.com>
- <20211213082614.22651-6-luca.weiss@fairphone.com>
+        Zhang Rui <rui.zhang@intel.com>,
+        Andy Gross <agross@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: (subset) [PATCH v3 0/4] arm64: dts: qcom: sdm845: Add thermal zones for PM8998 ADC
+Date:   Wed, 15 Dec 2021 16:27:19 -0600
+Message-Id: <163960723735.3062250.11642427389865484794.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20211005032531.2251928-1-bjorn.andersson@linaro.org>
+References: <20211005032531.2251928-1-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211213082614.22651-6-luca.weiss@fairphone.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 13 Dec 2021 09:26:06 +0100, Luca Weiss wrote:
-> Add devicetree compatible for tsens on SM6350 SoC.
+On Mon, 4 Oct 2021 20:25:27 -0700, Bjorn Andersson wrote:
+> Describe ADC channels, related thermal monitor channels and add thermal
+> zones for these.
 > 
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> Acked-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> ---
->  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
->  1 file changed, 1 insertion(+)
+> Bjorn Andersson (4):
+>   dt-bindings: thermal: qcom: add HC variant of adc-thermal monitor
+>     bindings
+>   thermal/drivers/qcom/spmi-adc-tm5: Add support for HC variant
+>   arm64: dts: qcom: pm8998: Add ADC Thermal Monitor node
+>   arm64: dts: qcom: sdm845: mtp: Add vadc channels and thermal zones
 > 
+> [...]
 
-Acked-by: Rob Herring <robh@kernel.org>
+Applied, thanks!
+
+[3/4] arm64: dts: qcom: pm8998: Add ADC Thermal Monitor node
+      commit: 4cc7c85cccc87e436a86b4281ddcd886eb0bf58f
+[4/4] arm64: dts: qcom: sdm845: mtp: Add vadc channels and thermal zones
+      commit: d5e12f3823aed1e35ee2411bdf0ab61dc1011387
+
+Best regards,
+-- 
+Bjorn Andersson <bjorn.andersson@linaro.org>
