@@ -2,64 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E42E475194
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Dec 2021 05:04:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E363D4758AA
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Dec 2021 13:16:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239687AbhLOEEv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Dec 2021 23:04:51 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:52050 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235674AbhLOEEu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Dec 2021 23:04:50 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 65F63B81D4C;
-        Wed, 15 Dec 2021 04:04:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34E8AC34603;
-        Wed, 15 Dec 2021 04:04:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639541088;
-        bh=OFQiIOJbDDB0jieVQbMNdFCClUHvhKr3mYLSoThmrow=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kIT9p5f4zAijGCEl4xxozDdr36MCMdYx1k0D/h+BY9NZt2BEcNdqGOVpAolFbjdHI
-         +xoFWVoUN+6fi3gvy+vThBoHDMM00JNZjHqwQrjKq0bP9FHCRsxIER80WCXNYMhGSt
-         MjqICTCMLXyZjuWPyVlGHKYQiwIrizs250N9BUAdyg9yPHV29CoG/rCqiC4b9La1iA
-         oa8uJhcNnYmcbUBBBNq4aksmCRakqrdbwZa6foT6b5rlMZbQtrDCce4WtNE9LLxdkM
-         wgfKtUl+RJ6Z3oF+RCaLk4E3xOpZdIn+BtoWepLUeFYiDRpg1FMrx3IW5yjQZD8sce
-         nL5L3bDu9ZuOw==
-Date:   Wed, 15 Dec 2021 09:34:44 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 4/4] arm64: dts: qcom: sdm845: mtp: Add vadc channels
- and thermal zones
-Message-ID: <YblpXLf1nFnDoAhT@matsya>
-References: <20211005032531.2251928-1-bjorn.andersson@linaro.org>
- <20211005032531.2251928-5-bjorn.andersson@linaro.org>
+        id S237108AbhLOMQW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Dec 2021 07:16:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47842 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229441AbhLOMQW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Dec 2021 07:16:22 -0500
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC15C061574
+        for <linux-pm@vger.kernel.org>; Wed, 15 Dec 2021 04:16:21 -0800 (PST)
+Received: by mail-lf1-x144.google.com with SMTP id d10so42791863lfg.6
+        for <linux-pm@vger.kernel.org>; Wed, 15 Dec 2021 04:16:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=HgoNJ4DLDnurahk5jAWbE4XTQYXuijM5tcGClTScIzc=;
+        b=EPqUGVaRP9SAyjzDdxC5KPxtUWZI0GsN2RrK1Ra0rfHRdNZlDQSmonNb+GunIy4EqI
+         lhf9FzWlkydyish0gZnzswqRS7IIlV64Polr73XnxIhkxd6Wxv5DLE0jAhI/TDMtuG1C
+         M3El4/SfPHq7O7SElIZBdVGnBTbXVvBYuPaAe6UvcUTn9eICnh2Uv2xbcBBZICJZGYqW
+         uM01TVg5Svni3ggDWHuRc65pwcy3SWFSI2Bg/4Hrl9dQ114stu44qcpZHlvIb4M7xOUY
+         0bvte595r0ggyoGK1Il3s7q3u6I+xAa3Pl9DYNfqglB5nSbHeneUG8nvV9E+OL49svty
+         xUYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=HgoNJ4DLDnurahk5jAWbE4XTQYXuijM5tcGClTScIzc=;
+        b=jtK+6lnqKbXNHlXJVupYJgdXvGSZIwQxndd8qH1b/ZBEKsEQRXTwKqWF0ISnVr1/di
+         TQkPzOUIbVan+6s6m6CdMl39hM0FRgUPCnPXMLj3t+jrjwOjbbYozriPbMjqgtyHA7vm
+         qVqQhXJdRIe1fs66C5401yCWKoK4xiKvsb06rE+r+aH2+HTG1a7s71pYZO0f1knNuJsV
+         7EKQAn3jNmqHD6WYRscAEsbirAwFvPdaP9QAEpF7coX8O3ifKfYnfVS4gJUZgkWZwZA9
+         dLJQmhCs6sOu+X1YX09V3KH8Ete5R/Ebz1guqspxMC3rgCIGqCa8iaDKN2hN9CYeriBt
+         XM8w==
+X-Gm-Message-State: AOAM533W0DCIQNxGIL02j2AeHLzW1Cvd4gAC3lNyQO07ldY7hrvvu9LG
+        VSHhXcVbr40UJ5yVedtDRMHgztwux4vT4VtK768=
+X-Google-Smtp-Source: ABdhPJxiv0szqneVAmUCzts1b0vsUfkqIii0cCqcIIErmr9HdJ4co4z9OJitlGp7r3fRpJUcN4wCoKtrpwpao3x7E5o=
+X-Received: by 2002:a05:6512:2827:: with SMTP id cf39mr9827459lfb.541.1639570579799;
+ Wed, 15 Dec 2021 04:16:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211005032531.2251928-5-bjorn.andersson@linaro.org>
+Received: by 2002:a05:6504:9c1:0:0:0:0 with HTTP; Wed, 15 Dec 2021 04:16:19
+ -0800 (PST)
+Reply-To: dwilliamssdavid@gmail.com
+From:   "Mr.David Williams" <wolley1william@gmail.com>
+Date:   Wed, 15 Dec 2021 13:16:19 +0100
+Message-ID: <CAM1JzmOFfhDRS8nwvwNquidL=2Bu8HyFZSpVsb+_2Bq2kpFxdg@mail.gmail.com>
+Subject: Did you authorize Mr. Liu Kong Nam
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 04-10-21, 20:25, Bjorn Andersson wrote:
-> Downstream defines four ADC channels related to thermal sensors external
-> to the PM8998 and two channels for internal voltage measurements.
-> 
-> Add these to the upstream SDM845 MTP, describe the thermal monitor
-> channels and add thermal_zones for these.
+Hello ,
 
-Reviewed-by: Vinod Koul <vkoul@kernel.org>
+Did you authorize Mr. Liu Kong Nam of Kemuning Ray Street
+NO.8,Tomang.Jakarta, Indonesia to pay the pending wire transfer
+activation charges and claim your WORLD BANK/IMF compensation payment
+the sum of Seven million two hundred thousand US dollars?.
 
--- 
-~Vinod
+Get back to me with your details.
+
+Regards
+Mr. David Williams
