@@ -2,140 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63D8C4767B5
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Dec 2021 03:07:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BF414767B6
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Dec 2021 03:07:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232752AbhLPCHC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Dec 2021 21:07:02 -0500
-Received: from mailout3.samsung.com ([203.254.224.33]:50651 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbhLPCHB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Dec 2021 21:07:01 -0500
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20211216020700epoutp03a0be71d77ce17333a253582c2dcfdd32~BGhXK8tzJ1258412584epoutp03z
-        for <linux-pm@vger.kernel.org>; Thu, 16 Dec 2021 02:07:00 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20211216020700epoutp03a0be71d77ce17333a253582c2dcfdd32~BGhXK8tzJ1258412584epoutp03z
+        id S232772AbhLPCHK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Dec 2021 21:07:10 -0500
+Received: from mailout4.samsung.com ([203.254.224.34]:25276 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232771AbhLPCHK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Dec 2021 21:07:10 -0500
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20211216020708epoutp04d46e50c9ded5bdad6c6f538cb398aac0~BGhfUjUwQ1194711947epoutp045
+        for <linux-pm@vger.kernel.org>; Thu, 16 Dec 2021 02:07:08 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20211216020708epoutp04d46e50c9ded5bdad6c6f538cb398aac0~BGhfUjUwQ1194711947epoutp045
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1639620420;
-        bh=wBrNla7Q/idEOugD6hQxRtGTv1bbK5zq7g3N6D8ADJw=;
+        s=mail20170921; t=1639620429;
+        bh=mI74+lYrCIoVgqdKUWVKTn7G5egS/5n/Se/dnL91UTw=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=ndDa09I7gMD9hgW8UdFigWtQCVUIIqmscbqQBYVim0S+YSw/CXGLjqgWn4uzm9CkC
-         QCgSs+ILJcNEsl7NwisXn3gS9b4aHGOCPDSST36nTR8KQvqXKKcHuBpJNHa8mp8dWz
-         hnvOyHjkeKBbbbONy5HyL+GQYuOBm0n3FmwqkOT0=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20211216020659epcas1p216dbbfaab7f20073a4370dc4f09d1272~BGhWlqXDn1059410594epcas1p28;
-        Thu, 16 Dec 2021 02:06:59 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.38.232]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4JDwTh2BCmz4x9QM; Thu, 16 Dec
-        2021 02:06:48 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        3C.CC.09592.50F9AB16; Thu, 16 Dec 2021 11:05:57 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
-        20211216020646epcas1p373a1025743091a376b189df29f68fc9f~BGhKq5vuX3152331523epcas1p3q;
-        Thu, 16 Dec 2021 02:06:46 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20211216020646epsmtrp227af5b3d400d587cbc85f20d74f0367b~BGhKqRo0l1563215632epsmtrp2q;
-        Thu, 16 Dec 2021 02:06:46 +0000 (GMT)
-X-AuditID: b6c32a37-28fff70000002578-53-61ba9f057afc
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        41.DE.29871.53F9AB16; Thu, 16 Dec 2021 11:06:46 +0900 (KST)
+        b=B42tSv5dD4XZG3OKBJ1KPrOaStKPGWgmMx/0wNpj5YgxZSIArmrc6C50V/Sv2EM7j
+         gqlxKsY/eq5B+SWnhRxkTIE8qDtvZrN+nTYAhhLX0Z4gOhF3DLBIJfmumJynaYC78J
+         zBWlPcBquqVhehmnBUZ731dYa5raZifFtXQVREP0=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20211216020708epcas1p161eab40748a79555c4b1ebd10a0f1372~BGhe2qLWS1738817388epcas1p1b;
+        Thu, 16 Dec 2021 02:07:08 +0000 (GMT)
+Received: from epsmges1p1.samsung.com (unknown [182.195.38.233]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4JDwTz176sz4x9Pr; Thu, 16 Dec
+        2021 02:07:03 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        96.3B.64085.F3F9AB16; Thu, 16 Dec 2021 11:06:55 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
+        20211216020653epcas1p4710b50224fca7fec1947e7847edaa91f~BGhRWdxG31146211462epcas1p4H;
+        Thu, 16 Dec 2021 02:06:53 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20211216020653epsmtrp173cf683b51f9552468bca2e5e145f06b~BGhRVoCtW1982819828epsmtrp1k;
+        Thu, 16 Dec 2021 02:06:53 +0000 (GMT)
+X-AuditID: b6c32a35-9adff7000000fa55-28-61ba9f3fdb94
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        D7.5F.08738.D3F9AB16; Thu, 16 Dec 2021 11:06:53 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20211216020646epsmtip274ddc1c68c7a2e44b6846aa01299d6ad~BGhKcQnSF2619826198epsmtip2N;
-        Thu, 16 Dec 2021 02:06:46 +0000 (GMT)
-Subject: Re: [PATCH] PM / devfreq: Reduce log severity for informative
- message
-To:     Tzung-Bi Shih <tzungbi@google.com>, myungjoo.ham@samsung.com,
-        kyungmin.park@samsung.com
-Cc:     linux-pm@vger.kernel.org
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20211216020653epsmtip17f4e1355c753882be13279aee8373a37~BGhRI2NW11715217152epsmtip1V;
+        Thu, 16 Dec 2021 02:06:53 +0000 (GMT)
+Subject: Re: [PATCH] PM / devfreq: sun8i: addd COMMON_CLK dependency
+To:     Arnd Bergmann <arnd@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Dong Aisheng <aisheng.dong@nxp.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 From:   Chanwoo Choi <cw00.choi@samsung.com>
 Organization: Samsung Electronics
-Message-ID: <639a5f91-b69c-c694-d993-1db8d2e70104@samsung.com>
-Date:   Thu, 16 Dec 2021 11:29:47 +0900
+Message-ID: <a56dbd34-cd89-63a7-e24c-6f45487aa129@samsung.com>
+Date:   Thu, 16 Dec 2021 11:29:54 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
         Thunderbird/59.0
 MIME-Version: 1.0
-In-Reply-To: <20211214063100.3066579-1-tzungbi@google.com>
+In-Reply-To: <20211215140523.481425-1-arnd@kernel.org>
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrHKsWRmVeSWpSXmKPExsWy7bCmgS7r/F2JBm8mcFucbXrDbvG59wij
-        xe3GFWwWey6+Yndg8ViwqdSjb8sqRo/Pm+QCmKOybTJSE1NSixRS85LzUzLz0m2VvIPjneNN
-        zQwMdQ0tLcyVFPISc1NtlVx8AnTdMnOAlikplCXmlAKFAhKLi5X07WyK8ktLUhUy8otLbJVS
-        C1JyCkwL9IoTc4tL89L18lJLrAwNDIxMgQoTsjN6TxxmLJjKUdF7YTV7A+MTti5GDg4JAROJ
-        5fe8uhg5OYQEdjBK/Pud1cXIBWR/YpR42HKdBcL5xiixd+tMFpAqkIaLr5YwQiT2Mkp8ePAf
-        quo9o8SazjdgVcICARKbFtwBs0UEYiVW/pzNBmIzC8hI/H6xiBnEZhPQktj/4gZYnF9AUeLq
-        j8eMIDavgJ3E8XdrWEFsFgFViRNzFoDFRQXCJE5ua4GqEZQ4OfMJ2HxOASuJlnfvoeaLS9x6
-        Mp8JwpaX2P52DjPIcRICH9klvna+YId4wUXiydu5jBC2sMSr41ug4lISn9/tZYNoWMYo8Wty
-        JxOEs55R4uWsTmaIKmOJ/UsnM4FCj1lAU2L9Ln2IsKLEzt8QQ5kF+CTefe1hhQQwr0RHmxBE
-        ibLE5Qd3mSBsSYnF7Z1sExiVZiH5ZxaSH2Yh+WEWwrIFjCyrGMVSC4pz01OLDQuM4bGdnJ+7
-        iRGcELXMdzBOe/tB7xAjEwfjIUYJDmYlEd4nEbsShXhTEiurUovy44tKc1KLDzGaAkN4IrOU
-        aHI+MCXnlcQbmlgamJgZGZtYGJoZKonzvvCfnigkkJ5YkpqdmlqQWgTTx8TBKdXAdL3OPlNp
-        dX9hFK/6Qr4dEV9Etq9rv3d5++zehXnvL3HMvOmgU2ObsZ4p3P9covTVCxsui+St2dC8OyKl
-        8W75rfkPUxc3nH3WdXap+r7e1l06fa079n3gfZ7Z0np5W9XFI4zurckPpD3vb0v+enh2QD5P
-        R+LukNtdGav3yB2etS/sYxvbldSe7xfSPvnleG5ar72mUH2Le3WcLot/gjCfq0xZ3pMI7nvt
-        YueEc21zPAP+K+cytSe0TplSfnwfQ0piaVr03YTpy3Nf9W7oMFNREmPpFvcvrvU69K/41dy3
-        kw9yqHtcE2kI0Uu6asTofm9hbl5sfLOkkM6vj3VPVvZwqjIF+7k/6UhuOv0x8IoSS3FGoqEW
-        c1FxIgA2D3+MEQQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrOLMWRmVeSWpSXmKPExsWy7bCSvK7Z/F2JBksLLc42vWG3+Nx7hNHi
-        duMKNos9F1+xO7B4LNhU6tG3ZRWjx+dNcgHMUVw2Kak5mWWpRfp2CVwZvScOMxZM5ajovbCa
-        vYHxCVsXIyeHhICJxMVXSxi7GLk4hAR2M0rMu7iTCSIhKTHt4lHmLkYOIFtY4vDhYoiat4wS
-        KyZvZgeJCwv4Sdy9LAxSLiIQK3H73DtmEJtZQEbi94tFzBD1vYwSp45tYwVJsAloSex/cQNs
-        Mb+AosTVH48ZQWxeATuJ4+/WgNWwCKhKnJizACwuKhAmsXPJYyaIGkGJkzOfsIDYnAJWEi3v
-        3rNBLFOX+DPvEtRicYlbT+YzQdjyEtvfzmGewCg8C0n7LCQts5C0zELSsoCRZRWjZGpBcW56
-        brFhgWFearlecWJucWleul5yfu4mRnBcaGnuYNy+6oPeIUYmDsZDjBIczEoivE8idiUK8aYk
-        VlalFuXHF5XmpBYfYpTmYFES573QdTJeSCA9sSQ1OzW1ILUIJsvEwSnVwJTK8nvLjyYDk1/v
-        Dnx9aFL34nnRnUzx+QL75W+/4xfh/Gu1K8/DJqgonv1XvNduxZmqgs/D2z+JPDC4/NN2u31U
-        42r3xDbP/O4tFsyVBunecSseH9L3sLti9jTPZv22KWe0Py3kD7lq9l92qbCegVKV1KRs91Nf
-        5JcyspjtaXu3eumEfMuS0r75dud79d5YxCyql9P6sNFYOneOdfw2lsanljyZynP2PzZ9kbU0
-        37t0Oou0Y8+MAzsVV8ye9L9bLkbK5nqj0SHt78VlvJn8nYefP9lr/6Av5ubrE6uOXl6s5nrs
-        aHlFvNzitcHm5eclP0p2O0us+dhdwnW2+t0/78sv1gQZFusXLnybWFwcqsRSnJFoqMVcVJwI
-        AF/Tha36AgAA
-X-CMS-MailID: 20211216020646epcas1p373a1025743091a376b189df29f68fc9f
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrMJsWRmVeSWpSXmKPExsWy7bCmnq79/F2JBg/apSy+TN3FbPF30jF2
+        i21bNrFanG16w25xedccNovPvUcYLW43rmCzeP6ok82Bw+P3r0mMHptWdbJ5bHy3g8mjb8sq
+        Ro9XX+cyenzeJBfAFpVtk5GamJJapJCal5yfkpmXbqvkHRzvHG9qZmCoa2hpYa6kkJeYm2qr
+        5OIToOuWmQN0kJJCWWJOKVAoILG4WEnfzqYov7QkVSEjv7jEVim1ICWnwLRArzgxt7g0L10v
+        L7XEytDAwMgUqDAhO2PT8wbGglaeikend7A3MM7n6mLk5JAQMJG4uH8LaxcjF4eQwA5GifWT
+        trKBJIQEPjFKzG2pg0h8ZpRo2HaKEaZj0vN7jBCJXUBFq98zQzjvGSU6Hixh72Lk4BAWcJFY
+        MYcJJC4isJBRYvqlnWDdzAINQB3ttiA2m4CWxP4XN8DW8QsoSlz98RishlfATmLB2wfMIDaL
+        gKrErsMLWEFsUYEwiZPbWqBqBCVOznzCAmJzCphJ9D3dzwQxX1zi1pP5ULa8xPa3c8COkxBY
+        ySHx/9xtdogXXCRO/9jODGELS7w6vgUqLiXxsr+NHaJhGaPEr8mdTBDOekaJl7M6oTqMJfYv
+        ncwE8iazgKbE+l36EGFFiZ2/50J9ySfx7msPK0iJhACvREebEESJssTlB3eZIGxJicXtnWwT
+        GJVmIflnFpIfZiH5YRbCsgWMLKsYxVILinPTU4sNCwzh0Z2cn7uJEZxatUx3ME58+0HvECMT
+        B+MhRgkOZiUR3icRuxKFeFMSK6tSi/Lji0pzUosPMZoCQ3gis5Rocj4wueeVxBuaWBqYmBkZ
+        m1gYmhkqifO+8J+eKCSQnliSmp2aWpBaBNPHxMEp1cAUdDR5s6ppnYBuWQ2ro1DTCtsV9zIW
+        bmTq2BbOqTXPm7VY2y9H44lVvUd1mlsVv3Ox/KugDwu1/85++CbGWyjipWmJoaf5xK+zZe30
+        Olk1Lb/ercoM0MsM7fQ42ZU3PfrmJsvtl3SEypjZI4o+ZfEGzzoRZsNu7/x2Z1X4T67Dck9T
+        X1qwaSXb/0i+YtX21v2wnPxriRkylUnLL6juUNPq4rDMWJQ1R1jiSsWsOdzBPbtmLzTRkpZ/
+        HBmyu/hBaqhWW2XP5T1MMhde963mcTm2sNRVXln+Of+Mfv8T78W8q+aY7nd95tCosf6mG0ty
+        yfZT98pj9vhPbhNpSFrZrFrktOC21M8OR0/JWZOVWIozEg21mIuKEwHJy/+nNgQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuplkeLIzCtJLcpLzFFi42LZdlhJTtd2/q5Eg01P1Sy+TN3FbPF30jF2
+        i21bNrFanG16w25xedccNovPvUcYLW43rmCzeP6ok82Bw+P3r0mMHptWdbJ5bHy3g8mjb8sq
+        Ro9XX+cyenzeJBfAFsVlk5Kak1mWWqRvl8CVsel5A2NBK0/Fo9M72BsY53N1MXJySAiYSEx6
+        fo+xi5GLQ0hgB6PE1eZ5zBAJSYlpF48C2RxAtrDE4cPFEDVvGSUWrf3ADhIXFnCRWDGHCSQu
+        IrCQUWLb9n1gg5gFGhglJhw4BjZISKCTUWLHVH4Qm01AS2L/ixtsIDa/gKLE1R+PGUFsXgE7
+        iQVvH4DVswioSuw6vIAVxBYVCJPYueQxE0SNoMTJmU9YQGxOATOJvqf7weLMAuoSf+ZdYoaw
+        xSVuPZkPFZeX2P52DvMERuFZSNpnIWmZhaRlFpKWBYwsqxglUwuKc9Nziw0LjPJSy/WKE3OL
+        S/PS9ZLzczcxgmNMS2sH455VH/QOMTJxMB5ilOBgVhLhfRKxK1GINyWxsiq1KD++qDQntfgQ
+        ozQHi5I474Wuk/FCAumJJanZqakFqUUwWSYOTqkGpoQWt/IfyiZuM521JHiqPG4suHSx29sx
+        LDBV+7xc/3ppUw+VlbcP2XxI6q322ie1qWdb0auuO0+DV5xYWpl2N+Raa6SRUu9cIUFjV16+
+        Up0H/6fsYL0l+bE8fmPS24VdwhuuHU6/LtX82TKm+MCuiObwZ9vZNocv/Oy0ykBNrdvuK0eP
+        3xO9dr3NB7JUCncrJ2j+FPhusP3w20Nx+5+1lte/iDu5KXPD5TCWJ/fuflC7/7dIRSi64PoZ
+        LhY+vpetsmqvIlIbWid1HbjI0z+1r5TtiEtm7hadDn+XOTrPWUPPZb/sc9/HMEuv/Nmyl/4J
+        liJyjzsNzCP2nFfd8fKeZ+LDqzFqB6Mv/whb/clCiaU4I9FQi7moOBEA2rCPVyADAAA=
+X-CMS-MailID: 20211216020653epcas1p4710b50224fca7fec1947e7847edaa91f
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20211214063114epcas1p38cfb009bda86839613bc5bc7ddc4bc2e
-References: <CGME20211214063114epcas1p38cfb009bda86839613bc5bc7ddc4bc2e@epcas1p3.samsung.com>
-        <20211214063100.3066579-1-tzungbi@google.com>
+X-CMS-RootMailID: 20211215140534epcas1p4a39eed46b3bd0e8582837321d1f279e6
+References: <CGME20211215140534epcas1p4a39eed46b3bd0e8582837321d1f279e6@epcas1p4.samsung.com>
+        <20211215140523.481425-1-arnd@kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/14/21 3:31 PM, Tzung-Bi Shih wrote:
-> Suppose devfreq_update_status() failure in devfreq_set_target() is not a
-> critical error, reduces the log severity.
+On 12/15/21 11:03 PM, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Signed-off-by: Tzung-Bi Shih <tzungbi@google.com>
+> Compile-testing the driver without CONFIG_COMMON_CLK causes
+> a link failure:
+> 
+> arm-linux-gnueabi-ld: drivers/devfreq/sun8i-a33-mbus.o: in function `sun8i_a33_mbus_remove':
+> sun8i-a33-mbus.c:(.text+0x450): undefined reference to `clk_rate_exclusive_put'
+> arm-linux-gnueabi-ld: sun8i-a33-mbus.c:(.text+0x460): undefined reference to `clk_rate_exclusive_put'
+> arm-linux-gnueabi-ld: drivers/devfreq/sun8i-a33-mbus.o: in function `sun8i_a33_mbus_probe':
+> sun8i-a33-mbus.c:(.text+0x85c): undefined reference to `clk_rate_exclusive_get'
+> arm-linux-gnueabi-ld: sun8i-a33-mbus.c:(.text+0x878): undefined reference to `clk_rate_exclusive_get'
+> 
+> Fixes: 8bfd4858b4bb ("PM / devfreq: Add a driver for the sun8i/sun50i MBUS")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
->  drivers/devfreq/devfreq.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/devfreq/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> index 7906220d025c..a525a609dfc6 100644
-> --- a/drivers/devfreq/devfreq.c
-> +++ b/drivers/devfreq/devfreq.c
-> @@ -382,8 +382,8 @@ static int devfreq_set_target(struct devfreq *devfreq, unsigned long new_freq,
->  	devfreq_notify_transition(devfreq, &freqs, DEVFREQ_POSTCHANGE);
->  
->  	if (devfreq_update_status(devfreq, new_freq))
-> -		dev_err(&devfreq->dev,
-> -			"Couldn't update frequency transition information.\n");
-> +		dev_warn(&devfreq->dev,
-> +			 "Couldn't update frequency transition information.\n");
->  
->  	devfreq->previous_freq = new_freq;
->  
+> diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
+> index b94eb04761f6..87eb2b837e68 100644
+> --- a/drivers/devfreq/Kconfig
+> +++ b/drivers/devfreq/Kconfig
+> @@ -135,6 +135,7 @@ config ARM_RK3399_DMC_DEVFREQ
+>  config ARM_SUN8I_A33_MBUS_DEVFREQ
+>  	tristate "sun8i/sun50i MBUS DEVFREQ Driver"
+>  	depends on ARCH_SUNXI || COMPILE_TEST
+> +	depends on COMMON_CLK
+>  	select DEVFREQ_GOV_SIMPLE_ONDEMAND
+>  	help
+>  	  This adds the DEVFREQ driver for the MBUS controller in some
 > 
 
-Applied it.
+
+Thanks. Applied it.
 
 -- 
 Best Regards,
