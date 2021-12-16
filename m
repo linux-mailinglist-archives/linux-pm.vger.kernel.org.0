@@ -2,152 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BF414767B6
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Dec 2021 03:07:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B43CB476838
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Dec 2021 03:42:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232772AbhLPCHK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Dec 2021 21:07:10 -0500
-Received: from mailout4.samsung.com ([203.254.224.34]:25276 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232771AbhLPCHK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Dec 2021 21:07:10 -0500
-Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20211216020708epoutp04d46e50c9ded5bdad6c6f538cb398aac0~BGhfUjUwQ1194711947epoutp045
-        for <linux-pm@vger.kernel.org>; Thu, 16 Dec 2021 02:07:08 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20211216020708epoutp04d46e50c9ded5bdad6c6f538cb398aac0~BGhfUjUwQ1194711947epoutp045
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1639620429;
-        bh=mI74+lYrCIoVgqdKUWVKTn7G5egS/5n/Se/dnL91UTw=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=B42tSv5dD4XZG3OKBJ1KPrOaStKPGWgmMx/0wNpj5YgxZSIArmrc6C50V/Sv2EM7j
-         gqlxKsY/eq5B+SWnhRxkTIE8qDtvZrN+nTYAhhLX0Z4gOhF3DLBIJfmumJynaYC78J
-         zBWlPcBquqVhehmnBUZ731dYa5raZifFtXQVREP0=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20211216020708epcas1p161eab40748a79555c4b1ebd10a0f1372~BGhe2qLWS1738817388epcas1p1b;
-        Thu, 16 Dec 2021 02:07:08 +0000 (GMT)
-Received: from epsmges1p1.samsung.com (unknown [182.195.38.233]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4JDwTz176sz4x9Pr; Thu, 16 Dec
-        2021 02:07:03 +0000 (GMT)
-Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
-        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        96.3B.64085.F3F9AB16; Thu, 16 Dec 2021 11:06:55 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
-        20211216020653epcas1p4710b50224fca7fec1947e7847edaa91f~BGhRWdxG31146211462epcas1p4H;
-        Thu, 16 Dec 2021 02:06:53 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20211216020653epsmtrp173cf683b51f9552468bca2e5e145f06b~BGhRVoCtW1982819828epsmtrp1k;
-        Thu, 16 Dec 2021 02:06:53 +0000 (GMT)
-X-AuditID: b6c32a35-9adff7000000fa55-28-61ba9f3fdb94
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        D7.5F.08738.D3F9AB16; Thu, 16 Dec 2021 11:06:53 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20211216020653epsmtip17f4e1355c753882be13279aee8373a37~BGhRI2NW11715217152epsmtip1V;
-        Thu, 16 Dec 2021 02:06:53 +0000 (GMT)
-Subject: Re: [PATCH] PM / devfreq: sun8i: addd COMMON_CLK dependency
-To:     Arnd Bergmann <arnd@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Dong Aisheng <aisheng.dong@nxp.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <a56dbd34-cd89-63a7-e24c-6f45487aa129@samsung.com>
-Date:   Thu, 16 Dec 2021 11:29:54 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
-MIME-Version: 1.0
-In-Reply-To: <20211215140523.481425-1-arnd@kernel.org>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrMJsWRmVeSWpSXmKPExsWy7bCmnq79/F2JBg/apSy+TN3FbPF30jF2
-        i21bNrFanG16w25xedccNovPvUcYLW43rmCzeP6ok82Bw+P3r0mMHptWdbJ5bHy3g8mjb8sq
-        Ro9XX+cyenzeJBfAFpVtk5GamJJapJCal5yfkpmXbqvkHRzvHG9qZmCoa2hpYa6kkJeYm2qr
-        5OIToOuWmQN0kJJCWWJOKVAoILG4WEnfzqYov7QkVSEjv7jEVim1ICWnwLRArzgxt7g0L10v
-        L7XEytDAwMgUqDAhO2PT8wbGglaeikend7A3MM7n6mLk5JAQMJG4uH8LaxcjF4eQwA5GifWT
-        trKBJIQEPjFKzG2pg0h8ZpRo2HaKEaZj0vN7jBCJXUBFq98zQzjvGSU6Hixh72Lk4BAWcJFY
-        MYcJJC4isJBRYvqlnWDdzAINQB3ttiA2m4CWxP4XN8DW8QsoSlz98RishlfATmLB2wfMIDaL
-        gKrErsMLWEFsUYEwiZPbWqBqBCVOznzCAmJzCphJ9D3dzwQxX1zi1pP5ULa8xPa3c8COkxBY
-        ySHx/9xtdogXXCRO/9jODGELS7w6vgUqLiXxsr+NHaJhGaPEr8mdTBDOekaJl7M6oTqMJfYv
-        ncwE8iazgKbE+l36EGFFiZ2/50J9ySfx7msPK0iJhACvREebEESJssTlB3eZIGxJicXtnWwT
-        GJVmIflnFpIfZiH5YRbCsgWMLKsYxVILinPTU4sNCwzh0Z2cn7uJEZxatUx3ME58+0HvECMT
-        B+MhRgkOZiUR3icRuxKFeFMSK6tSi/Lji0pzUosPMZoCQ3gis5Rocj4wueeVxBuaWBqYmBkZ
-        m1gYmhkqifO+8J+eKCSQnliSmp2aWpBaBNPHxMEp1cAUdDR5s6ppnYBuWQ2ro1DTCtsV9zIW
-        bmTq2BbOqTXPm7VY2y9H44lVvUd1mlsVv3Ox/KugDwu1/85++CbGWyjipWmJoaf5xK+zZe30
-        Olk1Lb/ercoM0MsM7fQ42ZU3PfrmJsvtl3SEypjZI4o+ZfEGzzoRZsNu7/x2Z1X4T67Dck9T
-        X1qwaSXb/0i+YtX21v2wnPxriRkylUnLL6juUNPq4rDMWJQ1R1jiSsWsOdzBPbtmLzTRkpZ/
-        HBmyu/hBaqhWW2XP5T1MMhde963mcTm2sNRVXln+Of+Mfv8T78W8q+aY7nd95tCosf6mG0ty
-        yfZT98pj9vhPbhNpSFrZrFrktOC21M8OR0/JWZOVWIozEg21mIuKEwHJy/+nNgQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuplkeLIzCtJLcpLzFFi42LZdlhJTtd2/q5Eg01P1Sy+TN3FbPF30jF2
-        i21bNrFanG16w25xedccNovPvUcYLW43rmCzeP6ok82Bw+P3r0mMHptWdbJ5bHy3g8mjb8sq
-        Ro9XX+cyenzeJBfAFsVlk5Kak1mWWqRvl8CVsel5A2NBK0/Fo9M72BsY53N1MXJySAiYSEx6
-        fo+xi5GLQ0hgB6PE1eZ5zBAJSYlpF48C2RxAtrDE4cPFEDVvGSUWrf3ADhIXFnCRWDGHCSQu
-        IrCQUWLb9n1gg5gFGhglJhw4BjZISKCTUWLHVH4Qm01AS2L/ixtsIDa/gKLE1R+PGUFsXgE7
-        iQVvH4DVswioSuw6vIAVxBYVCJPYueQxE0SNoMTJmU9YQGxOATOJvqf7weLMAuoSf+ZdYoaw
-        xSVuPZkPFZeX2P52DvMERuFZSNpnIWmZhaRlFpKWBYwsqxglUwuKc9Nziw0LjPJSy/WKE3OL
-        S/PS9ZLzczcxgmNMS2sH455VH/QOMTJxMB5ilOBgVhLhfRKxK1GINyWxsiq1KD++qDQntfgQ
-        ozQHi5I474Wuk/FCAumJJanZqakFqUUwWSYOTqkGpoQWt/IfyiZuM521JHiqPG4suHSx29sx
-        LDBV+7xc/3ppUw+VlbcP2XxI6q322ie1qWdb0auuO0+DV5xYWpl2N+Raa6SRUu9cIUFjV16+
-        Up0H/6fsYL0l+bE8fmPS24VdwhuuHU6/LtX82TKm+MCuiObwZ9vZNocv/Oy0ykBNrdvuK0eP
-        3xO9dr3NB7JUCncrJ2j+FPhusP3w20Nx+5+1lte/iDu5KXPD5TCWJ/fuflC7/7dIRSi64PoZ
-        LhY+vpetsmqvIlIbWid1HbjI0z+1r5TtiEtm7hadDn+XOTrPWUPPZb/sc9/HMEuv/Nmyl/4J
-        liJyjzsNzCP2nFfd8fKeZ+LDqzFqB6Mv/whb/clCiaU4I9FQi7moOBEA2rCPVyADAAA=
-X-CMS-MailID: 20211216020653epcas1p4710b50224fca7fec1947e7847edaa91f
-X-Msg-Generator: CA
+        id S231138AbhLPCmR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Dec 2021 21:42:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50794 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230436AbhLPCmR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Dec 2021 21:42:17 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A009C061574
+        for <linux-pm@vger.kernel.org>; Wed, 15 Dec 2021 18:42:17 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id z6so18239966plk.6
+        for <linux-pm@vger.kernel.org>; Wed, 15 Dec 2021 18:42:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=ruSFKYuJWvSSI13PQVNBt4J3FMBiI68WZj57AY3dhYU=;
+        b=iYQNFJ6tnAT0JM3WYPjV8buyvlKkwOIDRXAVb3ef3Jkt52WesObSW2lheXBmnT6CB5
+         jhw0sQ4VKI9LO55dC+CgKVwp3S6LHuEcl7HJV6LMjOeiEsRVTDq3yNYdtQHDZ0xozuKi
+         5PyMjqa1OBELHw+MVrlyyRJ412yUH6r66tIRlKxf9Wdxj6MLShW/+ptQmcx0CHyvtaC2
+         1dsToSrv9NYkp/4DoJAd6sIYamQ3JqLks+kEQlpUtgUI+gGFhj0xSi6V6SzioOOF0uQW
+         f39rVi3wkR6D2zvyOOEizwBiQGRqX/6q/0zlsejo867UuIpfFhOPIRfQ01xxp0YSEfLE
+         1QaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=ruSFKYuJWvSSI13PQVNBt4J3FMBiI68WZj57AY3dhYU=;
+        b=G7gZVGcG2hQCQtImfSmGcagzQUBYuQoBmsjs5QF1/L3RIGfuC5d+aTTvr60vJKjvgb
+         RVp6TgOxXQk/g7WOyg/j43HuGzx7eLbyeoWMBD69K63FagXiP3iM+QduBgzXNlzgBdAu
+         6R+KCxEolalXPQfyj0sRCM4yV2tY8+FezaCLEOeBRZHmgUllj46UGZtnOqN2jIBd/dxZ
+         +nz/mBtvDYy8nKahSIj55Dr3jS/ydcpu/acZQvkKYq3h8LnEwo6BHc47LmEdBa9TK0hB
+         M3+rXE2Va8E5xPGs4YTCHLyyMPSTG5isq6cauyIKx6kca0o2akrfQIVzijEPc/am2a1e
+         /2hg==
+X-Gm-Message-State: AOAM5319M8s9RJLwci5I262wZWaLLDqtvzf3u8uoAsjtwBdZNKkerdKz
+        ZXNSRyQvwPt8grp7Z+rXD3ht+3CsYFQX1DOR
+X-Google-Smtp-Source: ABdhPJxxHmhWnuLhLux5NvrbqlwDsH2ViI+Mr3VGSNfqcJAdqiCX2OBW6+nNGh14ac8RlnJGq8r9SQ==
+X-Received: by 2002:a17:90b:3ec2:: with SMTP id rm2mr3438266pjb.1.1639622536782;
+        Wed, 15 Dec 2021 18:42:16 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id y191sm3660346pfb.124.2021.12.15.18.42.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 18:42:16 -0800 (PST)
+Message-ID: <61baa788.1c69fb81.3a1e6.b1cb@mx.google.com>
+Date:   Wed, 15 Dec 2021 18:42:16 -0800 (PST)
 Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20211215140534epcas1p4a39eed46b3bd0e8582837321d1f279e6
-References: <CGME20211215140534epcas1p4a39eed46b3bd0e8582837321d1f279e6@epcas1p4.samsung.com>
-        <20211215140523.481425-1-arnd@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.16-rc5-43-g8dff5ac97bf3
+X-Kernelci-Report-Type: test
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing baseline: 88 runs,
+ 1 regressions (v5.16-rc5-43-g8dff5ac97bf3)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/15/21 11:03 PM, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Compile-testing the driver without CONFIG_COMMON_CLK causes
-> a link failure:
-> 
-> arm-linux-gnueabi-ld: drivers/devfreq/sun8i-a33-mbus.o: in function `sun8i_a33_mbus_remove':
-> sun8i-a33-mbus.c:(.text+0x450): undefined reference to `clk_rate_exclusive_put'
-> arm-linux-gnueabi-ld: sun8i-a33-mbus.c:(.text+0x460): undefined reference to `clk_rate_exclusive_put'
-> arm-linux-gnueabi-ld: drivers/devfreq/sun8i-a33-mbus.o: in function `sun8i_a33_mbus_probe':
-> sun8i-a33-mbus.c:(.text+0x85c): undefined reference to `clk_rate_exclusive_get'
-> arm-linux-gnueabi-ld: sun8i-a33-mbus.c:(.text+0x878): undefined reference to `clk_rate_exclusive_get'
-> 
-> Fixes: 8bfd4858b4bb ("PM / devfreq: Add a driver for the sun8i/sun50i MBUS")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/devfreq/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
-> index b94eb04761f6..87eb2b837e68 100644
-> --- a/drivers/devfreq/Kconfig
-> +++ b/drivers/devfreq/Kconfig
-> @@ -135,6 +135,7 @@ config ARM_RK3399_DMC_DEVFREQ
->  config ARM_SUN8I_A33_MBUS_DEVFREQ
->  	tristate "sun8i/sun50i MBUS DEVFREQ Driver"
->  	depends on ARCH_SUNXI || COMPILE_TEST
-> +	depends on COMMON_CLK
->  	select DEVFREQ_GOV_SIMPLE_ONDEMAND
->  	help
->  	  This adds the DEVFREQ driver for the MBUS controller in some
-> 
+pm/testing baseline: 88 runs, 1 regressions (v5.16-rc5-43-g8dff5ac97bf3)
+
+Regressions Summary
+-------------------
+
+platform                 | arch   | lab           | compiler | defconfig   =
+     | regressions
+-------------------------+--------+---------------+----------+-------------=
+-----+------------
+minnowboard-turbot-E3826 | x86_64 | lab-collabora | gcc-10   | x86_64_defco=
+nfig | 1          =
 
 
-Thanks. Applied it.
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.16-rc=
+5-43-g8dff5ac97bf3/plan/baseline/
 
--- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v5.16-rc5-43-g8dff5ac97bf3
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      8dff5ac97bf3147fe5caf4c0f21592607ca08416 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                 | arch   | lab           | compiler | defconfig   =
+     | regressions
+-------------------------+--------+---------------+----------+-------------=
+-----+------------
+minnowboard-turbot-E3826 | x86_64 | lab-collabora | gcc-10   | x86_64_defco=
+nfig | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/61ba97de5da29f8e14397131
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.16-rc5-43-g8dff5=
+ac97bf3/x86_64/x86_64_defconfig/gcc-10/lab-collabora/baseline-minnowboard-t=
+urbot-E3826.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.16-rc5-43-g8dff5=
+ac97bf3/x86_64/x86_64_defconfig/gcc-10/lab-collabora/baseline-minnowboard-t=
+urbot-E3826.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20211210.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/61ba97de5da29f8e14397=
+132
+        new failure (last pass: thermal-5.16-rc5-48-gf1f42573b6f3) =
+
+ =20
