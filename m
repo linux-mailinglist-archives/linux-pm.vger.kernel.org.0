@@ -2,128 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41886476BAF
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Dec 2021 09:15:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 689F0476CE0
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Dec 2021 10:08:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbhLPIPM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Dec 2021 03:15:12 -0500
-Received: from mailout4.samsung.com ([203.254.224.34]:41364 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229474AbhLPIPL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Dec 2021 03:15:11 -0500
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20211216081510epoutp047aed37e28913276ad41e8d9de5b43c6d~BLiz7PJM_0070700707epoutp04g
-        for <linux-pm@vger.kernel.org>; Thu, 16 Dec 2021 08:15:10 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20211216081510epoutp047aed37e28913276ad41e8d9de5b43c6d~BLiz7PJM_0070700707epoutp04g
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1639642510;
-        bh=LMoxrbyqzv20TkTPVfqQqFh9NWqqZbffNlA4jYTh2xI=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=QXK1YQUzXSwT0C5++zF5V7T1d30lDcmHSp+QHcBq5Jhgpo/gWrn2ht67eWOEm/FT9
-         ptD19txcKzwtemDkTw0PF2upP+RW1IGYep8efIsCY+LK1MIoLmaZ1XS3/SrJFP1wgp
-         r9GvR+c4dIHe3OovoFwwy4PaaEy6OvXYbZkcdkFk=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20211216081509epcas1p1e9ead12c5b6fa306927d4bf12bbed6a6~BLizYNhSK1324013240epcas1p1i;
-        Thu, 16 Dec 2021 08:15:09 +0000 (GMT)
-Received: from epsmges1p5.samsung.com (unknown [182.195.38.234]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4JF4fc61kVz4x9Q6; Thu, 16 Dec
-        2021 08:15:04 +0000 (GMT)
-Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
-        3F.5F.28648.885FAB16; Thu, 16 Dec 2021 17:15:04 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
-        20211216081504epcas1p3ebfe072845fe7cfd4833b2b57199a701~BLiuqPFcm3128431284epcas1p3S;
-        Thu, 16 Dec 2021 08:15:04 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20211216081504epsmtrp28351954c144e9d5dabafad852521baff~BLiupWzCX0525305253epsmtrp2h;
-        Thu, 16 Dec 2021 08:15:04 +0000 (GMT)
-X-AuditID: b6c32a39-813e6a8000006fe8-49-61baf588bc05
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        E7.97.29871.785FAB16; Thu, 16 Dec 2021 17:15:03 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20211216081504epsmtip2961137dfcc552c1938690c9107d01b63~BLiuUkrE02233122331epsmtip29;
-        Thu, 16 Dec 2021 08:15:04 +0000 (GMT)
+        id S232755AbhLPJIm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Dec 2021 04:08:42 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:59619 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232732AbhLPJIl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Dec 2021 04:08:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639645720;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/S2bBf2H4Ywg/G1YUzMTQsACFOpl5qi7kASq0wmmZwk=;
+        b=V4Y/QMOfjRmHBaXd9HnZ9l/HznmfcBDxrYrfbtnTCt5oFguu1BEGcNyhSdSd3UypKQ19p2
+        i9yqAcHhwZTiR+XMkBBvqXwDJ8O3CM0d40/QbGpW/iliPqpS/53F/GeYtcRRy5flmUXpoO
+        DiNYr6SgQx/dGH2MSAGvtqGL7jBd7vs=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-372-dLXe2DmxNIiw5ijnErZ8hw-1; Thu, 16 Dec 2021 04:08:39 -0500
+X-MC-Unique: dLXe2DmxNIiw5ijnErZ8hw-1
+Received: by mail-ed1-f72.google.com with SMTP id b15-20020aa7c6cf000000b003e7cf0f73daso22618404eds.22
+        for <linux-pm@vger.kernel.org>; Thu, 16 Dec 2021 01:08:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=/S2bBf2H4Ywg/G1YUzMTQsACFOpl5qi7kASq0wmmZwk=;
+        b=UwRxD4ufEGbiVFiVgVxeaWHY4bvNob2fx6eON+QPR5ozGCNS9bNkn8iELr1xtGue/W
+         lpgcn+pE34F2RutwimY2e1SixsGaaOdJrez32g9ipYihED71jXimjiHCJLXTH00IyfPH
+         vooBW07f74ATVhi9/cGS+dVAZD8Sp/bCG0DyD75mFNI4IuT0SNec8873mWMG4eK9EB7D
+         BxcLcDQuNR0EvvA7K9FX/AtOQLvJn9zPFl1jYOW10rWkfaD2Yg4oqo2CC9YLnj7tjlBM
+         cQ3/QCE8ldy+nJRzc7LLxaRXtvrs8uEsrby7Lp8ggcWBUy/ELALjeIPegJyB3VzBDi0N
+         4rLQ==
+X-Gm-Message-State: AOAM533uTaznanq41xyv0W/feEUcSD6x06cu8mvITTV2IfgQzkmji1+v
+        kvPNocf+ENJ5jMRLtFpO3OvTVH3wYpPaSWiUcqog4ySS9qM6BSEx6faQOSrV2K017E8t65+X7tV
+        QfDnmf6xo1z5K362cXjg=
+X-Received: by 2002:a17:907:3f1e:: with SMTP id hq30mr13896368ejc.579.1639645718164;
+        Thu, 16 Dec 2021 01:08:38 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwpoQtb8C3nM8xfkYi5jPPX96MzG1owNVpw3oKsZ+pHTY4AgBMB+VD4ViJdhbRHyy6UcznxMg==
+X-Received: by 2002:a17:907:3f1e:: with SMTP id hq30mr13896352ejc.579.1639645718010;
+        Thu, 16 Dec 2021 01:08:38 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id s13sm2204024edd.15.2021.12.16.01.08.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Dec 2021 01:08:37 -0800 (PST)
+Message-ID: <4855a130-b16b-d8d6-ec9b-ab1ac024e4a7@redhat.com>
+Date:   Thu, 16 Dec 2021 10:08:36 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
 Subject: Re: [PATCH v2] extcon: fix extcon_get_extcon_dev() error handling
-To:     Dan Carpenter <dan.carpenter@oracle.com>
+Content-Language: en-US
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
 Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Sebastian Reichel <sre@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Felipe Balbi <balbi@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>, Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
         kernel-janitors@vger.kernel.org
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <c8d18573-5dc1-4d45-f134-2a1dbb7590b6@samsung.com>
-Date:   Thu, 16 Dec 2021 17:38:04 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
-MIME-Version: 1.0
-In-Reply-To: <20211216080558.GE1978@kadam>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrHJsWRmVeSWpSXmKPExsWy7bCmvm7H112JBpcOa1gca3vCbvH633QW
-        i+bF69ks3hyfzmTRtXoni8XWW9IWl3fNYbOYvaSfxeJz7xFGi0XLWpktniw8w2Rxu3EFm8Xp
-        3SUWPw+dZ3Lg89jwaDWrx6ZVnWwe804Geuyfu4bd4+PTWywe7/ddZfPY+b2B3aNvyypGj8+b
-        5AI4o7JtMlITU1KLFFLzkvNTMvPSbZW8g+Od403NDAx1DS0tzJUU8hJzU22VXHwCdN0yc4BO
-        V1IoS8wpBQoFJBYXK+nb2RTll5akKmTkF5fYKqUWpOQUmBboFSfmFpfmpevlpZZYGRoYGJkC
-        FSZkZ3Rfm8JWcICv4tHNy6wNjGe5uxg5OSQETCQu3OhlB7GFBHYwSpxc79vFyAVkf2KUuPbs
-        BSOE841RYv2tOewwHZu7trNDJPYySmz7sIwJwnnPKPHx4UNGkCphAS+JrtmH2EBsEQEdicud
-        P8A6mAWuM0v0nd/NBJJgE9CS2P/iBlgRv4CixNUfj8GaeQXsJF7/eQQWZxFQlZjW08QKYosK
-        hEmc3NYCVSMocXLmExYQmxNozpe9h8HizALiEreezGeCsOUltr+dwwyyWELgCYfE/mvX2CB+
-        cJFYP7sP6h9hiVfHt0DZUhKf3+1lg2hYxijxa3InE4SznlHi5axOZogqY4n9SycDJTiAVmhK
-        rN+lDxFWlNj5ey7UFXwS7772sIKUSAjwSnS0CUGUKEtcfnCXCcKWlFjc3sk2gVFpFpJ/ZiH5
-        YRaSH2YhLFvAyLKKUSy1oDg3PbXYsMAUHt/J+bmbGMEJW8tyB+P0tx/0DjEycTAeYpTgYFYS
-        4X0SsStRiDclsbIqtSg/vqg0J7X4EKMpMIQnMkuJJucDc0ZeSbyhiaWBiZmRsYmFoZmhkjjv
-        c//piUIC6YklqdmpqQWpRTB9TBycUg1MXh2CPy6/N76yW0rA7OwSl819SQdEJaKnd1+Xc/2a
-        uytYbIH1KzPN6R+eMt5xcsj8EXDu7b7Nql9XXDkYtqst9rpT/FURLpFPJ67sDtjw8nS3e2Us
-        x4xZ+/bMyrDdte/11+cPv3TrRO8OvTTn+KKgB/Xx4ucXGBw990Oipo/pfUB335pG/slzL1qc
-        5v7r5xlforZqQ+Vr2TvM0fovbHWVpr5fn1XwWImn32xOWtV8O2P2gjMx9vl+/0Tvr3zEeyLs
-        Q7Th/Y2GK38uS5z8zG/y9RfSStE5t/W+yUVsu75EqUGj3nvexL8Cq876vTHavjfFIFgpM7HZ
-        W3LpX+3DBya1F/as0BOZruI0c0fczw9/xZVYijMSDbWYi4oTASnbrTthBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrBIsWRmVeSWpSXmKPExsWy7bCSvG77112JBnOPm1sca3vCbvH633QW
-        i+bF69ks3hyfzmTRtXoni8XWW9IWl3fNYbOYvaSfxeJz7xFGi0XLWpktniw8w2Rxu3EFm8Xp
-        3SUWPw+dZ3Lg89jwaDWrx6ZVnWwe804Geuyfu4bd4+PTWywe7/ddZfPY+b2B3aNvyypGj8+b
-        5AI4o7hsUlJzMstSi/TtErgyuq9NYSs4wFfx6OZl1gbGs9xdjJwcEgImEpu7trN3MXJxCAns
-        ZpQ4MXkrK0RCUmLaxaPMXYwcQLawxOHDxRA1b4FqzqwDqxEW8JLomn2IDcQWEdCRuNz5A2wQ
-        s8BtZommY0+YITqWMUkcWLWDGaSKTUBLYv+LG2Ad/AKKEld/PGYEsXkF7CRe/3kEFmcRUJWY
-        1tMEtkFUIExi55LHTBA1ghInZz5hAbE5geZ82XsYrJdZQF3iz7xLzBC2uMStJ/OZIGx5ie1v
-        5zBPYBSehaR9FpKWWUhaZiFpWcDIsopRMrWgODc9t9iwwDAvtVyvODG3uDQvXS85P3cTIzhy
-        tTR3MG5f9UHvECMTB+MhRgkOZiUR3icRuxKFeFMSK6tSi/Lji0pzUosPMUpzsCiJ817oOhkv
-        JJCeWJKanZpakFoEk2Xi4JRqYLIxX61gsu2MvXvbvtg0gcMfTu7VPeP3TqWmwt6oqEjwf97l
-        hQp9idnslRIl334smlWgP3/fXgGno985qyzzCs78lOR2UJ1cbRjFFr+9RNXe5rPhN8nbZx8Y
-        KE3jnqAnUv5EUkVJvNlD+3rr+Rr31ykWO2I1710VcHn0smHqy/N1V6uO6tjbnnGRcClm2Ffb
-        nVJ/qmDVXvPPT/mnOUc7iqyv2r5tk22Rmq2A0Jv34kI8JxM7nC956VzLbbz/YGJzpv1Sy8sN
-        G+03WE/OTVm6TFzsUupZ/lRz28dPEkr9F0cpfZxieXtPwNavGaKT2uu4f91Ml0nacfcIy6Rt
-        hbtnm3V8jNvbyr/9I+fWzPXPlFiKMxINtZiLihMBlgKyGEsDAAA=
-X-CMS-MailID: 20211216081504epcas1p3ebfe072845fe7cfd4833b2b57199a701
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20211123084357epcas1p14833147710153f9606f14941ac8b0d96
 References: <CGME20211123084357epcas1p14833147710153f9606f14941ac8b0d96@epcas1p1.samsung.com>
-        <20211123083925.GA3277@kili>
-        <562b12ff-e395-c818-787e-7fd6ee6d53fb@samsung.com>
-        <20211216075233.GD1978@kadam>
-        <b4d0c326-3122-c5f9-f376-b122f263d92c@samsung.com>
-        <20211216080558.GE1978@kadam>
+ <20211123083925.GA3277@kili>
+ <562b12ff-e395-c818-787e-7fd6ee6d53fb@samsung.com>
+ <20211216075233.GD1978@kadam>
+ <b4d0c326-3122-c5f9-f376-b122f263d92c@samsung.com>
+ <20211216080558.GE1978@kadam>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20211216080558.GE1978@kadam>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/16/21 5:05 PM, Dan Carpenter wrote:
+Hi,
+
+On 12/16/21 09:05, Dan Carpenter wrote:
 > On Thu, Dec 16, 2021 at 05:24:30PM +0900, Chanwoo Choi wrote:
 >> On 12/16/21 4:52 PM, Dan Carpenter wrote:
 >>> On Thu, Dec 16, 2021 at 03:39:46PM +0900, Chanwoo Choi wrote:
@@ -157,12 +120,18 @@ On 12/16/21 5:05 PM, Dan Carpenter wrote:
 > return -EPROBE_DEFER.  How do other functions guarantee they will only
 > be called from probe()?
 
-If it is possible to know extcon_get_extcon_dev() will be only callled on probe,
-it is no problem. But, it is not able to guarantee that extcon_get_extcon_dev()
-is called on probe. Because of this reason, this issue should be handled in each device driver.
+Right I have to agree with Dan here, all "get" functons for resources
+like gpios, clks, regulators, phys, pwms, etc. may return -EPROBE_DEFER
+and since these functions may return -EPROBE_DEFER they *must* only be
+called from a driver's probe() function.
 
--EPROBE_DEFER is only for probe step. If return -EPROBE_DEFER except for probe,
-it is wrong return value.
+So I believe that the solution here is to simply add a kernel-doc comment
+on extcon_get_extcon_dev() which documents that it may return -EPROBE_DEFER
+and that it thus *must* only be called from a driver's probe() function.
+
+Regards,
+
+Hans
 
 
 
@@ -170,11 +139,4 @@ it is wrong return value.
 > regards,
 > dan carpenter
 > 
-> 
-> 
 
-
--- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
