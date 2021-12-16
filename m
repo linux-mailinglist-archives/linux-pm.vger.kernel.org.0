@@ -2,65 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9474476B68
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Dec 2021 09:06:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20C74476B4E
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Dec 2021 09:02:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234656AbhLPIGp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Dec 2021 03:06:45 -0500
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:19200 "EHLO
-        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230324AbhLPIGo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Dec 2021 03:06:44 -0500
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BG7hhgO006553;
-        Thu, 16 Dec 2021 08:06:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=ShMltKNkVNAXQ5JGBIxZ078c7Ar/PUKnPNl+hfDjn8E=;
- b=G3mkF0UjQdjrPKveoL3RjmO2Rq8ydgfcMt9Pe0zNrsvQSdlGWl0dN4j9bVWvixshumpr
- 7Nr9lbXUp7/9ir/SAhZEEN068a99vf4AGFNMMr6MQbhexRZ2+CC01mbpOkO0WqWY2guh
- mkvPUZXNscL3x7RWZcLmZ866n9iZXZp38o2j3DVcEemh3pgrQByXOV+wZ5Bdlpqjy2qh
- Pa2xeyy7fSy8Ftvoiu6Fu+JawM8WpljqcFrceNahgluxTumlfidWsa608TedpbTV4C70
- z3yWnP0AWfCtfIYKcX1oEsu5yelrGfSGftKEBP75lEAKJTDktdriMH5a85tAQntJ6X1A 7Q== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3cykm5a05v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 16 Dec 2021 08:06:23 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1BG82ACE041088;
-        Thu, 16 Dec 2021 08:06:22 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2046.outbound.protection.outlook.com [104.47.66.46])
-        by aserp3030.oracle.com with ESMTP id 3cyju9hqk7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 16 Dec 2021 08:06:22 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Uqo5q6Zlt/YlFdNcnONaKylHkbP+YKxrdLs3dJ7rDuitAd46MHfpHIga4CqYOu3j1ZZdT+JwFKLpEKQ2UnUkWON5U0K01I68F7Zr8tJr+dwd5hxjXIAxJsI06VteuMF1ISFB8zpS9NuICZ8SyV4sZR8OZ82+qMQa/H0pUUT1KOZllkYgXGAy8K7a5tFbcgJ46Q+YB4PFYU3mNbqZcDEac+HfWV0MZpbCYenGUwmGGZ78+Ovq/6a8FhYSYXVHdUG0c0AnwW+6xt2JJNokbh54UNSAYL5QslZxIDld+/crkSpWcfJUAGx91ITjoNOK1ceCMVSxW1qCLr6104s49e4I9g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ShMltKNkVNAXQ5JGBIxZ078c7Ar/PUKnPNl+hfDjn8E=;
- b=MI967/UDEB3bvjhygnFZbWYUY1XfsOcTSB3Ui5VQ/w27PokRGFgfMnCoZ/OC19BqxiIfhOVdCRvjlbgHDLgI0/JcIobThDfHBhFschha1oxoSu0YV/mlyuJa+eEkjICJ7iyYfbP3t119RvrsP3ftakPQiPBdPIr+zO49hYKgyCZAvXmwyuxrRx4dXIeIPd6ifptdVVOcBfKR3Qg963K69JLhWQ9j4v+Wqwel3sSmuTkEhMO1C29a4Bd28ZRAx/VXHjBvPOOstcYTVshXatrPQeQIA0wxGTsSg6GBVuLOEeFQicW1rqCsvDfPOrNvpZhe+UaXY3NCXqSXu0RszF32hA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ShMltKNkVNAXQ5JGBIxZ078c7Ar/PUKnPNl+hfDjn8E=;
- b=pfTkWOi00SPb04RhspJIbtVOTESuNrQg8dPfQ41KMFLz1JvaeI8paCDmt5kEHDZ3EvTxPb9fCwKh/P8VMN5yE6d/9A4Xyfgi4YGkwwshyrNXYmF16icEpZclnlRSDJvGVjXHvwoJLdONx+vyM+SozDFyxcR1gvGuAYe8wGlolWg=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by MWHPR10MB1294.namprd10.prod.outlook.com
- (2603:10b6:300:20::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17; Thu, 16 Dec
- 2021 08:06:20 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::7194:c377:36cc:d9f0]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::7194:c377:36cc:d9f0%6]) with mapi id 15.20.4801.014; Thu, 16 Dec 2021
- 08:06:20 +0000
-Date:   Thu, 16 Dec 2021 11:05:58 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Chanwoo Choi <cw00.choi@samsung.com>
+        id S232110AbhLPIBi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Dec 2021 03:01:38 -0500
+Received: from mailout4.samsung.com ([203.254.224.34]:22978 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234626AbhLPIBh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Dec 2021 03:01:37 -0500
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20211216080135epoutp049732c015438d1086e9a8cba5082a7055~BLW9bCiVU2072320723epoutp04D
+        for <linux-pm@vger.kernel.org>; Thu, 16 Dec 2021 08:01:35 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20211216080135epoutp049732c015438d1086e9a8cba5082a7055~BLW9bCiVU2072320723epoutp04D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1639641695;
+        bh=5y97tgp0fDZSDibO/cpPtQ0gF2gqCgfXcUTjEGwvhLY=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=M+3K10ItUFfE4OeyoKl+ZD5jspr+EqLR2VD/25q3sM/SmgXAyPuPYS+DKmfFheR46
+         wkbB6WEAYZnqQfXlOWWVh2k1bNOJqBZKCfYKbJkLVzvtKisAnziHPXtZFfytDFKXvb
+         WK+HklbNLaZPbYZr7hmBQ1llSTbFYwkK/TRSCghA=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20211216080135epcas1p36d26bac9cb607de76bb5a900a6bbe27d~BLW88tvrT2252222522epcas1p3p;
+        Thu, 16 Dec 2021 08:01:35 +0000 (GMT)
+Received: from epsmges1p1.samsung.com (unknown [182.195.38.237]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4JF4Ly1qRkz4x9Pp; Thu, 16 Dec
+        2021 08:01:30 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        04.8A.64085.462FAB16; Thu, 16 Dec 2021 17:01:40 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20211216080129epcas1p1508dc29e0f2ba4ff03df45837efbc8b5~BLW3_JjlB3003130031epcas1p12;
+        Thu, 16 Dec 2021 08:01:29 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20211216080129epsmtrp298a7b24c10fcb310f9fe5c1467a776d3~BLW3602EF3077230772epsmtrp2Q;
+        Thu, 16 Dec 2021 08:01:29 +0000 (GMT)
+X-AuditID: b6c32a35-9c3ff7000000fa55-6d-61baf2649d3e
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        8C.17.08738.952FAB16; Thu, 16 Dec 2021 17:01:29 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20211216080129epsmtip11e4fca1ae3e474b1fff6359234dc1d7b~BLW3m91V00741907419epsmtip1a;
+        Thu, 16 Dec 2021 08:01:29 +0000 (GMT)
+Subject: Re: [PATCH v2] extcon: fix extcon_get_extcon_dev() error handling
+To:     Dan Carpenter <dan.carpenter@oracle.com>
 Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Sebastian Reichel <sre@kernel.org>,
@@ -72,115 +61,102 @@ Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
         kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH v2] extcon: fix extcon_get_extcon_dev() error handling
-Message-ID: <20211216080558.GE1978@kadam>
-References: <CGME20211123084357epcas1p14833147710153f9606f14941ac8b0d96@epcas1p1.samsung.com>
- <20211123083925.GA3277@kili>
- <562b12ff-e395-c818-787e-7fd6ee6d53fb@samsung.com>
- <20211216075233.GD1978@kadam>
- <b4d0c326-3122-c5f9-f376-b122f263d92c@samsung.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b4d0c326-3122-c5f9-f376-b122f263d92c@samsung.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: JN2P275CA0045.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:2::33)
- To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <b4d0c326-3122-c5f9-f376-b122f263d92c@samsung.com>
+Date:   Thu, 16 Dec 2021 17:24:30 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
+        Thunderbird/59.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 155fe366-0f18-42dd-d326-08d9c06af140
-X-MS-TrafficTypeDiagnostic: MWHPR10MB1294:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR10MB1294E26BD731410EBD7B50F78E779@MWHPR10MB1294.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VFRIL6FrGetp8LtbJwqPVo1iVS5i+r7staf0g98g6ef6bVxak/0soSuL5d7fGpFbeeCb8w9X0yRpAgazENeE6IwHJmpFgHQ3vO+36LSstrGrh5RchkevPGiknuFlXNHRUU88xI2PF8dNVMAluuiaCGbnQidcEVbW4npg6dMspYRqdfRAkJie0Daz5qn2eoXpiRpWLtfIyzsrnUQyDyfCTZHJc4xFq//jIs/nVrKnDkRrr2fyPBF2zjLXneOyslHutNKPTbaJTsL6xJxNjcWiIAbwvJEPS9QeIlpDPiSQ03SgCpWyxHXRdAoeZ3G5AEVcbyd32hbemgw3Z6TlCbR8fZvdAbm/sTYpKs1kx9Wx6zW8SCOZCrIteiodgSwJlGk4gTnwCUlDeoYK7sFNEyWelfV0BhVEFHiGZzlPeKN18EsRCzO5icZcRNb0NafizuykY1CHi9FkyHSKYhFEZGMZyyWh2ERGvYJeZK0TJHRD0tv6ASYN/jrx3FnLLYMKMvN6fQwr09gA4ap5WUefhFOv1xeiyJ3rAWNv8cptqQhjsBeoi2hGey9yxOhbfeVJnD/WfvJPfU+c8PMmr7TQYFmU4FoTVQJfOrO3GxRgk+roiJz7YDlCbF3vlxFnFLq3Up1IxSdliDN9wfplVxyXM4adoCFlqgKX2IMCMyNzVZFFPu+AMbMfRjpTYXiaptEd8RrGj+599E+Bm2EaGyL6/hXNbjo59TGIeIlr950UQaVjtRF8zxcHwZaZbmf/MhvqQAHgHmslQyergyYp5D+5Bo1eYaOcTtuS9tubYbWSwap/wEo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(366004)(66946007)(52116002)(6916009)(508600001)(86362001)(38350700002)(54906003)(9686003)(33716001)(1076003)(6666004)(966005)(4326008)(6512007)(38100700002)(6506007)(66556008)(5660300002)(8936002)(66476007)(8676002)(316002)(44832011)(6486002)(26005)(186003)(33656002)(7416002)(53546011)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/eJDfmxkIrWsKuwSjX8Dp2rvYXI/8tzPMKmOlwTqtME26UzfiM/j4CWz0BkR?=
- =?us-ascii?Q?9O7Meb96bXJ2AF2A+Oog6Ub6t71gr1st2fAVWRDlpyvQKrPZb6B8jGNloLRL?=
- =?us-ascii?Q?YZ6J0imEQXnPYqa2RflwtFFcxvF+n9j+2xj3KGAe8ykrx3DHOm6obP+vOG3I?=
- =?us-ascii?Q?m3xZTqK/6lLVgNho6WtmH8ViMKly2YTuBfa6f2LhZZ1aYb4nLUP9UWtnV+Qs?=
- =?us-ascii?Q?415Weifoqr7k8Md9o6uqaeXqpdUxGaYJlhoFuT3x6xPNLtub19SllY3KS/lF?=
- =?us-ascii?Q?pYpdv1VasbO48Pbbnttv3/eEi8qyDq9H2iIF6H3XAA/GZgVKlj41pqEYMHRb?=
- =?us-ascii?Q?aNDMFBBMVppRR+0XlLC/engTytqt0tswwKgu1DTfexsauhfF1e4l6IhSjWjz?=
- =?us-ascii?Q?FYBhfOcuiGEeWXtd7xfLlwJ4mY78viZaSt7YIfleA7f1YfifIq7dDkYygFnt?=
- =?us-ascii?Q?2rLJPR0oY0Ip2fqbVeeAxiOswgpeZSErQd7aRnRwMu9K9CvwHO9f0hUW8/4T?=
- =?us-ascii?Q?/xDcApalu9IdAxZPxYP99ZMWnIpXdqUMEFKDDaR7vQud9Qj7qhwWi9KGoESV?=
- =?us-ascii?Q?n9ffwUaEuk6nt59+FsRkYmcHz1WZA+vuCzkRQELtk4CqKhOpiXKLOFgn8s33?=
- =?us-ascii?Q?ibzUMB9Z/A1qIILdn9EUKy32boU2bZGuJzS1yfkqGLZ3rYmhlZ8wGjb1MWiO?=
- =?us-ascii?Q?Rr45qYuvQj6VtEjO5Y9it2zmfFv+qFY4EZzqo10e5E8up1/dM00eGzpNEx4C?=
- =?us-ascii?Q?4r/hFQAelZ+xdx/09MqXO1FmLfG3iR1jqaDJP5O3Jno6zJeGoZQrxW6m+TID?=
- =?us-ascii?Q?2PLnMDGrNojBOY1S+6ytfu9FrFguewKNasBw/a9oY9Uf3KChIPm0EU8lk1ug?=
- =?us-ascii?Q?WjeCDWhDj1hcP6JTy+LWjkgdV4VGIIC1lnTw9RIWK7AB1W+6WdyjcjtfAgGo?=
- =?us-ascii?Q?1zLoKU5CGw8GXNsLNAMTrNpefWGn4wv/FT5a25PaN7NfAjIuPM7kxC5Ss7JA?=
- =?us-ascii?Q?Fnfh6/eCBqbPeBqscIHv0BVBreWh2cvu1vBw6FB8/DBQSt0lsS1WT8DGjjH+?=
- =?us-ascii?Q?pihR3ZXnIxl7NIAB4G7Vq8al875FKRZykYU6OKp0+NEnzwWzr/CsOCehwy/l?=
- =?us-ascii?Q?9to9j+nOyoO396jmcQVVqgbiEemsIioTlGinCWktNOJrb0fV+8QUI+3T1loL?=
- =?us-ascii?Q?UjOderK4wWXddE6Ezo7ExnWxEBvC6C/ScfBizwb6YnDr2UG+pdQBAttn165A?=
- =?us-ascii?Q?5PJBI0qLeUsHQKrqM12AUOG/d+nvvFQ4uD6EsJzAGSlxgYmvnvtSoiRvUVhj?=
- =?us-ascii?Q?mIop2m1Y5lzAXItY/y0PLsWWSE6T2lo/wKVlrgEDRzWQMoLwK11QyGUT4sKa?=
- =?us-ascii?Q?MM9qyDwdiTo+8lTKxjV1dEHp2EAn0bpOOCxUcjZMobWnpXDAZ3BoMOpITA08?=
- =?us-ascii?Q?T/xLBfGitXd9r2vjnozFc2p7j/xD3oENFOS+N1BqQ3zKLN2cNNgjMQNy9CsF?=
- =?us-ascii?Q?356b85xUx8vL9zdMU0FVn/pwfauCY0/gPHlIamm09nAORauhkIy5FAY3OstD?=
- =?us-ascii?Q?ujZjxpMax2pq/CxRtn8br7Zi3dYq0wenyFtTupdOQK1GNw+k6qVVyY/fhRwH?=
- =?us-ascii?Q?7fiE1IdKRhawOzvaxSQaUAMwodR+urBACJhh/jNjnEDfGOOuQmp8d6DFrAkc?=
- =?us-ascii?Q?6Wv/GLsVbaHEp9iy1zp8VdcomQc=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 155fe366-0f18-42dd-d326-08d9c06af140
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2021 08:06:20.0527
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aP1zUJ1gWCKb/fLWVSOubfRbfnLo+mfsg6Uu6MdWy+2RqMTXx0X0ce6V5eFnJoqYGDxyzR8wC7cqyViBJDsVOjWxQRh0ERKMHU7LxxYeE38=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1294
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10199 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
- spamscore=0 mlxscore=0 adultscore=0 bulkscore=0 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112160045
-X-Proofpoint-GUID: 2fditgh8u7vH4mUBjSZVD1hUPmI6yJqh
-X-Proofpoint-ORIG-GUID: 2fditgh8u7vH4mUBjSZVD1hUPmI6yJqh
+In-Reply-To: <20211216075233.GD1978@kadam>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrLJsWRmVeSWpSXmKPExsWy7bCmnm7Kp12JBv82sFsca3vCbvH633QW
+        i+bF69ks3hyfzmTRtXoni8XWW9IWl3fNYbOYvaSfxeJz7xFGi0XLWpktniw8w2Rxu3EFm8Xp
+        3SUWPw+dZ3Lg89jwaDWrx6ZVnWwe804Geuyfu4bd4+PTWywe7/ddZfPY+b2B3aNvyypGj8+b
+        5AI4o7JtMlITU1KLFFLzkvNTMvPSbZW8g+Od403NDAx1DS0tzJUU8hJzU22VXHwCdN0yc4BO
+        V1IoS8wpBQoFJBYXK+nb2RTll5akKmTkF5fYKqUWpOQUmBboFSfmFpfmpevlpZZYGRoYGJkC
+        FSZkZ9y8LFhwgrPiePsHpgbGi+xdjJwcEgImEpNnNTN3MXJxCAnsYJRYsO8BG4TziVHi0bLP
+        LCBVQgKfGSV2nRSE6bj/5x87RNEuRolVPz8zQTjvGSV+b9oHNldYwEuia/YhNhBbREBH4nLn
+        D7AOZoHrzBJ953czgSTYBLQk9r+4AVbEL6AocfXHY0YQm1fATmL7oxlgq1kEVCU2LZwKVi8q
+        ECZxclsLVI2gxMmZT8BqOIHmLN4zD2wOs4C4xK0n85kgbHmJ7W/ngD0nIfCEQ2LJteusED+4
+        SJz/dYkFwhaWeHV8CzQ0pCQ+v9vLBtGwjFHi1+ROJghnPaPEy1mdzBBVxhL7l04GSnAArdCU
+        WL9LHyKsKLHz91xGiM18Eu++9rCClEgI8Ep0tAlBlChLXH5wlwnClpRY3N7JNoFRaRaSf2Yh
+        +WEWkh9mISxbwMiyilEstaA4Nz212LDAEB7dyfm5mxjB6VrLdAfjxLcf9A4xMnEwHmKU4GBW
+        EuF9ErErUYg3JbGyKrUoP76oNCe1+BCjKTCEJzJLiSbnAzNGXkm8oYmlgYmZkbGJhaGZoZI4
+        7wv/6YlCAumJJanZqakFqUUwfUwcnFINTIZGEX67N83N5074LJY56xV7jN/MuvUVWTpvPMM6
+        dZK+1qjnTmoI2K3zKnTlo/yec1NmqPDZ/5tWX3wm5R3n4zZuUYdW03k8/w52/FQwyzfsn6sy
+        1/nyPiOvmgzv3yZz3GclnYlV2dd90ZrjqfuZrdP2cMuvs7AR/Khe+8r/qlhs7luT6/UShf9S
+        Dutd9py0YjKTisHn3v+VVV7q5qr7Zsz7+D1mkqz97OPTdoRFT5epvR+Q6TfHdIP5z+UfWuPM
+        d2w9vr7nRy//xRdzSj4qir81ebfv71qmEiPVc2nC3xYlemfVTrDkOHZabevKX1+cHh8Xznht
+        zP53pkB7O1PMdtkQ1/e1/5bFOWnruKf9UmIpzkg01GIuKk4EAPpaEXdgBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrOIsWRmVeSWpSXmKPExsWy7bCSnG7kp12JBr/ea1gca3vCbvH633QW
+        i+bF69ks3hyfzmTRtXoni8XWW9IWl3fNYbOYvaSfxeJz7xFGi0XLWpktniw8w2Rxu3EFm8Xp
+        3SUWPw+dZ3Lg89jwaDWrx6ZVnWwe804Geuyfu4bd4+PTWywe7/ddZfPY+b2B3aNvyypGj8+b
+        5AI4o7hsUlJzMstSi/TtErgybl4WLDjBWXG8/QNTA+NF9i5GTg4JAROJ+3/+AdlcHEICOxgl
+        Jv+9CZWQlJh28ShzFyMHkC0scfhwMUTNW0aJBYefgtUIC3hJdM0+xAZiiwjoSFzu/AE2iFng
+        NrNE07EnzBAdFxklzt+fA1bFJqAlsf/FDTCbX0BR4uqPx4wgNq+AncT2RzNYQGwWAVWJTQun
+        MoHYogJhEjuXPGaCqBGUODnzCVgNJ9CcxXvmgc1hFlCX+DPvEjOELS5x68l8JghbXmL72znM
+        ExiFZyFpn4WkZRaSlllIWhYwsqxilEwtKM5Nzy02LDDKSy3XK07MLS7NS9dLzs/dxAiOWy2t
+        HYx7Vn3QO8TIxMF4iFGCg1lJhPdJxK5EId6UxMqq1KL8+KLSnNTiQ4zSHCxK4rwXuk7GCwmk
+        J5akZqemFqQWwWSZODilGpgaJu1eVLLUdN81Hs/U9ntaab7aH5nu75gUzPy5v2J3IPfq1Edb
+        VWOT8rwzMl0Pq7f6pIdoXv9/mmf7XKNDmZYxvDLlNq9vZZ+Ykvvz2wxPVq2el6/PzFVIu7/v
+        lGHpbufW67vX8rRemnBxyrWCs8u2HWcsZsq7L+vrvjh1g4mXwOpF9p/d7p2dYHeY6/9zAYWp
+        km/MVr283d///NYsMbO3aVN05TrfSrmaMmQ8MbYK2puw7FGcjvmJJRr3hKwduictesg5vWB6
+        u6iF8sorj82cJwVyvZ4r28fIeGGn0BXrpD/q687EfQyaeK2xeXKscMPs0rm/Q/kvHFmcwmp9
+        /DJLyka2vYonY2e5dcz5ovBaiaU4I9FQi7moOBEA5WfrWkoDAAA=
+X-CMS-MailID: 20211216080129epcas1p1508dc29e0f2ba4ff03df45837efbc8b5
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20211123084357epcas1p14833147710153f9606f14941ac8b0d96
+References: <CGME20211123084357epcas1p14833147710153f9606f14941ac8b0d96@epcas1p1.samsung.com>
+        <20211123083925.GA3277@kili>
+        <562b12ff-e395-c818-787e-7fd6ee6d53fb@samsung.com>
+        <20211216075233.GD1978@kadam>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 05:24:30PM +0900, Chanwoo Choi wrote:
-> On 12/16/21 4:52 PM, Dan Carpenter wrote:
-> > On Thu, Dec 16, 2021 at 03:39:46PM +0900, Chanwoo Choi wrote:
-> >> Hi Dan,
-> >>
-> >> First of all,  sorry for late reply.
-> >>
-> >> There is one issue. About this issue, I already discussed on patch[1]
-> >> [1] https://lore.kernel.org/lkml/5BEB63C3.1020504@samsung.com/  
-> >>
-> >> extcon_get_extcon_dev() is used for anywhere except for probe step.
-> >> But EPROBE_DEFER is only used on probe step.
-> >>
-> >> So that it is not clear to return EPROBE_DEFER from extcon_get_extcon_dev()
-> >> because extcon_get_extcon_dev() never know either call it on probe function
-> >> or not.
-> > 
-> > Currently extcon_get_extcon_dev() is only called from probe so it's not
-> > an issue.
+On 12/16/21 4:52 PM, Dan Carpenter wrote:
+> On Thu, Dec 16, 2021 at 03:39:46PM +0900, Chanwoo Choi wrote:
+>> Hi Dan,
+>>
+>> First of all,  sorry for late reply.
+>>
+>> There is one issue. About this issue, I already discussed on patch[1]
+>> [1] https://lore.kernel.org/lkml/5BEB63C3.1020504@samsung.com/ 
+>>
+>> extcon_get_extcon_dev() is used for anywhere except for probe step.
+>> But EPROBE_DEFER is only used on probe step.
+>>
+>> So that it is not clear to return EPROBE_DEFER from extcon_get_extcon_dev()
+>> because extcon_get_extcon_dev() never know either call it on probe function
+>> or not.
 > 
-> Even if extcon_get_extcon_dev() is used on probe until now,
-> it is possible to use on anywhere as I commented.
-> 
-> It is difficult to agree this approach without any other solution.
-> 
-> Basically, the subsystem core never know either probe time or not.
-> It means that this issue should be handled in each device driver.
-> 
+> Currently extcon_get_extcon_dev() is only called from probe so it's not
+> an issue.
 
-To be honest, I'm not sure how this differs from other functions which
-return -EPROBE_DEFER.  How do other functions guarantee they will only
-be called from probe()?
+Even if extcon_get_extcon_dev() is used on probe until now,
+it is possible to use on anywhere as I commented.
 
-regards,
-dan carpenter
+It is difficult to agree this approach without any other solution.
 
+Basically, the subsystem core never know either probe time or not.
+It means that this issue should be handled in each device driver.
+
+
+> 
+> It's impossible to know what future programmers will want, but I feel
+> like this change probably makes it easier for them.
+
+
+
+
+-- 
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
