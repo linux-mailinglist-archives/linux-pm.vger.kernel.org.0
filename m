@@ -2,192 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E89144771C5
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Dec 2021 13:26:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D6F9477279
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Dec 2021 14:00:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236826AbhLPM0e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Dec 2021 07:26:34 -0500
-Received: from new2-smtp.messagingengine.com ([66.111.4.224]:41703 "EHLO
-        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236849AbhLPM01 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Dec 2021 07:26:27 -0500
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.nyi.internal (Postfix) with ESMTP id E976B5805EC;
-        Thu, 16 Dec 2021 07:26:26 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Thu, 16 Dec 2021 07:26:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
-         h=from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm2; bh=iFE30ZBYJvCyN
-        kM0bB9sCSLWOJ+dFFVmxcQv5U8f2Ek=; b=Yhc/6u5mcB+c/p6khbrfYTfsL6Vjn
-        9+bB/+NB2KwLSam6vyE0vgq3ASnKjcnylyLxoFaEnGatRtIDLG1OWziHHXUZ40Yl
-        VfRnumVe/Ur3sZTKqWnxuCXtcch5ylIUTeKBJhXAvnsYpodRFCoJVI6YL1bEun50
-        EItlij+sB8Uu+/rtMxo64aY+6avfq/+4WeqJWhOvfqBXQ01AYhb2Be4zFj27Cz+M
-        lSR0Dpe2k5NiEjEf8QO7dXyk24KCETjMZmBWv48Gp6mM3rocOw2qF0y07z+XjJ7Q
-        hGqn8IYfOO0IWFSPjMy9Vnk3+uipqXdqh2jsqKXllm4VAwGezC6nGZjVw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:subject:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=iFE30ZBYJvCyNkM0bB9sCSLWOJ+dFFVmxcQv5U8f2Ek=; b=kZhc30Ok
-        dFcQKhc3ZgZ6254jtlNUCEDF3q8E1z6zxqFVlCcFNjFqB2cZGukKIB60ZUv3UNGn
-        sbxNjptr7Vg3wnryYbPd/MgMaTUgr0+1k59texia98ff8h3nH+jko45lNwyCGJOc
-        ZAY4vLxex6d8U9HUDh1/7IjWw3FC0oF5xRAe0p91kxfroJvlcJk2I+xZQ5ZKyswB
-        39Qet54s2cT2gexsPeAL4lKt8M39WNH5elZ0uosa1H0znYA5kT18m/0nPodGQIMk
-        LRQHHrLTNyQvBziHlc45hCK70OOyYJpt0Ung4PLgHCl55LNih6B1SAZbd2xci+E0
-        b5ChBK9NhnwYWw==
-X-ME-Sender: <xms:cjC7YdF96Ma-VqO80SKfUfDXrfIpYwu-LWKr5oAJcxv49SRgyNJ1KA>
-    <xme:cjC7YSV0qRTAYMfkBVuyvbn2IyIhHPvZLIe49NkKH-xr_BGLZt2rqLv27q3fx75X0
-    drkntCs_S6g4DcRwnk>
-X-ME-Received: <xmr:cjC7YfIJ_ClNlOeP4uiVMoXHqYN6GJZRYNG7yUdogCpp8ek--fY0zp0ju6l_2pkz2oBpt54apjvPbuxT41_LN3A20ZUrvwpluiLPNVm-rhwz>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrleeggdegudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffojghfggfgsedtkeertd
-    ertddtnecuhfhrohhmpeetlhhishhtrghirhcuhfhrrghntghishcuoegrlhhishhtrghi
-    rhesrghlihhsthgrihhrvdefrdhmvgeqnecuggftrfgrthhtvghrnhepgeegtdetjeekge
-    eguefgheeuvedugedvteejveeiudegvddtkeffkeehtdetudfhnecuvehluhhsthgvrhfu
-    ihiivgepudenucfrrghrrghmpehmrghilhhfrhhomheprghlihhsthgrihhrsegrlhhish
-    htrghirhdvfedrmhgv
-X-ME-Proxy: <xmx:cjC7YTEUO53tvOdjra3SvffLi-7GiJe3gYiNwy8WvN--C6o7mZ6DHg>
-    <xmx:cjC7YTVju1311KNtX5tfsV_CHGhaOsjU97C2DsX_1XoZubXAPvydaw>
-    <xmx:cjC7YeN3rS86aUTwml0UfFsHE0TmRjWXS6b4BAcvhK__FV36SvUBpQ>
-    <xmx:cjC7YXli5XcBdhJ0HpR8HCB9bY8t607R_5kxj5_vy1eex2DKQ9KADw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 16 Dec 2021 07:26:20 -0500 (EST)
-From:   Alistair Francis <alistair@alistair23.me>
-To:     kernel@pengutronix.de, lgirdwood@gmail.com, robh+dt@kernel.org,
-        lee.jones@linaro.org, broonie@kernel.org
-Cc:     linux-imx@nxp.com, devicetree@vger.kernel.org,
-        s.hauer@pengutronix.de, linux-arm-kernel@lists.infradead.org,
-        andreas@kemnade.info, linux-hwmon@vger.kernel.org,
-        alistair23@gmail.com, amitk@kernel.org, shawnguo@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rui.zhang@intel.com, Alistair Francis <alistair@alistair23.me>
-Subject: [PATCH v17 8/8] ARM: dts: imx7d-remarkable2: Enable lcdif
-Date:   Thu, 16 Dec 2021 22:25:25 +1000
-Message-Id: <20211216122525.136139-9-alistair@alistair23.me>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211216122525.136139-1-alistair@alistair23.me>
-References: <20211216122525.136139-1-alistair@alistair23.me>
+        id S232155AbhLPNAD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Dec 2021 08:00:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50148 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231903AbhLPNAD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Dec 2021 08:00:03 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628A1C061574;
+        Thu, 16 Dec 2021 05:00:02 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id n14-20020a7bcbce000000b00332f4abf43fso1376553wmi.0;
+        Thu, 16 Dec 2021 05:00:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=sRvIW7doKXqI6rhYNOhv8QjoOjQJfFJ2pt+OcCCzfU8=;
+        b=HHNt5BWbbSN7iQgL1IxSY2dyTbpfuuOTJd+nwlMaynKzL9Pr49qsLKX50WKeoinb7v
+         CODZlzv03cuts3cAnP6MLlI6JCDYL1EGCjjZKuYIoVOKOCG2oCpbEChvD+E10TAYDfkF
+         6rh+QtWkJxzHPoOET7ZmiNJhLnxKQjK8IRQTy+8BFse/zqY9nd4K6TzhXvuRErY1yHsq
+         plzukotDNSjepgnrBvPYy02vpDAwIh+TOSzIw44AOHr8nKpYWEsploOdS25nCOZbF40x
+         GclC6lPII5wBloBKlOu6nqfjow5kJ5xvYp3kds2uOS+a22LSRwY5/aYtsPRjzTbwk6si
+         SIpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=sRvIW7doKXqI6rhYNOhv8QjoOjQJfFJ2pt+OcCCzfU8=;
+        b=k4mCHhSrdnYeVLvJBYWjRMsSuFcDUO77yXA+FmQ9c7cLgUPOT10irXfDA4Ri1cdJld
+         LAjfScU2HCvD6BQd8i/4pMr/rnJEC7hOsohwtP4UgyXbk3Fl5wwr91isjmgIbgCo49Bc
+         rIHNlrTAWSey3Q91fpNHvWKfp/lOgpDc4oXLsRrQp0r919axtQrEuubbMxv/w8hjjAVE
+         UyyePi/KH6GFLxCTGpyMnv+M/sKvhA0tgTvtaYr6SQzpafKnBNgmet1Ir5nIx5Tg9dg4
+         mCYCKRi3wULasQSW20s/hjbdS79UeJMYY88/qbh20tSe8IHPh9SJtPr0OITlD3Wry2Q2
+         zl4w==
+X-Gm-Message-State: AOAM531jn3Q3ZpwE8sWloIx1Jkk1VYhZCkreuL2jxqOx9KZmJLaVDDm3
+        EFY6SfwOlmKu7Iz62t3Bqo5FHN3jsvLgEA==
+X-Google-Smtp-Source: ABdhPJzpa64m0gg+VUlHvNfE9WO8NP83sV16MMQYAolf5J2J2/tcI3cFqqyfnxLtT0rbWP5PckRJxg==
+X-Received: by 2002:a7b:c8d5:: with SMTP id f21mr4887604wml.146.1639659600749;
+        Thu, 16 Dec 2021 05:00:00 -0800 (PST)
+Received: from orome ([193.209.96.43])
+        by smtp.gmail.com with ESMTPSA id k6sm4299844wmj.16.2021.12.16.04.59.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Dec 2021 04:59:59 -0800 (PST)
+Date:   Thu, 16 Dec 2021 13:59:55 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-mmc@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-clk@vger.kernel.org, David Heidelberg <david@ixit.cz>
+Subject: Re: [PATCH v16 29/40] soc/tegra: fuse: Use resource-managed helpers
+Message-ID: <Ybs4S4WMJBhAEWWp@orome>
+References: <20211130232347.950-1-digetx@gmail.com>
+ <20211130232347.950-30-digetx@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ZQq/1UzGq+uUb+/w"
+Content-Disposition: inline
+In-Reply-To: <20211130232347.950-30-digetx@gmail.com>
+User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Connect the dispaly on the reMarkable2.
 
-Signed-off-by: Alistair Francis <alistair@alistair23.me>
----
- arch/arm/boot/dts/imx7d-remarkable2.dts | 74 +++++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
+--ZQq/1UzGq+uUb+/w
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
-index 99ac0d242936..03a4029e1e57 100644
---- a/arch/arm/boot/dts/imx7d-remarkable2.dts
-+++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
-@@ -68,6 +68,16 @@ reg_digitizer: regulator-digitizer {
- 		startup-delay-us = <100000>; /* 100 ms */
- 	};
- 
-+	reg_sdoe: regulator-sdoe {
-+		compatible = "regulator-fixed";
-+		regulator-name = "SDOE";
-+		pinctrl-names = "default", "sleep";
-+		pinctrl-0 = <&pinctrl_sdoe_reg>;
-+		pinctrl-1 = <&pinctrl_sdoe_reg>;
-+		gpio = <&gpio3 27 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+	};
-+
- 	wifi_pwrseq: wifi_pwrseq {
- 		compatible = "mmc-pwrseq-simple";
- 		pinctrl-names = "default";
-@@ -76,6 +86,16 @@ wifi_pwrseq: wifi_pwrseq {
- 		clocks = <&clks IMX7D_CLKO2_ROOT_DIV>;
- 		clock-names = "ext_clock";
- 	};
-+
-+	panel {
-+		compatible = "eink,vb3300-kca";
-+
-+		port {
-+			panel_in: endpoint {
-+				remote-endpoint = <&display_out>;
-+			};
-+		};
-+	};
- };
- 
- &clks {
-@@ -132,6 +152,20 @@ reg_epdpmic: vcom {
- 	};
- };
- 
-+&lcdif {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_lcdif>;
-+	lcd-supply = <&reg_epdpmic>;
-+	lcd2-supply = <&reg_sdoe>;
-+	status = "okay";
-+
-+	port {
-+		display_out: endpoint {
-+			remote-endpoint = <&panel_in>;
-+		};
-+	};
-+};
-+
- &snvs_pwrkey {
- 	status = "okay";
- };
-@@ -246,6 +280,46 @@ MX7D_PAD_I2C4_SCL__I2C4_SCL		0x4000007f
- 		>;
- 	};
- 
-+	pinctrl_lcdif: lcdifgrp {
-+		fsl,pins = <
-+			MX7D_PAD_LCD_DATA00__LCD_DATA0		0x79
-+			MX7D_PAD_LCD_DATA01__LCD_DATA1		0x79
-+			MX7D_PAD_LCD_DATA02__LCD_DATA2		0x79
-+			MX7D_PAD_LCD_DATA03__LCD_DATA3		0x79
-+			MX7D_PAD_LCD_DATA04__LCD_DATA4		0x79
-+			MX7D_PAD_LCD_DATA05__LCD_DATA5		0x79
-+			MX7D_PAD_LCD_DATA06__LCD_DATA6		0x79
-+			MX7D_PAD_LCD_DATA07__LCD_DATA7		0x79
-+			MX7D_PAD_LCD_DATA08__LCD_DATA8		0x79
-+			MX7D_PAD_LCD_DATA09__LCD_DATA9		0x79
-+			MX7D_PAD_LCD_DATA10__LCD_DATA10		0x79
-+			MX7D_PAD_LCD_DATA11__LCD_DATA11		0x79
-+			MX7D_PAD_LCD_DATA12__LCD_DATA12		0x79
-+			MX7D_PAD_LCD_DATA13__LCD_DATA13		0x79
-+			MX7D_PAD_LCD_DATA14__LCD_DATA14		0x79
-+			MX7D_PAD_LCD_DATA15__LCD_DATA15		0x79
-+
-+			MX7D_PAD_LCD_DATA17__LCD_DATA17		0x79
-+			MX7D_PAD_LCD_DATA18__LCD_DATA18		0x79
-+			MX7D_PAD_LCD_DATA19__LCD_DATA19		0x79
-+			MX7D_PAD_LCD_DATA20__LCD_DATA20		0x79
-+			MX7D_PAD_LCD_DATA21__LCD_DATA21		0x79
-+
-+			MX7D_PAD_LCD_DATA23__LCD_DATA23		0x79
-+			MX7D_PAD_LCD_CLK__LCD_CLK		0x79
-+			MX7D_PAD_LCD_ENABLE__LCD_ENABLE		0x79
-+			MX7D_PAD_LCD_VSYNC__LCD_VSYNC		0x79
-+			MX7D_PAD_LCD_HSYNC__LCD_HSYNC		0x79
-+			MX7D_PAD_LCD_RESET__LCD_RESET		0x79
-+		>;
-+	};
-+
-+	pinctrl_sdoe_reg: sdoereggrp {
-+		fsl,pins = <
-+			MX7D_PAD_LCD_DATA22__GPIO3_IO27		0x74
-+		>;
-+	};
-+
- 	pinctrl_uart1: uart1grp {
- 		fsl,pins = <
- 			MX7D_PAD_UART1_TX_DATA__UART1_DCE_TX	0x79
--- 
-2.31.1
+On Wed, Dec 01, 2021 at 02:23:36AM +0300, Dmitry Osipenko wrote:
+> Use resource-managed helpers to make code cleaner and more correct,
+> properly releasing all resources in case of driver probe error.
+>=20
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  drivers/soc/tegra/fuse/fuse-tegra.c   | 32 ++++++++++++++------------
+>  drivers/soc/tegra/fuse/fuse-tegra20.c | 33 ++++++++++++++++++++++++---
+>  2 files changed, 48 insertions(+), 17 deletions(-)
 
+Ehm... this is very borderline. Adding 31 lines of code isn't exactly
+making the code cleaner.
+
+On the other hand I don't care enough to get into an argument, so I've
+applied this anyway.
+
+Thierry
+
+--ZQq/1UzGq+uUb+/w
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmG7OEkACgkQ3SOs138+
+s6EVgw//Q1bJ7UIWESNDxmwd9IN5+l1yqA6koyP2/T9lZI6CZwZSmWcUUSpFP/5W
+FrIkEWkLWqBfpCCHSSi3DqBQRffF5XV/+VY/CgF7jkB5e8aQplyBe4NXabp8q2lu
++emE4bjR0Kx4MKewjHp6H+RPRDtatG1YmytnsHChDb/lB2lCTWawoYxjI9FuJLQI
+R+x0XMaa6zKM9Df3r3cbUf5vnk+aXUqQJ+CnIRxxHJR2Y+/toDoG1xw3igwQoBSF
++PBJ9p5YrHUhgk3IeS3D7LskY995tCgIjNhT3BlZEDax/m+KlSAVvW1SxrVmDorz
+/P4+MIrZc3n21VI8MbB3GYEswiOH28v56uR6fYLidA+SKOhf6GpZ5YfHJCEImdf9
+FXsn159vQIuwDAbrxZAW2rXGMJ0Ob9js0+e6F6Ef4gDcvHQVAqjyCzL477yzZzAM
+QWG9iGVewC5a8t+XyyUHiUegvFPM3FyM+BCybdFmADW4CBvI9Hm3wAG82YNOuY2b
+9gNymg0VeNUxQGu6LmKlgjXJ6H9L/9ecVxdQ4HHEcImotUXXaRheMyig16CF7HQP
+C0bqGjndmSWu2BkHYl7LHPF9gYtwYzjhTCHF0kTfLXLwCPrbCwxATChiTvITfPmz
+PDsmbJI2R6IygKQgpD39dqYrW8Y4QkyU7AjivlraXC9X31tp/yw=
+=b3Ro
+-----END PGP SIGNATURE-----
+
+--ZQq/1UzGq+uUb+/w--
