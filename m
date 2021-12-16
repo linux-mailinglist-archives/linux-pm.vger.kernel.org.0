@@ -2,85 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4960A47707E
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Dec 2021 12:42:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8814947719F
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Dec 2021 13:25:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233284AbhLPLmS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Dec 2021 06:42:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60076 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232983AbhLPLmP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Dec 2021 06:42:15 -0500
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56E4C061763
-        for <linux-pm@vger.kernel.org>; Thu, 16 Dec 2021 03:42:06 -0800 (PST)
-Received: by mail-qt1-x82c.google.com with SMTP id 8so25098159qtx.5
-        for <linux-pm@vger.kernel.org>; Thu, 16 Dec 2021 03:42:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=xre5um49Rnqa1tZMCD58Cd6UlD4MleswKAp3tzt2gjo=;
-        b=DbH1Ji01P93LyTzDoauO1Rc48sDWVtdwnBGUamxeb8T/9DnmNwFlL0JvNxtTxnIik8
-         AF4fiOnh94EFQzdZz8KJBnzwauC2lZM0yNVUv4pWHip6opgPog4u/vluZhPJXjw78vDA
-         f6sh/ed1OxoJ1g1t7gzdPodwSxTC5c4DgCybEoK61DXARfmFs8snxFiiIRa/Iu1/hNzN
-         fZIim177r1ShSprd0HKY5DfawS5hKhFwBWxLO3U7SnQ0mHNCzrBDbHpz1jt5tPoBjmr8
-         7Ae3NOwI9TZO/6l6pkdqJZg2o0eCT7Tj9ACDNqagtOISwltP3H2yXXWnIzZMI4wBc7By
-         rM9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=xre5um49Rnqa1tZMCD58Cd6UlD4MleswKAp3tzt2gjo=;
-        b=PRGAiPxoqlSggVaLcAt1Kr/b/Q+BEVDN6KkKGmFWGbkDUh0FWBezVMAYzBMAc/RBTg
-         gRtZE63S7p+zHPFKzKRXNk+T1vWPky103hqtABTDmdGfxS3cBY32/sjlNS3WDkAM8QBc
-         R5KwnLlQKpeNv/auN9nTZ7aBlkqiTAOXrEqN+PLuBLbo55iuVOI4y2XjaIBngJtbnXG4
-         i4hJDGgBiiwu7ToIKbTNNGT20/n323e7tKZunksHnZbWa5DHctv+vypA+hZQpUGwP/tx
-         sT05YU7s4o1aX9vke8F6F4ysN7cNAfd2cQ5GSrhmpnW/E37oMjSa0OEMfy4KYxQAvJyy
-         VFRA==
-X-Gm-Message-State: AOAM531A7aV62WOFxDNjoC6nOczj3nqz3aI8TYCODIt+aPfR3q1KtYhD
-        KV4Y76thJ3OWy+OiOT7KCSnSJOABdYqQRjxkaGE=
-X-Google-Smtp-Source: ABdhPJyrnf396a9ziJGBm+8eiYGOgUpOQ7p2/85GJukkUSbvGu1la687iolipeGN8a/w1GmTH3LvDnglSFpjsilKeBU=
-X-Received: by 2002:a05:622a:510:: with SMTP id l16mr16475505qtx.619.1639654925163;
- Thu, 16 Dec 2021 03:42:05 -0800 (PST)
+        id S236234AbhLPMZh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Dec 2021 07:25:37 -0500
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:47563 "EHLO
+        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234240AbhLPMZh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Dec 2021 07:25:37 -0500
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 078255804DC;
+        Thu, 16 Dec 2021 07:25:36 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Thu, 16 Dec 2021 07:25:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
+         h=from:to:cc:subject:date:message-id:content-type:mime-version
+        :content-transfer-encoding; s=fm2; bh=TSgqps1iDUhbFhbJp7MGOAGo8m
+        qIrmX1W/B+0CydO9Y=; b=0RyepsFVU2bY6Baev95I7Tvrq9ixoPqI/XERGWtUYq
+        TfZII+f+2JoFTvR4pIwYM9ilB3cGjdWGv2Bv9Eg20R78+hi3aVG36BU1Q3MvQJEj
+        9ayYdDbz/kniS6QjCFcPXSGp+ompTOf3KKaUpmQ8C4QPXoFn+uTLILmObS4tjA+T
+        XFnRNCLxlZRhGc1Dp58hZMCDxhyQ4HYzTHdXxKy48cI6u/LOdbLQDl2IOCNBV88f
+        3tCY971ic908P4ZZpMrV8g5X6U4gZQnctDu5QWU4JmB2Hhq33QSODNIAIU99Nzw8
+        UxqeohKk6eCmTMwCNFJMBicKA4tLpeFe7ODG3PNd44Zg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:message-id:mime-version:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=TSgqps
+        1iDUhbFhbJp7MGOAGo8mqIrmX1W/B+0CydO9Y=; b=T3WhLBxTOlHr1HPbwCy8dc
+        SoYs5DWUoZtX5CcC4eZQkfIcVuRW0zMdDkbavVTI2WZFRMDwj1ivGIjOnrgQ6709
+        6DeNTxPbwYNOky8QSH47OS2CaMmiYAn+CBnBX8jyBTVC7HzETljapGee40uiui9y
+        Kic6b7OarK3wlHMFKi7ZExgryc+pF5gWpRCqbzF4/g4Jo81SW7VWjkZh2b4es8lq
+        uDD5zVC6hjrz8bFfzxojGJ0bPpgDGc42bujvdnVeu2cHD4lPAGq94TcVzpqzp0K7
+        f1p20DIBGf8kv6lyVcHEHZTnzeEztdw4gLxBVAdazq4L83SrhR1J28nsiXfjqDqA
+        ==
+X-ME-Sender: <xms:PzC7YcdGBg8qO-508admVP7vai__h-1IwJW7GqQcsfjSWTphvSDYVg>
+    <xme:PzC7YeMIrSJTkd3c7IfpNMvchhEfjH6ya-Yz_CQn9Bv2GawVX-sv2mMSmTw4TK2PX
+    -ifKm3qz1ErfwkG-To>
+X-ME-Received: <xmr:PzC7YdgSTTzaCeomh0BhZ4zjC1zDpeJGtIDOJLzz1b07aJZBJ7BKWiMzm-74ihKbMi82-CFBwPyrmg9-vw09hx4GYgu67eZHaXYAZbPeTEGj>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrleeggdegtdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffotggggfesthhqredtre
+    dtjeenucfhrhhomheptehlihhsthgrihhrucfhrhgrnhgtihhsuceorghlihhsthgrihhr
+    segrlhhishhtrghirhdvfedrmhgvqeenucggtffrrghtthgvrhhnpeehteefgfejueejtd
+    egvdfggefhiefgheffvdffudevveetjeduhfdukeduteevjeenucevlhhushhtvghrufhi
+    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhishhtrghirhesrghlihhsth
+    grihhrvdefrdhmvg
+X-ME-Proxy: <xmx:PzC7YR-Cwt_ZpA2kSuvQHCRhBPYDqkqx0x_TD558lbdyA3JzPU72OQ>
+    <xmx:PzC7YYsFkRl5QQ-iIWGoa-PFgnkopaMTmTWmQwEnvnWZISxrlarh0A>
+    <xmx:PzC7YYHaxFSGt__pn4YOzA2JU19Om7Nl6EuICb2UzSBlktUU5KekOw>
+    <xmx:PzC7YZ-XE996ln-ZB-ZZStuN6qAX0zJHNpHrZ12bepmVV1aSKaFo2w>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 16 Dec 2021 07:25:29 -0500 (EST)
+From:   Alistair Francis <alistair@alistair23.me>
+To:     kernel@pengutronix.de, lgirdwood@gmail.com, robh+dt@kernel.org,
+        lee.jones@linaro.org, broonie@kernel.org
+Cc:     linux-imx@nxp.com, devicetree@vger.kernel.org,
+        s.hauer@pengutronix.de, linux-arm-kernel@lists.infradead.org,
+        andreas@kemnade.info, linux-hwmon@vger.kernel.org,
+        alistair23@gmail.com, amitk@kernel.org, shawnguo@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rui.zhang@intel.com, Alistair Francis <alistair@alistair23.me>
+Subject: [PATCH v17 0/8] Add support for the silergy,sy7636a
+Date:   Thu, 16 Dec 2021 22:25:17 +1000
+Message-Id: <20211216122525.136139-1-alistair@alistair23.me>
+X-Mailer: git-send-email 2.31.1
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Received: by 2002:a05:622a:199c:0:0:0:0 with HTTP; Thu, 16 Dec 2021 03:42:04
- -0800 (PST)
-Reply-To: selviasantiago1@gmail.com
-From:   Selvia Santiago <mariamatinez119@gmail.com>
-Date:   Thu, 16 Dec 2021 11:42:04 +0000
-Message-ID: <CAONDhKNqZ3ja5a2mdpyxiYfPYVQwq_MdxvhX-F--7sW9gxb1ZQ@mail.gmail.com>
-Subject: Urgent
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
--- 
-Urgent
-
-I am Mrs. Selvia Santiago from Abidjan, Cote D'Ivoire, I am a widow
-suffering from long time illness (Cancer), there is funds I inherited
-from my late loving husband Mr. Santiago Carlos, the sum of (US$2.7
-Million Dollars) which he deposited in bank before his death, I need a
-honest and Faithful person that can use these funds for humanity work.
-
-I took this decision because I don't have any child that will inherit
-this money and I don't want a situation where this money will be used
-in an ungodly way. That is why I am taking this decision, and my
-doctor has confirmed to me that I have less than two weeks to live,
-having known my condition I decided to donate this fund to a charity
-or individual that will utilize this money to assist the poor and the
-needy in accordance to my instructions.
-
-I want you to use 70% of this funds for orphanages, school, church,
-widows, propagating the word and other humanity works,The remaining
-30% should be yours for your efforts as the new beneficiary.
-
-Please if you would be able to use these funds for humanity work
-kindly reply me. As soon as I have received your response, I will give
-you further directives on how you are to go about the claims of the
-said funds.
-
-Remain blessed.
-Mrs Selvia Santiago.
+v17:=0D
+ - Rebase and fix build issues=0D
+v16:=0D
+ - Improve vdd regulator comments=0D
+v15:=0D
+ - Address comments on the patches=0D
+v14:=0D
+ - Merge the thermal driver and hwmon=0D
+v13:=0D
+ - Address comments on thermal driver=0D
+ - Rebase on master (without other patches)=0D
+v12:=0D
+ - Rebase=0D
+v11:=0D
+ - Address comments on hwmon=0D
+ - Improve "mfd: simple-mfd-i2c: Add a Kconfig name" commit message=0D
+v10:=0D
+ - Use dev_get_regmap() instead of dev_get_drvdata()=0D
+v9:=0D
+ - Convert to use the simple-mfd-i2c instead=0D
+=0D
+Alistair Francis (8):=0D
+  dt-bindings: mfd: Initial commit of silergy,sy7636a.yaml=0D
+  mfd: simple-mfd-i2c: Add a Kconfig name=0D
+  mfd: simple-mfd-i2c: Enable support for the silergy,sy7636a=0D
+  regulator: sy7636a: Remove requirement on sy7636a mfd=0D
+  hwmon: sy7636a: Add temperature driver for sy7636a=0D
+  ARM: imx_v6_v7_defconfig: Enable silergy,sy7636a=0D
+  ARM: dts: imx7d-remarkable2: Enable silergy,sy7636a=0D
+  ARM: dts: imx7d-remarkable2: Enable lcdif=0D
+=0D
+ .../bindings/mfd/silergy,sy7636a.yaml         |  82 +++++++++++=0D
+ Documentation/hwmon/index.rst                 |   1 +=0D
+ Documentation/hwmon/sy7636a-hwmon.rst         |  26 ++++=0D
+ arch/arm/boot/dts/imx7d-remarkable2.dts       | 136 ++++++++++++++++++=0D
+ arch/arm/configs/imx_v6_v7_defconfig          |   3 +=0D
+ drivers/hwmon/Kconfig                         |   9 ++=0D
+ drivers/hwmon/Makefile                        |   1 +=0D
+ drivers/hwmon/sy7636a-hwmon.c                 | 106 ++++++++++++++=0D
+ drivers/mfd/Kconfig                           |   2 +-=0D
+ drivers/mfd/simple-mfd-i2c.c                  |  11 ++=0D
+ drivers/regulator/Kconfig                     |   1 -=0D
+ drivers/regulator/sy7636a-regulator.c         |   7 +-=0D
+ include/linux/mfd/sy7636a.h                   |  34 +++++=0D
+ 13 files changed, 415 insertions(+), 4 deletions(-)=0D
+ create mode 100644 Documentation/devicetree/bindings/mfd/silergy,sy7636a.y=
+aml=0D
+ create mode 100644 Documentation/hwmon/sy7636a-hwmon.rst=0D
+ create mode 100644 drivers/hwmon/sy7636a-hwmon.c=0D
+ create mode 100644 include/linux/mfd/sy7636a.h=0D
+=0D
+-- =0D
+2.31.1=0D
+=0D
