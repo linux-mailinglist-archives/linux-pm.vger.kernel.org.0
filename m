@@ -2,308 +2,601 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 146C9479421
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Dec 2021 19:36:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AC15479445
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Dec 2021 19:49:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236643AbhLQSgl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Dec 2021 13:36:41 -0500
-Received: from mail-ot1-f50.google.com ([209.85.210.50]:45991 "EHLO
-        mail-ot1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235137AbhLQSgl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Dec 2021 13:36:41 -0500
-Received: by mail-ot1-f50.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso3923471otf.12;
-        Fri, 17 Dec 2021 10:36:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PdV/f6NkGwVaWx02uK9K8J+YFrDmtXRQ6p5obEQBrME=;
-        b=UbxXZtYvVT+KUYEwkUWJHhKqBBubedjeFKrB+TM8djNfQxOoMSz4TWTjv9U5/C6Fsq
-         onvGf7q2AST6yQHFi5YsKhjb5L9e24cx6TnITNibI6DrKkH7l0flgOA3dJqHOXtPXRbf
-         1KvvscwIKKsMxSWCh0w4rhb+1eLoF1l/QUjDfVSx1VFlyoiN+Yp5G+C3TBhVflfDbYBx
-         i8GCXwbIiryLEwnVe7Jhm2Dqe7usLyCabywy/LiUu3OdHzrAf8rHD3K0T7VnbJl0GNN5
-         uo5nJpdcJss0/f61/SYhzygYg31daMPblnevnLUAxndDb/lmRlRn5/lkPjccwlvoMnZB
-         qLUQ==
-X-Gm-Message-State: AOAM5331ddebHNs6cwrHBH5x4Uk8a+a8J5K9RXwHsO5khfv3rAa3+D2y
-        Qph0TaTTj0S+031rI/35wBkgk1g8JnQRoBHTINk=
-X-Google-Smtp-Source: ABdhPJwQzOPEakxF3KPlYIcfFF9x9FCJcONXiUBx6SGX7SneVsuCAfTggP5PumZNqKkB/GCnLXes6bv2xb1lpTa9qlQ=
-X-Received: by 2002:a05:6830:348f:: with SMTP id c15mr3221334otu.254.1639766200629;
- Fri, 17 Dec 2021 10:36:40 -0800 (PST)
+        id S239754AbhLQStR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Dec 2021 13:49:17 -0500
+Received: from foss.arm.com ([217.140.110.172]:33436 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231670AbhLQStQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 17 Dec 2021 13:49:16 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 382391042;
+        Fri, 17 Dec 2021 10:49:16 -0800 (PST)
+Received: from e123771.cambridge.arm.com (e123771.cambridge.arm.com [10.1.33.13])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 1868E3F774;
+        Fri, 17 Dec 2021 10:49:14 -0800 (PST)
+From:   Chetankumar Mistry <chetan.mistry@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     lukasz.luba@arm.com, rafael@kernel.org, daniel.lezcano@linaro.org,
+        amitk@kernel.org, rui.zhang@intel.com, linux-pm@vger.kernel.org
+Subject: [PATCH v2][RFC 1/2] Implement Ziegler-Nichols Heuristic
+Date:   Fri, 17 Dec 2021 18:49:06 +0000
+Message-Id: <20211217184907.2103677-1-chetan.mistry@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien>
-In-Reply-To: <alpine.DEB.2.22.394.2112132215060.215073@hadrien>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 17 Dec 2021 19:36:29 +0100
-Message-ID: <CAJZ5v0iBU8gw8+-5nxj2cKzf7tyN=p3Adcm4Z5bn=oVYhU28bQ@mail.gmail.com>
-Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 11:52 PM Julia Lawall <julia.lawall@inria.fr> wrote:
->
-> With HWP, intel_cpufreq_adjust_perf takes the utilization, scales it
-> between 0 and the capacity, and then maps everything below min_pstate to
-> the lowest frequency.
+Implement the Ziegler-Nichols Heuristic algorithm to better
+estimate the PID Coefficients for a running platform.
+The values are tuned to minimuse the amount of overshoot in
+the temperature of the platform and subsequently minimise
+the number of switches for cdev states.
 
-Well, it is not just intel_pstate with HWP.  This is how schedutil
-works in general; see get_next_freq() in there.
+Signed-off-by: Chetankumar Mistry <chetan.mistry@arm.com>
+---
+Changelog v2:
+- Updated Kernel-Docs to use ':' delimiter (asked by Randy Dunlap)
+- Changed divide operation to use div_frac (requested by kernel_test_robot)
 
-> On my Intel Xeon Gold 6130 and Intel Xeon Gold
-> 5218, this means that more than the bottom quarter of utilizations are all
-> mapped to the lowest frequency.  Running slowly doesn't necessarily save
-> energy, because it takes more time.
+ drivers/thermal/gov_power_allocator.c | 418 ++++++++++++++++++++++++++
+ drivers/thermal/thermal_sysfs.c       |   2 +
+ include/linux/thermal.h               |   7 +
+ 3 files changed, 427 insertions(+)
 
-This is true, but the layout of the available range of performance
-values is a property of the processor, not a driver issue.
+diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+index 13e375751d22..b7e85ee8a673 100644
+--- a/drivers/thermal/gov_power_allocator.c
++++ b/drivers/thermal/gov_power_allocator.c
+@@ -49,6 +49,59 @@ static inline s64 div_frac(s64 x, s64 y)
+ 	return div_s64(x << FRAC_BITS, y);
+ }
+ 
++/**
++ * enum pivot_type - Values representing what type of pivot the current error
++ *                   value is
++ * @PEAK:       The current error is a peak
++ * @TROUGH:     The current error is a trough
++ * @MIDPOINT:   The current error is neither a peak or trough and is some midpoint
++ *             in between
++ */
++enum pivot_type { PEAK = 1, TROUGH = -1, MIDPOINT = 0 };
++
++/**
++ * enum ZN_VALUES - Values which the Ziegler-Nichols variable can take. This
++ *                  determines which set of PID Coefficients to use
++ * @ZN_ORIGINAL: Use the Original PID Coefficients when the thermal zone was
++ *               initially bound
++ * @ZN_OFF:      Use the current set of PID Coefficients
++ * @ZN_ON:       Use Ziegler-Nichols to determine the best set of PID Coefficients
++ * @ZN_RESET:    Reset the Ziegler-Nichols set of PID Coefficients so they can be
++ *               found again
++ */
++enum ZN_VALUES { ZN_ORIGINAL = -1, ZN_OFF = 0, ZN_ON = 1, ZN_RESET = 2 };
++
++/**
++ * struct zn_coefficients - values used by the Ziegler-Nichols Heuristic to
++ *                          determine what the optimal PID coefficients are
++ * @zn_found:   Determine whether we have found or are still searching for
++ *              optimal PID coefficients
++ * @prev_err: Previous err logged
++ * @curr_err: Current err being processed
++ * @t_prev_peak: Timestamp for the previous "Peak"
++ * @period: Period of osciallation
++ * @k_ultimate: Value of k_P which produces stable oscillations
++ * @base_peak: Err value of the current peak
++ * @base_trough: Err value fo the current trough
++ * @oscillation_count: Number of stable oscillations we have observed
++ * @prev_pivot: Whether the previous pivot was a peak or trough
++ * @zn_state: Current Ziegler-Nichols state
++ *
++ */
++struct zn_coefficients {
++	bool zn_found;
++	s32 prev_err;
++	s32 curr_err;
++	u32 t_prev_peak;
++	u32 period;
++	u32 k_ultimate;
++
++	s32 base_peak;
++	s32 base_trough;
++	s32 oscillation_count;
++	enum pivot_type prev_pivot;
++};
++
+ /**
+  * struct power_allocator_params - parameters for the power allocator governor
+  * @allocated_tzp:	whether we have allocated tzp for this thermal zone and
+@@ -65,6 +118,8 @@ static inline s64 div_frac(s64 x, s64 y)
+  *					controlling for.
+  * @sustainable_power:	Sustainable power (heat) that this thermal zone can
+  *			dissipate
++ * @zn_coeffs:  Structure to hold information used by the Ziegler-Nichols
++ *              heuristic
+  */
+ struct power_allocator_params {
+ 	bool allocated_tzp;
+@@ -73,6 +128,7 @@ struct power_allocator_params {
+ 	int trip_switch_on;
+ 	int trip_max_desired_temperature;
+ 	u32 sustainable_power;
++	struct zn_coefficients *zn_coeffs;
+ };
+ 
+ /**
+@@ -85,6 +141,8 @@ struct power_allocator_params {
+  * can give some degree of functionality.  For optimal performance of
+  * this governor, provide a sustainable_power in the thermal zone's
+  * thermal_zone_params.
++ *
++ * Return: the sustainable power for this thermal_zone
+  */
+ static u32 estimate_sustainable_power(struct thermal_zone_device *tz)
+ {
+@@ -171,6 +229,8 @@ static void estimate_pid_constants(struct thermal_zone_device *tz,
+  * on variables which might be updated by the user sysfs interface. If that
+  * happen the new value is going to be estimated and updated. It is also used
+  * after thermal zone binding, where the initial values where set to 0.
++ *
++ * Return: The sustainable power for this thermal_zone
+  */
+ static u32 get_sustainable_power(struct thermal_zone_device *tz,
+ 				 struct power_allocator_params *params,
+@@ -196,6 +256,330 @@ static u32 get_sustainable_power(struct thermal_zone_device *tz,
+ 	return sustainable_power;
+ }
+ 
++/**
++ * set_original_pid_coefficients() - Reset PID Coefficients in the Thermal Zone
++ *                                   to original values
++ * @tzp: Thermal Zone Parameters we want to update
++ *
++ */
++static inline void set_original_pid_coefficients(struct thermal_zone_params *tzp)
++{
++	static bool init = true;
++	static s32 k_po, k_pu, k_i, k_d, integral_cutoff;
++
++	if (init) {
++		k_po = tzp->k_po;
++		k_pu = tzp->k_pu;
++		k_i = tzp->k_i;
++		k_d = tzp->k_d;
++		integral_cutoff = tzp->integral_cutoff;
++		init = false;
++	} else {
++		tzp->k_po = k_po;
++		tzp->k_pu = k_pu;
++		tzp->k_i = k_i;
++		tzp->k_d = k_d;
++		tzp->integral_cutoff = integral_cutoff;
++	}
++}
++
++/**
++ * set_zn_pid_coefficients() - Calculate and set PID Coefficients based
++ *                             on Ziegler-Nichols Heuristic
++ * @tzp: thermal zone params to set
++ * @period: time taken for error to cycle 1 period
++ * @k_ultimate: the Ultimate Proportional Gain value at which
++ *              the error oscillates around the set-point
++ *
++ * This function sets the PID Coefficients of the thermal device
++ */
++static inline void set_zn_pid_coefficients(struct thermal_zone_params *tzp,
++					   u32 period, s32 k_ultimate)
++{
++	/* Convert time in ms for 1 cycle to cycles/s */
++	s32 freq = 1000 / period;
++
++	/* Make k_pu and k_po identical so it represents k_p */
++	tzp->k_pu = k_ultimate * 1 / 10;
++	tzp->k_po = tzp->k_pu;
++
++	tzp->k_i = freq / 2;
++	/* We want an integral term so if the value is 0, set it to 1 */
++	tzp->k_i = tzp->k_i > 0 ? tzp->k_i : 1;
++
++	tzp->k_d = (33 * freq) / 100;
++	/* We want an integral term so if the value is 0, set it to 1 */
++	tzp->k_d = tzp->k_d > 0 ? tzp->k_d : 1;
++}
++
++/**
++ * is_error_acceptable() - Check whether the error determined to be a pivot
++ *                         point is within the acceptable range
++ * @err: error value we are checking
++ * @base: the base_line value we are comparing against
++ *
++ * This function is used to determine whether our current pivot point is within
++ * the acceptable limits. The value of base is the first pivot point within
++ * this series of oscillations
++ *
++ * Return: boolean representing whether or not the error was within the acceptable
++ *         range
++ */
++static inline bool is_error_acceptable(s32 err, s32 base)
++{
++	/* Margin for error in milli-celcius */
++	const s32 MARGIN = 500;
++	s32 lower = abs(base) - MARGIN;
++	s32 upper = abs(base) + MARGIN;
++
++	if (lower < abs(err) && abs(err) < upper)
++		return true;
++	return false;
++}
++
++/**
++ * is_error_pivot() - Determine whether an error value is a pivot based on the
++ *                    previous and next error values
++ * @next_err: the next error in a series
++ * @curr_err: the current error value we are checking
++ * @prev_err: the previous error in a series
++ * @peak_trough: integer value to output what kind of pivot (if any)
++ *                    the error value is
++ *
++ * Determine whether or not the current value of error is a pivot and if it is
++ * a pivot, which type of pivot it is (peak or trough).
++ *
++ * Return: Bool representing whether the current value is a pivot point and
++ *         integer set to PEAK, TROUGH or MIDPOINT
++ */
++static inline bool is_error_pivot(s32 next_err, s32 curr_err, s32 prev_err,
++				  enum pivot_type *peak_trough)
++{
++	/*
++	 * Check whether curr_err is at it's highest value compared to its neighbours and that error
++	 * value is positive
++	 */
++	if (prev_err < curr_err && curr_err > next_err && curr_err > 0) {
++		*peak_trough = PEAK;
++		return true;
++	}
++	/*
++	 * Check whether curr_err is at it's lowest value compared to its neighbours and that error
++	 * value is negative
++	 */
++	if (prev_err > curr_err && curr_err < next_err && curr_err < 0) {
++		*peak_trough = TROUGH;
++		return true;
++	}
++	/* If the error is not a pivot then it must be somewhere between pivots */
++	*peak_trough = MIDPOINT;
++	return false;
++}
++
++/**
++ * update_oscillation_count() - Update the Oscillation Count for this set of pivots
++ * @curr_err: the current error value we are checking
++ * @base_pivot: the amplitude we are comparing against
++ * @peak_trough: the type of pivot we are currently processing
++ * @zn_coeffs: the data structure holding information used by the Ziegler-Nichols Hueristic
++ *
++ * Update the number of times we have oscillated based on our current error value being within the
++ * accepted range from the amplitude of previous pivots in this oscillation series.
++ *
++ * Return: Integer count of the number of oscillations
++ */
++static inline s32 update_oscillation_count(s32 curr_err, s32 *base_pivot,
++					   enum pivot_type peak_trough,
++					   struct zn_coefficients *zn_coeffs)
++{
++	if (is_error_acceptable(curr_err, *base_pivot) &&
++	    zn_coeffs->prev_pivot == -peak_trough) {
++		zn_coeffs->oscillation_count++;
++	} else {
++		zn_coeffs->oscillation_count = 0;
++		*base_pivot = curr_err;
++	}
++	zn_coeffs->prev_pivot = peak_trough;
++	return zn_coeffs->oscillation_count;
++}
++
++/**
++ * get_oscillation_count() - Update and get the number of times we have oscillated
++ * @curr_err: the current error value we are checking
++ * @peak_trough: the type of pivot we are currently processing
++ * @zn_coeffs: the data structure holding information used by the
++ *                    Ziegler-Nichols Hueristic
++ *
++ * Return: The number of times we have oscillated for this k_ultimate
++ */
++static inline s32 get_oscillation_count(s32 curr_err,
++					enum pivot_type peak_trough,
++					struct zn_coefficients *zn_coeffs)
++{
++	s32 *base_pivot = 0;
++
++	if (peak_trough == PEAK)
++		base_pivot = &zn_coeffs->base_peak;
++	else if (peak_trough == TROUGH)
++		base_pivot = &zn_coeffs->base_trough;
++
++	return update_oscillation_count(curr_err, base_pivot, peak_trough,
++					zn_coeffs);
++}
++
++/**
++ * get_zn_state() - Update and get the current Ziegler-Nichols State
++ * @tzp: The thermal zone params to check to determine the current state
++ * @zn_state: The current state which should be returned if no changes are
++ * made
++ *
++ * Return: The next zieger-nichols state for this pass of the PID controller
++ */
++static inline int get_zn_state(struct thermal_zone_params *tzp, int zn_state)
++{
++	if (tzp->k_po == ZN_RESET && tzp->k_pu == ZN_RESET)
++		return ZN_RESET;
++
++	if (tzp->k_po == ZN_ORIGINAL && tzp->k_pu == ZN_ORIGINAL)
++		return ZN_ORIGINAL;
++
++	if (tzp->k_po == ZN_ON && tzp->k_pu == ZN_ON)
++		return ZN_ON;
++
++	return zn_state;
++}
++
++/**
++ * is_temperature_safe() - Check if the current temperature is within 10% of
++ *                         the target
++ *
++ * @current_temperature: Current reported temperature
++ * @control_temp:        Control Temperature we are targeting
++ *
++ * Return: True if current temperature is within 10% of the target, False otherwise
++ */
++static inline bool is_temperature_safe(int current_temperature,
++				       int control_temp)
++{
++	return (current_temperature - control_temp) < (control_temp / 10) ?
++		       true :
++		       false;
++}
++
++/**
++ * reset_ziegler_nichols() - Reset the Values used to Track Ziegler-Nichols
++ *
++ * @zn_coeffs: the data structure holding information used by the Ziegler-Nichols Hueristic
++ *
++ */
++static inline void reset_ziegler_nichols(struct zn_coefficients *zn_coeffs)
++{
++	zn_coeffs->zn_found = false;
++	zn_coeffs->k_ultimate = 10;
++	zn_coeffs->prev_err = 0;
++	zn_coeffs->curr_err = 0;
++	zn_coeffs->t_prev_peak = 0;
++	zn_coeffs->period = 0;
++	/* Manually input INT_MAX as a previous value so the system cannot use it accidentally */
++	zn_coeffs->oscillation_count = update_oscillation_count(
++		INT_MAX, &zn_coeffs->curr_err, PEAK, zn_coeffs);
++}
++
++/**
++ * ziegler_nichols() - Calculate the k_ultimate and period for the thermal device
++ *                      and use these values to calculate and set the PID coefficients based on
++ *                      the Ziegler-Nichols Heuristic
++ * @tz: The thermal device we are operating on
++ * @next_err: The next error value to be used for calculations
++ * @control_temp: The temperature we are trying to target
++ *
++ * The Ziegler-Nichols PID Coefficient Tuning Method works by determining a K_Ultimate value. This
++ * is the largest K_P which yields a stable set of oscillations in error. By using historic and
++ * current values of error, this function attempts to determine whether or not it is oscillating,
++ * and increment the value of K_Ultimate accordingly.  Once it has determined that the system is
++ * oscillating, it calculates the time between "peaks" to determine its period
++ *
++ */
++static inline void ziegler_nichols(struct thermal_zone_device *tz, s32 next_err,
++				   int control_temp)
++{
++	struct power_allocator_params *params = tz->governor_data;
++	struct zn_coefficients *zn_coeffs = params->zn_coeffs;
++	const int NUMBER_OF_OSCILLATIONS = 10;
++
++	u32 t_now = (u32)div_frac(ktime_get_real_ns(), 1000000);
++	enum pivot_type peak_trough = MIDPOINT;
++	s32 oscillation_count = 0;
++	bool is_pivot;
++	bool is_safe =
++		is_temperature_safe((control_temp - next_err), control_temp);
++
++	if (tz->tzp->ziegler_nichols == ZN_RESET) {
++		reset_ziegler_nichols(zn_coeffs);
++		tz->tzp->ziegler_nichols = ZN_ON;
++	}
++
++	/* Override default PID Coefficients. These will be updated later according to the
++	 * Heuristic
++	 */
++	tz->tzp->k_po = zn_coeffs->k_ultimate;
++	tz->tzp->k_pu = zn_coeffs->k_ultimate;
++	tz->tzp->k_i = 0;
++	tz->tzp->k_d = 0;
++
++	if (!zn_coeffs->zn_found) {
++		/* Make sure that the previous errors have been logged and this isn't executed on
++		 * first pass
++		 */
++		if (zn_coeffs->curr_err != zn_coeffs->prev_err &&
++		    zn_coeffs->prev_err != 0) {
++			if (!is_safe)
++				goto set_zn;
++			is_pivot = is_error_pivot(next_err, zn_coeffs->curr_err,
++						  zn_coeffs->prev_err,
++						  &peak_trough);
++			if (is_pivot) {
++				oscillation_count = get_oscillation_count(
++					zn_coeffs->curr_err, peak_trough,
++					zn_coeffs);
++				if (oscillation_count >=
++				    NUMBER_OF_OSCILLATIONS) {
++					goto set_zn;
++				}
++				if (peak_trough == PEAK)
++					zn_coeffs->t_prev_peak = t_now;
++			}
++			if (!is_pivot || !oscillation_count)
++				zn_coeffs->k_ultimate += 10;
++		}
++		goto update_errors;
++	} else {
++		set_zn_pid_coefficients(tz->tzp, zn_coeffs->period,
++					zn_coeffs->k_ultimate);
++		tz->tzp->ziegler_nichols = ZN_OFF;
++	}
++	return;
++
++update_errors:
++	zn_coeffs->prev_err = zn_coeffs->curr_err;
++	zn_coeffs->curr_err = next_err;
++	return;
++
++set_zn:
++	if (zn_coeffs->t_prev_peak) {
++		zn_coeffs->zn_found = true;
++		zn_coeffs->period = abs(t_now - zn_coeffs->t_prev_peak);
++		set_zn_pid_coefficients(tz->tzp, zn_coeffs->period,
++					zn_coeffs->k_ultimate);
++		((struct power_allocator_params *)tz->governor_data)
++			->err_integral = 0;
++		tz->tzp->ziegler_nichols = ZN_OFF;
++	} else {
++		if (peak_trough == PEAK)
++			zn_coeffs->t_prev_peak = t_now;
++	}
++}
++
+ /**
+  * pid_controller() - PID controller
+  * @tz:	thermal zone we are operating in
+@@ -228,6 +612,26 @@ static u32 pid_controller(struct thermal_zone_device *tz,
+ 	sustainable_power = get_sustainable_power(tz, params, control_temp);
+ 
+ 	err = control_temp - tz->temperature;
++
++	switch (tz->tzp->ziegler_nichols) {
++	case ZN_ORIGINAL: {
++		set_original_pid_coefficients(tz->tzp);
++		tz->tzp->ziegler_nichols = ZN_OFF;
++		break;
++	}
++	case ZN_RESET: {
++		ziegler_nichols(tz, err, control_temp);
++		tz->tzp->ziegler_nichols = ZN_ON;
++		break;
++	}
++	case ZN_ON: {
++		ziegler_nichols(tz, err, control_temp);
++		break;
++	}
++	default:
++		break;
++	}
++
+ 	err = int_to_frac(err);
+ 
+ 	/* Calculate the proportional term */
+@@ -375,6 +779,7 @@ static void divvy_up_power(u32 *req_power, u32 *max_power, int num_actors,
+ 	if (capped_extra_power > 0)
+ 		for (i = 0; i < num_actors; i++) {
+ 			u64 extra_range = (u64)extra_actor_power[i] * extra_power;
++
+ 			granted_power[i] += DIV_ROUND_CLOSEST_ULL(extra_range,
+ 							 capped_extra_power);
+ 		}
+@@ -644,6 +1049,7 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
+ 	int ret;
+ 	struct power_allocator_params *params;
+ 	int control_temp;
++	struct zn_coefficients *zn_coeffs;
+ 
+ 	ret = check_power_actors(tz);
+ 	if (ret)
+@@ -653,6 +1059,12 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
+ 	if (!params)
+ 		return -ENOMEM;
+ 
++	zn_coeffs = kzalloc(sizeof(*zn_coeffs), GFP_KERNEL);
++	if (!zn_coeffs)
++		return -ENOMEM;
++
++	params->zn_coeffs = zn_coeffs;
++
+ 	if (!tz->tzp) {
+ 		tz->tzp = kzalloc(sizeof(*tz->tzp), GFP_KERNEL);
+ 		if (!tz->tzp) {
+@@ -676,6 +1088,8 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
+ 			estimate_pid_constants(tz, tz->tzp->sustainable_power,
+ 					       params->trip_switch_on,
+ 					       control_temp);
++		/* Store the original PID coefficient values */
++		set_original_pid_coefficients(tz->tzp);
+ 	}
+ 
+ 	reset_pid_controller(params);
+@@ -696,6 +1110,9 @@ static void power_allocator_unbind(struct thermal_zone_device *tz)
+ 
+ 	dev_dbg(&tz->device, "Unbinding from thermal zone %d\n", tz->id);
+ 
++	kfree(params->zn_coeffs);
++	params->zn_coeffs = NULL;
++
+ 	if (params->allocated_tzp) {
+ 		kfree(tz->tzp);
+ 		tz->tzp = NULL;
+@@ -749,4 +1166,5 @@ static struct thermal_governor thermal_gov_power_allocator = {
+ 	.unbind_from_tz	= power_allocator_unbind,
+ 	.throttle	= power_allocator_throttle,
+ };
++
+ THERMAL_GOVERNOR_DECLARE(thermal_gov_power_allocator);
+diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+index f154bada2906..d2f410a33995 100644
+--- a/drivers/thermal/thermal_sysfs.c
++++ b/drivers/thermal/thermal_sysfs.c
+@@ -342,6 +342,7 @@ create_s32_tzp_attr(k_po);
+ create_s32_tzp_attr(k_pu);
+ create_s32_tzp_attr(k_i);
+ create_s32_tzp_attr(k_d);
++create_s32_tzp_attr(ziegler_nichols);
+ create_s32_tzp_attr(integral_cutoff);
+ create_s32_tzp_attr(slope);
+ create_s32_tzp_attr(offset);
+@@ -375,6 +376,7 @@ static struct attribute *thermal_zone_dev_attrs[] = {
+ 	&dev_attr_k_pu.attr,
+ 	&dev_attr_k_i.attr,
+ 	&dev_attr_k_d.attr,
++	&dev_attr_ziegler_nichols.attr,
+ 	&dev_attr_integral_cutoff.attr,
+ 	&dev_attr_slope.attr,
+ 	&dev_attr_offset.attr,
+diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+index c314893970b3..ed8cd6a826ed 100644
+--- a/include/linux/thermal.h
++++ b/include/linux/thermal.h
+@@ -282,6 +282,13 @@ struct thermal_zone_params {
+ 	 * 		Used by thermal zone drivers (default 0).
+ 	 */
+ 	int offset;
++
++	/*
++	 * Ziegler-Nichols estimation setting. Allows the user to decide
++	 * whether to use original PID coefficients or calculate using
++	 * the Ziegler-Nichols algorithm
++	 */
++	s32 ziegler_nichols;
+ };
+ 
+ /**
+-- 
+2.25.1
 
-Moreover, the role of the driver is not to decide how to respond to
-the given utilization value, that is the role of the governor.  The
-driver is expected to do what it is asked for by the governor.
-
-> This patch scales the utilization
-> (target_perf) between the min pstate and the cap pstate instead.
->
-> On the DaCapo (Java) benchmarks and on a few exmples of kernel compilation
-> (based on make defconfig), on two-socket machines with the above CPUs, the
-> performance is always the same or better as Linux v5.15, and the CPU and
-> RAM energy consumption is likewise always the same or better (one
-> exception: zxing-eval on the 5128 uses a little more energy).
->
-> 6130:
->
-> Performance (sec):
->                 v5.15           with this patch (improvement)
-> avrora          77.5773         56.4090 (1.38)
-> batik-eval      113.1173        112.4135 (1.01)
-> biojava-eval    196.6533        196.7943 (1.00)
-> cassandra-eval  62.6638         59.2800 (1.06)
-> eclipse-eval    218.5988        210.0139 (1.04)
-> fop             3.5537          3.4281 (1.04)
-> graphchi-evalN  13.8668         10.3411 (1.34)
-> h2              75.5018         62.2993 (1.21)
-> jme-eval        94.9531         89.5722 (1.06)
-> jython          23.5789         23.0603 (1.02)
-> kafka-eval      60.2784         59.2057 (1.02)
-> luindex         5.3537          5.1190 (1.05)
-> lusearch-fix    3.5956          3.3628 (1.07)
-> lusearch        3.5396          3.5204 (1.01)
-> pmd             13.3505         10.8795 (1.23)
-> sunflow         7.5932          7.4899 (1.01)
-> tomcat-eval     39.6568         31.4844 (1.26)
-> tradebeans      118.9918        99.3932 (1.20)
-> tradesoap-eval  56.9113         54.7567 (1.04)
-> tradesoap       50.7779         44.5169 (1.14)
-> xalan           5.0711          4.8879 (1.04)
-> zxing-eval      10.5532         10.2435 (1.03)
->
-> make            45.5977         45.3454 (1.01)
-> make sched      3.4318          3.3450 (1.03)
-> make fair.o     2.9611          2.8464 (1.04)
->
-> CPU energy consumption (J):
->
-> avrora          4740.4813       3585.5843 (1.32)
-> batik-eval      13361.34        13278.74 (1.01)
-> biojava-eval    21608.70        21652.94 (1.00)
-> cassandra-eval  3037.6907       2891.8117 (1.05)
-> eclipse-eval    23528.15        23198.36 (1.01)
-> fop             455.7363        441.6443 (1.03)
-> graphchi-eval   999.9220        971.5633 (1.03)
-> h2              5451.3093       4929.8383 (1.11)
-> jme-eval        5343.7790       5143.8463 (1.04)
-> jython          2685.3790       2623.1950 (1.02)
-> kafka-eval      2715.6047       2548.7220 (1.07)
-> luindex         597.7587        571.0387 (1.05)
-> lusearch-fix    714.0340        692.4727 (1.03)
-> lusearch        718.4863        704.3650 (1.02)
-> pmd             1627.6377       1497.5437 (1.09)
-> sunflow         1563.5173       1514.6013 (1.03)
-> tomcat-eval     4740.1603       4539.1503 (1.04)
-> tradebeans      8331.2260       7482.3737 (1.11)
-> tradesoap-eval  6610.1040       6426.7077 (1.03)
-> tradesoap       5641.9300       5544.3517 (1.02)
-> xalan           1072.0363       1065.7957 (1.01)
-> zxing-eval      2200.1883       2174.1137 (1.01)
->
-> make            9788.9290       9777.5823 (1.00)
-> make sched      501.0770        495.0600 (1.01)
-> make fair.o     363.4570        352.8670 (1.03)
->
-> RAM energy consumption (J):
->
-> avrora          2508.5553       1844.5977 (1.36)
-> batik-eval      5627.3327       5603.1820 (1.00)
-> biojava-eval    9371.1417       9351.1543 (1.00)
-> cassandra-eval  1398.0567       1289.8317 (1.08)
-> eclipse-eval    10193.28        9952.3543 (1.02)
-> fop             189.1927        184.0620 (1.03)
-> graphchi-eval   539.3947        447.4557 (1.21)
-> h2              2771.0573       2432.2587 (1.14)
-> jme-eval        2702.4030       2504.0783 (1.08)
-> jython          1135.7317       1114.5190 (1.02)
-> kafka-eval      1320.6840       1220.6867 (1.08)
-> luindex         246.6597        237.1593 (1.04)
-> lusearch-fix    294.4317        282.2193 (1.04)
-> lusearch        295.5400        284.3890 (1.04)
-> pmd             721.7020        643.1280 (1.12)
-> sunflow         568.6710        549.3780 (1.04)
-> tomcat-eval     2305.8857       1995.8843 (1.16)
-> tradebeans      4323.5243       3749.7033 (1.15)
-> tradesoap-eval  2862.8047       2783.5733 (1.03)
-> tradesoap       2717.3900       2519.9567 (1.08)
-> xalan           430.6100        418.5797 (1.03)
-> zxing-eval      732.2507        710.9423 (1.03)
->
-> make            3362.8837       3356.2587 (1.00)
-> make sched      191.7917        188.8863 (1.02)
-> make fair.o     149.6850        145.8273 (1.03)
->
-> 5128:
->
-> Performance (sec):
->
-> avrora          62.0511         43.9240 (1.41)
-> batik-eval      111.6393        110.1999 (1.01)
-> biojava-eval    241.4400        238.7388 (1.01)
-> cassandra-eval  62.0185         58.9052 (1.05)
-> eclipse-eval    240.9488        232.8944 (1.03)
-> fop             3.8318          3.6408 (1.05)
-> graphchi-eval   13.3911         10.4670 (1.28)
-> h2              75.3658         62.8218 (1.20)
-> jme-eval        95.0131         89.5635 (1.06)
-> jython          28.1397         27.6802 (1.02)
-> kafka-eval      60.4817         59.4780 (1.02)
-> luindex         5.1994          4.9587 (1.05)
-> lusearch-fix    3.8448          3.6519 (1.05)
-> lusearch        3.8928          3.7068 (1.05)
-> pmd             13.0990         10.8008 (1.21)
-> sunflow         7.7983          7.8569 (0.99)
-> tomcat-eval     39.2064         31.7629 (1.23)
-> tradebeans      120.8676        100.9113 (1.20)
-> tradesoap-eval  65.5552         63.3493 (1.03)
-> xalan           5.4463          5.3576 (1.02)
-> zxing-eval      9.8611          9.9692 (0.99)
->
-> make            43.1852         43.1285 (1.00)
-> make sched      3.2181          3.1706 (1.01)
-> make fair.o     2.7584          2.6615 (1.04)
->
-> CPU energy consumption (J):
->
-> avrora          3979.5297       3049.3347 (1.31)
-> batik-eval      12339.59        12413.41 (0.99)
-> biojava-eval    23935.18        23931.61 (1.00)
-> cassandra-eval  3552.2753       3380.4860 (1.05)
-> eclipse-eval    24186.38        24076.57 (1.00)
-> fop             441.0607        442.9647 (1.00)
-> graphchi-eval   1021.1323       964.4800 (1.06)
-> h2              5484.9667       4901.9067 (1.12)
-> jme-eval        6167.5287       5909.5767 (1.04)
-> jython          2956.7150       2986.3680 (0.99)
-> kafka-eval      3229.9333       3197.7743 (1.01)
-> luindex         537.0007        533.9980 (1.01)
-> lusearch-fix    720.1830        699.2343 (1.03)
-> lusearch        708.8190        700.7023 (1.01)
-> pmd             1539.7463       1398.1850 (1.10)
-> sunflow         1533.3367       1497.2863 (1.02)
-> tomcat-eval     4551.9333       4289.2553 (1.06)
-> tradebeans      8527.2623       7570.2933 (1.13)
-> tradesoap-eval  6849.3213       6750.9687 (1.01)
-> xalan           1013.2747       1019.1217 (0.99)
-> zxing-eval      1852.9077       1943.1753 (0.95)
->
-> make            9257.5547       9262.5993 (1.00)
-> make sched      438.7123        435.9133 (1.01)
-> make fair.o     315.6550        312.2280 (1.01)
->
-> RAM energy consumption (J):
->
-> avrora          16309.86        11458.08 (1.42)
-> batik-eval      30107.11        29891.58 (1.01)
-> biojava-eval    64290.01        63941.71 (1.01)
-> cassandra-eval  13240.04        12403.19 (1.07)
-> eclipse-eval    64188.41        62008.35 (1.04)
-> fop             1052.2457       996.0907 (1.06)
-> graphchi-eval   3622.5130       2856.1983 (1.27)
-> h2              19965.58        16624.08 (1.20)
-> jme-eval        21777.02        20211.06 (1.08)
-> jython          7515.3843       7396.6437 (1.02)
-> kafka-eval      12868.39        12577.32 (1.02)
-> luindex         1387.7263       1328.8073 (1.04)
-> lusearch-fix    1313.1220       1238.8813 (1.06)
-> lusearch        1303.5597       1245.4130 (1.05)
-> pmd             3650.6697       3049.8567 (1.20)
-> sunflow         2460.8907       2380.3773 (1.03)
-> tomcat-eval     11199.61        9232.8367 (1.21)
-> tradebeans      32385.99        26901.40 (1.20)
-> tradesoap-eval  17691.01        17006.95 (1.04)
-> xalan           1783.7290       1735.1937 (1.03)
-> zxing-eval      2812.9710       2952.2933 (0.95)
->
-> make            13247.47        13258.64 (1.00)
-> make sched      885.7790        877.1667 (1.01)
-> make fair.o     741.2473        723.6313 (1.02)
-
-So the number look better after the change, because it makes the
-driver ask the hardware for slightly more performance than it is asked
-for by the governor.
-
->
-> Signed-off-by: Julia Lawall <julia.lawall@inria.fr>
->
-> ---
->
-> min_pstate is defined in terms of cpu->pstate.min_pstate and
-> cpu->min_perf_ratio.  Maybe one of these values should be used instead.
-> Likewise, perhaps cap_pstate should be max_pstate?
-
-I'm not sure if I understand this remark.  cap_pstate is the max
-performance level of the CPU and max_pstate is the current limit
-imposed by the framework.  They are different things.
-
->
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> index 8c176b7dae41..ba6a48959754 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -2789,10 +2789,6 @@ static void intel_cpufreq_adjust_perf(unsigned int cpunum,
->
->         /* Optimization: Avoid unnecessary divisions. */
->
-> -       target_pstate = cap_pstate;
-> -       if (target_perf < capacity)
-> -               target_pstate = DIV_ROUND_UP(cap_pstate * target_perf, capacity);
-> -
->         min_pstate = cap_pstate;
->         if (min_perf < capacity)
->                 min_pstate = DIV_ROUND_UP(cap_pstate * min_perf, capacity);
-> @@ -2807,6 +2803,10 @@ static void intel_cpufreq_adjust_perf(unsigned int cpunum,
->         if (max_pstate < min_pstate)
->                 max_pstate = min_pstate;
->
-> +       target_pstate = cap_pstate;
-> +       if (target_perf < capacity)
-> +               target_pstate = DIV_ROUND_UP((cap_pstate - min_pstate) * target_perf, capacity) + min_pstate;
-
-So the driver is asked by the governor to deliver the fraction of the
-max performance (cap_pstate) given by the target_perf / capacity ratio
-with the floor given by min_perf / capacity.  It cannot turn around
-and do something else, because it thinks it knows better.
-
-> +
->         target_pstate = clamp_t(int, target_pstate, min_pstate, max_pstate);
->
->         intel_cpufreq_hwp_update(cpu, min_pstate, max_pstate, target_pstate, true);
