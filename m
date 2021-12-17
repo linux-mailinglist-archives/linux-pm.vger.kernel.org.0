@@ -2,165 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D78E8478D02
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Dec 2021 15:05:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0A0F478F05
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Dec 2021 16:07:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234350AbhLQOFm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Dec 2021 09:05:42 -0500
-Received: from mail-ot1-f54.google.com ([209.85.210.54]:41706 "EHLO
-        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231337AbhLQOFm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Dec 2021 09:05:42 -0500
-Received: by mail-ot1-f54.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so2960551otl.8;
-        Fri, 17 Dec 2021 06:05:42 -0800 (PST)
+        id S237848AbhLQPHq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Dec 2021 10:07:46 -0500
+Received: from mail-oi1-f174.google.com ([209.85.167.174]:36836 "EHLO
+        mail-oi1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237855AbhLQPHq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Dec 2021 10:07:46 -0500
+Received: by mail-oi1-f174.google.com with SMTP id t23so4021160oiw.3;
+        Fri, 17 Dec 2021 07:07:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=g03RicGR9jCGgYu9rbOy1z4bhFkncsLW5/9WH5otin0=;
-        b=2eRP517p2g/PP87LfQqdBzjdbYgEzvFgiOeFgRBSo6s+sUCF9n7SjKJO2Wt2A+4lm/
-         Yr9OIfU44fJrOdeAzlmKtVRTXPsHx7gWTv5OYBlwnm5QIAXi2dKQh1NMc0gDeKVYfu7U
-         Ic8sXTsX8GaTg4tlgsLGPjyQEzAcJBM+G3i+RTodPoMzYhAaE2367T9OfghI4MTiVjmT
-         8jWwTlK6OUg+PQSxJJ0iWSKTFtZQs4FfmufFG6qxgLjajDkfzCXRNNCtZ9/NTeYWnPt7
-         BPvM703SFq18jWSMhMUeHkVBaJlqg7dlGJ6WP0n7Cf61xQ0z5ZMD1otlagvaarTgW29R
-         11Rw==
-X-Gm-Message-State: AOAM530fD2QL0mrPF9/1Je+rUuh9Dtn1JyRiOqOuJu2cAJIfG/1s1U+B
-        W2Vjcz6FsAg58WqgJLTEj5rwMGU5h038i8u1nR0=
-X-Google-Smtp-Source: ABdhPJy/IphBLzZjsm4EXAGdbviICYzuhwIIecSgbras0W7fXy8zUbym4G24uZFUv9hMAT1aJFlGLXLsBT0coB58DYU=
-X-Received: by 2002:a05:6830:1e57:: with SMTP id e23mr2231331otj.16.1639749941912;
- Fri, 17 Dec 2021 06:05:41 -0800 (PST)
+        bh=MbOJyx0ICqsDBsXqhrfTxawCvgzjFoYCCHF95Prip3E=;
+        b=RiDhcJMb78rRzBLmIxbP5OkQydXAjBA72RxB29xIUOpt1mXMykSZn6mCckNHkEwzPS
+         GQL6J66SU4X75b91WK8HeCgtaez2TjJ/UHOwXgM9pWI9r465Fa3ngUdKo7Wgi10hP/OH
+         KJKPS7UFIlQcHRrzfuY0NEinyMSUZQ4kUMv9Rw/X+E83fK1vnoWLi6Pu7FLYakRTLL3C
+         BlLNslq2d/KjdxmHx9U2FPiiNCiTmyBwaWNqAoGuUzEf3PshovvpbkdmYUvlYQ+5a8f2
+         2adkXUHo7sCIdUmoOv95OLzz5PSm9jMQfaHByvrunQRggT5jh50ikMh0pnensDt8ZShN
+         fxvA==
+X-Gm-Message-State: AOAM530SqCgXXA5nr1fq7vrgA/2WPyVOdewp9Kb/pm94JEkEV166MCzs
+        vLzRjXV0adm3p+Usa3xEiZNIL3DAIZukZfGc5vE=
+X-Google-Smtp-Source: ABdhPJzIcKm353itWUd26MvND37q/kv/4/a54huG34fc7b6KcS+FdmapZEPP8pthrG9sJ/xgldU8kp89r2g0YypaCFQ=
+X-Received: by 2002:aca:eb0b:: with SMTP id j11mr8185991oih.51.1639753665410;
+ Fri, 17 Dec 2021 07:07:45 -0800 (PST)
 MIME-Version: 1.0
-References: <20211130123641.1449041-1-ray.huang@amd.com> <20211130123641.1449041-10-ray.huang@amd.com>
- <CAJZ5v0jbSC1Q1gn2+Hu6bJQN20uDDSbStdM3zHZ+UBR+YKsWQA@mail.gmail.com> <YbxByF9dEGrkR6Kr@amd.com>
-In-Reply-To: <YbxByF9dEGrkR6Kr@amd.com>
+References: <20211207002102.26414-1-paul@crapouillou.net> <CAK8P3a3xfuFN+0Gb694R_W2tpC7PfFEFcpsAyPdanqZ6FpVoxQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a3xfuFN+0Gb694R_W2tpC7PfFEFcpsAyPdanqZ6FpVoxQ@mail.gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 17 Dec 2021 15:05:29 +0100
-Message-ID: <CAJZ5v0i_1kNWLeqWCR8_uPetq9o5yCYAxfpyciLn1KF55gb=6g@mail.gmail.com>
-Subject: Re: [PATCH v5 09/22] cpufreq: amd: add trace for amd-pstate module
-To:     Huang Rui <ray.huang@amd.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Borislav Petkov <bp@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        Steven Noonan <steven@valvesoftware.com>,
-        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+Date:   Fri, 17 Dec 2021 16:07:34 +0100
+Message-ID: <CAJZ5v0jifFWLJgjJywGrjWgE9ZQkjD03rQDHw+4YL-VzkfL1Hg@mail.gmail.com>
+Subject: Re: [PATCH 0/5] Rework pm_ptr() and *_PM_OPS macros
+To:     Arnd Bergmann <arnd@arndb.de>, Paul Cercueil <paul@crapouillou.net>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>, list@opendingux.net,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Steven Rostedt <rostedt@goodmins.org>
+        Networking <netdev@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 8:53 AM Huang Rui <ray.huang@amd.com> wrote:
+On Tue, Dec 7, 2021 at 10:22 AM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> On Fri, Dec 17, 2021 at 02:12:41AM +0800, Rafael J. Wysocki wrote:
-> > On Tue, Nov 30, 2021 at 1:38 PM Huang Rui <ray.huang@amd.com> wrote:
-> > >
-> > > Add trace event to monitor the performance value changes which is
-> > > controlled by cpu governors.
+> On Tue, Dec 7, 2021 at 1:20 AM Paul Cercueil <paul@crapouillou.net> wrote:
 > >
-> > This would need an ACK from Steve.
+> > This patchset reworks the pm_ptr() macro I introduced a few versions
+> > ago, so that it is not conditionally defined.
 > >
-> > >
-> > > Signed-off-by: Huang Rui <ray.huang@amd.com>
-> > > ---
-> > >  drivers/cpufreq/Makefile           |  6 ++-
-> > >  drivers/cpufreq/amd-pstate-trace.c |  2 +
-> > >  drivers/cpufreq/amd-pstate-trace.h | 77 ++++++++++++++++++++++++++++++
+> > It applies the same treatment to the *_PM_OPS macros. Instead of
+> > modifying the existing ones, which would mean a 2000+ patch bomb, this
+> > patchset introduce two new macros to replace the now deprecated
+> > UNIVERSAL_DEV_PM_OPS() and SIMPLE_DEV_PM_OPS().
 > >
-> > Why are these two extra files necessary?
+> > The point of all of this, is to progressively switch from a code model
+> > where PM callbacks are all protected behind CONFIG_PM guards, to a code
+> > model where PM callbacks are always seen by the compiler, but discarded
+> > if not used.
+> >
+> > Patch [4/5] and [5/5] are just examples to illustrate the use of the new
+> > macros. As such they don't really have to be merged at the same time as
+> > the rest and can be delayed until a subsystem-wide patchset is proposed.
+> >
+> > - Patch [4/5] modifies a driver that already used the pm_ptr() macro,
+> >   but had to use the __maybe_unused flag to avoid compiler warnings;
+> > - Patch [5/5] modifies a driver that used a #ifdef CONFIG_PM guard
+> >   around its suspend/resume functions.
 >
-> Please see below answer.
+> This is fantastic, I love the new naming and it should provide a great path
+> towards converting all drivers eventually. I've added the patches to
+> my randconfig test build box to see if something breaks, but otherwise
+> I think these are ready to get into linux-next, at least patches 1-3,
+> so subsystem
+> maintainers can start queuing up the conversion patches once the
+> initial set is merged.
 >
-> >
-> > >  drivers/cpufreq/amd-pstate.c       |  4 ++
-> > >  4 files changed, 88 insertions(+), 1 deletion(-)
-> > >  create mode 100644 drivers/cpufreq/amd-pstate-trace.c
-> > >  create mode 100644 drivers/cpufreq/amd-pstate-trace.h
-> > >
-> > > diff --git a/drivers/cpufreq/Makefile b/drivers/cpufreq/Makefile
-> > > index c8d307010922..285de70af877 100644
-> > > --- a/drivers/cpufreq/Makefile
-> > > +++ b/drivers/cpufreq/Makefile
-> > > @@ -17,6 +17,10 @@ obj-$(CONFIG_CPU_FREQ_GOV_ATTR_SET)  += cpufreq_governor_attr_set.o
-> > >  obj-$(CONFIG_CPUFREQ_DT)               += cpufreq-dt.o
-> > >  obj-$(CONFIG_CPUFREQ_DT_PLATDEV)       += cpufreq-dt-platdev.o
-> > >
-> > > +# Traces
-> > > +CFLAGS_amd-pstate-trace.o               := -I$(src)
-> > > +amd_pstate-y                           := amd-pstate.o amd-pstate-trace.o
-> > > +
-> > >  ##################################################################################
-> > >  # x86 drivers.
-> > >  # Link order matters. K8 is preferred to ACPI because of firmware bugs in early
-> > > @@ -25,7 +29,7 @@ obj-$(CONFIG_CPUFREQ_DT_PLATDEV)      += cpufreq-dt-platdev.o
-> > >  # speedstep-* is preferred over p4-clockmod.
-> > >
-> > >  obj-$(CONFIG_X86_ACPI_CPUFREQ)         += acpi-cpufreq.o
-> > > -obj-$(CONFIG_X86_AMD_PSTATE)           += amd-pstate.o
-> > > +obj-$(CONFIG_X86_AMD_PSTATE)           += amd_pstate.o
-> > >  obj-$(CONFIG_X86_POWERNOW_K8)          += powernow-k8.o
-> > >  obj-$(CONFIG_X86_PCC_CPUFREQ)          += pcc-cpufreq.o
-> > >  obj-$(CONFIG_X86_POWERNOW_K6)          += powernow-k6.o
-> > > diff --git a/drivers/cpufreq/amd-pstate-trace.c b/drivers/cpufreq/amd-pstate-trace.c
-> > > new file mode 100644
-> > > index 000000000000..891b696dcd69
-> > > --- /dev/null
-> > > +++ b/drivers/cpufreq/amd-pstate-trace.c
-> > > @@ -0,0 +1,2 @@
-> > > +#define CREATE_TRACE_POINTS
-> > > +#include "amd-pstate-trace.h"
-> > > diff --git a/drivers/cpufreq/amd-pstate-trace.h b/drivers/cpufreq/amd-pstate-trace.h
-> > > new file mode 100644
-> > > index 000000000000..647505957d4f
-> > > --- /dev/null
-> > > +++ b/drivers/cpufreq/amd-pstate-trace.h
-> > > @@ -0,0 +1,77 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0 */
-> > > +/*
-> > > + * amd-pstate-trace.h - AMD Processor P-state Frequency Driver Tracer
-> > > + *
-> > > + * Copyright (C) 2021 Advanced Micro Devices, Inc. All Rights Reserved.
-> > > + *
-> > > + * Author: Huang Rui <ray.huang@amd.com>
-> > > + */
-> > > +
-> > > +#if !defined(_AMD_PSTATE_TRACE_H) || defined(TRACE_HEADER_MULTI_READ)
-> > > +#define _AMD_PSTATE_TRACE_H
-> > > +
-> > > +#include <linux/cpufreq.h>
-> > > +#include <linux/tracepoint.h>
-> > > +#include <linux/trace_events.h>
-> > > +
-> > > +#undef TRACE_SYSTEM
-> > > +#define TRACE_SYSTEM amd_cpu
-> > > +
-> > > +#undef TRACE_INCLUDE_FILE
-> > > +#define TRACE_INCLUDE_FILE amd-pstate-trace
-> > > +
-> > > +#define TPS(x)  tracepoint_string(x)
-> > > +
-> > > +TRACE_EVENT(amd_pstate_perf,
-> >
-> > Could this be added to include/trace/events/power.h ?
-> >
->
-> Actually, that is my original idea, but once I move the trace into
-> include/trace/events/power.h, the amd-pstate driver cannot build as "ko"
-> anymore. This is the early stage, "ko" is friendly and flexible for us to
-> switch and compare between amd-pstate and acpi-cpufreq. I can move it into
-> "power" trace events once we address the performance issue on shared memory
-> solution.
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 
-OK, I guess it's fine then, but it still needs an ACK from Steve.
+Patches [0-3/5] applied as 5.17 material.
+
+The mmc patches need ACKs, but I can take them too.
