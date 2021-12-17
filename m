@@ -2,160 +2,180 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2896B4781EA
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Dec 2021 02:09:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55915478384
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Dec 2021 04:10:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231610AbhLQBJE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Dec 2021 20:09:04 -0500
-Received: from mailout2.samsung.com ([203.254.224.25]:57062 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231625AbhLQBJD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Dec 2021 20:09:03 -0500
-Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20211217010901epoutp021950016b616a6856385b467f533bf7dd~BZYBsivHm1584915849epoutp02K
-        for <linux-pm@vger.kernel.org>; Fri, 17 Dec 2021 01:09:01 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20211217010901epoutp021950016b616a6856385b467f533bf7dd~BZYBsivHm1584915849epoutp02K
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1639703341;
-        bh=64+sb0x84cnuhFi2hvopvmRPJOEX1nVTHzV4z5VhkmA=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=XsFrqpchyFfyh7Z9O3NhucIDX2RDmyZg6KXK7yrrCg0sPHM3hH+3Sbolm7elRTKV5
-         pRkz4w0I/Btp08nJnlaGKkSOh8EkOXCep2ne/GD/+PdLitG+xTU+md1iKaprQmEZTR
-         a5bhipXo80SEN3ecSGvSLIWqq6uLy4FNmWBrC84o=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20211217010901epcas1p1aac532660ac79a097d7214bd5ad2447f~BZYBNIutk1654616546epcas1p1n;
-        Fri, 17 Dec 2021 01:09:01 +0000 (GMT)
-Received: from epsmges1p5.samsung.com (unknown [182.195.38.237]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4JFW8N3ccXz4x9QN; Fri, 17 Dec
-        2021 01:08:52 +0000 (GMT)
-Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
-        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
-        60.64.28648.F13EBB16; Fri, 17 Dec 2021 10:08:47 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20211217010847epcas1p2d44a4b1a5fa713c126a48697305c80b3~BZX0XEIHJ2372023720epcas1p2i;
-        Fri, 17 Dec 2021 01:08:47 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20211217010847epsmtrp2a813a03c1dc761672460a3f9f72a6cff~BZX0VH9pq2114021140epsmtrp2Q;
-        Fri, 17 Dec 2021 01:08:47 +0000 (GMT)
-X-AuditID: b6c32a39-ff1ff70000006fe8-5b-61bbe31f38ac
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        5F.EC.29871.E13EBB16; Fri, 17 Dec 2021 10:08:46 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20211217010846epsmtip16f9ee118c19b4120a71dabc79476bd2b~BZX0Dh7us0725907259epsmtip1O;
-        Fri, 17 Dec 2021 01:08:46 +0000 (GMT)
-Subject: Re: [PATCH v2] extcon: fix extcon_get_extcon_dev() error handling
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <1b4515cc-bddc-ff3d-7789-ea2eb66a2e4e@samsung.com>
-Date:   Fri, 17 Dec 2021 10:31:47 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
+        id S231920AbhLQDKS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Dec 2021 22:10:18 -0500
+Received: from mail-bn8nam11on2057.outbound.protection.outlook.com ([40.107.236.57]:42124
+        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229471AbhLQDKR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 16 Dec 2021 22:10:17 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jOdrm43kJ0Bg8G9Zg4snbZt+lYQUmUSxWuDaW7AlDjBN3EevaRn838UZu30qvAHCi2Dr0UCdaxIr6djdWR1eEmTNlzFq+9HCJ9iH4VDC6yh7s+PFlMJblTfl8nRGY83MoLV20QoID4nHm0iukUs2e8xIUmtFwnGPznczMPR9K2P6opm6CpXoi4sDn3Qfj0lMd9UCublmfSjivwfSEx8irdaeLqlKNmfzNnAAwSsHzvAA3PkWe77HIcRgqh0NTlx3yUv44xOCPxCCZE285Wyyi3nuj5nZsAewSOSvqXNiBvfZOvoF9djUBiiyIYdFytyUz+qLBq/V3U4m/hOODwaWPA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GceMpUy38Fqb/g0ghoLpdRigWAfxedSckTXA3vAQwo8=;
+ b=h0ePJkKyF6MbamItRwDgchsEHO+KiMXQIyjrW2SUjIEFS7iF4pOUrdS5WYtxY4fmdXT+eOjCsgg6vJptG38qRK44IH2/IE+wqhAd/OYRIJS5cAxTXQMrlA/QvOlKJmTuNu/s+K6+Paxo15U799rN/Rh1yBxvb+wSQbjbERJiEKIQBg7+A04p7soeeN4j84KY2+5a/gqULc3rBjM22bBnroyycMPa3CWMDAd1JIaun5gULsVJazqF5FD0EWeRDxn8hT1rgb9SemF9jvLa+R3lcv3F19/uPS7OEhjsolCh14uXR07u2bn9u3NhaMjMgYBGZ0YHc7d5AHRNNXlLsZhsJA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GceMpUy38Fqb/g0ghoLpdRigWAfxedSckTXA3vAQwo8=;
+ b=ulBMyoUzchtD2eDXCRMnfUSxOfafLOrAohsG+w8agmXKoxHa0/VrtwHODEosRU5CQaPanBzOthbzPtdHpEdMN8K5jwaEYJyVTdi7UWl08BKaHBYk8Bp8tnSDiHejj1UsFR0g3I6nOe0tYe3izp2dRMzFRAA3W+xgY/dxGQ+OERw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
+ DM6PR12MB3468.namprd12.prod.outlook.com (2603:10b6:5:38::33) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4801.14; Fri, 17 Dec 2021 03:10:11 +0000
+Received: from DM5PR12MB2504.namprd12.prod.outlook.com
+ ([fe80::5d07:e475:316c:d187]) by DM5PR12MB2504.namprd12.prod.outlook.com
+ ([fe80::5d07:e475:316c:d187%5]) with mapi id 15.20.4755.027; Fri, 17 Dec 2021
+ 03:10:11 +0000
+Date:   Fri, 17 Dec 2021 11:09:43 +0800
+From:   Huang Rui <ray.huang@amd.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Borislav Petkov <bp@suse.de>, Ingo Molnar <mingo@kernel.org>
+Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        Steven Noonan <steven@valvesoftware.com>,
+        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 02/22] x86/msr: add AMD CPPC MSR definitions
+Message-ID: <Ybv/dyYTubBaC5Ay@amd.com>
+References: <20211130123641.1449041-1-ray.huang@amd.com>
+ <20211130123641.1449041-3-ray.huang@amd.com>
+ <CAJZ5v0i_nE_LnpgkeFLscoR5fGtzCxrV8Zdon7y=Kod_SuFqtw@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0i_nE_LnpgkeFLscoR5fGtzCxrV8Zdon7y=Kod_SuFqtw@mail.gmail.com>
+X-ClientProxiedBy: HK0PR01CA0063.apcprd01.prod.exchangelabs.com
+ (2603:1096:203:a6::27) To DM5PR12MB2504.namprd12.prod.outlook.com
+ (2603:10b6:4:b5::19)
 MIME-Version: 1.0
-In-Reply-To: <20211216155916.GA7738@kadam>
-Content-Type: text/plain; charset="windows-1252"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrPJsWRmVeSWpSXmKPExsWy7bCmnq78492JBpsPGFgca3vCbvH633QW
-        i+bF69ks3hyfzmTRtXoni8XWW9IWl3fNYbOYvaSfxeJz7xFGi0XLWpktniw8w2Rxu3EFm8Xp
-        3SUWPw+dZ3Lg89jwaDWrx6ZVnWwe804Geuyfu4bd4+PTWywe7/ddZfPY+b2B3aNvyypGj8+b
-        5AI4o7JtMlITU1KLFFLzkvNTMvPSbZW8g+Od403NDAx1DS0tzJUU8hJzU22VXHwCdN0yc4BO
-        V1IoS8wpBQoFJBYXK+nb2RTll5akKmTkF5fYKqUWpOQUmBboFSfmFpfmpevlpZZYGRoYGJkC
-        FSZkZyz5foG94A9Xxf4DW5gbGO9ydDFyckgImEhMmN3M3sXIxSEksINRYun7jcwQzidGiQnX
-        trBBON8YJR7sXs8I03JiwzKolr2MEj/nzGCBcN4zSkx7+5gFpEpYwEuia/YhNhBbREBH4nLn
-        D7AOZoHrzBJ953czgSTYBLQk9r+4AVbEL6AocfXHY6AVHBy8AnYS025ZgYRZBFQl5r1aC1Yi
-        KhAmcXJbC9gVvAKCEidnPgHbxQk05uunr2BxZgEDiSOL5rBC2OISt57MZ4Kw5SW2v53DDPHB
-        Cw6Jpa3mELaLxM9P86A+E5Z4dXwLO4QtJfH53V6w9yUEljFK/JrcyQThrGeUeDmrE2qSscT+
-        pZOZIGxFiZ2/50JdwSfx7msPK8gzEgK8Eh1tQhAlyhKXH9yFKpeUWNzeyTaBUWkWkn9mIflh
-        FpIfZiH5YQEjyypGsdSC4tz01GLDAlN4hCfn525iBKdsLcsdjNPfftA7xMjEwXiIUYKDWUmE
-        V3H57kQh3pTEyqrUovz4otKc1OJDjKbAIJ7ILCWanA/MGnkl8YYmlgYmZkbGJhaGZoZK4rzP
-        /acnCgmkJ5akZqemFqQWwfQxcXBKNTAF10vyfTOYGD9JustEQmLz1tWVa9YKdm9eHbNEf8/F
-        A0Zua68uPhj87Chb27/TNw8oCJVvzjnGFO3mKasqOE9m4jpp2VvPROYHvZR8tofD55Za9NMY
-        +/+Xb/fKaK/rdDhZv+1lw4abvowvXrUnCfaulFkouaDwivbTbCa+lcXZ/HrFZQYSUu/PTlyw
-        adHH/ZN/nGS/lSCgmpkU+IvzY+zkje971f0SYrrv5RxZJPAzM3Kf47vEU4/mnwt7mxXAdG5i
-        gOatFf1X2C/rufAkcL6e3P3pxKJdVofZevxa325VeRBuIdjC39m9iF0k1OIYb2q0ksTRvMDn
-        eT8v/ymbZxaczfjE+1lvnHtk8Es3DiElluKMREMt5qLiRAAbvHQgYgQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrOIsWRmVeSWpSXmKPExsWy7bCSnK7c492JBrdbrCyOtT1ht3j9bzqL
-        RfPi9WwWb45PZ7LoWr2TxWLrLWmLy7vmsFnMXtLPYvG59wijxaJlrcwWTxaeYbK43biCzeL0
-        7hKLn4fOMznweWx4tJrVY9OqTjaPeScDPfbPXcPu8fHpLRaP9/uusnns/N7A7tG3ZRWjx+dN
-        cgGcUVw2Kak5mWWpRfp2CVwZS75fYC/4w1Wx/8AW5gbGuxxdjJwcEgImEic2LGPvYuTiEBLY
-        zSixomUbM0RCUmLaxaNANgeQLSxx+HAxRM1bRonGvvesIDXCAl4SXbMPsYHYIgI6Epc7f4AN
-        Yha4zSzRdOwJM0THbyaJrqcQU9kEtCT2v7gB1sEvoChx9cdjRpANvAJ2EtNuWYGEWQRUJea9
-        WgtWIioQJrFzyWMmEJtXQFDi5MwnLCA2J9CYr5++MoLYzAJ6Ejuu/2KFsMUlbj2ZzwRhy0ts
-        fzuHeQKj8Cwk7bOQtMxC0jILScsCRpZVjJKpBcW56bnFhgWGeanlesWJucWleel6yfm5mxjB
-        cauluYNx+6oPeocYmTgYDzFKcDArifAqLt+dKMSbklhZlVqUH19UmpNafIhRmoNFSZz3QtfJ
-        eCGB9MSS1OzU1ILUIpgsEwenVAPTwjefTojELjq0kEl4Y22S1uO7b6v/l0VpGpvyGMZmi6xk
-        LXug+rqtXern94fKe438ldYVBG8Ue/0zWSpLJrRYcSPzCgHR2WfF1sgJGHn+aa+5zcz0u1O5
-        6AVDu/n0C99uShx64vqoQEZE/Q7jjPtJk4vyNsxPrZgn83Xel82n5dfasYX5yXs/8i/afPdh
-        xpvPXc8neD9ZJMcW/VHmo2tWbeYksZ0hQgXbV5k+v8wvm/zkTv3cdzOjb+38V3v+qYRAvFtR
-        1pTvyoYWHuc0Ja5z2vakS5mzymuf9rLP89M9Evzx9bHNTPplV+RMF/VqbFsRqWsTt8JoaeCK
-        E8zXshg3TJTar/5FYm5gQ2HHk2glluKMREMt5qLiRAAzHHy3SgMAAA==
-X-CMS-MailID: 20211217010847epcas1p2d44a4b1a5fa713c126a48697305c80b3
-X-Msg-Generator: CA
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20211123084357epcas1p14833147710153f9606f14941ac8b0d96
-References: <CGME20211123084357epcas1p14833147710153f9606f14941ac8b0d96@epcas1p1.samsung.com>
-        <20211123083925.GA3277@kili>
-        <562b12ff-e395-c818-787e-7fd6ee6d53fb@samsung.com>
-        <20211216075233.GD1978@kadam>
-        <b4d0c326-3122-c5f9-f376-b122f263d92c@samsung.com>
-        <20211216080558.GE1978@kadam>
-        <c8d18573-5dc1-4d45-f134-2a1dbb7590b6@samsung.com>
-        <20211216155916.GA7738@kadam>
+Received: from amd.com (165.204.134.251) by HK0PR01CA0063.apcprd01.prod.exchangelabs.com (2603:1096:203:a6::27) with Microsoft SMTP Server (version=TLS1_2, cipher=) via Frontend Transport; Fri, 17 Dec 2021 03:10:04 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3a46d0f9-16aa-4867-64eb-08d9c10abc81
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3468:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB346858B70E9F4D7D4E850132EC789@DM6PR12MB3468.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: AsfmzyyBbu8Q9rnenfZOU0NgAnbj/cTZjDPap8YxJQC2dZSdOKg5pqRtGDgpKAB3cTitOKoEMP5v7VCbbH4J3/G76cxQNvtJt7Xw1hLhcbdi1c7mAEsUlkebTcZZ7vy96sTNoeYRcQc2qJYW+2F22zBmcZEmzj9B1aPOPM7sopgpIVM95fFbGSr5BQJ61OoGTcbX2g3Y2qf6bvPGESqsRzP1jpVmGhW2i35gc+18Yxn7WTh2/ElGMXFbeRFQm454YtA97Ff/rj8iFKBE/NL6n5ibykXEd14+bMaN3YW9EcWYMoJ647CnmtMPmpW9eWbFdmyWUDni3/zEogDly52hp+sIwHvJmQp8VnDvcmUdTd/fI+DpLfqEXMz4S+HIuTB4QJIwKG35VjRHTVMfXw8UJ32flOwKYHdxdRwlcg5Fd04n9CfEDJb3v4ATo/66x4feAIFMQ28tTuuFM/oc8bCe0Y5TNn7On+eGrmS06DWRyX9WIHrEapQE7fnyv/TOAHjD4utKzDO8Ou93A8CtllmdeUxeMSPuOx6nAk1KSZOysLv+WJE1XggMsOHyMLXKXUn+MGWSHl81yYD+FVXZ/CRSrR7SYF5CjVrlkNARwy5Be0nqrKnqLoLqw8rkoEsFsUqUnZFkj2H1FA4HmfwpNFz7fJEDHbUfQn2n5Aj/WaVUt5eMJCoYnG2hchqHPz6jDazCONT68zbFfDS8meWwoIzOHZp5+KaWrRaGgHPGAkaNiok=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(7416002)(956004)(2616005)(54906003)(66556008)(2906002)(508600001)(110136005)(86362001)(316002)(966005)(66476007)(38100700002)(66946007)(26005)(53546011)(4326008)(186003)(8676002)(36756003)(8936002)(6666004)(55016003)(8886007)(5660300002)(7696005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?EHcRj2iqfg+4rdAA1dd0tk9OgxWPOG2Q9R7OqM40ZN4cyd+HPe2YIazhA5yP?=
+ =?us-ascii?Q?slXcRAPseQysTvUvUylRCSPxTwf5xwb4lkYDHeInHSxu0ZDeMGq/Zz3p+j7i?=
+ =?us-ascii?Q?OgmzWMG75M2Ui1YJIiglBqTZKUsEzqf4WsUNog27wvZ6z2DvkHX4Yh+DcQYP?=
+ =?us-ascii?Q?q+FIkefAaollHdgMxeo2DCBbeH5fFtL+lUnv/HSw4uUyY9sSCANVInOee5J1?=
+ =?us-ascii?Q?YVnuv+SD9LKOyiOSDyb1/CtdxKSQ8w6uIckrwg9g8k1r7Txd/4OQyHfdLi9l?=
+ =?us-ascii?Q?fIBFaBEi5E5TbPJnoFLFHUMPUbly7DeGPIi9hIK2gzgdSblw2FWUfoEvyWOk?=
+ =?us-ascii?Q?f6wLs6A5ztGpgPIJK6VdQdTbXvupCOGXJB1rnRS743LC8oBKpN/eSz/04ZBG?=
+ =?us-ascii?Q?wEGW2rob6Eh7SMaztZDG71s3IDm/dr3IxUkNa7eLM3LrSp+DUysev//fB4fO?=
+ =?us-ascii?Q?KBeJYH98essGgjZkRRYAQRlGlkHK44p1o9U8iy3mlun857lOpo026GxG6L+h?=
+ =?us-ascii?Q?VOxXSondhRuZrMyznBmdt1jORNcLrMcLOWaUxD8ok3Nj3G9SAUUgQvA4dIxE?=
+ =?us-ascii?Q?byrPMYxLp5yB0eLsIoxi5+0TizoqK+D3+0ByfkNQIiiH1XnRLaNgLiudutjO?=
+ =?us-ascii?Q?2DAS/ti+NQ76O5S85CSFpd4FVvD3mktEO4h7xTw1/4UjV0ZP8I75pAVN+eCe?=
+ =?us-ascii?Q?TT1242D4OfTrEhGlDmhfafkNZ/OQGFtfJZEk9uMeDsnQWv+ex/QEtPpUJkco?=
+ =?us-ascii?Q?cbQcYddeih0NCcNFFbGWzejmofebk4wOpuko6GKjTLrgYzN9urf7+sqSae5f?=
+ =?us-ascii?Q?1sAwt/c9NsX6jQoSFnKs+mpnq5fejhwENdXJWI4ifeddhyig3HYlIKEj0CuP?=
+ =?us-ascii?Q?NJ4nNrk1sP392uSwkL6bnCAF25T/YzBBvWNA5SePLggxjlaiVXJOfnV9Afqi?=
+ =?us-ascii?Q?q1SYTjmk4ttF4gSPiwJA1Dg1QFfWjUYgfQDB031gYyyV/4IAGGN0EFENnZIv?=
+ =?us-ascii?Q?AYZitd9ppT1t1O+8PaenyPrKB/1Az9HVNHW5mj0jU9RuRlQSrdE29I6riyOX?=
+ =?us-ascii?Q?XfcEy7yJrlxrLTGWNvs4D0bdz2a3Fz/TsVpEv4Whj/gxDuvyd8fV//ivagdY?=
+ =?us-ascii?Q?EL1q0BBEKzR5uT6vtAsk0OuxpHJuT7IRazVEBzQpYfLWzpr0kg0NmGod2ise?=
+ =?us-ascii?Q?HUte5xhg92qc622kppVLWC9U3mFJIIdhtBuxILzVyenqc+B5687sdOK1/wK0?=
+ =?us-ascii?Q?3GyA9fQDMRipUfZcUH4vu8VmCEaYMPGs9npTpbNtNR7L+dNuSDLEy/ev7X2s?=
+ =?us-ascii?Q?DsNwm2A8IblaXpnLdbpvCup0RqHYnMdCw9vApYrLXmUtGjHJ/ELjnH1CdQy2?=
+ =?us-ascii?Q?oacCS/rt+h43jCLF9q3wCYPGRJtCqRT47C5+gamb+pvH/bLAHZd9mOjZ6N7h?=
+ =?us-ascii?Q?yReQ+2k5sO/dhLNZf8s2NpBi9DNbIwO5Vjz3zqlb5b4ZlxFQ/P6si05RtMgj?=
+ =?us-ascii?Q?6bla4Gn77mcgcgOyOH/0rkmSGxC2sIsQ+YCo5RXZavHT5p/Bzszs7UWKsqPH?=
+ =?us-ascii?Q?lyaQtPEonjP69YoKmyFdcz2mQyMc2WdwcSqdIYwVSKMI1gFT0NLX9sH0Um+9?=
+ =?us-ascii?Q?qXhnyXgT5oFWJpJ1e49xMoQ=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3a46d0f9-16aa-4867-64eb-08d9c10abc81
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Dec 2021 03:10:11.1378
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OUvyuqgTA0zNS+f7Y/AMI3SyM9qlNbHPaKg9iOZmanxRmzC7LaPbsbdx1C4N2e982fENHHuiUc6s4zr6rq9Rhg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3468
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/17/21 12:59 AM, Dan Carpenter wrote:
-> On Thu, Dec 16, 2021 at 05:38:04PM +0900, Chanwoo Choi wrote:
->>>
->>> To be honest, I'm not sure how this differs from other functions which
->>> return -EPROBE_DEFER.  How do other functions guarantee they will only
->>> be called from probe()?
->>
->> If it is possible to know extcon_get_extcon_dev() will be only callled on probe,
->> it is no problem. But, it is not able to guarantee that extcon_get_extcon_dev()
->> is called on probe. Because of this reason, this issue should be handled in each device driver.
->>
->> -EPROBE_DEFER is only for probe step. If return -EPROBE_DEFER except for probe,
->> it is wrong return value.
+On Fri, Dec 17, 2021 at 01:23:22AM +0800, Rafael J. Wysocki wrote:
+> On Tue, Nov 30, 2021 at 1:37 PM Huang Rui <ray.huang@amd.com> wrote:
+> >
+> > AMD CPPC (Collaborative Processor Performance Control) function uses MSR
+> > registers to manage the performance hints. So add the MSR register macro
+> > here.
+> >
+> > Signed-off-by: Huang Rui <ray.huang@amd.com>
 > 
-> The future is vast and unknowable.  We can't really future proof code
-> and we should never try do that if it makes the code more complicated
-> right now.
+> I guess I can take this one if there are no objections from the x86
+> maintainers, but it would be nice to receive an ACK from one of them.
 > 
-> When Andy submitted basically the same patch as me three years ago we
-> worried about future developers so we didn't merge his patch.  But
-> three years later no non-probe() were introduced.  Meanwhile the bad API
-> created bugs in the kernel for current users.
 
-As you mentioned, there were no use case except for probe step.
-OK. I agree this approach.
+Hi x86 maintainers, the MSR register descriptions are documented at
+Processor Programming Reference (PPR) for AMD Family 19h Model 51h,
+Revision A1 Processors:
 
+https://www.amd.com/system/files/TechDocs/56569-A1-PUB.zip
 
-For merging this patch, need to get ack from power-supply and usb maintainer.
-After getting the ack, I'll merge it. Thanks.
+Thanks,
+Ray
 
--- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+> > ---
+> >  arch/x86/include/asm/msr-index.h | 17 +++++++++++++++++
+> >  1 file changed, 17 insertions(+)
+> >
+> > diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+> > index 01e2650b9585..e7945ef6a8df 100644
+> > --- a/arch/x86/include/asm/msr-index.h
+> > +++ b/arch/x86/include/asm/msr-index.h
+> > @@ -486,6 +486,23 @@
+> >
+> >  #define MSR_AMD64_VIRT_SPEC_CTRL       0xc001011f
+> >
+> > +/* AMD Collaborative Processor Performance Control MSRs */
+> > +#define MSR_AMD_CPPC_CAP1              0xc00102b0
+> > +#define MSR_AMD_CPPC_ENABLE            0xc00102b1
+> > +#define MSR_AMD_CPPC_CAP2              0xc00102b2
+> > +#define MSR_AMD_CPPC_REQ               0xc00102b3
+> > +#define MSR_AMD_CPPC_STATUS            0xc00102b4
+> > +
+> > +#define CAP1_LOWEST_PERF(x)    (((x) >> 0) & 0xff)
+> > +#define CAP1_LOWNONLIN_PERF(x) (((x) >> 8) & 0xff)
+> > +#define CAP1_NOMINAL_PERF(x)   (((x) >> 16) & 0xff)
+> > +#define CAP1_HIGHEST_PERF(x)   (((x) >> 24) & 0xff)
+> > +
+> > +#define REQ_MAX_PERF(x)                (((x) & 0xff) << 0)
+> > +#define REQ_MIN_PERF(x)                (((x) & 0xff) << 8)
+> > +#define REQ_DES_PERF(x)                (((x) & 0xff) << 16)
+> > +#define REQ_ENERGY_PERF_PREF(x)        (((x) & 0xff) << 24)
+> > +
+> >  /* Fam 17h MSRs */
+> >  #define MSR_F17H_IRPERF                        0xc00000e9
+> >
+> > --
+> > 2.25.1
+> >
