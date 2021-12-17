@@ -2,184 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E126E479446
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Dec 2021 19:49:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55D36479486
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Dec 2021 20:06:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240444AbhLQStS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Dec 2021 13:49:18 -0500
-Received: from foss.arm.com ([217.140.110.172]:33446 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239844AbhLQStR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 17 Dec 2021 13:49:17 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 741541476;
-        Fri, 17 Dec 2021 10:49:17 -0800 (PST)
-Received: from e123771.cambridge.arm.com (e123771.cambridge.arm.com [10.1.33.13])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6D9403F774;
-        Fri, 17 Dec 2021 10:49:16 -0800 (PST)
-From:   Chetankumar Mistry <chetan.mistry@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     lukasz.luba@arm.com, rafael@kernel.org, daniel.lezcano@linaro.org,
-        amitk@kernel.org, rui.zhang@intel.com, linux-pm@vger.kernel.org
-Subject: [PATCH v2][RFC 2/2] Remove sysfs entry
-Date:   Fri, 17 Dec 2021 18:49:07 +0000
-Message-Id: <20211217184907.2103677-2-chetan.mistry@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211217184907.2103677-1-chetan.mistry@arm.com>
-References: <20211217184907.2103677-1-chetan.mistry@arm.com>
+        id S234115AbhLQTGR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Dec 2021 14:06:17 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:60308 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232624AbhLQTGQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Dec 2021 14:06:16 -0500
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 4.0.0)
+ id 6f7a3e1d06ed3d75; Fri, 17 Dec 2021 20:06:15 +0100
+Received: from kreacher.localnet (unknown [213.134.187.104])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id AD20766AF13;
+        Fri, 17 Dec 2021 20:06:14 +0100 (CET)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH] cpufreq: intel_pstate: Update cpuinfo.max_freq on HWP_CAP changes
+Date:   Fri, 17 Dec 2021 20:06:08 +0100
+Message-ID: <2628438.mvXUDI8C0e@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.187.104
+X-CLIENT-HOSTNAME: 213.134.187.104
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddrleeigdduvddtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpefhgedtffejheekgeeljeevvedtuefgffeiieejuddutdekgfejvdehueejjeetvdenucfkphepvddufedrudefgedrudekjedruddtgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukeejrddutdegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The previous patch introduced a sysfs entry to track the
-Ziegler-Nichols state.
-This patch will remove it, if it is unwanted.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Signed-off-by: Chetankumar Mistry <chetan.mistry@arm.com>
+With HWP enabled, when the turbo range of performance levels is
+disabled by the platform firmware, the CPU capacity is given by
+the "guaranteed performance" field in MSR_HWP_CAPABILITIES which
+is generally dynamic.  When it changes, the kernel receives an HWP
+notification interrupt handled by notify_hwp_interrupt().
+
+When the "guaranteed performance" value changes in the above
+configuration, the CPU performance scaling needs to be adjusted so
+as the use the new CPU capacity in computations, which means that
+the cpuinfo.max_freq value needs to be update for that CPU.
+
+Accordingly, modify intel_pstate_notify_work() to read
+MSR_HWP_CAPABILITIES and update cpuinfo.max_freq to reflect the
+new configuration (this update can be carried out even if the
+configuration doesn't actually change, because it simply doesn't
+matter then and it takes less time to update it than to do extra
+checks to decide whether or not a change has really occurred).
+
+Reported-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Tested-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/thermal/gov_power_allocator.c | 44 +++++++++++++--------------
- drivers/thermal/thermal_sysfs.c       |  2 --
- include/linux/thermal.h               |  7 -----
- 3 files changed, 21 insertions(+), 32 deletions(-)
+ drivers/cpufreq/intel_pstate.c |   29 ++++++++++++++++++++++-------
+ 1 file changed, 22 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
-index b7e85ee8a673..c0be03d0d161 100644
---- a/drivers/thermal/gov_power_allocator.c
-+++ b/drivers/thermal/gov_power_allocator.c
-@@ -100,6 +100,8 @@ struct zn_coefficients {
- 	s32 base_trough;
- 	s32 oscillation_count;
- 	enum pivot_type prev_pivot;
+Index: linux-pm/drivers/cpufreq/intel_pstate.c
+===================================================================
+--- linux-pm.orig/drivers/cpufreq/intel_pstate.c
++++ linux-pm/drivers/cpufreq/intel_pstate.c
+@@ -1124,19 +1124,22 @@ static void intel_pstate_update_policies
+ 		cpufreq_update_policy(cpu);
+ }
+ 
++static void __intel_pstate_update_max_freq(struct cpudata *cpudata,
++					   struct cpufreq_policy *policy)
++{
++	policy->cpuinfo.max_freq = global.turbo_disabled_mf ?
++			cpudata->pstate.max_freq : cpudata->pstate.turbo_freq;
++	refresh_frequency_limits(policy);
++}
 +
-+	int zn_state;
- };
+ static void intel_pstate_update_max_freq(unsigned int cpu)
+ {
+ 	struct cpufreq_policy *policy = cpufreq_cpu_acquire(cpu);
+-	struct cpudata *cpudata;
  
- /**
-@@ -431,7 +433,7 @@ static inline s32 get_oscillation_count(s32 curr_err,
-  * get_zn_state() - Update and get the current Ziegler-Nichols State
-  * @tzp: The thermal zone params to check to determine the current state
-  * @zn_state: The current state which should be returned if no changes are
-- * made
-+ *            made
-  *
-  * Return: The next zieger-nichols state for this pass of the PID controller
-  */
-@@ -514,9 +516,21 @@ static inline void ziegler_nichols(struct thermal_zone_device *tz, s32 next_err,
- 	bool is_safe =
- 		is_temperature_safe((control_temp - next_err), control_temp);
+ 	if (!policy)
+ 		return;
  
--	if (tz->tzp->ziegler_nichols == ZN_RESET) {
-+	zn_coeffs->zn_state = get_zn_state(tz->tzp, zn_coeffs->zn_state);
-+	switch (zn_coeffs->zn_state) {
-+	case ZN_ORIGINAL: {
-+		set_original_pid_coefficients(tz->tzp);
-+		zn_coeffs->zn_state = ZN_OFF;
-+		return;
-+	}
-+	case ZN_RESET: {
- 		reset_ziegler_nichols(zn_coeffs);
--		tz->tzp->ziegler_nichols = ZN_ON;
-+		zn_coeffs->zn_state = ZN_ON;
-+		break;
-+	}
-+
-+	case ZN_OFF:
-+		return;
- 	}
- 
- 	/* Override default PID Coefficients. These will be updated later according to the
-@@ -556,7 +570,7 @@ static inline void ziegler_nichols(struct thermal_zone_device *tz, s32 next_err,
- 	} else {
- 		set_zn_pid_coefficients(tz->tzp, zn_coeffs->period,
- 					zn_coeffs->k_ultimate);
--		tz->tzp->ziegler_nichols = ZN_OFF;
-+		zn_coeffs->zn_state = ZN_OFF;
- 	}
- 	return;
- 
-@@ -573,7 +587,7 @@ static inline void ziegler_nichols(struct thermal_zone_device *tz, s32 next_err,
- 					zn_coeffs->k_ultimate);
- 		((struct power_allocator_params *)tz->governor_data)
- 			->err_integral = 0;
--		tz->tzp->ziegler_nichols = ZN_OFF;
-+		zn_coeffs->zn_state = ZN_OFF;
- 	} else {
- 		if (peak_trough == PEAK)
- 			zn_coeffs->t_prev_peak = t_now;
-@@ -613,24 +627,7 @@ static u32 pid_controller(struct thermal_zone_device *tz,
- 
- 	err = control_temp - tz->temperature;
- 
--	switch (tz->tzp->ziegler_nichols) {
--	case ZN_ORIGINAL: {
--		set_original_pid_coefficients(tz->tzp);
--		tz->tzp->ziegler_nichols = ZN_OFF;
--		break;
--	}
--	case ZN_RESET: {
--		ziegler_nichols(tz, err, control_temp);
--		tz->tzp->ziegler_nichols = ZN_ON;
--		break;
--	}
--	case ZN_ON: {
--		ziegler_nichols(tz, err, control_temp);
--		break;
--	}
--	default:
--		break;
--	}
-+	ziegler_nichols(tz, err, control_temp);
- 
- 	err = int_to_frac(err);
- 
-@@ -1064,6 +1061,7 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
- 		return -ENOMEM;
- 
- 	params->zn_coeffs = zn_coeffs;
-+	zn_coeffs->zn_state = ZN_ON;
- 
- 	if (!tz->tzp) {
- 		tz->tzp = kzalloc(sizeof(*tz->tzp), GFP_KERNEL);
-diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-index d2f410a33995..f154bada2906 100644
---- a/drivers/thermal/thermal_sysfs.c
-+++ b/drivers/thermal/thermal_sysfs.c
-@@ -342,7 +342,6 @@ create_s32_tzp_attr(k_po);
- create_s32_tzp_attr(k_pu);
- create_s32_tzp_attr(k_i);
- create_s32_tzp_attr(k_d);
--create_s32_tzp_attr(ziegler_nichols);
- create_s32_tzp_attr(integral_cutoff);
- create_s32_tzp_attr(slope);
- create_s32_tzp_attr(offset);
-@@ -376,7 +375,6 @@ static struct attribute *thermal_zone_dev_attrs[] = {
- 	&dev_attr_k_pu.attr,
- 	&dev_attr_k_i.attr,
- 	&dev_attr_k_d.attr,
--	&dev_attr_ziegler_nichols.attr,
- 	&dev_attr_integral_cutoff.attr,
- 	&dev_attr_slope.attr,
- 	&dev_attr_offset.attr,
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index ed8cd6a826ed..c314893970b3 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -282,13 +282,6 @@ struct thermal_zone_params {
- 	 * 		Used by thermal zone drivers (default 0).
- 	 */
- 	int offset;
+-	cpudata = all_cpu_data[cpu];
+-	policy->cpuinfo.max_freq = global.turbo_disabled_mf ?
+-			cpudata->pstate.max_freq : cpudata->pstate.turbo_freq;
 -
--	/*
--	 * Ziegler-Nichols estimation setting. Allows the user to decide
--	 * whether to use original PID coefficients or calculate using
--	 * the Ziegler-Nichols algorithm
--	 */
--	s32 ziegler_nichols;
- };
+-	refresh_frequency_limits(policy);
++	__intel_pstate_update_max_freq(all_cpu_data[cpu], policy);
  
- /**
--- 
-2.25.1
+ 	cpufreq_cpu_release(policy);
+ }
+@@ -1584,8 +1592,15 @@ static void intel_pstate_notify_work(str
+ {
+ 	struct cpudata *cpudata =
+ 		container_of(to_delayed_work(work), struct cpudata, hwp_notify_work);
++	struct cpufreq_policy *policy = cpufreq_cpu_acquire(cpudata->cpu);
++
++	if (policy) {
++		intel_pstate_get_hwp_cap(cpudata);
++		__intel_pstate_update_max_freq(cpudata, policy);
++
++		cpufreq_cpu_release(policy);
++	}
+ 
+-	cpufreq_update_policy(cpudata->cpu);
+ 	wrmsrl_on_cpu(cpudata->cpu, MSR_HWP_STATUS, 0);
+ }
+ 
+
+
 
