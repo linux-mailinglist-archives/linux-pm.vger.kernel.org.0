@@ -2,368 +2,658 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EBF24784E5
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Dec 2021 07:29:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47AB547859D
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Dec 2021 08:35:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233217AbhLQG3c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Dec 2021 01:29:32 -0500
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:23762 "EHLO
-        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232073AbhLQG3b (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Dec 2021 01:29:31 -0500
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BH2UZGd009316;
-        Fri, 17 Dec 2021 06:29:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : content-type : in-reply-to : mime-version;
- s=corp-2021-07-09; bh=aqYVg5LJdIaojloGrIMe1822llZVNHtWXsNWDMdi5bE=;
- b=DOMlfndW4MN37ZjF6rpB4fHukNVdhUdzXnhL5IcxPBLfzO/bGCh8eJ8v7kDFWYCcW94C
- OzJZV5Cg0r6LiGKM/7XKkD1GIb3/heE63T1XegPsQcIqZCx7q1FD6Sj0iI2OfFm9GXdY
- VRQJebFTvRHWzADIZvzplFjzmQK2f0CKn7yFodd4T1dGE2V8R/jdU4hfczi/ca6Amjw9
- 8Btwqjk/BvwHZjcJZ601tZtaRQoP87EKce6s+ZJWlxd3WWjvO/LES16VB5p2navOM9rL
- ugSgIW5L+gC59IbGDlyT110MQGYv6pUr5ZJpZAi3lflMBsUa4zp0zdSsR2FxhdSL7KQj BQ== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3cyknp4w31-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Dec 2021 06:29:07 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1BH6GcKL079527;
-        Fri, 17 Dec 2021 06:29:06 GMT
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2101.outbound.protection.outlook.com [104.47.55.101])
-        by aserp3020.oracle.com with ESMTP id 3cxmrejmgb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Dec 2021 06:29:06 +0000
+        id S233722AbhLQHfa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Dec 2021 02:35:30 -0500
+Received: from mail-mw2nam12on2040.outbound.protection.outlook.com ([40.107.244.40]:10849
+        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233716AbhLQHf3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 17 Dec 2021 02:35:29 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kFZBGv6Uroi6kkgUiW2ukLLICGwdyH43oEXOOzUz0wpfO5JXcTuGr8JL0wJtEVaRSYVYJzXhTKt3otBsJ0UYPhj8ZivBJ9enS5H7Tl5ouvL9hYiGf9wM588QE6rBRtfLA8QoGZZGg5/28bDIhVhrOXqsEwaaOuiJ14Vt+wagdZFvpm7k3yYl1CmUZGC/sH+VhZ04ClQrFRDlFJeUsONjhvJGUwp5/L7pTQuBfknPv8cGGPUXgHJJ70qR9W9QVE4FlnisfE5EqAV5wQQalPcvhZJJMzZGoUB6KVij6738tWARty8fESent75fxiSciFMJAC4zEYsoLPK4C8SoT0VHLQ==
+ b=jV0o+0vOVUrQpOBC7hpjD6YeWFPREUvNKo5SY5px1Q0cwUoFRIxuS4l3l2tl/7NXTwaJNm9UqI4ehMysQQ6JmAAQ6EIsIAjpPVE7pAM5QyvNDOjJYWtPXV7VpgW2IBlg6YvW50zg5O8qck5HbT7QGMT5o8JzenC6CPPTO1R02sO64aZyeetcwZp/5T2ysy0wupKKXRjg6uOcb+fij9e19tRPsa9fp8lq9YHKYDuMTCTaT0tCmrn3CuOW1dGHKNkOmOIJfxxim7xCo2Xq8xx7GmoYmsF+4y/7KXz4Efeog/u/SaH4dF1+9zXj6pCY6MBNTVdk3Wihv3KaRdmh/DJU+A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aqYVg5LJdIaojloGrIMe1822llZVNHtWXsNWDMdi5bE=;
- b=Jmi1I9qMlAN11ISNtY9DyfQoO0FOagerBL/5tOOrPXd6ivBcDa3rRQaKES/o4aZnwCJ+W3jAJ3gTC/Xgs0XnAvYIApaQkMcC8YXcICJOBk0u8s1umhcxMWSPLe9P2EP+n+mN4ZXNP3F3LZktaPSvhEcz8ZReXY288D3vIz7sNmmaxOkHk5POTs7e272MjiETrFukv80IsjTRyAe6gjmgasT9wtp2nLFfX+GgaIyM//WFGerGja1FWZRkRiw6Us4COp0+tNp2DxKQfZA7oxx65LFYuHpGa6Z1cpbdNPzyAdMA1qkTdZ6qYh1nA4IhwdZRVDRajmL9DWasRu3Ely9ggg==
+ bh=6oSRb83T72s7b1Qu+f8gY3bPGlwWjJGNNrmL1lUXK/A=;
+ b=XJ1mimodzE87ikRemoBc+pfnHc1T89Xwlm12F2rb2atEbznQW9PFEE1t/K3ePOOW8LA0LjvwDeq+DYQqRllRPTiegBsHpEH89y1bSz41ESwARzNDhHJ2OgBXVlPM3Pcs9ZDyTy4Ob9gYHvx4mPkxYDoF3NGw8mM+QYwFmKtcqm9NRvQQlDnFF2lMmniVbfuqXpKpwdYMsyFpDbK4M6yyZPb5ZKpHJBr30dp22uxD90Ipb3FXUV9AQVMQHjp1gullSXIoHA0hc1oBln9vhMtIRKtv5CWDfo5wZuDoIoEmeC8eezRfgSuQIGEqgZoLNMNYBEyCVdQRsuW38gZLp8i5EQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aqYVg5LJdIaojloGrIMe1822llZVNHtWXsNWDMdi5bE=;
- b=kB0wZHkIokngF1dqv32dUTZ59qZ/bjGQOYGqp7LtMyDzvq/kD5lOGd96aar3SbHhADM+au9jfJ3uYiVnOM2c3KbORDd6q20IuIGkXqmnCf3YwjzpMXPO8VIVJ8ezlAKgn4hMV4VuqDirR3soC8CAuD9S/jbILvhdqwR7KCdlCHc=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by MWHPR10MB1246.namprd10.prod.outlook.com
- (2603:10b6:301:5::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.18; Fri, 17 Dec
- 2021 06:29:04 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::7194:c377:36cc:d9f0]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::7194:c377:36cc:d9f0%6]) with mapi id 15.20.4801.016; Fri, 17 Dec 2021
- 06:29:04 +0000
-Date:   Fri, 17 Dec 2021 09:28:46 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: [PATCH v3] extcon: fix extcon_get_extcon_dev() error handling
-Message-ID: <20211217062846.GA26548@kili>
+ bh=6oSRb83T72s7b1Qu+f8gY3bPGlwWjJGNNrmL1lUXK/A=;
+ b=L/l3PVbFyIfzpBLJQrurXLqFOoH9vcyFHYO6f0HZMJXLOfDGHRizfaorLPJSy2yJFGzQy/licr/ci2/4wdePBH+Y4suxkza4t4iQjOtXeIoRLUoqCRPHApl+Rt8jgHFot0h4571zVjK7jQyug+u/nA5sBxP7WWmrC/bWSeE1AbE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
+ DM6PR12MB2794.namprd12.prod.outlook.com (2603:10b6:5:48::22) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4778.17; Fri, 17 Dec 2021 07:35:23 +0000
+Received: from DM5PR12MB2504.namprd12.prod.outlook.com
+ ([fe80::5d07:e475:316c:d187]) by DM5PR12MB2504.namprd12.prod.outlook.com
+ ([fe80::5d07:e475:316c:d187%5]) with mapi id 15.20.4801.015; Fri, 17 Dec 2021
+ 07:35:22 +0000
+Date:   Fri, 17 Dec 2021 15:34:54 +0800
+From:   Huang Rui <ray.huang@amd.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Borislav Petkov <bp@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        Steven Noonan <steven@valvesoftware.com>,
+        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>
+Subject: Re: [PATCH v5 06/22] cpufreq: amd: introduce a new amd pstate driver
+ to support future processors
+Message-ID: <Ybw9nqrrrumSWpli@amd.com>
+References: <20211130123641.1449041-1-ray.huang@amd.com>
+ <20211130123641.1449041-7-ray.huang@amd.com>
+ <CAJZ5v0gxVTJ8KffVpcLUZ=KPVRwinV6Wdq+-s3RO_cv6bevxXQ@mail.gmail.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4855a130-b16b-d8d6-ec9b-ab1ac024e4a7@redhat.com>
-X-Mailer: git-send-email haha only kidding
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-ClientProxiedBy: ZR0P278CA0156.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:41::6) To MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28)
+In-Reply-To: <CAJZ5v0gxVTJ8KffVpcLUZ=KPVRwinV6Wdq+-s3RO_cv6bevxXQ@mail.gmail.com>
+X-ClientProxiedBy: SGAP274CA0012.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b6::24)
+ To DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c6cd5413-62be-41d1-9574-08d9c1268549
-X-MS-TrafficTypeDiagnostic: MWHPR10MB1246:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR10MB1246E4B951FA13800482D0C88E789@MWHPR10MB1246.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2331;
+X-MS-Office365-Filtering-Correlation-Id: ebdcf588-e8a9-4b03-8c5d-08d9c12fc86c
+X-MS-TrafficTypeDiagnostic: DM6PR12MB2794:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB2794422113EB58291438083BEC789@DM6PR12MB2794.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: z9Onsq+u+i8GctgZZemG9sxmRmiRUCQYSZJdehDadp0UJs9KAMq2Gl3B2ira7vSEHRdT7s7JkkSS0GktZ9uG1NJnTl15HeJqnsGRKthaQ4S6KSayAC/HcWx9Ly5V7LA6OfPe84kPMY4O3YN5YkxupWNyishXNluWwWTEWRzeE57UeDUbXZ28RWUeeriBsZIzU2B5VgG3YS6A0GJlmgCCmIjwnhmafOP1SJKtDu7wmu2vWo4Mqn9Abpdv4PZEWLDsJHlEau8I2hPQr2haNqcAXJNXVUc1YhpaSOGYY02Bb1R0NkogdzwlJ9kCxWKKEnSend/KBo2U/UQ7IN5Of42eyJqkhZt1IWcxaQfa7qtKT41V1bsfIRJ4RnYYGZu2igM8xb/AM/ywTtDHaVvQOKaVZaMWi5sysCrZ2DDwgPlMFdJRTXWv9vtTKc0A55JRflNJ+3pLE4WeEaBHY2lA3gPTytG1nXAj8is6UsoLDyuwztmcilt2qdZ9snnoU7N/ic02RJf4UVGaY7rITPcEhHUc59AIZoR4IPYpo4SnkpUfVUs05HQQk75wsBkWBm3suHcomsTbQebCXeoSf8XJf6g9p1OVbmOGGx/4Jzwxb14A3R764QNyFkDD77JRfupsT++r74Q/2CdEvEBhBiTYNnIaNtJpbKftQWn3elDh4KbnubB+GQ+uZTPel05DRMcSuZ5XWO5kBE9Nl4Yp4q5iL23l3A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(366004)(66946007)(33716001)(52116002)(186003)(1076003)(66476007)(6666004)(26005)(6506007)(7416002)(66556008)(316002)(4326008)(9686003)(8676002)(8936002)(110136005)(6486002)(54906003)(2906002)(86362001)(38350700002)(44832011)(6512007)(38100700002)(508600001)(83380400001)(5660300002)(33656002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 3WQeOUWu37hRXXlWyifeiRfb301Qcu+M/MeXtGjHUXcNaSfZwJAtN1fgNihbX18DkAH8036AR6jB8V20U+oCdyGaMyYC0JJTtso/D0xyDDsbvDcMwqhv8xGaaGuVfctRluoR1gtlM1ASkplU+0wcifiPKbsftVIfVsLW/Oo930YWLMaQ1Zx6KWsj3H/62icpxx6I2HS8DIcAcBq8sfjvAG7bWPeazv9QoIKSiWvdZCy1hHKK9QOmD5uMBQJeZRD6vcOlIGtrS+SNWReLAf5pQWFQUPdEgzgpUXb4yYTN9qUIfP9BBHUKw5zv09DoNj//YTH+dvEOglpFUCZXY9lwPI3NT17lkuIAlBVijusQf6DULp1R04LpjYfLfO5parF4QnmJ+1kyZVC407Wcc9FAaEF711NkjZJ4yCe5JFd53r6w+AzAsZdSYaXLj1x5/NuQrZQcgISCRpy1c9ytoOKLqR/qMP60W+WgojMqvMVnKEEjvuYK8SKxjH7RQN2cp3tXBSniMJgeQzw+mWuNmlsGwoNqoIkre9oM/umSP0S4YKnMCPGdj9zXAZlC02cy71FVjk7UxnT467QgeicDexixVCt7/feYGkqODzfVY3MqruTHPw6h1bihH8oR2B0SwP2wzTcHBOXDplInQBwIvlEfSQWwcgl6if1oZZbTzgVYGnczOIX6KvtQr80PWRjk8mzxiM3/LZq/RoGCb97TChcio6Vk4vh+LwAIhNbRGCIIlv0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(36756003)(7416002)(8936002)(186003)(6512007)(26005)(6486002)(2616005)(54906003)(38100700002)(66946007)(53546011)(6916009)(45080400002)(5660300002)(6666004)(966005)(66556008)(316002)(30864003)(66476007)(83380400001)(508600001)(86362001)(4326008)(2906002)(8676002)(6506007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4sYUnRCMspPD9/fCotIhymIbH88LdDXWjGRVLJLn2LDRf80tu+1OKbIPY1K4?=
- =?us-ascii?Q?bdPBoEg4o6AKyDTb2hOn0r/l23BThFoplcLE2JE7WfHoSp8V0RRkFmelbI+9?=
- =?us-ascii?Q?n/SA47uOyCEkrHSVGLLO4yDLzPnxle2Y5At4qTXEWGZXFCcPbDva0bferYRZ?=
- =?us-ascii?Q?Fgu2um3UhRAq9LfEd5Wext7ROZ8SmfBsJbM9sUQRfq2L1dVOg4JEZFq+lX84?=
- =?us-ascii?Q?BrugDxIw1ZBrJy5YJJD8XPPEsEuAzwmH/W5UJ164KkiHOJT9KILRIE5fNQUX?=
- =?us-ascii?Q?lyu1OfpWgkFUilwH6k8Nj6YgfUj1ZXcWH/0R0m96lqOUbnbFUKHeleWHdmBo?=
- =?us-ascii?Q?ec1f+qCjLxqoVcFD1QdpQCmI7zo+TI8Z6Lygi3GAcKi6yu7uEWNB0NZ626dQ?=
- =?us-ascii?Q?hRtqsuKzl2w+F1qx/JDhhSSfJq9TgoxELg8rFU4kFCVV+yEISEW7zA0089Ku?=
- =?us-ascii?Q?3C5qRUsbaF1y1eqvoGLcLE/ln/Cz7Mj4lDbAI9KTkGN+ypA0WN5JhG64vvg+?=
- =?us-ascii?Q?UE3jujtObvu+cOA4aytf6xfW78VlKx8YgtbJ3myE19ENjfro/R9kDtWm/6J0?=
- =?us-ascii?Q?T3pq86faAYQ2Ddf/MOxlgg/iVaZK40xtDuz2EudKlh+dzLut4U46C3m0yp1M?=
- =?us-ascii?Q?0Tp/mznybLz/M8W8MxxZArLIYcxCzEttp7SWKspekudemiOvFPI8f0/NzBYR?=
- =?us-ascii?Q?ooeKlfyxrFQRDWvNBIn4CL42ThPxzsGrx6t6SDdBseQcn+DyWG0maiajAvkI?=
- =?us-ascii?Q?RU2fsDxRY+vym/Jfx5Vmbm+3RnyZqTRVCMsq5s/VZ7MmuU/BNrS0u7wN/iKp?=
- =?us-ascii?Q?EHIdrKVEz3TQ5tcRH3+7bJOSQbZwhrJ/BKCxDk7KGgOife20FjwIwfvZEfGr?=
- =?us-ascii?Q?KTj8LlMp9RZPUtumQ2f1GM+5Vqd20PXZL+N5LKZudutKQWbnTzTPNLxF9ogY?=
- =?us-ascii?Q?qd76aBa0M1hLuLKNQFwkUW6kucDdjKN51x8ZLA8xBJfvYu+vZNBOKPdHc2ML?=
- =?us-ascii?Q?CDPttUfHStaKniIw55Q/nNx2pZNK4FpAFKdQlfvpKf2n2OsCsZMN25wNEC1C?=
- =?us-ascii?Q?te7BTh1C2oW5foHXKu1TOjsrtZHT1d8/s+u+svIEe3foOSWDOPcfz0Jppn/1?=
- =?us-ascii?Q?3eg4ITVkq5Pe5WwyZO9y8IKhqnD9CgJxvj96XA1bADd8fPXH2CXIf+F73C5F?=
- =?us-ascii?Q?FmFcm9wR9XOxiggUK3uSrEOKM+En8swTqDefOp4wMm23x5iIue73r5rYEP/9?=
- =?us-ascii?Q?eIJzbuiaWTWc7n9VL/27abtLPcCdWOD1Geh+9MRULnQKSc0LcBdyIMi5Ifyd?=
- =?us-ascii?Q?uF25I2ce2dYx0kmKM49MB72UjTzy++rs+4h6bAhUxm7eHYV9ci9nKY3Q78yo?=
- =?us-ascii?Q?V7LIBpUjOwPxLMN7dgu6b2n5OCohf4X1/y2mLg43XNxlgna4LjxrCZ7zMdPW?=
- =?us-ascii?Q?FNhS93z3dbO6yyLzR1PpVYI1lFJYQ55iFUwiwPEBDO9Hz22vPV8bzYrjp/LY?=
- =?us-ascii?Q?0JwRtwCBVLmvy7d+22lYJTQt01knfODYVPsZ54ZXAtlJZM4hGR6npDuxq0XT?=
- =?us-ascii?Q?RUZPp20Sk+GIDFsKC+oZY5bRLKnIcwOuvtuqrcWLFM2OcesacvCQkIsbudUT?=
- =?us-ascii?Q?Hcx/8a/aCCAQpdtBSRGsJGo5Q26dDghS85NZNZ9/D3NfCIQ9g4Aht7fGSOVJ?=
- =?us-ascii?Q?OEz10w=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c6cd5413-62be-41d1-9574-08d9c1268549
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3dJ2Aogr4+twPxI6M7wODiB+IhE5vYysoJqb/EAM/sz+r9D1mziSP64FdFmE?=
+ =?us-ascii?Q?381WwnNauNQ3uA7GqItK3RKfxoTk+9qX0D1/KJhUaFVgENSe5TprQB/7a4mI?=
+ =?us-ascii?Q?qkcify1W186fEONnWIJXjz6kD5WJS7I+H2DkTA1agDRPke9GcrlG2u6mNwx3?=
+ =?us-ascii?Q?v2jR7zjpT8jjfKyoRy9lCQFh8mcM9DYrchOBZCPWieDWM8oNXhr3aDEOkUkC?=
+ =?us-ascii?Q?c9yzKmdV++irYTha82aDu1SkxJVcdgCuKYMoSs6oi0nzShAaxkmVQD/d0YzC?=
+ =?us-ascii?Q?hvxyNjYjouiQAyLP71guG75eb67C2KEgZ04wRNanUh3TA2prsCcAcrphTGU9?=
+ =?us-ascii?Q?HsJ+pBKaCfVpANxc6ZEbJfbwIRqAn7HlkSD0h6PukRKDP3O8TDK4FwnBr5Qf?=
+ =?us-ascii?Q?9C+z+LygKdRO7VyMsezXDJTED9UIxEDZ1AfA4wb+kaq2lmUj79WqEgC027Jj?=
+ =?us-ascii?Q?MPwOqVPw8GAvOagnyTzqTekASkRFHXQGfKy3y1WE6Yptq8Dx8TR74FhlobWB?=
+ =?us-ascii?Q?JlceYpR2tnFfmxYBQqT7y/xHsz1Gb1HXPUl86pbTODak5FpPDQ/W8PBMYCW0?=
+ =?us-ascii?Q?1apjU7F8AVxXIIRpeu8+M0pI/IboRBXRcIX4Rzq8pommFfHZoun+luHzoW7x?=
+ =?us-ascii?Q?JIbXjTwe9XghY0k4nNAS/llXDi7nmLwR9+qUPw0hRWySAG+Yz8YMAiyIyc1L?=
+ =?us-ascii?Q?J9dIhMeQtkgFA2HLUw9quZ4jjmk4i/OPr3VerNk1blJ6WGsx9F2MUcdZMUTI?=
+ =?us-ascii?Q?2fFCdFwfwStpyG2Lv2X3Tlj/wANi89P9Y9hC3dmFvIEVA/RUmmx1Tq1eU4Ac?=
+ =?us-ascii?Q?s0R33Fg0OEEpfNsrn30fmqSsOcMy3NPNFdbZ6o1TP1fc3Qyi3R8kvUBJ1ke1?=
+ =?us-ascii?Q?7OgIRfUOhWN1IpwKdkBvo3vuhoNYSSi6kI8MRxaW+ReJikTo6jDa5WQHqJcE?=
+ =?us-ascii?Q?ZBfCv3J5eYFx6icKJSCc4gndNtnDgXxww8TsQgC5P1njnROFMNsSjY9pRRvv?=
+ =?us-ascii?Q?xTxs+w3cH844R9MbgcEaj9/x5Ua3hbz/XAScTzjtOTTklWOduv3qVZjOR3ee?=
+ =?us-ascii?Q?0fmshSsEl5sRoTgmDBepJ+zpZCvkScyYzEUAimH6Uv15r1C/EXJaP7W614Q5?=
+ =?us-ascii?Q?l5/1fRpdzOipKtTpmYg2rEL+tKdkpwe0Kh1Jxs9ZepftujDl7mtXf+pFT/zh?=
+ =?us-ascii?Q?OrjcPIyoQ4upCRjXnwwmTj2x3rf9Z15rFnffqPISPsnmRWvG6ki3M+dxw1fI?=
+ =?us-ascii?Q?/PHKHAXEGr6/VmYKS5j3Sdi/94At2NGNdRxUaSCVwoiE0ZCfjADAYnJ/k+KI?=
+ =?us-ascii?Q?QHLa/+6DtnFZDJtLqV6p5j8BKntLIGvv87xKonilePxKoAS/AEFKu0M4oVdP?=
+ =?us-ascii?Q?XX6pocbH7gYNg0A39S/RvNpP4s4mfaz59DULnP8R6Y5TA6Q6zGD9RZ0N8+XP?=
+ =?us-ascii?Q?4AQqJRuoSgc9ezrZ4wJNfjxp1JbzC5kyqSWZWU67Z00YZDeovwuX9nECas8w?=
+ =?us-ascii?Q?v3sJ4cIhrZhLCzHyxho4/cAcMzySW7z75S1QE+mabu9NNRVF3NajnLHL3oMy?=
+ =?us-ascii?Q?9kb0pWzubSOdxeffWIPjd46zSY5fu2R8CYwCl/8cuiiB9z85FOsr/pIXRMXA?=
+ =?us-ascii?Q?HdpZnm1vuFWYS6htH2kD0gY=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ebdcf588-e8a9-4b03-8c5d-08d9c12fc86c
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Dec 2021 06:29:04.0804
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Dec 2021 07:35:22.5441
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: iOPjDz9Oy/1s15H6/EMCxYIeaJ1w23xrCBrLEenz3GIIzAEoAdHZKDHfrZMkVbY2pekn2GCxjhGDGQqS4GHg+BY2iyrH3SqU2J0dY9qmRYg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1246
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10200 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 spamscore=0
- mlxlogscore=999 suspectscore=0 adultscore=0 malwarescore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2112170036
-X-Proofpoint-ORIG-GUID: YvdNwZKVkBxmmJ1ZV59z_l_kxTnf2j2H
-X-Proofpoint-GUID: YvdNwZKVkBxmmJ1ZV59z_l_kxTnf2j2H
+X-MS-Exchange-CrossTenant-UserPrincipalName: yYx6PULQXfrsN0cudvpbIa5VNQ6oK/ZBBVr4083K0JVDpkQN98XE3kF2qDjtjnXz3sEwX8t6NEkijSaiKjkB/Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2794
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The extcon_get_extcon_dev() function returns error pointers on error,
-NULL when it's a -EPROBE_DEFER defer situation, and ERR_PTR(-ENODEV)
-when the CONFIG_EXTCON option is disabled.  This is very complicated for
-the callers to handle and a number of them had bugs that would lead to
-an Oops.
+On Fri, Dec 17, 2021 at 01:59:35AM +0800, Rafael J. Wysocki wrote:
+> On Tue, Nov 30, 2021 at 1:37 PM Huang Rui <ray.huang@amd.com> wrote:
+> >
+> > amd-pstate is the AMD CPU performance scaling driver that introduces a
+> > new CPU frequency control mechanism on AMD Zen based CPU series in Linux
+> > kernel. The new mechanism is based on Collaborative processor
+> > performance control (CPPC) which is finer grain frequency management
+> > than legacy ACPI hardware P-States. Current AMD CPU platforms are using
+> > the ACPI P-states driver to manage CPU frequency and clocks with
+> > switching only in 3 P-states. AMD P-States is to replace the ACPI
+> > P-states controls, allows a flexible, low-latency interface for the
+> > Linux kernel to directly communicate the performance hints to hardware.
+> >
+> > "amd-pstate" leverages the Linux kernel governors such as *schedutil*,
+> > *ondemand*, etc. to manage the performance hints which are provided by CPPC
+> > hardware functionality. The first version for amd-pstate is to support one
+> > of the Zen3 processors, and we will support more in future after we verify
+> > the hardware and SBIOS functionalities.
+> >
+> > There are two types of hardware implementations for amd-pstate: one is full
+> > MSR support and another is shared memory support. It can use
+> > X86_FEATURE_CPPC feature flag to distinguish the different types.
+> >
+> > Using the new AMD P-States method + kernel governors (*schedutil*,
+> > *ondemand*, ...) to manage the frequency update is the most appropriate
+> > bridge between AMD Zen based hardware processor and Linux kernel, the
+> > processor is able to adjust to the most efficiency frequency according to
+> > the kernel scheduler loading.
+> >
+> > Please check the detailed CPU feature and MSR register description in
+> > Processor Programming Reference (PPR) for AMD Family 19h Model 51h,
+> > Revision A1 Processors:
+> >
+> > https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.amd.com%2Fsystem%2Ffiles%2FTechDocs%2F56569-A1-PUB.zip&amp;data=04%7C01%7Cray.huang%40amd.com%7C271b150291c64c7e3db808d9c0bdd9b0%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637752744522397473%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=VlOP2McSZlC11NJSJoVB74alfUqpdyDmoaAgT8Vl2Qc%3D&amp;reserved=0
+> >
+> > Signed-off-by: Huang Rui <ray.huang@amd.com>
+> > ---
+> >  drivers/cpufreq/Kconfig.x86  |  17 ++
+> >  drivers/cpufreq/Makefile     |   1 +
+> >  drivers/cpufreq/amd-pstate.c | 398 +++++++++++++++++++++++++++++++++++
+> >  3 files changed, 416 insertions(+)
+> >  create mode 100644 drivers/cpufreq/amd-pstate.c
+> >
+> > diff --git a/drivers/cpufreq/Kconfig.x86 b/drivers/cpufreq/Kconfig.x86
+> > index 92701a18bdd9..21837eb1698b 100644
+> > --- a/drivers/cpufreq/Kconfig.x86
+> > +++ b/drivers/cpufreq/Kconfig.x86
+> > @@ -34,6 +34,23 @@ config X86_PCC_CPUFREQ
+> >
+> >           If in doubt, say N.
+> >
+> > +config X86_AMD_PSTATE
+> > +       tristate "AMD Processor P-State driver"
+> > +       depends on X86
+> > +       select ACPI_PROCESSOR if ACPI
+> > +       select ACPI_CPPC_LIB if X86_64 && ACPI
+> > +       select CPU_FREQ_GOV_SCHEDUTIL if SMP
+> > +       help
+> > +         This driver adds a CPUFreq driver which utilizes a fine grain
+> > +         processor performance frequency control range instead of legacy
+> > +         performance levels. This driver supports the AMD processors with
+> > +         _CPC object in the SBIOS.
+> 
+> Well, _CPC needs to be present in the ACPI tables of the system.
 
-In real life, there are two things which prevented crashes.  First,
-error pointers would only be returned if there was bug in the caller
-where they passed a NULL "extcon_name" and none of them do that.
-Second, only two out of the eight drivers will build when CONFIG_EXTCON
-is disabled.
+Yes, will modify the words.
 
-The normal way to write this would be to return -EPROBE_DEFER directly
-when appropriate and return NULL when CONFIG_EXTCON is disabled.  Then
-the error handling is simple and just looks like:
+> 
+> > +
+> > +         For details, take a look at:
+> > +         <file:Documentation/admin-guide/pm/amd-pstate.rst>.
+> > +
+> > +         If in doubt, say N.
+> > +
+> >  config X86_ACPI_CPUFREQ
+> >         tristate "ACPI Processor P-States driver"
+> >         depends on ACPI_PROCESSOR
+> > diff --git a/drivers/cpufreq/Makefile b/drivers/cpufreq/Makefile
+> > index 48ee5859030c..c8d307010922 100644
+> > --- a/drivers/cpufreq/Makefile
+> > +++ b/drivers/cpufreq/Makefile
+> > @@ -25,6 +25,7 @@ obj-$(CONFIG_CPUFREQ_DT_PLATDEV)      += cpufreq-dt-platdev.o
+> >  # speedstep-* is preferred over p4-clockmod.
+> >
+> >  obj-$(CONFIG_X86_ACPI_CPUFREQ)         += acpi-cpufreq.o
+> > +obj-$(CONFIG_X86_AMD_PSTATE)           += amd-pstate.o
+> >  obj-$(CONFIG_X86_POWERNOW_K8)          += powernow-k8.o
+> >  obj-$(CONFIG_X86_PCC_CPUFREQ)          += pcc-cpufreq.o
+> >  obj-$(CONFIG_X86_POWERNOW_K6)          += powernow-k6.o
+> > diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> > new file mode 100644
+> > index 000000000000..20ffbc30118f
+> > --- /dev/null
+> > +++ b/drivers/cpufreq/amd-pstate.c
+> > @@ -0,0 +1,398 @@
+> > +// SPDX-License-Identifier: GPL-2.0-or-later
+> > +/*
+> > + * amd-pstate.c - AMD Processor P-state Frequency Driver
+> > + *
+> > + * Copyright (C) 2021 Advanced Micro Devices, Inc. All Rights Reserved.
+> > + *
+> > + * Author: Huang Rui <ray.huang@amd.com>
+> 
+> Given the lack of other documentation, it would be nice to provide at
+> least a brief description of the driver here.
 
-	dev->edev = extcon_get_extcon_dev(acpi_dev_name(adev));
-	if (IS_ERR(dev->edev))
-		return PTR_ERR(dev->edev);
+Fine, will add the description in V6.
 
-For the two drivers which can build with CONFIG_EXTCON disabled, then
-extcon_get_extcon_dev() will now return NULL which is not treated as an
-error and the probe will continue successfully.  Those two drivers are
-"typec_fusb302" and "max8997-battery".  In the original code, the
-typec_fusb302 driver had an 800ms hang in tcpm_get_current_limit() but
-now that function is a no-op.  For the max8997-battery driver everything
-should continue working as is.
+> 
+> > + */
+> > +
+> > +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> > +
+> > +#include <linux/kernel.h>
+> > +#include <linux/module.h>
+> > +#include <linux/init.h>
+> > +#include <linux/smp.h>
+> > +#include <linux/sched.h>
+> > +#include <linux/cpufreq.h>
+> > +#include <linux/compiler.h>
+> > +#include <linux/dmi.h>
+> > +#include <linux/slab.h>
+> > +#include <linux/acpi.h>
+> > +#include <linux/io.h>
+> > +#include <linux/delay.h>
+> > +#include <linux/uaccess.h>
+> > +#include <linux/static_call.h>
+> > +
+> > +#include <acpi/processor.h>
+> > +#include <acpi/cppc_acpi.h>
+> > +
+> > +#include <asm/msr.h>
+> > +#include <asm/processor.h>
+> > +#include <asm/cpufeature.h>
+> > +#include <asm/cpu_device_id.h>
+> > +
+> > +#define AMD_PSTATE_TRANSITION_LATENCY  0x20000
+> > +#define AMD_PSTATE_TRANSITION_DELAY    500
+> > +
+> > +static struct cpufreq_driver amd_pstate_driver;
+> > +
+> > +struct amd_cpudata {
+> > +       int     cpu;
+> > +
+> > +       struct freq_qos_request req[2];
+> > +
+> > +       u64     cppc_req_cached;
+> > +
+> > +       u32     highest_perf;
+> > +       u32     nominal_perf;
+> > +       u32     lowest_nonlinear_perf;
+> > +       u32     lowest_perf;
+> > +
+> > +       u32     max_freq;
+> > +       u32     min_freq;
+> > +       u32     nominal_freq;
+> > +       u32     lowest_nonlinear_freq;
+> > +};
+> 
+> Please describe the fields of this structure, preferably in a kerneldoc comment.
 
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
----
-v2: return NULL when CONFIG_EXTCON is disabled
-v3: Add a note to extcon_get_extcon_dev() to say that it may only be
-    called from probe().
+OK.
 
- drivers/extcon/extcon.c                |  4 +++-
- include/linux/extcon.h                 |  2 +-
- drivers/extcon/extcon-axp288.c         |  4 ++--
- drivers/power/supply/axp288_charger.c  | 17 ++++++++++-------
- drivers/power/supply/charger-manager.c |  7 ++-----
- drivers/power/supply/max8997_charger.c | 10 +++++-----
- drivers/usb/dwc3/drd.c                 |  9 ++-------
- drivers/usb/phy/phy-omap-otg.c         |  4 ++--
- drivers/usb/typec/tcpm/fusb302.c       |  4 ++--
- 9 files changed, 29 insertions(+), 32 deletions(-)
+> 
+> > +
+> > +static inline int pstate_enable(bool enable)
+> > +{
+> > +       return wrmsrl_safe(MSR_AMD_CPPC_ENABLE, enable);
+> > +}
+> > +
+> > +DEFINE_STATIC_CALL(amd_pstate_enable, pstate_enable);
+> 
+> Why do you need a static call here?
+> 
+> It doesn't get updated anywhere below.
 
-diff --git a/drivers/extcon/extcon.c b/drivers/extcon/extcon.c
-index e7a9561a826d..9eb92997f3ae 100644
---- a/drivers/extcon/extcon.c
-+++ b/drivers/extcon/extcon.c
-@@ -863,6 +863,8 @@ EXPORT_SYMBOL_GPL(extcon_set_property_capability);
-  * @extcon_name:	the extcon name provided with extcon_dev_register()
-  *
-  * Return the pointer of extcon device if success or ERR_PTR(err) if fail.
-+ * NOTE: This function returns -EPROBE_DEFER so it may only be called from
-+ * probe() functions.
-  */
- struct extcon_dev *extcon_get_extcon_dev(const char *extcon_name)
- {
-@@ -876,7 +878,7 @@ struct extcon_dev *extcon_get_extcon_dev(const char *extcon_name)
- 		if (!strcmp(sd->name, extcon_name))
- 			goto out;
- 	}
--	sd = NULL;
-+	sd = ERR_PTR(-EPROBE_DEFER);
- out:
- 	mutex_unlock(&extcon_dev_list_lock);
- 	return sd;
-diff --git a/include/linux/extcon.h b/include/linux/extcon.h
-index 0c19010da77f..685401d94d39 100644
---- a/include/linux/extcon.h
-+++ b/include/linux/extcon.h
-@@ -296,7 +296,7 @@ static inline void devm_extcon_unregister_notifier_all(struct device *dev,
- 
- static inline struct extcon_dev *extcon_get_extcon_dev(const char *extcon_name)
- {
--	return ERR_PTR(-ENODEV);
-+	return NULL;
- }
- 
- static inline struct extcon_dev *extcon_find_edev_by_node(struct device_node *node)
-diff --git a/drivers/extcon/extcon-axp288.c b/drivers/extcon/extcon-axp288.c
-index 7c6d5857ff25..180be768c215 100644
---- a/drivers/extcon/extcon-axp288.c
-+++ b/drivers/extcon/extcon-axp288.c
-@@ -394,8 +394,8 @@ static int axp288_extcon_probe(struct platform_device *pdev)
- 		if (adev) {
- 			info->id_extcon = extcon_get_extcon_dev(acpi_dev_name(adev));
- 			put_device(&adev->dev);
--			if (!info->id_extcon)
--				return -EPROBE_DEFER;
-+			if (IS_ERR(info->id_extcon))
-+				return PTR_ERR(info->id_extcon);
- 
- 			dev_info(dev, "controlling USB role\n");
- 		} else {
-diff --git a/drivers/power/supply/axp288_charger.c b/drivers/power/supply/axp288_charger.c
-index ec41f6cd3f93..4acfeb52a44e 100644
---- a/drivers/power/supply/axp288_charger.c
-+++ b/drivers/power/supply/axp288_charger.c
-@@ -848,17 +848,20 @@ static int axp288_charger_probe(struct platform_device *pdev)
- 	info->regmap_irqc = axp20x->regmap_irqc;
- 
- 	info->cable.edev = extcon_get_extcon_dev(AXP288_EXTCON_DEV_NAME);
--	if (info->cable.edev == NULL) {
--		dev_dbg(dev, "%s is not ready, probe deferred\n",
--			AXP288_EXTCON_DEV_NAME);
--		return -EPROBE_DEFER;
-+	if (IS_ERR(info->cable.edev)) {
-+		dev_err_probe(dev, PTR_ERR(info->cable.edev),
-+			      "extcon_get_extcon_dev(%s) failed\n",
-+			      AXP288_EXTCON_DEV_NAME);
-+		return PTR_ERR(info->cable.edev);
- 	}
- 
- 	if (acpi_dev_present(USB_HOST_EXTCON_HID, NULL, -1)) {
- 		info->otg.cable = extcon_get_extcon_dev(USB_HOST_EXTCON_NAME);
--		if (info->otg.cable == NULL) {
--			dev_dbg(dev, "EXTCON_USB_HOST is not ready, probe deferred\n");
--			return -EPROBE_DEFER;
-+		if (IS_ERR(info->otg.cable)) {
-+			dev_err_probe(dev, PTR_ERR(info->otg.cable),
-+				      "extcon_get_extcon_dev(%s) failed\n",
-+				      USB_HOST_EXTCON_NAME);
-+			return PTR_ERR(info->otg.cable);
- 		}
- 		dev_info(dev, "Using " USB_HOST_EXTCON_HID " extcon for usb-id\n");
- 	}
-diff --git a/drivers/power/supply/charger-manager.c b/drivers/power/supply/charger-manager.c
-index d67edb760c94..92db79400a6a 100644
---- a/drivers/power/supply/charger-manager.c
-+++ b/drivers/power/supply/charger-manager.c
-@@ -985,13 +985,10 @@ static int charger_extcon_init(struct charger_manager *cm,
- 	cable->nb.notifier_call = charger_extcon_notifier;
- 
- 	cable->extcon_dev = extcon_get_extcon_dev(cable->extcon_name);
--	if (IS_ERR_OR_NULL(cable->extcon_dev)) {
-+	if (IS_ERR(cable->extcon_dev)) {
- 		pr_err("Cannot find extcon_dev for %s (cable: %s)\n",
- 			cable->extcon_name, cable->name);
--		if (cable->extcon_dev == NULL)
--			return -EPROBE_DEFER;
--		else
--			return PTR_ERR(cable->extcon_dev);
-+		return PTR_ERR(cable->extcon_dev);
- 	}
- 
- 	for (i = 0; i < ARRAY_SIZE(extcon_mapping); i++) {
-diff --git a/drivers/power/supply/max8997_charger.c b/drivers/power/supply/max8997_charger.c
-index 25207fe2aa68..634658adf313 100644
---- a/drivers/power/supply/max8997_charger.c
-+++ b/drivers/power/supply/max8997_charger.c
-@@ -248,13 +248,13 @@ static int max8997_battery_probe(struct platform_device *pdev)
- 		dev_info(&pdev->dev, "couldn't get charger regulator\n");
- 	}
- 	charger->edev = extcon_get_extcon_dev("max8997-muic");
--	if (IS_ERR_OR_NULL(charger->edev)) {
--		if (!charger->edev)
--			return -EPROBE_DEFER;
--		dev_info(charger->dev, "couldn't get extcon device\n");
-+	if (IS_ERR(charger->edev)) {
-+		dev_err_probe(charger->dev, PTR_ERR(charger->edev),
-+			      "couldn't get extcon device: max8997-muic\n");
-+		return PTR_ERR(charger->edev);
- 	}
- 
--	if (!IS_ERR(charger->reg) && !IS_ERR_OR_NULL(charger->edev)) {
-+	if (!IS_ERR(charger->reg)) {
- 		INIT_WORK(&charger->extcon_work, max8997_battery_extcon_evt_worker);
- 		ret = devm_add_action(&pdev->dev, max8997_battery_extcon_evt_stop_work, charger);
- 		if (ret) {
-diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
-index d7f76835137f..a490f79131c1 100644
---- a/drivers/usb/dwc3/drd.c
-+++ b/drivers/usb/dwc3/drd.c
-@@ -454,13 +454,8 @@ static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
- 	 * This device property is for kernel internal use only and
- 	 * is expected to be set by the glue code.
- 	 */
--	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
--		edev = extcon_get_extcon_dev(name);
--		if (!edev)
--			return ERR_PTR(-EPROBE_DEFER);
--
--		return edev;
--	}
-+	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0)
-+		return extcon_get_extcon_dev(name);
- 
- 	/*
- 	 * Try to get an extcon device from the USB PHY controller's "port"
-diff --git a/drivers/usb/phy/phy-omap-otg.c b/drivers/usb/phy/phy-omap-otg.c
-index ee0863c6553e..6e6ef8c0bc7e 100644
---- a/drivers/usb/phy/phy-omap-otg.c
-+++ b/drivers/usb/phy/phy-omap-otg.c
-@@ -95,8 +95,8 @@ static int omap_otg_probe(struct platform_device *pdev)
- 		return -ENODEV;
- 
- 	extcon = extcon_get_extcon_dev(config->extcon);
--	if (!extcon)
--		return -EPROBE_DEFER;
-+	if (IS_ERR(extcon))
-+		return PTR_ERR(extcon);
- 
- 	otg_dev = devm_kzalloc(&pdev->dev, sizeof(*otg_dev), GFP_KERNEL);
- 	if (!otg_dev)
-diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
-index 72f9001b0792..96c55eaf3f80 100644
---- a/drivers/usb/typec/tcpm/fusb302.c
-+++ b/drivers/usb/typec/tcpm/fusb302.c
-@@ -1708,8 +1708,8 @@ static int fusb302_probe(struct i2c_client *client,
- 	 */
- 	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
- 		chip->extcon = extcon_get_extcon_dev(name);
--		if (!chip->extcon)
--			return -EPROBE_DEFER;
-+		if (IS_ERR(chip->extcon))
-+			return PTR_ERR(chip->extcon);
- 	}
- 
- 	chip->vbus = devm_regulator_get(chip->dev, "vbus");
--- 
-2.20.1
+Ah, the update behavior is defined in the following patch 8 (shared memory
+support). Sorry to make you confused.
 
+> 
+> > +
+> > +static inline int amd_pstate_enable(bool enable)
+> > +{
+> > +       return static_call(amd_pstate_enable)(enable);
+> > +}
+> > +
+> > +static int pstate_init_perf(struct amd_cpudata *cpudata)
+> > +{
+> > +       u64 cap1;
+> > +
+> > +       int ret = rdmsrl_safe_on_cpu(cpudata->cpu, MSR_AMD_CPPC_CAP1,
+> > +                                    &cap1);
+> > +       if (ret)
+> > +               return ret;
+> > +
+> > +       /*
+> > +        * TODO: Introduce AMD specific power feature.
+> > +        *
+> > +        * CPPC entry doesn't indicate the highest performance in some ASICs.
+> > +        */
+> > +       WRITE_ONCE(cpudata->highest_perf, amd_get_highest_perf());
+> > +
+> > +       WRITE_ONCE(cpudata->nominal_perf, CAP1_NOMINAL_PERF(cap1));
+> > +       WRITE_ONCE(cpudata->lowest_nonlinear_perf, CAP1_LOWNONLIN_PERF(cap1));
+> > +       WRITE_ONCE(cpudata->lowest_perf, CAP1_LOWEST_PERF(cap1));
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +DEFINE_STATIC_CALL(amd_pstate_init_perf, pstate_init_perf);
+> 
+> And same here.
+> 
+> > +
+> > +static inline int amd_pstate_init_perf(struct amd_cpudata *cpudata)
+> > +{
+> > +       return static_call(amd_pstate_init_perf)(cpudata);
+> > +}
+> > +
+> > +static void pstate_update_perf(struct amd_cpudata *cpudata, u32 min_perf,
+> > +                              u32 des_perf, u32 max_perf, bool fast_switch)
+> > +{
+> > +       if (fast_switch)
+> > +               wrmsrl(MSR_AMD_CPPC_REQ, READ_ONCE(cpudata->cppc_req_cached));
+> > +       else
+> > +               wrmsrl_on_cpu(cpudata->cpu, MSR_AMD_CPPC_REQ,
+> > +                             READ_ONCE(cpudata->cppc_req_cached));
+> > +}
+> > +
+> > +DEFINE_STATIC_CALL(amd_pstate_update_perf, pstate_update_perf);
+> 
+> Same here.
+> 
+> > +
+> > +static inline void amd_pstate_update_perf(struct amd_cpudata *cpudata,
+> > +                                         u32 min_perf, u32 des_perf,
+> > +                                         u32 max_perf, bool fast_switch)
+> > +{
+> > +       static_call(amd_pstate_update_perf)(cpudata, min_perf, des_perf,
+> > +                                           max_perf, fast_switch);
+> > +}
+> > +
+> > +static void amd_pstate_update(struct amd_cpudata *cpudata, u32 min_perf,
+> > +                             u32 des_perf, u32 max_perf, bool fast_switch)
+> > +{
+> > +       u64 prev = READ_ONCE(cpudata->cppc_req_cached);
+> > +       u64 value = prev;
+> > +
+> > +       value &= ~REQ_MIN_PERF(~0L);
+> > +       value |= REQ_MIN_PERF(min_perf);
+> > +
+> > +       value &= ~REQ_DES_PERF(~0L);
+> > +       value |= REQ_DES_PERF(des_perf);
+> > +
+> > +       value &= ~REQ_MAX_PERF(~0L);
+> > +       value |= REQ_MAX_PERF(max_perf);
+> > +
+> > +       if (value == prev)
+> > +               return;
+> > +
+> > +       WRITE_ONCE(cpudata->cppc_req_cached, value);
+> > +
+> > +       amd_pstate_update_perf(cpudata, min_perf, des_perf,
+> > +                              max_perf, fast_switch);
+> > +}
+> > +
+> > +static int amd_pstate_verify(struct cpufreq_policy_data *policy)
+> > +{
+> > +       cpufreq_verify_within_cpu_limits(policy);
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +static int amd_pstate_target(struct cpufreq_policy *policy,
+> > +                            unsigned int target_freq,
+> > +                            unsigned int relation)
+> > +{
+> > +       struct cpufreq_freqs freqs;
+> > +       struct amd_cpudata *cpudata = policy->driver_data;
+> > +       unsigned long max_perf, min_perf, des_perf, cap_perf;
+> > +
+> > +       if (!cpudata->max_freq)
+> > +               return -ENODEV;
+> > +
+> > +       cap_perf = READ_ONCE(cpudata->highest_perf);
+> > +       min_perf = READ_ONCE(cpudata->lowest_nonlinear_perf);
+> > +       max_perf = cap_perf;
+> > +
+> > +       freqs.old = policy->cur;
+> > +       freqs.new = target_freq;
+> > +
+> > +       des_perf = DIV_ROUND_CLOSEST(target_freq * cap_perf,
+> > +                                    cpudata->max_freq);
+> > +
+> > +       cpufreq_freq_transition_begin(policy, &freqs);
+> > +       amd_pstate_update(cpudata, min_perf, des_perf,
+> > +                         max_perf, false);
+> > +       cpufreq_freq_transition_end(policy, &freqs, false);
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +static int amd_get_min_freq(struct amd_cpudata *cpudata)
+> > +{
+> > +       struct cppc_perf_caps cppc_perf;
+> > +
+> > +       int ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
+> > +       if (ret)
+> > +               return ret;
+> > +
+> > +       /* Switch to khz */
+> > +       return cppc_perf.lowest_freq * 1000;
+> > +}
+> > +
+> > +static int amd_get_max_freq(struct amd_cpudata *cpudata)
+> > +{
+> > +       struct cppc_perf_caps cppc_perf;
+> > +       u32 max_perf, max_freq, nominal_freq, nominal_perf;
+> > +       u64 boost_ratio;
+> > +
+> > +       int ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
+> > +       if (ret)
+> > +               return ret;
+> > +
+> > +       nominal_freq = cppc_perf.nominal_freq;
+> > +       nominal_perf = READ_ONCE(cpudata->nominal_perf);
+> > +       max_perf = READ_ONCE(cpudata->highest_perf);
+> > +
+> > +       boost_ratio = div_u64(max_perf << SCHED_CAPACITY_SHIFT,
+> > +                             nominal_perf);
+> > +
+> > +       max_freq = nominal_freq * boost_ratio >> SCHED_CAPACITY_SHIFT;
+> > +
+> > +       /* Switch to khz */
+> > +       return max_freq * 1000;
+> > +}
+> > +
+> > +static int amd_get_nominal_freq(struct amd_cpudata *cpudata)
+> > +{
+> > +       struct cppc_perf_caps cppc_perf;
+> > +
+> > +       int ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
+> > +       if (ret)
+> > +               return ret;
+> > +
+> > +       /* Switch to khz */
+> > +       return cppc_perf.nominal_freq * 1000;
+> > +}
+> > +
+> > +static int amd_get_lowest_nonlinear_freq(struct amd_cpudata *cpudata)
+> > +{
+> > +       struct cppc_perf_caps cppc_perf;
+> > +       u32 lowest_nonlinear_freq, lowest_nonlinear_perf,
+> > +           nominal_freq, nominal_perf;
+> > +       u64 lowest_nonlinear_ratio;
+> > +
+> > +       int ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
+> > +       if (ret)
+> > +               return ret;
+> > +
+> > +       nominal_freq = cppc_perf.nominal_freq;
+> > +       nominal_perf = READ_ONCE(cpudata->nominal_perf);
+> > +
+> > +       lowest_nonlinear_perf = cppc_perf.lowest_nonlinear_perf;
+> > +
+> > +       lowest_nonlinear_ratio = div_u64(lowest_nonlinear_perf << SCHED_CAPACITY_SHIFT,
+> > +                                        nominal_perf);
+> > +
+> > +       lowest_nonlinear_freq = nominal_freq * lowest_nonlinear_ratio >> SCHED_CAPACITY_SHIFT;
+> > +
+> > +       /* Switch to khz */
+> > +       return lowest_nonlinear_freq * 1000;
+> > +}
+> > +
+> > +static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
+> > +{
+> > +       int min_freq, max_freq, nominal_freq, lowest_nonlinear_freq, ret;
+> > +       struct device *dev;
+> > +       struct amd_cpudata *cpudata;
+> > +
+> > +       dev = get_cpu_device(policy->cpu);
+> > +       if (!dev)
+> > +               return -ENODEV;
+> > +
+> > +       cpudata = kzalloc(sizeof(*cpudata), GFP_KERNEL);
+> > +       if (!cpudata)
+> > +               return -ENOMEM;
+> > +
+> > +       cpudata->cpu = policy->cpu;
+> > +
+> > +       ret = amd_pstate_init_perf(cpudata);
+> > +       if (ret)
+> > +               goto free_cpudata1;
+> > +
+> > +       min_freq = amd_get_min_freq(cpudata);
+> > +       max_freq = amd_get_max_freq(cpudata);
+> > +       nominal_freq = amd_get_nominal_freq(cpudata);
+> > +       lowest_nonlinear_freq = amd_get_lowest_nonlinear_freq(cpudata);
+> > +
+> > +       if (min_freq < 0 || max_freq < 0 || min_freq > max_freq) {
+> > +               dev_err(dev, "min_freq(%d) or max_freq(%d) value is incorrect\n",
+> > +                       min_freq, max_freq);
+> > +               ret = -EINVAL;
+> > +               goto free_cpudata1;
+> > +       }
+> > +
+> > +       policy->cpuinfo.transition_latency = AMD_PSTATE_TRANSITION_LATENCY;
+> > +       policy->transition_delay_us = AMD_PSTATE_TRANSITION_DELAY;
+> > +
+> > +       policy->min = min_freq;
+> > +       policy->max = max_freq;
+> > +
+> > +       policy->cpuinfo.min_freq = min_freq;
+> > +       policy->cpuinfo.max_freq = max_freq;
+> > +
+> > +       /* It will be updated by governor */
+> > +       policy->cur = policy->cpuinfo.min_freq;
+> 
+> The freq_qos requests below are never updated in this file.  What are they for?
+
+The freq_qos requests will be updated while we set boost disabled or
+enabled in patch 10. Sorry to make you confused again. Should I move the
+freq_qos requests implementation into patch 10 as well?
+
+Thanks,
+Ray
+
+> 
+> > +
+> > +       ret = freq_qos_add_request(&policy->constraints, &cpudata->req[0],
+> > +                                  FREQ_QOS_MIN, policy->cpuinfo.min_freq);
+> > +       if (ret < 0) {
+> > +               dev_err(dev, "Failed to add min-freq constraint (%d)\n", ret);
+> > +               goto free_cpudata1;
+> > +       }
+> > +
+> > +       ret = freq_qos_add_request(&policy->constraints, &cpudata->req[1],
+> > +                                  FREQ_QOS_MAX, policy->cpuinfo.max_freq);
+> > +       if (ret < 0) {
+> > +               dev_err(dev, "Failed to add max-freq constraint (%d)\n", ret);
+> > +               goto free_cpudata2;
+> > +       }
+> > +
+> > +       /* Initial processor data capability frequencies */
+> > +       cpudata->max_freq = max_freq;
+> > +       cpudata->min_freq = min_freq;
+> > +       cpudata->nominal_freq = nominal_freq;
+> > +       cpudata->lowest_nonlinear_freq = lowest_nonlinear_freq;
+> > +
+> > +       policy->driver_data = cpudata;
+> > +
+> > +       return 0;
+> > +
+> > +free_cpudata2:
+> > +       freq_qos_remove_request(&cpudata->req[0]);
+> > +free_cpudata1:
+> > +       kfree(cpudata);
+> > +       return ret;
+> > +}
+> > +
+> > +static int amd_pstate_cpu_exit(struct cpufreq_policy *policy)
+> > +{
+> > +       struct amd_cpudata *cpudata;
+> > +
+> > +       cpudata = policy->driver_data;
+> > +
+> > +       freq_qos_remove_request(&cpudata->req[1]);
+> > +       freq_qos_remove_request(&cpudata->req[0]);
+> > +       kfree(cpudata);
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +static struct cpufreq_driver amd_pstate_driver = {
+> > +       .flags          = CPUFREQ_CONST_LOOPS | CPUFREQ_NEED_UPDATE_LIMITS,
+> > +       .verify         = amd_pstate_verify,
+> > +       .target         = amd_pstate_target,
+> > +       .init           = amd_pstate_cpu_init,
+> > +       .exit           = amd_pstate_cpu_exit,
+> > +       .name           = "amd-pstate",
+> > +};
+> > +
+> > +static int __init amd_pstate_init(void)
+> > +{
+> > +       int ret;
+> > +
+> > +       if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
+> > +               return -ENODEV;
+> > +
+> > +       if (!acpi_cpc_valid()) {
+> > +               pr_debug("the _CPC object is not present in SBIOS\n");
+> > +               return -ENODEV;
+> > +       }
+> > +
+> > +       /* don't keep reloading if cpufreq_driver exists */
+> > +       if (cpufreq_get_current_driver())
+> > +               return -EEXIST;
+> > +
+> > +       /* capability check */
+> > +       if (!boot_cpu_has(X86_FEATURE_CPPC)) {
+> > +               pr_debug("AMD CPPC MSR based functionality is not supported\n");
+> > +               return -ENODEV;
+> > +       }
+> > +
+> > +       /* enable amd pstate feature */
+> > +       ret = amd_pstate_enable(true);
+> > +       if (ret) {
+> > +               pr_err("failed to enable amd-pstate with return %d\n", ret);
+> > +               return ret;
+> > +       }
+> > +
+> > +       ret = cpufreq_register_driver(&amd_pstate_driver);
+> > +       if (ret)
+> > +               pr_err("failed to register amd_pstate_driver with return %d\n",
+> > +                      ret);
+> > +
+> > +       return ret;
+> > +}
+> > +
+> > +static void __exit amd_pstate_exit(void)
+> > +{
+> > +       cpufreq_unregister_driver(&amd_pstate_driver);
+> > +
+> > +       amd_pstate_enable(false);
+> > +}
+> > +
+> > +module_init(amd_pstate_init);
+> > +module_exit(amd_pstate_exit);
+> > +
+> > +MODULE_AUTHOR("Huang Rui <ray.huang@amd.com>");
+> > +MODULE_DESCRIPTION("AMD Processor P-state Frequency Driver");
+> > +MODULE_LICENSE("GPL");
+> > --
+> > 2.25.1
+> >
