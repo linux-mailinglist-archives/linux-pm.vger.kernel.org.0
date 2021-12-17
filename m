@@ -2,113 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 980AF4792A1
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Dec 2021 18:17:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 187624792BB
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Dec 2021 18:21:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239756AbhLQRQ6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Dec 2021 12:16:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55340 "EHLO
+        id S239833AbhLQRVx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Dec 2021 12:21:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239781AbhLQRQ6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Dec 2021 12:16:58 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87BBBC06173F
-        for <linux-pm@vger.kernel.org>; Fri, 17 Dec 2021 09:16:57 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id z7so5957307lfi.11
-        for <linux-pm@vger.kernel.org>; Fri, 17 Dec 2021 09:16:57 -0800 (PST)
+        with ESMTP id S239485AbhLQRVw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Dec 2021 12:21:52 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580CAC061574
+        for <linux-pm@vger.kernel.org>; Fri, 17 Dec 2021 09:21:52 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id bi37so6062477lfb.5
+        for <linux-pm@vger.kernel.org>; Fri, 17 Dec 2021 09:21:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iVGRXJjXTkNbcWgM3Rtn/6//+8cggz0t1cCkyrwrD6E=;
-        b=NoFJLqJSh74xV0bvIGodtdU6myPwjLF70BlRz3/lsUs8ymeVI3TX0mW2+g2CbLfFH2
-         cMZpyQ8cJXTqfikJpsNjpTY8NKpoDtQ6tbZvFPqpvzLB/8TABVDbxuzQkIDLrXLFzsAf
-         LAfOhf4eXOIT2VY2t2w8dAmsw0w0SRzwb73eiKCIIlerc9QRfSGnZV2WoqRehN+f8UxJ
-         uqHGeEjQy3R5DIXecq1XiiV1fiAoq80ccCTwetxyKBLo9G5BT4ryA9XZEfInDJLXZP84
-         waME57Iu66TjWNfCLrCunB0IcKZxzoZ1+ty2Sni8so9u7ZUkp7YgdnRgV1d7s7aj25RC
-         yJpw==
+         :cc:content-transfer-encoding;
+        bh=DKDbAPgWRjftMAZ4AX+N8/6OW1hd8YHK7CRuaZo7N9w=;
+        b=qu+YVNL1Go+MIEgGIY7uj/TwjkgWTIdWamj0auq+OBGR7dMiNzlNoCYR2xxid8Dzfy
+         r5wHMtWoj9QInRSl317LoLr5jq15ch1hCb8hhoaoQrxmThuqq4D46zGMEm9TYbdrU8GH
+         dS+vuM+G3uAGfHWbNdna2D/Fa8P3NhBeGjM4KEm2u0+3qPHJ1tpnjNGUZizDaqrwHDn+
+         Oenf5vR+h6ZW+GVuR5yoyYryk0E1aXBDYsgdOjZwxFY+5algQQ1rFl/jFFXyGRq6A0kG
+         ddmlYNEK2H9XCdgogx8PVurzpUzFfR0ERZ49mknKyjkGziJ6kl6iueBjPPrbDGhw41rV
+         1+Vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iVGRXJjXTkNbcWgM3Rtn/6//+8cggz0t1cCkyrwrD6E=;
-        b=zQ/G8Vy75aGmjH8JxDO3YB9byAFGRYT1XfnTfgqW2mWchglhek2NiFgp65yWNB0OsJ
-         bSnPs8348EPrNhx9dufCxQudfGEEHBFHc3ICwZoxK8clu/g1v3M/SVsUJliFTPJmsmVY
-         WPHpnr/vecLLVrTcVHPLTXDuYKGXe0l99bi6MJP5E4mmQk9R67BsKANlwvM7vIdTLCjq
-         dunsnQ+K0oHnZWmAApXTt8nXpf0iIyOduo34aBgjMltI476oF2T2XVXV9+c7jX620nwH
-         VWHZF1IVWkj+qtQWd+PML0L/9oFD+LjSuzzMGQeXhklPA2tgv82K/EQX++JVHBjV6icM
-         f1YA==
-X-Gm-Message-State: AOAM530b4IDjHguKty3D04FU2iui+9VrVmfZB1ulutKracjyXzUz0CnP
-        VnOQrplmAy4mpJYRQ1nXN8WatT9tgGl4FSloUs3HHQ==
-X-Google-Smtp-Source: ABdhPJysvotVxooftGCVk/xDAJQ/AsjHsAYvT9wKfIRHe1I+TbfogcpumOtlivME3YTupY0NEGqA9TacfUf0YlHyD+Q=
-X-Received: by 2002:a05:6512:310e:: with SMTP id n14mr3660165lfb.167.1639761415733;
- Fri, 17 Dec 2021 09:16:55 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=DKDbAPgWRjftMAZ4AX+N8/6OW1hd8YHK7CRuaZo7N9w=;
+        b=UG9rgAgkxf/Wx2LXZAyQAsJbof65/udsnh5FVLk8gyq/Oi5m2GQgFPHc6KdOXvMh64
+         +MoRSN6j5JQDhXpPiW6v646gxt6L5mfXOi8nQL4KuVkdbB8jbRGzBASZqWyaf+tV8014
+         qZHOEPMPb+KBg37IfsoFKP0AqaH1U4+UdQAqL0piRoUgJMFdMZyQnWhFNV64NkZwQyOo
+         ff9PmPVP0kChqVFb3QSHuzi+JOxXAzUbGFa5HL9WMjPzMGDiVx1CGhpfseiX9SvoBZi7
+         UoJDUNqD0e0pCF5fijSxsiiN61unGRsvUDjakUQpoN6BbJQha4eAVrV6icrm0lydO/9U
+         gFmA==
+X-Gm-Message-State: AOAM531pWWVHG5Zg7aGgoIb9Oqb4a47AkCo4pNq9fEuADvyc4Cyyh+50
+        ZFBEH3leRvTizzPVBV8YbzxIqId15TBR92iW7zokbA==
+X-Google-Smtp-Source: ABdhPJzbCesvIKQ6uvwOZDusnV1v5sFY5Iq4dhVjpVN+PZ84oR7hXwi0dw6qDoxHODpMYgHvc2xRM2QAczMdz3rmjX4=
+X-Received: by 2002:a05:6512:310e:: with SMTP id n14mr3676224lfb.167.1639761710665;
+ Fri, 17 Dec 2021 09:21:50 -0800 (PST)
 MIME-Version: 1.0
-References: <20211207002102.26414-1-paul@crapouillou.net> <CAK8P3a3xfuFN+0Gb694R_W2tpC7PfFEFcpsAyPdanqZ6FpVoxQ@mail.gmail.com>
- <CAJZ5v0jifFWLJgjJywGrjWgE9ZQkjD03rQDHw+4YL-VzkfL1Hg@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jifFWLJgjJywGrjWgE9ZQkjD03rQDHw+4YL-VzkfL1Hg@mail.gmail.com>
+References: <4717160.31r3eYUQgx@kreacher>
+In-Reply-To: <4717160.31r3eYUQgx@kreacher>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 17 Dec 2021 18:16:19 +0100
-Message-ID: <CAPDyKFpfWZsw+7aZdQVsCsTxoEfUqpkZM6Ozfr5COQNNaqhLhA@mail.gmail.com>
-Subject: Re: [PATCH 0/5] Rework pm_ptr() and *_PM_OPS macros
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Jonathan Cameron <jic23@kernel.org>, list@opendingux.net,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
+Date:   Fri, 17 Dec 2021 18:21:14 +0100
+Message-ID: <CAPDyKFqGixF-GEMHBPjFpzRoFS88JyJTHwoBHbyaB+OTBNw1pg@mail.gmail.com>
+Subject: Re: [PATCH] PM: sleep: Fix error handling in dpm_prepare()
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        =?UTF-8?Q?Thomas_Hellstr=C3=B6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 17 Dec 2021 at 16:07, Rafael J. Wysocki <rafael@kernel.org> wrote:
+On Thu, 16 Dec 2021 at 20:30, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
 >
-> On Tue, Dec 7, 2021 at 10:22 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > On Tue, Dec 7, 2021 at 1:20 AM Paul Cercueil <paul@crapouillou.net> wrote:
-> > >
-> > > This patchset reworks the pm_ptr() macro I introduced a few versions
-> > > ago, so that it is not conditionally defined.
-> > >
-> > > It applies the same treatment to the *_PM_OPS macros. Instead of
-> > > modifying the existing ones, which would mean a 2000+ patch bomb, this
-> > > patchset introduce two new macros to replace the now deprecated
-> > > UNIVERSAL_DEV_PM_OPS() and SIMPLE_DEV_PM_OPS().
-> > >
-> > > The point of all of this, is to progressively switch from a code model
-> > > where PM callbacks are all protected behind CONFIG_PM guards, to a code
-> > > model where PM callbacks are always seen by the compiler, but discarded
-> > > if not used.
-> > >
-> > > Patch [4/5] and [5/5] are just examples to illustrate the use of the new
-> > > macros. As such they don't really have to be merged at the same time as
-> > > the rest and can be delayed until a subsystem-wide patchset is proposed.
-> > >
-> > > - Patch [4/5] modifies a driver that already used the pm_ptr() macro,
-> > >   but had to use the __maybe_unused flag to avoid compiler warnings;
-> > > - Patch [5/5] modifies a driver that used a #ifdef CONFIG_PM guard
-> > >   around its suspend/resume functions.
-> >
-> > This is fantastic, I love the new naming and it should provide a great path
-> > towards converting all drivers eventually. I've added the patches to
-> > my randconfig test build box to see if something breaks, but otherwise
-> > I think these are ready to get into linux-next, at least patches 1-3,
-> > so subsystem
-> > maintainers can start queuing up the conversion patches once the
-> > initial set is merged.
-> >
-> > Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 >
-> Patches [0-3/5] applied as 5.17 material.
+> Commit 2aa36604e824 ("PM: sleep: Avoid calling put_device() under
+> dpm_list_mtx") forgot to update the while () loop termination
+> condition to also break the loop if error is nonzero, which
+> causes the loop to become infinite if device_prepare() returns
+> an error for one device.
 >
-> The mmc patches need ACKs, but I can take them too.
+> Add the missing !error check.
+>
+> Fixes: 2aa36604e824 ("PM: sleep: Avoid calling put_device() under dpm_lis=
+t_mtx")
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Thomas Hellstr=C3=B6m <thomas.hellstrom@linux.intel.com>
 
-Sure, please add my ack for them!
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
 Kind regards
 Uffe
+
+> ---
+>  drivers/base/power/main.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> Index: linux-pm/drivers/base/power/main.c
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> --- linux-pm.orig/drivers/base/power/main.c
+> +++ linux-pm/drivers/base/power/main.c
+> @@ -1902,7 +1902,7 @@ int dpm_prepare(pm_message_t state)
+>         device_block_probing();
+>
+>         mutex_lock(&dpm_list_mtx);
+> -       while (!list_empty(&dpm_list)) {
+> +       while (!list_empty(&dpm_list) && !error) {
+>                 struct device *dev =3D to_device(dpm_list.next);
+>
+>                 get_device(dev);
+>
+>
+>
