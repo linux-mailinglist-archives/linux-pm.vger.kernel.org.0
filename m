@@ -2,41 +2,41 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7019F4785A0
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Dec 2021 08:38:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6C874785BF
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Dec 2021 08:53:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbhLQHiM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Dec 2021 02:38:12 -0500
-Received: from mail-dm6nam08on2083.outbound.protection.outlook.com ([40.107.102.83]:13280
-        "EHLO NAM04-DM6-obe.outbound.protection.outlook.com"
+        id S230496AbhLQHxO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Dec 2021 02:53:14 -0500
+Received: from mail-sn1anam02on2049.outbound.protection.outlook.com ([40.107.96.49]:64639
+        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229533AbhLQHiL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 17 Dec 2021 02:38:11 -0500
+        id S229449AbhLQHxO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 17 Dec 2021 02:53:14 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Zt1O4WFyWfq1CuD4q/5eEFx115qOkYMw7xuAEMDxyHnl4MJJ/kjxFbOhXc7OsWIhn8zbNd+LJZhp3nSwWHcWNRhgCAInZ8wwLjV+zRZohSmFRIGDWNVrTrB3XYtue+HUgEXPpvQc2QTpkHouhnhLE9DMoCy2/ccoXkTn+DmaguAcxWkFdTIU7Uw6ZGjJ2EP9ZObySQOFV1MJSevXDs00mJLe5TSB6J/fQ8nl7kMusK0J8QYtMOtLs7Vrx/+LAqYTfkGzlhgc0qyXD/t8OYd8JM4QXHt6GqrQXHJxy5cv5g+pNyGOSsPOeCej4JumAUfAAJmG/jEfrmNLjs6jBTLyIQ==
+ b=V2VSGqYlx8/KAhixqR/C4C4/hYUMCnUxoXP/OC7g6dIFLmd7FeUQavp3b71HmikTvPT+M66MgCC2PSvh2sN9q+2sK8Fcb2NZm3i5Wk5c5/vwcvvmGbHabCfKdQuxmXO9JHKrCvsJgLKQJ743IULfU4ygUdpmU+j4RNFnCTKdp3xHvMWfmWkilZKIFG/zPCfWIBwCBWFwW2JP07Xs3k5bUjw2reR+7uuCYh93V4/qncH9U7K0uMfYZWoqUoxuAr/ungAbehIR0Hf4L0DNblwjUOUhEpKurH7S1qKEaucZzt4WszYu+ze0BvfTuksGL8BnUbahnFvAwMbzrCsmFd9zNw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2R8H19OnSSpaAETw6w3gvXDbkzXcfv1JkTSi8X1Tta8=;
- b=hhyc/y72Fy22flpiQSEalynVSAFhfmc0YyyLKbvT47JXmJu2FcLQMSdsW5xO/Mj4iw93vPa8fEd1VjQyGwHTeRMeRd7UEjh5hU165EDC8ws3bwEw9viCyvAw5aLZ1LL7pJ9UvfPC6v98GsCiQQyYknllwdMjCSurduzH5Ck1+HdjGnFZc3ooTUnYKaion6JjFP3WtFlds1V1J8co0GXytELxq1Pwpr3mW9EbD1knla4jSIsKmKqeDdxdOW9bwgcvmILp7psN/C8+cgXU3tstozjIVcPt+XGbgsRx+kLrydkt15W8psKKhVTYCAzmZHA+kXUoqqAWZPyYF2oxM5UCmQ==
+ bh=YjAGgKvxDkV73+DlVchEpTo0bzHoD/w7nOaoVsluxcw=;
+ b=bJP4Ry4qpjPYSGrNvb3xiEGK7sqrXo2B9Kgf4VPHYg4b6Kg0ElKx8wiTRvTqwU0jTgEgs6STUdI6YsRwLn9Ktzu6TcBf7hYvfvXxav1Rp2uhTFtMKdxwMYmUdwscvWYwhpgWm8IR1+8rjlRJ25x028/CjN4sC/weqzRawF1Ex27RkjjRkafQMywoe/sinlpS21RvuWn81Em1ZIj2he5jOuij+r/W9NwH0GJG7CxVWdY3QpVczXE3w8brf+BhSCT7yLUwCWi8+JG9yr50tymzepZu6s5Hi6YQyolCFN1hh5C5ofZwDOo0jUmgV2BMcc3/hrnUElFBJOCigIMlMslGHg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2R8H19OnSSpaAETw6w3gvXDbkzXcfv1JkTSi8X1Tta8=;
- b=0qQOHCQo71xSCUcwZuAT1n9arD2P8SX7/f07CDjqLAOJFCADIAhx0vYkpgN9gAz10wkkRC/DtKmpMELPd+RcWwhuETNF6/eyBCSPrpSCAEFplRklUpMm8C+gtTraU662Tx5vDtrrBxTWjdQnC0fENAh1GW59qzlvYSd4IyUgp/M=
+ bh=YjAGgKvxDkV73+DlVchEpTo0bzHoD/w7nOaoVsluxcw=;
+ b=cNRsk9mHqroytkDrO20QwplRcEbFWVIqOsOQpDwdJOKB5nKJfzH2jQVotT8Tr03z6D3r+W3B6Oo3EJt1BuoqdtH8jAKBvY8JvfJmcdwaGrCtVruhfcDOIgSrtgSXngHg9c3/hCOyXNfQXK20B4ADyIEdFoqjf4kQyfdmqwow2UQ=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
- DM6PR12MB2795.namprd12.prod.outlook.com (2603:10b6:5:41::32) with Microsoft
+ DM5PR12MB1163.namprd12.prod.outlook.com (2603:10b6:3:7a::18) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4778.18; Fri, 17 Dec 2021 07:38:07 +0000
+ 15.20.4801.14; Fri, 17 Dec 2021 07:53:09 +0000
 Received: from DM5PR12MB2504.namprd12.prod.outlook.com
  ([fe80::5d07:e475:316c:d187]) by DM5PR12MB2504.namprd12.prod.outlook.com
  ([fe80::5d07:e475:316c:d187%5]) with mapi id 15.20.4801.015; Fri, 17 Dec 2021
- 07:38:07 +0000
-Date:   Fri, 17 Dec 2021 15:37:43 +0800
+ 07:53:09 +0000
+Date:   Fri, 17 Dec 2021 15:52:40 +0800
 From:   Huang Rui <ray.huang@amd.com>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>
 Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
@@ -55,227 +55,172 @@ Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
         "Du, Xiaojian" <Xiaojian.Du@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>
-Subject: Re: [PATCH v5 08/22] cpufreq: amd: introduce the support for the
- processors with shared memory solution
-Message-ID: <Ybw+R3HmkYYnnUZ1@amd.com>
+        the arch/x86 maintainers <x86@kernel.org>,
+        Steven Rostedt <rostedt@goodmins.org>
+Subject: Re: [PATCH v5 09/22] cpufreq: amd: add trace for amd-pstate module
+Message-ID: <YbxByF9dEGrkR6Kr@amd.com>
 References: <20211130123641.1449041-1-ray.huang@amd.com>
- <20211130123641.1449041-9-ray.huang@amd.com>
- <CAJZ5v0g=VWRtBoxd-yX8W_F9QfV4OE9Ap_vxHicW_CGgizsw2A@mail.gmail.com>
+ <20211130123641.1449041-10-ray.huang@amd.com>
+ <CAJZ5v0jbSC1Q1gn2+Hu6bJQN20uDDSbStdM3zHZ+UBR+YKsWQA@mail.gmail.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0g=VWRtBoxd-yX8W_F9QfV4OE9Ap_vxHicW_CGgizsw2A@mail.gmail.com>
-X-ClientProxiedBy: HK2PR06CA0012.apcprd06.prod.outlook.com
- (2603:1096:202:2e::24) To DM5PR12MB2504.namprd12.prod.outlook.com
+In-Reply-To: <CAJZ5v0jbSC1Q1gn2+Hu6bJQN20uDDSbStdM3zHZ+UBR+YKsWQA@mail.gmail.com>
+X-ClientProxiedBy: SG2PR02CA0051.apcprd02.prod.outlook.com
+ (2603:1096:4:54::15) To DM5PR12MB2504.namprd12.prod.outlook.com
  (2603:10b6:4:b5::19)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 12ee0c05-739e-4166-43ca-08d9c1302aa3
-X-MS-TrafficTypeDiagnostic: DM6PR12MB2795:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB27952DFB2F4E1E8CF7D4B352EC789@DM6PR12MB2795.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Office365-Filtering-Correlation-Id: 92891c40-79b6-4d7e-2971-08d9c1324471
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1163:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR12MB116352C87251DD26A9D9269DEC789@DM5PR12MB1163.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jaI6htsG3QWp7x3kJrGa1hsUAyssY6Sp6LBIuCWQ4Od4p6EnkId2HAxr77kqamJzxKZ4mYSIS5JTNBGzj8Sslt/NSauWU+tf79qlFIBvYp8DEj2UIrss2aKw7pJfeTHpRHBX6ij8xPFeh5MO4wA0SRZNx8+oZaCOkO75a3u6JjnCzrDwA8xjVp3pmxm00I4UZLiIvd0zIi6bh0H/VsVpTmmJh5FCz+TzCVWt+wY5uq5zCtJjOc24zQwIg7d+HsQ319evy4aRgvMlRoQyznzEZYU0NkY9+XCq01mZRv/oZfrZ1zrKLV5gJ1w16sjeTh96wDXsk3yTNOQIDOX8pSSPaJlbpXOyflm1MrvMX19wZ43ejoqhzXlRktXl/G3Vh61LuvrwPf5oraFYFK7WHO1rJn3ctQ6Rb0fmZfsjn1LLAhnvQPceVxDyPRSptWUELIPDEsxufYhNJJ65RVkb7YdIhKM+ututQFp+L99tqY6fzJduHZadsRlSREsinGSujd3bUOqW7juNzzsHvBO4zHOGLEe5kHlagZHVxQdNXJ5QJY4cI0zjbWwUUlY6uiI49U6FD71AhocLVp3Il6o+PxEDLgnGJ/Wm2PPQHZcFNdX9zaIxT0IZibEnxYY+VGpfRfxvW7pCCvSqtBov+R/mxfJp9t/e8KkkCNoKDMTp0ToNohU73oVOC2r1KniHXi9iY+TTS5DzdCxpGX3rzQF989xu5Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(83380400001)(86362001)(6512007)(2906002)(6506007)(4326008)(53546011)(7416002)(6916009)(316002)(66556008)(6666004)(508600001)(5660300002)(2616005)(54906003)(26005)(36756003)(6486002)(66946007)(38100700002)(8676002)(8936002)(66476007)(186003)(67856001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: qz3sF+Or5QK/059DheF9Ugde+RNx6oUsNP6/cE9Oxj0jqKHSx7YEA1lxGMleiq12UP/FzMWLTdNna9/RHtskfuIEen4EuZXxGW8ZC+iAlcmIjNo5CpNXO4+vE63r5WSkUuWpztskhyTRxJlfzkhv6qEdOCfXEMIaJIPAUeD9eUASyTjXvAnaNZKJno07VvYOujQripF2t5O9nxZXyfP8+mwOb7Rllno5lWyJs2DqkhnQBPeBcLpaoGz2yaSyZb+Rt3MWTTruWhnLEobTTOLLVWrk6tdbqTmb8pekzFVGQcAxQDqhR2R5NefOKj6vVrYnS6fr54plCP9zZ+PzLPr7RNRfn9Z5Eo4thZ/Ony2Y+67Br4z0t8Q6SRJ5jjaQnuZaoMfmEB/NoHW1lDhT/bXPAN0MfQla+KvXgFcjg4ZrhRkkt3RKYsjNKr0jmCSktpQagOTqy7axzShVIo01ZdoXc3t/7vSOe3zWdtSQRIymHcLjvMdc9GqTlXN0/VB1kp9/rpzejub3FTWRW6BjgMolA0AMqOpk+T5Mmvxmjr2nhCJXK8QW8FupQh7Tvwlne4nTlUFRy2kZHX5YqHsmDyPmytitT2EIM1mWlgsjsJw7C5bluACZXpBi+RKpmYeZ++alCul9EiGzOHZ3cNSIqCrKSQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(26005)(2616005)(508600001)(66476007)(66556008)(66946007)(6486002)(86362001)(5660300002)(36756003)(186003)(8676002)(54906003)(316002)(2906002)(8936002)(53546011)(6916009)(6506007)(6666004)(83380400001)(38100700002)(4326008)(7416002)(6512007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?RqIds6/RA8TZn35gxaPxjvYe2ZR0ysoGTMsDJgsFGBzTZ/DSplCbxT5bB/O6?=
- =?us-ascii?Q?iur7+WI0Z2n2izsxzicsLgMkyLfop2lFTncdcGUZoAZMqcqtAPRPu/xzYwCD?=
- =?us-ascii?Q?pk7naPfewXY7Wn7AzLtvp97cNBJltDdjWOtmh/z4wDv73keOCeXUqZfRJETs?=
- =?us-ascii?Q?WUlYT2L905QV9vQZa0b3tEjH9bAd6DIeU9J6emTjLc+BW3hpIp0zZ4g0nEWF?=
- =?us-ascii?Q?1pV2y6FzHtnr5OnCqM2NEdL89b7fso/kYPoHh7ggX3vtBebk+NH3RAIJBsTH?=
- =?us-ascii?Q?NNmYx5uq8FOS5xogr6xO6F4aYun8tcyl61PI+tWxiJeA0IS1AabtRt2u836y?=
- =?us-ascii?Q?2EvSBGphIBc4m39ozAgVlF697ZGllYPCuvxIGQDpSKxus2auIhfWGrKp6VVL?=
- =?us-ascii?Q?5x//nU+mYkDmNO9JyuxJGpBID8jzPjTufJzjHU2uriApDcT1Z0bywJz0BPcR?=
- =?us-ascii?Q?7zg/zlIuHzaWgrs+rQXaibV2uzL5eB5iOJL5GgrqbfsIpb18Qbx9OmmOYivM?=
- =?us-ascii?Q?SBPu7Or9u0mFkY+hzpeGDh0KFWPPCE16Z30E0lJy6K978ZqubeuSbEApQLqE?=
- =?us-ascii?Q?g/UBhLQcgLP+ZAno6BP62tKUBIB4D3Q86EkD96Xo1xx8b6XnJVp/CRz9sk9J?=
- =?us-ascii?Q?41c85raM+DlT9ul4/yVmrtBCpNcYxo8xtgS1HVgho47WW7wpEui4e1YVAJ+7?=
- =?us-ascii?Q?zJ69lzXWXdKGtDcJiawQtD05A9ZrAh9cPccTFXaMoLvdT/KtHhiqZ5RcJ9j4?=
- =?us-ascii?Q?mqig7c+HFfJoOtsBZara1YMoFoMBmoNVL7x2msR41NWFhhXFoTee2y/cfdwd?=
- =?us-ascii?Q?c0PUVnxSyK5CiKTmUbjBnzh1emdbI/HJyGQYVpK8rllaM9W+uT5LTACGURq1?=
- =?us-ascii?Q?YiW+Y5DLLcYXhRxBMOUQMOUjxK5p/NP/2eeIH2d2n4enEK01KMBnpeAQcy8+?=
- =?us-ascii?Q?E4IKqSGZuWNJkAI/VVc3TpWUaJ2tWgrJLB9OL6czgNXqTShFWXyrLNz/ZHLK?=
- =?us-ascii?Q?+rM190kQ+YZW5c7rqlRaQcyLF7Og3mApiQgttcT28K115e4JzAr2IjTaNtJ5?=
- =?us-ascii?Q?zmbjOltQqaG/lLUI5aMNRHCXGA0CKyVHJ9qSD6bowIyjfLXdy4waPfOOVD6L?=
- =?us-ascii?Q?R7t2VUHHcMAjroAoEQDtrVID2Q7nAE+VWIBHb6jXyRRlGXhQzZIkkNDK7JL6?=
- =?us-ascii?Q?/CV3slh9bbY5oZZ0MT2rv1kJodXU0tEYEGBDsoV1XI4jBNysHcpBHIS9HNRP?=
- =?us-ascii?Q?T0yY5ga8tBjXnhO0cfNorKcdfV12+48NJIreIdfj6SZx+0MpkWjRO8zeLykr?=
- =?us-ascii?Q?FMY8fjTBOUwqRKHMbH6GE4J3y9mGT5x/qQC6r4zVLiWD42i6hMbwAZeg2lNa?=
- =?us-ascii?Q?DLjiIaxOe+zeQ+VtNra/C6xa93PZso8GuBIDvHH2D0Xj0MjB/PZ8QsVOt1Qd?=
- =?us-ascii?Q?6xfuCfo5E23sdSvmtIp4UOGFJ8Ko9CmG6kIqCQm31qhVe/YeWJ/81Mo/UC9j?=
- =?us-ascii?Q?iHHI8sHGzOzZgrDSASZ6CPMGbI+1xVBDDBDlQLIfNB1ZIaBsz44cA2Nf+N74?=
- =?us-ascii?Q?iFeyDNu5O/qQxxPHm9SN/Rx9VBZAOb9/b1AUQpaRMuyDceLFTo5BIwRRUUqG?=
- =?us-ascii?Q?rqx3VuAh6XhMhNqdJIdqwBc=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GONSO/PC1Iob8farB4ogi25YhNSbi5lvbDuXVsT2v1nAC0blIwnWjJe+us+x?=
+ =?us-ascii?Q?5txcNWboTKFcPUPdnaQZQ0VxF+ztUsIkHxcEmIUmayeRcE/QK9r8yeBOq/CH?=
+ =?us-ascii?Q?TA4Dk9mh1u6Cdru2g9zoedJpunbz3HFPtrsBtizTWPVKSOaitcUV399IniSB?=
+ =?us-ascii?Q?Cr7XbC4dJtyTa+L4UuWqfAQl8iEaGK7cd6ZyxsnB3/Bo9l0euaRwQaKEZztT?=
+ =?us-ascii?Q?MoFw0DrVeXY3iHbe+HZ8R5YD/jdB1T4ZvVtaroWgcxMnZs9htSGoH2H01zqP?=
+ =?us-ascii?Q?rBGCzeJ4ub5XeSHU7ZAtltBuDkrirsd3zE+4GoW4rgUJ0TXX/qEGnPKb9w1e?=
+ =?us-ascii?Q?OmzqVWASTmF+tdqJUthRd3W/RV9NsMXaEGhu2Npu6IDtrXvlTHiFr8bBGlzM?=
+ =?us-ascii?Q?vf/WS9grwTp+UJsL5H7OZcnb0K7riAhorETaHJPjyDYNpJ9EoFMLgmbp/mTh?=
+ =?us-ascii?Q?MbpDMNeTiWVbWgf3vp+L7BnQAql6O+Gjpzutjl1BS3bSfwSCenqgHNjX9ZE6?=
+ =?us-ascii?Q?sbfkQcpaRdIA/bKHekoEnBrSkFz2jSsJz2vBrWgqhruyc82qmF28xuzl9G/F?=
+ =?us-ascii?Q?5LpnViIhnTOafqn6KMioMVtw2ezcxYrvGxCBTSOBXc3fIqGfs+JbD6HD8z45?=
+ =?us-ascii?Q?BN29EU1lhfdsE4hB3KjyaDBwrbTJX6RBZyAWY2LZzUXjx9uJlhH1GVOp7QOZ?=
+ =?us-ascii?Q?zRT2VAX4GxRmANKgUcCkvIdKkUQcLffz0p+6HfNakqskjOCy/s6zG5yYkkvf?=
+ =?us-ascii?Q?OoaA4T3O4Y+yEgQDogcQUbcoC9FjMxjcysImOFyJZQmxQsmmwPRv6TbGr3jb?=
+ =?us-ascii?Q?5vqWDrzPmJs/FvXXdLRzDmizxBnZJkvHSgSX9pNJrNXGAV7Otcf68HPNPgDo?=
+ =?us-ascii?Q?gBvvI2vp4p6FBm2u3UvlFKBvbchh4+zLnHbBJ31QUzaukknqan1QlQqDrh90?=
+ =?us-ascii?Q?AAFB+8b0KWNtH17WnJJxq8TPsM2hAnMERSURcmSzxDh6z3cixHnS4rPbBr9+?=
+ =?us-ascii?Q?W6Z++1CVgLN1l+ewo1+Dup8d7oVg6c4PaC1rXfAx+SGgjqC/sb73LC63qVYI?=
+ =?us-ascii?Q?g9X83a38lndP+r7NnBqBi1DTCDuomSUGAAq5LNpNt3cfRBlg0IwwIA3MYD7a?=
+ =?us-ascii?Q?f7vDgD/H0899YZFCYsZtV2Cu5Dt3uNvlbJ+eXvvjBbXY/R/a0KO701kKCcjd?=
+ =?us-ascii?Q?1q9WUEbW8/+XO36cKqeOQ82ffFGH0tpOBpNHG6aEHZwolParI//jo8k0dy16?=
+ =?us-ascii?Q?APk0lHNY6w4gLslHy9zLd261YF9dZRLa9lCSt6/mlY7kyz4Gd7qBtYuhT7lS?=
+ =?us-ascii?Q?glH249oYRSvmsUAK9JAn5sA97E3xgQAaQJ9rpVtZiRTPkeJ86ldailTApFM4?=
+ =?us-ascii?Q?04ei/UZvXhyIW9RbRcVmRgDVRMkzfORrmF7uyAmZfOVE02/n1Pvj8/10q1Bj?=
+ =?us-ascii?Q?wm/A9Qi0n6VmTkk3Cy/ll3NjEEHU4HGHcHVUKUTWrFpKJtDfXg8hJPGnh+mF?=
+ =?us-ascii?Q?R/1qdHx0OWxY5+BVrxzHidQtASRhtTdtSay4Q/HiIbTzrfLnrYOJ3C02lwmK?=
+ =?us-ascii?Q?yb4PthLyUVLtEicO5rS4onDkqkOBump2NMvpH74O6jgcdRITGPrqJwKTV7Pb?=
+ =?us-ascii?Q?hp6GfE2O9h+QflvTOx8/imw=3D?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 12ee0c05-739e-4166-43ca-08d9c1302aa3
+X-MS-Exchange-CrossTenant-Network-Message-Id: 92891c40-79b6-4d7e-2971-08d9c1324471
 X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Dec 2021 07:38:07.7100
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Dec 2021 07:53:09.4646
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8eoEXKUa3RB2rngEBWqblioZ9jwNPW4P1VH6iGauUceu3HgNjZA6aWQYR6WCW7RYHwsRA5OqHARbZu5wa6FLoA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2795
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ki2kwVpHWPqWwhP1ZV0XX/SavVEsgCxD35jBdwLiMT7MEtccIS2XiFXH+SRdYQUrASaARzYk0rJqwvw6Y3pSDw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1163
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 02:04:11AM +0800, Rafael J. Wysocki wrote:
+On Fri, Dec 17, 2021 at 02:12:41AM +0800, Rafael J. Wysocki wrote:
 > On Tue, Nov 30, 2021 at 1:38 PM Huang Rui <ray.huang@amd.com> wrote:
 > >
-> > In some of Zen2 and Zen3 based processors, they are using the shared
-> > memory that exposed from ACPI SBIOS. In this kind of the processors,
-> > there is no MSR support, so we add acpi cppc function as the backend for
-> > them.
+> > Add trace event to monitor the performance value changes which is
+> > controlled by cpu governors.
+> 
+> This would need an ACK from Steve.
+> 
 > >
-> > It is using a module param (shared_mem) to enable related processors
-> > manually. We will enable this by default once we address performance
-> > issue on this solution.
-> >
-> > Signed-off-by: Jinzhou Su <Jinzhou.Su@amd.com>
 > > Signed-off-by: Huang Rui <ray.huang@amd.com>
 > > ---
-> >  drivers/cpufreq/amd-pstate.c | 72 ++++++++++++++++++++++++++++++++++--
-> >  1 file changed, 68 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> > index cab266b8bf35..68991c450fd5 100644
-> > --- a/drivers/cpufreq/amd-pstate.c
-> > +++ b/drivers/cpufreq/amd-pstate.c
-> > @@ -35,6 +35,19 @@
-> >  #define AMD_PSTATE_TRANSITION_LATENCY  0x20000
-> >  #define AMD_PSTATE_TRANSITION_DELAY    500
-> >
-> > +/* TODO: We need more time to fine tune processors with shared memory solution
-> > + * with community together.
-> > + *
-> > + * There are some performance drops on the CPU benchmarks which reports from
-> > + * Suse. We are co-working with them to fine tune the shared memory solution. So
-> > + * we disable it by default to go acpi-cpufreq on these processors and add a
-> > + * module parameter to be able to enable it manually for debugging.
-> > + */
-> > +static bool shared_mem = false;
-> > +module_param(shared_mem, bool, 0444);
-> > +MODULE_PARM_DESC(shared_mem,
-> > +                "enable amd-pstate on processors with shared memory solution (false = disabled (default), true = enabled)");
-> > +
-> >  static struct cpufreq_driver amd_pstate_driver;
-> >
-> >  struct amd_cpudata {
-> > @@ -60,6 +73,19 @@ static inline int pstate_enable(bool enable)
-> >         return wrmsrl_safe(MSR_AMD_CPPC_ENABLE, enable);
-> >  }
-> >
-> > +static int cppc_enable(bool enable)
-> > +{
-> > +       int cpu, ret = 0;
-> > +
-> > +       for_each_online_cpu(cpu) {
-> > +               ret = cppc_set_enable(cpu, enable);
-> > +               if (ret)
-> > +                       return ret;
-> > +       }
-> > +
-> > +       return ret;
-> > +}
-> > +
-> >  DEFINE_STATIC_CALL(amd_pstate_enable, pstate_enable);
-> >
-> >  static inline int amd_pstate_enable(bool enable)
-> > @@ -90,6 +116,24 @@ static int pstate_init_perf(struct amd_cpudata *cpudata)
-> >         return 0;
-> >  }
-> >
-> > +static int cppc_init_perf(struct amd_cpudata *cpudata)
-> > +{
-> > +       struct cppc_perf_caps cppc_perf;
-> > +
-> > +       int ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
-> > +       if (ret)
-> > +               return ret;
-> > +
-> > +       WRITE_ONCE(cpudata->highest_perf, amd_get_highest_perf());
-> > +
-> > +       WRITE_ONCE(cpudata->nominal_perf, cppc_perf.nominal_perf);
-> > +       WRITE_ONCE(cpudata->lowest_nonlinear_perf,
-> > +                  cppc_perf.lowest_nonlinear_perf);
-> > +       WRITE_ONCE(cpudata->lowest_perf, cppc_perf.lowest_perf);
-> > +
-> > +       return 0;
-> > +}
-> > +
-> >  DEFINE_STATIC_CALL(amd_pstate_init_perf, pstate_init_perf);
-> >
-> >  static inline int amd_pstate_init_perf(struct amd_cpudata *cpudata)
-> > @@ -107,6 +151,19 @@ static void pstate_update_perf(struct amd_cpudata *cpudata, u32 min_perf,
-> >                               READ_ONCE(cpudata->cppc_req_cached));
-> >  }
-> >
-> > +static void cppc_update_perf(struct amd_cpudata *cpudata,
-> > +                            u32 min_perf, u32 des_perf,
-> > +                            u32 max_perf, bool fast_switch)
-> > +{
-> > +       struct cppc_perf_ctrls perf_ctrls;
-> > +
-> > +       perf_ctrls.max_perf = max_perf;
-> > +       perf_ctrls.min_perf = min_perf;
-> > +       perf_ctrls.desired_perf = des_perf;
-> > +
-> > +       cppc_set_perf(cpudata->cpu, &perf_ctrls);
-> > +}
-> > +
-> >  DEFINE_STATIC_CALL(amd_pstate_update_perf, pstate_update_perf);
-> >
-> >  static inline void amd_pstate_update_perf(struct amd_cpudata *cpudata,
-> > @@ -326,7 +383,8 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
-> >         /* It will be updated by governor */
-> >         policy->cur = policy->cpuinfo.min_freq;
-> >
-> > -       policy->fast_switch_possible = true;
-> > +       if (boot_cpu_has(X86_FEATURE_CPPC))
-> > +               policy->fast_switch_possible = true;
-> >
-> >         ret = freq_qos_add_request(&policy->constraints, &cpudata->req[0],
-> >                                    FREQ_QOS_MIN, policy->cpuinfo.min_freq);
-> > @@ -376,7 +434,6 @@ static struct cpufreq_driver amd_pstate_driver = {
-> >         .flags          = CPUFREQ_CONST_LOOPS | CPUFREQ_NEED_UPDATE_LIMITS,
-> >         .verify         = amd_pstate_verify,
-> >         .target         = amd_pstate_target,
-> > -       .adjust_perf    = amd_pstate_adjust_perf,
-> >         .init           = amd_pstate_cpu_init,
-> >         .exit           = amd_pstate_cpu_exit,
-> >         .name           = "amd-pstate",
-> > @@ -399,8 +456,15 @@ static int __init amd_pstate_init(void)
-> >                 return -EEXIST;
-> >
-> >         /* capability check */
-> > -       if (!boot_cpu_has(X86_FEATURE_CPPC)) {
-> > -               pr_debug("AMD CPPC MSR based functionality is not supported\n");
-> > +       if (boot_cpu_has(X86_FEATURE_CPPC)) {
-> > +               pr_debug("AMD CPPC MSR based functionality is supported\n");
-> > +               amd_pstate_driver.adjust_perf = amd_pstate_adjust_perf;
-> > +       } else if (shared_mem) {
-> > +               static_call_update(amd_pstate_enable, cppc_enable);
-> > +               static_call_update(amd_pstate_init_perf, cppc_init_perf);
-> > +               static_call_update(amd_pstate_update_perf, cppc_update_perf);
+> >  drivers/cpufreq/Makefile           |  6 ++-
+> >  drivers/cpufreq/amd-pstate-trace.c |  2 +
+> >  drivers/cpufreq/amd-pstate-trace.h | 77 ++++++++++++++++++++++++++++++
 > 
-> I would rather add the static call definitions in this patch,
-> otherwise is somewhat cumbersome to review the series.
+> Why are these two extra files necessary?
+
+Please see below answer.
+
+> 
+> >  drivers/cpufreq/amd-pstate.c       |  4 ++
+> >  4 files changed, 88 insertions(+), 1 deletion(-)
+> >  create mode 100644 drivers/cpufreq/amd-pstate-trace.c
+> >  create mode 100644 drivers/cpufreq/amd-pstate-trace.h
+> >
+> > diff --git a/drivers/cpufreq/Makefile b/drivers/cpufreq/Makefile
+> > index c8d307010922..285de70af877 100644
+> > --- a/drivers/cpufreq/Makefile
+> > +++ b/drivers/cpufreq/Makefile
+> > @@ -17,6 +17,10 @@ obj-$(CONFIG_CPU_FREQ_GOV_ATTR_SET)  += cpufreq_governor_attr_set.o
+> >  obj-$(CONFIG_CPUFREQ_DT)               += cpufreq-dt.o
+> >  obj-$(CONFIG_CPUFREQ_DT_PLATDEV)       += cpufreq-dt-platdev.o
+> >
+> > +# Traces
+> > +CFLAGS_amd-pstate-trace.o               := -I$(src)
+> > +amd_pstate-y                           := amd-pstate.o amd-pstate-trace.o
+> > +
+> >  ##################################################################################
+> >  # x86 drivers.
+> >  # Link order matters. K8 is preferred to ACPI because of firmware bugs in early
+> > @@ -25,7 +29,7 @@ obj-$(CONFIG_CPUFREQ_DT_PLATDEV)      += cpufreq-dt-platdev.o
+> >  # speedstep-* is preferred over p4-clockmod.
+> >
+> >  obj-$(CONFIG_X86_ACPI_CPUFREQ)         += acpi-cpufreq.o
+> > -obj-$(CONFIG_X86_AMD_PSTATE)           += amd-pstate.o
+> > +obj-$(CONFIG_X86_AMD_PSTATE)           += amd_pstate.o
+> >  obj-$(CONFIG_X86_POWERNOW_K8)          += powernow-k8.o
+> >  obj-$(CONFIG_X86_PCC_CPUFREQ)          += pcc-cpufreq.o
+> >  obj-$(CONFIG_X86_POWERNOW_K6)          += powernow-k6.o
+> > diff --git a/drivers/cpufreq/amd-pstate-trace.c b/drivers/cpufreq/amd-pstate-trace.c
+> > new file mode 100644
+> > index 000000000000..891b696dcd69
+> > --- /dev/null
+> > +++ b/drivers/cpufreq/amd-pstate-trace.c
+> > @@ -0,0 +1,2 @@
+> > +#define CREATE_TRACE_POINTS
+> > +#include "amd-pstate-trace.h"
+> > diff --git a/drivers/cpufreq/amd-pstate-trace.h b/drivers/cpufreq/amd-pstate-trace.h
+> > new file mode 100644
+> > index 000000000000..647505957d4f
+> > --- /dev/null
+> > +++ b/drivers/cpufreq/amd-pstate-trace.h
+> > @@ -0,0 +1,77 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * amd-pstate-trace.h - AMD Processor P-state Frequency Driver Tracer
+> > + *
+> > + * Copyright (C) 2021 Advanced Micro Devices, Inc. All Rights Reserved.
+> > + *
+> > + * Author: Huang Rui <ray.huang@amd.com>
+> > + */
+> > +
+> > +#if !defined(_AMD_PSTATE_TRACE_H) || defined(TRACE_HEADER_MULTI_READ)
+> > +#define _AMD_PSTATE_TRACE_H
+> > +
+> > +#include <linux/cpufreq.h>
+> > +#include <linux/tracepoint.h>
+> > +#include <linux/trace_events.h>
+> > +
+> > +#undef TRACE_SYSTEM
+> > +#define TRACE_SYSTEM amd_cpu
+> > +
+> > +#undef TRACE_INCLUDE_FILE
+> > +#define TRACE_INCLUDE_FILE amd-pstate-trace
+> > +
+> > +#define TPS(x)  tracepoint_string(x)
+> > +
+> > +TRACE_EVENT(amd_pstate_perf,
+> 
+> Could this be added to include/trace/events/power.h ?
 > 
 
-I see. Will move them into this patch in V6.
+Actually, that is my original idea, but once I move the trace into
+include/trace/events/power.h, the amd-pstate driver cannot build as "ko"
+anymore. This is the early stage, "ko" is friendly and flexible for us to
+switch and compare between amd-pstate and acpi-cpufreq. I can move it into
+"power" trace events once we address the performance issue on shared memory
+solution.
 
 Thanks,
 Ray
-
-> > +       } else {
-> > +               pr_info("This processor supports shared memory solution, you can enable it with amd_pstate.shared_mem=1\n");
-> >                 return -ENODEV;
-> >         }
-> >
-> > --
-> > 2.25.1
-> >
