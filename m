@@ -2,356 +2,225 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29FF6479024
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Dec 2021 16:42:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E147479035
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Dec 2021 16:45:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233615AbhLQPm6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Dec 2021 10:42:58 -0500
-Received: from mail-oi1-f182.google.com ([209.85.167.182]:39772 "EHLO
-        mail-oi1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232425AbhLQPm6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Dec 2021 10:42:58 -0500
-Received: by mail-oi1-f182.google.com with SMTP id bf8so4162737oib.6;
-        Fri, 17 Dec 2021 07:42:57 -0800 (PST)
+        id S235296AbhLQPpV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Dec 2021 10:45:21 -0500
+Received: from mail-ot1-f50.google.com ([209.85.210.50]:41613 "EHLO
+        mail-ot1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234993AbhLQPpV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Dec 2021 10:45:21 -0500
+Received: by mail-ot1-f50.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so3332019otl.8;
+        Fri, 17 Dec 2021 07:45:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=YVimRKi9Mf6Nn3TIsLinkuNs4zF4imOCzYAV86XVmsg=;
-        b=Zqhj+q9YaofBqSGH+Rq+TcmkGfk7y9T11rL8VqUsw1e7w74Hg6BIepiOJOxBmop2Ap
-         o7MZi7kuLqiZfeL1rVZPBNZ7qIhtvKqK2rq4mj9wyZBlwj6xjOB2yA+UW3upuCFKfMOq
-         u/+fwd2s6feI+8299YIg/hPRpsZC6JIXq7H3yRYc1Beb/3pGQhdpa+CqTyyLAHAE9HA8
-         UR5rbcoHx06ApuypxxsXdWxTIqWPJVaxLYxaQBB8PFiDPt+NKLVeyH7CPxhvTMpcVVik
-         Q1YDXinQ8epo27VED3if22js7Tw+4uCIQmKMrKc2l651AMCcHJ6hnoD6feoyZxfaoQdX
-         DqfQ==
-X-Gm-Message-State: AOAM5326LHHL8pjqnv+NJ+LQhYN8V3Hu5lHTa/nj9sfcYBRXQRRwfEhg
-        XYika2cG4DTYUjmNQh5HLRAfxyhHWzAmXxlSEoc=
-X-Google-Smtp-Source: ABdhPJzpGAU0FA05DNKXJUlmj6Hb/Am1OvUp34vAA6MDgyzGSPgZNfzZ6lQHsAscM4F62suOkRjaTBkL/jaRlfzMqRk=
-X-Received: by 2002:a05:6808:14c2:: with SMTP id f2mr2439454oiw.154.1639755777473;
- Fri, 17 Dec 2021 07:42:57 -0800 (PST)
+        bh=GzHQTD44+c4L/n3WuHxm40VcMWISZ6Ni+Liojc877bg=;
+        b=CsYFrNAYNsGem/1g45gar4mTeeSZWKtzFNeo7IhceptbF1GoQl9q43nIN80MbKb0fG
+         SsGHZMDGqu3o72UMbWYLwKUYl0z97yA58Rqqb4TbtJRcjOELxK0cDHIU5AvGg4nUVYfS
+         mqJmcAVDCU44y9Id22DKINKxW1oFzoRyrEArv8X20Zn/lbtemp+R6m4uZPkdndIfg41g
+         JU9Ssp4CJMULl492HcoFISMNwv1VmIOxEx83YGc02FqwNpE2CodNz15FS1zqIoJ9xJd1
+         IJ4wYQCIdCkgUGDnev0t6QTGcqIGPdobsYC4/xRV8SvsCvpoNIeMqU2NFr+jCa2ko+rR
+         xHRw==
+X-Gm-Message-State: AOAM530RiX6t2YutG4Yh/8zQY1HsJzMEpwcz/P2X5J4qx8f/O6bQJKs8
+        hip/aAGKiWIDmb19ePOAAsZwCyAaN7dxxzVf+y8=
+X-Google-Smtp-Source: ABdhPJwAUjR3gltHqTTD8lV/z+K87FvzcUT+wem08dLnWFKadwMiq3X/kA/6Ne6ndBT8sL9/vmmmZ/j62GZuVaulrBU=
+X-Received: by 2002:a05:6830:348f:: with SMTP id c15mr2642020otu.254.1639755920761;
+ Fri, 17 Dec 2021 07:45:20 -0800 (PST)
 MIME-Version: 1.0
-References: <20211214005212.20588-1-chang.seok.bae@intel.com> <20211214005212.20588-9-chang.seok.bae@intel.com>
-In-Reply-To: <20211214005212.20588-9-chang.seok.bae@intel.com>
+References: <20211216183305.3152807-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20211216183305.3152807-1-srinivas.pandruvada@linux.intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 17 Dec 2021 16:42:46 +0100
-Message-ID: <CAJZ5v0gbePA+rR9gMRnaJrUGS1MwF6UQzxrFZChy5i=11tgz-A@mail.gmail.com>
-Subject: Re: [PATCH v4 08/13] x86/power/keylocker: Restore internal wrapping
- key from the ACPI S3/4 sleep states
-To:     "Chang S. Bae" <chang.seok.bae@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, Borislav Petkov <bp@suse.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        charishma1.gairuboyina@intel.com, kumar.n.dwarakanath@intel.com,
-        lalithambika.krishnakumar@intel.com,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>
+Date:   Fri, 17 Dec 2021 16:45:09 +0100
+Message-ID: <CAJZ5v0iVusXxz7yhqTgnte+OCS+tZNSmCf0hwJxuK_w76CjpOw@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Update EPP for AlderLake mobile
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     Len Brown <lenb@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-First, I would change the subject to "x86/PM/keylocker: Restore
-internal wrapping key on resume from ACPI S3/S4".
+On Thu, Dec 16, 2021 at 7:33 PM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> There is an expectation from users that they can get frequency specified
+> by cpufreq/cpuinfo_max_freq when conditions permit. But with AlderLake
+> mobile it may not be possible. This is possible that frequency is clipped
+> based on the system power-up EPP value. In this case users can update
+> cpufreq/energy_performance_preference to some performance oriented EPP to
+> limit clipping of frequencies.
+>
+> To get out of box behavior as the prior generations of CPUs, update EPP
+> for AlderLake mobile CPUs on boot. On prior generations of CPUs EPP = 128
+> was enough to get maximum frequency, but with AlderLake mobile the
+> equivalent EPP is 102. Since EPP is model specific, this is possible that
+> they have different meaning on each generation of CPU.
+>
+> The current EPP string "balance_performance" corresponds to EPP = 128.
+> Change the EPP corresponding to "balance_performance" to 102 for only
+> AlderLake mobile CPUs and update this on each CPU during boot.
+>
+> To implement reuse epp_values[] array and update the modified EPP at the
+> index for BALANCE_PERFORMANCE. Add a dummy EPP_INDEX_DEFAULT to
+> epp_values[] to match indexes in the energy_perf_strings[].
+>
+> After HWP PM is enabled also update EPP when "balance_performance" is
+> redefined for the very first time after the boot on each CPU. On
+> subsequent suspend/resume or offline/online the old EPP is restored,
+> so no specific action is needed.
+>
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-On Tue, Dec 14, 2021 at 2:00 AM Chang S. Bae <chang.seok.bae@intel.com> wrote:
->
-> When the system state switches to these sleep states, the internal
-> wrapping key gets reset in the CPU state.
+Applied as 5.17 material, thanks!
 
-And here I would say
-
-"When the system enters the ACPI S3 or S4 sleep state, the internal
-wrapping key is discarded."
-
->
-> The primary use case for the feature is bare metal dm-crypt. The key needs
-> to be restored properly on wakeup, as dm-crypt does not prompt for the key
-> on resume from suspend. Even the prompt it does perform for unlocking
-> the volume where the hibernation image is stored, it still expects to reuse
-> the key handles within the hibernation image once it is loaded. So it is
-> motivated to meet dm-crypt's expectation that the key handles in the
-> suspend-image remain valid after resume from an S-state.
->
-> Key Locker provides a mechanism to back up the internal wrapping key in
-> non-volatile storage. The kernel requests a backup right after the key is
-> loaded at boot time. It is copied back to each CPU upon wakeup.
->
-> While the backup may be maintained in NVM across S5 and G3 "off"
-> states it is not architecturally guaranteed, nor is it expected by dm-crypt
-> which expects to prompt for the key each time the volume is started.
->
-> The entirety of Key Locker needs to be disabled if the backup mechanism is
-> not available unless CONFIG_SUSPEND=n, otherwise dm-crypt requires the
-> backup to be available.
->
-> In the event of a key restore failure the kernel proceeds with an
-> initialized IWKey state. This has the effect of invalidating any key
-> handles that might be present in a suspend-image. When this happens
-> dm-crypt will see I/O errors resulting from error returns from
-> crypto_skcipher_{en,de}crypt(). While this will disrupt operations in the
-> current boot, data is not at risk and access is restored at the next reboot
-> to create new handles relative to the current IWKey.
->
-> Manage a feature-specific flag to communicate with the crypto
-> implementation. This ensures to stop using the AES instructions upon the
-> key restore failure while not turning off the feature.
->
-> Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-> Cc: x86@kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
 > ---
-> Changes from v3:
-> * Fix the build issue with !X86_KEYLOCKER. (Eric Biggers)
+>  drivers/cpufreq/intel_pstate.c | 79 ++++++++++++++++++++++++----------
+>  1 file changed, 57 insertions(+), 22 deletions(-)
 >
-> Changes from RFC v2:
-> * Change the backup key failure handling. (Dan Williams)
->
-> Changes from RFC v1:
-> * Folded the warning message into the if condition check.
->   (Rafael Wysocki)
-> * Rebased on the changes of the previous patches.
-> * Added error code for key restoration failures.
-> * Moved the restore helper.
-> * Added function descriptions.
-> ---
->  arch/x86/include/asm/keylocker.h |   4 +
->  arch/x86/kernel/keylocker.c      | 124 ++++++++++++++++++++++++++++++-
->  arch/x86/power/cpu.c             |   2 +
->  3 files changed, 128 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/x86/include/asm/keylocker.h b/arch/x86/include/asm/keylocker.h
-> index 820ac29c06d9..c1d27fb5a1c3 100644
-> --- a/arch/x86/include/asm/keylocker.h
-> +++ b/arch/x86/include/asm/keylocker.h
-> @@ -32,9 +32,13 @@ struct iwkey {
->  #ifdef CONFIG_X86_KEYLOCKER
->  void setup_keylocker(struct cpuinfo_x86 *c);
->  void destroy_keylocker_data(void);
-> +void restore_keylocker(void);
-> +extern bool valid_keylocker(void);
->  #else
->  #define setup_keylocker(c) do { } while (0)
->  #define destroy_keylocker_data() do { } while (0)
-> +#define restore_keylocker() do { } while (0)
-> +static inline bool valid_keylocker(void) { return false; }
->  #endif
->
->  #endif /*__ASSEMBLY__ */
-> diff --git a/arch/x86/kernel/keylocker.c b/arch/x86/kernel/keylocker.c
-> index 87d775a65716..ff0e012e3dd5 100644
-> --- a/arch/x86/kernel/keylocker.c
-> +++ b/arch/x86/kernel/keylocker.c
-> @@ -11,11 +11,26 @@
->  #include <asm/fpu/api.h>
->  #include <asm/keylocker.h>
->  #include <asm/tlbflush.h>
-> +#include <asm/msr.h>
->
->  static __initdata struct keylocker_setup_data {
-> +       bool initialized;
->         struct iwkey key;
->  } kl_setup;
->
-> +/*
-> + * This flag is set with IWKey load. When the key restore fails, it is
-> + * reset. This restore state is exported to the crypto library, then AES-KL
-> + * will not be used there. So, the feature is soft-disabled with this flag.
-> + */
-> +static bool valid_kl;
+> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+> index dec2a5649ac1..1408411f4618 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -664,19 +664,29 @@ static int intel_pstate_set_epb(int cpu, s16 pref)
+>   *     3               balance_power
+>   *     4               power
+>   */
 > +
-> +bool valid_keylocker(void)
-> +{
-> +       return valid_kl;
-> +}
-> +EXPORT_SYMBOL_GPL(valid_keylocker);
+> +enum energy_perf_value_index {
+> +       EPP_INDEX_DEFAULT = 0,
+> +       EPP_INDEX_PERFORMANCE,
+> +       EPP_INDEX_BALANCE_PERFORMANCE,
+> +       EPP_INDEX_BALANCE_POWERSAVE,
+> +       EPP_INDEX_POWERSAVE,
+> +};
 > +
->  static void __init generate_keylocker_data(void)
->  {
->         get_random_bytes(&kl_setup.key.integrity_key,  sizeof(kl_setup.key.integrity_key));
-> @@ -25,6 +40,8 @@ static void __init generate_keylocker_data(void)
->  void __init destroy_keylocker_data(void)
->  {
->         memset(&kl_setup.key, KEY_DESTROY, sizeof(kl_setup.key));
-> +       kl_setup.initialized = true;
-> +       valid_kl = true;
->  }
+>  static const char * const energy_perf_strings[] = {
+> -       "default",
+> -       "performance",
+> -       "balance_performance",
+> -       "balance_power",
+> -       "power",
+> +       [EPP_INDEX_DEFAULT] = "default",
+> +       [EPP_INDEX_PERFORMANCE] = "performance",
+> +       [EPP_INDEX_BALANCE_PERFORMANCE] = "balance_performance",
+> +       [EPP_INDEX_BALANCE_POWERSAVE] = "balance_power",
+> +       [EPP_INDEX_POWERSAVE] = "power",
+>         NULL
+>  };
+> -static const unsigned int epp_values[] = {
+> -       HWP_EPP_PERFORMANCE,
+> -       HWP_EPP_BALANCE_PERFORMANCE,
+> -       HWP_EPP_BALANCE_POWERSAVE,
+> -       HWP_EPP_POWERSAVE
+> +static unsigned int epp_values[] = {
+> +       [EPP_INDEX_DEFAULT] = 0, /* Unused index */
+> +       [EPP_INDEX_PERFORMANCE] = HWP_EPP_PERFORMANCE,
+> +       [EPP_INDEX_BALANCE_PERFORMANCE] = HWP_EPP_BALANCE_PERFORMANCE,
+> +       [EPP_INDEX_BALANCE_POWERSAVE] = HWP_EPP_BALANCE_POWERSAVE,
+> +       [EPP_INDEX_POWERSAVE] = HWP_EPP_POWERSAVE,
+>  };
 >
->  static void __init load_keylocker(void)
-> @@ -34,6 +51,27 @@ static void __init load_keylocker(void)
->         kernel_fpu_end();
->  }
+>  static int intel_pstate_get_energy_pref_index(struct cpudata *cpu_data, int *raw_epp)
+> @@ -690,14 +700,14 @@ static int intel_pstate_get_energy_pref_index(struct cpudata *cpu_data, int *raw
+>                 return epp;
 >
-> +/**
-> + * copy_keylocker - Copy the internal wrapping key from the backup.
-> + *
-> + * Request hardware to copy the key in non-volatile storage to the CPU
-> + * state.
-> + *
-> + * Returns:    -EBUSY if the copy fails, 0 if successful.
-> + */
-> +static int copy_keylocker(void)
-> +{
-> +       u64 status;
-> +
-> +       wrmsrl(MSR_IA32_COPY_IWKEY_TO_LOCAL, 1);
-> +
-> +       rdmsrl(MSR_IA32_IWKEY_COPY_STATUS, status);
-> +       if (status & BIT(0))
-> +               return 0;
-> +       else
-> +               return -EBUSY;
-> +}
-> +
->  /**
->   * setup_keylocker - Enable the feature.
->   * @c:         A pointer to struct cpuinfo_x86
-> @@ -49,6 +87,7 @@ void __ref setup_keylocker(struct cpuinfo_x86 *c)
+>         if (boot_cpu_has(X86_FEATURE_HWP_EPP)) {
+> -               if (epp == HWP_EPP_PERFORMANCE)
+> -                       return 1;
+> -               if (epp == HWP_EPP_BALANCE_PERFORMANCE)
+> -                       return 2;
+> -               if (epp == HWP_EPP_BALANCE_POWERSAVE)
+> -                       return 3;
+> -               if (epp == HWP_EPP_POWERSAVE)
+> -                       return 4;
+> +               if (epp == epp_values[EPP_INDEX_PERFORMANCE])
+> +                       return EPP_INDEX_PERFORMANCE;
+> +               if (epp == epp_values[EPP_INDEX_BALANCE_PERFORMANCE])
+> +                       return EPP_INDEX_BALANCE_PERFORMANCE;
+> +               if (epp == epp_values[EPP_INDEX_BALANCE_POWERSAVE])
+> +                       return EPP_INDEX_BALANCE_POWERSAVE;
+> +               if (epp == epp_values[EPP_INDEX_POWERSAVE])
+> +                       return EPP_INDEX_POWERSAVE;
+>                 *raw_epp = epp;
+>                 return 0;
+>         } else if (boot_cpu_has(X86_FEATURE_EPB)) {
+> @@ -757,7 +767,7 @@ static int intel_pstate_set_energy_pref_index(struct cpudata *cpu_data,
+>                 if (use_raw)
+>                         epp = raw_epp;
+>                 else if (epp == -EINVAL)
+> -                       epp = epp_values[pref_index - 1];
+> +                       epp = epp_values[pref_index];
 >
->         if (c == &boot_cpu_data) {
->                 u32 eax, ebx, ecx, edx;
-> +               bool backup_available;
->
->                 cpuid_count(KEYLOCKER_CPUID, 0, &eax, &ebx, &ecx, &edx);
 >                 /*
-> @@ -62,10 +101,49 @@ void __ref setup_keylocker(struct cpuinfo_x86 *c)
->                         goto disable;
->                 }
+>                  * To avoid confusion, refuse to set EPP to any values different
+> @@ -843,7 +853,7 @@ static ssize_t store_energy_performance_preference(
+>                  * upfront.
+>                  */
+>                 if (!raw)
+> -                       epp = ret ? epp_values[ret - 1] : cpu->epp_default;
+> +                       epp = ret ? epp_values[ret] : cpu->epp_default;
 >
-> +               backup_available = (ebx & KEYLOCKER_CPUID_EBX_BACKUP) ? true : false;
-
-Why not
-
-backup_available = !!(ebx & KEYLOCKER_CPUID_EBX_BACKUP);
-
-Apart from this it looks OK, so with the above addressed, please feel
-free to add
-
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
-to this patch.
-
-> +               /*
-> +                * The internal wrapping key in CPU state is volatile in
-> +                * S3/4 states. So ensure the backup capability along with
-> +                * S-states.
-> +                */
-> +               if (!backup_available && IS_ENABLED(CONFIG_SUSPEND)) {
-> +                       pr_debug("x86/keylocker: No key backup support with possible S3/4.\n");
-> +                       goto disable;
-> +               }
-> +
->                 generate_keylocker_data();
-> -       }
-> +               load_keylocker();
+>                 if (cpu->epp_cached != epp) {
+>                         int err;
+> @@ -1679,10 +1689,18 @@ static void intel_pstate_hwp_enable(struct cpudata *cpudata)
+>                 wrmsrl_on_cpu(cpudata->cpu, MSR_HWP_INTERRUPT, 0x00);
 >
-> -       load_keylocker();
-> +               /* Backup an internal wrapping key in non-volatile media. */
-> +               if (backup_available)
-> +                       wrmsrl(MSR_IA32_BACKUP_IWKEY_TO_PLATFORM, 1);
-> +       } else {
-> +               int rc;
-> +
-> +               /*
-> +                * Load the internal wrapping key directly when available
-> +                * in memory, which is only possible at boot-time.
-> +                *
-> +                * NB: When system wakes up, this path also recovers the
-> +                * internal wrapping key.
-> +                */
-> +               if (!kl_setup.initialized) {
-> +                       load_keylocker();
-> +               } else if (valid_kl) {
-> +                       rc = copy_keylocker();
-> +                       /*
-> +                        * The boot CPU was successful but the key copy
-> +                        * fails here. Then, the subsequent feature use
-> +                        * will have inconsistent keys and failures. So,
-> +                        * invalidate the feature via the flag.
-> +                        */
-> +                       if (rc) {
-> +                               valid_kl = false;
-> +                               pr_err_once("x86/keylocker: Invalid copy status (rc: %d).\n", rc);
-> +                       }
-> +               }
-> +       }
+>         wrmsrl_on_cpu(cpudata->cpu, MSR_PM_ENABLE, 0x1);
+> -       if (cpudata->epp_default == -EINVAL)
+> -               cpudata->epp_default = intel_pstate_get_epp(cpudata, 0);
 >
->         pr_info_once("x86/keylocker: Enabled.\n");
->         return;
-> @@ -77,3 +155,45 @@ void __ref setup_keylocker(struct cpuinfo_x86 *c)
->         /* Make sure the feature disabled for kexec-reboot. */
->         cr4_clear_bits(X86_CR4_KEYLOCKER);
->  }
+>         intel_pstate_enable_hwp_interrupt(cpudata);
 > +
-> +/**
-> + * restore_keylocker - Restore the internal wrapping key.
-> + *
-> + * The boot CPU executes this while other CPUs restore it through the setup
-> + * function.
-> + */
-> +void restore_keylocker(void)
-> +{
-> +       u64 backup_status;
-> +       int rc;
-> +
-> +       if (!cpu_feature_enabled(X86_FEATURE_KEYLOCKER) || !valid_kl)
+> +       if (cpudata->epp_default >= 0)
 > +               return;
 > +
-> +       /*
-> +        * The IA32_IWKEYBACKUP_STATUS MSR contains a bitmap that indicates
-> +        * an invalid backup if bit 0 is set and a read (or write) error if
-> +        * bit 2 is set.
-> +        */
-> +       rdmsrl(MSR_IA32_IWKEY_BACKUP_STATUS, backup_status);
-> +       if (backup_status & BIT(0)) {
-> +               rc = copy_keylocker();
-> +               if (rc)
-> +                       pr_err("x86/keylocker: Invalid copy state (rc: %d).\n", rc);
-> +               else
-> +                       return;
+> +       if (epp_values[EPP_INDEX_BALANCE_PERFORMANCE] == HWP_EPP_BALANCE_PERFORMANCE) {
+> +               cpudata->epp_default = intel_pstate_get_epp(cpudata, 0);
 > +       } else {
-> +               pr_err("x86/keylocker: The key backup access failed with %s.\n",
-> +                      (backup_status & BIT(2)) ? "read error" : "invalid status");
+> +               cpudata->epp_default = epp_values[EPP_INDEX_BALANCE_PERFORMANCE];
+> +               intel_pstate_set_epp(cpudata, cpudata->epp_default);
+> +       }
+>  }
+>
+>  static int atom_get_min_pstate(void)
+> @@ -3349,6 +3367,16 @@ static bool intel_pstate_hwp_is_enabled(void)
+>         return !!(value & 0x1);
+>  }
+>
+> +static const struct x86_cpu_id intel_epp_balance_perf[] = {
+> +       /*
+> +        * Set EPP value as 102, this is the max suggested EPP
+> +        * which can result in one core turbo frequency for
+> +        * AlderLake Mobile CPUs.
+> +        */
+> +       X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L, 102),
+> +       {}
+> +};
+> +
+>  static int __init intel_pstate_init(void)
+>  {
+>         static struct cpudata **_all_cpu_data;
+> @@ -3438,6 +3466,13 @@ static int __init intel_pstate_init(void)
+>
+>         intel_pstate_sysfs_expose_params();
+>
+> +       if (hwp_active) {
+> +               const struct x86_cpu_id *id = x86_match_cpu(intel_epp_balance_perf);
+> +
+> +               if (id)
+> +                       epp_values[EPP_INDEX_BALANCE_PERFORMANCE] = id->driver_data;
 > +       }
 > +
-> +       /*
-> +        * Now the backup key is not available. Invalidate the feature via
-> +        * the flag to avoid any subsequent use. But keep the feature with
-> +        * zero IWKeys instead of disabling it. The current users will see
-> +        * key handle integrity failure but that's because of the internal
-> +        * key change.
-> +        */
-> +       pr_err("x86/keylocker: Failed to restore internal wrapping key.\n");
-> +       valid_kl = false;
-> +}
-> diff --git a/arch/x86/power/cpu.c b/arch/x86/power/cpu.c
-> index 9f2b251e83c5..1a290f529c73 100644
-> --- a/arch/x86/power/cpu.c
-> +++ b/arch/x86/power/cpu.c
-> @@ -25,6 +25,7 @@
->  #include <asm/cpu.h>
->  #include <asm/mmu_context.h>
->  #include <asm/cpu_device_id.h>
-> +#include <asm/keylocker.h>
->
->  #ifdef CONFIG_X86_32
->  __visible unsigned long saved_context_ebx;
-> @@ -262,6 +263,7 @@ static void notrace __restore_processor_state(struct saved_context *ctxt)
->         mtrr_bp_restore();
->         perf_restore_debug_store();
->         msr_restore_context(ctxt);
-> +       restore_keylocker();
->
->         c = &cpu_data(smp_processor_id());
->         if (cpu_has(c, X86_FEATURE_MSR_IA32_FEAT_CTL))
+>         mutex_lock(&intel_pstate_driver_lock);
+>         rc = intel_pstate_register_driver(default_driver);
+>         mutex_unlock(&intel_pstate_driver_lock);
 > --
-> 2.17.1
+> 2.31.1
 >
