@@ -2,61 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C02E479AE1
-	for <lists+linux-pm@lfdr.de>; Sat, 18 Dec 2021 14:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AC6E479AE4
+	for <lists+linux-pm@lfdr.de>; Sat, 18 Dec 2021 14:00:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233204AbhLRNAe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 18 Dec 2021 08:00:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33096 "EHLO
+        id S233242AbhLRNAh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 18 Dec 2021 08:00:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233022AbhLRNAe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 18 Dec 2021 08:00:34 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F67BC06173E
-        for <linux-pm@vger.kernel.org>; Sat, 18 Dec 2021 05:00:33 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id y196so3423435wmc.3
-        for <linux-pm@vger.kernel.org>; Sat, 18 Dec 2021 05:00:33 -0800 (PST)
+        with ESMTP id S233230AbhLRNAf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 18 Dec 2021 08:00:35 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36909C061574
+        for <linux-pm@vger.kernel.org>; Sat, 18 Dec 2021 05:00:35 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id s1so9409589wrg.1
+        for <linux-pm@vger.kernel.org>; Sat, 18 Dec 2021 05:00:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=JCbNL7RiUna5qq8DaSMW/coH4epXCMjSWD6ZnOXRFI0=;
-        b=u4gwbRii2rQYALroefHK1y6OAg/PaB5d8cxYkVOxNfQfP/GSpkOTw4lM0b9sykdRGn
-         I5+TfxMLFW4Yz9DjXmmwADnnilA4jAI3OuH+2kj279neBPdyczuIvIKan+BZxt1abCOC
-         PYvHZoojRGkGcKQVmwOZVt1XScnzpH93n3cT0kdV+KDJ4QLvkVW8g+u48CO+9sCgVbi+
-         IM8GXnnDHqRZPDHHNChAWlGub8OWoFq1V1IwRCwrtEzywv2SqESfkq3jDHxS/vHMIzCq
-         Y/6l37BlHAuffQ5iGLgabgk+gX6l3IXwpC+2N3WfHvO+x+p5njBf0nTvVHjxH/2oigQn
-         0Nrw==
+        bh=Ex98898ORuSQfXO3nt1xbryRupEWOc+Ws7IWvi7Y958=;
+        b=MSiX8872aULjxwwWkBGaY+6CBTB4Bk8og4GFTKrZcV/QR7h9Rib64/2uVR6t/iTRNM
+         pWwECd2NZ7wsGlKxsobev/zTSah25gQzRty9YfL4JF2qZQE/yr/+2LyBKqswZLrz0x1V
+         G3iM+/TXQR2kAdgQ9kjs0PeoHUJMrVTPEK1dtmTpT6CQ2ykfW04SYDVK2YcvQO/Ko9BL
+         zbskONb+0IxVZKhEEuAsI1zBjWtLdQMf1iBfwPVV21B0l3DRSkp/p7s0cZ+sJCmf5/Zo
+         N5ChbsSQrWozpzDLGQNEOClloAuIys7jA4GFvF2cWphyJqmsQxLJ0B2/RSvzsaQ7oLTR
+         GTGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=JCbNL7RiUna5qq8DaSMW/coH4epXCMjSWD6ZnOXRFI0=;
-        b=o5oj5Uup8ukoCpMsrnyxyHauBKDBSpFc3cRFgmzwNgqj1t57UF61Njs9pOTRM6LUcE
-         dfToLfreYwiy/SFtpgknMnF/dRBN1P2yRpXSMrS0v8Zx4uAOMS1f5pw5zZwSJjyStunX
-         wpp77ndJ7D5TcI+v+d/BdEJXZFzNG/pb6l0rhc2V7A/7gy2EzR9bblwgKKZX5qPE53Yd
-         yrYFRAlOQAZZOPw2jgulz2itpPZbjT0iIUcF5b4SUwncXMYhIAltz7hKAyKB7ZX6tD8u
-         LHTilBF7gc/E8dELyDokK9KJSY+pJ9NhGaZJCkzNUzberqL9FXo4l8XV9+3gQQws5fYM
-         +6cA==
-X-Gm-Message-State: AOAM531rxMLFty8/wUe/FgPxD1JDj7O2xaDTnSN3n3iyD5N4BSGYkmPB
-        JTBF8063Oag3XH4vmUcyUCrl5Q==
-X-Google-Smtp-Source: ABdhPJxXBs2crqxznWfWrplA3JeMlkC5cBhIFjXjof2wb1mGSFgRnncc6sy5NXR1PO3YD3c6rLebKQ==
-X-Received: by 2002:a05:600c:a4c:: with SMTP id c12mr6702096wmq.60.1639832431971;
-        Sat, 18 Dec 2021 05:00:31 -0800 (PST)
+        bh=Ex98898ORuSQfXO3nt1xbryRupEWOc+Ws7IWvi7Y958=;
+        b=DXHn1ImVuuuOv13ZtL6P1LhdchJn/qLjFLiV6JM0Nd27YI+BvXA3+To7Om2UrHvxHq
+         c0rR+pO8V0CY1ZbcRxYm3JovoQWUaA/3zSuIsIZkB94T3FSSnlIgeFkNmxAtU+UbPN19
+         DO9yQ/pjXzV5EzQnzzINTrpdSHuJzwMfe8dZ7pJnAvU8c3UMGhkRPUvcr3mnyUUCQ8j1
+         fq4BUDZKAcC9eRYmi/6qkX0IQNAwyAS8G7CNAy4vl2lwpFs7qq7ZsYY5CII+WQ0M+0Ax
+         VN+mkA5nDlshvEgGYSTg/+4zy/Mx/h3Wae6i/VO/7FzTOpw3bO/toZ6S8ViIz3EZgWtw
+         xeuA==
+X-Gm-Message-State: AOAM532AjJrUDZYz9fljIUa1dG8RQJDm31WaSbqOE3sOONtXjCCPVZlX
+        IQnZh/HHt9/afkKLL9RKMe9aSQ==
+X-Google-Smtp-Source: ABdhPJx1TFiCgA5HbwOo6OFSCSrP6j7DJZt+8Gf9pGtTd265i0qCfhzr2/PgJeD4Vo/417lUWht0IA==
+X-Received: by 2002:adf:cd8a:: with SMTP id q10mr6060897wrj.164.1639832433691;
+        Sat, 18 Dec 2021 05:00:33 -0800 (PST)
 Received: from localhost.localdomain ([2a01:e34:ed2f:f020:1f0f:c9b8:ee5c:5c2f])
-        by smtp.gmail.com with ESMTPSA id j16sm1465785wms.12.2021.12.18.05.00.30
+        by smtp.gmail.com with ESMTPSA id j16sm1465785wms.12.2021.12.18.05.00.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Dec 2021 05:00:31 -0800 (PST)
+        Sat, 18 Dec 2021 05:00:33 -0800 (PST)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     daniel.lezcano@linaro.org, rjw@rjwysocki.net
 Cc:     lukasz.luba@arm.com, robh@kernel.org, heiko@sntech.de,
         arnd@linaro.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, ulf.hansson@linaro.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arch@vger.kernel.org (open list:GENERIC INCLUDE/ASM HEADER FILES)
-Subject: [PATCH v5 1/6] powercap/drivers/dtpm: Move dtpm table from init to data section
-Date:   Sat, 18 Dec 2021 14:00:09 +0100
-Message-Id: <20211218130014.4037640-2-daniel.lezcano@linaro.org>
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@kernel.org>
+Subject: [PATCH v5 2/6] powercap/drivers/dtpm: Add hierarchy creation
+Date:   Sat, 18 Dec 2021 14:00:10 +0100
+Message-Id: <20211218130014.4037640-3-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211218130014.4037640-1-daniel.lezcano@linaro.org>
 References: <20211218130014.4037640-1-daniel.lezcano@linaro.org>
@@ -66,49 +66,287 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The dtpm table is used to let the different dtpm backends to register
-their setup callbacks in a single place and preventing to export
-multiple functions all around the kernel. That allows the dtpm code to
-be self-encapsulated.
+The DTPM framework is available but without a way to configure it.
 
-The dtpm hierarchy will be passed as a parameter by a platform
-specific code and that will lead to the creation of the different dtpm
-nodes.
+This change provides a way to create a hierarchy of DTPM node where
+the power consumption reflects the sum of the children's power
+consumption.
 
-The function creating the hierarchy could be called from a module at
-init time or when it is loaded. However, at this moment the table is
-already freed as it belongs to the init section and the creation will
-lead to a invalid memory access.
+It is up to the platform to specify an array of dtpm nodes where each
+element has a pointer to its parent, except the top most one. The type
+of the node gives the indication of which initialization callback to
+call. At this time, we can create a virtual node, where its purpose is
+to be a parent in the hierarchy, and a DT node where the name
+describes its path.
 
-Fix this by moving the table to the data section.
+In order to ensure a nice self-encapsulation, the DTPM table
+descriptors contains a couple of initialization functions, one to
+setup the DTPM backend and one to initialize it up. With this
+approach, the DTPM framework has a very few material to export.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- include/asm-generic/vmlinux.lds.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/powercap/Kconfig    |   1 +
+ drivers/powercap/dtpm.c     | 155 ++++++++++++++++++++++++++++++++++--
+ drivers/powercap/dtpm_cpu.c |   2 +-
+ include/linux/dtpm.h        |  21 ++++-
+ 4 files changed, 171 insertions(+), 8 deletions(-)
 
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index 42f3866bca69..50d494d94d6c 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -362,7 +362,8 @@
- 	BRANCH_PROFILE()						\
- 	TRACE_PRINTKS()							\
- 	BPF_RAW_TP()							\
--	TRACEPOINT_STR()
-+	TRACEPOINT_STR()						\
-+	DTPM_TABLE()
+diff --git a/drivers/powercap/Kconfig b/drivers/powercap/Kconfig
+index 8242e8c5ed77..b1ca339957e3 100644
+--- a/drivers/powercap/Kconfig
++++ b/drivers/powercap/Kconfig
+@@ -46,6 +46,7 @@ config IDLE_INJECT
  
- /*
-  * Data section helpers
-@@ -723,7 +724,6 @@
- 	ACPI_PROBE_TABLE(irqchip)					\
- 	ACPI_PROBE_TABLE(timer)						\
- 	THERMAL_TABLE(governor)						\
--	DTPM_TABLE()							\
- 	EARLYCON_TABLE()						\
- 	LSM_TABLE()							\
- 	EARLY_LSM_TABLE()						\
+ config DTPM
+ 	bool "Power capping for Dynamic Thermal Power Management (EXPERIMENTAL)"
++	depends on OF
+ 	help
+ 	  This enables support for the power capping for the dynamic
+ 	  thermal power management userspace engine.
+diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
+index 0fe70687c198..1611c86de5f5 100644
+--- a/drivers/powercap/dtpm.c
++++ b/drivers/powercap/dtpm.c
+@@ -23,6 +23,7 @@
+ #include <linux/powercap.h>
+ #include <linux/slab.h>
+ #include <linux/mutex.h>
++#include <linux/of.h>
+ 
+ #define DTPM_POWER_LIMIT_FLAG 0
+ 
+@@ -461,19 +462,163 @@ int dtpm_register(const char *name, struct dtpm *dtpm, struct dtpm *parent)
+ 	return 0;
+ }
+ 
+-static int __init init_dtpm(void)
++static struct dtpm *dtpm_setup_virtual(const struct dtpm_node *hierarchy,
++				       struct dtpm *parent)
++{
++	struct dtpm *dtpm;
++	int ret;
++
++	dtpm = kzalloc(sizeof(*dtpm), GFP_KERNEL);
++	if (!dtpm)
++		return ERR_PTR(-ENOMEM);
++	dtpm_init(dtpm, NULL);
++
++	ret = dtpm_register(hierarchy->name, dtpm, parent);
++	if (ret) {
++		pr_err("Failed to register dtpm node '%s': %d\n",
++		       hierarchy->name, ret);
++		kfree(dtpm);
++		return ERR_PTR(ret);
++	}
++
++	return dtpm;
++}
++
++static struct dtpm *dtpm_setup_dt(const struct dtpm_node *hierarchy,
++				  struct dtpm *parent)
++{
++	struct dtpm_descr *dtpm_descr;
++	struct device_node *np;
++	int ret;
++
++	np = of_find_node_by_path(hierarchy->name);
++	if (!np) {
++		pr_err("Failed to find '%s'\n", hierarchy->name);
++		return ERR_PTR(-ENXIO);
++	}
++
++	for_each_dtpm_table(dtpm_descr) {
++
++		ret = dtpm_descr->setup(parent, np);
++		if (ret) {
++			pr_err("Failed to setup '%s': %d\n", hierarchy->name, ret);
++			of_node_put(np);
++			return ERR_PTR(ret);
++		}
++
++		of_node_put(np);
++	}
++
++	/*
++	 * By returning a NULL pointer, we let know the caller there
++	 * is no child for us as we are a leaf of the tree
++	 */
++	return NULL;
++}
++
++typedef struct dtpm * (*dtpm_node_callback_t)(const struct dtpm_node *, struct dtpm *);
++
++dtpm_node_callback_t dtpm_node_callback[] = {
++	[DTPM_NODE_VIRTUAL] = dtpm_setup_virtual,
++	[DTPM_NODE_DT] = dtpm_setup_dt,
++};
++
++static int dtpm_for_each_child(const struct dtpm_node *hierarchy,
++			       const struct dtpm_node *it, struct dtpm *parent)
++{
++	struct dtpm *dtpm;
++	int i, ret;
++
++	for (i = 0; hierarchy[i].name; i++) {
++
++		if (hierarchy[i].parent != it)
++			continue;
++
++		dtpm = dtpm_node_callback[hierarchy[i].type](&hierarchy[i], parent);
++		if (!dtpm || IS_ERR(dtpm))
++			continue;
++
++		ret = dtpm_for_each_child(hierarchy, &hierarchy[i], dtpm);
++		if (ret)
++			return ret;
++	}
++
++	return 0;
++}
++
++/**
++ * dtpm_create_hierarchy - Create the dtpm hierarchy
++ * @hierarchy: An array of struct dtpm_node describing the hierarchy
++ *
++ * The function is called by the platform specific code with the
++ * description of the different node in the hierarchy. It creates the
++ * tree in the sysfs filesystem under the powercap dtpm entry.
++ *
++ * The expected tree has the format:
++ *
++ * struct dtpm_node hierarchy[] = {
++ *	[0] { .name = "topmost" },
++ *      [1] { .name = "package", .parent = &hierarchy[0] },
++ *      [2] { .name = "/cpus/cpu0", .type = DTPM_NODE_DT, .parent = &hierarchy[1] },
++ *      [3] { .name = "/cpus/cpu1", .type = DTPM_NODE_DT, .parent = &hierarchy[1] },
++ *      [4] { .name = "/cpus/cpu2", .type = DTPM_NODE_DT, .parent = &hierarchy[1] },
++ *      [5] { .name = "/cpus/cpu3", .type = DTPM_NODE_DT, .parent = &hierarchy[1] },
++ *	[6] { }
++ * };
++ *
++ * The last element is always an empty one and marks the end of the
++ * array.
++ *
++ * Return: zero on success, a negative value in case of error. Errors
++ * are reported back from the underlying functions.
++ */
++int dtpm_create_hierarchy(struct of_device_id *dtpm_match_table)
+ {
++	const struct of_device_id *match;
++	const struct dtpm_node *hierarchy;
+ 	struct dtpm_descr *dtpm_descr;
++	struct device_node *np;
++	int ret;
++
++	np = of_find_node_by_path("/");
++	if (!np)
++		return -ENODEV;
++
++	match = of_match_node(dtpm_match_table, np);
+ 
++	of_node_put(np);
++
++	if (!match)
++		return -ENODEV;
++
++	hierarchy = match->data;
++	if (!hierarchy)
++		return -EFAULT;
++
++	ret = dtpm_for_each_child(hierarchy, NULL, NULL);
++	if (ret)
++		return ret;
++	
++	for_each_dtpm_table(dtpm_descr) {
++
++		if (!dtpm_descr->init)
++			continue;
++
++		dtpm_descr->init();
++	}
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(dtpm_create_hierarchy);
++
++static int __init init_dtpm(void)
++{
+ 	pct = powercap_register_control_type(NULL, "dtpm", NULL);
+ 	if (IS_ERR(pct)) {
+ 		pr_err("Failed to register control type\n");
+ 		return PTR_ERR(pct);
+ 	}
+ 
+-	for_each_dtpm_table(dtpm_descr)
+-		dtpm_descr->init();
+-
+ 	return 0;
+ }
+-late_initcall(init_dtpm);
++fs_initcall_sync(init_dtpm);
+diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
+index b740866b228d..6bffb44c75aa 100644
+--- a/drivers/powercap/dtpm_cpu.c
++++ b/drivers/powercap/dtpm_cpu.c
+@@ -269,4 +269,4 @@ static int __init dtpm_cpu_init(void)
+ 	return 0;
+ }
+ 
+-DTPM_DECLARE(dtpm_cpu, dtpm_cpu_init);
++DTPM_DECLARE(dtpm_cpu, dtpm_cpu_init, NULL);
+diff --git a/include/linux/dtpm.h b/include/linux/dtpm.h
+index d37e5d06a357..5a6b31eaf7e4 100644
+--- a/include/linux/dtpm.h
++++ b/include/linux/dtpm.h
+@@ -32,23 +32,39 @@ struct dtpm_ops {
+ 	void (*release)(struct dtpm *);
+ };
+ 
++struct device_node;
++
+ typedef int (*dtpm_init_t)(void);
++typedef int (*dtpm_setup_t)(struct dtpm *, struct device_node *);
+ 
+ struct dtpm_descr {
+ 	dtpm_init_t init;
++	dtpm_setup_t setup;
++};
++
++enum DTPM_NODE_TYPE {
++	DTPM_NODE_VIRTUAL = 0,
++	DTPM_NODE_DT,
++};
++
++struct dtpm_node {
++	enum DTPM_NODE_TYPE type;
++	const char *name;
++	struct dtpm_node *parent;
+ };
+ 
+ /* Init section thermal table */
+ extern struct dtpm_descr __dtpm_table[];
+ extern struct dtpm_descr __dtpm_table_end[];
+ 
+-#define DTPM_TABLE_ENTRY(name, __init)				\
++#define DTPM_TABLE_ENTRY(name, __init, __setup)			\
+ 	static struct dtpm_descr __dtpm_table_entry_##name	\
+ 	__used __section("__dtpm_table") = {			\
+ 		.init = __init,					\
++		.setup = __setup,				\
+ 	}
+ 
+-#define DTPM_DECLARE(name, init)	DTPM_TABLE_ENTRY(name, init)
++#define DTPM_DECLARE(name, init, setup)	DTPM_TABLE_ENTRY(name, init, setup)
+ 
+ #define for_each_dtpm_table(__dtpm)	\
+ 	for (__dtpm = __dtpm_table;	\
+@@ -70,4 +86,5 @@ void dtpm_unregister(struct dtpm *dtpm);
+ 
+ int dtpm_register(const char *name, struct dtpm *dtpm, struct dtpm *parent);
+ 
++int dtpm_create_hierarchy(struct of_device_id *dtpm_match_table);
+ #endif
 -- 
 2.25.1
 
