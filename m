@@ -2,137 +2,244 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2A3B47A164
-	for <lists+linux-pm@lfdr.de>; Sun, 19 Dec 2021 17:37:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA03147A174
+	for <lists+linux-pm@lfdr.de>; Sun, 19 Dec 2021 18:03:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236228AbhLSQhL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 19 Dec 2021 11:37:11 -0500
-Received: from mail-bn7nam10on2072.outbound.protection.outlook.com ([40.107.92.72]:43744
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233242AbhLSQhL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 19 Dec 2021 11:37:11 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SgRxyIV/BawkyROCGGvU3gMwYDthCJqMke0TNp2ytZSwqp04UC2XydO0WAOiwVBlePVzIOsVi7/yPEXHylKPwGbhA4RLOeYp0Fcxh2P0/P55MxbdkzYm+hjd8PmDU4fYUkVZEqBbSWptVUB1xCiNB+b5tKe78i5rBkNTGW3fvqEJIR75UcbRUl8y54mfFrdlI/lRz03pOrL7+qr7BTg7bVrF0P82CjjYjjkl8m9L08ll7VLOuRIoOQ7Tnz+R6b9kiY0y1TcDL2Ic7M97Ipr46eWai/VnOY0I3TbLM5dL4X5Ip0K73KlREiPe8/rC0BZhXUbc1EHo1JVEIDULMjKrXg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=t/LfjMYioRuigC5rv4WSx+ehE7yjhQnxsEcC3qCNrDc=;
- b=i3CNcPExjJG/3PFX4RmsB36GTyjnCtIKrLMyGZJ/pz9nZ+2cdrLUrNLCbRWPK7fV+rgxov97gks1QcKvw4W6BlCcUGrHx03k1TTotYrW7h4q69pWJYYuFe4vDwHSjIthYk0XZ9jbK8HD35hXGk7mYxOMLdefOPmaehNEt4bLwMN52EtWQ0cg5mNhj9uDQnN/Zq8CNYJfceLRaM79DlvOZKdHFe0CT5fH9qC4o4/famfWHURw169i7TpgjC2VfN7TXfFhsZt82E1kvyHua5InUZMHX56BhD+x3vMokKovy/HCWPId7YZdb6/Ap2jEWyNr2ATrHkItpDJdIEyHZKDyzA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=t/LfjMYioRuigC5rv4WSx+ehE7yjhQnxsEcC3qCNrDc=;
- b=w+p/GMAtvdUf1Z1Nfj43JS97azgDCh6GKKS+VCOYeGGEHNuhHA7wEhuDoJYMvxTq9xvbtCl5aH5PgRSxWD9M0rJzOdeQiBONQbN2uxfxN8pHR3W2KE4xUtX6z/IFimo2lWEleWr63b4es/oKXiYEGlQbbIQ93GgDEncds2thu90=
-Received: from BN0PR04CA0041.namprd04.prod.outlook.com (2603:10b6:408:e8::16)
- by DM6PR12MB4516.namprd12.prod.outlook.com (2603:10b6:5:2ac::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.17; Sun, 19 Dec
- 2021 16:37:04 +0000
-Received: from BN8NAM11FT020.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:e8:cafe::32) by BN0PR04CA0041.outlook.office365.com
- (2603:10b6:408:e8::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.16 via Frontend
- Transport; Sun, 19 Dec 2021 16:37:04 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com;
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BN8NAM11FT020.mail.protection.outlook.com (10.13.176.223) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4801.14 via Frontend Transport; Sun, 19 Dec 2021 16:37:03 +0000
-Received: from hr-amd.amd.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Sun, 19 Dec
- 2021 10:36:59 -0600
-From:   Huang Rui <ray.huang@amd.com>
-To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        id S231583AbhLSRD1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 19 Dec 2021 12:03:27 -0500
+Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:34358 "EHLO
+        mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229742AbhLSRD1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Dec 2021 12:03:27 -0500
+IronPort-Data: =?us-ascii?q?A9a23=3Azjp7EKh6gM3ih8gQTQGhNlz5X161GBEKZh0ujC4?=
+ =?us-ascii?q?5NGQNrF6WrkVRnDAbWG2HMvzZZDOnct9+b97npxlT75TTyNFkGQc4r3w8FHgiR?=
+ =?us-ascii?q?ejtVY3IdB+oV8+xBpSeFxw/t512huEtnanYd1eEzvuWGuWn/SkUOZ2gHOKmUbe?=
+ =?us-ascii?q?eY3EpHGeIdQ964f5ds79g6mJXqYjha++9kYuaT/z3YDdJ6RYsWo4nw/7rRCdUg?=
+ =?us-ascii?q?RjHkGhwUmrSyhx8lAS2e3E9VPrzLEwqRpfyatE88uWSH44vwFwll1418SvBCvv?=
+ =?us-ascii?q?9+lr6Wk0DTqTTMA7mZnh+C/Xk3EgE/3ZrlP9kb5Lwam8O49mNt9JszNRE85i5V?=
+ =?us-ascii?q?g4tOoXNnv4cWl9WCUmSOIUfoe+eeybg6qR/yGWDKRMA2c5GFkg4NIAc0uV6G2d?=
+ =?us-ascii?q?D8bofMj9lRguZhuS33rugDPFlgMg5MdfiMIo3vnBm0CGfDPA6TJSFSKLPjfdc0?=
+ =?us-ascii?q?TE6rsNDB/DTY4weczUHRArBeRBUOhEUFZc3hs+sh3/2aToer0iazYIz4m7O3El?=
+ =?us-ascii?q?p1ZDzP9fPPN+HX8NYmgCfvG2u12D4BAwKcd+S0zyI9lqyieLV2yD2QoQfEPu/7?=
+ =?us-ascii?q?PECqFiSwGMUIAcbWVuyvb+yjUvWc8pSN0EO6AIvq6Yo/UCmR9W7WAe3yFaGowQ?=
+ =?us-ascii?q?dHd5dF+k7wBuAxqrd/0CSAW1sZiBAbtcrstNwSiErykOOg/vtBDpmqrrTTmiSn?=
+ =?us-ascii?q?op4Bxva1TM9dDBZI3ZeFE1bs5+z/ccpgwyJVdh5Vqi4krXI9fjL62jihEADa38?=
+ =?us-ascii?q?71KbnD5mGwG0=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AiEbXm6BYCxUgWGvlHenZ55DYdb4zR+YMi2TD?=
+ =?us-ascii?q?uHocdfU4SKGlfr6V8sjzvCWc4F0ssRob9uxoVpPrfU/h?=
+X-IronPort-AV: E=Sophos;i="5.88,218,1635199200"; 
+   d="scan'208";a="11812673"
+Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 19 Dec 2021 18:03:25 +0100
+Date:   Sun, 19 Dec 2021 18:03:25 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "Borislav Petkov" <bp@suse.de>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        <linux-pm@vger.kernel.org>
-CC:     Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Steven Noonan <steven@valvesoftware.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
-        Huang Rui <ray.huang@amd.com>
-Subject: [PATCH v6 14/14] MAINTAINERS: add AMD P-State driver maintainer entry
-Date:   Mon, 20 Dec 2021 00:35:28 +0800
-Message-ID: <20211219163528.1023186-15-ray.huang@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211219163528.1023186-1-ray.huang@amd.com>
-References: <20211219163528.1023186-1-ray.huang@amd.com>
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
+In-Reply-To: <CAJZ5v0jQysTLSHp533swboHBzX7DVF_0UETLmOqmnc7hTXHWVg@mail.gmail.com>
+Message-ID: <alpine.DEB.2.22.394.2112191751140.3181@hadrien>
+References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien> <CAJZ5v0iBU8gw8+-5nxj2cKzf7tyN=p3Adcm4Z5bn=oVYhU28bQ@mail.gmail.com> <alpine.DEB.2.22.394.2112172022100.2968@hadrien> <CAJZ5v0jQysTLSHp533swboHBzX7DVF_0UETLmOqmnc7hTXHWVg@mail.gmail.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB03.amd.com
- (10.181.40.144)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5b910686-adf5-432a-6b5d-08d9c30dc9e1
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4516:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB4516010D0FCD979D5A189F84EC7A9@DM6PR12MB4516.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3968;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: msZLZJdgT2VA9K8OU4KVxiQgWMBES1otf4jccY11RdkhN7NUABhNPf188D25fkjs1kBCUKfDW3oFcpg2ADzO/zjbLO2M7RdPO/XOfLAwAN2RLGjEvcSb/Q/Z26l5mMaWvIboHhjsXBWniwgpXsRv20zcOzax2oGFgx+lqWD5Sny9HBMEcLnYMqoGEJOdjYkf4h2iwGPmBMTB34aKnoOC/vDjhNT/m3OW10CGGWO5wdkxbIVACvhmTx9U4lxVk2UTeLLxrdCR04V+VBO3UNXuVzL9NCotNw8kKXlc13ikdqNp7wHAZk0LGtm+BnlvRcSDKIY8qlKLWWThrzjyWIEwBUpAmRLcJ25oBBqlIircqefT0JEtbxloA42UJwIMqxzhfT4E0wnfFbNEYIC+tFmlzsem68peQVPFz4jmImOGU5flWsno2sIzDDOr+KGE/k9UPSKW6Ddf7HB7qMr+U/YCV/6OZ9f5l4EeesqUn2eLMHGUwDWNpKa6GUTmXlEMgNxHRN461vv0zyYKy26bf19ygF7EwEkfy+q3dKfn55kBm8eqdxr05GfEgr36WLLaQJ2qquzPr0euCOw7TiEbJoWnBMZhflUcbbz7IUZ/eZgH7RLnim+MdISgBC0u9fI1jUMMrHF18jVZEHsVSB4zTqLTiBeXQY352yKA547wO79WIQQ/Ntdn7+M39Q1OaLYc5JB+XK4wK1k7i2z2frsf9Z4dsYEORatYB24iM7Aj27eBtwYFQWSd96zGXmZNgQYCtxHdR90YsxdYS6a57CuWbNEOzb7soX2AEZj0SAw2Igqr5so=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700001)(8676002)(16526019)(966005)(356005)(83380400001)(26005)(8936002)(508600001)(4326008)(336012)(110136005)(54906003)(36756003)(70206006)(5660300002)(81166007)(70586007)(7696005)(426003)(36860700001)(2616005)(86362001)(4744005)(2906002)(316002)(7416002)(186003)(82310400004)(40460700001)(6666004)(47076005)(1076003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Dec 2021 16:37:03.8151
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5b910686-adf5-432a-6b5d-08d9c30dc9e1
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT020.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4516
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-I will continue to add new feature and processor support, optimize the
-performance, and handle the issues for AMD P-State driver.
 
-Signed-off-by: Huang Rui <ray.huang@amd.com>
----
- MAINTAINERS | 7 +++++++
- 1 file changed, 7 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index fe347675fb5c..8e0666a552df 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -975,6 +975,13 @@ S:	Supported
- T:	git https://gitlab.freedesktop.org/agd5f/linux.git
- F:	drivers/gpu/drm/amd/pm/
- 
-+AMD PSTATE DRIVER
-+M:	Huang Rui <ray.huang@amd.com>
-+L:	linux-pm@vger.kernel.org
-+S:	Supported
-+F:	Documentation/admin-guide/pm/amd-pstate.rst
-+F:	drivers/cpufreq/amd-pstate*
-+
- AMD PTDMA DRIVER
- M:	Sanjay R Mehta <sanju.mehta@amd.com>
- L:	dmaengine@vger.kernel.org
--- 
-2.25.1
+On Sun, 19 Dec 2021, Rafael J. Wysocki wrote:
 
+> On Fri, Dec 17, 2021 at 8:32 PM Julia Lawall <julia.lawall@inria.fr> wrote:
+> >
+> >
+> >
+> > On Fri, 17 Dec 2021, Rafael J. Wysocki wrote:
+> >
+> > > On Mon, Dec 13, 2021 at 11:52 PM Julia Lawall <julia.lawall@inria.fr> wrote:
+> > > >
+> > > > With HWP, intel_cpufreq_adjust_perf takes the utilization, scales it
+> > > > between 0 and the capacity, and then maps everything below min_pstate to
+> > > > the lowest frequency.
+> > >
+> > > Well, it is not just intel_pstate with HWP.  This is how schedutil
+> > > works in general; see get_next_freq() in there.
+> > >
+> > > > On my Intel Xeon Gold 6130 and Intel Xeon Gold
+> > > > 5218, this means that more than the bottom quarter of utilizations are all
+> > > > mapped to the lowest frequency.  Running slowly doesn't necessarily save
+> > > > energy, because it takes more time.
+> > >
+> > > This is true, but the layout of the available range of performance
+> > > values is a property of the processor, not a driver issue.
+> > >
+> > > Moreover, the role of the driver is not to decide how to respond to
+> > > the given utilization value, that is the role of the governor.  The
+> > > driver is expected to do what it is asked for by the governor.
+> >
+> > OK, but what exactly is the goal of schedutil?
+>
+> The short answer is: minimizing the cost (in terms of energy) of
+> allocating an adequate amount of CPU time for a given workload.
+>
+> Of course, this requires a bit of explanation, so bear with me.
+>
+> It starts with a question:
+>
+> Given a steady workload (ie. a workload that uses approximately the
+> same amount of CPU time to run in every sampling interval), what is
+> the most efficient frequency (or generally, performance level measured
+> in some abstract units) to run it at and still ensure that it will get
+> as much CPU time as it needs (or wants)?
+>
+> To answer this question, let's first assume that
+>
+> (1) Performance is a monotonically increasing (ideally, linear)
+> function of frequency.
+> (2) CPU idle states have not enough impact on the energy usage for
+> them to matter.
+>
+> Both of these assumptions may not be realistic, but that's how it goes.
+>
+> Now, consider the "raw" frequency-dependent utilization
+>
+> util(f) = util_max * (t_{total} - t_{idle}(f)) / t_{total}
+>
+> where
+>
+> t_{total} is the total CPU time available in the given time frame.
+> t_{idle}(f) is the idle CPU time appearing in the workload when run at
+> frequency f in that time frame.
+> util_max is a convenience constant allowing an integer data type to be
+> used for representing util(f) with sufficient approximation.
+>
+> Notice that by assumption (1), util(f) is a monotonically decreasing
+> function, so if util(f_{max}) = util_max (where f_{max} is the maximum
+> frequency available from the hardware), which means that there is no
+> idle CPU time in the workload when run at the max available frequency,
+> there will be no idle CPU time in it when run at any frequency below
+> f_{max}.  Hence, in that case the workload needs to be run at f_{max}.
+>
+> If util(f_{max}) < util_max, there is some idle CPU time in the
+> workload at f_{max} and it may be run at a lower frequency without
+> sacrificing performance.  Moreover, the cost should be minimum when
+> running the workload at the maximum frequency f_e for which
+> t_{idle}(f_e) = 0.  IOW, that is the point at which the workload still
+> gets as much CPU time as needed, but the cost of running it is
+> maximally reduced.
+
+Thanks for the detailed explanation.  I got lost at this point, though.
+
+Idle time can be either due to I/O, or due to waiting for synchronization
+from some other thread perhaps on another core.  How can either of these
+disappear?  In the I/O case, no matter what the frequency, the idle time
+will be the same (in a simplified world).  In the case of waiting for
+another thread on another core, assuming that all the cores are running at
+the same frequency, lowering the frequency will cause the both running
+time and the idle time to increase, and it will cause util(f) to stay the
+same.  Both cases seem to send the application directly to the lowest
+frequency.  I guess that's fine if we also assume that the lowest
+frequency is also the most efficient one.
+
+julia
+
+>
+> In practice, it is better to look for a frequency slightly greater
+> than f_e to allow some performance margin to be there in case the
+> workload fluctuates or similar, so we get
+>
+> C * util(f) / util_max = 1
+>
+> where the constant C is slightly greater than 1.
+>
+> This equation cannot be solved directly, because the util(f) graph is
+> not known, but util(f) can be computed (at least approximately) for a
+> given f and the solution can be approximated by computing a series of
+> frequencies f_n given by
+>
+> f_{n+1} = C * f_n * util(f_n) / util_max
+>
+> under certain additional assumptions regarding the convergence etc.
+>
+> This is almost what schedutil does, but it also uses the observation
+> that if the frequency-invariant utilization util_inv is known, then
+> approximately
+>
+> util(f) = util_inv * f_{max} / f
+>
+> so finally
+>
+> f = C * f_{max} * util_inv / util_max
+>
+> and util_inv is provided by PELT.
+>
+> This has a few interesting properties that are vitally important:
+>
+> (a) The current frequency need not be known in order to compute the
+> next one (and it is hard to determine in general).
+> (b) The response is predictable by the CPU scheduler upfront, so it
+> can make decisions based on it in advance.
+> (c) If util_inv is properly scaled to reflect differences between
+> different types of CPUs in a hybrid system, the same formula can be
+> used for each of them regardless of where the workload was running
+> previously.
+>
+> and they need to be maintained.
+>
+> > I would have expected that it was to give good performance while saving
+> > energy, but it's not doing either in many of these cases.
+>
+> The performance improvement after making the change in question means
+> that something is missing.  The assumptions mentioned above (and there
+> are quite a few of them) may not hold or the hardware may not behave
+> exactly as anticipated.
+>
+> Generally, there are three directions worth investigating IMV:
+>
+> 1. The scale-invariance mechanism may cause util_inv to be
+> underestimated.  It may be worth trying to use the max non-turbo
+> performance instead of the 4-core-turbo performance level in it; see
+> intel_set_max_freq_ratio() in smpboot.c.
+>
+> 2.The hardware's response to the "desired" HWP value may depend on
+> some additional factors (eg. the EPP value) that may need to be
+> adjusted.
+>
+> 3. The workloads are not actually steady and running them at higher
+> frequencies causes the sections that really need more CPU time to
+> complete faster.
+>
+> At the same time, CPU idle states may actually have measurable impact
+> on energy usage which is why you may not see much difference in that
+> respect.
+>
+> > Is it the intent of schedutil that the bottom quarter of utilizations
+> > should be mapped to the lowest frequency?
+>
+> It is not the intent, but a consequence of the scaling algorithm used
+> by schedutil.
+>
+> As you can see from the derivation of that algorithm outlined above,
+> if the utilization is mapped to a performance level below min_perf,
+> running the workload at min_perf or above it is not expected (under
+> all of the the assumptions made) to improve performance, so mapping
+> all of the "low" utilization values to min_perf should not hurt
+> performance, as the CPU time required by the workload will still be
+> provided (and with a surplus for that matter).
+>
+> The reason why the hardware refuses to run below a certain minimum
+> performance level is because it knows that running below that level
+> doesn't really improve energy usage (or at least the improvement
+> whatever it may be is not worth the effort).  The CPU would run
+> slower, but it would still use (almost) as much energy as it uses at
+> the "hardware minimum" level, so it may as well run at the min level.
+>
