@@ -2,50 +2,43 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3714479FC1
-	for <lists+linux-pm@lfdr.de>; Sun, 19 Dec 2021 07:42:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5DE747A0D3
+	for <lists+linux-pm@lfdr.de>; Sun, 19 Dec 2021 15:14:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230413AbhLSGmK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 19 Dec 2021 01:42:10 -0500
-Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:13966 "EHLO
-        mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229756AbhLSGmK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Dec 2021 01:42:10 -0500
-IronPort-Data: =?us-ascii?q?A9a23=3A9+kqIqzCytXDHq0z8Ux6t+cmxyrEfRIJ4+MujC/?=
- =?us-ascii?q?XYbTApG9whmcAzTBNXzyFOv+NZjb3eIh3a4rg8E0H7JTdyt9mHQtv/xmBbVoa8?=
- =?us-ascii?q?JufXYzxwmTYZn7JcJWbFCqL1yivAzX5BJhcokT0+1H9YtANkVEmjfvRH+ClWLa?=
- =?us-ascii?q?eUsxMbVQMpBkJ2EsLd9ER0tYAbeiRW2thiPuqyyHtEAfNNw1cbgr435m+RCZH5?=
- =?us-ascii?q?5wejt+3UmsWPpintHeG/5Uc4Ql2yauZdxMUSaEMdgK2qnqq8V23wo/Z109F5tK?=
- =?us-ascii?q?Nkr/3aEwHRNY+PyDe1zwIC+772EEE/3Npuko4HKN0hUN/iSiNntk3zNxSvJi0Y?=
- =?us-ascii?q?QYvJKzF3uoHO/VdO3gnYvIYpuOaSZS4mYnJp6HcSFPn3u90C0M7J4AK0vx2Gmx?=
- =?us-ascii?q?T7boeJSxlRgqKieu7xJq4R/Nqi8BlK9PkVKsEoHBmzC/QFrA+SJbPWbjU7NNR9?=
- =?us-ascii?q?DMxgN1eW/fYe8cdLzFoaXzoZxBJMH8UBYg4kePugWPwGxVGqUiYvqpx4HXWxRZ?=
- =?us-ascii?q?Z1LnrOcDSPNuQSq19mkeeu3KD52HRHB4XLpqcxCCD/3bqgfXA9Qv/WYQPBPi7+?=
- =?us-ascii?q?+RsjVm72GMeElsVWEG9rP3/jVSxM/paKkob/QI0oKQy/VDtRd74NzWgrWKJpAw?=
- =?us-ascii?q?0WtxeCeQ25QiBjK3O7G6xBHUeT3hFZdgitecsSDAq30PPlNTsbRRxsbueRHSBs?=
- =?us-ascii?q?LiJrC+uPjQ9KW4EbDUDCwwf7LHeTCsb5v7UZo88S+js1ISzR2G2k23MtiUgwa4?=
- =?us-ascii?q?dl4gN2rnTwLwOuBr0zrChc+L/zly/srqZ0z5E?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3Awc9T1q0x+2ZUkRvYDTxWFwqjBRpyeYIsimQD?=
- =?us-ascii?q?101hICG9Lfb3qyn+ppsmPEHP5Ar5AEtQ5expOMG7MBfhHO1OkPYs1NCZLUfbUQ?=
- =?us-ascii?q?qTXc5fBO7ZogEIdBeOjtK1uZ0QEZSWTeeAcGSS7vyKoTVQcexQu+VvmZrA7Yy1?=
- =?us-ascii?q?ohcdLj2CKZsQlTuRYjzrSXGeLzM2YqbRYaDsn/av0ADQH0j/AP7LY0UtbqzmnZ?=
- =?us-ascii?q?nmhZjmaRkJC1oM8w+Vlw6l77b8Dlyxwgoeeykn+8ZjzUH11yjCoomzufCyzRHR?=
- =?us-ascii?q?k0XJ6Y5NpdfnwtxfQOSRl8kuLCn2gArAXvUjZ1TChkF2nAic0idvrDD+mWZmAy?=
- =?us-ascii?q?210QKWQoiBm2qp5+An6kd215at8y7BvZKpm72GeNtzMbsxuWseSGqC16NohqAN?=
- =?us-ascii?q?7Itbm22erJZZFhXGgWD04MXJTQhjkg6urWMlivN7tQ0UbWIyUs4YkWUkxjIfLH?=
- =?us-ascii?q?7AJlOP1Kk3VO11SM3M7vdfdl2XK3jfo2l02dSpGnA+BA2PTEQOstGcl2E+pgE0?=
- =?us-ascii?q?82IIgMgE2nsQ/pM0TJdJo+zCL6RzjblLCssbd7h0CusNSda+TmbNXRXPOmSPJk?=
- =?us-ascii?q?mPLtBLB1vd75rspLkl7uCjf5IFiJM0hZTaSVtd8XU/fkr/YPf+laGjMiq9NllV?=
- =?us-ascii?q?cQ6duP221qIJzYEUHoCbQhFrYGpe5vednw=3D=3D?=
-X-IronPort-AV: E=Sophos;i="5.88,217,1635199200"; 
-   d="scan'208";a="11776645"
-Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 19 Dec 2021 07:42:09 +0100
-Date:   Sun, 19 Dec 2021 07:42:07 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Francisco Jerez <currojerez@riseup.net>
-cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        id S232968AbhLSOOO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 19 Dec 2021 09:14:14 -0500
+Received: from mail-ot1-f49.google.com ([209.85.210.49]:42916 "EHLO
+        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232488AbhLSOON (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Dec 2021 09:14:13 -0500
+Received: by mail-ot1-f49.google.com with SMTP id 47-20020a9d0332000000b005798ac20d72so9331829otv.9;
+        Sun, 19 Dec 2021 06:14:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wPc4orBNRab1xAXrjJI4HRAbINpapbPATalmjOfB3qo=;
+        b=gOliB2oxf7fof+TlMh2pkNs5QBtfLg7WXCjGsMLFdtTXnjc0f8YdUUYFpKyZ9tcNl2
+         qpYlVbsLulMR+T4XbB57DV/0kyV+CxCRm/SDbxDnDy6gybcVZA/S7DsCY3ZAV9NhRZ7v
+         1xKy9g4RGhBktt/TesibMt1UEjWnQzqc9uunGxJuivZA62xz2Wy1JZ9pQnChKxGSnpcf
+         w7PXw8ZOLA8RtJ2YrGGTyeQEo2FeJ5Q4SnhSrGmmkLzHxmm+PqK9mWnnJnV+S2rPv9cA
+         u0owEXFt2wc1ClxzvTv+1rWygRWJtlGFQogSMvxkzcnrTLsOJcGHxoZ1gPcoHd+mtvyT
+         pqiA==
+X-Gm-Message-State: AOAM532oPguF9aD4rC6W43yp20Ahi/8o1q9PdcKO2QL3tfDga7t7NuTV
+        D/si16OiCO/9jaClZUVudUQ9P+lZ1wZNzl+CgBE=
+X-Google-Smtp-Source: ABdhPJzClEzyBlaaRXjN7ari/REV85CCrualt51z48S1SkJMn1Y5GDX53b6rqaA55OAyybpKGcEkgnoY5x2eMv75mmQ=
+X-Received: by 2002:a05:6830:1e57:: with SMTP id e23mr8235303otj.16.1639923253091;
+ Sun, 19 Dec 2021 06:14:13 -0800 (PST)
+MIME-Version: 1.0
+References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien>
+ <CAJZ5v0iBU8gw8+-5nxj2cKzf7tyN=p3Adcm4Z5bn=oVYhU28bQ@mail.gmail.com> <alpine.DEB.2.22.394.2112172022100.2968@hadrien>
+In-Reply-To: <alpine.DEB.2.22.394.2112172022100.2968@hadrien>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sun, 19 Dec 2021 15:14:01 +0100
+Message-ID: <CAJZ5v0jQysTLSHp533swboHBzX7DVF_0UETLmOqmnc7hTXHWVg@mail.gmail.com>
+Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         Len Brown <lenb@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
@@ -55,183 +48,175 @@ cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Juri Lelli <juri.lelli@redhat.com>,
         Vincent Guittot <vincent.guittot@linaro.org>
-Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
-In-Reply-To: <871r29tvdj.fsf@riseup.net>
-Message-ID: <alpine.DEB.2.22.394.2112190734070.3181@hadrien>
-References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien> <CAJZ5v0iBU8gw8+-5nxj2cKzf7tyN=p3Adcm4Z5bn=oVYhU28bQ@mail.gmail.com> <alpine.DEB.2.22.394.2112172022100.2968@hadrien> <87r1abt1d2.fsf@riseup.net> <alpine.DEB.2.22.394.2112172258480.2968@hadrien>
- <87fsqqu6by.fsf@riseup.net> <alpine.DEB.2.22.394.2112180654470.3139@hadrien> <878rwitdu3.fsf@riseup.net> <alpine.DEB.2.22.394.2112181138210.3130@hadrien> <871r29tvdj.fsf@riseup.net>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On Sat, 18 Dec 2021, Francisco Jerez wrote:
-
-> Julia Lawall <julia.lawall@inria.fr> writes:
+On Fri, Dec 17, 2021 at 8:32 PM Julia Lawall <julia.lawall@inria.fr> wrote:
 >
-> > On Sat, 18 Dec 2021, Francisco Jerez wrote:
-> >
-> >> Julia Lawall <julia.lawall@inria.fr> writes:
-> >>
-> >> >> As you can see in intel_pstate.c, min_pstate is initialized on core
-> >> >> platforms from MSR_PLATFORM_INFO[47:40], which is "Maximum Efficiency
-> >> >> Ratio (R/O)".  However that seems to deviate massively from the most
-> >> >> efficient ratio on your system, which may indicate a firmware bug, some
-> >> >> sort of clock gating problem, or an issue with the way that
-> >> >> intel_pstate.c processes this information.
-> >> >
-> >> > I'm not sure to understand the bug part.  min_pstate gives the frequency
-> >> > that I find as the minimum frequency when I look for the specifications of
-> >> > the CPU.  Should one expect that it should be something different?
-> >> >
-> >>
-> >> I'd expect the minimum frequency on your processor specification to
-> >> roughly match the "Maximum Efficiency Ratio (R/O)" value from that MSR,
-> >> since there's little reason to claim your processor can be clocked down
-> >> to a frequency which is inherently inefficient /and/ slower than the
-> >> maximum efficiency ratio -- In fact they both seem to match in your
-> >> system, they're just nowhere close to the frequency which is actually
-> >> most efficient, which smells like a bug, like your processor
-> >> misreporting what the most efficient frequency is, or it deviating from
-> >> the expected one due to your CPU static power consumption being greater
-> >> than it would be expected to be under ideal conditions -- E.g. due to
-> >> some sort of clock gating issue, possibly due to a software bug, or due
-> >> to our scheduling of such workloads with a large amount of lightly
-> >> loaded threads being unnecessarily inefficient which could also be
-> >> preventing most of your CPU cores from ever being clock-gated even
-> >> though your processor may be sitting idle for a large fraction of their
-> >> runtime.
-> >
-> > The original mail has results from two different machines: Intel 6130
-> > (skylake) and Intel 5218 (cascade lake).  I have access to another cluster
-> > of 6130s and 5218s.  I can try them.
-> >
-> > I tried 5.9 in which I just commented out the schedutil code to make
-> > frequency requests.  I only tested avrora (tiny pauses) and h2 (longer
-> > pauses) and in both case the execution is almost entirely in the turbo
-> > frequencies.
-> >
-> > I'm not sure to understand the term "clock-gated".  What C state does that
-> > correspond to?  The turbostat output for one run of avrora is below.
-> >
 >
-> I didn't have any specific C1+ state in mind, most of the deeper ones
-> implement some sort of clock gating among other optimizations, I was
-> just wondering whether some sort of software bug and/or the highly
-> intermittent CPU utilization pattern of these workloads are preventing
-> most of your CPU cores from entering deep sleep states.  See below.
 >
-> > julia
+> On Fri, 17 Dec 2021, Rafael J. Wysocki wrote:
+>
+> > On Mon, Dec 13, 2021 at 11:52 PM Julia Lawall <julia.lawall@inria.fr> wrote:
+> > >
+> > > With HWP, intel_cpufreq_adjust_perf takes the utilization, scales it
+> > > between 0 and the capacity, and then maps everything below min_pstate to
+> > > the lowest frequency.
 > >
-> > 78.062895 sec
-> > Package Core  CPU     Avg_MHz Busy%   Bzy_MHz TSC_MHz IRQ     SMI     POLL    C1      C1E     C6      POLL%   C1%     C1E%    C6%     CPU%c1  CPU%c6  CoreTmp PkgTmp  Pkg%pc2 Pkg%pc6 Pkg_J   RAM_J   PKG_%   RAM_%
-> > -     -       -       31      2.95    1065    2096    156134  0       1971    155458  2956270 657130  0.00    0.20    4.78    92.26   14.75   82.31   40      41      45.14   0.04    4747.52 2509.05 0.00    0.00
-> > 0     0       0       13      1.15    1132    2095    11360   0       0       2       39      19209   0.00    0.00    0.01    99.01   8.02    90.83   39      41      90.24   0.04    2266.04 1346.09 0.00    0.00
+> > Well, it is not just intel_pstate with HWP.  This is how schedutil
+> > works in general; see get_next_freq() in there.
+> >
+> > > On my Intel Xeon Gold 6130 and Intel Xeon Gold
+> > > 5218, this means that more than the bottom quarter of utilizations are all
+> > > mapped to the lowest frequency.  Running slowly doesn't necessarily save
+> > > energy, because it takes more time.
+> >
+> > This is true, but the layout of the available range of performance
+> > values is a property of the processor, not a driver issue.
+> >
+> > Moreover, the role of the driver is not to decide how to respond to
+> > the given utilization value, that is the role of the governor.  The
+> > driver is expected to do what it is asked for by the governor.
 >
-> This seems suspicious:                                                                                                                                                          ^^^^    ^^^^^^^
->
-> I hadn't understood that you're running this on a dual-socket system
-> until I looked at these results.
+> OK, but what exactly is the goal of schedutil?
 
-Sorry not to have mentioned that.
+The short answer is: minimizing the cost (in terms of energy) of
+allocating an adequate amount of CPU time for a given workload.
 
-> It seems like package #0 is doing
-> pretty much nothing according to the stats below, but it's still
-> consuming nearly half of your energy, apparently because the idle
-> package #0 isn't entering deep sleep states (Pkg%pc6 above is close to
-> 0%).  That could explain your unexpectedly high static power consumption
-> and the deviation of the real maximum efficiency frequency from the one
-> reported by your processor, since the reported maximum efficiency ratio
-> cannot possibly take into account the existence of a second CPU package
-> with dysfunctional idle management.
+Of course, this requires a bit of explanation, so bear with me.
 
-Our assumption was that if anything happens on any core, all of the
-packages remain in a state that allows them to react in a reasonable
-amount of time ot any memory request.
+It starts with a question:
 
-> I'm guessing that if you fully disable one of your CPU packages and
-> repeat the previous experiment forcing various P-states between 10 and
-> 37 you should get a maximum efficiency ratio closer to the theoretical
-> one for this CPU?
+Given a steady workload (ie. a workload that uses approximately the
+same amount of CPU time to run in every sampling interval), what is
+the most efficient frequency (or generally, performance level measured
+in some abstract units) to run it at and still ensure that it will get
+as much CPU time as it needs (or wants)?
 
-OK, but that's not really a natural usage context...  I do have a
-one-socket Intel 5220.  I'll see what happens there.
+To answer this question, let's first assume that
 
-I did some experiements with forcing different frequencies.  I haven't
-finished processing the results, but I notice that as the frequency goes
-up, the utilization (specifically the value of
-map_util_perf(sg_cpu->util) at the point of the call to
-cpufreq_driver_adjust_perf in sugov_update_single_perf) goes up as well.
-Is this expected?
+(1) Performance is a monotonically increasing (ideally, linear)
+function of frequency.
+(2) CPU idle states have not enough impact on the energy usage for
+them to matter.
 
-thanks,
-julia
+Both of these assumptions may not be realistic, but that's how it goes.
 
-> > 0     0       32      1       0.09    1001    2095    37      0       0       0       0       42      0.00    0.00    0.00    100.00  9.08
-> > 0     1       4       0       0.04    1000    2095    57      0       0       0       1       133     0.00    0.00    0.00    99.96   0.08    99.88   38
-> > 0     1       36      0       0.00    1000    2095    35      0       0       0       0       40      0.00    0.00    0.00    100.00  0.12
-> > 0     2       8       0       0.03    1000    2095    64      0       0       0       1       124     0.00    0.00    0.00    99.97   0.08    99.89   38
-> > 0     2       40      0       0.00    1000    2095    36      0       0       0       0       40      0.00    0.00    0.00    100.00  0.10
-> > 0     3       12      0       0.00    1000    2095    42      0       0       0       0       71      0.00    0.00    0.00    100.00  0.14    99.86   38
-> > 0     3       44      1       0.09    1000    2095    63      0       0       0       0       65      0.00    0.00    0.00    99.91   0.05
-> > 0     4       14      0       0.00    1010    2095    38      0       0       0       1       41      0.00    0.00    0.00    100.00  0.04    99.96   39
-> > 0     4       46      0       0.00    1011    2095    36      0       0       0       1       41      0.00    0.00    0.00    100.00  0.04
-> > 0     5       10      0       0.01    1084    2095    39      0       0       0       0       58      0.00    0.00    0.00    99.99   0.04    99.95   38
-> > 0     5       42      0       0.00    1114    2095    35      0       0       0       0       39      0.00    0.00    0.00    100.00  0.05
-> > 0     6       6       0       0.03    1005    2095    89      0       0       0       1       116     0.00    0.00    0.00    99.97   0.07    99.90   39
-> > 0     6       38      0       0.00    1000    2095    38      0       0       0       0       41      0.00    0.00    0.00    100.00  0.10
-> > 0     7       2       0       0.05    1001    2095    59      0       0       0       1       133     0.00    0.00    0.00    99.95   0.09    99.86   40
-> > 0     7       34      0       0.00    1000    2095    39      0       0       0       0       65      0.00    0.00    0.00    100.00  0.13
-> > 0     8       16      0       0.00    1000    2095    43      0       0       0       0       47      0.00    0.00    0.00    100.00  0.04    99.96   38
-> > 0     8       48      0       0.00    1000    2095    37      0       0       0       0       41      0.00    0.00    0.00    100.00  0.04
-> > 0     9       20      0       0.00    1000    2095    33      0       0       0       0       37      0.00    0.00    0.00    100.00  0.03    99.97   38
-> > 0     9       52      0       0.00    1000    2095    33      0       0       0       0       36      0.00    0.00    0.00    100.00  0.03
-> > 0     10      24      0       0.00    1000    2095    36      0       0       0       1       40      0.00    0.00    0.00    100.00  0.03    99.96   39
-> > 0     10      56      0       0.00    1000    2095    37      0       0       0       1       38      0.00    0.00    0.00    100.00  0.03
-> > 0     11      28      0       0.00    1002    2095    35      0       0       0       1       37      0.00    0.00    0.00    100.00  0.03    99.97   38
-> > 0     11      60      0       0.00    1004    2095    34      0       0       0       0       36      0.00    0.00    0.00    100.00  0.03
-> > 0     12      30      0       0.00    1001    2095    35      0       0       0       0       40      0.00    0.00    0.00    100.00  0.11    99.88   38
-> > 0     12      62      0       0.01    1000    2095    197     0       0       0       0       197     0.00    0.00    0.00    99.99   0.10
-> > 0     13      26      0       0.00    1000    2095    37      0       0       0       0       41      0.00    0.00    0.00    100.00  0.03    99.97   39
-> > 0     13      58      0       0.00    1000    2095    38      0       0       0       0       40      0.00    0.00    0.00    100.00  0.03
-> > 0     14      22      0       0.01    1000    2095    149     0       1       2       0       142     0.00    0.01    0.00    99.99   0.07    99.92   39
-> > 0     14      54      0       0.00    1000    2095    35      0       0       0       0       38      0.00    0.00    0.00    100.00  0.07
-> > 0     15      18      0       0.00    1000    2095    33      0       0       0       0       36      0.00    0.00    0.00    100.00  0.03    99.97   39
-> > 0     15      50      0       0.00    1000    2095    34      0       0       0       0       38      0.00    0.00    0.00    100.00  0.03
-> > 1     0       1       32      3.23    1008    2095    2385    0       31      3190    45025   10144   0.00    0.28    4.68    91.99   11.21   85.56   32      35      0.04    0.04    2481.49 1162.96 0.00    0.00
-> > 1     0       33      9       0.63    1404    2095    12206   0       5       162     2480    10283   0.00    0.04    0.75    98.64   13.81
-> > 1     1       5       1       0.07    1384    2095    236     0       0       38      24      314     0.00    0.09    0.06    99.77   4.66    95.27   33
-> > 1     1       37      81      3.93    2060    2095    1254    0       5       40      59      683     0.00    0.01    0.02    96.05   0.80
-> > 1     2       9       37      3.46    1067    2095    2396    0       29      2256    55406   11731   0.00    0.17    6.02    90.54   54.10   42.44   31
-> > 1     2       41      151     14.51   1042    2095    10447   0       135     10494   248077  42327   0.01    0.87    26.57   58.84   43.05
-> > 1     3       13      110     10.47   1053    2095    7120    0       120     9218    168938  33884   0.01    0.77    16.63   72.68   42.58   46.95   32
-> > 1     3       45      69      6.76    1021    2095    4730    0       66      5598    115410  23447   0.00    0.44    12.06   81.12   46.29
-> > 1     4       15      112     10.64   1056    2095    7204    0       116     8831    171423  37754   0.01    0.70    17.56   71.67   28.01   61.35   33
-> > 1     4       47      18      1.80    1006    2095    1771    0       13      915     29315   6564    0.00    0.07    3.20    95.03   36.85
-> > 1     5       11      63      5.96    1065    2095    4090    0       58      6449    99015   18955   0.00    0.45    10.27   83.64   31.24   62.80   31
-> > 1     5       43      72      7.11    1016    2095    4794    0       73      6203    115361  26494   0.00    0.48    11.79   81.02   30.09
-> > 1     6       7       35      3.39    1022    2095    2328    0       45      3377    52721   13759   0.00    0.27    5.10    91.43   25.84   70.77   32
-> > 1     6       39      67      6.09    1096    2095    4483    0       52      3696    94964   19366   0.00    0.30    10.32   83.61   23.14
-> > 1     7       3       1       0.06    1395    2095    91      0       0       0       1       167     0.00    0.00    0.00    99.95   25.36   74.58   35
-> > 1     7       35      83      8.16    1024    2095    5785    0       100     7398    134640  27428   0.00    0.56    13.39   78.34   17.26
-> > 1     8       17      46      4.49    1016    2095    3229    0       52      3048    74914   16010   0.00    0.27    8.29    87.19   29.71   65.80   33
-> > 1     8       49      64      6.12    1052    2095    4210    0       89      5782    100570  21463   0.00    0.42    10.63   83.17   28.08
-> > 1     9       21      73      7.02    1036    2095    4917    0       64      5786    109887  21939   0.00    0.55    11.61   81.18   22.10   70.88   33
-> > 1     9       53      64      6.33    1012    2095    4074    0       69      5957    97596   20580   0.00    0.51    9.78    83.74   22.79
-> > 1     10      25      26      2.58    1013    2095    1825    0       22      2124    42630   8627    0.00    0.17    4.17    93.24   53.91   43.52   33
-> > 1     10      57      159     15.59   1022    2095    10951   0       175     14237   256828  56810   0.01    1.10    26.00   58.16   40.89
-> > 1     11      29      112     10.54   1065    2095    7462    0       126     9548    179206  39821   0.01    0.85    18.49   70.71   29.46   60.00   31
-> > 1     11      61      29      2.89    1011    2095    2002    0       24      2468    45558   10288   0.00    0.20    4.71    92.36   37.11
-> > 1     12      31      37      3.66    1011    2095    2596    0       79      3161    61027   13292   0.00    0.24    6.48    89.79   23.75   72.59   32
-> > 1     12      63      56      5.08    1107    2095    3789    0       62      4777    79133   17089   0.00    0.41    7.91    86.86   22.31
-> > 1     13      27      12      1.14    1045    2095    1477    0       16      888     18744   3250    0.00    0.06    2.18    96.70   21.23   77.64   32
-> > 1     13      59      60      5.81    1038    2095    5230    0       60      4936    87225   21402   0.00    0.41    8.95    85.14   16.55
-> > 1     14      23      28      2.75    1024    2095    2008    0       20      1839    47417   9177    0.00    0.13    5.08    92.21   34.18   63.07   32
-> > 1     14      55      106     9.58    1105    2095    6292    0       89      7182    141379  31354   0.00    0.63    14.45   75.81   27.36
-> > 1     15      19      118     11.65   1012    2095    7872    0       121     10014   193186  40448   0.01    0.80    19.53   68.68   37.53   50.82   32
-> > 1     15      51      59      5.58    1059    2095    3967    0       54      5842    88063   21138   0.00    0.39    9.12    85.23   43.60
->
+Now, consider the "raw" frequency-dependent utilization
+
+util(f) = util_max * (t_{total} - t_{idle}(f)) / t_{total}
+
+where
+
+t_{total} is the total CPU time available in the given time frame.
+t_{idle}(f) is the idle CPU time appearing in the workload when run at
+frequency f in that time frame.
+util_max is a convenience constant allowing an integer data type to be
+used for representing util(f) with sufficient approximation.
+
+Notice that by assumption (1), util(f) is a monotonically decreasing
+function, so if util(f_{max}) = util_max (where f_{max} is the maximum
+frequency available from the hardware), which means that there is no
+idle CPU time in the workload when run at the max available frequency,
+there will be no idle CPU time in it when run at any frequency below
+f_{max}.  Hence, in that case the workload needs to be run at f_{max}.
+
+If util(f_{max}) < util_max, there is some idle CPU time in the
+workload at f_{max} and it may be run at a lower frequency without
+sacrificing performance.  Moreover, the cost should be minimum when
+running the workload at the maximum frequency f_e for which
+t_{idle}(f_e) = 0.  IOW, that is the point at which the workload still
+gets as much CPU time as needed, but the cost of running it is
+maximally reduced.
+
+In practice, it is better to look for a frequency slightly greater
+than f_e to allow some performance margin to be there in case the
+workload fluctuates or similar, so we get
+
+C * util(f) / util_max = 1
+
+where the constant C is slightly greater than 1.
+
+This equation cannot be solved directly, because the util(f) graph is
+not known, but util(f) can be computed (at least approximately) for a
+given f and the solution can be approximated by computing a series of
+frequencies f_n given by
+
+f_{n+1} = C * f_n * util(f_n) / util_max
+
+under certain additional assumptions regarding the convergence etc.
+
+This is almost what schedutil does, but it also uses the observation
+that if the frequency-invariant utilization util_inv is known, then
+approximately
+
+util(f) = util_inv * f_{max} / f
+
+so finally
+
+f = C * f_{max} * util_inv / util_max
+
+and util_inv is provided by PELT.
+
+This has a few interesting properties that are vitally important:
+
+(a) The current frequency need not be known in order to compute the
+next one (and it is hard to determine in general).
+(b) The response is predictable by the CPU scheduler upfront, so it
+can make decisions based on it in advance.
+(c) If util_inv is properly scaled to reflect differences between
+different types of CPUs in a hybrid system, the same formula can be
+used for each of them regardless of where the workload was running
+previously.
+
+and they need to be maintained.
+
+> I would have expected that it was to give good performance while saving
+> energy, but it's not doing either in many of these cases.
+
+The performance improvement after making the change in question means
+that something is missing.  The assumptions mentioned above (and there
+are quite a few of them) may not hold or the hardware may not behave
+exactly as anticipated.
+
+Generally, there are three directions worth investigating IMV:
+
+1. The scale-invariance mechanism may cause util_inv to be
+underestimated.  It may be worth trying to use the max non-turbo
+performance instead of the 4-core-turbo performance level in it; see
+intel_set_max_freq_ratio() in smpboot.c.
+
+2.The hardware's response to the "desired" HWP value may depend on
+some additional factors (eg. the EPP value) that may need to be
+adjusted.
+
+3. The workloads are not actually steady and running them at higher
+frequencies causes the sections that really need more CPU time to
+complete faster.
+
+At the same time, CPU idle states may actually have measurable impact
+on energy usage which is why you may not see much difference in that
+respect.
+
+> Is it the intent of schedutil that the bottom quarter of utilizations
+> should be mapped to the lowest frequency?
+
+It is not the intent, but a consequence of the scaling algorithm used
+by schedutil.
+
+As you can see from the derivation of that algorithm outlined above,
+if the utilization is mapped to a performance level below min_perf,
+running the workload at min_perf or above it is not expected (under
+all of the the assumptions made) to improve performance, so mapping
+all of the "low" utilization values to min_perf should not hurt
+performance, as the CPU time required by the workload will still be
+provided (and with a surplus for that matter).
+
+The reason why the hardware refuses to run below a certain minimum
+performance level is because it knows that running below that level
+doesn't really improve energy usage (or at least the improvement
+whatever it may be is not worth the effort).  The CPU would run
+slower, but it would still use (almost) as much energy as it uses at
+the "hardware minimum" level, so it may as well run at the min level.
