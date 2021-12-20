@@ -2,120 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BDA247AB48
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Dec 2021 15:28:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1102947AFFA
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Dec 2021 16:23:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233644AbhLTO20 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Dec 2021 09:28:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57278 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233640AbhLTO2Z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Dec 2021 09:28:25 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1ABC06173F
-        for <linux-pm@vger.kernel.org>; Mon, 20 Dec 2021 06:28:25 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id c4so20465220wrd.9
-        for <linux-pm@vger.kernel.org>; Mon, 20 Dec 2021 06:28:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=WooZ8+G3drvx1+6gABS1CB4CVHUChh8QD6al3hgLHT0=;
-        b=Hu2VM+3/PidvuBJkCTfuoSnf3r5qO3ftqjAkvelo8kOEZ8IHKSIQAhBwod07u+oq55
-         DqyDi6Ve0ed0E89JykoDluEmMSEgXLOAmGOzY/Z+ckuW1Vv0KHSFsgO83Tb3TpCTxq4Q
-         tqqW9C6ramZQNgmApKuN27wZ+A7enW96fegCtVwD1siH5daxTgaBf0zujAQ7T4Px6aun
-         wYPAG/ZlLvoJz2Zve08m22Qw98IYUMKW+TxYR8JIKiUILm0GqN13gbDLtXaZIADF7+5s
-         mQgyVRy3utRYbCCM2Tj77NoJLfnraoQwV/q9D01W52XkS+yfFG3lbJ8hXMtv9Yq9Ab7g
-         cQuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=WooZ8+G3drvx1+6gABS1CB4CVHUChh8QD6al3hgLHT0=;
-        b=f7oXBaorPNK0YTQcQNtYMnyjjPKFonszKLCaXMRuDzPuCx2Eqn6AS53wt18E+CLZpr
-         0b+FNvXIv99C4uq5HVNtvcrg6BlVgOmFEo2X1jLjOtjE6sGAhcp7ZlvZKwr46Szv9rih
-         /WoLt0muU4537UnYzuLvz2FMKUqJJhOpRyfz53c4t5er8sC2CBz5ADZ1R3mD1VxTV7/M
-         kDUQ0DQHqR0Zk2RwFAel5Pnv4+9/Ysclpeoe0NfoQLhn5ORso9u4xtA7FLaJUwxszqL8
-         2pz7ZU85JR+XE+272pCFD1dWh3GcPMpINBt/lX8rKdCxVqj2mfZIiQ9Ny0JKsdPa1QUJ
-         bNng==
-X-Gm-Message-State: AOAM533Zrg4rI6BqmBbkCSpAv1erKSQaPE9fQj4Tzl/YQaWHXzG2+agM
-        IX//fPkFSLgtRIXwyy3tNuFC9Q==
-X-Google-Smtp-Source: ABdhPJw3TlXRRdDAmrr2xdrbdnLzo6CM5X39e2ZExdeVHSwzM67b1QuANK08rfzgrK5uj0GU/t19mw==
-X-Received: by 2002:a5d:6088:: with SMTP id w8mr8586338wrt.85.1640010503680;
-        Mon, 20 Dec 2021 06:28:23 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:ac6:da31:b84c:183? ([2a01:e34:ed2f:f020:ac6:da31:b84c:183])
-        by smtp.googlemail.com with ESMTPSA id l8sm20108265wmc.40.2021.12.20.06.28.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Dec 2021 06:28:23 -0800 (PST)
-Subject: Re: [PATCH] thermal: rcar_thermal: Use platform_get_irq_optional() to
- get the interrupt
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
+        id S238313AbhLTPXa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Dec 2021 10:23:30 -0500
+Received: from mga11.intel.com ([192.55.52.93]:58453 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238378AbhLTPWg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 20 Dec 2021 10:22:36 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="237732815"
+X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
+   d="scan'208";a="237732815"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 07:16:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
+   d="scan'208";a="484086887"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by orsmga002.jf.intel.com with ESMTP; 20 Dec 2021 07:16:04 -0800
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org
+Cc:     x86@kernel.org, linux-doc@vger.kernel.org,
+        Len Brown <len.brown@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
         Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-References: <20211218144136.6663-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <5f8e2432-1214-3435-fb62-2f407ced0472@linaro.org>
- <CAMuHMdXgRzM4+OjR0or0aTk-ogPcAYajaVALsLF6E=MxEzeRQg@mail.gmail.com>
- <bdec1a89-ad1b-1e16-a248-029f7f02ae80@linaro.org>
- <CAMuHMdWjUG57trhkOevb0Pju1fFptXZwM+BKKvgnG0+vAM64gA@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <619343a0-4911-caff-7f47-a8469290c0f0@linaro.org>
-Date:   Mon, 20 Dec 2021 15:28:20 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <CAMuHMdWjUG57trhkOevb0Pju1fFptXZwM+BKKvgnG0+vAM64gA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        Andi Kleen <ak@linux.intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        linux-kernel@vger.kernel.org,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH v2 0/7] Thermal: Introduce the Hardware Feedback Interface for thermal and performance management
+Date:   Mon, 20 Dec 2021 07:14:31 -0800
+Message-Id: <20211220151438.1196-1-ricardo.neri-calderon@linux.intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20/12/2021 15:26, Geert Uytterhoeven wrote:
+Hi,
 
-[ ... ]
+This is v2 of this patchset after having incorporated the feedback from
+reviewers. Please find v1 here [1].
 
->>
->> if (irq == -ENXIO)
->>         continue;
->>
->> if (irq <= 0)
->>         goto out;
->>
->>
->> Did I miss your point ?
-> 
-> I think so, as I don't see your point, neither ;-)
-> 
-> I meant (a) there is no need to continue the loop when there are no
-> more interrupts present, and (b) irq == 0 cannot happen, so the cod
-> can be simplified to:
-> 
->     if (irq == -ENXIO)
->             break;
->     if (irq < 0) {
->             ret = irq;
->             goto out_unregister;
->     }
-> 
+The Intel Hardware Feedback Interface (HFI) [2] provides information about
+the performance and energy efficiency of each CPU in the system. It uses a
+table that is shared between hardware and the operating system. The
+contents of the table may be updated as a result of changes in the
+operating conditions of the system (e.g., reaching a thermal limit) or the
+action of external factors (e.g., changes in the thermal design power).
 
-Makes sense for me now, thanks :)
+The information that HFI provides are specified as numeric, unit-less
+capabilities relative to other CPUs in the system. These capabilities have
+a range of [0-255] where higher numbers represent higher capabilities.
+Energy efficiency and performance are reported in separate capabilities.
+If either the performance or energy capabilities efficiency of a CPU are 0,
+the hardware recommends to not schedule any tasks on such CPU for
+performance, energy efficiency or thermal reasons, respectively.
 
+The kernel or user space may use the information from the HFI to modify
+task placement and/or adjust power limits. This patchset focuses on the
+user space. The thermal notification framework is extended to relay
+updates of CPU capacity. Thus, a userspace daemon can affinitize workloads
+to certain CPUs and/or offline CPUs whose capabilities are zero.
 
+The frequency of HFI updates is specific to each processor model. On some
+systems, there is just a single HFI update at boot. On other systems, there
+may be updates every tens of milliseconds. In order to not overwhelm
+userspace with too many updates, they are limited to one update every
+CONFIG_HZ jiffies.
 
+Thanks and BR,
+Ricardo
+
+[1]. https://lore.kernel.org/lkml/20211106013312.26698-1-ricardo.neri-calderon@linux.intel.com/
+[2]. https://www.intel.com/sdm
+
+Changes since v1:
+ ++ Unchanged patches: none
+ * Clarified that HFI capabilities are independent. (Patch 1; Daniel)
+ * Provided examples on changes reflected in the HFI table.
+   (Patch 1; Daniel)
+ * Renamed X86_FEATURE_INTEL_HFI as X86_FEATURE_HFI. (Patch 2, 3, 4, 5;
+   Boris)
+ * Reworked parsing of HFI features using bitfields instead of bitmasks.
+   (Patch 3; PeterZ).
+ * Removed hfi_instance::parsed. (Patch 3; Rafael)
+ * Converted pr_err() to pr_debug(). (Patch 3; Srinivas, Rafael)
+ * Removed unnecessary dependency on CONFIG_SCHED_MC. (Patch 3)
+ * Renamed hfi_instance::ts_counter as hfi_instance::timestamp.
+   (Patch 3)
+ * Renamed hfi_instance::table_base as hfi_instance::local_table and
+   relocated its definition to this patch. (Patch 3)
+ * Wrapped hfi_instance::timestamp and hfi_instance:local_table in an
+   anonymous union, since both point at the same location. (Patch 3)
+ * Relocated definitions of MSR bits from intel_hfi.h to intel_hfi.c.
+   (Patch 4)
+ * Renamed HFI_PTR_VALID_BIT as HW_FEEDBACK_PTR_VALID_BIT for clarity.
+   (Patch 4).
+ * Reworked init_hfi_cpu_index() to take a pointer of type struct
+   hfi_cpu_info. (Patch 4; Rafael)
+ * In intel_hfi_online(), check for null hfi_instances and improve checks
+   of the die_id. (Patch 4; Rafael)
+ * Use a local cpumask_var_t to keep track of the CPUs of each
+   hfi_instance. (Patch 4; Rafael)
+ * Removed hfi_instance::die_id. It is not used anywhere. (Patch 4)
+ * Renamed hfi_instance::table_base as hfi_instance::local_table for
+   clarity. (Patch 4)
+ * Repurposed hfi_instance::event_lock to handle HFI interrupt
+   events to avoid keeping CPUs spinning needlessly. Added a new
+   hfi_instance::table_lock to serialize access to an HFI table.
+   (Patch 5; PeterZ)
+ * Replaced raw_spin_[un]lock[restore|save]() with raw_spin_[un]lock().
+   intel_hfi_process_event() runs in interrupt context and hence there
+   is no need to save interrupt flags. (Patch 5)
+ * Renamed HFI_CONFIG_ENABLE_BIT as HW_FEEDBACK_CONFIG_HFI_ENABLE_BIT
+   for clarity. (Patch 5)
+ * Relaxed checks on timestamp to allow time wrap around. (Patch 5)
+ * Reworded the members of struct cpu_capacity for clarity. (Patch 6;
+   Lukasz)
+ * Defined the CPU capability attributes to be scaled in the [0, 1023]
+   interval. (Patch 6; Lukasz)
+ * Made get_one_hfi_cap() return void. Removed unnecessary checks.
+   (Patch 7; Rafael)
+ * Replaced raw_spin_[un]lock_irq[restore|save]() with raw_spin_
+   [un]lock_irq() in get_one_hfi_cap(). This function is only called from
+   a workqueue and there is no need to save and restore irq flags.
+ * Scaled performance and energy efficiency values to a [0, 1023] interval
+   when reporting values to user space via thermal netlink notifications.
+   (Patch 7; Lucasz).
+
+Ricardo Neri (5):
+  x86/Documentation: Describe the Intel Hardware Feedback Interface
+  x86: Add definitions for the Intel Hardware Feedback Interface
+  thermal: intel: hfi: Minimally initialize the Hardware Feedback
+    Interface
+  thermal: intel: hfi: Handle CPU hotplug events
+  thermal: intel: hfi: Enable notification interrupt
+
+Srinivas Pandruvada (2):
+  thermal: netlink: Add a new event to notify CPU capabilities change
+  thermal: intel: hfi: Notify user space for HFI events
+
+ Documentation/x86/index.rst         |   1 +
+ Documentation/x86/intel-hfi.rst     |  72 ++++
+ arch/x86/include/asm/cpufeatures.h  |   1 +
+ arch/x86/include/asm/msr-index.h    |   6 +
+ drivers/thermal/intel/Kconfig       |  13 +
+ drivers/thermal/intel/Makefile      |   1 +
+ drivers/thermal/intel/intel_hfi.c   | 533 ++++++++++++++++++++++++++++
+ drivers/thermal/intel/intel_hfi.h   |  17 +
+ drivers/thermal/intel/therm_throt.c |  21 ++
+ drivers/thermal/thermal_netlink.c   |  55 +++
+ drivers/thermal/thermal_netlink.h   |  13 +
+ include/uapi/linux/thermal.h        |   6 +-
+ 12 files changed, 738 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/x86/intel-hfi.rst
+ create mode 100644 drivers/thermal/intel/intel_hfi.c
+ create mode 100644 drivers/thermal/intel/intel_hfi.h
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.17.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
