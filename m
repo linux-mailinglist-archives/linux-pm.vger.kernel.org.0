@@ -2,138 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C53DB47AA65
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Dec 2021 14:32:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D833547AAA1
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Dec 2021 14:49:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232898AbhLTNcD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Dec 2021 08:32:03 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:55078 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbhLTNcD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Dec 2021 08:32:03 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BKDVkKh032531;
-        Mon, 20 Dec 2021 07:31:46 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1640007106;
-        bh=5Xojthp86AJPaaXIqo7bpdpUtIVJBB4beqVhAYVWPmY=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=m6x5oO5rFQzL7oRKY0b2681tm5TN8vEsXyNhyFDNyWClWzsK1gtRNRVPSYdF6j3va
-         fPXbbrXCY7ibk6fx2bPoALMHzh7Ri+JcmxCL84e2jdlp/tEhrQ4F4UYnyhUIdO/sYA
-         DmSsvJPrvdymW+wLjfm6WErMr66tFzENq4EIA/Ls=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BKDVkMB115486
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 20 Dec 2021 07:31:46 -0600
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 20
- Dec 2021 07:31:46 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 20 Dec 2021 07:31:46 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BKDVjhM041337;
-        Mon, 20 Dec 2021 07:31:45 -0600
-Date:   Mon, 20 Dec 2021 07:31:45 -0600
-From:   Nishanth Menon <nm@ti.com>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        <SantoshShilimkarssantosh@kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Tony Lindgren <tony@atomide.com>, <linux-omap@vger.kernel.org>
-Subject: Re: [PATCH] soc: ti: smartreflex: Use platform_get_irq_optional() to
- get the interrupt
-Message-ID: <20211220133145.uiww2nuormjks7gc@unruly>
-References: <20211218153943.28014-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        id S233069AbhLTNtJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Dec 2021 08:49:09 -0500
+Received: from mail-ua1-f41.google.com ([209.85.222.41]:41590 "EHLO
+        mail-ua1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233178AbhLTNst (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Dec 2021 08:48:49 -0500
+Received: by mail-ua1-f41.google.com with SMTP id p37so17760636uae.8;
+        Mon, 20 Dec 2021 05:48:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4DF9LjH4hQKuWdOXF8V94wRpu2w4JP6fMl2d9enn9Ys=;
+        b=YFECEEl5yyGl1CTYb1e21ZkQKbdvqm4c9+wdw8LjLTHBgcQzVhs14ii3vSYz5hj5pp
+         dP7+Z2Lx9DXHaCV9Cw+CUS9tc9+VQXcfiH3hORcay3nD0yWpbuGK1xs8zrUuM9cnwd5h
+         DP5d0gTrrw/J7GYS5SRAwvdlF71N1fmzB45MDoRYClEdO6Yob1wSm5/A+JFqZes7vLBk
+         K4UypYocJ9Zz+JtLnP/H+GuZyFqfZ0CuxrBZgJFrzL6dAtz87By6b7AoFQ/mYoo+EASz
+         jijBzKcs6FOcaPrSyB0DSH3gQe/nRuyypLEInfFgqwBIyPXKdHXnssxH4uvkPpSrlIoM
+         Bs1Q==
+X-Gm-Message-State: AOAM532dRwIdWqgZn+02oSVPtyqzqlIn2v2MV9eDiNhS/347lCbrxbEe
+        Q/GcoGJvEhiFd7aCCFSZOfz6ohKpE25jng==
+X-Google-Smtp-Source: ABdhPJzcL4x4VBzkzjYw2+cWz8H7lhxYIgTDOv53F7NZ1Lo1P3st16Knih/A+/AS3NaeIiEkH/D/Vg==
+X-Received: by 2002:a9f:2e17:: with SMTP id t23mr5035855uaj.68.1640008128095;
+        Mon, 20 Dec 2021 05:48:48 -0800 (PST)
+Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com. [209.85.222.42])
+        by smtp.gmail.com with ESMTPSA id t3sm659319vsl.25.2021.12.20.05.48.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Dec 2021 05:48:47 -0800 (PST)
+Received: by mail-ua1-f42.google.com with SMTP id u40so17783923uad.1;
+        Mon, 20 Dec 2021 05:48:47 -0800 (PST)
+X-Received: by 2002:a05:6102:e10:: with SMTP id o16mr5097612vst.5.1640008127108;
+ Mon, 20 Dec 2021 05:48:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20211218153943.28014-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <20211218144136.6663-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <5f8e2432-1214-3435-fb62-2f407ced0472@linaro.org>
+In-Reply-To: <5f8e2432-1214-3435-fb62-2f407ced0472@linaro.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 20 Dec 2021 14:48:36 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXgRzM4+OjR0or0aTk-ogPcAYajaVALsLF6E=MxEzeRQg@mail.gmail.com>
+Message-ID: <CAMuHMdXgRzM4+OjR0or0aTk-ogPcAYajaVALsLF6E=MxEzeRQg@mail.gmail.com>
+Subject: Re: [PATCH] thermal: rcar_thermal: Use platform_get_irq_optional() to
+ get the interrupt
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15:39-20211218, Lad Prabhakar wrote:
-> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> allocation of IRQ resources in DT core code, this causes an issue
-> when using hierarchical interrupt domains using "interrupts" property
-> in the node as this bypasses the hierarchical setup and messes up the
-> irq chaining.
-> 
-> In preparation for removal of static setup of IRQ resource from DT core
-> code use platform_get_irq_optional().
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
-> Hi,
-> 
-> Dropping usage of platform_get_resource() was agreed based on
-> the discussion [0].
-> 
-> [0] https://patchwork.kernel.org/project/linux-renesas-soc/
-> patch/20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
-> 
-> Cheers,
-> Prabhakar
-> ---
->  drivers/soc/ti/smartreflex.c | 12 +++++++-----
->  1 file changed, 7 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/soc/ti/smartreflex.c b/drivers/soc/ti/smartreflex.c
-> index b5b2fa538d5c..4f311e00fa46 100644
-> --- a/drivers/soc/ti/smartreflex.c
-> +++ b/drivers/soc/ti/smartreflex.c
-> @@ -819,7 +819,7 @@ static int omap_sr_probe(struct platform_device *pdev)
->  {
->  	struct omap_sr *sr_info;
->  	struct omap_sr_data *pdata = pdev->dev.platform_data;
-> -	struct resource *mem, *irq;
-> +	struct resource *mem;
->  	struct dentry *nvalue_dir;
->  	int i, ret = 0;
->  
-> @@ -844,7 +844,12 @@ static int omap_sr_probe(struct platform_device *pdev)
->  	if (IS_ERR(sr_info->base))
->  		return PTR_ERR(sr_info->base);
->  
-> -	irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
-> +	ret = platform_get_irq_optional(pdev, 0);
-> +	if (ret <= 0 && ret != -ENXIO)
-> +		return ret ? ret : -ENXIO;
-^^ minor: This is a better check compared to what existed, might be good
-to add that to commit message, also does this cause the driver to fail
-probe silently?
+On Mon, Dec 20, 2021 at 1:29 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+> On 18/12/2021 15:41, Lad Prabhakar wrote:
+> > platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> > allocation of IRQ resources in DT core code, this causes an issue
+> > when using hierarchical interrupt domains using "interrupts" property
+> > in the node as this bypasses the hierarchical setup and messes up the
+> > irq chaining.
+> >
+> > In preparation for removal of static setup of IRQ resource from DT core
+> > code use platform_get_irq_optional().
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > ---
+> > Hi,
+> >
+> > Dropping usage of platform_get_resource() was agreed based on
+> > the discussion [0].
+> >
+> > [0] https://patchwork.kernel.org/project/linux-renesas-soc/
+> > patch/20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+> >
+> > Cheers,
+> > Prabhakar
+> > ---
+> >  drivers/thermal/rcar_thermal.c | 15 +++++++++++----
+> >  1 file changed, 11 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
+> > index b49f04daaf47..e4c7bc1bf7ef 100644
+> > --- a/drivers/thermal/rcar_thermal.c
+> > +++ b/drivers/thermal/rcar_thermal.c
+> > @@ -445,7 +445,7 @@ static int rcar_thermal_probe(struct platform_device *pdev)
+> >       struct rcar_thermal_common *common;
+> >       struct rcar_thermal_priv *priv;
+> >       struct device *dev = &pdev->dev;
+> > -     struct resource *res, *irq;
+> > +     struct resource *res;
+> >       const struct rcar_thermal_chip *chip = of_device_get_match_data(dev);
+> >       int mres = 0;
+> >       int i;
+> > @@ -467,9 +467,16 @@ static int rcar_thermal_probe(struct platform_device *pdev)
+> >       pm_runtime_get_sync(dev);
+> >
+> >       for (i = 0; i < chip->nirqs; i++) {
+> > -             irq = platform_get_resource(pdev, IORESOURCE_IRQ, i);
+> > -             if (!irq)
+> > +             int irq;
+> > +
+> > +             irq = platform_get_irq_optional(pdev, i);
+> > +             if (irq <= 0 && irq != -ENXIO) {
+> > +                     ret = irq ? irq : -ENXIO;
+> > +                     goto error_unregister;
+> > +             }
+> > +             if (irq == -ENXIO)
+> >                       continue;
+>
+> Why not invert the conditions?
+>
+>                 if (irq == -ENXIO)
+>                         continue;
 
-> +	if (ret > 0)
-> +		sr_info->irq = ret;
-> +	ret = 0;
->  
->  	sr_info->fck = devm_clk_get(pdev->dev.parent, "fck");
->  	if (IS_ERR(sr_info->fck))
-> @@ -870,9 +875,6 @@ static int omap_sr_probe(struct platform_device *pdev)
->  	sr_info->autocomp_active = false;
->  	sr_info->ip_type = pdata->ip_type;
->  
-> -	if (irq)
-> -		sr_info->irq = irq->start;
-> -
->  	sr_set_clk_length(sr_info);
->  
->  	list_add(&sr_info->node, &sr_list);
-> -- 
-> 2.17.1
-> 
+And this can be break.
 
-Otherwise, looks fine to me. but it is a little late since I have sent out my
-5.17 PR. We can try for rc OR 5.18.
+>
+>                 if (irq <= 0) {
+>                         ret = irq ? irq : -ENXIO;
 
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D)/Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+irq == 0 cannot happen.
+
+>                         goto out_unregister;
+>                 }
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
