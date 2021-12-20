@@ -2,79 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BD9F47A9B2
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Dec 2021 13:29:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C53DB47AA65
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Dec 2021 14:32:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbhLTM3r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Dec 2021 07:29:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58052 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbhLTM3r (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Dec 2021 07:29:47 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4A0C06173F
-        for <linux-pm@vger.kernel.org>; Mon, 20 Dec 2021 04:29:46 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id bg19-20020a05600c3c9300b0034565e837b6so5121130wmb.1
-        for <linux-pm@vger.kernel.org>; Mon, 20 Dec 2021 04:29:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=+PcnGxhJFgJFq8C9/A9f7W+O7WZ4IV+4n9+SWg14/VU=;
-        b=yoZ590xupjWmnjiXUltg7zRY6rWXuOa4c3FPxdaivdy8VQ/I1E6MTvCUpNwF8Yir2e
-         MYeJK5Z8MA8x+01/VLZ4B3/YIV6k9a9LdQ6QruGkxrUCM3yccYa2GpngoVQFJEBJpDWw
-         Iox2GXDfOgWO2ju02MjdRqduDoLdEx9HuPrcIEWixXTO0boWkM7cLK5uYLiOdBNxygoC
-         UVCYe3XX2P43PxAMn1OnT3bOUhUl/lb9nC4LZ0yYi4Z/xahVjqDwKces4z1Bw3a9oJ+t
-         /s2m/Jkx+z0kuuIVPjWXV7gjbcbRzTN21V/yeU7rgDa0GbES+6N1yeyEzUGTgQT/WIEu
-         TZdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=+PcnGxhJFgJFq8C9/A9f7W+O7WZ4IV+4n9+SWg14/VU=;
-        b=OMWaO/XlhGc6ryOj1bEqgtrT1WEeNAHC/kNYOmuWgNp2udzOsE39NUA3ecFELWTD8O
-         WOXm3W7F+SitiJlxcZH3fB4BxmG/p7juEONfhqJoWfOhVqtOotj+Iat7cmydtQ0hhywy
-         G1j2EIEl7YNhqtxpASobu9GqjBBYNfECoD7jKmpXyWoRBxl2KvkiRNRk0fAfazsLCrBx
-         nooZI/MIbjHUN4StVFRu/9I+s2oJ0pgpf5BjsmHLDECYOP91qR7fkuc+veD7Mi1HvWrY
-         4n+iiqRVIf4fVy9ZOp2hqx7kI3Rq9glWggrPHihBBAUYSIyXBbUEFczRJ3veeOOCmNtA
-         xZVg==
-X-Gm-Message-State: AOAM530jn+1GpkpsqZEAii1rwInD7t691Jmvq8JfHQPb9mKWXByAr944
-        oA+3TIHEg24B1xbiYxEnTNN7kWcwmiNXUw==
-X-Google-Smtp-Source: ABdhPJwDNRbbdfnlpSzXceRp9wC+Lp3t4UEDGZej7Ki6uZQTh5Z88Z3EgNxYi7qkF2gQ0KHyDFcyLQ==
-X-Received: by 2002:a7b:c92a:: with SMTP id h10mr884520wml.26.1640003385145;
-        Mon, 20 Dec 2021 04:29:45 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:ac6:da31:b84c:183? ([2a01:e34:ed2f:f020:ac6:da31:b84c:183])
-        by smtp.googlemail.com with ESMTPSA id p1sm6339686wma.42.2021.12.20.04.29.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Dec 2021 04:29:44 -0800 (PST)
-Subject: Re: [PATCH] thermal: rcar_thermal: Use platform_get_irq_optional() to
+        id S232898AbhLTNcD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Dec 2021 08:32:03 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:55078 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230176AbhLTNcD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Dec 2021 08:32:03 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BKDVkKh032531;
+        Mon, 20 Dec 2021 07:31:46 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1640007106;
+        bh=5Xojthp86AJPaaXIqo7bpdpUtIVJBB4beqVhAYVWPmY=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=m6x5oO5rFQzL7oRKY0b2681tm5TN8vEsXyNhyFDNyWClWzsK1gtRNRVPSYdF6j3va
+         fPXbbrXCY7ibk6fx2bPoALMHzh7Ri+JcmxCL84e2jdlp/tEhrQ4F4UYnyhUIdO/sYA
+         DmSsvJPrvdymW+wLjfm6WErMr66tFzENq4EIA/Ls=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BKDVkMB115486
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 20 Dec 2021 07:31:46 -0600
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 20
+ Dec 2021 07:31:46 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 20 Dec 2021 07:31:46 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BKDVjhM041337;
+        Mon, 20 Dec 2021 07:31:45 -0600
+Date:   Mon, 20 Dec 2021 07:31:45 -0600
+From:   Nishanth Menon <nm@ti.com>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        <SantoshShilimkarssantosh@kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Tony Lindgren <tony@atomide.com>, <linux-omap@vger.kernel.org>
+Subject: Re: [PATCH] soc: ti: smartreflex: Use platform_get_irq_optional() to
  get the interrupt
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>
-References: <20211218144136.6663-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <5f8e2432-1214-3435-fb62-2f407ced0472@linaro.org>
-Date:   Mon, 20 Dec 2021 13:29:43 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+Message-ID: <20211220133145.uiww2nuormjks7gc@unruly>
+References: <20211218153943.28014-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-In-Reply-To: <20211218144136.6663-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20211218153943.28014-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18/12/2021 15:41, Lad Prabhakar wrote:
+On 15:39-20211218, Lad Prabhakar wrote:
 > platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
 > allocation of IRQ resources in DT core code, this causes an issue
 > when using hierarchical interrupt domains using "interrupts" property
@@ -97,68 +82,58 @@ On 18/12/2021 15:41, Lad Prabhakar wrote:
 > Cheers,
 > Prabhakar
 > ---
->  drivers/thermal/rcar_thermal.c | 15 +++++++++++----
->  1 file changed, 11 insertions(+), 4 deletions(-)
+>  drivers/soc/ti/smartreflex.c | 12 +++++++-----
+>  1 file changed, 7 insertions(+), 5 deletions(-)
 > 
-> diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
-> index b49f04daaf47..e4c7bc1bf7ef 100644
-> --- a/drivers/thermal/rcar_thermal.c
-> +++ b/drivers/thermal/rcar_thermal.c
-> @@ -445,7 +445,7 @@ static int rcar_thermal_probe(struct platform_device *pdev)
->  	struct rcar_thermal_common *common;
->  	struct rcar_thermal_priv *priv;
->  	struct device *dev = &pdev->dev;
-> -	struct resource *res, *irq;
-> +	struct resource *res;
->  	const struct rcar_thermal_chip *chip = of_device_get_match_data(dev);
->  	int mres = 0;
->  	int i;
-> @@ -467,9 +467,16 @@ static int rcar_thermal_probe(struct platform_device *pdev)
->  	pm_runtime_get_sync(dev);
+> diff --git a/drivers/soc/ti/smartreflex.c b/drivers/soc/ti/smartreflex.c
+> index b5b2fa538d5c..4f311e00fa46 100644
+> --- a/drivers/soc/ti/smartreflex.c
+> +++ b/drivers/soc/ti/smartreflex.c
+> @@ -819,7 +819,7 @@ static int omap_sr_probe(struct platform_device *pdev)
+>  {
+>  	struct omap_sr *sr_info;
+>  	struct omap_sr_data *pdata = pdev->dev.platform_data;
+> -	struct resource *mem, *irq;
+> +	struct resource *mem;
+>  	struct dentry *nvalue_dir;
+>  	int i, ret = 0;
 >  
->  	for (i = 0; i < chip->nirqs; i++) {
-> -		irq = platform_get_resource(pdev, IORESOURCE_IRQ, i);
-> -		if (!irq)
-> +		int irq;
-> +
-> +		irq = platform_get_irq_optional(pdev, i);
-> +		if (irq <= 0 && irq != -ENXIO) {
-> +			ret = irq ? irq : -ENXIO;
-> +			goto error_unregister;
-> +		}
-> +		if (irq == -ENXIO)
->  			continue;
-
-Why not invert the conditions?
-
-		if (irq == -ENXIO)
-			continue;
-
-		if (irq <= 0) {
-			ret = irq ? irq : -ENXIO;
-			goto out_unregister;
-		}
-
-
-> +
->  		if (!common->base) {
->  			/*
->  			 * platform has IRQ support.
-> @@ -487,7 +494,7 @@ static int rcar_thermal_probe(struct platform_device *pdev)
->  			idle = 0; /* polling delay is not needed */
->  		}
+> @@ -844,7 +844,12 @@ static int omap_sr_probe(struct platform_device *pdev)
+>  	if (IS_ERR(sr_info->base))
+>  		return PTR_ERR(sr_info->base);
 >  
-> -		ret = devm_request_irq(dev, irq->start, rcar_thermal_irq,
-> +		ret = devm_request_irq(dev, irq, rcar_thermal_irq,
->  				       IRQF_SHARED, dev_name(dev), common);
->  		if (ret) {
->  			dev_err(dev, "irq request failed\n ");
+> -	irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+> +	ret = platform_get_irq_optional(pdev, 0);
+> +	if (ret <= 0 && ret != -ENXIO)
+> +		return ret ? ret : -ENXIO;
+^^ minor: This is a better check compared to what existed, might be good
+to add that to commit message, also does this cause the driver to fail
+probe silently?
+
+> +	if (ret > 0)
+> +		sr_info->irq = ret;
+> +	ret = 0;
+>  
+>  	sr_info->fck = devm_clk_get(pdev->dev.parent, "fck");
+>  	if (IS_ERR(sr_info->fck))
+> @@ -870,9 +875,6 @@ static int omap_sr_probe(struct platform_device *pdev)
+>  	sr_info->autocomp_active = false;
+>  	sr_info->ip_type = pdata->ip_type;
+>  
+> -	if (irq)
+> -		sr_info->irq = irq->start;
+> -
+>  	sr_set_clk_length(sr_info);
+>  
+>  	list_add(&sr_info->node, &sr_list);
+> -- 
+> 2.17.1
 > 
 
+Otherwise, looks fine to me. but it is a little late since I have sent out my
+5.17 PR. We can try for rc OR 5.18.
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D)/Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
