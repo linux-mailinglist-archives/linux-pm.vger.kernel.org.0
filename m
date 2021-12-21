@@ -2,75 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB7447C7A5
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Dec 2021 20:42:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35F7947C84E
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Dec 2021 21:36:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241053AbhLUTmN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Dec 2021 14:42:13 -0500
-Received: from mail-qt1-f172.google.com ([209.85.160.172]:40857 "EHLO
-        mail-qt1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231959AbhLUTmM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Dec 2021 14:42:12 -0500
-Received: by mail-qt1-f172.google.com with SMTP id l17so1440932qtk.7;
-        Tue, 21 Dec 2021 11:42:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=JPgPrPFVEIjf6OyDG4aeszuhlVMNt4/l0JdoVf4Nvng=;
-        b=BkILyB1Imscz9LLSRC+YAu+ApmTw3YdFIgQ81gtvIHj5LjPdh7L9CfLIUhZSA9Zr59
-         2jXZm9lR8fLu41bKb8qDvp2HQ2DpF113rJdHb54JizqZndfXAJwEN8Htn/bR59EX6BhA
-         ygrYxEFCg1Oinr2iHAaxdXhcN3lje77dwPwT7H3dfSSIZVjv7fPTFreK1btv0epI2D8Z
-         0VPOrSEKQH3duf9E74O7D/XDFgvWsBOw/Z1y5dbQT6YHro2mVzPCQSCqLr45cVUha+P7
-         PiAfWMTcUSFcFmVv/Q/2z24iT3087F+EwPl64o54eiHKsSjVzP3pFGpBhGON5lMJ5i7R
-         t35Q==
-X-Gm-Message-State: AOAM530Ay9xf/8QHMx7aTQt+ZNAeFnzmuJQ3ATWXMIZto//YWkBTtalx
-        yM6jfu0UEyreGX+fyO/D/b2PLnP/WLNzpbY0ijBCApWreHc=
-X-Google-Smtp-Source: ABdhPJwFsCNFcSELY8NLAo0c1hYknUwTujNgEcq/0+Davb5kk9RkbGJeC/wrtwRXJsvyW4itJIYZJc6NQ4AHp2YnXbU=
-X-Received: by 2002:ac8:7c4e:: with SMTP id o14mr3624634qtv.80.1640115731864;
- Tue, 21 Dec 2021 11:42:11 -0800 (PST)
-MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 21 Dec 2021 20:42:00 +0100
-Message-ID: <CAJZ5v0hCi7TM+WsaW+DFjwxtgvpJSFe10yCwg1yug8Sn_+4TPg@mail.gmail.com>
-Subject: [GIT PULL] Power management fix for v5.16-rc7
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        id S234285AbhLUUgr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Dec 2021 15:36:47 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:48390 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231477AbhLUUgq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Dec 2021 15:36:46 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3849B617B5;
+        Tue, 21 Dec 2021 20:36:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 99175C36AE8;
+        Tue, 21 Dec 2021 20:36:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640119005;
+        bh=uPHNF9xbRfddjQy938emDcAmzKVamF/aY+oL6reyMTM=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=lOYJ2ql0Z+zs+7I6luP0Gp7j8qhbdak+rDFUWhes756K9PPN+o2Xa+lPDSBQZ7J+g
+         Ii57C9KdD0mEbrGcBzo3ykIBv9oLsGRq+aZir6IgIHPTQnlxPjVwWl+tVu7tfHibWT
+         Zz0ByfEbC1cRY7UKnSEBtyvspegeTIAAaniNDwuXKJGZnHjNhlrryooQtzJ9HA440+
+         JWUAnbqXOyK9+VT3DhtxljUcbzPwhvUlGIKLQRuhA2j+Ovkw/R5mDdCD/2r/9lcLYv
+         vVkwwSOe6nDbDxRLF1Z3xY7fK1T8DrhaQAYjN9ehbiGra3W27bIcnNN2hajA8/00fb
+         9FvwYsKrP2s3w==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 8093F609CC;
+        Tue, 21 Dec 2021 20:36:45 +0000 (UTC)
+Subject: Re: [GIT PULL] Power management fix for v5.16-rc7
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0hCi7TM+WsaW+DFjwxtgvpJSFe10yCwg1yug8Sn_+4TPg@mail.gmail.com>
+References: <CAJZ5v0hCi7TM+WsaW+DFjwxtgvpJSFe10yCwg1yug8Sn_+4TPg@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0hCi7TM+WsaW+DFjwxtgvpJSFe10yCwg1yug8Sn_+4TPg@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.16-rc7
+X-PR-Tracked-Commit-Id: 544e737dea5ad1a457f25dbddf68761ff25e028b
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 2f47a9a4dfa3674fad19a49b40c5103a9a8e1589
+Message-Id: <164011900551.14510.16148976866619290369.pr-tracker-bot@kernel.org>
+Date:   Tue, 21 Dec 2021 20:36:45 +0000
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Linus,
+The pull request you sent on Tue, 21 Dec 2021 20:42:00 +0100:
 
-Please pull from the tag
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.16-rc7
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-5.16-rc7
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/2f47a9a4dfa3674fad19a49b40c5103a9a8e1589
 
-with top-most commit 544e737dea5ad1a457f25dbddf68761ff25e028b
+Thank you!
 
- PM: sleep: Fix error handling in dpm_prepare()
-
-on top of commit 2585cf9dfaaddf00b069673f27bb3f8530e2039c
-
- Linux 5.16-rc5
-
-to receive a power management fix for 5.16-rc7.
-
-This fixes a recent regression causing the loop in dpm_prepare()
-to become infinite if one of the device ->prepare() callbacks
-returns an error.
-
-Thanks!
-
-
----------------
-
-Rafael J. Wysocki (1):
-      PM: sleep: Fix error handling in dpm_prepare()
-
----------------
-
- drivers/base/power/main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
