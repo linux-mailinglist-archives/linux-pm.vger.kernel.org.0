@@ -2,152 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6018647C631
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Dec 2021 19:17:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 291F447C6B4
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Dec 2021 19:36:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241117AbhLUSQz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Dec 2021 13:16:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43610 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236895AbhLUSQz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Dec 2021 13:16:55 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 538BEC061574
-        for <linux-pm@vger.kernel.org>; Tue, 21 Dec 2021 10:16:55 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id v19so11362608plo.7
-        for <linux-pm@vger.kernel.org>; Tue, 21 Dec 2021 10:16:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=Ybs7grTQcuj48e/eKq5SQpQP/23TSJ1bRSIFfkiqnEc=;
-        b=Fe/7mmH3ZAp8ZVkto8UkSMdCSfyLn4G4LRT0yhVc98dmzidUmUE0eM6wiTnP1h3k7P
-         /RiYqMZpOkiCcBuyRIc+c6AyO2XolaKBiIFBXHUjZPnqvhTw/WmrYaZMXEhP51fbO4Ag
-         WFSg+blx6bEH7o4VWn83h000tuVphUFjN4hVZATs0PB+NiUprlYd0p9vjrNjvYtx3LCz
-         qf2IYxPg5a75jpTRzfXOwyAyRB3hwmudqAsRoirI9hhGv59R7xk70QUcBG9ArVfuqPXO
-         dowFe+lIIU1s5ehRzVPRfO/FdYGFZQrVS96OdpItG0bO5VHK4jkfJmZEf38IxFMs64Yb
-         wW4A==
+        id S241404AbhLUSgy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Dec 2021 13:36:54 -0500
+Received: from mail-qv1-f46.google.com ([209.85.219.46]:38777 "EHLO
+        mail-qv1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237219AbhLUSgy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Dec 2021 13:36:54 -0500
+Received: by mail-qv1-f46.google.com with SMTP id o10so85686qvc.5;
+        Tue, 21 Dec 2021 10:36:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=Ybs7grTQcuj48e/eKq5SQpQP/23TSJ1bRSIFfkiqnEc=;
-        b=6VPKZhoBpMd9uLBFnAfkM8/1BR65YPowSmQgXOG+v+0MlfdfInsteyMz3hv+RMEY00
-         UNa+w675/eek5zzTqD6ZALJRCol3c9kXoI9L1gV9R2W5wPydMoHy77um60vcSJIcmp2s
-         KLuz9s751nXNP77lRZRRKjQBHY+e7K/Kdc7L13US+sLvLr4ygqE1vbos5ihjzbnf7uc5
-         VgIfVQ7VodYMCIBE/bJTAS0dmJcGjg9Moh7huHDWkKSXOKKw2QY8XW3AfnmR+2hWYTLs
-         pzwOBJAYfrOszX1B1ZM68jAH9O4xsMqPvJW95kHDFJK07XJ2ymi12eg/Q3Wlc1UHCYvP
-         6czQ==
-X-Gm-Message-State: AOAM5338EYeHDJd2FyhTuy3b2FzMHEFN5hGGbZhbNhQNLmj5d6DNr8L4
-        RQJUz8pngj31dyqmV1E00CxWoA==
-X-Google-Smtp-Source: ABdhPJygNJwZ3un4Jlx5tFQdex7/tqW35I3QwC9cgcaY4UcBr03CSqyRt1jhvI98rKUmi46LsQ8vYA==
-X-Received: by 2002:a17:90a:f192:: with SMTP id bv18mr5416026pjb.110.1640110614894;
-        Tue, 21 Dec 2021 10:16:54 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id x31sm8024121pfh.116.2021.12.21.10.16.54
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=BwuHhEErlhOrEBWN0F2K7bnC+VuA2g6qjmBjpkSXVWE=;
+        b=uBDVdyZr/bqS8muxgSU1i9WixFqhRP62JJVjFLx7AyHEclqIjHf6okOh1ItZeedwxZ
+         qcBiK3Fr4bpa7WsQkX7Pg83fYYa8kwjaTsz9hsQZWj+he4ZK46dJRA3oczpgM2FQuKaI
+         8NS0JWiPX3OnA+buSXsZymLehchi3jURC2Ec+7Eeo/5R3Xh0X9/vIXNnQl8t9who2+gI
+         5ENt4gQir7IUBcHnCyChMZVhjZJEHP8zavEBnOiuiPIEzhLj4mQlcb72iuFU4FHqzVUX
+         DJtpVYMRwpuB3h8T253TfiagTu9kywvI6Wyuu56Dq1oRqWCopEHbArgQ/6iKaHNqqLaK
+         GN2g==
+X-Gm-Message-State: AOAM531OY04oBb5qSCf40sbaKRGhP5ycphC0KTAFc0tmhB+urnOrx9wa
+        J1ukhapFxFjzsdf1LiMJsuFRV/56O7A7
+X-Google-Smtp-Source: ABdhPJyDRlLrlh+BUAnq5NK6Y3yT0CSN8lqZ3xisjbY1Tm19bHm9vdHjB9QyQe75qmTH8mZU67t++w==
+X-Received: by 2002:a05:6214:2a88:: with SMTP id jr8mr3846082qvb.118.1640111813161;
+        Tue, 21 Dec 2021 10:36:53 -0800 (PST)
+Received: from robh.at.kernel.org ([24.55.105.145])
+        by smtp.gmail.com with ESMTPSA id z8sm18474428qta.50.2021.12.21.10.36.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 10:16:54 -0800 (PST)
-Message-ID: <61c21a16.1c69fb81.3d0b.52d7@mx.google.com>
-Date:   Tue, 21 Dec 2021 10:16:54 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 21 Dec 2021 10:36:52 -0800 (PST)
+Received: (nullmailer pid 1542555 invoked by uid 1000);
+        Tue, 21 Dec 2021 18:36:51 -0000
+Date:   Tue, 21 Dec 2021 14:36:51 -0400
+From:   Rob Herring <robh@kernel.org>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: power: reset: gpio-restart: Convert to
+ json-schema
+Message-ID: <YcIew5b7kEMYZxEL@robh.at.kernel.org>
+References: <20211217170042.2740058-1-thierry.reding@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.16-rc6-72-gbd982f30deb7
-X-Kernelci-Report-Type: build
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 1 warning (v5.16-rc6-72-gbd982f30deb7)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211217170042.2740058-1-thierry.reding@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.16-rc6-72-gbd=
-982f30deb7)
+On Fri, 17 Dec 2021 18:00:42 +0100, Thierry Reding wrote:
+> From: Thierry Reding <treding@nvidia.com>
+> 
+> Convert the GPIO restart bindings from the free-form text format to
+> json-schema.
+> 
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
+> ---
+>  .../bindings/power/reset/gpio-restart.txt     | 54 ------------
+>  .../bindings/power/reset/gpio-restart.yaml    | 86 +++++++++++++++++++
+>  2 files changed, 86 insertions(+), 54 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/power/reset/gpio-restart.txt
+>  create mode 100644 Documentation/devicetree/bindings/power/reset/gpio-restart.yaml
+> 
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-16-rc6-72-gbd982f30deb7/
-
-Tree: pm
-Branch: testing
-Git Describe: v5.16-rc6-72-gbd982f30deb7
-Git Commit: bd982f30deb7baab86095fc89f33954f10dcc387
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
-
-Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-
-riscv:
-
-x86_64:
-
-
-Warnings summary:
-
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+Applied, thanks!
