@@ -2,209 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4825347CC74
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Dec 2021 06:21:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CDB147CE66
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Dec 2021 09:41:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231742AbhLVFVi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Dec 2021 00:21:38 -0500
-Received: from mga07.intel.com ([134.134.136.100]:38764 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229493AbhLVFVh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 22 Dec 2021 00:21:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640150497; x=1671686497;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=VwNmXX+4BJ1AN/HJF6sCMc+Q1DizaL01l6oxT4tLGYQ=;
-  b=L5qaunZYRO48bph0vAZFitKD2fY7W2HiAGT0+w6G9Qzfgb4Shu0SYJjY
-   KjDnz+VTf2IaNYHKX4fJCkkr+uk3H0p75J1Njs2Ha1uvMV4TD1qgE+I2k
-   CAgvRLrUWABFnJGGSq3zpgjIPxpf8e1h6BOPORI5eiZgSQ6nrpmdni+35
-   DyO4f+F6JP/lbnh3JMIxGIIstOCvMaSFDMc2vtlhOOefiWszNJiwRS0Lg
-   jKNRIchzq1obU6vhtEikBNOfMKzYMpVlFJQsojh6GurdT8n4330Y9NK08
-   mUFyKXqOqEkrh04P9Bia09RYfic7n9HGUOMW8tlCfUanxkm6bNmMrBevH
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="303918093"
-X-IronPort-AV: E=Sophos;i="5.88,225,1635231600"; 
-   d="scan'208";a="303918093"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 21:21:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,225,1635231600"; 
-   d="scan'208";a="617014112"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 21 Dec 2021 21:21:35 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mzu4E-00009I-VD; Wed, 22 Dec 2021 05:21:34 +0000
-Date:   Wed, 22 Dec 2021 13:21:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- bd982f30deb7baab86095fc89f33954f10dcc387
-Message-ID: <61c2b5c5.9H1FqZT2VbxijcVs%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S243391AbhLVIlv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Dec 2021 03:41:51 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:27422 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239582AbhLVIlv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Dec 2021 03:41:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1640162511; x=1671698511;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=efBvZD3Wo2dCo6KUiX1BsCnl42Y38akJdR07rb3mcKQ=;
+  b=TBeviJOs/9DhGHB5Aa5B0JsXzO05/gmpEF/Lns9K/ZXTqsujPP4MM6uO
+   WeNjgE70SdPoa3HpVvW8oIVvtHRWasQyGUMBRcPXtZH7TRm3gPWnl0ypt
+   35CXVKRmwiBUrcrX2G6t0nf6jWc5FwXGeFLLSe6YIJd2cag2PU+Z1bu5s
+   0=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 22 Dec 2021 00:41:50 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 00:41:50 -0800
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 22 Dec 2021 00:41:49 -0800
+Received: from codeaurora.org (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Wed, 22 Dec
+ 2021 00:41:47 -0800
+From:   Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+To:     Sebastian Reichel <sre@kernel.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        David Collins <quic_collinsd@quicinc.com>,
+        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "thara . gopinath @ linaro . org" <thara.gopinath@linaro.org>,
+        "Manaf Meethalavalappu Pallikunhi" <quic_manafm@quicinc.com>
+Subject: [PATCH v4 1/2] power_supply: Register cooling device outside of probe
+Date:   Wed, 22 Dec 2021 14:11:28 +0530
+Message-ID: <1640162489-7847-1-git-send-email-quic_manafm@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: bd982f30deb7baab86095fc89f33954f10dcc387  Merge branches 'thermal-tools' and 'thermal-int340x' into linux-next
+Registering the cooling device from the probe can result in the
+execution of get_property() function before it gets initialized.
 
-elapsed time: 722m
+To avoid this, register the cooling device from a workqueue
+instead of registering in the probe.
 
-configs tested: 137
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm64                               defconfig
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                       imx_v4_v5_defconfig
-arm                          exynos_defconfig
-riscv                               defconfig
-powerpc                 mpc837x_mds_defconfig
-arm                          pxa910_defconfig
-mips                        bcm63xx_defconfig
-sh                             espt_defconfig
-mips                     loongson1c_defconfig
-arm                        realview_defconfig
-powerpc                  storcenter_defconfig
-sh                        edosk7705_defconfig
-arm                         cm_x300_defconfig
-mips                malta_qemu_32r6_defconfig
-sh                           se7712_defconfig
-m68k                       m5275evb_defconfig
-powerpc                      ppc44x_defconfig
-arm                              alldefconfig
-mips                         rt305x_defconfig
-mips                           gcw0_defconfig
-mips                       bmips_be_defconfig
-powerpc                     skiroot_defconfig
-mips                      maltaaprp_defconfig
-arm                          ixp4xx_defconfig
-mips                      bmips_stb_defconfig
-sh                            shmin_defconfig
-um                               alldefconfig
-nds32                             allnoconfig
-sh                           se7206_defconfig
-mips                        jmr3927_defconfig
-mips                       capcella_defconfig
-powerpc                 canyonlands_defconfig
-sh                        dreamcast_defconfig
-mips                           ci20_defconfig
-m68k                            q40_defconfig
-powerpc                   lite5200b_defconfig
-arm                          pcm027_defconfig
-powerpc                      katmai_defconfig
-arm                         assabet_defconfig
-arm                             pxa_defconfig
-powerpc                     pseries_defconfig
-m68k                          sun3x_defconfig
-sparc64                             defconfig
-powerpc                     tqm8540_defconfig
-um                                  defconfig
-sh                          urquell_defconfig
-sh                         microdev_defconfig
-arm                            mps2_defconfig
-sh                         ecovec24_defconfig
-arm                      jornada720_defconfig
-arm                            zeus_defconfig
-powerpc                    amigaone_defconfig
-s390                             alldefconfig
-powerpc                     mpc83xx_defconfig
-openrisc                    or1ksim_defconfig
-sh                           se7721_defconfig
-arm                  randconfig-c002-20211220
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                               defconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a001-20211220
-x86_64               randconfig-a003-20211220
-x86_64               randconfig-a005-20211220
-x86_64               randconfig-a006-20211220
-x86_64               randconfig-a004-20211220
-x86_64               randconfig-a002-20211220
-i386                 randconfig-a006-20211220
-i386                 randconfig-a004-20211220
-i386                 randconfig-a002-20211220
-i386                 randconfig-a003-20211220
-i386                 randconfig-a005-20211220
-i386                 randconfig-a001-20211220
-arc                  randconfig-r043-20211220
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a013-20211220
-x86_64               randconfig-a015-20211220
-x86_64               randconfig-a014-20211220
-x86_64               randconfig-a012-20211220
-x86_64               randconfig-a011-20211220
-x86_64               randconfig-a016-20211220
-i386                 randconfig-a012-20211220
-i386                 randconfig-a011-20211220
-i386                 randconfig-a014-20211220
-i386                 randconfig-a016-20211220
-i386                 randconfig-a015-20211220
-i386                 randconfig-a013-20211220
-hexagon              randconfig-r041-20211220
-hexagon              randconfig-r045-20211220
-riscv                randconfig-r042-20211220
-s390                 randconfig-r044-20211220
-
+Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/power/supply/power_supply_core.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+index 668369b..ef6f290 100644
+--- a/drivers/power/supply/power_supply_core.c
++++ b/drivers/power/supply/power_supply_core.c
+@@ -132,6 +132,7 @@ void power_supply_changed(struct power_supply *psy)
+ }
+ EXPORT_SYMBOL_GPL(power_supply_changed);
+ 
++static int psy_register_cooler(struct power_supply *psy);
+ /*
+  * Notify that power supply was registered after parent finished the probing.
+  *
+@@ -139,6 +140,8 @@ EXPORT_SYMBOL_GPL(power_supply_changed);
+  * calling power_supply_changed() directly from power_supply_register()
+  * would lead to execution of get_property() function provided by the driver
+  * too early - before the probe ends.
++ * Also, registering cooling device from the probe will execute the
++ * get_property() function. So register the cooling device after the probe.
+  *
+  * Avoid that by waiting on parent's mutex.
+  */
+@@ -156,6 +159,7 @@ static void power_supply_deferred_register_work(struct work_struct *work)
+ 	}
+ 
+ 	power_supply_changed(psy);
++	psy_register_cooler(psy);
+ 
+ 	if (psy->dev.parent)
+ 		mutex_unlock(&psy->dev.parent->mutex);
+@@ -1238,10 +1242,6 @@ __power_supply_register(struct device *parent,
+ 	if (rc)
+ 		goto register_thermal_failed;
+ 
+-	rc = psy_register_cooler(psy);
+-	if (rc)
+-		goto register_cooler_failed;
+-
+ 	rc = power_supply_create_triggers(psy);
+ 	if (rc)
+ 		goto create_triggers_failed;
+@@ -1271,8 +1271,6 @@ __power_supply_register(struct device *parent,
+ add_hwmon_sysfs_failed:
+ 	power_supply_remove_triggers(psy);
+ create_triggers_failed:
+-	psy_unregister_cooler(psy);
+-register_cooler_failed:
+ 	psy_unregister_thermal(psy);
+ register_thermal_failed:
+ 	device_del(dev);
+
