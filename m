@@ -2,111 +2,336 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9E9C47D3FC
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Dec 2021 15:55:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2300247D567
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Dec 2021 17:53:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237619AbhLVOzB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Dec 2021 09:55:01 -0500
-Received: from mail-qk1-f182.google.com ([209.85.222.182]:37485 "EHLO
-        mail-qk1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237161AbhLVOzB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Dec 2021 09:55:01 -0500
-Received: by mail-qk1-f182.google.com with SMTP id m186so2519770qkb.4;
-        Wed, 22 Dec 2021 06:55:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5nzVW9fS8lVq4A7s+LleLBNZjpuppm4Z5+9u/hx4F4M=;
-        b=kwSnQ44f1ozuIEFYOUypgo9Pe+mqqQ1Uo8TJ/cQ0WrsNJZuBmiwphTpMy/Z67K7Ww0
-         Pgtx+eUYiBsX2+GhJSdjyFkrEzq6907AWm+IeQCbqlB1rtWw/K8JlFqKRb7dtyXKEATN
-         2WwuQp8mmfNoIXnPD2Eul7X94KAxc+0yHL5GUq0PBbp9t5dFsy1G0vIS11xJ7MzXCCFL
-         dHKsxUmlo+jBg8S5yhwdxhPaYJVC2Kjr42Jiz9qUrPnZR2SK59KUe9781q9eq5etxrKb
-         5N0eQvFqUTOijb7QVxNt/+awdof6JlWVUbeg86oMq8rnyI2E2uX2jGqtLcyT6SspKxCx
-         MbLA==
-X-Gm-Message-State: AOAM532cf2h+JFH23yf84eoTuPZLKqMcSEST8IIjfgfnGCgLskQis+2k
-        PMVdAeyWBEgDLNoqGzfCEz+bgBZn0xZ8mmJhTGk=
-X-Google-Smtp-Source: ABdhPJxu4y5AWPkYpGQLKns+2Ooj7oRBJ8xa5ngpaxS0tHENl0qV83deqMOYvle2DP4D8tywrxLcdWrtsuYu8Gz4wLM=
-X-Received: by 2002:a05:620a:706:: with SMTP id 6mr2223347qkc.374.1640184900377;
- Wed, 22 Dec 2021 06:55:00 -0800 (PST)
-MIME-Version: 1.0
-References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien>
- <CAJZ5v0iBU8gw8+-5nxj2cKzf7tyN=p3Adcm4Z5bn=oVYhU28bQ@mail.gmail.com>
- <alpine.DEB.2.22.394.2112172022100.2968@hadrien> <87r1abt1d2.fsf@riseup.net>
- <alpine.DEB.2.22.394.2112172258480.2968@hadrien> <87fsqqu6by.fsf@riseup.net>
- <alpine.DEB.2.22.394.2112180654470.3139@hadrien> <878rwitdu3.fsf@riseup.net>
- <alpine.DEB.2.22.394.2112181138210.3130@hadrien> <871r29tvdj.fsf@riseup.net>
- <alpine.DEB.2.22.394.2112190734070.3181@hadrien> <87wnk0s0tf.fsf@riseup.net>
- <CAJZ5v0i7gBtm6x+zUUzhxXjmYhPwr=JxvOuMZ0aD9qxnjE9YKw@mail.gmail.com> <878rwdse9o.fsf@riseup.net>
-In-Reply-To: <878rwdse9o.fsf@riseup.net>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 22 Dec 2021 15:54:48 +0100
-Message-ID: <CAJZ5v0jyusD4r1eK_hv8CXuaoOXZ6gY8TVdomW5q75dS3wNq5A@mail.gmail.com>
-Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
-To:     Francisco Jerez <currojerez@riseup.net>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S241876AbhLVQxl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Dec 2021 11:53:41 -0500
+Received: from mga03.intel.com ([134.134.136.65]:25725 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241736AbhLVQxl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 22 Dec 2021 11:53:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640192021; x=1671728021;
+  h=from:to:cc:subject:date:message-id;
+  bh=sBH0mJvV8ASyw6f8QYQiDZ+ABUL46mfxPyYtRfsyFlM=;
+  b=MZjiw7McAo47t9xoZmkhCpupT9+4TLdM8NxQTwjqusqPYPvxoXUPsAwI
+   50iga8px3zsGYYGmNZ/LuPQsl89hp2+/1R6dBfIIbcvJCJN4Rf7ut9BX0
+   3WJYY7qRjZoFEvoUY6Hr4TCHe6qxRx9wzuiwWNGgzGIZmC8TvlxPsrpmD
+   hp0S25uoFXHYoFINCBEbcY/iUwdQnebCGmItEuWwdv03VebDJMDiXhbJQ
+   0gNWnJJb87T5xk6/BEmrUhW+az+XA+OQf3Tlj5tnI28bMCuNllWPhPP4E
+   Ix5sjYx5w9qnI90WTEULDTL0nfAqCAO5+K0g7cZlxtsQfbhfhEvxDqiLe
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="240613085"
+X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
+   d="scan'208";a="240613085"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 08:53:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
+   d="scan'208";a="549610036"
+Received: from srpawnik.iind.intel.com ([10.223.107.57])
+  by orsmga001.jf.intel.com with ESMTP; 22 Dec 2021 08:53:38 -0800
+From:   Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+To:     rafael@kernel.org, daniel.lezcano@linaro.org,
+        srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, sumeet.r.pawnikar@intel.com,
+        stable@vger.kernel.org
+Subject: [PATCH] thermal/drivers/int340x: add functions for mbox read and write commands
+Date:   Wed, 22 Dec 2021 22:23:00 +0530
+Message-Id: <20211222165300.8222-1-sumeet.r.pawnikar@intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 12:57 AM Francisco Jerez <currojerez@riseup.net> wrote:
->
-> "Rafael J. Wysocki" <rafael@kernel.org> writes:
->
-> > On Sun, Dec 19, 2021 at 11:10 PM Francisco Jerez <currojerez@riseup.net> wrote:
-> >>
-> >> Julia Lawall <julia.lawall@inria.fr> writes:
-> >>
-> >> > On Sat, 18 Dec 2021, Francisco Jerez wrote:
-> >
-> > [cut]
-> >
-> >> > I did some experiements with forcing different frequencies.  I haven't
-> >> > finished processing the results, but I notice that as the frequency goes
-> >> > up, the utilization (specifically the value of
-> >> > map_util_perf(sg_cpu->util) at the point of the call to
-> >> > cpufreq_driver_adjust_perf in sugov_update_single_perf) goes up as well.
-> >> > Is this expected?
-> >> >
-> >>
-> >> Actually, it *is* expected based on our previous hypothesis that these
-> >> workloads are largely latency-bound: In cases where a given burst of CPU
-> >> work is not parallelizable with any other tasks the thread needs to
-> >> complete subsequently, its overall runtime will decrease monotonically
-> >> with increasing frequency, therefore the number of instructions executed
-> >> per unit of time will increase monotonically with increasing frequency,
-> >> and with it its frequency-invariant utilization.
-> >
-> > But shouldn't these two effects cancel each other if the
-> > frequency-invariance mechanism works well?
->
-> No, they won't cancel each other out under our hypothesis that these
-> workloads are largely latency-bound, since the performance of the
-> application will increase steadily with increasing frequency, and with
-> it the amount of computational resources it utilizes per unit of time on
-> the average, and therefore its frequency-invariant utilization as well.
+The existing mail mechanism only supports writing of workload types.
+But mailbox command for RFIM (cmd = 0x08) also requires write operation
+which was ignored. This results in failing to store RFI restriction.
+This requires enhancing mailbox writes for non workload commands also.
+So, remove the check for MBOX_CMD_WORKLOAD_TYPE_WRITE in mailbox write,
+with this other write commands also can be supoorted. But at the same
+time, we have to make sure that there is no impact on read commands,
+by not writing anything in mailbox data register.
+To properly implement, add two separate functions for mbox read and write
+command for processor thermal workload command type. This helps to
+differentiate the read and write workload command types while sending mbox
+command.
 
-OK, so this is a workload in which the maximum performance is only
-achieved at the maximum available frequency.  IOW, there's no
-performance saturation point and increasing the frequency (if
-possible) will always cause more work to be done per unit of time.
+Fixes: 5d6fbc96bd36 ("thermal/drivers/int340x: processor_thermal: Export additional attributes")
+Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+Cc: stable@vger.kernel.org # 5.14+
+---
+ .../processor_thermal_device.h                |   3 +-
+ .../int340x_thermal/processor_thermal_mbox.c  | 101 +++++++++++-------
+ .../int340x_thermal/processor_thermal_rfim.c  |  23 ++--
+ 3 files changed, 74 insertions(+), 53 deletions(-)
 
-For this type of workloads, requirements regarding performance (for
-example, upper bound on the expected time of computations) need to be
-known in order to determine the "most suitable" frequency to run them
-and I agree that schedutil doesn't help much in that respect.
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+index be27f633e40a..43def8c5d2ce 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+@@ -80,7 +80,8 @@ void proc_thermal_rfim_remove(struct pci_dev *pdev);
+ int proc_thermal_mbox_add(struct pci_dev *pdev, struct proc_thermal_device *proc_priv);
+ void proc_thermal_mbox_remove(struct pci_dev *pdev);
+ 
+-int processor_thermal_send_mbox_cmd(struct pci_dev *pdev, u16 cmd_id, u32 cmd_data, u64 *cmd_resp);
++int processor_thermal_send_mbox_read_cmd(struct pci_dev *pdev, u16 id, u32 data, u64 *resp);
++int processor_thermal_send_mbox_write_cmd(struct pci_dev *pdev, u16 id, u32 data);
+ int proc_thermal_add(struct device *dev, struct proc_thermal_device *priv);
+ void proc_thermal_remove(struct proc_thermal_device *proc_priv);
+ int proc_thermal_suspend(struct device *dev);
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_mbox.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_mbox.c
+index 01008ae00e7f..26bae0434829 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_mbox.c
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_mbox.c
+@@ -24,19 +24,15 @@
+ 
+ static DEFINE_MUTEX(mbox_lock);
+ 
+-static int send_mbox_cmd(struct pci_dev *pdev, u16 cmd_id, u32 cmd_data, u64 *cmd_resp)
++static int wait_for_mbox_ready(struct proc_thermal_device *proc_priv)
+ {
+-	struct proc_thermal_device *proc_priv;
+ 	u32 retries, data;
+ 	int ret;
+ 
+-	mutex_lock(&mbox_lock);
+-	proc_priv = pci_get_drvdata(pdev);
+-
+ 	/* Poll for rb bit == 0 */
+ 	retries = MBOX_RETRY_COUNT;
+ 	do {
+-		data = readl((void __iomem *) (proc_priv->mmio_base + MBOX_OFFSET_INTERFACE));
++		data = readl(proc_priv->mmio_base + MBOX_OFFSET_INTERFACE);
+ 		if (data & BIT_ULL(MBOX_BUSY_BIT)) {
+ 			ret = -EBUSY;
+ 			continue;
+@@ -45,53 +41,79 @@ static int send_mbox_cmd(struct pci_dev *pdev, u16 cmd_id, u32 cmd_data, u64 *cm
+ 		break;
+ 	} while (--retries);
+ 
++	return ret;
++}
++
++static int send_mbox_write_cmd(struct pci_dev *pdev, u16 id, u32 data)
++{
++	struct proc_thermal_device *proc_priv;
++	u32 reg_data;
++	int ret;
++
++	proc_priv = pci_get_drvdata(pdev);
++
++	mutex_lock(&mbox_lock);
++
++	ret = wait_for_mbox_ready(proc_priv);
+ 	if (ret)
+ 		goto unlock_mbox;
+ 
+-	if (cmd_id == MBOX_CMD_WORKLOAD_TYPE_WRITE)
+-		writel(cmd_data, (void __iomem *) ((proc_priv->mmio_base + MBOX_OFFSET_DATA)));
+-
++	writel(data, (proc_priv->mmio_base + MBOX_OFFSET_DATA));
+ 	/* Write command register */
+-	data = BIT_ULL(MBOX_BUSY_BIT) | cmd_id;
+-	writel(data, (void __iomem *) ((proc_priv->mmio_base + MBOX_OFFSET_INTERFACE)));
++	reg_data = BIT_ULL(MBOX_BUSY_BIT) | id;
++	writel(reg_data, (proc_priv->mmio_base + MBOX_OFFSET_INTERFACE));
+ 
+-	/* Poll for rb bit == 0 */
+-	retries = MBOX_RETRY_COUNT;
+-	do {
+-		data = readl((void __iomem *) (proc_priv->mmio_base + MBOX_OFFSET_INTERFACE));
+-		if (data & BIT_ULL(MBOX_BUSY_BIT)) {
+-			ret = -EBUSY;
+-			continue;
+-		}
++	ret = wait_for_mbox_ready(proc_priv);
+ 
+-		if (data) {
+-			ret = -ENXIO;
+-			goto unlock_mbox;
+-		}
++unlock_mbox:
++	mutex_unlock(&mbox_lock);
++	return ret;
++}
+ 
+-		ret = 0;
++static int send_mbox_read_cmd(struct pci_dev *pdev, u16 id, u32 data, u64 *resp)
++{
++	struct proc_thermal_device *proc_priv;
++	u32 reg_data;
++	int ret;
+ 
+-		if (!cmd_resp)
+-			break;
++	proc_priv = pci_get_drvdata(pdev);
+ 
+-		if (cmd_id == MBOX_CMD_WORKLOAD_TYPE_READ)
+-			*cmd_resp = readl((void __iomem *) (proc_priv->mmio_base + MBOX_OFFSET_DATA));
+-		else
+-			*cmd_resp = readq((void __iomem *) (proc_priv->mmio_base + MBOX_OFFSET_DATA));
++	mutex_lock(&mbox_lock);
+ 
+-		break;
+-	} while (--retries);
++	ret = wait_for_mbox_ready(proc_priv);
++	if (ret)
++		goto unlock_mbox;
++
++	writel(data, (proc_priv->mmio_base + MBOX_OFFSET_DATA));
++	/* Write command register */
++	reg_data = BIT_ULL(MBOX_BUSY_BIT) | id;
++	writel(reg_data, (proc_priv->mmio_base + MBOX_OFFSET_INTERFACE));
++
++	ret = wait_for_mbox_ready(proc_priv);
++	if (ret)
++		goto unlock_mbox;
++
++	if (id == MBOX_CMD_WORKLOAD_TYPE_READ)
++		*resp = readl(proc_priv->mmio_base + MBOX_OFFSET_DATA);
++	else
++		*resp = readq(proc_priv->mmio_base + MBOX_OFFSET_DATA);
+ 
+ unlock_mbox:
+ 	mutex_unlock(&mbox_lock);
+ 	return ret;
+ }
+ 
+-int processor_thermal_send_mbox_cmd(struct pci_dev *pdev, u16 cmd_id, u32 cmd_data, u64 *cmd_resp)
++int processor_thermal_send_mbox_read_cmd(struct pci_dev *pdev, u16 id, u32 data, u64 *resp)
+ {
+-	return send_mbox_cmd(pdev, cmd_id, cmd_data, cmd_resp);
++	return send_mbox_read_cmd(pdev, id, data, resp);
+ }
+-EXPORT_SYMBOL_GPL(processor_thermal_send_mbox_cmd);
++EXPORT_SYMBOL_NS_GPL(processor_thermal_send_mbox_read_cmd, INT340X_THERMAL);
++
++int processor_thermal_send_mbox_write_cmd(struct pci_dev *pdev, u16 id, u32 data)
++{
++	return send_mbox_write_cmd(pdev, id, data);
++}
++EXPORT_SYMBOL_NS_GPL(processor_thermal_send_mbox_write_cmd, INT340X_THERMAL);
+ 
+ /* List of workload types */
+ static const char * const workload_types[] = {
+@@ -104,7 +126,6 @@ static const char * const workload_types[] = {
+ 	NULL
+ };
+ 
+-
+ static ssize_t workload_available_types_show(struct device *dev,
+ 					       struct device_attribute *attr,
+ 					       char *buf)
+@@ -146,7 +167,7 @@ static ssize_t workload_type_store(struct device *dev,
+ 
+ 	data |= ret;
+ 
+-	ret = send_mbox_cmd(pdev, MBOX_CMD_WORKLOAD_TYPE_WRITE, data, NULL);
++	ret = send_mbox_write_cmd(pdev, MBOX_CMD_WORKLOAD_TYPE_WRITE, data);
+ 	if (ret)
+ 		return false;
+ 
+@@ -161,7 +182,7 @@ static ssize_t workload_type_show(struct device *dev,
+ 	u64 cmd_resp;
+ 	int ret;
+ 
+-	ret = send_mbox_cmd(pdev, MBOX_CMD_WORKLOAD_TYPE_READ, 0, &cmd_resp);
++	ret = send_mbox_read_cmd(pdev, MBOX_CMD_WORKLOAD_TYPE_READ, 0, &cmd_resp);
+ 	if (ret)
+ 		return false;
+ 
+@@ -186,8 +207,6 @@ static const struct attribute_group workload_req_attribute_group = {
+ 	.name = "workload_request"
+ };
+ 
+-
+-
+ static bool workload_req_created;
+ 
+ int proc_thermal_mbox_add(struct pci_dev *pdev, struct proc_thermal_device *proc_priv)
+@@ -196,7 +215,7 @@ int proc_thermal_mbox_add(struct pci_dev *pdev, struct proc_thermal_device *proc
+ 	int ret;
+ 
+ 	/* Check if there is a mailbox support, if fails return success */
+-	ret = send_mbox_cmd(pdev, MBOX_CMD_WORKLOAD_TYPE_READ, 0, &cmd_resp);
++	ret = send_mbox_read_cmd(pdev, MBOX_CMD_WORKLOAD_TYPE_READ, 0, &cmd_resp);
+ 	if (ret)
+ 		return 0;
+ 
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
+index e693ec8234fb..bebc7aaf3433 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
+@@ -9,6 +9,8 @@
+ #include <linux/pci.h>
+ #include "processor_thermal_device.h"
+ 
++MODULE_IMPORT_NS(INT340X_THERMAL);
++
+ struct mmio_reg {
+ 	int read_only;
+ 	u32 offset;
+@@ -194,8 +196,7 @@ static ssize_t rfi_restriction_store(struct device *dev,
+ 				     struct device_attribute *attr,
+ 				     const char *buf, size_t count)
+ {
+-	u16 cmd_id = 0x0008;
+-	u64 cmd_resp;
++	u16 id = 0x0008;
+ 	u32 input;
+ 	int ret;
+ 
+@@ -203,7 +204,7 @@ static ssize_t rfi_restriction_store(struct device *dev,
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = processor_thermal_send_mbox_cmd(to_pci_dev(dev), cmd_id, input, &cmd_resp);
++	ret = processor_thermal_send_mbox_write_cmd(to_pci_dev(dev), id, input);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -214,30 +215,30 @@ static ssize_t rfi_restriction_show(struct device *dev,
+ 				    struct device_attribute *attr,
+ 				    char *buf)
+ {
+-	u16 cmd_id = 0x0007;
+-	u64 cmd_resp;
++	u16 id = 0x0007;
++	u64 resp;
+ 	int ret;
+ 
+-	ret = processor_thermal_send_mbox_cmd(to_pci_dev(dev), cmd_id, 0, &cmd_resp);
++	ret = processor_thermal_send_mbox_read_cmd(to_pci_dev(dev), id, 0, &resp);
+ 	if (ret)
+ 		return ret;
+ 
+-	return sprintf(buf, "%llu\n", cmd_resp);
++	return sprintf(buf, "%llu\n", resp);
+ }
+ 
+ static ssize_t ddr_data_rate_show(struct device *dev,
+ 				  struct device_attribute *attr,
+ 				  char *buf)
+ {
+-	u16 cmd_id = 0x0107;
+-	u64 cmd_resp;
++	u16 id = 0x0107;
++	u64 resp;
+ 	int ret;
+ 
+-	ret = processor_thermal_send_mbox_cmd(to_pci_dev(dev), cmd_id, 0, &cmd_resp);
++	ret = processor_thermal_send_mbox_read_cmd(to_pci_dev(dev), id, 0, &resp);
+ 	if (ret)
+ 		return ret;
+ 
+-	return sprintf(buf, "%llu\n", cmd_resp);
++	return sprintf(buf, "%llu\n", resp);
+ }
+ 
+ static DEVICE_ATTR_RW(rfi_restriction);
+-- 
+2.17.1
 
-It is probably better to run them with intel_pstate in the active mode
-(ie. "pure HWP") or decrease EPP via sysfs to allow HWP to ramp up
-turbo more aggressively.
