@@ -2,187 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DEDE47D61E
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Dec 2021 18:53:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A154F47D636
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Dec 2021 19:05:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234529AbhLVRx0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Dec 2021 12:53:26 -0500
-Received: from mga12.intel.com ([192.55.52.136]:30294 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234640AbhLVRxZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 22 Dec 2021 12:53:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640195605; x=1671731605;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=x0Yqt0Edekw759eVPj0zICnTeizEzXjxwbiRNPcJim0=;
-  b=R6cGGlryG38REb/bu3CGfTrzQan6IRGxgBUr9gWNtqPPO2034OJ3AqRb
-   yfFZMsE9ITIHxvh5fVE0PHHpszxrblg4s8TK+hF4cuigQyg2mXGCEAbXK
-   uqDJ/uSqT39L3etct4V9CamasHmB/qHXI8DPAJu/uuxXFsi5TtVmcCbG7
-   CdiBNqp5CtqCxgCJO88uB0LEktx/z3z/YVbzNGtRyfxwC35aka+PfLc2w
-   +/ttESLMd+AxNjaTiBwc/GRkYZPTOr+kLxjKIa+uMbzkeThaIgQ+XL9/f
-   7qzbNWNk3C6vdG4MArV5FZ7/VUNVGmAr43FQ25PiX2XW9yDAbUTSo2g7V
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="220689824"
-X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
-   d="scan'208";a="220689824"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 09:46:01 -0800
-X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
-   d="scan'208";a="549682684"
-Received: from mmoy1-mobl.amr.corp.intel.com ([10.212.163.250])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 09:45:58 -0800
-Message-ID: <a41970ea5e650f49dfa6470ee47110c1be8719a7.camel@linux.intel.com>
-Subject: Re: [PATCH] thermal/drivers/int340x: add functions for mbox read
- and write commands
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>
-Date:   Wed, 22 Dec 2021 09:45:58 -0800
-In-Reply-To: <CAJZ5v0gyGsOjiFsw1FP4ZXP7yXNFwcjRtrbdR0Gov_xMFhYRew@mail.gmail.com>
-References: <20211222165300.8222-1-sumeet.r.pawnikar@intel.com>
-         <CAJZ5v0gyGsOjiFsw1FP4ZXP7yXNFwcjRtrbdR0Gov_xMFhYRew@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
+        id S235838AbhLVSFw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Dec 2021 13:05:52 -0500
+Received: from mail-qk1-f172.google.com ([209.85.222.172]:39743 "EHLO
+        mail-qk1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232105AbhLVSFv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Dec 2021 13:05:51 -0500
+Received: by mail-qk1-f172.google.com with SMTP id 69so3100235qkd.6;
+        Wed, 22 Dec 2021 10:05:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nf5aXPoDAE/jO+Ix3AJanCNaQUNSY1ijxTeKGh4Dwj8=;
+        b=NnQ/3eSpkQ0kEHYNXFHrFGqPAj2b1gEs+n+Sh6LAuNQcmwUVujSzsN9uYpyLsdsfxO
+         ZBV+i0f7bapvTxDVyvDKuu+3JIqOV6VJA80zaJPOZuRacPEBA411jfw/OoYPAKsyISqb
+         LHbEiViDFjDyV2SmvEJKSfP3UWlKaI3ZOg+uSVvDscRVtw5p/FvUCR3+GwFY/GCgqMxj
+         w5YZrYqhq2YhPWatmApmKnlKGcaJ45s/nwA6Lur4F3b0vuYG2JaLDj2Ha2Qye6s8EpKE
+         jksodBppqFagbRtiiyyE8Erirw+7Ld/gj4eO2bT4ymTKe3U2na8euCGQrzKjICt+HiVk
+         G44A==
+X-Gm-Message-State: AOAM5338mp5ryKu+KUuSni5U2BshQlKwvn1GqAUQRSAKZwKGETkAJTP6
+        tQGgam80XUL22KYHfb7iCWyTmx4KldpsG7yZc+E=
+X-Google-Smtp-Source: ABdhPJxfTli9xvKRiKrxKAotvByqu494ew7/JecFpwV4DxThjSnnC0kkG6jK/t/8mb4L410nnerUW02iqxOOOFVdO58=
+X-Received: by 2002:a05:620a:706:: with SMTP id 6mr2880466qkc.374.1640196350918;
+ Wed, 22 Dec 2021 10:05:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211219163528.1023186-1-ray.huang@amd.com> <20211219163528.1023186-3-ray.huang@amd.com>
+ <YcH2hYJN9+NudhH4@zn.tnic> <YcJulhgWUj6kmQEw@amd.com>
+In-Reply-To: <YcJulhgWUj6kmQEw@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 22 Dec 2021 19:05:40 +0100
+Message-ID: <CAJZ5v0gA+FNh9EQWm0urtzFLgvzuakGydmKXG1pqakqrmDg18w@mail.gmail.com>
+Subject: Re: [PATCH v6 02/14] x86/msr: add AMD CPPC MSR definitions
+To:     Huang Rui <ray.huang@amd.com>
+Cc:     Borislav Petkov <bp@suse.de>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        Steven Noonan <steven@valvesoftware.com>,
+        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 2021-12-22 at 17:56 +0100, Rafael J. Wysocki wrote:
-> On Wed, Dec 22, 2021 at 5:53 PM Sumeet Pawnikar
-> <sumeet.r.pawnikar@intel.com> wrote:
-> > 
-> > The existing mail mechanism only supports writing of workload
-> > types.
-> > But mailbox command for RFIM (cmd = 0x08) also requires write
-> > operation
-> > which was ignored. This results in failing to store RFI
-> > restriction.
-> > This requires enhancing mailbox writes for non workload commands
-> > also.
-> > So, remove the check for MBOX_CMD_WORKLOAD_TYPE_WRITE in mailbox
-> > write,
-> > with this other write commands also can be supoorted. But at the
-> > same
-> > time, we have to make sure that there is no impact on read
-> > commands,
-> > by not writing anything in mailbox data register.
-> > To properly implement, add two separate functions for mbox read and
-> > write
-> > command for processor thermal workload command type. This helps to
-> > differentiate the read and write workload command types while
-> > sending mbox
-> > command.
-> > 
-> > Fixes: 5d6fbc96bd36 ("thermal/drivers/int340x: processor_thermal:
-> > Export additional attributes")
-> > Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
-> > Cc: stable@vger.kernel.org # 5.14+
-> 
-> This requires an ACK from Srinivas.
+On Wed, Dec 22, 2021 at 1:17 AM Huang Rui <ray.huang@amd.com> wrote:
+>
+> Hi Boris,
+>
+> On Tue, Dec 21, 2021 at 11:45:09PM +0800, Borislav Petkov wrote:
+> > On Mon, Dec 20, 2021 at 12:35:16AM +0800, Huang Rui wrote:
+> >
+> > Capitalize subject's first letter:
+> >  [x86/msr: add AMD CPPC MSR definitions]
+> >  [x86/msr: Add AMD CPPC MSR definitions]
+>
+> Thank you for the reply! Updated.
+>
+> >
+> > > AMD CPPC (Collaborative Processor Performance Control) function uses MSR
+> > > registers to manage the performance hints. So add the MSR register macro
+> > > here.
+> > >
+> > > Signed-off-by: Huang Rui <ray.huang@amd.com>
+> > > ---
+> > >  arch/x86/include/asm/msr-index.h | 17 +++++++++++++++++
+> > >  1 file changed, 17 insertions(+)
+> > >
+> > > diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+> > > index 01e2650b9585..e7945ef6a8df 100644
+> > > --- a/arch/x86/include/asm/msr-index.h
+> > > +++ b/arch/x86/include/asm/msr-index.h
+> > > @@ -486,6 +486,23 @@
+> > >
+> > >  #define MSR_AMD64_VIRT_SPEC_CTRL   0xc001011f
+> > >
+> > > +/* AMD Collaborative Processor Performance Control MSRs */
+> > > +#define MSR_AMD_CPPC_CAP1          0xc00102b0
+> > > +#define MSR_AMD_CPPC_ENABLE                0xc00102b1
+> > > +#define MSR_AMD_CPPC_CAP2          0xc00102b2
+> > > +#define MSR_AMD_CPPC_REQ           0xc00102b3
+> > > +#define MSR_AMD_CPPC_STATUS                0xc00102b4
+> > > +
+> > > +#define CAP1_LOWEST_PERF(x)        (((x) >> 0) & 0xff)
+> > > +#define CAP1_LOWNONLIN_PERF(x)     (((x) >> 8) & 0xff)
+> > > +#define CAP1_NOMINAL_PERF(x)       (((x) >> 16) & 0xff)
+> > > +#define CAP1_HIGHEST_PERF(x)       (((x) >> 24) & 0xff)
+> > > +
+> > > +#define REQ_MAX_PERF(x)            (((x) & 0xff) << 0)
+> > > +#define REQ_MIN_PERF(x)            (((x) & 0xff) << 8)
+> > > +#define REQ_DES_PERF(x)            (((x) & 0xff) << 16)
+> > > +#define REQ_ENERGY_PERF_PREF(x)    (((x) & 0xff) << 24)
+> >
+> > All those bitfield names are too generic - they should at least be
+> > prefixed with "CPPC_"
+> >
+> > If an Intel CPPC set of MSRs appears too, then the prefix should be
+> > "AMD_CPPC_" and so on.
+> >
+>
+> The similar function in Intel names HWP (Hardware P-State), and related MSR
+> registers names as "HWP_" as the prefixes like below:
+>
+> /* IA32_HWP_CAPABILITIES */
+> #define HWP_HIGHEST_PERF(x)             (((x) >> 0) & 0xff)
+> #define HWP_GUARANTEED_PERF(x)          (((x) >> 8) & 0xff)
+> #define HWP_MOSTEFFICIENT_PERF(x)       (((x) >> 16) & 0xff)
+> #define HWP_LOWEST_PERF(x)              (((x) >> 24) & 0xff)
+>
+> Hi Rafael,
+>
+> Can we use the "CPPC_" as the prefixes for AMD CPPC MSR bitfield name?
 
-I found some more issues in this patch after my prior internal review.
-
-1. Subject of patch should be what is this patch for rather than how.
-Something like:
-Fix RFIM mailbox write commands
-
-2. There is one issue in the code below.
-
-> 
-> > ---
-> > 
-
-[...]
-
-> > +static int send_mbox_read_cmd(struct pci_dev *pdev, u16 id, u32
-> > data, u64 *resp)
-There is no use of "data" argument for read  after spilt of read and
-write commands, if you look at the code before.
-
-> > +{
-> > +       struct proc_thermal_device *proc_priv;
-> > +       u32 reg_data;
-> > +       int ret;
-> > 
-> > -               if (!cmd_resp)
-> > -                       break;
-> > +       proc_priv = pci_get_drvdata(pdev);
-> > 
-> > -               if (cmd_id == MBOX_CMD_WORKLOAD_TYPE_READ)
-> > -                       *cmd_resp = readl((void __iomem *)
-> > (proc_priv->mmio_base + MBOX_OFFSET_DATA));
-> > -               else
-> > -                       *cmd_resp = readq((void __iomem *)
-> > (proc_priv->mmio_base + MBOX_OFFSET_DATA));
-> > +       mutex_lock(&mbox_lock);
-> > 
-> > -               break;
-> > -       } while (--retries);
-> > +       ret = wait_for_mbox_ready(proc_priv);
-> > +       if (ret)
-> > +               goto unlock_mbox;
-> > +
-> > +       writel(data, (proc_priv->mmio_base + MBOX_OFFSET_DATA));
-The above is not required for read. This is what we wanted to avoid for
-reads. 
-
-Thanks,
-Srinivas
-
-> > +       /* Write command register */
-> > +       reg_data = BIT_ULL(MBOX_BUSY_BIT) | id;
-> > +       writel(reg_data, (proc_priv->mmio_base +
-> > MBOX_OFFSET_INTERFACE));
-> > +
-> > +       ret = wait_for_mbox_ready(proc_priv);
-> > +       if (ret)
-> > +               goto unlock_mbox;
-> > +
-> > +       if (id == MBOX_CMD_WORKLOAD_TYPE_READ)
-> > +               *resp = readl(proc_priv->mmio_base +
-> > MBOX_OFFSET_DATA);
-> > +       else
-> > +               *resp = readq(proc_priv->mmio_base +
-> > MBOX_OFFSET_DATA);
-> > 
-> >  unlock_mbox:
-> >         mutex_unlock(&mbox_lock);
-> >         return ret;
-> >  }
-> > 
-> > -int processor_thermal_send_mbox_cmd(struct pci_dev *pdev, u16
-> > cmd_id, u32 cmd_data, u64 *cmd_resp)
-> > +int processor_thermal_send_mbox_read_cmd(struct pci_dev *pdev, u16
-> > id, u32 data, u64 *resp)
-> >  {
-> > -       return send_mbox_cmd(pdev, cmd_id, cmd_data, cmd_resp);
-> > +       return send_mbox_read_cmd(pdev, id, data, resp);
-> >  }
-> > -EXPORT_SYMBOL_GPL(processor_thermal_send_mbox_cmd);
-> > +EXPORT_SYMBOL_NS_GPL(processor_thermal_send_mbox_read_cmd,
-> > INT340X_THERMAL);
-> > +
-> > +int processor_thermal_send_mbox_write_cmd(struct pci_dev *pdev,
-> > u16 id, u32 data)
-> > +{
-> > +       return send_mbox_write_cmd(pdev, id, data);
-> > +}
-> > +EXPORT_SYMBOL_NS_GPL(processor_thermal_send_mbox_write_cmd,
-> > INT340X_THERMAL);
-> > 
-> >  /* List of workload types */
-> >  static const char * const workload_types[] = {
-> > @@ -104,7 +126,6 @@ static const char * const workload_types[] = {
-> >         NULL
-> >  };
-> > 
-
-
+Well, what about using "AMD_CPPC_" instead of "REQ_" in these names?
+The names of the analogous Intel macros start with "HWP_" which
+basically stands for "INTEL_CPPC_".
