@@ -2,148 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 072C247DE75
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Dec 2021 06:06:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB05047DF3C
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Dec 2021 07:59:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231724AbhLWFGY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Dec 2021 00:06:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33528 "EHLO
+        id S1346674AbhLWG7P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Dec 2021 01:59:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232034AbhLWFGY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Dec 2021 00:06:24 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C78C061401;
-        Wed, 22 Dec 2021 21:06:23 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id j13so3469501plx.4;
-        Wed, 22 Dec 2021 21:06:23 -0800 (PST)
+        with ESMTP id S1346671AbhLWG7O (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Dec 2021 01:59:14 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E25C061401;
+        Wed, 22 Dec 2021 22:59:13 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id o19-20020a1c7513000000b0033a93202467so2716659wmc.2;
+        Wed, 22 Dec 2021 22:59:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :in-reply-to:references;
-        bh=MyD24FNyOTXZ6y6NJg0xU97g9tQ5vVAI4e4gfsSyX8I=;
-        b=RQ+QnDl8ig7aT5l2ZErU1sJvwbgOlN8RlqENXg1pmGgYAhyHUREZ37OAKnRoMGb6Tt
-         czraqNgZpiv0BIEE02uj9+aJQrDdn9edPYsLpvKMdyvdwdQj/059BY18vPZg1aMWH2B1
-         YgiocTdTksbTxjlgESHWrR62VEcBjlTem2s8pYOTs2qoDg1i//Ia/lO2H4ekW52PrJuG
-         EUftBbUNRfKzkTh+LywPxx7DxopDt0VpvT5lhmD0BsNQy8YEfPfjCisaBkXDFbgs6wo1
-         Bms8EAQN3enYmMzlJw/aV0zDNdTYUFmXPW1s23i9WZp8XHpsLVs++F3njj+WGe5C7u43
-         GLOQ==
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=7rTDzbdFUFK7GKusqP/JZXHXtXUlNZ62iT+tZRNz+dg=;
+        b=SXoHnTuPQDi9Jju5amOmhy1Eujd+uiotnYMUp6grUUiWVS+EZzj3oySBXLxiGyCPA4
+         8gkJNsjRm0Z7nEUkxNgINiYhmOzHBQXioWyNL9AwjILONnmfUUzDP+KMwjF47VDBndSK
+         RSAjomBFYuMvvPmbSdaJg9gCthHvb7k42dhIbph6sjnx0Sn+mIQN6qzcCSYu9KTXw19t
+         JTqTolWkkt46GfshbJFQEqmLjB54PLF30ZwesG0B8EL8D6B66Hyd0P/mAXQ9wbBcgf26
+         YjQK9g833fa+ZEqNKhHwvKGdJNrFzFU16GL9JbWzoKYQ59UM8n+HIBRslNhkvmJcDtPL
+         7K8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:in-reply-to:references;
-        bh=MyD24FNyOTXZ6y6NJg0xU97g9tQ5vVAI4e4gfsSyX8I=;
-        b=ySYQlizcANqqbVTOlwKPoxF7LQ33gPldCViY21hoCuerVdAMmDfq6oYjU8S5nowNMd
-         iGHwR+7ygovPUU6dHpqZU38f/GcEODommW+TFEMG6wDYlHdFBoAcVL75PTE8K4s5idQs
-         PjSWaNDMsUZqm8u/TPEBdbM78IssLm8mcIYfR7pvbOgbElzHIW9GhOpdFf9phdsvF0F+
-         i4UGdCAWUL8mNY0KgRi0XYCuNlGJTUS1dCdeVI6kGzuw/1yQqxPvRweF++FjyAya3lRk
-         pJ9m7juquTe/MuvJ2cSTuEQl+ZINKdXmr+5KIfkYP920NOwbErizHLCABDJ6ZwjMXUO0
-         Wodg==
-X-Gm-Message-State: AOAM532vwr5T5RsmYk3avdcy2VnoRPIkftONWEE0TVe3U8Ewg3+enN9l
-        /ZOix7hB8WUFyeVKvUlptIo=
-X-Google-Smtp-Source: ABdhPJy7amt41DT3NqaSEXbPnwcszzTczZoQnmoKtjzbYzDvu/N82HqBI3WPVfzqr/STwuUvSPPrLw==
-X-Received: by 2002:a17:90a:fb83:: with SMTP id cp3mr1200518pjb.111.1640235983218;
-        Wed, 22 Dec 2021 21:06:23 -0800 (PST)
-Received: from scdiu3.sunplus.com ([113.196.136.192])
-        by smtp.googlemail.com with ESMTPSA id oo13sm4170936pjb.25.2021.12.22.21.06.21
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 22 Dec 2021 21:06:22 -0800 (PST)
-From:   Li-hao Kuo <lhjeff911@gmail.com>
-To:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
-        rui.zhang@intel.com, robh+dt@kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     wells.lu@sunplus.com, Li-hao Kuo <lhjeff911@gmail.com>
-Subject: [PATCH v2 2/2] devicetree: bindings THERMAL Add bindings doc for Sunplus SP7021
-Date:   Thu, 23 Dec 2021 13:06:26 +0800
-Message-Id: <297b69fbd49ac68e082ea43bbfd4e42bebdf5b77.1640235724.git.lhjeff911@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1640235724.git.lhjeff911@gmail.com>
-References: <cover.1640235724.git.lhjeff911@gmail.com>
-In-Reply-To: <cover.1640235724.git.lhjeff911@gmail.com>
-References: <cover.1640235724.git.lhjeff911@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=7rTDzbdFUFK7GKusqP/JZXHXtXUlNZ62iT+tZRNz+dg=;
+        b=69+vEonIRYL4J5RFik9CVYSMIPDx8FyTaoVQ/lnwGHmQ9hhRK7ekjRT9M2C+F18qnz
+         kwNjqcGIND1Z6ruJWqNjp23NGZ6vC2zyJ2qdDzQ0rmb/F5i33BBumL8U9Hz//NSUu5oq
+         4lKScnKGuKBxJzw/A+yHiyo1gtHpE/0vrYxKWAXZlG5lPTH7BDkMarn942x46jyW75vw
+         lW0YOXJw2sQPx2EExKwGHcnui/BWh1t2V1VghY6u2cRzPfwS2bR7Qf1lcIAqRcL9gfge
+         plqQwRShNH7PBca3l3CEL3zPsYB3LIic+B6q3CaWRn4G+rml+g7XLF81g55NOgBZDDCR
+         jJ4Q==
+X-Gm-Message-State: AOAM531/Bo3WVWXgNPvISwMXuw4tbZE5GXtMtm8PMCIj68jZHPvWZP+T
+        kePidZfSvfPkcrVdZNQp2eD/WXGDzy0=
+X-Google-Smtp-Source: ABdhPJx7UL5AdRz+b7OrXZdyDMozqYvEf+baGSn1nuJtQnRtn15jTSAPileLY9WLX6atkJ9Avh2eZA==
+X-Received: by 2002:a1c:23d2:: with SMTP id j201mr751942wmj.76.1640242752295;
+        Wed, 22 Dec 2021 22:59:12 -0800 (PST)
+Received: from ?IPV6:2003:ea:8f24:fd00:91a0:6ae6:f368:5418? (p200300ea8f24fd0091a06ae6f3685418.dip0.t-ipconnect.de. [2003:ea:8f24:fd00:91a0:6ae6:f368:5418])
+        by smtp.googlemail.com with ESMTPSA id w21sm374413wmi.19.2021.12.22.22.59.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Dec 2021 22:59:11 -0800 (PST)
+Message-ID: <8dd55bd0-ccb6-ea4e-5679-51f88925c40f@gmail.com>
+Date:   Thu, 23 Dec 2021 07:59:01 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
+References: <0edfdadc-336b-657d-5566-beeb4f4343ac@gmail.com>
+ <CAJZ5v0gps0C2923VqM8876npvhcETsyN+ajAkBKX5kf49J0+Mg@mail.gmail.com>
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+Subject: Re: Annotate pm_runtime_resume_and_get() as __must_check ?
+In-Reply-To: <CAJZ5v0gps0C2923VqM8876npvhcETsyN+ajAkBKX5kf49J0+Mg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add devicetree bindings THERMAL Add bindings doc for Sunplus SP7021
+On 03.08.2021 15:07, Rafael J. Wysocki wrote:
+> On Sat, Jul 31, 2021 at 11:36 AM Heiner Kallweit <hkallweit1@gmail.com> wrote:
+>>
+>> Seeing an erroneous use of pm_runtime_resume_and_get() in a patch I wonder
+>> whether we should annotate this function as __must_check. If the caller
+>> doesn't check the return code he doesn't know whether usage counter was
+>> bumped or not. Therefore I see a good chance that this results in a usage
+>> counter imbalance.
+> 
+> Sounds reasonable.  Please send a patch to make that change.
 
-Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
----
-Changes in v2:
- - Addressed all comments from Mr. Rob Herring
- - Modify Theraml driver
+It took some time to fix the callers that use pm_runtime_resume_and_get()
+w/o checking the return code. Last pending patch is [0], all other fixes
+are available on linux-next meanwhile.
+I'll submit the patch to annotate pm_runtime_resume_and_get() as
+__must_check, so that we hopefully can get this into 5.17 (incl. pending [0]).
 
- .../bindings/thermal/sunplus_thermal.yaml          | 49 ++++++++++++++++++++++
- MAINTAINERS                                        |  1 +
- 2 files changed, 50 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/thermal/sunplus_thermal.yaml
-
-diff --git a/Documentation/devicetree/bindings/thermal/sunplus_thermal.yaml b/Documentation/devicetree/bindings/thermal/sunplus_thermal.yaml
-new file mode 100644
-index 0000000..e0290fa
---- /dev/null
-+++ b/Documentation/devicetree/bindings/thermal/sunplus_thermal.yaml
-@@ -0,0 +1,49 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright (C) Sunplus Co., Ltd.
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/thermal/sunplus_thermal.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Sunplus Thermal controller
-+
-+maintainers:
-+  - Li-hao Kuo <lhjeff911@gmail.com>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - sunplus,sp7021-thermal
-+
-+  reg:
-+    maxItems: 1
-+
-+  reg-names:
-+    items:
-+      - const: reg
-+      - const: moon4
-+
-+  nvmem-cells:
-+    maxItems: 1
-+
-+  nvmem-cell-names:
-+    const: therm_calib
-+
-+required:
-+  - compatible
-+  - reg
-+  - reg-names
-+  - nvmem-cells
-+  - nvmem-cell-names
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    thermal@9c000280 {
-+        compatible = "sunplus,sp7021-thermal";
-+        reg = <0x9c000280 0x80>;
-+        nvmem-cells = <&therm_calib>;
-+        nvmem-cell-names = "therm_calib";
-+    };
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 5f1fa6d..17035b5 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18246,6 +18246,7 @@ SUNPLUS THERMAL DRIVER
- M:	Li-hao Kuo <lhjeff911@gmail.com>
- L:	linux-pm@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/thermal/sunplus_thermal.yaml
- F:	drivers/thermal/sunplus_thermal.c
- 
- SUPERH
--- 
-2.7.4
-
+[0] https://lore.kernel.org/all/ed1ac2f8-5259-684d-42c8-effdf2920e78@gmail.com/T/
