@@ -2,175 +2,184 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D86C47E408
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Dec 2021 14:20:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 629E147E420
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Dec 2021 14:33:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348619AbhLWNUo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Dec 2021 08:20:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59222 "EHLO
+        id S1348669AbhLWNdG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Dec 2021 08:33:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348610AbhLWNUn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Dec 2021 08:20:43 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B22C061401
-        for <linux-pm@vger.kernel.org>; Thu, 23 Dec 2021 05:20:43 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id d9so11549781wrb.0
-        for <linux-pm@vger.kernel.org>; Thu, 23 Dec 2021 05:20:43 -0800 (PST)
+        with ESMTP id S243693AbhLWNdF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Dec 2021 08:33:05 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6323AC061756
+        for <linux-pm@vger.kernel.org>; Thu, 23 Dec 2021 05:33:05 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id j11so10681446lfg.3
+        for <linux-pm@vger.kernel.org>; Thu, 23 Dec 2021 05:33:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=IeWWgFUpDxL4XHVhcJHTGPTnXsO6GVnksgWFNTbGDHs=;
-        b=z0fvxsqA0NAl2tBkKhm6Ku8bNZU9/NJXf5W5jeKyotrlyZcr3L09JyZ2W+jYLGgYlt
-         RvOIurRn9+FjQN4CBh0f6cwoXACOSAtEWOKqO60qOPmEenfYTbJh9C+3mwyOXVN6wO08
-         AUEwj6yi8wyEFeBmGhdf+qOoRIhxE8cTULf3ZNwFcsvfzaUJfIHWapV3ujGQvfBtl9De
-         WaD2ojdU/lqO5eU0pCVTKISkepK4NBzNobBHAsIvyltH8VUC/lPzDjYqEF5wAAvwdP1Y
-         UnQGibtyslp9KzK+Z0p1PNn2FSMtPfUlqQ2nuIidO/Su+cehsn/20ltYzle+/3FJqWlD
-         or8Q==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=N7vgevEe5WAYHkfQ6WaZYFMwuRhmD21COV/RY1gvJbg=;
+        b=hFHGP6Npw/5k5XVBdZeXj7qHSZC02f86qgNhlE3+g4VYen2I2wZQRsqZHTP4o4I2fF
+         fSIX30CMGGuRAuGEe99rm7U4ekF3m3zo4e8uQBIG9Yc1gLxGNvKTQaco11X0BMRoOfDD
+         wZcOGYpY8C5o9RHwv5ARrMezON3Q0V40lCFucoikl6AHWdPica8xJzT0Z0g4YGN6ZeKN
+         lDuuRF+BtoAEZemUFcgEFU/IjY+eQqsv7lr7/IFeqXKfDp5B2VqvIInMB7Ks/k+Eet15
+         4yD0wDM4aPuvKZCHIN6rTUMg2kgAPmNHGe/uDxlf4MUyUOrwybnzopLTaAuflpMpugxE
+         tVpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=IeWWgFUpDxL4XHVhcJHTGPTnXsO6GVnksgWFNTbGDHs=;
-        b=kSLgsGZ+zV/gv2ZSFsWu/vshSnJB3+XZ+PNRrvMwLoKUvT0kj9xIMK8CrauDe5VL6p
-         9Cy9tivbaQXyzYz4Fb/vcbNTIOPq7ojqUxcU8Ndschvl3ft7tzIx27+yVRFWIk2lEwQD
-         pciVVNur7mOw928v4Oqj3u2/4UlCOWn26W9LumKyPj4ruSr0tsTINl/12h8Cq9WsagQB
-         uELwPuzBXQaKitk2wa7jJceDAQfQRmu2I/BngKyJRtLW9ZBpfuBHu2KbbNuKObc1bYT0
-         ps69sPahOFVPnO2B6QMWekz4LAtKrN2jVNCRwU2kA+gpdQXCTOpgi4yB/8tqH89Kw3fo
-         R+Bg==
-X-Gm-Message-State: AOAM531ZyQ/A4hUqUg4unQFZWJXVQaJKiKxRwwBP6FMCKXDpZ+PW1fYx
-        sDw4Q9eHEPNbiRkGCBdtb+8aww==
-X-Google-Smtp-Source: ABdhPJw4TKi4oHUWZhWvD1KOht0oYxvcDfAg0Gvn0f3onCmQH26Y5Q9dKK6kNVLG9K6vi7I6KSn3/g==
-X-Received: by 2002:a5d:5348:: with SMTP id t8mr1739246wrv.439.1640265641891;
-        Thu, 23 Dec 2021 05:20:41 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:34ca:f67b:b782:1949? ([2a01:e34:ed2f:f020:34ca:f67b:b782:1949])
-        by smtp.googlemail.com with ESMTPSA id i9sm5229082wrb.84.2021.12.23.05.20.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Dec 2021 05:20:41 -0800 (PST)
-Subject: Re: [PATCH v5 0/6] powercap/drivers/dtpm: Create the dtpm hierarchy
-To:     rjw@rjwysocki.net
-Cc:     lukasz.luba@arm.com, robh@kernel.org, heiko@sntech.de,
-        arnd@linaro.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, ulf.hansson@linaro.org
-References: <20211218130014.4037640-1-daniel.lezcano@linaro.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <3badc321-381d-a48c-8abd-7702639304bb@linaro.org>
-Date:   Thu, 23 Dec 2021 14:20:34 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=N7vgevEe5WAYHkfQ6WaZYFMwuRhmD21COV/RY1gvJbg=;
+        b=f1lnsVboZwEkk4gw2QfEMPbxuv9bHXLKyWe8sI+O0a23ffXeoGPeNeznIS+xiT9mfS
+         2YNAQSyFGr/bY1b3P4TN+K4wwv4E7SLjapUPhdCza28VyrIMufhOzZR/DKW2U3CijPV8
+         WDYsu6oZAcR8gdrFIVwytKLz605zkupWxWQUpdRkaILb4t+p/xtDZvTiiBxv1C93BcZJ
+         fvH6VinHvjfy1yFCo7Y+o9ag1YWWlzsYBHwqU949eWZgOnSvDnRx1SAlUa7YA32liEZM
+         LWrxn76zgaZz7sXrPLmyhTMwa+T38cL2/DvIqw/h15zV4iaNEy8cOTyTH+86IoDPw9jn
+         chSw==
+X-Gm-Message-State: AOAM532LbWDoEVZaNOVGg7JTEjdo+JeygRXezC/7UqGCRHdgYE/wEYNJ
+        XHJrcEubmmTi8xmOO53gn+v3K1ubNrqh5WFCxJCUjg==
+X-Google-Smtp-Source: ABdhPJzeknIZEpkG86QKm9MgDA8X9ooe6HcnCTv4bg/PS+Bj9dvQtovRRBNfgdjYQju0yIoZmLkSzHbweyMNG9/71Qo=
+X-Received: by 2002:a05:6512:4015:: with SMTP id br21mr1919784lfb.233.1640266383602;
+ Thu, 23 Dec 2021 05:33:03 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20211218130014.4037640-1-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20211218130014.4037640-1-daniel.lezcano@linaro.org> <3badc321-381d-a48c-8abd-7702639304bb@linaro.org>
+In-Reply-To: <3badc321-381d-a48c-8abd-7702639304bb@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 23 Dec 2021 14:32:27 +0100
+Message-ID: <CAPDyKFpSeD5qqUMrBojga=3ecK_z4ad8PL7u+ZpyWXRpqHf94A@mail.gmail.com>
+Subject: Re: [PATCH v5 0/6] powercap/drivers/dtpm: Create the dtpm hierarchy
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rjw@rjwysocki.net, lukasz.luba@arm.com, robh@kernel.org,
+        heiko@sntech.de, arnd@linaro.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi all,
+On Thu, 23 Dec 2021 at 14:20, Daniel Lezcano <daniel.lezcano@linaro.org> wr=
+ote:
+>
+> Hi all,
+>
+> any comments on this series. Is it fine if I merge it without patch 6/6?
+>
+> Heiko, is the description fine for you in the SoC specific code?
 
-any comments on this series. Is it fine if I merge it without patch 6/6?
+FYI, I intend to have a closer look at the series next week. Happy holidays=
+!
 
-Heiko, is the description fine for you in the SoC specific code?
+Kind regards
+Uffe
 
-Thanks
-  -- Daniel
-
-On 18/12/2021 14:00, Daniel Lezcano wrote:
-> The DTPM hierarchy is the base to build on top of it a power budget
-> allocator. It reflects the power consumption of the group of devices
-> and allows to cap their power.
-> 
-> The core code is there but there is no way to describe the desired
-> hierarchy yet.
-> 
-> A first proposal introduced the description through configfs [1] but
-> was rejected [2].
-> 
-> A second proposal based on the device tree with a binding similar to
-> the power domains [3] was proposed but finally rejected [4].
-> 
-> This fifth version delegates the hierarchy creation to the SoC with a
-> specific and self-encapsulated code using an array to describe the tree. The
-> SoC DTPM driver defines an array of nodes pointing to their parents.  The
-> hierarchy description can integrate a DT node and in the future a SCMI node,
-> that means the description can mix different type of nodes.
-> 
-> In addition to the hierarchy creation, the devfreq dtpm support is also
-> integrated into this series.
-> 
-> This series was tested on a rock960 (revision B - rk3399 based) and a
-> db845c (Qualcomm sdm845 based).
-> 
-> [1] https://lore.kernel.org/all/20210401183654.27214-1-daniel.lezcano@linaro.org/
-> [2] https://lore.kernel.org/all/YGYg6ZeZ1181%2FpXk@kroah.com/
-> [3] https://lore.kernel.org/all/20211205231558.779698-1-daniel.lezcano@linaro.org/
-> [4] https://lore.kernel.org/all/YbfFapsmsjs4qnsg@robh.at.kernel.org/
-> 
-> Changelog:
->    V5:
->    - Remove DT bindings
->    - Added description with an array
->    - Added simple description for rk3399 and sdm845
->    - Moved dtpm table to the data section
->    
->    V4:
->    - Added missing powerzone-cells
->    - Changed powerzone name to comply with the pattern property
-> 
->    V3:
->    - Remove GPU section as no power is available (yet)
->    - Remove '#powerzone-cells' conforming to the bindings change
->    - Removed required property 'compatible'
->    - Removed powerzone-cells from the topmost node
->    - Removed powerzone-cells from cpus 'consumers' in example
->    - Set additionnal property to false
-> 
->    V2:
->    - Added pattern properties and stick to powerzone-*
->    - Added required property compatible and powerzone-cells
->    - Added additionnal property
->    - Added compatible
->    - Renamed to 'powerzones'
->    - Added missing powerzone-cells to the topmost node
->    - Fixed errors reported by 'make DT_CHECKER_FLAGS=-m dt_binding_check'
->    - Move description in the SoC dtsi specific file
->    - Fixed missing prototype warning reported by lkp@
-> 
->    V1: Initial post
-> 
-> Daniel Lezcano (6):
->   powercap/drivers/dtpm: Move dtpm table from init to data section
->   powercap/drivers/dtpm: Add hierarchy creation
->   powercap/drivers/dtpm: Add CPU DT initialization support
->   powercap/drivers/dtpm: Add dtpm devfreq with energy model support
->   rockchip/soc/drivers: Add DTPM description for rk3399
->   qcom/soc/drivers: Add DTPM description for sdm845
-> 
->  drivers/powercap/Kconfig          |   8 ++
->  drivers/powercap/Makefile         |   1 +
->  drivers/powercap/dtpm.c           | 155 ++++++++++++++++++++++-
->  drivers/powercap/dtpm_cpu.c       |  37 ++++--
->  drivers/powercap/dtpm_devfreq.c   | 201 ++++++++++++++++++++++++++++++
->  drivers/soc/qcom/Kconfig          |   9 ++
->  drivers/soc/qcom/Makefile         |   1 +
->  drivers/soc/qcom/dtpm.c           |  65 ++++++++++
->  drivers/soc/rockchip/Kconfig      |   8 ++
->  drivers/soc/rockchip/Makefile     |   1 +
->  drivers/soc/rockchip/dtpm.c       |  56 +++++++++
->  include/asm-generic/vmlinux.lds.h |   4 +-
->  include/linux/dtpm.h              |  21 +++-
->  13 files changed, 551 insertions(+), 16 deletions(-)
->  create mode 100644 drivers/powercap/dtpm_devfreq.c
->  create mode 100644 drivers/soc/qcom/dtpm.c
->  create mode 100644 drivers/soc/rockchip/dtpm.c
-> 
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+>
+> Thanks
+>   -- Daniel
+>
+> On 18/12/2021 14:00, Daniel Lezcano wrote:
+> > The DTPM hierarchy is the base to build on top of it a power budget
+> > allocator. It reflects the power consumption of the group of devices
+> > and allows to cap their power.
+> >
+> > The core code is there but there is no way to describe the desired
+> > hierarchy yet.
+> >
+> > A first proposal introduced the description through configfs [1] but
+> > was rejected [2].
+> >
+> > A second proposal based on the device tree with a binding similar to
+> > the power domains [3] was proposed but finally rejected [4].
+> >
+> > This fifth version delegates the hierarchy creation to the SoC with a
+> > specific and self-encapsulated code using an array to describe the tree=
+. The
+> > SoC DTPM driver defines an array of nodes pointing to their parents.  T=
+he
+> > hierarchy description can integrate a DT node and in the future a SCMI =
+node,
+> > that means the description can mix different type of nodes.
+> >
+> > In addition to the hierarchy creation, the devfreq dtpm support is also
+> > integrated into this series.
+> >
+> > This series was tested on a rock960 (revision B - rk3399 based) and a
+> > db845c (Qualcomm sdm845 based).
+> >
+> > [1] https://lore.kernel.org/all/20210401183654.27214-1-daniel.lezcano@l=
+inaro.org/
+> > [2] https://lore.kernel.org/all/YGYg6ZeZ1181%2FpXk@kroah.com/
+> > [3] https://lore.kernel.org/all/20211205231558.779698-1-daniel.lezcano@=
+linaro.org/
+> > [4] https://lore.kernel.org/all/YbfFapsmsjs4qnsg@robh.at.kernel.org/
+> >
+> > Changelog:
+> >    V5:
+> >    - Remove DT bindings
+> >    - Added description with an array
+> >    - Added simple description for rk3399 and sdm845
+> >    - Moved dtpm table to the data section
+> >
+> >    V4:
+> >    - Added missing powerzone-cells
+> >    - Changed powerzone name to comply with the pattern property
+> >
+> >    V3:
+> >    - Remove GPU section as no power is available (yet)
+> >    - Remove '#powerzone-cells' conforming to the bindings change
+> >    - Removed required property 'compatible'
+> >    - Removed powerzone-cells from the topmost node
+> >    - Removed powerzone-cells from cpus 'consumers' in example
+> >    - Set additionnal property to false
+> >
+> >    V2:
+> >    - Added pattern properties and stick to powerzone-*
+> >    - Added required property compatible and powerzone-cells
+> >    - Added additionnal property
+> >    - Added compatible
+> >    - Renamed to 'powerzones'
+> >    - Added missing powerzone-cells to the topmost node
+> >    - Fixed errors reported by 'make DT_CHECKER_FLAGS=3D-m dt_binding_ch=
+eck'
+> >    - Move description in the SoC dtsi specific file
+> >    - Fixed missing prototype warning reported by lkp@
+> >
+> >    V1: Initial post
+> >
+> > Daniel Lezcano (6):
+> >   powercap/drivers/dtpm: Move dtpm table from init to data section
+> >   powercap/drivers/dtpm: Add hierarchy creation
+> >   powercap/drivers/dtpm: Add CPU DT initialization support
+> >   powercap/drivers/dtpm: Add dtpm devfreq with energy model support
+> >   rockchip/soc/drivers: Add DTPM description for rk3399
+> >   qcom/soc/drivers: Add DTPM description for sdm845
+> >
+> >  drivers/powercap/Kconfig          |   8 ++
+> >  drivers/powercap/Makefile         |   1 +
+> >  drivers/powercap/dtpm.c           | 155 ++++++++++++++++++++++-
+> >  drivers/powercap/dtpm_cpu.c       |  37 ++++--
+> >  drivers/powercap/dtpm_devfreq.c   | 201 ++++++++++++++++++++++++++++++
+> >  drivers/soc/qcom/Kconfig          |   9 ++
+> >  drivers/soc/qcom/Makefile         |   1 +
+> >  drivers/soc/qcom/dtpm.c           |  65 ++++++++++
+> >  drivers/soc/rockchip/Kconfig      |   8 ++
+> >  drivers/soc/rockchip/Makefile     |   1 +
+> >  drivers/soc/rockchip/dtpm.c       |  56 +++++++++
+> >  include/asm-generic/vmlinux.lds.h |   4 +-
+> >  include/linux/dtpm.h              |  21 +++-
+> >  13 files changed, 551 insertions(+), 16 deletions(-)
+> >  create mode 100644 drivers/powercap/dtpm_devfreq.c
+> >  create mode 100644 drivers/soc/qcom/dtpm.c
+> >  create mode 100644 drivers/soc/rockchip/dtpm.c
+> >
+>
+>
+> --
+> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
+M SoCs
+>
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
