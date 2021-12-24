@@ -2,173 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DE4147EDF0
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Dec 2021 10:42:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B73EF47EE0A
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Dec 2021 10:48:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343929AbhLXJmd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Dec 2021 04:42:33 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:56246 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S241614AbhLXJmb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Dec 2021 04:42:31 -0500
-X-UUID: 6bdba6bd9965437d9f088d8dafb4cdaa-20211224
-X-UUID: 6bdba6bd9965437d9f088d8dafb4cdaa-20211224
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <roger.lu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2018012810; Fri, 24 Dec 2021 17:42:27 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 24 Dec 2021 17:42:25 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 24 Dec 2021 17:42:25 +0800
-Message-ID: <60ecf997de03e7426e0e54fc3eb937f95902419c.camel@mediatek.com>
-Subject: Re: [PATCH v16 6/7] arm64: dts: mt8192: add svs device information
-From:   Roger Lu <roger.lu@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     Fan Chen <fan.chen@mediatek.com>,
-        HenryC Chen <HenryC.Chen@mediatek.com>,
-        YT Lee <yt.lee@mediatek.com>,
-        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Fri, 24 Dec 2021 17:42:25 +0800
-In-Reply-To: <855e004b-b128-70f7-b1d2-9fe957c94e08@somainline.org>
-References: <20210428065440.3704-1-roger.lu@mediatek.com>
-         <20210428065440.3704-7-roger.lu@mediatek.com>
-         <855e004b-b128-70f7-b1d2-9fe957c94e08@somainline.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        id S1352328AbhLXJsz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Dec 2021 04:48:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47466 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352329AbhLXJsx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Dec 2021 04:48:53 -0500
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9698BC06175D
+        for <linux-pm@vger.kernel.org>; Fri, 24 Dec 2021 01:48:53 -0800 (PST)
+Received: by mail-qk1-x742.google.com with SMTP id de30so7986149qkb.0
+        for <linux-pm@vger.kernel.org>; Fri, 24 Dec 2021 01:48:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=DA2RfWm5BfTc8dY4tRUxJejPvziWb2AgHmDwtjqgqi8=;
+        b=JiqqbWB69DqkNf+sMs24hPGSjPJFHVk1jq6wqKCZLZL1CVrC0VmiKCzP/VgBjKx5pb
+         dsIUB59PLZgIT2JJ6Uzh7oWSP3zLskA83GOGNSb2bKGOnVVw+MbWPPhzz4K9/1tzw6Gc
+         S7OV7Utuw6vefWgsbytaKplD0MO4RERfSkYbOvBvEugzFnFqgn9t/8WZiJzCHwIVBEJr
+         viXgpji+moZuiLZOQ1P13xks6PXBNYGB4ttWksN0o9dTf927jgjnXtB9qqV+XJL7dGaq
+         l7vb7LhNl2TX0+kzqWNWEzbZKw5ovXURmly1INeFF9VARb29c0C2nAuwQURN47Fd4ZLO
+         j48w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=DA2RfWm5BfTc8dY4tRUxJejPvziWb2AgHmDwtjqgqi8=;
+        b=TuKwkeHxbZGsh8la4HD0bHVQ6vFHg2G++J5jDCgegq8G2fNlZRE9jc11wuFjyjX+3Q
+         /O8blD8NobxJret88e8B0Y8+pyul9/JktZhMHwUBZTMKjGTN+FxaFRmle4e24ZMK35Iq
+         rMXqaKKkx14yQAdqx9i9rCVpKKWTKGFAlGrGMzeFHIb8FXhhBYHKCGp7vQA86P8J3KJ+
+         X5oCWguj0DIAnOB0u/s7+iiCTR1QoS0Qsd9/MCfwPJwU7JtUoFJ4W0EygPdCztVuDRO8
+         GymG3CW/8ee4a+lOfwh7GIImx2BEgaEv80zmqVfMQe+D2QxxlorO7yz3yGPf1e3HBC11
+         g39Q==
+X-Gm-Message-State: AOAM532QMZeG2j0Dmasp8nxgEedFl5jeYE54icQMfGc3ox0oL3hZI6tg
+        4SC37RM3oaRT7H3HVYs1JQDk2pytLiRoKJWQWWM=
+X-Google-Smtp-Source: ABdhPJzxawpLFc682HnyGwOCnZ17wCPMxXvB7RlXp2GfPyU9ZuKCC0zpGLj5xXZYpCFnyoSEXGM/062g6Fh3MJkWVIA=
+X-Received: by 2002:a05:620a:424c:: with SMTP id w12mr4148560qko.62.1640339332657;
+ Fri, 24 Dec 2021 01:48:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+Received: by 2002:ad4:5c62:0:0:0:0:0 with HTTP; Fri, 24 Dec 2021 01:48:52
+ -0800 (PST)
+Reply-To: williamsreneta2019@gmail.com
+From:   MISS WILLIAMS <info.turvateealfastar@gmail.com>
+Date:   Fri, 24 Dec 2021 01:48:52 -0800
+Message-ID: <CAM-qQYba=eJ8z6wzBJYnqCULta=6iewd+_ar47dMCsuUnBhWCw@mail.gmail.com>
+Subject: Greetings Dearest One,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi AngeloGioacchino,
+Greetings Dearest One,
 
-Sorry for the late reply.
+How are you today, together with your family?Hope fine.I would like to
+use this opportunity to introduce myself to you. I am Miss Reneta
+Williams, From Benin Republic, West Africa. And my late parents are
+Mr. and Mrs. Dikko Williams; my father was a highly reputable business
+magnet who operated in Benin Republic during his days.
 
-On Wed, 2021-10-20 at 17:16 +0200, AngeloGioacchino Del Regno wrote:
-> Il 28/04/21 08:54, Roger Lu ha scritto:
-> > add compitable/reg/irq/clock/efuse/reset setting in svs node
-> > 
-> > Signed-off-by: Roger Lu <roger.lu@mediatek.com>
-> > ---
-> >   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 34 ++++++++++++++++++++++++
-> >   1 file changed, 34 insertions(+)
-> > 
-> 
-> Hello Roger,
-> thanks for this series! However, there is an issue with this patch:
-> 
-> > diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> > b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> > index fe24cc66ff7a..e9816a56d87b 100644
-> > --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> > +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> > @@ -270,6 +270,14 @@
-> >   			compatible = "mediatek,mt8192-infracfg", "syscon";
-> >   			reg = <0 0x10001000 0 0x1000>;
-> >   			#clock-cells = <1>;
-> > +
-> > +			infracfg_rst: reset-controller {
-> > +				compatible = "mediatek,infra-reset", "ti,syscon-
-> > reset";
-> > +				#reset-cells = <1>;
-> > +				ti,reset-bits = <
-> > +					0x150 5 0x154 5 0 0     (ASSERT_SET |
-> > DEASSERT_SET | STATUS_NONE) /* 0: svs */
-> 
-> You are using macros here, which are defined in dt-bindings/reset/ti-syscon.h
-> hovever, you are not including this header in this devicetree, so it's not
-> compiling.
-> 
-> Please fix it.
+I am writing this mail to you with tears and sorrow from my heart.
+With due respect trust and humanity, I know this mail will come to you
+as a surprise since we haven't known or come across each other before,
+considering the fact that I sourced your email contact through the
+Internet in search of trusted person who can be trusted and will
+assist me.
 
-Sure, I'll fix it. Thanks for the heads-up.
+It is sad to say that he passed away mysteriously in France during one
+of his business trips abroad. Though his sudden death was linked or
+rather suspected to have been masterminded by an uncle of his who
+traveled with him at that time. But God knows the truth! My mother
+died when I was just 6yrs old, and since then my father took me so
+special.
 
-> 
-> > +				>;
-> > +			};
-> >   		};
-> >   
-> >   		pericfg: syscon@10003000 {
-> > @@ -564,6 +572,20 @@
-> >   			status = "disabled";
-> >   		};
-> >   
-> > +		svs: svs@1100b000 {
-> > +			compatible = "mediatek,mt8192-svs";
-> > +			reg = <0 0x1100b000 0 0x1000>;
-> > +			interrupts = <GIC_SPI 167 IRQ_TYPE_LEVEL_HIGH 0>;
-> > +			clocks = <&infracfg CLK_INFRA_THERM>;
-> > +			clock-names = "main";
-> > +			nvmem-cells = <&svs_calibration>,
-> > +				      <&lvts_e_data1>;
-> > +			nvmem-cell-names = "svs-calibration-data",
-> > +					   "t-calibration-data";
-> > +			resets = <&infracfg_rst 0>;
-> > +			reset-names = "svs_rst";
-> > +		};
-> > +
-> >   		spi1: spi@11010000 {
-> >   			compatible = "mediatek,mt8192-spi",
-> >   				     "mediatek,mt6765-spi";
-> > @@ -681,6 +703,18 @@
-> >   			#clock-cells = <1>;
-> >   		};
-> >   
-> > +		efuse: efuse@11c10000 {
-> > +			compatible = "mediatek,efuse";
-> > +			reg = <0 0x11c10000 0 0x1000>;
-> > +
-> 
-> arch/arm64/boot/dts/mediatek/mt8192.dtsi:510.5-24: Warning (reg_format): 
-> /soc/efuse@11c10000/data1:reg: property has invalid length (8 bytes) 
-> (#address-cells == 2, #size-cells == 1)
-> 
-> arch/arm64/boot/dts/mediatek/mt8192.dtsi:513.5-24: Warning (reg_format): 
-> /soc/efuse@11c10000/calib@580:reg: property has invalid length (8 bytes) 
-> (#address-cells == 2, #size-cells == 1)
-> 
-> 
-> In short, you should add here:
-> 			#address-cells = <1>;
-> 			#size-cells = <1>;
+Before his death, he called me and informed me that he has the sum of
+Eighteen Million Five Hundred , United State Dollar
+(USD$18.500,000.00) left in fixed deposit account in one of the
+leading banks in Africa. He further told me that he deposited the
+money in my name, and also gave me all the necessary but legal
+documents to this fund with the bank.
 
-Thanks for the example code and I will add them in the latest patch.
+I am 21 years old and a university undergraduate and really don't know
+what to do. Now I want an account overseas where I can transfer this
+funds and after the transaction I will come and reside permanently in
+your country till such a time that it will be convenient for me to
+return back home if I so desire.
 
-> 
-> > +			lvts_e_data1: data1 {
-> > +				reg = <0x1C0 0x58>;
-> > +			};
-> > +			svs_calibration: calib@580 {
-> > +				reg = <0x580 0x68>;
-> > +			};
-> > +		};
-> > +
-> >   		i2c3: i2c3@11cb0000 {
-> >   			compatible = "mediatek,mt8192-i2c";
-> >   			reg = <0 0x11cb0000 0 0x1000>,
-> > 
-> 
-> Regards,
-> - Angelo
+The death of my father actually brought sorrow to my life. I also want
+to invest the fund under your care because I am ignorant of business
+world. I am in a sincere desire of your humble assistance in this
+regards. Your suggestions and ideas will be highly regarded.
 
+Now permit me to ask these few questions:
+
+1. Can you honestly help me from your heart?
+
+2. Can I completely trust you?
+
+3. What percentage of the total amount in question will be good for
+you after the money is in your account?
+
+Please, consider this and get back to me as soon as
+possible.Immediately and confirm your willingness on this my
+email(williamsreneta2019@gmail.com), here is one of my Picture and
+also i will inform you more details involved in this matter.
+
+Regards,
+
+Miss Reneta Williams.
