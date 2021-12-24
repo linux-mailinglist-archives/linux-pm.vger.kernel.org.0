@@ -2,125 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C72DA47ECB0
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Dec 2021 08:33:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C275147ED0B
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Dec 2021 09:19:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351815AbhLXHdx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Dec 2021 02:33:53 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:54478 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1351813AbhLXHdx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Dec 2021 02:33:53 -0500
-X-UUID: 642cc6016aae4d9092443f83fa7722ca-20211224
-X-UUID: 642cc6016aae4d9092443f83fa7722ca-20211224
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <roger.lu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1548116192; Fri, 24 Dec 2021 15:33:48 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 24 Dec 2021 15:33:48 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 24 Dec 2021 15:33:47 +0800
-Message-ID: <a5c9133e2bc856f8f9cbf6c70bc5196bce61639e.camel@mediatek.com>
-Subject: Re: [PATCH v16 2/7] arm64: dts: mt8183: add svs device information
-From:   Roger Lu <roger.lu@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     Fan Chen <fan.chen@mediatek.com>,
-        HenryC Chen <HenryC.Chen@mediatek.com>,
-        YT Lee <yt.lee@mediatek.com>,
-        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Fri, 24 Dec 2021 15:33:47 +0800
-In-Reply-To: <70e71210-6d17-92e3-4e3f-01b83380be42@collabora.com>
-References: <20210428065440.3704-1-roger.lu@mediatek.com>
-         <20210428065440.3704-3-roger.lu@mediatek.com>
-         <70e71210-6d17-92e3-4e3f-01b83380be42@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        id S1351935AbhLXITi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Dec 2021 03:19:38 -0500
+Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:48404
+        "EHLO smtp-relay-canonical-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234111AbhLXITh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Dec 2021 03:19:37 -0500
+Received: from HP-EliteBook-840-G7.. (223-136-216-233.emome-ip.hinet.net [223.136.216.233])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 467AA3F13C;
+        Fri, 24 Dec 2021 08:19:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1640333970;
+        bh=tENeFL8WIaSJFgGkKxOkudMuoVpt2IzxtUkKeonnshU=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=Ie9bN0vs+0tdUcGcmrHpsvYo30eEaNLYBLL8kXIa9Bdcu/47Tve2Pcma8uxC58VSV
+         OpI50ftVQz8wZ5aY3ZvRZyzLK0/rjdU3qKwzbhbHu4WvL+NZx/R1fnhzThTI5Us/Qa
+         96VR8fFI8Q8iLuz6OHz9qZ8zwX45hidIrL6FMoLMO87yBUnmF8U7BK/wJjDWYvfJrm
+         9Cj/HTHNL34IWeCHWOB4tUHuQP4A9gJy6oSxhplfSlnJoV8LMZ1jYYnt7I2Bk6JHti
+         iMTOS59VULu9CPtxUMdrrsS6EPiCW+P0dHp4EdJo8sFKwvG/heZtbNTD2sc4NWopwn
+         am4pQLbnBjbEw==
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     m.chetan.kumar@intel.com, linuxwwan@intel.com
+Cc:     linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] net: wwan: iosm: Let PCI core handle PCI power transition
+Date:   Fri, 24 Dec 2021 16:19:13 +0800
+Message-Id: <20211224081914.345292-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi AngeloGioacchino,
+pci_pm_suspend_noirq() and pci_pm_resume_noirq() already handle power
+transition for system-wide suspend and resume, so it's not necessary to
+do it in the driver.
 
-Sorry for the late reply. 
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+---
+ drivers/net/wwan/iosm/iosm_ipc_pcie.c | 49 ++-------------------------
+ 1 file changed, 2 insertions(+), 47 deletions(-)
 
-On Wed, 2021-10-20 at 17:20 +0200, AngeloGioacchino Del Regno wrote:
-> Il 28/04/21 08:54, Roger Lu ha scritto:
-> > add compitable/reg/irq/clock/efuse setting in svs node
-> > 
-> > Signed-off-by: Roger Lu <roger.lu@mediatek.com>
-> > ---
-> >   arch/arm64/boot/dts/mediatek/mt8183.dtsi | 18 ++++++++++++++++++
-> >   1 file changed, 18 insertions(+)
-> > 
-> > diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > index 80519a145f13..441d617ece43 100644
-> > --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > @@ -657,6 +657,18 @@
-> >   			status = "disabled";
-> >   		};
-> >   
-> > +		svs: svs@1100b000 {
-> > +			compatible = "mediatek,mt8183-svs";
-> > +			reg = <0 0x1100b000 0 0x1000>;
-> > +			interrupts = <GIC_SPI 127 IRQ_TYPE_LEVEL_LOW>;
-> > +			clocks = <&infracfg CLK_INFRA_THERM>;
-> > +			clock-names = "main";
-> > +			nvmem-cells = <&svs_calibration>,
-> > +				      <&thermal_calibration>;
-> > +			nvmem-cell-names = "svs-calibration-data",
-> > +					   "t-calibration-data";
-> > +		};
-> > +
-> >   		pwm0: pwm@1100e000 {
-> >   			compatible = "mediatek,mt8183-disp-pwm";
-> >   			reg = <0 0x1100e000 0 0x1000>;
-> > @@ -941,9 +953,15 @@
-> >   			reg = <0 0x11f10000 0 0x1000>;
-> >   			#address-cells = <1>;
-> >   			#size-cells = <1>;
-> > +			thermal_calibration: calib@180 {
-> > +				reg = <0x180 0xc>;
-> > +			};
-> >   			mipi_tx_calibration: calib@190 {
-> >   				reg = <0x190 0xc>;
-> >   			};
-> > +			svs_calibration: calib@580 {
-> > +				reg = <0x580 0x64>;
-> > +			};
-> >   		};
-> >   
-> >   		u3phy: usb-phy@11f40000 {
-> > 
-> 
-> This patch doesn't apply on the latest linux-next due to some new commits in
-> mt8183.dtsi, can you please rebase?
-
-Okay. I'll rebase it.
-
-> Thanks,
-> - Angelo
+diff --git a/drivers/net/wwan/iosm/iosm_ipc_pcie.c b/drivers/net/wwan/iosm/iosm_ipc_pcie.c
+index 2fe88b8be3481..d73894e2a84ed 100644
+--- a/drivers/net/wwan/iosm/iosm_ipc_pcie.c
++++ b/drivers/net/wwan/iosm/iosm_ipc_pcie.c
+@@ -363,67 +363,22 @@ static int __maybe_unused ipc_pcie_resume_s2idle(struct iosm_pcie *ipc_pcie)
+ 
+ int __maybe_unused ipc_pcie_suspend(struct iosm_pcie *ipc_pcie)
+ {
+-	struct pci_dev *pdev;
+-	int ret;
+-
+-	pdev = ipc_pcie->pci;
+-
+-	/* Execute D3 one time. */
+-	if (pdev->current_state != PCI_D0) {
+-		dev_dbg(ipc_pcie->dev, "done for PM=%d", pdev->current_state);
+-		return 0;
+-	}
+-
+ 	/* The HAL shall ask the shared memory layer whether D3 is allowed. */
+ 	ipc_imem_pm_suspend(ipc_pcie->imem);
+ 
+-	/* Save the PCI configuration space of a device before suspending. */
+-	ret = pci_save_state(pdev);
+-
+-	if (ret) {
+-		dev_err(ipc_pcie->dev, "pci_save_state error=%d", ret);
+-		return ret;
+-	}
+-
+-	/* Set the power state of a PCI device.
+-	 * Transition a device to a new power state, using the device's PCI PM
+-	 * registers.
+-	 */
+-	ret = pci_set_power_state(pdev, PCI_D3cold);
+-
+-	if (ret) {
+-		dev_err(ipc_pcie->dev, "pci_set_power_state error=%d", ret);
+-		return ret;
+-	}
+-
+ 	dev_dbg(ipc_pcie->dev, "SUSPEND done");
+-	return ret;
++	return 0;
+ }
+ 
+ int __maybe_unused ipc_pcie_resume(struct iosm_pcie *ipc_pcie)
+ {
+-	int ret;
+-
+-	/* Set the power state of a PCI device.
+-	 * Transition a device to a new power state, using the device's PCI PM
+-	 * registers.
+-	 */
+-	ret = pci_set_power_state(ipc_pcie->pci, PCI_D0);
+-
+-	if (ret) {
+-		dev_err(ipc_pcie->dev, "pci_set_power_state error=%d", ret);
+-		return ret;
+-	}
+-
+-	pci_restore_state(ipc_pcie->pci);
+-
+ 	/* The HAL shall inform the shared memory layer that the device is
+ 	 * active.
+ 	 */
+ 	ipc_imem_pm_resume(ipc_pcie->imem);
+ 
+ 	dev_dbg(ipc_pcie->dev, "RESUME done");
+-	return ret;
++	return 0;
+ }
+ 
+ static int __maybe_unused ipc_pcie_suspend_cb(struct device *dev)
+-- 
+2.33.1
 
