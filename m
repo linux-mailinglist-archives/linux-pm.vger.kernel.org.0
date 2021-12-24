@@ -2,162 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDEC047EC35
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Dec 2021 07:44:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C72DA47ECB0
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Dec 2021 08:33:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343496AbhLXGoo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Dec 2021 01:44:44 -0500
-Received: from mailout3.samsung.com ([203.254.224.33]:42976 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbhLXGon (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Dec 2021 01:44:43 -0500
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20211224064440epoutp03ac8a9c80da61bc2bdf6781dcec4616b5~DneFxddBy2162921629epoutp03O
-        for <linux-pm@vger.kernel.org>; Fri, 24 Dec 2021 06:44:40 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20211224064440epoutp03ac8a9c80da61bc2bdf6781dcec4616b5~DneFxddBy2162921629epoutp03O
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1640328280;
-        bh=Q65SdoUxVF82yqKEiz3o/mcQDWD7Y0oAKClGnD10t4s=;
-        h=To:Cc:From:Subject:Date:References:From;
-        b=TBPPJ9Zf6jepxEoTaoYwrQQ6lGbAhJRA4C295q1s66cwcRuBBLWzOXV7B4Mv+VGD7
-         GPxrrR7mVbsPro7fz8ex+swJBNZnOrHtu/+E/oCrqjUvVzw8qHNOHpo0HE06LN4yIo
-         0T7rLXXux20fFw+WRPcv2fgx3N0TfpWJksZ+zCJM=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20211224064440epcas1p20b65f9be32d7b814fb28b74d24cde42d~DneFcDOk_0369603696epcas1p23;
-        Fri, 24 Dec 2021 06:44:40 +0000 (GMT)
-Received: from epsmges1p5.samsung.com (unknown [182.195.38.233]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4JKyGV2b7xz4x9Q7; Fri, 24 Dec
-        2021 06:44:34 +0000 (GMT)
-Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
-        6A.24.28648.D4C65C16; Fri, 24 Dec 2021 15:44:29 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
-        20211224064428epcas1p40282064859748cd6735279bb7274a753~Dnd6p8RvA2512325123epcas1p4N;
-        Fri, 24 Dec 2021 06:44:28 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20211224064428epsmtrp24173e6cfc5022e9a55cc9d49ed883914~Dnd6pI2mS2975829758epsmtrp2-;
-        Fri, 24 Dec 2021 06:44:28 +0000 (GMT)
-X-AuditID: b6c32a39-813e6a8000006fe8-d9-61c56c4d7af9
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        B3.56.29871.C4C65C16; Fri, 24 Dec 2021 15:44:28 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20211224064428epsmtip1e41359287ede42cba7bbda827b722868~Dnd6bCW0X1524715247epsmtip1d;
-        Fri, 24 Dec 2021 06:44:28 +0000 (GMT)
-To:     "Rafael J. Wysocki <rjw@rjwysocki.net>" <rjw@rjwysocki.net>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "Chanwoo Choi (samsung.com)" <cw00.choi@samsung.com>,
-        "Chanwoo Choi (chanwoo@kernel.org)" <chanwoo@kernel.org>,
-        =?UTF-8?B?7ZWo66qF7KO8?= <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Subject: [GIT PULL] devfreq next for v5.17
-Organization: Samsung Electronics
-Message-ID: <09ff8415-0ebb-c8f2-026b-65af27f58f44@samsung.com>
-Date:   Fri, 24 Dec 2021 16:07:40 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
+        id S1351815AbhLXHdx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Dec 2021 02:33:53 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:54478 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1351813AbhLXHdx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Dec 2021 02:33:53 -0500
+X-UUID: 642cc6016aae4d9092443f83fa7722ca-20211224
+X-UUID: 642cc6016aae4d9092443f83fa7722ca-20211224
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1548116192; Fri, 24 Dec 2021 15:33:48 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 24 Dec 2021 15:33:48 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 24 Dec 2021 15:33:47 +0800
+Message-ID: <a5c9133e2bc856f8f9cbf6c70bc5196bce61639e.camel@mediatek.com>
+Subject: Re: [PATCH v16 2/7] arm64: dts: mt8183: add svs device information
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        YT Lee <yt.lee@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Fri, 24 Dec 2021 15:33:47 +0800
+In-Reply-To: <70e71210-6d17-92e3-4e3f-01b83380be42@collabora.com>
+References: <20210428065440.3704-1-roger.lu@mediatek.com>
+         <20210428065440.3704-3-roger.lu@mediatek.com>
+         <70e71210-6d17-92e3-4e3f-01b83380be42@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprMJsWRmVeSWpSXmKPExsWy7bCmvq5vztFEg0PfBC0m3rjCYnH9y3NW
-        i7NNb9gtLu+aw2bxufcIo8XtxhVsFmdOX2J1YPfYtKqTzWPL1XYWj74tqxg9Pm+SC2CJyrbJ
-        SE1MSS1SSM1Lzk/JzEu3VfIOjneONzUzMNQ1tLQwV1LIS8xNtVVy8QnQdcvMAbpASaEsMacU
-        KBSQWFyspG9nU5RfWpKqkJFfXGKrlFqQklNgWqBXnJhbXJqXrpeXWmJlaGBgZApUmJCd8eLy
-        ddaCa3wVM6ZfYm5g/MfdxcjBISFgInFkckwXIxeHkMAORokjH2YyQTifGCWu/vzGDOF8Y5R4
-        tbWDsYuRE6xj49ezjBCJvYwSV67tgKp6zygxff1CNpC5IgL2Eh0fMkHizAIXmCSOPtjIBtLN
-        JqAlsf/FDTBbGMhetmQOmM0voChx9cdjsA28AnYS9x5NZAaxWQRUJfp/N4LZogJhEie3tUDV
-        CEqcnPmEBcRmFhCXuPVkPhOELS+x/e0cZohLf7JLrDjsB2G7SNz5d54JwhaWeHV8CzuELSXx
-        +d1eNpBDJQSWMUr8mtzJBOGsZ5R4OasTapKxxP6lk5lAPmMW0JRYv0sfIqwosfP3XEaIxXwS
-        7772sEIClVeio00IokRZ4vKDu1B7JSUWt3eyQdgeElvavzFNYFScheSdWUjemYXknVkIixcw
-        sqxiFEstKM5NTy02LDCFx3Zyfu4mRnDq1LLcwTj97Qe9Q4xMHIyHGCU4mJVEeD1XHUkU4k1J
-        rKxKLcqPLyrNSS0+xGgKDOCJzFKiyfnA5J1XEm9oYmlgYmZkbGJhaGaoJM773H96opBAemJJ
-        anZqakFqEUwfEwenVAPTqlcOL1VineWepB/iPvf5k/fPbcIl7qsfrJnlfWllwoMcrlBG/337
-        px9d/jFmi910lwxOXQsv9ncnXPqZL/5qlkuc8L5c7vxCH8PYH5NVHSu/vFYoWy4nWcv1612j
-        v9mE/2Gn3B73xlzkZLWqvml/s/6R+t4ClTZHU87nbv7iux8s59T7MPem/pz6a6+3/WCavUCL
-        o53xy8Gcz/waO1mubbUJM5uzc3vmd2mmhhlHXiR+Zz/O2VQoJbBu/v67H/zXiJ2bxNZzcc5Z
-        NZvaD7VyD9Y2uvh6Ge74Uvx8KY+MnOHbGzLrgm7m9GzyW3AhwUdeuIPv1NqFuzdvzvh82DI9
-        dqGawHquogXCfte3TspersRSnJFoqMVcVJwIAF2WdPUmBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrCLMWRmVeSWpSXmKPExsWy7bCSnK5PztFEgwfvzS0m3rjCYnH9y3NW
-        i7NNb9gtLu+aw2bxufcIo8XtxhVsFmdOX2J1YPfYtKqTzWPL1XYWj74tqxg9Pm+SC2CJ4rJJ
-        Sc3JLEst0rdL4Mp4cfk6a8E1vooZ0y8xNzD+4+5i5OSQEDCR2Pj1LGMXIxeHkMBuRokLjw+y
-        QSQkJaZdPMrcxcgBZAtLHD5cDFHzllHi+OUvYHERAXuJjg+ZIOXMApeYJN6fZQWx2QS0JPa/
-        uAE2RhjIXrZkDpjNL6AocfXHY0YQm1fATuLeo4nMIDaLgKpE/+9GMFtUIExi55LHTBA1ghIn
-        Zz5hgZivLvFn3iVmCFtc4taT+UwQtrzE9rdzmCcwCs5C0jILScssJC2zkLQsYGRZxSiZWlCc
-        m55bbFhgmJdarlecmFtcmpeul5yfu4kRHBFamjsYt6/6oHeIkYmD8RCjBAezkgiv56ojiUK8
-        KYmVValF+fFFpTmpxYcYpTlYlMR5L3SdjBcSSE8sSc1OTS1ILYLJMnFwSjUwret7sav3xert
-        sX7F0+48bl58WvX9O+EI/TeO0y7dYrYSqfr8UXsC33ZzNp85vV0zf7lNOfm08uCmpmeF0z37
-        JS+JGzVsszyQuj6O9bT1pT9LRF52p6ydcW5x5etFcSu5j0wXPB/nyHng6vRPN5QWHU4XWsbw
-        Zcf6CMUVq+svHc0sKsrrFfWveWR8l7tU5HIhY7OL4uEDKx6/U5bZdqzwvcPjy1srV9zuVjqc
-        Ksy+yVF29YmVmz+X7P/mfjbDjM0+sFhKJUfc8d+tlETLzKpb7o8slRfVnT+W47ZH7sAsL7X0
-        3InO9zrry1hXvY/y27zVQFpC86/klXlX3HbfTIt+9qjiLWPijtBdlvN4pLW3WSqxFGckGmox
-        FxUnAgBxlh4Z9wIAAA==
-X-CMS-MailID: 20211224064428epcas1p40282064859748cd6735279bb7274a753
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20211224064428epcas1p40282064859748cd6735279bb7274a753
-References: <CGME20211224064428epcas1p40282064859748cd6735279bb7274a753@epcas1p4.samsung.com>
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dear Rafael,
+Hi AngeloGioacchino,
 
-This is devfreq-next pull request for v5.17-rc1. I add detailed description of
-this pull request on the following tag. Please pull devfreq with following updates.
+Sorry for the late reply. 
 
-Best Regards,
-Chanwoo Choi
+On Wed, 2021-10-20 at 17:20 +0200, AngeloGioacchino Del Regno wrote:
+> Il 28/04/21 08:54, Roger Lu ha scritto:
+> > add compitable/reg/irq/clock/efuse setting in svs node
+> > 
+> > Signed-off-by: Roger Lu <roger.lu@mediatek.com>
+> > ---
+> >   arch/arm64/boot/dts/mediatek/mt8183.dtsi | 18 ++++++++++++++++++
+> >   1 file changed, 18 insertions(+)
+> > 
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> > b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> > index 80519a145f13..441d617ece43 100644
+> > --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> > +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> > @@ -657,6 +657,18 @@
+> >   			status = "disabled";
+> >   		};
+> >   
+> > +		svs: svs@1100b000 {
+> > +			compatible = "mediatek,mt8183-svs";
+> > +			reg = <0 0x1100b000 0 0x1000>;
+> > +			interrupts = <GIC_SPI 127 IRQ_TYPE_LEVEL_LOW>;
+> > +			clocks = <&infracfg CLK_INFRA_THERM>;
+> > +			clock-names = "main";
+> > +			nvmem-cells = <&svs_calibration>,
+> > +				      <&thermal_calibration>;
+> > +			nvmem-cell-names = "svs-calibration-data",
+> > +					   "t-calibration-data";
+> > +		};
+> > +
+> >   		pwm0: pwm@1100e000 {
+> >   			compatible = "mediatek,mt8183-disp-pwm";
+> >   			reg = <0 0x1100e000 0 0x1000>;
+> > @@ -941,9 +953,15 @@
+> >   			reg = <0 0x11f10000 0 0x1000>;
+> >   			#address-cells = <1>;
+> >   			#size-cells = <1>;
+> > +			thermal_calibration: calib@180 {
+> > +				reg = <0x180 0xc>;
+> > +			};
+> >   			mipi_tx_calibration: calib@190 {
+> >   				reg = <0x190 0xc>;
+> >   			};
+> > +			svs_calibration: calib@580 {
+> > +				reg = <0x580 0x64>;
+> > +			};
+> >   		};
+> >   
+> >   		u3phy: usb-phy@11f40000 {
+> > 
+> 
+> This patch doesn't apply on the latest linux-next due to some new commits in
+> mt8183.dtsi, can you please rebase?
 
+Okay. I'll rebase it.
 
-The following changes since commit 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1:
+> Thanks,
+> - Angelo
 
-  Linux 5.16-rc4 (2021-12-05 14:08:22 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/devfreq-next-for-5.17
-
-for you to fetch changes up to 4667431419e93b63b4edfe7abdfc96cefcbcc051:
-
-  PM / devfreq: Reduce log severity for informative message (2021-12-16 11:29:54 +0900)
-
-----------------------------------------------------------------
-Update devfreq next for v5.17
-
-Detailed description for this pull request:
-1. Add new DRAM controller driver for sunXi SoCs
-- Add DRAM frequency controller devfreq driver for Allwinner sunXi SoCs
-in order to support dynamic frequency scaling of DRAM frequency. It
-calculates the supported frequency list from source clock in the range
-of full speed to quarter speed instead of devicetree.
-
-- Add COMMON_CLK dependency to fix build error
-
-2. Reduce log severity for informative message about frequency transition fail
-----------------------------------------------------------------
-
-Arnd Bergmann (1):
-      PM / devfreq: sun8i: addd COMMON_CLK dependency
-
-Samuel Holland (1):
-      PM / devfreq: Add a driver for the sun8i/sun50i MBUS
-
-Tzung-Bi Shih (1):
-      PM / devfreq: Reduce log severity for informative message
-
- drivers/devfreq/Kconfig          |   9 +
- drivers/devfreq/Makefile         |   1 +
- drivers/devfreq/devfreq.c        |   4 +-
- drivers/devfreq/sun8i-a33-mbus.c | 511 +++++++++++++++++++++++++++++++++++++++
- 4 files changed, 523 insertions(+), 2 deletions(-)
- create mode 100644 drivers/devfreq/sun8i-a33-mbus.c
