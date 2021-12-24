@@ -2,36 +2,32 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0390847EDE6
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Dec 2021 10:39:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DE4147EDF0
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Dec 2021 10:42:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343846AbhLXJjD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Dec 2021 04:39:03 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:50872 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1343812AbhLXJjC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Dec 2021 04:39:02 -0500
-X-UUID: 249930cfafff4f549a169c87bdbde67c-20211224
-X-UUID: 249930cfafff4f549a169c87bdbde67c-20211224
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        id S1343929AbhLXJmd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Dec 2021 04:42:33 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:56246 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S241614AbhLXJmb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Dec 2021 04:42:31 -0500
+X-UUID: 6bdba6bd9965437d9f088d8dafb4cdaa-20211224
+X-UUID: 6bdba6bd9965437d9f088d8dafb4cdaa-20211224
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
         (envelope-from <roger.lu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1935198536; Fri, 24 Dec 2021 17:39:00 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 24 Dec 2021 17:38:59 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 24 Dec
- 2021 17:38:58 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2018012810; Fri, 24 Dec 2021 17:42:27 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 24 Dec 2021 17:42:25 +0800
 Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 24 Dec 2021 17:38:58 +0800
-Message-ID: <a6f0704e430453fc6bbbb49eabcd5518c6852f4c.camel@mediatek.com>
-Subject: Re: [PATCH v16 4/7] soc: mediatek: SVS: add debug commands
+ Transport; Fri, 24 Dec 2021 17:42:25 +0800
+Message-ID: <60ecf997de03e7426e0e54fc3eb937f95902419c.camel@mediatek.com>
+Subject: Re: [PATCH v16 6/7] arm64: dts: mt8192: add svs device information
 From:   Roger Lu <roger.lu@mediatek.com>
 To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
+        <angelogioacchino.delregno@somainline.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         Enric Balletbo Serra <eballetbo@gmail.com>,
         Kevin Hilman <khilman@kernel.org>,
@@ -51,11 +47,11 @@ CC:     Fan Chen <fan.chen@mediatek.com>,
         <linux-mediatek@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Fri, 24 Dec 2021 17:38:58 +0800
-In-Reply-To: <715c9587-825f-6c22-96a2-273fb7f07bc3@collabora.com>
+Date:   Fri, 24 Dec 2021 17:42:25 +0800
+In-Reply-To: <855e004b-b128-70f7-b1d2-9fe957c94e08@somainline.org>
 References: <20210428065440.3704-1-roger.lu@mediatek.com>
-         <20210428065440.3704-5-roger.lu@mediatek.com>
-         <715c9587-825f-6c22-96a2-273fb7f07bc3@collabora.com>
+         <20210428065440.3704-7-roger.lu@mediatek.com>
+         <855e004b-b128-70f7-b1d2-9fe957c94e08@somainline.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
@@ -69,114 +65,110 @@ Hi AngeloGioacchino,
 
 Sorry for the late reply.
 
-On Thu, 2021-10-21 at 10:52 +0200, AngeloGioacchino Del Regno wrote:
+On Wed, 2021-10-20 at 17:16 +0200, AngeloGioacchino Del Regno wrote:
 > Il 28/04/21 08:54, Roger Lu ha scritto:
-> > The purpose of SVS is to help find the suitable voltages
-> > for DVFS. Therefore, if SVS bank voltages are concerned
-> > to be wrong, we can adjust SVS bank voltages by this patch.
+> > add compitable/reg/irq/clock/efuse/reset setting in svs node
 > > 
 > > Signed-off-by: Roger Lu <roger.lu@mediatek.com>
 > > ---
-> >   drivers/soc/mediatek/mtk-svs.c | 328 +++++++++++++++++++++++++++++++++
-> >   1 file changed, 328 insertions(+)
+> >   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 34 ++++++++++++++++++++++++
+> >   1 file changed, 34 insertions(+)
 > > 
-> > diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
-> > index 2d2153c92373..8794a2d87baa 100644
-> > --- a/drivers/soc/mediatek/mtk-svs.c
-> > +++ b/drivers/soc/mediatek/mtk-svs.c
-> > @@ -6,6 +6,7 @@
-> >   #include <linux/bits.h>
-> >   #include <linux/clk.h>
-> >   #include <linux/completion.h>
-> > +#include <linux/debugfs.h>
-> >   #include <linux/device.h>
-> >   #include <linux/init.h>
-> >   #include <linux/interrupt.h>
-> > @@ -24,6 +25,7 @@
-> >   #include <linux/pm_runtime.h>
-> >   #include <linux/regulator/consumer.h>
-> >   #include <linux/reset.h>
-> > +#include <linux/seq_file.h>
-> >   #include <linux/slab.h>
-> >   #include <linux/spinlock.h>
-> >   #include <linux/thermal.h>
-> > @@ -62,6 +64,39 @@
-> >   #define SVSB_INTSTS_COMPLETE		0x1
-> >   #define SVSB_INTSTS_CLEAN		0x00ffffff
-> >   
-> > +#define debug_fops_ro(name)						
-> > \
-> > +	static int svs_##name##_debug_open(struct inode *inode,		\
-> > +					   struct file *filp)		\
-> > +	{								\
-> > +		return single_open(filp, svs_##name##_debug_show,	\
-> > +				   inode->i_private);			\
-> > +	}								\
-> > +	static const struct file_operations svs_##name##_debug_fops = {	\
-> > +		.owner = THIS_MODULE,					\
-> > +		.open = svs_##name##_debug_open,			\
-> > +		.read = seq_read,					\
-> > +		.llseek = seq_lseek,					\
-> > +		.release = single_release,				\
-> > +	}
+> 
+> Hello Roger,
+> thanks for this series! However, there is an issue with this patch:
+> 
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> > b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> > index fe24cc66ff7a..e9816a56d87b 100644
+> > --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> > +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> > @@ -270,6 +270,14 @@
+> >   			compatible = "mediatek,mt8192-infracfg", "syscon";
+> >   			reg = <0 0x10001000 0 0x1000>;
+> >   			#clock-cells = <1>;
 > > +
-> > +#define debug_fops_rw(name)						
-> > \
-> > +	static int svs_##name##_debug_open(struct inode *inode,		\
-> > +					   struct file *filp)		\
-> > +	{								\
-> > +		return single_open(filp, svs_##name##_debug_show,	\
-> > +				   inode->i_private);			\
-> > +	}								\
-> > +	static const struct file_operations svs_##name##_debug_fops = {	\
-> > +		.owner = THIS_MODULE,					\
-> > +		.open = svs_##name##_debug_open,			\
-> > +		.read = seq_read,					\
-> > +		.write = svs_##name##_debug_write,			\
-> > +		.llseek = seq_lseek,					\
-> > +		.release = single_release,				\
-> > +	}
+> > +			infracfg_rst: reset-controller {
+> > +				compatible = "mediatek,infra-reset", "ti,syscon-
+> > reset";
+> > +				#reset-cells = <1>;
+> > +				ti,reset-bits = <
+> > +					0x150 5 0x154 5 0 0     (ASSERT_SET |
+> > DEASSERT_SET | STATUS_NONE) /* 0: svs */
+> 
+> You are using macros here, which are defined in dt-bindings/reset/ti-syscon.h
+> hovever, you are not including this header in this devicetree, so it's not
+> compiling.
+> 
+> Please fix it.
+
+Sure, I'll fix it. Thanks for the heads-up.
+
+> 
+> > +				>;
+> > +			};
+> >   		};
+> >   
+> >   		pericfg: syscon@10003000 {
+> > @@ -564,6 +572,20 @@
+> >   			status = "disabled";
+> >   		};
+> >   
+> > +		svs: svs@1100b000 {
+> > +			compatible = "mediatek,mt8192-svs";
+> > +			reg = <0 0x1100b000 0 0x1000>;
+> > +			interrupts = <GIC_SPI 167 IRQ_TYPE_LEVEL_HIGH 0>;
+> > +			clocks = <&infracfg CLK_INFRA_THERM>;
+> > +			clock-names = "main";
+> > +			nvmem-cells = <&svs_calibration>,
+> > +				      <&lvts_e_data1>;
+> > +			nvmem-cell-names = "svs-calibration-data",
+> > +					   "t-calibration-data";
+> > +			resets = <&infracfg_rst 0>;
+> > +			reset-names = "svs_rst";
+> > +		};
 > > +
-> > +#define svs_dentry(name)	{__stringify(name), &svs_##name##_debug_fops}
+> >   		spi1: spi@11010000 {
+> >   			compatible = "mediatek,mt8192-spi",
+> >   				     "mediatek,mt6765-spi";
+> > @@ -681,6 +703,18 @@
+> >   			#clock-cells = <1>;
+> >   		};
+> >   
+> > +		efuse: efuse@11c10000 {
+> > +			compatible = "mediatek,efuse";
+> > +			reg = <0 0x11c10000 0 0x1000>;
 > > +
-> >   static DEFINE_SPINLOCK(mtk_svs_lock);
-> >   
-> >   /*
-> > @@ -83,6 +118,7 @@ enum svsb_phase {
-> >   	SVSB_PHASE_INIT01,
-> >   	SVSB_PHASE_INIT02,
-> >   	SVSB_PHASE_MON,
-> > +	SVSB_PHASE_NUM,
 > 
-> I would move the addition of these last members in the previous (3/7) patch,
-> where you introduce the driver in the first place.
+> arch/arm64/boot/dts/mediatek/mt8192.dtsi:510.5-24: Warning (reg_format): 
+> /soc/efuse@11c10000/data1:reg: property has invalid length (8 bytes) 
+> (#address-cells == 2, #size-cells == 1)
 > 
-> Also, I think that using _MAX instead would be better, as it is pretty
-> much a common practice. So, this would become SVSB_PHASE_MAX.
+> arch/arm64/boot/dts/mediatek/mt8192.dtsi:513.5-24: Warning (reg_format): 
+> /soc/efuse@11c10000/calib@580:reg: property has invalid length (8 bytes) 
+> (#address-cells == 2, #size-cells == 1)
+> 
+> 
+> In short, you should add here:
+> 			#address-cells = <1>;
+> 			#size-cells = <1>;
 
-Okay. I'll move it to previous (3/7) patch. Thanks for advice.
-
-> 
-> >   };
-> >   
-> >   enum svs_reg_index {
-> > @@ -140,6 +176,7 @@ enum svs_reg_index {
-> >   	SPARE2,
-> >   	SPARE3,
-> >   	THSLPEVEB,
-> > +	SVS_REG_NUM,
-> 
-> ... and this would become SVS_REG_MAX
-
-Okay. I'll move it to previous (3/7) patch. Thanks for advice.
+Thanks for the example code and I will add them in the latest patch.
 
 > 
-> >   };
-> >   
-> >   static const u32 svs_regs_v2[] = {
+> > +			lvts_e_data1: data1 {
+> > +				reg = <0x1C0 0x58>;
+> > +			};
+> > +			svs_calibration: calib@580 {
+> > +				reg = <0x580 0x68>;
+> > +			};
+> > +		};
+> > +
+> >   		i2c3: i2c3@11cb0000 {
+> >   			compatible = "mediatek,mt8192-i2c";
+> >   			reg = <0 0x11cb0000 0 0x1000>,
+> > 
 > 
-> Apart from that,
-> 
-> Acked-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> 
+> Regards,
+> - Angelo
 
