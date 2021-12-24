@@ -2,144 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48A2847EE53
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Dec 2021 11:43:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3212747EE75
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Dec 2021 12:08:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352457AbhLXKnz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Dec 2021 05:43:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59426 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240741AbhLXKnz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Dec 2021 05:43:55 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC88AC061401;
-        Fri, 24 Dec 2021 02:43:54 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id t26so16780190wrb.4;
-        Fri, 24 Dec 2021 02:43:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GYowiWvO/gbLV76oGiytYGNx7I5pruViggqU/wNr2S0=;
-        b=f1D+y6mEvMN8p/Tbw86vSVh0C8fX8qS2ns/R4s8EtzG+npVnDoCtQ0ruzaKO3S6NuF
-         rZOh1tZXD8aVJZ2dUKJMLMB8lbXN8ZM11TVZIfVH7c8g4yWket7eHo+JKoIaJHlQCouw
-         yC+Ws7TLFZgNlIeq2AHFySwkaEPnz/dLT2NupaM1gvw3/PfIOqkoOnQMAYRwuuXnCJG1
-         avQNJDU9coXcWQmcdHP0DPiHzIl8RiSl3nnTnM8YJHxTGPSI1ryMVcCF5sKcrfNfeziz
-         1x7rYi7u9kbAolp38OF5bNlmbbVCL0YkofsLQxRdpjSqbAbezFmaJeEh6dRcg3Lc6aIo
-         c/hQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GYowiWvO/gbLV76oGiytYGNx7I5pruViggqU/wNr2S0=;
-        b=v1bhpYeEA/z5TVJuMPvY8UCvYuXPElYQqk5opgV/CmI/W+zy51nRsbm+Wx8ej60Yfb
-         5wu0r50qX/2+gF0WuWTESaN6UOLWBawRIXEJtT6P2ZpqSF22hPussRqJraUdExFjxw5F
-         SWRkaL2b5+K0MQX0RH3g/WPvIQdOa7Yitnr2sbWASCOvmWcWNOH4MKucmlw9JRbQDoGL
-         nEc8ZudhHWyyGzchbzbRy+RL19/SaF1nqvo3u2uMTlOsAdOPvHfJgnvwSPvr+LXq4LFg
-         9z1h0v7miUl65ziVfGtr78tDlDy3jiE/h8nVNvbQfQ/cI9fjjtAs/HfPRtCQPNBESCmE
-         TWCQ==
-X-Gm-Message-State: AOAM533Wo58L8ARbh8SvphfFZF5Ygc5S53s+KjldYJcEJYoEo287HIlB
-        zDJ4VK15h0yx+f4rTrywteo=
-X-Google-Smtp-Source: ABdhPJwHMEnOlEEKQIS2WBM5zLk6VIpwNdZypIDwWhx4qHnaGlYDccnMSyCietL8L303VVVanaPrmg==
-X-Received: by 2002:adf:ef81:: with SMTP id d1mr4324396wro.132.1640342633198;
-        Fri, 24 Dec 2021 02:43:53 -0800 (PST)
-Received: from fedora.domain.name ([95.70.245.16])
-        by smtp.googlemail.com with ESMTPSA id l2sm7640352wrs.43.2021.12.24.02.43.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Dec 2021 02:43:52 -0800 (PST)
-From:   Onur Ozkan <onurozkan.dev@gmail.com>
-X-Google-Original-From: Onur Ozkan <work@onurozkan.dev>
-To:     trenn@suse.com
-Cc:     shuah@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Onur Ozkan <work@onurozkan.dev>
-Subject: [PATCH v3] tools/power/cpupower/{ToDo => TODO}: Rename the todo file
-Date:   Fri, 24 Dec 2021 13:43:43 +0300
-Message-Id: <20211224104343.33331-1-work@onurozkan.dev>
-X-Mailer: git-send-email 2.33.1
+        id S229436AbhLXLI5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Dec 2021 06:08:57 -0500
+Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:43469
+        "EHLO mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230375AbhLXLI4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Dec 2021 06:08:56 -0500
+IronPort-Data: =?us-ascii?q?A9a23=3A1Pb2SajOnN4kMFK2d+OiLfL1X161dxEKZh0ujC4?=
+ =?us-ascii?q?5NGQNrF6WrkUHzzcbXDzSP/aINGL8L9t0aNy+9xxUv8TWz4RmGgppr3w8FHgiR?=
+ =?us-ascii?q?ejtVY3IdB+oV8+xBpSeFxw/t512huEtnanYd1eEzvuWGuWn/SkUOZ2gHOKmUbe?=
+ =?us-ascii?q?eYHwpH2eIdQ964f5ds79g6mJXqYjha++9kYuaT/z3YDdJ6RYsWo4nw/7rRCdUg?=
+ =?us-ascii?q?RjHkGhwUmrSyhx8lAS2e3E9VPrzLEwqRpfyatE88uWSH44vwFwll1418SvBCvv?=
+ =?us-ascii?q?9+lr6Wk0DTqTTMA7mZnh+C/Xk3EgE/3ZrlP9kb5Lwam8O49mNt9JszNRE85i5V?=
+ =?us-ascii?q?g4tOoXNnv4cWl9WCUmSOIUXpeCceifXXcu7iheun2HX6+9nAkg7OaUb9/xxDGU?=
+ =?us-ascii?q?I8uYXQBgGcwqZgOC72r+pYvNtnck+NI/tMZ93kmp6zDfYE/89B4jKRanQ+MFR0?=
+ =?us-ascii?q?D4YgsFIAOaYZswFZD4pZxPFCzVLN1EdIJEzhuGlgj/4aTIwgEyUv6cs4y7Q0Ql?=
+ =?us-ascii?q?4ypDpMdzcYNvMQt9a9m6cp2Tb7yHhBzkEO9GFjzmI6HShgqnIhyyTcIYTEqCos?=
+ =?us-ascii?q?/1nmluewkQNBxAME1i2u/+0jgi5Qd03A0kV/CUphbI/+EyiUp/2WBjQiGaJohM?=
+ =?us-ascii?q?GSfJRFeMg4Q2Aw6aS5ByWbkAGUyRALtgrsMs3bSYn2l+Ag5XiAjkHmKOUT3mQ8?=
+ =?us-ascii?q?KvSoi6zJTQSMUcGZCkNVwxD5MPsyLzfJDqnos1LSfHuyISvQHeuk3ba8W4kiqt?=
+ =?us-ascii?q?VlsARkaO24Tj6b/uXjsChZmYICs//BwpJNj9EWbM=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AQneXvqFKfBizBN2dpLqEiceALOsnbusQ8zAX?=
+ =?us-ascii?q?PiFKJyC9Hfb5qynDpoV56faWslkssQ8b+OxoUZPoKRi3yXcf2+Us1NmZMTXbhA?=
+ =?us-ascii?q?=3D=3D?=
+X-IronPort-AV: E=Sophos;i="5.88,232,1635199200"; 
+   d="scan'208";a="957337"
+Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Dec 2021 12:08:54 +0100
+Date:   Fri, 24 Dec 2021 12:08:53 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+cc:     Francisco Jerez <currojerez@riseup.net>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
+In-Reply-To: <CAJZ5v0jyusD4r1eK_hv8CXuaoOXZ6gY8TVdomW5q75dS3wNq5A@mail.gmail.com>
+Message-ID: <alpine.DEB.2.22.394.2112241207410.3217@hadrien>
+References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien> <CAJZ5v0iBU8gw8+-5nxj2cKzf7tyN=p3Adcm4Z5bn=oVYhU28bQ@mail.gmail.com> <alpine.DEB.2.22.394.2112172022100.2968@hadrien> <87r1abt1d2.fsf@riseup.net> <alpine.DEB.2.22.394.2112172258480.2968@hadrien>
+ <87fsqqu6by.fsf@riseup.net> <alpine.DEB.2.22.394.2112180654470.3139@hadrien> <878rwitdu3.fsf@riseup.net> <alpine.DEB.2.22.394.2112181138210.3130@hadrien> <871r29tvdj.fsf@riseup.net> <alpine.DEB.2.22.394.2112190734070.3181@hadrien> <87wnk0s0tf.fsf@riseup.net>
+ <CAJZ5v0i7gBtm6x+zUUzhxXjmYhPwr=JxvOuMZ0aD9qxnjE9YKw@mail.gmail.com> <878rwdse9o.fsf@riseup.net> <CAJZ5v0jyusD4r1eK_hv8CXuaoOXZ6gY8TVdomW5q75dS3wNq5A@mail.gmail.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Renamed the to-do file to 'TODO' instead of 'ToDo' to
-comply with the naming standard.
 
-Here are the all other todo file references in kernel source code:
-    drivers/accessibility/speakup/TODO
-    drivers/bcma/TODO
-    drivers/comedi/TODO
-    drivers/dma/TODO
-    drivers/gpio/TODO
-    drivers/gpu/drm/amd/display/TODO
-    drivers/gpu/drm/i915/TODO.txt
-    drivers/gpu/drm/omapdrm/TODO
-    drivers/gpu/drm/panfrost/TODO
-    drivers/iio/TODO
-    drivers/leds/TODO
-    drivers/parport/TODO-parport
-    drivers/pci/hotplug/TODO
-    drivers/staging/android/TODO
-    drivers/staging/board/TODO
-    drivers/staging/clocking-wizard/TODO
-    drivers/staging/emxx_udc/TODO
-    drivers/staging/fbtft/TODO
-    drivers/staging/fieldbus/TODO
-    drivers/staging/fwserial/TODO
-    drivers/staging/gdm724x/TODO
-    drivers/staging/greybus/TODO
-    drivers/staging/gs_fpgaboot/TODO
-    drivers/staging/iio/TODO
-    drivers/staging/ks7010/TODO
-    drivers/staging/media/atomisp/TODO
-    drivers/staging/media/av7110/TODO
-    drivers/staging/media/hantro/TODO
-    drivers/staging/media/imx/TODO
-    drivers/staging/media/ipu3/TODO
-    drivers/staging/media/meson/vdec/TODO
-    drivers/staging/media/omap4iss/TODO
-    drivers/staging/media/rkvdec/TODO
-    drivers/staging/media/sunxi/cedrus/TODO
-    drivers/staging/media/tegra-vde/TODO
-    drivers/staging/media/tegra-video/TODO
-    drivers/staging/media/zoran/TODO
-    drivers/staging/most/TODO
-    drivers/staging/mt7621-dma/TODO
-    drivers/staging/mt7621-dts/TODO
-    drivers/staging/nvec/TODO
-    drivers/staging/octeon-usb/TODO
-    drivers/staging/octeon/TODO
-    drivers/staging/olpc_dcon/TODO
-    drivers/staging/pi433/TODO
-    drivers/staging/qlge/TODO
-    drivers/staging/r8188eu/TODO
-    drivers/staging/rtl8192e/TODO
-    drivers/staging/rtl8712/TODO
-    drivers/staging/rtl8723bs/TODO
-    drivers/staging/rts5208/TODO
-    drivers/staging/sm750fb/TODO
-    drivers/staging/unisys/TODO
-    drivers/staging/vc04_services/bcm2835-audio/TODO
-    drivers/staging/vc04_services/bcm2835-camera/TODO
-    drivers/staging/vc04_services/interface/TODO
-    drivers/staging/vt6655/TODO
-    drivers/staging/vt6656/TODO
-    drivers/staging/wfx/TODO
-    drivers/thermal/ti-soc-thermal/TODO
-    tools/testing/selftests/arm64/fp/TODO
-    tools/testing/selftests/arm64/signal/testcases/TODO
-    tools/testing/selftests/tc-testing/TODO.txt
 
-Signed-off-by: Onur Ozkan <work@onurozkan.dev>
----
- tools/power/cpupower/{ToDo => TODO} | 0
- 1 file changed, 0 insertions(+), 0 deletions(-)
- rename tools/power/cpupower/{ToDo => TODO} (100%)
+On Wed, 22 Dec 2021, Rafael J. Wysocki wrote:
 
-diff --git a/tools/power/cpupower/ToDo b/tools/power/cpupower/TODO
-similarity index 100%
-rename from tools/power/cpupower/ToDo
-rename to tools/power/cpupower/TODO
--- 
-2.33.1
+> On Wed, Dec 22, 2021 at 12:57 AM Francisco Jerez <currojerez@riseup.net> wrote:
+> >
+> > "Rafael J. Wysocki" <rafael@kernel.org> writes:
+> >
+> > > On Sun, Dec 19, 2021 at 11:10 PM Francisco Jerez <currojerez@riseup.net> wrote:
+> > >>
+> > >> Julia Lawall <julia.lawall@inria.fr> writes:
+> > >>
+> > >> > On Sat, 18 Dec 2021, Francisco Jerez wrote:
+> > >
+> > > [cut]
+> > >
+> > >> > I did some experiements with forcing different frequencies.  I haven't
+> > >> > finished processing the results, but I notice that as the frequency goes
+> > >> > up, the utilization (specifically the value of
+> > >> > map_util_perf(sg_cpu->util) at the point of the call to
+> > >> > cpufreq_driver_adjust_perf in sugov_update_single_perf) goes up as well.
+> > >> > Is this expected?
+> > >> >
+> > >>
+> > >> Actually, it *is* expected based on our previous hypothesis that these
+> > >> workloads are largely latency-bound: In cases where a given burst of CPU
+> > >> work is not parallelizable with any other tasks the thread needs to
+> > >> complete subsequently, its overall runtime will decrease monotonically
+> > >> with increasing frequency, therefore the number of instructions executed
+> > >> per unit of time will increase monotonically with increasing frequency,
+> > >> and with it its frequency-invariant utilization.
+> > >
+> > > But shouldn't these two effects cancel each other if the
+> > > frequency-invariance mechanism works well?
+> >
+> > No, they won't cancel each other out under our hypothesis that these
+> > workloads are largely latency-bound, since the performance of the
+> > application will increase steadily with increasing frequency, and with
+> > it the amount of computational resources it utilizes per unit of time on
+> > the average, and therefore its frequency-invariant utilization as well.
+>
+> OK, so this is a workload in which the maximum performance is only
+> achieved at the maximum available frequency.  IOW, there's no
+> performance saturation point and increasing the frequency (if
+> possible) will always cause more work to be done per unit of time.
+>
+> For this type of workloads, requirements regarding performance (for
+> example, upper bound on the expected time of computations) need to be
+> known in order to determine the "most suitable" frequency to run them
+> and I agree that schedutil doesn't help much in that respect.
+>
+> It is probably better to run them with intel_pstate in the active mode
+> (ie. "pure HWP") or decrease EPP via sysfs to allow HWP to ramp up
+> turbo more aggressively.
 
+active mode + powersave indeed both gives faster runtimes and less energy
+consumption for these examples.
+
+thanks,
+julia
