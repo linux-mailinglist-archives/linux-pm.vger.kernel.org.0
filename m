@@ -2,89 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 859DC47F3DA
-	for <lists+linux-pm@lfdr.de>; Sat, 25 Dec 2021 17:37:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5D2B47F3ED
+	for <lists+linux-pm@lfdr.de>; Sat, 25 Dec 2021 17:57:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232281AbhLYQhv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 25 Dec 2021 11:37:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49604 "EHLO
+        id S232372AbhLYQ5A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 25 Dec 2021 11:57:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbhLYQhu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 25 Dec 2021 11:37:50 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E1BC061401;
-        Sat, 25 Dec 2021 08:37:50 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id w16so44332815edc.11;
-        Sat, 25 Dec 2021 08:37:50 -0800 (PST)
+        with ESMTP id S232371AbhLYQ5A (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 25 Dec 2021 11:57:00 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084A0C061401;
+        Sat, 25 Dec 2021 08:57:00 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id w16so44451357edc.11;
+        Sat, 25 Dec 2021 08:56:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=tp14R7GSqiYR9/6km+gt56wkm7AN4wImp9Bt9uzwo8A=;
-        b=orr5VkWZ2RUz2gwv5ntyrfNI0H2QPgETyCgYMeL66rWrSs93CuRYKa39T3GzmGTAYm
-         Ex+Mq7yilvbI/tGjq+JmQG2LYqcKosCRTr3Fd4e+0Fk4FRVM/ACaLG/ktAL9hQmpcoOl
-         vYrG+CLyp1Vi6Nls4lm6wE1RdzhLel/9A72g9zdvfeo0dYeJhbLK7MCLRJ2rftALhfOT
-         h/KOJU1VbQcep/HAEoOG+ZchVUjPaoGhFi6JK0xuRqxed6yIhCDutv6PselSOCBpFDUp
-         UekBOsEe0PyUP3O66BI6JFHiF+UkHtz7ur9OawOXgKuNj7f3G4rrHH+DWTeJjLfas5bz
-         03TA==
+        bh=BrE1MK1yTZcPfNFWv4O/JTmXCOBbMQyBOpNAcv66KpY=;
+        b=DtkG7Ra9kjyiHmuC8Og17831P4xxD8SaBGAtOco3jb2gdEm9yZYhZRb7SfWzNKcldX
+         n2MEmCzQhjC8mDCWugVlwmXErU4gGMtMwr7OJbaetNMaJk5er+UmUUB+2YHxlW0F7Oqg
+         ywb5+Aclh95ReHeVq6C7HfTUEpd93cUaqNUNG3Fl1p+87FWjaERIYKrNKyop3x9hY5pC
+         ZAalOJJSEElIA8H2VI2Ol3ky6f709f+gZK2+/O3/7H3NrwQWCSSSMi92flWx0AD1KSw7
+         ImTjy2mFbC4VVRx9KjoE9eq6iMEHYAM2No4C0Lra4waazfSqcTmc5LV/7w4mNto1ojt8
+         59wA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=tp14R7GSqiYR9/6km+gt56wkm7AN4wImp9Bt9uzwo8A=;
-        b=fFTzaE+L5qeVlTD4pHV+2e/37Msr4vD1I5hDqdGvmRsQOYuqzP0Ldb/iOpDmYQZpOM
-         YmKIi2oL+DjXi79eT/68QkJh+Itbza5WfOMDKaLoXbJakxtXSzv+BSF3a4CN1R+cQyAh
-         E1T0TfgW0vom5yKM18U0As7Y9QiBayNtu9X3XJtDvcAELUce9Cbyviuxex4ZQff1P0PM
-         L8hPPDMSpZ5fsuq/wRQs/IbBDhWUrWBcZK+kjXlINKLmdLKkS19u90G6lqtQEWKvzdFV
-         zUCwp1NrklkWa28KLzph1LFYaumyegQoAUjSZRSRUu2zKY8N+dR+Mbyb9hMrf5kaeM59
-         5lJQ==
-X-Gm-Message-State: AOAM5339LzzwjtuFFnSy7f/JlpxQl4e9zIBR3aV6EBddZTinwr/duabr
-        G7anDTfIz4N62HkvjTkefbSXsJs3A8suGKWzbYx21C8lqLBsJw==
-X-Google-Smtp-Source: ABdhPJzLELowdgw2LAqP2+ZLzXCIwhbHFPm0W89lpc2u8NuEknXTdv50O0phcI6Q9cloPRJuZPYsHEgMlmbZwKiTbWo=
-X-Received: by 2002:a17:906:3ed0:: with SMTP id d16mr8369159ejj.636.1640450268909;
- Sat, 25 Dec 2021 08:37:48 -0800 (PST)
+        bh=BrE1MK1yTZcPfNFWv4O/JTmXCOBbMQyBOpNAcv66KpY=;
+        b=B9ddJRdMslUDAcLmCv0ZivueVg8bufnXo767XG8KPt9Y+qwbs2YUL8908Bq8KUWTmt
+         iPGQ0Xn98VwKv2UP9vg5yAKLzlzflC4jvaMPW6qyYsia3/dS6nunqK5OSXvEjSh4qnAu
+         1Hm1bIP979Njfav7zaAyGUzO1c2pWOM/K1FvcG8UT8NF6AYsRZwFHDVR87bH0mJs5MrA
+         3LsjjjZE40qw3HzoOCDkexTjAtXYtR8ajSLUqIoIi0v35gXXXNTey1JCO0TVF90GR3IO
+         F+N74N2rZJrqojQMAfz21J2UZhFTP7nsuQ+Gt24ASELFondXSFZh8Qil1QKxWhD22y+O
+         Upaw==
+X-Gm-Message-State: AOAM5333Zf8X8ix6klkCs0UBDcaDMongqzZxGNi3SFns1KBAEZmawUNS
+        h8wdKAEF6AA6qVjglcwEhV5Jcl55jaKn0YMLkV4=
+X-Google-Smtp-Source: ABdhPJyk5ykIGlXqpPvrC/E5RjVXw1CPOu5Fhi0C14aud/dguuCWMZfYUrqivLm5x8YxSJwjqZNUiNH9V4UcO2e7bkg=
+X-Received: by 2002:a05:6402:12c4:: with SMTP id k4mr9822072edx.218.1640451418582;
+ Sat, 25 Dec 2021 08:56:58 -0800 (PST)
 MIME-Version: 1.0
-References: <20211117020346.4088302-1-swboyd@chromium.org> <20211203044718.b6nqn5rcbkrnpchp@vireshk-i7>
-In-Reply-To: <20211203044718.b6nqn5rcbkrnpchp@vireshk-i7>
+References: <20211224202231.31130-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20211224202231.31130-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 25 Dec 2021 18:37:12 +0200
-Message-ID: <CAHp75VdkxbJP7T-qaS=NKAUb7dXJdKeGRneQw+A1XN5AGtajeA@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: qcom-hw: Use optional irq API
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Stephen Boyd <swboyd@chromium.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
+Date:   Sat, 25 Dec 2021 18:56:22 +0200
+Message-ID: <CAHp75Vda7LTR=8eUki3yXEk5ia8va2Ma6Pqgj-4v6nSphNZjow@mail.gmail.com>
+Subject: Re: [PATCH v3] soc: ti: smartreflex: Use platform_get_irq_optional()
+ to get the interrupt
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Dec 6, 2021 at 5:26 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Sat, Dec 25, 2021 at 4:08 AM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
 >
-> On 16-11-21, 18:03, Stephen Boyd wrote:
-> > Use platform_get_irq_optional() to avoid a noisy error message when the
-> > irq isn't specified. The irq is definitely optional given that we only
-> > care about errors that are -EPROBE_DEFER here.
+> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> allocation of IRQ resources in DT core code, this causes an issue
+> when using hierarchical interrupt domains using "interrupts" property
+> in the node as this bypasses the hierarchical setup and messes up the
+> irq chaining.
+>
+> In preparation for removal of static setup of IRQ resource from DT core
+> code use platform_get_irq_optional().
 
-> > +     data->throttle_irq = platform_get_irq_optional(pdev, index);
-> > +     if (data->throttle_irq == -ENXIO)
-> > +             return 0;
-> > +     if (data->throttle_irq < 0)
-> > +             return data->throttle_irq;
+...
 
-This adds more work for the future.
-The best approach is
+> +       ret = platform_get_irq_optional(pdev, 0);
+> +       if (ret < 0 && ret != -ENXIO) {
 
-ret = platform_get_irq_optional(...);
-if (ret < 0 && ret != -ENXIO)
-  return ret;
-if (ret > 0)
-  ...we got it...
+> +               dev_err(&pdev->dev, "%s: failed to get IRQ resource\n", __func__);
+> +               return ret;
 
-It will allow the future API fix of platform_get_irq_optional() to be
-really optional.
+Almost fine, but you should exclude this from the deferred probe, so switch to
+
+  return dev_err_probe(...);
+
+> +       }
+> +       if (ret > 0)
+> +               sr_info->irq = ret;
+
+...
+
+> +       ret = 0;
+
+I do not see the context, is it really necessary?
 
 -- 
 With Best Regards,
