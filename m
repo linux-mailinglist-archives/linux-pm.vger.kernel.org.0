@@ -2,106 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5BB947F3AD
-	for <lists+linux-pm@lfdr.de>; Sat, 25 Dec 2021 16:55:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 859DC47F3DA
+	for <lists+linux-pm@lfdr.de>; Sat, 25 Dec 2021 17:37:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232147AbhLYPzp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 25 Dec 2021 10:55:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40528 "EHLO
+        id S232281AbhLYQhv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 25 Dec 2021 11:37:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232141AbhLYPzp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 25 Dec 2021 10:55:45 -0500
+        with ESMTP id S229987AbhLYQhu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 25 Dec 2021 11:37:50 -0500
 Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94325C061401;
-        Sat, 25 Dec 2021 07:55:44 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id y22so44195727edq.2;
-        Sat, 25 Dec 2021 07:55:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E1BC061401;
+        Sat, 25 Dec 2021 08:37:50 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id w16so44332815edc.11;
+        Sat, 25 Dec 2021 08:37:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=9DLKSeIndgPjjCOxHQScvibLO8kHejdBM84u4yhRKdw=;
-        b=efMBR7Wv4GAWbKS2UyH6Oe18HGl6TZsQkmr4gxKou4wN3lF0Jn/PgMluFfYBDkLAcd
-         TjYCep5KnKP80rNKIpdZfwK1lto9zvuGYlqWrPbyBIz+9PfEkHG7jjGDF67WdSw6JZym
-         6F6hK3H0bfto+6aSIMiTPXO7uxnGxfuXfB41qGkTEEftkYsLsDOn16zdBYPK9FbnBiVP
-         AgbemA1Swu0KSSKD50Kpzjot6AaVySKMKKmDjSuVUF3lxkw2X8xBl6A6g0+QwlJ+o8J6
-         LOnmFjn1OO97p3qJM8YP76QNso0zOPCYnnk3EAzwB68QmhnWZghDaRqeG/LL4QQ91dl8
-         W1cA==
+        bh=tp14R7GSqiYR9/6km+gt56wkm7AN4wImp9Bt9uzwo8A=;
+        b=orr5VkWZ2RUz2gwv5ntyrfNI0H2QPgETyCgYMeL66rWrSs93CuRYKa39T3GzmGTAYm
+         Ex+Mq7yilvbI/tGjq+JmQG2LYqcKosCRTr3Fd4e+0Fk4FRVM/ACaLG/ktAL9hQmpcoOl
+         vYrG+CLyp1Vi6Nls4lm6wE1RdzhLel/9A72g9zdvfeo0dYeJhbLK7MCLRJ2rftALhfOT
+         h/KOJU1VbQcep/HAEoOG+ZchVUjPaoGhFi6JK0xuRqxed6yIhCDutv6PselSOCBpFDUp
+         UekBOsEe0PyUP3O66BI6JFHiF+UkHtz7ur9OawOXgKuNj7f3G4rrHH+DWTeJjLfas5bz
+         03TA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=9DLKSeIndgPjjCOxHQScvibLO8kHejdBM84u4yhRKdw=;
-        b=GalQvyTFJkMAG0Bi2M0EbY66KLWPaTg/6clsPn/NeD6Pxsm2kheB5JkozPUtrhvqqn
-         FE+9LOMb/NadRAK25GvXw0TaQ2N1fOhgrXRJKyFhnSFrusEeXiX2Eyek5NdUvew6kQHL
-         HPy1uxN48lDnB6KgDdKZd6QTvdf9T9voa/9/Hvye3RFjAU0H7psEVAMEonYHjAHCmm5y
-         tXr5loRFzzYFtqN73apkb+nXNSciuhABOalW0QsVNUy8p41ZuGn4PMu9gh01+pqC0Ian
-         U5dEV6DQRNJwBvJF7Jpw8sBPonxkkt4E/1l1XTnAJjOob5a36wUv/7IZ/31xM/xpMIQU
-         287g==
-X-Gm-Message-State: AOAM533rS+7f2Vgo3RnyIKg+a7PfoClFe4HIELG7Mjlhqt1k+sCmBiL0
-        c0huBd4Yq0BVSwYgoedoE8GHhuB9LD6pyWUqQfE=
-X-Google-Smtp-Source: ABdhPJwvpIDYA/WqYlyPJTUhlOBXSVWk8jyw6JrS/Xc9bguueysDQYyaQEjMk1rn+UMrYsIPvpeZdb/J/nzALyEFghA=
-X-Received: by 2002:a05:6402:12c5:: with SMTP id k5mr10006635edx.296.1640447742716;
- Sat, 25 Dec 2021 07:55:42 -0800 (PST)
+        bh=tp14R7GSqiYR9/6km+gt56wkm7AN4wImp9Bt9uzwo8A=;
+        b=fFTzaE+L5qeVlTD4pHV+2e/37Msr4vD1I5hDqdGvmRsQOYuqzP0Ldb/iOpDmYQZpOM
+         YmKIi2oL+DjXi79eT/68QkJh+Itbza5WfOMDKaLoXbJakxtXSzv+BSF3a4CN1R+cQyAh
+         E1T0TfgW0vom5yKM18U0As7Y9QiBayNtu9X3XJtDvcAELUce9Cbyviuxex4ZQff1P0PM
+         L8hPPDMSpZ5fsuq/wRQs/IbBDhWUrWBcZK+kjXlINKLmdLKkS19u90G6lqtQEWKvzdFV
+         zUCwp1NrklkWa28KLzph1LFYaumyegQoAUjSZRSRUu2zKY8N+dR+Mbyb9hMrf5kaeM59
+         5lJQ==
+X-Gm-Message-State: AOAM5339LzzwjtuFFnSy7f/JlpxQl4e9zIBR3aV6EBddZTinwr/duabr
+        G7anDTfIz4N62HkvjTkefbSXsJs3A8suGKWzbYx21C8lqLBsJw==
+X-Google-Smtp-Source: ABdhPJzLELowdgw2LAqP2+ZLzXCIwhbHFPm0W89lpc2u8NuEknXTdv50O0phcI6Q9cloPRJuZPYsHEgMlmbZwKiTbWo=
+X-Received: by 2002:a17:906:3ed0:: with SMTP id d16mr8369159ejj.636.1640450268909;
+ Sat, 25 Dec 2021 08:37:48 -0800 (PST)
 MIME-Version: 1.0
-References: <20211224194649.22328-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAHp75Vd+84qyTzPc=Tkhz2cxkVv9Y+ME64XO6btXq=RmtWUxZw@mail.gmail.com>
-In-Reply-To: <CAHp75Vd+84qyTzPc=Tkhz2cxkVv9Y+ME64XO6btXq=RmtWUxZw@mail.gmail.com>
+References: <20211117020346.4088302-1-swboyd@chromium.org> <20211203044718.b6nqn5rcbkrnpchp@vireshk-i7>
+In-Reply-To: <20211203044718.b6nqn5rcbkrnpchp@vireshk-i7>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 25 Dec 2021 17:55:06 +0200
-Message-ID: <CAHp75VcubOLjXGCyh95zcDGNryAorO_WcgqeK0Vq81DsXSHW7Q@mail.gmail.com>
-Subject: Re: [PATCH v2] thermal: rcar_thermal: Use platform_get_irq_optional()
- to get the interrupt
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Date:   Sat, 25 Dec 2021 18:37:12 +0200
+Message-ID: <CAHp75VdkxbJP7T-qaS=NKAUb7dXJdKeGRneQw+A1XN5AGtajeA@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: qcom-hw: Use optional irq API
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Stephen Boyd <swboyd@chromium.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Dec 25, 2021 at 1:41 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-> On Friday, December 24, 2021, Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-
-...
-
->> +               int irq;
->> +
->> +               irq = platform_get_irq_optional(pdev, i);
->> +               if (irq == -ENXIO)
->> +                       break;
->> +               if (irq < 0) {
->> +                       ret = irq;
->> +                       goto error_unregister;
->> +               }
+On Mon, Dec 6, 2021 at 5:26 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
->
-> In all your patches which introduce optional IRQ please change the logic to the opposite:
->
->   if (irq > 0)
->     ...we got one...
->   if (irq == -EPROBE_DEFER)
->     ...return it, if it is ever possible...
->
-> With this you adding me a work.
+> On 16-11-21, 18:03, Stephen Boyd wrote:
+> > Use platform_get_irq_optional() to avoid a noisy error message when the
+> > irq isn't specified. The irq is definitely optional given that we only
+> > care about errors that are -EPROBE_DEFER here.
 
-I noticed that in some patches you actually do the right things, so,
-please do it in the same way where you use _optiomal() variant, i.e.
+> > +     data->throttle_irq = platform_get_irq_optional(pdev, index);
+> > +     if (data->throttle_irq == -ENXIO)
+> > +             return 0;
+> > +     if (data->throttle_irq < 0)
+> > +             return data->throttle_irq;
 
+This adds more work for the future.
+The best approach is
+
+ret = platform_get_irq_optional(...);
 if (ret < 0 && ret != -ENXIO)
   return ret;
 if (ret > 0)
   ...we got it...
+
+It will allow the future API fix of platform_get_irq_optional() to be
+really optional.
 
 -- 
 With Best Regards,
