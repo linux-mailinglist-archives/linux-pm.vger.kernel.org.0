@@ -2,127 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC7E547F42A
-	for <lists+linux-pm@lfdr.de>; Sat, 25 Dec 2021 18:53:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C5CB47F5B6
+	for <lists+linux-pm@lfdr.de>; Sun, 26 Dec 2021 08:51:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbhLYRxm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 25 Dec 2021 12:53:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37906 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbhLYRxm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 25 Dec 2021 12:53:42 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C25C061401;
-        Sat, 25 Dec 2021 09:53:41 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id l5so10139580edj.13;
-        Sat, 25 Dec 2021 09:53:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bvBcn3go1F0UEyng6sygvztSeY/tE15qrvLo8Sthp8E=;
-        b=jm5No03DzpQHKfB3xjgoBgb52aAfH/3xSxsf+RLSzXaDBiitmSsy/PMor5903XxSx2
-         D6MzQdIBx+3gFsOA0x+OMUmfR5TtuhvPLaJOqMerG4cRDWiCYEco+nfm2AJo7QeBRnaN
-         R7G3rHmBx+t2vod7yIls23tKHAeEOBQwEd5IRr2heyBCq9zF2QYnSmRXCb6vfjuP96lu
-         rVYJy6cP7HpshLMsPYEkVHIuv0pV/fx6McEjNFi3bDRirYtNw572P9/bC1wQmrzjAEe3
-         162X1LJRmVvk6nr1larRoervN0ZUJCRBHrVFnsuvylf2+gQZqVPz5VYky7WBX3s/DfWv
-         tHcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bvBcn3go1F0UEyng6sygvztSeY/tE15qrvLo8Sthp8E=;
-        b=nAyZcDPyFbqVy/kTxGGpA0R8oz149rHHURO7KRa7O+UqH2Kh2obKaEk2kXfqcA2gjL
-         UmDFumd3ds46pJUjs0/PtkC5AX6NmSSqqe3LuiraBRtOgk8cdkBpM5N7xwR08zC++p6a
-         ic/gBfiOhl+nBsUQwl7LyYYnQf3HF/CIr8jQ1SZHtLa+UGTnTzCcZa8DF4rSwKa2LvJ9
-         qN6jboBJGd17zLZbzWIdq9ZnciaGzGPgOBomV5H8Wd5EiSDD92fxDPiypEJ0evqIAsM5
-         t9cNymfqitHhjF1xHG0PQdHAEbn5qy0M/M5vLJ3aVeXkgIjZQ3ErHoF3YqzaAre9kE/C
-         DqAw==
-X-Gm-Message-State: AOAM5320Cr7JewvZmmfOokbHLmnQmaGk2GXVch+UFa40A3KFJa46YKpB
-        qML0HCLGveWP3sELyd21JD/MMB2Kw/92MzV/WGM=
-X-Google-Smtp-Source: ABdhPJwf4DKDgBNSmgD5A7KJ3JAODmu7a9nqSr92jT1HXJ33P85sZgHGahAW42Hz1Z0RxuStNOYhe93YX+kxb1LB1XQ=
-X-Received: by 2002:a05:6402:12c5:: with SMTP id k5mr10300335edx.296.1640454820084;
- Sat, 25 Dec 2021 09:53:40 -0800 (PST)
+        id S230320AbhLZHvK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 26 Dec 2021 02:51:10 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:30111 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229785AbhLZHvK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 26 Dec 2021 02:51:10 -0500
+Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JMCZd4qj1z1DKDk;
+        Sun, 26 Dec 2021 15:47:53 +0800 (CST)
+Received: from dggpeml500006.china.huawei.com (7.185.36.76) by
+ dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Sun, 26 Dec 2021 15:51:07 +0800
+Received: from huawei.com (10.175.100.227) by dggpeml500006.china.huawei.com
+ (7.185.36.76) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Sun, 26 Dec
+ 2021 15:51:01 +0800
+From:   Tang Yizhou <tangyizhou@huawei.com>
+To:     <viresh.kumar@linaro.org>, <rafael.j.wysocki@intel.com>,
+        <rafael@kernel.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <zhengbin13@huawei.com>,
+        Tang Yizhou <tangyizhou@huawei.com>
+Subject: [PATCH] Documentation: power: Update outdated contents in opp.rst
+Date:   Sun, 26 Dec 2021 16:18:39 +0800
+Message-ID: <20211226081839.13948-1-tangyizhou@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20211218144136.6663-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <5f8e2432-1214-3435-fb62-2f407ced0472@linaro.org> <CAMuHMdXgRzM4+OjR0or0aTk-ogPcAYajaVALsLF6E=MxEzeRQg@mail.gmail.com>
- <bdec1a89-ad1b-1e16-a248-029f7f02ae80@linaro.org> <CAMuHMdWjUG57trhkOevb0Pju1fFptXZwM+BKKvgnG0+vAM64gA@mail.gmail.com>
-In-Reply-To: <CAMuHMdWjUG57trhkOevb0Pju1fFptXZwM+BKKvgnG0+vAM64gA@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 25 Dec 2021 19:53:04 +0200
-Message-ID: <CAHp75VdgC=605KMonG_86rzZxSFdurXtWCpuWr-1DtgvxEXfDw@mail.gmail.com>
-Subject: Re: [PATCH] thermal: rcar_thermal: Use platform_get_irq_optional() to
- get the interrupt
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.175.100.227]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500006.china.huawei.com (7.185.36.76)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 8:08 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> On Mon, Dec 20, 2021 at 3:19 PM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
-> > On 20/12/2021 14:48, Geert Uytterhoeven wrote:
-> > > On Mon, Dec 20, 2021 at 1:29 PM Daniel Lezcano
-> > > <daniel.lezcano@linaro.org> wrote:
-> > >> On 18/12/2021 15:41, Lad Prabhakar wrote:
+Three problems have been revised:
+1. CONFIG_PM_OPP no longer depends on CONFIG_PM.
+2. opp_find_freq_{ceil, floor} is renamed as dev_pm_opp_find_freq_{ceil,
+   floor}.
+3. Make it clear that the 'opp' struct is actually dev_pm_opp.
 
+Signed-off-by: Tang Yizhou <tangyizhou@huawei.com>
+---
+ Documentation/power/opp.rst | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-> > >>> +             irq = platform_get_irq_optional(pdev, i);
-> > >>> +             if (irq <= 0 && irq != -ENXIO) {
-> > >>> +                     ret = irq ? irq : -ENXIO;
-> > >>> +                     goto error_unregister;
-> > >>> +             }
-> > >>> +             if (irq == -ENXIO)
-> > >>>                       continue;
-> > >>
-> > >> Why not invert the conditions?
-> > >>
-> > >>                 if (irq == -ENXIO)
-> > >>                         continue;
-> > >
-> > > And this can be break.
-> > >
-> > >>
-> > >>                 if (irq <= 0) {
-> > >>                         ret = irq ? irq : -ENXIO;
-> > >
-> > > irq == 0 cannot happen.
-
-Even if it's so, it adds a burden on my shoulders in the future.
-
-> > >>                         goto out_unregister;
-> > >>                 }
-
-> I think so, as I don't see your point, neither ;-)
->
-> I meant (a) there is no need to continue the loop when there are no
-> more interrupts present, and (b) irq == 0 cannot happen, so the cod
-> can be simplified to:
->
->     if (irq == -ENXIO)
->             break;
-
-This should be a better check to include 0 as no IRQ case. It will
-allow the platform_get_irq_optional() API to be aligned with other
-_optional() APIs.
-
->     if (irq < 0) {
->             ret = irq;
->             goto out_unregister;
->     }
-
+diff --git a/Documentation/power/opp.rst b/Documentation/power/opp.rst
+index e3cc4f349ea8..a7c03c470980 100644
+--- a/Documentation/power/opp.rst
++++ b/Documentation/power/opp.rst
+@@ -48,9 +48,9 @@ We can represent these as three OPPs as the following {Hz, uV} tuples:
+ OPP library provides a set of helper functions to organize and query the OPP
+ information. The library is located in drivers/opp/ directory and the header
+ is located in include/linux/pm_opp.h. OPP library can be enabled by enabling
+-CONFIG_PM_OPP from power management menuconfig menu. OPP library depends on
+-CONFIG_PM as certain SoCs such as Texas Instrument's OMAP framework allows to
+-optionally boot at a certain OPP without needing cpufreq.
++CONFIG_PM_OPP from power management menuconfig menu. Certain SoCs such as Texas
++Instrument's OMAP framework allows to optionally boot at a certain OPP without
++needing cpufreq.
+ 
+ Typical usage of the OPP library is as follows::
+ 
+@@ -75,8 +75,8 @@ operations until that OPP could be re-enabled if possible.
+ 
+ OPP library facilitates this concept in its implementation. The following
+ operational functions operate only on available opps:
+-opp_find_freq_{ceil, floor}, dev_pm_opp_get_voltage, dev_pm_opp_get_freq,
+-dev_pm_opp_get_opp_count
++dev_pm_opp_find_freq_{ceil, floor}, dev_pm_opp_get_voltage, dev_pm_opp_get_freq,
++dev_pm_opp_get_opp_count.
+ 
+ dev_pm_opp_find_freq_exact is meant to be used to find the opp pointer
+ which can then be used for dev_pm_opp_enable/disable functions to make an
+@@ -103,7 +103,7 @@ dev_pm_opp_add
+ 	The OPP is defined using the frequency and voltage. Once added, the OPP
+ 	is assumed to be available and control of its availability can be done
+ 	with the dev_pm_opp_enable/disable functions. OPP library
+-	internally stores and manages this information in the opp struct.
++	internally stores and manages this information in the dev_pm_opp struct.
+ 	This function may be used by SoC framework to define a optimal list
+ 	as per the demands of SoC usage environment.
+ 
+@@ -247,7 +247,7 @@ dev_pm_opp_disable
+ 5. OPP Data Retrieval Functions
+ ===============================
+ Since OPP library abstracts away the OPP information, a set of functions to pull
+-information from the OPP structure is necessary. Once an OPP pointer is
++information from the dev_pm_opp structure is necessary. Once an OPP pointer is
+ retrieved using the search functions, the following functions can be used by SoC
+ framework to retrieve the information represented inside the OPP layer.
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.17.1
+
