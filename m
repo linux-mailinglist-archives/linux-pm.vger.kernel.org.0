@@ -2,50 +2,41 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55FB547F626
-	for <lists+linux-pm@lfdr.de>; Sun, 26 Dec 2021 10:41:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F25A547F862
+	for <lists+linux-pm@lfdr.de>; Sun, 26 Dec 2021 18:22:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233165AbhLZJly (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 26 Dec 2021 04:41:54 -0500
-Received: from slot0.jllresort.com ([62.197.136.5]:53104 "EHLO
-        slot0.jllresort.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233043AbhLZJly (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 26 Dec 2021 04:41:54 -0500
-X-Greylist: delayed 716 seconds by postgrey-1.27 at vger.kernel.org; Sun, 26 Dec 2021 04:41:54 EST
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=jllresort.com;
- h=Reply-To:From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding; i=ele.mon@jllresort.com;
- bh=0EoIsWrD7mIgSI/EE7hkGwQ0EkE=;
- b=u37uFBlSpIFnmgvrmqOabgFUsxVkJcBmeBGMkPXhuhcyf4DKNULjXwY4JxuN0qALUiqwAhJQp/MS
-   rWybq7qe0mArdC56fExn+zoUEwCqUliZ6TiQGbPEXmR1EqnOLIaQvVL6D2dhAuA5nmsR713IS90M
-   T8HEIlqW5X4s+Ge+Vldhj7PeCZEB9so2rUhmFTcyw8k+dwoifOSpvLN4kdGa8T8MkAlgtVNwyOxm
-   KWIjX9eB2/GosY0xVQTtZRHUNSLYuMDq1sS5PhzEfcnNtXX3bPrxHzsIinyYrmmiK3FwuNpJexpT
-   aRTPTSsVfkUiJmwK3zS+yebmNUEeK/Xs24SXEA==
-DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=jllresort.com;
- b=MaSxB3l5U27R3v5nI1BFDHb6T8FK0ifKu8To+2467sz7LBf+IoQJPQVKG38/RaT9v6jv+Hl4JhsZ
-   OVl0xKzed16SoplNTjSH43hFAxd9vW/0VjjSRFU7SXvf55DQyxCMIE3DBD+v7YzEBrBHdNQq2/9c
-   j4MrzDljxQZ2/QfoVLBHjBozfGSiN0tfN8xs08Md6/x8X3R2VPKJQeFCD+HJr6qCgSV2KP/EySJe
-   +/uWIPqlEYmVHNQHj8+IUKgJ8Pt9e7mjSTxulaSZy444ToCubkqSYChDrt0XiIAKiZAqzO6sV8/y
-   oxvfsVqFSTj3nsJ4slYX7Y0ezsLWalRQxE13Ow==;
-Reply-To: mustafa.ayvaz@ayvazburosu.com
-From:   ele.mon@jllresort.com
+        id S230510AbhLZRWn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 26 Dec 2021 12:22:43 -0500
+Received: from vip179.hosting.reg.ru ([37.140.192.26]:50177 "EHLO
+        vip179.hosting.reg.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230484AbhLZRWn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 26 Dec 2021 12:22:43 -0500
+X-Greylist: delayed 6634 seconds by postgrey-1.27 at vger.kernel.org; Sun, 26 Dec 2021 12:22:43 EST
+Received: from u0081836 by vip179.hosting.reg.ru with local (Exim 4.94.2)
+        (envelope-from <u0081836@vip179.hosting.reg.ru>)
+        id 1n1VVI-0002O3-2w
+        for linux-pm@vger.kernel.org; Sun, 26 Dec 2021 18:32:08 +0300
 To:     linux-pm@vger.kernel.org
-Subject: Happy Weekend:
-Date:   26 Dec 2021 10:29:27 +0100
-Message-ID: <20211226102855.4E8BBA06FB90D7EA@jllresort.com>
+Subject: =?UTF-8?B?0JHQu9Cw0LPQvtGC0LLQvtGA0LjRgtC10LvRjNC90YvQuSDRhNC+0L3QtCA=?=  =?UTF-8?B?0L/QvtC80L7RidC4INC90LXQtNC+0L3QvtGI0LXQvdC90YvQvCDQtNC10YI=?=  =?UTF-8?B?0Y/QvCDCq9Cf0YDQsNCy0L4g0L3QsCDRh9GD0LTQvsK7?=
+Date:   Sun, 26 Dec 2021 15:32:08 +0000
+From:   =?UTF-8?B?0JHQu9Cw0LPQvtGC0LLQvtGA0LjRgtC10LvRjNC90YvQuSDRhNC+0L3QtCA=?=
+         =?UTF-8?B?0L/QvtC80L7RidC4INC90LXQtNC+0L3QvtGI0LXQvdC90YvQvCDQtNC10YI=?=
+         =?UTF-8?B?0Y/QvCDCq9Cf0YDQsNCy0L4g0L3QsCDRh9GD0LTQvsK7?= 
+        <wordpress@pravonachudo.ru>
+Message-ID: <Qyz4e3G0137piuCULAg1RCR354Hd4tP0kOhXp4IvZcQ@pravonachudo.ru>
+X-Mailer: PHPMailer 6.5.0 (https://github.com/PHPMailer/PHPMailer)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Greetings to you linux-pm,
+От: ❤️ You have unread messages from Phyllis (2)! Click Here: https://bit.ly/32sW8BP?ejvy ❤️ <linux-pm@vger.kernel.org>
 
-I was wondering if you got my previous email? I have been trying=20
-to reach you by email linux-pm@vger.kernel.org, kindly get back=20
-to me swiftly, it is very important and urgent.
+Спасибо! 
+Вы успешно подписались на рассылку Благотворительного фонда «Право на чудо»
 
-Thanks
-Mustafa Ayvaz
-Email: mustafa.ayvaz@ayvazburosu.com
+-- 
+Это сообщение отправлено с сайта Благотворительный фонд помощи недоношенным детям «Право на чудо» (https://pravonachudo.ru)
+
