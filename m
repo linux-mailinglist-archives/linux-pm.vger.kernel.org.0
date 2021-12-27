@@ -2,46 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82D4A4800CE
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Dec 2021 16:51:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40F36480136
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Dec 2021 16:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239653AbhL0PvH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Dec 2021 10:51:07 -0500
-Received: from mail-qv1-f47.google.com ([209.85.219.47]:44622 "EHLO
-        mail-qv1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238809AbhL0Prl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Dec 2021 10:47:41 -0500
-Received: by mail-qv1-f47.google.com with SMTP id kd9so14025427qvb.11;
-        Mon, 27 Dec 2021 07:47:40 -0800 (PST)
+        id S239526AbhL0Pzo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Dec 2021 10:55:44 -0500
+Received: from mail-qk1-f171.google.com ([209.85.222.171]:37602 "EHLO
+        mail-qk1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239809AbhL0PxI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Dec 2021 10:53:08 -0500
+Received: by mail-qk1-f171.google.com with SMTP id t66so3283205qkb.4;
+        Mon, 27 Dec 2021 07:53:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=bUWEP8j8McKJKL6aAva3y2o4pzUd6CPp6n4sGa/ihoE=;
-        b=Raa9XNMeRWq7P7+aPCkJ507cMIUPGZ4dFJ0z7WGPf3pq6jK1Utm073orBgfJM3Z67b
-         UosYpDjr0p1QBd5X4fzuekm/nJnQzWv3LQK8tO6LiGfXQaGR1fCbNW2HKAv0n/5gOIH8
-         nuejKk/22Fi9Aog+Ec56fyuM62OK0FAOMQmTX8cSrEeRqnoLe8qjgKF5mgJP0Pam7Lqg
-         Wu4fDOo/LhXARfkC//Aj3npLZOlRkJkoc3XdfPCoISqnN14YiMo2PeGbZmcFR72aTXOu
-         Z0YHQ7Ub/BE40k84wbgd8Cc0zn2FBmPUgI9mMUgkBdHtRFud7s6Y3WuuOTf05AUE1Qjl
-         ymLA==
-X-Gm-Message-State: AOAM533xoKh3JqPC0FVZtRV9fNtxNNBlQvKt1dP7XHkU4QuiaVm6j2qh
-        XtZNR6yQUbaTId387WVLBjt391fiKEx0Cov5lis=
-X-Google-Smtp-Source: ABdhPJzqa1f581bitu9IVaU5JkVD7hVKy0yE1mMS4Gm3R1cit0B53dB9m96MbfJznlwF4d8ioCP2VmO0Im3Nsx4wqLI=
-X-Received: by 2002:a05:6214:1c06:: with SMTP id u6mr15558528qvc.35.1640620060437;
- Mon, 27 Dec 2021 07:47:40 -0800 (PST)
+        bh=kFKpJ6n3LoVE/fmz9n2YS1AqKNWObFYFkYe9I6ztYm8=;
+        b=UHr/hbAMU2WJ7jwHgqewe7DhEjRKT5Xun9KouJXFjFIjp1jhi96NJ3BfxZB6iw+vFd
+         OoG9A2so7IPM0dUnfFzo2Ue0JIAIVn8uJiqnp8d9wos9/rRcuk4uQK6yhNuCLGU8J7Fz
+         TjcWdmSuA0w6O+jLs3nM3ohQkQjBhj5SDgE0vmfA3pmwFZ+LOqH00UiQdgGQXHlwADEg
+         iTjWRduqzMX5vU3BJgW+b+VKzwz4nlEQFt7ljuhkJKQnV628u2c+46s6WtQ3KBbqC3oC
+         dMr1GDN3Qod4HRyYIJ74XqH0nrAVzwcaNbkBS/wJFygrtTGhZKun8rRFKm7EjO+7KAnV
+         swxg==
+X-Gm-Message-State: AOAM531rWpuukUFvLs7nHK4/UaEIeuphNiZGcWXHjDNVPA+KPHpQiImv
+        wEVA0EMxo511nfNgFBSG6gqUzqml1Vmoq2yXWKETKv2P
+X-Google-Smtp-Source: ABdhPJzH5+5YaWCdYqXzpxbwlEUwnWFSavWOurnfrdLoz1d0PynSuRGYUYaUiH8A019SPVWejlJ17fq4vMPcDllLXzA=
+X-Received: by 2002:a05:620a:40d1:: with SMTP id g17mr12693132qko.621.1640620387203;
+ Mon, 27 Dec 2021 07:53:07 -0800 (PST)
 MIME-Version: 1.0
-References: <d393e7d8-b192-ff15-65f1-35f11e1a06bc@linaro.org>
-In-Reply-To: <d393e7d8-b192-ff15-65f1-35f11e1a06bc@linaro.org>
+References: <ffbefd9a-5dff-5c3d-8a24-2d42b3aa42ca@linaro.org>
+In-Reply-To: <ffbefd9a-5dff-5c3d-8a24-2d42b3aa42ca@linaro.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 Dec 2021 16:47:22 +0100
-Message-ID: <CAJZ5v0g86TxN1vp4aWexFHqVzWM6ZGzABvufrusOeAcM5ur+_g@mail.gmail.com>
-Subject: Re: [GIT PULL] thermal for v5.17
+Date:   Mon, 27 Dec 2021 16:52:49 +0100
+Message-ID: <CAJZ5v0isp2Gyj0t3bDLP329fqOEPpj22DsG7WWnEv3Rht7_qcg@mail.gmail.com>
+Subject: Re: [GIT PULL] dtpm for v5.17
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Paul Gerber <Paul.Gerber@tq-group.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux PM mailing list <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
@@ -49,68 +45,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Dec 23, 2021 at 4:54 PM Daniel Lezcano
+On Thu, Dec 23, 2021 at 5:02 PM Daniel Lezcano
 <daniel.lezcano@linaro.org> wrote:
 >
 >
 > Hi Rafael,
 >
+> please consider pulling this little changes for DTPM
 >
-> The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+> Thanks
 >
->   Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+>   -- Daniel
+>
+> The following changes since commit a7904a538933c525096ca2ccde1e60d0ee62c08e:
+>
+>   Linux 5.16-rc6 (2021-12-19 14:14:33 -0800)
 >
 > are available in the Git repository at:
 >
->   https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
-> tags/thermal-v5.17-rc1
+>   https://git.linaro.org/people/daniel.lezcano/linux.git tags/dtpm-v5.17
 >
-> for you to fetch changes up to 8ee1c0f6526ce942b7595951c7bb0165010051c2:
+> for you to fetch changes up to c1af85e442278fe120974358cf71c41bc48e0580:
 >
->   thermal/drivers/rz2gl: Add error check for reset_control_deassert()
-> (2021-12-09 15:58:09 +0100)
+>   powercap/drivers/dtpm: Reduce trace verbosity (2021-12-23 16:57:36 +0100)
 >
 > ----------------------------------------------------------------
-> - Fix PM issue on the iMX driver when suspend/resume is happening by
->   implementing PM runtime support (Oleksij Rempel)
->
-> - Add 'const' annotation to the thermal_cooling_ops in the Intel
->   powerclamp driver (Rikard Falkeborn)
->
-> - Add TSU driver and bindings for the RZ/G2L platform (Biju Das)
->
-> - Fix the missing ADC bit set on iMX8MP to enable the sensor (Paul
->   Gerber)
->
-> - Fix missing check when calling reset_control_deassert() (Biju Das)
+> - Cleanup and reduce trace verbosity (Daniel Lezcano)
 >
 > ----------------------------------------------------------------
-> Biju Das (3):
->       dt-bindings: thermal: Document Renesas RZ/G2L TSU
->       thermal/drivers: Add TSU driver for RZ/G2L
->       thermal/drivers/rz2gl: Add error check for reset_control_deassert()
+> Daniel Lezcano (2):
+>       powercap/drivers/dtpm: Remove unused function definition
+>       powercap/drivers/dtpm: Reduce trace verbosity
 >
-> Oleksij Rempel (1):
->       thermal/drivers/imx: Implement runtime PM support
->
-> Paul Gerber (1):
->       thermal/drivers/imx8mm: Enable ADC when enabling monitor
->
-> Rikard Falkeborn (1):
->       thermal/drivers/intel_powerclamp: Constify static
-> thermal_cooling_device_ops
->
->  .../devicetree/bindings/thermal/rzg2l-thermal.yaml |  76 +++++++
->  drivers/thermal/Kconfig                            |   9 +
->  drivers/thermal/Makefile                           |   1 +
->  drivers/thermal/imx8mm_thermal.c                   |   3 +
->  drivers/thermal/imx_thermal.c                      | 145 +++++++-----
->  drivers/thermal/intel/intel_powerclamp.c           |   2 +-
->  drivers/thermal/rzg2l_thermal.c                    | 242
-> +++++++++++++++++++++
->  7 files changed, 423 insertions(+), 55 deletions(-)
->  create mode 100644
-> Documentation/devicetree/bindings/thermal/rzg2l-thermal.yaml
->  create mode 100644 drivers/thermal/rzg2l_thermal.c
+>  drivers/powercap/dtpm.c | 6 +++---
+>  include/linux/dtpm.h    | 2 --
+>  2 files changed, 3 insertions(+), 5 deletions(-)
 
-Pulled and pushed out, thanks!
+Pulled, thanks!
