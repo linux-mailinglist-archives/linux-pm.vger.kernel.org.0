@@ -2,145 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3598A4801B2
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Dec 2021 17:40:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50A8C480219
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Dec 2021 17:45:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbhL0Qkl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Dec 2021 11:40:41 -0500
-Received: from mail-qt1-f180.google.com ([209.85.160.180]:34585 "EHLO
-        mail-qt1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbhL0Qkk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Dec 2021 11:40:40 -0500
-Received: by mail-qt1-f180.google.com with SMTP id o17so13955724qtk.1
-        for <linux-pm@vger.kernel.org>; Mon, 27 Dec 2021 08:40:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wiWqE8fbkJHWTbwi1WPXeHClBbg7lTTmnVrs1wsqMvE=;
-        b=Iz+pnhgCzThsxNaxLaFVjq0oEQzfbMfos9xFDkePm1fKqQRu98dSLuNJ7HHDQND+he
-         3gkDtIAoUb02H1Wr/LbmH9vEsdewpkSm8x2BOANtaWalRfd94DNbfcEZJHlE3VXjgz9N
-         VFynsxMTEfBvJIAKqeb4kqanMb6htPuFbOrV206k7F01GYRAA6G/nKHiFwaG9rhy/7Ve
-         FQwihs32dcPaomSvl9N1uA7zKLo03qCExl0Oe1vtQP2AULl6YaY0LAT/osCNjOISM/Yb
-         InOgOZcSAUo8Dt64hHatGvL3VDo2sUSP6PtOQkgy4FHvrgBA0X+NrlWYkb3ktkNCUykn
-         IcKA==
-X-Gm-Message-State: AOAM530RULuljDmoJEwUHCw4EPpfRfr/DkzKb0R5f2ZCafgDxSViqbKY
-        7sdVs0KjLWG/uu4y34iCXvrkzlwhDWt3ZcL/FaIrk+1N
-X-Google-Smtp-Source: ABdhPJz/s1pqeCwwfYRRy6/gkdDSt0UHhvHMjLFeeYeDR1d4m6MtoYXuAfADeZ2LN/L4BJ7HPkOttDnXQvugzrhqLWA=
-X-Received: by 2002:a05:622a:1113:: with SMTP id e19mr11714055qty.612.1640623239740;
- Mon, 27 Dec 2021 08:40:39 -0800 (PST)
+        id S230442AbhL0Qow (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Dec 2021 11:44:52 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:5856 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230350AbhL0QoS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Dec 2021 11:44:18 -0500
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BRGBqGl022410;
+        Mon, 27 Dec 2021 16:43:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=v3dGe2QGDD3E3vFku8Pa8VDCXFhOulGUR3qCP6owhSU=;
+ b=G8RISsiB0A1g0aa/BpWgPIwBPOsI4HkuYvP2GMVls0R6X2bVmTCqxrEq1flvzqt/k/6v
+ jU7e1S+eSNz33QYe4KO/sLnAuyzHGAZZtxYXNyYtsV1W6xH0XjUt9gvwJu3xCz1RbwO5
+ aVlF9wIsWosb8kQgzfcD2fAEZ+NbiYfkddGIqkEQDjIgGXdQy6Ov8pteWrfSeeqgCQk7
+ qia+6MBI1IeNN5AXS9SgI5UO2BdV2jweoWausbTDGvU4BTtL/2QivqCURznJZXrruxE8
+ GS3n/gGYiQ/MGHgzkuHRiWYg0J73eue06Ff5DSJ1WJHW3hWEFv9qnQjGldLWC+nRYtwU oQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3d7gsv8fj0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Dec 2021 16:43:50 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BRGhniT021750;
+        Mon, 27 Dec 2021 16:43:50 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3d7gsv8fhb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Dec 2021 16:43:49 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BRGgHIS010422;
+        Mon, 27 Dec 2021 16:43:47 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06fra.de.ibm.com with ESMTP id 3d5tjjau7r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Dec 2021 16:43:47 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BRGhi5546399824
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 27 Dec 2021 16:43:44 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8E1F6A405F;
+        Mon, 27 Dec 2021 16:43:44 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0D687A405B;
+        Mon, 27 Dec 2021 16:43:44 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 27 Dec 2021 16:43:43 +0000 (GMT)
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        John Garry <john.garry@huawei.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [RFC 21/32] power: Kconfig: add HAS_IOPORT dependencies
+Date:   Mon, 27 Dec 2021 17:43:06 +0100
+Message-Id: <20211227164317.4146918-22-schnelle@linux.ibm.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20211227164317.4146918-1-schnelle@linux.ibm.com>
+References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
 MIME-Version: 1.0
-References: <2141133765.114843316.1640622535018.JavaMail.root@zimbra40-e7.priv.proxad.net>
- <256689953.114854578.1640622738334.JavaMail.root@zimbra40-e7.priv.proxad.net>
-In-Reply-To: <256689953.114854578.1640622738334.JavaMail.root@zimbra40-e7.priv.proxad.net>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 Dec 2021 17:40:28 +0100
-Message-ID: <CAJZ5v0hC1_8z=VmBOgSU360KPj6N7YfDQBevsvyMNkdffyta6Q@mail.gmail.com>
-Subject: Re: Regression report on laptop suspend
-To:     casteyde.christian@free.fr
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 8CYSt9YHIivEn0Y5OnkwflGqubJ7MCQC
+X-Proofpoint-ORIG-GUID: GE2cugr94VI9zNbRd3hi3sXXigkl0fnc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-27_08,2021-12-24_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ clxscore=1011 priorityscore=1501 phishscore=0 lowpriorityscore=0
+ bulkscore=0 mlxscore=0 mlxlogscore=999 impostorscore=0 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112270080
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-CC Daniel, Thomas and dri-devel.
+In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+not being declared. We thus need to add HAS_IOPORT as dependency for
+those drivers using them.
 
-On Mon, Dec 27, 2021 at 5:32 PM <casteyde.christian@free.fr> wrote:
->
-> Hello
->
-> I've noticed my laptop totally freeze when going to hibernation.
-> The git bisect log is appended below.
-> Please note however that even the previous good commit was "good" (ie : laptop managed to suspend and resume), the system was unstable and froze few minutes later.
+Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+---
+ drivers/power/reset/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-So the breakage need not be related to the first bad commit.
+diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+index 4b563db3ab3e..96b91eaca0cd 100644
+--- a/drivers/power/reset/Kconfig
++++ b/drivers/power/reset/Kconfig
+@@ -151,6 +151,7 @@ config POWER_RESET_OXNAS
+ config POWER_RESET_PIIX4_POWEROFF
+ 	tristate "Intel PIIX4 power-off driver"
+ 	depends on PCI
++	depends on HAS_IOPORT
+ 	depends on MIPS || COMPILE_TEST
+ 	help
+ 	  This driver supports powering off a system using the Intel PIIX4
+-- 
+2.32.0
 
-Have you tried to revert that commit?  If so, has it helped?
-
-> Hardware specs: AMD Ryzen 5 4600H with Vega graphics + Nvidia 1650Ti (unused)
-> Software: Slackware 14.2 / X.org.
->
-> Seems to be related to drm stuff.
-> I've issued bugzilla https://bugzilla.kernel.org/show_bug.cgi?id=215427
->
-> Thanks
->
-> git bisect start
-> # good: [8bb7eca972ad531c9b149c0a51ab43a417385813] Linux 5.15
-> git bisect good 8bb7eca972ad531c9b149c0a51ab43a417385813
-> # bad: [a7904a538933c525096ca2ccde1e60d0ee62c08e] Linux 5.16-rc6
-> git bisect bad a7904a538933c525096ca2ccde1e60d0ee62c08e
-> # bad: [43e1b12927276cde8052122a24ff796649f09d60] Merge tag 'for_linus' of git://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost
-> git bisect bad 43e1b12927276cde8052122a24ff796649f09d60
-> # good: [fc02cb2b37fe2cbf1d3334b9f0f0eab9431766c4] Merge tag 'net-next-for-5.16' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next
-> git bisect good fc02cb2b37fe2cbf1d3334b9f0f0eab9431766c4
-> # bad: [d9bd054177fbd2c4762546aec40fc3071bfe4cc0] Merge tag 'amd-drm-next-5.16-2021-10-29' of https://gitlab.freedesktop.org/agd5f/linux into drm-next
-> git bisect bad d9bd054177fbd2c4762546aec40fc3071bfe4cc0
-> # skip: [797d72ce8e0f8fa8a808cb189b5411046432cfd3] Merge tag 'drm-misc-next-2021-10-06' of git://anongit.freedesktop.org/drm/drm-misc into drm-next
-> git bisect skip 797d72ce8e0f8fa8a808cb189b5411046432cfd3
-> # skip: [bf72ca73aaa6629568cb9b0761be6efdd02a2591] drm/amd/display: [FW Promotion] Release 0.0.85
-> git bisect skip bf72ca73aaa6629568cb9b0761be6efdd02a2591
-> # good: [bc41f059a080e487c235b539f1e5cdbf605aba9f] drm/i915/dp: fix DG1 and RKL max source rates
-> git bisect good bc41f059a080e487c235b539f1e5cdbf605aba9f
-> # skip: [58144d283712c9e80e528e001af6ac5aeee71af2] drm/amdgpu: unify BO evicting method in amdgpu_ttm
-> git bisect skip 58144d283712c9e80e528e001af6ac5aeee71af2
-> # skip: [a5b51a9f8523a0b88ce7e8e8059f75a43c34c57f] drm/i915/gt: add asm/cacheflush.h for use of clflush()
-> git bisect skip a5b51a9f8523a0b88ce7e8e8059f75a43c34c57f
-> # skip: [40348baedfbc6500e7a090c7da1d55b6c94c334f] drm/amd/display: fix duplicated inclusion
-> git bisect skip 40348baedfbc6500e7a090c7da1d55b6c94c334f
-> # skip: [7547675b84bf452542463db29adb113cadb7dd6d] drm/virtio: implement context init: track {ring_idx, emit_fence_info} in virtio_gpu_fence
-> git bisect skip 7547675b84bf452542463db29adb113cadb7dd6d
-> # good: [f01ee019586220c86f238263a4fbde6e72085e11] drm/amd/display: Add DP 2.0 SST DC Support
-> git bisect good f01ee019586220c86f238263a4fbde6e72085e11
-> # good: [f3ede209d44d71636890a78fa89c5b1c83340320] drm/i915/pci: rename functions to have i915_pci prefix
-> git bisect good f3ede209d44d71636890a78fa89c5b1c83340320
-> # skip: [4fb530e5caf7cb666948db65f245b350ce520436] drm/virtio: implement context init: support init ioctl
-> git bisect skip 4fb530e5caf7cb666948db65f245b350ce520436
-> # good: [c7c4dfb6fe704ae3cce1a8f438db75b1a0a9061f] drm/i915/display: Some code improvements and code style fixes for DRRS
-> git bisect good c7c4dfb6fe704ae3cce1a8f438db75b1a0a9061f
-> # skip: [7a28bee067d524c1b8770aa72a82263eb9fc53f0] drm/amd/display: Disable dpp root clock when not being used
-> git bisect skip 7a28bee067d524c1b8770aa72a82263eb9fc53f0
-> # good: [5b116c17e6babc6de2e26714bc66228c74038b71] drm/i915/guc: Drop pin count check trick between sched_disable and re-pin
-> git bisect good 5b116c17e6babc6de2e26714bc66228c74038b71
-> # skip: [9878844094703fbae1c3b301c9bb71253a30efe7] drm/amdgpu: drive all vega asics from the IP discovery table
-> git bisect skip 9878844094703fbae1c3b301c9bb71253a30efe7
-> # skip: [7194dc998dfffca096c30b3cd39625158608992d] drm/i915/tc: Fix TypeC port init/resume time sanitization
-> git bisect skip 7194dc998dfffca096c30b3cd39625158608992d
-> # skip: [5c3720be7d46581181782f5cf9585b532feed947] drm/amdgpu: get VCN and SDMA instances from IP discovery table
-> git bisect skip 5c3720be7d46581181782f5cf9585b532feed947
-> # skip: [a53f2c035e9832d20775d2c66c71495f2dc27699] drm/panfrost: Calculate lock region size correctly
-> git bisect skip a53f2c035e9832d20775d2c66c71495f2dc27699
-> # skip: [d04287d062a4198ec0bf0112db03618f65d7428a] drm/amdgpu: During s0ix don't wait to signal GFXOFF
-> git bisect skip d04287d062a4198ec0bf0112db03618f65d7428a
-> # skip: [9ced12182d0d8401d821e9602e56e276459900fc] drm/i915: Catch yet another unconditioal clflush
-> git bisect skip 9ced12182d0d8401d821e9602e56e276459900fc
-> # skip: [dac3c405b9aedee301d0634b4e275b81f0d74363] drm/amd/display: [FW Promotion] Release 0.0.87
-> git bisect skip dac3c405b9aedee301d0634b4e275b81f0d74363
-> # skip: [9f620f1dde3e3e984837163d7930dc4b2abffe82] drm/i915: Call intel_ddi_init_dp_buf_reg() earlier
-> git bisect skip 9f620f1dde3e3e984837163d7930dc4b2abffe82
-> # skip: [178fbb6d552f294037291bf62d41b31d30186f31] drm/amd/display: Implement DPIA training loop
-> git bisect skip 178fbb6d552f294037291bf62d41b31d30186f31
-> # good: [253a55918ce128f15a3be66db5e2072665143554] drm/amd/display: Fix issue with dynamic bpp change for DCN3x
-> git bisect good 253a55918ce128f15a3be66db5e2072665143554
-> # skip: [50638f7dbd0b3969b47d2772c4db02ed92b6c47b] drm/amdgpu/pm/amdgpu_smu: convert more IP version checking
-> git bisect skip 50638f7dbd0b3969b47d2772c4db02ed92b6c47b
-> # bad: [3605eacc8ae055d699f7fa3adb9123c4c36ecd82] drm/panfrost: Make use of the helper function devm_platform_ioremap_resource()
-> git bisect bad 3605eacc8ae055d699f7fa3adb9123c4c36ecd82
-> # bad: [47ddb72f789333a8ccb792b0fd6d6fe8a7906694] drm: zte: remove obsolete DRM Support for ZTE SoCs
-> git bisect bad 47ddb72f789333a8ccb792b0fd6d6fe8a7906694
-> # bad: [072e70d52372c44df90b44fb4cd949a709bb5bef] drm: panel-orientation-quirks: Add quirk for the Chuwi Hi10 Pro
-> git bisect bad 072e70d52372c44df90b44fb4cd949a709bb5bef
-> # bad: [82ade934dde45b9d9008954b297f7727233e37af] drm/arm: malidp: Use fourcc_mod_is_vendor() helper
-> git bisect bad 82ade934dde45b9d9008954b297f7727233e37af
-> # bad: [8b4e02c70fca482c5b947d8ba92b45093b4390e7] drm/panel: Add DT bindings for Samsung S6D27A1 display panel
-> git bisect bad 8b4e02c70fca482c5b947d8ba92b45093b4390e7
-> # bad: [804b6e5ee613b019b942ba6be52cccecd9d33655] drm/shmem-helpers: Allocate wc pages on x86
-> git bisect bad 804b6e5ee613b019b942ba6be52cccecd9d33655
-> # good: [8b93d1d7dbd578fd296e70008b29c0f62d09d7cb] drm/shmem-helper: Switch to vmf_insert_pfn
-> git bisect good 8b93d1d7dbd578fd296e70008b29c0f62d09d7cb
-> # first bad commit: [804b6e5ee613b019b942ba6be52cccecd9d33655] drm/shmem-helpers: Allocate wc pages on x86
