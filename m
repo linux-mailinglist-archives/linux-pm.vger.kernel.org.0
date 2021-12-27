@@ -2,118 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50A8C480219
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Dec 2021 17:45:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDE854804C6
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Dec 2021 22:16:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230442AbhL0Qow (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Dec 2021 11:44:52 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:5856 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230350AbhL0QoS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Dec 2021 11:44:18 -0500
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BRGBqGl022410;
-        Mon, 27 Dec 2021 16:43:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=v3dGe2QGDD3E3vFku8Pa8VDCXFhOulGUR3qCP6owhSU=;
- b=G8RISsiB0A1g0aa/BpWgPIwBPOsI4HkuYvP2GMVls0R6X2bVmTCqxrEq1flvzqt/k/6v
- jU7e1S+eSNz33QYe4KO/sLnAuyzHGAZZtxYXNyYtsV1W6xH0XjUt9gvwJu3xCz1RbwO5
- aVlF9wIsWosb8kQgzfcD2fAEZ+NbiYfkddGIqkEQDjIgGXdQy6Ov8pteWrfSeeqgCQk7
- qia+6MBI1IeNN5AXS9SgI5UO2BdV2jweoWausbTDGvU4BTtL/2QivqCURznJZXrruxE8
- GS3n/gGYiQ/MGHgzkuHRiWYg0J73eue06Ff5DSJ1WJHW3hWEFv9qnQjGldLWC+nRYtwU oQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d7gsv8fj0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Dec 2021 16:43:50 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BRGhniT021750;
-        Mon, 27 Dec 2021 16:43:50 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d7gsv8fhb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Dec 2021 16:43:49 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BRGgHIS010422;
-        Mon, 27 Dec 2021 16:43:47 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06fra.de.ibm.com with ESMTP id 3d5tjjau7r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Dec 2021 16:43:47 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BRGhi5546399824
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Dec 2021 16:43:44 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8E1F6A405F;
-        Mon, 27 Dec 2021 16:43:44 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0D687A405B;
-        Mon, 27 Dec 2021 16:43:44 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 27 Dec 2021 16:43:43 +0000 (GMT)
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        John Garry <john.garry@huawei.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [RFC 21/32] power: Kconfig: add HAS_IOPORT dependencies
-Date:   Mon, 27 Dec 2021 17:43:06 +0100
-Message-Id: <20211227164317.4146918-22-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211227164317.4146918-1-schnelle@linux.ibm.com>
-References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
+        id S233374AbhL0VQE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Dec 2021 16:16:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57258 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233362AbhL0VQD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Dec 2021 16:16:03 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFF2C061401
+        for <linux-pm@vger.kernel.org>; Mon, 27 Dec 2021 13:16:03 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id h1so8938561pls.11
+        for <linux-pm@vger.kernel.org>; Mon, 27 Dec 2021 13:16:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=Frzr3aXePT9v9LqKT5/n4+BGp+CAACBvbGIvPyliUNg=;
+        b=W3zx13dK/kldmD3cnvDk9PrZmOMT3g/FbVSOXpWytnUSKmOsvflytlWT+5ZjDazNca
+         Eg7joZc57n5pfzFgJRCOCv0nULMftwzvuUQaksFCxXEyZL+JBWoyeVtPma0QJHYjrS2t
+         Lh6xc4TqNpM0N2lRQYpLZTD9RcJgJtIjKLRcqp0CA8dO/Ngb/toAXuNZBAcTKyLqhFiU
+         wiWSDOdTg+d5zfGekHfoqcYQrgNSouWc7g8rGR2UDFaSqXLhxtFqr/b77iOpHIsT62as
+         yRCUjtc2Du2SiG7AW+Ihwdwm4sCd6Fh6c+MTewPSL/AETZ368g0RJsa+bkdHi5voPU0K
+         3UEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=Frzr3aXePT9v9LqKT5/n4+BGp+CAACBvbGIvPyliUNg=;
+        b=yiagVvwLzFLMtLZr0EEPe/Cms54sSSYHSdf6WMJCCXjDJAfoW20p0vJisnzDjY18DV
+         HqFbUm0YGnxcQDwI7hEAD+H/w1t8pGKeIsEkTN4kCVbcCUPMA0lGL4mIPFfVx2noxB6c
+         c6UMCnRMDBn0S9kxKjSMssB3/S1RweU6iR4TxFSF/FTLcaSlhFYGGjyubEKjZL8b2ZFk
+         57U207JbUB4VpRY86ZvzwksjV/CRNbPvFTcWRwt4m04lskB9akVewutdFgdc0VBUzKj+
+         HIGvaUB/Y4e3h6es9CPtXl/RhFErNwxTaVno/pWNG4Q7JaD9cJo6vj6T/DOQ1jy2PBZq
+         ASNw==
+X-Gm-Message-State: AOAM533evYFJBXXzhYOKLJTYK7KOyNtHVIACFupP+vRkVGEstuPf4avL
+        cljG6O27fcGhKNOlb3YE6UzJBdwxJ7N7lIb9
+X-Google-Smtp-Source: ABdhPJyB43NWli+2j2syDBomoZ9s3TZm0/I2PDGrgsSjAoKlme8/9/koFmTJkPGRo07AFMltzt9Uig==
+X-Received: by 2002:a17:90b:384f:: with SMTP id nl15mr12049448pjb.91.1640639763243;
+        Mon, 27 Dec 2021 13:16:03 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id n13sm9394273pfa.197.2021.12.27.13.16.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Dec 2021 13:16:03 -0800 (PST)
+Message-ID: <61ca2d13.1c69fb81.28849.b3be@mx.google.com>
+Date:   Mon, 27 Dec 2021 13:16:03 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 8CYSt9YHIivEn0Y5OnkwflGqubJ7MCQC
-X-Proofpoint-ORIG-GUID: GE2cugr94VI9zNbRd3hi3sXXigkl0fnc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-27_08,2021-12-24_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
- clxscore=1011 priorityscore=1501 phishscore=0 lowpriorityscore=0
- bulkscore=0 mlxscore=0 mlxlogscore=999 impostorscore=0 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112270080
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.16-rc7-85-g16448069b96c
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 1 warning (v5.16-rc7-85-g16448069b96c)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-not being declared. We thus need to add HAS_IOPORT as dependency for
-those drivers using them.
+pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.16-rc7-85-g16=
+448069b96c)
 
-Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+16-rc7-85-g16448069b96c/
+
+Tree: pm
+Branch: testing
+Git Describe: v5.16-rc7-85-g16448069b96c
+Git Commit: 16448069b96c511c9ac06af8b9975b8f2b1f37ca
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+x86_64:
+
+
+Warnings summary:
+
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
 ---
- drivers/power/reset/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-index 4b563db3ab3e..96b91eaca0cd 100644
---- a/drivers/power/reset/Kconfig
-+++ b/drivers/power/reset/Kconfig
-@@ -151,6 +151,7 @@ config POWER_RESET_OXNAS
- config POWER_RESET_PIIX4_POWEROFF
- 	tristate "Intel PIIX4 power-off driver"
- 	depends on PCI
-+	depends on HAS_IOPORT
- 	depends on MIPS || COMPILE_TEST
- 	help
- 	  This driver supports powering off a system using the Intel PIIX4
--- 
-2.32.0
-
+For more info write to <info@kernelci.org>
