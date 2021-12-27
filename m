@@ -2,83 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F36480136
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Dec 2021 16:55:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D27D480148
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Dec 2021 16:57:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239526AbhL0Pzo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Dec 2021 10:55:44 -0500
-Received: from mail-qk1-f171.google.com ([209.85.222.171]:37602 "EHLO
-        mail-qk1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239809AbhL0PxI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Dec 2021 10:53:08 -0500
-Received: by mail-qk1-f171.google.com with SMTP id t66so3283205qkb.4;
-        Mon, 27 Dec 2021 07:53:07 -0800 (PST)
+        id S240826AbhL0P5j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Dec 2021 10:57:39 -0500
+Received: from mail-qk1-f176.google.com ([209.85.222.176]:33575 "EHLO
+        mail-qk1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240105AbhL0P5D (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Dec 2021 10:57:03 -0500
+Received: by mail-qk1-f176.google.com with SMTP id de30so14812339qkb.0;
+        Mon, 27 Dec 2021 07:57:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=kFKpJ6n3LoVE/fmz9n2YS1AqKNWObFYFkYe9I6ztYm8=;
-        b=UHr/hbAMU2WJ7jwHgqewe7DhEjRKT5Xun9KouJXFjFIjp1jhi96NJ3BfxZB6iw+vFd
-         OoG9A2so7IPM0dUnfFzo2Ue0JIAIVn8uJiqnp8d9wos9/rRcuk4uQK6yhNuCLGU8J7Fz
-         TjcWdmSuA0w6O+jLs3nM3ohQkQjBhj5SDgE0vmfA3pmwFZ+LOqH00UiQdgGQXHlwADEg
-         iTjWRduqzMX5vU3BJgW+b+VKzwz4nlEQFt7ljuhkJKQnV628u2c+46s6WtQ3KBbqC3oC
-         dMr1GDN3Qod4HRyYIJ74XqH0nrAVzwcaNbkBS/wJFygrtTGhZKun8rRFKm7EjO+7KAnV
-         swxg==
-X-Gm-Message-State: AOAM531rWpuukUFvLs7nHK4/UaEIeuphNiZGcWXHjDNVPA+KPHpQiImv
-        wEVA0EMxo511nfNgFBSG6gqUzqml1Vmoq2yXWKETKv2P
-X-Google-Smtp-Source: ABdhPJzH5+5YaWCdYqXzpxbwlEUwnWFSavWOurnfrdLoz1d0PynSuRGYUYaUiH8A019SPVWejlJ17fq4vMPcDllLXzA=
-X-Received: by 2002:a05:620a:40d1:: with SMTP id g17mr12693132qko.621.1640620387203;
- Mon, 27 Dec 2021 07:53:07 -0800 (PST)
+        bh=MMjwqvI3oPgoDtspnzeQqaAzAEUbhEHL+9feOV2faXI=;
+        b=CO1cRJS9OozbvaXjJw8k0q9aqu7S8HsOCLvDrMQfpZftVtlVx8P/AHcb8FhiyEQ+Ox
+         5Qce8EQPG1a31/L0d6Vmsbq5Ebm4do1Gvs7TkBp4PHqXx0bSDC2fm+Vttox2HXYz2Fz9
+         ZNit73hJ0R98PIOlBZlJH3PJzf5+nF9Xd4/O+gm3q2uEyq842gjya3tCkTDJghkyHtaW
+         c1ICrm0cEpKfBw7oZ8qDKYuCEo+gf9g+nk04irS5b4X4ajDIA3RH9qSiw/4Im6yIV3fM
+         Jk5vAjQ0MDblCqDxEJcl8W6j1qJP1WY+eCeJPdxGqM11mHpIB7ixnYTpIt8iF7m78uH2
+         I71g==
+X-Gm-Message-State: AOAM530Vi0WruoJiW/X/oGjKrFBmq//R3qN8YpXs8O1TI607sHYwbobD
+        AZD8iTqJ+Zb/1Uaq6aegBOubaYRvehKeT98w8dQ=
+X-Google-Smtp-Source: ABdhPJxUqbylvZ+oSGOC4Njq/NWVZT7SvUWo6lTrvSnVw3y6ewrloKmIJu9NgzhyU9EVzo13J/S3Xpz0hnGgOhHNJAs=
+X-Received: by 2002:a05:620a:2001:: with SMTP id c1mr12237712qka.374.1640620623008;
+ Mon, 27 Dec 2021 07:57:03 -0800 (PST)
 MIME-Version: 1.0
-References: <ffbefd9a-5dff-5c3d-8a24-2d42b3aa42ca@linaro.org>
-In-Reply-To: <ffbefd9a-5dff-5c3d-8a24-2d42b3aa42ca@linaro.org>
+References: <CGME20211224064428epcas1p40282064859748cd6735279bb7274a753@epcas1p4.samsung.com>
+ <09ff8415-0ebb-c8f2-026b-65af27f58f44@samsung.com>
+In-Reply-To: <09ff8415-0ebb-c8f2-026b-65af27f58f44@samsung.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 Dec 2021 16:52:49 +0100
-Message-ID: <CAJZ5v0isp2Gyj0t3bDLP329fqOEPpj22DsG7WWnEv3Rht7_qcg@mail.gmail.com>
-Subject: Re: [GIT PULL] dtpm for v5.17
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>
+Date:   Mon, 27 Dec 2021 16:56:44 +0100
+Message-ID: <CAJZ5v0jQ_JyEAYK73ZNvyM_rwKPvR-Mk6UG5nPe+BQki42yjaw@mail.gmail.com>
+Subject: Re: [GIT PULL] devfreq next for v5.17
+To:     Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     "Rafael J. Wysocki <rjw@rjwysocki.net>" <rjw@rjwysocki.net>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "Chanwoo Choi (chanwoo@kernel.org)" <chanwoo@kernel.org>,
+        =?UTF-8?B?7ZWo66qF7KO8?= <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Dec 23, 2021 at 5:02 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
+On Fri, Dec 24, 2021 at 7:45 AM Chanwoo Choi <cw00.choi@samsung.com> wrote:
+>
+> Dear Rafael,
+>
+> This is devfreq-next pull request for v5.17-rc1. I add detailed description of
+> this pull request on the following tag. Please pull devfreq with following updates.
+>
+> Best Regards,
+> Chanwoo Choi
 >
 >
-> Hi Rafael,
+> The following changes since commit 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1:
 >
-> please consider pulling this little changes for DTPM
->
-> Thanks
->
->   -- Daniel
->
-> The following changes since commit a7904a538933c525096ca2ccde1e60d0ee62c08e:
->
->   Linux 5.16-rc6 (2021-12-19 14:14:33 -0800)
+>   Linux 5.16-rc4 (2021-12-05 14:08:22 -0800)
 >
 > are available in the Git repository at:
 >
->   https://git.linaro.org/people/daniel.lezcano/linux.git tags/dtpm-v5.17
+>   git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/devfreq-next-for-5.17
 >
-> for you to fetch changes up to c1af85e442278fe120974358cf71c41bc48e0580:
+> for you to fetch changes up to 4667431419e93b63b4edfe7abdfc96cefcbcc051:
 >
->   powercap/drivers/dtpm: Reduce trace verbosity (2021-12-23 16:57:36 +0100)
->
-> ----------------------------------------------------------------
-> - Cleanup and reduce trace verbosity (Daniel Lezcano)
+>   PM / devfreq: Reduce log severity for informative message (2021-12-16 11:29:54 +0900)
 >
 > ----------------------------------------------------------------
-> Daniel Lezcano (2):
->       powercap/drivers/dtpm: Remove unused function definition
->       powercap/drivers/dtpm: Reduce trace verbosity
+> Update devfreq next for v5.17
 >
->  drivers/powercap/dtpm.c | 6 +++---
->  include/linux/dtpm.h    | 2 --
->  2 files changed, 3 insertions(+), 5 deletions(-)
+> Detailed description for this pull request:
+> 1. Add new DRAM controller driver for sunXi SoCs
+> - Add DRAM frequency controller devfreq driver for Allwinner sunXi SoCs
+> in order to support dynamic frequency scaling of DRAM frequency. It
+> calculates the supported frequency list from source clock in the range
+> of full speed to quarter speed instead of devicetree.
+>
+> - Add COMMON_CLK dependency to fix build error
+>
+> 2. Reduce log severity for informative message about frequency transition fail
+> ----------------------------------------------------------------
+>
+> Arnd Bergmann (1):
+>       PM / devfreq: sun8i: addd COMMON_CLK dependency
+>
+> Samuel Holland (1):
+>       PM / devfreq: Add a driver for the sun8i/sun50i MBUS
+>
+> Tzung-Bi Shih (1):
+>       PM / devfreq: Reduce log severity for informative message
+>
+>  drivers/devfreq/Kconfig          |   9 +
+>  drivers/devfreq/Makefile         |   1 +
+>  drivers/devfreq/devfreq.c        |   4 +-
+>  drivers/devfreq/sun8i-a33-mbus.c | 511 +++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 523 insertions(+), 2 deletions(-)
+>  create mode 100644 drivers/devfreq/sun8i-a33-mbus.c
 
 Pulled, thanks!
