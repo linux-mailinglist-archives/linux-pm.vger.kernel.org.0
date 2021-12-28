@@ -2,154 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C11248097E
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Dec 2021 14:19:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F03C480B65
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Dec 2021 17:39:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232373AbhL1NTT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Dec 2021 08:19:19 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:54514 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231948AbhL1NTT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Dec 2021 08:19:19 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S236132AbhL1Qjj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Dec 2021 11:39:39 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:39404
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236067AbhL1Qjh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Dec 2021 11:39:37 -0500
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com [209.85.208.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 95EF2B811F6;
-        Tue, 28 Dec 2021 13:19:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9A9CC36AE7;
-        Tue, 28 Dec 2021 13:19:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640697556;
-        bh=kO/fFn2P+NnNbeUNRt7ndHbtmklWlYmiN7ryiQUJY2g=;
-        h=From:To:Cc:Subject:Date:From;
-        b=kZuHZYOZ5gQR1jQ/9YghTls/H6baz+RTZ5zgYcyQzfIcpTE2zXANqRO45mqKBi7t1
-         Dx0b4c2yhILi41BcXi+MyfDF39Z0G4dnzthNFTayKIhYDq6I+Z72O9ZosKgnfwa+7R
-         pwFChv6/cpo79gTUFDhcIvBKKJ9yE5iPbLs7FgNY=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 513703F07F
+        for <linux-pm@vger.kernel.org>; Tue, 28 Dec 2021 16:39:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1640709575;
+        bh=HGuU3G/CmacYFKUeANclkwpOH3maXtk12cKoz5IJaT0=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=oxxN6eSWF7AXk4UAgg/175iDP8hmfpEDN1ZnkOItg3GnAAV8mg/Y7D7sOPyrjzRcC
+         6m2XhJuKSYgwRwLLWIf+JbP4BVs/31EIC9Cn1ut+1WkTN6RrtLdfnnASUGcl1omKmN
+         HDGk97b8wIj0V5RoFUY0kipcX61vKZjCnvNU5EAdxH8ErPQxZAX1dB2BZuHK74W18i
+         w3+YVLp9WgODqPwAdS3pemiG25UpeceDqBDmJl2uJ4JkhJhXVwUXaDCuw5yQFB1+FJ
+         4daaf9eTSGy0o9bZd/+fNE+sa+2quqmfuBpMXqbhFphcInc06uPdnUOeKGQr5v2Lwf
+         dfeOkC/jDeElQ==
+Received: by mail-lj1-f197.google.com with SMTP id e7-20020a05651c090700b0022d70efe931so6238572ljq.10
+        for <linux-pm@vger.kernel.org>; Tue, 28 Dec 2021 08:39:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HGuU3G/CmacYFKUeANclkwpOH3maXtk12cKoz5IJaT0=;
+        b=seO2tnP9ZPrcC3p/p5RDq5d8Y8XlAo6YyBvkkv8+fCC7I5DoZHqcdJZqMrNF/JgCG7
+         ehVKMBGVbi5OwSW5fwyn4x/b9nXVQVtdSXZZCl47rG4EXKyl57eoY0U/axs66qlkUGKb
+         EGy32zhwjk0HkOj/x3ESUopMXp9I/uw5qaVrSfhTkJhsu+ME05f6SfhvCs0s56WyO+sh
+         jr6LSV2kw9JBHMBAU0MR3bgnreQ2J24R1mz+etIdafT2wYEjRUI87Ijo0UVdly1HAXUz
+         fxoMaBDWYkeSx+oc+/EDBNLxkoep0w2B+vnysBBIiGwFe69u4vYovuWczH7y15BF4ztU
+         Rv0A==
+X-Gm-Message-State: AOAM531pC0Tcoppov7aBfM+LrcNMHy/YzMdnsZcSQDiVIHsBkwM7JG8c
+        72PnHjDbw269TFj2okMUf2NWfjwL6HeBeAIJN5+WZqVzjdIe4dEPB6wiAf4XBmQ5qfdhh4aO2Lg
+        juwlqD2BByMZNQGzkV3vwDUg0YdasaLweeUSV
+X-Received: by 2002:a2e:894b:: with SMTP id b11mr12168954ljk.22.1640709574631;
+        Tue, 28 Dec 2021 08:39:34 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz2R4OjcmDuYU5dFgZyIsJA+br3TJLYbRM0hsPoVHlotH5EqETNcXzL7aQK6WUoOnCtKUrTgQ==
+X-Received: by 2002:a2e:894b:: with SMTP id b11mr12168917ljk.22.1640709574002;
+        Tue, 28 Dec 2021 08:39:34 -0800 (PST)
+Received: from krzk-bin.lan (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id d3sm1972876lfs.204.2021.12.28.08.39.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Dec 2021 08:39:33 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
         linux-pm@vger.kernel.org
-Subject: [PATCH] cpufreq: use default_groups in kobj_type
-Date:   Tue, 28 Dec 2021 14:19:12 +0100
-Message-Id: <20211228131912.260899-1-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.34.1
+Subject: [PATCH 0/4] leds/power/regulator/mfd: dt-bindings: maxim,max77693: convert to dtschema
+Date:   Tue, 28 Dec 2021 17:39:26 +0100
+Message-Id: <20211228163930.35524-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3915; h=from:subject; bh=kO/fFn2P+NnNbeUNRt7ndHbtmklWlYmiN7ryiQUJY2g=; b=owGbwMvMwCRo6H6F97bub03G02pJDImn+S5c+rp/j5Luzh/XDk2+Pd/A6q9y1dqjr+Y/Xbns9xXl nhNKFzpiWRgEmRhkxRRZvmzjObq/4pCil6HtaZg5rEwgQxi4OAVgItPWMMyv9XwfHXbVpFOLU1WFRy +czXBp8h2gqEzs13w9obSq/oAcy5NBpcvC9rcAAA==
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There are currently 2 ways to create a set of sysfs files for a
-kobj_type, through the default_attrs field, and the default_groups
-field.  Move the cpufreq code to use default_groups field which has been
-the preferred way since aa30f47cf666 ("kobject: Add support for default
-attribute groups to kobj_type") so that we can soon get rid of the
-obsolete default_attrs field.
+Hi,
 
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: linux-pm@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/cpufreq/cpufreq.c              | 5 +++--
- drivers/cpufreq/cpufreq_conservative.c | 5 +++--
- drivers/cpufreq/cpufreq_ondemand.c     | 5 +++--
- 3 files changed, 9 insertions(+), 6 deletions(-)
+The final patch - MFD maxim,max77693 bindings conversion - depends on
+all previous. Therefore this could go via Rob's or Lee's trees.
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index e338d2f010fe..09d676d5237e 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -924,7 +924,7 @@ cpufreq_freq_attr_rw(scaling_max_freq);
- cpufreq_freq_attr_rw(scaling_governor);
- cpufreq_freq_attr_rw(scaling_setspeed);
- 
--static struct attribute *default_attrs[] = {
-+static struct attribute *cpufreq_attrs[] = {
- 	&cpuinfo_min_freq.attr,
- 	&cpuinfo_max_freq.attr,
- 	&cpuinfo_transition_latency.attr,
-@@ -938,6 +938,7 @@ static struct attribute *default_attrs[] = {
- 	&scaling_setspeed.attr,
- 	NULL
- };
-+ATTRIBUTE_GROUPS(cpufreq);
- 
- #define to_policy(k) container_of(k, struct cpufreq_policy, kobj)
- #define to_attr(a) container_of(a, struct freq_attr, attr)
-@@ -1000,7 +1001,7 @@ static const struct sysfs_ops sysfs_ops = {
- 
- static struct kobj_type ktype_cpufreq = {
- 	.sysfs_ops	= &sysfs_ops,
--	.default_attrs	= default_attrs,
-+	.default_groups	= cpufreq_groups,
- 	.release	= cpufreq_sysfs_release,
- };
- 
-diff --git a/drivers/cpufreq/cpufreq_conservative.c b/drivers/cpufreq/cpufreq_conservative.c
-index 0879ec3c170c..08515f7e515f 100644
---- a/drivers/cpufreq/cpufreq_conservative.c
-+++ b/drivers/cpufreq/cpufreq_conservative.c
-@@ -257,7 +257,7 @@ gov_attr_rw(ignore_nice_load);
- gov_attr_rw(down_threshold);
- gov_attr_rw(freq_step);
- 
--static struct attribute *cs_attributes[] = {
-+static struct attribute *cs_attrs[] = {
- 	&sampling_rate.attr,
- 	&sampling_down_factor.attr,
- 	&up_threshold.attr,
-@@ -266,6 +266,7 @@ static struct attribute *cs_attributes[] = {
- 	&freq_step.attr,
- 	NULL
- };
-+ATTRIBUTE_GROUPS(cs);
- 
- /************************** sysfs end ************************/
- 
-@@ -315,7 +316,7 @@ static void cs_start(struct cpufreq_policy *policy)
- 
- static struct dbs_governor cs_governor = {
- 	.gov = CPUFREQ_DBS_GOVERNOR_INITIALIZER("conservative"),
--	.kobj_type = { .default_attrs = cs_attributes },
-+	.kobj_type = { .default_groups = cs_groups },
- 	.gov_dbs_update = cs_dbs_update,
- 	.alloc = cs_alloc,
- 	.free = cs_free,
-diff --git a/drivers/cpufreq/cpufreq_ondemand.c b/drivers/cpufreq/cpufreq_ondemand.c
-index 3b8f924771b4..6a41ea4729b8 100644
---- a/drivers/cpufreq/cpufreq_ondemand.c
-+++ b/drivers/cpufreq/cpufreq_ondemand.c
-@@ -328,7 +328,7 @@ gov_attr_rw(sampling_down_factor);
- gov_attr_rw(ignore_nice_load);
- gov_attr_rw(powersave_bias);
- 
--static struct attribute *od_attributes[] = {
-+static struct attribute *od_attrs[] = {
- 	&sampling_rate.attr,
- 	&up_threshold.attr,
- 	&sampling_down_factor.attr,
-@@ -337,6 +337,7 @@ static struct attribute *od_attributes[] = {
- 	&io_is_busy.attr,
- 	NULL
- };
-+ATTRIBUTE_GROUPS(od);
- 
- /************************** sysfs end ************************/
- 
-@@ -401,7 +402,7 @@ static struct od_ops od_ops = {
- 
- static struct dbs_governor od_dbs_gov = {
- 	.gov = CPUFREQ_DBS_GOVERNOR_INITIALIZER("ondemand"),
--	.kobj_type = { .default_attrs = od_attributes },
-+	.kobj_type = { .default_groups = od_groups },
- 	.gov_dbs_update = od_dbs_update,
- 	.alloc = od_alloc,
- 	.free = od_free,
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (4):
+  dt-bindings: leds: maxim,max77693: convert to dtschema
+  dt-bindings: power: supply: maxim,max77693: convert to dtschema
+  regulator: dt-bindings: maxim,max77693: convert to dtschema
+  dt-bindings: mfd: maxim,max77693: convert to dtschema
+
+ .../bindings/leds/maxim,max77693.yaml         | 105 ++++++++++
+ .../devicetree/bindings/mfd/max77693.txt      | 194 ------------------
+ .../bindings/mfd/maxim,max77693.yaml          | 139 +++++++++++++
+ .../bindings/power/supply/maxim,max77693.yaml |  70 +++++++
+ .../bindings/regulator/maxim,max77693.yaml    |  49 +++++
+ MAINTAINERS                                   |   3 +-
+ 6 files changed, 365 insertions(+), 195 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/leds/maxim,max77693.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mfd/max77693.txt
+ create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max77693.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/supply/maxim,max77693.yaml
+ create mode 100644 Documentation/devicetree/bindings/regulator/maxim,max77693.yaml
+
 -- 
-2.34.1
+2.32.0
 
