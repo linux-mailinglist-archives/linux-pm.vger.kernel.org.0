@@ -2,132 +2,218 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7054448059A
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Dec 2021 02:56:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA949480701
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Dec 2021 08:37:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234491AbhL1B4s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Dec 2021 20:56:48 -0500
-Received: from mga18.intel.com ([134.134.136.126]:58929 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230367AbhL1B4s (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 27 Dec 2021 20:56:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640656608; x=1672192608;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DKwG8lWbT6mngDQUOHLQ6ktH2iz4mmzsTr40NcmYb+Y=;
-  b=PNnnzuko1SMhgGqQDRtyPtvcUDD5ahWi+pk7E8CqYUCYXn+OhnvgX3Mq
-   RbePo6ZaPGrPPleGwhOKO2ogjL6ZtTu5IduspHrVSbtXOXbwznHcwXj5w
-   +rL3pxdtjYyOoUjzZGKvXHppoL/xDR8PatC8CjeCTqPdTwiuPHLpFBjx8
-   LSh3zgBIAng+qhK6rAsRWLV4gfgE+3P8nM5na0dWlb+yyMy/19YVu5giq
-   okSDRg3apZQBlNSItxrh2q8pwT7fNeHVkq0RkQ9rElBEfHbQeh0fWAXJg
-   x4i2T0OjYoPi5ZZ70atQWHFEpL8wXTMUD5AEy2ENIAJp73R6e3nGu+xxU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="228125906"
-X-IronPort-AV: E=Sophos;i="5.88,241,1635231600"; 
-   d="scan'208";a="228125906"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 17:56:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,241,1635231600"; 
-   d="scan'208";a="468001512"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 27 Dec 2021 17:56:45 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n21jI-000761-UL; Tue, 28 Dec 2021 01:56:44 +0000
-Date:   Tue, 28 Dec 2021 09:56:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jessica Clarke <jrtc27@jrtc27.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Bob Moore <robert.moore@intel.com>
-Subject: [rafael-pm:bleeding-edge 97/119]
- drivers/acpi/acpica/exregion.c:519:17: warning: performing pointer
- subtraction with a null pointer has undefined behavior
-Message-ID: <202112280907.gTYYYuB4-lkp@intel.com>
+        id S235324AbhL1HhY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Dec 2021 02:37:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50360 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235307AbhL1HhX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Dec 2021 02:37:23 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64355C061574
+        for <linux-pm@vger.kernel.org>; Mon, 27 Dec 2021 23:37:23 -0800 (PST)
+Received: from ip4d173d4a.dynamic.kabel-deutschland.de ([77.23.61.74] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1n272v-0004lg-Nx; Tue, 28 Dec 2021 08:37:21 +0100
+Message-ID: <6d260e9b-14cf-1aa5-ff28-464e85802af3@leemhuis.info>
+Date:   Tue, 28 Dec 2021 08:37:21 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: Regression report on laptop suspend
+Content-Language: en-BS
+To:     casteyde.christian@free.fr, rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <256689953.114854578.1640622738334.JavaMail.root@zimbra40-e7.priv.proxad.net>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <256689953.114854578.1640622738334.JavaMail.root@zimbra40-e7.priv.proxad.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1640677043;907b3387;
+X-HE-SMSGID: 1n272v-0004lg-Nx
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   86e4182dd2d1465f6446863dd26da97ea069c8a2
-commit: ca25f92b72d25457653dbf2a81f322235804fb05 [97/119] ACPICA: Use original data_table_region pointer for accesses
-config: i386-randconfig-a012-20211228 (https://download.01.org/0day-ci/archive/20211228/202112280907.gTYYYuB4-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7171af744543433ac75b232eb7dfdaef7efd4d7a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=ca25f92b72d25457653dbf2a81f322235804fb05
-        git remote add rafael-pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-        git fetch --no-tags rafael-pm bleeding-edge
-        git checkout ca25f92b72d25457653dbf2a81f322235804fb05
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/acpi/acpica/
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Hi, this is your Linux kernel regression tracker speaking.
 
-All warnings (new ones prefixed by >>):
+TWIMC: seems Christian system is affected by another issue (Touchpad is
+not working anymore after suspend to RAM since kernel 5.14) that might
+interfere:
 
->> drivers/acpi/acpica/exregion.c:519:17: warning: performing pointer subtraction with a null pointer has undefined behavior [-Wnull-pointer-subtraction]
-               (address - ACPI_PTR_TO_PHYSADDR(mapping->pointer));
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/acpi/actypes.h:513:41: note: expanded from macro 'ACPI_PTR_TO_PHYSADDR'
-   #define ACPI_PTR_TO_PHYSADDR(i)         ACPI_TO_INTEGER(i)
-                                           ^~~~~~~~~~~~~~~~~~
-   include/acpi/actypes.h:510:41: note: expanded from macro 'ACPI_TO_INTEGER'
-   #define ACPI_TO_INTEGER(p)              ACPI_PTR_DIFF (p, (void *) 0)
-                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/acpi/actypes.h:505:79: note: expanded from macro 'ACPI_PTR_DIFF'
-   #define ACPI_PTR_DIFF(a, b)             ((acpi_size) (ACPI_CAST_PTR (u8, (a)) - ACPI_CAST_PTR (u8, (b))))
-                                                                                 ^ ~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+https://bugzilla.kernel.org/show_bug.cgi?id=214667
+https://lore.kernel.org/regressions/12b9a10a-626b-cafd-05d6-cf0a116aa39b@leemhuis.info/
 
+Anyway, for the rest of this mail:
 
-vim +519 drivers/acpi/acpica/exregion.c
+[TLDR: I'm adding this regression to regzbot, the Linux kernel
+regression tracking bot; most text you find below is compiled from a few
+templates paragraphs some of you might have seen already.]
 
-   486	
-   487	/*******************************************************************************
-   488	 *
-   489	 * FUNCTION:    acpi_ex_data_table_space_handler
-   490	 *
-   491	 * PARAMETERS:  function            - Read or Write operation
-   492	 *              address             - Where in the space to read or write
-   493	 *              bit_width           - Field width in bits (8, 16, or 32)
-   494	 *              value               - Pointer to in or out value
-   495	 *              handler_context     - Pointer to Handler's context
-   496	 *              region_context      - Pointer to context specific to the
-   497	 *                                    accessed region
-   498	 *
-   499	 * RETURN:      Status
-   500	 *
-   501	 * DESCRIPTION: Handler for the Data Table address space (Op Region)
-   502	 *
-   503	 ******************************************************************************/
-   504	
-   505	acpi_status
-   506	acpi_ex_data_table_space_handler(u32 function,
-   507					 acpi_physical_address address,
-   508					 u32 bit_width,
-   509					 u64 *value,
-   510					 void *handler_context, void *region_context)
-   511	{
-   512		struct acpi_data_table_space_context *mapping;
-   513		char *pointer;
-   514	
-   515		ACPI_FUNCTION_TRACE(ex_data_table_space_handler);
-   516	
-   517		mapping = (struct acpi_data_table_space_context *) region_context;
-   518		pointer = ACPI_CAST_PTR(char, mapping->pointer) +
- > 519		    (address - ACPI_PTR_TO_PHYSADDR(mapping->pointer));
+On 27.12.21 17:32, casteyde.christian@free.fr wrote:
+> Hello
+> 
+> I've noticed my laptop totally freeze when going to hibernation.
+> The git bisect log is appended below.
+> Please note however that even the previous good commit was "good" (ie : laptop managed to suspend and resume), the system was unstable and froze few minutes later.
+> 
+> Hardware specs: AMD Ryzen 5 4600H with Vega graphics + Nvidia 1650Ti (unused)
+> Software: Slackware 14.2 / X.org.
+> 
+> Seems to be related to drm stuff.
+> I've issued bugzilla https://bugzilla.kernel.org/show_bug.cgi?id=215427
+> 
+> Thanks
+> 
+> git bisect start
+> # good: [8bb7eca972ad531c9b149c0a51ab43a417385813] Linux 5.15
+> git bisect good 8bb7eca972ad531c9b149c0a51ab43a417385813
+> # bad: [a7904a538933c525096ca2ccde1e60d0ee62c08e] Linux 5.16-rc6
+> git bisect bad a7904a538933c525096ca2ccde1e60d0ee62c08e
+> # bad: [43e1b12927276cde8052122a24ff796649f09d60] Merge tag 'for_linus' of git://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost
+> git bisect bad 43e1b12927276cde8052122a24ff796649f09d60
+> # good: [fc02cb2b37fe2cbf1d3334b9f0f0eab9431766c4] Merge tag 'net-next-for-5.16' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next
+> git bisect good fc02cb2b37fe2cbf1d3334b9f0f0eab9431766c4
+> # bad: [d9bd054177fbd2c4762546aec40fc3071bfe4cc0] Merge tag 'amd-drm-next-5.16-2021-10-29' of https://gitlab.freedesktop.org/agd5f/linux into drm-next
+> git bisect bad d9bd054177fbd2c4762546aec40fc3071bfe4cc0
+> # skip: [797d72ce8e0f8fa8a808cb189b5411046432cfd3] Merge tag 'drm-misc-next-2021-10-06' of git://anongit.freedesktop.org/drm/drm-misc into drm-next
+> git bisect skip 797d72ce8e0f8fa8a808cb189b5411046432cfd3
+> # skip: [bf72ca73aaa6629568cb9b0761be6efdd02a2591] drm/amd/display: [FW Promotion] Release 0.0.85
+> git bisect skip bf72ca73aaa6629568cb9b0761be6efdd02a2591
+> # good: [bc41f059a080e487c235b539f1e5cdbf605aba9f] drm/i915/dp: fix DG1 and RKL max source rates
+> git bisect good bc41f059a080e487c235b539f1e5cdbf605aba9f
+> # skip: [58144d283712c9e80e528e001af6ac5aeee71af2] drm/amdgpu: unify BO evicting method in amdgpu_ttm
+> git bisect skip 58144d283712c9e80e528e001af6ac5aeee71af2
+> # skip: [a5b51a9f8523a0b88ce7e8e8059f75a43c34c57f] drm/i915/gt: add asm/cacheflush.h for use of clflush()
+> git bisect skip a5b51a9f8523a0b88ce7e8e8059f75a43c34c57f
+> # skip: [40348baedfbc6500e7a090c7da1d55b6c94c334f] drm/amd/display: fix duplicated inclusion
+> git bisect skip 40348baedfbc6500e7a090c7da1d55b6c94c334f
+> # skip: [7547675b84bf452542463db29adb113cadb7dd6d] drm/virtio: implement context init: track {ring_idx, emit_fence_info} in virtio_gpu_fence
+> git bisect skip 7547675b84bf452542463db29adb113cadb7dd6d
+> # good: [f01ee019586220c86f238263a4fbde6e72085e11] drm/amd/display: Add DP 2.0 SST DC Support
+> git bisect good f01ee019586220c86f238263a4fbde6e72085e11
+> # good: [f3ede209d44d71636890a78fa89c5b1c83340320] drm/i915/pci: rename functions to have i915_pci prefix
+> git bisect good f3ede209d44d71636890a78fa89c5b1c83340320
+> # skip: [4fb530e5caf7cb666948db65f245b350ce520436] drm/virtio: implement context init: support init ioctl
+> git bisect skip 4fb530e5caf7cb666948db65f245b350ce520436
+> # good: [c7c4dfb6fe704ae3cce1a8f438db75b1a0a9061f] drm/i915/display: Some code improvements and code style fixes for DRRS
+> git bisect good c7c4dfb6fe704ae3cce1a8f438db75b1a0a9061f
+> # skip: [7a28bee067d524c1b8770aa72a82263eb9fc53f0] drm/amd/display: Disable dpp root clock when not being used
+> git bisect skip 7a28bee067d524c1b8770aa72a82263eb9fc53f0
+> # good: [5b116c17e6babc6de2e26714bc66228c74038b71] drm/i915/guc: Drop pin count check trick between sched_disable and re-pin
+> git bisect good 5b116c17e6babc6de2e26714bc66228c74038b71
+> # skip: [9878844094703fbae1c3b301c9bb71253a30efe7] drm/amdgpu: drive all vega asics from the IP discovery table
+> git bisect skip 9878844094703fbae1c3b301c9bb71253a30efe7
+> # skip: [7194dc998dfffca096c30b3cd39625158608992d] drm/i915/tc: Fix TypeC port init/resume time sanitization
+> git bisect skip 7194dc998dfffca096c30b3cd39625158608992d
+> # skip: [5c3720be7d46581181782f5cf9585b532feed947] drm/amdgpu: get VCN and SDMA instances from IP discovery table
+> git bisect skip 5c3720be7d46581181782f5cf9585b532feed947
+> # skip: [a53f2c035e9832d20775d2c66c71495f2dc27699] drm/panfrost: Calculate lock region size correctly
+> git bisect skip a53f2c035e9832d20775d2c66c71495f2dc27699
+> # skip: [d04287d062a4198ec0bf0112db03618f65d7428a] drm/amdgpu: During s0ix don't wait to signal GFXOFF
+> git bisect skip d04287d062a4198ec0bf0112db03618f65d7428a
+> # skip: [9ced12182d0d8401d821e9602e56e276459900fc] drm/i915: Catch yet another unconditioal clflush
+> git bisect skip 9ced12182d0d8401d821e9602e56e276459900fc
+> # skip: [dac3c405b9aedee301d0634b4e275b81f0d74363] drm/amd/display: [FW Promotion] Release 0.0.87
+> git bisect skip dac3c405b9aedee301d0634b4e275b81f0d74363
+> # skip: [9f620f1dde3e3e984837163d7930dc4b2abffe82] drm/i915: Call intel_ddi_init_dp_buf_reg() earlier
+> git bisect skip 9f620f1dde3e3e984837163d7930dc4b2abffe82
+> # skip: [178fbb6d552f294037291bf62d41b31d30186f31] drm/amd/display: Implement DPIA training loop
+> git bisect skip 178fbb6d552f294037291bf62d41b31d30186f31
+> # good: [253a55918ce128f15a3be66db5e2072665143554] drm/amd/display: Fix issue with dynamic bpp change for DCN3x
+> git bisect good 253a55918ce128f15a3be66db5e2072665143554
+> # skip: [50638f7dbd0b3969b47d2772c4db02ed92b6c47b] drm/amdgpu/pm/amdgpu_smu: convert more IP version checking
+> git bisect skip 50638f7dbd0b3969b47d2772c4db02ed92b6c47b
+> # bad: [3605eacc8ae055d699f7fa3adb9123c4c36ecd82] drm/panfrost: Make use of the helper function devm_platform_ioremap_resource()
+> git bisect bad 3605eacc8ae055d699f7fa3adb9123c4c36ecd82
+> # bad: [47ddb72f789333a8ccb792b0fd6d6fe8a7906694] drm: zte: remove obsolete DRM Support for ZTE SoCs
+> git bisect bad 47ddb72f789333a8ccb792b0fd6d6fe8a7906694
+> # bad: [072e70d52372c44df90b44fb4cd949a709bb5bef] drm: panel-orientation-quirks: Add quirk for the Chuwi Hi10 Pro
+> git bisect bad 072e70d52372c44df90b44fb4cd949a709bb5bef
+> # bad: [82ade934dde45b9d9008954b297f7727233e37af] drm/arm: malidp: Use fourcc_mod_is_vendor() helper
+> git bisect bad 82ade934dde45b9d9008954b297f7727233e37af
+> # bad: [8b4e02c70fca482c5b947d8ba92b45093b4390e7] drm/panel: Add DT bindings for Samsung S6D27A1 display panel
+> git bisect bad 8b4e02c70fca482c5b947d8ba92b45093b4390e7
+> # bad: [804b6e5ee613b019b942ba6be52cccecd9d33655] drm/shmem-helpers: Allocate wc pages on x86
+> git bisect bad 804b6e5ee613b019b942ba6be52cccecd9d33655
+> # good: [8b93d1d7dbd578fd296e70008b29c0f62d09d7cb] drm/shmem-helper: Switch to vmf_insert_pfn
+> git bisect good 8b93d1d7dbd578fd296e70008b29c0f62d09d7cb
+> # first bad commit: [804b6e5ee613b019b942ba6be52cccecd9d33655] drm/shmem-helpers: Allocate wc pages on x86
+
+Thanks for the report.
+
+Adding the regression mailing list to the list of recipients, as it
+should be in the loop for all regressions, as explained here:
+https://www.kernel.org/doc/html/latest/admin-guide/reporting-issues.html
+
+To be sure this issue doesn't fall through the cracks unnoticed, I'm
+adding it to regzbot, my Linux kernel regression tracking bot:
+
+#regzbot ^introduced 804b6e5ee613b019b942ba6be52cccecd9d33655
+#regzbot title pm: laptop totally freezes when going to hibernation
+#regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215427
+#regzbot ignore-activity
+
+Reminder: when fixing the issue, please add a 'Link:' tag with the URL
+to the report (the parent of this mail) using the kernel.org redirector,
+as explained in 'Documentation/process/submitting-patches.rst'. Regzbot
+then will automatically mark the regression as resolved once the fix
+lands in the appropriate tree. For more details about regzbot see footer.
+
+Sending this to everyone that got the initial report, to make all aware
+of the tracking. I also hope that messages like this motivate people to
+directly get at least the regression mailing list and ideally even
+regzbot involved when dealing with regressions, as messages like this
+wouldn't be needed then.
+
+Don't worry, I'll send further messages wrt to this regression just to
+the lists (with a tag in the subject so people can filter them away), as
+long as they are intended just for regzbot. With a bit of luck no such
+messages will be needed anyway.
+
+Ciao, Thorsten (wearing his 'Linux kernel regression tracker' hat).
+
+P.S.: As a Linux kernel regression tracker I'm getting a lot of reports
+on my table. I can only look briefly into most of them. Unfortunately
+therefore I sometimes will get things wrong or miss something important.
+I hope that's not the case here; if you think it is, don't hesitate to
+tell me about it in a public reply. That's in everyone's interest, as
+what I wrote above might be misleading to everyone reading this; any
+suggestion I gave thus might sent someone reading this down the wrong
+rabbit hole, which none of us wants.
+
+BTW, I have no personal interest in this issue, which is tracked using
+regzbot, my Linux kernel regression tracking bot
+(https://linux-regtracking.leemhuis.info/regzbot/). I'm only posting
+this mail to get things rolling again and hence don't need to be CC on
+all further activities wrt to this regression.
 
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Additional information about regzbot:
+
+If you want to know more about regzbot, check out its web-interface, the
+getting start guide, and/or the references documentation:
+
+https://linux-regtracking.leemhuis.info/regzbot/
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
+
+The last two documents will explain how you can interact with regzbot
+yourself if your want to.
+
+Hint for reporters: when reporting a regression it's in your interest to
+tell #regzbot about it in the report, as that will ensure the regression
+gets on the radar of regzbot and the regression tracker. That's in your
+interest, as they will make sure the report won't fall through the
+cracks unnoticed.
+
+Hint for developers: you normally don't need to care about regzbot once
+it's involved. Fix the issue as you normally would, just remember to
+include a 'Link:' tag to the report in the commit message, as explained
+in Documentation/process/submitting-patches.rst
+That aspect was recently was made more explicit in commit 1f57bd42b77c:
+https://git.kernel.org/linus/1f57bd42b77c
