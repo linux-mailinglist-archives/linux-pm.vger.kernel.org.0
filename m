@@ -2,187 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C83E548087B
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Dec 2021 11:40:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C11248097E
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Dec 2021 14:19:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231789AbhL1KkC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Dec 2021 05:40:02 -0500
-Received: from mga14.intel.com ([192.55.52.115]:21436 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230112AbhL1KkC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 28 Dec 2021 05:40:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640688002; x=1672224002;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=tiRyDOyL5kkRwfgvPqclCj2b1zkGRkJfUXvHFTZE8Ek=;
-  b=PODAb+JdrsUEpy6fn1hfMSs26SRcbuLG66/8jNEqtMaECeXe0KqRrRw+
-   haYEI/eWpI/bV1wHSPe7RIUgRIGgcK/gFkMcSRBmY2lXlWams3l6fv5BM
-   twyj70+HHShbeI0dAttc1sdiE9xU5FA+L13zFVRX03yl3sZ+vjNebJRzG
-   lNFfY6PRLYPvWRYU5Tzv2Tg0HgTKs9hVun8BaMVTWBZV0JHrftDMmO7wh
-   ZCcvi/nPm8NNGvHHzwEMKCuHZJh0D/6IXSuXkq/Zi5ra3zsisvBiN6yR7
-   s4oOPT9uuL/8IufZzoPdrdWGQV42OylrjHHotYvqrN6f5ZyBAFp4/PGlt
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="241563998"
-X-IronPort-AV: E=Sophos;i="5.88,242,1635231600"; 
-   d="scan'208";a="241563998"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 02:40:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,242,1635231600"; 
-   d="scan'208";a="469995176"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 28 Dec 2021 02:40:00 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n29tf-0007Uq-HW; Tue, 28 Dec 2021 10:39:59 +0000
-Date:   Tue, 28 Dec 2021 18:39:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS WITH WARNING
- 86e4182dd2d1465f6446863dd26da97ea069c8a2
-Message-ID: <61cae944.Twod0fyG7mT0FqUV%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S232373AbhL1NTT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Dec 2021 08:19:19 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:54514 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231948AbhL1NTT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Dec 2021 08:19:19 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 95EF2B811F6;
+        Tue, 28 Dec 2021 13:19:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9A9CC36AE7;
+        Tue, 28 Dec 2021 13:19:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640697556;
+        bh=kO/fFn2P+NnNbeUNRt7ndHbtmklWlYmiN7ryiQUJY2g=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kZuHZYOZ5gQR1jQ/9YghTls/H6baz+RTZ5zgYcyQzfIcpTE2zXANqRO45mqKBi7t1
+         Dx0b4c2yhILi41BcXi+MyfDF39Z0G4dnzthNFTayKIhYDq6I+Z72O9ZosKgnfwa+7R
+         pwFChv6/cpo79gTUFDhcIvBKKJ9yE5iPbLs7FgNY=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org
+Subject: [PATCH] cpufreq: use default_groups in kobj_type
+Date:   Tue, 28 Dec 2021 14:19:12 +0100
+Message-Id: <20211228131912.260899-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3915; h=from:subject; bh=kO/fFn2P+NnNbeUNRt7ndHbtmklWlYmiN7ryiQUJY2g=; b=owGbwMvMwCRo6H6F97bub03G02pJDImn+S5c+rp/j5Luzh/XDk2+Pd/A6q9y1dqjr+Y/Xbns9xXl nhNKFzpiWRgEmRhkxRRZvmzjObq/4pCil6HtaZg5rEwgQxi4OAVgItPWMMyv9XwfHXbVpFOLU1WFRy +czXBp8h2gqEzs13w9obSq/oAcy5NBpcvC9rcAAA==
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 86e4182dd2d1465f6446863dd26da97ea069c8a2  Merge branch 'acpi-pfrut' into bleeding-edge
+There are currently 2 ways to create a set of sysfs files for a
+kobj_type, through the default_attrs field, and the default_groups
+field.  Move the cpufreq code to use default_groups field which has been
+the preferred way since aa30f47cf666 ("kobject: Add support for default
+attribute groups to kobj_type") so that we can soon get rid of the
+obsolete default_attrs field.
 
-Warning reports:
-
-https://lore.kernel.org/llvm/202112280907.gTYYYuB4-lkp@intel.com
-
-Warning in current branch:
-
-drivers/acpi/acpica/exregion.c:519:17: warning: performing pointer subtraction with a null pointer has undefined behavior [-Wnull-pointer-subtraction]
-
-Warning ids grouped by kconfigs:
-
-clang_recent_errors
-|-- i386-randconfig-a012-20211228
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-`-- x86_64-randconfig-a015-20211228
-    `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-
-elapsed time: 721m
-
-configs tested: 102
-configs skipped: 3
-
-gcc tested configs:
-arm                                 defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm64                               defconfig
-arm64                            allyesconfig
-i386                 randconfig-c001-20211228
-powerpc                 mpc8540_ads_defconfig
-mips                        jmr3927_defconfig
-powerpc                   microwatt_defconfig
-sh                            shmin_defconfig
-powerpc                      obs600_defconfig
-powerpc                    amigaone_defconfig
-sparc                               defconfig
-arm                           spitz_defconfig
-sh                         ap325rxa_defconfig
-powerpc                  mpc866_ads_defconfig
-s390                             alldefconfig
-sh                              ul2_defconfig
-ia64                      gensparse_defconfig
-sh                            migor_defconfig
-powerpc                           allnoconfig
-powerpc                       eiger_defconfig
-powerpc                     tqm8548_defconfig
-arm                          ixp4xx_defconfig
-riscv                          rv32_defconfig
-sh                          urquell_defconfig
-arm                  randconfig-c002-20211228
-ia64                                defconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                             allnoconfig
-nios2                               defconfig
-arc                              allyesconfig
-csky                                defconfig
-alpha                               defconfig
-nds32                               defconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-parisc                              defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-s390                             allyesconfig
-i386                             allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-sparc                            allyesconfig
-mips                             allmodconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-powerpc                          allyesconfig
-x86_64               randconfig-a001-20211228
-x86_64               randconfig-a003-20211228
-x86_64               randconfig-a002-20211228
-x86_64               randconfig-a005-20211228
-x86_64               randconfig-a004-20211228
-x86_64               randconfig-a006-20211228
-i386                 randconfig-a002-20211228
-i386                 randconfig-a003-20211228
-i386                 randconfig-a001-20211228
-i386                 randconfig-a005-20211228
-i386                 randconfig-a006-20211228
-i386                 randconfig-a004-20211228
-arc                  randconfig-r043-20211228
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-x86_64                    rhel-8.3-kselftests
-
-clang tested configs:
-x86_64               randconfig-a014-20211228
-x86_64               randconfig-a013-20211228
-x86_64               randconfig-a012-20211228
-x86_64               randconfig-a011-20211228
-x86_64               randconfig-a016-20211228
-x86_64               randconfig-a015-20211228
-i386                 randconfig-a012-20211228
-i386                 randconfig-a011-20211228
-i386                 randconfig-a013-20211228
-i386                 randconfig-a014-20211228
-i386                 randconfig-a016-20211228
-i386                 randconfig-a015-20211228
-hexagon              randconfig-r041-20211228
-riscv                randconfig-r042-20211228
-s390                 randconfig-r044-20211228
-hexagon              randconfig-r045-20211228
-
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: linux-pm@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/cpufreq/cpufreq.c              | 5 +++--
+ drivers/cpufreq/cpufreq_conservative.c | 5 +++--
+ drivers/cpufreq/cpufreq_ondemand.c     | 5 +++--
+ 3 files changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index e338d2f010fe..09d676d5237e 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -924,7 +924,7 @@ cpufreq_freq_attr_rw(scaling_max_freq);
+ cpufreq_freq_attr_rw(scaling_governor);
+ cpufreq_freq_attr_rw(scaling_setspeed);
+ 
+-static struct attribute *default_attrs[] = {
++static struct attribute *cpufreq_attrs[] = {
+ 	&cpuinfo_min_freq.attr,
+ 	&cpuinfo_max_freq.attr,
+ 	&cpuinfo_transition_latency.attr,
+@@ -938,6 +938,7 @@ static struct attribute *default_attrs[] = {
+ 	&scaling_setspeed.attr,
+ 	NULL
+ };
++ATTRIBUTE_GROUPS(cpufreq);
+ 
+ #define to_policy(k) container_of(k, struct cpufreq_policy, kobj)
+ #define to_attr(a) container_of(a, struct freq_attr, attr)
+@@ -1000,7 +1001,7 @@ static const struct sysfs_ops sysfs_ops = {
+ 
+ static struct kobj_type ktype_cpufreq = {
+ 	.sysfs_ops	= &sysfs_ops,
+-	.default_attrs	= default_attrs,
++	.default_groups	= cpufreq_groups,
+ 	.release	= cpufreq_sysfs_release,
+ };
+ 
+diff --git a/drivers/cpufreq/cpufreq_conservative.c b/drivers/cpufreq/cpufreq_conservative.c
+index 0879ec3c170c..08515f7e515f 100644
+--- a/drivers/cpufreq/cpufreq_conservative.c
++++ b/drivers/cpufreq/cpufreq_conservative.c
+@@ -257,7 +257,7 @@ gov_attr_rw(ignore_nice_load);
+ gov_attr_rw(down_threshold);
+ gov_attr_rw(freq_step);
+ 
+-static struct attribute *cs_attributes[] = {
++static struct attribute *cs_attrs[] = {
+ 	&sampling_rate.attr,
+ 	&sampling_down_factor.attr,
+ 	&up_threshold.attr,
+@@ -266,6 +266,7 @@ static struct attribute *cs_attributes[] = {
+ 	&freq_step.attr,
+ 	NULL
+ };
++ATTRIBUTE_GROUPS(cs);
+ 
+ /************************** sysfs end ************************/
+ 
+@@ -315,7 +316,7 @@ static void cs_start(struct cpufreq_policy *policy)
+ 
+ static struct dbs_governor cs_governor = {
+ 	.gov = CPUFREQ_DBS_GOVERNOR_INITIALIZER("conservative"),
+-	.kobj_type = { .default_attrs = cs_attributes },
++	.kobj_type = { .default_groups = cs_groups },
+ 	.gov_dbs_update = cs_dbs_update,
+ 	.alloc = cs_alloc,
+ 	.free = cs_free,
+diff --git a/drivers/cpufreq/cpufreq_ondemand.c b/drivers/cpufreq/cpufreq_ondemand.c
+index 3b8f924771b4..6a41ea4729b8 100644
+--- a/drivers/cpufreq/cpufreq_ondemand.c
++++ b/drivers/cpufreq/cpufreq_ondemand.c
+@@ -328,7 +328,7 @@ gov_attr_rw(sampling_down_factor);
+ gov_attr_rw(ignore_nice_load);
+ gov_attr_rw(powersave_bias);
+ 
+-static struct attribute *od_attributes[] = {
++static struct attribute *od_attrs[] = {
+ 	&sampling_rate.attr,
+ 	&up_threshold.attr,
+ 	&sampling_down_factor.attr,
+@@ -337,6 +337,7 @@ static struct attribute *od_attributes[] = {
+ 	&io_is_busy.attr,
+ 	NULL
+ };
++ATTRIBUTE_GROUPS(od);
+ 
+ /************************** sysfs end ************************/
+ 
+@@ -401,7 +402,7 @@ static struct od_ops od_ops = {
+ 
+ static struct dbs_governor od_dbs_gov = {
+ 	.gov = CPUFREQ_DBS_GOVERNOR_INITIALIZER("ondemand"),
+-	.kobj_type = { .default_attrs = od_attributes },
++	.kobj_type = { .default_groups = od_groups },
+ 	.gov_dbs_update = od_dbs_update,
+ 	.alloc = od_alloc,
+ 	.free = od_free,
+-- 
+2.34.1
+
