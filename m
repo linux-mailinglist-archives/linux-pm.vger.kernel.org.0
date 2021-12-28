@@ -2,163 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E7D8480C65
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Dec 2021 19:14:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B73C480C69
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Dec 2021 19:16:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236943AbhL1SOd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Dec 2021 13:14:33 -0500
-Received: from mail-qk1-f177.google.com ([209.85.222.177]:39611 "EHLO
-        mail-qk1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233411AbhL1SOd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Dec 2021 13:14:33 -0500
-Received: by mail-qk1-f177.google.com with SMTP id 69so17849577qkd.6;
-        Tue, 28 Dec 2021 10:14:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EJ8aYnmOQRS5NqukNYSjs8nzRFdW5gCywT1c2u9vx3s=;
-        b=IzAcjFH6UE1bIfFAGsqJmkVDCYuivWqmymmXx6kgbr5Y76M06mpdRp5RR2pH20wLJi
-         nLL4kac2hFSHIClvNn/s3MzLCkoFjra9SlKvblVZVAyYHBUZsf9bqZdmJLW+hf5xuP9l
-         Eqmblp651dDipU7zuWhw6IYloDQu1GoEZsZNHuYxZnZOjk9GqTk/c3aARpTEpMA8ufM1
-         2qmIVYf9opwyiqyTafZEpcLHlbB1BBGalst8u1edYP2gJxLs4o4s9TlQe35WUFtzpIYu
-         3qy6LDdn0ifOgku6orQoeS93GSY+YWWZtE02aJSBvRtoMHYqOOFh/+kLajTqNGTv3+4D
-         Uf5g==
-X-Gm-Message-State: AOAM533jlB4hlvRQYnBZPfJTT4bG9Pdv5MkhPfOfeb3WZFLVKBQv4BKJ
-        v9f7dat1mJlFWRrI9LWXSvD1YJUQmx6SZEwlRTTBesTE
-X-Google-Smtp-Source: ABdhPJzJgODOGj4mxAKBm0Dvn2T/fQlJABCF8qKzEAqAlsIEDnZ8Pm2+Bdajm698UVXnHFSwdcL4bQzdgdaLr3ZphYg=
-X-Received: by 2002:a37:b702:: with SMTP id h2mr16333360qkf.135.1640715272805;
- Tue, 28 Dec 2021 10:14:32 -0800 (PST)
-MIME-Version: 1.0
-References: <20211228131912.260899-1-gregkh@linuxfoundation.org>
-In-Reply-To: <20211228131912.260899-1-gregkh@linuxfoundation.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 28 Dec 2021 19:14:22 +0100
-Message-ID: <CAJZ5v0gj4-ZOGPLzksvzB9Ed85P0qz=tC47Ntxnuc5G_C9GGVQ@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: use default_groups in kobj_type
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
+        id S233907AbhL1SQs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Dec 2021 13:16:48 -0500
+Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:5093 "EHLO
+        mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233411AbhL1SQr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Dec 2021 13:16:47 -0500
+IronPort-Data: =?us-ascii?q?A9a23=3Acj7Gb6vwEd1xHaExr0iN7Qd8zufnVEBfMUV32f8?=
+ =?us-ascii?q?akzHdYEJGY0x3zmQWUT2COPuOMGLyKIxyaN/k/B4CucTSyNNgTwdpq3hgHilAw?=
+ =?us-ascii?q?SbnLYTAfx2oZ0t+DeWaERk5t51GAjX4wXFdokb0/n9BCZC86yksvU20buCkUre?=
+ =?us-ascii?q?dYHohHVUMpBoJ0nqPpcZo2+aEvvDpW2thifuqyyHuEAfNNwxcagr42IrfwP9bh?=
+ =?us-ascii?q?8kejRtD1rAIiV+ni3eF/5UdJMp3yahctBIUSKEMdgKxb76rIL1UYgrkExkR5tO?=
+ =?us-ascii?q?Nyt4Xc2UKS7LIPAWI4pZUc/j/xEYS4HVoi+Bia6F0hUR/0l1lm/hz1dFMvNq0Q?=
+ =?us-ascii?q?BggOqnkmeIHUhAeHTsW0ahuoeaZeSji6qR/yGWDKRMA2c5GFkg4NIAc0uV6G2d?=
+ =?us-ascii?q?D8bofMj9lRhuenfixwr+hR/tEnMU4IdTzeoUSphlI1ivYC/c4SIuFW6zM6cVFw?=
+ =?us-ascii?q?j48j+hKHPDDd4wYbyZiaFLLZBgnElMaDpgWn+qygHT7NTpCpzq9u6st7nPTig9?=
+ =?us-ascii?q?s1bH3GN7UfNWQQoNShEnwjmbH+XnpRwkfHMKQxCDD8X+2gOLL2yThV+o6ELy+6?=
+ =?us-ascii?q?+4vg1CJwGEXIAMZWEH9ovSjjEO6HdVFJCQ8/ysooq8a7kGnTtDhGRa/pRasphM?=
+ =?us-ascii?q?AVsBCO+w85huExqfd70CeHGdsZjxcct1gsMIyQT0CzFKFn9r1QzdotdW9V3Ob/?=
+ =?us-ascii?q?bqSsXW9JCkJMWgeTSsFSwIf5J/kuo5bs/5lZr6PC4bs0YazQGuphW7a6nhjwa8?=
+ =?us-ascii?q?ek4gQ2b/9+13b6w9Ab6PhFmYdjjg7lEr8hu+hWLOYWg=3D=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AnQxveKgw7+GlvNqN6dnA+fVHmXBQXt0ji2hC?=
+ =?us-ascii?q?6mlwRA09TyX4rbHLoB1173TJYVoqMk3I3OrgBEDiewK4yXcW2+ks1N6ZNWHbUS?=
+ =?us-ascii?q?mTXeJfBODZrQEIdReTygcQ79YDT4FOTOy1N1R8gMrgiTPUL/8ryrC8n5yVuQ?=
+ =?us-ascii?q?=3D=3D?=
+X-IronPort-AV: E=Sophos;i="5.88,242,1635199200"; 
+   d="scan'208";a="1160853"
+Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 19:16:46 +0100
+Date:   Tue, 28 Dec 2021 19:16:45 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+cc:     Francisco Jerez <currojerez@riseup.net>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
+In-Reply-To: <CAJZ5v0grayg9evWsB5ktKSFq=yA_AHoEWSfpSkQ=MVQ-=butfA@mail.gmail.com>
+Message-ID: <alpine.DEB.2.22.394.2112281909170.24929@hadrien>
+References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien> <CAJZ5v0iBU8gw8+-5nxj2cKzf7tyN=p3Adcm4Z5bn=oVYhU28bQ@mail.gmail.com> <alpine.DEB.2.22.394.2112172022100.2968@hadrien> <87r1abt1d2.fsf@riseup.net> <alpine.DEB.2.22.394.2112172258480.2968@hadrien>
+ <87fsqqu6by.fsf@riseup.net> <alpine.DEB.2.22.394.2112180654470.3139@hadrien> <878rwitdu3.fsf@riseup.net> <alpine.DEB.2.22.394.2112181138210.3130@hadrien> <871r29tvdj.fsf@riseup.net> <alpine.DEB.2.22.394.2112190734070.3181@hadrien> <87wnk0s0tf.fsf@riseup.net>
+ <CAJZ5v0i7gBtm6x+zUUzhxXjmYhPwr=JxvOuMZ0aD9qxnjE9YKw@mail.gmail.com> <878rwdse9o.fsf@riseup.net> <alpine.DEB.2.22.394.2112281745240.24929@hadrien> <CAJZ5v0i4xnesG=vfx7Y-wyeaGvjDeGcsaOVqhRLnV8YXk-m2gA@mail.gmail.com> <alpine.DEB.2.22.394.2112281845180.24929@hadrien>
+ <CAJZ5v0grayg9evWsB5ktKSFq=yA_AHoEWSfpSkQ=MVQ-=butfA@mail.gmail.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Dec 28, 2021 at 2:19 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> There are currently 2 ways to create a set of sysfs files for a
-> kobj_type, through the default_attrs field, and the default_groups
-> field.  Move the cpufreq code to use default_groups field which has been
-> the preferred way since aa30f47cf666 ("kobject: Add support for default
-> attribute groups to kobj_type") so that we can soon get rid of the
-> obsolete default_attrs field.
->
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> Cc: linux-pm@vger.kernel.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Applied as 5.17 material, thanks!
 
-> ---
->  drivers/cpufreq/cpufreq.c              | 5 +++--
->  drivers/cpufreq/cpufreq_conservative.c | 5 +++--
->  drivers/cpufreq/cpufreq_ondemand.c     | 5 +++--
->  3 files changed, 9 insertions(+), 6 deletions(-)
+On Tue, 28 Dec 2021, Rafael J. Wysocki wrote:
+
+> On Tue, Dec 28, 2021 at 6:46 PM Julia Lawall <julia.lawall@inria.fr> wrote:
+> >
+> >
+> >
+> > On Tue, 28 Dec 2021, Rafael J. Wysocki wrote:
+> >
+> > > On Tue, Dec 28, 2021 at 5:58 PM Julia Lawall <julia.lawall@inria.fr> wrote:
+> > > >
+> > > > I looked a bit more into why pstate 20 is always using the least energy. I
+> > > > have just one thread spinning for 10 seconds, I use a fixed value for the
+> > > > pstate, and I measure the energy usage with turbostat.
+> > >
+> > > How exactly do you fix the pstate?
+> >
+> > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> > index e7af18857371..19440b15454c 100644
+> > --- a/kernel/sched/cpufreq_schedutil.c
+> > +++ b/kernel/sched/cpufreq_schedutil.c
+> > @@ -400,7 +402,7 @@ static void sugov_update_single_perf(struct update_util_data *hook, u64 time,
+> >                 sg_cpu->util = prev_util;
+> >
+> >         cpufreq_driver_adjust_perf(sg_cpu->cpu, map_util_perf(sg_cpu->bw_dl),
+> > -                                  map_util_perf(sg_cpu->util), sg_cpu->max);
+> > +                                  sysctl_sched_fixedfreq, sg_cpu->max);
 >
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index e338d2f010fe..09d676d5237e 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -924,7 +924,7 @@ cpufreq_freq_attr_rw(scaling_max_freq);
->  cpufreq_freq_attr_rw(scaling_governor);
->  cpufreq_freq_attr_rw(scaling_setspeed);
+> This is just changing the "target" hint given to the processor which
+> may very well ignore it, though.
+
+It doesn't seem to ignore it.  I also print the current frequency on every
+clock tick, and it is as it should be.  This is done in the function
+arch_scale_freq_tick in arch/x86/kernel/smpboot.c, where I added:
+
+        trace_printk("freq %lld\n", div64_u64((cpu_khz * acnt), mcnt));
+
+
 >
-> -static struct attribute *default_attrs[] = {
-> +static struct attribute *cpufreq_attrs[] = {
->         &cpuinfo_min_freq.attr,
->         &cpuinfo_max_freq.attr,
->         &cpuinfo_transition_latency.attr,
-> @@ -938,6 +938,7 @@ static struct attribute *default_attrs[] = {
->         &scaling_setspeed.attr,
->         NULL
->  };
-> +ATTRIBUTE_GROUPS(cpufreq);
+> >
+> >         sg_cpu->sg_policy->last_freq_update_time = time;
+> >  }
+> >
+> > ------------------------------
+> >
+> > sysctl_sched_fixedfreq is a variable that I added to sysfs.
 >
->  #define to_policy(k) container_of(k, struct cpufreq_policy, kobj)
->  #define to_attr(a) container_of(a, struct freq_attr, attr)
-> @@ -1000,7 +1001,7 @@ static const struct sysfs_ops sysfs_ops = {
+> If I were trying to fix a pstate, I would set scaling_max_freq and
+> scaling_min_freq in sysfs for all CPUs to the same value.
 >
->  static struct kobj_type ktype_cpufreq = {
->         .sysfs_ops      = &sysfs_ops,
-> -       .default_attrs  = default_attrs,
-> +       .default_groups = cpufreq_groups,
->         .release        = cpufreq_sysfs_release,
->  };
->
-> diff --git a/drivers/cpufreq/cpufreq_conservative.c b/drivers/cpufreq/cpufreq_conservative.c
-> index 0879ec3c170c..08515f7e515f 100644
-> --- a/drivers/cpufreq/cpufreq_conservative.c
-> +++ b/drivers/cpufreq/cpufreq_conservative.c
-> @@ -257,7 +257,7 @@ gov_attr_rw(ignore_nice_load);
->  gov_attr_rw(down_threshold);
->  gov_attr_rw(freq_step);
->
-> -static struct attribute *cs_attributes[] = {
-> +static struct attribute *cs_attrs[] = {
->         &sampling_rate.attr,
->         &sampling_down_factor.attr,
->         &up_threshold.attr,
-> @@ -266,6 +266,7 @@ static struct attribute *cs_attributes[] = {
->         &freq_step.attr,
->         NULL
->  };
-> +ATTRIBUTE_GROUPS(cs);
->
->  /************************** sysfs end ************************/
->
-> @@ -315,7 +316,7 @@ static void cs_start(struct cpufreq_policy *policy)
->
->  static struct dbs_governor cs_governor = {
->         .gov = CPUFREQ_DBS_GOVERNOR_INITIALIZER("conservative"),
-> -       .kobj_type = { .default_attrs = cs_attributes },
-> +       .kobj_type = { .default_groups = cs_groups },
->         .gov_dbs_update = cs_dbs_update,
->         .alloc = cs_alloc,
->         .free = cs_free,
-> diff --git a/drivers/cpufreq/cpufreq_ondemand.c b/drivers/cpufreq/cpufreq_ondemand.c
-> index 3b8f924771b4..6a41ea4729b8 100644
-> --- a/drivers/cpufreq/cpufreq_ondemand.c
-> +++ b/drivers/cpufreq/cpufreq_ondemand.c
-> @@ -328,7 +328,7 @@ gov_attr_rw(sampling_down_factor);
->  gov_attr_rw(ignore_nice_load);
->  gov_attr_rw(powersave_bias);
->
-> -static struct attribute *od_attributes[] = {
-> +static struct attribute *od_attrs[] = {
->         &sampling_rate.attr,
->         &up_threshold.attr,
->         &sampling_down_factor.attr,
-> @@ -337,6 +337,7 @@ static struct attribute *od_attributes[] = {
->         &io_is_busy.attr,
->         NULL
->  };
-> +ATTRIBUTE_GROUPS(od);
->
->  /************************** sysfs end ************************/
->
-> @@ -401,7 +402,7 @@ static struct od_ops od_ops = {
->
->  static struct dbs_governor od_dbs_gov = {
->         .gov = CPUFREQ_DBS_GOVERNOR_INITIALIZER("ondemand"),
-> -       .kobj_type = { .default_attrs = od_attributes },
-> +       .kobj_type = { .default_groups = od_groups },
->         .gov_dbs_update = od_dbs_update,
->         .alloc = od_alloc,
->         .free = od_free,
-> --
-> 2.34.1
->
+> That would cause intel_pstate to set HWP min and max to the same value
+> which should really cause the pstate to be fixed, at least outside the
+> turbo range of pstates.
+
+OK, I can try that, thanks.
+
+julia
