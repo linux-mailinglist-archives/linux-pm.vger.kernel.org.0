@@ -2,453 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 174E7480B72
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Dec 2021 17:39:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43924480B9F
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Dec 2021 17:58:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236297AbhL1Qjw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Dec 2021 11:39:52 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:39504
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236122AbhL1Qjo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Dec 2021 11:39:44 -0500
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com [209.85.167.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A00DC406EC
-        for <linux-pm@vger.kernel.org>; Tue, 28 Dec 2021 16:39:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1640709582;
-        bh=/nd1b9Jae+geOuYRS/fP3HNJ5JqXGFVL3LmeNMmkpPM=;
-        h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=H4o6pMUg0X3otJXq7kuBVoBxpeccIcgZIQ/p9cvKypbxcgy7f6Hnh0YxzXb1KL7qf
-         u1cjlfU3wxPe8sH+L7iZovUOK9ZvmBG6ViqPAdsveX8OBJn2i3UhzJKqh/YV/cSE/F
-         u8/YOP1D3qRz5+TCHCR9yWBsmJZ6aFu/6e35bnA+4pS9v76rgS4VWeMEpH9FhXle12
-         oVod97R6i9UyXhN3i3/FttE28r30cD0J22pTaV/It3kHkjlb3q0RFaYfu3o0Vlc5X8
-         xVvvvmdqssi54o5byC5Mh1WmoY+jPTuU092s9r55/ppRPsrM0x5kREQc3LhKFOd8bX
-         w3IikM0sUlzIw==
-Received: by mail-lf1-f70.google.com with SMTP id b35-20020a0565120ba300b0042604bb4857so4199751lfv.19
-        for <linux-pm@vger.kernel.org>; Tue, 28 Dec 2021 08:39:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/nd1b9Jae+geOuYRS/fP3HNJ5JqXGFVL3LmeNMmkpPM=;
-        b=kkQBfH/ZMO7jAH6sIIpEwQDWeiupnrQHfsl6jcfBlOlIWH9z6iu1rKLj5LFFfjCZPo
-         mrOtcSj0FnbLnzt2WPLxGSe/3dnvksgYt8QZKSPjcv+12StJMg50Jrg8RRh5S93mJ4HT
-         rup0dgqvgM2/bQqVUUuxjMNAqzpjojJyEE+Iv8/bj9WaH6o6pOPZKXlt+X61DSFOaOUL
-         yoeDrtdxA5dr8VmJcHBuJXlA0GpXsDcSt/pReKmC9W5TPBCpM/Pn1OF6SRIZ8/kz6hr3
-         uiRECfTMfcyZduf7eUSuhlNFr0SYTIrAVheBzA3zA/kF7UQzWitoYCiFEgvSZG4uquAF
-         9RGw==
-X-Gm-Message-State: AOAM532czdQsbWuinO06oP/IqxgdLpM96WWCduJlu08TQODwdSO3HgMY
-        N/ipAK1d0XTSAoirBBRjV1yAN4aHASFOUT9JcVnI/8VhiKKFDRDhDilniRrskbLhzDxba/grVEJ
-        M/bIWIy9UgpnANvECOCZyJsWxiyJHFkxS4yEB
-X-Received: by 2002:a2e:f1a:: with SMTP id 26mr19003590ljp.480.1640709581114;
-        Tue, 28 Dec 2021 08:39:41 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxwxNFto0SNwbMZEahleTnhZaXIfwwshjO3MvnBn4RSsv/mZhmGKYo00nnozjxHNwUD3q90nw==
-X-Received: by 2002:a2e:f1a:: with SMTP id 26mr19003567ljp.480.1640709580801;
-        Tue, 28 Dec 2021 08:39:40 -0800 (PST)
-Received: from krzk-bin.lan (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id d3sm1972876lfs.204.2021.12.28.08.39.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Dec 2021 08:39:40 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH 4/4] dt-bindings: mfd: maxim,max77693: convert to dtschema
-Date:   Tue, 28 Dec 2021 17:39:30 +0100
-Message-Id: <20211228163930.35524-5-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211228163930.35524-1-krzysztof.kozlowski@canonical.com>
-References: <20211228163930.35524-1-krzysztof.kozlowski@canonical.com>
+        id S236469AbhL1Q61 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Dec 2021 11:58:27 -0500
+Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:3847 "EHLO
+        mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236452AbhL1Q61 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Dec 2021 11:58:27 -0500
+IronPort-Data: =?us-ascii?q?A9a23=3Agmw6+akjfG0tLtdH22WVwfHo5gyQJ0RdPkR7XQ2?=
+ =?us-ascii?q?eYbTBsI5bpzMDm2JMW2yFa/2NNmbyKt5yao6y9RhSscfUndIxQARt+CA2RRqmi?=
+ =?us-ascii?q?+KVXIXDdh+Y0wC6d5CYEho/t63yUjRxRSwNZie0SiyFb/6x/RGQ6YnSHuClUbS?=
+ =?us-ascii?q?eangrLeNZYHxJZSxLyrdRbrFA0YDR7zOl4bsekuWHULOX82Yc3lE8t8pvnChSU?=
+ =?us-ascii?q?MHa41v0iLCRicdj5zcyn1FNZH4WyDrYw3HQGuG4FcbiLwrPIS3Qw4/Xw/stIov?=
+ =?us-ascii?q?NfrfTckQGWL/fO2BiiFIGBu780l4b/HV0i/lgXBYfQR4/ZzGhnc11ydwLsZWvQ?=
+ =?us-ascii?q?AMtFqzKguUUFRdCe817FfQcqOSdfSDv2SCU5wicG5f2+N1lEVssOo8V4OtlKXt?=
+ =?us-ascii?q?P7vEFMHYLYwzrr/i/zru2TsFvi94lIc2tO5kQ0ll71zDfDOgvWtbbSqPG/8JG1?=
+ =?us-ascii?q?Ts5rsRPG+vOIcsfdTdrKh/HZnVnPloRAro9kf2ui325dCdXwHqLpLA6+GiVzxF?=
+ =?us-ascii?q?02aLFNNvTc8aNA8JPkS6womPA4nS8GhQyKtOS03yG/2iqi+uJmjn0MKoWFbul5?=
+ =?us-ascii?q?rtpjUeVy2g7FhIbTx24rOO/h0r4XMhQQ2QR+ywhqoAo+UCrR8W7VBq9yFacswI?=
+ =?us-ascii?q?RQch4Eus08giBx6PYpQGDCQAsTCNbaZoiucsyRBQw21OJls+vDjtq2JWLSHSW+?=
+ =?us-ascii?q?7GI6zyvODQJKnMqYS4CRBECpd75r+kOYrjnJjp4OPfq1ZusQ2i2nWDM/HV4nbg?=
+ =?us-ascii?q?Ny9UFzeO98Eyvvt5lnbCRJiZd2+kddjvNAttFWbOY?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3A/ULs8aBoCty/i7vlHemr55DYdb4zR+YMi2TD?=
+ =?us-ascii?q?tnoBLSC9HfbyqynDpp4mPFrP6Qr5O0tQ/OxoWpPhfZq0z/cc3WBSB8bAYOCMgg?=
+ =?us-ascii?q?WVxe9ZgbcKjweQeRHWx6ptkZ1tdKVzE7TLYGRSh8yS2maFL+o=3D?=
+X-IronPort-AV: E=Sophos;i="5.88,242,1635199200"; 
+   d="scan'208";a="12832408"
+Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 17:58:24 +0100
+Date:   Tue, 28 Dec 2021 17:58:24 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Francisco Jerez <currojerez@riseup.net>
+cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
+In-Reply-To: <878rwdse9o.fsf@riseup.net>
+Message-ID: <alpine.DEB.2.22.394.2112281745240.24929@hadrien>
+References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien> <CAJZ5v0iBU8gw8+-5nxj2cKzf7tyN=p3Adcm4Z5bn=oVYhU28bQ@mail.gmail.com> <alpine.DEB.2.22.394.2112172022100.2968@hadrien> <87r1abt1d2.fsf@riseup.net> <alpine.DEB.2.22.394.2112172258480.2968@hadrien>
+ <87fsqqu6by.fsf@riseup.net> <alpine.DEB.2.22.394.2112180654470.3139@hadrien> <878rwitdu3.fsf@riseup.net> <alpine.DEB.2.22.394.2112181138210.3130@hadrien> <871r29tvdj.fsf@riseup.net> <alpine.DEB.2.22.394.2112190734070.3181@hadrien> <87wnk0s0tf.fsf@riseup.net>
+ <CAJZ5v0i7gBtm6x+zUUzhxXjmYhPwr=JxvOuMZ0aD9qxnjE9YKw@mail.gmail.com> <878rwdse9o.fsf@riseup.net>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Convert the MFD part of Maxim MAX77693 MUIC to DT schema format.  The
-example DTS was copied from existing DTS (exynos4412-midas.dtsi), so
-keep the license as GPL-2.0-only.
+I looked a bit more into why pstate 20 is always using the least energy. I
+have just one thread spinning for 10 seconds, I use a fixed value for the
+pstate, and I measure the energy usage with turbostat. I tried this on a
+2-socket Intel 6130 and a 4-socket Intel 6130.  The experiment runs 40
+times.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
----
- .../devicetree/bindings/mfd/max77693.txt      | 194 ------------------
- .../bindings/mfd/maxim,max77693.yaml          | 139 +++++++++++++
- MAINTAINERS                                   |   2 +-
- 3 files changed, 140 insertions(+), 195 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/mfd/max77693.txt
- create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max77693.yaml
+There seem to be only two levels of CPU energy usage.  On the 2-socket
+machine the energy usage is around 600J up to pstate 20 and around 1000J
+after that.  On the 4-socket machine it is twice that.
 
-diff --git a/Documentation/devicetree/bindings/mfd/max77693.txt b/Documentation/devicetree/bindings/mfd/max77693.txt
-deleted file mode 100644
-index 1032df14498b..000000000000
---- a/Documentation/devicetree/bindings/mfd/max77693.txt
-+++ /dev/null
-@@ -1,194 +0,0 @@
--Maxim MAX77693 multi-function device
--
--MAX77693 is a Multifunction device with the following submodules:
--- PMIC,
--- CHARGER,
--- LED,
--- MUIC,
--- HAPTIC
--
--It is interfaced to host controller using i2c.
--This document describes the bindings for the mfd device.
--
--Required properties:
--- compatible : Must be "maxim,max77693".
--- reg : Specifies the i2c slave address of PMIC block.
--- interrupts : This i2c device has an IRQ line connected to the main SoC.
--
--Optional properties:
--- regulators : The regulators of max77693 have to be instantiated under subnode
--  named "regulators" using the following format.
--
--	regulators {
--		regulator-compatible = ESAFEOUT1/ESAFEOUT2/CHARGER
--		standard regulator constraints[*].
--	};
--
--	[*] refer Documentation/devicetree/bindings/regulator/regulator.txt
--
--- haptic : The MAX77693 haptic device utilises a PWM controlled motor to provide
--  users with tactile feedback. PWM period and duty-cycle are varied in
--  order to provide the appropriate level of feedback.
--
-- Required properties:
--	- compatible : Must be "maxim,max77693-haptic"
--	- haptic-supply : power supply for the haptic motor
--	[*] refer Documentation/devicetree/bindings/regulator/regulator.txt
--	- pwms : phandle to the physical PWM(Pulse Width Modulation) device.
--	 PWM properties should be named "pwms". And number of cell is different
--	 for each pwm device.
--	 To get more information, please refer to documentation.
--	[*] refer Documentation/devicetree/bindings/pwm/pwm.txt
--
--- charger : Node configuring the charger driver.
--  If present, required properties:
--  - compatible : Must be "maxim,max77693-charger".
--
--  Optional properties (if not set, defaults will be used):
--  - maxim,constant-microvolt : Battery constant voltage in uV. The charger
--    will operate in fast charge constant current mode till battery voltage
--    reaches this level. Then the charger will switch to fast charge constant
--    voltage mode. Also vsys (system voltage) will be set to this value when
--    DC power is supplied but charger is not enabled.
--    Valid values: 3650000 - 4400000, step by 25000 (rounded down)
--    Default: 4200000
--
--  - maxim,min-system-microvolt : Minimal system voltage in uV.
--    Valid values: 3000000 - 3700000, step by 100000 (rounded down)
--    Default: 3600000
--
--  - maxim,thermal-regulation-celsius : Temperature in Celsius for entering
--    high temperature charging mode. If die temperature exceeds this value
--    the charging current will be reduced by 105 mA/Celsius.
--    Valid values: 70, 85, 100, 115
--    Default: 100
--
--  - maxim,battery-overcurrent-microamp : Overcurrent protection threshold
--    in uA (current from battery to system).
--    Valid values: 2000000 - 3500000, step by 250000 (rounded down)
--    Default: 3500000
--
--  - maxim,charge-input-threshold-microvolt : Threshold voltage in uV for
--    triggering input voltage regulation loop. If input voltage decreases
--    below this value, the input current will be reduced to reach the
--    threshold voltage.
--    Valid values: 4300000, 4700000, 4800000, 4900000
--    Default: 4300000
--
--- led : the LED submodule device node
--
--There are two LED outputs available - FLED1 and FLED2. Each of them can
--control a separate LED or they can be connected together to double
--the maximum current for a single connected LED. One LED is represented
--by one child node.
--
--Required properties:
--- compatible : Must be "maxim,max77693-led".
--
--Optional properties:
--- maxim,boost-mode :
--	In boost mode the device can produce up to 1.2A of total current
--	on both outputs. The maximum current on each output is reduced
--	to 625mA then. If not enabled explicitly, boost setting defaults to
--	LEDS_BOOST_FIXED in case both current sources are used.
--	Possible values:
--		LEDS_BOOST_OFF (0) - no boost,
--		LEDS_BOOST_ADAPTIVE (1) - adaptive mode,
--		LEDS_BOOST_FIXED (2) - fixed mode.
--- maxim,boost-mvout : Output voltage of the boost module in millivolts.
--	Valid values: 3300 - 5500, step by 25 (rounded down)
--	Default: 3300
--- maxim,mvsys-min : Low input voltage level in millivolts. Flash is not fired
--	if chip estimates that system voltage could drop below this level due
--	to flash power consumption.
--	Valid values: 2400 - 3400, step by 33 (rounded down)
--	Default: 2400
--
--Required properties for the LED child node:
--- led-sources : see Documentation/devicetree/bindings/leds/common.txt;
--		device current output identifiers: 0 - FLED1, 1 - FLED2
--- led-max-microamp : see Documentation/devicetree/bindings/leds/common.txt
--	Valid values for a LED connected to one FLED output:
--		15625 - 250000, step by 15625 (rounded down)
--	Valid values for a LED connected to both FLED outputs:
--		15625 - 500000, step by 15625 (rounded down)
--- flash-max-microamp : see Documentation/devicetree/bindings/leds/common.txt
--	Valid values for a single LED connected to one FLED output
--	(boost mode must be turned off):
--		15625 - 1000000, step by 15625 (rounded down)
--	Valid values for a single LED connected to both FLED outputs:
--		15625 - 1250000, step by 15625 (rounded down)
--	Valid values for two LEDs case:
--		15625 - 625000, step by 15625 (rounded down)
--- flash-max-timeout-us : see Documentation/devicetree/bindings/leds/common.txt
--	Valid values: 62500 - 1000000, step by 62500 (rounded down)
--
--Optional properties for the LED child node:
--- label : see Documentation/devicetree/bindings/leds/common.txt
--
--Optional nodes:
--- max77693-muic :
--	Node used only by extcon consumers.
--	Required properties:
--		- compatible : "maxim,max77693-muic"
--
--Example:
--#include <dt-bindings/leds/common.h>
--
--	max77693@66 {
--		compatible = "maxim,max77693";
--		reg = <0x66>;
--		interrupt-parent = <&gpx1>;
--		interrupts = <5 IRQ_TYPE_LEVEL_LOW>;
--
--		regulators {
--			esafeout@1 {
--				regulator-compatible = "ESAFEOUT1";
--				regulator-name = "ESAFEOUT1";
--				regulator-boot-on;
--			};
--			esafeout@2 {
--				regulator-compatible = "ESAFEOUT2";
--				regulator-name = "ESAFEOUT2";
--				};
--			charger@0 {
--				regulator-compatible = "CHARGER";
--				regulator-name = "CHARGER";
--				regulator-min-microamp = <60000>;
--				regulator-max-microamp = <2580000>;
--					regulator-boot-on;
--			};
--		};
--
--		haptic {
--			compatible = "maxim,max77693-haptic";
--			haptic-supply = <&haptic_supply>;
--			pwms = <&pwm 0 40000 0>;
--			pwm-names = "haptic";
--		};
--
--		charger {
--			compatible = "maxim,max77693-charger";
--
--			maxim,constant-microvolt = <4200000>;
--			maxim,min-system-microvolt = <3600000>;
--			maxim,thermal-regulation-celsius = <75>;
--			maxim,battery-overcurrent-microamp = <3000000>;
--			maxim,charge-input-threshold-microvolt = <4300000>;
--		};
--
--		led {
--			compatible = "maxim,max77693-led";
--			maxim,boost-mode = <LEDS_BOOST_FIXED>;
--			maxim,boost-mvout = <5000>;
--			maxim,mvsys-min = <2400>;
--
--			camera_flash: flash-led {
--				label = "max77693-flash";
--				led-sources = <0>, <1>;
--				led-max-microamp = <500000>;
--				flash-max-microamp = <1250000>;
--				flash-max-timeout-us = <1000000>;
--			};
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/mfd/maxim,max77693.yaml b/Documentation/devicetree/bindings/mfd/maxim,max77693.yaml
-new file mode 100644
-index 000000000000..bc9c90bd4ff9
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/maxim,max77693.yaml
-@@ -0,0 +1,139 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/maxim,max77693.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Maxim MAX77693 MicroUSB and Companion Power Management IC
-+
-+maintainers:
-+  - Chanwoo Choi <cw00.choi@samsung.com>
-+  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-+
-+description: |
-+  This is a part of device tree bindings for Maxim MAX77693 MicroUSB
-+  Integrated Circuit (MUIC).
-+
-+  The Maxim MAX77693 is a MicroUSB and Companion Power Management IC which
-+  includes voltage current regulators, charger, LED/flash, haptic motor driver
-+  and MicroUSB management IC.
-+
-+properties:
-+  compatible:
-+    const: maxim,max77693
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  reg:
-+    maxItems: 1
-+
-+  charger:
-+    $ref: ../power/supply/maxim,max77693.yaml
-+
-+  led:
-+    $ref: ../leds/maxim,max77693.yaml
-+
-+  max77693-muic:
-+    type: object
-+    properties:
-+      compatible:
-+        const: maxim,max77693-muic
-+
-+    required:
-+      - compatible
-+
-+  motor-driver:
-+    type: object
-+    properties:
-+      compatible:
-+        const: maxim,max77693-haptic
-+
-+      haptic-supply:
-+        description: Power supply to the haptic motor
-+
-+      pwms:
-+        maxItems: 1
-+
-+    required:
-+      - compatible
-+      - haptic-supply
-+      - pwms
-+
-+  regulators:
-+    $ref: ../regulator/maxim,max77693.yaml
-+    description:
-+      List of child nodes that specify the regulators.
-+
-+required:
-+  - compatible
-+  - interrupts
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/leds/common.h>
-+
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        pmic@66 {
-+            compatible = "maxim,max77693";
-+            reg = <0x66>;
-+            interrupt-parent = <&gpx1>;
-+            interrupts = <5 IRQ_TYPE_LEVEL_LOW>;
-+
-+            regulators {
-+                ESAFEOUT1 {
-+                    regulator-name = "ESAFEOUT1";
-+                };
-+
-+                ESAFEOUT2 {
-+                    regulator-name = "ESAFEOUT2";
-+                };
-+
-+                CHARGER {
-+                    regulator-name = "CHARGER";
-+                    regulator-min-microamp = <60000>;
-+                    regulator-max-microamp = <2580000>;
-+                };
-+            };
-+
-+            motor-driver {
-+                compatible = "maxim,max77693-haptic";
-+                haptic-supply = <&ldo26_reg>;
-+                pwms = <&pwm 0 38022 0>;
-+            };
-+
-+            charger {
-+                compatible = "maxim,max77693-charger";
-+
-+                maxim,constant-microvolt = <4350000>;
-+                maxim,min-system-microvolt = <3600000>;
-+                maxim,thermal-regulation-celsius = <100>;
-+                maxim,battery-overcurrent-microamp = <3500000>;
-+                maxim,charge-input-threshold-microvolt = <4300000>;
-+            };
-+
-+            led {
-+                compatible = "maxim,max77693-led";
-+                maxim,boost-mode = <LEDS_BOOST_FIXED>;
-+                maxim,boost-mvout = <5000>;
-+                maxim,mvsys-min = <2400>;
-+
-+                flash-led {
-+                    label = "max77693-flash";
-+                    function = LED_FUNCTION_FLASH;
-+                    color = <LED_COLOR_ID_WHITE>;
-+                    led-sources = <0>, <1>;
-+                    led-max-microamp = <500000>;
-+                    flash-max-microamp = <1250000>;
-+                    flash-max-timeout-us = <1000000>;
-+                };
-+            };
-+        };
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ead08768fb78..e5f2758531bc 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11692,9 +11692,9 @@ M:	Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
- L:	linux-kernel@vger.kernel.org
- S:	Supported
- F:	Documentation/devicetree/bindings/*/maxim,max77686.yaml
-+F:	Documentation/devicetree/bindings/*/maxim,max77693.yaml
- F:	Documentation/devicetree/bindings/clock/maxim,max77686.txt
- F:	Documentation/devicetree/bindings/mfd/max14577.txt
--F:	Documentation/devicetree/bindings/mfd/max77693.txt
- F:	drivers/*/max14577*.c
- F:	drivers/*/max77686*.c
- F:	drivers/*/max77693*.c
--- 
-2.32.0
+The change in RAM energy usage is similar, eg around 320J for the 2-socket
+machine up to pstate 20, and around 460J for higher pstates.
 
+On the 6130, pstate 21 is 2.1GHz, which is the nominal frequency of the
+machine.  So it seems that the most efficient thing is to be just below
+that.  The reduced execution time with pstate 20 as compared to pstate 10
+greatly outweighs any small increase in the energy usage due to changing
+the frequency.
+
+Perhaps there is something abnormal in how the machines are configured?
+
+julia
