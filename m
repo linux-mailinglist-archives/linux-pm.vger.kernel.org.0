@@ -2,218 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA949480701
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Dec 2021 08:37:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDFEC48077B
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Dec 2021 09:45:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235324AbhL1HhY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Dec 2021 02:37:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50360 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235307AbhL1HhX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Dec 2021 02:37:23 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64355C061574
-        for <linux-pm@vger.kernel.org>; Mon, 27 Dec 2021 23:37:23 -0800 (PST)
-Received: from ip4d173d4a.dynamic.kabel-deutschland.de ([77.23.61.74] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1n272v-0004lg-Nx; Tue, 28 Dec 2021 08:37:21 +0100
-Message-ID: <6d260e9b-14cf-1aa5-ff28-464e85802af3@leemhuis.info>
-Date:   Tue, 28 Dec 2021 08:37:21 +0100
+        id S235758AbhL1IpY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Dec 2021 03:45:24 -0500
+Received: from mswedge2.sunplus.com ([60.248.182.106]:37402 "EHLO
+        mg.sunplus.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231670AbhL1IpX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Dec 2021 03:45:23 -0500
+X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
+        ,3)
+Received: from 172.17.9.202
+        by mg02.sunplus.com with MailGates ESMTP Server V5.0(49508:0:AUTH_RELAY)
+        (envelope-from <edwin.chiu@sunplus.com>); Tue, 28 Dec 2021 16:45:27 +0800 (CST)
+Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
+ sphcmbx01.sunplus.com.tw (172.17.9.202) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.26; Tue, 28 Dec 2021 16:45:21 +0800
+Received: from sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd]) by
+ sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd%14]) with mapi id
+ 15.00.1497.026; Tue, 28 Dec 2021 16:45:21 +0800
+From:   =?big5?B?RWR3aW4gQ2hpdSCq9KurrnA=?= <edwin.chiu@sunplus.com>
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        Edwin Chiu <edwinchiu0505tw@gmail.com>
+CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: RE: [PATCH v2 2/2] cpuidle:sunplus:create cpuidle driver for sunplus
+ sp7021
+Thread-Topic: [PATCH v2 2/2] cpuidle:sunplus:create cpuidle driver for sunplus
+ sp7021
+Thread-Index: AQHX9WEUrNii4YTVCkGIbW8MVVMb3Kw6xGIAgAzaWSA=
+Date:   Tue, 28 Dec 2021 08:45:21 +0000
+Message-ID: <0812c44f777d4026b79df2e3698294be@sphcmbx02.sunplus.com.tw>
+References: <cover.1639971376.git.edwinchiu0505tw@gmail.com>
+ <6092f5f372851e2d6bf12b4b23209558038b9fda.1639971376.git.edwinchiu0505tw@gmail.com>
+ <20211220121050.rnd3o7d5cksqbqnk@bogus>
+In-Reply-To: <20211220121050.rnd3o7d5cksqbqnk@bogus>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [172.25.108.40]
+Content-Type: text/plain; charset="big5"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: Regression report on laptop suspend
-Content-Language: en-BS
-To:     casteyde.christian@free.fr, rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <256689953.114854578.1640622738334.JavaMail.root@zimbra40-e7.priv.proxad.net>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <256689953.114854578.1640622738334.JavaMail.root@zimbra40-e7.priv.proxad.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1640677043;907b3387;
-X-HE-SMSGID: 1n272v-0004lg-Nx
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-Hi, this is your Linux kernel regression tracker speaking.
-
-TWIMC: seems Christian system is affected by another issue (Touchpad is
-not working anymore after suspend to RAM since kernel 5.14) that might
-interfere:
-
-https://bugzilla.kernel.org/show_bug.cgi?id=214667
-https://lore.kernel.org/regressions/12b9a10a-626b-cafd-05d6-cf0a116aa39b@leemhuis.info/
-
-Anyway, for the rest of this mail:
-
-[TLDR: I'm adding this regression to regzbot, the Linux kernel
-regression tracking bot; most text you find below is compiled from a few
-templates paragraphs some of you might have seen already.]
-
-On 27.12.21 17:32, casteyde.christian@free.fr wrote:
-> Hello
-> 
-> I've noticed my laptop totally freeze when going to hibernation.
-> The git bisect log is appended below.
-> Please note however that even the previous good commit was "good" (ie : laptop managed to suspend and resume), the system was unstable and froze few minutes later.
-> 
-> Hardware specs: AMD Ryzen 5 4600H with Vega graphics + Nvidia 1650Ti (unused)
-> Software: Slackware 14.2 / X.org.
-> 
-> Seems to be related to drm stuff.
-> I've issued bugzilla https://bugzilla.kernel.org/show_bug.cgi?id=215427
-> 
-> Thanks
-> 
-> git bisect start
-> # good: [8bb7eca972ad531c9b149c0a51ab43a417385813] Linux 5.15
-> git bisect good 8bb7eca972ad531c9b149c0a51ab43a417385813
-> # bad: [a7904a538933c525096ca2ccde1e60d0ee62c08e] Linux 5.16-rc6
-> git bisect bad a7904a538933c525096ca2ccde1e60d0ee62c08e
-> # bad: [43e1b12927276cde8052122a24ff796649f09d60] Merge tag 'for_linus' of git://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost
-> git bisect bad 43e1b12927276cde8052122a24ff796649f09d60
-> # good: [fc02cb2b37fe2cbf1d3334b9f0f0eab9431766c4] Merge tag 'net-next-for-5.16' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next
-> git bisect good fc02cb2b37fe2cbf1d3334b9f0f0eab9431766c4
-> # bad: [d9bd054177fbd2c4762546aec40fc3071bfe4cc0] Merge tag 'amd-drm-next-5.16-2021-10-29' of https://gitlab.freedesktop.org/agd5f/linux into drm-next
-> git bisect bad d9bd054177fbd2c4762546aec40fc3071bfe4cc0
-> # skip: [797d72ce8e0f8fa8a808cb189b5411046432cfd3] Merge tag 'drm-misc-next-2021-10-06' of git://anongit.freedesktop.org/drm/drm-misc into drm-next
-> git bisect skip 797d72ce8e0f8fa8a808cb189b5411046432cfd3
-> # skip: [bf72ca73aaa6629568cb9b0761be6efdd02a2591] drm/amd/display: [FW Promotion] Release 0.0.85
-> git bisect skip bf72ca73aaa6629568cb9b0761be6efdd02a2591
-> # good: [bc41f059a080e487c235b539f1e5cdbf605aba9f] drm/i915/dp: fix DG1 and RKL max source rates
-> git bisect good bc41f059a080e487c235b539f1e5cdbf605aba9f
-> # skip: [58144d283712c9e80e528e001af6ac5aeee71af2] drm/amdgpu: unify BO evicting method in amdgpu_ttm
-> git bisect skip 58144d283712c9e80e528e001af6ac5aeee71af2
-> # skip: [a5b51a9f8523a0b88ce7e8e8059f75a43c34c57f] drm/i915/gt: add asm/cacheflush.h for use of clflush()
-> git bisect skip a5b51a9f8523a0b88ce7e8e8059f75a43c34c57f
-> # skip: [40348baedfbc6500e7a090c7da1d55b6c94c334f] drm/amd/display: fix duplicated inclusion
-> git bisect skip 40348baedfbc6500e7a090c7da1d55b6c94c334f
-> # skip: [7547675b84bf452542463db29adb113cadb7dd6d] drm/virtio: implement context init: track {ring_idx, emit_fence_info} in virtio_gpu_fence
-> git bisect skip 7547675b84bf452542463db29adb113cadb7dd6d
-> # good: [f01ee019586220c86f238263a4fbde6e72085e11] drm/amd/display: Add DP 2.0 SST DC Support
-> git bisect good f01ee019586220c86f238263a4fbde6e72085e11
-> # good: [f3ede209d44d71636890a78fa89c5b1c83340320] drm/i915/pci: rename functions to have i915_pci prefix
-> git bisect good f3ede209d44d71636890a78fa89c5b1c83340320
-> # skip: [4fb530e5caf7cb666948db65f245b350ce520436] drm/virtio: implement context init: support init ioctl
-> git bisect skip 4fb530e5caf7cb666948db65f245b350ce520436
-> # good: [c7c4dfb6fe704ae3cce1a8f438db75b1a0a9061f] drm/i915/display: Some code improvements and code style fixes for DRRS
-> git bisect good c7c4dfb6fe704ae3cce1a8f438db75b1a0a9061f
-> # skip: [7a28bee067d524c1b8770aa72a82263eb9fc53f0] drm/amd/display: Disable dpp root clock when not being used
-> git bisect skip 7a28bee067d524c1b8770aa72a82263eb9fc53f0
-> # good: [5b116c17e6babc6de2e26714bc66228c74038b71] drm/i915/guc: Drop pin count check trick between sched_disable and re-pin
-> git bisect good 5b116c17e6babc6de2e26714bc66228c74038b71
-> # skip: [9878844094703fbae1c3b301c9bb71253a30efe7] drm/amdgpu: drive all vega asics from the IP discovery table
-> git bisect skip 9878844094703fbae1c3b301c9bb71253a30efe7
-> # skip: [7194dc998dfffca096c30b3cd39625158608992d] drm/i915/tc: Fix TypeC port init/resume time sanitization
-> git bisect skip 7194dc998dfffca096c30b3cd39625158608992d
-> # skip: [5c3720be7d46581181782f5cf9585b532feed947] drm/amdgpu: get VCN and SDMA instances from IP discovery table
-> git bisect skip 5c3720be7d46581181782f5cf9585b532feed947
-> # skip: [a53f2c035e9832d20775d2c66c71495f2dc27699] drm/panfrost: Calculate lock region size correctly
-> git bisect skip a53f2c035e9832d20775d2c66c71495f2dc27699
-> # skip: [d04287d062a4198ec0bf0112db03618f65d7428a] drm/amdgpu: During s0ix don't wait to signal GFXOFF
-> git bisect skip d04287d062a4198ec0bf0112db03618f65d7428a
-> # skip: [9ced12182d0d8401d821e9602e56e276459900fc] drm/i915: Catch yet another unconditioal clflush
-> git bisect skip 9ced12182d0d8401d821e9602e56e276459900fc
-> # skip: [dac3c405b9aedee301d0634b4e275b81f0d74363] drm/amd/display: [FW Promotion] Release 0.0.87
-> git bisect skip dac3c405b9aedee301d0634b4e275b81f0d74363
-> # skip: [9f620f1dde3e3e984837163d7930dc4b2abffe82] drm/i915: Call intel_ddi_init_dp_buf_reg() earlier
-> git bisect skip 9f620f1dde3e3e984837163d7930dc4b2abffe82
-> # skip: [178fbb6d552f294037291bf62d41b31d30186f31] drm/amd/display: Implement DPIA training loop
-> git bisect skip 178fbb6d552f294037291bf62d41b31d30186f31
-> # good: [253a55918ce128f15a3be66db5e2072665143554] drm/amd/display: Fix issue with dynamic bpp change for DCN3x
-> git bisect good 253a55918ce128f15a3be66db5e2072665143554
-> # skip: [50638f7dbd0b3969b47d2772c4db02ed92b6c47b] drm/amdgpu/pm/amdgpu_smu: convert more IP version checking
-> git bisect skip 50638f7dbd0b3969b47d2772c4db02ed92b6c47b
-> # bad: [3605eacc8ae055d699f7fa3adb9123c4c36ecd82] drm/panfrost: Make use of the helper function devm_platform_ioremap_resource()
-> git bisect bad 3605eacc8ae055d699f7fa3adb9123c4c36ecd82
-> # bad: [47ddb72f789333a8ccb792b0fd6d6fe8a7906694] drm: zte: remove obsolete DRM Support for ZTE SoCs
-> git bisect bad 47ddb72f789333a8ccb792b0fd6d6fe8a7906694
-> # bad: [072e70d52372c44df90b44fb4cd949a709bb5bef] drm: panel-orientation-quirks: Add quirk for the Chuwi Hi10 Pro
-> git bisect bad 072e70d52372c44df90b44fb4cd949a709bb5bef
-> # bad: [82ade934dde45b9d9008954b297f7727233e37af] drm/arm: malidp: Use fourcc_mod_is_vendor() helper
-> git bisect bad 82ade934dde45b9d9008954b297f7727233e37af
-> # bad: [8b4e02c70fca482c5b947d8ba92b45093b4390e7] drm/panel: Add DT bindings for Samsung S6D27A1 display panel
-> git bisect bad 8b4e02c70fca482c5b947d8ba92b45093b4390e7
-> # bad: [804b6e5ee613b019b942ba6be52cccecd9d33655] drm/shmem-helpers: Allocate wc pages on x86
-> git bisect bad 804b6e5ee613b019b942ba6be52cccecd9d33655
-> # good: [8b93d1d7dbd578fd296e70008b29c0f62d09d7cb] drm/shmem-helper: Switch to vmf_insert_pfn
-> git bisect good 8b93d1d7dbd578fd296e70008b29c0f62d09d7cb
-> # first bad commit: [804b6e5ee613b019b942ba6be52cccecd9d33655] drm/shmem-helpers: Allocate wc pages on x86
-
-Thanks for the report.
-
-Adding the regression mailing list to the list of recipients, as it
-should be in the loop for all regressions, as explained here:
-https://www.kernel.org/doc/html/latest/admin-guide/reporting-issues.html
-
-To be sure this issue doesn't fall through the cracks unnoticed, I'm
-adding it to regzbot, my Linux kernel regression tracking bot:
-
-#regzbot ^introduced 804b6e5ee613b019b942ba6be52cccecd9d33655
-#regzbot title pm: laptop totally freezes when going to hibernation
-#regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215427
-#regzbot ignore-activity
-
-Reminder: when fixing the issue, please add a 'Link:' tag with the URL
-to the report (the parent of this mail) using the kernel.org redirector,
-as explained in 'Documentation/process/submitting-patches.rst'. Regzbot
-then will automatically mark the regression as resolved once the fix
-lands in the appropriate tree. For more details about regzbot see footer.
-
-Sending this to everyone that got the initial report, to make all aware
-of the tracking. I also hope that messages like this motivate people to
-directly get at least the regression mailing list and ideally even
-regzbot involved when dealing with regressions, as messages like this
-wouldn't be needed then.
-
-Don't worry, I'll send further messages wrt to this regression just to
-the lists (with a tag in the subject so people can filter them away), as
-long as they are intended just for regzbot. With a bit of luck no such
-messages will be needed anyway.
-
-Ciao, Thorsten (wearing his 'Linux kernel regression tracker' hat).
-
-P.S.: As a Linux kernel regression tracker I'm getting a lot of reports
-on my table. I can only look briefly into most of them. Unfortunately
-therefore I sometimes will get things wrong or miss something important.
-I hope that's not the case here; if you think it is, don't hesitate to
-tell me about it in a public reply. That's in everyone's interest, as
-what I wrote above might be misleading to everyone reading this; any
-suggestion I gave thus might sent someone reading this down the wrong
-rabbit hole, which none of us wants.
-
-BTW, I have no personal interest in this issue, which is tracked using
-regzbot, my Linux kernel regression tracking bot
-(https://linux-regtracking.leemhuis.info/regzbot/). I'm only posting
-this mail to get things rolling again and hence don't need to be CC on
-all further activities wrt to this regression.
-
----
-Additional information about regzbot:
-
-If you want to know more about regzbot, check out its web-interface, the
-getting start guide, and/or the references documentation:
-
-https://linux-regtracking.leemhuis.info/regzbot/
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
-
-The last two documents will explain how you can interact with regzbot
-yourself if your want to.
-
-Hint for reporters: when reporting a regression it's in your interest to
-tell #regzbot about it in the report, as that will ensure the regression
-gets on the radar of regzbot and the regression tracker. That's in your
-interest, as they will make sure the report won't fall through the
-cracks unnoticed.
-
-Hint for developers: you normally don't need to care about regzbot once
-it's involved. Fix the issue as you normally would, just remember to
-include a 'Link:' tag to the report in the commit message, as explained
-in Documentation/process/submitting-patches.rst
-That aspect was recently was made more explicit in commit 1f57bd42b77c:
-https://git.kernel.org/linus/1f57bd42b77c
+SGkgU3VkZWVwIGFuZCBEYW5pZWw6DQoNClRoYW5rcyB5b3VyIHJlc3BvbnNlLg0KTXkgQ1BVIGlz
+IGFybSBDQTcgdGhhdCBpcyAzMmJpdHMgY3B1Lg0KSWYgSSBkaXJlY3RseSB1c2VkIGNwdWlkbGUt
+YXJtLmMgZnVuY3Rpb24gd2l0aCBlbmFibGUgIkdlbmVyaWMgQVJNL0FSTTY0IENQVSBpZGxlIERy
+aXZlciIsDQp0aGUgY3B1aWRsZSBkcml2ZXIgbW91bnQgZmFpbCB3aXRoICJ1bnN1cHBvcnRlZCBl
+bmFibGUtbWV0aG9kIHByb3BlcnR5Ii4NCg0KVGhpcyBpcyBkdWUgdG8gbGludXgga2VybmVsIG5v
+IGludm9rZSBDUFVJRExFX01FVEhPRF9PRl9ERUNMQVJFIGZvciBhcm0gMzJiaXRzIGNwdS4NClRo
+ZXJlIGhhdmUgbm8gZGVmaW5lIGNwdWlkbGVfb3BzLmluaXQgYW5kIGNwdWlkbGVfb3BzLnN1c3Bl
+bmQgZnVuY3Rpb24gZm9yIGFybSAzMmJpdHMgY3B1IHRvby4NCg0KU28gSSBjcmVhdGUgY3B1aWRs
+ZS1zdW5wbHVzLmMgdG8gZXhlY3V0ZSBteSBjcHVpZGxlIGZ1bmN0aW9uLg0KUGxlYXNlIGNvcnJl
+Y3QgbWUgaWYgSSBnb3QgbWlzdGFrZS4NCg0KDQqq9KurrnAgRWR3aW5DaGl1DQq0vK/guUK64rFN
+rtcNClQ6ICs4ODYtMy01Nzg2MDA1IGV4dC4yNTkwDQplZHdpbi5jaGl1QHN1bnBsdXMuY29tDQoz
+MDAgt3Omy6zsvse26bDPs9C3c6RAuPQxObi5DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0t
+LS0NCj4gRnJvbTogU3VkZWVwIEhvbGxhIDxzdWRlZXAuaG9sbGFAYXJtLmNvbT4NCj4gU2VudDog
+TW9uZGF5LCBEZWNlbWJlciAyMCwgMjAyMSA4OjExIFBNDQo+IFRvOiBFZHdpbiBDaGl1IDxlZHdp
+bmNoaXUwNTA1dHdAZ21haWwuY29tPg0KPiBDYzogcm9iaCtkdEBrZXJuZWwub3JnOyBFZHdpbiBD
+aGl1IKr0q6uucCA8ZWR3aW4uY2hpdUBzdW5wbHVzLmNvbT47IGRldmljZXRyZWVAdmdlci5rZXJu
+ZWwub3JnOw0KPiBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyByYWZhZWxAa2VybmVsLm9y
+ZzsgU3VkZWVwIEhvbGxhIDxzdWRlZXAuaG9sbGFAYXJtLmNvbT47DQo+IGRhbmllbC5sZXpjYW5v
+QGxpbmFyby5vcmc7IGxpbnV4LXBtQHZnZXIua2VybmVsLm9yZw0KPiBTdWJqZWN0OiBSZTogW1BB
+VENIIHYyIDIvMl0gY3B1aWRsZTpzdW5wbHVzOmNyZWF0ZSBjcHVpZGxlIGRyaXZlciBmb3Igc3Vu
+cGx1cyBzcDcwMjENCj4gDQo+IE9uIE1vbiwgRGVjIDIwLCAyMDIxIGF0IDAxOjM3OjMyUE0gKzA4
+MDAsIEVkd2luIENoaXUgd3JvdGU6DQo+ID4gQ3JlYXRlIGNwdWlkbGUgZHJpdmVyIGZvciBzdW5w
+bHVzIHNwNzAyMSBjaGlwDQo+ID4NCj4gDQo+IEJhc2VkIG9uIHRoZSBkcml2ZXIgaGVyZSwgSSBj
+b3VsZG4ndCB1bmRlcnN0YW5kIHdoeSB5b3UgY2FuJ3QgbWFrZSB1c2Ugb2YgZXhpc3RpbmcgY3B1
+aWRsZS1hcm0uYyBkcml2ZXINCj4gDQo+IC0tDQo+IFJlZ2FyZHMsDQo+IFN1ZGVlcA0K
