@@ -2,81 +2,187 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDFEC48077B
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Dec 2021 09:45:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C83E548087B
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Dec 2021 11:40:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235758AbhL1IpY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Dec 2021 03:45:24 -0500
-Received: from mswedge2.sunplus.com ([60.248.182.106]:37402 "EHLO
-        mg.sunplus.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231670AbhL1IpX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Dec 2021 03:45:23 -0500
-X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
-        ,3)
-Received: from 172.17.9.202
-        by mg02.sunplus.com with MailGates ESMTP Server V5.0(49508:0:AUTH_RELAY)
-        (envelope-from <edwin.chiu@sunplus.com>); Tue, 28 Dec 2021 16:45:27 +0800 (CST)
-Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
- sphcmbx01.sunplus.com.tw (172.17.9.202) with Microsoft SMTP Server (TLS) id
- 15.0.1497.26; Tue, 28 Dec 2021 16:45:21 +0800
-Received: from sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd]) by
- sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd%14]) with mapi id
- 15.00.1497.026; Tue, 28 Dec 2021 16:45:21 +0800
-From:   =?big5?B?RWR3aW4gQ2hpdSCq9KurrnA=?= <edwin.chiu@sunplus.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>,
-        Edwin Chiu <edwinchiu0505tw@gmail.com>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: RE: [PATCH v2 2/2] cpuidle:sunplus:create cpuidle driver for sunplus
- sp7021
-Thread-Topic: [PATCH v2 2/2] cpuidle:sunplus:create cpuidle driver for sunplus
- sp7021
-Thread-Index: AQHX9WEUrNii4YTVCkGIbW8MVVMb3Kw6xGIAgAzaWSA=
-Date:   Tue, 28 Dec 2021 08:45:21 +0000
-Message-ID: <0812c44f777d4026b79df2e3698294be@sphcmbx02.sunplus.com.tw>
-References: <cover.1639971376.git.edwinchiu0505tw@gmail.com>
- <6092f5f372851e2d6bf12b4b23209558038b9fda.1639971376.git.edwinchiu0505tw@gmail.com>
- <20211220121050.rnd3o7d5cksqbqnk@bogus>
-In-Reply-To: <20211220121050.rnd3o7d5cksqbqnk@bogus>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [172.25.108.40]
-Content-Type: text/plain; charset="big5"
-Content-Transfer-Encoding: base64
+        id S231789AbhL1KkC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Dec 2021 05:40:02 -0500
+Received: from mga14.intel.com ([192.55.52.115]:21436 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230112AbhL1KkC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 28 Dec 2021 05:40:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640688002; x=1672224002;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=tiRyDOyL5kkRwfgvPqclCj2b1zkGRkJfUXvHFTZE8Ek=;
+  b=PODAb+JdrsUEpy6fn1hfMSs26SRcbuLG66/8jNEqtMaECeXe0KqRrRw+
+   haYEI/eWpI/bV1wHSPe7RIUgRIGgcK/gFkMcSRBmY2lXlWams3l6fv5BM
+   twyj70+HHShbeI0dAttc1sdiE9xU5FA+L13zFVRX03yl3sZ+vjNebJRzG
+   lNFfY6PRLYPvWRYU5Tzv2Tg0HgTKs9hVun8BaMVTWBZV0JHrftDMmO7wh
+   ZCcvi/nPm8NNGvHHzwEMKCuHZJh0D/6IXSuXkq/Zi5ra3zsisvBiN6yR7
+   s4oOPT9uuL/8IufZzoPdrdWGQV42OylrjHHotYvqrN6f5ZyBAFp4/PGlt
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="241563998"
+X-IronPort-AV: E=Sophos;i="5.88,242,1635231600"; 
+   d="scan'208";a="241563998"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 02:40:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,242,1635231600"; 
+   d="scan'208";a="469995176"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 28 Dec 2021 02:40:00 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n29tf-0007Uq-HW; Tue, 28 Dec 2021 10:39:59 +0000
+Date:   Tue, 28 Dec 2021 18:39:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS WITH WARNING
+ 86e4182dd2d1465f6446863dd26da97ea069c8a2
+Message-ID: <61cae944.Twod0fyG7mT0FqUV%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGkgU3VkZWVwIGFuZCBEYW5pZWw6DQoNClRoYW5rcyB5b3VyIHJlc3BvbnNlLg0KTXkgQ1BVIGlz
-IGFybSBDQTcgdGhhdCBpcyAzMmJpdHMgY3B1Lg0KSWYgSSBkaXJlY3RseSB1c2VkIGNwdWlkbGUt
-YXJtLmMgZnVuY3Rpb24gd2l0aCBlbmFibGUgIkdlbmVyaWMgQVJNL0FSTTY0IENQVSBpZGxlIERy
-aXZlciIsDQp0aGUgY3B1aWRsZSBkcml2ZXIgbW91bnQgZmFpbCB3aXRoICJ1bnN1cHBvcnRlZCBl
-bmFibGUtbWV0aG9kIHByb3BlcnR5Ii4NCg0KVGhpcyBpcyBkdWUgdG8gbGludXgga2VybmVsIG5v
-IGludm9rZSBDUFVJRExFX01FVEhPRF9PRl9ERUNMQVJFIGZvciBhcm0gMzJiaXRzIGNwdS4NClRo
-ZXJlIGhhdmUgbm8gZGVmaW5lIGNwdWlkbGVfb3BzLmluaXQgYW5kIGNwdWlkbGVfb3BzLnN1c3Bl
-bmQgZnVuY3Rpb24gZm9yIGFybSAzMmJpdHMgY3B1IHRvby4NCg0KU28gSSBjcmVhdGUgY3B1aWRs
-ZS1zdW5wbHVzLmMgdG8gZXhlY3V0ZSBteSBjcHVpZGxlIGZ1bmN0aW9uLg0KUGxlYXNlIGNvcnJl
-Y3QgbWUgaWYgSSBnb3QgbWlzdGFrZS4NCg0KDQqq9KurrnAgRWR3aW5DaGl1DQq0vK/guUK64rFN
-rtcNClQ6ICs4ODYtMy01Nzg2MDA1IGV4dC4yNTkwDQplZHdpbi5jaGl1QHN1bnBsdXMuY29tDQoz
-MDAgt3Omy6zsvse26bDPs9C3c6RAuPQxObi5DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0t
-LS0NCj4gRnJvbTogU3VkZWVwIEhvbGxhIDxzdWRlZXAuaG9sbGFAYXJtLmNvbT4NCj4gU2VudDog
-TW9uZGF5LCBEZWNlbWJlciAyMCwgMjAyMSA4OjExIFBNDQo+IFRvOiBFZHdpbiBDaGl1IDxlZHdp
-bmNoaXUwNTA1dHdAZ21haWwuY29tPg0KPiBDYzogcm9iaCtkdEBrZXJuZWwub3JnOyBFZHdpbiBD
-aGl1IKr0q6uucCA8ZWR3aW4uY2hpdUBzdW5wbHVzLmNvbT47IGRldmljZXRyZWVAdmdlci5rZXJu
-ZWwub3JnOw0KPiBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyByYWZhZWxAa2VybmVsLm9y
-ZzsgU3VkZWVwIEhvbGxhIDxzdWRlZXAuaG9sbGFAYXJtLmNvbT47DQo+IGRhbmllbC5sZXpjYW5v
-QGxpbmFyby5vcmc7IGxpbnV4LXBtQHZnZXIua2VybmVsLm9yZw0KPiBTdWJqZWN0OiBSZTogW1BB
-VENIIHYyIDIvMl0gY3B1aWRsZTpzdW5wbHVzOmNyZWF0ZSBjcHVpZGxlIGRyaXZlciBmb3Igc3Vu
-cGx1cyBzcDcwMjENCj4gDQo+IE9uIE1vbiwgRGVjIDIwLCAyMDIxIGF0IDAxOjM3OjMyUE0gKzA4
-MDAsIEVkd2luIENoaXUgd3JvdGU6DQo+ID4gQ3JlYXRlIGNwdWlkbGUgZHJpdmVyIGZvciBzdW5w
-bHVzIHNwNzAyMSBjaGlwDQo+ID4NCj4gDQo+IEJhc2VkIG9uIHRoZSBkcml2ZXIgaGVyZSwgSSBj
-b3VsZG4ndCB1bmRlcnN0YW5kIHdoeSB5b3UgY2FuJ3QgbWFrZSB1c2Ugb2YgZXhpc3RpbmcgY3B1
-aWRsZS1hcm0uYyBkcml2ZXINCj4gDQo+IC0tDQo+IFJlZ2FyZHMsDQo+IFN1ZGVlcA0K
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 86e4182dd2d1465f6446863dd26da97ea069c8a2  Merge branch 'acpi-pfrut' into bleeding-edge
+
+Warning reports:
+
+https://lore.kernel.org/llvm/202112280907.gTYYYuB4-lkp@intel.com
+
+Warning in current branch:
+
+drivers/acpi/acpica/exregion.c:519:17: warning: performing pointer subtraction with a null pointer has undefined behavior [-Wnull-pointer-subtraction]
+
+Warning ids grouped by kconfigs:
+
+clang_recent_errors
+|-- i386-randconfig-a012-20211228
+|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
+`-- x86_64-randconfig-a015-20211228
+    `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
+
+elapsed time: 721m
+
+configs tested: 102
+configs skipped: 3
+
+gcc tested configs:
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm64                               defconfig
+arm64                            allyesconfig
+i386                 randconfig-c001-20211228
+powerpc                 mpc8540_ads_defconfig
+mips                        jmr3927_defconfig
+powerpc                   microwatt_defconfig
+sh                            shmin_defconfig
+powerpc                      obs600_defconfig
+powerpc                    amigaone_defconfig
+sparc                               defconfig
+arm                           spitz_defconfig
+sh                         ap325rxa_defconfig
+powerpc                  mpc866_ads_defconfig
+s390                             alldefconfig
+sh                              ul2_defconfig
+ia64                      gensparse_defconfig
+sh                            migor_defconfig
+powerpc                           allnoconfig
+powerpc                       eiger_defconfig
+powerpc                     tqm8548_defconfig
+arm                          ixp4xx_defconfig
+riscv                          rv32_defconfig
+sh                          urquell_defconfig
+arm                  randconfig-c002-20211228
+ia64                                defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nds32                             allnoconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+alpha                               defconfig
+nds32                               defconfig
+alpha                            allyesconfig
+nios2                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+parisc                              defconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+s390                             allyesconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+sparc                            allyesconfig
+mips                             allmodconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+powerpc                          allyesconfig
+x86_64               randconfig-a001-20211228
+x86_64               randconfig-a003-20211228
+x86_64               randconfig-a002-20211228
+x86_64               randconfig-a005-20211228
+x86_64               randconfig-a004-20211228
+x86_64               randconfig-a006-20211228
+i386                 randconfig-a002-20211228
+i386                 randconfig-a003-20211228
+i386                 randconfig-a001-20211228
+i386                 randconfig-a005-20211228
+i386                 randconfig-a006-20211228
+i386                 randconfig-a004-20211228
+arc                  randconfig-r043-20211228
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                    rhel-8.3-kselftests
+
+clang tested configs:
+x86_64               randconfig-a014-20211228
+x86_64               randconfig-a013-20211228
+x86_64               randconfig-a012-20211228
+x86_64               randconfig-a011-20211228
+x86_64               randconfig-a016-20211228
+x86_64               randconfig-a015-20211228
+i386                 randconfig-a012-20211228
+i386                 randconfig-a011-20211228
+i386                 randconfig-a013-20211228
+i386                 randconfig-a014-20211228
+i386                 randconfig-a016-20211228
+i386                 randconfig-a015-20211228
+hexagon              randconfig-r041-20211228
+riscv                randconfig-r042-20211228
+s390                 randconfig-r044-20211228
+hexagon              randconfig-r045-20211228
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
