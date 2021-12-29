@@ -2,107 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D90C4813D4
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Dec 2021 15:09:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0491B4813E9
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Dec 2021 15:15:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237245AbhL2OJN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Dec 2021 09:09:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58528 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236661AbhL2OJN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Dec 2021 09:09:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EFB9C061574;
-        Wed, 29 Dec 2021 06:09:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S240159AbhL2OPi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Dec 2021 09:15:38 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:41002
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240164AbhL2OPf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Dec 2021 09:15:35 -0500
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com [209.85.208.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F447614AF;
-        Wed, 29 Dec 2021 14:09:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 916FCC36AE9;
-        Wed, 29 Dec 2021 14:09:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640786952;
-        bh=88kqdA+xI+3rnGnYil6mHZwNPE8XhAFpQsO+Eb69dkw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=mgildSj+syIkCn2EB5ubNeekfH9JyapYwFeWIs5OTHXDOZVRp5hwQFonoz0Fo6EYl
-         obYRfFO9poUHL2YhNfT37s8IN0hlm+CiA9gF+8tAnhXFbN/DVNRVJwqqDmllTjfLGZ
-         N4o048JH2y1ISv7Tcg6BGGlM9y04Q+zH6s+zT050=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH] power_supply: ab8500: use default_groups in kobj_type
-Date:   Wed, 29 Dec 2021 15:09:08 +0100
-Message-Id: <20211229140908.2523513-1-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.34.1
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 1DF953F31F
+        for <linux-pm@vger.kernel.org>; Wed, 29 Dec 2021 14:15:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1640787333;
+        bh=UlJjLAfS40qt5leudPWhfuRwJJRufaBrjQlrhE6JqdI=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=fbUWzs3gCad0e67u/90GE275tv/Lnz4IxlIb4CyO8SrX8IEq9qC530qBY2ZtyUyG2
+         LbVEUWRAivkfpwXt4XhdkTrI2Scwvqi9FvK9924yot1oxu+QDUGzSTYNlmMTZ3oy4B
+         t0BL2e9Z3fULeKUqTaD6deKHMbOribBqCc5HwrscLqOxxwEvQMHJCR0Em55zKYT11e
+         Rz0BoQwnNjumO8Z9wn5Kqram3f6+SOgaKjfvR8Dpu9m6Pwg/v5gThyRV+8W3pDSHb2
+         Gxt3x9LbVsGtNtRNExee5WJs3rYoBH4ho1gMXqQP/0P981H/tiVIlGv24A41XsJpOb
+         TH+ATPhgzt1uQ==
+Received: by mail-lj1-f197.google.com with SMTP id y4-20020a2e95c4000000b0022dbab5f69eso4540307ljh.14
+        for <linux-pm@vger.kernel.org>; Wed, 29 Dec 2021 06:15:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UlJjLAfS40qt5leudPWhfuRwJJRufaBrjQlrhE6JqdI=;
+        b=ekCs3rHzvu4rxcQ1V/MU15iBU3ywuwcWv3CC66rFvqkNwyJap73eDlmdVQLZKjOWNj
+         d5vpRLQjXOLRL0fUD48Nsx4dP5q7G4Mw4JX7zCIB373eMiqLjUAfuoZT0Ii/mXnaPnO8
+         DBlJcbLtW0GTRFRqENCi0EExSZdtwIIt939J3F48ufw3eeeRi7LKAYTPaWsOc4joMV4f
+         epPIdxGWpfMexsUCcQVUhv9iO+QyR+FQQL6G5A7AvfjOEisuxpSqyC9MINR5cyzLUG47
+         kdPdICvXZ1ooicKGpJcSccHsYubtKxDvi1t8BAjgcsxOmiriVm/DzjiIQivvAMnAgAx6
+         Ln7A==
+X-Gm-Message-State: AOAM530MshDp8fUwu0OSCzippkuo3vOCHsuiYz8Oc2NySz97VJs6/7QT
+        2Tdmk7h6GoJHRmkfrq4emVFndxh1D3J1vEU4FIQPt8OS0/5H6xYl0MeCsV+LJVwpo4tZAWIxUVa
+        M+qAuNkguGHoPWwaAi9bwAOPNVx02EaASD5Dv
+X-Received: by 2002:a05:651c:ba8:: with SMTP id bg40mr18007298ljb.276.1640787332068;
+        Wed, 29 Dec 2021 06:15:32 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz5TtuMxYfpkf1FSMtnQIraHesCWHTbGXlzooBflaELIyumSIPdU/aIFK3/MPK4jIGTN5L8Vw==
+X-Received: by 2002:a05:651c:ba8:: with SMTP id bg40mr18007281ljb.276.1640787331900;
+        Wed, 29 Dec 2021 06:15:31 -0800 (PST)
+Received: from krzk-bin.lan (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id a16sm1316164ljm.98.2021.12.29.06.15.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Dec 2021 06:15:31 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: [PATCH 0/4] mfd/power/regulators: dt-bindings: max14577: convert to dtschema
+Date:   Wed, 29 Dec 2021 15:15:20 +0100
+Message-Id: <20211229141524.34174-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2212; h=from:subject; bh=88kqdA+xI+3rnGnYil6mHZwNPE8XhAFpQsO+Eb69dkw=; b=owGbwMvMwCRo6H6F97bub03G02pJDIlnchg7THLiUiv2MrZ9zt6UKPiq9ej76slHZIN+/us72yP2 XH5ORywLgyATg6yYIsuXbTxH91ccUvQytD0NM4eVCWQIAxenAEwkag/DPBV26WnSbQt9t//qPbGRf+ 0635l3NzIsuLh5Z/qNmf2blRpTImICJ74UYJ3zBgA=
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There are currently 2 ways to create a set of sysfs files for a
-kobj_type, through the default_attrs field, and the default_groups
-field.  Move the ab8500 power supply sysfs code to use default_groups
-field which has been the preferred way since aa30f47cf666 ("kobject: Add
-support for default attribute groups to kobj_type") so that we can soon
-get rid of the obsolete default_attrs field.
+Hi,
 
-Cc: Sebastian Reichel <sre@kernel.org>
-Cc: linux-pm@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/power/supply/ab8500_chargalg.c | 5 +++--
- drivers/power/supply/ab8500_fg.c       | 3 ++-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+Dependencies:
+1. DTS patch 1/4: nothing depends on it, sending here so Rob's automatic
+   checker won't complain about DTS.
+   I will take it via Samsung SoC tree.
 
-diff --git a/drivers/power/supply/ab8500_chargalg.c b/drivers/power/supply/ab8500_chargalg.c
-index ff4b26b1ceca..42689ac2d898 100644
---- a/drivers/power/supply/ab8500_chargalg.c
-+++ b/drivers/power/supply/ab8500_chargalg.c
-@@ -1865,11 +1865,12 @@ static ssize_t ab8500_chargalg_sysfs_charger(struct kobject *kobj,
- 	return entry->store(di, buf, length);
- }
- 
--static struct attribute *ab8500_chargalg_chg[] = {
-+static struct attribute *ab8500_chargalg_attrs[] = {
- 	&ab8500_chargalg_en_charger.attr,
- 	&ab8500_chargalg_curr_step.attr,
- 	NULL,
- };
-+ATTRIBUTE_GROUPS(ab8500_chargalg);
- 
- static const struct sysfs_ops ab8500_chargalg_sysfs_ops = {
- 	.show = ab8500_chargalg_sysfs_show,
-@@ -1878,7 +1879,7 @@ static const struct sysfs_ops ab8500_chargalg_sysfs_ops = {
- 
- static struct kobj_type ab8500_chargalg_ktype = {
- 	.sysfs_ops = &ab8500_chargalg_sysfs_ops,
--	.default_attrs = ab8500_chargalg_chg,
-+	.default_groups = ab8500_chargalg_groups,
- };
- 
- /**
-diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
-index 05fe9724ba50..6820e19380b5 100644
---- a/drivers/power/supply/ab8500_fg.c
-+++ b/drivers/power/supply/ab8500_fg.c
-@@ -2514,10 +2514,11 @@ static struct attribute *ab8500_fg_attrs[] = {
- 	&charge_now_attr.attr,
- 	NULL,
- };
-+ATTRIBUTE_GROUPS(ab8500_fg);
- 
- static struct kobj_type ab8500_fg_ktype = {
- 	.sysfs_ops = &ab8500_fg_sysfs_ops,
--	.default_attrs = ab8500_fg_attrs,
-+	.default_groups = ab8500_fg_groups,
- };
- 
- /**
+2. Final MFD patch (4/4) depends on regulator and power, so the last
+   patches (2+3+4) should go via same tree.
+
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (4):
+  ARM: dts: exynos: Align MAX77836 nodes with dtschema on Monk and
+    Rinato
+  dt-bindings: power: supply: maxim,max14577: convert to dtschema
+  regulator: dt-bindings: maxim,max14577: convert to dtschema
+  dt-bindings: mfd: maxim,max14577: convert to dtschema
+
+ .../devicetree/bindings/mfd/max14577.txt      | 147 -------------
+ .../bindings/mfd/maxim,max14577.yaml          | 195 ++++++++++++++++++
+ .../bindings/power/supply/maxim,max14577.yaml |  84 ++++++++
+ .../bindings/regulator/maxim,max14577.yaml    |  81 ++++++++
+ MAINTAINERS                                   |   3 +-
+ arch/arm/boot/dts/exynos3250-monk.dts         |   2 +-
+ arch/arm/boot/dts/exynos3250-rinato.dts       |   2 +-
+ 7 files changed, 364 insertions(+), 150 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/mfd/max14577.txt
+ create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max14577.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/supply/maxim,max14577.yaml
+ create mode 100644 Documentation/devicetree/bindings/regulator/maxim,max14577.yaml
+
 -- 
-2.34.1
+2.32.0
 
