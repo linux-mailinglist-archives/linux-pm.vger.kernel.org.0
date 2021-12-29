@@ -2,144 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D3D9481302
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Dec 2021 14:07:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D90C4813D4
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Dec 2021 15:09:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238908AbhL2NFE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Dec 2021 08:05:04 -0500
-Received: from mga11.intel.com ([192.55.52.93]:39960 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238590AbhL2NFE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 29 Dec 2021 08:05:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640783104; x=1672319104;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OPekGE0BysIj2ePhh+K0lb5fBtjc9oFbufOduayBaso=;
-  b=hbav0veG9xqjrCyuSS6gSHoUJZ6RLBvWbCTU6WwyITqq5oj7o2QN/cQ2
-   zy3rk99xPKlD0gWq8vwbw6uJ8MSv8FJDktTfH2QNF3BafxSBrG3Db7AdV
-   zSY3Pu23DWDdVQDw72ISuXU12Q5VgZELyJ4QkgUpdz6wK2Zy7kVhispff
-   EszCj0KAHNQDcXQdHmxTWR0OgAy2tTIYDZFz5QhXrWOo371vbtfAfmnBY
-   YIb0CD3Ynh+M+kUzupbN4ZoQTnn6e/SPzUgIv3Q8+CDdqLq64vhHAwc87
-   bAJt/QMTqpbTy+CrMTxbrScCQtHHAcFFSx1jdM9YWYXLbSkGu7x3yfAS0
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="239059690"
-X-IronPort-AV: E=Sophos;i="5.88,245,1635231600"; 
-   d="scan'208";a="239059690"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 05:05:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,245,1635231600"; 
-   d="scan'208";a="572600689"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 29 Dec 2021 05:05:01 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n2YdZ-0008vc-20; Wed, 29 Dec 2021 13:05:01 +0000
-Date:   Wed, 29 Dec 2021 21:04:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Li-hao Kuo <lhjeff911@gmail.com>, rafael@kernel.org,
-        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
-        robh+dt@kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, wells.lu@sunplus.com,
-        Li-hao Kuo <lhjeff911@gmail.com>
-Subject: Re: [PATCH v2 1/2] THERMAL: Add THERMAL driver for Sunplus SP7021
-Message-ID: <202112292049.x3u9VQgr-lkp@intel.com>
-References: <a5b37169978e9b82c33718289066287dfd1b9c00.1640235724.git.lhjeff911@gmail.com>
+        id S237245AbhL2OJN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Dec 2021 09:09:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58528 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236661AbhL2OJN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Dec 2021 09:09:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EFB9C061574;
+        Wed, 29 Dec 2021 06:09:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F447614AF;
+        Wed, 29 Dec 2021 14:09:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 916FCC36AE9;
+        Wed, 29 Dec 2021 14:09:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640786952;
+        bh=88kqdA+xI+3rnGnYil6mHZwNPE8XhAFpQsO+Eb69dkw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mgildSj+syIkCn2EB5ubNeekfH9JyapYwFeWIs5OTHXDOZVRp5hwQFonoz0Fo6EYl
+         obYRfFO9poUHL2YhNfT37s8IN0hlm+CiA9gF+8tAnhXFbN/DVNRVJwqqDmllTjfLGZ
+         N4o048JH2y1ISv7Tcg6BGGlM9y04Q+zH6s+zT050=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
+Subject: [PATCH] power_supply: ab8500: use default_groups in kobj_type
+Date:   Wed, 29 Dec 2021 15:09:08 +0100
+Message-Id: <20211229140908.2523513-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a5b37169978e9b82c33718289066287dfd1b9c00.1640235724.git.lhjeff911@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2212; h=from:subject; bh=88kqdA+xI+3rnGnYil6mHZwNPE8XhAFpQsO+Eb69dkw=; b=owGbwMvMwCRo6H6F97bub03G02pJDIlnchg7THLiUiv2MrZ9zt6UKPiq9ej76slHZIN+/us72yP2 XH5ORywLgyATg6yYIsuXbTxH91ccUvQytD0NM4eVCWQIAxenAEwkag/DPBV26WnSbQt9t//qPbGRf+ 0635l3NzIsuLh5Z/qNmf2blRpTImICJ74UYJ3zBgA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Li-hao,
+There are currently 2 ways to create a set of sysfs files for a
+kobj_type, through the default_attrs field, and the default_groups
+field.  Move the ab8500 power supply sysfs code to use default_groups
+field which has been the preferred way since aa30f47cf666 ("kobject: Add
+support for default attribute groups to kobj_type") so that we can soon
+get rid of the obsolete default_attrs field.
 
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on rafael-pm/thermal]
-[also build test WARNING on linus/master v5.16-rc7 next-20211224]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Li-hao-Kuo/Add-THERMAL-control-driver-for-Sunplus-SP7021-SoC/20211223-130720
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
-config: h8300-allyesconfig (https://download.01.org/0day-ci/archive/20211229/202112292049.x3u9VQgr-lkp@intel.com/config)
-compiler: h8300-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/99e97d44b9115aad59fc953c2945c7cbda1d57bb
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Li-hao-Kuo/Add-THERMAL-control-driver-for-Sunplus-SP7021-SoC/20211223-130720
-        git checkout 99e97d44b9115aad59fc953c2945c7cbda1d57bb
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=h8300 SHELL=/bin/bash drivers/thermal/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/thermal/sunplus_thermal.c:44:7: warning: no previous prototype for 'sp7021_otp_coef_read' [-Wmissing-prototypes]
-      44 | char *sp7021_otp_coef_read(struct device *dev, ssize_t *len)
-         |       ^~~~~~~~~~~~~~~~~~~~
-   In file included from include/linux/printk.h:559,
-                    from include/linux/kernel.h:20,
-                    from include/linux/clk.h:13,
-                    from drivers/thermal/sunplus_thermal.c:8:
-   drivers/thermal/sunplus_thermal.c: In function 'sp7021_otp_coef_read':
->> drivers/thermal/sunplus_thermal.c:55:22: warning: format '%d' expects argument of type 'int', but argument 4 has type 'ssize_t' {aka 'long int'} [-Wformat=]
-      55 |         dev_dbg(dev, "%d bytes read from OTP", *len);
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dynamic_debug.h:134:29: note: in definition of macro '__dynamic_func_call'
-     134 |                 func(&id, ##__VA_ARGS__);               \
-         |                             ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:166:9: note: in expansion of macro '_dynamic_func_call'
-     166 |         _dynamic_func_call(fmt,__dynamic_dev_dbg,               \
-         |         ^~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:155:9: note: in expansion of macro 'dynamic_dev_dbg'
-     155 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:155:30: note: in expansion of macro 'dev_fmt'
-     155 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                              ^~~~~~~
-   drivers/thermal/sunplus_thermal.c:55:9: note: in expansion of macro 'dev_dbg'
-      55 |         dev_dbg(dev, "%d bytes read from OTP", *len);
-         |         ^~~~~~~
-   drivers/thermal/sunplus_thermal.c:55:24: note: format string is defined here
-      55 |         dev_dbg(dev, "%d bytes read from OTP", *len);
-         |                       ~^
-         |                        |
-         |                        int
-         |                       %ld
-
-
-vim +55 drivers/thermal/sunplus_thermal.c
-
-    43	
-  > 44	char *sp7021_otp_coef_read(struct device *dev, ssize_t *len)
-    45	{
-    46		char *ret = NULL;
-    47		struct nvmem_cell *c = nvmem_cell_get(dev, "therm_calib");
-    48	
-    49		if (IS_ERR_OR_NULL(c)) {
-    50			dev_err(dev, "OTP read failure:%ld", PTR_ERR(c));
-    51			return NULL;
-    52		}
-    53		ret = nvmem_cell_read(c, len);
-    54		nvmem_cell_put(c);
-  > 55		dev_dbg(dev, "%d bytes read from OTP", *len);
-    56		return ret;
-    57	}
-    58	
-
+Cc: Sebastian Reichel <sre@kernel.org>
+Cc: linux-pm@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/power/supply/ab8500_chargalg.c | 5 +++--
+ drivers/power/supply/ab8500_fg.c       | 3 ++-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/power/supply/ab8500_chargalg.c b/drivers/power/supply/ab8500_chargalg.c
+index ff4b26b1ceca..42689ac2d898 100644
+--- a/drivers/power/supply/ab8500_chargalg.c
++++ b/drivers/power/supply/ab8500_chargalg.c
+@@ -1865,11 +1865,12 @@ static ssize_t ab8500_chargalg_sysfs_charger(struct kobject *kobj,
+ 	return entry->store(di, buf, length);
+ }
+ 
+-static struct attribute *ab8500_chargalg_chg[] = {
++static struct attribute *ab8500_chargalg_attrs[] = {
+ 	&ab8500_chargalg_en_charger.attr,
+ 	&ab8500_chargalg_curr_step.attr,
+ 	NULL,
+ };
++ATTRIBUTE_GROUPS(ab8500_chargalg);
+ 
+ static const struct sysfs_ops ab8500_chargalg_sysfs_ops = {
+ 	.show = ab8500_chargalg_sysfs_show,
+@@ -1878,7 +1879,7 @@ static const struct sysfs_ops ab8500_chargalg_sysfs_ops = {
+ 
+ static struct kobj_type ab8500_chargalg_ktype = {
+ 	.sysfs_ops = &ab8500_chargalg_sysfs_ops,
+-	.default_attrs = ab8500_chargalg_chg,
++	.default_groups = ab8500_chargalg_groups,
+ };
+ 
+ /**
+diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
+index 05fe9724ba50..6820e19380b5 100644
+--- a/drivers/power/supply/ab8500_fg.c
++++ b/drivers/power/supply/ab8500_fg.c
+@@ -2514,10 +2514,11 @@ static struct attribute *ab8500_fg_attrs[] = {
+ 	&charge_now_attr.attr,
+ 	NULL,
+ };
++ATTRIBUTE_GROUPS(ab8500_fg);
+ 
+ static struct kobj_type ab8500_fg_ktype = {
+ 	.sysfs_ops = &ab8500_fg_sysfs_ops,
+-	.default_attrs = ab8500_fg_attrs,
++	.default_groups = ab8500_fg_groups,
+ };
+ 
+ /**
+-- 
+2.34.1
+
