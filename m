@@ -2,237 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C17B548105E
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Dec 2021 07:30:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89228481088
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Dec 2021 07:53:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234081AbhL2Gav (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Dec 2021 01:30:51 -0500
-Received: from mga07.intel.com ([134.134.136.100]:46129 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232444AbhL2Gau (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 29 Dec 2021 01:30:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640759450; x=1672295450;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=nn20DoR/p6ki/0UudGymy07+MjDwTYJ5M3ujk7GSdhY=;
-  b=K/P4W5zyQDOcxUw9wbLGS4+zkloNwqA6B4x/nghduXrBayNArluxNDjM
-   AYro2Z3snBPQzaXI1RjKMBLrKR6jpQbuMvaRFaSbi7/eqr9DUVf5XQY7a
-   8XppYCMbc94/+ej1FV76fmA7nQrZ8xrJtt1hLUwL/gwx0UednG2yR3fRI
-   9LKTsQn8PTP+Tu2olbpyr0QWdAy8nacK9XUYC9jetlfwlGInSg+vxzAC8
-   whTcOytSJ550E7EbOwIT3OA/HT8Py4GrTodcXV17MPzQG+bYOQU5lt541
-   0UKHnQsQAgrdz/B2wrsDpa4ji6p0zRFryswtQ9SFyoePdWE5aRJ5YqCxC
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="304831673"
-X-IronPort-AV: E=Sophos;i="5.88,244,1635231600"; 
-   d="scan'208";a="304831673"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 22:30:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,244,1635231600"; 
-   d="scan'208";a="615857359"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 28 Dec 2021 22:30:48 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n2SU3-0008cP-Tu; Wed, 29 Dec 2021 06:30:47 +0000
-Date:   Wed, 29 Dec 2021 14:30:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS WITH WARNING
- 8d681a5245f0a5cfb20326b4f6578af1adb8676b
-Message-ID: <61cc007a.mWwpG8hntz2tC9i6%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S230472AbhL2GxG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Dec 2021 01:53:06 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:26640 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229807AbhL2GxG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Dec 2021 01:53:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1640760786; x=1672296786;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ufkN8F8jUwn12NCyF940qBL0NdqCnffF+m6Y42RDBvc=;
+  b=C2yPZWs207HsAeLxNAXs7fbCG/WKevmPoyvIcHMKBgobzl4ZVtGTrwBl
+   BmA++8ltT6tvgRPztpDPQWUi4xLx8libQagtZ1/kcXV9dCiCDvnuvoFK9
+   yVtLB91BVXbtaGKqa/8G57N3OMLzkHPJPX8q3+ZK0/zS1sQNdGvQcq96G
+   0=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 28 Dec 2021 22:53:05 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 22:53:05 -0800
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Tue, 28 Dec 2021 22:53:05 -0800
+Received: from [10.216.19.24] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 28 Dec
+ 2021 22:53:01 -0800
+Message-ID: <cf6cfba0-816f-ca1e-3bb1-aad693e5a0b3@quicinc.com>
+Date:   Wed, 29 Dec 2021 12:22:54 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH] thermal/core: Clear all mitigation when thermal zone is
+ disabled
+To:     Matthias Kaehlcke <mka@chromium.org>
+CC:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1640083318-19277-1-git-send-email-quic_manafm@quicinc.com>
+ <YcSNIJVnCQvx6ttg@google.com>
+From:   Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+In-Reply-To: <YcSNIJVnCQvx6ttg@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 8d681a5245f0a5cfb20326b4f6578af1adb8676b  Merge branch 'acpi-sysfs' into bleeding-edge
 
-Warning reports:
-
-https://lore.kernel.org/llvm/202112280907.gTYYYuB4-lkp@intel.com
-
-Warning in current branch:
-
-drivers/acpi/acpica/exregion.c:519:17: warning: performing pointer subtraction with a null pointer has undefined behavior [-Wnull-pointer-subtraction]
-
-Warning ids grouped by kconfigs:
-
-clang_recent_errors
-|-- i386-randconfig-a001-20211229
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- i386-randconfig-a002-20211229
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- i386-randconfig-a003-20211229
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- i386-randconfig-a004-20211229
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- i386-randconfig-a005-20211229
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- i386-randconfig-a006-20211229
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- i386-randconfig-a011-20211228
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- i386-randconfig-a012-20211228
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- i386-randconfig-a013-20211228
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- i386-randconfig-a014-20211228
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- i386-randconfig-a015-20211228
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- i386-randconfig-a016-20211228
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- x86_64-randconfig-a001-20211229
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- x86_64-randconfig-a002-20211229
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- x86_64-randconfig-a003-20211229
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- x86_64-randconfig-a004-20211229
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- x86_64-randconfig-a005-20211229
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- x86_64-randconfig-a006-20211229
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- x86_64-randconfig-a011-20211228
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- x86_64-randconfig-a012-20211228
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- x86_64-randconfig-a013-20211228
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- x86_64-randconfig-a014-20211228
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- x86_64-randconfig-a015-20211228
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- x86_64-randconfig-a016-20211228
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- x86_64-randconfig-r012-20211228
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-`-- x86_64-randconfig-r024-20211228
-    `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-
-elapsed time: 725m
-
-configs tested: 104
-configs skipped: 3
-
-gcc tested configs:
-arm                              allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm64                               defconfig
-arm64                            allyesconfig
-i386                 randconfig-c001-20211228
-arm                           sama7_defconfig
-arc                        nsim_700_defconfig
-arm                            qcom_defconfig
-arm                          pxa3xx_defconfig
-powerpc                   bluestone_defconfig
-mips                      bmips_stb_defconfig
-arm                             ezx_defconfig
-sh                           se7343_defconfig
-powerpc                     skiroot_defconfig
-arm                         lpc18xx_defconfig
-arm                       imx_v6_v7_defconfig
-arm                          pxa910_defconfig
-powerpc                  mpc885_ads_defconfig
-powerpc                     pq2fads_defconfig
-arm                           sama5_defconfig
-arm                        shmobile_defconfig
-arc                    vdk_hs38_smp_defconfig
-csky                             alldefconfig
-riscv             nommu_k210_sdcard_defconfig
-arm                  randconfig-c002-20211229
-ia64                                defconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                             allnoconfig
-nios2                               defconfig
-arc                              allyesconfig
-csky                                defconfig
-alpha                               defconfig
-nds32                               defconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-parisc                              defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-s390                             allyesconfig
-i386                             allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-sparc                            allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-powerpc                          allyesconfig
-arc                  randconfig-r043-20211228
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-x86_64                    rhel-8.3-kselftests
-
-clang tested configs:
-x86_64               randconfig-a001-20211229
-x86_64               randconfig-a003-20211229
-x86_64               randconfig-a004-20211229
-x86_64               randconfig-a002-20211229
-x86_64               randconfig-a005-20211229
-x86_64               randconfig-a006-20211229
-i386                 randconfig-a002-20211229
-i386                 randconfig-a003-20211229
-i386                 randconfig-a001-20211229
-i386                 randconfig-a005-20211229
-i386                 randconfig-a006-20211229
-i386                 randconfig-a004-20211229
-x86_64               randconfig-a013-20211228
-x86_64               randconfig-a012-20211228
-x86_64               randconfig-a011-20211228
-x86_64               randconfig-a016-20211228
-x86_64               randconfig-a015-20211228
-x86_64               randconfig-a014-20211228
-i386                 randconfig-a012-20211228
-i386                 randconfig-a011-20211228
-i386                 randconfig-a013-20211228
-i386                 randconfig-a016-20211228
-i386                 randconfig-a014-20211228
-i386                 randconfig-a015-20211228
-hexagon              randconfig-r041-20211228
-riscv                randconfig-r042-20211228
-s390                 randconfig-r044-20211228
-hexagon              randconfig-r045-20211228
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+On 12/23/2021 8:22 PM, Matthias Kaehlcke wrote:
+> On Tue, Dec 21, 2021 at 04:11:58PM +0530, Manaf Meethalavalappu Pallikunhi wrote:
+>> Whenever a thermal zone is in trip violated state, there is a chance
+>> that the same thermal zone mode can be disabled either via thermal
+>> core API or via thermal zone sysfs. Once it is disabled, the framework
+>> bails out any re-evaluation of thermal zone. It leads to a case where
+>> if it is already in mitigation state, it will stay the same state
+>> until it is re-enabled.
+>>
+>> To avoid above mentioned issue, on thermal zone disable request
+>> reset thermal zone and clear mitigation for each trip explicitly.
+>>
+>> Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+>> ---
+>>   drivers/thermal/thermal_core.c | 9 ++++++++-
+>>   1 file changed, 8 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+>> index 51374f4..a8ae340 100644
+>> --- a/drivers/thermal/thermal_core.c
+>> +++ b/drivers/thermal/thermal_core.c
+>> @@ -427,6 +427,7 @@ static int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
+>>   					enum thermal_device_mode mode)
+>>   {
+>>   	int ret = 0;
+>> +	int count;
+>>   
+>>   	mutex_lock(&tz->lock);
+>>   
+>> @@ -449,8 +450,14 @@ static int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
+>>   
+>>   	if (mode == THERMAL_DEVICE_ENABLED)
+>>   		thermal_notify_tz_enable(tz->id);
+>> -	else
+>> +	else {
+>> +		/* make sure all previous throttlings are cleared */
+>> +		thermal_zone_device_init(tz);
+>> +		for (count = 0; count < tz->trips; count++)
+>> +			handle_thermal_trip(tz, count);
+> nit: s/count/trip/
+Updated in V2
