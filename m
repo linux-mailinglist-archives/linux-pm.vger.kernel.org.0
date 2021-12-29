@@ -2,62 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BB6848117F
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Dec 2021 11:04:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E0914811A2
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Dec 2021 11:22:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235404AbhL2KEa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Dec 2021 05:04:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60654 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235380AbhL2KEa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Dec 2021 05:04:30 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8182DC06173E
-        for <linux-pm@vger.kernel.org>; Wed, 29 Dec 2021 02:04:30 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id t187so4850666pfb.11
-        for <linux-pm@vger.kernel.org>; Wed, 29 Dec 2021 02:04:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=zc3ty3Yc8UZMZDolk8R9RLzAVwrlXgdQP1M1AzZqmFg=;
-        b=AXGT0RpFVqqWoqjSCUwI3AD8pubad2L1AqIe4tcQhGWxrLpzWYEXlc3oh8NEe2/cvd
-         ts528hZQ8JDrPHM03XrbmMC08eWf+BXdETcA6wdZagwTOH6bn7srGsRDY8WmlpaHsJ/T
-         ByxrAkCKBHebrgtF2xAyk6Vq9matE0w+3g6wfFkLGBhrANlFnQd51i8YSS/k/ma0ENk2
-         Jg26KRMwVPSImYELrfgAdQFZoiqWe0wnIdRb1hP6/G6yW9yTtH4gjghMxM1998IrRbFw
-         fyPR2FdEmsxIeff1+OC5pGGkaodA+DmeHRCXkgwQmaNmR4xv7BiKbVHUKgpeVLyhFabE
-         U9ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=zc3ty3Yc8UZMZDolk8R9RLzAVwrlXgdQP1M1AzZqmFg=;
-        b=mF6kGyNWvzCDIRR6wPCpBvuSmYsv5m+3mYTCZ5JMhv9SgVPnPQhutQKRX6gv5GmOfj
-         yKSns5JgYGInewhhQI9QuybfWsejxIcegRgx8A0puMUopjN51qVvNqFSE0+a27agUjMd
-         CzeKa3uxC7QKDJSDBXgvT/NAu2AGR9ukZNcQl9U3PZqS5F0KTALM+3uTfWYXZGkvISkQ
-         sghY7evuLz/snE3wxPU1yrUy2UVC2EpOMCIRqr8wX3Q+2MUy4r/52KH5dcel0WwcqF3O
-         woJLtBeeFJEOE+XDUTHReBgEc+6PgdywEvjSveeN+QpxWwmjtkhY7ESi7SC6jzxgXBPR
-         4+lQ==
-X-Gm-Message-State: AOAM530cGjnpra8O9w4seNpJKRaCSqDw2Gjr1yIc+A5dak5faLc0jm/M
-        +Jty2HzAbCXmc8WJ1cvtQwKk+hG4X2HebJNhnpQ=
-X-Google-Smtp-Source: ABdhPJx9wlvDEUjnz5RyK6155kg7S3aQx9KmSFeeuty2MZf4ZY5Lxrrmk4p4M8skRkik2wv/uq3QQLH0KkkwEivJVpE=
-X-Received: by 2002:a63:a50c:: with SMTP id n12mr23144358pgf.558.1640772270002;
- Wed, 29 Dec 2021 02:04:30 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a05:6a11:4422:0:0:0:0 with HTTP; Wed, 29 Dec 2021 02:04:29
- -0800 (PST)
-Reply-To: abrahammorrison443@gmail.com
-From:   Abraham Morrison <brose2831@gmail.com>
-Date:   Wed, 29 Dec 2021 02:04:29 -0800
-Message-ID: <CAP0Q2Sio=Xw+wqoa9Yi-Fqy3yt8yc6B_gAZZ9QpwisTq-spqVA@mail.gmail.com>
-Subject: Good day!
-To:     undisclosed-recipients:;
+        id S235331AbhL2KWc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Dec 2021 05:22:32 -0500
+Received: from mga02.intel.com ([134.134.136.20]:48779 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231732AbhL2KWb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 29 Dec 2021 05:22:31 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="228804415"
+X-IronPort-AV: E=Sophos;i="5.88,245,1635231600"; 
+   d="scan'208";a="228804415"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 02:22:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,245,1635231600"; 
+   d="scan'208";a="486575593"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga002.jf.intel.com with ESMTP; 29 Dec 2021 02:22:31 -0800
+Received: from abityuts-desk1.fi.intel.com (abityuts-desk1.fi.intel.com [10.237.68.32])
+        by linux.intel.com (Postfix) with ESMTP id DCF5C5802B1;
+        Wed, 29 Dec 2021 02:22:29 -0800 (PST)
+Message-ID: <2e5cd069996b1abb477eb4e817391db6f9bfa097.camel@gmail.com>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Update EPP for AlderLake mobile
+From:   Artem Bityutskiy <dedekind1@gmail.com>
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        lenb@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 29 Dec 2021 12:22:28 +0200
+In-Reply-To: <20211216183305.3152807-1-srinivas.pandruvada@linux.intel.com>
+References: <20211216183305.3152807-1-srinivas.pandruvada@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello! I am Barrister. Abraham Morrison, did you receive my previous
-letter? I have an important information for you. So if you are
-interested get back to me for more details.
-Thank you.
-Barrister. Abraham Morrison.
+On Thu, 2021-12-16 at 10:33 -0800, Srinivas Pandruvada wrote:
+> There is an expectation from users that they can get frequency specified
+> by cpufreq/cpuinfo_max_freq when conditions permit. But with AlderLake
+> mobile it may not be possible. This is possible that frequency is clipped
+> based on the system power-up EPP value. In this case users can update
+> cpufreq/energy_performance_preference to some performance oriented EPP to
+> limit clipping of frequencies.
+> 
+> To get out of box behavior as the prior generations of CPUs, update EPP
+> for AlderLake mobile CPUs on boot. On prior generations of CPUs EPP = 128
+> was enough to get maximum frequency, but with AlderLake mobile the
+> equivalent EPP is 102. Since EPP is model specific, this is possible that
+> they have different meaning on each generation of CPU.
+> 
+> The current EPP string "balance_performance" corresponds to EPP = 128.
+> Change the EPP corresponding to "balance_performance" to 102 for only
+> AlderLake mobile CPUs and update this on each CPU during boot.
+> 
+> To implement reuse epp_values[] array and update the modified EPP at the
+> index for BALANCE_PERFORMANCE. Add a dummy EPP_INDEX_DEFAULT to
+> epp_values[] to match indexes in the energy_perf_strings[].
+> 
+> After HWP PM is enabled also update EPP when "balance_performance" is
+> redefined for the very first time after the boot on each CPU. On
+> subsequent suspend/resume or offline/online the old EPP is restored,
+> so no specific action is needed.
+> 
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+
+
+I think this patch alone makes things a bit inconsistent, because the
+'x86_energy_perf_policy' does not get adjusted.
+
+Ideally, constants like HWP_EPP_BALANCE_PERFORMANCE should go away from
+arch/x86/include/asm/msr-index.h, along with all users.
+
+Artem.
+
