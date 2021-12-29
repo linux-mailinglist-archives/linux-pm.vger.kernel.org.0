@@ -2,129 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 271A8481135
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Dec 2021 10:13:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BB6848117F
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Dec 2021 11:04:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239482AbhL2JNG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Dec 2021 04:13:06 -0500
-Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:16859
-        "EHLO mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239474AbhL2JNG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Dec 2021 04:13:06 -0500
-IronPort-Data: =?us-ascii?q?A9a23=3AH65ZeaPQ5yobGJrvrR2zlsFynXyQoLVcMsFnjC/?=
- =?us-ascii?q?WdVTrhmsk1GZVzWUZXGrQOarbYWunKY0kat6+/BsC7cLWm99gGjLY11k9FiMQ8?=
- =?us-ascii?q?ZKt6fexdxqrYXvKdqUvdK/WhiknQoGowPscEzmM9n9BDpC79SMljPvSF+KlYAL?=
- =?us-ascii?q?5EnsZqTFMGX5JZS1Ly7ZRbr5A2bBVMivV0T/Ai5W31GyNh1aYBlkpB5er83uDi?=
- =?us-ascii?q?hhdVAQw5TTSbdgT1LPXeuJ84Jg3fcldJFOgKmVY83LTegrN8F251juxExYFCtq?=
- =?us-ascii?q?piLf2dCXmQJaCYE7Q2jwPAfHk20cZzsAx+v9T2P40a1pTijzPm9luwdFJnZ22U?=
- =?us-ascii?q?wYgeKPW8AgYe0ABQ3AgYfUuFLjvZCLXXdao51fPfXLhx91tAVswMIle/fx4aUl?=
- =?us-ascii?q?F6OYCLzIAdB2Rr/i327+mUq9qi9hLBNLxPYUepHh7iynQC/o8XI7KT6zi4d5ew?=
- =?us-ascii?q?Sd2h8ZSEPKYbM0cARJrYRLKSx5CIFEaDNQ5hujArmf+aTBDqBSWuK8++UDXzQp?=
- =?us-ascii?q?4yr+rN8DaEvSORMNIjgOAo0rY8GnjRBIXLtqSzXyC6H3EruvOmz7rHYEfDru18?=
- =?us-ascii?q?tZ0j1CJgG8eEhsbUR28u/bRoku/Xd1YA1YZ9ionse4580nDZsHwQxCislaFuBA?=
- =?us-ascii?q?GUtZdGuF87xuCooLW/hyYQGwJSjpAQMYruM8/WXoh0Vrht83oAzditqHTRm+c6?=
- =?us-ascii?q?quTsRu2OC4cN2hEYjULJTbpSfGLTJob102UCI85Sejr3pulRHfqzi7MtyYkwbM?=
- =?us-ascii?q?ekaY2O2yA1Qivq1qRSlLhF2bZPjnqY18=3D?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AFZAgBa1vBM7/vU568ycoowqjBKckLtp133Aq?=
- =?us-ascii?q?2lEZdPWaSKylfqGV8cjzuiWbtN98YhodcJW7WZVoP0m3yXcF2+Us1N6ZNWHbUS?=
- =?us-ascii?q?mTXeNfBODZrAEIdReOldK1rZ0QFpRDNA=3D=3D?=
-X-IronPort-AV: E=Sophos;i="5.88,244,1635199200"; 
-   d="scan'208";a="1189640"
-Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 10:13:05 +0100
-Date:   Wed, 29 Dec 2021 10:13:04 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-cc:     Francisco Jerez <currojerez@riseup.net>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
-In-Reply-To: <CAJZ5v0grayg9evWsB5ktKSFq=yA_AHoEWSfpSkQ=MVQ-=butfA@mail.gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2112291012030.24929@hadrien>
-References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien> <CAJZ5v0iBU8gw8+-5nxj2cKzf7tyN=p3Adcm4Z5bn=oVYhU28bQ@mail.gmail.com> <alpine.DEB.2.22.394.2112172022100.2968@hadrien> <87r1abt1d2.fsf@riseup.net> <alpine.DEB.2.22.394.2112172258480.2968@hadrien>
- <87fsqqu6by.fsf@riseup.net> <alpine.DEB.2.22.394.2112180654470.3139@hadrien> <878rwitdu3.fsf@riseup.net> <alpine.DEB.2.22.394.2112181138210.3130@hadrien> <871r29tvdj.fsf@riseup.net> <alpine.DEB.2.22.394.2112190734070.3181@hadrien> <87wnk0s0tf.fsf@riseup.net>
- <CAJZ5v0i7gBtm6x+zUUzhxXjmYhPwr=JxvOuMZ0aD9qxnjE9YKw@mail.gmail.com> <878rwdse9o.fsf@riseup.net> <alpine.DEB.2.22.394.2112281745240.24929@hadrien> <CAJZ5v0i4xnesG=vfx7Y-wyeaGvjDeGcsaOVqhRLnV8YXk-m2gA@mail.gmail.com> <alpine.DEB.2.22.394.2112281845180.24929@hadrien>
- <CAJZ5v0grayg9evWsB5ktKSFq=yA_AHoEWSfpSkQ=MVQ-=butfA@mail.gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        id S235404AbhL2KEa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Dec 2021 05:04:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60654 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235380AbhL2KEa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Dec 2021 05:04:30 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8182DC06173E
+        for <linux-pm@vger.kernel.org>; Wed, 29 Dec 2021 02:04:30 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id t187so4850666pfb.11
+        for <linux-pm@vger.kernel.org>; Wed, 29 Dec 2021 02:04:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=zc3ty3Yc8UZMZDolk8R9RLzAVwrlXgdQP1M1AzZqmFg=;
+        b=AXGT0RpFVqqWoqjSCUwI3AD8pubad2L1AqIe4tcQhGWxrLpzWYEXlc3oh8NEe2/cvd
+         ts528hZQ8JDrPHM03XrbmMC08eWf+BXdETcA6wdZagwTOH6bn7srGsRDY8WmlpaHsJ/T
+         ByxrAkCKBHebrgtF2xAyk6Vq9matE0w+3g6wfFkLGBhrANlFnQd51i8YSS/k/ma0ENk2
+         Jg26KRMwVPSImYELrfgAdQFZoiqWe0wnIdRb1hP6/G6yW9yTtH4gjghMxM1998IrRbFw
+         fyPR2FdEmsxIeff1+OC5pGGkaodA+DmeHRCXkgwQmaNmR4xv7BiKbVHUKgpeVLyhFabE
+         U9ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=zc3ty3Yc8UZMZDolk8R9RLzAVwrlXgdQP1M1AzZqmFg=;
+        b=mF6kGyNWvzCDIRR6wPCpBvuSmYsv5m+3mYTCZ5JMhv9SgVPnPQhutQKRX6gv5GmOfj
+         yKSns5JgYGInewhhQI9QuybfWsejxIcegRgx8A0puMUopjN51qVvNqFSE0+a27agUjMd
+         CzeKa3uxC7QKDJSDBXgvT/NAu2AGR9ukZNcQl9U3PZqS5F0KTALM+3uTfWYXZGkvISkQ
+         sghY7evuLz/snE3wxPU1yrUy2UVC2EpOMCIRqr8wX3Q+2MUy4r/52KH5dcel0WwcqF3O
+         woJLtBeeFJEOE+XDUTHReBgEc+6PgdywEvjSveeN+QpxWwmjtkhY7ESi7SC6jzxgXBPR
+         4+lQ==
+X-Gm-Message-State: AOAM530cGjnpra8O9w4seNpJKRaCSqDw2Gjr1yIc+A5dak5faLc0jm/M
+        +Jty2HzAbCXmc8WJ1cvtQwKk+hG4X2HebJNhnpQ=
+X-Google-Smtp-Source: ABdhPJx9wlvDEUjnz5RyK6155kg7S3aQx9KmSFeeuty2MZf4ZY5Lxrrmk4p4M8skRkik2wv/uq3QQLH0KkkwEivJVpE=
+X-Received: by 2002:a63:a50c:: with SMTP id n12mr23144358pgf.558.1640772270002;
+ Wed, 29 Dec 2021 02:04:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Received: by 2002:a05:6a11:4422:0:0:0:0 with HTTP; Wed, 29 Dec 2021 02:04:29
+ -0800 (PST)
+Reply-To: abrahammorrison443@gmail.com
+From:   Abraham Morrison <brose2831@gmail.com>
+Date:   Wed, 29 Dec 2021 02:04:29 -0800
+Message-ID: <CAP0Q2Sio=Xw+wqoa9Yi-Fqy3yt8yc6B_gAZZ9QpwisTq-spqVA@mail.gmail.com>
+Subject: Good day!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On Tue, 28 Dec 2021, Rafael J. Wysocki wrote:
-
-> On Tue, Dec 28, 2021 at 6:46 PM Julia Lawall <julia.lawall@inria.fr> wrote:
-> >
-> >
-> >
-> > On Tue, 28 Dec 2021, Rafael J. Wysocki wrote:
-> >
-> > > On Tue, Dec 28, 2021 at 5:58 PM Julia Lawall <julia.lawall@inria.fr> wrote:
-> > > >
-> > > > I looked a bit more into why pstate 20 is always using the least energy. I
-> > > > have just one thread spinning for 10 seconds, I use a fixed value for the
-> > > > pstate, and I measure the energy usage with turbostat.
-> > >
-> > > How exactly do you fix the pstate?
-> >
-> > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> > index e7af18857371..19440b15454c 100644
-> > --- a/kernel/sched/cpufreq_schedutil.c
-> > +++ b/kernel/sched/cpufreq_schedutil.c
-> > @@ -400,7 +402,7 @@ static void sugov_update_single_perf(struct update_util_data *hook, u64 time,
-> >                 sg_cpu->util = prev_util;
-> >
-> >         cpufreq_driver_adjust_perf(sg_cpu->cpu, map_util_perf(sg_cpu->bw_dl),
-> > -                                  map_util_perf(sg_cpu->util), sg_cpu->max);
-> > +                                  sysctl_sched_fixedfreq, sg_cpu->max);
->
-> This is just changing the "target" hint given to the processor which
-> may very well ignore it, though.
->
-> >
-> >         sg_cpu->sg_policy->last_freq_update_time = time;
-> >  }
-> >
-> > ------------------------------
-> >
-> > sysctl_sched_fixedfreq is a variable that I added to sysfs.
->
-> If I were trying to fix a pstate, I would set scaling_max_freq and
-> scaling_min_freq in sysfs for all CPUs to the same value.
->
-> That would cause intel_pstate to set HWP min and max to the same value
-> which should really cause the pstate to be fixed, at least outside the
-> turbo range of pstates.
-
-The effect is the same.  But that approach is indeed simpler than patching
-the kernel.
-
-julia
-
->
-> > >
-> > > > I tried this on a
-> > > > 2-socket Intel 6130 and a 4-socket Intel 6130.  The experiment runs 40
-> > > > times.
-> > > >
-> > > > There seem to be only two levels of CPU energy usage.  On the 2-socket
-> > > > machine the energy usage is around 600J up to pstate 20 and around 1000J
-> > > > after that.  On the 4-socket machine it is twice that.
-> > >
-> > > These are the package power numbers from turbostat, aren't they?
-> >
-> > Yes.
->
-> OK
->
+Hello! I am Barrister. Abraham Morrison, did you receive my previous
+letter? I have an important information for you. So if you are
+interested get back to me for more details.
+Thank you.
+Barrister. Abraham Morrison.
