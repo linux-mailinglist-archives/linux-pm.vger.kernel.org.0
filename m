@@ -2,126 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2346481DB0
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Dec 2021 16:30:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E367481DB9
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Dec 2021 16:34:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233731AbhL3PaF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Dec 2021 10:30:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52902 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234169AbhL3PaE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Dec 2021 10:30:04 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44731C061574;
-        Thu, 30 Dec 2021 07:30:04 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id j18so51114992wrd.2;
-        Thu, 30 Dec 2021 07:30:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=1jof+DZebMLPiQc0TwDMmSnKuPJVGago0B+tjBwIYlw=;
-        b=OZYYKWmxJBwf2rALtePHVS5iVQMWA2WaSnbsSEYQnasSAZbu2SogzxPvsH7rP1Z7GT
-         UGJMXslRLv9dnu1DEgFUCQhuZmfavkZDCl1cKazBsWGvsFZShnCxYJ7dnOzbJMR8uxuf
-         ilazXWBQFquKFYhUFEHXTR81dmAM0AETc+A+50T6ahvzFWkbNZwC+OVb8h2kymGRWjNo
-         PMvMiCvY4ovqjukVwQL72U4imxJ0i/QtiOXJ3uoNF8ie6gcfa8K6LgMYuekZKw7zRMRQ
-         BNOCziQY+5xLAWR2kxNKwmKTtBZ29pk//hWTqgCe2NgR9ZONCO2YeZHvjfMaHKnpusG3
-         bKdA==
+        id S233446AbhL3Ped (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Dec 2021 10:34:33 -0500
+Received: from mail-qk1-f179.google.com ([209.85.222.179]:38865 "EHLO
+        mail-qk1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233176AbhL3Pec (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Dec 2021 10:34:32 -0500
+Received: by mail-qk1-f179.google.com with SMTP id i187so20826227qkf.5
+        for <linux-pm@vger.kernel.org>; Thu, 30 Dec 2021 07:34:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1jof+DZebMLPiQc0TwDMmSnKuPJVGago0B+tjBwIYlw=;
-        b=Ds1708EBanEvnYUoe2gqDZZKLOD6lQIA4fatNI/y594vg3uIqNsBsVEYbFRfZH98Qg
-         i0gzcIwHf2gl+oXq67wq7xBcM/3LrfNVoCrQtqdw02P3QE+1wIz7ERJUjokni9FjdFOV
-         Pwz92gEibFTpORxA/nqvn7asb9RD1Mf4xdaUD4RBchYUvL8RmOIUSwbvHzLbdQIwXtjo
-         FiNwvZ1grMYH1hZG7nkJUuVEcZsRCWpO2+45ftLU9i9KrABQCtjJ8G13vzDK1qqc1kYz
-         CUlY6obSx2YBd3DIbV+vcQmu5zl8ph1LHQZoMQm4S+WbnlJ+ifuXuSk4hiLi/vPzmv5K
-         cLdg==
-X-Gm-Message-State: AOAM530X3q43mbNBFk3DmH2GJhTmMXXsoh9YJQ2c/xPDhv3F0EtzSww/
-        RhQLH9brzIlvA6816z9Xb0Y=
-X-Google-Smtp-Source: ABdhPJx5+OCjcspjRbYTsb4M9GjVMlH0pAjXWZCbNoB4HSUcvc6rFly+j9tntV0aChPYTZHYQgTHLA==
-X-Received: by 2002:adf:dcd2:: with SMTP id x18mr25558357wrm.173.1640878202749;
-        Thu, 30 Dec 2021 07:30:02 -0800 (PST)
-Received: from [192.168.1.145] ([207.188.161.251])
-        by smtp.gmail.com with ESMTPSA id d4sm23839556wrx.102.2021.12.30.07.30.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Dec 2021 07:30:02 -0800 (PST)
-Message-ID: <98efb356-dc0d-fa7e-5579-7984f2bb3e84@gmail.com>
-Date:   Thu, 30 Dec 2021 16:30:00 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ngbsgpp7W5oyvkxqPT5TtkKSwvbB5MJ3hwgR1Tmea8c=;
+        b=Fa/QD7kWrbyEJJJTUM/IAZCp++aN1qPGZQDULIGfsiaNEGTQ4OAP+b4TOqXpOYGXqF
+         E6KW8RqwheTo9htEf0TfAg08f/36dZwMHFxQGoTezfvtdA7uI7dtu5p4H08t0kUm70iM
+         1IfuPINj8raYcHMl5bgSpBnHixedVUZ1gwm0ihens28+God3zGGbNbrq3ELvJEkRjDnC
+         Tq98sOMWSBINx4CzjsAgf86efPd774U+o1olYyuv54CEqdMvZYz+Hl06rgyBhpm9JQUw
+         CHmHA/kNrmmC/1kwaki1Q23arcit1/e5+p6/VQDcFXzoJQtZ9X+rg5GEhtFgjIkla7mx
+         +gTA==
+X-Gm-Message-State: AOAM531E5QN9RgeVsyZcTuUB4TALntLvjVq+pyBCQPFPzZlBY66EU5/h
+        ksqy8dradQN/XyhYpVnzIAXLGiAtVmhBngVKm0rbm2aL
+X-Google-Smtp-Source: ABdhPJwjE8Q4BPf+T3ho7wQ0pyQLaz9ACdJLAZoULPTpue5C+qWOkTyRLLOzyke9MTbLK7fdew0uPo4IJclz3499Zr8=
+X-Received: by 2002:a05:620a:40d1:: with SMTP id g17mr22400527qko.621.1640878472045;
+ Thu, 30 Dec 2021 07:34:32 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v20 5/7] dt-bindings: soc: mediatek: add mt8192 svs
- dt-bindings
-Content-Language: en-US
-To:     Roger Lu <roger.lu@mediatek.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Fan Chen <fan.chen@mediatek.com>,
-        HenryC Chen <HenryC.Chen@mediatek.com>,
-        YT Lee <yt.lee@mediatek.com>,
-        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Guenter Roeck <linux@roeck-us.net>
-References: <20210721070904.15636-1-roger.lu@mediatek.com>
- <20210721070904.15636-6-roger.lu@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20210721070904.15636-6-roger.lu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <174f49e0-628d-f5e4-2f99-874524fb9f5e@gmail.com>
+In-Reply-To: <174f49e0-628d-f5e4-2f99-874524fb9f5e@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 30 Dec 2021 16:34:21 +0100
+Message-ID: <CAJZ5v0h94OHd_kSFEPOtjqpJhzOsBinQ_mg==aUwN2itYNGu-g@mail.gmail.com>
+Subject: Re: [PATCH] PM: runtime: Annotate pm_runtime_resume_and_get() as __must_check
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Please add a commit message.
-
-Regards,
-Matthias
-
-On 21/07/2021 09:09, Roger Lu wrote:
-> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+On Thu, Dec 23, 2021 at 8:21 AM Heiner Kallweit <hkallweit1@gmail.com> wrote:
+>
+> In the error case this function returns w/o the usage counter being
+> incremented. Not checking the return code will likely result in a
+> usage counter imbalance in the error case therefore.
+>
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 > ---
->   .../devicetree/bindings/soc/mediatek/mtk-svs.yaml         | 8 ++++++++
->   1 file changed, 8 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml b/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
-> index a855ced410f8..59342e627b67 100644
-> --- a/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
-> +++ b/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
-> @@ -22,6 +22,7 @@ properties:
->     compatible:
->       enum:
->         - mediatek,mt8183-svs
-> +      - mediatek,mt8192-svs
->   
->     reg:
->       maxItems: 1
-> @@ -51,6 +52,13 @@ properties:
->         - const: svs-calibration-data
->         - const: t-calibration-data
->   
-> +  resets:
-> +    maxItems: 1
-> +
-> +  reset-names:
-> +    items:
-> +      - const: svs_rst
-> +
->   required:
->     - compatible
->     - reg
-> 
+>  include/linux/pm_runtime.h | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+>
+> diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
+> index eddd66d42..aa106f5fb 100644
+> --- a/include/linux/pm_runtime.h
+> +++ b/include/linux/pm_runtime.h
+> @@ -384,9 +384,8 @@ static inline int pm_runtime_get(struct device *dev)
+>   * The possible return values of this function are the same as for
+>   * pm_runtime_resume() and the runtime PM usage counter of @dev remains
+>   * incremented in all cases, even if it returns an error code.
+> - * Consider using pm_runtime_resume_and_get() instead of it, especially
+> - * if its return value is checked by the caller, as this is likely to result
+> - * in cleaner code.
+> + * Consider using pm_runtime_resume_and_get() instead of it if its return
+> + * value is checked by the caller, as this is likely to result in cleaner code.
+>   */
+>  static inline int pm_runtime_get_sync(struct device *dev)
+>  {
+> @@ -401,7 +400,7 @@ static inline int pm_runtime_get_sync(struct device *dev)
+>   * PM usage counter. Return 0 if the runtime PM usage counter of @dev has been
+>   * incremented or a negative error code otherwise.
+>   */
+> -static inline int pm_runtime_resume_and_get(struct device *dev)
+> +static inline __must_check int pm_runtime_resume_and_get(struct device *dev)
+>  {
+>         int ret;
+>
+> --
+
+Applied as 5.17 material, thanks!
