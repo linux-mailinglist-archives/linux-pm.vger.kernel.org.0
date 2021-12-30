@@ -2,152 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3439481DE2
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Dec 2021 16:56:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61DA7481DF7
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Dec 2021 17:10:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240180AbhL3P4a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Dec 2021 10:56:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58730 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236262AbhL3P4a (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Dec 2021 10:56:30 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375E3C06173E
-        for <linux-pm@vger.kernel.org>; Thu, 30 Dec 2021 07:56:30 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id v25so21768419pge.2
-        for <linux-pm@vger.kernel.org>; Thu, 30 Dec 2021 07:56:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=5JtJxfzgWXREJNVRQweKsmMUML7D8pwiMG7VLXd2Beo=;
-        b=yhU8cg4JbWvwEzfoP1oJmUcQcuMy8r2UuE9hFCv9gmlz9E3LCcjS21Pmv8rbA10+4s
-         Y5az6Hf68CpQlPdOqgkn8ajB4ZVTfTal3DqmDrnmQAkx39ylCbi2AW5HEyZruo48eusB
-         Nz9AjJWGqYMBAT/1FhcaMzDkj/28unb3TjJzzWLOE979Zfj6IZwPkbYtH3oI4/A0py5k
-         vjuLTNLlg35NvD/axJyp+aayBSPdjwltpeZUjiI6vIlSlsqUPbhgdW8O9eeL4yB3v/2E
-         EqCuy0LbZNFgx+61lLBw564l2ZkJ4g7nxTBkp+x43iYXXLeDx/ejbgFYHhs9hN1qFPkq
-         1QvA==
+        id S240837AbhL3QJ7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Dec 2021 11:09:59 -0500
+Received: from mail-qv1-f46.google.com ([209.85.219.46]:38571 "EHLO
+        mail-qv1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240660AbhL3QJ7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Dec 2021 11:09:59 -0500
+Received: by mail-qv1-f46.google.com with SMTP id o10so22476531qvc.5;
+        Thu, 30 Dec 2021 08:09:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=5JtJxfzgWXREJNVRQweKsmMUML7D8pwiMG7VLXd2Beo=;
-        b=AvznmtmvDaFc5GGvt1dxmoaB44XTEOI/9cyumiPc135lhzfHQRRbz5cL0nC3K9/Gy4
-         h2A8D7bx7tQ4ervtE8s+cwYqCcOgY5QUO6m1v+9xfSFSy8XXp+n289OcBD2U8+qgqewi
-         3SMAYx4+r7A9MlwzGK+Jr1PbvnAfQFKu9fvC2R9KdNg8v3InXIXc4tr33SHOcLshzHDx
-         +Pc1xfPDrMqd0sfVwTkW9SiGLZWyCWVWhYnzHhjactpjMlvxS4Ct4QBU/+tVeVfNKuCl
-         rW/uiIvZQs5sgxWdf76A3G0mMYwLWAWGi4hIPes6GdR0mFQkQ4BmpS9cUcSGZWP4O7Zk
-         t62Q==
-X-Gm-Message-State: AOAM531x2pI5e7MqlanZgKUjieZFfHLtxST/MqEu5cJ1KE93taqL0/8S
-        lEKUylc5HH8nhA0JuFQC5CitYA==
-X-Google-Smtp-Source: ABdhPJxE+ivRFnilv6mm9T9xQkfz2kfB1X/FTgUyHOSf3KIF6d+lQunQrMWgjWZT8h9jAfcPVsrbPw==
-X-Received: by 2002:a05:6a00:174b:b0:4ba:c9f4:d4ee with SMTP id j11-20020a056a00174b00b004bac9f4d4eemr31956655pfc.3.1640879789837;
-        Thu, 30 Dec 2021 07:56:29 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id h17sm24006608pfv.217.2021.12.30.07.56.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Dec 2021 07:56:29 -0800 (PST)
-Message-ID: <61cdd6ad.1c69fb81.f74c7.fe69@mx.google.com>
-Date:   Thu, 30 Dec 2021 07:56:29 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ezClZAHT1R+O8T1YXwhFSh7VZXrZAFgQTaj9xuZLzog=;
+        b=oqQLStt5X0evvIZJRzAPpSgruG3BhDY2s1T/JU6CgGlSq7IbfR/5lpGT9XhuCl0yKK
+         RPTFAG/7xUal9BF8OyjzPp4E3P2ElKixocuUhB0Ec0a2QuFdV9vPD70j5xlxo+shTB+T
+         GTOo9TTQxq2jDpJvAKb2YHHnBDO9hZh507dTZCMFObJxgiEDSaBpWb47OowMNZDDTtjZ
+         v54s2rGIf9sYhhM4V/alNdRBO5/Uxp7k1H0xhe0bBJygdYZg3IVvl8JOS6mhNEdGsj9d
+         2cvHqu3jJ0EzeL4AabIoo914yadDR/ehBavEgUXYXT3dQ5QCwDCqCMznqKTxuxlmzyFz
+         zqmQ==
+X-Gm-Message-State: AOAM5338OB/SMNLpqxoasU67b3xe3mJjB4ihQEW5EcJoFH5cHnD4ijpr
+        6ILOZgnzYvne+iq3g/devDVm7nj6iiw14EdUHgo=
+X-Google-Smtp-Source: ABdhPJyN6mgj3ogQflSFsdGVVT7vwczPwYi2O0a40J14P8I3C0lWzPd9RpcwRZHoFFXgvBijaWrWvKG/9zU0e4uodnU=
+X-Received: by 2002:a05:6214:20a2:: with SMTP id 2mr27959264qvd.52.1640880598311;
+ Thu, 30 Dec 2021 08:09:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v5.16-rc7-138-g143d2aca78e4
-X-Kernelci-Branch: testing
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 1 warning (v5.16-rc7-138-g143d2aca78e4)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <1640761407-2028-1-git-send-email-quic_manafm@quicinc.com>
+In-Reply-To: <1640761407-2028-1-git-send-email-quic_manafm@quicinc.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 30 Dec 2021 17:09:47 +0100
+Message-ID: <CAJZ5v0hApA+fnuRmT_xDdJiqmkGfrfku=8rNG7G_YohGYZm5nw@mail.gmail.com>
+Subject: Re: [PATCH v2] thermal/core: Clear all mitigation when thermal zone
+ is disabled
+To:     Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.16-rc7-138-g1=
-43d2aca78e4)
+On Wed, Dec 29, 2021 at 8:03 AM Manaf Meethalavalappu Pallikunhi
+<quic_manafm@quicinc.com> wrote:
+>
+> Whenever a thermal zone is in trip violated state, there is a chance
+> that the same thermal zone mode can be disabled either via thermal
+> core API or via thermal zone sysfs. Once it is disabled, the framework
+> bails out any re-evaluation of thermal zone. It leads to a case where
+> if it is already in mitigation state, it will stay the same state
+> until it is re-enabled.
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-16-rc7-138-g143d2aca78e4/
+You seem to be arguing that disabling a thermal zone should prevent it
+from throttling anything, which is reasonable, but I'm not sure if the
+change below is sufficient for that.
 
-Tree: pm
-Branch: testing
-Git Describe: v5.16-rc7-138-g143d2aca78e4
-Git Commit: 143d2aca78e4249800d88ccb216e94db20d56fd1
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
+> To avoid above mentioned issue, on thermal zone disable request
+> reset thermal zone and clear mitigation for each trip explicitly.
+>
+> Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+> ---
+>  drivers/thermal/thermal_core.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index 51374f4..5f4e35b 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -427,6 +427,7 @@ static int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
+>                                         enum thermal_device_mode mode)
+>  {
+>         int ret = 0;
+> +       int trip;
 
-Warnings Detected:
+This can be declared in the block in which it is used.
 
-arc:
+>
+>         mutex_lock(&tz->lock);
+>
+> @@ -449,8 +450,14 @@ static int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
+>
+>         if (mode == THERMAL_DEVICE_ENABLED)
 
-arm64:
+The coding style asks for braces here if they are used after the else.
 
-arm:
+>                 thermal_notify_tz_enable(tz->id);
+> -       else
+> +       else {
+> +               /* make sure all previous throttlings are cleared */
+> +               thermal_zone_device_init(tz);
+> +               for (trip = 0; trip < tz->trips; trip++)
+> +                       handle_thermal_trip(tz, trip);
 
-i386:
+So I'm not sure if this makes the throttling go away in all cases (eg.
+what if the current temperature is still above the given trip at this
+point?).
 
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-
-riscv:
-
-x86_64:
-
-
-Warnings summary:
-
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+> +
+>                 thermal_notify_tz_disable(tz->id);
+> +       }
+>
+>         return ret;
+>  }
+>
