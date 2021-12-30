@@ -2,129 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8414481F19
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Dec 2021 19:16:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CF66481F25
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Dec 2021 19:20:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237085AbhL3SQX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Dec 2021 13:16:23 -0500
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:54908 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237082AbhL3SQX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Dec 2021 13:16:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1640888183; x=1672424183;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=RiMVmQ9LOmrelT64K7hBp62RSOIjUTvB8SLq8zRYLEE=;
-  b=s0l3JoG3OL8aODXxZtbx97pYOENrwR10XvEQ3Z+GIzbuc0EwN4FHzA3m
-   9RbWxS0nmZV2LBqqDbVENeDYOfPOQdbrehCqy9qU64B+d9L9LEQHTQSs0
-   gqpx1lD7w3SyuEfm96cem78JF7j092JX6C6YeVqUDUXEClVUsF4YkB23P
-   E=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 30 Dec 2021 10:16:23 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2021 10:16:22 -0800
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 30 Dec 2021 10:16:22 -0800
-Received: from [10.216.59.167] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Thu, 30 Dec
- 2021 10:16:17 -0800
-Message-ID: <0294025e-6579-f8af-278b-e4a2d2688ec1@quicinc.com>
-Date:   Thu, 30 Dec 2021 23:46:12 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v2] thermal/core: Clear all mitigation when thermal zone
- is disabled
+        id S236717AbhL3SU6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Dec 2021 13:20:58 -0500
+Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:18261
+        "EHLO mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233228AbhL3SU6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Dec 2021 13:20:58 -0500
+IronPort-Data: =?us-ascii?q?A9a23=3A4xYr+K30IRHhY3Lit/bD5cVwkn2cJEfYwER7XOP?=
+ =?us-ascii?q?LsXnJgWwrhmBUmmJNCzrQb6mOYTbye9tya4nk8k4Eu5+Bxtc2QQE+nZ1PZyIT+?=
+ =?us-ascii?q?JCdXbx1DW+pYnjMdpWbJK5fAnR3huDodKjYdVeB4Ef9WlTdhSMkj/jRHOGkULW?=
+ =?us-ascii?q?s1h1ZHmeIdg9w0HqPpMZp2uaEsfDha++8kYuaT//3YDdJ6BYoWo4g0J9vnTs01?=
+ =?us-ascii?q?BjEVJz0iXRlDRxDlAe2e3D4l/vzL4npR5fzatE88uJX24/+IL+FEmPxp3/BC/u?=
+ =?us-ascii?q?lm7rhc0AMKlLQFVjTzCQGHfH4214b+XdaPqUTbZLwbW9VljGIlpZ1wcpEsZiYS?=
+ =?us-ascii?q?AEzP6SKlv51vxxwSnshZfEap9crJlD666R/1XbuaXLiyvhqJEI7J4sV/qBwG24?=
+ =?us-ascii?q?m3fcFMioKbB2ZivCe2rOgR/R0wMIuMKHDJ5kevHB+xCqfFf8gTYreXazG7Pdc3?=
+ =?us-ascii?q?TEtloZPG+rTY4wSbj8HRBDNZRdnOVoNDp862uCyiRHXbTxCpUmV46kq5mHJ5Ah?=
+ =?us-ascii?q?w1rH3N5zSYNPibcFUmFuI43rD13r2DwtcN9GFzzeBtHW2iYfnmSL9RZJXF7Ci8?=
+ =?us-ascii?q?PNuqEOcy3ZVCxAMU1a/5/6jhSaWXtNZJEs84CciraEuskesS7HVRxCkrWSWlh8?=
+ =?us-ascii?q?aVcBZH+Az5EeK0KW8ywSEHGlCSjNFbN0OrsI6RTU2kFSOmrvBGz1pu7CTVTSS6?=
+ =?us-ascii?q?7aIsTSuESwUK2YYYmkDVwRt3jVJiOnflTqWEY0lSfTsyIOlX2GthSqHsm4lia9?=
+ =?us-ascii?q?Vi8MXv5hXNGvv21qEzqUlhCZvjukPYl+Y0w=3D=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3Aih3VWKP06LnfF8BcTsajsMiBIKoaSvp037BL?=
+ =?us-ascii?q?7TEUdfU7SKelfqyV9sjzkCWUtN9zYgBEpTnjAsm9qBrnnPZICMsqTNSftWLd1l?=
+ =?us-ascii?q?dAQrsP0WKv+UyDJwTOst8Y76tmfqRkYeecMXFxh6/BjzWFLw=3D=3D?=
+X-IronPort-AV: E=Sophos;i="5.88,248,1635199200"; 
+   d="scan'208";a="1270447"
+Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Dec 2021 19:20:47 +0100
+Date:   Thu, 30 Dec 2021 19:20:46 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
 To:     "Rafael J. Wysocki" <rafael@kernel.org>
-CC:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
+cc:     Francisco Jerez <currojerez@riseup.net>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <1640761407-2028-1-git-send-email-quic_manafm@quicinc.com>
- <CAJZ5v0hApA+fnuRmT_xDdJiqmkGfrfku=8rNG7G_YohGYZm5nw@mail.gmail.com>
-From:   Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-In-Reply-To: <CAJZ5v0hApA+fnuRmT_xDdJiqmkGfrfku=8rNG7G_YohGYZm5nw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
+In-Reply-To: <CAJZ5v0h38jh3gyTp9W0ws0yXyfK=F+TQ7VYRVx4aGXhNeSObEg@mail.gmail.com>
+Message-ID: <alpine.DEB.2.22.394.2112301919240.15550@hadrien>
+References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien> <87r1abt1d2.fsf@riseup.net> <alpine.DEB.2.22.394.2112172258480.2968@hadrien> <87fsqqu6by.fsf@riseup.net> <alpine.DEB.2.22.394.2112180654470.3139@hadrien> <878rwitdu3.fsf@riseup.net>
+ <alpine.DEB.2.22.394.2112181138210.3130@hadrien> <871r29tvdj.fsf@riseup.net> <alpine.DEB.2.22.394.2112190734070.3181@hadrien> <87wnk0s0tf.fsf@riseup.net> <CAJZ5v0i7gBtm6x+zUUzhxXjmYhPwr=JxvOuMZ0aD9qxnjE9YKw@mail.gmail.com> <878rwdse9o.fsf@riseup.net>
+ <alpine.DEB.2.22.394.2112281745240.24929@hadrien> <CAJZ5v0i4xnesG=vfx7Y-wyeaGvjDeGcsaOVqhRLnV8YXk-m2gA@mail.gmail.com> <alpine.DEB.2.22.394.2112281845180.24929@hadrien> <CAJZ5v0grayg9evWsB5ktKSFq=yA_AHoEWSfpSkQ=MVQ-=butfA@mail.gmail.com>
+ <alpine.DEB.2.22.394.2112291012030.24929@hadrien> <CAJZ5v0g5wDxYXA-V=Ex_Md82hgnj5K6Vr0tavFFVz=uBqo8wag@mail.gmail.com> <alpine.DEB.2.22.394.2112301840360.15550@hadrien> <CAJZ5v0h38jh3gyTp9W0ws0yXyfK=F+TQ7VYRVx4aGXhNeSObEg@mail.gmail.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-On 12/30/2021 9:39 PM, Rafael J. Wysocki wrote:
-> On Wed, Dec 29, 2021 at 8:03 AM Manaf Meethalavalappu Pallikunhi
-> <quic_manafm@quicinc.com> wrote:
->> Whenever a thermal zone is in trip violated state, there is a chance
->> that the same thermal zone mode can be disabled either via thermal
->> core API or via thermal zone sysfs. Once it is disabled, the framework
->> bails out any re-evaluation of thermal zone. It leads to a case where
->> if it is already in mitigation state, it will stay the same state
->> until it is re-enabled.
-> You seem to be arguing that disabling a thermal zone should prevent it
-> from throttling anything, which is reasonable, but I'm not sure if the
-> change below is sufficient for that.
+
+On Thu, 30 Dec 2021, Rafael J. Wysocki wrote:
+
+> On Thu, Dec 30, 2021 at 6:54 PM Julia Lawall <julia.lawall@inria.fr> wrote:
+> >
+> > > > The effect is the same.  But that approach is indeed simpler than patching
+> > > > the kernel.
+> > >
+> > > It is also applicable when intel_pstate runs in the active mode.
+> > >
+> > > As for the results that you have reported, it looks like the package
+> > > power on these systems is dominated by package voltage and going from
+> > > P-state 20 to P-state 21 causes that voltage to increase significantly
+> > > (the observed RAM energy usage pattern is consistent with that).  This
+> > > means that running at P-states above 20 is only really justified if
+> > > there is a strict performance requirement that can't be met otherwise.
+> > >
+> > > Can you please check what value is there in the base_frequency sysfs
+> > > attribute under cpuX/cpufreq/?
+> >
+> > 2100000, which should be pstate 21
+> >
+> > >
+> > > I'm guessing that the package voltage level for P-states 10 and 20 is
+> > > the same, so the power difference between them is not significant
+> > > relative to the difference between P-state 20 and 21 and if increasing
+> > > the P-state causes some extra idle time to appear in the workload
+> > > (even though there is not enough of it to prevent to overall
+> > > utilization from increasing), then the overall power draw when running
+> > > at P-state 10 may be greater that for P-state 20.
+> >
+> > My impression is that the package voltage level for P-states 10 to 20 is
+> > high enough that increasing the frequency has little impact.  But the code
+> > runs twice as fast, which reduces the execution time a lot, saving energy.
+> >
+> > My first experiment had only one running thread.  I also tried running 32
+> > spinning threads for 10 seconds, ie using up one package and leaving the
+> > other idle.  In this case, instead of staying around 600J for pstates
+> > 10-20, the pstate rises from 743 to 946.  But there is still a gap between
+> > 20 and 21, with 21 being 1392J.
+> >
+> > > You can check if there is any C-state residency difference between
+> > > these two cases by running the workload under turbostat in each of
+> > > them.
+> >
+> > The C1 and C6 cases (CPU%c1 and CPU%c6) are about the same between 20 and
+> > 21, whether with 1 thread or with 32 thread.
 >
->> To avoid above mentioned issue, on thermal zone disable request
->> reset thermal zone and clear mitigation for each trip explicitly.
->>
->> Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
->> ---
->>   drivers/thermal/thermal_core.c | 9 ++++++++-
->>   1 file changed, 8 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
->> index 51374f4..5f4e35b 100644
->> --- a/drivers/thermal/thermal_core.c
->> +++ b/drivers/thermal/thermal_core.c
->> @@ -427,6 +427,7 @@ static int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
->>                                          enum thermal_device_mode mode)
->>   {
->>          int ret = 0;
->> +       int trip;
-> This can be declared in the block in which it is used.
-Sure, will update in next patch version
+> I meant to compare P-state 10 and P-state 20.
 >
->>          mutex_lock(&tz->lock);
->>
->> @@ -449,8 +450,14 @@ static int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
->>
->>          if (mode == THERMAL_DEVICE_ENABLED)
-> The coding style asks for braces here if they are used after the else.
-Sure will update in next version
->>                  thermal_notify_tz_enable(tz->id);
->> -       else
->> +       else {
->> +               /* make sure all previous throttlings are cleared */
->> +               thermal_zone_device_init(tz);
->> +               for (trip = 0; trip < tz->trips; trip++)
->> +                       handle_thermal_trip(tz, trip);
-> So I'm not sure if this makes the throttling go away in all cases (eg.
-> what if the current temperature is still above the given trip at this
-> point?).
+> 20 and 21 are really close as far as the performance is concerned, so
+> I wouldn't expect to see any significant C-state residency difference
+> between them.
 
-The thermal_zone_device_init() will reset current temperature with THERMAL_TEMP_INVALID. Then the following API
-thandle_thermal_trip() doesn't call get_temp to sensor driver again instead it will use this reset temperature
-value for each trip re-evaluation. Hence  for above mentioned case, I think it will clear the throttling
-irrespective of what is the actual current temperature at that instant. Otherwise please correct me
+There's also no difference between 10 and 20.  This seems normal, because
+the same cores are either fully used or fully idle in both cases.  The
+idle ones are almost always in C6.
 
-May I know is there any other possible cases where throttling will not go away completely ?
-
->> +
->>                  thermal_notify_tz_disable(tz->id);
->> +       }
->>
->>          return ret;
->>   }
->>
+julia
