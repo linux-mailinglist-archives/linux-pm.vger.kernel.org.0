@@ -2,84 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E367481DB9
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Dec 2021 16:34:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9CB3481DBF
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Dec 2021 16:37:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233446AbhL3Ped (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Dec 2021 10:34:33 -0500
-Received: from mail-qk1-f179.google.com ([209.85.222.179]:38865 "EHLO
-        mail-qk1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233176AbhL3Pec (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Dec 2021 10:34:32 -0500
-Received: by mail-qk1-f179.google.com with SMTP id i187so20826227qkf.5
-        for <linux-pm@vger.kernel.org>; Thu, 30 Dec 2021 07:34:32 -0800 (PST)
+        id S234936AbhL3Phc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 30 Dec 2021 10:37:32 -0500
+Received: from mail-qv1-f48.google.com ([209.85.219.48]:43895 "EHLO
+        mail-qv1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233176AbhL3Phc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Dec 2021 10:37:32 -0500
+Received: by mail-qv1-f48.google.com with SMTP id fq10so22383377qvb.10
+        for <linux-pm@vger.kernel.org>; Thu, 30 Dec 2021 07:37:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ngbsgpp7W5oyvkxqPT5TtkKSwvbB5MJ3hwgR1Tmea8c=;
-        b=Fa/QD7kWrbyEJJJTUM/IAZCp++aN1qPGZQDULIGfsiaNEGTQ4OAP+b4TOqXpOYGXqF
-         E6KW8RqwheTo9htEf0TfAg08f/36dZwMHFxQGoTezfvtdA7uI7dtu5p4H08t0kUm70iM
-         1IfuPINj8raYcHMl5bgSpBnHixedVUZ1gwm0ihens28+God3zGGbNbrq3ELvJEkRjDnC
-         Tq98sOMWSBINx4CzjsAgf86efPd774U+o1olYyuv54CEqdMvZYz+Hl06rgyBhpm9JQUw
-         CHmHA/kNrmmC/1kwaki1Q23arcit1/e5+p6/VQDcFXzoJQtZ9X+rg5GEhtFgjIkla7mx
-         +gTA==
-X-Gm-Message-State: AOAM531E5QN9RgeVsyZcTuUB4TALntLvjVq+pyBCQPFPzZlBY66EU5/h
-        ksqy8dradQN/XyhYpVnzIAXLGiAtVmhBngVKm0rbm2aL
-X-Google-Smtp-Source: ABdhPJwjE8Q4BPf+T3ho7wQ0pyQLaz9ACdJLAZoULPTpue5C+qWOkTyRLLOzyke9MTbLK7fdew0uPo4IJclz3499Zr8=
-X-Received: by 2002:a05:620a:40d1:: with SMTP id g17mr22400527qko.621.1640878472045;
- Thu, 30 Dec 2021 07:34:32 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=eQnoNOmsZKy/dAmyzh07xfQRr2pNe7Li+DIe+eUk4RM=;
+        b=chCg5yOwL8hs/OFGMprkdoBILMqm8p3FygJUVhvyZZFcPnUWFe8EG3SJll9+0PQCVK
+         G+LWikGv+m4I5jSswFujI2+W1QMXaGJYZpnXm9FxTsKxZdt7IugmgAnTSiy5mAaA3cRp
+         kHLh3qUp3qweRuAQ4dfJhnNIUiOzocPK7kug2GJwzb2EWVwaRqgVLZ2Qqu6LxiTlNovr
+         rAr1vBnuMMFXKdRgQw4nAzvSPO3PZtKw52KZxH2O5RGt5D4OYg3Qmr3Y85tkM94MNbHQ
+         XScV4inuOfdRdyP1JDMxgUbGWKkSYso7fgFS41AedsVdmKkIxou5oEz11ndsvckOz/OI
+         XKnw==
+X-Gm-Message-State: AOAM531zLjEKgA+PH49fLvBqXpgtLlh4bo8fVZQCq4HHZtQeNaLXV46z
+        Tb20bxQaW28NFTrQ4ZojHSJh8OioR2kKzLUvx6AZnxkn
+X-Google-Smtp-Source: ABdhPJyDAuWTMonLbgmjLj80ka7JjOlLJs83TKCzYRjG28KQ94iT+7s3X/JlIJf+JnOXyE/IyZjRvQ7DDhlYuF/8UQc=
+X-Received: by 2002:a05:6214:508f:: with SMTP id kk15mr27656328qvb.61.1640878651598;
+ Thu, 30 Dec 2021 07:37:31 -0800 (PST)
 MIME-Version: 1.0
-References: <174f49e0-628d-f5e4-2f99-874524fb9f5e@gmail.com>
-In-Reply-To: <174f49e0-628d-f5e4-2f99-874524fb9f5e@gmail.com>
+References: <20211220215828.189814-1-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20211220215828.189814-1-u.kleine-koenig@pengutronix.de>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 30 Dec 2021 16:34:21 +0100
-Message-ID: <CAJZ5v0h94OHd_kSFEPOtjqpJhzOsBinQ_mg==aUwN2itYNGu-g@mail.gmail.com>
-Subject: Re: [PATCH] PM: runtime: Annotate pm_runtime_resume_and_get() as __must_check
-To:     Heiner Kallweit <hkallweit1@gmail.com>
+Date:   Thu, 30 Dec 2021 16:37:20 +0100
+Message-ID: <CAJZ5v0hWYJikZnt9NZHv+3GeMCLU-BtQciKcuazEDST_541nEw@mail.gmail.com>
+Subject: Re: [PATCH] thermal: Kconfig: simplify dependency of THERMAL_HWMON
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>, alvin@alvinhc.com,
+        Sascha Hauer <kernel@pengutronix.de>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Dec 23, 2021 at 8:21 AM Heiner Kallweit <hkallweit1@gmail.com> wrote:
+On Mon, Dec 20, 2021 at 10:58 PM Uwe Kleine-König
+<u.kleine-koenig@pengutronix.de> wrote:
 >
-> In the error case this function returns w/o the usage counter being
-> incremented. Not checking the return code will likely result in a
-> usage counter imbalance in the error case therefore.
+> THERMAL is bool (since commit 554b3529fe01 ("thermal/drivers/core:
+> Remove the module Kconfig's option") in v5.2-rc1) and so cannot be
+> configured as a module. As THERMAL_HWMON also depends on THERMAL (via a
+> big if block in drivers/thermal/Kconfig) the condition
 >
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-> ---
->  include/linux/pm_runtime.h | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
+>         depends on HWMON=y || HWMON=THERMAL
 >
-> diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
-> index eddd66d42..aa106f5fb 100644
-> --- a/include/linux/pm_runtime.h
-> +++ b/include/linux/pm_runtime.h
-> @@ -384,9 +384,8 @@ static inline int pm_runtime_get(struct device *dev)
->   * The possible return values of this function are the same as for
->   * pm_runtime_resume() and the runtime PM usage counter of @dev remains
->   * incremented in all cases, even if it returns an error code.
-> - * Consider using pm_runtime_resume_and_get() instead of it, especially
-> - * if its return value is checked by the caller, as this is likely to result
-> - * in cleaner code.
-> + * Consider using pm_runtime_resume_and_get() instead of it if its return
-> + * value is checked by the caller, as this is likely to result in cleaner code.
->   */
->  static inline int pm_runtime_get_sync(struct device *dev)
->  {
-> @@ -401,7 +400,7 @@ static inline int pm_runtime_get_sync(struct device *dev)
->   * PM usage counter. Return 0 if the runtime PM usage counter of @dev has been
->   * incremented or a negative error code otherwise.
->   */
-> -static inline int pm_runtime_resume_and_get(struct device *dev)
-> +static inline __must_check int pm_runtime_resume_and_get(struct device *dev)
->  {
->         int ret;
+> is equivalent to the simpler
 >
-> --
+>         depends on HWMON=y
+>
+> . Use the latter.
+>
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-Applied as 5.17 material, thanks!
+The change looks reasonable to me, but 0-day is evidently unhappy with
+it.  Can you have a look at its replies to this message, please?
+
+> ---
+> Hello,
+>
+> I want to use this patch as an opportunity to question if THERMAL being
+> a bool and not a tristate is still considered the right thing to do.
+
+IIRC there are correctness concerns regarding modular THERMAL.
+
+> This dependency attracted attention in the context of the armel Debian
+> kernel which has HWMON=m for binary size reason. When THERMAL was
+> changed to bool this resulted in THERMAL_HWMON not being available any
+> more.
+>
+> Best regards
+> Uwe
+>
+>  drivers/thermal/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index d7f44deab5b1..726bf396c8a9 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -52,7 +52,7 @@ config THERMAL_EMERGENCY_POWEROFF_DELAY_MS
+>  config THERMAL_HWMON
+>         bool
+>         prompt "Expose thermal sensors as hwmon device"
+> -       depends on HWMON=y || HWMON=THERMAL
+> +       depends on HWMON
+>         default y
+>         help
+>           In case a sensor is registered with the thermal
+> --
+> 2.33.0
+>
