@@ -2,120 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7135481B82
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Dec 2021 11:53:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7224C481BC4
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Dec 2021 12:42:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238737AbhL3Kxl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Dec 2021 05:53:41 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:54962
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238714AbhL3Kxk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Dec 2021 05:53:40 -0500
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com [209.85.167.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 7DFC4406EC
-        for <linux-pm@vger.kernel.org>; Thu, 30 Dec 2021 10:53:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1640861619;
-        bh=xYZejbhFSF4xwglRpwhIzdBP63mw8AEIBR2gKWeRi5A=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=NjaeV4dvjeUcYm/clWTVK4LbDm74B4hrMVhFCmq7/JJrED2Bcgz9tFrjSXnsghEgm
-         02HxkACJ5lVAEKfhCrnmg4VnbBzNGMcNrVQNiozvHxneMZTFaArpTCBL93b5+LfI+J
-         WVQkZQWala2ZY766qZN0EapkYAmCE4rm7q82Qei168qpQP7l+3a32p4rXrt5dB/Tj0
-         u2tltRliJEgvopGm/ta4fwyrZfvMJR0nsI/jkSkTPPLyw31XsQQMCH5pKutbBd3tPu
-         +g91BV4aYb3USSp6eTWcEevdmttvW4NZnC1zJjuv6SF9QLlS6/ujJ5VYw4HEDP2pE7
-         kfPP25DRR36OQ==
-Received: by mail-lf1-f71.google.com with SMTP id v139-20020a194891000000b0042a2927eaa8so521929lfa.3
-        for <linux-pm@vger.kernel.org>; Thu, 30 Dec 2021 02:53:39 -0800 (PST)
+        id S235376AbhL3LmJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Dec 2021 06:42:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58920 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235195AbhL3LmJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Dec 2021 06:42:09 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B328C061574;
+        Thu, 30 Dec 2021 03:42:09 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id u16so18064622plg.9;
+        Thu, 30 Dec 2021 03:42:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=/2GJveFYsVaUlKyHZdp6crFhqF80gEKGhbqZmnuCaPw=;
+        b=ejmeQXi5v7W71useZlfjfwzFxkxvM1kP7DwvtcTupW3abw6ntYvZSeCDvTvBfDr6rD
+         J7n569pNY4TVJauADBeMO0a58S/TwG1GBs3ffyk+e8m5ZgE5CixUEZpdIzqFlXPG+bAH
+         nk32QjcaPju2vdFe/OIih0/wNBavRPTrwWeFQljYboic3cktf0/Dtu0lrzIY2mvOobaa
+         I6hLRhU+bYCGPvtw1Q6uTKBwp1d4MgqfDj0c3Q58aoPE6aMq4zFx3EnVJAmSaKTSX7Q6
+         oHi+xCN/AsMQfPSADLHdrX6QRhAWTl5Vrm22Qr3ZwSUeafN/ENvg74hWt7qs/YjPUSwp
+         ZFYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xYZejbhFSF4xwglRpwhIzdBP63mw8AEIBR2gKWeRi5A=;
-        b=ZQN5ucimcqLxTd1XBT5M2ivspGgsHLkrUDhGk5VRLtKUNNqJb9NciWPdaNlBNKF9Cf
-         vcdJ94Qy+IISwb6pLdLPn9ChIHpUQga9l8Z5B/mAFEFFQKHadUodXipztiK/FUCdf+BV
-         9WusG7LAWBiEOJJ/RLQ/sutJpgWKl+j4LGfeY+KmyvyfvIt7fdhmsQdXMAM9AWXjCCWt
-         Q7G39aC3TNTX9Cc5UxT8hAYKL5t2D+amMH+DvJpb2x7fHCc8mMih6V5qppw7HdkJbwth
-         CueA7xavXPbfMffHHuKlQHuuXRvMuUxSZtowyMVnOFdeEtfNFss/ZwinDRqRQUvFwyRt
-         mt9Q==
-X-Gm-Message-State: AOAM533sJB8n3wDyEBcgnw1RnDhQH7/zrQ94vfdJWcOB5q4u7Btukeee
-        ePkwVy1p7o7ArexOf9duKVlUYv6toyPEyImT6WQaKM8IaOL1Q+YvNszmV+hAypX7ZtzAKKP5uKV
-        374ImC0EK0wAwRaZmIKMMF0oAC8lif1B/whrG
-X-Received: by 2002:a05:6512:39c7:: with SMTP id k7mr24100698lfu.619.1640861618725;
-        Thu, 30 Dec 2021 02:53:38 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyerqRnK1+XWImhdPq1FQz+KmsRHbdUCEsRHH6fubnWEVc0pW5KHWs9+wMlLjJM1Dyfo3fJjQ==
-X-Received: by 2002:a05:6512:39c7:: with SMTP id k7mr24100682lfu.619.1640861618556;
-        Thu, 30 Dec 2021 02:53:38 -0800 (PST)
-Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id v12sm1528591lfa.143.2021.12.30.02.53.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Dec 2021 02:53:38 -0800 (PST)
-Message-ID: <bedc4126-7536-a7f9-b833-d06f383ec15d@canonical.com>
-Date:   Thu, 30 Dec 2021 11:53:37 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH 1/4] dt-bindings: leds: maxim,max77693: convert to
- dtschema
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org
-References: <20211228163930.35524-1-krzysztof.kozlowski@canonical.com>
- <20211228163930.35524-2-krzysztof.kozlowski@canonical.com>
- <1640799296.482933.824019.nullmailer@robh.at.kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <1640799296.482933.824019.nullmailer@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=/2GJveFYsVaUlKyHZdp6crFhqF80gEKGhbqZmnuCaPw=;
+        b=nKz8xnhDF3VLuc3JF54ozUrT41sLORTHSh1mBRujIUihX4rUM32qI08IWxric7sAfS
+         Hub1uoCLwlshlrWa+p1v/tgHAR72QCKJosLHeQZMwsO0K801r7xYqgd6VssXxm55fSun
+         mdLhCQao+ST7LwcTbOiHYMDKcaqerp/wqCA5lI956u1n7c1jHv+6a26JwajfJn7ukpeK
+         8VSKRgt3qWP5sQTxq1Wmh8Q99bvHxeOcja+3W9Bh0VMczltrAdAidBPO+BpRsXwHVJ+W
+         Jsx+vYfBBGeBcUSZahZbf7BWGXQorDDUGs9NTNKu3EIbXniWXu1deJcth3eq86fEpdZX
+         tAZg==
+X-Gm-Message-State: AOAM531aNNy599FDtVZZ/caUXmMrFjeMoy9dlEvlHD8OdqtuE0P9fkdt
+        x/po9kk9VcAqSulSJC/JWB8Mxb2/AttiKmPXCtw=
+X-Google-Smtp-Source: ABdhPJz6MwEuYN2+6s3o7RaQLmfYGH7X11lcFjXo8ZW4cYY7etouGrgDssFxE12vtlb+FIrJSDflOg==
+X-Received: by 2002:a17:902:ea0f:b0:149:3fdd:1090 with SMTP id s15-20020a170902ea0f00b001493fdd1090mr30038430plg.43.1640864528698;
+        Thu, 30 Dec 2021 03:42:08 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id c9sm22932631pfc.61.2021.12.30.03.42.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Dec 2021 03:42:08 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+Cc:     linmq006@gmail.com, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] cpuidle: qcom_spm: Fix missing put_device() call in spm_cpuidle_register
+Date:   Thu, 30 Dec 2021 11:42:03 +0000
+Message-Id: <20211230114203.13467-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 29/12/2021 18:34, Rob Herring wrote:
-> On Tue, 28 Dec 2021 17:39:27 +0100, Krzysztof Kozlowski wrote:
->> Convert the LEDs bindings of Maxim MAX77693 MUIC to DT schema format.
->> The existing bindings were defined in ../bindings/mfd/max77693.txt.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->> ---
->>  .../bindings/leds/maxim,max77693.yaml         | 105 ++++++++++++++++++
->>  1 file changed, 105 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/leds/maxim,max77693.yaml
->>
-> 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/leds/common.example.dt.yaml: led-controller@0: 'reg' does not match any of the regexes: '^([a-z]+-)?led[01]?$', 'pinctrl-[0-9]+'
-> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/leds/maxim,max77693.yaml
-> 
-> doc reference errors (make refcheckdocs):
-> Documentation/devicetree/bindings/leds/maxim,max77693.yaml: Documentation/devicetree/bindings/mfd/maxim,max77693.yaml
-> 
-> See https://patchwork.ozlabs.org/patch/1573762
-> 
-> This check can fail if there are any dependencies. The base for a patch
-> series is generally the most recent rc1.
-> 
+The reference taken by 'of_find_device_by_node()' must be released when
+not needed anymore.
+Add the corresponding 'put_device()' in the error handling paths.
 
-I updated my yamllint and dtschema, run with DT_CHECKER_FLAGS=-m but
-still cannot reproduce it. Probably because I based on linux-next, so
-maybe this was a fixed issue in leds/common.yaml.
+Fixes: 60f3692 ("cpuidle: qcom_spm: Detach state machine from main SPM handling")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/cpuidle/cpuidle-qcom-spm.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/cpuidle/cpuidle-qcom-spm.c b/drivers/cpuidle/cpuidle-qcom-spm.c
+index 01e77913a414..6638c1de90c3 100644
+--- a/drivers/cpuidle/cpuidle-qcom-spm.c
++++ b/drivers/cpuidle/cpuidle-qcom-spm.c
+@@ -107,12 +107,16 @@ static int spm_cpuidle_register(struct device *cpuidle_dev, int cpu)
+ 		return -ENODEV;
+ 
+ 	data = devm_kzalloc(cpuidle_dev, sizeof(*data), GFP_KERNEL);
+-	if (!data)
++	if (!data) {
++		put_device(&pdev->dev);
+ 		return -ENOMEM;
++	}
+ 
+ 	data->spm = dev_get_drvdata(&pdev->dev);
+-	if (!data->spm)
++	if (!data->spm) {
++		put_device(&pdev->dev);
+ 		return -EINVAL;
++	}
+ 
+ 	data->cpuidle_driver = qcom_spm_idle_driver;
+ 	data->cpuidle_driver.cpumask = (struct cpumask *)cpumask_of(cpu);
+-- 
+2.17.1
+
