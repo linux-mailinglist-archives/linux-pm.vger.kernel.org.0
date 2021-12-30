@@ -2,153 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B12A481C6B
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Dec 2021 14:18:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D68F481D48
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Dec 2021 15:52:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239339AbhL3NSF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Dec 2021 08:18:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51722 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235434AbhL3NSF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Dec 2021 08:18:05 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E96C061574;
-        Thu, 30 Dec 2021 05:18:05 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id q16so50427207wrg.7;
-        Thu, 30 Dec 2021 05:18:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc
-         :references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=vuRsc8wW9XJ+M5W8oEGctVZv5dxejvx5UO2xVo0fpo8=;
-        b=odamaGhRaS2vZVQzGEGWPjhZergHYpE+vRdUAh/AyNJOFPAGghZCOYPny/IuuShyai
-         PTgQzgmlUrTSS92K9efVBozlqpMU4dK+iO+VC1u/bG0A/5QEZUuUgq/ZdH60YBuPbXBH
-         uljVMlp9iko78CgWOfs3AroAiebtnBbmtr4ZPOMpAxI+EJjPMzvQFDQw1uWdudbuyp+j
-         IBXvKVPDta63EeDOCpDF+OWDwtym1B3+0fVflo6WcBU41nLWWtWVJUOp87SphLB0gNQk
-         WKkI+NkauH1i62MUisfc7xan/U3TgyA+SaAYtfM1BMc2GargiEIquO+dZMDaQLiG5OO8
-         mE1A==
+        id S229936AbhL3Owo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Dec 2021 09:52:44 -0500
+Received: from mail-qk1-f175.google.com ([209.85.222.175]:36808 "EHLO
+        mail-qk1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229912AbhL3Owo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Dec 2021 09:52:44 -0500
+Received: by mail-qk1-f175.google.com with SMTP id i130so21835032qke.3
+        for <linux-pm@vger.kernel.org>; Thu, 30 Dec 2021 06:52:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=vuRsc8wW9XJ+M5W8oEGctVZv5dxejvx5UO2xVo0fpo8=;
-        b=cZhUuLPt4cJzu+LgTW/Nt52X3ZmEWbfHcJCFv5ydZzr2uYVtazya9+tLEbnBNl3nDd
-         AR6/fRp2LEa/xyiiqQHzLCZL3ej8F/XH5boYyHpUtM1vyvFyNwiDQa3gFTdNNSP1hXCk
-         1hJWpTCukmKVSJDk/cgoK37u3fyfK1wOjnonuoSWkB/mG7FmsFNngZSD1iZjbFWVYQaL
-         BxJ1CYl37ymLEOHRylR7WopJ27U7F9irVzlmVZ0qlXYCDyrvXtNbxRVqrDRYugmpvkmY
-         +K6WOT9US5RRqMD7+hU+ataA1dpK4Z/z0FKN/1JBS9EpsKjIZY116TF5yGN3PTpKp0i7
-         rj3w==
-X-Gm-Message-State: AOAM531bcDFVQoXRlBxEUDm3CnC6w71QmZdeLq8EjNup5WU64f5ez5NP
-        6qyRKhiu9TuKUlafkoKYKuY=
-X-Google-Smtp-Source: ABdhPJyvTHcr9eexUZO4ohoV+9DtcbakodobY0TzhO4u1LOmOZsK0+qvtXUoI5lBycGiP0hh2zTrZQ==
-X-Received: by 2002:a5d:51c9:: with SMTP id n9mr25116995wrv.694.1640870283425;
-        Thu, 30 Dec 2021 05:18:03 -0800 (PST)
-Received: from [192.168.1.145] ([207.188.161.251])
-        by smtp.gmail.com with ESMTPSA id p18sm4086785wms.16.2021.12.30.05.18.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Dec 2021 05:18:02 -0800 (PST)
-Message-ID: <abd9332b-dace-f75a-33f5-be88fe516784@gmail.com>
-Date:   Thu, 30 Dec 2021 14:18:01 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BEbbmYN9eWSKBtZkP33J2PEXK0dpc7EcDB7VExhJWdk=;
+        b=EMDM6A4Zu7Q2abtVR4IQYZLS4qrhUvGvEWGPYMx95RAY0ILw+4X3UcFq06SDK8/L4A
+         KlgGbov5xmpsbwOvDGk1RIs9FptfuKYzAiCvq8r01yXBLsNkV98OlyS8Wr94lqNLBW4K
+         CnW1rSIFT//s450+KFd1s2wQQzl/SxB6IagbPt15a9ChUg3hUVQfGDP+ZQ8AU9LyLPv+
+         GPU1I9ywQggVDMbXAXJFvWXZSXhM8ki+GwFzu4I4B6C1FcPAQ4biPrEWOJ4iQNG4GQ/n
+         ZNGGycTP/7DlOo8bUOoYCoKmAFsjRieX8mDx9UG7pgF2p5G/To7NmWVp5Ii++3dmtKHV
+         jmFA==
+X-Gm-Message-State: AOAM531M/e5OFrcaackNlBt9ZhbQJW93jDMBFvThBKsYZpHr6Ia4JAhP
+        KVlriPuhZqlTQAgvsNkPsYFcuviUiz0U0gG6aSQ=
+X-Google-Smtp-Source: ABdhPJwK16kWK454jKHYX45zBw54qsxTmM+JyOIrbOrHFOOjc1RlCNxLtOhyzRgQgs0RI91L8jLpYpSdH87RbkNZvFY=
+X-Received: by 2002:a05:620a:4721:: with SMTP id bs33mr22515540qkb.8.1640875963343;
+ Thu, 30 Dec 2021 06:52:43 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Content-Language: en-US
-To:     Roger Lu <roger.lu@mediatek.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Fan Chen <fan.chen@mediatek.com>,
-        HenryC Chen <HenryC.Chen@mediatek.com>,
-        YT Lee <yt.lee@mediatek.com>,
-        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20210428065440.3704-1-roger.lu@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Subject: Re: [PATCH v16 0/7] soc: mediatek: SVS: introduce MTK SVS
-In-Reply-To: <20210428065440.3704-1-roger.lu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20211229034635.tyh53sxs5uceoljm@vireshk-i7>
+In-Reply-To: <20211229034635.tyh53sxs5uceoljm@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 30 Dec 2021 15:52:32 +0100
+Message-ID: <CAJZ5v0h742vDZnMrDM0i3w=sXSSQa8cBf1FhLOk3_SNO-8W8Yg@mail.gmail.com>
+Subject: Re: [GIT PULL] cpufreq/arm updates for 5.17-rc1
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Wed, Dec 29, 2021 at 4:46 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> Hi Rafael,
+>
+> This pull request contains:
+>
+> - Qcom cpufreq driver updates improve irq support (Ard Biesheuvel, Stephen Boyd,
+>   and Vladimir Zapolskiy).
+>
+> - Fixes double devm_remap for mediatek driver (Hector Yuan).
+>
+> - Introduces thermal pressure helpers (Lukasz Luba).
+>
+> Thanks.
+>
+> --
+> Viresh
+>
+> -------------------------8<-------------------------
+> The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+>
+>   Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/linux-next
+>
+> for you to fetch changes up to d776790a55367b9313d03c364c04ff47e7f5ea83:
+>
+>   cpufreq: mediatek-hw: Fix double devm_remap in hotplug case (2021-12-27 09:44:53 +0530)
+>
+> ----------------------------------------------------------------
+> Ard Biesheuvel (1):
+>       cpufreq: qcom-cpufreq-hw: Avoid stack buffer for IRQ name
+>
+> Hector.Yuan (1):
+>       cpufreq: mediatek-hw: Fix double devm_remap in hotplug case
+>
+> Lukasz Luba (5):
+>       arch_topology: Introduce thermal pressure update function
+>       thermal: cpufreq_cooling: Use new thermal pressure update function
+>       cpufreq: qcom-cpufreq-hw: Update offline CPUs per-cpu thermal pressure
+>       cpufreq: qcom-cpufreq-hw: Use new thermal pressure update function
+>       arch_topology: Remove unused topology_set_thermal_pressure() and related
+>
+> Stephen Boyd (1):
+>       cpufreq: qcom-hw: Use optional irq API
+>
+> Vladimir Zapolskiy (2):
+>       cpufreq: qcom-hw: Fix probable nested interrupt handling
+>       cpufreq: qcom-hw: Set CPU affinity of dcvsh interrupts
+>
+>  arch/arm/include/asm/topology.h       |  2 +-
+>  arch/arm64/include/asm/topology.h     |  2 +-
+>  drivers/base/arch_topology.c          | 42 +++++++++++++++++++++++++++++++----
+>  drivers/cpufreq/mediatek-cpufreq-hw.c | 33 ++++++++++++++++++++++++---
+>  drivers/cpufreq/qcom-cpufreq-hw.c     | 39 ++++++++++++++++----------------
+>  drivers/thermal/cpufreq_cooling.c     |  6 +----
+>  include/linux/arch_topology.h         |  4 ++--
+>  include/linux/sched/topology.h        |  6 ++---
+>  init/Kconfig                          |  2 +-
+>  9 files changed, 96 insertions(+), 40 deletions(-)
+>
+> --
 
-
-On 28/04/2021 08:54, Roger Lu wrote:
-> 1. SVS driver uses OPP adjust event in [1] to update OPP table voltage part.
-> 2. SVS driver gets thermal/GPU device by node [2][3] and CPU device by get_cpu_device().
-> After retrieving subsys device, SVS driver calls device_link_add() to make sure probe/suspend callback priority.
-> 3. SVS dts refers to reset controller [4] to help reset SVS HW.
-> 
-> #mt8183 SVS related patches
-> [1] https://patchwork.kernel.org/patch/11193513/
-
-Already mainline, please either refer to the commit, to make it clear it's 
-maineline or drop it.
-
-> [2] https://patchwork.kernel.org/project/linux-mediatek/patch/20201013102358.22588-2-michael.kao@mediatek.com/
-
-Same here.
-
-> [3] https://patchwork.kernel.org/project/linux-mediatek/patch/20200306041345.259332-3-drinkcat@chromium.org/
-
-Same here,
-
-> 
-> #mt8192 SVS related patches
-> [1] https://patchwork.kernel.org/patch/11193513/
-
-Same here, it's actually the same link as [1].
-
-> [2] https://patchwork.kernel.org/project/linux-mediatek/patch/20201223074944.2061-1-michael.kao@mediatek.com/
-> [3] https://lore.kernel.org/patchwork/patch/1360551/
-> [4] https://patchwork.kernel.org/project/linux-mediatek/patch/20200817030324.5690-5-crystal.guo@mediatek.com/
-
-There are many dependencies for that. Some patches need resubmit, others seem to 
-be stale. I'd advise to concentrate on mt8183 for now and add support for mt8192 
-once dependencies have settled.
-
-Regards,
-Matthias
-
-> 
-> changes since v15:
-> - Put (*set_freqs_pct) and (*get_vops) in struct svs_bank because they are part of svs bank's operation
-> - Add define "SVSB_INIT02_RM_DVTFIXED" and "SVSB_MON_VOLT_IGNORE" to make control clearly.
-> - Remove unnecessary parenthesis
-> 
-> Roger Lu (7):
->    [v16,1/7] dt-bindings: soc: mediatek: add mtk svs dt-bindings
->    [v16,2/7] arm64: dts: mt8183: add svs device information
->    [v16,3/7] soc: mediatek: SVS: introduce MTK SVS engine
->    [v16,4/7] soc: mediatek: SVS: add debug commands
->    [v16,5/7] dt-bindings: soc: mediatek: add mt8192 svs dt-bindings
->    [v16,6/7] arm64: dts: mt8192: add svs device information
->    [v16,7/7] soc: mediatek: SVS: add mt8192 SVS GPU driver
-> 
->   .../bindings/soc/mediatek/mtk-svs.yaml        |   92 +
->   arch/arm64/boot/dts/mediatek/mt8183.dtsi      |   18 +
->   arch/arm64/boot/dts/mediatek/mt8192.dtsi      |   34 +
->   drivers/soc/mediatek/Kconfig                  |   10 +
->   drivers/soc/mediatek/Makefile                 |    1 +
->   drivers/soc/mediatek/mtk-svs.c                | 2524 +++++++++++++++++
->   6 files changed, 2679 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
->   create mode 100644 drivers/soc/mediatek/mtk-svs.c
-> 
-> _______________________________________________
-> Linux-mediatek mailing list
-> Linux-mediatek@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-mediatek
-> 
+Pulled, thanks!
