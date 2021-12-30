@@ -2,160 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8E58481DE0
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Dec 2021 16:56:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3439481DE2
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Dec 2021 16:56:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232051AbhL3P4U (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Dec 2021 10:56:20 -0500
-Received: from mail-qt1-f175.google.com ([209.85.160.175]:45745 "EHLO
-        mail-qt1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236262AbhL3P4U (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Dec 2021 10:56:20 -0500
-Received: by mail-qt1-f175.google.com with SMTP id p19so22004860qtw.12;
-        Thu, 30 Dec 2021 07:56:19 -0800 (PST)
+        id S240180AbhL3P4a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Dec 2021 10:56:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58730 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236262AbhL3P4a (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Dec 2021 10:56:30 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375E3C06173E
+        for <linux-pm@vger.kernel.org>; Thu, 30 Dec 2021 07:56:30 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id v25so21768419pge.2
+        for <linux-pm@vger.kernel.org>; Thu, 30 Dec 2021 07:56:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=5JtJxfzgWXREJNVRQweKsmMUML7D8pwiMG7VLXd2Beo=;
+        b=yhU8cg4JbWvwEzfoP1oJmUcQcuMy8r2UuE9hFCv9gmlz9E3LCcjS21Pmv8rbA10+4s
+         Y5az6Hf68CpQlPdOqgkn8ajB4ZVTfTal3DqmDrnmQAkx39ylCbi2AW5HEyZruo48eusB
+         Nz9AjJWGqYMBAT/1FhcaMzDkj/28unb3TjJzzWLOE979Zfj6IZwPkbYtH3oI4/A0py5k
+         vjuLTNLlg35NvD/axJyp+aayBSPdjwltpeZUjiI6vIlSlsqUPbhgdW8O9eeL4yB3v/2E
+         EqCuy0LbZNFgx+61lLBw564l2ZkJ4g7nxTBkp+x43iYXXLeDx/ejbgFYHhs9hN1qFPkq
+         1QvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Uyd2lmYIj+aDxIiI6zxbrO3VhujHcAJmwQIoF2owoAA=;
-        b=yn5o9HDLUh0kEm09aHx2hCsDwR2g4KFr5n35sRuylQ18g3qgCHIrZTRoxi46yEELk3
-         gYrSrIROKYFiBpJqE1rpvvnzc/algZHdBwlMxSud5PNKD1vDPWCGWXY9uwvRA/LwAlRW
-         wQlTj14EVDmbpTVvC/B9Ix9cWUz8BnetFrXNexONvT0cHcjnXiiPalbaCvs7wGJ0LvVE
-         hqYmhP82fWVmUgMK3X/clBGnUEVTW1pOorOmqGMNcC8JPcePwoqZsHqIJwMbSQPnJPU8
-         F3a7nmMDRKVevZlIgxvcY2sypUUsmaI3/S5lrewJ2GBmoVBHHfXLquBC8RwM444oVn2N
-         dV0Q==
-X-Gm-Message-State: AOAM53261JYJQ6K0gk61uOiDWKNg+Va7KUXvG7UAbgNovfIyMcWXQ8JT
-        iK2Ton2jWQgBBVcOSjhM71NyjAHsLRaKgDDaBU8=
-X-Google-Smtp-Source: ABdhPJz3+9w28sbI5DJJd57BV0iux6VYMlM3ZP1Hd7W5M/VmCNwFkRHOdUA/ovA2i96bz33JeTcJe7o2W8vYTvwOeH0=
-X-Received: by 2002:a05:622a:1113:: with SMTP id e19mr23739654qty.612.1640879779270;
- Thu, 30 Dec 2021 07:56:19 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=5JtJxfzgWXREJNVRQweKsmMUML7D8pwiMG7VLXd2Beo=;
+        b=AvznmtmvDaFc5GGvt1dxmoaB44XTEOI/9cyumiPc135lhzfHQRRbz5cL0nC3K9/Gy4
+         h2A8D7bx7tQ4ervtE8s+cwYqCcOgY5QUO6m1v+9xfSFSy8XXp+n289OcBD2U8+qgqewi
+         3SMAYx4+r7A9MlwzGK+Jr1PbvnAfQFKu9fvC2R9KdNg8v3InXIXc4tr33SHOcLshzHDx
+         +Pc1xfPDrMqd0sfVwTkW9SiGLZWyCWVWhYnzHhjactpjMlvxS4Ct4QBU/+tVeVfNKuCl
+         rW/uiIvZQs5sgxWdf76A3G0mMYwLWAWGi4hIPes6GdR0mFQkQ4BmpS9cUcSGZWP4O7Zk
+         t62Q==
+X-Gm-Message-State: AOAM531x2pI5e7MqlanZgKUjieZFfHLtxST/MqEu5cJ1KE93taqL0/8S
+        lEKUylc5HH8nhA0JuFQC5CitYA==
+X-Google-Smtp-Source: ABdhPJxE+ivRFnilv6mm9T9xQkfz2kfB1X/FTgUyHOSf3KIF6d+lQunQrMWgjWZT8h9jAfcPVsrbPw==
+X-Received: by 2002:a05:6a00:174b:b0:4ba:c9f4:d4ee with SMTP id j11-20020a056a00174b00b004bac9f4d4eemr31956655pfc.3.1640879789837;
+        Thu, 30 Dec 2021 07:56:29 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id h17sm24006608pfv.217.2021.12.30.07.56.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Dec 2021 07:56:29 -0800 (PST)
+Message-ID: <61cdd6ad.1c69fb81.f74c7.fe69@mx.google.com>
+Date:   Thu, 30 Dec 2021 07:56:29 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20211224010508.110159-1-ray.huang@amd.com>
-In-Reply-To: <20211224010508.110159-1-ray.huang@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 30 Dec 2021 16:56:08 +0100
-Message-ID: <CAJZ5v0i3xufGJi5+8zH7aG3vgjQpGuU_YVG=cBMxi0aGY1aP3A@mail.gmail.com>
-Subject: Re: [PATCH v7 00/14] cpufreq: Introduce a new AMD CPU frequency
- control mechanism
-To:     Huang Rui <ray.huang@amd.com>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Borislav Petkov <bp@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Steven Noonan <steven@valvesoftware.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v5.16-rc7-138-g143d2aca78e4
+X-Kernelci-Branch: testing
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 1 warning (v5.16-rc7-138-g143d2aca78e4)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Dec 24, 2021 at 2:05 AM Huang Rui <ray.huang@amd.com> wrote:
->
-> Hi all,
->
-> Merry Christmas & Happy New Year!
->
-> We would like to introduce a new AMD CPU frequency control mechanism as the
-> AMD P-State driver for modern AMD Zen based CPU series in Linux Kernel.
-> The new mechanism is based on Collaborative processor performance control
-> (CPPC) which is finer grain frequency management than legacy ACPI hardware
-> P-States. Current AMD CPU platforms are using the ACPI P-states driver to
-> manage CPU frequency and clocks with switching only in 3 P-states. AMD
-> P-State is to replace the ACPI P-states controls, allows a flexible,
-> low-latency interface for the Linux kernel to directly communicate the
-> performance hints to hardware.
->
-> AMD P-State leverages the Linux kernel governors such as *schedutil*,
-> *ondemand*, etc. to manage the performance hints which are provided by CPPC
-> hardware functionality. The first version for AMD P-State is to support one
-> of the Zen3 processors, and we will support more in future after we verify
-> the hardware and SBIOS functionalities.
->
-> There are two types of hardware implementations for AMD P-State: one is full
-> MSR support and another is shared memory support. It can use
-> X86_FEATURE_CPPC feature flag to distinguish the different types.
->
-> Using the new AMD P-State method + kernel governors (*schedutil*,
-> *ondemand*, ...) to manage the frequency update is the most appropriate
-> bridge between AMD Zen based hardware processor and Linux kernel, the
-> processor is able to adjust to the most efficiency frequency according to
-> the kernel scheduler loading.
->
+pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.16-rc7-138-g1=
+43d2aca78e4)
 
-[cut]
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+16-rc7-138-g143d2aca78e4/
 
-> Actually, the AMD P-State driver doesn't change the physical maximum
-> frequency capacity in the processor. But it's able to provide the finer
-> grain performance control range instead of legacy 3 P-States. It has a
-> better performance and power efficiency than before. We will continue
-> optimize AMD P-State function on kernel governors to support different types
-> of processors such as mobile latop, performance desktop, and etc.
->
+Tree: pm
+Branch: testing
+Git Describe: v5.16-rc7-138-g143d2aca78e4
+Git Commit: 143d2aca78e4249800d88ccb216e94db20d56fd1
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
-[cut]
+Warnings Detected:
 
->
->
-> Huang Rui (11):
->   x86/cpufeatures: Add AMD Collaborative Processor Performance Control
->     feature flag
->   x86/msr: Add AMD CPPC MSR definitions
->   cpufreq: amd-pstate: Introduce a new AMD P-State driver to support
->     future processors
->   cpufreq: amd-pstate: Add fast switch function for AMD P-State
->   cpufreq: amd-pstate: Introduce the support for the processors with
->     shared memory solution
->   cpufreq: amd-pstate: Add trace for AMD P-State module
->   cpufreq: amd-pstate: Add boost mode support for AMD P-State
->   cpufreq: amd-pstate: Add AMD P-State frequencies attributes
->   cpufreq: amd-pstate: Add AMD P-State performance attributes
->   Documentation: amd-pstate: Add AMD P-State driver introduction
->   MAINTAINERS: Add AMD P-State driver maintainer entry
->
-> Jinzhou Su (1):
->   ACPI: CPPC: Add CPPC enable register function
->
-> Mario Limonciello (1):
->   ACPI: CPPC: Check present CPUs for determining _CPC is valid
->
-> Steven Noonan (1):
->   ACPI: CPPC: Implement support for SystemIO registers
->
->  Documentation/admin-guide/acpi/cppc_sysfs.rst |   2 +
->  Documentation/admin-guide/pm/amd-pstate.rst   | 383 +++++++++++
->  .../admin-guide/pm/working-state.rst          |   1 +
->  MAINTAINERS                                   |   7 +
->  arch/x86/include/asm/cpufeatures.h            |   1 +
->  arch/x86/include/asm/msr-index.h              |  17 +
->  drivers/acpi/cppc_acpi.c                      |  99 ++-
->  drivers/cpufreq/Kconfig.x86                   |  17 +
->  drivers/cpufreq/Makefile                      |   5 +
->  drivers/cpufreq/amd-pstate-trace.c            |   2 +
->  drivers/cpufreq/amd-pstate-trace.h            |  77 +++
->  drivers/cpufreq/amd-pstate.c                  | 643 ++++++++++++++++++
->  include/acpi/cppc_acpi.h                      |   5 +
->  13 files changed, 1255 insertions(+), 4 deletions(-)
->  create mode 100644 Documentation/admin-guide/pm/amd-pstate.rst
->  create mode 100644 drivers/cpufreq/amd-pstate-trace.c
->  create mode 100644 drivers/cpufreq/amd-pstate-trace.h
->  create mode 100644 drivers/cpufreq/amd-pstate.c
->
-> --
+arc:
 
-I'm queuing up this series for 5.17 with the assumption that all of
-the comments on patch 2 have been addressed and that Steve will not
-hate patch 9.
+arm64:
 
-Thanks!
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+x86_64:
+
+
+Warnings summary:
+
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
