@@ -2,79 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96CA5481D50
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Dec 2021 15:57:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C544B481DA1
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Dec 2021 16:13:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240413AbhL3O5g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Dec 2021 09:57:36 -0500
-Received: from mail-qt1-f180.google.com ([209.85.160.180]:38628 "EHLO
-        mail-qt1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240416AbhL3O5g (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Dec 2021 09:57:36 -0500
-Received: by mail-qt1-f180.google.com with SMTP id 8so21904194qtx.5
-        for <linux-pm@vger.kernel.org>; Thu, 30 Dec 2021 06:57:36 -0800 (PST)
+        id S236529AbhL3PNP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Dec 2021 10:13:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49260 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235850AbhL3PNO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Dec 2021 10:13:14 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBE2C061574;
+        Thu, 30 Dec 2021 07:13:14 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id a83-20020a1c9856000000b00344731e044bso13478988wme.1;
+        Thu, 30 Dec 2021 07:13:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=BrOBt56bIUGwhax4+hkiSfB9eBwZpxmU8jWPncxv4xY=;
+        b=mdcO0u7q512tAOfsTZd7cVP+9FoqU2UTTHPO+Yo/IGSV0jpo3V6ocoJcpfqVC+FqVq
+         Y/R2IMnisigM9OZSRq5m8cMI7UyxCzpEuwJlZjzD5I47qKBijMd0cTgW8YdmGvwqGIgG
+         LwR00rdl+w0+6VoEoFxks9NrghoH8gzJl2c9Dh3417RDCUfH9BARG/IJnJfzaTAntEg/
+         CYUuZhMWbhoQqgpxKCsVWyAdkttIQD7uzWMV74baJmOu3o7+kEPwlbuTYOZNTQcs/XG3
+         ICfmjodf46LaSnfOU3e9lZLYnTXzYhDprLDPs755K6R3tRfUNrteJoBN+1Tea/4Qukih
+         upXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5kyEWX6EvoHUObYeMVkKHj4uMl0mU+cGvMTGFA37bmM=;
-        b=7HdPuPONxyLwkx1yPtINUlxtolQLQ+/1vIVDZJNaNNLbz7c8o3XXEcutmrz2It47pP
-         etSGhJ+r19l1Om///NOrZh4gKA0gVZ2cmRVuYWmKSi7ZKrj+ah5pO8gK6cA6vZtfuxwC
-         yZTyzDUuEh2x3R11tqyYj2uG/lfew0rCoHYTDX6z1V45nLbipThYMPVXwbVBFSerBcN+
-         Kt+Icm4qBZ/WXYKxbwzMAMf49IXC15n+pKjLwHqPKUSbyrcY29Zp4iJGwqmfA4ltttwX
-         fIwCMulLUg18aSKQUvf5X4XcuvjYUHeyfwEeeWQL48pQx13N9vaI8Jlr61W9FEAzvz1c
-         62Jw==
-X-Gm-Message-State: AOAM5331tmByl1g3Zujk9YUn5kgT9MUA7+1qIXXMO2JZ++Bo5Tgy7g9n
-        iR1jiU3BSiDW2xaVpfjtLYdw6S1y+e/gREjTdfE=
-X-Google-Smtp-Source: ABdhPJydpOmMGI7Bm0wE8xXeC5dIDlxKM0Jw1uC/zfq9eT9AiCfAz2ws+tfnFiyPycmKwzDLQuLSZ5KynPWfaCJGcyw=
-X-Received: by 2002:a05:622a:1113:: with SMTP id e19mr23491378qty.612.1640876255606;
- Thu, 30 Dec 2021 06:57:35 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=BrOBt56bIUGwhax4+hkiSfB9eBwZpxmU8jWPncxv4xY=;
+        b=tsQ47yVVoRPoGF44vIIAr0q2FRgdCOWQ9LY8wnIOfFcT5AfQ3QR4qyVrRNHjy76s59
+         8YOoiU57MXOh5JubV4o7JhsZBnnLkpZUG3kJ/gVFgL59NQgKTLZp7dAg2OFiIQfmJyw2
+         VqUYzc++V+DQqKjNVRbVPsLiMQgzMZiMrklMOftN+rhXZGYQGLNMswXQwYtIYUSEeD+1
+         aW/+WPcVsu0H0AMrLNhzAB1tOlpAW2X0fpO8/R1dF6Rl9JpA8HIbK1L0+pbESmhzlrOl
+         JygDhNd+2tzpm/QqakARpwMgda+dW9lENOAX8ndfke5yTHLunxHoXCjuq+JZqYfFUMUZ
+         P8vg==
+X-Gm-Message-State: AOAM533ILkJTFWHgOK1OaVUKCqzbbMPkXt1vvz8G7cjPrbVyZ1JwORC9
+        o8jYQ2R8NNSASH/X6RrDGvg=
+X-Google-Smtp-Source: ABdhPJz6Ivr54shp46pcRY+QQqmJl5qUd/LY3TzF+V+pjZDP3U8afmIJ+avvhxp005UdEO/5axkTJw==
+X-Received: by 2002:a1c:20c2:: with SMTP id g185mr26301905wmg.115.1640877192898;
+        Thu, 30 Dec 2021 07:13:12 -0800 (PST)
+Received: from [192.168.1.145] ([207.188.161.251])
+        by smtp.gmail.com with ESMTPSA id bg19sm2589127wmb.47.2021.12.30.07.13.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Dec 2021 07:13:12 -0800 (PST)
+Message-ID: <fff75b65-51ab-cafd-a55f-137c0b7c2dc6@gmail.com>
+Date:   Thu, 30 Dec 2021 16:13:10 +0100
 MIME-Version: 1.0
-References: <20211229034341.juivahmqhoqzjtgo@vireshk-i7>
-In-Reply-To: <20211229034341.juivahmqhoqzjtgo@vireshk-i7>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 30 Dec 2021 15:57:24 +0100
-Message-ID: <CAJZ5v0jvtxopMpYuR64xDYezma3+rNqEPV8uNbbSRcfOEySmcw@mail.gmail.com>
-Subject: Re: [GIT PULL] OPP updates for 5.17-rc1
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v20 0/7] soc: mediatek: SVS: introduce MTK SVS engine
+Content-Language: en-US
+To:     Roger Lu <roger.lu@mediatek.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        YT Lee <yt.lee@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Guenter Roeck <linux@roeck-us.net>
+References: <20210721070904.15636-1-roger.lu@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20210721070904.15636-1-roger.lu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Dec 29, 2021 at 4:43 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> Hi Rafael,
->
-> This pull request updates the documentation to match with the latest code.
->
-> Thanks.
->
-> --
-> Viresh
->
-> -------------------------8<-------------------------
-> The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
->
->   Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
->
-> for you to fetch changes up to 489a00ef46c93e85ed540d91836317cc469371ac:
->
->   Documentation: power: Update outdated contents in opp.rst (2021-12-27 09:47:52 +0530)
->
-> ----------------------------------------------------------------
-> Tang Yizhou (1):
->       Documentation: power: Update outdated contents in opp.rst
->
->  Documentation/power/opp.rst | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
->
-> --
+Hi Roger,
 
-Pulled, thanks!
+On 21/07/2021 09:08, Roger Lu wrote:
+> 1. SVS driver uses OPP adjust event in [1] to update OPP table voltage part.
+> 2. SVS driver gets thermal/GPU device by node [2][3] and CPU device by get_cpu_device().
+> After retrieving subsys device, SVS driver calls device_link_add() to make sure probe/suspend callback priority.
+> 3. SVS dts refers to reset controller [4] to help reset SVS HW.
+> 
+> #mt8183 SVS related patches
+> [1] https://patchwork.kernel.org/patch/11193513/
+> [2] https://patchwork.kernel.org/project/linux-mediatek/patch/20201013102358.22588-2-michael.kao@mediatek.com/
+> [3] https://patchwork.kernel.org/project/linux-mediatek/patch/20200306041345.259332-3-drinkcat@chromium.org/
+> 
+
+Comments made in v16 actually also hold for v20, so please take them into account :)
+
+Regards,
+Matthias
