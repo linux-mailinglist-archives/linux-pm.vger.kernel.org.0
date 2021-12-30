@@ -2,35 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C805B48169B
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Dec 2021 21:18:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C25014817F6
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Dec 2021 01:58:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231867AbhL2USU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Dec 2021 15:18:20 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:42284 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231773AbhL2USU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Dec 2021 15:18:20 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S233807AbhL3A56 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Dec 2021 19:57:58 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:45996
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233789AbhL3A55 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Dec 2021 19:57:57 -0500
+Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com [209.85.210.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6BC63CE1A32;
-        Wed, 29 Dec 2021 20:18:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D4F6C36AE9;
-        Wed, 29 Dec 2021 20:18:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640809096;
-        bh=OO/7H+q1tJgl+UkE2VDhBPwDsy+1vjPE6DQfF6j9qh0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=F+Plc0rWh9Hck56YGRXWzhcF6epaqqsaGxlZKhJf/NeCFraR983xCbxZDBKcRbZkx
-         juf5NnrJY1i/98V7kQj68uTTQLMxwlr+/R9eLPlbzzk2kFei4csC47gNrNaEF5DZOO
-         XY/lu9IIGzN4bMtI9XYsV61B0yi2x9pXI9xzWs38prFy/SbMvwEDMxP4Lj6cX1QF09
-         mhaFPtq8mWPwjj59u+d+KOcAh6SdqiZ4iE/gRCACCYmGTXGk9PbzVnt2utVHgAq7Tc
-         +KQYvJ3/1hyVXCQknQ2K3B3gvKSWZsUTc23UPMJ1ih+RYV/IgIkve9qqF252408jiW
-         BFED9/DlyB9ag==
-Date:   Wed, 29 Dec 2021 14:18:14 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 8DEAF406EC
+        for <linux-pm@vger.kernel.org>; Thu, 30 Dec 2021 00:57:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1640825876;
+        bh=9Hwlmcj0whxK49ykZw434uUikfx+0hXzEWWfpG3itis=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=tITYeT6KcBWIVEN2XOBh+4Y+l4Yf8zDaTEO+PnPyl3uzRwyxDyiNjwOjJGZIDLpzV
+         CuO54i6BhsW0f5eEzqfZEQfvBXfuhyrB9eK2NFuPGj8WMX3ue8mgnAyN6IKB7a53uz
+         TP3lgEC1lQ18adV0z9C8hpGk6pVUryxp9uU2IPDdxew5xskvnb85v2nACQyhRrutVx
+         JPM5I0Abz2Krd/FQZjhTLbN9VJ0EXTTzYMgbk6jwWe55/O7DC1z2kDulb2fw38zR1J
+         jINBzByB0S9u1Xho6IKh+ETsZftpLMHuOIqw5M+ILheji3cn3r97AxQBkQjlC3hp+S
+         IQ9PFmczyHpDQ==
+Received: by mail-ot1-f72.google.com with SMTP id y19-20020a0568301d9300b0056396063834so7163007oti.18
+        for <linux-pm@vger.kernel.org>; Wed, 29 Dec 2021 16:57:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9Hwlmcj0whxK49ykZw434uUikfx+0hXzEWWfpG3itis=;
+        b=LBvKEMfJQp5ccfx5T7SylpNYmMkES0t4ifkHkrFpnkO++9Z5AetIt3AMp+sp6YRhvR
+         mvbCScuIJhxUh0EquOAe+ZYKFYs5AUuNA09KNZu3IT3EzDXoTZiFJq79uvTsRQpt1Ilv
+         qYacSGhxNTdJTVEOd25v5paqd5fV3UnIgI5P5VHyV2CU7Usjmi4eFO/r+GAgtG5H8+R8
+         GsJr/k46/rklWd2S1aa+goSunkuxwQYrExI1sh1sXF2u9CNyQz2dej/GnVSlUJpr1m2z
+         N8wF5bPQ77J+3fCIIH0Smu9pNMCWpNME5JRhGNzO6QbPGnLxEtn1lb8imY19z53O+LP/
+         c+lA==
+X-Gm-Message-State: AOAM533Ho424BHBUpJBVUgRZ+94jW1cqdr0eYkI4cKkM9FRgRYN5l9Zg
+        Z0Y6B+0MZS77Vg06AiL1hUmStj/j+h3qqQWvXIdzFRftwJ8UhZFVh85bBqzNYoZaRvm8oQfOQWY
+        pVTXhLM8+nCb/3kbmyzRFq9Ae77l/KB+FOyRFdY5vka4mAc936wBb
+X-Received: by 2002:a4a:9406:: with SMTP id h6mr17864662ooi.80.1640825875120;
+        Wed, 29 Dec 2021 16:57:55 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwCOxmVFWE0YLjVd6KBaomVjMm7A0pPvlpZY/iwXtxTaHI020iaE+lbr1yOC/2PkujCMzC8WJeCzYUhLg1b854=
+X-Received: by 2002:a4a:9406:: with SMTP id h6mr17864647ooi.80.1640825874776;
+ Wed, 29 Dec 2021 16:57:54 -0800 (PST)
+MIME-Version: 1.0
+References: <20211224081914.345292-1-kai.heng.feng@canonical.com> <20211229201229.GA1698801@bhelgaas>
+In-Reply-To: <20211229201229.GA1698801@bhelgaas>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Thu, 30 Dec 2021 08:57:42 +0800
+Message-ID: <CAAd53p5GJRqRUvNSqNBLq2yTjjvJnSq5hFPSJYv08wuSLExx_w@mail.gmail.com>
+Subject: Re: [PATCH 1/2] net: wwan: iosm: Let PCI core handle PCI power transition
+To:     Bjorn Helgaas <helgaas@kernel.org>
 Cc:     m.chetan.kumar@intel.com, linuxwwan@intel.com,
         linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
         Loic Poulain <loic.poulain@linaro.org>,
@@ -39,55 +65,116 @@ Cc:     m.chetan.kumar@intel.com, linuxwwan@intel.com,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Vaibhav Gupta <vaibhavgupta40@gmail.com>
-Subject: Re: [PATCH 2/2] net: wwan: iosm: Keep device at D0 for s2idle case
-Message-ID: <20211229201814.GA1699315@bhelgaas>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211224081914.345292-2-kai.heng.feng@canonical.com>
+        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[+cc Rafael, Vaibhav]
+On Thu, Dec 30, 2021 at 4:12 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> [+cc Rafael, in case you have insight about the PCI_D0 question below;
+> Vaibhav, since this is related to your generic PM conversions]
+>
+> On Fri, Dec 24, 2021 at 04:19:13PM +0800, Kai-Heng Feng wrote:
+> > pci_pm_suspend_noirq() and pci_pm_resume_noirq() already handle power
+> > transition for system-wide suspend and resume, so it's not necessary to
+> > do it in the driver.
+>
+> I see DaveM has already applied this, but it looks good to me, thanks
+> for doing this!
+>
+> One minor question below...
+>
+> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > ---
+> >  drivers/net/wwan/iosm/iosm_ipc_pcie.c | 49 ++-------------------------
+> >  1 file changed, 2 insertions(+), 47 deletions(-)
+> >
+> > diff --git a/drivers/net/wwan/iosm/iosm_ipc_pcie.c b/drivers/net/wwan/iosm/iosm_ipc_pcie.c
+> > index 2fe88b8be3481..d73894e2a84ed 100644
+> > --- a/drivers/net/wwan/iosm/iosm_ipc_pcie.c
+> > +++ b/drivers/net/wwan/iosm/iosm_ipc_pcie.c
+> > @@ -363,67 +363,22 @@ static int __maybe_unused ipc_pcie_resume_s2idle(struct iosm_pcie *ipc_pcie)
+> >
+> >  int __maybe_unused ipc_pcie_suspend(struct iosm_pcie *ipc_pcie)
+> >  {
+> > -     struct pci_dev *pdev;
+> > -     int ret;
+> > -
+> > -     pdev = ipc_pcie->pci;
+> > -
+> > -     /* Execute D3 one time. */
+> > -     if (pdev->current_state != PCI_D0) {
+> > -             dev_dbg(ipc_pcie->dev, "done for PM=%d", pdev->current_state);
+> > -             return 0;
+> > -     }
+>
+> I don't understand the intent of this early exit, and it's not obvious
+> to me that pci_pm_suspend_noirq() bails out early when
+> (pdev->current_state != PCI_D0).
 
-On Fri, Dec 24, 2021 at 04:19:14PM +0800, Kai-Heng Feng wrote:
-> We are seeing spurious wakeup caused by Intel 7560 WWAN on AMD laptops.
-> This prevent those laptops to stay in s2idle state.
-> 
-> From what I can understand, the intention of ipc_pcie_suspend() is to
-> put the device to D3cold, and ipc_pcie_suspend_s2idle() is to keep the
-> device at D0. However, the device can still be put to D3hot/D3cold by
-> PCI core.
-> 
-> So explicitly let PCI core know this device should stay at D0, to solve
-> the spurious wakeup.
-> 
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> ---
->  drivers/net/wwan/iosm/iosm_ipc_pcie.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/net/wwan/iosm/iosm_ipc_pcie.c b/drivers/net/wwan/iosm/iosm_ipc_pcie.c
-> index d73894e2a84ed..af1d0e837fe99 100644
-> --- a/drivers/net/wwan/iosm/iosm_ipc_pcie.c
-> +++ b/drivers/net/wwan/iosm/iosm_ipc_pcie.c
-> @@ -340,6 +340,9 @@ static int __maybe_unused ipc_pcie_suspend_s2idle(struct iosm_pcie *ipc_pcie)
->  
->  	ipc_imem_pm_s2idle_sleep(ipc_pcie->imem, true);
->  
-> +	/* Let PCI core know this device should stay at D0 */
-> +	pci_save_state(ipc_pcie->pci);
+Yes, I think this can be removed too. Please let me send v2.
 
-This is a weird and non-obvious way to say "this device should stay at
-D0".  It's also fairly expensive since pci_save_state() does a lot of
-slow PCI config reads.
+Kai-Heng
 
->  	return 0;
->  }
->  
-> -- 
-> 2.33.1
-> 
+>
+> >       /* The HAL shall ask the shared memory layer whether D3 is allowed. */
+> >       ipc_imem_pm_suspend(ipc_pcie->imem);
+> >
+> > -     /* Save the PCI configuration space of a device before suspending. */
+> > -     ret = pci_save_state(pdev);
+> > -
+> > -     if (ret) {
+> > -             dev_err(ipc_pcie->dev, "pci_save_state error=%d", ret);
+> > -             return ret;
+> > -     }
+> > -
+> > -     /* Set the power state of a PCI device.
+> > -      * Transition a device to a new power state, using the device's PCI PM
+> > -      * registers.
+> > -      */
+> > -     ret = pci_set_power_state(pdev, PCI_D3cold);
+> > -
+> > -     if (ret) {
+> > -             dev_err(ipc_pcie->dev, "pci_set_power_state error=%d", ret);
+> > -             return ret;
+> > -     }
+> > -
+> >       dev_dbg(ipc_pcie->dev, "SUSPEND done");
+> > -     return ret;
+> > +     return 0;
+> >  }
+> >
+> >  int __maybe_unused ipc_pcie_resume(struct iosm_pcie *ipc_pcie)
+> >  {
+> > -     int ret;
+> > -
+> > -     /* Set the power state of a PCI device.
+> > -      * Transition a device to a new power state, using the device's PCI PM
+> > -      * registers.
+> > -      */
+> > -     ret = pci_set_power_state(ipc_pcie->pci, PCI_D0);
+> > -
+> > -     if (ret) {
+> > -             dev_err(ipc_pcie->dev, "pci_set_power_state error=%d", ret);
+> > -             return ret;
+> > -     }
+> > -
+> > -     pci_restore_state(ipc_pcie->pci);
+> > -
+> >       /* The HAL shall inform the shared memory layer that the device is
+> >        * active.
+> >        */
+> >       ipc_imem_pm_resume(ipc_pcie->imem);
+> >
+> >       dev_dbg(ipc_pcie->dev, "RESUME done");
+> > -     return ret;
+> > +     return 0;
+> >  }
+> >
+> >  static int __maybe_unused ipc_pcie_suspend_cb(struct device *dev)
+> > --
+> > 2.33.1
+> >
