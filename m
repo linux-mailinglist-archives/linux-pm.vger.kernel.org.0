@@ -2,101 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7224C481BC4
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Dec 2021 12:42:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50E09481C3F
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Dec 2021 13:54:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235376AbhL3LmJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Dec 2021 06:42:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58920 "EHLO
+        id S232743AbhL3Myt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Dec 2021 07:54:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235195AbhL3LmJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Dec 2021 06:42:09 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B328C061574;
-        Thu, 30 Dec 2021 03:42:09 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id u16so18064622plg.9;
-        Thu, 30 Dec 2021 03:42:09 -0800 (PST)
+        with ESMTP id S229565AbhL3Myt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Dec 2021 07:54:49 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3A4C061574;
+        Thu, 30 Dec 2021 04:54:48 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id j18so50295780wrd.2;
+        Thu, 30 Dec 2021 04:54:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=/2GJveFYsVaUlKyHZdp6crFhqF80gEKGhbqZmnuCaPw=;
-        b=ejmeQXi5v7W71useZlfjfwzFxkxvM1kP7DwvtcTupW3abw6ntYvZSeCDvTvBfDr6rD
-         J7n569pNY4TVJauADBeMO0a58S/TwG1GBs3ffyk+e8m5ZgE5CixUEZpdIzqFlXPG+bAH
-         nk32QjcaPju2vdFe/OIih0/wNBavRPTrwWeFQljYboic3cktf0/Dtu0lrzIY2mvOobaa
-         I6hLRhU+bYCGPvtw1Q6uTKBwp1d4MgqfDj0c3Q58aoPE6aMq4zFx3EnVJAmSaKTSX7Q6
-         oHi+xCN/AsMQfPSADLHdrX6QRhAWTl5Vrm22Qr3ZwSUeafN/ENvg74hWt7qs/YjPUSwp
-         ZFYw==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=YFsE9Hzd6Rw74/QWXyvFaT9SGHT235vGJZ7VH+X9Vqg=;
+        b=j1/mXzn1nmea5RST1mMajHuWCuVWhRqN+Lg+syW8EQjxxsP+3z/R93jwf8vgZWbZsm
+         OcuVJ9XUPFPEAU9OtCF+ZwU71OGyQMuKXNmj1Jk9ebfSFlPExhHPMigoSVaJforhf6qJ
+         MSrs2D6cozE43KuJe0O/r6SMBFCRBNmFMatKgoEH7XYm3mCx1BNX77iTI1GUfR0p3gq4
+         tvNKAQZL15557qK/KTsRBQpJFU/bA6CtoGsG0s1HKrGsDf+LMsoSvwqw8ZP6GhC+jaNe
+         hzqABqGTxll+o+q2ZW6rBTvjBRH1TaQ20zt2ZjIiL9k2BhLcnof9T1QFjiAB6uUXAa6m
+         I6nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=/2GJveFYsVaUlKyHZdp6crFhqF80gEKGhbqZmnuCaPw=;
-        b=nKz8xnhDF3VLuc3JF54ozUrT41sLORTHSh1mBRujIUihX4rUM32qI08IWxric7sAfS
-         Hub1uoCLwlshlrWa+p1v/tgHAR72QCKJosLHeQZMwsO0K801r7xYqgd6VssXxm55fSun
-         mdLhCQao+ST7LwcTbOiHYMDKcaqerp/wqCA5lI956u1n7c1jHv+6a26JwajfJn7ukpeK
-         8VSKRgt3qWP5sQTxq1Wmh8Q99bvHxeOcja+3W9Bh0VMczltrAdAidBPO+BpRsXwHVJ+W
-         Jsx+vYfBBGeBcUSZahZbf7BWGXQorDDUGs9NTNKu3EIbXniWXu1deJcth3eq86fEpdZX
-         tAZg==
-X-Gm-Message-State: AOAM531aNNy599FDtVZZ/caUXmMrFjeMoy9dlEvlHD8OdqtuE0P9fkdt
-        x/po9kk9VcAqSulSJC/JWB8Mxb2/AttiKmPXCtw=
-X-Google-Smtp-Source: ABdhPJz6MwEuYN2+6s3o7RaQLmfYGH7X11lcFjXo8ZW4cYY7etouGrgDssFxE12vtlb+FIrJSDflOg==
-X-Received: by 2002:a17:902:ea0f:b0:149:3fdd:1090 with SMTP id s15-20020a170902ea0f00b001493fdd1090mr30038430plg.43.1640864528698;
-        Thu, 30 Dec 2021 03:42:08 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id c9sm22932631pfc.61.2021.12.30.03.42.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Dec 2021 03:42:08 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-Cc:     linmq006@gmail.com, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] cpuidle: qcom_spm: Fix missing put_device() call in spm_cpuidle_register
-Date:   Thu, 30 Dec 2021 11:42:03 +0000
-Message-Id: <20211230114203.13467-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-To:     unlisted-recipients:; (no To-header on input)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=YFsE9Hzd6Rw74/QWXyvFaT9SGHT235vGJZ7VH+X9Vqg=;
+        b=LjxXxg/CDf7ZJ9poQDKh99O58i1YMr/qgmLIvdvTO609bVtBDiw2yWsvThbSshXz5x
+         sfzlqjBzs/CDNOg2F8A1oVbvvnnp95pGbbk0btjKnPk9Bah/aC49OlLHJ+3w1YNuoYyO
+         UBKgsKtBvGmoX/98WKSVbDajOVEwhJYkxfZyLtchMkuLPVc9tAH7Y8ypG0V5rHbKjo8g
+         S4BFNI3RiPKkOQkC+InDBENo/XEMJjDL9e93WRxVzg8hqggq5qK6eGvpSgPY4VVaA0HJ
+         3geSvLzB4J4xwwErEg6Y285ShyWpJJJz0TMuobQHXvX0dfOhabMsAmx1exCo9pyn+5jy
+         r9nQ==
+X-Gm-Message-State: AOAM533rrdOX6yO/zit2n2/tRaEUJ6c51bM8hHPhNOmfNnri970PLZ9b
+        qSY2C6FLABl9L0oDF3Gr9LA=
+X-Google-Smtp-Source: ABdhPJzPDe29tdWKwhekT4d7Z3/ncbk+zLexQx66U+rHmm1/X9HvJuKxKAeY5PKXovwjJaFWy4VXjw==
+X-Received: by 2002:a5d:6b8f:: with SMTP id n15mr24876182wrx.189.1640868886447;
+        Thu, 30 Dec 2021 04:54:46 -0800 (PST)
+Received: from [192.168.1.145] ([207.188.161.251])
+        by smtp.gmail.com with ESMTPSA id j3sm23485981wrt.14.2021.12.30.04.54.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Dec 2021 04:54:45 -0800 (PST)
+Message-ID: <20cf2c1e-d55b-5780-8c6e-4d8beaca5a65@gmail.com>
+Date:   Thu, 30 Dec 2021 13:54:44 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v16 2/7] arm64: dts: mt8183: add svs device information
+Content-Language: en-US
+To:     Roger Lu <roger.lu@mediatek.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        YT Lee <yt.lee@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20210428065440.3704-1-roger.lu@mediatek.com>
+ <20210428065440.3704-3-roger.lu@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20210428065440.3704-3-roger.lu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The reference taken by 'of_find_device_by_node()' must be released when
-not needed anymore.
-Add the corresponding 'put_device()' in the error handling paths.
 
-Fixes: 60f3692 ("cpuidle: qcom_spm: Detach state machine from main SPM handling")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/cpuidle/cpuidle-qcom-spm.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/cpuidle/cpuidle-qcom-spm.c b/drivers/cpuidle/cpuidle-qcom-spm.c
-index 01e77913a414..6638c1de90c3 100644
---- a/drivers/cpuidle/cpuidle-qcom-spm.c
-+++ b/drivers/cpuidle/cpuidle-qcom-spm.c
-@@ -107,12 +107,16 @@ static int spm_cpuidle_register(struct device *cpuidle_dev, int cpu)
- 		return -ENODEV;
- 
- 	data = devm_kzalloc(cpuidle_dev, sizeof(*data), GFP_KERNEL);
--	if (!data)
-+	if (!data) {
-+		put_device(&pdev->dev);
- 		return -ENOMEM;
-+	}
- 
- 	data->spm = dev_get_drvdata(&pdev->dev);
--	if (!data->spm)
-+	if (!data->spm) {
-+		put_device(&pdev->dev);
- 		return -EINVAL;
-+	}
- 
- 	data->cpuidle_driver = qcom_spm_idle_driver;
- 	data->cpuidle_driver.cpumask = (struct cpumask *)cpumask_of(cpu);
--- 
-2.17.1
+On 28/04/2021 08:54, Roger Lu wrote:
+> add compitable/reg/irq/clock/efuse setting in svs node
+> 
+> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
+> ---
+>   arch/arm64/boot/dts/mediatek/mt8183.dtsi | 18 ++++++++++++++++++
+>   1 file changed, 18 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> index 80519a145f13..441d617ece43 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> @@ -657,6 +657,18 @@
+>   			status = "disabled";
+>   		};
+>   
+> +		svs: svs@1100b000 {
+> +			compatible = "mediatek,mt8183-svs";
+> +			reg = <0 0x1100b000 0 0x1000>;
+> +			interrupts = <GIC_SPI 127 IRQ_TYPE_LEVEL_LOW>;
+> +			clocks = <&infracfg CLK_INFRA_THERM>;
+> +			clock-names = "main";
+> +			nvmem-cells = <&svs_calibration>,
+> +				      <&thermal_calibration>;
+> +			nvmem-cell-names = "svs-calibration-data",
+> +					   "t-calibration-data";
+> +		};
+> +
+>   		pwm0: pwm@1100e000 {
+>   			compatible = "mediatek,mt8183-disp-pwm";
+>   			reg = <0 0x1100e000 0 0x1000>;
+> @@ -941,9 +953,15 @@
+>   			reg = <0 0x11f10000 0 0x1000>;
+>   			#address-cells = <1>;
+>   			#size-cells = <1>;
 
+Please add a new line between the different calibartion data, to improve 
+readability.
+
+Regards,
+Matthias
+
+> +			thermal_calibration: calib@180 {
+> +				reg = <0x180 0xc>;
+> +			};
+>   			mipi_tx_calibration: calib@190 {
+>   				reg = <0x190 0xc>;
+>   			};
+> +			svs_calibration: calib@580 {
+> +				reg = <0x580 0x64>;
+> +			};
+>   		};
+>   
+>   		u3phy: usb-phy@11f40000 {
+> 
