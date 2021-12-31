@@ -2,202 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7B4A482448
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Dec 2021 14:58:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBDF54825FB
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Dec 2021 23:02:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230375AbhLaN6R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 31 Dec 2021 08:58:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35780 "EHLO
+        id S231834AbhLaWCJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 31 Dec 2021 17:02:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbhLaN6R (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Dec 2021 08:58:17 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B887AC061574
-        for <linux-pm@vger.kernel.org>; Fri, 31 Dec 2021 05:58:16 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id k21so60503498lfu.0
-        for <linux-pm@vger.kernel.org>; Fri, 31 Dec 2021 05:58:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ADzJWr+CbGVX014WZDS2L6snWL7iPLu3/ZLqlh/Pj3s=;
-        b=wI4yxCNQ8DbOEzf9a0EEKR+uVoNpqKvP2j3TfccxorArKXFLWGvXnmq/u3210XY7Bt
-         6SY+obn+o24I8ByNoCgePQrC00WOPliPKsVcJbKrys/NONrQfwABt+PYc9qNSjhQDXh4
-         nbip7b2zI1sg+e+4l9mNsHd2MOPZ8otBtAOAjqk8WfUql3FekXWomakhZ6RuuQvT2anB
-         x2gqumAvx4XayRNJBogn2ZkuHZpWolkn4EsDqtF3YlDHx2oBwLx1Fyj4cCuiQPK8xz0o
-         JZ4jhvwMP3FphymMKH6+FGcxVJ/zTIuNIXzTwmo2Sw7vgjcnNViKYKGEPpKmvv3w/HNW
-         9CLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ADzJWr+CbGVX014WZDS2L6snWL7iPLu3/ZLqlh/Pj3s=;
-        b=6uWVlOQPX6npGTIAkBDaTHdOchwqgE2EK0rUCEpFqtPH/DenOw6pmG7TS2teIp2s8N
-         aAvaeSPPh4TtZLGrwlytCOmXdGV4Xc2R4ZCvhRPsEzylx4Q/M4R9sYvMphTIo8CxDD34
-         DtQ/4ODXf/upS3J3I66BgYSw9/Kuyy8XMcVLdXJAtVC4QUJOE7bhlAUmTTpKRyOEPPLt
-         048Vh4Wnf469oq0I3MFj+PB3cndj/eEqKDm4WmgKBj1WY4hrPZznm5Bd+hvO+hPRS/M/
-         UoLUYsNkYIgXNU+DKg/N3Qsu6Hnpml3M17Mp1Bf0kDL5C+uB72k2hnT7btvWL794N+8S
-         0I1w==
-X-Gm-Message-State: AOAM533wS97rxvvHbN6PqCM2x5nyJkaQp51UU0bMrKvbbtrT3rfLvOTa
-        IjoUWKDkQyQp3G+9IdV/34DJc1GpNzHQnQMbZvQFPQ==
-X-Google-Smtp-Source: ABdhPJzaghSLSAc0pNPQzuES57Tnf+aNwFRoLwgYkTTcyuTMuv5rOoeqy7bTcVpKTyo/oJWiGUWJw4io8u+6ND1nCZk=
-X-Received: by 2002:a05:6512:4015:: with SMTP id br21mr32693525lfb.233.1640959094947;
- Fri, 31 Dec 2021 05:58:14 -0800 (PST)
+        with ESMTP id S231792AbhLaWCJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Dec 2021 17:02:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84FEC061574;
+        Fri, 31 Dec 2021 14:02:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 710D6B81DDB;
+        Fri, 31 Dec 2021 22:02:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08F72C36AEC;
+        Fri, 31 Dec 2021 22:02:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640988126;
+        bh=A7x7PdWBqcoi+hZ15G3SKeCFjNbydYvYM9peSG35voI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=spNqlz1BuwLvllg2l1Cse+pyNFqGdTr0M1Pmlr9E3BvzLZr2VZB44/LbaGjciWC8I
+         ie/xInDnFMXUVUEd7bUINzunKQ8qoB45O1O63H7G89HGJzo8DBUNXvYWMk/mp/7jtm
+         EESi0EFD6NruNTl/hSuKEJPyC0k7th0HZB1qLBB2KaeZmDc5GyJxyO7dkfingeeE2V
+         3JP4oy15bYJAKJd+i37tg5y//M2+orWArVbJQuPMnnhE+uNHzluxcZhQAh64DtkpwO
+         QYY6mVPO5eBpD1uh15hzDdjerbAPesBW1ohihloXnJ7Rh37vLtixW3nK5F3/L5tvJ8
+         SqyDQFuASuqVw==
+Date:   Fri, 31 Dec 2021 15:02:02 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v2] power: reset: ltc2952: Fix use of floating point
+ literals
+Message-ID: <Yc992ncu+CbDSJJn@archlinux-ax161>
+References: <20211105152049.2522250-1-nathan@kernel.org>
+ <20211116142614.ofqoox6zpn5erlc3@earth.universe>
 MIME-Version: 1.0
-References: <20211218130014.4037640-1-daniel.lezcano@linaro.org> <20211218130014.4037640-6-daniel.lezcano@linaro.org>
-In-Reply-To: <20211218130014.4037640-6-daniel.lezcano@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 31 Dec 2021 14:57:38 +0100
-Message-ID: <CAPDyKFqWUJTKte3dM=7xG6EtKR8i9neCCNYFs7Jf1J34TezUEQ@mail.gmail.com>
-Subject: Re: [PATCH v5 5/6] rockchip/soc/drivers: Add DTPM description for rk3399
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     rjw@rjwysocki.net, lukasz.luba@arm.com, heiko@sntech.de,
-        arnd@linaro.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "moderated list:ARM/Rockchip SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC support" 
-        <linux-rockchip@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211116142614.ofqoox6zpn5erlc3@earth.universe>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel, Rob,
+Hi Sebastian,
 
-On Sat, 18 Dec 2021 at 14:00, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->
-> The DTPM framework does support now the hierarchy description.
->
-> The platform specific code can call the hierarchy creation function
-> with an array of struct dtpm_node pointing to their parent.
->
-> This patch provides a description of the big and Little CPUs and the
-> GPU and tie them together under a virtual package name. Only rk3399 is
-> described now.
->
-> The description could be extended in the future with the memory
-> controller with devfreq if it has the energy information.
->
-> The hierarchy uses the GPU devfreq with the panfrost driver, and this
-> one could be loaded as a module. If the hierarchy is created before
-> the panfrost driver is loaded, it will fail. For this reason the
-> Kconfig option depends on the panfrost Kconfig's option. If this one
-> is compiled as a module, automatically the dtpm hierarchy code will be
-> a module also. Module loading ordering will fix this chicken-egg
-> problem.
->
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->  drivers/soc/rockchip/Kconfig  |  8 +++++
->  drivers/soc/rockchip/Makefile |  1 +
->  drivers/soc/rockchip/dtpm.c   | 56 +++++++++++++++++++++++++++++++++++
->  3 files changed, 65 insertions(+)
->  create mode 100644 drivers/soc/rockchip/dtpm.c
->
-> diff --git a/drivers/soc/rockchip/Kconfig b/drivers/soc/rockchip/Kconfig
-> index 25eb2c1e31bb..a88fe6d3064a 100644
-> --- a/drivers/soc/rockchip/Kconfig
-> +++ b/drivers/soc/rockchip/Kconfig
-> @@ -34,4 +34,12 @@ config ROCKCHIP_PM_DOMAINS
->
->            If unsure, say N.
->
-> +config ROCKCHIP_DTPM
-> +       tristate "Rockchip DTPM hierarchy"
-> +       depends on DTPM && DRM_PANFROST
-> +       help
-> +        Describe the hierarchy for the Dynamic Thermal Power
-> +        Management tree on this platform. That will create all the
-> +        power capping capable devices.
-> +
->  endif
-> diff --git a/drivers/soc/rockchip/Makefile b/drivers/soc/rockchip/Makefile
-> index 875032f7344e..05f31a4e743c 100644
-> --- a/drivers/soc/rockchip/Makefile
-> +++ b/drivers/soc/rockchip/Makefile
-> @@ -5,3 +5,4 @@
->  obj-$(CONFIG_ROCKCHIP_GRF) += grf.o
->  obj-$(CONFIG_ROCKCHIP_IODOMAIN) += io-domain.o
->  obj-$(CONFIG_ROCKCHIP_PM_DOMAINS) += pm_domains.o
-> +obj-$(CONFIG_ROCKCHIP_DTPM) += dtpm.o
-> diff --git a/drivers/soc/rockchip/dtpm.c b/drivers/soc/rockchip/dtpm.c
-> new file mode 100644
-> index 000000000000..77edc565c110
-> --- /dev/null
-> +++ b/drivers/soc/rockchip/dtpm.c
-> @@ -0,0 +1,56 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright 2021 Linaro Limited
-> + *
-> + * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
-> + *
-> + * DTPM hierarchy description
-> + */
-> +#include <linux/dtpm.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +
-> +static struct dtpm_node __initdata rk3399_hierarchy[] = {
-> +       [0]{ .name = "rk3399" },
-> +       [1]{ .name = "package",
-> +            .parent = &rk3399_hierarchy[0] },
-> +       [2]{ .name = "/cpus/cpu@0",
-> +            .type = DTPM_NODE_DT,
-> +            .parent = &rk3399_hierarchy[1] },
-> +       [3]{ .name = "/cpus/cpu@1",
-> +            .type = DTPM_NODE_DT,
-> +            .parent = &rk3399_hierarchy[1] },
-> +       [4]{ .name = "/cpus/cpu@2",
-> +            .type = DTPM_NODE_DT,
-> +            .parent = &rk3399_hierarchy[1] },
-> +       [5]{ .name = "/cpus/cpu@3",
-> +            .type = DTPM_NODE_DT,
-> +            .parent = &rk3399_hierarchy[1] },
-> +       [6]{ .name = "/cpus/cpu@100",
-> +            .type = DTPM_NODE_DT,
-> +            .parent = &rk3399_hierarchy[1] },
-> +       [7]{ .name = "/cpus/cpu@101",
-> +            .type = DTPM_NODE_DT,
-> +            .parent = &rk3399_hierarchy[1] },
-> +       [8]{ .name = "rockchip,rk3399-mali",
-> +            .type = DTPM_NODE_DT,
-> +            .parent = &rk3399_hierarchy[1] },
-> +       [9]{ },
-> +};
+On Tue, Nov 16, 2021 at 03:26:14PM +0100, Sebastian Reichel wrote:
+> Hi,
+> 
+> On Fri, Nov 05, 2021 at 08:20:50AM -0700, Nathan Chancellor wrote:
+> > A new commit in LLVM causes an error on the use of 'long double' when
+> > '-mno-x87' is used, which the kernel does through an alias,
+> > '-mno-80387' (see the LLVM commit below for more details around why it
+> > does this).
+> > 
+> > drivers/power/reset/ltc2952-poweroff.c:162:28: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
+> >         data->wde_interval = 300L * 1E6L;
+> >                                   ^
+> > drivers/power/reset/ltc2952-poweroff.c:162:21: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
+> >         data->wde_interval = 300L * 1E6L;
+> >                            ^
+> > drivers/power/reset/ltc2952-poweroff.c:163:41: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
+> >         data->trigger_delay = ktime_set(2, 500L*1E6L);
+> >                                                ^
+> > 3 errors generated.
+> > 
+> > This happens due to the use of a 'long double' literal. The 'E6' part of
+> > '1E6L' causes the literal to be a 'double' then the 'L' suffix promotes
+> > it to 'long double'.
+> > 
+> > There is no visible reason for floating point values in this driver, as
+> > the values are only assigned to integer types. Use NSEC_PER_MSEC, which
+> > is the same integer value as '1E6L', to avoid changing functionality but
+> > fix the error.
+> > 
+> > Fixes: 6647156c00cc ("power: reset: add LTC2952 poweroff driver")
+> > Link: https://github.com/ClangBuiltLinux/linux/issues/1497
+> > Link: https://github.com/llvm/llvm-project/commit/a8083d42b1c346e21623a1d36d1f0cadd7801d83
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> > ---
+> 
+> Thanks, queued to power-supply's fixes branch.
 
-I will not object to this, as in the end this seems like what we need
-to do, unless we can describe things through generic DT bindings for
-DTPM. Right?
+Is there a timeline for getting this to Linus, since it has been a month
+and a half now since this was applied? It breaks several x86_64 configs
+with tip of tree clang, which harms our testing of the upcoming release,
+and other people are now tripping over this and reporting it on the LLVM
+issue tracker:
 
-Although, if the above is correct, I need to stress that I am kind of
-worried that this doesn't really scale. We would need to copy lots of
-information from the DTS files into platform specific c-files, to be
-able to describe the DTPM hierarchy.
+https://github.com/llvm/llvm-project/issues/52924
 
-> +
-> +static struct of_device_id __initdata rockchip_dtpm_match_table[] = {
-> +        { .compatible = "rockchip,rk3399", .data = rk3399_hierarchy },
-> +        {},
-> +};
-> +
-> +static int __init rockchip_dtpm_init(void)
-> +{
-> +       return dtpm_create_hierarchy(rockchip_dtpm_match_table);
-> +}
-> +late_initcall(rockchip_dtpm_init);
-> +
-> +MODULE_DESCRIPTION("Rockchip DTPM driver");
-> +MODULE_LICENSE("GPL");
-> +MODULE_ALIAS("platform:dtpm");
-> +MODULE_AUTHOR("Daniel Lezcano <daniel.lezcano@kernel.org");
-> --
-> 2.25.1
->
+Also, I noticed that your fixes branch is not flowing into linux-next,
+meaning this is not fixed there either. Would it be possible for you to
+ask Stephen Rothwell to add it?
 
-Kind regards
-Uffe
+Cheers,
+Nathan
+
+> > 
+> > v1 -> v2: https://lore.kernel.org/r/20211104215047.663411-1-nathan@kernel.org/
+> > 
+> > * A separate review pointed out that NSEC_PER_MSEC is a better choice
+> >   than USEC_PER_SEC because ktime_t is nanoseconds and the few functions
+> >   that take these values work in nanoseconds. The value is the same but
+> >   the documentation is better.
+> > 
+> > * Pick up Nick's review tag.
+> > 
+> >  drivers/power/reset/ltc2952-poweroff.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/power/reset/ltc2952-poweroff.c b/drivers/power/reset/ltc2952-poweroff.c
+> > index fbb344353fe4..65d9528cc989 100644
+> > --- a/drivers/power/reset/ltc2952-poweroff.c
+> > +++ b/drivers/power/reset/ltc2952-poweroff.c
+> > @@ -159,8 +159,8 @@ static void ltc2952_poweroff_kill(void)
+> >  
+> >  static void ltc2952_poweroff_default(struct ltc2952_poweroff *data)
+> >  {
+> > -	data->wde_interval = 300L * 1E6L;
+> > -	data->trigger_delay = ktime_set(2, 500L*1E6L);
+> > +	data->wde_interval = 300L * NSEC_PER_MSEC;
+> > +	data->trigger_delay = ktime_set(2, 500L * NSEC_PER_MSEC);
+> >  
+> >  	hrtimer_init(&data->timer_trigger, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+> >  	data->timer_trigger.function = ltc2952_poweroff_timer_trigger;
+> > 
+> > base-commit: d4439a1189f93d0ac1eaf0197db8e6b3e197d5c7
+> > -- 
+> > 2.34.0.rc0
+> > 
+
+
