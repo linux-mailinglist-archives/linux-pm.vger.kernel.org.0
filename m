@@ -2,285 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A03C3482318
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Dec 2021 10:49:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88E51482395
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Dec 2021 12:10:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbhLaJtx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 31 Dec 2021 04:49:53 -0500
-Received: from mga04.intel.com ([192.55.52.120]:24939 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229753AbhLaJtx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 31 Dec 2021 04:49:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640944192; x=1672480192;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=E9emw0TlSksX88zg6rjmIHedw6o+X6vPYwASFUV6AuQ=;
-  b=eZ+vqLVk5q30bGMPScUxOrl5eW+ZzKQ/8qNXJnezlwoRwNtQMwQkQass
-   GhKKzkqvwRwVPpmv7EJtAkoldDXOdXlQw2cBVLujnVl0CqyYaO8hoink9
-   Nh2QOsubrER2z8iYgwjfThNssC4JeDDTYZo2zAHXQghMiwT3UHHNo73Ol
-   WidEZdesvIFT9ls5bj+5Qxr5kwNu23gPqVLf/Y+/jTfcX//p7b4zn9g7x
-   1uhkYfwjT1Md8eCQW5+Q+9c8mt4dmKYTTkK8Zel43m2Zd+NFTFOSrbOk0
-   7XfiB97FrZK0qa0H3HFxG90VlpqYUQTsA177DQlly9w/WKcohGS0vB1gX
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10213"; a="240582225"
-X-IronPort-AV: E=Sophos;i="5.88,251,1635231600"; 
-   d="scan'208";a="240582225"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Dec 2021 01:49:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,251,1635231600"; 
-   d="scan'208";a="470911704"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 31 Dec 2021 01:49:50 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n3EXl-000B9B-R0; Fri, 31 Dec 2021 09:49:49 +0000
-Date:   Fri, 31 Dec 2021 17:49:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS WITH WARNING
- 642439a4441150c7ab54db8d54fac1c7fee57b5a
-Message-ID: <61ced227.bwGu6xI7ZBErSpCQ%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S229650AbhLaLKk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 31 Dec 2021 06:10:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56148 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229553AbhLaLKj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Dec 2021 06:10:39 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0EEC06173E
+        for <linux-pm@vger.kernel.org>; Fri, 31 Dec 2021 03:10:39 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id y11so27150349iod.6
+        for <linux-pm@vger.kernel.org>; Fri, 31 Dec 2021 03:10:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=MCKSUZdIg2LlknPazZeU6YOn/vSo6Zd6+ppY3unVwPk=;
+        b=MK9TPw82agg+cb7Yb3yobKno/VDtBXZ5VbPY8YO47plZX44XHH/BDSFdh2i1dyva3a
+         fLhK1GcJzeGlXpYh1DM2fnFkA5D5WC7k68NsIzTtkYMQGsimchnJLB7hoE5iSTzKWwTM
+         a1Hqw+0GoH+0hCLpAH/dYIF6w5duBHcgnjFBU6v7IDxbrcX4dTaKYbzMu5vWzFWccvra
+         Y472dab3hqGKG7pMnQy8Or/Z7H6MozdyQyzaP1RXh3LfeMONtnpJCAwbBHkVx05AWQ9k
+         AKzc7BHNVv7vXRrVucP/qvkh8oYnl0wyN9T7WTNB+43KkyQpJy28fN2G3PipRhhUgOiJ
+         3WWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=MCKSUZdIg2LlknPazZeU6YOn/vSo6Zd6+ppY3unVwPk=;
+        b=Ze+xfnv0aPA0fVVs4UUkH0KC58AGYRc41mvQmE8wIRN66+U90wEOifyDfooRv8N7Z4
+         ourS5dDvhX3A3WZTfTS8pr6mbQ7l1Rym0KR6yHtRpyKoicLtdUp+SYyTTpRRnkNBzISb
+         FJXe4FimFf9rfbeJcGv4eCGr6j5gBctHuF8/PiBbTajfpB4iMOc1wKriwN2ulWsxRIaR
+         Ra9EYz6ZvAxuxBPTMs653scusj/uZd8O1ReHz5meawEaOfpDQgyDxXS2sbbk8ewv/qYg
+         UC0VYXARrwF7JcPfH6sy5b/XpGCvWpamFMSwTMfkwbdXhNFm0VgncbZy8K4NS+tNUVS7
+         3vuQ==
+X-Gm-Message-State: AOAM531u1OK4iz7x0NUGeON9fSxuwNXzYh6n3GTG3z79OJYz7UxnlL6T
+        tvecCqfToyhSm01aUsRdvgXTJo/VbULTQ45WfWc=
+X-Google-Smtp-Source: ABdhPJxz9nWQWyzSvPdUOV9v8JJaqKUO24CtddVg2dTGlTIEzlnVPdJS7wzeA/+Ad+jFdaztZTalXMgbqnGvTDm699M=
+X-Received: by 2002:a05:6638:1302:: with SMTP id r2mr14681935jad.37.1640949038844;
+ Fri, 31 Dec 2021 03:10:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Sender: saniadamsani19@gmail.com
+Received: by 2002:a6b:f819:0:0:0:0:0 with HTTP; Fri, 31 Dec 2021 03:10:38
+ -0800 (PST)
+From:   Jenny Ross <jennyross210@gmail.com>
+Date:   Fri, 31 Dec 2021 11:10:38 +0000
+X-Google-Sender-Auth: tRxCDjcMQKWoEqIqwKkb-5ZVbFI
+Message-ID: <CALTU+G-j+zB7yVz=n7eUpwn2=XQWvxPfacM_STMCYbcPJKey3g@mail.gmail.com>
+Subject: Hi
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 642439a4441150c7ab54db8d54fac1c7fee57b5a  Merge branch 'acpi-processor' into bleeding-edge
+How are you?
 
-Warning reports:
+My name is Jenny Ross, I came across your email address on Linkedin
+is your email address valid?  please your attention is needed, i have
+something very important to share with you.
 
-https://lore.kernel.org/llvm/202112280907.gTYYYuB4-lkp@intel.com
-
-Warning in current branch:
-
-drivers/acpi/acpica/exregion.c:519:17: warning: performing pointer subtraction with a null pointer has undefined behavior [-Wnull-pointer-subtraction]
-
-possible Warning in current branch (please contact us if interested):
-
-sound/soc/sh/rz-ssi.c:1023:9: warning: ignoring return value of 'pm_runtime_resume_and_get' declared with attribute 'warn_unused_result' [-Wunused-result]
-
-Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- alpha-allmodconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- alpha-allyesconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- arc-allyesconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- arc-randconfig-r043-20211230
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- arm-allmodconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- arm-allyesconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- arm-randconfig-c002-20211230
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- arm64-allyesconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- arm64-defconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- h8300-allyesconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- ia64-allyesconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- ia64-buildonly-randconfig-r004-20211231
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- m68k-allmodconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- m68k-allyesconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- mips-allmodconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- mips-allyesconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- nios2-allyesconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- parisc-allyesconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- powerpc-allmodconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- powerpc-allyesconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- riscv-allmodconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- riscv-allyesconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- s390-allyesconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- sh-allmodconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- sparc-allyesconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- sparc64-randconfig-r005-20211230
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-`-- xtensa-allyesconfig
-    `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-
-clang_recent_errors
-|-- i386-randconfig-a001-20211230
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- i386-randconfig-a002-20211230
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- i386-randconfig-a003-20211230
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- i386-randconfig-a004-20211230
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- i386-randconfig-a005-20211230
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- i386-randconfig-a006-20211230
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- i386-randconfig-a011-20211231
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- i386-randconfig-a012-20211231
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- i386-randconfig-a013-20211231
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- i386-randconfig-a014-20211231
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- i386-randconfig-a015-20211231
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- i386-randconfig-a016-20211231
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- i386-randconfig-r033-20211230
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- x86_64-randconfig-a001-20211230
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- x86_64-randconfig-a002-20211230
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- x86_64-randconfig-a003-20211230
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- x86_64-randconfig-a004-20211230
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- x86_64-randconfig-a005-20211230
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-`-- x86_64-randconfig-a006-20211230
-    `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-
-elapsed time: 724m
-
-configs tested: 106
-configs skipped: 3
-
-gcc tested configs:
-arm                                 defconfig
-arm                              allmodconfig
-arm                              allyesconfig
-arm64                               defconfig
-arm64                            allyesconfig
-i386                 randconfig-c001-20211230
-sh                         apsh4a3a_defconfig
-arm                       multi_v4t_defconfig
-sh                   rts7751r2dplus_defconfig
-sh                           se7721_defconfig
-powerpc                 mpc8313_rdb_defconfig
-h8300                       h8s-sim_defconfig
-arm                           spitz_defconfig
-arm                          pxa168_defconfig
-powerpc                          g5_defconfig
-powerpc                mpc7448_hpc2_defconfig
-powerpc                    ge_imp3a_defconfig
-mips                           mtx1_defconfig
-sh                ecovec24-romimage_defconfig
-arm                        mini2440_defconfig
-xtensa                           alldefconfig
-sh                            migor_defconfig
-arm                            zeus_defconfig
-arm                         at91_dt_defconfig
-m68k                       m5249evb_defconfig
-mips                          ath79_defconfig
-s390                          debug_defconfig
-arm                  randconfig-c002-20211230
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-nds32                               defconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-sparc                            allyesconfig
-nds32                             allnoconfig
-nios2                               defconfig
-arc                              allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                           allnoconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-x86_64               randconfig-a013-20211230
-x86_64               randconfig-a015-20211230
-x86_64               randconfig-a012-20211230
-x86_64               randconfig-a011-20211230
-x86_64               randconfig-a016-20211230
-x86_64               randconfig-a014-20211230
-arc                  randconfig-r043-20211230
-riscv                randconfig-r042-20211230
-s390                 randconfig-r044-20211230
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-x86_64                           allyesconfig
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-
-clang tested configs:
-x86_64               randconfig-a002-20211230
-x86_64               randconfig-a001-20211230
-x86_64               randconfig-a003-20211230
-x86_64               randconfig-a006-20211230
-x86_64               randconfig-a004-20211230
-x86_64               randconfig-a005-20211230
-i386                 randconfig-a001-20211230
-i386                 randconfig-a004-20211230
-i386                 randconfig-a002-20211230
-i386                 randconfig-a006-20211230
-i386                 randconfig-a003-20211230
-i386                 randconfig-a005-20211230
-i386                 randconfig-a011-20211231
-i386                 randconfig-a012-20211231
-i386                 randconfig-a013-20211231
-i386                 randconfig-a014-20211231
-i386                 randconfig-a015-20211231
-i386                 randconfig-a016-20211231
-hexagon              randconfig-r041-20211230
-hexagon              randconfig-r045-20211230
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Regards
+Jenny
