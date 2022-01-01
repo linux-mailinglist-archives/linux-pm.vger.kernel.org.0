@@ -2,120 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F97F48281B
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Jan 2022 19:26:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD3344828A6
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Jan 2022 23:02:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231404AbiAAS0O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 1 Jan 2022 13:26:14 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:54392 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230259AbiAAS0N (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Jan 2022 13:26:13 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7FD3FB8085E;
-        Sat,  1 Jan 2022 18:26:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64770C36AEC;
-        Sat,  1 Jan 2022 18:26:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641061571;
-        bh=iqhFODTGlNWUxu0EeVN1B0a2Td/9mvJSxYqNduuXVlE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=uXa86v619nFuog2NBKL8o/O2TCN3cRhajvLGXT00ONK8T3FwS6kekCul9NXkoFiJR
-         ToEG7wYy9NosAs6Xvi2YNL721gJKmtVGtnYk2XyYHm7S0Khnye6XGDWF/Z+zagf4L/
-         VNLOJr+s4/4qeJHEy3LQuKV8TarjXJnKaIxG/kuebKTccinC0dO0Kgl9QAtaXJaMDB
-         SbMTnAvdgyw61R0FQZA9ylKcPmYCrduoyoE9fI1p3nTrHAchvKse2hRdlgM5vP/zYt
-         L59HKluTOhQ6Hjm29WYZbpnll48EfJfx1eCxXZn3BiA+YPDAcIbK0RHu1L9Jq5DgTe
-         mRKYKFaA05EGw==
-Message-ID: <048650ad-e015-3733-bdf2-72b7a0ed61e4@kernel.org>
-Date:   Sat, 1 Jan 2022 20:26:05 +0200
-MIME-Version: 1.0
-Subject: Re: [PATCH v2 2/3] interconnect: imx: Add imx_icc_get_bw and
- imx_icc_aggregate functions
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>
-Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220101163956.3344467-1-abel.vesa@nxp.com>
- <20220101163956.3344467-2-abel.vesa@nxp.com>
-From:   Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <20220101163956.3344467-2-abel.vesa@nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        id S232774AbiAAWB4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 1 Jan 2022 17:01:56 -0500
+Received: from mail-ua1-f41.google.com ([209.85.222.41]:38838 "EHLO
+        mail-ua1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230239AbiAAWBz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Jan 2022 17:01:55 -0500
+Received: by mail-ua1-f41.google.com with SMTP id o63so51960268uao.5;
+        Sat, 01 Jan 2022 14:01:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=bX+hkhZ7Eih2D+5ldSl67WIDkHYTAjcaTRxOe2M6/bI=;
+        b=BaIBmznt5j6Opl9ej0mSogv4SshBQWsNkb1UjsOV9oVIPc5CWmWpfMPY5zHKA3oGPl
+         wort2Z/qMpsxZwFb7Gt2atlf8l25aOV6B18Yoqdhe/pXb+ArLitAs8jvSPEJNSke1PZs
+         IMCeuUNYVG3pUMhKRuo9p6iF43dmJ3vAPNDQ10vlC1odP0kAjESPDhLx3S8uvE0h8nej
+         FAw1TU9fF3tKMz5T/mBuiQIFoD8WIX4gA5fTUBoiDKPlxvcog/MNdVpVqY4XazZDJtcY
+         6AU8o+AYW5I/Dvg/e8d8eclKs+Yib4Arv3RrcvOMtnlyvcwg3gM/qbXqY78tWDfi1pP9
+         g+PQ==
+X-Gm-Message-State: AOAM5315Cxib+ufmrTYVmGsGG3pdok9Z1ZVyfHpn9ceVCDKsVJjlH4MN
+        cfQOA9Un7f5epashpoR2Cw==
+X-Google-Smtp-Source: ABdhPJyWdNLwpfnF94PFb/qTr0tF3rgBARt7e7hWAwX8GRgLeaPIwaDnFO3VfDNxDAD+pvEzwpKRCw==
+X-Received: by 2002:a05:6102:f12:: with SMTP id v18mr11491694vss.21.1641074514165;
+        Sat, 01 Jan 2022 14:01:54 -0800 (PST)
+Received: from robh.at.kernel.org ([209.91.235.3])
+        by smtp.gmail.com with ESMTPSA id y7sm6542277uac.3.2022.01.01.14.01.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 01 Jan 2022 14:01:53 -0800 (PST)
+Received: (nullmailer pid 839551 invoked by uid 1000);
+        Sat, 01 Jan 2022 22:01:44 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Sander Vanheule <sander@svanheule.net>
+Cc:     linux-pm@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>
+In-Reply-To: <c47705dbf6e9e287332f3ccb91578e81dbb81625.1640887456.git.sander@svanheule.net>
+References: <cover.1640887456.git.sander@svanheule.net> <c47705dbf6e9e287332f3ccb91578e81dbb81625.1640887456.git.sander@svanheule.net>
+Subject: Re: [RFC PATCH v1 1/3] dt-bindings: power: reset: Convert gpio-restart binding to schema
+Date:   Sat, 01 Jan 2022 18:01:44 -0400
+Message-Id: <1641074504.078105.839550.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Abel,
-
-On 1.01.22 18:39, Abel Vesa wrote:
-> The aggregate function will return whatever is the highest
-> rate for that specific node. The imx_icc_get_bw sets the
-
-Adding some more details about why we switch from
-icc_std_aggregate to imx_icc_aggregate would be nice.
-
-> initial avg and peak to 0 in order to avoid setting them to
-> INT_MAX by the interconnect core.
-
-Do we need a Fixes tag for this?
-
-I would recommend to split imx_icc_get_bw and imx_icc_aggregate
-changes into separate patches. These also seem to be unrelated to
-the imx_icc_node_adj_desc patchset.
-
-Thanks,
-Georgi
-
-> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+On Thu, 30 Dec 2021 19:06:01 +0100, Sander Vanheule wrote:
+> Convert the gpio-restart binding from plain text format to a schema
+> binding, maintaining the original content and updating formatting where
+> required.
+> 
+> Signed-off-by: Sander Vanheule <sander@svanheule.net>
 > ---
+>  .../bindings/power/reset/gpio-restart.txt     | 54 -----------
+>  .../bindings/power/reset/gpio-restart.yaml    | 92 +++++++++++++++++++
+>  2 files changed, 92 insertions(+), 54 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/power/reset/gpio-restart.txt
+>  create mode 100644 Documentation/devicetree/bindings/power/reset/gpio-restart.yaml
 > 
-> No changes since v1.
-> 
->   drivers/interconnect/imx/imx.c | 20 +++++++++++++++++++-
->   1 file changed, 19 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/interconnect/imx/imx.c b/drivers/interconnect/imx/imx.c
-> index 34bfc7936387..4d8a2a2d2608 100644
-> --- a/drivers/interconnect/imx/imx.c
-> +++ b/drivers/interconnect/imx/imx.c
-> @@ -25,6 +25,23 @@ struct imx_icc_node {
->   	struct dev_pm_qos_request qos_req;
->   };
->   
-> +static int imx_icc_get_bw(struct icc_node *node, u32 *avg, u32 *peak)
-> +{
-> +	*avg = 0;
-> +	*peak = 0;
-> +
-> +	return 0;
-> +}
-> +
-> +static int imx_icc_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
-> +		      u32 peak_bw, u32 *agg_avg, u32 *agg_peak)
-> +{
-> +	*agg_avg = max(*agg_avg, avg_bw);
-> +	*agg_peak = max(*agg_peak, peak_bw);
-> +
-> +	return 0;
-> +}
-> +
->   static int imx_icc_node_set(struct icc_node *node)
->   {
->   	struct device *dev = node->provider->dev;
-> @@ -233,7 +250,8 @@ int imx_icc_register(struct platform_device *pdev,
->   	if (!provider)
->   		return -ENOMEM;
->   	provider->set = imx_icc_set;
-> -	provider->aggregate = icc_std_aggregate;
-> +	provider->get_bw = imx_icc_get_bw;
-> +	provider->aggregate = imx_icc_aggregate;
->   	provider->xlate = of_icc_xlate_onecell;
->   	provider->data = data;
->   	provider->dev = dev;
+
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/reset/gpio-restart.yaml: maintainers:0: 'TODO' is not a 'email'
+	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/reset/gpio-restart.yaml: ignoring, error in schema: maintainers: 0
+Documentation/devicetree/bindings/power/reset/gpio-restart.example.dt.yaml:0:0: /example-0/gpio-restart: failed to match any schema with compatible: ['gpio-restart']
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/1574223
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
