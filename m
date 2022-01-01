@@ -2,141 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBDF54825FB
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Dec 2021 23:02:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49279482750
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Jan 2022 11:40:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231834AbhLaWCJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 31 Dec 2021 17:02:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55372 "EHLO
+        id S232253AbiAAKkx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 1 Jan 2022 05:40:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231792AbhLaWCJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Dec 2021 17:02:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84FEC061574;
-        Fri, 31 Dec 2021 14:02:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 710D6B81DDB;
-        Fri, 31 Dec 2021 22:02:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08F72C36AEC;
-        Fri, 31 Dec 2021 22:02:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640988126;
-        bh=A7x7PdWBqcoi+hZ15G3SKeCFjNbydYvYM9peSG35voI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=spNqlz1BuwLvllg2l1Cse+pyNFqGdTr0M1Pmlr9E3BvzLZr2VZB44/LbaGjciWC8I
-         ie/xInDnFMXUVUEd7bUINzunKQ8qoB45O1O63H7G89HGJzo8DBUNXvYWMk/mp/7jtm
-         EESi0EFD6NruNTl/hSuKEJPyC0k7th0HZB1qLBB2KaeZmDc5GyJxyO7dkfingeeE2V
-         3JP4oy15bYJAKJd+i37tg5y//M2+orWArVbJQuPMnnhE+uNHzluxcZhQAh64DtkpwO
-         QYY6mVPO5eBpD1uh15hzDdjerbAPesBW1ohihloXnJ7Rh37vLtixW3nK5F3/L5tvJ8
-         SqyDQFuASuqVw==
-Date:   Fri, 31 Dec 2021 15:02:02 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v2] power: reset: ltc2952: Fix use of floating point
- literals
-Message-ID: <Yc992ncu+CbDSJJn@archlinux-ax161>
-References: <20211105152049.2522250-1-nathan@kernel.org>
- <20211116142614.ofqoox6zpn5erlc3@earth.universe>
+        with ESMTP id S229624AbiAAKkx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Jan 2022 05:40:53 -0500
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A02C061574
+        for <linux-pm@vger.kernel.org>; Sat,  1 Jan 2022 02:40:53 -0800 (PST)
+Received: by mail-pj1-x1044.google.com with SMTP id v13-20020a17090a088d00b001b0e3a74cf7so18723656pjc.1
+        for <linux-pm@vger.kernel.org>; Sat, 01 Jan 2022 02:40:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:from:mime-version:content-transfer-encoding
+         :content-description:subject:to:date:reply-to;
+        bh=dhFaFNGf9P/hgzfpigNOAcNefTeR7Csml9+Bh/hdy/w=;
+        b=Xr5jzE1UKpKaqi4Ml91AczoVHAhwYBAtVn3Hu/yU3XBZLOPHROvws+2xOdFgJ1wS4Z
+         JMX6lfKfML9HAEgQ+ZRf4HgOu4SwE4+qe5s18GXS2No5kwXYVm8ojB5Nw8+yG28nXuTL
+         Rzgm6VS/LWKPiWTLWFDC4lgl5fdqJvjmCvorVenaITD1lQyvEaIOK5hNpfLmPOK75J3Q
+         mSsY9ILNrH2WEFBNAr6ZaX36rjQ5dk5LqIhYHGbn5tRiFa224cn/4DO4I6L1zpvncDXB
+         BR7HIawTYcHjDsHxWCyIZrvmeSy6cepkVF5lKbpGJbn0xR4pHFENJMafj+KcCWpJmTI4
+         r0RA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:from:mime-version
+         :content-transfer-encoding:content-description:subject:to:date
+         :reply-to;
+        bh=dhFaFNGf9P/hgzfpigNOAcNefTeR7Csml9+Bh/hdy/w=;
+        b=XL09GZpsedhOYJhP467gdhPJDEpxh7FzuwZEGhGaPSULWfclVvG47GId7Nh6CkeTIm
+         xaPhTIiLdXecUI6dhFSpU7bi+kanO1v8mEzF/BCQBIIn53K47DwrMkfNSO/PC5CDlDQv
+         tDXAQ4yNnv0npRT2JB0JsgXyLdH4P9TjCJfv13SH0pW2u1xmGcNMLJK6b1m+xepv2SQT
+         BiZP4qMfaE8mcwFJ3znFFZb+ONncpbtsQmv7MpqqMc5Buk90UM8neibddgPX+VL7YJP8
+         fpjuhIuxAcytjzPsYqt4Mew8E5TUOHi0HKTr7TVCcqigfWhJmPj2Av0YmkA2YXTxnJXo
+         dXXA==
+X-Gm-Message-State: AOAM5304IQ2Zzkc730VSTHx77L4NgxfcfEv0bsf6IlEzHBzkY2BCzqwH
+        C0Sizg8l8LMi+byAjY5Wflc=
+X-Google-Smtp-Source: ABdhPJz97xsYppQMcR43xJWGycPfTaDGC9NC8MSUuFH6xQg937VN9M+Y6SSPJL7D6EuQlSsda2cQaw==
+X-Received: by 2002:a17:90a:7001:: with SMTP id f1mr46900255pjk.70.1641033652607;
+        Sat, 01 Jan 2022 02:40:52 -0800 (PST)
+Received: from [192.168.0.153] ([143.244.48.136])
+        by smtp.gmail.com with ESMTPSA id s35sm26832835pfw.193.2022.01.01.02.40.44
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Sat, 01 Jan 2022 02:40:52 -0800 (PST)
+Message-ID: <61d02fb4.1c69fb81.dee2a.a940@mx.google.com>
+From:   hyaibe56@gmail.com
+X-Google-Original-From: suport.prilend@gmail.com
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211116142614.ofqoox6zpn5erlc3@earth.universe>
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: RE:
+To:     Recipients <suport.prilend@gmail.com>
+Date:   Sat, 01 Jan 2022 12:40:36 +0200
+Reply-To: andres.stemmet1@gmail.com
+X-Mailer: TurboMailer 2
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Sebastian,
+I want to confide in you to finalize this transaction of mutual benefits. I=
+t may seem strange to you, but it is real. This is a transaction that has n=
+o risk at all, due process shall be followed and it shall be carried out un=
+der the ambit of the financial laws. Being the Chief Financial Officer, BP =
+Plc. I want to trust and put in your care Eighteen Million British Pounds S=
+terling, The funds were acquired from an over-invoiced payment from a past =
+contract executed in one of my departments. I can't successfully achieve th=
+is transaction without presenting you as foreign contractor who will provid=
+e a bank account to receive the funds.
 
-On Tue, Nov 16, 2021 at 03:26:14PM +0100, Sebastian Reichel wrote:
-> Hi,
-> 
-> On Fri, Nov 05, 2021 at 08:20:50AM -0700, Nathan Chancellor wrote:
-> > A new commit in LLVM causes an error on the use of 'long double' when
-> > '-mno-x87' is used, which the kernel does through an alias,
-> > '-mno-80387' (see the LLVM commit below for more details around why it
-> > does this).
-> > 
-> > drivers/power/reset/ltc2952-poweroff.c:162:28: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
-> >         data->wde_interval = 300L * 1E6L;
-> >                                   ^
-> > drivers/power/reset/ltc2952-poweroff.c:162:21: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
-> >         data->wde_interval = 300L * 1E6L;
-> >                            ^
-> > drivers/power/reset/ltc2952-poweroff.c:163:41: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
-> >         data->trigger_delay = ktime_set(2, 500L*1E6L);
-> >                                                ^
-> > 3 errors generated.
-> > 
-> > This happens due to the use of a 'long double' literal. The 'E6' part of
-> > '1E6L' causes the literal to be a 'double' then the 'L' suffix promotes
-> > it to 'long double'.
-> > 
-> > There is no visible reason for floating point values in this driver, as
-> > the values are only assigned to integer types. Use NSEC_PER_MSEC, which
-> > is the same integer value as '1E6L', to avoid changing functionality but
-> > fix the error.
-> > 
-> > Fixes: 6647156c00cc ("power: reset: add LTC2952 poweroff driver")
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/1497
-> > Link: https://github.com/llvm/llvm-project/commit/a8083d42b1c346e21623a1d36d1f0cadd7801d83
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> > ---
-> 
-> Thanks, queued to power-supply's fixes branch.
+Documentation for the claim of the funds will be legally processed and docu=
+mented, so I will need your full cooperation on this matter for our mutual =
+benefits. We will discuss details if you are interested to work with me to =
+secure this funds. I will appreciate your prompt response in every bit of o=
+ur communication. Stay Blessed and Stay Safe.
 
-Is there a timeline for getting this to Linus, since it has been a month
-and a half now since this was applied? It breaks several x86_64 configs
-with tip of tree clang, which harms our testing of the upcoming release,
-and other people are now tripping over this and reporting it on the LLVM
-issue tracker:
+Best Regards
 
-https://github.com/llvm/llvm-project/issues/52924
 
-Also, I noticed that your fixes branch is not flowing into linux-next,
-meaning this is not fixed there either. Would it be possible for you to
-ask Stephen Rothwell to add it?
+Tel: +44 7537 185910
+Andres  Stemmet
+Email: andres.stemmet1@gmail.com  =
 
-Cheers,
-Nathan
+Chief financial officer
+BP Petroleum p.l.c.
 
-> > 
-> > v1 -> v2: https://lore.kernel.org/r/20211104215047.663411-1-nathan@kernel.org/
-> > 
-> > * A separate review pointed out that NSEC_PER_MSEC is a better choice
-> >   than USEC_PER_SEC because ktime_t is nanoseconds and the few functions
-> >   that take these values work in nanoseconds. The value is the same but
-> >   the documentation is better.
-> > 
-> > * Pick up Nick's review tag.
-> > 
-> >  drivers/power/reset/ltc2952-poweroff.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/power/reset/ltc2952-poweroff.c b/drivers/power/reset/ltc2952-poweroff.c
-> > index fbb344353fe4..65d9528cc989 100644
-> > --- a/drivers/power/reset/ltc2952-poweroff.c
-> > +++ b/drivers/power/reset/ltc2952-poweroff.c
-> > @@ -159,8 +159,8 @@ static void ltc2952_poweroff_kill(void)
-> >  
-> >  static void ltc2952_poweroff_default(struct ltc2952_poweroff *data)
-> >  {
-> > -	data->wde_interval = 300L * 1E6L;
-> > -	data->trigger_delay = ktime_set(2, 500L*1E6L);
-> > +	data->wde_interval = 300L * NSEC_PER_MSEC;
-> > +	data->trigger_delay = ktime_set(2, 500L * NSEC_PER_MSEC);
-> >  
-> >  	hrtimer_init(&data->timer_trigger, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
-> >  	data->timer_trigger.function = ltc2952_poweroff_timer_trigger;
-> > 
-> > base-commit: d4439a1189f93d0ac1eaf0197db8e6b3e197d5c7
-> > -- 
-> > 2.34.0.rc0
-> > 
-
+                                                                           =
+                        Copyright =A9 1996-2021
 
