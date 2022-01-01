@@ -2,211 +2,233 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD5C44827C5
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Jan 2022 15:40:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 768D44827DD
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Jan 2022 16:53:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232148AbiAAOkH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 1 Jan 2022 09:40:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42392 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231408AbiAAOkG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Jan 2022 09:40:06 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A61AC061574
-        for <linux-pm@vger.kernel.org>; Sat,  1 Jan 2022 06:40:06 -0800 (PST)
-Received: from ip4d173d02.dynamic.kabel-deutschland.de ([77.23.61.2] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1n3fYB-0005Wh-3r; Sat, 01 Jan 2022 15:40:03 +0100
-Message-ID: <a4c11429-4e08-dac2-61ce-3a6b468c1172@leemhuis.info>
-Date:   Sat, 1 Jan 2022 15:40:02 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: Regression report on laptop suspend
-Content-Language: en-BS
-To:     Christian Casteyde <casteyde.christian@free.fr>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-References: <2141133765.114843316.1640622535018.JavaMail.root@zimbra40-e7.priv.proxad.net>
- <256689953.114854578.1640622738334.JavaMail.root@zimbra40-e7.priv.proxad.net>
- <CAJZ5v0hC1_8z=VmBOgSU360KPj6N7YfDQBevsvyMNkdffyta6Q@mail.gmail.com>
- <52933493.dBzk7ret6Y@geek500>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <52933493.dBzk7ret6Y@geek500>
-Content-Type: text/plain; charset=UTF-8
+        id S232480AbiAAPxG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 1 Jan 2022 10:53:06 -0500
+Received: from mail-eopbgr00048.outbound.protection.outlook.com ([40.107.0.48]:58694
+        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229634AbiAAPxG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 1 Jan 2022 10:53:06 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iNUTxKzKxxim9S3JgCoStrG7zwbTlRK5zsJmdXhgBCv7Q4i0DyKZKIFHqbjLrefdOtUNKvR3mY3yO7HRUC6D8Xpq2aEXFxKbfu5izcui3HNGZ3qqf9AxFMZjxcVgnwzMwzQ1hefjd7oeFEOWnQ6dH+aEbwr+ks1jeSAnR23W/lgAie9W4ePbq0a9IjMS7Z+OFdoNg8jH/+yyvmn8vckyzoi6Y9x9ZIWhWSvxBvI9orsvNcoXohrVRjYp3mhYkY7SzV4G8BQPR4Rk4mq3wqQ927ESe6rom3gQJ+5TUfdKk6p2ahYCCZ/WXSDcCJ1CndvgZYSRvbsxcK9c80f8p3hMXQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UgNjz+O8hwfEvWjFsZd2UP50SV2XuyTPksBEuhMMz9Q=;
+ b=KbwZlwSYH6qT9cqAi2rhpa03nTR06MRZoELdmw/1f3JHqTsf9kiuHBektcVUXrNoy+AaCiuHL+DprdvO78b5tpqJux6Q1DeS8meXZAwpGeihZxQeJ/FQVtRct0pYKurzeI4vjp0dpdT6+/fIV4ngHa9ny56iIyo2ShKynH4Q8aO755jnBY7DIpAxcFENMaQvP+BnDGTKPlCmP67XCdjAbMv0kfpMcHi9YuSCm0xm7s+MJKM+mzh/8HqtkM9jrAHSPFa0flpkOhW8BWJNv9Z7bTi1AwBksr6AycP52ntDvbWZth38vvszhHeBtl2BcdUTNsPONRH5NyyCrNCMfIYrog==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UgNjz+O8hwfEvWjFsZd2UP50SV2XuyTPksBEuhMMz9Q=;
+ b=f+1R/ZNrFYVw/S8myYR+b26tsd1R4D0J73IajfKVFF3iOm/lubr3LzrvOfX7QGHq/C+5P0i19zVGtBvRwbG9yyN1RJ2pGo3HLydCeVGAJNJ+lAKYm4RoCYsj6HPDvdYpyYsxXTCsRjoRr2KYgDajSty+LQ1NFQuyhjvKJ+kIAwI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB4688.eurprd04.prod.outlook.com (2603:10a6:803:6a::30)
+ by VE1PR04MB7471.eurprd04.prod.outlook.com (2603:10a6:800:1a7::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.14; Sat, 1 Jan
+ 2022 15:53:01 +0000
+Received: from VI1PR04MB4688.eurprd04.prod.outlook.com
+ ([fe80::4c4c:f2b2:addb:841]) by VI1PR04MB4688.eurprd04.prod.outlook.com
+ ([fe80::4c4c:f2b2:addb:841%6]) with mapi id 15.20.4844.015; Sat, 1 Jan 2022
+ 15:53:01 +0000
+From:   Abel Vesa <abel.vesa@nxp.com>
+To:     Georgi Djakov <djakov@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>
+Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/3] interconnect: imx: Switch from imx_icc_node_adj_desc to fsl,icc-id node assignment
+Date:   Sat,  1 Jan 2022 17:52:43 +0200
+Message-Id: <20220101155245.3139667-1-abel.vesa@nxp.com>
+X-Mailer: git-send-email 2.31.1
 Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1641048006;e8f600a9;
-X-HE-SMSGID: 1n3fYB-0005Wh-3r
+Content-Type: text/plain
+X-ClientProxiedBy: VI1PR09CA0084.eurprd09.prod.outlook.com
+ (2603:10a6:802:29::28) To VI1PR04MB4688.eurprd04.prod.outlook.com
+ (2603:10a6:803:6a::30)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e3e9d053-ef78-47da-94e4-08d9cd3ec9c6
+X-MS-TrafficTypeDiagnostic: VE1PR04MB7471:EE_
+X-Microsoft-Antispam-PRVS: <VE1PR04MB7471BEEA02FC6E02A809BCE5F6479@VE1PR04MB7471.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:541;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BPtM06VuBGEOzekTb/TejEtve4Rqu3EJ5g7mVCgJW5ApBmHHyvaXWDXxbVwEku2FSnrlfZgiKaCGeU9ULAudTIARMCP2Sbv5D5KgpufKrFCm2LiSdRM6pvJNC99rA5ygAk7xO5ZEG997tvM9ltMryacSjvoMujYYyu1OC0GNUREVBC5WDhmBBg0fyPXJpg9ZckvjTKJeB6A6KBFa7x3NAjO5xRz1YSPiS2t1PfiHEwvQ3FIcgtV1eIr2acCaCaxvn6UlcvsS3TUB+btXUvGkeOLExy5f6eJROsrqCeYPbXeru8W8j3aXjo/vzIzWCQDZiFWnZYbL4uL6Ddx5OrTemcq3UM/A2ZnpUS1k75dHb7kq+wshR8DHmkZInObn7mf0tSKinMKvUfxU+FTVA62YuGHHenD12aBUVTskXRRvZqcdNldUV2d15ZUQypeJFnOdR1+vd328JATyCZz8GfOVd4ukBCbfvf/ftTYyJMHIXznm12Epog8st6vkmtCRzhIHNB0rEq9o79CqXnkDngfh/rRwAHKDvFz9tsGMamoedJjpJWyh2w6+fhSPq5MyUf9qJHeqy0R93rLo4wH8tqh0uIXryijNtP/4N7XdLm/GdWauFdI4C3YjLLr1drBDzmJ6mVw5bh+oBSTnpcuGnxrl4pQ2+hZwce8/vDt6PIq67hVGrqKRUbr2Wwt1d9hsmV5ZtNwHv+LZpoyqAEW90ayCGA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4688.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66476007)(4326008)(66946007)(2616005)(52116002)(316002)(186003)(26005)(83380400001)(38350700002)(66556008)(38100700002)(5660300002)(1076003)(6666004)(110136005)(2906002)(36756003)(44832011)(8936002)(54906003)(508600001)(8676002)(86362001)(6506007)(6486002)(6512007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kVv/aAZbq3OwehEZgYx337qOsjhOvfDNkaG3M7SqW5W9vRhR+nQfZeS8vD8D?=
+ =?us-ascii?Q?zSK+xWIDZqOvNIP6kb7EK7sFeEKPyR8DB98eBXvpC1LymlAMjn0xZxWhMbG/?=
+ =?us-ascii?Q?BbTesDD3d675wNsodxapMxGC8G0XqnQH1lnyzs2ZD3DerO0jra1zPjTXfAJ8?=
+ =?us-ascii?Q?eAB+JveHy3dmUunYmawb1rnkCAHEWlg4f2dYUZesGWUL8ACAzMPfUswpgBSU?=
+ =?us-ascii?Q?BmXn6Ck8+g5mx+bAe3Bbpl07qTmp5P/Mvp458AfwnpnjhBTlY/KD/FjgcZfU?=
+ =?us-ascii?Q?7dGguoSoLNehbUwxdk96igVMdQEQEHkXa5A27nVQI1+XlFrc2+g04/gaHUVv?=
+ =?us-ascii?Q?y9yjuFszGCyVU71pGizZrlzbkR3S1agDd4QgFsKNDfEOIHOjgx11JbTwkr3N?=
+ =?us-ascii?Q?E8kRS4F/dThJLPBvk6094sjWY9woUtdhmF2Pxa5MN03jJQJ5YqSA8lx0ovLq?=
+ =?us-ascii?Q?/cpwN4vCxPEHJMnZ7tnNAvpt7hpx4rCGNmOlVmLwoE3wKChMD4/zBk/QRgwu?=
+ =?us-ascii?Q?XI2TGEv53WuyafM1txSQsuzyc1C3yeEiNnD7Kygc91j7ij2qG7v8DE+z2IH3?=
+ =?us-ascii?Q?K98QvOA/Gpi6tZ0nmw8vIa8DayYfUNvdwxhi3PctzPro5KgMHbW6i57sJwJ0?=
+ =?us-ascii?Q?F05FglU2GoMN/FcCeXmLRbhH0o22rcFg/9VL5FgdyfoIgZQj92yWCca3YEwx?=
+ =?us-ascii?Q?Qb/6t1s4XPjSi9q+6/3cIFrgTk6T+Bnqn3esalQVrwG+1DXrBZ3FK8sZGRn1?=
+ =?us-ascii?Q?0HLHCjhEJIf3WQlY8s7JhxNthmWCsUrJydi/Ep+Q8S21wEvaQc5hv6HIID5Y?=
+ =?us-ascii?Q?nhybRomHoW2aINMrrxYoxI47guk+vD7Tll1O+Osez9gI5lahBB9S9O0cIxBU?=
+ =?us-ascii?Q?4F3F9DywtrZPNDdKwJR+1sg6tbSAuXYt6tsbV9pnzEDZH50vd/VcZhjKUFmA?=
+ =?us-ascii?Q?G7eJ8b4s35jSxovxCvjUeEbh7EW6CI7+u8v4PxqNelz09pu+EaZwB9H8/KzS?=
+ =?us-ascii?Q?v81pkci8xdNdYyxvWse8ah9ufxpgTbxl4eVNDkXXR2hzOoWoDsds9o3/9JiK?=
+ =?us-ascii?Q?7y7pMv5ZqIiao/YTAbKCTcJIAsD8fhQRNGd1mt3yFCm2SIcDxtkZTeRCJlVA?=
+ =?us-ascii?Q?qb7gNg2O7AeN4059liVbtolRtIsHpuD8nn3a3ThbiIiPxs3QW3Et7r2nsOaS?=
+ =?us-ascii?Q?vqz1rhCYZwcbQnXPOr9VjUU1s6C3XgRmdnfM/cRZ07POqiiszKT0Jenmzdtl?=
+ =?us-ascii?Q?3JKHc6YNFgtXcWlMbtPIzMUA06Otj5ZCcAfCoWiVThbyf7eDUc8Yj/25rwUG?=
+ =?us-ascii?Q?mjD04R3G+0xh6TMOIZ9ylgSlBemG/eNyPUup6OGswS0LMOeal51vDPYRijCC?=
+ =?us-ascii?Q?GcU1j6o7sm+xpXdQKjFxM92eRzYIf0HRmsLWZS8jl+4hHs0LGh/8i0v59YWf?=
+ =?us-ascii?Q?lYdQ/E86xcztgbTlvLH+n2GbuSuXXt6/kEU7thyMAKlIC2JU89/yG3rEHCAv?=
+ =?us-ascii?Q?8g3Bpl6vf6HVlWJmToJXND8SAEPqpdfZNDtpMk3zJgM0yrMiwDcosoFJrp4b?=
+ =?us-ascii?Q?ElZMu9fhwl00X/15uU/WCVnN56gDt6eML1DK5spDnqrNbMT2wF/cGqkyoDix?=
+ =?us-ascii?Q?lTqpDwmwf6HITqXARFZdvKo=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e3e9d053-ef78-47da-94e4-08d9cd3ec9c6
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4688.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jan 2022 15:53:01.1604
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +LNnFRSXpZSLIzDpJ+lppBcVmzltZSqRRWeQaptjrsboP2NaR4OKRbE27vPUy2bje5s2UXrD4uo2940M8eboFw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7471
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker speaking.
+In order to be able to have more than one NoCs in the interconnect net
+we need to decouple the NoC from the dram. So instead of using the
+imx_icc_node_adj_desc, we use the fsl,icc-id property that is in
+each NoC (or pl301) to the icc node (based on the id) to it.
+Along with all the NoC and pl301 nodes in the dts we will have a
+interconnect dedicated node. This node will be the actual device of the
+icc provider.
 
-On 30.12.21 16:55, Christian Casteyde wrote:
-> Le lundi 27 décembre 2021 17:40:28 Rafael J. Wysocki a écrit :
->> CC Daniel, Thomas and dri-devel.
->>
->> On Mon, Dec 27, 2021 at 5:32 PM <casteyde.christian@free.fr> wrote:
->>> Hello
->>>
->>> I've noticed my laptop totally freeze when going to hibernation.
->>> The git bisect log is appended below.
->>> Please note however that even the previous good commit was "good" (ie :
->>> laptop managed to suspend and resume), the system was unstable and froze
->>> few minutes later.
->> So the breakage need not be related to the first bad commit.
->>
->> Have you tried to revert that commit?  If so, has it helped?
-> Reverting the last bad commit on 5.16-rc7, the problem is still there.
-> I'm still convinced from bisection that it is related to graphic.
+Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+---
+ drivers/interconnect/imx/imx.c | 70 +++++++++++++++-------------------
+ 1 file changed, 31 insertions(+), 39 deletions(-)
 
-TWIMC: Christian afaics is plagued by an older issue wrt suspend: "
-Touchpad is not working anymore after suspend to RAM since kernel 5.14 -
-AMD Ryzen 5 4600H". For details see:
-https://bugzilla.kernel.org/show_bug.cgi?id=214667
-https://lore.kernel.org/regressions/12b9a10a-626b-cafd-05d6-cf0a116aa39b@leemhuis.info/
-
-I wonder if that might interfere somehow and if there is a easy way to
-rule that out (I wonder if unloading the hid modules involved is a good
-idea or stupid advice -- I fear it's the latter).
-
-Ciao, Thorsten
-
-P.S.: As a Linux kernel regression tracker I'm getting a lot of reports
-on my table. I can only look briefly into most of them. Unfortunately
-therefore I sometimes will get things wrong or miss something important.
-I hope that's not the case here; if you think it is, don't hesitate to
-tell me about it in a public reply, that's in everyone's interest.
-
-BTW, I have no personal interest in this issue, which is tracked using
-regzbot, my Linux kernel regression tracking bot
-(https://linux-regtracking.leemhuis.info/regzbot/). I'm only posting
-this mail to get things rolling again and hence don't need to be CC on
-all further activities wrt to this regression.
-
-
-
->>> Hardware specs: AMD Ryzen 5 4600H with Vega graphics + Nvidia 1650Ti
->>> (unused) Software: Slackware 14.2 / X.org.
->>>
->>> Seems to be related to drm stuff.
->>> I've issued bugzilla https://bugzilla.kernel.org/show_bug.cgi?id=215427
->>>
->>> Thanks
->>>
->>> git bisect start
->>> # good: [8bb7eca972ad531c9b149c0a51ab43a417385813] Linux 5.15
->>> git bisect good 8bb7eca972ad531c9b149c0a51ab43a417385813
->>> # bad: [a7904a538933c525096ca2ccde1e60d0ee62c08e] Linux 5.16-rc6
->>> git bisect bad a7904a538933c525096ca2ccde1e60d0ee62c08e
->>> # bad: [43e1b12927276cde8052122a24ff796649f09d60] Merge tag 'for_linus' of
->>> git://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost git bisect bad
->>> 43e1b12927276cde8052122a24ff796649f09d60
->>> # good: [fc02cb2b37fe2cbf1d3334b9f0f0eab9431766c4] Merge tag
->>> 'net-next-for-5.16' of
->>> git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next git bisect
->>> good fc02cb2b37fe2cbf1d3334b9f0f0eab9431766c4
->>> # bad: [d9bd054177fbd2c4762546aec40fc3071bfe4cc0] Merge tag
->>> 'amd-drm-next-5.16-2021-10-29' of
->>> https://gitlab.freedesktop.org/agd5f/linux into drm-next git bisect bad
->>> d9bd054177fbd2c4762546aec40fc3071bfe4cc0
->>> # skip: [797d72ce8e0f8fa8a808cb189b5411046432cfd3] Merge tag
->>> 'drm-misc-next-2021-10-06' of git://anongit.freedesktop.org/drm/drm-misc
->>> into drm-next git bisect skip 797d72ce8e0f8fa8a808cb189b5411046432cfd3
->>> # skip: [bf72ca73aaa6629568cb9b0761be6efdd02a2591] drm/amd/display: [FW
->>> Promotion] Release 0.0.85 git bisect skip
->>> bf72ca73aaa6629568cb9b0761be6efdd02a2591
->>> # good: [bc41f059a080e487c235b539f1e5cdbf605aba9f] drm/i915/dp: fix DG1
->>> and RKL max source rates git bisect good
->>> bc41f059a080e487c235b539f1e5cdbf605aba9f
->>> # skip: [58144d283712c9e80e528e001af6ac5aeee71af2] drm/amdgpu: unify BO
->>> evicting method in amdgpu_ttm git bisect skip
->>> 58144d283712c9e80e528e001af6ac5aeee71af2
->>> # skip: [a5b51a9f8523a0b88ce7e8e8059f75a43c34c57f] drm/i915/gt: add
->>> asm/cacheflush.h for use of clflush() git bisect skip
->>> a5b51a9f8523a0b88ce7e8e8059f75a43c34c57f
->>> # skip: [40348baedfbc6500e7a090c7da1d55b6c94c334f] drm/amd/display: fix
->>> duplicated inclusion git bisect skip
->>> 40348baedfbc6500e7a090c7da1d55b6c94c334f
->>> # skip: [7547675b84bf452542463db29adb113cadb7dd6d] drm/virtio: implement
->>> context init: track {ring_idx, emit_fence_info} in virtio_gpu_fence git
->>> bisect skip 7547675b84bf452542463db29adb113cadb7dd6d
->>> # good: [f01ee019586220c86f238263a4fbde6e72085e11] drm/amd/display: Add DP
->>> 2.0 SST DC Support git bisect good
->>> f01ee019586220c86f238263a4fbde6e72085e11
->>> # good: [f3ede209d44d71636890a78fa89c5b1c83340320] drm/i915/pci: rename
->>> functions to have i915_pci prefix git bisect good
->>> f3ede209d44d71636890a78fa89c5b1c83340320
->>> # skip: [4fb530e5caf7cb666948db65f245b350ce520436] drm/virtio: implement
->>> context init: support init ioctl git bisect skip
->>> 4fb530e5caf7cb666948db65f245b350ce520436
->>> # good: [c7c4dfb6fe704ae3cce1a8f438db75b1a0a9061f] drm/i915/display: Some
->>> code improvements and code style fixes for DRRS git bisect good
->>> c7c4dfb6fe704ae3cce1a8f438db75b1a0a9061f
->>> # skip: [7a28bee067d524c1b8770aa72a82263eb9fc53f0] drm/amd/display:
->>> Disable dpp root clock when not being used git bisect skip
->>> 7a28bee067d524c1b8770aa72a82263eb9fc53f0
->>> # good: [5b116c17e6babc6de2e26714bc66228c74038b71] drm/i915/guc: Drop pin
->>> count check trick between sched_disable and re-pin git bisect good
->>> 5b116c17e6babc6de2e26714bc66228c74038b71
->>> # skip: [9878844094703fbae1c3b301c9bb71253a30efe7] drm/amdgpu: drive all
->>> vega asics from the IP discovery table git bisect skip
->>> 9878844094703fbae1c3b301c9bb71253a30efe7
->>> # skip: [7194dc998dfffca096c30b3cd39625158608992d] drm/i915/tc: Fix TypeC
->>> port init/resume time sanitization git bisect skip
->>> 7194dc998dfffca096c30b3cd39625158608992d
->>> # skip: [5c3720be7d46581181782f5cf9585b532feed947] drm/amdgpu: get VCN and
->>> SDMA instances from IP discovery table git bisect skip
->>> 5c3720be7d46581181782f5cf9585b532feed947
->>> # skip: [a53f2c035e9832d20775d2c66c71495f2dc27699] drm/panfrost: Calculate
->>> lock region size correctly git bisect skip
->>> a53f2c035e9832d20775d2c66c71495f2dc27699
->>> # skip: [d04287d062a4198ec0bf0112db03618f65d7428a] drm/amdgpu: During s0ix
->>> don't wait to signal GFXOFF git bisect skip
->>> d04287d062a4198ec0bf0112db03618f65d7428a
->>> # skip: [9ced12182d0d8401d821e9602e56e276459900fc] drm/i915: Catch yet
->>> another unconditioal clflush git bisect skip
->>> 9ced12182d0d8401d821e9602e56e276459900fc
->>> # skip: [dac3c405b9aedee301d0634b4e275b81f0d74363] drm/amd/display: [FW
->>> Promotion] Release 0.0.87 git bisect skip
->>> dac3c405b9aedee301d0634b4e275b81f0d74363
->>> # skip: [9f620f1dde3e3e984837163d7930dc4b2abffe82] drm/i915: Call
->>> intel_ddi_init_dp_buf_reg() earlier git bisect skip
->>> 9f620f1dde3e3e984837163d7930dc4b2abffe82
->>> # skip: [178fbb6d552f294037291bf62d41b31d30186f31] drm/amd/display:
->>> Implement DPIA training loop git bisect skip
->>> 178fbb6d552f294037291bf62d41b31d30186f31
->>> # good: [253a55918ce128f15a3be66db5e2072665143554] drm/amd/display: Fix
->>> issue with dynamic bpp change for DCN3x git bisect good
->>> 253a55918ce128f15a3be66db5e2072665143554
->>> # skip: [50638f7dbd0b3969b47d2772c4db02ed92b6c47b]
->>> drm/amdgpu/pm/amdgpu_smu: convert more IP version checking git bisect
->>> skip 50638f7dbd0b3969b47d2772c4db02ed92b6c47b
->>> # bad: [3605eacc8ae055d699f7fa3adb9123c4c36ecd82] drm/panfrost: Make use
->>> of the helper function devm_platform_ioremap_resource() git bisect bad
->>> 3605eacc8ae055d699f7fa3adb9123c4c36ecd82
->>> # bad: [47ddb72f789333a8ccb792b0fd6d6fe8a7906694] drm: zte: remove
->>> obsolete DRM Support for ZTE SoCs git bisect bad
->>> 47ddb72f789333a8ccb792b0fd6d6fe8a7906694
->>> # bad: [072e70d52372c44df90b44fb4cd949a709bb5bef] drm:
->>> panel-orientation-quirks: Add quirk for the Chuwi Hi10 Pro git bisect bad
->>> 072e70d52372c44df90b44fb4cd949a709bb5bef
->>> # bad: [82ade934dde45b9d9008954b297f7727233e37af] drm/arm: malidp: Use
->>> fourcc_mod_is_vendor() helper git bisect bad
->>> 82ade934dde45b9d9008954b297f7727233e37af
->>> # bad: [8b4e02c70fca482c5b947d8ba92b45093b4390e7] drm/panel: Add DT
->>> bindings for Samsung S6D27A1 display panel git bisect bad
->>> 8b4e02c70fca482c5b947d8ba92b45093b4390e7
->>> # bad: [804b6e5ee613b019b942ba6be52cccecd9d33655] drm/shmem-helpers:
->>> Allocate wc pages on x86 git bisect bad
->>> 804b6e5ee613b019b942ba6be52cccecd9d33655
->>> # good: [8b93d1d7dbd578fd296e70008b29c0f62d09d7cb] drm/shmem-helper:
->>> Switch to vmf_insert_pfn git bisect good
->>> 8b93d1d7dbd578fd296e70008b29c0f62d09d7cb
->>> # first bad commit: [804b6e5ee613b019b942ba6be52cccecd9d33655]
->>> drm/shmem-helpers: Allocate wc pages on x86
+diff --git a/drivers/interconnect/imx/imx.c b/drivers/interconnect/imx/imx.c
+index c770951a909c..34bfc7936387 100644
+--- a/drivers/interconnect/imx/imx.c
++++ b/drivers/interconnect/imx/imx.c
+@@ -34,8 +34,8 @@ static int imx_icc_node_set(struct icc_node *node)
+ 	if (!node_data->qos_dev)
+ 		return 0;
+ 
+-	freq = (node->avg_bw + node->peak_bw) * node_data->desc->adj->bw_mul;
+-	do_div(freq, node_data->desc->adj->bw_div);
++	freq = max(node->avg_bw, node->peak_bw);
++
+ 	dev_dbg(dev, "node %s device %s avg_bw %ukBps peak_bw %ukBps min_freq %llukHz\n",
+ 		node->name, dev_name(node_data->qos_dev),
+ 		node->avg_bw, node->peak_bw, freq);
+@@ -79,41 +79,35 @@ static int imx_icc_node_init_qos(struct icc_provider *provider,
+ 				 struct icc_node *node)
+ {
+ 	struct imx_icc_node *node_data = node->data;
+-	const struct imx_icc_node_adj_desc *adj = node_data->desc->adj;
+ 	struct device *dev = provider->dev;
+-	struct device_node *dn = NULL;
+ 	struct platform_device *pdev;
++	struct device_node *np = NULL, *dn = NULL;
++	int idx;
+ 
+-	if (adj->main_noc) {
+-		node_data->qos_dev = dev;
+-		dev_dbg(dev, "icc node %s[%d] is main noc itself\n",
+-			node->name, node->id);
+-	} else {
+-		dn = of_parse_phandle(dev->of_node, adj->phandle_name, 0);
+-		if (!dn) {
+-			dev_warn(dev, "Failed to parse %s\n",
+-				 adj->phandle_name);
+-			return -ENODEV;
+-		}
+-		/* Allow scaling to be disabled on a per-node basis */
+-		if (!of_device_is_available(dn)) {
+-			dev_warn(dev, "Missing property %s, skip scaling %s\n",
+-				 adj->phandle_name, node->name);
+-			of_node_put(dn);
+-			return 0;
+-		}
++	for_each_node_with_property(np, "fsl,icc-id") {
++		of_property_read_u32(np, "fsl,icc-id", &idx);
++		if (idx == node_data->desc->id)
++			dn = np;
++	}
+ 
+-		pdev = of_find_device_by_node(dn);
+-		of_node_put(dn);
+-		if (!pdev) {
+-			dev_warn(dev, "node %s[%d] missing device for %pOF\n",
+-				 node->name, node->id, dn);
+-			return -EPROBE_DEFER;
+-		}
+-		node_data->qos_dev = &pdev->dev;
+-		dev_dbg(dev, "node %s[%d] has device node %pOF\n",
+-			node->name, node->id, dn);
++	if (!dn)
++		return 0;
++
++	if (!of_device_is_available(dn)) {
++		dev_warn(dev, "%pOF is disabled\n", dn);
++		return 0;
++	}
++
++	pdev = of_find_device_by_node(dn);
++	of_node_put(dn);
++	if (!pdev) {
++		dev_warn(dev, "node %s[%d] missing device for %pOF\n",
++			 node->name, node->id, dn);
++		return -EPROBE_DEFER;
+ 	}
++	node_data->qos_dev = &pdev->dev;
++	dev_dbg(dev, "node %s[%d] has device node %pOF\n", node->name,
++							node->id, dn);
+ 
+ 	return dev_pm_qos_add_request(node_data->qos_dev,
+ 				      &node_data->qos_req,
+@@ -151,12 +145,10 @@ static struct icc_node *imx_icc_node_add(struct icc_provider *provider,
+ 	node_data->desc = node_desc;
+ 	icc_node_add(node, provider);
+ 
+-	if (node_desc->adj) {
+-		ret = imx_icc_node_init_qos(provider, node);
+-		if (ret < 0) {
+-			imx_icc_node_destroy(node);
+-			return ERR_PTR(ret);
+-		}
++	ret = imx_icc_node_init_qos(provider, node);
++	if (ret < 0) {
++		imx_icc_node_destroy(node);
++		return ERR_PTR(ret);
+ 	}
+ 
+ 	return node;
+@@ -244,7 +236,7 @@ int imx_icc_register(struct platform_device *pdev,
+ 	provider->aggregate = icc_std_aggregate;
+ 	provider->xlate = of_icc_xlate_onecell;
+ 	provider->data = data;
+-	provider->dev = dev->parent;
++	provider->dev = dev;
+ 	platform_set_drvdata(pdev, provider);
+ 
+ 	ret = icc_provider_add(provider);
+-- 
+2.31.1
 
