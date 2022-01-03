@@ -2,112 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F070482D8B
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jan 2022 03:22:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 664BA482E61
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jan 2022 07:08:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231387AbiACCWh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 2 Jan 2022 21:22:37 -0500
-Received: from mga05.intel.com ([192.55.52.43]:8749 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231346AbiACCWg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 2 Jan 2022 21:22:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641176556; x=1672712556;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=t/8ppdYUq/8Kc8VOSsDoAYfcw9iNBQgZWUdDKxTFxLI=;
-  b=N3ge8u7VE+gZYzZiw2XPLy8PZZbSo/bnXtMMsI4+6JVJHVXwmfkPHhLN
-   2I9eFT6IKXY8IYr/215+KQfif1Su8hzn6o07MxYUAUvEUo+CkNcHxjUoE
-   75Ml5wio8uXUMCznDLXeS39oXsthaZaIIu8/Sfntijy5ZrrIuD2skwMuO
-   pbOaeVczJuumtyFV/NzeIRXNMK7Vmt0LMN7deW6LkwcpcF21BD7TrO34k
-   gZ/ZpX6sJCMn1G6Fu+9nerpqumKFNOWtBs+pDNAEkuKfpMSo9H+eQJr9e
-   VfLJfs9k8CBamu99WeQBJ1NLdS8H1L8cdO402TF3d/riggksXPBkVdfkY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10215"; a="328344351"
-X-IronPort-AV: E=Sophos;i="5.88,256,1635231600"; 
-   d="scan'208";a="328344351"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2022 18:22:34 -0800
-X-IronPort-AV: E=Sophos;i="5.88,256,1635231600"; 
-   d="scan'208";a="471501208"
-Received: from tnakamaf-mobl.amr.corp.intel.com ([10.209.55.114])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2022 18:22:33 -0800
-Message-ID: <2f284d197a5cc160d973a81c898ff42fb4a75db1.camel@linux.intel.com>
-Subject: Re: [PATCH v2 3/7] thermal: intel: hfi: Minimally initialize the
- Hardware Feedback Interface
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Date:   Sun, 02 Jan 2022 18:22:33 -0800
-In-Reply-To: <20220102214647.GC14930@ranerica-svr.sc.intel.com>
-References: <20211220151438.1196-1-ricardo.neri-calderon@linux.intel.com>
-         <20211220151438.1196-4-ricardo.neri-calderon@linux.intel.com>
-         <CAJZ5v0hQUMBw-0t0QzvCfOvzp0WEhE64xiU1JX2jkzdG5BJrMg@mail.gmail.com>
-         <20220102214647.GC14930@ranerica-svr.sc.intel.com>
+        id S229902AbiACGIW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Jan 2022 01:08:22 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:55772 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229505AbiACGIV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jan 2022 01:08:21 -0500
+X-UUID: edc9f4d61a9f42cdac6351498b7ee7fe-20220103
+X-UUID: edc9f4d61a9f42cdac6351498b7ee7fe-20220103
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2050952494; Mon, 03 Jan 2022 14:08:17 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 3 Jan 2022 14:08:15 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 3 Jan 2022 14:08:15 +0800
+Message-ID: <63e17e727d8290a5ebd8c4c5cd8f2383fc1164cc.camel@mediatek.com>
+Subject: Re: [PATCH v16 2/7] arm64: dts: mt8183: add svs device information
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        YT Lee <yt.lee@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Mon, 3 Jan 2022 14:08:15 +0800
+In-Reply-To: <20cf2c1e-d55b-5780-8c6e-4d8beaca5a65@gmail.com>
+References: <20210428065440.3704-1-roger.lu@mediatek.com>
+         <20210428065440.3704-3-roger.lu@mediatek.com>
+         <20cf2c1e-d55b-5780-8c6e-4d8beaca5a65@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 2022-01-02 at 13:46 -0800, Ricardo Neri wrote:
-> On Thu, Dec 30, 2021 at 07:43:22PM +0100, Rafael J. Wysocki wrote:
-> > On Mon, Dec 20, 2021 at 4:23 PM Ricardo Neri
-> > <ricardo.neri-calderon@linux.intel.com> wrote:
+Hi Matthias,
+
+On Thu, 2021-12-30 at 13:54 +0100, Matthias Brugger wrote:
+> 
+> On 28/04/2021 08:54, Roger Lu wrote:
+> > add compitable/reg/irq/clock/efuse setting in svs node
 > > 
+> > Signed-off-by: Roger Lu <roger.lu@mediatek.com>
+> > ---
+> >   arch/arm64/boot/dts/mediatek/mt8183.dtsi | 18 ++++++++++++++++++
+> >   1 file changed, 18 insertions(+)
 > > 
-[...]
-
-> > This looks like it may be too general, because HFI is not a
-> > thermal-only thing.
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> > b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> > index 80519a145f13..441d617ece43 100644
+> > --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> > +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> > @@ -657,6 +657,18 @@
+> >   			status = "disabled";
+> >   		};
+> >   
+> > +		svs: svs@1100b000 {
+> > +			compatible = "mediatek,mt8183-svs";
+> > +			reg = <0 0x1100b000 0 0x1000>;
+> > +			interrupts = <GIC_SPI 127 IRQ_TYPE_LEVEL_LOW>;
+> > +			clocks = <&infracfg CLK_INFRA_THERM>;
+> > +			clock-names = "main";
+> > +			nvmem-cells = <&svs_calibration>,
+> > +				      <&thermal_calibration>;
+> > +			nvmem-cell-names = "svs-calibration-data",
+> > +					   "t-calibration-data";
+> > +		};
+> > +
+> >   		pwm0: pwm@1100e000 {
+> >   			compatible = "mediatek,mt8183-disp-pwm";
+> >   			reg = <0 0x1100e000 0 0x1000>;
+> > @@ -941,9 +953,15 @@
+> >   			reg = <0 0x11f10000 0 0x1000>;
+> >   			#address-cells = <1>;
+> >   			#size-cells = <1>;
 > 
+> Please add a new line between the different calibartion data, to improve 
+> readability.
+
+No problem and thanks for the review.
+
+> Regards,
+> Matthias
+> 
+> > +			thermal_calibration: calib@180 {
+> > +				reg = <0x180 0xc>;
+> > +			};
+> >   			mipi_tx_calibration: calib@190 {
+> >   				reg = <0x190 0xc>;
+> >   			};
+> > +			svs_calibration: calib@580 {
+> > +				reg = <0x580 0x64>;
+> > +			};
+> >   		};
+> >   
+> >   		u3phy: usb-phy@11f40000 {
 > > 
-> > Maybe cal it INTEL_HFI_THERMAL?
-> 
-> True. The *Enhanced* HFI introduces the concept of thread classes
-> [1]. I was
-> planning to wrap this patchset, which parses the HFI table and deals
-> with updates, as INTEL_HFI. The code that deals with classes would be
-> wrapped as INTEL_EHFI.
-> 
-> After this comment, so you still think that INTEL_HFI_THERMAL makes
-> more
-> sense?
-In general most of the configs for Intel thermal is has THERMAL suffix,
-so to be consistent may be add THERMAL also at the end.
-
-You can still add INTEL_EHFI as a silent config, which user will not
-select. It will be selected by default with INTEL_HFI_THERMAL.
-
-Thanks,
-Srinivas
-
-
-> 
-> Thanks and BR,
-> Ricardo
-> 
-> 
-> [1].  
-> https://www.intel.com/content/www/us/en/develop/download/intel-architecture-instruction-set-extensions-programming-reference.html
->  , Chapter 13
-> 
-
 
