@@ -2,73 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8C1E48357C
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jan 2022 18:21:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D79BE483646
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jan 2022 18:40:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233112AbiACRVy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Jan 2022 12:21:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51406 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232003AbiACRVx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jan 2022 12:21:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38685C061761;
-        Mon,  3 Jan 2022 09:21:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D79EE61174;
-        Mon,  3 Jan 2022 17:21:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE3FAC36AEB;
-        Mon,  3 Jan 2022 17:21:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641230512;
-        bh=KDcOrgZIU1XDeH6Uo1OKvN4VTlGEYf+34WT5LyZU3Fc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=OkyGR7z2+zOu07oK66nwXVdb+DmZa00050akbOjEWkut2RPlEW48yHw2a8JORhR8m
-         CDUOGu/TQpvvaD7FXF0daltKw9AexNjTGDmbe30S0vT9NYLY3hppLE2cBiCWSy04uN
-         0YwLKOWqTOB3nYLiVhhbqVmeP70W7j/N7kEoh7r1KbHfBZkQDs5+tWQ2k0xB6V+K0V
-         Y1denEl8lwJxNhVv6bRxZkqPeXn7zpcKAKaWWs8W/UT/0EuEGEGCJtrspy7+TJeuM0
-         jnrfsKBJUPQy0YVds91tvgifgIfLzm9+8kaFaGrU4Ghdd/IviSWe5KvWAvdw0mdUQV
-         Qxxt1VsxT9l1Q==
-Date:   Mon, 3 Jan 2022 09:21:42 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     "Kumar, M Chetan" <m.chetan.kumar@intel.com>
-Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linuxwwan <linuxwwan@intel.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        "Sergey Ryazanov" <ryazanov.s.a@gmail.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Vaibhav Gupta <vaibhavgupta40@gmail.com>
-Subject: Re: [PATCH 2/2] net: wwan: iosm: Keep device at D0 for s2idle case
-Message-ID: <20220103092142.102c272f@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <SJ0PR11MB500869254A4E9DEEC1DF3B5DD7499@SJ0PR11MB5008.namprd11.prod.outlook.com>
-References: <20211224081914.345292-2-kai.heng.feng@canonical.com>
-        <20211229201814.GA1699315@bhelgaas>
-        <CAAd53p74bHYmQJzKuriDrRWpJwXivfYCfNCsUjC47d1WKUZ=gQ@mail.gmail.com>
-        <SJ0PR11MB500869254A4E9DEEC1DF3B5DD7499@SJ0PR11MB5008.namprd11.prod.outlook.com>
+        id S233166AbiACRkA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Jan 2022 12:40:00 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:49434 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232983AbiACRji (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jan 2022 12:39:38 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id DB79B1F42227
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1641231576;
+        bh=9l1MBhj87w2oaRpGKQi8FSzTUXDs8AF6OfoemMGXZdQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OdsEPLQaOg45KDfNYyUnd6+5KuBv5StpMedj71QXzFjpLn955GNf5/hrFGmx5jXDM
+         h1Dwa0w08dxdqKd4GAzY0V+j7d4PfG5pKyz+dKSUyl2Un1xwj4aoH7o7Lrvxt1e8Z4
+         i7Da4PK23/TRZOlzwCGX+U8Y3ivPX9MteR70Dqz42sIXwnW8jHr7oF/g9JbZGsqeJu
+         iPgFugQjNgi5qccrKEhJ0acE/3QOu8ZF/LlBGoetG+wkVGjXQBRK4EMS14YKOZP0WZ
+         LBRycLLQ2It3YParZ4Y3WyoJIREK6MPhXm5WcncA8Dkpr5w+wkJVxtSh44zaG4ONUl
+         /E8iCHWHqAPcQ==
+Received: by earth.universe (Postfix, from userid 1000)
+        id 7A7363C0CB7; Mon,  3 Jan 2022 18:39:34 +0100 (CET)
+Date:   Mon, 3 Jan 2022 18:39:34 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     sean.wang@mediatek.com, matthias.bgg@gmail.com,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rtc: mt6397: Check for null res pointer
+Message-ID: <20220103173934.qupnu5gne2v2tpig@earth.universe>
+References: <20211220083811.907261-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ibsvhphyobg6wdwd"
+Content-Disposition: inline
+In-Reply-To: <20211220083811.907261-1-jiasheng@iscas.ac.cn>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 3 Jan 2022 15:28:18 +0000 Kumar, M Chetan wrote:
-> > Dave, can you drop it from netdev until IOSM devs confirm this patch is
-> > correct?  
-> 
-> Dave, please drop this patch from netdev.
 
-YMMV but these sort of requests aren't usually acted on. netdev doesn't
-rebase so revert is needed, and the developers involved are best at
-writing commit messages for those since they have all the context. 
-So sending a revert patch, with Link to the discussion and context
-explained is the best way.
+--ibsvhphyobg6wdwd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+On Mon, Dec 20, 2021 at 04:38:11PM +0800, Jiasheng Jiang wrote:
+> The return value of platform_get_resource() needs to be checked.
+> To avoid use of error pointer in case that there is no suitable
+> resource.
+>=20
+> Fixes: d28c74c10751 ("power: reset: add driver for mt6323 poweroff")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
+
+Thanks, I fixed the subject and queued the patch.
+
+-- Sebastian
+
+>  drivers/power/reset/mt6323-poweroff.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>=20
+> diff --git a/drivers/power/reset/mt6323-poweroff.c b/drivers/power/reset/=
+mt6323-poweroff.c
+> index 0532803e6cbc..d90e76fcb938 100644
+> --- a/drivers/power/reset/mt6323-poweroff.c
+> +++ b/drivers/power/reset/mt6323-poweroff.c
+> @@ -57,6 +57,9 @@ static int mt6323_pwrc_probe(struct platform_device *pd=
+ev)
+>  		return -ENOMEM;
+> =20
+>  	res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	if (!res)
+> +		return -EINVAL;
+> +
+>  	pwrc->base =3D res->start;
+>  	pwrc->regmap =3D mt6397_chip->regmap;
+>  	pwrc->dev =3D &pdev->dev;
+> --=20
+> 2.25.1
+>=20
+
+--ibsvhphyobg6wdwd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmHTNM8ACgkQ2O7X88g7
++pqX7Q//a7FhbfUdQUBPoNx8GliifDl9XPDkJE3hN4sm0flN5mrgDJ0to9G5CHIg
+NiV0VHUIug7TKyXT1aJOMZkW0JFDQ0FK7PuBB/oWDl8VG1cFYtKJ2o/q//xyP6Bj
+c83UUCQa2B2jwfVq+zlPmPbVMjXl796q74JL7tfcQQSzM8+CKCdxP/cCGYJctwfK
+NhwPPnM0m9ho5VKobOkeHRvGkjAHSgI3EOcAWwOKcCvMaBqJzlhqbwuMf6nEARwt
+Jr8L7+5EbPRCCzJPPshNB96AT15UayZHkkhCF8v/xWY+2T+EjjOh2Cdaz2uNc3jY
+N8umF2drhl0lPHZotF3/cSJcHivedvl9a8XdFAVkwmWiOCzjDqxErpgJPayFpsHV
+3saj0u4wEkFUssfnZqLvXnme9IHiBaH7+Jc5Ejbg85z8J4ejME6M1xllCe/718/n
+Cv50/1j9FfFZKVl1G8cEzYu9GNddlMZejZaZVgHRYjrKuWE/j9dvpPQpVbOvZ3H+
+e+d9Tz7P3iOGWzo7wrQuSp7f9H9HkM1D1T4lf502BJMcft9v6n5JYzcYcZsOmtzo
+tx65r1KHiosLF/bj2W7SX4xU1Z1yjEmCPSlxFj3SlCEWwogc2qcOC3Fc4g/RDXWl
+5iPY2cwVbwBBr6q32CdCoS4Rd7KLVH+9bgl0Cfoi5porimkZdlA=
+=12QQ
+-----END PGP SIGNATURE-----
+
+--ibsvhphyobg6wdwd--
