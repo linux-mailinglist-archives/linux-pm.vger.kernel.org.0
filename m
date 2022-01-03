@@ -2,29 +2,29 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 986FB482EC2
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jan 2022 08:43:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 927AA482EC6
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jan 2022 08:44:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230321AbiACHnf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Jan 2022 02:43:35 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:56978 "EHLO
+        id S230384AbiACHo0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Jan 2022 02:44:26 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:58302 "EHLO
         mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229793AbiACHne (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jan 2022 02:43:34 -0500
-X-UUID: 6a3dbd5d55aa466a9f48df8d76e658b4-20220103
-X-UUID: 6a3dbd5d55aa466a9f48df8d76e658b4-20220103
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        with ESMTP id S229793AbiACHo0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jan 2022 02:44:26 -0500
+X-UUID: 1fdf354a63754465837a47703602c459-20220103
+X-UUID: 1fdf354a63754465837a47703602c459-20220103
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
         (envelope-from <roger.lu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 891752601; Mon, 03 Jan 2022 15:43:30 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 239288997; Mon, 03 Jan 2022 15:44:23 +0800
 Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 3 Jan 2022 15:43:28 +0800
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 3 Jan 2022 15:44:22 +0800
 Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 3 Jan 2022 15:43:28 +0800
-Message-ID: <ca8e8e62d4c7d9b714c64fbf9e59ba0ebe42bea4.camel@mediatek.com>
-Subject: Re: [PATCH v16 0/7] soc: mediatek: SVS: introduce MTK SVS
+ Transport; Mon, 3 Jan 2022 15:44:21 +0800
+Message-ID: <8d0b14c93f98d97ed1c1147b785738baf7dfc117.camel@mediatek.com>
+Subject: Re: [PATCH v20 0/7] soc: mediatek: SVS: introduce MTK SVS engine
 From:   Roger Lu <roger.lu@mediatek.com>
 To:     Matthias Brugger <matthias.bgg@gmail.com>,
         Enric Balletbo Serra <eballetbo@gmail.com>,
@@ -44,11 +44,12 @@ CC:     Fan Chen <fan.chen@mediatek.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Mon, 3 Jan 2022 15:43:28 +0800
-In-Reply-To: <abd9332b-dace-f75a-33f5-be88fe516784@gmail.com>
-References: <20210428065440.3704-1-roger.lu@mediatek.com>
-         <abd9332b-dace-f75a-33f5-be88fe516784@gmail.com>
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Date:   Mon, 3 Jan 2022 15:44:21 +0800
+In-Reply-To: <fff75b65-51ab-cafd-a55f-137c0b7c2dc6@gmail.com>
+References: <20210721070904.15636-1-roger.lu@mediatek.com>
+         <fff75b65-51ab-cafd-a55f-137c0b7c2dc6@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
@@ -60,9 +61,10 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi Matthias,
 
-On Thu, 2021-12-30 at 14:18 +0100, Matthias Brugger wrote:
+On Thu, 2021-12-30 at 16:13 +0100, Matthias Brugger wrote:
+> Hi Roger,
 > 
-> On 28/04/2021 08:54, Roger Lu wrote:
+> On 21/07/2021 09:08, Roger Lu wrote:
 > > 1. SVS driver uses OPP adjust event in [1] to update OPP table voltage part.
 > > 2. SVS driver gets thermal/GPU device by node [2][3] and CPU device by
 > > get_cpu_device().
@@ -72,90 +74,22 @@ On Thu, 2021-12-30 at 14:18 +0100, Matthias Brugger wrote:
 > > 
 > > #mt8183 SVS related patches
 > > [1] 
-> > https://urldefense.com/v3/__https://patchwork.kernel.org/patch/11193513/__;!!CTRNKA9wMg0ARbw!yy2e7JqE__BQAZF3jwBuR3Fbzbv8LPxwwA3l6SVu7SFAG94dCHyVq9A3MIscKXW-$
+> > https://urldefense.com/v3/__https://patchwork.kernel.org/patch/11193513/__;!!CTRNKA9wMg0ARbw!1SsvfMF2dN3uBcTxgzllNcmZ0yWfXvvAKdKlWRVgaEm69mvIZUYLBf27o_UqdhsH$
 > >  
-> 
-> Already mainline, please either refer to the commit, to make it clear it's 
-> maineline or drop it.
-> 
 > > [2] 
-> > https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-mediatek/patch/20201013102358.22588-2-michael.kao@mediatek.com/__;!!CTRNKA9wMg0ARbw!yy2e7JqE__BQAZF3jwBuR3Fbzbv8LPxwwA3l6SVu7SFAG94dCHyVq9A3ML35Ale5$
+> > https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-mediatek/patch/20201013102358.22588-2-michael.kao@mediatek.com/__;!!CTRNKA9wMg0ARbw!1SsvfMF2dN3uBcTxgzllNcmZ0yWfXvvAKdKlWRVgaEm69mvIZUYLBf27o_10UEyP$
 > >  
-> 
-> Same here.
-> 
 > > [3] 
-> > https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-mediatek/patch/20200306041345.259332-3-drinkcat@chromium.org/__;!!CTRNKA9wMg0ARbw!yy2e7JqE__BQAZF3jwBuR3Fbzbv8LPxwwA3l6SVu7SFAG94dCHyVq9A3MMUMr7Oh$
+> > https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-mediatek/patch/20200306041345.259332-3-drinkcat@chromium.org/__;!!CTRNKA9wMg0ARbw!1SsvfMF2dN3uBcTxgzllNcmZ0yWfXvvAKdKlWRVgaEm69mvIZUYLBf27ozqhhMBj$
 > >  
-> 
-> Same here,
-
-Thanks for the review. I'll refer to mainline or the latest reviewing patch. 
-
-> 
 > > 
-> > #mt8192 SVS related patches
-> > [1] 
-> > https://urldefense.com/v3/__https://patchwork.kernel.org/patch/11193513/__;!!CTRNKA9wMg0ARbw!yy2e7JqE__BQAZF3jwBuR3Fbzbv8LPxwwA3l6SVu7SFAG94dCHyVq9A3MIscKXW-$
-> >  
 > 
-> Same here, it's actually the same link as [1].
-> 
-> > [2] 
-> > https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-mediatek/patch/20201223074944.2061-1-michael.kao@mediatek.com/__;!!CTRNKA9wMg0ARbw!yy2e7JqE__BQAZF3jwBuR3Fbzbv8LPxwwA3l6SVu7SFAG94dCHyVq9A3MEUxFEDM$
-> >  
-> > [3] 
-> > https://urldefense.com/v3/__https://lore.kernel.org/patchwork/patch/1360551/__;!!CTRNKA9wMg0ARbw!yy2e7JqE__BQAZF3jwBuR3Fbzbv8LPxwwA3l6SVu7SFAG94dCHyVq9A3MNObUeLt$
-> >  
-> > [4] 
-> > https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-mediatek/patch/20200817030324.5690-5-crystal.guo@mediatek.com/__;!!CTRNKA9wMg0ARbw!yy2e7JqE__BQAZF3jwBuR3Fbzbv8LPxwwA3l6SVu7SFAG94dCHyVq9A3MMx-JKoe$
-> >  
-> 
-> There are many dependencies for that. Some patches need resubmit, others seem
-> to 
-> be stale. I'd advise to concentrate on mt8183 for now and add support for
-> mt8192 
-> once dependencies have settled.
+> Comments made in v16 actually also hold for v20, so please take them into
+> account :)
 
-Sure, let's concentrate on mt8183 patches first. Thanks for sharing the advice.
+Sure. Thanks for the reminding :)
 
 > 
 > Regards,
 > Matthias
-> 
-> > 
-> > changes since v15:
-> > - Put (*set_freqs_pct) and (*get_vops) in struct svs_bank because they are
-> > part of svs bank's operation
-> > - Add define "SVSB_INIT02_RM_DVTFIXED" and "SVSB_MON_VOLT_IGNORE" to make
-> > control clearly.
-> > - Remove unnecessary parenthesis
-> > 
-> > Roger Lu (7):
-> >    [v16,1/7] dt-bindings: soc: mediatek: add mtk svs dt-bindings
-> >    [v16,2/7] arm64: dts: mt8183: add svs device information
-> >    [v16,3/7] soc: mediatek: SVS: introduce MTK SVS engine
-> >    [v16,4/7] soc: mediatek: SVS: add debug commands
-> >    [v16,5/7] dt-bindings: soc: mediatek: add mt8192 svs dt-bindings
-> >    [v16,6/7] arm64: dts: mt8192: add svs device information
-> >    [v16,7/7] soc: mediatek: SVS: add mt8192 SVS GPU driver
-> > 
-> >   .../bindings/soc/mediatek/mtk-svs.yaml        |   92 +
-> >   arch/arm64/boot/dts/mediatek/mt8183.dtsi      |   18 +
-> >   arch/arm64/boot/dts/mediatek/mt8192.dtsi      |   34 +
-> >   drivers/soc/mediatek/Kconfig                  |   10 +
-> >   drivers/soc/mediatek/Makefile                 |    1 +
-> >   drivers/soc/mediatek/mtk-svs.c                | 2524 +++++++++++++++++
-> >   6 files changed, 2679 insertions(+)
-> >   create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mtk-
-> > svs.yaml
-> >   create mode 100644 drivers/soc/mediatek/mtk-svs.c
-> > 
-> > _______________________________________________
-> > Linux-mediatek mailing list
-> > Linux-mediatek@lists.infradead.org
-> > 
-https://urldefense.com/v3/__http://lists.infradead.org/mailman/listinfo/linux-mediatek__;!!CTRNKA9wMg0ARbw!yy2e7JqE__BQAZF3jwBuR3Fbzbv8LPxwwA3l6SVu7SFAG94dCHyVq9A3MIj4Pohu$
-> >  
-> > 
 
