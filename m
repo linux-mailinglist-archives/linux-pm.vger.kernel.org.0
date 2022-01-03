@@ -2,29 +2,33 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 927AA482EC6
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jan 2022 08:44:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00A1F482ECB
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jan 2022 08:45:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230384AbiACHo0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Jan 2022 02:44:26 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:58302 "EHLO
+        id S230395AbiACHpX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Jan 2022 02:45:23 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:59636 "EHLO
         mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229793AbiACHo0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jan 2022 02:44:26 -0500
-X-UUID: 1fdf354a63754465837a47703602c459-20220103
-X-UUID: 1fdf354a63754465837a47703602c459-20220103
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        with ESMTP id S230370AbiACHpX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jan 2022 02:45:23 -0500
+X-UUID: cfc88ef970f049fba0806cd9aca3ad48-20220103
+X-UUID: cfc88ef970f049fba0806cd9aca3ad48-20220103
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
         (envelope-from <roger.lu@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 239288997; Mon, 03 Jan 2022 15:44:23 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+        with ESMTP id 528300326; Mon, 03 Jan 2022 15:45:19 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
  mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 3 Jan 2022 15:44:22 +0800
+ 15.0.1497.2; Mon, 3 Jan 2022 15:45:17 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 3 Jan
+ 2022 15:45:17 +0800
 Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 3 Jan 2022 15:44:21 +0800
-Message-ID: <8d0b14c93f98d97ed1c1147b785738baf7dfc117.camel@mediatek.com>
-Subject: Re: [PATCH v20 0/7] soc: mediatek: SVS: introduce MTK SVS engine
+ Transport; Mon, 3 Jan 2022 15:45:16 +0800
+Message-ID: <28bc9c8ba962e09e321db3149c1196edefe4e856.camel@mediatek.com>
+Subject: Re: [PATCH v20 5/7] dt-bindings: soc: mediatek: add mt8192 svs
+ dt-bindings
 From:   Roger Lu <roger.lu@mediatek.com>
 To:     Matthias Brugger <matthias.bgg@gmail.com>,
         Enric Balletbo Serra <eballetbo@gmail.com>,
@@ -46,10 +50,11 @@ CC:     Fan Chen <fan.chen@mediatek.com>,
         <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         Guenter Roeck <linux@roeck-us.net>
-Date:   Mon, 3 Jan 2022 15:44:21 +0800
-In-Reply-To: <fff75b65-51ab-cafd-a55f-137c0b7c2dc6@gmail.com>
+Date:   Mon, 3 Jan 2022 15:45:17 +0800
+In-Reply-To: <98efb356-dc0d-fa7e-5579-7984f2bb3e84@gmail.com>
 References: <20210721070904.15636-1-roger.lu@mediatek.com>
-         <fff75b65-51ab-cafd-a55f-137c0b7c2dc6@gmail.com>
+         <20210721070904.15636-6-roger.lu@mediatek.com>
+         <98efb356-dc0d-fa7e-5579-7984f2bb3e84@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
@@ -61,35 +66,49 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi Matthias,
 
-On Thu, 2021-12-30 at 16:13 +0100, Matthias Brugger wrote:
-> Hi Roger,
-> 
-> On 21/07/2021 09:08, Roger Lu wrote:
-> > 1. SVS driver uses OPP adjust event in [1] to update OPP table voltage part.
-> > 2. SVS driver gets thermal/GPU device by node [2][3] and CPU device by
-> > get_cpu_device().
-> > After retrieving subsys device, SVS driver calls device_link_add() to make
-> > sure probe/suspend callback priority.
-> > 3. SVS dts refers to reset controller [4] to help reset SVS HW.
-> > 
-> > #mt8183 SVS related patches
-> > [1] 
-> > https://urldefense.com/v3/__https://patchwork.kernel.org/patch/11193513/__;!!CTRNKA9wMg0ARbw!1SsvfMF2dN3uBcTxgzllNcmZ0yWfXvvAKdKlWRVgaEm69mvIZUYLBf27o_UqdhsH$
-> >  
-> > [2] 
-> > https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-mediatek/patch/20201013102358.22588-2-michael.kao@mediatek.com/__;!!CTRNKA9wMg0ARbw!1SsvfMF2dN3uBcTxgzllNcmZ0yWfXvvAKdKlWRVgaEm69mvIZUYLBf27o_10UEyP$
-> >  
-> > [3] 
-> > https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-mediatek/patch/20200306041345.259332-3-drinkcat@chromium.org/__;!!CTRNKA9wMg0ARbw!1SsvfMF2dN3uBcTxgzllNcmZ0yWfXvvAKdKlWRVgaEm69mvIZUYLBf27ozqhhMBj$
-> >  
-> > 
-> 
-> Comments made in v16 actually also hold for v20, so please take them into
-> account :)
 
-Sure. Thanks for the reminding :)
+On Thu, 2021-12-30 at 16:30 +0100, Matthias Brugger wrote:
+> Please add a commit message.
+
+Sure, I'll add it in the next version. Thanks.
 
 > 
 > Regards,
 > Matthias
+> 
+> On 21/07/2021 09:09, Roger Lu wrote:
+> > Signed-off-by: Roger Lu <roger.lu@mediatek.com>
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+> > ---
+> >   .../devicetree/bindings/soc/mediatek/mtk-svs.yaml         | 8 ++++++++
+> >   1 file changed, 8 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
+> > b/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
+> > index a855ced410f8..59342e627b67 100644
+> > --- a/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
+> > +++ b/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
+> > @@ -22,6 +22,7 @@ properties:
+> >     compatible:
+> >       enum:
+> >         - mediatek,mt8183-svs
+> > +      - mediatek,mt8192-svs
+> >   
+> >     reg:
+> >       maxItems: 1
+> > @@ -51,6 +52,13 @@ properties:
+> >         - const: svs-calibration-data
+> >         - const: t-calibration-data
+> >   
+> > +  resets:
+> > +    maxItems: 1
+> > +
+> > +  reset-names:
+> > +    items:
+> > +      - const: svs_rst
+> > +
+> >   required:
+> >     - compatible
+> >     - reg
+> > 
 
