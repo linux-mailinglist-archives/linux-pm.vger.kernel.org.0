@@ -2,107 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D264841A1
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Jan 2022 13:25:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D61A484262
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Jan 2022 14:27:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231706AbiADMZU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Jan 2022 07:25:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53524 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230490AbiADMZU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jan 2022 07:25:20 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1AAC061784
-        for <linux-pm@vger.kernel.org>; Tue,  4 Jan 2022 04:25:20 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id s84-20020a254557000000b0060ac37f4bb1so53184919yba.5
-        for <linux-pm@vger.kernel.org>; Tue, 04 Jan 2022 04:25:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=prQTiZLznLqZ5+2hB9O27N1xUv+Alw1+Gsfjs0LUolU=;
-        b=L/dp4Nhdz0lOG7M3GRsqIH/D6Zs9eJevRNLaTGWU2eKSPxFQQ7dUJqWpv1ogLXogea
-         cMYA44jT047mndDVGbQ+KM4wVLljxO7uPPiJWeCYiaS+q6scQtlZwjou6dYt4NzLqvSo
-         9R3NKz/0nLuaptqGZVGi8Vk8dqnLweFpPxSMN5RkUleQFPxbCXF8+xlF90C8Tu53tEji
-         IpdWz1xQBjYcitr4JO2PTEE3w535AXFwK6l68R7j3lfbQIsWZR8zrC+jThap/VjSfJBw
-         y3OQkkzmaAQ1441UNw8h7aztUv4y2ReP5g0e+xswUTHXOfX4cRWANGaVbHqWqkw3Xjyj
-         gqbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=prQTiZLznLqZ5+2hB9O27N1xUv+Alw1+Gsfjs0LUolU=;
-        b=AaZwFUjPaBkihWi/s6srhgpXw6A8cTwQC5oR2wkCFVnCetTRwwSuEE4HGXZklIzvgQ
-         jXFNwdJKD8eXyYoXxxAyqOd6eD+6jekVBv5wnFJkte41uA2VySGkEahhs9Mh4o+qJ9JF
-         a7VJDGDecFyu4qKxhYfjsJNz0niSZm9KRyEX28uU4ZNIfZJHcMN62ZSFqR6cewRGWrQz
-         pD0lLwodgthVh0nfekWO4mrufk1/V9vrJ3/cUqR0jGkTdfA3+gnBdoeGqgXO1HiFzHSN
-         5gxFfR9OMvsTSL30Zh6y2XE4r1MtEUOEa9dpbeGBojgD0az8+ZZ/cHxgG4XZuY6UCKpc
-         1nsQ==
-X-Gm-Message-State: AOAM533PUOILwNAEiH/SOTyNo37EbuVM3vrCOoQhiFkKLV4HJsis6xaJ
-        oSpsR7mQBxoWBSSgLXz0Fx2TACmRBg==
-X-Google-Smtp-Source: ABdhPJz2gAA4J1A21mPQygq6+T6rFoBtqZJVjXY6aMYrh4yrjZ7M5WvXgxvSREJsqzeEZ6sl6vWREcwNLg==
-X-Received: from wjack.tao.corp.google.com ([2401:fa00:fd:203:fe84:812d:a171:4b7e])
- (user=wjack job=sendgmr) by 2002:a25:cc55:: with SMTP id l82mr52843990ybf.408.1641299119492;
- Tue, 04 Jan 2022 04:25:19 -0800 (PST)
-Date:   Tue,  4 Jan 2022 20:24:59 +0800
-Message-Id: <20220104122500.338870-1-wjack@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
-Subject: [PATCH v1] power: supply: add dock type
-From:   Jack Wu <wjack@google.com>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Jack Wu <wjack@google.com>, kernel-team@android.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        id S232664AbiADN1r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Jan 2022 08:27:47 -0500
+Received: from mail-4319.protonmail.ch ([185.70.43.19]:27109 "EHLO
+        mail-4319.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233452AbiADN1q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jan 2022 08:27:46 -0500
+Date:   Tue, 04 Jan 2022 13:27:36 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail2; t=1641302864;
+        bh=N7TpRcOftGUw1oifCpP7wjHuRkrHBIGaeiwn9kajWDE=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc;
+        b=IEMI4JihSWX9ee2Vw9tB89Q4ml+v1FxEi7fDsZXnsmu23gdA9N2b/Dz3muscm7U85
+         NW02cO4eqnLQe25jqTCd83fegrMNTPxbRpii6fZfqb7KX5FcmoHIXazWy5TG7ho+q+
+         HXSEOsJ17jHdmzjUzDq5eE6zsRnGT0sACL0TLrrCLB7sIi6O40EG7XKwL8EllSJFl0
+         ZfBPMCytskxwVXfs+xHIS8Qbcjc56JmFnNqHj8Qqt1v/OTWTJXzFdDJCzPvvyAcM7q
+         07vq06iLa19PRvXHj91pnMlQfrvMj4R5gI8OYpr25+gKpfdd+1ttO1ibFFIVxTxtTm
+         UnwOjr4cN9v5w==
+To:     Rob Herring <robh+dt@kernel.org>, Ilia Lin <ilia.lin@kernel.org>,
+        Niklas Cassel <nks@flawful.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org
+From:   Yassine Oudjana <y.oudjana@protonmail.com>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-kernel@vger.kernel.org
+Reply-To: Yassine Oudjana <y.oudjana@protonmail.com>
+Subject: [PATCH 0/7] dt-bindings: Convert multiple Qualcomm OPP and CPUFreq bindings to DT schema
+Message-ID: <20220104132618.391799-1-y.oudjana@protonmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add dock power_supply_type for the drivers which supports dock can
-register a power supply class device with POWER_SUPPLY_TYPE_DOCK.
+This series is a compilation of DT schema conversions of multiple Qualcomm
+OPP and CPUFreq bindings:
+- qcom-cpufreq-nvmem (operating-points-v2-kryo-cpu)
+- qcom-opp (operating-points-v2-qcom-level)
+- qcom,cpr
 
-Signed-off-by: Jack Wu <wjack@google.com>
----
- Documentation/ABI/testing/sysfs-class-power | 2 +-
- drivers/power/supply/power_supply_sysfs.c   | 1 +
- include/linux/power_supply.h                | 1 +
- 3 files changed, 3 insertions(+), 1 deletion(-)
+Converting each one to DT schema introduces new dt_binding_check and
+dtbs_check errors to the others, so it was better to combine them into
+a series. Some errors were also caused by a couple of device trees having
+OPP tables with names that do not follow opp-v2-base, so these got fixed
+in this series as well. Finally, the lack of MSM8996 compatibles in
+arm/qcom.yaml caused an error in the opp-v2-kryo-cpu example, so they were
+added to the schema as well as to the msm8996-mtp device tree, which only
+had qcom,msm8996-mtp as its compatible.
 
-diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
-index f7904efc4cfa..854299a0d36f 100644
---- a/Documentation/ABI/testing/sysfs-class-power
-+++ b/Documentation/ABI/testing/sysfs-class-power
-@@ -34,7 +34,7 @@ Description:
- 		Describes the main type of the supply.
- 
- 		Access: Read
--		Valid values: "Battery", "UPS", "Mains", "USB", "Wireless"
-+		Valid values: "Battery", "UPS", "Mains", "USB", "Wireless", "Dock"
- 
- **Battery and USB properties**
- 
-diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-index c3d7cbcd4fad..53494b56bbb4 100644
---- a/drivers/power/supply/power_supply_sysfs.c
-+++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -57,6 +57,7 @@ static const char * const POWER_SUPPLY_TYPE_TEXT[] = {
- 	[POWER_SUPPLY_TYPE_USB_PD_DRP]		= "USB_PD_DRP",
- 	[POWER_SUPPLY_TYPE_APPLE_BRICK_ID]	= "BrickID",
- 	[POWER_SUPPLY_TYPE_WIRELESS]		= "Wireless",
-+	[POWER_SUPPLY_TYPE_DOCK]		= "Dock",
- };
- 
- static const char * const POWER_SUPPLY_USB_TYPE_TEXT[] = {
-diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index 9ca1f120a211..fa80eaa54242 100644
---- a/include/linux/power_supply.h
-+++ b/include/linux/power_supply.h
-@@ -187,6 +187,7 @@ enum power_supply_type {
- 	POWER_SUPPLY_TYPE_USB_PD_DRP,		/* PD Dual Role Port */
- 	POWER_SUPPLY_TYPE_APPLE_BRICK_ID,	/* Apple Charging Method */
- 	POWER_SUPPLY_TYPE_WIRELESS,		/* Wireless */
-+	POWER_SUPPLY_TYPE_DOCK,			/* Dock Charging */
- };
- 
- enum power_supply_usb_type {
--- 
-2.34.1.448.ga2b2bfdf31-goog
+PATCH 4/7 is a new version of a patch[1] that was sent as part of
+a different series before, and PATCH 7/7 is a new version of a patch[2]
+that was first sent alone.
+
+Changes since v1 (PATCH v2 4/7):
+ - Split the schema into an OPP schema and a CPUFreq schema.=20
+
+Changes since v1 (PATCH v2 7/7):
+ - Remove allOf from compatible.
+
+Yassine Oudjana (7):
+  dt-bindings: arm: qcom: Add msm8996 and apq8096 compatibles
+  arm64: dts: qcom: msm8996-mtp: Add msm8996 compatible
+  dt-bindings: opp: qcom-opp: Convert to DT schema
+  dt-bindings: opp: Convert qcom-nvmem-cpufreq to DT schema
+  arm64: dts: qcom: msm8996: Rename cluster OPP tables
+  arm64: dts: qcom: qcs404: Rename CPU and CPR OPP tables
+  dt-bindings: power: avs: qcom,cpr: Convert to DT schema
+
+ .../devicetree/bindings/arm/qcom.yaml         |  16 +-
+ .../bindings/cpufreq/qcom-cpufreq-nvmem.yaml  | 166 ++++
+ .../bindings/opp/opp-v2-kryo-cpu.yaml         | 257 ++++++
+ .../bindings/opp/opp-v2-qcom-level.yaml       |  60 ++
+ .../bindings/opp/qcom-nvmem-cpufreq.txt       | 796 ------------------
+ .../devicetree/bindings/opp/qcom-opp.txt      |  19 -
+ .../bindings/power/avs/qcom,cpr.txt           | 130 ---
+ .../bindings/power/avs/qcom,cpr.yaml          | 160 ++++
+ MAINTAINERS                                   |   5 +-
+ arch/arm64/boot/dts/qcom/msm8996-mtp.dts      |   2 +-
+ arch/arm64/boot/dts/qcom/msm8996.dtsi         |   4 +-
+ arch/arm64/boot/dts/qcom/qcs404.dtsi          |   4 +-
+ 12 files changed, 666 insertions(+), 953 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-=
+nvmem.yaml
+ create mode 100644 Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.y=
+aml
+ create mode 100644 Documentation/devicetree/bindings/opp/opp-v2-qcom-level=
+.yaml
+ delete mode 100644 Documentation/devicetree/bindings/opp/qcom-nvmem-cpufre=
+q.txt
+ delete mode 100644 Documentation/devicetree/bindings/opp/qcom-opp.txt
+ delete mode 100644 Documentation/devicetree/bindings/power/avs/qcom,cpr.tx=
+t
+ create mode 100644 Documentation/devicetree/bindings/power/avs/qcom,cpr.ya=
+ml
+
+[1] https://lore.kernel.org/linux-arm-msm/20211014083016.137441-6-y.oudjana=
+@protonmail.com/
+[2]=09https://lore.kernel.org/linux-arm-msm/20211221133937.173618-1-y.oudja=
+na@protonmail.com/
+--=20
+2.34.1
+
 
