@@ -2,78 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E6E2484530
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Jan 2022 16:49:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB77548461E
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Jan 2022 17:43:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232812AbiADPtK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Jan 2022 10:49:10 -0500
-Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:62141
-        "EHLO mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230352AbiADPtJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jan 2022 10:49:09 -0500
-IronPort-Data: =?us-ascii?q?A9a23=3AYUT76KpX7Pi54w4vrSRUHGaGhKteBmIOZBIvgKr?=
- =?us-ascii?q?LsJaIsI5as4F+vjZLDG7QP/yMYzbyc4t3O4rnpE4AvZLRx9FgTQBkpHthQiMRo?=
- =?us-ascii?q?6IpJ/zJdxaqZ3v6wu7rFR88sZ1GMrEsFC2FJ5Pljk/F3oPJ8D8shclkepKmULS?=
- =?us-ascii?q?eYnkpGVc+IMscoUkLd9AR09cAbeeRU1vlVePa+6UzCXf9s9JGGjp8B5Gr9HuDi?=
- =?us-ascii?q?M/PVAYw5TTSUxzkUGj2zBH5BLpHTU24wuCRroN8RoZWTM6bpF21E/+wwvsjNj+?=
- =?us-ascii?q?luu6TnkwiQrfeJwmDjBK6WYDy314c9mpriP99baVHAatUo2zhc9RZyshJtJX2T?=
- =?us-ascii?q?Q42N6nIsOUbSRhRVS9kVUFD0OaZeSjh75b7I0ruNiGEL+9VJFs/M4QV/s50DHt?=
- =?us-ascii?q?I+PheLyoCBjiImvisx7C2UOR+rt4iN8T2JMUZt20I5SrDDPAnX5nYBb3D49NCw?=
- =?us-ascii?q?Sk5islmGffYetpfaDxzYRCGaBpKUn8TBZQ0tOSlnH/yd3tfsl39jbQ2+WXIzEp?=
- =?us-ascii?q?yzb3kKvLRe9qDX8ITmVyXzkrC/mLkElQCMfSBxjeftHGhnOnCmWX8Qo16PLm58?=
- =?us-ascii?q?ON6xV6e3GoeDDUIWlah5/q0kEizX5RYMUN80i8vq6c13FamQtn0Q1uzp3vslgY?=
- =?us-ascii?q?RR9dKAcU77g+Xw6bZ6grfAXILJhZDdcYn8ss7QTgr/kWEk9PgGXpkt7j9YWyc8?=
- =?us-ascii?q?LyZqy/0NjUUMXMFeQcATA0M+d6lp5s85i8j5P4L/LWd14KuX2iqmnbU/G5u2vM?=
- =?us-ascii?q?JgNBNzKuhu1bKn1qRSlHyZlZdzm3qsqiNt2uVvLKYWrE=3D?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AEiMVIqq3h3H7HEkOOnPxhSoaV5oLeYIsimQD?=
- =?us-ascii?q?101hICG9E/bo7vxG88516faZslwssTIb6LK90dC7L080rKQV3WBzB8bAYOCFgh?=
- =?us-ascii?q?rPEGgK1+KLqAEIcBeTygcy78pdmudFebjN5PVB/KLHyRj9OewJhPOA9Lmshe/Y?=
- =?us-ascii?q?xXsodwd3cKtthj0YNu/eKDwQeDV7?=
-X-IronPort-AV: E=Sophos;i="5.88,261,1635199200"; 
-   d="scan'208";a="1608662"
-Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 16:49:07 +0100
-Date:   Tue, 4 Jan 2022 16:49:06 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-cc:     Francisco Jerez <currojerez@riseup.net>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
-In-Reply-To: <CAJZ5v0hFcRWPO859YWUKLdqkTrVA1WLqRjFWg1=WS8qGG5CTkQ@mail.gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2201041643520.3020@hadrien>
-References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien> <CAJZ5v0i4xnesG=vfx7Y-wyeaGvjDeGcsaOVqhRLnV8YXk-m2gA@mail.gmail.com> <alpine.DEB.2.22.394.2112281845180.24929@hadrien> <CAJZ5v0grayg9evWsB5ktKSFq=yA_AHoEWSfpSkQ=MVQ-=butfA@mail.gmail.com>
- <alpine.DEB.2.22.394.2112291012030.24929@hadrien> <CAJZ5v0g5wDxYXA-V=Ex_Md82hgnj5K6Vr0tavFFVz=uBqo8wag@mail.gmail.com> <alpine.DEB.2.22.394.2112301840360.15550@hadrien> <CAJZ5v0h38jh3gyTp9W0ws0yXyfK=F+TQ7VYRVx4aGXhNeSObEg@mail.gmail.com>
- <alpine.DEB.2.22.394.2112301919240.15550@hadrien> <CAJZ5v0haa5QWvTUUg+wwSHvuWyk8pic1N0kox=E1ZKNrHSFuzw@mail.gmail.com> <alpine.DEB.2.22.394.2112301942360.15550@hadrien> <CAJZ5v0im+Cke7tcNRav2VCyf5Qvi7qC29aF+9A1kVZZmt7cu6g@mail.gmail.com>
- <alpine.DEB.2.22.394.2201031922110.3020@hadrien> <CAJZ5v0hsCjKA3EisK9s_S8Vb9Tgm4eps1FTKvUSfd9_JPh5wBQ@mail.gmail.com> <alpine.DEB.2.22.394.2201032110590.3020@hadrien> <CAJZ5v0hFcRWPO859YWUKLdqkTrVA1WLqRjFWg1=WS8qGG5CTkQ@mail.gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        id S233918AbiADQn5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Jan 2022 11:43:57 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:53242 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233987AbiADQn5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jan 2022 11:43:57 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 671DEB81763;
+        Tue,  4 Jan 2022 16:43:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8510EC36AED;
+        Tue,  4 Jan 2022 16:43:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641314635;
+        bh=xfaQ4ZzPEkHlGDP1oPu71K7zPIoKMUYF4oJjqhQj2pw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=nWUIdWB3cI72NVFVjkUK5lU9QXAU1fDECfFIcLQ9AKL/lUVJRnmGdGYjTJ+j9Lpdz
+         OWPrHwQaOrMB5alB6XS7aQkulNwyVgCDaREcBDzXEAS9L7YQ9SOGjX27kc0QDoBi34
+         Oglpq9z/kdCRdpP69a58uiSUEC5f/4YfbGSrOFFc=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org
+Subject: [PATCH] cpuidle: use default_groups in kobj_type
+Date:   Tue,  4 Jan 2022 17:43:51 +0100
+Message-Id: <20220104164351.1360316-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1826; h=from:subject; bh=xfaQ4ZzPEkHlGDP1oPu71K7zPIoKMUYF4oJjqhQj2pw=; b=owGbwMvMwCRo6H6F97bub03G02pJDIlXKl1f3rv+T2yBddPG9zbyewL6bO+vse0+k732Vsj2ALkH sty/OmJZGASZGGTFFFm+bOM5ur/ikKKXoe1pmDmsTCBDGLg4BWAimyMZ5opM+mDhf/6Xf99Jr+KcU5 4eUq0bBRnmlxzlSL0Rq/303Prg2HCnqpQT1dN4AA==
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-I tried the whole experiment again on an Intel w2155 (one socket, 10
-physical cores, pstates 12, 33, and 45).
+There are currently 2 ways to create a set of sysfs files for a
+kobj_type, through the default_attrs field, and the default_groups
+field.  Move the cpuidle sysfs code to use default_groups field which
+has been the preferred way since aa30f47cf666 ("kobject: Add support for
+default attribute groups to kobj_type") so that we can soon get rid of
+the obsolete default_attrs field.
 
-For the CPU there is a small jump a between 32 and 33 - less than for the
-6130.
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: linux-pm@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/cpuidle/sysfs.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-For the RAM, there is a big jump between 21 and 22.
+diff --git a/drivers/cpuidle/sysfs.c b/drivers/cpuidle/sysfs.c
+index 469e18547d06..565ed005833a 100644
+--- a/drivers/cpuidle/sysfs.c
++++ b/drivers/cpuidle/sysfs.c
+@@ -335,6 +335,7 @@ static struct attribute *cpuidle_state_default_attrs[] = {
+ 	&attr_default_status.attr,
+ 	NULL
+ };
++ATTRIBUTE_GROUPS(cpuidle_state_default);
+ 
+ struct cpuidle_state_kobj {
+ 	struct cpuidle_state *state;
+@@ -448,7 +449,7 @@ static void cpuidle_state_sysfs_release(struct kobject *kobj)
+ 
+ static struct kobj_type ktype_state_cpuidle = {
+ 	.sysfs_ops = &cpuidle_state_sysfs_ops,
+-	.default_attrs = cpuidle_state_default_attrs,
++	.default_groups = cpuidle_state_default_groups,
+ 	.release = cpuidle_state_sysfs_release,
+ };
+ 
+@@ -591,10 +592,11 @@ static struct attribute *cpuidle_driver_default_attrs[] = {
+ 	&attr_driver_name.attr,
+ 	NULL
+ };
++ATTRIBUTE_GROUPS(cpuidle_driver_default);
+ 
+ static struct kobj_type ktype_driver_cpuidle = {
+ 	.sysfs_ops = &cpuidle_driver_sysfs_ops,
+-	.default_attrs = cpuidle_driver_default_attrs,
++	.default_groups = cpuidle_driver_default_groups,
+ 	.release = cpuidle_driver_sysfs_release,
+ };
+ 
+-- 
+2.34.1
 
-Combining them leaves a big jump between 21 and 22.
-
-It seems that the definition of efficient is that there is no more cost
-for the computation than the cost of simply having the machine doing any
-computation at all.  It doesn't take into account the time and energy
-required to do some actual amount of work.
-
-julia
