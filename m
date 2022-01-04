@@ -2,160 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F4C7484311
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Jan 2022 15:10:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7629C484392
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Jan 2022 15:41:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232748AbiADOKJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Jan 2022 09:10:09 -0500
-Received: from mail-qt1-f173.google.com ([209.85.160.173]:40715 "EHLO
-        mail-qt1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233914AbiADOKI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jan 2022 09:10:08 -0500
-Received: by mail-qt1-f173.google.com with SMTP id l17so34096409qtk.7;
-        Tue, 04 Jan 2022 06:10:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eSJCpKrzVTZ0DRHEgcn2i6+0lS6LrPG+CWjHR6R6Hnk=;
-        b=j7p6y1MLkHA1OP2QJV6TEJWVqiXkLiZI9qs7aBQrXr39yr6zml7H+sQhQchrc11k2F
-         zpeWu/TO1r/Ug0FYAR5K6xiG2swn2OkKaaZZc05IeqQi2mfk7geRMYaibQ7oVyCW8XtP
-         eYUGUaIjhNSRXDRruPxMRrN1EFAqW4RHCYF0n0xGrlcc1ktEtMhg7boGesdsYc6FbIZ7
-         NQGj4mc0yMfdzJoSCdjeZoXPxXo+TBdipssJYY/pBQbCHAKvGBWnThR3AppOi9Uen6Sr
-         CjAK6aydpyvIrburcVnWfzMG+6Cd18agG6rDsNp1+d7e7QEXM/41b2PEoh+RN3lW2nmg
-         ix3Q==
-X-Gm-Message-State: AOAM530obTSz4uGOmhyawWAzWCw/a1hRi6MIEBhLKyWiEVyYyXJbGmcf
-        I6j3AhfRQuQGtZvXsvpT7+8OQ3KKO2IYZ/AukV4=
-X-Google-Smtp-Source: ABdhPJyCIhpgxTSRTj7lzFPUo7NOOuzxWqEwokm/Ef4PcUgUQzwerLkXpOPHVhFk7snyadHJmzuprBtVuOkv+Cc8sPE=
-X-Received: by 2002:ac8:7c4e:: with SMTP id o14mr44069322qtv.80.1641305407638;
- Tue, 04 Jan 2022 06:10:07 -0800 (PST)
+        id S234310AbiADOl4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Jan 2022 09:41:56 -0500
+Received: from mga04.intel.com ([192.55.52.120]:8304 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234304AbiADOl4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 4 Jan 2022 09:41:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641307316; x=1672843316;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ALkibHjsClqfYfZP3YOyjyWa+8oE9fy3FXzt+mGIh/U=;
+  b=Qn5ini/BcyZyj7xbytbVaarMzd8g0v0mbAlz+gCUplabjNKez2QetqSI
+   o9rzLoy6XUyR1y+z+AEOT1aqYskjzr2Hm9cfWtm3TZMCIShH0z4l3NJ1K
+   M5wgMBqFeA/FZGxx6NCmsTqM5CPFwkPBDwvw/plqQiiHCyXm5Sh07RQep
+   8e9dbaN62q0YmI5Y0EncOoZGwHaggAhEJ5BXBhEZlDPv/hRZi8gUdphin
+   pyBCiFckVlxKA0k35anUJGLON584BNxTq8q52Izwbb3mmJsgHG95TbVpH
+   1XODDMniXuJyoCTVDFlK8k6XtCgrd4fY2N2UfbpTGGnS0soVuQ3PB8jUe
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="241051201"
+X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
+   d="scan'208";a="241051201"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 06:41:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
+   d="scan'208";a="488214451"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 04 Jan 2022 06:41:54 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n4l0b-000FUC-K9; Tue, 04 Jan 2022 14:41:53 +0000
+Date:   Tue, 04 Jan 2022 22:41:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 3d72f8341423038eaf304155884dda9989a2fc58
+Message-ID: <61d45c90.hMXKGWYzXg8ixuFr%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien>
- <878rwdse9o.fsf@riseup.net> <alpine.DEB.2.22.394.2112281745240.24929@hadrien>
- <CAJZ5v0i4xnesG=vfx7Y-wyeaGvjDeGcsaOVqhRLnV8YXk-m2gA@mail.gmail.com>
- <alpine.DEB.2.22.394.2112281845180.24929@hadrien> <CAJZ5v0grayg9evWsB5ktKSFq=yA_AHoEWSfpSkQ=MVQ-=butfA@mail.gmail.com>
- <alpine.DEB.2.22.394.2112291012030.24929@hadrien> <CAJZ5v0g5wDxYXA-V=Ex_Md82hgnj5K6Vr0tavFFVz=uBqo8wag@mail.gmail.com>
- <alpine.DEB.2.22.394.2112301840360.15550@hadrien> <CAJZ5v0h38jh3gyTp9W0ws0yXyfK=F+TQ7VYRVx4aGXhNeSObEg@mail.gmail.com>
- <alpine.DEB.2.22.394.2112301919240.15550@hadrien> <CAJZ5v0haa5QWvTUUg+wwSHvuWyk8pic1N0kox=E1ZKNrHSFuzw@mail.gmail.com>
- <alpine.DEB.2.22.394.2112301942360.15550@hadrien> <CAJZ5v0im+Cke7tcNRav2VCyf5Qvi7qC29aF+9A1kVZZmt7cu6g@mail.gmail.com>
- <alpine.DEB.2.22.394.2201031922110.3020@hadrien> <CAJZ5v0hsCjKA3EisK9s_S8Vb9Tgm4eps1FTKvUSfd9_JPh5wBQ@mail.gmail.com>
- <alpine.DEB.2.22.394.2201032110590.3020@hadrien>
-In-Reply-To: <alpine.DEB.2.22.394.2201032110590.3020@hadrien>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 4 Jan 2022 15:09:56 +0100
-Message-ID: <CAJZ5v0hFcRWPO859YWUKLdqkTrVA1WLqRjFWg1=WS8qGG5CTkQ@mail.gmail.com>
-Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Francisco Jerez <currojerez@riseup.net>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jan 3, 2022 at 9:51 PM Julia Lawall <julia.lawall@inria.fr> wrote:
->
->
->
-> On Mon, 3 Jan 2022, Rafael J. Wysocki wrote:
->
-> > On Mon, Jan 3, 2022 at 7:23 PM Julia Lawall <julia.lawall@inria.fr> wrote:
-> > >
-> > > > > > Can you please run the 32 spinning threads workload (ie. on one
-> > > > > > package) and with P-state locked to 10 and then to 20 under turbostat
-> > > > > > and send me the turbostat output for both runs?
-> > > > >
-> > > > > Attached.
-> > > > >
-> > > > > Pstate 10: spin_minmax_10_dahu-9_5.15.0freq_schedutil_11.turbo
-> > > > > Pstate 20: spin_minmax_20_dahu-9_5.15.0freq_schedutil_11.turbo
-> > > >
-> > > > Well, in  both cases there is only 1 CPU running and it is running at
-> > > > 1 GHz (ie. P-state 10) all the time as far as I can say.
-> > >
-> > > It looks better now.  I included 1 core (core 0) for pstates 10, 20, and
-> > > 21, and 32 cores (socket 0) for the same pstates.
-> >
-> > OK, so let's first consider the runs where 32 cores (entire socket 0)
-> > are doing the work.
-> >
-> > This set of data clearly shows that running the busy cores at 1 GHz
-> > takes less energy than running them at 2 GHz (the ratio of these
-> > numbers is roughly 2/3 if I got that right).  This means that P-state
-> > 10 is more energy efficient than P-state 20, as expected.
->
-> Here all the threads always spin for 10 seconds.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 3d72f8341423038eaf304155884dda9989a2fc58  Merge branches 'thermal' and 'thermal-int340x' into linux-next
 
-That escaped me, sorry.
+possible Warning in current branch (please contact us if interested):
 
->  But if they had a fixed
-> amount of work to do, they should finish twice as fast at pstate 20.
-> Currently, we have 708J at pstate 10 and 905J at pstate 20, but if we can
-> divide the time at pstate 20 by 2, we should be around 450J, which is much
-> less than 708J.
+sound/soc/sh/rz-ssi.c:1023:9: warning: ignoring return value of 'pm_runtime_resume_and_get' declared with attribute 'warn_unused_result' [-Wunused-result]
 
-But socket 1 is idle and only slightly affected by P-state changes in
-the range below P-state 21, so the difference that matters here is
-between socket 0 running at 1 GHz and that socket running  at 2 GHz,
-which is 420 J vs 620 J (rounded to the closest multiple of 10 J).
+Warning ids grouped by kconfigs:
 
-> turbostat -J sleep 5 shows 105J, so we're still ahead.
->
-> I haven't yet tried the actual experiment of spinning for 5 seconds and
-> then sleeping for 5 seconds, though.
->
-> >
-> > However, the cost of running at 2.1 GHz is much greater than the cost
-> > of running at 2 GHz and I'm still thinking that this is attributable
-> > to some kind of voltage increase between P-state 20 and P-state 21
-> > (which, interestingly enough, affects the second "idle" socket too).
-> >
-> > In the other set of data, where only 1 CPU is doing the work, P-state
-> > 10 is still more energy-efficient than P-state 20,
->
-> Actually, this doesn't seem to be the case.  It's surely due to the
-> approximation of the result, but the consumption is slightly lower for
-> pstate 20.  With more runs it probably averages out to around the same.
+gcc_recent_errors
+|-- arc-allyesconfig
+|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
+|-- arm-allmodconfig
+|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
+|-- arm-allyesconfig
+|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
+|-- arm64-allyesconfig
+|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
+|-- arm64-defconfig
+|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
+|-- ia64-allyesconfig
+|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
+|-- m68k-allmodconfig
+|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
+|-- m68k-allyesconfig
+|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
+|-- mips-allmodconfig
+|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
+|-- mips-allyesconfig
+|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
+|-- parisc-allyesconfig
+|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
+|-- powerpc-allmodconfig
+|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
+|-- powerpc-allyesconfig
+|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
+|-- s390-allyesconfig
+|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
+`-- sparc-allyesconfig
+    `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
 
-First of all, the cost of keeping a socket in the state in which CPUs
-can execute code (referred to as PS0 sometimes) is relatively large on
-that system.
+elapsed time: 1467m
 
-Because socket 1 spending the vast majority of time in PC2 (in which
-instructions cannot be executed by the CPUs in it) consistently draws
-around 29 W when CPUs in socket 0 run at 1-2 GHz, the power needed to
-keep socket 0 in PC0 must be larger than this and it looks like it is
-around 30 W for the given range of P-states (because it cannot exceed
-the total power needed to run 1 CPU at 1 GHz). Running 1 CPU 100% busy
-on top of that makes around 1% of a difference which is likely below
-the accuracy of the power meter (ie. in the noise).
+configs tested: 54
+configs skipped: 3
 
-In the case when all of the 16 cores (32 CPUs) in socket 0 are running
-we have the 29 J drawn by socket 1 (idle), around 30 W drawn by the
-memory (on both sockets), 30 W drawn by socket 0 just because it is in
-PC0 all the time and the power drawn because the cores are actually
-running.  That last part is around 12 W when they are running at 1 GHz
-or around 32 W when they are running at 2 GHz, so if the running cores
-alone are taken into consideration, the latter is still more expensive
-after all even if work is done twice as fast then.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-However, in practice everything counts, not just the running cores
-alone, so what is more efficient really depends on the use case.
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+powerpc                          allyesconfig
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                    rhel-8.3-kselftests
 
-For example, if it is known that at least 1 CPU will be 100% busy all
-the time, the power drawn by socket 1 (mostly in PC2), by the memory
-and in order to hold socket 0 in PC0 will need to be drawn anyway and
-in that case 1 GHz is more efficient.
-
-If the system as a whole can be completely idle at least from time to
-time (in which state it will draw much less power as a whole), though,
-it is likely more efficient to run the CPUs at 2 GHz.
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
