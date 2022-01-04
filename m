@@ -2,108 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD884843D3
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Jan 2022 15:52:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9549A4843F7
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Jan 2022 15:57:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234480AbiADOwe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Jan 2022 09:52:34 -0500
-Received: from relmlor1.renesas.com ([210.160.252.171]:6078 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S233208AbiADOwb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jan 2022 09:52:31 -0500
-X-IronPort-AV: E=Sophos;i="5.88,261,1635174000"; 
-   d="scan'208";a="105485577"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 04 Jan 2022 23:52:29 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 800AB4205AA3;
-        Tue,  4 Jan 2022 23:52:26 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] thermal: rcar_thermal: Use platform_get_irq_optional() to get the interrupt
-Date:   Tue,  4 Jan 2022 14:52:11 +0000
-Message-Id: <20220104145212.4608-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
+        id S234538AbiADO5Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Jan 2022 09:57:24 -0500
+Received: from mail-qt1-f175.google.com ([209.85.160.175]:34707 "EHLO
+        mail-qt1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234518AbiADO5U (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jan 2022 09:57:20 -0500
+Received: by mail-qt1-f175.google.com with SMTP id o17so34341814qtk.1;
+        Tue, 04 Jan 2022 06:57:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WSJgFExu/X7wt2tCNz4jIqrdOE7wTC6/5Y//ZXGA70g=;
+        b=l4/UrgaQkblLCgtA4hA2w2HUl34I2FviCZZ+/Fuw57lCRXt6QuiHOldR8710Cut99U
+         xNNRfm4vofhigRSZOvFaw+MZn8j6rAtg6Wh++D2Mm+pPGDL4pvokG6LCJMrkFUoqjOji
+         Q7U6fji4ejXS2/jcalxoGpToMxt6fu4GvKk1A36h80uJXXqKzG/xo35leEYEljuwQPhH
+         DHviEPOO2J7UKfxslXKSeG8E21r/GP3+oRUCTDnqL4p9vFNmzvGNRH4+5frTNnUfITnU
+         9xlLJJmtdYRGA7clsVQZlExVi64oGcQaDnKyOs/UxSq+8PLRGriSPNAsl4NULxsyY8Kl
+         ZqEQ==
+X-Gm-Message-State: AOAM532OEbnDuixp9ANda5R1WcOfvSmePY/Lco0C/oCa239A4pjIAl1W
+        SOfCcDCfP9ATG6nB2aXRsraV7l1veT8zPHSG7TVaSMGJ
+X-Google-Smtp-Source: ABdhPJxMgNo/xF6dU5+Nzut94xdyfTKHf2qUDqB6uRRKoU2Ihc9s9sMectG5DEeB22/MV2U+0cO/0k+61KwpUMv2L20=
+X-Received: by 2002:ac8:7c4e:: with SMTP id o14mr44266202qtv.80.1641308239742;
+ Tue, 04 Jan 2022 06:57:19 -0800 (PST)
+MIME-Version: 1.0
+References: <20220104111551.7f26e893@canb.auug.org.au> <d485fb62-b576-f9b6-13bc-709a2c409240@gmail.com>
+ <20220104190220.45c8e0cf@canb.auug.org.au> <c905fd23-19c1-218f-819b-b8ae3434f48c@gmail.com>
+In-Reply-To: <c905fd23-19c1-218f-819b-b8ae3434f48c@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 4 Jan 2022 15:57:08 +0100
+Message-ID: <CAJZ5v0i4SNV+NRHW9f0epJu9UAALxD3C3abJjPTJM81Uy292EQ@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the pm tree
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-allocation of IRQ resources in DT core code, this causes an issue
-when using hierarchical interrupt domains using "interrupts" property
-in the node as this bypasses the hierarchical setup and messes up the
-irq chaining.
+On Tue, Jan 4, 2022 at 3:43 PM Heiner Kallweit <hkallweit1@gmail.com> wrote:
+>
+> On 04.01.2022 09:02, Stephen Rothwell wrote:
+> > Hi Heiner,
+> >
+> > On Tue, 4 Jan 2022 08:29:28 +0100 Heiner Kallweit <hkallweit1@gmail.com> wrote:
+> >>
+> >> The patch in the pm tree annotating pm_runtime_resume_and_get() as __must_check
+> >> follows some fixes of pm_runtime_resume_and_get() usage that went through other
+> >> trees. These fixes are in linux-next but don't seem to be in the pm tree.
+> >> We talk about:
+> >> f04b4fb47d83 ("ASoC: sh: rz-ssi: Check return value of pm_runtime_resume_and_get()")
+> >
+> > In the sound-asoc tree.
+> >
+> >> 3d6b661330a7 ("crypto: stm32 - Revert broken pm_runtime_resume_and_get changes")
+> >
+> > In the crypto tree.
+> >
+> > Both those are merged into linux-next after the pm tree.  If Linus did
+> > the same, the pm tree commit would break his build.  The only way you
+> > can have that pm tree commit in linux-next is to ask Andrew Morton to
+> > put it in the post linux-next part of his patch series.  Otherwise, it
+> > needs to be removed form the pm tree and wait until after the next
+> > merge window closes (or at least both the above trees have been merged
+> > by Linus).
+> >
+> Rafael,
+> can you take care of this?
 
-In preparation for removal of static setup of IRQ resource from DT core
-code use platform_get_irq_optional().
+Done.
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
-v2-v3:
-* Fixed review comment pointed by Andy
-
-v1->v2
-* Simplified checking error code
-* Break loop earlier if no interrupts are seen
-
-v1: https://lkml.org/lkml/2021/12/18/163
----
- drivers/thermal/rcar_thermal.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
-index b49f04daaf47..e480f7290ccf 100644
---- a/drivers/thermal/rcar_thermal.c
-+++ b/drivers/thermal/rcar_thermal.c
-@@ -445,7 +445,7 @@ static int rcar_thermal_probe(struct platform_device *pdev)
- 	struct rcar_thermal_common *common;
- 	struct rcar_thermal_priv *priv;
- 	struct device *dev = &pdev->dev;
--	struct resource *res, *irq;
-+	struct resource *res;
- 	const struct rcar_thermal_chip *chip = of_device_get_match_data(dev);
- 	int mres = 0;
- 	int i;
-@@ -467,9 +467,16 @@ static int rcar_thermal_probe(struct platform_device *pdev)
- 	pm_runtime_get_sync(dev);
- 
- 	for (i = 0; i < chip->nirqs; i++) {
--		irq = platform_get_resource(pdev, IORESOURCE_IRQ, i);
--		if (!irq)
--			continue;
-+		int irq;
-+
-+		irq = platform_get_irq_optional(pdev, i);
-+		if (irq < 0 && irq != -ENXIO) {
-+			ret = irq;
-+			goto error_unregister;
-+		}
-+		if (!irq || irq == -ENXIO)
-+			break;
-+
- 		if (!common->base) {
- 			/*
- 			 * platform has IRQ support.
-@@ -487,7 +494,7 @@ static int rcar_thermal_probe(struct platform_device *pdev)
- 			idle = 0; /* polling delay is not needed */
- 		}
- 
--		ret = devm_request_irq(dev, irq->start, rcar_thermal_irq,
-+		ret = devm_request_irq(dev, irq, rcar_thermal_irq,
- 				       IRQF_SHARED, dev_name(dev), common);
- 		if (ret) {
- 			dev_err(dev, "irq request failed\n ");
--- 
-2.17.1
-
+I've dropped the commit in question from pm-core and I'm going to add
+it back and submit by the end of the merge window.
