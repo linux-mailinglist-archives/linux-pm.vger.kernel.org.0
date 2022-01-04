@@ -2,162 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D022A483A90
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Jan 2022 03:24:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 995E1483ABF
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Jan 2022 03:58:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232209AbiADCX7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Jan 2022 21:23:59 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:42308
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229469AbiADCX7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jan 2022 21:23:59 -0500
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com [209.85.167.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 33073406EC
-        for <linux-pm@vger.kernel.org>; Tue,  4 Jan 2022 02:23:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1641263032;
-        bh=5cazmRarXDvXEd4JyRxvrVTfaRwqdqkKmDWF6lTNaUE=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=OC+a05owYoZbbBaZCe+95fUB4J6NHoJKYEFV0Bx/Xj/k2HCCFup/7Yct9Qo7JsEnU
-         bmGnnjw1O11lwpD+aQU52HZ1eQ33FhKZgfMv01vpRaMic5U/48V+AN3SzZ1c1HSCbZ
-         r+8BiWkSHhEpSW5154T0Rr3Bxf7z5GVwln888DtT1nWytI2ERpIcQ20Vi+MkDrJ195
-         e4LpQ4sov2S87gX5ZdVuHYkvL9trAA6/lZ+c8I4mRt+1w1uKU8cyDkB7cbK3kVcOBz
-         /cgrq3uomQcExBElDKTGCF+5IZXr5zfPVyvBlV6VWlXZpPY8fExQjBddQLKBz8tIw6
-         X/KOft12SXOYw==
-Received: by mail-oi1-f198.google.com with SMTP id w133-20020acadf8b000000b002c6c86f4afbso23168905oig.16
-        for <linux-pm@vger.kernel.org>; Mon, 03 Jan 2022 18:23:52 -0800 (PST)
+        id S232411AbiADC6u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Jan 2022 21:58:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39096 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231172AbiADC6t (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jan 2022 21:58:49 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7864C061761;
+        Mon,  3 Jan 2022 18:58:49 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id h1so22884388pls.11;
+        Mon, 03 Jan 2022 18:58:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=OQY/hTNMQjXQ3XWIE7F5XZaTxUiq57IOz3DJuepeLhQ=;
+        b=B5h1GMCf5Ozq9KbPpMv5cLXTdQga/g5NqMXXlO30jgbsdbrVN+v5v404KQurT8lj4I
+         2yZ+6lxHHWkm4kaodAPGeWJMQi7BCbDnemVqadSPchYMuCeMKihB/rvZaW9KHzShAJ8z
+         S0PB8qRlYog9BLA4a6vFoTYMrraaNs2E3GkmAdMU17tCXZzTpBAy6BAmr3oXBIbgoSp8
+         xEZjex4xvRq8iYWo09FKzboGbgjt0U1RxIXYVQpXe6AKiCFn7kk8DHcip515Tz8qjocb
+         jsqQfVD6k95ZKszsigiXsmwT4h0TMhDS4K/5YRFZw4xW2SqQiJknPC7j+GqvgyytMP7B
+         kN3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5cazmRarXDvXEd4JyRxvrVTfaRwqdqkKmDWF6lTNaUE=;
-        b=DX6pGgDqyvjHhxKyfqepiM0vggkii1Q/D0gYXDCyeba+G8+rxhL2DEaYFPhiJlRpVq
-         JAAGEkH7vF7K3YccVEYNiud+gpw8TOS2IXtRsvncMQBJX1avyzzNz77rAWhONAijJgiu
-         1/FtGQgZETVKTt6PhreBcUfQ+vw2A0g05E5/yas2mnvbKVQejOC+ClxhFLsRGzWnX/ZS
-         tq8X3w5Cezm6bzeo3L38a1oSG2zFpUOl7aE01E8A/oCAoSjj4Ujcr+qmT4eavvK52OH6
-         CMiA+sgA4RIAXrU8IIdTCcD9HS0VDPdy205BF2epYPNWeI4B2orGmUlMc22eP4wnHCEP
-         o4bQ==
-X-Gm-Message-State: AOAM5321ZfRjOI3xQZ7BIT7laS+1ypcIq8CBFmd/fOr8qLbLIvqZHh+w
-        cZQ4J8VPfX5XxaEWUTrRB4MTct58Lo/g3to5G6bA6Wgm+L3mI3Vi7m4FyUHq21yZb2twZkNpLuO
-        cDCE7nglGWjLlSdMlHxHuVuaHBCDlfR/f/szpXBP0e6q7+R9WUuQx
-X-Received: by 2002:a9d:24e4:: with SMTP id z91mr33904514ota.11.1641263030936;
-        Mon, 03 Jan 2022 18:23:50 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzPidDUDT7zkVJQH32VyKsgWKAjH6fZz3mxUzBG8x2j81B9Qp88ucqAoNaI+qAUs/lvK97Qw+QQyoy3s0UZ3/4=
-X-Received: by 2002:a9d:24e4:: with SMTP id z91mr33904498ota.11.1641263030633;
- Mon, 03 Jan 2022 18:23:50 -0800 (PST)
-MIME-Version: 1.0
-References: <20211224081914.345292-2-kai.heng.feng@canonical.com>
- <20211229201814.GA1699315@bhelgaas> <CAAd53p74bHYmQJzKuriDrRWpJwXivfYCfNCsUjC47d1WKUZ=gQ@mail.gmail.com>
- <SJ0PR11MB500869254A4E9DEEC1DF3B5DD7499@SJ0PR11MB5008.namprd11.prod.outlook.com>
-In-Reply-To: <SJ0PR11MB500869254A4E9DEEC1DF3B5DD7499@SJ0PR11MB5008.namprd11.prod.outlook.com>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Tue, 4 Jan 2022 10:23:38 +0800
-Message-ID: <CAAd53p4-Sxx+8bF4ZTA9R7L=bJHv2yTCPSoFHmPpHHPFd1Bx+g@mail.gmail.com>
-Subject: Re: [PATCH 2/2] net: wwan: iosm: Keep device at D0 for s2idle case
-To:     "Kumar, M Chetan" <m.chetan.kumar@intel.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linuxwwan <linuxwwan@intel.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Vaibhav Gupta <vaibhavgupta40@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=OQY/hTNMQjXQ3XWIE7F5XZaTxUiq57IOz3DJuepeLhQ=;
+        b=02SlBy4jcun1guhYDT+HVytzYmNBJUiQUyPHjWg8onBVeO5kfMP9B9dk/B2e/cbWGp
+         A/48RVlrlVJSTHhwWapdXQgoL+xyG5u4r8U7GVMRktHoRTDyE6H79wL5RHkLrgSC+aWj
+         kdrmQHuX1QmyOhCPf4KSft+NqOCXMVeidvs9tTNtKzYNBtsKmmM9BUkaRu2xjYok4Jrr
+         9fVVJcwblrZqXpATiINxmsv/Idmxp8v7kZQ4G+KWg44ubw+A0KWi4c9QE/y4eepf6AVc
+         g8wSJAmcAzPs7tQrmF0metG1dVsQ+bGhcN8nnVnu70FvvKsScy/FwaqsoWXYUea3Mi5W
+         iuuQ==
+X-Gm-Message-State: AOAM532BfkqTxwBZivqoLg3XqG9xT0UvpRYv7FYtKJq2IiwpcIcUe9og
+        4MMXsWrT8Icw/SMT0L0UYb4=
+X-Google-Smtp-Source: ABdhPJxTDkjCEEJTdfh4TFJJnpCILCQhcQ5Sah8XvbCV7NEexq+MLmqOhZeFzts4BVEmGSa6iv/t+Q==
+X-Received: by 2002:a17:90a:7e8a:: with SMTP id j10mr16824650pjl.13.1641265128640;
+        Mon, 03 Jan 2022 18:58:48 -0800 (PST)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id k23sm573142pji.3.2022.01.03.18.58.46
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 03 Jan 2022 18:58:48 -0800 (PST)
+From:   Li-hao Kuo <lhjeff911@gmail.com>
+To:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com, robh+dt@kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     wells.lu@sunplus.com, lh.kuo@sunplus.com,
+        Li-hao Kuo <lhjeff911@gmail.com>
+Subject: [PATCH v3 0/2] Add THERMAL control driver for Sunplus SP7021 SoC
+Date:   Tue,  4 Jan 2022 10:58:55 +0800
+Message-Id: <cover.1641264908.git.lhjeff911@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jan 3, 2022 at 11:28 PM Kumar, M Chetan
-<m.chetan.kumar@intel.com> wrote:
->
-> > -----Original Message-----
-> > From: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> > Sent: Thursday, December 30, 2021 6:31 AM
-> > To: Bjorn Helgaas <helgaas@kernel.org>
-> > Cc: Kumar, M Chetan <m.chetan.kumar@intel.com>; linuxwwan
-> > <linuxwwan@intel.com>; linux-pci@vger.kernel.org; linux-
-> > pm@vger.kernel.org; Loic Poulain <loic.poulain@linaro.org>; Sergey
-> > Ryazanov <ryazanov.s.a@gmail.com>; Johannes Berg
-> > <johannes@sipsolutions.net>; David S. Miller <davem@davemloft.net>;
-> > Jakub Kicinski <kuba@kernel.org>; netdev@vger.kernel.org; linux-
-> > kernel@vger.kernel.org; Rafael J. Wysocki <rjw@rjwysocki.net>; Vaibhav
-> > Gupta <vaibhavgupta40@gmail.com>
-> > Subject: Re: [PATCH 2/2] net: wwan: iosm: Keep device at D0 for s2idle case
-> >
-> > On Thu, Dec 30, 2021 at 4:18 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > >
-> > > [+cc Rafael, Vaibhav]
-> > >
-> > > On Fri, Dec 24, 2021 at 04:19:14PM +0800, Kai-Heng Feng wrote:
-> > > > We are seeing spurious wakeup caused by Intel 7560 WWAN on AMD
-> > laptops.
-> > > > This prevent those laptops to stay in s2idle state.
-> > > >
-> > > > From what I can understand, the intention of ipc_pcie_suspend() is
-> > > > to put the device to D3cold, and ipc_pcie_suspend_s2idle() is to
-> > > > keep the device at D0. However, the device can still be put to
-> > > > D3hot/D3cold by PCI core.
-> > > >
-> > > > So explicitly let PCI core know this device should stay at D0, to
-> > > > solve the spurious wakeup.
->
-> Did you get a chance to check the cause of spurious wakeup ? Was there any
-> information device is trying to send while platform is entering suspend/
-> host sw missed to unsubscribe certain notifications which resulted in wake event.
+This is a patch series for THERMAL driver for Sunplus SP7021 SoC.
 
-Can you please let me know how to check it?
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and
+etc.) into a single chip. It is designed for industrial control.
 
->
-> In our internal test (x86 platform) we had not noticed such spurious wakeup but would
-> like to cross check by running few more tests.
+Refer to:
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+https://tibbo.com/store/plus1.html
 
-Sure, let me know what tests you want me to run.
+Li-hao Kuo (2):
+  THERMAL: Add THERMAL driver for Sunplus SP7021
+  devicetree: bindings THERMAL Add bindings doc for Sunplus SP7021
 
->
-> > > >
-> > > > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> > > > ---
-> > > >  drivers/net/wwan/iosm/iosm_ipc_pcie.c | 3 +++
-> > > >  1 file changed, 3 insertions(+)
-> > > >
-> > > > diff --git a/drivers/net/wwan/iosm/iosm_ipc_pcie.c
-> > > > b/drivers/net/wwan/iosm/iosm_ipc_pcie.c
-> > > > index d73894e2a84ed..af1d0e837fe99 100644
-> > > > --- a/drivers/net/wwan/iosm/iosm_ipc_pcie.c
-> > > > +++ b/drivers/net/wwan/iosm/iosm_ipc_pcie.c
-> > > > @@ -340,6 +340,9 @@ static int __maybe_unused
-> > > > ipc_pcie_suspend_s2idle(struct iosm_pcie *ipc_pcie)
-> > > >
-> > > >       ipc_imem_pm_s2idle_sleep(ipc_pcie->imem, true);
-> > > >
-> > > > +     /* Let PCI core know this device should stay at D0 */
-> > > > +     pci_save_state(ipc_pcie->pci);
-> > >
-> > > This is a weird and non-obvious way to say "this device should stay at
-> > > D0".  It's also fairly expensive since pci_save_state() does a lot of
-> > > slow PCI config reads.
-> >
-> > Yes, so I was waiting for feedback from IOSM devs what's the expected PCI
-> > state for the s2idle case.
->
-> D3 is the expected state.
+ .../bindings/thermal/sunplus_thermal.yaml          |  49 +++++++
+ MAINTAINERS                                        |   7 +
+ drivers/thermal/Kconfig                            |  10 ++
+ drivers/thermal/Makefile                           |   1 +
+ drivers/thermal/sunplus_thermal.c                  | 161 +++++++++++++++++++++
+ 5 files changed, 228 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/thermal/sunplus_thermal.yaml
+ create mode 100644 drivers/thermal/sunplus_thermal.c
 
-Is it D3hot or D3cold?
+-- 
+2.7.4
 
-Kai-Heng
-
->
-> > Dave, can you drop it from netdev until IOSM devs confirm this patch is
-> > correct?
->
-> Dave, please drop this patch from netdev.
