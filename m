@@ -2,84 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9549A4843F7
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Jan 2022 15:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E3AE48442C
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Jan 2022 16:05:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234538AbiADO5Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Jan 2022 09:57:24 -0500
-Received: from mail-qt1-f175.google.com ([209.85.160.175]:34707 "EHLO
-        mail-qt1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234518AbiADO5U (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jan 2022 09:57:20 -0500
-Received: by mail-qt1-f175.google.com with SMTP id o17so34341814qtk.1;
-        Tue, 04 Jan 2022 06:57:20 -0800 (PST)
+        id S233194AbiADPFj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Jan 2022 10:05:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34722 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232087AbiADPFi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jan 2022 10:05:38 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CB3C061761;
+        Tue,  4 Jan 2022 07:05:38 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id e202so66151004ybf.4;
+        Tue, 04 Jan 2022 07:05:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BALCb4IQm/GwztxbFONFkzBgFbeC1YxSt8jC3/n5QF8=;
+        b=MBvr7j9wSDxa6r+DmF54Rv/yAt8b8hBI2IPx2tvGlSHlgD7PU5JsTUtrfdU0HPFyg9
+         SRNG87Uba7dDI3z3vHTqJlxhfgVDi1MmqMP4/R5AFausKLkZjGksTywEqzw+r/5zszl2
+         8jwSpD8WJajqW9JXtrcTv3vIbAjWKeZuxGCcnnsXov70QKCraWZNID3JhDqdzCm9Aeg7
+         JVD0TmqAU42OqLSt9on1NGyLr48UqwZaD/Gi0DLIiW4q0KjRT/rC5kJTx6eoQrezh3j+
+         XlSjiNa5aLXY38KekR+qoqxwswyugBM9jsquGXcUxn+uFH00d8yxbc93YdH+cQqOZNcE
+         D8mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=WSJgFExu/X7wt2tCNz4jIqrdOE7wTC6/5Y//ZXGA70g=;
-        b=l4/UrgaQkblLCgtA4hA2w2HUl34I2FviCZZ+/Fuw57lCRXt6QuiHOldR8710Cut99U
-         xNNRfm4vofhigRSZOvFaw+MZn8j6rAtg6Wh++D2Mm+pPGDL4pvokG6LCJMrkFUoqjOji
-         Q7U6fji4ejXS2/jcalxoGpToMxt6fu4GvKk1A36h80uJXXqKzG/xo35leEYEljuwQPhH
-         DHviEPOO2J7UKfxslXKSeG8E21r/GP3+oRUCTDnqL4p9vFNmzvGNRH4+5frTNnUfITnU
-         9xlLJJmtdYRGA7clsVQZlExVi64oGcQaDnKyOs/UxSq+8PLRGriSPNAsl4NULxsyY8Kl
-         ZqEQ==
-X-Gm-Message-State: AOAM532OEbnDuixp9ANda5R1WcOfvSmePY/Lco0C/oCa239A4pjIAl1W
-        SOfCcDCfP9ATG6nB2aXRsraV7l1veT8zPHSG7TVaSMGJ
-X-Google-Smtp-Source: ABdhPJxMgNo/xF6dU5+Nzut94xdyfTKHf2qUDqB6uRRKoU2Ihc9s9sMectG5DEeB22/MV2U+0cO/0k+61KwpUMv2L20=
-X-Received: by 2002:ac8:7c4e:: with SMTP id o14mr44266202qtv.80.1641308239742;
- Tue, 04 Jan 2022 06:57:19 -0800 (PST)
+        bh=BALCb4IQm/GwztxbFONFkzBgFbeC1YxSt8jC3/n5QF8=;
+        b=va95/ya5HaMxlfAKNjVc5YFR9bx0n/u+1GxFDSW7IphIwncAkNoFaw05CsiPAASEau
+         plFLao5emaJJp+Vd4Ldp87rKXmAo4NDcToqNQUvi4m96BB6Dvq2Kz98hKUjGMyu+vZYY
+         1+VNSorsud/k37oZie33F9N3Ob//FIYuKLrGX3bQkMDQsMIRp37B5aSYJ83rt8D0SvMu
+         1b6+JlpgLu4SHaPl9c7HxURD1n5mSV1XocT65PojS4S/sy3Hs8fuBM0Tdn46/YYLx85H
+         aJpY48StWbvvPT59+MsrIAJFxENHa4Ye/fhLnBQ5QirojsLZcYVboffY4f+mG/KW5B65
+         iDpA==
+X-Gm-Message-State: AOAM533Jg8YEDDQpwWjb1LtnldvF7doCt98byisX8703u5mUDZDApZ7M
+        UT09t3m8eWk4rE2YxcUOmfh6ebqMihP8S8G+f5rCjla1CSg=
+X-Google-Smtp-Source: ABdhPJxkDQuQ5UmgB51ZHBEfNedFXZU7ke8KQffBjb21iLwnDUSUnBe5hv/Xp36E/v3SfZ9GoSJfBmmElw4hIi7OPiw=
+X-Received: by 2002:a5b:bc1:: with SMTP id c1mr39737268ybr.669.1641308738036;
+ Tue, 04 Jan 2022 07:05:38 -0800 (PST)
 MIME-Version: 1.0
-References: <20220104111551.7f26e893@canb.auug.org.au> <d485fb62-b576-f9b6-13bc-709a2c409240@gmail.com>
- <20220104190220.45c8e0cf@canb.auug.org.au> <c905fd23-19c1-218f-819b-b8ae3434f48c@gmail.com>
-In-Reply-To: <c905fd23-19c1-218f-819b-b8ae3434f48c@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 4 Jan 2022 15:57:08 +0100
-Message-ID: <CAJZ5v0i4SNV+NRHW9f0epJu9UAALxD3C3abJjPTJM81Uy292EQ@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the pm tree
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+References: <20220104134512.18498-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAHp75Vcx1Ey-SHBCgBh1RM=PTBRcncGOwAx9_6PL+sDJtzezvw@mail.gmail.com>
+In-Reply-To: <CAHp75Vcx1Ey-SHBCgBh1RM=PTBRcncGOwAx9_6PL+sDJtzezvw@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Tue, 4 Jan 2022 15:05:12 +0000
+Message-ID: <CA+V-a8uduHrVr4HWAgPt3YP_g27xhi4FdsrANn9S5mY0TBSvbg@mail.gmail.com>
+Subject: Re: [PATCH v4] soc: ti: smartreflex: Use platform_get_irq_optional()
+ to get the interrupt
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux PM <linux-pm@vger.kernel.org>
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jan 4, 2022 at 3:43 PM Heiner Kallweit <hkallweit1@gmail.com> wrote:
+On Tue, Jan 4, 2022 at 2:50 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
 >
-> On 04.01.2022 09:02, Stephen Rothwell wrote:
-> > Hi Heiner,
+> On Tue, Jan 4, 2022 at 3:45 PM Lad Prabhakar
+> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
 > >
-> > On Tue, 4 Jan 2022 08:29:28 +0100 Heiner Kallweit <hkallweit1@gmail.com> wrote:
-> >>
-> >> The patch in the pm tree annotating pm_runtime_resume_and_get() as __must_check
-> >> follows some fixes of pm_runtime_resume_and_get() usage that went through other
-> >> trees. These fixes are in linux-next but don't seem to be in the pm tree.
-> >> We talk about:
-> >> f04b4fb47d83 ("ASoC: sh: rz-ssi: Check return value of pm_runtime_resume_and_get()")
+> > platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> > allocation of IRQ resources in DT core code, this causes an issue
+> > when using hierarchical interrupt domains using "interrupts" property
+> > in the node as this bypasses the hierarchical setup and messes up the
+> > irq chaining.
 > >
-> > In the sound-asoc tree.
+> > In preparation for removal of static setup of IRQ resource from DT core
+> > code use platform_get_irq_optional().
 > >
-> >> 3d6b661330a7 ("crypto: stm32 - Revert broken pm_runtime_resume_and_get changes")
-> >
-> > In the crypto tree.
-> >
-> > Both those are merged into linux-next after the pm tree.  If Linus did
-> > the same, the pm tree commit would break his build.  The only way you
-> > can have that pm tree commit in linux-next is to ask Andrew Morton to
-> > put it in the post linux-next part of his patch series.  Otherwise, it
-> > needs to be removed form the pm tree and wait until after the next
-> > merge window closes (or at least both the above trees have been merged
-> > by Linus).
-> >
-> Rafael,
-> can you take care of this?
+> > While at it return 0 instead of returning ret in the probe success path.
+>
+> ...
+>
+> > +       ret = platform_get_irq_optional(pdev, 0);
+> > +       if (ret < 0 && ret != -ENXIO) {
+>
+> > +               dev_err_probe(&pdev->dev, ret, "%s: failed to get IRQ resource\n", __func__);
+> > +               return ret;
+>
+> return dev_err_probe(...); ?
+>
+Argh my bad.
 
-Done.
-
-I've dropped the commit in question from pm-core and I'm going to add
-it back and submit by the end of the merge window.
+Cheers,
+Prabhakar
