@@ -2,137 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B655948448B
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Jan 2022 16:29:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E6E2484530
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Jan 2022 16:49:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234678AbiADP3p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Jan 2022 10:29:45 -0500
-Received: from mail-ot1-f53.google.com ([209.85.210.53]:33346 "EHLO
-        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbiADP3o (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jan 2022 10:29:44 -0500
-Received: by mail-ot1-f53.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso47791576otf.0;
-        Tue, 04 Jan 2022 07:29:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xWoBmQ/Xq0c3l218W4If/18Ogxhx6vVmLTRO9/MBVEk=;
-        b=L/PLA48iCsM8zlcRJD+1cdugU7oIoGLkfCbF30P4Yp2V/G9FAn1jE3tMUBEvq0qtob
-         k9fM6aZLnx2RdOr5p8ziK6MJ81BSfzOnpJWX9SL0+mMcTgcymhBO1tJk6cN16Etwryus
-         fnbr9dBdZTc+g3jBSVD1OlMljhp6U1yJk4zbGX97WbYL2mX0ASpPYQi8QpBEbRGStb2V
-         eemfZwkO6Xq+rbT/WKwNDM01iKnw1pAdwEC957gyl2qaVVfGNui6+k0vzamuCZ+tk5Ho
-         I+9SOjDo2De61m2oOWEH+02VZEQS5KQtA13H5CZYrVQxYzmwGcY7uGvFaNemrP6QZntm
-         sE+w==
-X-Gm-Message-State: AOAM533zOAGDUOLM7LkRfiRhz4cOtpKtuZhi+LamgQJpI+6xJQVKGbUJ
-        XfCmRSEgQXjk9JP1LLcqJw==
-X-Google-Smtp-Source: ABdhPJys1YUFCxDtCeyfPt60STEmiPO3oYdgxBYsW9u1PDFxyC2a9WwVQUeMgPmRD4v/QTwGTyyrMg==
-X-Received: by 2002:a9d:6e0a:: with SMTP id e10mr33368896otr.323.1641310183378;
-        Tue, 04 Jan 2022 07:29:43 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id n18sm7900663ooj.30.2022.01.04.07.29.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 07:29:42 -0800 (PST)
-Received: (nullmailer pid 872552 invoked by uid 1000);
-        Tue, 04 Jan 2022 15:29:41 -0000
-Date:   Tue, 4 Jan 2022 09:29:41 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH 3/4] regulator: dt-bindings: maxim,max77693: convert to
- dtschema
-Message-ID: <YdRn5cvksYXK4icV@robh.at.kernel.org>
-References: <20211228163930.35524-1-krzysztof.kozlowski@canonical.com>
- <20211228163930.35524-4-krzysztof.kozlowski@canonical.com>
+        id S232812AbiADPtK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Jan 2022 10:49:10 -0500
+Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:62141
+        "EHLO mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230352AbiADPtJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jan 2022 10:49:09 -0500
+IronPort-Data: =?us-ascii?q?A9a23=3AYUT76KpX7Pi54w4vrSRUHGaGhKteBmIOZBIvgKr?=
+ =?us-ascii?q?LsJaIsI5as4F+vjZLDG7QP/yMYzbyc4t3O4rnpE4AvZLRx9FgTQBkpHthQiMRo?=
+ =?us-ascii?q?6IpJ/zJdxaqZ3v6wu7rFR88sZ1GMrEsFC2FJ5Pljk/F3oPJ8D8shclkepKmULS?=
+ =?us-ascii?q?eYnkpGVc+IMscoUkLd9AR09cAbeeRU1vlVePa+6UzCXf9s9JGGjp8B5Gr9HuDi?=
+ =?us-ascii?q?M/PVAYw5TTSUxzkUGj2zBH5BLpHTU24wuCRroN8RoZWTM6bpF21E/+wwvsjNj+?=
+ =?us-ascii?q?luu6TnkwiQrfeJwmDjBK6WYDy314c9mpriP99baVHAatUo2zhc9RZyshJtJX2T?=
+ =?us-ascii?q?Q42N6nIsOUbSRhRVS9kVUFD0OaZeSjh75b7I0ruNiGEL+9VJFs/M4QV/s50DHt?=
+ =?us-ascii?q?I+PheLyoCBjiImvisx7C2UOR+rt4iN8T2JMUZt20I5SrDDPAnX5nYBb3D49NCw?=
+ =?us-ascii?q?Sk5islmGffYetpfaDxzYRCGaBpKUn8TBZQ0tOSlnH/yd3tfsl39jbQ2+WXIzEp?=
+ =?us-ascii?q?yzb3kKvLRe9qDX8ITmVyXzkrC/mLkElQCMfSBxjeftHGhnOnCmWX8Qo16PLm58?=
+ =?us-ascii?q?ON6xV6e3GoeDDUIWlah5/q0kEizX5RYMUN80i8vq6c13FamQtn0Q1uzp3vslgY?=
+ =?us-ascii?q?RR9dKAcU77g+Xw6bZ6grfAXILJhZDdcYn8ss7QTgr/kWEk9PgGXpkt7j9YWyc8?=
+ =?us-ascii?q?LyZqy/0NjUUMXMFeQcATA0M+d6lp5s85i8j5P4L/LWd14KuX2iqmnbU/G5u2vM?=
+ =?us-ascii?q?JgNBNzKuhu1bKn1qRSlHyZlZdzm3qsqiNt2uVvLKYWrE=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AEiMVIqq3h3H7HEkOOnPxhSoaV5oLeYIsimQD?=
+ =?us-ascii?q?101hICG9E/bo7vxG88516faZslwssTIb6LK90dC7L080rKQV3WBzB8bAYOCFgh?=
+ =?us-ascii?q?rPEGgK1+KLqAEIcBeTygcy78pdmudFebjN5PVB/KLHyRj9OewJhPOA9Lmshe/Y?=
+ =?us-ascii?q?xXsodwd3cKtthj0YNu/eKDwQeDV7?=
+X-IronPort-AV: E=Sophos;i="5.88,261,1635199200"; 
+   d="scan'208";a="1608662"
+Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 16:49:07 +0100
+Date:   Tue, 4 Jan 2022 16:49:06 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+cc:     Francisco Jerez <currojerez@riseup.net>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
+In-Reply-To: <CAJZ5v0hFcRWPO859YWUKLdqkTrVA1WLqRjFWg1=WS8qGG5CTkQ@mail.gmail.com>
+Message-ID: <alpine.DEB.2.22.394.2201041643520.3020@hadrien>
+References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien> <CAJZ5v0i4xnesG=vfx7Y-wyeaGvjDeGcsaOVqhRLnV8YXk-m2gA@mail.gmail.com> <alpine.DEB.2.22.394.2112281845180.24929@hadrien> <CAJZ5v0grayg9evWsB5ktKSFq=yA_AHoEWSfpSkQ=MVQ-=butfA@mail.gmail.com>
+ <alpine.DEB.2.22.394.2112291012030.24929@hadrien> <CAJZ5v0g5wDxYXA-V=Ex_Md82hgnj5K6Vr0tavFFVz=uBqo8wag@mail.gmail.com> <alpine.DEB.2.22.394.2112301840360.15550@hadrien> <CAJZ5v0h38jh3gyTp9W0ws0yXyfK=F+TQ7VYRVx4aGXhNeSObEg@mail.gmail.com>
+ <alpine.DEB.2.22.394.2112301919240.15550@hadrien> <CAJZ5v0haa5QWvTUUg+wwSHvuWyk8pic1N0kox=E1ZKNrHSFuzw@mail.gmail.com> <alpine.DEB.2.22.394.2112301942360.15550@hadrien> <CAJZ5v0im+Cke7tcNRav2VCyf5Qvi7qC29aF+9A1kVZZmt7cu6g@mail.gmail.com>
+ <alpine.DEB.2.22.394.2201031922110.3020@hadrien> <CAJZ5v0hsCjKA3EisK9s_S8Vb9Tgm4eps1FTKvUSfd9_JPh5wBQ@mail.gmail.com> <alpine.DEB.2.22.394.2201032110590.3020@hadrien> <CAJZ5v0hFcRWPO859YWUKLdqkTrVA1WLqRjFWg1=WS8qGG5CTkQ@mail.gmail.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211228163930.35524-4-krzysztof.kozlowski@canonical.com>
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Dec 28, 2021 at 05:39:29PM +0100, Krzysztof Kozlowski wrote:
-> Convert the regulator bindings of Maxim MAX77693 MUIC to DT schema format.
-> The existing bindings were defined in ../bindings/mfd/max77693.txt.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
->  .../bindings/regulator/maxim,max77693.yaml    | 49 +++++++++++++++++++
->  1 file changed, 49 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/regulator/maxim,max77693.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/regulator/maxim,max77693.yaml b/Documentation/devicetree/bindings/regulator/maxim,max77693.yaml
-> new file mode 100644
-> index 000000000000..81242c8cd77c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/regulator/maxim,max77693.yaml
-> @@ -0,0 +1,49 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/regulator/maxim,max77693.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Maxim MAX77693 MicroUSB and Companion Power Management IC regulators
-> +
-> +maintainers:
-> +  - Chanwoo Choi <cw00.choi@samsung.com>
-> +  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> +
-> +description: |
-> +  This is a part of device tree bindings for Maxim MAX77693 MicroUSB Integrated
-> +  Circuit (MUIC).
-> +
-> +  See also Documentation/devicetree/bindings/mfd/maxim,max77693.yaml for
-> +  additional information and example.
-> +
-> +patternProperties:
-> +  "^ESAFEOUT[12]$":
-> +    type: object
-> +    $ref: regulator.yaml#
-> +    unevaluatedProperties: false
-> +    description: |
-> +      Safeout LDO regulator.
-> +
-> +    properties:
-> +      regulator-min-microvolt: true
-> +      regulator-max-microvolt: true
+I tried the whole experiment again on an Intel w2155 (one socket, 10
+physical cores, pstates 12, 33, and 45).
 
-If you want to define which properties are valid from regulator.yaml, 
-then you need to define all of them (regulator-name is missing), and use 
-'additionalProperties: false'. Or you can just drop these. 
+For the CPU there is a small jump a between 32 and 33 - less than for the
+6130.
 
-> +
-> +    required:
-> +      - regulator-name
-> +
-> +  "^CHARGER$":
+For the RAM, there is a big jump between 21 and 22.
 
-Fixed string, not a pattern. Place under 'properties'.
+Combining them leaves a big jump between 21 and 22.
 
-> +    type: object
-> +    $ref: regulator.yaml#
-> +    unevaluatedProperties: false
-> +    description: |
-> +      Current regulator.
-> +
-> +    properties:
-> +      regulator-min-microamp: true
-> +      regulator-max-microamp: true
-> +
-> +    required:
-> +      - regulator-name
-> +
-> +additionalProperties: false
-> -- 
-> 2.32.0
-> 
-> 
+It seems that the definition of efficient is that there is no more cost
+for the computation than the cost of simply having the machine doing any
+computation at all.  It doesn't take into account the time and energy
+required to do some actual amount of work.
+
+julia
