@@ -2,96 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E3AE48442C
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Jan 2022 16:05:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1929F484443
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Jan 2022 16:09:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233194AbiADPFj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Jan 2022 10:05:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34722 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232087AbiADPFi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jan 2022 10:05:38 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CB3C061761;
-        Tue,  4 Jan 2022 07:05:38 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id e202so66151004ybf.4;
-        Tue, 04 Jan 2022 07:05:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BALCb4IQm/GwztxbFONFkzBgFbeC1YxSt8jC3/n5QF8=;
-        b=MBvr7j9wSDxa6r+DmF54Rv/yAt8b8hBI2IPx2tvGlSHlgD7PU5JsTUtrfdU0HPFyg9
-         SRNG87Uba7dDI3z3vHTqJlxhfgVDi1MmqMP4/R5AFausKLkZjGksTywEqzw+r/5zszl2
-         8jwSpD8WJajqW9JXtrcTv3vIbAjWKeZuxGCcnnsXov70QKCraWZNID3JhDqdzCm9Aeg7
-         JVD0TmqAU42OqLSt9on1NGyLr48UqwZaD/Gi0DLIiW4q0KjRT/rC5kJTx6eoQrezh3j+
-         XlSjiNa5aLXY38KekR+qoqxwswyugBM9jsquGXcUxn+uFH00d8yxbc93YdH+cQqOZNcE
-         D8mw==
+        id S234489AbiADPJo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Jan 2022 10:09:44 -0500
+Received: from mail-ot1-f44.google.com ([209.85.210.44]:41933 "EHLO
+        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232106AbiADPJo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jan 2022 10:09:44 -0500
+Received: by mail-ot1-f44.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so6757395otl.8;
+        Tue, 04 Jan 2022 07:09:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BALCb4IQm/GwztxbFONFkzBgFbeC1YxSt8jC3/n5QF8=;
-        b=va95/ya5HaMxlfAKNjVc5YFR9bx0n/u+1GxFDSW7IphIwncAkNoFaw05CsiPAASEau
-         plFLao5emaJJp+Vd4Ldp87rKXmAo4NDcToqNQUvi4m96BB6Dvq2Kz98hKUjGMyu+vZYY
-         1+VNSorsud/k37oZie33F9N3Ob//FIYuKLrGX3bQkMDQsMIRp37B5aSYJ83rt8D0SvMu
-         1b6+JlpgLu4SHaPl9c7HxURD1n5mSV1XocT65PojS4S/sy3Hs8fuBM0Tdn46/YYLx85H
-         aJpY48StWbvvPT59+MsrIAJFxENHa4Ye/fhLnBQ5QirojsLZcYVboffY4f+mG/KW5B65
-         iDpA==
-X-Gm-Message-State: AOAM533Jg8YEDDQpwWjb1LtnldvF7doCt98byisX8703u5mUDZDApZ7M
-        UT09t3m8eWk4rE2YxcUOmfh6ebqMihP8S8G+f5rCjla1CSg=
-X-Google-Smtp-Source: ABdhPJxkDQuQ5UmgB51ZHBEfNedFXZU7ke8KQffBjb21iLwnDUSUnBe5hv/Xp36E/v3SfZ9GoSJfBmmElw4hIi7OPiw=
-X-Received: by 2002:a5b:bc1:: with SMTP id c1mr39737268ybr.669.1641308738036;
- Tue, 04 Jan 2022 07:05:38 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3fNpTZaUUWS8pNu7Z1i39rMhdF3vva9BPhlRLzG5t3U=;
+        b=M88rwpFApHyVIx+aq26NR3wL+6ZOdojnDeEeq4JwK64YbC9/4XICQNqtBhp0QAoUKZ
+         kDIyRi/ZCXFLaBf3hiX0dBd4zzXKf4ZRjUwtWvbDDixcM3kCJYmf1sXWfxW0hqza36cW
+         Gf9PjkZe2+K0gq33jA6AShr8H7qS8LBOusYXfNu1/0pF1FdCk5TGW6qVj4mQjuH5xZWz
+         rxuc7cEZYbQg8mXivsppaPbkQTT6A7GTxYiQbxQ5hkf9545pOaO2XQyNWdq3wfWmsEl9
+         ySfC7yUxjUA8fxspxfPJM/OGzxsW5de0+uLwYDuIDl9fOVAbmUZKdN20uVxBtH+nUk4C
+         cmEg==
+X-Gm-Message-State: AOAM530AC/odDxz7TqOPEsVePpdzE3sNcwBzXDmfyP9tlUv/sYGrSzU+
+        k1QzP6S1YJF7HlphgsPrNg==
+X-Google-Smtp-Source: ABdhPJxXjg4g63hJgQsj67dfIJjSpRy5lUSjbL2UcU2zKSTRR4cRKv47dMOhfrj6TDa5dpCSeI05/w==
+X-Received: by 2002:a05:6830:4d6:: with SMTP id s22mr36640079otd.270.1641308983233;
+        Tue, 04 Jan 2022 07:09:43 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id q5sm9981694oiv.2.2022.01.04.07.09.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 07:09:42 -0800 (PST)
+Received: (nullmailer pid 840400 invoked by uid 1000);
+        Tue, 04 Jan 2022 15:09:41 -0000
+Date:   Tue, 4 Jan 2022 09:09:41 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org
+Subject: Re: [PATCH 1/4] dt-bindings: leds: maxim,max77693: convert to
+ dtschema
+Message-ID: <YdRjNUMht6HjVM7s@robh.at.kernel.org>
+References: <20211228163930.35524-1-krzysztof.kozlowski@canonical.com>
+ <20211228163930.35524-2-krzysztof.kozlowski@canonical.com>
+ <1640799296.482933.824019.nullmailer@robh.at.kernel.org>
+ <bedc4126-7536-a7f9-b833-d06f383ec15d@canonical.com>
 MIME-Version: 1.0
-References: <20220104134512.18498-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAHp75Vcx1Ey-SHBCgBh1RM=PTBRcncGOwAx9_6PL+sDJtzezvw@mail.gmail.com>
-In-Reply-To: <CAHp75Vcx1Ey-SHBCgBh1RM=PTBRcncGOwAx9_6PL+sDJtzezvw@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Tue, 4 Jan 2022 15:05:12 +0000
-Message-ID: <CA+V-a8uduHrVr4HWAgPt3YP_g27xhi4FdsrANn9S5mY0TBSvbg@mail.gmail.com>
-Subject: Re: [PATCH v4] soc: ti: smartreflex: Use platform_get_irq_optional()
- to get the interrupt
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Nishanth Menon <nm@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bedc4126-7536-a7f9-b833-d06f383ec15d@canonical.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jan 4, 2022 at 2:50 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Tue, Jan 4, 2022 at 3:45 PM Lad Prabhakar
-> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> >
-> > platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> > allocation of IRQ resources in DT core code, this causes an issue
-> > when using hierarchical interrupt domains using "interrupts" property
-> > in the node as this bypasses the hierarchical setup and messes up the
-> > irq chaining.
-> >
-> > In preparation for removal of static setup of IRQ resource from DT core
-> > code use platform_get_irq_optional().
-> >
-> > While at it return 0 instead of returning ret in the probe success path.
->
-> ...
->
-> > +       ret = platform_get_irq_optional(pdev, 0);
-> > +       if (ret < 0 && ret != -ENXIO) {
->
-> > +               dev_err_probe(&pdev->dev, ret, "%s: failed to get IRQ resource\n", __func__);
-> > +               return ret;
->
-> return dev_err_probe(...); ?
->
-Argh my bad.
+On Thu, Dec 30, 2021 at 11:53:37AM +0100, Krzysztof Kozlowski wrote:
+> On 29/12/2021 18:34, Rob Herring wrote:
+> > On Tue, 28 Dec 2021 17:39:27 +0100, Krzysztof Kozlowski wrote:
+> >> Convert the LEDs bindings of Maxim MAX77693 MUIC to DT schema format.
+> >> The existing bindings were defined in ../bindings/mfd/max77693.txt.
+> >>
+> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> >> ---
+> >>  .../bindings/leds/maxim,max77693.yaml         | 105 ++++++++++++++++++
+> >>  1 file changed, 105 insertions(+)
+> >>  create mode 100644 Documentation/devicetree/bindings/leds/maxim,max77693.yaml
+> >>
+> > 
+> > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> > 
+> > yamllint warnings/errors:
+> > 
+> > dtschema/dtc warnings/errors:
+> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/leds/common.example.dt.yaml: led-controller@0: 'reg' does not match any of the regexes: '^([a-z]+-)?led[01]?$', 'pinctrl-[0-9]+'
+> > 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/leds/maxim,max77693.yaml
+> > 
+> > doc reference errors (make refcheckdocs):
+> > Documentation/devicetree/bindings/leds/maxim,max77693.yaml: Documentation/devicetree/bindings/mfd/maxim,max77693.yaml
+> > 
+> > See https://patchwork.ozlabs.org/patch/1573762
+> > 
+> > This check can fail if there are any dependencies. The base for a patch
+> > series is generally the most recent rc1.
+> > 
+> 
+> I updated my yamllint and dtschema, run with DT_CHECKER_FLAGS=-m but
+> still cannot reproduce it. Probably because I based on linux-next, so
+> maybe this was a fixed issue in leds/common.yaml.
 
-Cheers,
-Prabhakar
+Are you setting DT_SCHEMA_FILES, because the error is in 
+common.yaml but caused by this schema.
+
+Clearly, 'reg' is not defined here. And there is no change to 
+common.yaml in next.
+
+Rob
