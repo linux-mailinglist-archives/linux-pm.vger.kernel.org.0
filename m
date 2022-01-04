@@ -2,194 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7446483A0C
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Jan 2022 02:55:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D022A483A90
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Jan 2022 03:24:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbiADBzw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Jan 2022 20:55:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52998 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbiADBzw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jan 2022 20:55:52 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B394C061761
-        for <linux-pm@vger.kernel.org>; Mon,  3 Jan 2022 17:55:52 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id r16-20020a17090a0ad000b001b276aa3aabso26073968pje.0
-        for <linux-pm@vger.kernel.org>; Mon, 03 Jan 2022 17:55:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=NFzh4Tih/teDjraUq5b4D1rBRc/bS7NtnvhOTHb2NHk=;
-        b=e86ZU8Jl7qYAOdD2dRQlCfXtZZZRuthZV8xn4/LHUdisqax/yRyP113Fx7K8JrUkh0
-         qMk1bpXLheIeVNV9hu0DljwOEVUc47xljFnW8H6Jsa1n72HPlSSVeD1Sa9FhjGQjBhpI
-         S0NHk7bzU6hWr5gF2w6IlTXJnM7G3et70h2Lt+vdculF8TdiS+WOi546Wz+U4yJkxzjS
-         2KGNBPRK39X2+5aYsUm2jhPrEw6tLpR4kI03KXdSZS9qJzTBffIeJbbURePfk3jvuaXz
-         kwlR8gn4xo2kZTiTCbr+N1MT3KodyvFojV5znVa07yoMHv1VsFl6qjIhiKiEeAvY+S2C
-         xQOg==
+        id S232209AbiADCX7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Jan 2022 21:23:59 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:42308
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229469AbiADCX7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jan 2022 21:23:59 -0500
+Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com [209.85.167.198])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 33073406EC
+        for <linux-pm@vger.kernel.org>; Tue,  4 Jan 2022 02:23:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1641263032;
+        bh=5cazmRarXDvXEd4JyRxvrVTfaRwqdqkKmDWF6lTNaUE=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=OC+a05owYoZbbBaZCe+95fUB4J6NHoJKYEFV0Bx/Xj/k2HCCFup/7Yct9Qo7JsEnU
+         bmGnnjw1O11lwpD+aQU52HZ1eQ33FhKZgfMv01vpRaMic5U/48V+AN3SzZ1c1HSCbZ
+         r+8BiWkSHhEpSW5154T0Rr3Bxf7z5GVwln888DtT1nWytI2ERpIcQ20Vi+MkDrJ195
+         e4LpQ4sov2S87gX5ZdVuHYkvL9trAA6/lZ+c8I4mRt+1w1uKU8cyDkB7cbK3kVcOBz
+         /cgrq3uomQcExBElDKTGCF+5IZXr5zfPVyvBlV6VWlXZpPY8fExQjBddQLKBz8tIw6
+         X/KOft12SXOYw==
+Received: by mail-oi1-f198.google.com with SMTP id w133-20020acadf8b000000b002c6c86f4afbso23168905oig.16
+        for <linux-pm@vger.kernel.org>; Mon, 03 Jan 2022 18:23:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=NFzh4Tih/teDjraUq5b4D1rBRc/bS7NtnvhOTHb2NHk=;
-        b=ElbmjksBmlb0D/GSupt9jdEN8ePrBx+8L5zXe+19l4QSfDB3Iz603hhBgUlQxSvJ5M
-         WwxVwCbpCQe38NTPbhppwxfO0IyS0xLS5sIUP8PxhOs+/yxru6JyeFV6TMk0Tu4kTiPN
-         vSqyyCfZc+7XkBkRMSIckoddDSWTmvZQR6UMJ16iWcZnt7QKHoQZ6F1o5jJH2pQK1xUI
-         PH2F/vkfu8sHThm9P3eHZ1U//2SlpoTewS0zq1HmY3+vscvMVCbHJ8cgc7fAjI21BL2q
-         yNnhMD08xsPwz2suaSnBk8KzkwVh1lEPufJWjwqkAKusKt2bxTsYvIo9mpPu/B32NEJb
-         c7Uw==
-X-Gm-Message-State: AOAM5306hwF9yittn8gb3D+0OzKYTEvP0sI9yvwAOObahpbXH7uyzOz2
-        j14nAZp+nn3MNOcKatG4AR1dkg==
-X-Google-Smtp-Source: ABdhPJyPKjti3c/ozVpHrA5SEyP+dSzteq4xElPt3TEyARNXEoC5XpnFdYxV4uoPtI6LpmWNm8BTkg==
-X-Received: by 2002:a17:902:9343:b0:148:a2e7:fb5f with SMTP id g3-20020a170902934300b00148a2e7fb5fmr50092789plp.160.1641261351914;
-        Mon, 03 Jan 2022 17:55:51 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id pf7sm42468548pjb.8.2022.01.03.17.55.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jan 2022 17:55:51 -0800 (PST)
-Message-ID: <61d3a927.1c69fb81.f66d4.1f35@mx.google.com>
-Date:   Mon, 03 Jan 2022 17:55:51 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5cazmRarXDvXEd4JyRxvrVTfaRwqdqkKmDWF6lTNaUE=;
+        b=DX6pGgDqyvjHhxKyfqepiM0vggkii1Q/D0gYXDCyeba+G8+rxhL2DEaYFPhiJlRpVq
+         JAAGEkH7vF7K3YccVEYNiud+gpw8TOS2IXtRsvncMQBJX1avyzzNz77rAWhONAijJgiu
+         1/FtGQgZETVKTt6PhreBcUfQ+vw2A0g05E5/yas2mnvbKVQejOC+ClxhFLsRGzWnX/ZS
+         tq8X3w5Cezm6bzeo3L38a1oSG2zFpUOl7aE01E8A/oCAoSjj4Ujcr+qmT4eavvK52OH6
+         CMiA+sgA4RIAXrU8IIdTCcD9HS0VDPdy205BF2epYPNWeI4B2orGmUlMc22eP4wnHCEP
+         o4bQ==
+X-Gm-Message-State: AOAM5321ZfRjOI3xQZ7BIT7laS+1ypcIq8CBFmd/fOr8qLbLIvqZHh+w
+        cZQ4J8VPfX5XxaEWUTrRB4MTct58Lo/g3to5G6bA6Wgm+L3mI3Vi7m4FyUHq21yZb2twZkNpLuO
+        cDCE7nglGWjLlSdMlHxHuVuaHBCDlfR/f/szpXBP0e6q7+R9WUuQx
+X-Received: by 2002:a9d:24e4:: with SMTP id z91mr33904514ota.11.1641263030936;
+        Mon, 03 Jan 2022 18:23:50 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzPidDUDT7zkVJQH32VyKsgWKAjH6fZz3mxUzBG8x2j81B9Qp88ucqAoNaI+qAUs/lvK97Qw+QQyoy3s0UZ3/4=
+X-Received: by 2002:a9d:24e4:: with SMTP id z91mr33904498ota.11.1641263030633;
+ Mon, 03 Jan 2022 18:23:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v5.16-rc8-156-g3d72f8341423
-X-Kernelci-Branch: testing
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 7 warnings (v5.16-rc8-156-g3d72f8341423)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <20211224081914.345292-2-kai.heng.feng@canonical.com>
+ <20211229201814.GA1699315@bhelgaas> <CAAd53p74bHYmQJzKuriDrRWpJwXivfYCfNCsUjC47d1WKUZ=gQ@mail.gmail.com>
+ <SJ0PR11MB500869254A4E9DEEC1DF3B5DD7499@SJ0PR11MB5008.namprd11.prod.outlook.com>
+In-Reply-To: <SJ0PR11MB500869254A4E9DEEC1DF3B5DD7499@SJ0PR11MB5008.namprd11.prod.outlook.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Tue, 4 Jan 2022 10:23:38 +0800
+Message-ID: <CAAd53p4-Sxx+8bF4ZTA9R7L=bJHv2yTCPSoFHmPpHHPFd1Bx+g@mail.gmail.com>
+Subject: Re: [PATCH 2/2] net: wwan: iosm: Keep device at D0 for s2idle case
+To:     "Kumar, M Chetan" <m.chetan.kumar@intel.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linuxwwan <linuxwwan@intel.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Vaibhav Gupta <vaibhavgupta40@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 7 warnings (v5.16-rc8-156-g=
-3d72f8341423)
+On Mon, Jan 3, 2022 at 11:28 PM Kumar, M Chetan
+<m.chetan.kumar@intel.com> wrote:
+>
+> > -----Original Message-----
+> > From: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > Sent: Thursday, December 30, 2021 6:31 AM
+> > To: Bjorn Helgaas <helgaas@kernel.org>
+> > Cc: Kumar, M Chetan <m.chetan.kumar@intel.com>; linuxwwan
+> > <linuxwwan@intel.com>; linux-pci@vger.kernel.org; linux-
+> > pm@vger.kernel.org; Loic Poulain <loic.poulain@linaro.org>; Sergey
+> > Ryazanov <ryazanov.s.a@gmail.com>; Johannes Berg
+> > <johannes@sipsolutions.net>; David S. Miller <davem@davemloft.net>;
+> > Jakub Kicinski <kuba@kernel.org>; netdev@vger.kernel.org; linux-
+> > kernel@vger.kernel.org; Rafael J. Wysocki <rjw@rjwysocki.net>; Vaibhav
+> > Gupta <vaibhavgupta40@gmail.com>
+> > Subject: Re: [PATCH 2/2] net: wwan: iosm: Keep device at D0 for s2idle case
+> >
+> > On Thu, Dec 30, 2021 at 4:18 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > >
+> > > [+cc Rafael, Vaibhav]
+> > >
+> > > On Fri, Dec 24, 2021 at 04:19:14PM +0800, Kai-Heng Feng wrote:
+> > > > We are seeing spurious wakeup caused by Intel 7560 WWAN on AMD
+> > laptops.
+> > > > This prevent those laptops to stay in s2idle state.
+> > > >
+> > > > From what I can understand, the intention of ipc_pcie_suspend() is
+> > > > to put the device to D3cold, and ipc_pcie_suspend_s2idle() is to
+> > > > keep the device at D0. However, the device can still be put to
+> > > > D3hot/D3cold by PCI core.
+> > > >
+> > > > So explicitly let PCI core know this device should stay at D0, to
+> > > > solve the spurious wakeup.
+>
+> Did you get a chance to check the cause of spurious wakeup ? Was there any
+> information device is trying to send while platform is entering suspend/
+> host sw missed to unsubscribe certain notifications which resulted in wake event.
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-16-rc8-156-g3d72f8341423/
+Can you please let me know how to check it?
 
-Tree: pm
-Branch: testing
-Git Describe: v5.16-rc8-156-g3d72f8341423
-Git Commit: 3d72f8341423038eaf304155884dda9989a2fc58
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
+>
+> In our internal test (x86 platform) we had not noticed such spurious wakeup but would
+> like to cross check by running few more tests.
 
-Warnings Detected:
+Sure, let me know what tests you want me to run.
 
-arc:
+>
+> > > >
+> > > > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > > > ---
+> > > >  drivers/net/wwan/iosm/iosm_ipc_pcie.c | 3 +++
+> > > >  1 file changed, 3 insertions(+)
+> > > >
+> > > > diff --git a/drivers/net/wwan/iosm/iosm_ipc_pcie.c
+> > > > b/drivers/net/wwan/iosm/iosm_ipc_pcie.c
+> > > > index d73894e2a84ed..af1d0e837fe99 100644
+> > > > --- a/drivers/net/wwan/iosm/iosm_ipc_pcie.c
+> > > > +++ b/drivers/net/wwan/iosm/iosm_ipc_pcie.c
+> > > > @@ -340,6 +340,9 @@ static int __maybe_unused
+> > > > ipc_pcie_suspend_s2idle(struct iosm_pcie *ipc_pcie)
+> > > >
+> > > >       ipc_imem_pm_s2idle_sleep(ipc_pcie->imem, true);
+> > > >
+> > > > +     /* Let PCI core know this device should stay at D0 */
+> > > > +     pci_save_state(ipc_pcie->pci);
+> > >
+> > > This is a weird and non-obvious way to say "this device should stay at
+> > > D0".  It's also fairly expensive since pci_save_state() does a lot of
+> > > slow PCI config reads.
+> >
+> > Yes, so I was waiting for feedback from IOSM devs what's the expected PCI
+> > state for the s2idle case.
+>
+> D3 is the expected state.
 
-arm64:
-    defconfig (gcc-10): 2 warnings
+Is it D3hot or D3cold?
 
-arm:
-    multi_v7_defconfig (gcc-10): 4 warnings
+Kai-Heng
 
-i386:
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-
-riscv:
-
-x86_64:
-
-
-Warnings summary:
-
-    1    sound/soc/sh/rz-ssi.c:1023:2: warning: ignoring return value of =
-=E2=80=98pm_runtime_resume_and_get=E2=80=99 declared with attribute =E2=80=
-=98warn_unused_result=E2=80=99 [-Wunused-result]
-    1    drivers/reset/reset-rzg2l-usbphy-ctrl.c:140:2: warning: ignoring r=
-eturn value of =E2=80=98pm_runtime_resume_and_get=E2=80=99 declared with at=
-tribute =E2=80=98warn_unused_result=E2=80=99 [-Wunused-result]
-    1    drivers/crypto/stm32/stm32-hash.c:965:2: warning: ignoring return =
-value of =E2=80=98pm_runtime_resume_and_get=E2=80=99 declared with attribut=
-e =E2=80=98warn_unused_result=E2=80=99 [-Wunused-result]
-    1    drivers/crypto/stm32/stm32-hash.c:816:2: warning: ignoring return =
-value of =E2=80=98pm_runtime_resume_and_get=E2=80=99 declared with attribut=
-e =E2=80=98warn_unused_result=E2=80=99 [-Wunused-result]
-    1    drivers/crypto/stm32/stm32-hash.c:1003:2: warning: ignoring return=
- value of =E2=80=98pm_runtime_resume_and_get=E2=80=99 declared with attribu=
-te =E2=80=98warn_unused_result=E2=80=99 [-Wunused-result]
-    1    drivers/crypto/stm32/stm32-cryp.c:545:2: warning: ignoring return =
-value of =E2=80=98pm_runtime_resume_and_get=E2=80=99 declared with attribut=
-e =E2=80=98warn_unused_result=E2=80=99 [-Wunused-result]
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section m=
-ismatches
-
-Warnings:
-    drivers/reset/reset-rzg2l-usbphy-ctrl.c:140:2: warning: ignoring return=
- value of =E2=80=98pm_runtime_resume_and_get=E2=80=99 declared with attribu=
-te =E2=80=98warn_unused_result=E2=80=99 [-Wunused-result]
-    sound/soc/sh/rz-ssi.c:1023:2: warning: ignoring return value of =E2=80=
-=98pm_runtime_resume_and_get=E2=80=99 declared with attribute =E2=80=98warn=
-_unused_result=E2=80=99 [-Wunused-result]
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    drivers/crypto/stm32/stm32-hash.c:816:2: warning: ignoring return value=
- of =E2=80=98pm_runtime_resume_and_get=E2=80=99 declared with attribute =E2=
-=80=98warn_unused_result=E2=80=99 [-Wunused-result]
-    drivers/crypto/stm32/stm32-hash.c:1003:2: warning: ignoring return valu=
-e of =E2=80=98pm_runtime_resume_and_get=E2=80=99 declared with attribute =
-=E2=80=98warn_unused_result=E2=80=99 [-Wunused-result]
-    drivers/crypto/stm32/stm32-hash.c:965:2: warning: ignoring return value=
- of =E2=80=98pm_runtime_resume_and_get=E2=80=99 declared with attribute =E2=
-=80=98warn_unused_result=E2=80=99 [-Wunused-result]
-    drivers/crypto/stm32/stm32-cryp.c:545:2: warning: ignoring return value=
- of =E2=80=98pm_runtime_resume_and_get=E2=80=99 declared with attribute =E2=
-=80=98warn_unused_result=E2=80=99 [-Wunused-result]
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+>
+> > Dave, can you drop it from netdev until IOSM devs confirm this patch is
+> > correct?
+>
+> Dave, please drop this patch from netdev.
