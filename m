@@ -2,79 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6FC7484E88
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jan 2022 07:57:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD95484F40
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jan 2022 09:24:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237861AbiAEG5S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Jan 2022 01:57:18 -0500
-Received: from smtp21.cstnet.cn ([159.226.251.21]:33140 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229759AbiAEG5S (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 5 Jan 2022 01:57:18 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-01 (Coremail) with SMTP id qwCowACHjlY1QdVh6WzQBQ--.43380S2;
-        Wed, 05 Jan 2022 14:56:53 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     rui.zhang@intel.com, daniel.lezcano@linaro.org, amitk@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] thermal/int340x_thermal: Check for null pointer after calling kmemdup
-Date:   Wed,  5 Jan 2022 14:56:52 +0800
-Message-Id: <20220105065652.2340271-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S238524AbiAEIYm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Jan 2022 03:24:42 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:59604 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238471AbiAEIYe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jan 2022 03:24:34 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4801760FD2;
+        Wed,  5 Jan 2022 08:24:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA530C36AE9;
+        Wed,  5 Jan 2022 08:24:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641371073;
+        bh=Glpkj1KcZnNZbZ/VBEkml8yh5tq2RrH+wGMUlhm4xr0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Su4fBo4tiV2LtzQZzXRQUmn0MRG3NinY0sl8mNRTF7aj38iJGax1OU79k8Vo86xzm
+         mTUklWGcG0jnpxtWVBR7utItSaqc5xwFi4Z/4uBX/crnNi/fmoftsiV0AvGunRZAAM
+         xyKRVly+TsaFeVeqIo42haTnPK+iNuJrZipWaCf54rSL6oWtnXYY4yS+WqYnipnphx
+         auz3ZT9qlTh+apyho14i1jOQdeNY+c1EMfyKCCXRGa3zQTmPgjHw+vn3l0IkFSNAwd
+         o78eDD/8B7VToOz66JwPcR8O1ju5rJhL/omIJquxJ5wJ1Y+uKSTmwNDLvR9VRVBeFa
+         xgi5v2fkyvikA==
+Message-ID: <73f0b849-223a-11a8-8238-4d29a3ccef0b@kernel.org>
+Date:   Wed, 5 Jan 2022 10:24:28 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowACHjlY1QdVh6WzQBQ--.43380S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tFy7KFyUKw4UKF4xZF4xZwb_yoW8Jw15pF
-        4rKr1UCr1DWF4xWw17Cr15AFZ8C3WkKay5WFyF9a4YyFnxCFWSqFWFyFyFyry0kr1fK3WY
-        yw1rtF4UAr1DArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r47
-        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
-        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JV
-        WxJwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
-        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjdOz3UUUU
-        U==
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+Subject: Re: [PATCH v3 1/3] dt-bindings: interconnect: imx8m-noc: Add
+ fsl,icc-id property
+Content-Language: en-US
+To:     Abel Vesa <abel.vesa@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>
+Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220103192900.946521-1-abel.vesa@nxp.com>
+From:   Georgi Djakov <djakov@kernel.org>
+In-Reply-To: <20220103192900.946521-1-abel.vesa@nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-As the possible failure of the allocation, kmemdup() may return NULL
-pointer.
-Therefore, it should be better to check the return value of kmemdup().
-If fails, just free 'buffer.pointer' and directly return is enough, same
-as the way that 'obj' fails above.
+Hi Abel,
 
-Fixes: 0ba13c763aac ("thermal/int340x_thermal: Export GDDV")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 5 +++++
- 1 file changed, 5 insertions(+)
+On 3.01.22 21:28, Abel Vesa wrote:
+> Add documentation for fsl,icc-id property.
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+> ---
+>   .../devicetree/bindings/interconnect/fsl,imx8m-noc.yaml      | 5 +++++
 
-diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-index 823354a1a91a..999b5682c28a 100644
---- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-@@ -462,6 +462,11 @@ static void int3400_setup_gddv(struct int3400_thermal_priv *priv)
- 	priv->data_vault = kmemdup(obj->package.elements[0].buffer.pointer,
- 				   obj->package.elements[0].buffer.length,
- 				   GFP_KERNEL);
-+	if (!priv->data_vault) {
-+		kfree(buffer.pointer);
-+		return;
-+	}
-+
- 	bin_attr_data_vault.private = priv->data_vault;
- 	bin_attr_data_vault.size = obj->package.elements[0].buffer.length;
- 	kfree(buffer.pointer);
--- 
-2.25.1
+Please CC the DT mailing list.
+
+>   1 file changed, 5 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml b/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
+> index b8204ed22dd5..4924743e8cb1 100644
+> --- a/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
+> +++ b/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
+> @@ -47,6 +47,11 @@ properties:
+>     operating-points-v2: true
+>     opp-table: true
+>   
+> +  fsl,icc-id:
+> +    $ref: "/schemas/types.yaml#/definitions/uint32"
+> +    description:
+> +      unique ID used for linking i.MX bus or ddrc node to inteconnect
+
+s/inteconnect/interconnect/
+
+Thanks,
+Georgi
+
+> +
+>     fsl,ddrc:
+>       $ref: "/schemas/types.yaml#/definitions/phandle"
+>       description:
 
