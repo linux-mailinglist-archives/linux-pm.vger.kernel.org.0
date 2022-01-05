@@ -2,109 +2,165 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BAEB48585B
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jan 2022 19:31:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C90C04858F6
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jan 2022 20:13:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242995AbiAESbm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Jan 2022 13:31:42 -0500
-Received: from aposti.net ([89.234.176.197]:41922 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243023AbiAESbR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 5 Jan 2022 13:31:17 -0500
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
-        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-pm@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v2 6/6] iio: pressure: bmp280: Use new PM macros
-Date:   Wed,  5 Jan 2022 18:29:39 +0000
-Message-Id: <20220105182939.106885-7-paul@crapouillou.net>
-In-Reply-To: <20220105182939.106885-1-paul@crapouillou.net>
-References: <20220105182939.106885-1-paul@crapouillou.net>
+        id S243390AbiAETNd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Jan 2022 14:13:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50938 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243383AbiAETNd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jan 2022 14:13:33 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3FC2C061245
+        for <linux-pm@vger.kernel.org>; Wed,  5 Jan 2022 11:13:32 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id p13so54977314lfh.13
+        for <linux-pm@vger.kernel.org>; Wed, 05 Jan 2022 11:13:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=2HdX9pP3Q9Z4uX3aqatRsjO5Pcb0UlsROg+qvzlzu6U=;
+        b=4Ia3W4Dly6LiEQ5rKk1rFgj2unuQVnuNkmEoWAgTiBmpoDUNo6KDtGSZKFElawIMBB
+         QwE/6lc0CZwbDgzPZ2bbDKdrYLRT11UUM+csHe46QZkEXwHi1FlJeynWBRWqqHoWgDAy
+         2q05fAIpz6T9XP0OK8KtjGn/ZvyU9+WG2OoxJkBJzVCoVzHEk0AYJcLkxZvxcaCxCGOf
+         cDaKc7AdX+oKzmjS4H6HlDoYv9flmnakaBP8MdY8BSaZ5mf941atiIRPyzOeycPGx8xX
+         sofNg01bLqJR6YyT0Khy0MLKTWHYGDlOWVZ31wCoA5FZtOIjmi87B+1tWPnopguQMhns
+         ayUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=2HdX9pP3Q9Z4uX3aqatRsjO5Pcb0UlsROg+qvzlzu6U=;
+        b=hetZkBw+qS/gLwMBBBrDyWPTy6RwRBMhmaoDUAONY1lQMkopCgssY0B2Ujx9QZYHX9
+         qyFUb9qg5LZhzvZpPG+2JOF1jRQH4yB6ZtUvd4n6M2/8bG6/V+xaIOTkpfjYBfNepblf
+         WhvlgpXdmNn7GGPJCNHdPIZ8IDhXROVpkRNITe0zL1NCQP+Z8XWJOjwHFH1zYcJphtYR
+         JY9C7Cx26McTWj9bDBsRE4Gnahk1mZqFkohBPZ3bFXshPZXdmWdxm/9am2RnKbaZ/MLs
+         JtDhAZa4Y7ZrkpcyXyeCRYR83llpx2Zq1uchk6v60Ma+1foAQ3ftgL+8aj0HSrZIv/se
+         h/tQ==
+X-Gm-Message-State: AOAM533QJMkFnJjSuzd4r6um7q4CwtK8ujEBj1q5sbtNAAu2+R/9tLoW
+        3xoi2iAnj6Kefccu8l9xi1aJ2g==
+X-Google-Smtp-Source: ABdhPJxJkJV4hQT7Y2RsB1BpVxL1CZQl3s9UDmLuhqUBJOe3uL8T7JoZSHRH5w4BepZxn7XdgmSiNA==
+X-Received: by 2002:ac2:5b9a:: with SMTP id o26mr48055390lfn.479.1641410011203;
+        Wed, 05 Jan 2022 11:13:31 -0800 (PST)
+Received: from localhost (h-85-24-188-65.A463.priv.bahnhof.se. [85.24.188.65])
+        by smtp.gmail.com with ESMTPSA id b18sm3226047ljq.62.2022.01.05.11.13.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jan 2022 11:13:30 -0800 (PST)
+Date:   Wed, 5 Jan 2022 20:13:30 +0100
+From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] thermal: rcar_thermal: Use
+ platform_get_irq_optional() to get the interrupt
+Message-ID: <YdXt2mDjZ0zikbt6@oden.dyn.berto.se>
+References: <20220104145212.4608-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220104145212.4608-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use the new EXPORT_RUNTIME_DEV_PM_OPS() macro. It allows the underlying
-dev_pm_ops struct as well as the suspend/resume callbacks to be detected
-as dead code in the case where CONFIG_PM is disabled, without having to
-wrap everything inside #ifdef CONFIG_PM guards.
+Hi Lad,
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
+Thanks for your work.
 
-Notes:
-    v2: New patch
+On 2022-01-04 14:52:11 +0000, Lad Prabhakar wrote:
+> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> allocation of IRQ resources in DT core code, this causes an issue
+> when using hierarchical interrupt domains using "interrupts" property
+> in the node as this bypasses the hierarchical setup and messes up the
+> irq chaining.
+> 
+> In preparation for removal of static setup of IRQ resource from DT core
+> code use platform_get_irq_optional().
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> v2-v3:
+> * Fixed review comment pointed by Andy
+> 
+> v1->v2
+> * Simplified checking error code
+> * Break loop earlier if no interrupts are seen
+> 
+> v1: https://lkml.org/lkml/2021/12/18/163
+> ---
+>  drivers/thermal/rcar_thermal.c | 17 ++++++++++++-----
+>  1 file changed, 12 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
+> index b49f04daaf47..e480f7290ccf 100644
+> --- a/drivers/thermal/rcar_thermal.c
+> +++ b/drivers/thermal/rcar_thermal.c
+> @@ -445,7 +445,7 @@ static int rcar_thermal_probe(struct platform_device *pdev)
+>  	struct rcar_thermal_common *common;
+>  	struct rcar_thermal_priv *priv;
+>  	struct device *dev = &pdev->dev;
+> -	struct resource *res, *irq;
+> +	struct resource *res;
+>  	const struct rcar_thermal_chip *chip = of_device_get_match_data(dev);
+>  	int mres = 0;
+>  	int i;
+> @@ -467,9 +467,16 @@ static int rcar_thermal_probe(struct platform_device *pdev)
+>  	pm_runtime_get_sync(dev);
+>  
+>  	for (i = 0; i < chip->nirqs; i++) {
+> -		irq = platform_get_resource(pdev, IORESOURCE_IRQ, i);
+> -		if (!irq)
+> -			continue;
+> +		int irq;
+> +
+> +		irq = platform_get_irq_optional(pdev, i);
+> +		if (irq < 0 && irq != -ENXIO) {
+> +			ret = irq;
+> +			goto error_unregister;
+> +		}
+> +		if (!irq || irq == -ENXIO)
+> +			break;
 
- drivers/iio/pressure/bmp280-core.c | 11 ++---------
- drivers/iio/pressure/bmp280-i2c.c  |  2 +-
- drivers/iio/pressure/bmp280-spi.c  |  2 +-
- 3 files changed, 4 insertions(+), 11 deletions(-)
+This do not look correct and differs form v1.
 
-diff --git a/drivers/iio/pressure/bmp280-core.c b/drivers/iio/pressure/bmp280-core.c
-index 6b7da40f99c8..bf8167f43c56 100644
---- a/drivers/iio/pressure/bmp280-core.c
-+++ b/drivers/iio/pressure/bmp280-core.c
-@@ -1138,7 +1138,6 @@ int bmp280_common_probe(struct device *dev,
- }
- EXPORT_SYMBOL(bmp280_common_probe);
- 
--#ifdef CONFIG_PM
- static int bmp280_runtime_suspend(struct device *dev)
- {
- 	struct iio_dev *indio_dev = dev_get_drvdata(dev);
-@@ -1159,15 +1158,9 @@ static int bmp280_runtime_resume(struct device *dev)
- 	usleep_range(data->start_up_time, data->start_up_time + 100);
- 	return data->chip_info->chip_config(data);
- }
--#endif /* CONFIG_PM */
- 
--const struct dev_pm_ops bmp280_dev_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
--				pm_runtime_force_resume)
--	SET_RUNTIME_PM_OPS(bmp280_runtime_suspend,
--			   bmp280_runtime_resume, NULL)
--};
--EXPORT_SYMBOL(bmp280_dev_pm_ops);
-+EXPORT_RUNTIME_DEV_PM_OPS(bmp280_dev_pm_ops, bmp280_runtime_suspend,
-+			  bmp280_runtime_resume, NULL);
- 
- MODULE_AUTHOR("Vlad Dogaru <vlad.dogaru@intel.com>");
- MODULE_DESCRIPTION("Driver for Bosch Sensortec BMP180/BMP280 pressure and temperature sensor");
-diff --git a/drivers/iio/pressure/bmp280-i2c.c b/drivers/iio/pressure/bmp280-i2c.c
-index 8b03ea15c0d0..35045bd92846 100644
---- a/drivers/iio/pressure/bmp280-i2c.c
-+++ b/drivers/iio/pressure/bmp280-i2c.c
-@@ -58,7 +58,7 @@ static struct i2c_driver bmp280_i2c_driver = {
- 	.driver = {
- 		.name	= "bmp280",
- 		.of_match_table = bmp280_of_i2c_match,
--		.pm = &bmp280_dev_pm_ops,
-+		.pm = pm_ptr(&bmp280_dev_pm_ops),
- 	},
- 	.probe		= bmp280_i2c_probe,
- 	.id_table	= bmp280_i2c_id,
-diff --git a/drivers/iio/pressure/bmp280-spi.c b/drivers/iio/pressure/bmp280-spi.c
-index 625b86878ad8..41f6cc56d229 100644
---- a/drivers/iio/pressure/bmp280-spi.c
-+++ b/drivers/iio/pressure/bmp280-spi.c
-@@ -109,7 +109,7 @@ static struct spi_driver bmp280_spi_driver = {
- 	.driver = {
- 		.name = "bmp280",
- 		.of_match_table = bmp280_of_spi_match,
--		.pm = &bmp280_dev_pm_ops,
-+		.pm = pm_ptr(&bmp280_dev_pm_ops),
- 	},
- 	.id_table = bmp280_spi_id,
- 	.probe = bmp280_spi_probe,
+In the old code if we can't get an IRQ the loop is continued. This is 
+used to detect if interrupts are supported or not on the platform.  This 
+change will fail on all systems that don't describes interrupts in DT 
+while the driver can function without interrupts.
+
+Is there a reason you wish to do this change in addition to the switch 
+to platform_get_irq_optional()? If so I think that should be done in a 
+separate patch.
+
+> +
+>  		if (!common->base) {
+>  			/*
+>  			 * platform has IRQ support.
+> @@ -487,7 +494,7 @@ static int rcar_thermal_probe(struct platform_device *pdev)
+>  			idle = 0; /* polling delay is not needed */
+>  		}
+>  
+> -		ret = devm_request_irq(dev, irq->start, rcar_thermal_irq,
+> +		ret = devm_request_irq(dev, irq, rcar_thermal_irq,
+>  				       IRQF_SHARED, dev_name(dev), common);
+>  		if (ret) {
+>  			dev_err(dev, "irq request failed\n ");
+> -- 
+> 2.17.1
+> 
+
 -- 
-2.34.1
-
+Kind Regards,
+Niklas Söderlund
