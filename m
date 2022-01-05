@@ -2,176 +2,189 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77D1A484F62
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jan 2022 09:33:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ADCF484FEE
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jan 2022 10:22:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238537AbiAEIdd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Jan 2022 03:33:33 -0500
-Received: from mga09.intel.com ([134.134.136.24]:10990 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229962AbiAEIdc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 5 Jan 2022 03:33:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641371612; x=1672907612;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Yb2rvcoqRLow4ev5sn49PX+MkzguxeiBq3oN2yYL0wU=;
-  b=iHs7VEY3BIarRXDtfnYEHyG1pcG27zSXOa8VFJ2PhyNc3p3sqJuN6rlb
-   zvub3ic9lS9TtkQynASaXyui8usVz1gdkLS2GS6GfdnnXDNklKlz5ZRSK
-   yJpFW9V0kmw2yjKWP69F+UwEcE8JoMupoCpmzNmXEYjc3wxHoCJHIcMDy
-   g3ohyS14Q4DDGWCHnn0sEgduep8qfLSl40sINL3nTj2j6y9nK98/5WtNn
-   Wa+oqhRhltxObLSI6FBF3GJjPz1yIjfAfxEsc5HJG5gfLCi1EbyvFUxZa
-   c/kYqmYABaaDN55qR4HaolM9c1Q7Xe+Tur2aofOhZopPmbDbbo0zn0OM3
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="242196218"
-X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
-   d="scan'208";a="242196218"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 00:33:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
-   d="scan'208";a="574314295"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 05 Jan 2022 00:33:30 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n51jd-000GQ0-Pe; Wed, 05 Jan 2022 08:33:29 +0000
-Date:   Wed, 05 Jan 2022 16:32:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- bcb051d6e10a9f7171d96984a1d65cf8feb29071
-Message-ID: <61d557b2.lItPPsQeH5WBLhSj%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S233874AbiAEJWC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Jan 2022 04:22:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56574 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232509AbiAEJWC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jan 2022 04:22:02 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B57DDC061784
+        for <linux-pm@vger.kernel.org>; Wed,  5 Jan 2022 01:22:01 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id k18so44894416wrg.11
+        for <linux-pm@vger.kernel.org>; Wed, 05 Jan 2022 01:22:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=36HWW0hYRMzTGJgOF2Hhqt8UhNo3eiE5xA5YF+rYVCA=;
+        b=ExXs4oRL1W7tObWa/h9o4bst7B77VUpcnP6vebd/XcxHcsuHjJYP46sBunAzmARIXH
+         Fm+aNa7Tp3LTRCU08jKBszK7n0w5rKk8VRmGdj0OJzjUiD4xalgu0gZnZzAdilOWBqWE
+         H/ez/MCvgnmaUCsVzwh1q4/jGLXhoKglfWwFtWz/GBcYkK+h860DbRF4VcqAijsnPE87
+         ii2W+r6GA+lEj2amkAhEFxiPqXw9ZPT/ZJEyS8yhi9LMcE4OP1eEQiLT06HfgRFLnOpr
+         JLBUfQuZHbAfqZJORLmqEOR2vA69h2KXv+NGuygBVhaEFAaSF5mSNy8Zh0240Ry+6+zV
+         uGiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=36HWW0hYRMzTGJgOF2Hhqt8UhNo3eiE5xA5YF+rYVCA=;
+        b=bZ8/7OewXle+NHzu3wdu1pPfaUrlhwlcllNt03+UUJ70wex3GD5jlPAHwMJXMeuyYE
+         voprdx3UVKyLTYCXbcTo9pJuhu1OazllC6G/OwI+harrB/31RVVZ/LNjNR+Kp6xuprxF
+         zczH7tgdwEFZQID5QNZABi3EjLRtlBTUg533Fuch4Qd3WJb28ZAojLfHsCH6pcwYIjtR
+         4YDZ5BmacuvyVMrBA/1jJc2iznkZnXb3V95BepDS1e0LMEQmosLYEG/+OR7GDiVxTMNA
+         E0qr6Y4vp4D3HPDGSVVexkveYTxHyeOOOcBNp0S6iOyTEWheHxhigcugKw1OdQ1XZMpI
+         KHHw==
+X-Gm-Message-State: AOAM533pYp0vbbB5pRmKjoxbwGLtHSS4OX2t9eGNdb0tfi11IySow6lh
+        Ad6LdWgJFn68ezADrmaMh+ypLg==
+X-Google-Smtp-Source: ABdhPJxrVfKVBzchLy0D6aJ/irztUnYgE5NOowgvLeaVDTqUhmw1be6mFqctzKDqkax6Ez+eV65Y4A==
+X-Received: by 2002:adf:df09:: with SMTP id y9mr45140559wrl.594.1641374520220;
+        Wed, 05 Jan 2022 01:22:00 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:9997:55b1:2e48:dc4a? ([2a01:e34:ed2f:f020:9997:55b1:2e48:dc4a])
+        by smtp.googlemail.com with ESMTPSA id b4sm1537957wrw.4.2022.01.05.01.21.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jan 2022 01:21:59 -0800 (PST)
+Subject: Re: [PATCH v5 5/6] rockchip/soc/drivers: Add DTPM description for
+ rk3399
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Rob Herring <robh@kernel.org>, rjw@rjwysocki.net,
+        lukasz.luba@arm.com, heiko@sntech.de, arnd@linaro.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "moderated list:ARM/Rockchip SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC support" 
+        <linux-rockchip@lists.infradead.org>
+References: <20211218130014.4037640-1-daniel.lezcano@linaro.org>
+ <20211218130014.4037640-6-daniel.lezcano@linaro.org>
+ <CAPDyKFqWUJTKte3dM=7xG6EtKR8i9neCCNYFs7Jf1J34TezUEQ@mail.gmail.com>
+ <CAMuHMdXzs9WMksQAJXdYaQndsqK3CnQZTGYw=TSFVrDEdX8PCA@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <08787cb7-439e-74a4-f268-6c8de0d60a30@linaro.org>
+Date:   Wed, 5 Jan 2022 10:21:58 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <CAMuHMdXzs9WMksQAJXdYaQndsqK3CnQZTGYw=TSFVrDEdX8PCA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: bcb051d6e10a9f7171d96984a1d65cf8feb29071  Merge branch 'acpi-pcc' into bleeding-edge
 
-possible Warning in current branch (please contact us if interested):
+Hi Geert,
 
-sound/soc/sh/rz-ssi.c:1023:9: warning: ignoring return value of 'pm_runtime_resume_and_get' declared with attribute 'warn_unused_result' [-Wunused-result]
+thanks for your feedback
 
-Warning ids grouped by kconfigs:
+On 04/01/2022 10:29, Geert Uytterhoeven wrote:
+> On Fri, Dec 31, 2021 at 2:58 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+>> On Sat, 18 Dec 2021 at 14:00, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>>> The DTPM framework does support now the hierarchy description.
+>>>
+>>> The platform specific code can call the hierarchy creation function
+>>> with an array of struct dtpm_node pointing to their parent.
+>>>
+>>> This patch provides a description of the big and Little CPUs and the
+>>> GPU and tie them together under a virtual package name. Only rk3399 is
+>>> described now.
+>>>
+>>> The description could be extended in the future with the memory
+>>> controller with devfreq if it has the energy information.
+>>>
+>>> The hierarchy uses the GPU devfreq with the panfrost driver, and this
+>>> one could be loaded as a module. If the hierarchy is created before
+>>> the panfrost driver is loaded, it will fail. For this reason the
+>>> Kconfig option depends on the panfrost Kconfig's option. If this one
+>>> is compiled as a module, automatically the dtpm hierarchy code will be
+>>> a module also. Module loading ordering will fix this chicken-egg
+>>> problem.
+>>>
+>>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> 
+>>> --- /dev/null
+>>> +++ b/drivers/soc/rockchip/dtpm.c
+>>> @@ -0,0 +1,56 @@
+>>> +// SPDX-License-Identifier: GPL-2.0-only
+>>> +/*
+>>> + * Copyright 2021 Linaro Limited
+>>> + *
+>>> + * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
+>>> + *
+>>> + * DTPM hierarchy description
+>>> + */
+>>> +#include <linux/dtpm.h>
+>>> +#include <linux/module.h>
+>>> +#include <linux/of.h>
+>>> +#include <linux/platform_device.h>
+>>> +
+>>> +static struct dtpm_node __initdata rk3399_hierarchy[] = {
+>>> +       [0]{ .name = "rk3399" },
+>>> +       [1]{ .name = "package",
+>>> +            .parent = &rk3399_hierarchy[0] },
+>>> +       [2]{ .name = "/cpus/cpu@0",
+>>> +            .type = DTPM_NODE_DT,
+>>> +            .parent = &rk3399_hierarchy[1] },
+>>> +       [3]{ .name = "/cpus/cpu@1",
+>>> +            .type = DTPM_NODE_DT,
+>>> +            .parent = &rk3399_hierarchy[1] },
+>>> +       [4]{ .name = "/cpus/cpu@2",
+>>> +            .type = DTPM_NODE_DT,
+>>> +            .parent = &rk3399_hierarchy[1] },
+>>> +       [5]{ .name = "/cpus/cpu@3",
+>>> +            .type = DTPM_NODE_DT,
+>>> +            .parent = &rk3399_hierarchy[1] },
+>>> +       [6]{ .name = "/cpus/cpu@100",
+>>> +            .type = DTPM_NODE_DT,
+>>> +            .parent = &rk3399_hierarchy[1] },
+>>> +       [7]{ .name = "/cpus/cpu@101",
+>>> +            .type = DTPM_NODE_DT,
+>>> +            .parent = &rk3399_hierarchy[1] },
+>>> +       [8]{ .name = "rockchip,rk3399-mali",
+>>> +            .type = DTPM_NODE_DT,
+>>> +            .parent = &rk3399_hierarchy[1] },
+>>> +       [9]{ },
+>>> +};
+>>
+>> I will not object to this, as in the end this seems like what we need
+>> to do, unless we can describe things through generic DT bindings for
+>> DTPM. Right?
+>>
+>> Although, if the above is correct, I need to stress that I am kind of
+>> worried that this doesn't really scale. We would need to copy lots of
+>> information from the DTS files into platform specific c-files, to be
+>> able to describe the DTPM hierarchy.
+> 
+> The description in rk3399_hierarchy[] looks fairly similar to a
+> power-domains hierarchy, like we have in e.g. the various
+> drivers/soc/renesas/r8*-sysc.c files.  One big difference is that the
+> latter do not hardcode the node paths in the driver, but use power
+> domain indices, referenced from DT in power-domains properties.
+> 
+> Perhaps a similar approach can be used for DTPM?
+> Does DTPM differ a lot from PM Domains? 
 
-gcc_recent_errors
-|-- alpha-allyesconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- arc-allyesconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- arm-allmodconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- arm-allyesconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- arm64-allyesconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- arm64-defconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- h8300-allyesconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- ia64-allyesconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- m68k-allmodconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- m68k-allyesconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- mips-allmodconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- mips-allyesconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- nios2-allyesconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- parisc-allyesconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- powerpc-allmodconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- powerpc-allyesconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- riscv-allmodconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- riscv-allyesconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- s390-allyesconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- sh-allmodconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-|-- sparc-allyesconfig
-|   `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
-`-- xtensa-allyesconfig
-    `-- sound-soc-sh-rz-ssi.c:warning:ignoring-return-value-of-pm_runtime_resume_and_get-declared-with-attribute-warn_unused_result
+Yes they differ. A DTPM node is a powerzone, a place where we can get
+and set the power.
 
-elapsed time: 723m
+That is the reason why initially a separate binding was proposed.
 
-configs tested: 54
-configs skipped: 3
+> If not, perhaps no new
+> properties are needed, and power-domains/#power-domain-cells can be
+> used as is?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
 
-gcc tested configs:
-arm                                 defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm64                               defconfig
-arm64                            allyesconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nds32                             allnoconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                               defconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-parisc                              defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-s390                             allyesconfig
-i386                             allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-sparc                            allyesconfig
-mips                             allmodconfig
-mips                             allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-powerpc                          allyesconfig
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-x86_64                    rhel-8.3-kselftests
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
