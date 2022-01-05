@@ -2,189 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ADCF484FEE
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jan 2022 10:22:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78BC1485051
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jan 2022 10:47:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233874AbiAEJWC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Jan 2022 04:22:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56574 "EHLO
+        id S229694AbiAEJrG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Jan 2022 04:47:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232509AbiAEJWC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jan 2022 04:22:02 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B57DDC061784
-        for <linux-pm@vger.kernel.org>; Wed,  5 Jan 2022 01:22:01 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id k18so44894416wrg.11
-        for <linux-pm@vger.kernel.org>; Wed, 05 Jan 2022 01:22:01 -0800 (PST)
+        with ESMTP id S229635AbiAEJrF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jan 2022 04:47:05 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 256D3C061761;
+        Wed,  5 Jan 2022 01:47:05 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id o6so159667591edc.4;
+        Wed, 05 Jan 2022 01:47:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=36HWW0hYRMzTGJgOF2Hhqt8UhNo3eiE5xA5YF+rYVCA=;
-        b=ExXs4oRL1W7tObWa/h9o4bst7B77VUpcnP6vebd/XcxHcsuHjJYP46sBunAzmARIXH
-         Fm+aNa7Tp3LTRCU08jKBszK7n0w5rKk8VRmGdj0OJzjUiD4xalgu0gZnZzAdilOWBqWE
-         H/ez/MCvgnmaUCsVzwh1q4/jGLXhoKglfWwFtWz/GBcYkK+h860DbRF4VcqAijsnPE87
-         ii2W+r6GA+lEj2amkAhEFxiPqXw9ZPT/ZJEyS8yhi9LMcE4OP1eEQiLT06HfgRFLnOpr
-         JLBUfQuZHbAfqZJORLmqEOR2vA69h2KXv+NGuygBVhaEFAaSF5mSNy8Zh0240Ry+6+zV
-         uGiQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oGgV9HOe1eHxafvPTz2hwuCui50Fondk/Z+tJBrwCXY=;
+        b=ZfQ0H+mzXfFzwLJEWKz47HI36ciejJ99qg71vvKDDrEuSoPfvjC7/is5k8N5cudsPf
+         ri0DNaRXsaCrzi8tP9ncvG8SqrMRZrnHfyFGnIMjVPgUdHWxbBvMtNcnaZJlVnp2WGfd
+         GDJYEwDgS03Ly7qL7J9nf0kZNFLsjTP5DUL8I+rnJCPbtoNGih1FinFdXeBS6T9ejmk1
+         +BjejejVC606sx5pGTnP0oEP5XvzwuieUxRkWltb1yZcxt6QcKKdyWmBQ2FiQlMUKtCP
+         pgUllj1CxVJox+Gd4ic9Ja7kViGVdCP0M6mpkV5jVTHQTZm96E+VYBogx5coPDFtfnJN
+         K11w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=36HWW0hYRMzTGJgOF2Hhqt8UhNo3eiE5xA5YF+rYVCA=;
-        b=bZ8/7OewXle+NHzu3wdu1pPfaUrlhwlcllNt03+UUJ70wex3GD5jlPAHwMJXMeuyYE
-         voprdx3UVKyLTYCXbcTo9pJuhu1OazllC6G/OwI+harrB/31RVVZ/LNjNR+Kp6xuprxF
-         zczH7tgdwEFZQID5QNZABi3EjLRtlBTUg533Fuch4Qd3WJb28ZAojLfHsCH6pcwYIjtR
-         4YDZ5BmacuvyVMrBA/1jJc2iznkZnXb3V95BepDS1e0LMEQmosLYEG/+OR7GDiVxTMNA
-         E0qr6Y4vp4D3HPDGSVVexkveYTxHyeOOOcBNp0S6iOyTEWheHxhigcugKw1OdQ1XZMpI
-         KHHw==
-X-Gm-Message-State: AOAM533pYp0vbbB5pRmKjoxbwGLtHSS4OX2t9eGNdb0tfi11IySow6lh
-        Ad6LdWgJFn68ezADrmaMh+ypLg==
-X-Google-Smtp-Source: ABdhPJxrVfKVBzchLy0D6aJ/irztUnYgE5NOowgvLeaVDTqUhmw1be6mFqctzKDqkax6Ez+eV65Y4A==
-X-Received: by 2002:adf:df09:: with SMTP id y9mr45140559wrl.594.1641374520220;
-        Wed, 05 Jan 2022 01:22:00 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:9997:55b1:2e48:dc4a? ([2a01:e34:ed2f:f020:9997:55b1:2e48:dc4a])
-        by smtp.googlemail.com with ESMTPSA id b4sm1537957wrw.4.2022.01.05.01.21.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jan 2022 01:21:59 -0800 (PST)
-Subject: Re: [PATCH v5 5/6] rockchip/soc/drivers: Add DTPM description for
- rk3399
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Rob Herring <robh@kernel.org>, rjw@rjwysocki.net,
-        lukasz.luba@arm.com, heiko@sntech.de, arnd@linaro.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "moderated list:ARM/Rockchip SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC support" 
-        <linux-rockchip@lists.infradead.org>
-References: <20211218130014.4037640-1-daniel.lezcano@linaro.org>
- <20211218130014.4037640-6-daniel.lezcano@linaro.org>
- <CAPDyKFqWUJTKte3dM=7xG6EtKR8i9neCCNYFs7Jf1J34TezUEQ@mail.gmail.com>
- <CAMuHMdXzs9WMksQAJXdYaQndsqK3CnQZTGYw=TSFVrDEdX8PCA@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <08787cb7-439e-74a4-f268-6c8de0d60a30@linaro.org>
-Date:   Wed, 5 Jan 2022 10:21:58 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oGgV9HOe1eHxafvPTz2hwuCui50Fondk/Z+tJBrwCXY=;
+        b=V1BCZ/cEt1183yd+9jt9BwXUNft6sXE5Fy6z9SVaI/TPxNlbMoVJaSdTAocWePW9RG
+         lpLIu6luolkAjiODfmBJVMH9wdsydzU/LZrq4/F16ltkzzErEa25/LrH/V6O7VLVV3va
+         G3CkiuDh1Ng3MuRpvHrZiHyGkEXhmy0uUIwhnVPnHXND8YHcpWXb2flr9KFe97BGg1/1
+         O5GOA/fcaR6Wu40DYaLSAg2wqJI1GmOjKNYF0rggAMjR8Ty2qK/SmXM028cSCuZDCbva
+         nDKJ2Bt1WchseRdNj0PRovta3xpXC43eHuGKxr5+F3ULuj6KfRRfPBJ7otr0CUKXlLEs
+         CW0w==
+X-Gm-Message-State: AOAM533ywTF4vGg5WmiejfqppaSmxN6r8OlIRYBg3vvnHm1BrfNzer7h
+        xKxM6+BiEfkCOlSGTCkiMpbEQJ1VA9/wL36ympc=
+X-Google-Smtp-Source: ABdhPJyWP+r+Hl6nvMg68q/i6OYDhYdeVKwOgFVPlEUkA2nMCMSgM1qbJiLpo7bG3M6VR9QEm9Ct8IJCSJUfta1+a2E=
+X-Received: by 2002:a17:907:6d8d:: with SMTP id sb13mr42802906ejc.132.1641376023662;
+ Wed, 05 Jan 2022 01:47:03 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAMuHMdXzs9WMksQAJXdYaQndsqK3CnQZTGYw=TSFVrDEdX8PCA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20220104164504.24707-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220104164504.24707-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 5 Jan 2022 11:46:27 +0200
+Message-ID: <CAHp75Ve+0VmfU7GhC=AjZ3J1J6KtGko2YAenA9mXCSCVrcuX5w@mail.gmail.com>
+Subject: Re: [PATCH v5] soc: ti: smartreflex: Use platform_get_irq_optional()
+ to get the interrupt
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Tue, Jan 4, 2022 at 6:45 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+>
+> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> allocation of IRQ resources in DT core code, this causes an issue
+> when using hierarchical interrupt domains using "interrupts" property
+> in the node as this bypasses the hierarchical setup and messes up the
+> irq chaining.
+>
+> In preparation for removal of static setup of IRQ resource from DT core
+> code use platform_get_irq_optional().
+>
+> While at it return 0 instead of returning ret in the probe success path.
 
-Hi Geert,
+...
 
-thanks for your feedback
+> +       ret = platform_get_irq_optional(pdev, 0);
+> +       if (ret < 0 && ret != -ENXIO)
+> +               return dev_err_probe(&pdev->dev, ret, "%s: failed to get IRQ resource\n", __func__);
 
-On 04/01/2022 10:29, Geert Uytterhoeven wrote:
-> On Fri, Dec 31, 2021 at 2:58 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
->> On Sat, 18 Dec 2021 at 14:00, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->>> The DTPM framework does support now the hierarchy description.
->>>
->>> The platform specific code can call the hierarchy creation function
->>> with an array of struct dtpm_node pointing to their parent.
->>>
->>> This patch provides a description of the big and Little CPUs and the
->>> GPU and tie them together under a virtual package name. Only rk3399 is
->>> described now.
->>>
->>> The description could be extended in the future with the memory
->>> controller with devfreq if it has the energy information.
->>>
->>> The hierarchy uses the GPU devfreq with the panfrost driver, and this
->>> one could be loaded as a module. If the hierarchy is created before
->>> the panfrost driver is loaded, it will fail. For this reason the
->>> Kconfig option depends on the panfrost Kconfig's option. If this one
->>> is compiled as a module, automatically the dtpm hierarchy code will be
->>> a module also. Module loading ordering will fix this chicken-egg
->>> problem.
->>>
->>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> 
->>> --- /dev/null
->>> +++ b/drivers/soc/rockchip/dtpm.c
->>> @@ -0,0 +1,56 @@
->>> +// SPDX-License-Identifier: GPL-2.0-only
->>> +/*
->>> + * Copyright 2021 Linaro Limited
->>> + *
->>> + * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
->>> + *
->>> + * DTPM hierarchy description
->>> + */
->>> +#include <linux/dtpm.h>
->>> +#include <linux/module.h>
->>> +#include <linux/of.h>
->>> +#include <linux/platform_device.h>
->>> +
->>> +static struct dtpm_node __initdata rk3399_hierarchy[] = {
->>> +       [0]{ .name = "rk3399" },
->>> +       [1]{ .name = "package",
->>> +            .parent = &rk3399_hierarchy[0] },
->>> +       [2]{ .name = "/cpus/cpu@0",
->>> +            .type = DTPM_NODE_DT,
->>> +            .parent = &rk3399_hierarchy[1] },
->>> +       [3]{ .name = "/cpus/cpu@1",
->>> +            .type = DTPM_NODE_DT,
->>> +            .parent = &rk3399_hierarchy[1] },
->>> +       [4]{ .name = "/cpus/cpu@2",
->>> +            .type = DTPM_NODE_DT,
->>> +            .parent = &rk3399_hierarchy[1] },
->>> +       [5]{ .name = "/cpus/cpu@3",
->>> +            .type = DTPM_NODE_DT,
->>> +            .parent = &rk3399_hierarchy[1] },
->>> +       [6]{ .name = "/cpus/cpu@100",
->>> +            .type = DTPM_NODE_DT,
->>> +            .parent = &rk3399_hierarchy[1] },
->>> +       [7]{ .name = "/cpus/cpu@101",
->>> +            .type = DTPM_NODE_DT,
->>> +            .parent = &rk3399_hierarchy[1] },
->>> +       [8]{ .name = "rockchip,rk3399-mali",
->>> +            .type = DTPM_NODE_DT,
->>> +            .parent = &rk3399_hierarchy[1] },
->>> +       [9]{ },
->>> +};
->>
->> I will not object to this, as in the end this seems like what we need
->> to do, unless we can describe things through generic DT bindings for
->> DTPM. Right?
->>
->> Although, if the above is correct, I need to stress that I am kind of
->> worried that this doesn't really scale. We would need to copy lots of
->> information from the DTS files into platform specific c-files, to be
->> able to describe the DTPM hierarchy.
-> 
-> The description in rk3399_hierarchy[] looks fairly similar to a
-> power-domains hierarchy, like we have in e.g. the various
-> drivers/soc/renesas/r8*-sysc.c files.  One big difference is that the
-> latter do not hardcode the node paths in the driver, but use power
-> domain indices, referenced from DT in power-domains properties.
-> 
-> Perhaps a similar approach can be used for DTPM?
-> Does DTPM differ a lot from PM Domains? 
+Sorry, I haven't noticed that you are using __func__ in the message.
+Please don't. It shows either that the message is not unique (so make
+the message unique enough in this driver) or the redundancy of the
+__func__ (it doesn't add any value, but noise).
 
-Yes they differ. A DTPM node is a powerzone, a place where we can get
-and set the power.
-
-That is the reason why initially a separate binding was proposed.
-
-> If not, perhaps no new
-> properties are needed, and power-domains/#power-domain-cells can be
-> used as is?
-
-
+> +       if (ret > 0)
+> +               sr_info->irq = ret;
 
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+With Best Regards,
+Andy Shevchenko
