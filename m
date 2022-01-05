@@ -2,122 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1FE54857DD
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jan 2022 19:03:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09A84485834
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jan 2022 19:29:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242690AbiAESDc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Jan 2022 13:03:32 -0500
-Received: from relmlor1.renesas.com ([210.160.252.171]:38341 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S242686AbiAESDa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jan 2022 13:03:30 -0500
-X-IronPort-AV: E=Sophos;i="5.88,264,1635174000"; 
-   d="scan'208";a="105608649"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 06 Jan 2022 03:03:28 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 3E3B140BBDB2;
-        Thu,  6 Jan 2022 03:03:26 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Nishanth Menon <nm@ti.com>, Santosh Shilimkar <ssantosh@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v6] soc: ti: smartreflex: Use platform_get_irq_optional() to get the interrupt
-Date:   Wed,  5 Jan 2022 18:03:22 +0000
-Message-Id: <20220105180323.8563-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
+        id S242916AbiAES3t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Jan 2022 13:29:49 -0500
+Received: from aposti.net ([89.234.176.197]:41636 "EHLO aposti.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242911AbiAES3r (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 5 Jan 2022 13:29:47 -0500
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
+        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-pm@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH v2 0/6] DEV_PM_OPS macros rework v2
+Date:   Wed,  5 Jan 2022 18:29:33 +0000
+Message-Id: <20220105182939.106885-1-paul@crapouillou.net>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-allocation of IRQ resources in DT core code, this causes an issue
-when using hierarchical interrupt domains using "interrupts" property
-in the node as this bypasses the hierarchical setup and messes up the
-irq chaining.
+Hi,
 
-In preparation for removal of static setup of IRQ resource from DT core
-code use platform_get_irq_optional().
+A V2 of my patchset that tweaks a bit the *_DEV_PM_OPS() macros that
+were introduced recently.
 
-While at it return 0 instead of returning ret in the probe success path.
+Changes since V1:
+- Previous patches [2/8], [6/8] and [7/8] were merged together to [2/6]
+  to create an atomic patch.
+- Remove useless empty line in patch [3/8] (now [3/6])
+- Remove the patch that updated the mpu3050 driver, since it wasn't a
+  very good example.
+- Update the bmp280 pressure sensor driver to use
+  EXPORT_RUNTIME_DEV_PM_OPS(), which should be a much better showcase
+  than the mpu3050.
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
-v5->v6:
-* Dropped printing function name in error message.
+Cheers,
+-Paul
 
-v4->v5:
-* Fixed missing return while using dev_err_probe().
+Paul Cercueil (6):
+  PM: core: Remove DEFINE_UNIVERSAL_DEV_PM_OPS() macro
+  PM: core: Remove static qualifier in DEFINE_SIMPLE_DEV_PM_OPS macro
+  PM: core: Add EXPORT[_GPL]_SIMPLE_DEV_PM_OPS macros
+  PM: runtime: Add DEFINE_RUNTIME_DEV_PM_OPS() macro
+  PM: runtime: Add EXPORT[_GPL]_RUNTIME_DEV_PM_OPS macros
+  iio: pressure: bmp280: Use new PM macros
 
-v3->v4:
-* Used dev_err_probe() to print error message
-* Returning 0 in probe success path.
+ drivers/iio/pressure/bmp280-core.c | 11 ++-----
+ drivers/iio/pressure/bmp280-i2c.c  |  2 +-
+ drivers/iio/pressure/bmp280-spi.c  |  2 +-
+ drivers/mmc/host/jz4740_mmc.c      |  4 +--
+ drivers/mmc/host/mxcmmc.c          |  2 +-
+ include/linux/pm.h                 | 52 +++++++++++++++++++++---------
+ include/linux/pm_runtime.h         | 21 ++++++++++++
+ 7 files changed, 65 insertions(+), 29 deletions(-)
 
-v2->v3
-* Switch back to platform_get_irq_optional()
-* Only print error in case of error, and not when interrupt is missing.
-
-v1->v2
-* Updated commit message
-* Drop check for IRQ0
-* Switched to using platform_get_irq() so that the probe won't
-  fail silently as requested by Nishanth.
-
-v1:
-* https://www.spinics.net/lists/arm-kernel/msg942549.html
----
- drivers/soc/ti/smartreflex.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/soc/ti/smartreflex.c b/drivers/soc/ti/smartreflex.c
-index b5b2fa538d5c..ad2bb72e640c 100644
---- a/drivers/soc/ti/smartreflex.c
-+++ b/drivers/soc/ti/smartreflex.c
-@@ -819,7 +819,7 @@ static int omap_sr_probe(struct platform_device *pdev)
- {
- 	struct omap_sr *sr_info;
- 	struct omap_sr_data *pdata = pdev->dev.platform_data;
--	struct resource *mem, *irq;
-+	struct resource *mem;
- 	struct dentry *nvalue_dir;
- 	int i, ret = 0;
- 
-@@ -844,7 +844,11 @@ static int omap_sr_probe(struct platform_device *pdev)
- 	if (IS_ERR(sr_info->base))
- 		return PTR_ERR(sr_info->base);
- 
--	irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
-+	ret = platform_get_irq_optional(pdev, 0);
-+	if (ret < 0 && ret != -ENXIO)
-+		return dev_err_probe(&pdev->dev, ret, "failed to get IRQ resource\n");
-+	if (ret > 0)
-+		sr_info->irq = ret;
- 
- 	sr_info->fck = devm_clk_get(pdev->dev.parent, "fck");
- 	if (IS_ERR(sr_info->fck))
-@@ -870,9 +874,6 @@ static int omap_sr_probe(struct platform_device *pdev)
- 	sr_info->autocomp_active = false;
- 	sr_info->ip_type = pdata->ip_type;
- 
--	if (irq)
--		sr_info->irq = irq->start;
--
- 	sr_set_clk_length(sr_info);
- 
- 	list_add(&sr_info->node, &sr_list);
-@@ -926,7 +927,7 @@ static int omap_sr_probe(struct platform_device *pdev)
- 
- 	}
- 
--	return ret;
-+	return 0;
- 
- err_debugfs:
- 	debugfs_remove_recursive(sr_info->dbg_dir);
 -- 
-2.17.1
+2.34.1
 
