@@ -2,155 +2,198 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86FD94859ED
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jan 2022 21:19:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CE02485B14
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jan 2022 22:51:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243967AbiAEUTn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Jan 2022 15:19:43 -0500
-Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:55324
-        "EHLO mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243950AbiAEUTj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jan 2022 15:19:39 -0500
-IronPort-Data: =?us-ascii?q?A9a23=3AEyX4Z6Nz2DxN1aXvrR2PlsFynXyQoLVcMsFnjC/?=
- =?us-ascii?q?WdQW60DIi0jcHzWJJXGDUa/yKMGP9LtgjPNm3oEJSusfcm99gGjLY11k9FiMQ8?=
- =?us-ascii?q?ZKt6fexdxqrYXvKdqUvdK/WhiknQoGowPscEzmM9n9BDpC79SMmjfjQG+KmYAL?=
- =?us-ascii?q?5EnsZqTFMGX5JZS1Ly7ZRbr5A2bBVMivV0T/Ai5W31GyNh1aYBlkpB5er83uDi?=
- =?us-ascii?q?hhdVAQw5TTSbdgT1LPXeuJ84Jg3fcldJFOgKmVY83LTegrN8F251juxExYFAde?=
- =?us-ascii?q?51++hIghbGfuLYlnL0yIQRbCkxBlEvC07lKghXBYeQR4N23PYxJYol4QL7MTYp?=
- =?us-ascii?q?QQBZ8UgnMwfTh1ZGmd6NLJP/LvvIH6lsMXVwVeun37Emqo1UBtsbeX0/c4yWwm?=
- =?us-ascii?q?i78cwMjkDZx2Hr+G72rS2Tq9rnMtLBML2JpkYuHx6wCPxF/c9TI3bBaPH+bdwx?=
- =?us-ascii?q?y0xgMFQFO2Yf8MfZSBych3MajVLO1EKGNQ/mvulgj/0dDgwgFaYo6Af4GXJygF?=
- =?us-ascii?q?1lr/3P7L9ZN2QSN5V2EWFo2vc12D4BBgAM5qY0zXt2natgPLf2Dv+cJwdGaf+9?=
- =?us-ascii?q?fNwhlCXgGsJB3U+UVq9vOn8iUOkXd9bA1Ib9zBorqUo8kGvCN7nUHWQpX+CsRk?=
- =?us-ascii?q?0QddcE+QmrgqKz8L8+wuFC3IWZj9HZsYvuMI/SXotzFDht9H0Hz0ptLCRTXO17?=
- =?us-ascii?q?LqYrTqufyMSKAcqey4CRgYD/5/svYAvkhXTZtJiFqeviZvyAz6Y/twghEDSnJ0?=
- =?us-ascii?q?YidJOjv/ruAGcxmvz992QFkgr/gORX2S/7wo/apTNWmBh0nCDhd4oEWpTZgDpU?=
- =?us-ascii?q?KA4pvWj?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3A7JtGtKpalhfFXRfmqRRNBHIaV5oseYIsimQD?=
- =?us-ascii?q?101hICG9E/bo8/xG885x6faZslwssTQb+OxoW5PwJE80l6QU3WB5B97LYOClgh?=
- =?us-ascii?q?rKEGgI1+XfKlPbdxEWutQtt5tIQuxOTOf9ClV3lq/BjTWQGdxI+ra6zJw=3D?=
-X-IronPort-AV: E=Sophos;i="5.88,264,1635199200"; 
-   d="scan'208";a="1734228"
-Received: from clt-128-93-179-10.vpn.inria.fr ([128.93.179.10])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 21:19:35 +0100
-Date:   Wed, 5 Jan 2022 21:19:34 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-cc:     Francisco Jerez <currojerez@riseup.net>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
-In-Reply-To: <CAJZ5v0i9Rh0Cm3Mbu3N8w6UmgJEnmThk4znWVcp9qeroabjsNw@mail.gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2201052107280.48852@hadrien>
-References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien> <CAJZ5v0grayg9evWsB5ktKSFq=yA_AHoEWSfpSkQ=MVQ-=butfA@mail.gmail.com> <alpine.DEB.2.22.394.2112291012030.24929@hadrien> <CAJZ5v0g5wDxYXA-V=Ex_Md82hgnj5K6Vr0tavFFVz=uBqo8wag@mail.gmail.com>
- <alpine.DEB.2.22.394.2112301840360.15550@hadrien> <CAJZ5v0h38jh3gyTp9W0ws0yXyfK=F+TQ7VYRVx4aGXhNeSObEg@mail.gmail.com> <alpine.DEB.2.22.394.2112301919240.15550@hadrien> <CAJZ5v0haa5QWvTUUg+wwSHvuWyk8pic1N0kox=E1ZKNrHSFuzw@mail.gmail.com>
- <alpine.DEB.2.22.394.2112301942360.15550@hadrien> <CAJZ5v0im+Cke7tcNRav2VCyf5Qvi7qC29aF+9A1kVZZmt7cu6g@mail.gmail.com> <alpine.DEB.2.22.394.2201031922110.3020@hadrien> <CAJZ5v0hsCjKA3EisK9s_S8Vb9Tgm4eps1FTKvUSfd9_JPh5wBQ@mail.gmail.com>
- <alpine.DEB.2.22.394.2201032110590.3020@hadrien> <CAJZ5v0hFcRWPO859YWUKLdqkTrVA1WLqRjFWg1=WS8qGG5CTkQ@mail.gmail.com> <alpine.DEB.2.22.394.2201041643520.3020@hadrien> <CAJZ5v0i9Rh0Cm3Mbu3N8w6UmgJEnmThk4znWVcp9qeroabjsNw@mail.gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        id S235552AbiAEVvn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Jan 2022 16:51:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58604 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244590AbiAEVve (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jan 2022 16:51:34 -0500
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A258C061201
+        for <linux-pm@vger.kernel.org>; Wed,  5 Jan 2022 13:51:34 -0800 (PST)
+Received: by mail-ot1-x32b.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso869991otf.12
+        for <linux-pm@vger.kernel.org>; Wed, 05 Jan 2022 13:51:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2keR8hCMUDIY7bnNjmG+SAvoD6opBafNXfTHV+Fh0DA=;
+        b=PbgzYXDhpebbQ8HJD9s+CMOouBvRusJVw6TWznVldZPDR0uZ7XWAzbyOD2T2J0fp+F
+         Ydap/7y3W7BKC389hdxz963xdS2nTHKtAB9I+ZOhq5cbpBqA5KL/Kut7z3mYNHFovUUw
+         r+j7JNlTEtkP5hsyBatFonqkP5c87V6ZGoSax83yPAdueQT9UxQJ0unO3lRKGlMqybBm
+         VwxlQiEu/ueMijLaX562L8rJZeSeDUJJlueVeRJ18ZXmL/0nRiGwSr+ZbCewtq0ZkrE6
+         Kgt4YhmqgazwiwmR5UdP5VDWKaS4v/AxLiADbnHhX8BnWvsSF9cOErYUwQmOEwmrz0YS
+         fMHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2keR8hCMUDIY7bnNjmG+SAvoD6opBafNXfTHV+Fh0DA=;
+        b=xaAnAcndWKD+xXkh3M2v5Lj1yCzaTOLzpRzSa1VR33zj6fSTe/PgKCyYNaUnTZRUzg
+         OqLAjc1GXxJTDNreIxyPDbwQfw1GL+X2GSEjrH4vKIUjKSZf8vj0Rtro5wFIs2Rtrp3M
+         n7VwyllhdEWBVscRZF4PA9hEk4VZVnhrY0VSQ6Xl6LXkdjhnhoNE+wpJOXPbKvloE01k
+         WhOZmebI69HxJEmC8MKijVHjonEBHXtuvp9urHdJIlRNySRtm+DDLlXe+HULyLQ1K55P
+         Mq7UrQLXp8/r49LPSd60ZM3LTB8hd245YudgE40n76SXtj6sme9IcCt/3mW1jHMf55Q4
+         C63Q==
+X-Gm-Message-State: AOAM531J6JvadIS0KgC5WwQv7xVaDZAopMPfQdsMYIbU1J3AYu+0nUmi
+        fMSp5MkMtx7AJcu9jM/vX2HaaNkhQTVsjQ==
+X-Google-Smtp-Source: ABdhPJxzCvfc1uKh7RaRPbxKo+wYz4qfhrjAj2y8Fbw99Dl0hoag8VY3AOGBjREkCSDZqAefpeRdzw==
+X-Received: by 2002:a9d:74ca:: with SMTP id a10mr2521610otl.222.1641419493649;
+        Wed, 05 Jan 2022 13:51:33 -0800 (PST)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id e20sm48385oiw.32.2022.01.05.13.51.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jan 2022 13:51:33 -0800 (PST)
+Date:   Wed, 5 Jan 2022 13:52:22 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Thara Gopinath <thara.gopinath@linaro.org>
+Cc:     agross@kernel.org, daniel.lezcano@linaro.org, rafael@kernel.org,
+        rui.zhang@intel.com, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [Patch v2 1/3] thermal: qcom: lmh: Add support for sm8150
+Message-ID: <YdYTFu/QTZ5DS95M@ripper>
+References: <20211215163400.33349-1-thara.gopinath@linaro.org>
+ <20211215163400.33349-2-thara.gopinath@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211215163400.33349-2-thara.gopinath@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Wed 15 Dec 08:33 PST 2021, Thara Gopinath wrote:
 
+> Add compatible to support LMh for sm8150 SoC.
+> sm8150 does not require explicit enabling for various LMh subsystems.
+> Add a variable indicating the same as match data which is set for sdm845.
+> Execute the piece of code enabling various LMh subsystems only if
+> enable algorithm match data is present.
+> 
+> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
+> ---
+> 
+> v1->v2:
+> 	- Added LMH_ENABLE_ALGOS of_device_id match data to indicate
+> 	  whether LMh subsytems need explicit enabling or not.
+> 
+>  drivers/thermal/qcom/lmh.c | 62 +++++++++++++++++++++-----------------
+>  1 file changed, 35 insertions(+), 27 deletions(-)
+> 
+> diff --git a/drivers/thermal/qcom/lmh.c b/drivers/thermal/qcom/lmh.c
+> index eafa7526eb8b..80d26d043498 100644
+> --- a/drivers/thermal/qcom/lmh.c
+> +++ b/drivers/thermal/qcom/lmh.c
+> @@ -28,6 +28,8 @@
+>  
+>  #define LMH_REG_DCVS_INTR_CLR		0x8
+>  
+> +#define LMH_ENABLE_ALGOS		((void *)1)
+> +
+>  struct lmh_hw_data {
+>  	void __iomem *base;
+>  	struct irq_domain *domain;
+> @@ -87,6 +89,7 @@ static int lmh_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+>  	struct device_node *np = dev->of_node;
+> +	const struct of_device_id *of_id;
+>  	struct device_node *cpu_node;
+>  	struct lmh_hw_data *lmh_data;
+>  	int temp_low, temp_high, temp_arm, cpu_id, ret;
+> @@ -141,32 +144,36 @@ static int lmh_probe(struct platform_device *pdev)
+>  	if (!qcom_scm_lmh_dcvsh_available())
+>  		return -EINVAL;
+>  
+> -	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_CRNT, LMH_ALGO_MODE_ENABLE, 1,
+> -				 LMH_NODE_DCVS, node_id, 0);
+> -	if (ret)
+> -		dev_err(dev, "Error %d enabling current subfunction\n", ret);
+> -
+> -	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_REL, LMH_ALGO_MODE_ENABLE, 1,
+> -				 LMH_NODE_DCVS, node_id, 0);
+> -	if (ret)
+> -		dev_err(dev, "Error %d enabling reliability subfunction\n", ret);
+> -
+> -	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_BCL, LMH_ALGO_MODE_ENABLE, 1,
+> -				 LMH_NODE_DCVS, node_id, 0);
+> -	if (ret)
+> -		dev_err(dev, "Error %d enabling BCL subfunction\n", ret);
+> -
+> -	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_ALGO_MODE_ENABLE, 1,
+> -				 LMH_NODE_DCVS, node_id, 0);
+> -	if (ret) {
+> -		dev_err(dev, "Error %d enabling thermal subfunction\n", ret);
+> -		return ret;
+> -	}
+> -
+> -	ret = qcom_scm_lmh_profile_change(0x1);
+> -	if (ret) {
+> -		dev_err(dev, "Error %d changing profile\n", ret);
+> -		return ret;
+> +	of_id = of_match_device(dev->driver->of_match_table, dev);
 
-On Tue, 4 Jan 2022, Rafael J. Wysocki wrote:
+I think it would be preferable to use of_device_get_match_data() and
+assign this to an unsigned long.
 
-> On Tue, Jan 4, 2022 at 4:49 PM Julia Lawall <julia.lawall@inria.fr> wrote:
-> >
-> > I tried the whole experiment again on an Intel w2155 (one socket, 10
-> > physical cores, pstates 12, 33, and 45).
-> >
-> > For the CPU there is a small jump a between 32 and 33 - less than for the
-> > 6130.
-> >
-> > For the RAM, there is a big jump between 21 and 22.
-> >
-> > Combining them leaves a big jump between 21 and 22.
->
-> These jumps are most likely related to voltage increases.
->
-> > It seems that the definition of efficient is that there is no more cost
-> > for the computation than the cost of simply having the machine doing any
-> > computation at all.  It doesn't take into account the time and energy
-> > required to do some actual amount of work.
->
-> Well, that's not what I wanted to say.
+> +
+> +	if (of_id && of_id->data == LMH_ENABLE_ALGOS) {
 
-I was referring to Francisco's comment that the lowest indicated frequency
-should be the most efficient one.  Turbostat also reports the lowest
-frequency as the most efficient one.  In my graph, there are the pstates 7
-and 10, which give exactly the same energy consumption as 12.  7 and 10
-are certainly less efficient, because the energy consumption is the same,
-but the execution speed is lower.
+Then you don't need to check of_id for NULL here and this would lend
+itself nicely to be a bitmask of enabled algorithms if some platform
+would need to enable a subset of these.
 
-> Of course, the configuration that requires less energy to be spent to
-> do a given amount of work is more energy-efficient.  To measure this,
-> the system needs to be given exactly the same amount of work for each
-> run and the energy spent by it during each run needs to be compared.
+> +		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_CRNT, LMH_ALGO_MODE_ENABLE, 1,
+> +					 LMH_NODE_DCVS, node_id, 0);
+> +		if (ret)
+> +			dev_err(dev, "Error %d enabling current subfunction\n", ret);
+> +
+> +		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_REL, LMH_ALGO_MODE_ENABLE, 1,
+> +					 LMH_NODE_DCVS, node_id, 0);
+> +		if (ret)
+> +			dev_err(dev, "Error %d enabling reliability subfunction\n", ret);
+> +
+> +		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_BCL, LMH_ALGO_MODE_ENABLE, 1,
+> +					 LMH_NODE_DCVS, node_id, 0);
+> +		if (ret)
+> +			dev_err(dev, "Error %d enabling BCL subfunction\n", ret);
+> +
+> +		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_ALGO_MODE_ENABLE, 1,
+> +					 LMH_NODE_DCVS, node_id, 0);
+> +		if (ret) {
+> +			dev_err(dev, "Error %d enabling thermal subfunction\n", ret);
+> +			return ret;
+> +		}
+> +
+> +		ret = qcom_scm_lmh_profile_change(0x1);
+> +		if (ret) {
+> +			dev_err(dev, "Error %d changing profile\n", ret);
+> +			return ret;
+> +		}
+>  	}
+>  
+>  	/* Set default thermal trips */
+> @@ -213,7 +220,8 @@ static int lmh_probe(struct platform_device *pdev)
+>  }
+>  
+>  static const struct of_device_id lmh_table[] = {
+> -	{ .compatible = "qcom,sdm845-lmh", },
+> +	{ .compatible = "qcom,sdm845-lmh", .data = LMH_ENABLE_ALGOS},
 
-This is bascially my point of view, but there is a question about it.  If
-over 10 seconds you consume 10J and by running twice as fast you would
-consume only 6J, then how do you account for the nest 5 seconds?  If the
-machine is then idle for the next 5 seconds, maybe you would end up
-consuming 8J in total over the 10 seconds.  But if you take advantage of
-the free 5 seconds to pack in another job, then you end up consuming 12J.
+Make LMH_ENABLE_ALGOS just an integer define and add the explicit (void
+*) cast here.
 
-> However, I think that you are interested in answering a different
-> question: Given a specific amount of time (say T) to run the workload,
-> what frequency to run the CPUs doing the work at in order to get the
-> maximum amount of work done per unit of energy spent by the system (as
-> a whole)?  Or, given 2 different frequency levels, which of them to
-> run the CPUs at to get more work done per energy unit?
+Regards,
+Bjorn
 
-This is the approach where you assume that the machine will be idle in any
-leftover time.  And it accounts for the energy consumed in that idle time.
-
-> The work / energy ratio can be estimated as
->
-> W / E = C * f / P(f)
->
-> where C is a constant and P(f) is the power drawn by the whole system
-> while the CPUs doing the work are running at frequency f, and of
-> course for the system discussed previously it is greater in the 2 GHz
-> case.
->
-> However P(f) can be divided into two parts, P_1(f) that really depends
-> on the frequency and P_0 that does not depend on it.  If P_0 is large
-> enough to dominate P(f), which is the case in the 10-20 range of
-> P-states on the system in question, it is better to run the CPUs doing
-> the work faster (as long as there is always enough work to do for
-> them; see below).  This doesn't mean that P(f) is not a convex
-> function of f, though.
->
-> Moreover, this assumes that there will always be enough work for the
-> system to do when running the busy CPUs at 2 GHz, or that it can go
-> completely idle when it doesn't do any work, but let's see what
-> happens if the amount of work to do is W_1 = C * 1 GHz * T and the
-> system cannot go completely idle when the work is done.
->
-> Then, nothing changes for the busy CPUs running at 1 GHz, but in the 2
-> GHz case we get W = W_1 and E = P(2 GHz) * T/2 + P_0 * T/2, because
-> the busy CPUs are only busy 1/2 of the time, but power P_0 is drawn by
-> the system regardless.  Hence, in the 2 GHz case (assuming P(2 GHz) =
-> 120 W and P_0 = 90 W), we get
->
-> W / E = 2 * C * 1 GHz / (P(2 GHz) + P_0) = 0.0095 * C * 1 GHz
->
-> which is slightly less than the W / E ratio at 1 GHz approximately
-> equal to 0.01 * C * 1 GHz (assuming P(1 GHz) = 100 W), so in these
-> conditions it would be better to run the busy CPUs at 1 GHz.
-
-OK, I'll try to measure this.
-
-thanks,
-julia
+> +	{ .compatible = "qcom,sm8150-lmh", },
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(of, lmh_table);
+> -- 
+> 2.25.1
+> 
