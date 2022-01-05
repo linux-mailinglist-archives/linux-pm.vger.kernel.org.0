@@ -2,90 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD7D3484E77
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jan 2022 07:50:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6FC7484E88
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jan 2022 07:57:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235760AbiAEGuC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Jan 2022 01:50:02 -0500
-Received: from todd.t-8ch.de ([159.69.126.157]:40711 "EHLO todd.t-8ch.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229759AbiAEGuC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 5 Jan 2022 01:50:02 -0500
-Date:   Wed, 5 Jan 2022 07:49:59 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1641365400;
-        bh=afrKCOqNubeiPYf4TQvcYsO4O7woEkun/NZnSzhJmB0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bSKMNX6/W1IBeitY5sfihEqq17clNJCbw7+sQUR87j5l6I4jTXj6cDC0bH0c6VYDD
-         y2ce/0NzjWIsudlb+MMKJHRBrD4A/rJoOaIcafIKjuVDrvgukBt4IAnQG3JZiy05UR
-         tEKDJ+sdPx5y6LT3BVX3VbJ2P/HMKLzWEmr214hw=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] power: supply: validate size of power_supply_attrs
- at compiletime
-Message-ID: <5bbd9f31-f6b5-4554-958c-71ec9ebd0363@t-8ch.de>
-References: <52cedbd4-7db2-7d81-f6c6-e6f6b7436545@gmail.com>
- <20220105064239.2689-2-linux@weissschuh.net>
+        id S237861AbiAEG5S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Jan 2022 01:57:18 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:33140 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229759AbiAEG5S (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 5 Jan 2022 01:57:18 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowACHjlY1QdVh6WzQBQ--.43380S2;
+        Wed, 05 Jan 2022 14:56:53 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     rui.zhang@intel.com, daniel.lezcano@linaro.org, amitk@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] thermal/int340x_thermal: Check for null pointer after calling kmemdup
+Date:   Wed,  5 Jan 2022 14:56:52 +0800
+Message-Id: <20220105065652.2340271-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220105064239.2689-2-linux@weissschuh.net>
-Jabber-ID: thomas@t-8ch.de
-X-Accept: text/plain, text/html;q=0.2, text/*;q=0.1
-X-Accept-Language: en-us, en;q=0.8, de-de;q=0.7, de;q=0.6
+X-CM-TRANSID: qwCowACHjlY1QdVh6WzQBQ--.43380S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7tFy7KFyUKw4UKF4xZF4xZwb_yoW8Jw15pF
+        4rKr1UCr1DWF4xWw17Cr15AFZ8C3WkKay5WFyF9a4YyFnxCFWSqFWFyFyFyry0kr1fK3WY
+        yw1rtF4UAr1DArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r47
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JV
+        WxJwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
+        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjdOz3UUUU
+        U==
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Sebastian, Hans,
+As the possible failure of the allocation, kmemdup() may return NULL
+pointer.
+Therefore, it should be better to check the return value of kmemdup().
+If fails, just free 'buffer.pointer' and directly return is enough, same
+as the way that 'obj' fails above.
 
-On 2022-01-05 07:42+0100, Thomas Weißschuh wrote:
-> For each member of enum power_supply_property a matching entry in
-> power_supply_attrs is needed.
-> Add a basic test at compiletime to validate this in addition to the
-> existing runtime testing.
-> 
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> ---
->  drivers/power/supply/power_supply_sysfs.c | 2 ++
->  include/linux/power_supply.h              | 2 ++
->  2 files changed, 4 insertions(+)
-> 
-> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-> index 491ffec7bf47..2565052a7a8c 100644
-> --- a/drivers/power/supply/power_supply_sysfs.c
-> +++ b/drivers/power/supply/power_supply_sysfs.c
-> @@ -403,6 +403,8 @@ void power_supply_init_attrs(struct device_type *dev_type)
->  {
->  	int i;
->  
-> +	BUILD_BUG_ON(ARRAY_SIZE(power_supply_attrs) != __POWER_SUPPLY_PROP_CNT);
-> +
->  	dev_type->groups = power_supply_attr_groups;
->  
->  	for (i = 0; i < ARRAY_SIZE(power_supply_attrs); i++) {
-> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-> index 71f0379c2af8..60853f26e25f 100644
-> --- a/include/linux/power_supply.h
-> +++ b/include/linux/power_supply.h
-> @@ -172,6 +172,8 @@ enum power_supply_property {
->  	POWER_SUPPLY_PROP_MODEL_NAME,
->  	POWER_SUPPLY_PROP_MANUFACTURER,
->  	POWER_SUPPLY_PROP_SERIAL_NUMBER,
-> +
-> +	__POWER_SUPPLY_PROP_CNT
->  };
->  
->  enum power_supply_type {
-> -- 
-> 2.34.1
-> 
+Fixes: 0ba13c763aac ("thermal/int340x_thermal: Export GDDV")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Please ignore this patch. It does not do what is tries to do. Sorry for the
-noise.
+diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+index 823354a1a91a..999b5682c28a 100644
+--- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
++++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+@@ -462,6 +462,11 @@ static void int3400_setup_gddv(struct int3400_thermal_priv *priv)
+ 	priv->data_vault = kmemdup(obj->package.elements[0].buffer.pointer,
+ 				   obj->package.elements[0].buffer.length,
+ 				   GFP_KERNEL);
++	if (!priv->data_vault) {
++		kfree(buffer.pointer);
++		return;
++	}
++
+ 	bin_attr_data_vault.private = priv->data_vault;
+ 	bin_attr_data_vault.size = obj->package.elements[0].buffer.length;
+ 	kfree(buffer.pointer);
+-- 
+2.25.1
 
-Thomas
