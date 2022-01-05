@@ -2,101 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BB194857C7
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jan 2022 18:56:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1FE54857DD
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jan 2022 19:03:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242639AbiAER4l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Jan 2022 12:56:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33252 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242677AbiAER4c (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jan 2022 12:56:32 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 622DFC06118A;
-        Wed,  5 Jan 2022 09:55:59 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id d1so131999ybh.6;
-        Wed, 05 Jan 2022 09:55:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9ixWsWTEdona6bvKg11lphGXvz/Decueq8W21LGFdhs=;
-        b=KKM3BAmFM+tHN4vn5vqP1PLVKsTD9IlGClPJN9mbEkF+ta1gUVKNfBWxIs9x3lhrD8
-         h+tVZUX2aBYOo5IIpVAJ8rApUelOZFBzxnOWyAGjMoR9141xQZoXrMWWLF6i4Zx+Ojvt
-         xn8MqaeAeBMjxZqUVex45JZCqtjeonHljcs7hCmL5qU2/9ERkCBW50/zCZH8UfSL843g
-         SzLBiR3EgOShy4wVU7D6lOWfUyRfC7+WoyJcIIs43LxMWbzQ/NZJhljaJiOUVXqRHmZa
-         XJYDMuiDoVd19QrYk6hs2bfi1H10dvsZgfKYZJJuLGi20NiFxFrBY/KN795xGkxYD2Es
-         lSsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9ixWsWTEdona6bvKg11lphGXvz/Decueq8W21LGFdhs=;
-        b=H/RJAZbLfx7tlXNWiAgxz98QwdUmLKXLAe0du/64zoH/LiRvYGfweH2WD2IDbs3ELG
-         NZWUcFyT4TQQ9BFD00ZOoh6dsZ+eveWBX0qVW0eYe7/lZDrHfeUTC2x/8W8KU4Zd3Pf6
-         50NpcRA8Qx9FvkOyLvNv/b0aYLImhuP/MCYaCgXd/Mz3R0vGVUlzeZfl1EkMDPpsq7SC
-         NR94ZXwHHOXSVySITLCWRm2H7qU1T0wMMgCxcvl4l+qjMdQHCz1MuybNpuzY/mH49jkF
-         lZp6P1it3FVuqD0TtfreOe819lzcKzjk6U3URI44jFyRtfAxV7t5WTo84EXkR9/nCWVy
-         UBow==
-X-Gm-Message-State: AOAM533G+87l3v23BRAGr0X6CPCBOkq94DXVdWBDeuCNeD90CkTqDPXp
-        a1DQMbo4YR4XP0YC3io0s7Lw+gKOtaaXCbn6DztQK8Ttsrs=
-X-Google-Smtp-Source: ABdhPJwwVk3W31NyU77htA6VxNyyefySsdT7yUay9eB3zD3W26ECURL+gGQz2slV1QAVMysFLHMJwqkFOG2XcChy4l0=
-X-Received: by 2002:a25:98c4:: with SMTP id m4mr70112189ybo.613.1641405358698;
- Wed, 05 Jan 2022 09:55:58 -0800 (PST)
-MIME-Version: 1.0
-References: <20220104164504.24707-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAHp75Ve+0VmfU7GhC=AjZ3J1J6KtGko2YAenA9mXCSCVrcuX5w@mail.gmail.com>
-In-Reply-To: <CAHp75Ve+0VmfU7GhC=AjZ3J1J6KtGko2YAenA9mXCSCVrcuX5w@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Wed, 5 Jan 2022 17:55:32 +0000
-Message-ID: <CA+V-a8uvuuk_t43COPVnaf2cFOhMxuPkK1Bj5OO9DtygTpy1ag@mail.gmail.com>
-Subject: Re: [PATCH v5] soc: ti: smartreflex: Use platform_get_irq_optional()
- to get the interrupt
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Nishanth Menon <nm@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S242690AbiAESDc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Jan 2022 13:03:32 -0500
+Received: from relmlor1.renesas.com ([210.160.252.171]:38341 "EHLO
+        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S242686AbiAESDa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jan 2022 13:03:30 -0500
+X-IronPort-AV: E=Sophos;i="5.88,264,1635174000"; 
+   d="scan'208";a="105608649"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 06 Jan 2022 03:03:28 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 3E3B140BBDB2;
+        Thu,  6 Jan 2022 03:03:26 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Nishanth Menon <nm@ti.com>, Santosh Shilimkar <ssantosh@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v6] soc: ti: smartreflex: Use platform_get_irq_optional() to get the interrupt
+Date:   Wed,  5 Jan 2022 18:03:22 +0000
+Message-Id: <20220105180323.8563-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Andy,
+platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+allocation of IRQ resources in DT core code, this causes an issue
+when using hierarchical interrupt domains using "interrupts" property
+in the node as this bypasses the hierarchical setup and messes up the
+irq chaining.
 
-Thank you for the review.
+In preparation for removal of static setup of IRQ resource from DT core
+code use platform_get_irq_optional().
 
-On Wed, Jan 5, 2022 at 9:47 AM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Tue, Jan 4, 2022 at 6:45 PM Lad Prabhakar
-> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> >
-> > platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> > allocation of IRQ resources in DT core code, this causes an issue
-> > when using hierarchical interrupt domains using "interrupts" property
-> > in the node as this bypasses the hierarchical setup and messes up the
-> > irq chaining.
-> >
-> > In preparation for removal of static setup of IRQ resource from DT core
-> > code use platform_get_irq_optional().
-> >
-> > While at it return 0 instead of returning ret in the probe success path.
->
-> ...
->
-> > +       ret = platform_get_irq_optional(pdev, 0);
-> > +       if (ret < 0 && ret != -ENXIO)
-> > +               return dev_err_probe(&pdev->dev, ret, "%s: failed to get IRQ resource\n", __func__);
->
-> Sorry, I haven't noticed that you are using __func__ in the message.
-> Please don't. It shows either that the message is not unique (so make
-> the message unique enough in this driver) or the redundancy of the
-> __func__ (it doesn't add any value, but noise).
->
-Thanks for the pointer, I was just keeping the messages in-sync with the driver.
+While at it return 0 instead of returning ret in the probe success path.
 
-Cheers,
-Prabhakar
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+v5->v6:
+* Dropped printing function name in error message.
+
+v4->v5:
+* Fixed missing return while using dev_err_probe().
+
+v3->v4:
+* Used dev_err_probe() to print error message
+* Returning 0 in probe success path.
+
+v2->v3
+* Switch back to platform_get_irq_optional()
+* Only print error in case of error, and not when interrupt is missing.
+
+v1->v2
+* Updated commit message
+* Drop check for IRQ0
+* Switched to using platform_get_irq() so that the probe won't
+  fail silently as requested by Nishanth.
+
+v1:
+* https://www.spinics.net/lists/arm-kernel/msg942549.html
+---
+ drivers/soc/ti/smartreflex.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/soc/ti/smartreflex.c b/drivers/soc/ti/smartreflex.c
+index b5b2fa538d5c..ad2bb72e640c 100644
+--- a/drivers/soc/ti/smartreflex.c
++++ b/drivers/soc/ti/smartreflex.c
+@@ -819,7 +819,7 @@ static int omap_sr_probe(struct platform_device *pdev)
+ {
+ 	struct omap_sr *sr_info;
+ 	struct omap_sr_data *pdata = pdev->dev.platform_data;
+-	struct resource *mem, *irq;
++	struct resource *mem;
+ 	struct dentry *nvalue_dir;
+ 	int i, ret = 0;
+ 
+@@ -844,7 +844,11 @@ static int omap_sr_probe(struct platform_device *pdev)
+ 	if (IS_ERR(sr_info->base))
+ 		return PTR_ERR(sr_info->base);
+ 
+-	irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
++	ret = platform_get_irq_optional(pdev, 0);
++	if (ret < 0 && ret != -ENXIO)
++		return dev_err_probe(&pdev->dev, ret, "failed to get IRQ resource\n");
++	if (ret > 0)
++		sr_info->irq = ret;
+ 
+ 	sr_info->fck = devm_clk_get(pdev->dev.parent, "fck");
+ 	if (IS_ERR(sr_info->fck))
+@@ -870,9 +874,6 @@ static int omap_sr_probe(struct platform_device *pdev)
+ 	sr_info->autocomp_active = false;
+ 	sr_info->ip_type = pdata->ip_type;
+ 
+-	if (irq)
+-		sr_info->irq = irq->start;
+-
+ 	sr_set_clk_length(sr_info);
+ 
+ 	list_add(&sr_info->node, &sr_list);
+@@ -926,7 +927,7 @@ static int omap_sr_probe(struct platform_device *pdev)
+ 
+ 	}
+ 
+-	return ret;
++	return 0;
+ 
+ err_debugfs:
+ 	debugfs_remove_recursive(sr_info->dbg_dir);
+-- 
+2.17.1
+
