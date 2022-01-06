@@ -2,144 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19465486115
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jan 2022 08:44:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDC47486145
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jan 2022 09:11:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236081AbiAFHno (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 6 Jan 2022 02:43:44 -0500
-Received: from mail-dm6nam10on2058.outbound.protection.outlook.com ([40.107.93.58]:41953
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234484AbiAFHnn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 6 Jan 2022 02:43:43 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=InRfE+yg2ivPqqUsrFhxPwdN67aQ/yXRwIuYWS/hi7KGXHHXQjiKAu9vPgXNoqgnvgAUXXV4ucAvbAX7NWANu8ainwYwrWOtQGk6yWqASSb9A1UXuYZDRy6+DDZyDYg8aiCV4GowiSCIW6/b1awLY3mlpDhx00F51ZhaoFr2mO+LqI6lyA+B9jkxuTsYZUWo07tAgv1qACbMHfoqG0yKgkSk3mjni1lTF3UvKwOZYUJ6J7gTgz0+w/flCXASm7W4oNkQyAsN3So5YHqwjTKC8hLmMLcNwSFdmMQAcUk8+whiBtEqdazrEN543djUf/rOH7gCV0h2HD/PCESWStHcPA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uPR0atBDHY80BPB4rfw9xxOAR0z+Hek8HoPovBWKUh4=;
- b=XEAzHr8v76MESKO00UFlXwn2dmJnlp/tl1VxfBDq1AOyNIlo0oxBAA0iYwEceemTyIF1/URb9VJlrsLt7SARk5mTPI23I4C7bVzMWK9bSNnysz0QG1k4xhig2RPQtHYRlnwYapMPuVf0WTbI7il0w/x4kIkL/OG3pWBvmrBkCGOYgzeP77AVrawFFc3368Q6gzVnNA3MKCNo3X2Vg2ZijMNgsM+WDfd3kUlzpqfCavHTHMgS/VfRH2ZzoGtEUsBmpxdyhHk4GqPGu1I36NiKL00Ep++VdmFYEWJ+W0DN79wp/VjOF6lTPGnu/Os0uRpuX7heHvmE0UXU9jadz4bnow==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uPR0atBDHY80BPB4rfw9xxOAR0z+Hek8HoPovBWKUh4=;
- b=bYenOkd25WoGbKkVzte++c5KtVv4VwexYH+3xH3AaECrmUHaU1XAz4A0aps5Pq8l1usRn1C4m4MUVpIq80X4yWbFNau2v8z3VBf4iH2WH3njuVIXeUyMwLOx3gEi1RvylkEgkpCLEcnptg8S5AIXbSuLppmcDrU3x1f47CQh9qk=
-Received: from BN9PR03CA0191.namprd03.prod.outlook.com (2603:10b6:408:f9::16)
- by BN9PR12MB5130.namprd12.prod.outlook.com (2603:10b6:408:137::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.7; Thu, 6 Jan
- 2022 07:43:34 +0000
-Received: from BN8NAM11FT052.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:f9:cafe::a7) by BN9PR03CA0191.outlook.office365.com
- (2603:10b6:408:f9::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.7 via Frontend
- Transport; Thu, 6 Jan 2022 07:43:34 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com;
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BN8NAM11FT052.mail.protection.outlook.com (10.13.177.210) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4867.7 via Frontend Transport; Thu, 6 Jan 2022 07:43:34 +0000
-Received: from hr-amd.amd.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Thu, 6 Jan
- 2022 01:43:29 -0600
-From:   Huang Rui <ray.huang@amd.com>
-To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Perry Yuan <Perry.Yuan@amd.com>, Jinzhou Su <Jinzhou.Su@amd.com>,
-        "Xiaojian Du" <Xiaojian.Du@amd.com>, Huang Rui <ray.huang@amd.com>,
-        kernel test robot <lkp@intel.com>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, <x86@kernel.org>,
-        <stable@vger.kernel.org>
-Subject: [PATCH 2/2] x86, sched: Fix the undefined reference building error of init_freq_invariance_cppc
-Date:   Thu, 6 Jan 2022 15:43:06 +0800
-Message-ID: <20220106074306.2712090-2-ray.huang@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220106074306.2712090-1-ray.huang@amd.com>
-References: <20220106074306.2712090-1-ray.huang@amd.com>
+        id S236398AbiAFILz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 6 Jan 2022 03:11:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57034 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236364AbiAFILz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Jan 2022 03:11:55 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CCF9C061245
+        for <linux-pm@vger.kernel.org>; Thu,  6 Jan 2022 00:11:55 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id a129so1659429oif.6
+        for <linux-pm@vger.kernel.org>; Thu, 06 Jan 2022 00:11:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=muDLpDbWJ7+5o2h/WSFjj/IcElI1JnlzjYoFpnWANM4=;
+        b=E4AV8bmpCRRT1r+Ity6neu+bsTGPRfQBMik7fDYIAoZ9eS5cWgQZYDz51k9QvpVglq
+         NXl/hUHRMezbm1C/nZnrUjzXZbpUMS2Y5Y70eHNj/9nuvfPprVg5tOBj8PhG5IJfq41L
+         y+ORcUGLKCxWhLibMVIHDVamqDLTdMUIAMPUDl59SAHxTlvXooRytVmv+6uQdTn8lT0C
+         Ks97uOXV/TaT6WWOxRtcXJpDdqA/dKWtefFuDCuwd85ZUQlS7lvux0QIBf5sr4ip2hih
+         hSYM1egtgLSjR1Z4Arzpq5SDcsH98BEAjNTh33AfmeeyXLGAP0m5Z1s9sDwgtVpZm1Zz
+         Nzrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=muDLpDbWJ7+5o2h/WSFjj/IcElI1JnlzjYoFpnWANM4=;
+        b=FogFY2ZufJuOF0maXPaVJCU+90BkTHbpse4lqfyNPvrZI9aTzzXtdLxpC3sTFElw5F
+         /acEFTxanMxprhggUv9AVAPZW9cmAiCb/jBWO6+2YoDAmLHPy2xblYtvLWyDoadmDA6l
+         wwKbDYFD3XT2LLkXs5AADPD5jilOyRLbq9G1MbZrxkHwq8/kokxazuMwcVhdExBf0Xog
+         2a7hhiPBfUf1OmVCOvzU/T7HbSxAjYeej9BKvtR+jqP+91OmqyaM+INSGJnRko4FfTXS
+         SJnljiJ+y6PpOyX9vY+4I58ICOrG8hpFkU/ORN423eB8yb9wEc16hyXWY4h9rrhH425S
+         Iqxw==
+X-Gm-Message-State: AOAM530k4S9PgJc7wBCXdwxMmjfEgdq8ngtBSaovHh2rdO63ljsdWlMQ
+        fqq8W5VNLjHkDfXQb9o6T7MzMurArsUcKFHezlM=
+X-Google-Smtp-Source: ABdhPJzffdyl+dFCsaPrzXb87+ds7MXW5YJHIyB14gCpOlaPiiFMgxF7fMPjeQqNzuDgfa0judrnQkpA5mxQZmsgDUs=
+X-Received: by 2002:a54:4e0c:: with SMTP id a12mr5423678oiy.12.1641456714362;
+ Thu, 06 Jan 2022 00:11:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB03.amd.com
- (10.181.40.144)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 17b74f13-a550-4263-8a48-08d9d0e83e6f
-X-MS-TrafficTypeDiagnostic: BN9PR12MB5130:EE_
-X-Microsoft-Antispam-PRVS: <BN9PR12MB5130B52FB7D374EBA53CD4A5EC4C9@BN9PR12MB5130.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3276;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qW4kIlqpXYju5u0vziJWVPad5dfDSRCXJmvJlWfFGGdwzo/3fJXIlfV0V4mnm6lYjooUg1MmBFV8+ddQiktrWFIl7btuc+RA4fqk5WBkFzj42uVB0qIaUkI3O6YDf1HJ/PNiQzaB1Rx1C9DkL2n7P47jFm9dRxoBqeyjRBvXiB2fvq2CBco0yyIgP+NYiATgqa39oWBtRAsPy/X0DvNSdpdi3wM8T61iOTTMclg20ZcwuQQPi/XnVg+C00DfNQ/yXITt4w2ilY44S9uH0kwTdD8sqWVCMtl/RjNMg5bIfOBPZmlcz35iz8k7R++8GNvQZQaOuXPH9sCVkbwhdKsz4vE1kXZavFHcR10XFaCnHaoZaoSZCXKr4m9XIkcHbdNVz5pP9ilLVXXWrjRxiIxYkPAytogsLHORNYfE64SnRcVXWMz0rBiQ6wmo88dRwZI4bWsu5Ow7OzF2EvkOeiP+rljoDIJ2Vt+pHuSl/ZDGgFFs0gepHGUjZO7LPVkpZy2p6FbmhWkdMLG8QOS2FdnfKQz7cP5aKTBd70AwQPLGNVJswQo1j5fD/Njwdv/5Obu8oTzUiSv0CsGKSlfL46w5mncteEF4FUsFD2THqLF9dOc5O0cGOouCJNkUR4ShVM8dDCI3DVgGiyyp3ReSAZl3INPE9TB8zqTLkF6R6mQ1KNanbzdVcMqvQK53qIHDku4I7oVbjcVrIWDlcB/FODLKqWgUL+vpfYGcZqzHVKF+o+B7H8/mqwa/mfOs5I4xorr0UftXwkGzl5HUhu+eWruiWhgP2CtPDQajY2zPuY6uPoiveQhJvgLY9VobU3ngYA2eC2xzmz8cYwplJcMvP12VpUehfIk2txa9lhjhiQlrx79M1NvOnkRZGf9zBwEx/bTH
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700002)(316002)(2906002)(336012)(966005)(36860700001)(82310400004)(5660300002)(8676002)(6666004)(508600001)(4326008)(110136005)(2616005)(86362001)(70586007)(40460700001)(47076005)(83380400001)(70206006)(81166007)(26005)(16526019)(356005)(1076003)(36756003)(8936002)(54906003)(426003)(7696005)(186003)(7416002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2022 07:43:34.7654
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 17b74f13-a550-4263-8a48-08d9d0e83e6f
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT052.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5130
+Reply-To: mrselodieantonie778@yahoo.com
+Sender: marriammichel85@gmail.com
+Received: by 2002:a8a:12c5:0:0:0:0:0 with HTTP; Thu, 6 Jan 2022 00:11:53 -0800 (PST)
+From:   Mrs Elodie Antoine <mrselodieantoinea@gmail.com>
+Date:   Thu, 6 Jan 2022 00:11:53 -0800
+X-Google-Sender-Auth: ERYqsVO2T6sRivKrmAb0_a1tkPE
+Message-ID: <CALu+k43+BoA_yy=iLCq6qn-UxuyVVxGZDfO-O59Zz-3fdHp5bA@mail.gmail.com>
+Subject: Calvary Greetings
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The init_freq_invariance_cppc function is implemented in smpboot and depends on
-CONFIG_SMP.
+CAN I TRUST YOU WITH  THIS (US$4.5 Million Dollars) FOR CHARITY WORKS,
 
-  MODPOST vmlinux.symvers
-  MODINFO modules.builtin.modinfo
-  GEN     modules.builtin
-  LD      .tmp_vmlinux.kallsyms1
-ld: drivers/acpi/cppc_acpi.o: in function `acpi_cppc_processor_probe':
-/home/ray/brahma3/linux/drivers/acpi/cppc_acpi.c:819: undefined reference to `init_freq_invariance_cppc'
-make: *** [Makefile:1161: vmlinux] Error 1
+Calvary Greetings in the name of the LORD Almighty and Our LORD JESUS
+CHRIST the giver of every good thing. Good day,i know this letter will
+definitely come to you as a huge surprise, but I implore you to take
+the time to go through it carefully as the decision you make will go
+off a long way to determine my future and continued existence. I am
+Mrs Elodie Antoine
+aging widow of 59 years old suffering from long time illness. I have
+some funds I inherited from my late husband,
 
-See https://lore.kernel.org/lkml/484af487-7511-647e-5c5b-33d4429acdec@infradead.org/.
+The sum of (US$4.5 Million Dollars) and I needed a very honest and God
+fearing  who can withdraw this money then use the funds for Charity
+works. I WISH TO GIVE THIS FUNDS TO YOU FOR CHARITY WORKS. I found
+your email address from the internet after honest prayers  to the LORD
+to bring me a helper and i decided to contact you if you may be
+willing and interested to handle these trust funds in good faith
+before anything happens to me.
+I accept this decision because I do not have any child who will
+inherit this money after I die. I want your urgent reply to me so that
+I will give you the deposit receipt which the  COMPANY issued to me as
+next of kin for immediate transfer of the money to your account in
+your country, to start the good work of God, I want you to use the
+15/percent of the total amount to help yourself in doing the project.
 
-Fixes: 41ea667227ba ("x86, sched: Calculate frequency invariance for AMD systems")
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Huang Rui <ray.huang@amd.com>
-Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: x86@kernel.org
-Cc: stable@vger.kernel.org
----
- arch/x86/include/asm/topology.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topology.h
-index cc164777e661..2f0b6be8eaab 100644
---- a/arch/x86/include/asm/topology.h
-+++ b/arch/x86/include/asm/topology.h
-@@ -221,7 +221,7 @@ static inline void arch_set_max_freq_ratio(bool turbo_disabled)
- }
- #endif
- 
--#ifdef CONFIG_ACPI_CPPC_LIB
-+#if defined(CONFIG_ACPI_CPPC_LIB) && defined(CONFIG_SMP)
- void init_freq_invariance_cppc(void);
- #define init_freq_invariance_cppc init_freq_invariance_cppc
- #endif
--- 
-2.25.1
+I am desperately in keen need of assistance and I have summoned up
+courage to contact you for this task, you must not fail me and the
+millions of the poor people in our todays WORLD. This is no stolen
+money and there are no dangers involved,100% RISK FREE with full legal
+proof. Please if you would be able to use the funds for the Charity
+works kindly let me know immediately.I will appreciate your utmost
+confidentiality and trust in this matter to accomplish my heart
+desire, as I don't want anything that will jeopardize my last wish. I
+want you to take 15 percent of the total money for your personal use
+while 85% of the money will go to charity.I will appreciate your
+utmost confidentiality and trust in this matter to accomplish my heart
+desire, as I don't want anything that will jeopardize my last wish.
 
+
+Kindly reply me
+
+Thanks and God bless you,
+
+Mrs Elodie Antoine
