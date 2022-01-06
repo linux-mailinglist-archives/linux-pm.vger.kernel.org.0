@@ -2,102 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0E3A48682C
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jan 2022 18:12:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FC6248686F
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jan 2022 18:26:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241562AbiAFRMe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 6 Jan 2022 12:12:34 -0500
-Received: from mail-qv1-f54.google.com ([209.85.219.54]:34621 "EHLO
-        mail-qv1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbiAFRMd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Jan 2022 12:12:33 -0500
-Received: by mail-qv1-f54.google.com with SMTP id ke6so2984025qvb.1;
-        Thu, 06 Jan 2022 09:12:33 -0800 (PST)
+        id S241790AbiAFR0x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 6 Jan 2022 12:26:53 -0500
+Received: from mail-qk1-f171.google.com ([209.85.222.171]:43583 "EHLO
+        mail-qk1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241717AbiAFR0x (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Jan 2022 12:26:53 -0500
+Received: by mail-qk1-f171.google.com with SMTP id f138so3332293qke.10;
+        Thu, 06 Jan 2022 09:26:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=3IA1ahLCNPOQhCIpb5/ahAQS2dP6cjsn0rV/hKbv++w=;
-        b=Q5R6sgmIvdMW03IYTjg6nicgSOC9D8Pc7GKnevvJoVvLU3h/+uecRI3/QqKe/IlDbe
-         s7SQ5LnyBzAUzfIvUhFF3ND5iZSq8OgGLNCY1JZKE7fBuuOPNTPfpHeXRaDRs/mkp0Nf
-         pw3mKrtcJc3bDiu29m7YuVMVL+11k8TtCKUPrIjEwG8jKiEpAbk1+DLvGYFHpFS6FS6k
-         gyEVNJx8Qbykjnn1+mSmAvy6oYHLVR7tKApW5+wssn0IKm4UIKfPS+qXDkONA/rAxm7Y
-         KzZWVWaErg4kAkME6VwHixedz7T0RceCLujY76wI5ejjDuBwaoYPv733bS1dhq6EJW5v
-         AS0g==
-X-Gm-Message-State: AOAM533y46K+6DiRpg41WwSEpPMjPOlw10Z7ArS7PsEZC43dy8F1Aqvk
-        1nTcMR6nN5oXttr89PL2TQW9iYd4HLdw4Go3ddcO/CQ+EeI=
-X-Google-Smtp-Source: ABdhPJwZA/vDfCXlX+KKPHZBLv8gRqJUFE1cS5uj/DSk0o0ftCh64qrZ1Bp6ACSQTRl83lXiVMPDRJHHaQiYubBa8nw=
-X-Received: by 2002:ad4:5c8b:: with SMTP id o11mr53640125qvh.130.1641489152767;
- Thu, 06 Jan 2022 09:12:32 -0800 (PST)
+        bh=Y5Mh5bVpmK8eYyep3yxqYOdNWT89jlaMb60StPy485A=;
+        b=cKPai63QXCOULd+JYweRNthK+EFz4BKyWWc8Q5dbhzW41L8rnpF7LhT7X5pxDLaW9T
+         Qm4ynb54PiW3ktsE0anNODJoPIoDyg7P6NkMitAiSomzaeYB4OLfDaKug8WQMZNXn9YV
+         FoRyt2y14r71al3XrKlCjP346fIRL+h4ncfzsEtQDZLi/zHxpIW6fW4ITf3+lpyo7wz+
+         QPCcTX67aVI9DVaqOFqdbcLvvsDZY6SvcaRzzDloTtMgMoeyGRQ7CBD9qz/0CsO0k8dF
+         NcKGcpmGwuHO3khUe2ELXH7OcEGrVZ/cD8e/Nr+qpIRO/eegkPNJtZjLPIbgxWbdX76y
+         OjFw==
+X-Gm-Message-State: AOAM531m0madbb1ipaw+g4/Bv8HYBNH/qmr12aSK0Js8M0KzR1mv8EYa
+        xEY7OZXYYqTnpNN2yShzpBMnzEYdT0yhFz1uGaE=
+X-Google-Smtp-Source: ABdhPJxtsqp8aUZfHoLl5dtQbIUKostepyMhKdNiM8HK9Tx9ep8MgjIudv2L7QVSqHIgf5RaQYlkr87oh5ASoEKjMSY=
+X-Received: by 2002:a05:620a:4721:: with SMTP id bs33mr43755838qkb.8.1641490012648;
+ Thu, 06 Jan 2022 09:26:52 -0800 (PST)
 MIME-Version: 1.0
-References: <20220106074306.2712090-1-ray.huang@amd.com> <20220106074306.2712090-2-ray.huang@amd.com>
-In-Reply-To: <20220106074306.2712090-2-ray.huang@amd.com>
+References: <20220104164351.1360316-1-gregkh@linuxfoundation.org>
+In-Reply-To: <20220104164351.1360316-1-gregkh@linuxfoundation.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 6 Jan 2022 18:12:22 +0100
-Message-ID: <CAJZ5v0htW=twuLY88XJmLGnDtmmjoav=Z8WLZZcjG29-YKQMog@mail.gmail.com>
-Subject: Re: [PATCH 2/2] x86, sched: Fix the undefined reference building
- error of init_freq_invariance_cppc
-To:     Huang Rui <ray.huang@amd.com>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        kernel test robot <lkp@intel.com>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Stable <stable@vger.kernel.org>
+Date:   Thu, 6 Jan 2022 18:26:41 +0100
+Message-ID: <CAJZ5v0jS3NBSiO0W+phmP3wQUN4fJpRv4_ogG6EXA6dHbcr3Yg@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: use default_groups in kobj_type
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jan 6, 2022 at 8:43 AM Huang Rui <ray.huang@amd.com> wrote:
+On Tue, Jan 4, 2022 at 5:43 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> The init_freq_invariance_cppc function is implemented in smpboot and depends on
-> CONFIG_SMP.
+> There are currently 2 ways to create a set of sysfs files for a
+> kobj_type, through the default_attrs field, and the default_groups
+> field.  Move the cpuidle sysfs code to use default_groups field which
+> has been the preferred way since aa30f47cf666 ("kobject: Add support for
+> default attribute groups to kobj_type") so that we can soon get rid of
+> the obsolete default_attrs field.
 >
->   MODPOST vmlinux.symvers
->   MODINFO modules.builtin.modinfo
->   GEN     modules.builtin
->   LD      .tmp_vmlinux.kallsyms1
-> ld: drivers/acpi/cppc_acpi.o: in function `acpi_cppc_processor_probe':
-> /home/ray/brahma3/linux/drivers/acpi/cppc_acpi.c:819: undefined reference to `init_freq_invariance_cppc'
-> make: *** [Makefile:1161: vmlinux] Error 1
->
-> See https://lore.kernel.org/lkml/484af487-7511-647e-5c5b-33d4429acdec@infradead.org/.
->
-> Fixes: 41ea667227ba ("x86, sched: Calculate frequency invariance for AMD systems")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Signed-off-by: Huang Rui <ray.huang@amd.com>
-> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Ingo Molnar <mingo@kernel.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: x86@kernel.org
-> Cc: stable@vger.kernel.org
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: linux-pm@vger.kernel.org
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > ---
->  arch/x86/include/asm/topology.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/cpuidle/sysfs.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 >
-> diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topology.h
-> index cc164777e661..2f0b6be8eaab 100644
-> --- a/arch/x86/include/asm/topology.h
-> +++ b/arch/x86/include/asm/topology.h
-> @@ -221,7 +221,7 @@ static inline void arch_set_max_freq_ratio(bool turbo_disabled)
->  }
->  #endif
+> diff --git a/drivers/cpuidle/sysfs.c b/drivers/cpuidle/sysfs.c
+> index 469e18547d06..565ed005833a 100644
+> --- a/drivers/cpuidle/sysfs.c
+> +++ b/drivers/cpuidle/sysfs.c
+> @@ -335,6 +335,7 @@ static struct attribute *cpuidle_state_default_attrs[] = {
+>         &attr_default_status.attr,
+>         NULL
+>  };
+> +ATTRIBUTE_GROUPS(cpuidle_state_default);
 >
-> -#ifdef CONFIG_ACPI_CPPC_LIB
-> +#if defined(CONFIG_ACPI_CPPC_LIB) && defined(CONFIG_SMP)
->  void init_freq_invariance_cppc(void);
->  #define init_freq_invariance_cppc init_freq_invariance_cppc
+>  struct cpuidle_state_kobj {
+>         struct cpuidle_state *state;
+> @@ -448,7 +449,7 @@ static void cpuidle_state_sysfs_release(struct kobject *kobj)
+>
+>  static struct kobj_type ktype_state_cpuidle = {
+>         .sysfs_ops = &cpuidle_state_sysfs_ops,
+> -       .default_attrs = cpuidle_state_default_attrs,
+> +       .default_groups = cpuidle_state_default_groups,
+>         .release = cpuidle_state_sysfs_release,
+>  };
+>
+> @@ -591,10 +592,11 @@ static struct attribute *cpuidle_driver_default_attrs[] = {
+>         &attr_driver_name.attr,
+>         NULL
+>  };
+> +ATTRIBUTE_GROUPS(cpuidle_driver_default);
+>
+>  static struct kobj_type ktype_driver_cpuidle = {
+>         .sysfs_ops = &cpuidle_driver_sysfs_ops,
+> -       .default_attrs = cpuidle_driver_default_attrs,
+> +       .default_groups = cpuidle_driver_default_groups,
+>         .release = cpuidle_driver_sysfs_release,
+>  };
+>
+> --
 
-Why don't you check CONFIG_SMP instead of this symbol in cppc_acpi.c?
-That file depends on CONFIG_ACPI_CPPC_LIB anyway.
+Applied as 5.17 material, thanks!
