@@ -2,155 +2,203 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA74F485EA5
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jan 2022 03:22:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04153485EF0
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jan 2022 03:49:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344810AbiAFCW5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Jan 2022 21:22:57 -0500
-Received: from mail-dm6nam08on2062.outbound.protection.outlook.com ([40.107.102.62]:19297
-        "EHLO NAM04-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1344720AbiAFCWa (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 5 Jan 2022 21:22:30 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AhKvN+icbNxeyUI73SNlSqyoHzAGLgB+qV3nnqTq+x6RArZ1GbaJrIr697YJ7V2g1AountMrRNOCoNQSiydAml0I536D+eJOhkSqhsR7f6y9FYmQVgaTVpk8TR3T9LiSIVk6JfRq4B60h2KW6Ztduo4vqXbvnbnyL2O0Oj5A9VH/+6VHXIBpzE3Mb1UHW4FzKQcPb/e5mSDU1FHp4ucjmM5c/F6HAYiaZsjAhEyINXD3SX18sHxieablyn9PlUR97qnlaQBp7YlUjKJjaAlyKA4gS/dlTCjnpRDbmg1uV7w9PehUX2C/HWvxEwoc0Bs0Mtfu27b57ReRsLMk85pqqQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pmbmGIjTJUmRjGsrWiWguw+bksq4c153X61Q/VCGpic=;
- b=Dk/d637nCsPhcVNt61CCitF9X3aI87SmUglgKVqSoibOE2q9f+14YZUYKDpTKHhuACFfCcDW3OahY2T+zLCP+wAPcRpnbZPOtybMBGmrkzIKdsh3OwNSYQeLha6yNo/3VPTOs0t884EiqpjtqhKAVtVDsRJZvIfYOu0m3C0sYeOfYdMMqiLlef3k8MmxLrl32kyAJZ7pxceMIOfGbj1lvx+vEU4BkQFq5EBMfJyEZNBzaLO1ilNnoe5zjr5QNo1drJRJJ2Quyb++uB7FSazDGsoJHvSh5mqsYbIlyjSyUGLqsNq8SEYeeJSb/VPZjDU+hkitFgG9o7wf+jsUxIwmhw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pmbmGIjTJUmRjGsrWiWguw+bksq4c153X61Q/VCGpic=;
- b=yOhBnaHwC6eTASWNQbNZpL0KEZ5yUZ/rl5bTv3ZrOToxthw0YHVSbuet+k9aDCifF8ByMHk5t2suWXFiMOrCKqvh8bXYNO8RcMbcUuOgjkptDCzclsiP7sL+O9qx6Lx38hT+6dMKrpfgFl9Ka/up3OoS88lNjJOUmZIZGg84hjk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
- DM6PR12MB3083.namprd12.prod.outlook.com (2603:10b6:5:11d::28) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4844.15; Thu, 6 Jan 2022 02:22:28 +0000
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::f02e:2cba:7c63:e368]) by DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::f02e:2cba:7c63:e368%4]) with mapi id 15.20.4844.016; Thu, 6 Jan 2022
- 02:22:28 +0000
-Date:   Thu, 6 Jan 2022 10:22:08 +0800
-From:   Huang Rui <ray.huang@amd.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: Re: linux-next: Tree for Jan 5 (cpufreq/amd-pstate)
-Message-ID: <YdZSUHl2iD2bo4p0@amd.com>
-References: <20220105191239.26498b30@canb.auug.org.au>
- <20e286d4-25d7-fb6e-31a1-4349c805aae3@infradead.org>
-Content-Type: text/plain; charset=gb2312
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20e286d4-25d7-fb6e-31a1-4349c805aae3@infradead.org>
-X-ClientProxiedBy: HK2PR04CA0061.apcprd04.prod.outlook.com
- (2603:1096:202:14::29) To DM5PR12MB2504.namprd12.prod.outlook.com
- (2603:10b6:4:b5::19)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d663a913-7ea0-4eff-6086-08d9d0bb62b2
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3083:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB308307E68FE861C31A4F2D01EC4C9@DM6PR12MB3083.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2887;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DZzJEE9L+lMqzuz9o5Ud0kA2jnFrfgDFb8W9sVYP3iqF8vZVPBbqHemfAoLh8ekn/ZIqU4jKMymeWIOu6wISZgucwQahgqe2U4CUz7V9BfVCr6OYqOyr+EpNqkmNLXsM69whpp78GwcGRGRfCxKBYUTsx5XVgXAWV1oW3vjDT13qnRjR1tD8Iia0MjQjuGGEBGhZSGzzR/Aqn5OdaeqE/wov4YKvQhJOPUrnFk1IjvCAz1D/BKKlZ7quWKuZzNxQyL6pT5IOE8ooKRtPEIHbsDxJZlSIoy/HImBN/8UmGgFzB4/kFpeufeu9YRdD9A1sePfP/9dEx+Sfnzzty7LwQB5XeYNk9Al662g1qLncfj4mhJfk7w8fmdGleHAqYq+8HRVqVYlfYVZ6G642I+wDvmHmaRLE6wVelTwIWvGv1LCMMOGu01jtQI2bKW35pHSyGCb99McscDLAN1SKndAaOnDKNcQ3s8yQXT+whO6YtwgH0cOtWi8+ZsbbpLAHfmUoxsefZzK2NBFt7A6f2/2OETIhJAmq1WMqBd3ccLYUSBjYvPU/ShnUphR7lWjoNA5X4xBbvylXRrcykrT9wcE/4shQwexZ60j9H73QdXAYfieOismOgMTY8+DQ0KAsNOB3GW147EciMPeLNvqQpSA4yA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(186003)(6486002)(66556008)(2906002)(38100700002)(8676002)(66476007)(4326008)(8936002)(66946007)(54906003)(6666004)(6916009)(36756003)(6506007)(53546011)(316002)(5660300002)(86362001)(2616005)(6512007)(83380400001)(508600001)(26005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?gb2312?B?MEJxR2M0VEJLeVlsMjRXVTJEMm5mQS9WRkpOMFhmNXI4N2tpN1NEV2gwdU1a?=
- =?gb2312?B?L004MXVKbEh6bW55Qmk3QzI1b1lCc1dLa21uMDI1bGdobFJqemNpaWpKSUZt?=
- =?gb2312?B?TFFBeWRWTnc0VUI2VmsvcFZnd2FsZDgwUWFDR3I4RDFlZ2NEcGhmM1NsZ0d5?=
- =?gb2312?B?a0lMSmFFMjFqbGk5bCtwcEtWTmlVY0xyQUdhZGp4OU05WFBBZEVSRzNHclRH?=
- =?gb2312?B?NlJYdEM0MUc3Y2NGeWdvR1gvemdqdzJHVnFSZE5KWkxSdXBSN2wwd3hscnhW?=
- =?gb2312?B?S1oxTmt2ekpBbEFZL3RQVGd4K1lEdUpqZG03c2krQmwyVkRaOWlIeWVlSmF0?=
- =?gb2312?B?d1RZdFhtMVdqYTdiYWY3UHJ6ZVV5TGt0bDR5c0JwcmlvanJlR05qUWF5RU9n?=
- =?gb2312?B?d2NKdFFvY2Fnd2FnKzkveEU0eHh1ZFl4cUhyVzhVVExsZ2J3NS9LNGpWZXNh?=
- =?gb2312?B?ZGlhWjBsNjZmNHhrWVcrSzgweU9WaWJCeEpwR21nOFR2M3RjdUFuL2t2Zm1y?=
- =?gb2312?B?b0R1WGlyL3hyYzFyZXAwM0M2c1RWZ2pmenlTTGNmaTZ2YTZkeU1jbE04c3pH?=
- =?gb2312?B?WHhEUnBvOHkwK0tQUld2RHdOdGd3aElFQ2Rrbm1xc1h5cVN6KzFPc2U0YmJz?=
- =?gb2312?B?bVlEbXFScFpVOHpIejhYMm5NWEcwZkc0aUdtWEZiRFhYcmRhYjJqMWVDNUhB?=
- =?gb2312?B?LzBhZTBKNU5kOXl1MWNHWGRWMDBjdEx2bnk1TE45RHRSK3ByYWJER0NrZ252?=
- =?gb2312?B?OElsUC8xZVJXZzBpN3lZdmdzVEJpMnJSdkdNbXdITmFvWVBQZmFDbjQ0eWFq?=
- =?gb2312?B?RzZBdGwvZ29mb21QOWxSbXlkcGQ0MEN3NzJENWxGTi9Nb2NvQXA2b3dKcnZU?=
- =?gb2312?B?TzJsVStvOFFBODZ5TGdtOER1YVUvU1ExMDVvWWh6UmlUZEgzc2VBVndybXUy?=
- =?gb2312?B?UGZIS2lLMkpuVklDdXI4T3RYOC9MMGo4Q3A4c3hQcmFDb1JvaUZYL3plUExC?=
- =?gb2312?B?VEFram56VU96U2RQNUFWV0IxNS9TVS9IOVgwTi8zQ2JDQVM0NnR6RG9oR0Jw?=
- =?gb2312?B?WlFlRTUwK0NaeXVSQjFHSTRabm1lYnpmTFNvdVFMcWJ5N3ZkWXVPWFBRK3dD?=
- =?gb2312?B?NG1uR2YwNjJxZ1FabGIyeU5xZnduUU9DanlvSFlHR2F5d2M3UjVtakNLbXlx?=
- =?gb2312?B?T0krQS9HL0w0ckdCZ2R5WEhwQktIWTNZeDc4T1hWbTJrR3ZSWTRmTDJyeWU2?=
- =?gb2312?B?RVBaeTlSeVN5WmlsU3psdWI3RWVaU3JXVXBBTjdzbmRuOEo0UEJXWkQwWGo0?=
- =?gb2312?B?QkpvdTR6MFJWWU1ONFo0QW5QSDRCcCtNK2dmSWpvMmFjSGNKZS9nNXkyZ3ox?=
- =?gb2312?B?TW9mZTkzNGZJN01Wd3JoK2dFd3JkNGVEWU1pMGQ1NnY2ZDkrdkQyc2V6azI1?=
- =?gb2312?B?TGFaVmdsSG9WczVlcmRxejdPbkYwbWtXZmtJL0M3elNWNTFLU0g2bHdHQ2l3?=
- =?gb2312?B?VEZZMStVSm90cWZvSVNrbnhnUjFjaHNpTVNKSnFkM2lWRDF6eTJGQUw2UE9K?=
- =?gb2312?B?WE5rVEJIbHlLUkdjRm5QdkFYd0R5RmEyU1N6QTl6L2tmQWNYREE1SU5PL05a?=
- =?gb2312?B?NC9xSldpM29jWkhVN1QwVEVidUtBUXJJZ0szL2FpMTRqQmIxQWgzZXBZRnN4?=
- =?gb2312?B?bzV4VkJDRmlxTlJ6MEV6MWhIUEg4c0ZyOEI3TWhQZERURVVScXFaWGN3Um02?=
- =?gb2312?B?R2RDSEpKTk44ZUx2L0o3K1lEU3hjMVR2RFowMjB6bk1jc2hNUm1XUnIxd3l1?=
- =?gb2312?B?WDREYnJVb3o5dDY0WUZOQXVGdGdkODJKUTVjZkw5ejBxZjM5bWROOE9XUmN5?=
- =?gb2312?B?aDh3cTU5cUg3V1JYRTgvcEFIYmEzMVIzZndKdW95aUhFdG9LN2hlbkoyV0E1?=
- =?gb2312?B?VUkyNlVocWYzQjZhZWFRbjBoRm95MDJpNDFhTGxPbVhaVTY5SUg5RlQ3cjN6?=
- =?gb2312?B?dzljYWxjSXRrMlF2bkd4dVdhTkF3aGJnRU5NYytGeTc2UW56cENwUTFqOUFN?=
- =?gb2312?B?WTB2YmsrOWRSNllhVmJkaFFITjA0ZitKTGFSQmVHNjhLN0NraXFQTGV5QVBn?=
- =?gb2312?B?NDlMWC9IREpRRituUDlPclRaTmxnWXJiS3B1TmdvYmxGSjE2UVJoNkk3VlNE?=
- =?gb2312?Q?/qCePLU4M9bGOFWsDnK2qBE=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d663a913-7ea0-4eff-6086-08d9d0bb62b2
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2022 02:22:28.4673
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: oiUdGZAT/KgvDYXPm1sJb81jfmvweuTP74BI/o4ChhUnK0Y7ZKvEssImQbewWBCxudMEU8+kwNRrmJd3YBB8vA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3083
+        id S1344979AbiAFCt1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Jan 2022 21:49:27 -0500
+Received: from mga14.intel.com ([192.55.52.115]:49584 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1344972AbiAFCtW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 5 Jan 2022 21:49:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641437362; x=1672973362;
+  h=from:to:cc:subject:date:message-id;
+  bh=sWOtdGi8py39apk6V9+1Cc3HvrPCoQjwl0XE0pBSkSE=;
+  b=KjMgeMy5W0DoNhkFh31cjwMIisMwTdm3WjYB/fLMGQV9t0b9F0xBQAzK
+   eqgscsCdxKez0tWtjfQ8w2sdlOXqp7+0sUm1XrYtyX+wzyMeNdsl6intL
+   0uM2bhMQQxoAn85T8bhiuNQIPbOHkwIH0+v0IEjC4vD79jYLxg2xRGVnw
+   xaUmJt7CSl0EN0Z6jwakCAfgOgFcJuuWr2ZJ2tbx59PUGdDDr/mUhuBWd
+   WU/dYX617EBndqUEz7c6Dw6TneQy3D+I/CBD3VZuwV1Q+t3Xm/qxmZFqr
+   uJH8Al87u3n5f573b89OgFWhD4o9xmcwGItcu7/sokUtXXbUaswr0Anm7
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="242784654"
+X-IronPort-AV: E=Sophos;i="5.88,265,1635231600"; 
+   d="scan'208";a="242784654"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 18:49:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,265,1635231600"; 
+   d="scan'208";a="488796520"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by orsmga002.jf.intel.com with ESMTP; 05 Jan 2022 18:49:19 -0800
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org
+Cc:     x86@kernel.org, linux-doc@vger.kernel.org,
+        Len Brown <len.brown@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        linux-kernel@vger.kernel.org,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH v3 0/7] Thermal: Introduce the Hardware Feedback Interface for thermal and performance management
+Date:   Wed,  5 Jan 2022 18:50:52 -0800
+Message-Id: <20220106025059.25847-1-ricardo.neri-calderon@linux.intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jan 06, 2022 at 10:19:14AM +0800, Randy Dunlap wrote:
-> 
-> 
-> On 1/5/22 00:12, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > Changes since 20220104:
-> > 
-> > The pm tree lost its build failure.
-> > 
-> 
-> on i386 and x86_64:
-> # CONFIG_ACPI is not set
-> 
-> In file included from ../drivers/cpufreq/amd-pstate.c:40:0:
-> ../include/acpi/processor.h:226:2: error: unknown type name ¡®phys_cpuid_t¡¯
->   phys_cpuid_t phys_id; /* CPU hardware ID such as APIC ID for x86 */
->   ^~~~~~~~~~~~
-> ../include/acpi/processor.h:355:1: error: unknown type name ¡®phys_cpuid_t¡¯; did you mean ¡®phys_addr_t¡¯?
->  phys_cpuid_t acpi_get_phys_id(acpi_handle, int type, u32 acpi_id);
->  ^~~~~~~~~~~~
->  phys_addr_t
->   CC      drivers/rtc/rtc-rv3029c2.o
-> ../include/acpi/processor.h:356:1: error: unknown type name ¡®phys_cpuid_t¡¯; did you mean ¡®phys_addr_t¡¯?
->  phys_cpuid_t acpi_map_madt_entry(u32 acpi_id);
->  ^~~~~~~~~~~~
->  phys_addr_t
-> ../include/acpi/processor.h:357:20: error: unknown type name ¡®phys_cpuid_t¡¯; did you mean ¡®phys_addr_t¡¯?
->  int acpi_map_cpuid(phys_cpuid_t phys_id, u32 acpi_id);
->                     ^~~~~~~~~~~~
->                     phys_addr_t
-> 
+Hi,
 
-Thanks to report this, let me take a look.
+This is v3 of this patchset after having incorporated the feedback from
+reviewers. Please find v1 and v2 in [1] and [2], respectively.
 
-Ray
+The Intel Hardware Feedback Interface (HFI) [3] provides information about
+the performance and energy efficiency of each CPU in the system. It uses a
+table that is shared between hardware and the operating system. The
+contents of the table may be updated as a result of changes in the
+operating conditions of the system (e.g., reaching a thermal limit) or the
+action of external factors (e.g., changes in the thermal design power).
+
+The information that HFI provides are specified as numeric, unit-less
+capabilities relative to other CPUs in the system. These capabilities have
+a range of [0-255] where higher numbers represent higher capabilities.
+Energy efficiency and performance are reported in separate capabilities.
+If either the performance or energy capabilities efficiency of a CPU are 0,
+the hardware recommends to not schedule any tasks on such CPU for
+performance, energy efficiency or thermal reasons, respectively.
+
+The kernel or user space may use the information from the HFI to modify
+task placement and/or adjust power limits. This patchset focuses on the
+user space. The thermal notification framework is extended to relay
+updates of CPU capacity. Thus, a userspace daemon can affinitize workloads
+to certain CPUs and/or offline CPUs whose capabilities are zero.
+
+The frequency of HFI updates is specific to each processor model. On some
+systems, there is just a single HFI update at boot. On other systems, there
+may be updates every tens of milliseconds. In order to not overwhelm
+userspace with too many updates, they are limited to one update every
+CONFIG_HZ jiffies.
+
+Thanks and BR,
+Ricardo
+
+[1]. https://lore.kernel.org/lkml/20211106013312.26698-1-ricardo.neri-calderon@linux.intel.com/
+[2]. https://lore.kernel.org/lkml/20211220151438.1196-1-ricardo.neri-calderon@linux.intel.com/
+[3]. https://www.intel.com/sdm
+
+Changes since v2:
+ ++ Unchanged patches: 1, 6, 7.
+ * Replaced subject prefix to be "x86/cpu:". (Patch 2; Boris)
+ * Rename the INTEL_HFI Kconfig option as INTEL_HFI_THERMAL to reflect
+   better the nature of the feature. (Patch 3; Rafael)
+ * Removed hfi_instance::initialized. Instead, use hfi_instance::
+   hdr to determine if the instance has been initialized. (Patch 4; Rafael)
+ * Renamed hfi_lock as hfi_instance_lock to reflect the fact that it is
+   used to protect accesses to HFI instances. (Patch 4; Rafael)
+ * Removed unnecessary locking when linking a CPU to an HFI instance
+   in intel_hfi_online(). (Patch 4; Rafael)
+ * Unconditionally link the hfi_instance of a package/die to CPUs in
+   the same package in intel_hfi_online(). Initialization is taken care
+   of separately. (Patch 4)
+ * Improved locking in error paths in intel_hfi_online(). (Patch 4; Rafael)
+ * Removed a pointless check for NULL when taking a pointer of an element
+   of hfi_instances. (Patch 4)
+ * Added missing #include files. (Patches 3, 4, 5)
+
+Changes since v1:
+ ++ Unchanged patches: none
+ * Clarified that HFI capabilities are independent. (Patch 1; Daniel)
+ * Provided examples on changes reflected in the HFI table.
+   (Patch 1; Daniel)
+ * Renamed X86_FEATURE_INTEL_HFI as X86_FEATURE_HFI. (Patch 2, 3, 4, 5;
+   Boris)
+ * Reworked parsing of HFI features using bitfields instead of bitmasks.
+   (Patch 3; PeterZ).
+ * Removed hfi_instance::parsed. (Patch 3; Rafael)
+ * Converted pr_err() to pr_debug(). (Patch 3; Srinivas, Rafael)
+ * Removed unnecessary dependency on CONFIG_SCHED_MC. (Patch 3)
+ * Renamed hfi_instance::ts_counter as hfi_instance::timestamp.
+   (Patch 3)
+ * Renamed hfi_instance::table_base as hfi_instance::local_table and
+   relocated its definition to this patch. (Patch 3)
+ * Wrapped hfi_instance::timestamp and hfi_instance:local_table in an
+   anonymous union, since both point at the same location. (Patch 3)
+ * Relocated definitions of MSR bits from intel_hfi.h to intel_hfi.c.
+   (Patch 4)
+ * Renamed HFI_PTR_VALID_BIT as HW_FEEDBACK_PTR_VALID_BIT for clarity.
+   (Patch 4).
+ * Reworked init_hfi_cpu_index() to take a pointer of type struct
+   hfi_cpu_info. (Patch 4; Rafael)
+ * In intel_hfi_online(), check for null hfi_instances and improve checks
+   of the die_id. (Patch 4; Rafael)
+ * Use a local cpumask_var_t to keep track of the CPUs of each
+   hfi_instance. (Patch 4; Rafael)
+ * Removed hfi_instance::die_id. It is not used anywhere. (Patch 4)
+ * Renamed hfi_instance::table_base as hfi_instance::local_table for
+   clarity. (Patch 4)
+ * Repurposed hfi_instance::event_lock to handle HFI interrupt
+   events to avoid keeping CPUs spinning needlessly. Added a new
+   hfi_instance::table_lock to serialize access to an HFI table.
+   (Patch 5; PeterZ)
+ * Replaced raw_spin_[un]lock[restore|save]() with raw_spin_[un]lock().
+   intel_hfi_process_event() runs in interrupt context and hence there
+   is no need to save interrupt flags. (Patch 5)
+ * Renamed HFI_CONFIG_ENABLE_BIT as HW_FEEDBACK_CONFIG_HFI_ENABLE_BIT
+   for clarity. (Patch 5)
+ * Relaxed checks on timestamp to allow time wrap around. (Patch 5)
+ * Reworded the members of struct cpu_capacity for clarity. (Patch 6;
+   Lukasz)
+ * Defined the CPU capability attributes to be scaled in the [0, 1023]
+   interval. (Patch 6; Lukasz)
+ * Made get_one_hfi_cap() return void. Removed unnecessary checks.
+   (Patch 7; Rafael)
+ * Replaced raw_spin_[un]lock_irq[restore|save]() with raw_spin_
+   [un]lock_irq() in get_one_hfi_cap(). This function is only called from
+   a workqueue and there is no need to save and restore irq flags.
+ * Scaled performance and energy efficiency values to a [0, 1023] interval
+   when reporting values to user space via thermal netlink notifications.
+   (Patch 7; Lucasz).
+
+
+Ricardo Neri (5):
+  x86/Documentation: Describe the Intel Hardware Feedback Interface
+  x86/cpu: Add definitions for the Intel Hardware Feedback Interface
+  thermal: intel: hfi: Minimally initialize the Hardware Feedback
+    Interface
+  thermal: intel: hfi: Handle CPU hotplug events
+  thermal: intel: hfi: Enable notification interrupt
+
+Srinivas Pandruvada (2):
+  thermal: netlink: Add a new event to notify CPU capabilities change
+  thermal: intel: hfi: Notify user space for HFI events
+
+ Documentation/x86/index.rst         |   1 +
+ Documentation/x86/intel-hfi.rst     |  72 ++++
+ arch/x86/include/asm/cpufeatures.h  |   1 +
+ arch/x86/include/asm/msr-index.h    |   6 +
+ drivers/thermal/intel/Kconfig       |  13 +
+ drivers/thermal/intel/Makefile      |   1 +
+ drivers/thermal/intel/intel_hfi.c   | 542 ++++++++++++++++++++++++++++
+ drivers/thermal/intel/intel_hfi.h   |  17 +
+ drivers/thermal/intel/therm_throt.c |  21 ++
+ drivers/thermal/thermal_netlink.c   |  55 +++
+ drivers/thermal/thermal_netlink.h   |  13 +
+ include/uapi/linux/thermal.h        |   6 +-
+ 12 files changed, 747 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/x86/intel-hfi.rst
+ create mode 100644 drivers/thermal/intel/intel_hfi.c
+ create mode 100644 drivers/thermal/intel/intel_hfi.h
+
+-- 
+2.17.1
+
