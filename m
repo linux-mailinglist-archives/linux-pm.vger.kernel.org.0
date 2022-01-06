@@ -2,84 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6E08486B57
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jan 2022 21:43:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AC2C486C12
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jan 2022 22:45:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243920AbiAFUnP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 6 Jan 2022 15:43:15 -0500
-Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:31129 "EHLO
-        mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232673AbiAFUnO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Jan 2022 15:43:14 -0500
-IronPort-Data: =?us-ascii?q?A9a23=3AbZvM1KPbd/+/7GPvrR20lsFynXyQoLVcMsFnjC/?=
- =?us-ascii?q?WdVa93Tom12cCmjQZUT/Xbq7eMDP3etl2YYi/oEwE78TVm99gGjLY11k9FiMQ8?=
- =?us-ascii?q?ZKt6fexdxqrYXvKdqUvdK/WhiknQoGowPscEzmM9n9BDpC79SMmjfjQGOKmYAL?=
- =?us-ascii?q?5EnsZqTFMGX5JZS1Ly7ZRbr5A2bBVMivV0T/Ai5W31GyNh1aYBlkpB5er83uDi?=
- =?us-ascii?q?hhdVAQw5TTSbdgT1LPXeuJ84Jg3fcldJFOgKmVY83LTegrN8F251juxExYFCtq?=
- =?us-ascii?q?piLf2dCXmQJaCYE7Q2jwPAfHk20cZzsAx+v9T2P40a1pTijzPm9luwdFJnZ22U?=
- =?us-ascii?q?wYgeKPW8AgYe0AES3EhbPQYkFPACT3l2SCJ9GXdaXrqwutnFwcuNIsU4PtpCG1?=
- =?us-ascii?q?H3fgZLi0dKBGFm++yhrm8T4FEjdk5Ns7pMZkSqFl6zCrUEO5gR53fK43Q7NFR0?=
- =?us-ascii?q?TMYhc1UG/vaIc0DZlJHaBnGaTVMN00RBZZ4m/2n7lHhcidVs1LTprcy6nL7yA1?=
- =?us-ascii?q?32aLqdt3PdbSiQcRTg1bdvmfu4Wv0GFcZOcaZxD7D9Wij7sfLnCXmSMcRGae++?=
- =?us-ascii?q?/pCnlKe3CoQBQcQWF/9puO24ma7WtRQLGQO9yYupLR0/0uuJvHlUgG1umysvxg?=
- =?us-ascii?q?SQdNcHuQ2rgaXxcL84RuDBy4AQzpFafQ8ucM2TCBs3ViM9/v3BDpkvbuJD32A9?=
- =?us-ascii?q?6uIqi+aPSkTJHUFIygeQmM4D3PLyG0opkuQFZA6Svfz0I2zSWy22T2U6jMwnfM?=
- =?us-ascii?q?VgNJj6klyxnif6xrEm3QDZl9dCt3rY1+Y?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3A2+TO7a+zKkcN+MigXfZuk+C7I+orL9Y04lQ7?=
- =?us-ascii?q?vn2ZKCY+TiX2ra6TdZggviMc9gx/ZJhQo7290cC7KBvhHPVOjbX5U43CYOCfgg?=
- =?us-ascii?q?uVEL0=3D?=
-X-IronPort-AV: E=Sophos;i="5.88,267,1635199200"; 
-   d="scan'208";a="14087916"
-Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 21:43:13 +0100
-Date:   Thu, 6 Jan 2022 21:43:12 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-cc:     Francisco Jerez <currojerez@riseup.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
-In-Reply-To: <1b2be990d5c31f62d9ce33aa2eb2530708d5607a.camel@linux.intel.com>
-Message-ID: <alpine.DEB.2.22.394.2201062141290.3098@hadrien>
-References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien>  <alpine.DEB.2.22.394.2112291012030.24929@hadrien>  <CAJZ5v0g5wDxYXA-V=Ex_Md82hgnj5K6Vr0tavFFVz=uBqo8wag@mail.gmail.com>  <alpine.DEB.2.22.394.2112301840360.15550@hadrien> 
- <CAJZ5v0h38jh3gyTp9W0ws0yXyfK=F+TQ7VYRVx4aGXhNeSObEg@mail.gmail.com>  <alpine.DEB.2.22.394.2112301919240.15550@hadrien>  <CAJZ5v0haa5QWvTUUg+wwSHvuWyk8pic1N0kox=E1ZKNrHSFuzw@mail.gmail.com>  <alpine.DEB.2.22.394.2112301942360.15550@hadrien> 
- <CAJZ5v0im+Cke7tcNRav2VCyf5Qvi7qC29aF+9A1kVZZmt7cu6g@mail.gmail.com>  <alpine.DEB.2.22.394.2201031922110.3020@hadrien>  <CAJZ5v0hsCjKA3EisK9s_S8Vb9Tgm4eps1FTKvUSfd9_JPh5wBQ@mail.gmail.com>  <alpine.DEB.2.22.394.2201032110590.3020@hadrien> 
- <CAJZ5v0hFcRWPO859YWUKLdqkTrVA1WLqRjFWg1=WS8qGG5CTkQ@mail.gmail.com>  <alpine.DEB.2.22.394.2201041643520.3020@hadrien>  <CAJZ5v0i9Rh0Cm3Mbu3N8w6UmgJEnmThk4znWVcp9qeroabjsNw@mail.gmail.com>  <alpine.DEB.2.22.394.2201052107280.48852@hadrien>  <87a6g9rbje.fsf@riseup.net>
-  <alpine.DEB.2.22.394.2201062044340.3098@hadrien> <1b2be990d5c31f62d9ce33aa2eb2530708d5607a.camel@linux.intel.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        id S244369AbiAFVpI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 6 Jan 2022 16:45:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43880 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244268AbiAFVpI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Jan 2022 16:45:08 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C84C061245
+        for <linux-pm@vger.kernel.org>; Thu,  6 Jan 2022 13:45:07 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id z30so235952pge.4
+        for <linux-pm@vger.kernel.org>; Thu, 06 Jan 2022 13:45:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=VX3mIDIkdqQ8VpapDA1BFJtm8lw/XhGYrl73131cKII=;
+        b=DxApNcVR7wXnssZM8ls9cVSjdiB4stijxljvkVTQ8IpDvjilflyUUyyQRr12GaDrGX
+         F+rbiScl+tIlXTmE0bzsBVMbItjNSLfTmbt5Uu1kyEyMF8ezkxHZKEkUUdo9WaK69qI4
+         svokQx3hxUgW9pado2LF38eN0eexmKPh/vWi1r/tbCj1p83enAy+IsAep3QJx7URWuF8
+         IFBytOTfESb1BNRlsYLUxkKqyaim+vx8d4rUAJzTuwganb/VYh+It7HcWxOc0NOA2DR1
+         PnY/lTRzUkALrCKkWjhwa3VSLE07fiIurSZ/1DmUrmkgvexRhWD9APUHeoyiKALYgWKv
+         HP3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=VX3mIDIkdqQ8VpapDA1BFJtm8lw/XhGYrl73131cKII=;
+        b=w4O5qNiazX07aUb2oIVj+MUypRH7qu4AV699y4XPRq/86TG1k7+8ut1YRhaUto6Yx0
+         mKgV5pv1VUX/bh7tE2U0pBDjK6/NPlFq69nDcdl61adThw1983LzVX8KoojFDEX/zc4R
+         rYXTPUOC4loc4E1eO4Dl50Zca9MLeb5tX0Q7w8QH0vJ++X2iJBpL/OXO2NK+r8j1ROL1
+         NW3QR8Jv1VgSoa72WzBYTuBZMGeC8n7koW6B2wKG6+LbixbFqGILqcWQmF35/3Vk2XfM
+         PSCQTzuFiAnaSJwIzIIyKzqpxf6rGFCMhBACEK1M6DBgOtClSCDgRQ4NcvmNAwcXWxLu
+         KCsQ==
+X-Gm-Message-State: AOAM533QWvoLze++n1/GXYH2zfiAyaL3UTesz4LlzLLLsBsa2begM5OA
+        ZwrjQjBD2TiN5cd+S17KGRZJOjSxwB8YeHG8
+X-Google-Smtp-Source: ABdhPJzE2EmiFWef/JM/+920afIorQnVpXcmgWodA2bI5nIGiHS2/ycEEr08K708DXFnGW8xkw7SEg==
+X-Received: by 2002:a63:36c1:: with SMTP id d184mr44862035pga.102.1641505507443;
+        Thu, 06 Jan 2022 13:45:07 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id h22sm3378264pfv.1.2022.01.06.13.45.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 13:45:07 -0800 (PST)
+Message-ID: <61d762e3.1c69fb81.6a9a4.8b0e@mx.google.com>
+Date:   Thu, 06 Jan 2022 13:45:07 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v5.16-rc8-171-gf099fd60c342
+X-Kernelci-Branch: testing
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 1 warning (v5.16-rc8-171-gf099fd60c342)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-> > All the turbostat output and graphs I have sent recently were just
-> > for
-> > continuous spinning:
-> >
-> > for(;;);
-> >
-> > Now I am trying running for the percentage of the time corresponding
-> > to
-> > 10 / P for pstate P (ie 0.5 of the time for pstate 20), and then
-> > sleeping,
-> > to see whether one can just add the sleeping power consumption of the
-> > machine to compute the efficiency as Rafael suggested.
-> >
-> Before doing comparison try freezing uncore.
->
-> wrmsr -a 0x620 0x0808
->
-> to Freeze uncore at 800MHz. Any other value is fine.
+pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.16-rc8-171-gf=
+099fd60c342)
 
-Thanks for the suggestion.  What is the impact of this?
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+16-rc8-171-gf099fd60c342/
 
-julia
+Tree: pm
+Branch: testing
+Git Describe: v5.16-rc8-171-gf099fd60c342
+Git Commit: f099fd60c342d8d8265202ce01b4375358913072
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+x86_64:
+
+
+Warnings summary:
+
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
