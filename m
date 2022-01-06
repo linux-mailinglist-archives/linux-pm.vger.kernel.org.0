@@ -2,181 +2,213 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 535974866D4
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jan 2022 16:40:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68A5D486716
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jan 2022 16:52:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240478AbiAFPkR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 6 Jan 2022 10:40:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44594 "EHLO
+        id S230138AbiAFPww (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 6 Jan 2022 10:52:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240462AbiAFPkR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Jan 2022 10:40:17 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DACC061245;
-        Thu,  6 Jan 2022 07:40:17 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id w184so8498806ybg.5;
-        Thu, 06 Jan 2022 07:40:17 -0800 (PST)
+        with ESMTP id S240675AbiAFPww (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Jan 2022 10:52:52 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DDDC061212
+        for <linux-pm@vger.kernel.org>; Thu,  6 Jan 2022 07:52:51 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id y17so2662651qtx.9
+        for <linux-pm@vger.kernel.org>; Thu, 06 Jan 2022 07:52:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=YKFqbxqRhSrpS10gEKkdq6zgQ77RwI60JI4NhfOBth8=;
-        b=GQlTSEtVjB8pz+9yfl1zRN8k9cSW8tlJTk/60O1OSAab9wXsSzSR2AfP1SyTPghggm
-         R3H2jCiuw2uo1+suvE7iAHJMv+YMN0zp9rL/KgzE39VhtRYzEyMA3rW/aJTelzXrz1hW
-         a6B854t6NyMsVWD3a1Zh7KlIzkkHjArhxStrPgL9EdYhzLQYb0XfetkARgtPdTvHLQvw
-         6ET7InaKrLehHVlH+DS/MXyncL6EQm+6uVLRwee59/MiII3cUpHa3tZIPw09g7+kCwQ3
-         1N1ZIa5l6ULYQcgkPCVqiiYMjuVgbg/D3cqfAoQmmUUlJejodPr4JWcjjQmBLFWz7Q4F
-         0VGQ==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=GhPv3TCVMNdzUlnrS7GkeARVb8jWq6T2I9klaQoUwbI=;
+        b=mHj9cU1mZ6+AB2dMfeWCnzQpmvDTSdjQ5h89UiEllr8fDgUmgLQN5aAd0vSd5pEJaA
+         mxouS/6Sbd2IF2gwVQR8Mc5mTxut8muKa8K5E8Zg0bKborLAHXPib8E3Mu75W8mVuEa1
+         CnnOkkjJTOs0lLWA8n90R8AdshgTb//mTalunZPjrNeERzpCjWv0ligUJaD53pPFYmve
+         /Sm4At6DaJZrbvx3TgAR9+qYvzjxCGlw2wPEJR6V1Lv02QAFKaqdAs4GSnfXS2DZi9w9
+         WbOsdM5KctOO5LQJiNZDxjiRwKhPhCFhP8ZqIlO+eamevz1IkEuszxQEIUAXKSxWteZi
+         GGmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=YKFqbxqRhSrpS10gEKkdq6zgQ77RwI60JI4NhfOBth8=;
-        b=Lpb8S52npMzYFZKBK7rWfWt3BhWGEei7FyjqBarUSnc1ts/2uaEnnX/NGG0BJZ+igg
-         Z4M8pGt4CAxx/Irlx+ZvWsuScLav4i78opaCvgC9WqAgtN/yd8luqbv0kywx+x+pP6b0
-         KXxZU2ONoUqO/58W1DyCrc6wKgWCV8J1rNv70BiKbjLnTcnyuu+X4mBbxaQ9N+Ab5wt1
-         8ljXxaXesKPPz3Hgg7i+oZrbuhnkgg4uEQHe2oRuykG7UZMxTOa000HZrUJd9LuJFzWD
-         jiHUEehP+G6yRMAW3wbXjQJTFW54CR9RnZil8wJXwDjSAuhPKQrmAejBPbDN49u7SKQ3
-         rkFg==
-X-Gm-Message-State: AOAM532BOWud52NJK8jo/6T3N871/Ixw+lG4ZtkFQ3bI6e910hxxlZqL
-        Ln+oHvoDQjDHv91p9CTO6wngdLtvf9zd53MOrZk=
-X-Google-Smtp-Source: ABdhPJzIA3AtEQTXGqxbgw11u0GELqS4RKSp/Z6gEhPYVGeQrt+BzeRO1+w3fxGgvXIigvfwxF0XzUN+inh/Ab9jfQM=
-X-Received: by 2002:a25:98c4:: with SMTP id m4mr75641857ybo.613.1641483616417;
- Thu, 06 Jan 2022 07:40:16 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=GhPv3TCVMNdzUlnrS7GkeARVb8jWq6T2I9klaQoUwbI=;
+        b=Z+jWSoJQC4NmkMRR7u77qVmpELYjapTpWLPwJRx4x8rPao0eENAZpbsCRSptGgtlM+
+         lWzLSnna3ge2iPr581x7g2SL9bhpSmXMw7A0nBPj4rAcp8Osn9Jro2nY47CLRA0CXVXV
+         8RpRE9Zh1aXm4TVZwJUg+fiBYNvGUQqpIeNLOHPgzivYLsSPe+wyQUZ2xcktCvGXLxMw
+         l0zEP2qsz5GXxXk0ldU5iL/awKHouakQmPCqhHyvcaGju4hoxxwzE4cBzbJunevMSMM4
+         u9Z8YXnSDCTB+5Sxrz7CGrAo7PlpxXIMVQjCCWnK2nxx9X/MOQJChw6CN7G4pbfdyTsf
+         gvCQ==
+X-Gm-Message-State: AOAM532vlZoNo2n4TlI4iX2IzajEyNovlYazoT1zqsM/9PVLSQNW2U1i
+        IMryLDIagNhxmXcmqAhYswM0DA==
+X-Google-Smtp-Source: ABdhPJzsQPvOoewQNO3rShMtgLaJZlLZfDc1vqyDvuNjeB4XHvY9hmxC9cyUio4pPyQleEFz0K3wiA==
+X-Received: by 2002:ac8:5993:: with SMTP id e19mr51906451qte.568.1641484370843;
+        Thu, 06 Jan 2022 07:52:50 -0800 (PST)
+Received: from [192.168.1.93] (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
+        by smtp.gmail.com with ESMTPSA id y6sm1696596qtn.23.2022.01.06.07.52.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Jan 2022 07:52:50 -0800 (PST)
+Subject: Re: [Patch v2 1/3] thermal: qcom: lmh: Add support for sm8150
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     agross@kernel.org, daniel.lezcano@linaro.org, rafael@kernel.org,
+        rui.zhang@intel.com, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211215163400.33349-1-thara.gopinath@linaro.org>
+ <20211215163400.33349-2-thara.gopinath@linaro.org> <YdYTFu/QTZ5DS95M@ripper>
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+Message-ID: <efe8205e-aaea-fda6-c556-f42bfd6ec82c@linaro.org>
+Date:   Thu, 6 Jan 2022 10:52:49 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-References: <20220104145212.4608-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <YdXt2mDjZ0zikbt6@oden.dyn.berto.se> <CA+V-a8sGh0bCiDu_Eiz3EFgaDPmr-qyz95=dExwf+UvuyA21Cg@mail.gmail.com>
- <YdcK5WWnEtEQk0Fp@oden.dyn.berto.se>
-In-Reply-To: <YdcK5WWnEtEQk0Fp@oden.dyn.berto.se>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Thu, 6 Jan 2022 15:39:50 +0000
-Message-ID: <CA+V-a8v1ijFVVh91eHTD2uSGcinD46Hs9LDV125+_dfmvj6vYw@mail.gmail.com>
-Subject: Re: [PATCH v3] thermal: rcar_thermal: Use platform_get_irq_optional()
- to get the interrupt
-To:     =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <YdYTFu/QTZ5DS95M@ripper>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Niklas,
 
-On Thu, Jan 6, 2022 at 3:29 PM Niklas S=C3=B6derlund
-<niklas.soderlund@ragnatech.se> wrote:
->
-> Hi Lad,
->
-> On 2022-01-05 19:25:25 +0000, Lad, Prabhakar wrote:
-> > Hi Niklas,
-> >
-> > Thank you for the review.
-> >
-> > On Wed, Jan 5, 2022 at 7:13 PM Niklas S=C3=B6derlund
-> > <niklas.soderlund@ragnatech.se> wrote:
-> > >
-> > > Hi Lad,
-> > >
-> > > Thanks for your work.
-> > >
-> > > On 2022-01-04 14:52:11 +0000, Lad Prabhakar wrote:
-> > > > platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> > > > allocation of IRQ resources in DT core code, this causes an issue
-> > > > when using hierarchical interrupt domains using "interrupts" proper=
-ty
-> > > > in the node as this bypasses the hierarchical setup and messes up t=
-he
-> > > > irq chaining.
-> > > >
-> > > > In preparation for removal of static setup of IRQ resource from DT =
-core
-> > > > code use platform_get_irq_optional().
-> > > >
-> > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.c=
-om>
-> > > > ---
-> > > > v2-v3:
-> > > > * Fixed review comment pointed by Andy
-> > > >
-> > > > v1->v2
-> > > > * Simplified checking error code
-> > > > * Break loop earlier if no interrupts are seen
-> > > >
-> > > > v1: https://lkml.org/lkml/2021/12/18/163
-> > > > ---
-> > > >  drivers/thermal/rcar_thermal.c | 17 ++++++++++++-----
-> > > >  1 file changed, 12 insertions(+), 5 deletions(-)
-> > > >
-> > > > diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_=
-thermal.c
-> > > > index b49f04daaf47..e480f7290ccf 100644
-> > > > --- a/drivers/thermal/rcar_thermal.c
-> > > > +++ b/drivers/thermal/rcar_thermal.c
-> > > > @@ -445,7 +445,7 @@ static int rcar_thermal_probe(struct platform_d=
-evice *pdev)
-> > > >       struct rcar_thermal_common *common;
-> > > >       struct rcar_thermal_priv *priv;
-> > > >       struct device *dev =3D &pdev->dev;
-> > > > -     struct resource *res, *irq;
-> > > > +     struct resource *res;
-> > > >       const struct rcar_thermal_chip *chip =3D of_device_get_match_=
-data(dev);
-> > > >       int mres =3D 0;
-> > > >       int i;
-> > > > @@ -467,9 +467,16 @@ static int rcar_thermal_probe(struct platform_=
-device *pdev)
-> > > >       pm_runtime_get_sync(dev);
-> > > >
-> > > >       for (i =3D 0; i < chip->nirqs; i++) {
-> > > > -             irq =3D platform_get_resource(pdev, IORESOURCE_IRQ, i=
-);
-> > > > -             if (!irq)
-> > > > -                     continue;
-> > > > +             int irq;
-> > > > +
-> > > > +             irq =3D platform_get_irq_optional(pdev, i);
-> > > > +             if (irq < 0 && irq !=3D -ENXIO) {
-> > > > +                     ret =3D irq;
-> > > > +                     goto error_unregister;
-> > > > +             }
-> > > > +             if (!irq || irq =3D=3D -ENXIO)
-> > > > +                     break;
-> > >
-> > > This do not look correct and differs form v1.
-> > >
-> > > In the old code if we can't get an IRQ the loop is continued. This is
-> > > used to detect if interrupts are supported or not on the platform.  T=
-his
-> > > change will fail on all systems that don't describes interrupts in DT
-> > > while the driver can function without interrupts.
-> > >
-> > There are no non-DT users for this driver. Do you see this driver
-> > being used in a non-DT environment in near future?
->
-> No, maybe I was unclear sorry about that. What I intended to say was
-> that this change will break platforms that that make use of this driver
-> but do not describe interrupts in its DT description. As with this
-> change not describing interrupts is consider an error.
->
-> For example checkout thermal@ffc48000 in arch/arm/boot/dts/r8a7779.dtsi.
->
-If the interrupts are missing in DT (for example in [1])
-platform_get_irq_optional() will return -ENXIO with this patch this
-error code is handled gracefully i.e. it doesn't return error and
-breaks instead keeping the orignal behavior of the driver.
 
-[1] arch/arm/boot/dts/r8a7779.dtsi
+On 1/5/22 4:52 PM, Bjorn Andersson wrote:
+> On Wed 15 Dec 08:33 PST 2021, Thara Gopinath wrote:
+> 
+>> Add compatible to support LMh for sm8150 SoC.
+>> sm8150 does not require explicit enabling for various LMh subsystems.
+>> Add a variable indicating the same as match data which is set for sdm845.
+>> Execute the piece of code enabling various LMh subsystems only if
+>> enable algorithm match data is present.
+>>
+>> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
+>> ---
+>>
+>> v1->v2:
+>> 	- Added LMH_ENABLE_ALGOS of_device_id match data to indicate
+>> 	  whether LMh subsytems need explicit enabling or not.
+>>
+>>   drivers/thermal/qcom/lmh.c | 62 +++++++++++++++++++++-----------------
+>>   1 file changed, 35 insertions(+), 27 deletions(-)
+>>
+>> diff --git a/drivers/thermal/qcom/lmh.c b/drivers/thermal/qcom/lmh.c
+>> index eafa7526eb8b..80d26d043498 100644
+>> --- a/drivers/thermal/qcom/lmh.c
+>> +++ b/drivers/thermal/qcom/lmh.c
+>> @@ -28,6 +28,8 @@
+>>   
+>>   #define LMH_REG_DCVS_INTR_CLR		0x8
+>>   
+>> +#define LMH_ENABLE_ALGOS		((void *)1)
+>> +
+>>   struct lmh_hw_data {
+>>   	void __iomem *base;
+>>   	struct irq_domain *domain;
+>> @@ -87,6 +89,7 @@ static int lmh_probe(struct platform_device *pdev)
+>>   {
+>>   	struct device *dev = &pdev->dev;
+>>   	struct device_node *np = dev->of_node;
+>> +	const struct of_device_id *of_id;
+>>   	struct device_node *cpu_node;
+>>   	struct lmh_hw_data *lmh_data;
+>>   	int temp_low, temp_high, temp_arm, cpu_id, ret;
+>> @@ -141,32 +144,36 @@ static int lmh_probe(struct platform_device *pdev)
+>>   	if (!qcom_scm_lmh_dcvsh_available())
+>>   		return -EINVAL;
+>>   
+>> -	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_CRNT, LMH_ALGO_MODE_ENABLE, 1,
+>> -				 LMH_NODE_DCVS, node_id, 0);
+>> -	if (ret)
+>> -		dev_err(dev, "Error %d enabling current subfunction\n", ret);
+>> -
+>> -	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_REL, LMH_ALGO_MODE_ENABLE, 1,
+>> -				 LMH_NODE_DCVS, node_id, 0);
+>> -	if (ret)
+>> -		dev_err(dev, "Error %d enabling reliability subfunction\n", ret);
+>> -
+>> -	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_BCL, LMH_ALGO_MODE_ENABLE, 1,
+>> -				 LMH_NODE_DCVS, node_id, 0);
+>> -	if (ret)
+>> -		dev_err(dev, "Error %d enabling BCL subfunction\n", ret);
+>> -
+>> -	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_ALGO_MODE_ENABLE, 1,
+>> -				 LMH_NODE_DCVS, node_id, 0);
+>> -	if (ret) {
+>> -		dev_err(dev, "Error %d enabling thermal subfunction\n", ret);
+>> -		return ret;
+>> -	}
+>> -
+>> -	ret = qcom_scm_lmh_profile_change(0x1);
+>> -	if (ret) {
+>> -		dev_err(dev, "Error %d changing profile\n", ret);
+>> -		return ret;
+>> +	of_id = of_match_device(dev->driver->of_match_table, dev);
+> 
+> I think it would be preferable to use of_device_get_match_data() and
+> assign this to an unsigned long.
 
-Cheers,
-Prabhakar
+Sure.. I will fix this and the comment below and send out v3.
+
+-- 
+Warm Regards
+Thara (She/Her/Hers)
+> 
+>> +
+>> +	if (of_id && of_id->data == LMH_ENABLE_ALGOS) {
+> 
+> Then you don't need to check of_id for NULL here and this would lend
+> itself nicely to be a bitmask of enabled algorithms if some platform
+> would need to enable a subset of these.
+> 
+>> +		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_CRNT, LMH_ALGO_MODE_ENABLE, 1,
+>> +					 LMH_NODE_DCVS, node_id, 0);
+>> +		if (ret)
+>> +			dev_err(dev, "Error %d enabling current subfunction\n", ret);
+>> +
+>> +		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_REL, LMH_ALGO_MODE_ENABLE, 1,
+>> +					 LMH_NODE_DCVS, node_id, 0);
+>> +		if (ret)
+>> +			dev_err(dev, "Error %d enabling reliability subfunction\n", ret);
+>> +
+>> +		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_BCL, LMH_ALGO_MODE_ENABLE, 1,
+>> +					 LMH_NODE_DCVS, node_id, 0);
+>> +		if (ret)
+>> +			dev_err(dev, "Error %d enabling BCL subfunction\n", ret);
+>> +
+>> +		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_ALGO_MODE_ENABLE, 1,
+>> +					 LMH_NODE_DCVS, node_id, 0);
+>> +		if (ret) {
+>> +			dev_err(dev, "Error %d enabling thermal subfunction\n", ret);
+>> +			return ret;
+>> +		}
+>> +
+>> +		ret = qcom_scm_lmh_profile_change(0x1);
+>> +		if (ret) {
+>> +			dev_err(dev, "Error %d changing profile\n", ret);
+>> +			return ret;
+>> +		}
+>>   	}
+>>   
+>>   	/* Set default thermal trips */
+>> @@ -213,7 +220,8 @@ static int lmh_probe(struct platform_device *pdev)
+>>   }
+>>   
+>>   static const struct of_device_id lmh_table[] = {
+>> -	{ .compatible = "qcom,sdm845-lmh", },
+>> +	{ .compatible = "qcom,sdm845-lmh", .data = LMH_ENABLE_ALGOS},
+> 
+> Make LMH_ENABLE_ALGOS just an integer define and add the explicit (void
+> *) cast here.
+> 
+> Regards,
+> Bjorn
+> 
+>> +	{ .compatible = "qcom,sm8150-lmh", },
+>>   	{}
+>>   };
+>>   MODULE_DEVICE_TABLE(of, lmh_table);
+>> -- 
+>> 2.25.1
+>>
+
+
