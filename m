@@ -2,67 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1AA9486878
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jan 2022 18:29:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D362748687C
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jan 2022 18:31:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241812AbiAFR3h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 6 Jan 2022 12:29:37 -0500
-Received: from mail-qt1-f173.google.com ([209.85.160.173]:35527 "EHLO
-        mail-qt1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241825AbiAFR3g (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Jan 2022 12:29:36 -0500
-Received: by mail-qt1-f173.google.com with SMTP id c10so1256960qte.2;
-        Thu, 06 Jan 2022 09:29:36 -0800 (PST)
+        id S241835AbiAFRbl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 6 Jan 2022 12:31:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41660 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241822AbiAFRbk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Jan 2022 12:31:40 -0500
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D494C061212
+        for <linux-pm@vger.kernel.org>; Thu,  6 Jan 2022 09:31:40 -0800 (PST)
+Received: by mail-qt1-x836.google.com with SMTP id c10so1262995qte.2
+        for <linux-pm@vger.kernel.org>; Thu, 06 Jan 2022 09:31:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uSBn+Ips2mtFKmkest40VuG2t1Y4Y842E21N7HcVLJw=;
+        b=KRlCFD5KV+WoJ+jF34AGPj77mfOTitmcVtdNTWCJ0WyhMf7uB/TfCP6b+01TV1eF7G
+         Z9Rz1Tk2QJEAU4OGX7qnERqkDPihLIskT9gJrWpCajmgLeGm3ovHofUdfGGD/U57Bald
+         E8AqlWMbVzVYjsBqw8yR35fEk1hzUW+ZZ6JAKq6nE+FSVpMia+YMmp1yU2lWnbN6134g
+         N+dlVB0pOl81XfwbhH61YgaCuJRyYJvbhku03FdwbytcfF90/Mo96jIzw/3bFkbB3Krz
+         ucy1cOlyrZhSd/pJeDZUkEbOFqkkiFxSJHZpDOBU3ULTe6lXvRzh8QoMPWGVNPPL7hOI
+         CqAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lZvOVyvHa+NSE4rPQu9G15aq3roh0PFjTN6noXXuPx0=;
-        b=2wzMuK4UfF5jlFvxFh/U9Qtfy8GMQd3sSrDowM5otwkqNGAip9NaZ8Mqk480osoGic
-         5AhmDBRjuz9FmWjHRfZ1OrTWMozmGBFGHPLLDwPTn4qtUBYUXi/Lwak/IH4XWBfHDJTe
-         vjRRkO77PmjPlFR+mcPhdRFye6c326qQSCu3tDsHYTxvH/PMsuvrmBm2fzdBm+3yt5Vh
-         LeZQlK3E+AuhFNUoi17EC8AedeVRXjm7Qw/JoiyYTTUSlMORioB73d1JnYLJBxoH09pt
-         fUfjstMNIfk1rxcN18nPZPu+m3ivNavnCGkscOGFSogq6s3ZiXTZtIJkgfnMkLDj0DLR
-         p7bQ==
-X-Gm-Message-State: AOAM531Hlf8P8QHA99P0azCgmvSiPjp06YdcxcLBgR2vAtpbBnGHMlcV
-        vTCerHmxbG3zHisIEPPRtr3Smue26FOO4wCv1WJWgtK0
-X-Google-Smtp-Source: ABdhPJymUr7GPHJZodzyR7v7RfmRC8PjBzeTOopN/4j7fx3SK+CbzJnjUNhcG4AdREO3l2e4gg5Ui0cJEHZxh1gq4HY=
-X-Received: by 2002:ac8:5f4e:: with SMTP id y14mr52183191qta.305.1641490165166;
- Thu, 06 Jan 2022 09:29:25 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uSBn+Ips2mtFKmkest40VuG2t1Y4Y842E21N7HcVLJw=;
+        b=FDlO3U8kg1/21JUwmEtgU/YmY2dSyiqejfq+FicbTWlJF58Y5h/jM/9JBDr4IMqDaA
+         dCOPJHAXKQKdGRxyNTYgakqFzmU49LXFQP4l5LIvkAdU3zDLgfvAkH2s/9WpfRGLhPC0
+         u5bovhLiyNWA2XMfXZX3pQLaLhBqSBz23Y7/kA2fSE8kleYmimGiJjn/I78kxW3IYgCq
+         t0ImUJasb7DJ03uBPGUo2IzM845IepJJnZUqT8ar5YZ49cIlWdgZP+oz+Z8wy4xKSeEp
+         oMMQoea8L6SUd/swcPH3KyuNlVaFQr7vaANYLx7tD0c7dMcj8iQy9T8Vfr1l0e+AFNQ4
+         oALg==
+X-Gm-Message-State: AOAM531bCnkJmsBdQa7nA8CRjRf4qgRyy8oCxICpSiCSyhM+ED1jpauM
+        p/sRdud93tqDVNV5STudz60Qjw==
+X-Google-Smtp-Source: ABdhPJxE5KkAAzma7mqLIUe2FZ4XWQGFK4NRb0bHNrVt5TNjZCSoBUnAU8GezkGBh69GcrQDQoAVgw==
+X-Received: by 2002:ac8:7d47:: with SMTP id h7mr53966124qtb.486.1641490299706;
+        Thu, 06 Jan 2022 09:31:39 -0800 (PST)
+Received: from pop-os.fios-router.home (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
+        by smtp.googlemail.com with ESMTPSA id i21sm2126536qti.31.2022.01.06.09.31.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 09:31:39 -0800 (PST)
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+To:     agross@kernel.org, bjorn.andersson@linaro.org,
+        daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
+        robh+dt@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [Patch v3 0/3] Extend LMh driver to suppot Qualcomm sm8150 SoC.
+Date:   Thu,  6 Jan 2022 12:31:35 -0500
+Message-Id: <20220106173138.411097-1-thara.gopinath@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220106021605.93341-1-yang.lee@linux.alibaba.com> <YdaJ9GFoz4AlIgQv@amd.com>
-In-Reply-To: <YdaJ9GFoz4AlIgQv@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 6 Jan 2022 18:29:14 +0100
-Message-ID: <CAJZ5v0gew-=d=oep-MzUnP_b74FcZ4e94Lg=mXQzeVX8zDCV+w@mail.gmail.com>
-Subject: Re: [PATCH -next] cpufreq: amd-pstate: Fix struct amd_cpudata
- kernel-doc comment
-To:     Huang Rui <ray.huang@amd.com>, Yang Li <yang.lee@linux.alibaba.com>
-Cc:     "rafael@kernel.org" <rafael@kernel.org>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jan 6, 2022 at 7:20 AM Huang Rui <ray.huang@amd.com> wrote:
->
-> On Thu, Jan 06, 2022 at 10:16:05AM +0800, Yang Li wrote:
-> > Add the description of @req and @boost_supported in struct amd_cpudata
-> > kernel-doc comment to remove warnings found by running scripts/kernel-doc,
-> > which is caused by using 'make W=1'.
-> >
-> > drivers/cpufreq/amd-pstate.c:104: warning: Function parameter or member
-> > 'req' not described in 'amd_cpudata'
-> > drivers/cpufreq/amd-pstate.c:104: warning: Function parameter or member
-> > 'boost_supported' not described in 'amd_cpudata'
-> >
-> > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> > Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
->
-> Acked-by: Huang Rui <ray.huang@amd.com>
+Add support for sm8150 in the Qualcomm Limits Management Hardware(LMh)
+driver. Also add required device tree entries and dt-binding.
 
-Applied, thanks!
+Thara Gopinath (3):
+  thermal: qcom: lmh: Add support for sm8150
+  arm64: dts: qcom: sm8150: Add support for LMh node
+  dt-bindings: thermal: Add sm8150 compatible string for LMh
+
+ .../devicetree/bindings/thermal/qcom-lmh.yaml |  1 +
+ arch/arm64/boot/dts/qcom/sm8150.dtsi          | 24 +++++++
+ drivers/thermal/qcom/lmh.c                    | 62 +++++++++++--------
+ 3 files changed, 60 insertions(+), 27 deletions(-)
+
+-- 
+2.25.1
+
