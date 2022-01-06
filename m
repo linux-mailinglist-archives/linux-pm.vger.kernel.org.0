@@ -2,103 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDC47486145
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jan 2022 09:11:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5795486371
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jan 2022 12:06:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236398AbiAFILz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 6 Jan 2022 03:11:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57034 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236364AbiAFILz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Jan 2022 03:11:55 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CCF9C061245
-        for <linux-pm@vger.kernel.org>; Thu,  6 Jan 2022 00:11:55 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id a129so1659429oif.6
-        for <linux-pm@vger.kernel.org>; Thu, 06 Jan 2022 00:11:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=muDLpDbWJ7+5o2h/WSFjj/IcElI1JnlzjYoFpnWANM4=;
-        b=E4AV8bmpCRRT1r+Ity6neu+bsTGPRfQBMik7fDYIAoZ9eS5cWgQZYDz51k9QvpVglq
-         NXl/hUHRMezbm1C/nZnrUjzXZbpUMS2Y5Y70eHNj/9nuvfPprVg5tOBj8PhG5IJfq41L
-         y+ORcUGLKCxWhLibMVIHDVamqDLTdMUIAMPUDl59SAHxTlvXooRytVmv+6uQdTn8lT0C
-         Ks97uOXV/TaT6WWOxRtcXJpDdqA/dKWtefFuDCuwd85ZUQlS7lvux0QIBf5sr4ip2hih
-         hSYM1egtgLSjR1Z4Arzpq5SDcsH98BEAjNTh33AfmeeyXLGAP0m5Z1s9sDwgtVpZm1Zz
-         Nzrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=muDLpDbWJ7+5o2h/WSFjj/IcElI1JnlzjYoFpnWANM4=;
-        b=FogFY2ZufJuOF0maXPaVJCU+90BkTHbpse4lqfyNPvrZI9aTzzXtdLxpC3sTFElw5F
-         /acEFTxanMxprhggUv9AVAPZW9cmAiCb/jBWO6+2YoDAmLHPy2xblYtvLWyDoadmDA6l
-         wwKbDYFD3XT2LLkXs5AADPD5jilOyRLbq9G1MbZrxkHwq8/kokxazuMwcVhdExBf0Xog
-         2a7hhiPBfUf1OmVCOvzU/T7HbSxAjYeej9BKvtR+jqP+91OmqyaM+INSGJnRko4FfTXS
-         SJnljiJ+y6PpOyX9vY+4I58ICOrG8hpFkU/ORN423eB8yb9wEc16hyXWY4h9rrhH425S
-         Iqxw==
-X-Gm-Message-State: AOAM530k4S9PgJc7wBCXdwxMmjfEgdq8ngtBSaovHh2rdO63ljsdWlMQ
-        fqq8W5VNLjHkDfXQb9o6T7MzMurArsUcKFHezlM=
-X-Google-Smtp-Source: ABdhPJzffdyl+dFCsaPrzXb87+ds7MXW5YJHIyB14gCpOlaPiiFMgxF7fMPjeQqNzuDgfa0judrnQkpA5mxQZmsgDUs=
-X-Received: by 2002:a54:4e0c:: with SMTP id a12mr5423678oiy.12.1641456714362;
- Thu, 06 Jan 2022 00:11:54 -0800 (PST)
+        id S230238AbiAFLGN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 6 Jan 2022 06:06:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:20557 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238263AbiAFLGN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Jan 2022 06:06:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641467172;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zcO6TrtvqNyZ5nzPZpQ6zYxJyCqEOIOr5GEZ2eAC3BQ=;
+        b=H+mwiXGhee8eqP0y6W7Hy4M7WLnOgksGEdwr/ro7gloKqK2cC/xUTLcxdEOP8wt++68iHF
+        zWYS1CZl1hZlVfby8rjlXKu15EavmitCNB1l4siA2CXa9t8XvrfR3vGq2nvv7qOA9NwfHV
+        OadIoT8hxUDL6ohLC46NySIJifptdGQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-298-8vNtK2z_PTyn-REzekrywg-1; Thu, 06 Jan 2022 06:06:11 -0500
+X-MC-Unique: 8vNtK2z_PTyn-REzekrywg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6106A804305;
+        Thu,  6 Jan 2022 11:06:10 +0000 (UTC)
+Received: from shalem.redhat.com (unknown [10.39.192.137])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 92B8B752B0;
+        Thu,  6 Jan 2022 11:06:09 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-pm@vger.kernel.org
+Subject: [PATCH 1/7] power: supply: axp288_fuel_gauge: Add dev helper var to probe()
+Date:   Thu,  6 Jan 2022 12:06:02 +0100
+Message-Id: <20220106110608.66231-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-Reply-To: mrselodieantonie778@yahoo.com
-Sender: marriammichel85@gmail.com
-Received: by 2002:a8a:12c5:0:0:0:0:0 with HTTP; Thu, 6 Jan 2022 00:11:53 -0800 (PST)
-From:   Mrs Elodie Antoine <mrselodieantoinea@gmail.com>
-Date:   Thu, 6 Jan 2022 00:11:53 -0800
-X-Google-Sender-Auth: ERYqsVO2T6sRivKrmAb0_a1tkPE
-Message-ID: <CALu+k43+BoA_yy=iLCq6qn-UxuyVVxGZDfO-O59Zz-3fdHp5bA@mail.gmail.com>
-Subject: Calvary Greetings
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-CAN I TRUST YOU WITH  THIS (US$4.5 Million Dollars) FOR CHARITY WORKS,
+Add a dev local variable to probe() as shortcut for &pdev->dev, this is
+a preparation change for making more use of devm managed resources.
 
-Calvary Greetings in the name of the LORD Almighty and Our LORD JESUS
-CHRIST the giver of every good thing. Good day,i know this letter will
-definitely come to you as a huge surprise, but I implore you to take
-the time to go through it carefully as the decision you make will go
-off a long way to determine my future and continued existence. I am
-Mrs Elodie Antoine
-aging widow of 59 years old suffering from long time illness. I have
-some funds I inherited from my late husband,
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ drivers/power/supply/axp288_fuel_gauge.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-The sum of (US$4.5 Million Dollars) and I needed a very honest and God
-fearing  who can withdraw this money then use the funds for Charity
-works. I WISH TO GIVE THIS FUNDS TO YOU FOR CHARITY WORKS. I found
-your email address from the internet after honest prayers  to the LORD
-to bring me a helper and i decided to contact you if you may be
-willing and interested to handle these trust funds in good faith
-before anything happens to me.
-I accept this decision because I do not have any child who will
-inherit this money after I die. I want your urgent reply to me so that
-I will give you the deposit receipt which the  COMPANY issued to me as
-next of kin for immediate transfer of the money to your account in
-your country, to start the good work of God, I want you to use the
-15/percent of the total amount to help yourself in doing the project.
+diff --git a/drivers/power/supply/axp288_fuel_gauge.c b/drivers/power/supply/axp288_fuel_gauge.c
+index c1da217fdb0e..1495402f440c 100644
+--- a/drivers/power/supply/axp288_fuel_gauge.c
++++ b/drivers/power/supply/axp288_fuel_gauge.c
+@@ -622,16 +622,17 @@ static int axp288_fuel_gauge_probe(struct platform_device *pdev)
+ 		[BAT_D_CURR] = "axp288-chrg-d-curr",
+ 		[BAT_VOLT] = "axp288-batt-volt",
+ 	};
++	struct device *dev = &pdev->dev;
+ 	unsigned int val;
+ 
+ 	if (dmi_check_system(axp288_no_battery_list))
+ 		return -ENODEV;
+ 
+-	info = devm_kzalloc(&pdev->dev, sizeof(*info), GFP_KERNEL);
++	info = devm_kzalloc(dev, sizeof(*info), GFP_KERNEL);
+ 	if (!info)
+ 		return -ENOMEM;
+ 
+-	info->dev = &pdev->dev;
++	info->dev = dev;
+ 	info->regmap = axp20x->regmap;
+ 	info->regmap_irqc = axp20x->regmap_irqc;
+ 	info->status = POWER_SUPPLY_STATUS_UNKNOWN;
+@@ -651,8 +652,7 @@ static int axp288_fuel_gauge_probe(struct platform_device *pdev)
+ 			iio_channel_get(NULL, iio_chan_name[i]);
+ 		if (IS_ERR(info->iio_channel[i])) {
+ 			ret = PTR_ERR(info->iio_channel[i]);
+-			dev_dbg(&pdev->dev, "error getting iiochan %s: %d\n",
+-				iio_chan_name[i], ret);
++			dev_dbg(dev, "error getting iiochan %s: %d\n", iio_chan_name[i], ret);
+ 			/* Wait for axp288_adc to load */
+ 			if (ret == -ENODEV)
+ 				ret = -EPROBE_DEFER;
+@@ -722,10 +722,10 @@ static int axp288_fuel_gauge_probe(struct platform_device *pdev)
+ 		goto out_free_iio_chan;
+ 
+ 	psy_cfg.drv_data = info;
+-	info->bat = power_supply_register(&pdev->dev, &fuel_gauge_desc, &psy_cfg);
++	info->bat = power_supply_register(dev, &fuel_gauge_desc, &psy_cfg);
+ 	if (IS_ERR(info->bat)) {
+ 		ret = PTR_ERR(info->bat);
+-		dev_err(&pdev->dev, "failed to register battery: %d\n", ret);
++		dev_err(dev, "failed to register battery: %d\n", ret);
+ 		goto out_free_iio_chan;
+ 	}
+ 
+-- 
+2.33.1
 
-
-I am desperately in keen need of assistance and I have summoned up
-courage to contact you for this task, you must not fail me and the
-millions of the poor people in our todays WORLD. This is no stolen
-money and there are no dangers involved,100% RISK FREE with full legal
-proof. Please if you would be able to use the funds for the Charity
-works kindly let me know immediately.I will appreciate your utmost
-confidentiality and trust in this matter to accomplish my heart
-desire, as I don't want anything that will jeopardize my last wish. I
-want you to take 15 percent of the total money for your personal use
-while 85% of the money will go to charity.I will appreciate your
-utmost confidentiality and trust in this matter to accomplish my heart
-desire, as I don't want anything that will jeopardize my last wish.
-
-
-Kindly reply me
-
-Thanks and God bless you,
-
-Mrs Elodie Antoine
