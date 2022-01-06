@@ -2,102 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FC6248686F
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jan 2022 18:26:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1AA9486878
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jan 2022 18:29:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241790AbiAFR0x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 6 Jan 2022 12:26:53 -0500
-Received: from mail-qk1-f171.google.com ([209.85.222.171]:43583 "EHLO
-        mail-qk1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241717AbiAFR0x (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Jan 2022 12:26:53 -0500
-Received: by mail-qk1-f171.google.com with SMTP id f138so3332293qke.10;
-        Thu, 06 Jan 2022 09:26:53 -0800 (PST)
+        id S241812AbiAFR3h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 6 Jan 2022 12:29:37 -0500
+Received: from mail-qt1-f173.google.com ([209.85.160.173]:35527 "EHLO
+        mail-qt1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241825AbiAFR3g (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Jan 2022 12:29:36 -0500
+Received: by mail-qt1-f173.google.com with SMTP id c10so1256960qte.2;
+        Thu, 06 Jan 2022 09:29:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Y5Mh5bVpmK8eYyep3yxqYOdNWT89jlaMb60StPy485A=;
-        b=cKPai63QXCOULd+JYweRNthK+EFz4BKyWWc8Q5dbhzW41L8rnpF7LhT7X5pxDLaW9T
-         Qm4ynb54PiW3ktsE0anNODJoPIoDyg7P6NkMitAiSomzaeYB4OLfDaKug8WQMZNXn9YV
-         FoRyt2y14r71al3XrKlCjP346fIRL+h4ncfzsEtQDZLi/zHxpIW6fW4ITf3+lpyo7wz+
-         QPCcTX67aVI9DVaqOFqdbcLvvsDZY6SvcaRzzDloTtMgMoeyGRQ7CBD9qz/0CsO0k8dF
-         NcKGcpmGwuHO3khUe2ELXH7OcEGrVZ/cD8e/Nr+qpIRO/eegkPNJtZjLPIbgxWbdX76y
-         OjFw==
-X-Gm-Message-State: AOAM531m0madbb1ipaw+g4/Bv8HYBNH/qmr12aSK0Js8M0KzR1mv8EYa
-        xEY7OZXYYqTnpNN2yShzpBMnzEYdT0yhFz1uGaE=
-X-Google-Smtp-Source: ABdhPJxtsqp8aUZfHoLl5dtQbIUKostepyMhKdNiM8HK9Tx9ep8MgjIudv2L7QVSqHIgf5RaQYlkr87oh5ASoEKjMSY=
-X-Received: by 2002:a05:620a:4721:: with SMTP id bs33mr43755838qkb.8.1641490012648;
- Thu, 06 Jan 2022 09:26:52 -0800 (PST)
+        bh=lZvOVyvHa+NSE4rPQu9G15aq3roh0PFjTN6noXXuPx0=;
+        b=2wzMuK4UfF5jlFvxFh/U9Qtfy8GMQd3sSrDowM5otwkqNGAip9NaZ8Mqk480osoGic
+         5AhmDBRjuz9FmWjHRfZ1OrTWMozmGBFGHPLLDwPTn4qtUBYUXi/Lwak/IH4XWBfHDJTe
+         vjRRkO77PmjPlFR+mcPhdRFye6c326qQSCu3tDsHYTxvH/PMsuvrmBm2fzdBm+3yt5Vh
+         LeZQlK3E+AuhFNUoi17EC8AedeVRXjm7Qw/JoiyYTTUSlMORioB73d1JnYLJBxoH09pt
+         fUfjstMNIfk1rxcN18nPZPu+m3ivNavnCGkscOGFSogq6s3ZiXTZtIJkgfnMkLDj0DLR
+         p7bQ==
+X-Gm-Message-State: AOAM531Hlf8P8QHA99P0azCgmvSiPjp06YdcxcLBgR2vAtpbBnGHMlcV
+        vTCerHmxbG3zHisIEPPRtr3Smue26FOO4wCv1WJWgtK0
+X-Google-Smtp-Source: ABdhPJymUr7GPHJZodzyR7v7RfmRC8PjBzeTOopN/4j7fx3SK+CbzJnjUNhcG4AdREO3l2e4gg5Ui0cJEHZxh1gq4HY=
+X-Received: by 2002:ac8:5f4e:: with SMTP id y14mr52183191qta.305.1641490165166;
+ Thu, 06 Jan 2022 09:29:25 -0800 (PST)
 MIME-Version: 1.0
-References: <20220104164351.1360316-1-gregkh@linuxfoundation.org>
-In-Reply-To: <20220104164351.1360316-1-gregkh@linuxfoundation.org>
+References: <20220106021605.93341-1-yang.lee@linux.alibaba.com> <YdaJ9GFoz4AlIgQv@amd.com>
+In-Reply-To: <YdaJ9GFoz4AlIgQv@amd.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 6 Jan 2022 18:26:41 +0100
-Message-ID: <CAJZ5v0jS3NBSiO0W+phmP3wQUN4fJpRv4_ogG6EXA6dHbcr3Yg@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: use default_groups in kobj_type
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+Date:   Thu, 6 Jan 2022 18:29:14 +0100
+Message-ID: <CAJZ5v0gew-=d=oep-MzUnP_b74FcZ4e94Lg=mXQzeVX8zDCV+w@mail.gmail.com>
+Subject: Re: [PATCH -next] cpufreq: amd-pstate: Fix struct amd_cpudata
+ kernel-doc comment
+To:     Huang Rui <ray.huang@amd.com>, Yang Li <yang.lee@linux.alibaba.com>
+Cc:     "rafael@kernel.org" <rafael@kernel.org>,
+        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Abaci Robot <abaci@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jan 4, 2022 at 5:43 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Thu, Jan 6, 2022 at 7:20 AM Huang Rui <ray.huang@amd.com> wrote:
 >
-> There are currently 2 ways to create a set of sysfs files for a
-> kobj_type, through the default_attrs field, and the default_groups
-> field.  Move the cpuidle sysfs code to use default_groups field which
-> has been the preferred way since aa30f47cf666 ("kobject: Add support for
-> default attribute groups to kobj_type") so that we can soon get rid of
-> the obsolete default_attrs field.
+> On Thu, Jan 06, 2022 at 10:16:05AM +0800, Yang Li wrote:
+> > Add the description of @req and @boost_supported in struct amd_cpudata
+> > kernel-doc comment to remove warnings found by running scripts/kernel-doc,
+> > which is caused by using 'make W=1'.
+> >
+> > drivers/cpufreq/amd-pstate.c:104: warning: Function parameter or member
+> > 'req' not described in 'amd_cpudata'
+> > drivers/cpufreq/amd-pstate.c:104: warning: Function parameter or member
+> > 'boost_supported' not described in 'amd_cpudata'
+> >
+> > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> > Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 >
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: linux-pm@vger.kernel.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->  drivers/cpuidle/sysfs.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/cpuidle/sysfs.c b/drivers/cpuidle/sysfs.c
-> index 469e18547d06..565ed005833a 100644
-> --- a/drivers/cpuidle/sysfs.c
-> +++ b/drivers/cpuidle/sysfs.c
-> @@ -335,6 +335,7 @@ static struct attribute *cpuidle_state_default_attrs[] = {
->         &attr_default_status.attr,
->         NULL
->  };
-> +ATTRIBUTE_GROUPS(cpuidle_state_default);
->
->  struct cpuidle_state_kobj {
->         struct cpuidle_state *state;
-> @@ -448,7 +449,7 @@ static void cpuidle_state_sysfs_release(struct kobject *kobj)
->
->  static struct kobj_type ktype_state_cpuidle = {
->         .sysfs_ops = &cpuidle_state_sysfs_ops,
-> -       .default_attrs = cpuidle_state_default_attrs,
-> +       .default_groups = cpuidle_state_default_groups,
->         .release = cpuidle_state_sysfs_release,
->  };
->
-> @@ -591,10 +592,11 @@ static struct attribute *cpuidle_driver_default_attrs[] = {
->         &attr_driver_name.attr,
->         NULL
->  };
-> +ATTRIBUTE_GROUPS(cpuidle_driver_default);
->
->  static struct kobj_type ktype_driver_cpuidle = {
->         .sysfs_ops = &cpuidle_driver_sysfs_ops,
-> -       .default_attrs = cpuidle_driver_default_attrs,
-> +       .default_groups = cpuidle_driver_default_groups,
->         .release = cpuidle_driver_sysfs_release,
->  };
->
-> --
+> Acked-by: Huang Rui <ray.huang@amd.com>
 
-Applied as 5.17 material, thanks!
+Applied, thanks!
