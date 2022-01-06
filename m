@@ -2,70 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B68CB485E7B
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jan 2022 03:16:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27F8C485E84
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jan 2022 03:19:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344638AbiAFCQK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Jan 2022 21:16:10 -0500
-Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:53618 "EHLO
-        out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344590AbiAFCQK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jan 2022 21:16:10 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V13r89o_1641435367;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V13r89o_1641435367)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 06 Jan 2022 10:16:07 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     rafael@kernel.org
-Cc:     viresh.kumar@linaro.org, ray.huang@amd.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] cpufreq: amd-pstate: Fix struct amd_cpudata kernel-doc comment
-Date:   Thu,  6 Jan 2022 10:16:05 +0800
-Message-Id: <20220106021605.93341-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        id S1344590AbiAFCTX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Jan 2022 21:19:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35072 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231945AbiAFCTV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jan 2022 21:19:21 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3806C061245;
+        Wed,  5 Jan 2022 18:19:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=Jb0syjHpG90vtrcvQMBr8NaCZtixi1quvmjWqPgmKwo=; b=idFiwniAicpO40YAG+sjgcnG7D
+        3p75dlba9rRvggAS66G3KyurtPqYnkSjMyuRQpUhDxsDW0qWL0xoJQPlkBjdFZKHyIIKpDh7SIj1r
+        NktCifCT42dl/xK8YSEGCiI4PynNT/7i7UidVWLRRsZVySPyIpPix/4B8HHe5rjMZ2b4OaYNzKJlW
+        TrAmYw93/9u96/2RhurUnPpA0xXpjG5gtVQNxYhLCM7zCbGqDHJRkFtGtzl+MF0VcfOhjRW8Sal4A
+        X8ISLkPXgVLB0av1zX85Igp9yZsJRaUPQ+2Q3dGKAiYfzRHRA02mU2Xy9qOWZdqjT/549m8NKj7/y
+        pozQ37ew==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n5IN3-00F5FT-Ii; Thu, 06 Jan 2022 02:19:17 +0000
+Message-ID: <20e286d4-25d7-fb6e-31a1-4349c805aae3@infradead.org>
+Date:   Wed, 5 Jan 2022 18:19:14 -0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: linux-next: Tree for Jan 5 (cpufreq/amd-pstate)
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Huang Rui <ray.huang@amd.com>, linux-pm@vger.kernel.org
+References: <20220105191239.26498b30@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220105191239.26498b30@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add the description of @req and @boost_supported in struct amd_cpudata
-kernel-doc comment to remove warnings found by running scripts/kernel-doc,
-which is caused by using 'make W=1'.
 
-drivers/cpufreq/amd-pstate.c:104: warning: Function parameter or member
-'req' not described in 'amd_cpudata'
-drivers/cpufreq/amd-pstate.c:104: warning: Function parameter or member
-'boost_supported' not described in 'amd_cpudata'
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/cpufreq/amd-pstate.c | 2 ++
- 1 file changed, 2 insertions(+)
+On 1/5/22 00:12, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Changes since 20220104:
+> 
+> The pm tree lost its build failure.
+> 
 
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 40ceb031abf5..9ce75ed11f8e 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -68,6 +68,7 @@ static struct cpufreq_driver amd_pstate_driver;
- /**
-  * struct amd_cpudata - private CPU data for AMD P-State
-  * @cpu: CPU number
-+ * @req: constraint request to apply
-  * @cppc_req_cached: cached performance request hints
-  * @highest_perf: the maximum performance an individual processor may reach,
-  *		  assuming ideal conditions
-@@ -80,6 +81,7 @@ static struct cpufreq_driver amd_pstate_driver;
-  * @min_freq: the frequency that mapped to lowest_perf
-  * @nominal_freq: the frequency that mapped to nominal_perf
-  * @lowest_nonlinear_freq: the frequency that mapped to lowest_nonlinear_perf
-+ * @boost_supported: check whether the Processor or SBIOS supports boost mode
-  *
-  * The amd_cpudata is key private data for each CPU thread in AMD P-State, and
-  * represents all the attributes and goals that AMD P-State requests at runtime.
+on i386 and x86_64:
+# CONFIG_ACPI is not set
+
+In file included from ../drivers/cpufreq/amd-pstate.c:40:0:
+../include/acpi/processor.h:226:2: error: unknown type name ‘phys_cpuid_t’
+  phys_cpuid_t phys_id; /* CPU hardware ID such as APIC ID for x86 */
+  ^~~~~~~~~~~~
+../include/acpi/processor.h:355:1: error: unknown type name ‘phys_cpuid_t’; did you mean ‘phys_addr_t’?
+ phys_cpuid_t acpi_get_phys_id(acpi_handle, int type, u32 acpi_id);
+ ^~~~~~~~~~~~
+ phys_addr_t
+  CC      drivers/rtc/rtc-rv3029c2.o
+../include/acpi/processor.h:356:1: error: unknown type name ‘phys_cpuid_t’; did you mean ‘phys_addr_t’?
+ phys_cpuid_t acpi_map_madt_entry(u32 acpi_id);
+ ^~~~~~~~~~~~
+ phys_addr_t
+../include/acpi/processor.h:357:20: error: unknown type name ‘phys_cpuid_t’; did you mean ‘phys_addr_t’?
+ int acpi_map_cpuid(phys_cpuid_t phys_id, u32 acpi_id);
+                    ^~~~~~~~~~~~
+                    phys_addr_t
+
+
 -- 
-2.20.1.7.g153144c
-
+~Randy
