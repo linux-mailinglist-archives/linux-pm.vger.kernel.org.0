@@ -2,251 +2,211 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A92D74875E7
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jan 2022 11:50:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C24D14876D8
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jan 2022 12:52:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237653AbiAGKuz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Jan 2022 05:50:55 -0500
-Received: from mga05.intel.com ([192.55.52.43]:39388 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232217AbiAGKuy (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 7 Jan 2022 05:50:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641552654; x=1673088654;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ZfNHIJudR1ILB87w3a2Yaf41Qr6TJ+x0txFoNiMPGA4=;
-  b=lBz2YmYhhQ8+tsG/uBGqJWwmUmfSzB8bVKqlfR62NwqE2m+3GT0POVeF
-   9ypPvxfL4hM8iTR+1bWmLeQ9ZWIRphbh2vD/c9xYSK5a9fFEIbRELafbg
-   PotQZyfXMTya3CwwAyKAKTv/0A0GTJyDYuk1Zad8U6h6I0HigQDpUXq5k
-   fnNWzM9z4KdPry5fkmi6jRAuOFozhiq7j5o1lwB0f7bzvg2ZQ01WWK1gE
-   xs3GwEYYdWGyDtLR6yYKfrCtEcrEIYlC3I33EYmSFKnh42QV5r3g+yC39
-   Vss3O+PcItnephysAykwpCayC2fyF2jiUAd4ki8P7/s4sL4G6ElW4F/5P
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10219"; a="329192491"
-X-IronPort-AV: E=Sophos;i="5.88,269,1635231600"; 
-   d="scan'208";a="329192491"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 02:50:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,269,1635231600"; 
-   d="scan'208";a="489257204"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 07 Jan 2022 02:50:52 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n5mpf-000IZX-CF; Fri, 07 Jan 2022 10:50:51 +0000
-Date:   Fri, 07 Jan 2022 18:50:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS WITH WARNING
- f099fd60c342d8d8265202ce01b4375358913072
-Message-ID: <61d81aeb.IipLiV6Q1X7uzVAE%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1347236AbiAGLwn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Jan 2022 06:52:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37056 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347226AbiAGLwm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jan 2022 06:52:42 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4091BC061201
+        for <linux-pm@vger.kernel.org>; Fri,  7 Jan 2022 03:52:42 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id o203-20020a1ca5d4000000b003477d032384so1157042wme.2
+        for <linux-pm@vger.kernel.org>; Fri, 07 Jan 2022 03:52:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=y+v65dbymAmhdz70zjQsgwhuuC70Kn2IqrbK3x6r9EQ=;
+        b=EniNqefda68+tvBDXbfbsYibERdc8QM8kXumEieusVvefyXztMy2uHZL/TZ+l2UXVz
+         AjTA8uMHLVpqEttUV2+uuSzEjG5sABmu5+TnLBsW4b+MVG0lNPrDgGh0yb+O8PTWFCg6
+         bn98LM0nToumySsLmHhPOKzBWOpYrB1G9Ms9ztog+ljmuoano/81boEuMx9+48dDrrup
+         SiuNSmWEG5DtxkWpUFmhuN+nnoNrhr/efPMqFJ1uonWxHwtBppJlWJNCfAxo6UundamO
+         0cUkjORJVZNr0t2ZosCMaq92diOBl1ldTHbRdTq6pqp2Q6uFjppcJHHu819xtnh9Qm8M
+         MP3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=y+v65dbymAmhdz70zjQsgwhuuC70Kn2IqrbK3x6r9EQ=;
+        b=c4ThUZfDe13/+EVblYXW3JWmiYwCVpGlbrRikI+uzGLcf5rj9QWwecxFcF8MbHPpAW
+         ksMDSQIwiz52DB47zzbZEC649qptLXQQ+jcU4tlldsGEr5nxzkabECOetHJjduwq8PMy
+         tbGvhAwdL1GBh6pNF1bpO2JFOD5MCO29mJmVytf8izy4ba5nX/ZPGNhuY5VhbIaOIWNs
+         72PDl+6ArmIOgPprwJSb1EUUCKO6mH20gdFzG++tAH5tKg3xzFm0wMuTYZb+ZZnOPhLg
+         xmeH+DCooIvEXlt9AIbYsghhwua2CBRJvdU9EOf7nE7DwcOlejkIsOade16ntt0ZqjHB
+         Vh8A==
+X-Gm-Message-State: AOAM530qm8IKP/gUChgRXOg9r37DnhOm2pxYgN462ZHvhYTMm70bMQ2h
+        2clcuWBjj0GdZFn8WF+I3D+QmR7x6OCmkB+N
+X-Google-Smtp-Source: ABdhPJyONxY2KW0bOiX73rFYHQx3qpz02tX5V0UTVRixd6paxgVStplFldFYbkYmEeNCkuh0SpI2QQ==
+X-Received: by 2002:a05:600c:3ac5:: with SMTP id d5mr10855056wms.32.1641556360452;
+        Fri, 07 Jan 2022 03:52:40 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:4875:220c:f3a4:c74e? ([2a01:e34:ed2f:f020:4875:220c:f3a4:c74e])
+        by smtp.googlemail.com with ESMTPSA id d18sm2606303wrn.102.2022.01.07.03.52.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Jan 2022 03:52:39 -0800 (PST)
+Subject: Re: [PATCH v2][RFC 1/2] Implement Ziegler-Nichols Heuristic
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org, amitk@kernel.org,
+        Chetankumar Mistry <chetan.mistry@arm.com>,
+        rui.zhang@intel.com, linux-pm@vger.kernel.org
+References: <20211217184907.2103677-1-chetan.mistry@arm.com>
+ <23c3480a-c46b-f049-5758-d11124367190@arm.com>
+ <1b6047eb-2f14-ddde-4712-145a26dc8aa5@linaro.org>
+ <42e8c75e-3827-3950-0705-4670ec1c904e@arm.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <0e9eb5a9-733c-cf4d-a8c9-e13b5258dce5@linaro.org>
+Date:   Fri, 7 Jan 2022 12:52:38 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <42e8c75e-3827-3950-0705-4670ec1c904e@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: f099fd60c342d8d8265202ce01b4375358913072  Merge branch 'acpi-pfrut' into linux-next
+On 06/01/2022 14:16, Lukasz Luba wrote:
+> 
+> Thank you for fast response!
+> 
+> On 1/6/22 12:16 PM, Daniel Lezcano wrote:
+>>
+>> Hi Lukasz,
+>>
+>> On 06/01/2022 12:54, Lukasz Luba wrote:
+>>> Hi Daniel,
+>>>
+>>> Could you have a look at this, please?
+>>
+>> Yes, I had a quick look at the code and went to the algorithm
+>> description.
+>>
+>> Still digesting ...
+>>
+>>> On 12/17/21 6:49 PM, Chetankumar Mistry wrote:
+>>>> Implement the Ziegler-Nichols Heuristic algorithm to better
+>>>> estimate the PID Coefficients for a running platform.
+>>>> The values are tuned to minimuse the amount of overshoot in
+>>>> the temperature of the platform and subsequently minimise
+>>>> the number of switches for cdev states.
+>>>>
+>>>> Signed-off-by: Chetankumar Mistry <chetan.mistry@arm.com>
+>>>
+>>>
+>>> This is the continuation of the previous idea to have
+>>> better k_* values. You might remember this conversation [1].
+>>>
+>>> I've spent some time researching papers how and what can be done
+>>> in this field and if possible to plumb in to the kernel.
+>>> We had internal discussions (~2017) of one method fuzzy-logic that I
+>>> found back then, but died at the begging not fitting into this
+>>> IPA kernel specific environment and user-space. Your suggestion with
+>>> observing undershooting and overshooting results sparked better idea.
+>>> I thought it's worth to invest in it but I didn't have
+>>> time. We are lucky, Chetan was designated to help me and
+>>> experiment/implement/test these ideas and here is the patch set.
+>>>
+>>> He's chosen the Ziegler-Nichols method, which shows really
+>>> good results in benchmarks (Geekbench and GFXbench on hikey960 Android).
+>>> The improved performance in Geekbench is ~10% (vs. old IPA).
+>>
+>> +10% perf improvements sounds great. What about the temperature
+>> mitigation (temp avg + stddev) ?
+> 
+> Chetan would respond about that with the link to the .html file.
+> We just have to create an official public server space for it.
+> I hope till Monday evening we would get something.
+> 
+>>
+>>> The main question from our side is the sysfs interface
+>>> which we could be used to trigger this algorithm for
+>>> better coefficients estimations.
+>>> We ask user to echo to some sysfs files in thermal zone
+>>> and start his/her workload. This new IPA 'learns' the system
+>>> utilization and reaction in temperature. After a few rounds,
+>>> we get better fitted coefficients.
+>>> If you need more background about the code or mechanisms, or tests,
+>>> I'm sure Chetan is happy to provide you those.
+>>
+>> I'm worried about the complexity of the algorithm and the overhead
+>> implied.
+>>
+>> The k_* factors are tied with the system and the thermal setup (fan,
+>> heatsink, processor, opp, ...). So IIUC when the factors are found, they
+>> should not change and could be part of the system setup.
+> 
+> True, they are found and will be fixed for that board.
+> 
+>>
+>> Would the algorithm fit better in a separate userspace kernel tooling?
+>> So we can run it once and find the k_* for a board.
+> 
+> We wanted to be part of IPA in kernel because:
+> - the logic needs access to internals of IPA
+> - it would be easy accessible for all distros out-of-box
+> - no additional maintenance and keeping in sync two codes, especially
+>   those in some packages for user-space
 
-Warning reports:
+Sorry, I'm not convinced :/
 
-https://lore.kernel.org/llvm/202112280907.gTYYYuB4-lkp@intel.com
+AFAICT, the temperature and the sampling rate should be enough
+information to find out the k_*
 
-Warning in current branch:
+IMO, an userspace tool in ./tools/thermal/ipa is the right place
 
-drivers/acpi/acpica/exregion.c:519:17: warning: performing pointer subtraction with a null pointer has undefined behavior [-Wnull-pointer-subtraction]
+So if you give the tooling to the SoC vendor via the thermal ones, with
+a file containing the temp + timestamp, they should be able to find the
+k_* and setup their boards.
 
-Warning ids grouped by kconfigs:
+Actually my opinion is the kernel should not handle everything and the
+SoC vendor should at least do some work to setup their system. If they
+are able to find out the sustainable power, they can do the same for the
+right coefficients.
 
-clang_recent_errors
-|-- i386-randconfig-a011-20220107
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- i386-randconfig-a012-20220107
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- i386-randconfig-a013-20220107
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- i386-randconfig-a014-20220107
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- i386-randconfig-r014-20220107
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- x86_64-randconfig-a011-20220107
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- x86_64-randconfig-a012-20220107
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- x86_64-randconfig-a013-20220107
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- x86_64-randconfig-a014-20220107
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- x86_64-randconfig-a015-20220107
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-`-- x86_64-randconfig-a016-20220107
-    `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
+>> Additionally, the values can be stored in the Documentation for
+>> different board and a documentation on how to use the tool.
+>>
+>> Then up to the SoC vendor to setup the k_* in sysfs, so no need to
+>> change any interface.
+> 
+> It wouldn't be for SoC vendor, but up to the OEM or board designer,
+> because the same SoC might have different thermal headroom thanks
+> to better cooling or bigger PCB, etc.
 
-elapsed time: 733m
+Right, s/SoC vendor/SoC platform/
 
-configs tested: 145
-configs skipped: 4
+> I agree that these optimized k_* values might be shared in the kernel.
+> Ideally I would see them in the board's DT file, in the thermal zone,
+> but I'm afraid they are not 'Device description' so don't fit into DT
+> scope. They are rather optimizations of pure kernel mechanism.
+> 
+> where would be a good place for it? Maybe a new IPA Documentation/
+> sub-directory?
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20220107
-parisc                           alldefconfig
-arm                           stm32_defconfig
-mips                        bcm47xx_defconfig
-powerpc                      ppc40x_defconfig
-arm                       omap2plus_defconfig
-arm                            lart_defconfig
-sh                        sh7763rdp_defconfig
-sh                           se7343_defconfig
-sh                           se7721_defconfig
-sh                     sh7710voipgw_defconfig
-m68k                        mvme147_defconfig
-sh                          lboxre2_defconfig
-powerpc                      chrp32_defconfig
-powerpc                      mgcoge_defconfig
-mips                           jazz_defconfig
-arm                           viper_defconfig
-m68k                       m5275evb_defconfig
-xtensa                  cadence_csp_defconfig
-arc                        nsimosci_defconfig
-xtensa                    smp_lx200_defconfig
-sparc64                          alldefconfig
-arm                           h5000_defconfig
-arm                          badge4_defconfig
-sh                        dreamcast_defconfig
-m68k                       m5208evb_defconfig
-m68k                          sun3x_defconfig
-sh                            migor_defconfig
-mips                         cobalt_defconfig
-sh                          polaris_defconfig
-m68k                       m5475evb_defconfig
-openrisc                            defconfig
-arm                        realview_defconfig
-powerpc                       ppc64_defconfig
-arm                        trizeps4_defconfig
-arm                  randconfig-c002-20220107
-arm                  randconfig-c002-20220106
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-sparc                            allyesconfig
-i386                             allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a005-20220107
-x86_64               randconfig-a001-20220107
-x86_64               randconfig-a004-20220107
-x86_64               randconfig-a006-20220107
-x86_64               randconfig-a002-20220107
-x86_64               randconfig-a003-20220107
-i386                 randconfig-a003-20220107
-i386                 randconfig-a005-20220107
-i386                 randconfig-a004-20220107
-i386                 randconfig-a006-20220107
-i386                 randconfig-a002-20220107
-i386                 randconfig-a001-20220107
-arc                  randconfig-r043-20220107
-s390                 randconfig-r044-20220106
-arc                  randconfig-r043-20220106
-riscv                randconfig-r042-20220106
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
+You can improve the documentation in:
 
-clang tested configs:
-mips                 randconfig-c004-20220107
-arm                  randconfig-c002-20220107
-i386                 randconfig-c001-20220107
-riscv                randconfig-c006-20220107
-powerpc              randconfig-c003-20220107
-x86_64               randconfig-c007-20220107
-arm                          moxart_defconfig
-arm                      tct_hammer_defconfig
-arm                        spear3xx_defconfig
-mips                      malta_kvm_defconfig
-arm                      pxa255-idp_defconfig
-mips                       lemote2f_defconfig
-mips                        qi_lb60_defconfig
-arm                          collie_defconfig
-powerpc                          allyesconfig
-arm                         s5pv210_defconfig
-arm                         palmz72_defconfig
-powerpc                 xes_mpc85xx_defconfig
-mips                         tb0219_defconfig
-s390                             alldefconfig
-i386                 randconfig-a003-20220106
-i386                 randconfig-a005-20220106
-i386                 randconfig-a006-20220106
-i386                 randconfig-a002-20220106
-i386                 randconfig-a001-20220106
-x86_64               randconfig-a012-20220107
-x86_64               randconfig-a015-20220107
-x86_64               randconfig-a014-20220107
-x86_64               randconfig-a013-20220107
-x86_64               randconfig-a011-20220107
-x86_64               randconfig-a016-20220107
-i386                 randconfig-a012-20220107
-i386                 randconfig-a016-20220107
-i386                 randconfig-a014-20220107
-i386                 randconfig-a015-20220107
-i386                 randconfig-a011-20220107
-i386                 randconfig-a013-20220107
-hexagon              randconfig-r041-20220107
-hexagon              randconfig-r045-20220107
-riscv                randconfig-r042-20220107
-s390                 randconfig-r044-20220107
+Documentation/driver-api/thermal/power_allocator.rst
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+And if we agree on a tools/thermal/ipa, the documentation with examples
+and some SoC reference can be put there also
+
+>>> If you are interested in those analyses we can find a way to share a>
+>>> .html file with the results from LISA notebook.
+>>
+>> Yes,
+> 
+> Sure thing, let me arrange that.
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
