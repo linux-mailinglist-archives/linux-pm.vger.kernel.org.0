@@ -2,113 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79FA14879F1
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jan 2022 16:54:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6943E487A46
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jan 2022 17:26:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239713AbiAGPyk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Jan 2022 10:54:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35430 "EHLO
+        id S233408AbiAGQ0r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Jan 2022 11:26:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348148AbiAGPyj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jan 2022 10:54:39 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47BC6C061574
-        for <linux-pm@vger.kernel.org>; Fri,  7 Jan 2022 07:54:39 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id r4so17018147lfe.7
-        for <linux-pm@vger.kernel.org>; Fri, 07 Jan 2022 07:54:39 -0800 (PST)
+        with ESMTP id S233445AbiAGQ0q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jan 2022 11:26:46 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED72C06173E
+        for <linux-pm@vger.kernel.org>; Fri,  7 Jan 2022 08:26:45 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id bp20so17400079lfb.6
+        for <linux-pm@vger.kernel.org>; Fri, 07 Jan 2022 08:26:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ZO/W9rGLOxOpKaVamlRqS2vqDyG5yS3id6+AvMs5yjg=;
-        b=trRMaGODxAyUdqkqVw17H/6Wktal/N4fmj24uECvOEBch+PgmF/YkUDKm8DDCkI/c1
-         Vu3txWOgsJuTx3iFPu2sln8SLaYqkaqL2PCMTTd1LfgzmRvfI+evy2P9KswuoYfd7in5
-         Pv5kj6AHEfDfvieYAwng/hwjyJxWllp/N/BNSgvRy5Cr5teRXul359Gep5MxACwprHCb
-         vl+RaPMQzSJcotC6BPnlHcmsVlYwxfNrYpithBaI1kTS6p+n+zn6vCgJHfjgYWwF24Bw
-         3KJozjeFpowjT2oA6JEgtakhSua+Q+k3aonuwi0KGm+RfWs2EVr7xVGzFPRcQllUXZfB
-         fyFw==
+        bh=4Wx8vb4BLG+DDO7rJPIEbH27WUURa/Qd6ietWG6WiTA=;
+        b=kip4fAu6AOvdI/hgmyaP2ZkUZLdRk1u5qdrt+qzHKZO1vBFbyBqKMWs0S5MxRVOOEr
+         WHlSHuVuY3wnX7GgX+gPrFRAfOhoPkdE6rSOMKPUmsmuNuN1JQl1+zl4eEUuJwT24h5e
+         BFYmWBhOCRLzIQVbWiZ5ccSAVwu1VfzINav9YzegtskifHvW70kEFNs4l5uEb2UVtUjW
+         9w/yxNXShxWS2E06MP5HLMbO0MgBQFM+k/7sLMZgQMhs7hM4PHq9IdBraWeFDjnRuax+
+         WQlG51ziBaQEbUCwLtiwf7QqjmBItEKzQ9D8ZvrtjPrP0Lz9c9g8RlDw/bFrOtGzGKgj
+         DXoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ZO/W9rGLOxOpKaVamlRqS2vqDyG5yS3id6+AvMs5yjg=;
-        b=hlHMcPi6Mp5xl4X8VIqHjx/WAv/eRatIhwK/QCv+5NX6OMWbd0QcwGrL+f4GYtwUez
-         NZWCbWRN/kmOGBQjdDRBtW8zNKGTVpXK0v1AQdmGAKLf+rSEkocdEgc46j0ZVisKn7Sa
-         m8ybrxMMbXAC85ABoZoq61FRL1NzHICnAVsNMo5og/T6UI7vmOzHsminIpi/AKq7pE6Q
-         yFhmjf+cARg7Hd2k1a2fZcQdPxPefe58rjWhZh1Bgzg/fP+DccLpIsJL7hMAuQFjbAvM
-         KgBKqAIDMCFoIAPOyaPXTY+inq5Z8EaEYu4ZJS8azvnZ2pgeitAswM4jkUgP4t+CodB7
-         B+lw==
-X-Gm-Message-State: AOAM530arShmMzYZIDNZsaGq3yt0EDX4AI/xhWifK74DhA+j7970HJkM
-        tyP+fF4iLmX/smAAaHehwCIXTpuqS5mxZv4efFPnJQ==
-X-Google-Smtp-Source: ABdhPJyQeu9mN7kR7KthJ1yYHTKt2DUQkemDvvaMggnz/5gzMvRlBtgUbPtaNUKQGsHMsCuQliyQ9twCV00Ok/bMpqw=
-X-Received: by 2002:a05:6512:4015:: with SMTP id br21mr57521918lfb.233.1641570877566;
- Fri, 07 Jan 2022 07:54:37 -0800 (PST)
+        bh=4Wx8vb4BLG+DDO7rJPIEbH27WUURa/Qd6ietWG6WiTA=;
+        b=xgaYLK4JtIm0ZonXAdYrIB+NzLSNReClduKc8VMKuCArE+2/mGOvd5rG4AtL4pY+nq
+         GuiX4rn3QIcEg3yBj/F47hfM6uzBhrrkgMVnf8p2ZRdZqBrO7RRAiAV+TzcDhWvJkz9u
+         msA+KNjARVvdEkmZ230U5b9PCSSgtS+D4zXyI1oTUP6glITYpnfYKdcExT6rasyUBn24
+         zh3jz5tkxnB6jCTuz3n7tdMCZpPOmB4OhXxiys3/JQT+c90nJzfNFAd8/z1oNo9a69rU
+         g4MrvH3HS7FxO9Zo0F96kWg5fxXWL0o8smaO2oVJudLoe6nbQs6tLORkVwt6uOTzM6Gs
+         m3pQ==
+X-Gm-Message-State: AOAM530yhu5hs0U+UnE9I+OHtIgBuOBhbyXSM6fSjR6TjGGQ/Z3oNe1p
+        OuFbe0AlmYkuBHk0N6A/QqGJ/aNjnil4hw4MR3rRIg==
+X-Google-Smtp-Source: ABdhPJxoyZIKjIKAy0vsM+Q9YLUcHyiT1i/rcFqzeHrV03xqmKlXiwgDQU8UZOFEvDKB4fVVjM97MAq7llbdE9aZfKg=
+X-Received: by 2002:a05:6512:3d9e:: with SMTP id k30mr56148357lfv.184.1641572803993;
+ Fri, 07 Jan 2022 08:26:43 -0800 (PST)
 MIME-Version: 1.0
-References: <20211218130014.4037640-1-daniel.lezcano@linaro.org>
- <20211218130014.4037640-3-daniel.lezcano@linaro.org> <CAPDyKFrLTsUxG8JHdK33h2BT8pxeHk6kiU-4uGrvxUhcQKg3Sw@mail.gmail.com>
- <8fcc0ef8-b0c7-da73-434f-31c88896aed5@linaro.org>
-In-Reply-To: <8fcc0ef8-b0c7-da73-434f-31c88896aed5@linaro.org>
+References: <20220105182939.106885-1-paul@crapouillou.net> <20220105182939.106885-2-paul@crapouillou.net>
+In-Reply-To: <20220105182939.106885-2-paul@crapouillou.net>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 7 Jan 2022 16:54:01 +0100
-Message-ID: <CAPDyKFqzxnfh0kow5mzoApFMQpKOAv=e1b7Cy9H-iEh99Wmagw@mail.gmail.com>
-Subject: Re: [PATCH v5 2/6] powercap/drivers/dtpm: Add hierarchy creation
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rjw@rjwysocki.net, lukasz.luba@arm.com, robh@kernel.org,
-        heiko@sntech.de, arnd@linaro.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@kernel.org>
+Date:   Fri, 7 Jan 2022 17:26:07 +0100
+Message-ID: <CAPDyKFqiVTcsr03SqCzZsTraivrnM4YxKxPQ7dMmt14dT1uiCQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/6] PM: core: Remove DEFINE_UNIVERSAL_DEV_PM_OPS() macro
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
+        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Jonathan Cameron <jonathan.cameron@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[...]
-
-> >> +static int dtpm_for_each_child(const struct dtpm_node *hierarchy,
-> >> +                              const struct dtpm_node *it, struct dtpm *parent)
-> >> +{
-> >> +       struct dtpm *dtpm;
-> >> +       int i, ret;
-> >> +
-> >> +       for (i = 0; hierarchy[i].name; i++) {
-> >> +
-> >> +               if (hierarchy[i].parent != it)
-> >> +                       continue;
-> >> +
-> >> +               dtpm = dtpm_node_callback[hierarchy[i].type](&hierarchy[i], parent);
-> >> +               if (!dtpm || IS_ERR(dtpm))
-> >> +                       continue;
-> >> +
-> >> +               ret = dtpm_for_each_child(hierarchy, &hierarchy[i], dtpm);
-> >
-> > Why do you need to recursively call dtpm_for_each_child() here?
-> >
-> > Is there a restriction on how the dtpm core code manages adding
-> > children/parents?
+On Wed, 5 Jan 2022 at 19:29, Paul Cercueil <paul@crapouillou.net> wrote:
 >
-> [ ... ]
+> The deprecated UNIVERSAL_DEV_PM_OPS() macro uses the provided callbacks
+> for both runtime PM and system sleep, which is very likely to be a
+> mistake, as a system sleep can be triggered while a given device is
+> already PM-suspended, which would cause the suspend callback to be
+> called twice.
 >
-> The recursive call is needed given the structure of the tree in an array
-> in order to connect with the parent.
+> The amount of users of UNIVERSAL_DEV_PM_OPS() is also tiny (16
+> occurences) compared to the number of places where
+> SET_SYSTEM_SLEEP_PM_OPS() is used with pm_runtime_force_suspend() and
+> pm_runtime_force_resume(), which makes me think that none of these cases
+> are actually valid.
+>
+> As this macro is currently unused, remove it before someone starts to
+> use it in yet another invalid case.
 
-Right, I believe I understand what you are trying to do here, but I am
-not sure if this is the best approach to do this. Maybe it is.
+I assume you refer to DEFINE_UNIVERSAL_DEV_PM_OPS here. Can you
+perhaps make that more clear?
 
-The problem is that we are also allocating memory for a dtpm and we
-call dtpm_register() on it in this execution path - and this memory
-doesn't get freed up nor unregistered, if any of the later recursive
-calls to dtpm_for_each_child() fails.
+>
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> ---
+>
+> Notes:
+>     v2: No change
+>
+>  include/linux/pm.h | 19 ++++++-------------
+>  1 file changed, 6 insertions(+), 13 deletions(-)
+>
+> diff --git a/include/linux/pm.h b/include/linux/pm.h
+> index e1e9402180b9..31bbaafb06d2 100644
+> --- a/include/linux/pm.h
+> +++ b/include/linux/pm.h
+> @@ -366,6 +366,12 @@ static const struct dev_pm_ops name = { \
+>         SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+>  }
+>
+> +/* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
+> +#define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+> +const struct dev_pm_ops __maybe_unused name = { \
+> +       SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+> +}
+> +
+>  /*
+>   * Use this for defining a set of PM operations to be used in all situations
+>   * (system suspend, hibernation or runtime PM).
+> @@ -379,19 +385,6 @@ static const struct dev_pm_ops name = { \
+>   * .resume_early(), to the same routines as .runtime_suspend() and
+>   * .runtime_resume(), respectively (and analogously for hibernation).
+>   */
+> -#define DEFINE_UNIVERSAL_DEV_PM_OPS(name, suspend_fn, resume_fn, idle_fn) \
+> -static const struct dev_pm_ops name = { \
+> -       SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+> -       RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn) \
+> -}
+> -
+> -/* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
+> -#define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+> -const struct dev_pm_ops __maybe_unused name = { \
+> -       SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+> -}
+> -
+> -/* Deprecated. Use DEFINE_UNIVERSAL_DEV_PM_OPS() instead. */
 
-The point is, it looks like it can get rather messy with the recursive
-calls to cope with the error path. Maybe it's easier to store the
-allocated dtpms in a list somewhere and use this to also find a
-reference of a parent?
+Shouldn't this macro be deprecated any more?
 
-Later on, when we may decide to implement "dtpm_destroy_hierarchy()"
-(or whatever we would call such interface), you probably need a list
-of the allocated dtpms anyway, don't you think?
-
-[...]
+>  #define UNIVERSAL_DEV_PM_OPS(name, suspend_fn, resume_fn, idle_fn) \
+>  const struct dev_pm_ops __maybe_unused name = { \
+>         SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+> --
+> 2.34.1
+>
 
 Kind regards
 Uffe
