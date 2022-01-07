@@ -2,87 +2,302 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EF6E4878F9
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jan 2022 15:33:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BBCE487902
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jan 2022 15:33:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347583AbiAGOc7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Jan 2022 09:32:59 -0500
-Received: from smtp21.cstnet.cn ([159.226.251.21]:58698 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233190AbiAGOc6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 7 Jan 2022 09:32:58 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-01 (Coremail) with SMTP id qwCowADXbaYAT9hh3kz7BQ--.38327S2;
-        Fri, 07 Jan 2022 22:32:32 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     daniel.lezcano@linaro.org, rui.zhang@intel.com, amitk@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: Re: Re: [PATCH] thermal/int340x_thermal: Check for null pointer after calling kmemdup
-Date:   Fri,  7 Jan 2022 22:32:30 +0800
-Message-Id: <20220107143230.4057632-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S1347827AbiAGOdd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Jan 2022 09:33:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45374 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347822AbiAGOdd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jan 2022 09:33:33 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A83CC061746;
+        Fri,  7 Jan 2022 06:33:32 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id ADD2E1F41A85
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1641566010;
+        bh=xsEtblrCb0tBGSZg8VcgU0f3IuRCjwRAstGnjQ8ex4M=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=QztwbUzfrGMamK1nWpM8GF6PyhX/dvB4Q4MRkV+FgjLDfhxFomfBA/TddHKIgB3x1
+         43q4PBu4b4iO0S3kFcdqmiyHP3anskAUZUGjvQMG5Em2AqHqpFqgfZI3QpxBrYd6oA
+         4h9Cjx/95lA8ECG2FTfu5eaupz6adnpD2bHDlPdsz/3YCYIRJ2ZM2X7o9LTkjX/KbX
+         dAtivBbTKJleh18+csF8ixXQeRmeZC3wLNJu5ESLPTLBk7MhStatySGKSLreVFQF+l
+         ezG2zpxcX/9zwDA4gYxThJg331dIv+bvKfRQNzP3/qSTCCkoBNdJS8R3JwaITQ7b4B
+         h9SGuLEfNKThg==
+Subject: Re: [PATCH v21 8/8] soc: mediatek: SVS: add mt8192 SVS GPU driver
+To:     Roger Lu <roger.lu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        YT Lee <yt.lee@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Guenter Roeck <linux@roeck-us.net>
+References: <20220107095200.4389-1-roger.lu@mediatek.com>
+ <20220107095200.4389-9-roger.lu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Message-ID: <2c0e89c6-6e9c-9d12-703f-d71e22023e7a@collabora.com>
+Date:   Fri, 7 Jan 2022 15:33:26 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowADXbaYAT9hh3kz7BQ--.38327S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zr1UCw45Zr1kGF1xuFW7Jwb_yoW8Xr4kpF
-        WSgryUArZYgF48XwnrAr15Ja98C3Z5Ka95uFyFga4YyFnIyFWSgFyFyF1Ykry0kr1xKw1j
-        ya4YqFs7ZryDJ3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkq14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW5XwCF
-        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
-        1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAI
-        cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjc183UUUUU==
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+In-Reply-To: <20220107095200.4389-9-roger.lu@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 08:05:17PM +0800, Daniel Lezcano wrote:
->> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
->> index 823354a1a91a..999b5682c28a 100644
->> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
->> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
->> @@ -462,6 +462,11 @@ static void int3400_setup_gddv(struct int3400_thermal_priv *priv)
->>  	priv->data_vault = kmemdup(obj->package.elements[0].buffer.pointer,
->>  				   obj->package.elements[0].buffer.length,
->>  				   GFP_KERNEL);
->> +	if (!priv->data_vault) {
->> +		kfree(buffer.pointer);
->> +		return;
->> +	}
->> +
->
-> There is another kfree on error before
->
-> Please replace those by a goto out_kfree;
->
->>  	bin_attr_data_vault.private = priv->data_vault;
->>  	bin_attr_data_vault.size = obj->package.elements[0].buffer.length;
->
-> out_kfree;
->>  	kfree(buffer.pointer);
->> 
+Il 07/01/22 10:52, Roger Lu ha scritto:
+> mt8192 SVS GPU uses 2-line (high/low bank) HW architecture to provide
+> bank voltages. High bank helps update higher frequency's voltage
+> and low bank helps update lower frequency's voltage.
+> 
+> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
+> ---
+>   drivers/soc/mediatek/mtk-svs.c | 469 ++++++++++++++++++++++++++++++++-
+>   1 file changed, 464 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
+> index 93cdaecadd6d..bec6524ab33a 100644
+> --- a/drivers/soc/mediatek/mtk-svs.c
+> +++ b/drivers/soc/mediatek/mtk-svs.c
 
-Ok, I will submit new patch to replace those.
+..snip..
 
-> Why there is no error code returned to the caller?
+> @@ -639,9 +706,11 @@ static int svs_status_debug_show(struct seq_file *m, void *v)
+>   
+>   	ret = svs_get_zone_temperature(svsb->tzone_name, &tzone_temp);
+>   	if (ret)
+> -		seq_printf(m, "%s: temperature ignore\n", svsb->name);
+> +		seq_printf(m, "%s: temperature ignore, turn_pt = %u\n",
+> +			   svsb->name, svsb->turn_pt);
+>   	else
+> -		seq_printf(m, "%s: temperature = %d\n", svsb->name, tzone_temp);
+> +		seq_printf(m, "%s: temperature = %d, turn_pt = %u\n",
+> +			   svsb->name, tzone_temp, svsb->turn_pt);
+>   
+>   	for (i = 0; i < svsb->opp_count; i++) {
+>   		opp = dev_pm_opp_find_freq_exact(svsb->opp_dev,
+> @@ -784,6 +853,181 @@ static u32 interpolate(u32 f0, u32 f1, u32 v0, u32 v1, u32 fx)
+>   	return DIV_ROUND_UP(vx, 100);
+>   }
+>   
+> +static void svs_get_bank_volts_v3(struct svs_platform *svsp)
+> +{
+> +	struct svs_bank *svsb = svsp->pbank;
+> +	u32 i, j, *vop, vop74, vop30, mask7_0 = GENMASK(7, 0);
+> +	u32 b_sft, bits8 = 8, shift_byte = 0, reg_bytes = 4;
 
-Well, I check the commit 0ba13c763aac ("thermal/int340x_thermal: Export GDDV")
-and find that it was designed to return without error.
-And it seems that the 'bin_attr_data_vault.size' is related to the
-'bin_attr_data_vault.private'.
-If the size is 0, then the array will not be used.
-Therefore, I think it is unnecessary to return error.
+mask7_0, bits8, reg_bytes are constants, and it's not right to declare constants
+as variables like you're doing here.
 
-Sincerely thanks,
-Jiang
+Please replace all usages of `mask7_0` with either a definition or with the call
+to the GENMASK macro;
+also, replace all usages of `bits8` with a definition, or just 8;
+finally, either make `reg_bytes` a `const u8` or a definition.
+
+
+In my opinion, a #define would be preferred, since the exact same comments on
+the exact same values also apply to function svs_set_bank_freq_pct_v3().
+
+After that fix, you'll get my R-b.
+
+I feel like v22 will be golden :)
+
+Regards,
+- Angelo
+
+> +	u32 middle_index = (svsb->opp_count / 2);
+> +	u32 opp_start = 0, opp_stop = 0, turn_pt = svsb->turn_pt;
+> +
+> +	if (svsb->phase == SVSB_PHASE_MON &&
+> +	    svsb->volt_flags & SVSB_MON_VOLT_IGNORE)
+> +		return;
+> +
+> +	vop74 = svs_readl_relaxed(svsp, VOP74);
+> +	vop30 = svs_readl_relaxed(svsp, VOP30);
+> +
+> +	/* Target is to set svsb->volt[] by algorithm */
+> +	if (turn_pt < middle_index) {
+> +		if (svsb->type == SVSB_HIGH) {
+> +			/* volt[0] ~ volt[turn_pt - 1] */
+> +			for (i = 0; i < turn_pt; i++) {
+> +				b_sft = bits8 * (shift_byte % reg_bytes);
+> +				vop = (shift_byte < reg_bytes) ? &vop30 :
+> +								 &vop74;
+> +				svsb->volt[i] = (*vop >> b_sft) & mask7_0;
+> +				shift_byte++;
+> +			}
+> +		} else if (svsb->type == SVSB_LOW) {
+> +			/* volt[turn_pt] + volt[j] ~ volt[opp_count - 1] */
+> +			j = svsb->opp_count - 7;
+> +			svsb->volt[turn_pt] = vop30 & mask7_0;
+> +			shift_byte++;
+> +			for (i = j; i < svsb->opp_count; i++) {
+> +				b_sft = bits8 * (shift_byte % reg_bytes);
+> +				vop = (shift_byte < reg_bytes) ? &vop30 :
+> +								 &vop74;
+> +				svsb->volt[i] = (*vop >> b_sft) & mask7_0;
+> +				shift_byte++;
+> +			}
+> +
+> +			/* volt[turn_pt + 1] ~ volt[j - 1] by interpolate */
+> +			for (i = turn_pt + 1; i < j; i++)
+> +				svsb->volt[i] =
+> +					interpolate(svsb->freq_pct[turn_pt],
+> +						    svsb->freq_pct[j],
+> +						    svsb->volt[turn_pt],
+> +						    svsb->volt[j],
+> +						    svsb->freq_pct[i]);
+> +		}
+> +	} else {
+> +		if (svsb->type == SVSB_HIGH) {
+> +			/* volt[0] + volt[j] ~ volt[turn_pt - 1] */
+> +			j = turn_pt - 7;
+> +			svsb->volt[0] = vop30 & mask7_0;
+> +			shift_byte++;
+> +			for (i = j; i < turn_pt; i++) {
+> +				b_sft = bits8 * (shift_byte % reg_bytes);
+> +				vop = (shift_byte < reg_bytes) ? &vop30 :
+> +								 &vop74;
+> +				svsb->volt[i] = (*vop >> b_sft) & mask7_0;
+> +				shift_byte++;
+> +			}
+> +
+> +			/* volt[1] ~ volt[j - 1] by interpolate */
+> +			for (i = 1; i < j; i++)
+> +				svsb->volt[i] =
+> +					interpolate(svsb->freq_pct[0],
+> +						    svsb->freq_pct[j],
+> +						    svsb->volt[0],
+> +						    svsb->volt[j],
+> +						    svsb->freq_pct[i]);
+> +		} else if (svsb->type == SVSB_LOW) {
+> +			/* volt[turn_pt] ~ volt[opp_count - 1] */
+> +			for (i = turn_pt; i < svsb->opp_count; i++) {
+> +				b_sft = bits8 * (shift_byte % reg_bytes);
+> +				vop = (shift_byte < reg_bytes) ? &vop30 :
+> +								 &vop74;
+> +				svsb->volt[i] = (*vop >> b_sft) & mask7_0;
+> +				shift_byte++;
+> +			}
+> +		}
+> +	}
+> +
+> +	if (svsb->type == SVSB_HIGH) {
+> +		opp_start = 0;
+> +		opp_stop = svsb->turn_pt;
+> +	} else if (svsb->type == SVSB_LOW) {
+> +		opp_start = svsb->turn_pt;
+> +		opp_stop = svsb->opp_count;
+> +	}
+> +
+> +	for (i = opp_start; i < opp_stop; i++)
+> +		if (svsb->volt_flags & SVSB_REMOVE_DVTFIXED_VOLT)
+> +			svsb->volt[i] -= svsb->dvt_fixed;
+> +}
+> +
+> +static void svs_set_bank_freq_pct_v3(struct svs_platform *svsp)
+> +{
+> +	struct svs_bank *svsb = svsp->pbank;
+> +	u32 i, j, *freq_pct, freq_pct74 = 0, freq_pct30 = 0;
+> +	u32 b_sft, bits8 = 8, shift_byte = 0, reg_bytes = 4;
+> +	u32 middle_index = (svsb->opp_count / 2);
+> +	u32 turn_pt = middle_index;
+> +
+> +	for (i = 0; i < svsb->opp_count; i++) {
+> +		if (svsb->opp_dfreq[i] <= svsb->turn_freq_base) {
+> +			svsb->turn_pt = i;
+> +			break;
+> +		}
+> +	}
+> +
+> +	turn_pt = svsb->turn_pt;
+> +
+> +	/* Target is to fill out freq_pct74 / freq_pct30 by algorithm */
+> +	if (turn_pt < middle_index) {
+> +		if (svsb->type == SVSB_HIGH) {
+> +			/* Edge case for preventing freq_pct30 from being 0 */
+> +			if (turn_pt == 0)
+> +				freq_pct30 = svsb->freq_pct[0];
+> +
+> +			/* freq_pct[0] ~ freq_pct[turn_pt - 1] */
+> +			for (i = 0; i < turn_pt; i++) {
+> +				b_sft = bits8 * (shift_byte % reg_bytes);
+> +				freq_pct = (shift_byte < reg_bytes) ?
+> +					   &freq_pct30 : &freq_pct74;
+> +				*freq_pct |= (svsb->freq_pct[i] << b_sft);
+> +				shift_byte++;
+> +			}
+> +		} else if (svsb->type == SVSB_LOW) {
+> +			/*
+> +			 * freq_pct[turn_pt] +
+> +			 * freq_pct[opp_count - 7] ~ freq_pct[opp_count -1]
+> +			 */
+> +			freq_pct30 = svsb->freq_pct[turn_pt];
+> +			shift_byte++;
+> +			j = svsb->opp_count - 7;
+> +			for (i = j; i < svsb->opp_count; i++) {
+> +				b_sft = bits8 * (shift_byte % reg_bytes);
+> +				freq_pct = (shift_byte < reg_bytes) ?
+> +					   &freq_pct30 : &freq_pct74;
+> +				*freq_pct |= (svsb->freq_pct[i] << b_sft);
+> +				shift_byte++;
+> +			}
+> +		}
+> +	} else {
+> +		if (svsb->type == SVSB_HIGH) {
+> +			/*
+> +			 * freq_pct[0] +
+> +			 * freq_pct[turn_pt - 7] ~ freq_pct[turn_pt - 1]
+> +			 */
+> +			freq_pct30 = svsb->freq_pct[0];
+> +			shift_byte++;
+> +			j = turn_pt - 7;
+> +			for (i = j; i < turn_pt; i++) {
+> +				b_sft = bits8 * (shift_byte % reg_bytes);
+> +				freq_pct = (shift_byte < reg_bytes) ?
+> +					   &freq_pct30 : &freq_pct74;
+> +				*freq_pct |= (svsb->freq_pct[i] << b_sft);
+> +				shift_byte++;
+> +			}
+> +		} else if (svsb->type == SVSB_LOW) {
+> +			/* freq_pct[turn_pt] ~ freq_pct[opp_count - 1] */
+> +			for (i = turn_pt; i < svsb->opp_count; i++) {
+> +				b_sft = bits8 * (shift_byte % reg_bytes);
+> +				freq_pct = (shift_byte < reg_bytes) ?
+> +					   &freq_pct30 : &freq_pct74;
+> +				*freq_pct |= (svsb->freq_pct[i] << b_sft);
+> +				shift_byte++;
+> +			}
+> +		}
+> +	}
+> +
+> +	svs_writel_relaxed(svsp, freq_pct74, FREQPCT74);
+> +	svs_writel_relaxed(svsp, freq_pct30, FREQPCT30);
+> +}
+> +
+>   static void svs_get_bank_volts_v2(struct svs_platform *svsp)
+>   {
+>   	struct svs_bank *svsb = svsp->pbank;
+
 
