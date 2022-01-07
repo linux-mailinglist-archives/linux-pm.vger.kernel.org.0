@@ -2,68 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C24D14876D8
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jan 2022 12:52:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ECE3487750
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jan 2022 13:05:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347236AbiAGLwn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Jan 2022 06:52:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37056 "EHLO
+        id S238571AbiAGMFZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Jan 2022 07:05:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347226AbiAGLwm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jan 2022 06:52:42 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4091BC061201
-        for <linux-pm@vger.kernel.org>; Fri,  7 Jan 2022 03:52:42 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id o203-20020a1ca5d4000000b003477d032384so1157042wme.2
-        for <linux-pm@vger.kernel.org>; Fri, 07 Jan 2022 03:52:42 -0800 (PST)
+        with ESMTP id S238658AbiAGMFV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jan 2022 07:05:21 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D709EC061201
+        for <linux-pm@vger.kernel.org>; Fri,  7 Jan 2022 04:05:20 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id t28so3899952wrb.4
+        for <linux-pm@vger.kernel.org>; Fri, 07 Jan 2022 04:05:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=y+v65dbymAmhdz70zjQsgwhuuC70Kn2IqrbK3x6r9EQ=;
-        b=EniNqefda68+tvBDXbfbsYibERdc8QM8kXumEieusVvefyXztMy2uHZL/TZ+l2UXVz
-         AjTA8uMHLVpqEttUV2+uuSzEjG5sABmu5+TnLBsW4b+MVG0lNPrDgGh0yb+O8PTWFCg6
-         bn98LM0nToumySsLmHhPOKzBWOpYrB1G9Ms9ztog+ljmuoano/81boEuMx9+48dDrrup
-         SiuNSmWEG5DtxkWpUFmhuN+nnoNrhr/efPMqFJ1uonWxHwtBppJlWJNCfAxo6UundamO
-         0cUkjORJVZNr0t2ZosCMaq92diOBl1ldTHbRdTq6pqp2Q6uFjppcJHHu819xtnh9Qm8M
-         MP3g==
+        bh=0fJMEtzExslnnr0EE8eXwCGBvIQxk/jbdwPaaLTTA00=;
+        b=IJQa1FuCgd2GxfNawwlcKxlFhFzK0wLrdh4JPB+nC1eC3xsz0mlpEWd5oqyzZfqQHZ
+         bxB5KMAWYsqxWstNRcvz/BKZ+zTMeaK8HcGEgPBNTMasbSRHxf+lRtJClFHU86ekAQV6
+         ZQovDZ7IpBCY8oPOLxipZSJc7IowlcIdTT3ogdt38IFqzN4NvtmKGQ3qBwd2XY5j6TDE
+         nK2p63QbaQtKgJJLl8cCixAQfFAkBPxQrnUt0joGPP6xhE2hBgCXPYkpAgiBDoiYWOzN
+         rEKVSdzeEKx7ne3IEUsSaKcPtnnjAGHdSGLuN2fIrB24mHesHV76BlNHEyW47d6qN5Qz
+         QFQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=y+v65dbymAmhdz70zjQsgwhuuC70Kn2IqrbK3x6r9EQ=;
-        b=c4ThUZfDe13/+EVblYXW3JWmiYwCVpGlbrRikI+uzGLcf5rj9QWwecxFcF8MbHPpAW
-         ksMDSQIwiz52DB47zzbZEC649qptLXQQ+jcU4tlldsGEr5nxzkabECOetHJjduwq8PMy
-         tbGvhAwdL1GBh6pNF1bpO2JFOD5MCO29mJmVytf8izy4ba5nX/ZPGNhuY5VhbIaOIWNs
-         72PDl+6ArmIOgPprwJSb1EUUCKO6mH20gdFzG++tAH5tKg3xzFm0wMuTYZb+ZZnOPhLg
-         xmeH+DCooIvEXlt9AIbYsghhwua2CBRJvdU9EOf7nE7DwcOlejkIsOade16ntt0ZqjHB
-         Vh8A==
-X-Gm-Message-State: AOAM530qm8IKP/gUChgRXOg9r37DnhOm2pxYgN462ZHvhYTMm70bMQ2h
-        2clcuWBjj0GdZFn8WF+I3D+QmR7x6OCmkB+N
-X-Google-Smtp-Source: ABdhPJyONxY2KW0bOiX73rFYHQx3qpz02tX5V0UTVRixd6paxgVStplFldFYbkYmEeNCkuh0SpI2QQ==
-X-Received: by 2002:a05:600c:3ac5:: with SMTP id d5mr10855056wms.32.1641556360452;
-        Fri, 07 Jan 2022 03:52:40 -0800 (PST)
+        bh=0fJMEtzExslnnr0EE8eXwCGBvIQxk/jbdwPaaLTTA00=;
+        b=OXM4h4HwSag33ATuCkLlUFNV/nPqb0zVS0cHpPsbkLd9nHDUV0OD7mxeBzsPlvEwmZ
+         3Zo1h/b5gDUeeVoSKnE088Vrh+fOj9wZ9bHFxs0ja5vThyoDYKuMYLwTb9drns118fvZ
+         wTEaZ8cYuF2g4qpB4s7JcG5H0AGjEx/wYkxAr4c4se9r50qk8w5gbAQMQ1mmCRCFIjxx
+         0xDZAFhSW5NHsRf56WzYklAGC9+z8cujLKcAd1BxtdezQes1YHq7+SHgg9pnMQf5bCB5
+         jFHtjb1Knf98Lw4hvza+RTlW4jlM5jKXAJ0BJmT/FPxST/esmoJEODypgxyN/pk3crjD
+         q2Bg==
+X-Gm-Message-State: AOAM533cRItUgjnkJ1CcsVgJjwi9Snh7+e2BqSO+tlp8fWwNmb2ANpOJ
+        9vkiPSrmra4dROT5cFUlSy0ffg==
+X-Google-Smtp-Source: ABdhPJxTsNsWkeEQ2mnZJnaLdfoL07T6yJwIyYu0AsBAWgmFKi0xzsj2RTXPP/QWacpb0CHHCScWhA==
+X-Received: by 2002:a05:6000:49:: with SMTP id k9mr56277757wrx.190.1641557119381;
+        Fri, 07 Jan 2022 04:05:19 -0800 (PST)
 Received: from ?IPv6:2a01:e34:ed2f:f020:4875:220c:f3a4:c74e? ([2a01:e34:ed2f:f020:4875:220c:f3a4:c74e])
-        by smtp.googlemail.com with ESMTPSA id d18sm2606303wrn.102.2022.01.07.03.52.39
+        by smtp.googlemail.com with ESMTPSA id n7sm4282059wms.46.2022.01.07.04.05.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jan 2022 03:52:39 -0800 (PST)
-Subject: Re: [PATCH v2][RFC 1/2] Implement Ziegler-Nichols Heuristic
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org, amitk@kernel.org,
-        Chetankumar Mistry <chetan.mistry@arm.com>,
-        rui.zhang@intel.com, linux-pm@vger.kernel.org
-References: <20211217184907.2103677-1-chetan.mistry@arm.com>
- <23c3480a-c46b-f049-5758-d11124367190@arm.com>
- <1b6047eb-2f14-ddde-4712-145a26dc8aa5@linaro.org>
- <42e8c75e-3827-3950-0705-4670ec1c904e@arm.com>
+        Fri, 07 Jan 2022 04:05:18 -0800 (PST)
+Subject: Re: [PATCH] thermal/int340x_thermal: Check for null pointer after
+ calling kmemdup
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, rui.zhang@intel.com,
+        amitk@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220105065652.2340271-1-jiasheng@iscas.ac.cn>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <0e9eb5a9-733c-cf4d-a8c9-e13b5258dce5@linaro.org>
-Date:   Fri, 7 Jan 2022 12:52:38 +0100
+Message-ID: <24d097f7-59a5-cd7d-3fc8-c3ce5fd9e88b@linaro.org>
+Date:   Fri, 7 Jan 2022 13:05:17 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <42e8c75e-3827-3950-0705-4670ec1c904e@arm.com>
+In-Reply-To: <20220105065652.2340271-1-jiasheng@iscas.ac.cn>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -71,138 +68,45 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 06/01/2022 14:16, Lukasz Luba wrote:
+On 05/01/2022 07:56, Jiasheng Jiang wrote:
+> As the possible failure of the allocation, kmemdup() may return NULL
+> pointer.
+> Therefore, it should be better to check the return value of kmemdup().
+> If fails, just free 'buffer.pointer' and directly return is enough, same
+> as the way that 'obj' fails above.
 > 
-> Thank you for fast response!
+> Fixes: 0ba13c763aac ("thermal/int340x_thermal: Export GDDV")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
+>  drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> On 1/6/22 12:16 PM, Daniel Lezcano wrote:
->>
->> Hi Lukasz,
->>
->> On 06/01/2022 12:54, Lukasz Luba wrote:
->>> Hi Daniel,
->>>
->>> Could you have a look at this, please?
->>
->> Yes, I had a quick look at the code and went to the algorithm
->> description.
->>
->> Still digesting ...
->>
->>> On 12/17/21 6:49 PM, Chetankumar Mistry wrote:
->>>> Implement the Ziegler-Nichols Heuristic algorithm to better
->>>> estimate the PID Coefficients for a running platform.
->>>> The values are tuned to minimuse the amount of overshoot in
->>>> the temperature of the platform and subsequently minimise
->>>> the number of switches for cdev states.
->>>>
->>>> Signed-off-by: Chetankumar Mistry <chetan.mistry@arm.com>
->>>
->>>
->>> This is the continuation of the previous idea to have
->>> better k_* values. You might remember this conversation [1].
->>>
->>> I've spent some time researching papers how and what can be done
->>> in this field and if possible to plumb in to the kernel.
->>> We had internal discussions (~2017) of one method fuzzy-logic that I
->>> found back then, but died at the begging not fitting into this
->>> IPA kernel specific environment and user-space. Your suggestion with
->>> observing undershooting and overshooting results sparked better idea.
->>> I thought it's worth to invest in it but I didn't have
->>> time. We are lucky, Chetan was designated to help me and
->>> experiment/implement/test these ideas and here is the patch set.
->>>
->>> He's chosen the Ziegler-Nichols method, which shows really
->>> good results in benchmarks (Geekbench and GFXbench on hikey960 Android).
->>> The improved performance in Geekbench is ~10% (vs. old IPA).
->>
->> +10% perf improvements sounds great. What about the temperature
->> mitigation (temp avg + stddev) ?
+> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> index 823354a1a91a..999b5682c28a 100644
+> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> @@ -462,6 +462,11 @@ static void int3400_setup_gddv(struct int3400_thermal_priv *priv)
+>  	priv->data_vault = kmemdup(obj->package.elements[0].buffer.pointer,
+>  				   obj->package.elements[0].buffer.length,
+>  				   GFP_KERNEL);
+> +	if (!priv->data_vault) {
+> +		kfree(buffer.pointer);
+> +		return;
+> +	}
+> +
+
+There is another kfree on error before
+
+Please replace those by a goto out_kfree;
+
+>  	bin_attr_data_vault.private = priv->data_vault;
+>  	bin_attr_data_vault.size = obj->package.elements[0].buffer.length;
+
+out_kfree;
+>  	kfree(buffer.pointer);
 > 
-> Chetan would respond about that with the link to the .html file.
-> We just have to create an official public server space for it.
-> I hope till Monday evening we would get something.
-> 
->>
->>> The main question from our side is the sysfs interface
->>> which we could be used to trigger this algorithm for
->>> better coefficients estimations.
->>> We ask user to echo to some sysfs files in thermal zone
->>> and start his/her workload. This new IPA 'learns' the system
->>> utilization and reaction in temperature. After a few rounds,
->>> we get better fitted coefficients.
->>> If you need more background about the code or mechanisms, or tests,
->>> I'm sure Chetan is happy to provide you those.
->>
->> I'm worried about the complexity of the algorithm and the overhead
->> implied.
->>
->> The k_* factors are tied with the system and the thermal setup (fan,
->> heatsink, processor, opp, ...). So IIUC when the factors are found, they
->> should not change and could be part of the system setup.
-> 
-> True, they are found and will be fixed for that board.
-> 
->>
->> Would the algorithm fit better in a separate userspace kernel tooling?
->> So we can run it once and find the k_* for a board.
-> 
-> We wanted to be part of IPA in kernel because:
-> - the logic needs access to internals of IPA
-> - it would be easy accessible for all distros out-of-box
-> - no additional maintenance and keeping in sync two codes, especially
->   those in some packages for user-space
 
-Sorry, I'm not convinced :/
-
-AFAICT, the temperature and the sampling rate should be enough
-information to find out the k_*
-
-IMO, an userspace tool in ./tools/thermal/ipa is the right place
-
-So if you give the tooling to the SoC vendor via the thermal ones, with
-a file containing the temp + timestamp, they should be able to find the
-k_* and setup their boards.
-
-Actually my opinion is the kernel should not handle everything and the
-SoC vendor should at least do some work to setup their system. If they
-are able to find out the sustainable power, they can do the same for the
-right coefficients.
-
->> Additionally, the values can be stored in the Documentation for
->> different board and a documentation on how to use the tool.
->>
->> Then up to the SoC vendor to setup the k_* in sysfs, so no need to
->> change any interface.
-> 
-> It wouldn't be for SoC vendor, but up to the OEM or board designer,
-> because the same SoC might have different thermal headroom thanks
-> to better cooling or bigger PCB, etc.
-
-Right, s/SoC vendor/SoC platform/
-
-> I agree that these optimized k_* values might be shared in the kernel.
-> Ideally I would see them in the board's DT file, in the thermal zone,
-> but I'm afraid they are not 'Device description' so don't fit into DT
-> scope. They are rather optimizations of pure kernel mechanism.
-> 
-> where would be a good place for it? Maybe a new IPA Documentation/
-> sub-directory?
-
-You can improve the documentation in:
-
-Documentation/driver-api/thermal/power_allocator.rst
-
-And if we agree on a tools/thermal/ipa, the documentation with examples
-and some SoC reference can be put there also
-
->>> If you are interested in those analyses we can find a way to share a>
->>> .html file with the results from LISA notebook.
->>
->> Yes,
-> 
-> Sure thing, let me arrange that.
-
+Why there is no error code returned to the caller?
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
