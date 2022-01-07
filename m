@@ -2,96 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E70AF487387
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jan 2022 08:26:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 323A3487505
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jan 2022 10:52:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344496AbiAGH0n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Jan 2022 02:26:43 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:44310
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344618AbiAGH0e (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jan 2022 02:26:34 -0500
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 2BA954001B
-        for <linux-pm@vger.kernel.org>; Fri,  7 Jan 2022 07:26:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1641540383;
-        bh=M9bA08m/4+qmYorXwlFuqKIOOS7D4thRY9R5eRYtFbs=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=CUnUfjCWP4RYcEeNH73ExObzqwUnzE2qPp6eHblTgAlOBAcJ5FWEKJgWGkeBsaR/C
-         4tAJAydfUxdsgq/hHPdFHaBPnyexgrgjdM3pMfXFOVHxcV33AbBdzgUW/Sz06lzwI4
-         3h1McXYSgzgD+KoqT9zHSU2gXBPMi9qxJuJ6WBv49+siGp8vuFqPyGJNikXRs4wfC7
-         dr/24VWM5VhFdcD5ZX/vcqPkpfaCksIwT63I3NofTbKAEiwbT0k579IlR2XJR9bkQb
-         Vze83ueJ4zf16bFgYdseekRB6C9XxX4mqhA1gEG8vIFTDCrt+Ey3sDrpZnzd2SM9zF
-         Dn83UFqhdVLSQ==
-Received: by mail-ed1-f69.google.com with SMTP id dz8-20020a0564021d4800b003f897935eb3so3944688edb.12
-        for <linux-pm@vger.kernel.org>; Thu, 06 Jan 2022 23:26:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=M9bA08m/4+qmYorXwlFuqKIOOS7D4thRY9R5eRYtFbs=;
-        b=AVYOVkCeFV4EWA0YMwEiA5PsZpX6G4jMeN+4thEEqbGHN/HPdC6GPawUVhwklH4vCS
-         VT1jCm1BinH6JX8bSU2fmZTfOFEu5Q0xRcAn29lKz7j1AF3J6KJWEHw5UtaADVdRmWwM
-         YPpqskCfSed5ye6IM4mKCt/B04j1GMt2GKpl7Xy46jnr91r7S80vwhnHUwBXXKNu2X38
-         KuJNxnn+BD8sXWDBXememEvllKP563QNUPTZ/dtgtvYzAnMg8rWSmw8/FyL/Rvr14dml
-         6a3NrgcaFB/8DUi6gRnI0owLjZkwexQb0t6ssoGaejYClCJLJ7KQDAytXQ/LXvqLhXSm
-         jAlA==
-X-Gm-Message-State: AOAM533bNttFoQI+TcByIs/i1wpmsIQFdIqLfRWACnK5o4fOh4dMt5b5
-        OOBVRtjtJRlUk91gFdIEH+l7tQZDq6KqKHjMyEYutgKeoqmAnyFoVmDiOWrXqzfsAtnGCJEJOYY
-        OCp4S+8HN3AeV/BC0f4hqOtPpKUDfmydnZeEv
-X-Received: by 2002:a17:906:3e44:: with SMTP id t4mr1013016eji.233.1641540382847;
-        Thu, 06 Jan 2022 23:26:22 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwb017p+Oc5AqO2GTx8LN7DviB/du5sQ9u+BbDoumqR10b5Wls3pJvkYlFJVzjLDs3uNuoJQw==
-X-Received: by 2002:a17:906:3e44:: with SMTP id t4mr1013010eji.233.1641540382728;
-        Thu, 06 Jan 2022 23:26:22 -0800 (PST)
-Received: from [192.168.1.126] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id f15sm1705500edq.33.2022.01.06.23.26.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jan 2022 23:26:22 -0800 (PST)
-Message-ID: <950a0cb6-be94-dc60-9878-0c4dd8581f1f@canonical.com>
-Date:   Fri, 7 Jan 2022 08:26:21 +0100
+        id S1346482AbiAGJwL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Jan 2022 04:52:11 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:59076 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S237149AbiAGJwH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jan 2022 04:52:07 -0500
+X-UUID: cabfac39429b40b7999b052c3b3718a3-20220107
+X-UUID: cabfac39429b40b7999b052c3b3718a3-20220107
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 802823189; Fri, 07 Jan 2022 17:52:03 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 7 Jan 2022 17:52:01 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 7 Jan
+ 2022 17:52:01 +0800
+Received: from mtksdaap41.mediatek.inc (172.21.77.4) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 7 Jan 2022 17:52:00 +0800
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        YT Lee <yt.lee@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, Roger Lu <roger.lu@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v21 0/8] soc: mediatek: SVS: introduce MTK SVS engine
+Date:   Fri, 7 Jan 2022 17:51:52 +0800
+Message-ID: <20220107095200.4389-1-roger.lu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH] dt-bindings: power: maxim,max17040: Fix incorrect type
- for 'maxim,rcomp'
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        Iskren Chernev <iskren.chernev@gmail.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Matheus Castello <matheus@castello.eng.br>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220107030433.2381616-1-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220107030433.2381616-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07/01/2022 04:04, Rob Herring wrote:
-> The 'maxim,rcomp' is defined as a uint32, but the description and users all
-> say it is uint8-array with 1 or 2 elements. The tools missed checking this
-> case.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/power/supply/maxim,max17040.yaml      | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
+The Smart Voltage Scaling(SVS) engine is a piece of hardware
+which calculates suitable SVS bank voltages to OPP voltage table.
+Then, DVFS driver could apply those SVS bank voltages to PMIC/Buck
+when receiving OPP_EVENT_ADJUST_VOLTAGE.
 
+1. SVS driver uses OPP adjust event in [1] to update OPP table voltage part.
+2. SVS driver gets thermal/GPU device by node [2][3] and CPU device by get_cpu_device().
+After retrieving subsys device, SVS driver calls device_link_add() to make sure probe/suspend callback priority.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=25cb20a212a1f989385dfe23230817e69c62bee5
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=b325ce39785b1408040d90365a6ab1aa36e94f87
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.16-next/dts64&id=a8168cebf1bca1b5269e8a7eb2626fb76814d6e2
 
+change since v20:
+- Rebase to kernel 5.16-rc1
+- Separate mt8183 svs as two patches for minimun version support. patch1 (init01 ~ init02) and patch2 (mon mode).
+- Remove unused flags in each patch.
+- Move @SVSB_PHASE_ERROR before @SVSB_PHASE_INIT01 for order correctness.
+- Reorder the struct member comment and coding for the consistenty. Also revise the ambiguous comments.
+- Use [writel,readl]_relaxed instead of [writel,readl].
+- Fix ->efuse_parsing() not return "false" mistake.
+- Move more commen settings out of svs bank structure for shrinking data structure size.
+- Split up the "get platform data" and "platform probe" behavior.
+- Change the naming of "svs_is_supported()" to "svs_is_efuse_data_correct()" for better understanding.
+- SVSB_DC_SIGNED_BIT is configured as BIT(15) instead of 0x8000.
+- Add the missing variables comments back in the structure.
+- Add define "MAX_OPP_ENTRIES" for representing opp total count.
+- Add more kernel log description when error happens.
+- Add missing error handler when using nvmem_cell_read().
 
-Best regards,
-Krzysztof
+Roger Lu (8):
+  [v21,1/8] dt-bindings: soc: mediatek: add mtk svs dt-bindings
+  [v21,2/8] arm64: dts: mt8183: add svs device information
+  [v21,3/8] soc: mediatek: SVS: introduce MTK SVS engine
+  [v21,4/8] soc: mediatek: SVS: add monitor mode
+  [v21,5/8] soc: mediatek: SVS: add debug commands
+  [v21,6/8] dt-bindings: soc: mediatek: add mt8192 svs dt-bindings
+  [v21,7/8] arm64: dts: mt8192: add svs device information
+  [v21,8/8] soc: mediatek: SVS: add mt8192 SVS GPU driver
+
+ .../bindings/soc/mediatek/mtk-svs.yaml        |   92 +
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi      |   16 +
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi      |   39 +
+ drivers/soc/mediatek/Kconfig                  |   10 +
+ drivers/soc/mediatek/Makefile                 |    1 +
+ drivers/soc/mediatek/mtk-svs.c                | 2461 +++++++++++++++++
+ 6 files changed, 2619 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
+ create mode 100644 drivers/soc/mediatek/mtk-svs.c
+
