@@ -2,211 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B3A6487CFE
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jan 2022 20:27:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DEB6487D61
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jan 2022 20:58:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231470AbiAGT1I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Jan 2022 14:27:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55934 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232057AbiAGT1I (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jan 2022 14:27:08 -0500
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF75C06173F
-        for <linux-pm@vger.kernel.org>; Fri,  7 Jan 2022 11:27:07 -0800 (PST)
-Received: by mail-ot1-x32f.google.com with SMTP id s21-20020a05683004d500b0058f585672efso7692516otd.3
-        for <linux-pm@vger.kernel.org>; Fri, 07 Jan 2022 11:27:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7NkUgJRGyv/mGOJjcDFlQgMnvKEd2905SAIiMK/+wtE=;
-        b=diH74T6M28+vlK6mRBohtBievIcLoYDNhMQVJQtqXb+BQhjwBBgE9hnxvnCqEe+mjX
-         /I+FLpA0O1vUce24LeiofkQWsLGWOE7ROTLL5BznzuyIqOMjBJoy98WIkTPWrdQmLORk
-         NyUa+oYBYwcr8qa6rjXNlyv3oytgrYJ2nQRZU5Ea6iuATUbNJ+EwEP3nsUG/QLDWyeTT
-         J/rSDvmtQ2TuOBt5ylcNqKi24SQiUxZ8/4Q57iFAvYzeKQ8o2/EZI0Z0IbuEl/KlGWmP
-         C/wVpqcEv74u4/20GTMZUSr4VOzA4mElSt4qA6VexPyNVk2iSPuEJAi6FudZaoN00sSO
-         LyZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7NkUgJRGyv/mGOJjcDFlQgMnvKEd2905SAIiMK/+wtE=;
-        b=dG75X9qY2KnCAnCu/J+YVic5YKLxZrt7igwJ6MDKUZOFTYR8pbGmYqxLrLygeCxG9f
-         JZqR4r+BWnQyzINb6r/MhYBDdvFdkmZPkI86DNQy2Bh7Lm+AZv4BWaOvzhoUAoeQaWH0
-         DK8ej+EmlpjFMRsDec8IeHvwKbhVB4dW2KyJVhzJf2H4uNMxEyJXfhJnCzQf61Zoo9Cc
-         qB8/pTRWbd+N70qk7sHwjzUfKiQuGPJBawgmzftuCBR93eXYH2eHuVyRksHfEUYk9y/y
-         6q82bCBGwrLJULp6Z5jthL+tv6dq2n2pOwAfLno8VtPmkPLzoBFya67QpEv4s9Kgw9K7
-         RwXA==
-X-Gm-Message-State: AOAM530E1zyXDKYfOEvRa0qdFpjhpvDC8XXRwPjTvnJE1g+f8Scbm2FO
-        y+eFLGvE/dAsKLyjaEaID2Os/g==
-X-Google-Smtp-Source: ABdhPJwzflM4/ZC276UeLQsqnYjgLT3b8PYW7TqWlC7GqsDuQtLFWDALbglEfGsUu1xN50Cdhej/Fw==
-X-Received: by 2002:a05:6830:1d5c:: with SMTP id p28mr49666970oth.10.1641583627216;
-        Fri, 07 Jan 2022 11:27:07 -0800 (PST)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id l3sm1067724oic.37.2022.01.07.11.27.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jan 2022 11:27:06 -0800 (PST)
-Date:   Fri, 7 Jan 2022 11:27:54 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rjw@rjwysocki.net, lukasz.luba@arm.com, robh@kernel.org,
-        heiko@sntech.de, arnd@linaro.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, ulf.hansson@linaro.org,
-        Andy Gross <agross@kernel.org>,
-        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH v5 6/6] qcom/soc/drivers: Add DTPM description for sdm845
-Message-ID: <YdiUOh8FtPRktlUM@ripper>
-References: <20211218130014.4037640-1-daniel.lezcano@linaro.org>
- <20211218130014.4037640-7-daniel.lezcano@linaro.org>
+        id S233659AbiAGT61 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Jan 2022 14:58:27 -0500
+Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:22418 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231377AbiAGT60 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jan 2022 14:58:26 -0500
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 207Fo27U008191;
+        Fri, 7 Jan 2022 13:58:23 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=mtESrcOKgKXQmkilrqoNob9Tn40gKNW7FNM5KPZ6lbo=;
+ b=otW07zScz2YLzJEEM/HVrSHwyN2F/djLUeGgSLyX+MTI1HTdb7k7oeTwWuGgvjcztPDw
+ pNjphlG2r2jEn98gl1XyqAJBdaPaPYK2Gtw1DO/i3hUN24I2uuKfm+tXQjyEB807WEXW
+ pUPTBPipfuGpfVsASbAk8EER42w1jplKdKmyWX5nv45JgIfgY5wcEY0zHAxJ2NUVkIbB
+ kJXRbjXbIMpJIetzvjJ0HBfjDqPZvuhsqBKw1u3pAY0XbEd61S/eaDoqqVkZemkuo0wy
+ b7/GbOZMHmj/Unq6TKClZ2erIxmOfyPvHSSJ46nhiXhSNl3e0mwlTtpxn7/ya9sKA0gN lQ== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3dergng88h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 07 Jan 2022 13:58:23 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Fri, 7 Jan
+ 2022 19:58:21 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Fri, 7 Jan 2022 19:58:21 +0000
+Received: from ricardo-lws.crystal.cirrus.com (ricardo-lws.ad.cirrus.com [141.131.206.19])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id DBA4E2A9;
+        Fri,  7 Jan 2022 19:58:19 +0000 (UTC)
+From:   Ricardo Rivera-Matos <rriveram@opensource.cirrus.com>
+To:     <sre@kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>
+CC:     Ricardo Rivera-Matos <rriveram@opensource.cirrus.com>
+Subject: [PATCH v2 0/2] Introduces bypass charge type property
+Date:   Fri, 7 Jan 2022 13:58:04 -0600
+Message-ID: <20220107195806.100956-1-rriveram@opensource.cirrus.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211218130014.4037640-7-daniel.lezcano@linaro.org>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: uoxMeuUJ0Ge2r1-NdkQrl5DjQSOZmnNg
+X-Proofpoint-ORIG-GUID: uoxMeuUJ0Ge2r1-NdkQrl5DjQSOZmnNg
+X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat 18 Dec 05:00 PST 2021, Daniel Lezcano wrote:
+Hello,
 
-> The DTPM framework does support now the hierarchy description.
-> 
-> The platform specific code can call the hierarchy creation function
-> with an array of struct dtpm_node pointing to their parents.
-> 
-> This patch provides a description of the big and Little CPUs and the
-> GPU and tie them together under a virtual package name. Only sdm845 is
-> described.
-> 
-> The description could be extended in the future with the memory
-> controller with devfreq if it has the energy information.
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->  drivers/soc/qcom/Kconfig  |  9 ++++++
->  drivers/soc/qcom/Makefile |  1 +
->  drivers/soc/qcom/dtpm.c   | 65 +++++++++++++++++++++++++++++++++++++++
->  3 files changed, 75 insertions(+)
->  create mode 100644 drivers/soc/qcom/dtpm.c
-> 
-> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
-> index e718b8735444..f21c1df2f2f9 100644
-> --- a/drivers/soc/qcom/Kconfig
-> +++ b/drivers/soc/qcom/Kconfig
-> @@ -228,4 +228,13 @@ config QCOM_APR
->  	  application processor and QDSP6. APR is
->  	  used by audio driver to configure QDSP6
->  	  ASM, ADM and AFE modules.
-> +
-> +config QCOM_DTPM
-> +	tristate "Qualcomm DTPM hierarchy"
-> +	depends on DTPM
-> +	help
-> +	 Describe the hierarchy for the Dynamic Thermal Power
-> +	 Management tree on this platform. That will create all the
-> +	 power capping capable devices.
-> +
->  endmenu
-> diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
-> index 70d5de69fd7b..cf38496c3f61 100644
-> --- a/drivers/soc/qcom/Makefile
-> +++ b/drivers/soc/qcom/Makefile
-> @@ -28,3 +28,4 @@ obj-$(CONFIG_QCOM_LLCC) += llcc-qcom.o
->  obj-$(CONFIG_QCOM_RPMHPD) += rpmhpd.o
->  obj-$(CONFIG_QCOM_RPMPD) += rpmpd.o
->  obj-$(CONFIG_QCOM_KRYO_L2_ACCESSORS) +=	kryo-l2-accessors.o
-> +obj-$(CONFIG_QCOM_DTPM) += dtpm.o
-> diff --git a/drivers/soc/qcom/dtpm.c b/drivers/soc/qcom/dtpm.c
-> new file mode 100644
-> index 000000000000..c15283f59494
-> --- /dev/null
-> +++ b/drivers/soc/qcom/dtpm.c
-> @@ -0,0 +1,65 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright 2021 Linaro Limited
-> + *
-> + * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
-> + *
-> + * DTPM hierarchy description
-> + */
-> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> +
-> +#include <linux/dtpm.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +
-> +static struct dtpm_node __initdata sdm845_hierarchy[] = {
-> +	[0]{ .name = "sdm845" },
+This patch series introduces a new POWER_SUPPLY_CHARGE_TYPE for bypass charging
+operation.
 
-Why is the index signifiant here?
-Doesn't this imply risk that we forget one element, which will be
-thereby implicitly be left initialized as {} and hence denote
-termination of the list?
+In fast charging ICs, the bypass operation is used to bypass the charging path
+around the charging IC's integrated power converter to its load. This allows
+for "smart" wall adaptors (such as USB PPS standard power adaptors) to handle
+the power conversion and heat dissipation externally.
 
-> +	[1]{ .name = "package",
-> +	     .parent = &sdm845_hierarchy[0] },
-> +	[2]{ .name = "/cpus/cpu@0",
-> +	     .type = DTPM_NODE_DT,
-> +	     .parent = &sdm845_hierarchy[1] },
-> +	[3]{ .name = "/cpus/cpu@100",
-> +	     .type = DTPM_NODE_DT,
-> +	     .parent = &sdm845_hierarchy[1] },
-> +	[4]{ .name = "/cpus/cpu@200",
-> +	     .type = DTPM_NODE_DT,
-> +	     .parent = &sdm845_hierarchy[1] },
-> +	[5]{ .name = "/cpus/cpu@300",
-> +	     .type = DTPM_NODE_DT,
-> +	     .parent = &sdm845_hierarchy[1] },
-> +	[6]{ .name = "/cpus/cpu@400",
-> +	     .type = DTPM_NODE_DT,
-> +	     .parent = &sdm845_hierarchy[1] },
-> +	[7]{ .name = "/cpus/cpu@500",
-> +	     .type = DTPM_NODE_DT,
-> +	     .parent = &sdm845_hierarchy[1] },
-> +	[8]{ .name = "/cpus/cpu@600",
-> +	     .type = DTPM_NODE_DT,
-> +	     .parent = &sdm845_hierarchy[1] },
-> +	[9]{ .name = "/cpus/cpu@700",
-> +	     .type = DTPM_NODE_DT,
-> +	     .parent = &sdm845_hierarchy[1] },
-> +	[10]{ .name = "/soc@0/gpu@5000000",
+Best Regards,
+Ricardo
 
-It worries me that we encode the textual structure of the dts in the
-kernel. E.g. for quite a while this was "/soc/gpu@5000000", so if this
-landed a year ago this driver would have prevented us from correcting
-the dts.
+Ricardo Rivera-Matos (2):
+  power: supply: Introduces bypass charging property
+  power: supply: bq25980: Implements POWER_SUPPLY_CHARGE_TYPE_BYPASS
 
-Another concern is that not all busses in the system are capable of
-36-bit wide addresses, so it's plausible that we might one day have to
-create a more accurate representation of the address space. Maybe not on
-SDM845, but this would force us to be inconsistent.
+ drivers/power/supply/bq25980_charger.c    | 2 +-
+ drivers/power/supply/power_supply_sysfs.c | 1 +
+ include/linux/power_supply.h              | 1 +
+ 3 files changed, 3 insertions(+), 1 deletion(-)
 
-Regards,
-Bjorn
+-- 
+2.25.1
 
-> +	     .type = DTPM_NODE_DT,
-> +	     .parent = &sdm845_hierarchy[1] },
-> +	[11]{ },
-> +};
-> +
-> +static struct of_device_id __initdata sdm845_dtpm_match_table[] = {
-> +        { .compatible = "qcom,sdm845", .data = sdm845_hierarchy },
-> +        {},
-> +};
-> +
-> +static int __init sdm845_dtpm_init(void)
-> +{
-> +	return dtpm_create_hierarchy(sdm845_dtpm_match_table);
-> +}
-> +late_initcall(sdm845_dtpm_init);
-> +
-> +MODULE_DESCRIPTION("Qualcomm DTPM driver");
-> +MODULE_LICENSE("GPL");
-> +MODULE_ALIAS("platform:dtpm");
-> +MODULE_AUTHOR("Daniel Lezcano <daniel.lezcano@kernel.org");
-> +
-> -- 
-> 2.25.1
-> 
