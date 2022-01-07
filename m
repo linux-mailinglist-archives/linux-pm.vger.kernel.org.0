@@ -2,103 +2,211 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B2E5487CB0
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jan 2022 20:01:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B3A6487CFE
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jan 2022 20:27:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbiAGTBO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Jan 2022 14:01:14 -0500
-Received: from mail-oi1-f170.google.com ([209.85.167.170]:40885 "EHLO
-        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbiAGTBN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jan 2022 14:01:13 -0500
-Received: by mail-oi1-f170.google.com with SMTP id t204so9443630oie.7;
-        Fri, 07 Jan 2022 11:01:13 -0800 (PST)
+        id S231470AbiAGT1I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Jan 2022 14:27:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55934 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232057AbiAGT1I (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jan 2022 14:27:08 -0500
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF75C06173F
+        for <linux-pm@vger.kernel.org>; Fri,  7 Jan 2022 11:27:07 -0800 (PST)
+Received: by mail-ot1-x32f.google.com with SMTP id s21-20020a05683004d500b0058f585672efso7692516otd.3
+        for <linux-pm@vger.kernel.org>; Fri, 07 Jan 2022 11:27:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=7NkUgJRGyv/mGOJjcDFlQgMnvKEd2905SAIiMK/+wtE=;
+        b=diH74T6M28+vlK6mRBohtBievIcLoYDNhMQVJQtqXb+BQhjwBBgE9hnxvnCqEe+mjX
+         /I+FLpA0O1vUce24LeiofkQWsLGWOE7ROTLL5BznzuyIqOMjBJoy98WIkTPWrdQmLORk
+         NyUa+oYBYwcr8qa6rjXNlyv3oytgrYJ2nQRZU5Ea6iuATUbNJ+EwEP3nsUG/QLDWyeTT
+         J/rSDvmtQ2TuOBt5ylcNqKi24SQiUxZ8/4Q57iFAvYzeKQ8o2/EZI0Z0IbuEl/KlGWmP
+         C/wVpqcEv74u4/20GTMZUSr4VOzA4mElSt4qA6VexPyNVk2iSPuEJAi6FudZaoN00sSO
+         LyZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=M9Ewz3je/UPVYnHWZBwxIw8fSnK7ld3cFu23OJRs32o=;
-        b=QSaiHZcUjaBlieoGO4ml/wWDA+vMLHMr1IjWVXohsvog7agq7DAsdQ9enlnOatOTr4
-         rc7S/torPYNqCv7cOI4aoTVd6/PwhvzNrU06C7p+UUlxIryJp5C2jC5dVpVySHSdjZxT
-         KlbqjYlwqzj57oRGQzAAfD9j4NMZAC/pv6THl04Omrb5OxklmR5+KxUKcGUVIYU29Qgj
-         uSYUA1UaVTib58btL9+uMT5j0NS6pIVtlc1c63OfgLjoAbPshDiC/ype0evbCVLROarC
-         TlTTMat8KlMVUx0eh7hzagSXVFgA2D5Q8lUw9Jo0o2VbebK2s/qBJohPcTFMrB6srYR2
-         OD3Q==
-X-Gm-Message-State: AOAM530eoln2lOrLfRhkfYCitqP610cMiw+5Zp163gRiNXiEepox2zyi
-        xo/UOVwVJDoBrFUyzLPl6A==
-X-Google-Smtp-Source: ABdhPJxquTndMbNj9kp8gfIWlQVYbrUBHSB+Weu7q94ndIncJ7r49i9m0gMX0OQlKB+LamGTAe7UxA==
-X-Received: by 2002:a05:6808:13ce:: with SMTP id d14mr10955251oiw.62.1641582073051;
-        Fri, 07 Jan 2022 11:01:13 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id be30sm1117011oib.50.2022.01.07.11.01.11
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7NkUgJRGyv/mGOJjcDFlQgMnvKEd2905SAIiMK/+wtE=;
+        b=dG75X9qY2KnCAnCu/J+YVic5YKLxZrt7igwJ6MDKUZOFTYR8pbGmYqxLrLygeCxG9f
+         JZqR4r+BWnQyzINb6r/MhYBDdvFdkmZPkI86DNQy2Bh7Lm+AZv4BWaOvzhoUAoeQaWH0
+         DK8ej+EmlpjFMRsDec8IeHvwKbhVB4dW2KyJVhzJf2H4uNMxEyJXfhJnCzQf61Zoo9Cc
+         qB8/pTRWbd+N70qk7sHwjzUfKiQuGPJBawgmzftuCBR93eXYH2eHuVyRksHfEUYk9y/y
+         6q82bCBGwrLJULp6Z5jthL+tv6dq2n2pOwAfLno8VtPmkPLzoBFya67QpEv4s9Kgw9K7
+         RwXA==
+X-Gm-Message-State: AOAM530E1zyXDKYfOEvRa0qdFpjhpvDC8XXRwPjTvnJE1g+f8Scbm2FO
+        y+eFLGvE/dAsKLyjaEaID2Os/g==
+X-Google-Smtp-Source: ABdhPJwzflM4/ZC276UeLQsqnYjgLT3b8PYW7TqWlC7GqsDuQtLFWDALbglEfGsUu1xN50Cdhej/Fw==
+X-Received: by 2002:a05:6830:1d5c:: with SMTP id p28mr49666970oth.10.1641583627216;
+        Fri, 07 Jan 2022 11:27:07 -0800 (PST)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id l3sm1067724oic.37.2022.01.07.11.27.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jan 2022 11:01:12 -0800 (PST)
-Received: (nullmailer pid 3702049 invoked by uid 1000);
-        Fri, 07 Jan 2022 19:01:11 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Roger Lu <roger.lu@mediatek.com>
-Cc:     HenryC Chen <HenryC.Chen@mediatek.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Nishanth Menon <nm@ti.com>, Rob Herring <robh+dt@kernel.org>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        linux-pm@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Fan Chen <fan.chen@mediatek.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        YT Lee <yt.lee@mediatek.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>
-In-Reply-To: <20220107095200.4389-2-roger.lu@mediatek.com>
-References: <20220107095200.4389-1-roger.lu@mediatek.com> <20220107095200.4389-2-roger.lu@mediatek.com>
-Subject: Re: [PATCH v21 1/8] dt-bindings: soc: mediatek: add mtk svs dt-bindings
-Date:   Fri, 07 Jan 2022 13:01:11 -0600
-Message-Id: <1641582071.084026.3702048.nullmailer@robh.at.kernel.org>
+        Fri, 07 Jan 2022 11:27:06 -0800 (PST)
+Date:   Fri, 7 Jan 2022 11:27:54 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rjw@rjwysocki.net, lukasz.luba@arm.com, robh@kernel.org,
+        heiko@sntech.de, arnd@linaro.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, ulf.hansson@linaro.org,
+        Andy Gross <agross@kernel.org>,
+        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH v5 6/6] qcom/soc/drivers: Add DTPM description for sdm845
+Message-ID: <YdiUOh8FtPRktlUM@ripper>
+References: <20211218130014.4037640-1-daniel.lezcano@linaro.org>
+ <20211218130014.4037640-7-daniel.lezcano@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211218130014.4037640-7-daniel.lezcano@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 07 Jan 2022 17:51:53 +0800, Roger Lu wrote:
-> Document the binding for enabling mtk svs on MediaTek SoC.
+On Sat 18 Dec 05:00 PST 2021, Daniel Lezcano wrote:
+
+> The DTPM framework does support now the hierarchy description.
 > 
-> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> The platform specific code can call the hierarchy creation function
+> with an array of struct dtpm_node pointing to their parents.
+> 
+> This patch provides a description of the big and Little CPUs and the
+> GPU and tie them together under a virtual package name. Only sdm845 is
+> described.
+> 
+> The description could be extended in the future with the memory
+> controller with devfreq if it has the energy information.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 > ---
->  .../bindings/soc/mediatek/mtk-svs.yaml        | 84 +++++++++++++++++++
->  1 file changed, 84 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
+>  drivers/soc/qcom/Kconfig  |  9 ++++++
+>  drivers/soc/qcom/Makefile |  1 +
+>  drivers/soc/qcom/dtpm.c   | 65 +++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 75 insertions(+)
+>  create mode 100644 drivers/soc/qcom/dtpm.c
 > 
+> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
+> index e718b8735444..f21c1df2f2f9 100644
+> --- a/drivers/soc/qcom/Kconfig
+> +++ b/drivers/soc/qcom/Kconfig
+> @@ -228,4 +228,13 @@ config QCOM_APR
+>  	  application processor and QDSP6. APR is
+>  	  used by audio driver to configure QDSP6
+>  	  ASM, ADM and AFE modules.
+> +
+> +config QCOM_DTPM
+> +	tristate "Qualcomm DTPM hierarchy"
+> +	depends on DTPM
+> +	help
+> +	 Describe the hierarchy for the Dynamic Thermal Power
+> +	 Management tree on this platform. That will create all the
+> +	 power capping capable devices.
+> +
+>  endmenu
+> diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
+> index 70d5de69fd7b..cf38496c3f61 100644
+> --- a/drivers/soc/qcom/Makefile
+> +++ b/drivers/soc/qcom/Makefile
+> @@ -28,3 +28,4 @@ obj-$(CONFIG_QCOM_LLCC) += llcc-qcom.o
+>  obj-$(CONFIG_QCOM_RPMHPD) += rpmhpd.o
+>  obj-$(CONFIG_QCOM_RPMPD) += rpmpd.o
+>  obj-$(CONFIG_QCOM_KRYO_L2_ACCESSORS) +=	kryo-l2-accessors.o
+> +obj-$(CONFIG_QCOM_DTPM) += dtpm.o
+> diff --git a/drivers/soc/qcom/dtpm.c b/drivers/soc/qcom/dtpm.c
+> new file mode 100644
+> index 000000000000..c15283f59494
+> --- /dev/null
+> +++ b/drivers/soc/qcom/dtpm.c
+> @@ -0,0 +1,65 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright 2021 Linaro Limited
+> + *
+> + * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
+> + *
+> + * DTPM hierarchy description
+> + */
+> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> +
+> +#include <linux/dtpm.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +
+> +static struct dtpm_node __initdata sdm845_hierarchy[] = {
+> +	[0]{ .name = "sdm845" },
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Why is the index signifiant here?
+Doesn't this imply risk that we forget one element, which will be
+thereby implicitly be left initialized as {} and hence denote
+termination of the list?
 
-yamllint warnings/errors:
+> +	[1]{ .name = "package",
+> +	     .parent = &sdm845_hierarchy[0] },
+> +	[2]{ .name = "/cpus/cpu@0",
+> +	     .type = DTPM_NODE_DT,
+> +	     .parent = &sdm845_hierarchy[1] },
+> +	[3]{ .name = "/cpus/cpu@100",
+> +	     .type = DTPM_NODE_DT,
+> +	     .parent = &sdm845_hierarchy[1] },
+> +	[4]{ .name = "/cpus/cpu@200",
+> +	     .type = DTPM_NODE_DT,
+> +	     .parent = &sdm845_hierarchy[1] },
+> +	[5]{ .name = "/cpus/cpu@300",
+> +	     .type = DTPM_NODE_DT,
+> +	     .parent = &sdm845_hierarchy[1] },
+> +	[6]{ .name = "/cpus/cpu@400",
+> +	     .type = DTPM_NODE_DT,
+> +	     .parent = &sdm845_hierarchy[1] },
+> +	[7]{ .name = "/cpus/cpu@500",
+> +	     .type = DTPM_NODE_DT,
+> +	     .parent = &sdm845_hierarchy[1] },
+> +	[8]{ .name = "/cpus/cpu@600",
+> +	     .type = DTPM_NODE_DT,
+> +	     .parent = &sdm845_hierarchy[1] },
+> +	[9]{ .name = "/cpus/cpu@700",
+> +	     .type = DTPM_NODE_DT,
+> +	     .parent = &sdm845_hierarchy[1] },
+> +	[10]{ .name = "/soc@0/gpu@5000000",
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml: properties:nvmem-cells: {'minItems': 1, 'maxItems': 2, 'description': 'Phandle to the calibration data provided by a nvmem device.', 'items': [{'description': 'SVS efuse for SVS controller'}, {'description': 'Thermal efuse for SVS controller'}]} should not be valid under {'required': ['maxItems']}
-	hint: "maxItems" is not needed with an "items" list
-	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml: ignoring, error in schema: properties: nvmem-cells
-Documentation/devicetree/bindings/soc/mediatek/mtk-svs.example.dt.yaml:0:0: /example-0/soc/svs@1100b000: failed to match any schema with compatible: ['mediatek,mt8183-svs']
+It worries me that we encode the textual structure of the dts in the
+kernel. E.g. for quite a while this was "/soc/gpu@5000000", so if this
+landed a year ago this driver would have prevented us from correcting
+the dts.
 
-doc reference errors (make refcheckdocs):
+Another concern is that not all busses in the system are capable of
+36-bit wide addresses, so it's plausible that we might one day have to
+create a more accurate representation of the address space. Maybe not on
+SDM845, but this would force us to be inconsistent.
 
-See https://patchwork.ozlabs.org/patch/1576508
+Regards,
+Bjorn
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+> +	     .type = DTPM_NODE_DT,
+> +	     .parent = &sdm845_hierarchy[1] },
+> +	[11]{ },
+> +};
+> +
+> +static struct of_device_id __initdata sdm845_dtpm_match_table[] = {
+> +        { .compatible = "qcom,sdm845", .data = sdm845_hierarchy },
+> +        {},
+> +};
+> +
+> +static int __init sdm845_dtpm_init(void)
+> +{
+> +	return dtpm_create_hierarchy(sdm845_dtpm_match_table);
+> +}
+> +late_initcall(sdm845_dtpm_init);
+> +
+> +MODULE_DESCRIPTION("Qualcomm DTPM driver");
+> +MODULE_LICENSE("GPL");
+> +MODULE_ALIAS("platform:dtpm");
+> +MODULE_AUTHOR("Daniel Lezcano <daniel.lezcano@kernel.org");
+> +
+> -- 
+> 2.25.1
+> 
