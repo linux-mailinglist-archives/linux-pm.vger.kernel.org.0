@@ -2,65 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ECE3487750
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jan 2022 13:05:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50BED48780F
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jan 2022 14:15:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238571AbiAGMFZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Jan 2022 07:05:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40210 "EHLO
+        id S1347512AbiAGNP4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Jan 2022 08:15:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238658AbiAGMFV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jan 2022 07:05:21 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D709EC061201
-        for <linux-pm@vger.kernel.org>; Fri,  7 Jan 2022 04:05:20 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id t28so3899952wrb.4
-        for <linux-pm@vger.kernel.org>; Fri, 07 Jan 2022 04:05:20 -0800 (PST)
+        with ESMTP id S237898AbiAGNP4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jan 2022 08:15:56 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3262C061201
+        for <linux-pm@vger.kernel.org>; Fri,  7 Jan 2022 05:15:55 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id x18-20020a7bc212000000b00347cc83ec07so590979wmi.4
+        for <linux-pm@vger.kernel.org>; Fri, 07 Jan 2022 05:15:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=0fJMEtzExslnnr0EE8eXwCGBvIQxk/jbdwPaaLTTA00=;
-        b=IJQa1FuCgd2GxfNawwlcKxlFhFzK0wLrdh4JPB+nC1eC3xsz0mlpEWd5oqyzZfqQHZ
-         bxB5KMAWYsqxWstNRcvz/BKZ+zTMeaK8HcGEgPBNTMasbSRHxf+lRtJClFHU86ekAQV6
-         ZQovDZ7IpBCY8oPOLxipZSJc7IowlcIdTT3ogdt38IFqzN4NvtmKGQ3qBwd2XY5j6TDE
-         nK2p63QbaQtKgJJLl8cCixAQfFAkBPxQrnUt0joGPP6xhE2hBgCXPYkpAgiBDoiYWOzN
-         rEKVSdzeEKx7ne3IEUsSaKcPtnnjAGHdSGLuN2fIrB24mHesHV76BlNHEyW47d6qN5Qz
-         QFQA==
+        bh=VkR7BTBuYolNplyfmZPpWt062c+R++SOe8lOMyFDxzA=;
+        b=TSI1Uo5IqQWt41egEUQOWD2ZOVg8WW2OdrwdJxsisNTy3dNplBALo1z28jPuv7Nhof
+         VB4+QmLi+PFoPvgpa7lXMVy4mqbV9XNuqVtNmquqYFQXJdzo3vR/DGAUoQdWHJ93sZOe
+         serITN14TGSsrRISIe18MbEZ3KOSgqZu0RgP53RzSfIcRFpAEmJmnDXNcfZuyIHDfKGk
+         g1S9wLVJC/smAs4RcUS6zMJRYTbi6ra0bBpF7gW9RrSzBU2Q9QDzYb6FGVK7JM1aZvbT
+         LGKuZ4ta/m8WtJv0KLBaa0B3uSZejAyocp/63t1XALX/sx81FSk9ulGGSOkyirrR775+
+         Hwrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=0fJMEtzExslnnr0EE8eXwCGBvIQxk/jbdwPaaLTTA00=;
-        b=OXM4h4HwSag33ATuCkLlUFNV/nPqb0zVS0cHpPsbkLd9nHDUV0OD7mxeBzsPlvEwmZ
-         3Zo1h/b5gDUeeVoSKnE088Vrh+fOj9wZ9bHFxs0ja5vThyoDYKuMYLwTb9drns118fvZ
-         wTEaZ8cYuF2g4qpB4s7JcG5H0AGjEx/wYkxAr4c4se9r50qk8w5gbAQMQ1mmCRCFIjxx
-         0xDZAFhSW5NHsRf56WzYklAGC9+z8cujLKcAd1BxtdezQes1YHq7+SHgg9pnMQf5bCB5
-         jFHtjb1Knf98Lw4hvza+RTlW4jlM5jKXAJ0BJmT/FPxST/esmoJEODypgxyN/pk3crjD
-         q2Bg==
-X-Gm-Message-State: AOAM533cRItUgjnkJ1CcsVgJjwi9Snh7+e2BqSO+tlp8fWwNmb2ANpOJ
-        9vkiPSrmra4dROT5cFUlSy0ffg==
-X-Google-Smtp-Source: ABdhPJxTsNsWkeEQ2mnZJnaLdfoL07T6yJwIyYu0AsBAWgmFKi0xzsj2RTXPP/QWacpb0CHHCScWhA==
-X-Received: by 2002:a05:6000:49:: with SMTP id k9mr56277757wrx.190.1641557119381;
-        Fri, 07 Jan 2022 04:05:19 -0800 (PST)
+        bh=VkR7BTBuYolNplyfmZPpWt062c+R++SOe8lOMyFDxzA=;
+        b=oGB5PMP6uHeMMaJg9V/4KV7RAPCtAGT7FoopnzvBU7lbp5tn+k/M2kbS21BmsfGgLs
+         XPes3wwJJbyUHBYEVO/Rd9Wmt8EBYlY3LF5q0lh5fdNZkSITJwVL+Lwy2buy4mLhVjSD
+         dG0ERVKk6Udrs5AK/cplWtmyLtmP8fqAPH/gTT/MNFFKLBvinTwX4OPzaqRC2U0N/7uv
+         tTake0nzrlqv7/e0eH6SLTPoeH+tMsLK1xVZc6kDI3pt1pSNCXgIxHYg25hWqHY6pHSB
+         8aHiA/0m5VYu64RbwpksJLXS3M4FuYD1JWLc4cgMYpt0DOjDhsOc4LJUynYhYWvQdJUC
+         o2zA==
+X-Gm-Message-State: AOAM530hCq1hbrO9VeY7t6k+04g+ZuP/rM02HnNgUT+96Wc3fU/eBTAp
+        UMN7pn6G3B9s/zgVoQ2bgRKa4g==
+X-Google-Smtp-Source: ABdhPJyEBWAWCrDWZzRzk8VSqs3XQybb8ZvQsVJEq5AWCS7ypIsmZ0NfN2lDWn6OPcd5vrwigK5qvg==
+X-Received: by 2002:a1c:9d54:: with SMTP id g81mr8910621wme.51.1641561354512;
+        Fri, 07 Jan 2022 05:15:54 -0800 (PST)
 Received: from ?IPv6:2a01:e34:ed2f:f020:4875:220c:f3a4:c74e? ([2a01:e34:ed2f:f020:4875:220c:f3a4:c74e])
-        by smtp.googlemail.com with ESMTPSA id n7sm4282059wms.46.2022.01.07.04.05.18
+        by smtp.googlemail.com with ESMTPSA id b14sm4922565wrg.15.2022.01.07.05.15.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jan 2022 04:05:18 -0800 (PST)
-Subject: Re: [PATCH] thermal/int340x_thermal: Check for null pointer after
- calling kmemdup
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, rui.zhang@intel.com,
-        amitk@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220105065652.2340271-1-jiasheng@iscas.ac.cn>
+        Fri, 07 Jan 2022 05:15:54 -0800 (PST)
+Subject: Re: [PATCH v5 1/6] powercap/drivers/dtpm: Move dtpm table from init
+ to data section
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     rjw@rjwysocki.net, lukasz.luba@arm.com, robh@kernel.org,
+        heiko@sntech.de, arnd@linaro.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>
+References: <20211218130014.4037640-1-daniel.lezcano@linaro.org>
+ <20211218130014.4037640-2-daniel.lezcano@linaro.org>
+ <CAPDyKFpY4i0Mtb==8zknsuG0HdhPW2fXFvEN+AJScVmT65A-ow@mail.gmail.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <24d097f7-59a5-cd7d-3fc8-c3ce5fd9e88b@linaro.org>
-Date:   Fri, 7 Jan 2022 13:05:17 +0100
+Message-ID: <556eca9c-4ce8-1c79-cc6d-08d0ec603bd4@linaro.org>
+Date:   Fri, 7 Jan 2022 14:15:52 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <20220105065652.2340271-1-jiasheng@iscas.ac.cn>
+In-Reply-To: <CAPDyKFpY4i0Mtb==8zknsuG0HdhPW2fXFvEN+AJScVmT65A-ow@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -68,45 +73,86 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05/01/2022 07:56, Jiasheng Jiang wrote:
-> As the possible failure of the allocation, kmemdup() may return NULL
-> pointer.
-> Therefore, it should be better to check the return value of kmemdup().
-> If fails, just free 'buffer.pointer' and directly return is enough, same
-> as the way that 'obj' fails above.
+On 31/12/2021 14:33, Ulf Hansson wrote:
+> On Sat, 18 Dec 2021 at 14:00, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>>
+>> The dtpm table is used to let the different dtpm backends to register
+>> their setup callbacks in a single place and preventing to export
+>> multiple functions all around the kernel. That allows the dtpm code to
+>> be self-encapsulated.
 > 
-> Fixes: 0ba13c763aac ("thermal/int340x_thermal: Export GDDV")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
->  drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 5 +++++
->  1 file changed, 5 insertions(+)
+> Well, that's not entirely true. The dtpm code and its backends (or
+> ops, whatever we call them) are already maintained from a single
+> place, the /drivers/powercap/* directory. I assume we intend to keep
+> it like this going forward too, right?
 > 
-> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> index 823354a1a91a..999b5682c28a 100644
-> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> @@ -462,6 +462,11 @@ static void int3400_setup_gddv(struct int3400_thermal_priv *priv)
->  	priv->data_vault = kmemdup(obj->package.elements[0].buffer.pointer,
->  				   obj->package.elements[0].buffer.length,
->  				   GFP_KERNEL);
-> +	if (!priv->data_vault) {
-> +		kfree(buffer.pointer);
-> +		return;
-> +	}
-> +
-
-There is another kfree on error before
-
-Please replace those by a goto out_kfree;
-
->  	bin_attr_data_vault.private = priv->data_vault;
->  	bin_attr_data_vault.size = obj->package.elements[0].buffer.length;
-
-out_kfree;
->  	kfree(buffer.pointer);
+> That is also what patch4 with the devfreq backend continues to conform to.
 > 
+>>
+>> The dtpm hierarchy will be passed as a parameter by a platform
+>> specific code and that will lead to the creation of the different dtpm
+>> nodes.
+>>
+>> The function creating the hierarchy could be called from a module at
+>> init time or when it is loaded. However, at this moment the table is
+>> already freed as it belongs to the init section and the creation will
+>> lead to a invalid memory access.
+>>
+>> Fix this by moving the table to the data section.
+> 
+> With the above said, I find it a bit odd to put a table in the data
+> section like this. Especially, since the only remaining argument for
+> why, is to avoid exporting functions, which isn't needed anyway.
+> 
+> I mean, it would be silly if we should continue to put subsystem
+> specific tables in here, to just let them contain a set of subsystem
+> specific callbacks.
 
-Why there is no error code returned to the caller?
+So I tried to change the approach and right now I was not able to find
+an alternative keeping the code self-encapsulate and without introducing
+cyclic dependencies.
+
+I suggest to keep the patch as it is and double check if it makes sense
+to change it after adding more dtpm backends
+
+Alternatively I can copy the table to a dynamically allocated table.
+
+
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> 
+> Kind regards
+> Uffe
+> 
+>> ---
+>>  include/asm-generic/vmlinux.lds.h | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+>> index 42f3866bca69..50d494d94d6c 100644
+>> --- a/include/asm-generic/vmlinux.lds.h
+>> +++ b/include/asm-generic/vmlinux.lds.h
+>> @@ -362,7 +362,8 @@
+>>         BRANCH_PROFILE()                                                \
+>>         TRACE_PRINTKS()                                                 \
+>>         BPF_RAW_TP()                                                    \
+>> -       TRACEPOINT_STR()
+>> +       TRACEPOINT_STR()                                                \
+>> +       DTPM_TABLE()
+>>
+>>  /*
+>>   * Data section helpers
+>> @@ -723,7 +724,6 @@
+>>         ACPI_PROBE_TABLE(irqchip)                                       \
+>>         ACPI_PROBE_TABLE(timer)                                         \
+>>         THERMAL_TABLE(governor)                                         \
+>> -       DTPM_TABLE()                                                    \
+>>         EARLYCON_TABLE()                                                \
+>>         LSM_TABLE()                                                     \
+>>         EARLY_LSM_TABLE()                                               \
+>> --
+>> 2.25.1
+>>
+
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
