@@ -2,161 +2,212 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50BED48780F
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jan 2022 14:15:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F858487852
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jan 2022 14:39:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347512AbiAGNP4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Jan 2022 08:15:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56158 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237898AbiAGNP4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jan 2022 08:15:56 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3262C061201
-        for <linux-pm@vger.kernel.org>; Fri,  7 Jan 2022 05:15:55 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id x18-20020a7bc212000000b00347cc83ec07so590979wmi.4
-        for <linux-pm@vger.kernel.org>; Fri, 07 Jan 2022 05:15:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=VkR7BTBuYolNplyfmZPpWt062c+R++SOe8lOMyFDxzA=;
-        b=TSI1Uo5IqQWt41egEUQOWD2ZOVg8WW2OdrwdJxsisNTy3dNplBALo1z28jPuv7Nhof
-         VB4+QmLi+PFoPvgpa7lXMVy4mqbV9XNuqVtNmquqYFQXJdzo3vR/DGAUoQdWHJ93sZOe
-         serITN14TGSsrRISIe18MbEZ3KOSgqZu0RgP53RzSfIcRFpAEmJmnDXNcfZuyIHDfKGk
-         g1S9wLVJC/smAs4RcUS6zMJRYTbi6ra0bBpF7gW9RrSzBU2Q9QDzYb6FGVK7JM1aZvbT
-         LGKuZ4ta/m8WtJv0KLBaa0B3uSZejAyocp/63t1XALX/sx81FSk9ulGGSOkyirrR775+
-         Hwrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=VkR7BTBuYolNplyfmZPpWt062c+R++SOe8lOMyFDxzA=;
-        b=oGB5PMP6uHeMMaJg9V/4KV7RAPCtAGT7FoopnzvBU7lbp5tn+k/M2kbS21BmsfGgLs
-         XPes3wwJJbyUHBYEVO/Rd9Wmt8EBYlY3LF5q0lh5fdNZkSITJwVL+Lwy2buy4mLhVjSD
-         dG0ERVKk6Udrs5AK/cplWtmyLtmP8fqAPH/gTT/MNFFKLBvinTwX4OPzaqRC2U0N/7uv
-         tTake0nzrlqv7/e0eH6SLTPoeH+tMsLK1xVZc6kDI3pt1pSNCXgIxHYg25hWqHY6pHSB
-         8aHiA/0m5VYu64RbwpksJLXS3M4FuYD1JWLc4cgMYpt0DOjDhsOc4LJUynYhYWvQdJUC
-         o2zA==
-X-Gm-Message-State: AOAM530hCq1hbrO9VeY7t6k+04g+ZuP/rM02HnNgUT+96Wc3fU/eBTAp
-        UMN7pn6G3B9s/zgVoQ2bgRKa4g==
-X-Google-Smtp-Source: ABdhPJyEBWAWCrDWZzRzk8VSqs3XQybb8ZvQsVJEq5AWCS7ypIsmZ0NfN2lDWn6OPcd5vrwigK5qvg==
-X-Received: by 2002:a1c:9d54:: with SMTP id g81mr8910621wme.51.1641561354512;
-        Fri, 07 Jan 2022 05:15:54 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:4875:220c:f3a4:c74e? ([2a01:e34:ed2f:f020:4875:220c:f3a4:c74e])
-        by smtp.googlemail.com with ESMTPSA id b14sm4922565wrg.15.2022.01.07.05.15.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jan 2022 05:15:54 -0800 (PST)
-Subject: Re: [PATCH v5 1/6] powercap/drivers/dtpm: Move dtpm table from init
- to data section
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     rjw@rjwysocki.net, lukasz.luba@arm.com, robh@kernel.org,
-        heiko@sntech.de, arnd@linaro.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>
-References: <20211218130014.4037640-1-daniel.lezcano@linaro.org>
- <20211218130014.4037640-2-daniel.lezcano@linaro.org>
- <CAPDyKFpY4i0Mtb==8zknsuG0HdhPW2fXFvEN+AJScVmT65A-ow@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <556eca9c-4ce8-1c79-cc6d-08d0ec603bd4@linaro.org>
-Date:   Fri, 7 Jan 2022 14:15:52 +0100
+        id S1347568AbiAGNjt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Jan 2022 08:39:49 -0500
+Received: from foss.arm.com ([217.140.110.172]:40742 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1347554AbiAGNjr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 7 Jan 2022 08:39:47 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5301A13A1;
+        Fri,  7 Jan 2022 05:39:47 -0800 (PST)
+Received: from [10.57.9.122] (unknown [10.57.9.122])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1DE463F774;
+        Fri,  7 Jan 2022 05:39:45 -0800 (PST)
+Subject: Re: [PATCH v2][RFC 1/2] Implement Ziegler-Nichols Heuristic
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org, amitk@kernel.org,
+        Chetankumar Mistry <chetan.mistry@arm.com>,
+        rui.zhang@intel.com, linux-pm@vger.kernel.org
+References: <20211217184907.2103677-1-chetan.mistry@arm.com>
+ <23c3480a-c46b-f049-5758-d11124367190@arm.com>
+ <1b6047eb-2f14-ddde-4712-145a26dc8aa5@linaro.org>
+ <42e8c75e-3827-3950-0705-4670ec1c904e@arm.com>
+ <0e9eb5a9-733c-cf4d-a8c9-e13b5258dce5@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <120bdfda-92b9-d098-d298-e319be158417@arm.com>
+Date:   Fri, 7 Jan 2022 13:39:44 +0000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <CAPDyKFpY4i0Mtb==8zknsuG0HdhPW2fXFvEN+AJScVmT65A-ow@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <0e9eb5a9-733c-cf4d-a8c9-e13b5258dce5@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 31/12/2021 14:33, Ulf Hansson wrote:
-> On Sat, 18 Dec 2021 at 14:00, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+
+
+On 1/7/22 11:52 AM, Daniel Lezcano wrote:
+> On 06/01/2022 14:16, Lukasz Luba wrote:
 >>
->> The dtpm table is used to let the different dtpm backends to register
->> their setup callbacks in a single place and preventing to export
->> multiple functions all around the kernel. That allows the dtpm code to
->> be self-encapsulated.
-> 
-> Well, that's not entirely true. The dtpm code and its backends (or
-> ops, whatever we call them) are already maintained from a single
-> place, the /drivers/powercap/* directory. I assume we intend to keep
-> it like this going forward too, right?
-> 
-> That is also what patch4 with the devfreq backend continues to conform to.
-> 
+>> Thank you for fast response!
 >>
->> The dtpm hierarchy will be passed as a parameter by a platform
->> specific code and that will lead to the creation of the different dtpm
->> nodes.
+>> On 1/6/22 12:16 PM, Daniel Lezcano wrote:
+>>>
+>>> Hi Lukasz,
+>>>
+>>> On 06/01/2022 12:54, Lukasz Luba wrote:
+>>>> Hi Daniel,
+>>>>
+>>>> Could you have a look at this, please?
+>>>
+>>> Yes, I had a quick look at the code and went to the algorithm
+>>> description.
+>>>
+>>> Still digesting ...
+>>>
+>>>> On 12/17/21 6:49 PM, Chetankumar Mistry wrote:
+>>>>> Implement the Ziegler-Nichols Heuristic algorithm to better
+>>>>> estimate the PID Coefficients for a running platform.
+>>>>> The values are tuned to minimuse the amount of overshoot in
+>>>>> the temperature of the platform and subsequently minimise
+>>>>> the number of switches for cdev states.
+>>>>>
+>>>>> Signed-off-by: Chetankumar Mistry <chetan.mistry@arm.com>
+>>>>
+>>>>
+>>>> This is the continuation of the previous idea to have
+>>>> better k_* values. You might remember this conversation [1].
+>>>>
+>>>> I've spent some time researching papers how and what can be done
+>>>> in this field and if possible to plumb in to the kernel.
+>>>> We had internal discussions (~2017) of one method fuzzy-logic that I
+>>>> found back then, but died at the begging not fitting into this
+>>>> IPA kernel specific environment and user-space. Your suggestion with
+>>>> observing undershooting and overshooting results sparked better idea.
+>>>> I thought it's worth to invest in it but I didn't have
+>>>> time. We are lucky, Chetan was designated to help me and
+>>>> experiment/implement/test these ideas and here is the patch set.
+>>>>
+>>>> He's chosen the Ziegler-Nichols method, which shows really
+>>>> good results in benchmarks (Geekbench and GFXbench on hikey960 Android).
+>>>> The improved performance in Geekbench is ~10% (vs. old IPA).
+>>>
+>>> +10% perf improvements sounds great. What about the temperature
+>>> mitigation (temp avg + stddev) ?
 >>
->> The function creating the hierarchy could be called from a module at
->> init time or when it is loaded. However, at this moment the table is
->> already freed as it belongs to the init section and the creation will
->> lead to a invalid memory access.
+>> Chetan would respond about that with the link to the .html file.
+>> We just have to create an official public server space for it.
+>> I hope till Monday evening we would get something.
 >>
->> Fix this by moving the table to the data section.
+>>>
+>>>> The main question from our side is the sysfs interface
+>>>> which we could be used to trigger this algorithm for
+>>>> better coefficients estimations.
+>>>> We ask user to echo to some sysfs files in thermal zone
+>>>> and start his/her workload. This new IPA 'learns' the system
+>>>> utilization and reaction in temperature. After a few rounds,
+>>>> we get better fitted coefficients.
+>>>> If you need more background about the code or mechanisms, or tests,
+>>>> I'm sure Chetan is happy to provide you those.
+>>>
+>>> I'm worried about the complexity of the algorithm and the overhead
+>>> implied.
+>>>
+>>> The k_* factors are tied with the system and the thermal setup (fan,
+>>> heatsink, processor, opp, ...). So IIUC when the factors are found, they
+>>> should not change and could be part of the system setup.
+>>
+>> True, they are found and will be fixed for that board.
+>>
+>>>
+>>> Would the algorithm fit better in a separate userspace kernel tooling?
+>>> So we can run it once and find the k_* for a board.
+>>
+>> We wanted to be part of IPA in kernel because:
+>> - the logic needs access to internals of IPA
+>> - it would be easy accessible for all distros out-of-box
+>> - no additional maintenance and keeping in sync two codes, especially
+>>    those in some packages for user-space
 > 
-> With the above said, I find it a bit odd to put a table in the data
-> section like this. Especially, since the only remaining argument for
-> why, is to avoid exporting functions, which isn't needed anyway.
+> Sorry, I'm not convinced :/
 > 
-> I mean, it would be silly if we should continue to put subsystem
-> specific tables in here, to just let them contain a set of subsystem
-> specific callbacks.
+> AFAICT, the temperature and the sampling rate should be enough
+> information to find out the k_*
 
-So I tried to change the approach and right now I was not able to find
-an alternative keeping the code self-encapsulate and without introducing
-cyclic dependencies.
+We are allowing to overshoot the temperature by not capping the
+power actors, but we have a safety net to not overshoot too much.
+It's internal decision insdie IPA. Userspace would have to
+re-implement whole IPA logic and take control over cooling
+device states - which would contradict the decision from IPA
+controlling the same thermal zone. The finding of coefficients
+is by testing many values while running. The post processing
+of the data (temp., power requests, frequency, etc) won't tell us
+the the limits. We have to check them. That means the user-space tool
+would have to re-implement major part of IPA, but also somehow
+get the CPUs utilization, then use the obsolete user-space
+governor API to experiment with them.
 
-I suggest to keep the patch as it is and double check if it makes sense
-to change it after adding more dtpm backends
-
-Alternatively I can copy the table to a dynamically allocated table.
-
-
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 > 
-> Kind regards
-> Uffe
+> IMO, an userspace tool in ./tools/thermal/ipa is the right place
 > 
->> ---
->>  include/asm-generic/vmlinux.lds.h | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
->> index 42f3866bca69..50d494d94d6c 100644
->> --- a/include/asm-generic/vmlinux.lds.h
->> +++ b/include/asm-generic/vmlinux.lds.h
->> @@ -362,7 +362,8 @@
->>         BRANCH_PROFILE()                                                \
->>         TRACE_PRINTKS()                                                 \
->>         BPF_RAW_TP()                                                    \
->> -       TRACEPOINT_STR()
->> +       TRACEPOINT_STR()                                                \
->> +       DTPM_TABLE()
->>
->>  /*
->>   * Data section helpers
->> @@ -723,7 +724,6 @@
->>         ACPI_PROBE_TABLE(irqchip)                                       \
->>         ACPI_PROBE_TABLE(timer)                                         \
->>         THERMAL_TABLE(governor)                                         \
->> -       DTPM_TABLE()                                                    \
->>         EARLYCON_TABLE()                                                \
->>         LSM_TABLE()                                                     \
->>         EARLY_LSM_TABLE()                                               \
->> --
->> 2.25.1
->>
+> So if you give the tooling to the SoC vendor via the thermal ones, with
+> a file containing the temp + timestamp, they should be able to find the
+> k_* and setup their boards.
 
+This feature is aimed for every user of the device, even w/o
+expert knowledge in thermal/power. If vendor or OEM didn't
+support properly the board, users could do this and they don't
+have to be restricted (IMO).
+Apart from that, I see vendors are rather interested in investing
+in their proprietary solutions, not willing to share know-how
+in open source power/thermal mechanisms. Then user is restricted
+IMO in using the board. This might block e.g. research of some
+PhD students, who have good ideas, but the restrictions of the platform
+prevent them or cause the behavior of the board that they cannot
+control. I would like to enable everyone to use fully the potential
+of the HW/SW - even end-user.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+> 
+> Actually my opinion is the kernel should not handle everything and the
+> SoC vendor should at least do some work to setup their system. If they
+> are able to find out the sustainable power, they can do the same for the
+> right coefficients.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Ideally, yes, I would also like to see that. As you said a few months
+ago during review of my former patches, a lot of this 'sustainable
+power' entries in DT are Linaro contribution. I wish vendors also
+contribute, but c'est la vie.
+
+> 
+>>> Additionally, the values can be stored in the Documentation for
+>>> different board and a documentation on how to use the tool.
+>>>
+>>> Then up to the SoC vendor to setup the k_* in sysfs, so no need to
+>>> change any interface.
+>>
+>> It wouldn't be for SoC vendor, but up to the OEM or board designer,
+>> because the same SoC might have different thermal headroom thanks
+>> to better cooling or bigger PCB, etc.
+> 
+> Right, s/SoC vendor/SoC platform/
+> 
+>> I agree that these optimized k_* values might be shared in the kernel.
+>> Ideally I would see them in the board's DT file, in the thermal zone,
+>> but I'm afraid they are not 'Device description' so don't fit into DT
+>> scope. They are rather optimizations of pure kernel mechanism.
+>>
+>> where would be a good place for it? Maybe a new IPA Documentation/
+>> sub-directory?
+> 
+> You can improve the documentation in:
+> 
+> Documentation/driver-api/thermal/power_allocator.rst
+> 
+> And if we agree on a tools/thermal/ipa, the documentation with examples
+> and some SoC reference can be put there also
+> 
+>>>> If you are interested in those analyses we can find a way to share a>
+>>>> .html file with the results from LISA notebook.
+>>>
+>>> Yes,
+>>
+>> Sure thing, let me arrange that.
+> 
+> 
