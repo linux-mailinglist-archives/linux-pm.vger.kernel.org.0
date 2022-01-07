@@ -2,44 +2,45 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4027487924
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jan 2022 15:41:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24AA048792D
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jan 2022 15:44:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbiAGOlu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Jan 2022 09:41:50 -0500
-Received: from smtp21.cstnet.cn ([159.226.251.21]:59600 "EHLO cstnet.cn"
+        id S239524AbiAGOo3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Jan 2022 09:44:29 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:59852 "EHLO cstnet.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230012AbiAGOlu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 7 Jan 2022 09:41:50 -0500
+        id S230012AbiAGOo2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 7 Jan 2022 09:44:28 -0500
 Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-01 (Coremail) with SMTP id qwCowABXXp4WUdhhVF37BQ--.42416S2;
-        Fri, 07 Jan 2022 22:41:26 +0800 (CST)
+        by APP-01 (Coremail) with SMTP id qwCowAAH3aW2Udhh42H7BQ--.18277S2;
+        Fri, 07 Jan 2022 22:44:06 +0800 (CST)
 From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
 To:     daniel.lezcano@linaro.org, rui.zhang@intel.com, amitk@kernel.org
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] thermal/int340x_thermal: Check for null pointer after calling kmemdup
-Date:   Fri,  7 Jan 2022 22:41:25 +0800
-Message-Id: <20220107144125.4081235-1-jiasheng@iscas.ac.cn>
+Subject: [PATCH v2] thermal/int340x_thermal: Check for null pointer after calling kmemdup
+Date:   Fri,  7 Jan 2022 22:44:05 +0800
+Message-Id: <20220107144405.4081288-1-jiasheng@iscas.ac.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowABXXp4WUdhhVF37BQ--.42416S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7uF4rAr4UKF43Xw48tF45trb_yoW8Ary8pF
-        WFgr1UJrs5WF1xWwnrArn8Xa1DCF4vga4UuF43Ca4YyFn3CFWSqFWFyF1Fyry09r1xt3Wj
-        y345tF4xZryDJrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkv14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+X-CM-TRANSID: qwCowAAH3aW2Udhh42H7BQ--.18277S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uF4rAr4UKF43Xw48tF45trb_yoW8AFWDpF
+        WFgr1UJrs5WF1xWwnrArn8XayDCF4vga4UuF4FkayYy3ZxCFWSqFyFyF1Fyry0kr17t3Wj
+        y345tF4xZryDJrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvv14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
         rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
         1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
         6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
         0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r106r15McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW5XwCF
-        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr
-        1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF
-        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUhzVbUUUUU=
+        jxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkF7I0En4kS14v26r12
+        6r1DMxkIecxEwVAFwVW5XwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8Jw
+        C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
+        wI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
+        v20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E
+        87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73Uj
+        IFyTuYvjfU8D73DUUUU
 X-Originating-IP: [124.16.138.126]
 X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
@@ -55,6 +56,12 @@ avoid the wrong size.
 
 Fixes: 0ba13c763aac ("thermal/int340x_thermal: Export GDDV")
 Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+Changelog
+
+v1 -> v2
+
+* Change 1. Use out_kfree to simplify the code.
 ---
  .../thermal/intel/int340x_thermal/int3400_thermal.c  | 12 ++++++++----
  1 file changed, 8 insertions(+), 4 deletions(-)
