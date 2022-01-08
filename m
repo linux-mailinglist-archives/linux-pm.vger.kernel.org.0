@@ -2,138 +2,153 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2EF348845B
-	for <lists+linux-pm@lfdr.de>; Sat,  8 Jan 2022 16:58:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C97B8488520
+	for <lists+linux-pm@lfdr.de>; Sat,  8 Jan 2022 18:55:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231236AbiAHP6s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 8 Jan 2022 10:58:48 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:27287 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229521AbiAHP6s (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 8 Jan 2022 10:58:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641657527;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vU57yWko8FS2IXRvev408Ys04n75VGGdrg6NxAdaDtE=;
-        b=PEXceYtwqr3htkSe9MNxwvlyiAQvZI8K3XXU84CkSMpY+wTdT12KwLf7A0lEnnFK0aKZ/H
-        yzs6tyET3XaxV4XAHmAuENwO94BThP7qtUl0pzutIotvcVPRfa/sW1RhNEsptOs/pjYSEA
-        tXvJsyX9AFRmMVkQaZOkJOvqUpxzePY=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-133-4ebJltPKNiKtEI27kHZpLA-1; Sat, 08 Jan 2022 10:58:46 -0500
-X-MC-Unique: 4ebJltPKNiKtEI27kHZpLA-1
-Received: by mail-ed1-f69.google.com with SMTP id z10-20020a05640235ca00b003f8efab3342so6967773edc.2
-        for <linux-pm@vger.kernel.org>; Sat, 08 Jan 2022 07:58:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vU57yWko8FS2IXRvev408Ys04n75VGGdrg6NxAdaDtE=;
-        b=BMNmxQV5ealX+4oUPwQsVSSjhNHGs1KxTVKk8qMzm+je5XmBPu66QDPJorrfwmE81a
-         /bvY099HmnVyY0MXx4BmL3pE5b2biscDfP4q7RNvFZ3fTpW5dPxJSMRMmzu8n46Kinwo
-         NPcRGvnFthhYMf0amiksr3VS1Fxutr+Fr/IAkCPoJjPwR33Inn4eiMDCpKM0XpeZwtAW
-         Vi800pLm8lhhSzwZXCGD5F6mweugOZpCzBxPDTytLy5SZ2I4jkQu75a/3aw4uLr2+vbM
-         W/5MjCCvv+d3LyVz5YzLsIotGgXmIfm5FcV5Xht2sK29Tv1wf8TDIUzHs27isOOa0mnN
-         PQ8w==
-X-Gm-Message-State: AOAM533XXQJDn7j1lHCtvTSt5E+0pOe6BIw22PCzI9267W8ppRqCx3vV
-        ouj8oGEST8OYa3ABEbuL4I47IAyEqylDIGbRr9REuIstTB2BGqoxR7MGCYooTM2R+HWHHNUeOsL
-        siUmWxPAnuLnIRuu6B3k=
-X-Received: by 2002:a17:907:7b88:: with SMTP id ne8mr52690235ejc.39.1641657524144;
-        Sat, 08 Jan 2022 07:58:44 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwxsDi88gWoz/yFn06znH+GlQCed5mHhzzbuFm0oPCmY5DmkRskm4o2cKqyiJpOlrxdATjS+A==
-X-Received: by 2002:a17:907:7b88:: with SMTP id ne8mr52690232ejc.39.1641657523992;
-        Sat, 08 Jan 2022 07:58:43 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id x17sm857217edv.69.2022.01.08.07.58.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 08 Jan 2022 07:58:43 -0800 (PST)
-Message-ID: <442f838d-5143-e272-9679-5bfaa9ac7b6a@redhat.com>
-Date:   Sat, 8 Jan 2022 16:58:43 +0100
+        id S233795AbiAHRz3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 8 Jan 2022 12:55:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40314 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230249AbiAHRz3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 8 Jan 2022 12:55:29 -0500
+X-Greylist: delayed 1332 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 08 Jan 2022 09:55:28 PST
+Received: from balrog.mythic-beasts.com (balrog.mythic-beasts.com [IPv6:2a00:1098:0:82:1000:0:2:1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A058C061401;
+        Sat,  8 Jan 2022 09:55:28 -0800 (PST)
+Received: from [81.101.6.87] (port=34286 helo=jic23-huawei)
+        by balrog.mythic-beasts.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <jic23@jic23.retrosnub.co.uk>)
+        id 1n6Faq-0001DM-Oj; Sat, 08 Jan 2022 17:33:33 +0000
+Date:   Sat, 8 Jan 2022 17:38:51 +0000
+From:   Jonathan Cameron <jic23@jic23.retrosnub.co.uk>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
+        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH v3 3/6] PM: core: Add EXPORT[_GPL]_SIMPLE_DEV_PM_OPS
+ macros
+Message-ID: <20220108173825.08ebf8ba@jic23-huawei>
+In-Reply-To: <20220107181723.54392-4-paul@crapouillou.net>
+References: <20220107181723.54392-1-paul@crapouillou.net>
+        <20220107181723.54392-4-paul@crapouillou.net>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] power: supply: Provide stubs for charge_behaviour helpers
-Content-Language: en-US
-To:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Thomas Koch <linrunner@gmx.net>,
-        =?UTF-8?Q?Nicol=c3=b2_Piazzalunga?= <nicolopiazzalunga@gmail.com>,
-        linux-pm@vger.kernel.org, kernel test robot <lkp@intel.com>
-References: <487dd7a3-8f29-de9a-2612-65fe895e676f@redhat.com>
- <20220108153158.189489-1-linux@weissschuh.net>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220108153158.189489-1-linux@weissschuh.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-BlackCat-Spam-Score: 19
+X-Spam-Status: No, score=1.9
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On Fri,  7 Jan 2022 18:17:20 +0000
+Paul Cercueil <paul@crapouillou.net> wrote:
 
-On 1/8/22 16:31, Thomas Weißschuh wrote:
-> When CONFIG_SYSFS is not enabled provide stubs for the helper functions
-> to not break their callers.
+> These macros are defined conditionally, according to CONFIG_PM:
+> - if CONFIG_PM is enabled, these macros resolve to
+>   DEFINE_SIMPLE_DEV_PM_OPS(), and the dev_pm_ops symbol will be
+>   exported.
 > 
-> Fixes: 539b9c94ac83 ("power: supply: add helpers for charge_behaviour sysfs")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> - if CONFIG_PM is disabled, these macros will result in a dummy static
+>   dev_pm_ops to be created with the __maybe_unused flag. The dev_pm_ops
+>   will then be discarded by the compiler, along with the provided
+>   callback functions if they are not used anywhere else.
+> 
+> In the second case, the symbol is not exported, which should be
+> perfectly fine - users of the symbol should all use the pm_ptr() or
+> pm_sleep_ptr() macro, so the dev_pm_ops marked as "extern" in the
+> client's code will never be accessed.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+Hi Paul,
 
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
+Can definitely be a follow up rather than needing to be in this series
+but an EXPORT_NS_[_GPL]_SIMPLE_DEV_PM_OPS() will be needed as I suspect
+a lot of the places that export pm_ops structures will have their exports
+moved to a namespace at somepoint.
 
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
+That can easily go in with the first user though rather than needing
+to be rushed in now.
 
-Regards,
-
-Hans
-
+Jonathan
 
 > ---
->  include/linux/power_supply.h | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
 > 
-> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-> index d92de670d6a7..e218041cc000 100644
-> --- a/include/linux/power_supply.h
-> +++ b/include/linux/power_supply.h
-> @@ -723,6 +723,21 @@ ssize_t power_supply_charge_behaviour_show(struct device *dev,
->  					   char *buf);
+> Notes:
+>     v2: Remove useless empty line
+>     v3: - Reorder the code to have non-private macros together in the file
+>         - Add comment about the necesity to use the new export macro when
+>           the dev_pm_ops has to be exported
+> 
+>  include/linux/pm.h | 35 ++++++++++++++++++++++++++++++++---
+>  1 file changed, 32 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/linux/pm.h b/include/linux/pm.h
+> index 8e13387e70ec..8279af2c538a 100644
+> --- a/include/linux/pm.h
+> +++ b/include/linux/pm.h
+> @@ -8,6 +8,7 @@
+>  #ifndef _LINUX_PM_H
+>  #define _LINUX_PM_H
 >  
->  int power_supply_charge_behaviour_parse(unsigned int available_behaviours, const char *buf);
-> +#else
-> +static inline
-> +ssize_t power_supply_charge_behaviour_show(struct device *dev,
-> +					   unsigned int available_behaviours,
-> +					   enum power_supply_charge_behaviour behaviour,
-> +					   char *buf)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
-> +
-> +static inline int power_supply_charge_behaviour_parse(unsigned int available_behaviours,
-> +						      const char *buf)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
+> +#include <linux/export.h>
+>  #include <linux/list.h>
+>  #include <linux/workqueue.h>
+>  #include <linux/spinlock.h>
+> @@ -357,14 +358,42 @@ struct dev_pm_ops {
+>  #define SET_RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn)
 >  #endif
 >  
->  #endif /* __LINUX_POWER_SUPPLY_H__ */
-> 
-> base-commit: b8170452cd5121b11a5726e3ea8dbdfc2d74e771
-> 
+> +#define _DEFINE_DEV_PM_OPS(name, \
+> +			   suspend_fn, resume_fn, \
+> +			   runtime_suspend_fn, runtime_resume_fn, idle_fn) \
+> +const struct dev_pm_ops name = { \
+> +	SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+> +	RUNTIME_PM_OPS(runtime_suspend_fn, runtime_resume_fn, idle_fn) \
+> +}
+> +
+> +#ifdef CONFIG_PM
+> +#define _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
+> +			   runtime_resume_fn, idle_fn, sec) \
+> +	_DEFINE_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
+> +			   runtime_resume_fn, idle_fn); \
+> +	_EXPORT_SYMBOL(name, sec)
+> +#else
+> +#define _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
+> +			   runtime_resume_fn, idle_fn, sec) \
+> +static __maybe_unused _DEFINE_DEV_PM_OPS(__static_##name, suspend_fn, \
+> +					 resume_fn, runtime_suspend_fn, \
+> +					 runtime_resume_fn, idle_fn)
+> +#endif
+> +
+>  /*
+>   * Use this if you want to use the same suspend and resume callbacks for suspend
+>   * to RAM and hibernation.
+> + *
+> + * If the underlying dev_pm_ops struct symbol has to be exported, use
+> + * EXPORT_SIMPLE_DEV_PM_OPS() or EXPORT_GPL_SIMPLE_DEV_PM_OPS() instead.
+>   */
+>  #define DEFINE_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+> -const struct dev_pm_ops name = { \
+> -	SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+> -}
+> +	_DEFINE_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL)
+> +
+> +#define EXPORT_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+> +	_EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL, "")
+> +#define EXPORT_GPL_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+> +	_EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL, "_gpl")
+>  
+>  /* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
+>  #define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
 
