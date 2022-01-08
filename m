@@ -2,153 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C97B8488520
-	for <lists+linux-pm@lfdr.de>; Sat,  8 Jan 2022 18:55:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D34744885CB
+	for <lists+linux-pm@lfdr.de>; Sat,  8 Jan 2022 21:10:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233795AbiAHRz3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 8 Jan 2022 12:55:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40314 "EHLO
+        id S232596AbiAHUKp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 8 Jan 2022 15:10:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbiAHRz3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 8 Jan 2022 12:55:29 -0500
-X-Greylist: delayed 1332 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 08 Jan 2022 09:55:28 PST
-Received: from balrog.mythic-beasts.com (balrog.mythic-beasts.com [IPv6:2a00:1098:0:82:1000:0:2:1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A058C061401;
-        Sat,  8 Jan 2022 09:55:28 -0800 (PST)
-Received: from [81.101.6.87] (port=34286 helo=jic23-huawei)
-        by balrog.mythic-beasts.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <jic23@jic23.retrosnub.co.uk>)
-        id 1n6Faq-0001DM-Oj; Sat, 08 Jan 2022 17:33:33 +0000
-Date:   Sat, 8 Jan 2022 17:38:51 +0000
-From:   Jonathan Cameron <jic23@jic23.retrosnub.co.uk>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
-        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v3 3/6] PM: core: Add EXPORT[_GPL]_SIMPLE_DEV_PM_OPS
- macros
-Message-ID: <20220108173825.08ebf8ba@jic23-huawei>
-In-Reply-To: <20220107181723.54392-4-paul@crapouillou.net>
-References: <20220107181723.54392-1-paul@crapouillou.net>
-        <20220107181723.54392-4-paul@crapouillou.net>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        with ESMTP id S229912AbiAHUKp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 8 Jan 2022 15:10:45 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7356C06173F
+        for <linux-pm@vger.kernel.org>; Sat,  8 Jan 2022 12:10:44 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id 30so34715997edv.3
+        for <linux-pm@vger.kernel.org>; Sat, 08 Jan 2022 12:10:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iD4a6uEwkGzhV9ZR3rAuaktGDkUY36sehuvaU03nU68=;
+        b=J70dfVCkP/UVwSADaOG5pn4SSuDU7kItk7Cqr9eOGU9m+lL+cf5Qr2M0YZghxqCW2X
+         rWU11Dg45fCALxmXodChTlsQ+/F/d2Ojhy0FXgXd2eBh4ASKNF14wrPxDJFpEKbkxpc0
+         rNE49ua/InyqlBx/ml5LyWO1hbjLd7i4czvbU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iD4a6uEwkGzhV9ZR3rAuaktGDkUY36sehuvaU03nU68=;
+        b=F33IvwivQj8VBOJLQFzTU3PoU3UNewOrWDKUDA5s99HbNDLEG3FF/fKPG8ie+AGGW/
+         DtFs86ghI8CbXUmGWljSg4yHGTWEhFjJFj37y6PyXiyUzR4YMzbcwI8qeXxYHC0hkYW7
+         RZgDiE7hH+FZR5Pj9ucog91JMTd+z1hw+7KpN0omI87hbfWnB2hMFJhbk705eJmy8ofz
+         8xLzpY/GX+8OODYz2B3ZR9UaflQpw7ZDEtFPpJOAL9+b9zYg6+XWBMC3rNaDFaIaaROZ
+         1ylmRMW+5r18LFZh+zoDuQcbbS1Indx8f/dpH+qoKqFSpwwxHS2vXsZYXI40SRy1scJF
+         hOmQ==
+X-Gm-Message-State: AOAM531t1zm9cdQP/Mx2reTfTW6C/hXlEZ7ldX0RkyFbqvVkw30ygt+r
+        41LtKso3oPSzPhGXy1cRxsZQ5zVhFHofi7/7
+X-Google-Smtp-Source: ABdhPJz4xXyuWH0FF9PHu8fV0oG8to6ZS/PZrtsUWe4i4fTpGk29dc816MKIyCPym9eDOogg5pzXzw==
+X-Received: by 2002:a05:6402:26c8:: with SMTP id x8mr69112781edd.149.1641672643055;
+        Sat, 08 Jan 2022 12:10:43 -0800 (PST)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
+        by smtp.gmail.com with ESMTPSA id i9sm97932ejw.88.2022.01.08.12.10.42
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 08 Jan 2022 12:10:42 -0800 (PST)
+Received: by mail-wr1-f52.google.com with SMTP id q8so18233192wra.12
+        for <linux-pm@vger.kernel.org>; Sat, 08 Jan 2022 12:10:42 -0800 (PST)
+X-Received: by 2002:adf:eeca:: with SMTP id a10mr14312457wrp.274.1641672642052;
+ Sat, 08 Jan 2022 12:10:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-BlackCat-Spam-Score: 19
-X-Spam-Status: No, score=1.9
+References: <20220108112229.v3d7enmuibypa5tm@earth.universe>
+In-Reply-To: <20220108112229.v3d7enmuibypa5tm@earth.universe>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 8 Jan 2022 12:10:25 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wh55h__rC6+RTH7pLLTbnBuuOXPNzGGswVDGN7C6NW1pQ@mail.gmail.com>
+Message-ID: <CAHk-=wh55h__rC6+RTH7pLLTbnBuuOXPNzGGswVDGN7C6NW1pQ@mail.gmail.com>
+Subject: Re: [GIT PULL] power-supply fixes for 5.16
+To:     Sebastian Reichel <sre@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri,  7 Jan 2022 18:17:20 +0000
-Paul Cercueil <paul@crapouillou.net> wrote:
+On Sat, Jan 8, 2022 at 3:22 AM Sebastian Reichel <sre@kernel.org> wrote:
+>
+> 2. Replace 1E6L with NSEC_PER_MSEC to avoid floating point calculation
+>    in LLVM resulting in a build failure
 
-> These macros are defined conditionally, according to CONFIG_PM:
-> - if CONFIG_PM is enabled, these macros resolve to
->   DEFINE_SIMPLE_DEV_PM_OPS(), and the dev_pm_ops symbol will be
->   exported.
-> 
-> - if CONFIG_PM is disabled, these macros will result in a dummy static
->   dev_pm_ops to be created with the __maybe_unused flag. The dev_pm_ops
->   will then be discarded by the compiler, along with the provided
->   callback functions if they are not used anywhere else.
-> 
-> In the second case, the symbol is not exported, which should be
-> perfectly fine - users of the symbol should all use the pm_ptr() or
-> pm_sleep_ptr() macro, so the dev_pm_ops marked as "extern" in the
-> client's code will never be accessed.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+So I think the patch is obviously the right thing to do regardless,
+but that still makes me go "WTF?"
 
-Hi Paul,
+Those uses of 1E6L were perhaps strange, but they were only used in
+constant compile-time expressions that were cast to 'unsigned long' in
+the end, so how the heck did llvm end up with any floating point in
+there?
 
-Can definitely be a follow up rather than needing to be in this series
-but an EXPORT_NS_[_GPL]_SIMPLE_DEV_PM_OPS() will be needed as I suspect
-a lot of the places that export pm_ops structures will have their exports
-moved to a namespace at somepoint.
+In this case there was really no excuse not to just use a better
+constant, but there are other situations where it might well be quite
+reasonable to use floating point calculations to create an integer
+constant (eg maybe some spec describes an algorithm in FP, but the
+implementation uses fixed-point arithmetic and has initializers that
+do the conversion).
 
-That can easily go in with the first user though rather than needing
-to be rushed in now.
+Imagine for a moment that you want to do fixed-point math (perhaps
+because you have a microcontroller without an FP unit - it's not
+limited to just "the kernel doesn't do FP"). Further imagine just for
+a moment that you still want some fundamental constants like PI in
+that fixed-point format.
 
-Jonathan
+The sane way to generate said constants is to do something like
 
-> ---
-> 
-> Notes:
->     v2: Remove useless empty line
->     v3: - Reorder the code to have non-private macros together in the file
->         - Add comment about the necesity to use the new export macro when
->           the dev_pm_ops has to be exported
-> 
->  include/linux/pm.h | 35 ++++++++++++++++++++++++++++++++---
->  1 file changed, 32 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/linux/pm.h b/include/linux/pm.h
-> index 8e13387e70ec..8279af2c538a 100644
-> --- a/include/linux/pm.h
-> +++ b/include/linux/pm.h
-> @@ -8,6 +8,7 @@
->  #ifndef _LINUX_PM_H
->  #define _LINUX_PM_H
->  
-> +#include <linux/export.h>
->  #include <linux/list.h>
->  #include <linux/workqueue.h>
->  #include <linux/spinlock.h>
-> @@ -357,14 +358,42 @@ struct dev_pm_ops {
->  #define SET_RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn)
->  #endif
->  
-> +#define _DEFINE_DEV_PM_OPS(name, \
-> +			   suspend_fn, resume_fn, \
-> +			   runtime_suspend_fn, runtime_resume_fn, idle_fn) \
-> +const struct dev_pm_ops name = { \
-> +	SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
-> +	RUNTIME_PM_OPS(runtime_suspend_fn, runtime_resume_fn, idle_fn) \
-> +}
-> +
-> +#ifdef CONFIG_PM
-> +#define _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
-> +			   runtime_resume_fn, idle_fn, sec) \
-> +	_DEFINE_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
-> +			   runtime_resume_fn, idle_fn); \
-> +	_EXPORT_SYMBOL(name, sec)
-> +#else
-> +#define _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
-> +			   runtime_resume_fn, idle_fn, sec) \
-> +static __maybe_unused _DEFINE_DEV_PM_OPS(__static_##name, suspend_fn, \
-> +					 resume_fn, runtime_suspend_fn, \
-> +					 runtime_resume_fn, idle_fn)
-> +#endif
-> +
->  /*
->   * Use this if you want to use the same suspend and resume callbacks for suspend
->   * to RAM and hibernation.
-> + *
-> + * If the underlying dev_pm_ops struct symbol has to be exported, use
-> + * EXPORT_SIMPLE_DEV_PM_OPS() or EXPORT_GPL_SIMPLE_DEV_PM_OPS() instead.
->   */
->  #define DEFINE_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
-> -const struct dev_pm_ops name = { \
-> -	SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
-> -}
-> +	_DEFINE_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL)
-> +
-> +#define EXPORT_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
-> +	_EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL, "")
-> +#define EXPORT_GPL_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
-> +	_EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL, "_gpl")
->  
->  /* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
->  #define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+      #define FIXPT_1 (1u << FIXPT_SHIFT)
+      #define FIXPT_FP(x) ((fixpt_t) (((x)*FIXPT_1)+0.5))
+      #define FIXPT_PI FIXPT_FP(3.14159265)
 
+rather than have to do something incredibly stupid and illogical and
+unreadable like
+
+    #define FIXPT_PI 205887
+
+So honestly, this seems to be just llvm being completely stupid. The
+fact that you don't want to generate floating point code has *NOTHING*
+to do with floating point literals for constant expressions.
+
+In fact, even if you don't want to generate floating point code -
+again, maybe you don't have a FP unit - doesn't mean that you might
+not want to generate normal floating point constants. You may end up
+having explicit software floating point, and doing things like passing
+the floating point values around manually, ie
+
+        union fp {
+            uint64_t val;
+            double fp_val;
+       };
+
+and having code like
+
+        static const union fp sqrt2 = { .fp_val = 1.4142.... };
+
+and then doing all the math in 'uint64_t' just because you wrote a
+couple of math routines yourself:
+
+        fp_mul(&res,  sqrt2.val, x);
+
+again, there's no floating point *code* generated, but that doesn't
+mean that the compiler shouldn't allow users to use floating point
+*values*.
+
+Sadly, I see in the LLVM discussions that the llvm people seem to be
+completely out to lunch and in denial, and claim "maybe this is a gcc
+bug".
+
+No. Gcc just isn't being stupid.
+
+Nathan, Nick, please talk some sense into the llvm people. The two
+examples above are very much not about the Linux kernel (although I
+think we actually have a couple of places that do things exactly like
+that) they are about generic coding issues.
+
+              Linus
