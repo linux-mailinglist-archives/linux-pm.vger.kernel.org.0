@@ -2,235 +2,262 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F3E3487FC0
-	for <lists+linux-pm@lfdr.de>; Sat,  8 Jan 2022 00:54:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF70C488085
+	for <lists+linux-pm@lfdr.de>; Sat,  8 Jan 2022 02:28:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229627AbiAGXx7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Jan 2022 18:53:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59116 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232025AbiAGXxw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jan 2022 18:53:52 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22E5C06173F
-        for <linux-pm@vger.kernel.org>; Fri,  7 Jan 2022 15:53:51 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id n30-20020a17090a5aa100b001b2b6509685so8234110pji.3
-        for <linux-pm@vger.kernel.org>; Fri, 07 Jan 2022 15:53:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=eGzgdGw2ygRqpcUdePm+Su5tD7TZxP9sdobQbw7EuUI=;
-        b=RUQ7R2K0ZKIUdwB5X5NmRvSqn3fS17E6ywGorO3ouAqwwj3P5S0sZwCL/ybr4XscT4
-         6D5y3Njh9Bz3SdNQwXelYmKZIpQQAisRv8pd85kvQyGL+8A7U5Q86we/+xH2jY4WvEAK
-         JdAeJlcWx2Hw74F5uoUczZ6RNG4YfJ9DkTiL0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=eGzgdGw2ygRqpcUdePm+Su5tD7TZxP9sdobQbw7EuUI=;
-        b=F8RYsOrLvueE2/w/bGJl8n0PW6avpdSzUDyi4C+uVklVHPi/VyqZP3mubH0/X/7nyJ
-         LASAcDuKX2cjomowq2ISNhufbWPz/kJNxtdzJN3VzWzP9xexviTx6HWTgaCKv8qA+b0D
-         w695IUIO4WPYwZSEOAmAwluvz0zodn90kOi3KDyoWjX8HSAIHieWLHZls8WJz+djRwZh
-         rbWL5VtICfTz3g+bbHowSG0YduQCjix6bmPRy3S4GptlVRWlBl+OlQa9/rIKSUb+F0jr
-         4nE6wiBeDYxT4+IwVfzxpDY2rjVjKO0/eEy+OMLoVjZLeJHpn5bwhpcg6SbyzWkq89xz
-         TocQ==
-X-Gm-Message-State: AOAM530QZQ8o4dKv7TCQRx/WAZ04OQptRzq1kxJnmrjk/JHnpQNl/Lb5
-        XPixc7kkrCCZ4uAWelMnx5+jCw==
-X-Google-Smtp-Source: ABdhPJwL1zbXYqcwNN1NKUrnQbenm9zESq2WGHkzK0A9KpnOeaZTWfin5pN4KEKW7GQcDUdkAFVExA==
-X-Received: by 2002:a17:903:191:b0:148:a2f7:9d4a with SMTP id z17-20020a170903019100b00148a2f79d4amr64690380plg.105.1641599631474;
-        Fri, 07 Jan 2022 15:53:51 -0800 (PST)
-Received: from localhost ([2620:15c:202:201:db:1c60:693f:c24e])
-        by smtp.gmail.com with UTF8SMTPSA id u18sm49681pfi.158.2022.01.07.15.53.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jan 2022 15:53:51 -0800 (PST)
-From:   Brian Norris <briannorris@chromium.org>
-To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Heiko Stuebner <heiko@sntech.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Lin Huang <hl@rock-chips.com>, devicetree@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-pm@vger.kernel.org,
-        Derek Basehore <dbasehore@chromium.org>,
-        linux-kernel@vger.kernel.org,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@collabora.com>,
+        id S230061AbiAHB1w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Jan 2022 20:27:52 -0500
+Received: from mga18.intel.com ([134.134.136.126]:16479 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232154AbiAHB1w (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 7 Jan 2022 20:27:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641605272; x=1673141272;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=//8VGUMooQPPnCZuqgRzt27L6N6BiaBo37so/qlf+0A=;
+  b=OA70PPysMdgX2yg2u0cbB2SQQLNm9oeimwsQUgx20IwaCbtM3GA4xR+i
+   aB5aWWqBxdsEMDcowjJE8MMkYXcG4vBDf2JtBwKlpaMprkfzng/SGFuB6
+   gM2Gw9O/9ApzIw7Xl3rDOagWsZCN6Ye7e/uxwSBept1itIo3CqQB9khGc
+   sTao3hgEGaDlakj7XOa4xhNWn+LFwDQmX/a74bF/GmtrXVvmjGBmeCIrz
+   5BSwGaLiYSVDawpv571k4CuksWvMA211Jdq7Xh99CZfT2PT9eq1ilgN1p
+   hPKbxzwkg2fbS5LxCxrgp5Wlu0Srj7WII8yV+X6gttzclcIdeADbvtgfx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="229778960"
+X-IronPort-AV: E=Sophos;i="5.88,271,1635231600"; 
+   d="scan'208";a="229778960"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 17:27:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,271,1635231600"; 
+   d="scan'208";a="471487856"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by orsmga003.jf.intel.com with ESMTP; 07 Jan 2022 17:27:51 -0800
+Date:   Fri, 7 Jan 2022 17:29:37 -0800
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Brian Norris <briannorris@chromium.org>
-Subject: [PATCH 10/10] arm64: dts: rockchip: Enable dmc and dfi nodes on gru
-Date:   Fri,  7 Jan 2022 15:53:20 -0800
-Message-Id: <20220107155215.10.I3a5c7f21ecd8221b42c2dbcd618386bce7b3e9a6@changeid>
-X-Mailer: git-send-email 2.34.1.575.g55b058a8bb-goog
-In-Reply-To: <20220107235320.965497-1-briannorris@chromium.org>
-References: <20220107235320.965497-1-briannorris@chromium.org>
+        linux-pm@vger.kernel.org
+Cc:     x86@kernel.org, linux-doc@vger.kernel.org,
+        Len Brown <len.brown@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 4/7] thermal: intel: hfi: Handle CPU hotplug events
+Message-ID: <20220108012937.GA19633@ranerica-svr.sc.intel.com>
+References: <20220106025059.25847-1-ricardo.neri-calderon@linux.intel.com>
+ <20220106025059.25847-5-ricardo.neri-calderon@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220106025059.25847-5-ricardo.neri-calderon@linux.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Lin Huang <hl@rock-chips.com>
+On Wed, Jan 05, 2022 at 06:50:56PM -0800, Ricardo Neri wrote:
+> All CPUs in a package are represented in an HFI table. There exists an
+> HFI table per package. Thus, CPUs in a package need to coordinate to
+> initialize and access the table. Do such coordination during CPU hotplug.
+> Use the first CPU to come online in a package to initialize the HFI table
+> and the data structure representing it. Other CPUs in the same package need
+> only to register or unregister themselves in that data structure.
+> 
+> The HFI depends on both the package-level thermal management and the local
+> APIC thermal local vector. Thus, ensure that both are properly configured
+> before calling intel_hfi_online(). The CPU hotplug callbacks of the thermal
+> throttle events code already meet these conditions. Enable the HFI from
+> thermal_throttle_online().
+> 
+> Cc: Andi Kleen <ak@linux.intel.com>
+> Cc: Aubrey Li <aubrey.li@linux.intel.com>
+> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: Tim Chen <tim.c.chen@linux.intel.com>
+> Cc: "Ravi V. Shankar" <ravi.v.shankar@intel.com>
+> Reviewed-by: Len Brown <len.brown@intel.com>
+> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> ---
+> Changes since v2:
+>   * Removed hfi_instance::initialized. Instead, use hfi_instance::
+>     hdr to determine if the instance has been initialized. (Rafael)
+>   * Renamed hfi_lock as hfi_instance_lock to reflect the fact that it is
+>     used to protect accesses to HFI instances. (Rafael)
+>   * Removed unnecessary locking when linking a CPU to an HFI instance
+>     in intel_hfi_online(). (Rafael)
+>   * Improved locking in error paths in intel_hfi_online(). (Rafael)
+>   * Unconditionally link the hfi_instance of a package/die to CPUs in
+>     the same package in intel_hfi_online(). Initialization is taken care
+>     of separately.
+>   * Removed a pointless check for NULL when taking a pointer of an element
+>     of hfi_instances.
+>   * Added missing #include files.
+> 
+> Changes since v1:
+>   * Renamed X86_FEATURE_INTEL_HFI as X86_FEATURE_HFI. (Boris)
+>   * Relocated definitions of MSR bits from intel_hfi.h to intel_hfi.c.
+>   * Renamed HFI_PTR_VALID_BIT as HW_FEEDBACK_PTR_VALID_BIT for clarity.
+>   * Reworked init_hfi_cpu_index() to take a pointer of type struct
+>     hfi_cpu_info. This makes the function more concise. (Rafael)
+>   * In intel_hfi_online(), check for null hfi_instances and improve checks
+>     of the die_id. (Rafael)
+>   * Use a local cpumask_var_t to keep track of the CPUs of each
+>     hfi_instance. (Rafael)
+>   * Removed hfi_instance::die_id. It is not used anywhere.
+>   * Renamed hfi_instance::table_base as hfi_instance::local_table for
+>     clarity.
+> ---
+>  drivers/thermal/intel/intel_hfi.c   | 203 ++++++++++++++++++++++++++++
+>  drivers/thermal/intel/intel_hfi.h   |   4 +
+>  drivers/thermal/intel/therm_throt.c |   8 ++
+>  3 files changed, 215 insertions(+)
+> 
+> diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
+> index 52e16d2bc957..cf506ef1bfca 100644
+> --- a/drivers/thermal/intel/intel_hfi.c
+> +++ b/drivers/thermal/intel/intel_hfi.c
+> @@ -23,14 +23,24 @@
+>  
+>  #include <linux/bitops.h>
+>  #include <linux/cpufeature.h>
+> +#include <linux/cpumask.h>
+> +#include <linux/gfp.h>
+> +#include <linux/io.h>
+>  #include <linux/math.h>
+> +#include <linux/mutex.h>
+> +#include <linux/percpu-defs.h>
+>  #include <linux/printk.h>
+>  #include <linux/processor.h>
+>  #include <linux/slab.h>
+>  #include <linux/topology.h>
+>  
+> +#include <asm/msr.h>
+> +
+>  #include "intel_hfi.h"
+>  
+> +/* Hardware Feedback Interface MSR configuration bits */
+> +#define HW_FEEDBACK_PTR_VALID_BIT		BIT(0)
+> +
+>  /* CPUID detection and enumeration definitions for HFI */
+>  
+>  #define CPUID_HFI_LEAF 6
+> @@ -86,6 +96,8 @@ struct hfi_hdr {
+>   *			Located at the base of the local table.
+>   * @hdr:		Base address of the local table header
+>   * @data:		Base address of the local table data
+> + * @cpus:		CPUs represented in this HFI table instance
+> + * @hw_table:		Pointer to the HFI table of this instance
+>   *
+>   * A set of parameters to parse and navigate a specific HFI table.
+>   */
+> @@ -96,6 +108,8 @@ struct hfi_instance {
+>  	};
+>  	void			*hdr;
+>  	void			*data;
+> +	cpumask_var_t		cpus;
+> +	void			*hw_table;
+>  };
+>  
+>  /**
+> @@ -113,10 +127,178 @@ struct hfi_features {
+>  	unsigned int	hdr_size;
+>  };
+>  
+> +/**
+> + * struct hfi_cpu_info - Per-CPU attributes to consume HFI data
+> + * @index:		Row of this CPU in its HFI table
+> + * @hfi_instance:	Attributes of the HFI table to which this CPU belongs
+> + *
+> + * Parameters to link a logical processor to an HFI table and a row within it.
+> + */
+> +struct hfi_cpu_info {
+> +	s16			index;
+> +	struct hfi_instance	*hfi_instance;
+> +};
+> +
+> +static DEFINE_PER_CPU(struct hfi_cpu_info, hfi_cpu_info) = { .index = -1 };
+> +
+>  static int max_hfi_instances;
+>  static struct hfi_instance *hfi_instances;
+>  
+>  static struct hfi_features hfi_features;
+> +static DEFINE_MUTEX(hfi_instance_lock);
+> +
+> +static void init_hfi_cpu_index(struct hfi_cpu_info *info)
+> +{
+> +	union cpuid6_edx edx;
+> +
+> +	/* Do not re-read @cpu's index if it has already been initialized. */
+> +	if (info->index > -1)
+> +		return;
+> +
+> +	edx.full = cpuid_edx(CPUID_HFI_LEAF);
+> +	info->index = edx.split.index;
+> +}
+> +
+> +/*
+> + * The format of the HFI table depends on the number of capabilities that the
+> + * hardware supports. Keep a data structure to navigate the table.
+> + */
+> +static void init_hfi_instance(struct hfi_instance *hfi_instance)
+> +{
+> +	/* The HFI header is below the time-stamp. */
+> +	hfi_instance->hdr = hfi_instance->local_table +
+> +			    sizeof(*hfi_instance->timestamp);
+> +
+> +	/* The HFI data starts below the header. */
+> +	hfi_instance->data = hfi_instance->hdr + hfi_features.hdr_size;
+> +}
+> +
+> +/**
+> + * intel_hfi_online() - Enable HFI on @cpu
+> + * @cpu:	CPU in which the HFI will be enabled
+> + *
+> + * Enable the HFI to be used in @cpu. The HFI is enabled at the die/package
+> + * level. The first CPU in the die/package to come online does the full HFI
+> + * initialization. Subsequent CPUs will just link themselves to the HFI
+> + * instance of their die/package.
+> + */
+> +void intel_hfi_online(unsigned int cpu)
+> +{
+> +	struct hfi_cpu_info *info = &per_cpu(hfi_cpu_info, cpu);
+> +	u16 die_id = topology_logical_die_id(cpu);
+> +	struct hfi_instance *hfi_instance;
+> +	phys_addr_t hw_table_pa;
+> +	u64 msr_val;
+> +
+> +	if (!boot_cpu_has(X86_FEATURE_HFI))
+> +		return;
+> +
+> +	/* Not much to do if hfi_instances are missing. */
+> +	if (!hfi_instances)
+> +		return;
+> +
+> +	/*
+> +	 * The HFI instance of this @cpu may exist already but they have not
+> +	 * been linked to @cpu.
+> +	 */
+> +	hfi_instance = info->hfi_instance;
+> +	if (!hfi_instance) {
+> +		if (die_id < 0 || die_id >= max_hfi_instances)
+> +			return;
+> +
+> +		/*
+> +		 * Link @cpu to the HFI instance of its package/die. It does
+> +		 * not matter whether the instance has been initialized.
+> +		 */
+> +		info->hfi_instance = hfi_instance;
 
-Enable the DMC (Dynamic Memory Controller) and the DFI (DDR PHY
-Interface) nodes on gru boards so we can support DDR DVFS.
+There is a bug here. info->hfi_instance would be set to NULL because
+hfi_instance is NULL. The latter needs to be set to
+&hfi_instances[die_id] first.
 
-Signed-off-by: Lin Huang <hl@rock-chips.com>
-Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
-Signed-off-by: Gaël PORTAY <gael.portay@collabora.com>
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Signed-off-by: Brian Norris <briannorris@chromium.org>
----
-This was part of a previous series, at:
-https://lore.kernel.org/r/20210308233858.24741-3-daniel.lezcano@linaro.org
-I've picked up a bunch of changes and fixes, so I've restarted the patch
-series numbering.
-
-Updates since the old series:
-
- * reordered alphabetically by phandle name, per style
- * drop a ton of deprecated/unused properties
- * add required center-supply for scarlet
- * add new *_idle_dis_freq properties
- * drop the lowest (200 MHz) OPP; this was never stabilized for
-   production
- * bump the voltage (0.9V -> 0.925V) for the highest OPP on Chromebook
-   models; later (tablet) models were more stable, with a fixed DDR
-   regulator
- * bump odt_dis_freq to 666 MHz; early versions used 333 MHz, but
-   stabilization efforts landed on 666 MHz for production
-
- .../dts/rockchip/rk3399-gru-chromebook.dtsi   |  7 +++++
- .../boot/dts/rockchip/rk3399-gru-scarlet.dtsi | 12 ++++++++
- arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi  | 28 +++++++++++++++++++
- .../boot/dts/rockchip/rk3399-op1-opp.dtsi     | 25 +++++++++++++++++
- 4 files changed, 72 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
-index 9b2c679f5eca..46292fdceecb 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
-@@ -234,6 +234,13 @@ &cdn_dp {
- 	extcon = <&usbc_extcon0>, <&usbc_extcon1>;
- };
- 
-+&dmc {
-+	center-supply = <&ppvar_centerlogic>;
-+	rockchip,pd_idle_dis_freq = <800000000>;
-+	rockchip,sr_idle_dis_freq = <800000000>;
-+	rockchip,sr_mc_gate_idle_dis_freq = <800000000>;
-+};
-+
- &edp {
- 	status = "okay";
- 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi
-index a9817b3d7edc..913d845eb51a 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi
-@@ -391,6 +391,18 @@ &cru {
- 		<400000000>;
- };
- 
-+/* The center supply is fixed to .9V on scarlet */
-+&dmc {
-+	center-supply = <&pp900_s0>;
-+};
-+
-+/* We don't need .925 V for 928 MHz on scarlet */
-+&dmc_opp_table {
-+	opp03 {
-+		opp-microvolt = <900000>;
-+	};
-+};
-+
- &gpio0 {
- 	gpio-line-names = /* GPIO0 A 0-7 */
- 			  "CLK_32K_AP",
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi
-index 45a5ae5d2027..58b8d332f924 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi
-@@ -373,6 +373,34 @@ &cru {
- 		<200000000>;
- };
- 
-+&dfi {
-+	status = "okay";
-+};
-+
-+&dmc {
-+	status = "okay";
-+	rockchip,pd_idle = <0x40>;
-+	rockchip,sr_idle = <0x2>;
-+	rockchip,sr_mc_gate_idle = <0x3>;
-+	rockchip,srpd_lite_idle	= <0x4>;
-+	rockchip,standby_idle = <0x2000>;
-+	rockchip,ddr3_odt_dis_freq = <666000000>;
-+	rockchip,lpddr3_odt_dis_freq = <666000000>;
-+	rockchip,lpddr4_odt_dis_freq = <666000000>;
-+
-+	rockchip,pd_idle_dis_freq = <1000000000>;
-+	rockchip,sr_idle_dis_freq = <1000000000>;
-+	rockchip,sr_mc_gate_idle_dis_freq = <1000000000>;
-+	rockchip,srpd_lite_idle_dis_freq = <0>;
-+	rockchip,standby_idle_dis_freq = <928000000>;
-+};
-+
-+&dmc_opp_table {
-+	opp03 {
-+		opp-suspend;
-+	};
-+};
-+
- &emmc_phy {
- 	status = "okay";
- };
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-op1-opp.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-op1-opp.dtsi
-index 2180e0f75003..6e29e74f6fc6 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-op1-opp.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-op1-opp.dtsi
-@@ -110,6 +110,27 @@ opp05 {
- 			opp-microvolt = <1075000>;
- 		};
- 	};
-+
-+	dmc_opp_table: dmc_opp_table {
-+		compatible = "operating-points-v2";
-+
-+		opp00 {
-+			opp-hz = /bits/ 64 <400000000>;
-+			opp-microvolt = <900000>;
-+		};
-+		opp01 {
-+			opp-hz = /bits/ 64 <666000000>;
-+			opp-microvolt = <900000>;
-+		};
-+		opp02 {
-+			opp-hz = /bits/ 64 <800000000>;
-+			opp-microvolt = <900000>;
-+		};
-+		opp03 {
-+			opp-hz = /bits/ 64 <928000000>;
-+			opp-microvolt = <925000>;
-+		};
-+	};
- };
- 
- &cpu_l0 {
-@@ -136,6 +157,10 @@ &cpu_b1 {
- 	operating-points-v2 = <&cluster1_opp>;
- };
- 
-+&dmc {
-+	operating-points-v2 = <&dmc_opp_table>;
-+};
-+
- &gpu {
- 	operating-points-v2 = <&gpu_opp_table>;
- };
--- 
-2.34.1.575.g55b058a8bb-goog
-
+Thanks and BR,
+Ricardo
