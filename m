@@ -2,108 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED1BC488A94
-	for <lists+linux-pm@lfdr.de>; Sun,  9 Jan 2022 17:33:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE3F3488B01
+	for <lists+linux-pm@lfdr.de>; Sun,  9 Jan 2022 18:25:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234150AbiAIQdO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 9 Jan 2022 11:33:14 -0500
-Received: from mail-ot1-f48.google.com ([209.85.210.48]:39485 "EHLO
-        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231853AbiAIQdN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 9 Jan 2022 11:33:13 -0500
-Received: by mail-ot1-f48.google.com with SMTP id c3-20020a9d6c83000000b00590b9c8819aso3261828otr.6;
-        Sun, 09 Jan 2022 08:33:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=6aQP76L17zZIifS48mJSyI2JpkFOM8CJyj+hC/CiesE=;
-        b=SAeXACI8IJbntaLQmRUSoStSnUl/wC0E5rKRw8V7FyhpCMdoSN2YrXGMJ5qHo0IkR7
-         mKIeihpeZBWazgUDY2/rkc6iVzUXvoo0fxHQUnwvRAgDQcTK/N94wH8BcFBjjkpU9wQK
-         kC+idPSRnDonJd3uAmdQSu0KVXOlBFngBZwmUqGc9Qo2ZINAykRoW+dFuKiBzG0YQABK
-         umL9xf9LedepjkKHArrqTArfWC3RRmkXI6hRZp9G/T/bgDz58BE4t1DPVFguLtndUqxR
-         zhaol/uDtxxsEwGJI9mqcDOgX73SiYbO7n1Wa0FiqxHiDdx8hSshUQM8G606ZBqV84tK
-         FyIw==
-X-Gm-Message-State: AOAM532r/d0+6YWwI7+2o9bJSqPxkm9OFxXkQcalH3spV0sJ66A4zG2Y
-        U7oCo6UA+wcwv2MakCclS9WLoqoC3A==
-X-Google-Smtp-Source: ABdhPJyjNrFptPbU7HtswyOghK5ZNW41xftu9unOvQFYSHzdWpB2VWJ/iT1O1WH3Rms7hoEFc6T7aQ==
-X-Received: by 2002:a9d:4d8d:: with SMTP id u13mr14022539otk.246.1641745993000;
-        Sun, 09 Jan 2022 08:33:13 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id q65sm759252oih.45.2022.01.09.08.33.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Jan 2022 08:33:12 -0800 (PST)
-Received: (nullmailer pid 3263068 invoked by uid 1000);
-        Sun, 09 Jan 2022 16:33:11 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Brian Norris <briannorris@chromium.org>
-Cc:     Kyungmin Park <kyungmin.park@samsung.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Derek Basehore <dbasehore@chromium.org>,
-        linux-rockchip@lists.infradead.org, Lin Huang <hl@rock-chips.com>
-In-Reply-To: <20220107155215.1.I875ab8f28c5155a7d2f103316191954d4b07ac13@changeid>
-References: <20220107235320.965497-1-briannorris@chromium.org> <20220107155215.1.I875ab8f28c5155a7d2f103316191954d4b07ac13@changeid>
-Subject: Re: [PATCH 01/10] dt-bindings: devfreq: rk3399_dmc: Convert to YAML
-Date:   Sun, 09 Jan 2022 10:33:11 -0600
-Message-Id: <1641745991.444665.3263067.nullmailer@robh.at.kernel.org>
+        id S234243AbiAIRZW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 9 Jan 2022 12:25:22 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:33326 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232409AbiAIRZW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 9 Jan 2022 12:25:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1641749122; x=1673285122;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=pY/vgC3mibUTksylngWUfaDZ+uO3n7is8v7CToQVCw4=;
+  b=vk6mjJcCerO2hmAoyrNutr/Zo4vmVNEr7EXKXteKrVLxEPCNfqy9AbPy
+   MdKdugrvb0Y6IyXn8KTgxqVKvF2yZRUxh0UMCmIedvWN7bnfC91NHPbmf
+   IGggL2cSIBo/Z+Xac5zsCYppkolGk5wnpj8dKH1fOlyQ71EKOA4penyoK
+   w=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 09 Jan 2022 09:25:22 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2022 09:25:21 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Sun, 9 Jan 2022 09:25:21 -0800
+Received: from mkshah-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Sun, 9 Jan 2022 09:25:17 -0800
+From:   Maulik Shah <quic_mkshah@quicinc.com>
+To:     <bjorn.andersson@linaro.org>, <ulf.hansson@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <rafael@kernel.org>,
+        <daniel.lezcano@linaro.org>, <quic_lsrao@quicinc.com>,
+        <quic_rjendra@quicinc.com>, Maulik Shah <quic_mkshah@quicinc.com>
+Subject: [PATCH 00/10] Add APSS RSC to Cluster power domain
+Date:   Sun, 9 Jan 2022 22:54:57 +0530
+Message-ID: <1641749107-31979-1-git-send-email-quic_mkshah@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 07 Jan 2022 15:53:11 -0800, Brian Norris wrote:
-> I want to add, deprecate, and bugfix some properties, as well as add the
-> first users. This is easier with a proper schema.
-> 
-> The transformation is mostly straightforward, plus a few notable tweaks:
-> 
->  * Renamed rockchip,dram_speed_bin to rockchip,ddr3_speed_bin. The
->    driver code and the example matched, but the description was
->    different. I went with the implementation.
-> 
->  * Drop upthreshold and downdifferential properties from the example.
->    These were undocumented (so, wouldn't pass validation), but were
->    representing software properties (governor tweaks). I drop them from
->    the driver in subsequent patches.
-> 
->  * Rename clock from pclk_ddr_mon to dmc_clk. The driver, DT example,
->    and all downstream users matched -- the binding definition was the
->    exception. Anyway, "dmc_clk" is a more appropriately generic name.
-> 
-> Signed-off-by: Brian Norris <briannorris@chromium.org>
-> ---
-> 
->  .../bindings/devfreq/rk3399_dmc.txt           | 212 -------------
->  .../bindings/devfreq/rk3399_dmc.yaml          | 297 ++++++++++++++++++
->  2 files changed, 297 insertions(+), 212 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/devfreq/rk3399_dmc.txt
->  create mode 100644 Documentation/devicetree/bindings/devfreq/rk3399_dmc.yaml
-> 
+This series patches 1 to 4 adds/corrects the cpuidle states/
+apps_rsc TCS configuration to make it same as downstream kernel.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+The patches 5, 6 and 7 adds apps_rsc device to cluster power domain such
+that when cluster is going to power down the cluster pre off notification
+will program the 'sleep' and 'wake' votes in SLEEP TCS and WAKE TCSes.
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/devfreq/rk3399_dmc.yaml:37:5: [warning] wrong indentation: expected 6 but found 4 (indentation)
+The patches 8, 9 and 10 are to program the next wakeup in CONTROL_TCS.
 
-dtschema/dtc warnings/errors:
+[1], [2] was older way of programming CONTROL_TCS (exporting an API and
+calling when last CPU was entering deeper low power mode). Now with patch
+number 5,6 and 7 the apps RSC is added to to cluster power domain and hence
+these patches are no longer needed with this series.
 
-doc reference errors (make refcheckdocs):
+The series is tested on SM8250 with latest linux-next tag next-20220107.
 
-See https://patchwork.ozlabs.org/patch/1577007
+[1] https://patchwork.kernel.org/project/linux-arm-msm/patch/20190218140210.14631-3-rplsssn@codeaurora.org/
+[2] https://patchwork.kernel.org/project/linux-arm-msm/list/?series=59613
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+Lina Iyer (1):
+  soc: qcom: rpmh-rsc: Attach RSC to cluster PM domain
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+Maulik Shah (9):
+  arm64: dts: qcom: sm8150: Correct TCS configuration for apps rsc
+  arm64: dts: qcom: sm8250: Add cpuidle states
+  arm64: dts: qcom: sm8350: Correct TCS configuration for apps rsc
+  arm64: dts: qcom: sm8450: Update cpuidle states parameters
+  dt-bindings: soc: qcom: Update devicetree binding document for
+    rpmh-rsc
+  arm64: dts: qcom: Add power-domains property for apps_rsc
+  PM: domains: Store the closest hrtimer event of the domain CPUs
+  soc: qcom: rpmh-rsc: Save base address of drv
+  soc: qcom: rpmh-rsc: Write CONTROL_TCS with next timer wakeup
 
-pip3 install dtschema --upgrade
+ .../devicetree/bindings/soc/qcom/rpmh-rsc.txt      |   6 +
+ arch/arm64/boot/dts/qcom/sm8150.dtsi               |   7 +-
+ arch/arm64/boot/dts/qcom/sm8250.dtsi               | 106 ++++++++++++++++
+ arch/arm64/boot/dts/qcom/sm8350.dtsi               |   3 +-
+ arch/arm64/boot/dts/qcom/sm8450.dtsi               |  29 ++---
+ drivers/base/power/domain_governor.c               |   1 +
+ drivers/soc/qcom/rpmh-internal.h                   |   9 +-
+ drivers/soc/qcom/rpmh-rsc.c                        | 138 +++++++++++++++++++--
+ drivers/soc/qcom/rpmh.c                            |   4 +-
+ include/linux/pm_domain.h                          |   1 +
+ 10 files changed, 271 insertions(+), 33 deletions(-)
 
-Please check and re-submit.
+-- 
+2.7.4
 
