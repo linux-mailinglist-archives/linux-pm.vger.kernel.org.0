@@ -2,192 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9905148959C
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jan 2022 10:48:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55FD748982A
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jan 2022 12:58:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243316AbiAJJss (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Jan 2022 04:48:48 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:52326 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243256AbiAJJsP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jan 2022 04:48:15 -0500
-Received: from mail.kernel.org (unknown [198.145.29.99])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 182CA61230;
-        Mon, 10 Jan 2022 09:48:15 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 462A260E9C;
-        Mon, 10 Jan 2022 09:48:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641808094;
-        bh=U/jYykCwrdRALpOYDLDxmcZRWhrau4yen2V9+zz1eaY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=WgT/Y4vy/KdsI9TRDwQIe92xblAs+f6kWEp5R0/uV4UI727/10wQX7Hq8V5t+wRwJ
-         SvKHON1RYgQz3S3DrKuzhttS8vh9WQjWAFaZs7YBFONpJiicojppE5Kglg3qAcy45n
-         jVQ6PCcIl5f5RfjK72u2X4ac5GXiD4euoGdcx3tcqDBkrAOAyewRUNx3kp+Em1nYNq
-         dViuh3O9ceBk/yGVWu9Gv41QOn3oEh8kzrMFTCBFzxvTxKTwlXdNdyf7fZjIIiUkct
-         74/GC8arGPpAyDHwol46+4i82xMfFHPk9s6AD1nBE+odSHQyO7HwYOow4fOewk0cmI
-         4fWpwQZkdKl8A==
-Received: by earth.universe (Postfix, from userid 1000)
-        id 49CCF3C0CB7; Mon, 10 Jan 2022 10:48:12 +0100 (CET)
-Date:   Mon, 10 Jan 2022 10:48:12 +0100
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: [GIT PULL] power-supply changes for 5.17
-Message-ID: <20220110094812.4rtl2ltyaow7hgla@earth.universe>
+        id S245110AbiAJL6w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Jan 2022 06:58:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55712 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245088AbiAJL6v (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jan 2022 06:58:51 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1B3CC061748
+        for <linux-pm@vger.kernel.org>; Mon, 10 Jan 2022 03:58:50 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id x7so43373833lfu.8
+        for <linux-pm@vger.kernel.org>; Mon, 10 Jan 2022 03:58:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vAXIYuNH/ABiPfxXuFwD6hgcp+PMFzZ1M3jPIGte8RQ=;
+        b=NJ/1KfGQ48zcYiEWUDeXEubmTWTNVNFMx+ELOnyY6J+LpNXaV8IC5nwRla3xErpV/s
+         TD3hTj+tjN5UDqdhhH1Fwv1KeGp+wSi9yu/hUyLr13SBtxex8FCmU0IkQcz4NZA3haNA
+         sskjdqxUaOqcgQl1CXZrfiNtUG4RvqEFEydULZ9huWWhkfyUcuOITbZ/wXmBEgjIMtEe
+         dkjXZE0Bn6DsBearqgyC3xlueG6vynTLnXe8Ymf+I3pkfAVZkNv0dnAWWg1Byc3UYwRA
+         3PefZz7HTTY6TmTTSy5bWJGzXf6+/dtgPJzNuuoh5iIm+mroxAgS/jfW4o1aLrqxU9hN
+         o0EQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vAXIYuNH/ABiPfxXuFwD6hgcp+PMFzZ1M3jPIGte8RQ=;
+        b=wnzaDffNWlN0KnJyjrXBSL+2mvzvwW6pixVSecm82Xm5qsELkuhvsSmplB680umml9
+         fh01Pku45o+55AObgIlaZQwSEfSXdqqzJhb4S1of3K1aIAZJJVOEz0giA5HUQKySSgC9
+         H7zLL6JxArFwTewgRJIPeFwp4/yz+CV6Yxjp09ae1Qzv8ET6oAYzUVW9sWCmrU/+TtxO
+         Ev3aoyj/nFA8UY5RY44DQv+A+ubF0cgWeey2nQTrij/4r+/c3nrEq5lf6qwEES09Xvob
+         1HXa0zJVwixG3bOVUXhlOLzolvtiHvVsva0iaby/FJ1AIiDW74MBzSBV4QG/s93KzV5R
+         J4Uw==
+X-Gm-Message-State: AOAM533Y2xZXLuX0LH6KlZPwokRWyV8rZlsbhw6Is53HZQPw+3WBlfUd
+        Ygod8W4bLINO1nfqSsfxvqvJkYiPG2U86kf6c1yY5Q==
+X-Google-Smtp-Source: ABdhPJyvU0aPWAbZNBBTFMu8lAzaFaDMBdxzeezJqVEtf7JUnEGWH30MbzadfScGxijR2bznfgG5kndzKGGMa/VaCeE=
+X-Received: by 2002:a05:6512:4021:: with SMTP id br33mr4147162lfb.233.1641815928741;
+ Mon, 10 Jan 2022 03:58:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wieyd2kpie6pevce"
-Content-Disposition: inline
+References: <20220107181723.54392-1-paul@crapouillou.net> <20220107181723.54392-2-paul@crapouillou.net>
+In-Reply-To: <20220107181723.54392-2-paul@crapouillou.net>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 10 Jan 2022 12:58:12 +0100
+Message-ID: <CAPDyKFobtZ_WGtbzhHdBRDT4RjQ8M_NXF+FmqXg2ZHTX=Z1frg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/6] PM: core: Remove DEFINE_UNIVERSAL_DEV_PM_OPS() macro
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
+        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Jonathan Cameron <jonathan.cameron@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Fri, 7 Jan 2022 at 19:17, Paul Cercueil <paul@crapouillou.net> wrote:
+>
+> The deprecated UNIVERSAL_DEV_PM_OPS() macro uses the provided callbacks
+> for both runtime PM and system sleep, which is very likely to be a
+> mistake, as a system sleep can be triggered while a given device is
+> already PM-suspended, which would cause the suspend callback to be
+> called twice.
+>
+> The amount of users of UNIVERSAL_DEV_PM_OPS() is also tiny (16
+> occurences) compared to the number of places where
+> SET_SYSTEM_SLEEP_PM_OPS() is used with pm_runtime_force_suspend() and
+> pm_runtime_force_resume(), which makes me think that none of these cases
+> are actually valid.
+>
+> As the new macro DEFINE_UNIVERSAL_DEV_PM_OPS() which was introduced to
+> replace UNIVERSAL_DEV_PM_OPS() is currently unused, remove it before
+> someone starts to use it in yet another invalid case.
+>
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
---wieyd2kpie6pevce
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-Hi Linus,
+Kind regards
+Uffe
 
-In addition to these changes some power-supply core changes will be
-part of the X86 platform drivers pull-request, which contains
-changes to the thinkpad ACPI driver. No merge conflicts have been
-detected in linux-next.
 
--- Sebastian
-
-The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
-
-  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
-
-are available in the Git repository at:
-
-  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v5.17
-
-for you to fetch changes up to 25fd330370ac40653671f323acc7fb6db27ef6fe:
-
-  power: supply_core: Pass pointer to battery info (2022-01-03 18:53:10 +0100)
-
-----------------------------------------------------------------
-power supply and reset changes for the v5.17 series
-
-power-supply core:
- - introduce "No Battery" health status
- - use library interpolation
- - add power_supply_battery_info documentation
- - migrate power_supply_battery_info to be fully heap allocated
-   making it more obvious that it needs to be free'd manually
-
-Drivers:
- - max77976-charger: new driver
- - qcom-smbb: add pm8226 charger support
- - bq25890-charger: support battery temperature readings
- - ab8500: continue migrating towards using standard core APIs
-
-----------------------------------------------------------------
-Angus Ainslie (1):
-      power: bq25890: add POWER_SUPPLY_PROP_TEMP
-
-Christophe JAILLET (1):
-      power: supply: ab8500: Fix the error handling path of ab8500_charger_probe()
-
-David Heidelberg (1):
-      dt-bindings: power: reset: gpio-poweroff: Convert txt bindings to yaml
-
-Jiasheng Jiang (1):
-      power: reset: mt6397: Check for null res pointer
-
-Linus Walleij (19):
-      power: supply: core: Use library interpolation
-      power: supply: core: Add kerneldoc to battery struct
-      power: supply: ab8500: Use core battery parser
-      power: supply: ab8500: Sink current tables into charger code
-      power: supply: ab8500: Standardize operating temperature
-      power: supply: ab8500: Drop unused battery types
-      power: supply: ab8500: Use only one battery type
-      power: supply: ab8500: Standardize design capacity
-      power: supply: ab8500: Standardize technology
-      power: supply: ab8500: Standardize voltages
-      power: supply: ab8500_fg: Init battery data in bind()
-      power: supply: ab8500: Standardize internal resistance
-      power: supply: ab8500: Standardize termination current
-      power: supply: ab8500: Make recharge capacity a constant
-      power: supply: ab8500: Standardize CC current
-      power: supply: ab8500: Standardize CV voltage
-      power: supply: ab8500: Standardize temp res lookup
-      power: supply: ab8500: Standardize capacity lookup
-      power: supply_core: Pass pointer to battery info
-
-Luca Ceresoli (3):
-      dt-bindings: power: supply: add Maxim MAX77976 battery charger
-      power: supply: core: add POWER_SUPPLY_HEALTH_NO_BATTERY
-      power: supply: max77976: add Maxim MAX77976 charger driver
-
-Luca Weiss (2):
-      dt-bindings: power: supply: pm8941-charger: add pm8226
-      power: supply: qcom_smbb: support pm8226
-
- Documentation/ABI/testing/sysfs-class-power        |   2 +-
- .../bindings/power/reset/gpio-poweroff.txt         |  41 --
- .../bindings/power/reset/gpio-poweroff.yaml        |  59 +++
- .../bindings/power/supply/maxim,max77976.yaml      |  44 ++
- .../bindings/power/supply/qcom,pm8941-charger.yaml |   4 +-
- MAINTAINERS                                        |   6 +
- drivers/power/reset/mt6323-poweroff.c              |   3 +
- drivers/power/supply/Kconfig                       |  12 +
- drivers/power/supply/Makefile                      |   1 +
- drivers/power/supply/ab8500-bm.h                   | 123 +----
- drivers/power/supply/ab8500-chargalg.h             |   8 +-
- drivers/power/supply/ab8500_bmdata.c               | 575 +++++----------------
- drivers/power/supply/ab8500_btemp.c                |  65 ++-
- drivers/power/supply/ab8500_chargalg.c             | 315 +++++------
- drivers/power/supply/ab8500_charger.c              | 544 ++++++++++---------
- drivers/power/supply/ab8500_fg.c                   | 373 +++++++------
- drivers/power/supply/axp20x_battery.c              |   6 +-
- drivers/power/supply/bd99954-charger.c             |  24 +-
- drivers/power/supply/bq24190_charger.c             |   6 +-
- drivers/power/supply/bq2515x_charger.c             |   8 +-
- drivers/power/supply/bq256xx_charger.c             |  24 +-
- drivers/power/supply/bq25890_charger.c             |  37 +-
- drivers/power/supply/bq25980_charger.c             |   6 +-
- drivers/power/supply/bq27xxx_battery.c             |  38 +-
- drivers/power/supply/cw2015_battery.c              |  20 +-
- drivers/power/supply/ingenic-battery.c             |  14 +-
- drivers/power/supply/max77976_charger.c            | 509 ++++++++++++++++++
- drivers/power/supply/power_supply_core.c           |  80 +--
- drivers/power/supply/power_supply_sysfs.c          |   1 +
- drivers/power/supply/qcom_smbb.c                   |   5 +-
- drivers/power/supply/sc2731_charger.c              |   8 +-
- drivers/power/supply/sc27xx_fuel_gauge.c           |  22 +-
- drivers/power/supply/smb347-charger.c              |  34 +-
- include/linux/power_supply.h                       | 218 +++++++-
- 34 files changed, 1847 insertions(+), 1388 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/power/reset/gpio-poweroff.txt
- create mode 100644 Documentation/devicetree/bindings/power/reset/gpio-poweroff.yaml
- create mode 100644 Documentation/devicetree/bindings/power/supply/maxim,max77976.yaml
- create mode 100644 drivers/power/supply/max77976_charger.c
-
---wieyd2kpie6pevce
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmHcANQACgkQ2O7X88g7
-+ppciw//cC3ajHnCIxQ+x8belEgEbnIqXKSbUpUxO9mta+jI0V5pDKD7X172g5uo
-+NqUgi5di98YVKvmRsC7BBclOxOwDDyUn7IUm1G3vHgiSHhxYtbO5+1+gWghYMMI
-9etHnqKqu9JKaOsR7/Ay1KbMYA0dPSDMt2LIzIAtq61bgHYDyV5DPA0xxCOWL3mL
-/0pXDUNJNmxzdJuFjtK51ENjG1/L5h4f3aZjYC+mfB36PmtZo7llPnffMmgKdWXK
-bJAkvTOX7RGpx2wjemBANDJmsWO216LTrNGHQhSPZmgNzCYerOuOYcZNer7ll+O3
-vsNPtX2qR2koc3Q/P565L5F5+R5k+cZ+DAFR/SBGTPBAkBmZDtFDtwVLVBrcUXER
-BvrXUTFnJWAzOOAYdkBf3LcWKUIRAdaAoUPf85vz+xXTf187VHYjoPUsHoicViuP
-DSmiuH1PDa2vWxHo+TP9Hinrf4tcFYYcxirsZ5SLVsQeTeIMD2gzQtDOV1bINdS5
-itIW2yYPv9Lnl0HtoUInvS6LMgINU3csxfrGCl0d2iWuHoGa7QFH+BizUaUfGCEN
-FwktUEcfm+ZP5Cx/yv+/QLCN/ibYqBAM7oTNc52md02N+C5L8QB8ewPCIaoZz13h
-qe16zqcUBKU5FLYlJ6cNZdFNFCsOw6E+o4pup1UXI9GZTqeZdjk=
-=eclG
------END PGP SIGNATURE-----
-
---wieyd2kpie6pevce--
+> ---
+>
+> Notes:
+>     v2: No change
+>     v3: - Keep UNIVERSAL_DEV_PM_OPS deprecated
+>         - Rework commit message
+>
+>  include/linux/pm.h | 21 ++++++++-------------
+>  1 file changed, 8 insertions(+), 13 deletions(-)
+>
+> diff --git a/include/linux/pm.h b/include/linux/pm.h
+> index e1e9402180b9..02f059d814bb 100644
+> --- a/include/linux/pm.h
+> +++ b/include/linux/pm.h
+> @@ -366,6 +366,12 @@ static const struct dev_pm_ops name = { \
+>         SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+>  }
+>
+> +/* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
+> +#define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+> +const struct dev_pm_ops __maybe_unused name = { \
+> +       SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+> +}
+> +
+>  /*
+>   * Use this for defining a set of PM operations to be used in all situations
+>   * (system suspend, hibernation or runtime PM).
+> @@ -378,20 +384,9 @@ static const struct dev_pm_ops name = { \
+>   * suspend and "early" resume callback pointers, .suspend_late() and
+>   * .resume_early(), to the same routines as .runtime_suspend() and
+>   * .runtime_resume(), respectively (and analogously for hibernation).
+> + *
+> + * Deprecated. You most likely don't want this macro.
+>   */
+> -#define DEFINE_UNIVERSAL_DEV_PM_OPS(name, suspend_fn, resume_fn, idle_fn) \
+> -static const struct dev_pm_ops name = { \
+> -       SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+> -       RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn) \
+> -}
+> -
+> -/* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
+> -#define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+> -const struct dev_pm_ops __maybe_unused name = { \
+> -       SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+> -}
+> -
+> -/* Deprecated. Use DEFINE_UNIVERSAL_DEV_PM_OPS() instead. */
+>  #define UNIVERSAL_DEV_PM_OPS(name, suspend_fn, resume_fn, idle_fn) \
+>  const struct dev_pm_ops __maybe_unused name = { \
+>         SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+> --
+> 2.34.1
+>
