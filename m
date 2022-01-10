@@ -2,120 +2,192 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD01C488B81
-	for <lists+linux-pm@lfdr.de>; Sun,  9 Jan 2022 19:11:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9905148959C
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jan 2022 10:48:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236366AbiAISLu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 9 Jan 2022 13:11:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43890 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234535AbiAISLu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 9 Jan 2022 13:11:50 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF76FC06173F;
-        Sun,  9 Jan 2022 10:11:49 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id pf13so2922817pjb.0;
-        Sun, 09 Jan 2022 10:11:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version:reply-to
-         :organization:content-transfer-encoding;
-        bh=tNvI+a7A8PS5Wd2PToIgDMYPiKE2u7O11qPaKJfdtO8=;
-        b=hFx4PqOcNZK5MuhbcALaswLAWpYR63pmyKMyh3S1r4Dkx2YT9LsxaoSfGDgGTqktAB
-         izsb8drDwggw5idyFf8BE9Yx6Z/c8yjegszok9iAO31xvjdvQgHKJPMkB+bmVambspHc
-         edGrF9kxxltrQOgWkEx4t/iW9GCDaq7dIKgswpbPRWCAnZ3e+wq4b9erEaNphdtClGFP
-         uZZSLB2zsU2s67S2/TBCfDocJUGkJLfaSbNvoI0sbpD1OTkK8103AhbEPjYs4TdsIkw/
-         lzzlNlbbb09ddQ87s3T0ZlaaIxY6wZreQrPPhkVmmMJNYgUWceNQJA0ElerW1/m3Inwe
-         q+PQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:reply-to:organization:content-transfer-encoding;
-        bh=tNvI+a7A8PS5Wd2PToIgDMYPiKE2u7O11qPaKJfdtO8=;
-        b=4Pjgb3CPlWtVXA4QwXi1vZnFqUH3BgRvt+Fq9p7YnCVs+qiTeX4DEPZpaOKXO2OUeo
-         r/6psmJP6KsB+qtowYLXwGo8mGaFKQAc+z+huW0o3jtH7xLUAJMPMvKYkpaJOOdcOUuL
-         mJUfIEyCy8rRLxFMR4ThCJoZQGojTOvjgvmiELIHlXt27Vdo3lo2AsPTJHekajP5jRui
-         5TpOrH9mIMKRrtEqEUYcED1IqAnsNvxDqMbnT4ih8Zxq1r6m0LEHaAH5+FOcgrjlPTAQ
-         2LXbUD4RHgYrtR07UyVIH7STwLW04YOO13+GDR8Jh15o7K5wH6PT0F0BHyyJuYBeN1sp
-         cmFg==
-X-Gm-Message-State: AOAM532XbhxYf1awFYQ4UVXWe1u3BOiUgLWZ6Jq3L9Km89PNG2PVmcBb
-        SKt5oIYsyqXMPVPL1sBBLi6D7O0jOgRijg==
-X-Google-Smtp-Source: ABdhPJyh8djCs5KBhtHmWvs+w17xnphZd7/tx119erntsFX9510Pj8MdMJrgE3jzC2Hewn4vcst2iQ==
-X-Received: by 2002:a17:90b:4c11:: with SMTP id na17mr27193063pjb.84.1641751909234;
-        Sun, 09 Jan 2022 10:11:49 -0800 (PST)
-Received: from localhost.localdomain (h69-131-29-103.cntcnh.broadband.dynamic.tds.net. [69.131.29.103])
-        by smtp.gmail.com with ESMTPSA id j4sm4372827pfj.34.2022.01.09.10.11.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Jan 2022 10:11:48 -0800 (PST)
-Sender: Len Brown <lenb417@gmail.com>
-From:   Len Brown <lenb@kernel.org>
-To:     torvalds@linux-foundation.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Len Brown <len.brown@intel.com>,
-        Guchun Chen <guchun.chen@amd.com>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        stable@vger.kernel.org
-Subject: [PATCH REGRESSION] Revert "drm/amdgpu: stop scheduler when calling hw_fini (v2)"
-Date:   Sun,  9 Jan 2022 13:11:37 -0500
-Message-Id: <8ab406c8bb2e58969668a806a529d5988b447530.1641750730.git.len.brown@intel.com>
-X-Mailer: git-send-email 2.25.1
+        id S243316AbiAJJss (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Jan 2022 04:48:48 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:52326 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243256AbiAJJsP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jan 2022 04:48:15 -0500
+Received: from mail.kernel.org (unknown [198.145.29.99])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 182CA61230;
+        Mon, 10 Jan 2022 09:48:15 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 462A260E9C;
+        Mon, 10 Jan 2022 09:48:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641808094;
+        bh=U/jYykCwrdRALpOYDLDxmcZRWhrau4yen2V9+zz1eaY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=WgT/Y4vy/KdsI9TRDwQIe92xblAs+f6kWEp5R0/uV4UI727/10wQX7Hq8V5t+wRwJ
+         SvKHON1RYgQz3S3DrKuzhttS8vh9WQjWAFaZs7YBFONpJiicojppE5Kglg3qAcy45n
+         jVQ6PCcIl5f5RfjK72u2X4ac5GXiD4euoGdcx3tcqDBkrAOAyewRUNx3kp+Em1nYNq
+         dViuh3O9ceBk/yGVWu9Gv41QOn3oEh8kzrMFTCBFzxvTxKTwlXdNdyf7fZjIIiUkct
+         74/GC8arGPpAyDHwol46+4i82xMfFHPk9s6AD1nBE+odSHQyO7HwYOow4fOewk0cmI
+         4fWpwQZkdKl8A==
+Received: by earth.universe (Postfix, from userid 1000)
+        id 49CCF3C0CB7; Mon, 10 Jan 2022 10:48:12 +0100 (CET)
+Date:   Mon, 10 Jan 2022 10:48:12 +0100
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: [GIT PULL] power-supply changes for 5.17
+Message-ID: <20220110094812.4rtl2ltyaow7hgla@earth.universe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Reply-To: Len Brown <lenb@kernel.org>
-Organization: Intel Open Source Technology Center
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="wieyd2kpie6pevce"
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Len Brown <len.brown@intel.com>
 
-This reverts commit f7d6779df642720e22bffd449e683bb8690bd3bf.
+--wieyd2kpie6pevce
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-This bisected regression has impacted suspend-resume stability
-since 5.15-rc1. It regressed -stable via 5.14.10.
+Hi Linus,
 
-https://bugzilla.kernel.org/show_bug.cgi?id=215315
+In addition to these changes some power-supply core changes will be
+part of the X86 platform drivers pull-request, which contains
+changes to the thinkpad ACPI driver. No merge conflicts have been
+detected in linux-next.
 
-Fixes: f7d6779df64 ("drm/amdgpu: stop scheduler when calling hw_fini (v2)")
-Cc: Guchun Chen <guchun.chen@amd.com>
-Cc: Andrey Grodzovsky <andrey.grodzovsky@amd.com>
-Cc: Christian Koenig <christian.koenig@amd.com>
-Cc: Alex Deucher <alexander.deucher@amd.com>
-Cc: <stable@vger.kernel.org> # 5.14+
-Signed-off-by: Len Brown <len.brown@intel.com>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c | 8 --------
- 1 file changed, 8 deletions(-)
+-- Sebastian
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
-index 9afd11ca2709..45977a72b5dd 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
-@@ -547,9 +547,6 @@ void amdgpu_fence_driver_hw_fini(struct amdgpu_device *adev)
- 		if (!ring || !ring->fence_drv.initialized)
- 			continue;
- 
--		if (!ring->no_scheduler)
--			drm_sched_stop(&ring->sched, NULL);
--
- 		/* You can't wait for HW to signal if it's gone */
- 		if (!drm_dev_is_unplugged(adev_to_drm(adev)))
- 			r = amdgpu_fence_wait_empty(ring);
-@@ -609,11 +606,6 @@ void amdgpu_fence_driver_hw_init(struct amdgpu_device *adev)
- 		if (!ring || !ring->fence_drv.initialized)
- 			continue;
- 
--		if (!ring->no_scheduler) {
--			drm_sched_resubmit_jobs(&ring->sched);
--			drm_sched_start(&ring->sched, true);
--		}
--
- 		/* enable the interrupt */
- 		if (ring->fence_drv.irq_src)
- 			amdgpu_irq_get(adev, ring->fence_drv.irq_src,
--- 
-2.25.1
+The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
 
+  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+
+are available in the Git repository at:
+
+  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v5.17
+
+for you to fetch changes up to 25fd330370ac40653671f323acc7fb6db27ef6fe:
+
+  power: supply_core: Pass pointer to battery info (2022-01-03 18:53:10 +0100)
+
+----------------------------------------------------------------
+power supply and reset changes for the v5.17 series
+
+power-supply core:
+ - introduce "No Battery" health status
+ - use library interpolation
+ - add power_supply_battery_info documentation
+ - migrate power_supply_battery_info to be fully heap allocated
+   making it more obvious that it needs to be free'd manually
+
+Drivers:
+ - max77976-charger: new driver
+ - qcom-smbb: add pm8226 charger support
+ - bq25890-charger: support battery temperature readings
+ - ab8500: continue migrating towards using standard core APIs
+
+----------------------------------------------------------------
+Angus Ainslie (1):
+      power: bq25890: add POWER_SUPPLY_PROP_TEMP
+
+Christophe JAILLET (1):
+      power: supply: ab8500: Fix the error handling path of ab8500_charger_probe()
+
+David Heidelberg (1):
+      dt-bindings: power: reset: gpio-poweroff: Convert txt bindings to yaml
+
+Jiasheng Jiang (1):
+      power: reset: mt6397: Check for null res pointer
+
+Linus Walleij (19):
+      power: supply: core: Use library interpolation
+      power: supply: core: Add kerneldoc to battery struct
+      power: supply: ab8500: Use core battery parser
+      power: supply: ab8500: Sink current tables into charger code
+      power: supply: ab8500: Standardize operating temperature
+      power: supply: ab8500: Drop unused battery types
+      power: supply: ab8500: Use only one battery type
+      power: supply: ab8500: Standardize design capacity
+      power: supply: ab8500: Standardize technology
+      power: supply: ab8500: Standardize voltages
+      power: supply: ab8500_fg: Init battery data in bind()
+      power: supply: ab8500: Standardize internal resistance
+      power: supply: ab8500: Standardize termination current
+      power: supply: ab8500: Make recharge capacity a constant
+      power: supply: ab8500: Standardize CC current
+      power: supply: ab8500: Standardize CV voltage
+      power: supply: ab8500: Standardize temp res lookup
+      power: supply: ab8500: Standardize capacity lookup
+      power: supply_core: Pass pointer to battery info
+
+Luca Ceresoli (3):
+      dt-bindings: power: supply: add Maxim MAX77976 battery charger
+      power: supply: core: add POWER_SUPPLY_HEALTH_NO_BATTERY
+      power: supply: max77976: add Maxim MAX77976 charger driver
+
+Luca Weiss (2):
+      dt-bindings: power: supply: pm8941-charger: add pm8226
+      power: supply: qcom_smbb: support pm8226
+
+ Documentation/ABI/testing/sysfs-class-power        |   2 +-
+ .../bindings/power/reset/gpio-poweroff.txt         |  41 --
+ .../bindings/power/reset/gpio-poweroff.yaml        |  59 +++
+ .../bindings/power/supply/maxim,max77976.yaml      |  44 ++
+ .../bindings/power/supply/qcom,pm8941-charger.yaml |   4 +-
+ MAINTAINERS                                        |   6 +
+ drivers/power/reset/mt6323-poweroff.c              |   3 +
+ drivers/power/supply/Kconfig                       |  12 +
+ drivers/power/supply/Makefile                      |   1 +
+ drivers/power/supply/ab8500-bm.h                   | 123 +----
+ drivers/power/supply/ab8500-chargalg.h             |   8 +-
+ drivers/power/supply/ab8500_bmdata.c               | 575 +++++----------------
+ drivers/power/supply/ab8500_btemp.c                |  65 ++-
+ drivers/power/supply/ab8500_chargalg.c             | 315 +++++------
+ drivers/power/supply/ab8500_charger.c              | 544 ++++++++++---------
+ drivers/power/supply/ab8500_fg.c                   | 373 +++++++------
+ drivers/power/supply/axp20x_battery.c              |   6 +-
+ drivers/power/supply/bd99954-charger.c             |  24 +-
+ drivers/power/supply/bq24190_charger.c             |   6 +-
+ drivers/power/supply/bq2515x_charger.c             |   8 +-
+ drivers/power/supply/bq256xx_charger.c             |  24 +-
+ drivers/power/supply/bq25890_charger.c             |  37 +-
+ drivers/power/supply/bq25980_charger.c             |   6 +-
+ drivers/power/supply/bq27xxx_battery.c             |  38 +-
+ drivers/power/supply/cw2015_battery.c              |  20 +-
+ drivers/power/supply/ingenic-battery.c             |  14 +-
+ drivers/power/supply/max77976_charger.c            | 509 ++++++++++++++++++
+ drivers/power/supply/power_supply_core.c           |  80 +--
+ drivers/power/supply/power_supply_sysfs.c          |   1 +
+ drivers/power/supply/qcom_smbb.c                   |   5 +-
+ drivers/power/supply/sc2731_charger.c              |   8 +-
+ drivers/power/supply/sc27xx_fuel_gauge.c           |  22 +-
+ drivers/power/supply/smb347-charger.c              |  34 +-
+ include/linux/power_supply.h                       | 218 +++++++-
+ 34 files changed, 1847 insertions(+), 1388 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/power/reset/gpio-poweroff.txt
+ create mode 100644 Documentation/devicetree/bindings/power/reset/gpio-poweroff.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/supply/maxim,max77976.yaml
+ create mode 100644 drivers/power/supply/max77976_charger.c
+
+--wieyd2kpie6pevce
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmHcANQACgkQ2O7X88g7
++ppciw//cC3ajHnCIxQ+x8belEgEbnIqXKSbUpUxO9mta+jI0V5pDKD7X172g5uo
++NqUgi5di98YVKvmRsC7BBclOxOwDDyUn7IUm1G3vHgiSHhxYtbO5+1+gWghYMMI
+9etHnqKqu9JKaOsR7/Ay1KbMYA0dPSDMt2LIzIAtq61bgHYDyV5DPA0xxCOWL3mL
+/0pXDUNJNmxzdJuFjtK51ENjG1/L5h4f3aZjYC+mfB36PmtZo7llPnffMmgKdWXK
+bJAkvTOX7RGpx2wjemBANDJmsWO216LTrNGHQhSPZmgNzCYerOuOYcZNer7ll+O3
+vsNPtX2qR2koc3Q/P565L5F5+R5k+cZ+DAFR/SBGTPBAkBmZDtFDtwVLVBrcUXER
+BvrXUTFnJWAzOOAYdkBf3LcWKUIRAdaAoUPf85vz+xXTf187VHYjoPUsHoicViuP
+DSmiuH1PDa2vWxHo+TP9Hinrf4tcFYYcxirsZ5SLVsQeTeIMD2gzQtDOV1bINdS5
+itIW2yYPv9Lnl0HtoUInvS6LMgINU3csxfrGCl0d2iWuHoGa7QFH+BizUaUfGCEN
+FwktUEcfm+ZP5Cx/yv+/QLCN/ibYqBAM7oTNc52md02N+C5L8QB8ewPCIaoZz13h
+qe16zqcUBKU5FLYlJ6cNZdFNFCsOw6E+o4pup1UXI9GZTqeZdjk=
+=eclG
+-----END PGP SIGNATURE-----
+
+--wieyd2kpie6pevce--
