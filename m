@@ -2,135 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 025A348A008
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jan 2022 20:20:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4F5248A04D
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jan 2022 20:43:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242224AbiAJTUL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Jan 2022 14:20:11 -0500
-Received: from mail-qk1-f176.google.com ([209.85.222.176]:42797 "EHLO
-        mail-qk1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232564AbiAJTUL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jan 2022 14:20:11 -0500
-Received: by mail-qk1-f176.google.com with SMTP id r139so16011377qke.9;
-        Mon, 10 Jan 2022 11:20:10 -0800 (PST)
+        id S242516AbiAJTnB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Jan 2022 14:43:01 -0500
+Received: from mail-ot1-f48.google.com ([209.85.210.48]:42668 "EHLO
+        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241122AbiAJTnA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jan 2022 14:43:00 -0500
+Received: by mail-ot1-f48.google.com with SMTP id s8-20020a0568301e0800b00590a1c8cc08so10267442otr.9;
+        Mon, 10 Jan 2022 11:43:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=jUoXBd6z9wk2qe8u5czH7CyiQQ+GhCQjBmZrqwoF4XU=;
-        b=p3HwsmwRxxEMzGjz9M54ctxGTAlt0cexLNc66wu44wyNMn8cetSEyM2L0drVulUL8c
-         f1JjSo1Wthq11BBdva5gI34JEi9ym3mlL+7B/7eVMn//olSHTdP2O9PVC06+Cbwd691M
-         H+tsFLbkfBIkl0KNehg/NkHZuJU5kjJ3nLHAJmT9ByjtdwJGao228W7IEWwATaI4WI4x
-         dAtIBg8UP25Ld8kyzvL0YsNuhx58wkafzcBOwYcncW4RvOpTSZ2GQjdhjvaWezde3C0I
-         FHyaLKaUhwhC8P97KSkecsGRrrnWcejvZDraSlFPE5EQMnmGL4pKOnFSRK/s/84gBpeQ
-         bZxw==
-X-Gm-Message-State: AOAM533+Pj9vjSqoUgB3YngB9n1VEsp/Rp1Cb7Ujp4UA/KeabDVaSEk3
-        DBHI8Eag0bJ6yvvTmZhSF7x03ron7PkWCZqoPiCrWltT0a4=
-X-Google-Smtp-Source: ABdhPJxe2HhGRJK0Qtq+8L2smLhXaYFNGLLQS7atQO8Wp9gtytLpd7FVdrCSal4rUN5h+cXbioSf+ir8ebknuoWsXtE=
-X-Received: by 2002:a37:b702:: with SMTP id h2mr887819qkf.135.1641842410354;
- Mon, 10 Jan 2022 11:20:10 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Zqf0lxpyDYLolwCzW0Am7zZh3ipLNoodALoA+Vyy/ss=;
+        b=Nte+c9bq0613ai6P2Y01wykEaRCrP1pza6XLJZn+FjcWW6nDZzr+afEY8nNMtKAitH
+         atE5C1aUrHIAauPNg+ZMt1cM0CFBtpoQTJLJIgXkGWqq6zWZqWyvGTwL6fd3E/hUqe/P
+         uhNV/pvDFdiXerYFl4tubj6d21N+mxjpRVKGcLkT1uBD5xIoHqQMVSp5JGvZBuOyORee
+         VUgr4gEM9R9J4VPR+FlI6XxC3Y3YGc7ZJIZDV7yhS0j0mwRa26l1ofXlkQVR3ZGzHEK5
+         serKoHyUvyE1lCLkXZ+3uqrkia/FJ0GmImIJoWFCgZdYeExIPGuL9Y+NfKeXFf8Zeh64
+         SCfw==
+X-Gm-Message-State: AOAM5310THiWOPN77EFhC8wJADidqIL6qddC9WBn4bMfjDvhHuOA73JR
+        bOCu9I4Dkl+8kx02T0dUZw==
+X-Google-Smtp-Source: ABdhPJwZZM/nBMXdZxSNDa4Ao9zfBXyZJPsBbveh8wtTfVIVHDzuVjXD27OR+WFOiziYyxzYYiQklQ==
+X-Received: by 2002:a05:6830:2710:: with SMTP id j16mr1046953otu.257.1641843779989;
+        Mon, 10 Jan 2022 11:42:59 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id o11sm1337836oiv.10.2022.01.10.11.42.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jan 2022 11:42:59 -0800 (PST)
+Received: (nullmailer pid 1371958 invoked by uid 1000);
+        Mon, 10 Jan 2022 19:42:58 -0000
+Date:   Mon, 10 Jan 2022 13:42:58 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>, devicetree@vger.kernel.org,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>
+Subject: Re: [PATCH 2/4] dt-bindings: power: supply: maxim,max14577: convert
+ to dtschema
+Message-ID: <YdyMQiRRooFgjfyo@robh.at.kernel.org>
+References: <20211229141524.34174-1-krzysztof.kozlowski@canonical.com>
+ <20211229141524.34174-3-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 10 Jan 2022 20:19:59 +0100
-Message-ID: <CAJZ5v0ipPn6up69zcR9RAS-=pPFwjpmEri680jgh8EtOP_A1+g@mail.gmail.com>
-Subject: [GIT PULL] Thermal control updates for v5.17-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211229141524.34174-3-krzysztof.kozlowski@canonical.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Linus,
+On Wed, 29 Dec 2021 15:15:22 +0100, Krzysztof Kozlowski wrote:
+> Convert the Charger bindings of Maxim MAX14577/MAX77836 MUIC to DT
+> schema format.  The existing bindings were defined in
+> ../bindings/mfd/max14577.txt.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
+>  .../bindings/power/supply/maxim,max14577.yaml | 84 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 85 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/maxim,max14577.yaml
+> 
 
-Please pull from the tag
-
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- thermal-5.17-rc1
-
-with top-most commit fff489ff0722bec127a05667bec00ea45cf9f77e
-
- Merge branch 'thermal-int340x'
-
-on top of commit f872f73601b92c86f3da8bdf3e19abd0f1780eb9
-
- thermal: int340x: Fix VCoRefLow MMIO bit offset for TGL
-
-to receive thermal control updates for 5.17-rc1.
-
-These add a new driver for Renesas RZ/G2L TSU, update a few existing
-thermal control drivers and clean up the tmon utility.
-
-Specifics:
-
- - Add new TSU driver and DT bindings for the Renesas RZ/G2L platform
-   (Biju Das).
-
- - Fix missing check when calling reset_control_deassert() in the
-   rz2gl thermal driver (Biju Das).
-
- - In preparation for FORTIFY_SOURCE performing compile-time and
-   run-time field bounds checking for memcpy(), avoid intentionally
-   writing across neighboring fields in the int340x thermal control
-   driver (Kees Cook).
-
- - Fix RFIM mailbox write commands handling in the int340x thermal
-   control driver (Sumeet Pawnikar).
-
- - Fix PM issue occurring in the iMX thermal control driver during
-   suspend/resume by implementing PM runtime support in it (Oleksij
-   Rempel).
-
- - Add 'const' annotation to thermal_cooling_ops in the Intel
-   powerclamp driver (Rikard Falkeborn).
-
- - Fix missing ADC bit set in the iMX8MP thermal driver to enable the
-   sensor (Paul Gerber).
-
- - Drop unused local variable definition from tmon (ran jianping).
-
-Thanks!
-
-
----------------
-
-Biju Das (3):
-      dt-bindings: thermal: Document Renesas RZ/G2L TSU
-      thermal/drivers: Add TSU driver for RZ/G2L
-      thermal/drivers/rz2gl: Add error check for reset_control_deassert()
-
-Kees Cook (1):
-      thermal: int340x: Use struct_group() for memcpy() region
-
-Oleksij Rempel (1):
-      thermal/drivers/imx: Implement runtime PM support
-
-Paul Gerber (1):
-      thermal/drivers/imx8mm: Enable ADC when enabling monitor
-
-Rikard Falkeborn (1):
-      thermal/drivers/intel_powerclamp: Constify static
-thermal_cooling_device_ops
-
-Sumeet Pawnikar (1):
-      thermal/drivers/int340x: Fix RFIM mailbox write commands
-
-ran jianping (1):
-      thermal: tools: tmon: remove unneeded local variable
-
----------------
-
- .../devicetree/bindings/thermal/rzg2l-thermal.yaml |  76 +++++++
- drivers/thermal/Kconfig                            |   9 +
- drivers/thermal/Makefile                           |   1 +
- drivers/thermal/imx8mm_thermal.c                   |   3 +
- drivers/thermal/imx_thermal.c                      | 145 +++++++-----
- .../intel/int340x_thermal/acpi_thermal_rel.c       |   5 +-
- .../intel/int340x_thermal/acpi_thermal_rel.h       |  48 ++--
- .../int340x_thermal/processor_thermal_device.h     |   3 +-
- .../intel/int340x_thermal/processor_thermal_mbox.c | 100 +++++----
- .../intel/int340x_thermal/processor_thermal_rfim.c |  23 +-
- drivers/thermal/intel/intel_powerclamp.c           |   2 +-
- drivers/thermal/rzg2l_thermal.c                    | 242 +++++++++++++++++++++
- tools/thermal/tmon/pid.c                           |   3 +-
- 13 files changed, 526 insertions(+), 134 deletions(-)
+Reviewed-by: Rob Herring <robh@kernel.org>
