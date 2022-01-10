@@ -2,85 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DABD248A100
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jan 2022 21:38:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4870D48A112
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jan 2022 21:46:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240408AbiAJUih (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Jan 2022 15:38:37 -0500
-Received: from mail-oi1-f171.google.com ([209.85.167.171]:36779 "EHLO
-        mail-oi1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240414AbiAJUig (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jan 2022 15:38:36 -0500
-Received: by mail-oi1-f171.google.com with SMTP id w200so4974197oiw.3;
-        Mon, 10 Jan 2022 12:38:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6Zoh6wMeFyB1q/b0sOtK3LGYITSgUJ3C/NH6A9juBU8=;
-        b=2/TCz1a8gFj7Hl+VKEAk3+ygA3OijGgxweVW6WEtL+fRCH+dZtm/6KQjLDQGZBpKS0
-         PFZGYVoQxb4ahs9XQyik1r2q23fYByytwD7sKrVupA5w+yVw+//y07oZQlG4b6ulU3YR
-         oT09G7PuiTm4kKXkks2WlxnQH/RmSxbDbRr553RGVbMtHTE49gh+3/0P305fuuYPHq6j
-         zFh2UfuhVhjp7m7EtMfct8x9wiG+HPYUkRcdj5EmfQBZUdYzcocYgBD6LbUqPnPEwQaU
-         +4Hsx6mq9jgnpPl0zgQ77ZWc0FGpnQo1765DPp/vH7oazuah9lJhOAoGB2JgqmCoebNp
-         enFw==
-X-Gm-Message-State: AOAM532FgBeiqkv3Zx/cPQ5bo+Eh/tIzW6PjRhUos4W8q8rs8PFmInoX
-        CemVCaexwojOr7U6kNm3qhPFrsasuQ==
-X-Google-Smtp-Source: ABdhPJyULNftbUFRzV9LVVc0fFSefRzoxas66hryFyp7dRXGYLZwHT9vmZdYKwCbidU/QHSgGmAcQQ==
-X-Received: by 2002:a05:6808:f04:: with SMTP id m4mr15738041oiw.123.1641847116040;
-        Mon, 10 Jan 2022 12:38:36 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id l1sm1648514oti.51.2022.01.10.12.38.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 12:38:35 -0800 (PST)
-Received: (nullmailer pid 1464106 invoked by uid 1000);
-        Mon, 10 Jan 2022 20:38:34 -0000
-Date:   Mon, 10 Jan 2022 14:38:34 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Sander Vanheule <sander@svanheule.net>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        Sebastian Reichel <sre@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v1 2/3] dt-bindings: power: reset: gpio-restart: Add
- -ms suffix to delays
-Message-ID: <YdyZSu4eoYuKQvx1@robh.at.kernel.org>
-References: <cover.1640887456.git.sander@svanheule.net>
- <35e4da34fb7e18ea7e3af2405db4c5a2a7ba2dfe.1640887456.git.sander@svanheule.net>
+        id S240052AbiAJUqD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Jan 2022 15:46:03 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:57089 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239763AbiAJUqD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jan 2022 15:46:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1641847563; x=1673383563;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=o66mVFYLBPliOYwGmHmc8WSTm1KLBStmLgLNs0rcxw4=;
+  b=KfvpGt4x6BULEsNu0kLEGlZyb+/VZRItN2WS0CdWFnnpn9rA4Tbca1Dl
+   baiM/ceqMoKWT8PPzrR26ibPLZKz2wYnRBbBkpph+jeyn/ayzDRdLSfXI
+   iJd2nt6KguWq2BaIOTd3GuPhzWSRdRMCIXQL6XyqKOxycZKanNqNJJAsx
+   Y=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 10 Jan 2022 12:46:03 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 12:46:02 -0800
+Received: from nalasex01c.na.qualcomm.com (10.47.97.35) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Mon, 10 Jan 2022 12:46:01 -0800
+Received: from [10.216.6.1] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 10 Jan
+ 2022 12:45:56 -0800
+Message-ID: <7c29c833-b558-f0ab-83ab-08371785ffd1@quicinc.com>
+Date:   Tue, 11 Jan 2022 02:15:51 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <35e4da34fb7e18ea7e3af2405db4c5a2a7ba2dfe.1640887456.git.sander@svanheule.net>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v3] thermal/core: Clear all mitigation when thermal zone
+ is disabled
+To:     Thara Gopinath <thara.gopinath@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Amit Kucheria" <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        "Matthias Kaehlcke" <mka@chromium.org>, <thara.gopinath@gmail.com>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1641581806-32550-1-git-send-email-quic_manafm@quicinc.com>
+ <cf34f77e-587b-7f97-619f-dcbf431332ff@linaro.org>
+From:   Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+In-Reply-To: <cf34f77e-587b-7f97-619f-dcbf431332ff@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Dec 30, 2021 at 07:06:02PM +0100, Sander Vanheule wrote:
-> The delay properties are expressed in milliseconds, so the property
-> names should have a -ms suffix. Add the suffix, and deprecate the
-> original properties.
-> 
-> Signed-off-by: Sander Vanheule <sander@svanheule.net>
-> ---
->  .../bindings/power/reset/gpio-restart.yaml    | 27 ++++++++++++-------
->  1 file changed, 18 insertions(+), 9 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/power/reset/gpio-restart.yaml b/Documentation/devicetree/bindings/power/reset/gpio-restart.yaml
-> index 6a1f4aeebf49..13827fe7b395 100644
-> --- a/Documentation/devicetree/bindings/power/reset/gpio-restart.yaml
-> +++ b/Documentation/devicetree/bindings/power/reset/gpio-restart.yaml
-> @@ -62,17 +62,26 @@ properties:
->              restart handlers
->  
->    active-delay:
-> -    $ref: /schemas/types.yaml#/definitions/uint32
-> -    description: Delay (default 100) to wait after driving gpio active [ms]
-> +    $ref: '#/properties/active-delay-ms'
+Hi Thara,
 
-While 'active-delay-ms' has a type because '.*-ms' has a type, you just 
-removed the type for this property. Now 'active-delay = "foo"' is valid.
+On 1/10/2022 11:25 PM, Thara Gopinath wrote:
+> Hi Manaf,
+>
+> On 1/7/22 1:56 PM, Manaf Meethalavalappu Pallikunhi wrote:
+>> Whenever a thermal zone is in trip violated state, there is a chance
+>> that the same thermal zone mode can be disabled either via thermal
+>> core API or via thermal zone sysfs. Once it is disabled, the framework
+>> bails out any re-evaluation of thermal zone. It leads to a case where
+>> if it is already in mitigation state, it will stay the same state
+>> until it is re-enabled.
+>>
+>> To avoid above mentioned issue, on thermal zone disable request
+>> reset thermal zone and clear mitigation for each trip explicitly.
+>>
+>> Signed-off-by: Manaf Meethalavalappu Pallikunhi 
+>> <quic_manafm@quicinc.com>
+>> ---
+>>   drivers/thermal/thermal_core.c | 12 ++++++++++--
+>>   1 file changed, 10 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/thermal/thermal_core.c 
+>> b/drivers/thermal/thermal_core.c
+>> index 51374f4..e288c82 100644
+>> --- a/drivers/thermal/thermal_core.c
+>> +++ b/drivers/thermal/thermal_core.c
+>> @@ -447,10 +447,18 @@ static int thermal_zone_device_set_mode(struct 
+>> thermal_zone_device *tz,
+>>         thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
+>>   -    if (mode == THERMAL_DEVICE_ENABLED)
+>> +    if (mode == THERMAL_DEVICE_ENABLED) {
+>>           thermal_notify_tz_enable(tz->id);
+>> -    else
+>> +    } else {
+>> +        int trip;
+>> +
+>> +        /* make sure all previous throttlings are cleared */
+>> +        thermal_zone_device_init(tz);
+>
+> It looks weird to do a init when you are actually disabling the 
+> thermal zone.
+>
+>
+>> +        for (trip = 0; trip < tz->trips; trip++)
+>> +            handle_thermal_trip(tz, trip);
+>
+> So this is exactly what thermal_zone_device_update does except that 
+> thermal_zone_device_update checks for the mode and bails out if the 
+> zone is disabled.
+> This will work because as you explained in v2, the temperature is 
+> reset in thermal_zone_device_init and handle_thermal_trip will remove 
+> the mitigation if any.
+>
+> My two cents here (Rafael and Daniel can comment more on this).
+>
+> I think it will be cleaner if we can have a third mode 
+> THERMAL_DEVICE_DISABLING and have thermal_zone_device_update handle 
+> clearing the mitigation. So this will look like
+> if (mode == THERMAL_DEVICE_DISABLED)
+>     tz->mode = THERMAL_DEVICE_DISABLING;
+> else
+>     tz->mode = mode;
+>
+> thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
+>
+> if (mode == THERMAL_DEVICE_DISABLED)
+>     tz->mode = mode;
+>
+> You will have to update update_temperature to set tz->temperature = 
+> THERMAL_TEMP_INVALID and thermal_zone_set_trips to set 
+> tz->prev_low_trip = -INT_MAX and tz->prev_high_trip = INT_MAX for
+> THERMAL_DEVICE_DISABLING mode.
 
-While it would be nice to change this, we're pretty much stuck with it 
-forever. I don't think supporting both versions in the kernel is worth 
-it.
+I think just updating above fields doesn't guarantee complete clearing 
+of mitigation for all governors. For  step_wise governor, to make sure 
+mitigation removed completely, we have to set each 
+thermal-instance->initialized = false as well.
 
-Rob
+If we add that to above list of variables in update_temperature() under 
+if (mode == THERMAL_DEVICE_DISABLING) , it is same as 
+thermal_zone_device_init function does in current patch. We are just 
+resetting same fields in different place under a new mode, right ?
+
+Thanks,
+
+Manaf
+
