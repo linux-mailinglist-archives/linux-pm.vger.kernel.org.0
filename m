@@ -2,82 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96B60489CBB
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jan 2022 16:51:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32203489CD8
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jan 2022 16:55:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236655AbiAJPvB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Jan 2022 10:51:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53118 "EHLO
+        id S236701AbiAJPzg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Jan 2022 10:55:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236555AbiAJPvA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jan 2022 10:51:00 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0ACC06173F
-        for <linux-pm@vger.kernel.org>; Mon, 10 Jan 2022 07:51:00 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id s73so19313030oie.5
-        for <linux-pm@vger.kernel.org>; Mon, 10 Jan 2022 07:51:00 -0800 (PST)
+        with ESMTP id S236684AbiAJPzf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jan 2022 10:55:35 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C831C06173F
+        for <linux-pm@vger.kernel.org>; Mon, 10 Jan 2022 07:55:35 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id 25-20020a05600c231900b003497473a9c4so1110732wmo.5
+        for <linux-pm@vger.kernel.org>; Mon, 10 Jan 2022 07:55:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2n4Mxe58gHLUEnPXE5oeDtI7K/YB+n1aglZeR3Rn/W4=;
-        b=QyaqqwhPNk2QapI3TCYdd0SyoXpwXXIqLTKkB6NI/+njxuIWipqu1/dUbfIhl4DRce
-         dAmrxVJ8Cko1MhjzEyO3v89+dSA3U6BAmArjcinBB/50+AOIaFJT7KaatxLWmkKDJnPH
-         bQINXIG6QWR1tLDzbcI0tpIFFkFQ01WJsm+uMXjDvxAZHbXSI+iaqtKH2RVa0MxNh1Rs
-         MIAz6i/jLdx/Kz/OvoNOnU9NjOhrqvSbl+Wtj3Hgmpkks1B68ec3xP4QublKnCOFiZLW
-         oKaLjmmXTpCFOgt94wJYgqStV/z+6vAsJ4V8d8bQV6dPHFcYxh4PExMVrX+hvxXKOGr3
-         OM9Q==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=7s3MOFZuNDY7toiO/Y3Rxx9iJkH7JdNecRXNZtv+XK4=;
+        b=ppgC+n7R8bfoSNcjkhktE+DXfE7Oe7p46An7xDYHMOjpPkWMUOItqR7hDLS7oZcrH0
+         zBEWT6SFYHKDuvW4EiErBaZujW++2y8YzENbLFRyXE2zIvgklf1pnjXzkcX9sk+B9AR6
+         zKmrxVK7dF1Z3eikkvJBtCuUCA+IxvhaaVgrlVHoUqOAdidthaz6uaXCRwjpPB8vx2pA
+         hWUlrq841AbOQ0ZTZnMoD7nYDdU3z6PoMzAJzYIllr9dsZcc1NDET9VNY74xAZgC7s63
+         IEVxS5N+pn+oGzZ1L8ShkkFDHVsm2AI9eNrjH2VSaYxK5cDagcaYdl/EKLoXLSr2MWYO
+         lsDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2n4Mxe58gHLUEnPXE5oeDtI7K/YB+n1aglZeR3Rn/W4=;
-        b=sImAbjr/Rq8I9/ILD1Vm5Uu7RM4xu1+iwVABlA1G8fFOM242dEvKN7+OiQ2gK53RyZ
-         QSYmFQxXEKOwCAb63AajA0J+KN8+6Lgvc3EBQ2NqdEBCE67L5A0RmiCox4ooiMQ7F+LL
-         WxsFQItNMAoWCMN5EOxV9BpIdA1+N9mb1wfYAKeqtC0SlEhmRzf8h5amrJl2jB2Xdpul
-         1nsjR4iVBUtbQ/bSLIlhO0AVTqDwez9LBkT9Vl/h1Aeo5fyAZfSAbKnKaBviYutcQbsF
-         0UohoKHIc6BkXmBQMq2T1YggN6p1cKKgn5ydQEZtKFesxzgr9Lr80f/EZIqF3jl/wd8l
-         iLgw==
-X-Gm-Message-State: AOAM531wPXIU3ShEAzSEPn7Q0c+iArgDSl3QkC+W8Bi/H3930OxL3De7
-        VQkTYCC0zrlYGCW4VhJQ3MxVy2qEeNA/Dew7OotOeA==
-X-Google-Smtp-Source: ABdhPJxVjlxJzkR+kQYNgsdp35b6EFDFfGPq6nn0DGflwGrWihs76DtzgvQWoCz2iSVqgsXWVzILrPNDQyQPzS4VZ2w=
-X-Received: by 2002:a05:6808:19a5:: with SMTP id bj37mr63940oib.132.1641829860102;
- Mon, 10 Jan 2022 07:51:00 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=7s3MOFZuNDY7toiO/Y3Rxx9iJkH7JdNecRXNZtv+XK4=;
+        b=0WitMaqVjHvo/huz7HWr08uKWmG54nIRLvdsjCA91cU792k5KjTuvbgWTGpr38pLcI
+         y0lGRDaWguqGU94uirbtccn6F9qAI7EQAwyrh3AjF+72wLrC1ejdWoa/bO87Wiszdz9i
+         2mM7mEDGjeKkROraH+BYdemVsNGn5A0Hdv5dASrD/xgi5dZHFV9z3yXjM3bYtkKgVQKN
+         N+vrwgc0/Gbw5dobKtpxj7Mlf/Dvi7K/6otKyLL8pNb0wbYWke/pPRTadIK58jH8Z6SK
+         umv1FNx9X5gSajFLdo1bXDYVCFSGjNjPT1IySVuhg0boqeQQVcbOAr8JSmxcjgSjGwis
+         WJrQ==
+X-Gm-Message-State: AOAM532+dTONG3nI2b6VOyAZfQ6UotekoZxyI+HUFvWxXZt+cny/2X2Y
+        an8hXRUaDsKnWa7ayV2BAMpl2A==
+X-Google-Smtp-Source: ABdhPJz6952ZE93XlgA1Usg0LK+0UHUKyv0bNQKLSeR0fMDSl2H1RS4KpiMrPCx2wZP0KU/bt1/1EQ==
+X-Received: by 2002:a7b:c305:: with SMTP id k5mr98169wmj.144.1641830133670;
+        Mon, 10 Jan 2022 07:55:33 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:18f0:2692:14f:d8fd? ([2a01:e34:ed2f:f020:18f0:2692:14f:d8fd])
+        by smtp.googlemail.com with ESMTPSA id j39sm7400619wms.0.2022.01.10.07.55.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jan 2022 07:55:33 -0800 (PST)
+Subject: Re: [PATCH v5 2/6] powercap/drivers/dtpm: Add hierarchy creation
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     rjw@rjwysocki.net, lukasz.luba@arm.com, robh@kernel.org,
+        heiko@sntech.de, arnd@linaro.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@kernel.org>
+References: <20211218130014.4037640-1-daniel.lezcano@linaro.org>
+ <20211218130014.4037640-3-daniel.lezcano@linaro.org>
+ <CAPDyKFrLTsUxG8JHdK33h2BT8pxeHk6kiU-4uGrvxUhcQKg3Sw@mail.gmail.com>
+ <8fcc0ef8-b0c7-da73-434f-31c88896aed5@linaro.org>
+ <CAPDyKFqzxnfh0kow5mzoApFMQpKOAv=e1b7Cy9H-iEh99Wmagw@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <cbc70ea7-39b4-b5e8-b5c0-45fb436f53eb@linaro.org>
+Date:   Mon, 10 Jan 2022 16:55:31 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20220106131931.GA32698@kili>
-In-Reply-To: <20220106131931.GA32698@kili>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 10 Jan 2022 16:50:48 +0100
-Message-ID: <CACRpkdZZ+LXW5RF=xfFciZX3LshpGHh7uOReVzWCE3M2rCVgeQ@mail.gmail.com>
-Subject: Re: [bug report] power: supply_core: Pass pointer to battery info
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAPDyKFqzxnfh0kow5mzoApFMQpKOAv=e1b7Cy9H-iEh99Wmagw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jan 6, 2022 at 2:19 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+On 07/01/2022 16:54, Ulf Hansson wrote:
+> [...]
+> 
+>>>> +static int dtpm_for_each_child(const struct dtpm_node *hierarchy,
+>>>> +                              const struct dtpm_node *it, struct dtpm *parent)
+>>>> +{
+>>>> +       struct dtpm *dtpm;
+>>>> +       int i, ret;
+>>>> +
+>>>> +       for (i = 0; hierarchy[i].name; i++) {
+>>>> +
+>>>> +               if (hierarchy[i].parent != it)
+>>>> +                       continue;
+>>>> +
+>>>> +               dtpm = dtpm_node_callback[hierarchy[i].type](&hierarchy[i], parent);
+>>>> +               if (!dtpm || IS_ERR(dtpm))
+>>>> +                       continue;
+>>>> +
+>>>> +               ret = dtpm_for_each_child(hierarchy, &hierarchy[i], dtpm);
+>>>
+>>> Why do you need to recursively call dtpm_for_each_child() here?
+>>>
+>>> Is there a restriction on how the dtpm core code manages adding
+>>> children/parents?
+>>
+>> [ ... ]
+>>
+>> The recursive call is needed given the structure of the tree in an array
+>> in order to connect with the parent.
+> 
+> Right, I believe I understand what you are trying to do here, but I am
+> not sure if this is the best approach to do this. Maybe it is.
+> 
+> The problem is that we are also allocating memory for a dtpm and we
+> call dtpm_register() on it in this execution path - and this memory
+> doesn't get freed up nor unregistered, if any of the later recursive
+> calls to dtpm_for_each_child() fails.
+> 
+> The point is, it looks like it can get rather messy with the recursive
+> calls to cope with the error path. Maybe it's easier to store the
+> allocated dtpms in a list somewhere and use this to also find a
+> reference of a parent?
 
-> The patch 25fd330370ac: "power: supply_core: Pass pointer to battery
-> info" from Dec 15, 2021, leads to the following Smatch static checker
-> warning:
->
->         drivers/power/supply/bq256xx_charger.c:1529 bq256xx_hw_init()
->         error: potentially dereferencing uninitialized 'bat_info'.
-(...)
->     1525         ret = power_supply_get_battery_info(bq->charger, &bat_info);
->
-> If the first allocation in power_supply_get_battery_info() fails then
-> bat_info is uninitialized.  (It's not really possible unless you do
-> failure injection).
->
->     1526         if (ret) {
->     1527                 dev_warn(bq->dev, "battery info missing, default values will be applied\n");
->     1528
-> --> 1529                 bat_info->constant_charge_current_max_ua =
+I think it is better to continue the construction with other nodes even
+some of them failed to create, it should be a non critical issue. As an
+analogy, if one thermal zone fails to create, the other thermal zones
+are not removed.
 
-Ouch, that one was easy to miss! I sent a fixup patch.
+In addition, that should allow multiple nodes description for different
+DT setup for the same platform. That should fix the issue pointed by Bjorn.
 
-Yours,
-Linus Walleij
+> Later on, when we may decide to implement "dtpm_destroy_hierarchy()"
+> (or whatever we would call such interface), you probably need a list
+> of the allocated dtpms anyway, don't you think?
+
+No it is not necessary, the dtpms list is the dtpm tree itself and it
+can be destroyed recursively.
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
