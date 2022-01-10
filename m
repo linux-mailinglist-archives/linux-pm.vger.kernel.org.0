@@ -2,449 +2,300 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B964489FE8
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jan 2022 20:10:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1322A489FFF
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jan 2022 20:16:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243227AbiAJTKD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Jan 2022 14:10:03 -0500
-Received: from mail-oi1-f181.google.com ([209.85.167.181]:43953 "EHLO
-        mail-oi1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241532AbiAJTKC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jan 2022 14:10:02 -0500
-Received: by mail-oi1-f181.google.com with SMTP id u21so19937124oie.10;
-        Mon, 10 Jan 2022 11:10:02 -0800 (PST)
+        id S241320AbiAJTQm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Jan 2022 14:16:42 -0500
+Received: from mail-qk1-f178.google.com ([209.85.222.178]:33624 "EHLO
+        mail-qk1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232564AbiAJTQl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jan 2022 14:16:41 -0500
+Received: by mail-qk1-f178.google.com with SMTP id b127so5446874qkd.0;
+        Mon, 10 Jan 2022 11:16:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XmDUNfPt3QOOect2MdS0OVaTzzhuxKx2HF9undc3/uc=;
-        b=X7P++OQc/U+EdDCTqa0coL9xBbps6zKbYphLqmqvVtXKoXqFKNZsckV0OO7HJNtM4J
-         hH7gTqHCCzkRGWvkw4ab4LzemasPhl1yEnqRwSbHHSxAPtIzCTCordWZVRWBeRjvodOg
-         XNvsmXryk35TLo2CnceGGyv39Jt2QVpagnU5UnZK5JkC3LtPSGpJKS8As8iTDMLu+ksK
-         iXZWGahOOA2o1P9MpmcbKaD4PkYdxKSGoJr+VEMjigVTF8CGjento1WKcCDT9BVPMukE
-         LQXul3xkPYNGlplqVumKefGk3K+ro75zrjomsnqfk2WT2So7utYRJ/Bxcs/p+6IBUGod
-         VWiw==
-X-Gm-Message-State: AOAM530IhP70YhXudtZfBBT7I9DAntt3mXdyN1n2c0aCiWJ4zqYfZDS4
-        68AxMOO0VGgxkfAKtySew7KUPUsjVA==
-X-Google-Smtp-Source: ABdhPJxJ+Mssggsf+lk7b+jJGNRMIT1Hutj8tEQ6odjWh5Wx7BfA1azqx2XepgujqAi+c2InjOyOrA==
-X-Received: by 2002:a05:6808:16a4:: with SMTP id bb36mr19654397oib.112.1641841802055;
-        Mon, 10 Jan 2022 11:10:02 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id w5sm1619168otp.38.2022.01.10.11.10.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 11:10:01 -0800 (PST)
-Received: (nullmailer pid 1308212 invoked by uid 1000);
-        Mon, 10 Jan 2022 19:10:00 -0000
-Date:   Mon, 10 Jan 2022 13:10:00 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH 4/4] dt-bindings: mfd: maxim,max77693: convert to dtschema
-Message-ID: <YdyEiBj3mKpVKMWo@robh.at.kernel.org>
-References: <20211228163930.35524-1-krzysztof.kozlowski@canonical.com>
- <20211228163930.35524-5-krzysztof.kozlowski@canonical.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=715mf0IoeIH7IwYf/E3qVJpnqkm0zOIzT2GiFjhzg08=;
+        b=IFeq4DJnSfyknmga3forMRvc8ejb3LFGeJxYPW5/6PjieehyJ2qHxFmTx1hSYEfN3l
+         vgiGqejOQ8HuYfK/wGUj/wLx2uaAuJWUCD7hoj8ScpTytQrhhAK1lwVJvm6bAfK/ZQYn
+         vXIHaZb2iSsPJyVD2lAUSUBr0PBRwbjFnViCefE0ep9wRsmMzYvfeeOVEAsnOWkNijtI
+         fGCa6oVSe9VGWdkyKGr7L8Q6iBkb0Q/Fe7+YLQm6oTkFSzCRjbhp2KgXt9N4hvsQ064F
+         U1dwAdxYhbnaWDwxNorFAXTe2cKtsRr0sbNN3SnG4Z/qay44w/DKfJoc/GJbNdAxvLxm
+         3b3g==
+X-Gm-Message-State: AOAM530O5Ph8ujmBT0MvZbLS4AEKvuCJBhgMTfFSC7o8aDcWIvRxXCBz
+        u0eIEf9KZuU8uViHLvhjSf2dVgzC7UpCcHoA6bljPV8pvlw=
+X-Google-Smtp-Source: ABdhPJwa6Wq43oRWqoj1MEQkS/8HsVSSNy/JCK8wfWR0ZoQ/9r7PWgyK/2EfxsZGCzSfGjMSqgGlZQ2f1XVhZncRaOw=
+X-Received: by 2002:a05:620a:2001:: with SMTP id c1mr900944qka.374.1641842200763;
+ Mon, 10 Jan 2022 11:16:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211228163930.35524-5-krzysztof.kozlowski@canonical.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 10 Jan 2022 20:16:29 +0100
+Message-ID: <CAJZ5v0jHk1fP=V_iDGKVOeYg4xt-EEdgi5UUtQA4_qrQvUibNA@mail.gmail.com>
+Subject: [GIT PULL] Power management updates for v5.17-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Dec 28, 2021 at 05:39:30PM +0100, Krzysztof Kozlowski wrote:
-> Convert the MFD part of Maxim MAX77693 MUIC to DT schema format.  The
-> example DTS was copied from existing DTS (exynos4412-midas.dtsi), so
-> keep the license as GPL-2.0-only.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
->  .../devicetree/bindings/mfd/max77693.txt      | 194 ------------------
->  .../bindings/mfd/maxim,max77693.yaml          | 139 +++++++++++++
->  MAINTAINERS                                   |   2 +-
->  3 files changed, 140 insertions(+), 195 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/mfd/max77693.txt
->  create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max77693.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/max77693.txt b/Documentation/devicetree/bindings/mfd/max77693.txt
-> deleted file mode 100644
-> index 1032df14498b..000000000000
-> --- a/Documentation/devicetree/bindings/mfd/max77693.txt
-> +++ /dev/null
-> @@ -1,194 +0,0 @@
-> -Maxim MAX77693 multi-function device
-> -
-> -MAX77693 is a Multifunction device with the following submodules:
-> -- PMIC,
-> -- CHARGER,
-> -- LED,
-> -- MUIC,
-> -- HAPTIC
-> -
-> -It is interfaced to host controller using i2c.
-> -This document describes the bindings for the mfd device.
-> -
-> -Required properties:
-> -- compatible : Must be "maxim,max77693".
-> -- reg : Specifies the i2c slave address of PMIC block.
-> -- interrupts : This i2c device has an IRQ line connected to the main SoC.
-> -
-> -Optional properties:
-> -- regulators : The regulators of max77693 have to be instantiated under subnode
-> -  named "regulators" using the following format.
-> -
-> -	regulators {
-> -		regulator-compatible = ESAFEOUT1/ESAFEOUT2/CHARGER
-> -		standard regulator constraints[*].
-> -	};
-> -
-> -	[*] refer Documentation/devicetree/bindings/regulator/regulator.txt
-> -
-> -- haptic : The MAX77693 haptic device utilises a PWM controlled motor to provide
-> -  users with tactile feedback. PWM period and duty-cycle are varied in
-> -  order to provide the appropriate level of feedback.
-> -
-> - Required properties:
-> -	- compatible : Must be "maxim,max77693-haptic"
-> -	- haptic-supply : power supply for the haptic motor
-> -	[*] refer Documentation/devicetree/bindings/regulator/regulator.txt
-> -	- pwms : phandle to the physical PWM(Pulse Width Modulation) device.
-> -	 PWM properties should be named "pwms". And number of cell is different
-> -	 for each pwm device.
-> -	 To get more information, please refer to documentation.
-> -	[*] refer Documentation/devicetree/bindings/pwm/pwm.txt
-> -
-> -- charger : Node configuring the charger driver.
-> -  If present, required properties:
-> -  - compatible : Must be "maxim,max77693-charger".
-> -
-> -  Optional properties (if not set, defaults will be used):
-> -  - maxim,constant-microvolt : Battery constant voltage in uV. The charger
-> -    will operate in fast charge constant current mode till battery voltage
-> -    reaches this level. Then the charger will switch to fast charge constant
-> -    voltage mode. Also vsys (system voltage) will be set to this value when
-> -    DC power is supplied but charger is not enabled.
-> -    Valid values: 3650000 - 4400000, step by 25000 (rounded down)
-> -    Default: 4200000
-> -
-> -  - maxim,min-system-microvolt : Minimal system voltage in uV.
-> -    Valid values: 3000000 - 3700000, step by 100000 (rounded down)
-> -    Default: 3600000
-> -
-> -  - maxim,thermal-regulation-celsius : Temperature in Celsius for entering
-> -    high temperature charging mode. If die temperature exceeds this value
-> -    the charging current will be reduced by 105 mA/Celsius.
-> -    Valid values: 70, 85, 100, 115
-> -    Default: 100
-> -
-> -  - maxim,battery-overcurrent-microamp : Overcurrent protection threshold
-> -    in uA (current from battery to system).
-> -    Valid values: 2000000 - 3500000, step by 250000 (rounded down)
-> -    Default: 3500000
-> -
-> -  - maxim,charge-input-threshold-microvolt : Threshold voltage in uV for
-> -    triggering input voltage regulation loop. If input voltage decreases
-> -    below this value, the input current will be reduced to reach the
-> -    threshold voltage.
-> -    Valid values: 4300000, 4700000, 4800000, 4900000
-> -    Default: 4300000
-> -
-> -- led : the LED submodule device node
-> -
-> -There are two LED outputs available - FLED1 and FLED2. Each of them can
-> -control a separate LED or they can be connected together to double
-> -the maximum current for a single connected LED. One LED is represented
-> -by one child node.
-> -
-> -Required properties:
-> -- compatible : Must be "maxim,max77693-led".
-> -
-> -Optional properties:
-> -- maxim,boost-mode :
-> -	In boost mode the device can produce up to 1.2A of total current
-> -	on both outputs. The maximum current on each output is reduced
-> -	to 625mA then. If not enabled explicitly, boost setting defaults to
-> -	LEDS_BOOST_FIXED in case both current sources are used.
-> -	Possible values:
-> -		LEDS_BOOST_OFF (0) - no boost,
-> -		LEDS_BOOST_ADAPTIVE (1) - adaptive mode,
-> -		LEDS_BOOST_FIXED (2) - fixed mode.
-> -- maxim,boost-mvout : Output voltage of the boost module in millivolts.
-> -	Valid values: 3300 - 5500, step by 25 (rounded down)
-> -	Default: 3300
-> -- maxim,mvsys-min : Low input voltage level in millivolts. Flash is not fired
-> -	if chip estimates that system voltage could drop below this level due
-> -	to flash power consumption.
-> -	Valid values: 2400 - 3400, step by 33 (rounded down)
-> -	Default: 2400
-> -
-> -Required properties for the LED child node:
-> -- led-sources : see Documentation/devicetree/bindings/leds/common.txt;
-> -		device current output identifiers: 0 - FLED1, 1 - FLED2
-> -- led-max-microamp : see Documentation/devicetree/bindings/leds/common.txt
-> -	Valid values for a LED connected to one FLED output:
-> -		15625 - 250000, step by 15625 (rounded down)
-> -	Valid values for a LED connected to both FLED outputs:
-> -		15625 - 500000, step by 15625 (rounded down)
-> -- flash-max-microamp : see Documentation/devicetree/bindings/leds/common.txt
-> -	Valid values for a single LED connected to one FLED output
-> -	(boost mode must be turned off):
-> -		15625 - 1000000, step by 15625 (rounded down)
-> -	Valid values for a single LED connected to both FLED outputs:
-> -		15625 - 1250000, step by 15625 (rounded down)
-> -	Valid values for two LEDs case:
-> -		15625 - 625000, step by 15625 (rounded down)
-> -- flash-max-timeout-us : see Documentation/devicetree/bindings/leds/common.txt
-> -	Valid values: 62500 - 1000000, step by 62500 (rounded down)
-> -
-> -Optional properties for the LED child node:
-> -- label : see Documentation/devicetree/bindings/leds/common.txt
-> -
-> -Optional nodes:
-> -- max77693-muic :
-> -	Node used only by extcon consumers.
-> -	Required properties:
-> -		- compatible : "maxim,max77693-muic"
-> -
-> -Example:
-> -#include <dt-bindings/leds/common.h>
-> -
-> -	max77693@66 {
-> -		compatible = "maxim,max77693";
-> -		reg = <0x66>;
-> -		interrupt-parent = <&gpx1>;
-> -		interrupts = <5 IRQ_TYPE_LEVEL_LOW>;
-> -
-> -		regulators {
-> -			esafeout@1 {
-> -				regulator-compatible = "ESAFEOUT1";
-> -				regulator-name = "ESAFEOUT1";
-> -				regulator-boot-on;
-> -			};
-> -			esafeout@2 {
-> -				regulator-compatible = "ESAFEOUT2";
-> -				regulator-name = "ESAFEOUT2";
-> -				};
-> -			charger@0 {
-> -				regulator-compatible = "CHARGER";
-> -				regulator-name = "CHARGER";
-> -				regulator-min-microamp = <60000>;
-> -				regulator-max-microamp = <2580000>;
-> -					regulator-boot-on;
-> -			};
-> -		};
-> -
-> -		haptic {
-> -			compatible = "maxim,max77693-haptic";
-> -			haptic-supply = <&haptic_supply>;
-> -			pwms = <&pwm 0 40000 0>;
-> -			pwm-names = "haptic";
-> -		};
-> -
-> -		charger {
-> -			compatible = "maxim,max77693-charger";
-> -
-> -			maxim,constant-microvolt = <4200000>;
-> -			maxim,min-system-microvolt = <3600000>;
-> -			maxim,thermal-regulation-celsius = <75>;
-> -			maxim,battery-overcurrent-microamp = <3000000>;
-> -			maxim,charge-input-threshold-microvolt = <4300000>;
-> -		};
-> -
-> -		led {
-> -			compatible = "maxim,max77693-led";
-> -			maxim,boost-mode = <LEDS_BOOST_FIXED>;
-> -			maxim,boost-mvout = <5000>;
-> -			maxim,mvsys-min = <2400>;
-> -
-> -			camera_flash: flash-led {
-> -				label = "max77693-flash";
-> -				led-sources = <0>, <1>;
-> -				led-max-microamp = <500000>;
-> -				flash-max-microamp = <1250000>;
-> -				flash-max-timeout-us = <1000000>;
-> -			};
-> -		};
-> -	};
-> diff --git a/Documentation/devicetree/bindings/mfd/maxim,max77693.yaml b/Documentation/devicetree/bindings/mfd/maxim,max77693.yaml
-> new file mode 100644
-> index 000000000000..bc9c90bd4ff9
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/maxim,max77693.yaml
-> @@ -0,0 +1,139 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/maxim,max77693.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Maxim MAX77693 MicroUSB and Companion Power Management IC
-> +
-> +maintainers:
-> +  - Chanwoo Choi <cw00.choi@samsung.com>
-> +  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> +
-> +description: |
-> +  This is a part of device tree bindings for Maxim MAX77693 MicroUSB
-> +  Integrated Circuit (MUIC).
-> +
-> +  The Maxim MAX77693 is a MicroUSB and Companion Power Management IC which
-> +  includes voltage current regulators, charger, LED/flash, haptic motor driver
-> +  and MicroUSB management IC.
-> +
-> +properties:
-> +  compatible:
-> +    const: maxim,max77693
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  charger:
-> +    $ref: ../power/supply/maxim,max77693.yaml
+Hi Linus,
 
-/schemas/power/supply/...
+Please pull from the tag
 
-> +
-> +  led:
-> +    $ref: ../leds/maxim,max77693.yaml
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-5.17-rc1
 
-ditto
+with top-most commit 78e6e4dfd8f0cbb477a6f9571123edcbd5873c28
 
-> +
-> +  max77693-muic:
-> +    type: object
+ Merge branches 'pm-opp', 'pm-devfreq' and 'powercap'
 
-       additionalProperties: false
+on top of commit c9e6606c7fe92b50a02ce51dda82586ebdf99b48
 
-> +    properties:
-> +      compatible:
-> +        const: maxim,max77693-muic
-> +
-> +    required:
-> +      - compatible
-> +
-> +  motor-driver:
-> +    type: object
+ Linux 5.16-rc8
 
-       additionalProperties: false
+to receive power management updates for 5.17-rc1.
 
-> +    properties:
-> +      compatible:
-> +        const: maxim,max77693-haptic
-> +
-> +      haptic-supply:
-> +        description: Power supply to the haptic motor
-> +
-> +      pwms:
-> +        maxItems: 1
-> +
-> +    required:
-> +      - compatible
-> +      - haptic-supply
-> +      - pwms
-> +
-> +  regulators:
-> +    $ref: ../regulator/maxim,max77693.yaml
-> +    description:
-> +      List of child nodes that specify the regulators.
-> +
-> +required:
-> +  - compatible
-> +  - interrupts
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/leds/common.h>
-> +
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        pmic@66 {
-> +            compatible = "maxim,max77693";
-> +            reg = <0x66>;
-> +            interrupt-parent = <&gpx1>;
-> +            interrupts = <5 IRQ_TYPE_LEVEL_LOW>;
-> +
-> +            regulators {
-> +                ESAFEOUT1 {
-> +                    regulator-name = "ESAFEOUT1";
-> +                };
-> +
-> +                ESAFEOUT2 {
-> +                    regulator-name = "ESAFEOUT2";
-> +                };
-> +
-> +                CHARGER {
-> +                    regulator-name = "CHARGER";
-> +                    regulator-min-microamp = <60000>;
-> +                    regulator-max-microamp = <2580000>;
-> +                };
-> +            };
-> +
-> +            motor-driver {
-> +                compatible = "maxim,max77693-haptic";
-> +                haptic-supply = <&ldo26_reg>;
-> +                pwms = <&pwm 0 38022 0>;
-> +            };
-> +
-> +            charger {
-> +                compatible = "maxim,max77693-charger";
-> +
-> +                maxim,constant-microvolt = <4350000>;
-> +                maxim,min-system-microvolt = <3600000>;
-> +                maxim,thermal-regulation-celsius = <100>;
-> +                maxim,battery-overcurrent-microamp = <3500000>;
-> +                maxim,charge-input-threshold-microvolt = <4300000>;
-> +            };
-> +
-> +            led {
-> +                compatible = "maxim,max77693-led";
-> +                maxim,boost-mode = <LEDS_BOOST_FIXED>;
-> +                maxim,boost-mvout = <5000>;
-> +                maxim,mvsys-min = <2400>;
-> +
-> +                flash-led {
-> +                    label = "max77693-flash";
-> +                    function = LED_FUNCTION_FLASH;
-> +                    color = <LED_COLOR_ID_WHITE>;
-> +                    led-sources = <0>, <1>;
-> +                    led-max-microamp = <500000>;
-> +                    flash-max-microamp = <1250000>;
-> +                    flash-max-timeout-us = <1000000>;
-> +                };
-> +            };
-> +        };
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index ead08768fb78..e5f2758531bc 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -11692,9 +11692,9 @@ M:	Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
->  L:	linux-kernel@vger.kernel.org
->  S:	Supported
->  F:	Documentation/devicetree/bindings/*/maxim,max77686.yaml
-> +F:	Documentation/devicetree/bindings/*/maxim,max77693.yaml
->  F:	Documentation/devicetree/bindings/clock/maxim,max77686.txt
->  F:	Documentation/devicetree/bindings/mfd/max14577.txt
-> -F:	Documentation/devicetree/bindings/mfd/max77693.txt
->  F:	drivers/*/max14577*.c
->  F:	drivers/*/max77686*.c
->  F:	drivers/*/max77693*.c
-> -- 
-> 2.32.0
-> 
-> 
+The most signigicant change here is the addition of a new cpufreq
+"P-state" driver for AMD processors as a better replacement for
+the venerable acpi-cpufreq driver.  There are also other cpufreq
+updates (in the core, intel_pstate, ARM drivers), PM core updates
+(mostly related to adding new macros for declaring PM operations
+which should make the lives of driver developers somewhat easier),
+and a bunch of assorted fixes and cleanups.
+
+Specifics:
+
+ - Add new P-state driver for AMD processors (Huang Rui).
+
+ - Fix initialization of min and max frequency QoS requests in the
+   cpufreq core (Rafael Wysocki).
+
+ - Fix EPP handling on Alder Lake in intel_pstate (Srinivas Pandruvada).
+
+ - Make intel_pstate update cpuinfo.max_freq when notified of HWP
+   capabilities changes and drop a redundant function call from that
+   driver (Rafael Wysocki).
+
+ - Improve IRQ support in the Qcom cpufreq driver (Ard Biesheuvel,
+   Stephen Boyd, Vladimir Zapolskiy).
+
+ - Fix double devm_remap() in the Mediatek cpufreq driver (Hector Yuan).
+
+ - Introduce thermal pressure helpers for cpufreq CPU cooling (Lukasz
+   Luba).
+
+ - Make cpufreq use default_groups in kobj_type (Greg Kroah-Hartman).
+
+ - Make cpuidle use default_groups in kobj_type (Greg Kroah-Hartman).
+
+ - Fix two comments in cpuidle code (Jason Wang, Yang Li).
+
+ - Allow model-specific normal EPB value to be used in the intel_epb
+   sysfs attribute handling code (Srinivas Pandruvada).
+
+ - Simplify locking in pm_runtime_put_suppliers() (Rafael Wysocki).
+
+ - Add safety net to supplier device release in the runtime PM core
+   code (Rafael Wysocki).
+
+ - Capture device status before disabling runtime PM for it (Rafael
+   Wysocki).
+
+ - Add new macros for declaring PM operations to allow drivers to
+   avoid guarding them with CONFIG_PM #ifdefs or __maybe_unused and
+   update some drivers to use these macros (Paul Cercueil).
+
+ - Allow ACPI hardware signature to be honoured during restore from
+   hibernation (David Woodhouse).
+
+ - Update outdated operating performance points (OPP) documentation
+   (Tang Yizhou).
+
+ - Reduce log severity for informative message regarding frequency
+   transition failures in devfreq (Tzung-Bi Shih).
+
+ - Add DRAM frequency controller devfreq driver for Allwinner sunXi
+   SoCs (Samuel Holland).
+
+ - Add missing COMMON_CLK dependency to sun8i devfreq driver (Arnd
+   Bergmann).
+
+ - Add support for new layout of Psys PowerLimit Register on SPR to
+   the Intel RAPL power capping driver (Zhang Rui).
+
+ - Fix typo in a comment in idle_inject.c (Jason Wang).
+
+ - Remove unused function definition from the DTPM (Dynamit Thermal
+   Power Management) power capping framework (Daniel Lezcano).
+
+ - Reduce DTPM trace verbosity (Daniel Lezcano).
+
+Thanks!
+
+
+---------------
+
+Ard Biesheuvel (1):
+      cpufreq: qcom-cpufreq-hw: Avoid stack buffer for IRQ name
+
+Arnd Bergmann (1):
+      PM / devfreq: sun8i: addd COMMON_CLK dependency
+
+Daniel Lezcano (2):
+      powercap/drivers/dtpm: Remove unused function definition
+      powercap/drivers/dtpm: Reduce trace verbosity
+
+David Woodhouse (1):
+      PM: hibernate: Allow ACPI hardware signature to be honoured
+
+Greg Kroah-Hartman (2):
+      cpufreq: use default_groups in kobj_type
+      cpuidle: use default_groups in kobj_type
+
+Hector.Yuan (1):
+      cpufreq: mediatek-hw: Fix double devm_remap in hotplug case
+
+Huang Rui (13):
+      x86/cpufeatures: Add AMD Collaborative Processor Performance
+Control feature flag
+      x86/msr: Add AMD CPPC MSR definitions
+      cpufreq: amd-pstate: Introduce a new AMD P-State driver to
+support future processors
+      cpufreq: amd-pstate: Add fast switch function for AMD P-State
+      cpufreq: amd-pstate: Introduce the support for the processors
+with shared memory solution
+      cpufreq: amd-pstate: Add trace for AMD P-State module
+      cpufreq: amd-pstate: Add boost mode support for AMD P-State
+      cpufreq: amd-pstate: Add AMD P-State frequencies attributes
+      cpufreq: amd-pstate: Add AMD P-State performance attributes
+      Documentation: amd-pstate: Add AMD P-State driver introduction
+      MAINTAINERS: Add AMD P-State driver maintainer entry
+      cpufreq: amd-pstate: Fix Kconfig dependencies for AMD P-State
+      x86, sched: Fix undefined reference to
+init_freq_invariance_cppc() build error
+
+Jason Wang (2):
+      cpuidle: menu: Fix typo in a comment
+      powercap: fix typo in a comment in idle_inject.c
+
+Jinzhou Su (1):
+      ACPI: CPPC: Add CPPC enable register function
+
+Lukasz Luba (5):
+      arch_topology: Introduce thermal pressure update function
+      thermal: cpufreq_cooling: Use new thermal pressure update function
+      cpufreq: qcom-cpufreq-hw: Update offline CPUs per-cpu thermal pressure
+      cpufreq: qcom-cpufreq-hw: Use new thermal pressure update function
+      arch_topology: Remove unused topology_set_thermal_pressure() and related
+
+Mario Limonciello (1):
+      ACPI: CPPC: Check present CPUs for determining _CPC is valid
+
+Paul Cercueil (5):
+      r8169: Avoid misuse of pm_ptr() macro
+      PM: core: Redefine pm_ptr() macro
+      PM: core: Add new *_PM_OPS macros, deprecate old ones
+      mmc: jz4740: Use the new PM macros
+      mmc: mxc: Use the new PM macros
+
+Rafael J. Wysocki (6):
+      PM: runtime: Capture device status before disabling runtime PM
+      PM: runtime: Add safety net to supplier device release
+      cpufreq: intel_pstate: Drop redundant intel_pstate_get_hwp_cap() call
+      cpufreq: Fix initialization of min and max frequency QoS requests
+      cpufreq: intel_pstate: Update cpuinfo.max_freq on HWP_CAP changes
+      PM: runtime: Simplify locking in pm_runtime_put_suppliers()
+
+Samuel Holland (1):
+      PM / devfreq: Add a driver for the sun8i/sun50i MBUS
+
+Srinivas Pandruvada (2):
+      cpufreq: intel_pstate: Update EPP for AlderLake mobile
+      x86: intel_epb: Allow model specific normal EPB value
+
+Stephen Boyd (1):
+      cpufreq: qcom-hw: Use optional irq API
+
+Steven Noonan (1):
+      ACPI: CPPC: Implement support for SystemIO registers
+
+Tang Yizhou (1):
+      Documentation: power: Update outdated contents in opp.rst
+
+Tzung-Bi Shih (1):
+      PM / devfreq: Reduce log severity for informative message
+
+Vladimir Zapolskiy (2):
+      cpufreq: qcom-hw: Fix probable nested interrupt handling
+      cpufreq: qcom-hw: Set CPU affinity of dcvsh interrupts
+
+Yang Li (2):
+      cpuidle: Fix cpuidle_remove_state_sysfs() kerneldoc comment
+      cpufreq: amd-pstate: Fix struct amd_cpudata kernel-doc comment
+
+Zhang Rui (1):
+      powercap: intel_rapl: support new layout of Psys PowerLimit
+Register on SPR
+
+---------------
+
+ Documentation/admin-guide/acpi/cppc_sysfs.rst   |   2 +
+ Documentation/admin-guide/kernel-parameters.txt |  15 +-
+ Documentation/admin-guide/pm/amd-pstate.rst     | 382 ++++++++++++++
+ Documentation/admin-guide/pm/working-state.rst  |   1 +
+ Documentation/power/opp.rst                     |  14 +-
+ Documentation/power/runtime_pm.rst              |  14 +-
+ MAINTAINERS                                     |   7 +
+ arch/arm/include/asm/topology.h                 |   2 +-
+ arch/arm64/include/asm/topology.h               |   2 +-
+ arch/x86/include/asm/cpufeatures.h              |   1 +
+ arch/x86/include/asm/msr-index.h                |  17 +
+ arch/x86/include/asm/topology.h                 |   2 +-
+ arch/x86/kernel/acpi/sleep.c                    |   4 +-
+ arch/x86/kernel/cpu/intel_epb.c                 |  45 +-
+ drivers/acpi/cppc_acpi.c                        |  99 +++-
+ drivers/acpi/sleep.c                            |  26 +-
+ drivers/base/arch_topology.c                    |  42 +-
+ drivers/base/core.c                             |   3 +-
+ drivers/base/power/runtime.c                    |  98 ++--
+ drivers/cpufreq/Kconfig.x86                     |  17 +
+ drivers/cpufreq/Makefile                        |   5 +
+ drivers/cpufreq/amd-pstate-trace.c              |   2 +
+ drivers/cpufreq/amd-pstate-trace.h              |  77 +++
+ drivers/cpufreq/amd-pstate.c                    | 645 ++++++++++++++++++++++++
+ drivers/cpufreq/cpufreq.c                       |   9 +-
+ drivers/cpufreq/cpufreq_conservative.c          |   5 +-
+ drivers/cpufreq/cpufreq_ondemand.c              |   5 +-
+ drivers/cpufreq/intel_pstate.c                  | 121 +++--
+ drivers/cpufreq/mediatek-cpufreq-hw.c           |  33 +-
+ drivers/cpufreq/qcom-cpufreq-hw.c               |  39 +-
+ drivers/cpuidle/governors/menu.c                |   2 +-
+ drivers/cpuidle/sysfs.c                         |   8 +-
+ drivers/devfreq/Kconfig                         |   9 +
+ drivers/devfreq/Makefile                        |   1 +
+ drivers/devfreq/devfreq.c                       |   4 +-
+ drivers/devfreq/sun8i-a33-mbus.c                | 511 +++++++++++++++++++
+ drivers/mmc/host/jz4740_mmc.c                   |   8 +-
+ drivers/mmc/host/mxcmmc.c                       |   6 +-
+ drivers/net/ethernet/realtek/r8169_main.c       |   4 +-
+ drivers/powercap/dtpm.c                         |   6 +-
+ drivers/powercap/idle_inject.c                  |   2 +-
+ drivers/powercap/intel_rapl_common.c            |  61 ++-
+ drivers/thermal/cpufreq_cooling.c               |   6 +-
+ include/acpi/cppc_acpi.h                        |   5 +
+ include/linux/acpi.h                            |   2 +-
+ include/linux/arch_topology.h                   |   4 +-
+ include/linux/dtpm.h                            |   2 -
+ include/linux/intel_rapl.h                      |   6 +
+ include/linux/pm.h                              |  82 +--
+ include/linux/pm_runtime.h                      |   3 +
+ include/linux/sched/topology.h                  |   6 +-
+ include/linux/suspend.h                         |   1 +
+ init/Kconfig                                    |   2 +-
+ kernel/power/power.h                            |   1 +
+ kernel/power/swap.c                             |  16 +-
+ 55 files changed, 2274 insertions(+), 218 deletions(-)
