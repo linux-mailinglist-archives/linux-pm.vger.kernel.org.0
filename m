@@ -2,159 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0765C4899FE
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jan 2022 14:33:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EA5A489B76
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jan 2022 15:40:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232476AbiAJNdn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Jan 2022 08:33:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232339AbiAJNdn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jan 2022 08:33:43 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332B1C061751
-        for <linux-pm@vger.kernel.org>; Mon, 10 Jan 2022 05:33:43 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id q8so26718595wra.12
-        for <linux-pm@vger.kernel.org>; Mon, 10 Jan 2022 05:33:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=wykY6RVdYGo3LCViVwH8y47ACjO/I+ljCrJ3y0UU7JI=;
-        b=v1Zcv9HlWrtnmwH4thsDg6vrRCwzTZ5N6M/GatTtutfPZRit5EBvmKTBFZPCgPTJKW
-         ovkE2K8C4JhfsZPyursJLwrLenN+sCROvchDrLPWtois83nNe6YYbIe/BCDgQcK+0l/p
-         tTIDGwkBM8KEPu415OviYoXRz8J1Z1kCPc0bqLx/PlI/4s8PxAovVHHB+l8qXpsKgRQL
-         wBDQYezTgMUITDf96ffPgD+YzjzwSGEcIzcoTGVRnZJIvAC+PsFiacF21s/8pDE3ngmT
-         46HZdvjWelj18UoR1KCCNUrAaU//W3ki8ACtpxocSZOpGzpDxp3KsRx1sE1oE08S/plk
-         +57A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=wykY6RVdYGo3LCViVwH8y47ACjO/I+ljCrJ3y0UU7JI=;
-        b=U6LclG3EKY2Qm3qgNl0C4deWbNclLYDCajJn2u1Eqg61ZCnQe06oAQrTRP1e2a+RVF
-         G55TNE53TUE2Cl/JWa4M+AS0yPKnShMKTx1lPrZkNPVPuc+V4qKXkg7usZezVVDh3o6t
-         F5B7y3s6Q9UwIpsGJCjSj+G1SGW2Bc+Qc9HbLPOv2TkJWqG9fVPletO2TuwNOp0ByWVQ
-         m8SCKWDqqssIIQapRIzGRf5xRf0UTAEuPQEuCcd6xxJ+SVg5+N97z8lI4srcxetTQQxJ
-         HUsUmxxf0fHTbVq1HorukZlf5XudsKQ4Mp77MZnPeXMzx5rY8OQT1tR/TvmUzRmd57rp
-         t05A==
-X-Gm-Message-State: AOAM5309b6sunYFfOIbYjE+/EyClFTGcahLfffaqbC78p0VmRlehq9mv
-        lvOkBw2iaLrMrAJwUdXBzki9oWk87cPvZ8Tw
-X-Google-Smtp-Source: ABdhPJx1Hj2+aXURh9tvHBF3KCs98lyOQJ6RXC4QdC+VRwtBLAb5wjpVXh0T8OgzHl7S46JpaQ8bpg==
-X-Received: by 2002:a05:6000:18a5:: with SMTP id b5mr66369168wri.267.1641821621565;
-        Mon, 10 Jan 2022 05:33:41 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:18f0:2692:14f:d8fd? ([2a01:e34:ed2f:f020:18f0:2692:14f:d8fd])
-        by smtp.googlemail.com with ESMTPSA id 5sm7563904wrb.77.2022.01.10.05.33.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jan 2022 05:33:40 -0800 (PST)
-Subject: Re: [PATCH v5 1/6] powercap/drivers/dtpm: Move dtpm table from init
- to data section
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     rjw@rjwysocki.net, lukasz.luba@arm.com, robh@kernel.org,
-        heiko@sntech.de, arnd@linaro.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>
-References: <20211218130014.4037640-1-daniel.lezcano@linaro.org>
- <20211218130014.4037640-2-daniel.lezcano@linaro.org>
- <CAPDyKFpY4i0Mtb==8zknsuG0HdhPW2fXFvEN+AJScVmT65A-ow@mail.gmail.com>
- <556eca9c-4ce8-1c79-cc6d-08d0ec603bd4@linaro.org>
- <CAPDyKFpWtVFoqhFrhMQOgHUjggvg_GPYwmeK-jkphQpA7KQZRw@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <a4581b79-c2b2-c2bd-b96c-98389ea15a1e@linaro.org>
-Date:   Mon, 10 Jan 2022 14:33:39 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <CAPDyKFpWtVFoqhFrhMQOgHUjggvg_GPYwmeK-jkphQpA7KQZRw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S235669AbiAJOkt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Jan 2022 09:40:49 -0500
+Received: from relmlor1.renesas.com ([210.160.252.171]:13349 "EHLO
+        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S235678AbiAJOks (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jan 2022 09:40:48 -0500
+X-IronPort-AV: E=Sophos;i="5.88,277,1635174000"; 
+   d="scan'208";a="106017083"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 10 Jan 2022 23:40:47 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id F3829400194A;
+        Mon, 10 Jan 2022 23:40:44 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4] thermal: rcar_thermal: Use platform_get_irq_optional() to get the interrupt
+Date:   Mon, 10 Jan 2022 14:40:39 +0000
+Message-Id: <20220110144039.5810-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07/01/2022 15:49, Ulf Hansson wrote:
-> On Fri, 7 Jan 2022 at 14:15, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->>
->> On 31/12/2021 14:33, Ulf Hansson wrote:
->>> On Sat, 18 Dec 2021 at 14:00, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->>>>
->>>> The dtpm table is used to let the different dtpm backends to register
->>>> their setup callbacks in a single place and preventing to export
->>>> multiple functions all around the kernel. That allows the dtpm code to
->>>> be self-encapsulated.
->>>
->>> Well, that's not entirely true. The dtpm code and its backends (or
->>> ops, whatever we call them) are already maintained from a single
->>> place, the /drivers/powercap/* directory. I assume we intend to keep
->>> it like this going forward too, right?
->>>
->>> That is also what patch4 with the devfreq backend continues to conform to.
->>>
->>>>
->>>> The dtpm hierarchy will be passed as a parameter by a platform
->>>> specific code and that will lead to the creation of the different dtpm
->>>> nodes.
->>>>
->>>> The function creating the hierarchy could be called from a module at
->>>> init time or when it is loaded. However, at this moment the table is
->>>> already freed as it belongs to the init section and the creation will
->>>> lead to a invalid memory access.
->>>>
->>>> Fix this by moving the table to the data section.
->>>
->>> With the above said, I find it a bit odd to put a table in the data
->>> section like this. Especially, since the only remaining argument for
->>> why, is to avoid exporting functions, which isn't needed anyway.
->>>
->>> I mean, it would be silly if we should continue to put subsystem
->>> specific tables in here, to just let them contain a set of subsystem
->>> specific callbacks.
->>
->> So I tried to change the approach and right now I was not able to find
->> an alternative keeping the code self-encapsulate and without introducing
->> cyclic dependencies.
->>
->> I suggest to keep the patch as it is and double check if it makes sense
->> to change it after adding more dtpm backends
->>
->> Alternatively I can copy the table to a dynamically allocated table.
-> 
-> I am not sure I understand the problem. You don't need a "table of
-> callbacks" at all, at least to start with.
-> 
-> Instead, what you need is to make a call to a function, or actually
-> one call per supported dtpm type from dtpm_setup_dt() (introduced in
-> patch2).
-> 
-> For CPUs, you would simply call dtpm_cpu_setup() (introduced in
-> patch3) from dtpm_setup_dt(), rather than walking the dtpm table an
-> invoking the ->setup() callback.
->
-> Did that make sense to you?
+platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+allocation of IRQ resources in DT core code, this causes an issue
+when using hierarchical interrupt domains using "interrupts" property
+in the node as this bypasses the hierarchical setup and messes up the
+irq chaining.
 
-Yeah, I already got the point ;)
+In preparation for removal of static setup of IRQ resource from DT core
+code use platform_get_irq_optional().
 
-I'll convert it to something else, and we will see in the future if that
-needs to be converted back to the table.
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+v3->v4:
+* Updated check as suggested by Andy
 
+v2->v3:
+* Fixed review comment pointed by Andy
 
-> Going forward, when we decide to introduce the option to add/remove
-> support for dtpm types dynamically, you can then convert to a
-> dynamically allocated table.
-> 
-> [...]
-> 
-> Kind regards
-> Uffe
-> 
+v1->v2
+* Simplified checking error code
+* Break loop earlier if no interrupts are seen
 
+v1: https://lkml.org/lkml/2021/12/18/163
+---
+ drivers/thermal/rcar_thermal.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
+diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
+index b49f04daaf47..1d729ed4d685 100644
+--- a/drivers/thermal/rcar_thermal.c
++++ b/drivers/thermal/rcar_thermal.c
+@@ -445,7 +445,7 @@ static int rcar_thermal_probe(struct platform_device *pdev)
+ 	struct rcar_thermal_common *common;
+ 	struct rcar_thermal_priv *priv;
+ 	struct device *dev = &pdev->dev;
+-	struct resource *res, *irq;
++	struct resource *res;
+ 	const struct rcar_thermal_chip *chip = of_device_get_match_data(dev);
+ 	int mres = 0;
+ 	int i;
+@@ -467,9 +467,16 @@ static int rcar_thermal_probe(struct platform_device *pdev)
+ 	pm_runtime_get_sync(dev);
+ 
+ 	for (i = 0; i < chip->nirqs; i++) {
+-		irq = platform_get_resource(pdev, IORESOURCE_IRQ, i);
+-		if (!irq)
+-			continue;
++		int irq;
++
++		ret = platform_get_irq_optional(pdev, i);
++		if (ret < 0 && ret != -ENXIO)
++			goto error_unregister;
++		if (ret > 0)
++			irq = ret;
++		else
++			break;
++
+ 		if (!common->base) {
+ 			/*
+ 			 * platform has IRQ support.
+@@ -487,7 +494,7 @@ static int rcar_thermal_probe(struct platform_device *pdev)
+ 			idle = 0; /* polling delay is not needed */
+ 		}
+ 
+-		ret = devm_request_irq(dev, irq->start, rcar_thermal_irq,
++		ret = devm_request_irq(dev, irq, rcar_thermal_irq,
+ 				       IRQF_SHARED, dev_name(dev), common);
+ 		if (ret) {
+ 			dev_err(dev, "irq request failed\n ");
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.17.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
