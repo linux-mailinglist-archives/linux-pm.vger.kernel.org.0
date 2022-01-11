@@ -2,65 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA02248B8FB
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jan 2022 21:53:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D99D148BAAF
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jan 2022 23:21:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233173AbiAKUxy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jan 2022 15:53:54 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:43406 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244590AbiAKUxK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jan 2022 15:53:10 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 682D8B81D50;
-        Tue, 11 Jan 2022 20:53:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 39833C36B03;
-        Tue, 11 Jan 2022 20:53:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641934388;
-        bh=YRjKWNl+VzQWa8Hv3wTzIaOB8mXASYhZrFJ4rjMQ9/I=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=GMQHS0K7rQSikD4jAR2L4FYUWKt4rRJHK7aat/KDckLNEcHOOwfHqdyPDdgK7X7bS
-         Aago6jj7E0EluFOcDe8iCytYXwwSNyK0cPZEnMV0IPDWlze2A3J+GDvQRp9MaVS6SL
-         J1nJ3sB2Va4JT/dTl2DteSLXwxzPRPuYpzqVvNfH/POFXhIBtejaDWUV7GErrrWIxv
-         qqJSAZFVjTZjB0YilHgKBoAI9Ix36D2/eShNB/SOm5if14M3ptiewkyWd5ApsY//fp
-         m0rtm5ZYbB7MSIYYAA5Y+axTltc+Omoehf5evhjSB+CVLX0EM8ewy+a0d5Tz36Dni1
-         pZ9j6nxlWmaTA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 265E0F6078A;
-        Tue, 11 Jan 2022 20:53:08 +0000 (UTC)
-Subject: Re: [GIT PULL] power-supply changes for 5.17
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220110094812.4rtl2ltyaow7hgla@earth.universe>
-References: <20220110094812.4rtl2ltyaow7hgla@earth.universe>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220110094812.4rtl2ltyaow7hgla@earth.universe>
-X-PR-Tracked-Remote: ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v5.17
-X-PR-Tracked-Commit-Id: 25fd330370ac40653671f323acc7fb6db27ef6fe
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 039053c11965a33250e75009e37dab8e7580fa4e
-Message-Id: <164193438814.11435.10197426396100717909.pr-tracker-bot@kernel.org>
-Date:   Tue, 11 Jan 2022 20:53:08 +0000
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Hans de Goede <hdegoede@redhat.com>
+        id S244871AbiAKWVa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Jan 2022 17:21:30 -0500
+Received: from mail-ot1-f46.google.com ([209.85.210.46]:46047 "EHLO
+        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237156AbiAKWV3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jan 2022 17:21:29 -0500
+Received: by mail-ot1-f46.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso389346otf.12;
+        Tue, 11 Jan 2022 14:21:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=eXnuPsm6XOy6OO5kINyQC2KNf2jcAboFWMAeaxM8vOs=;
+        b=uI3FUKJ7Dowu544cjK36TQMsu/0TBNzf6G/RdjvMJG6luhbR7ubm2TEsq/NNzLiOUJ
+         5qH+Ccg8k1/CQ/T/w3It1F8ZC/YQ8APD16XF8xPsKO320NzcUpYq0K/pu9zn0n8CX5JS
+         YpaYAVmkmmR37DpBfGsdZWWpseoFQ6i6thZQh1aq/w/5uDYMXO+Me1tPs45T1nj5R0wB
+         Gks0sLQ0BhsfR7tMGU/KAv0rC8HijGgTNTQHv6txOjUB16rf7jENV8ohv4uIMpKb4EQz
+         Ihyp3Ke0myO74kiSlq06BK9WEMyD12PUf4128UnVzj7G8LbyHSWftiobtz/TnDkERFS+
+         uEVQ==
+X-Gm-Message-State: AOAM532xb4GDhWYCKF2/4ILW27LdzXxZW11OPGLYPoclfyME12854gAY
+        EI4YIUltJwAd2pFa7zPQ1w==
+X-Google-Smtp-Source: ABdhPJzy+NTAhL+JzZOe+O0CoyTNWVo+qGjS7KlhXYDh37rW8SJupSpaxDgRIVFHmsWvz33yNEhyDQ==
+X-Received: by 2002:a9d:125:: with SMTP id 34mr1776677otu.255.1641939689107;
+        Tue, 11 Jan 2022 14:21:29 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id y8sm2178573ooq.22.2022.01.11.14.21.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 14:21:27 -0800 (PST)
+Received: (nullmailer pid 3607761 invoked by uid 1000);
+        Tue, 11 Jan 2022 22:21:26 -0000
+Date:   Tue, 11 Jan 2022 16:21:26 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Chanwoo Choi <cw00.choi@samsung.com>, linux-pm@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        Liam Girdwood <lgirdwood@gmail.com>
+Subject: Re: [PATCH v2 3/4] regulator: dt-bindings: maxim,max14577: convert
+ to dtschema
+Message-ID: <Yd4C5mx/FzBpB6Bm@robh.at.kernel.org>
+References: <20220111174337.223320-1-krzysztof.kozlowski@canonical.com>
+ <20220111174337.223320-4-krzysztof.kozlowski@canonical.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220111174337.223320-4-krzysztof.kozlowski@canonical.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Mon, 10 Jan 2022 10:48:12 +0100:
+On Tue, 11 Jan 2022 18:43:36 +0100, Krzysztof Kozlowski wrote:
+> Convert the regulator bindings of Maxim MAX14577/MAX77835 MUIC to DT
+> schema format.  The existing bindings were defined in
+> ../bindings/mfd/max14577.txt.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
+>  .../bindings/regulator/maxim,max14577.yaml    | 92 +++++++++++++++++++
+>  1 file changed, 92 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/regulator/maxim,max14577.yaml
+> 
 
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v5.17
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/039053c11965a33250e75009e37dab8e7580fa4e
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Reviewed-by: Rob Herring <robh@kernel.org>
