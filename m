@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 268EB48AB73
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jan 2022 11:34:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D014A48AB72
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jan 2022 11:34:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348912AbiAKKeA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jan 2022 05:34:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58776 "EHLO
+        id S1348522AbiAKKeB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Jan 2022 05:34:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348522AbiAKKeA (ORCPT
+        with ESMTP id S1348906AbiAKKeA (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jan 2022 05:34:00 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF383C061748
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jan 2022 02:33:58 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id a5so28109043wrh.5
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jan 2022 02:33:58 -0800 (PST)
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE7A4C061756
+        for <linux-pm@vger.kernel.org>; Tue, 11 Jan 2022 02:33:59 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id e9so30568540wra.2
+        for <linux-pm@vger.kernel.org>; Tue, 11 Jan 2022 02:33:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dlvnTPe3lASdFY+T2t68uKlxKrbSmUU8V1J05NQSw6U=;
-        b=kFZHjxBqak04QecvDE2NLpVra0DHWksVsM+UYYxryGtHYHXrRSQWq1/xX9A+ZsO93M
-         rhwTwSrvVZrQkeHIRa1TxI4azHBBS0Zk6HLOjRdFBHyJHXYIMKAwOCchTXp35Qd2V8qd
-         /cZJXXl9E0B7ZMWaCVf19hdhB/drQhSEuY9rEEvWE/0HNNhg+4lJTlV+Zg4PoRCxVR1F
-         gt0qdlAskSDXGLVhdbk5nwi2G/xccxm/5fH6oLS+tZv8cMQeI6H+wTzrZ1pchceJj6Jk
-         x0croQongRyfddXEMEK0VaxWIeQQqMSMvF9X2hIlxWqCN0BunojhMGYG/77YcYElVabB
-         laOA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=JqNBsRcjQjHmu9oXUqgctJ3evIfScLc2vJGzdrITO90=;
+        b=Xu8gUB/wyAxcPFd6dw8gkm2TKTIJlGJBTor9EjQDZnIuguIPM2TaeFArBB2r+gxca+
+         zMCKxJZvUTn4+YK8p0ixF2gEoy/sIAzBD2lO1jVfjjbw8/xJfrsqgYnRQirrKS9Yeyic
+         QOwMGKCdlPW5mxRoDCvn6uJ5ksFdSZk9Mz/qfDDWJRRVGv89RVQgG6HNS2GZT8gs6kzg
+         T0VgYZSWSudlsymwnqAl46t6EsWlHsXE34MXoMobGFQwXvkA6tqNsRqPPGwgjW+BAK92
+         1Xu3QHBYfhSCmk1DxWNU5WhbJZwu+IXwvZTkt/Q1vfvJRc5KZ9dTrg3f3YfpLJOg+8vl
+         Gegw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dlvnTPe3lASdFY+T2t68uKlxKrbSmUU8V1J05NQSw6U=;
-        b=ev3ZkKKmfO3L6QRbwQ0ziIdY2sLEcT1rZGpF5PAaP16OMy0jY3HPB/JgMa03cvst+6
-         fzTxyntfkfIy0AUe5SIujgDCGd3SUTEoSyIQmaRHQ00TE9D5oOw0uHHkwrFGTzEp2QAo
-         0q84NUC0vz4eiZ/o49AN4zRmKIww7FpScLyakcRHwg7oMaxjgmgp/2rd7WYp//2hidwC
-         bWSZUnwYEEQ0OOfke2rHEXjm+WPcpfUMEYvFm2BFdklIfDbXqbFiYJ9OAzdH5WDDkYYP
-         ow2lUuukcMrea/OLOiciTW6XN+HpYvg5WzhH7epkv2+pCta39U5bKNGlmW0lJuQjzyt1
-         RCWA==
-X-Gm-Message-State: AOAM533ZN/Yrn+ZpuNXD+pQVE9hQ40H21/JYvpT2qkWKWiLomKeO09x6
-        ez83V1sp1iZouso9+G88HKgR4Q==
-X-Google-Smtp-Source: ABdhPJwTazpdHrgr+MgipqzrdPRu4Vt8uCoZ/sH/0PYCwESlfQYlVUTG3LeTI2N/8eVmiKSo9w/aEQ==
-X-Received: by 2002:a5d:588f:: with SMTP id n15mr3282791wrf.279.1641897237487;
-        Tue, 11 Jan 2022 02:33:57 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=JqNBsRcjQjHmu9oXUqgctJ3evIfScLc2vJGzdrITO90=;
+        b=Sy/4SiUHSfnN3/DtJgJrAPGr4rGxOovzxBe9fX3qsUms/ULvXemZklCYocBc1iCyha
+         8Ad/LPDtXLyXuAHl1ZQXZFijiRMjghrv1V/FmxSvp4S/a4ZIub/raPDjVW/KQF1SvkGA
+         W0d4LYoym+OgNMmWsTmFOIay/ZcUhaz1+a7Q6trkp1xba6yJ54HpGp+/K8yt5a2/5P4q
+         JY5NjUthztGXFSqV0b1I3hW7BM9vRDaaGAAtqFVJcdJ8qulQ9MFJNCTS4xrQbYs2DGEq
+         D044ZfRRN3QlUB//lqTx0MbJ87i22yPKgUE9ubx5kPRc93Yjwf4TE5LGB7sZmLqznakG
+         9VLw==
+X-Gm-Message-State: AOAM531We3e4zjkgndkJdOS0O41NSmYXCAJmJcYpiiaRnzL187fAqyrq
+        lLGT48k1Vyj0smLcG90/VdrfrWkfB3y2cw==
+X-Google-Smtp-Source: ABdhPJzUrxsR8cHYm600a8hZckJc96n5dY9Z+dWP6MFmc9bq6QlUWlmZs8hKVhm7nGrhrAImvvIVwQ==
+X-Received: by 2002:adf:da45:: with SMTP id r5mr3364866wrl.695.1641897238277;
+        Tue, 11 Jan 2022 02:33:58 -0800 (PST)
 Received: from xps-9300.baylibre.local (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id u16sm8803470wrn.24.2022.01.11.02.33.56
+        by smtp.gmail.com with ESMTPSA id u16sm8803470wrn.24.2022.01.11.02.33.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 11 Jan 2022 02:33:57 -0800 (PST)
 From:   Alexandre Bailon <abailon@baylibre.com>
@@ -53,51 +53,143 @@ To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         ben.tseng@mediatek.com, khilman@baylibre.com, mka@chromium.org,
         Alexandre Bailon <abailon@baylibre.com>
-Subject: [PATCH v4 RESEND 0/2] Add a generic virtual thermal sensor
-Date:   Tue, 11 Jan 2022 11:33:44 +0100
-Message-Id: <20220111103346.2660639-1-abailon@baylibre.com>
+Subject: [PATCH v4 RESEND 1/2] dt-bindings: Add DT bindings for the DT-based virtual sensor driver
+Date:   Tue, 11 Jan 2022 11:33:45 +0100
+Message-Id: <20220111103346.2660639-2-abailon@baylibre.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220111103346.2660639-1-abailon@baylibre.com>
+References: <20220111103346.2660639-1-abailon@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This series add a virtual thermal sensor.
-It could be used to get a temperature using some thermal sensors.
-Currently, the supported operations are max, min and avg.
-The virtual sensor could be easily extended to support others operations.
+This adds the DT bindings for the DT-based virtual sensor driver.
+This driver provides a way, using DT, to aggregate the temperature
+of multiple thermal zones and get some useful data from it.
 
-Changes in v2:
-- Fix some warnings / errors reported by kernel test robot
-- rename some struct and functions with a more accurate name
-- update the dt bindings: rename type attribute to aggregation-function
-- factorize a little bit the aggregation functions
-Changes in v3:
-- Aggregate thermal zone instead of thermal sensors
-- Use try_get_module / put_module to prevent thermal providers to be removed
-- Update the bindings, to be more accurate
-Changes in v4:
-- Fix two warnings reported by kernel test robot
-
-Alexandre Bailon (2):
-  dt-bindings: Add DT bindings for the DT-based virtual sensor driver
-  thermal: add a virtual sensor to aggregate temperatures
-
-Alexandre Bailon (2):
-  dt-bindings: Add DT bindings for the DT-based virtual sensor driver
-  thermal: add a virtual sensor to aggregate temperatures
-
- .../thermal/virtual,thermal-sensor.yaml       |  86 +++++++
- drivers/thermal/Kconfig                       |   8 +
- drivers/thermal/Makefile                      |   1 +
- drivers/thermal/virtual_thermal_sensor.c      | 218 ++++++++++++++++++
- include/dt-bindings/thermal/virtual-sensor.h  |  15 ++
- 5 files changed, 328 insertions(+)
+Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
+---
+ .../thermal/virtual,thermal-sensor.yaml       | 86 +++++++++++++++++++
+ include/dt-bindings/thermal/virtual-sensor.h  | 15 ++++
+ 2 files changed, 101 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/thermal/virtual,thermal-sensor.yaml
- create mode 100644 drivers/thermal/virtual_thermal_sensor.c
  create mode 100644 include/dt-bindings/thermal/virtual-sensor.h
 
+diff --git a/Documentation/devicetree/bindings/thermal/virtual,thermal-sensor.yaml b/Documentation/devicetree/bindings/thermal/virtual,thermal-sensor.yaml
+new file mode 100644
+index 000000000000..b404fd4b2b38
+--- /dev/null
++++ b/Documentation/devicetree/bindings/thermal/virtual,thermal-sensor.yaml
+@@ -0,0 +1,86 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright 2021 BayLibre
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/thermal/virtual,thermal-sensor.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Virtual thermal sensor binding
++
++maintainers:
++  - Alexandre Bailon <abailon@baylibre.com>
++
++description: |
++  The virtual thermal sensor device provides a way to aggregate the temperature
++  from multiple thermal zones. Basically, this could be used to get the
++  maximum, minimum or average temperature.
++
++allOf:
++  - $ref: thermal-sensor.yaml#
++
++properties:
++  compatible:
++    const: virtual,thermal-sensor
++
++  aggregation-function:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      Used to select the operations to perform on the sensors to get the virtual
++      sensor temperature.
++    enum:
++      - VIRTUAL_THERMAL_SENSOR_MIN_VAL
++      - VIRTUAL_THERMAL_SENSOR_MAX_VAL
++      - VIRTUAL_THERMAL_SENSOR_AVG_VAL
++
++  thermal-sensors:
++    $ref: /schemas/types.yaml#/definitions/string-array
++    description:
++      The names of the thermal zone to aggregate.
++
++required:
++  - aggregation-function
++  - thermal-sensors
++
++additionalProperties: true
++
++examples:
++  - |
++    #include <dt-bindings/thermal/thermal.h>
++    #include <dt-bindings/thermal/virtual-sensor.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/clock/mt8192-clk.h>
++
++    lvts: lvts@1100b000 {
++        compatible = "mediatek,mt6873-lvts";
++        reg = <0x1100b000 0x1000>;
++        clocks = <&infracfg CLK_INFRA_THERM>;
++        clock-names = "lvts_clk";
++        #thermal-sensor-cells = <1>;
++        interrupts = <GIC_SPI 147 IRQ_TYPE_LEVEL_HIGH>;
++    };
++
++    cpu_max_sensor: cpu_max_sensor {
++      compatible = "virtual,thermal-sensor";
++      #thermal-sensor-cells = <1>;
++      aggregation-function = <VIRTUAL_THERMAL_SENSOR_MAX_VAL>;
++      thermal-sensors = "cpu1", "cpu2";
++    };
++
++    thermal_zones: thermal-zones {
++      cpu1 {
++        polling-delay = <0>; /* milliseconds */
++        polling-delay-passive = <0>; /* milliseconds */
++        thermal-sensors = <&lvts 0>;
++      };
++      cpu2 {
++        polling-delay = <0>; /* milliseconds */
++        polling-delay-passive = <0>; /* milliseconds */
++        thermal-sensors = <&lvts 1>;
++      };
++      cpu_max {
++        polling-delay = <0>; /* milliseconds */
++        polling-delay-passive = <0>; /* milliseconds */
++        thermal-sensors = <&cpu_max_sensor 0>;
++      };
++    };
++...
+diff --git a/include/dt-bindings/thermal/virtual-sensor.h b/include/dt-bindings/thermal/virtual-sensor.h
+new file mode 100644
+index 000000000000..6254b2aa8f5c
+--- /dev/null
++++ b/include/dt-bindings/thermal/virtual-sensor.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * This header provides constants for virtual thermal sensor bindings.
++ *
++ * Copyright (C) 2021 BayLibre
++ */
++
++#ifndef _DT_BINDINGS_THERMAL_VIRTUAL_SENSOR_H
++#define _DT_BINDINGS_THERMAL_VIRTUAL_SENSOR_H
++
++#define VIRTUAL_THERMAL_SENSOR_MIN_VAL 0
++#define VIRTUAL_THERMAL_SENSOR_MAX_VAL 1
++#define VIRTUAL_THERMAL_SENSOR_AVG_VAL 2
++
++#endif /* _DT_BINDINGS_THERMAL_VIRTUAL_SENSOR_H */
 -- 
 2.25.1
 
