@@ -2,174 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A4748B498
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jan 2022 18:52:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA02248B8FB
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jan 2022 21:53:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344295AbiAKRwv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jan 2022 12:52:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48230 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344936AbiAKRwq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jan 2022 12:52:46 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A24C3C06175B
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jan 2022 09:52:45 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id x4so9285790wru.7
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jan 2022 09:52:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=vQV7H1k8exOsSWKyQG8KsYMhFmUsr7KfsLG2MHz/o1w=;
-        b=wbT3spThsr/W+NEL008mAHAbggqQ2ihoWWllfG+L4kCSIv1OT+mxhVFT9Xu1lgvIF6
-         UpY/GVGa5gFqxaEyeovNIyngExV+/NbcGXrH5BLqiiMXE0QLvtyD4SdWnwtXHCegzSsq
-         aMtoWWLv7dfHVoXotfUvYpOCKR0drophadDmcpR/LhHQ04ZSnfNg6MebA4UqIMBLSXEn
-         ujhyMQ36X4QmNMQr7jtmMognGzDXlVTdDelv0fL7r+UdwM2eWC16dv6D4J4ZZ3A5p8qV
-         QvNP3tuBmAOqhv0zf9Te312E7+4sTXTt+cmCODhTX6Znv+U/ku+/+JpxK8KQTcmRy+fS
-         rVaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=vQV7H1k8exOsSWKyQG8KsYMhFmUsr7KfsLG2MHz/o1w=;
-        b=gj5hFDQp64zeWnXQu7lJQmSYLALdKxXgv18oFLpn7MtOPgnc44Tg17lZ7ET+prcNDT
-         gT3lCA5dI1yPLy5hiJjRAKrltAwO7A5PFgpawbNiDIKmndX/VLCmkjw4LH400cUZPVm4
-         FdYwcCuQEIuGVs3GEMYpP3xPTOZhsY95ePtyarGI0RY6RSAyyoGen2ERXbasOx3RMW9f
-         8NaOwo02RDrthAhKW/RnenSVoFbMKKmcsQ6ZnfiI+ph7eky6g1NTvM96bqvVt0t84E1U
-         N1DtcU+HyQy/y14pDlAkBW1q8jaqbewhYhXxeh6ODXngwOKUYoSNn1rIqeKz0Iwcx+uE
-         oPbQ==
-X-Gm-Message-State: AOAM531jqjaOCJ76XJKBTVESXPLIfWm3S1VW/pjMlsQwOqWz9Acaqi9i
-        MKIzA3qCFdKUGsMG5jRIO7HruA==
-X-Google-Smtp-Source: ABdhPJy/SOq67WEpADi1gHx1k1OD5/uwhjSEt55UTwb/G6+/YUHv8px0Q2P0S9U1Q6+lJBpgMIaP5Q==
-X-Received: by 2002:a5d:6d8a:: with SMTP id l10mr4845085wrs.534.1641923563972;
-        Tue, 11 Jan 2022 09:52:43 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:f884:1ae9:44d3:2a67? ([2a01:e34:ed2f:f020:f884:1ae9:44d3:2a67])
-        by smtp.googlemail.com with ESMTPSA id i11sm9031090wrn.59.2022.01.11.09.52.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jan 2022 09:52:14 -0800 (PST)
-Subject: Re: [PATCH v5 2/6] powercap/drivers/dtpm: Add hierarchy creation
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     rjw@rjwysocki.net, lukasz.luba@arm.com, robh@kernel.org,
-        heiko@sntech.de, arnd@linaro.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@kernel.org>
-References: <20211218130014.4037640-1-daniel.lezcano@linaro.org>
- <20211218130014.4037640-3-daniel.lezcano@linaro.org>
- <CAPDyKFrLTsUxG8JHdK33h2BT8pxeHk6kiU-4uGrvxUhcQKg3Sw@mail.gmail.com>
- <8fcc0ef8-b0c7-da73-434f-31c88896aed5@linaro.org>
- <CAPDyKFqzxnfh0kow5mzoApFMQpKOAv=e1b7Cy9H-iEh99Wmagw@mail.gmail.com>
- <cbc70ea7-39b4-b5e8-b5c0-45fb436f53eb@linaro.org>
- <CAPDyKFoFpEjakaeb1JvYg47qoagGnzwyh2T1SpHQiwB3sFgkoA@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <aad4eb52-67b0-a486-53c6-755de3dee6be@linaro.org>
-Date:   Tue, 11 Jan 2022 18:52:07 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <CAPDyKFoFpEjakaeb1JvYg47qoagGnzwyh2T1SpHQiwB3sFgkoA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S233173AbiAKUxy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Jan 2022 15:53:54 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:43406 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244590AbiAKUxK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jan 2022 15:53:10 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 682D8B81D50;
+        Tue, 11 Jan 2022 20:53:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 39833C36B03;
+        Tue, 11 Jan 2022 20:53:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641934388;
+        bh=YRjKWNl+VzQWa8Hv3wTzIaOB8mXASYhZrFJ4rjMQ9/I=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=GMQHS0K7rQSikD4jAR2L4FYUWKt4rRJHK7aat/KDckLNEcHOOwfHqdyPDdgK7X7bS
+         Aago6jj7E0EluFOcDe8iCytYXwwSNyK0cPZEnMV0IPDWlze2A3J+GDvQRp9MaVS6SL
+         J1nJ3sB2Va4JT/dTl2DteSLXwxzPRPuYpzqVvNfH/POFXhIBtejaDWUV7GErrrWIxv
+         qqJSAZFVjTZjB0YilHgKBoAI9Ix36D2/eShNB/SOm5if14M3ptiewkyWd5ApsY//fp
+         m0rtm5ZYbB7MSIYYAA5Y+axTltc+Omoehf5evhjSB+CVLX0EM8ewy+a0d5Tz36Dni1
+         pZ9j6nxlWmaTA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 265E0F6078A;
+        Tue, 11 Jan 2022 20:53:08 +0000 (UTC)
+Subject: Re: [GIT PULL] power-supply changes for 5.17
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220110094812.4rtl2ltyaow7hgla@earth.universe>
+References: <20220110094812.4rtl2ltyaow7hgla@earth.universe>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220110094812.4rtl2ltyaow7hgla@earth.universe>
+X-PR-Tracked-Remote: ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v5.17
+X-PR-Tracked-Commit-Id: 25fd330370ac40653671f323acc7fb6db27ef6fe
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 039053c11965a33250e75009e37dab8e7580fa4e
+Message-Id: <164193438814.11435.10197426396100717909.pr-tracker-bot@kernel.org>
+Date:   Tue, 11 Jan 2022 20:53:08 +0000
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Hans de Goede <hdegoede@redhat.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11/01/2022 09:28, Ulf Hansson wrote:
-> On Mon, 10 Jan 2022 at 16:55, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->>
->> On 07/01/2022 16:54, Ulf Hansson wrote:
->>> [...]
->>>
->>>>>> +static int dtpm_for_each_child(const struct dtpm_node *hierarchy,
->>>>>> +                              const struct dtpm_node *it, struct dtpm *parent)
->>>>>> +{
->>>>>> +       struct dtpm *dtpm;
->>>>>> +       int i, ret;
->>>>>> +
->>>>>> +       for (i = 0; hierarchy[i].name; i++) {
->>>>>> +
->>>>>> +               if (hierarchy[i].parent != it)
->>>>>> +                       continue;
->>>>>> +
->>>>>> +               dtpm = dtpm_node_callback[hierarchy[i].type](&hierarchy[i], parent);
->>>>>> +               if (!dtpm || IS_ERR(dtpm))
->>>>>> +                       continue;
->>>>>> +
->>>>>> +               ret = dtpm_for_each_child(hierarchy, &hierarchy[i], dtpm);
->>>>>
->>>>> Why do you need to recursively call dtpm_for_each_child() here?
->>>>>
->>>>> Is there a restriction on how the dtpm core code manages adding
->>>>> children/parents?
->>>>
->>>> [ ... ]
->>>>
->>>> The recursive call is needed given the structure of the tree in an array
->>>> in order to connect with the parent.
->>>
->>> Right, I believe I understand what you are trying to do here, but I am
->>> not sure if this is the best approach to do this. Maybe it is.
->>>
->>> The problem is that we are also allocating memory for a dtpm and we
->>> call dtpm_register() on it in this execution path - and this memory
->>> doesn't get freed up nor unregistered, if any of the later recursive
->>> calls to dtpm_for_each_child() fails.
->>>
->>> The point is, it looks like it can get rather messy with the recursive
->>> calls to cope with the error path. Maybe it's easier to store the
->>> allocated dtpms in a list somewhere and use this to also find a
->>> reference of a parent?
->>
->> I think it is better to continue the construction with other nodes even
->> some of them failed to create, it should be a non critical issue. As an
->> analogy, if one thermal zone fails to create, the other thermal zones
->> are not removed.
-> 
-> Well, what if it fails because its "consumer part" is waiting for some
-> resource to become available?
-> 
-> Maybe the devfreq driver/subsystem isn't available yet and causes
-> -EPROBE_DEFER, for example. Perhaps this isn't the way the dtpm
-> registration works currently, but sure it's worth considering when
-> going forward, no?
+The pull request you sent on Mon, 10 Jan 2022 10:48:12 +0100:
 
-It should be solved by the fact that the DTPM description is a module
-and loaded after the system booted. The module loading ordering is
-solved by userspace.
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v5.17
 
-I agree, we could improve that but it is way too complex to be addressed
-in a single series and should be part of a specific change IMO.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/039053c11965a33250e75009e37dab8e7580fa4e
 
-> In any case, papering over the error seems quite scary to me. I would
-> much prefer if we instead could propagate the error code correctly to
-> the caller of dtpm_create_hierarchy(), to allow it to retry if
-> necessary.
-
-It is really something we should be able to address later.
-
->> In addition, that should allow multiple nodes description for different
->> DT setup for the same platform. That should fix the issue pointed by Bjorn.
->>
->>> Later on, when we may decide to implement "dtpm_destroy_hierarchy()"
->>> (or whatever we would call such interface), you probably need a list
->>> of the allocated dtpms anyway, don't you think?
->>
->> No it is not necessary, the dtpms list is the dtpm tree itself and it
->> can be destroyed recursively.
-> 
-> I could quite figure out how that should work though, but I assume
-> that is what the ->release() callback in the struct dtpm_ops is there
-> to help with, in some way.
-> 
-> Kind regards
-> Uffe
-> 
-
+Thank you!
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
