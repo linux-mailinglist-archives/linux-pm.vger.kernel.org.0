@@ -2,456 +2,174 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AAC848B489
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jan 2022 18:51:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69A4748B498
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jan 2022 18:52:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344897AbiAKRvT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jan 2022 12:51:19 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:33076
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344770AbiAKRvF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jan 2022 12:51:05 -0500
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id EF4B03F198
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jan 2022 17:51:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1641923463;
-        bh=j6uZDel7K615FhQ3acPPw5TtgkYoagK9b4lklXpsWps=;
-        h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=LPfQqWw3A5gyyncEvropGL307WPKyurGm31oEbwQN351Z3gVURcWbrbMmVcra+36/
-         xBb46LZZxYvnPFa6oyRvcfF9zlnypiNRS8hEE/kU60qLCdPAHDm0O7y9qZOEdJ66TV
-         aRu7tpHeQNqpvWOWxvwusPuXO4CLPkUxH7XCRZbOHK4koQeObfQOY2yN2tK1Jd8y2l
-         D39myVnPPWP5nUNaw43oqPtLspKIWSCMPJSKguuun+fw7UCQOQCpslrAuo0B6anrRd
-         fq5zMOBNkFH4lokUIPerkh2HPWk+y7mhszxCIN0Tbdd5dXJ4btHVkc1R9LtZn+OY+W
-         FcaHwpUfMCzvw==
-Received: by mail-ed1-f70.google.com with SMTP id g11-20020a056402090b00b003f8fd1ac475so14011594edz.1
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jan 2022 09:51:03 -0800 (PST)
+        id S1344295AbiAKRwv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Jan 2022 12:52:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48230 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344936AbiAKRwq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jan 2022 12:52:46 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A24C3C06175B
+        for <linux-pm@vger.kernel.org>; Tue, 11 Jan 2022 09:52:45 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id x4so9285790wru.7
+        for <linux-pm@vger.kernel.org>; Tue, 11 Jan 2022 09:52:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=vQV7H1k8exOsSWKyQG8KsYMhFmUsr7KfsLG2MHz/o1w=;
+        b=wbT3spThsr/W+NEL008mAHAbggqQ2ihoWWllfG+L4kCSIv1OT+mxhVFT9Xu1lgvIF6
+         UpY/GVGa5gFqxaEyeovNIyngExV+/NbcGXrH5BLqiiMXE0QLvtyD4SdWnwtXHCegzSsq
+         aMtoWWLv7dfHVoXotfUvYpOCKR0drophadDmcpR/LhHQ04ZSnfNg6MebA4UqIMBLSXEn
+         ujhyMQ36X4QmNMQr7jtmMognGzDXlVTdDelv0fL7r+UdwM2eWC16dv6D4J4ZZ3A5p8qV
+         QvNP3tuBmAOqhv0zf9Te312E7+4sTXTt+cmCODhTX6Znv+U/ku+/+JpxK8KQTcmRy+fS
+         rVaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=j6uZDel7K615FhQ3acPPw5TtgkYoagK9b4lklXpsWps=;
-        b=m/VFuGWCZW/fftixgLj4Rh+Ogx0mWQ0XJmi/LNVXdWe+T7tublK0k1sqOynAk3d/Rq
-         mGboOU8VooGqcPlOQxhrw0ROTxoIt5w46/1Gy8tuviOB4xe1U5g0j2ghUTlGOyYzdnW4
-         jm88rV+mYlYLHd/QxUKCm9m9rytVUWiAsMe4tMsOwTJ0YEvfrgDZUJERyuXgcruMNcEk
-         Pf4nNlSTgQNJaE0jYxbstpEXyGxeEz25U+j5XAtS9Fk8sReta1Jy7jyp5QdVewDuT4Fl
-         UfZveDc16JmzP51qN5ONAy4vdG34RspPWks1umxeyEm/lje3KOQ5zK567YSEfGln3BHg
-         ZwYw==
-X-Gm-Message-State: AOAM533bYhA8yYvcokub8M1rCqbfJkY8DnWCFIpNZAonbfjSmB4zIoGq
-        +ySUofMkKg9qIeKKuEEst9CrAWKvQbR2Qeoh43tge7ikJeCtdV0S2o0VUBBDO8ziq51QdR05oXo
-        MOuwG+VjceZg8XzYGn4mDJLsroYIb6NMNslES
-X-Received: by 2002:a17:906:9c82:: with SMTP id fj2mr4415016ejc.699.1641923463397;
-        Tue, 11 Jan 2022 09:51:03 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy6sxjwCsNV7pjYkWCmE4jQTr4JH/59BHwUL74BTu3PUEEOxC5/W5dprVsiN23jn3BDA8+oaw==
-X-Received: by 2002:a17:906:9c82:: with SMTP id fj2mr4414989ejc.699.1641923463063;
-        Tue, 11 Jan 2022 09:51:03 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id p25sm5265160edw.75.2022.01.11.09.51.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 09:51:02 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v2 4/4] dt-bindings: mfd: maxim,max77693: convert to dtschema
-Date:   Tue, 11 Jan 2022 18:50:17 +0100
-Message-Id: <20220111175017.223966-5-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220111175017.223966-1-krzysztof.kozlowski@canonical.com>
-References: <20220111175017.223966-1-krzysztof.kozlowski@canonical.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=vQV7H1k8exOsSWKyQG8KsYMhFmUsr7KfsLG2MHz/o1w=;
+        b=gj5hFDQp64zeWnXQu7lJQmSYLALdKxXgv18oFLpn7MtOPgnc44Tg17lZ7ET+prcNDT
+         gT3lCA5dI1yPLy5hiJjRAKrltAwO7A5PFgpawbNiDIKmndX/VLCmkjw4LH400cUZPVm4
+         FdYwcCuQEIuGVs3GEMYpP3xPTOZhsY95ePtyarGI0RY6RSAyyoGen2ERXbasOx3RMW9f
+         8NaOwo02RDrthAhKW/RnenSVoFbMKKmcsQ6ZnfiI+ph7eky6g1NTvM96bqvVt0t84E1U
+         N1DtcU+HyQy/y14pDlAkBW1q8jaqbewhYhXxeh6ODXngwOKUYoSNn1rIqeKz0Iwcx+uE
+         oPbQ==
+X-Gm-Message-State: AOAM531jqjaOCJ76XJKBTVESXPLIfWm3S1VW/pjMlsQwOqWz9Acaqi9i
+        MKIzA3qCFdKUGsMG5jRIO7HruA==
+X-Google-Smtp-Source: ABdhPJy/SOq67WEpADi1gHx1k1OD5/uwhjSEt55UTwb/G6+/YUHv8px0Q2P0S9U1Q6+lJBpgMIaP5Q==
+X-Received: by 2002:a5d:6d8a:: with SMTP id l10mr4845085wrs.534.1641923563972;
+        Tue, 11 Jan 2022 09:52:43 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:f884:1ae9:44d3:2a67? ([2a01:e34:ed2f:f020:f884:1ae9:44d3:2a67])
+        by smtp.googlemail.com with ESMTPSA id i11sm9031090wrn.59.2022.01.11.09.52.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jan 2022 09:52:14 -0800 (PST)
+Subject: Re: [PATCH v5 2/6] powercap/drivers/dtpm: Add hierarchy creation
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     rjw@rjwysocki.net, lukasz.luba@arm.com, robh@kernel.org,
+        heiko@sntech.de, arnd@linaro.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@kernel.org>
+References: <20211218130014.4037640-1-daniel.lezcano@linaro.org>
+ <20211218130014.4037640-3-daniel.lezcano@linaro.org>
+ <CAPDyKFrLTsUxG8JHdK33h2BT8pxeHk6kiU-4uGrvxUhcQKg3Sw@mail.gmail.com>
+ <8fcc0ef8-b0c7-da73-434f-31c88896aed5@linaro.org>
+ <CAPDyKFqzxnfh0kow5mzoApFMQpKOAv=e1b7Cy9H-iEh99Wmagw@mail.gmail.com>
+ <cbc70ea7-39b4-b5e8-b5c0-45fb436f53eb@linaro.org>
+ <CAPDyKFoFpEjakaeb1JvYg47qoagGnzwyh2T1SpHQiwB3sFgkoA@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <aad4eb52-67b0-a486-53c6-755de3dee6be@linaro.org>
+Date:   Tue, 11 Jan 2022 18:52:07 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
+In-Reply-To: <CAPDyKFoFpEjakaeb1JvYg47qoagGnzwyh2T1SpHQiwB3sFgkoA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Convert the MFD part of Maxim MAX77693 MUIC to DT schema format.  The
-example DTS was copied from existing DTS (exynos4412-midas.dtsi), so
-keep the license as GPL-2.0-only.
+On 11/01/2022 09:28, Ulf Hansson wrote:
+> On Mon, 10 Jan 2022 at 16:55, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>>
+>> On 07/01/2022 16:54, Ulf Hansson wrote:
+>>> [...]
+>>>
+>>>>>> +static int dtpm_for_each_child(const struct dtpm_node *hierarchy,
+>>>>>> +                              const struct dtpm_node *it, struct dtpm *parent)
+>>>>>> +{
+>>>>>> +       struct dtpm *dtpm;
+>>>>>> +       int i, ret;
+>>>>>> +
+>>>>>> +       for (i = 0; hierarchy[i].name; i++) {
+>>>>>> +
+>>>>>> +               if (hierarchy[i].parent != it)
+>>>>>> +                       continue;
+>>>>>> +
+>>>>>> +               dtpm = dtpm_node_callback[hierarchy[i].type](&hierarchy[i], parent);
+>>>>>> +               if (!dtpm || IS_ERR(dtpm))
+>>>>>> +                       continue;
+>>>>>> +
+>>>>>> +               ret = dtpm_for_each_child(hierarchy, &hierarchy[i], dtpm);
+>>>>>
+>>>>> Why do you need to recursively call dtpm_for_each_child() here?
+>>>>>
+>>>>> Is there a restriction on how the dtpm core code manages adding
+>>>>> children/parents?
+>>>>
+>>>> [ ... ]
+>>>>
+>>>> The recursive call is needed given the structure of the tree in an array
+>>>> in order to connect with the parent.
+>>>
+>>> Right, I believe I understand what you are trying to do here, but I am
+>>> not sure if this is the best approach to do this. Maybe it is.
+>>>
+>>> The problem is that we are also allocating memory for a dtpm and we
+>>> call dtpm_register() on it in this execution path - and this memory
+>>> doesn't get freed up nor unregistered, if any of the later recursive
+>>> calls to dtpm_for_each_child() fails.
+>>>
+>>> The point is, it looks like it can get rather messy with the recursive
+>>> calls to cope with the error path. Maybe it's easier to store the
+>>> allocated dtpms in a list somewhere and use this to also find a
+>>> reference of a parent?
+>>
+>> I think it is better to continue the construction with other nodes even
+>> some of them failed to create, it should be a non critical issue. As an
+>> analogy, if one thermal zone fails to create, the other thermal zones
+>> are not removed.
+> 
+> Well, what if it fails because its "consumer part" is waiting for some
+> resource to become available?
+> 
+> Maybe the devfreq driver/subsystem isn't available yet and causes
+> -EPROBE_DEFER, for example. Perhaps this isn't the way the dtpm
+> registration works currently, but sure it's worth considering when
+> going forward, no?
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
----
- .../devicetree/bindings/mfd/max77693.txt      | 194 ------------------
- .../bindings/mfd/maxim,max77693.yaml          | 143 +++++++++++++
- MAINTAINERS                                   |   2 +-
- 3 files changed, 144 insertions(+), 195 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/mfd/max77693.txt
- create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max77693.yaml
+It should be solved by the fact that the DTPM description is a module
+and loaded after the system booted. The module loading ordering is
+solved by userspace.
 
-diff --git a/Documentation/devicetree/bindings/mfd/max77693.txt b/Documentation/devicetree/bindings/mfd/max77693.txt
-deleted file mode 100644
-index 1032df14498b..000000000000
---- a/Documentation/devicetree/bindings/mfd/max77693.txt
-+++ /dev/null
-@@ -1,194 +0,0 @@
--Maxim MAX77693 multi-function device
--
--MAX77693 is a Multifunction device with the following submodules:
--- PMIC,
--- CHARGER,
--- LED,
--- MUIC,
--- HAPTIC
--
--It is interfaced to host controller using i2c.
--This document describes the bindings for the mfd device.
--
--Required properties:
--- compatible : Must be "maxim,max77693".
--- reg : Specifies the i2c slave address of PMIC block.
--- interrupts : This i2c device has an IRQ line connected to the main SoC.
--
--Optional properties:
--- regulators : The regulators of max77693 have to be instantiated under subnode
--  named "regulators" using the following format.
--
--	regulators {
--		regulator-compatible = ESAFEOUT1/ESAFEOUT2/CHARGER
--		standard regulator constraints[*].
--	};
--
--	[*] refer Documentation/devicetree/bindings/regulator/regulator.txt
--
--- haptic : The MAX77693 haptic device utilises a PWM controlled motor to provide
--  users with tactile feedback. PWM period and duty-cycle are varied in
--  order to provide the appropriate level of feedback.
--
-- Required properties:
--	- compatible : Must be "maxim,max77693-haptic"
--	- haptic-supply : power supply for the haptic motor
--	[*] refer Documentation/devicetree/bindings/regulator/regulator.txt
--	- pwms : phandle to the physical PWM(Pulse Width Modulation) device.
--	 PWM properties should be named "pwms". And number of cell is different
--	 for each pwm device.
--	 To get more information, please refer to documentation.
--	[*] refer Documentation/devicetree/bindings/pwm/pwm.txt
--
--- charger : Node configuring the charger driver.
--  If present, required properties:
--  - compatible : Must be "maxim,max77693-charger".
--
--  Optional properties (if not set, defaults will be used):
--  - maxim,constant-microvolt : Battery constant voltage in uV. The charger
--    will operate in fast charge constant current mode till battery voltage
--    reaches this level. Then the charger will switch to fast charge constant
--    voltage mode. Also vsys (system voltage) will be set to this value when
--    DC power is supplied but charger is not enabled.
--    Valid values: 3650000 - 4400000, step by 25000 (rounded down)
--    Default: 4200000
--
--  - maxim,min-system-microvolt : Minimal system voltage in uV.
--    Valid values: 3000000 - 3700000, step by 100000 (rounded down)
--    Default: 3600000
--
--  - maxim,thermal-regulation-celsius : Temperature in Celsius for entering
--    high temperature charging mode. If die temperature exceeds this value
--    the charging current will be reduced by 105 mA/Celsius.
--    Valid values: 70, 85, 100, 115
--    Default: 100
--
--  - maxim,battery-overcurrent-microamp : Overcurrent protection threshold
--    in uA (current from battery to system).
--    Valid values: 2000000 - 3500000, step by 250000 (rounded down)
--    Default: 3500000
--
--  - maxim,charge-input-threshold-microvolt : Threshold voltage in uV for
--    triggering input voltage regulation loop. If input voltage decreases
--    below this value, the input current will be reduced to reach the
--    threshold voltage.
--    Valid values: 4300000, 4700000, 4800000, 4900000
--    Default: 4300000
--
--- led : the LED submodule device node
--
--There are two LED outputs available - FLED1 and FLED2. Each of them can
--control a separate LED or they can be connected together to double
--the maximum current for a single connected LED. One LED is represented
--by one child node.
--
--Required properties:
--- compatible : Must be "maxim,max77693-led".
--
--Optional properties:
--- maxim,boost-mode :
--	In boost mode the device can produce up to 1.2A of total current
--	on both outputs. The maximum current on each output is reduced
--	to 625mA then. If not enabled explicitly, boost setting defaults to
--	LEDS_BOOST_FIXED in case both current sources are used.
--	Possible values:
--		LEDS_BOOST_OFF (0) - no boost,
--		LEDS_BOOST_ADAPTIVE (1) - adaptive mode,
--		LEDS_BOOST_FIXED (2) - fixed mode.
--- maxim,boost-mvout : Output voltage of the boost module in millivolts.
--	Valid values: 3300 - 5500, step by 25 (rounded down)
--	Default: 3300
--- maxim,mvsys-min : Low input voltage level in millivolts. Flash is not fired
--	if chip estimates that system voltage could drop below this level due
--	to flash power consumption.
--	Valid values: 2400 - 3400, step by 33 (rounded down)
--	Default: 2400
--
--Required properties for the LED child node:
--- led-sources : see Documentation/devicetree/bindings/leds/common.txt;
--		device current output identifiers: 0 - FLED1, 1 - FLED2
--- led-max-microamp : see Documentation/devicetree/bindings/leds/common.txt
--	Valid values for a LED connected to one FLED output:
--		15625 - 250000, step by 15625 (rounded down)
--	Valid values for a LED connected to both FLED outputs:
--		15625 - 500000, step by 15625 (rounded down)
--- flash-max-microamp : see Documentation/devicetree/bindings/leds/common.txt
--	Valid values for a single LED connected to one FLED output
--	(boost mode must be turned off):
--		15625 - 1000000, step by 15625 (rounded down)
--	Valid values for a single LED connected to both FLED outputs:
--		15625 - 1250000, step by 15625 (rounded down)
--	Valid values for two LEDs case:
--		15625 - 625000, step by 15625 (rounded down)
--- flash-max-timeout-us : see Documentation/devicetree/bindings/leds/common.txt
--	Valid values: 62500 - 1000000, step by 62500 (rounded down)
--
--Optional properties for the LED child node:
--- label : see Documentation/devicetree/bindings/leds/common.txt
--
--Optional nodes:
--- max77693-muic :
--	Node used only by extcon consumers.
--	Required properties:
--		- compatible : "maxim,max77693-muic"
--
--Example:
--#include <dt-bindings/leds/common.h>
--
--	max77693@66 {
--		compatible = "maxim,max77693";
--		reg = <0x66>;
--		interrupt-parent = <&gpx1>;
--		interrupts = <5 IRQ_TYPE_LEVEL_LOW>;
--
--		regulators {
--			esafeout@1 {
--				regulator-compatible = "ESAFEOUT1";
--				regulator-name = "ESAFEOUT1";
--				regulator-boot-on;
--			};
--			esafeout@2 {
--				regulator-compatible = "ESAFEOUT2";
--				regulator-name = "ESAFEOUT2";
--				};
--			charger@0 {
--				regulator-compatible = "CHARGER";
--				regulator-name = "CHARGER";
--				regulator-min-microamp = <60000>;
--				regulator-max-microamp = <2580000>;
--					regulator-boot-on;
--			};
--		};
--
--		haptic {
--			compatible = "maxim,max77693-haptic";
--			haptic-supply = <&haptic_supply>;
--			pwms = <&pwm 0 40000 0>;
--			pwm-names = "haptic";
--		};
--
--		charger {
--			compatible = "maxim,max77693-charger";
--
--			maxim,constant-microvolt = <4200000>;
--			maxim,min-system-microvolt = <3600000>;
--			maxim,thermal-regulation-celsius = <75>;
--			maxim,battery-overcurrent-microamp = <3000000>;
--			maxim,charge-input-threshold-microvolt = <4300000>;
--		};
--
--		led {
--			compatible = "maxim,max77693-led";
--			maxim,boost-mode = <LEDS_BOOST_FIXED>;
--			maxim,boost-mvout = <5000>;
--			maxim,mvsys-min = <2400>;
--
--			camera_flash: flash-led {
--				label = "max77693-flash";
--				led-sources = <0>, <1>;
--				led-max-microamp = <500000>;
--				flash-max-microamp = <1250000>;
--				flash-max-timeout-us = <1000000>;
--			};
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/mfd/maxim,max77693.yaml b/Documentation/devicetree/bindings/mfd/maxim,max77693.yaml
-new file mode 100644
-index 000000000000..906101197e11
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/maxim,max77693.yaml
-@@ -0,0 +1,143 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/maxim,max77693.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Maxim MAX77693 MicroUSB and Companion Power Management IC
-+
-+maintainers:
-+  - Chanwoo Choi <cw00.choi@samsung.com>
-+  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-+
-+description: |
-+  This is a part of device tree bindings for Maxim MAX77693 MicroUSB
-+  Integrated Circuit (MUIC).
-+
-+  The Maxim MAX77693 is a MicroUSB and Companion Power Management IC which
-+  includes voltage current regulators, charger, LED/flash, haptic motor driver
-+  and MicroUSB management IC.
-+
-+properties:
-+  compatible:
-+    const: maxim,max77693
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  reg:
-+    maxItems: 1
-+
-+  charger:
-+    $ref: /schemas/power/supply/maxim,max77693.yaml
-+
-+  led:
-+    $ref: /schemas/leds/maxim,max77693.yaml
-+
-+  max77693-muic:
-+    type: object
-+    additionalProperties: false
-+
-+    properties:
-+      compatible:
-+        const: maxim,max77693-muic
-+
-+    required:
-+      - compatible
-+
-+  motor-driver:
-+    type: object
-+    additionalProperties: false
-+
-+    properties:
-+      compatible:
-+        const: maxim,max77693-haptic
-+
-+      haptic-supply:
-+        description: Power supply to the haptic motor
-+
-+      pwms:
-+        maxItems: 1
-+
-+    required:
-+      - compatible
-+      - haptic-supply
-+      - pwms
-+
-+  regulators:
-+    $ref: ../regulator/maxim,max77693.yaml
-+    description:
-+      List of child nodes that specify the regulators.
-+
-+required:
-+  - compatible
-+  - interrupts
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/leds/common.h>
-+
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        pmic@66 {
-+            compatible = "maxim,max77693";
-+            reg = <0x66>;
-+            interrupt-parent = <&gpx1>;
-+            interrupts = <5 IRQ_TYPE_LEVEL_LOW>;
-+
-+            regulators {
-+                ESAFEOUT1 {
-+                    regulator-name = "ESAFEOUT1";
-+                };
-+
-+                ESAFEOUT2 {
-+                    regulator-name = "ESAFEOUT2";
-+                };
-+
-+                CHARGER {
-+                    regulator-name = "CHARGER";
-+                    regulator-min-microamp = <60000>;
-+                    regulator-max-microamp = <2580000>;
-+                };
-+            };
-+
-+            motor-driver {
-+                compatible = "maxim,max77693-haptic";
-+                haptic-supply = <&ldo26_reg>;
-+                pwms = <&pwm 0 38022 0>;
-+            };
-+
-+            charger {
-+                compatible = "maxim,max77693-charger";
-+
-+                maxim,constant-microvolt = <4350000>;
-+                maxim,min-system-microvolt = <3600000>;
-+                maxim,thermal-regulation-celsius = <100>;
-+                maxim,battery-overcurrent-microamp = <3500000>;
-+                maxim,charge-input-threshold-microvolt = <4300000>;
-+            };
-+
-+            led {
-+                compatible = "maxim,max77693-led";
-+                maxim,boost-mode = <LEDS_BOOST_FIXED>;
-+                maxim,boost-mvout = <5000>;
-+                maxim,mvsys-min = <2400>;
-+
-+                flash-led {
-+                    label = "max77693-flash";
-+                    function = LED_FUNCTION_FLASH;
-+                    color = <LED_COLOR_ID_WHITE>;
-+                    led-sources = <0>, <1>;
-+                    led-max-microamp = <500000>;
-+                    flash-max-microamp = <1250000>;
-+                    flash-max-timeout-us = <1000000>;
-+                };
-+            };
-+        };
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ead08768fb78..e5f2758531bc 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11692,9 +11692,9 @@ M:	Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
- L:	linux-kernel@vger.kernel.org
- S:	Supported
- F:	Documentation/devicetree/bindings/*/maxim,max77686.yaml
-+F:	Documentation/devicetree/bindings/*/maxim,max77693.yaml
- F:	Documentation/devicetree/bindings/clock/maxim,max77686.txt
- F:	Documentation/devicetree/bindings/mfd/max14577.txt
--F:	Documentation/devicetree/bindings/mfd/max77693.txt
- F:	drivers/*/max14577*.c
- F:	drivers/*/max77686*.c
- F:	drivers/*/max77693*.c
+I agree, we could improve that but it is way too complex to be addressed
+in a single series and should be part of a specific change IMO.
+
+> In any case, papering over the error seems quite scary to me. I would
+> much prefer if we instead could propagate the error code correctly to
+> the caller of dtpm_create_hierarchy(), to allow it to retry if
+> necessary.
+
+It is really something we should be able to address later.
+
+>> In addition, that should allow multiple nodes description for different
+>> DT setup for the same platform. That should fix the issue pointed by Bjorn.
+>>
+>>> Later on, when we may decide to implement "dtpm_destroy_hierarchy()"
+>>> (or whatever we would call such interface), you probably need a list
+>>> of the allocated dtpms anyway, don't you think?
+>>
+>> No it is not necessary, the dtpms list is the dtpm tree itself and it
+>> can be destroyed recursively.
+> 
+> I could quite figure out how that should work though, but I assume
+> that is what the ->release() callback in the struct dtpm_ops is there
+> to help with, in some way.
+> 
+> Kind regards
+> Uffe
+> 
+
+
 -- 
-2.32.0
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
