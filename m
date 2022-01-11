@@ -2,159 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A7948B165
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jan 2022 16:54:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4121F48B210
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jan 2022 17:26:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343654AbiAKPym (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jan 2022 10:54:42 -0500
-Received: from foss.arm.com ([217.140.110.172]:48650 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349717AbiAKPym (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 11 Jan 2022 10:54:42 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 21C826D;
-        Tue, 11 Jan 2022 07:54:42 -0800 (PST)
-Received: from e126645.arm.com (unknown [10.57.67.22])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 42BA23F774;
-        Tue, 11 Jan 2022 07:54:40 -0800 (PST)
-From:   Pierre Gondois <Pierre.Gondois@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Ionela.Voinescu@arm.com, Lukasz Luba <lukasz.luba@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v2] cpufreq: CPPC: Fix performance/frequency conversion
-Date:   Tue, 11 Jan 2022 16:54:19 +0100
-Message-Id: <20220111155419.943980-1-Pierre.Gondois@arm.com>
-X-Mailer: git-send-email 2.25.1
+        id S1349882AbiAKQ0P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Jan 2022 11:26:15 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:49864
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241194AbiAKQ0P (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jan 2022 11:26:15 -0500
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id EE7C5402EB
+        for <linux-pm@vger.kernel.org>; Tue, 11 Jan 2022 16:26:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1641918373;
+        bh=puOvobGfY/I3hOBitRLCMcxZnTzU14JJR6HhloQSBP0=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=e39H7Dw8YsS92DohieevTxyA69xVbUM0TbrXSpONEBvzSsoTnFJeutzTe/xv/RXf/
+         cBwIYrp/k5tb/x0tVTj/UZcmL2SqERVl9FL3l4W5ojpZ13BfupfQfiHuNBSzCe8/Gw
+         wkNFyXwHIGVUxCmPeI9Cc71iM2sIEdP7/uIItDVGd4Fhb0qUrYe2Bx/mcFpeDDYbCe
+         NwDETKOdg6TosX+tem+fJv4pXe7v/ZIWBGFGS0KE8Uksj4hDcpQKduQ1LXbVSSs31K
+         pqG/nrxNAguLEocQJSfrIXSoSWHB5+fzWZX9GEhLNN/Xn/WqZfC7QPzmDWVHHej2sg
+         WwEr2qpJ5BVKQ==
+Received: by mail-ed1-f70.google.com with SMTP id m16-20020a056402431000b003fb60bbe0e2so10931454edc.3
+        for <linux-pm@vger.kernel.org>; Tue, 11 Jan 2022 08:26:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=puOvobGfY/I3hOBitRLCMcxZnTzU14JJR6HhloQSBP0=;
+        b=j+Qux64BXooYqfGUSO8gGKLZXRO5hSa45VY/fTQ7N42V6E3kZ75DTs1RACt/xzycWL
+         g7PFaFh8uLnpNos5KM8y/n3swGK4CLow9ROptqWyfekPOGoEPzheLqnAWS9VUAHeploL
+         6ko5T/BfvjoUk+KaYGH4fyRWuAenbtIhkUcDbLBwXfH8WxVMKiF6Hu9b1xqgU3DKapDl
+         HUyAA+uNIZR/ShXUPOi9WngnTHdvd1uLtu9rbNbyd12XDKL0q8/r6A5ELpkyqu0iz3ud
+         HR2Pore9X5mhN+EPYDN9QA9zx3roy/0m1jEAkFwdivXbeEFYKY6Gf9eBij4duudJ/O+I
+         b/zg==
+X-Gm-Message-State: AOAM532VHn/OCaxO/3dTG3StRfmfJT0cLpw/PgSZHdZEK5GCGwq8gEp/
+        28EEH7DqGtme6OxTJ5Qa3+RiD5FcIEq+UQeuW+ucz13OfTnvoMZXY5ZS+JqfLZSvDManpIc32dD
+        HVvYmcMNqQczyHQiBHzHRgzrKoSmPbpg7NHI6
+X-Received: by 2002:a17:906:70b:: with SMTP id y11mr4245191ejb.364.1641918373510;
+        Tue, 11 Jan 2022 08:26:13 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw0WB7kXHdSOBmqAzj8OY2NGoRe81KUh+8ODpxEz+TNyF7Q2q490El0I+0sV/r9OOnYaBP5zg==
+X-Received: by 2002:a17:906:70b:: with SMTP id y11mr4245172ejb.364.1641918373301;
+        Tue, 11 Jan 2022 08:26:13 -0800 (PST)
+Received: from [192.168.0.25] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id e18sm5155101edq.77.2022.01.11.08.26.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jan 2022 08:26:12 -0800 (PST)
+Message-ID: <585a7c40-ede2-cadb-6f64-04477b3d93e3@canonical.com>
+Date:   Tue, 11 Jan 2022 17:26:11 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH 3/4] regulator: dt-bindings: maxim,max77693: convert to
+ dtschema
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20211228163930.35524-1-krzysztof.kozlowski@canonical.com>
+ <20211228163930.35524-4-krzysztof.kozlowski@canonical.com>
+ <YdRn5cvksYXK4icV@robh.at.kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <YdRn5cvksYXK4icV@robh.at.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-CPUfreq governors request CPU frequencies using information
-on current CPU usage. The CPPC driver converts them to
-performance requests. Frequency targets are computed as:
-	target_freq = (util / cpu_capacity) * max_freq
-target_freq is then clamped between [policy->min, policy->max].
+On 04/01/2022 16:29, Rob Herring wrote:
+> On Tue, Dec 28, 2021 at 05:39:29PM +0100, Krzysztof Kozlowski wrote:
+>> Convert the regulator bindings of Maxim MAX77693 MUIC to DT schema format.
+>> The existing bindings were defined in ../bindings/mfd/max77693.txt.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>> ---
+>>  .../bindings/regulator/maxim,max77693.yaml    | 49 +++++++++++++++++++
+>>  1 file changed, 49 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/regulator/maxim,max77693.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/regulator/maxim,max77693.yaml b/Documentation/devicetree/bindings/regulator/maxim,max77693.yaml
+>> new file mode 100644
+>> index 000000000000..81242c8cd77c
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/regulator/maxim,max77693.yaml
+>> @@ -0,0 +1,49 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/regulator/maxim,max77693.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Maxim MAX77693 MicroUSB and Companion Power Management IC regulators
+>> +
+>> +maintainers:
+>> +  - Chanwoo Choi <cw00.choi@samsung.com>
+>> +  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>> +
+>> +description: |
+>> +  This is a part of device tree bindings for Maxim MAX77693 MicroUSB Integrated
+>> +  Circuit (MUIC).
+>> +
+>> +  See also Documentation/devicetree/bindings/mfd/maxim,max77693.yaml for
+>> +  additional information and example.
+>> +
+>> +patternProperties:
+>> +  "^ESAFEOUT[12]$":
+>> +    type: object
+>> +    $ref: regulator.yaml#
+>> +    unevaluatedProperties: false
+>> +    description: |
+>> +      Safeout LDO regulator.
+>> +
+>> +    properties:
+>> +      regulator-min-microvolt: true
+>> +      regulator-max-microvolt: true
+> 
+> If you want to define which properties are valid from regulator.yaml, 
+> then you need to define all of them (regulator-name is missing), and use 
+> 'additionalProperties: false'. Or you can just drop these. 
+> 
+>> +
+>> +    required:
+>> +      - regulator-name
+>> +
+>> +  "^CHARGER$":
+> 
+> Fixed string, not a pattern. Place under 'properties'.
+> 
 
-The CPPC driver converts performance values to frequencies
-(and vice-versa) using cppc_cpufreq_perf_to_khz() and
-cppc_cpufreq_khz_to_perf(). These functions both use two different
-factors depending on the range of the input value. For
-cppc_cpufreq_khz_to_perf():
-- (NOMINAL_PERF / NOMINAL_FREQ) or
-- (LOWEST_PERF / LOWEST_FREQ)
-and for cppc_cpufreq_perf_to_khz():
-- (NOMINAL_FREQ / NOMINAL_PERF) or
-- ((NOMINAL_PERF - LOWEST_FREQ) / (NOMINAL_PERF - LOWEST_PERF))
+Thanks, I'll fix both.
 
-This means:
-1- the functions are not inverse for some values:
-   (perf_to_khz(khz_to_perf(x)) != x)
-2- cppc_cpufreq_perf_to_khz(LOWEST_PERF) can sometimes give
-   a different value from LOWEST_FREQ due to integer approximation
-3- it is implied that performance and frequency are proportional
-   (NOMINAL_FREQ / NOMINAL_PERF) == (LOWEST_PERF / LOWEST_FREQ)
 
-This patch changes the conversion functions to an affine function.
-This fixes the 3 points above.
-
-Suggested-by: Lukasz Luba <lukasz.luba@arm.com>
-Suggested-by: Morten Rasmussen <morten.rasmussen@arm.com>
-Signed-off-by: Pierre Gondois <Pierre.Gondois@arm.com>
----
- drivers/cpufreq/cppc_cpufreq.c | 43 +++++++++++++++++-----------------
- 1 file changed, 21 insertions(+), 22 deletions(-)
-
-diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-index db17196266e4..5024d9af2e6e 100644
---- a/drivers/cpufreq/cppc_cpufreq.c
-+++ b/drivers/cpufreq/cppc_cpufreq.c
-@@ -303,52 +303,48 @@ static u64 cppc_get_dmi_max_khz(void)
- 
- /*
-  * If CPPC lowest_freq and nominal_freq registers are exposed then we can
-- * use them to convert perf to freq and vice versa
-- *
-- * If the perf/freq point lies between Nominal and Lowest, we can treat
-- * (Low perf, Low freq) and (Nom Perf, Nom freq) as 2D co-ordinates of a line
-- * and extrapolate the rest
-- * For perf/freq > Nominal, we use the ratio perf:freq at Nominal for conversion
-+ * use them to convert perf to freq and vice versa. The conversion is
-+ * extrapolated as an affine function passing by the 2 points:
-+ *  - (Low perf, Low freq)
-+ *  - (Nominal perf, Nominal perf)
-  */
- static unsigned int cppc_cpufreq_perf_to_khz(struct cppc_cpudata *cpu_data,
- 					     unsigned int perf)
- {
- 	struct cppc_perf_caps *caps = &cpu_data->perf_caps;
-+	s64 retval, offset = 0;
- 	static u64 max_khz;
- 	u64 mul, div;
- 
- 	if (caps->lowest_freq && caps->nominal_freq) {
--		if (perf >= caps->nominal_perf) {
--			mul = caps->nominal_freq;
--			div = caps->nominal_perf;
--		} else {
--			mul = caps->nominal_freq - caps->lowest_freq;
--			div = caps->nominal_perf - caps->lowest_perf;
--		}
-+		mul = caps->nominal_freq - caps->lowest_freq;
-+		div = caps->nominal_perf - caps->lowest_perf;
-+		offset = caps->nominal_freq - (u64)caps->nominal_perf * mul / div;
- 	} else {
- 		if (!max_khz)
- 			max_khz = cppc_get_dmi_max_khz();
- 		mul = max_khz;
- 		div = caps->highest_perf;
- 	}
--	return (u64)perf * mul / div;
-+
-+	retval = offset + (u64)perf * mul / div;
-+	if (retval >= 0)
-+		return retval;
-+	return 0;
- }
- 
- static unsigned int cppc_cpufreq_khz_to_perf(struct cppc_cpudata *cpu_data,
- 					     unsigned int freq)
- {
- 	struct cppc_perf_caps *caps = &cpu_data->perf_caps;
-+	s64 retval, offset = 0;
- 	static u64 max_khz;
- 	u64  mul, div;
- 
- 	if (caps->lowest_freq && caps->nominal_freq) {
--		if (freq >= caps->nominal_freq) {
--			mul = caps->nominal_perf;
--			div = caps->nominal_freq;
--		} else {
--			mul = caps->lowest_perf;
--			div = caps->lowest_freq;
--		}
-+		mul = caps->nominal_perf - caps->lowest_perf;
-+		div = caps->nominal_freq - caps->lowest_freq;
-+		offset = caps->nominal_perf - (u64)caps->nominal_freq * mul / div;
- 	} else {
- 		if (!max_khz)
- 			max_khz = cppc_get_dmi_max_khz();
-@@ -356,7 +352,10 @@ static unsigned int cppc_cpufreq_khz_to_perf(struct cppc_cpudata *cpu_data,
- 		div = max_khz;
- 	}
- 
--	return (u64)freq * mul / div;
-+	retval = offset + (u64)freq * mul / div;
-+	if (retval >= 0)
-+		return retval;
-+	return 0;
- }
- 
- static int cppc_cpufreq_set_target(struct cpufreq_policy *policy,
--- 
-2.25.1
-
+Best regards,
+Krzysztof
