@@ -2,144 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CE1948A958
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jan 2022 09:28:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 268EB48AB73
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jan 2022 11:34:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348909AbiAKI25 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jan 2022 03:28:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58496 "EHLO
+        id S1348912AbiAKKeA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Jan 2022 05:34:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348899AbiAKI24 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jan 2022 03:28:56 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A0BC061748
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jan 2022 00:28:55 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id g11so53560843lfu.2
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jan 2022 00:28:55 -0800 (PST)
+        with ESMTP id S1348522AbiAKKeA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jan 2022 05:34:00 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF383C061748
+        for <linux-pm@vger.kernel.org>; Tue, 11 Jan 2022 02:33:58 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id a5so28109043wrh.5
+        for <linux-pm@vger.kernel.org>; Tue, 11 Jan 2022 02:33:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=w64oRqjy2sBBTYpxJqtZ5u6+GHIXLbttja2ZaIWmILY=;
-        b=srx4yPzHYNdYr0CC4i1/pIX9bImRobXWfrTb/WMcU5awT1Q1LqnnVGz4lkCyJNNVtQ
-         o6dAg8T+E72GvH23nookiW/N2M0GzMPO+MUG81Plzc3guueA6Gm7wFgGvlMj5a+h1Sx7
-         n2UHf8A4khYCg05U7q3/AtL0r9w3pz4Nm0lOtirIpCqJw/hl2gXBF1kyNrz2AXWGb92n
-         4LaLRYY7W80xLPWDwfNo5Uibe4QoBVnvkcbYc4c/pmZ3cY827oGieERLJMqCGmbms4VJ
-         ToN2/pO5dRFXkfw7C5u/aqvXNxa/vfh1JuGsO7nFuuGFsa6shCpswU9fty244TU4N4gz
-         5wMw==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dlvnTPe3lASdFY+T2t68uKlxKrbSmUU8V1J05NQSw6U=;
+        b=kFZHjxBqak04QecvDE2NLpVra0DHWksVsM+UYYxryGtHYHXrRSQWq1/xX9A+ZsO93M
+         rhwTwSrvVZrQkeHIRa1TxI4azHBBS0Zk6HLOjRdFBHyJHXYIMKAwOCchTXp35Qd2V8qd
+         /cZJXXl9E0B7ZMWaCVf19hdhB/drQhSEuY9rEEvWE/0HNNhg+4lJTlV+Zg4PoRCxVR1F
+         gt0qdlAskSDXGLVhdbk5nwi2G/xccxm/5fH6oLS+tZv8cMQeI6H+wTzrZ1pchceJj6Jk
+         x0croQongRyfddXEMEK0VaxWIeQQqMSMvF9X2hIlxWqCN0BunojhMGYG/77YcYElVabB
+         laOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=w64oRqjy2sBBTYpxJqtZ5u6+GHIXLbttja2ZaIWmILY=;
-        b=BTYif+wGn3Z0imDRqad/P9mjo/iSL/+zPuSHIH57yGoXqMm8O9jRdxzxIWT71SrkuK
-         bzKsBhtafU1MN9prQhpT0uZw8rmJgW8EDjLQUCXYDu+e4esOOq5pX40Y5faPWJ8thlgU
-         t48tgaWK6ivQuxQlIOJ6puQqEoiWlDuG8xIkqgoYn98Dw7OGqOJ3qBK4KIcDKowJ0Joe
-         WNEC4QqOsJzHYIkYWaIAKg+vbvzy76K6cdJNYJd2JNSTI7ASlW5mAhVq2KSOyscz4x2j
-         qYmJ3lW8h5vlaW+2j5d0qLN9F+GaQrliCks7qA/o5DaNGsPQkoaJICroxW+nXoVxqghI
-         MG/A==
-X-Gm-Message-State: AOAM531864+xe1pLsieNGzWXLqAYTwE4Tiyil5FMIKEVrP/RdjAXbHQ/
-        iJFmR+85lvVfSNQ2oN1KYmtdF4V1Im2xcg4qm6Edyw==
-X-Google-Smtp-Source: ABdhPJz4Ucs7djDQ4nkdItIbDWDwL6t/cbpWI/q5kJrjUsF3ZjH58NU0nm9GE4KFDs5LFx4VSOMqXjR5Ks0x1lQoMlo=
-X-Received: by 2002:a05:6512:20ca:: with SMTP id u10mr2586999lfr.71.1641889734076;
- Tue, 11 Jan 2022 00:28:54 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dlvnTPe3lASdFY+T2t68uKlxKrbSmUU8V1J05NQSw6U=;
+        b=ev3ZkKKmfO3L6QRbwQ0ziIdY2sLEcT1rZGpF5PAaP16OMy0jY3HPB/JgMa03cvst+6
+         fzTxyntfkfIy0AUe5SIujgDCGd3SUTEoSyIQmaRHQ00TE9D5oOw0uHHkwrFGTzEp2QAo
+         0q84NUC0vz4eiZ/o49AN4zRmKIww7FpScLyakcRHwg7oMaxjgmgp/2rd7WYp//2hidwC
+         bWSZUnwYEEQ0OOfke2rHEXjm+WPcpfUMEYvFm2BFdklIfDbXqbFiYJ9OAzdH5WDDkYYP
+         ow2lUuukcMrea/OLOiciTW6XN+HpYvg5WzhH7epkv2+pCta39U5bKNGlmW0lJuQjzyt1
+         RCWA==
+X-Gm-Message-State: AOAM533ZN/Yrn+ZpuNXD+pQVE9hQ40H21/JYvpT2qkWKWiLomKeO09x6
+        ez83V1sp1iZouso9+G88HKgR4Q==
+X-Google-Smtp-Source: ABdhPJwTazpdHrgr+MgipqzrdPRu4Vt8uCoZ/sH/0PYCwESlfQYlVUTG3LeTI2N/8eVmiKSo9w/aEQ==
+X-Received: by 2002:a5d:588f:: with SMTP id n15mr3282791wrf.279.1641897237487;
+        Tue, 11 Jan 2022 02:33:57 -0800 (PST)
+Received: from xps-9300.baylibre.local (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id u16sm8803470wrn.24.2022.01.11.02.33.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 02:33:57 -0800 (PST)
+From:   Alexandre Bailon <abailon@baylibre.com>
+To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        amitk@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ben.tseng@mediatek.com, khilman@baylibre.com, mka@chromium.org,
+        Alexandre Bailon <abailon@baylibre.com>
+Subject: [PATCH v4 RESEND 0/2] Add a generic virtual thermal sensor
+Date:   Tue, 11 Jan 2022 11:33:44 +0100
+Message-Id: <20220111103346.2660639-1-abailon@baylibre.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20211218130014.4037640-1-daniel.lezcano@linaro.org>
- <20211218130014.4037640-3-daniel.lezcano@linaro.org> <CAPDyKFrLTsUxG8JHdK33h2BT8pxeHk6kiU-4uGrvxUhcQKg3Sw@mail.gmail.com>
- <8fcc0ef8-b0c7-da73-434f-31c88896aed5@linaro.org> <CAPDyKFqzxnfh0kow5mzoApFMQpKOAv=e1b7Cy9H-iEh99Wmagw@mail.gmail.com>
- <cbc70ea7-39b4-b5e8-b5c0-45fb436f53eb@linaro.org>
-In-Reply-To: <cbc70ea7-39b4-b5e8-b5c0-45fb436f53eb@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 11 Jan 2022 09:28:17 +0100
-Message-ID: <CAPDyKFoFpEjakaeb1JvYg47qoagGnzwyh2T1SpHQiwB3sFgkoA@mail.gmail.com>
-Subject: Re: [PATCH v5 2/6] powercap/drivers/dtpm: Add hierarchy creation
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rjw@rjwysocki.net, lukasz.luba@arm.com, robh@kernel.org,
-        heiko@sntech.de, arnd@linaro.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 10 Jan 2022 at 16:55, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->
-> On 07/01/2022 16:54, Ulf Hansson wrote:
-> > [...]
-> >
-> >>>> +static int dtpm_for_each_child(const struct dtpm_node *hierarchy,
-> >>>> +                              const struct dtpm_node *it, struct dtpm *parent)
-> >>>> +{
-> >>>> +       struct dtpm *dtpm;
-> >>>> +       int i, ret;
-> >>>> +
-> >>>> +       for (i = 0; hierarchy[i].name; i++) {
-> >>>> +
-> >>>> +               if (hierarchy[i].parent != it)
-> >>>> +                       continue;
-> >>>> +
-> >>>> +               dtpm = dtpm_node_callback[hierarchy[i].type](&hierarchy[i], parent);
-> >>>> +               if (!dtpm || IS_ERR(dtpm))
-> >>>> +                       continue;
-> >>>> +
-> >>>> +               ret = dtpm_for_each_child(hierarchy, &hierarchy[i], dtpm);
-> >>>
-> >>> Why do you need to recursively call dtpm_for_each_child() here?
-> >>>
-> >>> Is there a restriction on how the dtpm core code manages adding
-> >>> children/parents?
-> >>
-> >> [ ... ]
-> >>
-> >> The recursive call is needed given the structure of the tree in an array
-> >> in order to connect with the parent.
-> >
-> > Right, I believe I understand what you are trying to do here, but I am
-> > not sure if this is the best approach to do this. Maybe it is.
-> >
-> > The problem is that we are also allocating memory for a dtpm and we
-> > call dtpm_register() on it in this execution path - and this memory
-> > doesn't get freed up nor unregistered, if any of the later recursive
-> > calls to dtpm_for_each_child() fails.
-> >
-> > The point is, it looks like it can get rather messy with the recursive
-> > calls to cope with the error path. Maybe it's easier to store the
-> > allocated dtpms in a list somewhere and use this to also find a
-> > reference of a parent?
->
-> I think it is better to continue the construction with other nodes even
-> some of them failed to create, it should be a non critical issue. As an
-> analogy, if one thermal zone fails to create, the other thermal zones
-> are not removed.
+This series add a virtual thermal sensor.
+It could be used to get a temperature using some thermal sensors.
+Currently, the supported operations are max, min and avg.
+The virtual sensor could be easily extended to support others operations.
 
-Well, what if it fails because its "consumer part" is waiting for some
-resource to become available?
+Changes in v2:
+- Fix some warnings / errors reported by kernel test robot
+- rename some struct and functions with a more accurate name
+- update the dt bindings: rename type attribute to aggregation-function
+- factorize a little bit the aggregation functions
+Changes in v3:
+- Aggregate thermal zone instead of thermal sensors
+- Use try_get_module / put_module to prevent thermal providers to be removed
+- Update the bindings, to be more accurate
+Changes in v4:
+- Fix two warnings reported by kernel test robot
 
-Maybe the devfreq driver/subsystem isn't available yet and causes
--EPROBE_DEFER, for example. Perhaps this isn't the way the dtpm
-registration works currently, but sure it's worth considering when
-going forward, no?
+Alexandre Bailon (2):
+  dt-bindings: Add DT bindings for the DT-based virtual sensor driver
+  thermal: add a virtual sensor to aggregate temperatures
 
-In any case, papering over the error seems quite scary to me. I would
-much prefer if we instead could propagate the error code correctly to
-the caller of dtpm_create_hierarchy(), to allow it to retry if
-necessary.
+Alexandre Bailon (2):
+  dt-bindings: Add DT bindings for the DT-based virtual sensor driver
+  thermal: add a virtual sensor to aggregate temperatures
 
->
-> In addition, that should allow multiple nodes description for different
-> DT setup for the same platform. That should fix the issue pointed by Bjorn.
->
-> > Later on, when we may decide to implement "dtpm_destroy_hierarchy()"
-> > (or whatever we would call such interface), you probably need a list
-> > of the allocated dtpms anyway, don't you think?
->
-> No it is not necessary, the dtpms list is the dtpm tree itself and it
-> can be destroyed recursively.
+ .../thermal/virtual,thermal-sensor.yaml       |  86 +++++++
+ drivers/thermal/Kconfig                       |   8 +
+ drivers/thermal/Makefile                      |   1 +
+ drivers/thermal/virtual_thermal_sensor.c      | 218 ++++++++++++++++++
+ include/dt-bindings/thermal/virtual-sensor.h  |  15 ++
+ 5 files changed, 328 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/thermal/virtual,thermal-sensor.yaml
+ create mode 100644 drivers/thermal/virtual_thermal_sensor.c
+ create mode 100644 include/dt-bindings/thermal/virtual-sensor.h
 
-I could quite figure out how that should work though, but I assume
-that is what the ->release() callback in the struct dtpm_ops is there
-to help with, in some way.
+-- 
+2.25.1
 
-Kind regards
-Uffe
