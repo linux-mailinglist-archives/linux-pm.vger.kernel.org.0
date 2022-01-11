@@ -2,334 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA3548AB74
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jan 2022 11:34:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7A6F48B040
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jan 2022 16:03:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349129AbiAKKeC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jan 2022 05:34:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58784 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349092AbiAKKeA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jan 2022 05:34:00 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A50C061748
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jan 2022 02:34:00 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id k18so31999871wrg.11
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jan 2022 02:34:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=XUjj1RE5dBBUa1ZWEnoK1axgok9F759obl3L2a0UOZI=;
-        b=ZEnEc1+E8TAUABuwGbc3jjjzWx8pPgMt9+6B9t1MpV3Df9stEl+uyHuM58y73KQAQP
-         cwRz1NkTmDRmrIq49qyXqp2RK58WcRG16CR8QYdGWrv5VNcIzHc9/4JiL4fhUOW1IL40
-         5CPT7TTjBXEytwp1ZxiEJrO5T/8kO4Wcqh6rl7jnq8Oa9uitNDT6t43qVhxFo0p2QPaQ
-         +2+vS2AtKWkdwQ78+Y8MkxcLw1n9ZUmtC2awun1yDgeLe2mS+jpKfrieBq10P8dKIIzV
-         xIss/xxixi62rLR3I/t1rgFmgZZ++dWeyUYp03EgPz4SwJ4Z0noGd8zZ+bFMGYyomQHT
-         21ng==
+        id S239916AbiAKPDz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Jan 2022 10:03:55 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:53278
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240903AbiAKPDy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jan 2022 10:03:54 -0500
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 15C1E3F1A2
+        for <linux-pm@vger.kernel.org>; Tue, 11 Jan 2022 15:03:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1641913433;
+        bh=IYze5jR3qO6DwvRj2WvqsMLmcMVBiBOg+v8HeU+h+As=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=gRJEi6cEOs95dkEHS4Wm3VoYdlHeOd+hPMQ0VEgEbklmt3gO3Ld8QMQ3VhUvZEg5K
+         iYYLTDr3fWwGErIn9sdTPB8euT0oyKE332mqt2VlV70+M67Yg2c6v9DzauTq65J/Xy
+         veHFRlD5Boo+YX9kkcRCEEMUry++rGck6hFQbobBUvdzIw8cwvokGlObJdwI5tChHV
+         gEK4wRuVToZ/OBhcKj9nTZesFR9y3lyt581luwoGZ828NEimbeqiaVD35ngzAUsJkf
+         ZSZrpSBKU78GMoWuCfW3Qb7vrLjuiSadSzgW/VM2ATG0GBhIndAJIAB+SF3UmDAoL6
+         NGkrzC3aKb6tw==
+Received: by mail-ed1-f71.google.com with SMTP id q15-20020a056402518f00b003f87abf9c37so13536607edd.15
+        for <linux-pm@vger.kernel.org>; Tue, 11 Jan 2022 07:03:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=XUjj1RE5dBBUa1ZWEnoK1axgok9F759obl3L2a0UOZI=;
-        b=ThdelJXjF29zV45nFOY/+DBy7Fo7gCKK0Q/GLc6KZhEu2rg8ib25DYAYRFO7FwuCPD
-         9XkNYW5yCTB/nO1fvB9r5c2FSldIptywVoo4k35uXeFf3c0txg4ReI+5TmZHps2FW2FJ
-         rrIVUdcCkHzXvqjaZzM4eqdJEUkaYoVytCWrWI3OmOZ7ah0t2HMzk+QG3swzL0uk/gKY
-         Gl7VUIGxsEiwtd05+ckU1SkW3FLpGYFE9tBuLMKsA2G0NmeXywck6IXXvO2mw/atbIOe
-         TmIrPNPCzfoDGXncnbXx/Tkr998G9REccV+k+vyTLMoxIQZ8fS9Dk32DXppR/bzZ/m4Z
-         Vj+A==
-X-Gm-Message-State: AOAM530Qpx9wasSYx2f3kUtTf4dXpg/7Lp06KjIe+LeCXd8+7iA86tLg
-        7OLTmXI4w05d3jjIXMg2eb+3Bw==
-X-Google-Smtp-Source: ABdhPJxFoXafrsFCIVbDq3SDjluLGverX8M1bZL1a2ve/AuQAfWynNpsbKozrHDoT2i/ez3gTM7kVQ==
-X-Received: by 2002:a5d:6784:: with SMTP id v4mr3263819wru.275.1641897238983;
-        Tue, 11 Jan 2022 02:33:58 -0800 (PST)
-Received: from xps-9300.baylibre.local (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id u16sm8803470wrn.24.2022.01.11.02.33.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 02:33:58 -0800 (PST)
-From:   Alexandre Bailon <abailon@baylibre.com>
-To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        amitk@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ben.tseng@mediatek.com, khilman@baylibre.com, mka@chromium.org,
-        Alexandre Bailon <abailon@baylibre.com>
-Subject: [PATCH v4 RESEND 2/2] thermal: add a virtual sensor to aggregate temperatures
-Date:   Tue, 11 Jan 2022 11:33:46 +0100
-Message-Id: <20220111103346.2660639-3-abailon@baylibre.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220111103346.2660639-1-abailon@baylibre.com>
-References: <20220111103346.2660639-1-abailon@baylibre.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=IYze5jR3qO6DwvRj2WvqsMLmcMVBiBOg+v8HeU+h+As=;
+        b=a3EVbav+u6u+RgPsJYkOaGa7+l+zLGGtsU7ni7WDd1KCiViYya6F60Ev8RYIRYqECq
+         B6hYNIp/eX+ClT/Y3QPaxnxe06uqLtvQF5aG6y6LCRpR1pfzYKvi5THLuD0qaW6oIROH
+         4hvEkMf8r6R08FHNdxdy54oCtelb6AntkfgDvuLEN8G/mQBA8Cs9X5mruxsnGFpvvlqY
+         OKXyVXOfHZ6ywOVF4kOOYpRtgwcFPD0gErO4Rt3HhZ+4zTcDDD51pw1Lc5Lk9TLBgQ2P
+         I36BbGtsP7IUcbj7cbzTBS7rKvLwnFcNqrC0t6A+p+GS1Wpoal8WD/8PRNKAclcH7j3P
+         Eh3g==
+X-Gm-Message-State: AOAM532VOLYClxlkWb5JoYOJS0PPamaQWFQZ8Nv8hGDvkOynqWVd/tW5
+        5FPBM48RXX7FRljr2W6IyAcoyDEGPySrsm5sxfy9cxcZCdU/H9+PKTU2MMXbXOVK884Lvc0ln0G
+        rptrzxOsyWoWxHQvPX3uofTLJbXBxw96qTi6s
+X-Received: by 2002:aa7:c5c4:: with SMTP id h4mr4888655eds.240.1641913432709;
+        Tue, 11 Jan 2022 07:03:52 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwDNRq5OgEYq9q0OcJZ+LftNyARufACeAEd50pZ8N6QddIaIPn7tod2xjmXmdJrlbUyNmrbmQ==
+X-Received: by 2002:aa7:c5c4:: with SMTP id h4mr4888638eds.240.1641913432542;
+        Tue, 11 Jan 2022 07:03:52 -0800 (PST)
+Received: from [192.168.0.25] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id nc29sm3695670ejc.3.2022.01.11.07.03.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jan 2022 07:03:51 -0800 (PST)
+Message-ID: <86288708-8024-d981-6900-44e06278c24a@canonical.com>
+Date:   Tue, 11 Jan 2022 16:03:51 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH 1/4] dt-bindings: leds: maxim,max77693: convert to
+ dtschema
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org
+References: <20211228163930.35524-1-krzysztof.kozlowski@canonical.com>
+ <20211228163930.35524-2-krzysztof.kozlowski@canonical.com>
+ <1640799296.482933.824019.nullmailer@robh.at.kernel.org>
+ <bedc4126-7536-a7f9-b833-d06f383ec15d@canonical.com>
+ <YdRjNUMht6HjVM7s@robh.at.kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <YdRjNUMht6HjVM7s@robh.at.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This adds a virtual thermal sensor driver that reads temperature from
-multiple hardware sensors and returns an aggregated temperature.
-Currently, this supports three aggregations:
-the minimum, maximum and average temperature.
+On 04/01/2022 16:09, Rob Herring wrote:
+> On Thu, Dec 30, 2021 at 11:53:37AM +0100, Krzysztof Kozlowski wrote:
+>> On 29/12/2021 18:34, Rob Herring wrote:
+>>> On Tue, 28 Dec 2021 17:39:27 +0100, Krzysztof Kozlowski wrote:
+>>>> Convert the LEDs bindings of Maxim MAX77693 MUIC to DT schema format.
+>>>> The existing bindings were defined in ../bindings/mfd/max77693.txt.
+>>>>
+>>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>>>> ---
+>>>>  .../bindings/leds/maxim,max77693.yaml         | 105 ++++++++++++++++++
+>>>>  1 file changed, 105 insertions(+)
+>>>>  create mode 100644 Documentation/devicetree/bindings/leds/maxim,max77693.yaml
+>>>>
+>>>
+>>> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+>>> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+>>>
+>>> yamllint warnings/errors:
+>>>
+>>> dtschema/dtc warnings/errors:
+>>> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/leds/common.example.dt.yaml: led-controller@0: 'reg' does not match any of the regexes: '^([a-z]+-)?led[01]?$', 'pinctrl-[0-9]+'
+>>> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/leds/maxim,max77693.yaml
+>>>
+>>> doc reference errors (make refcheckdocs):
+>>> Documentation/devicetree/bindings/leds/maxim,max77693.yaml: Documentation/devicetree/bindings/mfd/maxim,max77693.yaml
+>>>
+>>> See https://patchwork.ozlabs.org/patch/1573762
+>>>
+>>> This check can fail if there are any dependencies. The base for a patch
+>>> series is generally the most recent rc1.
+>>>
+>>
+>> I updated my yamllint and dtschema, run with DT_CHECKER_FLAGS=-m but
+>> still cannot reproduce it. Probably because I based on linux-next, so
+>> maybe this was a fixed issue in leds/common.yaml.
+> 
+> Are you setting DT_SCHEMA_FILES, because the error is in 
+> common.yaml but caused by this schema.
+> 
+> Clearly, 'reg' is not defined here. And there is no change to 
+> common.yaml in next.
+> 
 
-Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
----
- drivers/thermal/Kconfig                  |   8 +
- drivers/thermal/Makefile                 |   1 +
- drivers/thermal/virtual_thermal_sensor.c | 218 +++++++++++++++++++++++
- 3 files changed, 227 insertions(+)
- create mode 100644 drivers/thermal/virtual_thermal_sensor.c
+Indeed, I'll fix this up.
 
-diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-index d7f44deab5b1..b326fae5ad1d 100644
---- a/drivers/thermal/Kconfig
-+++ b/drivers/thermal/Kconfig
-@@ -228,6 +228,14 @@ config THERMAL_MMIO
- 	  register or shared memory, is a potential candidate to work with this
- 	  driver.
- 
-+config VIRTUAL_THERMAL
-+	tristate "DT-based virtual thermal sensor driver"
-+	depends on THERMAL_OF || COMPILE_TEST
-+	help
-+	  This option enables the generic DT-based thermal sensor aggregator.
-+	  This driver creates a thermal sensor that reads multiple hardware
-+	  sensors and aggregates their output.
-+
- config HISI_THERMAL
- 	tristate "Hisilicon thermal driver"
- 	depends on ARCH_HISI || COMPILE_TEST
-diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-index 82fc3e616e54..8bf55973059c 100644
---- a/drivers/thermal/Makefile
-+++ b/drivers/thermal/Makefile
-@@ -60,3 +60,4 @@ obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
- obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
- obj-$(CONFIG_SPRD_THERMAL)	+= sprd_thermal.o
- obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)	+= khadas_mcu_fan.o
-+obj-$(CONFIG_VIRTUAL_THERMAL) += virtual_thermal_sensor.o
-diff --git a/drivers/thermal/virtual_thermal_sensor.c b/drivers/thermal/virtual_thermal_sensor.c
-new file mode 100644
-index 000000000000..9f38af925fd1
---- /dev/null
-+++ b/drivers/thermal/virtual_thermal_sensor.c
-@@ -0,0 +1,218 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * virtual_thermal_sensor.c - DT-based virtual thermal sensor driver.
-+ *
-+ * Copyright (c) 2021 BayLibre
-+ */
-+
-+#include <linux/err.h>
-+#include <linux/export.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/of_platform.h>
-+#include <linux/slab.h>
-+#include <linux/thermal.h>
-+#include <linux/types.h>
-+#include <linux/string.h>
-+
-+#include <dt-bindings/thermal/virtual-sensor.h>
-+
-+struct virtual_thermal_zone_device {
-+	struct thermal_zone_device *zone;
-+	struct module *owner;
-+};
-+
-+struct virtual_thermal_sensor {
-+	int count;
-+	struct virtual_thermal_zone_device *zones;
-+	struct thermal_zone_device *tzd;
-+	int (*aggr_temp)(int temp1, int temp2);
-+
-+	struct list_head node;
-+};
-+
-+static int max_temp(int temp1, int temp2)
-+{
-+	return max(temp1, temp2);
-+}
-+
-+static int min_temp(int temp1, int temp2)
-+{
-+	return min(temp1, temp2);
-+}
-+
-+static int avg_temp(int temp1, int temp2)
-+{
-+	return (temp1 + temp2) / 2;
-+}
-+
-+static int virtual_thermal_sensor_get_temp(void *data, int *temperature)
-+{
-+	struct virtual_thermal_sensor *sensor = data;
-+	int max_temp = INT_MIN;
-+	int temp;
-+	int i;
-+
-+	for (i = 0; i < sensor->count; i++) {
-+		struct thermal_zone_device *zone;
-+
-+		zone = sensor->zones[i].zone;
-+		zone->ops->get_temp(zone, &temp);
-+		max_temp = sensor->aggr_temp(max_temp, temp);
-+	}
-+
-+	*temperature = max_temp;
-+
-+	return 0;
-+}
-+
-+static const struct thermal_zone_of_device_ops virtual_thermal_sensor_ops = {
-+	.get_temp = virtual_thermal_sensor_get_temp,
-+};
-+
-+static int virtual_thermal_sensor_get_module(struct virtual_thermal_zone_device *zone,
-+					     const char *name)
-+{
-+		struct platform_device *sensor_pdev;
-+		struct device_node *node;
-+
-+		node = of_find_node_by_name(NULL, name);
-+		if (!node)
-+			return -ENODEV;
-+
-+		node = of_parse_phandle(node, "thermal-sensors", 0);
-+		if (!node)
-+			return -ENODEV;
-+
-+		sensor_pdev = of_find_device_by_node(node);
-+		if (!sensor_pdev)
-+			return -ENODEV;
-+
-+		if (!sensor_pdev->dev.driver)
-+			return -EPROBE_DEFER;
-+
-+		if (!try_module_get(sensor_pdev->dev.driver->owner))
-+			return -ENODEV;
-+
-+		zone->owner = sensor_pdev->dev.driver->owner;
-+
-+		return 0;
-+}
-+
-+static void virtual_thermal_sensor_put_modules(struct virtual_thermal_sensor *sensor)
-+{
-+	int i;
-+
-+	for (i = 0; i < sensor->count; i++) {
-+		if (sensor->zones[i].zone)
-+			module_put(sensor->zones[i].owner);
-+	}
-+}
-+
-+static int virtual_thermal_sensor_probe(struct platform_device *pdev)
-+{
-+	struct virtual_thermal_sensor *sensor;
-+	struct device *dev = &pdev->dev;
-+	struct property *prop;
-+	const char *name;
-+	u32 type;
-+	int ret;
-+	int i = 0;
-+
-+	sensor = devm_kzalloc(dev, sizeof(*sensor), GFP_KERNEL);
-+	if (!sensor)
-+		return -ENOMEM;
-+	sensor->count = of_property_count_strings(dev->of_node, "thermal-sensors");
-+	if (sensor->count <= 0)
-+		return -EINVAL;
-+
-+	sensor->zones = devm_kmalloc_array(dev, sensor->count,
-+					     sizeof(*sensor->zones),
-+					     GFP_KERNEL);
-+	if (!sensor->zones)
-+		return -ENOMEM;
-+
-+	of_property_for_each_string(dev->of_node, "thermal-sensors", prop, name) {
-+		struct virtual_thermal_zone_device *virtual_zone;
-+		struct thermal_zone_device *zone;
-+
-+		virtual_zone = &sensor->zones[i++];
-+
-+		zone = thermal_zone_get_zone_by_name(name);
-+		if (IS_ERR(zone))
-+			return PTR_ERR(zone);
-+
-+		ret = virtual_thermal_sensor_get_module(virtual_zone, name);
-+		if (ret)
-+			goto err;
-+
-+		virtual_zone->zone = zone;
-+	}
-+
-+	ret = of_property_read_u32(dev->of_node, "aggregation-function", &type);
-+	if (ret)
-+		return ret;
-+
-+	switch (type) {
-+	case VIRTUAL_THERMAL_SENSOR_MAX_VAL:
-+		sensor->aggr_temp = max_temp;
-+		break;
-+	case VIRTUAL_THERMAL_SENSOR_MIN_VAL:
-+		sensor->aggr_temp = min_temp;
-+		break;
-+	case VIRTUAL_THERMAL_SENSOR_AVG_VAL:
-+		sensor->aggr_temp = avg_temp;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	sensor->tzd = devm_thermal_zone_of_sensor_register(dev, 0, sensor,
-+							   &virtual_thermal_sensor_ops);
-+	if (IS_ERR(sensor->tzd))
-+		return PTR_ERR(sensor->tzd);
-+
-+	platform_set_drvdata(pdev, sensor);
-+
-+	return 0;
-+
-+err:
-+	virtual_thermal_sensor_put_modules(sensor);
-+
-+	return ret;
-+}
-+
-+static int virtual_thermal_sensor_remove(struct platform_device *pdev)
-+{
-+	struct virtual_thermal_sensor *sensor;
-+
-+	sensor = platform_get_drvdata(pdev);
-+	list_del(&sensor->node);
-+
-+	virtual_thermal_sensor_put_modules(sensor);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id virtual_thermal_sensor_of_match[] = {
-+	{
-+		.compatible = "virtual,thermal-sensor",
-+	},
-+	{
-+	},
-+};
-+MODULE_DEVICE_TABLE(of, virtual_thermal_sensor_of_match);
-+
-+static struct platform_driver virtual_thermal_sensor = {
-+	.probe = virtual_thermal_sensor_probe,
-+	.remove = virtual_thermal_sensor_remove,
-+	.driver = {
-+		.name = "virtual-thermal-sensor",
-+		.of_match_table = virtual_thermal_sensor_of_match,
-+	},
-+};
-+
-+module_platform_driver(virtual_thermal_sensor);
-+MODULE_AUTHOR("Alexandre Bailon <abailon@baylibre.com>");
-+MODULE_DESCRIPTION("Virtual thermal sensor");
-+MODULE_LICENSE("GPL v2");
--- 
-2.25.1
 
+Best regards,
+Krzysztof
