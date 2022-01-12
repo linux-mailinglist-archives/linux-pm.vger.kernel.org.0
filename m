@@ -2,82 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 292EC48BCCF
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jan 2022 03:01:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF57848BCD5
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jan 2022 03:04:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348115AbiALCBU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jan 2022 21:01:20 -0500
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:37886 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348035AbiALCBT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jan 2022 21:01:19 -0500
-Received: by mail-ot1-f43.google.com with SMTP id h20-20020a9d6f94000000b0059100e01744so936537otq.4;
-        Tue, 11 Jan 2022 18:01:19 -0800 (PST)
+        id S1348137AbiALCEG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Jan 2022 21:04:06 -0500
+Received: from mail-ot1-f49.google.com ([209.85.210.49]:40943 "EHLO
+        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231477AbiALCEG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jan 2022 21:04:06 -0500
+Received: by mail-ot1-f49.google.com with SMTP id t6-20020a9d7746000000b005917e6b96ffso923149otl.7;
+        Tue, 11 Jan 2022 18:04:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Qk2OQ/ws2ks++rPbFgmN3BZmamKFSn87De142ZHrSBo=;
-        b=mm3IOCg7BE1RUDaNWUP5MzmaanQJ93Tk9NqNoF79W0OkrmDAbRazDW8ksYz+0gaN4/
-         jZnN3Tx4Jvl2bbuuzkxb0dlNwRJcj12Xj989obAT5Hi37NrhH2URi9b9dBq3SNPHNppn
-         TwsKlSPqlpgYj6k2vELHHp17qVDrUWW1+KxTtAsA3d4My7lm/28UBovoxyAR03t2IDdC
-         j3DkH9w2mNRBfZ/N7WVp1AHvqoWE7lCotZEkecBfUlStnAT1l6YA7gQOVpO9QY0hTfBi
-         leLilUA98KZiaqBNqZw1wKxw+htkbQQs6FFvXO07GRMSP7WPK6UiJxnltUUjE41nA94G
-         KVWQ==
-X-Gm-Message-State: AOAM531WJ4E9rX3uIb5rCud2gg9m0odCXy1J+otAb/fdvOeHDahk9tqE
-        xxLMv/mURWcuiivhY2HP5A==
-X-Google-Smtp-Source: ABdhPJzqarYaUXTAPE1/+tVVkQSjhrV2udoe9wYR0feu1OlMihqzlS2aPOfLf1LHnoecfVXpdiso7Q==
-X-Received: by 2002:a05:6830:2705:: with SMTP id j5mr5399966otu.204.1641952879291;
-        Tue, 11 Jan 2022 18:01:19 -0800 (PST)
+        bh=732LfXDboSsjn+njEaotROfdKRLLZkHsbM9vidIAV2s=;
+        b=tMqOxhR+BDCnEfD653Ihfl4u3evsC7fvM4+ZXE9UIa3ctDksx/UeLxWSvjIjVUFFUY
+         nrXNQQOWtZvvslbbKbt1RWa9oLpiIHs55QYUyCRht7+SDQs80Ael8REhSsAHmLjJB7jU
+         UrMPpKPJJJUJ/e9T+dek+uYXo5QvM+JRrxJUtB8tAZ+KhfxTzPo7+jb0vo1WFYHu3tKw
+         bclJqmLo9oI/PCSNc+VLo9gDRbNsrPTgrdiSTowjKJzCyJgf0eLfkp1paB2WAJ+XBrCq
+         kVhSnfVeaTmZWOfb4Aj473r2xgtSJi3pYYgqkrfVy+o16CgureGFabrgoH/xGA/uSYrM
+         POMw==
+X-Gm-Message-State: AOAM530LhMl+3+6ng66CpDICwP0vh9i24l8vY5YhVRsyJHfR7ALULsXo
+        ciHNznwJVE0t1ijTNz1SUg==
+X-Google-Smtp-Source: ABdhPJwY9dDpl1RJ6XKuFyePGvXumDgTUK6UNAgVzBPFfb/mWwiqA6knmsV9VO0FPVh3Jm7bTxlfAw==
+X-Received: by 2002:a9d:65cb:: with SMTP id z11mr5231750oth.241.1641953045635;
+        Tue, 11 Jan 2022 18:04:05 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id u14sm2369656ote.62.2022.01.11.18.01.18
+        by smtp.gmail.com with ESMTPSA id e69sm111160ote.1.2022.01.11.18.04.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 18:01:18 -0800 (PST)
-Received: (nullmailer pid 3915021 invoked by uid 1000);
-        Wed, 12 Jan 2022 02:01:17 -0000
-Date:   Tue, 11 Jan 2022 20:01:17 -0600
+        Tue, 11 Jan 2022 18:04:05 -0800 (PST)
+Received: (nullmailer pid 3919030 invoked by uid 1000);
+        Wed, 12 Jan 2022 02:04:04 -0000
+Date:   Tue, 11 Jan 2022 20:04:04 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Brian Norris <briannorris@chromium.org>
-Cc:     Kyungmin Park <kyungmin.park@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        Lin Huang <hl@rock-chips.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
         Chanwoo Choi <cw00.choi@samsung.com>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Lin Huang <hl@rock-chips.com>, devicetree@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-pm@vger.kernel.org,
         Derek Basehore <dbasehore@chromium.org>,
-        devicetree@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH 03/10] dt-bindings: devfreq: rk3399_dmc: Fix Hz units
-Message-ID: <Yd42bfH5skA+TZup@robh.at.kernel.org>
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 04/10] dt-bindings: devfreq: rk3399_dmc: Add more
+ disable-freq properties
+Message-ID: <Yd43FL2JihCdn8Ta@robh.at.kernel.org>
 References: <20220107235320.965497-1-briannorris@chromium.org>
- <20220107155215.3.I9341269171c114d0e04e41d48037fd32816e2d8c@changeid>
+ <20220107155215.4.I382d4de737198ea52deb118c9bdc4d93d76e009e@changeid>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220107155215.3.I9341269171c114d0e04e41d48037fd32816e2d8c@changeid>
+In-Reply-To: <20220107155215.4.I382d4de737198ea52deb118c9bdc4d93d76e009e@changeid>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 07 Jan 2022 15:53:13 -0800, Brian Norris wrote:
-> The driver and all downstream device trees [1] are using Hz units, but
-> the document claims MHz. DRAM frequency for these systems can't possibly
-> exceed 2^32-1 Hz, so the choice of unit doesn't really matter than much.
-> 
-> Rather than add unnecessary risk in getting the units wrong, let's just
-> go with the unofficial convention and make the docs match reality.
-> 
-> A sub-1MHz frequency is extremely unlikely, so include a minimum in the
-> schema, to help catch anybody who might have believed this was MHz.
-> 
-> [1] And notably, also those trying to upstream them:
-> https://lore.kernel.org/lkml/20210308233858.24741-3-daniel.lezcano@linaro.org/
+On Fri, Jan 07, 2022 at 03:53:14PM -0800, Brian Norris wrote:
+> DDR DVFS tuning has found that several power-saving features don't have
+> good tradeoffs at higher frequencies -- at higher frequencies, we'll see
+> glitches or other errors. Provide tuning controls so these can be
+> disabled at higher OPPs, and left active only at the lower ones.
 > 
 > Signed-off-by: Brian Norris <briannorris@chromium.org>
 > ---
 > 
->  .../bindings/devfreq/rk3399_dmc.yaml          | 24 +++++++++----------
->  1 file changed, 12 insertions(+), 12 deletions(-)
+>  .../bindings/devfreq/rk3399_dmc.yaml          | 42 +++++++++++++++++++
+>  1 file changed, 42 insertions(+)
 > 
+> diff --git a/Documentation/devicetree/bindings/devfreq/rk3399_dmc.yaml b/Documentation/devicetree/bindings/devfreq/rk3399_dmc.yaml
+> index 2c871c57fd97..357d07c5a3df 100644
+> --- a/Documentation/devicetree/bindings/devfreq/rk3399_dmc.yaml
+> +++ b/Documentation/devicetree/bindings/devfreq/rk3399_dmc.yaml
+> @@ -271,6 +271,43 @@ properties:
+>        When the DRAM type is LPDDR4, this parameter defines the PHY side ODT
+>        strength. Default value is 60.
+>  
+> +  rockchip,pd_idle_dis_freq:
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+s/_/-/
+
+on all the new properties.
+
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      Defines the power-down idle disable frequency in Hz. When the DDR
+> +      frequency is greater than pd_idle_dis_freq, power-down idle is disabled.
+> +      See also rockchip,pd_idle.
+> +
+> +  rockchip,sr_idle_dis_freq:
+
+'-hz' suffix. Let's not repeat the same problem.
+
+
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+
+And then the type can be dropped.
+
+> +    description:
+> +      Defines the self-refresh idle disable frequency in Hz. When the DDR
+> +      frequency is greater than sr_idle_dis_freq, self-refresh idle is
+> +      disabled. See also rockchip,sr_idle.
+> +
+> +  rockchip,sr_mc_gate_idle_dis_freq:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      Defines the self-refresh and memory-controller clock gating disable
+> +      frequency in Hz. When the DDR frequency is greater than
+> +      sr_mc_gate_idle_dis_freq, the clock will not be gated when idle. See also
+> +      rockchip,sr_mc_gate_idle.
+> +
+> +  rockchip,srpd_lite_idle_dis_freq:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      Defines the self-refresh power down idle disable frequency in Hz. When
+> +      the DDR frequency is greater than srpd_lite_idle_dis_freq, memory will
+> +      not be placed into self-refresh power down mode when idle. See also
+> +      rockchip,srpd_lite_idle.
+> +
+> +  rockchip,standby_idle_dis_freq:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      Defines the standby idle disable frequency in Hz. When the DDR frequency
+> +      is greater than standby_idle_dis_freq, standby idle is disabled. See also
+> +      rockchip,standby_idle.
+> +
+>  additionalProperties: false
+>  
+>  examples:
+> @@ -294,4 +331,9 @@ examples:
+>        rockchip,ddr3_odt_dis_freq = <333000000>;
+>        rockchip,lpddr3_odt_dis_freq = <333000000>;
+>        rockchip,lpddr4_odt_dis_freq = <333000000>;
+> +      rockchip,pd_idle_dis_freq = <1000000000>;
+> +      rockchip,sr_idle_dis_freq = <1000000000>;
+> +      rockchip,sr_mc_gate_idle_dis_freq = <1000000000>;
+> +      rockchip,srpd_lite_idle_dis_freq = <0>;
+> +      rockchip,standby_idle_dis_freq = <928000000>;
+>      };
+> -- 
+> 2.34.1.575.g55b058a8bb-goog
+> 
+> 
