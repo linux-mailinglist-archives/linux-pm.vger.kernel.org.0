@@ -2,167 +2,174 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2209A48BE64
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jan 2022 06:39:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A934A48BFFD
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jan 2022 09:34:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350902AbiALFjc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Jan 2022 00:39:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40072 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235279AbiALFjb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jan 2022 00:39:31 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C742C06173F
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jan 2022 21:39:31 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id 59-20020a17090a09c100b001b34a13745eso9697865pjo.5
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jan 2022 21:39:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=R5hqfUsAPsrAcm5lTbdPCL6TjiAR9gBOlE2FBMp7Mvs=;
-        b=htMfhVEWKSLTovh+4fMqYcqwYvnGKzp0CxNC3gTUF6pabrMAtQk9mTgtix4gKL4nFe
-         w8LaP9SQ/d31ZRnJqAjoW69WqWufrPkEhYZcS141/4b4apSd3qz6zo6guIciCKdwIzyv
-         8W3AhmCTX+2afkFIegCGZlZPrOvhOcZWlTMgVnVxXg9m9dSxRYs8LhJAlgX8a8FAt/wm
-         09e0LNx4GMQoXfyqXWRG3GYGKB9EQQhA1AI0Nhhk+c6n2Ar5PONjkbf7QhW4bXrk5Ps8
-         mkDl4z4fL0H/SaH2OX5J1FZJ9HwNBNhOih+onxAWBKY3H8MKuTmxhc3i6TeJ76wcBXBN
-         xxNg==
+        id S1351645AbiALIeG convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 12 Jan 2022 03:34:06 -0500
+Received: from mail-ua1-f49.google.com ([209.85.222.49]:41614 "EHLO
+        mail-ua1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237928AbiALIeE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jan 2022 03:34:04 -0500
+Received: by mail-ua1-f49.google.com with SMTP id p37so3317815uae.8;
+        Wed, 12 Jan 2022 00:34:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=R5hqfUsAPsrAcm5lTbdPCL6TjiAR9gBOlE2FBMp7Mvs=;
-        b=OSYnv6XG6T0XexwoO+fal2T+DbJK2EVWgz4UCv82W2gX6fA6/LIJMuYIugrE48ZUi4
-         8nEfsrWAMPgJISKGNz3mndeOMhRbhuNHZQBRTH/UsJDCAtsbGZsqcHUx88w0l/dV1RB5
-         BiwG8UeniXbCeoaV4iEwSZUyaEBGBQ384Sky+mUQypZ8cN1zRugx1ESl1Oj41MXA+OXW
-         lF80zF2s0AM2zdlj/DIzw6TsjJooceDOYovzCFLFX0d1VcHW9i22vHjjRsWQ3cNaHEvn
-         7VgTXwu1tCNYcWGKUh98n9xYNxAMkZbG6fj0oxMzfKPlGxjb+YQxFIYOyHA9XpM6Uamc
-         51bg==
-X-Gm-Message-State: AOAM533yldr7oFmDCE0uuzke3rTlWragMjxP2ug0mqwE2nsnihmIQhP4
-        O/oGu+88Mk29MIFbvBgI7Pi4cE1lXk4WyjBh
-X-Google-Smtp-Source: ABdhPJx8CQwHeV4aeP/FmZWa/vMFIx+pKzMGAC2yFnPzFSm1aTbaXS9nood/LyeysIaxPjiBQpgDTg==
-X-Received: by 2002:a17:902:70c7:b0:149:d966:789d with SMTP id l7-20020a17090270c700b00149d966789dmr7800177plt.164.1641965971022;
-        Tue, 11 Jan 2022 21:39:31 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id j16sm13399739pfj.16.2022.01.11.21.39.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 21:39:30 -0800 (PST)
-Message-ID: <61de6992.1c69fb81.62cde.19b0@mx.google.com>
-Date:   Tue, 11 Jan 2022 21:39:30 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=phWLHSZjGguJkLwzqhKqiJsmBiGXyQV/Ve2Tok5pS7g=;
+        b=xQ+L+sbnDvIN7pQZoS8oBhJ5hzOFEnlOOpe0OQGj7QGmg7rD/yK5U1MGDB+JbrfrmQ
+         Og+LufblsPcyAVbZiGFfqtw3N2LGMeLNEhUeKdnNxSYyOEPDVOTY9uaxHaH7LtUo7nUu
+         ZvT/QTfefrqC1vON97MKHf+PjxRKic3ayHsJFD6oS5cU9Z1f7gnSF2qJbpA31ujslifE
+         tDhl4Uz+JeZB66TZl0+hAwQWxum4Vlt01A1vgRSNzGq5560NZ2vCuDBsqQpogRY4cL0O
+         CcUQMHrLamCovqXDX55XYYap2uK0R+WbsTNj8+rS638rfgH4JfDPr/fLf/9RMA7JbLil
+         8mIw==
+X-Gm-Message-State: AOAM530bCf0yLZUGo4uESq65lDQwMDIPSwXAwTd0KJYxcY+rNfkltWlc
+        SMx9dbIt3QtupXLLf1ZRuArJNDEz+J0gPZMr
+X-Google-Smtp-Source: ABdhPJzhw6BMVIlG0RK3C7ZFhyThZLkewdr5PHsq29ggIRCtRT34EBNJubspsNzz4yr+xS05jmWBlw==
+X-Received: by 2002:a67:f84e:: with SMTP id b14mr3562668vsp.32.1641976442903;
+        Wed, 12 Jan 2022 00:34:02 -0800 (PST)
+Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com. [209.85.222.52])
+        by smtp.gmail.com with ESMTPSA id n15sm6569086vkf.35.2022.01.12.00.34.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jan 2022 00:34:00 -0800 (PST)
+Received: by mail-ua1-f52.google.com with SMTP id m90so3385529uam.2;
+        Wed, 12 Jan 2022 00:34:00 -0800 (PST)
+X-Received: by 2002:ab0:2118:: with SMTP id d24mr3735076ual.78.1641976440167;
+ Wed, 12 Jan 2022 00:34:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v5.16-rc8-173-g00759929cccb
-X-Kernelci-Branch: testing
-Subject: pm/testing sleep: 4 runs, 5 regressions (v5.16-rc8-173-g00759929cccb)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <20220110195449.12448-1-s.shtylyov@omp.ru> <20220110195449.12448-2-s.shtylyov@omp.ru>
+ <20220110201014.mtajyrfcfznfhyqm@pengutronix.de> <YdyilpjC6rtz6toJ@lunn.ch>
+In-Reply-To: <YdyilpjC6rtz6toJ@lunn.ch>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 12 Jan 2022 09:33:48 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
+Message-ID: <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        linux-phy@lists.infradead.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-mtd@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        openipmi-developer@lists.sourceforge.net,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        kvm@vger.kernel.org, Kamal Dasu <kdasu.kdev@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-serial@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        platform-driver-x86@vger.kernel.org, linux-pwm@vger.kernel.org,
+        John Garry <john.garry@huawei.com>,
+        Robert Richter <rric@kernel.org>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Corey Minyard <minyard@acm.org>, linux-pm@vger.kernel.org,
+        Peter Korsgaard <peter@korsgaard.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        Tony Luck <tony.luck@intel.com>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Eric Auger <eric.auger@redhat.com>, netdev@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>, linux-mmc@vger.kernel.org,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        linux-spi@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        linux-mediatek@lists.infradead.org,
+        Brian Norris <computersforpeace@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 4 runs, 5 regressions (v5.16-rc8-173-g00759929cccb)
+Hi Andrew,
 
-Regressions Summary
--------------------
+On Mon, Jan 10, 2022 at 10:20 PM Andrew Lunn <andrew@lunn.ch> wrote:
+> On Mon, Jan 10, 2022 at 09:10:14PM +0100, Uwe Kleine-König wrote:
+> > On Mon, Jan 10, 2022 at 10:54:48PM +0300, Sergey Shtylyov wrote:
+> > > This patch is based on the former Andy Shevchenko's patch:
+> > >
+> > > https://lore.kernel.org/lkml/20210331144526.19439-1-andriy.shevchenko@linux.intel.com/
+> > >
+> > > Currently platform_get_irq_optional() returns an error code even if IRQ
+> > > resource simply has not been found. It prevents the callers from being
+> > > error code agnostic in their error handling:
+> > >
+> > >     ret = platform_get_irq_optional(...);
+> > >     if (ret < 0 && ret != -ENXIO)
+> > >             return ret; // respect deferred probe
+> > >     if (ret > 0)
+> > >             ...we get an IRQ...
+> > >
+> > > All other *_optional() APIs seem to return 0 or NULL in case an optional
+> > > resource is not available. Let's follow this good example, so that the
+> > > callers would look like:
+> > >
+> > >     ret = platform_get_irq_optional(...);
+> > >     if (ret < 0)
+> > >             return ret;
+> > >     if (ret > 0)
+> > >             ...we get an IRQ...
+> >
+> > The difference to gpiod_get_optional (and most other *_optional) is that
+> > you can use the NULL value as if it were a valid GPIO.
+> >
+> > As this isn't given with for irqs, I don't think changing the return
+> > value has much sense.
+>
+> We actually want platform_get_irq_optional() to look different to all
+> the other _optional() methods because it is not equivalent. If it
+> looks the same, developers will assume it is the same, and get
+> themselves into trouble.
 
-platform            | arch | lab           | compiler | defconfig          =
-| regressions
---------------------+------+---------------+----------+--------------------=
-+------------
-rk3288-rock2-square | arm  | lab-collabora | gcc-10   | multi_v7_defconfig =
-| 5          =
+Developers already assume it is the same, and thus forget they have
+to check against -ENXIO instead of zero.
 
+Gr{oetje,eeting}s,
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.16-rc=
-8-173-g00759929cccb/plan/sleep/
+                        Geert
 
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.16-rc8-173-g00759929cccb
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      00759929cccbf2e508326f2d9139ca708195d8f1 =
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-
-
-Test Regressions
----------------- =
-
-
-
-platform            | arch | lab           | compiler | defconfig          =
-| regressions
---------------------+------+---------------+----------+--------------------=
-+------------
-rk3288-rock2-square | arm  | lab-collabora | gcc-10   | multi_v7_defconfig =
-| 5          =
-
-
-  Details:     https://kernelci.org/test/plan/id/61de5c3047938d481eef676f
-
-  Results:     2 PASS, 16 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.16-rc8-173-g0075=
-9929cccb/arm/multi_v7_defconfig/gcc-10/lab-collabora/sleep-rk3288-rock2-squ=
-are.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.16-rc8-173-g0075=
-9929cccb/arm/multi_v7_defconfig/gcc-10/lab-collabora/sleep-rk3288-rock2-squ=
-are.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye/20=
-211224.1/armhf/rootfs.cpio.gz =
-
-
-
-  * sleep.rtcwake-mem-5: https://kernelci.org/test/case/id/61de5c3047938d48=
-1eef677c
-        new failure (last pass: v5.16-rc8-171-gf099fd60c342) =
-
-
-  * sleep.rtcwake-mem-4: https://kernelci.org/test/case/id/61de5c3047938d48=
-1eef677d
-        new failure (last pass: v5.16-rc8-171-gf099fd60c342)
-
-    2022-01-12T04:42:11.551880  rtcwake: ass<4>[   14.779011] rtc-hym8563 0=
--0051: no valid clock/calendar values available
-    2022-01-12T04:42:11.552236  uming RTC uses UTC ...
-    2022-01-12T04:42:11.597129  rtcwake: read rtc time failed: Invalid a<4>=
-[   14.798591] rtc-hym8563 0-0051: no valid clock/calendar values available
-    2022-01-12T04:42:11.597658  rgument
-    2022-01-12T04:42:11.598527  rtcwake: assuming RTC uses UTC ...
-    2022-01-12T04:42:11.598908  rtcwake: read rtc ti<4>[   14.813278] rtc-h=
-ym8563 0-0051: no valid clock/calendar values available
-    2022-01-12T04:42:11.599280  me failed: Invalid argument   =
-
-
-  * sleep.rtcwake-mem-3: https://kernelci.org/test/case/id/61de5c3047938d48=
-1eef677e
-        new failure (last pass: v5.16-rc8-171-gf099fd60c342) =
-
-
-  * sleep.rtcwake-mem-2: https://kernelci.org/test/case/id/61de5c3047938d48=
-1eef677f
-        new failure (last pass: v5.16-rc8-171-gf099fd60c342)
-
-    2022-01-12T04:42:11.504813  rtcwake: assuming RTC uses UTC ...
-    2022-01-12T04:42:11.548958  rtcwake: read rt<4>[   14.739837] rtc-hym85=
-63 0-0051: no valid clock/calendar values available
-    2022-01-12T04:42:11.549515  c time failed: Invalid argument
-    2022-01-12T04:42:11.550414  rtcwake: assuming RTC uses UTC .<4>[   14.7=
-58687] rtc-hym8563 0-0051: no valid clock/calendar values available
-    2022-01-12T04:42:11.550798  ..
-    2022-01-12T04:42:11.551167  rtcwake: read rtc time failed: Invalid argu=
-ment   =
-
-
-  * sleep.rtcwake-mem-1: https://kernelci.org/test/case/id/61de5c3047938d48=
-1eef6780
-        new failure (last pass: v5.16-rc8-171-gf099fd60c342) =
-
- =20
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
