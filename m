@@ -2,81 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4812A48BCAE
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jan 2022 02:49:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8032A48BCCA
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jan 2022 02:59:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347992AbiALBtA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jan 2022 20:49:00 -0500
-Received: from mail-ot1-f42.google.com ([209.85.210.42]:45845 "EHLO
-        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347980AbiALBtA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jan 2022 20:49:00 -0500
-Received: by mail-ot1-f42.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso864981otf.12;
-        Tue, 11 Jan 2022 17:48:59 -0800 (PST)
+        id S1347252AbiALB7a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Jan 2022 20:59:30 -0500
+Received: from mail-oi1-f178.google.com ([209.85.167.178]:42933 "EHLO
+        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244071AbiALB73 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jan 2022 20:59:29 -0500
+Received: by mail-oi1-f178.google.com with SMTP id y14so1526879oia.9;
+        Tue, 11 Jan 2022 17:59:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=pJKZUzOBI6Vo24287X8+wRGy/ESvzR2XScRXuUWLW0c=;
-        b=NdQORPbUShh2cH6QGXBPhOcCvmShK4bfVQph+w8Y8xEhMitLXu8yM1TWX43a5bwDpH
-         LrN8IlAk8pIEYx2IGF+qRZ1oS0lrtBxMkOdQAQLtzvZQGdt0RoxGNSI0sMb519J9+W9s
-         FH5vfCUYphicQkiA0FuaH4yMdMTHDPzq0w0LjVZ7YT2y4dlIFO6TBsyBL7CBlxfYWBvi
-         6ZA14ecJjBxaDXiEl21iXPPe60oIoauboTAKl6WPGQ4Z8DakrFqZfJ7FlPAY13QxPwUO
-         e1drJ/eKYDhwMGq74b0kgDg5AExx9L9cN5WKtm/3+RqbSAr+Uqhro7kGWEE6W8iPYLA5
-         LoEg==
-X-Gm-Message-State: AOAM5321EZPS2DBf/xn19wUyl39eYOUaPVR36nOaJxAfeyoQCf/2Ny7r
-        3Y7M578lfKagRqOHhpdWEQ==
-X-Google-Smtp-Source: ABdhPJxZVpceae6kFAyem51l5ODi7fPdybfjS305Va6Wt3Hz3NqJYY92UE8NPVoA8llkUbDBoq3mdQ==
-X-Received: by 2002:a9d:5549:: with SMTP id h9mr5257588oti.36.1641952139623;
-        Tue, 11 Jan 2022 17:48:59 -0800 (PST)
+        bh=SY7Nt3LIYS+ee95IOS2lYNehaYFihAIPxIiHoAlBkr0=;
+        b=GMheOFW2O67tS0IVR9zAlAeST4u5gr5Sw/EXCDAM8bEGPnugQNnPiCuqiFEYbAKfBC
+         rZfw9sB1jDocGjmlY3NhRkdmxjVpQlvMbo465Ki5nKp/ObwFG1F1go6n+I11KGprWUOI
+         wBfJ/jGdO+AWXR5l4+AcHzwgztYtTAbGdcHxTcGsiPqLSleXhJiwENzTPw9lcYQMPF/Z
+         PCf5eRaanli4iKURkditrMKErM7YsFU+JK3Muba1nREV78V7LpDVB5ocTkfRiVaxkukl
+         uD8+iaLivIqCc78bsa0ZtrX0PMocg66iSAU02MQn/qIlPbJ1krHr7VfOEKafoBi4/jBW
+         Lgog==
+X-Gm-Message-State: AOAM532OsRRgXCmTIOAvfTfqocFj2+dHZh6jzHCkjAjQwoUgxjiFR592
+        /HRNTjbTfSbcO7OxpJykbCLwKs/7qA==
+X-Google-Smtp-Source: ABdhPJyhji8EPb5FuVMZbGyJHgSzUgoThoUKc/7Ld8ukWHPII1dRpzHjuB3StkNE/TYAj81PwYIOnQ==
+X-Received: by 2002:aca:3014:: with SMTP id w20mr2685105oiw.69.1641952768993;
+        Tue, 11 Jan 2022 17:59:28 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id i16sm2030688oig.15.2022.01.11.17.48.58
+        by smtp.gmail.com with ESMTPSA id w19sm406835oiw.29.2022.01.11.17.59.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 17:48:58 -0800 (PST)
-Received: (nullmailer pid 3896072 invoked by uid 1000);
-        Wed, 12 Jan 2022 01:48:57 -0000
-Date:   Tue, 11 Jan 2022 19:48:57 -0600
+        Tue, 11 Jan 2022 17:59:28 -0800 (PST)
+Received: (nullmailer pid 3912227 invoked by uid 1000);
+        Wed, 12 Jan 2022 01:59:27 -0000
+Date:   Tue, 11 Jan 2022 19:59:27 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Roger Lu <roger.lu@mediatek.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Kevin Hilman <khilman@kernel.org>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-kernel@vger.kernel.org, Fan Chen <fan.chen@mediatek.com>,
-        linux-pm@vger.kernel.org, YT Lee <yt.lee@mediatek.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-mediatek@lists.infradead.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        HenryC Chen <HenryC.Chen@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v21 6/8] dt-bindings: soc: mediatek: add mt8192 svs
- dt-bindings
-Message-ID: <Yd4ziRBDa2W34/Cn@robh.at.kernel.org>
-References: <20220107095200.4389-1-roger.lu@mediatek.com>
- <20220107095200.4389-7-roger.lu@mediatek.com>
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     Kyungmin Park <kyungmin.park@samsung.com>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Lin Huang <hl@rock-chips.com>,
+        Derek Basehore <dbasehore@chromium.org>,
+        linux-rockchip@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>
+Subject: Re: [PATCH 02/10] dt-bindings: devfreq: rk3399_dmc: Deprecate
+ unused/redundant properties
+Message-ID: <Yd41/06PvO7DDGlO@robh.at.kernel.org>
+References: <20220107235320.965497-1-briannorris@chromium.org>
+ <20220107155215.2.I5ba582cd678d34c03d647e5500db8e33b7524d66@changeid>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220107095200.4389-7-roger.lu@mediatek.com>
+In-Reply-To: <20220107155215.2.I5ba582cd678d34c03d647e5500db8e33b7524d66@changeid>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 07 Jan 2022 17:51:58 +0800, Roger Lu wrote:
-> Add mt8192 svs compatible/resets in dt-bindings.
+On Fri, 07 Jan 2022 15:53:12 -0800, Brian Norris wrote:
+> These DRAM configuration properties are all handled in ARM Trusted
+> Firmware (and have been since the early days of this SoC), and there are
+> no in-tree users of the DMC binding yet. It's better to just defer to
+> firmware instead of maintaining this large list of properties.
 > 
-> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
+> There's also some confusion about units: many of these are specified in
+> MHz, but the downstream users and driver code are treating them as Hz, I
+> believe. Rather than straighten all that out, I just drop them.
+> 
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
 > ---
->  .../devicetree/bindings/soc/mediatek/mtk-svs.yaml         | 8 ++++++++
->  1 file changed, 8 insertions(+)
+> 
+>  .../bindings/devfreq/rk3399_dmc.yaml          | 42 +++++++++----------
+>  1 file changed, 21 insertions(+), 21 deletions(-)
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>
