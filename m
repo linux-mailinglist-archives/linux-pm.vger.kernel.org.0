@@ -2,198 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48FC348C323
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jan 2022 12:31:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3837348C3A2
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jan 2022 13:00:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352858AbiALLbO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Jan 2022 06:31:14 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:60852 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237766AbiALLbL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jan 2022 06:31:11 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 252881F44D84
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1641987070;
-        bh=QaddnVuAGh34b/vvUEEUmniaA8iMOx8VQkk27YV+934=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=D7ZTGjA9QyexnjmGklm/I0+xXFMSsqB0gNhmsf4F8KiYm80JhYxXMoDdp5q1BvLX0
-         gwnWWDv71XIEUopzpJb8ZwXppEqqLqLXs+tYTX0ESav3pFufhhxLetPdyLY1Etnmbn
-         Yb9OzrN/103W2PQr4iWsWGQSOjS7IWaQpfmfuxaE28nGd/G4f7O8dFI35cL+f8esNZ
-         iDeD+Mvjh2aUJP++J7yrI9WSJG3TGWnSMVAFOrzhPIzgDzgu6z/OQCCirEvvAMcWY6
-         h3gqfUWhiT9as0x4aJ21f1J9VRyg1pRhNXBc8zDNjjQjpnA/RY+kvtFEbZt8otSMXs
-         LOaKY+6m6y8Og==
-Received: by earth.universe (Postfix, from userid 1000)
-        id 8693C3C0CB7; Wed, 12 Jan 2022 12:31:07 +0100 (CET)
-Date:   Wed, 12 Jan 2022 12:31:07 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v2 2/4] dt-bindings: power: supply: maxim,max77693:
- convert to dtschema
-Message-ID: <20220112113107.qahlfoizapcc2k23@earth.universe>
-References: <20220111175017.223966-1-krzysztof.kozlowski@canonical.com>
- <20220111175017.223966-3-krzysztof.kozlowski@canonical.com>
+        id S1353009AbiALMAt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Jan 2022 07:00:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41326 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353008AbiALMAs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jan 2022 07:00:48 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C59C06173F
+        for <linux-pm@vger.kernel.org>; Wed, 12 Jan 2022 04:00:47 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id k21so7452989lfu.0
+        for <linux-pm@vger.kernel.org>; Wed, 12 Jan 2022 04:00:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=muSscxPEf2XddsrQqYWou18NFugYkAP4ss7xaHOt1ns=;
+        b=eJOV/bNTs42nTK8cUwzEhsUDtxjY26cDP+LEKWup31jP9laDjsmdz6QwoiZeUExLDj
+         7uiZ0S+G0G4zI2MomAFVh3epp+00UfPvup0TXXALpcA9GwMibU28YD+LBR/wOWhB3TpZ
+         wZ9qvbjmzPFotdrRInJKnLg7GRtli5WX3BtQPt4FBAqcQSgK68P+cXtPSvHqmf/Y8Rwd
+         aCk2XqZnCi615c1/RYyZtAtB3eQ5JXOoyJbZlLQlI72pb92TE0JYjZ4wajLbGiy4xuVq
+         wGKzXoS1P+FHXctsQtxcicIi0prElWS29n3LXr/6+hbO2/STcxfIi/Qkw2rP8+Cv4M8y
+         Bk/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=muSscxPEf2XddsrQqYWou18NFugYkAP4ss7xaHOt1ns=;
+        b=rfehxUaZ1US2L7gQTPhz4OIUzZYHRF8Ale7ZasKsaH4DeK34gFsFqmAqcXIoFKxie6
+         Q4Yc6jK+O5AduYUnvByNZFCcTz79ZCZHhh8ihpIdWQTPWT4t58DDp8N8BCmfq2f7FQSk
+         IjzzvGWKpngeFU3n6b56Q6laLHClamFDYdHN4+XuJCpu/D8t9pY8YIvYoSs+W5pJ7uGx
+         PrRzUCwV0APMg45G9NUK4WayyWfaVSWEJdaHCdlHjurG9xYKKQGCyHsM46xYl/Khyy77
+         r4NBKe8LHlBi8sDKrJ2rGsZKv+qmUOUabUNyHjPyrVLptC3Wgv4PtHSAGJtvQgdwGfsm
+         kHkQ==
+X-Gm-Message-State: AOAM531VMrPOiSmLzaPcGejLnyC9NOq+CmaPaCOAO3eylQQdvwTl48pS
+        DznqDHrn+mO/B6KXCeUBlpmtykRuhbnSzjrCzCe68ugzo8loj4Fb
+X-Google-Smtp-Source: ABdhPJwAVDJu/y3n6NXObZ5H0mAFc4JwWpFDykmljO3TvL1LW3QDz1rdQjjEXdhPUtGhjh1spFVVBPLM/jca1O3tCXY=
+X-Received: by 2002:a05:6512:400f:: with SMTP id br15mr5186699lfb.233.1641988846017;
+ Wed, 12 Jan 2022 04:00:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="f6iv24ch4yx5vat5"
-Content-Disposition: inline
-In-Reply-To: <20220111175017.223966-3-krzysztof.kozlowski@canonical.com>
+References: <20211218130014.4037640-1-daniel.lezcano@linaro.org>
+ <20211218130014.4037640-3-daniel.lezcano@linaro.org> <CAPDyKFrLTsUxG8JHdK33h2BT8pxeHk6kiU-4uGrvxUhcQKg3Sw@mail.gmail.com>
+ <8fcc0ef8-b0c7-da73-434f-31c88896aed5@linaro.org> <CAPDyKFqzxnfh0kow5mzoApFMQpKOAv=e1b7Cy9H-iEh99Wmagw@mail.gmail.com>
+ <cbc70ea7-39b4-b5e8-b5c0-45fb436f53eb@linaro.org> <CAPDyKFoFpEjakaeb1JvYg47qoagGnzwyh2T1SpHQiwB3sFgkoA@mail.gmail.com>
+ <aad4eb52-67b0-a486-53c6-755de3dee6be@linaro.org>
+In-Reply-To: <aad4eb52-67b0-a486-53c6-755de3dee6be@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 12 Jan 2022 13:00:09 +0100
+Message-ID: <CAPDyKFrYTbVRUcYT8DMbdz4HXTbOz-xHsvUiAtmCGYdPNuOUOg@mail.gmail.com>
+Subject: Re: [PATCH v5 2/6] powercap/drivers/dtpm: Add hierarchy creation
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rjw@rjwysocki.net, lukasz.luba@arm.com, robh@kernel.org,
+        heiko@sntech.de, arnd@linaro.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Tue, 11 Jan 2022 at 18:52, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>
+> On 11/01/2022 09:28, Ulf Hansson wrote:
+> > On Mon, 10 Jan 2022 at 16:55, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+> >>
+> >> On 07/01/2022 16:54, Ulf Hansson wrote:
+> >>> [...]
+> >>>
+> >>>>>> +static int dtpm_for_each_child(const struct dtpm_node *hierarchy,
+> >>>>>> +                              const struct dtpm_node *it, struct dtpm *parent)
+> >>>>>> +{
+> >>>>>> +       struct dtpm *dtpm;
+> >>>>>> +       int i, ret;
+> >>>>>> +
+> >>>>>> +       for (i = 0; hierarchy[i].name; i++) {
+> >>>>>> +
+> >>>>>> +               if (hierarchy[i].parent != it)
+> >>>>>> +                       continue;
+> >>>>>> +
+> >>>>>> +               dtpm = dtpm_node_callback[hierarchy[i].type](&hierarchy[i], parent);
+> >>>>>> +               if (!dtpm || IS_ERR(dtpm))
+> >>>>>> +                       continue;
+> >>>>>> +
+> >>>>>> +               ret = dtpm_for_each_child(hierarchy, &hierarchy[i], dtpm);
+> >>>>>
+> >>>>> Why do you need to recursively call dtpm_for_each_child() here?
+> >>>>>
+> >>>>> Is there a restriction on how the dtpm core code manages adding
+> >>>>> children/parents?
+> >>>>
+> >>>> [ ... ]
+> >>>>
+> >>>> The recursive call is needed given the structure of the tree in an array
+> >>>> in order to connect with the parent.
+> >>>
+> >>> Right, I believe I understand what you are trying to do here, but I am
+> >>> not sure if this is the best approach to do this. Maybe it is.
+> >>>
+> >>> The problem is that we are also allocating memory for a dtpm and we
+> >>> call dtpm_register() on it in this execution path - and this memory
+> >>> doesn't get freed up nor unregistered, if any of the later recursive
+> >>> calls to dtpm_for_each_child() fails.
+> >>>
+> >>> The point is, it looks like it can get rather messy with the recursive
+> >>> calls to cope with the error path. Maybe it's easier to store the
+> >>> allocated dtpms in a list somewhere and use this to also find a
+> >>> reference of a parent?
+> >>
+> >> I think it is better to continue the construction with other nodes even
+> >> some of them failed to create, it should be a non critical issue. As an
+> >> analogy, if one thermal zone fails to create, the other thermal zones
+> >> are not removed.
+> >
+> > Well, what if it fails because its "consumer part" is waiting for some
+> > resource to become available?
+> >
+> > Maybe the devfreq driver/subsystem isn't available yet and causes
+> > -EPROBE_DEFER, for example. Perhaps this isn't the way the dtpm
+> > registration works currently, but sure it's worth considering when
+> > going forward, no?
+>
+> It should be solved by the fact that the DTPM description is a module
+> and loaded after the system booted. The module loading ordering is
+> solved by userspace.
 
---f6iv24ch4yx5vat5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Ideally, yes. However, drivers/subsystems in the kernel should respect
+-EPROBE_DEFER. It's good practice to do that.
 
-Hi,
+>
+> I agree, we could improve that but it is way too complex to be addressed
+> in a single series and should be part of a specific change IMO.
 
-On Tue, Jan 11, 2022 at 06:50:15PM +0100, Krzysztof Kozlowski wrote:
-> Convert the Charger bindings of Maxim MAX77693 MUIC to DT schema format.
-> The existing bindings were defined in ../bindings/mfd/max77693.txt.
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
+It's not my call to make, but I don't agree, sorry.
 
-I expect this to go through Rob's or Lee's tree:
+In my opinion, plain error handling to avoid leaking memory isn't
+something that should be addressed later. At least if the problems are
+already spotted during review.
 
-Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+>
+> > In any case, papering over the error seems quite scary to me. I would
+> > much prefer if we instead could propagate the error code correctly to
+> > the caller of dtpm_create_hierarchy(), to allow it to retry if
+> > necessary.
+>
+> It is really something we should be able to address later.
+>
 
--- Sebastian
+[...]
 
->  .../bindings/power/supply/maxim,max77693.yaml | 70 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  2 files changed, 71 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/supply/maxim,=
-max77693.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max7769=
-3.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max77693.yaml
-> new file mode 100644
-> index 000000000000..a21dc1a8890f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/supply/maxim,max77693.yaml
-> @@ -0,0 +1,70 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/supply/maxim,max77693.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Maxim MAX77693 MicroUSB and Companion Power Management IC Charger
-> +
-> +maintainers:
-> +  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> +
-> +description: |
-> +  This is a part of device tree bindings for Maxim MAX77693 MicroUSB Int=
-egrated
-> +  Circuit (MUIC).
-> +
-> +  See also Documentation/devicetree/bindings/mfd/maxim,max77693.yaml for
-> +  additional information and example.
-> +
-> +properties:
-> +  compatible:
-> +    const: maxim,max77693-charger
-> +
-> +  maxim,constant-microvolt:
-> +    description: |
-> +      Battery constant voltage in uV. The charger will operate in fast
-> +      charge constant current mode till battery voltage reaches this lev=
-el.
-> +      Then the charger will switch to fast charge constant voltage mode.
-> +      Also vsys (system voltage) will be set to this value when DC power=
- is
-> +      supplied but charger is not enabled.
-> +      Valid values: 3650000 - 4400000, step by 25000 (rounded down)
-> +    minimum: 3650000
-> +    maximum: 4400000
-> +    default: 4200000
-> +
-> +  maxim,min-system-microvolt:
-> +    description: |
-> +      Minimal system voltage in uV.
-> +    enum: [3000000, 3100000, 3200000, 3300000, 3400000, 3500000,
-> +           3600000, 3700000]
-> +    default: 3600000
-> +
-> +  maxim,thermal-regulation-celsius:
-> +    description: |
-> +      Temperature in Celsius for entering high temperature charging mode.
-> +      If die temperature exceeds this value the charging current will be
-> +      reduced by 105 mA/Celsius.
-> +    enum: [70, 85, 100, 115]
-> +    default: 100
-> +
-> +  maxim,battery-overcurrent-microamp:
-> +    description: |
-> +      Overcurrent protection threshold in uA (current from battery to
-> +      system).
-> +      Valid values: 2000000 - 3500000, step by 250000 (rounded down)
-> +    minimum: 2000000
-> +    maximum: 3500000
-> +    default: 3500000
-> +
-> +  maxim,charge-input-threshold-microvolt:
-> +    description: |
-> +      Threshold voltage in uV for triggering input voltage regulation lo=
-op.
-> +      If input voltage decreases below this value, the input current will
-> +      be reduced to reach the threshold voltage.
-> +    enum: [4300000, 4700000, 4800000, 4900000]
-> +    default: 4300000
-> +
-> +required:
-> +  - compatible
-> +
-> +additionalProperties: false
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index b5e4f14f6768..ead08768fb78 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -11681,6 +11681,7 @@ M:	Krzysztof Kozlowski <krzysztof.kozlowski@canon=
-ical.com>
->  M:	Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
->  L:	linux-pm@vger.kernel.org
->  S:	Supported
-> +F:	Documentation/devicetree/bindings/power/supply/maxim,max77693.yaml
->  F:	drivers/power/supply/max14577_charger.c
->  F:	drivers/power/supply/max77693_charger.c
-> =20
-> --=20
-> 2.32.0
->=20
-
---f6iv24ch4yx5vat5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmHeu/sACgkQ2O7X88g7
-+polphAAm/l8/UHhSpnw9k7he1pdP+mfWcJ+lfiwMPHLRa96gVpIhBWZUE5ezs3+
-mwbeMitlkYHHTQZfxyPoGNDRw4FPaJxF9h6Yb2MUrw6tQP294BDAegleq8tPVcFg
-IGQanfR3QhgMmFuSZLSgBZuLesIAV9rpxZteoNBmvJnSNO4RMf+k9kJH9xQwODxM
-D6NoS7OfMbGPRQ8EJVHgKOB0Q7GzTobBlANReIVtREXOGMJF5JpGX8THlT9CibNP
-4jBGMTHqlWjuJKOHOro59qraYF7T1MWmXfe0HnmyDC6SUIWs+h2pX2TJvQXFnTjE
-U3Powkm1uuK1b7lUEdjShVGRX+2GWNPcBl+GSJ1ICnUmZJRhcRrccyfG9MRwePo0
-cx5Ph1bqiQmbyva2U0r3H2Ft31qkikdGoumOJjIrIgbfvW6G05k2ZDReyAVHrEiX
-NqnZwO9T/pY6qP0frQTCZ3cIuyHp2inhMglM9P9YIHp2akD+XXA3bHme/uj0VYBP
-r6S8Neilx/Ypkiwi/vlC+g3/Iv0uCpQ+GxAkMlSS9dq1zDrQl1JFCh6hjuy08BJr
-wDswwUCUB5uB3F0lTzh3037Rot3gEZq94oJYFwHPAbMkBJpoHTtSLjneQj2f5FiF
-CyEhc6pxSwlESplkadcpxKH6Xw+tRxGIEUGl4DaPuTYh5O29Au0=
-=Z1vI
------END PGP SIGNATURE-----
-
---f6iv24ch4yx5vat5--
+Kind regards
+Uffe
