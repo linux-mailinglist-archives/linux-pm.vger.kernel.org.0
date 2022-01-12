@@ -2,273 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4741448CBF0
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jan 2022 20:27:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E9748CC86
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jan 2022 20:53:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345041AbiALT1L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Jan 2022 14:27:11 -0500
-Received: from mail-qt1-f179.google.com ([209.85.160.179]:46896 "EHLO
-        mail-qt1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345003AbiALT0L (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jan 2022 14:26:11 -0500
-Received: by mail-qt1-f179.google.com with SMTP id v7so4200362qtw.13;
-        Wed, 12 Jan 2022 11:26:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2OdLpMkE2Acb+qyy0VLgKmSLDMsqxL4iDRMnwTvWvo4=;
-        b=Df+XV2aRp4lprTsUyOnO5eHLEPye13FpHlQ+kiHMFdbRuoafzWAUPX/QcmfXFJeDGg
-         k0YdRpkXSfugmORDM5e2OE9GyZpFzVHlZREYnK3+L46vpzBcJ1bti2VhsfYSCFkOYdxB
-         3nPgwD16WR7KeYydmH3BGSxpZkr1pwXCNusI+hgqU4TiJ4jqSVS4uqwYHwtaO0Dh73ME
-         GlQrOFeqxXD8//MNvAg1hFTqhEEJokx59X7b8r6T+M2s+ghKuCw7DNPpwDfpelOKHENn
-         Q5eaa8+ll+txetBBDV5sovo3iztMuHgy0J5YCHZJj7LZKRdNLfM9qYKEEaObYhQHPm50
-         fwUQ==
-X-Gm-Message-State: AOAM531Wf8FIPXo84pSeKBlpOZhQJR0PrpDmUZAvf8F/WJoRMidHJBzV
-        ku7VbPzCCPkrrVt2Xgj5tBbWcnuXiIp41XwgpuA=
-X-Google-Smtp-Source: ABdhPJx1aWGsGy+DZCQpo3w29Z+cZ5A3P9bcxtWN7LIJdJrayKGtcTlLBLeJhDQioFdlyGdiwS9VToSEXBXcEca3Y5Y=
-X-Received: by 2002:a05:622a:44e:: with SMTP id o14mr901295qtx.369.1642015569811;
- Wed, 12 Jan 2022 11:26:09 -0800 (PST)
+        id S1357495AbiALTwr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Jan 2022 14:52:47 -0500
+Received: from mail.z3ntu.xyz ([128.199.32.197]:33198 "EHLO mail.z3ntu.xyz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1356987AbiALTv6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 12 Jan 2022 14:51:58 -0500
+Received: from localhost.localdomain (ip-213-127-106-2.ip.prioritytelecom.net [213.127.106.2])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 99ECDCDF9F;
+        Wed, 12 Jan 2022 19:42:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1642016544; bh=0kWYHyQ+FdQZVfHCIbfLblrDXNannTFucaCQYt2r6LQ=;
+        h=From:To:Cc:Subject:Date;
+        b=miax10sWCxLcvuPulMRI9I8OxkGClnhZ7on8fnVVyuxu3eLoIzlmYgDUW+CcsPSnK
+         Cz95AHMYXfk4vBg0yIPTahxcsi7xikZlNOJK59DxWJKpylDH8bAjfHzKVFpB2OfNoy
+         ookhq+C83s4UtZgJGkb6zXdZKvG7GFw/47b1tpAI=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Luca Weiss <luca@z3ntu.xyz>, Amit Kucheria <amitk@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        Zhang Rui <rui.zhang@intel.com>, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH 00/15] Initial MSM8953 & Fairphone 3 support
+Date:   Wed, 12 Jan 2022 20:40:49 +0100
+Message-Id: <20220112194118.178026-1-luca@z3ntu.xyz>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220106025059.25847-1-ricardo.neri-calderon@linux.intel.com> <20220106025059.25847-7-ricardo.neri-calderon@linux.intel.com>
-In-Reply-To: <20220106025059.25847-7-ricardo.neri-calderon@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 12 Jan 2022 20:25:59 +0100
-Message-ID: <CAJZ5v0ioQ7UQt58NraPAG=M8k-joSy5pmszFjp=NcS6z==6RQg@mail.gmail.com>
-Subject: Re: [PATCH v3 6/7] thermal: netlink: Add a new event to notify CPU
- capabilities change
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jan 6, 2022 at 3:49 AM Ricardo Neri
-<ricardo.neri-calderon@linux.intel.com> wrote:
->
-> From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
->
-> Add a new netlink event to notify change in CPU capabilities in terms of
-> performance and efficiency.
->
-> Firmware may change CPU capabilities as a result of thermal events in the
-> system or to account for changes in the TDP (thermal design power) level.
->
-> This notification type will allow user space to avoid running workloads
-> on certain CPUs or proactively adjust power limits to avoid future events.
->
-> The netlink message consists of a nested attribute
-> (THERMAL_GENL_ATTR_CPU_CAPABILITY) with three attributes:
->
->  * THERMAL_GENL_ATTR_CPU_CAPABILITY_ID (type u32):
->    -- logical CPU number
->  * THERMAL_GENL_ATTR_CPU_CAPABILITY_PERFORMANCE (type u32):
->    -- Scaled performance from 0-1023
->  * THERMAL_GENL_ATTR_CPU_CAPABILITY_EFFICIENCY (type u32):
->    -- Scaled efficiency from 0-1023
->
-> Cc: Andi Kleen <ak@linux.intel.com>
-> Cc: Aubrey Li <aubrey.li@linux.intel.com>
-> Cc: Lukasz Luba <lukasz.luba@arm.com>
-> Cc: Tim Chen <tim.c.chen@linux.intel.com>
-> Cc: "Ravi V. Shankar" <ravi.v.shankar@intel.com>
-> Reviewed-by: Len Brown <len.brown@intel.com>
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+This series adds initial support for MSM8953 (and SDM632 which is based
+on MSM8953) and the Fairphone 3 smartphone.
 
-Of course, I need to know if Daniel and Lukasz agree with this patch.
+Only relatively basic functionality is supported like storage, volume
+keys and USB.
 
-> ---
-> Changes since v2:
->   * None
->
-> Changes since v1:
->   * Reworded commit message.
->   * Reworded the members of struct cpu_capacity for clarity. (Lukasz)
->   * Defined the CPU capability attributes to be scaled in the [0, 1023]
->     interval. (Lukasz)
-> ---
->  drivers/thermal/thermal_netlink.c | 55 +++++++++++++++++++++++++++++++
->  drivers/thermal/thermal_netlink.h | 13 ++++++++
->  include/uapi/linux/thermal.h      |  6 +++-
->  3 files changed, 73 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/thermal/thermal_netlink.c b/drivers/thermal/thermal_netlink.c
-> index a16dd4d5d710..38e6c20f460c 100644
-> --- a/drivers/thermal/thermal_netlink.c
-> +++ b/drivers/thermal/thermal_netlink.c
-> @@ -43,6 +43,11 @@ static const struct nla_policy thermal_genl_policy[THERMAL_GENL_ATTR_MAX + 1] =
->         [THERMAL_GENL_ATTR_CDEV_MAX_STATE]      = { .type = NLA_U32 },
->         [THERMAL_GENL_ATTR_CDEV_NAME]           = { .type = NLA_STRING,
->                                                     .len = THERMAL_NAME_LENGTH },
-> +       /* CPU capabilities */
-> +       [THERMAL_GENL_ATTR_CPU_CAPABILITY]              = { .type = NLA_NESTED },
-> +       [THERMAL_GENL_ATTR_CPU_CAPABILITY_ID]           = { .type = NLA_U32 },
-> +       [THERMAL_GENL_ATTR_CPU_CAPABILITY_PERFORMANCE]  = { .type = NLA_U32 },
-> +       [THERMAL_GENL_ATTR_CPU_CAPABILITY_EFFICIENCY]   = { .type = NLA_U32 },
->  };
->
->  struct param {
-> @@ -58,6 +63,8 @@ struct param {
->         int temp;
->         int cdev_state;
->         int cdev_max_state;
-> +       struct cpu_capability *cpu_capabilities;
-> +       int cpu_capabilities_count;
->  };
->
->  typedef int (*cb_t)(struct param *);
-> @@ -190,6 +197,45 @@ static int thermal_genl_event_gov_change(struct param *p)
->         return 0;
->  }
->
-> +static int thermal_genl_event_cpu_capability_change(struct param *p)
-> +{
-> +       struct cpu_capability *cpu_cap = p->cpu_capabilities;
-> +       struct sk_buff *msg = p->msg;
-> +       struct nlattr *start_cap;
-> +       int i, ret;
-> +
-> +       start_cap = nla_nest_start(msg, THERMAL_GENL_ATTR_CPU_CAPABILITY);
-> +       if (!start_cap)
-> +               return -EMSGSIZE;
-> +
-> +       for (i = 0; i < p->cpu_capabilities_count; ++i) {
-> +               if (nla_put_u32(msg, THERMAL_GENL_ATTR_CPU_CAPABILITY_ID,
-> +                               cpu_cap->cpu)) {
-> +                       ret = -EMSGSIZE;
-> +                       goto out_cancel_nest;
-> +               }
-> +               if (nla_put_u32(msg, THERMAL_GENL_ATTR_CPU_CAPABILITY_PERFORMANCE,
-> +                               cpu_cap->performance)) {
-> +                       ret = -EMSGSIZE;
-> +                       goto out_cancel_nest;
-> +               }
-> +               if (nla_put_u32(msg, THERMAL_GENL_ATTR_CPU_CAPABILITY_EFFICIENCY,
-> +                               cpu_cap->efficiency)) {
-> +                       ret = -EMSGSIZE;
-> +                       goto out_cancel_nest;
-> +               }
-> +               ++cpu_cap;
-> +       }
-> +
-> +       nla_nest_end(msg, start_cap);
-> +
-> +       return 0;
-> +out_cancel_nest:
-> +       nla_nest_cancel(msg, start_cap);
-> +
-> +       return ret;
+There is currently close-to-mainline support for other components for
+this SoC including GPU, WiFi and audio, this series adds only basic
+support so that the other components can start getting upstreamed
+easier.
 
-It looks like ret is never different from -EMSGSIZE here, so I'd just
-return that error and drop the ret variable.
+Luca Weiss (10):
+  dt-bindings: phy: qcom,qusb2: Document msm8953 compatible
+  phy: qcom-qusb2: Add compatible for MSM8953
+  dt-bindings: mfd: qcom,tcsr: Document msm8953 compatible
+  mfd: qcom-spmi-pmic: Add pm8953 compatible
+  dt-bindings: mmc: sdhci-msm: Add msm8953 compatible
+  dt-bindings: thermal: tsens: Add msm8953 compatible
+  dt-bindings: usb: qcom,dwc3: Add msm8953 compatible
+  dt-bindings: pinctrl: qcom: msm8953: allow gpio-reserved-ranges
+  dt-bindings: arm: qcom: Document sdm632 and fairphone,fp3 board
+  arm64: dts: qcom: sdm632: Add device tree for Fairphone 3
 
-> +}
-> +
->  int thermal_genl_event_tz_delete(struct param *p)
->         __attribute__((alias("thermal_genl_event_tz")));
->
-> @@ -219,6 +265,7 @@ static cb_t event_cb[] = {
->         [THERMAL_GENL_EVENT_CDEV_DELETE]        = thermal_genl_event_cdev_delete,
->         [THERMAL_GENL_EVENT_CDEV_STATE_UPDATE]  = thermal_genl_event_cdev_state_update,
->         [THERMAL_GENL_EVENT_TZ_GOV_CHANGE]      = thermal_genl_event_gov_change,
-> +       [THERMAL_GENL_EVENT_CPU_CAPABILITY_CHANGE] = thermal_genl_event_cpu_capability_change,
->  };
->
->  /*
-> @@ -356,6 +403,14 @@ int thermal_notify_tz_gov_change(int tz_id, const char *name)
->         return thermal_genl_send_event(THERMAL_GENL_EVENT_TZ_GOV_CHANGE, &p);
->  }
->
-> +int thermal_genl_cpu_capability_event(int count, struct cpu_capability *caps)
-> +{
-> +       struct param p = { .cpu_capabilities_count = count, .cpu_capabilities = caps };
-> +
-> +       return thermal_genl_send_event(THERMAL_GENL_EVENT_CPU_CAPABILITY_CHANGE, &p);
-> +}
-> +EXPORT_SYMBOL_GPL(thermal_genl_cpu_capability_event);
-> +
->  /*************************** Command encoding ********************************/
->
->  static int __thermal_genl_cmd_tz_get_id(struct thermal_zone_device *tz,
-> diff --git a/drivers/thermal/thermal_netlink.h b/drivers/thermal/thermal_netlink.h
-> index e554f76291f4..44bc3dec5568 100644
-> --- a/drivers/thermal/thermal_netlink.h
-> +++ b/drivers/thermal/thermal_netlink.h
-> @@ -4,6 +4,12 @@
->   *  Author: Daniel Lezcano <daniel.lezcano@linaro.org>
->   */
->
-> +struct cpu_capability {
+Vladimir Lypak (5):
+  rpmsg: smd: Drop unnecessary condition for channel creation
+  arm64: dts: qcom: Add MSM8953 device tree
+  arm64: dts: qcom: Add PM8953 PMIC
+  arm64: dts: qcom: Add SDM632 device tree
+  arm64: dts: qcom: Add MSM8953+PM8953 device tree
 
-I'm wondering if the struct name is not too generic as the purpose it
-is used for is rather narrow and specific.
+ .../devicetree/bindings/arm/qcom.yaml         |    6 +
+ .../bindings/mfd/qcom,spmi-pmic.txt           |    1 +
+ .../devicetree/bindings/mfd/qcom,tcsr.txt     |    1 +
+ .../devicetree/bindings/mmc/sdhci-msm.txt     |    1 +
+ .../bindings/phy/qcom,qusb2-phy.yaml          |    1 +
+ .../pinctrl/qcom,msm8953-pinctrl.yaml         |    2 +
+ .../bindings/thermal/qcom-tsens.yaml          |    1 +
+ .../devicetree/bindings/usb/qcom,dwc3.yaml    |    1 +
+ arch/arm64/boot/dts/qcom/Makefile             |    1 +
+ arch/arm64/boot/dts/qcom/msm8953-pm8953.dtsi  |   50 +
+ arch/arm64/boot/dts/qcom/msm8953.dtsi         | 1337 +++++++++++++++++
+ arch/arm64/boot/dts/qcom/pm8953.dtsi          |   90 ++
+ .../boot/dts/qcom/sdm632-fairphone-fp3.dts    |  189 +++
+ arch/arm64/boot/dts/qcom/sdm632.dtsi          |  125 ++
+ drivers/phy/qualcomm/phy-qcom-qusb2.c         |    3 +
+ drivers/rpmsg/qcom_smd.c                      |    8 +-
+ 16 files changed, 1810 insertions(+), 7 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8953-pm8953.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8953.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/pm8953.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sdm632.dtsi
 
-> +       int cpu;
-> +       int performance;
-> +       int efficiency;
-> +};
-> +
->  /* Netlink notification function */
->  #ifdef CONFIG_THERMAL_NETLINK
->  int __init thermal_netlink_init(void);
-> @@ -23,6 +29,7 @@ int thermal_notify_cdev_add(int cdev_id, const char *name, int max_state);
->  int thermal_notify_cdev_delete(int cdev_id);
->  int thermal_notify_tz_gov_change(int tz_id, const char *name);
->  int thermal_genl_sampling_temp(int id, int temp);
-> +int thermal_genl_cpu_capability_event(int count, struct cpu_capability *caps);
->  #else
->  static inline int thermal_netlink_init(void)
->  {
-> @@ -101,4 +108,10 @@ static inline int thermal_genl_sampling_temp(int id, int temp)
->  {
->         return 0;
->  }
-> +
-> +static inline int thermal_genl_cpu_capability_event(int count, struct cpu_capability *caps)
-> +{
-> +       return 0;
-> +}
-> +
->  #endif /* CONFIG_THERMAL_NETLINK */
-> diff --git a/include/uapi/linux/thermal.h b/include/uapi/linux/thermal.h
-> index 9aa2fedfa309..fc78bf3aead7 100644
-> --- a/include/uapi/linux/thermal.h
-> +++ b/include/uapi/linux/thermal.h
-> @@ -44,7 +44,10 @@ enum thermal_genl_attr {
->         THERMAL_GENL_ATTR_CDEV_MAX_STATE,
->         THERMAL_GENL_ATTR_CDEV_NAME,
->         THERMAL_GENL_ATTR_GOV_NAME,
-> -
-> +       THERMAL_GENL_ATTR_CPU_CAPABILITY,
-> +       THERMAL_GENL_ATTR_CPU_CAPABILITY_ID,
-> +       THERMAL_GENL_ATTR_CPU_CAPABILITY_PERFORMANCE,
-> +       THERMAL_GENL_ATTR_CPU_CAPABILITY_EFFICIENCY,
->         __THERMAL_GENL_ATTR_MAX,
->  };
->  #define THERMAL_GENL_ATTR_MAX (__THERMAL_GENL_ATTR_MAX - 1)
-> @@ -71,6 +74,7 @@ enum thermal_genl_event {
->         THERMAL_GENL_EVENT_CDEV_DELETE,         /* Cdev unbound */
->         THERMAL_GENL_EVENT_CDEV_STATE_UPDATE,   /* Cdev state updated */
->         THERMAL_GENL_EVENT_TZ_GOV_CHANGE,       /* Governor policy changed  */
-> +       THERMAL_GENL_EVENT_CPU_CAPABILITY_CHANGE,       /* CPU capability changed */
->         __THERMAL_GENL_EVENT_MAX,
->  };
->  #define THERMAL_GENL_EVENT_MAX (__THERMAL_GENL_EVENT_MAX - 1)
-> --
-> 2.17.1
->
+-- 
+2.34.1
+
