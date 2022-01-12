@@ -2,116 +2,200 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F49948C034
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jan 2022 09:47:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0168C48C067
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jan 2022 09:54:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351737AbiALIro (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Jan 2022 03:47:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53950 "EHLO
+        id S1351786AbiALIx7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Jan 2022 03:53:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236424AbiALIro (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jan 2022 03:47:44 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0835C06173F
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jan 2022 00:47:43 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id x6so5619560lfa.5
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jan 2022 00:47:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=wirenboard-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gGTJ0YMWlqsV3o/hYwnScYAWcVImYPc9SsDEYcGH0Ug=;
-        b=ADBQq7N3EXaLvFKxY/X34A3KQ45an1rLGJ7URyi5cOejvdXZJ9MapCueFQMk+hw5rR
-         YUhUu2HI8v3JXzmMuSLwE3pVfNYj4hTxlCrYOkVOg9ljYoRuaGxAdvu2TmhK4AjEFP9w
-         3yIqfy1GiwCr1WZtdtGnciAyITCDGjRJMaw3dQHZaXVUth8y2CLzqOpeVPLAWfARUu+Q
-         +ppDjEGxBEnm4QeOgxGKbqMIk876Sn3No4MyGZKN2FwUZDMOto6UBTLNtTtLvdFu1hKO
-         WgcrXwK41gxL7sI00HRXcgjXUmPju5LZVjd+wC40cSr1oyDthtbn1OdQBw3zExgVZnAC
-         xmEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gGTJ0YMWlqsV3o/hYwnScYAWcVImYPc9SsDEYcGH0Ug=;
-        b=LbjlE2uNnDptAP0oe41IGBJAF7bHN5rxWVejeIFWnrSgByz12QAdvLZdScT4g288Q8
-         vCrTgS1KJlVTu5QCD/cEeY3FXgWwiJm7zFAjvtAwbnpFF+v6QCBAzufaI74c5cZMHVqj
-         3HoGo+W2vF9nm76t+ueHH1w38gL1Is7JuamZKEFRmK0DJu+NxYp5uhgUH9Ia30vKNzTD
-         DivclCpx382WvJDwbQutZ3fM/JopBD6XQ71mddC4xofM9k8CQhOzv7zW5z/MXh6eCrj8
-         ZKpMslZi8EcJGsCvLMH4EvEbwaXETzA4pGCEmbX9HRScaFH/dxrzQ4okm1dxC32R9x7G
-         V/5w==
-X-Gm-Message-State: AOAM531YD2XFwP2Wv4DxJz8RsE2vpK/4MC3IoJARPyGzhgfLLG/8iCSI
-        B822W1UTc3hs9KcCypO5wVofSg==
-X-Google-Smtp-Source: ABdhPJzqoGgt17edI0+HwJNjn5IVWxVZvqTMXCeuiVyMJ6dXr2R/e6qf9BB+6rBoD2/Bl3YXs0Vc0A==
-X-Received: by 2002:a2e:90f:: with SMTP id 15mr125948ljj.263.1641977262068;
-        Wed, 12 Jan 2022 00:47:42 -0800 (PST)
-Received: from boger-laptop.lan (81.5.110.253.dhcp.mipt-telecom.ru. [81.5.110.253])
-        by smtp.gmail.com with ESMTPSA id bq10sm1573741lfb.199.2022.01.12.00.47.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 00:47:41 -0800 (PST)
-From:   Evgeny Boger <boger@wirenboard.com>
-To:     Chen-Yu Tsai <wens@csie.org>, linux-pm@vger.kernel.org,
-        Quentin Schulz <foss@0leil.net>
-Cc:     Evgeny Boger <boger@wirenboard.com>,
+        with ESMTP id S1351778AbiALIx6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jan 2022 03:53:58 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9666C061756
+        for <linux-pm@vger.kernel.org>; Wed, 12 Jan 2022 00:53:57 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n7ZLN-0005mh-UE; Wed, 12 Jan 2022 09:50:57 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n7ZL6-009rFV-QA; Wed, 12 Jan 2022 09:50:40 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n7ZL5-00061g-Dl; Wed, 12 Jan 2022 09:50:39 +0100
+Date:   Wed, 12 Jan 2022 09:50:09 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>, kvm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-mtd@lists.infradead.org, linux-i2c@vger.kernel.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-phy@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-serial@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        platform-driver-x86@vger.kernel.org, linux-pwm@vger.kernel.org,
+        Robert Richter <rric@kernel.org>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>, linux-pm@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>, linux-gpio@vger.kernel.org,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Eric Auger <eric.auger@redhat.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        openipmi-developer@lists.sourceforge.net,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Richard Weinberger <richard@nod.at>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>, linux-mmc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-spi@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
         Sebastian Reichel <sre@kernel.org>,
-        Hermann Lauer <Hermann.Lauer@iwr.uni-heidelberg.de>
-Subject: [PATCH v2] power: supply: axp20x_battery: properly report current when discharging
-Date:   Wed, 12 Jan 2022 11:47:27 +0300
-Message-Id: <20220112084727.131053-1-boger@wirenboard.com>
-X-Mailer: git-send-email 2.25.1
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        linux-mediatek@lists.infradead.org,
+        Brian Norris <computersforpeace@gmail.com>,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
+Message-ID: <20220112085009.dbasceh3obfok5dc@pengutronix.de>
+References: <20220110195449.12448-1-s.shtylyov@omp.ru>
+ <20220110195449.12448-2-s.shtylyov@omp.ru>
+ <20220110201014.mtajyrfcfznfhyqm@pengutronix.de>
+ <YdyilpjC6rtz6toJ@lunn.ch>
+ <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="xmww6gsp5dtrk3ed"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-As stated in [1], negative current values are used for discharging
-batteries.
 
-AXP PMICs internally have two different ADC channels for shunt current
-measurement: one used during charging and one during discharging.
-The values reported by these ADCs are unsigned.
-While the driver properly selects ADC channel to get the data from,
-it doesn't apply negative sign when reporting discharging current.
+--xmww6gsp5dtrk3ed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[1] Documentation/ABI/testing/sysfs-class-power
+On Wed, Jan 12, 2022 at 09:33:48AM +0100, Geert Uytterhoeven wrote:
+> Hi Andrew,
+>=20
+> On Mon, Jan 10, 2022 at 10:20 PM Andrew Lunn <andrew@lunn.ch> wrote:
+> > On Mon, Jan 10, 2022 at 09:10:14PM +0100, Uwe Kleine-K=F6nig wrote:
+> > > On Mon, Jan 10, 2022 at 10:54:48PM +0300, Sergey Shtylyov wrote:
+> > > > This patch is based on the former Andy Shevchenko's patch:
+> > > >
+> > > > https://lore.kernel.org/lkml/20210331144526.19439-1-andriy.shevchen=
+ko@linux.intel.com/
+> > > >
+> > > > Currently platform_get_irq_optional() returns an error code even if=
+ IRQ
+> > > > resource simply has not been found. It prevents the callers from be=
+ing
+> > > > error code agnostic in their error handling:
+> > > >
+> > > >     ret =3D platform_get_irq_optional(...);
+> > > >     if (ret < 0 && ret !=3D -ENXIO)
+> > > >             return ret; // respect deferred probe
+> > > >     if (ret > 0)
+> > > >             ...we get an IRQ...
+> > > >
+> > > > All other *_optional() APIs seem to return 0 or NULL in case an opt=
+ional
+> > > > resource is not available. Let's follow this good example, so that =
+the
+> > > > callers would look like:
+> > > >
+> > > >     ret =3D platform_get_irq_optional(...);
+> > > >     if (ret < 0)
+> > > >             return ret;
+> > > >     if (ret > 0)
+> > > >             ...we get an IRQ...
+> > >
+> > > The difference to gpiod_get_optional (and most other *_optional) is t=
+hat
+> > > you can use the NULL value as if it were a valid GPIO.
+> > >
+> > > As this isn't given with for irqs, I don't think changing the return
+> > > value has much sense.
+> >
+> > We actually want platform_get_irq_optional() to look different to all
+> > the other _optional() methods because it is not equivalent. If it
+> > looks the same, developers will assume it is the same, and get
+> > themselves into trouble.
+>=20
+> Developers already assume it is the same, and thus forget they have
+> to check against -ENXIO instead of zero.
 
-Signed-off-by: Evgeny Boger <boger@wirenboard.com>
----
-Changes from v1:
- * fix formatting, no other changes
+Is this an ack for renaming platform_get_irq_optional() to
+platform_get_irq_silent()?
 
- drivers/power/supply/axp20x_battery.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+And then a coccinelle or sparse or ... hook that catches people testing
+the return value against 0 would be great.
 
-diff --git a/drivers/power/supply/axp20x_battery.c b/drivers/power/supply/axp20x_battery.c
-index 5d197141f476..9106077c0dbb 100644
---- a/drivers/power/supply/axp20x_battery.c
-+++ b/drivers/power/supply/axp20x_battery.c
-@@ -186,7 +186,6 @@ static int axp20x_battery_get_prop(struct power_supply *psy,
- 				   union power_supply_propval *val)
- {
- 	struct axp20x_batt_ps *axp20x_batt = power_supply_get_drvdata(psy);
--	struct iio_channel *chan;
- 	int ret = 0, reg, val1;
- 
- 	switch (psp) {
-@@ -266,12 +265,12 @@ static int axp20x_battery_get_prop(struct power_supply *psy,
- 		if (ret)
- 			return ret;
- 
--		if (reg & AXP20X_PWR_STATUS_BAT_CHARGING)
--			chan = axp20x_batt->batt_chrg_i;
--		else
--			chan = axp20x_batt->batt_dischrg_i;
--
--		ret = iio_read_channel_processed(chan, &val->intval);
-+		if (reg & AXP20X_PWR_STATUS_BAT_CHARGING) {
-+			ret = iio_read_channel_processed(axp20x_batt->batt_chrg_i, &val->intval);
-+		} else {
-+			ret = iio_read_channel_processed(axp20x_batt->batt_dischrg_i, &val1);
-+			val->intval = -val1;
-+		}
- 		if (ret)
- 			return ret;
- 
--- 
-2.25.1
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--xmww6gsp5dtrk3ed
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHeljYACgkQwfwUeK3K
+7AljMgf/RPunUgCLZTRo6HVoWGaeXoeKF+2cGlwuAsz4Z00TAkiSHfoaeZtHOlTi
+q5shu1KHHU618Mhtt6XvXodObLXVJs41ty1v6SytKsW7BJQt5naWkyRnggT5tFWu
+ggmVGMBXOmKX/wp2DCDa7dah1/SOrnFqP53whp6ZTB6oejvTyXmM97J3490sqGq5
+MsUAM2Z9/yyDuSZevN858NdTs3OZGSfWvvhFoG4EurYBcNo4znZgjQ6JgBbg3L5J
+/m2yKP4XrG0hiM86Q5XlzUdX3r5ERS4K78HS9ywkjsC/gmXD3i3XQGIjcG5VMN7F
+HGppnegV30H+5MPW7Ws6xs2xopwryw==
+=d8xy
+-----END PGP SIGNATURE-----
+
+--xmww6gsp5dtrk3ed--
