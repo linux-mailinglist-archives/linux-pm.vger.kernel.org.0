@@ -2,225 +2,273 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E07448C841
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jan 2022 17:27:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4741448CBF0
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jan 2022 20:27:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355174AbiALQ1X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Jan 2022 11:27:23 -0500
-Received: from mga07.intel.com ([134.134.136.100]:23755 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349786AbiALQ1U (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 12 Jan 2022 11:27:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642004839; x=1673540839;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cNBpfFoHqPuz0zcd6tz8l/vAk1K6ivBaRN+f33DpqwQ=;
-  b=ASct3LNplB69yAqS+n1IhiWag76WsMOuPxygSUcyUwyJpgSym3zReXbK
-   IBi1cj4vKrtniZeoru8N6GtDHdpUNoMra1bqMU2He/qi2kTIGemjxHv9y
-   2jx+WLNvb6r/krRsA1ycLuy1IijnWM7MfEVP7f5JwsysgCyB2WwXyus/z
-   2ZWsWWKCO9J4Jdzwnqv+/bjIxJrRx3HTPETtmgUcPj1JgDwa3+1agDZoL
-   HzfRl/xMMMLvpNLlrGnL6kPZ4FtfKUUupkoI7ykGeZP90a778xYDq+KEj
-   MN+MOpsOjQBFgSVWS4hyAogwg6HUS8q0ZR87emtfiVDIQLgbH7yMcPj/7
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10224"; a="307120901"
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="307120901"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 08:22:59 -0800
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="529239592"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 08:22:42 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1n7gNK-009l6p-Ao;
-        Wed, 12 Jan 2022 18:21:26 +0200
-Date:   Wed, 12 Jan 2022 18:21:26 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        KVM list <kvm@vger.kernel.org>, linux-iio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-phy@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Corey Minyard <minyard@acm.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Eric Auger <eric.auger@redhat.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        openipmi-developer@lists.sourceforge.net,
-        Benson Leung <bleung@chromium.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:EDAC-CORE" <linux-edac@vger.kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Richard Weinberger <richard@nod.at>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>,
-        Brian Norris <computersforpeace@gmail.com>,
-        netdev <netdev@vger.kernel.org>
-Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
-Message-ID: <Yd8ABkwagyVevTaE@smile.fi.intel.com>
-References: <20220110195449.12448-1-s.shtylyov@omp.ru>
- <20220110195449.12448-2-s.shtylyov@omp.ru>
- <20220110201014.mtajyrfcfznfhyqm@pengutronix.de>
- <YdyilpjC6rtz6toJ@lunn.ch>
- <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
- <20220112085009.dbasceh3obfok5dc@pengutronix.de>
- <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
- <Yd7Z3Qwevb/lEwQZ@lunn.ch>
- <CAMuHMdV2cGvqMppwt9xhpze=pcnHfTozDZMjwT1DkivLD+_nbQ@mail.gmail.com>
- <CAJZ5v0iyAHtDe1kFObQorXOX0Xraxac0j29Dh+8sq7zxzbsmcQ@mail.gmail.com>
+        id S1345041AbiALT1L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Jan 2022 14:27:11 -0500
+Received: from mail-qt1-f179.google.com ([209.85.160.179]:46896 "EHLO
+        mail-qt1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345003AbiALT0L (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jan 2022 14:26:11 -0500
+Received: by mail-qt1-f179.google.com with SMTP id v7so4200362qtw.13;
+        Wed, 12 Jan 2022 11:26:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2OdLpMkE2Acb+qyy0VLgKmSLDMsqxL4iDRMnwTvWvo4=;
+        b=Df+XV2aRp4lprTsUyOnO5eHLEPye13FpHlQ+kiHMFdbRuoafzWAUPX/QcmfXFJeDGg
+         k0YdRpkXSfugmORDM5e2OE9GyZpFzVHlZREYnK3+L46vpzBcJ1bti2VhsfYSCFkOYdxB
+         3nPgwD16WR7KeYydmH3BGSxpZkr1pwXCNusI+hgqU4TiJ4jqSVS4uqwYHwtaO0Dh73ME
+         GlQrOFeqxXD8//MNvAg1hFTqhEEJokx59X7b8r6T+M2s+ghKuCw7DNPpwDfpelOKHENn
+         Q5eaa8+ll+txetBBDV5sovo3iztMuHgy0J5YCHZJj7LZKRdNLfM9qYKEEaObYhQHPm50
+         fwUQ==
+X-Gm-Message-State: AOAM531Wf8FIPXo84pSeKBlpOZhQJR0PrpDmUZAvf8F/WJoRMidHJBzV
+        ku7VbPzCCPkrrVt2Xgj5tBbWcnuXiIp41XwgpuA=
+X-Google-Smtp-Source: ABdhPJx1aWGsGy+DZCQpo3w29Z+cZ5A3P9bcxtWN7LIJdJrayKGtcTlLBLeJhDQioFdlyGdiwS9VToSEXBXcEca3Y5Y=
+X-Received: by 2002:a05:622a:44e:: with SMTP id o14mr901295qtx.369.1642015569811;
+ Wed, 12 Jan 2022 11:26:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0iyAHtDe1kFObQorXOX0Xraxac0j29Dh+8sq7zxzbsmcQ@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20220106025059.25847-1-ricardo.neri-calderon@linux.intel.com> <20220106025059.25847-7-ricardo.neri-calderon@linux.intel.com>
+In-Reply-To: <20220106025059.25847-7-ricardo.neri-calderon@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 12 Jan 2022 20:25:59 +0100
+Message-ID: <CAJZ5v0ioQ7UQt58NraPAG=M8k-joSy5pmszFjp=NcS6z==6RQg@mail.gmail.com>
+Subject: Re: [PATCH v3 6/7] thermal: netlink: Add a new event to notify CPU
+ capabilities change
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 03:41:38PM +0100, Rafael J. Wysocki wrote:
-> On Wed, Jan 12, 2022 at 2:55 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> >
-> > Hi Andrew,
-> >
-> > On Wed, Jan 12, 2022 at 2:38 PM Andrew Lunn <andrew@lunn.ch> wrote:
-> > > > If an optional IRQ is not present, drivers either just ignore it (e.g.
-> > > > for devices that can have multiple interrupts or a single muxed IRQ),
-> > > > or they have to resort to polling. For the latter, fall-back handling
-> > > > is needed elsewhere in the driver.
-> > > > To me it sounds much more logical for the driver to check if an
-> > > > optional irq is non-zero (available) or zero (not available), than to
-> > > > sprinkle around checks for -ENXIO. In addition, you have to remember
-> > > > that this one returns -ENXIO, while other APIs use -ENOENT or -ENOSYS
-> > > > (or some other error code) to indicate absence. I thought not having
-> > > > to care about the actual error code was the main reason behind the
-> > > > introduction of the *_optional() APIs.
-> > >
-> > > The *_optional() functions return an error code if there has been a
-> > > real error which should be reported up the call stack. This excludes
-> > > whatever error code indicates the requested resource does not exist,
-> > > which can be -ENODEV etc. If the device does not exist, a magic cookie
-> > > is returned which appears to be a valid resources but in fact is
-> > > not. So the users of these functions just need to check for an error
-> > > code, and fail the probe if present.
-> >
-> > Agreed.
-> >
-> > Note that in most (all?) other cases, the return type is a pointer
-> > (e.g. to struct clk), and NULL is the magic cookie.
-> >
-> > > You seems to be suggesting in binary return value: non-zero
-> > > (available) or zero (not available)
-> >
-> > Only in case of success. In case of a real failure, an error code
-> > must be returned.
-> >
-> > > This discards the error code when something goes wrong. That is useful
-> > > information to have, so we should not be discarding it.
-> >
-> > No, the error code must be retained in case of failure.
-> >
-> > > IRQ don't currently have a magic cookie value. One option would be to
-> > > add such a magic cookie to the subsystem. Otherwise, since 0 is
-> > > invalid, return 0 to indicate the IRQ does not exist.
-> >
-> > Exactly. And using 0 means the similar code can be used as for other
-> > subsystems, where NULL would be returned.
-> >
-> > The only remaining difference is the "dummy cookie can be passed
-> > to other functions" behavior.  Which is IMHO a valid difference,
-> > as unlike with e.g. clk_prepare_enable(), you do pass extra data to
-> > request_irq(), and sometimes you do need to handle the absence of
-> > the interrupt using e.g. polling.
-> >
-> > > The request for a script checking this then makes sense. However, i
-> > > don't know how well coccinelle/sparse can track values across function
-> > > calls. They probably can check for:
-> > >
-> > >    ret = irq_get_optional()
-> > >    if (ret < 0)
-> > >       return ret;
-> > >
-> > > A missing if < 0 statement somewhere later is very likely to be an
-> > > error. A comparison of <= 0 is also likely to be an error. A check for
-> > > > 0 before calling any other IRQ functions would be good. I'm
-> > > surprised such a check does not already existing in the IRQ API, but
-> > > there are probably historical reasons for that.
-> >
-> > There are still a few platforms where IRQ 0 does exist.
-> 
-> Not just a few even.  This happens on a reasonably recent x86 PC:
+On Thu, Jan 6, 2022 at 3:49 AM Ricardo Neri
+<ricardo.neri-calderon@linux.intel.com> wrote:
+>
+> From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+>
+> Add a new netlink event to notify change in CPU capabilities in terms of
+> performance and efficiency.
+>
+> Firmware may change CPU capabilities as a result of thermal events in the
+> system or to account for changes in the TDP (thermal design power) level.
+>
+> This notification type will allow user space to avoid running workloads
+> on certain CPUs or proactively adjust power limits to avoid future events.
+>
+> The netlink message consists of a nested attribute
+> (THERMAL_GENL_ATTR_CPU_CAPABILITY) with three attributes:
+>
+>  * THERMAL_GENL_ATTR_CPU_CAPABILITY_ID (type u32):
+>    -- logical CPU number
+>  * THERMAL_GENL_ATTR_CPU_CAPABILITY_PERFORMANCE (type u32):
+>    -- Scaled performance from 0-1023
+>  * THERMAL_GENL_ATTR_CPU_CAPABILITY_EFFICIENCY (type u32):
+>    -- Scaled efficiency from 0-1023
+>
+> Cc: Andi Kleen <ak@linux.intel.com>
+> Cc: Aubrey Li <aubrey.li@linux.intel.com>
+> Cc: Lukasz Luba <lukasz.luba@arm.com>
+> Cc: Tim Chen <tim.c.chen@linux.intel.com>
+> Cc: "Ravi V. Shankar" <ravi.v.shankar@intel.com>
+> Reviewed-by: Len Brown <len.brown@intel.com>
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-Yes, but the timer doesn't use platform_get_irq*() and friends.
+Of course, I need to know if Daniel and Lukasz agree with this patch.
 
-> rafael@gratch:~/work/linux-pm> head -2 /proc/interrupts
->            CPU0       CPU1       CPU2       CPU3       CPU4       CPU5
->   0:         10          0          0          0          0          0
->  IR-IO-APIC    2-edge
-> timer
+> ---
+> Changes since v2:
+>   * None
+>
+> Changes since v1:
+>   * Reworded commit message.
+>   * Reworded the members of struct cpu_capacity for clarity. (Lukasz)
+>   * Defined the CPU capability attributes to be scaled in the [0, 1023]
+>     interval. (Lukasz)
+> ---
+>  drivers/thermal/thermal_netlink.c | 55 +++++++++++++++++++++++++++++++
+>  drivers/thermal/thermal_netlink.h | 13 ++++++++
+>  include/uapi/linux/thermal.h      |  6 +++-
+>  3 files changed, 73 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/thermal/thermal_netlink.c b/drivers/thermal/thermal_netlink.c
+> index a16dd4d5d710..38e6c20f460c 100644
+> --- a/drivers/thermal/thermal_netlink.c
+> +++ b/drivers/thermal/thermal_netlink.c
+> @@ -43,6 +43,11 @@ static const struct nla_policy thermal_genl_policy[THERMAL_GENL_ATTR_MAX + 1] =
+>         [THERMAL_GENL_ATTR_CDEV_MAX_STATE]      = { .type = NLA_U32 },
+>         [THERMAL_GENL_ATTR_CDEV_NAME]           = { .type = NLA_STRING,
+>                                                     .len = THERMAL_NAME_LENGTH },
+> +       /* CPU capabilities */
+> +       [THERMAL_GENL_ATTR_CPU_CAPABILITY]              = { .type = NLA_NESTED },
+> +       [THERMAL_GENL_ATTR_CPU_CAPABILITY_ID]           = { .type = NLA_U32 },
+> +       [THERMAL_GENL_ATTR_CPU_CAPABILITY_PERFORMANCE]  = { .type = NLA_U32 },
+> +       [THERMAL_GENL_ATTR_CPU_CAPABILITY_EFFICIENCY]   = { .type = NLA_U32 },
+>  };
+>
+>  struct param {
+> @@ -58,6 +63,8 @@ struct param {
+>         int temp;
+>         int cdev_state;
+>         int cdev_max_state;
+> +       struct cpu_capability *cpu_capabilities;
+> +       int cpu_capabilities_count;
+>  };
+>
+>  typedef int (*cb_t)(struct param *);
+> @@ -190,6 +197,45 @@ static int thermal_genl_event_gov_change(struct param *p)
+>         return 0;
+>  }
+>
+> +static int thermal_genl_event_cpu_capability_change(struct param *p)
+> +{
+> +       struct cpu_capability *cpu_cap = p->cpu_capabilities;
+> +       struct sk_buff *msg = p->msg;
+> +       struct nlattr *start_cap;
+> +       int i, ret;
+> +
+> +       start_cap = nla_nest_start(msg, THERMAL_GENL_ATTR_CPU_CAPABILITY);
+> +       if (!start_cap)
+> +               return -EMSGSIZE;
+> +
+> +       for (i = 0; i < p->cpu_capabilities_count; ++i) {
+> +               if (nla_put_u32(msg, THERMAL_GENL_ATTR_CPU_CAPABILITY_ID,
+> +                               cpu_cap->cpu)) {
+> +                       ret = -EMSGSIZE;
+> +                       goto out_cancel_nest;
+> +               }
+> +               if (nla_put_u32(msg, THERMAL_GENL_ATTR_CPU_CAPABILITY_PERFORMANCE,
+> +                               cpu_cap->performance)) {
+> +                       ret = -EMSGSIZE;
+> +                       goto out_cancel_nest;
+> +               }
+> +               if (nla_put_u32(msg, THERMAL_GENL_ATTR_CPU_CAPABILITY_EFFICIENCY,
+> +                               cpu_cap->efficiency)) {
+> +                       ret = -EMSGSIZE;
+> +                       goto out_cancel_nest;
+> +               }
+> +               ++cpu_cap;
+> +       }
+> +
+> +       nla_nest_end(msg, start_cap);
+> +
+> +       return 0;
+> +out_cancel_nest:
+> +       nla_nest_cancel(msg, start_cap);
+> +
+> +       return ret;
 
--- 
-With Best Regards,
-Andy Shevchenko
+It looks like ret is never different from -EMSGSIZE here, so I'd just
+return that error and drop the ret variable.
 
+> +}
+> +
+>  int thermal_genl_event_tz_delete(struct param *p)
+>         __attribute__((alias("thermal_genl_event_tz")));
+>
+> @@ -219,6 +265,7 @@ static cb_t event_cb[] = {
+>         [THERMAL_GENL_EVENT_CDEV_DELETE]        = thermal_genl_event_cdev_delete,
+>         [THERMAL_GENL_EVENT_CDEV_STATE_UPDATE]  = thermal_genl_event_cdev_state_update,
+>         [THERMAL_GENL_EVENT_TZ_GOV_CHANGE]      = thermal_genl_event_gov_change,
+> +       [THERMAL_GENL_EVENT_CPU_CAPABILITY_CHANGE] = thermal_genl_event_cpu_capability_change,
+>  };
+>
+>  /*
+> @@ -356,6 +403,14 @@ int thermal_notify_tz_gov_change(int tz_id, const char *name)
+>         return thermal_genl_send_event(THERMAL_GENL_EVENT_TZ_GOV_CHANGE, &p);
+>  }
+>
+> +int thermal_genl_cpu_capability_event(int count, struct cpu_capability *caps)
+> +{
+> +       struct param p = { .cpu_capabilities_count = count, .cpu_capabilities = caps };
+> +
+> +       return thermal_genl_send_event(THERMAL_GENL_EVENT_CPU_CAPABILITY_CHANGE, &p);
+> +}
+> +EXPORT_SYMBOL_GPL(thermal_genl_cpu_capability_event);
+> +
+>  /*************************** Command encoding ********************************/
+>
+>  static int __thermal_genl_cmd_tz_get_id(struct thermal_zone_device *tz,
+> diff --git a/drivers/thermal/thermal_netlink.h b/drivers/thermal/thermal_netlink.h
+> index e554f76291f4..44bc3dec5568 100644
+> --- a/drivers/thermal/thermal_netlink.h
+> +++ b/drivers/thermal/thermal_netlink.h
+> @@ -4,6 +4,12 @@
+>   *  Author: Daniel Lezcano <daniel.lezcano@linaro.org>
+>   */
+>
+> +struct cpu_capability {
 
+I'm wondering if the struct name is not too generic as the purpose it
+is used for is rather narrow and specific.
+
+> +       int cpu;
+> +       int performance;
+> +       int efficiency;
+> +};
+> +
+>  /* Netlink notification function */
+>  #ifdef CONFIG_THERMAL_NETLINK
+>  int __init thermal_netlink_init(void);
+> @@ -23,6 +29,7 @@ int thermal_notify_cdev_add(int cdev_id, const char *name, int max_state);
+>  int thermal_notify_cdev_delete(int cdev_id);
+>  int thermal_notify_tz_gov_change(int tz_id, const char *name);
+>  int thermal_genl_sampling_temp(int id, int temp);
+> +int thermal_genl_cpu_capability_event(int count, struct cpu_capability *caps);
+>  #else
+>  static inline int thermal_netlink_init(void)
+>  {
+> @@ -101,4 +108,10 @@ static inline int thermal_genl_sampling_temp(int id, int temp)
+>  {
+>         return 0;
+>  }
+> +
+> +static inline int thermal_genl_cpu_capability_event(int count, struct cpu_capability *caps)
+> +{
+> +       return 0;
+> +}
+> +
+>  #endif /* CONFIG_THERMAL_NETLINK */
+> diff --git a/include/uapi/linux/thermal.h b/include/uapi/linux/thermal.h
+> index 9aa2fedfa309..fc78bf3aead7 100644
+> --- a/include/uapi/linux/thermal.h
+> +++ b/include/uapi/linux/thermal.h
+> @@ -44,7 +44,10 @@ enum thermal_genl_attr {
+>         THERMAL_GENL_ATTR_CDEV_MAX_STATE,
+>         THERMAL_GENL_ATTR_CDEV_NAME,
+>         THERMAL_GENL_ATTR_GOV_NAME,
+> -
+> +       THERMAL_GENL_ATTR_CPU_CAPABILITY,
+> +       THERMAL_GENL_ATTR_CPU_CAPABILITY_ID,
+> +       THERMAL_GENL_ATTR_CPU_CAPABILITY_PERFORMANCE,
+> +       THERMAL_GENL_ATTR_CPU_CAPABILITY_EFFICIENCY,
+>         __THERMAL_GENL_ATTR_MAX,
+>  };
+>  #define THERMAL_GENL_ATTR_MAX (__THERMAL_GENL_ATTR_MAX - 1)
+> @@ -71,6 +74,7 @@ enum thermal_genl_event {
+>         THERMAL_GENL_EVENT_CDEV_DELETE,         /* Cdev unbound */
+>         THERMAL_GENL_EVENT_CDEV_STATE_UPDATE,   /* Cdev state updated */
+>         THERMAL_GENL_EVENT_TZ_GOV_CHANGE,       /* Governor policy changed  */
+> +       THERMAL_GENL_EVENT_CPU_CAPABILITY_CHANGE,       /* CPU capability changed */
+>         __THERMAL_GENL_EVENT_MAX,
+>  };
+>  #define THERMAL_GENL_EVENT_MAX (__THERMAL_GENL_EVENT_MAX - 1)
+> --
+> 2.17.1
+>
