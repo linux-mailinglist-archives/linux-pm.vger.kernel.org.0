@@ -2,93 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E63048CCB5
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jan 2022 21:01:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2505948CD40
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jan 2022 21:50:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243059AbiALUAs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Jan 2022 15:00:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40302 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243715AbiALUAf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jan 2022 15:00:35 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D99C034004
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jan 2022 12:00:35 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id s6so5373632ioj.0
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jan 2022 12:00:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Cl1FUyfdprGONZXPglxSDKBSmEWDkw6VkfF16x5mxXo=;
-        b=QVJEehF7WPyvGeEiM5KzQqPIBMMXGEV3R+wLe8PkJGDeACISPmV4QHm+bqRf3ctMii
-         e9A7XOez7BgUJWpIS85K3eqDw9O/LP5gRWCD7MDNpgnuqpnoM7y4SqV96P1MzAz4QbkZ
-         6dTMEEMsxLx1RvNmJhKDjS7fzc3PdRvc8pQIM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Cl1FUyfdprGONZXPglxSDKBSmEWDkw6VkfF16x5mxXo=;
-        b=QLqT+JhLh417ddPfnoeLo22lJC+n2jNHUPdhDe8lcEtd3X58Xrph1w8b68WgdqBhQU
-         jZQdwUMR70jaLxRpSAcxey1pX/r1HPd0YMOwFNPCIW2PX/vbfGAoAR4aCwGn5F0idMxg
-         wcN1sdXPDyfZwb3Z9ddpj+gb3QPLRuudiYt7QPi475t60h2/6DzOgzsd1KFPCKwOuf3r
-         NK/t1ZVF2NUhLm0VS+OsO2cAVFmltblsTy1Knrgk5vfmaUN8Yfo/HaSoGVEm3aaDmJRz
-         aNXXfU0Le0Q2VCgBULHOTTRrJc+/m/S8M02iwa+pKPJ/eHbTGdkKVYv+EHj6shjcM1iv
-         hZFw==
-X-Gm-Message-State: AOAM531PW2r46QYn/64zFk8wBqm1zN3DmsbifAnC9bIIEmdnb5mScocr
-        K4Gdtk3FGXLzvpm74AAnALi8WQ==
-X-Google-Smtp-Source: ABdhPJyqfTMBuJuxUvt68Bs1IVabNVrDXN9rilZ2BQG+2TZJXMJyou7YfZBE20+jh9R7SNMFYnATlw==
-X-Received: by 2002:a5d:8a0a:: with SMTP id w10mr692518iod.90.1642017634562;
-        Wed, 12 Jan 2022 12:00:34 -0800 (PST)
-Received: from [192.168.1.128] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id h4sm412552ilh.1.2022.01.12.12.00.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jan 2022 12:00:34 -0800 (PST)
-Subject: Re: [PATCH v3] tools/power/cpupower/{ToDo => TODO}: Rename the todo
- file
-To:     Onur Ozkan <onurozkan.dev@gmail.com>, trenn@suse.com
-Cc:     shuah@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Onur Ozkan <work@onurozkan.dev>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20211224104343.33331-1-work@onurozkan.dev>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <9fdc2f8e-8c76-ad3b-1ca5-39fae07d37de@linuxfoundation.org>
-Date:   Wed, 12 Jan 2022 13:00:31 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S1357752AbiALUtF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Jan 2022 15:49:05 -0500
+Received: from polaris.svanheule.net ([84.16.241.116]:35794 "EHLO
+        polaris.svanheule.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357748AbiALUtA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jan 2022 15:49:00 -0500
+X-Greylist: delayed 172398 seconds by postgrey-1.27 at vger.kernel.org; Wed, 12 Jan 2022 15:49:00 EST
+Received: from [IPv6:2a02:a03f:eafe:c901:8be6:7813:530e:2d21] (unknown [IPv6:2a02:a03f:eafe:c901:8be6:7813:530e:2d21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id 963972908E9;
+        Wed, 12 Jan 2022 21:48:54 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1642020534;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SyLn+1iZg8U+1VoC+Sc82PZQ0iI/L12fBI5+NQV+CPE=;
+        b=fnAVrlBH7KefO7aFpo6HqO78v1+xvueeKyQLruB4NPtiLKpObPAta8kEEzPj59QW/xY3Pq
+        +d6oOelSj/DeXOiUq4RfYtP2dF4EDQxOzO3IwoZcbJ7+g/11TmZP1aukQ9u10cQ4xRyWlg
+        xGQPHniThyXnAdUTnunmdHjKOZSUElBIonNbrcjI/lDGlKbHAW8384sBeU5axlH8ZWatsF
+        fNAIe1LKuLlEd7MD8l71XVHRvYGBVpCOZv7FDFydTeiCv73ty4uDuF3X+3i+wpIDY/dh1Q
+        PgpMlbhCITCjBQgRBVsFpqL/0vWVPGlXHhm9Bd1ag+iJUn4vRxGOoJhRyNnvOQ==
+Message-ID: <71fffde0704d240f5ec8773fe0e738b6e069a6b8.camel@svanheule.net>
+Subject: Re: [PATCH] dt-bindings: power: reset: gpio-restart: Correct
+ default priority
+From:   Sander Vanheule <sander@svanheule.net>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Sebastian Reichel <sre@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>
+Date:   Wed, 12 Jan 2022 21:48:53 +0100
+In-Reply-To: <Yd46ayLnvT/3ch9e@robh.at.kernel.org>
+References: <20220110214456.67087-1-sander@svanheule.net>
+         <Yd46ayLnvT/3ch9e@robh.at.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
 MIME-Version: 1.0
-In-Reply-To: <20211224104343.33331-1-work@onurozkan.dev>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/24/21 3:43 AM, Onur Ozkan wrote:
-> Renamed the to-do file to 'TODO' instead of 'ToDo' to
-> comply with the naming standard.
+Hi Rob,
+
+On Tue, 2022-01-11 at 20:18 -0600, Rob Herring wrote:
+> On Mon, 10 Jan 2022 22:44:56 +0100, Sander Vanheule wrote:
+> > Commit bcd56fe1aa97 ("power: reset: gpio-restart: increase priority
+> > slightly") changed the default restart priority 129, but did not update
+> > the documentation. Correct this, so the driver and documentation have
+> > the same default value.
+> > 
+> > Signed-off-by: Sander Vanheule <sander@svanheule.net>
+> > ---
+> > This is a resubmission of RFC:
+> > https://lore.kernel.org/all/cfcd00257daba5aa30b8d20a62ba542be1a6914c.1640887456.git.sander@svanheule.net/
+> > 
+> > The commit message for bcd56fe1aa97 mentions that it is a workaround for
+> > rk3288-veryon boards. However, commit e28ea9dbc52d3 ("ARM: dts:
+> > rockchip: add shared rk3288-veyron files") later adds a gpio-restart
+> > node with a priority value of <200> for those boards, effectively
+> > rendering bcd56fe1aa97 obsolete (for their use case).
+> > 
+> > Perhaps bcd56fe1aa97 could just be reverted instead of updating the
+> > documentation.
+> > 
+> > An argument against reverting (a 6 year old patch) is that other boards
+> > may have come to depend on the default value of 129. I don't know about
+> > out-of-tree user of gpio-restart, but there are a few in-tree users of
+> > gpio-restart /without/ an explicit priority:
+> > 
+> > arch/arm/boot/dts/imx53-ppd.dts (commit 2952d67637716)
+> >   DTS submitted after changed default, but DTS copyright predates the
+> >   changed default.
+> > 
+> > arch/microblaze/boot/dts/system.dts (commit 7cca9b8b7c5bc)
+> >   The original DTS commit predates the changed default, but didn't use
+> >   gpio-restart. The commit adding gpio-restart appears to indicate no
+> >   other restart handlers are present on this platform, although it could
+> >   be these were just being shadowed by the custom restart code.
+> > 
+> > arch/riscv/boot/dts/sifive/hifive-unleashed-a00.dts (commit 0a91330b2af9f)
+> >   Recently added board; couldn't find any obvious alternative restart
+> >   handlers.
+> > 
+> > Best,
+> > Sander
+> > 
+> >  .../devicetree/bindings/power/reset/gpio-restart.yaml         | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
 > 
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-I get it now. I didn't pick up on the "ToDo" vs. "TODO"
-difference. No need to add the list.
+Thanks for the review!
 
-> Signed-off-by: Onur Ozkan <work@onurozkan.dev>
+I've noticed the devicetree patchwork has this patch marked as "Not  applicable", but
+linux-pm patchwork has it marked "Handled elsewhere". Since you merged the gpio-restart
+conversion patch, can you also take this one, Rob?
 
-Your from doesn't match the Signed-off-by - please match them
-and send v4 - no need to add the TODO file list this time.
-
-> ---
->   tools/power/cpupower/{ToDo => TODO} | 0
->   1 file changed, 0 insertions(+), 0 deletions(-)
->   rename tools/power/cpupower/{ToDo => TODO} (100%)
-> 
-> diff --git a/tools/power/cpupower/ToDo b/tools/power/cpupower/TODO
-> similarity index 100%
-> rename from tools/power/cpupower/ToDo
-> rename to tools/power/cpupower/TODO
-> 
-
-thanks,
--- Shuah
+Best,
+Sander
