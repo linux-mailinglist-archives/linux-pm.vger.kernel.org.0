@@ -2,84 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CFC648DB28
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jan 2022 16:56:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6158648DABB
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jan 2022 16:36:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236392AbiAMP4I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Jan 2022 10:56:08 -0500
-Received: from [194.99.46.92] ([194.99.46.92]:50737 "EHLO
-        slot0.bluewaterleisure.com" rhost-flags-FAIL-FAIL-OK-OK)
-        by vger.kernel.org with ESMTP id S236386AbiAMP4H (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jan 2022 10:56:07 -0500
-X-Greylist: delayed 612 seconds by postgrey-1.27 at vger.kernel.org; Thu, 13 Jan 2022 10:56:06 EST
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=bluewaterleisure.com;
- h=Reply-To:From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding; i=ker.mon@bluewaterleisure.com;
- bh=GFgTTFrXlQ8OyySq4PoNy0Dlx64=;
- b=ccLbV3H0W0ZBpoDC9ph9eVP9uvFWdjOCDq1EAb35B7HPMOMSfnZbeVxMrvIlHyzfY5cDh6Anwf/s
-   D/bzjNW8PcW5PUdNfhTpIN/5FPE5HEmlSksSGW2Fe11Hq+a1iOSAboLD/VxTp65f3Sz1I9EAfe55
-   9aqXwfqWxkF7kvEWdfErIJqdJWlbb/S1TSG8I2NTlnZh2oEFWB5a4Y68Bvxa3AcJDVKxm/u7xaYM
-   KuU9Vr3fqEoB7/D7Ec8LBvc5jvVbpXBFeAyoaeEHyeSRP71lOrXd1LW3YNhY5eGcAsjFnTAhZsRL
-   Dbulgx4IGvdcFUEajJJBzNqbvEtCxIYqPBKfzA==
-DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=bluewaterleisure.com;
- b=dgPTuRZLxZMKpO+nVzZiHkQdDpGdcLHdllpOvW17UMIlUdScRF1AJJxRvwellHqYCWl8gNRQHdZp
-   OniJIr+LmsELfe85gcdw39p7DkHHa0RBcZv0JNXe6dFwkV3EOOvsLhKEfjqaLxQG6znNXja97UnM
-   hNcO5x0pbnu+RlT4pQIC5y2AeSEB76VWELbsFpKQFr5I6DsvfGjK+P3Z8N56Ze9RbZ9O8lmp8PbR
-   RBpvcA1ZlseqIATDMilfODvZYsCLV3wIsaKRpbcQ3debLPV1XWEG6X9/0NE/yOMyXvjt+9r3IBkb
-   iSN/HcIftmlrQEZoPIwcXDiJoNvU+7LZShCK+Q==;
-Reply-To: mustafa.ayvaz@ayvazburosu.com
-From:   "Barrister Mustafa" <ker.mon@bluewaterleisure.com>
-To:     linux-pm@vger.kernel.org
-Subject: Achtung:
-Date:   13 Jan 2022 16:36:24 +0100
-Message-ID: <20220113163624.74FBFD85F9278724@bluewaterleisure.com>
+        id S236152AbiAMPgb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Jan 2022 10:36:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51326 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236144AbiAMPg3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jan 2022 10:36:29 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E789C061748
+        for <linux-pm@vger.kernel.org>; Thu, 13 Jan 2022 07:36:29 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id o6so24563869edc.4
+        for <linux-pm@vger.kernel.org>; Thu, 13 Jan 2022 07:36:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=XHQEo9fqyrDZ/5pi9gXVVtH309S9YPpH8gy7JyNdDZw=;
+        b=n9FfjuP2bLhZ4H2O1TCdlrOQM2oQfDk+FqT32mA/qVE2T6zFXeDYiBh3gFi0NKqumU
+         lRgZ35xiOyX2qN1EQCJQUrokfDCN/q1oRI6jayDyoSRm0oRGDCsJz6FwjG/JiShj7xU4
+         YZbzA02kF8lDvETrvzBtl0AYUkdbqYJ34aBgBH34kIzkiq+gL6+hAx5Pf9DfxxzqRMkM
+         DhCPxauQmPv4K8+EoJTug03CWyN2vb7sW5ZU10Eikl1kIKvOikiashtEYmkLM8Ch5//t
+         CpjK2cI4kMvNAcvWz7qIWXcOetuetZWI8YXR5buD9akTba6eHqb8jA5JwMVb2AoKNgA/
+         Y+Kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=XHQEo9fqyrDZ/5pi9gXVVtH309S9YPpH8gy7JyNdDZw=;
+        b=n1YumSmPcSwj7jx+grlwHpYDQGdY+ZsgmTdazg5m+e+NzsJogUgLpDuE/62GYDGOey
+         Y2Eotd9MFTEYgdLbptalttPWVhSa8esjnOLcTFgQFDJ3pzCnGGAxQZ0GqNCg7MrO65es
+         RFFJnAiAUmWhoYTJiXxhT+vBZg3i36wJbrJQES5v+ZYBwslaipgyaIjV5AVUSwf4Z4dQ
+         eQ77TrECj4ZPJQQ/pBENDavCOQ4aC9bTcorayt1NykXOZ82FmOL6FEHZl8IXg3F0Awok
+         gwLVlplYbgsrU6E4Ev2kvsDEFHfGgrRMUflfl++fjXpKvA7ZvxgW6hcMkyfsswGsGHXe
+         jwfQ==
+X-Gm-Message-State: AOAM532mCjUcL8NKXpWFKE8fYpWTPqiUhB+i6uaItoemVB2/XyDEPPVR
+        thKauK0UwiEUm4qApZ6Zo/rWC6itIo0xB88C1vQ=
+X-Google-Smtp-Source: ABdhPJz6uz7scSCbFh7ox39AaVp8nDxjEESf2m4mb8GDT8yiOikEVP4Gy+aRLDxS9NFPTD5E/vKUcUMih4PeJeVtlH8=
+X-Received: by 2002:a05:6402:42c4:: with SMTP id i4mr4823241edc.408.1642088187635;
+ Thu, 13 Jan 2022 07:36:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
+Received: by 2002:a17:907:9691:0:0:0:0 with HTTP; Thu, 13 Jan 2022 07:36:27
+ -0800 (PST)
+Reply-To: rco.ben189@outlook.fr
+From:   "Mrs. Susan Dansuki" <peteronyekachi077@gmail.com>
+Date:   Thu, 13 Jan 2022 07:36:27 -0800
+Message-ID: <CAB6=xyYh_Th1nx0Kce8yCW1RD-VOGJB5UWk-gXL+yQNXE40pFg@mail.gmail.com>
+Subject: Re: COVID-19 RELIEF FUND WORTH $1,500,000.00 USD
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dear linux-pm,
+--=20
+Attention: Beneficiary,
 
-Ich bin Barrister Mustafa Ayvaz, ein pers=C3=B6nlicher Anwalt des=20
-verstorbenen Mr.
-Anderson, der an der Coronavirus-Krankheit starb, die er
-w=C3=A4hrend seiner Gesch=C3=A4ftsreise in China unter Vertrag genommen.=20=
+I am  Mrs. Susan Dansuki, the current Director of the Centers for
+Disease Control and Prevention. In the wake of the global COVID-19
+Pandemic, I wish to bring you the good news of hope. Be officially
+inform that the United Nations organization department for disaster
+management in conjunction with IMF, World Bank, is giving out Covid-19
+stimulus package worth $1,500, 000.00 USD, and your e-mail address
+were selected among other's to receive this stimulus package.
 
-Ich m=C3=B6chte, dass Sie freundlich sind und mit mir=20
-zusammenarbeiten, um das Geld zu sichern, das er hier in der=20
-T=C3=BCrkei auf der Bank hinterlassen hat, das sind drei Millionen=20
-dreihundertneunzigtausend Dollar.
+The United Nations COVID-19 Response and Recovery Fund is a UN
+inter-agency fund mechanism established by the UN Secretary-General to
+help support low- and middle-income people(s) to respond to the
+pandemic and its impacts, including an unprecedented socio-economic
+shock. The Fund=E2=80=99s assistance targets those most vulnerable to econo=
+mic
+hardship and social disruption around the world.
 
-Ich habe nach den n=C3=A4chsten Angeh=C3=B6rigen meines Verstorbenen=20
-gesucht
-Kunde, sind aber gescheitert, da ich seinen aktuellen Wohnsitz=20
-nicht habe
-und Kontaktdaten. Auf der Suche bin ich auf dich gesto=C3=9Fen
-Profil mit dem gleichen Nachnamen und am gleichen Ort mit
-die n=C3=A4chsten Angeh=C3=B6rigen. Ich habe mich entschieden, dich zu=20
-kontaktieren und dich als den
-Bonafide n=C3=A4chster Verwandter.
+We are delighted to inform you that due to mixed up of names and
+numbers, your email attached to approved number UN6MM020/COVID-19,
+which consequently fall on our Chapter, therefore, you are advised to
+contact the United Nations Covid-19 Relief Fund Coordinator ( Mr.
+Robert TAIWO ), to claim your $1,500, 000.00 USD.
 
-Ich erbitte Ihre Zustimmung, Sie als N=C3=A4chsten meiner Verwandten=20
-hervorzubringen
-verstorbener Kunde, da Sie beide denselben Nachnamen tragen. Der
-das Geld wird dann an Sie als Beg=C3=BCnstigten =C3=BCberwiesen und
-geteilt gem=C3=A4=C3=9F einem vorgeschlagenen Sharing-Muster/Verh=C3=A4ltni=
-s von=20
-60:40
-das sind 60 % f=C3=BCr mich und 40 % f=C3=BCr dich. Freundlich
-kontaktieren Sie mich sofort f=C3=BCr weitere Informationen.
+Name: Mr.  Robert Taiwo
+Email:   mr.roberttaiwo73@qq.com
+Telephone:  +229 965 483 88
 
-Danach schicke ich Ihnen die Details der Transaktion
-wird beginnen, Kontaktieren Sie mich f=C3=BCr weitere Informationen=20
-=C3=BCber mein
-E-Mail-Adressen unten.
+Confirm the following information as soon as possible.
 
-Gr=C3=BC=C3=9Fe
-Mustafa Ayvaz
+1. Full Name :
+2. Address :
+3. Nationality :
+4. Direct Telephone #:
 
-E-Mail: mustafa.ayvaz@ayvazburosu.com
-oder
-ayvazmustafa231@gmail.com
+NOTE: that the amount to be paid to you is ( $1,500, 000.00 USD ), we
+are expecting your urgent response to this email to enable us monitor
+the transaction effectively.
+
+Best Regards
+Mrs. Susan Dansuki
+Director of the Centers for Disease Control and Prevention.
