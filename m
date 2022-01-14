@@ -2,117 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D70848EAEB
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jan 2022 14:38:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73C6648EC38
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jan 2022 16:08:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241384AbiANNi5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Jan 2022 08:38:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38374 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241379AbiANNi4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jan 2022 08:38:56 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E92C06173E
-        for <linux-pm@vger.kernel.org>; Fri, 14 Jan 2022 05:38:56 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id x22so30261484lfd.10
-        for <linux-pm@vger.kernel.org>; Fri, 14 Jan 2022 05:38:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fm/m3hhYi8USgiEU3N02TwzoT6Lhf/h0pQPibfSrZZQ=;
-        b=HUKDG5fAEr+kRVIfFS9wNG2zI/eiySiSKmv+MgH0I8+xhYNV4kJSgcsCJmZmbSWfJB
-         lvVG1pYw39g/4oIb/F+k2fOzCpSrlTAS2gr9ltL/T6S2PXS5Gdy4KZzSF3MucOrzF5tA
-         xtYzZ8kBPoaYoHPhM2Hg2uF1ibuTZSk5wNofetIGoNguVkgGAI3WLxW0s7B3uedgVzmk
-         do7oqAqpe4sDAbAiN4yTk6O8SHPS0gr6rOMf8p9PTJoZ9e9aB0e+mzlpHaT9CKkB+6Rk
-         5ZPowLDjb74IEbWMohJA4RSz8is2DGvPXNu2nxfNT4O3MDSwt51H2dOKM/eD94VxaGOL
-         HLAQ==
+        id S242175AbiANPIB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Jan 2022 10:08:01 -0500
+Received: from mail-oi1-f181.google.com ([209.85.167.181]:37741 "EHLO
+        mail-oi1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235794AbiANPIB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jan 2022 10:08:01 -0500
+Received: by mail-oi1-f181.google.com with SMTP id i9so12546768oih.4;
+        Fri, 14 Jan 2022 07:08:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fm/m3hhYi8USgiEU3N02TwzoT6Lhf/h0pQPibfSrZZQ=;
-        b=ti7HYJemjbyd+bXbB+O4ziGGKj23EME9cxykrOjA8nW/1aTzc/i0oVha3YDGbsIE7m
-         KaAvTUOjGdrakR2Fz1czw8nPMbTT8S4s/wiy07/tTrUDH2C5NQ+HEudKWIrMrlZeRgeN
-         C7V3BhZojqXk2GB/VnbTzCkyGtOwetW7gBygU+8eoGjT7RGwiX3aqgXiYMJxFts4heTe
-         RsfXk/nfpEVs4XvG4fDGAjpKvFwsgwSFx7QrovKafc1YdMgIxqd9iKkmPssW5aJu7lJD
-         L7+KEwxotLT0ql1JtNnhbchI8DgfwTbS1DC47gKpDTr8hPp6vPMI5T7vQoV7aRZT07wl
-         q6WQ==
-X-Gm-Message-State: AOAM5304cnLIvaHGCFP4f/pFyFa6BQ3++X2wbFjUtjEyg1hDxqhzHFkv
-        TAFhAZ7PmvLwYATNoe2QHIjg15nNiv6Y/oACKD+O7Q==
-X-Google-Smtp-Source: ABdhPJwU75v+PDeGlfsjylWxQOTH/0+OJYuUCddEMAGNjxc4X3KiKPSVleT14H/MDGd6Wyw44lujhS0zZl2BgsqaRRg=
-X-Received: by 2002:a2e:947:: with SMTP id 68mr6892116ljj.300.1642167534811;
- Fri, 14 Jan 2022 05:38:54 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mELcxoCS2rGqtuIQqHLN1/ESK0gzux5v3TxcVcf+0NY=;
+        b=Sjq5dVh276ILS2BMZmHOzlsSX3/R3wta4Quzx3bt1VyKnKO+D7lzc1F2uHVAdjGuvE
+         Cd2TOg1iCScwbS6kfRNVOV6u8pDWF/57N8nWFxRtIGV0RWuQDnnNSmJmsXn/MQwHkOG8
+         +7ivyAAU6Pkxgvl6aRBDcyr7hnVxr1KzmJnRPa9mzmL+fatxWRPwjzjVkWAav8kfzNLs
+         ZDqxtxAWunZ5+fjAFOdFYE3n92EcTDeI1HUcLXdfbTwiSBr8Jv9dbT3J1pIR1SvRSavE
+         9T2bNmoDulyiCHj2OwY/a6Ok2LJc5AQ1slv3ZT+fQNcMBT1FJGZ/gtH5kmFEXNsPb4Jh
+         skFA==
+X-Gm-Message-State: AOAM533+TNIpXowvAsokD64f1+zqGEbXJhNpiFuuiyEjdxNP0Yin6K7U
+        xgBoHW6FxJXdpKfAbvDE8tXUjVRmZA==
+X-Google-Smtp-Source: ABdhPJxHWKztI9xJhF9PWC2HI/gkFe+b9mkNYmIf0SuBeLj1ScA/QuakJAE+PHMNdecRvcNp+D7XzQ==
+X-Received: by 2002:a05:6808:8c3:: with SMTP id k3mr85956oij.98.1642172880317;
+        Fri, 14 Jan 2022 07:08:00 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id c4sm1875869otu.39.2022.01.14.07.07.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jan 2022 07:07:59 -0800 (PST)
+Received: (nullmailer pid 1894656 invoked by uid 1000);
+        Fri, 14 Jan 2022 15:07:56 -0000
+Date:   Fri, 14 Jan 2022 09:07:56 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Sander Vanheule <sander@svanheule.net>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: power: reset: gpio-restart: Correct default
+ priority
+Message-ID: <YeGRzIMsbSRTEId1@robh.at.kernel.org>
+References: <20220110214456.67087-1-sander@svanheule.net>
 MIME-Version: 1.0
-References: <1641749107-31979-1-git-send-email-quic_mkshah@quicinc.com> <1641749107-31979-9-git-send-email-quic_mkshah@quicinc.com>
-In-Reply-To: <1641749107-31979-9-git-send-email-quic_mkshah@quicinc.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 14 Jan 2022 14:38:18 +0100
-Message-ID: <CAPDyKFpqdRveupZ-jnZ82OdRW32tHA37TTaWpQgHSrmodK0FeQ@mail.gmail.com>
-Subject: Re: [PATCH 08/10] PM: domains: Store the closest hrtimer event of the
- domain CPUs
-To:     Maulik Shah <quic_mkshah@quicinc.com>
-Cc:     bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rafael@kernel.org, daniel.lezcano@linaro.org,
-        quic_lsrao@quicinc.com, quic_rjendra@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220110214456.67087-1-sander@svanheule.net>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 9 Jan 2022 at 18:26, Maulik Shah <quic_mkshah@quicinc.com> wrote:
->
-> The arch timer can not wake up the Qualcomm Technologies, Inc. (QTI)
-> SoCs when the deepest CPUidle modes results in the SoC also to enter
-> the low power mode.
->
-> RSC is part of CPU subsystem and APSS rsc device is attached to cluster
-> power domain. RSC has to setup next hrtimer wakeup in CONTROL_TCS which
-> can wakeup the SoC from deepest low power states. The CONTROL_TCS does
-> this by writing next wakeup in always on domain timer when the SoC is
-> entering the low power state.
->
-> Store the domain wakeup time from all the CPUs which can be used from
-> domain power off callback by RSC device.
->
-> Signed-off-by: Maulik Shah <quic_mkshah@quicinc.com>
-
-I need to think a little bit more about this one, so I have to get
-back with some more detailed comments next week.
-
-Kind regards
-Uffe
-
+On Mon, 10 Jan 2022 22:44:56 +0100, Sander Vanheule wrote:
+> Commit bcd56fe1aa97 ("power: reset: gpio-restart: increase priority
+> slightly") changed the default restart priority 129, but did not update
+> the documentation. Correct this, so the driver and documentation have
+> the same default value.
+> 
+> Signed-off-by: Sander Vanheule <sander@svanheule.net>
 > ---
->  drivers/base/power/domain_governor.c | 1 +
->  include/linux/pm_domain.h            | 1 +
->  2 files changed, 2 insertions(+)
->
-> diff --git a/drivers/base/power/domain_governor.c b/drivers/base/power/domain_governor.c
-> index cd08c58..a4c7dd8 100644
-> --- a/drivers/base/power/domain_governor.c
-> +++ b/drivers/base/power/domain_governor.c
-> @@ -363,6 +363,7 @@ static bool cpu_power_down_ok(struct dev_pm_domain *pd)
->                                 domain_wakeup = next_hrtimer;
->                 }
->         }
-> +       genpd->next_hrtimer = domain_wakeup;
->
->         /* The minimum idle duration is from now - until the next wakeup. */
->         idle_duration_ns = ktime_to_ns(ktime_sub(domain_wakeup, now));
-> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-> index 67017c9..682b372 100644
-> --- a/include/linux/pm_domain.h
-> +++ b/include/linux/pm_domain.h
-> @@ -136,6 +136,7 @@ struct generic_pm_domain {
->         struct gpd_dev_ops dev_ops;
->         s64 max_off_time_ns;    /* Maximum allowed "suspended" time. */
->         ktime_t next_wakeup;    /* Maintained by the domain governor */
-> +       ktime_t next_hrtimer;   /* Closest hrtimer event of the domain CPUs */
->         bool max_off_time_changed;
->         bool cached_power_down_ok;
->         bool cached_power_down_state_idx;
-> --
-> 2.7.4
->
+> This is a resubmission of RFC:
+> https://lore.kernel.org/all/cfcd00257daba5aa30b8d20a62ba542be1a6914c.1640887456.git.sander@svanheule.net/
+> 
+> The commit message for bcd56fe1aa97 mentions that it is a workaround for
+> rk3288-veryon boards. However, commit e28ea9dbc52d3 ("ARM: dts:
+> rockchip: add shared rk3288-veyron files") later adds a gpio-restart
+> node with a priority value of <200> for those boards, effectively
+> rendering bcd56fe1aa97 obsolete (for their use case).
+> 
+> Perhaps bcd56fe1aa97 could just be reverted instead of updating the
+> documentation.
+> 
+> An argument against reverting (a 6 year old patch) is that other boards
+> may have come to depend on the default value of 129. I don't know about
+> out-of-tree user of gpio-restart, but there are a few in-tree users of
+> gpio-restart /without/ an explicit priority:
+> 
+> arch/arm/boot/dts/imx53-ppd.dts (commit 2952d67637716)
+>   DTS submitted after changed default, but DTS copyright predates the
+>   changed default.
+> 
+> arch/microblaze/boot/dts/system.dts (commit 7cca9b8b7c5bc)
+>   The original DTS commit predates the changed default, but didn't use
+>   gpio-restart. The commit adding gpio-restart appears to indicate no
+>   other restart handlers are present on this platform, although it could
+>   be these were just being shadowed by the custom restart code.
+> 
+> arch/riscv/boot/dts/sifive/hifive-unleashed-a00.dts (commit 0a91330b2af9f)
+>   Recently added board; couldn't find any obvious alternative restart
+>   handlers.
+> 
+> Best,
+> Sander
+> 
+>  .../devicetree/bindings/power/reset/gpio-restart.yaml         | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+
+Applied, thanks!
