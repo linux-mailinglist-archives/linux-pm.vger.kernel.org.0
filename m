@@ -2,254 +2,257 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C08AF48E6A0
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jan 2022 09:36:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B710C48E77D
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jan 2022 10:27:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234463AbiANIgi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Jan 2022 03:36:38 -0500
-Received: from mga11.intel.com ([192.55.52.93]:50574 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234295AbiANIgi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 14 Jan 2022 03:36:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642149398; x=1673685398;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=3CGh/MudxyzwkBuNBCKJeUmz0ETgj2pAJrvNQX2fPyk=;
-  b=SwmS5ePkL5o5huaZgv6Qj2mOJDF+zhK+hGP87uC6JEAjRSyD5uJQJ4lM
-   fJnnyR2PWulARZr2qgifIaWO8jWiHlCTQgCljNusD/YVWBF0qsBGeTWzS
-   U7sHcWdUv2XJlorcIWipxrR3Mfnah4Wy+h0HER46IVx57fuuUNSg6bQD4
-   AHDpOHDVGS5UhQUHScse4xa7Me5tTz/H1Vor+RhaVO3urJkG45a6VWbZF
-   yTf50GB3aRMmCYzwj2Gy/whpuQDwRxrSWwO4cc1B8qSoWUOBa97fIWGxk
-   XKhWGi6aPPO6sYmjspd2zx9C5/bF85W91TgSzBjGjoYrBPLdi/pCkPmql
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="241769493"
-X-IronPort-AV: E=Sophos;i="5.88,288,1635231600"; 
-   d="scan'208";a="241769493"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 00:36:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,288,1635231600"; 
-   d="scan'208";a="516291576"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 14 Jan 2022 00:36:35 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n8I4Y-0008JM-Oa; Fri, 14 Jan 2022 08:36:34 +0000
-Date:   Fri, 14 Jan 2022 16:35:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS WITH WARNING
- 93e5c8b5e46e70f119200c99a8f15e2e87083b53
-Message-ID: <61e135db.+ddT8af5GkhnpHHb%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S239967AbiANJ1E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Jan 2022 04:27:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37692 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239955AbiANJ07 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jan 2022 04:26:59 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC38AC06173E
+        for <linux-pm@vger.kernel.org>; Fri, 14 Jan 2022 01:26:58 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n8IqX-0007Po-Mn; Fri, 14 Jan 2022 10:26:09 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n8IqP-00AEBU-7g; Fri, 14 Jan 2022 10:26:00 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n8IqN-0000tG-Uq; Fri, 14 Jan 2022 10:25:59 +0100
+Date:   Fri, 14 Jan 2022 10:25:57 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     Mark Brown <broonie@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        KVM list <kvm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-phy@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        platform-driver-x86@vger.kernel.org,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Eric Auger <eric.auger@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        openipmi-developer@lists.sourceforge.net,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        Richard Weinberger <richard@nod.at>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        netdev@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        linux-mediatek@lists.infradead.org,
+        Brian Norris <computersforpeace@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
+Message-ID: <20220114092557.jrkfx7ihg26ekzci@pengutronix.de>
+References: <20220110195449.12448-1-s.shtylyov@omp.ru>
+ <20220110195449.12448-2-s.shtylyov@omp.ru>
+ <20220110201014.mtajyrfcfznfhyqm@pengutronix.de>
+ <YdyilpjC6rtz6toJ@lunn.ch>
+ <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
+ <20220112085009.dbasceh3obfok5dc@pengutronix.de>
+ <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
+ <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
+ <Yd9L9SZ+g13iyKab@sirena.org.uk>
+ <29f0c65d-77f2-e5b2-f6cc-422add8a707d@omp.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pqpclpjbrmroys3t"
+Content-Disposition: inline
+In-Reply-To: <29f0c65d-77f2-e5b2-f6cc-422add8a707d@omp.ru>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 93e5c8b5e46e70f119200c99a8f15e2e87083b53  Merge branch 'pm-core' into linux-next
 
-Warning reports:
+--pqpclpjbrmroys3t
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-https://lore.kernel.org/llvm/202112280907.gTYYYuB4-lkp@intel.com
+Hello Sergey,
 
-Warning in current branch:
+On Thu, Jan 13, 2022 at 11:35:34PM +0300, Sergey Shtylyov wrote:
+> On 1/13/22 12:45 AM, Mark Brown wrote:
+> >>> To me it sounds much more logical for the driver to check if an
+> >>> optional irq is non-zero (available) or zero (not available), than to
+> >>> sprinkle around checks for -ENXIO. In addition, you have to remember
+> >>> that this one returns -ENXIO, while other APIs use -ENOENT or -ENOSYS
+> >>> (or some other error code) to indicate absence. I thought not having
+> >>> to care about the actual error code was the main reason behind the
+> >>> introduction of the *_optional() APIs.
+> >=20
+> >> No, the main benefit of gpiod_get_optional() (and clk_get_optional()) =
+is
+> >> that you can handle an absent GPIO (or clk) as if it were available.
+>=20
+>    Hm, I've just looked at these and must note that they match 1:1 with
+> platform_get_irq_optional(). Unfortunately, we can't however behave the
+> same way in request_irq() -- because it has to support IRQ0 for the sake
+> of i8253 drivers in arch/...
 
-drivers/acpi/acpica/exregion.c:519:17: warning: performing pointer subtraction with a null pointer has undefined behavior [-Wnull-pointer-subtraction]
+Let me reformulate your statement to the IMHO equivalent:
 
-Warning ids grouped by kconfigs:
+	If you set aside the differences between
+	platform_get_irq_optional() and gpiod_get_optional(),
+	platform_get_irq_optional() is like gpiod_get_optional().
 
-clang_recent_errors
-|-- i386-randconfig-a002
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- i386-randconfig-a004
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- i386-randconfig-a006
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- i386-randconfig-a011
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- i386-randconfig-a013
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- i386-randconfig-a015
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- x86_64-randconfig-a001
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- x86_64-randconfig-a003
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- x86_64-randconfig-a005
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- x86_64-randconfig-a012
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-|-- x86_64-randconfig-a014
-|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
-`-- x86_64-randconfig-a016
-    `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
+The introduction of gpiod_get_optional() made it possible to simplify
+the following code:
 
-elapsed time: 721m
+	reset_gpio =3D gpiod_get(...)
+	if IS_ERR(reset_gpio):
+		error =3D PTR_ERR(reset_gpio)
+		if error !=3D -ENDEV:
+			return error
+	else:
+		gpiod_set_direction(reset_gpiod, INACTIVE)
 
-configs tested: 145
-configs skipped: 3
+to
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                          randconfig-c001
-arm                          gemini_defconfig
-arm                         at91_dt_defconfig
-nios2                         10m50_defconfig
-sparc64                             defconfig
-mips                        bcm47xx_defconfig
-powerpc                 mpc837x_mds_defconfig
-m68k                        mvme16x_defconfig
-powerpc                     tqm8555_defconfig
-arm                            hisi_defconfig
-powerpc                      tqm8xx_defconfig
-arm                         lpc18xx_defconfig
-powerpc                      pcm030_defconfig
-arm                         s3c6400_defconfig
-arm                         axm55xx_defconfig
-arm                           h5000_defconfig
-powerpc                    amigaone_defconfig
-arc                        nsim_700_defconfig
-sh                        sh7757lcr_defconfig
-sh                          landisk_defconfig
-csky                             alldefconfig
-xtensa                          iss_defconfig
-arm                           sunxi_defconfig
-powerpc                      pasemi_defconfig
-sh                               j2_defconfig
-arc                              alldefconfig
-mips                           ci20_defconfig
-arm                          iop32x_defconfig
-mips                         tb0226_defconfig
-arm                            mps2_defconfig
-arm                          lpd270_defconfig
-riscv                            allmodconfig
-arm                            qcom_defconfig
-arm                            pleb_defconfig
-ia64                        generic_defconfig
-sh                   rts7751r2dplus_defconfig
-mips                         db1xxx_defconfig
-powerpc                     mpc83xx_defconfig
-mips                        vocore2_defconfig
-openrisc                    or1ksim_defconfig
-sh                   sh7724_generic_defconfig
-s390                          debug_defconfig
-sh                          rsk7264_defconfig
-sh                          r7785rp_defconfig
-arm                            xcep_defconfig
-sh                           se7343_defconfig
-sh                                  defconfig
-i386                             alldefconfig
-sh                          sdk7786_defconfig
-arm                           tegra_defconfig
-sh                         microdev_defconfig
-powerpc                       ppc64_defconfig
-m68k                             allmodconfig
-sh                              ul2_defconfig
-arm                  randconfig-c002-20220113
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-csky                                defconfig
-alpha                               defconfig
-nds32                               defconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-s390                             allyesconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a003
-i386                          randconfig-a001
-i386                          randconfig-a005
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-riscv                randconfig-r042-20220113
-arc                  randconfig-r043-20220113
-s390                 randconfig-r044-20220113
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
+	reset_gpio =3D gpiod_get_optional(....)
+	if IS_ERR(reset_gpio):
+		return reset_gpio
+	gpiod_set_direction(reset_gpiod, INACTIVE)
 
-clang tested configs:
-arm                  randconfig-c002-20220113
-x86_64                        randconfig-c007
-riscv                randconfig-c006-20220113
-powerpc              randconfig-c003-20220113
-i386                          randconfig-c001
-mips                 randconfig-c004-20220113
-mips                           ip28_defconfig
-arm                          pxa168_defconfig
-powerpc                     powernv_defconfig
-powerpc                        icon_defconfig
-mips                        bcm63xx_defconfig
-arm                                 defconfig
-riscv                             allnoconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-hexagon              randconfig-r045-20220113
-hexagon              randconfig-r041-20220113
+and I never need to actually know if the reset_gpio actually exists.
+Either the line is put into its inactive state, or it doesn't exist and
+then gpiod_set_direction is a noop. For a regulator or a clk this works
+in a similar way.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+However for an interupt this cannot work. You will always have to check
+if the irq is actually there or not because if it's not you cannot just
+ignore that. So there is no benefit of an optional irq.
+
+Leaving error message reporting aside, the introduction of
+platform_get_irq_optional() allows to change
+
+	irq =3D platform_get_irq(...);
+	if (irq < 0 && irq !=3D -ENXIO) {
+		return irq;
+	} else if (irq >=3D 0) {
+		... setup irq operation ...
+	} else { /* irq =3D=3D -ENXIO */
+		... setup polling ...
+	}
+
+to
+=09
+	irq =3D platform_get_irq_optional(...);
+	if (irq < 0 && irq !=3D -ENXIO) {
+		return irq;
+	} else if (irq >=3D 0) {
+		... setup irq operation ...
+	} else { /* irq =3D=3D -ENXIO */
+		... setup polling ...
+	}
+
+which isn't a win. When changing the return value as you suggest, it can
+be changed instead to:
+
+	irq =3D platform_get_irq_optional(...);
+	if (irq < 0) {
+		return irq;
+	} else if (irq > 0) {
+		... setup irq operation ...
+	} else { /* irq =3D=3D 0 */
+		... setup polling ...
+	}
+
+which is a tad nicer. If that is your goal however I ask you to also
+change the semantic of platform_get_irq() to return 0 on "not found".
+Note the win is considerably less compared to gpiod_get_optional vs
+gpiod_get however. And then it still lacks the semantic of a dummy irq
+which IMHO forfeits the right to call it ..._optional().
+
+Now I'm unwilling to continue the discussion unless there pops up a
+suggestion that results in a considerable part (say > 10%) of the
+drivers using platform_get_irq_optional not having to check if the
+return value corresponds to "not found".
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--pqpclpjbrmroys3t
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHhQaIACgkQwfwUeK3K
+7AmkQAf/d5PfPw0IAOs7Wqvc6r/p6+1tkvEg9YM43cQ03LWApgcX+mJuGNq/lpcb
+MvZUP4vJwOgXf4HlzKhY5cmrtlcjY+gTojfSCWGvV2oO7t1vx/19Mqh9zY3W297j
+f5fYMWJx8DicM/I+7Clo5cNGZiBiwEcH3eptaX6YahEQXjSg45gPcXIpGNotj8AO
+O/Xl9hviFVW48prFLlFLY+qfKNsJPVNtu/Gnl8qdD/USm6Wa7361ko6G32lHIHUf
+7NnENwu96Qw92tZN7jHMMmHbiW1xwp5Yu3yd4xf2/h/RBc3iRsgbEoSgjoUYbMgS
+v/GqERP7XEBCpDmg1fzMNr/LcXeBxQ==
+=hCsr
+-----END PGP SIGNATURE-----
+
+--pqpclpjbrmroys3t--
