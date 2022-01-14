@@ -2,152 +2,185 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35ABB48ED04
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jan 2022 16:19:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F261448EF84
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jan 2022 18:55:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236491AbiANPTR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Jan 2022 10:19:17 -0500
-Received: from mail-gv0che01on2108.outbound.protection.outlook.com ([40.107.23.108]:64257
-        "EHLO CHE01-GV0-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235681AbiANPTN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 14 Jan 2022 10:19:13 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lTEAjQw9iNnEd0ZxAmIHOjMF34ojAXxyZ7jAaIrYiN7ts9nLbUlCoHWqBqZvyqnPZ/p1VEVT6fzDMs3fmUcR+jNHervzJ7ar6xvrfn11Yjkf9uC4GIjSRnnv0OBIkVdScVFCxKy4Dimc/rkrO2fGkVuCaxAdjI3Y38c0ICpZinQpRL4YgdYFwYOwyUuy3FslAF9PfOpfT0mXJZmFapmzbBO1w2IRSppnvrOkDsXWafXHI8th3oOgVa0bXu+GzYK02n76BvWu7n94n3yD0bkBm6B2MPtmiLFP6xlsif2XJXrrY4Zc5J5niKolrIJm3qFwr/MZHZ9WXFAWPJPQG6RS5g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iqzNVp++vLnkPZ3x2sQjCax3A8kzgFudflQGOPaUzcc=;
- b=K4W79c1iSHwiKLn24A78P2jj7lXqXxtGhzfFkwYhNXmBupLmdbIoGkmdt8WAigvLI3NNvAu0m4xgtKklIK5Y8wjLV4BuK94bfya0ET7fAa2XsZYaw7XF23S5MIvHW9wPoMSKA8RJHmD6w1yxE5432zdiFLE022XSD4HFqST7nwaEYe0iQUpEBGfHtGAvVnLTp6HMEH4ptE2hdrnyeDQ6RcenzNRhOJvAWcL4kLeBxVeeepcHQgr19TFYqZZtsv+DbnlAOy2AWcVTGVdl2u5Ql41+6nfo2/enr73Bo9MTLheeSKlLhjYI1PtBElX4GErYsy6vwQVUtB77OBYKPq+zjw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=toradex.com; dmarc=pass action=none header.from=toradex.com;
- dkim=pass header.d=toradex.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=toradex.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iqzNVp++vLnkPZ3x2sQjCax3A8kzgFudflQGOPaUzcc=;
- b=IAKqD8KxvWT9LoNo80B2ZH1GxFdFqviropB3spjUDMI7lD7XK33vndt7hKbEsTmYTFnCpyQu0N086x7jY3hHyo4tVBhqQr5Inc2i/dEeqJEU0UfRlvxZfEVzlGcpNI46W/6V2wK7HsiGx+rNSSHw8KeYdRxE7fSrH7A/147Av0o=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=toradex.com;
-Received: from ZRAP278MB0642.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:3d::11)
- by ZRAP278MB0080.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:13::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Fri, 14 Jan
- 2022 15:19:05 +0000
-Received: from ZRAP278MB0642.CHEP278.PROD.OUTLOOK.COM
- ([fe80::d837:7398:e400:25f0]) by ZRAP278MB0642.CHEP278.PROD.OUTLOOK.COM
- ([fe80::d837:7398:e400:25f0%2]) with mapi id 15.20.4888.012; Fri, 14 Jan 2022
- 15:19:05 +0000
-From:   Francesco Dolcini <francesco.dolcini@toradex.com>
-To:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
+        id S244016AbiANRzX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Jan 2022 12:55:23 -0500
+Received: from mxout02.lancloud.ru ([45.84.86.82]:37634 "EHLO
+        mxout02.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244005AbiANRzR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jan 2022 12:55:17 -0500
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru 02F2120606E9
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: [PATCH] driver core: platform: Rename platform_get_irq_optional()
+ to platform_get_irq_silent()
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>
+CC:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        KVM list <kvm@vger.kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Stefan Agner <stefan.agner@toradex.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Denys Drozdov <denys.drozdov@toradex.com>,
-        Stefan Agner <stefan@agner.ch>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>
-Subject: [PATCH v1 2/2] cpufreq: Add i.MX7S to cpufreq-dt-platdev blocklist
-Date:   Fri, 14 Jan 2022 16:18:47 +0100
-Message-Id: <20220114151847.290518-3-francesco.dolcini@toradex.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220114151847.290518-1-francesco.dolcini@toradex.com>
-References: <20220114151847.290518-1-francesco.dolcini@toradex.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: GV0P278CA0085.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:710:2b::18) To ZRAP278MB0642.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:3d::11)
+        <linux-iio@vger.kernel.org>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        "ALSA Development Mailing List" <alsa-devel@alsa-project.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        <linux-phy@lists.infradead.org>, Jiri Slaby <jirislaby@kernel.org>,
+        <openipmi-developer@lists.sourceforge.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        "William Breathitt Gray" <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Borislav Petkov" <bp@alien8.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        <platform-driver-x86@vger.kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        <linux-edac@vger.kernel.org>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        "Eric Auger" <eric.auger@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Cornelia Huck <cohuck@redhat.com>,
+        "Linux MMC List" <linux-mmc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Richard Weinberger <richard@nod.at>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        <linux-mediatek@lists.infradead.org>,
+        "Brian Norris" <computersforpeace@gmail.com>,
+        <netdev@vger.kernel.org>
+References: <20220110195449.12448-2-s.shtylyov@omp.ru>
+ <20220110201014.mtajyrfcfznfhyqm@pengutronix.de> <YdyilpjC6rtz6toJ@lunn.ch>
+ <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
+ <20220112085009.dbasceh3obfok5dc@pengutronix.de>
+ <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
+ <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
+ <Yd9L9SZ+g13iyKab@sirena.org.uk>
+ <20220113110831.wvwbm75hbfysbn2d@pengutronix.de>
+ <YeA7CjOyJFkpuhz/@sirena.org.uk>
+ <20220113194358.xnnbhsoyetihterb@pengutronix.de>
+ <745c601f-c782-0904-f786-c9bfced8f11c@gmail.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <cae0b73e-46df-a491-4a8e-415205038c2c@omp.ru>
+Date:   Fri, 14 Jan 2022 20:55:07 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0e94f3f5-cb45-4df7-620d-08d9d77133b1
-X-MS-TrafficTypeDiagnostic: ZRAP278MB0080:EE_
-X-Microsoft-Antispam-PRVS: <ZRAP278MB00801563131A6BB31078656CE2549@ZRAP278MB0080.CHEP278.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4714;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bUbw5BRIwxSp6tz/XCDQ+2FMn/WJ2Dnfhgl/lP65n4OcTQupjMvC/WTi20o5KQkOf34+erm9qrwT6aTxI8BzT6/36zlpkpgwdpPQz8cQLpls+AElT2TcDFN91mNKoQiN1RJY8TMQ8nyx6+QHjo/XJNxCYPOiiLyz87a3Brc9I4B7Sfb9AJEfE6rvMyavXIZcxeCsY7+OsEklnB7TSEzkLljMbCSp6qZUas8Z2S1G+lc78w6bAUgfJRTRNLnLoOXCk8N2JFC1SJE1XI8EnRED0sEP8m7kK37K2VvlGlUAI4dmdJqEZfKhUNa+PwZhceWWNTbbo7u+V9VdODa3hXCCtZ3l77tJkWfqyMwNohc2TgguapjUYiY5KaX8VPJcxN0oLTtJllhoefCXWXCCoVFulLTOzutqjQywSLrFhj+UksLkedwzboA37wCyV/7EUniQ5XuVesid7TwVSL4kw6BjMSFv/kAvuSXAGAcqTQp7q/Xpqqf1D7SRn94+0DB7Kv5O+SzqMtLNwrKIYZXZRimNO5W5fPCtIyFBNEn8j8DEEXEArqxy5Jpxc4AvLBzilQRezr+AJBNhHjz8afa0fEs4vMjH1dH3LEVAqhKL0J8vUns6AIp4b2rxt88LaVcHlVjd7lCC+dooxlOJYk0XgPuJ/DZVtHQGHZCO3E2B8ReCIsO74c9HkssIIPOg0i8lrXx5+Q1nRY/wONK+vtVuub0iQQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0642.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(136003)(346002)(376002)(39850400004)(396003)(366004)(36756003)(110136005)(86362001)(5660300002)(2616005)(316002)(54906003)(38350700002)(6506007)(26005)(52116002)(8676002)(66946007)(66476007)(66556008)(186003)(44832011)(83380400001)(1076003)(107886003)(6512007)(7416002)(6666004)(6486002)(38100700002)(508600001)(4326008)(2906002)(8936002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YKJDa4BzM7kTre8yOeymrpTPsl8uoy2HxNIAfaoRx9B/rTthQPm0qFIVYP0s?=
- =?us-ascii?Q?VyZYqDacBWbunxjp1IZjsERGGk0cQJsF/gXEdX1FjJeOwLNSla7+oCTIsugv?=
- =?us-ascii?Q?aVibtcFjpgvlMCtIMMUx5QqrAnRNn49F3nV5Yj2dmMttbgLdMNJlRjV7ZzXb?=
- =?us-ascii?Q?8vjTtP0KJiW4gZDq0qJPIw6Vlwyf7QUUOvqoXqVJSbzFF/IhquJsjzBJ46Xq?=
- =?us-ascii?Q?SMcks4HfPU+qvpOLcD9kDCelRpuABTScWmi/6S3VbzY4+w4A+9zinkOa1I5f?=
- =?us-ascii?Q?e8yDOWpaOMYHFJw6qi0oUt7u+0HFkjOoseKs7mNd/fEK/sZ8tTrTdDvA/+Xr?=
- =?us-ascii?Q?a7ZohKW0veLWpWawoNiZS7ZmIG8NXSBteqFNRmoXOdIqlfKL8dmG1VZwl3+V?=
- =?us-ascii?Q?IK6XLgumZTQ0EQaiP/ujaYvh/HVdr25Oeu1VkGCTYZ9xv7HjgBkA3XA2YOCE?=
- =?us-ascii?Q?eJQHt+/v3/F0vDMhqG/G+v4h10flN7H0zdKrQISmYZVij/2+HuN4nMw5rOv1?=
- =?us-ascii?Q?ncK3HyBUOslvGa+BRuLvuOCU7rxQh1Mjk+rE4NSOJWh6rtkQ+wu0cCsnSmH3?=
- =?us-ascii?Q?kzAQdYNPIvqKJkttj1/2Jw40YjJQJ/xIJFa4gVuCKAwfOTatk+u0Octyx9xh?=
- =?us-ascii?Q?Ge6h9WICHIgq/yN2EVHPlJsLrjPj4+qIvnnOCTudL4uEs4quWuOsnilEMe76?=
- =?us-ascii?Q?yO3Rq0oG2j423OaDPZIIDXv+18MMYLgVELJZM1zc5V2SMSWjeNTMIlyLGobV?=
- =?us-ascii?Q?sW9F3/30/eDDufeX80WPdIUQReGDkjvLJewcEl0OmsX61r30NnDuthwhiWwY?=
- =?us-ascii?Q?2somJCDogg6UhZcLMuZZ2lkupZISJiFqfKj/uqHE7aUOOOJdD5SGH/dvgq29?=
- =?us-ascii?Q?bFvjQaaNVHRGZyqoCaZ4NUT1Na4Ij2tk1Wxn/S9EHw+gizBm+Z/V5ERMvoPV?=
- =?us-ascii?Q?5oOJJIoOp+gMG4JUWBd1S9rEBjEIuSgdhwPzzAjvrIRmuOybL855/G9CmqjI?=
- =?us-ascii?Q?AwrcvXSgKTizcrvZNfYckBDf7oyxR1zZZtVNAsshu9HH/r/Tk5DXZGqxejCZ?=
- =?us-ascii?Q?mvKH+czdTo4BoAgdtXUJSc2YsfSFW1fq6r5S67u6c3zReQa4Cyc0fZnvIHcj?=
- =?us-ascii?Q?O3+6z5wnrmd+wgXr2VfvpHIrLP2Bm+bGqn7qNIrUZ1/q8w1eNkjYswMobTLQ?=
- =?us-ascii?Q?4ggNILdMqMU3JCTFCi8btmammdB0TZ1wb9h6/yidSIAYZt0cfmqJCcoii410?=
- =?us-ascii?Q?LIxTVjbJSQAF10HqW/H5mCazsdfPDq7gAQLhDnSf7seYQSzXEUX5ATm/k5IS?=
- =?us-ascii?Q?4AN1gps9rXogLOqtbzuh5tmuq9kqKY4ZVWtLlSE8SKRI80BAjRnAqKv2Z09j?=
- =?us-ascii?Q?cQdNa8TCUC6SaK5/4f4sDNEd+b5CcJbdV+vblqKk3RIAGO+RpCJfNoE2mMlH?=
- =?us-ascii?Q?ceScijBg74v3ZfzApap1zNFCdSYiEbVNgzIrNaqHXhzwsqVOvqilqX1qzv7O?=
- =?us-ascii?Q?b9fv9bMgVYf1jshgSDIruWCuKwzbp7ft5X+Fmq8RHvJZvOULFEbNgboBev6T?=
- =?us-ascii?Q?jzULjEVg0zNvawBoTDsmuCUQz6YT4Zdz690IZ2j+kVzljqGYaHf/ysC+yOBg?=
- =?us-ascii?Q?zalhFUz/hpPSKcyyAVLWUvSt4IlUKj46xc/g3o/wnp/fwg79+e5jJHkqvlCq?=
- =?us-ascii?Q?4ZImjA=3D=3D?=
-X-OriginatorOrg: toradex.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0e94f3f5-cb45-4df7-620d-08d9d77133b1
-X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0642.CHEP278.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jan 2022 15:19:04.8941
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HtANcMkTvQ28a3GWShcAcw+3gq00eOmkWjG6yYQOhZUTTS9Rf1FLKVNEBacpbUWbvbeknCHzkuufpYpzronyp7tH8aU1H4SZ9JnnQpqrNMo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZRAP278MB0080
+In-Reply-To: <745c601f-c782-0904-f786-c9bfced8f11c@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Stefan Agner <stefan.agner@toradex.com>
+On 1/14/22 12:42 AM, Florian Fainelli wrote:
 
-The i.MX 7Solo currently does not have multiple operating points,
-however, in order for the i.MX Thermal driver to successfully probe
-a cpufreq device is required. Add it to the cpufreq-dt-platdev
-driver's blocklist to allow using imx-cpufreq-dt.
+>> The subsystems regulator, clk and gpio have the concept of a dummy
+>> resource. For regulator, clk and gpio there is a semantic difference
+>> between the regular _get() function and the _get_optional() variant.
+>> (One might return the dummy resource, the other won't. Unfortunately
+>> which one implements which isn't the same for these three.) The
+>> difference between platform_get_irq() and platform_get_irq_optional() is
+>> only that the former might emit an error message and the later won't.
+>>
+>> To prevent people's expectations that there is a semantic difference
+>> between these too, rename platform_get_irq_optional() to
+>> platform_get_irq_silent() to make the actual difference more obvious.
+>>
+>> The #define for the old name can and should be removed once all patches
+>> currently in flux still relying on platform_get_irq_optional() are
+>> fixed.
+>>
+>> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+[...]
+>>>> I think at least c) is easy to resolve because
+>>>> platform_get_irq_optional() isn't that old yet and mechanically
+>>>> replacing it by platform_get_irq_silent() should be easy and safe.
+>>>> And this is orthogonal to the discussion if -ENOXIO is a sensible return
+>>>> value and if it's as easy as it could be to work with errors on irq
+>>>> lookups.
+>>>
+>>> It'd certainly be good to name anything that doesn't correspond to one
+>>> of the existing semantics for the API (!) something different rather
+>>> than adding yet another potentially overloaded meaning.
+>>
+>> It seems we're (at least) three who agree about this. Here is a patch
+>> fixing the name.
+> 
+> From an API naming perspective this does not make much sense anymore with the name chosen,
+> it is understood that whent he function is called platform_get_irq_optional(), optional applies
+> to the IRQ. An optional IRQ is something people can reason about because it makes sense.
 
-Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
-Cc: Stefan Agner <stefan@agner.ch>
-Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
----
- drivers/cpufreq/cpufreq-dt-platdev.c | 2 ++
- 1 file changed, 2 insertions(+)
+   Right! :-)
 
-diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
-index ca1d103ec449..2e08f8564a12 100644
---- a/drivers/cpufreq/cpufreq-dt-platdev.c
-+++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-@@ -110,6 +110,8 @@ static const struct of_device_id blocklist[] __initconst = {
- 
- 	{ .compatible = "fsl,imx7ulp", },
- 	{ .compatible = "fsl,imx7d", },
-+	{ .compatible = "fsl,imx7s", },
-+
- 	{ .compatible = "fsl,imx8mq", },
- 	{ .compatible = "fsl,imx8mm", },
- 	{ .compatible = "fsl,imx8mn", },
--- 
-2.25.1
+> What is a a "silent" IRQ however? It does not apply to the object it is trying to fetch to
+> anymore, but to the message that may not be printed in case the resource failed to be obtained,
+> because said resource is optional. Woah, that's quite a stretch.
 
+   Right again! :-)
+
+> Following the discussion and original 2 patches set from Sergey, it is not entirely clear to me
+> anymore what is it that we are trying to fix.
+
+   Andy and me tried to fix the platform_get_irq[_byname]_optional() value, corresponding to
+a missing (optional) IRQ resource from -ENXIO to 0, in order to keep the callers error code
+agnostic. This change completely aligns e.g. platform_get_irq_optional() with clk_get_optional()
+and gpiod_get_optional()...
+   Unforunately, we can't "fix" request_irq() and company to treat 0 as missing IRQ -- they have
+to keep the ability to get called from the arch/ code (that doesn't use platform_get_irq(), etc.
+
+> I nearly forgot, I would paint it blue, sky blue, not navy blue, not light blue ;)
+
+   :-)
+
+PS: Florian, something was wrong with your mail client -- I had to manually wrap your quotes,
+else there were super long unbroken paragraphs...
