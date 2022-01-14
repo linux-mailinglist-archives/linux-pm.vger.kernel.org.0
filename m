@@ -2,143 +2,254 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AC0748E498
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jan 2022 07:57:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C08AF48E6A0
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jan 2022 09:36:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239423AbiANG5k convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 14 Jan 2022 01:57:40 -0500
-Received: from relay9-d.mail.gandi.net ([217.70.183.199]:48213 "EHLO
-        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiANG5i (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jan 2022 01:57:38 -0500
-Received: (Authenticated sender: peter@korsgaard.com)
-        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 6952FFF805;
-        Fri, 14 Jan 2022 06:57:08 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
-        (envelope-from <peter@korsgaard.com>)
-        id 1n8GWI-0002SW-Ku; Fri, 14 Jan 2022 07:57:06 +0100
-From:   Peter Korsgaard <peter@korsgaard.com>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Mark Brown <broonie@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        KVM list <kvm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-phy@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
-        openipmi-developer@lists.sourceforge.net,
-        "David S. Miller" <davem@davemloft.net>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "open list\:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Corey Minyard <minyard@acm.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        platform-driver-x86@vger.kernel.org,
-        Benson Leung <bleung@chromium.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-edac@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list\:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Richard Weinberger <richard@nod.at>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        linux-mediatek@lists.infradead.org,
-        Brian Norris <computersforpeace@gmail.com>,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH] driver core: platform: Rename platform_get_irq_optional() to platform_get_irq_silent()
-References: <20220110195449.12448-2-s.shtylyov@omp.ru>
-        <20220110201014.mtajyrfcfznfhyqm@pengutronix.de>
-        <YdyilpjC6rtz6toJ@lunn.ch>
-        <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
-        <20220112085009.dbasceh3obfok5dc@pengutronix.de>
-        <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
-        <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
-        <Yd9L9SZ+g13iyKab@sirena.org.uk>
-        <20220113110831.wvwbm75hbfysbn2d@pengutronix.de>
-        <YeA7CjOyJFkpuhz/@sirena.org.uk>
-        <20220113194358.xnnbhsoyetihterb@pengutronix.de>
-Date:   Fri, 14 Jan 2022 07:57:06 +0100
-In-Reply-To: <20220113194358.xnnbhsoyetihterb@pengutronix.de> ("Uwe
-        =?utf-8?Q?Kleine-K=C3=B6nig=22's?= message of "Thu, 13 Jan 2022 20:43:58
- +0100")
-Message-ID: <87ilum954t.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S234463AbiANIgi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Jan 2022 03:36:38 -0500
+Received: from mga11.intel.com ([192.55.52.93]:50574 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234295AbiANIgi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 14 Jan 2022 03:36:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642149398; x=1673685398;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=3CGh/MudxyzwkBuNBCKJeUmz0ETgj2pAJrvNQX2fPyk=;
+  b=SwmS5ePkL5o5huaZgv6Qj2mOJDF+zhK+hGP87uC6JEAjRSyD5uJQJ4lM
+   fJnnyR2PWulARZr2qgifIaWO8jWiHlCTQgCljNusD/YVWBF0qsBGeTWzS
+   U7sHcWdUv2XJlorcIWipxrR3Mfnah4Wy+h0HER46IVx57fuuUNSg6bQD4
+   AHDpOHDVGS5UhQUHScse4xa7Me5tTz/H1Vor+RhaVO3urJkG45a6VWbZF
+   yTf50GB3aRMmCYzwj2Gy/whpuQDwRxrSWwO4cc1B8qSoWUOBa97fIWGxk
+   XKhWGi6aPPO6sYmjspd2zx9C5/bF85W91TgSzBjGjoYrBPLdi/pCkPmql
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="241769493"
+X-IronPort-AV: E=Sophos;i="5.88,288,1635231600"; 
+   d="scan'208";a="241769493"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 00:36:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,288,1635231600"; 
+   d="scan'208";a="516291576"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 14 Jan 2022 00:36:35 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n8I4Y-0008JM-Oa; Fri, 14 Jan 2022 08:36:34 +0000
+Date:   Fri, 14 Jan 2022 16:35:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS WITH WARNING
+ 93e5c8b5e46e70f119200c99a8f15e2e87083b53
+Message-ID: <61e135db.+ddT8af5GkhnpHHb%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
->>>>> "Uwe" == Uwe Kleine-König <u.kleine-koenig@pengutronix.de> writes:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 93e5c8b5e46e70f119200c99a8f15e2e87083b53  Merge branch 'pm-core' into linux-next
 
- > The subsystems regulator, clk and gpio have the concept of a dummy
- > resource. For regulator, clk and gpio there is a semantic difference
- > between the regular _get() function and the _get_optional() variant.
- > (One might return the dummy resource, the other won't. Unfortunately
- > which one implements which isn't the same for these three.) The
- > difference between platform_get_irq() and platform_get_irq_optional() is
- > only that the former might emit an error message and the later won't.
+Warning reports:
 
- > To prevent people's expectations that there is a semantic difference
- > between these too, rename platform_get_irq_optional() to
- > platform_get_irq_silent() to make the actual difference more obvious.
+https://lore.kernel.org/llvm/202112280907.gTYYYuB4-lkp@intel.com
 
- > The #define for the old name can and should be removed once all patches
- > currently in flux still relying on platform_get_irq_optional() are
- > fixed.
+Warning in current branch:
 
- > Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+drivers/acpi/acpica/exregion.c:519:17: warning: performing pointer subtraction with a null pointer has undefined behavior [-Wnull-pointer-subtraction]
 
-For i2c-ocores.c:
+Warning ids grouped by kconfigs:
 
-Acked-by: Peter Korsgaard <peter@korsgaard.com>
+clang_recent_errors
+|-- i386-randconfig-a002
+|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
+|-- i386-randconfig-a004
+|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
+|-- i386-randconfig-a006
+|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
+|-- i386-randconfig-a011
+|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
+|-- i386-randconfig-a013
+|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
+|-- i386-randconfig-a015
+|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
+|-- x86_64-randconfig-a001
+|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
+|-- x86_64-randconfig-a003
+|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
+|-- x86_64-randconfig-a005
+|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
+|-- x86_64-randconfig-a012
+|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
+|-- x86_64-randconfig-a014
+|   `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
+`-- x86_64-randconfig-a016
+    `-- drivers-acpi-acpica-exregion.c:warning:performing-pointer-subtraction-with-a-null-pointer-has-undefined-behavior
 
--- 
-Bye, Peter Korsgaard
+elapsed time: 721m
+
+configs tested: 145
+configs skipped: 3
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                          randconfig-c001
+arm                          gemini_defconfig
+arm                         at91_dt_defconfig
+nios2                         10m50_defconfig
+sparc64                             defconfig
+mips                        bcm47xx_defconfig
+powerpc                 mpc837x_mds_defconfig
+m68k                        mvme16x_defconfig
+powerpc                     tqm8555_defconfig
+arm                            hisi_defconfig
+powerpc                      tqm8xx_defconfig
+arm                         lpc18xx_defconfig
+powerpc                      pcm030_defconfig
+arm                         s3c6400_defconfig
+arm                         axm55xx_defconfig
+arm                           h5000_defconfig
+powerpc                    amigaone_defconfig
+arc                        nsim_700_defconfig
+sh                        sh7757lcr_defconfig
+sh                          landisk_defconfig
+csky                             alldefconfig
+xtensa                          iss_defconfig
+arm                           sunxi_defconfig
+powerpc                      pasemi_defconfig
+sh                               j2_defconfig
+arc                              alldefconfig
+mips                           ci20_defconfig
+arm                          iop32x_defconfig
+mips                         tb0226_defconfig
+arm                            mps2_defconfig
+arm                          lpd270_defconfig
+riscv                            allmodconfig
+arm                            qcom_defconfig
+arm                            pleb_defconfig
+ia64                        generic_defconfig
+sh                   rts7751r2dplus_defconfig
+mips                         db1xxx_defconfig
+powerpc                     mpc83xx_defconfig
+mips                        vocore2_defconfig
+openrisc                    or1ksim_defconfig
+sh                   sh7724_generic_defconfig
+s390                          debug_defconfig
+sh                          rsk7264_defconfig
+sh                          r7785rp_defconfig
+arm                            xcep_defconfig
+sh                           se7343_defconfig
+sh                                  defconfig
+i386                             alldefconfig
+sh                          sdk7786_defconfig
+arm                           tegra_defconfig
+sh                         microdev_defconfig
+powerpc                       ppc64_defconfig
+m68k                             allmodconfig
+sh                              ul2_defconfig
+arm                  randconfig-c002-20220113
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+csky                                defconfig
+alpha                               defconfig
+nds32                               defconfig
+alpha                            allyesconfig
+nios2                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+s390                             allyesconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+i386                          randconfig-a003
+i386                          randconfig-a001
+i386                          randconfig-a005
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+riscv                randconfig-r042-20220113
+arc                  randconfig-r043-20220113
+s390                 randconfig-r044-20220113
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+
+clang tested configs:
+arm                  randconfig-c002-20220113
+x86_64                        randconfig-c007
+riscv                randconfig-c006-20220113
+powerpc              randconfig-c003-20220113
+i386                          randconfig-c001
+mips                 randconfig-c004-20220113
+mips                           ip28_defconfig
+arm                          pxa168_defconfig
+powerpc                     powernv_defconfig
+powerpc                        icon_defconfig
+mips                        bcm63xx_defconfig
+arm                                 defconfig
+riscv                             allnoconfig
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+hexagon              randconfig-r045-20220113
+hexagon              randconfig-r041-20220113
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
