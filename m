@@ -2,87 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39DC0491019
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jan 2022 19:12:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3086049107A
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jan 2022 19:54:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238221AbiAQSMC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Jan 2022 13:12:02 -0500
-Received: from mail-qv1-f41.google.com ([209.85.219.41]:39727 "EHLO
-        mail-qv1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232426AbiAQSMB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jan 2022 13:12:01 -0500
-Received: by mail-qv1-f41.google.com with SMTP id ee17so7946582qvb.6;
-        Mon, 17 Jan 2022 10:12:01 -0800 (PST)
+        id S242653AbiAQSwh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Jan 2022 13:52:37 -0500
+Received: from mail-qt1-f179.google.com ([209.85.160.179]:34358 "EHLO
+        mail-qt1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242635AbiAQSwg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jan 2022 13:52:36 -0500
+Received: by mail-qt1-f179.google.com with SMTP id y10so20095079qtw.1;
+        Mon, 17 Jan 2022 10:52:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=nP8dCcD5x2Uj/NuOQ+k1uj+xSjjaAiCKfaCAXq4vDo0=;
-        b=RyRUiVSinz5qFZ+j2KDfNyVjai7/rrW75Qeg6rTulIhuuL9DNvkTFR83abIlOMael9
-         HLRAsM/QPJn2+x8WyqZY8W60JvT97cLlp1KVZ7LwuSLX+ubmUJabrCT2H0J6nhNo3uW4
-         zX6hPLdR3AQAR/95fYOCQhBqau9FW/rYtppTZj6uGgIbNEL/Le2qY+rFQDwrAXtnmsmj
-         lZ9m9Gyx9+vBFdiMGlotgSVQXRe4jos5QSJKDg9FbYuehbf8rWfAfvj8hVI3xLybq4Fk
-         JEMJoTlZbBiWwu4JAzw2EeUkqODoZ+djczngFwfGIccMoEEAtfRvvGjVpSRGVnW1U42R
-         xS3Q==
-X-Gm-Message-State: AOAM5329uc49rfOKLQ7mS4xvlOVii5cX21Mv1NBDD9cdtp4mdTGrQ2Lv
-        0NaPQ5Fj9TMVUphLKEE6vjZLZecdObuqvMRRYQuGE1IZQAQ=
-X-Google-Smtp-Source: ABdhPJwcfp5YvzWX2Sm4i0CtelaNW/jH0WRwjfo3lpjuWY/2SL0p8ORFb+BGOv2taqTC1bfsYRmVNT9LkfDPMwm18jU=
-X-Received: by 2002:a05:6214:29cc:: with SMTP id gh12mr7074084qvb.35.1642443120986;
- Mon, 17 Jan 2022 10:12:00 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lIJ5TezUW0gOVcxYESXX/bvlayB02U32YgdHRb0vJMY=;
+        b=Mmt760SCPkW1mF8N36Rl/DkPW/Jyfq8LiOXbS8I5ULFukJSy6LvljWDi/e4kJa/T41
+         5YrNFOzyhZyzjLZRgsYkvsidnBkmRNcBdSuoLHrw1RXUduxB77yL+y2p1DUElj7Crlzt
+         vtoUcToS6Z6qzlw6HTNRQS2+z6Qe7kr6st25RDATn3gH8lSj8y+3F/+CbbeSXUuX4KsS
+         PKTePuItXo36MOZXyHL6bKtS/RXhFcu9IP5d2t4S/3c6O5jJ71zHi0VlRps1/PeCyH2v
+         hkxAxYliSHd+raB2pZvChzS2tYItl583Wuhr4i9ID1K8j8B6t2jYZcuXookExuw79qaY
+         A1lA==
+X-Gm-Message-State: AOAM533X4RnhAJSDAayeqgL47D47dOdg0hs+1FSQPES4nu+nKN/1Uiji
+        wTkyOj9i+k//tsCn+BkJFemdboeAcvvmeuQ7nX3q/t4D
+X-Google-Smtp-Source: ABdhPJxH+SJ1sdZPrnz4zcNZsKQDXvkTBbxK0veFscyvWaZ0R0VeWmvRQzae1Hr9wAmknqAHDhuLelVNgL/WhiBV0tg=
+X-Received: by 2002:ac8:578d:: with SMTP id v13mr4089436qta.472.1642445555650;
+ Mon, 17 Jan 2022 10:52:35 -0800 (PST)
 MIME-Version: 1.0
+References: <20220114232435.448340-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20220114232435.448340-1-srinivas.pandruvada@linux.intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 17 Jan 2022 19:11:50 +0100
-Message-ID: <CAJZ5v0hwe1bdpymAMMv-W-mpxZGMZVdE5UM4JZbammhS0rdPMQ@mail.gmail.com>
-Subject: [GIT PULL] More power management updates for v5.17-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Mon, 17 Jan 2022 19:52:24 +0100
+Message-ID: <CAJZ5v0iVXbXVnUA4=j6G+texb=KTXjipRigFbYb9tEL7E9BThw@mail.gmail.com>
+Subject: Re: [PATCH 0/3] DPTF IDs for Raptor Lake
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Amit Kucheria <amitk@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Linus,
+On Sat, Jan 15, 2022 at 12:24 AM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> Add ACPI and PCI device ids for Raptor Lake DPTF support.
+>
+> Srinivas Pandruvada (3):
+>   ACPI: DPTF: Support Raptor Lake
+>   thermal: int340x: Support Raptor Lake
+>   thermal: int340x: Add Raptor Lake PCI device id
+>
+>  drivers/acpi/dptf/dptf_pch_fivr.c                           | 1 +
+>  drivers/acpi/dptf/dptf_power.c                              | 2 ++
+>  drivers/acpi/dptf/int340x_thermal.c                         | 6 ++++++
+>  drivers/acpi/fan.h                                          | 1 +
+>  drivers/thermal/intel/int340x_thermal/int3400_thermal.c     | 1 +
+>  drivers/thermal/intel/int340x_thermal/int3403_thermal.c     | 1 +
+>  .../intel/int340x_thermal/processor_thermal_device.h        | 1 +
+>  .../intel/int340x_thermal/processor_thermal_device_pci.c    | 1 +
+>  8 files changed, 14 insertions(+)
+>
+> --
 
-Please pull from the tag
-
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-5.17-rc1-2
-
-with top-most commit 5865918fe49ed3cb9d7b5d21f41aff8a68fbceb1
-
- iio: pressure: bmp280: Use new PM macros
-
-on top of commit b35b6d4d71365fbfb6f2cc8edc331b3882ca817e
-
- Merge tag 'pm-5.17-rc1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
-
-to receive more power management updates for 5.17-rc1.
-
-This is a continuation of the rework of device power management
-macros used for declaring device power management callbacks (Paul
-Cercueil).
-
-Thanks!
-
-
----------------
-
-Paul Cercueil (6):
-      PM: core: Remove DEFINE_UNIVERSAL_DEV_PM_OPS() macro
-      PM: core: Remove static qualifier in DEFINE_SIMPLE_DEV_PM_OPS macro
-      PM: core: Add EXPORT[_GPL]_SIMPLE_DEV_PM_OPS macros
-      PM: runtime: Add DEFINE_RUNTIME_DEV_PM_OPS() macro
-      PM: runtime: Add EXPORT[_GPL]_RUNTIME_DEV_PM_OPS macros
-      iio: pressure: bmp280: Use new PM macros
-
----------------
-
- drivers/iio/pressure/bmp280-core.c | 11 ++------
- drivers/iio/pressure/bmp280-i2c.c  |  2 +-
- drivers/iio/pressure/bmp280-spi.c  |  2 +-
- drivers/mmc/host/jz4740_mmc.c      |  4 +--
- drivers/mmc/host/mxcmmc.c          |  2 +-
- include/linux/pm.h                 | 55 +++++++++++++++++++++++++++-----------
- include/linux/pm_runtime.h         | 24 +++++++++++++++++
- 7 files changed, 71 insertions(+), 29 deletions(-)
+All 3 patches applied as 5.17-rc material, thanks!
