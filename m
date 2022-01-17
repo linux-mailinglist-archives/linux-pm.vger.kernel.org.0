@@ -2,102 +2,344 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79E72490644
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jan 2022 11:52:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF86649075C
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jan 2022 12:50:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238772AbiAQKwE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Jan 2022 05:52:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44926 "EHLO
+        id S239239AbiAQLuc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Jan 2022 06:50:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231277AbiAQKwD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jan 2022 05:52:03 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94109C061574;
-        Mon, 17 Jan 2022 02:52:03 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id g22so17297405edu.1;
-        Mon, 17 Jan 2022 02:52:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
-         :subject:content-transfer-encoding;
-        bh=iHEJ7aPY/vyeKyL4IrOawGrgT3E6eTiteUfS/PavmY4=;
-        b=iNs8s0CIp2CW6jnGcysUC78KZIW+mkhe0ZFvEoskbn8MWlnCvVZUN/x1kuv4qNCwRM
-         4UFcXcdtVje0rjHeSe/zxw4B1tSdUHFu7JHGNfH71IrOmB4SVhk6EFS1o2M7u6Iahrhp
-         RAJjZfPvOA4yAPzIBTH0yjXopMVWU10Nn2ZuuA4nq2QQvow8tznS6up9JHfdIeH52O3P
-         E6KNmieCeAkI3CQVrPwo+GGnSZoG5LXIp4sKbqPoL5zbVwC6qGBfXXeTQ/zO2e/dbqJ5
-         hGmYhADMo0v5F1zv8AoT03I4ZjrV9tQ8SSc54vmmQXichYhqtQBYD8bn3hFR3OcpQIez
-         FIMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:from:subject:content-transfer-encoding;
-        bh=iHEJ7aPY/vyeKyL4IrOawGrgT3E6eTiteUfS/PavmY4=;
-        b=7eaoF91+Q6Ej8jYJS8YaWDVuixPSqCygNRT8TBrQQ7Tz0XR1Kf/UtqHYRXbMiEW00q
-         aH2wIHW3k932Y5NBUfWzriT3WMXxvD/zKC+mi7MoXw46pHss5fwN8KKvyVDlZ9/G9wBJ
-         28cchUgGs0M5bBvA4iCDbdz/AxmgAq0FkXceBOjdrEBSc531rY4tNZNWVJiBVgwSbJgJ
-         H+2V9c4JgU7X/LYLvhw/02Og6jwtU5OCTQZoLkPOTwWl0FIVrr5wAu/gtIBdso3+8PTf
-         IIli40VaDVnOZXAoGityznATSv284jneM74ss2M3K2NtH/iJUMBKEJ4IpFtTpdgxb/u/
-         u2mA==
-X-Gm-Message-State: AOAM5327YO7vPiDxAay90+8WYfV3Mmkq9Rc7XLtK8mTt6pJLZDyemCsI
-        4Uvk6CsHkykJmxDpjTyyJVw=
-X-Google-Smtp-Source: ABdhPJwcz89uAhbQ/PxhSMbS21X8jl1M0muLAE1r3yiBA67LZ9Flhk0/FBGVIdrdxh9dIiq8jUK3dg==
-X-Received: by 2002:a05:6402:d0a:: with SMTP id eb10mr20155973edb.48.1642416722143;
-        Mon, 17 Jan 2022 02:52:02 -0800 (PST)
-Received: from ?IPV6:2003:ea:8f2f:5b00:cd6d:ebf4:94e9:c321? (p200300ea8f2f5b00cd6debf494e9c321.dip0.t-ipconnect.de. [2003:ea:8f2f:5b00:cd6d:ebf4:94e9:c321])
-        by smtp.googlemail.com with ESMTPSA id l25sm2951078edc.20.2022.01.17.02.52.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jan 2022 02:52:01 -0800 (PST)
-Message-ID: <cadbd4eb-40bb-1fa8-1e00-dc95dab62295@gmail.com>
-Date:   Mon, 17 Jan 2022 11:51:54 +0100
+        with ESMTP id S239233AbiAQLuc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jan 2022 06:50:32 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A77EAC061574
+        for <linux-pm@vger.kernel.org>; Mon, 17 Jan 2022 03:50:31 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n9QVx-0000fx-Mn; Mon, 17 Jan 2022 12:49:33 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n9QVo-00AoYK-L6; Mon, 17 Jan 2022 12:49:23 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n9QVn-0001x3-Fg; Mon, 17 Jan 2022 12:49:23 +0100
+Date:   Mon, 17 Jan 2022 12:49:23 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        KVM list <kvm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-phy@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
+        openipmi-developer@lists.sourceforge.net,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        platform-driver-x86@vger.kernel.org,
+        Benson Leung <bleung@chromium.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-edac@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Richard Weinberger <richard@nod.at>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        linux-mediatek@lists.infradead.org,
+        Brian Norris <computersforpeace@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
+Message-ID: <20220117114923.d5vajgitxneec7j7@pengutronix.de>
+References: <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
+ <Yd9L9SZ+g13iyKab@sirena.org.uk>
+ <29f0c65d-77f2-e5b2-f6cc-422add8a707d@omp.ru>
+ <20220114092557.jrkfx7ihg26ekzci@pengutronix.de>
+ <61b80939-357d-14f5-df99-b8d102a4e1a1@omp.ru>
+ <20220114202226.ugzklxv4wzr6egwj@pengutronix.de>
+ <c9026f17-2b3f-ee94-0ea3-5630f981fbc1@omp.ru>
+ <CAMuHMdXVbRudGs69f9ZzaP1PXhteDNZiXA658eMFAwP4nr9r3w@mail.gmail.com>
+ <20220117092444.opoedfcf5k5u6otq@pengutronix.de>
+ <CAMuHMdUgZUeraHadRAi2Z=DV+NuNBrKPkmAKsvFvir2MuquVoA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH] PCI: Forbid RPM on ACPI systems before 5.0 only
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="p6yh245p57zhiyck"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdUgZUeraHadRAi2Z=DV+NuNBrKPkmAKsvFvir2MuquVoA@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently PCI core forbids RPM and requires opt-in from userspace,
-apart from few drivers calling pm_runtime_allow(). Reason is that some
-early ACPI PM implementations conflict with RPM, see [0].
-Note that as of today pm_runtime_forbid() is also called for non-ACPI
-systems. Maybe it's time to allow RPM per default for non-ACPI systems
-and recent enough ACPI versions. Let's allow RPM from ACPI 5.0 which
-was published in 2011.
 
-[0] https://lkml.org/lkml/2020/11/17/1548
+--p6yh245p57zhiyck
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
----
- drivers/pci/pci.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+On Mon, Jan 17, 2022 at 11:35:52AM +0100, Geert Uytterhoeven wrote:
+> Hi Uwe,
+>=20
+> On Mon, Jan 17, 2022 at 10:24 AM Uwe Kleine-K=F6nig
+> <u.kleine-koenig@pengutronix.de> wrote:
+> > On Mon, Jan 17, 2022 at 09:41:42AM +0100, Geert Uytterhoeven wrote:
+> > > On Sat, Jan 15, 2022 at 9:22 PM Sergey Shtylyov <s.shtylyov@omp.ru> w=
+rote:
+> > > > On 1/14/22 11:22 PM, Uwe Kleine-K=F6nig wrote:
+> > > > > You have to understand that for clk (and regulator and gpiod) NUL=
+L is a
+> > > > > valid descriptor that can actually be used, it just has no effect=
+=2E So
+> > > > > this is a convenience value for the case "If the clk/regulator/gp=
+iod in
+> > > > > question isn't available, there is nothing to do". This is what m=
+akes
+> > > > > clk_get_optional() and the others really useful and justifies the=
+ir
+> > > > > existence. This doesn't apply to platform_get_irq_optional().
+> > > >
+> > > >    I do understand that. However, IRQs are a different beast with t=
+heir
+> > > > own justifications...
+> > >
+> > > > > clk_get_optional() is sane and sensible for cases where the clk m=
+ight be
+> > > > > absent and it helps you because you don't have to differentiate b=
+etween
+> > > > > "not found" and "there is an actual resource".
+> > > > >
+> > > > > The reason for platform_get_irq_optional()'s existence is just th=
+at
+> > > > > platform_get_irq() emits an error message which is wrong or subop=
+timal
+> > > >
+> > > >    I think you are very wrong here. The real reason is to simplify =
+the
+> > > > callers.
+> > >
+> > > Indeed.
+> >
+> > The commit that introduced platform_get_irq_optional() said:
+> >
+> >         Introduce a new platform_get_irq_optional() that works much like
+> >         platform_get_irq() but does not output an error on failure to
+> >         find the interrupt.
+> >
+> > So the author of 8973ea47901c81a1912bd05f1577bed9b5b52506 failed to
+> > mention the real reason? Or look at
+> > 31a8d8fa84c51d3ab00bf059158d5de6178cf890:
+> >
+> >         [...] use platform_get_irq_optional() to get second/third IRQ
+> >         which are optional to avoid below error message during probe:
+> >         [...]
+> >
+> > Look through the output of
+> >
+> >         git log -Splatform_get_irq_optional
+> >
+> > to find several more of these.
+>=20
+> Commit 8973ea47901c81a1 ("driver core: platform: Introduce
+> platform_get_irq_optional()") and the various fixups fixed the ugly
+> printing of error messages that were not applicable.
+> In hindsight, probably commit 7723f4c5ecdb8d83 ("driver core:
+> platform: Add an error message to platform_get_irq*()") should have
+> been reverted instead, until a platform_get_irq_optional() with proper
+> semantics was introduced.
 
-diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-index 428afd459..26e3a500c 100644
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -3101,7 +3101,12 @@ void pci_pm_init(struct pci_dev *dev)
- 	u16 status;
- 	u16 pmc;
- 
--	pm_runtime_forbid(&dev->dev);
-+#ifdef CONFIG_ACPI
-+	/* Some early ACPI PM implementations conflict with RPM. */
-+	if (acpi_gbl_FADT.header.revision > 0 &&
-+	    acpi_gbl_FADT.header.revision < 5)
-+		pm_runtime_forbid(&dev->dev);
-+#endif
- 	pm_runtime_set_active(&dev->dev);
- 	pm_runtime_enable(&dev->dev);
- 	device_enable_async_suspend(&dev->dev);
--- 
-2.34.1
+ack.
 
+> But as we were all in a hurry to kill the non-applicable error
+> message, we went for the quick and dirty fix.
+>=20
+> > Also I fail to see how a caller of (today's) platform_get_irq_optional()
+> > is simpler than a caller of platform_get_irq() given that there is no
+> > semantic difference between the two. Please show me a single
+> > conversion from platform_get_irq to platform_get_irq_optional that
+> > yielded a simplification.
+>=20
+> That's exactly why we want to change the latter to return 0 ;-)
+
+OK. So you agree to my statement "The reason for
+platform_get_irq_optional()'s existence is just that platform_get_irq()
+emits an error message [...]". Actually you don't want to oppose but
+say: It's unfortunate that the silent variant of platform_get_irq() took
+the obvious name of a function that could have an improved return code
+semantic.
+
+So my suggestion to rename todays platform_get_irq_optional() to
+platform_get_irq_silently() and then introducing
+platform_get_irq_optional() with your suggested semantic seems
+intriguing and straigt forward to me.
+
+Another thought: platform_get_irq emits an error message for all
+problems. Wouldn't it be consistent to let platform_get_irq_optional()
+emit an error message for all problems but "not found"?
+Alternatively remove the error printk from platform_get_irq().
+
+> > So you need some more effort to convince me of your POV.
+> >
+> > > Even for clocks, you cannot assume that you can always blindly use
+> > > the returned dummy (actually a NULL pointer) to call into the clk
+> > > API.  While this works fine for simple use cases, where you just
+> > > want to enable/disable an optional clock (clk_prepare_enable() and
+> > > clk_disable_unprepare()), it does not work for more complex use cases.
+> >
+> > Agreed. But for clks and gpiods and regulators the simple case is quite
+> > usual. For irqs it isn't.
+>=20
+> It is for devices that can have either separate interrupts, or a single
+> multiplexed interrupt.
+>=20
+> The logic in e.g. drivers/tty/serial/sh-sci.c and
+> drivers/spi/spi-rspi.c could be simplified and improved (currently
+> it doesn't handle deferred probe) if platform_get_irq_optional()
+> would return 0 instead of -ENXIO.
+
+Looking at sh-sci.c the irq handling logic could be improved even
+without a changed platform_get_irq_optional():
+
+diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
+index 968967d722d4..c7dc9fb84844 100644
+--- a/drivers/tty/serial/sh-sci.c
++++ b/drivers/tty/serial/sh-sci.c
+@@ -2873,11 +2873,13 @@ static int sci_init_single(struct platform_device *=
+dev,
+ 	 * interrupt ID numbers, or muxed together with another interrupt.
+ 	 */
+ 	if (sci_port->irqs[0] < 0)
+-		return -ENXIO;
++		return sci_port->irqs[0];
+=20
+-	if (sci_port->irqs[1] < 0)
++	if (sci_port->irqs[1] =3D=3D -ENXIO)
+ 		for (i =3D 1; i < ARRAY_SIZE(sci_port->irqs); i++)
+ 			sci_port->irqs[i] =3D sci_port->irqs[0];
++	else if (sci_port->irqs[1] < 0)
++		return sci_port->irqs[1];
+=20
+ 	sci_port->params =3D sci_probe_regmap(p);
+ 	if (unlikely(sci_port->params =3D=3D NULL))
+
+And then the code flow is actively irritating. sci_init_single() copies
+irqs[0] to all other irqs[i] and then sci_request_irq() loops over the
+already requested irqs and checks for duplicates. A single place that
+identifies the exact set of required irqs would already help a lot.
+
+Also for spi-rspi.c I don't see how platform_get_irq_byname_optional()
+returning 0 instead of -ENXIO would help. Please talk in patches.
+
+Preferably first simplify in-driver logic to make the conversion to the
+new platform_get_irq_optional() actually reviewable.
+
+> > And if you cannot blindly use the dummy, then you're not the targetted
+> > caller of *_get_optional() and should better use *_get() and handle
+> > -ENODEV explicitly.
+>=20
+> No, because the janitors tend to consolidate error message handling,
+> by moving the printing up, inside the *_get() methods.  That's exactly
+> what happened here.
+
+This is in my eyes the root cause of the issues at hand. Moving the
+error message handling into a get function is only right for most of the
+callers. So the more conservative approach would be to introduce a noisy
+variant of the get function and convert all users that benefit
+separately while the unreviewed callers and those that don't want an
+error message can happily continue to use the silent variant.
+
+> So there are three reasons: because the absence of an optional IRQ
+> is not an error, and thus that should not cause (a) an error code
+> to be returned, and (b) an error message to be printed, and (c)
+> because it can simplify the logic in device drivers.
+
+I don't agree to (a). If the value signaling not-found is -ENXIO or 0
+(or -ENODEV) doesn't matter much. I wouldn't deviate from the return
+code semantics of platform_get_irq() just for having to check against 0
+instead of -ENXIO. Zero is then just another magic value.
+(c) still has to be proven, see above.
+
+> Commit 8973ea47901c81a1 ("driver core: platform: Introduce
+> platform_get_irq_optional()") fixed (b), but didn't address (a) and
+> (c).
+
+Yes, it fixed (b) and picked a bad name for that.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--p6yh245p57zhiyck
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHlV8AACgkQwfwUeK3K
+7Am0GQf8CoKYtZsyB2Veq4tA4dVxwehDrqSNzD0/oee9gQ2W8Ug3o/BHJYBwahzq
+EvMyo3JUywFfBFS6fqP6q+5CXaw3qhcVdLIQIYR1NbdbDku9fPpYgUlMeO8FLj0S
+AjA1gReJzZffpqQa+j6sWHbwoCmV4ZWTYuhi2tnY6gxes4QcBTcXhrlPtPvEcvRj
+xiaHDNvm4yBJjau7t98dhCCfb9ioYwkuGybaTVJenP6u4ZB5QxTAKBsVZsaYscE9
+K/bTKX+pt+MFJrjy6AN6Qq4JYNuQK8v7MawD5u/q9qZHAELmMQaNyWTpBBDKqjGv
+Z8p6bAtXmJy2dTalO786GdRxwAWrMQ==
+=gT+3
+-----END PGP SIGNATURE-----
+
+--p6yh245p57zhiyck--
