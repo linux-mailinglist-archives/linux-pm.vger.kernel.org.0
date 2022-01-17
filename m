@@ -2,80 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C923490389
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jan 2022 09:15:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6143849038C
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jan 2022 09:16:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237974AbiAQIPg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Jan 2022 03:15:36 -0500
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:38125 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230028AbiAQIPf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jan 2022 03:15:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1642407335; x=1673943335;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=pE15V9cC2hu9MEnNgmYkLQQoTLc+mdGCHkVp2gX0xDE=;
-  b=CLVi9hju/2oTjkw4QtNG1CK7ZYrf+7ZDYJJyVbQcE/KlC/7RzesIf2Xb
-   bXSfLigWmZaumnZMC+qn9/e37YBUmTbAz7NLEG3wOhQCny9i3ReJKV+YF
-   JZgUvZ1uA5T6FXeWbji7t1q7kls56risDXooYSFEi8kqPbcGsQ1uhv2Nb
-   o=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 17 Jan 2022 00:15:35 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 00:12:59 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Mon, 17 Jan 2022 00:12:58 -0800
-Received: from [10.216.37.171] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 17 Jan
- 2022 00:12:53 -0800
-Message-ID: <7745d562-17bd-0a51-7f7e-8f5468e6d373@quicinc.com>
-Date:   Mon, 17 Jan 2022 13:42:40 +0530
+        id S237989AbiAQIP7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Jan 2022 03:15:59 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:16715 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237985AbiAQIP7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jan 2022 03:15:59 -0500
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Jcl4b05S4zZfB6;
+        Mon, 17 Jan 2022 16:12:15 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 17 Jan 2022 16:15:57 +0800
+From:   Shaokun Zhang <zhangshaokun@hisilicon.com>
+To:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Guo Yang <guoyang2@huawei.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>
+Subject: [PATCH] cpuidle: menu: Fix long delay issue when tick stopped
+Date:   Mon, 17 Jan 2022 16:16:15 +0800
+Message-ID: <20220117081615.45449-1-zhangshaokun@hisilicon.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH 04/10] arm64: dts: qcom: sm8450: Update cpuidle states
- parameters
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-CC:     <bjorn.andersson@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <rafael@kernel.org>, <daniel.lezcano@linaro.org>,
-        <quic_lsrao@quicinc.com>, <quic_rjendra@quicinc.com>,
-        <devicetree@vger.kernel.org>
-References: <1641749107-31979-1-git-send-email-quic_mkshah@quicinc.com>
- <1641749107-31979-5-git-send-email-quic_mkshah@quicinc.com>
- <CAPDyKFrrajGPsH5=iqtB6PAuO6Y9C8_QfbF8yF2PKqrVuCmZ9g@mail.gmail.com>
-From:   Maulik Shah <quic_mkshah@quicinc.com>
-In-Reply-To: <CAPDyKFrrajGPsH5=iqtB6PAuO6Y9C8_QfbF8yF2PKqrVuCmZ9g@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.69.192.56]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+From: Guo Yang <guoyang2@huawei.com>
 
-On 1/14/2022 6:00 PM, Ulf Hansson wrote:
->
->> @@ -315,7 +315,7 @@
->>
->>                  CLUSTER_PD: cpu-cluster0 {
->>                          #power-domain-cells = <0>;
->> -                       domain-idle-states = <&CLUSTER_SLEEP_0>;
->> +                       domain-idle-states = <&CLUSTER_SLEEP_0 &CLUSTER_SLEEP_1>;
-> Should this be like the below instead?
->
-> <&CLUSTER_SLEEP_0>,  <&CLUSTER_SLEEP_1>;
+The network delay was always big on arm server tested by qperf,
+the reason was that the cpu entered deep power down idle state(like intel
+C6) and can't goto a shallow one.
 
-Thanks for catching this. Will correct in v2.
+The intervals in @get_typical_interval() was much smaller than predicted_ns
+in @menu_select(), so the predict state is always deepest and cause long
+time network delay.
 
-Thanks,
-Maulik
+Every time when the cpu got an interrupt from the network, the cpu was
+waken up and did the IRQ, after that the cpu enter @menu_select()
+but the @tick_nohz_tick_stopped() was true and get a big data->next_timer_ns,
+the cpu can never goto a shallow state util the data->next_timer_ns timeout.
+Below was the print when the issue occurrence.
+
+[   37.082861] intervals = 36us
+[   37.082875] intervals = 15us
+[   37.082888] intervals = 22us
+[   37.082902] intervals = 35us
+[   37.082915] intervals = 34us
+[   37.082929] intervals = 39us
+[   37.082942] intervals = 39us
+[   37.082956] intervals = 35us
+[   37.082970] target_residency_ns = 10000, predicted_ns = 35832710
+[   37.082998] target_residency_ns = 600000, predicted_ns = 35832710
+[   37.083037] intervals = 36us
+[   37.083050] intervals = 15us
+[   37.083064] intervals = 22us
+[   37.083077] intervals = 35us
+[   37.083091] intervals = 34us
+[   37.083104] intervals = 39us
+[   37.083118] intervals = 39us
+[   37.083131] intervals = 35us
+[   37.083145] target_residency_ns = 10000, predicted_ns = 35657420
+[   37.083174] target_residency_ns = 600000, predicted_ns = 35657420
+[   37.083212] intervals = 36us
+[   37.083225] intervals = 15us
+[   37.083239] intervals = 22us
+[   37.083253] intervals = 35us
+[   37.083266] intervals = 34us
+[   37.083279] intervals = 39us
+[   37.083293] intervals = 39us
+[   37.083307] intervals = 35us
+[   37.083320] target_residency_ns = 10000, predicted_ns = 35482140
+[   37.083349] target_residency_ns = 600000, predicted_ns = 35482140
+
+Add idle tick wakeup judge before change predicted_ns.
+
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Signed-off-by: Guo Yang <guoyang2@huawei.com>
+Signed-off-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
+---
+ drivers/cpuidle/governors/menu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/cpuidle/governors/menu.c b/drivers/cpuidle/governors/menu.c
+index c492268..3f03843 100644
+--- a/drivers/cpuidle/governors/menu.c
++++ b/drivers/cpuidle/governors/menu.c
+@@ -313,7 +313,7 @@ static int menu_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
+ 				get_typical_interval(data, predicted_us)) *
+ 				NSEC_PER_USEC;
+ 
+-	if (tick_nohz_tick_stopped()) {
++	if (tick_nohz_tick_stopped() && data->tick_wakeup) {
+ 		/*
+ 		 * If the tick is already stopped, the cost of possible short
+ 		 * idle duration misprediction is much higher, because the CPU
+-- 
+1.8.3.1
+
