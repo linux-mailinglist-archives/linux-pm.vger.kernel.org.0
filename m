@@ -2,112 +2,237 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FB75492348
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jan 2022 10:54:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F16849256E
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jan 2022 13:09:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234810AbiARJyQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Jan 2022 04:54:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49740 "EHLO
+        id S241341AbiARMJP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Jan 2022 07:09:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbiARJyN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jan 2022 04:54:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28BE7C06173E
-        for <linux-pm@vger.kernel.org>; Tue, 18 Jan 2022 01:54:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DF910B812A9
-        for <linux-pm@vger.kernel.org>; Tue, 18 Jan 2022 09:54:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7F7A3C340E5
-        for <linux-pm@vger.kernel.org>; Tue, 18 Jan 2022 09:54:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642499650;
-        bh=PlUVjzFkehk1kAzxDRLpxTuTPRSQviXiKRzeaCxZe3c=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=CpIuEv0IEiS9DsFJgINHCojNWhuZFTnB18hQr7DCmnjwN2yP6UY4qp02DD565CKUb
-         yMF/sHUfiha1pa5QXfAP4Te8z4SKpo8ys7mwHyIVILO46/VQqrdYjoSFARuuCsH+cP
-         +jqoG0K3l5ri9B8sCWMejFHMYSZFHheFUMCkMOdMA8TZfR4p3xQF+T5gxZwcbgQq0A
-         ibwtSnFYphHaWUpYi1/AeHtFcqgin+GQiIVFkbL4TWYkddIbUCoHjW6ABBRMu2KZrJ
-         RrM615WyhylegKlAk3WdPUtNYGoxTeVwsV8hZgDEB6E/N0Wf2j/hVvN+G59HTAQBA1
-         Hc4XZaF/psLfg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 64E95CC13AF; Tue, 18 Jan 2022 09:54:10 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [Bug 215135] proposed cpufreq driver amd-pstate regresses wrt
- acpi-cpufreq on some AMD EPYC Zen3
-Date:   Tue, 18 Jan 2022 09:54:10 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: jinzhou.su@amd.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-215135-137361-ZPGNwyGILG@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215135-137361@https.bugzilla.kernel.org/>
-References: <bug-215135-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S241334AbiARMJN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jan 2022 07:09:13 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66804C06161C
+        for <linux-pm@vger.kernel.org>; Tue, 18 Jan 2022 04:09:13 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n9nHg-0001Dm-Ou; Tue, 18 Jan 2022 13:08:20 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n9nHT-00AzwP-Do; Tue, 18 Jan 2022 13:08:06 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n9nHS-0004EX-Dv; Tue, 18 Jan 2022 13:08:06 +0100
+Date:   Tue, 18 Jan 2022 13:08:06 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        KVM list <kvm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-phy@lists.infradead.org,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        platform-driver-x86@vger.kernel.org,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Borislav Petkov <bp@alien8.de>, Takashi Iwai <tiwai@suse.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        openipmi-developer@lists.sourceforge.net,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        Richard Weinberger <richard@nod.at>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        linux-mediatek@lists.infradead.org,
+        Brian Norris <computersforpeace@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
+Message-ID: <20220118120806.pbjsat4ulg3vnhsh@pengutronix.de>
+References: <c9026f17-2b3f-ee94-0ea3-5630f981fbc1@omp.ru>
+ <CAMuHMdXVbRudGs69f9ZzaP1PXhteDNZiXA658eMFAwP4nr9r3w@mail.gmail.com>
+ <20220117092444.opoedfcf5k5u6otq@pengutronix.de>
+ <CAMuHMdUgZUeraHadRAi2Z=DV+NuNBrKPkmAKsvFvir2MuquVoA@mail.gmail.com>
+ <20220117114923.d5vajgitxneec7j7@pengutronix.de>
+ <CAMuHMdWCKERO20R2iVHq8P=BaoauoBAtiampWzfMRYihi3Sb0g@mail.gmail.com>
+ <20220117170609.yxaamvqdkivs56ju@pengutronix.de>
+ <CAMuHMdXbuZqEpYivyS6hkaRN+CwTOGaHq_OROwVAWvDD6OXODQ@mail.gmail.com>
+ <20220118090913.pjumkq4zf4iqtlha@pengutronix.de>
+ <CAMuHMdUW8+Y_=uszD+JOZO3Lpa9oDayk+GO+cg276i2f2T285w@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2svqigojwuu4sr3n"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdUW8+Y_=uszD+JOZO3Lpa9oDayk+GO+cg276i2f2T285w@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215135
 
-Joe (jinzhou.su@amd.com) changed:
+--2svqigojwuu4sr3n
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |jinzhou.su@amd.com
+Hello Geert,
 
---- Comment #2 from Joe (jinzhou.su@amd.com) ---
-Hello Giovanni,
+On Tue, Jan 18, 2022 at 10:37:25AM +0100, Geert Uytterhoeven wrote:
+> On Tue, Jan 18, 2022 at 10:09 AM Uwe Kleine-K=F6nig
+> <u.kleine-koenig@pengutronix.de> wrote:
+> > For the (clk|gpiod|regulator)_get_optional() you don't have to check
+> > against the magic not-found value (so no implementation detail magic
+> > leaks into the caller code) and just pass it to the next API function.
+> > (And my expectation would be that if you chose to represent not-found by
+> > (void *)66 instead of NULL, you won't have to adapt any user, just the
+> > framework internal checks. This is a good thing!)
+>=20
+> Ah, there is the wrong assumption: drivers sometimes do need to know
+> if the resource was found, and thus do need to know about (void *)66,
+> -ENODEV, or -ENXIO.  I already gave examples for IRQ and clk before.
+> I can imagine these exist for gpiod and regulator, too, as soon as
+> you go beyond the trivial "enable" and "disable" use-cases.
 
-Thanks for testing AMD Pstate driver. Finally we have set up the same devic=
-e on
-our local, here is the lscpu info:
+My premise is that every user who has to check for "not found"
+explicitly should not use (clk|gpiod)_get_optional() but
+(clk|gpiod)_get() and do proper (and explicit) error handling for
+-ENODEV. (clk|gpiod)_get_optional() is only for these trivial use-cases.
 
-Architecture:        x86_64
-CPU op-mode(s):      32-bit, 64-bit
-Byte Order:          Little Endian
-CPU(s):              256
-On-line CPU(s) list: 0-255
-Thread(s) per core:  2
-Core(s) per socket:  64
-Socket(s):           2
-NUMA node(s):        2
-Vendor ID:           AuthenticAMD
-CPU family:          25
-Model:               1
+> And 0/NULL vs. > 0 is the natural check here: missing, but not
+> an error.
 
-Here is the tbench test result.
+For me it it 100% irrelevant if "not found" is an error for the query
+function or not. I just have to be able to check for "not found" and
+react accordingly.
 
-acpi-cpufreq-ondemand  17628  MB/sec  ( 1.00)
-acpi-cpufreq-perfgov   25317  MB/sec  ( 1.43)
-acpi-cpufreq-sugov     21369   MB/sec ( 1.21)
+And adding a function
 
-amd-pstate-ondemand    17913  MB/sec  ( 1.02)
-amd-pstate-perfgov     25865  MB/sec  ( 1.47)
-amd-pstate-sugov       22359  MB/sec  ( 1.26)
+	def platform_get_irq_opional():
+		ret =3D platform_get_irq()
+		if ret =3D=3D -ENXIO:
+			return 0
+		return ret
 
-From our site of view, amd-pstate performs slight better acpi driver in
-Tbench4. The test based on 50 times test in each policy.
+it's not a useful addition to the API if I cannot use 0 as a dummy
+because it doesn't simplify the caller enough to justify the additional
+function.
+
+The only thing I need to be able is to distinguish the cases "there is
+an irq", "there is no irq" and anything else is "there is a problem I
+cannot handle and so forward it to my caller". The semantic of
+platform_get_irq() is able to satisfy this requirement[1], so why introduce
+platform_get_irq_opional() for the small advantage that I can check for
+not-found using
+
+	if (!irq)
+
+instead of
+
+	if (irq !=3D -ENXIO)
+
+? The semantic of platform_get_irq() is easier ("Either a usable
+non-negative irq number or a negative error number") compared to
+platform_get_irq_optional() ("Either a usable positive irq number or a
+negative error number or 0 meaning not found"). Usage of
+platform_get_irq() isn't harder or more expensive (neither for a human
+reader nor for a maching running the resulting compiled code).
+For a human reader
+
+	if (irq !=3D -ENXIO)
+
+is even easier to understand because for
+
+	if (!irq)
+
+they have to check where the value comes from, see it's
+platform_get_irq_optional() and understand that 0 means not-found.
+
+This function just adds overhead because as a irq framework user I have
+to understand another function. For me the added benefit is too small to
+justify the additional function. And you break out-of-tree drivers.
+These are all no major counter arguments, but as the advantage isn't
+major either, they still matter.
+
+Best regards
+Uwe
+
+[1] the only annoying thing is the error message.
 
 --=20
-You may reply to this email to add a comment.
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-You are receiving this mail because:
-You are the assignee for the bug.=
+--2svqigojwuu4sr3n
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHmraMACgkQwfwUeK3K
+7Ak1qwf6Am8XN0nqXfS0pbngp7EaV4pL4oNS8RQxKSvsObY254xYZ+ARuc9D/qcI
+/twFVp0MmVPlJHmpEM8KLdVakfXpJlaJRkoNiXFxGO6FJGbPNXIQvl33fM4L9u3c
+k8jyDoz2mdmZdpc6JSLgLroVyQXOl/WygxRbgqO0WCHu762nPfCuaaKUb2yzQ0I1
+m+08eRtqVh8WqbbOHrpIhcpfPYzkCeRiGeaqGkO5YwvqeH6kv6eudm8RkAfo6DE9
+IwzIaWANKnEqD3UzsSUPdPTmMPfqWML7RJPs6sZCdumiS+Ox36ZGrc7Ewn2ffU/V
+Q83qyxKFK+RfjJQmmPycReC6KM89bw==
+=RHyZ
+-----END PGP SIGNATURE-----
+
+--2svqigojwuu4sr3n--
