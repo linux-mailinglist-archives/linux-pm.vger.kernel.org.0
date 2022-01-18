@@ -2,104 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A872492DEF
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jan 2022 19:56:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33956492DF2
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jan 2022 19:56:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348471AbiARSzh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Jan 2022 13:55:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34464 "EHLO
+        id S1348496AbiARSzp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Jan 2022 13:55:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347837AbiARSzg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jan 2022 13:55:36 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB27C06161C
-        for <linux-pm@vger.kernel.org>; Tue, 18 Jan 2022 10:55:36 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id s9so271099oib.11
-        for <linux-pm@vger.kernel.org>; Tue, 18 Jan 2022 10:55:36 -0800 (PST)
+        with ESMTP id S1348466AbiARSzm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jan 2022 13:55:42 -0500
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D071C061574
+        for <linux-pm@vger.kernel.org>; Tue, 18 Jan 2022 10:55:42 -0800 (PST)
+Received: by mail-ot1-x331.google.com with SMTP id z25-20020a0568301db900b005946f536d85so16549834oti.9
+        for <linux-pm@vger.kernel.org>; Tue, 18 Jan 2022 10:55:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8ZFGTElrC3sfK3btUfb11FHGF7x4FjrcJFy3qIIQKiM=;
-        b=hCarYOz34jr83WftfM0iS+dwH1sSDGCkfsBkAB57NfnKesxK4aaH5gD3/gh3issx9+
-         Daa5eBqKtQcCCoptygVZMnTNfFjMD8xIZoP7jzlGWUGzWWIUiTFJ3vGwzYp8QHUkHvDX
-         qpJY+Q0N4siTxyRUiqYaSBFwPjztC9Dwyzg20xTJeFpuiUGSgcpmoF9mm+KrEFyb2VW5
-         GQXv425AFDyHeYwfKpRwAaPL9cGijJqd3aCus/IssOUsVcRu3y4VSnTgwf3/Qoy3a4e5
-         rNzA1caD7HISrSKPftdbKKczvNQz2zBzNro1xInu9PrWcsjXFXZdGcNMIqx2ZFbW7Sac
-         ENvg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=XziV/n9B8PpP9E8+IXEEf54U2FY8YzKnDMuVpjY6U5A=;
+        b=HkPZzoOIRCtl6lrqaCk0aFbTnEru8Ew05oHxXXc/Mzpl+2MWEQ7HjlUppuJ2b3MM2N
+         o7MRe9xLnfOqhoLiu87FbzSt6LQsvdx5GeuIwU3LU3kyQdNNQ3uzUZrpIPYjvmCWRkua
+         J0aBtoLHaZYn7ut7fwLw8QHJrnipKlOm01dmkgYmq4fFttooXrFNw41Iy2ob9VX5NQf2
+         c/BSaC8PsUsjTOmWPQtVYr3N6pdY/D+A1/5mHzHyQGq2V0dVA1Iq0jUNT2JKXmsepe+d
+         qwphza+a1aOOU4f+KaZHUJjBhX+MJRiKKvM0vu1kymTfyww+JDdTCc4o2SChJa2taNXV
+         s/Zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8ZFGTElrC3sfK3btUfb11FHGF7x4FjrcJFy3qIIQKiM=;
-        b=r9FpLeBy53pGNxTd2EnEgvTOkdrz5BmQJ3qfFIuOd8b2iicBfl9HQ87iF/GwSkPM50
-         pllXZ5wDYVsXIdpKMrq5lNNCkLSQEoUeH2louQaY8o8FKg0+d6ad8ksm69VOqajHa/5a
-         Rlz+vWmGbEDEjhb60UzbnHwYGrTqGgRt5e5PbmjCTBPWWsRbDDDBKeGLR7WaVISGh3WM
-         Oojk6C2bbI3i1EzLwBynU/tyAik5Rrq/gnGbxwQHOFf74EzD7wdJCra8giHxnNp7RIIL
-         QQnIqNWy9KgwakOyRPNJ5kWe3wpzb7/qu4GdkaW/3FIhRH+ki4hXqjDvqemgpYjkBuyR
-         dN+Q==
-X-Gm-Message-State: AOAM531uXM7zwxsJb3xhLxtcXeQaAiHu+oKxSnCW7m0Bk78c1o4FtG/i
-        O2S7PF96FTqMd8iNuU3fTG7jdg==
-X-Google-Smtp-Source: ABdhPJwMGts/PsWLqBrYm3HeRRLwq7WaG7CdrrxQZDPqt3E46l7dlRGt5JffecmAxnLrUslTHJ33uw==
-X-Received: by 2002:a05:6808:1508:: with SMTP id u8mr9261476oiw.35.1642532135383;
-        Tue, 18 Jan 2022 10:55:35 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=XziV/n9B8PpP9E8+IXEEf54U2FY8YzKnDMuVpjY6U5A=;
+        b=xBQZeaeleqDML5tcusBlpiURZ7W/3pkMtRlW12v5ShZbPbOP2fPWSM0Olw1k7Q7BAc
+         hJ76buWNDcR8rXX97kYgnJJ7g5ci94K87N9bvCntC4F8D4QmhII1pOj4/F5LqDJCh/Tj
+         /UpMlznbSjDsQDPtAAl2Eg2XArqqOs8K9QPvxUO7zWSL3R7/Y7jHvdiG4EySLwlYz0+O
+         ZcrsPCLDu1XJOoqITupKwPZIBaedbsFlzGeWECxhOr+CV2Hji22hyOdYW2JEzaWV910L
+         MnFvEgdGufPlROLujRbmYD/bkEibRoGrSrVwQbhVY+hDKEz+Z1U91Gt8iV172NQXz/tH
+         8BZA==
+X-Gm-Message-State: AOAM533C0O7WZMpWDj/4KydND7wg6Xs5tFSOeEdchMHYW6+B0XjvHcIT
+        vbvBXD+OizNVAsAFLB2RAt0YJw==
+X-Google-Smtp-Source: ABdhPJxlA7kt5pwruBssnEeyA/MsZssNoJJ/xTh9YGDq/TqY3+IfR7fHEcrxgAzpVSOQTS7M3hXJKw==
+X-Received: by 2002:a9d:6d89:: with SMTP id x9mr11329377otp.52.1642532136376;
+        Tue, 18 Jan 2022 10:55:36 -0800 (PST)
 Received: from ripper.. ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id n19sm7258855otq.11.2022.01.18.10.55.34
+        by smtp.gmail.com with ESMTPSA id n19sm7258855otq.11.2022.01.18.10.55.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 10:55:34 -0800 (PST)
+        Tue, 18 Jan 2022 10:55:35 -0800 (PST)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+To:     Sudeep Holla <sudeep.holla@arm.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Cc:     Thara Gopinath <thara.gopinath@gmail.com>,
         linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-pm@vger.kernel.org
-Subject: [PATCH 1/2] cpufreq: qcom-hw: Use initialized cpumask for thermal pressure update
-Date:   Tue, 18 Jan 2022 10:56:11 -0800
-Message-Id: <20220118185612.2067031-1-bjorn.andersson@linaro.org>
+Subject: [PATCH 2/2] arch_topology: Sanity check cpumask in thermal pressure update
+Date:   Tue, 18 Jan 2022 10:56:12 -0800
+Message-Id: <20220118185612.2067031-2-bjorn.andersson@linaro.org>
 X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20220118185612.2067031-1-bjorn.andersson@linaro.org>
+References: <20220118185612.2067031-1-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In the event that the SoC is under thermal pressure while booting it's
-possible for the dcvs notification to happen inbetween the cpufreq
-framework calling init and it actually updating the policy's
-related_cpus cpumask.
+Occasionally during boot the Qualcomm cpufreq driver was able to cause
+an invalid memory access in topology_update_thermal_pressure() on the
+line:
 
-Prior to the introduction of the thermal pressure update helper an empty
-cpumask would simply result in the thermal pressure of no cpus being
-updated, but the new code will attempt to dereference an invalid per_cpu
-variable.
+	if (max_freq <= capped_freq)
 
-Avoid this problem by using the policy's cpus cpumask instead of the
-related_cpus mask, as this is initialized before the interrupt is
-registered.
+It turns out that this was caused by a race, which resulted in the
+cpumask passed to the function being empty, in which case
+cpumask_first() will return a cpu beyond the number of valid cpus, which
+when used to access the per_cpu max_freq would return invalid pointer.
 
-Fixes: 0258cb19c77d ("cpufreq: qcom-cpufreq-hw: Use new thermal pressure update function")
+The bug in the Qualcomm cpufreq driver is being fixed, but having a
+sanity check of the arguments would have saved quite a bit of time and
+it's not unlikely that others will run into the same issue.
+
 Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 ---
- drivers/cpufreq/qcom-cpufreq-hw.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/base/arch_topology.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index 05f3d7876e44..866fba3ac6fc 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -297,7 +297,7 @@ static void qcom_lmh_dcvs_notify(struct qcom_cpufreq_data *data)
- 	throttled_freq = freq_hz / HZ_PER_KHZ;
+diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+index 976154140f0b..6560a0c3b969 100644
+--- a/drivers/base/arch_topology.c
++++ b/drivers/base/arch_topology.c
+@@ -177,6 +177,9 @@ void topology_update_thermal_pressure(const struct cpumask *cpus,
+ 	u32 max_freq;
+ 	int cpu;
  
- 	/* Update thermal pressure (the boost frequencies are accepted) */
--	arch_update_thermal_pressure(policy->related_cpus, throttled_freq);
-+	arch_update_thermal_pressure(policy->cpus, throttled_freq);
- 
- 	/*
- 	 * In the unlikely case policy is unregistered do not enable
++	if (WARN_ON(cpumask_empty(cpus)))
++		return;
++
+ 	cpu = cpumask_first(cpus);
+ 	max_capacity = arch_scale_cpu_capacity(cpu);
+ 	max_freq = per_cpu(freq_factor, cpu);
 -- 
 2.33.1
 
