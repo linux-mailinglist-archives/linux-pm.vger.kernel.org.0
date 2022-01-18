@@ -2,79 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BE29492647
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jan 2022 14:00:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A8C4926E0
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jan 2022 14:14:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239024AbiARNAe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Jan 2022 08:00:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36058 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239392AbiARNAd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jan 2022 08:00:33 -0500
-Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C02C061748
-        for <linux-pm@vger.kernel.org>; Tue, 18 Jan 2022 05:00:33 -0800 (PST)
-Received: by mail-vk1-xa31.google.com with SMTP id n9so11399651vkq.8
-        for <linux-pm@vger.kernel.org>; Tue, 18 Jan 2022 05:00:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=kt7BSYvG+rr2bLEECwLOEMCvBVZotJIk44/4XcKD9H0=;
-        b=oIAPvRrwyQK9z6AQAojxDeGAhXY+r2o1UmC6sFh8E/FwQr9mstQDRr/1NSvmGRtcCX
-         /w1QS+uNfbLsvQZX7xX+9sz3uC6D4RoCWaXbANnoA2dUrPepMcqirC5k6HNVS1fFqE0Z
-         mmnlRUiL8Xw3KIyLVLMGnExCwsSQFeIKh8JW3bqp1bYt9+tHsadbHk4RvmOHNK7Sl5QN
-         8VSQkuo3Tc4LhDddKs1B1xacb1x98ojXw9qcgRZeTdxEnzHjo/CWLLbARksjq/KHcz6i
-         aR29itdUv3X9HyWbgkBUkSe9JOKQ7x5gCFvVaYAAUeR/IrssS1C3mXYec7clwDkIPtov
-         CL+g==
+        id S242017AbiARNO2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Jan 2022 08:14:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:32751 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242270AbiARNOX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jan 2022 08:14:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642511662;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UfPcLWqi6SZLWlgUKc6INmjHHY/xRBa8vL1E7Hp3TMk=;
+        b=NqRW7ef9O0rUP6VyQ/6Yjagv0YybtEmcLYf8FJ6NlDSvtv6cWG5bhSdyawsBFWOIyEfZ/v
+        GC/DH/QrLlmOdVTRRc8YnpB9coe7pN76uVMtlKPGmk5IEdU2xn2TRbMuoi1NijesMaf8u3
+        uHNVUwE1HrdG1ajADVDfa1SOadCbZRY=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-554-zI9uLdCxP6Wa9pBjh70wJQ-1; Tue, 18 Jan 2022 08:14:21 -0500
+X-MC-Unique: zI9uLdCxP6Wa9pBjh70wJQ-1
+Received: by mail-ed1-f70.google.com with SMTP id h1-20020aa7cdc1000000b0040042dd2fe4so15696872edw.17
+        for <linux-pm@vger.kernel.org>; Tue, 18 Jan 2022 05:14:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=kt7BSYvG+rr2bLEECwLOEMCvBVZotJIk44/4XcKD9H0=;
-        b=01Z34QICN1ZrGQEAGPcS7d1sIeZwNA1vuo6ypczjJUTN5cFgoNH57/QwMDzaptJGum
-         M2jkHXCwytvEXMx72ZowqD6AVOqHGGAPb3q0sk5eMIfw8CU9NZ7d0ATUfF71xnx9y8bp
-         gZ0wxYPwT7VmnLZyRdbAoAp9ZRXnpQuRCH4jbYaw8fXQKiM7AbrKIaN1aNkJRT95R+06
-         6sMNCtAbomAAUXQzO/k9CvKJZjTwOLzoY1I30PjDodxXMQs9eKQtSjcFSi/bTvjc+Y/3
-         om8i0Rh71hhVI3YFoeHWKwRPBNDzIqzt4vyd9kQXOY3lEBnXd0pFCzL5lQRfU3lQKJhg
-         br5A==
-X-Gm-Message-State: AOAM532abtjjlLFueFajB0Za2bkUEtVaH6wB9yudJUjQsfXirWWHmQp5
-        UND5GqDZFyi6u4fBn69G+5DgUtNElPicoub2JEU=
-X-Google-Smtp-Source: ABdhPJxU0Mgz8nglAQGJWvQd5fZGyHw86cgkNwVsJrkRauzIVzFmr7WCj4QJVEymoxx51zJjSdHqWP82BjKwyfLYnRA=
-X-Received: by 2002:a05:6122:1808:: with SMTP id ay8mr10188346vkb.36.1642510832144;
- Tue, 18 Jan 2022 05:00:32 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=UfPcLWqi6SZLWlgUKc6INmjHHY/xRBa8vL1E7Hp3TMk=;
+        b=jYvABpPvDgzt/0YOD6u17cipbilHj3P5V4tDGHtMfQf1P193sHQjq2gdaPl1AUAzEB
+         EOmeItD0eXHbcMmcg9Q8jHQVZbtD/qUBYM3aUGJQGImo585s1N3i/7z1to67StKyd4hg
+         ujL3zjgDzMvMcFDxXZpc4fuilZMJ38pnJtC4t0IqGWslIxvKNykMcBlTDkavJCpgEpgT
+         a0ehF+FbPj3TWmqjQ13mxaOzpSffdMUYxSKsH1aFFDxh2+d6clVfU4i/J8WA+RXxdRXh
+         SCOqa8mmco8I/+vtgl0VPJDJSTAexAO0wQtnvpGhe63L3cZhgQxmCl8qYk2RmX4CXdFB
+         V6eg==
+X-Gm-Message-State: AOAM532Fj9Dah2D5KoL80pMNdYxKHjAw8pzSnHPkRiteIc7OScahXSFg
+        NY4HV2mEZAKC61zbsAE7NNYgHcfPzb4JhS3rLnpfdenT6L/9Q2EgbUmCUrDpLYqGbSeABAIJZEl
+        Agq+a27/5WMr1eqNzra4=
+X-Received: by 2002:aa7:c6c1:: with SMTP id b1mr25552627eds.172.1642511659976;
+        Tue, 18 Jan 2022 05:14:19 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwVXPBkyZaCbHIx/HBCeq3N73EccAH4eC6n2rvzGk7A3reUfBMaU6vShbC6aQz7gJjmFLNErw==
+X-Received: by 2002:aa7:c6c1:: with SMTP id b1mr25552617eds.172.1642511659862;
+        Tue, 18 Jan 2022 05:14:19 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? ([2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id 24sm5351050ejg.47.2022.01.18.05.14.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jan 2022 05:14:19 -0800 (PST)
+Message-ID: <d8542235-01ff-e04f-84c6-53259ab845b9@redhat.com>
+Date:   Tue, 18 Jan 2022 14:14:14 +0100
 MIME-Version: 1.0
-Received: by 2002:ab0:3793:0:0:0:0:0 with HTTP; Tue, 18 Jan 2022 05:00:31
- -0800 (PST)
-Reply-To: mohsheikhalhamed@gmail.com
-From:   bratikox <bratikox@gmail.com>
-Date:   Tue, 18 Jan 2022 14:00:31 +0100
-Message-ID: <CAFuXTSx6Lu9odoPCd=RZLGBtKNFkTY9wS0ub46GZpRb2p6+pYQ@mail.gmail.com>
-Subject: Salam Alaikum /ADIA LOAN OFFER
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH -next] power: supply: fix table problem in
+ sysfs-class-power
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
+        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+References: <20220118021522.1672-1-rdunlap@infradead.org>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220118021522.1672-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Salam Alaikum,
+Hi,
 
-We are a United Arab Emirates based investment company known as Abu
-Dhabi Investment Authority working on expanding its portfolio globally
-and financing projects.
+On 1/18/22 03:15, Randy Dunlap wrote:
+> Add a bottom table border to complete the table format and prevent
+> a documentation build warning.
+> 
+> Documentation/ABI/testing/sysfs-class-power:459: WARNING: Malformed table.
+> No bottom table border found.
+> 
+> Fixes: 1b0b6cc8030d0 ("power: supply: add charge_behaviour attributes")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Thomas Weißschuh <linux@weissschuh.net>
+> Cc: Hans de Goede <hdegoede@redhat.com>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: linux-pm@vger.kernel.org
+> Cc: Stephen Rothwell <sfr@canb.auug.org.au>
 
-We are offering Corporate and Personal Loan at 3.5% Interest Rate for
-a duration of 5 to 10 years.
+Randy, thank you for the patch.
 
-Please get back to us on Email: mohsheikhalhamed@gmail.com ,if you are
-interested for further embellishment.
+Sebastian, assuming you will merge 5.17-rc1 into your tree, this could
+be merged through your tree (since this is a psy patch).
 
-We also pay 2% commission to brokers who introduce project owners for
-finance or other opportunities.
+Since I've merged the original patch introducing this; and since I've
+a bunch of other fixed lined up for 5.17 already, I would also
+be happy to merge this through the pdx86 tree. Sebastian, please let
+me know how you want to proceed with this ?
+
+Regards,
+
+Hans
 
 
- Yours truly,
- Hamed Mohammad
- (Personal Assistant)
- Abu Dhabi Investment Authority
- 211 Corniche, P.O Box 3600
- Abu Dhabi,United Arab Emirates
+
+> ---
+>  Documentation/ABI/testing/sysfs-class-power |    1 +
+>  1 file changed, 1 insertion(+)
+> 
+> --- linux-next-20220117.orig/Documentation/ABI/testing/sysfs-class-power
+> +++ linux-next-20220117/Documentation/ABI/testing/sysfs-class-power
+> @@ -468,6 +468,7 @@ Description:
+>  			auto:            Charge normally, respect thresholds
+>  			inhibit-charge:  Do not charge while AC is attached
+>  			force-discharge: Force discharge while AC is attached
+> +			================ ====================================
+>  
+>  What:		/sys/class/power_supply/<supply_name>/technology
+>  Date:		May 2007
+> 
+
