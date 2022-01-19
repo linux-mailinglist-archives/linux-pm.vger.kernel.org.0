@@ -2,196 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C0B24940BB
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jan 2022 20:20:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6419D49404C
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jan 2022 20:06:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239367AbiASTUG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Jan 2022 14:20:06 -0500
-Received: from mga09.intel.com ([134.134.136.24]:46925 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239752AbiASTTu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 19 Jan 2022 14:19:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642619990; x=1674155990;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=GrIa/eIkS4G4kb2rO6T4E37qSkXPKSwhy4Oe6Ceo9GE=;
-  b=Ks/3HUvVsWkTUYJa/4ZMdoPiTTOvIVu4N5vGSVNIgBMIpKUFJDpaVJsA
-   EXWo/0GjwdvwnEOEFpVd0O7SeNs7lL5keSDSz+RPWqdhQ4ffsiZhh6Jy1
-   led0+7j6qXeab/lVKMGvzIQ2k/UrscgKtA2x4/Q2UOXxd6aeN/3kTzSyl
-   u6Z+8vCeBIceyDcsgaBpKJsypR4p3mndFe41m5qcZLlLo9uwF8STJFdYn
-   vhufn7waodXb4VESKPHGk/N5ux2Ot1WYL60mjawln0QZ9/bMPx4qlzY48
-   O8odoesT1i5jmSDbpjwZU3JimCWmbatGCREUwibyRrz2J+6xbeojmDQwS
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="244961252"
-X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
-   d="scan'208";a="244961252"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 11:01:51 -0800
-X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
-   d="scan'208";a="595498167"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 11:01:29 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nAG9n-00CEAT-Kb;
-        Wed, 19 Jan 2022 20:58:07 +0200
-Date:   Wed, 19 Jan 2022 20:58:07 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>, Andrew Lunn <andrew@lunn.ch>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        KVM list <kvm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-phy@lists.infradead.org, netdev@vger.kernel.org,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        platform-driver-x86@vger.kernel.org,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Corey Minyard <minyard@acm.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        openipmi-developer@lists.sourceforge.net,
-        Benson Leung <bleung@chromium.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        Richard Weinberger <richard@nod.at>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>,
-        linux-mediatek@lists.infradead.org,
-        Brian Norris <computersforpeace@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
-Message-ID: <YehfP23nMd4wn48K@smile.fi.intel.com>
-References: <20220112085009.dbasceh3obfok5dc@pengutronix.de>
- <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
- <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
- <Yd9L9SZ+g13iyKab@sirena.org.uk>
- <29f0c65d-77f2-e5b2-f6cc-422add8a707d@omp.ru>
- <20220114092557.jrkfx7ihg26ekzci@pengutronix.de>
- <61b80939-357d-14f5-df99-b8d102a4e1a1@omp.ru>
- <20220114202226.ugzklxv4wzr6egwj@pengutronix.de>
- <57af1851-9341-985e-7b28-d2ba86770ecb@omp.ru>
- <20220117084732.cdy2sash5hxp4lwo@pengutronix.de>
+        id S1356943AbiASTF6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Jan 2022 14:05:58 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:51598 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356952AbiASTF5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jan 2022 14:05:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1642619157; x=1674155157;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=8tpMU1MPfLluRg4b410pi6oF7iQdI0FSUxvs6PPkE9o=;
+  b=QbByzD8acXaXWRd622LRwIzWjcVEhgkBwk8Jo2gf4nNLBUWtvNGcDSFQ
+   T+pOaXIhP/xQBI8V3klzHVCSTTlN4SZOotYfbJLJkcEUdhXPgc3y5fiXy
+   FZ3fng4HcBJuyKPL1bih9LIDsqjnMq99dwkHXc8T4N4CBvk5YpF3YBcEa
+   Q=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 19 Jan 2022 11:05:55 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 11:05:53 -0800
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 19 Jan 2022 11:05:54 -0800
+Received: from [10.216.15.20] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Wed, 19 Jan
+ 2022 11:05:47 -0800
+Message-ID: <9fb8fb88-73d7-771e-1309-4363907f7c01@quicinc.com>
+Date:   Thu, 20 Jan 2022 00:35:37 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v3] thermal/core: Clear all mitigation when thermal zone
+ is disabled
+From:   Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+To:     Thara Gopinath <thara.gopinath@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Amit Kucheria" <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        "Matthias Kaehlcke" <mka@chromium.org>, <thara.gopinath@gmail.com>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1641581806-32550-1-git-send-email-quic_manafm@quicinc.com>
+ <cf34f77e-587b-7f97-619f-dcbf431332ff@linaro.org>
+ <7c29c833-b558-f0ab-83ab-08371785ffd1@quicinc.com>
+In-Reply-To: <7c29c833-b558-f0ab-83ab-08371785ffd1@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220117084732.cdy2sash5hxp4lwo@pengutronix.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 09:47:32AM +0100, Uwe Kleine-K�nig wrote:
-> On Sun, Jan 16, 2022 at 09:15:20PM +0300, Sergey Shtylyov wrote:
+Hi Rafael/Daniel,
 
-...
+Could you please check and comment  ?
 
-> Because with your change we have:
-> 
->  - < 0 -> error
->  - == 0 -> no irq
->  - > 0 -> irq
-> 
-> For my part I'd say this doesn't justify the change, but at least I
-> could better life with the reasoning. If you start at:
-> 
-> 	irq = platform_get_irq_optional(...)
-> 	if (irq < 0 && irq != -ENXIO)
-> 		return irq
-> 	else if (irq > 0)
-> 		setup_irq(irq);
-> 	else
-> 		setup_polling()
-> 
-> I'd change that to
-> 
-> 	irq = platform_get_irq_optional(...)
-> 	if (irq > 0) /* or >= 0 ? */
-> 		setup_irq(irq)
-> 	else if (irq == -ENXIO)
-> 		setup_polling()
-> 	else
-> 		return irq
-> 
-> This still has to mention -ENXIO, but this is ok and checking for 0 just
-> hardcodes a different return value.
+Thanks,
 
-It's what we are against of. The idea is to have
+Manaf
 
-	irq = platform_get_irq_optional(...)
-	if (irq < 0) // we do not care about special cookies here
-		return irq;
-
-	if (irq)
-		setup_irq(irq)
-	else
-		setup_polling()
-
-See the difference? Your code is convoluted.
-
-> Anyhow, I think if you still want to change platform_get_irq_optional
-> you should add a few patches converting some drivers which demonstrates
-> the improvement for the callers.
-
-
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+On 1/11/2022 2:15 AM, Manaf Meethalavalappu Pallikunhi wrote:
+> Hi Thara,
+>
+> On 1/10/2022 11:25 PM, Thara Gopinath wrote:
+>> Hi Manaf,
+>>
+>> On 1/7/22 1:56 PM, Manaf Meethalavalappu Pallikunhi wrote:
+>>> Whenever a thermal zone is in trip violated state, there is a chance
+>>> that the same thermal zone mode can be disabled either via thermal
+>>> core API or via thermal zone sysfs. Once it is disabled, the framework
+>>> bails out any re-evaluation of thermal zone. It leads to a case where
+>>> if it is already in mitigation state, it will stay the same state
+>>> until it is re-enabled.
+>>>
+>>> To avoid above mentioned issue, on thermal zone disable request
+>>> reset thermal zone and clear mitigation for each trip explicitly.
+>>>
+>>> Signed-off-by: Manaf Meethalavalappu Pallikunhi 
+>>> <quic_manafm@quicinc.com>
+>>> ---
+>>>   drivers/thermal/thermal_core.c | 12 ++++++++++--
+>>>   1 file changed, 10 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/thermal/thermal_core.c 
+>>> b/drivers/thermal/thermal_core.c
+>>> index 51374f4..e288c82 100644
+>>> --- a/drivers/thermal/thermal_core.c
+>>> +++ b/drivers/thermal/thermal_core.c
+>>> @@ -447,10 +447,18 @@ static int thermal_zone_device_set_mode(struct 
+>>> thermal_zone_device *tz,
+>>>         thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
+>>>   -    if (mode == THERMAL_DEVICE_ENABLED)
+>>> +    if (mode == THERMAL_DEVICE_ENABLED) {
+>>>           thermal_notify_tz_enable(tz->id);
+>>> -    else
+>>> +    } else {
+>>> +        int trip;
+>>> +
+>>> +        /* make sure all previous throttlings are cleared */
+>>> +        thermal_zone_device_init(tz);
+>>
+>> It looks weird to do a init when you are actually disabling the 
+>> thermal zone.
+>>
+>>
+>>> +        for (trip = 0; trip < tz->trips; trip++)
+>>> +            handle_thermal_trip(tz, trip);
+>>
+>> So this is exactly what thermal_zone_device_update does except that 
+>> thermal_zone_device_update checks for the mode and bails out if the 
+>> zone is disabled.
+>> This will work because as you explained in v2, the temperature is 
+>> reset in thermal_zone_device_init and handle_thermal_trip will remove 
+>> the mitigation if any.
+>>
+>> My two cents here (Rafael and Daniel can comment more on this).
+>>
+>> I think it will be cleaner if we can have a third mode 
+>> THERMAL_DEVICE_DISABLING and have thermal_zone_device_update handle 
+>> clearing the mitigation. So this will look like
+>> if (mode == THERMAL_DEVICE_DISABLED)
+>>     tz->mode = THERMAL_DEVICE_DISABLING;
+>> else
+>>     tz->mode = mode;
+>>
+>> thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
+>>
+>> if (mode == THERMAL_DEVICE_DISABLED)
+>>     tz->mode = mode;
+>>
+>> You will have to update update_temperature to set tz->temperature = 
+>> THERMAL_TEMP_INVALID and thermal_zone_set_trips to set 
+>> tz->prev_low_trip = -INT_MAX and tz->prev_high_trip = INT_MAX for
+>> THERMAL_DEVICE_DISABLING mode.
+>
+> I think just updating above fields doesn't guarantee complete clearing 
+> of mitigation for all governors. For  step_wise governor, to make sure 
+> mitigation removed completely, we have to set each 
+> thermal-instance->initialized = false as well.
+>
+> If we add that to above list of variables in update_temperature() 
+> under if (mode == THERMAL_DEVICE_DISABLING) , it is same as 
+> thermal_zone_device_init function does in current patch. We are just 
+> resetting same fields in different place under a new mode, right ?
+>
+> Thanks,
+>
+> Manaf
+>
