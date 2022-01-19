@@ -2,166 +2,210 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9185B4936A7
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jan 2022 09:57:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 071E24936AA
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jan 2022 09:58:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352639AbiASI55 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Jan 2022 03:57:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53244 "EHLO
+        id S1352608AbiASI6B (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Jan 2022 03:58:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352591AbiASI5z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jan 2022 03:57:55 -0500
+        with ESMTP id S1352615AbiASI57 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jan 2022 03:57:59 -0500
 Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F09C06161C
-        for <linux-pm@vger.kernel.org>; Wed, 19 Jan 2022 00:57:55 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id f202-20020a1c1fd3000000b0034dd403f4fbso1092574wmf.1
-        for <linux-pm@vger.kernel.org>; Wed, 19 Jan 2022 00:57:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA38C06173E
+        for <linux-pm@vger.kernel.org>; Wed, 19 Jan 2022 00:57:59 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id e9-20020a05600c4e4900b0034d23cae3f0so4409204wmq.2
+        for <linux-pm@vger.kernel.org>; Wed, 19 Jan 2022 00:57:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=H7wH3Fy0QK4pLP8rp/pio349QaWy+exypBXARmLuDDM=;
-        b=bCctUAfh6as+QX3kcgZKdBxST75OU+nLIz5K62rG6t/SuFaEAocBwB9keDSTnl3vaS
-         2V64Xpmfp4Arb822opCRyH/fFmL3tHa+DImrnRtfGgNKMJqiUrBzinuACYPmxYihDWY6
-         lY8KI3voYPkn7ogj981YCIExs1Xzs/FC/QCyIhIONq6BaJYKlA59GjPKVAn6ScPElPg4
-         TZv4PSva3Deh2dsO9HDNxh6m2vSGjzw5P48SNc9yBfjcfgfmxdU9UMY05Wb6nvczMzSh
-         7zy9Rz946ASpwK9yDb/EQ8vajW3YZA2T7moxO9Uv7pKTpa5PYpSWN07DBNz7t13xaG+k
-         YvMw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=MnhZj/9Mg3uDWbdA8BAR3iGD0nHR50Pcm6mLxqECe0c=;
+        b=PNm0VpWPk0+lPEuZ8kBffhhv/vJW300oM/nIRWMgql4Z6Exa1C22Ys4z/5arCk8gIO
+         APJu8yTgdDJYLaHxb6JSPUCnHY31+pmxrs4KiOr8xOeg6hog03UgQZx5gQurjsE5LPqZ
+         s1Q1BFSwNuFRum/mWzAcTz+nqT8GFH8n8sdau1n4kUlIVX7VmR21OO0/czCpDIDlD12T
+         paH+eJbn4y2m+yTbQlGSKF+v7docQADTVz5jdzvYpKNbPK1dv45cUG8CsBRHMxnEo/IU
+         Pivccxd20zyRNpSm0IvCWW9+2+0urxAR3BfnuG5BLPEdVNsr5WNE6SScNDENv6wWM0ly
+         7UIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=H7wH3Fy0QK4pLP8rp/pio349QaWy+exypBXARmLuDDM=;
-        b=dIBAIXR6/nq14p8JpRL7/GIGfHBdSMIfDVKNcx4yAs8vwhqF7f8fN1M04beyPOCPe5
-         lQtxXuOpi/X62VBmHTgNoSTB9/ahFIsUk+ZA5L61QWD6HFRtHuh1Aj9k5kSsYFEXXkV3
-         8Ham2nPIMn7+eNqj/Q2GvMWl2rZEWFjeoYIYrrlhoT2HJ2graJHDAMCzGfgz9q2gR+R8
-         AMmSo2SXQcA4NXjku0tpWG9IXy5Wabe1RLBnS950mI9vjzaTrkdawgz7NG6nHQof6Nqr
-         NGDxrUKcfg10flx9JgMh8IDEtEROUdCGRh78Vc+AkYEq/z7yhepa/Igwa7w1O1KU+T/J
-         NpqQ==
-X-Gm-Message-State: AOAM533Rf1gIPWmKSjV78Z+3IcT+pshVHMg+dIku9cqcH+5tr/MVmVYS
-        F2VZUsODYcowhy2mR1UKI1hKNQ==
-X-Google-Smtp-Source: ABdhPJw0LpkicNpFOniPNUVbEPCYgytuw+4dzpi+UhI/PrbDb+20vJ0H2SDYb0u5lCXcegprD1h6jg==
-X-Received: by 2002:a5d:494f:: with SMTP id r15mr26224354wrs.388.1642582673924;
-        Wed, 19 Jan 2022 00:57:53 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=MnhZj/9Mg3uDWbdA8BAR3iGD0nHR50Pcm6mLxqECe0c=;
+        b=kYrQPC0Shn9W2cPRphariBMYPAWiNQA6KKt1dF/LNKUQp0SHE7ZqSQ1rZhb3UD6lVp
+         LFdx6WhCsLon3uQQ0/7gD5GP8FG7Z1m8mYidZNxe2PWlDrwDbl6rt3pAJQJGbwjqSYvw
+         e7fqfM8XsQW6BgMKUaGoF2DL3Q11GLqs4d+UwKCCd3P2UB8Ps17Nps9CtOSoF9gEEHe4
+         /4nou1Tm+EHHF0vWNI8WvJXfF8CGn8XnZccOmUiTf27I3TQc4+748XRrgFC95ZL3F7wb
+         YvX4EFYcN2IVEoj0i0hxd+g2O3TjbONvXdTtNsdMbE1Tf3jo1FSg9apnRuvVz9l2vZof
+         2ksA==
+X-Gm-Message-State: AOAM530yeK+kC7t1WJHG+tbYFtX1ywkVkkDmpr0s8zmn5C0qW72oJ8Jk
+        +XHfDW9FrmbVjRV81XKNKqbMYQ==
+X-Google-Smtp-Source: ABdhPJwE4E4mJ7k1qL2f+MAoscgTtq2+OIpP/e10mhyF6kajkU2juT1b80rKoVl+TopMxxKutY+1ZQ==
+X-Received: by 2002:a5d:53ca:: with SMTP id a10mr28833643wrw.624.1642582677766;
+        Wed, 19 Jan 2022 00:57:57 -0800 (PST)
 Received: from localhost.localdomain ([2a01:e34:ed2f:f020:ef34:de48:dc4e:ad87])
-        by smtp.gmail.com with ESMTPSA id 10sm4491454wmc.44.2022.01.19.00.57.51
+        by smtp.gmail.com with ESMTPSA id 10sm4491454wmc.44.2022.01.19.00.57.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 00:57:53 -0800 (PST)
+        Wed, 19 Jan 2022 00:57:57 -0800 (PST)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     daniel.lezcano@linaro.org, rjw@rjwysocki.net
 Cc:     robh@kernel.org, lukasz.luba@arm.com, heiko@sntech.de,
         arnd@linaro.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v6 0/6] powercap/drivers/dtpm: Create the dtpm hierarchy
-Date:   Wed, 19 Jan 2022 09:57:14 +0100
-Message-Id: <20220119085719.1357874-1-daniel.lezcano@linaro.org>
+        linux-pm@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arch@vger.kernel.org (open list:GENERIC INCLUDE/ASM HEADER FILES)
+Subject: [PATCH v6 1/5] powercap/drivers/dtpm: Convert the init table section to a simple array
+Date:   Wed, 19 Jan 2022 09:57:15 +0100
+Message-Id: <20220119085719.1357874-2-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220119085719.1357874-1-daniel.lezcano@linaro.org>
+References: <20220119085719.1357874-1-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The DTPM hierarchy is the base to build on top of it a power budget
-allocator. It reflects the power consumption of the group of devices
-and allows to cap their power.
+The init table section is freed after the system booted. However the
+next changes will make per module the DTPM description, so the table
+won't be accessible when the module is loaded.
 
-The core code is there but there is no way to describe the desired
-hierarchy yet.
+In order to fix that, we should move the table to the data section
+where there are very few entries and that makes strange to add it
+there.
 
-A first proposal introduced the description through configfs [1] but
-was rejected [2].
+The main goal of the table was to keep self-encapsulated code and we
+can keep it almost as it by using an array instead.
 
-A second proposal based on the device tree with a binding similar to
-the power domains [3] was proposed but finally rejected [4].
-
-This sixth version delegates the hierarchy creation to the SoC with a
-specific and self-encapsulated code using an array to describe the tree. The
-SoC DTPM driver defines an array of nodes pointing to their parents.  The
-hierarchy description can integrate a DT node and in the future a SCMI node,
-that means the description can mix different type of nodes.
-
-As the DTPM tree depends on different devices which could be modules,
-the SoC specific description must always be compiled as a module and
-describe the module softdeps in order to let the userspace to handle
-proper loading ordering.
-
-In addition to the hierarchy creation, the devfreq dtpm support is also
-integrated into this series.
-
-This series was tested on a rock960 (revision B - rk3399 based) and a
-db845c (Qualcomm sdm845 based).
-
-[1] https://lore.kernel.org/all/20210401183654.27214-1-daniel.lezcano@linaro.org/
-[2] https://lore.kernel.org/all/YGYg6ZeZ1181%2FpXk@kroah.com/
-[3] https://lore.kernel.org/all/20211205231558.779698-1-daniel.lezcano@linaro.org/
-[4] https://lore.kernel.org/all/YbfFapsmsjs4qnsg@robh.at.kernel.org/
-
-Changelog:
-   V6:
-   - Switched the init table to a subsystem arrays
-   - Checked 'setup' function is set before calling it
-   - Moved out of the loop the 'of_node_put'
-   - Explicitely add DTPM_NODE_VIRTUAL in documentation
-   - Moved powercap_register_control_type() into the hierarchy creation function
-   - Removed the sdm845 description
-   - Made rk3399 always as a module and added module softdeps
-
-   V5:
-   - Remove DT bindings
-   - Added description with an array
-   - Added simple description for rk3399 and sdm845
-   - Moved dtpm table to the data section
-   
-   V4:
-   - Added missing powerzone-cells
-   - Changed powerzone name to comply with the pattern property
-
-   V3:
-   - Remove GPU section as no power is available (yet)
-   - Remove '#powerzone-cells' conforming to the bindings change
-   - Removed required property 'compatible'
-   - Removed powerzone-cells from the topmost node
-   - Removed powerzone-cells from cpus 'consumers' in example
-   - Set additionnal property to false
-
-   V2:
-   - Added pattern properties and stick to powerzone-*
-   - Added required property compatible and powerzone-cells
-   - Added additionnal property
-   - Added compatible
-   - Renamed to 'powerzones'
-   - Added missing powerzone-cells to the topmost node
-   - Fixed errors reported by 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-   - Move description in the SoC dtsi specific file
-   - Fixed missing prototype warning reported by lkp@
-
-   V1: Initial post
-
-Daniel Lezcano (5):
-  powercap/drivers/dtpm: Convert the init table section to a simple
-    array
-  powercap/drivers/dtpm: Add hierarchy creation
-  powercap/drivers/dtpm: Add CPU DT initialization support
-  powercap/drivers/dtpm: Add dtpm devfreq with energy model support
-  rockchip/soc/drivers: Add DTPM description for rk3399
-
- drivers/powercap/Kconfig          |   8 ++
- drivers/powercap/Makefile         |   1 +
- drivers/powercap/dtpm.c           | 170 ++++++++++++++++++++++++-
- drivers/powercap/dtpm_cpu.c       |  41 +++++-
- drivers/powercap/dtpm_devfreq.c   | 204 ++++++++++++++++++++++++++++++
- drivers/powercap/dtpm_subsys.h    |  22 ++++
- drivers/soc/rockchip/Kconfig      |   8 ++
- drivers/soc/rockchip/Makefile     |   1 +
- drivers/soc/rockchip/dtpm.c       |  59 +++++++++
- include/asm-generic/vmlinux.lds.h |  11 --
- include/linux/dtpm.h              |  33 +++--
- 11 files changed, 519 insertions(+), 39 deletions(-)
- create mode 100644 drivers/powercap/dtpm_devfreq.c
+Suggested-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ drivers/powercap/dtpm.c           |  2 ++
+ drivers/powercap/dtpm_cpu.c       |  5 ++++-
+ drivers/powercap/dtpm_subsys.h    | 18 ++++++++++++++++++
+ include/asm-generic/vmlinux.lds.h | 11 -----------
+ include/linux/dtpm.h              | 24 +++---------------------
+ 5 files changed, 27 insertions(+), 33 deletions(-)
  create mode 100644 drivers/powercap/dtpm_subsys.h
- create mode 100644 drivers/soc/rockchip/dtpm.c
 
+diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
+index 8cb45f2d3d78..0e5c93443c70 100644
+--- a/drivers/powercap/dtpm.c
++++ b/drivers/powercap/dtpm.c
+@@ -24,6 +24,8 @@
+ #include <linux/slab.h>
+ #include <linux/mutex.h>
+ 
++#include "dtpm_subsys.h"
++
+ #define DTPM_POWER_LIMIT_FLAG 0
+ 
+ static const char *constraint_name[] = {
+diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
+index b740866b228d..5763e0ce2af5 100644
+--- a/drivers/powercap/dtpm_cpu.c
++++ b/drivers/powercap/dtpm_cpu.c
+@@ -269,4 +269,7 @@ static int __init dtpm_cpu_init(void)
+ 	return 0;
+ }
+ 
+-DTPM_DECLARE(dtpm_cpu, dtpm_cpu_init);
++struct dtpm_subsys_ops dtpm_cpu_ops = {
++	.name = KBUILD_MODNAME,
++	.init = dtpm_cpu_init,
++};
+diff --git a/drivers/powercap/dtpm_subsys.h b/drivers/powercap/dtpm_subsys.h
+new file mode 100644
+index 000000000000..2a3a2055f60e
+--- /dev/null
++++ b/drivers/powercap/dtpm_subsys.h
+@@ -0,0 +1,18 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2022 Linaro Ltd
++ *
++ * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
++ */
++#ifndef ___DTPM_SUBSYS_H__
++#define ___DTPM_SUBSYS_H__
++
++extern struct dtpm_subsys_ops dtpm_cpu_ops;
++
++struct dtpm_subsys_ops *dtpm_subsys[] = {
++#ifdef CONFIG_DTPM_CPU
++	&dtpm_cpu_ops,
++#endif
++};
++
++#endif
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index 42f3866bca69..2a10db2f0bc5 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -321,16 +321,6 @@
+ #define THERMAL_TABLE(name)
+ #endif
+ 
+-#ifdef CONFIG_DTPM
+-#define DTPM_TABLE()							\
+-	. = ALIGN(8);							\
+-	__dtpm_table = .;						\
+-	KEEP(*(__dtpm_table))						\
+-	__dtpm_table_end = .;
+-#else
+-#define DTPM_TABLE()
+-#endif
+-
+ #define KERNEL_DTB()							\
+ 	STRUCT_ALIGN();							\
+ 	__dtb_start = .;						\
+@@ -723,7 +713,6 @@
+ 	ACPI_PROBE_TABLE(irqchip)					\
+ 	ACPI_PROBE_TABLE(timer)						\
+ 	THERMAL_TABLE(governor)						\
+-	DTPM_TABLE()							\
+ 	EARLYCON_TABLE()						\
+ 	LSM_TABLE()							\
+ 	EARLY_LSM_TABLE()						\
+diff --git a/include/linux/dtpm.h b/include/linux/dtpm.h
+index d37e5d06a357..506048158a50 100644
+--- a/include/linux/dtpm.h
++++ b/include/linux/dtpm.h
+@@ -32,29 +32,11 @@ struct dtpm_ops {
+ 	void (*release)(struct dtpm *);
+ };
+ 
+-typedef int (*dtpm_init_t)(void);
+-
+-struct dtpm_descr {
+-	dtpm_init_t init;
++struct dtpm_subsys_ops {
++	const char *name;
++	int (*init)(void);
+ };
+ 
+-/* Init section thermal table */
+-extern struct dtpm_descr __dtpm_table[];
+-extern struct dtpm_descr __dtpm_table_end[];
+-
+-#define DTPM_TABLE_ENTRY(name, __init)				\
+-	static struct dtpm_descr __dtpm_table_entry_##name	\
+-	__used __section("__dtpm_table") = {			\
+-		.init = __init,					\
+-	}
+-
+-#define DTPM_DECLARE(name, init)	DTPM_TABLE_ENTRY(name, init)
+-
+-#define for_each_dtpm_table(__dtpm)	\
+-	for (__dtpm = __dtpm_table;	\
+-	     __dtpm < __dtpm_table_end;	\
+-	     __dtpm++)
+-
+ static inline struct dtpm *to_dtpm(struct powercap_zone *zone)
+ {
+ 	return container_of(zone, struct dtpm, zone);
 -- 
 2.25.1
 
