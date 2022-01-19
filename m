@@ -2,121 +2,289 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 018BD493C90
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jan 2022 16:05:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 828B5493CF0
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jan 2022 16:22:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355477AbiASPFe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Jan 2022 10:05:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53310 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355616AbiASPFT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jan 2022 10:05:19 -0500
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1DBFC061574
-        for <linux-pm@vger.kernel.org>; Wed, 19 Jan 2022 07:05:18 -0800 (PST)
-Received: by mail-ot1-x332.google.com with SMTP id a10-20020a9d260a000000b005991bd6ae3eso3421103otb.11
-        for <linux-pm@vger.kernel.org>; Wed, 19 Jan 2022 07:05:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rT9FJ0j7/GR3QV3pYKP9vdE5VbXyREPL1/JFSj49N9s=;
-        b=TkP0onxPtD5jB1gt+D1/yPotxgObqZuoJ/oopIGNyr03TMDZ7ffUflSnGXNAV0hBNY
-         BNwV6mQbgB6X6N1lGoQnuS3jSZr3RFboo+vWCYPZ7/Auy9axTIv6HvhunxexwcEsulex
-         TXvAqRxLAMXqpjBfp/a3bOjQ4fvrv1DATGjwX5CjV/byPb+y5ESE3Y5Mb78UYIy+VXSZ
-         1je7N4dc4VJZ3qCyrJ/0MO2YrAYFMOQ4E/lSrau8JkqGfzbBbrrsMMxazFTSCI4UQqGN
-         cNfBwEAtOLJxHzE6fYt9uGIk7onUWOkr8hJG57D8d0ukqepWeoTI8A+a1kkktS9KWcBM
-         JSBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rT9FJ0j7/GR3QV3pYKP9vdE5VbXyREPL1/JFSj49N9s=;
-        b=cbQ6vm5eSP3zZkNKHgtxcjMU39TuS5prmJ9ZczpdASTO6SEYvq7w2w3p1QSjT3eZ7z
-         FgbKxqlLL2vWG4ddRpUCG1Q6LkOkOv72yafzv2mbPioRalp8wu8LHnL/79Y5dEx7pdil
-         LRLUcGRekeZ+qHEDeHWFEgZYeZTPPV9ZhAmBTiC5wFNR/my/QLMZVhMT+sPFdmTqo5yd
-         zX65jG3iCbPVRE62yvtx3rRxRZyPHuHoA4omcCOmfqG+yLsl/lT8X8hhLDImI4jJ3aW7
-         ij3099mDU3oqRe0F78aTjIhjNp3zAIuSCXeMIb3zUEOOrgx+ZC8ua+MnHrAVDtwU3MAN
-         dEaA==
-X-Gm-Message-State: AOAM5300QNt8NBXcUkdOn/wX/lnvSpdyYIl+90kFuVUaJ8YdZRdn0PCd
-        UlZZ06i4gEI7SoyAtxHNA1F+cA==
-X-Google-Smtp-Source: ABdhPJzUIi3KXQuwlo8bH34JPGPPIl8ckdmaGpfQ9ZMEiW7t0Q0G9kj77P/h92SFPMEX42ha38Va0Q==
-X-Received: by 2002:a05:6830:2684:: with SMTP id l4mr14282953otu.79.1642604717967;
-        Wed, 19 Jan 2022 07:05:17 -0800 (PST)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id w22sm9105oov.24.2022.01.19.07.05.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jan 2022 07:05:17 -0800 (PST)
-Date:   Wed, 19 Jan 2022 07:05:52 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Lukasz Luba <lukasz.luba@arm.com>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S1355691AbiASPVr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Jan 2022 10:21:47 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:35168 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1355310AbiASPVl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jan 2022 10:21:41 -0500
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20JCnbo7014959;
+        Wed, 19 Jan 2022 16:21:36 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=m/aWoxbwO4ww33sxaSzrOIlxUKriBNkq4+frD3/0F5Y=;
+ b=aUlpneYD1/Myb/Bi5Sf2uaY7bPgcTvI5O4fx5VCC7EhIC+iSqb+ce3LtpyCtgSKUgiUB
+ C8VdKQEXzQvGAZERCdTDVWKDG0MKpTeORJEbfNMS3LP95/TB3jU9UhuP+QV46DGbbsqR
+ E45Je0X5Rd5P67ppfhNt7Wog1Rv2AWHpyFGYl9gTGYnidnBMb/yLh83KZdRZvpafudXh
+ 254ZekIe3dgdgmu1NnXE0VkJAEJZa4JZZv4/Q3zXj0oyTQlpivYViygkK1/C52A91o8X
+ vW/VbK+o6cKSp09BWrKsVnnWEZPGfR+jufJ6BVL41J2lp5FAYTM1kgfRFg5rWI8vM4Qm 0w== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3dpf2vam04-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Jan 2022 16:21:36 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 82DD510002A;
+        Wed, 19 Jan 2022 16:21:35 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node1.st.com [10.75.127.4])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E3E5921BF59;
+        Wed, 19 Jan 2022 16:21:34 +0100 (CET)
+Received: from lmecxl0889.lme.st.com (10.75.127.44) by SFHDAG2NODE1.st.com
+ (10.75.127.4) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 19 Jan
+ 2022 16:21:32 +0100
+Subject: Re: [PATCH] dt-bindings: Improve phandle-array schemas
+To:     Rob Herring <robh@kernel.org>, <devicetree@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH 1/2] cpufreq: qcom-hw: Use initialized cpumask for
- thermal pressure update
-Message-ID: <Yego0BwrVXkqqJOm@ripper>
-References: <20220118185612.2067031-1-bjorn.andersson@linaro.org>
- <20220119063547.hktwzbycf7trqjju@vireshk-i7>
- <20220119064029.b2yhqcazhpdbhasc@vireshk-i7>
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        <linux-ide@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <dmaengine@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <iommu@lists.linux-foundation.org>,
+        <linux-leds@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-can@vger.kernel.org>,
+        <linux-wireless@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <linux-gpio@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <linux-remoteproc@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <linux-usb@vger.kernel.org>
+References: <20220119015038.2433585-1-robh@kernel.org>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Message-ID: <de35edd9-b85d-0ed7-98b6-7a41134c3ece@foss.st.com>
+Date:   Wed, 19 Jan 2022 16:21:32 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220119064029.b2yhqcazhpdbhasc@vireshk-i7>
+In-Reply-To: <20220119015038.2433585-1-robh@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE1.st.com
+ (10.75.127.4)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-19_08,2022-01-19_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue 18 Jan 22:40 PST 2022, Viresh Kumar wrote:
+Hello Rob,
 
-> On 19-01-22, 12:05, Viresh Kumar wrote:
-> > policy->cpus keeps on changing with CPU hotplug and this can leave
-> > your platform in an inconsistent state. For example, in case where you
-> > offline a CPU from policy, other CPUs get their thermal pressure
-> > updated, online the CPU back and all CPUs of a policy don't have the
-> > same settings anymore.
-> > 
+On 1/19/22 2:50 AM, Rob Herring wrote:
+> The 'phandle-array' type is a bit ambiguous. It can be either just an
+> array of phandles or an array of phandles plus args. Many schemas for
+> phandle-array properties aren't clear in the schema which case applies
+> though the description usually describes it.
+> 
+> The array of phandles case boils down to needing:
+> 
+> items:
+>   maxItems: 1
+> 
+> The phandle plus args cases should typically take this form:
+> 
+> items:
+>   - items:
+>       - description: A phandle
+>       - description: 1st arg cell
+>       - description: 2nd arg cell
+> 
+> With this change, some examples need updating so that the bracketing of
+> property values matches the schema.
+> 
+> Cc: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Cc: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Georgi Djakov <djakov@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Joerg Roedel <joro@8bytes.org>
+> Cc: Lee Jones <lee.jones@linaro.org>
+> Cc: Daniel Thompson <daniel.thompson@linaro.org>
+> Cc: Jingoo Han <jingoohan1@gmail.com>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Wolfgang Grandegger <wg@grandegger.com>
+> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+> Cc: Andrew Lunn <andrew@lunn.ch>
+> Cc: Vivien Didelot <vivien.didelot@gmail.com>
+> Cc: Florian Fainelli <f.fainelli@gmail.com>
+> Cc: Vladimir Oltean <olteanv@gmail.com>
+> Cc: Kalle Valo <kvalo@kernel.org>
+> Cc: Viresh Kumar <vireshk@kernel.org>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Kishon Vijay Abraham I <kishon@ti.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Kevin Hilman <khilman@kernel.org>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Zhang Rui <rui.zhang@intel.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Jonathan Hunter <jonathanh@nvidia.com>
+> Cc: Sudeep Holla <sudeep.holla@arm.com>
+> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
+> Cc: linux-ide@vger.kernel.org
+> Cc: linux-crypto@vger.kernel.org
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: dmaengine@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: iommu@lists.linux-foundation.org
+> Cc: linux-leds@vger.kernel.org
+> Cc: linux-media@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-can@vger.kernel.org
+> Cc: linux-wireless@vger.kernel.org
+> Cc: linux-phy@lists.infradead.org
+> Cc: linux-gpio@vger.kernel.org
+> Cc: linux-riscv@lists.infradead.org
+> Cc: linux-remoteproc@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
 
-Oh, I didn't know that. Then my proposal doesn't seem that awesome.
+[...]
 
-> > There are few things we can do here now:
-> > 
-> > - Check for empty related_cpus and return early. Since related_cpus is
-> >   updated only once, this shall work just fine and must not be racy.
-> > 
-> >   While at it, I think we can also do something like this in
-> >   topology_update_thermal_pressure() instead:
-> > 
-> >   	cpu = cpumask_first(cpus);
-> >         if (unlikely(cpu >= NR_CPUS))
-> >                 return;
-> > 
-> > - And while writing this email, I dropped all other ideas in favor of
-> >   change to topology_update_thermal_pressure() :)
-> 
-> And then I saw your second patch, which looks good as otherwise we
-> will not be able to catch the bug in our system where we are sending
-> the empty cpumask :)
-> 
-> So the other idea is:
-> 
-> - Revert, or bring back a new version of this and register the
->   interrupt from there. But that is also not a very clean solution.
-> 
->   commit 4bf8e582119e ("cpufreq: Remove ready() callback")
-> 
+>  .../bindings/remoteproc/st,stm32-rproc.yaml   | 33 ++++++--
 
-We could do this and keep the interrupt disabled until we hit ready().
+[...]
 
-But I found the resulting issue non-trivial to debug, so I would prefer
-if arch_update_thermal_pressure() dealt with the empty cpumask. So as
-you suggest in your first reply, I'll respin the second patch alone,
-without the WARN_ON().
+> diff --git a/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
+> index b587c97c282b..be3d9b0e876b 100644
+> --- a/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
+> +++ b/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
+> @@ -29,17 +29,22 @@ properties:
+>  
+>    st,syscfg-holdboot:
+>      description: remote processor reset hold boot
+> -      - Phandle of syscon block.
+> -      - The offset of the hold boot setting register.
+> -      - The field mask of the hold boot.
+>      $ref: "/schemas/types.yaml#/definitions/phandle-array"
+> -    maxItems: 1
+> +    items:
+> +      - items:
+> +          - description: Phandle of syscon block
+> +          - description: The offset of the hold boot setting register
+> +          - description: The field mask of the hold boot
+>  
+>    st,syscfg-tz:
+>      description:
+>        Reference to the system configuration which holds the RCC trust zone mode
+>      $ref: "/schemas/types.yaml#/definitions/phandle-array"
+> -    maxItems: 1
+> +    items:
+> +      - items:
+> +          - description: Phandle of syscon block
+> +          - description: FIXME
+> +          - description: FIXME
+
+         - description: The offset of the trust zone setting register
+         - description: The field mask of the trust zone state
+
+>  
+>    interrupts:
+>      description: Should contain the WWDG1 watchdog reset interrupt
+> @@ -93,20 +98,32 @@ properties:
+>      $ref: "/schemas/types.yaml#/definitions/phandle-array"
+>      description: |
+>        Reference to the system configuration which holds the remote
+> -    maxItems: 1
+> +    items:
+> +      - items:
+> +          - description: Phandle of syscon block
+> +          - description: FIXME
+> +          - description: FIXME
+
+         - description: The offset of the power setting register
+         - description: The field mask of the PDDS selection
+
+>  
+>    st,syscfg-m4-state:
+>      $ref: "/schemas/types.yaml#/definitions/phandle-array"
+>      description: |
+>        Reference to the tamp register which exposes the Cortex-M4 state.
+> -    maxItems: 1
+> +    items:
+> +      - items:
+> +          - description: Phandle of syscon block with the tamp register
+> +          - description: FIXME
+> +          - description: FIXME
+
+         - description: The offset of the tamp register
+         - description: The field mask of the Cortex-M4 state
+
+>  
+>    st,syscfg-rsc-tbl:
+>      $ref: "/schemas/types.yaml#/definitions/phandle-array"
+>      description: |
+>        Reference to the tamp register which references the Cortex-M4
+>        resource table address.
+> -    maxItems: 1
+> +    items:
+> +      - items:
+> +          - description: Phandle of syscon block with the tamp register
+> +          - description: FIXME
+> +          - description: FIXME
+
+         - description: The offset of the tamp register
+         - description: The field mask of the Cortex-M4 resource table address
+
+Please tell me if you prefer that I fix this in a dedicated patch.
 
 Thanks,
-Bjorn
+Arnaud
