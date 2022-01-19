@@ -2,124 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 434F8493A11
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jan 2022 13:09:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8118E493C13
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jan 2022 15:45:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349419AbiASMJW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Jan 2022 07:09:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41276 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234677AbiASMJU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jan 2022 07:09:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A51C061574;
-        Wed, 19 Jan 2022 04:09:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C30661659;
-        Wed, 19 Jan 2022 12:09:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C899C004E1;
-        Wed, 19 Jan 2022 12:09:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642594158;
-        bh=jTL1kOllWwNpAyRghJtzBJcKTv5b3vqCwXM1meqTpw0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=EAM3BRW+CbiGfMCjMaveMIE0YyZKBv4YGXrhRLSxa7sz3YBI0QQEuz2LrLupXBm6Y
-         R889FqqDBLJRbmysGVMQsKr1+BPa+yDJxTjvvCiMdGOmw3WRnNeHLu+nDQzZ0VrcIg
-         537D4y6llCDYE69wujlX8OZOzzDzuUv4TZj1s79d9eFb+RXQG9+f7bhJe+cQ9hqXOs
-         UzplFSvX38xneJW3n6U2ZW+ZGtGaC4rD9CUZ5eJbXp53b/2qOgmJO8dTGx52wnNROz
-         mMWxGEVBV5Zu24UiKq2KQXFZoJvf1AB0QizfrxdUr/IZ5hnV98uHFEwvu8cGlN1QiB
-         De5JfwgYpTzOg==
-Message-ID: <07adcd47-79c9-ae37-80c6-d1204c6cfea4@kernel.org>
-Date:   Wed, 19 Jan 2022 14:09:01 +0200
-MIME-Version: 1.0
-Subject: Re: [PATCH] dt-bindings: Improve phandle-array schemas
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        id S1355226AbiASOoH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Jan 2022 09:44:07 -0500
+Received: from foss.arm.com ([217.140.110.172]:58214 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1355133AbiASOoG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 19 Jan 2022 09:44:06 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 42849ED1;
+        Wed, 19 Jan 2022 06:44:04 -0800 (PST)
+Received: from bogus (unknown [10.57.34.234])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DEC5B3F774;
+        Wed, 19 Jan 2022 06:44:01 -0800 (PST)
+Date:   Wed, 19 Jan 2022 14:43:28 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
         Sudeep Holla <sudeep.holla@arm.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, dmaengine@vger.kernel.org,
-        linux-pm@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-remoteproc@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-usb@vger.kernel.org
-References: <20220119015038.2433585-1-robh@kernel.org>
-From:   Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <20220119015038.2433585-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH 2/2] arch_topology: Sanity check cpumask in thermal
+ pressure update
+Message-ID: <20220119144328.cvt76mhsufxg7qbr@bogus>
+References: <20220118185612.2067031-1-bjorn.andersson@linaro.org>
+ <20220118185612.2067031-2-bjorn.andersson@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220118185612.2067031-2-bjorn.andersson@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Tue, Jan 18, 2022 at 10:56:12AM -0800, Bjorn Andersson wrote:
+> Occasionally during boot the Qualcomm cpufreq driver was able to cause
+> an invalid memory access in topology_update_thermal_pressure() on the
+> line:
+> 
+> 	if (max_freq <= capped_freq)
+> 
+> It turns out that this was caused by a race, which resulted in the
+> cpumask passed to the function being empty, in which case
+> cpumask_first() will return a cpu beyond the number of valid cpus, which
+> when used to access the per_cpu max_freq would return invalid pointer.
+> 
+> The bug in the Qualcomm cpufreq driver is being fixed, but having a
+> sanity check of the arguments would have saved quite a bit of time and
+> it's not unlikely that others will run into the same issue.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+>  drivers/base/arch_topology.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+> index 976154140f0b..6560a0c3b969 100644
+> --- a/drivers/base/arch_topology.c
+> +++ b/drivers/base/arch_topology.c
+> @@ -177,6 +177,9 @@ void topology_update_thermal_pressure(const struct cpumask *cpus,
+>  	u32 max_freq;
+>  	int cpu;
+>  
+> +	if (WARN_ON(cpumask_empty(cpus)))
+> +		return;
+> +
 
-On 19.01.22 3:50, Rob Herring wrote:
-> The 'phandle-array' type is a bit ambiguous. It can be either just an
-> array of phandles or an array of phandles plus args. Many schemas for
-> phandle-array properties aren't clear in the schema which case applies
-> though the description usually describes it.
-> 
-> The array of phandles case boils down to needing:
-> 
-> items:
->    maxItems: 1
-> 
-> The phandle plus args cases should typically take this form:
-> 
-> items:
->    - items:
->        - description: A phandle
->        - description: 1st arg cell
->        - description: 2nd arg cell
-> 
-> With this change, some examples need updating so that the bracketing of
-> property values matches the schema.
-> 
-[..]
->   .../bindings/interconnect/qcom,rpmh.yaml      |  2 +
+Why can't the caller check and call this only when cpus is not empty ?
+IIUC there are many such APIs that use cpumask and could result in similar
+issues if called with empty cpus. Probably we could add a note that cpus
+must not be empty if that helps the callers ?
 
-Acked-by: Georgi Djakov <djakov@kernel.org>
+-- 
+Regards,
+Sudeep
