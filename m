@@ -2,175 +2,166 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3396049363E
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jan 2022 09:25:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9185B4936A7
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jan 2022 09:57:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352366AbiASIY4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Jan 2022 03:24:56 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:42970 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346595AbiASIYx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jan 2022 03:24:53 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 579E5B81906;
-        Wed, 19 Jan 2022 08:24:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A35DAC004E1;
-        Wed, 19 Jan 2022 08:24:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642580689;
-        bh=+aAjJqYgCB6wYsQ+TkHIz5BRkQQLBlav51rmak29+GE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cHtItM4mbfYOPuPhhPbkJhoJxiHZDumIyowKutBRkwdRAonHQ67rICg6LsPDCfHbA
-         QZbjt+9O/l+cvixjJDghPIFQOSzFWgJIJvP8UJlpTRsxxWB39t3m3AvKMSAFq8CBPt
-         bRA3U40sQfvuaUThRuNLKopLBDpeH18K4EpKopH4=
-Date:   Wed, 19 Jan 2022 09:24:45 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, dmaengine@vger.kernel.org,
-        linux-pm@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-remoteproc@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Improve phandle-array schemas
-Message-ID: <YefKzYIDUFC3NW7e@kroah.com>
-References: <20220119015038.2433585-1-robh@kernel.org>
+        id S1352639AbiASI55 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Jan 2022 03:57:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53244 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352591AbiASI5z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jan 2022 03:57:55 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F09C06161C
+        for <linux-pm@vger.kernel.org>; Wed, 19 Jan 2022 00:57:55 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id f202-20020a1c1fd3000000b0034dd403f4fbso1092574wmf.1
+        for <linux-pm@vger.kernel.org>; Wed, 19 Jan 2022 00:57:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=H7wH3Fy0QK4pLP8rp/pio349QaWy+exypBXARmLuDDM=;
+        b=bCctUAfh6as+QX3kcgZKdBxST75OU+nLIz5K62rG6t/SuFaEAocBwB9keDSTnl3vaS
+         2V64Xpmfp4Arb822opCRyH/fFmL3tHa+DImrnRtfGgNKMJqiUrBzinuACYPmxYihDWY6
+         lY8KI3voYPkn7ogj981YCIExs1Xzs/FC/QCyIhIONq6BaJYKlA59GjPKVAn6ScPElPg4
+         TZv4PSva3Deh2dsO9HDNxh6m2vSGjzw5P48SNc9yBfjcfgfmxdU9UMY05Wb6nvczMzSh
+         7zy9Rz946ASpwK9yDb/EQ8vajW3YZA2T7moxO9Uv7pKTpa5PYpSWN07DBNz7t13xaG+k
+         YvMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=H7wH3Fy0QK4pLP8rp/pio349QaWy+exypBXARmLuDDM=;
+        b=dIBAIXR6/nq14p8JpRL7/GIGfHBdSMIfDVKNcx4yAs8vwhqF7f8fN1M04beyPOCPe5
+         lQtxXuOpi/X62VBmHTgNoSTB9/ahFIsUk+ZA5L61QWD6HFRtHuh1Aj9k5kSsYFEXXkV3
+         8Ham2nPIMn7+eNqj/Q2GvMWl2rZEWFjeoYIYrrlhoT2HJ2graJHDAMCzGfgz9q2gR+R8
+         AMmSo2SXQcA4NXjku0tpWG9IXy5Wabe1RLBnS950mI9vjzaTrkdawgz7NG6nHQof6Nqr
+         NGDxrUKcfg10flx9JgMh8IDEtEROUdCGRh78Vc+AkYEq/z7yhepa/Igwa7w1O1KU+T/J
+         NpqQ==
+X-Gm-Message-State: AOAM533Rf1gIPWmKSjV78Z+3IcT+pshVHMg+dIku9cqcH+5tr/MVmVYS
+        F2VZUsODYcowhy2mR1UKI1hKNQ==
+X-Google-Smtp-Source: ABdhPJw0LpkicNpFOniPNUVbEPCYgytuw+4dzpi+UhI/PrbDb+20vJ0H2SDYb0u5lCXcegprD1h6jg==
+X-Received: by 2002:a5d:494f:: with SMTP id r15mr26224354wrs.388.1642582673924;
+        Wed, 19 Jan 2022 00:57:53 -0800 (PST)
+Received: from localhost.localdomain ([2a01:e34:ed2f:f020:ef34:de48:dc4e:ad87])
+        by smtp.gmail.com with ESMTPSA id 10sm4491454wmc.44.2022.01.19.00.57.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jan 2022 00:57:53 -0800 (PST)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rjw@rjwysocki.net
+Cc:     robh@kernel.org, lukasz.luba@arm.com, heiko@sntech.de,
+        arnd@linaro.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v6 0/6] powercap/drivers/dtpm: Create the dtpm hierarchy
+Date:   Wed, 19 Jan 2022 09:57:14 +0100
+Message-Id: <20220119085719.1357874-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220119015038.2433585-1-robh@kernel.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 07:50:38PM -0600, Rob Herring wrote:
-> The 'phandle-array' type is a bit ambiguous. It can be either just an
-> array of phandles or an array of phandles plus args. Many schemas for
-> phandle-array properties aren't clear in the schema which case applies
-> though the description usually describes it.
-> 
-> The array of phandles case boils down to needing:
-> 
-> items:
->   maxItems: 1
-> 
-> The phandle plus args cases should typically take this form:
-> 
-> items:
->   - items:
->       - description: A phandle
->       - description: 1st arg cell
->       - description: 2nd arg cell
-> 
-> With this change, some examples need updating so that the bracketing of
-> property values matches the schema.
-> 
-> Cc: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-> Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Cc: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Georgi Djakov <djakov@kernel.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Joerg Roedel <joro@8bytes.org>
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Cc: Daniel Thompson <daniel.thompson@linaro.org>
-> Cc: Jingoo Han <jingoohan1@gmail.com>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Wolfgang Grandegger <wg@grandegger.com>
-> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-> Cc: Andrew Lunn <andrew@lunn.ch>
-> Cc: Vivien Didelot <vivien.didelot@gmail.com>
-> Cc: Florian Fainelli <f.fainelli@gmail.com>
-> Cc: Vladimir Oltean <olteanv@gmail.com>
-> Cc: Kalle Valo <kvalo@kernel.org>
-> Cc: Viresh Kumar <vireshk@kernel.org>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Kishon Vijay Abraham I <kishon@ti.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Kevin Hilman <khilman@kernel.org>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Zhang Rui <rui.zhang@intel.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Jonathan Hunter <jonathanh@nvidia.com>
-> Cc: Sudeep Holla <sudeep.holla@arm.com>
-> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-> Cc: linux-ide@vger.kernel.org
-> Cc: linux-crypto@vger.kernel.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: dmaengine@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: iommu@lists.linux-foundation.org
-> Cc: linux-leds@vger.kernel.org
-> Cc: linux-media@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-can@vger.kernel.org
-> Cc: linux-wireless@vger.kernel.org
-> Cc: linux-phy@lists.infradead.org
-> Cc: linux-gpio@vger.kernel.org
-> Cc: linux-riscv@lists.infradead.org
-> Cc: linux-remoteproc@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-usb@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
+The DTPM hierarchy is the base to build on top of it a power budget
+allocator. It reflects the power consumption of the group of devices
+and allows to cap their power.
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+The core code is there but there is no way to describe the desired
+hierarchy yet.
+
+A first proposal introduced the description through configfs [1] but
+was rejected [2].
+
+A second proposal based on the device tree with a binding similar to
+the power domains [3] was proposed but finally rejected [4].
+
+This sixth version delegates the hierarchy creation to the SoC with a
+specific and self-encapsulated code using an array to describe the tree. The
+SoC DTPM driver defines an array of nodes pointing to their parents.  The
+hierarchy description can integrate a DT node and in the future a SCMI node,
+that means the description can mix different type of nodes.
+
+As the DTPM tree depends on different devices which could be modules,
+the SoC specific description must always be compiled as a module and
+describe the module softdeps in order to let the userspace to handle
+proper loading ordering.
+
+In addition to the hierarchy creation, the devfreq dtpm support is also
+integrated into this series.
+
+This series was tested on a rock960 (revision B - rk3399 based) and a
+db845c (Qualcomm sdm845 based).
+
+[1] https://lore.kernel.org/all/20210401183654.27214-1-daniel.lezcano@linaro.org/
+[2] https://lore.kernel.org/all/YGYg6ZeZ1181%2FpXk@kroah.com/
+[3] https://lore.kernel.org/all/20211205231558.779698-1-daniel.lezcano@linaro.org/
+[4] https://lore.kernel.org/all/YbfFapsmsjs4qnsg@robh.at.kernel.org/
+
+Changelog:
+   V6:
+   - Switched the init table to a subsystem arrays
+   - Checked 'setup' function is set before calling it
+   - Moved out of the loop the 'of_node_put'
+   - Explicitely add DTPM_NODE_VIRTUAL in documentation
+   - Moved powercap_register_control_type() into the hierarchy creation function
+   - Removed the sdm845 description
+   - Made rk3399 always as a module and added module softdeps
+
+   V5:
+   - Remove DT bindings
+   - Added description with an array
+   - Added simple description for rk3399 and sdm845
+   - Moved dtpm table to the data section
+   
+   V4:
+   - Added missing powerzone-cells
+   - Changed powerzone name to comply with the pattern property
+
+   V3:
+   - Remove GPU section as no power is available (yet)
+   - Remove '#powerzone-cells' conforming to the bindings change
+   - Removed required property 'compatible'
+   - Removed powerzone-cells from the topmost node
+   - Removed powerzone-cells from cpus 'consumers' in example
+   - Set additionnal property to false
+
+   V2:
+   - Added pattern properties and stick to powerzone-*
+   - Added required property compatible and powerzone-cells
+   - Added additionnal property
+   - Added compatible
+   - Renamed to 'powerzones'
+   - Added missing powerzone-cells to the topmost node
+   - Fixed errors reported by 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+   - Move description in the SoC dtsi specific file
+   - Fixed missing prototype warning reported by lkp@
+
+   V1: Initial post
+
+Daniel Lezcano (5):
+  powercap/drivers/dtpm: Convert the init table section to a simple
+    array
+  powercap/drivers/dtpm: Add hierarchy creation
+  powercap/drivers/dtpm: Add CPU DT initialization support
+  powercap/drivers/dtpm: Add dtpm devfreq with energy model support
+  rockchip/soc/drivers: Add DTPM description for rk3399
+
+ drivers/powercap/Kconfig          |   8 ++
+ drivers/powercap/Makefile         |   1 +
+ drivers/powercap/dtpm.c           | 170 ++++++++++++++++++++++++-
+ drivers/powercap/dtpm_cpu.c       |  41 +++++-
+ drivers/powercap/dtpm_devfreq.c   | 204 ++++++++++++++++++++++++++++++
+ drivers/powercap/dtpm_subsys.h    |  22 ++++
+ drivers/soc/rockchip/Kconfig      |   8 ++
+ drivers/soc/rockchip/Makefile     |   1 +
+ drivers/soc/rockchip/dtpm.c       |  59 +++++++++
+ include/asm-generic/vmlinux.lds.h |  11 --
+ include/linux/dtpm.h              |  33 +++--
+ 11 files changed, 519 insertions(+), 39 deletions(-)
+ create mode 100644 drivers/powercap/dtpm_devfreq.c
+ create mode 100644 drivers/powercap/dtpm_subsys.h
+ create mode 100644 drivers/soc/rockchip/dtpm.c
+
+-- 
+2.25.1
+
