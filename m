@@ -2,110 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8795C493516
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jan 2022 07:40:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68F7E4935A4
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jan 2022 08:41:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351846AbiASGke (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Jan 2022 01:40:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50402 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351825AbiASGkc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jan 2022 01:40:32 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E261C061401
-        for <linux-pm@vger.kernel.org>; Tue, 18 Jan 2022 22:40:32 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id pf13so1645806pjb.0
-        for <linux-pm@vger.kernel.org>; Tue, 18 Jan 2022 22:40:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=zpqOr/tBRi75Pp8qLo4l0nBsgr344a1nSf9Rbnq+odM=;
-        b=qEYIK5rApXpv0wg81nkrlkx1T++XKJBs1RDU+7UymNOd/serK07jnV/QZUYpzO1cZx
-         wj6xTp+NFXcu/VVvkGp0KBC0MfieDkaiP5XvpIvvJKB6tbSd3+sSr5ueB8ITW9ftDO/u
-         yheozRHgkCfFm6CVnnrKd6XiKG2Su3UOFenBTkSPuvzul0kpK9ncGpQJNPSj4vw5afam
-         GYNFNl6Oov2WscSyYFmKYYuq+EJfNE0yfTueSoo4RuDtNhXRP6U1d5CxcfJ120j9HVLg
-         Mj5zu7jCDAtYo8SUwn+zSVSF0TeeL27Wz3XKko0KU5GOn3lm2i2OTWH1ygcjd24A8CHU
-         2jPQ==
+        id S1352107AbiASHlI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Jan 2022 02:41:08 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:38138
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1352139AbiASHlF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jan 2022 02:41:05 -0500
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com [209.85.128.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 5706140049
+        for <linux-pm@vger.kernel.org>; Wed, 19 Jan 2022 07:41:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642578064;
+        bh=KOwrbfmVaaY4sfUgcL8mu/NpRfAwFGVtSAETT0kqBAg=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=I6q8teHD2ayJ51KdZSsCQtYzgTU1B5feQxWWcbf/7Aa8wezEfkF8zg/bsnILf56WJ
+         /yD0g7ASnOAX/AJyM+cnWGXecITg6RVlB2CTd9SFbABjaxU8hymxCxhUWXlKUiFEFk
+         h7NzJxrzRfWgDvDxDdXh8UQzDbwjMhNCWiCrXPfNskmuiwyvULBgRTe6sZwpveEG3Q
+         3JwCA5dvo14if8mGx8VEeB0hqU7QnmeZtJSQcBbDAztvE0hV+f+MTwSyS+uPa71rTf
+         GCoOxhHcb7vTE5ze9FuA6hg80MOEPXYPmtmZHm2fqeAKOUJRpgxOkXEeyeVUXymEIT
+         GlxIumaJc295g==
+Received: by mail-wm1-f72.google.com with SMTP id 20-20020a05600c22d400b00349067fe7b7so742172wmg.5
+        for <linux-pm@vger.kernel.org>; Tue, 18 Jan 2022 23:41:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=zpqOr/tBRi75Pp8qLo4l0nBsgr344a1nSf9Rbnq+odM=;
-        b=CljMnaLMMQcK94H8/a05Nf5hS0lC6xtmXcJ0GhyafqTeGI4KbR9/ZpDX0s250TOgTw
-         58iv2kHRpDVQ2ve0A/vhwzravAC1fi8tZNvjw+KUDsf90ud5fJwyGmkMS6AkF6RBsItA
-         reStWMw9eXZCiO+Qq4/GUKGEhDKqfni2LkY/EgxIPtB4ffwN68FAxG+w4sJ+7CkhlBjg
-         SP+o6hzqitMOttRtSAkO0k4i0kQzEjtLz4+C7hGDTHpEZVamKCgoG4N22wgAmWTPYymf
-         otRk9wWcCfahK1h4Cr6D5yo11F/ykEdA1MQyOp+mP+/BnkZCo7PTOn+bmYs22aRKsL6s
-         OCQg==
-X-Gm-Message-State: AOAM533eLf2V62Zs6AXB2lq4qnm2cLEyYiN9pcE00zskhLTee9c4/wS7
-        nOKjyNv6c9yswIlJooVlGaEqww==
-X-Google-Smtp-Source: ABdhPJx8ka9jtqv7zCBJO2qiQ9/AM6qAF/k8L4Cci5O8W/jOWZTORT9y08zINcOya2zj/P+qTeHWVQ==
-X-Received: by 2002:a17:90b:3144:: with SMTP id ip4mr2608936pjb.19.1642574431950;
-        Tue, 18 Jan 2022 22:40:31 -0800 (PST)
-Received: from localhost ([223.184.90.234])
-        by smtp.gmail.com with ESMTPSA id a9sm18672318pfo.169.2022.01.18.22.40.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 22:40:31 -0800 (PST)
-Date:   Wed, 19 Jan 2022 12:10:29 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Lukasz Luba <lukasz.luba@arm.com>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH 1/2] cpufreq: qcom-hw: Use initialized cpumask for
- thermal pressure update
-Message-ID: <20220119064029.b2yhqcazhpdbhasc@vireshk-i7>
-References: <20220118185612.2067031-1-bjorn.andersson@linaro.org>
- <20220119063547.hktwzbycf7trqjju@vireshk-i7>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=KOwrbfmVaaY4sfUgcL8mu/NpRfAwFGVtSAETT0kqBAg=;
+        b=rQ1ypyjzUMLSflB+McBA/CraMstf3zG4it+E+QjpNaoGvXkuYQvaIgYrCZimCF05c1
+         OetJBNhqtTxPfIVUjj2TOUunjS7rWKlUa2xFMWcgS9lmGzhPCd2+mpSMvJ7f8WaWdDWU
+         g7HH3TIn6ftvT40g/Pip3FAD+NUeCwJU3nWgOitkO+Il2NjcKdnX6RTxoUfaIo1hPBQk
+         T71KWO9fhGpFOZ5SfagF+kbZRPCvhZ0oR6ot3818HrK86BQXmnQrMrm+IaGVdXl5y/HR
+         d3t2CLAS0K2rZOH3jwaafN+mpeJID5C/Z3cphwAdhTvoVx/7exqbKqTmH631GJLVXUIm
+         dQdw==
+X-Gm-Message-State: AOAM5332MYgtfRwg51TDFR+4BE4aMWoydUx3likBrgHAMFi/vsqpJyGg
+        MbCV+sI+8AYYt6152KWGe4GkMyUY5J0VJZExb3GGWLn3qK5zunxY48iYjd3LK70czBAhK1/yATR
+        oAO2cmXet1V52IkX1zXFPg3ceoHw/PfYEDrP9
+X-Received: by 2002:a17:907:7ea6:: with SMTP id qb38mr23673610ejc.557.1642578052287;
+        Tue, 18 Jan 2022 23:40:52 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwcC/F4TT/k1wEFa2HsX2oDgdxrLKxkyNjrLq8ReErAXQsVWpB2ePW4VmJCVcsiAdC0JWuWGg==
+X-Received: by 2002:a17:907:7ea6:: with SMTP id qb38mr23673541ejc.557.1642578052033;
+        Tue, 18 Jan 2022 23:40:52 -0800 (PST)
+Received: from [192.168.0.42] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id d2sm791994edy.86.2022.01.18.23.40.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jan 2022 23:40:51 -0800 (PST)
+Message-ID: <21b72055-e158-6586-f48a-17695128b507@canonical.com>
+Date:   Wed, 19 Jan 2022 08:40:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220119063547.hktwzbycf7trqjju@vireshk-i7>
-User-Agent: NeoMutt/20180716-391-311a52
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH] dt-bindings: Improve phandle-array schemas
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, dmaengine@vger.kernel.org,
+        linux-pm@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-usb@vger.kernel.org
+References: <20220119015038.2433585-1-robh@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220119015038.2433585-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19-01-22, 12:05, Viresh Kumar wrote:
-> policy->cpus keeps on changing with CPU hotplug and this can leave
-> your platform in an inconsistent state. For example, in case where you
-> offline a CPU from policy, other CPUs get their thermal pressure
-> updated, online the CPU back and all CPUs of a policy don't have the
-> same settings anymore.
+On 19/01/2022 02:50, Rob Herring wrote:
+> The 'phandle-array' type is a bit ambiguous. It can be either just an
+> array of phandles or an array of phandles plus args. Many schemas for
+> phandle-array properties aren't clear in the schema which case applies
+> though the description usually describes it.
 > 
-> There are few things we can do here now:
+> The array of phandles case boils down to needing:
 > 
-> - Check for empty related_cpus and return early. Since related_cpus is
->   updated only once, this shall work just fine and must not be racy.
+> items:
+>   maxItems: 1
 > 
->   While at it, I think we can also do something like this in
->   topology_update_thermal_pressure() instead:
+> The phandle plus args cases should typically take this form:
 > 
->   	cpu = cpumask_first(cpus);
->         if (unlikely(cpu >= NR_CPUS))
->                 return;
+> items:
+>   - items:
+>       - description: A phandle
+>       - description: 1st arg cell
+>       - description: 2nd arg cell
 > 
-> - And while writing this email, I dropped all other ideas in favor of
->   change to topology_update_thermal_pressure() :)
+> With this change, some examples need updating so that the bracketing of
+> property values matches the schema.
+> 
 
-And then I saw your second patch, which looks good as otherwise we
-will not be able to catch the bug in our system where we are sending
-the empty cpumask :)
+Samsung and memory controller bits look good:
 
-So the other idea is:
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-- Revert, or bring back a new version of this and register the
-  interrupt from there. But that is also not a very clean solution.
 
-  commit 4bf8e582119e ("cpufreq: Remove ready() callback")
-
-- 
-
--- 
-viresh
+Best regards,
+Krzysztof
