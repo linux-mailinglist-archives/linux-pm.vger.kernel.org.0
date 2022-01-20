@@ -2,248 +2,177 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61F604948F4
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Jan 2022 08:58:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A46494911
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Jan 2022 09:06:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343901AbiATH6g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Jan 2022 02:58:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54644 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344374AbiATH6f (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Jan 2022 02:58:35 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2CFC06173F
-        for <linux-pm@vger.kernel.org>; Wed, 19 Jan 2022 23:58:35 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nASK7-0002RI-3O; Thu, 20 Jan 2022 08:57:35 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nASJu-00BJom-IA; Thu, 20 Jan 2022 08:57:21 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nASJt-000Bvo-3V; Thu, 20 Jan 2022 08:57:21 +0100
-Date:   Thu, 20 Jan 2022 08:57:18 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        KVM list <kvm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-phy@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
-        openipmi-developer@lists.sourceforge.net,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Corey Minyard <minyard@acm.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        platform-driver-x86@vger.kernel.org,
-        Benson Leung <bleung@chromium.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>, netdev@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Vinod Koul <vkoul@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Richard Weinberger <richard@nod.at>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        linux-mediatek@lists.infradead.org,
-        Brian Norris <computersforpeace@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH] driver core: platform: Rename
- platform_get_irq_optional() to platform_get_irq_silent()
-Message-ID: <20220120075718.5qtrpc543kkykaow@pengutronix.de>
-References: <20220112085009.dbasceh3obfok5dc@pengutronix.de>
- <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
- <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
- <Yd9L9SZ+g13iyKab@sirena.org.uk>
- <20220113110831.wvwbm75hbfysbn2d@pengutronix.de>
- <YeA7CjOyJFkpuhz/@sirena.org.uk>
- <20220113194358.xnnbhsoyetihterb@pengutronix.de>
- <YeF05vBOzkN+xYCq@smile.fi.intel.com>
- <20220115154539.j3tsz5ioqexq2yuu@pengutronix.de>
- <YehdsUPiOTwgZywq@smile.fi.intel.com>
+        id S1358385AbiATIEr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Jan 2022 03:04:47 -0500
+Received: from comms.puri.sm ([159.203.221.185]:39846 "EHLO comms.puri.sm"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1358348AbiATIEZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 20 Jan 2022 03:04:25 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id E17D9DF89E;
+        Thu, 20 Jan 2022 00:04:23 -0800 (PST)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id TEDNyp5EBpIu; Thu, 20 Jan 2022 00:04:23 -0800 (PST)
+Message-ID: <98d12c1acaf77772f51361b079dde7e982a6dafd.camel@puri.sm>
+Subject: Re: [PATCH v3] media: i2c: dw9714: add optional regulator support
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     broonie@kernel.org, sakari.ailus@linux.intel.com
+Cc:     angus@akkea.ca, kernel@puri.sm, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
+        mchehab@kernel.org
+Date:   Thu, 20 Jan 2022 09:04:17 +0100
+In-Reply-To: <8f4c0f74523ea615786942fe2a30f83a2d0e8c16.camel@puri.sm>
+References: <20211129120754.1766570-1-martin.kepplinger@puri.sm>
+         <8f4c0f74523ea615786942fe2a30f83a2d0e8c16.camel@puri.sm>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vtmtr3soi3npiqhl"
-Content-Disposition: inline
-In-Reply-To: <YehdsUPiOTwgZywq@smile.fi.intel.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Am Dienstag, dem 21.12.2021 um 18:33 +0100 schrieb Martin Kepplinger:
+> Am Montag, dem 29.11.2021 um 13:07 +0100 schrieb Martin Kepplinger:
+> > From: Angus Ainslie <angus@akkea.ca>
+> > 
+> > Allow the dw9714 to control a regulator and adjust suspend() and
+> > resume()
+> > to support both runtime and system pm.
+> > 
+> > Signed-off-by: Angus Ainslie <angus@akkea.ca>
+> > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+> > ---
+> > 
+> > 
+> > revision history
+> > ----------------
+> > v3: (thank you Mark and Sakari)
+> >  * use regulator_get() instead of regulator_get_optional()
+> > 
+> > v2: (thank you Mark)
+> >  * simplify the regulator_get_optional() error path
+> >  * fix regulator usage during probe()
+> > https://lore.kernel.org/linux-media/20211126090107.1243558-1-martin.kepplinger@puri.sm/
+> > 
+> > v1:
+> > https://lore.kernel.org/linux-media/20211125080922.978583-1-martin.kepplinger@puri.sm/
+> > 
+> > 
+> > 
+> >  drivers/media/i2c/dw9714.c | 32 +++++++++++++++++++++++++++++++-
+> >  1 file changed, 31 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/media/i2c/dw9714.c
+> > b/drivers/media/i2c/dw9714.c
+> > index 3863dfeb8293..81170bbe0e55 100644
+> > --- a/drivers/media/i2c/dw9714.c
+> > +++ b/drivers/media/i2c/dw9714.c
+> > @@ -5,6 +5,7 @@
+> >  #include <linux/i2c.h>
+> >  #include <linux/module.h>
+> >  #include <linux/pm_runtime.h>
+> > +#include <linux/regulator/consumer.h>
+> >  #include <media/v4l2-ctrls.h>
+> >  #include <media/v4l2-device.h>
+> >  #include <media/v4l2-event.h>
+> > @@ -36,6 +37,7 @@ struct dw9714_device {
+> >         struct v4l2_ctrl_handler ctrls_vcm;
+> >         struct v4l2_subdev sd;
+> >         u16 current_val;
+> > +       struct regulator *vcc;
+> >  };
+> >  
+> >  static inline struct dw9714_device *to_dw9714_vcm(struct v4l2_ctrl
+> > *ctrl)
+> > @@ -145,6 +147,16 @@ static int dw9714_probe(struct i2c_client
+> > *client)
+> >         if (dw9714_dev == NULL)
+> >                 return -ENOMEM;
+> >  
+> > +       dw9714_dev->vcc = devm_regulator_get(&client->dev, "vcc");
+> > +       if (IS_ERR(dw9714_dev->vcc))
+> > +               return PTR_ERR(dw9714_dev->vcc);
+> > +
+> > +       rval = regulator_enable(dw9714_dev->vcc);
+> > +       if (rval < 0) {
+> > +               dev_err(&client->dev, "failed to enable vcc: %d\n",
+> > rval);
+> > +               return rval;
+> > +       }
+> > +
+> >         v4l2_i2c_subdev_init(&dw9714_dev->sd, client, &dw9714_ops);
+> >         dw9714_dev->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
+> >                                 V4L2_SUBDEV_FL_HAS_EVENTS;
+> > @@ -200,6 +212,9 @@ static int __maybe_unused
+> > dw9714_vcm_suspend(struct device *dev)
+> >         struct dw9714_device *dw9714_dev = sd_to_dw9714_vcm(sd);
+> >         int ret, val;
+> >  
+> > +       if (pm_runtime_suspended(&client->dev))
+> > +               return 0;
+> > +
+> >         for (val = dw9714_dev->current_val & ~(DW9714_CTRL_STEPS -
+> > 1);
+> >              val >= 0; val -= DW9714_CTRL_STEPS) {
+> >                 ret = dw9714_i2c_write(client,
+> > @@ -208,7 +223,12 @@ static int __maybe_unused
+> > dw9714_vcm_suspend(struct device *dev)
+> >                         dev_err_once(dev, "%s I2C failure: %d",
+> > __func__, ret);
+> >                 usleep_range(DW9714_CTRL_DELAY_US,
+> > DW9714_CTRL_DELAY_US + 10);
+> >         }
+> > -       return 0;
+> > +
+> > +       ret = regulator_disable(dw9714_dev->vcc);
+> > +       if (ret)
+> > +               dev_err(dev, "Failed to disable vcc: %d\n", ret);
+> > +
+> > +       return ret;
+> >  }
+> >  
+> >  /*
+> > @@ -224,6 +244,16 @@ static int  __maybe_unused
+> > dw9714_vcm_resume(struct device *dev)
+> >         struct dw9714_device *dw9714_dev = sd_to_dw9714_vcm(sd);
+> >         int ret, val;
+> >  
+> > +       if (pm_runtime_suspended(&client->dev))
+> > +               return 0;
+> > +
+> > +       ret = regulator_enable(dw9714_dev->vcc);
+> > +       if (ret) {
+> > +               dev_err(dev, "Failed to enable vcc: %d\n", ret);
+> > +               return ret;
+> > +       }
+> > +       usleep_range(1000, 2000);
+> > +
+> >         for (val = dw9714_dev->current_val % DW9714_CTRL_STEPS;
+> >              val < dw9714_dev->current_val + DW9714_CTRL_STEPS - 1;
+> >              val += DW9714_CTRL_STEPS) {
+> 
+> hi Sakari and all interested,
+> 
+> any objection to this addition? I run it for a long time now.
+> 
+> thank you,
+> 
+>                               martin
+> 
+> 
 
---vtmtr3soi3npiqhl
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+hi all, patchwork marked this as "changes requested":
+https://patchwork.linuxtv.org/project/linux-media/patch/20211129120754.1766570-1-martin.kepplinger@puri.sm/
 
-On Wed, Jan 19, 2022 at 08:51:29PM +0200, Andy Shevchenko wrote:
-> On Sat, Jan 15, 2022 at 04:45:39PM +0100, Uwe Kleine-K=F6nig wrote:
-> > On Fri, Jan 14, 2022 at 03:04:38PM +0200, Andy Shevchenko wrote:
-> > > On Thu, Jan 13, 2022 at 08:43:58PM +0100, Uwe Kleine-K=F6nig wrote:
-> > > > > It'd certainly be good to name anything that doesn't correspond t=
-o one
-> > > > > of the existing semantics for the API (!) something different rat=
-her
-> > > > > than adding yet another potentially overloaded meaning.
-> > > >=20
-> > > > It seems we're (at least) three who agree about this. Here is a pat=
-ch
-> > > > fixing the name.
-> > >=20
-> > > And similar number of people are on the other side.
-> >=20
-> > If someone already opposed to the renaming (and not only the name) I
-> > must have missed that.
-> >=20
-> > So you think it's a good idea to keep the name
-> > platform_get_irq_optional() despite the "not found" value returned by it
-> > isn't usable as if it were a normal irq number?
->=20
-> I meant that on the other side people who are in favour of Sergey's patch.
-> Since that I commented already that I opposed the renaming being a standa=
-lone
-> change.
->=20
-> Do you agree that we have several issues with platform_get_irq*() APIs?
->=20
-> 1. The unfortunate naming
+I'm not aware of changes you wish to this. What do you think?
 
-unfortunate naming for the currently implemented semantic, yes.
+thank you,
 
-> 2. The vIRQ0 handling: a) WARN() followed by b) returned value 0
+                           martin
 
-I'm happy with the vIRQ0 handling. Today platform_get_irq() and it's
-silent variant returns either a valid and usuable irq number or a
-negative error value. That's totally fine.
 
-> 3. The specific cookie for "IRQ not found, while no error happened" case
-
-Not sure what you mean here. I have no problem that a situation I can
-cope with is called an error for the query function. I just do error
-handling and continue happily. So the part "while no error happened" is
-irrelevant to me.
-
-Additionally I see the problems:
-
-4. The semantic as implemented in Sergey's patch isn't better than the
-current one. platform_get_irq*() is still considerably different from
-(clk|gpiod)_get* because the not-found value for the _optional variant
-isn't usuable for the irq case. For clk and gpio I get rid of a whole if
-branch, for irq I only change the if-condition. (And if that change is
-considered good or bad seems to be subjective.)
-
-For the idea to add a warning to platform_get_irq_optional for all but
--ENXIO (and -EPROBE_DEFER), I see the problem:
-
-5. platform_get_irq*() issuing an error message is only correct most of
-the time and given proper error handling in the caller (which might be
-able to handle not only -ENXIO but maybe also -EINVAL[1]) the error message
-is irritating. Today platform_get_irq() emits an error message for all
-but -EPROBE_DEFER. As soon as we find a driver that handles -EINVAL we
-need a function platform_get_irq_variant1 to be silent for -EINVAL,
--EPROBE_DEFER and -ENXIO (or platform_get_irq_variant2 that is only
-silent for -EINVAL and -EPROBE_DEFER?)
-
-IMHO a query function should always be silent and let the caller do the
-error handling. And if it's only because
-
-	mydev: IRQ index 0 not found
-
-is worse than
-
-	mydev: neither TX irq not a muxed RX/TX irq found
-
-=2E Also "index 0" is irritating for devices that are expected to have
-only a single irq (i.e. the majority of all devices).
-
-Yes, I admit, we can safe some code by pushing the error message in a
-query function. But that doesn't only have advantages.
-
-Best regards
-Uwe
-
-[1] Looking through the source I wonder: What are the errors that can happen
-    in platform_get_irq*()? (calling everything but a valid irq number
-    an error) Looking at many callers, they only seem to expect "not
-    found" and some "probe defer" (even platform_get_irq() interprets
-    everything but -EPROBE_DEFER as "IRQ index %u not found\n".)
-    IMHO before we should consider to introduce a platform_get_irq*()
-    variant with improved semantics, some cleanup in the internals of
-    the irq lookup are necessary.
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---vtmtr3soi3npiqhl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHpFdoACgkQwfwUeK3K
-7AlpCwf8CIVWD1ztALs4saPfU+hCAXGdHPMYsVb4ZTfj+uT0g5uOPF3Vn08Dfosw
-tyqmKEnwGKIMZpavCJ+pScDwmT2FfANDq+R3xZzWj1hEcEvhjMFWB/IDU+s33/IB
-9pbnCAE8Oa/2PGjM3+FGf5OA6q8vCcuO8XHluolGQqPqvajsCulKZytLIFnnTc9t
-UXm+5HxATeIlvcxF5NHMcNFRt2ADkTGVGj0zrEOxinsiT3edhaWLDR5/vSnbXySV
-NKWnnkWO/T3Huohcr85IS2dVfqbqxuMmfU6RyQKdMat7ZUzOqtffi2I6KdXRRjog
-OHR+PLT7KSOdf6ODGMs+9P8AMEotwg==
-=El6G
------END PGP SIGNATURE-----
-
---vtmtr3soi3npiqhl--
