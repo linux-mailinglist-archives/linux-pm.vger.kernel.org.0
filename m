@@ -2,161 +2,257 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 608D4494D2E
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Jan 2022 12:42:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CA49495082
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Jan 2022 15:50:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231704AbiATLkv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Jan 2022 06:40:51 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:58334 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231744AbiATLkr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Jan 2022 06:40:47 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S242709AbiATOuT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Jan 2022 09:50:19 -0500
+Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:36452
+        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236017AbiATOuS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Jan 2022 09:50:18 -0500
+Received: from localhost.localdomain (1-171-82-176.dynamic-ip.hinet.net [1.171.82.176])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9232CCE2062
-        for <linux-pm@vger.kernel.org>; Thu, 20 Jan 2022 11:40:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC072C340E9
-        for <linux-pm@vger.kernel.org>; Thu, 20 Jan 2022 11:40:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642678843;
-        bh=6LnIdV6RHDt7o1vEGoXG3R/w1FEA0NaGl+qjDdBHh6A=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nyCfojrhHas7JIC/VhRk8yNQls+07YqG83l+vY87JiuDfY+2xgjf2/IZyjzmQ3mq9
-         rZwHMVDmt1oXH65iswpk74VRHRpBR04plymjoOxh2bYN1rPxVN93oV797VTf0h13Nf
-         Z5rYloMvl4/Mwc0OGBAaggrm+er7G0k5GXugAYN5yo6J4lFoZkRHr4gsQ7slXfm9o1
-         W20hWwyWv1pwBl5b51eMHZPOKOELdIdag8Dq6+kFP+ypug/iVpp3JVqYG6v4mrMrXG
-         tdYAb35NrlAkXKRlgAJWAmFxxvdls2h4omxsN00m3HwnrcMeyaaG8+/4keRVHGd82p
-         fR/eKidaJlzDQ==
-Received: by mail-lf1-f47.google.com with SMTP id m1so20562409lfq.4
-        for <linux-pm@vger.kernel.org>; Thu, 20 Jan 2022 03:40:43 -0800 (PST)
-X-Gm-Message-State: AOAM532gm/BgHI5zZvOpYEZJFGvg8xN4wB1aD1+OUPHRohKwEDO8S60e
-        oC3ZPg4u4mcSRkH/Y/FTMtlgcVHY0KAvSH64HJZZMA==
-X-Google-Smtp-Source: ABdhPJyqvGdAQDASGi3+qeicpoixSod0DA9RvTNoKMV7lu0kBXWGFZ2SPaJSvDutVU0pqtnFC+GVeFiuVBMM+3BFhjY=
-X-Received: by 2002:a2e:8799:: with SMTP id n25mr5195536lji.255.1642678841839;
- Thu, 20 Jan 2022 03:40:41 -0800 (PST)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 014D33F10B;
+        Thu, 20 Jan 2022 14:50:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642690216;
+        bh=v+jLBr5FFoCZA1NsbC3yHqoG/FwpyzWTYGM8JwT+N9Y=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=hFCyA4dbdAeZnzD+15nQw1Mr77j6dTzevQVwQ8sLbZFaVk98IypcsMV2yXVABSYp3
+         xKkePViB6RnAfiwuz5V6EUWePtYIaS8OYPohL5ye7YJ1DYwLQigqPZs4gSyj0+f24Z
+         qeBdR/MC7i2LI0cSF9QlQdCmy8IiQ+bgas4V2z1gLT7qfJAoikymwjbU6JioA+77ME
+         KbP0gMqZm+M2xgJvaT5TGw/0w7cq/XnSdxOhuFEO2B6ER1z8+ctHoOKmWlDMva3jwE
+         BjjjWBYAal7K1TdES7T8H9SM3mFb8Rm4c19gU5gCqlEOMM9G+A6Bq6nYgqG+olNr47
+         Y+vTY4FlihWlw==
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     arnd@arndb.de, gregkh@linuxfoundation.org, ulf.hansson@linaro.org
+Cc:     linux-pm@vger.kernel.org,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Ricky WU <ricky_wu@realtek.com>,
+        Thomas Hebb <tommyhebb@gmail.com>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/4] mmc: rtsx: Use pm_runtime_{get,put}() to handle runtime PM
+Date:   Thu, 20 Jan 2022 22:50:02 +0800
+Message-Id: <20220120145006.1682014-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-References: <20220114031730.25621-1-benl@squareup.com>
-In-Reply-To: <20220114031730.25621-1-benl@squareup.com>
-From:   Amit Kucheria <amitk@kernel.org>
-Date:   Thu, 20 Jan 2022 17:10:30 +0530
-X-Gmail-Original-Message-ID: <CAHLCerNYXxrW=K6hQ38mXd+3V-u=5_NFXKBoaOx+yUaYW5Zu7A@mail.gmail.com>
-Message-ID: <CAHLCerNYXxrW=K6hQ38mXd+3V-u=5_NFXKBoaOx+yUaYW5Zu7A@mail.gmail.com>
-Subject: Re: [PATCH v2] drivers: thermal: tsens: respect thermal_device_mode
- in threshold irq reporting
-To:     Benjamin Li <benl@squareup.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 8:47 AM Benjamin Li <benl@squareup.com> wrote:
->
-> 'echo disabled > .../thermal_zoneX/mode' will disable the thermal core's
-> polling mechanism to check for threshold trips. This is used sometimes to
-> run performance test cases.
->
-> However, tsens supports an interrupt mechanism to receive notification of
-> trips, implemented in commit 634e11d5b450 ("drivers: thermal: tsens: Add
-> interrupt support").
->
-> Currently the thermal zone mode that's set by userspace is not checked
-> before propagating threshold trip events from IRQs. Let's fix this to
-> restore the abilty to disable thermal throttling at runtime.
->
-> ====================
->
-> Tested on MSM8939 running 5.16.0. This platform has 8 cores; the first
-> four thermal zones control cpu0-3 and the last zone is for the other four
-> CPUs together.
->
->   for f in /sys/class/thermal/thermal_zone*; do
->     echo "disabled" > $f/mode
->     echo $f | paste - $f/type $f/mode
->   done
->
-> /sys/class/thermal/thermal_zone0        cpu0-thermal    disabled
-> /sys/class/thermal/thermal_zone1        cpu1-thermal    disabled
-> /sys/class/thermal/thermal_zone2        cpu2-thermal    disabled
-> /sys/class/thermal/thermal_zone3        cpu3-thermal    disabled
-> /sys/class/thermal/thermal_zone4        cpu4567-thermal disabled
->
-> With mitigation thresholds at 75 degC and load running, we can now cruise
-> past temp=75000 without CPU throttling kicking in.
->
->   watch -n 1 "grep '' /sys/class/thermal/*/temp
->       /sys/class/thermal/*/cur_state
->       /sys/bus/cpu/devices/cpu*/cpufreq/cpuinfo_cur_freq"
->
-> /sys/class/thermal/thermal_zone0/temp:82000
-> /sys/class/thermal/thermal_zone1/temp:84000
-> /sys/class/thermal/thermal_zone2/temp:87000
-> /sys/class/thermal/thermal_zone3/temp:84000
-> /sys/class/thermal/thermal_zone4/temp:84000
-> /sys/class/thermal/cooling_device0/cur_state:0
-> /sys/class/thermal/cooling_device1/cur_state:0
-> /sys/bus/cpu/devices/cpu0/cpufreq/cpuinfo_cur_freq:1113600
-> /sys/bus/cpu/devices/cpu1/cpufreq/cpuinfo_cur_freq:1113600
-> /sys/bus/cpu/devices/cpu2/cpufreq/cpuinfo_cur_freq:1113600
-> /sys/bus/cpu/devices/cpu3/cpufreq/cpuinfo_cur_freq:1113600
-> /sys/bus/cpu/devices/cpu4/cpufreq/cpuinfo_cur_freq:800000
-> /sys/bus/cpu/devices/cpu5/cpufreq/cpuinfo_cur_freq:800000
-> /sys/bus/cpu/devices/cpu6/cpufreq/cpuinfo_cur_freq:800000
-> /sys/bus/cpu/devices/cpu7/cpufreq/cpuinfo_cur_freq:800000
->
-> Reported-by: Zac Crosby <zac@squareup.com>
-> Signed-off-by: Benjamin Li <benl@squareup.com>
-> ---
-> Changes in v2:
-> - Reordered sentences in first part of commit message to make sense.
->
->  drivers/thermal/qcom/tsens.c | 15 +++++++++------
->  1 file changed, 9 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-> index 99a8d9f3e03c..0b6299512e7c 100644
-> --- a/drivers/thermal/qcom/tsens.c
-> +++ b/drivers/thermal/qcom/tsens.c
-> @@ -509,13 +509,16 @@ static irqreturn_t tsens_irq_thread(int irq, void *data)
->                 spin_unlock_irqrestore(&priv->ul_lock, flags);
->
->                 if (trigger) {
-> -                       dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC)\n",
-> -                               hw_id, __func__, temp);
-> -                       thermal_zone_device_update(s->tzd,
-> -                                                  THERMAL_EVENT_UNSPECIFIED);
-> +                       if (s->tzd->mode == THERMAL_DEVICE_ENABLED) {
-> +                               dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC)\n",
-> +                                       hw_id, __func__, temp);
-> +                               thermal_zone_device_update(s->tzd, THERMAL_EVENT_UNSPECIFIED);
-> +                       } else {
-> +                               dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC) skipped as zone disabled\n",
+Commit 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM") doesn't
+use pm_runtime_{get,put}() helpers when it should, so the RPM refcount
+keeps at zero, hence its parent driver, rtsx_pci, has to do lots of
+weird tricks to keep it from runtime suspending.
 
-Hmm. I don't like the fact that these messages won't be visible to
-users in dmesg unless they're debugging. This change puts the SoC in a
-potentially unsafe state. Perhaps we should print a ratelimited
-message in the logs that we're operating outside safety limits?
+So use those helpers at right places to properly manage runtime PM.
 
-> +                                       hw_id, __func__, temp);
-> +                       }
->                 } else {
-> -                       dev_dbg(priv->dev, "[%u] %s: no violation:  %d\n",
-> -                               hw_id, __func__, temp);
-> +                       dev_dbg(priv->dev, "[%u] %s: no violation:  %d\n", hw_id, __func__, temp);
+Fixes: 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM")
+Cc: Ricky WU <ricky_wu@realtek.com>
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+---
+ drivers/mmc/host/rtsx_pci_sdmmc.c | 44 +++++++++++++++++++++++--------
+ 1 file changed, 33 insertions(+), 11 deletions(-)
 
-Get rid of this hunk, it is unrelated to the above change.
+diff --git a/drivers/mmc/host/rtsx_pci_sdmmc.c b/drivers/mmc/host/rtsx_pci_sdmmc.c
+index 58cfaffa3c2d8..2656dc840a3a5 100644
+--- a/drivers/mmc/host/rtsx_pci_sdmmc.c
++++ b/drivers/mmc/host/rtsx_pci_sdmmc.c
+@@ -806,6 +806,7 @@ static void sd_request(struct work_struct *work)
+ 	struct mmc_request *mrq = host->mrq;
+ 	struct mmc_command *cmd = mrq->cmd;
+ 	struct mmc_data *data = mrq->data;
++	struct device *dev = &host->pdev->dev;
+ 
+ 	unsigned int data_size = 0;
+ 	int err;
+@@ -822,6 +823,7 @@ static void sd_request(struct work_struct *work)
+ 	}
+ 
+ 	mutex_lock(&pcr->pcr_mutex);
++	pm_runtime_get_sync(dev);
+ 
+ 	rtsx_pci_start_run(pcr);
+ 
+@@ -858,6 +860,8 @@ static void sd_request(struct work_struct *work)
+ 			data->bytes_xfered = data->blocks * data->blksz;
+ 	}
+ 
++	pm_runtime_mark_last_busy(dev);
++	pm_runtime_put_autosuspend(dev);
+ 	mutex_unlock(&pcr->pcr_mutex);
+ 
+ finish:
+@@ -1080,6 +1084,7 @@ static void sdmmc_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
+ {
+ 	struct realtek_pci_sdmmc *host = mmc_priv(mmc);
+ 	struct rtsx_pcr *pcr = host->pcr;
++	struct device *dev = &host->pdev->dev;
+ 
+ 	if (host->eject)
+ 		return;
+@@ -1088,6 +1093,7 @@ static void sdmmc_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
+ 		return;
+ 
+ 	mutex_lock(&pcr->pcr_mutex);
++	pm_runtime_get_sync(dev);
+ 
+ 	rtsx_pci_start_run(pcr);
+ 
+@@ -1121,6 +1127,8 @@ static void sdmmc_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
+ 	rtsx_pci_switch_clock(pcr, ios->clock, host->ssc_depth,
+ 			host->initial_mode, host->double_clk, host->vpclk);
+ 
++	pm_runtime_mark_last_busy(dev);
++	pm_runtime_put_autosuspend(dev);
+ 	mutex_unlock(&pcr->pcr_mutex);
+ }
+ 
+@@ -1128,6 +1136,7 @@ static int sdmmc_get_ro(struct mmc_host *mmc)
+ {
+ 	struct realtek_pci_sdmmc *host = mmc_priv(mmc);
+ 	struct rtsx_pcr *pcr = host->pcr;
++	struct device *dev = &host->pdev->dev;
+ 	int ro = 0;
+ 	u32 val;
+ 
+@@ -1135,6 +1144,7 @@ static int sdmmc_get_ro(struct mmc_host *mmc)
+ 		return -ENOMEDIUM;
+ 
+ 	mutex_lock(&pcr->pcr_mutex);
++	pm_runtime_get_sync(dev);
+ 
+ 	rtsx_pci_start_run(pcr);
+ 
+@@ -1144,6 +1154,8 @@ static int sdmmc_get_ro(struct mmc_host *mmc)
+ 	if (val & SD_WRITE_PROTECT)
+ 		ro = 1;
+ 
++	pm_runtime_mark_last_busy(dev);
++	pm_runtime_put_autosuspend(dev);
+ 	mutex_unlock(&pcr->pcr_mutex);
+ 
+ 	return ro;
+@@ -1153,6 +1165,7 @@ static int sdmmc_get_cd(struct mmc_host *mmc)
+ {
+ 	struct realtek_pci_sdmmc *host = mmc_priv(mmc);
+ 	struct rtsx_pcr *pcr = host->pcr;
++	struct device *dev = &host->pdev->dev;
+ 	int cd = 0;
+ 	u32 val;
+ 
+@@ -1160,6 +1173,7 @@ static int sdmmc_get_cd(struct mmc_host *mmc)
+ 		return cd;
+ 
+ 	mutex_lock(&pcr->pcr_mutex);
++	pm_runtime_get_sync(dev);
+ 
+ 	rtsx_pci_start_run(pcr);
+ 
+@@ -1169,6 +1183,8 @@ static int sdmmc_get_cd(struct mmc_host *mmc)
+ 	if (val & SD_EXIST)
+ 		cd = 1;
+ 
++	pm_runtime_mark_last_busy(dev);
++	pm_runtime_put_autosuspend(dev);
+ 	mutex_unlock(&pcr->pcr_mutex);
+ 
+ 	return cd;
+@@ -1251,6 +1267,7 @@ static int sdmmc_switch_voltage(struct mmc_host *mmc, struct mmc_ios *ios)
+ {
+ 	struct realtek_pci_sdmmc *host = mmc_priv(mmc);
+ 	struct rtsx_pcr *pcr = host->pcr;
++	struct device *dev = &host->pdev->dev;
+ 	int err = 0;
+ 	u8 voltage;
+ 
+@@ -1265,6 +1282,7 @@ static int sdmmc_switch_voltage(struct mmc_host *mmc, struct mmc_ios *ios)
+ 		return err;
+ 
+ 	mutex_lock(&pcr->pcr_mutex);
++	pm_runtime_get_sync(dev);
+ 
+ 	rtsx_pci_start_run(pcr);
+ 
+@@ -1294,6 +1312,8 @@ static int sdmmc_switch_voltage(struct mmc_host *mmc, struct mmc_ios *ios)
+ 	err = rtsx_pci_write_register(pcr, SD_BUS_STAT,
+ 			SD_CLK_TOGGLE_EN | SD_CLK_FORCE_STOP, 0);
+ 
++	pm_runtime_mark_last_busy(dev);
++	pm_runtime_put_autosuspend(dev);
+ 	mutex_unlock(&pcr->pcr_mutex);
+ 
+ 	return err;
+@@ -1303,6 +1323,7 @@ static int sdmmc_execute_tuning(struct mmc_host *mmc, u32 opcode)
+ {
+ 	struct realtek_pci_sdmmc *host = mmc_priv(mmc);
+ 	struct rtsx_pcr *pcr = host->pcr;
++	struct device *dev = &host->pdev->dev;
+ 	int err = 0;
+ 
+ 	if (host->eject)
+@@ -1313,6 +1334,7 @@ static int sdmmc_execute_tuning(struct mmc_host *mmc, u32 opcode)
+ 		return err;
+ 
+ 	mutex_lock(&pcr->pcr_mutex);
++	pm_runtime_get_sync(dev);
+ 
+ 	rtsx_pci_start_run(pcr);
+ 
+@@ -1345,6 +1367,8 @@ static int sdmmc_execute_tuning(struct mmc_host *mmc, u32 opcode)
+ 		err = sd_change_phase(host, DDR50_RX_PHASE(pcr), true);
+ 
+ out:
++	pm_runtime_mark_last_busy(dev);
++	pm_runtime_put_autosuspend(dev);
+ 	mutex_unlock(&pcr->pcr_mutex);
+ 
+ 	return err;
+@@ -1495,12 +1519,12 @@ static int rtsx_pci_sdmmc_drv_probe(struct platform_device *pdev)
+ 
+ 	realtek_init_host(host);
+ 
+-	if (pcr->rtd3_en) {
+-		pm_runtime_set_autosuspend_delay(&pdev->dev, 5000);
+-		pm_runtime_use_autosuspend(&pdev->dev);
+-		pm_runtime_enable(&pdev->dev);
+-	}
+-
++	pm_runtime_no_callbacks(&pdev->dev);
++	pm_runtime_set_active(&pdev->dev);
++	pm_runtime_enable(&pdev->dev);
++	pm_runtime_set_autosuspend_delay(&pdev->dev, 5000);
++	pm_runtime_mark_last_busy(&pdev->dev);
++	pm_runtime_use_autosuspend(&pdev->dev);
+ 
+ 	mmc_add_host(mmc);
+ 
+@@ -1521,11 +1545,6 @@ static int rtsx_pci_sdmmc_drv_remove(struct platform_device *pdev)
+ 	pcr->slots[RTSX_SD_CARD].card_event = NULL;
+ 	mmc = host->mmc;
+ 
+-	if (pcr->rtd3_en) {
+-		pm_runtime_dont_use_autosuspend(&pdev->dev);
+-		pm_runtime_disable(&pdev->dev);
+-	}
+-
+ 	cancel_work_sync(&host->work);
+ 
+ 	mutex_lock(&host->host_mutex);
+@@ -1548,6 +1567,9 @@ static int rtsx_pci_sdmmc_drv_remove(struct platform_device *pdev)
+ 
+ 	flush_work(&host->work);
+ 
++	pm_runtime_dont_use_autosuspend(&pdev->dev);
++	pm_runtime_disable(&pdev->dev);
++
+ 	mmc_free_host(mmc);
+ 
+ 	dev_dbg(&(pdev->dev),
+-- 
+2.33.1
 
->                 }
->
->                 if (tsens_version(priv) < VER_0_1) {
-> --
-> 2.17.1
->
