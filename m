@@ -2,179 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD0949422C
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jan 2022 21:57:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADB134944B1
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Jan 2022 01:33:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245107AbiASU4j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Jan 2022 15:56:39 -0500
-Received: from mga17.intel.com ([192.55.52.151]:54135 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229541AbiASU4h (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 19 Jan 2022 15:56:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642625797; x=1674161797;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Zn3K2EdVeDLJCMJ0xbcykPqu/tTiNlke9kM/JdHhcyA=;
-  b=UKP5BPWQ+uw2sBH+BM1UqeeTghbHvgaSjb/HR8XqV2m/L0x+YVEmxOGG
-   flhgx042uwtvDmyFlbH1w3PHokLzPGv6z+k+i45vi98jaPXt+vr175APx
-   AbZt1GcjiOufYlT52vxr4qzItwd0SVdtcN8WG3VZf89UFYd8sgki/FTZ0
-   nAJVaJF3b9itTPyNWKR/tIDClRlUTOZwB+qhiCz2ulEGjz2iqqn3ekqLu
-   wBY0+mwl9tNWjORFuFbtJE0r88oQiNJ8px6dZJvxRVbsCoXYnnCWjk+qF
-   bKdDmFFe8Dlc4vZoy0A9phMp1kTFErGo9dZCebUQjx5RAQ/pMMDiEL2gZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="225862988"
-X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
-   d="scan'208";a="225862988"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 12:56:37 -0800
-X-IronPort-AV: E=Sophos;i="5.88,300,1635231600"; 
-   d="scan'208";a="615845335"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2022 12:56:21 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nAHz3-00CGxM-Ht;
-        Wed, 19 Jan 2022 22:55:09 +0200
-Date:   Wed, 19 Jan 2022 22:55:09 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Andrew Lunn <andrew@lunn.ch>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        KVM list <kvm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-phy@lists.infradead.org, netdev@vger.kernel.org,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
+        id S1344987AbiATAdY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Jan 2022 19:33:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41450 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344946AbiATAdY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jan 2022 19:33:24 -0500
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D751EC06173E
+        for <linux-pm@vger.kernel.org>; Wed, 19 Jan 2022 16:33:23 -0800 (PST)
+Received: by mail-ot1-x334.google.com with SMTP id z25-20020a0568301db900b005946f536d85so5513554oti.9
+        for <linux-pm@vger.kernel.org>; Wed, 19 Jan 2022 16:33:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=XI0YKgrX96jrRqJX0xTirhQDqynoAmpoLgDxtstEk0I=;
+        b=z8oZ5Kpgc5dBpj8kOuTY4Eudhob0nTtmDUBa3JtW4JrKkYpg0NA7DaBeAVjXDiP4+O
+         JIjxKWffcXfOCVeOhm/uvHDXqKiVxM1Cqzl0+XP9n7RZs4jP6Apuz7UCP0a6lOg0zq3q
+         6cgO7Kzu1F1c+OpVkpqzP6hYWhST5UHtINBJw20WsOYRZeigxzX5LTtHZjo0HFAGADI5
+         lyoxTSltXu79nlOgrAp9I0zSwVU1G+AFd3yVi74O7lDpzJgx/Oz/xcxabXqz4HulrIVS
+         w+AAyt41Vr8Yb04M+FQd3BHlBG1kVtdzIonPqpo+MH9/w3GY53qchM+lQM5qnqF+m4zS
+         rYcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XI0YKgrX96jrRqJX0xTirhQDqynoAmpoLgDxtstEk0I=;
+        b=NfhZkEfIRbL+pLYT1vAJILsOvlHT4aquOBSZTFY5ydeaCXgb5SaMd349677ISXKgJJ
+         fFnWg3nVCqJqHtUBqzA57fOS/GzCFPlNJAGpAiwvN/md+X9j2LoVtFx04Me28NX3KUw5
+         sdSWPIenKMfSYlY1ws0aREQXP6UYaWDvbiyakIzixMSxzhnwMboFHIs6o0j/YdaG0DLW
+         lr9wS9+F9XtqQLbFAi+VWwkjhnVGB47qoWhaE2/QYI6IkikQkPHTx3kgX9dUuMF2fYNR
+         1zF5Kng2TwFmdUCIgZAC8D9thLiTzarm03GxA/sVoS9Ubk5MNp3h+ObzjSkW33UT2Q3C
+         Ek/w==
+X-Gm-Message-State: AOAM533DjHi4oVT4oi4fjiZc6UtMmV6jQbstRBU2eDco/EUf6Hj8gx0C
+        fIOTj4Zy6uIo3oJzkk4vsK3peA==
+X-Google-Smtp-Source: ABdhPJzeXboRJRatdu05KzVyDKwnnW2vtxjtTUwciHWbIWWVta4xpf8URS13rB7eFo3fSSkTj5X4Lg==
+X-Received: by 2002:a05:6830:3115:: with SMTP id b21mr26749635ots.27.1642638803019;
+        Wed, 19 Jan 2022 16:33:23 -0800 (PST)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id bj19sm886796oib.9.2022.01.19.16.33.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jan 2022 16:33:22 -0800 (PST)
+Date:   Wed, 19 Jan 2022 16:33:57 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Benjamin Li <benl@squareup.com>
+Cc:     Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        platform-driver-x86@vger.kernel.org,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Corey Minyard <minyard@acm.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        John Garry <john.garry@huawei.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        openipmi-developer@lists.sourceforge.net,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        Richard Weinberger <richard@nod.at>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>,
-        linux-mediatek@lists.infradead.org,
-        Brian Norris <computersforpeace@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH] driver core: platform: Rename
- platform_get_irq_optional() to platform_get_irq_silent()
-Message-ID: <Yeh6rdBjEMiavLfh@smile.fi.intel.com>
-References: <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
- <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
- <Yd9L9SZ+g13iyKab@sirena.org.uk>
- <20220113110831.wvwbm75hbfysbn2d@pengutronix.de>
- <YeA7CjOyJFkpuhz/@sirena.org.uk>
- <20220113194358.xnnbhsoyetihterb@pengutronix.de>
- <YeF05vBOzkN+xYCq@smile.fi.intel.com>
- <20220115154539.j3tsz5ioqexq2yuu@pengutronix.de>
- <YehdsUPiOTwgZywq@smile.fi.intel.com>
- <b7edb713-dd91-14e7-34ff-d8fb559e8e92@omp.ru>
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drivers: thermal: tsens: respect thermal_device_mode in
+ threshold irq reporting
+Message-ID: <Yeit9QQhVsnDX6TT@ripper>
+References: <20220114031337.24741-1-benl@squareup.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b7edb713-dd91-14e7-34ff-d8fb559e8e92@omp.ru>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20220114031337.24741-1-benl@squareup.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 10:47:06PM +0300, Sergey Shtylyov wrote:
-> On 1/19/22 9:51 PM, Andy Shevchenko wrote:
+On Thu 13 Jan 19:13 PST 2022, Benjamin Li wrote:
 
-> >>>>> It'd certainly be good to name anything that doesn't correspond to one
-> >>>>> of the existing semantics for the API (!) something different rather
-> >>>>> than adding yet another potentially overloaded meaning.
-> >>>>
-> >>>> It seems we're (at least) three who agree about this. Here is a patch
-> >>>> fixing the name.
-> >>>
-> >>> And similar number of people are on the other side.
-> >>
-> >> If someone already opposed to the renaming (and not only the name) I
-> >> must have missed that.
-> >>
-> >> So you think it's a good idea to keep the name
-> >> platform_get_irq_optional() despite the "not found" value returned by it
-> >> isn't usable as if it were a normal irq number?
-> > 
-> > I meant that on the other side people who are in favour of Sergey's patch.
-> > Since that I commented already that I opposed the renaming being a standalone
-> > change.
-> > 
-> > Do you agree that we have several issues with platform_get_irq*() APIs?
-> > 
-> > 1. The unfortunate naming
+> 'echo disabled > .../thermal_zoneX/mode' will disable the thermal core's
+> polling mechanism to check for threshold trips. However, tsens supports
+> an interrupt mechanism to receive notification of trips, implemented in
+> commit 634e11d5b450 ("drivers: thermal: tsens: Add interrupt support").
+> This is used sometimes to run performance test cases.
 > 
->    Mmm, "what's in a name?"... is this the topmost prio issue?
-
-The order is arbitrary.
-
-> > 2. The vIRQ0 handling: a) WARN() followed by b) returned value 0
+> Currently the thermal zone mode that's set by userspace is not checked
+> before propagating threshold trip events from IRQs. Let's fix this to
+> restore the abilty to disable thermal throttling at runtime.
 > 
->    This is the most severe issue, I think...
+> ====================
 > 
-> > 3. The specific cookie for "IRQ not found, while no error happened" case
+> Tested on MSM8939 running 5.16.0. This platform has 8 cores; the first
+> four thermal zones control cpu0-3 and the last zone is for the other four
+> CPUs together.
+> 
+>   for f in /sys/class/thermal/thermal_zone*; do
+>     echo "disabled" > $f/mode
+>     echo $f | paste - $f/type $f/mode
+>   done
+> 
+> /sys/class/thermal/thermal_zone0	cpu0-thermal	disabled
+> /sys/class/thermal/thermal_zone1	cpu1-thermal	disabled
+> /sys/class/thermal/thermal_zone2	cpu2-thermal	disabled
+> /sys/class/thermal/thermal_zone3	cpu3-thermal	disabled
+> /sys/class/thermal/thermal_zone4	cpu4567-thermal	disabled
+> 
+> With mitigation thresholds at 75 degC and load running, we can now cruise
+> past temp=75000 without CPU throttling kicking in.
+> 
+>   watch -n 1 "grep '' /sys/class/thermal/*/temp
+>       /sys/class/thermal/*/cur_state
+>       /sys/bus/cpu/devices/cpu*/cpufreq/cpuinfo_cur_freq"
+> 
+> /sys/class/thermal/thermal_zone0/temp:82000
+> /sys/class/thermal/thermal_zone1/temp:84000
+> /sys/class/thermal/thermal_zone2/temp:87000
+> /sys/class/thermal/thermal_zone3/temp:84000
+> /sys/class/thermal/thermal_zone4/temp:84000
+> /sys/class/thermal/cooling_device0/cur_state:0
+> /sys/class/thermal/cooling_device1/cur_state:0
+> /sys/bus/cpu/devices/cpu0/cpufreq/cpuinfo_cur_freq:1113600
+> /sys/bus/cpu/devices/cpu1/cpufreq/cpuinfo_cur_freq:1113600
+> /sys/bus/cpu/devices/cpu2/cpufreq/cpuinfo_cur_freq:1113600
+> /sys/bus/cpu/devices/cpu3/cpufreq/cpuinfo_cur_freq:1113600
+> /sys/bus/cpu/devices/cpu4/cpufreq/cpuinfo_cur_freq:800000
+> /sys/bus/cpu/devices/cpu5/cpufreq/cpuinfo_cur_freq:800000
+> /sys/bus/cpu/devices/cpu6/cpufreq/cpuinfo_cur_freq:800000
+> /sys/bus/cpu/devices/cpu7/cpufreq/cpuinfo_cur_freq:800000
+> 
+> Reported-by: Zac Crosby <zac@squareup.com>
+> Signed-off-by: Benjamin Li <benl@squareup.com>
 
--- 
-With Best Regards,
-Andy Shevchenko
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
+Regards,
+Bjorn
 
+> ---
+>  drivers/thermal/qcom/tsens.c | 15 +++++++++------
+>  1 file changed, 9 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+> index 99a8d9f3e03c..0b6299512e7c 100644
+> --- a/drivers/thermal/qcom/tsens.c
+> +++ b/drivers/thermal/qcom/tsens.c
+> @@ -509,13 +509,16 @@ static irqreturn_t tsens_irq_thread(int irq, void *data)
+>  		spin_unlock_irqrestore(&priv->ul_lock, flags);
+>  
+>  		if (trigger) {
+> -			dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC)\n",
+> -				hw_id, __func__, temp);
+> -			thermal_zone_device_update(s->tzd,
+> -						   THERMAL_EVENT_UNSPECIFIED);
+> +			if (s->tzd->mode == THERMAL_DEVICE_ENABLED) {
+> +				dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC)\n",
+> +					hw_id, __func__, temp);
+> +				thermal_zone_device_update(s->tzd, THERMAL_EVENT_UNSPECIFIED);
+> +			} else {
+> +				dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC) skipped as zone disabled\n",
+> +					hw_id, __func__, temp);
+> +			}
+>  		} else {
+> -			dev_dbg(priv->dev, "[%u] %s: no violation:  %d\n",
+> -				hw_id, __func__, temp);
+> +			dev_dbg(priv->dev, "[%u] %s: no violation:  %d\n", hw_id, __func__, temp);
+>  		}
+>  
+>  		if (tsens_version(priv) < VER_0_1) {
+> -- 
+> 2.17.1
+> 
