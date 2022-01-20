@@ -2,63 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 322D1494C0E
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Jan 2022 11:50:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CAAD494C59
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Jan 2022 11:59:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbiATKuk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Jan 2022 05:50:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37654 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376411AbiATKtc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Jan 2022 05:49:32 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83783C061746
-        for <linux-pm@vger.kernel.org>; Thu, 20 Jan 2022 02:49:32 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id o80so16523221yba.6
-        for <linux-pm@vger.kernel.org>; Thu, 20 Jan 2022 02:49:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=6Llb3z0/5OIzG6RJ3l9/Z14PDgc6xtj5MthS1YNcYzc=;
-        b=eHf7VM8nwKnMuPlR+rCoLSiO9EmRnsWfVr0RRKXi/fwOIHWiKOODrw6FLkTVvG0tZH
-         2cFw9u4SmT/PpLSFb3jl3RSQKuWR0BbNdrRD1fVGYWkGWyKaoqH5f+1+JlyQ/CSZo+BL
-         XBugH95SB5SMVUoqeYdSZF+fPxV8tk15nu5e4Wra2eMjxV+ojLiTkDfW7ONz3VZMm51b
-         f2pbUx6bDnaYZxRJpGQ/HeLiDUvJLr4P3QynSAoHOWMEzsmfPE9XArOwSAwSg2vgIcGv
-         rq6rc7o4ojdmeOhPWzn2lW03PAKsW8Zq8m4UyEOpi6/ylFOMBrxJZtcB/JHQZ3WR2EQw
-         LaSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=6Llb3z0/5OIzG6RJ3l9/Z14PDgc6xtj5MthS1YNcYzc=;
-        b=6a/Jwft/Nhz+eU7/V8yeRC8JKa/uo75TOoF4xfTBaiczzGgwA9k/xIuqjFCFyC2XS7
-         pTGX2cgHY5qRJ02Bq+QIItx15euwJOCc4+0zqve7WzOc/Ly0Dp2eGHuW+xgbst6JyWTN
-         J2BsdbuwLT0aWRgdFS+INEyOjzlHnoXJJBpT41aq6ys4sbrfZlL/EpY6yyphuehxnQ68
-         8M04e2mYuuOaEtbATV0LJyk4P0PQn8IhtXgBSRE3V5WXSvO2COvHxcGkyicVS3pWibmE
-         vIGJ5CxdluHbEs2FYEopyO+KoXsRtdldG+3cqxIApSg0PYWQc+PGP8NjYpB45aT2rFxH
-         YcbQ==
-X-Gm-Message-State: AOAM532YeX8sN9lMeRm14EVx/IWY9gD7db9Mj50Woq0ZhssPrgTUzku8
-        i4UIC9iIyhUAEUAqEMoX1z4O1Y9LYKezXFzUEaI=
-X-Google-Smtp-Source: ABdhPJzZMsqM9GJcLX58zAOeMA22IYBlCD5R1pK8NsHzK/VPEDbXzqFuCYxQsQb9XYkftW0VZZQfuhIakSL3UKhBXBg=
-X-Received: by 2002:a25:73d6:: with SMTP id o205mr13544613ybc.678.1642675771801;
- Thu, 20 Jan 2022 02:49:31 -0800 (PST)
+        id S230024AbiATK6z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Jan 2022 05:58:55 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:37966 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230014AbiATK6y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Jan 2022 05:58:54 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 78CA96153F
+        for <linux-pm@vger.kernel.org>; Thu, 20 Jan 2022 10:58:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF0B4C340EA
+        for <linux-pm@vger.kernel.org>; Thu, 20 Jan 2022 10:58:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642676333;
+        bh=+jkyxXMoEk5+hwtBJlffpwJ8aa4wwzoRMO9NurvgCWU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=g8YoZlVkh/8k178K0nLX3wCKHTyTeisRKNVJwPT8ky5ra7t+9c50Mymp49zx4hvA8
+         KHG361Br503LtIHzpMLGQLbZMXsdBX693wh56U+kx0ISfnb6z9MQMTqNP0l1UhAd/l
+         bbbMRpdJVPc0t9bvSJchRS4xLi/FEhhXqVcJNG8RunmVPOt5fy6bbjIeopq0p6gT2l
+         djl1pvdmppC8+L1diVcoUFU4czH0IuGEr197CKK0n8anbhUm5I3BeZHaj9h8l6KmH6
+         FC2NJ3rqvC+y3cInKFDY2Kudu9DgHl0Sj6pn+GwwsB0aTg+aC5bjg7tKG4mA7SDR9S
+         NTcYYDYcTdevg==
+Received: by mail-lf1-f46.google.com with SMTP id x11so20145687lfa.2
+        for <linux-pm@vger.kernel.org>; Thu, 20 Jan 2022 02:58:53 -0800 (PST)
+X-Gm-Message-State: AOAM532k7qGNVJANAi/bV3Mo1pa3DNlGq672etiUKQLKI/RM5D+jpzgk
+        0v/rN/mnjRExA2Ud00Ocp9e/ot/X5IWKysvoth7rLg==
+X-Google-Smtp-Source: ABdhPJzCBCnJZ3oIXFukCi1Pa6f/1m/OuPcJzRFUfboLxTs9Ofigs2PhdSiU3aU8RkHR44+n8gnJLTI4QW+JwXe3GT4=
+X-Received: by 2002:a05:6512:986:: with SMTP id w6mr31394398lft.201.1642676331951;
+ Thu, 20 Jan 2022 02:58:51 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:7000:49c7:0:0:0:0 with HTTP; Thu, 20 Jan 2022 02:49:31
- -0800 (PST)
-Reply-To: barristerjohnsonphillip1@gmail.com
-From:   Johnson Phillip <bourahime.saliou0907521@gmail.com>
-Date:   Thu, 20 Jan 2022 10:49:31 +0000
-Message-ID: <CAE7kwUav3OiHqxm+8e9gTNuvjYYY0Q8_9+jvKqJGNsXDskx4qQ@mail.gmail.com>
-Subject: Hallo
-To:     undisclosed-recipients:;
+References: <20220112194118.178026-1-luca@z3ntu.xyz> <20220112194118.178026-7-luca@z3ntu.xyz>
+In-Reply-To: <20220112194118.178026-7-luca@z3ntu.xyz>
+From:   Amit Kucheria <amitk@kernel.org>
+Date:   Thu, 20 Jan 2022 16:28:40 +0530
+X-Gmail-Original-Message-ID: <CAHLCerMEvDyrxkwpd+POUSjspkEfw=-FhPCS1=nX5WOVH4=bcw@mail.gmail.com>
+Message-ID: <CAHLCerMEvDyrxkwpd+POUSjspkEfw=-FhPCS1=nX5WOVH4=bcw@mail.gmail.com>
+Subject: Re: [PATCH 06/15] dt-bindings: thermal: tsens: Add msm8953 compatible
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
+On Thu, Jan 13, 2022 at 1:12 AM Luca Weiss <luca@z3ntu.xyz> wrote:
+>
+> Document the compatible string for tsens found in msm8953.
+>
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> Acked-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 
-I am still waiting for your response.
+Acked-by: Amit Kucheria <amitk@kernel.org>
 
-Regards
-Barr. Johnson Phillip
+> ---
+>  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> index d3b9e9b600a2..b6406bcc683f 100644
+> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> @@ -43,6 +43,7 @@ properties:
+>        - description: v2 of TSENS
+>          items:
+>            - enum:
+> +              - qcom,msm8953-tsens
+>                - qcom,msm8996-tsens
+>                - qcom,msm8998-tsens
+>                - qcom,sc7180-tsens
+> --
+> 2.34.1
+>
