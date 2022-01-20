@@ -2,197 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDC7F494B3E
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Jan 2022 10:58:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEDC0494C0C
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Jan 2022 11:50:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241199AbiATJ6H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Jan 2022 04:58:07 -0500
-Received: from mga01.intel.com ([192.55.52.88]:44111 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236220AbiATJ6E (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 20 Jan 2022 04:58:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642672684; x=1674208684;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=raqwXEEy2MRn+bbuViAO9MIejxyTxPocYNFdzQABk90=;
-  b=do2qPzkPUhDRJ1IHLuu+NPx+FxUwFes/Vwmj1suT5824zwb9tdqmxwP1
-   VBcFFIUmoFzcJ9lHUsQXrHX+9n5yi9vdY+iyidF+s/vDpLtRFMAlFIIg+
-   cLB+TK/biYhWwVd+8A+Z/snLXiL67xH6wnftKcRAplFJMXEFFQkxsPgOZ
-   PwRPEEkl0w3Za/ZHwlmRD3DhbN3ELfa6N23mrJeLhYwo4vdP1JESmRqCD
-   FIXrfnRFS0S+d5xcsDxJWtAd7kLOvKTkkWzY/R/RmTmTXhmBkZOb0zm8l
-   gKKqElQdTaeAhnfyE/LCT6mI47vskXru4f8H4drm3/jINxge5abpqrsIf
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10232"; a="269714204"
-X-IronPort-AV: E=Sophos;i="5.88,302,1635231600"; 
-   d="scan'208";a="269714204"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 01:58:04 -0800
-X-IronPort-AV: E=Sophos;i="5.88,302,1635231600"; 
-   d="scan'208";a="518553733"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 01:57:57 -0800
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with ESMTP id DEEF4203C8;
-        Thu, 20 Jan 2022 11:57:24 +0200 (EET)
-Date:   Thu, 20 Jan 2022 11:57:24 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     broonie@kernel.org, angus@akkea.ca, kernel@puri.sm,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-pm@vger.kernel.org, mchehab@kernel.org
-Subject: Re: [PATCH v3] media: i2c: dw9714: add optional regulator support
-Message-ID: <YekyBKHYqo0vrQ0k@paasikivi.fi.intel.com>
-References: <20211129120754.1766570-1-martin.kepplinger@puri.sm>
- <8f4c0f74523ea615786942fe2a30f83a2d0e8c16.camel@puri.sm>
- <98d12c1acaf77772f51361b079dde7e982a6dafd.camel@puri.sm>
+        id S1376481AbiATKuf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Jan 2022 05:50:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37078 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230419AbiATKqy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Jan 2022 05:46:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8746C061574
+        for <linux-pm@vger.kernel.org>; Thu, 20 Jan 2022 02:46:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3801C61519
+        for <linux-pm@vger.kernel.org>; Thu, 20 Jan 2022 10:46:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 979EEC36AE7
+        for <linux-pm@vger.kernel.org>; Thu, 20 Jan 2022 10:46:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642675612;
+        bh=k+uQQQF7GQAwh9UXBPTIV58+RXFCR7Pd2Rz5cvZglN4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=uPp0e8zapeU+w6K2MlVMA+YysP/dabxvXISTGCXtgxNTb/koXAF/FRfWvFOGAkKKG
+         jKjhqTLxU5wAL0g6IaaFqHgewabyt/8yxAhePV+hKSh3ba8ymnqjIYfRvzcvipVFBJ
+         plsi4FeXJNaGjaKYDFYDCm1qo7n2jBWL5Jlqq8cNLzwoWl9kIwajIpe9ZDuBDAxH2r
+         iuKeoYLX5i0Mo3YMqbNBeMP8feKun39YZPpPG11Yww7J65CW1GNmYsHa9zdlgWse9u
+         RVffbV/a2yRNEioBNtepigXjQHo61Eeq5FtaK6b5zSrLFuc36JRWNw96YBEJlfLUOZ
+         QCu0UbDXYKxOw==
+Received: by mail-lf1-f49.google.com with SMTP id bu18so20019925lfb.5
+        for <linux-pm@vger.kernel.org>; Thu, 20 Jan 2022 02:46:52 -0800 (PST)
+X-Gm-Message-State: AOAM5329sW7vu+TA37Yzjfa4uVfyhJGKzZ2Fd8kEmevNVooHQR4WL6Qd
+        c2ZurQZrPGZCTpUYqlh4lODYq60aYKgxYad3wCMFTw==
+X-Google-Smtp-Source: ABdhPJxHdz1sSl6DZamoq/5yN4GrTCEPRNTOuwn+s5//0QZBhQs+EYn7MaYBJxodo/VLzLE3tdxyE6IZ171L2SljYfY=
+X-Received: by 2002:a2e:904e:: with SMTP id n14mr29339084ljg.28.1642675610651;
+ Thu, 20 Jan 2022 02:46:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <98d12c1acaf77772f51361b079dde7e982a6dafd.camel@puri.sm>
+References: <20220114095529.1754065-1-dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220114095529.1754065-1-dmitry.baryshkov@linaro.org>
+From:   Amit Kucheria <amitk@kernel.org>
+Date:   Thu, 20 Jan 2022 16:16:39 +0530
+X-Gmail-Original-Message-ID: <CAHLCerOJQ_rf+dz8BE9YqK_X7YfJMO9VoEVXedkrkRrn1Ef8+w@mail.gmail.com>
+Message-ID: <CAHLCerOJQ_rf+dz8BE9YqK_X7YfJMO9VoEVXedkrkRrn1Ef8+w@mail.gmail.com>
+Subject: Re: [PATCH] thermal/drivers/tsens: register thermal zones as hwmon sensors
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 09:04:17AM +0100, Martin Kepplinger wrote:
-> Am Dienstag, dem 21.12.2021 um 18:33 +0100 schrieb Martin Kepplinger:
-> > Am Montag, dem 29.11.2021 um 13:07 +0100 schrieb Martin Kepplinger:
-> > > From: Angus Ainslie <angus@akkea.ca>
-> > > 
-> > > Allow the dw9714 to control a regulator and adjust suspend() and
-> > > resume()
-> > > to support both runtime and system pm.
-> > > 
-> > > Signed-off-by: Angus Ainslie <angus@akkea.ca>
-> > > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-> > > ---
-> > > 
-> > > 
-> > > revision history
-> > > ----------------
-> > > v3: (thank you Mark and Sakari)
-> > >  * use regulator_get() instead of regulator_get_optional()
-> > > 
-> > > v2: (thank you Mark)
-> > >  * simplify the regulator_get_optional() error path
-> > >  * fix regulator usage during probe()
-> > > https://lore.kernel.org/linux-media/20211126090107.1243558-1-martin.kepplinger@puri.sm/
-> > > 
-> > > v1:
-> > > https://lore.kernel.org/linux-media/20211125080922.978583-1-martin.kepplinger@puri.sm/
-> > > 
-> > > 
-> > > 
-> > >  drivers/media/i2c/dw9714.c | 32 +++++++++++++++++++++++++++++++-
-> > >  1 file changed, 31 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/media/i2c/dw9714.c
-> > > b/drivers/media/i2c/dw9714.c
-> > > index 3863dfeb8293..81170bbe0e55 100644
-> > > --- a/drivers/media/i2c/dw9714.c
-> > > +++ b/drivers/media/i2c/dw9714.c
-> > > @@ -5,6 +5,7 @@
-> > >  #include <linux/i2c.h>
-> > >  #include <linux/module.h>
-> > >  #include <linux/pm_runtime.h>
-> > > +#include <linux/regulator/consumer.h>
-> > >  #include <media/v4l2-ctrls.h>
-> > >  #include <media/v4l2-device.h>
-> > >  #include <media/v4l2-event.h>
-> > > @@ -36,6 +37,7 @@ struct dw9714_device {
-> > >         struct v4l2_ctrl_handler ctrls_vcm;
-> > >         struct v4l2_subdev sd;
-> > >         u16 current_val;
-> > > +       struct regulator *vcc;
-> > >  };
-> > >  
-> > >  static inline struct dw9714_device *to_dw9714_vcm(struct v4l2_ctrl
-> > > *ctrl)
-> > > @@ -145,6 +147,16 @@ static int dw9714_probe(struct i2c_client
-> > > *client)
-> > >         if (dw9714_dev == NULL)
-> > >                 return -ENOMEM;
-> > >  
-> > > +       dw9714_dev->vcc = devm_regulator_get(&client->dev, "vcc");
-> > > +       if (IS_ERR(dw9714_dev->vcc))
-> > > +               return PTR_ERR(dw9714_dev->vcc);
-> > > +
-> > > +       rval = regulator_enable(dw9714_dev->vcc);
-> > > +       if (rval < 0) {
-> > > +               dev_err(&client->dev, "failed to enable vcc: %d\n",
-> > > rval);
-> > > +               return rval;
-> > > +       }
-> > > +
-> > >         v4l2_i2c_subdev_init(&dw9714_dev->sd, client, &dw9714_ops);
-> > >         dw9714_dev->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
-> > >                                 V4L2_SUBDEV_FL_HAS_EVENTS;
-> > > @@ -200,6 +212,9 @@ static int __maybe_unused
-> > > dw9714_vcm_suspend(struct device *dev)
-> > >         struct dw9714_device *dw9714_dev = sd_to_dw9714_vcm(sd);
-> > >         int ret, val;
-> > >  
-> > > +       if (pm_runtime_suspended(&client->dev))
-> > > +               return 0;
-> > > +
-> > >         for (val = dw9714_dev->current_val & ~(DW9714_CTRL_STEPS -
-> > > 1);
-> > >              val >= 0; val -= DW9714_CTRL_STEPS) {
-> > >                 ret = dw9714_i2c_write(client,
-> > > @@ -208,7 +223,12 @@ static int __maybe_unused
-> > > dw9714_vcm_suspend(struct device *dev)
-> > >                         dev_err_once(dev, "%s I2C failure: %d",
-> > > __func__, ret);
-> > >                 usleep_range(DW9714_CTRL_DELAY_US,
-> > > DW9714_CTRL_DELAY_US + 10);
-> > >         }
-> > > -       return 0;
-> > > +
-> > > +       ret = regulator_disable(dw9714_dev->vcc);
-> > > +       if (ret)
-> > > +               dev_err(dev, "Failed to disable vcc: %d\n", ret);
-> > > +
-> > > +       return ret;
-> > >  }
-> > >  
-> > >  /*
-> > > @@ -224,6 +244,16 @@ static int  __maybe_unused
-> > > dw9714_vcm_resume(struct device *dev)
-> > >         struct dw9714_device *dw9714_dev = sd_to_dw9714_vcm(sd);
-> > >         int ret, val;
-> > >  
-> > > +       if (pm_runtime_suspended(&client->dev))
-> > > +               return 0;
-> > > +
-> > > +       ret = regulator_enable(dw9714_dev->vcc);
-> > > +       if (ret) {
-> > > +               dev_err(dev, "Failed to enable vcc: %d\n", ret);
-> > > +               return ret;
-> > > +       }
-> > > +       usleep_range(1000, 2000);
-> > > +
-> > >         for (val = dw9714_dev->current_val % DW9714_CTRL_STEPS;
-> > >              val < dw9714_dev->current_val + DW9714_CTRL_STEPS - 1;
-> > >              val += DW9714_CTRL_STEPS) {
-> > 
-> > hi Sakari and all interested,
-> > 
-> > any objection to this addition? I run it for a long time now.
-> > 
-> > thank you,
-> > 
-> >                               martin
-> > 
-> > 
-> 
-> hi all, patchwork marked this as "changes requested":
-> https://patchwork.linuxtv.org/project/linux-media/patch/20211129120754.1766570-1-martin.kepplinger@puri.sm/
-> 
-> I'm not aware of changes you wish to this. What do you think?
+On Fri, Jan 14, 2022 at 3:25 PM Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
+>
+> Register thermal zones as hwmon sensors to let userspace read
+> temperatures using standard hwmon interface.
+>
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>  drivers/thermal/qcom/tsens.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+> index 99a8d9f3e03c..c13093e8a642 100644
+> --- a/drivers/thermal/qcom/tsens.c
+> +++ b/drivers/thermal/qcom/tsens.c
+> @@ -19,6 +19,7 @@
+>  #include <linux/slab.h>
+>  #include <linux/thermal.h>
+>  #include "tsens.h"
+> +#include "../thermal_hwmon.h"
 
-Oops! I wrote a reply but forgot to send it. I've just sent that.
+Just a nit, but can you move this above the tsen.h along with other
+system headers?
 
--- 
-Sakari Ailus
+With that, feel free to add
+
+Acked-by: Amit Kucheria <amitk@kernel.org>
+
+>
+>  /**
+>   * struct tsens_irq_data - IRQ status and temperature violations
+> @@ -1060,6 +1061,10 @@ static int tsens_register(struct tsens_priv *priv)
+>                 priv->sensor[i].tzd = tzd;
+>                 if (priv->ops->enable)
+>                         priv->ops->enable(priv, i);
+> +
+> +               if (devm_thermal_add_hwmon_sysfs(tzd))
+> +                       dev_warn(priv->dev,
+> +                                "Failed to add hwmon sysfs attributes\n");
+>         }
+>
+>         /* VER_0 require to set MIN and MAX THRESH
+> --
+> 2.34.1
+>
