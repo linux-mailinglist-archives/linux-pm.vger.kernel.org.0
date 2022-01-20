@@ -2,131 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62B4449547A
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Jan 2022 19:56:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 879934954E4
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Jan 2022 20:32:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346282AbiATS4K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Jan 2022 13:56:10 -0500
-Received: from mail-qk1-f176.google.com ([209.85.222.176]:42691 "EHLO
-        mail-qk1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233413AbiATS4J (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Jan 2022 13:56:09 -0500
-Received: by mail-qk1-f176.google.com with SMTP id c190so7099070qkg.9;
-        Thu, 20 Jan 2022 10:56:09 -0800 (PST)
+        id S1347250AbiATTcH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Jan 2022 14:32:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45634 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347177AbiATTcF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Jan 2022 14:32:05 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E972AC06161C
+        for <linux-pm@vger.kernel.org>; Thu, 20 Jan 2022 11:32:04 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id b1-20020a17090a990100b001b14bd47532so6751194pjp.0
+        for <linux-pm@vger.kernel.org>; Thu, 20 Jan 2022 11:32:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=squareup.com; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=X5WAzIxDTkyxIZIfLA7zVlKDebLcwsAnnd4EsqerCs0=;
+        b=PXAUFdrg39jWP9KQSJnqZHseJEry2XHsAATfJztAz4ao8s+ncqljBdum3TMtcq7hXY
+         h+VpEzNzAdk3hxV/NMEZdUL8kzdX3qWWMzXEfqJuxtCaeH5JZRjDs/7crmLENOMcieu+
+         iPHEVsSHXL2FUsXZfeFIaZdZSlipkW2bKvUQQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xRWBDbesgHdt5Xb1VUf1OEE5dZ9gpONo3xSzy6Jbfyo=;
-        b=GJYgAWncVD8cbLwHxq9wcaTYyj3LvZShvgy3Gc5UBw5myRTmSlKbeDb/Kv+1ACgZHV
-         fjx6XK3CbxwrpxOkrgqCsri7S3036mzMy3MeTb5X60guACm8Tz2lSyFrY/KXseKFvFya
-         DRnOSF81T5Ku2yy6UdwLI3ohWlF+ySIgy2hOx70EZhlUv585IasLn8WSfBi5GngwghcF
-         tNfGnX5pRN/AgrWWCmc2EXJ70QyMnBdzBSXMaSddQcBVCTR+HuwKKeOGtErCx9varerr
-         UtDZNtthE5+fI/unDrUzag7nmeOV0L406AW+3TYOL/AXgPMvh0vONPZOpRSGnZKcdaBI
-         dIFw==
-X-Gm-Message-State: AOAM531Hjab1CeMRNGCpqFO4rbqKHP+4Q2XQp6Z1icJRLc8Ut4LRBF65
-        jJlkQIRI5uC+wHBGvRy4gN3lp6T2knoesTg+Bh8=
-X-Google-Smtp-Source: ABdhPJwQWvstaLQAUXELt6rsGZJHy2Qw5ozIJjOpuU8tyRo8LzlaGVcYVU6AOIodMVKLqKupbn97Wb3lefSo54YHXcc=
-X-Received: by 2002:a37:b702:: with SMTP id h2mr151557qkf.135.1642704968644;
- Thu, 20 Jan 2022 10:56:08 -0800 (PST)
-MIME-Version: 1.0
-References: <20220117081615.45449-1-zhangshaokun@hisilicon.com>
-In-Reply-To: <20220117081615.45449-1-zhangshaokun@hisilicon.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 20 Jan 2022 19:55:57 +0100
-Message-ID: <CAJZ5v0jBVX9H8d8g4v3W7x9MEKQpudr3NP+LGP57FioFvpq7Jg@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: menu: Fix long delay issue when tick stopped
-To:     Shaokun Zhang <zhangshaokun@hisilicon.com>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Guo Yang <guoyang2@huawei.com>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=X5WAzIxDTkyxIZIfLA7zVlKDebLcwsAnnd4EsqerCs0=;
+        b=dIvmxJHCmlJ/YmEISQqMctzBHkXK9FFnMZ/mxYX05ca6M/JTWHMBVpp9j8fRICdlX9
+         hrJ93kPaLr58PsLKfr92SKXXi9NEx7XEGw6NEXyQ+3SgO/TJNBPNk8GJo+iSRdsswkek
+         9G4VTKCKH43Gg5VUkE4Rd2El60yjbiBTpUFpiK+RHUNvdIUEncsHgmKyS/TtzxruphG6
+         sJ3XRjX8fH4f3Foax5NlGePBdDgbLeuKY4/6YWgNQ6YdlHtC88tLyN/aZhQtHrBjvnHI
+         Uqk/b0EKyYQR0l/SENl4Ff21Zd50cF2TJfs9C2pIWxSp79r54r2PMsYIhDaZXzp80tXL
+         rw6g==
+X-Gm-Message-State: AOAM530cTqBBaaUD+WZMPgP4hKhrvMih1a8/ZIevPtMxq+fSihd0OReF
+        nAHTJYdmR5NOFL47cyOLRx9YYw==
+X-Google-Smtp-Source: ABdhPJysjmZstPUoFDXt61dN+xUALOtaMIIfAuYp0kfR47pU8wHWGaxbjf/YzPdWDERzDMsr6+j9ZQ==
+X-Received: by 2002:a17:902:8e82:b0:149:b26a:b9c8 with SMTP id bg2-20020a1709028e8200b00149b26ab9c8mr443501plb.143.1642707124317;
+        Thu, 20 Jan 2022 11:32:04 -0800 (PST)
+Received: from benl-m5lvdt.local ([2600:1700:87d7:48f:b42f:611e:846e:37fd])
+        by smtp.gmail.com with ESMTPSA id rj9sm3254062pjb.49.2022.01.20.11.32.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Jan 2022 11:32:03 -0800 (PST)
+Subject: Re: [PATCH v2] drivers: thermal: tsens: respect thermal_device_mode
+ in threshold irq reporting
+To:     Amit Kucheria <amitk@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220114031730.25621-1-benl@squareup.com>
+ <CAHLCerNYXxrW=K6hQ38mXd+3V-u=5_NFXKBoaOx+yUaYW5Zu7A@mail.gmail.com>
+From:   Benjamin Li <benl@squareup.com>
+Message-ID: <30c38867-78b0-d3a1-ffcf-9612a7befc3a@squareup.com>
+Date:   Thu, 20 Jan 2022 11:32:01 -0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <CAHLCerNYXxrW=K6hQ38mXd+3V-u=5_NFXKBoaOx+yUaYW5Zu7A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 9:16 AM Shaokun Zhang
-<zhangshaokun@hisilicon.com> wrote:
->
-> From: Guo Yang <guoyang2@huawei.com>
->
-> The network delay was always big on arm server tested by qperf,
-> the reason was that the cpu entered deep power down idle state(like intel
-> C6) and can't goto a shallow one.
->
-> The intervals in @get_typical_interval() was much smaller than predicted_ns
-> in @menu_select(), so the predict state is always deepest and cause long
-> time network delay.
->
-> Every time when the cpu got an interrupt from the network, the cpu was
-> waken up and did the IRQ, after that the cpu enter @menu_select()
-> but the @tick_nohz_tick_stopped() was true and get a big data->next_timer_ns,
-> the cpu can never goto a shallow state util the data->next_timer_ns timeout.
-> Below was the print when the issue occurrence.
->
-> [   37.082861] intervals = 36us
-> [   37.082875] intervals = 15us
-> [   37.082888] intervals = 22us
-> [   37.082902] intervals = 35us
-> [   37.082915] intervals = 34us
-> [   37.082929] intervals = 39us
-> [   37.082942] intervals = 39us
-> [   37.082956] intervals = 35us
-> [   37.082970] target_residency_ns = 10000, predicted_ns = 35832710
-> [   37.082998] target_residency_ns = 600000, predicted_ns = 35832710
-> [   37.083037] intervals = 36us
-> [   37.083050] intervals = 15us
-> [   37.083064] intervals = 22us
-> [   37.083077] intervals = 35us
-> [   37.083091] intervals = 34us
-> [   37.083104] intervals = 39us
-> [   37.083118] intervals = 39us
-> [   37.083131] intervals = 35us
-> [   37.083145] target_residency_ns = 10000, predicted_ns = 35657420
-> [   37.083174] target_residency_ns = 600000, predicted_ns = 35657420
-> [   37.083212] intervals = 36us
-> [   37.083225] intervals = 15us
-> [   37.083239] intervals = 22us
-> [   37.083253] intervals = 35us
-> [   37.083266] intervals = 34us
-> [   37.083279] intervals = 39us
-> [   37.083293] intervals = 39us
-> [   37.083307] intervals = 35us
-> [   37.083320] target_residency_ns = 10000, predicted_ns = 35482140
-> [   37.083349] target_residency_ns = 600000, predicted_ns = 35482140
->
-> Add idle tick wakeup judge before change predicted_ns.
->
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Signed-off-by: Guo Yang <guoyang2@huawei.com>
-> Signed-off-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
-> ---
->  drivers/cpuidle/governors/menu.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/cpuidle/governors/menu.c b/drivers/cpuidle/governors/menu.c
-> index c492268..3f03843 100644
-> --- a/drivers/cpuidle/governors/menu.c
-> +++ b/drivers/cpuidle/governors/menu.c
-> @@ -313,7 +313,7 @@ static int menu_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
->                                 get_typical_interval(data, predicted_us)) *
->                                 NSEC_PER_USEC;
->
-> -       if (tick_nohz_tick_stopped()) {
-> +       if (tick_nohz_tick_stopped() && data->tick_wakeup) {
+On 1/19/22 4:33 PM, Bjorn Andersson <bjorn.andersson@linaro.org> wrote:
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-data->tick_wakeup is only true if tick_nohz_idle_got_tick() has
-returned true, but I'm not sure how this can happen after stopping the
-tick.
+Thanks!
 
-IOW, it looks like the change simply makes the condition be always false.
+On 1/20/22 3:40 AM, Amit Kucheria wrote:
+>> +                               dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC)\n",
+>> +                                       hw_id, __func__, temp);
+>> +                               thermal_zone_device_update(s->tzd, THERMAL_EVENT_UNSPECIFIED);
+>> +                       } else {
+>> +                               dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC) skipped as zone disabled\n",
+> 
+> Hmm. I don't like the fact that these messages won't be visible to
+> users in dmesg unless they're debugging. This change puts the SoC in a
+> potentially unsafe state. Perhaps we should print a ratelimited
+> message in the logs that we're operating outside safety limits?
 
->                 /*
->                  * If the tick is already stopped, the cost of possible short
->                  * idle duration misprediction is much higher, because the CPU
-> --
-> 1.8.3.1
->
+That seems fine, I'll change to dev_info_ratelimited and make the message
+a bit scarier.
+
+> 
+>> +                                       hw_id, __func__, temp);
+>> +                       }
+>>                 } else {
+>> -                       dev_dbg(priv->dev, "[%u] %s: no violation:  %d\n",
+>> -                               hw_id, __func__, temp);
+>> +                       dev_dbg(priv->dev, "[%u] %s: no violation:  %d\n", hw_id, __func__, temp);
+> 
+> Get rid of this hunk, it is unrelated to the above change.
+
+Will do.
+
+
+> 
+>>                 }
+>>
+>>                 if (tsens_version(priv) < VER_0_1) {
+>> --
+>> 2.17.1
+>>
