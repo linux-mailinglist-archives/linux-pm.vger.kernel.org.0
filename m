@@ -2,127 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D66F49635A
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jan 2022 17:57:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9116F49655C
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jan 2022 20:01:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381923AbiAUQ5m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Jan 2022 11:57:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49682 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379849AbiAUQ4t (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Jan 2022 11:56:49 -0500
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755DBC061763;
-        Fri, 21 Jan 2022 08:55:34 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id w188so14290830oiw.13;
-        Fri, 21 Jan 2022 08:55:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=4weifrQ7PTCoGujS0yQMKZpi8lSBUanoNpSA0DdSt+Y=;
-        b=OF1LGc0evnBIhNNz84FPs7c8hsoF1r+/WS4fAuOmilgSYZYbT6CrqaPs1OIO/6LIxh
-         aCfomttS8vaYkKjlBhGRnCkK5sNSvB90MhaAykJPVz096eYCnJ7kncwalddJLbZmYVe5
-         MjebfomEvGhfTf2h1MgGTNSTVznz9gV0EWT14LVTZ24nZGykPBIKktLkT/rP1v3y60e1
-         Z6yTLr7ejol0GHlZUCZY41ckrUnhyqaRW1JwMN5GZK5O2k8qBmD5DCBxAozgWYBBu1uF
-         5RSJhj6dkBWt0EeCIIdyLjgqmWG4OcP7EQD/B7dkBMCqcGG2P0YCfdnVn2Gyds3JND8A
-         yv3Q==
+        id S229453AbiAUTBB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Jan 2022 14:01:01 -0500
+Received: from mail-qt1-f177.google.com ([209.85.160.177]:40457 "EHLO
+        mail-qt1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230332AbiAUTBA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Jan 2022 14:01:00 -0500
+Received: by mail-qt1-f177.google.com with SMTP id k2so1908955qtm.7;
+        Fri, 21 Jan 2022 11:01:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=4weifrQ7PTCoGujS0yQMKZpi8lSBUanoNpSA0DdSt+Y=;
-        b=x+li9HbDXQxNSfkR5zgpJikqvGrAYCErkUYGH9I5UfkQQCf1U17sx/roNCXoDm411l
-         BZclYBsCnwRC1gLj6Y8kDxmWfULut50+ZKnVP1JpyMb36dfHJWM8l/sdQON2F9jw6coW
-         sYgEzsKs8JzU71ELMlRk/CFcjK4Z/DDKNZ8BQ79MqAEL+VyjNxRNedhBWMHbcdKYzQbf
-         pgphObiWid10/FsYZViA3CWwGNuMYXD4OMAzeWSfLZPee1S2LBAkvQDYpe+uCbMGrmCa
-         tvAxKp4vZeDflKS0MmJV67b8cSlk40cM5ha1LV/sp0g2Vc7tKNTtJiVpml4kn4cekY3w
-         zWSg==
-X-Gm-Message-State: AOAM5328Le80sLSk3NGsLg4blFjC2dRtgEx06Ps5cugKvls4BHdkbhL9
-        jKm8j0ZRnfnfhvjjHkUGUflbyJnnq9I=
-X-Google-Smtp-Source: ABdhPJwjGzQmdpB6fvzrVNmA0mJLwxz20tqVgliSftrr9PonyQNufPf2QsVgpesq4DcccdBJkKfIgw==
-X-Received: by 2002:a54:4e9a:: with SMTP id c26mr1250134oiy.159.1642784133886;
-        Fri, 21 Jan 2022 08:55:33 -0800 (PST)
-Received: from thinkpad.localdomain ([2804:14d:5cd1:5d03:cf72:4317:3105:f6e5])
-        by smtp.gmail.com with ESMTPSA id y8sm1089271oou.23.2022.01.21.08.55.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jan 2022 08:55:33 -0800 (PST)
-From:   Luiz Sampaio <sampaio.ime@gmail.com>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Luiz Sampaio <sampaio.ime@gmail.com>,
-        linux-pm@vger.kernel.org
-Subject: [PATCH 21/31] power: supply: changing LED_* from enum led_brightness to actual value
-Date:   Fri, 21 Jan 2022 13:54:26 -0300
-Message-Id: <20220121165436.30956-22-sampaio.ime@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220121165436.30956-1-sampaio.ime@gmail.com>
-References: <20220121165436.30956-1-sampaio.ime@gmail.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=qcTWtImjSv/IKa8U1ZDMasjCJ9CJxcj4OoduIWlDcq4=;
+        b=r8Fkw+6VZF5dqczKzD2/VW/6mNTo0d5w+TieMs9hCNS0v/MWtW46bzETpXe8a2WjdN
+         AaZkfKrrlVQpwzA3WRi8KnVJIYVaiAxpxLsAk17sFSKr2OOf5hG1hXRo/a1yfoxqdt5r
+         6Cd3nQS+sn2EYyU81sP/6OEb6jq8wb8a7x6KtihNy1jZPFGZEy1QjmpaMcmkhQKJs1Ta
+         ZPyb5q66/KHO41fCGxZw2dcfnNP/+vRAN/hGPnkenVjAeGIji9tmnByAL1UZ/dHyNda8
+         DhPh+l2iY7lNM3XM0aoMwgoN958YSXsBHMIESQxgh0UWrQDgUadrvAMxN/kxZNEM55e3
+         zJVw==
+X-Gm-Message-State: AOAM530Zlo5ggIbcVipxt/4Xd8Mc/0FDy59yqiS1gaes0ipyOMVRP27c
+        VwIQhHTiCcoJ0tapZeUdaE3jL091Nxbem+Or+Sk=
+X-Google-Smtp-Source: ABdhPJyuCR+SmirJdSiW2AywJ+r5kBb0SMVoSkmDQY+lIDivISAXiLXa1FRk8dJkdQNCEpV3MKOA4Ik2GJyMfvyLmAk=
+X-Received: by 2002:a05:622a:293:: with SMTP id z19mr4389219qtw.302.1642791660062;
+ Fri, 21 Jan 2022 11:01:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 21 Jan 2022 20:00:49 +0100
+Message-ID: <CAJZ5v0hvvYedSn5u-i7sjpoEHU4P65t7i1b2pVn=S1q0nHWgqQ@mail.gmail.com>
+Subject: [Bug] nvme blocks PC10 since v5.15 - bisected
+To:     Keith Busch <kbusch@kernel.org>
+Cc:     Sagi Grimberg <sagi@grimberg.me>, Christoph Hellwig <hch@lst.de>,
+        Len Brown <lenb@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        m.heingbecker@googlemail.com,
+        linux-nvme <linux-nvme@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The enum led_brightness, which contains the declaration of LED_OFF,
-LED_ON, LED_HALF and LED_FULL is obsolete, as the led class now supports
-max_brightness.
----
- drivers/power/supply/power_supply_leds.c | 26 ++++++++++++------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
+Hi Keith,
 
-diff --git a/drivers/power/supply/power_supply_leds.c b/drivers/power/supply/power_supply_leds.c
-index d69880cc3593..16f25179f710 100644
---- a/drivers/power/supply/power_supply_leds.c
-+++ b/drivers/power/supply/power_supply_leds.c
-@@ -31,25 +31,25 @@ static void power_supply_update_bat_leds(struct power_supply *psy)
- 
- 	switch (status.intval) {
- 	case POWER_SUPPLY_STATUS_FULL:
--		led_trigger_event(psy->charging_full_trig, LED_FULL);
--		led_trigger_event(psy->charging_trig, LED_OFF);
--		led_trigger_event(psy->full_trig, LED_FULL);
-+		led_trigger_event(psy->charging_full_trig, 255);
-+		led_trigger_event(psy->charging_trig, 0);
-+		led_trigger_event(psy->full_trig, 255);
- 		led_trigger_event(psy->charging_blink_full_solid_trig,
--			LED_FULL);
-+			255);
- 		break;
- 	case POWER_SUPPLY_STATUS_CHARGING:
--		led_trigger_event(psy->charging_full_trig, LED_FULL);
--		led_trigger_event(psy->charging_trig, LED_FULL);
--		led_trigger_event(psy->full_trig, LED_OFF);
-+		led_trigger_event(psy->charging_full_trig, 255);
-+		led_trigger_event(psy->charging_trig, 255);
-+		led_trigger_event(psy->full_trig, 0);
- 		led_trigger_blink(psy->charging_blink_full_solid_trig,
- 			&delay_on, &delay_off);
- 		break;
- 	default:
--		led_trigger_event(psy->charging_full_trig, LED_OFF);
--		led_trigger_event(psy->charging_trig, LED_OFF);
--		led_trigger_event(psy->full_trig, LED_OFF);
-+		led_trigger_event(psy->charging_full_trig, 0);
-+		led_trigger_event(psy->charging_trig, 0);
-+		led_trigger_event(psy->full_trig, 0);
- 		led_trigger_event(psy->charging_blink_full_solid_trig,
--			LED_OFF);
-+			0);
- 		break;
- 	}
- }
-@@ -120,9 +120,9 @@ static void power_supply_update_gen_leds(struct power_supply *psy)
- 	dev_dbg(&psy->dev, "%s %d\n", __func__, online.intval);
- 
- 	if (online.intval)
--		led_trigger_event(psy->online_trig, LED_FULL);
-+		led_trigger_event(psy->online_trig, 255);
- 	else
--		led_trigger_event(psy->online_trig, LED_OFF);
-+		led_trigger_event(psy->online_trig, 0);
- }
- 
- static int power_supply_create_gen_triggers(struct power_supply *psy)
--- 
-2.34.1
+It is reported that the following commit
 
+commit e5ad96f388b765fe6b52f64f37e910c0ba4f3de7
+Author: Keith Busch <kbusch@kernel.org>
+Date:   Tue Jul 27 09:40:44 2021 -0700
+
+   nvme-pci: disable hmb on idle suspend
+
+   An idle suspend may or may not disable host memory access from devices
+   placed in low power mode. Either way, it should always be safe to
+   disable the host memory buffer prior to entering the low power mode, and
+   this should also always be faster than a full device shutdown.
+
+   Signed-off-by: Keith Busch <kbusch@kernel.org>
+   Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
+   Signed-off-by: Christoph Hellwig <hch@lst.de>
+
+is the source of a serious power regression occurring since 5.15
+(please see https://bugzilla.kernel.org/show_bug.cgi?id=215467).
+
+After this commit, the SoC on the affected system cannot enter
+C-states deeper than PC2 while suspended to idle which basically
+defeats the purpose of suspending.
+
+What may be happening is that nvme_disable_prepare_reset() that is not
+called any more in the ndev->nr_host_mem_descs case somehow causes the
+LTR of the device to change to "no requirement" which allows deeper
+C-states to be entered.
+
+Can you have a look at this, please?
+
+Cheers,
+Rafael
