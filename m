@@ -2,167 +2,340 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1373149552F
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Jan 2022 21:02:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C91644957D5
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jan 2022 02:41:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377536AbiATUCU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Jan 2022 15:02:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52314 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377519AbiATUCU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Jan 2022 15:02:20 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E9DC061574
-        for <linux-pm@vger.kernel.org>; Thu, 20 Jan 2022 12:02:20 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id t18so6066757plg.9
-        for <linux-pm@vger.kernel.org>; Thu, 20 Jan 2022 12:02:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=squareup.com; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=HtkLk42w0fWd+6/z9mh2AZD/Xm33fQuNOQj57mIh9Q4=;
-        b=M06sFa/2Shhq7noZOjf2EeS1lXvRx9NRhU+kUJyjKxjuBy2rUaKXy2LIkm7Cyda/16
-         bGRqiz9HX+frjV6/IMeFaPBpnzNQUlcbiiVOwfbghUOLYoYogqc3cqVkBh2NZhztpOFA
-         II9ZSGRRYLfmadeUXP9jOQCYsEZKc+G9W6w7E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=HtkLk42w0fWd+6/z9mh2AZD/Xm33fQuNOQj57mIh9Q4=;
-        b=JpWzk9cCtjpEBpdiWMrDEjVPeO8TZMPEdtuuPxcJmJZH3tda5uJ+DzaHa6w+l+j81g
-         iGOqFsuZQ9+P5n9d8EsfDoYux59GQIQdd3oezLOCr6mt7NF7DDqFuunB2j5LIDo4skP0
-         ND/PI5lfFiDOHsErgdnmbpOMWG4yRUaDiPWcWLUOtm18iaeTyVmrYbaJrAm7O55c39i5
-         e0WQ4X3vdooWlO2RExqe5CdYRBQRznBUBUVRVubhylPRfMZykAnE5iwBOMBFR8+tK9di
-         I/r6RsWYBonjC0wPLe71mBQrocOa4+47Qug4IeT/JfOr6Brlalzk6PZjm+xfCQRrBnV4
-         Df6A==
-X-Gm-Message-State: AOAM531CXMHVYuLyiygiNt9dSCvEJZIClbItemnmAJ4uDzjK/bHN0zQi
-        OSOsTWyMthcD2FCmSTjpy6Dw9Q==
-X-Google-Smtp-Source: ABdhPJx4Bedm7kx35gBQovgPPmgKSyX2vlJnVfF48rpV+/YtF+cSQhc7Wm9itzPQ9iYRqRwmoRO20w==
-X-Received: by 2002:a17:90a:ae15:: with SMTP id t21mr677825pjq.147.1642708939439;
-        Thu, 20 Jan 2022 12:02:19 -0800 (PST)
-Received: from localhost (99-47-69-49.lightspeed.sntcca.sbcglobal.net. [99.47.69.49])
-        by smtp.gmail.com with ESMTPSA id em22sm3398862pjb.23.2022.01.20.12.02.17
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 20 Jan 2022 12:02:18 -0800 (PST)
-From:   Benjamin Li <benl@squareup.com>
-To:     Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Zac Crosby <zac@squareup.com>, Benjamin Li <benl@squareup.com>,
-        Andy Gross <agross@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] drivers: thermal: tsens: respect thermal_device_mode in threshold irq reporting
-Date:   Thu, 20 Jan 2022 12:01:53 -0800
-Message-Id: <20220120200153.1214-1-benl@squareup.com>
-X-Mailer: git-send-email 2.17.1
+        id S244789AbiAUBlA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Jan 2022 20:41:00 -0500
+Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:55570
+        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233355AbiAUBlA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Jan 2022 20:41:00 -0500
+Received: from HP-EliteBook-840-G7.. (1-171-224-13.dynamic-ip.hinet.net [1.171.224.13])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 00DFA41987;
+        Fri, 21 Jan 2022 01:40:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642729254;
+        bh=laRvn2OmTykA/zR1T9VGQH/rOB/hKyOR3Nj8kVtntNM=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version;
+        b=O2gc8U8M31Br2gYt5pNyndWwR5DD8qiCUjI0JAAvq7Ui0rIf2BqeYSNUqE+4qxFZM
+         82oz8ZhmvP/b/EumH8WtuMLLzXrs54wfDY6Zg5itxL/govxynrn5g8o2bM3eP2eeyc
+         5eUVXTmWF+/AxcGNWyfOTdeuJByQ6h5Of6dSgdr4uGNEj9JXYtyVIfWGlxr5ZRV1gs
+         ewSR3MtXb5poYUvMDUD5Kphc6uHMVeo0h4ubGIxdobJkcInAxuNBAxSLYu4G9kQTBE
+         PebXyQtnBPI9fdmX+2GTAQlOM65mWLfBb0gpGRz1vfg8NqNKYUZf9YUoHprUhSdjwO
+         FVSDT2cJCDuDg==
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     arnd@arndb.de, gregkh@linuxfoundation.org, ulf.hansson@linaro.org
+Cc:     linux-pm@vger.kernel.org,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Ricky WU <ricky_wu@realtek.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 2/4] misc: rtsx: Rework runtime power management flow
+Date:   Fri, 21 Jan 2022 09:40:36 +0800
+Message-Id: <20220121014039.1693208-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20220120145006.1682014-2-kai.heng.feng@canonical.com>
+References: <20220120145006.1682014-2-kai.heng.feng@canonical.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-'echo disabled > .../thermal_zoneX/mode' will disable the thermal core's
-polling mechanism to check for threshold trips. This is used sometimes to
-run performance test cases.
+Commit 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM")
+uses "rtd3_work" and "idle_work" to manage it's own runtime PM state
+machine.
 
-However, tsens supports an interrupt mechanism to receive notification of
-trips, implemented in commit 634e11d5b450 ("drivers: thermal: tsens: Add
-interrupt support").
+When its child device, rtsx_pci_sdmmc, uses runtime PM refcount
+correctly, all the additional works can be managed by generic runtime PM
+helpers.
 
-Currently the thermal zone mode that's set by userspace is not checked
-before propagating threshold trip events from IRQs. Let's fix this to
-restore the abilty to disable thermal throttling at runtime.
+So consolidate "idle_work" and "rtd3_work" into generic runtime idle
+callback and runtime suspend callback, respectively.
 
-====================
-
-Tested on MSM8939 running 5.16.0. This platform has 8 cores; the first
-four thermal zones control cpu0-3 and the last zone is for the other four
-CPUs together.
-
-  for f in /sys/class/thermal/thermal_zone*; do
-    echo "disabled" > $f/mode
-    echo $f | paste - $f/type $f/mode
-  done
-
-/sys/class/thermal/thermal_zone0	cpu0-thermal	disabled
-/sys/class/thermal/thermal_zone1	cpu1-thermal	disabled
-/sys/class/thermal/thermal_zone2	cpu2-thermal	disabled
-/sys/class/thermal/thermal_zone3	cpu3-thermal	disabled
-/sys/class/thermal/thermal_zone4	cpu4567-thermal	disabled
-
-With mitigation thresholds at 75 degC and load running, we can now cruise
-past temp=75000 without CPU throttling kicking in.
-
-  watch -n 1 "grep '' /sys/class/thermal/*/temp
-      /sys/class/thermal/*/cur_state
-      /sys/bus/cpu/devices/cpu*/cpufreq/cpuinfo_cur_freq"
-
-/sys/class/thermal/thermal_zone0/temp:82000
-/sys/class/thermal/thermal_zone1/temp:84000
-/sys/class/thermal/thermal_zone2/temp:87000
-/sys/class/thermal/thermal_zone3/temp:84000
-/sys/class/thermal/thermal_zone4/temp:84000
-/sys/class/thermal/cooling_device0/cur_state:0
-/sys/class/thermal/cooling_device1/cur_state:0
-/sys/bus/cpu/devices/cpu0/cpufreq/cpuinfo_cur_freq:1113600
-/sys/bus/cpu/devices/cpu1/cpufreq/cpuinfo_cur_freq:1113600
-/sys/bus/cpu/devices/cpu2/cpufreq/cpuinfo_cur_freq:1113600
-/sys/bus/cpu/devices/cpu3/cpufreq/cpuinfo_cur_freq:1113600
-/sys/bus/cpu/devices/cpu4/cpufreq/cpuinfo_cur_freq:800000
-/sys/bus/cpu/devices/cpu5/cpufreq/cpuinfo_cur_freq:800000
-/sys/bus/cpu/devices/cpu6/cpufreq/cpuinfo_cur_freq:800000
-/sys/bus/cpu/devices/cpu7/cpufreq/cpuinfo_cur_freq:800000
-
-Reported-by: Zac Crosby <zac@squareup.com>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Benjamin Li <benl@squareup.com>
+Fixes: 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM")
+Cc: Ricky WU <ricky_wu@realtek.com>
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 ---
-Changes in v3:
-- Upgraded logging to dev_info_ratelimited and revised log message.
-- Remove unrelated hunk.
+v2:
+ - Remove unused idle_work and rtd3_work from rtsx_pcr.
 
-Some drivers that support thermal zone disabling implement a set_mode
-operation and simply disable the sensor or the relevant IRQ(s), so they
-actually don't log anything when zones are disabled. These drivers are
-imx_thermal.c, intel_quark_dts_thermal.c, and int3400_thermal.c.
+ drivers/misc/cardreader/rtsx_pcr.c | 123 +++++++++++------------------
+ include/linux/rtsx_pci.h           |   3 -
+ 2 files changed, 44 insertions(+), 82 deletions(-)
 
-For tsens.c, implementing a change_mode would require migrating the driver
-from devm_thermal_zone_of_sensor_register to thermal_zone_device_register
-(or updating thermal_of.c to add a change_mode operation in thermal_zone_
-of_device_ops).
-
-stm_thermal.c seems to use this patch's model of not disabling IRQs when
-the zone is disabled (they still perform the thermal_zone_device_update
-upon IRQ, but return -EAGAIN from their get_temp).
-
-Changes in v2:
-- Reordered sentences in first part of commit message to make sense.
-
- drivers/thermal/qcom/tsens.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-index 99a8d9f3e03c..dd0002829536 100644
---- a/drivers/thermal/qcom/tsens.c
-+++ b/drivers/thermal/qcom/tsens.c
-@@ -509,10 +509,14 @@ static irqreturn_t tsens_irq_thread(int irq, void *data)
- 		spin_unlock_irqrestore(&priv->ul_lock, flags);
+diff --git a/drivers/misc/cardreader/rtsx_pcr.c b/drivers/misc/cardreader/rtsx_pcr.c
+index 6ac509c1821c9..1dcf98b597569 100644
+--- a/drivers/misc/cardreader/rtsx_pcr.c
++++ b/drivers/misc/cardreader/rtsx_pcr.c
+@@ -152,20 +152,12 @@ void rtsx_pci_start_run(struct rtsx_pcr *pcr)
+ 	if (pcr->remove_pci)
+ 		return;
  
- 		if (trigger) {
--			dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC)\n",
--				hw_id, __func__, temp);
--			thermal_zone_device_update(s->tzd,
--						   THERMAL_EVENT_UNSPECIFIED);
-+			if (s->tzd->mode == THERMAL_DEVICE_ENABLED) {
-+				dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC)\n",
-+					hw_id, __func__, temp);
-+				thermal_zone_device_update(s->tzd, THERMAL_EVENT_UNSPECIFIED);
-+			} else {
-+				dev_info_ratelimited(priv->dev, "[%u] %s: TZ update trigger (%d mC) skipped - zone disabled, operating outside of safety limits!\n",
-+					hw_id, __func__, temp);
-+			}
- 		} else {
- 			dev_dbg(priv->dev, "[%u] %s: no violation:  %d\n",
- 				hw_id, __func__, temp);
+-	if (pcr->rtd3_en)
+-		if (pcr->is_runtime_suspended) {
+-			pm_runtime_get(&(pcr->pci->dev));
+-			pcr->is_runtime_suspended = false;
+-		}
+-
+ 	if (pcr->state != PDEV_STAT_RUN) {
+ 		pcr->state = PDEV_STAT_RUN;
+ 		if (pcr->ops->enable_auto_blink)
+ 			pcr->ops->enable_auto_blink(pcr);
+ 		rtsx_pm_full_on(pcr);
+ 	}
+-
+-	mod_delayed_work(system_wq, &pcr->idle_work, msecs_to_jiffies(200));
+ }
+ EXPORT_SYMBOL_GPL(rtsx_pci_start_run);
+ 
+@@ -1094,40 +1086,6 @@ static void rtsx_pm_power_saving(struct rtsx_pcr *pcr)
+ 	rtsx_comm_pm_power_saving(pcr);
+ }
+ 
+-static void rtsx_pci_rtd3_work(struct work_struct *work)
+-{
+-	struct delayed_work *dwork = to_delayed_work(work);
+-	struct rtsx_pcr *pcr = container_of(dwork, struct rtsx_pcr, rtd3_work);
+-
+-	pcr_dbg(pcr, "--> %s\n", __func__);
+-	if (!pcr->is_runtime_suspended)
+-		pm_runtime_put(&(pcr->pci->dev));
+-}
+-
+-static void rtsx_pci_idle_work(struct work_struct *work)
+-{
+-	struct delayed_work *dwork = to_delayed_work(work);
+-	struct rtsx_pcr *pcr = container_of(dwork, struct rtsx_pcr, idle_work);
+-
+-	pcr_dbg(pcr, "--> %s\n", __func__);
+-
+-	mutex_lock(&pcr->pcr_mutex);
+-
+-	pcr->state = PDEV_STAT_IDLE;
+-
+-	if (pcr->ops->disable_auto_blink)
+-		pcr->ops->disable_auto_blink(pcr);
+-	if (pcr->ops->turn_off_led)
+-		pcr->ops->turn_off_led(pcr);
+-
+-	rtsx_pm_power_saving(pcr);
+-
+-	mutex_unlock(&pcr->pcr_mutex);
+-
+-	if (pcr->rtd3_en)
+-		mod_delayed_work(system_wq, &pcr->rtd3_work, msecs_to_jiffies(10000));
+-}
+-
+ static void rtsx_base_force_power_down(struct rtsx_pcr *pcr, u8 pm_state)
+ {
+ 	/* Set relink_time to 0 */
+@@ -1598,7 +1556,6 @@ static int rtsx_pci_probe(struct pci_dev *pcidev,
+ 	pcr->card_inserted = 0;
+ 	pcr->card_removed = 0;
+ 	INIT_DELAYED_WORK(&pcr->carddet_work, rtsx_pci_card_detect);
+-	INIT_DELAYED_WORK(&pcr->idle_work, rtsx_pci_idle_work);
+ 
+ 	pcr->msi_en = msi_en;
+ 	if (pcr->msi_en) {
+@@ -1623,20 +1580,16 @@ static int rtsx_pci_probe(struct pci_dev *pcidev,
+ 		rtsx_pcr_cells[i].pdata_size = sizeof(*handle);
+ 	}
+ 
+-	if (pcr->rtd3_en) {
+-		INIT_DELAYED_WORK(&pcr->rtd3_work, rtsx_pci_rtd3_work);
+-		pm_runtime_allow(&pcidev->dev);
+-		pm_runtime_enable(&pcidev->dev);
+-		pcr->is_runtime_suspended = false;
+-	}
+-
+ 
+ 	ret = mfd_add_devices(&pcidev->dev, pcr->id, rtsx_pcr_cells,
+ 			ARRAY_SIZE(rtsx_pcr_cells), NULL, 0, NULL);
+ 	if (ret < 0)
+ 		goto free_slots;
+ 
+-	schedule_delayed_work(&pcr->idle_work, msecs_to_jiffies(200));
++	if (pcr->rtd3_en) {
++		pm_runtime_allow(&pcidev->dev);
++		pm_runtime_put(&pcidev->dev);
++	}
+ 
+ 	return 0;
+ 
+@@ -1668,10 +1621,11 @@ static void rtsx_pci_remove(struct pci_dev *pcidev)
+ 	struct pcr_handle *handle = pci_get_drvdata(pcidev);
+ 	struct rtsx_pcr *pcr = handle->pcr;
+ 
+-	if (pcr->rtd3_en)
+-		pm_runtime_get_noresume(&pcr->pci->dev);
+-
+ 	pcr->remove_pci = true;
++	if (pcr->rtd3_en) {
++		pm_runtime_get_sync(&pcidev->dev);
++		pm_runtime_forbid(&pcidev->dev);
++	}
+ 
+ 	/* Disable interrupts at the pcr level */
+ 	spin_lock_irq(&pcr->lock);
+@@ -1680,9 +1634,6 @@ static void rtsx_pci_remove(struct pci_dev *pcidev)
+ 	spin_unlock_irq(&pcr->lock);
+ 
+ 	cancel_delayed_work_sync(&pcr->carddet_work);
+-	cancel_delayed_work_sync(&pcr->idle_work);
+-	if (pcr->rtd3_en)
+-		cancel_delayed_work_sync(&pcr->rtd3_work);
+ 
+ 	mfd_remove_devices(&pcidev->dev);
+ 
+@@ -1700,11 +1651,6 @@ static void rtsx_pci_remove(struct pci_dev *pcidev)
+ 	idr_remove(&rtsx_pci_idr, pcr->id);
+ 	spin_unlock(&rtsx_pci_lock);
+ 
+-	if (pcr->rtd3_en) {
+-		pm_runtime_disable(&pcr->pci->dev);
+-		pm_runtime_put_noidle(&pcr->pci->dev);
+-	}
+-
+ 	kfree(pcr->slots);
+ 	kfree(pcr);
+ 	kfree(handle);
+@@ -1726,7 +1672,6 @@ static int __maybe_unused rtsx_pci_suspend(struct device *dev_d)
+ 	pcr = handle->pcr;
+ 
+ 	cancel_delayed_work(&pcr->carddet_work);
+-	cancel_delayed_work(&pcr->idle_work);
+ 
+ 	mutex_lock(&pcr->pcr_mutex);
+ 
+@@ -1760,8 +1705,6 @@ static int __maybe_unused rtsx_pci_resume(struct device *dev_d)
+ 	if (ret)
+ 		goto out;
+ 
+-	schedule_delayed_work(&pcr->idle_work, msecs_to_jiffies(200));
+-
+ out:
+ 	mutex_unlock(&pcr->pcr_mutex);
+ 	return ret;
+@@ -1786,6 +1729,32 @@ static void rtsx_pci_shutdown(struct pci_dev *pcidev)
+ 		pci_disable_msi(pcr->pci);
+ }
+ 
++static int rtsx_pci_runtime_idle(struct device *device)
++{
++	struct pci_dev *pcidev = to_pci_dev(device);
++	struct pcr_handle *handle = pci_get_drvdata(pcidev);
++	struct rtsx_pcr *pcr = handle->pcr;
++
++	dev_dbg(device, "--> %s\n", __func__);
++
++	mutex_lock(&pcr->pcr_mutex);
++
++	pcr->state = PDEV_STAT_IDLE;
++
++	if (pcr->ops->disable_auto_blink)
++		pcr->ops->disable_auto_blink(pcr);
++	if (pcr->ops->turn_off_led)
++		pcr->ops->turn_off_led(pcr);
++
++	rtsx_pm_power_saving(pcr);
++
++	mutex_unlock(&pcr->pcr_mutex);
++
++	pm_schedule_suspend(device, 5000);
++
++	return -EBUSY;
++}
++
+ static int rtsx_pci_runtime_suspend(struct device *device)
+ {
+ 	struct pci_dev *pcidev = to_pci_dev(device);
+@@ -1794,31 +1763,29 @@ static int rtsx_pci_runtime_suspend(struct device *device)
+ 
+ 	handle = pci_get_drvdata(pcidev);
+ 	pcr = handle->pcr;
+-	dev_dbg(&(pcidev->dev), "--> %s\n", __func__);
+ 
+-	cancel_delayed_work(&pcr->carddet_work);
+-	cancel_delayed_work(&pcr->rtd3_work);
+-	cancel_delayed_work(&pcr->idle_work);
++	if (!pcr->rtd3_en)
++		return -EBUSY;
++
++	dev_dbg(device, "--> %s\n", __func__);
++
++	cancel_delayed_work_sync(&pcr->carddet_work);
+ 
+ 	mutex_lock(&pcr->pcr_mutex);
+ 	rtsx_pci_power_off(pcr, HOST_ENTER_S3);
+ 
+ 	mutex_unlock(&pcr->pcr_mutex);
+ 
+-	pcr->is_runtime_suspended = true;
+-
+ 	return 0;
+ }
+ 
+ static int rtsx_pci_runtime_resume(struct device *device)
+ {
+ 	struct pci_dev *pcidev = to_pci_dev(device);
+-	struct pcr_handle *handle;
+-	struct rtsx_pcr *pcr;
++	struct pcr_handle *handle = pci_get_drvdata(pcidev);
++	struct rtsx_pcr *pcr = handle->pcr;
+ 
+-	handle = pci_get_drvdata(pcidev);
+-	pcr = handle->pcr;
+-	dev_dbg(&(pcidev->dev), "--> %s\n", __func__);
++	dev_dbg(device, "--> %s\n", __func__);
+ 
+ 	mutex_lock(&pcr->pcr_mutex);
+ 
+@@ -1834,8 +1801,6 @@ static int rtsx_pci_runtime_resume(struct device *device)
+ 				pcr->slots[RTSX_SD_CARD].p_dev);
+ 	}
+ 
+-	schedule_delayed_work(&pcr->idle_work, msecs_to_jiffies(200));
+-
+ 	mutex_unlock(&pcr->pcr_mutex);
+ 	return 0;
+ }
+@@ -1850,7 +1815,7 @@ static int rtsx_pci_runtime_resume(struct device *device)
+ 
+ static const struct dev_pm_ops rtsx_pci_pm_ops = {
+ 	SET_SYSTEM_SLEEP_PM_OPS(rtsx_pci_suspend, rtsx_pci_resume)
+-	SET_RUNTIME_PM_OPS(rtsx_pci_runtime_suspend, rtsx_pci_runtime_resume, NULL)
++	SET_RUNTIME_PM_OPS(rtsx_pci_runtime_suspend, rtsx_pci_runtime_resume, rtsx_pci_runtime_idle)
+ };
+ 
+ static struct pci_driver rtsx_pci_driver = {
+diff --git a/include/linux/rtsx_pci.h b/include/linux/rtsx_pci.h
+index 4ab7bfc675f11..89b7d34e25b63 100644
+--- a/include/linux/rtsx_pci.h
++++ b/include/linux/rtsx_pci.h
+@@ -1201,8 +1201,6 @@ struct rtsx_pcr {
+ 	unsigned int			card_exist;
+ 
+ 	struct delayed_work		carddet_work;
+-	struct delayed_work		idle_work;
+-	struct delayed_work		rtd3_work;
+ 
+ 	spinlock_t			lock;
+ 	struct mutex			pcr_mutex;
+@@ -1212,7 +1210,6 @@ struct rtsx_pcr {
+ 	unsigned int			cur_clock;
+ 	bool				remove_pci;
+ 	bool				msi_en;
+-	bool				is_runtime_suspended;
+ 
+ #define EXTRA_CAPS_SD_SDR50		(1 << 0)
+ #define EXTRA_CAPS_SD_SDR104		(1 << 1)
 -- 
-2.17.1
+2.33.1
 
