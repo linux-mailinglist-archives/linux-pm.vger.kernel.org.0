@@ -2,88 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37CF149671F
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jan 2022 22:09:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9F1D49674A
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jan 2022 22:27:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232203AbiAUVJJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Jan 2022 16:09:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50760 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiAUVJJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Jan 2022 16:09:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10F2C06173B;
-        Fri, 21 Jan 2022 13:09:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6010961827;
-        Fri, 21 Jan 2022 21:09:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D19CC340E1;
-        Fri, 21 Jan 2022 21:09:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642799347;
-        bh=R9IH1HO9BhkurxhbfZ/tA3xkofYRaHlskaeE4j+DY68=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ebzQK3QhDgT/T2L/u8OlnNiGo3KbbTl6h5ztLuRo1EU0Nh4K9UOFn3pXR7raSTmaG
-         zE3L4EdP2ms0NyP6lev85hl9EIsezgehE/pUfqaLG0gXcC3+/2A+SjmPIbGa2sP1pk
-         bKGXZgtEWFaXVNC7112ut1J7kKrMo+Himt6b7mB9SFooC4k09b7wEelxbAQZ5aEyqE
-         JWLhRSyRXJUhUT8f3B/Ze08E0f7ZogB7WGNplgY5cWZndUY8Li3DPefIfG7mpRHxRj
-         KIP+WqjvZelxRCAkMN0e4ih4MMKnYbIwrlgRxeOztyM+sQ8S9ENjbX7yPWI81WI/RV
-         rafEKwoAeV3lA==
-Date:   Fri, 21 Jan 2022 13:09:05 -0800
-From:   Keith Busch <kbusch@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Sagi Grimberg <sagi@grimberg.me>, Christoph Hellwig <hch@lst.de>,
-        Len Brown <lenb@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
+        id S229707AbiAUV1L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Jan 2022 16:27:11 -0500
+Received: from mail-ot1-f45.google.com ([209.85.210.45]:46835 "EHLO
+        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229459AbiAUV1L (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Jan 2022 16:27:11 -0500
+Received: by mail-ot1-f45.google.com with SMTP id t4-20020a05683022e400b00591aaf48277so13324225otc.13;
+        Fri, 21 Jan 2022 13:27:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LGElPy2VACsBdFnkh6MdJpINb1+42Tm0MAH//73tJqU=;
+        b=i3s+iJXS1gZIBPTtdd4e/MuWxyzSod+QeWAzlYvA2jMCz7R3Ye9BAqP7vkyJC9ARn/
+         IP0n6oou/9SnRmSm3E5FsPbrQM7tgeo1gQV0nTDC3gB2H6Q1NHTti/E/JPL05iFwj3XP
+         thDH3VcMvgRZCSjfTwsbb1bUt5o7JEA/i4DC+f6YvEEjXw3qwjELuck5V8vQV015VPfO
+         TK9LEfH8uvNeu+08z3Vxbw3pRQHDxY35F6XweGI4GvDIemiI+X7/luiu5Yo4jpfS18kD
+         y+NvJEVUvNGHmoT37d9SD2/rCaOAl0NwltB2t4TpylUvvGxBB89cervnBgJaj6l6V5E0
+         ULyA==
+X-Gm-Message-State: AOAM530SWrTqjFmAi4AbSRHV8BxDQCfeULLu1b5WcTJLNpYjiHcDTK0y
+        Mg04iE+B1Z6M42XmzCceKA==
+X-Google-Smtp-Source: ABdhPJwygzWkhErXMaYWnI0oDmdrjDawCFds/EJVU76juuAX/N0kolybjRGafXge9r46h1+sDrkEcA==
+X-Received: by 2002:a9d:2ae9:: with SMTP id e96mr4103155otb.130.1642800430655;
+        Fri, 21 Jan 2022 13:27:10 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id bh10sm1735740oib.24.2022.01.21.13.27.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Jan 2022 13:27:09 -0800 (PST)
+Received: (nullmailer pid 1614542 invoked by uid 1000);
+        Fri, 21 Jan 2022 21:27:08 -0000
+Date:   Fri, 21 Jan 2022 15:27:08 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Abel Vesa <abel.vesa@nxp.com>
+Cc:     Georgi Djakov <djakov@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        m.heingbecker@googlemail.com,
-        linux-nvme <linux-nvme@lists.infradead.org>
-Subject: Re: [Bug] nvme blocks PC10 since v5.15 - bisected
-Message-ID: <20220121210905.GA1114868@dhcp-10-100-145-180.wdc.com>
-References: <CAJZ5v0hvvYedSn5u-i7sjpoEHU4P65t7i1b2pVn=S1q0nHWgqQ@mail.gmail.com>
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 1/3] dt-bindings: interconnect: imx8m-noc: Add
+ fsl,icc-id property
+Message-ID: <YeslLJqwhX668+oa@robh.at.kernel.org>
+References: <20220106164150.3474048-1-abel.vesa@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0hvvYedSn5u-i7sjpoEHU4P65t7i1b2pVn=S1q0nHWgqQ@mail.gmail.com>
+In-Reply-To: <20220106164150.3474048-1-abel.vesa@nxp.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 08:00:49PM +0100, Rafael J. Wysocki wrote:
-> Hi Keith,
+On Thu, Jan 06, 2022 at 06:41:48PM +0200, Abel Vesa wrote:
+> Add documentation for fsl,icc-id property.
 > 
-> It is reported that the following commit
+> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+> ---
 > 
-> commit e5ad96f388b765fe6b52f64f37e910c0ba4f3de7
-> Author: Keith Busch <kbusch@kernel.org>
-> Date:   Tue Jul 27 09:40:44 2021 -0700
+> Changes since v3:
+>  * fixed typo in property description
 > 
->    nvme-pci: disable hmb on idle suspend
+>  .../devicetree/bindings/interconnect/fsl,imx8m-noc.yaml      | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
->    An idle suspend may or may not disable host memory access from devices
->    placed in low power mode. Either way, it should always be safe to
->    disable the host memory buffer prior to entering the low power mode, and
->    this should also always be faster than a full device shutdown.
-> 
->    Signed-off-by: Keith Busch <kbusch@kernel.org>
->    Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
->    Signed-off-by: Christoph Hellwig <hch@lst.de>
-> 
-> is the source of a serious power regression occurring since 5.15
-> (please see https://bugzilla.kernel.org/show_bug.cgi?id=215467).
-> 
-> After this commit, the SoC on the affected system cannot enter
-> C-states deeper than PC2 while suspended to idle which basically
-> defeats the purpose of suspending.
-> 
-> What may be happening is that nvme_disable_prepare_reset() that is not
-> called any more in the ndev->nr_host_mem_descs case somehow causes the
-> LTR of the device to change to "no requirement" which allows deeper
-> C-states to be entered.
-> 
-> Can you have a look at this, please?
+> diff --git a/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml b/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
+> index b8204ed22dd5..dc7f6b6f508a 100644
+> --- a/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
+> +++ b/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
+> @@ -47,6 +47,11 @@ properties:
+>    operating-points-v2: true
+>    opp-table: true
+>  
+> +  fsl,icc-id:
+> +    $ref: "/schemas/types.yaml#/definitions/uint32"
+> +    description:
+> +      unique ID used for linking i.MX bus or ddrc node to interconnect
 
-I thought platforms that wanted full device shutdown  behaviour would
-always set acpi_storage_d3. Is that not happening here?
+Where does this unique ID come from and how is it used? Why aren't cells 
+in 'interconnects' sufficient for this?
+
+> +
+>    fsl,ddrc:
+>      $ref: "/schemas/types.yaml#/definitions/phandle"
+>      description:
+> -- 
+> 2.31.1
+> 
+> 
