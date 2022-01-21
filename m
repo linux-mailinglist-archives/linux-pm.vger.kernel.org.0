@@ -2,118 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4DC14961FF
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jan 2022 16:24:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D66F49635A
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jan 2022 17:57:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351305AbiAUPYd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Jan 2022 10:24:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57122 "EHLO
+        id S1381923AbiAUQ5m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Jan 2022 11:57:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236375AbiAUPYd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Jan 2022 10:24:33 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCDE3C06173D
-        for <linux-pm@vger.kernel.org>; Fri, 21 Jan 2022 07:24:32 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id m1so28589928ybo.5
-        for <linux-pm@vger.kernel.org>; Fri, 21 Jan 2022 07:24:32 -0800 (PST)
+        with ESMTP id S1379849AbiAUQ4t (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Jan 2022 11:56:49 -0500
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755DBC061763;
+        Fri, 21 Jan 2022 08:55:34 -0800 (PST)
+Received: by mail-oi1-x22f.google.com with SMTP id w188so14290830oiw.13;
+        Fri, 21 Jan 2022 08:55:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lHv4QGKyWaC8pJttpt8QUbf3yyP/jMKn3N+flk/PW10=;
-        b=TuYOvf2B9HOi6a6+5H3dsW8U3FeTz9UocCY2hj9gLGhDsiqoc/vJ4m/8w6bS1mIXAx
-         DfzIIKlVbbDQ2XO53YTs+3KImo9w77vLdnlNocWdvZhBO69EUV1qCkr/K/tJYMeQkQIB
-         a1ZSJe9u2MwXLlhK0yvgZNH0jSsNAf+fk6xNknc5OOrvmGPN0OsDYtfU1iEO4oSKz3px
-         FWRYKaz5l7DLNHgHH/Daee6JLM0IhoUGnE2mmF1uDk32AkvK/k0h+7NlhLM5Lwy/3hlB
-         zU8a6LtNI62avuO/YK+UPiDllbENyvd6MONG7fd86WC/2etQOle1gOmHUJYrL2nHP+lv
-         qrAg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=4weifrQ7PTCoGujS0yQMKZpi8lSBUanoNpSA0DdSt+Y=;
+        b=OF1LGc0evnBIhNNz84FPs7c8hsoF1r+/WS4fAuOmilgSYZYbT6CrqaPs1OIO/6LIxh
+         aCfomttS8vaYkKjlBhGRnCkK5sNSvB90MhaAykJPVz096eYCnJ7kncwalddJLbZmYVe5
+         MjebfomEvGhfTf2h1MgGTNSTVznz9gV0EWT14LVTZ24nZGykPBIKktLkT/rP1v3y60e1
+         Z6yTLr7ejol0GHlZUCZY41ckrUnhyqaRW1JwMN5GZK5O2k8qBmD5DCBxAozgWYBBu1uF
+         5RSJhj6dkBWt0EeCIIdyLjgqmWG4OcP7EQD/B7dkBMCqcGG2P0YCfdnVn2Gyds3JND8A
+         yv3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lHv4QGKyWaC8pJttpt8QUbf3yyP/jMKn3N+flk/PW10=;
-        b=nM6XKbbl1nSZZlsLEtNOqxZ3g+qgEHHzheaveYuSzE50xS9zORFnPMWT7I90Yr75Gz
-         irv7xaTpmHtOFs/Tc6NTLc1k65czPsGw+GUkheN5xQMpOg2987vlM9hBnNvtG0i5hHff
-         a5af8YOLpqocVMl5JT2MJ5b44F/r3pgZDtyugDBPUqpqkRFx4ZdximnaaKR6IdVb/UN5
-         460fMzWv42Ryjl7uSWDelDGfzLnAMxi5cWGG0ANsZX7B3Zz3hhoKBb2hSxHbU1qFuWYe
-         GTJY/swnfXzWBz+smuRoAUMHKHmYzUe3Mj2xmFosYDdkMN66Y1SVtkEiq8XhXa/HbL7J
-         KdHQ==
-X-Gm-Message-State: AOAM530ZHbkWhSVgv+/0Po1b7gK6Ei9oipotC4LqKWL38s9Eg9Rq33yX
-        OLo0p8pHbq+tJzzPfSWNy4nSgbym/SkUWDuTFCd9Ng==
-X-Google-Smtp-Source: ABdhPJx9UVWg3EfP5/63PnvEnF1YOj5Isounp9ZYZMOzIVLh11iewxgOKv8wxnLSIL7XfldkUQ5A1Lpj9PcvCTC39xs=
-X-Received: by 2002:a25:838b:: with SMTP id t11mr4282883ybk.146.1642778671696;
- Fri, 21 Jan 2022 07:24:31 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=4weifrQ7PTCoGujS0yQMKZpi8lSBUanoNpSA0DdSt+Y=;
+        b=x+li9HbDXQxNSfkR5zgpJikqvGrAYCErkUYGH9I5UfkQQCf1U17sx/roNCXoDm411l
+         BZclYBsCnwRC1gLj6Y8kDxmWfULut50+ZKnVP1JpyMb36dfHJWM8l/sdQON2F9jw6coW
+         sYgEzsKs8JzU71ELMlRk/CFcjK4Z/DDKNZ8BQ79MqAEL+VyjNxRNedhBWMHbcdKYzQbf
+         pgphObiWid10/FsYZViA3CWwGNuMYXD4OMAzeWSfLZPee1S2LBAkvQDYpe+uCbMGrmCa
+         tvAxKp4vZeDflKS0MmJV67b8cSlk40cM5ha1LV/sp0g2Vc7tKNTtJiVpml4kn4cekY3w
+         zWSg==
+X-Gm-Message-State: AOAM5328Le80sLSk3NGsLg4blFjC2dRtgEx06Ps5cugKvls4BHdkbhL9
+        jKm8j0ZRnfnfhvjjHkUGUflbyJnnq9I=
+X-Google-Smtp-Source: ABdhPJwjGzQmdpB6fvzrVNmA0mJLwxz20tqVgliSftrr9PonyQNufPf2QsVgpesq4DcccdBJkKfIgw==
+X-Received: by 2002:a54:4e9a:: with SMTP id c26mr1250134oiy.159.1642784133886;
+        Fri, 21 Jan 2022 08:55:33 -0800 (PST)
+Received: from thinkpad.localdomain ([2804:14d:5cd1:5d03:cf72:4317:3105:f6e5])
+        by smtp.gmail.com with ESMTPSA id y8sm1089271oou.23.2022.01.21.08.55.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Jan 2022 08:55:33 -0800 (PST)
+From:   Luiz Sampaio <sampaio.ime@gmail.com>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Luiz Sampaio <sampaio.ime@gmail.com>,
+        linux-pm@vger.kernel.org
+Subject: [PATCH 21/31] power: supply: changing LED_* from enum led_brightness to actual value
+Date:   Fri, 21 Jan 2022 13:54:26 -0300
+Message-Id: <20220121165436.30956-22-sampaio.ime@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220121165436.30956-1-sampaio.ime@gmail.com>
+References: <20220121165436.30956-1-sampaio.ime@gmail.com>
 MIME-Version: 1.0
-References: <CA+G9fYvuEqeoLO6dC_qtGyRUz=UPv5i0C3jZ_n9nz5kWOuCHYQ@mail.gmail.com>
-In-Reply-To: <CA+G9fYvuEqeoLO6dC_qtGyRUz=UPv5i0C3jZ_n9nz5kWOuCHYQ@mail.gmail.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 21 Jan 2022 20:54:20 +0530
-Message-ID: <CA+G9fYuKGaDfyke81wbSe2yqTm6GqWNuKw2wB6NFaCLa1q7z6A@mail.gmail.com>
-Subject: Re: [next] parisc: allnoconfig: ERROR: modpost: Section mismatches
- detected. Set CONFIG_SECTION_MISMATCH_WARN_ONLY=y to allow them.
-To:     John David Anglin <dave.anglin@bell.net>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        linux-parisc <linux-parisc@vger.kernel.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>, pavel@ucw.cz,
-        rppt@kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Helge Deller <deller@gmx.de>, Deller <deller@kernel.org>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 21 Jan 2022 at 13:16, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
->
-> Linux next-20220121 parisc allnoconfig build failed with gcc-9/10/11.
->
-> make --silent --keep-going --jobs=8 ARCH=parisc
-> CROSS_COMPILE=hppa-linux-gnu- 'CC=sccache hppa-linux-gnu-gcc'
-> 'HOSTCC=sccache gcc'
->
-> WARNING: modpost: vmlinux.o(.text+0x1c8): Section mismatch in
-> reference from the function ksys_sync() to the function
-> .init.text:memblock_alloc_try_nid()
-> The function ksys_sync() references
-> the function __init memblock_alloc_try_nid().
-> This is often because ksys_sync lacks a __init
-> annotation or the annotation of memblock_alloc_try_nid is wrong.
->
-> ERROR: modpost: Section mismatches detected.
-> Set CONFIG_SECTION_MISMATCH_WARN_ONLY=y to allow them.
-> make[2]: *** [/builds/linux/scripts/Makefile.modpost:59:
-> vmlinux.symvers] Error 1
+The enum led_brightness, which contains the declaration of LED_OFF,
+LED_ON, LED_HALF and LED_FULL is obsolete, as the led class now supports
+max_brightness.
+---
+ drivers/power/supply/power_supply_leds.c | 26 ++++++++++++------------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
 
-Anders bisected this build and the first bad commit is point to,
+diff --git a/drivers/power/supply/power_supply_leds.c b/drivers/power/supply/power_supply_leds.c
+index d69880cc3593..16f25179f710 100644
+--- a/drivers/power/supply/power_supply_leds.c
++++ b/drivers/power/supply/power_supply_leds.c
+@@ -31,25 +31,25 @@ static void power_supply_update_bat_leds(struct power_supply *psy)
+ 
+ 	switch (status.intval) {
+ 	case POWER_SUPPLY_STATUS_FULL:
+-		led_trigger_event(psy->charging_full_trig, LED_FULL);
+-		led_trigger_event(psy->charging_trig, LED_OFF);
+-		led_trigger_event(psy->full_trig, LED_FULL);
++		led_trigger_event(psy->charging_full_trig, 255);
++		led_trigger_event(psy->charging_trig, 0);
++		led_trigger_event(psy->full_trig, 255);
+ 		led_trigger_event(psy->charging_blink_full_solid_trig,
+-			LED_FULL);
++			255);
+ 		break;
+ 	case POWER_SUPPLY_STATUS_CHARGING:
+-		led_trigger_event(psy->charging_full_trig, LED_FULL);
+-		led_trigger_event(psy->charging_trig, LED_FULL);
+-		led_trigger_event(psy->full_trig, LED_OFF);
++		led_trigger_event(psy->charging_full_trig, 255);
++		led_trigger_event(psy->charging_trig, 255);
++		led_trigger_event(psy->full_trig, 0);
+ 		led_trigger_blink(psy->charging_blink_full_solid_trig,
+ 			&delay_on, &delay_off);
+ 		break;
+ 	default:
+-		led_trigger_event(psy->charging_full_trig, LED_OFF);
+-		led_trigger_event(psy->charging_trig, LED_OFF);
+-		led_trigger_event(psy->full_trig, LED_OFF);
++		led_trigger_event(psy->charging_full_trig, 0);
++		led_trigger_event(psy->charging_trig, 0);
++		led_trigger_event(psy->full_trig, 0);
+ 		led_trigger_event(psy->charging_blink_full_solid_trig,
+-			LED_OFF);
++			0);
+ 		break;
+ 	}
+ }
+@@ -120,9 +120,9 @@ static void power_supply_update_gen_leds(struct power_supply *psy)
+ 	dev_dbg(&psy->dev, "%s %d\n", __func__, online.intval);
+ 
+ 	if (online.intval)
+-		led_trigger_event(psy->online_trig, LED_FULL);
++		led_trigger_event(psy->online_trig, 255);
+ 	else
+-		led_trigger_event(psy->online_trig, LED_OFF);
++		led_trigger_event(psy->online_trig, 0);
+ }
+ 
+ static int power_supply_create_gen_triggers(struct power_supply *psy)
+-- 
+2.34.1
 
-first bad commit: [4f05e5a3946923676e147ad0e33c80df8249b2fe]
-parisc: Drop __init from map_pages declaration
-
-
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->
-> metadata:
->   git branch: master
->   git repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
->   git describe: next-20220121
->   kernel-config: https://builds.tuxbuild.com/23zIAxC4uCgy4zadA01JYyOwCR4/config
->   build: https://builds.tuxbuild.com/23zIAxC4uCgy4zadA01JYyOwCR4/
->
-> # To install tuxmake on your system globally:
-> # sudo pip3 install -U tuxmake
-> #
-> # See https://docs.tuxmake.org/ for complete documentation.
-> # Original tuxmake command with fragments listed below.
->
-> tuxmake --runtime podman --target-arch parisc --toolchain gcc-11
-> --kconfig allnoconfig
->
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
