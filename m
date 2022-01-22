@@ -2,66 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E48496B74
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Jan 2022 10:40:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6D45496C88
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Jan 2022 14:26:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232971AbiAVJkJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 22 Jan 2022 04:40:09 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:52088 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231922AbiAVJkI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Jan 2022 04:40:08 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S232976AbiAVN0D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 22 Jan 2022 08:26:03 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:44424
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231774AbiAVN0C (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Jan 2022 08:26:02 -0500
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 28A39B81B8E;
-        Sat, 22 Jan 2022 09:40:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B631AC340E8;
-        Sat, 22 Jan 2022 09:40:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642844405;
-        bh=dsiJR+kP2XD9Ms4tTGM2cH6Z9ukEFKq6SuWK2HULMUo=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=JNZcWoOiQoO83jZQ0kkppQyqPKWY0u5lKjVmvuDYqIfM6D/Fx6raTW+RbledMB7/V
-         oKq6CoEga8hUCW7VYEfJq2klxNPJrnhMT70xelmzY/sBwTTU70TSRS6AMNBd2grZvy
-         txe4ETSoOeDI8qxHC4HHp9aGRQPNeRAUU8gFFszSUJ8nQ3hVEKjPshntP6pcKb/Hxk
-         DYTSmkWTkI201hPXpqHUxnXLfm538TrLJNjZQ/eZ/qnFAb5wBBtbHJ/DhKaQdGgv6D
-         QZRZBjVj4Zgm4r/PvWVR3KRAQLlxAVJG5526I4UngNCuCtWa3BAdeOAwOQUtGUpXqM
-         olSecUyn0uusg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9F67FF60796;
-        Sat, 22 Jan 2022 09:40:05 +0000 (UTC)
-Subject: Re: [GIT PULL] More thermal control updates for v5.17-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0hTjqYHH3WeN-jzrgsR8m7=LAvsq9Y7eQRWz3pz0=5bgQ@mail.gmail.com>
-References: <CAJZ5v0hTjqYHH3WeN-jzrgsR8m7=LAvsq9Y7eQRWz3pz0=5bgQ@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0hTjqYHH3WeN-jzrgsR8m7=LAvsq9Y7eQRWz3pz0=5bgQ@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal-5.17-rc1-2
-X-PR-Tracked-Commit-Id: e5b54867f47f765fcb439e09ed763b5de617af3e
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 6bdfb259d6d66161011d1d618af190f52b6d57fd
-Message-Id: <164284440564.7666.4445430942052934098.pr-tracker-bot@kernel.org>
-Date:   Sat, 22 Jan 2022 09:40:05 +0000
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id D64BC3F19E
+        for <linux-pm@vger.kernel.org>; Sat, 22 Jan 2022 13:25:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642857958;
+        bh=8fMesucJS/Q/CHcDtWavokH1YLXI1OKktuJiUdUDTLs=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=GzUqFmu1KOVpaDKr/t6akjdkqEqJ/4Yogf0L3IYwdf5ZGHVkKF0jd7ZArvD5hziWz
+         1SLwY1frzkw+5n5sPzk/xEiADGOTGuTJ2EGR6ntRBeLKhUlX1MY1EFKcZzY3xew6Ad
+         UcneQ0zSEWePdFi09Aq8X6wx8wcaB+J3r+mRIo3jzi+p0xtaKAAcsp4jPGwDUOKsjZ
+         QJ3z2Qdq599+pd8aWbiYtcSUBXVp1Q6gDTNeGMIIGaytXcHHUjpZOhvLps8VDiwCYg
+         dKXkucRU+wsRvt1GHhRrF7xhhjKPFk91moFSEyjeZglNcAXkfV3psYlaKxJmCCl8xQ
+         gEx+Ltddsm+YA==
+Received: by mail-ej1-f72.google.com with SMTP id q19-20020a1709064c9300b006b39291ff3eso948546eju.5
+        for <linux-pm@vger.kernel.org>; Sat, 22 Jan 2022 05:25:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8fMesucJS/Q/CHcDtWavokH1YLXI1OKktuJiUdUDTLs=;
+        b=nIoTTbBGw8IimlJ6nEeFyNRUJm8uwU5XbRVS8N46tqFQTIYMTFiB2soQ8Vn7H0QBi9
+         Kksf7aXf0JGi1IvLLebcgV/WDs7Wi+O5o9vYiQy/tEpJ4fpu/H5HXDeY7f8c+yLi4bRM
+         7+vMPdml59jFTtjDRsp6S/OsKzwlsXwPLGb/jj+6MATVbAmR00ZTCmUbGK5F7lFewT4H
+         Z51xSl8zXuOREadVfwTzG16g6Egbw86KdwVuaUUP55kzEZVgONGx0czWeUVlW2W47s70
+         4eDpx+n3UVfzCDjsS77LPdl5tPhxt5uBsm8OMLet6JJ3ZBJt+0Tmt2soknGCbmHO86ol
+         soUg==
+X-Gm-Message-State: AOAM530rNIejTm2o31tm2umfkpaiEMwOBLj5Ow1atpW5hPsnNRdwLFVb
+        YjmDvc3ZX3Cm/KyuNQIdGQqcgiIOm0Uog2npGOZfQ0wVzWLQqUR99YKn8tXOk3US4MryBxfJJqr
+        /E5azt6gOwaHpCtCc5haEVc03y3Epxl5ZCBYr
+X-Received: by 2002:a17:907:2da3:: with SMTP id gt35mr6700211ejc.493.1642857958428;
+        Sat, 22 Jan 2022 05:25:58 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyNLq+wl/T1aIhyqPK0PgngG1nTaJ+rpaL0m5ALl8KOG7N8L+TA5ORWK4t1DsKSjwTs3nbw4w==
+X-Received: by 2002:a17:907:2da3:: with SMTP id gt35mr6700198ejc.493.1642857958277;
+        Sat, 22 Jan 2022 05:25:58 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id v2sm2373060ejb.114.2022.01.22.05.25.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 22 Jan 2022 05:25:57 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/3] ARM: dts: exynos: drop old thermal properties from Exynos4210
+Date:   Sat, 22 Jan 2022 14:25:52 +0100
+Message-Id: <20220122132554.65192-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Fri, 21 Jan 2022 20:28:16 +0100:
+The samsung,tmu_gain and samsung,tmu_reference_voltage properties of
+Exynos Thermal Management Unit driver are not used since April 2018.
+They were removed with commit fccfe0993b5d ("thermal: exynos: remove
+parsing of samsung,tmu_gain property") and commit 61020d189dbc
+("thermal: exynos: remove parsing of samsung, tmu_reference_voltage
+property"), so drop them also from Exynos4210 DTS.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal-5.17-rc1-2
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/6bdfb259d6d66161011d1d618af190f52b6d57fd
+---
 
-Thank you!
+I'll take this patch via Samsung SoC. Adding here for reference, so
+Rob's robot will not spot DTS issues when checking against dtschema.
+---
+ arch/arm/boot/dts/exynos4210.dtsi | 2 --
+ 1 file changed, 2 deletions(-)
 
+diff --git a/arch/arm/boot/dts/exynos4210.dtsi b/arch/arm/boot/dts/exynos4210.dtsi
+index 7e7d65ce6585..2c25cc37934e 100644
+--- a/arch/arm/boot/dts/exynos4210.dtsi
++++ b/arch/arm/boot/dts/exynos4210.dtsi
+@@ -527,8 +527,6 @@ &tmu {
+ 	compatible = "samsung,exynos4210-tmu";
+ 	clocks = <&clock CLK_TMU_APBIF>;
+ 	clock-names = "tmu_apbif";
+-	samsung,tmu_gain = <15>;
+-	samsung,tmu_reference_voltage = <7>;
+ };
+ 
+ #include "exynos4210-pinctrl.dtsi"
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.32.0
+
