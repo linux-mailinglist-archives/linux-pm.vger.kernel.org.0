@@ -2,95 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D13149736E
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Jan 2022 18:10:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6594E497468
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Jan 2022 19:40:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239140AbiAWRKp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 23 Jan 2022 12:10:45 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:43086
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239108AbiAWRKo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Jan 2022 12:10:44 -0500
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id DBFE23F17B
-        for <linux-pm@vger.kernel.org>; Sun, 23 Jan 2022 17:10:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642957843;
-        bh=9aUVeDHijgpk/gPdmhnxkt4h8TZ5fsPsv2xLl017ipQ=;
-        h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version:Content-Type;
-        b=HBF8rJH647PAOgyAXPxRwd4FzBWJimgJQINeSKLo1u4WZtdHM+BHlNHJ7mIaP6alM
-         oBZyoL8d/hzo6Ga+njWrakX+T8c4bcqlAoXGlA3iPyXz79mUhB7F2Tj3X/7lsDqikM
-         xv70tsNCkGJj9JIdMgvPh8UnS3s/9q9zmdysgl9/r7ZfwLsJS5N22g8uqC805rnfth
-         TLb4N+t7GfM+IMDFhP+lOwMjbraH2fGwzID9GUHimYbrTpcHRiH7MWUQab4nWytD4y
-         pxrR1aPy6GG59y7xXSdrhJX9Rd5fbrH3cn3O4fajQd0aJjyz0Znl9gNndhGeYQiDUj
-         ATQUfg/U20Uig==
-Received: by mail-ed1-f72.google.com with SMTP id j1-20020aa7c341000000b0040417b84efeso11504199edr.21
-        for <linux-pm@vger.kernel.org>; Sun, 23 Jan 2022 09:10:43 -0800 (PST)
+        id S239626AbiAWSkC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 23 Jan 2022 13:40:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53382 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239588AbiAWSj6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Jan 2022 13:39:58 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47680C06173D;
+        Sun, 23 Jan 2022 10:39:58 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id c9so13468678plg.11;
+        Sun, 23 Jan 2022 10:39:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=6Y67UpGJgCeGI3YjkkCV3h1RWBz0EaSLMoBqw+YNaKM=;
+        b=fj2Be3j4ZXRuOSxn0ZBVfLiLCyC1T7HgxLBl1dbJ+1GQMBP1uFWdWTNbPb+uWf/xrO
+         fEq/nS9cpgMQq4Z/EeGzuaSIb6mOIrZ7LgCI/XoIPnvJf3RsIJv7y1hkMvE+QnCq9zKA
+         JMV8tbR5pot6iHL3EBKW2XXAqJM5+ApGwCvEnj7iWYw02WTqJjO0ci1TnCiThd9Xg445
+         pcSMonvfQBFpKb5hWyBaJtMySDLtJzDJSIYoXZXdot1LheibM6eHhYHQWrtYShBnp/K+
+         iwi8TcO5n5tk0ketawzGGBBDDj8oY+p4hunGEj1VW3/rokkCis1vkQfda195htV4ArRP
+         EnQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=9aUVeDHijgpk/gPdmhnxkt4h8TZ5fsPsv2xLl017ipQ=;
-        b=O6lTFWMYqJmEFeyZRfmIq7TXtfMnVbVrk7nlbedh6lAwCF5yh5DT3qiPdRFmvVji9Z
-         2XvfW3CStHEv6Km12I3f9KXrjgPV8048t9i13QuA5nSOF2OZXgtWvbxda0wmwaIaGQTH
-         7S8yXkk31/j018MZz0m9l1nbeM7Xb8pkupUIZmaZrWrbYarNyDkt4qrq0pL7Z56e3WLu
-         Xh0azmAE0PMoDjyNTTXy/yS9XNLq7BNroYEgkb9KRqhta2xzCzHhrwkFutIJJEyTwgJl
-         bYmbNKSvsMfFwopK4BR9a5gYil1twiSbwGBBA+SlrEc7LFzehIgI4x2q/9r/SmNpcD+w
-         wvUw==
-X-Gm-Message-State: AOAM530wLVrQdBceaIfMn+YwHxw/qz2c4ydonAFV0mfcUPfXRSYi8MB1
-        3HXGnFq854Nwtbdg3nJjqFhPARI69v4/KcVGwF2r+b8c7L7ymYFC7roRkLUXHakG8L0nhMdvQQ5
-        4LlzYoSLCsBasrlh+S1RXAaHXaO202v6d5nYG
-X-Received: by 2002:a17:906:4ccb:: with SMTP id q11mr10028602ejt.398.1642957843643;
-        Sun, 23 Jan 2022 09:10:43 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyMefem0jCf3PJq8lnGfLau04Ms1Hd+SIUWXl64m0Pg5L2zvBjINugQgs92nw/gH+x7IuW1rQ==
-X-Received: by 2002:a17:906:4ccb:: with SMTP id q11mr10028597ejt.398.1642957843504;
-        Sun, 23 Jan 2022 09:10:43 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id l2sm5208665eds.28.2022.01.23.09.10.42
+        bh=6Y67UpGJgCeGI3YjkkCV3h1RWBz0EaSLMoBqw+YNaKM=;
+        b=i4JhkczdiVAZxbJ8/hC6I8OSUtGal6kftEu+QieyBk9lIMir0JiKqkGmS47QamLxjL
+         d1PTX72aJDrGjfcI2t7eqlliwGSEZP5ZBKdTYv8VGwOz4YJAg1fAe6kG+E3K2BjUhl34
+         HvuBuo/++8dU60Mlc8RxpN3f8AIJV7kyNL/NguW8+Sfx/zBkxDAgB6Qz1S+t+b7XcArI
+         PkgYC629xqLOPEuJEUsw2+m7RMIO5lYciiX9GZN0mvvSmc5CVoK1Qx48/A7upEeQ/Sfp
+         edzkxutQsYlzu0wezb1PmK7Iv/dKhrhhiV8MwhQvHRwxtp63JVrrp1Qp+En5wJk3mM5x
+         LQqA==
+X-Gm-Message-State: AOAM532JgeIgVfGsW9BTN3PPcCuIhFrcrilQkQquuTcuz/r05gfQwh+h
+        oE7qPyIX/Vj0h3ZHoCzHaIg=
+X-Google-Smtp-Source: ABdhPJxGVSXvOUZjhokqqNWOPu2slOcHKradSt7jDO2Wwih5XKmhc8jCE0q6lk4Znh/tsr/lxxzGbw==
+X-Received: by 2002:a17:90b:1b0e:: with SMTP id nu14mr9710263pjb.39.1642963197744;
+        Sun, 23 Jan 2022 10:39:57 -0800 (PST)
+Received: from localhost (searspoint.nvidia.com. [216.228.112.21])
+        by smtp.gmail.com with ESMTPSA id d8sm9389575pjz.32.2022.01.23.10.39.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Jan 2022 09:10:43 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-samsung-soc@vger.kernel.org,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH v2 1/4] ARM: dts: exynos: Align MAX77836 nodes with dtschema on Monk and Rinato
-Date:   Sun, 23 Jan 2022 18:10:36 +0100
-Message-Id: <164295777264.25838.2090071538223607341.b4-ty@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220111174337.223320-2-krzysztof.kozlowski@canonical.com>
-References: <20220111174337.223320-1-krzysztof.kozlowski@canonical.com> <20220111174337.223320-2-krzysztof.kozlowski@canonical.com>
+        Sun, 23 Jan 2022 10:39:57 -0800 (PST)
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        David Laight <David.Laight@aculab.com>,
+        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        linux-pm@vger.kernel.org
+Subject: [PATCH 03/54] thermal/intel: don't use bitmap_weight() in end_power_clamp()
+Date:   Sun, 23 Jan 2022 10:38:34 -0800
+Message-Id: <20220123183925.1052919-4-yury.norov@gmail.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220123183925.1052919-1-yury.norov@gmail.com>
+References: <20220123183925.1052919-1-yury.norov@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 11 Jan 2022 18:43:34 +0100, Krzysztof Kozlowski wrote:
-> The newly introduced dtschema for MAX77836 MUIC requires proper naming
-> of extcon child node.
-> 
-> This should not have actual impact on MFD children driver binding,
-> because the max77836 MFD driver uses compatibles.
-> 
-> 
-> [...]
+Don't call bitmap_weight() if the following code can get by
+without it.
 
-Applied, thanks!
+Signed-off-by: Yury Norov <yury.norov@gmail.com>
+---
+ drivers/thermal/intel/intel_powerclamp.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-[1/4] ARM: dts: exynos: Align MAX77836 nodes with dtschema on Monk and Rinato
-      commit: 8d6f5af71e2ada6214df028441d479e1925e105b
-
-Best regards,
+diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
+index 14256421d98c..c841ab37e7c6 100644
+--- a/drivers/thermal/intel/intel_powerclamp.c
++++ b/drivers/thermal/intel/intel_powerclamp.c
+@@ -556,12 +556,9 @@ static void end_power_clamp(void)
+ 	 * stop faster.
+ 	 */
+ 	clamping = false;
+-	if (bitmap_weight(cpu_clamping_mask, num_possible_cpus())) {
+-		for_each_set_bit(i, cpu_clamping_mask, num_possible_cpus()) {
+-			pr_debug("clamping worker for cpu %d alive, destroy\n",
+-				 i);
+-			stop_power_clamp_worker(i);
+-		}
++	for_each_set_bit(i, cpu_clamping_mask, num_possible_cpus()) {
++		pr_debug("clamping worker for cpu %d alive, destroy\n", i);
++		stop_power_clamp_worker(i);
+ 	}
+ }
+ 
 -- 
-Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+2.30.2
+
