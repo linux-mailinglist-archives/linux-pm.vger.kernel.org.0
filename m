@@ -2,107 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F26A9497BA4
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jan 2022 10:14:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E482B497D4F
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jan 2022 11:40:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbiAXJOP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Jan 2022 04:14:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47968 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbiAXJOP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jan 2022 04:14:15 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EFC9C06173B
-        for <linux-pm@vger.kernel.org>; Mon, 24 Jan 2022 01:14:14 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id 204so181270wmc.4
-        for <linux-pm@vger.kernel.org>; Mon, 24 Jan 2022 01:14:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=qiv8SCZ1DWia4b/ngawnPJlXQ3FTRyWB9RDCxFqT2os=;
-        b=wLe7ks67JPi0/ir33GiUEWBmw+QazGl7+viYWqnVZjVN0MKcjiueuIVbGt52pplQUl
-         c1W52yrGDY4SUIdUTHHrQsb+grONIZPrHVYcIzLRc7haL7jczvhmfopgeqr3iPEvgXhG
-         5isCsOJyhK6rjnQG3kaNm0DH6hSBfT2dE/Yh/XdG8n0ANmLCpPNgrl2L/yYd5Yi/5X32
-         JNYvMPB9HRoSW2nETf7Ndhyt0k4eXSmCuWLWOiEidaipXJVCzGch4ICQ6xmxPurzqLSi
-         ZhYF42Tz2Wwzra2YiOZrqoVvwvdAhLV38nJ3tWZv7lJtg5RrBFRoSX9gZRXsj3urwnO3
-         CHUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=qiv8SCZ1DWia4b/ngawnPJlXQ3FTRyWB9RDCxFqT2os=;
-        b=0lCe9+gj/NWroZltfQ4/HyfEiouLZ2zphUK0yiHYuixn2pjPP8jXQR4CyiKIku6AGs
-         NpE7TrCwAURQPLgyIa4b4WE6mg8+hTP2735gBCCiSh79J+4h4cD5hYPO18KENYhot1AB
-         050Fv/zli2pOu2yJo8SY9FD28Mc2gVIRIZYYXWPmTpXDU8iThlc2jl+h80Ib59UFVAGe
-         Arb8muGZ4QbBDB5ejHZEt0mXn1WgrW2UJx2/7xi0FJy3cKuj9izYUJ2+fqnj8ahd+X3h
-         r5qhV0JB8P1xNW6gVDOwlOOPJaCkpKaoqAutYe42HCiF6Y4AWFlWVqrbBx4vCWCcKCGM
-         QujQ==
-X-Gm-Message-State: AOAM531/TemtNltWzXTk6ZT2sXB5IYmR/GLIdCmKMV7Hd1Y7HvTG9uH7
-        k2vk0CWGVz1BgS2ZFXu6LjrcAw==
-X-Google-Smtp-Source: ABdhPJyIEnnflQqUOEWE/Cu463EvA9RPW7Zy9Bo/q8PAKDzFOw2tnhB80U89Ab2CGcBs7xw5wevaoA==
-X-Received: by 2002:a1c:2784:: with SMTP id n126mr908918wmn.1.1643015652934;
-        Mon, 24 Jan 2022 01:14:12 -0800 (PST)
-Received: from localhost.localdomain ([2a01:e0a:82c:5f0:507b:3e2c:fe72:e1b4])
-        by smtp.gmail.com with ESMTPSA id o8sm15392007wmq.41.2022.01.24.01.14.11
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 24 Jan 2022 01:14:12 -0800 (PST)
-From:   Loic Poulain <loic.poulain@linaro.org>
-To:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz
-Cc:     linux-pm@vger.kernel.org, gregkh@linuxfoundation.org,
-        Loic Poulain <loic.poulain@linaro.org>
-Subject: [RESEND PATCH] PM: wakeup: Wakeup accounting for interrupts
-Date:   Mon, 24 Jan 2022 10:26:24 +0100
-Message-Id: <1643016384-11161-1-git-send-email-loic.poulain@linaro.org>
-X-Mailer: git-send-email 2.7.4
+        id S233645AbiAXKkW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Jan 2022 05:40:22 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:57086 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S233316AbiAXKkV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jan 2022 05:40:21 -0500
+X-UUID: d23d858e94544c1cba011559a5dfdaa1-20220124
+X-UUID: d23d858e94544c1cba011559a5dfdaa1-20220124
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 155025945; Mon, 24 Jan 2022 18:40:17 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Mon, 24 Jan 2022 18:40:16 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 24 Jan 2022 18:40:15 +0800
+Message-ID: <2404cea17479df35b5a5d55a923a96b10ebae909.camel@mediatek.com>
+Subject: Re: [PATCH v21 5/8] soc: mediatek: SVS: add debug commands
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        YT Lee <yt.lee@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Date:   Mon, 24 Jan 2022 18:40:15 +0800
+In-Reply-To: <47bcbffc-42f6-335e-dfab-990e0ab5f103@collabora.com>
+References: <20220107095200.4389-1-roger.lu@mediatek.com>
+         <20220107095200.4389-6-roger.lu@mediatek.com>
+         <47bcbffc-42f6-335e-dfab-990e0ab5f103@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Most of the time, system wakeup is caused by a wakeup-enabled
-interrupt, but the accounting is not done for the related wakeup
-source, causing 'wrong' values reported by device's wakeup attributes
-and debugfs stats (debug/wakeup_sources).
+Hi AngeloGioacchino,
 
-This change reports a wakeup event for any wakeup-sources the irq is
-attached with.
+Sorry for the late reply and thanks for the advice.
 
-Note: This only works for drivers explicitly attaching the irq to
-a given device (e.g. with dev_pm_set_wake_irq).
+On Fri, 2022-01-07 at 15:34 +0100, AngeloGioacchino Del Regno wrote:
+> Il 07/01/22 10:51, Roger Lu ha scritto:
+> > The purpose of SVS is to help find the suitable voltages
+> > for DVFS. Therefore, if SVS bank voltages are concerned
+> > to be wrong, we can adjust SVS bank voltages by this patch.
+> > 
+> > Signed-off-by: Roger Lu <roger.lu@mediatek.com>
+> > ---
+> >   drivers/soc/mediatek/mtk-svs.c | 321 ++++++++++++++++++++++++++++++++-
+> >   1 file changed, 318 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
+> > index 042c6e8e9069..93cdaecadd6d 100644
+> > --- a/drivers/soc/mediatek/mtk-svs.c
+> > +++ b/drivers/soc/mediatek/mtk-svs.c
+> 
+> ..snip..
+> 
+> > @@ -605,6 +896,16 @@ static void svs_set_bank_phase(struct svs_platform
+> > *svsp,
+> >   	}
+> >   }
+> >   
+> > +static inline void svs_save_bank_register_data(struct svs_platform *svsp,
+> > +					       enum svsb_phase phase)
+> > +{
+> > +	struct svs_bank *svsb = svsp->pbank;
+> > +	enum svs_reg_index rg_i;
+> > +
+> 
+> I think that it'd be a good idea to add an `enable` parameter, so that we
+> don't always do a register dump; after all, this is a debugging feature and
+> it's going to be completely irrelevant to the user, so keeping this disabled
+> by default would ensure to get no performance degradation (even if small)
+> unless really wanted.
+> 
+> So, in this case, here we'd have
+> 
+> 	if (!svsp->debug_enabled)
+> 		return;
 
-Note2: Some drivers call pm_wakeup_event() in their irq handler, but
-not all, moreover, an interrupt can be disabled while being flagged
-as wakeup source, and so accounting must be performed. This solution
-ensures that accounting will always be done for the interrupt waking
-up the host.
+Thanks for pointing out the concern. Excuse us, we really need this to be
+enabled by default. If we add a enable flag here, we'll face below problems and
+make debug more difficult.
 
-Signed-off-by: Loic Poulain <loic.poulain@linaro.org>
----
- drivers/base/power/wakeup.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+1. If we enable it afterward by cmd, init0[1~2] registers' data cannot be
+recorded expectedly because the init flow has been finished already and won't be
+run anymore. So, it doesn't work by using cmd to enable the flag.
+2. If we add a enable flag here, it means we have to re-build the kernel load in
+order to enable this flag. However, we cannot re-build the kernel load and needs
+to debug directly sometimes. It's a sad situation... :(
 
-diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-index 99bda0da..2d75e057 100644
---- a/drivers/base/power/wakeup.c
-+++ b/drivers/base/power/wakeup.c
-@@ -952,8 +952,19 @@ void pm_wakeup_clear(bool reset)
- void pm_system_irq_wakeup(unsigned int irq_number)
- {
- 	if (pm_wakeup_irq == 0) {
-+		struct wakeup_source *ws;
-+		int srcuidx;
-+
- 		pm_wakeup_irq = irq_number;
- 		pm_system_wakeup();
-+
-+		/* wakeup accounting */
-+		srcuidx = srcu_read_lock(&wakeup_srcu);
-+		list_for_each_entry_rcu(ws, &wakeup_sources, entry) {
-+			if (ws->wakeirq && ws->wakeirq->irq == irq_number)
-+				pm_wakeup_ws_event(ws, 0, false);
-+		}
-+		srcu_read_unlock(&wakeup_srcu, srcuidx);
- 	}
- }
- 
--- 
-2.7.4
+> 
+> > +	for (rg_i = DESCHAR; rg_i < SVS_REG_MAX; rg_i++)
+> > +		svsb->reg_data[phase][rg_i] = svs_readl_relaxed(svsp, rg_i);
+> > +}
+> > +
+> 
+> Of course, this implies adding a new debugfs entry to enable/disable the
+> debugging.
+> Everything else looks good :)
+
+Oh, excuse us, we have to keep the old design for better instant support and
+thanks for the understanding.
+
+> >   static inline void svs_error_isr_handler(struct svs_platform *svsp)
+> >   {
+> >   	struct svs_bank *svsb = svsp->pbank;
+> > @@ -619,6 +920,8 @@ static inline void svs_error_isr_handler(struct
+> > svs_platform *svsp)
+> >   		svs_readl_relaxed(svsp, SMSTATE1));
+> >   	dev_err(svsb->dev, "TEMP = 0x%08x\n", svs_readl_relaxed(svsp, TEMP));
+> >   
+> > +	svs_save_bank_register_data(svsp, SVSB_PHASE_ERROR);
+> > +
+> >   	svsb->mode_support = SVSB_MODE_ALL_DISABLE;
+> >   	svsb->phase = SVSB_PHASE_ERROR;
+
+[snip]
+
 
