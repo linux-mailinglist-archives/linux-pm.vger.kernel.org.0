@@ -2,171 +2,190 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9428499CB7
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jan 2022 23:13:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA9249970A
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jan 2022 22:24:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1579929AbiAXWHS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Jan 2022 17:07:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54442 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1456129AbiAXVhw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jan 2022 16:37:52 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 198CDC0BD133
-        for <linux-pm@vger.kernel.org>; Mon, 24 Jan 2022 12:24:11 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id y23so9072244oia.13
-        for <linux-pm@vger.kernel.org>; Mon, 24 Jan 2022 12:24:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=w3ynFKV1fLntHunSKUJ/uGzn1fGWIgjZmU7aBt47Qlo=;
-        b=i5o1/vEQIKJw1sMvH0GGqP/BOyX0hMhqYlSabek/jvvjhnl8Dd6qOmKf048VgTNIgL
-         W+mER+ik7PnWfOA5TdWVnoOWd4HDBmu0KUMfwo0rA7EBo6NDHZyxLLU1Jba6TlactXU8
-         TTOqJa0YtytYB5OBMJs5XhZLcXQZy6D+ZObjc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=w3ynFKV1fLntHunSKUJ/uGzn1fGWIgjZmU7aBt47Qlo=;
-        b=TPGOrby4ZgR3a8s2EMulVsLP/JS9/pQ7vpkcQjYgLPuGPfcJ5tJ4vWbnc5vUJT8KfJ
-         bfjh3phG4jKE0Jppk0wyC3OBOyXlPJPs/9uaUw8Gww2FfDZS4r5UeuBOOOWbwitrWRmU
-         3I5bgq3aMJO4EJNUxHw/yndC4w9UdDahzF2shm+1G2CJhep2z3gDzrFU5mpfxd8fJvwG
-         VS0pgSYcF5h6cmLQ+ZnvCDn/ysrfZpun2e8jc42CeTArQE7HMENyKwo+fUindpqOzEf5
-         x7jI6YUunq3gY3frDahCZcyGkYm0+cIT5GNOHV725HPIumu8ipete8/NEygS9Sir/6JJ
-         RX/w==
-X-Gm-Message-State: AOAM531bhCkAXvQ92i74aY3qeZQruClNpu3vzKd5IxyqtHVMWdelOXpa
-        uLUQ3A16VDHkGQ8zXQ5MSz8PMtFQIYLWLY1NDc7bNQ==
-X-Google-Smtp-Source: ABdhPJwJr+L9TLQ5U3Eh5OUnJaPwt9T0uy8XOGbvauiD6g+ZvjuWnHO+tGF2uwCLg7VOfdaAHF1gbUWcJoGO76mVM7Y=
-X-Received: by 2002:aca:aa0f:: with SMTP id t15mr2917122oie.32.1643055850425;
- Mon, 24 Jan 2022 12:24:10 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 24 Jan 2022 12:24:10 -0800
-MIME-Version: 1.0
-In-Reply-To: <20220124011143.684348-1-dnojiri@chromium.org>
-References: <20220124010348.681893-1-dnojiri@chromium.org> <20220124011143.684348-1-dnojiri@chromium.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Mon, 24 Jan 2022 12:24:09 -0800
-Message-ID: <CAE-0n528Mw8mCLTL9GAiaYBXxTbTBUi_f_OfeFPo_gmDpBGqXg@mail.gmail.com>
-Subject: Re: [PATCH v2] power: supply: PCHG: Use MKBP for device event handling
-To:     Daisuke Nojiri <dnojiri@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
+        id S1352029AbiAXVIz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Jan 2022 16:08:55 -0500
+Received: from mxout02.lancloud.ru ([45.84.86.82]:57190 "EHLO
+        mxout02.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1445138AbiAXVCV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jan 2022 16:02:21 -0500
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru 817A9209B103
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: [PATCH] driver core: platform: Rename platform_get_irq_optional()
+ to platform_get_irq_silent()
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+CC:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        KVM list <kvm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        <linux-iio@vger.kernel.org>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        "ALSA Development Mailing List" <alsa-devel@alsa-project.org>,
+        Jaroslav Kysela <perex@perex.cz>,
         Guenter Roeck <groeck@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Thierry Reding <thierry.reding@gmail.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        <linux-phy@lists.infradead.org>, Jiri Slaby <jirislaby@kernel.org>,
+        <openipmi-developer@lists.sourceforge.net>,
+        "Khuong Dinh" <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        "Bartosz Golaszewski" <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        "Sebastian Reichel" <sre@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        <platform-driver-x86@vger.kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        <linux-edac@vger.kernel.org>, Tony Luck <tony.luck@intel.com>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        <netdev@vger.kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        "Linux MMC List" <linux-mmc@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        "James Morse" <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        "Pengutronix Kernel Team" <kernel@pengutronix.de>,
+        Richard Weinberger <richard@nod.at>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        <linux-mediatek@lists.infradead.org>,
+        Brian Norris <computersforpeace@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+References: <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
+ <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
+ <Yd9L9SZ+g13iyKab@sirena.org.uk>
+ <20220113110831.wvwbm75hbfysbn2d@pengutronix.de>
+ <YeA7CjOyJFkpuhz/@sirena.org.uk>
+ <20220113194358.xnnbhsoyetihterb@pengutronix.de>
+ <YeF05vBOzkN+xYCq@smile.fi.intel.com>
+ <20220115154539.j3tsz5ioqexq2yuu@pengutronix.de>
+ <YehdsUPiOTwgZywq@smile.fi.intel.com>
+ <20220120075718.5qtrpc543kkykaow@pengutronix.de>
+ <Ye6/NgfxsZnpXE09@smile.fi.intel.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <15796e57-f7d4-9c66-3b53-0b026eaf31d8@omp.ru>
+Date:   Tue, 25 Jan 2022 00:02:06 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
+MIME-Version: 1.0
+In-Reply-To: <Ye6/NgfxsZnpXE09@smile.fi.intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Daisuke Nojiri (2022-01-23 17:11:40)
-> This patch makes the PCHG driver receive device events through
+Hello!
 
-$ git grep "This patch" -- Documentation/process
+On 1/24/22 6:01 PM, Andy Shevchenko wrote:
 
-i.e. don't use "This patch"
+>>>>>>> It'd certainly be good to name anything that doesn't correspond to one
+>>>>>>> of the existing semantics for the API (!) something different rather
+>>>>>>> than adding yet another potentially overloaded meaning.
+>>>>>>
+>>>>>> It seems we're (at least) three who agree about this. Here is a patch
+>>>>>> fixing the name.
+>>>>>
+>>>>> And similar number of people are on the other side.
+>>>>
+>>>> If someone already opposed to the renaming (and not only the name) I
+>>>> must have missed that.
+>>>>
+>>>> So you think it's a good idea to keep the name
+>>>> platform_get_irq_optional() despite the "not found" value returned by it
+>>>> isn't usable as if it were a normal irq number?
+>>>
+>>> I meant that on the other side people who are in favour of Sergey's patch.
+>>> Since that I commented already that I opposed the renaming being a standalone
+>>> change.
+>>>
+>>> Do you agree that we have several issues with platform_get_irq*() APIs?
+[...]
+>>> 2. The vIRQ0 handling: a) WARN() followed by b) returned value 0
+>>
+>> I'm happy with the vIRQ0 handling. Today platform_get_irq() and it's
+>> silent variant returns either a valid and usuable irq number or a
+>> negative error value. That's totally fine.
+> 
+> It might return 0.
+> Actually it seems that the WARN() can only be issued in two cases:
+> - SPARC with vIRQ0 in one of the array member
+> - fallback to ACPI for GPIO IRQ resource with index 0
 
-> MKBP protocol since CrOS EC switched to deliver all peripheral
-> charge events to the MKBP protocol. This will unify PCHG event
-> handling on X86 and ARM.
->
-> Signed-off-by: Daisuke Nojiri <dnojiri@chromium.org>
-> ---
+   You have probably missed the recent discovery that arch/sh/boards/board-aps4*.c
+causes IRQ0 to be passed as a direct IRQ resource?
 
-Just some nitpicks
+> But the latter is bogus, because it would mean a bug in the ACPI code.
 
-> diff --git a/drivers/power/supply/cros_peripheral_charger.c b/drivers/power/supply/cros_peripheral_charger.c
-> index 305f10dfc06d1b..cb402f48087ddf 100644
-> --- a/drivers/power/supply/cros_peripheral_charger.c
-> +++ b/drivers/power/supply/cros_peripheral_charger.c
-> @@ -237,46 +238,22 @@ static int cros_pchg_event(const struct charger_data *charger,
->         return NOTIFY_OK;
->  }
->
-> -static u32 cros_get_device_event(const struct charger_data *charger)
-> -{
-> -       struct ec_params_device_event req;
-> -       struct ec_response_device_event rsp;
-> -       struct device *dev = charger->dev;
-> -       int ret;
-> -
-> -       req.param = EC_DEVICE_EVENT_PARAM_GET_CURRENT_EVENTS;
-> -       ret = cros_pchg_ec_command(charger, 0, EC_CMD_DEVICE_EVENT,
-> -                                  &req, sizeof(req), &rsp, sizeof(rsp));
-> -       if (ret < 0) {
-> -               dev_warn(dev, "Unable to get device events (err:%d)\n", ret);
-> -               return 0;
-> -       }
-> -
-> -       return rsp.event_mask;
-> -}
-> -
->  static int cros_ec_notify(struct notifier_block *nb,
->                           unsigned long queued_during_suspend,
->                           void *data)
->  {
->         struct cros_ec_device *ec_dev = (struct cros_ec_device *)data;
+   Worth changing >= 0 to > 0 there, maybe?
 
-Not a problem in this patch but the cast can be dropped.
+> The bottom line here is the SPARC case. Anybody familiar with the platform
+> can shed a light on this. If there is no such case, we may remove warning
+> along with ret = 0 case from platfrom_get_irq().
 
-> -       u32 host_event = cros_ec_get_host_event(ec_dev);
->         struct charger_data *charger =
->                         container_of(nb, struct charger_data, notifier);
-> -       u32 device_event_mask;
-> +       u32 host_event;
->
-> -       if (!host_event)
-> +       if (ec_dev->event_data.event_type != EC_MKBP_EVENT_PCHG
-> +                       || ec_dev->event_size != sizeof(host_event))
+   I'm afraid you're too fast here... :-)
+   We'll have a really hard time if we continue to allow IRQ0 to be returned by
+platform_get_irq() -- we'll have oto fileter it out in the callers then...
 
-Does checkpatch complain here? Preferably it's written as
+>>> 3. The specific cookie for "IRQ not found, while no error happened" case
+>>
+>> Not sure what you mean here. I have no problem that a situation I can
+>> cope with is called an error for the query function. I just do error
+>> handling and continue happily. So the part "while no error happened" is
+>> irrelevant to me.
+> 
+> I meant that instead of using special error code, 0 is very much good for
+> the cases when IRQ is not found. It allows to distinguish -ENXIO from the
+> low layer from -ENXIO with this magic meaning.
 
-       if (ec_dev->event_data.event_type != EC_MKBP_EVENT_PCHG ||
-           ec_dev->event_size != sizeof(host_event))
+   I don't see how -ENXIO can trickle from the lower layers, frankly...
 
->                 return NOTIFY_DONE;
->
-> -       if (!(host_event & EC_HOST_EVENT_MASK(EC_HOST_EVENT_DEVICE)))
-> -               return NOTIFY_DONE;
-> +       host_event = get_unaligned_le32(&ec_dev->event_data.data.host_event);
->
-> -       /*
-> -        * todo: Retrieve device event mask in common place
-> -        * (e.g. cros_ec_proto.c).
-> -        */
-> -       device_event_mask = cros_get_device_event(charger);
-> -       if (!(device_event_mask & EC_DEVICE_EVENT_MASK(EC_DEVICE_EVENT_WLC)))
-> +       if (!(host_event & EC_MKBP_PCHG_DEVICE_EVENT))
->                 return NOTIFY_DONE;
->
->         return cros_pchg_event(charger, host_event);
-> diff --git a/include/linux/platform_data/cros_ec_commands.h b/include/linux/platform_data/cros_ec_commands.h
-> index 271bd87bff0a25..c784bed3388865 100644
-> --- a/include/linux/platform_data/cros_ec_commands.h
-> +++ b/include/linux/platform_data/cros_ec_commands.h
-> @@ -3386,6 +3386,9 @@ enum ec_mkbp_event {
->         /* Send an incoming CEC message to the AP */
->         EC_MKBP_EVENT_CEC_MESSAGE = 9,
->
-> +       /* Peripheral device charger event */
-> +       EC_MKBP_EVENT_PCHG = 12,
-> +
->         /* Number of MKBP events */
->         EC_MKBP_EVENT_COUNT,
->  };
-> @@ -5527,6 +5530,67 @@ enum pchg_state {
->         [PCHG_STATE_CONNECTED] = "CONNECTED", \
->         }
->
-> +/**
+[...]
 
-Please use only one '*', i.e. '/*' so that this doesn't trip up
-kernel-doc generation that looks for two stars.
-
-> + * Update firmware of peripheral chip
-> + */
-> +#define EC_CMD_PCHG_UPDATE 0x0136
+MBR, Sergey
