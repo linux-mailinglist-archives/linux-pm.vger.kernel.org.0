@@ -2,236 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA8C549796C
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jan 2022 08:28:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B34E849798F
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jan 2022 08:36:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241865AbiAXH2d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Jan 2022 02:28:33 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:34688 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S241813AbiAXH2c (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jan 2022 02:28:32 -0500
-X-UUID: 707d40179bd543fd8fba229a40cedfab-20220124
-X-UUID: 707d40179bd543fd8fba229a40cedfab-20220124
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <roger.lu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1848919182; Mon, 24 Jan 2022 15:28:29 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 24 Jan 2022 15:28:28 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 24 Jan
- 2022 15:28:27 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 24 Jan 2022 15:28:27 +0800
-Message-ID: <f4fbfc91d2f0abf041f058f191e2b239ac173a1e.camel@mediatek.com>
-Subject: Re: [PATCH v21 4/8] soc: mediatek: SVS: add monitor mode
-From:   Roger Lu <roger.lu@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     Fan Chen <fan.chen@mediatek.com>,
-        HenryC Chen <HenryC.Chen@mediatek.com>,
-        YT Lee <yt.lee@mediatek.com>,
-        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Date:   Mon, 24 Jan 2022 15:28:27 +0800
-In-Reply-To: <e118df40-da6b-88f6-fbff-15befb3405d5@collabora.com>
-References: <20220107095200.4389-1-roger.lu@mediatek.com>
-         <20220107095200.4389-5-roger.lu@mediatek.com>
-         <e118df40-da6b-88f6-fbff-15befb3405d5@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        id S241904AbiAXHgB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Jan 2022 02:36:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53582 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241893AbiAXHgA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jan 2022 02:36:00 -0500
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F1FBC061401
+        for <linux-pm@vger.kernel.org>; Sun, 23 Jan 2022 23:36:00 -0800 (PST)
+Received: by mail-ot1-x331.google.com with SMTP id l64-20020a9d1b46000000b005983a0a8aaaso21119053otl.3
+        for <linux-pm@vger.kernel.org>; Sun, 23 Jan 2022 23:36:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=zOHJbgxEeKcTUS1M3dbg/CCHL8zxNc7o7Y1pwSiNVNQ=;
+        b=nnn9LtLwXfk7cnMsheBf/i/NrLocB5ZH4T6337Dpv82Oj2Low4So95DhYusrDqfQgr
+         ZrLtE7d2iUqFHmJDVdjrO2lhVt84Rj3bVKKjPcdlzLgauycE0b8EIJKKuAmdJ4unjYYn
+         7LZiBTfpZ06IW4qOFLzIvb+X+r0FDlTMkNqwBORskjKlVZFUi3Mbw7YG/3W7xT95PB1G
+         gEucmzF7XRcFKikid2+aCrVKzSZJxXvj3lNKDY6VjjwJKCjEjiYizx7yXNl8Ju3zMgUb
+         qbwzpRhjz4zunCqbBLFND+/0JzIkiV06okLrB6LSyHL1PcDAH1lKt3t06T48eImwZJ+U
+         ieHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=zOHJbgxEeKcTUS1M3dbg/CCHL8zxNc7o7Y1pwSiNVNQ=;
+        b=wh/jWJ31WqYqFOZjKoZ/3fBV5DzVhCIkEVjtZHwYYWvbYi3KO12BZk3MfUIqfZ/gbo
+         ium8Xp6ldcPiAH2eRTHXKvk8IdRiCN2N+Al3YdFPeI7DpWFB2ytYhYU+N5LdkMvRGu14
+         9tyoLvqzBBQwwVAEk68ET4NgP9jaUDqCD8rH0wEsxAV63KrFxqIBzctirvds3M9gWgcg
+         GVLgka69N3pC4y/8d1UtB3IZJ5ey1hHaYuyyd1WqaLmitkExnFAEQPEMj6UojnYqpJBi
+         WnreHm9FUuOXbMfvkOzmUIjkLOpFbQYMwGFdtseuD6JjPXoasil0yCqG1vtO+4aexAJS
+         h4Cw==
+X-Gm-Message-State: AOAM532yyz9XZqZ3IXGhQQ12P+7/kyaUAZmCsKwGX8PrivzEe8KZXoni
+        CU5Amp5h96uID++esRtpjJBKI3xPWbu7/zqJUxc=
+X-Google-Smtp-Source: ABdhPJxU32YNupNleWFwExE5RevdgxxJdX62CTXPJWdkWrogcDbY/DYawRwnrsfoV4yZFjQ3D3ASXj0PQ/lX2NfdHp4=
+X-Received: by 2002:a9d:64c3:: with SMTP id n3mr6167493otl.49.1643009759871;
+ Sun, 23 Jan 2022 23:35:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+Sender: blessmegod87@gmail.com
+Received: by 2002:a05:6838:441f:0:0:0:0 with HTTP; Sun, 23 Jan 2022 23:35:59
+ -0800 (PST)
+From:   DINA MCKENNA <dinamckennahowley@gmail.com>
+Date:   Mon, 24 Jan 2022 07:35:59 +0000
+X-Google-Sender-Auth: wXyhnIu9y8GFI4qBrYQUoqbJ-7s
+Message-ID: <CACOw96=7fxdoYVHW5DfJjR3jV3BmUng0T67PKJYsv4-uH9ZOzQ@mail.gmail.com>
+Subject: Calvary greetings.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi AngeloGioacchino,
+Hello my dear,
 
-Sorry for the late reply and thanks for the advice.
+ I sent this mail praying it will get to you in a good condition of
+health, since I myself are in a very critical health condition in
+which I sleep every night without knowing if I may be alive to see the
+next day. I bring peace and love to you. It is by the grace of God, I
+had no choice than to do what is lawful and right in the sight of God
+for eternal life and in the sight of man, for witness of God=E2=80=99s merc=
+y
+and glory upon my life. I am Mrs. Dina. Howley Mckenna, a widow. I am
+suffering from a long time brain tumor, It has defiled all forms of
+medical treatment, and right now I have about a few months to leave,
+according to medical experts. The situation has gotten complicated
+recently with my inability to hear proper, am communicating with you
+with the help of the chief nurse herein the hospital, from all
+indication my conditions is really deteriorating and it is quite
+obvious that, according to my doctors they have advised me that I may
+not live too long, Because this illness has gotten to a very bad
+stage. I plead that you will not expose or betray this trust and
+confidence that I am about to repose on you for the mutual benefit of
+the orphans and the less privilege. I have some funds I inherited from
+my late husband, the sum of ($ 11,000,000.00, Eleven Million Dollars).
+Having known my condition, I decided to donate this fund to you
+believing that you will utilize it the way i am going to instruct
+herein. I need you to assist me and reclaim this money and use it for
+Charity works therein your country  for orphanages and gives justice
+and help to the poor, needy and widows says The Lord." Jeremiah
+22:15-16.=E2=80=9C and also build schools for less privilege that will be
+named after my late husband if possible and to promote the word of God
+and the effort that the house of God is maintained. I do not want a
+situation where this money will be used in an ungodly manner. That's
+why I'm taking this decision. I'm not afraid of death, so I know where
+I'm going. I accept this decision because I do not have any child who
+will inherit this money after I die.. Please I want your sincerely and
+urgent answer to know if you will be able to execute this project for
+the glory of God, and I will give you more information on how the fund
+will be transferred to your bank account. May the grace, peace, love
+and the truth in the Word of God be with you and all those that you
+love and care for.
 
-On Fri, 2022-01-07 at 15:34 +0100, AngeloGioacchino Del Regno wrote:
-> Il 07/01/22 10:51, Roger Lu ha scritto:
-> > SVS monitor mode is based on different thermal temperature
-> > to provide suitable SVS bank voltages.
-> > 
-> > Signed-off-by: Roger Lu <roger.lu@mediatek.com>
-> > ---
-> >   drivers/soc/mediatek/mtk-svs.c | 253 ++++++++++++++++++++++++++++++++-
-> >   1 file changed, 247 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
-> > index fc7e2ee44a92..042c6e8e9069 100644
-> > --- a/drivers/soc/mediatek/mtk-svs.c
-> > +++ b/drivers/soc/mediatek/mtk-svs.c
-> > @@ -25,6 +25,7 @@
-> >   #include <linux/regulator/consumer.h>
-> >   #include <linux/slab.h>
-> >   #include <linux/spinlock.h>
-> > +#include <linux/thermal.h>
-> >   
-> >   /* svs bank 1-line sw id */
-> >   #define SVSB_CPU_LITTLE			BIT(0)
-> > @@ -36,6 +37,7 @@
-> >   #define SVSB_MODE_ALL_DISABLE		0
-> >   #define SVSB_MODE_INIT01		BIT(1)
-> >   #define SVSB_MODE_INIT02		BIT(2)
-> > +#define SVSB_MODE_MON			BIT(3)
+I'm waiting for your immediate reply..
 
-[snip]
-
-> >   /**
-> > @@ -241,6 +254,7 @@ struct svs_platform {
-> >    * @get_volts: function pointer to get bank voltages
-> >    * @name: bank name
-> >    * @buck_name: regulator name
-> > + * @tzone_name: thermal zone name
-> >    * @suspended: suspend flag of this bank
-> >    * @phase: bank current phase
-> >    * @volt_od: bank voltage overdrive
-> > @@ -270,6 +284,13 @@ struct svs_platform {
-> >    * @sw_id: bank software identification
-> >    * @cpu_id: cpu core id for SVS CPU bank use only
-> >    * @ctl0: TS-x selection
-> > + * @temp: bank temperature
-> > + * @tzone_htemp: thermal zone high temperature threshold
-> > + * @tzone_htemp_voffset: thermal zone high temperature voltage offset
-> > + * @tzone_ltemp: thermal zone low temperature threshold
-> > + * @tzone_ltemp_voffset: thermal zone low temperature voltage offset
-> > + * @bts: svs efuse data
-> > + * @mts: svs efuse data
-> >    * @bdes: svs efuse data
-> >    * @mdes: svs efuse data
-> >    * @mtdes: svs efuse data
-> > @@ -292,6 +313,7 @@ struct svs_bank {
-> >   	void (*get_volts)(struct svs_platform *svsp);
-> >   	char *name;
-> >   	char *buck_name;
-> > +	char *tzone_name;
-> >   	bool suspended;
-> >   	enum svsb_phase phase;
-> >   	s32 volt_od;
-> > @@ -321,6 +343,13 @@ struct svs_bank {
-> >   	u32 sw_id;
-> >   	u32 cpu_id;
-> >   	u32 ctl0;
-> > +	u32 temp;
-> > +	u32 tzone_htemp;
-> > +	u32 tzone_htemp_voffset;
-> > +	u32 tzone_ltemp;
-> > +	u32 tzone_ltemp_voffset;
-> > +	u32 bts;
-> > +	u32 mts;
-> >   	u32 bdes;
-> >   	u32 mdes;
-> >   	u32 mtdes;
-> > @@ -361,10 +390,21 @@ static u32 svs_bank_volt_to_opp_volt(u32 svsb_volt,
-> > u32 svsb_volt_step,
-> >   	return (svsb_volt * svsb_volt_step) + svsb_volt_base;
-> >   }
-> >   
-> 
-> I'm sorry for the double review, but this went unnoticed in the previous one.
-> 
-> > +static int svs_get_zone_temperature(const char *tzone_name, int
-> > *tzone_temp)
-> > +{
-> > +	struct thermal_zone_device *tzd;
-> > +
-> > +	tzd = thermal_zone_get_zone_by_name(tzone_name);
-> 
-> This call is expensive, as it's iterating through the (possibly) entire
-> thermal_tz_list (drivers/thermal/thermal_core.c) so, for performance purposes,
-> noting that you're using this in svs_adjust_pm_opp_volts(), it's not a good
-> idea
-> to call it at every ISR.
-> 
-> I would instead propose to get a pointer to the thermal_zone at driver probe
-> time and cache that in struct svs_bank: this function would also be removed
-> as the only thing that you'd need to do then would be just one call...
-> 
-> [read forward...]
-
-No problem. I'll cache thermal_zone at driver probe time and remove this API in
-the next patch. Thanks.
-
-> 
-> > +	if (IS_ERR(tzd))
-> > +		return PTR_ERR(tzd);
-> > +
-> > +	return thermal_zone_get_temp(tzd, tzone_temp);
-> > +}
-> > +
-> >   static int svs_adjust_pm_opp_volts(struct svs_bank *svsb, bool
-> > force_update)
-> >   {
-> > -	int ret = -EPERM;
-> > -	u32 i, svsb_volt, opp_volt;
-> > +	int ret = -EPERM, tzone_temp = 0;
-> > +	u32 i, svsb_volt, opp_volt, temp_voffset = 0;
-> >   
-> >   	mutex_lock(&svsb->lock);
-> >   
-> > @@ -378,6 +418,22 @@ static int svs_adjust_pm_opp_volts(struct svs_bank
-> > *svsb, bool force_update)
-> >   		goto unlock_mutex;
-> >   	}
-> >   
-> > +	/* Get thermal effect */
-> > +	if (svsb->phase == SVSB_PHASE_MON) {
-> > +		ret = svs_get_zone_temperature(svsb->tzone_name, &tzone_temp);
-> 
-> ... so you can simply call ...
-> 
-> 
-> 	ret = thermal_zone_get_temp(svsb->tzd, tzone_temp);
-> 
-> 
-> ...without any need for any helper.
-
-Sure, I'll call thermal_zone_get_temp() directly after applying this recommended
-change in the next patch. Thanks.
-
-> 
-> > +		if (ret || (svsb->temp > SVSB_TEMP_UPPER_BOUND &&
-> > +			    svsb->temp < SVSB_TEMP_LOWER_BOUND)) {
-> > +			dev_err(svsb->dev, "%s: %d (0x%x), run default volts\n",
-> > +				svsb->tzone_name, ret, svsb->temp);
-> > +			svsb->phase = SVSB_PHASE_ERROR;
-> > +		}
-> > +
-> > +		if (tzone_temp >= svsb->tzone_htemp)
-> > +			temp_voffset += svsb->tzone_htemp_voffset;
-> > +		else if (tzone_temp <= svsb->tzone_ltemp)
-> > +			temp_voffset += svsb->tzone_ltemp_voffset;
-> > +	}
-> > +
-> >   	/* vmin <= svsb_volt (opp_volt) <= default opp voltage */
-> >   	for (i = 0; i < svsb->opp_count; i++) {
-> >   		switch (svsb->phase) {
-> 
-> Apart from that, the commit looks good. Looking forward to review the new
-> version!
-> 
-> Regards,
-> - Angelo
-
+May God Bless you,
+Mrs. Dina. Howley Mckenna.
