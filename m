@@ -2,77 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 633BB498944
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jan 2022 19:54:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED5EE498FA8
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jan 2022 20:55:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245356AbiAXSx6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Jan 2022 13:53:58 -0500
-Received: from mail-qk1-f174.google.com ([209.85.222.174]:43606 "EHLO
-        mail-qk1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245656AbiAXSw1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jan 2022 13:52:27 -0500
-Received: by mail-qk1-f174.google.com with SMTP id h2so21394780qkp.10;
-        Mon, 24 Jan 2022 10:52:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JVltL7XfUr78OBdyLqEqOu/YRzCA0cEoywdSG9wAfwo=;
-        b=QJ58ryjU0BQnhokNxWiSvx9LVJwvpRNeTjeCa7g5uqbTy6E9pv4SzezeQnGTPQcvYm
-         QQgaIWSpdt/RWwmso62q/DYncSFGhGGOJDQcPLiwqvy/X8ucaeyM8sAguAMXYjX5WH8V
-         +FP/z9eeimYBcPQUsRAJxiWRYGOOts4wBFoKeuHADnfTwnGpAgY5QdrgKI2zhaLcEkgJ
-         fNOm17Fze2vFZPl7Gx+vU6mWOzbhmA0MYXWYNjJXD2Fy0MwytP904gXmZ+GVLAsjn34x
-         zYEQVjdBrIVpxAHKO1IXyFtQO9j+3uNqTqwgX2O9CqTiNfygiLvxE5OjvUuga8IXiWz+
-         MdFA==
-X-Gm-Message-State: AOAM5328EF22RW5au7gQUBSdOKnMVMs4/R7IOtYCmclHB/6PYcievHFn
-        h0eIp75pgzzLfbS8pASIQ5NN0Q9JL3KtqqxW23w=
-X-Google-Smtp-Source: ABdhPJx7TK2MvPwVSaAnSh01KupVk1iv0Pp7EXSDqNuAkHni9KT1XFQY2XONmQZbwXzKfAEkNwUa4j5bzUrEm8hJr20=
-X-Received: by 2002:a05:620a:1a97:: with SMTP id bl23mr12176564qkb.621.1643050346792;
- Mon, 24 Jan 2022 10:52:26 -0800 (PST)
+        id S1347648AbiAXTyK convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 24 Jan 2022 14:54:10 -0500
+Received: from [103.153.79.64] ([103.153.79.64]:61134 "EHLO [103.153.79.64]"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1357138AbiAXTsO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 24 Jan 2022 14:48:14 -0500
+Reply-To: Nasser Rashid <nasserrashid.uae@gmail.com>
+From:   Nasser Rashid <anice.fronteracapitalgroup@gmail.com>
+To:     linux-pm@vger.kernel.org
+Subject: EXPO 2020 BUSINESS PROPOSAL
+Date:   24 Jan 2022 11:48:16 -0800
+Message-ID: <20220124114816.CA2E539AACF3222E@gmail.com>
 MIME-Version: 1.0
-References: <20220111103346.2660639-1-abailon@baylibre.com> <7hilu9xe7n.fsf@baylibre.com>
-In-Reply-To: <7hilu9xe7n.fsf@baylibre.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 24 Jan 2022 19:52:11 +0100
-Message-ID: <CAJZ5v0gZFBEKDt6S0H91F5xCjC3qtT6B+cTnv6u1nijMHkc8jA@mail.gmail.com>
-Subject: Re: [PATCH v4 RESEND 0/2] Add a generic virtual thermal sensor
-To:     Kevin Hilman <khilman@baylibre.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ben.tseng@mediatek.com, Matthias Kaehlcke <mka@chromium.org>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 5:58 PM Kevin Hilman <khilman@baylibre.com> wrote:
->
-> Daniel, Amit,
->
-> Alexandre Bailon <abailon@baylibre.com> writes:
->
-> > This series add a virtual thermal sensor.
-> > It could be used to get a temperature using some thermal sensors.
-> > Currently, the supported operations are max, min and avg.
-> > The virtual sensor could be easily extended to support others operations.
-> >
-> > Changes in v2:
-> > - Fix some warnings / errors reported by kernel test robot
-> > - rename some struct and functions with a more accurate name
-> > - update the dt bindings: rename type attribute to aggregation-function
-> > - factorize a little bit the aggregation functions
-> > Changes in v3:
-> > - Aggregate thermal zone instead of thermal sensors
-> > - Use try_get_module / put_module to prevent thermal providers to be removed
-> > - Update the bindings, to be more accurate
-> > Changes in v4:
-> > - Fix two warnings reported by kernel test robot
->
-> Any more feedback on this series?
+Greetings!
 
-Hopefully, I'll get to it this week and I'll let you know.
+I'm Nasser Rashid, a business financial specialist and investment 
+expert. consultant experienced in financial funding services. I 
+have a
+
+I have a serious business investment opportunity to discuss with 
+you. Century Financial Dubai is the home of discerning investors.
+We
+
+We offer independent financial advice and assist our clients in 
+making sound investment decisions from a variety of investment 
+options.
+
+Opportunities are available.
+
+Our company is structured to provide personalized services to As 
+a result, capital security and adequate funding are ensured.
+
+returns on investment. Our investors are ready to provide funding 
+for your business expansion, such as debt and equity.
+
+financing. If you require funding, we would be able to partner 
+with you. We look forward to your response.
+
+Thank you and stay safe,
+
+Nasser Rashid, CFA,
+
+Century Financial
