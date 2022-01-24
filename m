@@ -2,149 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 243B849870C
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jan 2022 18:38:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 633BB498944
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jan 2022 19:54:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241554AbiAXRiL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Jan 2022 12:38:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54028 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241578AbiAXRiK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jan 2022 12:38:10 -0500
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1EFC06173D;
-        Mon, 24 Jan 2022 09:38:10 -0800 (PST)
-Received: by mail-io1-xd2b.google.com with SMTP id y84so4062739iof.0;
-        Mon, 24 Jan 2022 09:38:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9PC3NeMELC1XD6IFEvl0tImz7mUzi6DrIvhNgtCXheg=;
-        b=r3W2o3FbK8Po9p5t9DKi/hM9uqDYDGKCZAI1sHFgfyGCY4wwhyY98OXAuMF6IdpkZb
-         c/rGYTdAPqbfzZMwr0XyNrlMnlGcWLc4gz44291eU8oERgzhJg5YyFWQ2MsBRSQV9NqI
-         YvgTo69DQeTu17hTODXR9xxiuw9j2iE1Rqq3AI3xm3b/lGWCXIrrMmkF6pVkIM8DnOoA
-         /xOJeIVot2b74mIishr1uty9wkFBQ8MNphJrpakA14QRl6MCgygV6kKmvSr1AaD8mVPm
-         ILUVGnzEomtWsL6yreWjWfZOAuFFTyBZUXIwEOeVAMlj+h0KorsJijDssRichvSERbtn
-         Drtw==
+        id S245356AbiAXSx6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Jan 2022 13:53:58 -0500
+Received: from mail-qk1-f174.google.com ([209.85.222.174]:43606 "EHLO
+        mail-qk1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245656AbiAXSw1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jan 2022 13:52:27 -0500
+Received: by mail-qk1-f174.google.com with SMTP id h2so21394780qkp.10;
+        Mon, 24 Jan 2022 10:52:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=9PC3NeMELC1XD6IFEvl0tImz7mUzi6DrIvhNgtCXheg=;
-        b=JjGA8i5ZocSBkzMAB08G1KaFWAF6jHHleGbeBq3KtPYDAd3adZV3l46eJYpt5ErID6
-         /S8Hqh/TwxF7OyMHPgaKuV5jzvEskSH0qERaDTsb1/AETVf1WGySaCURQoKNnUxIw2zL
-         odjcS/omXq6npk1V93bDJv6dMAG+0U1VpoLtLtmgw0ht+CrFbdwvwmL5/kRE8AWD2LaG
-         +Y3ghEEOrsIn2KTsH60Pp6tnq41qlmxrChcBMEvpOHZ3gsL6aXV4ZPU5EBTTfo2xOply
-         1GOviSNvv8slp1WGWAm34ENeIFN18DimYKG5DQ8hLhC9RlcbdNzmtXPBnpIbdWQgXm6k
-         kX8w==
-X-Gm-Message-State: AOAM531eI5IKadKjMLMP5GgYgRZL5e3GB/RBIxRcTwbsjbf1mHcaW+52
-        9OO8tS7L5wESdXEYOgTcL1dueLYShJroGpEqv0lGRLkCjMo=
-X-Google-Smtp-Source: ABdhPJxqyiT0PPFpA0fk5ZVw2UJp+Mt7/NILaDDSxDYChAcP9uwMjItN1NgZ6EKo9iCRfF7hQBQ1H8jJ8B4YIwuKyNo=
-X-Received: by 2002:a05:6638:32a5:: with SMTP id f37mr7394048jav.208.1643045890072;
- Mon, 24 Jan 2022 09:38:10 -0800 (PST)
+        bh=JVltL7XfUr78OBdyLqEqOu/YRzCA0cEoywdSG9wAfwo=;
+        b=QJ58ryjU0BQnhokNxWiSvx9LVJwvpRNeTjeCa7g5uqbTy6E9pv4SzezeQnGTPQcvYm
+         QQgaIWSpdt/RWwmso62q/DYncSFGhGGOJDQcPLiwqvy/X8ucaeyM8sAguAMXYjX5WH8V
+         +FP/z9eeimYBcPQUsRAJxiWRYGOOts4wBFoKeuHADnfTwnGpAgY5QdrgKI2zhaLcEkgJ
+         fNOm17Fze2vFZPl7Gx+vU6mWOzbhmA0MYXWYNjJXD2Fy0MwytP904gXmZ+GVLAsjn34x
+         zYEQVjdBrIVpxAHKO1IXyFtQO9j+3uNqTqwgX2O9CqTiNfygiLvxE5OjvUuga8IXiWz+
+         MdFA==
+X-Gm-Message-State: AOAM5328EF22RW5au7gQUBSdOKnMVMs4/R7IOtYCmclHB/6PYcievHFn
+        h0eIp75pgzzLfbS8pASIQ5NN0Q9JL3KtqqxW23w=
+X-Google-Smtp-Source: ABdhPJx7TK2MvPwVSaAnSh01KupVk1iv0Pp7EXSDqNuAkHni9KT1XFQY2XONmQZbwXzKfAEkNwUa4j5bzUrEm8hJr20=
+X-Received: by 2002:a05:620a:1a97:: with SMTP id bl23mr12176564qkb.621.1643050346792;
+ Mon, 24 Jan 2022 10:52:26 -0800 (PST)
 MIME-Version: 1.0
-References: <CAHTsKTdSyC7Jwk56tDR8QwM_oO13ByBRaA78VpHymOZ7J4NQ9Q@mail.gmail.com>
-In-Reply-To: <CAHTsKTdSyC7Jwk56tDR8QwM_oO13ByBRaA78VpHymOZ7J4NQ9Q@mail.gmail.com>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Mon, 24 Jan 2022 09:37:59 -0800
-Message-ID: <CANcMJZA16b5gT++73a8hjA=6OeLsPLQM-X+ps3kEsYHVyariGg@mail.gmail.com>
-Subject: Re: [RFC] PM: suspend: Upstreaming wakeup reason capture support
-To:     Kelly Rossmoyer <krossmo@google.com>,
-        Zichar Zhang <zichar.zhang@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Vijay Nayak <nayakvij@google.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Sumit Semwal <sumit.semwal@linaro.org>
+References: <20220111103346.2660639-1-abailon@baylibre.com> <7hilu9xe7n.fsf@baylibre.com>
+In-Reply-To: <7hilu9xe7n.fsf@baylibre.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 24 Jan 2022 19:52:11 +0100
+Message-ID: <CAJZ5v0gZFBEKDt6S0H91F5xCjC3qtT6B+cTnv6u1nijMHkc8jA@mail.gmail.com>
+Subject: Re: [PATCH v4 RESEND 0/2] Add a generic virtual thermal sensor
+To:     Kevin Hilman <khilman@baylibre.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ben.tseng@mediatek.com, Matthias Kaehlcke <mka@chromium.org>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 5:06 AM Kelly Rossmoyer <krossmo@google.com> wrote:
+On Mon, Jan 24, 2022 at 5:58 PM Kevin Hilman <khilman@baylibre.com> wrote:
 >
-> # Introduction
+> Daniel, Amit,
 >
-> To aid optimization, troubleshooting, and attribution of battery life, the
-> Android kernel currently includes a set of patches which provide enhanced
-> visibility into kernel suspend/resume/abort behaviors.  The capabilities
-> and implementation of this feature have evolved significantly since an
-> unsuccessful attempt to upstream the original code
-> (https://lkml.org/lkml/2014/3/10/716), and we would like to (re)start a
-> conversation about upstreaming, starting with the central question: is
-> there support for upstreaming this set of features?
+> Alexandre Bailon <abailon@baylibre.com> writes:
 >
-> # Motivation
+> > This series add a virtual thermal sensor.
+> > It could be used to get a temperature using some thermal sensors.
+> > Currently, the supported operations are max, min and avg.
+> > The virtual sensor could be easily extended to support others operations.
+> >
+> > Changes in v2:
+> > - Fix some warnings / errors reported by kernel test robot
+> > - rename some struct and functions with a more accurate name
+> > - update the dt bindings: rename type attribute to aggregation-function
+> > - factorize a little bit the aggregation functions
+> > Changes in v3:
+> > - Aggregate thermal zone instead of thermal sensors
+> > - Use try_get_module / put_module to prevent thermal providers to be removed
+> > - Update the bindings, to be more accurate
+> > Changes in v4:
+> > - Fix two warnings reported by kernel test robot
 >
-> Of the many factors influencing battery life on Linux-powered mobile
-> devices, kernel suspend tends to be amongst the most impactful.  Maximizing
-> time spent in suspend and minimizing the frequency of net-negative suspend
-> cycles are both important contributors to battery life optimization.  But
-> enabling that optimization - and troubleshooting when things go wrong -
-> requires more observability of suspend/resume/abort behavior than Linux
-> currently provides.  While mechanisms like `/sys/power/pm_wakeup_irq` and
-> wakeup_source stats are useful, they are incomplete and scattered.  The
-> Android kernel wakeup reason patches implement significant improvements in
-> that area.
->
-> # Features
->
-> As of today, the active set of patches surface the following
-> suspend-related data:
->
-> * wakeup IRQs, including:
->    * multiple IRQs if more than one is pending during resume flow
->    * unmapped HW IRQs (wakeup-capable in HW) that should not be
->      occurring
->    * misconfigured IRQs (e.g. both enable_irq_wake() and
->      IRQF_NO_SUSPEND)
->    * threaded IRQs (not just the parent chip's IRQ)
->
-> * non-IRQ wakeups, including:
->    * wakeups caused by an IRQ that was consumed by lower-level SW
->    * wakeups from SOC architecture that don't manifest as IRQs
->
-> * abort reasons, including:
->    * wakeup_source activity
->    * failure to freeze userspace
->    * failure to suspend devices
->    * failed syscore_suspend callback
->
-> * durations from the most recent cycle, including:
->    * time spent doing suspend/resume work
->    * time spent in suspend
->
-> In addition to battery life optimization and troubleshooting, some of these
-> capabilities also lay the groundwork for efforts around improving
-> attribution of wakeups/aborts (e.g. to specific processes, device features,
-> external devices, etc).
->
-> # Shortcomings
->
-> While the core implementation (see below) is relatively straightforward and
-> localized, calls into that core are somewhat widely spread in order to
-> capture the breadth of events of interest.  The pervasiveness of those
-> hooks is clearly an area where improvement would be beneficial, especially
-> if a cleaner solution preserved equivalent capabilities.
->
-> # Existing Code
->
-> As a reference for how Android currently implements the core code for these
-> features (which would need a bit of work before submission even if all
-> features were included), see the following link:
->
-> https://android.googlesource.com/kernel/common/+/refs/heads/android-mainline/kernel/power/wakeup_reason.c
->
+> Any more feedback on this series?
 
-Hey Kelly!
-  So Zichar (added to the thread here) has been working for a little
-while on his own approach to upstream a simplified version of the
-wakeup_reason functionality. He's just gotten it to a place where it
-can be shared, so I wanted to pull him in so he could reply with his
-proposal.
-
-thanks
--john
+Hopefully, I'll get to it this week and I'll let you know.
