@@ -2,301 +2,236 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA962497971
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jan 2022 08:28:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA8C549796C
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jan 2022 08:28:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241896AbiAXH2n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Jan 2022 02:28:43 -0500
-Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:41218
-        "EHLO smtp-relay-canonical-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241813AbiAXH2k (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jan 2022 02:28:40 -0500
-Received: from HP-EliteBook-840-G7.. (36-229-235-192.dynamic-ip.hinet.net [36.229.235.192])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 0FC403F165;
-        Mon, 24 Jan 2022 07:28:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643009319;
-        bh=/P4GM/HjZ9otcaPnYgwHZvVXprLdcfNklxr7iOYHDzQ=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=kc7ZB4pwkGIwfAO2p0ruXNoqesrQPsnHj5x52Qh+hMjefN5ABwUVieTpprjuo2+l2
-         FSbwK7qXmtembBdCn6iL5RGuEL+ZCv/YTw4Ztdg1PE+nfDcz+m45RvCaRWo7et+Ty1
-         rqMzkeQDlaHJIFBhuI7qxriaZhmLAYiBq1jRdI7Y9Wb1EZ+bsigdX/TUwrFkNDMae7
-         M+no7P+8Q1sEuXddyqw7vo2sDE1D1RgBJlk+v0cjAu0VMiAMGsNUuhxAcIY4ybrMJD
-         GS2W8snJnhbKf7Bs8RAV0is2eFIV8+lcWN460s7hJvZLNDqr+Eo72XOejb/nftn9tP
-         FoPzol/OTOOWw==
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     arnd@arndb.de, gregkh@linuxfoundation.org, ulf.hansson@linaro.org
-Cc:     linux-pm@vger.kernel.org,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Ricky WU <ricky_wu@realtek.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 4/4] misc: rtsx: Quiesce rts5249 on system suspend
-Date:   Mon, 24 Jan 2022 15:28:03 +0800
-Message-Id: <20220124072804.1811690-4-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220124072804.1811690-1-kai.heng.feng@canonical.com>
-References: <20220121014039.1693208-1-kai.heng.feng@canonical.com>
- <20220124072804.1811690-1-kai.heng.feng@canonical.com>
+        id S241865AbiAXH2d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Jan 2022 02:28:33 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:34688 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S241813AbiAXH2c (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jan 2022 02:28:32 -0500
+X-UUID: 707d40179bd543fd8fba229a40cedfab-20220124
+X-UUID: 707d40179bd543fd8fba229a40cedfab-20220124
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1848919182; Mon, 24 Jan 2022 15:28:29 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 24 Jan 2022 15:28:28 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 24 Jan
+ 2022 15:28:27 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 24 Jan 2022 15:28:27 +0800
+Message-ID: <f4fbfc91d2f0abf041f058f191e2b239ac173a1e.camel@mediatek.com>
+Subject: Re: [PATCH v21 4/8] soc: mediatek: SVS: add monitor mode
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        YT Lee <yt.lee@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Date:   Mon, 24 Jan 2022 15:28:27 +0800
+In-Reply-To: <e118df40-da6b-88f6-fbff-15befb3405d5@collabora.com>
+References: <20220107095200.4389-1-roger.lu@mediatek.com>
+         <20220107095200.4389-5-roger.lu@mediatek.com>
+         <e118df40-da6b-88f6-fbff-15befb3405d5@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Set more registers in force_power_down callback to avoid S3 wakeup from
-hotplugging cards.
+Hi AngeloGioacchino,
 
-This is originally written by Ricky WU.
+Sorry for the late reply and thanks for the advice.
 
-Link: https://lore.kernel.org/lkml/c4525b4738f94483b9b8f8571fc80646@realtek.com/
-Cc: Ricky WU <ricky_wu@realtek.com>
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
----
-v5:
-v4:
-v3:
-v2:
- - No change.
+On Fri, 2022-01-07 at 15:34 +0100, AngeloGioacchino Del Regno wrote:
+> Il 07/01/22 10:51, Roger Lu ha scritto:
+> > SVS monitor mode is based on different thermal temperature
+> > to provide suitable SVS bank voltages.
+> > 
+> > Signed-off-by: Roger Lu <roger.lu@mediatek.com>
+> > ---
+> >   drivers/soc/mediatek/mtk-svs.c | 253 ++++++++++++++++++++++++++++++++-
+> >   1 file changed, 247 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
+> > index fc7e2ee44a92..042c6e8e9069 100644
+> > --- a/drivers/soc/mediatek/mtk-svs.c
+> > +++ b/drivers/soc/mediatek/mtk-svs.c
+> > @@ -25,6 +25,7 @@
+> >   #include <linux/regulator/consumer.h>
+> >   #include <linux/slab.h>
+> >   #include <linux/spinlock.h>
+> > +#include <linux/thermal.h>
+> >   
+> >   /* svs bank 1-line sw id */
+> >   #define SVSB_CPU_LITTLE			BIT(0)
+> > @@ -36,6 +37,7 @@
+> >   #define SVSB_MODE_ALL_DISABLE		0
+> >   #define SVSB_MODE_INIT01		BIT(1)
+> >   #define SVSB_MODE_INIT02		BIT(2)
+> > +#define SVSB_MODE_MON			BIT(3)
 
- drivers/misc/cardreader/rtl8411.c  |  2 +-
- drivers/misc/cardreader/rts5209.c  |  2 +-
- drivers/misc/cardreader/rts5228.c  |  2 +-
- drivers/misc/cardreader/rts5229.c  |  2 +-
- drivers/misc/cardreader/rts5249.c  | 31 ++++++++++++++++++++++++++++--
- drivers/misc/cardreader/rts5261.c  |  2 +-
- drivers/misc/cardreader/rtsx_pcr.c | 14 +++++++-------
- drivers/misc/cardreader/rtsx_pcr.h |  1 +
- include/linux/rtsx_pci.h           |  2 +-
- 9 files changed, 43 insertions(+), 15 deletions(-)
+[snip]
 
-diff --git a/drivers/misc/cardreader/rtl8411.c b/drivers/misc/cardreader/rtl8411.c
-index 4c5621b17a6fb..06457e875a90c 100644
---- a/drivers/misc/cardreader/rtl8411.c
-+++ b/drivers/misc/cardreader/rtl8411.c
-@@ -76,7 +76,7 @@ static void rtl8411b_fetch_vendor_settings(struct rtsx_pcr *pcr)
- 		map_sd_drive(rtl8411b_reg_to_sd30_drive_sel_3v3(reg));
- }
- 
--static void rtl8411_force_power_down(struct rtsx_pcr *pcr, u8 pm_state)
-+static void rtl8411_force_power_down(struct rtsx_pcr *pcr, u8 pm_state, bool runtime)
- {
- 	rtsx_pci_write_register(pcr, FPDCTL, 0x07, 0x07);
- }
-diff --git a/drivers/misc/cardreader/rts5209.c b/drivers/misc/cardreader/rts5209.c
-index 29f5414072bf1..52b0a476ba51f 100644
---- a/drivers/misc/cardreader/rts5209.c
-+++ b/drivers/misc/cardreader/rts5209.c
-@@ -47,7 +47,7 @@ static void rts5209_fetch_vendor_settings(struct rtsx_pcr *pcr)
- 	}
- }
- 
--static void rts5209_force_power_down(struct rtsx_pcr *pcr, u8 pm_state)
-+static void rts5209_force_power_down(struct rtsx_pcr *pcr, u8 pm_state, bool runtime)
- {
- 	rtsx_pci_write_register(pcr, FPDCTL, 0x07, 0x07);
- }
-diff --git a/drivers/misc/cardreader/rts5228.c b/drivers/misc/cardreader/rts5228.c
-index ffc128278613b..ffe3afbf8bfed 100644
---- a/drivers/misc/cardreader/rts5228.c
-+++ b/drivers/misc/cardreader/rts5228.c
-@@ -91,7 +91,7 @@ static int rts5228_optimize_phy(struct rtsx_pcr *pcr)
- 	return rtsx_pci_write_phy_register(pcr, 0x07, 0x8F40);
- }
- 
--static void rts5228_force_power_down(struct rtsx_pcr *pcr, u8 pm_state)
-+static void rts5228_force_power_down(struct rtsx_pcr *pcr, u8 pm_state, bool runtime)
- {
- 	/* Set relink_time to 0 */
- 	rtsx_pci_write_register(pcr, AUTOLOAD_CFG_BASE + 1, MASK_8_BIT_DEF, 0);
-diff --git a/drivers/misc/cardreader/rts5229.c b/drivers/misc/cardreader/rts5229.c
-index c748eaf1ec1f9..b0edd8006d52f 100644
---- a/drivers/misc/cardreader/rts5229.c
-+++ b/drivers/misc/cardreader/rts5229.c
-@@ -44,7 +44,7 @@ static void rts5229_fetch_vendor_settings(struct rtsx_pcr *pcr)
- 		map_sd_drive(rtsx_reg_to_sd30_drive_sel_3v3(reg));
- }
- 
--static void rts5229_force_power_down(struct rtsx_pcr *pcr, u8 pm_state)
-+static void rts5229_force_power_down(struct rtsx_pcr *pcr, u8 pm_state, bool runtime)
- {
- 	rtsx_pci_write_register(pcr, FPDCTL, 0x03, 0x03);
- }
-diff --git a/drivers/misc/cardreader/rts5249.c b/drivers/misc/cardreader/rts5249.c
-index 53f3a1f45c4a7..91d240dd68faa 100644
---- a/drivers/misc/cardreader/rts5249.c
-+++ b/drivers/misc/cardreader/rts5249.c
-@@ -74,7 +74,8 @@ static void rtsx_base_fetch_vendor_settings(struct rtsx_pcr *pcr)
- 	pci_read_config_dword(pdev, PCR_SETTING_REG2, &reg);
- 	pcr_dbg(pcr, "Cfg 0x%x: 0x%x\n", PCR_SETTING_REG2, reg);
- 
--	pcr->rtd3_en = rtsx_reg_to_rtd3_uhsii(reg);
-+	if (CHK_PCI_PID(pcr, PID_524A) || CHK_PCI_PID(pcr, PID_525A))
-+		pcr->rtd3_en = rtsx_reg_to_rtd3_uhsii(reg);
- 
- 	if (rtsx_check_mmc_support(reg))
- 		pcr->extra_caps |= EXTRA_CAPS_NO_MMC;
-@@ -143,6 +144,27 @@ static int rts5249_init_from_hw(struct rtsx_pcr *pcr)
- 	return 0;
- }
- 
-+static void rts52xa_force_power_down(struct rtsx_pcr *pcr, u8 pm_state, bool runtime)
-+{
-+	/* Set relink_time to 0 */
-+	rtsx_pci_write_register(pcr, AUTOLOAD_CFG_BASE + 1, MASK_8_BIT_DEF, 0);
-+	rtsx_pci_write_register(pcr, AUTOLOAD_CFG_BASE + 2, MASK_8_BIT_DEF, 0);
-+	rtsx_pci_write_register(pcr, AUTOLOAD_CFG_BASE + 3,
-+				RELINK_TIME_MASK, 0);
-+
-+	rtsx_pci_write_register(pcr, RTS524A_PM_CTRL3,
-+			D3_DELINK_MODE_EN, D3_DELINK_MODE_EN);
-+
-+	if (!runtime) {
-+		rtsx_pci_write_register(pcr, RTS524A_AUTOLOAD_CFG1,
-+				CD_RESUME_EN_MASK, 0);
-+		rtsx_pci_write_register(pcr, RTS524A_PM_CTRL3, 0x01, 0x00);
-+		rtsx_pci_write_register(pcr, RTS524A_PME_FORCE_CTL, 0x30, 0x20);
-+	}
-+
-+	rtsx_pci_write_register(pcr, FPDCTL, ALL_POWER_DOWN, ALL_POWER_DOWN);
-+}
-+
- static void rts52xa_save_content_from_efuse(struct rtsx_pcr *pcr)
- {
- 	u8 cnt, sv;
-@@ -281,8 +303,11 @@ static int rts5249_extra_init_hw(struct rtsx_pcr *pcr)
- 
- 	rtsx_pci_send_cmd(pcr, CMD_TIMEOUT_DEF);
- 
--	if (CHK_PCI_PID(pcr, PID_524A) || CHK_PCI_PID(pcr, PID_525A))
-+	if (CHK_PCI_PID(pcr, PID_524A) || CHK_PCI_PID(pcr, PID_525A)) {
- 		rtsx_pci_write_register(pcr, REG_VREF, PWD_SUSPND_EN, PWD_SUSPND_EN);
-+		rtsx_pci_write_register(pcr, RTS524A_AUTOLOAD_CFG1,
-+			CD_RESUME_EN_MASK, CD_RESUME_EN_MASK);
-+	}
- 
- 	if (pcr->rtd3_en) {
- 		if (CHK_PCI_PID(pcr, PID_524A) || CHK_PCI_PID(pcr, PID_525A)) {
-@@ -724,6 +749,7 @@ static const struct pcr_ops rts524a_pcr_ops = {
- 	.card_power_on = rtsx_base_card_power_on,
- 	.card_power_off = rtsx_base_card_power_off,
- 	.switch_output_voltage = rtsx_base_switch_output_voltage,
-+	.force_power_down = rts52xa_force_power_down,
- 	.set_l1off_cfg_sub_d0 = rts5250_set_l1off_cfg_sub_d0,
- };
- 
-@@ -841,6 +867,7 @@ static const struct pcr_ops rts525a_pcr_ops = {
- 	.card_power_on = rts525a_card_power_on,
- 	.card_power_off = rtsx_base_card_power_off,
- 	.switch_output_voltage = rts525a_switch_output_voltage,
-+	.force_power_down = rts52xa_force_power_down,
- 	.set_l1off_cfg_sub_d0 = rts5250_set_l1off_cfg_sub_d0,
- };
- 
-diff --git a/drivers/misc/cardreader/rts5261.c b/drivers/misc/cardreader/rts5261.c
-index 1fd4e0e507302..64333347c14a4 100644
---- a/drivers/misc/cardreader/rts5261.c
-+++ b/drivers/misc/cardreader/rts5261.c
-@@ -91,7 +91,7 @@ static void rtsx5261_fetch_vendor_settings(struct rtsx_pcr *pcr)
- 	pcr->sd30_drive_sel_3v3 = rts5261_reg_to_sd30_drive_sel_3v3(reg);
- }
- 
--static void rts5261_force_power_down(struct rtsx_pcr *pcr, u8 pm_state)
-+static void rts5261_force_power_down(struct rtsx_pcr *pcr, u8 pm_state, bool runtime)
- {
- 	/* Set relink_time to 0 */
- 	rtsx_pci_write_register(pcr, AUTOLOAD_CFG_BASE + 1, MASK_8_BIT_DEF, 0);
-diff --git a/drivers/misc/cardreader/rtsx_pcr.c b/drivers/misc/cardreader/rtsx_pcr.c
-index ec395a33faf8b..7262ef0f1913f 100644
---- a/drivers/misc/cardreader/rtsx_pcr.c
-+++ b/drivers/misc/cardreader/rtsx_pcr.c
-@@ -1086,7 +1086,7 @@ static void rtsx_pm_power_saving(struct rtsx_pcr *pcr)
- 	rtsx_comm_pm_power_saving(pcr);
- }
- 
--static void rtsx_base_force_power_down(struct rtsx_pcr *pcr, u8 pm_state)
-+static void rtsx_base_force_power_down(struct rtsx_pcr *pcr)
- {
- 	/* Set relink_time to 0 */
- 	rtsx_pci_write_register(pcr, AUTOLOAD_CFG_BASE + 1, MASK_8_BIT_DEF, 0);
-@@ -1100,7 +1100,7 @@ static void rtsx_base_force_power_down(struct rtsx_pcr *pcr, u8 pm_state)
- 	rtsx_pci_write_register(pcr, FPDCTL, ALL_POWER_DOWN, ALL_POWER_DOWN);
- }
- 
--static void __maybe_unused rtsx_pci_power_off(struct rtsx_pcr *pcr, u8 pm_state)
-+static void __maybe_unused rtsx_pci_power_off(struct rtsx_pcr *pcr, u8 pm_state, bool runtime)
- {
- 	if (pcr->ops->turn_off_led)
- 		pcr->ops->turn_off_led(pcr);
-@@ -1112,9 +1112,9 @@ static void __maybe_unused rtsx_pci_power_off(struct rtsx_pcr *pcr, u8 pm_state)
- 	rtsx_pci_write_register(pcr, HOST_SLEEP_STATE, 0x03, pm_state);
- 
- 	if (pcr->ops->force_power_down)
--		pcr->ops->force_power_down(pcr, pm_state);
-+		pcr->ops->force_power_down(pcr, pm_state, runtime);
- 	else
--		rtsx_base_force_power_down(pcr, pm_state);
-+		rtsx_base_force_power_down(pcr);
- }
- 
- void rtsx_pci_enable_ocp(struct rtsx_pcr *pcr)
-@@ -1669,7 +1669,7 @@ static int __maybe_unused rtsx_pci_suspend(struct device *dev_d)
- 
- 	mutex_lock(&pcr->pcr_mutex);
- 
--	rtsx_pci_power_off(pcr, HOST_ENTER_S3);
-+	rtsx_pci_power_off(pcr, HOST_ENTER_S3, false);
- 
- 	mutex_unlock(&pcr->pcr_mutex);
- 	return 0;
-@@ -1708,7 +1708,7 @@ static void rtsx_pci_shutdown(struct pci_dev *pcidev)
- 
- 	dev_dbg(&(pcidev->dev), "--> %s\n", __func__);
- 
--	rtsx_pci_power_off(pcr, HOST_ENTER_S1);
-+	rtsx_pci_power_off(pcr, HOST_ENTER_S1, false);
- 
- 	pci_disable_device(pcidev);
- 	free_irq(pcr->irq, (void *)pcr);
-@@ -1754,7 +1754,7 @@ static int rtsx_pci_runtime_suspend(struct device *device)
- 	cancel_delayed_work_sync(&pcr->carddet_work);
- 
- 	mutex_lock(&pcr->pcr_mutex);
--	rtsx_pci_power_off(pcr, HOST_ENTER_S3);
-+	rtsx_pci_power_off(pcr, HOST_ENTER_S3, true);
- 
- 	mutex_unlock(&pcr->pcr_mutex);
- 
-diff --git a/drivers/misc/cardreader/rtsx_pcr.h b/drivers/misc/cardreader/rtsx_pcr.h
-index daf057c4eea62..aa0ebd6672277 100644
---- a/drivers/misc/cardreader/rtsx_pcr.h
-+++ b/drivers/misc/cardreader/rtsx_pcr.h
-@@ -25,6 +25,7 @@
- #define REG_EFUSE_POWEROFF		0x00
- #define RTS5250_CLK_CFG3		0xFF79
- #define RTS525A_CFG_MEM_PD		0xF0
-+#define RTS524A_AUTOLOAD_CFG1		0xFF7C
- #define RTS524A_PM_CTRL3		0xFF7E
- #define RTS525A_BIOS_CFG		0xFF2D
- #define RTS525A_LOAD_BIOS_FLAG	0x01
-diff --git a/include/linux/rtsx_pci.h b/include/linux/rtsx_pci.h
-index 89b7d34e25b63..3d780b44e678a 100644
---- a/include/linux/rtsx_pci.h
-+++ b/include/linux/rtsx_pci.h
-@@ -1095,7 +1095,7 @@ struct pcr_ops {
- 	unsigned int	(*cd_deglitch)(struct rtsx_pcr *pcr);
- 	int		(*conv_clk_and_div_n)(int clk, int dir);
- 	void		(*fetch_vendor_settings)(struct rtsx_pcr *pcr);
--	void		(*force_power_down)(struct rtsx_pcr *pcr, u8 pm_state);
-+	void		(*force_power_down)(struct rtsx_pcr *pcr, u8 pm_state, bool runtime);
- 	void		(*stop_cmd)(struct rtsx_pcr *pcr);
- 
- 	void (*set_aspm)(struct rtsx_pcr *pcr, bool enable);
--- 
-2.33.1
+> >   /**
+> > @@ -241,6 +254,7 @@ struct svs_platform {
+> >    * @get_volts: function pointer to get bank voltages
+> >    * @name: bank name
+> >    * @buck_name: regulator name
+> > + * @tzone_name: thermal zone name
+> >    * @suspended: suspend flag of this bank
+> >    * @phase: bank current phase
+> >    * @volt_od: bank voltage overdrive
+> > @@ -270,6 +284,13 @@ struct svs_platform {
+> >    * @sw_id: bank software identification
+> >    * @cpu_id: cpu core id for SVS CPU bank use only
+> >    * @ctl0: TS-x selection
+> > + * @temp: bank temperature
+> > + * @tzone_htemp: thermal zone high temperature threshold
+> > + * @tzone_htemp_voffset: thermal zone high temperature voltage offset
+> > + * @tzone_ltemp: thermal zone low temperature threshold
+> > + * @tzone_ltemp_voffset: thermal zone low temperature voltage offset
+> > + * @bts: svs efuse data
+> > + * @mts: svs efuse data
+> >    * @bdes: svs efuse data
+> >    * @mdes: svs efuse data
+> >    * @mtdes: svs efuse data
+> > @@ -292,6 +313,7 @@ struct svs_bank {
+> >   	void (*get_volts)(struct svs_platform *svsp);
+> >   	char *name;
+> >   	char *buck_name;
+> > +	char *tzone_name;
+> >   	bool suspended;
+> >   	enum svsb_phase phase;
+> >   	s32 volt_od;
+> > @@ -321,6 +343,13 @@ struct svs_bank {
+> >   	u32 sw_id;
+> >   	u32 cpu_id;
+> >   	u32 ctl0;
+> > +	u32 temp;
+> > +	u32 tzone_htemp;
+> > +	u32 tzone_htemp_voffset;
+> > +	u32 tzone_ltemp;
+> > +	u32 tzone_ltemp_voffset;
+> > +	u32 bts;
+> > +	u32 mts;
+> >   	u32 bdes;
+> >   	u32 mdes;
+> >   	u32 mtdes;
+> > @@ -361,10 +390,21 @@ static u32 svs_bank_volt_to_opp_volt(u32 svsb_volt,
+> > u32 svsb_volt_step,
+> >   	return (svsb_volt * svsb_volt_step) + svsb_volt_base;
+> >   }
+> >   
+> 
+> I'm sorry for the double review, but this went unnoticed in the previous one.
+> 
+> > +static int svs_get_zone_temperature(const char *tzone_name, int
+> > *tzone_temp)
+> > +{
+> > +	struct thermal_zone_device *tzd;
+> > +
+> > +	tzd = thermal_zone_get_zone_by_name(tzone_name);
+> 
+> This call is expensive, as it's iterating through the (possibly) entire
+> thermal_tz_list (drivers/thermal/thermal_core.c) so, for performance purposes,
+> noting that you're using this in svs_adjust_pm_opp_volts(), it's not a good
+> idea
+> to call it at every ISR.
+> 
+> I would instead propose to get a pointer to the thermal_zone at driver probe
+> time and cache that in struct svs_bank: this function would also be removed
+> as the only thing that you'd need to do then would be just one call...
+> 
+> [read forward...]
+
+No problem. I'll cache thermal_zone at driver probe time and remove this API in
+the next patch. Thanks.
+
+> 
+> > +	if (IS_ERR(tzd))
+> > +		return PTR_ERR(tzd);
+> > +
+> > +	return thermal_zone_get_temp(tzd, tzone_temp);
+> > +}
+> > +
+> >   static int svs_adjust_pm_opp_volts(struct svs_bank *svsb, bool
+> > force_update)
+> >   {
+> > -	int ret = -EPERM;
+> > -	u32 i, svsb_volt, opp_volt;
+> > +	int ret = -EPERM, tzone_temp = 0;
+> > +	u32 i, svsb_volt, opp_volt, temp_voffset = 0;
+> >   
+> >   	mutex_lock(&svsb->lock);
+> >   
+> > @@ -378,6 +418,22 @@ static int svs_adjust_pm_opp_volts(struct svs_bank
+> > *svsb, bool force_update)
+> >   		goto unlock_mutex;
+> >   	}
+> >   
+> > +	/* Get thermal effect */
+> > +	if (svsb->phase == SVSB_PHASE_MON) {
+> > +		ret = svs_get_zone_temperature(svsb->tzone_name, &tzone_temp);
+> 
+> ... so you can simply call ...
+> 
+> 
+> 	ret = thermal_zone_get_temp(svsb->tzd, tzone_temp);
+> 
+> 
+> ...without any need for any helper.
+
+Sure, I'll call thermal_zone_get_temp() directly after applying this recommended
+change in the next patch. Thanks.
+
+> 
+> > +		if (ret || (svsb->temp > SVSB_TEMP_UPPER_BOUND &&
+> > +			    svsb->temp < SVSB_TEMP_LOWER_BOUND)) {
+> > +			dev_err(svsb->dev, "%s: %d (0x%x), run default volts\n",
+> > +				svsb->tzone_name, ret, svsb->temp);
+> > +			svsb->phase = SVSB_PHASE_ERROR;
+> > +		}
+> > +
+> > +		if (tzone_temp >= svsb->tzone_htemp)
+> > +			temp_voffset += svsb->tzone_htemp_voffset;
+> > +		else if (tzone_temp <= svsb->tzone_ltemp)
+> > +			temp_voffset += svsb->tzone_ltemp_voffset;
+> > +	}
+> > +
+> >   	/* vmin <= svsb_volt (opp_volt) <= default opp voltage */
+> >   	for (i = 0; i < svsb->opp_count; i++) {
+> >   		switch (svsb->phase) {
+> 
+> Apart from that, the commit looks good. Looking forward to review the new
+> version!
+> 
+> Regards,
+> - Angelo
 
