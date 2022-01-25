@@ -2,159 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FDF149B7F8
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Jan 2022 16:50:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4885A49B91C
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Jan 2022 17:51:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344396AbiAYPum (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Jan 2022 10:50:42 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:46500 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1582494AbiAYPs7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jan 2022 10:48:59 -0500
+        id S1585862AbiAYQpT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Jan 2022 11:45:19 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:23715 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1346610AbiAYQg3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jan 2022 11:36:29 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1643125739; x=1674661739;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=uuU7P40JMh4ZEKpl+/QMPGzxGUUPCLs+4G9cP3BtI2U=;
-  b=f1li3HJFgUxgMB+frFACGtcVeOnZmUUBMgWNcs1Ig0wblm9egzrJl1vX
-   EUEGJjc/7141J5gQDKrLqfVcvc58r0/1yX0M9AaoO/bpuIddcGfkiFuE3
-   5ZsRxDk9zvmEgIjH5j7c0YUxcPNd0lCEdx8ufwVxhd4oCJPX6muFmpdzI
+  t=1643128588; x=1674664588;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=0WnV+EmPb8krky3QwTcyyzwQkQl+BhKbWAGWV4smPyc=;
+  b=vpfVJVu+lgJADXsRNAEROAPp5JNr06ci5m9H4ewteMbsUWuo98ICNeuO
+   vDrMQud3MwG4G1kTJyH1y1JJ/iPGISu0pVHUGhiKGvkX9qxh27Okkprn2
+   E43mgQ8LF5MTCtHiCVE7Hf40HAVGYGY3O31X+GRPi/yWu9+hdL5TFuyXr
    w=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 25 Jan 2022 07:48:54 -0800
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 25 Jan 2022 08:36:24 -0800
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 07:48:54 -0800
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 08:36:24 -0800
 Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Tue, 25 Jan 2022 07:48:53 -0800
-Received: from [10.216.12.29] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ 15.2.922.19; Tue, 25 Jan 2022 08:36:24 -0800
+Received: from codeaurora.org (10.80.80.8) by nalasex01b.na.qualcomm.com
  (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 25 Jan
- 2022 07:48:47 -0800
-Message-ID: <d0ecfe37-b8f8-c6f8-49d7-0bdbc2bde47e@quicinc.com>
-Date:   Tue, 25 Jan 2022 21:18:42 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v3] thermal/core: Clear all mitigation when thermal zone
- is disabled
-To:     "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        "thara.gopinath@linaro.org" <thara.gopinath@linaro.org>,
-        "mka@chromium.org" <mka@chromium.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "amitk@kernel.org" <amitk@kernel.org>
-CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <1641581806-32550-1-git-send-email-quic_manafm@quicinc.com>
- <927aca29-fca7-bdf9-9ad6-2599125ca1b4@linaro.org>
- <ab6134bd1ca7f7fd8cedad90c1bbb81f642ac647.camel@intel.com>
+ 2022 08:36:21 -0800
 From:   Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-In-Reply-To: <ab6134bd1ca7f7fd8cedad90c1bbb81f642ac647.camel@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
+To:     Lukasz Luba <lukasz.luba@arm.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Amit Kucheria" <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Manaf Meethalavalappu Pallikunhi" <quic_manafm@quicinc.com>
+Subject: [PATCH v4] drivers: thermal: clear all mitigation when thermal zone is disabled
+Date:   Tue, 25 Jan 2022 22:06:05 +0530
+Message-ID: <1643128565-22838-1-git-send-email-quic_manafm@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+MIME-Version: 1.0
+Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01b.na.qualcomm.com (10.47.209.197)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-HI Daniel,
+Whenever a thermal zone is in trip violated state, there is a chance
+that the same thermal zone mode can be disabled either via
+thermal core API or via thermal zone sysfs. Once it is disabled,
+the framework bails out any re-evaluation of thermal zone. It leads
+to a case where if it is already in mitigation state, it will stay
+the same state forever.
 
-On 1/24/2022 6:35 AM, Pandruvada, Srinivas wrote:
-> On Sun, 2022-01-23 at 21:51 +0100, Daniel Lezcano wrote:
->> Hi Manaf,
->>
->> semantically speaking disabling a thermal zone would be to detach the
->> thermal zone from its governor and stop the monitoring.
->>
->> May be add the functions
->>
->>   - thermal_governor_attach(struct thermal_zone_device *tzd)
->>     {
->>          ...
->>          if (tz->governor && tz->governor->bind_to_tz) {
->>                  if (tz->governor->bind_to_tz(tz)) {
->>          }
->>          ...
->>     }
->>
->>   - thermal_governor_detach(struct thermal_zone_device *tzd)
->>     {
->>          ...
->>          if (tz->governor && tz->governor->unbind_from_tz)
->>                  tz->governor->unbind_from_tz(tz);
->>          ...
->>     }
->>
->> And add in the step_wise and power_allocator the reset of the
->> governor's
->> data as well as the cooling device instances in the unbind_from_tz()
->> callback
->>
->> Then, thermal_zone_device_enable() attaches and
->> thermal_zone_device_disable() detaches the governor.
->>
->> Does it make sense ?
-> This is better.
->
-> Thanks,
-> Srinivas
-Yes, it makes sense. I will update it in v4
->
->>
->> On 07/01/2022 19:56, Manaf Meethalavalappu Pallikunhi wrote:
->>> Whenever a thermal zone is in trip violated state, there is a
->>> chance
->>> that the same thermal zone mode can be disabled either via thermal
->>> core API or via thermal zone sysfs. Once it is disabled, the
->>> framework
->>> bails out any re-evaluation of thermal zone. It leads to a case
->>> where
->>> if it is already in mitigation state, it will stay the same state
->>> until it is re-enabled.
->>>
->>> To avoid above mentioned issue, on thermal zone disable request
->>> reset thermal zone and clear mitigation for each trip explicitly.
->>>
->>> Signed-off-by: Manaf Meethalavalappu Pallikunhi
->>> <quic_manafm@quicinc.com>
->>> ---
->>>   drivers/thermal/thermal_core.c | 12 ++++++++++--
->>>   1 file changed, 10 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/thermal/thermal_core.c
->>> b/drivers/thermal/thermal_core.c
->>> index 51374f4..e288c82 100644
->>> --- a/drivers/thermal/thermal_core.c
->>> +++ b/drivers/thermal/thermal_core.c
->>> @@ -447,10 +447,18 @@ static int
->>> thermal_zone_device_set_mode(struct thermal_zone_device *tz,
->>>   
->>>          thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
->>>   
->>> -       if (mode == THERMAL_DEVICE_ENABLED)
->>> +       if (mode == THERMAL_DEVICE_ENABLED) {
->>>                  thermal_notify_tz_enable(tz->id);
->>> -       else
->>> +       } else {
->>> +               int trip;
->>> +
->>> +               /* make sure all previous throttlings are cleared
->>> */
->>> +               thermal_zone_device_init(tz);
->>> +               for (trip = 0; trip < tz->trips; trip++)
->>> +                       handle_thermal_trip(tz, trip);
->>> +
->>>                  thermal_notify_tz_disable(tz->id);
->>> +       }
->>>   
->>>          return ret;
->>>   }
->>>
->>
+To avoid above mentioned issue, add support to bind/unbind
+governor from thermal zone during thermal zone mode change request
+and clear all existing throttling in governor unbind_from_tz()
+callback.
+
+Suggested-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+---
+ drivers/thermal/gov_power_allocator.c |  3 +++
+ drivers/thermal/gov_step_wise.c       | 26 ++++++++++++++++++++++++++
+ drivers/thermal/thermal_core.c        | 31 +++++++++++++++++++++++++++----
+ 3 files changed, 56 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+index 13e3757..9ff0c5f 100644
+--- a/drivers/thermal/gov_power_allocator.c
++++ b/drivers/thermal/gov_power_allocator.c
+@@ -696,6 +696,9 @@ static void power_allocator_unbind(struct thermal_zone_device *tz)
+ 
+ 	dev_dbg(&tz->device, "Unbinding from thermal zone %d\n", tz->id);
+ 
++	tz->passive = 0;
++	allow_maximum_power(tz, true);
++
+ 	if (params->allocated_tzp) {
+ 		kfree(tz->tzp);
+ 		tz->tzp = NULL;
+diff --git a/drivers/thermal/gov_step_wise.c b/drivers/thermal/gov_step_wise.c
+index 12acb12..2132c14 100644
+--- a/drivers/thermal/gov_step_wise.c
++++ b/drivers/thermal/gov_step_wise.c
+@@ -168,6 +168,31 @@ static void thermal_zone_trip_update(struct thermal_zone_device *tz, int trip)
+ }
+ 
+ /**
++ * step_wise_unbind() - unbind the step_wise governor to a thermal zone
++ * @tz:	thermal zone to unbind it to
++ *
++ * Clear all previous throttling and reset passive counter.
++ *
++ */
++static void step_wise_unbind(struct thermal_zone_device *tz)
++{
++	struct thermal_instance *instance;
++
++	dev_dbg(&tz->device, "Unbinding from thermal zone %d\n", tz->id);
++
++	mutex_lock(&tz->lock);
++	tz->passive = 0;
++	list_for_each_entry(instance, &tz->thermal_instances, tz_node) {
++		instance->initialized = false;
++		instance->target = THERMAL_NO_TARGET;
++		mutex_lock(&instance->cdev->lock);
++		 __thermal_cdev_update(instance->cdev);
++		mutex_unlock(&instance->cdev->lock);
++	}
++	mutex_unlock(&tz->lock);
++}
++
++/**
+  * step_wise_throttle - throttles devices associated with the given zone
+  * @tz: thermal_zone_device
+  * @trip: trip point index
+@@ -196,6 +221,7 @@ static int step_wise_throttle(struct thermal_zone_device *tz, int trip)
+ 
+ static struct thermal_governor thermal_gov_step_wise = {
+ 	.name		= "step_wise",
++	.unbind_from_tz	= step_wise_unbind,
+ 	.throttle	= step_wise_throttle,
+ };
+ THERMAL_GOVERNOR_DECLARE(thermal_gov_step_wise);
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 1389174..9828eb3 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -274,6 +274,26 @@ static int __init thermal_register_governors(void)
+ 	return ret;
+ }
+ 
++static void thermal_governor_attach(struct thermal_zone_device *tz)
++{
++	mutex_lock(&thermal_governor_lock);
++	if (tz->governor && tz->governor->bind_to_tz) {
++		if (tz->governor->bind_to_tz(tz))
++			dev_err(&tz->device,
++				"governor %s failed to bind to thermal zone %s\n",
++				tz->governor->name, tz->type);
++	}
++	mutex_unlock(&thermal_governor_lock);
++}
++
++static void thermal_governor_detach(struct thermal_zone_device *tz)
++{
++	mutex_lock(&thermal_governor_lock);
++	if (tz->governor && tz->governor->unbind_from_tz)
++		tz->governor->unbind_from_tz(tz);
++	mutex_unlock(&thermal_governor_lock);
++}
++
+ /*
+  * Zone update section: main control loop applied to each zone while monitoring
+  *
+@@ -447,12 +467,15 @@ static int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
+ 
+ 	mutex_unlock(&tz->lock);
+ 
+-	thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
+-
+-	if (mode == THERMAL_DEVICE_ENABLED)
++	if (mode == THERMAL_DEVICE_ENABLED) {
++		thermal_governor_attach(tz);
++		thermal_zone_device_init(tz);
++		thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
+ 		thermal_notify_tz_enable(tz->id);
+-	else
++	} else {
++		thermal_governor_detach(tz);
+ 		thermal_notify_tz_disable(tz->id);
++	}
+ 
+ 	return ret;
+ }
