@@ -2,108 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6166D49BA85
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Jan 2022 18:40:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E96C49BA98
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Jan 2022 18:48:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381464AbiAYRkY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Jan 2022 12:40:24 -0500
-Received: from mail-yb1-f176.google.com ([209.85.219.176]:45826 "EHLO
-        mail-yb1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381711AbiAYRj1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jan 2022 12:39:27 -0500
-Received: by mail-yb1-f176.google.com with SMTP id h14so63810832ybe.12;
-        Tue, 25 Jan 2022 09:39:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=37oLDsr51k3XVENJHyR2l3wKXsdRvCveBrsGiXcmGKU=;
-        b=iWRrhny68w0EEoaLWGQLaMzkc3fznQs1cpBqjXg3/IgZIo0lj0FhljoNdU9zkwBG/G
-         zc3767nDt9dJ4E5kF4c0xVAtlXeC5GxEIwdtZXvZBgaIodQ040jkUPl96MW6f3gHFIJk
-         uSbmtB1Dsgb/U8MEQyo2cun52mDril01PKNEWXFlbtt/DwhSZOk9U7hQaeKKUGugGGE2
-         kjnnTJ4/SEwhNeD5kuBxVSpwtceIXUvHLGT7Ro0Vy4KQnKqpzIT1i4MxqULPfvue/LIR
-         HK4FdSpGnTmqMpWWT5WAK6l6AY3hncoPgLisgxL2T51KXwE/DWmrOGAhJt4ksBQ1CE+R
-         N7zg==
-X-Gm-Message-State: AOAM532tYQ6Cvykvvr7dKYS089okpa1rthYetPKq1orED4a6CrmUs3AZ
-        /hrPiu7p74zpO3Fliscvw2wDpMcMYcv0QT3NFyc=
-X-Google-Smtp-Source: ABdhPJwtTEgfCu7ZxhU+Cl89dSmfhCglhDWpNPPhuaSYofKPq0gq5ox/ViOixr7dYRXyDMNmWvVH3u8jmh76ZUpAEwQ=
-X-Received: by 2002:a25:b8f:: with SMTP id 137mr19315933ybl.330.1643132363575;
- Tue, 25 Jan 2022 09:39:23 -0800 (PST)
+        id S1347720AbiAYRre (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Jan 2022 12:47:34 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:56542 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1382198AbiAYRqC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jan 2022 12:46:02 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C6DB6B819DB;
+        Tue, 25 Jan 2022 17:46:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D32BDC340E6;
+        Tue, 25 Jan 2022 17:45:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643132759;
+        bh=dpNFflG1Kul0cblc0qXDQXXmYLTowF2QDwhwsWST6u8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=YSaMWp2lLtvrFg8QwQ1S5JB8pAwi3XxyG3y2BfJviBW4/fhmASqZAZAUMlsqY07iy
+         jhNpyOQFJCzMIkKYej0uP1C0XcLvqTPiGedh2sSVbDtqgUJf9XYMpBZnOyI55kwZ89
+         hx3+qfcw9uiBccsDtVQze6OnVOt5T7Xr3Yb4M+Ci1+NafAe8VMvaUjVF62AEO6ntT2
+         pONrQPhwlrQOT4yjvng/IavPvNw2bB6CM0YFeNE832ktu3sqVo5KTbhGgI6h0usaPL
+         TY+hWAOp65b1/xmNK615x6akKZfP1c8Ypk8J9/RQBhlXdqs04WQqBl3HBDvX0fJF2a
+         ovL21RV50wSFg==
+Date:   Tue, 25 Jan 2022 11:52:45 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] power: supply: cros_usbpd: Use struct_size() helper in
+ kzalloc()
+Message-ID: <20220125175245.GA66154@embeddedor>
 MIME-Version: 1.0
-References: <20220107144405.4081288-1-jiasheng@iscas.ac.cn>
-In-Reply-To: <20220107144405.4081288-1-jiasheng@iscas.ac.cn>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 25 Jan 2022 18:39:12 +0100
-Message-ID: <CAJZ5v0hmb_4zC8FtMff1=v7uRF8DeH7sD7+UtBtD7JJXOrOCew@mail.gmail.com>
-Subject: Re: [PATCH v2] thermal/int340x_thermal: Check for null pointer after
- calling kmemdup
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jan 7, 2022 at 3:44 PM Jiasheng Jiang <jiasheng@iscas.ac.cn> wrote:
->
-> As the possible failure of the allocation, kmemdup() may return NULL
-> pointer.
-> Then the 'bin_attr_data_vault.private' will be NULL pointer but the
-> 'bin_attr_data_vault.size' is not 0.
-> Therefore, it should be better to check the return value of kmemdup() to
-> avoid the wrong size.
->
-> Fixes: 0ba13c763aac ("thermal/int340x_thermal: Export GDDV")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
-> Changelog
->
-> v1 -> v2
->
-> * Change 1. Use out_kfree to simplify the code.
-> ---
->  .../thermal/intel/int340x_thermal/int3400_thermal.c  | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> index 19926beeb3b7..f869aeb087d3 100644
-> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> @@ -457,17 +457,21 @@ static void int3400_setup_gddv(struct int3400_thermal_priv *priv)
->
->         obj = buffer.pointer;
->         if (obj->type != ACPI_TYPE_PACKAGE || obj->package.count != 1
-> -           || obj->package.elements[0].type != ACPI_TYPE_BUFFER) {
-> -               kfree(buffer.pointer);
-> -               return;
-> -       }
-> +           || obj->package.elements[0].type != ACPI_TYPE_BUFFER)
-> +               goto out_kfree;
+Make use of the struct_size() helper instead of an open-coded version,
+in order to avoid any potential type mistakes or integer overflows that,
+in the worst scenario, could lead to heap overflows.
 
-This change isn't strictly necessary.
+Also, address the following sparse warnings:
+drivers/power/supply/cros_usbpd-charger.c:107:23: warning: using sizeof on a flexible structure
 
->
->         priv->data_vault = kmemdup(obj->package.elements[0].buffer.pointer,
->                                    obj->package.elements[0].buffer.length,
->                                    GFP_KERNEL);
-> +       if (!priv->data_vault)
-> +               goto out_kfree;
-> +
->         bin_attr_data_vault.private = priv->data_vault;
->         bin_attr_data_vault.size = obj->package.elements[0].buffer.length;
->         kfree(buffer.pointer);
-> +
-> +out_kfree:
-> +       kfree(buffer.pointer);
+Link: https://github.com/KSPP/linux/issues/174
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ drivers/power/supply/cros_usbpd-charger.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On success, this would be the second kfree() for the same pointer in a
-row, which would be a bug.
+diff --git a/drivers/power/supply/cros_usbpd-charger.c b/drivers/power/supply/cros_usbpd-charger.c
+index d89e08efd2ad..cadb6a0c2cc7 100644
+--- a/drivers/power/supply/cros_usbpd-charger.c
++++ b/drivers/power/supply/cros_usbpd-charger.c
+@@ -104,7 +104,7 @@ static int cros_usbpd_charger_ec_command(struct charger_data *charger,
+ 	struct cros_ec_command *msg;
+ 	int ret;
+ 
+-	msg = kzalloc(sizeof(*msg) + max(outsize, insize), GFP_KERNEL);
++	msg = kzalloc(struct_size(msg, data, max(outsize, insize)), GFP_KERNEL);
+ 	if (!msg)
+ 		return -ENOMEM;
+ 
+-- 
+2.27.0
 
->  }
->
->  static int int3400_thermal_probe(struct platform_device *pdev)
-> --
