@@ -2,183 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4885A49B91C
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Jan 2022 17:51:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5604D49B9B6
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Jan 2022 18:09:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1585862AbiAYQpT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Jan 2022 11:45:19 -0500
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:23715 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1346610AbiAYQg3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jan 2022 11:36:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1643128588; x=1674664588;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=0WnV+EmPb8krky3QwTcyyzwQkQl+BhKbWAGWV4smPyc=;
-  b=vpfVJVu+lgJADXsRNAEROAPp5JNr06ci5m9H4ewteMbsUWuo98ICNeuO
-   vDrMQud3MwG4G1kTJyH1y1JJ/iPGISu0pVHUGhiKGvkX9qxh27Okkprn2
-   E43mgQ8LF5MTCtHiCVE7Hf40HAVGYGY3O31X+GRPi/yWu9+hdL5TFuyXr
-   w=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 25 Jan 2022 08:36:24 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 08:36:24 -0800
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Tue, 25 Jan 2022 08:36:24 -0800
-Received: from codeaurora.org (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 25 Jan
- 2022 08:36:21 -0800
-From:   Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-To:     Lukasz Luba <lukasz.luba@arm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
+        id S237573AbiAYRIx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Jan 2022 12:08:53 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:50916
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241135AbiAYRFe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jan 2022 12:05:34 -0500
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com [209.85.221.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id B28233F1E8
+        for <linux-pm@vger.kernel.org>; Tue, 25 Jan 2022 17:05:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1643130332;
+        bh=dSvKZ8AHHeBFaUwfnKaz2QA3fzKNbqhnfNH57EfO12U=;
+        h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version:Content-Type;
+        b=BOz5CwyW9SZaVU0hdxBLIug4WGNw7Zp8QeR7Qed1cjWli1KLDTH62t/hyQwE6s/sR
+         Rsz1a5dGdUHm6XTBoIbXiXMtYx8KIGS+w9GjfK4+d6HdKTns5PL+wYQHiIUV+160ZD
+         Y5FvpIyeSXwaj+L5kHWhS//bxTz6oW2we95h/jJLBZd5PbSqR9JE/C8GasI4WgqXVX
+         R2P3M3dRh86jjyZ8b43N8XyNniIvU+VdFh2B2FZP7JIHnYg3N8N7fRNA0XUWGAgSWM
+         UGvfQEKp1Ppo49x8sZLDUu12IN2ftn2aRJYoRXRURSg3W76XwlNlhuxCAVqxd08H/l
+         ktDejOOs/RM+g==
+Received: by mail-wr1-f70.google.com with SMTP id t13-20020adfa2cd000000b001d09443ee4fso3334077wra.3
+        for <linux-pm@vger.kernel.org>; Tue, 25 Jan 2022 09:05:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=dSvKZ8AHHeBFaUwfnKaz2QA3fzKNbqhnfNH57EfO12U=;
+        b=hg7zRDfUMCcTTurqfKVx8xoKILmFzy7e9ulr2G6ut9czqwtDPFS1leUrYtbPUxh5Wt
+         ChNYeYTagZiqBh7GGAFz1tsPtJ/87/2Lhgs5OuQpfrDTvmsEd55kK2DXn0xSB6bGLPNz
+         19J0oHY5+7ctsNP9x7e+HfqvCPPdTa8cpaL9gyaA+Mh48BsheHTBoeu9ySsHbYGQTFF3
+         9OWxDyjoJqzhtwuAa94Pw302n2Y1SX7ZF8lUwjraW25a6PmF6kwKzwZfqeED3WnAO81N
+         IOH1hrHJWTXugg75xa3H1OL3wCod+wesRipmrKB/khh5ybqC9xTNXmmRSt3iYJM1AYhX
+         IlIg==
+X-Gm-Message-State: AOAM530OR1ktC3T+MbsQeSH9ikXw5Nj8qUEym+nvKK5qEu4lBYNKiZo4
+        u3fHX4LhTmBuIt4rSikpzxl8RStKMOV7J1rjvm4Jielshy9KOIypreU2jp4i7ws8Q3hu2vY1vPq
+        iyIbX7ux3rjk00/V4xPYXIbAaSWVobMftTf3q
+X-Received: by 2002:a1c:c915:: with SMTP id f21mr3793715wmb.39.1643130332352;
+        Tue, 25 Jan 2022 09:05:32 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy7hsKMSTS+c3tg8hbEizs0VHVpl83/TDWW7Ey8qOCr5k/EuXQApytnig+iht+MKtj+BSx35g==
+X-Received: by 2002:a1c:c915:: with SMTP id f21mr3793698wmb.39.1643130332208;
+        Tue, 25 Jan 2022 09:05:32 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id o15sm1082377wms.9.2022.01.25.09.05.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 09:05:31 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        linux-pm@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Amit Kucheria" <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Manaf Meethalavalappu Pallikunhi" <quic_manafm@quicinc.com>
-Subject: [PATCH v4] drivers: thermal: clear all mitigation when thermal zone is disabled
-Date:   Tue, 25 Jan 2022 22:06:05 +0530
-Message-ID: <1643128565-22838-1-git-send-email-quic_manafm@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-samsung-soc@vger.kernel.org
+Subject: Re: (subset) [PATCH 1/3] ARM: dts: exynos: drop old thermal properties from Exynos4210
+Date:   Tue, 25 Jan 2022 18:04:54 +0100
+Message-Id: <164313029072.79782.14492454091056440886.b4-ty@canonical.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220122132554.65192-1-krzysztof.kozlowski@canonical.com>
+References: <20220122132554.65192-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Whenever a thermal zone is in trip violated state, there is a chance
-that the same thermal zone mode can be disabled either via
-thermal core API or via thermal zone sysfs. Once it is disabled,
-the framework bails out any re-evaluation of thermal zone. It leads
-to a case where if it is already in mitigation state, it will stay
-the same state forever.
+On Sat, 22 Jan 2022 14:25:52 +0100, Krzysztof Kozlowski wrote:
+> The samsung,tmu_gain and samsung,tmu_reference_voltage properties of
+> Exynos Thermal Management Unit driver are not used since April 2018.
+> They were removed with commit fccfe0993b5d ("thermal: exynos: remove
+> parsing of samsung,tmu_gain property") and commit 61020d189dbc
+> ("thermal: exynos: remove parsing of samsung, tmu_reference_voltage
+> property"), so drop them also from Exynos4210 DTS.
+> 
+> [...]
 
-To avoid above mentioned issue, add support to bind/unbind
-governor from thermal zone during thermal zone mode change request
-and clear all existing throttling in governor unbind_from_tz()
-callback.
+Applied, thanks!
 
-Suggested-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
----
- drivers/thermal/gov_power_allocator.c |  3 +++
- drivers/thermal/gov_step_wise.c       | 26 ++++++++++++++++++++++++++
- drivers/thermal/thermal_core.c        | 31 +++++++++++++++++++++++++++----
- 3 files changed, 56 insertions(+), 4 deletions(-)
+[1/3] ARM: dts: exynos: drop old thermal properties from Exynos4210
+      commit: e20bd06fc421fba4099be51d3f56b9b1741b499b
 
-diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
-index 13e3757..9ff0c5f 100644
---- a/drivers/thermal/gov_power_allocator.c
-+++ b/drivers/thermal/gov_power_allocator.c
-@@ -696,6 +696,9 @@ static void power_allocator_unbind(struct thermal_zone_device *tz)
- 
- 	dev_dbg(&tz->device, "Unbinding from thermal zone %d\n", tz->id);
- 
-+	tz->passive = 0;
-+	allow_maximum_power(tz, true);
-+
- 	if (params->allocated_tzp) {
- 		kfree(tz->tzp);
- 		tz->tzp = NULL;
-diff --git a/drivers/thermal/gov_step_wise.c b/drivers/thermal/gov_step_wise.c
-index 12acb12..2132c14 100644
---- a/drivers/thermal/gov_step_wise.c
-+++ b/drivers/thermal/gov_step_wise.c
-@@ -168,6 +168,31 @@ static void thermal_zone_trip_update(struct thermal_zone_device *tz, int trip)
- }
- 
- /**
-+ * step_wise_unbind() - unbind the step_wise governor to a thermal zone
-+ * @tz:	thermal zone to unbind it to
-+ *
-+ * Clear all previous throttling and reset passive counter.
-+ *
-+ */
-+static void step_wise_unbind(struct thermal_zone_device *tz)
-+{
-+	struct thermal_instance *instance;
-+
-+	dev_dbg(&tz->device, "Unbinding from thermal zone %d\n", tz->id);
-+
-+	mutex_lock(&tz->lock);
-+	tz->passive = 0;
-+	list_for_each_entry(instance, &tz->thermal_instances, tz_node) {
-+		instance->initialized = false;
-+		instance->target = THERMAL_NO_TARGET;
-+		mutex_lock(&instance->cdev->lock);
-+		 __thermal_cdev_update(instance->cdev);
-+		mutex_unlock(&instance->cdev->lock);
-+	}
-+	mutex_unlock(&tz->lock);
-+}
-+
-+/**
-  * step_wise_throttle - throttles devices associated with the given zone
-  * @tz: thermal_zone_device
-  * @trip: trip point index
-@@ -196,6 +221,7 @@ static int step_wise_throttle(struct thermal_zone_device *tz, int trip)
- 
- static struct thermal_governor thermal_gov_step_wise = {
- 	.name		= "step_wise",
-+	.unbind_from_tz	= step_wise_unbind,
- 	.throttle	= step_wise_throttle,
- };
- THERMAL_GOVERNOR_DECLARE(thermal_gov_step_wise);
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 1389174..9828eb3 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -274,6 +274,26 @@ static int __init thermal_register_governors(void)
- 	return ret;
- }
- 
-+static void thermal_governor_attach(struct thermal_zone_device *tz)
-+{
-+	mutex_lock(&thermal_governor_lock);
-+	if (tz->governor && tz->governor->bind_to_tz) {
-+		if (tz->governor->bind_to_tz(tz))
-+			dev_err(&tz->device,
-+				"governor %s failed to bind to thermal zone %s\n",
-+				tz->governor->name, tz->type);
-+	}
-+	mutex_unlock(&thermal_governor_lock);
-+}
-+
-+static void thermal_governor_detach(struct thermal_zone_device *tz)
-+{
-+	mutex_lock(&thermal_governor_lock);
-+	if (tz->governor && tz->governor->unbind_from_tz)
-+		tz->governor->unbind_from_tz(tz);
-+	mutex_unlock(&thermal_governor_lock);
-+}
-+
- /*
-  * Zone update section: main control loop applied to each zone while monitoring
-  *
-@@ -447,12 +467,15 @@ static int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
- 
- 	mutex_unlock(&tz->lock);
- 
--	thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
--
--	if (mode == THERMAL_DEVICE_ENABLED)
-+	if (mode == THERMAL_DEVICE_ENABLED) {
-+		thermal_governor_attach(tz);
-+		thermal_zone_device_init(tz);
-+		thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
- 		thermal_notify_tz_enable(tz->id);
--	else
-+	} else {
-+		thermal_governor_detach(tz);
- 		thermal_notify_tz_disable(tz->id);
-+	}
- 
- 	return ret;
- }
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
