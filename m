@@ -2,108 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FB2D49BAAE
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Jan 2022 18:55:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3C9349BB7D
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Jan 2022 19:49:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350304AbiAYRy1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Jan 2022 12:54:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56904 "EHLO
+        id S233561AbiAYStp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Jan 2022 13:49:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354958AbiAYRxr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jan 2022 12:53:47 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F70C06173D
-        for <linux-pm@vger.kernel.org>; Tue, 25 Jan 2022 09:53:47 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id f202-20020a1c1fd3000000b0034dd403f4fbso2435765wmf.1
-        for <linux-pm@vger.kernel.org>; Tue, 25 Jan 2022 09:53:47 -0800 (PST)
+        with ESMTP id S231443AbiAYStj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jan 2022 13:49:39 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B5FC06173E
+        for <linux-pm@vger.kernel.org>; Tue, 25 Jan 2022 10:49:38 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id p27so58610760lfa.1
+        for <linux-pm@vger.kernel.org>; Tue, 25 Jan 2022 10:49:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=WhuuXHFJMAbuaVPhoPEVC9jC8MwTp/NZVNJewIORlvs=;
-        b=s3f1D54qdscWFEa7Uoi1oq7p/IHQBan8WXzRVkwdC8LEd67XsDDVCsaS2odDT/CbrY
-         HuWl367BDVbn0OO6TYjeOLvgyX01GmtwLNdcIPKFhb7bYw8vC8/fq0FHqY6QXPxblrd/
-         LxdpSW3E8zlTJclOULBkl6pTkBURLvDizTL8FaqIDeicfL3xNNdWecHle8vALKS+FT3p
-         f0H48TOa/ZZOW/8Wxch1S6Nnelnp56hxxlfndFU+0zQ8nea4Fcgv8UsuXdMPnfvj64V0
-         L2BunarPltl/xo9Sw/FuMhVle3ul7oWh1VZ95t8g5dTenCaMpmuXBjK7nwBfDon4WZzZ
-         pPKQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oWLpzvRinJwVHFJZ5l+R8ls90zt89KNl+7gB074iPMw=;
+        b=RMKKeWIUoJqGGE8YhS2fIB7T3ASIgs7mxqK2wuoWQluHFT48/hj1q0vAjlfbXBYRmv
+         5njEKMFUMMqN/E9UzoszSTr8EiCuzYMvnfY67PnrYj7BopQ4PxeVDq+5ouIy4JpES8ZU
+         C1KdrIDnKGgq8mhCqwRkSlD8PMmYHBh/MJkdI3mAbtcKq8U76CFKTyVWiFhJmKT5DtYz
+         HuhWj59Wl93FgHX+OK1Pq3tGaHIpHVLsF2AXDezwOR6azidfAQ7urugkTwG+8xmux0YI
+         xfeoZSSQxMYqq5aTD8jwxvfAVElQCO0HI/K2MmLgrreKN9GpFWH8p0OoA1bxo++VKWUo
+         sZHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=WhuuXHFJMAbuaVPhoPEVC9jC8MwTp/NZVNJewIORlvs=;
-        b=EqwdJR4m4FUzD9S202WkoDml5j4yeuaaBP1U+s63JmFuwCPNA83w7osiZMkIphlHiG
-         IZuq6sYCDot6GoLLO0IPAn2/Us3wIrQd2x0l9Ggt4pXGWyzLZ42zUEVvHkESSMiAnCrZ
-         Sx3F3RS3nPFraYjGNjn6QHE1zFkrZzMaV7t+ruW7BUuYHtexmICAaOa68HaCKR1tEYNX
-         /xSYKSLw4TEl+hBnqSyrKW9JSlaqEU0ek/8L5OHvnJfXhfR5fEt6PkW4Ndchsv7WX5v/
-         I6bQGN9DnZBivqQBn7MY9D4HCOfcx/SglZM3fkHv30Tbq5tgMzs33MOahgkP5yBbUjcU
-         8vCA==
-X-Gm-Message-State: AOAM530ulW0sKM0dEjF4qAcmV5Cqzh/rdo6OrYZpX0RWdtcoBILAhqUW
-        pRnO05X+wzrtHdaFwj0xlMFrDA==
-X-Google-Smtp-Source: ABdhPJwAqzkVTq3dZH0KhhRlUciAuK1eBUyi+58WhWOwf5b5Hm5NrjMDK3e6xDBrBvAe6Taq9I34Og==
-X-Received: by 2002:a05:600c:5028:: with SMTP id n40mr3901446wmr.10.1643133225573;
-        Tue, 25 Jan 2022 09:53:45 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:f589:cf7d:b2ee:bb5e? ([2a01:e34:ed2f:f020:f589:cf7d:b2ee:bb5e])
-        by smtp.googlemail.com with ESMTPSA id b2sm8476521wri.88.2022.01.25.09.53.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jan 2022 09:53:45 -0800 (PST)
-Subject: Re: [PATCH v7 2/5] powercap/drivers/dtpm: Add hierarchy creation
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     rjw@rjwysocki.net, robh@kernel.org, lukasz.luba@arm.com,
-        heiko@sntech.de, arnd@linaro.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@kernel.org>
-References: <20220125171809.1273269-1-daniel.lezcano@linaro.org>
- <20220125171809.1273269-3-daniel.lezcano@linaro.org>
- <CAPDyKFoKCY1sBPA8eDxZPqSmaPBWeJix=A2b_Z7fBsn-CD-4DQ@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <cc6b66f1-c918-041e-9965-07a417a31088@linaro.org>
-Date:   Tue, 25 Jan 2022 18:53:43 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oWLpzvRinJwVHFJZ5l+R8ls90zt89KNl+7gB074iPMw=;
+        b=lEXIqEce8zzDTmWzNZhNpXODuz+Lec6krE8Ms91nYk2x+IQLfgX7fvvNkgBq8jp1kX
+         P3virn4QguT4pE+Qw4VsvMQZtu8sNQbrRHYg8sRjsO4phESauTlJicz8q5UDWMUPXXdd
+         rR+Yoe1W63/FdjDw86mdSfjoVTmQnopX0w62KDhCksH7x1lGbCVtnRJ7Z03jQRMA93Ps
+         GyvcJ7Yr37V+wZUHI9MNeLuOWhn6FbbitHUJoqRQsGDvLUkqQQmB001GNXqKOfud8taZ
+         hdPW6ngx4snzGvB0MKWXn5YqSkq0xndxcXmbA8PrRbNmJOiACZrpIwTKxD8GyYgIyvxE
+         4JAw==
+X-Gm-Message-State: AOAM5320doLH4O02T7Og8o1Wsw3ufTYPR07xGm6B/lYL3GhCj0uPF1xF
+        rxKlUC+l9tsj/3gB0ZzggOJ1MYcVn3gzGX7bW3kpPA==
+X-Google-Smtp-Source: ABdhPJzroNW2XM9JUO3ZyCYiZo5rSd0NVZ+1Py1R28klXukskpHC5iKqzcDcfYMNVwikZBECMncvuVfpIhWlI/O1WvE=
+X-Received: by 2002:a05:6512:3c98:: with SMTP id h24mr11359880lfv.233.1643136577075;
+ Tue, 25 Jan 2022 10:49:37 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAPDyKFoKCY1sBPA8eDxZPqSmaPBWeJix=A2b_Z7fBsn-CD-4DQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <1641749107-31979-1-git-send-email-quic_mkshah@quicinc.com> <1641749107-31979-9-git-send-email-quic_mkshah@quicinc.com>
+In-Reply-To: <1641749107-31979-9-git-send-email-quic_mkshah@quicinc.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 25 Jan 2022 19:49:00 +0100
+Message-ID: <CAPDyKFoiCVeMeaSDch+xX4iURP2beaDvvjhhodeGxrv2WehKEA@mail.gmail.com>
+Subject: Re: [PATCH 08/10] PM: domains: Store the closest hrtimer event of the
+ domain CPUs
+To:     Maulik Shah <quic_mkshah@quicinc.com>
+Cc:     bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rafael@kernel.org, daniel.lezcano@linaro.org,
+        quic_lsrao@quicinc.com, quic_rjendra@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25/01/2022 18:36, Ulf Hansson wrote:
-> On Tue, 25 Jan 2022 at 18:18, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->>
->> The DTPM framework is available but without a way to configure it.
->>
->> This change provides a way to create a hierarchy of DTPM node where
->> the power consumption reflects the sum of the children's power
->> consumption.
->>
->> It is up to the platform to specify an array of dtpm nodes where each
->> element has a pointer to its parent, except the top most one. The type
->> of the node gives the indication of which initialization callback to
->> call. At this time, we can create a virtual node, where its purpose is
->> to be a parent in the hierarchy, and a DT node where the name
->> describes its path.
->>
->> In order to ensure a nice self-encapsulation, the DTPM subsys array
->> contains a couple of initialization functions, one to setup the DTPM
->> backend and one to initialize it up. With this approach, the DTPM
->> framework has a very few material to export.
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-> 
-> Yes, this looks good to me now. Thanks for adopting my suggestions.
+On Sun, 9 Jan 2022 at 18:26, Maulik Shah <quic_mkshah@quicinc.com> wrote:
+>
+> The arch timer can not wake up the Qualcomm Technologies, Inc. (QTI)
+> SoCs when the deepest CPUidle modes results in the SoC also to enter
+> the low power mode.
+>
+> RSC is part of CPU subsystem and APSS rsc device is attached to cluster
+> power domain. RSC has to setup next hrtimer wakeup in CONTROL_TCS which
+> can wakeup the SoC from deepest low power states. The CONTROL_TCS does
+> this by writing next wakeup in always on domain timer when the SoC is
+> entering the low power state.
+>
+> Store the domain wakeup time from all the CPUs which can be used from
+> domain power off callback by RSC device.
+>
+> Signed-off-by: Maulik Shah <quic_mkshah@quicinc.com>
+> ---
+>  drivers/base/power/domain_governor.c | 1 +
+>  include/linux/pm_domain.h            | 1 +
+>  2 files changed, 2 insertions(+)
+>
+> diff --git a/drivers/base/power/domain_governor.c b/drivers/base/power/domain_governor.c
+> index cd08c58..a4c7dd8 100644
+> --- a/drivers/base/power/domain_governor.c
+> +++ b/drivers/base/power/domain_governor.c
+> @@ -363,6 +363,7 @@ static bool cpu_power_down_ok(struct dev_pm_domain *pd)
+>                                 domain_wakeup = next_hrtimer;
+>                 }
+>         }
+> +       genpd->next_hrtimer = domain_wakeup;
+>
+>         /* The minimum idle duration is from now - until the next wakeup. */
+>         idle_duration_ns = ktime_to_ns(ktime_sub(domain_wakeup, now));
+> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+> index 67017c9..682b372 100644
+> --- a/include/linux/pm_domain.h
+> +++ b/include/linux/pm_domain.h
+> @@ -136,6 +136,7 @@ struct generic_pm_domain {
+>         struct gpd_dev_ops dev_ops;
+>         s64 max_off_time_ns;    /* Maximum allowed "suspended" time. */
+>         ktime_t next_wakeup;    /* Maintained by the domain governor */
+> +       ktime_t next_hrtimer;   /* Closest hrtimer event of the domain CPUs */
 
+Would you mind clarifying the comment into something along the lines
+of: "/* Next hrtimer for the CPU PM domain */
 
-Thanks for your time to review the code
+>         bool max_off_time_changed;
+>         bool cached_power_down_ok;
+>         bool cached_power_down_state_idx;
+> --
+> 2.7.4
+>
 
+Beside the nitpick above, I have a few additional minor comments.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+*) Users of genpd->next_hrtimer should not access this member in the
+struct generic_pm_domain themselves. Instead, I suggest we add a genpd
+helper function to deal with this. In this regard, we should also add
+a description to the helper function to explain under what *specific*
+conditions it's allowed to be called for.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+**) We should assign genpd->next_hrtimer a default value in
+pm_genpd_init(). Perhaps that can also be used in a way to make sure
+the helper function always returns a valid value!?
+
+Other than this, I think the approach looks sane to me!
+
+Kind regards
+Uffe
