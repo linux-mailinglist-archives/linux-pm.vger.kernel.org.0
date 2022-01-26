@@ -2,114 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5182149C99F
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jan 2022 13:26:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFB3949CEDB
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jan 2022 16:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241269AbiAZM0r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Jan 2022 07:26:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57668 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241263AbiAZM0q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jan 2022 07:26:46 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B23C06161C
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jan 2022 04:26:46 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id h21so7942221wrb.8
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jan 2022 04:26:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=RTTc+tIxboDX1aAp6zIcb8nku1+Z0jGEe/zvj/3GVws=;
-        b=ifdoWnIM4+DPkoukaQV9D4X0bFzOCYQiemnycFMl7Fr6vLCDMvG8RcLtoG3Q4v6M8u
-         9gqXE/wlJh4yHZ46KHrf4pjUk6nA6v+ei1qBKCq7m+4LlIE5K84VHb5isEinaKeMPA6e
-         xuu8Ij9jLHWTDdIMqGnfAzfRCgSTumD8UYb3OTsfSb4Pgcv1LnGtQPvbJqqUXhcjW1I2
-         S9EcEPVn6/hx4UeaHzvZRuf/X6qGoyXHpDv1pDDm2ohOZwdUaDaH4tbeZl6wN5ttRa6x
-         fZFTNQ4S6XF+56g65PEHdTQNsTEP8lZJ6HOIDq4aRUkADyWdvE0F64YUW4aqXHLoljFa
-         hlGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=RTTc+tIxboDX1aAp6zIcb8nku1+Z0jGEe/zvj/3GVws=;
-        b=c8m98gsWa05soQvb49xPxG/IeZOFk00TjukMUN+OsIP166YKqd8SOpXGyPFuzgdEyb
-         lkzGy/mMRPUNpjkkU/QKVXHVJqFOJ7N+dj2inKIBbXOmVmEy+WWSLfrymsch6u6MQE4u
-         sY644L/Nzl5RO8rju3ptRr8Ia+F1vaMnwTlec8qaYgzad4Ro0SOaZBSLoSIsyzgo528c
-         OkwX5EPOjCyqbalpTGpDvZtHr6O5ijUls82B9z6OjEDCC6yvh7aLEv0Lu9eSs545Oe6X
-         CY8RIkSvMaeY7QYacqGC66irLjrw/IXJOhhWGeA2kY+eP8tZ917/gw+jg6FMwNimi5Li
-         cEfA==
-X-Gm-Message-State: AOAM530Tqvdc2TKQcx77jl9IL+jMm1faFEwO9Yw+DacRpsh+Mqdl0zNg
-        +wNMMJRw5lyw5ad2VQPZ02HL4w==
-X-Google-Smtp-Source: ABdhPJxbZEHuj6ajYtjPTlbiEw4+WdhYMQwvbBKCrW7Ge5qMW7KY/m/LBunO3t7fUhjHvvf9aIM/NQ==
-X-Received: by 2002:adf:9e49:: with SMTP id v9mr20989963wre.469.1643200004873;
-        Wed, 26 Jan 2022 04:26:44 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:f589:cf7d:b2ee:bb5e? ([2a01:e34:ed2f:f020:f589:cf7d:b2ee:bb5e])
-        by smtp.googlemail.com with ESMTPSA id g7sm4009602wmq.28.2022.01.26.04.26.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jan 2022 04:26:44 -0800 (PST)
-Subject: Re: (subset) [PATCH 1/3] ARM: dts: exynos: drop old thermal
- properties from Exynos4210
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        linux-pm@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-References: <20220122132554.65192-1-krzysztof.kozlowski@canonical.com>
- <164313029072.79782.14492454091056440886.b4-ty@canonical.com>
- <c4a6d5a4-647a-f80c-e487-a5434e744bae@linaro.org>
- <CA+Eumj6rUZ=e6oOZyRMEEoXn2uh0FpuUQbJaT3rsX3rhXT67pQ@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <8fba22fc-3fc1-a55e-9926-7f008ac24925@linaro.org>
-Date:   Wed, 26 Jan 2022 13:26:42 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S236060AbiAZPtB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Jan 2022 10:49:01 -0500
+Received: from mga07.intel.com ([134.134.136.100]:54866 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235555AbiAZPtB (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 26 Jan 2022 10:49:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643212141; x=1674748141;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+J63yfbsQbuQjnkNpkFhv6uxQDj/oTnzatWDWLCsMgU=;
+  b=XmesMcw2YCailfty3FSyhP6YEBWuDAC0r6Cq9sV9HN4rKo9L0ouw/kiO
+   cBRG0d6+p+q2m+S7LH52w32naaGPdOOa5hckGdwefz2vW00EbjyJeeO8J
+   MX2hcWl6MHv+heqTI47FcbI9Mdy13hRTttJ3SO9rmIfH94YViMGIyrth1
+   gXlTzeZyOu7rYJp00axWpWIr67BffSoHQct7kALp5mQJ1Oeu8XMMz8FMX
+   QOVLoXOsJathTBDVoDgktcaQTqEO3hoa0S28ana1fx7P3NpGT59FyFk0a
+   sVXYytvuFu7cTdZuG0SpLMu5KgWEdZKFtGngHldIVTVxaPNpTbexVuIvp
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="309891077"
+X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
+   d="scan'208";a="309891077"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 07:49:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
+   d="scan'208";a="563442847"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 26 Jan 2022 07:48:58 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nCkXZ-000LLv-No; Wed, 26 Jan 2022 15:48:57 +0000
+Date:   Wed, 26 Jan 2022 23:48:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+Subject: Re: [PATCH v4] drivers: thermal: clear all mitigation when thermal
+ zone is disabled
+Message-ID: <202201262251.KzdCvJYy-lkp@intel.com>
+References: <1643128565-22838-1-git-send-email-quic_manafm@quicinc.com>
 MIME-Version: 1.0
-In-Reply-To: <CA+Eumj6rUZ=e6oOZyRMEEoXn2uh0FpuUQbJaT3rsX3rhXT67pQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1643128565-22838-1-git-send-email-quic_manafm@quicinc.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26/01/2022 13:20, Krzysztof Kozlowski wrote:
-> On Wed, 26 Jan 2022 at 12:57, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->>
->> On 25/01/2022 18:04, Krzysztof Kozlowski wrote:
->>> On Sat, 22 Jan 2022 14:25:52 +0100, Krzysztof Kozlowski wrote:
->>>> The samsung,tmu_gain and samsung,tmu_reference_voltage properties of
->>>> Exynos Thermal Management Unit driver are not used since April 2018.
->>>> They were removed with commit fccfe0993b5d ("thermal: exynos: remove
->>>> parsing of samsung,tmu_gain property") and commit 61020d189dbc
->>>> ("thermal: exynos: remove parsing of samsung, tmu_reference_voltage
->>>> property"), so drop them also from Exynos4210 DTS.
->>>>
->>>> [...]
->>>
->>> Applied, thanks!
->>>
->>> [1/3] ARM: dts: exynos: drop old thermal properties from Exynos4210
->>>       commit: e20bd06fc421fba4099be51d3f56b9b1741b499b
->>>
->>
->> I guess up to me to pick 2 and 3
-> 
-> Yes, please.
+Hi Manaf,
 
-Ok, I'll wait for Rob's ack
+Thank you for the patch! Perhaps something to improve:
 
-Thanks
+[auto build test WARNING on rafael-pm/thermal]
+[also build test WARNING on v5.17-rc1 next-20220125]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-  -- Daniel
+url:    https://github.com/0day-ci/linux/commits/Manaf-Meethalavalappu-Pallikunhi/drivers-thermal-clear-all-mitigation-when-thermal-zone-is-disabled/20220126-004720
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+config: nios2-randconfig-m031-20220124 (https://download.01.org/0day-ci/archive/20220126/202201262251.KzdCvJYy-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 11.2.0
 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+smatch warnings:
+drivers/thermal/gov_step_wise.c:189 step_wise_unbind() warn: inconsistent indenting
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+vim +189 drivers/thermal/gov_step_wise.c
+
+   169	
+   170	/**
+   171	 * step_wise_unbind() - unbind the step_wise governor to a thermal zone
+   172	 * @tz:	thermal zone to unbind it to
+   173	 *
+   174	 * Clear all previous throttling and reset passive counter.
+   175	 *
+   176	 */
+   177	static void step_wise_unbind(struct thermal_zone_device *tz)
+   178	{
+   179		struct thermal_instance *instance;
+   180	
+   181		dev_dbg(&tz->device, "Unbinding from thermal zone %d\n", tz->id);
+   182	
+   183		mutex_lock(&tz->lock);
+   184		tz->passive = 0;
+   185		list_for_each_entry(instance, &tz->thermal_instances, tz_node) {
+   186			instance->initialized = false;
+   187			instance->target = THERMAL_NO_TARGET;
+   188			mutex_lock(&instance->cdev->lock);
+ > 189			 __thermal_cdev_update(instance->cdev);
+   190			mutex_unlock(&instance->cdev->lock);
+   191		}
+   192		mutex_unlock(&tz->lock);
+   193	}
+   194	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
