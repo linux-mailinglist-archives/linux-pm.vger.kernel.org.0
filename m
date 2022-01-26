@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D75DD49C8EC
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jan 2022 12:45:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1207949C8EF
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jan 2022 12:45:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240886AbiAZLpQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Jan 2022 06:45:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47976 "EHLO
+        id S240883AbiAZLpW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Jan 2022 06:45:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240876AbiAZLpP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jan 2022 06:45:15 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156DCC061747
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jan 2022 03:45:15 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id r59so5092471pjg.4
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jan 2022 03:45:15 -0800 (PST)
+        with ESMTP id S240891AbiAZLpW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jan 2022 06:45:22 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA7DC06161C
+        for <linux-pm@vger.kernel.org>; Wed, 26 Jan 2022 03:45:22 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id d18so9447620plg.2
+        for <linux-pm@vger.kernel.org>; Wed, 26 Jan 2022 03:45:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ventanamicro.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=s5PgLHdLhcwiJdVhNsOwglrdY0pbHmFnLAELykCh5Ws=;
-        b=PYGgs67GQPFDJ15PjfEz6fgO2DTbqR/L4BR+YDKngG7olmoD8RgBVJsLkK480Vr3Hb
-         ieMxqYaA+CV0ToHsTK/RS4zRCGGCtuWrzrvxLaDbtZrsxz57UFH/oL19/Cueh1OPjSJ1
-         J0pjcqm5DjB7jkJhR1iO7SwCHzJvZq/1iGTUXgiYJN36WPVJJIVLYj+4893mC9xbaMx1
-         SoLXCKyuGUbf76s2DUNGPydGvs/x0Ma73H1W11cFThxK1uiJfrICNSy+RIxTZBMQcF9Q
-         RI6OYDT/PTOsGkKbtJh4t1l/c6K2Sqjhx0WJNnKa60o+qRiN6P3n1AA1mLODSDVjugY5
-         0msQ==
+        bh=+fhSSByGJ1StCm+oVdHQ6+iIgAeqBD8uGJ6nIDfD98Q=;
+        b=Xh3abpUhKWutXSa5R1ZrcfayK4Iv8eorhSc5LPbUtCDbBFaBPa9kqT8qgAN7Phl8nU
+         CgRXNkYUDQunBNy0SQFPU3KtLxi4nxKVsgyw1npo+bSHe/H7aRQobrLmSB2TwnU35k0O
+         kju0hA7bIzlfmUL+MIGzuQRxAyP7rssltUN/QqFgxic+7sxSz+mSIAiJdpRhO7PRMd0y
+         D8S7aUCAtEhuYBJecE11TgvnuE1237Ng9D32dCvoYNw57D5ci1E9lQVlxqJ9KARV940R
+         J6qOe/dlg9eb1lWi2yiYIJ7wIzyN2rKRIw57gUVIFMPfEA5Nb41eT7R8VPyeoD1tCqX+
+         azcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=s5PgLHdLhcwiJdVhNsOwglrdY0pbHmFnLAELykCh5Ws=;
-        b=mIK1RjQXGNaIt6TIGBdrFFT3XMKkGKb89sgoEsJqhDvwIfSdzUNkJbRHLxuMu6KhjV
-         m1pyR87DiaPNC2Z86iDkrtII8jS89AwupxXdfnWD+Fvdss/kTm9g0Ss9umRa74srRkVX
-         A0hz3gkBuZcIwM1q5jXo3zZqFIcPu8VvEcItUMUcuOOua57sLfbwj6rerWPWso1GHkjo
-         oIJQmdxrFBIsJoGGFRtbtkfMkqh6LYCKzHOydLrubjIvYdzmoLJidOzROh63V0NWiWCX
-         /tVfk4oekMKA/8JJp0+cTAa1efJwnCx30vp/x2SJkdpD8tPpyHeyHpZoV6Ir1TEaFYk1
-         /8Dw==
-X-Gm-Message-State: AOAM533KgoAAnIDZf9MvC/NrN+ENAVQA8L4U2nUXiyo7dTA6uty6PF86
-        DgRtfrLfu1/+EXvABS7TwSJwyQ==
-X-Google-Smtp-Source: ABdhPJwAY0SiEeiP7NCmqUrkybPvy8Zo1tT1PswCl1bTDjTh1U5WwHZ70oyc8R+cYGUMwlpIaC2zCg==
-X-Received: by 2002:a17:90b:1bc1:: with SMTP id oa1mr8327304pjb.209.1643197514585;
-        Wed, 26 Jan 2022 03:45:14 -0800 (PST)
+        bh=+fhSSByGJ1StCm+oVdHQ6+iIgAeqBD8uGJ6nIDfD98Q=;
+        b=1/qKrLB2UR8E5/JoiuGTw/vtH+fdZskftVVcFEIwEnTEK2T3+widvyQ4dJ2BfDhkkY
+         ZY9aADtQcLyZTcw+KxoSZpz2dtwHnYcU3NhlnZYQwmtzKdGGgpjNfRH38+FOm6n8XS+M
+         zdj43ofAeqCHZHTnIlyN8h+a77v/+owTUU3yCUF5MGJE+JJ+6eTPzUH5xWf0Jyu1VN/Y
+         hzj4PPlU7ocXFa4pnyrko5e5LWnO12G3WFuGD3sHcKrkwbo0/o3uOY7gBVAm0HsNNavz
+         1DWB15iZVmz+Z0FDGoO1N7UiyK0UmUVLkOvf4kXu/+CZpOfIQLnuQQmvmEhYiR0NWLu8
+         yhcA==
+X-Gm-Message-State: AOAM532cmkuqrpamG4gOG6LDcVDB31QoP4vLeXN/YVisklSalqI5ib0A
+        5jQTW5zUJ4ya/y2pcAvOzmHtjA==
+X-Google-Smtp-Source: ABdhPJyRC3Dl4A/e6StezF1hozEQZSpNbbOMa429zzx/OGkYNb3FFKnDfVLh7Pv/0LpuLfdKVLTI3w==
+X-Received: by 2002:a17:902:8544:b0:14a:bea3:1899 with SMTP id d4-20020a170902854400b0014abea31899mr22998561plo.143.1643197521827;
+        Wed, 26 Jan 2022 03:45:21 -0800 (PST)
 Received: from localhost.localdomain ([122.167.221.23])
-        by smtp.gmail.com with ESMTPSA id nn2sm2994976pjb.35.2022.01.26.03.45.08
+        by smtp.gmail.com with ESMTPSA id nn2sm2994976pjb.35.2022.01.26.03.45.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 03:45:14 -0800 (PST)
+        Wed, 26 Jan 2022 03:45:21 -0800 (PST)
 From:   Anup Patel <apatel@ventanamicro.com>
 To:     Palmer Dabbelt <palmer@dabbelt.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
@@ -62,10 +62,10 @@ Cc:     Sandeep Tripathy <milun.tripathy@gmail.com>,
         Anup Patel <anup@brainfault.org>, devicetree@vger.kernel.org,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvm-riscv@lists.infradead.org
-Subject: [PATCH v10 1/8] RISC-V: Enable CPU_IDLE drivers
-Date:   Wed, 26 Jan 2022 17:14:45 +0530
-Message-Id: <20220126114452.692512-2-apatel@ventanamicro.com>
+        kvm-riscv@lists.infradead.org, Anup Patel <apatel@ventanamicro.com>
+Subject: [PATCH v10 2/8] RISC-V: Rename relocate() and make it global
+Date:   Wed, 26 Jan 2022 17:14:46 +0530
+Message-Id: <20220126114452.692512-3-apatel@ventanamicro.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220126114452.692512-1-apatel@ventanamicro.com>
 References: <20220126114452.692512-1-apatel@ventanamicro.com>
@@ -77,118 +77,52 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Anup Patel <anup.patel@wdc.com>
 
-We force select CPU_PM and provide asm/cpuidle.h so that we can
-use CPU IDLE drivers for Linux RISC-V kernel.
+The low-level relocate() function enables mmu and relocates
+execution to link-time addresses. We rename relocate() function
+to relocate_enable_mmu() function which is more informative.
+
+Also, the relocate_enable_mmu() function will be used in the
+resume path when a CPU wakes-up from a non-retentive suspend
+so we make it global symbol.
 
 Signed-off-by: Anup Patel <anup.patel@wdc.com>
-Signed-off-by: Anup Patel <apatel@vetanamicro.com>
+Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 ---
- arch/riscv/Kconfig                |  7 +++++++
- arch/riscv/configs/defconfig      |  1 +
- arch/riscv/configs/rv32_defconfig |  1 +
- arch/riscv/include/asm/cpuidle.h  | 24 ++++++++++++++++++++++++
- arch/riscv/kernel/process.c       |  3 ++-
- 5 files changed, 35 insertions(+), 1 deletion(-)
- create mode 100644 arch/riscv/include/asm/cpuidle.h
+ arch/riscv/kernel/head.S | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 5adcbd9b5e88..76976d12b463 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -46,6 +46,7 @@ config RISCV
- 	select CLONE_BACKWARDS
- 	select CLINT_TIMER if !MMU
- 	select COMMON_CLK
-+	select CPU_PM if CPU_IDLE
- 	select EDAC_SUPPORT
- 	select GENERIC_ARCH_TOPOLOGY if SMP
- 	select GENERIC_ATOMIC64 if !64BIT
-@@ -547,4 +548,10 @@ source "kernel/power/Kconfig"
+diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
+index 2363b43312fc..5f4c6b6c4974 100644
+--- a/arch/riscv/kernel/head.S
++++ b/arch/riscv/kernel/head.S
+@@ -90,7 +90,8 @@ pe_head_start:
  
- endmenu
+ .align 2
+ #ifdef CONFIG_MMU
+-relocate:
++	.global relocate_enable_mmu
++relocate_enable_mmu:
+ 	/* Relocate return address */
+ 	la a1, kernel_map
+ 	XIP_FIXUP_OFFSET a1
+@@ -185,7 +186,7 @@ secondary_start_sbi:
+ 	/* Enable virtual memory and relocate to virtual address */
+ 	la a0, swapper_pg_dir
+ 	XIP_FIXUP_OFFSET a0
+-	call relocate
++	call relocate_enable_mmu
+ #endif
+ 	call setup_trap_vector
+ 	tail smp_callin
+@@ -329,7 +330,7 @@ clear_bss_done:
+ #ifdef CONFIG_MMU
+ 	la a0, early_pg_dir
+ 	XIP_FIXUP_OFFSET a0
+-	call relocate
++	call relocate_enable_mmu
+ #endif /* CONFIG_MMU */
  
-+menu "CPU Power Management"
-+
-+source "drivers/cpuidle/Kconfig"
-+
-+endmenu
-+
- source "arch/riscv/kvm/Kconfig"
-diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
-index f120fcc43d0a..a5e0482a4969 100644
---- a/arch/riscv/configs/defconfig
-+++ b/arch/riscv/configs/defconfig
-@@ -20,6 +20,7 @@ CONFIG_SOC_SIFIVE=y
- CONFIG_SOC_VIRT=y
- CONFIG_SMP=y
- CONFIG_HOTPLUG_CPU=y
-+CONFIG_CPU_IDLE=y
- CONFIG_VIRTUALIZATION=y
- CONFIG_KVM=m
- CONFIG_JUMP_LABEL=y
-diff --git a/arch/riscv/configs/rv32_defconfig b/arch/riscv/configs/rv32_defconfig
-index 8b56a7f1eb06..d1b87db54d68 100644
---- a/arch/riscv/configs/rv32_defconfig
-+++ b/arch/riscv/configs/rv32_defconfig
-@@ -20,6 +20,7 @@ CONFIG_SOC_VIRT=y
- CONFIG_ARCH_RV32I=y
- CONFIG_SMP=y
- CONFIG_HOTPLUG_CPU=y
-+CONFIG_CPU_IDLE=y
- CONFIG_VIRTUALIZATION=y
- CONFIG_KVM=m
- CONFIG_JUMP_LABEL=y
-diff --git a/arch/riscv/include/asm/cpuidle.h b/arch/riscv/include/asm/cpuidle.h
-new file mode 100644
-index 000000000000..71fdc607d4bc
---- /dev/null
-+++ b/arch/riscv/include/asm/cpuidle.h
-@@ -0,0 +1,24 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2021 Allwinner Ltd
-+ * Copyright (C) 2021 Western Digital Corporation or its affiliates.
-+ */
-+
-+#ifndef _ASM_RISCV_CPUIDLE_H
-+#define _ASM_RISCV_CPUIDLE_H
-+
-+#include <asm/barrier.h>
-+#include <asm/processor.h>
-+
-+static inline void cpu_do_idle(void)
-+{
-+	/*
-+	 * Add mb() here to ensure that all
-+	 * IO/MEM accesses are completed prior
-+	 * to entering WFI.
-+	 */
-+	mb();
-+	wait_for_interrupt();
-+}
-+
-+#endif
-diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
-index 03ac3aa611f5..504b496787aa 100644
---- a/arch/riscv/kernel/process.c
-+++ b/arch/riscv/kernel/process.c
-@@ -23,6 +23,7 @@
- #include <asm/string.h>
- #include <asm/switch_to.h>
- #include <asm/thread_info.h>
-+#include <asm/cpuidle.h>
- 
- register unsigned long gp_in_global __asm__("gp");
- 
-@@ -37,7 +38,7 @@ extern asmlinkage void ret_from_kernel_thread(void);
- 
- void arch_cpu_idle(void)
- {
--	wait_for_interrupt();
-+	cpu_do_idle();
- 	raw_local_irq_enable();
- }
- 
+ 	call setup_trap_vector
 -- 
 2.25.1
 
