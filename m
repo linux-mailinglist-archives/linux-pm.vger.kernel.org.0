@@ -2,115 +2,234 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFB3949CEDB
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jan 2022 16:49:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4618249D163
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jan 2022 19:05:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236060AbiAZPtB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Jan 2022 10:49:01 -0500
-Received: from mga07.intel.com ([134.134.136.100]:54866 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235555AbiAZPtB (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 26 Jan 2022 10:49:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643212141; x=1674748141;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+J63yfbsQbuQjnkNpkFhv6uxQDj/oTnzatWDWLCsMgU=;
-  b=XmesMcw2YCailfty3FSyhP6YEBWuDAC0r6Cq9sV9HN4rKo9L0ouw/kiO
-   cBRG0d6+p+q2m+S7LH52w32naaGPdOOa5hckGdwefz2vW00EbjyJeeO8J
-   MX2hcWl6MHv+heqTI47FcbI9Mdy13hRTttJ3SO9rmIfH94YViMGIyrth1
-   gXlTzeZyOu7rYJp00axWpWIr67BffSoHQct7kALp5mQJ1Oeu8XMMz8FMX
-   QOVLoXOsJathTBDVoDgktcaQTqEO3hoa0S28ana1fx7P3NpGT59FyFk0a
-   sVXYytvuFu7cTdZuG0SpLMu5KgWEdZKFtGngHldIVTVxaPNpTbexVuIvp
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="309891077"
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="309891077"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 07:49:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="563442847"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 26 Jan 2022 07:48:58 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nCkXZ-000LLv-No; Wed, 26 Jan 2022 15:48:57 +0000
-Date:   Wed, 26 Jan 2022 23:48:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-Subject: Re: [PATCH v4] drivers: thermal: clear all mitigation when thermal
- zone is disabled
-Message-ID: <202201262251.KzdCvJYy-lkp@intel.com>
-References: <1643128565-22838-1-git-send-email-quic_manafm@quicinc.com>
+        id S244078AbiAZSFY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Jan 2022 13:05:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53590 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244076AbiAZSFX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jan 2022 13:05:23 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F65EC06161C
+        for <linux-pm@vger.kernel.org>; Wed, 26 Jan 2022 10:05:23 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id n32so386944pfv.11
+        for <linux-pm@vger.kernel.org>; Wed, 26 Jan 2022 10:05:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XHRzkjXAM0E1aJzJpuPlGE2P9DpNKrPAb41dqjf9ou0=;
+        b=ALyW7muOssnQBwmbOiO1HjI0CFvrViQtngSRmU4hNa40Kpryb63lcQKjPrU+OVNaKJ
+         EyA3G10btji+3Y3Jcl+LMXKxFfCFZ5fJ7LaxAbBmepcHwQTLcqSEJ5JHGJqYlzkCv4NF
+         Cz6tB6q+IdZEmuqiIAho8XDZEzowucHZ9iaUk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XHRzkjXAM0E1aJzJpuPlGE2P9DpNKrPAb41dqjf9ou0=;
+        b=L5OJkXOPun/zx99d9LZ5NWl9g8wJy8UJobU7V3HHMDISpUptKyz7fXx+UwsL1pgNj0
+         1ToRNMELzV8IU8OFtJ5Mz3sk1Lgeh8BbqJ7zzyijxwW17AnIdDlCrWK1s77snhirB7yg
+         7t7RCjJ7rmB4rFE/QCPSK2FL1RfmDu3YOAOykeZVVwS6+DpYkmbmZ5B561FJ3XoOStXG
+         /EaYaFGymYB9e4fVgPVCN09hTRMRzgWC0IiQS/D/hBdEywU5nEO5ZfjUfGHP3UqI9l5t
+         iZDjT6D7L1JrXw1rl4jZPI9hBgYgH6WZpnb+exFRP60lssM6/AyzEhFJtUa889LpDkux
+         oNrg==
+X-Gm-Message-State: AOAM531jmbnKe70cshFCD4qo3c/Xp88cmNgWA4NzMGRdoRniCerZTw5L
+        AQGyci6Dk4y4Xnt1a40QZMSDpQ==
+X-Google-Smtp-Source: ABdhPJxfagmQS57r4YpbOqH1dCugE2RtJd6HvM6jTC4LosWKDke2P0BRQ+3/xcSk5ppOQSIV0VrwQw==
+X-Received: by 2002:a65:5943:: with SMTP id g3mr63355pgu.3.1643220322880;
+        Wed, 26 Jan 2022 10:05:22 -0800 (PST)
+Received: from pc98bx3.roam.corp.google.com (c-73-222-23-249.hsd1.ca.comcast.net. [73.222.23.249])
+        by smtp.gmail.com with ESMTPSA id u10sm17211404pgl.68.2022.01.26.10.05.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 10:05:22 -0800 (PST)
+From:   Daisuke Nojiri <dnojiri@chromium.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Daisuke Nojiri <dnojiri@chromium.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v3] power: supply: PCHG: Use MKBP for device event handling
+Date:   Wed, 26 Jan 2022 10:04:10 -0800
+Message-Id: <20220126180413.2565825-1-dnojiri@chromium.org>
+X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1643128565-22838-1-git-send-email-quic_manafm@quicinc.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Manaf,
+This change makes the PCHG driver receive device events through
+MKBP protocol since CrOS EC switched to deliver all peripheral
+charge events to the MKBP protocol. This will unify PCHG event
+handling on X86 and ARM.
 
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on rafael-pm/thermal]
-[also build test WARNING on v5.17-rc1 next-20220125]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Manaf-Meethalavalappu-Pallikunhi/drivers-thermal-clear-all-mitigation-when-thermal-zone-is-disabled/20220126-004720
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
-config: nios2-randconfig-m031-20220124 (https://download.01.org/0day-ci/archive/20220126/202201262251.KzdCvJYy-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 11.2.0
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-smatch warnings:
-drivers/thermal/gov_step_wise.c:189 step_wise_unbind() warn: inconsistent indenting
-
-vim +189 drivers/thermal/gov_step_wise.c
-
-   169	
-   170	/**
-   171	 * step_wise_unbind() - unbind the step_wise governor to a thermal zone
-   172	 * @tz:	thermal zone to unbind it to
-   173	 *
-   174	 * Clear all previous throttling and reset passive counter.
-   175	 *
-   176	 */
-   177	static void step_wise_unbind(struct thermal_zone_device *tz)
-   178	{
-   179		struct thermal_instance *instance;
-   180	
-   181		dev_dbg(&tz->device, "Unbinding from thermal zone %d\n", tz->id);
-   182	
-   183		mutex_lock(&tz->lock);
-   184		tz->passive = 0;
-   185		list_for_each_entry(instance, &tz->thermal_instances, tz_node) {
-   186			instance->initialized = false;
-   187			instance->target = THERMAL_NO_TARGET;
-   188			mutex_lock(&instance->cdev->lock);
- > 189			 __thermal_cdev_update(instance->cdev);
-   190			mutex_unlock(&instance->cdev->lock);
-   191		}
-   192		mutex_unlock(&tz->lock);
-   193	}
-   194	
-
+Signed-off-by: Daisuke Nojiri <dnojiri@chromium.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+v1 -> v2
+* Make the patch description concise.
+* Change the order of if-conditions in cros_ec_notify.
+v2 -> v3
+* Style changes. No functional change is made.
+* 'This patch' -> 'This change' in the patch description.
+---
+ .../power/supply/cros_peripheral_charger.c    | 37 ++---------
+ .../linux/platform_data/cros_ec_commands.h    | 64 +++++++++++++++++++
+ 2 files changed, 71 insertions(+), 30 deletions(-)
+
+diff --git a/drivers/power/supply/cros_peripheral_charger.c b/drivers/power/supply/cros_peripheral_charger.c
+index 305f10dfc06d1b..9fe6d826148db9 100644
+--- a/drivers/power/supply/cros_peripheral_charger.c
++++ b/drivers/power/supply/cros_peripheral_charger.c
+@@ -14,6 +14,7 @@
+ #include <linux/slab.h>
+ #include <linux/stringify.h>
+ #include <linux/types.h>
++#include <asm/unaligned.h>
+ 
+ #define DRV_NAME		"cros-ec-pchg"
+ #define PCHG_DIR_PREFIX		"peripheral"
+@@ -237,46 +238,22 @@ static int cros_pchg_event(const struct charger_data *charger,
+ 	return NOTIFY_OK;
+ }
+ 
+-static u32 cros_get_device_event(const struct charger_data *charger)
+-{
+-	struct ec_params_device_event req;
+-	struct ec_response_device_event rsp;
+-	struct device *dev = charger->dev;
+-	int ret;
+-
+-	req.param = EC_DEVICE_EVENT_PARAM_GET_CURRENT_EVENTS;
+-	ret = cros_pchg_ec_command(charger, 0, EC_CMD_DEVICE_EVENT,
+-				   &req, sizeof(req), &rsp, sizeof(rsp));
+-	if (ret < 0) {
+-		dev_warn(dev, "Unable to get device events (err:%d)\n", ret);
+-		return 0;
+-	}
+-
+-	return rsp.event_mask;
+-}
+-
+ static int cros_ec_notify(struct notifier_block *nb,
+ 			  unsigned long queued_during_suspend,
+ 			  void *data)
+ {
+-	struct cros_ec_device *ec_dev = (struct cros_ec_device *)data;
+-	u32 host_event = cros_ec_get_host_event(ec_dev);
++	struct cros_ec_device *ec_dev = data;
+ 	struct charger_data *charger =
+ 			container_of(nb, struct charger_data, notifier);
+-	u32 device_event_mask;
++	u32 host_event;
+ 
+-	if (!host_event)
++	if (ec_dev->event_data.event_type != EC_MKBP_EVENT_PCHG ||
++			ec_dev->event_size != sizeof(host_event))
+ 		return NOTIFY_DONE;
+ 
+-	if (!(host_event & EC_HOST_EVENT_MASK(EC_HOST_EVENT_DEVICE)))
+-		return NOTIFY_DONE;
++	host_event = get_unaligned_le32(&ec_dev->event_data.data.host_event);
+ 
+-	/*
+-	 * todo: Retrieve device event mask in common place
+-	 * (e.g. cros_ec_proto.c).
+-	 */
+-	device_event_mask = cros_get_device_event(charger);
+-	if (!(device_event_mask & EC_DEVICE_EVENT_MASK(EC_DEVICE_EVENT_WLC)))
++	if (!(host_event & EC_MKBP_PCHG_DEVICE_EVENT))
+ 		return NOTIFY_DONE;
+ 
+ 	return cros_pchg_event(charger, host_event);
+diff --git a/include/linux/platform_data/cros_ec_commands.h b/include/linux/platform_data/cros_ec_commands.h
+index 271bd87bff0a25..95e7e5667291b7 100644
+--- a/include/linux/platform_data/cros_ec_commands.h
++++ b/include/linux/platform_data/cros_ec_commands.h
+@@ -3386,6 +3386,9 @@ enum ec_mkbp_event {
+ 	/* Send an incoming CEC message to the AP */
+ 	EC_MKBP_EVENT_CEC_MESSAGE = 9,
+ 
++	/* Peripheral device charger event */
++	EC_MKBP_EVENT_PCHG = 12,
++
+ 	/* Number of MKBP events */
+ 	EC_MKBP_EVENT_COUNT,
+ };
+@@ -5527,6 +5530,67 @@ enum pchg_state {
+ 	[PCHG_STATE_CONNECTED] = "CONNECTED", \
+ 	}
+ 
++/*
++ * Update firmware of peripheral chip
++ */
++#define EC_CMD_PCHG_UPDATE 0x0136
++
++/* Port number is encoded in bit[28:31]. */
++#define EC_MKBP_PCHG_PORT_SHIFT		28
++/* Utility macro for converting MKBP event to port number. */
++#define EC_MKBP_PCHG_EVENT_TO_PORT(e)	(((e) >> EC_MKBP_PCHG_PORT_SHIFT) & 0xf)
++/* Utility macro for extracting event bits. */
++#define EC_MKBP_PCHG_EVENT_MASK(e)	((e) \
++					& GENMASK(EC_MKBP_PCHG_PORT_SHIFT-1, 0))
++
++#define EC_MKBP_PCHG_UPDATE_OPENED	BIT(0)
++#define EC_MKBP_PCHG_WRITE_COMPLETE	BIT(1)
++#define EC_MKBP_PCHG_UPDATE_CLOSED	BIT(2)
++#define EC_MKBP_PCHG_UPDATE_ERROR	BIT(3)
++#define EC_MKBP_PCHG_DEVICE_EVENT	BIT(4)
++
++enum ec_pchg_update_cmd {
++	/* Reset chip to normal mode. */
++	EC_PCHG_UPDATE_CMD_RESET_TO_NORMAL = 0,
++	/* Reset and put a chip in update (a.k.a. download) mode. */
++	EC_PCHG_UPDATE_CMD_OPEN,
++	/* Write a block of data containing FW image. */
++	EC_PCHG_UPDATE_CMD_WRITE,
++	/* Close update session. */
++	EC_PCHG_UPDATE_CMD_CLOSE,
++	/* End of commands */
++	EC_PCHG_UPDATE_CMD_COUNT,
++};
++
++struct ec_params_pchg_update {
++	/* PCHG port number */
++	uint8_t port;
++	/* enum ec_pchg_update_cmd */
++	uint8_t cmd;
++	/* Padding */
++	uint8_t reserved0;
++	uint8_t reserved1;
++	/* Version of new firmware */
++	uint32_t version;
++	/* CRC32 of new firmware */
++	uint32_t crc32;
++	/* Address in chip memory where <data> is written to */
++	uint32_t addr;
++	/* Size of <data> */
++	uint32_t size;
++	/* Partial data of new firmware */
++	uint8_t data[];
++} __ec_align4;
++
++BUILD_ASSERT(EC_PCHG_UPDATE_CMD_COUNT
++	     < BIT(sizeof(((struct ec_params_pchg_update *)0)->cmd)*8));
++
++struct ec_response_pchg_update {
++	/* Block size */
++	uint32_t block_size;
++} __ec_align4;
++
++
+ /*****************************************************************************/
+ /* Voltage regulator controls */
+ 
+-- 
+2.31.0
+
