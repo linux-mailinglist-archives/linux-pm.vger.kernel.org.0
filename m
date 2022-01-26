@@ -2,103 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A742049BD76
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Jan 2022 21:52:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E60C549BFF9
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jan 2022 01:10:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232484AbiAYUv4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Jan 2022 15:51:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41682 "EHLO
+        id S233834AbiAZAKd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Jan 2022 19:10:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232617AbiAYUvc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jan 2022 15:51:32 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E06C06173B
-        for <linux-pm@vger.kernel.org>; Tue, 25 Jan 2022 12:51:32 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id c188so3019409iof.6
-        for <linux-pm@vger.kernel.org>; Tue, 25 Jan 2022 12:51:32 -0800 (PST)
+        with ESMTP id S234522AbiAZAKd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jan 2022 19:10:33 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31171C06161C
+        for <linux-pm@vger.kernel.org>; Tue, 25 Jan 2022 16:10:33 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id b15so6354017plg.3
+        for <linux-pm@vger.kernel.org>; Tue, 25 Jan 2022 16:10:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=T8xWDu4VUa1KMmhWTT9ApCS91QssIS1sg0FGU1r8EdQ=;
-        b=fPq3W1qMhDmrc3O/H8jdKQejjyFMQcM1Nf2I2cWXLB9x+cYe7GtZ0SOc+D8gTv3JC9
-         px3drDlrNv8oN6Vd4UkFmJDaixRaMa1Z/7xVc3/TNd1u7J0OmTKAhVvt2X3h8qtXvhvg
-         LM9w+SFq8dO7kFkvlcUUZV3xdeaARAZFjuobc=
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=xLG4I7Y0HzNmnisjUTkIFSd1ZXSy/NMnnFHFCH00rfE=;
+        b=4KOvxnI6RzPsN7YbvNT9hlJFb2AhmiE16n0R0Gywh/prMXXNVNogij+1wL37CwhXsi
+         wNtgBVkYIaMGw1JZQzrUwKQxOB3B9T/7d3eBS4yx7Nvsh3T3x05Uxi4L1l7E30OpXY44
+         WPvw3VHyJ7on59QUIUz8OIogcquYsfAYz1rcIy32qAg1cMJx1A7cV34iflxhHtXPN2B4
+         r26uM7lNlBUUs38LUMYtGEVmFC4nuc6fClao7cuZSLXc9sBa4IqAJXiG87Laz1goCJsC
+         2qDPPZIJfnnX6usIB4nGDZTsfAUECh8OklYoUFcgmNOWJupQCUh5csLdClKHV8R9fmT7
+         2Ngw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=T8xWDu4VUa1KMmhWTT9ApCS91QssIS1sg0FGU1r8EdQ=;
-        b=TZPAzjdHW+m7yGEjWeUI68c6JCg6AmTXIQ5xOX4UOekL/gYdbWuO7EBsgNCmqtWeSo
-         gHwRo7BPv/poNxqd+09pgAb5Q+DhFP2r0D3d35dskQp3Fshr1KJaMuOitunuycLJzp9M
-         bZi8Jy8nft81jshsk6ub5mA2NkrLiZZhNf0SyIMLr+F6aOgnLaqClbp4gpV6dKjd9OBC
-         roaXJvozT0yi4QgijWoK2Y9rJnPv0jNcSfeuqPbB+rb1s0Blb5H8Q2xUhRz2v0bB5R1/
-         llDaak+xqJUn9PSKNRzsWLb0R0ILoA5XNdW20u/xrnHthF9SW89+MOjfQtiFB4Xpz8FN
-         DoPw==
-X-Gm-Message-State: AOAM532xI89CDSlmRweuAPEppyzh7zPIw9UrmH7Nu+UjBZ8OTWihVVj6
-        IkVvY0hm6N2TWpQB2v28ao917w==
-X-Google-Smtp-Source: ABdhPJx/5kXDAPM3pl1xICZm6MAV5zSuAmwkrZES9NWzUNvjzNE6hLuNOCqo1WYWsXaDO98YHEW5og==
-X-Received: by 2002:a05:6638:31e:: with SMTP id w30mr5046563jap.57.1643143891513;
-        Tue, 25 Jan 2022 12:51:31 -0800 (PST)
-Received: from ?IPv6:2601:282:8200:4c:4ef8:d404:554b:9671? ([2601:282:8200:4c:4ef8:d404:554b:9671])
-        by smtp.gmail.com with ESMTPSA id e5sm9374160ilq.9.2022.01.25.12.51.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jan 2022 12:51:31 -0800 (PST)
-Subject: Re: [PATCH] selftests: cpufreq: Write test output to stdout as well
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, Shuah Khan <skhan@linuxfoundation.org>
-References: <20220114232126.92043-1-nfraprado@collabora.com>
- <20220117064144.bovae2r4wnln7g7k@vireshk-i7>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <31ebfa0a-5e2d-332c-cbe1-22bdfeee8cd9@linuxfoundation.org>
-Date:   Tue, 25 Jan 2022 13:51:29 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=xLG4I7Y0HzNmnisjUTkIFSd1ZXSy/NMnnFHFCH00rfE=;
+        b=q2EWoQjVdnlulfcCKsUBO+x11dC1dllKzk4NHcomA6YIDHf1/QvQZ1eiPuYgXWgMUa
+         McRjzu+WCeANqL4n7dFqJHXQZ/yT0WRo7eSpoc1pjyrslKKYZVnEjXHdBY0bmZ12fw1A
+         SeH87STvEBCPBLElyOOVA/IYUsi+1VbG4tjGO6c7/SL2wCKfnPKh/BWWsHU550ty9PFQ
+         uNwvGcl4O38Jt8XnCkecLw7PGnp8wWuAiDAmsP0wwLTo1S2vFMrp8qhyO7jeal/EpHl1
+         TLYlQCgZiq+EyAdzIgTP5qjooeVunhoXA1vZLloacu6lTtIaKDxFPU/9CMztU64ZB/nL
+         Jd2Q==
+X-Gm-Message-State: AOAM531yVyOlY8L8Fm0QaeHyb3wef+DzE6OboMVeidAwYC5V5aJN1GJq
+        qMuCLijAZMhQ8LRe3uQP02CbXw==
+X-Google-Smtp-Source: ABdhPJxRl2r7ok8cO2dmjyx8kENfmUMj6SfSBotVGBw8VOssv8bAbpVluik2kFwjv4Bwf1oYBparTA==
+X-Received: by 2002:a17:902:8494:b0:149:8a72:98bb with SMTP id c20-20020a170902849400b001498a7298bbmr20133740plo.0.1643155832619;
+        Tue, 25 Jan 2022 16:10:32 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id k13sm150220pfc.176.2022.01.25.16.10.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 16:10:32 -0800 (PST)
+Message-ID: <61f09178.1c69fb81.9d5d2.0a6a@mx.google.com>
+Date:   Tue, 25 Jan 2022 16:10:32 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20220117064144.bovae2r4wnln7g7k@vireshk-i7>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v5.17-rc1
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+Subject: pm/testing build: 4 builds: 0 failed, 4 passed (v5.17-rc1)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 1/16/22 11:41 PM, Viresh Kumar wrote:
-> On 14-01-22, 18:21, Nícolas F. R. A. Prado wrote:
->> Use 'tee' to send the test output to stdout in addition to the current
->> output file. This makes the output easier to handle in automated test
->> systems and is superior to only later dumping the output file contents
->> to stdout, since this way the test output can be interleaved with other
->> log messages, like from the kernel, so that chronology is preserved,
->> making it easier to detect issues.
->>
->> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
->> ---
->>   tools/testing/selftests/cpufreq/main.sh | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/tools/testing/selftests/cpufreq/main.sh b/tools/testing/selftests/cpufreq/main.sh
->> index 31f8c9a76c5f..60ce18ed0666 100755
->> --- a/tools/testing/selftests/cpufreq/main.sh
->> +++ b/tools/testing/selftests/cpufreq/main.sh
->> @@ -194,5 +194,5 @@ prerequisite
->>   
->>   # Run requested functions
->>   clear_dumps $OUTFILE
->> -do_test >> $OUTFILE.txt
->> +do_test | tee -a $OUTFILE.txt
->>   dmesg_dumps $OUTFILE
-> 
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> 
+pm/testing build: 4 builds: 0 failed, 4 passed (v5.17-rc1)
 
-Thank you. Applied to linux-kselftest fixes for rc2/3
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+17-rc1/
 
-thanks,
--- Shuah
+Tree: pm
+Branch: testing
+Git Describe: v5.17-rc1
+Git Commit: e783362eb54cd99b2cac8b3a9aeac942e6f6ac07
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 4 unique architectures
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
