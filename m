@@ -2,61 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E60C549BFF9
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jan 2022 01:10:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1347B49C059
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jan 2022 01:54:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233834AbiAZAKd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Jan 2022 19:10:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58954 "EHLO
+        id S235439AbiAZAx7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Jan 2022 19:53:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234522AbiAZAKd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jan 2022 19:10:33 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31171C06161C
-        for <linux-pm@vger.kernel.org>; Tue, 25 Jan 2022 16:10:33 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id b15so6354017plg.3
-        for <linux-pm@vger.kernel.org>; Tue, 25 Jan 2022 16:10:33 -0800 (PST)
+        with ESMTP id S234910AbiAZAx6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jan 2022 19:53:58 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F7EC06161C
+        for <linux-pm@vger.kernel.org>; Tue, 25 Jan 2022 16:53:58 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id i8so19675981pgt.13
+        for <linux-pm@vger.kernel.org>; Tue, 25 Jan 2022 16:53:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:content-transfer-encoding:subject:to
          :from;
-        bh=xLG4I7Y0HzNmnisjUTkIFSd1ZXSy/NMnnFHFCH00rfE=;
-        b=4KOvxnI6RzPsN7YbvNT9hlJFb2AhmiE16n0R0Gywh/prMXXNVNogij+1wL37CwhXsi
-         wNtgBVkYIaMGw1JZQzrUwKQxOB3B9T/7d3eBS4yx7Nvsh3T3x05Uxi4L1l7E30OpXY44
-         WPvw3VHyJ7on59QUIUz8OIogcquYsfAYz1rcIy32qAg1cMJx1A7cV34iflxhHtXPN2B4
-         r26uM7lNlBUUs38LUMYtGEVmFC4nuc6fClao7cuZSLXc9sBa4IqAJXiG87Laz1goCJsC
-         2qDPPZIJfnnX6usIB4nGDZTsfAUECh8OklYoUFcgmNOWJupQCUh5csLdClKHV8R9fmT7
-         2Ngw==
+        bh=YPSgXNG3SdzMs1KBvdyqNfOE4ezlpdGLDAJRiN73U1I=;
+        b=WN7gvFICQZPvj1Lyw6VVHhLdweEvU5NaTGiISmg4sxZ5gQ1rFoD7E6K9BZUFYio1+F
+         f6i3pnViTiiWIa/oN3WMycmpV/snaBq2bdIhPOug0VDjdT8a4awqpRwWYRJ2vH1G8tcm
+         CTHiBV8m3eZjZaE+CjJe+bxnNzYD1mWc+I/3DTKPnaBybCP7iSr/sfbzmcFqJt1A+og6
+         +vC9QUwTYjjuMKH3BoUDD5GycSnq6VfAtTKJflb3llUdKMIulXackd2AHYVCT4ljTJtO
+         t9FVoU1UmuQ8cf+hsqvocAGnGIFapBo9o0rVsH5yr8xzTpl4KY0Kw5p5vINqA2jaCZAo
+         A83Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version
          :content-transfer-encoding:subject:to:from;
-        bh=xLG4I7Y0HzNmnisjUTkIFSd1ZXSy/NMnnFHFCH00rfE=;
-        b=q2EWoQjVdnlulfcCKsUBO+x11dC1dllKzk4NHcomA6YIDHf1/QvQZ1eiPuYgXWgMUa
-         McRjzu+WCeANqL4n7dFqJHXQZ/yT0WRo7eSpoc1pjyrslKKYZVnEjXHdBY0bmZ12fw1A
-         SeH87STvEBCPBLElyOOVA/IYUsi+1VbG4tjGO6c7/SL2wCKfnPKh/BWWsHU550ty9PFQ
-         uNwvGcl4O38Jt8XnCkecLw7PGnp8wWuAiDAmsP0wwLTo1S2vFMrp8qhyO7jeal/EpHl1
-         TLYlQCgZiq+EyAdzIgTP5qjooeVunhoXA1vZLloacu6lTtIaKDxFPU/9CMztU64ZB/nL
-         Jd2Q==
-X-Gm-Message-State: AOAM531yVyOlY8L8Fm0QaeHyb3wef+DzE6OboMVeidAwYC5V5aJN1GJq
-        qMuCLijAZMhQ8LRe3uQP02CbXw==
-X-Google-Smtp-Source: ABdhPJxRl2r7ok8cO2dmjyx8kENfmUMj6SfSBotVGBw8VOssv8bAbpVluik2kFwjv4Bwf1oYBparTA==
-X-Received: by 2002:a17:902:8494:b0:149:8a72:98bb with SMTP id c20-20020a170902849400b001498a7298bbmr20133740plo.0.1643155832619;
-        Tue, 25 Jan 2022 16:10:32 -0800 (PST)
+        bh=YPSgXNG3SdzMs1KBvdyqNfOE4ezlpdGLDAJRiN73U1I=;
+        b=u2aQd/dmQOdvi28RWCELLvudJOaJGTVetlSrSXD+zi3l3zSIHWG60vDN53QVx1afB0
+         7scWROqasxBcI0JvYnbr7W4ak8tgdMUjBLo9mZSkrTPB5RbDuD26X+GbKfH42+DPubsF
+         dKMHAqH7eFxuuIJrR0Whn37+wiaZCLRXGfTOfRlckZde2p+nCRqpsVxlS3X1tF+PBaoT
+         LjgM4Kc5SvGur/gMODwcdONsEOyYwj2tu/YseA7CvE4td4YOdMDmRpwKzaVmn4AN7wPa
+         geE+4ygNsV7taODgWpRYIDs8zKVVW0OnFHJ2tFbF4Hko7XshXo0fLU8F5MBeQX4xEFoc
+         Cqcg==
+X-Gm-Message-State: AOAM531a5DUBqGq3eFS6xSbjajZLzBM7Ur+qfG6ZUxecXRxSXP3uJObH
+        RXFJzKU+oG7TP7ra03JSn5IAQw==
+X-Google-Smtp-Source: ABdhPJzM6FNnn/uPMXKkL6YwTqpPPhKRuAVFCBLx0EMg+jVN8rnXhFV7rlnrvQclAOFdnJfouBzq7Q==
+X-Received: by 2002:aa7:9edc:0:b0:4c6:eb85:be8c with SMTP id r28-20020aa79edc000000b004c6eb85be8cmr20212800pfq.62.1643158437755;
+        Tue, 25 Jan 2022 16:53:57 -0800 (PST)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id k13sm150220pfc.176.2022.01.25.16.10.32
+        by smtp.gmail.com with ESMTPSA id q9sm193304pfk.137.2022.01.25.16.53.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 16:10:32 -0800 (PST)
-Message-ID: <61f09178.1c69fb81.9d5d2.0a6a@mx.google.com>
-Date:   Tue, 25 Jan 2022 16:10:32 -0800 (PST)
+        Tue, 25 Jan 2022 16:53:57 -0800 (PST)
+Message-ID: <61f09ba5.1c69fb81.78e6b.0df2@mx.google.com>
+Date:   Tue, 25 Jan 2022 16:53:57 -0800 (PST)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
+X-Kernelci-Report-Type: test
 X-Kernelci-Kernel: v5.17-rc1
 X-Kernelci-Tree: pm
 X-Kernelci-Branch: testing
-Subject: pm/testing build: 4 builds: 0 failed, 4 passed (v5.17-rc1)
+Subject: pm/testing baseline: 52 runs, 4 regressions (v5.17-rc1)
 To:     rafael@kernel.org, linux-pm@vger.kernel.org,
         kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
 From:   "kernelci.org bot" <bot@kernelci.org>
@@ -64,44 +64,130 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 4 builds: 0 failed, 4 passed (v5.17-rc1)
+pm/testing baseline: 52 runs, 4 regressions (v5.17-rc1)
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-17-rc1/
+Regressions Summary
+-------------------
 
-Tree: pm
-Branch: testing
-Git Describe: v5.17-rc1
-Git Commit: e783362eb54cd99b2cac8b3a9aeac942e6f6ac07
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 4 unique architectures
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
+platform              | arch  | lab         | compiler | defconfig | regres=
+sions
+----------------------+-------+-------------+----------+-----------+-------=
 -----
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+imx8mn-ddr4-evk       | arm64 | lab-nxp     | gcc-10   | defconfig | 2     =
+     =
 
----------------------------------------------------------------------------=
+kontron-kbox-a-230-ls | arm64 | lab-kontron | gcc-10   | defconfig | 2     =
+     =
+
+
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.17-rc=
+1/plan/baseline/
+
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v5.17-rc1
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      e783362eb54cd99b2cac8b3a9aeac942e6f6ac07 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform              | arch  | lab         | compiler | defconfig | regres=
+sions
+----------------------+-------+-------------+----------+-----------+-------=
 -----
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
+imx8mn-ddr4-evk       | arm64 | lab-nxp     | gcc-10   | defconfig | 2     =
+     =
 
----------------------------------------------------------------------------=
+
+  Details:     https://kernelci.org/test/plan/id/61f08d1d0b1fe6e977abbd81
+
+  Results:     4 PASS, 2 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.17-rc1/arm64/def=
+config/gcc-10/lab-nxp/baseline-imx8mn-ddr4-evk.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.17-rc1/arm64/def=
+config/gcc-10/lab-nxp/baseline-imx8mn-ddr4-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220121.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/61f08d1d0b1fe6e=
+977abbd88
+        new failure (last pass: v5.16-rc7-119-g63b95bce9ea4)
+        12 lines
+
+    2022-01-25T23:51:25.936824  kern  :alert : Unable to handle kernel NULL=
+ pointer dereference <8>[   14.438533] <LAVA_SIGNAL_TESTCASE TEST_CASE_ID=
+=3Dalert RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D12>
+    2022-01-25T23:51:25.937031  at virtual address 0000000000000000
+    2022-01-25T23:51:25.937139  kern  :alert : Mem abort info:
+    2022-01-25T23:51:25.937239  kern  :alert :   ESR =3D 0x96000006
+    2022-01-25T23:51:25.937337  kern  :alert :   EC =3D 0x25: DABT (current=
+ EL), IL =3D 32 bits   =
+
+
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/61f08d1d0b1fe6e=
+977abbd89
+        new failure (last pass: v5.16-rc7-119-g63b95bce9ea4)
+        2 lines
+
+    2022-01-25T23:51:25.938037  kern  :alert :   SET =3D <8>[   14.462950] =
+<LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Demerg RESULT=3Dfail UNITS=3Dlines MEAS=
+UREMENT=3D2>
+    2022-01-25T23:51:25.938139  0, FnV =3D 0   =
+
+ =
+
+
+
+platform              | arch  | lab         | compiler | defconfig | regres=
+sions
+----------------------+-------+-------------+----------+-----------+-------=
 -----
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
+kontron-kbox-a-230-ls | arm64 | lab-kontron | gcc-10   | defconfig | 2     =
+     =
 
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
 
----
-For more info write to <info@kernelci.org>
+  Details:     https://kernelci.org/test/plan/id/61f08be47b3952893eabbd5f
+
+  Results:     91 PASS, 2 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.17-rc1/arm64/def=
+config/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.17-rc1/arm64/def=
+config/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220121.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.ftm-alarm-driver-present: https://kernelci.org/test/cas=
+e/id/61f08be57b3952893eabbda0
+        new failure (last pass: v5.16-rc8-171-gf099fd60c342)
+
+    2022-01-25T23:46:20.381491  /lava-83642/1/../bin/lava-test-case   =
+
+
+  * baseline.bootrr.ftm-alarm-probed: https://kernelci.org/test/case/id/61f=
+08be57b3952893eabbda1
+        new failure (last pass: v5.16-rc8-171-gf099fd60c342)
+
+    2022-01-25T23:46:20.383768  <8>[   17.402413] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dftm-alarm-driver-present RESULT=3Dfail>
+    2022-01-25T23:46:21.433332  /lava-83642/1/../bin/lava-test-case
+    2022-01-25T23:46:21.433654  <8>[   18.421819] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dftm-alarm-probed RESULT=3Dfail>   =
+
+ =20
