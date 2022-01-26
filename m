@@ -2,234 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4618249D163
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jan 2022 19:05:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AB2249D1A5
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jan 2022 19:23:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244078AbiAZSFY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Jan 2022 13:05:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53590 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244076AbiAZSFX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jan 2022 13:05:23 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F65EC06161C
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jan 2022 10:05:23 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id n32so386944pfv.11
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jan 2022 10:05:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XHRzkjXAM0E1aJzJpuPlGE2P9DpNKrPAb41dqjf9ou0=;
-        b=ALyW7muOssnQBwmbOiO1HjI0CFvrViQtngSRmU4hNa40Kpryb63lcQKjPrU+OVNaKJ
-         EyA3G10btji+3Y3Jcl+LMXKxFfCFZ5fJ7LaxAbBmepcHwQTLcqSEJ5JHGJqYlzkCv4NF
-         Cz6tB6q+IdZEmuqiIAho8XDZEzowucHZ9iaUk=
+        id S237448AbiAZSXG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Jan 2022 13:23:06 -0500
+Received: from mail-yb1-f174.google.com ([209.85.219.174]:45684 "EHLO
+        mail-yb1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237412AbiAZSXE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jan 2022 13:23:04 -0500
+Received: by mail-yb1-f174.google.com with SMTP id h14so1234909ybe.12
+        for <linux-pm@vger.kernel.org>; Wed, 26 Jan 2022 10:23:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XHRzkjXAM0E1aJzJpuPlGE2P9DpNKrPAb41dqjf9ou0=;
-        b=L5OJkXOPun/zx99d9LZ5NWl9g8wJy8UJobU7V3HHMDISpUptKyz7fXx+UwsL1pgNj0
-         1ToRNMELzV8IU8OFtJ5Mz3sk1Lgeh8BbqJ7zzyijxwW17AnIdDlCrWK1s77snhirB7yg
-         7t7RCjJ7rmB4rFE/QCPSK2FL1RfmDu3YOAOykeZVVwS6+DpYkmbmZ5B561FJ3XoOStXG
-         /EaYaFGymYB9e4fVgPVCN09hTRMRzgWC0IiQS/D/hBdEywU5nEO5ZfjUfGHP3UqI9l5t
-         iZDjT6D7L1JrXw1rl4jZPI9hBgYgH6WZpnb+exFRP60lssM6/AyzEhFJtUa889LpDkux
-         oNrg==
-X-Gm-Message-State: AOAM531jmbnKe70cshFCD4qo3c/Xp88cmNgWA4NzMGRdoRniCerZTw5L
-        AQGyci6Dk4y4Xnt1a40QZMSDpQ==
-X-Google-Smtp-Source: ABdhPJxfagmQS57r4YpbOqH1dCugE2RtJd6HvM6jTC4LosWKDke2P0BRQ+3/xcSk5ppOQSIV0VrwQw==
-X-Received: by 2002:a65:5943:: with SMTP id g3mr63355pgu.3.1643220322880;
-        Wed, 26 Jan 2022 10:05:22 -0800 (PST)
-Received: from pc98bx3.roam.corp.google.com (c-73-222-23-249.hsd1.ca.comcast.net. [73.222.23.249])
-        by smtp.gmail.com with ESMTPSA id u10sm17211404pgl.68.2022.01.26.10.05.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 10:05:22 -0800 (PST)
-From:   Daisuke Nojiri <dnojiri@chromium.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Daisuke Nojiri <dnojiri@chromium.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v3] power: supply: PCHG: Use MKBP for device event handling
-Date:   Wed, 26 Jan 2022 10:04:10 -0800
-Message-Id: <20220126180413.2565825-1-dnojiri@chromium.org>
-X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PU3C1m+MTHZdSFLfo8q1etcFcCM/mNJ2l0QPbTq/BMs=;
+        b=VV4hdpHq6ORuEJKuhWHDTEVEkSmRWanEYVWO7RNJkN1ni5r9maNgHdvsEFuruYPGLt
+         r70CjBo3GpkM+3sOCU9p+ft3FX+GoT2Jzv7qYyr19iyA/XWJkUTzXyW2Tq0ukhGBXefQ
+         7JLIMi3jn41FxElqHiRb/WFwZ5CBCWLtZzTgk03nTQTYB+BSZMX5eZDhM2iSjwYVsZ65
+         EKXxKim6wVcvFaxFCzRPV7u2Yn0BMPAN/Jn/uNUI967M9F1WzIMEe8WWPeDrlhcp34bM
+         /zEzLO/4omeBC87tv2PeG6bDt3LxawYgq9WcHyNDCKwy4Xf3AipBzRTkrNwX4Bt0NenY
+         ivHw==
+X-Gm-Message-State: AOAM531bcaYlKZ+xdfw1Mi5n4mkdZaXYH8vLNkKW60v5cD7elodguVpK
+        M1KqmU9ZDWlIDa5v/BeN5Z0J84kCpjnimd2gf8g=
+X-Google-Smtp-Source: ABdhPJybEUj9a+XCyYL/sozStPtwRO8dzRiglqCtF05P0e+F35o0LBQeRMPwLQprvwUI/FXCgObgiIo+OhBiNApTArw=
+X-Received: by 2002:a25:34c4:: with SMTP id b187mr320234yba.78.1643221383636;
+ Wed, 26 Jan 2022 10:23:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <1643016384-11161-1-git-send-email-loic.poulain@linaro.org>
+In-Reply-To: <1643016384-11161-1-git-send-email-loic.poulain@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 26 Jan 2022 19:22:52 +0100
+Message-ID: <CAJZ5v0hJzZpLv69coibEApT9zOxZ43mmOixNo5TZtizbUCFSTA@mail.gmail.com>
+Subject: Re: [RESEND PATCH] PM: wakeup: Wakeup accounting for interrupts
+To:     Loic Poulain <loic.poulain@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This change makes the PCHG driver receive device events through
-MKBP protocol since CrOS EC switched to deliver all peripheral
-charge events to the MKBP protocol. This will unify PCHG event
-handling on X86 and ARM.
+On Mon, Jan 24, 2022 at 10:14 AM Loic Poulain <loic.poulain@linaro.org> wrote:
+>
+> Most of the time, system wakeup is caused by a wakeup-enabled
+> interrupt, but the accounting is not done for the related wakeup
+> source, causing 'wrong' values reported by device's wakeup attributes
+> and debugfs stats (debug/wakeup_sources).
+>
+> This change reports a wakeup event for any wakeup-sources the irq is
+> attached with.
+>
+> Note: This only works for drivers explicitly attaching the irq to
+> a given device (e.g. with dev_pm_set_wake_irq).
+>
+> Note2: Some drivers call pm_wakeup_event() in their irq handler, but
+> not all, moreover, an interrupt can be disabled while being flagged
+> as wakeup source, and so accounting must be performed. This solution
+> ensures that accounting will always be done for the interrupt waking
+> up the host.
+>
+> Signed-off-by: Loic Poulain <loic.poulain@linaro.org>
+> ---
+>  drivers/base/power/wakeup.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>
+> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+> index 99bda0da..2d75e057 100644
+> --- a/drivers/base/power/wakeup.c
+> +++ b/drivers/base/power/wakeup.c
+> @@ -952,8 +952,19 @@ void pm_wakeup_clear(bool reset)
+>  void pm_system_irq_wakeup(unsigned int irq_number)
+>  {
+>         if (pm_wakeup_irq == 0) {
+> +               struct wakeup_source *ws;
+> +               int srcuidx;
+> +
+>                 pm_wakeup_irq = irq_number;
+>                 pm_system_wakeup();
+> +
+> +               /* wakeup accounting */
+> +               srcuidx = srcu_read_lock(&wakeup_srcu);
 
-Signed-off-by: Daisuke Nojiri <dnojiri@chromium.org>
----
-v1 -> v2
-* Make the patch description concise.
-* Change the order of if-conditions in cros_ec_notify.
-v2 -> v3
-* Style changes. No functional change is made.
-* 'This patch' -> 'This change' in the patch description.
----
- .../power/supply/cros_peripheral_charger.c    | 37 ++---------
- .../linux/platform_data/cros_ec_commands.h    | 64 +++++++++++++++++++
- 2 files changed, 71 insertions(+), 30 deletions(-)
+This is called from interrupt context, so srcu_read_lock() cannot be used here.
 
-diff --git a/drivers/power/supply/cros_peripheral_charger.c b/drivers/power/supply/cros_peripheral_charger.c
-index 305f10dfc06d1b..9fe6d826148db9 100644
---- a/drivers/power/supply/cros_peripheral_charger.c
-+++ b/drivers/power/supply/cros_peripheral_charger.c
-@@ -14,6 +14,7 @@
- #include <linux/slab.h>
- #include <linux/stringify.h>
- #include <linux/types.h>
-+#include <asm/unaligned.h>
- 
- #define DRV_NAME		"cros-ec-pchg"
- #define PCHG_DIR_PREFIX		"peripheral"
-@@ -237,46 +238,22 @@ static int cros_pchg_event(const struct charger_data *charger,
- 	return NOTIFY_OK;
- }
- 
--static u32 cros_get_device_event(const struct charger_data *charger)
--{
--	struct ec_params_device_event req;
--	struct ec_response_device_event rsp;
--	struct device *dev = charger->dev;
--	int ret;
--
--	req.param = EC_DEVICE_EVENT_PARAM_GET_CURRENT_EVENTS;
--	ret = cros_pchg_ec_command(charger, 0, EC_CMD_DEVICE_EVENT,
--				   &req, sizeof(req), &rsp, sizeof(rsp));
--	if (ret < 0) {
--		dev_warn(dev, "Unable to get device events (err:%d)\n", ret);
--		return 0;
--	}
--
--	return rsp.event_mask;
--}
--
- static int cros_ec_notify(struct notifier_block *nb,
- 			  unsigned long queued_during_suspend,
- 			  void *data)
- {
--	struct cros_ec_device *ec_dev = (struct cros_ec_device *)data;
--	u32 host_event = cros_ec_get_host_event(ec_dev);
-+	struct cros_ec_device *ec_dev = data;
- 	struct charger_data *charger =
- 			container_of(nb, struct charger_data, notifier);
--	u32 device_event_mask;
-+	u32 host_event;
- 
--	if (!host_event)
-+	if (ec_dev->event_data.event_type != EC_MKBP_EVENT_PCHG ||
-+			ec_dev->event_size != sizeof(host_event))
- 		return NOTIFY_DONE;
- 
--	if (!(host_event & EC_HOST_EVENT_MASK(EC_HOST_EVENT_DEVICE)))
--		return NOTIFY_DONE;
-+	host_event = get_unaligned_le32(&ec_dev->event_data.data.host_event);
- 
--	/*
--	 * todo: Retrieve device event mask in common place
--	 * (e.g. cros_ec_proto.c).
--	 */
--	device_event_mask = cros_get_device_event(charger);
--	if (!(device_event_mask & EC_DEVICE_EVENT_MASK(EC_DEVICE_EVENT_WLC)))
-+	if (!(host_event & EC_MKBP_PCHG_DEVICE_EVENT))
- 		return NOTIFY_DONE;
- 
- 	return cros_pchg_event(charger, host_event);
-diff --git a/include/linux/platform_data/cros_ec_commands.h b/include/linux/platform_data/cros_ec_commands.h
-index 271bd87bff0a25..95e7e5667291b7 100644
---- a/include/linux/platform_data/cros_ec_commands.h
-+++ b/include/linux/platform_data/cros_ec_commands.h
-@@ -3386,6 +3386,9 @@ enum ec_mkbp_event {
- 	/* Send an incoming CEC message to the AP */
- 	EC_MKBP_EVENT_CEC_MESSAGE = 9,
- 
-+	/* Peripheral device charger event */
-+	EC_MKBP_EVENT_PCHG = 12,
-+
- 	/* Number of MKBP events */
- 	EC_MKBP_EVENT_COUNT,
- };
-@@ -5527,6 +5530,67 @@ enum pchg_state {
- 	[PCHG_STATE_CONNECTED] = "CONNECTED", \
- 	}
- 
-+/*
-+ * Update firmware of peripheral chip
-+ */
-+#define EC_CMD_PCHG_UPDATE 0x0136
-+
-+/* Port number is encoded in bit[28:31]. */
-+#define EC_MKBP_PCHG_PORT_SHIFT		28
-+/* Utility macro for converting MKBP event to port number. */
-+#define EC_MKBP_PCHG_EVENT_TO_PORT(e)	(((e) >> EC_MKBP_PCHG_PORT_SHIFT) & 0xf)
-+/* Utility macro for extracting event bits. */
-+#define EC_MKBP_PCHG_EVENT_MASK(e)	((e) \
-+					& GENMASK(EC_MKBP_PCHG_PORT_SHIFT-1, 0))
-+
-+#define EC_MKBP_PCHG_UPDATE_OPENED	BIT(0)
-+#define EC_MKBP_PCHG_WRITE_COMPLETE	BIT(1)
-+#define EC_MKBP_PCHG_UPDATE_CLOSED	BIT(2)
-+#define EC_MKBP_PCHG_UPDATE_ERROR	BIT(3)
-+#define EC_MKBP_PCHG_DEVICE_EVENT	BIT(4)
-+
-+enum ec_pchg_update_cmd {
-+	/* Reset chip to normal mode. */
-+	EC_PCHG_UPDATE_CMD_RESET_TO_NORMAL = 0,
-+	/* Reset and put a chip in update (a.k.a. download) mode. */
-+	EC_PCHG_UPDATE_CMD_OPEN,
-+	/* Write a block of data containing FW image. */
-+	EC_PCHG_UPDATE_CMD_WRITE,
-+	/* Close update session. */
-+	EC_PCHG_UPDATE_CMD_CLOSE,
-+	/* End of commands */
-+	EC_PCHG_UPDATE_CMD_COUNT,
-+};
-+
-+struct ec_params_pchg_update {
-+	/* PCHG port number */
-+	uint8_t port;
-+	/* enum ec_pchg_update_cmd */
-+	uint8_t cmd;
-+	/* Padding */
-+	uint8_t reserved0;
-+	uint8_t reserved1;
-+	/* Version of new firmware */
-+	uint32_t version;
-+	/* CRC32 of new firmware */
-+	uint32_t crc32;
-+	/* Address in chip memory where <data> is written to */
-+	uint32_t addr;
-+	/* Size of <data> */
-+	uint32_t size;
-+	/* Partial data of new firmware */
-+	uint8_t data[];
-+} __ec_align4;
-+
-+BUILD_ASSERT(EC_PCHG_UPDATE_CMD_COUNT
-+	     < BIT(sizeof(((struct ec_params_pchg_update *)0)->cmd)*8));
-+
-+struct ec_response_pchg_update {
-+	/* Block size */
-+	uint32_t block_size;
-+} __ec_align4;
-+
-+
- /*****************************************************************************/
- /* Voltage regulator controls */
- 
--- 
-2.31.0
-
+> +               list_for_each_entry_rcu(ws, &wakeup_sources, entry) {
+> +                       if (ws->wakeirq && ws->wakeirq->irq == irq_number)
+> +                               pm_wakeup_ws_event(ws, 0, false);
+> +               }
+> +               srcu_read_unlock(&wakeup_srcu, srcuidx);
+>         }
+>  }
+>
+> --
+> 2.7.4
+>
