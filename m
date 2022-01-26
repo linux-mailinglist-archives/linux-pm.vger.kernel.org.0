@@ -2,181 +2,206 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B6AD49C4F4
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jan 2022 09:11:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0EFC49C661
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jan 2022 10:36:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbiAZILn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Jan 2022 03:11:43 -0500
-Received: from mga11.intel.com ([192.55.52.93]:20228 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230202AbiAZILm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 26 Jan 2022 03:11:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643184702; x=1674720702;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=+0CNHvxudF+drdCVHIQmeiLO4y31a0s8hhTTtm7SUQA=;
-  b=X3FqtR4A8+8ocmKyfcsS1AbzP14FBX2x9t4BXccaex7rf1KnIq9mnbpV
-   DH8id8ZQNAsb2F+judgnWt8VooN8uvEibBFr1iybzld5/FvBfv4VzaS5z
-   BcZYjyzXTfLM4dAoei2w/eKrg4bN0d3ZfcTnPlogSsuChDsSjT2wG28CS
-   JbJU4rVUJRCfulbIu3hJYBpfIUQTvs4kXOwYVpd8QMKbiV2wOQ0okG/3K
-   ZKqg+vXZefhpM7O3t5XLwz3kaHmHZoR19RSEKCbPU7J90aTC/AmSRQHLP
-   JvSROxOgXxXmOBOqvNB4eB1hwp28aEjeIP0P/4gME+VGeVm2ZAxAUK6M2
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="244101724"
-X-IronPort-AV: E=Sophos;i="5.88,317,1635231600"; 
-   d="scan'208";a="244101724"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 00:11:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,317,1635231600"; 
-   d="scan'208";a="563339697"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 26 Jan 2022 00:11:39 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nCdP0-000KyW-Rr; Wed, 26 Jan 2022 08:11:38 +0000
-Date:   Wed, 26 Jan 2022 16:10:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- af8e84518513d168ae3bc299e761ce7fec1dcb89
-Message-ID: <61f10200.0PBUFzNDuN552Nk2%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S239209AbiAZJgg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Jan 2022 04:36:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45706 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229565AbiAZJgg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jan 2022 04:36:36 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D45C5C06161C
+        for <linux-pm@vger.kernel.org>; Wed, 26 Jan 2022 01:36:35 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id a13so24647605wrh.9
+        for <linux-pm@vger.kernel.org>; Wed, 26 Jan 2022 01:36:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=+cJdKrQBbtFl4PCCfmc5IKpii91wqwE6nOEX76XsXzw=;
+        b=WjMWLcyAVG4mrCnc/LPX+4zMi8zuj0DdLNl4JrzuDlW8nhtdWBhh0GJ2AR0bNzN8kh
+         RoxsssydBHZ6Sd+ZtivTdDLCja6oNInbRN1rl8RJ6xGzXstIJ16KeGA4FAgpPFwkr3ug
+         KG+hV4EgLaHzQ1iFjJG8r8nMGotczpafR+CXM0XUvxfatZOX8hG31r0ajYqgSfuk/iq1
+         OuA1nMiERRu6aiO7fZzZfe8XL5HjDJ5xKLbYMU5ZoDo1xaKhizVkjfhWUvlbhtaSji9W
+         NOvrUoLL1CcgdVWuLHCNmYlukhaXeQUGjEDTUcx1n/RK3UuAKO0LdWrmRPuWOraSsmAQ
+         3Cjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=+cJdKrQBbtFl4PCCfmc5IKpii91wqwE6nOEX76XsXzw=;
+        b=DnjZChPeenSh+fhrGwjBjn+T5IzgLjU8sFZCdnuRjTP/28X+Lssr1EnH6hWgKm7Ljg
+         Y/xlQjvd2tvFuzJ36BUlRj7rsd39cG4cEZOQZMcVZL68YtWyuETWdecqNh/qLL9W4fEg
+         TKkF83W7s5PbXFCXgZ0plJpsi1RMMSJKwxFXVPZX4AMWjKR2nbCKTe6dVzrv1sJ1Mj2N
+         cTu+rD1jNxfRmmiiTj+Z9wzdfwW6fsmgVPM5ev1AfVu4bQ8Xm0w+SWOlCnaZNKPOOzoj
+         Ek1Xb5V1Cg7XqEsyJJEaMy1ask61XjPi4OucUTmvbg6Iz+H0B9AzYnWkgRgKYrxOd/MW
+         q8ZQ==
+X-Gm-Message-State: AOAM533BgGTvUZheN/o/hMkW1vIPUMd95oMmGPOO/GUhMYQ8FhbNkcP7
+        ZgUJuGyu8U7rmZNnAcs2TkrTrA==
+X-Google-Smtp-Source: ABdhPJwZ7RIf1Mv26UmtNuw4VQZ0frbLNOe8nDz8itMxjbg0gojSWqRwnq7wNETXijrc/qdguRGr1Q==
+X-Received: by 2002:adf:fe51:: with SMTP id m17mr21015037wrs.441.1643189794278;
+        Wed, 26 Jan 2022 01:36:34 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:f589:cf7d:b2ee:bb5e? ([2a01:e34:ed2f:f020:f589:cf7d:b2ee:bb5e])
+        by smtp.googlemail.com with ESMTPSA id h4sm22800855wre.0.2022.01.26.01.36.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jan 2022 01:36:33 -0800 (PST)
+Subject: Re: [PATCH v7 5/5] rockchip/soc/drivers: Add DTPM description for
+ rk3399
+To:     heiko@sntech.de
+Cc:     robh@kernel.org, lukasz.luba@arm.com, arnd@linaro.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "moderated list:ARM/Rockchip SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC support" 
+        <linux-rockchip@lists.infradead.org>, rjw@rjwysocki.net
+References: <20220125171809.1273269-1-daniel.lezcano@linaro.org>
+ <20220125171809.1273269-6-daniel.lezcano@linaro.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <f91ac11e-82bf-2803-bb22-1a4500f07468@linaro.org>
+Date:   Wed, 26 Jan 2022 10:36:32 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20220125171809.1273269-6-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: af8e84518513d168ae3bc299e761ce7fec1dcb89  Merge branch 'acpi-properties' into bleeding-edge
 
-elapsed time: 737m
+Hi Heiko,
 
-configs tested: 107
-configs skipped: 3
+do you have comments on this patch?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
 
-gcc tested configs:
-arm                                 defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm64                               defconfig
-arm64                            allyesconfig
-i386                 randconfig-c001-20220124
-nios2                            alldefconfig
-sh                 kfr2r09-romimage_defconfig
-sh                          urquell_defconfig
-mips                         cobalt_defconfig
-powerpc                         ps3_defconfig
-powerpc                  storcenter_defconfig
-sh                            shmin_defconfig
-sh                           se7780_defconfig
-mips                         db1xxx_defconfig
-xtensa                  audio_kc705_defconfig
-s390                             allyesconfig
-arc                                 defconfig
-mips                            gpr_defconfig
-powerpc                       ppc64_defconfig
-arm                  randconfig-c002-20220124
-ia64                                defconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nds32                             allnoconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                               defconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-sh                               allmodconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-parisc                              defconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-i386                             allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-sparc                            allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-powerpc                          allyesconfig
-i386                          randconfig-a003
-i386                          randconfig-a001
-i386                          randconfig-a005
-arc                  randconfig-r043-20220124
-x86_64               randconfig-a002-20220124
-x86_64               randconfig-a003-20220124
-x86_64               randconfig-a001-20220124
-x86_64               randconfig-a004-20220124
-x86_64               randconfig-a005-20220124
-x86_64               randconfig-a006-20220124
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
+On 25/01/2022 18:18, Daniel Lezcano wrote:
+> The DTPM framework does support now the hierarchy description.
+> 
+> The platform specific code can call the hierarchy creation function
+> with an array of struct dtpm_node pointing to their parent.
+> 
+> This patch provides a description of the big / Little CPUs and the
+> GPU and tie them together under a virtual 'package' name. Only rk3399 is
+> described now.
+> 
+> The description could be extended in the future with the memory
+> controller with devfreq.
+> 
+> The description is always a module and it describes the soft
+> dependencies. The userspace has to load the softdeps module in the
+> right order.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>  drivers/soc/rockchip/Kconfig  |  8 +++++
+>  drivers/soc/rockchip/Makefile |  1 +
+>  drivers/soc/rockchip/dtpm.c   | 59 +++++++++++++++++++++++++++++++++++
+>  3 files changed, 68 insertions(+)
+>  create mode 100644 drivers/soc/rockchip/dtpm.c
+> 
+> diff --git a/drivers/soc/rockchip/Kconfig b/drivers/soc/rockchip/Kconfig
+> index 25eb2c1e31bb..6dc017f02431 100644
+> --- a/drivers/soc/rockchip/Kconfig
+> +++ b/drivers/soc/rockchip/Kconfig
+> @@ -34,4 +34,12 @@ config ROCKCHIP_PM_DOMAINS
+>  
+>            If unsure, say N.
+>  
+> +config ROCKCHIP_DTPM
+> +	tristate "Rockchip DTPM hierarchy"
+> +	depends on DTPM && DRM_PANFROST && m
+> +	help
+> +	 Describe the hierarchy for the Dynamic Thermal Power
+> +	 Management tree on this platform. That will create all the
+> +	 power capping capable devices.
+> +
+>  endif
+> diff --git a/drivers/soc/rockchip/Makefile b/drivers/soc/rockchip/Makefile
+> index 875032f7344e..05f31a4e743c 100644
+> --- a/drivers/soc/rockchip/Makefile
+> +++ b/drivers/soc/rockchip/Makefile
+> @@ -5,3 +5,4 @@
+>  obj-$(CONFIG_ROCKCHIP_GRF) += grf.o
+>  obj-$(CONFIG_ROCKCHIP_IODOMAIN) += io-domain.o
+>  obj-$(CONFIG_ROCKCHIP_PM_DOMAINS) += pm_domains.o
+> +obj-$(CONFIG_ROCKCHIP_DTPM) += dtpm.o
+> diff --git a/drivers/soc/rockchip/dtpm.c b/drivers/soc/rockchip/dtpm.c
+> new file mode 100644
+> index 000000000000..0b73a9cba954
+> --- /dev/null
+> +++ b/drivers/soc/rockchip/dtpm.c
+> @@ -0,0 +1,59 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright 2021 Linaro Limited
+> + *
+> + * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
+> + *
+> + * DTPM hierarchy description
+> + */
+> +#include <linux/dtpm.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +
+> +static struct dtpm_node __initdata rk3399_hierarchy[] = {
+> +	[0]{ .name = "rk3399",
+> +	     .type = DTPM_NODE_VIRTUAL },
+> +	[1]{ .name = "package",
+> +	     .type = DTPM_NODE_VIRTUAL,
+> +	     .parent = &rk3399_hierarchy[0] },
+> +	[2]{ .name = "/cpus/cpu@0",
+> +	     .type = DTPM_NODE_DT,
+> +	     .parent = &rk3399_hierarchy[1] },
+> +	[3]{ .name = "/cpus/cpu@1",
+> +	     .type = DTPM_NODE_DT,
+> +	     .parent = &rk3399_hierarchy[1] },
+> +	[4]{ .name = "/cpus/cpu@2",
+> +	     .type = DTPM_NODE_DT,
+> +	     .parent = &rk3399_hierarchy[1] },
+> +	[5]{ .name = "/cpus/cpu@3",
+> +	     .type = DTPM_NODE_DT,
+> +	     .parent = &rk3399_hierarchy[1] },
+> +	[6]{ .name = "/cpus/cpu@100",
+> +	     .type = DTPM_NODE_DT,
+> +	     .parent = &rk3399_hierarchy[1] },
+> +	[7]{ .name = "/cpus/cpu@101",
+> +	     .type = DTPM_NODE_DT,
+> +	     .parent = &rk3399_hierarchy[1] },
+> +	[8]{ .name = "/gpu@ff9a0000",
+> +	     .type = DTPM_NODE_DT,
+> +	     .parent = &rk3399_hierarchy[1] },
+> +	[9]{ },
+> +};
+> +
+> +static struct of_device_id __initdata rockchip_dtpm_match_table[] = {
+> +        { .compatible = "rockchip,rk3399", .data = rk3399_hierarchy },
+> +        {},
+> +};
+> +
+> +static int __init rockchip_dtpm_init(void)
+> +{
+> +	return dtpm_create_hierarchy(rockchip_dtpm_match_table);
+> +}
+> +module_init(rockchip_dtpm_init);
+> +
+> +MODULE_SOFTDEP("pre: panfrost cpufreq-dt");
+> +MODULE_DESCRIPTION("Rockchip DTPM driver");
+> +MODULE_LICENSE("GPL");
+> +MODULE_ALIAS("platform:dtpm");
+> +MODULE_AUTHOR("Daniel Lezcano <daniel.lezcano@kernel.org");
+> 
 
-clang tested configs:
-arm                  randconfig-c002-20220124
-i386                 randconfig-c001-20220124
-powerpc              randconfig-c003-20220124
-mips                 randconfig-c004-20220124
-s390                 randconfig-c005-20220124
-x86_64               randconfig-c007-20220124
-riscv                randconfig-c006-20220124
-mips                      bmips_stb_defconfig
-powerpc                    socrates_defconfig
-arm                         orion5x_defconfig
-powerpc                     skiroot_defconfig
-powerpc                        icon_defconfig
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64               randconfig-a011-20220124
-x86_64               randconfig-a013-20220124
-x86_64               randconfig-a014-20220124
-x86_64               randconfig-a012-20220124
-x86_64               randconfig-a015-20220124
-x86_64               randconfig-a016-20220124
-i386                 randconfig-a011-20220124
-i386                 randconfig-a013-20220124
-i386                 randconfig-a014-20220124
-i386                 randconfig-a015-20220124
-i386                 randconfig-a012-20220124
-i386                 randconfig-a016-20220124
-riscv                randconfig-r042-20220124
-hexagon              randconfig-r045-20220124
-hexagon              randconfig-r041-20220124
-s390                 randconfig-r044-20220124
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
