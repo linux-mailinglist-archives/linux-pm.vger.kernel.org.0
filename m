@@ -2,152 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54BAD49D3D2
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jan 2022 21:49:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A60C849D45E
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jan 2022 22:17:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbiAZUtE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Jan 2022 15:49:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34656 "EHLO
+        id S229928AbiAZVRY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Jan 2022 16:17:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiAZUtD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jan 2022 15:49:03 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 848EAC06161C
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jan 2022 12:49:03 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id y17so650197plg.7
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jan 2022 12:49:03 -0800 (PST)
+        with ESMTP id S229699AbiAZVRX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jan 2022 16:17:23 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE3AC06173B
+        for <linux-pm@vger.kernel.org>; Wed, 26 Jan 2022 13:17:23 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id i10so2534114ybt.10
+        for <linux-pm@vger.kernel.org>; Wed, 26 Jan 2022 13:17:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=A8DeV0/pdrx+2Ob4ZkErYjdVQQiIGwgfTGEE+HcI6C4=;
-        b=aoudvhsFeK2i8iUCaRh9DeH7aCJkz6GuhzR6HXCF3xGhUzEH1/5OIEfDpolwNCudYh
-         98T2bb7uFyx1Pv5x+lmrRQ60aXbngImGdJbCdv/ltFPawAVXUTa50D0Wav4o8BQIaSNS
-         0472JOVbsWGosJodXDsSXbY43piNgLQXxCnMy4P4rz5dzfU66FBLj83gciA9CT4tnLNF
-         KESSWPnD2YxOw6ZpnSgvvff0XvFn/yrtKrJkXDQHfCQnt0SNnc0zPFF+oN40BtrMv7Lj
-         ljTXtS/9BJwsL9AAlFXccf1LYAsWTMgzim9cqbDdBqraVZuZrr4uMRRhs+bpTzLUtEpZ
-         Eagg==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=HeTNr01RtMT3y1jwaE5DwhIVcnFwpxWhUzqMArakIPa9fir0IEZO/BgW13/OBi1N0a
+         YrEGhtDTlO4F9gL4q7viTBXUuj+PhllRCpGVB9DFuTWtVObLUUwafUlogMyFrJT+7n9J
+         UaT+aiZTA7Cd/FWxMsBVzpRLNh8rq5denFgP5xrKFPlHQbJnaoaw8Qw7CXBGroOGbKIr
+         isjbyPSRjdL/xPNGh/od79Qq3cPbg3DyO9EC71Fwr6teRHKk8D2gRMQpWqkPw8Rqsk0k
+         E2Sh1eprmuR3v6KCt998J2c8nxfYivzKo7vH3cMjxO6u2bQ9sfw8TbOU/L8cEoDc8GYc
+         REWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=A8DeV0/pdrx+2Ob4ZkErYjdVQQiIGwgfTGEE+HcI6C4=;
-        b=dJ35vcgppCFWe5YTGv3TDP0VVCFM7fzOV0bzmJk8/y70Z3Nb8IkjIuwVxPVVXPK5qF
-         5yfq2z1vekHN/38P+GPwBD0Ird3yGz+DK4zo7tvre0M4/R44mpQHqPBi2bPgqkyiUVbp
-         qQKZHPkO6Z9tYynn6WV8CRQWcGmzdPBdUwi9QILUi9lrLJY/SaWhX8wFFn5EWk/wWSmr
-         iKpgbKMZNcSmFWN34jxCFjbGp/Z9jju6MQSrcnSDYhu9oZi58lIDilPLtd9i3JX5G+tQ
-         Js+Cx2ADAsdz3vd2PpzDjpQKhKKwCuFzVgHX0ouFRj30tIdX9hhJK0aFZnHOqnD6oeac
-         kAUA==
-X-Gm-Message-State: AOAM5332g1P1uiaiYPT/Kpyop5kpZUkA0aHO44jYLK5XJrd0ecih/jG0
-        tEZ59Z7gyTFuam8isqV9GRKTGrkEaILIRD5SlU8=
-X-Google-Smtp-Source: ABdhPJx6sgFk+oqVQz8vRT2h76R0GS0Pz/4pBWy/i2wkAraVIvngQk538iJF+ygoG2CJ3ES1oJ6b3Q==
-X-Received: by 2002:a17:90b:b06:: with SMTP id bf6mr10312705pjb.61.1643230143025;
-        Wed, 26 Jan 2022 12:49:03 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id qe15sm113353pjb.47.2022.01.26.12.49.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 12:49:02 -0800 (PST)
-Message-ID: <61f1b3be.1c69fb81.8530b.07ad@mx.google.com>
-Date:   Wed, 26 Jan 2022 12:49:02 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=wYHXbSIqU0Hdq78UwJlP6LMNK2UNcHzg/zBaTUtgpGC3Z5QtrpfzRPJYnR41uY6f7m
+         ZQrpoIY3TUvwaG2yO8VZ4TOzlhpyXo+6UAEYgo75fJvJpmmiVL8OaVhwPkdKnBrKmJ4b
+         HDfyDju7FPRzFQBhlaFBdHGavohgrZ3WCQ3T9TNXgvz56tZh42ITdMOerTVbdOoyjuaa
+         ISbYdusJhmgqzasLQ9VepT0D11C0GJpJLIAz7vqepqRqOn6iB0DbxCutuBBdi3pJ6dbO
+         s4NHg427Yx+8fsUyTE//2AwdunvyZhX9D1mdx3o7gnuBwKUl/5Ud/aO5pwJB1vhqjkjJ
+         a04A==
+X-Gm-Message-State: AOAM533LzUOB/evXovH7lCNiNKuwaU1NK5HAv3ROMrFmfWH/DxYr3Exr
+        qRVAkGRUtK+dewLyCGXtii9a1BXDnMKRCDJdgA==
+X-Google-Smtp-Source: ABdhPJwzTSn8awA/m/Z8j+shhGFcdRgYltLxXFeuvmlWzJvfCJM6KDiT6KJ6gjFe0ysgEAzpz338Z+ie8K/z55R9okU=
+X-Received: by 2002:a25:25d0:: with SMTP id l199mr1180595ybl.454.1643231842154;
+ Wed, 26 Jan 2022 13:17:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v5.17-rc1-9-g52d883c7bbae
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 1 warning (v5.17-rc1-9-g52d883c7bbae)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Reply-To: martinahrivnakova@post.cz
+Sender: compensattionoffice26@gmail.com
+Received: by 2002:a05:7000:bd9e:0:0:0:0 with HTTP; Wed, 26 Jan 2022 13:17:21
+ -0800 (PST)
+From:   HANNIBAL SEHESTED <a.mboma0@gmail.com>
+Date:   Wed, 26 Jan 2022 22:17:21 +0100
+X-Google-Sender-Auth: StG8Sb3O3DPYacQ6mybFwfse4nI
+Message-ID: <CAGyEYSSmU1rCSy33GwftRwh+DUprmb_6eABNuNMnAQ+mpG_6YA@mail.gmail.com>
+Subject: HELLO
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.17-rc1-9-g52d=
-883c7bbae)
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-17-rc1-9-g52d883c7bbae/
-
-Tree: pm
-Branch: testing
-Git Describe: v5.17-rc1-9-g52d883c7bbae
-Git Commit: 52d883c7bbae11e5f06311eae7778db69bc4806e
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
-
-Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-
-riscv:
-
-x86_64:
-
-
-Warnings summary:
-
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
