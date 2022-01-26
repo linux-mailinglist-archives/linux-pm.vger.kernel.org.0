@@ -2,192 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1347B49C059
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jan 2022 01:54:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A343B49C0E5
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jan 2022 02:49:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235439AbiAZAx7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Jan 2022 19:53:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40514 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234910AbiAZAx6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jan 2022 19:53:58 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F7EC06161C
-        for <linux-pm@vger.kernel.org>; Tue, 25 Jan 2022 16:53:58 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id i8so19675981pgt.13
-        for <linux-pm@vger.kernel.org>; Tue, 25 Jan 2022 16:53:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=YPSgXNG3SdzMs1KBvdyqNfOE4ezlpdGLDAJRiN73U1I=;
-        b=WN7gvFICQZPvj1Lyw6VVHhLdweEvU5NaTGiISmg4sxZ5gQ1rFoD7E6K9BZUFYio1+F
-         f6i3pnViTiiWIa/oN3WMycmpV/snaBq2bdIhPOug0VDjdT8a4awqpRwWYRJ2vH1G8tcm
-         CTHiBV8m3eZjZaE+CjJe+bxnNzYD1mWc+I/3DTKPnaBybCP7iSr/sfbzmcFqJt1A+og6
-         +vC9QUwTYjjuMKH3BoUDD5GycSnq6VfAtTKJflb3llUdKMIulXackd2AHYVCT4ljTJtO
-         t9FVoU1UmuQ8cf+hsqvocAGnGIFapBo9o0rVsH5yr8xzTpl4KY0Kw5p5vINqA2jaCZAo
-         A83Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=YPSgXNG3SdzMs1KBvdyqNfOE4ezlpdGLDAJRiN73U1I=;
-        b=u2aQd/dmQOdvi28RWCELLvudJOaJGTVetlSrSXD+zi3l3zSIHWG60vDN53QVx1afB0
-         7scWROqasxBcI0JvYnbr7W4ak8tgdMUjBLo9mZSkrTPB5RbDuD26X+GbKfH42+DPubsF
-         dKMHAqH7eFxuuIJrR0Whn37+wiaZCLRXGfTOfRlckZde2p+nCRqpsVxlS3X1tF+PBaoT
-         LjgM4Kc5SvGur/gMODwcdONsEOyYwj2tu/YseA7CvE4td4YOdMDmRpwKzaVmn4AN7wPa
-         geE+4ygNsV7taODgWpRYIDs8zKVVW0OnFHJ2tFbF4Hko7XshXo0fLU8F5MBeQX4xEFoc
-         Cqcg==
-X-Gm-Message-State: AOAM531a5DUBqGq3eFS6xSbjajZLzBM7Ur+qfG6ZUxecXRxSXP3uJObH
-        RXFJzKU+oG7TP7ra03JSn5IAQw==
-X-Google-Smtp-Source: ABdhPJzM6FNnn/uPMXKkL6YwTqpPPhKRuAVFCBLx0EMg+jVN8rnXhFV7rlnrvQclAOFdnJfouBzq7Q==
-X-Received: by 2002:aa7:9edc:0:b0:4c6:eb85:be8c with SMTP id r28-20020aa79edc000000b004c6eb85be8cmr20212800pfq.62.1643158437755;
-        Tue, 25 Jan 2022 16:53:57 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id q9sm193304pfk.137.2022.01.25.16.53.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 16:53:57 -0800 (PST)
-Message-ID: <61f09ba5.1c69fb81.78e6b.0df2@mx.google.com>
-Date:   Tue, 25 Jan 2022 16:53:57 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S236034AbiAZBt2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Jan 2022 20:49:28 -0500
+Received: from smtp25.cstnet.cn ([159.226.251.25]:34322 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S236024AbiAZBtR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 25 Jan 2022 20:49:17 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-05 (Coremail) with SMTP id zQCowACXe0GHqPBho9zoBg--.31642S2;
+        Wed, 26 Jan 2022 09:48:55 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     rafael@kernel.org
+Cc:     daniel.lezcano@linaro.org, rui.zhang@intel.com, amitk@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v3] thermal/int340x_thermal: Check for null pointer after calling kmemdup
+Date:   Wed, 26 Jan 2022 09:48:53 +0800
+Message-Id: <20220126014853.2915981-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.17-rc1
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-Subject: pm/testing baseline: 52 runs, 4 regressions (v5.17-rc1)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowACXe0GHqPBho9zoBg--.31642S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uF4rAr4UKF43Ar13CF1Utrb_yoW8Xw4fpF
+        4Fgr1UArs5WF4xW3WUAr15Ja98C3Z5Kay5WFyS9a4YyFnxAFWSqFyFyFyFyry0kr17t3WY
+        ya4rtr4xZr1DArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkm14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
+        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_
+        KwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
+        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
+        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
+        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
+        IxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUOMKZDUUUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 52 runs, 4 regressions (v5.17-rc1)
+As the potential failure of the allocation, kmemdup() may return NULL
+pointer.
+Then the 'bin_attr_data_vault.private' will be NULL pointer but the
+'bin_attr_data_vault.size' is not 0.
+Therefore, it should be better to check the return value of kmemdup() to
+avoid the wrong size.
+And since the error handling process is simple, it may not use the
+'goto' to simplify the code.
 
-Regressions Summary
--------------------
+Fixes: 0ba13c763aac ("thermal/int340x_thermal: Export GDDV")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+Changelog
 
-platform              | arch  | lab         | compiler | defconfig | regres=
-sions
-----------------------+-------+-------------+----------+-----------+-------=
------
-imx8mn-ddr4-evk       | arm64 | lab-nxp     | gcc-10   | defconfig | 2     =
-     =
+v1 -> v2
 
-kontron-kbox-a-230-ls | arm64 | lab-kontron | gcc-10   | defconfig | 2     =
-     =
+* Change 1. Use out_kfree to simplify the code.
 
+v2 -> v3
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.17-rc=
-1/plan/baseline/
+* Change 1. Revert the code to v1 and refine the commit message.
+---
+ drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.17-rc1
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      e783362eb54cd99b2cac8b3a9aeac942e6f6ac07 =
+diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+index 8502b7d8df89..52ac3ee54309 100644
+--- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
++++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+@@ -464,6 +464,11 @@ static void int3400_setup_gddv(struct int3400_thermal_priv *priv)
+ 	priv->data_vault = kmemdup(obj->package.elements[0].buffer.pointer,
+ 				   obj->package.elements[0].buffer.length,
+ 				   GFP_KERNEL);
++	if (!priv->data_vault) {
++		kfree(buffer.pointer);
++		return;
++	}
++
+ 	bin_attr_data_vault.private = priv->data_vault;
+ 	bin_attr_data_vault.size = obj->package.elements[0].buffer.length;
+ 	kfree(buffer.pointer);
+-- 
+2.25.1
 
-
-
-Test Regressions
----------------- =
-
-
-
-platform              | arch  | lab         | compiler | defconfig | regres=
-sions
-----------------------+-------+-------------+----------+-----------+-------=
------
-imx8mn-ddr4-evk       | arm64 | lab-nxp     | gcc-10   | defconfig | 2     =
-     =
-
-
-  Details:     https://kernelci.org/test/plan/id/61f08d1d0b1fe6e977abbd81
-
-  Results:     4 PASS, 2 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.17-rc1/arm64/def=
-config/gcc-10/lab-nxp/baseline-imx8mn-ddr4-evk.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.17-rc1/arm64/def=
-config/gcc-10/lab-nxp/baseline-imx8mn-ddr4-evk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220121.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/61f08d1d0b1fe6e=
-977abbd88
-        new failure (last pass: v5.16-rc7-119-g63b95bce9ea4)
-        12 lines
-
-    2022-01-25T23:51:25.936824  kern  :alert : Unable to handle kernel NULL=
- pointer dereference <8>[   14.438533] <LAVA_SIGNAL_TESTCASE TEST_CASE_ID=
-=3Dalert RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D12>
-    2022-01-25T23:51:25.937031  at virtual address 0000000000000000
-    2022-01-25T23:51:25.937139  kern  :alert : Mem abort info:
-    2022-01-25T23:51:25.937239  kern  :alert :   ESR =3D 0x96000006
-    2022-01-25T23:51:25.937337  kern  :alert :   EC =3D 0x25: DABT (current=
- EL), IL =3D 32 bits   =
-
-
-  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/61f08d1d0b1fe6e=
-977abbd89
-        new failure (last pass: v5.16-rc7-119-g63b95bce9ea4)
-        2 lines
-
-    2022-01-25T23:51:25.938037  kern  :alert :   SET =3D <8>[   14.462950] =
-<LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Demerg RESULT=3Dfail UNITS=3Dlines MEAS=
-UREMENT=3D2>
-    2022-01-25T23:51:25.938139  0, FnV =3D 0   =
-
- =
-
-
-
-platform              | arch  | lab         | compiler | defconfig | regres=
-sions
-----------------------+-------+-------------+----------+-----------+-------=
------
-kontron-kbox-a-230-ls | arm64 | lab-kontron | gcc-10   | defconfig | 2     =
-     =
-
-
-  Details:     https://kernelci.org/test/plan/id/61f08be47b3952893eabbd5f
-
-  Results:     91 PASS, 2 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.17-rc1/arm64/def=
-config/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.17-rc1/arm64/def=
-config/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220121.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.ftm-alarm-driver-present: https://kernelci.org/test/cas=
-e/id/61f08be57b3952893eabbda0
-        new failure (last pass: v5.16-rc8-171-gf099fd60c342)
-
-    2022-01-25T23:46:20.381491  /lava-83642/1/../bin/lava-test-case   =
-
-
-  * baseline.bootrr.ftm-alarm-probed: https://kernelci.org/test/case/id/61f=
-08be57b3952893eabbda1
-        new failure (last pass: v5.16-rc8-171-gf099fd60c342)
-
-    2022-01-25T23:46:20.383768  <8>[   17.402413] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dftm-alarm-driver-present RESULT=3Dfail>
-    2022-01-25T23:46:21.433332  /lava-83642/1/../bin/lava-test-case
-    2022-01-25T23:46:21.433654  <8>[   18.421819] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dftm-alarm-probed RESULT=3Dfail>   =
-
- =20
