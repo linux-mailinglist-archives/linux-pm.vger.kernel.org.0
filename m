@@ -2,241 +2,323 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CE3949C2EC
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jan 2022 06:09:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA2DF49C4B7
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jan 2022 08:49:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231555AbiAZFJX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Jan 2022 00:09:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41482 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbiAZFJW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jan 2022 00:09:22 -0500
-Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83AA5C061744
-        for <linux-pm@vger.kernel.org>; Tue, 25 Jan 2022 21:09:22 -0800 (PST)
-Received: by mail-ua1-x932.google.com with SMTP id m90so41493009uam.2
-        for <linux-pm@vger.kernel.org>; Tue, 25 Jan 2022 21:09:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ULKsotdNfK1GjpHBxFknCGil4tyRTc4FFZp3NSZMfY4=;
-        b=gKSi9Hy9kAAL5wjEcluH7Yx+kNchSkZPMLuaeMy/4t2XH9N134RVVts06zGW931tcB
-         soZ4fyM1aEw2sQBllwALdmxNmmKvAEYWaToNW0DMNewAnqIIVF+GEUzBad/ygXDIahau
-         knjy9IVd/Naz6ObSqOqeYZ+FIf6MEBBsxhNIfvq+lD6CaFCb0lf1vcmnrWoH4lJQbPOT
-         rIlrYAFn3l4v9tpKnUjl4WE1WVP796LrnMTNlQQvN2/rXpKJmJCy059X4XU8jS1zcvuF
-         D3sb0bIdHmG3DhEsbZ+zZhNg2x3JvX97CcOVV/BJlcIE6i4Brq4Ky/TkOqHj4L/s54ZM
-         lvrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ULKsotdNfK1GjpHBxFknCGil4tyRTc4FFZp3NSZMfY4=;
-        b=JDA3Qh9YSJlxgcq4IV0JDQW7TT/0EQjtHEJ3sv+LzHqKeWFbx+s+QrEj5DxPulX8/w
-         lGPAA2yTyWwfpqpWz2me64Jj9Ly3HYV+LarT4hGOOxUhzbWRu2d5vOhojfmyXz7XfnE2
-         drrspH05gzSUTRGd1w47RzkBrGsAhEf0axBAEPKSGPMFUffszJ+4s0Qn097B6D4L1nhK
-         3bP0FJG8ek7LnOMgmoSXz8IkNCgCFX+rykr0vy0tNONDjX6/JQ/W4ZGaDhzG/7HuKAf4
-         wHCk5X4U4EUXH+4ImR7A0irEKYhdzjyBY8UncesMnSEObd9YbQ8CMXdd86RDZilG9GOd
-         6GgQ==
-X-Gm-Message-State: AOAM533brc02GKi72sd88YYIXbFQ74JNiFidMqs5Cybe208ZRstabjQy
-        DvvmvUdxzieaJ9dl122xzu5xYIL4uOvtQyurBxODig==
-X-Google-Smtp-Source: ABdhPJw1gobt5SN7rdO/s4DihA1/CYLLRCN3+2lp46elXkejaEYfynLRV2i1rbhWRRjnkS+z0Tu1X30lZMpECsapQf4=
-X-Received: by 2002:ab0:6946:: with SMTP id c6mr8972476uas.44.1643173761576;
- Tue, 25 Jan 2022 21:09:21 -0800 (PST)
-MIME-Version: 1.0
-References: <CAHTsKTdSyC7Jwk56tDR8QwM_oO13ByBRaA78VpHymOZ7J4NQ9Q@mail.gmail.com>
- <CANcMJZA16b5gT++73a8hjA=6OeLsPLQM-X+ps3kEsYHVyariGg@mail.gmail.com>
-In-Reply-To: <CANcMJZA16b5gT++73a8hjA=6OeLsPLQM-X+ps3kEsYHVyariGg@mail.gmail.com>
-From:   Zichar Zhang <zichar.zhang@linaro.org>
-Date:   Wed, 26 Jan 2022 13:09:21 +0800
-Message-ID: <CAE9iGoiCZZBkyX9ZWnhSDMjWmucOmybCOp=XTr6Hz5rN9GNyrw@mail.gmail.com>
-Subject: Re: [RFC] PM: suspend: Upstreaming wakeup reason capture support
-To:     John Stultz <john.stultz@linaro.org>
-Cc:     Kelly Rossmoyer <krossmo@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Vijay Nayak <nayakvij@google.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Sumit Semwal <sumit.semwal@linaro.org>
+        id S238038AbiAZHtO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Jan 2022 02:49:14 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:34710 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S238036AbiAZHtO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jan 2022 02:49:14 -0500
+X-UUID: a12fa10eb91643b2a7bfd8c6a5c136a1-20220126
+X-UUID: a12fa10eb91643b2a7bfd8c6a5c136a1-20220126
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1805714807; Wed, 26 Jan 2022 15:49:11 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 26 Jan 2022 15:49:10 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 26 Jan
+ 2022 15:49:09 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 26 Jan 2022 15:49:09 +0800
+Message-ID: <bcc104a362f637d92e69045dc57dd02c17c45975.camel@mediatek.com>
+Subject: Re: [PATCH v21 8/8] soc: mediatek: SVS: add mt8192 SVS GPU driver
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        YT Lee <yt.lee@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Date:   Wed, 26 Jan 2022 15:49:09 +0800
+In-Reply-To: <2c0e89c6-6e9c-9d12-703f-d71e22023e7a@collabora.com>
+References: <20220107095200.4389-1-roger.lu@mediatek.com>
+         <20220107095200.4389-9-roger.lu@mediatek.com>
+         <2c0e89c6-6e9c-9d12-703f-d71e22023e7a@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-hello John,  Kelly!
+Hi AngeloGioacchino,
 
-I'm working on upstream "wakeup_reason" patch.
-But I found It's a little bit hard to do that, cause it is too heavy.
+Sorry for the late reply.
 
-The android patch put "wakeup_reason",  suspend/resume process and
-interrupt subsystem together make it hard to upstream all these at once. I
-think maybe we can cooperate with each other, and do it step by step.
-And I make a simplified "wakeup_reason" patch as the start.
+On Fri, 2022-01-07 at 15:33 +0100, AngeloGioacchino Del Regno wrote:
+> Il 07/01/22 10:52, Roger Lu ha scritto:
+> > mt8192 SVS GPU uses 2-line (high/low bank) HW architecture to provide
+> > bank voltages. High bank helps update higher frequency's voltage
+> > and low bank helps update lower frequency's voltage.
+> > 
+> > Signed-off-by: Roger Lu <roger.lu@mediatek.com>
+> > ---
+> >   drivers/soc/mediatek/mtk-svs.c | 469 ++++++++++++++++++++++++++++++++-
+> >   1 file changed, 464 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
+> > index 93cdaecadd6d..bec6524ab33a 100644
+> > --- a/drivers/soc/mediatek/mtk-svs.c
+> > +++ b/drivers/soc/mediatek/mtk-svs.c
+> 
+> ..snip..
+> 
+> > @@ -639,9 +706,11 @@ static int svs_status_debug_show(struct seq_file *m,
+> > void *v)
+> >   
+> >   	ret = svs_get_zone_temperature(svsb->tzone_name, &tzone_temp);
+> >   	if (ret)
+> > -		seq_printf(m, "%s: temperature ignore\n", svsb->name);
+> > +		seq_printf(m, "%s: temperature ignore, turn_pt = %u\n",
+> > +			   svsb->name, svsb->turn_pt);
+> >   	else
+> > -		seq_printf(m, "%s: temperature = %d\n", svsb->name, tzone_temp);
+> > +		seq_printf(m, "%s: temperature = %d, turn_pt = %u\n",
+> > +			   svsb->name, tzone_temp, svsb->turn_pt);
+> >   
+> >   	for (i = 0; i < svsb->opp_count; i++) {
+> >   		opp = dev_pm_opp_find_freq_exact(svsb->opp_dev,
+> > @@ -784,6 +853,181 @@ static u32 interpolate(u32 f0, u32 f1, u32 v0, u32 v1,
+> > u32 fx)
+> >   	return DIV_ROUND_UP(vx, 100);
+> >   }
+> >   
+> > +static void svs_get_bank_volts_v3(struct svs_platform *svsp)
+> > +{
+> > +	struct svs_bank *svsb = svsp->pbank;
+> > +	u32 i, j, *vop, vop74, vop30, mask7_0 = GENMASK(7, 0);
+> > +	u32 b_sft, bits8 = 8, shift_byte = 0, reg_bytes = 4;
+> 
+> mask7_0, bits8, reg_bytes are constants, and it's not right to declare
+> constants
+> as variables like you're doing here.
+> 
+> Please replace all usages of `mask7_0` with either a definition or with the
+> call
+> to the GENMASK macro;
+> also, replace all usages of `bits8` with a definition, or just 8;
+> finally, either make `reg_bytes` a `const u8` or a definition.
+> 
+> 
+> In my opinion, a #define would be preferred, since the exact same comments on
+> the exact same values also apply to function svs_set_bank_freq_pct_v3().
+> 
+> After that fix, you'll get my R-b.
+> 
+> I feel like v22 will be golden :)
 
-It just report the  normal IRQs which cause system wake up from suspend
-and non-device "wakeups" which use kernel interface "wakeup source". It
-can cover most of the situations.
+No problem. I'll use GENMASK macro and replace bits8/reg_bytes with 
+definition. Thanks for the tutorial a lot. :)
 
-Here I placed the patch, so that people can review it:
-https://android-review.googlesource.com/c/kernel/common/+/1958188
+> 
+> Regards,
+> - Angelo
+> 
+> > +	u32 middle_index = (svsb->opp_count / 2);
+> > +	u32 opp_start = 0, opp_stop = 0, turn_pt = svsb->turn_pt;
+> > +
+> > +	if (svsb->phase == SVSB_PHASE_MON &&
+> > +	    svsb->volt_flags & SVSB_MON_VOLT_IGNORE)
+> > +		return;
+> > +
+> > +	vop74 = svs_readl_relaxed(svsp, VOP74);
+> > +	vop30 = svs_readl_relaxed(svsp, VOP30);
+> > +
+> > +	/* Target is to set svsb->volt[] by algorithm */
+> > +	if (turn_pt < middle_index) {
+> > +		if (svsb->type == SVSB_HIGH) {
+> > +			/* volt[0] ~ volt[turn_pt - 1] */
+> > +			for (i = 0; i < turn_pt; i++) {
+> > +				b_sft = bits8 * (shift_byte % reg_bytes);
+> > +				vop = (shift_byte < reg_bytes) ? &vop30 :
+> > +								 &vop74;
+> > +				svsb->volt[i] = (*vop >> b_sft) & mask7_0;
+> > +				shift_byte++;
+> > +			}
+> > +		} else if (svsb->type == SVSB_LOW) {
+> > +			/* volt[turn_pt] + volt[j] ~ volt[opp_count - 1] */
+> > +			j = svsb->opp_count - 7;
+> > +			svsb->volt[turn_pt] = vop30 & mask7_0;
+> > +			shift_byte++;
+> > +			for (i = j; i < svsb->opp_count; i++) {
+> > +				b_sft = bits8 * (shift_byte % reg_bytes);
+> > +				vop = (shift_byte < reg_bytes) ? &vop30 :
+> > +								 &vop74;
+> > +				svsb->volt[i] = (*vop >> b_sft) & mask7_0;
+> > +				shift_byte++;
+> > +			}
+> > +
+> > +			/* volt[turn_pt + 1] ~ volt[j - 1] by interpolate */
+> > +			for (i = turn_pt + 1; i < j; i++)
+> > +				svsb->volt[i] =
+> > +					interpolate(svsb->freq_pct[turn_pt],
+> > +						    svsb->freq_pct[j],
+> > +						    svsb->volt[turn_pt],
+> > +						    svsb->volt[j],
+> > +						    svsb->freq_pct[i]);
+> > +		}
+> > +	} else {
+> > +		if (svsb->type == SVSB_HIGH) {
+> > +			/* volt[0] + volt[j] ~ volt[turn_pt - 1] */
+> > +			j = turn_pt - 7;
+> > +			svsb->volt[0] = vop30 & mask7_0;
+> > +			shift_byte++;
+> > +			for (i = j; i < turn_pt; i++) {
+> > +				b_sft = bits8 * (shift_byte % reg_bytes);
+> > +				vop = (shift_byte < reg_bytes) ? &vop30 :
+> > +								 &vop74;
+> > +				svsb->volt[i] = (*vop >> b_sft) & mask7_0;
+> > +				shift_byte++;
+> > +			}
+> > +
+> > +			/* volt[1] ~ volt[j - 1] by interpolate */
+> > +			for (i = 1; i < j; i++)
+> > +				svsb->volt[i] =
+> > +					interpolate(svsb->freq_pct[0],
+> > +						    svsb->freq_pct[j],
+> > +						    svsb->volt[0],
+> > +						    svsb->volt[j],
+> > +						    svsb->freq_pct[i]);
+> > +		} else if (svsb->type == SVSB_LOW) {
+> > +			/* volt[turn_pt] ~ volt[opp_count - 1] */
+> > +			for (i = turn_pt; i < svsb->opp_count; i++) {
+> > +				b_sft = bits8 * (shift_byte % reg_bytes);
+> > +				vop = (shift_byte < reg_bytes) ? &vop30 :
+> > +								 &vop74;
+> > +				svsb->volt[i] = (*vop >> b_sft) & mask7_0;
+> > +				shift_byte++;
+> > +			}
+> > +		}
+> > +	}
+> > +
+> > +	if (svsb->type == SVSB_HIGH) {
+> > +		opp_start = 0;
+> > +		opp_stop = svsb->turn_pt;
+> > +	} else if (svsb->type == SVSB_LOW) {
+> > +		opp_start = svsb->turn_pt;
+> > +		opp_stop = svsb->opp_count;
+> > +	}
+> > +
+> > +	for (i = opp_start; i < opp_stop; i++)
+> > +		if (svsb->volt_flags & SVSB_REMOVE_DVTFIXED_VOLT)
+> > +			svsb->volt[i] -= svsb->dvt_fixed;
+> > +}
+> > +
+> > +static void svs_set_bank_freq_pct_v3(struct svs_platform *svsp)
+> > +{
+> > +	struct svs_bank *svsb = svsp->pbank;
+> > +	u32 i, j, *freq_pct, freq_pct74 = 0, freq_pct30 = 0;
+> > +	u32 b_sft, bits8 = 8, shift_byte = 0, reg_bytes = 4;
+> > +	u32 middle_index = (svsb->opp_count / 2);
+> > +	u32 turn_pt = middle_index;
+> > +
+> > +	for (i = 0; i < svsb->opp_count; i++) {
+> > +		if (svsb->opp_dfreq[i] <= svsb->turn_freq_base) {
+> > +			svsb->turn_pt = i;
+> > +			break;
+> > +		}
+> > +	}
+> > +
+> > +	turn_pt = svsb->turn_pt;
+> > +
+> > +	/* Target is to fill out freq_pct74 / freq_pct30 by algorithm */
+> > +	if (turn_pt < middle_index) {
+> > +		if (svsb->type == SVSB_HIGH) {
+> > +			/* Edge case for preventing freq_pct30 from being 0 */
+> > +			if (turn_pt == 0)
+> > +				freq_pct30 = svsb->freq_pct[0];
+> > +
+> > +			/* freq_pct[0] ~ freq_pct[turn_pt - 1] */
+> > +			for (i = 0; i < turn_pt; i++) {
+> > +				b_sft = bits8 * (shift_byte % reg_bytes);
+> > +				freq_pct = (shift_byte < reg_bytes) ?
+> > +					   &freq_pct30 : &freq_pct74;
+> > +				*freq_pct |= (svsb->freq_pct[i] << b_sft);
+> > +				shift_byte++;
+> > +			}
+> > +		} else if (svsb->type == SVSB_LOW) {
+> > +			/*
+> > +			 * freq_pct[turn_pt] +
+> > +			 * freq_pct[opp_count - 7] ~ freq_pct[opp_count -1]
+> > +			 */
+> > +			freq_pct30 = svsb->freq_pct[turn_pt];
+> > +			shift_byte++;
+> > +			j = svsb->opp_count - 7;
+> > +			for (i = j; i < svsb->opp_count; i++) {
+> > +				b_sft = bits8 * (shift_byte % reg_bytes);
+> > +				freq_pct = (shift_byte < reg_bytes) ?
+> > +					   &freq_pct30 : &freq_pct74;
+> > +				*freq_pct |= (svsb->freq_pct[i] << b_sft);
+> > +				shift_byte++;
+> > +			}
+> > +		}
+> > +	} else {
+> > +		if (svsb->type == SVSB_HIGH) {
+> > +			/*
+> > +			 * freq_pct[0] +
+> > +			 * freq_pct[turn_pt - 7] ~ freq_pct[turn_pt - 1]
+> > +			 */
+> > +			freq_pct30 = svsb->freq_pct[0];
+> > +			shift_byte++;
+> > +			j = turn_pt - 7;
+> > +			for (i = j; i < turn_pt; i++) {
+> > +				b_sft = bits8 * (shift_byte % reg_bytes);
+> > +				freq_pct = (shift_byte < reg_bytes) ?
+> > +					   &freq_pct30 : &freq_pct74;
+> > +				*freq_pct |= (svsb->freq_pct[i] << b_sft);
+> > +				shift_byte++;
+> > +			}
+> > +		} else if (svsb->type == SVSB_LOW) {
+> > +			/* freq_pct[turn_pt] ~ freq_pct[opp_count - 1] */
+> > +			for (i = turn_pt; i < svsb->opp_count; i++) {
+> > +				b_sft = bits8 * (shift_byte % reg_bytes);
+> > +				freq_pct = (shift_byte < reg_bytes) ?
+> > +					   &freq_pct30 : &freq_pct74;
+> > +				*freq_pct |= (svsb->freq_pct[i] << b_sft);
+> > +				shift_byte++;
+> > +			}
+> > +		}
+> > +	}
+> > +
+> > +	svs_writel_relaxed(svsp, freq_pct74, FREQPCT74);
+> > +	svs_writel_relaxed(svsp, freq_pct30, FREQPCT30);
+> > +}
+> > +
+> >   static void svs_get_bank_volts_v2(struct svs_platform *svsp)
+> >   {
+> >   	struct svs_bank *svsb = svsp->pbank;
+> 
+> 
+> 
+> _______________________________________________
+> Linux-mediatek mailing list
+> Linux-mediatek@lists.infradead.org
+> 
+https://urldefense.com/v3/__http://lists.infradead.org/mailman/listinfo/linux-mediatek__;!!CTRNKA9wMg0ARbw!2hHinI997WLSwDhGwMLxsnPzZMt8US0HmcDwqKvo2yvyiHuJ7AR4BSd7C_Z2haFK$
+>  
 
-Here is the differences from the requirement:
-
->> As of today, the active set of patches surface the following
->> suspend-related data:
->>
->> * wakeup IRQs, including:
->>    * multiple IRQs if more than one is pending during resume flow
->>    * unmapped HW IRQs (wakeup-capable in HW) that should not be
->>      occurring
->>    * misconfigured IRQs (e.g. both enable_irq_wake() and
->>      IRQF_NO_SUSPEND)
->>    * threaded IRQs (not just the parent chip's IRQ)
-
-    -- If we do these things, the additional codes should be added in
-    interrupt subsystem or some interrupt controller drivers. These
-    codes are no relationship with the interrupt subsystem or the
-    interrupt controllers. And we can't distinguish these IRQs from
-    "non-suspend" environment, even the "Android patch" can't do that.
-    So it will make the things complicated.
-    -- If these IRQs do hanpen, the code in this commit will catch
-    them as "unknown wakeup reason" and suggest user to check the
-    kernel log for more information.
-    -- I think We should cooperate with interrupt subsystem to log
-    these "abnormal" IRQs. And it could be several additional
-    commits to accomplish this work together then.
-
->> * abort reasons, including:
->>    * wakeup_source activity
->>    * failure to freeze userspace
->>    * failure to suspend devices
->>    * failed syscore_suspend callback
-
-    -- These codes are "intrusive" to kernel (suspend/resume).
-    -- These "errors" are already printed in kernel log, if we add
-    these log to "wakeup_reason" either, it will cause double
-    "log string" in section ".data", which just waste of the memory.
-    -- As mentioned before, if these "abort action" happened, you
-    can catch string "unknown wakeup reason", and check the kernel
-    log then.
-
->> * durations from the most recent cycle, including:
->>    * time spent doing suspend/resume work
->>    * time spent in suspend
-
-    -- Just separate these from "wakeup reason".
-    It should be done in another commit.
-
-The patch is not complete, these is the next steps:
-1. add interface to show time spend in suspend/resume work.
-(after this, I think it could be works and replace the android patch)
-2. we need solve the "unmapped HW IRQs", "misconfigured IRQs" and
-"threaded IRQs" problem.
-(this is the hardest one)
-3. add a string report interface for the "wakeup reason" not belongs to
-any thing above.
-(kernel actually didn't know the hardware wake up reason. The IRQs just
-one of the reason for wake up. So it just report a "wakeup reason" from
-interrupt subsystem. It just a coincidence that most hardware "wakeup
-reason" is also the interupt signal.  Even the "interrupt" and "wake up"
-signal are separated from each other in GIC700.
-So give them a chance to report the their "wakeup reason".)
-
-This patch can be tested in Android using the following change to AOSP:
- https://android-review.googlesource.com/c/platform/system/hardware/interfaces/+/1958666
-
-And there is a stress test code for the interfaces in kernel:
- https://android-review.googlesource.com/c/kernel/common/+/1958189
-
-Best
-zichar
-
-
-On Tue, 25 Jan 2022 at 01:38, John Stultz <john.stultz@linaro.org> wrote:
->
-> On Tue, Jan 11, 2022 at 5:06 AM Kelly Rossmoyer <krossmo@google.com> wrote:
-> >
-> > # Introduction
-> >
-> > To aid optimization, troubleshooting, and attribution of battery life, the
-> > Android kernel currently includes a set of patches which provide enhanced
-> > visibility into kernel suspend/resume/abort behaviors.  The capabilities
-> > and implementation of this feature have evolved significantly since an
-> > unsuccessful attempt to upstream the original code
-> > (https://lkml.org/lkml/2014/3/10/716), and we would like to (re)start a
-> > conversation about upstreaming, starting with the central question: is
-> > there support for upstreaming this set of features?
-> >
-> > # Motivation
-> >
-> > Of the many factors influencing battery life on Linux-powered mobile
-> > devices, kernel suspend tends to be amongst the most impactful.  Maximizing
-> > time spent in suspend and minimizing the frequency of net-negative suspend
-> > cycles are both important contributors to battery life optimization.  But
-> > enabling that optimization - and troubleshooting when things go wrong -
-> > requires more observability of suspend/resume/abort behavior than Linux
-> > currently provides.  While mechanisms like `/sys/power/pm_wakeup_irq` and
-> > wakeup_source stats are useful, they are incomplete and scattered.  The
-> > Android kernel wakeup reason patches implement significant improvements in
-> > that area.
-> >
-> > # Features
-> >
-> > As of today, the active set of patches surface the following
-> > suspend-related data:
-> >
-> > * wakeup IRQs, including:
-> >    * multiple IRQs if more than one is pending during resume flow
-> >    * unmapped HW IRQs (wakeup-capable in HW) that should not be
-> >      occurring
-> >    * misconfigured IRQs (e.g. both enable_irq_wake() and
-> >      IRQF_NO_SUSPEND)
-> >    * threaded IRQs (not just the parent chip's IRQ)
-> >
-> > * non-IRQ wakeups, including:
-> >    * wakeups caused by an IRQ that was consumed by lower-level SW
-> >    * wakeups from SOC architecture that don't manifest as IRQs
-> >
-> > * abort reasons, including:
-> >    * wakeup_source activity
-> >    * failure to freeze userspace
-> >    * failure to suspend devices
-> >    * failed syscore_suspend callback
-> >
-> > * durations from the most recent cycle, including:
-> >    * time spent doing suspend/resume work
-> >    * time spent in suspend
-> >
-> > In addition to battery life optimization and troubleshooting, some of these
-> > capabilities also lay the groundwork for efforts around improving
-> > attribution of wakeups/aborts (e.g. to specific processes, device features,
-> > external devices, etc).
-> >
-> > # Shortcomings
-> >
-> > While the core implementation (see below) is relatively straightforward and
-> > localized, calls into that core are somewhat widely spread in order to
-> > capture the breadth of events of interest.  The pervasiveness of those
-> > hooks is clearly an area where improvement would be beneficial, especially
-> > if a cleaner solution preserved equivalent capabilities.
-> >
-> > # Existing Code
-> >
-> > As a reference for how Android currently implements the core code for these
-> > features (which would need a bit of work before submission even if all
-> > features were included), see the following link:
-> >
-> > https://android.googlesource.com/kernel/common/+/refs/heads/android-mainline/kernel/power/wakeup_reason.c
-> >
->
-> Hey Kelly!
->   So Zichar (added to the thread here) has been working for a little
-> while on his own approach to upstream a simplified version of the
-> wakeup_reason functionality. He's just gotten it to a place where it
-> can be shared, so I wanted to pull him in so he could reply with his
-> proposal.
->
-> thanks
-> -john
