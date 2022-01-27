@@ -2,138 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2C0D49EC4B
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jan 2022 21:10:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3DAD49ED27
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jan 2022 22:11:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343849AbiA0UKp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Jan 2022 15:10:45 -0500
-Received: from mail-yb1-f174.google.com ([209.85.219.174]:33643 "EHLO
-        mail-yb1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343865AbiA0UKp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Jan 2022 15:10:45 -0500
-Received: by mail-yb1-f174.google.com with SMTP id l68so12295050ybl.0;
-        Thu, 27 Jan 2022 12:10:44 -0800 (PST)
+        id S1344279AbiA0VLB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Jan 2022 16:11:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59342 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344290AbiA0VLA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Jan 2022 16:11:00 -0500
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4247CC061749
+        for <linux-pm@vger.kernel.org>; Thu, 27 Jan 2022 13:11:00 -0800 (PST)
+Received: by mail-qk1-x736.google.com with SMTP id q5so3841408qkc.1
+        for <linux-pm@vger.kernel.org>; Thu, 27 Jan 2022 13:11:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=wXM0hly6tyNlZq07rMipvtfpnu3wRqtV0B2JSV05g3E=;
+        b=m0D8ivz9PDCDCKh/arptMpR3/ao+LhFd+WDbL0Ndw6mZAYZf1UgxGLzVj40s+AmZjb
+         DuEwjd7NT9LFwA9OjKx7vr7puLYpS6zkJNbh+1BfuQgx4db+dU06Jgc7C75K093Hwjn/
+         9mCc5rYI5j3y1VvMx9vpxL5dad+OafMT9QhIQgFRN9dvv+QgByQ7o1yzKGSP02L54Znm
+         q7FBXWGkelfiR3xpWnnkdKDqg2UlG70uCnsM1s4SP7cRlEb+IJNQAjeVKHpZy42mZonq
+         RnHAdJAaDrxUHvlQWr6CsD5rnkBvpJUkcJOYzRgUFr/Bb7DCHALpPY9Ux9K4Rjywr0lt
+         YgYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gh+UlDf/TEfrWF/4dLOcpRWKXy/rGv4qkE/LWOydCEU=;
-        b=VzKMX/umQH3GLHH8plYvpHJysEDD0dZL+41KvnSMfQ9D27OQOmWeSYgqx1/Qiq2vVO
-         0KIPlihYXZPdP4XNdr0VQmc1apdpTTtaISIBPakvfIIeC8+sI6dyvCBmau99JkCYzfAq
-         Z2JVXKZbZeHRSjlxdbbJhL3A1cmM3zAdp8r3BC9aAfvDK4WIgq2r63APluHLC73Qvep8
-         vVapGUyhQK0ZXzQcfaU9tTiPyMUjRqqnYGUx3qKwDEnuh6BgU7ZZ7zHRSslUINUPOtrQ
-         BDcZDPDCcHkj2XzOH5kcNUTYKnpbqma/CjZXv/Pt1OTVopWSBHo5ZxbcxOaB+M4CzMgt
-         xhlQ==
-X-Gm-Message-State: AOAM533Ia/3Ig1kDRy6vr06pqeEBzcferopnP8zTFkfQ803Q7auVSygh
-        krots3ar4ZOKh2apYqaqQsBqESUqvzl9NtQtByM=
-X-Google-Smtp-Source: ABdhPJxONF5czKwKSr4XjHPsxyOZpvAMwe77IoMGqGHLhMjlI7aWj9Ry3JZes3jus7I/ZL+eEQZOs4ed0Zan2Vgsxg0=
-X-Received: by 2002:a25:180a:: with SMTP id 10mr8572542yby.552.1643314236571;
- Thu, 27 Jan 2022 12:10:36 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=wXM0hly6tyNlZq07rMipvtfpnu3wRqtV0B2JSV05g3E=;
+        b=P+BP0gmxYaUJ/p08yZbLTtAARHCEaoUNDTUNpyKtvMSAXuZqxdzASuQUncPtXP9TVz
+         mv+IwZ5epIK1uBEEoR10NpAIY2yalB5S5XwQ7OHmdrlXfpORiCQPc3LmyXODYWarEJA4
+         m5197NxhfDcaRR6XQuihYN0erUZOPtMmIPDy62uGvE/A9Z9pXn5j5CAxlN9F4n1r5UKr
+         2oI/Z2m4PEoPBU6+L1x0TiCbhm/gRuNZX7MYgXGxUP/lcLhEnvE0LS9H80wrpdLFEGS9
+         ZuA2NGzyNnOJ78DgmlUC4IxkOnSBU+Azu7Np2BNVYmYAdcZZHjhRSlXyyLRfGEHQhRSp
+         d6DQ==
+X-Gm-Message-State: AOAM531w8ptLjIEC0CH64qg6nfL9NsGCvy9kOn6YpwePritRJ23l7FFz
+        AZXsdau4a5sIQE6c9vlKIsYxmlkj/3UeJKThny+XKePj1Z0=
+X-Google-Smtp-Source: ABdhPJxjfwa8g49rNfb5xQ4Dtq316EM5E6QepnaR+uvM+BcTaI+qmB/caHz8VslukXXXqzp0798ys0wp0mZ+YQ4gMH8=
+X-Received: by 2002:ac8:4e48:: with SMTP id e8mr4202203qtw.64.1643317847801;
+ Thu, 27 Jan 2022 13:10:47 -0800 (PST)
 MIME-Version: 1.0
-References: <CAHTsKTdSyC7Jwk56tDR8QwM_oO13ByBRaA78VpHymOZ7J4NQ9Q@mail.gmail.com>
- <CAJZ5v0jrU4Xw2wzdUL9Vd2C6u8NVx5J79DeiRY6KU1xT6ZSuqw@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jrU4Xw2wzdUL9Vd2C6u8NVx5J79DeiRY6KU1xT6ZSuqw@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 27 Jan 2022 21:10:25 +0100
-Message-ID: <CAJZ5v0gLMSPsaS7Jnsr8DhevaQamsVk=pu=BfXZxrT+SBAM=fQ@mail.gmail.com>
-Subject: Re: [RFC] PM: suspend: Upstreaming wakeup reason capture support
-To:     Kelly Rossmoyer <krossmo@google.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Vijay Nayak <nayakvij@google.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Received: by 2002:a05:6214:e4b:0:0:0:0 with HTTP; Thu, 27 Jan 2022 13:10:46
+ -0800 (PST)
+Reply-To: eanna00111@gmail.com
+From:   Mrs Anna Edward <mussaaliooooo7@gmail.com>
+Date:   Thu, 27 Jan 2022 13:10:46 -0800
+Message-ID: <CAFbf-n2dj0f-EXo2OhZA4D_6QXVYoysuMB5_+AOQv9Sb_nGe0w@mail.gmail.com>
+Subject: Urgent Reply
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 8:54 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Mon, Jan 10, 2022 at 7:49 PM Kelly Rossmoyer <krossmo@google.com> wrote:
-> >
-> > # Introduction
-> >
-> > To aid optimization, troubleshooting, and attribution of battery life, the
-> > Android kernel currently includes a set of patches which provide enhanced
-> > visibility into kernel suspend/resume/abort behaviors.  The capabilities
-> > and implementation of this feature have evolved significantly since an
-> > unsuccessful attempt to upstream the original code
-> > (https://lkml.org/lkml/2014/3/10/716), and we would like to (re)start a
-> > conversation about upstreaming, starting with the central question: is
-> > there support for upstreaming this set of features?
-> >
-> > # Motivation
-> >
-> > Of the many factors influencing battery life on Linux-powered mobile
-> > devices, kernel suspend tends to be amongst the most impactful.  Maximizing
-> > time spent in suspend and minimizing the frequency of net-negative suspend
-> > cycles are both important contributors to battery life optimization.  But
-> > enabling that optimization - and troubleshooting when things go wrong -
-> > requires more observability of suspend/resume/abort behavior than Linux
-> > currently provides.  While mechanisms like `/sys/power/pm_wakeup_irq` and
-> > wakeup_source stats are useful, they are incomplete and scattered.  The
-> > Android kernel wakeup reason patches implement significant improvements in
-> > that area.
-> >
-> > # Features
-> >
-> > As of today, the active set of patches surface the following
-> > suspend-related data:
-> >
-> > * wakeup IRQs, including:
-> >    * multiple IRQs if more than one is pending during resume flow
-> >    * unmapped HW IRQs (wakeup-capable in HW) that should not be
-> >      occurring
-> >    * misconfigured IRQs (e.g. both enable_irq_wake() and
-> >      IRQF_NO_SUSPEND)
-> >    * threaded IRQs (not just the parent chip's IRQ)
-> >
-> > * non-IRQ wakeups, including:
-> >    * wakeups caused by an IRQ that was consumed by lower-level SW
-> >    * wakeups from SOC architecture that don't manifest as IRQs
-> >
-> > * abort reasons, including:
-> >    * wakeup_source activity
-> >    * failure to freeze userspace
-> >    * failure to suspend devices
-> >    * failed syscore_suspend callback
-> >
-> > * durations from the most recent cycle, including:
-> >    * time spent doing suspend/resume work
-> >    * time spent in suspend
-> >
-> > In addition to battery life optimization and troubleshooting, some of these
-> > capabilities also lay the groundwork for efforts around improving
-> > attribution of wakeups/aborts (e.g. to specific processes, device features,
-> > external devices, etc).
-> >
-> > # Shortcomings
-> >
-> > While the core implementation (see below) is relatively straightforward and
-> > localized, calls into that core are somewhat widely spread in order to
-> > capture the breadth of events of interest.  The pervasiveness of those
-> > hooks is clearly an area where improvement would be beneficial, especially
-> > if a cleaner solution preserved equivalent capabilities.
-> >
-> > # Existing Code
-> >
-> > As a reference for how Android currently implements the core code for these
-> > features (which would need a bit of work before submission even if all
-> > features were included), see the following link:
-> >
-> > https://android.googlesource.com/kernel/common/+/refs/heads/android-mainline/kernel/power/wakeup_reason.c
->
-> So as Zichar said, this is quite heavy-weight.
->
-> I'm not fundamentally against adding more infrastructure to help
-> identify issues related to system suspend, but there needs to be a
-> clear benefit associated with any change in this direction.
+Greeting to you,
+Please forgive me for stressing you with my predicaments and I sorry
+to approach you through this media because it serves the fastest means
+of communication. I came across your E-mail from my personal search
+and I decided to contact you believing you will be honest to fulfill
+my final wish before I die.
 
-That said, the general idea behind wakeup_source objects is that every
-system wakeup event should be recorded in one of them which then can
-be used for later analysis.
+I am Mrs Anna Edward, 63 years, from USA, I am childless and I am
+suffering from a pro-long critical cancer, my doctors confirmed I may
+not live beyond two months from now as my ill health has defiled all
+forms of medical treatment. Since my days are numbered, I have decided
+willingly to fulfill my long-time promise to donate you the sum
+($5.000.000.00) million dollars I inherited from my late husband Mr.
+Edward Herbart, foreign bank account over years. I need a very honest
+person who can assist in transfer of this money to his or her account
+and use the funds for charity work of God while you use 50% for
+yourself. I want you to know there is no risk involved; it is 100%
+hitch free & safe.
 
-If there are reasons why this cannot work in general, what are they?
+If you are interested in assisting in getting this fund into your
+account for a charity project to fulfill my promise before I die
+please let me know immediately.
+
+I will appreciate your utmost confidentiality as I wait for your reply.
+Best Regards,
+Mrs Anna Edward
