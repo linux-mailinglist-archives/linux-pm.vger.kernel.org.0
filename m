@@ -2,58 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8C0149D765
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jan 2022 02:15:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB36B49D766
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jan 2022 02:15:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232134AbiA0BPF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Jan 2022 20:15:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39248 "EHLO
+        id S232206AbiA0BPI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Jan 2022 20:15:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232206AbiA0BPF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jan 2022 20:15:05 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD242C06173B
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jan 2022 17:15:04 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id o12so2179282lfg.12
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jan 2022 17:15:04 -0800 (PST)
+        with ESMTP id S231386AbiA0BPG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jan 2022 20:15:06 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733C8C06161C
+        for <linux-pm@vger.kernel.org>; Wed, 26 Jan 2022 17:15:06 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id n8so2265319lfq.4
+        for <linux-pm@vger.kernel.org>; Wed, 26 Jan 2022 17:15:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=haRFNa2MOuGGx+qiHY4rYq2fcJJPvI8NSUcWdSM3M9o=;
-        b=ZxBLmP94C2g/0rl+XNyh6ZIQ1WIHp1DCoDrqMU+zlkNlMNH5KTmib/Dy3XCE+LbLXr
-         3ni0qldNPP/pTNNdEij1n9z4g5KX6DW/tlwtrfemRse/h5EXaS28sf0jCIpl9iNO/njj
-         CU/AOSwwiFHa2mru41YsTKZ4pqVfN/P5R5rDxg1Fy71lIY4q/wiY/XEDhmAxJvJhe2L/
-         ZpDwFyGqYqBIdqJHbD5MKRd93VieDLxcs9L1VyvNU4osUV85kK/FWRu4PsMDR5GBUnBf
-         Q2MFmPdUhg3G90sf23HV2k5S9B5+X3EDf2nHndA90fvkb5PmJur6NEfE6U0/7dRURLzM
-         Kn8g==
+        bh=ykjGaL0hTNu/sFC5BS2s3FG5tHHOkoccsGYthrfBM5s=;
+        b=paQumlxaFdnS3Y1aaB/QbnjiND43BhcQvxtYiFNyUrrIYwnLwNOysR0C5WOcJ981pP
+         F2dhTvsembDYjy/PURZ6lD0Qj9Huoy8aAQhCZpA3sG910jLMl7oKA7yUSOrU5pd/z89C
+         95xPNTxwiLWx1BEVlGV/2kxA2HsC5WFF+npKoMsK4dknG/KjPliVXbXRXEbS0MFJpOtm
+         bMSyNapgQI+vH1E/ec/jYN6bIPw2zQJpFXg0QOPptfhIEUh8boEqEPnR/8bOUBHW8X74
+         D8PQaci8uBBCnXsHwti7LivwIj6d/wg3C8Y6M4c4PM1xqivOI1XAOP0zxPXPBPFgrESZ
+         S+Gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=haRFNa2MOuGGx+qiHY4rYq2fcJJPvI8NSUcWdSM3M9o=;
-        b=xj41JoMKpL3hgh9zPxIe+pnywAoxAKMbKGpRXB7HUFuUSZg2Cytbxkwuz2gae4CLH+
-         8scjDXH9wUgoNsxY1EAE1fOjGz+5lPE2Aoo/5q/3PzswyA6lL8Vvr3DPK9uc+0k2ZasH
-         X0JvUBmuTxM83BehJcmtTUPu1BqUbCsqgQbABcr4jmYb842lLjqeg8YAfhaC9mBuPHGn
-         okOTCGH+PwvRLSjngkjUjmL+xhVs4B0qYPAzvbJxQR63eITiTHsrBI0OthdiztQhealE
-         pkT0oErNKkjGftbhroxK6BTWXK9rS/lXdjSO/w0oM5IYlWCdwVEg/tLu638SnHqL/EDe
-         PbKg==
-X-Gm-Message-State: AOAM5315eVAAkxTuKZH9gJfuGtN+ExkgrJzw9d4gwYg28ugiMi2rmXO5
-        mKzQ7+XwQteg/jrtMYHH54jsgg==
-X-Google-Smtp-Source: ABdhPJztp4pcWK0oUBNBH0iA2LHgVCrevSIUo1onUQt/yOGNW8a++8eWI5+ARJ9Esgh/SAFdljmtjg==
-X-Received: by 2002:ac2:4e89:: with SMTP id o9mr1276366lfr.246.1643246103170;
-        Wed, 26 Jan 2022 17:15:03 -0800 (PST)
+        bh=ykjGaL0hTNu/sFC5BS2s3FG5tHHOkoccsGYthrfBM5s=;
+        b=2BG8ceIZyCLXzQfh0V4ORwcLXNJDv5T/9DaAJ0oyJOuk+55ZJKPsga2kniT9eWC0Ai
+         wAph09XN4tq59P0kBaJxKUW4kqhXoLoawDH2V+MLfNanaXxpJSazCgxAtKGCjLSGbgHD
+         GMpzOCbhHBnbYGZC1wHe6FXra3j/y83NBCw7VX/SXl2fd5u+zSJe3PbqN7iCzkci5Pc3
+         c+oEuo4WOiHTRhpdfrDZ5lGYdZLRRGPZCmvZrJll7f8btJTs4sDbPp0WEUVyiUCD7TGk
+         CpSCEyga7dmlfW/+HY5yVx+XkUTnxbFruOOSaOCfqz2QYSOpc5mQ4sWxJRcZgNgd5hw1
+         vp8g==
+X-Gm-Message-State: AOAM5302dWz5tv9rPwv6tQPBUJ/x2QmEAPe3FhWJ2tPjAavg1OgU2i7H
+        XzcjL949DCRp9lzC2e2XAyhjyQ==
+X-Google-Smtp-Source: ABdhPJyhI4nFtxKHbYxKGY8ZI794y18fImfolRZynLn1n5NgQGhzXZrBhWkrXkDXNulh/Ymynysssw==
+X-Received: by 2002:a05:6512:2314:: with SMTP id o20mr1249321lfu.590.1643246104781;
+        Wed, 26 Jan 2022 17:15:04 -0800 (PST)
 Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id u14sm1028337lji.40.2022.01.26.17.15.02
+        by smtp.gmail.com with ESMTPSA id u14sm1028337lji.40.2022.01.26.17.15.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 17:15:02 -0800 (PST)
+        Wed, 26 Jan 2022 17:15:04 -0800 (PST)
 From:   Linus Walleij <linus.walleij@linaro.org>
 To:     Sebastian Reichel <sre@kernel.org>,
         Marcus Cooper <codekipper@gmail.com>
 Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 10/11] power: supply: ab8500_charger: Restrict ADC retrieveal
-Date:   Thu, 27 Jan 2022 02:12:35 +0100
-Message-Id: <20220127011236.332687-11-linus.walleij@linaro.org>
+Subject: [PATCH 11/11] power: supply: ab8500_charger: Fix VBAT interval check
+Date:   Thu, 27 Jan 2022 02:12:36 +0100
+Message-Id: <20220127011236.332687-12-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220127011236.332687-1-linus.walleij@linaro.org>
 References: <20220127011236.332687-1-linus.walleij@linaro.org>
@@ -63,50 +63,80 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The AB8505 only has two ADC channels: the voltage and current
-provided from VBUS (USB). It does not support AC charging at all.
-Make sure we don't try to retrieve the non-existing channels.
+When using USB charging, the AB8500 charger is periodically
+checking VBAT for a threshold at 3.8V.
+
+This crashes badly, as the class_for_each_device() was passed
+the wrong argument. I think this has maybe worked by chance
+in the past because of how the structs were arranged but it
+is leading to crashes now.
+
+Fix this up and also switch to using microvolts for the
+voltages like the rest of the code.
 
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- drivers/power/supply/ab8500_charger.c | 24 +++++++++++++-----------
- 1 file changed, 13 insertions(+), 11 deletions(-)
+ drivers/power/supply/ab8500_charger.c | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/power/supply/ab8500_charger.c b/drivers/power/supply/ab8500_charger.c
-index ce074c018dcb..681b53bb0df0 100644
+index 681b53bb0df0..88099cdba8a7 100644
 --- a/drivers/power/supply/ab8500_charger.c
 +++ b/drivers/power/supply/ab8500_charger.c
-@@ -3443,17 +3443,19 @@ static int ab8500_charger_probe(struct platform_device *pdev)
- 	di->parent = dev_get_drvdata(pdev->dev.parent);
+@@ -163,7 +163,7 @@ enum ab8500_usb_state {
+ #define USB_CH_IP_CUR_LVL_1P4		1400000
+ #define USB_CH_IP_CUR_LVL_1P5		1500000
  
- 	/* Get ADC channels */
--	di->adc_main_charger_v = devm_iio_channel_get(dev, "main_charger_v");
--	if (IS_ERR(di->adc_main_charger_v)) {
--		ret = dev_err_probe(dev, PTR_ERR(di->adc_main_charger_v),
--				    "failed to get ADC main charger voltage\n");
--		return ret;
--	}
--	di->adc_main_charger_c = devm_iio_channel_get(dev, "main_charger_c");
--	if (IS_ERR(di->adc_main_charger_c)) {
--		ret = dev_err_probe(dev, PTR_ERR(di->adc_main_charger_c),
--				    "failed to get ADC main charger current\n");
--		return ret;
-+	if (!is_ab8505(di->parent)) {
-+		di->adc_main_charger_v = devm_iio_channel_get(dev, "main_charger_v");
-+		if (IS_ERR(di->adc_main_charger_v)) {
-+			ret = dev_err_probe(dev, PTR_ERR(di->adc_main_charger_v),
-+					    "failed to get ADC main charger voltage\n");
-+			return ret;
-+		}
-+		di->adc_main_charger_c = devm_iio_channel_get(dev, "main_charger_c");
-+		if (IS_ERR(di->adc_main_charger_c)) {
-+			ret = dev_err_probe(dev, PTR_ERR(di->adc_main_charger_c),
-+					    "failed to get ADC main charger current\n");
-+			return ret;
-+		}
- 	}
- 	di->adc_vbus_v = devm_iio_channel_get(dev, "vbus_v");
- 	if (IS_ERR(di->adc_vbus_v)) {
+-#define VBAT_TRESH_IP_CUR_RED		3800
++#define VBAT_TRESH_IP_CUR_RED		3800000
+ 
+ #define to_ab8500_charger_usb_device_info(x) container_of((x), \
+ 	struct ab8500_charger, usb_chg)
+@@ -1920,7 +1920,11 @@ static int ab8500_charger_get_ext_psy_data(struct device *dev, void *data)
+ 
+ 	di = to_ab8500_charger_usb_device_info(usb_chg);
+ 
+-	/* For all psy where the driver name appears in any supplied_to */
++	/*
++	 * For all psy where the driver name appears in any supplied_to
++	 * in practice what we will find will always be "ab8500_fg" as
++	 * the fuel gauge is responsible of keeping track of VBAT.
++	 */
+ 	j = match_string(supplicants, ext->num_supplicants, psy->desc->name);
+ 	if (j < 0)
+ 		return 0;
+@@ -1937,7 +1941,10 @@ static int ab8500_charger_get_ext_psy_data(struct device *dev, void *data)
+ 		case POWER_SUPPLY_PROP_VOLTAGE_NOW:
+ 			switch (ext->desc->type) {
+ 			case POWER_SUPPLY_TYPE_BATTERY:
+-				di->vbat = ret.intval / 1000;
++				/* This will always be "ab8500_fg" */
++				dev_dbg(di->dev, "get VBAT from %s\n",
++					dev_name(&ext->dev));
++				di->vbat = ret.intval;
+ 				break;
+ 			default:
+ 				break;
+@@ -1966,7 +1973,7 @@ static void ab8500_charger_check_vbat_work(struct work_struct *work)
+ 		struct ab8500_charger, check_vbat_work.work);
+ 
+ 	class_for_each_device(power_supply_class, NULL,
+-		di->usb_chg.psy, ab8500_charger_get_ext_psy_data);
++			      &di->usb_chg, ab8500_charger_get_ext_psy_data);
+ 
+ 	/* First run old_vbat is 0. */
+ 	if (di->old_vbat == 0)
+@@ -1991,8 +1998,8 @@ static void ab8500_charger_check_vbat_work(struct work_struct *work)
+ 	 * No need to check the battery voltage every second when not close to
+ 	 * the threshold.
+ 	 */
+-	if (di->vbat < (VBAT_TRESH_IP_CUR_RED + 100) &&
+-		(di->vbat > (VBAT_TRESH_IP_CUR_RED - 100)))
++	if (di->vbat < (VBAT_TRESH_IP_CUR_RED + 100000) &&
++		(di->vbat > (VBAT_TRESH_IP_CUR_RED - 100000)))
+ 			t = 1;
+ 
+ 	queue_delayed_work(di->charger_wq, &di->check_vbat_work, t * HZ);
 -- 
 2.34.1
 
