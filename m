@@ -2,58 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0C7C49D761
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jan 2022 02:14:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8514E49D762
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jan 2022 02:15:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232110AbiA0BO7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Jan 2022 20:14:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39214 "EHLO
+        id S232031AbiA0BPA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Jan 2022 20:15:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232031AbiA0BO6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jan 2022 20:14:58 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE5EC06161C
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jan 2022 17:14:58 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id e17so2009590ljk.5
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jan 2022 17:14:58 -0800 (PST)
+        with ESMTP id S232128AbiA0BPA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jan 2022 20:15:00 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E05FC06161C
+        for <linux-pm@vger.kernel.org>; Wed, 26 Jan 2022 17:15:00 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id z19so2173932lfq.13
+        for <linux-pm@vger.kernel.org>; Wed, 26 Jan 2022 17:14:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=IrjM1MQ0G3FDaMRIIRJA5dUwbfXPuiWXnRfRN9yfCGg=;
-        b=VTyiQGofjVVGxfgX8nhW+RrcsQ4MDxnqT8D2u3YwESeYdlT5/Js6ANjWs2lAlBWjy7
-         2ZTCUk+7TW8ND2zSO6U6cIK4bcolPI32lbyJI18LDIxAFnyjPZZsGXRHkd+Oe2NAPJZ0
-         xqRCYOwr10vtVKmr9m+dqeTihUz2XD4Cof8rSQZfcwMwRzW0BuLyy1fRqRdNV5LWk/9R
-         cRiJURqzD6yooPVA8XuvIAOgqR0pfFSkhBYol43KwmHk2sXRPIwVgH4Md5qivnhOjwpV
-         u7gGlIGVcl91DsMtIGGvH93pWQ7ysr7Js7fOdH06w/U7sY/HUSK9KjeuiyX3Pxvi9qOk
-         7VuQ==
+        bh=r9/KleBGoO0PO95Mx9jAXT4YN2e2L9g/3cjOpS4m2Og=;
+        b=Uur9cwQYEtlq9UTRd353wREk9TgzYS1t4rt9DwbMXKOIa14TvjvJ5X7bZgeqp7Gwb1
+         73/gNDuCYh0qhknuJ4WAKrbSAuPVBSYRfu746lbfQmiO9rnvcDnKlbLOq/HAuQLaaRzz
+         1e5iJv/7yR7w3UF8BD54WnDoLP8YvWqgN9rMjRYjnyAmKF6bGXDai5lPHlIxqB5XmEYS
+         HtfwDGowjxelE3mgM6pWQ+lj5eSRgF2Gn/yGgyPpEAyFhsN4C6ZGH+5iye6EpI4zhU02
+         SHayC/SCSbM+LotrE412pRNG47BOeXtEgmmO7zRLvXm3JQER3R1wsLTbo3tpqqsYN+h3
+         razQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=IrjM1MQ0G3FDaMRIIRJA5dUwbfXPuiWXnRfRN9yfCGg=;
-        b=Dbp+VndXXuEhCKPQfH84wbOpfZ1DlEfWVxhFIdjS72n/5FAB74u5sWm9ieUA3itKp6
-         NbIHqaARaDiLipTM1pa3PjqU3E09dslrkVzfaXobnxUiBV7tOxH2yQr2CLI6FJFdB69V
-         ApE3CEwrlQ+VzNUlkYNTT8RaFG32kCTRIQsaf/vByaDLRKdE81PCFtQB9FtPUexcwy+h
-         iys+9w3Ggn/PKNpFcnuF8rzR0iDuPm2H+51xSm0E0ZUDbb3CBvbz8gvYLkZmDg9k3DEl
-         aug7kW2MMK1Ks/oYpD9H4nIalz5UVtzO120GkW6Mp2AP2hyiFWiAgc1YLmkjkbLIJZ7F
-         1x+Q==
-X-Gm-Message-State: AOAM532KmAiEqVQBwEOaruckoMmOVdCFCwBSe2ENa6E7KCdt4EcyVof3
-        jAxNelHZ/Fx8eHfd8hubGncJEg==
-X-Google-Smtp-Source: ABdhPJwHxTO5JSUWk/GCdV1dOFx1HsvVxIbAOvCwWDFsDzhoQe9W67wp8jHZP/Q4nUHN47Kf3S1/rA==
-X-Received: by 2002:a2e:a378:: with SMTP id i24mr1299003ljn.240.1643246096749;
-        Wed, 26 Jan 2022 17:14:56 -0800 (PST)
+        bh=r9/KleBGoO0PO95Mx9jAXT4YN2e2L9g/3cjOpS4m2Og=;
+        b=kx13k53PwGg8J72dflfCBQIq0TDpZUBQ1zhjT3nHQsoilrLMiSNb+DeNiRksUMbr22
+         QO7N2RmiCf4bq5fTNg146AeRmv5ebsaYvupHQlvAzVntGfLWFh7zt6xsFEopU/XG5zzv
+         3hL7kJInR00Me/VH2Rpder7ezHw+3b6r0GJaI9gwi9evakzpXOwN8oJAaQ6FkEVfp6x+
+         GwKtc/DqRcOlLB0vTMXYT/w0EcAVtW6lWwYmgcpYqTgo47wJiBHrU5u+ixPsU4PbaMFK
+         81T/HpsaH1+Qd+MMUr3WYm0utHdeUQMFipAutTS2orBJL3J/90fnot1FVQ5P6+0L08x6
+         TSNA==
+X-Gm-Message-State: AOAM532/o9tH8bW6zBuU2z/hYnaEx3xJ/CSHy/K+emuNH1E6LotSOPR6
+        z+xxPEPVTTWHZpegXh/E4yrkbA==
+X-Google-Smtp-Source: ABdhPJyJgNa0PwxJwof/RQfYwTUyhbhFZZEMeWJah93XGYuW+cA4hvT2Yjv+TWzWZpuXgIdN8OnpZA==
+X-Received: by 2002:a05:6512:2347:: with SMTP id p7mr1227546lfu.123.1643246098405;
+        Wed, 26 Jan 2022 17:14:58 -0800 (PST)
 Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id u14sm1028337lji.40.2022.01.26.17.14.55
+        by smtp.gmail.com with ESMTPSA id u14sm1028337lji.40.2022.01.26.17.14.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 17:14:56 -0800 (PST)
+        Wed, 26 Jan 2022 17:14:58 -0800 (PST)
 From:   Linus Walleij <linus.walleij@linaro.org>
 To:     Sebastian Reichel <sre@kernel.org>,
         Marcus Cooper <codekipper@gmail.com>
 Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 06/11] power: supply: ab8500_fg: Safeguard compensated voltage
-Date:   Thu, 27 Jan 2022 02:12:31 +0100
-Message-Id: <20220127011236.332687-7-linus.walleij@linaro.org>
+Subject: [PATCH 07/11] power: supply: ab8500_fg: Drop useless parameter
+Date:   Thu, 27 Jan 2022 02:12:32 +0100
+Message-Id: <20220127011236.332687-8-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220127011236.332687-1-linus.walleij@linaro.org>
 References: <20220127011236.332687-1-linus.walleij@linaro.org>
@@ -63,70 +63,90 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In some cases when the platform is dissapating more than
-500mA the voltage measurements and compensation will become
-instable. Add a parameter to bail out of the voltage
-measurement if this happens.
-
-This code was found in a Samsung vendor tree.
+All calls to ab8500_fg_calc_cap_discharge_voltage() require
+compensation and pass true as the second argument so just drop
+this argument.
 
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- drivers/power/supply/ab8500_fg.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ drivers/power/supply/ab8500_fg.c | 24 ++++++++++--------------
+ 1 file changed, 10 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
-index 8c907900a56d..323f6bacefd8 100644
+index 323f6bacefd8..fa61ecebbce3 100644
 --- a/drivers/power/supply/ab8500_fg.c
 +++ b/drivers/power/supply/ab8500_fg.c
-@@ -46,6 +46,8 @@
- 
- #define NBR_AVG_SAMPLES			20
- #define WAIT_FOR_INST_CURRENT_MAX	70
-+/* Currents higher than -500mA (dissipating) will make compensation unstable */
-+#define IGNORE_VBAT_HIGHCUR		-500000
- 
- #define LOW_BAT_CHECK_INTERVAL		(HZ / 16) /* 62.5 ms */
- 
-@@ -911,12 +913,13 @@ static int ab8500_fg_battery_resistance(struct ab8500_fg *di)
+@@ -1073,20 +1073,16 @@ static int ab8500_fg_calc_cap_charging(struct ab8500_fg *di)
  /**
-  * ab8500_load_comp_fg_bat_voltage() - get load compensated battery voltage
+  * ab8500_fg_calc_cap_discharge_voltage() - Capacity in discharge with voltage
   * @di:		pointer to the ab8500_fg structure
-+ * @always:	always return a voltage, also uncompensated
+- * @comp:	if voltage should be load compensated before capacity calc
   *
-  * Returns compensated battery voltage (on success) else error code.
-  * If always is specified, we always return a voltage but it may be
-  * uncompensated.
+- * Return the capacity in mAh based on the battery voltage. The voltage can
+- * either be load compensated or not. This value is added to the filter and a
+- * new mean value is calculated and returned.
++ * Return the capacity in mAh based on the load compensated battery voltage.
++ * This value is added to the filter and a new mean value is calculated and
++ * returned.
   */
--static int ab8500_load_comp_fg_bat_voltage(struct ab8500_fg *di)
-+static int ab8500_load_comp_fg_bat_voltage(struct ab8500_fg *di, bool always)
+-static int ab8500_fg_calc_cap_discharge_voltage(struct ab8500_fg *di, bool comp)
++static int ab8500_fg_calc_cap_discharge_voltage(struct ab8500_fg *di)
  {
- 	int i = 0;
- 	int vbat_uv = 0;
-@@ -941,6 +944,14 @@ static int ab8500_load_comp_fg_bat_voltage(struct ab8500_fg *di)
+ 	int permille, mah;
  
- 	ab8500_fg_inst_curr_finalize(di, &di->inst_curr_ua);
+-	if (comp)
+-		permille = ab8500_fg_load_comp_volt_to_capacity(di);
+-	else
+-		permille = ab8500_fg_uncomp_volt_to_capacity(di);
++	permille = ab8500_fg_load_comp_volt_to_capacity(di);
  
-+	/*
-+	 * If there is too high current dissipation, the compensation cannot be
-+	 * trusted so return an error unless we must return something here, as
-+	 * enforced by the "always" parameter.
-+	 */
-+	if (!always && di->inst_curr_ua < IGNORE_VBAT_HIGHCUR)
-+		return -EINVAL;
-+
- 	vbat_uv = vbat_uv / i;
+ 	mah = ab8500_fg_convert_permille_to_mah(di, permille);
  
- 	/* Next we apply voltage compensation from internal resistance */
-@@ -964,7 +975,7 @@ static int ab8500_fg_load_comp_volt_to_capacity(struct ab8500_fg *di)
- {
- 	int vbat_comp_uv;
+@@ -1563,7 +1559,7 @@ static void ab8500_fg_algorithm_discharging(struct ab8500_fg *di)
  
--	vbat_comp_uv = ab8500_load_comp_fg_bat_voltage(di);
-+	vbat_comp_uv = ab8500_load_comp_fg_bat_voltage(di, true);
+ 		/* Discard the first [x] seconds */
+ 		if (di->init_cnt > di->bm->fg_params->init_discard_time) {
+-			ab8500_fg_calc_cap_discharge_voltage(di, true);
++			ab8500_fg_calc_cap_discharge_voltage(di);
  
- 	return ab8500_fg_volt_to_capacity(di, vbat_comp_uv);
- }
+ 			ab8500_fg_check_capacity_limits(di, true);
+ 		}
+@@ -1646,7 +1642,7 @@ static void ab8500_fg_algorithm_discharging(struct ab8500_fg *di)
+ 				break;
+ 			}
+ 
+-			ab8500_fg_calc_cap_discharge_voltage(di, true);
++			ab8500_fg_calc_cap_discharge_voltage(di);
+ 		} else {
+ 			mutex_lock(&di->cc_lock);
+ 			if (!di->flags.conv_done) {
+@@ -1680,7 +1676,7 @@ static void ab8500_fg_algorithm_discharging(struct ab8500_fg *di)
+ 		break;
+ 
+ 	case AB8500_FG_DISCHARGE_WAKEUP:
+-		ab8500_fg_calc_cap_discharge_voltage(di, true);
++		ab8500_fg_calc_cap_discharge_voltage(di);
+ 
+ 		di->fg_samples = SEC_TO_SAMPLE(
+ 			di->bm->fg_params->accu_high_curr);
+@@ -1799,7 +1795,7 @@ static void ab8500_fg_periodic_work(struct work_struct *work)
+ 
+ 	if (di->init_capacity) {
+ 		/* Get an initial capacity calculation */
+-		ab8500_fg_calc_cap_discharge_voltage(di, true);
++		ab8500_fg_calc_cap_discharge_voltage(di);
+ 		ab8500_fg_check_capacity_limits(di, true);
+ 		di->init_capacity = false;
+ 
+@@ -2422,7 +2418,7 @@ static void ab8500_fg_reinit_work(struct work_struct *work)
+ 	if (!di->flags.calibrate) {
+ 		dev_dbg(di->dev, "Resetting FG state machine to init.\n");
+ 		ab8500_fg_clear_cap_samples(di);
+-		ab8500_fg_calc_cap_discharge_voltage(di, true);
++		ab8500_fg_calc_cap_discharge_voltage(di);
+ 		ab8500_fg_charge_state_to(di, AB8500_FG_CHARGE_INIT);
+ 		ab8500_fg_discharge_state_to(di, AB8500_FG_DISCHARGE_INIT);
+ 		queue_delayed_work(di->fg_wq, &di->fg_periodic_work, 0);
 -- 
 2.34.1
 
