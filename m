@@ -2,152 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7CF349EBEC
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jan 2022 21:03:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C0D49EC4B
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jan 2022 21:10:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240338AbiA0UDB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Jan 2022 15:03:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43280 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240117AbiA0UCe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Jan 2022 15:02:34 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A92C061777
-        for <linux-pm@vger.kernel.org>; Thu, 27 Jan 2022 12:02:31 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id y17so3686466plg.7
-        for <linux-pm@vger.kernel.org>; Thu, 27 Jan 2022 12:02:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=riumb/7yMkcFbw4RrpVGufoj0gjKUJSuK0Qg2XknZ7c=;
-        b=NpYO5ID7f28ORexqnHkzZ0M54adxGnU0hRqq3qMqQyrYGblQq3T7AbkbyeSwkleWwX
-         1tdKASzL3lfB1QiEImyl7I5sFgEJAzg5lhJ31c07BZMxspqw1wEXyCWCACCBDKj4GvBM
-         Mku2sKRUm6mYUtIPaoIcno6DGaPIftBeAqDeo=
+        id S1343849AbiA0UKp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Jan 2022 15:10:45 -0500
+Received: from mail-yb1-f174.google.com ([209.85.219.174]:33643 "EHLO
+        mail-yb1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343865AbiA0UKp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Jan 2022 15:10:45 -0500
+Received: by mail-yb1-f174.google.com with SMTP id l68so12295050ybl.0;
+        Thu, 27 Jan 2022 12:10:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=riumb/7yMkcFbw4RrpVGufoj0gjKUJSuK0Qg2XknZ7c=;
-        b=spw5/NJjWeoMM+LahKnwQP9sSv2SVGgz3IRUhbhfymLHTcbjva4XYgw47oS7tnvaoc
-         WfvMKiVsDeJxVsbOdAqfyHMFJzz2kAlfSkrMyCprEyFFiYDE5F9Q7dQ+dLd6EAUwV+pZ
-         ti2WlGmAlVCjsoAqCHZHKeXAtsCL/ZGFb6ARSrKE4T/hl7usK700MObUyZbpOgrSCsm4
-         SmI4FVGIZU4mIWX3PCHB3sZ397aQpOz4oxIS6Bncei366iFwr8XDYC2vjM+jcqAmpIpt
-         /Z25+qOCLHN5eWTyRkNiUfwJgwj4r7XysgYYaEy6M74It+X0zX7L7q+XMBhuWAkGwg3z
-         cKvQ==
-X-Gm-Message-State: AOAM532V3tODdbrtQKIjLpsv/HXN+mhL8m7azrE7Rs4ZWspFhaUDsoyD
-        iyWAnjvpuGACp9PKVFxSvs+lqQ==
-X-Google-Smtp-Source: ABdhPJwWoTTDM63H2gCdds/RxYfOFR7pmlktYW6DhFTALTQitolMZJK4DIvXjvtcObjDsy8ZXAWysA==
-X-Received: by 2002:a17:902:7ec1:: with SMTP id p1mr4549151plb.159.1643313750817;
-        Thu, 27 Jan 2022 12:02:30 -0800 (PST)
-Received: from smtp.gmail.com ([2620:15c:202:201:9246:1838:3243:3071])
-        by smtp.gmail.com with ESMTPSA id k21sm6561190pff.33.2022.01.27.12.02.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 12:02:30 -0800 (PST)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Douglas Anderson <dianders@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-pm@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        Saravana Kannan <saravanak@google.com>
-Subject: [PATCH v6 27/35] power: supply: ab8500: Migrate to aggregate driver
-Date:   Thu, 27 Jan 2022 12:01:33 -0800
-Message-Id: <20220127200141.1295328-28-swboyd@chromium.org>
-X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
-In-Reply-To: <20220127200141.1295328-1-swboyd@chromium.org>
-References: <20220127200141.1295328-1-swboyd@chromium.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gh+UlDf/TEfrWF/4dLOcpRWKXy/rGv4qkE/LWOydCEU=;
+        b=VzKMX/umQH3GLHH8plYvpHJysEDD0dZL+41KvnSMfQ9D27OQOmWeSYgqx1/Qiq2vVO
+         0KIPlihYXZPdP4XNdr0VQmc1apdpTTtaISIBPakvfIIeC8+sI6dyvCBmau99JkCYzfAq
+         Z2JVXKZbZeHRSjlxdbbJhL3A1cmM3zAdp8r3BC9aAfvDK4WIgq2r63APluHLC73Qvep8
+         vVapGUyhQK0ZXzQcfaU9tTiPyMUjRqqnYGUx3qKwDEnuh6BgU7ZZ7zHRSslUINUPOtrQ
+         BDcZDPDCcHkj2XzOH5kcNUTYKnpbqma/CjZXv/Pt1OTVopWSBHo5ZxbcxOaB+M4CzMgt
+         xhlQ==
+X-Gm-Message-State: AOAM533Ia/3Ig1kDRy6vr06pqeEBzcferopnP8zTFkfQ803Q7auVSygh
+        krots3ar4ZOKh2apYqaqQsBqESUqvzl9NtQtByM=
+X-Google-Smtp-Source: ABdhPJxONF5czKwKSr4XjHPsxyOZpvAMwe77IoMGqGHLhMjlI7aWj9Ry3JZes3jus7I/ZL+eEQZOs4ed0Zan2Vgsxg0=
+X-Received: by 2002:a25:180a:: with SMTP id 10mr8572542yby.552.1643314236571;
+ Thu, 27 Jan 2022 12:10:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CAHTsKTdSyC7Jwk56tDR8QwM_oO13ByBRaA78VpHymOZ7J4NQ9Q@mail.gmail.com>
+ <CAJZ5v0jrU4Xw2wzdUL9Vd2C6u8NVx5J79DeiRY6KU1xT6ZSuqw@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jrU4Xw2wzdUL9Vd2C6u8NVx5J79DeiRY6KU1xT6ZSuqw@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 27 Jan 2022 21:10:25 +0100
+Message-ID: <CAJZ5v0gLMSPsaS7Jnsr8DhevaQamsVk=pu=BfXZxrT+SBAM=fQ@mail.gmail.com>
+Subject: Re: [RFC] PM: suspend: Upstreaming wakeup reason capture support
+To:     Kelly Rossmoyer <krossmo@google.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Vijay Nayak <nayakvij@google.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use an aggregate driver instead of component ops so that we can get
-proper driver probe ordering of the aggregate device with respect to all
-the component devices that make up the aggregate device.
+On Thu, Jan 27, 2022 at 8:54 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Mon, Jan 10, 2022 at 7:49 PM Kelly Rossmoyer <krossmo@google.com> wrote:
+> >
+> > # Introduction
+> >
+> > To aid optimization, troubleshooting, and attribution of battery life, the
+> > Android kernel currently includes a set of patches which provide enhanced
+> > visibility into kernel suspend/resume/abort behaviors.  The capabilities
+> > and implementation of this feature have evolved significantly since an
+> > unsuccessful attempt to upstream the original code
+> > (https://lkml.org/lkml/2014/3/10/716), and we would like to (re)start a
+> > conversation about upstreaming, starting with the central question: is
+> > there support for upstreaming this set of features?
+> >
+> > # Motivation
+> >
+> > Of the many factors influencing battery life on Linux-powered mobile
+> > devices, kernel suspend tends to be amongst the most impactful.  Maximizing
+> > time spent in suspend and minimizing the frequency of net-negative suspend
+> > cycles are both important contributors to battery life optimization.  But
+> > enabling that optimization - and troubleshooting when things go wrong -
+> > requires more observability of suspend/resume/abort behavior than Linux
+> > currently provides.  While mechanisms like `/sys/power/pm_wakeup_irq` and
+> > wakeup_source stats are useful, they are incomplete and scattered.  The
+> > Android kernel wakeup reason patches implement significant improvements in
+> > that area.
+> >
+> > # Features
+> >
+> > As of today, the active set of patches surface the following
+> > suspend-related data:
+> >
+> > * wakeup IRQs, including:
+> >    * multiple IRQs if more than one is pending during resume flow
+> >    * unmapped HW IRQs (wakeup-capable in HW) that should not be
+> >      occurring
+> >    * misconfigured IRQs (e.g. both enable_irq_wake() and
+> >      IRQF_NO_SUSPEND)
+> >    * threaded IRQs (not just the parent chip's IRQ)
+> >
+> > * non-IRQ wakeups, including:
+> >    * wakeups caused by an IRQ that was consumed by lower-level SW
+> >    * wakeups from SOC architecture that don't manifest as IRQs
+> >
+> > * abort reasons, including:
+> >    * wakeup_source activity
+> >    * failure to freeze userspace
+> >    * failure to suspend devices
+> >    * failed syscore_suspend callback
+> >
+> > * durations from the most recent cycle, including:
+> >    * time spent doing suspend/resume work
+> >    * time spent in suspend
+> >
+> > In addition to battery life optimization and troubleshooting, some of these
+> > capabilities also lay the groundwork for efforts around improving
+> > attribution of wakeups/aborts (e.g. to specific processes, device features,
+> > external devices, etc).
+> >
+> > # Shortcomings
+> >
+> > While the core implementation (see below) is relatively straightforward and
+> > localized, calls into that core are somewhat widely spread in order to
+> > capture the breadth of events of interest.  The pervasiveness of those
+> > hooks is clearly an area where improvement would be beneficial, especially
+> > if a cleaner solution preserved equivalent capabilities.
+> >
+> > # Existing Code
+> >
+> > As a reference for how Android currently implements the core code for these
+> > features (which would need a bit of work before submission even if all
+> > features were included), see the following link:
+> >
+> > https://android.googlesource.com/kernel/common/+/refs/heads/android-mainline/kernel/power/wakeup_reason.c
+>
+> So as Zichar said, this is quite heavy-weight.
+>
+> I'm not fundamentally against adding more infrastructure to help
+> identify issues related to system suspend, but there needs to be a
+> clear benefit associated with any change in this direction.
 
-Acked-by: Sebastian Reichel <sre@kernel.org>
-Tested-by: Linus Walleij <linus.walleij@linaro.org>
-Cc: <linux-pm@vger.kernel.org>
-Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Rob Clark <robdclark@gmail.com>
-Cc: Russell King <rmk+kernel@arm.linux.org.uk>
-Cc: Saravana Kannan <saravanak@google.com>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
- drivers/power/supply/ab8500_charger.c | 22 +++++++++++++---------
- 1 file changed, 13 insertions(+), 9 deletions(-)
+That said, the general idea behind wakeup_source objects is that every
+system wakeup event should be recorded in one of them which then can
+be used for later analysis.
 
-diff --git a/drivers/power/supply/ab8500_charger.c b/drivers/power/supply/ab8500_charger.c
-index ce074c018dcb..e3164e8335ca 100644
---- a/drivers/power/supply/ab8500_charger.c
-+++ b/drivers/power/supply/ab8500_charger.c
-@@ -3335,8 +3335,9 @@ static const struct power_supply_desc ab8500_usb_chg_desc = {
- 	.get_property	= ab8500_charger_usb_get_property,
- };
- 
--static int ab8500_charger_bind(struct device *dev)
-+static int ab8500_charger_bind(struct aggregate_device *adev)
- {
-+	struct device *dev = aggregate_device_parent(adev);
- 	struct ab8500_charger *di = dev_get_drvdata(dev);
- 	int ch_stat;
- 	int ret;
-@@ -3377,8 +3378,9 @@ static int ab8500_charger_bind(struct device *dev)
- 	return 0;
- }
- 
--static void ab8500_charger_unbind(struct device *dev)
-+static void ab8500_charger_unbind(struct aggregate_device *adev)
- {
-+	struct device *dev = aggregate_device_parent(adev);
- 	struct ab8500_charger *di = dev_get_drvdata(dev);
- 	int ret;
- 
-@@ -3403,9 +3405,13 @@ static void ab8500_charger_unbind(struct device *dev)
- 	component_unbind_all(dev, di);
- }
- 
--static const struct component_master_ops ab8500_charger_comp_ops = {
--	.bind = ab8500_charger_bind,
--	.unbind = ab8500_charger_unbind,
-+static struct aggregate_driver ab8500_charger_aggregate_driver = {
-+	.probe = ab8500_charger_bind,
-+	.remove = ab8500_charger_unbind,
-+	.driver = {
-+		.name = "ab8500_charger_agg",
-+		.owner = THIS_MODULE,
-+	},
- };
- 
- static struct platform_driver *const ab8500_charger_component_drivers[] = {
-@@ -3694,9 +3700,7 @@ static int ab8500_charger_probe(struct platform_device *pdev)
- 	}
- 
- 
--	ret = component_master_add_with_match(&pdev->dev,
--					      &ab8500_charger_comp_ops,
--					      match);
-+	ret = component_aggregate_register(&pdev->dev, &ab8500_charger_aggregate_driver, match);
- 	if (ret) {
- 		dev_err(dev, "failed to add component master\n");
- 		goto free_notifier;
-@@ -3721,7 +3725,7 @@ static int ab8500_charger_remove(struct platform_device *pdev)
- {
- 	struct ab8500_charger *di = platform_get_drvdata(pdev);
- 
--	component_master_del(&pdev->dev, &ab8500_charger_comp_ops);
-+	component_aggregate_unregister(&pdev->dev, &ab8500_charger_aggregate_driver);
- 
- 	usb_unregister_notifier(di->usb_phy, &di->nb);
- 	ab8500_bm_of_remove(di->usb_chg.psy, di->bm);
--- 
-https://chromeos.dev
-
+If there are reasons why this cannot work in general, what are they?
