@@ -2,141 +2,166 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB36B49D766
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jan 2022 02:15:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E255049D791
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jan 2022 02:43:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232206AbiA0BPI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Jan 2022 20:15:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39256 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231386AbiA0BPG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jan 2022 20:15:06 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733C8C06161C
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jan 2022 17:15:06 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id n8so2265319lfq.4
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jan 2022 17:15:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ykjGaL0hTNu/sFC5BS2s3FG5tHHOkoccsGYthrfBM5s=;
-        b=paQumlxaFdnS3Y1aaB/QbnjiND43BhcQvxtYiFNyUrrIYwnLwNOysR0C5WOcJ981pP
-         F2dhTvsembDYjy/PURZ6lD0Qj9Huoy8aAQhCZpA3sG910jLMl7oKA7yUSOrU5pd/z89C
-         95xPNTxwiLWx1BEVlGV/2kxA2HsC5WFF+npKoMsK4dknG/KjPliVXbXRXEbS0MFJpOtm
-         bMSyNapgQI+vH1E/ec/jYN6bIPw2zQJpFXg0QOPptfhIEUh8boEqEPnR/8bOUBHW8X74
-         D8PQaci8uBBCnXsHwti7LivwIj6d/wg3C8Y6M4c4PM1xqivOI1XAOP0zxPXPBPFgrESZ
-         S+Gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ykjGaL0hTNu/sFC5BS2s3FG5tHHOkoccsGYthrfBM5s=;
-        b=2BG8ceIZyCLXzQfh0V4ORwcLXNJDv5T/9DaAJ0oyJOuk+55ZJKPsga2kniT9eWC0Ai
-         wAph09XN4tq59P0kBaJxKUW4kqhXoLoawDH2V+MLfNanaXxpJSazCgxAtKGCjLSGbgHD
-         GMpzOCbhHBnbYGZC1wHe6FXra3j/y83NBCw7VX/SXl2fd5u+zSJe3PbqN7iCzkci5Pc3
-         c+oEuo4WOiHTRhpdfrDZ5lGYdZLRRGPZCmvZrJll7f8btJTs4sDbPp0WEUVyiUCD7TGk
-         CpSCEyga7dmlfW/+HY5yVx+XkUTnxbFruOOSaOCfqz2QYSOpc5mQ4sWxJRcZgNgd5hw1
-         vp8g==
-X-Gm-Message-State: AOAM5302dWz5tv9rPwv6tQPBUJ/x2QmEAPe3FhWJ2tPjAavg1OgU2i7H
-        XzcjL949DCRp9lzC2e2XAyhjyQ==
-X-Google-Smtp-Source: ABdhPJyhI4nFtxKHbYxKGY8ZI794y18fImfolRZynLn1n5NgQGhzXZrBhWkrXkDXNulh/Ymynysssw==
-X-Received: by 2002:a05:6512:2314:: with SMTP id o20mr1249321lfu.590.1643246104781;
-        Wed, 26 Jan 2022 17:15:04 -0800 (PST)
-Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id u14sm1028337lji.40.2022.01.26.17.15.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 17:15:04 -0800 (PST)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Marcus Cooper <codekipper@gmail.com>
-Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 11/11] power: supply: ab8500_charger: Fix VBAT interval check
-Date:   Thu, 27 Jan 2022 02:12:36 +0100
-Message-Id: <20220127011236.332687-12-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220127011236.332687-1-linus.walleij@linaro.org>
-References: <20220127011236.332687-1-linus.walleij@linaro.org>
+        id S231681AbiA0Bn7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Jan 2022 20:43:59 -0500
+Received: from szxga03-in.huawei.com ([45.249.212.189]:32123 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229816AbiA0Bn6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jan 2022 20:43:58 -0500
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JkjwV3pGWz8wdn;
+        Thu, 27 Jan 2022 09:40:58 +0800 (CST)
+Received: from [10.67.77.175] (10.67.77.175) by dggpeml500023.china.huawei.com
+ (7.185.36.114) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Thu, 27 Jan
+ 2022 09:43:56 +0800
+Subject: Re: [PATCH] cpuidle: menu: Fix long delay issue when tick stopped
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+CC:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Guo Yang <guoyang2@huawei.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+References: <20220117081615.45449-1-zhangshaokun@hisilicon.com>
+ <CAJZ5v0jBVX9H8d8g4v3W7x9MEKQpudr3NP+LGP57FioFvpq7Jg@mail.gmail.com>
+From:   Shaokun Zhang <zhangshaokun@hisilicon.com>
+Message-ID: <bcd3cadf-df4a-7d7a-e28a-adeb7b1a4c24@hisilicon.com>
+Date:   Thu, 27 Jan 2022 09:43:56 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0jBVX9H8d8g4v3W7x9MEKQpudr3NP+LGP57FioFvpq7Jg@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.77.175]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When using USB charging, the AB8500 charger is periodically
-checking VBAT for a threshold at 3.8V.
+Hi Rafael,
 
-This crashes badly, as the class_for_each_device() was passed
-the wrong argument. I think this has maybe worked by chance
-in the past because of how the structs were arranged but it
-is leading to crashes now.
+Apologies that reply later.
 
-Fix this up and also switch to using microvolts for the
-voltages like the rest of the code.
+On 2022/1/21 2:55, Rafael J. Wysocki wrote:
+> On Mon, Jan 17, 2022 at 9:16 AM Shaokun Zhang
+> <zhangshaokun@hisilicon.com> wrote:
+>>
 
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- drivers/power/supply/ab8500_charger.c | 19 +++++++++++++------
- 1 file changed, 13 insertions(+), 6 deletions(-)
+...<snip>...
 
-diff --git a/drivers/power/supply/ab8500_charger.c b/drivers/power/supply/ab8500_charger.c
-index 681b53bb0df0..88099cdba8a7 100644
---- a/drivers/power/supply/ab8500_charger.c
-+++ b/drivers/power/supply/ab8500_charger.c
-@@ -163,7 +163,7 @@ enum ab8500_usb_state {
- #define USB_CH_IP_CUR_LVL_1P4		1400000
- #define USB_CH_IP_CUR_LVL_1P5		1500000
- 
--#define VBAT_TRESH_IP_CUR_RED		3800
-+#define VBAT_TRESH_IP_CUR_RED		3800000
- 
- #define to_ab8500_charger_usb_device_info(x) container_of((x), \
- 	struct ab8500_charger, usb_chg)
-@@ -1920,7 +1920,11 @@ static int ab8500_charger_get_ext_psy_data(struct device *dev, void *data)
- 
- 	di = to_ab8500_charger_usb_device_info(usb_chg);
- 
--	/* For all psy where the driver name appears in any supplied_to */
-+	/*
-+	 * For all psy where the driver name appears in any supplied_to
-+	 * in practice what we will find will always be "ab8500_fg" as
-+	 * the fuel gauge is responsible of keeping track of VBAT.
-+	 */
- 	j = match_string(supplicants, ext->num_supplicants, psy->desc->name);
- 	if (j < 0)
- 		return 0;
-@@ -1937,7 +1941,10 @@ static int ab8500_charger_get_ext_psy_data(struct device *dev, void *data)
- 		case POWER_SUPPLY_PROP_VOLTAGE_NOW:
- 			switch (ext->desc->type) {
- 			case POWER_SUPPLY_TYPE_BATTERY:
--				di->vbat = ret.intval / 1000;
-+				/* This will always be "ab8500_fg" */
-+				dev_dbg(di->dev, "get VBAT from %s\n",
-+					dev_name(&ext->dev));
-+				di->vbat = ret.intval;
- 				break;
- 			default:
- 				break;
-@@ -1966,7 +1973,7 @@ static void ab8500_charger_check_vbat_work(struct work_struct *work)
- 		struct ab8500_charger, check_vbat_work.work);
- 
- 	class_for_each_device(power_supply_class, NULL,
--		di->usb_chg.psy, ab8500_charger_get_ext_psy_data);
-+			      &di->usb_chg, ab8500_charger_get_ext_psy_data);
- 
- 	/* First run old_vbat is 0. */
- 	if (di->old_vbat == 0)
-@@ -1991,8 +1998,8 @@ static void ab8500_charger_check_vbat_work(struct work_struct *work)
- 	 * No need to check the battery voltage every second when not close to
- 	 * the threshold.
- 	 */
--	if (di->vbat < (VBAT_TRESH_IP_CUR_RED + 100) &&
--		(di->vbat > (VBAT_TRESH_IP_CUR_RED - 100)))
-+	if (di->vbat < (VBAT_TRESH_IP_CUR_RED + 100000) &&
-+		(di->vbat > (VBAT_TRESH_IP_CUR_RED - 100000)))
- 			t = 1;
- 
- 	queue_delayed_work(di->charger_wq, &di->check_vbat_work, t * HZ);
--- 
-2.34.1
+>> [   37.083307] intervals = 35us
+>> [   37.083320] target_residency_ns = 10000, predicted_ns = 35482140
+>> [   37.083349] target_residency_ns = 600000, predicted_ns = 35482140
+>>
+>> Add idle tick wakeup judge before change predicted_ns.
+>>
+>> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+>> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> Signed-off-by: Guo Yang <guoyang2@huawei.com>
+>> Signed-off-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
+>> ---
+>>  drivers/cpuidle/governors/menu.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/cpuidle/governors/menu.c b/drivers/cpuidle/governors/menu.c
+>> index c492268..3f03843 100644
+>> --- a/drivers/cpuidle/governors/menu.c
+>> +++ b/drivers/cpuidle/governors/menu.c
+>> @@ -313,7 +313,7 @@ static int menu_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
+>>                                 get_typical_interval(data, predicted_us)) *
+>>                                 NSEC_PER_USEC;
+>>
+>> -       if (tick_nohz_tick_stopped()) {
+>> +       if (tick_nohz_tick_stopped() && data->tick_wakeup) {
+> 
+> data->tick_wakeup is only true if tick_nohz_idle_got_tick() has
+> returned true, but I'm not sure how this can happen after stopping the
+> tick.
 
+In order to debug this, call trace is added and as follow:
+
+if (predicted_us < TICK_USEC)
+    predicted_us = ktime_to_us(delta_next);
+    printk("predicted_us = %uus\n", predicted_us);
+    dump_stack(); //add call trace print
+}
+
+When the issue came, the CPU was waken up by network interrupts
+[ 1048.130033] intervals = 1us
+[ 1048.130034] intervals = 1us
+[ 1048.130035] intervals = 1us
+[ 1048.130036] intervals = 1us
+[ 1048.130037] intervals = 1us
+[ 1048.130038] intervals = 1us
+[ 1048.130039] intervals = 1us
+[ 1048.130040] intervals = 1us
+[ 1048.130041] predicted_us = 484143us
+[ 1048.130043] CPU: 3 PID: 0 Comm: swapper/3 Tainted: G           OE     5.3.0-rc6 #23
+[ 1048.130044] Hardware name: Huawei 2288H V5/BC11SPSCB0, BIOS 0.39 12/01/2017
+[ 1048.130045] Call Trace:
+[ 1048.130048]  dump_stack+0x5a/0x73
+[ 1048.130052]  menu_select+0x3b0/0x6c0
+[ 1048.130058]  do_idle+0x1b4/0x290
+[ 1048.130063]  cpu_startup_entry+0x19/0x20
+[ 1048.130067]  start_secondary+0x155/0x1b0
+[ 1048.130070]  secondary_startup_64+0xa4/0xb0
+[ 1048.130078] intervals = 1us
+[ 1048.130079] intervals = 1us
+[ 1048.130080] intervals = 1us
+[ 1048.130081] intervals = 1us
+[ 1048.130081] intervals = 1us
+[ 1048.130082] intervals = 1us
+[ 1048.130083] intervals = 1us
+[ 1048.130084] intervals = 1us
+[ 1048.130085] predicted_us = 484097us
+[ 1048.130087] CPU: 3 PID: 0 Comm: swapper/3 Tainted: G           OE     5.3.0-rc6 #23
+[ 1048.130088] Hardware name: Huawei 2288H V5/BC11SPSCB0, BIOS 0.39 12/01/2017
+[ 1048.130089] Call Trace:
+[ 1048.130093]  dump_stack+0x5a/0x73
+[ 1048.130097]  menu_select+0x3b0/0x6c0
+[ 1048.130102]  do_idle+0x1b4/0x290
+[ 1048.130107]  cpu_startup_entry+0x19/0x20
+[ 1048.130112]  start_secondary+0x155/0x1b0
+[ 1048.130115]  secondary_startup_64+0xa4/0xb0
+[ 1048.130123] intervals = 1us
+[ 1048.130123] intervals = 1us
+[ 1048.130124] intervals = 1us
+[ 1048.130125] intervals = 1us
+[ 1048.130126] intervals = 1us
+[ 1048.130127] intervals = 1us
+[ 1048.130128] intervals = 1us
+[ 1048.130129] intervals = 1us
+[ 1048.130130] predicted_us = 484053us
+[ 1048.130132] CPU: 3 PID: 0 Comm: swapper/3 Tainted: G           OE     5.3.0-rc6 #23
+[ 1048.130133] Hardware name: Huawei 2288H V5/BC11SPSCB0, BIOS 0.39 12/01/2017
+[ 1048.130134] Call Trace:
+[ 1048.130137]  dump_stack+0x5a/0x73
+[ 1048.130141]  menu_select+0x3b0/0x6c0
+[ 1048.130147]  do_idle+0x1b4/0x290
+[ 1048.130152]  cpu_startup_entry+0x19/0x20
+[ 1048.130156]  start_secondary+0x155/0x1b0
+[ 1048.130159]  secondary_startup_64+0xa4/0xb0
+
+> 
+> IOW, it looks like the change simply makes the condition be always false.
+> 
+
+Agree, any good feedback is welcome and we can try it.
+
+Thanks,
+Shaokun
+
+>>                 /*
+>>                  * If the tick is already stopped, the cost of possible short
+>>                  * idle duration misprediction is much higher, because the CPU
+>> --
+>> 1.8.3.1
+>>
+> .
+> 
