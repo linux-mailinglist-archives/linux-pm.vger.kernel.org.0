@@ -2,292 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E0E649D48A
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jan 2022 22:32:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C515A49D75B
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jan 2022 02:14:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbiAZVcs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Jan 2022 16:32:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44848 "EHLO
+        id S231918AbiA0BOo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Jan 2022 20:14:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiAZVcr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jan 2022 16:32:47 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17219C06161C
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jan 2022 13:32:47 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id u11so712809plh.13
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jan 2022 13:32:47 -0800 (PST)
+        with ESMTP id S232038AbiA0BOo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jan 2022 20:14:44 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C59C06173B
+        for <linux-pm@vger.kernel.org>; Wed, 26 Jan 2022 17:14:43 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id e17so2008962ljk.5
+        for <linux-pm@vger.kernel.org>; Wed, 26 Jan 2022 17:14:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=VzD9V2RVr99sFMsvfBA6tReybSYrcbyX0IM/e7N2blY=;
-        b=35fPReULFkdneisr5/soxM8Wwx9TprrkBglq6T/DDnxg2C2aXjtLWZpIvklK5ePVn4
-         ZA5AQSVD8brf5OIpx1Zot8tfgq8Pa3DqCCK3StiXz0/EizzQWoJHh+JmoObIJwpjtIzP
-         NdV7qVfrH+4RNaEpRZ35X6oY5anIJKCuY36saBkpaw8rc7+6fBAwUFhmn+qojCaCdwxe
-         tABZNzwiEEF3XJ/NwB5N3ELvXS20g62bRXLNTnfnuKHtukiMm+kWacc93VFFAxgICXHg
-         xMzdZ0Ck+2wpMg9d1A/1tDLCcbPOyuHCZ3Ws9dx9fbbuSELrxefBbG0ukk4xYZpG+j8F
-         Nl+Q==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KtBtToJsFMLwYQoP8lW6fSXGBbIbsCxBZggg6jXTK7c=;
+        b=htmLZTm2dVYIspXW/pVKO2iXjtbnx/o5Ic6mnmpfUCfG457HtRCY8hDRVk8Hsr+iVp
+         ooKt7ahWW93QXiRXCI3zpp0WAf6M2AynVhs5Q4duhnYxH+H71A3Al6cup/R6CakOXScD
+         kSpiJx3bmGJmAioqPRGvXmj2Ak9aUMj6jVQJkDg8JieKFQDNwCm68pHTL6vvLNTrIDzT
+         v/wn+25iHIP0MJhLyfkucsjGamxVejio1S1YeLS0+DpjbeH6OaKXKuPpAVWQv5Zn5+Cp
+         GYXkudPP65uo2Pq1/0gDlg6/82o5oNm2K7WghDlf5e1y4HsxMxbr/3pfa1sezhvmSrgx
+         WUUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=VzD9V2RVr99sFMsvfBA6tReybSYrcbyX0IM/e7N2blY=;
-        b=CTUkQM9F2fVd+KAGKrRBkZmGSrJ3vEnSvbNpG5s52W/RhQowIG/jNieNCQJ5OLRHZP
-         q/n4KLdDSKvidxcN9Neyazv2aN9n1wvOcPOyzyZ8JicyWEMaEkk2oQLjh29YUTgD8dZB
-         dLugsg8ZehTQusch+n4b7ll0gfrjuXTyPOM9q01Spf7aMY61uugni7yFJHO09B16H7IH
-         eqH57ShR8dp/1nC0sLKtNQ9ksTCDUZiz3hXOtUqKU1VhLyHXbmYV77E0CkLOlTgZ9hKD
-         IGfXXyeqgq7cNvUa7sIxWEPSFGSlZXDwEk0bHWW7r6Ht8UXbvrr53ddkXDB67gX3IDbK
-         Bx6w==
-X-Gm-Message-State: AOAM532BMyCa4TEC5MW59W+WyBndWi0u19pbhIoK2NdpxHtUcHDvnUGF
-        cwgnQg/c3x9jU7j9wHynSygEjhBwuXTZLCKqK1s=
-X-Google-Smtp-Source: ABdhPJzgqlQRM41y2HOIa5J/p3k8vYn4A9SxZhm0MQZnj+2M4ntPvSv01VYUxk+RizMwVZPl26hTGw==
-X-Received: by 2002:a17:902:8e84:: with SMTP id bg4mr503920plb.141.1643232766472;
-        Wed, 26 Jan 2022 13:32:46 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id s14sm3071872pfk.174.2022.01.26.13.32.46
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KtBtToJsFMLwYQoP8lW6fSXGBbIbsCxBZggg6jXTK7c=;
+        b=igggWe2uwYnRZThAckq2B+oTwZygSjgcTlM1zHUhKCVmwZ8La4ERTBH2YXJsgClmxq
+         x3VvUvWr6WAeEa+cWD1xDkW8kj7CHRmUpy2NrjyA76/IpPJKuwXAVKkTE8yoXbOH9nuc
+         7unRcznvrwd27lBh+wR1eACDfFXdsrV+cCIPfyyY2c1nqPYgIZwuko/v1GhrBbZMk2ZK
+         RYhru12SqWVk/a74Pe9me0BE0elVq6JyZw+yP1bdIPbQd1dhImHLiajOmgzw6WzWTcZG
+         XBrBjL9KOXveXbNbcvU7B4WtF9qWE5p0pYyqO795KnotQEHXPAk+ddmGQNy4uVbih8q0
+         SHOA==
+X-Gm-Message-State: AOAM532+gB9SWFkfKpDc15XCXWgG+braAq0UAb7dZEy19VunEQ92JOh4
+        hbvpoxaDoZ0UNKyDnRmikGciNw==
+X-Google-Smtp-Source: ABdhPJwsUuMM7Zs6/aVcJnopFYSIZ/Q4G/6rNpDIh9AcKow6s9VnZWzVvqev7Z7cq6z/VlblHlxq0w==
+X-Received: by 2002:a2e:9e01:: with SMTP id e1mr1191059ljk.31.1643246081609;
+        Wed, 26 Jan 2022 17:14:41 -0800 (PST)
+Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
+        by smtp.gmail.com with ESMTPSA id u14sm1028337lji.40.2022.01.26.17.14.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 13:32:46 -0800 (PST)
-Message-ID: <61f1bdfe.1c69fb81.3816b.9348@mx.google.com>
-Date:   Wed, 26 Jan 2022 13:32:46 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 26 Jan 2022 17:14:41 -0800 (PST)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Marcus Cooper <codekipper@gmail.com>
+Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 00/11] AB8500 charging fixes
+Date:   Thu, 27 Jan 2022 02:12:25 +0100
+Message-Id: <20220127011236.332687-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.17-rc1-9-g52d883c7bbae
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-Subject: pm/testing baseline: 89 runs,
- 7 regressions (v5.17-rc1-9-g52d883c7bbae)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 89 runs, 7 regressions (v5.17-rc1-9-g52d883c7bbae)
+This is a first round of AB8500 charging patches for v5.18.
 
-Regressions Summary
--------------------
+This fixes some minor and major bugs - they aren't tagged for
+fixes or stable since the charging code is still default
+disabled on the platform (Ux500) for a good reason
+(it never worked properly).
 
-platform               | arch  | lab           | compiler | defconfig      =
-    | regressions
------------------------+-------+---------------+----------+----------------=
-----+------------
-imx8mn-ddr4-evk        | arm64 | lab-nxp       | gcc-10   | defconfig      =
-    | 2          =
+We drop the custom charger sysfs ABI that we do not use anyway.
 
-kontron-kbox-a-230-ls  | arm64 | lab-kontron   | gcc-10   | defconfig      =
-    | 2          =
+The thermal zone we are looking up is defined in a separate
+DTS patch that will be merged through ARM SoC. The prerequisite
+changes to the hwmon NTC driver were merged for v5.17 already.
 
-kontron-sl28-var3-ads2 | arm64 | lab-kontron   | gcc-10   | defconfig      =
-    | 2          =
+Once this is agreed and merged I will follow this up with a
+more important series with 6 patches that adds the
+Samsung static battery data and actually makes charging
+work on these platforms.
 
-tegra124-nyan-big      | arm   | lab-collabora | gcc-10   | multi_v7_defcon=
-fig | 1          =
+Linus Walleij (11):
+  power: supply: ab8500: Drop BATCTRL thermal mode
+  power: supply: ab8500: Swap max and overvoltage
+  power: supply: ab8500: Integrate thermal zone
+  power: supply: ab8500_fg: Break loop for measurement
+  power: supply: ab8500_fg: Break out load compensated voltage
+  power: supply: ab8500_fg: Safeguard compensated voltage
+  power: supply: ab8500_fg: Drop useless parameter
+  power: supply: ab8500_chargalg: Drop charging step
+  power: supply: ab8500_chargalg: Drop enable/disable sysfs
+  power: supply: ab8500_charger: Restrict ADC retrieveal
+  power: supply: ab8500_charger: Fix VBAT interval check
 
+ drivers/power/supply/Kconfig           |   2 +
+ drivers/power/supply/ab8500-bm.h       |  49 ----
+ drivers/power/supply/ab8500_bmdata.c   |  34 +--
+ drivers/power/supply/ab8500_btemp.c    | 330 +++----------------------
+ drivers/power/supply/ab8500_chargalg.c | 318 +-----------------------
+ drivers/power/supply/ab8500_charger.c  |  43 ++--
+ drivers/power/supply/ab8500_fg.c       |  96 ++++---
+ 7 files changed, 138 insertions(+), 734 deletions(-)
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.17-rc=
-1-9-g52d883c7bbae/plan/baseline/
+-- 
+2.34.1
 
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.17-rc1-9-g52d883c7bbae
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      52d883c7bbae11e5f06311eae7778db69bc4806e =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform               | arch  | lab           | compiler | defconfig      =
-    | regressions
------------------------+-------+---------------+----------+----------------=
-----+------------
-imx8mn-ddr4-evk        | arm64 | lab-nxp       | gcc-10   | defconfig      =
-    | 2          =
-
-
-  Details:     https://kernelci.org/test/plan/id/61f1b1d1b836d16c05abbd15
-
-  Results:     4 PASS, 2 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.17-rc1-9-g52d883=
-c7bbae/arm64/defconfig/gcc-10/lab-nxp/baseline-imx8mn-ddr4-evk.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.17-rc1-9-g52d883=
-c7bbae/arm64/defconfig/gcc-10/lab-nxp/baseline-imx8mn-ddr4-evk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220121.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/61f1b1d1b836d16=
-c05abbd1c
-        failing since 0 day (last pass: v5.16-rc7-119-g63b95bce9ea4, first =
-fail: v5.17-rc1)
-        12 lines
-
-    2022-01-26T20:40:32.427945  kern  :alert : Unable to handle kernel NULL=
- pointer dereference at virtual address 000000000000<8>[   14.926914] <LAVA=
-_SIGNAL_TESTCASE TEST_CASE_ID=3Dalert RESULT=3Dfail UNITS=3Dlines MEASUREME=
-NT=3D12>
-    2022-01-26T20:40:32.428326  0000   =
-
-
-  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/61f1b1d1b836d16=
-c05abbd1d
-        failing since 0 day (last pass: v5.16-rc7-119-g63b95bce9ea4, first =
-fail: v5.17-rc1)
-        2 lines
-
-    2022-01-26T20:40:32.429683  kern  :alert : Mem abort info:
-    2022-01-26T20:40:32.429929  kern  :alert :   ESR =3D 0x96000006
-    2022-01-26T20:40:32.430230  kern  :alert :   EC =3D 0x25: DABT (current=
- EL), IL =3D 32 bits
-    2022-01-26T20:40:32.430468  kern  :alert :   SET =3D 0, FnV =3D 0
-    2022-01-26T20:40:32.430699  kern  :alert :   EA<8>[   14.953797] <LAVA_=
-SIGNAL_TESTCASE TEST_CASE_ID=3Demerg RESULT=3Dfail UNITS=3Dlines MEASUREMEN=
-T=3D2>
-    2022-01-26T20:40:32.430931   =3D 0, S1PTW =3D 0
-    2022-01-26T20:40:32.431158  kern  :alert :  <8>[   14.964545] <LAVA_SIG=
-NAL_ENDRUN 0_dmesg 813382_1.5.2.4.1>
-    2022-01-26T20:40:32.431386   FSC =3D 0x06: level 2 translation fault
-    2022-01-26T20:40:32.431611  kern  :alert : Data abort info:   =
-
- =
-
-
-
-platform               | arch  | lab           | compiler | defconfig      =
-    | regressions
------------------------+-------+---------------+----------+----------------=
-----+------------
-kontron-kbox-a-230-ls  | arm64 | lab-kontron   | gcc-10   | defconfig      =
-    | 2          =
-
-
-  Details:     https://kernelci.org/test/plan/id/61f1b1f006e5cb90f9abbd2e
-
-  Results:     91 PASS, 2 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.17-rc1-9-g52d883=
-c7bbae/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.17-rc1-9-g52d883=
-c7bbae/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.ht=
-ml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220121.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.ftm-alarm-driver-present: https://kernelci.org/test/cas=
-e/id/61f1b1f006e5cb90f9abbd6f
-        failing since 0 day (last pass: v5.16-rc8-171-gf099fd60c342, first =
-fail: v5.17-rc1)
-
-    2022-01-26T20:40:46.994347  /lava-84014/1/../bin/lava-test-case   =
-
-
-  * baseline.bootrr.ftm-alarm-probed: https://kernelci.org/test/case/id/61f=
-1b1f006e5cb90f9abbd70
-        failing since 0 day (last pass: v5.16-rc8-171-gf099fd60c342, first =
-fail: v5.17-rc1)
-
-    2022-01-26T20:40:46.997618  <8>[   16.868291] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dftm-alarm-driver-present RESULT=3Dfail>
-    2022-01-26T20:40:48.044048  /lava-84014/1/../bin/lava-test-case
-    2022-01-26T20:40:48.044413  <8>[   17.887014] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dftm-alarm-probed RESULT=3Dfail>   =
-
- =
-
-
-
-platform               | arch  | lab           | compiler | defconfig      =
-    | regressions
------------------------+-------+---------------+----------+----------------=
-----+------------
-kontron-sl28-var3-ads2 | arm64 | lab-kontron   | gcc-10   | defconfig      =
-    | 2          =
-
-
-  Details:     https://kernelci.org/test/plan/id/61f1b1270acce51239abbd39
-
-  Results:     99 PASS, 2 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.17-rc1-9-g52d883=
-c7bbae/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-sl28-var3-ads2.t=
-xt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.17-rc1-9-g52d883=
-c7bbae/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-sl28-var3-ads2.h=
-tml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220121.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.ftm-alarm-driver-present: https://kernelci.org/test/cas=
-e/id/61f1b1270acce51239abbd81
-        new failure (last pass: v5.16-rc8-171-gf099fd60c342)
-
-    2022-01-26T20:37:51.103124  /lava-84012/1/../bin/lava-test-case   =
-
-
-  * baseline.bootrr.ftm-alarm-probed: https://kernelci.org/test/case/id/61f=
-1b1270acce51239abbd82
-        new failure (last pass: v5.16-rc8-171-gf099fd60c342)
-
-    2022-01-26T20:37:51.106275  <8>[   13.413255] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dftm-alarm-driver-present RESULT=3Dfail>
-    2022-01-26T20:37:52.153351  /lava-84012/1/../bin/lava-test-case
-    2022-01-26T20:37:52.153750  <8>[   14.432299] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dftm-alarm-probed RESULT=3Dfail>
-    2022-01-26T20:37:52.153995  /lava-84012/1/../bin/lava-test-case
-    2022-01-26T20:37:52.154223  <8>[   14.448601] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dsimple-mfd-i2c-driver-present RESULT=3Dpass>   =
-
- =
-
-
-
-platform               | arch  | lab           | compiler | defconfig      =
-    | regressions
------------------------+-------+---------------+----------+----------------=
-----+------------
-tegra124-nyan-big      | arm   | lab-collabora | gcc-10   | multi_v7_defcon=
-fig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/61f1bd1e6599627f83abbd17
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.17-rc1-9-g52d883=
-c7bbae/arm/multi_v7_defconfig/gcc-10/lab-collabora/baseline-tegra124-nyan-b=
-ig.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.17-rc1-9-g52d883=
-c7bbae/arm/multi_v7_defconfig/gcc-10/lab-collabora/baseline-tegra124-nyan-b=
-ig.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220121.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/61f1bd1e6599627f83abb=
-d18
-        new failure (last pass: v5.16-rc8-173-g00759929cccb) =
-
- =20
