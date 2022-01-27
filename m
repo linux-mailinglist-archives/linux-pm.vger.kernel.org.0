@@ -2,166 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E255049D791
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jan 2022 02:43:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA50249D957
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jan 2022 04:40:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231681AbiA0Bn7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Jan 2022 20:43:59 -0500
-Received: from szxga03-in.huawei.com ([45.249.212.189]:32123 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbiA0Bn6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jan 2022 20:43:58 -0500
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JkjwV3pGWz8wdn;
-        Thu, 27 Jan 2022 09:40:58 +0800 (CST)
-Received: from [10.67.77.175] (10.67.77.175) by dggpeml500023.china.huawei.com
- (7.185.36.114) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Thu, 27 Jan
- 2022 09:43:56 +0800
-Subject: Re: [PATCH] cpuidle: menu: Fix long delay issue when tick stopped
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-CC:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Guo Yang <guoyang2@huawei.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-References: <20220117081615.45449-1-zhangshaokun@hisilicon.com>
- <CAJZ5v0jBVX9H8d8g4v3W7x9MEKQpudr3NP+LGP57FioFvpq7Jg@mail.gmail.com>
-From:   Shaokun Zhang <zhangshaokun@hisilicon.com>
-Message-ID: <bcd3cadf-df4a-7d7a-e28a-adeb7b1a4c24@hisilicon.com>
-Date:   Thu, 27 Jan 2022 09:43:56 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S235820AbiA0DkB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Jan 2022 22:40:01 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:33056 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S235829AbiA0DkB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jan 2022 22:40:01 -0500
+X-UUID: ef7df919c52e48e9b047c0d2ef1d574a-20220127
+X-UUID: ef7df919c52e48e9b047c0d2ef1d574a-20220127
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1628771184; Thu, 27 Jan 2022 11:39:58 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 27 Jan 2022 11:39:57 +0800
+Received: from mtksdaap41.mediatek.inc (172.21.77.4) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 27 Jan 2022 11:39:57 +0800
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, Roger Lu <roger.lu@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v22 0/7] soc: mediatek: SVS: introduce MTK SVS engine
+Date:   Thu, 27 Jan 2022 11:39:49 +0800
+Message-ID: <20220127033956.24585-1-roger.lu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-In-Reply-To: <CAJZ5v0jBVX9H8d8g4v3W7x9MEKQpudr3NP+LGP57FioFvpq7Jg@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.77.175]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+The Smart Voltage Scaling(SVS) engine is a piece of hardware
+which calculates suitable SVS bank voltages to OPP voltage table.
+Then, DVFS driver could apply those SVS bank voltages to PMIC/Buck
+when receiving OPP_EVENT_ADJUST_VOLTAGE.
 
-Apologies that reply later.
+1. SVS driver uses OPP adjust event in [1] to update OPP table voltage part.
+2. SVS driver gets thermal/GPU device by node [2][3] and CPU device by get_cpu_device().
+After retrieving subsys device, SVS driver calls device_link_add() to make sure probe/suspend callback priority.
 
-On 2022/1/21 2:55, Rafael J. Wysocki wrote:
-> On Mon, Jan 17, 2022 at 9:16 AM Shaokun Zhang
-> <zhangshaokun@hisilicon.com> wrote:
->>
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=25cb20a212a1f989385dfe23230817e69c62bee5
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=b325ce39785b1408040d90365a6ab1aa36e94f87
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.16-next/dts64&id=a8168cebf1bca1b5269e8a7eb2626fb76814d6e2
 
-...<snip>...
+change since v21:
+- Rebase to kernel 5.17-rc1.
+- Remove unnecessary "maxItems" from nvmem-cells in mtk-svs.yaml.
+- Move svs_platform_data definition to the beginning of the file for increased readability.
+- For better performance purpose, we add "thermal_zone_device" memeber in svs bank structure and cache it at driver probe time.
+- Remove svs_get_zone_temperature() and call thermal_zone_get_temp() directly when we needs to read temperature.
+- Drop mt8192 svs node patch and we'll submit another complete mt8192.dtsi patch including mt8192 svs node.
+- Replace mask7_0 with GENMASK macro and bits8/reg_bytes with corresponding definition.
+- Separate definition with "register common configuration" and "related setting" for better categorization.
+- Remove redundant codes including "svsb->suspended concept" and refine comments.
+- Move devm_regulator_get_optional() to svs_bank_resource_setup() for better understanding.
 
->> [   37.083307] intervals = 35us
->> [   37.083320] target_residency_ns = 10000, predicted_ns = 35482140
->> [   37.083349] target_residency_ns = 600000, predicted_ns = 35482140
->>
->> Add idle tick wakeup judge before change predicted_ns.
->>
->> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
->> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
->> Signed-off-by: Guo Yang <guoyang2@huawei.com>
->> Signed-off-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
->> ---
->>  drivers/cpuidle/governors/menu.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/cpuidle/governors/menu.c b/drivers/cpuidle/governors/menu.c
->> index c492268..3f03843 100644
->> --- a/drivers/cpuidle/governors/menu.c
->> +++ b/drivers/cpuidle/governors/menu.c
->> @@ -313,7 +313,7 @@ static int menu_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
->>                                 get_typical_interval(data, predicted_us)) *
->>                                 NSEC_PER_USEC;
->>
->> -       if (tick_nohz_tick_stopped()) {
->> +       if (tick_nohz_tick_stopped() && data->tick_wakeup) {
-> 
-> data->tick_wakeup is only true if tick_nohz_idle_got_tick() has
-> returned true, but I'm not sure how this can happen after stopping the
-> tick.
+Roger Lu (7):
+  [v22,1/7] dt-bindings: soc: mediatek: add mtk svs dt-bindings
+  [v22,2/7] arm64: dts: mt8183: add svs device information
+  [v22,3/7] soc: mediatek: SVS: introduce MTK SVS engine
+  [v22,4/7] soc: mediatek: SVS: add monitor mode
+  [v22,5/7] soc: mediatek: SVS: add debug commands
+  [v22,6/7] dt-bindings: soc: mediatek: add mt8192 svs dt-bindings
+  [v22,7/7] soc: mediatek: SVS: add mt8192 SVS GPU driver
 
-In order to debug this, call trace is added and as follow:
+ .../bindings/soc/mediatek/mtk-svs.yaml        |   91 +
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi      |   16 +
+ drivers/soc/mediatek/Kconfig                  |   10 +
+ drivers/soc/mediatek/Makefile                 |    1 +
+ drivers/soc/mediatek/mtk-svs.c                | 2439 +++++++++++++++++
+ 5 files changed, 2557 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
+ create mode 100644 drivers/soc/mediatek/mtk-svs.c
 
-if (predicted_us < TICK_USEC)
-    predicted_us = ktime_to_us(delta_next);
-    printk("predicted_us = %uus\n", predicted_us);
-    dump_stack(); //add call trace print
-}
 
-When the issue came, the CPU was waken up by network interrupts
-[ 1048.130033] intervals = 1us
-[ 1048.130034] intervals = 1us
-[ 1048.130035] intervals = 1us
-[ 1048.130036] intervals = 1us
-[ 1048.130037] intervals = 1us
-[ 1048.130038] intervals = 1us
-[ 1048.130039] intervals = 1us
-[ 1048.130040] intervals = 1us
-[ 1048.130041] predicted_us = 484143us
-[ 1048.130043] CPU: 3 PID: 0 Comm: swapper/3 Tainted: G           OE     5.3.0-rc6 #23
-[ 1048.130044] Hardware name: Huawei 2288H V5/BC11SPSCB0, BIOS 0.39 12/01/2017
-[ 1048.130045] Call Trace:
-[ 1048.130048]  dump_stack+0x5a/0x73
-[ 1048.130052]  menu_select+0x3b0/0x6c0
-[ 1048.130058]  do_idle+0x1b4/0x290
-[ 1048.130063]  cpu_startup_entry+0x19/0x20
-[ 1048.130067]  start_secondary+0x155/0x1b0
-[ 1048.130070]  secondary_startup_64+0xa4/0xb0
-[ 1048.130078] intervals = 1us
-[ 1048.130079] intervals = 1us
-[ 1048.130080] intervals = 1us
-[ 1048.130081] intervals = 1us
-[ 1048.130081] intervals = 1us
-[ 1048.130082] intervals = 1us
-[ 1048.130083] intervals = 1us
-[ 1048.130084] intervals = 1us
-[ 1048.130085] predicted_us = 484097us
-[ 1048.130087] CPU: 3 PID: 0 Comm: swapper/3 Tainted: G           OE     5.3.0-rc6 #23
-[ 1048.130088] Hardware name: Huawei 2288H V5/BC11SPSCB0, BIOS 0.39 12/01/2017
-[ 1048.130089] Call Trace:
-[ 1048.130093]  dump_stack+0x5a/0x73
-[ 1048.130097]  menu_select+0x3b0/0x6c0
-[ 1048.130102]  do_idle+0x1b4/0x290
-[ 1048.130107]  cpu_startup_entry+0x19/0x20
-[ 1048.130112]  start_secondary+0x155/0x1b0
-[ 1048.130115]  secondary_startup_64+0xa4/0xb0
-[ 1048.130123] intervals = 1us
-[ 1048.130123] intervals = 1us
-[ 1048.130124] intervals = 1us
-[ 1048.130125] intervals = 1us
-[ 1048.130126] intervals = 1us
-[ 1048.130127] intervals = 1us
-[ 1048.130128] intervals = 1us
-[ 1048.130129] intervals = 1us
-[ 1048.130130] predicted_us = 484053us
-[ 1048.130132] CPU: 3 PID: 0 Comm: swapper/3 Tainted: G           OE     5.3.0-rc6 #23
-[ 1048.130133] Hardware name: Huawei 2288H V5/BC11SPSCB0, BIOS 0.39 12/01/2017
-[ 1048.130134] Call Trace:
-[ 1048.130137]  dump_stack+0x5a/0x73
-[ 1048.130141]  menu_select+0x3b0/0x6c0
-[ 1048.130147]  do_idle+0x1b4/0x290
-[ 1048.130152]  cpu_startup_entry+0x19/0x20
-[ 1048.130156]  start_secondary+0x155/0x1b0
-[ 1048.130159]  secondary_startup_64+0xa4/0xb0
-
-> 
-> IOW, it looks like the change simply makes the condition be always false.
-> 
-
-Agree, any good feedback is welcome and we can try it.
-
-Thanks,
-Shaokun
-
->>                 /*
->>                  * If the tick is already stopped, the cost of possible short
->>                  * idle duration misprediction is much higher, because the CPU
->> --
->> 1.8.3.1
->>
-> .
-> 
