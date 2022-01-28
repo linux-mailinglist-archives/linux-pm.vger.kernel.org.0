@@ -2,178 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4418E49F728
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jan 2022 11:19:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDC8B49F77D
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jan 2022 11:39:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234193AbiA1KT3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Jan 2022 05:19:29 -0500
-Received: from gloria.sntech.de ([185.11.138.130]:38144 "EHLO gloria.sntech.de"
+        id S233683AbiA1Kjo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Jan 2022 05:39:44 -0500
+Received: from foss.arm.com ([217.140.110.172]:35540 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1346985AbiA1KT2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 28 Jan 2022 05:19:28 -0500
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1nDOLk-0005uy-4f; Fri, 28 Jan 2022 11:19:24 +0100
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     daniel.lezcano@linaro.org, rjw@rjwysocki.net,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     robh@kernel.org, lukasz.luba@arm.com, arnd@linaro.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "moderated list:ARM/Rockchip SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC support" 
-        <linux-rockchip@lists.infradead.org>
-Subject: Re: [PATCH v7 5/5] rockchip/soc/drivers: Add DTPM description for rk3399
-Date:   Fri, 28 Jan 2022 11:19:22 +0100
-Message-ID: <48865702.Mx8J7aE1p6@diego>
-In-Reply-To: <20220125171809.1273269-6-daniel.lezcano@linaro.org>
-References: <20220125171809.1273269-1-daniel.lezcano@linaro.org> <20220125171809.1273269-6-daniel.lezcano@linaro.org>
+        id S229462AbiA1Kjo (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 28 Jan 2022 05:39:44 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BB643113E;
+        Fri, 28 Jan 2022 02:39:43 -0800 (PST)
+Received: from [10.57.12.131] (unknown [10.57.12.131])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 59F8E3F766;
+        Fri, 28 Jan 2022 02:39:42 -0800 (PST)
+Subject: Re: [PATCH v2 2/2] cpufreq: qcom-hw: Delay enabling throttle_irq
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-pm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Viresh Kumar <viresh.kumar@linaro.org>
+References: <20220128032554.155132-1-bjorn.andersson@linaro.org>
+ <20220128032554.155132-2-bjorn.andersson@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <5433250b-ee51-06e0-3ef8-ab287a112611@arm.com>
+Date:   Fri, 28 Jan 2022 10:39:40 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+In-Reply-To: <20220128032554.155132-2-bjorn.andersson@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Am Dienstag, 25. Januar 2022, 18:18:09 CET schrieb Daniel Lezcano:
-> The DTPM framework does support now the hierarchy description.
+
+
+On 1/28/22 3:25 AM, Bjorn Andersson wrote:
+> In the event that the SoC is under thermal pressure while booting it's
+> possible for the dcvs notification to happen inbetween the cpufreq
+> framework calling init and it actually updating the policy's
+> related_cpus cpumask.
 > 
-> The platform specific code can call the hierarchy creation function
-> with an array of struct dtpm_node pointing to their parent.
+> Prior to the introduction of the thermal pressure update helper an empty
+> cpumask would simply result in the thermal pressure of no cpus being
+> updated, but the new code will attempt to dereference an invalid per_cpu
+> variable.
+
+Just to confirm, is that per-cpu var the 'policy->related_cpus' in this
+driver?
+
 > 
-> This patch provides a description of the big / Little CPUs and the
-> GPU and tie them together under a virtual 'package' name. Only rk3399 is
-> described now.
+> Avoid this problem by using the newly reintroduced "ready" callback, to
+> postpone enabling the IRQ until the related_cpus cpumask is filled in.
 > 
-> The description could be extended in the future with the memory
-> controller with devfreq.
-> 
-> The description is always a module and it describes the soft
-> dependencies. The userspace has to load the softdeps module in the
-> right order.
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->  drivers/soc/rockchip/Kconfig  |  8 +++++
->  drivers/soc/rockchip/Makefile |  1 +
->  drivers/soc/rockchip/dtpm.c   | 59 +++++++++++++++++++++++++++++++++++
->  3 files changed, 68 insertions(+)
->  create mode 100644 drivers/soc/rockchip/dtpm.c
-> 
-> diff --git a/drivers/soc/rockchip/Kconfig b/drivers/soc/rockchip/Kconfig
-> index 25eb2c1e31bb..6dc017f02431 100644
-> --- a/drivers/soc/rockchip/Kconfig
-> +++ b/drivers/soc/rockchip/Kconfig
-> @@ -34,4 +34,12 @@ config ROCKCHIP_PM_DOMAINS
->  
->            If unsure, say N.
->  
-> +config ROCKCHIP_DTPM
-> +	tristate "Rockchip DTPM hierarchy"
-> +	depends on DTPM && DRM_PANFROST && m
-> +	help
-> +	 Describe the hierarchy for the Dynamic Thermal Power
-> +	 Management tree on this platform. That will create all the
-> +	 power capping capable devices.
-> +
->  endif
-> diff --git a/drivers/soc/rockchip/Makefile b/drivers/soc/rockchip/Makefile
-> index 875032f7344e..05f31a4e743c 100644
-> --- a/drivers/soc/rockchip/Makefile
-> +++ b/drivers/soc/rockchip/Makefile
-> @@ -5,3 +5,4 @@
->  obj-$(CONFIG_ROCKCHIP_GRF) += grf.o
->  obj-$(CONFIG_ROCKCHIP_IODOMAIN) += io-domain.o
->  obj-$(CONFIG_ROCKCHIP_PM_DOMAINS) += pm_domains.o
-> +obj-$(CONFIG_ROCKCHIP_DTPM) += dtpm.o
-> diff --git a/drivers/soc/rockchip/dtpm.c b/drivers/soc/rockchip/dtpm.c
-> new file mode 100644
-> index 000000000000..0b73a9cba954
-> --- /dev/null
-> +++ b/drivers/soc/rockchip/dtpm.c
-> @@ -0,0 +1,59 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright 2021 Linaro Limited
-> + *
-> + * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
-> + *
-> + * DTPM hierarchy description
-> + */
-> +#include <linux/dtpm.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +
-> +static struct dtpm_node __initdata rk3399_hierarchy[] = {
+> Fixes: 0258cb19c77d ("cpufreq: qcom-cpufreq-hw: Use new thermal pressure update function")
 
-The driver is tristate so buildable as module but uses __initdata.
-As it depends on panfrost (which also can be a module) you
-probably want a "__initdata_or_module" here .
+You have 'Fixes' tagging here, which might be picked by the stable tree.
+The code uses the reverted callback .ready(), which might be missing
+there (since patch 1/2 doesn't have tagging). This patch looks like a
+proper fix for the root cause.
 
+Anyway, I'm going to send a patch, which adds a check for null cpumask
+in the topology_update_thermal_pressure()
+It was removed after the review comments:
+https://lore.kernel.org/linux-pm/20211028054459.dve6s2my2tq7odem@vireshk-i7/
 
-> +	[0]{ .name = "rk3399",
-> +	     .type = DTPM_NODE_VIRTUAL },
-> +	[1]{ .name = "package",
-> +	     .type = DTPM_NODE_VIRTUAL,
-> +	     .parent = &rk3399_hierarchy[0] },
-> +	[2]{ .name = "/cpus/cpu@0",
-> +	     .type = DTPM_NODE_DT,
-> +	     .parent = &rk3399_hierarchy[1] },
-> +	[3]{ .name = "/cpus/cpu@1",
-> +	     .type = DTPM_NODE_DT,
-> +	     .parent = &rk3399_hierarchy[1] },
-> +	[4]{ .name = "/cpus/cpu@2",
-> +	     .type = DTPM_NODE_DT,
-> +	     .parent = &rk3399_hierarchy[1] },
-> +	[5]{ .name = "/cpus/cpu@3",
-> +	     .type = DTPM_NODE_DT,
-> +	     .parent = &rk3399_hierarchy[1] },
-> +	[6]{ .name = "/cpus/cpu@100",
-> +	     .type = DTPM_NODE_DT,
-> +	     .parent = &rk3399_hierarchy[1] },
-> +	[7]{ .name = "/cpus/cpu@101",
-> +	     .type = DTPM_NODE_DT,
-> +	     .parent = &rk3399_hierarchy[1] },
-> +	[8]{ .name = "/gpu@ff9a0000",
-> +	     .type = DTPM_NODE_DT,
-> +	     .parent = &rk3399_hierarchy[1] },
-> +	[9]{ },
+I'll also push that change for the stable tree.
 
-hmm, do we want a "/* sentinel */" inside the empty last entry?
-I think that is pretty common to denote the "this one is the last entry"
-of a dynamic list ;-)
-
-> +};
-> +
-> +static struct of_device_id __initdata rockchip_dtpm_match_table[] = {
-> +        { .compatible = "rockchip,rk3399", .data = rk3399_hierarchy },
-> +        {},
-> +};
-> +
-> +static int __init rockchip_dtpm_init(void)
-> +{
-> +	return dtpm_create_hierarchy(rockchip_dtpm_match_table);
-> +}
-> +module_init(rockchip_dtpm_init);
-
-Just for my understanding what happens on driver unload?
-
-
-Thanks
-Heiko
-
-> +
-> +MODULE_SOFTDEP("pre: panfrost cpufreq-dt");
-> +MODULE_DESCRIPTION("Rockchip DTPM driver");
-> +MODULE_LICENSE("GPL");
-> +MODULE_ALIAS("platform:dtpm");
-> +MODULE_AUTHOR("Daniel Lezcano <daniel.lezcano@kernel.org");
-> 
-
-
-
-
+Regards,
+Lukasz
