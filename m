@@ -2,61 +2,23 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94B3A49FC87
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jan 2022 16:13:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A4E49FD12
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jan 2022 16:48:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245465AbiA1PNR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Jan 2022 10:13:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53292 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244267AbiA1PNQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Jan 2022 10:13:16 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46E8C061714
-        for <linux-pm@vger.kernel.org>; Fri, 28 Jan 2022 07:13:15 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id w11so11483756wra.4
-        for <linux-pm@vger.kernel.org>; Fri, 28 Jan 2022 07:13:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=AUwJFbkTUdnlBk2iiUiCsMF/VYfJTKSHUYAJSm9ePFA=;
-        b=m/G2yCpBhl3MgvFX0eCqxTH2UX/2jTTlzDb9a9d99JkomGhjqBJCg2rFda7/6wywEu
-         kbUESx3fj8prq771TTeIbSjXjKBRhuKJYt8kKGZSBwT0xJ81NcxpBQ19kpXgDNNoR7qK
-         hUhNE66MeEuQLOvTxeuGaXksymzOMjAZ9XKxDSybd8ZdkXSBeCEavf13SUnbrMEB2dlB
-         Td3bDENJ0Cl//PHpNAJlb8GS3+1uyYDH3UFAZkGHVUQcCsTrgJqYKIRMoDV9hr2g2dTf
-         9FjgJHgRtfblCYDx7YEPcHgrDc84bq2aSxOADkaxfiMq0l5kjvSj7GANDwapEcThRP8F
-         UGLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=AUwJFbkTUdnlBk2iiUiCsMF/VYfJTKSHUYAJSm9ePFA=;
-        b=su8a6ruWEjq5qO8O7zZqciRCJ6yLDk9MDfVqW96tR6srBGpwe+0gr2RBGh+jcCozjW
-         Z2QUtuOZoEpBBPe4+Gqlr+fiZOAQZOlJtzasYz93Mn0VloNsGHSlrVUE3jkZHHwimI0h
-         a+sodClYZLvOfLnVvBHtZSzaDMP0SyYcwf+zjYmzgABTEBRfuUBR35W1jZLj+jjcTw7p
-         Y0kSE969Y8J1Z4UB7CuyfxObTgX7MC8l5cpSAxTlh0WEe9PXrPVRa/QwL4IxIJtjB/2U
-         3GvmJdunHSASlX+1RyOmzUPdUjxoma9gwwaslSCdfRMlNHA/QRyMmWYxQ18FbSwGV2Jv
-         M2Bg==
-X-Gm-Message-State: AOAM531TLGLWi0yaTTQBAbnjcOgbvk1Dy3ZQ+3zoIUBWcEhmDjuj5ess
-        HzUetyA9ROXUgL3wtZT4+uqSgw==
-X-Google-Smtp-Source: ABdhPJyYERh4YgS4Bbw9OaouOmH93frvS5/RF382UnIWRRnGqAeIjfNe8mDbXZOwE2Th4HzRUqZVMA==
-X-Received: by 2002:a05:6000:16c2:: with SMTP id h2mr7667083wrf.614.1643382794348;
-        Fri, 28 Jan 2022 07:13:14 -0800 (PST)
-Received: from ?IPV6:2a01:e34:ed2f:f020:f39:b962:8b8e:9851? ([2a01:e34:ed2f:f020:f39:b962:8b8e:9851])
-        by smtp.googlemail.com with ESMTPSA id d4sm6066910wri.39.2022.01.28.07.13.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jan 2022 07:13:13 -0800 (PST)
-Message-ID: <55780cda-f963-9168-f439-5a51da3b4907@linaro.org>
-Date:   Fri, 28 Jan 2022 16:13:11 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v7 5/5] rockchip/soc/drivers: Add DTPM description for
- rk3399
-Content-Language: en-US
-To:     =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>, rjw@rjwysocki.net
+        id S1349427AbiA1Psd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Jan 2022 10:48:33 -0500
+Received: from gloria.sntech.de ([185.11.138.130]:41220 "EHLO gloria.sntech.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1348753AbiA1Psd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 28 Jan 2022 10:48:33 -0500
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1nDTUC-0007d7-G7; Fri, 28 Jan 2022 16:48:28 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     daniel.lezcano@linaro.org, rjw@rjwysocki.net,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     robh@kernel.org, lukasz.luba@arm.com, arnd@linaro.org,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Geert Uytterhoeven <geert+renesas@glider.be>,
@@ -64,127 +26,37 @@ Cc:     robh@kernel.org, lukasz.luba@arm.com, arnd@linaro.org,
         <linux-arm-kernel@lists.infradead.org>,
         "open list:ARM/Rockchip SoC support" 
         <linux-rockchip@lists.infradead.org>
-References: <20220125171809.1273269-1-daniel.lezcano@linaro.org>
- <20220125171809.1273269-6-daniel.lezcano@linaro.org>
- <48865702.Mx8J7aE1p6@diego>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <48865702.Mx8J7aE1p6@diego>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v7 5/5] rockchip/soc/drivers: Add DTPM description for rk3399
+Date:   Fri, 28 Jan 2022 16:48:27 +0100
+Message-ID: <3660693.PMFMTDrQKU@diego>
+In-Reply-To: <20220125171809.1273269-6-daniel.lezcano@linaro.org>
+References: <20220125171809.1273269-1-daniel.lezcano@linaro.org> <20220125171809.1273269-6-daniel.lezcano@linaro.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-Hi Heiko,
-
-thanks for your comments
-
-On 28/01/2022 11:19, Heiko Stübner wrote:
-> Am Dienstag, 25. Januar 2022, 18:18:09 CET schrieb Daniel Lezcano:
->> The DTPM framework does support now the hierarchy description.
->>
->> The platform specific code can call the hierarchy creation function
->> with an array of struct dtpm_node pointing to their parent.
->>
->> This patch provides a description of the big / Little CPUs and the
->> GPU and tie them together under a virtual 'package' name. Only rk3399 is
->> described now.
->>
->> The description could be extended in the future with the memory
->> controller with devfreq.
->>
->> The description is always a module and it describes the soft
->> dependencies. The userspace has to load the softdeps module in the
->> right order.
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-
-[ ... ]
-
->> +static struct dtpm_node __initdata rk3399_hierarchy[] = {
+Am Dienstag, 25. Januar 2022, 18:18:09 CET schrieb Daniel Lezcano:
+> The DTPM framework does support now the hierarchy description.
 > 
-> The driver is tristate so buildable as module but uses __initdata.
-> As it depends on panfrost (which also can be a module) you
-> probably want a "__initdata_or_module" here .
-
-Well, actually the dependency is wrong.
-
-It should be:
-
-	depends on DTPM && m
-
-It will be compiled always as a module.
-
-Referring to the Documentation/kernel-hacking/hacking.rst
-
-"After boot, the kernel frees up a special section; functions marked with
-``__init`` and data structures marked with ``__initdata`` are dropped
-after boot is complete: similarly modules discard this memory after
-initialization."
-
-So after the module is loaded and the hierarchy is created, nothing will 
-stay in memory (except the future module exit function)
-
-
->> +	[0]{ .name = "rk3399",
->> +	     .type = DTPM_NODE_VIRTUAL },
->> +	[1]{ .name = "package",
->> +	     .type = DTPM_NODE_VIRTUAL,
->> +	     .parent = &rk3399_hierarchy[0] },
->> +	[2]{ .name = "/cpus/cpu@0",
->> +	     .type = DTPM_NODE_DT,
->> +	     .parent = &rk3399_hierarchy[1] },
->> +	[3]{ .name = "/cpus/cpu@1",
->> +	     .type = DTPM_NODE_DT,
->> +	     .parent = &rk3399_hierarchy[1] },
->> +	[4]{ .name = "/cpus/cpu@2",
->> +	     .type = DTPM_NODE_DT,
->> +	     .parent = &rk3399_hierarchy[1] },
->> +	[5]{ .name = "/cpus/cpu@3",
->> +	     .type = DTPM_NODE_DT,
->> +	     .parent = &rk3399_hierarchy[1] },
->> +	[6]{ .name = "/cpus/cpu@100",
->> +	     .type = DTPM_NODE_DT,
->> +	     .parent = &rk3399_hierarchy[1] },
->> +	[7]{ .name = "/cpus/cpu@101",
->> +	     .type = DTPM_NODE_DT,
->> +	     .parent = &rk3399_hierarchy[1] },
->> +	[8]{ .name = "/gpu@ff9a0000",
->> +	     .type = DTPM_NODE_DT,
->> +	     .parent = &rk3399_hierarchy[1] },
->> +	[9]{ },
+> The platform specific code can call the hierarchy creation function
+> with an array of struct dtpm_node pointing to their parent.
 > 
-> hmm, do we want a "/* sentinel */" inside the empty last entry?
-> I think that is pretty common to denote the "this one is the last entry"
-> of a dynamic list ;-)
-
-Sure
-
->> +};
->> +
->> +static struct of_device_id __initdata rockchip_dtpm_match_table[] = {
->> +        { .compatible = "rockchip,rk3399", .data = rk3399_hierarchy },
->> +        {},
->> +};
->> +
->> +static int __init rockchip_dtpm_init(void)
->> +{
->> +	return dtpm_create_hierarchy(rockchip_dtpm_match_table);
->> +}
->> +module_init(rockchip_dtpm_init);
+> This patch provides a description of the big / Little CPUs and the
+> GPU and tie them together under a virtual 'package' name. Only rk3399 is
+> described now.
 > 
-> Just for my understanding what happens on driver unload?
+> The description could be extended in the future with the memory
+> controller with devfreq.
+> 
+> The description is always a module and it describes the soft
+> dependencies. The userspace has to load the softdeps module in the
+> right order.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-ATM it is not possible to unload it.
-
-A second series with the hierarchy destruction will follow once this 
-series is merged. The module unloading will be added here.
+Reviewed-by; Heiko Stuebner <heiko@sntech.de>
 
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
