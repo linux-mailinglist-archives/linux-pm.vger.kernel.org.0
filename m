@@ -2,202 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FF2149FE2C
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jan 2022 17:36:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1312C49FF98
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jan 2022 18:33:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350196AbiA1Qg2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Jan 2022 11:36:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44556 "EHLO
+        id S232607AbiA1Rdn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Jan 2022 12:33:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350197AbiA1QgW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Jan 2022 11:36:22 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C4A7C061747
-        for <linux-pm@vger.kernel.org>; Fri, 28 Jan 2022 08:36:22 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id m14so11690501wrg.12
-        for <linux-pm@vger.kernel.org>; Fri, 28 Jan 2022 08:36:22 -0800 (PST)
+        with ESMTP id S234826AbiA1Rdm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Jan 2022 12:33:42 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB467C061714;
+        Fri, 28 Jan 2022 09:33:41 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id u11so6629058plh.13;
+        Fri, 28 Jan 2022 09:33:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=99dERtWOZtbIzdgryv5Ia92S7CWD3+jik7G8TWPvHK4=;
-        b=M56W1cYQkxO416lN+jHB1tezGrT0pfoCHG+V30MKezZeGa1pynMj+KMFaFb+TC3xtR
-         QMogfQHJDufhRqxBR6KnAJ+xQF7iDAHcaL6BHjZb6W/t92XCBNdgp5zou1XR178MrL4z
-         s5FbTVaCgtijqYCITJBmcuM2L2B5PwH9jDR/fAJrnrdt0vx//WVR71e2M8M8NCYLjDbW
-         h+w/tXk883nHnYyi9FXF9ylMdrOSRfI7SARFZKXXO11REESQ44wxz971S/YF4HYsH792
-         W7EZTGUfv9qcua4OiCgY61fRq35io87LL5TW8Ovtjzq3anlJRGCuSS2YRqLemAlcSh1Q
-         I5Kg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=ao8NjMa37zJEFe2r9MsBKR2VMUSdhu4BCAQG2c75rDQ=;
+        b=F6ZSDPxhKHfBEjDL4YcsRKdgGJ8VWs5qWxZZlr/CrIbG6Q4s+vaPMBDgsiuk31DKjQ
+         T5RPT8FyK9U1I8v1eweLb5i0ve2TUIHFzy3OJXsNWbmgfa66+4up86RKUYdmQdF92Q7Z
+         ryBX7ILD0piR3CD9l240OEgor9a2sGyr9cI9o1n5Kmwsad46VlnuzbFdByp9oPEbv1fP
+         H91ZNNB3omjusyznVUkInHDspdUvWwLP6y2AE67hAqOHQrB+YDMYc2a/mulvn5bWH/L3
+         mQgrFRUyGQB2MK7uNAXphwqTXp7Hj7zDiC5o9PUyM+2HPboCswKviWa5YumIzQo300Wq
+         qaAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=99dERtWOZtbIzdgryv5Ia92S7CWD3+jik7G8TWPvHK4=;
-        b=drLDgFU+wfgfac5FCjCu72oF+wqA3IYI2fnKv7lhjEic7X9+fHECv8jQX3+hbcnNzt
-         an4jhDMSeWW13jxaecig/QO3Tn5L9G0Q/Awha56A7jR/GLK8BzvOEK5F2ebfUPwaL0Sf
-         /GrcQVlqPtptFnDKvvF9mdGeJ6BmLL++zjYbEPOSFbZrSwcWo7VDOdpwZH81VV2+frg9
-         jj/DBAXg/i8YCJvB5bFzIvMBTgJeZ2x1vhyJDXSx+QTJeK8pFOCB9VgATg0HnzjtGkrb
-         KqVBs1uJOz6IpdWfg1PlDKtN6zHVBBL4BUI7FMEcHCnNhZJWZe8DRY+I2rTV5hvKshIr
-         4TXA==
-X-Gm-Message-State: AOAM533NXG+kz/aKP5yqk9PTuwMb6IPgNjsFqfv+SfwBnztKez5QfyPd
-        fsrTx0bnT77c61PjbUpf6KWo4Q==
-X-Google-Smtp-Source: ABdhPJwxf8JZPd4soZH8tiFA70PMwbDqUAwzX9iu+50eMktnT6hbnD1to8hEQRhEd71OIDQlFPrA1g==
-X-Received: by 2002:adf:f141:: with SMTP id y1mr7683089wro.104.1643387780869;
-        Fri, 28 Jan 2022 08:36:20 -0800 (PST)
-Received: from localhost.localdomain ([2a01:e34:ed2f:f020:f39:b962:8b8e:9851])
-        by smtp.gmail.com with ESMTPSA id m6sm5734745wrw.54.2022.01.28.08.36.19
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=ao8NjMa37zJEFe2r9MsBKR2VMUSdhu4BCAQG2c75rDQ=;
+        b=Lzen3gpKVYfIbimygRTfKQi9GVQU7Ns8SD82v0niuYAOvTC8RAec0gCl8MiPYWt3be
+         1IcdsImE7HXKNbKm2tfc9dQxSNfCoYG5fA8AwED5mws6x27PeoBOOAhxcTsWyvKEW4ed
+         R985K6OKR5bEVQnq43dwDBK/b7nJ83OOUzcZZLboq3hXLlmLiSHUXTIzNmXjTE7Dj6kC
+         OSMbM7MSdhqHKLGHwExCboBtUm8tOGG9SVm3QW/d0/cgJSA3+/yU9aiSxhmekw/eK22H
+         gzufGqXmgHAJG3pSXIBr/VczH5o6J+BXPb+GsPgglev6+32rIjLvjyYKFnvzU1rNfrp5
+         Pi+A==
+X-Gm-Message-State: AOAM5324lFCm8CtfpLQFfriXbrX4UGeZYmA+Nh88E4a5TXhppuDf//Tg
+        5E+pN40C3x8GQq8aQZw/3+3afNnqy6cHOElaCHE=
+X-Google-Smtp-Source: ABdhPJwINMZvGAQ+RGr24gO4n8v3Uq1+6XfGb2pR4cBeZU2V4y9GJxPszxjME/Nn7qtNc4dK1pDO0w==
+X-Received: by 2002:a17:903:2305:: with SMTP id d5mr9237955plh.14.1643391221529;
+        Fri, 28 Jan 2022 09:33:41 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id l14sm10440643pjf.1.2022.01.28.09.33.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 08:36:20 -0800 (PST)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rjw@rjwysocki.net
-Cc:     heiko@sntech.de, robh@kernel.org, lukasz.luba@arm.com,
-        arnd@linaro.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Rockchip SoC
-        support),
-        linux-rockchip@lists.infradead.org (open list:ARM/Rockchip SoC support)
-Subject: [PATCH v8 5/5] rockchip/soc/drivers: Add DTPM description for rk3399
-Date:   Fri, 28 Jan 2022 17:35:37 +0100
-Message-Id: <20220128163537.212248-6-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220128163537.212248-1-daniel.lezcano@linaro.org>
-References: <20220128163537.212248-1-daniel.lezcano@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Fri, 28 Jan 2022 09:33:40 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] power: supply: ab8500: Fix memory leak in ab8500_chargalg_sysfs_init
+Date:   Fri, 28 Jan 2022 17:33:35 +0000
+Message-Id: <20220128173336.643-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The DTPM framework does support now the hierarchy description.
+kobject_init_and_add() takes reference even when it fails.
+According to the doc of kobject_init_and_add()
 
-The platform specific code can call the hierarchy creation function
-with an array of struct dtpm_node pointing to their parent.
+   If this function returns an error, kobject_put() must be called to
+   properly clean up the memory associated with the object.
 
-This patch provides a description of the big / Little CPUs and the
-GPU and tie them together under a virtual 'package' name. Only rk3399 is
-described now.
+Fix this issue by adding kobject_put().
 
-The description could be extended in the future with the memory
-controller with devfreq.
-
-The description is always a module and it describes the soft
-dependencies. The userspace has to load the softdeps module in the
-right order.
-
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Reviewed-by; Heiko Stuebner <heiko@sntech.de>
+Fixes: c5b64a990e7f ("power: supply: ab8500: Rename charging algorithm symbols")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
-Changelog:
-   V8:
-   - Add '/* sentinel */' in the last array entry
-   - Remove Panfrost dependency in the dtpm rockchip module's Kconfig
+ drivers/power/supply/ab8500_chargalg.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-   V7:
-   - No changes
-
-   V6:
-   - Made rk3399 always as a module and added module softdeps
-
-   V5:
-   - Module creation
----
-drivers/soc/rockchip/Kconfig  |  8 +++++
- drivers/soc/rockchip/Makefile |  1 +
- drivers/soc/rockchip/dtpm.c   | 59 +++++++++++++++++++++++++++++++++++
- 3 files changed, 68 insertions(+)
- create mode 100644 drivers/soc/rockchip/dtpm.c
-
-diff --git a/drivers/soc/rockchip/Kconfig b/drivers/soc/rockchip/Kconfig
-index 25eb2c1e31bb..156ac0e0c8fe 100644
---- a/drivers/soc/rockchip/Kconfig
-+++ b/drivers/soc/rockchip/Kconfig
-@@ -34,4 +34,12 @@ config ROCKCHIP_PM_DOMAINS
+diff --git a/drivers/power/supply/ab8500_chargalg.c b/drivers/power/supply/ab8500_chargalg.c
+index c4a2fe07126c..658139797509 100644
+--- a/drivers/power/supply/ab8500_chargalg.c
++++ b/drivers/power/supply/ab8500_chargalg.c
+@@ -1907,8 +1907,10 @@ static int ab8500_chargalg_sysfs_init(struct ab8500_chargalg *di)
+ 	ret = kobject_init_and_add(&di->chargalg_kobject,
+ 		&ab8500_chargalg_ktype,
+ 		NULL, "ab8500_chargalg");
+-	if (ret < 0)
++	if (ret < 0) {
+ 		dev_err(di->dev, "failed to create sysfs entry\n");
++		kobject_put(&di->chargalg_kobject);
++	}
  
-           If unsure, say N.
- 
-+config ROCKCHIP_DTPM
-+	tristate "Rockchip DTPM hierarchy"
-+	depends on DTPM && m
-+	help
-+	 Describe the hierarchy for the Dynamic Thermal Power
-+	 Management tree on this platform. That will create all the
-+	 power capping capable devices.
-+
- endif
-diff --git a/drivers/soc/rockchip/Makefile b/drivers/soc/rockchip/Makefile
-index 875032f7344e..05f31a4e743c 100644
---- a/drivers/soc/rockchip/Makefile
-+++ b/drivers/soc/rockchip/Makefile
-@@ -5,3 +5,4 @@
- obj-$(CONFIG_ROCKCHIP_GRF) += grf.o
- obj-$(CONFIG_ROCKCHIP_IODOMAIN) += io-domain.o
- obj-$(CONFIG_ROCKCHIP_PM_DOMAINS) += pm_domains.o
-+obj-$(CONFIG_ROCKCHIP_DTPM) += dtpm.o
-diff --git a/drivers/soc/rockchip/dtpm.c b/drivers/soc/rockchip/dtpm.c
-new file mode 100644
-index 000000000000..ebebb748488b
---- /dev/null
-+++ b/drivers/soc/rockchip/dtpm.c
-@@ -0,0 +1,59 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright 2021 Linaro Limited
-+ *
-+ * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
-+ *
-+ * DTPM hierarchy description
-+ */
-+#include <linux/dtpm.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+
-+static struct dtpm_node __initdata rk3399_hierarchy[] = {
-+	[0]{ .name = "rk3399",
-+	     .type = DTPM_NODE_VIRTUAL },
-+	[1]{ .name = "package",
-+	     .type = DTPM_NODE_VIRTUAL,
-+	     .parent = &rk3399_hierarchy[0] },
-+	[2]{ .name = "/cpus/cpu@0",
-+	     .type = DTPM_NODE_DT,
-+	     .parent = &rk3399_hierarchy[1] },
-+	[3]{ .name = "/cpus/cpu@1",
-+	     .type = DTPM_NODE_DT,
-+	     .parent = &rk3399_hierarchy[1] },
-+	[4]{ .name = "/cpus/cpu@2",
-+	     .type = DTPM_NODE_DT,
-+	     .parent = &rk3399_hierarchy[1] },
-+	[5]{ .name = "/cpus/cpu@3",
-+	     .type = DTPM_NODE_DT,
-+	     .parent = &rk3399_hierarchy[1] },
-+	[6]{ .name = "/cpus/cpu@100",
-+	     .type = DTPM_NODE_DT,
-+	     .parent = &rk3399_hierarchy[1] },
-+	[7]{ .name = "/cpus/cpu@101",
-+	     .type = DTPM_NODE_DT,
-+	     .parent = &rk3399_hierarchy[1] },
-+	[8]{ .name = "/gpu@ff9a0000",
-+	     .type = DTPM_NODE_DT,
-+	     .parent = &rk3399_hierarchy[1] },
-+	[9]{ /* sentinel */ }
-+};
-+
-+static struct of_device_id __initdata rockchip_dtpm_match_table[] = {
-+        { .compatible = "rockchip,rk3399", .data = rk3399_hierarchy },
-+        {},
-+};
-+
-+static int __init rockchip_dtpm_init(void)
-+{
-+	return dtpm_create_hierarchy(rockchip_dtpm_match_table);
-+}
-+module_init(rockchip_dtpm_init);
-+
-+MODULE_SOFTDEP("pre: panfrost cpufreq-dt");
-+MODULE_DESCRIPTION("Rockchip DTPM driver");
-+MODULE_LICENSE("GPL");
-+MODULE_ALIAS("platform:dtpm");
-+MODULE_AUTHOR("Daniel Lezcano <daniel.lezcano@kernel.org");
+ 	return ret;
+ }
 -- 
-2.25.1
+2.17.1
 
