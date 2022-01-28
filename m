@@ -2,102 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E1B14A0008
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jan 2022 19:23:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E6574A001A
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jan 2022 19:30:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343872AbiA1SXt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Jan 2022 13:23:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41430 "EHLO
+        id S1349516AbiA1Sa0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Jan 2022 13:30:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236050AbiA1SXt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Jan 2022 13:23:49 -0500
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43059C061714
-        for <linux-pm@vger.kernel.org>; Fri, 28 Jan 2022 10:23:49 -0800 (PST)
-Received: by mail-ot1-x332.google.com with SMTP id g15-20020a9d6b0f000000b005a062b0dc12so6527037otp.4
-        for <linux-pm@vger.kernel.org>; Fri, 28 Jan 2022 10:23:49 -0800 (PST)
+        with ESMTP id S1343798AbiA1SaZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Jan 2022 13:30:25 -0500
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15945C061748
+        for <linux-pm@vger.kernel.org>; Fri, 28 Jan 2022 10:30:25 -0800 (PST)
+Received: by mail-oi1-x22e.google.com with SMTP id v67so13882249oie.9
+        for <linux-pm@vger.kernel.org>; Fri, 28 Jan 2022 10:30:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=+Z84hA385+KUpWAPAKjIC7/QMu1TKrmdAANnEx3DyCY=;
-        b=BBo5QdBta5BAavqJ7iRkpq+Hd+0Mgt0/RUjLKEczTFkyK9/d4eh0F+5YL/b407BHNg
-         gMYCmjyzHgmAR3RLYnew181kdoiqeT82Wsa4RONhtG3CZyKIcthbk79qr/64iHIB4+Os
-         gB4NXoiLdwBDjAfdxPunyT4j0bb3ZZYI+jX5zas5YljOVnjBPuQgIBuw+9jD05Rt+b7K
-         ac/+tNzOougAkStGC0tpTiSraZ53qpbksn7nBojjj3A0MOjB9Ki+xmZXVrplz8VqJKXD
-         6qSQRXCeTGBdEHmIjT9vDY+E59XwRExamhX+gvwaDln1ZmWB2x3mOV/8baor+hiDBude
-         MgKA==
+        bh=255BVw7+Ht0b8sdVHt7ws2Ve8e5tAHnc/nipGjdYGp0=;
+        b=EEJpZtCHAcUPBVHDEt8/8j6Y06vhmk5k14Knz6haNa+/3HpxiSqJBPz46ecBlEdFWD
+         +Axw3MHdAC35prQcjEwCZj914HYtKUhRfdd8ZUBcyA9MhYCKgEntbaWmC5xmurfMMn1G
+         ass2HtUTa2wzYB6TOLbHG84Th8SSWeT/h2eOF/UoskJmoQD4WLBjzxLtFPiqY+LL8Yy3
+         zVRBXghfCdStwW9b4O4X7ScE1FgwmDgF6JJaqNJJhco8FyoIur76yEr5PyxyJW+52sym
+         2gBXcVAItfbioHCR4g628wY4QQj10oyFAIZA72JH2wZP5hhBq1W8HWiRGnmt7csEp62g
+         fXOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=+Z84hA385+KUpWAPAKjIC7/QMu1TKrmdAANnEx3DyCY=;
-        b=orUWRtXQBS/WbPextj+QLJBfxb7+l9gDgfEw61Z7IvSZUJNGwuPseYInTh24SZKQ5s
-         bnDQmdDOMekO0cR7eoU0jardD4/RQyxKTrsLWdxwiI/cj3JByeOizKan5ztFjkQ+6tDO
-         05+mwkD+Iqkey+ADtHBr7gk9Xz+YAxTOFFG1900bpjIXJDrUOxK1Rk/bIFDolyfuVGGc
-         SjLCzq+yd9D5fME16baA6vSX83DuqZP1/bzKMBNhXw5xrEz4wsbbrGZhDrNvtMpOkuAz
-         oeTAHCc7ueIFBgIU/OdLVcy4xIQ9ook7m4u2MLATsyU/o4PmEN72GUhuEsjD8xYVpp3a
-         VBkg==
-X-Gm-Message-State: AOAM532Mj4nnQH+jodiqGSQ+y6gLEgassuvNroaHh9xVdpam4IwKe+hN
-        lrN4LBbISiza6DK2iC4FWbSb0A==
-X-Google-Smtp-Source: ABdhPJxoxtcRm7gplqirhnjzY+X2kbmnsS9fA2HSBZEma2oDdbXZI8Fs58UWiHtW/ITPEYZ+PQX+yg==
-X-Received: by 2002:a9d:628a:: with SMTP id x10mr5380348otk.264.1643394228584;
-        Fri, 28 Jan 2022 10:23:48 -0800 (PST)
+        bh=255BVw7+Ht0b8sdVHt7ws2Ve8e5tAHnc/nipGjdYGp0=;
+        b=KBXHccWsXKlKTu1uBQ5tkuGiyO3ZLgoo5RiyiiPxNqV0a1SSEgYbztIPo4PGDPic9h
+         PBNoVNhLVBFB3BJxPSkS2YunIVZ/wMcHUhLI9qPOtJ8OUsfrAkUU8F3QWMvpsagwQhQ0
+         Yn6Hr8d+DA/DJrkAdOpbQTPXE55xcf3I0zQKEKXxPxkIrR+6uLu7ft7wq/CpWPWG9QnP
+         XAiI6AQOc+nMnm2j0USb6liTuw6dbonaxhwg0Ohr5ky1od4Fjj4o9zRJB7mb2YwXmSDU
+         3zmKHKDAPMRl/llFns2LiKTdGX8dN4VbhT97xhWOKCggeD6ZLRhAfWM4lGB6XaCw0n5s
+         qQnw==
+X-Gm-Message-State: AOAM531YKfPoj+7Axlviw+7UX+yoLckEpLv+ZoAOJevP3DCM48TAvMKz
+        KhDj+gqxds/JtfZo7nYIuNNqVQ==
+X-Google-Smtp-Source: ABdhPJw3fgunIiMqXvsJlYsQB6YNJPusV5AEIDPjrkMWBztd7tGWvDrzSr4LAkUaCP1vZjbS3zX6HQ==
+X-Received: by 2002:a05:6808:2214:: with SMTP id bd20mr8376062oib.159.1643394624296;
+        Fri, 28 Jan 2022 10:30:24 -0800 (PST)
 Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id 44sm11993414otl.15.2022.01.28.10.23.47
+        by smtp.gmail.com with ESMTPSA id s3sm8272427otg.67.2022.01.28.10.30.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 10:23:47 -0800 (PST)
-Date:   Fri, 28 Jan 2022 10:24:12 -0800
+        Fri, 28 Jan 2022 10:30:23 -0800 (PST)
+Date:   Fri, 28 Jan 2022 10:30:48 -0800
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-pm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] cpufreq: Reintroduce ready() callback
-Message-ID: <YfQ0zFyJsjIZnCys@ripper>
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-pm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Subject: Re: [PATCH v2 2/2] cpufreq: qcom-hw: Delay enabling throttle_irq
+Message-ID: <YfQ2WEiqV30PGNrt@ripper>
 References: <20220128032554.155132-1-bjorn.andersson@linaro.org>
- <f539ca2b-22c4-5708-ddd6-4b638dc0655d@arm.com>
+ <20220128032554.155132-2-bjorn.andersson@linaro.org>
+ <5433250b-ee51-06e0-3ef8-ab287a112611@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f539ca2b-22c4-5708-ddd6-4b638dc0655d@arm.com>
+In-Reply-To: <5433250b-ee51-06e0-3ef8-ab287a112611@arm.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri 28 Jan 00:52 PST 2022, Lukasz Luba wrote:
+On Fri 28 Jan 02:39 PST 2022, Lukasz Luba wrote:
 
-> Hi Bjorn,
+> 
 > 
 > On 1/28/22 3:25 AM, Bjorn Andersson wrote:
-> > This effectively revert '4bf8e582119e ("cpufreq: Remove ready()
-> > callback")' (except the Chinese translation), in order to reintroduce
-> 
-> Is there something wrong with the Chinese translation that it has to be
-> dropped? Someone has put an effort to create it, I'd assume (and also
-> based on online translator) that it's correct.
-> 
-
-I don't expect there to be anything wrong with the Chinese translation,
-unfortunately "git revert" trips on a merge conflict and I'm
-unfortunately not able to resolve that on my machine.
-
-> > the ready callback.
+> > In the event that the SoC is under thermal pressure while booting it's
+> > possible for the dcvs notification to happen inbetween the cpufreq
+> > framework calling init and it actually updating the policy's
+> > related_cpus cpumask.
 > > 
-> > This is needed in order to be able to leave the thermal pressure
-> > interrupts in the Qualcomm CPUfreq driver disabled during
-> > initialization, so that it doesn't fire while related_cpus are still 0.
+> > Prior to the introduction of the thermal pressure update helper an empty
+> > cpumask would simply result in the thermal pressure of no cpus being
+> > updated, but the new code will attempt to dereference an invalid per_cpu
+> > variable.
 > 
-> If you are going to push the 2nd patch into stable tree, then you would
-> also need this one.
+> Just to confirm, is that per-cpu var the 'policy->related_cpus' in this
+> driver?
 > 
 
-That's correct. This patch is however not a stable change in itself, so
-I didn't mark it as such. I can work with the stable maintainers to let
-them know that this patch is needs to go along with patch 2 - although
-I've seen cases before where they automagically resolved that.
+Correct, we boot under thermal pressure, so the interrupt fires before
+we return from "init", which means that related_cpus is still 0.
+
+> > 
+> > Avoid this problem by using the newly reintroduced "ready" callback, to
+> > postpone enabling the IRQ until the related_cpus cpumask is filled in.
+> > 
+> > Fixes: 0258cb19c77d ("cpufreq: qcom-cpufreq-hw: Use new thermal pressure update function")
+> 
+> You have 'Fixes' tagging here, which might be picked by the stable tree.
+> The code uses the reverted callback .ready(), which might be missing
+> there (since patch 1/2 doesn't have tagging). This patch looks like a
+> proper fix for the root cause.
+> 
+
+Yes, the pair would need to be picked up.
+
+> Anyway, I'm going to send a patch, which adds a check for null cpumask
+> in the topology_update_thermal_pressure()
+> It was removed after the review comments:
+> https://lore.kernel.org/linux-pm/20211028054459.dve6s2my2tq7odem@vireshk-i7/
+> 
+
+I attempted that in v1:
+https://lore.kernel.org/all/20220118185612.2067031-2-bjorn.andersson@linaro.org/
+
+And while patch 1 is broken, I think Greg and Sudeep made it clear that
+they didn't want a condition to guard against the caller passing cpus of
+0.
+
+That's why I in v2 reverted to postpone the thermal pressure IRQ until
+cpufreq is "ready".
 
 Regards,
 Bjorn
+
+> I'll also push that change for the stable tree.
+> 
+> Regards,
+> Lukasz
