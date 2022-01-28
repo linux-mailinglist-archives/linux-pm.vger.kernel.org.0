@@ -2,101 +2,174 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3ACF49FDB0
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jan 2022 17:10:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C29849FE20
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jan 2022 17:36:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235537AbiA1QKP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Jan 2022 11:10:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38412 "EHLO
+        id S1350100AbiA1QgF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Jan 2022 11:36:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiA1QKP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Jan 2022 11:10:15 -0500
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E05C06173B
-        for <linux-pm@vger.kernel.org>; Fri, 28 Jan 2022 08:10:14 -0800 (PST)
-Received: by mail-qv1-xf2f.google.com with SMTP id hu2so6238909qvb.8
-        for <linux-pm@vger.kernel.org>; Fri, 28 Jan 2022 08:10:14 -0800 (PST)
+        with ESMTP id S1350098AbiA1QgF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Jan 2022 11:36:05 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3888BC06173B
+        for <linux-pm@vger.kernel.org>; Fri, 28 Jan 2022 08:36:05 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id w11so11938056wra.4
+        for <linux-pm@vger.kernel.org>; Fri, 28 Jan 2022 08:36:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=BZVdFXLyl74h3jtOPF272oyC+s8DavqmR8oCcxBJMgQ=;
-        b=Irl9DzzuMp5iz+pnKClhzQPaMwdM0JkYG1ovs0IKC2O9S0v4uxcneGJvTgqJ2M9fWR
-         z1uk2YF3U4ckMLO3AyhN0a04UiwiJJ/sfl3WbfVcGyOfUtHe6tB1hYjYC+MQFU6uKJSd
-         rEloCtTXSk/x2tZcORAqeOWG7ihk5pXHdPzj2jif+RwjvoOPQ5vZV4JGSX3uzGKS/AV2
-         1RtNE7BIp+sw5rndSOrKv9LN6PeClTtxV4znTpb70yiGCSkivqBWeM/8PHvZzinwfboM
-         82HHT9uk2Gs3l9k+6G8WQYE4gfEWi1Jg8yHty8vSgLeh/4fcUwuheOiEKCnyQ8ovf35e
-         qHXA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5TceRxuk2fQE3djY5Tb2lWnPhhHwofkfTcUwbKOvdyI=;
+        b=vVmuf7RRpu6VRa3zvcn34asve1SGLN1cn1oojFVCC8TyE9u/WYi73McT7s7ILNZTm8
+         /ajq4N/os8jZxw8vHpVU8abJUGIMc5jlKNVoyDI/vGt2V8VGwh/0Lr39qN3RTrfYfLk5
+         kR5dmJpuV6tdIMDnvYjkP9529o7VrRgJ1XQ4N0B1MAMKulxa93lh6ynqc4+YKF//AxZW
+         GuwY7wcMJc3cQx/C2ytNiMU0LtK+8zgtdF74OsullakR6JOv1C9RUy2j4+LzXbFIJ5jK
+         CddXGIYwiHcxw8Yy5+M9CCUczk4RSlDNFGRKTyX8TNnXgEHmsDoRnIoYehKbuZZePbAp
+         hu1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=BZVdFXLyl74h3jtOPF272oyC+s8DavqmR8oCcxBJMgQ=;
-        b=4HJvZqfhtD13VaLxMQw+522j8kyyunQVOflLrEZB9yx3gdhBovYtHvFiPITwW9g288
-         MNYjMdF/lBprweyitWn8/C1ls4Y7u1fUb732hCy8hVTpyQosjN7qbN9oZTqxA+vEO7cP
-         wC2omdZkXjNJ5WjXnmYAjlK6fJ1aspOkYeGc0fgkFgPAnnpCg1E12AGIf4dJpXuRSe2b
-         QX9LuqqcGj5k6UPSa9Jh1HT4I6Oxm8GaaX5dcM4ZXaB2hJilDftbvbr/fQfInG2ZwSLe
-         QIYE56+Q4JbocJJxA6X1kaD4PxP0hyVWSIZTOFKT03Kic9MLYNeTlc2u5XKbN++hl0Z9
-         qa/A==
-X-Gm-Message-State: AOAM532oF7F32F6PB9BuF1BbRF0A1mf52WgNtuoxkoiKG2bxe2DEmNOn
-        lrHgtNGSnlojpvl5Zl6KdAlh/g==
-X-Google-Smtp-Source: ABdhPJx4boyq8XpVgJFTXH3MbmtL0MCaFGhtPTIwTG2irXEbCBxo7KD1ZiZ+2g2ELnnqqy8i9BqdFw==
-X-Received: by 2002:a05:6214:5189:: with SMTP id kl9mr7555285qvb.9.1643386213864;
-        Fri, 28 Jan 2022 08:10:13 -0800 (PST)
-Received: from sagittarius-a.sqcorp.co (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id o21sm3339006qtv.68.2022.01.28.08.10.11
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5TceRxuk2fQE3djY5Tb2lWnPhhHwofkfTcUwbKOvdyI=;
+        b=Yh364syhcXrZ6Odo1tamP5RsuK0BiQhO2ZxamsVWPlaK9wx0sYny9SD6R/DI4B/lFk
+         GdTYVjn92yM+x9F3+ZR30Vswxwk0mruby+kmmveEIQpTAPT7NM1KF4NsJH8WSbjFm+zt
+         oC6jsDZDNCZVa4QXoUsX3YGH/BA67o8Nk1M/kIQl0ReLSPmunWuWUOdzsid9CK+gBhjB
+         qDSN3dmly5WNJcXPBo69FDDrku2KHnMK8wAzt8awSFv/+RhV7JJrHd7hYoGTbnmTAkO1
+         vijyQEV9fqMvSEAxNm6o4kVT8E8yzcilEX88eQT5JdoDVPHRZs0yXmAhOXZvfGANgClu
+         BZSg==
+X-Gm-Message-State: AOAM531NdhivEFeiZsnIYTN9Hb2JtEgCJ/Z2GGkTI0/77Ru5ICV5z/Lc
+        ulwMrdNBfjOtiSoSB9tvyXkJbg==
+X-Google-Smtp-Source: ABdhPJwlsnRDe760kCFZnGg4E9DX6U0EsgF0aATukMI2rRQ99YHdR6TiAPpD6lc6K2xCeDCbMdqzFQ==
+X-Received: by 2002:adf:ee86:: with SMTP id b6mr7934942wro.373.1643387763678;
+        Fri, 28 Jan 2022 08:36:03 -0800 (PST)
+Received: from localhost.localdomain ([2a01:e34:ed2f:f020:f39:b962:8b8e:9851])
+        by smtp.gmail.com with ESMTPSA id m6sm5734745wrw.54.2022.01.28.08.36.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 08:10:13 -0800 (PST)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     djakov@kernel.org, bjorn.andersson@linaro.org, agross@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-Cc:     jun.nie@linaro.org, shawn.guo@linaro.org, benl@squareup.com,
-        dmitry.baryshkov@linaro.org, bryan.odonoghue@linaro.org
-Subject: [PATCH 3/3] interconnect: qcom: msm8939: Deliniate bus, bus_a, bus_mm and bus_a_mm clocks
-Date:   Fri, 28 Jan 2022 16:10:02 +0000
-Message-Id: <20220128161002.2308563-4-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220128161002.2308563-1-bryan.odonoghue@linaro.org>
-References: <20220128161002.2308563-1-bryan.odonoghue@linaro.org>
+        Fri, 28 Jan 2022 08:36:02 -0800 (PST)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rjw@rjwysocki.net
+Cc:     heiko@sntech.de, robh@kernel.org, lukasz.luba@arm.com,
+        arnd@linaro.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v8 0/6] powercap/drivers/dtpm: Create the dtpm hierarchy
+Date:   Fri, 28 Jan 2022 17:35:32 +0100
+Message-Id: <20220128163537.212248-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-System NoC (snoc) and System MM NoC (snoc_mm) clocks can be defined
-together and passed as part of a single snoc interconnect. rpmcc indexes
-take care of sending the right RPM messages.
+The DTPM hierarchy is the base to build on top of it a power budget allocator.
+It reflects the power consumption of the group of devices and allows to cap
+their power.
 
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- drivers/interconnect/qcom/msm8939.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+The core code is there but there is no way to describe the desired hierarchy
+yet.
 
-diff --git a/drivers/interconnect/qcom/msm8939.c b/drivers/interconnect/qcom/msm8939.c
-index 7030911e25adc..431e77d63df46 100644
---- a/drivers/interconnect/qcom/msm8939.c
-+++ b/drivers/interconnect/qcom/msm8939.c
-@@ -1290,10 +1290,19 @@ static const struct regmap_config msm8939_snoc_regmap_config = {
- 	.fast_io	= true,
- };
- 
-+static const char * const snoc_clocks[] = {
-+	"bus",
-+	"bus_a",
-+	"bus_mm",
-+	"bus_a_mm",
-+};
-+
- static struct qcom_icc_desc msm8939_snoc = {
- 	.type = QCOM_ICC_NOC,
- 	.nodes = msm8939_snoc_nodes,
- 	.num_nodes = ARRAY_SIZE(msm8939_snoc_nodes),
-+	.clocks = snoc_clocks,
-+	.num_clocks = ARRAY_SIZE(snoc_clocks),
- 	.regmap_cfg = &msm8939_snoc_regmap_config,
- 	.qos_offset = 0x7000,
- };
+A first proposal introduced the description through configfs [1] but was
+rejected [2].
+
+A second proposal based on the device tree with a binding similar to the power
+domains [3] was proposed but finally rejected [4].
+
+This version delegates the hierarchy creation to the SoC with a specific and
+self-encapsulated code using an array to describe the tree. The SoC DTPM driver
+defines an array of nodes pointing to their parents.  The hierarchy description
+can integrate a DT node and in the future a SCMI node, that means the
+description can mix different type of nodes.
+
+As the DTPM tree depends on different devices which could be modules, the SoC
+specific description must always be compiled as a module and describe the
+module softdeps in order to let the userspace to handle proper loading
+ordering.
+
+In addition to the hierarchy creation, the devfreq dtpm support is also
+integrated into this series.
+
+This series was tested on a rock960 (revision B - rk3399 based) and a db845c
+(Qualcomm sdm845 based).
+
+[1] https://lore.kernel.org/all/20210401183654.27214-1-daniel.lezcano@linaro.org/
+[2] https://lore.kernel.org/all/YGYg6ZeZ1181%2FpXk@kroah.com/
+[3] https://lore.kernel.org/all/20211205231558.779698-1-daniel.lezcano@linaro.org/
+[4] https://lore.kernel.org/all/YbfFapsmsjs4qnsg@robh.at.kernel.org/
+
+Changelog:
+   V8:
+   - Add '/* sentinel */' in the last array entry
+   - Remove Panfrost dependency in the dtpm rockchip module's Kconfig
+
+   V7:
+   - Added a couple of comments if a node in the hierarchy fails to create
+   - Fixed a double free in dtpm_devfreq in the error path
+
+   V6:
+   - Switched the init table to a subsystem arrays
+   - Checked 'setup' function is set before calling it
+   - Moved out of the loop the 'of_node_put'
+   - Explicitely add DTPM_NODE_VIRTUAL in documentation
+   - Moved powercap_register_control_type() into the hierarchy creation function
+   - Removed the sdm845 description
+   - Made rk3399 always as a module and added module softdeps
+
+   V5:
+   - Remove DT bindings
+   - Added description with an array
+   - Added simple description for rk3399 and sdm845
+   - Moved dtpm table to the data section
+
+   V4:
+   - Added missing powerzone-cells
+   - Changed powerzone name to comply with the pattern property
+
+   V3:
+   - Remove GPU section as no power is available (yet)
+   - Remove '#powerzone-cells' conforming to the bindings change
+   - Removed required property 'compatible'
+   - Removed powerzone-cells from the topmost node
+   - Removed powerzone-cells from cpus 'consumers' in example
+   - Set additionnal property to false
+
+   V2:
+   - Added pattern properties and stick to powerzone-*
+   - Added required property compatible and powerzone-cells
+   - Added additionnal property
+   - Added compatible
+   - Renamed to 'powerzones'
+   - Added missing powerzone-cells to the topmost node
+   - Fixed errors reported by 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+   - Move description in the SoC dtsi specific file
+   - Fixed missing prototype warning reported by lkp@
+
+   V1: Initial post
+
+Daniel Lezcano (5):
+  powercap/drivers/dtpm: Convert the init table section to a simple
+    array
+  powercap/drivers/dtpm: Add hierarchy creation
+  powercap/drivers/dtpm: Add CPU DT initialization support
+  powercap/drivers/dtpm: Add dtpm devfreq with energy model support
+  rockchip/soc/drivers: Add DTPM description for rk3399
+
+ drivers/powercap/Kconfig          |   8 ++
+ drivers/powercap/Makefile         |   1 +
+ drivers/powercap/dtpm.c           | 192 +++++++++++++++++++++++++++-
+ drivers/powercap/dtpm_cpu.c       |  41 ++++--
+ drivers/powercap/dtpm_devfreq.c   | 203 ++++++++++++++++++++++++++++++
+ drivers/powercap/dtpm_subsys.h    |  22 ++++
+ drivers/soc/rockchip/Kconfig      |   8 ++
+ drivers/soc/rockchip/Makefile     |   1 +
+ drivers/soc/rockchip/dtpm.c       |  59 +++++++++
+ include/asm-generic/vmlinux.lds.h |  11 --
+ include/linux/dtpm.h              |  33 +++--
+ 11 files changed, 540 insertions(+), 39 deletions(-)
+ create mode 100644 drivers/powercap/dtpm_devfreq.c
+ create mode 100644 drivers/powercap/dtpm_subsys.h
+ create mode 100644 drivers/soc/rockchip/dtpm.c
+
 -- 
-2.33.0
+2.25.1
 
