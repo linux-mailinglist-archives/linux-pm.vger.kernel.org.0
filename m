@@ -2,133 +2,489 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93B5D49F1CA
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jan 2022 04:25:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2176F49F2A5
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jan 2022 05:55:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345745AbiA1DZb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Jan 2022 22:25:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59644 "EHLO
+        id S242114AbiA1Ezs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Jan 2022 23:55:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345737AbiA1DZb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Jan 2022 22:25:31 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFCFC06173B
-        for <linux-pm@vger.kernel.org>; Thu, 27 Jan 2022 19:25:30 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id p203so9879155oih.10
-        for <linux-pm@vger.kernel.org>; Thu, 27 Jan 2022 19:25:30 -0800 (PST)
+        with ESMTP id S242268AbiA1Ezp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Jan 2022 23:55:45 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA95C06173B
+        for <linux-pm@vger.kernel.org>; Thu, 27 Jan 2022 20:55:45 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id o64so5436219pjo.2
+        for <linux-pm@vger.kernel.org>; Thu, 27 Jan 2022 20:55:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=YR+p+rFyNameRdcM6O13QjKJ9vZV8WKjT+NcfVNIzDk=;
-        b=TeqI3HUPV3Jl3BnoYjWy/fbTJvhxGGRTTGiICuAzEYvIfPk8e7AXDes8R48EU8Ery1
-         8gkrIYYbq1v4Xt/YRrsU4hI2/y5OG0jnzvLJSCAHBQr7/cjWht8hi3VTCEKCJROa+1tR
-         IFLgJR0DVK7Lo+iB/WGjayto6QpT8erB5l5iEVMx4DgzbhvKpgj2nUHeJnkmAahNeoy9
-         d3NpulJs3HNTqLhDVxjNfHXX+vkzB0WcRS+XWkcRCrzlad74KgB/AF49aPlblhXl7R4j
-         h6BpM1aeaPoH7Jqdcco9XmP/s6/ahjoBYbNSzMpTeO7+dCxvKsu55GWeOA9YGBAhC8wL
-         1wyQ==
+        bh=EST4yPRhpYd4j6/4I3VVjJykcTXmME6pCSAXeD9O2oI=;
+        b=a4omuQ8xjejCbxr6+rlGqzBUPSW52h2bcZrDlUg61UqWinEPJJUWkn0Hiof028jMzv
+         XuoAWcKWy7F62VF8D33FMSQS6vEfLfr3BplzE1WnhJdFf7qiV1ve78laLaVU3UQVK6m6
+         iVdE9RhGeEOF8ZOCz6+UuuZ1r0evIcT8EmfwkJOHOQpYWJgDAApDf47zB5TurYlKccD8
+         NInEQRSW3BgNes7Ckk4OEwinat1VgC7R51rqF6cp1fihMEWXMZ/QiHvdguAfeBJOJbRD
+         zxy2T0uzfk4mtqv+sdHM9wtOgqiIICsJmum56TEs7I0tbVXiAR+wT56ApDAxegCYMlPO
+         yC5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=YR+p+rFyNameRdcM6O13QjKJ9vZV8WKjT+NcfVNIzDk=;
-        b=mWL392Kip+kZOPJtS2yti208vA80qg6u/9+Um2cdNO/M9pkVGFPNLWBFyQIOsbp71M
-         VqEp9B5E3QCVXqZlmXmzzbL6wL4mTIFtGP6zksbDxpuDVYHyk5AKJcXwaChygoD8hB8E
-         0kHiBdiFajlCuTPzZlY/TFPTHDrFd/k6fkKiuwkR6AOHRYxVSwoWJwmaLchXrcrtLV/0
-         X3hD9UMPJeEUTTlXioVOqXkFSX3sk0/l9b4vM82Uns3u8W6O+FPh0SFPXIkIzmjVeEb+
-         At3pCicsSGXBuDh9G7N3bYPciPJCx/gQhmyPPBm0eleUN/7VT+JwCUnhr3v9Ms3oI4n5
-         oN4g==
-X-Gm-Message-State: AOAM533xCTSYeiGtNc4dt1IcF0WTBIfFpiGb56n1xxzj4e4V2riEOSXC
-        o2mEXAUdViunckjePB1mua44qw==
-X-Google-Smtp-Source: ABdhPJwibfMcKHWbE2gHhsX0tTGrzHohSADwkFMnqvYTQ4+Rl2ElNEBOarunj7M+9mFH3Ot/8S/CbA==
-X-Received: by 2002:a05:6808:14c9:: with SMTP id f9mr3027113oiw.251.1643340330235;
-        Thu, 27 Jan 2022 19:25:30 -0800 (PST)
-Received: from ripper.. ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id l63sm5447242oia.2.2022.01.27.19.25.29
+        bh=EST4yPRhpYd4j6/4I3VVjJykcTXmME6pCSAXeD9O2oI=;
+        b=ArTlwOdG658HDoQCbMayFXJF6qo7LZn1wpV0vNrXje58TowypR7M112u19AaHF7BJi
+         yTpiMrB8Ahr6tjUvkXjThbf+jcK/XZzZl+uUfQHnmNXGmsWDq+KgU+w19ivEx12hlrjO
+         MjfbdvfUQUV9n4W8N0LnAa7ZYOAI37Q4xe2C9ZGLGtzVaCEj7nFn4bxzT6K2EjaRPxP/
+         rZVxBsa56t6YJvavcjm434iwIAoqDRI/VdekjRgPggU0mV+V95Y/QW7mj/UE/sJsxvAg
+         MTMXbwlT9dy7Mkk3RHHzdv/DsUHOGGAXxN2Pn2sZZaZrxH5M85+ZHvBfQRqL2nd1jBzw
+         s/RQ==
+X-Gm-Message-State: AOAM532MeWu4k/sZStPEPkRaq+NJT8NUPaQrVKQgVgQKG+6DBP9WKYi2
+        q8Qo3iREZxKQj58RMYDgRGunfIbKajDcLWq5
+X-Google-Smtp-Source: ABdhPJws5e/bf1O5+jHM7h0S19SpwnFB7zNd9TDJSuO1sCdmqRfAA1qjZvfqoIilXgJRZk/fJFBXyg==
+X-Received: by 2002:a17:90b:1d84:: with SMTP id pf4mr17817198pjb.106.1643345744949;
+        Thu, 27 Jan 2022 20:55:44 -0800 (PST)
+Received: from localhost.localdomain ([103.117.248.198])
+        by smtp.gmail.com with ESMTPSA id e4sm20316238pge.74.2022.01.27.20.55.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 19:25:29 -0800 (PST)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH v2 2/2] cpufreq: qcom-hw: Delay enabling throttle_irq
-Date:   Thu, 27 Jan 2022 19:25:54 -0800
-Message-Id: <20220128032554.155132-2-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220128032554.155132-1-bjorn.andersson@linaro.org>
-References: <20220128032554.155132-1-bjorn.andersson@linaro.org>
+        Thu, 27 Jan 2022 20:55:44 -0800 (PST)
+From:   Zichar Zhang <zichar.zhang@linaro.org>
+To:     zichar.zhang@linaro.org
+Cc:     gregkh@linuxfoundation.org, john.stultz@linaro.org,
+        krossmo@google.com, lee.jones@linaro.org, len.brown@intel.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        nayakvij@google.com, pavel@ucw.cz, rafael@kernel.org,
+        sumit.semwal@linaro.org, amit.pundir@linaro.org,
+        kernel-team@android.com
+Subject: [PATCH 1/1] [RFC] wakeup_reason: Add infrastructure to log and report why the system resumed from suspend.
+Date:   Fri, 28 Jan 2022 12:55:22 +0800
+Message-Id: <20220128045522.3505336-1-zichar.zhang@linaro.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CAE9iGoiCZZBkyX9ZWnhSDMjWmucOmybCOp=XTr6Hz5rN9GNyrw@mail.gmail.com>
+References: <CAE9iGoiCZZBkyX9ZWnhSDMjWmucOmybCOp=XTr6Hz5rN9GNyrw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In the event that the SoC is under thermal pressure while booting it's
-possible for the dcvs notification to happen inbetween the cpufreq
-framework calling init and it actually updating the policy's
-related_cpus cpumask.
+When optimizing for power usage, it's useful to be able to track and
+log each time why the system woke up from suspend. This is useful as
+it helps us understand why we might be seeing more wakeups then we
+expect. For a while now, Android has carried the "wakeup_reasons"
+patch which provides this to allow developers to optimize battery life
+on devices.
 
-Prior to the introduction of the thermal pressure update helper an empty
-cpumask would simply result in the thermal pressure of no cpus being
-updated, but the new code will attempt to dereference an invalid per_cpu
-variable.
+This patch tries to provide a simplified version of the
+Android wakeup_reasons functionality. It tracks both software
+wakeup_sources as well as IRQS that brought the device out of suspend,
+and exposes these values as a string via /sys/power/last_wakeup_reason.
 
-Avoid this problem by using the newly reintroduced "ready" callback, to
-postpone enabling the IRQ until the related_cpus cpumask is filled in.
+This differs slightly from the Android patch, in that it doesn't track
+the suspend-abort reason logging, the misconfigured or unmapped IRQS,
+the threaded IRQS, and time spent in suspend/resume. But it provides
+an initial simple step to add a useful portion of the logic.
 
-Fixes: 0258cb19c77d ("cpufreq: qcom-cpufreq-hw: Use new thermal pressure update function")
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Here is the requirements from https://lkml.org/lkml/2022/1/10/1134 for
+"wakeup_reason" with line head "[Y]" and "[N]" to notify if this commit
+meet the requirements or not. And if it is not, the detail reason is
+right behind it after "--".
+
+* wakeup IRQs, including:
+    [Y]* multiple IRQs if more than one is pending during resume flow
+    [N]* unmapped HW IRQs
+    [N]* misconfigured IRQs
+    [N]* threaded IRQs (not just the parent chip's IRQ)
+    -- If we do these things, the additional codes should be added in
+    interrupt subsystem or some interrupt controller drivers. These
+    codes are no relationship with the interrupt subsystem or the
+    interrupt controllers. And we can't distinguish these IRQs from
+    "non-suspend" environment, even the "Android patch" can't do that.
+    So it will make the things complicated.
+    -- If these IRQs do hanpen, the code in this commit will catch
+    them as "unknown wakeup reason" and suggest user to check the
+    kernel log for more information.
+    -- I think We should cooperate with interrupt subsystem to log
+    these "abnormal" IRQs. And it could be several additional
+    commits to accomplish this work together then.
+
+* non-IRQ wakeups, including:
+    [Y]* wakeups caused by an IRQ that was consumed by lower-level SW
+    [Y]* wakeups from SOC architecture that don't manifest as IRQs
+
+* abort reasons, including:
+    [N]* wakeup_source activity
+    [N]* failure to freeze userspace
+    [N]* failure to suspend devices
+    [N]* failed syscore_suspend callback
+    -- These codes are "intrusive" to kernel (suspend/resume).
+    -- These "errors" are already printed in kernel log, if we add
+    these log to "wakeup_reason" either, it will cause double
+    "log string" in section ".data", which just waste of the memory.
+    -- As mentioned before, if these "abort action" happened, you
+    can catch string "unknown wakeup reason", and check the kernel
+    log then.
+
+* durations from the most recent cycle, including:
+    [N]* time spent doing suspend/resume work
+    [N]* time spent in suspend
+    -- Just separate these from "wakeup reason". It should be done
+    in another commit.
+
+This patch can be tested in Android using the following change to AOSP:
+  https://android-review.googlesource.com/c/platform/system/hardware/interfaces/+/1958666
+
+And there is a stress test code for the interfaces in kernel:
+  https://android-review.googlesource.com/c/kernel/common/+/1958189
+
+Any feedback or thoughts would be welcome!
+
+Signed-off-by: Zichar Zhang <zichar.zhang@linaro.org>
+Change-Id: Id70f3cbec15f24ea999d7f643e9589be9c047f2b
 ---
+ Documentation/ABI/testing/sysfs-power |   9 ++
+ drivers/base/power/wakeup.c           |   6 +
+ include/linux/wakeup_reason.h         |  35 +++++
+ kernel/power/Makefile                 |   1 +
+ kernel/power/main.c                   |  11 ++
+ kernel/power/wakeup_reason.c          | 183 ++++++++++++++++++++++++++
+ 6 files changed, 245 insertions(+)
+ create mode 100644 include/linux/wakeup_reason.h
+ create mode 100644 kernel/power/wakeup_reason.c
 
-Changes since v2:
-- Switched back to applying thermal pressure on "related_cpus", as
-  "policy->cpus" is adjusted based on CPU hotplug.
-- Reintroduced "ready" callback (in patch 1), as the maintainers of
-  topology_update_thermal_pressure() where not interested in allowing a cpumask
-  of 0.
-
- drivers/cpufreq/qcom-cpufreq-hw.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index 05f3d7876e44..effbb680b453 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -388,7 +388,7 @@ static int qcom_cpufreq_hw_lmh_init(struct cpufreq_policy *policy, int index)
+diff --git a/Documentation/ABI/testing/sysfs-power b/Documentation/ABI/testing/sysfs-power
+index 90ec4987074b..e79d7a49a24e 100644
+--- a/Documentation/ABI/testing/sysfs-power
++++ b/Documentation/ABI/testing/sysfs-power
+@@ -182,6 +182,15 @@ Description:
+ 		to a sleep state if any wakeup events are reported after the
+ 		write has returned.
  
- 	snprintf(data->irq_name, sizeof(data->irq_name), "dcvsh-irq-%u", policy->cpu);
- 	ret = request_threaded_irq(data->throttle_irq, NULL, qcom_lmh_dcvs_handle_irq,
--				   IRQF_ONESHOT, data->irq_name, data);
-+				   IRQF_ONESHOT | IRQF_NO_AUTOEN, data->irq_name, data);
++What:		/sys/power/last_wakeup_reason
++Date:		Jan 2022
++Contact:	Zichar Zhang <zichar.zhang@linaro.org>
++Description:
++		The /sys/power/last_wakeup_reason file shows the last reason
++		causing system "wake up" from suspend state. It could be an
++		interrupt signal, a kernel "wakeup_source" or just some other
++		reason logged into this file, and shows as a string.
++
+ What:		/sys/power/reserved_size
+ Date:		May 2011
+ Contact:	Rafael J. Wysocki <rjw@rjwysocki.net>
+diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+index 99bda0da23a8..a91ee1b8c0df 100644
+--- a/drivers/base/power/wakeup.c
++++ b/drivers/base/power/wakeup.c
+@@ -15,6 +15,7 @@
+ #include <linux/seq_file.h>
+ #include <linux/debugfs.h>
+ #include <linux/pm_wakeirq.h>
++#include <linux/wakeup_reason.h>
+ #include <trace/events/power.h>
+ 
+ #include "power.h"
+@@ -924,6 +925,7 @@ bool pm_wakeup_pending(void)
+ 
  	if (ret) {
- 		dev_err(&pdev->dev, "Error registering %s: %d\n", data->irq_name, ret);
- 		return 0;
-@@ -542,6 +542,14 @@ static int qcom_cpufreq_hw_cpu_exit(struct cpufreq_policy *policy)
- 	return 0;
+ 		pm_pr_dbg("Wakeup pending, aborting suspend\n");
++		log_ws_wakeup_reason();
+ 		pm_print_active_wakeup_sources();
+ 	}
+ 
+@@ -947,11 +949,15 @@ void pm_wakeup_clear(bool reset)
+ 	pm_wakeup_irq = 0;
+ 	if (reset)
+ 		atomic_set(&pm_abort_suspend, 0);
++
++	clear_wakeup_reason();
  }
  
-+static void qcom_cpufreq_ready(struct cpufreq_policy *policy)
-+{
-+	struct qcom_cpufreq_data *data = policy->driver_data;
+ void pm_system_irq_wakeup(unsigned int irq_number)
+ {
+ 	if (pm_wakeup_irq == 0) {
++		log_irq_wakeup_reason(irq_number);
 +
-+	if (data->throttle_irq >= 0)
-+		enable_irq(data->throttle_irq);
+ 		pm_wakeup_irq = irq_number;
+ 		pm_system_wakeup();
+ 	}
+diff --git a/include/linux/wakeup_reason.h b/include/linux/wakeup_reason.h
+new file mode 100644
+index 000000000000..8d6e7a0e0bad
+--- /dev/null
++++ b/include/linux/wakeup_reason.h
+@@ -0,0 +1,35 @@
++/*
++ * include/linux/wakeup_reason.h
++ *
++ * Logs the reason which caused the kernel to resume
++ * from the suspend mode.
++ *
++ * Copyright (C) 2021 Linaro, Inc.
++ * This software is licensed under the terms of the GNU General Public
++ * License version 2, as published by the Free Software Foundation, and
++ * may be copied, distributed, and modified under those terms.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ */
++
++#ifndef _LINUX_WAKEUP_REASON_H
++#define _LINUX_WAKEUP_REASON_H
++
++#define MAX_WAKEUP_REASON_STR_LEN 256
++
++#ifdef CONFIG_SUSPEND
++ssize_t log_ws_wakeup_reason(void);
++ssize_t log_irq_wakeup_reason(unsigned int irq_number);
++void clear_wakeup_reason(void);
++ssize_t last_wakeup_reason_get(char *buf, ssize_t max);
++#else
++ssize_t log_ws_wakeup_reason(void) { }
++ssize_t log_irq_wakeup_reason(unsigned int irq_number) { }
++void clear_wakeup_reason(void) { }
++ssize_t last_wakeup_reason_get(char *buf, ssize_t max) { }
++#endif
++
++#endif /* _LINUX_WAKEUP_REASON_H */
+diff --git a/kernel/power/Makefile b/kernel/power/Makefile
+index 5899260a8bef..73d77edc6a08 100644
+--- a/kernel/power/Makefile
++++ b/kernel/power/Makefile
+@@ -14,6 +14,7 @@ obj-$(CONFIG_HIBERNATION)	+= hibernate.o snapshot.o swap.o
+ obj-$(CONFIG_HIBERNATION_SNAPSHOT_DEV) += user.o
+ obj-$(CONFIG_PM_AUTOSLEEP)	+= autosleep.o
+ obj-$(CONFIG_PM_WAKELOCKS)	+= wakelock.o
++obj-$(CONFIG_PM_SLEEP)		+= wakeup_reason.o
+ 
+ obj-$(CONFIG_MAGIC_SYSRQ)	+= poweroff.o
+ 
+diff --git a/kernel/power/main.c b/kernel/power/main.c
+index 44169f3081fd..859af097813c 100644
+--- a/kernel/power/main.c
++++ b/kernel/power/main.c
+@@ -16,6 +16,7 @@
+ #include <linux/suspend.h>
+ #include <linux/syscalls.h>
+ #include <linux/pm_runtime.h>
++#include <linux/wakeup_reason.h>
+ 
+ #include "power.h"
+ 
+@@ -739,6 +740,15 @@ static ssize_t wakeup_count_store(struct kobject *kobj,
+ 
+ power_attr(wakeup_count);
+ 
++static ssize_t last_wakeup_reason_show(struct kobject *kobj,
++				struct kobj_attribute *attr,
++				char *buf)
++{
++	return last_wakeup_reason_get(buf, PAGE_SIZE);
 +}
 +
- static struct freq_attr *qcom_cpufreq_hw_attr[] = {
- 	&cpufreq_freq_attr_scaling_available_freqs,
- 	&cpufreq_freq_attr_scaling_boost_freqs,
-@@ -561,6 +569,7 @@ static struct cpufreq_driver cpufreq_qcom_hw_driver = {
- 	.fast_switch    = qcom_cpufreq_hw_fast_switch,
- 	.name		= "qcom-cpufreq-hw",
- 	.attr		= qcom_cpufreq_hw_attr,
-+	.ready		= qcom_cpufreq_ready,
- };
- 
- static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
++power_attr_ro(last_wakeup_reason);
++
+ #ifdef CONFIG_PM_AUTOSLEEP
+ static ssize_t autosleep_show(struct kobject *kobj,
+ 			      struct kobj_attribute *attr,
+@@ -892,6 +902,7 @@ static struct attribute * g[] = {
+ #ifdef CONFIG_PM_SLEEP
+ 	&pm_async_attr.attr,
+ 	&wakeup_count_attr.attr,
++	&last_wakeup_reason_attr.attr,
+ #ifdef CONFIG_SUSPEND
+ 	&mem_sleep_attr.attr,
+ 	&sync_on_suspend_attr.attr,
+diff --git a/kernel/power/wakeup_reason.c b/kernel/power/wakeup_reason.c
+new file mode 100644
+index 000000000000..38d5f5e4d373
+--- /dev/null
++++ b/kernel/power/wakeup_reason.c
+@@ -0,0 +1,183 @@
++/*
++ * driver/base/power/wakeup_reason.c
++ *
++ * Logs the reasons which caused the kernel to resume from
++ * the suspend mode.
++ *
++ * Copyright (C) 2021 Linaro, Inc.
++ * This software is licensed under the terms of the GNU General Public
++ * License version 2, as published by the Free Software Foundation, and
++ * may be copied, distributed, and modified under those terms.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ */
++
++#include <linux/kernel.h>
++#include <linux/irq.h>
++#include <linux/interrupt.h>
++#include <linux/io.h>
++#include <linux/init.h>
++#include <linux/spinlock.h>
++#include <linux/notifier.h>
++#include <linux/suspend.h>
++#include <linux/wakeup_reason.h>
++
++static DEFINE_SPINLOCK(wakeup_reason_lock);
++
++static bool capture_reasons;
++static char wakeup_reason_str[MAX_WAKEUP_REASON_STR_LEN];
++
++ssize_t log_ws_wakeup_reason(void)
++{
++	struct wakeup_source *ws, *last_active_ws = NULL;
++	int idx, max, len = 0;
++	bool active = false;
++	unsigned long flags;
++
++	spin_lock_irqsave(&wakeup_reason_lock, flags);
++
++	if (!capture_reasons) {
++		goto out;
++	}
++
++	idx = wakeup_sources_read_lock();
++	max = MAX_WAKEUP_REASON_STR_LEN;
++	for_each_wakeup_source(ws) {
++		if (ws->active && len < max) {
++			if (!active)
++				len += scnprintf(wakeup_reason_str, max,
++						"Pending Wakeup Sources: ");
++			len += scnprintf(wakeup_reason_str + len, max - len,
++				"%s ", ws->name);
++			active = true;
++		} else if (!active &&
++			   (!last_active_ws ||
++			    ktime_to_ns(ws->last_time) >
++			    ktime_to_ns(last_active_ws->last_time))) {
++			last_active_ws = ws;
++		}
++	}
++	if (!active && last_active_ws) {
++		len = scnprintf(wakeup_reason_str, max,
++				"Last active Wakeup Source: %s",
++				last_active_ws->name);
++	}
++	len += scnprintf(wakeup_reason_str + len, max - len, "\n");
++	wakeup_sources_read_unlock(idx);
++
++out:
++	spin_unlock_irqrestore(&wakeup_reason_lock, flags);
++
++	return len;
++}
++EXPORT_SYMBOL(log_ws_wakeup_reason);
++
++ssize_t log_irq_wakeup_reason(unsigned int irq_number)
++{
++	int len = 0;
++	struct irq_desc *desc;
++	const char *name = "null";
++	unsigned long flags;
++
++	desc = irq_to_desc(irq_number);
++	if (desc == NULL)
++		name = "stray irq";
++	else if (desc->action && desc->action->name)
++		name = desc->action->name;
++
++	spin_lock_irqsave(&wakeup_reason_lock, flags);
++
++	len = strnlen(wakeup_reason_str, MAX_WAKEUP_REASON_STR_LEN);
++	len += scnprintf(wakeup_reason_str + len,
++			MAX_WAKEUP_REASON_STR_LEN - len,
++			"%d %s\n", irq_number, name);
++
++	spin_unlock_irqrestore(&wakeup_reason_lock, flags);
++
++	return len;
++}
++EXPORT_SYMBOL(log_irq_wakeup_reason);
++
++void clear_wakeup_reason(void)
++{
++	unsigned long flags;
++
++	spin_lock_irqsave(&wakeup_reason_lock, flags);
++
++	memset(wakeup_reason_str, 0, sizeof(wakeup_reason_str));
++
++	spin_unlock_irqrestore(&wakeup_reason_lock, flags);
++}
++EXPORT_SYMBOL(clear_wakeup_reason);
++
++ssize_t last_wakeup_reason_get(char *buf, ssize_t max)
++{
++	ssize_t len, size = 0;
++	unsigned long flags;
++
++	if (!buf) {
++		return 0;
++	}
++
++	spin_lock_irqsave(&wakeup_reason_lock, flags);
++
++	len = strnlen(wakeup_reason_str, MAX_WAKEUP_REASON_STR_LEN);
++	if (len > 0) {
++		size = scnprintf(buf, max, "%s", wakeup_reason_str);
++	} else {
++		size = -ENODATA;
++	}
++
++	spin_unlock_irqrestore(&wakeup_reason_lock, flags);
++
++	return size;
++}
++EXPORT_SYMBOL(last_wakeup_reason_get);
++
++static int wakeup_reason_pm_event(struct notifier_block *notifier,
++		unsigned long pm_event, void *unused)
++{
++	unsigned long flags;
++
++	switch (pm_event) {
++	case PM_SUSPEND_PREPARE:
++		spin_lock_irqsave(&wakeup_reason_lock, flags);
++		capture_reasons = true;
++		spin_unlock_irqrestore(&wakeup_reason_lock, flags);
++
++		clear_wakeup_reason();
++		break;
++	case PM_POST_SUSPEND:
++		spin_lock_irqsave(&wakeup_reason_lock, flags);
++		capture_reasons = false;
++		if (!strnlen(wakeup_reason_str, MAX_WAKEUP_REASON_STR_LEN)) {
++			scnprintf(wakeup_reason_str, MAX_WAKEUP_REASON_STR_LEN,
++				"unknown wakeup reason, please check the kernel log\n");
++		}
++		spin_unlock_irqrestore(&wakeup_reason_lock, flags);
++
++		pr_debug("Resume caused by %s\n", wakeup_reason_str);
++		break;
++	default:
++		break;
++	}
++	return NOTIFY_DONE;
++}
++
++static struct notifier_block wakeup_reason_pm_notifier_block = {
++	.notifier_call = wakeup_reason_pm_event,
++};
++
++static int __init wakeup_reason_init(void)
++{
++	if (register_pm_notifier(&wakeup_reason_pm_notifier_block)) {
++		pr_warn("[%s] failed to register PM notifier\n", __func__);
++		return -EPERM;
++	}
++
++	return 0;
++}
++late_initcall(wakeup_reason_init);
 -- 
-2.33.1
+2.25.1
 
