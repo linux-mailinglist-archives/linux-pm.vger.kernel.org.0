@@ -2,115 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A885B4A2B8E
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Jan 2022 05:10:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB5364A2CA3
+	for <lists+linux-pm@lfdr.de>; Sat, 29 Jan 2022 08:54:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345258AbiA2EKo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Jan 2022 23:10:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58904 "EHLO
+        id S1343761AbiA2Hxc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 29 Jan 2022 02:53:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232072AbiA2EKm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Jan 2022 23:10:42 -0500
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2B0C06173B
-        for <linux-pm@vger.kernel.org>; Fri, 28 Jan 2022 20:10:41 -0800 (PST)
-Received: by mail-qv1-xf2e.google.com with SMTP id o9so7696325qvy.13
-        for <linux-pm@vger.kernel.org>; Fri, 28 Jan 2022 20:10:41 -0800 (PST)
+        with ESMTP id S241538AbiA2Hxc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 29 Jan 2022 02:53:32 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364EDC061714
+        for <linux-pm@vger.kernel.org>; Fri, 28 Jan 2022 23:53:31 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id t9so12146321lji.12
+        for <linux-pm@vger.kernel.org>; Fri, 28 Jan 2022 23:53:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=C4Lf1TnT0Pcqk5oV6l/C2rZINNCB+v1VbsrorTZOtDg=;
-        b=vcjmUBT7vZvEQ7XtlY/4gJrb0jglLdfakbX7LrVnurEzO0sqHYKFJvXNYrNXyDPEIA
-         G4EGCvlJcNWco5/C2kplbki1UUQTxytOednDDSBUqNuWzDtkVurlHBQOT8diuVWRTZ/V
-         zt0D+EZY3OkELZJZbvsanu4yvJ/3ANkvMZcSifg0z2RVHRdjMp7h1UWnfyUt5MRmm7yk
-         mTrhrU/gti/5EA/1ZSH0gd7aVZ15dOXah9SCmRx8diErLXLRBO+gticChqxiIhaV06V5
-         NpMoc3wRuLMaoZaNRIDTBOvqnvrKL2ep/DgJ6GDSRboqIP4blNybARndH7YF2psnSJXK
-         8Gvw==
+        bh=ZjffD8C6hWszKe+q+e4gp+s/8emWlsNf02+aVWLSx1o=;
+        b=XtVYbiuKY9YiMw7e4qqMCW0JoeMk0DpTYwCwXZJrNVziB0gmDaUmkyglq9LmvvTJMW
+         zVozIdHYPSnjxLH1Ov0a235DAG9mULlYwksbOkmv4YQoOj9cMIzAlh9OjvoSsSHW0w+P
+         lbupVGzXMFz8yplhEiPpLVYiiJE2bkE0WCGzHKPRDvIw6RgSFdeqQZSdNgwAXWiRIpOJ
+         uRRa5UY2j/OtaEWGNnZv7pRHj+eKlj3iqzJvaGfhFxBZZ2PvRDmExevajdp20nzgFgou
+         bdBr8696+nNQ/Z6DYSFinK823o7c4wt8EiinzJ6nMzCGCGOpAgBcEsuZJEqDTIpjn7PJ
+         2qVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=C4Lf1TnT0Pcqk5oV6l/C2rZINNCB+v1VbsrorTZOtDg=;
-        b=RQj3senZkiHcEto9gumkgXFuC2sjih5QHP/Z0BtlNIlvOuhBwa8z7Y3e+KryYfuuu4
-         XI3kjTD5wnvEb1tMOeG8GKOEpj9jp0RRCby6Z3sphOMfIKJSjUiU6zP/CL5jDLYdmVjJ
-         SledH6GC/RG7dWw8C96oQGxV6zwWPY3VtBJdPKFP3ur/idCcqzZ78aQxmenmXDsq6mRA
-         BOne4nxR2T5Ae3jRgP1HwhdIjBoh3O2TZtTHh9ZFkpZKdaxeDUE8/LjpnsrLT7cvPwQy
-         BpbxMLNrXsY5gU5m8liQAQtf6iUozEnjVAv3jjqoEEKPMaD6v4pbZ2XBfMRSIh2fHPKW
-         GroA==
-X-Gm-Message-State: AOAM533/OpNyUTWY+0/5Z3rtIBovnZMmeY9uA/CatlpaL2nbWEp2gbyY
-        VaucEKLO5pKmXFZRApjFnqnTb9rLPKkQjXlAyXyrAw==
-X-Google-Smtp-Source: ABdhPJxitrKVz1BvX4K8YA0JPZ7P1zLYokkrXpyfe5xR/tkBJHMB25GhyiBNaKQ7hs+jrRuRypQ0wpbQjhH0W001FwQ=
-X-Received: by 2002:a05:6214:29cd:: with SMTP id gh13mr9811402qvb.122.1643429440974;
- Fri, 28 Jan 2022 20:10:40 -0800 (PST)
+        bh=ZjffD8C6hWszKe+q+e4gp+s/8emWlsNf02+aVWLSx1o=;
+        b=hCXqS2gcd3pLHHhvgwncgh43ulj3DkDRciQjEsRWD5N0FlMYpP7a9kkpQiA4WJUcW0
+         CpOIrhPeAquUNvM+ZAaiH8tn0O46lZkM8mfSs218uz22Iuqt+5+OHSNVFfJ8ztJlMwD2
+         a062zPYWxsfTzFbXF6awCEICCJ+hjTeEwvKBIaKOqvndaMpRTuxBOI20DZvb2445oeBB
+         RL6ntD41PRbOfNxEu4l8/Sz3vA0VTBvBmUkT/jqP3Sj30Blvw4E/6lf+iI3j6Kbd+7UU
+         WWcdGUcpfYvU2U8xn8qEGtiqeD6X/s/iBVapp1IUYVtFLWW4nM7djVrhLiB57qhCbJMm
+         yKGQ==
+X-Gm-Message-State: AOAM532pfB+LGaK7AreCtT57KKObgVqXGhhVmS20Kzhp1b0wnLjOmtCH
+        bx6wV0jVvthXFZ9VwHrfeuuMou10Utk54h0xrlzPYw==
+X-Google-Smtp-Source: ABdhPJxXjmeIrPS5esBmIZy29jk4awgm1RZq5Zk2vMrOjU/zU+/NmzMmcb4LYpJstc59tkQ37omBeDPXUe/O8Woi8/g=
+X-Received: by 2002:a2e:bf01:: with SMTP id c1mr7963677ljr.406.1643442809222;
+ Fri, 28 Jan 2022 23:53:29 -0800 (PST)
 MIME-Version: 1.0
-References: <20220128161002.2308563-1-bryan.odonoghue@linaro.org>
- <20220128161002.2308563-3-bryan.odonoghue@linaro.org> <CAA8EJpqvDqTH3+ATsdC2pwtfT-OWpLNSUgOPmeU_Tpu8Uqa1+g@mail.gmail.com>
- <251a8515-7f8d-2535-e222-17443266f275@linaro.org>
-In-Reply-To: <251a8515-7f8d-2535-e222-17443266f275@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Sat, 29 Jan 2022 07:10:29 +0300
-Message-ID: <CAA8EJpoSjaMsYn42X9arPQan-8Ex6LFJf4ZKQMmyts3J7VTcyw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] interconnect: qcom: msm8939: Merge snoc and snoc_mm
- into one
-To:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
-Cc:     djakov@kernel.org, bjorn.andersson@linaro.org, agross@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        jun.nie@linaro.org, shawn.guo@linaro.org, benl@squareup.com
+References: <CAHTsKTdSyC7Jwk56tDR8QwM_oO13ByBRaA78VpHymOZ7J4NQ9Q@mail.gmail.com>
+ <CANcMJZA16b5gT++73a8hjA=6OeLsPLQM-X+ps3kEsYHVyariGg@mail.gmail.com> <CAE9iGoiCZZBkyX9ZWnhSDMjWmucOmybCOp=XTr6Hz5rN9GNyrw@mail.gmail.com>
+In-Reply-To: <CAE9iGoiCZZBkyX9ZWnhSDMjWmucOmybCOp=XTr6Hz5rN9GNyrw@mail.gmail.com>
+From:   Kelly Rossmoyer <krossmo@google.com>
+Date:   Fri, 28 Jan 2022 23:52:52 -0800
+Message-ID: <CAHTsKTcHd1Uo2QVr=ux1hFfA+x00k3i3Jya5n5XqZFfg9B68bw@mail.gmail.com>
+Subject: Re: [RFC] PM: suspend: Upstreaming wakeup reason capture support
+To:     Zichar Zhang <zichar.zhang@linaro.org>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Vijay Nayak <nayakvij@google.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sumit Semwal <sumit.semwal@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, 29 Jan 2022 at 02:23, Bryan O'Donoghue
-<bryan.odonoghue@linaro.org> wrote:
+On Tue, Jan 25, 2022 at 9:09 PM Zichar Zhang <zichar.zhang@linaro.org> wrote:
 >
-> On 28/01/2022 22:24, Dmitry Baryshkov wrote:
-> > This would lead to higher frequencies being set on both 'normal' and
-> > mm snoc clocks, thus (possibly) increasing power consumption.
-> >
-> How so ?
+> hello John,  Kelly!
 
-If I remember correctly, bus clocks are set to max(sum(avg_bw),
-max(peak_bw)) calculated over all bandwidth paths (nodes).
-If you merge snoc and snoc_mm, the resulting sum(avg_bw) would be a
-sum of (older) snoc's and snoc_mm's sums.
-Thus the bus clocks (both bus and bus_mm) would be set to higher frequencies.
+Hello!  Happy to see what the future may bring in this space, and looking
+forward to what we can all do to move this area forward.
 
->
-> There are four clocks
->
-> bus
-> bus_a
-> bus_mm
-> bus_a_mm
->
-> The last two clocks
->
-> SNOC performance points are
-> 0 | 19.2  | XO
-> 1 | 50    | GPLL0
-> 2 | 100   | GPLL0
-> 3 | 133.3 | GPLL0
-> 4 | 160   | GPLL0
-> 5 | 200   | GPLL0
-> 6 | 266.6 | GPLL0
->
-> SNOC_MM performance points are
-> 0 | 19.2  | XO
-> 1 | 50    | GPLL0
-> 2 | 100   | GPLL0
-> 3 | 133.3 | GPLL0
-> 4 | 160   | GPLL0
-> 5 | 200   | GPLL0
-> 6 | 266.6 | GPLL0
-> 7 | 320   | GPLL0
-> 8 | 400   | GPLL0
->
-> Its GPLL0 being set, the snoc_mm clocks really just map back to GPLL0
+>     -- If these IRQs do hanpen, the code in this commit will catch
+>     them as "unknown wakeup reason" and suggest user to check the
+>     kernel log for more information.
 
+I would argue that - at least in Android context, as that's what I know -
+the kernel log is not a substitute for wakeup reason capture.
+1) It is common to find yourself troubleshooting battery life issues for
+   which kernel log data is not unavailable.
+2) Troubleshooting is not the only consideration.  Since "why aren't we in
+   suspend right now?" is such a key question for mobile device battery
+   life, this is also about power attribution.  And I think trying to build
+   that upon live kernel log parsing would be both inefficient and brittle.
+   (But my lack of knowledge is vast, so maybe that's a solvable problem?)
 
+> >> * abort reasons, including:
+> >>    * wakeup_source activity
+> >>    * failure to freeze userspace
+> >>    * failure to suspend devices
+> >>    * failed syscore_suspend callback
+>
+>     -- As mentioned before, if these "abort action" happened, you
+>     can catch string "unknown wakeup reason", and check the kernel
+>     log then.
 
--- 
-With best wishes
-Dmitry
+I don't think the kernel log is a solution here.  Suspend aborts can be a
+significant fraction of how suspend attempts end, making them a key
+contributor to battery drain.  If the eventual set of patches doesn't solve
+for at least the most common kinds of suspend aborts, that leaves a lot of
+power observability off the table.  And again, at least on Android, kernel
+log content is often not available for the interval when a series of
+suspend aborts contributed to power drain.
+
+> The patch is not complete, these is the next steps:
+> 1. add interface to show time spend in suspend/resume work.
+> (after this, I think it could be works and replace the android patch)
+
+I believe Android would experience a significant regression in capability
+with only those two patches implemented, so that would require a lot of
+careful consideration.
+
+> 2. we need solve the "unmapped HW IRQs", "misconfigured IRQs" and
+> "threaded IRQs" problem.
+> (this is the hardest one)
+
+FWIW, I'm already expecting unmapped HW IRQs and misconfigured IRQs not to
+make the cut.  Those have helped solve real and recurring issues, but
+they're admittedly niche solutions to infrequent problems at the expense of
+messy code coupling, so... maybe not broadly beneficial for Linux.
+
+Threaded wakeup IRQs are a different matter.  As one example, there are
+architectures in which the RTC wakeup IRQ is threaded and knowing "this
+string of wakeups was due to the RTC" is a lot more useful than "this
+string of wakeups was due to an irqchip with tens of child IRQs".
+
+> ... So it just report a "wakeup reason" from
+> interrupt subsystem. It just a coincidence that most hardware "wakeup
+> reason" is also the interupt signal.  Even the "interrupt" and "wake up"
+> signal are separated from each other in GIC700.
+> So give them a chance to report the their "wakeup reason".)
+
+Agreed.  But I do hope we can find a way to bring them together so a single
+story is presented to userspace.  Or, barring that, at least make it easy
+for userspace to figure that out after the fact.
+
+Thanks so much for the work you are doing on this and taking the time to
+walk me through your thoughts.  I'm happy to contribute in whatever manner
+adds value.
+
+--
+
+Kelly Rossmoyer | Software Engineer | krossmo@google.com | 858-239-4111
