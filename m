@@ -2,143 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB5364A2CA3
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Jan 2022 08:54:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 393E44A2D12
+	for <lists+linux-pm@lfdr.de>; Sat, 29 Jan 2022 09:27:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343761AbiA2Hxc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 29 Jan 2022 02:53:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50712 "EHLO
+        id S1345144AbiA2I12 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 29 Jan 2022 03:27:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241538AbiA2Hxc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 29 Jan 2022 02:53:32 -0500
+        with ESMTP id S1344981AbiA2I11 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 29 Jan 2022 03:27:27 -0500
 Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364EDC061714
-        for <linux-pm@vger.kernel.org>; Fri, 28 Jan 2022 23:53:31 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id t9so12146321lji.12
-        for <linux-pm@vger.kernel.org>; Fri, 28 Jan 2022 23:53:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F39C061714
+        for <linux-pm@vger.kernel.org>; Sat, 29 Jan 2022 00:27:27 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id c15so12219323ljf.11
+        for <linux-pm@vger.kernel.org>; Sat, 29 Jan 2022 00:27:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ZjffD8C6hWszKe+q+e4gp+s/8emWlsNf02+aVWLSx1o=;
-        b=XtVYbiuKY9YiMw7e4qqMCW0JoeMk0DpTYwCwXZJrNVziB0gmDaUmkyglq9LmvvTJMW
-         zVozIdHYPSnjxLH1Ov0a235DAG9mULlYwksbOkmv4YQoOj9cMIzAlh9OjvoSsSHW0w+P
-         lbupVGzXMFz8yplhEiPpLVYiiJE2bkE0WCGzHKPRDvIw6RgSFdeqQZSdNgwAXWiRIpOJ
-         uRRa5UY2j/OtaEWGNnZv7pRHj+eKlj3iqzJvaGfhFxBZZ2PvRDmExevajdp20nzgFgou
-         bdBr8696+nNQ/Z6DYSFinK823o7c4wt8EiinzJ6nMzCGCGOpAgBcEsuZJEqDTIpjn7PJ
-         2qVw==
+        bh=w9uRzLT9tOaaqJM7nSMiNZ/1KY+M4UxydAN6h5AO9MI=;
+        b=aW8u7H6qeuvdLJsJXRJr4Qi2iXnWYsgSsPltESLApBgvx8c2ZZoIXyjXi+8Rpv8uZh
+         kyouL7Vg2mulPxjRMWY1yolI0YuY4hcsmlHBtXc8MzP3R43eKrsAjqj+JPYT1D2fyxsr
+         7jqBgUygsfVoEZNGAjTg+cumT4CGZpxq8BltpfIsp+26BYuGg67CGzNod9UCf7++ULtP
+         xfsq/uTFN3ArJLfYHsqSkAjLXPlOlqin0DCaHSeHLup4Cl/YpozOc5A9MCRyuyzhFtqc
+         a/wvCsQKp8Y2o82FBBfmt1nBImLpR8Hb3c9AbkmQTHQdvVJrCj8lo0Ga4ZmhmFGngEGU
+         ckFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ZjffD8C6hWszKe+q+e4gp+s/8emWlsNf02+aVWLSx1o=;
-        b=hCXqS2gcd3pLHHhvgwncgh43ulj3DkDRciQjEsRWD5N0FlMYpP7a9kkpQiA4WJUcW0
-         CpOIrhPeAquUNvM+ZAaiH8tn0O46lZkM8mfSs218uz22Iuqt+5+OHSNVFfJ8ztJlMwD2
-         a062zPYWxsfTzFbXF6awCEICCJ+hjTeEwvKBIaKOqvndaMpRTuxBOI20DZvb2445oeBB
-         RL6ntD41PRbOfNxEu4l8/Sz3vA0VTBvBmUkT/jqP3Sj30Blvw4E/6lf+iI3j6Kbd+7UU
-         WWcdGUcpfYvU2U8xn8qEGtiqeD6X/s/iBVapp1IUYVtFLWW4nM7djVrhLiB57qhCbJMm
-         yKGQ==
-X-Gm-Message-State: AOAM532pfB+LGaK7AreCtT57KKObgVqXGhhVmS20Kzhp1b0wnLjOmtCH
-        bx6wV0jVvthXFZ9VwHrfeuuMou10Utk54h0xrlzPYw==
-X-Google-Smtp-Source: ABdhPJxXjmeIrPS5esBmIZy29jk4awgm1RZq5Zk2vMrOjU/zU+/NmzMmcb4LYpJstc59tkQ37omBeDPXUe/O8Woi8/g=
-X-Received: by 2002:a2e:bf01:: with SMTP id c1mr7963677ljr.406.1643442809222;
- Fri, 28 Jan 2022 23:53:29 -0800 (PST)
+        bh=w9uRzLT9tOaaqJM7nSMiNZ/1KY+M4UxydAN6h5AO9MI=;
+        b=K1Mxu7Nf78aug9NqNd6fmxWxmFIqdB28fHBMYtjVUXw3/RALf+eem23r5wyNRYib/Z
+         VzG8x6qHF+XtCPd7gTRuGc+3ICUQcBKrU0vy+mvHGUoaOkSYQXIIHPhHs4eZY7gMXbl9
+         0dAwJSewEwyGYZT3fH3WbaNkG3MJI8QPlLFuOrlWqvwv8JRjI8bbA9+vtNTUCVSl5VxT
+         99Kl/T5ouGPO0s89ja2I3ye3m3ERBB4qwLB/iOFbmhVhglR60rJJG2mWShpI/w1MY7QZ
+         3YhwIjUBSoxNQU/TEcB1OcfBEVxo9A/aZQAxRKipe1ywlc2lVMYCG55QYYVxo38ENpCg
+         yKKA==
+X-Gm-Message-State: AOAM530xiN9Dmw0YijErsUUHbQlpMouaMltGrYdTvhKOqilnBWf3SoQH
+        kPVPpN/ByWroVfnvWmzsg65yFADqYb8GFqcGn1+CLw==
+X-Google-Smtp-Source: ABdhPJxpz9Bvq18me08M00YHjoD295rRRh9PT9SOtaJU/iABRC0Qg+sWNK2KHRfUeK0jlNA2/4eyyV/dtBXrembmLJs=
+X-Received: by 2002:a05:651c:1142:: with SMTP id h2mr8171907ljo.150.1643444845259;
+ Sat, 29 Jan 2022 00:27:25 -0800 (PST)
 MIME-Version: 1.0
 References: <CAHTsKTdSyC7Jwk56tDR8QwM_oO13ByBRaA78VpHymOZ7J4NQ9Q@mail.gmail.com>
- <CANcMJZA16b5gT++73a8hjA=6OeLsPLQM-X+ps3kEsYHVyariGg@mail.gmail.com> <CAE9iGoiCZZBkyX9ZWnhSDMjWmucOmybCOp=XTr6Hz5rN9GNyrw@mail.gmail.com>
-In-Reply-To: <CAE9iGoiCZZBkyX9ZWnhSDMjWmucOmybCOp=XTr6Hz5rN9GNyrw@mail.gmail.com>
+ <CAJZ5v0jrU4Xw2wzdUL9Vd2C6u8NVx5J79DeiRY6KU1xT6ZSuqw@mail.gmail.com> <CAJZ5v0gLMSPsaS7Jnsr8DhevaQamsVk=pu=BfXZxrT+SBAM=fQ@mail.gmail.com>
+In-Reply-To: <CAJZ5v0gLMSPsaS7Jnsr8DhevaQamsVk=pu=BfXZxrT+SBAM=fQ@mail.gmail.com>
 From:   Kelly Rossmoyer <krossmo@google.com>
-Date:   Fri, 28 Jan 2022 23:52:52 -0800
-Message-ID: <CAHTsKTcHd1Uo2QVr=ux1hFfA+x00k3i3Jya5n5XqZFfg9B68bw@mail.gmail.com>
+Date:   Sat, 29 Jan 2022 00:26:48 -0800
+Message-ID: <CAHTsKTc0M0wDLVJovzO01z1B9iOSc4cHcS4tNffykna3c=9eJQ@mail.gmail.com>
 Subject: Re: [RFC] PM: suspend: Upstreaming wakeup reason capture support
-To:     Zichar Zhang <zichar.zhang@linaro.org>
-Cc:     John Stultz <john.stultz@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Lee Jones <lee.jones@linaro.org>,
-        Vijay Nayak <nayakvij@google.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Sumit Semwal <sumit.semwal@linaro.org>
+        Vijay Nayak <nayakvij@google.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 9:09 PM Zichar Zhang <zichar.zhang@linaro.org> wrote:
+On Thu, Jan 27, 2022 at 12:10 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
 >
-> hello John,  Kelly!
-
-Hello!  Happy to see what the future may bring in this space, and looking
-forward to what we can all do to move this area forward.
-
->     -- If these IRQs do hanpen, the code in this commit will catch
->     them as "unknown wakeup reason" and suggest user to check the
->     kernel log for more information.
-
-I would argue that - at least in Android context, as that's what I know -
-the kernel log is not a substitute for wakeup reason capture.
-1) It is common to find yourself troubleshooting battery life issues for
-   which kernel log data is not unavailable.
-2) Troubleshooting is not the only consideration.  Since "why aren't we in
-   suspend right now?" is such a key question for mobile device battery
-   life, this is also about power attribution.  And I think trying to build
-   that upon live kernel log parsing would be both inefficient and brittle.
-   (But my lack of knowledge is vast, so maybe that's a solvable problem?)
-
-> >> * abort reasons, including:
-> >>    * wakeup_source activity
-> >>    * failure to freeze userspace
-> >>    * failure to suspend devices
-> >>    * failed syscore_suspend callback
+> On Thu, Jan 27, 2022 at 8:54 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >
+> > On Mon, Jan 10, 2022 at 7:49 PM Kelly Rossmoyer <krossmo@google.com> wrote:
+> > >
+> > So as Zichar said, this is quite heavy-weight.
+> >
+> > I'm not fundamentally against adding more infrastructure to help
+> > identify issues related to system suspend, but there needs to be a
+> > clear benefit associated with any change in this direction.
 >
->     -- As mentioned before, if these "abort action" happened, you
->     can catch string "unknown wakeup reason", and check the kernel
->     log then.
+> That said, the general idea behind wakeup_source objects is that every
+> system wakeup event should be recorded in one of them which then can
+> be used for later analysis.
+>
+> If there are reasons why this cannot work in general, what are they?
 
-I don't think the kernel log is a solution here.  Suspend aborts can be a
-significant fraction of how suspend attempts end, making them a key
-contributor to battery drain.  If the eventual set of patches doesn't solve
-for at least the most common kinds of suspend aborts, that leaves a lot of
-power observability off the table.  And again, at least on Android, kernel
-log content is often not available for the interval when a series of
-suspend aborts contributed to power drain.
+I won't presume to say that it "cannot work in general."  Nearly everyone on
+this thread has more expertise here than I do, and I'm keenly aware of how
+much I don't know.  :-)
 
-> The patch is not complete, these is the next steps:
-> 1. add interface to show time spend in suspend/resume work.
-> (after this, I think it could be works and replace the android patch)
+What I will say is that - across the chips and architectures I've worked upon
+over the last few years - that concept has not appeared to match observed
+reality.  From what I've seen (which is a very narrow slice of the Linux
+universe, but I suspect is at least pretty representative of Android):
+* resumes from successful suspends are typically accompanied by a flurry of
+  wakesource activity from which it is not possible to determine what actually
+  caused the resume (despite last changed timestamps)
+* resumes that aren't accompanied by wakeup-armed IRQs can be even
+  less well-reflected by wakesource activity
+* I believe inferring wakeup reasons from wakesource stats would require
+  having a snapshot from the last moment prior to suspend, which seems
+  unsolvable from userspace
+* suspend aborts (which can be even more harmful for battery life than
+  "true" wakeups) are often caused by things that aren't reflected by specific
+  wakesources (e.g. a driver failing to suspend)
 
-I believe Android would experience a significant regression in capability
-with only those two patches implemented, so that would require a lot of
-careful consideration.
+And as I mentioned in my reply to Zichar, this isn't solely about
+troubleshooting.  There's a lot of room to improve on user-focused power
+attribution, and I'm hoping to build change in that direction upon the same
+foundation.  Having the best possible data about "why we're awake" serves both
+goals.
 
-> 2. we need solve the "unmapped HW IRQs", "misconfigured IRQs" and
-> "threaded IRQs" problem.
-> (this is the hardest one)
+Tangentially, the new(ish) wakesource stats interface has also proved to be
+quite difficult to utilize robustly from userspace (at least on Android, maybe
+not elsewhere?).  But that's a different fish for a different fryer, that I'm
+hoping to tackle later this year.
 
-FWIW, I'm already expecting unmapped HW IRQs and misconfigured IRQs not to
-make the cut.  Those have helped solve real and recurring issues, but
-they're admittedly niche solutions to infrequent problems at the expense of
-messy code coupling, so... maybe not broadly beneficial for Linux.
-
-Threaded wakeup IRQs are a different matter.  As one example, there are
-architectures in which the RTC wakeup IRQ is threaded and knowing "this
-string of wakeups was due to the RTC" is a lot more useful than "this
-string of wakeups was due to an irqchip with tens of child IRQs".
-
-> ... So it just report a "wakeup reason" from
-> interrupt subsystem. It just a coincidence that most hardware "wakeup
-> reason" is also the interupt signal.  Even the "interrupt" and "wake up"
-> signal are separated from each other in GIC700.
-> So give them a chance to report the their "wakeup reason".)
-
-Agreed.  But I do hope we can find a way to bring them together so a single
-story is presented to userspace.  Or, barring that, at least make it easy
-for userspace to figure that out after the fact.
-
-Thanks so much for the work you are doing on this and taking the time to
-walk me through your thoughts.  I'm happy to contribute in whatever manner
-adds value.
 
 --
 
