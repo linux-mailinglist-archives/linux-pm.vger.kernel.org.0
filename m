@@ -2,91 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B7F54A31BF
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Jan 2022 21:07:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 409DD4A3254
+	for <lists+linux-pm@lfdr.de>; Sat, 29 Jan 2022 23:24:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346299AbiA2UHA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 29 Jan 2022 15:07:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42364 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243982AbiA2UHA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 29 Jan 2022 15:07:00 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90296C061714
-        for <linux-pm@vger.kernel.org>; Sat, 29 Jan 2022 12:06:59 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id k6-20020a05600c1c8600b003524656034cso3483813wms.2
-        for <linux-pm@vger.kernel.org>; Sat, 29 Jan 2022 12:06:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=S51O7i9lXG7bN9afK9GQn6FtCRWvzVPVNhY8VS6CT3c=;
-        b=LZbqyWLQbndc+d1Z7o5jmL3/kT1nBaFoQ8IL3tsadvkKreBIu2kpcWK/g2AmsEB/Jw
-         Zn6BDDapH7Yb3uB8Xcj+/op8xAZ/EeZ3ZANpUh4qlXdd1pdiGykTZvdJWOiwLvA2zfqS
-         Wm+o8gB5ylo4qlCuBWBRzouJb0TbX8mxxYv/X7vfMcuA/aPwJQ3DUK3causnOZ8P6KBe
-         w7dxaT+0zmZCXQSE/qHiRr3+GLSbAxuewvQRUBi5ez/st0h8X22x4A1XkrWtKibxaWmM
-         FdVhYqBQw9TDw9TVfajzMoXub9v4fFUkwctJ7sahaEJy0mPh3cOVqYSVKly2+TQOL5Gd
-         qJpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=S51O7i9lXG7bN9afK9GQn6FtCRWvzVPVNhY8VS6CT3c=;
-        b=ihMPo3atztdlYU5uTR2s2nRHJ2iI9YwPcDP4Ayrp9nZIAdBxJJOvPDAIIOktOgoBkk
-         OgTMhU9Aas8XemjgjWYxHi8WvfSOlBAOINwlnWMjXKu3by6IohInv/uO5W48AQv9p1t7
-         zNfNsj+IWh654eUUFvWEC1x1M7Upo6xlXIahmkgkku6bNsHrht1aZJdhbrnPxf9URSsf
-         D1TyhVFVKW7iwFyxz4i3sYVsg1+y/5J4VdgYymEoGzG9tNbzfy0ywzjX1g0sxH3KjNWJ
-         8AouBBFaD7R1ELv9cUJbODFyucadF7M1RfcxZEV4gQaLGemzrOz8/mOvDLuEB4pfja06
-         x77g==
-X-Gm-Message-State: AOAM5333z3+P3wyhvWIevbJde94/E+w6vxWhsaFzoQktaTuFdT4ilfhf
-        FpzTq2KPbD2YETDz92Cm/TzM4Q==
-X-Google-Smtp-Source: ABdhPJzkjd4N/OmSdj/wA8yEM1j/6676LvYD5iELsVlVvGibDqSEeYYv0jaEwt/VlEy+aYjqlZ2O4A==
-X-Received: by 2002:a05:600c:3d0b:: with SMTP id bh11mr12249921wmb.24.1643486817374;
-        Sat, 29 Jan 2022 12:06:57 -0800 (PST)
-Received: from ?IPV6:2a01:e34:ed2f:f020:88a4:8c58:a63:ad53? ([2a01:e34:ed2f:f020:88a4:8c58:a63:ad53])
-        by smtp.googlemail.com with ESMTPSA id m4sm5010873wmc.1.2022.01.29.12.06.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 29 Jan 2022 12:06:56 -0800 (PST)
-Message-ID: <0918ba01-6ab0-fba5-fd65-9a027159c2f0@linaro.org>
-Date:   Sat, 29 Jan 2022 21:06:54 +0100
+        id S1346413AbiA2WY2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 29 Jan 2022 17:24:28 -0500
+Received: from wout2-smtp.messagingengine.com ([64.147.123.25]:43301 "EHLO
+        wout2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243417AbiA2WY2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 29 Jan 2022 17:24:28 -0500
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 441263201D2B;
+        Sat, 29 Jan 2022 17:24:27 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Sat, 29 Jan 2022 17:24:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm1; bh=ZLs+SrcrQEFpnx7GAQjwvG0vzMrTPmwfGUpg9Qy+1mA=; b=bYzTm
+        ayaqyj0EbSBgRC2hsjHmQm6+ykSfyZbydWZMFa3+P8vxt7hmPk6guod1qFHiUD5Y
+        gktp2Qf64wMJp/sgmi99n2WS6/+TTz7AvPHS3RE8Jt3tCWfcnHPLOBRmS2hQgLWP
+        aRh/LXe8pcAprSYr6k5bppn3PkqyIYHfc2is3z72+l19OdekFXWJPrknE0hPsP/o
+        qOiQy/J4nJhI89V25Y9jgLvCHL07PkuoBMR0QzvRmMNO5zLkJTVuEVDRe8f4fPcQ
+        8KrFUN361964rk6a945pXUE4H/9/slFhOb4WCk6lOQUGLBy1Xd1tqc2pGEi1GV73
+        +AvvE7Fuf6JaHJW0A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm1; bh=ZLs+SrcrQEFpnx7GAQjwvG0vzMrTP
+        mwfGUpg9Qy+1mA=; b=AtAuvuvoOF4swnHI/85OnNEv7rcZ73zd65m4AxNUTisAL
+        V+fJYC3R/lQRwm3PiXSBIUzwzZIiSEO8vI76zKI+hK5SPouvRwtJxAd0zXX5Q/cT
+        PAwMMipAgIJctjcDp9pTzkoiMslJPA7epZDEiwqBQW7EZ6i0CGQqz9NruLxk4sjW
+        Au/rZVZHSVvjWxuYZF+100K1M21ZLVpiY9qQ2d/CUGlpksnnorUGabHC4paCt9Xt
+        DMBrhudiHBJq77XbhxOAUC4tC8mDyM95kcjlwKaLp/LZwewbxy6/lvNHzdDN3YMs
+        x2qc9O1kPd0yYMZsB3YmDb+tQ5XdvYvUEP8HDrMBQ==
+X-ME-Sender: <xms:mr71Ybzs2KKdKarx9vWJeiDxW-hT-GEWWt8yK4LGSinSOXiBvzOt5g>
+    <xme:mr71YTTQU8jFNYauTTFjw1lCD3k9qgQJOI8A62pNTfpBNL8t1YmO2R-pdS866HEgl
+    NWzk3XH3IfLhJ982w>
+X-ME-Received: <xmr:mr71YVW2DpheJYSDfYb9qGbOaUyL2oP-VTd7g2xr63HdGMrdWErqhVwomJ8Fr-rxiVZuT_gTyBKY6d1hNo1qYztEcalFJB1Dd-UBGMAOk1hyLL-l1yDLIxO9waosPNfaFTsM1g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrfeejgdduiedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgvlhcu
+    jfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtffrrg
+    htthgvrhhnpeetuddugeeihfehueduueehjeehleetiedvudegfeevveeuieeflefhueeg
+    gefftdenucffohhmrghinhepihhnjhhoihhnihgtrdgtohhmnecuvehluhhsthgvrhfuih
+    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshgrmhhuvghlsehshhholhhlrghn
+    ugdrohhrgh
+X-ME-Proxy: <xmx:mr71YVhsUwciSJqYRfxMafOM3p1F26iHb9fJ2oUShcNbWTha9VL-9A>
+    <xmx:mr71YdD1P3_59RWhiNHnXwmcs4SNpBFj4NvgEYHODvOvfrBDJA20Cw>
+    <xmx:mr71YeIluyGD8a0IpCbA3IMNwoQe4SVymtPugLQCDdZ1GmBIAwKLug>
+    <xmx:mr71YQ6u1huPS0PUkYehcM1GHsv172IpMLyAXwLGqnVSORTDYqrdwA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 29 Jan 2022 17:24:25 -0500 (EST)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ondrej Jirman <megous@megous.com>,
+        Samuel Holland <samuel@sholland.org>
+Subject: [PATCH 1/3] dt-bindings: vendor-prefixes: Add Injoinic
+Date:   Sat, 29 Jan 2022 16:24:22 -0600
+Message-Id: <20220129222424.45707-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] thermal/drivers/tsens: register thermal zones as hwmon
- sensors
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20220129180750.1882310-1-dmitry.baryshkov@linaro.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220129180750.1882310-1-dmitry.baryshkov@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 29/01/2022 19:07, Dmitry Baryshkov wrote:
-> Register thermal zones as hwmon sensors to let userspace read
-> CPU temperatures using standard hwmon interface.
-> 
-> Acked-by: Amit Kucheria <amitk@kernel.org>
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
+Add prefix for Injoinic Technology Corp. (http://www.injoinic.com/)
 
-Applied, thanks
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
 
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 294093d45a23..3a1a7b2fbe52 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -561,6 +561,8 @@ patternProperties:
+     description: InfoVision Optoelectronics Kunshan Co. Ltd.
+   "^ingenic,.*":
+     description: Ingenic Semiconductor
++  "^injoinic,.*":
++    description: Injoinic Technology Corp.
+   "^innolux,.*":
+     description: Innolux Corporation
+   "^inside-secure,.*":
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.33.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
