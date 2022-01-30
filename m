@@ -2,119 +2,294 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 849E84A3969
-	for <lists+linux-pm@lfdr.de>; Sun, 30 Jan 2022 21:48:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A778B4A399C
+	for <lists+linux-pm@lfdr.de>; Sun, 30 Jan 2022 22:02:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356393AbiA3UsX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 30 Jan 2022 15:48:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:58077 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1356408AbiA3Ur7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 30 Jan 2022 15:47:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643575678;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LamNEK/YX9d4yqutYB371mhhnNQ/iRuKdSAUJRRVPa4=;
-        b=aH0HVWIVggdOFYUe+55cqlWLuLk2sfSUlFoufjWh5oQ/Nfk0HLAuXHGD5tqBPoidNBpQsM
-        0r6FZmqRclZgIqx1c0gCaSlkp8zg+J1De1Tci6YpNd0n+JC7jUSmErb/blQHITiAY9QGvQ
-        FJB9q8hNqmB473fLmn3YgARVYiJWmOI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-445-QBa4bKeKPgeBJ39eD09GAg-1; Sun, 30 Jan 2022 15:47:55 -0500
-X-MC-Unique: QBa4bKeKPgeBJ39eD09GAg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AEE2A1083F65;
-        Sun, 30 Jan 2022 20:47:52 +0000 (UTC)
-Received: from shalem.redhat.com (unknown [10.39.192.60])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C386361093;
-        Sun, 30 Jan 2022 20:47:46 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org, Yauhen Kharuzhy <jekhor@gmail.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        Fabio Aiuto <fabioaiuto83@gmail.com>,
-        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org
-Subject: [PATCH v4 20/20] extcon: intel-cht-wc: Report RID_A for ACA adapters
-Date:   Sun, 30 Jan 2022 21:45:57 +0100
-Message-Id: <20220130204557.15662-21-hdegoede@redhat.com>
-In-Reply-To: <20220130204557.15662-1-hdegoede@redhat.com>
-References: <20220130204557.15662-1-hdegoede@redhat.com>
+        id S1347634AbiA3VCQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 30 Jan 2022 16:02:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56748 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243746AbiA3VCQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 30 Jan 2022 16:02:16 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AEF9C06173B
+        for <linux-pm@vger.kernel.org>; Sun, 30 Jan 2022 13:02:16 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id m26so2577770wms.0
+        for <linux-pm@vger.kernel.org>; Sun, 30 Jan 2022 13:02:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zgN4kboK6BDi4j8PdQgM4+rnAZo/EbE+mRU5+LkdX5I=;
+        b=M/RIeWVvt1ILqz4YX0HR2Qt8Kvbj0WY/BF3eVcE1RalbZnfNLEy/jueZPykje3r2tw
+         IZUwziPCwJFmd2Ch+F1gaPcrMbwfRSy7RSNjvFrkPYDFTkeZX+ZDpY/sn1LIWnYQcqJ5
+         zdBCfTvQVLkoGpocGrgSJ2VCHftcLvvdgY8EMhn2Q1Jq5GHHZzZVgSaoqtA3ltsQUla5
+         bleYRO+Qmr2irw117KzrVrBDbpy0TXNdjhADSBga3vZN0fw0KFPzb1AkBkp3YH48WlaK
+         JXjo3mA0kTN0jx7Q8XKU+7y1WCcCdEJcEYAFuApb7GKYTLhFl5dJIgEg47LO+uEzBh1J
+         Pm7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zgN4kboK6BDi4j8PdQgM4+rnAZo/EbE+mRU5+LkdX5I=;
+        b=dP/THpYfExC/zaHN1MFdVj+nqgM0LsVQs7vsuymhBgVT64opynOScAGjDufFvSon9W
+         +9ROI214581zGjJS4C0tdUL09C7kD8POATFdk1BISqxLZVuiMCpH8TqohnvQGPTfA7Y6
+         v76rN9n55LlS5B8xQLhaMvjRurVe0nIorOuOitlHc3owVj1rEK9HLiK/d6egLry/OuwQ
+         FAbCGE+6KQLmtJicO8ouxFpQ6HPJ+lUquZmNwg60EA7d0eFipmHrvwXoFgMbwhGPdNPB
+         rZjrHPtI59uHYSnJHPXECIydOQRytUDINrMkO7xm9OnOJ/iASSad4LRIhLIS1gyUSHIH
+         ceyQ==
+X-Gm-Message-State: AOAM530U7T1OxIFdkcWu4x+nb0XU6EqY7ONOw+MMEWioh75g3flV6hRO
+        i7vI8dQVh5Iy+RnpE44Y0npZkQ==
+X-Google-Smtp-Source: ABdhPJwnuWOR0GnzVxtJ/hx7eZAn0y6Hp7MDGqzH0Qs+meRUlepIIhnQDaIGi1drQWL04J8IJeHP2w==
+X-Received: by 2002:a7b:c153:: with SMTP id z19mr23962932wmi.118.1643576534603;
+        Sun, 30 Jan 2022 13:02:14 -0800 (PST)
+Received: from localhost.localdomain ([2a01:e34:ed2f:f020:d3c5:fe0:78a4:5227])
+        by smtp.gmail.com with ESMTPSA id i6sm9845185wrw.8.2022.01.30.13.02.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 30 Jan 2022 13:02:13 -0800 (PST)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rjw@rjwysocki.net
+Cc:     heiko@sntech.de, lukasz.luba@arm.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, ulf.hansson@linaro.org,
+        Daniel Lezcano <daniel.lezcano@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: [PATCH v1 1/7] powercap/dtpm: Change locking scheme
+Date:   Sun, 30 Jan 2022 22:02:03 +0100
+Message-Id: <20220130210210.549877-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Make cht_wc_extcon_get_id() report RID_A for ACA adapters, instead of
-reporting ID_FLOAT.
+The different functions are all called through the
+dtpm_create_hierarchy() which handle the mutex. The different
+functions are used in this context, consequently with the lock always
+held.
 
-According to the spec. we should read the USB-ID pin ADC value
-to determine the resistance of the used pull-down resister and
-then return RID_A / RID_B / RID_C based on this. But all "Accessory
-Charger Adapter"s (ACAs) which users can actually buy always use
-a combination of a charging port with one or more USB-A ports, so
-they should always use a resistor indicating RID_A. But the spec
-is hard to read / badly-worded so some of them actually indicate
-they are a RID_B ACA even though they clearly are a RID_A ACA.
+Remove all locks taken in the function and add the lock in the
+hierarchy creation function.
 
-To workaround this simply always return INTEL_USB_RID_A, which
-matches all the ACAs which users can actually buy.
-
-Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/extcon/extcon-intel-cht-wc.c | 18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
+ drivers/powercap/dtpm.c | 95 ++++++++++++-----------------------------
+ 1 file changed, 27 insertions(+), 68 deletions(-)
 
-diff --git a/drivers/extcon/extcon-intel-cht-wc.c b/drivers/extcon/extcon-intel-cht-wc.c
-index 144cb5d8cd47..2a8d41cbf41c 100644
---- a/drivers/extcon/extcon-intel-cht-wc.c
-+++ b/drivers/extcon/extcon-intel-cht-wc.c
-@@ -121,13 +121,21 @@ static int cht_wc_extcon_get_id(struct cht_wc_extcon_data *ext, int pwrsrc_sts)
- 		return INTEL_USB_ID_GND;
- 	case CHT_WC_PWRSRC_RID_FLOAT:
- 		return INTEL_USB_ID_FLOAT;
-+	/*
-+	 * According to the spec. we should read the USB-ID pin ADC value here
-+	 * to determine the resistance of the used pull-down resister and then
-+	 * return RID_A / RID_B / RID_C based on this. But all "Accessory
-+	 * Charger Adapter"s (ACAs) which users can actually buy always use
-+	 * a combination of a charging port with one or more USB-A ports, so
-+	 * they should always use a resistor indicating RID_A. But the spec
-+	 * is hard to read / badly-worded so some of them actually indicate
-+	 * they are a RID_B ACA evnen though they clearly are a RID_A ACA.
-+	 * To workaround this simply always return INTEL_USB_RID_A, which
-+	 * matches all the ACAs which users can actually buy.
-+	 */
- 	case CHT_WC_PWRSRC_RID_ACA:
-+		return INTEL_USB_RID_A;
- 	default:
--		/*
--		 * Once we have IIO support for the GPADC we should read
--		 * the USBID GPADC channel here and determine ACA role
--		 * based on that.
--		 */
- 		return INTEL_USB_ID_FLOAT;
+diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
+index 414826a1509b..0b0121c37a1b 100644
+--- a/drivers/powercap/dtpm.c
++++ b/drivers/powercap/dtpm.c
+@@ -51,9 +51,7 @@ static int get_max_power_range_uw(struct powercap_zone *pcz, u64 *max_power_uw)
+ {
+ 	struct dtpm *dtpm = to_dtpm(pcz);
+ 
+-	mutex_lock(&dtpm_lock);
+ 	*max_power_uw = dtpm->power_max - dtpm->power_min;
+-	mutex_unlock(&dtpm_lock);
+ 
+ 	return 0;
+ }
+@@ -83,14 +81,7 @@ static int __get_power_uw(struct dtpm *dtpm, u64 *power_uw)
+ 
+ static int get_power_uw(struct powercap_zone *pcz, u64 *power_uw)
+ {
+-	struct dtpm *dtpm = to_dtpm(pcz);
+-	int ret;
+-
+-	mutex_lock(&dtpm_lock);
+-	ret = __get_power_uw(dtpm, power_uw);
+-	mutex_unlock(&dtpm_lock);
+-
+-	return ret;
++	return __get_power_uw(to_dtpm(pcz), power_uw);
+ }
+ 
+ static void __dtpm_rebalance_weight(struct dtpm *dtpm)
+@@ -133,7 +124,16 @@ static void __dtpm_add_power(struct dtpm *dtpm)
  	}
  }
+ 
+-static int __dtpm_update_power(struct dtpm *dtpm)
++/**
++ * dtpm_update_power - Update the power on the dtpm
++ * @dtpm: a pointer to a dtpm structure to update
++ *
++ * Function to update the power values of the dtpm node specified in
++ * parameter. These new values will be propagated to the tree.
++ *
++ * Return: zero on success, -EINVAL if the values are inconsistent
++ */
++int dtpm_update_power(struct dtpm *dtpm)
+ {
+ 	int ret;
+ 
+@@ -155,26 +155,6 @@ static int __dtpm_update_power(struct dtpm *dtpm)
+ 	return ret;
+ }
+ 
+-/**
+- * dtpm_update_power - Update the power on the dtpm
+- * @dtpm: a pointer to a dtpm structure to update
+- *
+- * Function to update the power values of the dtpm node specified in
+- * parameter. These new values will be propagated to the tree.
+- *
+- * Return: zero on success, -EINVAL if the values are inconsistent
+- */
+-int dtpm_update_power(struct dtpm *dtpm)
+-{
+-	int ret;
+-
+-	mutex_lock(&dtpm_lock);
+-	ret = __dtpm_update_power(dtpm);
+-	mutex_unlock(&dtpm_lock);
+-
+-	return ret;
+-}
+-
+ /**
+  * dtpm_release_zone - Cleanup when the node is released
+  * @pcz: a pointer to a powercap_zone structure
+@@ -191,20 +171,14 @@ int dtpm_release_zone(struct powercap_zone *pcz)
+ 	struct dtpm *dtpm = to_dtpm(pcz);
+ 	struct dtpm *parent = dtpm->parent;
+ 
+-	mutex_lock(&dtpm_lock);
+-
+-	if (!list_empty(&dtpm->children)) {
+-		mutex_unlock(&dtpm_lock);
++	if (!list_empty(&dtpm->children))
+ 		return -EBUSY;
+-	}
+ 
+ 	if (parent)
+ 		list_del(&dtpm->sibling);
+ 
+ 	__dtpm_sub_power(dtpm);
+ 
+-	mutex_unlock(&dtpm_lock);
+-
+ 	if (dtpm->ops)
+ 		dtpm->ops->release(dtpm);
+ 
+@@ -216,23 +190,12 @@ int dtpm_release_zone(struct powercap_zone *pcz)
+ 	return 0;
+ }
+ 
+-static int __get_power_limit_uw(struct dtpm *dtpm, int cid, u64 *power_limit)
+-{
+-	*power_limit = dtpm->power_limit;
+-	return 0;
+-}
+-
+ static int get_power_limit_uw(struct powercap_zone *pcz,
+ 			      int cid, u64 *power_limit)
+ {
+-	struct dtpm *dtpm = to_dtpm(pcz);
+-	int ret;
+-
+-	mutex_lock(&dtpm_lock);
+-	ret = __get_power_limit_uw(dtpm, cid, power_limit);
+-	mutex_unlock(&dtpm_lock);
+-
+-	return ret;
++	*power_limit = to_dtpm(pcz)->power_limit;
++	
++	return 0;
+ }
+ 
+ /*
+@@ -292,7 +255,7 @@ static int __set_power_limit_uw(struct dtpm *dtpm, int cid, u64 power_limit)
+ 
+ 			ret = __set_power_limit_uw(child, cid, power);
+ 			if (!ret)
+-				ret = __get_power_limit_uw(child, cid, &power);
++				ret = get_power_limit_uw(&child->zone, cid, &power);
+ 
+ 			if (ret)
+ 				break;
+@@ -310,8 +273,6 @@ static int set_power_limit_uw(struct powercap_zone *pcz,
+ 	struct dtpm *dtpm = to_dtpm(pcz);
+ 	int ret;
+ 
+-	mutex_lock(&dtpm_lock);
+-
+ 	/*
+ 	 * Don't allow values outside of the power range previously
+ 	 * set when initializing the power numbers.
+@@ -323,8 +284,6 @@ static int set_power_limit_uw(struct powercap_zone *pcz,
+ 	pr_debug("%s: power limit: %llu uW, power max: %llu uW\n",
+ 		 dtpm->zone.name, dtpm->power_limit, dtpm->power_max);
+ 
+-	mutex_unlock(&dtpm_lock);
+-
+ 	return ret;
+ }
+ 
+@@ -335,11 +294,7 @@ static const char *get_constraint_name(struct powercap_zone *pcz, int cid)
+ 
+ static int get_max_power_uw(struct powercap_zone *pcz, int id, u64 *max_power)
+ {
+-	struct dtpm *dtpm = to_dtpm(pcz);
+-
+-	mutex_lock(&dtpm_lock);
+-	*max_power = dtpm->power_max;
+-	mutex_unlock(&dtpm_lock);
++	*max_power = to_dtpm(pcz)->power_max;
+ 
+ 	return 0;
+ }
+@@ -442,8 +397,6 @@ int dtpm_register(const char *name, struct dtpm *dtpm, struct dtpm *parent)
+ 	if (IS_ERR(pcz))
+ 		return PTR_ERR(pcz);
+ 
+-	mutex_lock(&dtpm_lock);
+-
+ 	if (parent) {
+ 		list_add_tail(&dtpm->sibling, &parent->children);
+ 		dtpm->parent = parent;
+@@ -459,8 +412,6 @@ int dtpm_register(const char *name, struct dtpm *dtpm, struct dtpm *parent)
+ 	pr_debug("Registered dtpm node '%s' / %llu-%llu uW, \n",
+ 		 dtpm->zone.name, dtpm->power_min, dtpm->power_max);
+ 
+-	mutex_unlock(&dtpm_lock);
+-
+ 	return 0;
+ }
+ 
+@@ -605,8 +556,12 @@ int dtpm_create_hierarchy(struct of_device_id *dtpm_match_table)
+ 	struct device_node *np;
+ 	int i, ret;
+ 
+-	if (pct)
+-		return -EBUSY;
++	mutex_lock(&dtpm_lock);
++
++	if (pct) {
++		ret = -EBUSY;
++		goto out_unlock;
++	}
+ 
+ 	pct = powercap_register_control_type(NULL, "dtpm", NULL);
+ 	if (IS_ERR(pct)) {
+@@ -648,12 +603,16 @@ int dtpm_create_hierarchy(struct of_device_id *dtpm_match_table)
+ 				dtpm_subsys[i]->name, ret);
+ 	}
+ 
++	mutex_unlock(&dtpm_lock);
++
+ 	return 0;
+ 
+ out_err:
+ 	powercap_unregister_control_type(pct);
+ out_pct:
+ 	pct = NULL;
++out_unlock:
++	mutex_unlock(&dtpm_lock);
+ 	
+ 	return ret;
+ }
 -- 
-2.33.1
+2.25.1
 
