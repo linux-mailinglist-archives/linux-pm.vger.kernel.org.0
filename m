@@ -2,144 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4C724A373A
-	for <lists+linux-pm@lfdr.de>; Sun, 30 Jan 2022 16:23:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73B784A3802
+	for <lists+linux-pm@lfdr.de>; Sun, 30 Jan 2022 19:15:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355423AbiA3PXO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 30 Jan 2022 10:23:14 -0500
-Received: from mail-yb1-f175.google.com ([209.85.219.175]:34537 "EHLO
-        mail-yb1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355421AbiA3PXO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 30 Jan 2022 10:23:14 -0500
-Received: by mail-yb1-f175.google.com with SMTP id v186so33170232ybg.1;
-        Sun, 30 Jan 2022 07:23:13 -0800 (PST)
+        id S233487AbiA3SPd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 30 Jan 2022 13:15:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48228 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236788AbiA3SPc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 30 Jan 2022 13:15:32 -0500
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA55C06173B
+        for <linux-pm@vger.kernel.org>; Sun, 30 Jan 2022 10:15:31 -0800 (PST)
+Received: by mail-ua1-x92a.google.com with SMTP id m90so10629895uam.2
+        for <linux-pm@vger.kernel.org>; Sun, 30 Jan 2022 10:15:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=PB7S81wb9t4u0hRvcxHMNh0F5lIgk9V9ej9pH5Jl/70=;
+        b=qcUne9Bu7WOVGASCnovsKC7MQtpyr8NW367UbN9LDAKeYqjV+Sc1eaTq7aXGnL8uYB
+         yy+vLPD2xC0TrFWLb3JJGZcVrhMhvJ5C+AsurDen9tJ5nka/M6wf+pDb1bRB0BSioeUJ
+         qiiOjKHv2spFm+Pw6Qx7t6Jdazw8Te/U+OaPKscHrxLlVUppgq3WTrOVQEOVJBUKGYT2
+         h1GXw5ZSXwIdGki6m949qzHILSRhNPaPRiRB3Pz5QwxIIXBGwuj6MqBI8UB9udpj1F2B
+         TP6accXkSFhXaKidGNlPEiUgQLcviMaAowWoJA14YyB5vXA5wHPnEr2JUIYrF7ff1IPL
+         M5OA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DnaGa9i2/yIHISXAioqft9HOSE9O/Wi5g9EfNGqVIvQ=;
-        b=xZ0bs5tB0Ls0Z4Pzf0qU51RUDw3Qkbm+PnVZdxVuAivKtwyHL8VJFfeL3AAVGaW1oo
-         FLJ+NBo/VmZHnsGVKyentWpdQQMmaqU3gP6b87dLAd1cvWfBR3c149LDyGRF1XdTLlt0
-         nUVj3908uHaESTfQJgUQ7U62IG4zBtgQZYV8f37CHzo4wjbBNKzrAgaQ8BmvMIq8ao2h
-         djNExZMbvvi3lDQ9HhFnlpzGgHmCO8JNHs7rwQViTBAQzmFagJWNETQyxKRmzq6q/5EH
-         S+2hkxl3wyxBJY27LGMbR3QugLCMjr9fyHim03rdRZxzTVbpMBRKvEjm/E4PfLJuZ14B
-         bmGw==
-X-Gm-Message-State: AOAM5311em6HY4dNB2WyFcMIclmqsGahFi5ghtcdB2MPjBqGvQIhgfKm
-        scuBhtrwdiL/Q4oYDcRYX+/7EjK6ukRLX9g7yuE=
-X-Google-Smtp-Source: ABdhPJxmxan+KUOGEZoo1TI2DjjpSddqkIhdH4H8VP41kvwb8gci9GcdbLTs0OtgdEyvUv7O73o6JRQ/9p8uxtjsRVc=
-X-Received: by 2002:a25:2fca:: with SMTP id v193mr25873075ybv.475.1643556193485;
- Sun, 30 Jan 2022 07:23:13 -0800 (PST)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=PB7S81wb9t4u0hRvcxHMNh0F5lIgk9V9ej9pH5Jl/70=;
+        b=poofCf3Tiix1j+6s2OI1Q+ngjPYFpPAHzTqkLDIqtZHoacjoX07hRkw6obytfkkSzg
+         jAEF/GOjvmKTBolQDzuFhF7v9WZw/dTBGYKZwyYjef6xaIDRJV4ImNnN/jt2/MrpW1R7
+         lw+hcfHv37fqYTAeWfH45zEJI//TBlPqJDOwszSVi9dkrDI0NSZpEF4bunfpUBZkwH1V
+         io8/lrS5F2fPEl9oPCIx/sZCnZ2cQaSkttvtwq7BBYnyrDdR1yVlRxwg+chpYREbLKl2
+         OYIKAQdr/XCy6UWAmUO3z57tka4kv6m7iqtFJgvgfnrVkIVJ0Pwkn0VaqDfBfd/5KAML
+         nilQ==
+X-Gm-Message-State: AOAM5339bemudHRMeFqkidhkHUqvXhxabILXy5rn0tSRRSrhuJL3Hb6y
+        QM3PYpcYX9ZzufYnL+0e37QJHMKpKESDiyObETgGj0Jkam4C6FOA
+X-Google-Smtp-Source: ABdhPJx5lAhfHKjbAMCz3qIR4BXsRA6gWS+gSyHum+OQxSFQ/mgbgvgsC/r0+PEV2LnuYeJfDS2f5S1vk7x74VOhmkw=
+X-Received: by 2002:ab0:2619:: with SMTP id c25mr6810336uao.44.1643566529737;
+ Sun, 30 Jan 2022 10:15:29 -0800 (PST)
 MIME-Version: 1.0
-References: <20220127193454.12814-1-ricardo.neri-calderon@linux.intel.com>
-In-Reply-To: <20220127193454.12814-1-ricardo.neri-calderon@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sun, 30 Jan 2022 16:23:02 +0100
-Message-ID: <CAJZ5v0gcK10TiVbc8+j1pVN+T2p3EZHEK9Ga2=2ZxeGd=iVkhw@mail.gmail.com>
-Subject: Re: [PATCH v5 0/7] Thermal: Introduce the Hardware Feedback Interface
- for thermal and performance management
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+From:   Zichar Zhang <zichar.zhang@linaro.org>
+Date:   Mon, 31 Jan 2022 02:15:05 +0800
+Message-ID: <CAE9iGojMgYKxReeartpXKWORdAfsj4t7Zo0pVb--+SLVGq4=cA@mail.gmail.com>
+Subject: Re: [RFC] PM: suspend: Upstreaming wakeup reason capture support
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kelly Rossmoyer <krossmo@google.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Len Brown <len.brown@intel.com>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Vijay Nayak <nayakvij@google.com>,
+        Pavel Machek <pavel@ucw.cz>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 8:33 PM Ricardo Neri
-<ricardo.neri-calderon@linux.intel.com> wrote:
->
-> Hi,
->
-> This is v5 of this patchset after having incorporated the feedback from
-> reviewers. Please find v1, v2, v3, and v4 in [1], [2], [3], and [4],
-> respectively.
->
-> The Intel Hardware Feedback Interface (HFI) [5] provides information about
-> the performance and energy efficiency of each CPU in the system. It uses a
-> table that is shared between hardware and the operating system. The
-> contents of the table may be updated as a result of changes in the
-> operating conditions of the system (e.g., reaching a thermal limit) or the
-> action of external factors (e.g., changes in the thermal design power).
->
-> The information that HFI provides are specified as numeric, unit-less
-> capabilities relative to other CPUs in the system. These capabilities have
-> a range of [0-255] where higher numbers represent higher capabilities.
-> Energy efficiency and performance are reported in separate capabilities.
-> If either the performance or energy capabilities efficiency of a CPU are 0,
-> the hardware recommends to not schedule any tasks on such CPU for
-> performance, energy efficiency or thermal reasons, respectively.
->
-> The kernel or user space may use the information from the HFI to modify
-> task placement and/or adjust power limits. This patchset focuses on the
-> user space. The thermal notification framework is extended to relay
-> updates of CPU capacity. Thus, a userspace daemon can affinitize workloads
-> to certain CPUs and/or offline CPUs whose capabilities are zero.
->
-> The frequency of HFI updates is specific to each processor model. On some
-> systems, there is just a single HFI update at boot. On other systems, there
-> may be updates every tens of milliseconds. In order to not overwhelm
-> userspace with too many updates, they are limited to one update every
-> CONFIG_HZ jiffies.
->
-> Thanks and BR,
-> Ricardo
->
-> [1]. https://lore.kernel.org/lkml/20211106013312.26698-1-ricardo.neri-calderon@linux.intel.com/
-> [2]. https://lore.kernel.org/lkml/20211220151438.1196-1-ricardo.neri-calderon@linux.intel.com/
-> [3]. https://lore.kernel.org/lkml/20220106025059.25847-8-ricardo.neri-calderon@linux.intel.com/
-> [4]. https://lore.kernel.org/lkml/20220108034743.31277-1-ricardo.neri-calderon@linux.intel.com/
-> [5]. https://www.intel.com/sdm
->
-> Changes since v4:
->  ++ Unchanged patches: 1, 2.
->  * Reworded description hfi_instance::hdr and hfi_instance::data.
->    (Patch 3; Srinivas)
->  * Call intel_hfi_online() before enabling the thermal vector at the
->    local APIC is enabled. This makes sure that a CPU has an associated
->    HFI instance when an HFI event happens. Reworded the commit message to
->    reflect this change. (Patch 4; Srinivas)
->  * Set hfi_instances to NULL if we fail to allocate memory for
->    hfi_instance::cpus. (Patch 4; Srinivas)
->  * Delayed initialization of local variables until after the check for a
->    non-NULL hfi_instances in intel_hfi_online(). (Patch 4; Srinivas)
->  * Optimized the error path in init_hfi_init() to not needlessly
->    free the memory of cpumasks that have not been allocated. (Patch 4;
->    Srinivas)
->  * Removed pointless checks for X86_FEATURE_HFI in
->    intel_hfi_[on|off]line(). It is sufficient to check for a non-NULL
->    hfi_instances or a CPU's hfi_instance. (Patch 4)
->  * Added a dedicated (i.e., not system_wq) workqueue to process HFI updates.
->    Reworded commit message accordingly. (Patch 5; Rafael)
->  * Repurposed comment on possibly receiving an HFI event with a NULL
->    hfi_cpu_info::instance. Patch 4 fixed this potential issue. Instead,
->    add a debug statement. (Patch 5; Srinivas)
->  * Wrapped check for NULL hfi_cpu_info::instance in the unlikely macro.
->    (Patch 5; Srinivas)
->  * Renamed struct cpu_capability as struct thermal_genl_cpu_caps.
->    (Patch 6; Rafael)
->  * Removed automatic variable ret from
->    thermal_genl_event_cpu_capability_change() and instead always return
->    -EMSGSIZE on error. (Patch 6; Rafael)
->  * Reworked parsing of HFI capabilities into chunks of
->    HFI_MAX_THERM_NOTIFY_COUNT CPUs at a time to reduce the time
->    we spend with interrupts disabled. (Patch7; Srinivas)
->  * Protected hfi_instance::cpus when iterating over them. (Patch 7;
->    Rafael)
+Hi Rafael, Kelly
 
-All patches in the series look good to me now, so I will be queuing it
-up for 5.18 unless there are any objections or concerns.
+hello Rafael, it is a little bit late for me to reply to you. I was
+finding the way to
+reply to you, cause I'm not in the "cc list". So, thanks Kelly in that way. :)
+I'm totally agree with you that we should split the work into smaller
+pieces and do it step by step.
 
-Thanks!
+Hi Kelly,
+I got the strong signal from you that you insist on your requirement.
+It's reasonable, and I want that if I am the user too. :)
+
+But it's could be some problem for me to do all of that. And I am calling help
+here. Yes! I need some help!
+
+I want to seperate this task into 4 part:
+1. user interface: like sysfs file /sys/power/last_wakeup_reason.
+2. report interface: call by "wakeup sources" to report "wakeup reason".
+3. report operation in kernel: like "interrupt subsystem". (a common interface)
+4. report operation in device: like WDT driver, GIC driver or other
+device driver.
+
+I think we should do the first 3 parts, but not the last one, cause it is device
+specific things. Device and BSP should do that, I insist that.
+Part 1 and 2 are easily to do, and I can rework again and agian until it is all
+right for everyone.
+So it is clear that we have problem with the third part. And yes! it is very
+hard.
+
+Kernel desn't know how the "machine" wakeup, kernel just offer the interface
+that user can mark the "wakeup source", like IRQD_WAKEUP_STATE flag
+and "ws"(wakeup source) interface (acturally they are fake wakeup sources).
+These works well and we can easily to report these which Android patch and
+mine already do that.
+But the left things is hard.Cause kernel or "subsystem" in kernel desn't has
+any mechanism to do that. Then we are facing these three things:
+
+1. "misconfigured" and "unmapped" IRQs reporting.
+Android patch just add a "wakeup report" interface here once it was occurred,
+even it's not in a "suspend" state, and even one of them was in GIC driver.
+if I was the maintainer I won't take this, but the question is what should I do
+for that?
+(Maybe I shoud give a task to "interrupt subsystem people" and ask them to
+do that? :) )
+
+2. errors in suspend/resume process.
+That means if there is a error occurs in suspend/resume process I need to
+report it as "wakeup reason".Which is just "abort wakeup reason" as  Kelly
+said. But it is lots of errors may occurs here, and which one I should report,
+and is that enough?
+And as  Kelly said the code is "messy", that does hit the point.
+
+3. threaded inerrupt
+Sorry, I don't find the properly place in kernel to report there "wakeup
+reason". Maybe that's my lack of knowalige. :)
+It's seem like some interrupt chip driver should do that? I don't know. Maybe
+I should offer a interface and just let "user" to use it?
+
+So, that all the things I got.
+And again kelly, I got your mind, and I will try to think this over again to see
+if I can find a way to do that.
+
+besides, thanks Jone and John, I will rework the patch after this discusion.
+
+And any advice could help! :)
+Or you have a better idea, I can help you to do yours!
+
+Best
+Zichar
