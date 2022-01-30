@@ -2,62 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FD514A35AE
-	for <lists+linux-pm@lfdr.de>; Sun, 30 Jan 2022 11:27:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F035F4A3608
+	for <lists+linux-pm@lfdr.de>; Sun, 30 Jan 2022 12:45:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232545AbiA3K1f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 30 Jan 2022 05:27:35 -0500
-Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:35886
-        "EHLO mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1354584AbiA3K1e (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 30 Jan 2022 05:27:34 -0500
-X-IronPort-AV: E=Sophos;i="5.88,328,1635199200"; 
-   d="scan'208";a="4476194"
-Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 11:27:34 +0100
-Date:   Sun, 30 Jan 2022 11:27:32 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Len Brown <lenb@kernel.org>
-cc:     linux-pm@vger.kernel.org
-Subject: DRAM power consumption with turbostat
-Message-ID: <alpine.DEB.2.22.394.2201301121380.3109@hadrien>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        id S1354700AbiA3Lpw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 30 Jan 2022 06:45:52 -0500
+Received: from mail.z3ntu.xyz ([128.199.32.197]:43338 "EHLO mail.z3ntu.xyz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1354689AbiA3Lpw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 30 Jan 2022 06:45:52 -0500
+Received: from localhost.localdomain (ip-213-127-106-2.ip.prioritytelecom.net [213.127.106.2])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 23EFDCE852;
+        Sun, 30 Jan 2022 11:45:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1643543147; bh=+J7dsbVz0Gr8InKACrreO1d9W/9Jj6OF5yJF+RWIf/E=;
+        h=From:To:Cc:Subject:Date;
+        b=c10RlLUlhqufnyLDvfgaFSw4/SeapNyg8sHtOOCs2asKq8bYgmIo5jMHiQrO4sVtn
+         bPDvbPVUDDhHSLnswp3shlNPnW51H3wvzOwcEZppmr/yi164niHla/lSA2M3yCz15a
+         VDxkxHqguH1CGgef7Q+WRr1vWpE+fLPIyZLxJeJ4=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Luca Weiss <luca@z3ntu.xyz>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Ansuel Smith <ansuelsmth@gmail.com>,
+        Sricharan R <sricharan@codeaurora.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] cpufreq: qcom-cpufreq-nvmem: fix reading of PVS Valid fuse
+Date:   Sun, 30 Jan 2022 12:45:35 +0100
+Message-Id: <20220130114535.1570634-1-luca@z3ntu.xyz>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
+The fuse consists of 64 bits, with this statement we're supposed to get
+the upper 32 bits but it actually read out of bounds and got 0 instead
+of the desired value which lead to the "PVS bin not set." codepath being
+run resetting our pvs value.
 
-I was wondering whether the DRAM power consumption reported by turbostat
-is reliable on recent Intel machines?
+Fixes: a8811ec764f9 ("cpufreq: qcom: Add support for krait based socs")
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+---
+ drivers/cpufreq/qcom-cpufreq-nvmem.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-In particular, I observed that turbostat reported a high DRAM energy
-comsumption on a machine (Intel 5128) with persistent memory, but where
-the persistent memory was not being used.  A colleague did an experiemnt
-on another machine with persistent memory, and reported:
+diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+index d1744b5d9619..6dfa86971a75 100644
+--- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
++++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+@@ -130,7 +130,7 @@ static void get_krait_bin_format_b(struct device *cpu_dev,
+ 	}
+ 
+ 	/* Check PVS_BLOW_STATUS */
+-	pte_efuse = *(((u32 *)buf) + 4);
++	pte_efuse = *(((u32 *)buf) + 1);
+ 	pte_efuse &= BIT(21);
+ 	if (pte_efuse) {
+ 		dev_dbg(cpu_dev, "PVS bin: %d\n", *pvs);
+-- 
+2.34.1
 
------
-
-I didn't run the test on troll but on another server equipped with PM
-where I was able to reproduce the bug and by reading directly the msr
-registers, I see that:
-CPU Energy units = 0.00006104J
-DRAM Energy units = 0.00001526J
-
-However turbostat assumes that the DRAM  Energy units is 0.00006104J when
-it runs the computation to obtain Joules (hence the too-high value
-returned by turbostat)
-
------
-
-I see the code in turbostat that just uses the CPU energy units value
-(rapl_dram_energy_units_probe), but I don't know what was the MSR used to
-collect the above information.  Overall, I am wondering if the DRAM energy
-consumption values are reliable in cases with and without persistent
-memory.
-
-thanks,
-julia
