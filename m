@@ -2,353 +2,275 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 475C44A3700
-	for <lists+linux-pm@lfdr.de>; Sun, 30 Jan 2022 15:53:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15AC74A3737
+	for <lists+linux-pm@lfdr.de>; Sun, 30 Jan 2022 16:20:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355216AbiA3Ox0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 30 Jan 2022 09:53:26 -0500
-Received: from mail-yb1-f176.google.com ([209.85.219.176]:44592 "EHLO
-        mail-yb1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355210AbiA3OxZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 30 Jan 2022 09:53:25 -0500
-Received: by mail-yb1-f176.google.com with SMTP id r65so32816927ybc.11;
-        Sun, 30 Jan 2022 06:53:24 -0800 (PST)
+        id S1355411AbiA3PUy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 30 Jan 2022 10:20:54 -0500
+Received: from mail-yb1-f178.google.com ([209.85.219.178]:40874 "EHLO
+        mail-yb1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347323AbiA3PUv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 30 Jan 2022 10:20:51 -0500
+Received: by mail-yb1-f178.google.com with SMTP id 23so33007292ybf.7;
+        Sun, 30 Jan 2022 07:20:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=7eJIL31UX2rAhkSExrDSGNzwUL60RNw+wx2TtRBpbHM=;
-        b=EGIaZctifb3Z6xrjTV7QI5nh/c9u2+7+J/H0ezfaLnGim/zGZaedgvsF8grMwD8ViK
-         qkE3iw3mQEL6mabhYTMtZDmyib7YQ+Zg7UdJkB4shO911FrioclznN2Tr1N0AYtxzfSS
-         kvQYX3XLliXRG6VERMz4iXPmpks6n8FdTgGfeZQ+Svc7lRUfIYMgwKsXUMOPX1NAI4Sr
-         iccoMQrOJx4oQjLggjxTAIpXOUeXtiWpv/JC2S2IfReV4zM7m5RHFvA175eq+/XG52iQ
-         8Ig1jEPqCSQTHzNrMcFzmo3YM8F82qdMGsbkIY+QaFKDFz+CPY07JsoIjo8YH+cwoi+B
-         upZw==
-X-Gm-Message-State: AOAM531SaMlUnRVvEdLV/4Wz8QJ309Zodk9w7j/nHwm8wXs39/lbBF9D
-        mGllgQydsKca9Tpnz3YL8GVYEbeq2vcBEz8gQcc=
-X-Google-Smtp-Source: ABdhPJz5Sdr72jUwaYcAB+X7TeIukkf5+ix90a/KgepawgznXeBG4JZ59eM1/4KjeSYHmb2QEwdTsN5SpYfoP1Z7nCA=
-X-Received: by 2002:a25:34c4:: with SMTP id b187mr24811518yba.78.1643554404447;
- Sun, 30 Jan 2022 06:53:24 -0800 (PST)
+        bh=B+sJwPFAgN3YNkQrqpXV+cKoPAui0xuyuLBRL1lcyp0=;
+        b=x2uB4TK0kJN5cAvdccNzG6IQ3atK1U5FWVbFL/xKIrUN+hi1lLPR6h4upCX6mbPY6T
+         bZ2Ik7ivy3kRtSpPSmokL8B69jF1LJuTGlrHphNkh0Cf0hDGw8OlYWYTH8iQN/RQMXAT
+         020FfLaqspGozDN/9Wamg6sNUf+9SX/SzhpsImsG4R/C67Ep4UBO7Ho3iBZDY63EcfpQ
+         If1D/4AaQLYzOoxN4nNQotEVxXGqr9740JvpOvvbE1RT/X2eP8GMFl8idtU9jyWgOB7k
+         waJoo5hh9M+kjdb2P8V2Ypcs2Ds6yKRoF1PDHkt6zXHA/tkdYEK05KuBKF44M/A1gCbC
+         Plbg==
+X-Gm-Message-State: AOAM532dm7UzJo1FN0cFkNcnFpMXQOPSRlWcTfADgNTYpvg6mlm5nImD
+        vXxzLM0QV93FdLZwKIkaoO7Kz6YRJmsQ3riESp7PWMyq
+X-Google-Smtp-Source: ABdhPJx+jfYmUbSVI6ItMonBCnezGJ0sXNORp2HfgazmsxDO9BUb29Z8y8E5WjvwEXUd0h7rwUv/BB0ag0LddOQFUFQ=
+X-Received: by 2002:a25:c102:: with SMTP id r2mr26957463ybf.330.1643556051078;
+ Sun, 30 Jan 2022 07:20:51 -0800 (PST)
 MIME-Version: 1.0
-References: <20211126125244.126300-1-abailon@baylibre.com> <20211126125244.126300-3-abailon@baylibre.com>
- <CAJZ5v0jejFG76OfewYg3kmKv4xwLdRBpC+zRpJ9Jom+tqo7qyg@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jejFG76OfewYg3kmKv4xwLdRBpC+zRpJ9Jom+tqo7qyg@mail.gmail.com>
+References: <20220127193454.12814-1-ricardo.neri-calderon@linux.intel.com> <20220127193454.12814-7-ricardo.neri-calderon@linux.intel.com>
+In-Reply-To: <20220127193454.12814-7-ricardo.neri-calderon@linux.intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sun, 30 Jan 2022 15:53:13 +0100
-Message-ID: <CAJZ5v0iy_nVvvxYArBG=8=xxLzPDorct+bQQBLqcrWsjRuT5sg@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] thermal: add a virtual sensor to aggregate temperatures
-To:     Alexandre Bailon <abailon@baylibre.com>
-Cc:     "Zhang, Rui" <rui.zhang@intel.com>,
+Date:   Sun, 30 Jan 2022 16:20:40 +0100
+Message-ID: <CAJZ5v0hbtmP6LHngWg0J47G2PwTxNwmjb=KMyz1zi1FM09cF8g@mail.gmail.com>
+Subject: Re: [PATCH v5 6/7] thermal: netlink: Add a new event to notify CPU
+ capabilities change
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
+        Lukasz Luba <lukasz.luba@arm.com>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Matthias Kaehlcke <mka@chromium.org>
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 8:31 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+On Thu, Jan 27, 2022 at 8:33 PM Ricardo Neri
+<ricardo.neri-calderon@linux.intel.com> wrote:
 >
-> On Fri, Nov 26, 2021 at 1:53 PM Alexandre Bailon <abailon@baylibre.com> wrote:
-> >
-> > This adds a virtual thermal sensor driver that reads temperature from
-> > multiple hardware sensors and returns an aggregated temperature.
-> > Currently, this supports three aggregations:
-> > the minimum, maximum and average temperature.
-> >
-> > Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
-> > ---
-> >  drivers/thermal/Kconfig                  |   8 +
-> >  drivers/thermal/Makefile                 |   1 +
-> >  drivers/thermal/virtual_thermal_sensor.c | 218 +++++++++++++++++++++++
-> >  3 files changed, 227 insertions(+)
-> >  create mode 100644 drivers/thermal/virtual_thermal_sensor.c
-> >
-> > diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> > index d7f44deab5b1..b326fae5ad1d 100644
-> > --- a/drivers/thermal/Kconfig
-> > +++ b/drivers/thermal/Kconfig
-> > @@ -228,6 +228,14 @@ config THERMAL_MMIO
-> >           register or shared memory, is a potential candidate to work with this
-> >           driver.
-> >
-> > +config VIRTUAL_THERMAL
+> From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 >
-> The name is a bit overly generic IMV and that may be confusing.  It
-> would be good to use a name reflecting the fact that this is DT-based.
-> For example, something like thermal_of_virtual_sensor or similar.
+> Add a new netlink event to notify change in CPU capabilities in terms of
+> performance and efficiency.
 >
-> > +       tristate "DT-based virtual thermal sensor driver"
-> > +       depends on THERMAL_OF || COMPILE_TEST
-> > +       help
-> > +         This option enables the generic DT-based thermal sensor aggregator.
-> > +         This driver creates a thermal sensor that reads multiple hardware
-> > +         sensors and aggregates their output.
-> > +
-> >  config HISI_THERMAL
-> >         tristate "Hisilicon thermal driver"
-> >         depends on ARCH_HISI || COMPILE_TEST
-> > diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-> > index 82fc3e616e54..8bf55973059c 100644
-> > --- a/drivers/thermal/Makefile
-> > +++ b/drivers/thermal/Makefile
-> > @@ -60,3 +60,4 @@ obj-$(CONFIG_UNIPHIER_THERMAL)        += uniphier_thermal.o
-> >  obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
-> >  obj-$(CONFIG_SPRD_THERMAL)     += sprd_thermal.o
-> >  obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)   += khadas_mcu_fan.o
-> > +obj-$(CONFIG_VIRTUAL_THERMAL) += virtual_thermal_sensor.o
-> > diff --git a/drivers/thermal/virtual_thermal_sensor.c b/drivers/thermal/virtual_thermal_sensor.c
-> > new file mode 100644
-> > index 000000000000..9f38af925fd1
-> > --- /dev/null
-> > +++ b/drivers/thermal/virtual_thermal_sensor.c
-> > @@ -0,0 +1,218 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * virtual_thermal_sensor.c - DT-based virtual thermal sensor driver.
+> Firmware may change CPU capabilities as a result of thermal events in the
+> system or to account for changes in the TDP (thermal design power) level.
 >
-> It would be good to have some more information on what it does here.
+> This notification type will allow user space to avoid running workloads
+> on certain CPUs or proactively adjust power limits to avoid future events.
 >
-> > + *
-> > + * Copyright (c) 2021 BayLibre
-> > + */
-> > +
-> > +#include <linux/err.h>
-> > +#include <linux/export.h>
-> > +#include <linux/module.h>
-> > +#include <linux/of_device.h>
-> > +#include <linux/of_platform.h>
-> > +#include <linux/slab.h>
-> > +#include <linux/thermal.h>
-> > +#include <linux/types.h>
-> > +#include <linux/string.h>
-> > +
-> > +#include <dt-bindings/thermal/virtual-sensor.h>
-> > +
-> > +struct virtual_thermal_zone_device {
-> > +       struct thermal_zone_device *zone;
-> > +       struct module *owner;
-> > +};
-> > +
-> > +struct virtual_thermal_sensor {
-> > +       int count;
-> > +       struct virtual_thermal_zone_device *zones;
-> > +       struct thermal_zone_device *tzd;
-> > +       int (*aggr_temp)(int temp1, int temp2);
-> > +
-> > +       struct list_head node;
-> > +};
-> > +
-> > +static int max_temp(int temp1, int temp2)
-> > +{
-> > +       return max(temp1, temp2);
-> > +}
-> > +
-> > +static int min_temp(int temp1, int temp2)
-> > +{
-> > +       return min(temp1, temp2);
-> > +}
-> > +
-> > +static int avg_temp(int temp1, int temp2)
-> > +{
-> > +       return (temp1 + temp2) / 2;
-> > +}
-> > +
-> > +static int virtual_thermal_sensor_get_temp(void *data, int *temperature)
-> > +{
-> > +       struct virtual_thermal_sensor *sensor = data;
-> > +       int max_temp = INT_MIN;
-> > +       int temp;
-> > +       int i;
-> > +
-> > +       for (i = 0; i < sensor->count; i++) {
-> > +               struct thermal_zone_device *zone;
-> > +
-> > +               zone = sensor->zones[i].zone;
+> The netlink message consists of a nested attribute
+> (THERMAL_GENL_ATTR_CPU_CAPABILITY) with three attributes:
 >
-> What if one of the zones gets unregistered after registering a thermal
-> sensor depending on it?
+>  * THERMAL_GENL_ATTR_CPU_CAPABILITY_ID (type u32):
+>    -- logical CPU number
+>  * THERMAL_GENL_ATTR_CPU_CAPABILITY_PERFORMANCE (type u32):
+>    -- Scaled performance from 0-1023
+>  * THERMAL_GENL_ATTR_CPU_CAPABILITY_EFFICIENCY (type u32):
+>    -- Scaled efficiency from 0-1023
 >
-> I don't think this will still work in that case.
->
-> > +               zone->ops->get_temp(zone, &temp);
-> > +               max_temp = sensor->aggr_temp(max_temp, temp);
+> Cc: Andi Kleen <ak@linux.intel.com>
+> Cc: Aubrey Li <aubrey.li@linux.intel.com>
+> Cc: Lukasz Luba <lukasz.luba@arm.com>
+> Cc: Tim Chen <tim.c.chen@linux.intel.com>
+> Cc: "Ravi V. Shankar" <ravi.v.shankar@intel.com>
+> Reviewed-by: Len Brown <len.brown@intel.com>
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-One more thing: AFAICS, this is only going to work for the "average"
-type of aggregation if there are two sensors involved.  For three (or
-more), you won't really get the average.  For instance, for three
-sensors the current patch leads to t = t_0 / 4 + t_1 / 4 + t_2 / 2
-whereas the average is the sum of t_i divided by the number of them
-(3).
+Daniel, Lukasz, if you have any comments or concerns regarding this
+patch, please let me know.
 
-It looks like you need to check the aggregation type here directly
-instead of using the callback approach, which would also make it
-easier to follow the code.
-
-> > +       }
-> > +
-> > +       *temperature = max_temp;
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static const struct thermal_zone_of_device_ops virtual_thermal_sensor_ops = {
-> > +       .get_temp = virtual_thermal_sensor_get_temp,
-> > +};
-> > +
-> > +static int virtual_thermal_sensor_get_module(struct virtual_thermal_zone_device *zone,
-> > +                                            const char *name)
-> > +{
-> > +               struct platform_device *sensor_pdev;
-> > +               struct device_node *node;
-> > +
-> > +               node = of_find_node_by_name(NULL, name);
-> > +               if (!node)
-> > +                       return -ENODEV;
-> > +
-> > +               node = of_parse_phandle(node, "thermal-sensors", 0);
-> > +               if (!node)
-> > +                       return -ENODEV;
-> > +
-> > +               sensor_pdev = of_find_device_by_node(node);
-> > +               if (!sensor_pdev)
-> > +                       return -ENODEV;
-> > +
-> > +               if (!sensor_pdev->dev.driver)
-> > +                       return -EPROBE_DEFER;
-> > +
-> > +               if (!try_module_get(sensor_pdev->dev.driver->owner))
-> > +                       return -ENODEV;
-> > +
-> > +               zone->owner = sensor_pdev->dev.driver->owner;
-> > +
-> > +               return 0;
-> > +}
-> > +
-> > +static void virtual_thermal_sensor_put_modules(struct virtual_thermal_sensor *sensor)
-> > +{
-> > +       int i;
-> > +
-> > +       for (i = 0; i < sensor->count; i++) {
-> > +               if (sensor->zones[i].zone)
-> > +                       module_put(sensor->zones[i].owner);
-> > +       }
-> > +}
-> > +
-> > +static int virtual_thermal_sensor_probe(struct platform_device *pdev)
-> > +{
-> > +       struct virtual_thermal_sensor *sensor;
-> > +       struct device *dev = &pdev->dev;
-> > +       struct property *prop;
-> > +       const char *name;
-> > +       u32 type;
-> > +       int ret;
-> > +       int i = 0;
-> > +
-> > +       sensor = devm_kzalloc(dev, sizeof(*sensor), GFP_KERNEL);
-> > +       if (!sensor)
-> > +               return -ENOMEM;
-> > +       sensor->count = of_property_count_strings(dev->of_node, "thermal-sensors");
-> > +       if (sensor->count <= 0)
-> > +               return -EINVAL;
-> > +
-> > +       sensor->zones = devm_kmalloc_array(dev, sensor->count,
-> > +                                            sizeof(*sensor->zones),
-> > +                                            GFP_KERNEL);
-> > +       if (!sensor->zones)
-> > +               return -ENOMEM;
-> > +
-> > +       of_property_for_each_string(dev->of_node, "thermal-sensors", prop, name) {
-> > +               struct virtual_thermal_zone_device *virtual_zone;
-> > +               struct thermal_zone_device *zone;
-> > +
-> > +               virtual_zone = &sensor->zones[i++];
-> > +
-> > +               zone = thermal_zone_get_zone_by_name(name);
-> > +               if (IS_ERR(zone))
-> > +                       return PTR_ERR(zone);
-> > +
-> > +               ret = virtual_thermal_sensor_get_module(virtual_zone, name);
-> > +               if (ret)
-> > +                       goto err;
+> ---
+> Changes since v4:
+>   * Renamed struct cpu_capability as struct thermal_genl_cpu_caps.
+>     (Rafael)
+>   * Removed automatic variable ret from
+>     thermal_genl_event_cpu_capability_change() and instead always return
+>     -EMSGSIZE on error. (Rafael)
 >
-> The above prevents the module holding the zone driver from being
-> unloaded while it is used by this virtual sensor, but it still doesn't
-> prevent its zone from being unregistered after probing the virtual
-> sensor.
+> Changes since v3:
+>   * None
 >
-> > +
-> > +               virtual_zone->zone = zone;
-> > +       }
-> > +
-> > +       ret = of_property_read_u32(dev->of_node, "aggregation-function", &type);
-> > +       if (ret)
-> > +               return ret;
-> > +
-> > +       switch (type) {
-> > +       case VIRTUAL_THERMAL_SENSOR_MAX_VAL:
-> > +               sensor->aggr_temp = max_temp;
-> > +               break;
-> > +       case VIRTUAL_THERMAL_SENSOR_MIN_VAL:
-> > +               sensor->aggr_temp = min_temp;
-> > +               break;
-> > +       case VIRTUAL_THERMAL_SENSOR_AVG_VAL:
-> > +               sensor->aggr_temp = avg_temp;
-> > +               break;
-> > +       default:
-> > +               return -EINVAL;
-> > +       }
-> > +
-> > +       sensor->tzd = devm_thermal_zone_of_sensor_register(dev, 0, sensor,
-> > +                                                          &virtual_thermal_sensor_ops);
-> > +       if (IS_ERR(sensor->tzd))
-> > +               return PTR_ERR(sensor->tzd);
-> > +
-> > +       platform_set_drvdata(pdev, sensor);
-> > +
-> > +       return 0;
-> > +
-> > +err:
-> > +       virtual_thermal_sensor_put_modules(sensor);
-> > +
-> > +       return ret;
-> > +}
-> > +
-> > +static int virtual_thermal_sensor_remove(struct platform_device *pdev)
-> > +{
-> > +       struct virtual_thermal_sensor *sensor;
-> > +
-> > +       sensor = platform_get_drvdata(pdev);
-> > +       list_del(&sensor->node);
-> > +
-> > +       virtual_thermal_sensor_put_modules(sensor);
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static const struct of_device_id virtual_thermal_sensor_of_match[] = {
-> > +       {
-> > +               .compatible = "virtual,thermal-sensor",
-> > +       },
-> > +       {
-> > +       },
-> > +};
-> > +MODULE_DEVICE_TABLE(of, virtual_thermal_sensor_of_match);
-> > +
-> > +static struct platform_driver virtual_thermal_sensor = {
-> > +       .probe = virtual_thermal_sensor_probe,
-> > +       .remove = virtual_thermal_sensor_remove,
-> > +       .driver = {
-> > +               .name = "virtual-thermal-sensor",
-> > +               .of_match_table = virtual_thermal_sensor_of_match,
-> > +       },
-> > +};
-> > +
-> > +module_platform_driver(virtual_thermal_sensor);
-> > +MODULE_AUTHOR("Alexandre Bailon <abailon@baylibre.com>");
-> > +MODULE_DESCRIPTION("Virtual thermal sensor");
-> > +MODULE_LICENSE("GPL v2");
-> > --
+> Changes since v2:
+>   * None
+>
+> Changes since v1:
+>   * Reworded commit message.
+>   * Reworded the members of struct cpu_capacity for clarity. (Lukasz)
+>   * Defined the CPU capability attributes to be scaled in the [0, 1023]
+>     interval. (Lukasz)
+> ---
+>  drivers/thermal/thermal_netlink.c | 53 +++++++++++++++++++++++++++++++
+>  drivers/thermal/thermal_netlink.h | 14 ++++++++
+>  include/uapi/linux/thermal.h      |  6 +++-
+>  3 files changed, 72 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/thermal/thermal_netlink.c b/drivers/thermal/thermal_netlink.c
+> index a16dd4d5d710..7c97a091680e 100644
+> --- a/drivers/thermal/thermal_netlink.c
+> +++ b/drivers/thermal/thermal_netlink.c
+> @@ -43,6 +43,11 @@ static const struct nla_policy thermal_genl_policy[THERMAL_GENL_ATTR_MAX + 1] =
+>         [THERMAL_GENL_ATTR_CDEV_MAX_STATE]      = { .type = NLA_U32 },
+>         [THERMAL_GENL_ATTR_CDEV_NAME]           = { .type = NLA_STRING,
+>                                                     .len = THERMAL_NAME_LENGTH },
+> +       /* CPU capabilities */
+> +       [THERMAL_GENL_ATTR_CPU_CAPABILITY]              = { .type = NLA_NESTED },
+> +       [THERMAL_GENL_ATTR_CPU_CAPABILITY_ID]           = { .type = NLA_U32 },
+> +       [THERMAL_GENL_ATTR_CPU_CAPABILITY_PERFORMANCE]  = { .type = NLA_U32 },
+> +       [THERMAL_GENL_ATTR_CPU_CAPABILITY_EFFICIENCY]   = { .type = NLA_U32 },
+>  };
+>
+>  struct param {
+> @@ -58,6 +63,8 @@ struct param {
+>         int temp;
+>         int cdev_state;
+>         int cdev_max_state;
+> +       struct thermal_genl_cpu_caps *cpu_capabilities;
+> +       int cpu_capabilities_count;
+>  };
+>
+>  typedef int (*cb_t)(struct param *);
+> @@ -190,6 +197,42 @@ static int thermal_genl_event_gov_change(struct param *p)
+>         return 0;
+>  }
+>
+> +static int thermal_genl_event_cpu_capability_change(struct param *p)
+> +{
+> +       struct thermal_genl_cpu_caps *cpu_cap = p->cpu_capabilities;
+> +       struct sk_buff *msg = p->msg;
+> +       struct nlattr *start_cap;
+> +       int i;
+> +
+> +       start_cap = nla_nest_start(msg, THERMAL_GENL_ATTR_CPU_CAPABILITY);
+> +       if (!start_cap)
+> +               return -EMSGSIZE;
+> +
+> +       for (i = 0; i < p->cpu_capabilities_count; ++i) {
+> +               if (nla_put_u32(msg, THERMAL_GENL_ATTR_CPU_CAPABILITY_ID,
+> +                               cpu_cap->cpu))
+> +                       goto out_cancel_nest;
+> +
+> +               if (nla_put_u32(msg, THERMAL_GENL_ATTR_CPU_CAPABILITY_PERFORMANCE,
+> +                               cpu_cap->performance))
+> +                       goto out_cancel_nest;
+> +
+> +               if (nla_put_u32(msg, THERMAL_GENL_ATTR_CPU_CAPABILITY_EFFICIENCY,
+> +                               cpu_cap->efficiency))
+> +                       goto out_cancel_nest;
+> +
+> +               ++cpu_cap;
+> +       }
+> +
+> +       nla_nest_end(msg, start_cap);
+> +
+> +       return 0;
+> +out_cancel_nest:
+> +       nla_nest_cancel(msg, start_cap);
+> +
+> +       return -EMSGSIZE;
+> +}
+> +
+>  int thermal_genl_event_tz_delete(struct param *p)
+>         __attribute__((alias("thermal_genl_event_tz")));
+>
+> @@ -219,6 +262,7 @@ static cb_t event_cb[] = {
+>         [THERMAL_GENL_EVENT_CDEV_DELETE]        = thermal_genl_event_cdev_delete,
+>         [THERMAL_GENL_EVENT_CDEV_STATE_UPDATE]  = thermal_genl_event_cdev_state_update,
+>         [THERMAL_GENL_EVENT_TZ_GOV_CHANGE]      = thermal_genl_event_gov_change,
+> +       [THERMAL_GENL_EVENT_CPU_CAPABILITY_CHANGE] = thermal_genl_event_cpu_capability_change,
+>  };
+>
+>  /*
+> @@ -356,6 +400,15 @@ int thermal_notify_tz_gov_change(int tz_id, const char *name)
+>         return thermal_genl_send_event(THERMAL_GENL_EVENT_TZ_GOV_CHANGE, &p);
+>  }
+>
+> +int thermal_genl_cpu_capability_event(int count,
+> +                                     struct thermal_genl_cpu_caps *caps)
+> +{
+> +       struct param p = { .cpu_capabilities_count = count, .cpu_capabilities = caps };
+> +
+> +       return thermal_genl_send_event(THERMAL_GENL_EVENT_CPU_CAPABILITY_CHANGE, &p);
+> +}
+> +EXPORT_SYMBOL_GPL(thermal_genl_cpu_capability_event);
+> +
+>  /*************************** Command encoding ********************************/
+>
+>  static int __thermal_genl_cmd_tz_get_id(struct thermal_zone_device *tz,
+> diff --git a/drivers/thermal/thermal_netlink.h b/drivers/thermal/thermal_netlink.h
+> index e554f76291f4..04d1adbbc012 100644
+> --- a/drivers/thermal/thermal_netlink.h
+> +++ b/drivers/thermal/thermal_netlink.h
+> @@ -4,6 +4,12 @@
+>   *  Author: Daniel Lezcano <daniel.lezcano@linaro.org>
+>   */
+>
+> +struct thermal_genl_cpu_caps {
+> +       int cpu;
+> +       int performance;
+> +       int efficiency;
+> +};
+> +
+>  /* Netlink notification function */
+>  #ifdef CONFIG_THERMAL_NETLINK
+>  int __init thermal_netlink_init(void);
+> @@ -23,6 +29,8 @@ int thermal_notify_cdev_add(int cdev_id, const char *name, int max_state);
+>  int thermal_notify_cdev_delete(int cdev_id);
+>  int thermal_notify_tz_gov_change(int tz_id, const char *name);
+>  int thermal_genl_sampling_temp(int id, int temp);
+> +int thermal_genl_cpu_capability_event(int count,
+> +                                     struct thermal_genl_cpu_caps *caps);
+>  #else
+>  static inline int thermal_netlink_init(void)
+>  {
+> @@ -101,4 +109,10 @@ static inline int thermal_genl_sampling_temp(int id, int temp)
+>  {
+>         return 0;
+>  }
+> +
+> +static inline int thermal_genl_cpu_capability_event(int count, struct cpu_capability *caps)
+> +{
+> +       return 0;
+> +}
+> +
+>  #endif /* CONFIG_THERMAL_NETLINK */
+> diff --git a/include/uapi/linux/thermal.h b/include/uapi/linux/thermal.h
+> index 9aa2fedfa309..fc78bf3aead7 100644
+> --- a/include/uapi/linux/thermal.h
+> +++ b/include/uapi/linux/thermal.h
+> @@ -44,7 +44,10 @@ enum thermal_genl_attr {
+>         THERMAL_GENL_ATTR_CDEV_MAX_STATE,
+>         THERMAL_GENL_ATTR_CDEV_NAME,
+>         THERMAL_GENL_ATTR_GOV_NAME,
+> -
+> +       THERMAL_GENL_ATTR_CPU_CAPABILITY,
+> +       THERMAL_GENL_ATTR_CPU_CAPABILITY_ID,
+> +       THERMAL_GENL_ATTR_CPU_CAPABILITY_PERFORMANCE,
+> +       THERMAL_GENL_ATTR_CPU_CAPABILITY_EFFICIENCY,
+>         __THERMAL_GENL_ATTR_MAX,
+>  };
+>  #define THERMAL_GENL_ATTR_MAX (__THERMAL_GENL_ATTR_MAX - 1)
+> @@ -71,6 +74,7 @@ enum thermal_genl_event {
+>         THERMAL_GENL_EVENT_CDEV_DELETE,         /* Cdev unbound */
+>         THERMAL_GENL_EVENT_CDEV_STATE_UPDATE,   /* Cdev state updated */
+>         THERMAL_GENL_EVENT_TZ_GOV_CHANGE,       /* Governor policy changed  */
+> +       THERMAL_GENL_EVENT_CPU_CAPABILITY_CHANGE,       /* CPU capability changed */
+>         __THERMAL_GENL_EVENT_MAX,
+>  };
+>  #define THERMAL_GENL_EVENT_MAX (__THERMAL_GENL_EVENT_MAX - 1)
+> --
+> 2.17.1
+>
