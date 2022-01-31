@@ -2,126 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B76D4A466C
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Jan 2022 12:56:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E3F14A4867
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Jan 2022 14:38:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231238AbiAaL4R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Jan 2022 06:56:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55100 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378851AbiAaLwq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jan 2022 06:52:46 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC375C0797A4
-        for <linux-pm@vger.kernel.org>; Mon, 31 Jan 2022 03:38:06 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id e9so19033670ljq.1
-        for <linux-pm@vger.kernel.org>; Mon, 31 Jan 2022 03:38:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=W8c20o6vm+QehnaH5SGz0nEPnQS7Uvpo1uJWmbdFZlc=;
-        b=TBoqWZUVCECQVtQsmAoVuSv+8zXX5npwQzMT/o7dAdNDzUXMGpnR7gdfY0Qc+cV519
-         DiMH8bfdYRd7qr2zaAy0/wwBxhIw0RZvqfmwviAjJgsXdFySxShr6sN6RsptFTN962o7
-         65YJ0XJmI70G0PcoXT5IMxq86oClWUgzvIuafSL2K2UjGKhkGFS0RJ5usVIPs/HRPhnm
-         r/cKHF+Nw7n5qe+Yw+34qwlAyP5vX/PKL+mTe+K+2wCL2yklRn83o2kFXCeFCbEW9t5O
-         7BX4O+9Coot60HOEmq9nxcy9c7at/ZjIkDq/QhHfCW+Xj5KuJlSHAEU9kIQz0Bi8lRNz
-         MKfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=W8c20o6vm+QehnaH5SGz0nEPnQS7Uvpo1uJWmbdFZlc=;
-        b=IgN2oTofeajRTGZZbSWuobJltsiAcuIb/TRvRRoowIMJZuvLuCAP8v13fzCgcgwVED
-         yfoGGEABDU8UOSi1h3m2BhAoaXNryp3KQ27C0Y3ou1Uf5VOGAWdQC0qDrorgqYT8NBBk
-         OahFauZ1WdjHmUa2n1zsSPrg4sGa53+zAogqaDNEQxkeLPlIb09n2jGB7ZzK6HAoJ7Rd
-         cfa07PnL8yq/qXhxFEdH3Gu5/pHQUbF7dTi3HTnNA1em3YfqtDS/3aqorEwnOoToRE/U
-         Vyue1KhHS1iakvDgbtY+MEKFLdlzer7TE2P3XN9TZM8KNgpPIdJdquJ61MUgvJbBmMw/
-         NaOA==
-X-Gm-Message-State: AOAM532K2CaAaFFZo9ftSb/sLD6KI9ReowVMN2bsE7f7gCz/TeMaTdPd
-        02NrkK09KPQ3fO5+P29TXz1vrg==
-X-Google-Smtp-Source: ABdhPJy8MOQDAw//y5jxcHDGs1rFLfsXGOtR/s7UPuFneVxw+5BAwdjjbS/0n0t0JHKdNGYX6XNjpA==
-X-Received: by 2002:a2e:a4bb:: with SMTP id g27mr13623432ljm.469.1643629083336;
-        Mon, 31 Jan 2022 03:38:03 -0800 (PST)
-Received: from localhost.localdomain (h-155-4-129-21.NA.cust.bahnhof.se. [155.4.129.21])
-        by smtp.gmail.com with ESMTPSA id b8sm597682lfp.34.2022.01.31.03.38.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 03:38:02 -0800 (PST)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Cc:     Kevin Hilman <khilman@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] PM: domains: Prevent power off for parent unless child is in deepest state
-Date:   Mon, 31 Jan 2022 12:37:43 +0100
-Message-Id: <20220131113743.52265-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        id S1379110AbiAaNi2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Jan 2022 08:38:28 -0500
+Received: from mga11.intel.com ([192.55.52.93]:24460 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1379018AbiAaNiZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 31 Jan 2022 08:38:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643636305; x=1675172305;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vV+EosjS0aKdpssFXwRRe5Zc72CZWBXPL31TLfqD2Qo=;
+  b=LrBChNDJEmmY9fiUoCF5N8DXv4N6BqeYV2BZupqQGD419QCqiP/xUWFI
+   otOkDxz3Impmq5BIvvUPsbb5ddcvlwXM0R5Jr1wsDIb1BQbtLkHWbsfgd
+   CyulMbgKIoGS17SzxvcLWv1QiEBnrUzGiQWN+6k0+BLjDCV36cQIstPyx
+   mTo8NUl9GX8rI1KAD+JmrsXi+pgXUiJJx0TEyXTwgmTHp3Z9bm6RB+3Vr
+   9DiZIExoBNN1dHQZB+7DlTFGpvLapzIQJ+8L/ifVlW8vd7zDILnxBhtHU
+   Ao36KCw1mXN9fkLPrElK83jAP2QB1cYlvP7YV/UKUEITjhptRbaptkM0E
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="245053765"
+X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
+   d="scan'208";a="245053765"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 05:38:24 -0800
+X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
+   d="scan'208";a="565010093"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 05:38:19 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1nEWrs-00Gsrq-Ge;
+        Mon, 31 Jan 2022 15:37:16 +0200
+Date:   Mon, 31 Jan 2022 15:37:16 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
+        linux-acpi@vger.kernel.org, Yauhen Kharuzhy <jekhor@gmail.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        Fabio Aiuto <fabioaiuto83@gmail.com>,
+        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org
+Subject: Re: [PATCH v4 01/20] power: supply: core: Refactor
+ power_supply_set_input_current_limit_from_supplier()
+Message-ID: <YffmDCHY6csr0uyD@smile.fi.intel.com>
+References: <20220130204557.15662-1-hdegoede@redhat.com>
+ <20220130204557.15662-2-hdegoede@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220130204557.15662-2-hdegoede@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-A PM domain managed by genpd may support multiple idlestates. During
-genpd_power_off() a genpd governor may be asked to select one of the
-idlestates based upon the dev PM QoS constraints, for example.
+On Sun, Jan 30, 2022 at 09:45:38PM +0100, Hans de Goede wrote:
+> Some (USB) charger ICs have variants with USB D+ and D- pins to do their
+> own builtin charger-type detection, like e.g. the bq24190 and bq25890 and
+> also variants which lack this functionality, e.g. the bq24192 and bq25892.
+> 
+> In case the charger-type; and thus the input-current-limit detection is
+> done outside the charger IC then we need some way to communicate this to
+> the charger IC. In the past extcon was used for this, but if the external
+> detection does e.g. full USB PD negotiation then the extcon cable-types do
+> not convey enough information.
+> 
+> For these setups it was decided to model the external charging "brick"
+> and the parameters negotiated with it as a power_supply class-device
+> itself; and power_supply_set_input_current_limit_from_supplier() was
+> introduced to allow drivers to get the input-current-limit this way.
+> 
+> But in some cases psy drivers may want to know other properties, e.g. the
+> bq25892 can do "quick-charge" negotiation by pulsing its current draw,
+> but this should only be done if the usb_type psy-property of its supplier
+> is set to DCP (and device-properties indicate the board allows higher
+> voltages).
+> 
+> Instead of adding extra helper functions for each property which
+> a psy-driver wants to query from its supplier, refactor
+> power_supply_set_input_current_limit_from_supplier() into a
+> more generic power_supply_get_property_from_supplier() function.
 
-However, there is a problem with the behaviour around this in genpd. More
-precisely, a parent-domain is allowed to be powered off, no matter of what
-idlestate that has been selected for the child-domain.
+...
 
-So far, we have not received any reports about errors, possibly because
-there might not be platform with this hierarchical configuration, yet.
-Nevertheless, it seems reasonable to change the behaviour into preventing
-the parent-domain from being powered off, unless the deepest idlestate has
-been selected for the child-domain, so let's do that.
+> +	ret = power_supply_get_property_from_supplier(bdi->charger,
+> +						      POWER_SUPPLY_PROP_CURRENT_MAX,
+> +						      &val);
+> +	if (ret == 0)
 
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
----
- drivers/base/power/domain.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+Can it be as simple as
 
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index 5db704f02e71..7f97c5cabdc2 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -636,6 +636,17 @@ static int genpd_power_off(struct generic_pm_domain *genpd, bool one_dev_on,
- 			atomic_read(&genpd->sd_count) > 0)
- 		return -EBUSY;
- 
-+	/*
-+	 * The children must be in their deepest states to allow the parent to
-+	 * be powered off. Note that, there's no need for additional locking, as
-+	 * powering on a child, requires the parent's lock to be acquired first.
-+	 */
-+	list_for_each_entry(link, &genpd->parent_links, parent_node) {
-+		struct generic_pm_domain *child = link->child;
-+		if (child->state_idx < child->state_count - 1)
-+			return -EBUSY;
-+	}
-+
- 	list_for_each_entry(pdd, &genpd->dev_list, list_node) {
- 		enum pm_qos_flags_status stat;
- 
-@@ -1073,6 +1084,13 @@ static void genpd_sync_power_off(struct generic_pm_domain *genpd, bool use_lock,
- 	    || atomic_read(&genpd->sd_count) > 0)
- 		return;
- 
-+	/* Check that the children are in their deepest state. */
-+	list_for_each_entry(link, &genpd->parent_links, parent_node) {
-+		struct generic_pm_domain *child = link->child;
-+		if (child->state_idx < child->state_count - 1)
-+			return;
-+	}
-+
- 	/* Choose the deepest state when suspending */
- 	genpd->state_idx = genpd->state_count - 1;
- 	if (_genpd_power_off(genpd, false))
+	if (ret)
+		return;
+
+	...
+
+
+?
+
+Or did I misunderstand the meaning of 0?
+
 -- 
-2.25.1
+With Best Regards,
+Andy Shevchenko
+
 
