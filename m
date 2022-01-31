@@ -2,75 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A57D04A4091
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Jan 2022 11:57:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B53714A4110
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Jan 2022 12:02:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239694AbiAaK5F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Jan 2022 05:57:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42244 "EHLO
+        id S1358876AbiAaLB5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Jan 2022 06:01:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239633AbiAaK5E (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jan 2022 05:57:04 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA714C061714;
-        Mon, 31 Jan 2022 02:57:03 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 6EEF21F4312B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1643626622;
-        bh=AhIlSPFIs8ak0I/I8Ku1qwLQESsLxE26HyIIypM3mfI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=VtX2wMwZbmlVio86rbbyFReXPbkiIl33IMybSs+olR6XD2iuZtBgwcgoZGtzFZxut
-         SEPrxE9Y/T3VWOod7FCLJjutTvjmDiIzA3Nb1kYOXfIYdPWG65bUF8jwCdxZWGuC3+
-         r5S9a4nWHlmo4C1GF5+cj55SF0DSFdv++YxwL/eOIebuovdwygIlKG6muH9/h3UdKF
-         CVOZ7tpZiAkVRiQdmU6hPKolqXWg7uqua8QmEbLLGNxT1N9DqFnzWwAEqEMz4wBbyh
-         UzSG1O7T6kr1mZunW5yXiqHkXjij1CDgNJ3y9OtqSTIhMANM7pgftW1YTrOPv3fQrl
-         X52Pp5ab6/brw==
-Message-ID: <59582e31-66d7-ad07-dd64-4ebb223cf809@collabora.com>
-Date:   Mon, 31 Jan 2022 11:56:58 +0100
+        with ESMTP id S1358671AbiAaLBA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jan 2022 06:01:00 -0500
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B218C061789
+        for <linux-pm@vger.kernel.org>; Mon, 31 Jan 2022 02:59:47 -0800 (PST)
+Received: by mail-io1-xd42.google.com with SMTP id z199so16328612iof.10
+        for <linux-pm@vger.kernel.org>; Mon, 31 Jan 2022 02:59:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=FANIUiWvB3mdY3zLX2DODg2pUIL5eGT5wlydl6jYk40=;
+        b=OjUeAkMVzEddLMMo5PnTCjKyhCs1ageGmC5+cFdXpsSEtg6JbUDTvXCRmwfTUCSofJ
+         slj36zZmhn3J4uwPw0DJBjnv3hUS5m+nEauuYDUNcCWjc1f+d0I+yOjKIUc0Pgz+j5Ue
+         rRdRGfWkjcSXGfwT+M+UDneKFOQe0c6aLr+5TauC2FupNgb1qyGc5yiIkJ8k0NAmHZhf
+         anrjd59/OgrastnWs4ZkrvFaIDjw5pd3eh107tNZ/TuMjnW3micCxNZKM2MDkg13GKwm
+         O5Q6tfm8j18o2CLpoCl1kG865M+uxrSOQqgPJI+OJu79ECke4sTf94bEwDsB5fZLVwuG
+         tdrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=FANIUiWvB3mdY3zLX2DODg2pUIL5eGT5wlydl6jYk40=;
+        b=qJlmjRQlu0WpzksqhGulUM2FpSb+TiOK0WCuaNBoVHpvNJaiQt+CwCEpBZQFOcEszX
+         FMCsr+xFZj6rK80fRnlxRrh3499gKU6zx7itUbOWupjbWiVUljQh5NW7dPnn9GGwB8fY
+         Ve+QcrcTBIuaRedzQfXYDpeVbYSRynQbBKxLq3oHoyyvJOcxZXI5aj/Lomox44eFnD+q
+         J8v7ZydFAV0OlF0Vy3FESBz2Eb8VVoA94eck2WhtfiOKn3iUeCHqMD3M7ab/+nVhC6n2
+         r7n2bhewmDnKEdJ67Ls1IffXCJPnxHZ8UfsU+kyqed4xGxWWMqBSJeJeN+Ig66mMUVD+
+         FsjQ==
+X-Gm-Message-State: AOAM531qV6TjZdiEopuRG1gWSaFoQK36KDnuUaWchKsosuLZFLTNb436
+        RgNxiW4SR7PXK4oGt0qbATuQCr65PMBWD99qXEk=
+X-Google-Smtp-Source: ABdhPJx07OLMUPeEc0ImjaiJBKF2Mcc3ZmsWTIoSvX2FNfz03c1HE0RFqesREnjvPqYHKyL/ALkhu5ugV57XI3T5t/k=
+X-Received: by 2002:a6b:441a:: with SMTP id r26mr10856124ioa.211.1643626786286;
+ Mon, 31 Jan 2022 02:59:46 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v22 7/7] soc: mediatek: SVS: add mt8192 SVS GPU driver
-Content-Language: en-US
-To:     Roger Lu <roger.lu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Fan Chen <fan.chen@mediatek.com>,
-        HenryC Chen <HenryC.Chen@mediatek.com>,
-        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Guenter Roeck <linux@roeck-us.net>
-References: <20220127033956.24585-1-roger.lu@mediatek.com>
- <20220127033956.24585-8-roger.lu@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220127033956.24585-8-roger.lu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Reply-To: daniellakyle60@gmail.com
+Sender: drdanielmorris11111@gmail.com
+Received: by 2002:a05:6638:1248:0:0:0:0 with HTTP; Mon, 31 Jan 2022 02:59:45
+ -0800 (PST)
+From:   Mrs daniell akyle <daniellakyle60@gmail.com>
+Date:   Mon, 31 Jan 2022 11:59:45 +0100
+X-Google-Sender-Auth: xE_x512-NJSetLeK1z_d90RC9Q0
+Message-ID: <CAKFcj-P8h0HeDMtZZnog7Sh8cFMKV7095BN2fQnUMpCGPgmhFg@mail.gmail.com>
+Subject: Ahoj
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Il 27/01/22 04:39, Roger Lu ha scritto:
-> mt8192 SVS GPU uses 2-line (high/low bank) HW architecture to provide
-> bank voltages. High bank helps update higher frequency's voltage
-> and low bank helps update lower frequency's voltage.
-> 
-> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
-
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
+Pozdravy
+Jmenuji se pan=C3=AD Daniella Kyleov=C3=A1, je mi 58 let
+Filip=C3=ADny. V sou=C4=8Dasn=C3=A9 dob=C4=9B jsem hospitalizov=C3=A1n na F=
+ilip=C3=ADn=C3=A1ch, kde jsem
+podstupuje l=C3=A9=C4=8Dbu akutn=C3=ADho karcinomu j=C3=ADcnu. jsem um=C3=
+=ADraj=C3=ADc=C3=AD,
+vdova, kter=C3=A1 se rozhodla darovat =C4=8D=C3=A1st sv=C3=A9ho majetku spo=
+lehliv=C3=A9 osob=C4=9B
+kter=C3=A1 tyto pen=C3=ADze pou=C5=BEije na pomoc chud=C3=BDm a m=C3=A9n=C4=
+=9B privilegovan=C3=BDm. Chci
+poskytnout dar ve v=C3=BD=C5=A1i 3 700 000 =C2=A3 na sirotky nebo charitati=
+vn=C3=AD organizace
+ve va=C5=A1=C3=AD oblasti. Zvl=C3=A1dne=C5=A1 to? Pokud jste ochotni tuto n=
+ab=C3=ADdku p=C5=99ijmout
+a ud=C4=9Blejte p=C5=99esn=C4=9B tak, jak v=C3=A1m =C5=99=C3=ADk=C3=A1m, pa=
+k se mi vra=C5=A5te pro dal=C5=A1=C3=AD vysv=C4=9Btlen=C3=AD.
+pozdravy
+Pan=C3=AD Daniella Kyleov=C3=A1
