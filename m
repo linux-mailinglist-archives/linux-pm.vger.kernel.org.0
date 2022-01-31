@@ -2,37 +2,37 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B8FA4A4065
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Jan 2022 11:44:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A57D04A4091
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Jan 2022 11:57:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358299AbiAaKoh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Jan 2022 05:44:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39432 "EHLO
+        id S239694AbiAaK5F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Jan 2022 05:57:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358150AbiAaKog (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jan 2022 05:44:36 -0500
+        with ESMTP id S239633AbiAaK5E (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jan 2022 05:57:04 -0500
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB658C061714;
-        Mon, 31 Jan 2022 02:44:36 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA714C061714;
+        Mon, 31 Jan 2022 02:57:03 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id 33D791F4311D
+        with ESMTPSA id 6EEF21F4312B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1643625875;
-        bh=8kwBiHu+rozMfTRk8eG2eaRsAY8jmwscyixrLHkGQZ4=;
+        s=mail; t=1643626622;
+        bh=AhIlSPFIs8ak0I/I8Ku1qwLQESsLxE26HyIIypM3mfI=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=eyB/p5HuyuwZUaLJdj2jW28sbi2CAuEJI1owJGs6WD+nZtWScfTBwOfCDsm2fAvw0
-         PF2MUfVbHJTahO+mbSluTxWNCDCo59mFfBlJQiue7n85pXSPlWhgQCLMD0TY3zIQcY
-         THkKQNVdBRgsPj77qZhcWMTCn/jCpOtjCUulRpV5Qm1V/eE7fVz6nDyzK2WqoWrP/0
-         Oj8s8cFTTOybXRYS/CLNDbW+JtUGyZk3qBMQqaV+k8LySI2mWUKJdfu42tHsZPIEkG
-         2KxhGlGmXOS+4GEJ5HIh82h62L3l9zsBiPzGAulvuPRnSZLXAlKr1/TzrpibxjjFb6
-         phEgAtFz7ZApg==
-Message-ID: <98696462-3648-24f7-6034-7864a3793ce4@collabora.com>
-Date:   Mon, 31 Jan 2022 11:44:31 +0100
+        b=VtX2wMwZbmlVio86rbbyFReXPbkiIl33IMybSs+olR6XD2iuZtBgwcgoZGtzFZxut
+         SEPrxE9Y/T3VWOod7FCLJjutTvjmDiIzA3Nb1kYOXfIYdPWG65bUF8jwCdxZWGuC3+
+         r5S9a4nWHlmo4C1GF5+cj55SF0DSFdv++YxwL/eOIebuovdwygIlKG6muH9/h3UdKF
+         CVOZ7tpZiAkVRiQdmU6hPKolqXWg7uqua8QmEbLLGNxT1N9DqFnzWwAEqEMz4wBbyh
+         UzSG1O7T6kr1mZunW5yXiqHkXjij1CDgNJ3y9OtqSTIhMANM7pgftW1YTrOPv3fQrl
+         X52Pp5ab6/brw==
+Message-ID: <59582e31-66d7-ad07-dd64-4ebb223cf809@collabora.com>
+Date:   Mon, 31 Jan 2022 11:56:58 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.1
-Subject: Re: [PATCH v22 4/7] soc: mediatek: SVS: add monitor mode
+Subject: Re: [PATCH v22 7/7] soc: mediatek: SVS: add mt8192 SVS GPU driver
 Content-Language: en-US
 To:     Roger Lu <roger.lu@mediatek.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
@@ -55,10 +55,10 @@ Cc:     Fan Chen <fan.chen@mediatek.com>,
         Project_Global_Chrome_Upstream_Group@mediatek.com,
         Guenter Roeck <linux@roeck-us.net>
 References: <20220127033956.24585-1-roger.lu@mediatek.com>
- <20220127033956.24585-5-roger.lu@mediatek.com>
+ <20220127033956.24585-8-roger.lu@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220127033956.24585-5-roger.lu@mediatek.com>
+In-Reply-To: <20220127033956.24585-8-roger.lu@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -66,8 +66,9 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 Il 27/01/22 04:39, Roger Lu ha scritto:
-> SVS monitor mode is based on different thermal temperature
-> to provide suitable SVS bank voltages.
+> mt8192 SVS GPU uses 2-line (high/low bank) HW architecture to provide
+> bank voltages. High bank helps update higher frequency's voltage
+> and low bank helps update lower frequency's voltage.
 > 
 > Signed-off-by: Roger Lu <roger.lu@mediatek.com>
 
