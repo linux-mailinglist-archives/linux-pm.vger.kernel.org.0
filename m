@@ -2,90 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53CBC4A4E00
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Jan 2022 19:24:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1F544A4E49
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Jan 2022 19:29:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350436AbiAaSYh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Jan 2022 13:24:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34976 "EHLO
+        id S1345035AbiAaS3K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Jan 2022 13:29:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349461AbiAaSYf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jan 2022 13:24:35 -0500
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CFD0C061741
-        for <linux-pm@vger.kernel.org>; Mon, 31 Jan 2022 10:24:33 -0800 (PST)
-Received: by mail-ot1-x32e.google.com with SMTP id b17-20020a9d4791000000b005a17fc2dfc1so13850884otf.1
-        for <linux-pm@vger.kernel.org>; Mon, 31 Jan 2022 10:24:33 -0800 (PST)
+        with ESMTP id S1350968AbiAaS3K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jan 2022 13:29:10 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8466C06173D;
+        Mon, 31 Jan 2022 10:29:09 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id y15so28620794lfa.9;
+        Mon, 31 Jan 2022 10:29:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=/uEQDiPvyVpaW3bH2ylqgdN3GSKb6mGtIDulo2igF4A=;
-        b=Dj4Ze4AyS49RZQCHcV7EVYf3hJluedHM2cMEXbuCHBtf8CPRtUSONXankqPdPPbGg+
-         kVh8mrcPUn4v1+u6txNnRyQKAN70VohEMitBldwoJ6c/AoYAilMgI26DXnO9F55yAyL0
-         z4Z/avh/s/F9K1lXs4japf33mYiGxt5IZBCkaGh7KVhAk7NLXmXv6p0dL8nWqn0nqSbB
-         R88H4gOMjV1+cOEE+ALXTChil4s1IqG5xuUD2Q+E07Fnm3B/06TSCDkw/mziAjxejpTd
-         aE9CJ4dpPFq/aMty/FEd3kaRGWuAOAr3vqoS4UBh9MSjAuJ/sLmIc0nQnqS+IuMgl4aW
-         EfMw==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=qOOYqQyirhJ4gHyrf0pQn6wWDcf9SoG9lpkJduxhv4k=;
+        b=cxtxBVJfaZ53YZqjv1zCKieiVOePdMVid12olZKkMqf4013+GlYyz+g479stJ3s1Iw
+         bPLdtG7kphKcEoXRJMThS1JkynntZ9CZ4v8Ub0N/c6NcpJk2UgbAmxZbIOde+MbPalS0
+         s68iETvNFwYmVSimrr5K33F5tK+25t9oWuLxARl690aL9rHQJzKQ3KbPxQDA6g38jE6w
+         fUPZNftw+S4S7HttOvfn6iSwdxPPi3Ddgh7nl/8S3+G/h95wnNVxfq1wbweC6ZoHRWo/
+         3qwEZOyoNXqsn9X1ixp5nCDFgdnA+oMZvtb2fYSXuoFrDMyeihtjl9wY2DzaEZVp+lUg
+         /Tow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/uEQDiPvyVpaW3bH2ylqgdN3GSKb6mGtIDulo2igF4A=;
-        b=grZzUcEXr/h4hhoDhGY9s3sdlh2NcohFegzfrieDh7YxbRCongVvU2FPNKpbuqoWho
-         64SuMyl06XO/DF6oeq5fi0NxwNEo+hKyr7CAh0dsKjjk6KYwNYGApBvWNu+b7JVylLsI
-         Ur7ABHrvkL/lt703L7WMQ1c+OgZwX67KaDgEj2wfkPdKZw8luO3bBnytvOQ6IVAy/1/x
-         F2ho/HN3f3TqUd0aNOPb1y44tFFY85Lf/uVwTzMXXgjLeSMpLVLaZqncox7wsNcr24AO
-         DhPRsVwUtOAFQ4xJUx//sLWiEAA2ZmDw8bEd8OqbVFnS9WRb1/i3M7gshgybdwC33ECV
-         Nb3Q==
-X-Gm-Message-State: AOAM531TBNU1mH21YkSnZcbw0a8LoFBYgc5dsQQi7GUGLy/39XHv9D5N
-        /SVAY6xIeHtT7DRO7L1prTltng==
-X-Google-Smtp-Source: ABdhPJxYX/Skwea3U6mnS3RjwgXRsnB8XXUHMcSLu/8d72fFJvoUTX2f9Iov6ifpLhXWnw5fbHDUUQ==
-X-Received: by 2002:a9d:5388:: with SMTP id w8mr12079357otg.296.1643653472814;
-        Mon, 31 Jan 2022 10:24:32 -0800 (PST)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id y19sm3273722oti.49.2022.01.31.10.24.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 10:24:32 -0800 (PST)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, Luca Weiss <luca@z3ntu.xyz>
-Cc:     phone-devel@vger.kernel.org, devicetree@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
-        Sebastian Reichel <sre@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH 1/7] dt-bindings: power: supply: pm8941-charger: add pm8226
-Date:   Mon, 31 Jan 2022 12:24:21 -0600
-Message-Id: <164365345128.3009281.14091610271244037976.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211118210210.160895-1-luca@z3ntu.xyz>
-References: <20211118210210.160895-1-luca@z3ntu.xyz>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=qOOYqQyirhJ4gHyrf0pQn6wWDcf9SoG9lpkJduxhv4k=;
+        b=3PEeW6cGR2fi8Yq9//jAIwgl3mcu62A1unZPUsf1rpJ2D9ILOtOssQgiEZ1YiWZP/Z
+         IRtWe0lqQtN081IfvsJ2XFMBSLzgQcJMCy8zHeeGdCFnD1vVEHXlr1sz8g3cPhB8R1Ei
+         c7vHq6/yti2RH/W3XQtRiT2vfL0R6G4xFPTPPwMpwrI0XJw0oiI3Tj0wA2wIBKg17Q1e
+         qp2GGnb5sib6lv5MsP9fzq8hq+IYTf7uVH2QZvM/W3CjF30HrElACYVNoGMNbezS+Jcm
+         CQsSHb0QkozHonlRnJ4TZxEpHRy6TOL18cZgsRWk7LUaqx4i4tGH55NmyMi70wY51ARt
+         bJLw==
+X-Gm-Message-State: AOAM533nGkBj/eWwf+fD4oufNZlZOF7S7g3yQFoB3hU7uNOAxuGicXhC
+        EUxbWSnYUXtQZuqXMBx1H/w=
+X-Google-Smtp-Source: ABdhPJzgBn4YsT0MM8VrBY4KBgqjRFnemm3wEAwyeGfcRcpHOiEjYkpLJGEL27XmR1wbhKFaWTkp9w==
+X-Received: by 2002:a05:6512:3f27:: with SMTP id y39mr17652645lfa.347.1643653748190;
+        Mon, 31 Jan 2022 10:29:08 -0800 (PST)
+Received: from [192.168.2.145] (109-252-138-136.dynamic.spd-mgts.ru. [109.252.138.136])
+        by smtp.googlemail.com with ESMTPSA id t27sm2435829ljk.138.2022.01.31.10.29.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 10:29:07 -0800 (PST)
+Message-ID: <b33ceac4-506a-65c8-7c80-b1b0a67ce65e@gmail.com>
+Date:   Mon, 31 Jan 2022 21:29:06 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] PM: domains: Prevent power off for parent unless child is
+ in deepest state
+Content-Language: en-US
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
+Cc:     Kevin Hilman <khilman@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        linux-kernel@vger.kernel.org
+References: <20220131113743.52265-1-ulf.hansson@linaro.org>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <20220131113743.52265-1-ulf.hansson@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 18 Nov 2021 22:02:04 +0100, Luca Weiss wrote:
-> The charger in PM8226 (used in MSM8226) is similar to the charger in
-> PM8941.
+31.01.2022 14:37, Ulf Hansson пишет:
+> A PM domain managed by genpd may support multiple idlestates. During
+> genpd_power_off() a genpd governor may be asked to select one of the
+> idlestates based upon the dev PM QoS constraints, for example.
 > 
+> However, there is a problem with the behaviour around this in genpd. More
+> precisely, a parent-domain is allowed to be powered off, no matter of what
+> idlestate that has been selected for the child-domain.
 > 
+> So far, we have not received any reports about errors, possibly because
+> there might not be platform with this hierarchical configuration, yet.
+> Nevertheless, it seems reasonable to change the behaviour into preventing
+> the parent-domain from being powered off, unless the deepest idlestate has
+> been selected for the child-domain, so let's do that.
+> 
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> ---
+>  drivers/base/power/domain.c | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+> 
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index 5db704f02e71..7f97c5cabdc2 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -636,6 +636,17 @@ static int genpd_power_off(struct generic_pm_domain *genpd, bool one_dev_on,
+>  			atomic_read(&genpd->sd_count) > 0)
+>  		return -EBUSY;
+>  
+> +	/*
+> +	 * The children must be in their deepest states to allow the parent to
+> +	 * be powered off. Note that, there's no need for additional locking, as
+> +	 * powering on a child, requires the parent's lock to be acquired first.
+> +	 */
+> +	list_for_each_entry(link, &genpd->parent_links, parent_node) {
+> +		struct generic_pm_domain *child = link->child;
+> +		if (child->state_idx < child->state_count - 1)
+> +			return -EBUSY;
+> +	}
+> +
+>  	list_for_each_entry(pdd, &genpd->dev_list, list_node) {
+>  		enum pm_qos_flags_status stat;
+>  
+> @@ -1073,6 +1084,13 @@ static void genpd_sync_power_off(struct generic_pm_domain *genpd, bool use_lock,
+>  	    || atomic_read(&genpd->sd_count) > 0)
+>  		return;
+>  
+> +	/* Check that the children are in their deepest state. */
+> +	list_for_each_entry(link, &genpd->parent_links, parent_node) {
+> +		struct generic_pm_domain *child = link->child;
+> +		if (child->state_idx < child->state_count - 1)
+> +			return;
+> +	}
+> +
+>  	/* Choose the deepest state when suspending */
+>  	genpd->state_idx = genpd->state_count - 1;
+>  	if (_genpd_power_off(genpd, false))
 
-Applied, thanks!
+Hello Ulf,
 
-[3/7] ARM: dts: qcom: pm8226: add smbb charger node
-      commit: b64192272cb65b0fddb97dba7c4f244452954a85
-[4/7] ARM: dts: qcom: apq8026-lg-lenok: configure SMBB charger
-      commit: 0bbcddc5f0365937ed53ebf7daa98134a6ebce8d
-[5/7] dt-bindings: phy: qcom,usb-hs-phy: add MSM8226 compatible
-      commit: c04421c68fd40ee33df87eea69c1a447b7985d0d
-[6/7] ARM: dts: qcom: msm8226: add USB node
-      commit: 1a34117f2e145f158c339ad9d296c0c1c42bc504
-[7/7] ARM: dts: qcom: apq8026-lg-lenok: enable USB
-      commit: f8565bd5404fcd6f87ee1e2d585541fbb457612d
-
-Best regards,
--- 
-Bjorn Andersson <bjorn.andersson@linaro.org>
+Is this needed by a concrete SoC? It needs to be clarified in the commit
+message, otherwise looks like this patch wasn't tested and it's unclear
+whether this change is really needed.
