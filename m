@@ -2,141 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5ABB4A5050
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Jan 2022 21:39:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6C8C4A509C
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Jan 2022 21:55:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376735AbiAaUji (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Jan 2022 15:39:38 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:37656 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343999AbiAaUjh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jan 2022 15:39:37 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D4412614C2;
-        Mon, 31 Jan 2022 20:39:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37D95C340E8;
-        Mon, 31 Jan 2022 20:39:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643661576;
-        bh=LlCWcmjo9XBLXtkZjmaUu+sQAjNy8t3wD356RhDm6+8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=dbIvvaZtUtglyEdPJeUXqJeRCSK+nQ6All4q5LCLeHNekPbJGzAd5HBkBDMUdPyEX
-         aLGoz9yVDcpb77joBuHGnfcQ20RTksmJJA8Y7SrJ9Rew6tW4rcMIZRXV5cttCSPQ0D
-         HkEINXYQFrsUCNmd3iD1ToriUf9adNj2trOKs5EHQpQh2ZgYg2jkD+SsyjO4qmwmJU
-         upmD5OlqmrXdrSY7oYrS3dOZxgV98KvJJ3JFZxzIEf0AVbUnMz0iuLBk8UlKNXkBOk
-         lpi4tu/p3npuGwGoPD/pO37vgzqDNONpZMMhn8MfAwiO9zjbATlOiIceIevlZ9aNye
-         Lvr+4f0EY7Kbg==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nEdSX-004Ugn-LI; Mon, 31 Jan 2022 20:39:33 +0000
+        id S1354941AbiAaUzU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Jan 2022 15:55:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41388 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232590AbiAaUzT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jan 2022 15:55:19 -0500
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80191C061714
+        for <linux-pm@vger.kernel.org>; Mon, 31 Jan 2022 12:55:19 -0800 (PST)
+Received: by mail-io1-xd32.google.com with SMTP id d188so18579054iof.7
+        for <linux-pm@vger.kernel.org>; Mon, 31 Jan 2022 12:55:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=J7Z4frfkNygPo6FHbFDcIBQYjHYPOVKaL1K52NaFr7Y=;
+        b=JL1/zqIMQYTbfgLs6DX2pvBnG7fbwVKuP7FHg2FQ/j5RT4aFm/pk3/eJXwCpOrOL1N
+         23/+WVXGXLk2e44CFeCr60trl4hU9aT/CKfLeT71+kmqO4TyRkMW5LcMnXCf6kgmjSBh
+         v3yTOtfLahmyDaBe4aYoHzcUtQZve8rbgPaKiGkUXdDMcdEIHvYr7h+vvoyXDc8e4eif
+         OvaJMzKoDZN5zmyMZg8DAsEzXjzqCgTW5VR63QtaHaHp0OUPjTy8Q59z5nI9+O0iXV8j
+         nzK/jhtC4spJ1V0qfPfSKLmgXlkM3ZhJI4gXcclEKWqVlexSIzM25JlBkc18t9d6rWhl
+         w9iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=J7Z4frfkNygPo6FHbFDcIBQYjHYPOVKaL1K52NaFr7Y=;
+        b=NOh5HS1f28YqBvnn08y/5JPt5meF2esl3O+ke3GUZlPjtpWGs9h/aHN3eJSrnvRuqO
+         ellpC2FQi5oj3L82dYa3TBrUWgIvl09moHyNl5oT0GApNf0POqsZdt6uIUpw0ca38lbQ
+         mEJ8UyJ5/Vx00VnBT7dpMtxBtf0zO/oAgFQMRatH8176sngvdPsauFFdiQO5LG+sqQKu
+         +eju2xjt0JBdp3+PkZcdnb7IgdAmenKJ15b8FvvIck9wH73Acm+qBZ/KHhzClWZ6CGuj
+         WKNTH5bulqaM+W00u7UrE7DdRAUwuM2CxlMV0ihWnN211b2J5hfeEdIubZMnbSRtIPdX
+         G5oQ==
+X-Gm-Message-State: AOAM531bzy3q5AfOsR7kzfJCj49srLUWCOLSL8SjczFts1ZEa/IeYu0j
+        yS0SK0yCDq6EUdVvGfmeaFeQD6IGUIx2JRwQkZY=
+X-Google-Smtp-Source: ABdhPJzLY2kInSfZorTOCX645YWO/JZOHT7s2bf5UvYwMXMk7VbuOt2UdsuVcN+0IWttnyDtI6GS+Y4hrw//Tk1OEKc=
+X-Received: by 2002:a05:6638:1384:: with SMTP id w4mr4553114jad.200.1643662518819;
+ Mon, 31 Jan 2022 12:55:18 -0800 (PST)
 MIME-Version: 1.0
-Date:   Mon, 31 Jan 2022 20:39:33 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Jon Hunter <jonathanh@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?U?= =?UTF-8?Q?we_Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-mmc@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-clk@vger.kernel.org, David Heidelberg <david@ixit.cz>
-Subject: Re: [PATCH v16 08/40] gpu: host1x: Add initial runtime PM and OPP
- support
-In-Reply-To: <40983f6e-92ee-40d4-861f-06faea0113fc@gmail.com>
-References: <20211130232347.950-1-digetx@gmail.com>
- <20211130232347.950-9-digetx@gmail.com>
- <21212ddb-205f-71d6-0199-d75768eaf32c@nvidia.com>
- <41edc53b-5ed1-d524-2546-c3d1ee6cdea4@gmail.com>
- <6652ac84-36f5-0e43-65fa-04786f384f21@nvidia.com>
- <56dce9c7-397d-75b0-b5b8-18ce1084e72b@nvidia.com>
- <6dbc8205-5669-8b08-16b8-fe5e1acdd06f@gmail.com>
- <796eb3f7-80e2-bc55-fd52-43e76220f8c2@nvidia.com>
- <40983f6e-92ee-40d4-861f-06faea0113fc@gmail.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <6adda63b4de6b55d11426ecbb08d6c51@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: digetx@gmail.com, jonathanh@nvidia.com, thierry.reding@gmail.com, ulf.hansson@linaro.org, vireshk@kernel.org, sboyd@kernel.org, pdeschrijver@nvidia.com, mperttunen@nvidia.com, lee.jones@linaro.org, u.kleine-koenig@pengutronix.de, nm@ti.com, adrian.hunter@intel.com, mturquette@baylibre.com, linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org, linux-mmc@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-clk@vger.kernel.org, david@ixit.cz
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+Received: by 2002:a05:6638:240a:0:0:0:0 with HTTP; Mon, 31 Jan 2022 12:55:17
+ -0800 (PST)
+Reply-To: ayishagddafio@mail.ru
+From:   Aisha Gaddafi <marroncoulibaly@gmail.com>
+Date:   Mon, 31 Jan 2022 12:55:17 -0800
+Message-ID: <CAFSXqefEYMsbDp=SXCse=DMxbM4Mjag1T9eoVtLOy_Mru+N4EQ@mail.gmail.com>
+Subject: Liebster Freund,?
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi all,
+Liebster Freund,
 
-On 2021-12-22 19:31, Dmitry Osipenko wrote:
-> 22.12.2021 22:30, Jon Hunter пишет:
->> 
->> On 22/12/2021 19:01, Dmitry Osipenko wrote:
->> 
->> ...
->> 
->>> diff --git a/drivers/gpu/host1x/syncpt.c 
->>> b/drivers/gpu/host1x/syncpt.c
->>> index e08e331e46ae..8194826c9ce3 100644
->>> --- a/drivers/gpu/host1x/syncpt.c
->>> +++ b/drivers/gpu/host1x/syncpt.c
->>> @@ -137,6 +137,15 @@ void host1x_syncpt_restore(struct host1x *host)
->>>       struct host1x_syncpt *sp_base = host->syncpt;
->>>       unsigned int i;
->>> 
->>> +    for (i = 0; i < host->info->nb_pts; i++) {
->>> +        /*
->>> +         * Unassign syncpt from channels for purposes of Tegra186
->>> +         * syncpoint protection. This prevents any channel from
->>> +         * accessing it until it is reassigned.
->>> +         */
->>> +        host1x_hw_syncpt_assign_to_channel(host, sp_base + i, NULL);
->>> +    }
->>> +
->>>       for (i = 0; i < host1x_syncpt_nb_pts(host); i++)
->>>           host1x_hw_syncpt_restore(host, sp_base + i);
->>> 
->>> @@ -352,13 +361,6 @@ int host1x_syncpt_init(struct host1x *host)
->>>       for (i = 0; i < host->info->nb_pts; i++) {
->>>           syncpt[i].id = i;
->>>           syncpt[i].host = host;
->>> -
->>> -        /*
->>> -         * Unassign syncpt from channels for purposes of Tegra186
->>> -         * syncpoint protection. This prevents any channel from
->>> -         * accessing it until it is reassigned.
->>> -         */
->>> -        host1x_hw_syncpt_assign_to_channel(host, &syncpt[i], NULL);
->>>       }
->>> 
->>>       for (i = 0; i < host->info->nb_bases; i++)
->>> 
->> 
->> 
->> Thanks! This fixed it!
-> 
-> I'll prepare proper patch with yours t-b, thank you.
+Im Namen Gottes, des gn=C3=A4digsten, barmherzigsten.
 
-The fix has been in -next for some time now, but it still hasn't
-made it into Linus' tree (at least not in -rc2).
+Friede sei mit dir und Barmherzigkeit sei mit dir und Segen sei mit dir.
+Ich habe die Summe von 27,5 Millionen USD f=C3=BCr Investitionen, ich
+interessiere mich f=C3=BCr Sie f=C3=BCr die Unterst=C3=BCtzung von
+Investitionsprojekten in Ihrem Land. Mein Name ist Aisha Gaddafi und
+lebe derzeit im Oman, ich bin eine Witwe und alleinerziehende Mutter
+mit drei Kindern, die einzige leibliche Tochter des verstorbenen
+libyschen Pr=C3=A4sidenten (dem verstorbenen Oberst Muammar Gaddafi) und
+stehe derzeit unter politischem Asylschutz der omanischen Regierung.
 
-Any hope for this to land -rc3?
+Bitte antworten Sie dringend f=C3=BCr weitere Details.
 
-Thanks,
-
-      M.
--- 
-Jazz is not dead. It just smells funny...
+meine E-Mail-Adresse unten: ayishagddafio@mail.ru
+Vielen Dank
+Mit freundlichen Gr=C3=BC=C3=9Fen Aisha
