@@ -2,37 +2,37 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEC914A3E32
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Jan 2022 08:26:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CC6B4A3EF3
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Jan 2022 10:00:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348070AbiAaH0K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Jan 2022 02:26:10 -0500
-Received: from foss.arm.com ([217.140.110.172]:36498 "EHLO foss.arm.com"
+        id S233396AbiAaJAC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Jan 2022 04:00:02 -0500
+Received: from foss.arm.com ([217.140.110.172]:40708 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1357985AbiAaHZi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 31 Jan 2022 02:25:38 -0500
+        id S231173AbiAaJAA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 31 Jan 2022 04:00:00 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 14BE7D6E;
-        Sun, 30 Jan 2022 23:25:37 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4B91FED1;
+        Mon, 31 Jan 2022 00:59:59 -0800 (PST)
 Received: from [10.57.9.236] (unknown [10.57.9.236])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2B4C03F73B;
-        Sun, 30 Jan 2022 23:25:35 -0800 (PST)
-Subject: Re: [PATCH v5] drivers: thermal: clear all mitigation when thermal
- zone is disabled
-To:     Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zhang Rui <rui.zhang@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-References: <1643307093-22501-1-git-send-email-quic_manafm@quicinc.com>
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E4F443F73B;
+        Mon, 31 Jan 2022 00:59:57 -0800 (PST)
+Subject: Re: [PATCH v2 2/2] cpufreq: qcom-hw: Delay enabling throttle_irq
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-pm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Viresh Kumar <viresh.kumar@linaro.org>
+References: <20220128032554.155132-1-bjorn.andersson@linaro.org>
+ <20220128032554.155132-2-bjorn.andersson@linaro.org>
+ <5433250b-ee51-06e0-3ef8-ab287a112611@arm.com> <YfQ2WEiqV30PGNrt@ripper>
 From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <4024218b-7938-e181-f456-bff4b3fb157a@arm.com>
-Date:   Mon, 31 Jan 2022 07:25:33 +0000
+Message-ID: <64df8bc9-1c13-d9cf-3dba-d5e1cbf4c50a@arm.com>
+Date:   Mon, 31 Jan 2022 08:59:56 +0000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <1643307093-22501-1-git-send-email-quic_manafm@quicinc.com>
+In-Reply-To: <YfQ2WEiqV30PGNrt@ripper>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -40,38 +40,70 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Manaf,
 
-On 1/27/22 6:11 PM, Manaf Meethalavalappu Pallikunhi wrote:
-> Whenever a thermal zone is in trip violated state, there is a chance
-> that the same thermal zone mode can be disabled either via
-> thermal core API or via thermal zone sysfs. Once it is disabled,
-> the framework bails out any re-evaluation of thermal zone. It leads
-> to a case where if it is already in mitigation state, it will stay
-> the same state forever.
+
+On 1/28/22 6:30 PM, Bjorn Andersson wrote:
+> On Fri 28 Jan 02:39 PST 2022, Lukasz Luba wrote:
 > 
-> To avoid above mentioned issue, add support to bind/unbind
-> governor from thermal zone during thermal zone mode change request
-> and clear all existing throttling in governor unbind_from_tz()
-> callback.
+>>
+>>
+>> On 1/28/22 3:25 AM, Bjorn Andersson wrote:
+>>> In the event that the SoC is under thermal pressure while booting it's
+>>> possible for the dcvs notification to happen inbetween the cpufreq
+>>> framework calling init and it actually updating the policy's
+>>> related_cpus cpumask.
+>>>
+>>> Prior to the introduction of the thermal pressure update helper an empty
+>>> cpumask would simply result in the thermal pressure of no cpus being
+>>> updated, but the new code will attempt to dereference an invalid per_cpu
+>>> variable.
+>>
+>> Just to confirm, is that per-cpu var the 'policy->related_cpus' in this
+>> driver?
+>>
+> 
+> Correct, we boot under thermal pressure, so the interrupt fires before
+> we return from "init", which means that related_cpus is still 0.
+> 
+>>>
+>>> Avoid this problem by using the newly reintroduced "ready" callback, to
+>>> postpone enabling the IRQ until the related_cpus cpumask is filled in.
+>>>
+>>> Fixes: 0258cb19c77d ("cpufreq: qcom-cpufreq-hw: Use new thermal pressure update function")
+>>
+>> You have 'Fixes' tagging here, which might be picked by the stable tree.
+>> The code uses the reverted callback .ready(), which might be missing
+>> there (since patch 1/2 doesn't have tagging). This patch looks like a
+>> proper fix for the root cause.
+>>
+> 
+> Yes, the pair would need to be picked up.
+> 
+>> Anyway, I'm going to send a patch, which adds a check for null cpumask
+>> in the topology_update_thermal_pressure()
+>> It was removed after the review comments:
+>> https://lore.kernel.org/linux-pm/20211028054459.dve6s2my2tq7odem@vireshk-i7/
+>>
+> 
+> I attempted that in v1:
+> https://lore.kernel.org/all/20220118185612.2067031-2-bjorn.andersson@linaro.org/
+> 
+> And while patch 1 is broken, I think Greg and Sudeep made it clear that
+> they didn't want a condition to guard against the caller passing cpus of
+> 0.
 
-I have one use case:
-This would be a bit dangerous, e.g. to switch governors while there is a
-high temperature. Although, sounds reasonable to left a 'default' state
-for a next governor.
+Thanks for the link, I missed that conversation.
 
 > 
-> Suggested-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-> ---
->   drivers/thermal/gov_power_allocator.c |  3 +++
->   drivers/thermal/gov_step_wise.c       | 26 ++++++++++++++++++++++++++
->   drivers/thermal/thermal_core.c        | 31 +++++++++++++++++++++++++++----
->   3 files changed, 56 insertions(+), 4 deletions(-)
+> That's why I in v2 reverted to postpone the thermal pressure IRQ until
+> cpufreq is "ready".
 
-Why only two governors need that change and not all?
-Because they don't have 'bind/unbind' callbacks, then maybe we should
-change that as well to make it consistent?
+Which is fixing the root cause, but involves this backporting
+of the new API callback into stable.
+
+Sorry to hear that you had to fight with this tricky mem fault.
+There is a 'good' outcome from this: we know that the platform
+instantly has thermal issues during boot.
 
 Regards,
 Lukasz
