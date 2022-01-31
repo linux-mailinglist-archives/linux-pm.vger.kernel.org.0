@@ -2,90 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B153D4A51BC
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Jan 2022 22:41:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23AD24A520C
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Jan 2022 23:06:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345898AbiAaVlA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Jan 2022 16:41:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51532 "EHLO
+        id S231266AbiAaWGr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Jan 2022 17:06:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381236AbiAaVit (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jan 2022 16:38:49 -0500
-Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA50CC06176E
-        for <linux-pm@vger.kernel.org>; Mon, 31 Jan 2022 13:38:20 -0800 (PST)
-Received: by mail-oi1-x243.google.com with SMTP id v67so29371222oie.9
-        for <linux-pm@vger.kernel.org>; Mon, 31 Jan 2022 13:38:20 -0800 (PST)
+        with ESMTP id S230320AbiAaWGr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jan 2022 17:06:47 -0500
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75C3C061714
+        for <linux-pm@vger.kernel.org>; Mon, 31 Jan 2022 14:06:46 -0800 (PST)
+Received: by mail-oi1-x236.google.com with SMTP id y23so29465444oia.13
+        for <linux-pm@vger.kernel.org>; Mon, 31 Jan 2022 14:06:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=RcCyF58LaRxi/j1nHAT0ApLeXmQ9s66f3iMVqhPacvY=;
-        b=dEuqzCa7Zlz6s4mRGbRbRWXXanD59qsT+xmKk7tBbCVL8shmNgt9pnuL3r3GZQALql
-         Y63DqHUGCnZO0yzAtzp7ZNS2CuC8pMKUMaMtNqE3s9gB45FDt9/C7CdeYDqwmv7HZJbj
-         h6fZit5aG7dGp8FvXKTscfcGshyIKAGZl/Y4NFvWe+GDkg5MDDBzPsbgzyvzZ7B1mfX4
-         ltlQ0tRJrdsWlCdvxMPpvS+PhwNDM1Zp7MYHnfnHzWMTP4bbhrhxbQSB0Xw9LPR0gSp/
-         L2Vas/DZH4ZiZyplfhihUfOHaOD2GjtH1tg3ZI6lVgxDcwRnl8d4U3qCI5tj+07J/ZXk
-         SzvA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=W9hEBXurjCl7qSO381JI7fgMTyHfEqjYiRw7QVwUoiQ=;
+        b=f83Oy42QBUfyAnO9mve85cB7lvEpbgY0o691h1XkMCXtnW+ODYVqKGNpp53UiVmbrl
+         1LapiEW86Y8LpNLC57YIN4MJXtXRsAUASy/va5wXAVR9UsZJydU9Z6ScvgYH3Rto1ZtR
+         ATpM+JnVu6yUXaT++xmS910rY+UtTeVAJJ+1i1Ca8VUFPdxpkRYLLl3WFGoeM3QW+v+a
+         UJyNh4UCzHKLT4f4eL1OfYTWVH6YZJGYIXwmVk90Y+qy7if69L8IjUhOCEy3QGIDQSfF
+         nDnJhFBgh5+AWipXSUTTZ9+V7sctCUUqRpGELV9SZihVlU5DiMdDgTt1IZyt7DWrK1Pz
+         3m7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=RcCyF58LaRxi/j1nHAT0ApLeXmQ9s66f3iMVqhPacvY=;
-        b=lM1qoyiK6ramN/xpCpHKmKTZ2BY0/AZ8ASlT35UJ9nPD8Ci/ZgAKDhtpkOLjI1E4ZH
-         ZfGCVzcOK0m8ZfRpnTmBX0U/gAxjVrLpPkorb4sYfQhy/0WQsGY08UDGuxFYqn6Hfa71
-         9CSsnLVMavDQYJp8OmZjZ1Uo3szYKuqD6Wbe9LUH1p4bfBUyIi6DSCNQa/OXiB9YZxE0
-         9og4czPV4V7R8NejJMEnQ0IwaDxVYv8Opgdbt+1S8K/G6SVhWmtp4Ajd61KfRNeqQwn+
-         XFqrflFIIIzHjHcf8YMORyWLz+SgD9jhhJhBPNkI/y/jp44DebaU1k2TZwYZbp1khLPj
-         2YzQ==
-X-Gm-Message-State: AOAM532/ecdGUsXQsGNkqxBN6bblVY1w7BkVNQhxCtt1y3D5zmFHEqSF
-        lk0Efbc2MJneEH3JMW+asJQZy0cPpYnzHDKk+OB4jqnc7CEpDw==
-X-Google-Smtp-Source: ABdhPJzjG4nHBnpm1YeRsvfpKVsM6nmNJIeFJaztEJrNHMe+iyJctx1iGavTAT23A2IhS4j6LtYbunRiUquAn1xj08o=
-X-Received: by 2002:a54:4490:: with SMTP id v16mr14818764oiv.157.1643665089421;
- Mon, 31 Jan 2022 13:38:09 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=W9hEBXurjCl7qSO381JI7fgMTyHfEqjYiRw7QVwUoiQ=;
+        b=n2+SoeNA4lfedgNfw9GI5LkH5XH48DNBb1Em2ozoTQio3zbS9Zj6BajCn5YqvE6EK9
+         ZYP4jN7XWX4ResRIVTKSwAKAjaCRTXOQwZmEfs97iPPV0M7m+8U54qwdvFExGW7rqs3A
+         rWi5oNazE+JCSCXOg3BlHga+MfMv0cAOgmUGMBMzpbz/qJ5U4CXTpb+OSJG5HFmPVfHR
+         sqscgSNyTa2+rEo/VAiUIegHSgEXP313thHowAbTMPbOMPAgrQeRUeiTPHbSNDY2U+EN
+         NHf9wbVNYHuimQDHBmkY7jk+Svq4e/OHLqx+IqIo5W0ZWYXO7s5tguTZELFVWRakgcbS
+         X/Uw==
+X-Gm-Message-State: AOAM530rIJN03Bm5mmFc2p5vFzW3MYPci1cZebdOlP9H06GoA6pKo1Ia
+        EjgJbsXGjlD/aWTtV8+3tUYdGg==
+X-Google-Smtp-Source: ABdhPJwHPXbk+76P0Fx/D780/C1NJjDyzqlecixXCiyHyxzMZac7l6IJP/2pS0jKeDB9FmtMamolhg==
+X-Received: by 2002:a05:6808:1822:: with SMTP id bh34mr14801119oib.209.1643666806299;
+        Mon, 31 Jan 2022 14:06:46 -0800 (PST)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id q11sm7085491oti.3.2022.01.31.14.06.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jan 2022 14:06:45 -0800 (PST)
+Date:   Mon, 31 Jan 2022 16:06:44 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Yassine Oudjana <y.oudjana@protonmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Ilia Lin <ilia.lin@kernel.org>,
+        Niklas Cassel <nks@flawful.org>,
+        Andy Gross <agross@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/7] dt-bindings: Convert multiple Qualcomm OPP and
+ CPUFreq bindings to DT schema
+Message-ID: <YfhddMNAL1mQGtKU@builder.lan>
+References: <20220104132618.391799-1-y.oudjana@protonmail.com>
 MIME-Version: 1.0
-Received: by 2002:a4a:c30d:0:0:0:0:0 with HTTP; Mon, 31 Jan 2022 13:38:09
- -0800 (PST)
-Reply-To: westerunion909@gmail.com
-From:   "Antonia Lloyd." <anthonylloydatmxxx04@gmail.com>
-Date:   Mon, 31 Jan 2022 13:38:09 -0800
-Message-ID: <CAExPwBBpihjV-rv_-+hYqb1WD3wpSWx81B_Q3ES15U3TXSPsyw@mail.gmail.com>
-Subject: Dear Email ID Owner.(USD$4000 IMF COMPENSATION FUND TO PICK UP TODAY).
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220104132618.391799-1-y.oudjana@protonmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dear Email ID Owner.
+On Tue 04 Jan 07:27 CST 2022, Yassine Oudjana wrote:
 
-The IMF is compensating all the email address that was funds as one of
-the ward win Victims and your email address and your name is among the
-listed one of approved to pay the sum of $3.6 million U.S Dollars. We
-have concluded to effect your own payment through Western Union Money
-Transfer for easy pick-up of those funds in good condition,$4000 twice
-daily,till the $3.6 million is completely transferred to you.We now
-need your information where we will be sending the funds,such
-as;Receiver name(Your full Name)address and phone number.Contact
-Western Union agent with this Email: ( westerunion995@gmail.com  ) for
-your payment fund.
+> This series is a compilation of DT schema conversions of multiple Qualcomm
+> OPP and CPUFreq bindings:
+> - qcom-cpufreq-nvmem (operating-points-v2-kryo-cpu)
+> - qcom-opp (operating-points-v2-qcom-level)
+> - qcom,cpr
+> 
+> Converting each one to DT schema introduces new dt_binding_check and
+> dtbs_check errors to the others, so it was better to combine them into
+> a series. Some errors were also caused by a couple of device trees having
+> OPP tables with names that do not follow opp-v2-base, so these got fixed
+> in this series as well. Finally, the lack of MSM8996 compatibles in
+> arm/qcom.yaml caused an error in the opp-v2-kryo-cpu example, so they were
+> added to the schema as well as to the msm8996-mtp device tree, which only
+> had qcom,msm8996-mtp as its compatible.
+> 
+> PATCH 4/7 is a new version of a patch[1] that was sent as part of
+> a different series before, and PATCH 7/7 is a new version of a patch[2]
+> that was first sent alone.
+> 
+> Changes since v1 (PATCH v2 4/7):
+>  - Split the schema into an OPP schema and a CPUFreq schema. 
+> 
+> Changes since v1 (PATCH v2 7/7):
+>  - Remove allOf from compatible.
+> 
 
-Ms.Maria Zatto
-E-mail:westerunion995@gmail.com
-Telephone: +229 682 97 169
+The mixed versioning in this series confuses b4 - and thereby me as
+well.  Can you please resubmit this with all patches of the same version
+(e.g. v3).
 
-Contact Ms.Maria,immediately you get this mail through western union
-email address above to enable her speed-up.your payment and release
-the $4000 dollars MTCN today for you to pick up the payment OK.
+Thanks,
+Bjorn
 
-You are expected to provide us with the details as prescribed below to
-enable safe and easy release of your funds today.
-
-(1)Your Full name:
-(2)Your Phone number:
-(3)Your Country:
-(4)Your Age:
-
-Thank you,
-Dr.Antonia Lloyd.
-Contact Dir.Western Union Money Transfer,
-Cotonou-Benin Republic.
+> Yassine Oudjana (7):
+>   dt-bindings: arm: qcom: Add msm8996 and apq8096 compatibles
+>   arm64: dts: qcom: msm8996-mtp: Add msm8996 compatible
+>   dt-bindings: opp: qcom-opp: Convert to DT schema
+>   dt-bindings: opp: Convert qcom-nvmem-cpufreq to DT schema
+>   arm64: dts: qcom: msm8996: Rename cluster OPP tables
+>   arm64: dts: qcom: qcs404: Rename CPU and CPR OPP tables
+>   dt-bindings: power: avs: qcom,cpr: Convert to DT schema
+> 
+>  .../devicetree/bindings/arm/qcom.yaml         |  16 +-
+>  .../bindings/cpufreq/qcom-cpufreq-nvmem.yaml  | 166 ++++
+>  .../bindings/opp/opp-v2-kryo-cpu.yaml         | 257 ++++++
+>  .../bindings/opp/opp-v2-qcom-level.yaml       |  60 ++
+>  .../bindings/opp/qcom-nvmem-cpufreq.txt       | 796 ------------------
+>  .../devicetree/bindings/opp/qcom-opp.txt      |  19 -
+>  .../bindings/power/avs/qcom,cpr.txt           | 130 ---
+>  .../bindings/power/avs/qcom,cpr.yaml          | 160 ++++
+>  MAINTAINERS                                   |   5 +-
+>  arch/arm64/boot/dts/qcom/msm8996-mtp.dts      |   2 +-
+>  arch/arm64/boot/dts/qcom/msm8996.dtsi         |   4 +-
+>  arch/arm64/boot/dts/qcom/qcs404.dtsi          |   4 +-
+>  12 files changed, 666 insertions(+), 953 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+>  create mode 100644 Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
+>  create mode 100644 Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt
+>  delete mode 100644 Documentation/devicetree/bindings/opp/qcom-opp.txt
+>  delete mode 100644 Documentation/devicetree/bindings/power/avs/qcom,cpr.txt
+>  create mode 100644 Documentation/devicetree/bindings/power/avs/qcom,cpr.yaml
+> 
+> [1] https://lore.kernel.org/linux-arm-msm/20211014083016.137441-6-y.oudjana@protonmail.com/
+> [2]	https://lore.kernel.org/linux-arm-msm/20211221133937.173618-1-y.oudjana@protonmail.com/
+> -- 
+> 2.34.1
+> 
+> 
