@@ -2,114 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 261EC4A4A77
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Jan 2022 16:22:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B0114A4B16
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Jan 2022 16:58:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379447AbiAaPWZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Jan 2022 10:22:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:55796 "EHLO
+        id S1379943AbiAaP6B (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Jan 2022 10:58:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:44065 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1379434AbiAaPWY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jan 2022 10:22:24 -0500
+        by vger.kernel.org with ESMTP id S232673AbiAaP56 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jan 2022 10:57:58 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643642544;
+        s=mimecast20190719; t=1643644677;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1yKKyQNpn9GQvDG3vl3rth1pSqIt5HzIp/zlMMSE9sc=;
-        b=eW7ZtPNrY+VeCfOkr7F9Z7jUOXP6g+1+1UdPzXnJ+OmsalAGuYBewGyttuJpM1jxucIpG0
-        wU+Bh2FKq7q9Nf98TOPgUwvgjpsEGSVvIDdqHjNme/QwQRuthItKYv7r39Gm1bZQ6OW7jS
-        wY+ojTVwlsqGf8VF//omq6D1zL3TO2A=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=NJW3BDXpjZxtDhCAQi4pMm+5TQP0sydAdH0hiybs94w=;
+        b=WjmeqM2uv+2BCYk7jv6xqQwxGdz5YjOHad7Te0J95W2FwgihalJ1t5iHWrWuGamajWkCuN
+        z9otzePCPxk8pBkgLYqAFpO2MsGiHHFhukS9GssfYgzMSaspJKlTJROgI/e/EeTI0lhIKv
+        mjeVARYzXvrTiyPBtgmfKnlhvSTTKpw=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-118-zaH5Qr5IOOO-RImIkCVafQ-1; Mon, 31 Jan 2022 10:22:22 -0500
-X-MC-Unique: zaH5Qr5IOOO-RImIkCVafQ-1
-Received: by mail-ed1-f71.google.com with SMTP id c23-20020a056402159700b00406aa42973eso7133258edv.2
-        for <linux-pm@vger.kernel.org>; Mon, 31 Jan 2022 07:22:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1yKKyQNpn9GQvDG3vl3rth1pSqIt5HzIp/zlMMSE9sc=;
-        b=vZWDGWyE9aTe+OWDm0m5DoGAjEF3XFSQ8oKw73zhFWtdrGkA2oBdTR5kDYTVpU2LVf
-         QMm29deJ2dffcMdhp9CxJJEEugYeV+dTPILQ+kRZbIgLlnz0azjPu++liYgRZL0tD9YF
-         fSvSYked+DmXKJy49gMOg1mRHxQ/q4aZNcNOpdxKtiZyOkEjpDey7hOBF6IPf52/359F
-         erD34c4zAd6icQW4JaAA5OLmT4Yjo4q/9kmI3DULbZBiovEvVDejH+7HiYjDu1Zj5p3d
-         uW4EXsy9UjTGHQDqtWbrmD+Sz0uYTCKZiVtk6Ml406q8VGdGcGRr3g8axEnVu2ATfjN3
-         Ku5A==
-X-Gm-Message-State: AOAM532JQa004gqG5bG3YNsqcvvF7DNE+Xr+iLFDhiRHxfN4WsxZ2zEn
-        FF1UPS7Iyy6LSlD0SWKxnHNuKS71F6+pmU7iVGFUf8cNRuAPt4p8cqVsc7+a0DTrqNarSFYX6KZ
-        qWSU1XcooqiqLdUlnKJM=
-X-Received: by 2002:a05:6402:2c7:: with SMTP id b7mr21496675edx.217.1643642541112;
-        Mon, 31 Jan 2022 07:22:21 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwZCKT74UkCDZBDQNDUdwOtrJDPJ19WVDRL2LkVmN7hZB3+nxQLwq0VfY4rGEwkR0/CEPHnog==
-X-Received: by 2002:a05:6402:2c7:: with SMTP id b7mr21496648edx.217.1643642540992;
-        Mon, 31 Jan 2022 07:22:20 -0800 (PST)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id t13sm13466973ejs.187.2022.01.31.07.22.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Jan 2022 07:22:20 -0800 (PST)
-Message-ID: <7aefe6a7-eff9-bd86-10d0-f2c51517aeba@redhat.com>
-Date:   Mon, 31 Jan 2022 16:22:19 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v4 18/20] extcon: intel-cht-wc: Refactor
- cht_wc_extcon_get_charger()
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org, Yauhen Kharuzhy <jekhor@gmail.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        Fabio Aiuto <fabioaiuto83@gmail.com>,
-        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org
-References: <20220130204557.15662-1-hdegoede@redhat.com>
- <20220130204557.15662-19-hdegoede@redhat.com>
- <Yffqd4c7WrxTrHHL@smile.fi.intel.com>
+ us-mta-383-c_UxvsO6PoSon4aVe3D4cg-1; Mon, 31 Jan 2022 10:57:55 -0500
+X-MC-Unique: c_UxvsO6PoSon4aVe3D4cg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BF0B184DA41;
+        Mon, 31 Jan 2022 15:57:53 +0000 (UTC)
+Received: from x1.localdomain.com (unknown [10.39.194.59])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5C090798C6;
+        Mon, 31 Jan 2022 15:57:32 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <Yffqd4c7WrxTrHHL@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Stephan Gerhold <stephan@gerhold.net>, linux-pm@vger.kernel.org
+Subject: [PATCH 0/8] power: supply: bq24190 updates + new ug3105 driver
+Date:   Mon, 31 Jan 2022 16:57:22 +0100
+Message-Id: <20220131155730.309513-1-hdegoede@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+Hi Sebastian,
 
-On 1/31/22 14:56, Andy Shevchenko wrote:
-> On Sun, Jan 30, 2022 at 09:45:55PM +0100, Hans de Goede wrote:
->> This is a preparation patch for adding support for registering
->> a power_supply class device.
->>
->> Setting usbsrc to "CHT_WC_USBSRC_TYPE_SDP << CHT_WC_USBSRC_TYPE_SHIFT"
->> will make the following switch-case return EXTCON_CHG_USB_SDP
->> just as before, so there is no functional change.
-> 
-> ...
-> 
->> -		return EXTCON_CHG_USB_SDP; /* Save fallback */
-> 
->> +		/* Save fallback */
-> 
-> I see it's in the previous code, but what does it mean?
-> I would read it as "Safe fallback", bit I have no clue.
+Here is a series of patches which:
 
-Ah yes that should be safe not save, sorry will fix for v5.
+1. Modifies power_supply_get_battery_info() to also work with non
+   of/dt device-properties
+
+2. Modifies bq24190_charger to use and apply more settings returned
+   by power_supply_get_battery_info()
+
+3. Adds a new driver for the ug3105 battery monitoring chip, note
+   this chip is not really a full/standalone fuel-gauge so
+   the functionality of the is limited
 
 Regards,
 
 Hans
+
+
+Hans de Goede (8):
+  power: supply: core: Use fwnode_property_*() in
+    power_supply_get_battery_info()
+  power: supply: core: Add support for generic fwnodes to
+    power_supply_get_battery_info()
+  power: supply: bq24190_charger: Turn off 5V boost regulator on
+    shutdown
+  power: supply: bq24190_charger: Always call
+    power_supply_get_battery_info()
+  power: supply: bq24190_charger: Store ichg-max and vreg-max in
+    bq24190_dev_info
+  power: supply: bq24190_charger: Program charger with fwnode supplied
+    ccc_ireg and cvc_vreg
+  power: supply: bq24190_charger: Disallow ccc_ireg and cvc_vreg to be
+    higher then the fwnode values
+  power: supply: ug3105_battery: Add driver for uPI uG3105 battery
+    monitor
+
+ drivers/power/supply/Kconfig             |  14 +
+ drivers/power/supply/Makefile            |   1 +
+ drivers/power/supply/bq24190_charger.c   | 114 ++++--
+ drivers/power/supply/power_supply_core.c |  93 +++--
+ drivers/power/supply/ug3105_battery.c    | 486 +++++++++++++++++++++++
+ 5 files changed, 642 insertions(+), 66 deletions(-)
+ create mode 100644 drivers/power/supply/ug3105_battery.c
+
+-- 
+2.33.1
 
