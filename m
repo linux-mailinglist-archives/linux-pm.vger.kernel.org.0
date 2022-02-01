@@ -2,152 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D7C74A55A7
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Feb 2022 04:34:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7C7C4A5696
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Feb 2022 06:23:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233170AbiBADeH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Jan 2022 22:34:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47432 "EHLO
+        id S231562AbiBAFWJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Feb 2022 00:22:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233146AbiBADeH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jan 2022 22:34:07 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8467AC061714
-        for <linux-pm@vger.kernel.org>; Mon, 31 Jan 2022 19:34:06 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id i30so14647352pfk.8
-        for <linux-pm@vger.kernel.org>; Mon, 31 Jan 2022 19:34:06 -0800 (PST)
+        with ESMTP id S233728AbiBAFUx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Feb 2022 00:20:53 -0500
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F180C061775
+        for <linux-pm@vger.kernel.org>; Mon, 31 Jan 2022 21:20:49 -0800 (PST)
+Received: by mail-ot1-x330.google.com with SMTP id w27-20020a9d5a9b000000b005a17d68ae89so15150569oth.12
+        for <linux-pm@vger.kernel.org>; Mon, 31 Jan 2022 21:20:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=oe167xSYsLXLJ8Fk/LtiS2O4zDS4xbHpv6ZxTGoK2W4=;
-        b=Uvcu7q43WHYOs0XPmru3jYqDI6QT7iOKRfDx4wt71oKHmtAhQR7EsFJBwsZRpWaDKm
-         9lLE/a6CDXHS/M0RNChPo2vc2PXDLT0YWTy2mkBVH8Twsyh133Q10H7uVnznG/F0nhJL
-         BVgBfb733klef+326oukXQ0lL+Ww5VEIBDQwhFPCqTSuuMbAyS6ASmDaDGd1kqL5Z7YQ
-         6lv8TWf75liauHI6xBQJK2Tw3Qf3HFghus0aFZHtm1DbzsOanH/ztWsNpvRTc6PWonRX
-         4UFT6qali5VGdV0crPZEkBVOifjOEJ/ElSle66zLVhthnyj08uYJR/wb3lwhZE/+zfXp
-         gJBg==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=F9HwklFMgrH0ZHo9rfrNQ1EtdGLFrJIK/z09jxQ6sQE=;
+        b=NCBTFggGO1gX9FqyqbBI0ltcoWZj8mJa769wa6/KSNbC9l2eF3cU7jQuNvMoQcRd9H
+         x2ltL54rif8kfP6tHwjX0Fm4qooi1XAlWv7gQ1gvpMgWDmF5s1yyImLGd5hLDZalfEeB
+         WaX+CtM0qv+4vtKpm+n7faiKwkk24J7PgE32Gx78wZXjRc3bgGACgNtk5bHx7tjXopBf
+         lfaTJ6/eEEybaneS0IHinTd7g8SQJyfQh+M4AZYljUix0ww/ts9067dtYJ96iU//8Xlh
+         mAipd6OVms+UJ7xESwUONmb0oiHgUqSEPokef4R9xBRuftCu613+czXsKrFaauIUFtxe
+         lZIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=oe167xSYsLXLJ8Fk/LtiS2O4zDS4xbHpv6ZxTGoK2W4=;
-        b=4+L94ZQ6Ei2I9N+vhVp/fnzS2YWe4zE5c8fGq/8wZUgEvlvuDX+0nHxLzUWr6HwPvl
-         T5xcYUIe4zpxk6czPcziosXYwrxnDTeojUI6B3qX8mif79OB+Xkb/AI5ps5cdHw6+omq
-         nfwMG/jh0UVsMnWD9r0qgw462fyWpeSvgwtICTkDpteKbux0gg43aaAuVBQdnHbUIVDD
-         bReID94lkYnuJcGF/Qx5YD7rOIf0uacXBDkZelGolML9DDLsbrXJAtPoS0ncJ4dwLeKQ
-         d4yi9O+1SoDRTEHzbphDyo/UTfCq3c0c/DrV9FQept3SF7R5cIVksM32N6B0r8sS85fW
-         cBKw==
-X-Gm-Message-State: AOAM532BbW5d0C/kihii4F6fSu994uhKl0e/62TA2Es9D5eK0hPJ3ocP
-        wSthpRxjbNxJjLMmLX1FiFis+g==
-X-Google-Smtp-Source: ABdhPJx5RS0spByt4Atbaw3sVXdXPNcunWrd5w0eadcDQLH1k8ojPRXfY1KPKXoQb0KSv2R8IdbTbg==
-X-Received: by 2002:a63:dd4d:: with SMTP id g13mr19311878pgj.202.1643686446070;
-        Mon, 31 Jan 2022 19:34:06 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id o5sm20307946pfk.172.2022.01.31.19.34.05
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=F9HwklFMgrH0ZHo9rfrNQ1EtdGLFrJIK/z09jxQ6sQE=;
+        b=5RYGy0tyVOBd0J0YKk7Z82IunTqdhROMFF2PQw9JAw8xVU/QgsICCr/j1lzvtg49ts
+         lKk7obVzG4wXdtQ15Qus/V6vTZZ5h4iBk/Z+ymsPcNGEIo5oM0GFSzzXDJvwMuu1Pebt
+         SaC6MTBizrIMsu7XCrx10qFPfs1vR7iRcaYx5vkOpC/emPhdnQKtvSzU8LHmAIhjM+8I
+         3RVUsw5Gdhndd4BCqqHFA9KLtL4Kb30tPK+oJM9enLRGbJHL5no2bKy4mSuC6duLavU8
+         XFt1riQDpLRjcH0TLkl6DdbY6bkmlCSA2XZbU2bTAbCnN3PMxmKPjUHG05j6gxZL+w5m
+         a02A==
+X-Gm-Message-State: AOAM531RprC0o0ZFiYjSLQ7l422rYV+DLtqNemPl1DxQKWopABLegeGR
+        8GQFyKH+YcAkUB2V3zHWyzYaNg==
+X-Google-Smtp-Source: ABdhPJxQgX0OxvwSIzQuemWh5fh9ef7s10rXI9v+cOHjLYoj53CFX2N69eo+c6EVORP4GKgX9ujvCw==
+X-Received: by 2002:a05:6830:1f2f:: with SMTP id e15mr13175426oth.175.1643692848578;
+        Mon, 31 Jan 2022 21:20:48 -0800 (PST)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id u3sm8193107ooh.19.2022.01.31.21.20.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 19:34:05 -0800 (PST)
-Message-ID: <61f8aa2d.1c69fb81.cf1c.7a37@mx.google.com>
-Date:   Mon, 31 Jan 2022 19:34:05 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 31 Jan 2022 21:20:48 -0800 (PST)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     ulf.hansson@linaro.org, Maulik Shah <quic_mkshah@quicinc.com>
+Cc:     quic_rjendra@quicinc.com, daniel.lezcano@linaro.org,
+        quic_lsrao@quicinc.com, rafael@kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: (subset) [PATCH 00/10] Add APSS RSC to Cluster power domain
+Date:   Mon, 31 Jan 2022 23:19:58 -0600
+Message-Id: <164369277345.3095904.10944386444643776011.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <1641749107-31979-1-git-send-email-quic_mkshah@quicinc.com>
+References: <1641749107-31979-1-git-send-email-quic_mkshah@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.17-rc2-6-g601753a2ad1e
-X-Kernelci-Tree: pm
-X-Kernelci-Report-Type: build
-X-Kernelci-Branch: testing
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 1 warning (v5.17-rc2-6-g601753a2ad1e)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.17-rc2-6-g601=
-753a2ad1e)
+On Sun, 9 Jan 2022 22:54:57 +0530, Maulik Shah wrote:
+> This series patches 1 to 4 adds/corrects the cpuidle states/
+> apps_rsc TCS configuration to make it same as downstream kernel.
+> 
+> The patches 5, 6 and 7 adds apps_rsc device to cluster power domain such
+> that when cluster is going to power down the cluster pre off notification
+> will program the 'sleep' and 'wake' votes in SLEEP TCS and WAKE TCSes.
+> 
+> [...]
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-17-rc2-6-g601753a2ad1e/
+Applied, thanks!
 
-Tree: pm
-Branch: testing
-Git Describe: v5.17-rc2-6-g601753a2ad1e
-Git Commit: 601753a2ad1e94e6d9498c8faefbae61275d045f
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
+[01/10] arm64: dts: qcom: sm8150: Correct TCS configuration for apps rsc
+        commit: 17ac8af678b6da6a8f1df7da8ebf2c5198741827
+[02/10] arm64: dts: qcom: sm8250: Add cpuidle states
+        commit: 32bc936d732171d48c9c8f96c4fa25ac3ed7e1c7
+[03/10] arm64: dts: qcom: sm8350: Correct TCS configuration for apps rsc
+        commit: a131255e4ad1ef8d4873ecba21561ba272b2547a
+[04/10] arm64: dts: qcom: sm8450: Update cpuidle states parameters
+        commit: 6574702b0d394d2acc9ff808c4a79df8b9999173
 
-Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-
-riscv:
-
-x86_64:
-
-
-Warnings summary:
-
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+Best regards,
+-- 
+Bjorn Andersson <bjorn.andersson@linaro.org>
