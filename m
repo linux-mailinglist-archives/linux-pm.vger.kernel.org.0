@@ -2,49 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E635D4AAAF6
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Feb 2022 19:36:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DD144AADA2
+	for <lists+linux-pm@lfdr.de>; Sun,  6 Feb 2022 04:30:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343583AbiBESfb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 5 Feb 2022 13:35:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41342 "EHLO
+        id S1381115AbiBFDap (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 5 Feb 2022 22:30:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237920AbiBESfb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 5 Feb 2022 13:35:31 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ED0BC061348
-        for <linux-pm@vger.kernel.org>; Sat,  5 Feb 2022 10:35:30 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nGPuC-0006Bh-AM; Sat, 05 Feb 2022 19:35:28 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nGPuC-00EjqM-0a; Sat, 05 Feb 2022 19:35:27 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nGPuA-008MZ8-2e; Sat, 05 Feb 2022 19:35:26 +0100
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     kernel@pengutronix.de, linux-pm@vger.kernel.org
-Subject: [PATCH] power: supply: rt9455: Don't pass an error code in remove callback
-Date:   Sat,  5 Feb 2022 19:35:12 +0100
-Message-Id: <20220205183512.11038-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S1381030AbiBFDan (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 5 Feb 2022 22:30:43 -0500
+X-Greylist: delayed 10802 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 05 Feb 2022 19:30:42 PST
+Received: from mx1.smtp.larsendata.com (mx1.smtp.larsendata.com [91.221.196.215])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11817C0401C1
+        for <linux-pm@vger.kernel.org>; Sat,  5 Feb 2022 19:30:41 -0800 (PST)
+Received: from mail01.mxhotel.dk (mail01.mxhotel.dk [91.221.196.236])
+        by mx1.smtp.larsendata.com (Halon) with ESMTPS
+        id 12f30462-8454-11ec-b20b-0050568c148b;
+        Wed, 02 Feb 2022 18:15:17 +0000 (UTC)
+Received: from ravnborg.org (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: sam@ravnborg.org)
+        by mail01.mxhotel.dk (Postfix) with ESMTPSA id 67A6F194BFA;
+        Wed,  2 Feb 2022 19:14:11 +0100 (CET)
+Date:   Wed, 2 Feb 2022 19:14:08 +0100
+X-Report-Abuse-To: abuse@mxhotel.dk
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     nick.hawkins@hpe.com
+Cc:     verdun@hpe.com, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Corey Minyard <minyard@acm.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Shawn Guo <shawnguo@kernel.org>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Hao Fang <fanghao11@huawei.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Wang Kefeng <wangkefeng.wang@huawei.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] HPE BMC GXP SUPPORT
+Message-ID: <YfrJ8JWjyH9ptV4z@ravnborg.org>
+References: <nick.hawkins@hpe.com>
+ <20220202165315.18282-1-nick.hawkins@hpe.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1050; h=from:subject; bh=ImaO7aZj/l0NInJlnvO0hoXfA/qvB2vfu6KuyxD/dWQ=; b=owGbwMvMwMV48I9IxdpTbzgZT6slMST+OxxT/TrjwsZjGX8r3Z+bfpL6fjbpz9mdzMwy/Zc2+3Fw cLx61slozMLAyMUgK6bIUlekJTZBYs1/u5Il3DCDWJlApjBwcQrARAp62P9pcqpvZ9cO5SpaoLb0i7 jJ+vu9uj8uFi/nfz3vnYAzo3H91xVef3LUSn4yiDDevXnV6sTpP8vL06r6Fyns7t/1aMIFfwsBNXn1 moh7KVFZbp1fvHljt+S1H717RcjUfs5Ly6RJm1+xsMsECt1+/fGo364u3hdPWJvmBSSukd0mHZkZmM a86DhHonOUuKvKOXlLg1KNmjKnbSwqDUsspvPMajxm0Nkaxpcq2MGf68K+c3n1C6WDN1QaxJeJX34z TcPV0C0+0tw3+9nMQOkp5tx6rHLPnlwNn7fubfIEnawHKzPT2Xks1/grszHcVMrS4HqVz8DYm7X0ul bZ7TDJ709yOViOxjDnrXv787wLAA==
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220202165315.18282-1-nick.hawkins@hpe.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,31 +92,51 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When ret is not zero there were already one or two error messages emitted
-about a problem (because rt9455_register_reset() emits a message in most
-cases then). Passing on that error code to the i2c core only results in
-another error message. Suppress that by returning zero unconditionally.
+Hi Nick,
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/power/supply/rt9455_charger.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+good to see all this stuff coming mainline,
 
-diff --git a/drivers/power/supply/rt9455_charger.c b/drivers/power/supply/rt9455_charger.c
-index 594bb3b8a4d1..74ee54320e6a 100644
---- a/drivers/power/supply/rt9455_charger.c
-+++ b/drivers/power/supply/rt9455_charger.c
-@@ -1716,7 +1716,7 @@ static int rt9455_remove(struct i2c_client *client)
- 	cancel_delayed_work_sync(&info->max_charging_time_work);
- 	cancel_delayed_work_sync(&info->batt_presence_work);
- 
--	return ret;
-+	return 0;
- }
- 
- static const struct i2c_device_id rt9455_i2c_id_table[] = {
+On Wed, Feb 02, 2022 at 10:52:50AM -0600, nick.hawkins@hpe.com wrote:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
+> 
+> GXP is the name of the HPE SoC.
+> This SoC is used to implement BMC features of HPE servers
+> (all ProLiant, Synergy, and many Apollo, and Superdome machines)
+> It does support many features including:
+> 	ARMv7 architecture, and it is based on a Cortex A9 core
+> 	Use an AXI bus to which
+> 		a memory controller is attached, as well as
+>                  multiple SPI interfaces to connect boot flash,
+>                  and ROM flash, a 10/100/1000 Mac engine which
+>                  supports SGMII (2 ports) and RMII
+> 		Multiple I2C engines to drive connectivity with a host infrastructure
+> 		A video engine which support VGA and DP, as well as
+>                  an hardware video encoder
+> 		Multiple PCIe ports
+> 		A PECI interface, and LPC eSPI
+> 		Multiple UART for debug purpose, and Virtual UART for host connectivity
+> 		A GPIO engine
+> This Patch Includes:
+> 	Documentation for device tree bindings
+> 	Device Tree Bindings
+> 	GXP Timer Support
+> 	GXP Architecture Support
+> 
+> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+> ---
+>  .../bindings/display/hpe,gxp-thumbnail.txt    |  21 +
+>  .../devicetree/bindings/gpio/hpe,gxp-gpio.txt |  16 +
+...
 
-base-commit: dcb85f85fa6f142aae1fe86f399d4503d49f2b60
--- 
-2.34.1
+All new bindings must be in the DT-schema format (yaml files).
+This enables a lot of syntax checks and validation.
 
+We are slowly migrating away from the .txt based bindings.
+
+Also, for new bindings please follow the guide lines listed in
+Documentation/devicetree/bindings/submitting-patches.rst
+
+Consider including the bindings with the drivers using the bindings so
+things have a more natural split.
+
+	Sam
