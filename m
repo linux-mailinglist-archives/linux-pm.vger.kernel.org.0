@@ -2,123 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B8A34A7880
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Feb 2022 20:06:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9CE4A78EA
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Feb 2022 20:49:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232546AbiBBTGR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Feb 2022 14:06:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49964 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbiBBTGQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Feb 2022 14:06:16 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B6BC061714;
-        Wed,  2 Feb 2022 11:06:15 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 5B8D51F44A86
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1643828774;
-        bh=pnJYMQnocKqaSHZAoESmT/s7AHzQaVIvJvrK5HrPS/o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JXsqG06L0GERFcYx0wT7nGX4frg3b9BU//3O9afKJ8obSUNUviwXFg0uXnnmfRt4H
-         hodhvSttk7TRnHAaxxpbbMYSTUnzOgsUzPvcJurMEMgMs9X0z1JGx8/xjjFz+8Arui
-         srhmWsl0NPUUwHxnJ3/rPFCLXmrKHGZ0p83VJQkOJLhB/odm9Mx6GJ/ESVGocpodYM
-         e2eMB4a2oNQu5DuAOhKNz+umPcemFdCOgy+nmjpCVK7Tdv/kLVfVDk/TFJS3z4iJpQ
-         VYm2tQYhPrPkhL8/VpJPyiTcoNarHfjEFRPDuentW9kC9gXP1PXlAZWZi5inqCuBBs
-         31vWPMdb40vpQ==
-Received: by earth.universe (Postfix, from userid 1000)
-        id F1AC03C0CCE; Wed,  2 Feb 2022 20:06:11 +0100 (CET)
-Date:   Wed, 2 Feb 2022 20:06:11 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Colin Ian King <colin.i.king@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, linux-pm@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] power: supply: axp288_fuel_gauge: Fix spelling
- mistake "resisitor" -> "resistor"
-Message-ID: <20220202190611.wfzp3qacb2dyds74@earth.universe>
-References: <20220202091246.580091-1-colin.i.king@gmail.com>
- <8386b5bf-46bd-5927-9119-cdf77e1df082@redhat.com>
+        id S233073AbiBBTtw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Feb 2022 14:49:52 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:44944 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346967AbiBBTtw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Feb 2022 14:49:52 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 212Jnim6127964;
+        Wed, 2 Feb 2022 13:49:44 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1643831384;
+        bh=DIp43XSAMx2adaN2x1pPnNwrO9YL3U19pEVY50lVnro=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=pucDKKT/IHoySA4FMMY4TPFqqm+CfSuAt+ZSx2+GbqLgZRKfRN2+U0HY2xQpG0Xpw
+         rbAwEYyz4Bh6Cwj0yUSK91GEdUsTvL6RuAomnUMx0zRiR96guIY5k8nCmdP0kp7iP2
+         qbtAtkLZDyVEHUUY3E67fBNbuUyyLVt1bD6iwiCo=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 212JnioI083004
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 2 Feb 2022 13:49:44 -0600
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 2
+ Feb 2022 13:49:44 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 2 Feb 2022 13:49:44 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 212Jnh1j042364;
+        Wed, 2 Feb 2022 13:49:43 -0600
+From:   Nishanth Menon <nm@ti.com>
+To:     Santosh Shilimkar <ssantosh@kernel.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+CC:     Nishanth Menon <nm@ti.com>, <linux-pm@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6] soc: ti: smartreflex: Use platform_get_irq_optional() to get the interrupt
+Date:   Wed, 2 Feb 2022 13:49:43 -0600
+Message-ID: <164383137177.1624.10089341781660907242.b4-ty@ti.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220105180323.8563-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20220105180323.8563-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lecfetpmufqm7vqu"
-Content-Disposition: inline
-In-Reply-To: <8386b5bf-46bd-5927-9119-cdf77e1df082@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Lad Prabhakar,
 
---lecfetpmufqm7vqu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wed, 5 Jan 2022 18:03:22 +0000, Lad Prabhakar wrote:
+> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> allocation of IRQ resources in DT core code, this causes an issue
+> when using hierarchical interrupt domains using "interrupts" property
+> in the node as this bypasses the hierarchical setup and messes up the
+> irq chaining.
+> 
+> In preparation for removal of static setup of IRQ resource from DT core
+> code use platform_get_irq_optional().
+> 
+> [...]
 
-Hi,
+I have applied the following to branch ti-drivers-soc-next on [1].
+Thank you!
 
-On Wed, Feb 02, 2022 at 01:45:55PM +0100, Hans de Goede wrote:
-> Hi,
->=20
-> On 2/2/22 10:12, Colin Ian King wrote:
-> > There is a spelling mistake in a MODULE_PARM_DESC description. Fix it.
-> >=20
-> > Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
->=20
-> Oops my bad, patch looks good to me:
->=20
-> Acked-by: Hans de Goede <hdegoede@redhat.com>
->=20
-> Regards,
->=20
-> Hans
+[1/1] soc: ti: smartreflex: Use platform_get_irq_optional() to get the interrupt
+      commit: 001d7c83704bc98c28cc6444d2e7518d12ed029f
 
-Thanks, queued.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent up the chain during
+the next merge window (or sooner if it is a relevant bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
--- Sebastian
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
->=20
-> > ---
-> >  drivers/power/supply/axp288_fuel_gauge.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/power/supply/axp288_fuel_gauge.c b/drivers/power/s=
-upply/axp288_fuel_gauge.c
-> > index dcedbc59732d..13be2c1d6528 100644
-> > --- a/drivers/power/supply/axp288_fuel_gauge.c
-> > +++ b/drivers/power/supply/axp288_fuel_gauge.c
-> > @@ -91,7 +91,7 @@
-> > =20
-> >  static bool no_current_sense_res;
-> >  module_param(no_current_sense_res, bool, 0444);
-> > -MODULE_PARM_DESC(no_current_sense_res, "No (or broken) current sense r=
-esisitor");
-> > +MODULE_PARM_DESC(no_current_sense_res, "No (or broken) current sense r=
-esistor");
-> > =20
-> >  enum {
-> >  	QWBTU_IRQ =3D 0,
-> >=20
->=20
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---lecfetpmufqm7vqu
-Content-Type: application/pgp-signature; name="signature.asc"
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
------BEGIN PGP SIGNATURE-----
+[1] git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmH61h0ACgkQ2O7X88g7
-+ppnhw/8CA8ZHeI3ic57A52w676LcT3Ds58ZkauZtkb848URRS9a/k+HGmvYtrHz
-YHQa6HGb8YAYNjYSTv+KcbJ+insT02uKxGf2aiAUnVD6ImgsH3oKIvCMZU7m2YqC
-fMh7fIadn9fB5ReR8+Lj/h/zdi8kbSFeRh8QPv/qwUXeeP29c5L0SYdUiAHwqnvy
-kRu4jexscqod5LUQ3BZwe9kIAWD1Hq2Z5p8gqbtgCcYVRxriuoIs0WqIqRGfOxfw
-kf6ifzYLF96NQZdKZtO3TKt3s1BJP/i4RtExFvshQ3I3mkzXm+uPppMDTgjLcjzg
-6noghaPWWdNqECfbiUYxwFIAZKRt5U9K1/uUcihjf8J/zU1ALfm9KxolFiG0r5iR
-REW44VP7TZELJZpAbDX6jJuZ/Jr93GIhynogzeF13SVrPdMDwqj5VMaYtGmVri/K
-bpfG9mtCkfHfG59PejCPeO76r5PD0XdthjpoxcS9H1u3c+tvSKZdcW9Ye9E21o/F
-99ZbVMQxtGnpxvFmp+wEJgh2Mj/4IGMKZFFKbHPmf1FaFArXz5M6+n2Ahq2j0DnY
-3edmJ1UaEzFyJb3z02imf+Ed4/MG5Fz2VdoGQ4nV7NMkqRilHJH/mqF6MvmkAfsk
-9CS9asAKEES0u6tzIgItLEPUlSHj/VmZDmTOUsK7yki3fzxZZZM=
-=5VWk
------END PGP SIGNATURE-----
-
---lecfetpmufqm7vqu--
