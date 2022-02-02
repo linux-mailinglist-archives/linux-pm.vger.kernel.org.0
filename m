@@ -2,86 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF09C4A6D8D
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Feb 2022 10:12:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF9674A70FC
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Feb 2022 13:46:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245331AbiBBJMv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Feb 2022 04:12:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54178 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245328AbiBBJMu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Feb 2022 04:12:50 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B958BC061714;
-        Wed,  2 Feb 2022 01:12:49 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id v13so36944416wrv.10;
-        Wed, 02 Feb 2022 01:12:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=yJdtPOjpOJxcw/bDrep6QyoQiiLSPQ6yNsHfnZN05PI=;
-        b=jSUB4XrIRP6GTtKBT+hq9g63X7O1VislQePExHgAwMfwlO0SqMVeEd9JKZ9CJhFR+W
-         Wj5881Lad6UA9L/qk4xuwZlu6TUoOT3tuTZ5J5cdPCM9QdUu576JUaIjlOLdyG7enFlS
-         UdQIzMT6nYHC16AQoyJvWtGdya1EP48iuJxZ5E9I/ApEJHleOVYvTB7ff+4BrbCcN55y
-         IriE6ufcTxAYYFgTIoLHliIlDqlVGXl1NzivvraBEMHgtEtNvgb7ewKj96yTs5x+yJwe
-         OonhUvWaanyy7zyxFTocEz1LBO0k+ba1vZmXEGTJFeBax7RYM9352e6e3sSn0ZeuyqY0
-         76GQ==
+        id S239666AbiBBMqA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Feb 2022 07:46:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:46811 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237261AbiBBMp7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Feb 2022 07:45:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643805959;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=L2MgpqkUcQy8xm2YEczHn5aMWVUVny42CQPa38ApqUo=;
+        b=VBp3nBumZQG3y5BnoX/TJeVgV7ojZEiJgWPQPteEpPQVGeGJpsTEWoFLOEYg+/YRSJb25B
+        uT4fp4fwhpqVFKc0VJ6jH2Vdn9buQqmTfO8q73JFUutQNEKZakt5g1suy51cpc6k/2k/Ey
+        VBfXchn/8ijykm0+MXT5760YX9VhlEE=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-584-9dVwC3qEN4SLLaxhboyIDQ-1; Wed, 02 Feb 2022 07:45:58 -0500
+X-MC-Unique: 9dVwC3qEN4SLLaxhboyIDQ-1
+Received: by mail-ed1-f72.google.com with SMTP id w3-20020a50c443000000b0040696821132so10315993edf.22
+        for <linux-pm@vger.kernel.org>; Wed, 02 Feb 2022 04:45:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=yJdtPOjpOJxcw/bDrep6QyoQiiLSPQ6yNsHfnZN05PI=;
-        b=oqZ/49w8hghBuxrfOaiXr3ruKvXYX+wqoU249sELD7HGFVjcL7/vSI0JEq064OAKZ9
-         oIf8vLhVAQYdEpteR2j6wopzOZwQVY5Ljx8vLa0/X0x/74xzN/6G+dzJ4jVH0hHmKDNT
-         EFaYIFcrGi89A2r38fSxdI8JfOPnCVPK9D5e5jroXtN6+IW7CjGQLZnF6PP0fdj5FRTE
-         YFF4h0QQLIs+c3nGX67U1sfneCPScIqXy83+88prJ5QveSR2zWciZ/+2mmsb8GavR4XW
-         Os3h4FSn+Jha7gqkyhtv4CNepKAHoLNPxVH1pXAZsCIwb+KVvz+slzhM/nQLr6rcFRvW
-         n13Q==
-X-Gm-Message-State: AOAM5310XzHhoH7CeR+kaKSiMHW5upRr5/Df5HGTGqY6Xno0XhmdXjtw
-        Ksnh19/MYYmynKQuoE7kVQU=
-X-Google-Smtp-Source: ABdhPJzGm5XRxQrPBOIGpKj/DmunuAW2c5T5gyDjptyQR+b0izn4UDCqFxguQioa4WWh87M3GLZQvQ==
-X-Received: by 2002:a5d:6d82:: with SMTP id l2mr24731664wrs.236.1643793168264;
-        Wed, 02 Feb 2022 01:12:48 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id b11sm4112779wmq.46.2022.02.02.01.12.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 01:12:47 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Sebastian Reichel <sre@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Hans de Goede <hdegoede@redhat.com>, linux-pm@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] power: supply: axp288_fuel_gauge: Fix spelling mistake "resisitor" -> "resistor"
-Date:   Wed,  2 Feb 2022 09:12:46 +0000
-Message-Id: <20220202091246.580091-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        bh=L2MgpqkUcQy8xm2YEczHn5aMWVUVny42CQPa38ApqUo=;
+        b=0SJaO4u6gznTTmzzAXE1RYMqcuWxc9klCzOTTmlKDpdRiljmAS6xVxgFROojZWXoTs
+         9ibhz/QY0QbiUrZUqk8FJdZ6r3pY114SMki4UKuKMlf3IMFjuSjGSCaBY7xi8wGK1O/b
+         Ul1qdtqDmAvEZzUEIVjRXoeWsJKZjJCzy6J6pDVdnNzHC2pJmKdtj2x8TCzNwvbV+RUP
+         yDBXc2a1pRJTp43Q7ZmuBfez8YUZDPKGIUY8Rb+OKHBDFL0yU6P0DzgJcWv3WxrLz/gt
+         09WuDRW2z7Q0XmhP9s8x/bIPVKCockE3DlxNAstv64rXFYVawGiTrYhivyiNrffd2dUG
+         6sRA==
+X-Gm-Message-State: AOAM532HF4tUOvbzoQ5PnDwe5VZaUzVM+pISfb1twqx5wftU3d2k/Bwk
+        4RK88chPkHhKRrx7qeuCFgL8VgTbNOJP/cCtCMzDIteGkNirip3aU2/ptK/qD3A1B+pEl4RV5FN
+        X2nfAyukzWXzwVNeezTE=
+X-Received: by 2002:a05:6402:698:: with SMTP id f24mr30447151edy.159.1643805957168;
+        Wed, 02 Feb 2022 04:45:57 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx0BOt5vFNLNoU+2m3VvI1dwFENKVK9kPv+3YXwZ4YNAFwj6bqDiewZqYzq9PKmLgXw0q43hA==
+X-Received: by 2002:a05:6402:698:: with SMTP id f24mr30447139edy.159.1643805957039;
+        Wed, 02 Feb 2022 04:45:57 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id q6sm15775628ejx.113.2022.02.02.04.45.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Feb 2022 04:45:56 -0800 (PST)
+Message-ID: <8386b5bf-46bd-5927-9119-cdf77e1df082@redhat.com>
+Date:   Wed, 2 Feb 2022 13:45:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH][next] power: supply: axp288_fuel_gauge: Fix spelling
+ mistake "resisitor" -> "resistor"
+Content-Language: en-US
+To:     Colin Ian King <colin.i.king@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>, linux-pm@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220202091246.580091-1-colin.i.king@gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220202091246.580091-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There is a spelling mistake in a MODULE_PARM_DESC description. Fix it.
+Hi,
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/power/supply/axp288_fuel_gauge.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 2/2/22 10:12, Colin Ian King wrote:
+> There is a spelling mistake in a MODULE_PARM_DESC description. Fix it.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-diff --git a/drivers/power/supply/axp288_fuel_gauge.c b/drivers/power/supply/axp288_fuel_gauge.c
-index dcedbc59732d..13be2c1d6528 100644
---- a/drivers/power/supply/axp288_fuel_gauge.c
-+++ b/drivers/power/supply/axp288_fuel_gauge.c
-@@ -91,7 +91,7 @@
- 
- static bool no_current_sense_res;
- module_param(no_current_sense_res, bool, 0444);
--MODULE_PARM_DESC(no_current_sense_res, "No (or broken) current sense resisitor");
-+MODULE_PARM_DESC(no_current_sense_res, "No (or broken) current sense resistor");
- 
- enum {
- 	QWBTU_IRQ = 0,
--- 
-2.34.1
+Oops my bad, patch looks good to me:
+
+Acked-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
+
+> ---
+>  drivers/power/supply/axp288_fuel_gauge.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/power/supply/axp288_fuel_gauge.c b/drivers/power/supply/axp288_fuel_gauge.c
+> index dcedbc59732d..13be2c1d6528 100644
+> --- a/drivers/power/supply/axp288_fuel_gauge.c
+> +++ b/drivers/power/supply/axp288_fuel_gauge.c
+> @@ -91,7 +91,7 @@
+>  
+>  static bool no_current_sense_res;
+>  module_param(no_current_sense_res, bool, 0444);
+> -MODULE_PARM_DESC(no_current_sense_res, "No (or broken) current sense resisitor");
+> +MODULE_PARM_DESC(no_current_sense_res, "No (or broken) current sense resistor");
+>  
+>  enum {
+>  	QWBTU_IRQ = 0,
+> 
 
