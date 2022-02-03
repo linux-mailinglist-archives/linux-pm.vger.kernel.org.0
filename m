@@ -2,26 +2,27 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86CE94A7FB4
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Feb 2022 08:24:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B43D64A7FBE
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Feb 2022 08:25:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349349AbiBCHYP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Feb 2022 02:24:15 -0500
-Received: from mail-4318.protonmail.ch ([185.70.43.18]:10711 "EHLO
-        mail-4318.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349347AbiBCHYM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Feb 2022 02:24:12 -0500
-Date:   Thu, 03 Feb 2022 07:24:00 +0000
+        id S1349234AbiBCHZV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Feb 2022 02:25:21 -0500
+Received: from mail-40132.protonmail.ch ([185.70.40.132]:34192 "EHLO
+        mail-40132.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234859AbiBCHZV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Feb 2022 02:25:21 -0500
+Date:   Thu, 03 Feb 2022 07:25:13 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail2; t=1643873050;
-        bh=Cg4VVZKyYzdKoQN0OKZO+sJINPAqHtXoxzHLdJuIiy8=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc;
-        b=kpaLMmRNDM4NsRUfXN4zBaf9lL4xBbIOxHMQTyumTQiwFteQPFqgKXmHTmzCFjxsV
-         ZXFFbHuRMDyHvZlW2FahfANqu1WKRMsCY5o8PKHwNXe4Rb+z73K+xSJAS4/Pcr7wVo
-         W8jRDpGc23n0w2HtyPo2al4obP9y4pUd7wd0hZ1mQ6hnTeVTO67ZuAZIc6AO8p5Ike
-         psqwnraYOFH3OV+JMiBxhJhoEQsbPaldsBAlqct7AooUQtvhGpoyeMQXBRRQSxt21f
-         OoI71at9kUaVAYaqFue86oFMKAqDUonhsSM8WlAupOEmYRH5Wd4t5vzo7tVXhlzGn5
-         2Gm02GF3BZiYg==
+        s=protonmail2; t=1643873119;
+        bh=rroVZy+8mm+y9NJmmSBWrLbl8QRoHIsd7+BkHgYOTVg=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:From:To:Cc;
+        b=DBYP77jMHRsBppbN6FldyHmlwGym/e9QVtnf8/aiLs2zukGlqbAUVeTDAyBAf3L8k
+         qQj0yyaZ/lueegbKIw3ybl4xaZFTTqpL+gHU0mcptYF+RrNIGtreBTdMDl2i1XY3+Z
+         uIaou8p9z+Ry2dxRF4q6wmHudPlzg/ORZFLhw4SneLjZN+5ZTvF3pUOPUIzI6tW5+D
+         h7prvM0R2Lm5mVmj/NEbIPNwNtcIpSvQ0HVvPKmn4GH0/7rv4JV5rRnQr4mwxpWe4O
+         YmxQzRLLTYSPgCsQc3xOt5gEC+OPk/vnMgd0VaAm/NRw9gIfVifaPWbBP6uNRZOOgz
+         ZnLiEn4eRFtzw==
 To:     Rob Herring <robh@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
@@ -30,8 +31,10 @@ From:   Yassine Oudjana <y.oudjana@protonmail.com>
 Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
         linux-kernel@vger.kernel.org
 Reply-To: Yassine Oudjana <y.oudjana@protonmail.com>
-Subject: [PATCH RESEND v3 0/7] dt-bindings: Convert multiple Qualcomm OPP and CPUFreq bindings to DT schema
-Message-ID: <20220203072226.51482-1-y.oudjana@protonmail.com>
+Subject: [PATCH RESEND v3 1/7] dt-bindings: arm: qcom: Add msm8996 and apq8096 compatibles
+Message-ID: <20220203072226.51482-2-y.oudjana@protonmail.com>
+In-Reply-To: <20220203072226.51482-1-y.oudjana@protonmail.com>
+References: <20220203072226.51482-1-y.oudjana@protonmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
@@ -44,74 +47,43 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This series is a compilation of DT schema conversions of multiple Qualcomm
-OPP and CPUFreq bindings:
-- qcom-cpufreq-nvmem (operating-points-v2-kryo-cpu)
-- qcom-opp (operating-points-v2-qcom-level)
-- qcom,cpr
+Add compatibles for MSM8996 and APQ8096 and all supported devices
+that have them.
 
-Converting each one to DT schema introduces new dt_binding_check and
-dtbs_check errors to the others, so it was better to combine them into
-a series. Some errors were also caused by a couple of device trees having
-OPP tables with names that do not follow opp-v2-base, so these got fixed
-in this series as well. Finally, the lack of MSM8996 compatibles in
-arm/qcom.yaml caused an error in the opp-v2-kryo-cpu example, so they were
-added to the schema as well as to the msm8996-mtp device tree, which only
-had qcom,msm8996-mtp as its compatible.
+Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+ Documentation/devicetree/bindings/arm/qcom.yaml | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-PATCH 4/7 is a new version of a patch[1] that was sent as part of
-a different series before, and PATCH 7/7 is a new version of a patch[2]
-that was sent alone.
-
-Changes in v3:
- - Resend with unified version for all patches
-
-Changes since v1 (PATCH v2 4/7):
- - Split the schema into an OPP schema and a CPUFreq schema.=20
-
-Changes since v1 (PATCH v2 7/7):
- - Remove allOf from compatible.
-
-Yassine Oudjana (7):
-  dt-bindings: arm: qcom: Add msm8996 and apq8096 compatibles
-  arm64: dts: qcom: msm8996-mtp: Add msm8996 compatible
-  dt-bindings: opp: qcom-opp: Convert to DT schema
-  dt-bindings: opp: Convert qcom-nvmem-cpufreq to DT schema
-  arm64: dts: qcom: msm8996: Rename cluster OPP tables
-  arm64: dts: qcom: qcs404: Rename CPU and CPR OPP tables
-  dt-bindings: power: avs: qcom,cpr: Convert to DT schema
-
- .../devicetree/bindings/arm/qcom.yaml         |  16 +-
- .../bindings/cpufreq/qcom-cpufreq-nvmem.yaml  | 166 ++++
- .../bindings/opp/opp-v2-kryo-cpu.yaml         | 257 ++++++
- .../bindings/opp/opp-v2-qcom-level.yaml       |  60 ++
- .../bindings/opp/qcom-nvmem-cpufreq.txt       | 796 ------------------
- .../devicetree/bindings/opp/qcom-opp.txt      |  19 -
- .../bindings/power/avs/qcom,cpr.txt           | 130 ---
- .../bindings/power/avs/qcom,cpr.yaml          | 160 ++++
- MAINTAINERS                                   |   5 +-
- arch/arm64/boot/dts/qcom/msm8996-mtp.dts      |   2 +-
- arch/arm64/boot/dts/qcom/msm8996.dtsi         |   4 +-
- arch/arm64/boot/dts/qcom/qcs404.dtsi          |   4 +-
- 12 files changed, 666 insertions(+), 953 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-=
-nvmem.yaml
- create mode 100644 Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.y=
-aml
- create mode 100644 Documentation/devicetree/bindings/opp/opp-v2-qcom-level=
-.yaml
- delete mode 100644 Documentation/devicetree/bindings/opp/qcom-nvmem-cpufre=
-q.txt
- delete mode 100644 Documentation/devicetree/bindings/opp/qcom-opp.txt
- delete mode 100644 Documentation/devicetree/bindings/power/avs/qcom,cpr.tx=
-t
- create mode 100644 Documentation/devicetree/bindings/power/avs/qcom,cpr.ya=
-ml
-
-[1] https://lore.kernel.org/linux-arm-msm/20211014083016.137441-6-y.oudjana=
-@protonmail.com/
-[2] https://lore.kernel.org/linux-arm-msm/20211221133937.173618-1-y.oudjana=
-@protonmail.com/
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentatio=
+n/devicetree/bindings/arm/qcom.yaml
+index 04ff0b55bb85..da6b2608f10b 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -172,7 +172,21 @@ properties:
+           - const: qcom,apq8094
+=20
+       - items:
+-          - const: qcom,msm8996-mtp
++          - enum:
++              - arrow,apq8096-db820c
++              - inforce,ifc6640
++          - const: qcom,apq8096-sbc
++          - const: qcom,apq8096
++
++      - items:
++          - enum:
++              - qcom,msm8996-mtp
++              - sony,dora-row
++              - sony,kagura-row
++              - sony,keyaki-row
++              - xiaomi,gemini
++              - xiaomi,scorpio
++          - const: qcom,msm8996
+=20
+       - items:
+           - enum:
 --=20
 2.34.1
 
