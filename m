@@ -2,78 +2,188 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D9F14A83C2
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Feb 2022 13:23:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 676DB4A8715
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Feb 2022 15:56:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347494AbiBCMWQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Feb 2022 07:22:16 -0500
-Received: from foss.arm.com ([217.140.110.172]:43618 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229379AbiBCMWQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 3 Feb 2022 07:22:16 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B206211D4;
-        Thu,  3 Feb 2022 04:22:15 -0800 (PST)
-Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B6F9A3F774;
-        Thu,  3 Feb 2022 04:22:13 -0800 (PST)
-Date:   Thu, 3 Feb 2022 12:22:11 +0000
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>
-Cc:     rafael@kernel.org, viresh.kumar@linaro.org, jonathanh@nvidia.com,
-        krzysztof.kozlowski@canonical.com, robh@kernel.org, kw@linux.com,
-        p.zabel@pengutronix.de, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, amitk@kernel.org,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH 5/5] PCI: tegra194: Handle errors in BPMP response
-Message-ID: <20220203122211.GB24443@lpieralisi>
-References: <20210915085517.1669675-1-mperttunen@nvidia.com>
- <20210915085517.1669675-5-mperttunen@nvidia.com>
- <YV86l4OhqKN0AkMN@orome.fritz.box>
- <20211013125956.GA11036@lpieralisi>
- <20211129121918.GA24438@lpieralisi>
+        id S1351590AbiBCO4G (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Feb 2022 09:56:06 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:33916
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1351569AbiBCO4B (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Feb 2022 09:56:01 -0500
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 03A70402FF
+        for <linux-pm@vger.kernel.org>; Thu,  3 Feb 2022 14:56:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1643900160;
+        bh=JKwlxtatWZQCVG4GF4BszucWwjVQTt2PxoebrxL5ciY=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=i6yA7t9Cv2ukmUXvHhtNRdUE9hNLWOnYQ2g7APjSZAMHCMKpeANi/B1ZtgoguxDA5
+         Nm8VGjt1PXrQCyAjvavzejgvqNwBlvEgSHGjKPyLksrXFul6IDWxivqgsLUUGcCUjS
+         fYm9h6Pyw0RXim93IOsKpnABcf1QYGK+V8qRcDxd11bioFzHas2El667YHdN3q+EGT
+         2qj40Z0/CY+7lpUpF8OMylyrNyz35bRpUel+rnHAY/Czwj0Tnr1Wlb+rKxCPcM4sIj
+         7RfT/OhKWfuiBotVjERE1wg8fEM53q7Hpi+txS+3Vpb2pmHIpb1VidkUD8X5eEaxz4
+         C9+xoRt97/5cg==
+Received: by mail-ed1-f72.google.com with SMTP id i22-20020a50fd16000000b00405039f2c59so1597357eds.1
+        for <linux-pm@vger.kernel.org>; Thu, 03 Feb 2022 06:56:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=JKwlxtatWZQCVG4GF4BszucWwjVQTt2PxoebrxL5ciY=;
+        b=nX2dqJqXOiHicRJVEvgPIovyCRLzb1DsJoml7+5F4f6Fwf3z+Bf6x/wGWtoAcIS7FE
+         fpjICzN8E6vJhuWDUiROSR5Lq+kYDM4rYWibEm7JVDrkR1RSEOqKWdn5/1tNykkA36bH
+         J2sYuV5sGI9KTbI4PascZUon3kc8Yw+GY6ZE98mlS7lPEGy9u8ElXo75jroY2b8wgzkv
+         PnETIycZ4mjBkxUuzVkUjEG16/k+xuoY0dQ16/7tuArQjLoQLmQmyvbGGkfddl9I/O+U
+         nDc2s0YV0ODvHh5CKz/jk/bRxNjY9bGl5/q9aG3VkX/5+/fZEJt6e0+vj0yzFPM2/Lgh
+         /6fw==
+X-Gm-Message-State: AOAM530Xu/q0TRrZMi6YoFeuG3C/Qjg0eXxp24JnnEdJ7osCivwQLBRs
+        cvXWTpE1raUjXFt7XGPle2krHIJbEgG5+Uy+AZXGtpWaidSZ88MfA1eP2xvdFVSuKaiIFwCoDJE
+        0v+AqDmv9CtrMH512NV0uub9UezWiv9jkjt9H
+X-Received: by 2002:a17:907:c14:: with SMTP id ga20mr1992497ejc.243.1643900159526;
+        Thu, 03 Feb 2022 06:55:59 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxET41+skPJ0t2ws3cpvdAuE3SIGtoLLzPApxhNtKVWxdECIqy/nqXcAWE2tMCANk5h/+crhA==
+X-Received: by 2002:a17:907:c14:: with SMTP id ga20mr1992450ejc.243.1643900159293;
+        Thu, 03 Feb 2022 06:55:59 -0800 (PST)
+Received: from [192.168.0.81] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id z19sm7573934eja.18.2022.02.03.06.55.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Feb 2022 06:55:58 -0800 (PST)
+Message-ID: <e79133f2-f872-3ed6-4038-526e94e84909@canonical.com>
+Date:   Thu, 3 Feb 2022 15:55:56 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211129121918.GA24438@lpieralisi>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] HPE BMC GXP SUPPORT
+Content-Language: en-US
+To:     Rob Herring <robh+dt@kernel.org>, nick.hawkins@hpe.com
+Cc:     verdun@hpe.com, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Corey Minyard <minyard@acm.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        SoC Team <soc@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Hao Fang <fanghao11@huawei.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Wang Kefeng <wangkefeng.wang@huawei.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        openipmi-developer@lists.sourceforge.net,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        netdev <netdev@vger.kernel.org>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+References: <nick.hawkins@hpe.com>
+ <20220202165315.18282-1-nick.hawkins@hpe.com>
+ <CAL_Jsq+K2t5WYE056so1iZgZr7CBKvDEjAwnJVTyUFQcK-VFSA@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <CAL_Jsq+K2t5WYE056so1iZgZr7CBKvDEjAwnJVTyUFQcK-VFSA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 12:19:18PM +0000, Lorenzo Pieralisi wrote:
-> On Wed, Oct 13, 2021 at 01:59:56PM +0100, Lorenzo Pieralisi wrote:
-> > On Thu, Oct 07, 2021 at 08:21:11PM +0200, Thierry Reding wrote:
-> > > On Wed, Sep 15, 2021 at 11:55:17AM +0300, Mikko Perttunen wrote:
-> > > > The return value from tegra_bpmp_transfer indicates the success or
-> > > > failure of the IPC transaction with BPMP. If the transaction
-> > > > succeeded, we also need to check the actual command's result code.
-> > > > Add code to do this.
-> > > > 
-> > > > Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
-> > > > ---
-> > > >  drivers/pci/controller/dwc/pcie-tegra194.c | 9 ++++++++-
-> > > >  1 file changed, 8 insertions(+), 1 deletion(-)
-> > > 
-> > > Acked-by: Thierry Reding <treding@nvidia.com>
-> > 
-> > Hi Thierry,
-> > 
-> > can I pull this patch into the PCI tree ? Or if you want the series
-> > to go via another tree:
-> > 
-> > Acked-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+On 03/02/2022 15:29, Rob Herring wrote:
+> On Wed, Feb 2, 2022 at 10:55 AM <nick.hawkins@hpe.com> wrote:
+>>
+>> From: Nick Hawkins <nick.hawkins@hpe.com>
+>>
+
+(...)
+
+>> +
+>> +       vuart_a: vuart_a@80fd0200 {
 > 
-> Hi,
+> serial@...
+
+Maybe it does not look like, but this is actually a v2. Nick was asked
+to change the naming for the nodes already in v1. Unfortunately it did
+not happen, so we have vuart, spifi, vic and more.
+
+It is a waste of reviewers' time to ask them to perform the same review
+twice or to ignore their comments.
+
 > 
-> I would like to ask please how you want this series to be handled.
+>> +               compatible = "hpe,gxp-vuart";
+>> +               reg = <0x80fd0200 0x100>;
+>> +               interrupts = <2>;
+>> +               interrupt-parent = <&vic1>;
+>> +               clock-frequency = <1846153>;
+>> +               reg-shift = <0>;
+>> +               status = "okay";
+>> +               serial-line = <3>;
+>> +               vuart_cfg = <&vuart_a_cfg>;
+>> +       };
 
-Should I apply this patch stand-alone ?
+(...)
 
-I will mark all other patches in this series as Not Applicable in
-the PCI queue.
+>> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+>> index 294093d45a23..913f722a6b8d 100644
+>> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
+>> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+>> @@ -514,7 +514,9 @@ patternProperties:
+>>    "^hoperun,.*":
+>>      description: Jiangsu HopeRun Software Co., Ltd.
+>>    "^hp,.*":
+>> -    description: Hewlett Packard
+>> +    description: Hewlett Packard Inc.
+> 
+> Why are you changing this one?
 
-Thanks,
-Lorenzo
+I guess this is squashing of my patch:
+https://lore.kernel.org/all/20220127075229.10299-1-krzysztof.kozlowski@canonical.com/
+
+which is fine to me, but vendor changve should be a separate commit with
+its own explanation. Now it looks indeed weird.
+
+> 
+>> +  "^hpe,.*":
+> 
+> You used HPE elsewhere... Lowercase is preferred.
+
+
+
+
+Best regards,
+Krzysztof
