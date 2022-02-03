@@ -2,27 +2,27 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 671504A7FD0
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Feb 2022 08:26:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9552C4A7FD1
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Feb 2022 08:27:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349386AbiBCH0l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Feb 2022 02:26:41 -0500
-Received: from mail-40138.protonmail.ch ([185.70.40.138]:31135 "EHLO
-        mail-40138.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349088AbiBCH0k (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Feb 2022 02:26:40 -0500
-Date:   Thu, 03 Feb 2022 07:26:24 +0000
+        id S1349392AbiBCH07 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Feb 2022 02:26:59 -0500
+Received: from mail-4324.protonmail.ch ([185.70.43.24]:12149 "EHLO
+        mail-4324.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239780AbiBCH0x (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Feb 2022 02:26:53 -0500
+Date:   Thu, 03 Feb 2022 07:26:44 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail2; t=1643873199;
-        bh=sR/YQB+9UhT4OEEpJHtDhmgJhmBoOU3G+c+isEuYc2M=;
+        s=protonmail2; t=1643873212;
+        bh=ddOT8Uc+zAx4EeLE9VJ+W8yoFZ2uDF6RSAmpP8fOn38=;
         h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
          References:From:To:Cc;
-        b=L7I8i48AEjkvaGzpqm67XPHRxmYUv74nDisBs2akkn/5Bt+FYV8WzT9LTonnzNiYc
-         p+G4RY0/s22DToWqP12Ftb4eFSZB/FGOEns4BSYqHqBUC/WNhBJr2syvMFTIf2wwzv
-         yfs7puyGNP3UajyIMGRmThrY0JupX3Nx9T92o2fIKgthYYfDgorgxN4zNV7KP5xIu5
-         T+BMHcXhZqGJOZZPA96h+xz5ZNnq96d1JktgpuhBrOPXgONkD8oqUGmg4PLIvYzUxx
-         N778Q3Kmn6cZ6pHJSvECWXgivUQDXCjNN1u0BPbEegVTKX/xEGNEHm4gJ+giUo85qL
-         NCEmOrhmg8hag==
+        b=GktgZuwNBhPEcmiAj46GnQIzzlfVCFT1cWQ8/pOe3btNIWqFD1/X1VQb92XU+IxsE
+         1gcj6feRF3gFQ/dBRWkvqGG0VNOM03tYDhwLRBtq32LCGK0dUYz3X4rdxi+u16Rxpz
+         1yFOdIY5qkPkO8dBuwMeSJpAffRjUzq3jc/XfbGimk6MePVPbwYGk5U6gyHBNVWHn2
+         Kkz1jBws2fxMPM7+Xq8xrXVZckeutoZ/M30Ao+eON4LKr148sNZI+QMGDFG/EdHle4
+         AoPb40U+tj0KUV9WTT3vFYOzhLLumG1ZiYS8JfDUXxdFPxtrAlSZkznvX8boRiDSgX
+         MP2qLVTdQ/Wrw==
 To:     Rob Herring <robh@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
@@ -31,8 +31,8 @@ From:   Yassine Oudjana <y.oudjana@protonmail.com>
 Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
         linux-kernel@vger.kernel.org
 Reply-To: Yassine Oudjana <y.oudjana@protonmail.com>
-Subject: [PATCH RESEND v3 5/7] arm64: dts: qcom: msm8996: Rename cluster OPP tables
-Message-ID: <20220203072226.51482-6-y.oudjana@protonmail.com>
+Subject: [PATCH RESEND v3 6/7] arm64: dts: qcom: qcs404: Rename CPU and CPR OPP tables
+Message-ID: <20220203072226.51482-7-y.oudjana@protonmail.com>
 In-Reply-To: <20220203072226.51482-1-y.oudjana@protonmail.com>
 References: <20220203072226.51482-1-y.oudjana@protonmail.com>
 MIME-Version: 1.0
@@ -47,37 +47,37 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Rename cluster OPP table node names to match the nodename pattern
+Rename CPU and CPR OPP table node names to match the nodename pattern
 defined in the opp-v2-base DT schema.
 
 Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
 ---
- arch/arm64/boot/dts/qcom/msm8996.dtsi | 4 ++--
+ arch/arm64/boot/dts/qcom/qcs404.dtsi | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qc=
-om/msm8996.dtsi
-index 91bc974aeb0a..036de52c54f1 100644
---- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-@@ -134,7 +134,7 @@ CPU_SLEEP_0: cpu-sleep-0 {
+diff --git a/arch/arm64/boot/dts/qcom/qcs404.dtsi b/arch/arm64/boot/dts/qco=
+m/qcs404.dtsi
+index 6db753b49326..3f06f7cd3cf2 100644
+--- a/arch/arm64/boot/dts/qcom/qcs404.dtsi
++++ b/arch/arm64/boot/dts/qcom/qcs404.dtsi
+@@ -110,7 +110,7 @@ CPU_SLEEP_0: cpu-sleep-0 {
  =09=09};
  =09};
 =20
--=09cluster0_opp: opp_table0 {
-+=09cluster0_opp: opp-table-cluster0 {
+-=09cpu_opp_table: cpu-opp-table {
++=09cpu_opp_table: opp-table-cpu {
  =09=09compatible =3D "operating-points-v2-kryo-cpu";
- =09=09nvmem-cells =3D <&speedbin_efuse>;
  =09=09opp-shared;
-@@ -222,7 +222,7 @@ opp-1593600000 {
+=20
+@@ -128,7 +128,7 @@ opp-1401600000 {
  =09=09};
  =09};
 =20
--=09cluster1_opp: opp_table1 {
-+=09cluster1_opp: opp-table-cluster1 {
- =09=09compatible =3D "operating-points-v2-kryo-cpu";
- =09=09nvmem-cells =3D <&speedbin_efuse>;
- =09=09opp-shared;
+-=09cpr_opp_table: cpr-opp-table {
++=09cpr_opp_table: opp-table-cpr {
+ =09=09compatible =3D "operating-points-v2-qcom-level";
+=20
+ =09=09cpr_opp1: opp1 {
 --=20
 2.34.1
 
