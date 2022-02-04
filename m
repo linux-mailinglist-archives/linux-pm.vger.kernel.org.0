@@ -2,161 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA6D74A9710
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Feb 2022 10:44:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03B504A978F
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Feb 2022 11:17:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357580AbiBDJod (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Feb 2022 04:44:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38244 "EHLO
+        id S243892AbiBDKRG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Feb 2022 05:17:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235827AbiBDJoc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Feb 2022 04:44:32 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 629D3C06173E
-        for <linux-pm@vger.kernel.org>; Fri,  4 Feb 2022 01:44:32 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id u7so6136090lji.2
-        for <linux-pm@vger.kernel.org>; Fri, 04 Feb 2022 01:44:32 -0800 (PST)
+        with ESMTP id S233481AbiBDKRF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Feb 2022 05:17:05 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE16C061714
+        for <linux-pm@vger.kernel.org>; Fri,  4 Feb 2022 02:17:05 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id x23so11787674lfc.0
+        for <linux-pm@vger.kernel.org>; Fri, 04 Feb 2022 02:17:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=s3hoNqkHm8uABs8bA5GkGd4u8pf+9SvyozF/PnFazzA=;
-        b=iQ1GwxAN6QzhF77ngrDL5IUqqH/qnq2wnuA15gyhCr63Ob42nAFu+SOlLp4gMNRLg/
-         gOOH9xR6sFPXc/69PwTAxghKL2IIclwXvduszgWH+PKoCDG9C2hRCYwuCGRkr61BRklh
-         YHq6UG0+YUIMxo4vXxCgecOZQ14MjdZZDY9gTbRAyClssRYH77caNmpuwqW7Tu/dhnbD
-         tY397u7RcGu8CPhjoXolUm0dy5Yg1hWtCkhWPjy6SEwZAOO5yrL1/z4Ix1BcBVKx7BOU
-         3tTmIH0B9vl7PJjJDySU9WmHF1ajTTuufg5iou88ZLtwoBwXCLb6ytR5HzorTbrenadO
-         TBtA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LEZmn2TCD/EbdRMOs40aYSuOww/xn/Q6VxOfylJ/UrU=;
+        b=fp+p0q5Ow3IEOMtvcfUBWSbZSX2v8PMGM2B3S/iRoMZyylHzL7nKOmZ4jZeSU0asIs
+         5T1PIx9LuZCjwwGqblqOErrDs9xYFEzRIsJ2eMJeMuNGoi3r0iupIfA4MfWaNhPlFCNZ
+         M0sk72pkv8AeUMoAxhddQfX3hHaXwVOYL30xjo1+S4J9p477l422yS4DiKwjUJMFtZJB
+         SYfDcF+3hQScStIxqld/+HW3SGbNtc5I8s/r5gq303sa80mrLk9x/BdOSPAq/RaE6Jw3
+         yU0jfEusuchipamwEY+eTj5aComsG3jSaqb0bv3uktXNUV/Izfd1PZM8KlZjncXp8n55
+         S4Nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=s3hoNqkHm8uABs8bA5GkGd4u8pf+9SvyozF/PnFazzA=;
-        b=mOpz5MHOdH9xMryHTX22CDj2OxwtuUOeB5tpqv12MUM7qp7ztsZbTHPpinDPZt4DIa
-         zOnh+jVlxc/JVomc5wM2fPp0uWAyTyZd8GgVXEJZTvy73NGuoUu/EZEVVGuBFVhndi5K
-         GK6oDroa1r4YHwF+mhXwUhz58iWZw+ipLk3XFTr/L21Kj8LuTYaUKJsajzdw/8jIirI8
-         Ylfzgfiv7yj0U1lt7GfwpGT1Cr6Rd9pr53ScKzraeyHjto8DX73vLO4+Ohf2avd30j11
-         RuKyzeCIPXSiW8M6p3os9mBUpJW0QkVevG/0E8Icx5v7NEtF01lxu4OLKQjgoVpJQU+A
-         PjJA==
-X-Gm-Message-State: AOAM531lu9U5qG2A6Ba8tL0iBKf6BM73TtSbYeLG4Maju9OETeHvwWND
-        BCwVJ88Zu160UEd658DUtT6xflVEPeu6NQrkFCtaVA==
-X-Google-Smtp-Source: ABdhPJxvuguFzra5GtzuztPGthoos7qcHGERlZxk4EZGk0b2aj/xM9XE+MZ0Xq7aG/g/jk60nFQ0MnRng8vFmigaIto=
-X-Received: by 2002:a05:651c:179c:: with SMTP id bn28mr1320707ljb.4.1643967870698;
- Fri, 04 Feb 2022 01:44:30 -0800 (PST)
-MIME-Version: 1.0
-References: <20220131113743.52265-1-ulf.hansson@linaro.org> <b33ceac4-506a-65c8-7c80-b1b0a67ce65e@gmail.com>
-In-Reply-To: <b33ceac4-506a-65c8-7c80-b1b0a67ce65e@gmail.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LEZmn2TCD/EbdRMOs40aYSuOww/xn/Q6VxOfylJ/UrU=;
+        b=U2fm6ILV2YBePN/fVO7BGIo89Ur1fuMBBxOe5xtWBKTJoCA6HeE1GyYfwLq95JTghC
+         niiEDw0/TZIGN9UU+MLihEOHWv2iooQYIQT/xDMLpiGlR4rsmJjUBFQ1Pou0DTY54pIm
+         sD1Ud8IbWDGxtM8WLDzlZ2xXip7eObMe0F82L7ob3ChQ4I7uwOZopiA8Xu4PYnmw8Ckk
+         UuhHVyDKM8KSbJHdh5luvuoVJndxvvC/Qg+9DAo6RCa72V1sip0dPMprMkFMl3gMkeRU
+         HoKZydQ38GVXfNp24hbEVUExH+56WLUHhYG/GfS9lTBpEDSUUR+vVbWZCZGkKKTNnjsX
+         r1tw==
+X-Gm-Message-State: AOAM531omQBlAj2clZbA31p2RCCt4vbVEzUhcOwpiNR6DM6KFYqOexTY
+        WdBIukUBOS+dIQdCy8S7d6UHDw==
+X-Google-Smtp-Source: ABdhPJwxPCgfe1d9RL6DJe+Y0zkjVBMr4lb7rkRtuUFFb0r32JCOYEif1YCU3faXZm8FzGhQbhECkA==
+X-Received: by 2002:ac2:41cb:: with SMTP id d11mr1749831lfi.10.1643969823445;
+        Fri, 04 Feb 2022 02:17:03 -0800 (PST)
+Received: from localhost.localdomain (h-155-4-129-21.NA.cust.bahnhof.se. [155.4.129.21])
+        by smtp.gmail.com with ESMTPSA id u4sm245855lfg.239.2022.02.04.02.17.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Feb 2022 02:17:02 -0800 (PST)
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 4 Feb 2022 10:43:54 +0100
-Message-ID: <CAPDyKFqsvF=Pm-vMXSUwPMPnjCr7nSYuy5AH+8rwLYm_NUPKww@mail.gmail.com>
-Subject: Re: [PATCH] PM: domains: Prevent power off for parent unless child is
- in deepest state
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        Kevin Hilman <khilman@kernel.org>,
+To:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
+Cc:     Kevin Hilman <khilman@kernel.org>,
         Alexandre Torgue <alexandre.torgue@foss.st.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
+        Dmitry Osipenko <digetx@gmail.com>,
         Rajendra Nayak <rnayak@codeaurora.org>,
         Dong Aisheng <aisheng.dong@nxp.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: [PATCH v2] PM: domains: Prevent power off for parent unless child is in deepest state
+Date:   Fri,  4 Feb 2022 11:16:57 +0100
+Message-Id: <20220204101657.233723-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 31 Jan 2022 at 19:29, Dmitry Osipenko <digetx@gmail.com> wrote:
->
-> 31.01.2022 14:37, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > A PM domain managed by genpd may support multiple idlestates. During
-> > genpd_power_off() a genpd governor may be asked to select one of the
-> > idlestates based upon the dev PM QoS constraints, for example.
-> >
-> > However, there is a problem with the behaviour around this in genpd. Mo=
-re
-> > precisely, a parent-domain is allowed to be powered off, no matter of w=
-hat
-> > idlestate that has been selected for the child-domain.
-> >
-> > So far, we have not received any reports about errors, possibly because
-> > there might not be platform with this hierarchical configuration, yet.
-> > Nevertheless, it seems reasonable to change the behaviour into preventi=
-ng
-> > the parent-domain from being powered off, unless the deepest idlestate =
-has
-> > been selected for the child-domain, so let's do that.
-> >
-> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > ---
-> >  drivers/base/power/domain.c | 18 ++++++++++++++++++
-> >  1 file changed, 18 insertions(+)
-> >
-> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> > index 5db704f02e71..7f97c5cabdc2 100644
-> > --- a/drivers/base/power/domain.c
-> > +++ b/drivers/base/power/domain.c
-> > @@ -636,6 +636,17 @@ static int genpd_power_off(struct generic_pm_domai=
-n *genpd, bool one_dev_on,
-> >                       atomic_read(&genpd->sd_count) > 0)
-> >               return -EBUSY;
-> >
-> > +     /*
-> > +      * The children must be in their deepest states to allow the pare=
-nt to
-> > +      * be powered off. Note that, there's no need for additional lock=
-ing, as
-> > +      * powering on a child, requires the parent's lock to be acquired=
- first.
-> > +      */
-> > +     list_for_each_entry(link, &genpd->parent_links, parent_node) {
-> > +             struct generic_pm_domain *child =3D link->child;
-> > +             if (child->state_idx < child->state_count - 1)
-> > +                     return -EBUSY;
-> > +     }
-> > +
-> >       list_for_each_entry(pdd, &genpd->dev_list, list_node) {
-> >               enum pm_qos_flags_status stat;
-> >
-> > @@ -1073,6 +1084,13 @@ static void genpd_sync_power_off(struct generic_=
-pm_domain *genpd, bool use_lock,
-> >           || atomic_read(&genpd->sd_count) > 0)
-> >               return;
-> >
-> > +     /* Check that the children are in their deepest state. */
-> > +     list_for_each_entry(link, &genpd->parent_links, parent_node) {
-> > +             struct generic_pm_domain *child =3D link->child;
-> > +             if (child->state_idx < child->state_count - 1)
-> > +                     return;
-> > +     }
-> > +
-> >       /* Choose the deepest state when suspending */
-> >       genpd->state_idx =3D genpd->state_count - 1;
-> >       if (_genpd_power_off(genpd, false))
->
-> Hello Ulf,
+A PM domain managed by genpd may support multiple idlestates. During
+genpd_power_off() a genpd governor may be asked to select one of the
+idlestates based upon the dev PM QoS constraints, for example.
 
-Hi Dmitry,
+However, there is a problem with the behaviour around this in genpd. More
+precisely, a parent-domain is allowed to be powered off, no matter of what
+idlestate that has been selected for the child-domain.
 
->
-> Is this needed by a concrete SoC? It needs to be clarified in the commit
-> message, otherwise looks like this patch wasn't tested and it's unclear
-> whether this change is really needed.
+So far, we have not received any reports about errors from the current
+behaviour. However, there is an STMicro platform that is being worked on,
+which can't cope with this. Therefore, let's change genpd to prevent the
+parent- domain from being powered off, unless the deepest idlestate has
+been selected for the child-domain.
 
-It's needed on a STMicro SoC that I have been working on. However,
-it's difficult for me to test on that platform, as some SoC specific
-pieces are missing upstream (the power domain deployment in
-particular). Anyway, let me add some information about this in the
-commit log for the next version.
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
 
-When it comes to testing, I am using a couple of local test dummy
-drivers. One that manages devices that gets attached to a genpd,
-mostly to execute runtime PM and dev PM QoS calls - and another that
-manages the PM domains with genpd. I have been thinking of a way to
-share these "tools" to let other people use them for testing too, but
-I haven't just got to it yet.
+Changes in v2:
+	- Clarified the commit message
 
-Besides the above, do you see any issues from Nvidia platforms point
-of view with $subject patch?
+---
+ drivers/base/power/domain.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-Kind regards
-Uffe
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index 5db704f02e71..7f97c5cabdc2 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -636,6 +636,17 @@ static int genpd_power_off(struct generic_pm_domain *genpd, bool one_dev_on,
+ 			atomic_read(&genpd->sd_count) > 0)
+ 		return -EBUSY;
+ 
++	/*
++	 * The children must be in their deepest states to allow the parent to
++	 * be powered off. Note that, there's no need for additional locking, as
++	 * powering on a child, requires the parent's lock to be acquired first.
++	 */
++	list_for_each_entry(link, &genpd->parent_links, parent_node) {
++		struct generic_pm_domain *child = link->child;
++		if (child->state_idx < child->state_count - 1)
++			return -EBUSY;
++	}
++
+ 	list_for_each_entry(pdd, &genpd->dev_list, list_node) {
+ 		enum pm_qos_flags_status stat;
+ 
+@@ -1073,6 +1084,13 @@ static void genpd_sync_power_off(struct generic_pm_domain *genpd, bool use_lock,
+ 	    || atomic_read(&genpd->sd_count) > 0)
+ 		return;
+ 
++	/* Check that the children are in their deepest state. */
++	list_for_each_entry(link, &genpd->parent_links, parent_node) {
++		struct generic_pm_domain *child = link->child;
++		if (child->state_idx < child->state_count - 1)
++			return;
++	}
++
+ 	/* Choose the deepest state when suspending */
+ 	genpd->state_idx = genpd->state_count - 1;
+ 	if (_genpd_power_off(genpd, false))
+-- 
+2.25.1
+
