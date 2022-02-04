@@ -2,178 +2,233 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 131FF4A9595
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Feb 2022 09:52:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62EE64A96D8
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Feb 2022 10:32:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357222AbiBDIwW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Feb 2022 03:52:22 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:36852
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1357209AbiBDIwQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Feb 2022 03:52:16 -0500
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 93CEF40326
-        for <linux-pm@vger.kernel.org>; Fri,  4 Feb 2022 08:52:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643964734;
-        bh=iqZrLHxxMKYXcwDk+JH/xBRKoG0uPSeGw2pYz3/v6kY=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=TfcFge227DkvHqmguJL3GjRvNS4JUZe4tZ0vUXbNTOp9bXawP0HIxL5SOuwO94SNH
-         LCu9lyWNkoXMJerP6A88IHg6f4EwSd5yJKXNnFYjuf1XCZIgDOUe3kMn/yovzZPmSj
-         k3Ku3f8a0EhBw8mRv1nVPgz+FmB7PtxT2dZBe7JaHvmNMun+lSYqQWuz6lO0VUogYF
-         iCSEH37TwdcMui+iwQ1B2HcvzPI/mZjonzVP4BQiiPiobmXyaMkp2UgUQyuGAmPyfB
-         Qdgv1sug9WAyByoNiWuVuVwgGAT+RX7EYWhCzpsrWSlriBC6wS0LDZm3nmDqoQAEmf
-         YgkKaQzqSlThw==
-Received: by mail-ej1-f69.google.com with SMTP id lb14-20020a170907784e00b006aa178894fcso2251468ejc.6
-        for <linux-pm@vger.kernel.org>; Fri, 04 Feb 2022 00:52:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=iqZrLHxxMKYXcwDk+JH/xBRKoG0uPSeGw2pYz3/v6kY=;
-        b=uZ09QBqheKS2LGtdwj367HmYZJAVQWTdiKcPXB2leTizdMh4r5/0zItepdVIZaaYrm
-         VmaOrlrvHDAaOtpnu1KJtSRhhBF8MmCRnh84s8bflIxaMvzoIii/QmiAXMwBrL1IPxVG
-         /DUex8aI+UQAMUCtYFnaysYVVPyO6FimPVf1REbUrusS4IAYDNCnqWjzj2H0Hz4ulKRk
-         ykKns0JeMgcPy3ICXa3YaFqKUCWlpFfQ8iMzBgTYpZaUo/gTqm3iNZZrMLyBu23tqYi0
-         cbPQJpE9gzdCauMvPT2+XDI3JxSf2x4wDAvl73M5oqFXHChvWmixNw7LNfcwTvCiRyPz
-         gkxA==
-X-Gm-Message-State: AOAM531WfrqJ/RG88DchYUQd7tdw5MXqcQ3T8Ld+h5j9+LeRLtYTaeJa
-        +ZGqR3AlzXPC9P5IY1V9aDGiDhDdgjwZyi/eWOyFviOQGppcAqH0NAlY81zL2LvJiQQmVvoT1E4
-        ZuJIDRCT9C0arToxmutxJhrh1WFZYRucw9OQ9
-X-Received: by 2002:a05:6402:3492:: with SMTP id v18mr1976622edc.345.1643964732793;
-        Fri, 04 Feb 2022 00:52:12 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwVcZDvspQCzKUyW5YG8zjDVQmYqY/DEAG3sfjKSfnQIzLHqmc3NlVf9LlkkFskfuUgLPJavA==
-X-Received: by 2002:a05:6402:3492:: with SMTP id v18mr1976597edc.345.1643964732578;
-        Fri, 04 Feb 2022 00:52:12 -0800 (PST)
-Received: from [192.168.0.81] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id z8sm418238ejc.197.2022.02.04.00.52.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Feb 2022 00:52:11 -0800 (PST)
-Message-ID: <ed615fdb-5c30-697e-f197-a3a93c5336b9@canonical.com>
-Date:   Fri, 4 Feb 2022 09:52:10 +0100
+        id S1357902AbiBDJcH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Feb 2022 04:32:07 -0500
+Received: from mga02.intel.com ([134.134.136.20]:30680 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1359152AbiBDJbl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 4 Feb 2022 04:31:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643967101; x=1675503101;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=5EL1VBYApL9UypzAY486rLPxoexZxlq9oTOM2BiBcj0=;
+  b=bajtKzCn+LJg2N3z+hvN+ni0QeXs+jVs1Bbyb2DEMGoC4E1EsnJC4sn2
+   hwxyMDA6eSO6PFRsSxZJ5ihljXE41/RbHf/CfmgXdfl/pAdlDYWEB73jK
+   3aFSFssaXlJFkoELupubcV/Md0NsrTYE9MP+KzjJp6Kihv91NvTJ2J/ZL
+   Ot4orORQMaoCsr6i/M74lsAvTtq7TJCZ91QpnU4BJhDvJKH50+TwpFKPb
+   spSPXXG/A/U7SR03bhk62oYspo2FPHAJmVMVqhOz29hxsouuBiQ13/BZA
+   Gly1U1BXgLkv1TfB3liDJJl85kfMArEU0omhTL2yvMnN4TrcXpp07vvYf
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="235738767"
+X-IronPort-AV: E=Sophos;i="5.88,342,1635231600"; 
+   d="scan'208";a="235738767"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 01:26:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,342,1635231600"; 
+   d="scan'208";a="524254454"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 04 Feb 2022 01:26:13 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nFur7-000XQG-4e; Fri, 04 Feb 2022 09:26:13 +0000
+Date:   Fri, 04 Feb 2022 17:25:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 119d56b735c4f42a805657c0b9b5982e58f41929
+Message-ID: <61fcf124.z6Ri5a/JbVZn2kR4%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] HPE BMC GXP SUPPORT
-Content-Language: en-US
-To:     "Verdun, Jean-Marie" <verdun@hpe.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Hawkins, Nick" <nick.hawkins@hpe.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Corey Minyard <minyard@acm.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        SoC Team <soc@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Hao Fang <fanghao11@huawei.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Wang Kefeng <wangkefeng.wang@huawei.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        "openipmi-developer@lists.sourceforge.net" 
-        <openipmi-developer@lists.sourceforge.net>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        netdev <netdev@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-References: <nick.hawkins@hpe.com>
- <20220202165315.18282-1-nick.hawkins@hpe.com>
- <CAL_Jsq+K2t5WYE056so1iZgZr7CBKvDEjAwnJVTyUFQcK-VFSA@mail.gmail.com>
- <e79133f2-f872-3ed6-4038-526e94e84909@canonical.com>
- <1FEAAC19-1DD7-40D7-98FD-30C2659E7C0F@hpe.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <1FEAAC19-1DD7-40D7-98FD-30C2659E7C0F@hpe.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03/02/2022 18:07, Verdun, Jean-Marie wrote:
-> 
->    > Maybe it does not look like, but this is actually a v2. Nick was asked
->    > to change the naming for the nodes already in v1. Unfortunately it did
->    > not happen, so we have vuart, spifi, vic and more.
-> 
->    > It is a waste of reviewers' time to ask them to perform the same review
->    > twice or to ignore their comments.
-> 
->     Hi Krysztof,
-> 
->     Accept our apologies if you think you lose your time, it is clearly not our
->     intent. 
-> 
->     This is the first time that we (I mean the team) introduce a new arch into
->     the linux kernel and I must admit that we had hard time to understand
->     from which angle we needed to start.
-> 
->     I will probably write a Documentation afterward, as it is easy to find doc
->     on how to introduce a patch or a driver, but not when you want to 
->     introduce a new chip. 
-> 
->     We are trying to do our best, and clearly want to follow all of your inputs.
->     Mistakes happen and they are clearly not intentional and not driven in 
->     a way to make you lose your time.
-> 
->     Helping others, and teaching something new is definitely a way to 
->     optimize your time and this is what you are currently doing with us.
-> 
->     We appreciate it and hope you will too.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 119d56b735c4f42a805657c0b9b5982e58f41929  Merge branch 'thermal-hfi' into bleeding-edge
 
-I understand, I also maybe over-reacted on this. Just please go through
-the comments you got for first submission and either apply them or
-respond why you disagree.
+possible Warning in current branch (please contact us if interested):
 
-The next submissions (patchset split into several commits) should be a
-v3, preferably with cover letter (git format-patch --cover-letter -v3
-...) where you can document also changes you did to the patchset.
+drivers/thermal/qcom/../thermal_netlink.h:113:71: warning: 'struct cpu_capability' declared inside parameter list will not be visible outside of this definition or declaration
+drivers/thermal/qcom/../thermal_netlink.h:113:71: warning: declaration of 'struct cpu_capability' will not be visible outside of this function [-Wvisibility]
+drivers/thermal/samsung/../thermal_netlink.h:113:71: warning: 'struct cpu_capability' declared inside parameter list will not be visible outside of this definition or declaration
+drivers/thermal/samsung/../thermal_netlink.h:113:71: warning: declaration of 'struct cpu_capability' will not be visible outside of this function [-Wvisibility]
+drivers/thermal/st/../thermal_netlink.h:113:71: warning: 'struct cpu_capability' declared inside parameter list will not be visible outside of this definition or declaration
+drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: 'struct cpu_capability' declared inside parameter list will not be visible outside of this definition or declaration
+drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: declaration of 'struct cpu_capability' will not be visible outside of this function [-Wvisibility]
+drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'struct cpu_capability' will not be visible outside of this function [-Wvisibility]
 
-It looks for example like this:
-https://lore.kernel.org/linux-samsung-soc/31da451b-a36c-74fb-5667-d4193284c6cd@canonical.com/T/#mf98d2ac27a8481dc69dd110f9861c8318cade252
+Warning ids grouped by kconfigs:
 
-or like this (where changelogs are in each patch, although ordering is
-not correct because dt-bindings should be the first in the series):
-https://lore.kernel.org/all/20220103233948.198119-1-Mr.Bossman075@gmail.com/
+gcc_recent_errors
+|-- arc-randconfig-r043-20220130
+|   `-- drivers-thermal-samsung-..-thermal_netlink.h:warning:struct-cpu_capability-declared-inside-parameter-list-will-not-be-visible-outside-of-this-definition-or-declaration
+|-- arm-defconfig
+|   |-- drivers-thermal-samsung-..-thermal_netlink.h:warning:struct-cpu_capability-declared-inside-parameter-list-will-not-be-visible-outside-of-this-definition-or-declaration
+|   |-- drivers-thermal-st-..-thermal_netlink.h:warning:struct-cpu_capability-declared-inside-parameter-list-will-not-be-visible-outside-of-this-definition-or-declaration
+|   `-- drivers-thermal-tegra-..-thermal_netlink.h:warning:struct-cpu_capability-declared-inside-parameter-list-will-not-be-visible-outside-of-this-definition-or-declaration
+|-- arm64-defconfig
+|   |-- drivers-thermal-qcom-..-thermal_netlink.h:warning:struct-cpu_capability-declared-inside-parameter-list-will-not-be-visible-outside-of-this-definition-or-declaration
+|   |-- drivers-thermal-samsung-..-thermal_netlink.h:warning:struct-cpu_capability-declared-inside-parameter-list-will-not-be-visible-outside-of-this-definition-or-declaration
+|   `-- drivers-thermal-tegra-..-thermal_netlink.h:warning:struct-cpu_capability-declared-inside-parameter-list-will-not-be-visible-outside-of-this-definition-or-declaration
+|-- mips-buildonly-randconfig-r005-20220130
+|   `-- drivers-thermal-tegra-..-thermal_netlink.h:warning:struct-cpu_capability-declared-inside-parameter-list-will-not-be-visible-outside-of-this-definition-or-declaration
+|-- openrisc-randconfig-r012-20220131
+|   `-- drivers-thermal-tegra-..-thermal_netlink.h:warning:struct-cpu_capability-declared-inside-parameter-list-will-not-be-visible-outside-of-this-definition-or-declaration
+|-- openrisc-randconfig-r013-20220130
+|   `-- drivers-thermal-tegra-..-thermal_netlink.h:warning:struct-cpu_capability-declared-inside-parameter-list-will-not-be-visible-outside-of-this-definition-or-declaration
+|-- openrisc-randconfig-r026-20220131
+|   `-- drivers-thermal-tegra-..-thermal_netlink.h:warning:struct-cpu_capability-declared-inside-parameter-list-will-not-be-visible-outside-of-this-definition-or-declaration
+|-- openrisc-randconfig-r035-20220130
+|   `-- drivers-thermal-tegra-..-thermal_netlink.h:warning:struct-cpu_capability-declared-inside-parameter-list-will-not-be-visible-outside-of-this-definition-or-declaration
+|-- powerpc-buildonly-randconfig-r006-20220130
+|   `-- drivers-thermal-tegra-..-thermal_netlink.h:warning:struct-cpu_capability-declared-inside-parameter-list-will-not-be-visible-outside-of-this-definition-or-declaration
+`-- xtensa-randconfig-m031-20220131
+    `-- drivers-thermal-tegra-..-thermal_netlink.h:warning:struct-cpu_capability-declared-inside-parameter-list-will-not-be-visible-outside-of-this-definition-or-declaration
 
+clang_recent_errors
+|-- hexagon-buildonly-randconfig-r001-20220131
+|   `-- drivers-thermal-thermal_netlink.h:warning:declaration-of-struct-cpu_capability-will-not-be-visible-outside-of-this-function
+|-- hexagon-randconfig-r045-20220131
+|   `-- drivers-thermal-tegra-..-thermal_netlink.h:warning:declaration-of-struct-cpu_capability-will-not-be-visible-outside-of-this-function
+|-- riscv-buildonly-randconfig-r005-20220131
+|   `-- drivers-thermal-qcom-..-thermal_netlink.h:warning:declaration-of-struct-cpu_capability-will-not-be-visible-outside-of-this-function
+`-- riscv-randconfig-r001-20220130
+    |-- drivers-thermal-samsung-..-thermal_netlink.h:warning:declaration-of-struct-cpu_capability-will-not-be-visible-outside-of-this-function
+    `-- drivers-thermal-tegra-..-thermal_netlink.h:warning:declaration-of-struct-cpu_capability-will-not-be-visible-outside-of-this-function
 
-Best regards,
-Krzysztof
+elapsed time: 728m
+
+configs tested: 110
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm64                               defconfig
+arm64                            allyesconfig
+i386                 randconfig-c001-20220131
+arm                         assabet_defconfig
+mips                 decstation_r4k_defconfig
+m68k                          multi_defconfig
+powerpc                     mpc83xx_defconfig
+powerpc                     stx_gp3_defconfig
+openrisc                  or1klitex_defconfig
+xtensa                    smp_lx200_defconfig
+sh                            shmin_defconfig
+sh                           se7343_defconfig
+powerpc                     rainier_defconfig
+mips                    maltaup_xpa_defconfig
+openrisc                 simple_smp_defconfig
+arm                  randconfig-c002-20220130
+arm                  randconfig-c002-20220131
+ia64                                defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+m68k                                defconfig
+csky                                defconfig
+alpha                               defconfig
+nds32                               defconfig
+alpha                            allyesconfig
+nios2                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+parisc                              defconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+s390                             allyesconfig
+i386                             allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+sparc                            allyesconfig
+nds32                             allnoconfig
+nios2                               defconfig
+arc                              allyesconfig
+mips                             allmodconfig
+mips                             allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+powerpc                          allyesconfig
+i386                          randconfig-a003
+i386                          randconfig-a001
+i386                          randconfig-a005
+x86_64               randconfig-a004-20220131
+x86_64               randconfig-a003-20220131
+x86_64               randconfig-a001-20220131
+x86_64               randconfig-a006-20220131
+x86_64               randconfig-a005-20220131
+x86_64               randconfig-a002-20220131
+riscv                randconfig-r042-20220130
+arc                  randconfig-r043-20220130
+arc                  randconfig-r043-20220131
+s390                 randconfig-r044-20220130
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+x86_64                    rhel-8.3-kselftests
+x86_64                          rhel-8.3-func
+
+clang tested configs:
+arm                    vt8500_v6_v7_defconfig
+mips                          rm200_defconfig
+powerpc                   lite5200b_defconfig
+arm                             mxs_defconfig
+mips                          ath79_defconfig
+powerpc                     ppa8548_defconfig
+mips                        bcm63xx_defconfig
+riscv                             allnoconfig
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64               randconfig-a013-20220131
+x86_64               randconfig-a015-20220131
+x86_64               randconfig-a014-20220131
+x86_64               randconfig-a016-20220131
+x86_64               randconfig-a011-20220131
+x86_64               randconfig-a012-20220131
+i386                 randconfig-a013-20220131
+i386                 randconfig-a014-20220131
+i386                 randconfig-a012-20220131
+i386                 randconfig-a015-20220131
+i386                 randconfig-a016-20220131
+i386                 randconfig-a011-20220131
+s390                 randconfig-r044-20220131
+hexagon              randconfig-r045-20220130
+hexagon              randconfig-r045-20220131
+hexagon              randconfig-r041-20220130
+hexagon              randconfig-r041-20220131
+riscv                randconfig-r042-20220131
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
