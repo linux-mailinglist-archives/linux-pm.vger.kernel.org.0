@@ -2,97 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A3A44A9F03
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Feb 2022 19:29:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 421254A9F1C
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Feb 2022 19:35:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377511AbiBDS3M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Feb 2022 13:29:12 -0500
-Received: from mail-yb1-f170.google.com ([209.85.219.170]:34765 "EHLO
-        mail-yb1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377528AbiBDS3M (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Feb 2022 13:29:12 -0500
-Received: by mail-yb1-f170.google.com with SMTP id v186so21328242ybg.1;
-        Fri, 04 Feb 2022 10:29:12 -0800 (PST)
+        id S1377594AbiBDSfj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Feb 2022 13:35:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47722 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377562AbiBDSfh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Feb 2022 13:35:37 -0500
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAFF2C061744
+        for <linux-pm@vger.kernel.org>; Fri,  4 Feb 2022 10:35:36 -0800 (PST)
+Received: by mail-oi1-x229.google.com with SMTP id t199so9455033oie.10
+        for <linux-pm@vger.kernel.org>; Fri, 04 Feb 2022 10:35:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=+YeDXrSaTsKwJr5hwLf03qpBrP3hJgVmDGEXVBjwbhI=;
+        b=PlZFAsHZLMruSJWk1AWXmQ+99gk5cBjkuT3quRp1oYR9aG1UGnZRj0+bpQyjdEk4Yl
+         EWhxJtzfj20YkkxVCdgBrGNgE4GLN7PtvAuYvZxvR3aecqH5FWgreQBKJc8iiLTYEi2Z
+         nhOHAhBcCh0FyCAKU3uKbB/tArrpH4DM2wnaUthU4ZuUi/OWgrTHt9J0oG/dQjXnYvM5
+         dmibNKHl4SA4/QbRuvXF16CXHBQOM3rW0CWNkb1uDNSCIr5wJCnM6HdP86kFoFhp+5iB
+         uL7qD2MSqSqkAqiCuopRag+owLL55ShjaAcInERKGCnXnyAsNfQOJPSlQlQvomKY8nQU
+         AOWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RqAWQmdoXqG0G2kwAD2e7NWcP4SlcibKebTgmg5BUJc=;
-        b=Zm0l3IjTqEukeY0o6/T/SCAclek8V7MpbzXEgHBxNfVmP9rwFqvdx627TIXjpCruiE
-         m/1QHVfd1fgqd+QPfMu9QRmlBtFSdmLh0aQg8PdYe4p7ZDz5QOCNxXMvU+93p7JdW16b
-         w2KbtrqkJoIDeew/mth4VNcflmc9ZuTwVwtT+a/v/blzD81UQxpILMB5OVNUXUbb7dLW
-         FCFMHos7UF0M1LytcEJRSMmrDBNOOT8LeKJ1vXLUQMVXHF2RvLzuVVGkQE3aS//LkURs
-         8ajgCeMM0YPgE2zaAiBEzSsw3gWFofCsHBqGmYzHKSSE8feDi87+KrJGnprOM1WUxIlS
-         BObg==
-X-Gm-Message-State: AOAM533x6bw69EUBzGSmJapiBfGPDZOIkySNE+lWgQl7I6uzpUMHNxUp
-        DTpCPIOyU0ae/sMbtNOijCuqz+VsIfrPK54WvNI=
-X-Google-Smtp-Source: ABdhPJyj2XCqxLQigrO1h5Vv11Xf5spz6I7/vWZ0+MeoMysgAe/P23JU+jJp4PS9LwunFtvqgdIoJsFzwaMZadnFT94=
-X-Received: by 2002:a25:180a:: with SMTP id 10mr492538yby.552.1643999351652;
- Fri, 04 Feb 2022 10:29:11 -0800 (PST)
-MIME-Version: 1.0
-References: <20220123183925.1052919-1-yury.norov@gmail.com> <20220123183925.1052919-4-yury.norov@gmail.com>
-In-Reply-To: <20220123183925.1052919-4-yury.norov@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 4 Feb 2022 19:29:00 +0100
-Message-ID: <CAJZ5v0j+LS_0jaZwvze_8ar2n1R1FYqx0w_nM89SySg7oExi6A@mail.gmail.com>
-Subject: Re: [PATCH 03/54] thermal/intel: don't use bitmap_weight() in end_power_clamp()
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        David Laight <David.Laight@aculab.com>,
-        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=+YeDXrSaTsKwJr5hwLf03qpBrP3hJgVmDGEXVBjwbhI=;
+        b=ZFIJq52N5wdoyGr7kFRNNl+sFjhFURqn74hSvPd3KLvOluNBRyMqrnJNhOADrvEl7X
+         RiejFxqFw6k965S/hqgdMLte/bIIyq6YocJhmnADEYIzSldGO27St80TNrQuF7oLjWhJ
+         L5x0uvGolHUMgZhRnm5JnBy62mmk3RmS45fvcTuqjlxNA6AuyeIWEkszmCFLHo0GGWNC
+         Bq+me2gK8gW0oHMnwm/mUxDcBpgR3E9lBsk49LBrrr/ysazrSXXSEZ01+5DIpjY8WD/n
+         AmiyGq/G7dRNKi2vQycZCfFPpcBDNSiOIENgco6Vq12l30awPVTOvNNnCUUgvJJNfbwt
+         jbKA==
+X-Gm-Message-State: AOAM5309d5kcKPuRSWKfSbB8PPuboamRJHpi1PkG+QKZUKEj6jLmCI9X
+        fD7g0/ILihvMt4TXQGY2CqOmCw==
+X-Google-Smtp-Source: ABdhPJwetBAy+jRJO/nh7qxpk2M6EUaaEjGE8HhDLGzjXVOKLj4Yu4nQDAGoJDbGBFGIxk+LR5kCKQ==
+X-Received: by 2002:aca:a891:: with SMTP id r139mr2017231oie.337.1643999736169;
+        Fri, 04 Feb 2022 10:35:36 -0800 (PST)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id 100sm1044182oth.75.2022.02.04.10.35.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Feb 2022 10:35:35 -0800 (PST)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Andy Gross <agross@kernel.org>, linux-pm@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH v3 0/4] qcom_scm: Add support for MC boot address API
+Date:   Fri,  4 Feb 2022 12:35:24 -0600
+Message-Id: <164399969245.3386915.4570233686283734930.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20211201130505.257379-1-stephan@gerhold.net>
+References: <20211201130505.257379-1-stephan@gerhold.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Jan 23, 2022 at 7:39 PM Yury Norov <yury.norov@gmail.com> wrote:
->
-> Don't call bitmap_weight() if the following code can get by
-> without it.
->
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> ---
->  drivers/thermal/intel/intel_powerclamp.c | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
-> index 14256421d98c..c841ab37e7c6 100644
-> --- a/drivers/thermal/intel/intel_powerclamp.c
-> +++ b/drivers/thermal/intel/intel_powerclamp.c
-> @@ -556,12 +556,9 @@ static void end_power_clamp(void)
->          * stop faster.
->          */
->         clamping = false;
-> -       if (bitmap_weight(cpu_clamping_mask, num_possible_cpus())) {
-> -               for_each_set_bit(i, cpu_clamping_mask, num_possible_cpus()) {
-> -                       pr_debug("clamping worker for cpu %d alive, destroy\n",
-> -                                i);
-> -                       stop_power_clamp_worker(i);
-> -               }
-> +       for_each_set_bit(i, cpu_clamping_mask, num_possible_cpus()) {
-> +               pr_debug("clamping worker for cpu %d alive, destroy\n", i);
-> +               stop_power_clamp_worker(i);
->         }
->  }
->
-> --
+On Wed, 1 Dec 2021 14:05:01 +0100, Stephan Gerhold wrote:
+> The "firmware: qcom: scm: Add support for MC boot address API" commit
+> was reverted again in 5.16 [1]. This is a new attempt to add it back
+> with much less potential build problems.
+> 
+> For that I first simplify the existing qcom_scm_set_cold/warm_boot_addr()
+> implementations. The idea is that cpu_logical_map(), MPIDR_AFFINITY_LEVEL()
+> etc are not needed if we just set the entry address for all CPUs.
+> Nothing in the mainline tree actually requires setting a different entry
+> address for one particular CPU and I cannot really think of a use case for this.
+> 
+> [...]
 
-Applied as 5.18 material, thanks!
+Applied, thanks!
+
+[1/4] cpuidle: qcom-spm: Check if any CPU is managed by SPM
+      commit: 0ee30ace67e425ab83a1673bf51f50b577328cf9
+[2/4] firmware: qcom: scm: Simplify set_cold/warm_boot_addr()
+      commit: 7734c4b507cefbcf2f7a2a806e79c43e52528c5f
+[3/4] firmware: qcom: scm: Drop cpumask parameter from set_boot_addr()
+      commit: 52beb1fc237d67cdc64277dc90047767a6fc52d7
+[4/4] firmware: qcom: scm: Add support for MC boot address API
+      commit: f60a317bcbea5c5b8923d6de6c7288850fdd83fb
+
+Best regards,
+-- 
+Bjorn Andersson <bjorn.andersson@linaro.org>
