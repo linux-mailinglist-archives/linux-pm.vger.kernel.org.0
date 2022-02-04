@@ -2,96 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83B154A9E6D
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Feb 2022 18:58:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A80ED4A9E7E
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Feb 2022 19:00:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377214AbiBDR6T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Feb 2022 12:58:19 -0500
-Received: from mail-yb1-f175.google.com ([209.85.219.175]:36486 "EHLO
-        mail-yb1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377200AbiBDR6T (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Feb 2022 12:58:19 -0500
-Received: by mail-yb1-f175.google.com with SMTP id c6so21050988ybk.3;
-        Fri, 04 Feb 2022 09:58:18 -0800 (PST)
+        id S1377223AbiBDSAe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Feb 2022 13:00:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39568 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346048AbiBDSAd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Feb 2022 13:00:33 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C7BC06173D
+        for <linux-pm@vger.kernel.org>; Fri,  4 Feb 2022 10:00:33 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id m185so62241iof.10
+        for <linux-pm@vger.kernel.org>; Fri, 04 Feb 2022 10:00:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=oQ3iVUBPEiq3dEjoofm8ahlbYpZKeb/5UkEVsQyFaMA=;
+        b=XAjC8Ar6cP/RehWU5blcKBOztQqKC0OTfm8hMXcFgRp1xeC1pRgkI6xqB0d0+aaDmD
+         dxBtBhTpCwTmRaiOzHQdK915f2zHVY/uyqKdzq9fEh06br6fIoSOkXiMFpwy0w69SE53
+         V+vzr7V1CQFFy4n5v5Mc9IlU7DS4pluPRIPWk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1KpgwQenVwyvbtZUfE0b3LoE53JfPaVnSYNKALVtwLc=;
-        b=ooW2cVNhF+vxk4CEQxUCHkKzvc48NDyLNIMwXe4X9eVe1Odb80zmfH7V7XXh1GNzUW
-         TyC1lizVvsP4l7VFILIra9G/e0qV+fU25oBR/7BpKGue9ZtXaIb9RLtPwx+Giwmpa334
-         l+mQ+cbnK5CovlT4/tXGkANCTCdkTxdRqeQfzNFQXqAoLd9sz1s9nM9j2COA9FQ+6ON/
-         uPZBWOb5nyiwpaItG4tzq2iNA9ZT+GRwt3K0j0pKwVP+VOLIMF68mm2gaoFdjdLINK5H
-         +a7fuMm8M88DhThiivvjJlYMjsYDmv5pV9HbeSC45thxzSf0K4bZQ7NRh5G5oljdTBQf
-         0tZg==
-X-Gm-Message-State: AOAM531EeMK2AFdlLAWvfkR4msj8n3rOAc16FoJI+CWHZYzn1+Wn/pmL
-        Z1qdcnyol9fNtvdDDU1JAjw/xPzNuupcaLQIIjZVr+zG
-X-Google-Smtp-Source: ABdhPJxkHT0jLVjwRfw3Vut+GrEEwcFXR/6dyjSGizn7GeepbfgHMQDG1ODgzkT6s/vm7sLkkMTM7+N05Lm4VWj3z7Q=
-X-Received: by 2002:a81:3744:: with SMTP id e65mr613498ywa.301.1643997498498;
- Fri, 04 Feb 2022 09:58:18 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=oQ3iVUBPEiq3dEjoofm8ahlbYpZKeb/5UkEVsQyFaMA=;
+        b=w++gb33Hs9EaPH8rFrBR67HZZkqbVbXSYn3Xo+iLekyDwZQ6t4mP/vOlSef91eSSc0
+         4CTZNMads3qiXdksRM+YzIAML4z+QGo8ouJYBDrwilP3aQq0fT9R9INPa7jLDVlmI5fi
+         +llKrAcNR1lx5POhophoV+cOXY5uXHS9YCSqfPO+EPsfAKYJeBvpURLG6EPdHujyZnfn
+         zHVRi2EIjH33c667CkMoteDfm/DuxQvbFAjB7J1eL5uWyUuyxs9o325uhHmcQ8smF+yD
+         eqRPYRiMin61BNeGjly3QwDxyGTBiM3StI8vUPyuIbHbAmEGuhdutRx6PnQkcmV4m4N3
+         D/uw==
+X-Gm-Message-State: AOAM532ElQn6UCjuwNZObeS8+uxEyvlRaa5Qs4THYN7+GC2IhUUBW25d
+        eC6WK2JG4xBp4FVszbPBfPGlLw==
+X-Google-Smtp-Source: ABdhPJyMO28cCglSDCVL0Gik32FW0XJvfm40Vv+l/zs4EOgoAJNXW0hJSUfmz03tLYlCoHDzR1yTNA==
+X-Received: by 2002:a5d:89c9:: with SMTP id a9mr131990iot.210.1643997633168;
+        Fri, 04 Feb 2022 10:00:33 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id h3sm1302097ilj.81.2022.02.04.10.00.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Feb 2022 10:00:32 -0800 (PST)
+Subject: Re: [GIT PULL] cpupower update for Linux 5.17-rc4
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <1fbd35ba-4921-9dcc-959d-ff8f7270d3a7@linuxfoundation.org>
+ <CAJZ5v0jUEQdETrx5G_PGzGc_rs48bozCXm1sNpio5fpDq6sBeQ@mail.gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <defca3e7-2315-7515-8a0c-3c1393aa09c6@linuxfoundation.org>
+Date:   Fri, 4 Feb 2022 11:00:32 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-References: <20220126014853.2915981-1-jiasheng@iscas.ac.cn>
-In-Reply-To: <20220126014853.2915981-1-jiasheng@iscas.ac.cn>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 4 Feb 2022 18:58:07 +0100
-Message-ID: <CAJZ5v0igZFKcPojJyLkcn=aTVhyznENwLEbfzK7XvrrVrGu_vg@mail.gmail.com>
-Subject: Re: [PATCH v3] thermal/int340x_thermal: Check for null pointer after
- calling kmemdup
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAJZ5v0jUEQdETrx5G_PGzGc_rs48bozCXm1sNpio5fpDq6sBeQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 2:49 AM Jiasheng Jiang <jiasheng@iscas.ac.cn> wrote:
->
-> As the potential failure of the allocation, kmemdup() may return NULL
-> pointer.
-> Then the 'bin_attr_data_vault.private' will be NULL pointer but the
-> 'bin_attr_data_vault.size' is not 0.
-> Therefore, it should be better to check the return value of kmemdup() to
-> avoid the wrong size.
-> And since the error handling process is simple, it may not use the
-> 'goto' to simplify the code.
->
-> Fixes: 0ba13c763aac ("thermal/int340x_thermal: Export GDDV")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
-> Changelog
->
-> v1 -> v2
->
-> * Change 1. Use out_kfree to simplify the code.
->
-> v2 -> v3
->
-> * Change 1. Revert the code to v1 and refine the commit message.
-> ---
->  drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> index 8502b7d8df89..52ac3ee54309 100644
-> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> @@ -464,6 +464,11 @@ static void int3400_setup_gddv(struct int3400_thermal_priv *priv)
->         priv->data_vault = kmemdup(obj->package.elements[0].buffer.pointer,
->                                    obj->package.elements[0].buffer.length,
->                                    GFP_KERNEL);
-> +       if (!priv->data_vault) {
-> +               kfree(buffer.pointer);
-> +               return;
-> +       }
-> +
->         bin_attr_data_vault.private = priv->data_vault;
->         bin_attr_data_vault.size = obj->package.elements[0].buffer.length;
->         kfree(buffer.pointer);
-> --
+On 2/4/22 10:06 AM, Rafael J. Wysocki wrote:
+> On Tue, Feb 1, 2022 at 10:22 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+>>
+>> Hi Rafael,
+>>
+>> Please pull the following cpupower update for Linux 5.17-rc4 or to be
+>> included in your next pull request to Linus.
+>>
+>> This cpupower update for Linux 5.17-rc4 consists of minor typo fix
+>> and renaming of file TODO to match the kernel naming convention.
+>>
+>> diff is attached.
+> 
+> Thanks, pulled, but is there any particular reason why this needs to
+> go into 5.17-rc?  It looks like it can wait for the 5.18 merge window
+> just fine.
+> 
 
-Applied as 5.18 material with some edits in the subject and changelog, thanks!
+They can wait. Nothing urgent. That's what I meant to say - "to be included
+in your next pull request to Linus."
+
+It wasn't very clear as I read it now :)
+
+thanks,
+-- Shuah
+
