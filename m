@@ -2,299 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D35274A9E84
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Feb 2022 19:01:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E6604A9EA4
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Feb 2022 19:08:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236832AbiBDSBN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Feb 2022 13:01:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39750 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377297AbiBDSBM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Feb 2022 13:01:12 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F0FC061714
-        for <linux-pm@vger.kernel.org>; Fri,  4 Feb 2022 10:01:12 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id i30so5741066pfk.8
-        for <linux-pm@vger.kernel.org>; Fri, 04 Feb 2022 10:01:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=lVXhFQturG0qA2l+H8bkOCeCPmMjt/R4IDlJBWnCOUg=;
-        b=nX57dLahC17NnXLTLssATrFrtVGihr52q9hqyFciT5zZjv7ghNFBtKyoEfyxlfiNKy
-         b63iR3/Wl+znL30Wh236G6a7q8HXCYmXthj5hPdNhpQQEC81fZQQ9LmeSxkTlXjRz2B9
-         kGP/r0A3W5Z4eD1fMmsk0CDUtHJWg23aDXqLI/K8zksfOM22rNcRI9klXwEGILc7Opg3
-         LtU1dSq9z9poynRS+NwuPrucxYqV01q/XLrNCeL7tfFqkVHt4Yhsyw8/HcSqNKFzT15V
-         skTkmrG4e6b+PfRa0inH9TaugjjOAE6BwAuj/I3sDAG58ifw7CbOjYuQrx61nh7opoMa
-         bCTg==
+        id S243752AbiBDSIJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Feb 2022 13:08:09 -0500
+Received: from mail-yb1-f175.google.com ([209.85.219.175]:37841 "EHLO
+        mail-yb1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231759AbiBDSII (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Feb 2022 13:08:08 -0500
+Received: by mail-yb1-f175.google.com with SMTP id v190so4871265ybv.4;
+        Fri, 04 Feb 2022 10:08:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=lVXhFQturG0qA2l+H8bkOCeCPmMjt/R4IDlJBWnCOUg=;
-        b=ZaeLKPBu3ZBCzl3Qg1KIO6zB7QXHfeI586no4B2KxHSSMA7hxpe/TPyEM5e7jsbf9F
-         tAvcWS5R4zPHnDNo7aR3Tj1hHXEI4PptfjCPXCek34yc1oSWvj0i5oRCEfmVx7oQXvBT
-         lBvHCn2nER0jpUvJ2OxP/xZyIWl14Ej/mcjP4S/gyo6LHjF1jRa3WQkobOGCN2nCgANC
-         f1Td9i6Dyx7E//9ejqzASYA806PSPg8HEQOPs5bdzj6eOQn9OZ0m5SbrxG8PQEEoKkjA
-         oO33QwlEHJAmajv5V+glZqj67UIZqFwvA1qW00wM3s3Z5kH+lwMoJ7ZmQUaGQcFVUCPp
-         1KXA==
-X-Gm-Message-State: AOAM5309jQFClU4jEEOuhqfR4T3sy9OE1c2zepHEmhLKvDP+jupdmIRj
-        jeCSl0LKOqob/XQ3mLmUhvCsSw==
-X-Google-Smtp-Source: ABdhPJwducmVxqLiF9wUZgLmF3k0KYuYhJjrsIZz2AekpOhrE1M8SULHdLwoPGAsqrpf97Yltynw3w==
-X-Received: by 2002:a63:87c3:: with SMTP id i186mr128759pge.311.1643997672119;
-        Fri, 04 Feb 2022 10:01:12 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id f12sm2257672pgg.35.2022.02.04.10.01.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 10:01:11 -0800 (PST)
-Message-ID: <61fd69e7.1c69fb81.497b3.5f17@mx.google.com>
-Date:   Fri, 04 Feb 2022 10:01:11 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tzUcaIEImdF9ZfeiorQex0NTCKZ9P1s8gIbYQ0VJVoc=;
+        b=NsZqPZL8uJuFdoMjcUUp4iJgY6/VrG5x9EE3Jkjvcuy8Hr/SCjQsudMRKQ7tfX/bvL
+         eiX8D9u/QCN57l94RegmLWgz7JFWNtPuQ7DHyRl7y3hTQyod3YPTjyExBsFxUr2H4sXG
+         pjqGUZl89ERsrmIpxu5Tan51y/TWLLYRjicW6W+57eLVMqPG8+l9uB0ZGgrpIYQSFyVq
+         P63b4WpaxIfe0qXmyrWWsbf0n7mvdZSIasdwkGKTL93RmdTpDr9XAMEMi7fRS+OPoaN8
+         8UG9GnGjkK1ApGgCqszVjBezMgbFZ/8q5QgMugon4Xv54IdyUgxYz2Id/uqN9ogU7CjJ
+         IPnQ==
+X-Gm-Message-State: AOAM532PW08/SXIk5T5YNv4EdTw/MR3Qu6lM5jK5XoNo49tGX6/M/1Fv
+        3LtwBr+37Yk2exAiaibsn1/c4jhOz8wV64OfchQ=
+X-Google-Smtp-Source: ABdhPJxAL91eBAqtrWjpV0BxhH1GVXsDA1TEJzQEsTef4kYwIT1aeMckqA8/Ilmt7L0QE7gNfF0p6VX5/dD3DWxtceU=
+X-Received: by 2002:a25:7e81:: with SMTP id z123mr359595ybc.466.1643998088291;
+ Fri, 04 Feb 2022 10:08:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: acpi-5.17-rc3-15-g08615cb8c0e1
-X-Kernelci-Tree: pm
-X-Kernelci-Report-Type: build
-X-Kernelci-Branch: testing
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 41 warnings (acpi-5.17-rc3-15-g08615cb8c0e1)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <20220111155419.943980-1-Pierre.Gondois@arm.com>
+In-Reply-To: <20220111155419.943980-1-Pierre.Gondois@arm.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 4 Feb 2022 19:07:57 +0100
+Message-ID: <CAJZ5v0hqzsoANFVPJXqYM6ZL4Ad6rDh=+G0qKmnmKLtyvADwmg@mail.gmail.com>
+Subject: Re: [PATCH v2] cpufreq: CPPC: Fix performance/frequency conversion
+To:     Pierre Gondois <Pierre.Gondois@arm.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ionela Voinescu <Ionela.Voinescu@arm.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 41 warnings (acpi-5.17-rc3-=
-15-g08615cb8c0e1)
+On Tue, Jan 11, 2022 at 4:54 PM Pierre Gondois <Pierre.Gondois@arm.com> wrote:
+>
+> CPUfreq governors request CPU frequencies using information
+> on current CPU usage. The CPPC driver converts them to
+> performance requests. Frequency targets are computed as:
+>         target_freq = (util / cpu_capacity) * max_freq
+> target_freq is then clamped between [policy->min, policy->max].
+>
+> The CPPC driver converts performance values to frequencies
+> (and vice-versa) using cppc_cpufreq_perf_to_khz() and
+> cppc_cpufreq_khz_to_perf(). These functions both use two different
+> factors depending on the range of the input value. For
+> cppc_cpufreq_khz_to_perf():
+> - (NOMINAL_PERF / NOMINAL_FREQ) or
+> - (LOWEST_PERF / LOWEST_FREQ)
+> and for cppc_cpufreq_perf_to_khz():
+> - (NOMINAL_FREQ / NOMINAL_PERF) or
+> - ((NOMINAL_PERF - LOWEST_FREQ) / (NOMINAL_PERF - LOWEST_PERF))
+>
+> This means:
+> 1- the functions are not inverse for some values:
+>    (perf_to_khz(khz_to_perf(x)) != x)
+> 2- cppc_cpufreq_perf_to_khz(LOWEST_PERF) can sometimes give
+>    a different value from LOWEST_FREQ due to integer approximation
+> 3- it is implied that performance and frequency are proportional
+>    (NOMINAL_FREQ / NOMINAL_PERF) == (LOWEST_PERF / LOWEST_FREQ)
+>
+> This patch changes the conversion functions to an affine function.
+> This fixes the 3 points above.
+>
+> Suggested-by: Lukasz Luba <lukasz.luba@arm.com>
+> Suggested-by: Morten Rasmussen <morten.rasmussen@arm.com>
+> Signed-off-by: Pierre Gondois <Pierre.Gondois@arm.com>
+> ---
+>  drivers/cpufreq/cppc_cpufreq.c | 43 +++++++++++++++++-----------------
+>  1 file changed, 21 insertions(+), 22 deletions(-)
+>
+> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> index db17196266e4..5024d9af2e6e 100644
+> --- a/drivers/cpufreq/cppc_cpufreq.c
+> +++ b/drivers/cpufreq/cppc_cpufreq.c
+> @@ -303,52 +303,48 @@ static u64 cppc_get_dmi_max_khz(void)
+>
+>  /*
+>   * If CPPC lowest_freq and nominal_freq registers are exposed then we can
+> - * use them to convert perf to freq and vice versa
+> - *
+> - * If the perf/freq point lies between Nominal and Lowest, we can treat
+> - * (Low perf, Low freq) and (Nom Perf, Nom freq) as 2D co-ordinates of a line
+> - * and extrapolate the rest
+> - * For perf/freq > Nominal, we use the ratio perf:freq at Nominal for conversion
+> + * use them to convert perf to freq and vice versa. The conversion is
+> + * extrapolated as an affine function passing by the 2 points:
+> + *  - (Low perf, Low freq)
+> + *  - (Nominal perf, Nominal perf)
+>   */
+>  static unsigned int cppc_cpufreq_perf_to_khz(struct cppc_cpudata *cpu_data,
+>                                              unsigned int perf)
+>  {
+>         struct cppc_perf_caps *caps = &cpu_data->perf_caps;
+> +       s64 retval, offset = 0;
+>         static u64 max_khz;
+>         u64 mul, div;
+>
+>         if (caps->lowest_freq && caps->nominal_freq) {
+> -               if (perf >= caps->nominal_perf) {
+> -                       mul = caps->nominal_freq;
+> -                       div = caps->nominal_perf;
+> -               } else {
+> -                       mul = caps->nominal_freq - caps->lowest_freq;
+> -                       div = caps->nominal_perf - caps->lowest_perf;
+> -               }
+> +               mul = caps->nominal_freq - caps->lowest_freq;
+> +               div = caps->nominal_perf - caps->lowest_perf;
+> +               offset = caps->nominal_freq - (u64)caps->nominal_perf * mul / div;
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/acp=
-i-5.17-rc3-15-g08615cb8c0e1/
+Since mult is a u64, the other operands need not be cast to u64
+explicitly AFAICS.
 
-Tree: pm
-Branch: testing
-Git Describe: acpi-5.17-rc3-15-g08615cb8c0e1
-Git Commit: 08615cb8c0e1deeca5489d672213fb205fa53c3b
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
+Moreover, it might be better to use div64_u64() instead of the plain
+integer division.
 
-Warnings Detected:
-
-arc:
-
-arm64:
-    defconfig (gcc-10): 17 warnings
-
-arm:
-    multi_v7_defconfig (gcc-10): 13 warnings
-
-i386:
-    i386_defconfig (gcc-10): 5 warnings
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-
-riscv:
-
-x86_64:
-    x86_64_defconfig (gcc-10): 5 warnings
-
-
-Warnings summary:
-
-    33   drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct=
- cpu_capability=E2=80=99 declared inside parameter list will not be visible=
- outside of this definition or declaration
-    3    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: =E2=80=
-=98struct cpu_capability=E2=80=99 declared inside parameter list will not b=
-e visible outside of this definition or declaration
-    2    drivers/thermal/samsung/../thermal_netlink.h:113:71: warning: =E2=
-=80=98struct cpu_capability=E2=80=99 declared inside parameter list will no=
-t be visible outside of this definition or declaration
-    1    drivers/thermal/st/../thermal_netlink.h:113:71: warning: =E2=80=98=
-struct cpu_capability=E2=80=99 declared inside parameter list will not be v=
-isible outside of this definition or declaration
-    1    drivers/thermal/qcom/../thermal_netlink.h:113:71: warning: =E2=80=
-=98struct cpu_capability=E2=80=99 declared inside parameter list will not b=
-e visible outside of this definition or declaration
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 17 warnings, 0 section =
-mismatches
-
-Warnings:
-    drivers/thermal/samsung/../thermal_netlink.h:113:71: warning: =E2=80=98=
-struct cpu_capability=E2=80=99 declared inside parameter list will not be v=
-isible outside of this definition or declaration
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-    drivers/thermal/qcom/../thermal_netlink.h:113:71: warning: =E2=80=98str=
-uct cpu_capability=E2=80=99 declared inside parameter list will not be visi=
-ble outside of this definition or declaration
-    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: =E2=80=98st=
-ruct cpu_capability=E2=80=99 declared inside parameter list will not be vis=
-ible outside of this definition or declaration
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 13 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    drivers/thermal/samsung/../thermal_netlink.h:113:71: warning: =E2=80=98=
-struct cpu_capability=E2=80=99 declared inside parameter list will not be v=
-isible outside of this definition or declaration
-    drivers/thermal/st/../thermal_netlink.h:113:71: warning: =E2=80=98struc=
-t cpu_capability=E2=80=99 declared inside parameter list will not be visibl=
-e outside of this definition or declaration
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: =E2=80=98st=
-ruct cpu_capability=E2=80=99 declared inside parameter list will not be vis=
-ible outside of this definition or declaration
-    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: =E2=80=98st=
-ruct cpu_capability=E2=80=99 declared inside parameter list will not be vis=
-ible outside of this definition or declaration
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
-capability=E2=80=99 declared inside parameter list will not be visible outs=
-ide of this definition or declaration
-
----
-For more info write to <info@kernelci.org>
+>         } else {
+>                 if (!max_khz)
+>                         max_khz = cppc_get_dmi_max_khz();
+>                 mul = max_khz;
+>                 div = caps->highest_perf;
+>         }
+> -       return (u64)perf * mul / div;
+> +
+> +       retval = offset + (u64)perf * mul / div;
+> +       if (retval >= 0)
+> +               return retval;
+> +       return 0;
+>  }
+>
+>  static unsigned int cppc_cpufreq_khz_to_perf(struct cppc_cpudata *cpu_data,
+>                                              unsigned int freq)
+>  {
+>         struct cppc_perf_caps *caps = &cpu_data->perf_caps;
+> +       s64 retval, offset = 0;
+>         static u64 max_khz;
+>         u64  mul, div;
+>
+>         if (caps->lowest_freq && caps->nominal_freq) {
+> -               if (freq >= caps->nominal_freq) {
+> -                       mul = caps->nominal_perf;
+> -                       div = caps->nominal_freq;
+> -               } else {
+> -                       mul = caps->lowest_perf;
+> -                       div = caps->lowest_freq;
+> -               }
+> +               mul = caps->nominal_perf - caps->lowest_perf;
+> +               div = caps->nominal_freq - caps->lowest_freq;
+> +               offset = caps->nominal_perf - (u64)caps->nominal_freq * mul / div;
+>         } else {
+>                 if (!max_khz)
+>                         max_khz = cppc_get_dmi_max_khz();
+> @@ -356,7 +352,10 @@ static unsigned int cppc_cpufreq_khz_to_perf(struct cppc_cpudata *cpu_data,
+>                 div = max_khz;
+>         }
+>
+> -       return (u64)freq * mul / div;
+> +       retval = offset + (u64)freq * mul / div;
+> +       if (retval >= 0)
+> +               return retval;
+> +       return 0;
+>  }
+>
+>  static int cppc_cpufreq_set_target(struct cpufreq_policy *policy,
+> --
+> 2.25.1
+>
