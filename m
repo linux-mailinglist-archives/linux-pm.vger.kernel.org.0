@@ -2,143 +2,209 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 338564A8F11
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Feb 2022 21:42:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB13A4A920D
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Feb 2022 02:35:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349482AbiBCUmH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Feb 2022 15:42:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59114 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242140AbiBCUjF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Feb 2022 15:39:05 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF79C061765;
-        Thu,  3 Feb 2022 12:36:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ED298B835A4;
-        Thu,  3 Feb 2022 20:36:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 999D2C36AE3;
-        Thu,  3 Feb 2022 20:36:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643920568;
-        bh=nBbcmC2clBtFUE4+r3jUl7e4KKEhA/7ys6t+U2NjNkU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G2oG9puqbN7GqimjoSjJmz0N7/wjTehrMqxEDL/h2i/EQ6ackG0sEUDZgpMXWzSCL
-         u3kZZoXAMTVW0jtWTZRod5IIMxbahokU4K2iamCtseooyXQHGEzRQRtPjCO8XNpbLC
-         ebjr5gYZHOW5jN5bVsy0reflmNEJxWAqQrNMvu6Rn0iVR6fxLWQGQ+1/h60wUaIi+E
-         LXrWXbcyF3V3taoKG04BuQ2lGZeWd8eHSUUfl7o7Ur6Xpb556U24c4b5I3W2jlUr5Y
-         DX0W11o1qBqbHXbvNGCsok97J+a1dhbaWV0kk9y0sq/hV/ioknabBUaf7eE3TFdqOR
-         hhN3FCFWzhoVQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Sasha Levin <sashal@kernel.org>, rafael@kernel.org,
-        len.brown@intel.com, pavel@ucw.cz, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 13/15] PM: hibernate: Remove register_nosave_region_late()
-Date:   Thu,  3 Feb 2022 15:35:43 -0500
-Message-Id: <20220203203545.3879-13-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220203203545.3879-1-sashal@kernel.org>
-References: <20220203203545.3879-1-sashal@kernel.org>
+        id S1356544AbiBDBfm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Feb 2022 20:35:42 -0500
+Received: from mailout2.samsung.com ([203.254.224.25]:20965 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238539AbiBDBfl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Feb 2022 20:35:41 -0500
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220204013541epoutp025259b93aa1ed38d61ca3435d56fa64b5~QcWSmiuSv0146201462epoutp02F
+        for <linux-pm@vger.kernel.org>; Fri,  4 Feb 2022 01:35:41 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220204013541epoutp025259b93aa1ed38d61ca3435d56fa64b5~QcWSmiuSv0146201462epoutp02F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1643938541;
+        bh=s5bBJJKpwvQaFDJJwqoqljzz6YIugD/evOylhy/zgB0=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=LNP9TDbDggVQ79MXofRzsxeXLjnMiJlESAZG6WuUGAytK5U9wmgzjxJppRe1E/p1C
+         gEgIcT+2gdi/DrFErG7yKH5laVw10QRCBqZglMjoWvyPZgpGmDHeEm7rL7OzW10knb
+         yOLl57sejNm9MwcOdwT2LCJve0BpHYaR6t4Q2lFo=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20220204013540epcas1p3d62fe2de665a4b3945364ce186fb5158~QcWSFMaFy2224722247epcas1p3J;
+        Fri,  4 Feb 2022 01:35:40 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.38.237]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4JqdQX6Xbyz4x9QP; Fri,  4 Feb
+        2022 01:35:32 +0000 (GMT)
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        41.E1.28648.3E28CF16; Fri,  4 Feb 2022 10:35:31 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220204013532epcas1p1bb7acbbf276dfc9ac3a955c242651979~QcWKZir6k1775217752epcas1p1P;
+        Fri,  4 Feb 2022 01:35:32 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220204013532epsmtrp133d52c0c2ecce46487ca71e1a3ec6b26~QcWKYlu0v2264322643epsmtrp1x;
+        Fri,  4 Feb 2022 01:35:32 +0000 (GMT)
+X-AuditID: b6c32a39-003ff70000006fe8-84-61fc82e34d9c
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        EF.F5.08738.4E28CF16; Fri,  4 Feb 2022 10:35:32 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220204013532epsmtip2e16bc88bf503f3247f61a38e43fac0d0~QcWKI4v3g0540205402epsmtip2A;
+        Fri,  4 Feb 2022 01:35:32 +0000 (GMT)
+Subject: Re: [PATCH v2 03/15] dt-bindings: devfreq: rk3399_dmc: Fix Hz units
+To:     Brian Norris <briannorris@chromium.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        Lin Huang <hl@rock-chips.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Derek Basehore <dbasehore@chromium.org>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        Heiko Stuebner <heiko@sntech.de>
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <e495b6f3-f772-0dd2-b9fb-27c179e57cfe@samsung.com>
+Date:   Fri, 4 Feb 2022 10:59:22 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
+        Thunderbird/59.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220127150615.v2.3.I9341269171c114d0e04e41d48037fd32816e2d8c@changeid>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrDJsWRmVeSWpSXmKPExsWy7bCmru7jpj+JBrsWWlts+vie1eLV5j1s
+        FvOPnGO1+P/oNavFjw2nmC3ONr1ht9j0+BqrxeVdc9gsPvceYbT49OA/s8XtxhVsFq17j7A7
+        8HjMbrjI4rFpVSebx+Yl9R5/Z+1n8ejbsorRY/u1ecwenzfJBbBHZdtkpCampBYppOYl56dk
+        5qXbKnkHxzvHm5oZGOoaWlqYKynkJeam2iq5+AToumXmAB2qpFCWmFMKFApILC5W0rezKcov
+        LUlVyMgvLrFVSi1IySkwLdArTswtLs1L18tLLbEyNDAwMgUqTMjOmLvvIGvBGfmK7Qv3sjQw
+        3pfoYuTkkBAwkdg58zpbFyMXh5DADkaJ5z/OMkM4nxglrs15zgjhfGaUWPN/KhtMy9/zjewQ
+        iV2MEl+Pr2OBcN4zSmxbd44JpEpYwEeidcMSsFkiAksZJSY9/wRWxSwwgUmid+0lFpAqNgEt
+        if0vboDN5RdQlLj64zEjiM0rYCex7twKdhCbRUBF4svEu6wgtqhAmMTJbS1QNYISJ2c+AZvD
+        KRAq8XPXWrDNzALiEreezIey5SW2v53DDHH3GQ6JlkcuXYwcQLaLxJSlwhBhYYlXx7ewQ9hS
+        Ei/728BekxBoZpRoeHGbEcLpYZQ4+qyPBaLKWGL/0slMIIOYBTQl1u/ShwgrSuz8PZcRYi+f
+        xLuvPawQu3glOtqEIEqUJS4/uMsEYUtKLG7vZJvAqDQLyTezkHwwC8kHsxCWLWBkWcUollpQ
+        nJueWmxYYAqP7+T83E2M4GSsZbmDcfrbD3qHGJk4GA8xSnAwK4nwZk/7nSjEm5JYWZValB9f
+        VJqTWnyI0RQYvhOZpUST84H5IK8k3tDE0sDEzMjYxMLQzFBJnHfVtNOJQgLpiSWp2ampBalF
+        MH1MHJxSDUxb7UPajPadPl3apqYiuseY+btBiMrM+1OuuopVPHcLrLLnOHHff4ugzy6rLfuO
+        fZq988JPjm1S7en6Qoy/LzZcmm4+t2DGknOMf1ICKl629zwo1OF3NWaeHFoiHnowt/PT8Xox
+        ZeF24dhZ11jcN7cX7ZFfX/vOgoE76V1UzYy4pfbxe1827V5y6sbOZTx/HlRe831y/rOz3Osr
+        Wg+VdS79ffUs6HldAn+lQ27h1RKFtwxiO5oPmRZ3aoQLtZ+I4k5kEbFxklx3y+/zRLOA0J9v
+        90VXmJuGdqywN9RM31d1XJr7pVeFoLiubeGMNOndJm9Zy1If8eyLmFo/yYVVXFg4M6XNkld9
+        QUqxRn+iEktxRqKhFnNRcSIAxGbBRE8EAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrKIsWRmVeSWpSXmKPExsWy7bCSvO6Tpj+JBvf+iVts+vie1eLV5j1s
+        FvOPnGO1+P/oNavFjw2nmC3ONr1ht9j0+BqrxeVdc9gsPvceYbT49OA/s8XtxhVsFq17j7A7
+        8HjMbrjI4rFpVSebx+Yl9R5/Z+1n8ejbsorRY/u1ecwenzfJBbBHcdmkpOZklqUW6dslcGXM
+        3XeQteCMfMX2hXtZGhjvS3QxcnJICJhI/D3fyA5iCwnsYJSY9i0eIi4pMe3iUeYuRg4gW1ji
+        8OHiLkYuoJK3jBL7tv9lBqkRFvCRaN2whBkkISKwlFHixI4WMIdZYAKTxIPVc6Cm3mOUmLBR
+        GMRmE9CS2P/iBhuIzS+gKHH1x2NGEJtXwE5i3bkVYPUsAioSXybeZQWxRQXCJHYuecwEUSMo
+        cXLmExYQm1MgVOLnrrVgcWYBdYk/8y4xQ9jiEreezIeKy0tsfzuHeQKj8Cwk7bOQtMxC0jIL
+        ScsCRpZVjJKpBcW56bnFhgVGeanlesWJucWleel6yfm5mxjBMamltYNxz6oPeocYmTgYDzFK
+        cDArifBmT/udKMSbklhZlVqUH19UmpNafIhRmoNFSZz3QtfJeCGB9MSS1OzU1ILUIpgsEwen
+        VAMTq8jOWFl7xrk+P853anYu/JQ2p+vw3f+uK6ZynfB8+KlZNSTU6rNC5BU1j1sOq/Vm6e42
+        mHV3j4wCv5oJs091+qvTr16dEBacvni2TMYrzunK2tET2jU0sx/Y8H66zmH3fIV5YEHurtal
+        GeLaqXzlt2awHlV+9mfS39N1P/UvBm2u/BPgI9u/fMvUR59VJghzp5jFxxx6oygn0HizwaxD
+        bLvE3Z5qZuUCncb80KYfPgeWcMQW8y3rcPgtz7Qk3LGJLYEtPnZzzAkJrpp3KXIZJRv3+HW9
+        /fHL5GGUQL7g+tg1VTt5eRkCWUuEH/+p+l+QVxdVktY83/W/wJzLV18kfsxROld591aodM/S
+        1UosxRmJhlrMRcWJAIP24J44AwAA
+X-CMS-MailID: 20220204013532epcas1p1bb7acbbf276dfc9ac3a955c242651979
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220127230838epcas1p407910e790cf0d4d3cf1e8f8905553b93
+References: <20220127230727.3369358-1-briannorris@chromium.org>
+        <CGME20220127230838epcas1p407910e790cf0d4d3cf1e8f8905553b93@epcas1p4.samsung.com>
+        <20220127150615.v2.3.I9341269171c114d0e04e41d48037fd32816e2d8c@changeid>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+On 1/28/22 8:07 AM, Brian Norris wrote:
+> The driver and all downstream device trees [1] are using Hz units, but
+> the document claims MHz. DRAM frequency for these systems can't possibly
+> exceed 2^32-1 Hz, so the choice of unit doesn't really matter than much.
+> 
+> Rather than add unnecessary risk in getting the units wrong, let's just
+> go with the unofficial convention and make the docs match reality.
+> 
+> A sub-1MHz frequency is extremely unlikely, so include a minimum in the
+> schema, to help catch anybody who might have believed this was MHz.
+> 
+> [1] And notably, also those trying to upstream them:
+> https://protect2.fireeye.com/v1/url?k=0a7de78e-55e6dec8-0a7c6cc1-0cc47a3003e8-4f0969a9fa7b496e&q=1&e=6129c5df-8bd2-4072-86ef-79b79b36ec89&u=https%3A%2F%2Flore.kernel.org%2Flkml%2F20210308233858.24741-3-daniel.lezcano%40linaro.org%2F
+> 
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
+> ---
+> 
+> (no changes since v1)
+> 
+>  .../bindings/devfreq/rk3399_dmc.yaml          | 24 +++++++++----------
+>  1 file changed, 12 insertions(+), 12 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/devfreq/rk3399_dmc.yaml b/Documentation/devicetree/bindings/devfreq/rk3399_dmc.yaml
+> index fd62a8cd62d5..8bb778df92ae 100644
+> --- a/Documentation/devicetree/bindings/devfreq/rk3399_dmc.yaml
+> +++ b/Documentation/devicetree/bindings/devfreq/rk3399_dmc.yaml
+> @@ -116,11 +116,11 @@ properties:
+>  
+>    rockchip,ddr3_odt_dis_freq:
+>      $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 1000000  # In case anyone thought this was MHz.
+>      description:
+>        When the DRAM type is DDR3, this parameter defines the ODT disable
+> -      frequency in MHz (Mega Hz). When the DDR frequency is less then
+> -      ddr3_odt_dis_freq, the ODT on the DRAM side and controller side are both
+> -      disabled.
+> +      frequency in Hz. When the DDR frequency is less then ddr3_odt_dis_freq,
+> +      the ODT on the DRAM side and controller side are both disabled.
+>  
+>    rockchip,ddr3_drv:
+>      deprecated: true
+> @@ -160,11 +160,11 @@ properties:
+>  
+>    rockchip,lpddr3_odt_dis_freq:
+>      $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 1000000  # In case anyone thought this was MHz.
+>      description:
+>        When the DRAM type is LPDDR3, this parameter defines then ODT disable
+> -      frequency in MHz (Mega Hz). When DDR frequency is less then
+> -      ddr3_odt_dis_freq, the ODT on the DRAM side and controller side are both
+> -      disabled.
+> +      frequency in Hz. When DDR frequency is less then ddr3_odt_dis_freq, the
+> +      ODT on the DRAM side and controller side are both disabled.
+>  
+>    rockchip,lpddr3_drv:
+>      deprecated: true
+> @@ -204,11 +204,11 @@ properties:
+>  
+>    rockchip,lpddr4_odt_dis_freq:
+>      $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 1000000  # In case anyone thought this was MHz.
+>      description:
+>        When the DRAM type is LPDDR4, this parameter defines the ODT disable
+> -      frequency in MHz (Mega Hz). When the DDR frequency is less then
+> -      ddr3_odt_dis_freq, the ODT on the DRAM side and controller side are both
+> -      disabled.
+> +      frequency in Hz. When the DDR frequency is less then ddr3_odt_dis_freq,
+> +      the ODT on the DRAM side and controller side are both disabled.
+>  
+>    rockchip,lpddr4_drv:
+>      deprecated: true
+> @@ -287,7 +287,7 @@ examples:
+>        rockchip,sr_mc_gate_idle = <0x3>;
+>        rockchip,srpd_lite_idle = <0x4>;
+>        rockchip,standby_idle = <0x2000>;
+> -      rockchip,ddr3_odt_dis_freq = <333>;
+> -      rockchip,lpddr3_odt_dis_freq = <333>;
+> -      rockchip,lpddr4_odt_dis_freq = <333>;
+> +      rockchip,ddr3_odt_dis_freq = <333000000>;
+> +      rockchip,lpddr3_odt_dis_freq = <333000000>;
+> +      rockchip,lpddr4_odt_dis_freq = <333000000>;
+>      };
+> 
 
-[ Upstream commit 33569ef3c754a82010f266b7b938a66a3ccf90a4 ]
+Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
 
-It is an unused wrapper forcing kmalloc allocation for registering
-nosave regions. Also, rename __register_nosave_region() to
-register_nosave_region() now that there is no need for disambiguation.
-
-Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
-Reviewed-by: Cezary Rojewski <cezary.rojewski@intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- include/linux/suspend.h | 11 +----------
- kernel/power/snapshot.c | 21 +++++++--------------
- 2 files changed, 8 insertions(+), 24 deletions(-)
-
-diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-index cd97d2c8840cc..44dd49cb2ea05 100644
---- a/include/linux/suspend.h
-+++ b/include/linux/suspend.h
-@@ -428,15 +428,7 @@ struct platform_hibernation_ops {
- 
- #ifdef CONFIG_HIBERNATION
- /* kernel/power/snapshot.c */
--extern void __register_nosave_region(unsigned long b, unsigned long e, int km);
--static inline void __init register_nosave_region(unsigned long b, unsigned long e)
--{
--	__register_nosave_region(b, e, 0);
--}
--static inline void __init register_nosave_region_late(unsigned long b, unsigned long e)
--{
--	__register_nosave_region(b, e, 1);
--}
-+extern void register_nosave_region(unsigned long b, unsigned long e);
- extern int swsusp_page_is_forbidden(struct page *);
- extern void swsusp_set_page_free(struct page *);
- extern void swsusp_unset_page_free(struct page *);
-@@ -453,7 +445,6 @@ extern struct pbe *restore_pblist;
- int pfn_is_nosave(unsigned long pfn);
- #else /* CONFIG_HIBERNATION */
- static inline void register_nosave_region(unsigned long b, unsigned long e) {}
--static inline void register_nosave_region_late(unsigned long b, unsigned long e) {}
- static inline int swsusp_page_is_forbidden(struct page *p) { return 0; }
- static inline void swsusp_set_page_free(struct page *p) {}
- static inline void swsusp_unset_page_free(struct page *p) {}
-diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-index d65f2d5ab6942..46455aa7951ec 100644
---- a/kernel/power/snapshot.c
-+++ b/kernel/power/snapshot.c
-@@ -945,8 +945,7 @@ static void memory_bm_recycle(struct memory_bitmap *bm)
-  * Register a range of page frames the contents of which should not be saved
-  * during hibernation (to be used in the early initialization code).
-  */
--void __init __register_nosave_region(unsigned long start_pfn,
--				     unsigned long end_pfn, int use_kmalloc)
-+void __init register_nosave_region(unsigned long start_pfn, unsigned long end_pfn)
- {
- 	struct nosave_region *region;
- 
-@@ -962,18 +961,12 @@ void __init __register_nosave_region(unsigned long start_pfn,
- 			goto Report;
- 		}
- 	}
--	if (use_kmalloc) {
--		/* During init, this shouldn't fail */
--		region = kmalloc(sizeof(struct nosave_region), GFP_KERNEL);
--		BUG_ON(!region);
--	} else {
--		/* This allocation cannot fail */
--		region = memblock_alloc(sizeof(struct nosave_region),
--					SMP_CACHE_BYTES);
--		if (!region)
--			panic("%s: Failed to allocate %zu bytes\n", __func__,
--			      sizeof(struct nosave_region));
--	}
-+	/* This allocation cannot fail */
-+	region = memblock_alloc(sizeof(struct nosave_region),
-+				SMP_CACHE_BYTES);
-+	if (!region)
-+		panic("%s: Failed to allocate %zu bytes\n", __func__,
-+		      sizeof(struct nosave_region));
- 	region->start_pfn = start_pfn;
- 	region->end_pfn = end_pfn;
- 	list_add_tail(&region->list, &nosave_regions);
 -- 
-2.34.1
-
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
