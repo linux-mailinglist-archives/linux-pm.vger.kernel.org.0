@@ -2,95 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E937E4A9EEE
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Feb 2022 19:25:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A3A44A9F03
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Feb 2022 19:29:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377514AbiBDSZk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Feb 2022 13:25:40 -0500
-Received: from mail-yb1-f176.google.com ([209.85.219.176]:41905 "EHLO
-        mail-yb1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377520AbiBDSZe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Feb 2022 13:25:34 -0500
-Received: by mail-yb1-f176.google.com with SMTP id g14so21145480ybs.8
-        for <linux-pm@vger.kernel.org>; Fri, 04 Feb 2022 10:25:33 -0800 (PST)
+        id S1377511AbiBDS3M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Feb 2022 13:29:12 -0500
+Received: from mail-yb1-f170.google.com ([209.85.219.170]:34765 "EHLO
+        mail-yb1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377528AbiBDS3M (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Feb 2022 13:29:12 -0500
+Received: by mail-yb1-f170.google.com with SMTP id v186so21328242ybg.1;
+        Fri, 04 Feb 2022 10:29:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=atWEyHSnUBVM1VPuCOanje1Np1yfQUZk0+Z/FrpuYk4=;
-        b=AS3LPO6eSkVZ1jbH5KiX6v1cfxwKE5FQUTzGFneJid2PYkhmO/nce3tyJD3uDRk25I
-         kJCsIb7EZ/kciwg2WW3ep61pUZp1fp/ziglnU5tzs2hO+5mI63Wpi6tteloilIE7K23w
-         oI3Hq383CimD/dNPhnkMMbiN7wpcnw0WGFq1D4Z9RY8WKvl6Rhw8TyFVi3HlJIf6gVad
-         oqoqqyq0YOGH46dVZohvb2lN2RTFNXMfdI8ss1QR/DRLmwffIXTlQ1lZxwCDBTxSSlhe
-         3UWIv0/aZyk9yf62E6r36go//d+HSKFlz5TyRHI0/lNekoRkA2PSfuTMRKq09rBRcLUe
-         OcSQ==
-X-Gm-Message-State: AOAM531+uv/xAPVkUBNW9KwlaDJ/oSVD0jmqCb6QGsodxTclEpkr05vT
-        5zQfD7rVUpHM6wI0Aj3x0KWYMKbQX2LZBC9xEZ3sSpEl
-X-Google-Smtp-Source: ABdhPJzkJyGSbHA33V6ivBzEIikzEopTd/nOS1/pXnVwSu3oqVtPk25yskDmwRAlQd5H96f7uPBKHhFSRb8GDCLx02g=
-X-Received: by 2002:a05:6902:54c:: with SMTP id z12mr440573ybs.624.1643999133509;
- Fri, 04 Feb 2022 10:25:33 -0800 (PST)
+        bh=RqAWQmdoXqG0G2kwAD2e7NWcP4SlcibKebTgmg5BUJc=;
+        b=Zm0l3IjTqEukeY0o6/T/SCAclek8V7MpbzXEgHBxNfVmP9rwFqvdx627TIXjpCruiE
+         m/1QHVfd1fgqd+QPfMu9QRmlBtFSdmLh0aQg8PdYe4p7ZDz5QOCNxXMvU+93p7JdW16b
+         w2KbtrqkJoIDeew/mth4VNcflmc9ZuTwVwtT+a/v/blzD81UQxpILMB5OVNUXUbb7dLW
+         FCFMHos7UF0M1LytcEJRSMmrDBNOOT8LeKJ1vXLUQMVXHF2RvLzuVVGkQE3aS//LkURs
+         8ajgCeMM0YPgE2zaAiBEzSsw3gWFofCsHBqGmYzHKSSE8feDi87+KrJGnprOM1WUxIlS
+         BObg==
+X-Gm-Message-State: AOAM533x6bw69EUBzGSmJapiBfGPDZOIkySNE+lWgQl7I6uzpUMHNxUp
+        DTpCPIOyU0ae/sMbtNOijCuqz+VsIfrPK54WvNI=
+X-Google-Smtp-Source: ABdhPJyj2XCqxLQigrO1h5Vv11Xf5spz6I7/vWZ0+MeoMysgAe/P23JU+jJp4PS9LwunFtvqgdIoJsFzwaMZadnFT94=
+X-Received: by 2002:a25:180a:: with SMTP id 10mr492538yby.552.1643999351652;
+ Fri, 04 Feb 2022 10:29:11 -0800 (PST)
 MIME-Version: 1.0
-References: <20220123124508.463305-1-haokexin@gmail.com>
-In-Reply-To: <20220123124508.463305-1-haokexin@gmail.com>
+References: <20220123183925.1052919-1-yury.norov@gmail.com> <20220123183925.1052919-4-yury.norov@gmail.com>
+In-Reply-To: <20220123183925.1052919-4-yury.norov@gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 4 Feb 2022 19:25:22 +0100
-Message-ID: <CAJZ5v0j0d4VwmwzZ1E+Qv28DLQDLLwAxZ3KGCZgOBrikWHpXbg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] cpufreq: Move to_gov_attr_set() to cpufreq.h
-To:     Kevin Hao <haokexin@gmail.com>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
+Date:   Fri, 4 Feb 2022 19:29:00 +0100
+Message-ID: <CAJZ5v0j+LS_0jaZwvze_8ar2n1R1FYqx0w_nM89SySg7oExi6A@mail.gmail.com>
+Subject: Re: [PATCH 03/54] thermal/intel: don't use bitmap_weight() in end_power_clamp()
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        David Laight <David.Laight@aculab.com>,
+        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Jan 23, 2022 at 1:49 PM Kevin Hao <haokexin@gmail.com> wrote:
+On Sun, Jan 23, 2022 at 7:39 PM Yury Norov <yury.norov@gmail.com> wrote:
 >
-> So it can be reused by other codes.
+> Don't call bitmap_weight() if the following code can get by
+> without it.
 >
-> Signed-off-by: Kevin Hao <haokexin@gmail.com>
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
 > ---
->  drivers/cpufreq/cpufreq_governor_attr_set.c | 5 -----
->  include/linux/cpufreq.h                     | 5 +++++
->  2 files changed, 5 insertions(+), 5 deletions(-)
+>  drivers/thermal/intel/intel_powerclamp.c | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
 >
-> diff --git a/drivers/cpufreq/cpufreq_governor_attr_set.c b/drivers/cpufreq/cpufreq_governor_attr_set.c
-> index a6f365b9cc1a..771770ea0ed0 100644
-> --- a/drivers/cpufreq/cpufreq_governor_attr_set.c
-> +++ b/drivers/cpufreq/cpufreq_governor_attr_set.c
-> @@ -8,11 +8,6 @@
+> diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
+> index 14256421d98c..c841ab37e7c6 100644
+> --- a/drivers/thermal/intel/intel_powerclamp.c
+> +++ b/drivers/thermal/intel/intel_powerclamp.c
+> @@ -556,12 +556,9 @@ static void end_power_clamp(void)
+>          * stop faster.
+>          */
+>         clamping = false;
+> -       if (bitmap_weight(cpu_clamping_mask, num_possible_cpus())) {
+> -               for_each_set_bit(i, cpu_clamping_mask, num_possible_cpus()) {
+> -                       pr_debug("clamping worker for cpu %d alive, destroy\n",
+> -                                i);
+> -                       stop_power_clamp_worker(i);
+> -               }
+> +       for_each_set_bit(i, cpu_clamping_mask, num_possible_cpus()) {
+> +               pr_debug("clamping worker for cpu %d alive, destroy\n", i);
+> +               stop_power_clamp_worker(i);
+>         }
+>  }
 >
->  #include "cpufreq_governor.h"
->
-> -static inline struct gov_attr_set *to_gov_attr_set(struct kobject *kobj)
-> -{
-> -       return container_of(kobj, struct gov_attr_set, kobj);
-> -}
-> -
->  static inline struct governor_attr *to_gov_attr(struct attribute *attr)
->  {
->         return container_of(attr, struct governor_attr, attr);
-> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-> index 1ab29e61b078..f0dfc0b260ec 100644
-> --- a/include/linux/cpufreq.h
-> +++ b/include/linux/cpufreq.h
-> @@ -658,6 +658,11 @@ struct gov_attr_set {
->  /* sysfs ops for cpufreq governors */
->  extern const struct sysfs_ops governor_sysfs_ops;
->
-> +static inline struct gov_attr_set *to_gov_attr_set(struct kobject *kobj)
-> +{
-> +       return container_of(kobj, struct gov_attr_set, kobj);
-> +}
-> +
->  void gov_attr_set_init(struct gov_attr_set *attr_set, struct list_head *list_node);
->  void gov_attr_set_get(struct gov_attr_set *attr_set, struct list_head *list_node);
->  unsigned int gov_attr_set_put(struct gov_attr_set *attr_set, struct list_head *list_node);
 > --
 
-This one and the [2/3] have been applied as 5.18 material.
-
-I've replied to the [3/3] directly.
-
-Thanks!
+Applied as 5.18 material, thanks!
