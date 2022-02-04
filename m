@@ -1,96 +1,181 @@
 Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 421254A9F1C
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Feb 2022 19:35:41 +0100 (CET)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.lfdr.de (Postfix) with ESMTP id EA34C4A9FC6
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Feb 2022 20:10:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377594AbiBDSfj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Feb 2022 13:35:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47722 "EHLO
+        id S231361AbiBDTK3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Feb 2022 14:10:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377562AbiBDSfh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Feb 2022 13:35:37 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAFF2C061744
-        for <linux-pm@vger.kernel.org>; Fri,  4 Feb 2022 10:35:36 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id t199so9455033oie.10
-        for <linux-pm@vger.kernel.org>; Fri, 04 Feb 2022 10:35:36 -0800 (PST)
+        with ESMTP id S231264AbiBDTK3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Feb 2022 14:10:29 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBAD1C061714;
+        Fri,  4 Feb 2022 11:10:28 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id a28so14428536lfl.7;
+        Fri, 04 Feb 2022 11:10:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=+YeDXrSaTsKwJr5hwLf03qpBrP3hJgVmDGEXVBjwbhI=;
-        b=PlZFAsHZLMruSJWk1AWXmQ+99gk5cBjkuT3quRp1oYR9aG1UGnZRj0+bpQyjdEk4Yl
-         EWhxJtzfj20YkkxVCdgBrGNgE4GLN7PtvAuYvZxvR3aecqH5FWgreQBKJc8iiLTYEi2Z
-         nhOHAhBcCh0FyCAKU3uKbB/tArrpH4DM2wnaUthU4ZuUi/OWgrTHt9J0oG/dQjXnYvM5
-         dmibNKHl4SA4/QbRuvXF16CXHBQOM3rW0CWNkb1uDNSCIr5wJCnM6HdP86kFoFhp+5iB
-         uL7qD2MSqSqkAqiCuopRag+owLL55ShjaAcInERKGCnXnyAsNfQOJPSlQlQvomKY8nQU
-         AOWw==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=9zg2Epm+4R0Cixsv56zpwyV80d3uBmMu4tyEVn6yI4M=;
+        b=Ys1yJzrR1s9q9Z+kSA15wOWVSM8PAg0uzybTzvDI27wK3kZCkIvNHnW+KP9SUvaCis
+         dU1UCMCxjaBKOHD+7zj7dTNvdMdlzDb2/OwhgbJ6NWrhW8R90Sa/8xEtILTbS/651KvJ
+         LXFgwTXhKowq0XXf4z7Yiph0ff0W8HRw3OJ4WeYIuiFE0vF7f/YRhHWEv1WXdt0tUHMN
+         9+CHQNBM7bJvCVDaxAjUQTp6X6XhuTmd0J6/pBzqWczvqohyaCmAneUFd8NKAEBQ4Wim
+         Oi/P6FS7Pv7ZQ21Zn4sbwXpKWIyHqGgJfnPcFwuL3M8Xqdt4e0DHV+7L52yAtWOhBz6h
+         seqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+YeDXrSaTsKwJr5hwLf03qpBrP3hJgVmDGEXVBjwbhI=;
-        b=ZFIJq52N5wdoyGr7kFRNNl+sFjhFURqn74hSvPd3KLvOluNBRyMqrnJNhOADrvEl7X
-         RiejFxqFw6k965S/hqgdMLte/bIIyq6YocJhmnADEYIzSldGO27St80TNrQuF7oLjWhJ
-         L5x0uvGolHUMgZhRnm5JnBy62mmk3RmS45fvcTuqjlxNA6AuyeIWEkszmCFLHo0GGWNC
-         Bq+me2gK8gW0oHMnwm/mUxDcBpgR3E9lBsk49LBrrr/ysazrSXXSEZ01+5DIpjY8WD/n
-         AmiyGq/G7dRNKi2vQycZCfFPpcBDNSiOIENgco6Vq12l30awPVTOvNNnCUUgvJJNfbwt
-         jbKA==
-X-Gm-Message-State: AOAM5309d5kcKPuRSWKfSbB8PPuboamRJHpi1PkG+QKZUKEj6jLmCI9X
-        fD7g0/ILihvMt4TXQGY2CqOmCw==
-X-Google-Smtp-Source: ABdhPJwetBAy+jRJO/nh7qxpk2M6EUaaEjGE8HhDLGzjXVOKLj4Yu4nQDAGoJDbGBFGIxk+LR5kCKQ==
-X-Received: by 2002:aca:a891:: with SMTP id r139mr2017231oie.337.1643999736169;
-        Fri, 04 Feb 2022 10:35:36 -0800 (PST)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id 100sm1044182oth.75.2022.02.04.10.35.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 10:35:35 -0800 (PST)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Gross <agross@kernel.org>, linux-pm@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v3 0/4] qcom_scm: Add support for MC boot address API
-Date:   Fri,  4 Feb 2022 12:35:24 -0600
-Message-Id: <164399969245.3386915.4570233686283734930.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211201130505.257379-1-stephan@gerhold.net>
-References: <20211201130505.257379-1-stephan@gerhold.net>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9zg2Epm+4R0Cixsv56zpwyV80d3uBmMu4tyEVn6yI4M=;
+        b=LxAEF3RI6O0HtkQnAvXMI6G0AubQ4hFzEXKfOucA2ePbZMs0NruEkDHqHC6M4Ny+7j
+         gjljH+VDwDQ4tjzD92OrukK/sgumv4qmN1hL/HRf5Ix6B+/yilyVuF1JFdWAAzJ15NEx
+         wolxVlZ6PwR1xU2ifnV2JtS42aoKmoCkjx5rHZThwdL0GAT1hHLkpaa3ktVbFXfh5EnW
+         Yx805WgNhWpgaTnsBjLR/uzahyHMvBGKuTMQr2xWWZ7h6Yfu0PdqGB6jRP3HvOtN6ai4
+         UbPfUDNYsdtUPRTl2QYOLo8L2OiCLSmpsyoIBjoegjwOiRfQJDZdnvmXkfscE3IXNU3/
+         PR6A==
+X-Gm-Message-State: AOAM530TlILNSb7dptipuLIe4M76OtdT6IMSfE8BqCm7WmbhiE/NLExI
+        dmwPzGNoQ9/Oi3NuGk9HSDU=
+X-Google-Smtp-Source: ABdhPJxlT/1uttoyR0gyiFDPAH7QSRVypaAdnmTQQi8F60RbSv6+M2hOfxi+feW5LvIdkrJncmbH8w==
+X-Received: by 2002:a05:6512:3611:: with SMTP id f17mr292460lfs.88.1644001827114;
+        Fri, 04 Feb 2022 11:10:27 -0800 (PST)
+Received: from [192.168.2.145] (109-252-138-165.dynamic.spd-mgts.ru. [109.252.138.165])
+        by smtp.googlemail.com with ESMTPSA id q19sm425278lfp.5.2022.02.04.11.10.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Feb 2022 11:10:26 -0800 (PST)
+Message-ID: <400e45da-837a-c8ad-84b3-285e35f8462c@gmail.com>
+Date:   Fri, 4 Feb 2022 22:10:25 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] PM: domains: Prevent power off for parent unless child is
+ in deepest state
+Content-Language: en-US
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Kevin Hilman <khilman@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        linux-kernel@vger.kernel.org
+References: <20220131113743.52265-1-ulf.hansson@linaro.org>
+ <b33ceac4-506a-65c8-7c80-b1b0a67ce65e@gmail.com>
+ <CAPDyKFqsvF=Pm-vMXSUwPMPnjCr7nSYuy5AH+8rwLYm_NUPKww@mail.gmail.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <CAPDyKFqsvF=Pm-vMXSUwPMPnjCr7nSYuy5AH+8rwLYm_NUPKww@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 1 Dec 2021 14:05:01 +0100, Stephan Gerhold wrote:
-> The "firmware: qcom: scm: Add support for MC boot address API" commit
-> was reverted again in 5.16 [1]. This is a new attempt to add it back
-> with much less potential build problems.
+04.02.2022 12:43, Ulf Hansson пишет:
+> On Mon, 31 Jan 2022 at 19:29, Dmitry Osipenko <digetx@gmail.com> wrote:
+>>
+>> 31.01.2022 14:37, Ulf Hansson пишет:
+>>> A PM domain managed by genpd may support multiple idlestates. During
+>>> genpd_power_off() a genpd governor may be asked to select one of the
+>>> idlestates based upon the dev PM QoS constraints, for example.
+>>>
+>>> However, there is a problem with the behaviour around this in genpd. More
+>>> precisely, a parent-domain is allowed to be powered off, no matter of what
+>>> idlestate that has been selected for the child-domain.
+>>>
+>>> So far, we have not received any reports about errors, possibly because
+>>> there might not be platform with this hierarchical configuration, yet.
+>>> Nevertheless, it seems reasonable to change the behaviour into preventing
+>>> the parent-domain from being powered off, unless the deepest idlestate has
+>>> been selected for the child-domain, so let's do that.
+>>>
+>>> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+>>> ---
+>>>  drivers/base/power/domain.c | 18 ++++++++++++++++++
+>>>  1 file changed, 18 insertions(+)
+>>>
+>>> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+>>> index 5db704f02e71..7f97c5cabdc2 100644
+>>> --- a/drivers/base/power/domain.c
+>>> +++ b/drivers/base/power/domain.c
+>>> @@ -636,6 +636,17 @@ static int genpd_power_off(struct generic_pm_domain *genpd, bool one_dev_on,
+>>>                       atomic_read(&genpd->sd_count) > 0)
+>>>               return -EBUSY;
+>>>
+>>> +     /*
+>>> +      * The children must be in their deepest states to allow the parent to
+>>> +      * be powered off. Note that, there's no need for additional locking, as
+>>> +      * powering on a child, requires the parent's lock to be acquired first.
+>>> +      */
+>>> +     list_for_each_entry(link, &genpd->parent_links, parent_node) {
+>>> +             struct generic_pm_domain *child = link->child;
+>>> +             if (child->state_idx < child->state_count - 1)
+>>> +                     return -EBUSY;
+>>> +     }
+>>> +
+>>>       list_for_each_entry(pdd, &genpd->dev_list, list_node) {
+>>>               enum pm_qos_flags_status stat;
+>>>
+>>> @@ -1073,6 +1084,13 @@ static void genpd_sync_power_off(struct generic_pm_domain *genpd, bool use_lock,
+>>>           || atomic_read(&genpd->sd_count) > 0)
+>>>               return;
+>>>
+>>> +     /* Check that the children are in their deepest state. */
+>>> +     list_for_each_entry(link, &genpd->parent_links, parent_node) {
+>>> +             struct generic_pm_domain *child = link->child;
+>>> +             if (child->state_idx < child->state_count - 1)
+>>> +                     return;
+>>> +     }
+>>> +
+>>>       /* Choose the deepest state when suspending */
+>>>       genpd->state_idx = genpd->state_count - 1;
+>>>       if (_genpd_power_off(genpd, false))
+>>
+>> Hello Ulf,
 > 
-> For that I first simplify the existing qcom_scm_set_cold/warm_boot_addr()
-> implementations. The idea is that cpu_logical_map(), MPIDR_AFFINITY_LEVEL()
-> etc are not needed if we just set the entry address for all CPUs.
-> Nothing in the mainline tree actually requires setting a different entry
-> address for one particular CPU and I cannot really think of a use case for this.
+> Hi Dmitry,
 > 
-> [...]
+>>
+>> Is this needed by a concrete SoC? It needs to be clarified in the commit
+>> message, otherwise looks like this patch wasn't tested and it's unclear
+>> whether this change is really needed.
+> 
+> It's needed on a STMicro SoC that I have been working on. However,
+> it's difficult for me to test on that platform, as some SoC specific
+> pieces are missing upstream (the power domain deployment in
+> particular). Anyway, let me add some information about this in the
+> commit log for the next version.
+> 
+> When it comes to testing, I am using a couple of local test dummy
+> drivers. One that manages devices that gets attached to a genpd,
+> mostly to execute runtime PM and dev PM QoS calls - and another that
+> manages the PM domains with genpd. I have been thinking of a way to
+> share these "tools" to let other people use them for testing too, but
+> I haven't just got to it yet.
+> 
+> Besides the above, do you see any issues from Nvidia platforms point
+> of view with $subject patch?
 
-Applied, thanks!
+I've two main concerns:
 
-[1/4] cpuidle: qcom-spm: Check if any CPU is managed by SPM
-      commit: 0ee30ace67e425ab83a1673bf51f50b577328cf9
-[2/4] firmware: qcom: scm: Simplify set_cold/warm_boot_addr()
-      commit: 7734c4b507cefbcf2f7a2a806e79c43e52528c5f
-[3/4] firmware: qcom: scm: Drop cpumask parameter from set_boot_addr()
-      commit: 52beb1fc237d67cdc64277dc90047767a6fc52d7
-[4/4] firmware: qcom: scm: Add support for MC boot address API
-      commit: f60a317bcbea5c5b8923d6de6c7288850fdd83fb
+1. This is a patch for something (STMicro SoC) that isn't fully
+supported by upstream kernel and it's not clear whether it will be ever
+supported at all.
 
-Best regards,
--- 
-Bjorn Andersson <bjorn.andersson@linaro.org>
+2. It's not clear why behaviour of a very specific SoC should be applied
+to all SoCs, especially given that the specific SoC itself isn't going
+to use to this feature right now. I guess it could be okay to put this
+behaviour into the core code until any other SoC will require a
+different behaviour, but the commit message doesn't clarify this.
+
+To my knowledge all NVIDIA Tegra SoCs are indifferent to this patch
+because they don't have such kind of dependency between power domains.
+
+In general, such changes usually are deferred from being upstreamed
+until there is a real user, otherwise there is a risk of cluttering the
+code with unused features. Do you have a time estimation in regards to
+when STMicro may start to benefit from this change?
