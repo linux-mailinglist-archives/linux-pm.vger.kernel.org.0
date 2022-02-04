@@ -2,150 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CAFD4A94DC
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Feb 2022 09:08:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B843D4A9518
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Feb 2022 09:29:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242133AbiBDIIP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Feb 2022 03:08:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43692 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbiBDIIO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Feb 2022 03:08:14 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C8DFC061714
-        for <linux-pm@vger.kernel.org>; Fri,  4 Feb 2022 00:08:14 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id v10so195494wrv.10
-        for <linux-pm@vger.kernel.org>; Fri, 04 Feb 2022 00:08:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=F1g4OTxFW0XMQzsgv95JcbZmhOfVmDYbCrlN2Y/w884=;
-        b=OqhxBsujr0GLQ94fpAOgRSvHN6suDw97MDwnCJEI1rAYYfRSkMPjvKP6SOn+2jXbs/
-         PSf7VhG0K/yW9Iz1d0AnLftnLSW+eVs0iv7Gqg/ksSiQogdfS1khZxFQGxb5MPeCss7g
-         PUHQF59EW3/3gYC2S+BiTSNh23LhY/IOXO6F2NH9JgYx47IkCz+c3DQRLWrgx38hErKY
-         M7aZKKgrwBE/9xpYO9ZvjRrNbOSlTHsSuuVyKouw8gm59+F2F1CA02p9a5iBtKj07aEi
-         /CGAygeu4K7fYxH0JELpL8ioq+Nc43AMWM32oQIP3ofdJewJ3B5viAUzrBG4nOOVZApY
-         XTvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=F1g4OTxFW0XMQzsgv95JcbZmhOfVmDYbCrlN2Y/w884=;
-        b=TJjwAFCsJ0ZNNg32nqDDyaX8yf0QnT1/HsAoXzWYfbZdXqjaUhNrFIWeFB6vrgewwJ
-         D8XNSo99NXsYb3dE1d5jskj7uPKOnBSBNt+J+8VOxkuWUmWdsyAW1bRxhTRNmcT7wkHT
-         mInLGhoEHEelgfbLKXDK4pcZHOYW1/mpbBEJpmAg4gxetXSeYkEPBj+2VSkLQREHDaMM
-         b8vGjCYoDWCuMFReEs0i8ktU2XewQJvFM9t8Z90My1UDsQFknnkUAySdI8qcmkKugaR2
-         eXEO+mVItOzosmHupHRz9+kOcZmgDM4QHLVmRp5AqtimFpgK6JdNQwudDtlXtMSO+qhJ
-         6HQw==
-X-Gm-Message-State: AOAM530ywEbK7nZvWhbVv3yQZmDFFVokL/ptpByUtMNywFDAmxbuUVuh
-        tFctfeunBAu/viJSwe/56uHh/Q==
-X-Google-Smtp-Source: ABdhPJwxcYWYJrBDOz5mjR+skEcwR7oqY2SM/eZ6qDb/vOvdh3NGygqKqF5ku7DqOeqNP9ADWhJGFw==
-X-Received: by 2002:adf:ed09:: with SMTP id a9mr81645wro.411.1643962092739;
-        Fri, 04 Feb 2022 00:08:12 -0800 (PST)
-Received: from ?IPV6:2a01:e34:ed2f:f020:e349:6e3c:93e:6c2c? ([2a01:e34:ed2f:f020:e349:6e3c:93e:6c2c])
-        by smtp.googlemail.com with ESMTPSA id o14sm1284854wry.104.2022.02.04.00.08.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Feb 2022 00:08:11 -0800 (PST)
-Message-ID: <59897307-042e-932e-6b02-257cabacaaa4@linaro.org>
-Date:   Fri, 4 Feb 2022 09:08:10 +0100
+        id S241421AbiBDI3d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Feb 2022 03:29:33 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58576 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238709AbiBDI3d (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Feb 2022 03:29:33 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E06DBB83551;
+        Fri,  4 Feb 2022 08:29:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16867C004E1;
+        Fri,  4 Feb 2022 08:29:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643963370;
+        bh=hV0XVIpJv8RfsccFVgtd6nr6963RmT/8SgaEKOgrUGM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CkacnUzIMgDRFphD+YHfn9mQpier5IfJsqoe/Ygn0PfYfp0gBV6K82RfCBDhpo6Yf
+         jFMWFZUT0aez4ocdBJ8E1XmVV5KqFjpylE3tFFbmBR9NWg5qIny6U61rAl1sqHtTzR
+         eJuabVpShJszWnFnRlPjlTWmMQJuv4chuWqlEs8k=
+Date:   Fri, 4 Feb 2022 09:29:27 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.16 36/52] PM: wakeup: simplify the output logic
+ of pm_show_wakelocks()
+Message-ID: <Yfzj56RiMMd79M26@kroah.com>
+References: <20220203202947.2304-1-sashal@kernel.org>
+ <20220203202947.2304-36-sashal@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 RESEND 1/2] dt-bindings: Add DT bindings for the
- DT-based virtual sensor driver
-Content-Language: en-US
-To:     Alexandre Bailon <abailon@baylibre.com>, rafael@kernel.org,
-        rui.zhang@intel.com, amitk@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ben.tseng@mediatek.com, khilman@baylibre.com, mka@chromium.org
-References: <20220111103346.2660639-1-abailon@baylibre.com>
- <20220111103346.2660639-2-abailon@baylibre.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220111103346.2660639-2-abailon@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220203202947.2304-36-sashal@kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11/01/2022 11:33, Alexandre Bailon wrote:
-> This adds the DT bindings for the DT-based virtual sensor driver.
-> This driver provides a way, using DT, to aggregate the temperature
-> of multiple thermal zones and get some useful data from it.
+On Thu, Feb 03, 2022 at 03:29:30PM -0500, Sasha Levin wrote:
+> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > 
-> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
+> [ Upstream commit c9d967b2ce40d71e968eb839f36c936b8a9cf1ea ]
+> 
+> The buffer handling in pm_show_wakelocks() is tricky, and hopefully
+> correct.  Ensure it really is correct by using sysfs_emit_at() which
+> handles all of the tricky string handling logic in a PAGE_SIZE buffer
+> for us automatically as this is a sysfs file being read from.
+> 
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Reviewed-by: Lee Jones <lee.jones@linaro.org>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 > ---
+>  kernel/power/wakelock.c | 11 ++++-------
+>  1 file changed, 4 insertions(+), 7 deletions(-)
 
-[ ... ]
+This is already in a stable release, so no need to add it again.
 
-> +description: |
-> +  The virtual thermal sensor device provides a way to aggregate the temperature
-> +  from multiple thermal zones. Basically, this could be used to get the
-> +  maximum, minimum or average temperature.
-> +
-> +allOf:
-> +  - $ref: thermal-sensor.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: virtual,thermal-sensor
-> +
-> +  aggregation-function:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      Used to select the operations to perform on the sensors to get the virtual
-> +      sensor temperature.
-> +    enum:
-> +      - VIRTUAL_THERMAL_SENSOR_MIN_VAL
-> +      - VIRTUAL_THERMAL_SENSOR_MAX_VAL
-> +      - VIRTUAL_THERMAL_SENSOR_AVG_VAL
-> +
-> +  thermal-sensors:
-> +    $ref: /schemas/types.yaml#/definitions/string-array
-> +    description:
-> +      The names of the thermal zone to aggregate.
+thanks,
 
-IMO this is not correct. We are dealing with virtual sensor in order to 
-aggregate a group of sensors in a thermal zone. But actually this 
-description aggregates the thermal zones.
-
-I recalled a detail about the binding from the old 'txt' format from [1].
-
-"- thermal-sensors: A list of thermal sensor phandles and sensor specifier
-
-    Type: list of phandles + sensor specifier used while monitoring the 
-thermal zone."
-
-This information was lost in the conversion to yaml with commit 
-1202a442a31fd
-
-In addition, the "coefficients" property tells the 'thermal-sensors' 
-property can have multiple sensors.
-
-So actually, the bindings should be fixed as part of the information was 
-lost during of the txt -> yaml conversion.
-
-And the multiple sensors per thermal zone could be implemented as that 
-was something planned since a while.
-
-I realize we initially asked to create a virtual sensor but that is not 
-the most adequate ATM. Doing the multiple sensors support makes more 
-sense to me, especially it does not require any extra binding except an 
-attribute tell what kind of temperature aggregation we do. Defaulting to 
-max should suffice when no aggregation method is set.
-
-   -- Daniel
-
-[1] 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/thermal/thermal.txt?h=v4.5#n147
-
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+greg k-h
