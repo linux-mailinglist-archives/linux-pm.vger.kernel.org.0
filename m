@@ -2,233 +2,161 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62EE64A96D8
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Feb 2022 10:32:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA6D74A9710
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Feb 2022 10:44:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357902AbiBDJcH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Feb 2022 04:32:07 -0500
-Received: from mga02.intel.com ([134.134.136.20]:30680 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1359152AbiBDJbl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 4 Feb 2022 04:31:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643967101; x=1675503101;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=5EL1VBYApL9UypzAY486rLPxoexZxlq9oTOM2BiBcj0=;
-  b=bajtKzCn+LJg2N3z+hvN+ni0QeXs+jVs1Bbyb2DEMGoC4E1EsnJC4sn2
-   hwxyMDA6eSO6PFRsSxZJ5ihljXE41/RbHf/CfmgXdfl/pAdlDYWEB73jK
-   3aFSFssaXlJFkoELupubcV/Md0NsrTYE9MP+KzjJp6Kihv91NvTJ2J/ZL
-   Ot4orORQMaoCsr6i/M74lsAvTtq7TJCZ91QpnU4BJhDvJKH50+TwpFKPb
-   spSPXXG/A/U7SR03bhk62oYspo2FPHAJmVMVqhOz29hxsouuBiQ13/BZA
-   Gly1U1BXgLkv1TfB3liDJJl85kfMArEU0omhTL2yvMnN4TrcXpp07vvYf
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="235738767"
-X-IronPort-AV: E=Sophos;i="5.88,342,1635231600"; 
-   d="scan'208";a="235738767"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 01:26:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,342,1635231600"; 
-   d="scan'208";a="524254454"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 04 Feb 2022 01:26:13 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nFur7-000XQG-4e; Fri, 04 Feb 2022 09:26:13 +0000
-Date:   Fri, 04 Feb 2022 17:25:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 119d56b735c4f42a805657c0b9b5982e58f41929
-Message-ID: <61fcf124.z6Ri5a/JbVZn2kR4%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1357580AbiBDJod (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Feb 2022 04:44:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38244 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235827AbiBDJoc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Feb 2022 04:44:32 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 629D3C06173E
+        for <linux-pm@vger.kernel.org>; Fri,  4 Feb 2022 01:44:32 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id u7so6136090lji.2
+        for <linux-pm@vger.kernel.org>; Fri, 04 Feb 2022 01:44:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=s3hoNqkHm8uABs8bA5GkGd4u8pf+9SvyozF/PnFazzA=;
+        b=iQ1GwxAN6QzhF77ngrDL5IUqqH/qnq2wnuA15gyhCr63Ob42nAFu+SOlLp4gMNRLg/
+         gOOH9xR6sFPXc/69PwTAxghKL2IIclwXvduszgWH+PKoCDG9C2hRCYwuCGRkr61BRklh
+         YHq6UG0+YUIMxo4vXxCgecOZQ14MjdZZDY9gTbRAyClssRYH77caNmpuwqW7Tu/dhnbD
+         tY397u7RcGu8CPhjoXolUm0dy5Yg1hWtCkhWPjy6SEwZAOO5yrL1/z4Ix1BcBVKx7BOU
+         3tTmIH0B9vl7PJjJDySU9WmHF1ajTTuufg5iou88ZLtwoBwXCLb6ytR5HzorTbrenadO
+         TBtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=s3hoNqkHm8uABs8bA5GkGd4u8pf+9SvyozF/PnFazzA=;
+        b=mOpz5MHOdH9xMryHTX22CDj2OxwtuUOeB5tpqv12MUM7qp7ztsZbTHPpinDPZt4DIa
+         zOnh+jVlxc/JVomc5wM2fPp0uWAyTyZd8GgVXEJZTvy73NGuoUu/EZEVVGuBFVhndi5K
+         GK6oDroa1r4YHwF+mhXwUhz58iWZw+ipLk3XFTr/L21Kj8LuTYaUKJsajzdw/8jIirI8
+         Ylfzgfiv7yj0U1lt7GfwpGT1Cr6Rd9pr53ScKzraeyHjto8DX73vLO4+Ohf2avd30j11
+         RuKyzeCIPXSiW8M6p3os9mBUpJW0QkVevG/0E8Icx5v7NEtF01lxu4OLKQjgoVpJQU+A
+         PjJA==
+X-Gm-Message-State: AOAM531lu9U5qG2A6Ba8tL0iBKf6BM73TtSbYeLG4Maju9OETeHvwWND
+        BCwVJ88Zu160UEd658DUtT6xflVEPeu6NQrkFCtaVA==
+X-Google-Smtp-Source: ABdhPJxvuguFzra5GtzuztPGthoos7qcHGERlZxk4EZGk0b2aj/xM9XE+MZ0Xq7aG/g/jk60nFQ0MnRng8vFmigaIto=
+X-Received: by 2002:a05:651c:179c:: with SMTP id bn28mr1320707ljb.4.1643967870698;
+ Fri, 04 Feb 2022 01:44:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+References: <20220131113743.52265-1-ulf.hansson@linaro.org> <b33ceac4-506a-65c8-7c80-b1b0a67ce65e@gmail.com>
+In-Reply-To: <b33ceac4-506a-65c8-7c80-b1b0a67ce65e@gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 4 Feb 2022 10:43:54 +0100
+Message-ID: <CAPDyKFqsvF=Pm-vMXSUwPMPnjCr7nSYuy5AH+8rwLYm_NUPKww@mail.gmail.com>
+Subject: Re: [PATCH] PM: domains: Prevent power off for parent unless child is
+ in deepest state
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Kevin Hilman <khilman@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 119d56b735c4f42a805657c0b9b5982e58f41929  Merge branch 'thermal-hfi' into bleeding-edge
+On Mon, 31 Jan 2022 at 19:29, Dmitry Osipenko <digetx@gmail.com> wrote:
+>
+> 31.01.2022 14:37, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> > A PM domain managed by genpd may support multiple idlestates. During
+> > genpd_power_off() a genpd governor may be asked to select one of the
+> > idlestates based upon the dev PM QoS constraints, for example.
+> >
+> > However, there is a problem with the behaviour around this in genpd. Mo=
+re
+> > precisely, a parent-domain is allowed to be powered off, no matter of w=
+hat
+> > idlestate that has been selected for the child-domain.
+> >
+> > So far, we have not received any reports about errors, possibly because
+> > there might not be platform with this hierarchical configuration, yet.
+> > Nevertheless, it seems reasonable to change the behaviour into preventi=
+ng
+> > the parent-domain from being powered off, unless the deepest idlestate =
+has
+> > been selected for the child-domain, so let's do that.
+> >
+> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > ---
+> >  drivers/base/power/domain.c | 18 ++++++++++++++++++
+> >  1 file changed, 18 insertions(+)
+> >
+> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> > index 5db704f02e71..7f97c5cabdc2 100644
+> > --- a/drivers/base/power/domain.c
+> > +++ b/drivers/base/power/domain.c
+> > @@ -636,6 +636,17 @@ static int genpd_power_off(struct generic_pm_domai=
+n *genpd, bool one_dev_on,
+> >                       atomic_read(&genpd->sd_count) > 0)
+> >               return -EBUSY;
+> >
+> > +     /*
+> > +      * The children must be in their deepest states to allow the pare=
+nt to
+> > +      * be powered off. Note that, there's no need for additional lock=
+ing, as
+> > +      * powering on a child, requires the parent's lock to be acquired=
+ first.
+> > +      */
+> > +     list_for_each_entry(link, &genpd->parent_links, parent_node) {
+> > +             struct generic_pm_domain *child =3D link->child;
+> > +             if (child->state_idx < child->state_count - 1)
+> > +                     return -EBUSY;
+> > +     }
+> > +
+> >       list_for_each_entry(pdd, &genpd->dev_list, list_node) {
+> >               enum pm_qos_flags_status stat;
+> >
+> > @@ -1073,6 +1084,13 @@ static void genpd_sync_power_off(struct generic_=
+pm_domain *genpd, bool use_lock,
+> >           || atomic_read(&genpd->sd_count) > 0)
+> >               return;
+> >
+> > +     /* Check that the children are in their deepest state. */
+> > +     list_for_each_entry(link, &genpd->parent_links, parent_node) {
+> > +             struct generic_pm_domain *child =3D link->child;
+> > +             if (child->state_idx < child->state_count - 1)
+> > +                     return;
+> > +     }
+> > +
+> >       /* Choose the deepest state when suspending */
+> >       genpd->state_idx =3D genpd->state_count - 1;
+> >       if (_genpd_power_off(genpd, false))
+>
+> Hello Ulf,
 
-possible Warning in current branch (please contact us if interested):
+Hi Dmitry,
 
-drivers/thermal/qcom/../thermal_netlink.h:113:71: warning: 'struct cpu_capability' declared inside parameter list will not be visible outside of this definition or declaration
-drivers/thermal/qcom/../thermal_netlink.h:113:71: warning: declaration of 'struct cpu_capability' will not be visible outside of this function [-Wvisibility]
-drivers/thermal/samsung/../thermal_netlink.h:113:71: warning: 'struct cpu_capability' declared inside parameter list will not be visible outside of this definition or declaration
-drivers/thermal/samsung/../thermal_netlink.h:113:71: warning: declaration of 'struct cpu_capability' will not be visible outside of this function [-Wvisibility]
-drivers/thermal/st/../thermal_netlink.h:113:71: warning: 'struct cpu_capability' declared inside parameter list will not be visible outside of this definition or declaration
-drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: 'struct cpu_capability' declared inside parameter list will not be visible outside of this definition or declaration
-drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: declaration of 'struct cpu_capability' will not be visible outside of this function [-Wvisibility]
-drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'struct cpu_capability' will not be visible outside of this function [-Wvisibility]
+>
+> Is this needed by a concrete SoC? It needs to be clarified in the commit
+> message, otherwise looks like this patch wasn't tested and it's unclear
+> whether this change is really needed.
 
-Warning ids grouped by kconfigs:
+It's needed on a STMicro SoC that I have been working on. However,
+it's difficult for me to test on that platform, as some SoC specific
+pieces are missing upstream (the power domain deployment in
+particular). Anyway, let me add some information about this in the
+commit log for the next version.
 
-gcc_recent_errors
-|-- arc-randconfig-r043-20220130
-|   `-- drivers-thermal-samsung-..-thermal_netlink.h:warning:struct-cpu_capability-declared-inside-parameter-list-will-not-be-visible-outside-of-this-definition-or-declaration
-|-- arm-defconfig
-|   |-- drivers-thermal-samsung-..-thermal_netlink.h:warning:struct-cpu_capability-declared-inside-parameter-list-will-not-be-visible-outside-of-this-definition-or-declaration
-|   |-- drivers-thermal-st-..-thermal_netlink.h:warning:struct-cpu_capability-declared-inside-parameter-list-will-not-be-visible-outside-of-this-definition-or-declaration
-|   `-- drivers-thermal-tegra-..-thermal_netlink.h:warning:struct-cpu_capability-declared-inside-parameter-list-will-not-be-visible-outside-of-this-definition-or-declaration
-|-- arm64-defconfig
-|   |-- drivers-thermal-qcom-..-thermal_netlink.h:warning:struct-cpu_capability-declared-inside-parameter-list-will-not-be-visible-outside-of-this-definition-or-declaration
-|   |-- drivers-thermal-samsung-..-thermal_netlink.h:warning:struct-cpu_capability-declared-inside-parameter-list-will-not-be-visible-outside-of-this-definition-or-declaration
-|   `-- drivers-thermal-tegra-..-thermal_netlink.h:warning:struct-cpu_capability-declared-inside-parameter-list-will-not-be-visible-outside-of-this-definition-or-declaration
-|-- mips-buildonly-randconfig-r005-20220130
-|   `-- drivers-thermal-tegra-..-thermal_netlink.h:warning:struct-cpu_capability-declared-inside-parameter-list-will-not-be-visible-outside-of-this-definition-or-declaration
-|-- openrisc-randconfig-r012-20220131
-|   `-- drivers-thermal-tegra-..-thermal_netlink.h:warning:struct-cpu_capability-declared-inside-parameter-list-will-not-be-visible-outside-of-this-definition-or-declaration
-|-- openrisc-randconfig-r013-20220130
-|   `-- drivers-thermal-tegra-..-thermal_netlink.h:warning:struct-cpu_capability-declared-inside-parameter-list-will-not-be-visible-outside-of-this-definition-or-declaration
-|-- openrisc-randconfig-r026-20220131
-|   `-- drivers-thermal-tegra-..-thermal_netlink.h:warning:struct-cpu_capability-declared-inside-parameter-list-will-not-be-visible-outside-of-this-definition-or-declaration
-|-- openrisc-randconfig-r035-20220130
-|   `-- drivers-thermal-tegra-..-thermal_netlink.h:warning:struct-cpu_capability-declared-inside-parameter-list-will-not-be-visible-outside-of-this-definition-or-declaration
-|-- powerpc-buildonly-randconfig-r006-20220130
-|   `-- drivers-thermal-tegra-..-thermal_netlink.h:warning:struct-cpu_capability-declared-inside-parameter-list-will-not-be-visible-outside-of-this-definition-or-declaration
-`-- xtensa-randconfig-m031-20220131
-    `-- drivers-thermal-tegra-..-thermal_netlink.h:warning:struct-cpu_capability-declared-inside-parameter-list-will-not-be-visible-outside-of-this-definition-or-declaration
+When it comes to testing, I am using a couple of local test dummy
+drivers. One that manages devices that gets attached to a genpd,
+mostly to execute runtime PM and dev PM QoS calls - and another that
+manages the PM domains with genpd. I have been thinking of a way to
+share these "tools" to let other people use them for testing too, but
+I haven't just got to it yet.
 
-clang_recent_errors
-|-- hexagon-buildonly-randconfig-r001-20220131
-|   `-- drivers-thermal-thermal_netlink.h:warning:declaration-of-struct-cpu_capability-will-not-be-visible-outside-of-this-function
-|-- hexagon-randconfig-r045-20220131
-|   `-- drivers-thermal-tegra-..-thermal_netlink.h:warning:declaration-of-struct-cpu_capability-will-not-be-visible-outside-of-this-function
-|-- riscv-buildonly-randconfig-r005-20220131
-|   `-- drivers-thermal-qcom-..-thermal_netlink.h:warning:declaration-of-struct-cpu_capability-will-not-be-visible-outside-of-this-function
-`-- riscv-randconfig-r001-20220130
-    |-- drivers-thermal-samsung-..-thermal_netlink.h:warning:declaration-of-struct-cpu_capability-will-not-be-visible-outside-of-this-function
-    `-- drivers-thermal-tegra-..-thermal_netlink.h:warning:declaration-of-struct-cpu_capability-will-not-be-visible-outside-of-this-function
+Besides the above, do you see any issues from Nvidia platforms point
+of view with $subject patch?
 
-elapsed time: 728m
-
-configs tested: 110
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm64                               defconfig
-arm64                            allyesconfig
-i386                 randconfig-c001-20220131
-arm                         assabet_defconfig
-mips                 decstation_r4k_defconfig
-m68k                          multi_defconfig
-powerpc                     mpc83xx_defconfig
-powerpc                     stx_gp3_defconfig
-openrisc                  or1klitex_defconfig
-xtensa                    smp_lx200_defconfig
-sh                            shmin_defconfig
-sh                           se7343_defconfig
-powerpc                     rainier_defconfig
-mips                    maltaup_xpa_defconfig
-openrisc                 simple_smp_defconfig
-arm                  randconfig-c002-20220130
-arm                  randconfig-c002-20220131
-ia64                                defconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-m68k                                defconfig
-csky                                defconfig
-alpha                               defconfig
-nds32                               defconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-parisc                              defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-s390                             allyesconfig
-i386                             allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-sparc                            allyesconfig
-nds32                             allnoconfig
-nios2                               defconfig
-arc                              allyesconfig
-mips                             allmodconfig
-mips                             allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-powerpc                          allyesconfig
-i386                          randconfig-a003
-i386                          randconfig-a001
-i386                          randconfig-a005
-x86_64               randconfig-a004-20220131
-x86_64               randconfig-a003-20220131
-x86_64               randconfig-a001-20220131
-x86_64               randconfig-a006-20220131
-x86_64               randconfig-a005-20220131
-x86_64               randconfig-a002-20220131
-riscv                randconfig-r042-20220130
-arc                  randconfig-r043-20220130
-arc                  randconfig-r043-20220131
-s390                 randconfig-r044-20220130
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-x86_64                    rhel-8.3-kselftests
-x86_64                          rhel-8.3-func
-
-clang tested configs:
-arm                    vt8500_v6_v7_defconfig
-mips                          rm200_defconfig
-powerpc                   lite5200b_defconfig
-arm                             mxs_defconfig
-mips                          ath79_defconfig
-powerpc                     ppa8548_defconfig
-mips                        bcm63xx_defconfig
-riscv                             allnoconfig
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64               randconfig-a013-20220131
-x86_64               randconfig-a015-20220131
-x86_64               randconfig-a014-20220131
-x86_64               randconfig-a016-20220131
-x86_64               randconfig-a011-20220131
-x86_64               randconfig-a012-20220131
-i386                 randconfig-a013-20220131
-i386                 randconfig-a014-20220131
-i386                 randconfig-a012-20220131
-i386                 randconfig-a015-20220131
-i386                 randconfig-a016-20220131
-i386                 randconfig-a011-20220131
-s390                 randconfig-r044-20220131
-hexagon              randconfig-r045-20220130
-hexagon              randconfig-r045-20220131
-hexagon              randconfig-r041-20220130
-hexagon              randconfig-r041-20220131
-riscv                randconfig-r042-20220131
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Kind regards
+Uffe
