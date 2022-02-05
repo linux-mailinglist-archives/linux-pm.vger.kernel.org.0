@@ -2,135 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9153E4AA3ED
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Feb 2022 00:04:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACC754AA51F
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Feb 2022 01:46:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377833AbiBDXEC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Feb 2022 18:04:02 -0500
-Received: from mga04.intel.com ([192.55.52.120]:27123 "EHLO mga04.intel.com"
+        id S245116AbiBEAqL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Feb 2022 19:46:11 -0500
+Received: from mga03.intel.com ([134.134.136.65]:15579 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1377830AbiBDXEB (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 4 Feb 2022 18:04:01 -0500
+        id S230266AbiBEAqL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 4 Feb 2022 19:46:11 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644015841; x=1675551841;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=cDlea75dcM5oWd3Z9GjyVZl7KExXwKzNlRCG52zMlrk=;
-  b=KwiQPSCYCh/VCprgMjYUvX8Q3+7Zqj5XN7y4gEXvqZ5y7riYIwHrvNGg
-   fh051UeBCwgZDD3gMnuHL4heSmR0HAGu8poW/AKJuUEnNlFI+CalLv1pI
-   IxSUP7tT1lR8ZdbNjF2Rxn+/i5M5EIyI0SSTO0dHvuYOi1RSx/cCG6g2B
-   eSePmemdCy7Rqudi67fBq5qa1VMYqlP5g3gnq6bDIGIZLy0MO+8FfkM30
-   QglLVfgnz1ZcGBxuk7TYj+KEX9vZJHrgQfrXd689/rJK55FnUuifiL8Da
-   pmfZJiWYq+DNuCINmZV5Uhrc31qSmtvqmeA0KGQ/lc+h80yh0HfblBGlv
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="247290619"
+  t=1644021971; x=1675557971;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RTnhhinurZQZcCo/zAYuMWSmR/Zk64TZ7GLeuH68Ld0=;
+  b=gICqyx86rFzn4xjPwolvYdjiwOjjuWijOoQPm7pbPFSD4sdmiFqHRA6v
+   MfwSFF5/u0cajCNUVIVBJiUSntbmTPgarfRT5sv4/XeFhKAyEMf6kfTTb
+   9iuPgQRhMotzcCc3Mjq6SvuyekRjmWIsaCwrqtWJTYICh5me7zDyqmVvU
+   7Fq06lIyixRNvk6PbY56ZcVJwklQ4qunupo/H05WsTLveto0cAn+3Uu2D
+   wHZMXlbiT2V0R05SzrLcdtybjKkS/7sG3mty6mfV6Wj7qTjjvdWly4jNc
+   ecoj0Y+P2RiSCMano4IG6tmPqekamu4fjZKmdgi2AYN4wkC2qPqqvf8dp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="248417672"
 X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
-   d="scan'208";a="247290619"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 15:04:01 -0800
+   d="scan'208";a="248417672"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 16:46:09 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
-   d="scan'208";a="539338882"
-Received: from ahofrock-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.64.72])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 15:04:01 -0800
-Message-ID: <4b97ea9a45476698a439aebca4ebcc881892e201.camel@linux.intel.com>
-Subject: Re: [PATCH] tools/lib/thermal: Add a thermal library
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Viktor Rosendahl <Viktor.Rosendahl@bmw.de>,
-        Sasha Levin <sashal@kernel.org>,
-        Colin Ian King <colin.king@intel.com>,
-        "Zhang, Rui" <rui.zhang@intel.com>
-Date:   Fri, 04 Feb 2022 15:04:00 -0800
-In-Reply-To: <c610f361-14b5-6c64-ff28-7ae0442aed71@linaro.org>
-References: <20220204161518.163536-1-daniel.lezcano@linaro.org>
-         <CAJZ5v0gXJ8wF2ChGU1bydPiNHB4c+SVrmrTpUwxMh7ddODFV5g@mail.gmail.com>
-         <d8e4c15757cd9b40fe5d47bec7e07fc997431b1a.camel@linux.intel.com>
-         <c610f361-14b5-6c64-ff28-7ae0442aed71@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
+   d="scan'208";a="677248362"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by fmsmga001.fm.intel.com with ESMTP; 04 Feb 2022 16:46:09 -0800
+Date:   Fri, 4 Feb 2022 16:47:58 -0800
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 0/7] Thermal: Introduce the Hardware Feedback
+ Interface for thermal and performance management
+Message-ID: <20220205004758.GB11058@ranerica-svr.sc.intel.com>
+References: <20220127193454.12814-1-ricardo.neri-calderon@linux.intel.com>
+ <CAJZ5v0gcK10TiVbc8+j1pVN+T2p3EZHEK9Ga2=2ZxeGd=iVkhw@mail.gmail.com>
+ <CAJZ5v0j7+xkYOGB8kLxGwwD3ReaXt4oMRK-D-5t2zKeMxd-CYA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0j7+xkYOGB8kLxGwwD3ReaXt4oMRK-D-5t2zKeMxd-CYA@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 2022-02-04 at 23:16 +0100, Daniel Lezcano wrote:
+On Thu, Feb 03, 2022 at 07:57:25PM +0100, Rafael J. Wysocki wrote:
+> On Sun, Jan 30, 2022 at 4:23 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >
+> > On Thu, Jan 27, 2022 at 8:33 PM Ricardo Neri
+> > <ricardo.neri-calderon@linux.intel.com> wrote:
+> > >
+> > > Hi,
+> > >
+> > > This is v5 of this patchset after having incorporated the feedback from
+> > > reviewers. Please find v1, v2, v3, and v4 in [1], [2], [3], and [4],
+> > > respectively.
+> > >
+> > > The Intel Hardware Feedback Interface (HFI) [5] provides information about
+> > > the performance and energy efficiency of each CPU in the system. It uses a
+> > > table that is shared between hardware and the operating system. The
+> > > contents of the table may be updated as a result of changes in the
+> > > operating conditions of the system (e.g., reaching a thermal limit) or the
+> > > action of external factors (e.g., changes in the thermal design power).
+> > >
+> > > The information that HFI provides are specified as numeric, unit-less
+> > > capabilities relative to other CPUs in the system. These capabilities have
+> > > a range of [0-255] where higher numbers represent higher capabilities.
+> > > Energy efficiency and performance are reported in separate capabilities.
+> > > If either the performance or energy capabilities efficiency of a CPU are 0,
+> > > the hardware recommends to not schedule any tasks on such CPU for
+> > > performance, energy efficiency or thermal reasons, respectively.
+> > >
+> > > The kernel or user space may use the information from the HFI to modify
+> > > task placement and/or adjust power limits. This patchset focuses on the
+> > > user space. The thermal notification framework is extended to relay
+> > > updates of CPU capacity. Thus, a userspace daemon can affinitize workloads
+> > > to certain CPUs and/or offline CPUs whose capabilities are zero.
+> > >
+> > > The frequency of HFI updates is specific to each processor model. On some
+> > > systems, there is just a single HFI update at boot. On other systems, there
+> > > may be updates every tens of milliseconds. In order to not overwhelm
+> > > userspace with too many updates, they are limited to one update every
+> > > CONFIG_HZ jiffies.
+> > >
+> > > Thanks and BR,
+> > > Ricardo
+> > >
+> > > [1]. https://lore.kernel.org/lkml/20211106013312.26698-1-ricardo.neri-calderon@linux.intel.com/
+> > > [2]. https://lore.kernel.org/lkml/20211220151438.1196-1-ricardo.neri-calderon@linux.intel.com/
+> > > [3]. https://lore.kernel.org/lkml/20220106025059.25847-8-ricardo.neri-calderon@linux.intel.com/
+> > > [4]. https://lore.kernel.org/lkml/20220108034743.31277-1-ricardo.neri-calderon@linux.intel.com/
+> > > [5]. https://www.intel.com/sdm
+> > >
+> > > Changes since v4:
+> > >  ++ Unchanged patches: 1, 2.
+> > >  * Reworded description hfi_instance::hdr and hfi_instance::data.
+> > >    (Patch 3; Srinivas)
+> > >  * Call intel_hfi_online() before enabling the thermal vector at the
+> > >    local APIC is enabled. This makes sure that a CPU has an associated
+> > >    HFI instance when an HFI event happens. Reworded the commit message to
+> > >    reflect this change. (Patch 4; Srinivas)
+> > >  * Set hfi_instances to NULL if we fail to allocate memory for
+> > >    hfi_instance::cpus. (Patch 4; Srinivas)
+> > >  * Delayed initialization of local variables until after the check for a
+> > >    non-NULL hfi_instances in intel_hfi_online(). (Patch 4; Srinivas)
+> > >  * Optimized the error path in init_hfi_init() to not needlessly
+> > >    free the memory of cpumasks that have not been allocated. (Patch 4;
+> > >    Srinivas)
+> > >  * Removed pointless checks for X86_FEATURE_HFI in
+> > >    intel_hfi_[on|off]line(). It is sufficient to check for a non-NULL
+> > >    hfi_instances or a CPU's hfi_instance. (Patch 4)
+> > >  * Added a dedicated (i.e., not system_wq) workqueue to process HFI updates.
+> > >    Reworded commit message accordingly. (Patch 5; Rafael)
+> > >  * Repurposed comment on possibly receiving an HFI event with a NULL
+> > >    hfi_cpu_info::instance. Patch 4 fixed this potential issue. Instead,
+> > >    add a debug statement. (Patch 5; Srinivas)
+> > >  * Wrapped check for NULL hfi_cpu_info::instance in the unlikely macro.
+> > >    (Patch 5; Srinivas)
+> > >  * Renamed struct cpu_capability as struct thermal_genl_cpu_caps.
+> > >    (Patch 6; Rafael)
+> > >  * Removed automatic variable ret from
+> > >    thermal_genl_event_cpu_capability_change() and instead always return
+> > >    -EMSGSIZE on error. (Patch 6; Rafael)
+> > >  * Reworked parsing of HFI capabilities into chunks of
+> > >    HFI_MAX_THERM_NOTIFY_COUNT CPUs at a time to reduce the time
+> > >    we spend with interrupts disabled. (Patch7; Srinivas)
+> > >  * Protected hfi_instance::cpus when iterating over them. (Patch 7;
+> > >    Rafael)
+> >
+> > All patches in the series look good to me now, so I will be queuing it
+> > up for 5.18 unless there are any objections or concerns.
 > 
-> Hi Srinivas,
-> 
-> On 04/02/2022 20:32, srinivas pandruvada wrote:
-> > On Fri, 2022-02-04 at 18:11 +0100, Rafael J. Wysocki wrote:
-> > > CC Rui and Srinivas
-> > > 
-> > > On Fri, Feb 4, 2022 at 5:15 PM Daniel Lezcano
-> > > <daniel.lezcano@linaro.org> wrote:
-> > > > 
-> > > > The thermal framework implements a netlink notification
-> > > > mechanism
-> > > > to
-> > > > be used by the userspace to have a thermal configuration
-> > > > discovery,
-> > > > trip point changes or violation, cooling device changes
-> > > > notifications,
-> > > > etc...
-> > > > 
-> > > > This library provides a level of abstraction for the thermal
-> > > > netlink
-> > > > notification allowing the userspace to connect to the
-> > > > notification
-> > > > mechanism more easily. The library is callback oriented.
-> > > > 
-> > > > As it is the very first iteration, the API may be subject to
-> > > > changes. For this reason, the documentation will be provided
-> > > > after
-> > > > those are stabilized.
-> > > 
-> > > So shouldn't this be an RFC?
-> > > 
-> > > Also, I would prefer documentation to be provided or at least
-> > > some
-> > > intended usage examples to be given.
-> > > 
-> > > > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> > > > ---
-> > > >   tools/Makefile                           |  14 +-
-> > > >   tools/include/uapi/linux/thermal.h       |  91 ++++++
-> > This is duplicating the file at include/uapi/linux. I know this is
-> > done
-> > for other tools also. In my use I am copying and using symbolic
-> > link.
-> 
-> Why copy and symbolic link ? Should it be create a symbolic link only
-> ?
-Correct, symbolic only by making change in Makefile:
+> The series has been applied as 5.18 material, thanks!
 
-$(OUTPUT)include/linux/thermal.h:
-../../../../include/uapi/linux/thermal.h
-	mkdir -p $(OUTPUT)include/linux 2>&1 || true
-	ln -sf $(CURDIR)/../../../../include/uapi/linux/thermal.h $@
+Thank you very much Rafael for taking the patches. Thanks everyone for
+your feedback. It did improve the patches.
 
-Thanks,
-Srinivas
-
-> 
-> > BTW I have potential usage of netlink targeted for next release in
-> > linux tools.
-> > 
-> > https://github.com/spandruvada/linux-kernel/blob/intel-sst/tools/power/x86/intel-speed-select/hfi-events.c
-> > 
-> > I can replace with libthermal calls once ready. I will check the
-> > code
-> > below next week.
-> 
-> Great, thanks!
-> 
-> In attachment a test file as an example of the library usage.
-> 
-> 
-
+BR,
+Ricardo
