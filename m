@@ -2,117 +2,192 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 144364AB0FE
-	for <lists+linux-pm@lfdr.de>; Sun,  6 Feb 2022 18:39:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D4E34AB132
+	for <lists+linux-pm@lfdr.de>; Sun,  6 Feb 2022 19:26:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344599AbiBFRjq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 6 Feb 2022 12:39:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35758 "EHLO
+        id S231347AbiBFS0F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 6 Feb 2022 13:26:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241740AbiBFRjp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 6 Feb 2022 12:39:45 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA43C043185
-        for <linux-pm@vger.kernel.org>; Sun,  6 Feb 2022 09:39:44 -0800 (PST)
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 7257D3F1D0
-        for <linux-pm@vger.kernel.org>; Sun,  6 Feb 2022 17:39:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644169183;
-        bh=TeCoJpL2gatn+bwxsrgd/Z8tOsdzbjXD8EGKfCYuAUI=;
-        h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
-         In-Reply-To:Content-Type;
-        b=KuxWJAFrIq6MkXD1ka4Ds2NnVQ15lEsDuNHYGSbF0BkjAde8whxrdlBvpPFrCnN6b
-         Ri7erN+ir3Iq1QdybZ+L9EnOCwPYY8+ePOsHK3JmmxCsXuO+PZRkduoDIhZjknA61D
-         Nr4jnFn9tVNqU8yXbu/Mt261Ex684pzWg/qUB8vDZekym/Y6sC7kYqUGnGOn1dvOQm
-         pBChbksQvMXireq2GweQyj5VKO0egarHWd/t8AE2H4EbA+mlggTHpBtEyRzMC9efsH
-         f+TXInaVigGr3nAYWR16HrnZ7CKudGJso4UEHNE9wgb/zq82w6Q2Dv3964gar9WugH
-         NbfoE1iPFvTkA==
-Received: by mail-wm1-f71.google.com with SMTP id v185-20020a1cacc2000000b0034906580813so10854461wme.1
-        for <linux-pm@vger.kernel.org>; Sun, 06 Feb 2022 09:39:43 -0800 (PST)
+        with ESMTP id S230006AbiBFS0E (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 6 Feb 2022 13:26:04 -0500
+X-Greylist: delayed 336 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 10:26:02 PST
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 27510C06173B
+        for <linux-pm@vger.kernel.org>; Sun,  6 Feb 2022 10:26:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644171961;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lhLw3hXmLLPUfYVSxNooij004YEdn4Gmv5Im5DrUYIs=;
+        b=G/slwai9XxQ4qwnumFfqqfiQeVH9tCe+AGGhvhsRBu7f7nW18L/4EG+pdDEk6U/FQD26mU
+        pKFpJZzdC/Lmo3PosP8tI31q/Ktn3AHzGoVzzFkpsj2w7UijgLratZSjqwD6VMlU45y7am
+        jh1izcLgh3NUg1B8gAE6YO4o48M4cZ8=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-336-UCaKvr5sNkm-BjA7hMTaww-1; Sun, 06 Feb 2022 13:19:05 -0500
+X-MC-Unique: UCaKvr5sNkm-BjA7hMTaww-1
+Received: by mail-ed1-f71.google.com with SMTP id f6-20020a0564021e8600b0040f662b99ffso418729edf.7
+        for <linux-pm@vger.kernel.org>; Sun, 06 Feb 2022 10:19:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:cc:from:in-reply-to
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
          :content-transfer-encoding;
-        bh=TeCoJpL2gatn+bwxsrgd/Z8tOsdzbjXD8EGKfCYuAUI=;
-        b=oOppxRFy6CxXl/dHOoWUVEYvvbwQpsCSQ2nVCqSmoch/hE5KoojSXlSdccJ3NSL/Yi
-         +OYlwflAeDEPvJvvyfhtyoMX3RfamB18qVCRWQNSDYlZUmvqvBl1mQuhLeV4Qd/f/yD/
-         Ou9at8fdoIYLtNpT3htt5fgde72nkf4zzjCGs1xZDYgP6fSsLV611IDsCF3ZHBYnzzlq
-         n0JhvY0IV+FMPOF9caMxXyTpDWVLo79hSXwLYGkVPGtoBS7QxsFLz9QfjLPqyXa9za1I
-         AGZcwzcuvz7rxydWwz15+S9Lw376H2z3Kz1HRJEzTeBUAAotPucBS6ert2XiBKoZx1j8
-         XaQw==
-X-Gm-Message-State: AOAM530IbI2eRShQM7ZdLZdKrS4GS+mEeWriSwqwk1v8LcPfxJXxsTZ6
-        fS8wSXfyEIWybHvKBCbcTGbUuDuyxwyswhSLkjV/bp80XSSWnRgnGl9/J+jzxtrvAz593p5PDsF
-        7ziqfN46FltWZgVUQc5EIZTRIUlXZ08jfuMa4
-X-Received: by 2002:a05:600c:3d10:: with SMTP id bh16mr7970813wmb.127.1644169183170;
-        Sun, 06 Feb 2022 09:39:43 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxNGyI316biye7/WOlhhfjgOL6hxWvuVVlOz2JoSM+EAOV5h0PkLe5T3HK/z9BHSLc2pvUaoA==
-X-Received: by 2002:a05:600c:3d10:: with SMTP id bh16mr7970800wmb.127.1644169182958;
-        Sun, 06 Feb 2022 09:39:42 -0800 (PST)
-Received: from [192.168.0.86] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id i6sm7814875wry.33.2022.02.06.09.39.41
+        bh=lhLw3hXmLLPUfYVSxNooij004YEdn4Gmv5Im5DrUYIs=;
+        b=BucspSN+VZPWFxcmHGokYL/+emxFKNaBxylhmkgohD9F1G/UjXlJqY7B+Q6KbYGOtV
+         qj1//r5Yn3SPLKMAadI2vPStNKfbwQY3twCoOC45/s7eEeZwrnJ5QnrzS6dFcmI2ExuP
+         J44iPRC1lhHeV9bA7QvudYAkac3sV/3poYVfX6F0dgwSeC3e8xbRekQpQp6sfQcMFhBL
+         MbApWxwCIFsbBLQXxfaBMa1nadruTjfVmtckzb7ka0y/h6C4I7lkZjOEhw3dzv5PnJcY
+         P3jzXEbhCzSGkTPbzhOTtvQI2NPPbC7JcxgJTswS8sYfvUccgWm98MoEDCGniVPQVwJU
+         ZuWw==
+X-Gm-Message-State: AOAM530OULP0s71LsN0dm9Mk56yQ4RnNwlLHMBt+nBs/3TEhPJob69nv
+        tYLiOE8u+ZLMqVAF0ZLJ0pvYg4Tc9FJ7RjdGQIIG7PUSBbYG3fpUGOAP5qGheqoJ3h6aEifQhID
+        esTa0echA1lda0AYvtWA=
+X-Received: by 2002:a05:6402:27d4:: with SMTP id c20mr9850083ede.182.1644171544398;
+        Sun, 06 Feb 2022 10:19:04 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzFdGtstmkhqKhdF8gOjB+7sqibnMlVm8pjAeOcqwu0okDfC7HsxvZ6FPmJ8zqJNL0Ew+AdTQ==
+X-Received: by 2002:a05:6402:27d4:: with SMTP id c20mr9850071ede.182.1644171544219;
+        Sun, 06 Feb 2022 10:19:04 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id qb30sm2793439ejc.27.2022.02.06.10.19.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Feb 2022 09:39:42 -0800 (PST)
-Message-ID: <73bad620-97eb-a734-cbc8-6f001d04c18a@canonical.com>
-Date:   Sun, 6 Feb 2022 18:39:41 +0100
+        Sun, 06 Feb 2022 10:19:03 -0800 (PST)
+Message-ID: <f4cfc27e-7dbf-8dab-71fd-bad1172b31fd@redhat.com>
+Date:   Sun, 6 Feb 2022 19:19:03 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 0/4] mfd/power/regulators: dt-bindings: max14577:
- convert to dtschema
+ Thunderbird/91.3.0
+From:   Hans de Goede <hdegoede@redhat.com>
+Subject: Re: [PATCH 8/8] power: supply: ug3105_battery: Add driver for uPI
+ uG3105 battery monitor
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Stephan Gerhold <stephan@gerhold.net>, linux-pm@vger.kernel.org
+References: <20220131155730.309513-1-hdegoede@redhat.com>
+ <20220131155730.309513-9-hdegoede@redhat.com>
+ <20220201233335.henx5x53i4azbsdy@earth.universe>
 Content-Language: en-US
-To:     Lee Jones <lee.jones@linaro.org>
-References: <20220111174337.223320-1-krzysztof.kozlowski@canonical.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Chanwoo Choi <cw00.choi@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220111174337.223320-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220201233335.henx5x53i4azbsdy@earth.universe>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11/01/2022 18:43, Krzysztof Kozlowski wrote:
+Hi Sebastian,
+
+Thank you for the review and thank you for merging the axp288-fuel-gauge
+and the bug bq25890 series.
+
+On 2/2/22 00:33, Sebastian Reichel wrote:
 > Hi,
 > 
-> Changes since v1
-> ================
-> 1. MFD: Use absolute path to schemas
-> 2. Regulator: mention all allowed properties,
->    additionalProperties=false, add min/max values for voltages and
->    current, don't use patternProperties when not needed.
+> On Mon, Jan 31, 2022 at 04:57:30PM +0100, Hans de Goede wrote:
+>> Add a new battery driver for the uPI uG3105 battery monitor.
+>>
+>> Note the uG3105 is not a full-featured autonomous fuel-gauge. Instead it
+>> is expected to be use in combination with some always on microcontroller
+>> reading its coulomb-counter before it can wrap (must be read every 400
+>> seconds!).
+>>
+>> Since Linux does not monitor coulomb-counter changes while the device is
+>> off or suspended, the coulomb counter is not used atm.
+>>
+>> So far this driver is only used on x86/ACPI (non devicetree) devs
+>> (also note there is no of_match table). Therefor there is no devicetree
+>> bindings documentation for this driver's "upi,rsns-microohm" property
+>> since this is not used in actual devicetree files and the dt bindings
+>> maintainers have requested properties with no actual dt users to
+>> _not_ be added to the dt bindings.
+>>
+>> The property's name has been chosen so that it should not need to be
+>> changed if/when devicetree enumeration support gets added later, as it
+>> mirrors "maxim,rsns-microohm" from the "maxim,max17042" bindings.
 > 
-> Dependencies
-> ============
-> 1. DTS patch 1/4: nothing depends on it, sending here so Rob's automatic
->    checker won't complain about DTS.
->    I will take it via Samsung SoC tree.
+> Except the vendor prefix being incorrect; please use this one:
 > 
-> 2. Final MFD patch (4/4) depends on regulator and power, so the last
->    patches (2+3+4) should go via same tree.
-> 
-Dear Lee,
+> $ grep -i upi Documentation/devicetree/bindings/vendor-prefixes.yaml
+>   "^upisemi,.*":
+>     description: uPI Semiconductor Corp.
 
-This patchset was reviewed and there are no outstanding issues. Could
-you pick up patches 2-4 (skipping DTS patch) via MFD tree?
+Ah I didn't realize there already was a vendor prefix for uPI,
+will fix for v2.
 
-Best regards,
-Krzysztof
+<snip>
+
+> +static int ug3105_read_word(struct i2c_client *client, u8 reg)
+>> +{
+>> +	int val;
+>> +
+>> +	val = i2c_smbus_read_word_data(client, reg);
+>> +	if (val < 0)
+>> +		dev_err(&client->dev, "Error reading reg 0x%02x\n", reg);
+>> +
+>> +	return val;
+>> +}
+> 
+> can we use regmap instead? :)
+
+That would be tricky, since some registers are 8 bit, where as
+others are 16 bit. Where as the i2c-regmap code assumes a fixed
+register-size.
+
+Also I don't really see much added value for this driver to use
+the regmap abstraction, so I believe it would be better to
+just keep this as is and I'm going to keep this as is for v2.
+
+<snip>
+
+>> +static int ug3105_probe(struct i2c_client *client)
+>> +{
+>> +	struct power_supply_config psy_cfg = {};
+>> +	struct device *dev = &client->dev;
+>> +	u32 curr_sense_res_uohm = 10000;
+>> +	struct power_supply *psy;
+>> +	struct ug3105_chip *chip;
+>> +	int ret;
+>> +
+>> +	chip = devm_kzalloc(dev, sizeof(*chip), GFP_KERNEL);
+>> +	if (!chip)
+>> +		return -ENOMEM;
+>> +
+>> +	chip->client = client;
+>> +	mutex_init(&chip->lock);
+>> +	ret = devm_delayed_work_autocancel(dev, &chip->work, ug3105_work);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	psy_cfg.drv_data = chip;
+>> +	psy = devm_power_supply_register(dev, &ug3105_psy_desc, &psy_cfg);
+>> +	if (IS_ERR(psy))
+>> +		return PTR_ERR(psy);
+>> +
+>> +	ret = power_supply_get_battery_info(psy, &chip->info);
+>> +	if (ret)
+>> +		return ret;
+> 
+> this allocates data, so you need to call power_supply_put_battery_info()
+> when chip->info is no loner required.
+
+ug3105_work() and ug3105_get_property() both use the info, so it
+is needed until the driver gets unbound; and since the memory allocated
+by power_supply_get_battery_info() is allocated using devm_kmalloc
+it will get freed on driver-unbind automatically.
+
+So AFAICT there is no need to call power_supply_put_battery_info()
+(which uses devm_kfree() internally to avoid the memory being free-ed
+a second time on driver unbind).
+
+Regards,
+
+Hans
+
