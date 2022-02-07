@@ -2,129 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E0ED4AC6C2
+	by mail.lfdr.de (Postfix) with ESMTP id 724834AC6C3
 	for <lists+linux-pm@lfdr.de>; Mon,  7 Feb 2022 18:07:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230401AbiBGRFc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Feb 2022 12:05:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56866 "EHLO
+        id S230122AbiBGRGZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Feb 2022 12:06:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243051AbiBGQ62 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Feb 2022 11:58:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8780EC0401D1;
-        Mon,  7 Feb 2022 08:58:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3DEBBB8162C;
-        Mon,  7 Feb 2022 16:58:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32F76C340ED;
-        Mon,  7 Feb 2022 16:58:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644253104;
-        bh=ZRdo6pBuuxa9P8yx75CNgVwMKpdNus9AHcHyaeZxi2o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TO/pPYnITsm40qUyQa01pmiLC4AM9DO/KHFFHqqNouR/edaEcAn9V3UTSHFLAC2wd
-         yQ5EiIbU+xeCnykFGZMS9l1AKk5zpwCtdLnJ3KmjVC3YMwkS4Z8lHwB3Fh2JL8FAj7
-         qg18M9GWMycYeIIJ5LxlNSxcrWB9eS+jc9dsCgNnjdRADFvOnMGZ33ShfHiPji2VjI
-         zPDmUojdDSya+fnUiJ+AQDVWS4EQTdLx1hWHXjEWBU015y91aemghOvJRrD4I8DuPY
-         aiwIOmKM1OdgSR8tKdpmSsG5yIFqqNHnJXo6OS8Kul5vdCWa8o5zCPreMrvW8RIU1B
-         cQlONZQy3JGYw==
-Date:   Mon, 7 Feb 2022 09:58:20 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH] thermal: netlink: Fix parameter type of
- thermal_genl_cpu_capability_event() stub
-Message-ID: <YgFPrElA4O9P6U/l@dev-arch.archlinux-ax161>
-References: <20220207163829.1025904-1-nathan@kernel.org>
- <0d11f34a98e720cb5cf0d37e67a3e130d8275e31.camel@linux.intel.com>
+        with ESMTP id S229947AbiBGRCl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Feb 2022 12:02:41 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8DD8C0401D3;
+        Mon,  7 Feb 2022 09:02:40 -0800 (PST)
+Received: from [192.168.0.175] ([151.127.53.97]) by mrelayeu.kundenserver.de
+ (mreue108 [213.165.67.119]) with ESMTPSA (Nemesis) id
+ 1MGz9p-1nUc431LzX-00E51x; Mon, 07 Feb 2022 18:02:24 +0100
+Message-ID: <eed40b17-9db7-ff97-822d-535eaeb73c65@green-communications.fr>
+Date:   Mon, 7 Feb 2022 18:02:09 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0d11f34a98e720cb5cf0d37e67a3e130d8275e31.camel@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH] imx_thermal: Fix temperature retrieval after overheat
+Content-Language: fr
+From:   Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220207161829.4807-1-nicolas.cavallari@green-communications.fr>
+In-Reply-To: <20220207161829.4807-1-nicolas.cavallari@green-communications.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:xG18oAhepxkOh6DIWJZDPXfxyrJin2ryIuz9EgSKE8xitq0xGB4
+ m3KXUYXo7y7h+2T7QQH0qDtGihiuNeS8oyltyF769cqNY77cyfuR1sUhA2hzdFdcu1agIEd
+ NGZd68CXgu6W5JN5X4SlsbFRp22q9eKAUjVdGaR5EY5KUhBiVzkRujSJlbtcKj3m5QgqsB0
+ TMKhB233qM/Wfom0PyX7g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:zQ+TzyCXroE=:0ov39CnpbAPHJWiUTCYNMf
+ 1J3MQxS26dikqcsPQQTw+ygTGo8pI4d424GUONgKiXEprgN/hTge0LWaq7/P0OOC9cf+r/n9N
+ efnTJefrV+iYqIyS45U464PblBEaiA4pfLEOkhaI9ryqWQVwovxgFqV3tYwb6hXkvMUVlQtXS
+ onQNl4KV68n8zy9t9KrFyoP6WCtPFPAemMNEzY5Dz6ViDcFPrByEKRjuPt5rgliKjh5tB8oxq
+ xsiJ4Fr5Ul83qmO6pp41NLH3Teycdq9LuzOMXBlNV7eGFOwtrRh4Vw5/17IgsjetXJwIfS+ko
+ NfFBbPD6/j6hXG1i2cGdEEIV/3TGPTk6WOEdE0mIdHv922bbVhv6DYS3rBBFwGsyiyLMRfLvH
+ nadq9luuqH7yfyZQP4e2jtaYLRmP80dtlsQIjCDVdJg2kvcaf0Mmr728eafxrUuZx0qPTcg+a
+ HrEixYiy5fvmJ3AJc+AZTqL1YQkpsoT7lGYRDGPa6xU2Z9hPgYK/2GUP5ITgBx+5hzLNM2ytS
+ s+9v0EE32OJC6VfphPhs+pj/lpJEJR2i7dzgzkpAbqAjmqbYWaeNLTPsKHmvixitQC2qMCCHt
+ lhgnKWhm8jVWJgquRUUnVtPo6xEEW/Y/1vWZOE+q5yCfwGaw9jkYg/W6TKOibL/RZc0PV/5ku
+ 30vCeiEiBxbYvuM+SJcCFOSsS4qUZT+wLb3mj5J2RQGVFGN3PM2P2PJa5ADdLCvEsQ2lTOvsY
+ ml18Lu2V94BRPRAPoEHoWlIvLkcGF7gw/5jw2A==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 08:54:41AM -0800, srinivas pandruvada wrote:
-> On Mon, 2022-02-07 at 09:38 -0700, Nathan Chancellor wrote:
-> > When building with CONFIG_THERMAL_NETLINK=n, there is a spew of
-> > warnings
-> > along the lines of:
-> > 
-> >   In file included from drivers/thermal/thermal_core.c:27:
-> >   In file included from drivers/thermal/thermal_core.h:15:
-> >   drivers/thermal/thermal_netlink.h:113:71: warning: declaration of
-> > 'struct cpu_capability' will not be visible outside of this function
-> > [-Wvisibility]
-> >   static inline int thermal_genl_cpu_capability_event(int count,
-> > struct cpu_capability *caps)
-> >                                                                      
-> >    ^
-> >   1 warning generated.
-> > 
-> > 'struct cpu_capability' is not forward declared anywhere in the
-> > header.
-> > As it turns out, this should really be 'struct
-> > thermal_genl_cpu_caps',
-> > which silences the warning and makes the parameter types of the stub
-> > match the full function.
-> Thanks for sending the patch. I was about to send this change.
-> Since this patch target only linux-next, don't we need prefix:
-> "[PATCH -next]" instead of "[PATCH]"?
+On 07/02/2022 17:18, Nicolas Cavallari wrote:
+> When the CPU temperature is above the passive trip point, reading the
+> temperature would fail forever with EAGAIN.  Fortunately, the thermal
+> core would continue to assume that the system is overheating, so would
+> put all passive cooling devices to the max.  Unfortunately, it does
+> this forever, even if the temperature returns to normal.
 
-I could probably get better about adding "-next" to the subject prefix
-to make it easier for maintainers but I do include the commit that the
-patch was based on at the bottom of the patch to accomplish the same
-thing.
-
-Thank you for the review!
-
-Cheers,
-Nathan
-
-> > 
-> > Fixes: e4b1eb24ce5a ("thermal: netlink: Add a new event to notify CPU
-> > capabilities change")
-> > Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> Reviewed-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> 
-> > ---
-> >  drivers/thermal/thermal_netlink.h | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/thermal/thermal_netlink.h
-> > b/drivers/thermal/thermal_netlink.h
-> > index 04d1adbbc012..1052f523188d 100644
-> > --- a/drivers/thermal/thermal_netlink.h
-> > +++ b/drivers/thermal/thermal_netlink.h
-> > @@ -110,7 +110,7 @@ static inline int thermal_genl_sampling_temp(int
-> > id, int temp)
-> >         return 0;
-> >  }
-> >  
-> > -static inline int thermal_genl_cpu_capability_event(int count,
-> > struct cpu_capability *caps)
-> > +static inline int thermal_genl_cpu_capability_event(int count,
-> > struct thermal_genl_cpu_caps *caps)
-> >  {
-> >         return 0;
-> >  }
-> > 
-> > base-commit: 08615cb8c0e1deeca5489d672213fb205fa53c3b
-> 
+Please drop this patch, apparently this was already fixed. Sorry for the 
+noise.
