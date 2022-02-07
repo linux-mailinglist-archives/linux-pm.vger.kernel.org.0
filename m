@@ -2,172 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85F034AB479
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Feb 2022 07:16:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69CFD4AB53A
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Feb 2022 07:54:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233427AbiBGGPl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Feb 2022 01:15:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43484 "EHLO
+        id S230502AbiBGGyN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Feb 2022 01:54:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351369AbiBGERU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 6 Feb 2022 23:17:20 -0500
-X-Greylist: delayed 162 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 20:17:18 PST
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5330DC043182
-        for <linux-pm@vger.kernel.org>; Sun,  6 Feb 2022 20:17:18 -0800 (PST)
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220207041716epoutp04ffa292ca258ceb82dd29b01aaffec247~RZfO1f7nU1294512945epoutp04X
-        for <linux-pm@vger.kernel.org>; Mon,  7 Feb 2022 04:17:16 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220207041716epoutp04ffa292ca258ceb82dd29b01aaffec247~RZfO1f7nU1294512945epoutp04X
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1644207436;
-        bh=4ck6lVtCBpeaSDrwhLqPIKiZExfSF7Tyk9gaU04baw0=;
-        h=From:To:In-Reply-To:Subject:Date:References:From;
-        b=Mu7kLaL68nGzaQwoRPSf6t5owqSaq7cjE2tIaIxcLg/gf+UTApeAeCi3nLV5ILxB0
-         nf37CzVsk3iDp6YEAWIwAKrI3UZLwt9RdwxxNtwAlQt+nNRAuvH5+xTFy+8fpaoyzz
-         va+gCC13T08MW+zZxOwpjsSnlGzXPMmq7l7/ogIo=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20220207041715epcas5p1033fb80b16399411885fc73428746e1c~RZfOZKyRT0984509845epcas5p1o;
-        Mon,  7 Feb 2022 04:17:15 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.181]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4JsXsf5DFYz4x9Q9; Mon,  7 Feb
-        2022 04:17:10 +0000 (GMT)
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        43.44.46822.AAC90026; Mon,  7 Feb 2022 13:14:34 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-        20220207041708epcas5p3a8e7483fc69e7e6019e48e9f05d56806~RZfHsio_42307023070epcas5p39;
-        Mon,  7 Feb 2022 04:17:08 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220207041708epsmtrp15c172bd6db2f1756f2b748c4cf0ef0b4~RZfHrrGjq0897108971epsmtrp1e;
-        Mon,  7 Feb 2022 04:17:08 +0000 (GMT)
-X-AuditID: b6c32a4a-de5ff7000000b6e6-97-62009caa640c
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        96.9B.08738.44D90026; Mon,  7 Feb 2022 13:17:08 +0900 (KST)
-Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220207041701epsmtip15f07fd6355d1db162219b38209f85dc9~RZfBBFTso3211932119epsmtip1C;
-        Mon,  7 Feb 2022 04:17:00 +0000 (GMT)
-From:   "Alim Akhtar" <alim.akhtar@samsung.com>
-To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>,
-        "'Rob Herring'" <robh+dt@kernel.org>,
-        "'Lukasz Luba'" <lukasz.luba@arm.com>,
-        "'Dmitry Osipenko'" <digetx@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-samsung-soc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-In-Reply-To: <20220206135807.211767-8-krzysztof.kozlowski@canonical.com>
-Subject: RE: [PATCH v3 7/8] memory: of: parse max-freq property
-Date:   Mon, 7 Feb 2022 09:46:55 +0530
-Message-ID: <0a7201d81bd9$9251fed0$b6f5fc70$@samsung.com>
+        with ESMTP id S241068AbiBGG3W (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Feb 2022 01:29:22 -0500
+X-Greylist: delayed 302 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 22:29:20 PST
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5169EC043181;
+        Sun,  6 Feb 2022 22:29:20 -0800 (PST)
+X-UUID: b38ae3703fd145f7aa8aadeb02123d6a-20220207
+X-UUID: b38ae3703fd145f7aa8aadeb02123d6a-20220207
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 458394913; Mon, 07 Feb 2022 14:24:13 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Mon, 7 Feb 2022 14:24:12 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 7 Feb
+ 2022 14:24:11 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 7 Feb 2022 14:24:11 +0800
+Message-ID: <4490a88150f5aa108e1d6ff8ce55264c3b1734c2.camel@mediatek.com>
+Subject: Re: [PATCH v22 1/7] dt-bindings: soc: mediatek: add mtk svs
+ dt-bindings
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        "HenryC Chen" <HenryC.Chen@mediatek.com>,
+        Nishanth Menon <nm@ti.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Fan Chen <fan.chen@mediatek.com>, <devicetree@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        Angus Lin <Angus.Lin@mediatek.com>
+Date:   Mon, 7 Feb 2022 14:24:11 +0800
+In-Reply-To: <YfnFBirxSnCqRDem@robh.at.kernel.org>
+References: <20220127033956.24585-1-roger.lu@mediatek.com>
+         <20220127033956.24585-2-roger.lu@mediatek.com>
+         <YfnFBirxSnCqRDem@robh.at.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQGyHe1yAVlgrWkusZTYpz8Cv3vw/AIE77dMAizDPX+ssekcMA==
-Content-Language: en-us
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrOJsWRmVeSWpSXmKPExsWy7bCmpu6qOQxJBttf6lvMP3KO1WL1x8eM
-        Fhvf/mCy2PT4GqvF5V1z2Cw+9x5htJhxfh+TxcKmFnaL1r1H2B04PdbMW8PoMauhl81j56y7
-        7B6bVnWyeWxeUu/xeZNcAFtUtk1GamJKapFCal5yfkpmXrqtkndwvHO8qZmBoa6hpYW5kkJe
-        Ym6qrZKLT4CuW2YO0FFKCmWJOaVAoYDE4mIlfTubovzSklSFjPziElul1IKUnAKTAr3ixNzi
-        0rx0vbzUEitDAwMjU6DChOyMGWtWsRQs4KtYc7SRuYFxCU8XIyeHhICJxK1Tn9i7GLk4hAR2
-        M0qcX3CKGcL5xCix6u9rFpAqIYHPjBI770vAdDx+sA2qaBejxLcrOxghnJeMEp0v7rODVLEJ
-        6ErsWNzGBpIQEXjMJDHx/FZGkASngIfE7zXvgcZycAgL2Eu87bUECbMIqEis+3OQGcTmFbCU
-        uNW0kwnCFpQ4OfMJ2BXMAvIS29/OYYa4QkHi59NlrCC2iICTxPRPfYwQNeISL48eAftHQmAh
-        h8Tf951MEA0uEgd/vWWDsIUlXh3fwg5hS0m87G9jB7lHQiBbomeXMUS4RmLpvGMsELa9xIEr
-        c8BOZhbQlFi/Sx9iFZ9E7+8nTBCdvBIdbUIQ1aoSze+uQnVKS0zs7maFKPGQ+DlXDBJSNxkl
-        Zp7fwTiBUWEWkidnIXlyFpJnZiEsXsDIsopRMrWgODc9tdi0wCgvtRwe3cn5uZsYwSlWy2sH
-        48MHH/QOMTJxMB5ilOBgVhLhlen+nyjEm5JYWZValB9fVJqTWnyI0RQY8hOZpUST84FJPq8k
-        3tDE0sDEzMzMxNLYzFBJnPd0+oZEIYH0xJLU7NTUgtQimD4mDk6pBqaiqfztqqeOr1D/O1lE
-        tiLy4pYAkQPdsUz/Nu6IE3/2/vDreneWt8rBO8PPSnk9OV+7rJnLL/lJX6/L6sr8l61BHctu
-        bDyn4l55veIUk5CwV4pRVWYte+3r+sP3trN6Wcrn2R1fvWC7hK25gL+Lsbgpo73XN4v68qQT
-        QT9XT46MM1LSnxpU/phpb4apk8fkfIkap8vtX4urohjtnC/JHPHuuBWUXp9Qsdl7V8W6RTWy
-        Lpc2/Txpx9+bmmVypDWr8d3ePRc+LejJOLTeY/d8jqPCx9uYXduXt1/78EL/ycWcwxtCFSLl
-        yuU/Xrv1jZ2dYZ79/V+r6l9ov7p81yb4HX/V2qJL5+ccfHL3xDbhMiWW4oxEQy3mouJEAEiG
-        5MY6BAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpmkeLIzCtJLcpLzFFi42LZdlhJTtdlLkOSwadGRYv5R86xWqz++JjR
-        YuPbH0wWmx5fY7W4vGsOm8Xn3iOMFjPO72OyWNjUwm7RuvcIuwOnx5p5axg9ZjX0snnsnHWX
-        3WPTqk42j81L6j0+b5ILYIvisklJzcksSy3St0vgypixZhVLwQK+ijVHG5kbGJfwdDFyckgI
-        mEg8frCNGcQWEtjBKLF9PjtEXFri+sYJULawxMp/z4FsLqCa54wSu3bPYwNJsAnoSuxY3MYG
-        khAReM0k8aBpKQtE1VVGieVbrzCBVHEKeEj8XvMeKMHBISxgL/G21xIkzCKgIrHuz0GwzbwC
-        lhK3mnYyQdiCEidnPgErZxbQk2jbyAgSZhaQl9j+dg4zxEEKEj+fLmMFsUUEnCSmf+qDqhGX
-        eHn0CPsERqFZSCbNQpg0C8mkWUg6FjCyrGKUTC0ozk3PLTYsMMpLLdcrTswtLs1L10vOz93E
-        CI4nLa0djHtWfdA7xMjEwXiIUYKDWUmEV6b7f6IQb0piZVVqUX58UWlOavEhRmkOFiVx3gtd
-        J+OFBNITS1KzU1MLUotgskwcnFINTKt/OZuvvKmSW7A6Kyn66921hom7eX6d2MU5IWrO9fe9
-        Eyf+VbFozk6bWi4uULLjvcyUTV9r+te4CHOf2pt/xzDBgCXSxfJNtfURycNdTGsm2dhd+/9j
-        +l/e/QYcP4IPVE53t5J7qrZR+KTYucNOAueLbtUvzd5wfMZ0G6f++ke2fXO8z0k6y6bWLhST
-        XL8udfsLfu5js0+v+MO5dnduMMP9V/kX77ptLgw6zFUaqfxsf/el/5qXuS7tF7r//bHTs6Ym
-        FrUMl0/fahkD7NIuFHavevV1xWObz03TOm7HOCucYo2+eU3o+7y7QL99Xtsm63ywcX6Y6s60
-        ssUvmGKd/ScWT5lXf3uT4pNN0v+WbFdiKc5INNRiLipOBABd+X+FFgMAAA==
-X-CMS-MailID: 20220207041708epcas5p3a8e7483fc69e7e6019e48e9f05d56806
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220206135826epcas5p23b773aa6d7a4483d8b91015d200d975f
-References: <20220206135807.211767-1-krzysztof.kozlowski@canonical.com>
-        <CGME20220206135826epcas5p23b773aa6d7a4483d8b91015d200d975f@epcas5p2.samsung.com>
-        <20220206135807.211767-8-krzysztof.kozlowski@canonical.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Krzysztof
+Hi Rob,
 
->-----Original Message-----
->From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@canonical.com]
->Sent: Sunday, February 6, 2022 7:28 PM
->To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>; Rob Herring
-><robh+dt@kernel.org>; Lukasz Luba <lukasz.luba@arm.com>; Alim Akhtar
-><alim.akhtar@samsung.com>; Dmitry Osipenko <digetx@gmail.com>; linux-
->kernel@vger.kernel.org; devicetree@vger.kernel.org; linux-
->pm@vger.kernel.org; linux-samsung-soc@vger.kernel.org; linux-arm-
->kernel@lists.infradead.org
->Subject: [PATCH v3 7/8] memory: of: parse max-freq property
->
->Passing the memory timings maximum frequency as an unit address was a
->workaround and instead 'max-freq' is preferred.  Look for 'max-freq'
->first and then fallback to 'reg'.
->
->Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->---
+On Tue, 2022-02-01 at 17:40 -0600, Rob Herring wrote:
+> On Thu, 27 Jan 2022 11:39:50 +0800, Roger Lu wrote:
+> > Document the binding for enabling mtk svs on MediaTek SoC.
+> > 
+> > Signed-off-by: Roger Lu <roger.lu@mediatek.com>
+> > ---
+> >  .../bindings/soc/mediatek/mtk-svs.yaml        | 83 +++++++++++++++++++
+> >  1 file changed, 83 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mtk-
+> > svs.yaml
+> > 
+> 
+> 
+> Please add Acked-by/Reviewed-by tags when posting new versions. However,
+> there's no need to repost patches *only* to add the tags. The upstream
+> maintainer will do that for acks received on the version they apply.
+> 
+> If a tag was not added on purpose, please state why and what changed.
 
-Reviewed-by: Alim Akhtar <alim.ahtar@samsung.com>
+Oh, this patch has error detected and shown in [1]. Therefore, I fix it and
+state the change at [2]. Thanks for the explanation and time to review the
+patch.
 
-
-> drivers/memory/of_memory.c | 6 ++++--
-> 1 file changed, 4 insertions(+), 2 deletions(-)
->
->diff --git a/drivers/memory/of_memory.c b/drivers/memory/of_memory.c
->index b94408954d85..bac5c7f34936 100644
->--- a/drivers/memory/of_memory.c
->+++ b/drivers/memory/of_memory.c
->@@ -212,8 +212,10 @@ static int of_lpddr3_do_get_timings(struct
->device_node *np,  {
-> 	int ret;
->
->-	/* The 'reg' param required since DT has changed, used as 'max-freq'
->*/
->-	ret = of_property_read_u32(np, "reg", &tim->max_freq);
->+	ret = of_property_read_u32(np, "max-freq", &tim->max_freq);
->+	if (ret)
->+		/* Deprecated way of passing max-freq as 'reg' */
->+		ret = of_property_read_u32(np, "reg", &tim->max_freq);
-> 	ret |= of_property_read_u32(np, "min-freq", &tim->min_freq);
-> 	ret |= of_property_read_u32(np, "tRFC", &tim->tRFC);
-> 	ret |= of_property_read_u32(np, "tRRD", &tim->tRRD);
->--
->2.32.0
-
+[1] 
+https://patchwork.kernel.org/project/linux-mediatek/patch/20220107095200.4389-2-roger.lu@mediatek.com/
+[2] 
+https://patchwork.kernel.org/project/linux-mediatek/cover/20220127033956.24585-1-roger.lu@mediatek.com/
+- Remove unnecessary "maxItems" from nvmem-cells in mtk-svs.yaml.
 
