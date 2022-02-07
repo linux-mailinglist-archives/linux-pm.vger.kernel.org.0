@@ -2,81 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8A354ABE62
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Feb 2022 13:13:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 148CC4AC124
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Feb 2022 15:31:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233248AbiBGME6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Feb 2022 07:04:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55262 "EHLO
+        id S1344859AbiBGOWG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Feb 2022 09:22:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385880AbiBGLpB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Feb 2022 06:45:01 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CB145C0401ED;
-        Mon,  7 Feb 2022 03:44:48 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 258F911B3;
-        Mon,  7 Feb 2022 03:44:48 -0800 (PST)
-Received: from [10.57.15.201] (unknown [10.57.15.201])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 31D9B3F70D;
-        Mon,  7 Feb 2022 03:44:45 -0800 (PST)
-Subject: Re: [PATCH 0/2] Ignore Energy Model with abstract scale in IPA and
- DTPM
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     amit.kachhap@gmail.com, viresh.kumar@linaro.org, rafael@kernel.org,
-        amitk@kernel.org, rui.zhang@intel.com, dietmar.eggemann@arm.com,
-        Pierre.Gondois@arm.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20220207073036.14901-1-lukasz.luba@arm.com>
- <0d2217e0-44f7-8587-3e1f-a73d301ab166@linaro.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <616307f7-b419-8e36-6879-6cf6f4e02d5a@arm.com>
-Date:   Mon, 7 Feb 2022 11:44:44 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        with ESMTP id S241746AbiBGNws (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Feb 2022 08:52:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C26C043189
+        for <linux-pm@vger.kernel.org>; Mon,  7 Feb 2022 05:52:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E58EE61268
+        for <linux-pm@vger.kernel.org>; Mon,  7 Feb 2022 13:52:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 59A23C341E3
+        for <linux-pm@vger.kernel.org>; Mon,  7 Feb 2022 13:52:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644241966;
+        bh=1vxx1eF35JrEWw0/wu/kw/+5FRH7T9jk/Ofu0LYJhSg=;
+        h=From:To:Subject:Date:From;
+        b=WMT27z6cYvAaCx6z/fCIgp0xKV0z1d/h7V3D/7fq1TSnUBncNhjRpUY8ZzkQZgob6
+         stwHuseDW7lSFPPVOIu4ga2AYz5riYnn7yPwq2uz2XHLIhRRjyNnmlW1HBENj9a6zT
+         P8CARIDkKzyZaLxJuCNPet+UIjm7+WuIhoKETwpDwrA8R855oDkwPRsMEOpOmGzGtH
+         UIsuMQ2kI4w2rJkWKCPjp2dV8zVrqhGBesTzpd+9F2u1iIW3ZoXavlrS+Zpbi8ZhDr
+         hIIUqeq4spzoz0MAx3JOqbsuaRgJxzcNk44uktmKPe54lDY4MpqSaeknNmi1gaT3xP
+         pXTNC5VMSSK8Q==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 4596DC05FE2; Mon,  7 Feb 2022 13:52:46 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 215574] New: Frequency boost disabled by default on Asus PN50
+Date:   Mon, 07 Feb 2022 13:52:46 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: parag.lkml@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression
+Message-ID: <bug-215574-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-In-Reply-To: <0d2217e0-44f7-8587-3e1f-a73d301ab166@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215574
 
+            Bug ID: 215574
+           Summary: Frequency boost disabled by default on Asus PN50
+           Product: Power Management
+           Version: 2.5
+    Kernel Version: 5.17.0-rc2+
+          Hardware: x86-64
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: normal
+          Priority: P1
+         Component: cpufreq
+          Assignee: linux-pm@vger.kernel.org
+          Reporter: parag.lkml@gmail.com
+        Regression: No
 
-On 2/7/22 10:41 AM, Daniel Lezcano wrote:
-> On 07/02/2022 08:30, Lukasz Luba wrote:
->> Hi all,
->>
->> The Energy Model supports abstract scale power values. This might cause
->> issues for some mechanisms like thermal governor IPA or DTPM, which
->> expect that all devices provide sane power values. This patch set 
->> prevents
->> from registering such devices for IPA and DTPM.
-> 
-> 
-> Does it mean for example big and little have both 0-100 ?
-> 
-> 
+On Asus PN50 with the latest available BIOS 0623 - turbo boost is disabled =
+by
+default on boot and CPU only goes from 1.4Ghz to 1.8Gz non turbo frequencies
+resulting in noticeable sluggishness vs Windows which seems to be able to b=
+oost
+to 4.2Ghz.
 
-Unfortunately, these can be any numbers. I hope at least the CPUs
-Big and Little power have sense: Little power is not higher
-than Big power. The purpose of EM is to enable EAS, so this power
-relation between Big and Little should have sense. Someone
-who is not willing to or cannot expose real power values, still
-wants the EAS to operate (my assumption and hope). The SCMI FW can
-provide abstract power values. It's in the SCMI spec. Thus,
-creating these abstract scale power values for big.LITTLE the right
-way should result in properly working EAS.
+If I manually echo 1 > /sys/devices/system/cpu/cpufreq/boost or put it in u=
+dev
+rules for that matter - things work as expected, processor boosts to 4.x Gh=
+z,
+fans kick in and system is snappier.
 
-I can also have hope for GPU vs. Big power, but it is a weaker hope.
-The second is more tricky to distinguish even if you have a domain
-knowledge, but not the real measurements with you. The GPU power
-values is also a 'sensitive' knowledge to share. Open source guys can do
-that (after measurements), but some vendor's engineers probably can't.
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
