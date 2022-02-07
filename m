@@ -2,99 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5253C4AC9E7
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Feb 2022 20:54:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 716154ACA43
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Feb 2022 21:20:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235314AbiBGTwo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Feb 2022 14:52:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60990 "EHLO
+        id S241877AbiBGUSf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Feb 2022 15:18:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240743AbiBGTr2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Feb 2022 14:47:28 -0500
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3C0CC03FEE0;
-        Mon,  7 Feb 2022 11:47:15 -0800 (PST)
-Received: by mail-yb1-f178.google.com with SMTP id p5so43184679ybd.13;
-        Mon, 07 Feb 2022 11:47:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wuRNuHNXZ73VDUS0YFtFTT31aQYm+MB2IbD5aGK6CEA=;
-        b=D8UOl53t8IcFGd1x/TM8N09U7/cI8gTG/YwBARd7rwxsyItIX21MQ+YYwhuLBtV/wC
-         FhsMN8dwMbasBYbKjLgylYM8X0uZjGhB8E5iV3QrKeEi+MK8q2gnNPQAnDz7BMzbkiVE
-         fgXGPSanDEjshW7A7S9tmkhFkNoyakFkjocos/tPFf3n3/HpN7/HHJXYlqt8Z1vOrYng
-         MbMquK5xfZKKTl3/UwoxCFzfio6JITWwmgh1WbwwIklCATYbsrze5RVIHHzEKQ00aVuG
-         MnYDAJJSaoyeSQpUBwPMObI6AOzmrswu3xdML2HoGRd8O1k9q+GeBcpwnCp3ArQeDIUC
-         8eDg==
-X-Gm-Message-State: AOAM531wI8B/mvwRPLDxLRJWBSL0QwbQxp22T/mWwXteQTUKLYBC9H2n
-        KDxEhxVI7j9SujfKeLO8/cphv1kOpC8TriUvh+k=
-X-Google-Smtp-Source: ABdhPJyzP29Oh6MTXKAjJHRSuLi+phXO76/VohY769b33mWTlzmTt9W6CUm0Y/8REwbK8ghJsb0vS9WEFL5YIcwNsL4=
-X-Received: by 2002:a05:690c:118:: with SMTP id bd24mr1600198ywb.515.1644263233894;
- Mon, 07 Feb 2022 11:47:13 -0800 (PST)
+        with ESMTP id S241807AbiBGUNs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Feb 2022 15:13:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF969C0401DA;
+        Mon,  7 Feb 2022 12:13:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AF9B1B81673;
+        Mon,  7 Feb 2022 20:13:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E746C340EE;
+        Mon,  7 Feb 2022 20:13:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644264825;
+        bh=plTnq9pejgjpmDCGWtGP8pfnD0zRw1CkgzOlZIUXW+Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=cCGH/YrbuY0GdCIi582p6XmXwWgBSOhqBYn2V9Oy3z29nvC/AEkgYR8oJ+IBaQo89
+         NH6MrrUR6Gd4iGcQaK2NtW6N4k10sovKyCWY27PiZ9jM7VPSXKZsUpWdJhUR3nRYFq
+         y738P/ANGIvN8Gdwk7JHHDFo+FEECNI4rgGobNbl8ApAZukXQEPwN1n3NE2t4+ab3O
+         bnqVVg3KflfjdcJZSb8dVNuzA0OkG8YHeq9G29zHWUGqyeZrSstPwYcGjStdoZ7Lsz
+         EwhbN5U1fziwzU9kHbfuENQiQAOjYzkCIOEueSJfD1Qdf/p1HRn/iovjSwu6YhjeNk
+         R7M0VZW4kyV6g==
+Date:   Mon, 7 Feb 2022 14:13:43 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Abhishek Sahu <abhsahu@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH] PCI: Fix the ACPI power state during runtime resume
+Message-ID: <20220207201343.GA413636@bhelgaas>
 MIME-Version: 1.0
-References: <20220207163829.1025904-1-nathan@kernel.org> <0d11f34a98e720cb5cf0d37e67a3e130d8275e31.camel@linux.intel.com>
- <YgFPrElA4O9P6U/l@dev-arch.archlinux-ax161>
-In-Reply-To: <YgFPrElA4O9P6U/l@dev-arch.archlinux-ax161>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 7 Feb 2022 20:47:03 +0100
-Message-ID: <CAJZ5v0j-FyFRwwfKk8Ohyutvde_aBkdu+_Ni7FBvtzT5oEuVzg@mail.gmail.com>
-Subject: Re: [PATCH] thermal: netlink: Fix parameter type of
- thermal_genl_cpu_capability_event() stub
-To:     Nathan Chancellor <nathan@kernel.org>,
-        srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2249802.ElGaqSPkdT@kreacher>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Feb 7, 2022 at 5:58 PM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> On Mon, Feb 07, 2022 at 08:54:41AM -0800, srinivas pandruvada wrote:
-> > On Mon, 2022-02-07 at 09:38 -0700, Nathan Chancellor wrote:
-> > > When building with CONFIG_THERMAL_NETLINK=n, there is a spew of
-> > > warnings
-> > > along the lines of:
-> > >
-> > >   In file included from drivers/thermal/thermal_core.c:27:
-> > >   In file included from drivers/thermal/thermal_core.h:15:
-> > >   drivers/thermal/thermal_netlink.h:113:71: warning: declaration of
-> > > 'struct cpu_capability' will not be visible outside of this function
-> > > [-Wvisibility]
-> > >   static inline int thermal_genl_cpu_capability_event(int count,
-> > > struct cpu_capability *caps)
-> > >
-> > >    ^
-> > >   1 warning generated.
-> > >
-> > > 'struct cpu_capability' is not forward declared anywhere in the
-> > > header.
-> > > As it turns out, this should really be 'struct
-> > > thermal_genl_cpu_caps',
-> > > which silences the warning and makes the parameter types of the stub
-> > > match the full function.
-> > Thanks for sending the patch. I was about to send this change.
-> > Since this patch target only linux-next, don't we need prefix:
-> > "[PATCH -next]" instead of "[PATCH]"?
->
-> I could probably get better about adding "-next" to the subject prefix
-> to make it easier for maintainers but I do include the commit that the
-> patch was based on at the bottom of the patch to accomplish the same
-> thing.
->
-> Thank you for the review!
+On Mon, Feb 07, 2022 at 07:58:13PM +0100, Rafael J. Wysocki wrote:
+> On Saturday, February 5, 2022 12:32:19 AM CET Bjorn Helgaas wrote:
+> > Wonder if we should add something like this to MAINTAINERS so you get
+> > cc'd on power-related things:
+> > 
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index ea3e6c914384..3d9a211cad5d 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -15422,6 +15422,7 @@ F:	include/linux/pm.h
+> >  F:	include/linux/pm_*
+> >  F:	include/linux/powercap.h
+> >  F:	kernel/configs/nopm.config
+> > +K:	pci_[a-z_]*power[a-z_]*\(
+> 
+> It seems so, but generally PM patches should be CCed to linux-pm anyway.
 
-Patch applied, thanks!
+Definitely.  It's just that running get_maintainer.pl on this patch
+currently shows:
+
+  Bjorn Helgaas <bhelgaas@google.com> (supporter:PCI SUBSYSTEM)
+  linux-pci@vger.kernel.org (open list:PCI SUBSYSTEM)
+  linux-kernel@vger.kernel.org (open list)
+
+so it's not as helpful as it could be.  The MAINTAINERS patch above
+would change it to this:
+
+  Bjorn Helgaas <bhelgaas@google.com> (supporter:PCI SUBSYSTEM)
+  "Rafael J. Wysocki" <rafael@kernel.org> (supporter:POWER MANAGEMENT CORE)
+  linux-pci@vger.kernel.org (open list:PCI SUBSYSTEM)
+  linux-kernel@vger.kernel.org (open list)
+  linux-pm@vger.kernel.org (open list:POWER MANAGEMENT CORE)
+
+Bjorn
