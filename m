@@ -2,78 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B531B4AB8AD
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Feb 2022 11:30:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 658254AB910
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Feb 2022 11:52:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352651AbiBGKZ7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Feb 2022 05:25:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49164 "EHLO
+        id S231678AbiBGKtJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Feb 2022 05:49:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357418AbiBGKL7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Feb 2022 05:11:59 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46DFC0401CA
-        for <linux-pm@vger.kernel.org>; Mon,  7 Feb 2022 02:11:53 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id n40-20020a05600c3ba800b00353958feb16so8217773wms.1
-        for <linux-pm@vger.kernel.org>; Mon, 07 Feb 2022 02:11:53 -0800 (PST)
+        with ESMTP id S1355402AbiBGKmG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Feb 2022 05:42:06 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFFEAC0401CB
+        for <linux-pm@vger.kernel.org>; Mon,  7 Feb 2022 02:41:42 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id h6so5186034wrb.9
+        for <linux-pm@vger.kernel.org>; Mon, 07 Feb 2022 02:41:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=guHISOtMMO9Q0hH9tbWxwVMEC6CpTUnDrgqh7P8fsAo=;
-        b=QyaiYp4jthHY0ZF6FxY8Mu0vf/UB7rbeZv6CwkI2gb5aev8fH0DUT3WLb7qkJARCXu
-         eQmncuIRTLNMcqu0YHL6Ab6CNgdMrznVD75rgoHrn3kt/u3w9hn68ZEIAZWBawj/BKD9
-         pZ3tQefFeBjg0R/4ucv147qVd7rc4hJ8fY9lzpJAr2ASghvUS6RFvhr9fJnMELEXkzMG
-         NyuEYb/SJ7wiX5IKcRoBH31obVhiSixmubK+GMjJo8pwL89HuaVx5TqvGFlCLRjaabqE
-         2xu8/BdwAr1BYlbjKP2lVJ0+a6AEGgfP/SLXNcqFMcL31DzfMsRAw+w+Uc0VymhDQ6mn
-         XvEg==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=T6Y4XwyMFlMeGLzQGb5LndPQ3ElLUnlBrYaGjIYGShI=;
+        b=Ob5A1YIBRvULbvGmzFBCbIcU+XZeq0qU4VD1yGb6jrOI1GIR0OoVYDmZn72ar9cIbu
+         NcurQVPHxzzlFAcNcArrPQ+lUEswI0+Oy2u+WOwKC53DivxIPFfUKXnCLVx6Hg8OGM/z
+         JLao0lZFOY1L1Ym/Ns6uHfIoe3i/x+xpDrYqDI5edmYQXBFzgHNSTB4HW8wGJIrG+b8q
+         3VHcP5bT7cjR/UAOxs2bpqJrsjr4oYYR//2wqdsva4lHNYxMMPTz5cEdya5UWFJFxxSU
+         zadQp+mOo4RRnaQHLKM0jQAPoapwYr+nkZrButpeQNj8qnmt3x56dyfwioAcY/X8k0ZP
+         iSBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=guHISOtMMO9Q0hH9tbWxwVMEC6CpTUnDrgqh7P8fsAo=;
-        b=S497/rJEwyuGA5Yh9G2MQuROGS3MaHAPgZct5NWlGk0SkVVkZw35x7Ny0iXR891ugk
-         faRkq9DbLiElN/NtCsNMtLAIfFjmwSKYJ/CKBFqSTYVxRk6canus3eFcqkITIMakVmKA
-         FA5/hKwiEnPwGGFwRzPNHqZvZBIuIQJV7LYMdMP8fPw1Qrf+Dx4vTcjzfszmLXLbCw/a
-         N3wR3NqR0JbDx88pKkQEpkG6MBunsPDMBWLCRRm4NAM7iFczhHdXuqDEsPYR9D/z4mHm
-         2gG5HqNBtdJcf9aMuEAf16/3+mPf/bmM/6mC5tVQrkiGjLSXqhGPvjkbFoTq1VKiiyUw
-         C8hQ==
-X-Gm-Message-State: AOAM532llen9bFbkcLTtLiU+XtL85UhHc4B1Zo5FTN5iZHxgUp6Gufza
-        bENBWe8xPSEcXlyJHbOuhp55bw==
-X-Google-Smtp-Source: ABdhPJy37cfI9ctBEfDiVSbCY7fy4ejXeLGzYhOD0a+pEgOKu0ccEi842Nj2bPmLvc3aD4m28muY8A==
-X-Received: by 2002:a05:600c:154f:: with SMTP id f15mr10537627wmg.111.1644228712372;
-        Mon, 07 Feb 2022 02:11:52 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id j2sm9155980wms.2.2022.02.07.02.11.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 02:11:51 -0800 (PST)
-Date:   Mon, 7 Feb 2022 10:11:49 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Subject: Re: [PATCH v2 0/4] mfd/power/regulators: dt-bindings: max14577:
- convert to dtschema
-Message-ID: <YgDwZUtc+Ac7ByWk@google.com>
-References: <20220111174337.223320-1-krzysztof.kozlowski@canonical.com>
- <73bad620-97eb-a734-cbc8-6f001d04c18a@canonical.com>
- <YgDnlWKO6/BTxZh2@google.com>
- <68d1f184-bfc5-9d78-8c68-0c793b35adf4@canonical.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=T6Y4XwyMFlMeGLzQGb5LndPQ3ElLUnlBrYaGjIYGShI=;
+        b=dTTjpTbXX7BaVUjUy+NthsE24tSW9MkqlzuF3If7i/Pb8eQW30aKZC69mbKh1BsvjN
+         aQAtlNdXp6514Bn43z5FKoahKXva7iBfGLbDxve38QO30Vtdz7ga5e4C3ICrATUFB9nv
+         +Ds0kPVX6F8kptXmDbZdyJ51dL0Sl9YNsjrvpO5mgLtgerMgv5fKxTeC63reOuRzfZVf
+         bnO2Az4mn7su8KHBwbz8C+NYo3NGeQiDZ9EI1L6+QHEoUwFTSXx9ZdIgcAN5n6HSHS+q
+         F8QKJRqMtM9WkYAMLkwBegec3t/0zj/QVYmX2rFDEZk2EN7X1Ox4y0UKE0ixfseZgW5c
+         A7Ng==
+X-Gm-Message-State: AOAM533IFz5DKX2xg6YQcgIzX8PmIof1yG+q7Y7718N33pXlOp7MbL/H
+        t4dGZet4W2h/n/42wZp/nOXU7w==
+X-Google-Smtp-Source: ABdhPJwYXiJDItEqRFFJ0jxOt0InTlKSm5WeIpAG+Cbkr0EGULbWjnWSGTHjnC6+X5lO/QPTRJ52iw==
+X-Received: by 2002:adf:dd8e:: with SMTP id x14mr1125270wrl.576.1644230501325;
+        Mon, 07 Feb 2022 02:41:41 -0800 (PST)
+Received: from ?IPV6:2a01:e34:ed2f:f020:aad:d73a:87d6:4855? ([2a01:e34:ed2f:f020:aad:d73a:87d6:4855])
+        by smtp.googlemail.com with ESMTPSA id ay29sm8852796wmb.38.2022.02.07.02.41.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Feb 2022 02:41:40 -0800 (PST)
+Message-ID: <0d2217e0-44f7-8587-3e1f-a73d301ab166@linaro.org>
+Date:   Mon, 7 Feb 2022 11:41:39 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 0/2] Ignore Energy Model with abstract scale in IPA and
+ DTPM
+Content-Language: en-US
+To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Cc:     amit.kachhap@gmail.com, viresh.kumar@linaro.org, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com, dietmar.eggemann@arm.com,
+        Pierre.Gondois@arm.com
+References: <20220207073036.14901-1-lukasz.luba@arm.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220207073036.14901-1-lukasz.luba@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <68d1f184-bfc5-9d78-8c68-0c793b35adf4@canonical.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,47 +76,21 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 07 Feb 2022, Krzysztof Kozlowski wrote:
-
-> On 07/02/2022 10:34, Lee Jones wrote:
-> > On Sun, 06 Feb 2022, Krzysztof Kozlowski wrote:
-> > 
-> >> On 11/01/2022 18:43, Krzysztof Kozlowski wrote:
-> >>> Hi,
-> >>>
-> >>> Changes since v1
-> >>> ================
-> >>> 1. MFD: Use absolute path to schemas
-> >>> 2. Regulator: mention all allowed properties,
-> >>>    additionalProperties=false, add min/max values for voltages and
-> >>>    current, don't use patternProperties when not needed.
-> >>>
-> >>> Dependencies
-> >>> ============
-> >>> 1. DTS patch 1/4: nothing depends on it, sending here so Rob's automatic
-> >>>    checker won't complain about DTS.
-> >>>    I will take it via Samsung SoC tree.
-> >>>
-> >>> 2. Final MFD patch (4/4) depends on regulator and power, so the last
-> >>>    patches (2+3+4) should go via same tree.
-> >>>
-> >> Dear Lee,
-> >>
-> >> This patchset was reviewed and there are no outstanding issues. Could
-> >> you pick up patches 2-4 (skipping DTS patch) via MFD tree?
-> > 
-> > Nothing from Mark?
+On 07/02/2022 08:30, Lukasz Luba wrote:
+> Hi all,
 > 
-> No, nothing. There is no other simultaneous work on these files, so I
-> don't expect conflicts here. Important part is that I got review from Rob.
-> 
-> If lack of ack makes you hesitant, I can resend hoping it will help but
-> it is a bit of pain.
+> The Energy Model supports abstract scale power values. This might cause
+> issues for some mechanisms like thermal governor IPA or DTPM, which
+> expect that all devices provide sane power values. This patch set prevents
+> from registering such devices for IPA and DTPM.
 
-No need.  I'll ping Mark privately to de-conflict.
+
+Does it mean for example big and little have both 0-100 ?
+
 
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
