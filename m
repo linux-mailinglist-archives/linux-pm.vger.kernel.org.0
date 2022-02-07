@@ -2,149 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ADBB4AC5F7
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Feb 2022 17:39:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 940A04AC615
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Feb 2022 17:40:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbiBGQir (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Feb 2022 11:38:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33076 "EHLO
+        id S1344683AbiBGQjG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Feb 2022 11:39:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389775AbiBGQ1G (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Feb 2022 11:27:06 -0500
-X-Greylist: delayed 311 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 08:27:04 PST
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F28C0401CC;
-        Mon,  7 Feb 2022 08:27:04 -0800 (PST)
-Received: from evilbit.green-communications.fr ([92.154.77.116]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.119]) with ESMTPSA (Nemesis)
- id 1MKbwg-1nbwVi0iyK-00L0Yj; Mon, 07 Feb 2022 17:21:38 +0100
-From:   Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+        with ESMTP id S229852AbiBGQis (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Feb 2022 11:38:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D129C0401CE;
+        Mon,  7 Feb 2022 08:38:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 968D260FA0;
+        Mon,  7 Feb 2022 16:38:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 379AEC004E1;
+        Mon,  7 Feb 2022 16:38:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644251926;
+        bh=d1P7xXA0sn7Ib/qlqtAf54sGUHU/Uu61l57wjUHrrsU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=inbf3l7d4gkyu8w5vIZ7z24auQUKHzTjjg49M4baRxTUm2Iov61sRatRv0WoV0BUT
+         Y3SdKlGn4iY26AGSoEXmDOKrF6dInPNWkLzU6/4pFGlgnYAd4wPx3T/w5iO5MkZ3l+
+         gGWroPswyhZ6FptlIzI/B5D0W2ozDX7dw9j3jNFPBnNsZk3LvMSaj0Xrachd+7uJDz
+         ImUqk3nl242sV7Yh3KXsxMaVrPxxh+RN10tfCH7O2NlPctIv0Ow8epTzdWw84WSe2o
+         b30JZKMw81dGBSK8PlScZHcHZqJnKML15mNoc6Bq4K84cfYx6YS7wAbrkN7QTGH5OY
+         18p+T7G2kiB4A==
+From:   Nathan Chancellor <nathan@kernel.org>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
+        Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] imx_thermal: Fix temperature retrieval after overheat
-Date:   Mon,  7 Feb 2022 17:18:30 +0100
-Message-Id: <20220207161829.4807-1-nicolas.cavallari@green-communications.fr>
-X-Mailer: git-send-email 2.34.1
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: [PATCH] thermal: netlink: Fix parameter type of thermal_genl_cpu_capability_event() stub
+Date:   Mon,  7 Feb 2022 09:38:29 -0700
+Message-Id: <20220207163829.1025904-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:nB1bTMwZBFWEuhylUis7rLw5EQ2337iNQATK8GFDRXIZ7yaAo/p
- zViD23GEZDiLLLdymY7ZtS9rODuTGylsdyaKoZB79ML/Z2+8UizghvoK42a8KJ8Tn06M/4j
- AFo4amFvwIIsyIsFNo+iZeTzpA5njJ5N0jNl6i2nFhqy92t9GRJNMK/KzQ+RUkbjxb5tjnD
- OFMPHJEHWe8qhJRaOwAfQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:DrdQU+NYlxo=:ZI9BjRW9eZMtiZ1FpJjbHp
- YZxmh/MqKo+wLu95PSRy/e7+58EAOV5H2v7N6n1YIJwMVO+Re1f0E2o4EEbpQoOdPirIJIrXh
- rkUN4LQGj0pRbCiGo4O9cbGbr6t4GK1IjCfkgVJkpFtjGPojf7yolu202n+GJn3KRRZ15grHW
- EvlOGKNGOmPXaH8U/iuy2Xh2decU44u4/VX+WxEiWyq7UgvNOTxKqmg2K2kPvgIijFScTJU+c
- IkFolc9rXr4kePFy936LnSMonyF0XShig3loZAvWjVVZ389EE2u2TPcnmT9uhLKbSzoyoHrSY
- EBHBBaU1t6Ksa27R2/TmTjyKicWbqBh+WWq0qMt1cy39cCCKwmsFVly1aZprxuvipPenNVXsL
- 0gNykysooh377d4oVg5fHdjj77Ry+QkBQYAp1ldcCbGpY6Acl5bse1nLwr1NIvZ/nFCcGLIqH
- mjj6q9HUyAZg2vDtB6dlwemQGkDCIq4J565fNoqF8xN2qO8oNktogCb4yC+kbQBUftsZFjIhr
- qChuXN96Wfasnvcwr14wXQDLcdRjnBGBCnrVaz/7dxvrZQeQTZJ5RNhKIoz1W9x7XguUR8kJV
- 9d6iTM9OvV752nu4PZdsDNBDfIIZ1l0JjNM3bPTEJjIrIHHznqLcDi8R3gzgYCk6JrZG9UnZv
- yIrJkS5f3YZLR4I5LhQTSdCY72OuJGyClxZxJnG7armMo1zoIqvtauQS2v9oqXQpGf88S8Bvd
- Yt9a9kpJumHqeo9s52H1Zi61KQSbtvOJsHvotA==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When the CPU temperature is above the passive trip point, reading the
-temperature would fail forever with EAGAIN.  Fortunately, the thermal
-core would continue to assume that the system is overheating, so would
-put all passive cooling devices to the max.  Unfortunately, it does
-this forever, even if the temperature returns to normal.
+When building with CONFIG_THERMAL_NETLINK=n, there is a spew of warnings
+along the lines of:
 
-This can be easily tested by setting a very low trip point and crossing
-it with while(1) loops.
+  In file included from drivers/thermal/thermal_core.c:27:
+  In file included from drivers/thermal/thermal_core.h:15:
+  drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'struct cpu_capability' will not be visible outside of this function [-Wvisibility]
+  static inline int thermal_genl_cpu_capability_event(int count, struct cpu_capability *caps)
+                                                                        ^
+  1 warning generated.
 
-The cause is commit d92ed2c9d3ff ("thermal: imx: Use driver's local data
-to decide whether to run a measurement"), which replaced a check for
-thermal_zone_device_is_enabled() by a check for irq_enabled, which
-tests if the passive trip interrupt is enabled.
+'struct cpu_capability' is not forward declared anywhere in the header.
+As it turns out, this should really be 'struct thermal_genl_cpu_caps',
+which silences the warning and makes the parameter types of the stub
+match the full function.
 
-Normally, when the thermal zone is enabled, the temperature sensors
-are always enabled and the interrupt is used to detect overheating.
-When the interrupt fires, it must be disabled.
-In that case, the commit causes the measurements to be done
-manually (enable sensor, do measurement, disable sensor).
-If the thermal core successfully cools down the system below the trip
-point (which it typically does quickly), the irq is enabled again but
-the sensor is not enabled.
-
-To fix this without using thermal_zone_device_is_enabled(), use a
-separate variable to record if the thermal zone is enabled.
-
-Fixes: d92ed2c9d3ff ("thermal: imx: Use driver's local data to decide
-whether to run a measurement")
-
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Fixes: e4b1eb24ce5a ("thermal: netlink: Add a new event to notify CPU capabilities change")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- drivers/thermal/imx_thermal.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/thermal/thermal_netlink.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
-index 2c7473d86a59..5a6ad5bae238 100644
---- a/drivers/thermal/imx_thermal.c
-+++ b/drivers/thermal/imx_thermal.c
-@@ -205,6 +205,7 @@ struct imx_thermal_data {
- 	int alarm_temp;
- 	int last_temp;
- 	bool irq_enabled;
-+	bool tz_enabled;
- 	int irq;
- 	struct clk *thermal_clk;
- 	const struct thermal_soc_data *socdata;
-@@ -252,11 +253,10 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
- 	const struct thermal_soc_data *soc_data = data->socdata;
- 	struct regmap *map = data->tempmon;
- 	unsigned int n_meas;
--	bool wait, run_measurement;
-+	bool wait;
- 	u32 val;
+diff --git a/drivers/thermal/thermal_netlink.h b/drivers/thermal/thermal_netlink.h
+index 04d1adbbc012..1052f523188d 100644
+--- a/drivers/thermal/thermal_netlink.h
++++ b/drivers/thermal/thermal_netlink.h
+@@ -110,7 +110,7 @@ static inline int thermal_genl_sampling_temp(int id, int temp)
+ 	return 0;
+ }
  
--	run_measurement = !data->irq_enabled;
--	if (!run_measurement) {
-+	if (data->tz_enabled) {
- 		/* Check if a measurement is currently in progress */
- 		regmap_read(map, soc_data->temp_data, &val);
- 		wait = !(val & soc_data->temp_valid_mask);
-@@ -283,7 +283,7 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
- 
- 	regmap_read(map, soc_data->temp_data, &val);
- 
--	if (run_measurement) {
-+	if (!data->tz_enabled) {
- 		regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
- 			     soc_data->measure_temp_mask);
- 		regmap_write(map, soc_data->sensor_ctrl + REG_SET,
-@@ -339,6 +339,7 @@ static int imx_change_mode(struct thermal_zone_device *tz,
- 	const struct thermal_soc_data *soc_data = data->socdata;
- 
- 	if (mode == THERMAL_DEVICE_ENABLED) {
-+		data->tz_enabled = true;
- 		regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
- 			     soc_data->power_down_mask);
- 		regmap_write(map, soc_data->sensor_ctrl + REG_SET,
-@@ -349,6 +350,7 @@ static int imx_change_mode(struct thermal_zone_device *tz,
- 			enable_irq(data->irq);
- 		}
- 	} else {
-+		data->tz_enabled = false;
- 		regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
- 			     soc_data->measure_temp_mask);
- 		regmap_write(map, soc_data->sensor_ctrl + REG_SET,
+-static inline int thermal_genl_cpu_capability_event(int count, struct cpu_capability *caps)
++static inline int thermal_genl_cpu_capability_event(int count, struct thermal_genl_cpu_caps *caps)
+ {
+ 	return 0;
+ }
+
+base-commit: 08615cb8c0e1deeca5489d672213fb205fa53c3b
 -- 
-2.34.1
+2.35.1
 
