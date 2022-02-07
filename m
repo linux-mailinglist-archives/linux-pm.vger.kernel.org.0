@@ -2,222 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AFBE4AB702
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Feb 2022 10:08:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 080AA4AB715
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Feb 2022 10:08:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234394AbiBGIxO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Feb 2022 03:53:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36458 "EHLO
+        id S231847AbiBGJFg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Feb 2022 04:05:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243052AbiBGIoM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Feb 2022 03:44:12 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2AB7C043184
-        for <linux-pm@vger.kernel.org>; Mon,  7 Feb 2022 00:44:10 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id o17so18500798ljp.1
-        for <linux-pm@vger.kernel.org>; Mon, 07 Feb 2022 00:44:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=iV9+wsyfUcoW/CmR74trefYkab9ZaA0MJl8TccvkpxA=;
-        b=fqB0sUl89xvVMJzuFktZmc/xLp21fIZ6V56NLPiVLb9Uww8w6ImIdxClcUslefyuPn
-         S2F/Mhkk6nsF4h1ky4NCN1mB9VXbj5ih7KokULjll67LTGb4+uQY73fSSrhrrABW0Oci
-         OG0CEwYVzYxvHlrxJTJ4GbHZBJV7l1ZnmrSLH5CtimQO1FWKuS7G6HBHbju6sxzDTwNC
-         fS1UYXgY7nAp2pWwCWN8KlmekeD/3jw9NKwfAkxAf2YEqCVALpH17K7fxR4xEgTr7MKj
-         OYdmTAGZw2qoLsqIvWWKC7V40+JrpIviGe5vYb7/MBWZ2ZhjkSAiXNiYuzKSd6i/V4Ia
-         DFKg==
+        with ESMTP id S241434AbiBGI4n (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Feb 2022 03:56:43 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1EEC043181
+        for <linux-pm@vger.kernel.org>; Mon,  7 Feb 2022 00:56:42 -0800 (PST)
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com [209.85.128.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 9445E3F328
+        for <linux-pm@vger.kernel.org>; Mon,  7 Feb 2022 08:56:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644224201;
+        bh=btDpU5FmsTkCm5Mc+WyqRMkXXG3Fg8Z86T3tz0oN0CM=;
+        h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+         In-Reply-To:Content-Type;
+        b=HepHLUJh7x3PakI0ZWJV0Iy7bSoGdHu68AE9wjL1bUgbOacsNEc5ZVSrOoXzIbjPP
+         a2Qxm9VLBNzFNIkPVJkF+Lbckf7nhUN9rbwd0uBTKK7qu+bpmYt8QblGX9f8lvBLWw
+         Py6vDiaJkyNirKJK72AyzQloEdSdt/7Wo4RlKQvIY8IGpuo+epS2wKfwtSKYPdNRM/
+         cpNYofpHIkOAGiD+v80C3L6PYsT4zNcXtyY5X8yVklFD7WrzybSLq5flIp+60DfxD2
+         qDrD18XitNL3p3LmdhA6LB2i/4ktTlRpe2OrY4zh7T2fj3owW7+e9MjQEzItDE+VMp
+         R+vxYns3BDtYQ==
+Received: by mail-wm1-f72.google.com with SMTP id h82-20020a1c2155000000b003552c13626cso7533962wmh.3
+        for <linux-pm@vger.kernel.org>; Mon, 07 Feb 2022 00:56:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=iV9+wsyfUcoW/CmR74trefYkab9ZaA0MJl8TccvkpxA=;
-        b=eoXB4EJjdfpXQeQtwMwZ37a6FZRRRx8QoczSCQKey52UxIUNmvJz3FEqw8E+ToJ4OJ
-         pE+YKY0FQg7KBYofrzIahf9lbins7eTf8+VCnHpGzM65p2vkeym8732L3xKu9RmJJnHr
-         eaO3cUj/1+np0kGM5Sxhdi5ninvhIviW0clyv9DkdyvjNUu5MUAgLRU6U4aYj8OnfkeD
-         VJt1KIkWogAuX2mA1zPS2r6F7cxgVVOpsUup/XKHAedWtf9vshcn8dsUMFD6rw9M1Ywv
-         LhSTpQQUR72sZpvl7SU3XcbORUQojcYN5TkEJnKMjG+/msNeCws/pGnqmMnvFFMzVlmU
-         XYyw==
-X-Gm-Message-State: AOAM5337UTU2Rq2Cy7eRhskCySTvw2QqxC1hu0YRIeqHlIY3mjdKJs4R
-        4ehlDaRVzgvl/e6JUqYz7tTyEhDrfRaTt17+RdUuKA==
-X-Google-Smtp-Source: ABdhPJxijT6MHex4bqgY6LoldBW85wOtJU7/upx1oWMkfqzHyF0lKD8+g8zAWNzBSJRF+FvSmiCwkEC1iYh0SoLCoMQ=
-X-Received: by 2002:a05:651c:1787:: with SMTP id bn7mr8423349ljb.16.1644223449112;
- Mon, 07 Feb 2022 00:44:09 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=btDpU5FmsTkCm5Mc+WyqRMkXXG3Fg8Z86T3tz0oN0CM=;
+        b=3mdGzQdIJeFrKIP/qGDQbgp7VznGv/rO6EHC8ps9raYwGnVyKj9nnR2vDGoRbPhtlS
+         hVFzgh8Pa+6Rh/76UR4KHTCKrQy1bldm666YG9YlM4MnmryhyP9bZSp1Lasez7+bs458
+         0UTrLyfHydzlVEqMNvcGCOG1Ai9Fh2Y24hKpN11BdYxKWKrsecLgv7EWrJ9EoJPJX5Rn
+         mmz1PqEFRQTDHw8PQu+1DS5V7K9xv3Q+FLmsaKYLFj8uZoQC+U7vkncid67j7VEuxxOV
+         +TADsaC4wrRhZEGkTr2o52w+mzOfJmMAfQfG8oRxShtth8YydEIzp0RFDX8IBLPP/W3u
+         tOVg==
+X-Gm-Message-State: AOAM531zVK0+qYMYOltPwBdNNEfdr9e9j6USsABkWFMJFK2TVxNNAtsM
+        qX1V2kk1X5HFl01eQeJQuBncEbwrMe23hNj/4b7eZcSOQmVHw0Q4nBZ/V4yNNgnq8by8hayVeDZ
+        BWcAGx1C+PzMCFI59lATcLuFxrAknn9BcbA+I
+X-Received: by 2002:a05:6000:16c5:: with SMTP id h5mr9011094wrf.364.1644224201260;
+        Mon, 07 Feb 2022 00:56:41 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwUWIz/kuedsRBnrB7RSMh9Ojazqtas2KPEtQ5IG7MGExl8fZ8JQjN+4o3EFV9rqV86qk4Cxw==
+X-Received: by 2002:a05:6000:16c5:: with SMTP id h5mr9011087wrf.364.1644224201104;
+        Mon, 07 Feb 2022 00:56:41 -0800 (PST)
+Received: from [192.168.0.86] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id t14sm17259601wmq.43.2022.02.07.00.56.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Feb 2022 00:56:40 -0800 (PST)
+Message-ID: <4b18991e-1c93-077d-368f-a861e8c2b845@canonical.com>
+Date:   Mon, 7 Feb 2022 09:56:39 +0100
 MIME-Version: 1.0
-References: <20220131113743.52265-1-ulf.hansson@linaro.org>
- <b33ceac4-506a-65c8-7c80-b1b0a67ce65e@gmail.com> <CAPDyKFqsvF=Pm-vMXSUwPMPnjCr7nSYuy5AH+8rwLYm_NUPKww@mail.gmail.com>
- <400e45da-837a-c8ad-84b3-285e35f8462c@gmail.com>
-In-Reply-To: <400e45da-837a-c8ad-84b3-285e35f8462c@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 7 Feb 2022 09:43:32 +0100
-Message-ID: <CAPDyKFpLX0Jpz-tzYx3-g0YBZZNh6Bw731gQEFQub1SviLGoYg@mail.gmail.com>
-Subject: Re: [PATCH] PM: domains: Prevent power off for parent unless child is
- in deepest state
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        Kevin Hilman <khilman@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 5/8] dt-bindings: memory: lpddr3: deprecate
+ manufacturer ID
+Content-Language: en-US
+To:     Alim Akhtar <alim.akhtar@samsung.com>,
+        'Rob Herring' <robh+dt@kernel.org>,
+        'Lukasz Luba' <lukasz.luba@arm.com>,
+        'Dmitry Osipenko' <digetx@gmail.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220206135807.211767-1-krzysztof.kozlowski@canonical.com>
+ <CGME20220206135825epcas5p4c07136cf0a54eb4d6c8441cd6dbf14bc@epcas5p4.samsung.com>
+ <20220206135807.211767-6-krzysztof.kozlowski@canonical.com>
+ <0a7101d81bd9$33088840$991998c0$@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <0a7101d81bd9$33088840$991998c0$@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 4 Feb 2022 at 20:10, Dmitry Osipenko <digetx@gmail.com> wrote:
->
-> 04.02.2022 12:43, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > On Mon, 31 Jan 2022 at 19:29, Dmitry Osipenko <digetx@gmail.com> wrote:
-> >>
-> >> 31.01.2022 14:37, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> >>> A PM domain managed by genpd may support multiple idlestates. During
-> >>> genpd_power_off() a genpd governor may be asked to select one of the
-> >>> idlestates based upon the dev PM QoS constraints, for example.
-> >>>
-> >>> However, there is a problem with the behaviour around this in genpd. =
-More
-> >>> precisely, a parent-domain is allowed to be powered off, no matter of=
- what
-> >>> idlestate that has been selected for the child-domain.
-> >>>
-> >>> So far, we have not received any reports about errors, possibly becau=
-se
-> >>> there might not be platform with this hierarchical configuration, yet=
-.
-> >>> Nevertheless, it seems reasonable to change the behaviour into preven=
-ting
-> >>> the parent-domain from being powered off, unless the deepest idlestat=
-e has
-> >>> been selected for the child-domain, so let's do that.
-> >>>
-> >>> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> >>> ---
-> >>>  drivers/base/power/domain.c | 18 ++++++++++++++++++
-> >>>  1 file changed, 18 insertions(+)
-> >>>
-> >>> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.=
-c
-> >>> index 5db704f02e71..7f97c5cabdc2 100644
-> >>> --- a/drivers/base/power/domain.c
-> >>> +++ b/drivers/base/power/domain.c
-> >>> @@ -636,6 +636,17 @@ static int genpd_power_off(struct generic_pm_dom=
-ain *genpd, bool one_dev_on,
-> >>>                       atomic_read(&genpd->sd_count) > 0)
-> >>>               return -EBUSY;
-> >>>
-> >>> +     /*
-> >>> +      * The children must be in their deepest states to allow the pa=
-rent to
-> >>> +      * be powered off. Note that, there's no need for additional lo=
-cking, as
-> >>> +      * powering on a child, requires the parent's lock to be acquir=
-ed first.
-> >>> +      */
-> >>> +     list_for_each_entry(link, &genpd->parent_links, parent_node) {
-> >>> +             struct generic_pm_domain *child =3D link->child;
-> >>> +             if (child->state_idx < child->state_count - 1)
-> >>> +                     return -EBUSY;
-> >>> +     }
-> >>> +
-> >>>       list_for_each_entry(pdd, &genpd->dev_list, list_node) {
-> >>>               enum pm_qos_flags_status stat;
-> >>>
-> >>> @@ -1073,6 +1084,13 @@ static void genpd_sync_power_off(struct generi=
-c_pm_domain *genpd, bool use_lock,
-> >>>           || atomic_read(&genpd->sd_count) > 0)
-> >>>               return;
-> >>>
-> >>> +     /* Check that the children are in their deepest state. */
-> >>> +     list_for_each_entry(link, &genpd->parent_links, parent_node) {
-> >>> +             struct generic_pm_domain *child =3D link->child;
-> >>> +             if (child->state_idx < child->state_count - 1)
-> >>> +                     return;
-> >>> +     }
-> >>> +
-> >>>       /* Choose the deepest state when suspending */
-> >>>       genpd->state_idx =3D genpd->state_count - 1;
-> >>>       if (_genpd_power_off(genpd, false))
-> >>
-> >> Hello Ulf,
-> >
-> > Hi Dmitry,
-> >
-> >>
-> >> Is this needed by a concrete SoC? It needs to be clarified in the comm=
-it
-> >> message, otherwise looks like this patch wasn't tested and it's unclea=
-r
-> >> whether this change is really needed.
-> >
-> > It's needed on a STMicro SoC that I have been working on. However,
-> > it's difficult for me to test on that platform, as some SoC specific
-> > pieces are missing upstream (the power domain deployment in
-> > particular). Anyway, let me add some information about this in the
-> > commit log for the next version.
-> >
-> > When it comes to testing, I am using a couple of local test dummy
-> > drivers. One that manages devices that gets attached to a genpd,
-> > mostly to execute runtime PM and dev PM QoS calls - and another that
-> > manages the PM domains with genpd. I have been thinking of a way to
-> > share these "tools" to let other people use them for testing too, but
-> > I haven't just got to it yet.
-> >
-> > Besides the above, do you see any issues from Nvidia platforms point
-> > of view with $subject patch?
->
-> I've two main concerns:
->
-> 1. This is a patch for something (STMicro SoC) that isn't fully
-> supported by upstream kernel and it's not clear whether it will be ever
-> supported at all.
+On 07/02/2022 05:14, Alim Akhtar wrote:
+> Hi Krzysztof
+> 
+>> -----Original Message-----
+>> From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@canonical.com]
+>> Sent: Sunday, February 6, 2022 7:28 PM
+>> To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>; Rob Herring
+>> <robh+dt@kernel.org>; Lukasz Luba <lukasz.luba@arm.com>; Alim Akhtar
+>> <alim.akhtar@samsung.com>; Dmitry Osipenko <digetx@gmail.com>; linux-
+>> kernel@vger.kernel.org; devicetree@vger.kernel.org; linux-
+>> pm@vger.kernel.org; linux-samsung-soc@vger.kernel.org; linux-arm-
+>> kernel@lists.infradead.org
+>> Subject: [PATCH v3 5/8] dt-bindings: memory: lpddr3: deprecate
+>> manufacturer ID
+>>
+>> The memory manufacturer should be described in vendor part of compatible,
+>> so there is no need to duplicate it in a separate property.
+>> Similarly is done in LPDDR2 bindings.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>> ---
+>> .../bindings/memory-controllers/ddr/jedec,lpddr3.yaml         | 4 +++-
+>> 1 file changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/memory-
+>> controllers/ddr/jedec,lpddr3.yaml
+>> b/Documentation/devicetree/bindings/memory-
+>> controllers/ddr/jedec,lpddr3.yaml
+>> index d6787b5190ee..3bcba15098ea 100644
+>> --- a/Documentation/devicetree/bindings/memory-
+>> controllers/ddr/jedec,lpddr3.yaml
+>> +++ b/Documentation/devicetree/bindings/memory-
+>> controllers/ddr/jedec,lpd
+>> +++ dr3.yaml
+>> @@ -40,7 +40,9 @@ properties:
+>>   manufacturer-id:
+>>     $ref: /schemas/types.yaml#/definitions/uint32
+>>     description: |
+>> -      Manufacturer ID value read from Mode Register 5.
+>> +      Manufacturer ID value read from Mode Register 5.  The property is
+>> +      deprecated, manufacturer should be derived from the compatible.
+>> +    deprecated: true
+>>
+> 
+> Shouldn't it be the other way? As DT describes hardware and MR5 does contain
+> the Manufacturer ID, 
+> so getting Manufacturer ID from MR5 makes aligned to hardware description.
 
-The upstream work is ongoing, it's the stm32mp1 platform, which is
-already supported upstream.
+The code/driver can read MR5 and report it to user-space in case for
+example we have a device compatible with different vendor and same
+compatible is used. So compatible is re-used but we want real
+manufacturer ID from the hardware.
 
->
-> 2. It's not clear why behaviour of a very specific SoC should be applied
-> to all SoCs, especially given that the specific SoC itself isn't going
-> to use to this feature right now. I guess it could be okay to put this
-> behaviour into the core code until any other SoC will require a
-> different behaviour, but the commit message doesn't clarify this.
+But storing a fixed MR5 value in DT does not fit here. If someone takes
+effort to encode manufacturer ID in the DTS, then he/she should take
+effort to actually document the compatible.
 
-The point with the commit message is to question the current default
-behaviour. If we have a QoS constraint that causes the genpd governor
-to select a shallow state for a child, it seems wrong to allow the
-parent to be turned off, in my opinion.
+Basically having MR5 in DT is equal to having a compatible in DTS. I
+prefer the latter - simpler, less properties, using existing property
+from DT spec instead of custom one.
 
-If a platform with a PM domain hierarchy would need a different
-behaviour from genpd, then we need to look into that, of course.
-However, the current *uncontrolled* behaviour is most likely not going
-to be suitable for any platform anyway.
-
->
-> To my knowledge all NVIDIA Tegra SoCs are indifferent to this patch
-> because they don't have such kind of dependency between power domains.
-
-Great, thanks for confirming!
-
->
-> In general, such changes usually are deferred from being upstreamed
-> until there is a real user, otherwise there is a risk of cluttering the
-> code with unused features. Do you have a time estimation in regards to
-> when STMicro may start to benefit from this change?
-
-The STMicro folkz are working on it right now, but I can't give you
-any estimates for their work.
-
-Moreover, I think the important point in this regard, is that the
-$subject patch doesn't really hurt anything else, so then what's the
-point of holding this back?
-
-Kind regards
-Uffe
+Best regards,
+Krzysztof
