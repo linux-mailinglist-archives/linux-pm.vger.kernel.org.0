@@ -2,109 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 683624AB824
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Feb 2022 11:01:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB694AB815
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Feb 2022 11:01:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245171AbiBGJqI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Feb 2022 04:46:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32808 "EHLO
+        id S236029AbiBGJrV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Feb 2022 04:47:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345347AbiBGJf1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Feb 2022 04:35:27 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 447D5C043187
-        for <linux-pm@vger.kernel.org>; Mon,  7 Feb 2022 01:35:26 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id c192so9390840wma.4
-        for <linux-pm@vger.kernel.org>; Mon, 07 Feb 2022 01:35:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=TCP4D7FjgMKnby1e08gVg89o79MvrPT+OFv+Q8blaaw=;
-        b=ogrUu/AfnxSajBawUTAzhtl8hLHhL27U55AVn39abbS66VthBN2tMwBOrOl3xMel+M
-         qcydCYRurHTN44lCd9x0SEZQ1xWAGK/kf7FCmswWvYVMdoQomDqI7uBjuqYS+hkkbsLH
-         M0aU74LkynnNMWzcR83MoJglFkamGY4FGKSAthZ4e6ZfWaRlRuJuCuW6zwtdP5LaEJ5K
-         754Hu2ipMrf9lbi3w7cSa9wVeqU94CaV0PlO9mrimZQZKRfMxHnUYifUturxVEDlt+nJ
-         DSvz2SHZnrxS+h8kwo2kPAnt+8Pw0JYWRcAWqzR29lntazxq3gkLeaPbCE3bGj69p3UE
-         WauQ==
+        with ESMTP id S233720AbiBGJnX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Feb 2022 04:43:23 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17AA4C043189
+        for <linux-pm@vger.kernel.org>; Mon,  7 Feb 2022 01:43:23 -0800 (PST)
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com [209.85.221.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id DA916402FD
+        for <linux-pm@vger.kernel.org>; Mon,  7 Feb 2022 09:43:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644227001;
+        bh=+L6E+uDCjSN479CYKJ9gYlHkAuXqDhEQEWmjUAJvDhE=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=EehYkJpXRPjeAfAUTRGoah5C5hB5d++bxbE1a40LKh8POiNt+tO5eh6ap0osKBRWg
+         cKSIG/g2/cZXW6PCMMFChioiSThT0TPCHhL4B3wWp/jFig1blGEEY4yndBQo/4RzRY
+         LtsK1DmqdVPELoHgeOXjB02l+sukNVpO61UeNI+QR2gxOo3I4fvolhp3KlDNRlcK3o
+         o1MV/7QUYB6lqKwE4j9DyPHzCkPjZhxYheAc7+Xdqt4BC8meRNivB0tP5AA3tHQ/6l
+         7ssxN5dStQ3s+twKlXN+z/z/fKDZoczA/nNYHZftSjJgvthsMyGrREqogB7SMhLP2G
+         5U0R3UcJFZ4bQ==
+Received: by mail-wr1-f70.google.com with SMTP id i2-20020adfa502000000b001e30c5ae60fso1172181wrb.1
+        for <linux-pm@vger.kernel.org>; Mon, 07 Feb 2022 01:43:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=TCP4D7FjgMKnby1e08gVg89o79MvrPT+OFv+Q8blaaw=;
-        b=cf7npAXQhQgZ25d+gXVX1b1UA2wIkMVvi0QjrOiXjsPoAVaEN/ggf7xtuUOwAUvvge
-         MplaBH2TczOtqztdFnoaJsOyhJ+t8/TMmg7xIwr9dkmjBS9Y+tBZ5FRFZ6M8LWInKm5j
-         X+sZMIopzOwqUiz6rEzlbW5yatsVPzWLttJwk5Y8ECmRQCDnVXNp/89jsRARwB4LgMgQ
-         fgF1abm41rUPngnG2b3M7/RQ5/bEVJ6oipntnKKMcAE5YMKIa+3MZRGjwaj0TfeuKJcv
-         Br57ObOkrPdP9y/qqGiqHC/tmDpdUV8rgGGlwys3dZRgcfeoc3ta8zVuO6yIwgXfbEyF
-         ECjw==
-X-Gm-Message-State: AOAM533OT43E9BDs9xcKXaOWeXOSjttinT4LkZefyMfkRUF6MU3/bHiY
-        2ZA35eLYd6OReORYbyPmUuXH2w==
-X-Google-Smtp-Source: ABdhPJw22S5Q4w+myvg3aIQzNPQRoUolNTKEHd2CXwdqN9FlAuhosQe7sBTyghe8NdwcT3vntxlSiw==
-X-Received: by 2002:a1c:35c9:: with SMTP id c192mr9022814wma.168.1644226524796;
-        Mon, 07 Feb 2022 01:35:24 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id g15sm9584075wri.82.2022.02.07.01.35.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 01:35:24 -0800 (PST)
-Date:   Mon, 7 Feb 2022 09:35:22 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     linux-kernel@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v2 0/4] leds/power/regulator/mfd: dt-bindings:
- maxim,max77693: convert to dtschema
-Message-ID: <YgDn2iupBQL1lr9p@google.com>
-References: <20220111175017.223966-1-krzysztof.kozlowski@canonical.com>
- <63255060-8df8-660d-52bf-198d77c884d5@canonical.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+L6E+uDCjSN479CYKJ9gYlHkAuXqDhEQEWmjUAJvDhE=;
+        b=YGkkzy8buSYhKUbq4NiHpWIbMXdR6wgPrm52jif96Fq+Ytic7sXKdWtOnurEnOL19U
+         B3G5rnCNMip6TxEO1MBKXc/WqAsCmTjIaGFLtg4MohoZlMNUPdDm6iUbw8n7i7wpzGqz
+         rmOgO8sXKChmf5JIamFuN04/StNmHtRz4cpO6srPOh2jgtcKbpRgI5xp1tAxPKa+6TkO
+         ZPTADYGgPej/l2+xL3ePkt8qj5Z/kqHr1uRBhKwvnalgYQtG8n7Yh50aIiChrZPVCg8L
+         svCmJxvAHJZoFJBGiEc7GgjU7u8Pl9Bcg4F+kyf16xZmxISItgE3jTODzTTuOookDkWq
+         i3nA==
+X-Gm-Message-State: AOAM530vhkcHB+/bprQEfcgoLVNRzSyBu7THRGtkALr0qWpSvM4hCWCZ
+        NxKj8KEaobiWllIggFpvoVQ7SLnWDhLuZxHWRzDgT6y8BjeIUcqeM0dES5LIgtk4U5PuVNM+4u5
+        4DrkoizUqmJOZA+IkEWgziTs2n4E3eBq7h3/o
+X-Received: by 2002:a05:600c:3516:: with SMTP id h22mr13431080wmq.143.1644227000969;
+        Mon, 07 Feb 2022 01:43:20 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwHF7dm2ZsoEJJ5VPAil3jjFNgC2lqhi4OrFY5B5qRigsPvDSfxiXW8PeX3gyanY9lg95hK0Q==
+X-Received: by 2002:a05:600c:3516:: with SMTP id h22mr13431067wmq.143.1644227000728;
+        Mon, 07 Feb 2022 01:43:20 -0800 (PST)
+Received: from [192.168.0.86] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id v5sm10694902wrx.114.2022.02.07.01.43.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Feb 2022 01:43:19 -0800 (PST)
+Message-ID: <68d1f184-bfc5-9d78-8c68-0c793b35adf4@canonical.com>
+Date:   Mon, 7 Feb 2022 10:43:19 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <63255060-8df8-660d-52bf-198d77c884d5@canonical.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 0/4] mfd/power/regulators: dt-bindings: max14577:
+ convert to dtschema
+Content-Language: en-US
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Chanwoo Choi <cw00.choi@samsung.com>
+References: <20220111174337.223320-1-krzysztof.kozlowski@canonical.com>
+ <73bad620-97eb-a734-cbc8-6f001d04c18a@canonical.com>
+ <YgDnlWKO6/BTxZh2@google.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <YgDnlWKO6/BTxZh2@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 06 Feb 2022, Krzysztof Kozlowski wrote:
-
-> On 11/01/2022 18:50, Krzysztof Kozlowski wrote:
-> > Hi,
-> > 
-> > Changes since v1
-> > ================
-> > 1. MFD: Use absolute path to schemas, add additionalProperties=false.
-> > 2. Regulator: mention all allowed properties,
-> >    additionalProperties=false, add min/max values for voltages and
-> >    current, don't use patternProperties when not needed.
-> > 
-> > Dependencies
-> > ============
-> > The final patch - MFD maxim,max77693 bindings conversion - depends on
-> > all previous. Therefore this could go via Rob's or Lee's trees.
-> > 
+On 07/02/2022 10:34, Lee Jones wrote:
+> On Sun, 06 Feb 2022, Krzysztof Kozlowski wrote:
 > 
-> Dear Lee,
+>> On 11/01/2022 18:43, Krzysztof Kozlowski wrote:
+>>> Hi,
+>>>
+>>> Changes since v1
+>>> ================
+>>> 1. MFD: Use absolute path to schemas
+>>> 2. Regulator: mention all allowed properties,
+>>>    additionalProperties=false, add min/max values for voltages and
+>>>    current, don't use patternProperties when not needed.
+>>>
+>>> Dependencies
+>>> ============
+>>> 1. DTS patch 1/4: nothing depends on it, sending here so Rob's automatic
+>>>    checker won't complain about DTS.
+>>>    I will take it via Samsung SoC tree.
+>>>
+>>> 2. Final MFD patch (4/4) depends on regulator and power, so the last
+>>>    patches (2+3+4) should go via same tree.
+>>>
+>> Dear Lee,
+>>
+>> This patchset was reviewed and there are no outstanding issues. Could
+>> you pick up patches 2-4 (skipping DTS patch) via MFD tree?
 > 
-> This patchset was reviewed and there are no outstanding issues. Could
-> you pick up entire set via MFD tree?
+> Nothing from Mark?
 
-Nothing from LED or Regulator?
+No, nothing. There is no other simultaneous work on these files, so I
+don't expect conflicts here. Important part is that I got review from Rob.
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+If lack of ack makes you hesitant, I can resend hoping it will help but
+it is a bit of pain.
+
+Best regards,
+Krzysztof
