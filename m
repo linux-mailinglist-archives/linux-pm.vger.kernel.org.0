@@ -2,343 +2,222 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B5FB4AB678
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Feb 2022 09:19:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AFBE4AB702
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Feb 2022 10:08:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237674AbiBGISr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Feb 2022 03:18:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51784 "EHLO
+        id S234394AbiBGIxO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Feb 2022 03:53:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244821AbiBGILJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Feb 2022 03:11:09 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D11CC043181;
-        Mon,  7 Feb 2022 00:11:08 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id t4-20020a17090a510400b001b8c4a6cd5dso1382146pjh.5;
-        Mon, 07 Feb 2022 00:11:08 -0800 (PST)
+        with ESMTP id S243052AbiBGIoM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Feb 2022 03:44:12 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2AB7C043184
+        for <linux-pm@vger.kernel.org>; Mon,  7 Feb 2022 00:44:10 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id o17so18500798ljp.1
+        for <linux-pm@vger.kernel.org>; Mon, 07 Feb 2022 00:44:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :in-reply-to:references;
-        bh=tJgN6ObjRlhMw53PvowYY4iEyegOVrJ3AMYQ6grvdY4=;
-        b=ldQIe6EreZOjeqnFx6oLhPtcwhuLtam4pk7scApN42kzuAgQcPCQqr6RpLtfuUMjH2
-         RbfHeFVMv5IId1lb3RbI5TR97KyAu7BXlZPrhq34T6/a++uaoCBgvYSsn2BLjLUE/WME
-         G8XzG81OD6PZrF3CTICf5+V+Mh4NWTp5p2xQQJhqzOv2KYF7sB11UabFUNw3ecfV5AUm
-         92FWBjZ5MIBwCL5+ejnA72YVMemMZ8l5lwg9m4DBbPRwu5D2ZEvZOgN0qOq1UVfJbruq
-         Tur5k1TAFViumBluJFxLhhP/E5rdnaRA6yJ4puYnmAF/EM8CUIMbJVq0MhQx30VaajkT
-         Lvbw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=iV9+wsyfUcoW/CmR74trefYkab9ZaA0MJl8TccvkpxA=;
+        b=fqB0sUl89xvVMJzuFktZmc/xLp21fIZ6V56NLPiVLb9Uww8w6ImIdxClcUslefyuPn
+         S2F/Mhkk6nsF4h1ky4NCN1mB9VXbj5ih7KokULjll67LTGb4+uQY73fSSrhrrABW0Oci
+         OG0CEwYVzYxvHlrxJTJ4GbHZBJV7l1ZnmrSLH5CtimQO1FWKuS7G6HBHbju6sxzDTwNC
+         fS1UYXgY7nAp2pWwCWN8KlmekeD/3jw9NKwfAkxAf2YEqCVALpH17K7fxR4xEgTr7MKj
+         OYdmTAGZw2qoLsqIvWWKC7V40+JrpIviGe5vYb7/MBWZ2ZhjkSAiXNiYuzKSd6i/V4Ia
+         DFKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:in-reply-to:references;
-        bh=tJgN6ObjRlhMw53PvowYY4iEyegOVrJ3AMYQ6grvdY4=;
-        b=kcOaxNuc1VMatjVSXSq7hTXmjo2Yl7jDc+2q0qR/7UWCBY3QTctezrmfBSlcfSMmYI
-         CLlHwuAy6pfLhRiROW2L1jvZFLBgz9Dq6TIhWDq17WjXgLZ0iZUF24Q3UBnXdiMtsJO/
-         lD0cCqlBLTgM2qk1b+U4VUcgVNT6wl1u6kbhr/P/tZ7Rw14S0qQIW3hq9TOPfsHz+6SW
-         Qim6IZFl5meZVqkiul9/jK2ux4+wsbFuTJBWQnz4K4hDeo2WIJVyPEvk6r4LyX4LynAd
-         sGC5jvPdxhzv8lm3QdIzFONMwmaPju0WgOcT7wz+onuPxYxR8IjznbLDiidTCXnwl2ee
-         q1qw==
-X-Gm-Message-State: AOAM533aGeRZLAruRtreXdlPA5dkAzq6vQN62mK9VjL03JbQviCjYh1y
-        XgeYgOMAy56/NXSbiRADOt4MGBwSFENJyA==
-X-Google-Smtp-Source: ABdhPJxMKzDOHc259OFdHM9FFHRa/gM9gK9wbbVCxDHO9X1S52d3iKTAP7XSGxV2x/L5BC9TvwdgCg==
-X-Received: by 2002:a17:90a:4291:: with SMTP id p17mr12579893pjg.126.1644221467833;
-        Mon, 07 Feb 2022 00:11:07 -0800 (PST)
-Received: from scdiu3.sunplus.com ([113.196.136.192])
-        by smtp.googlemail.com with ESMTPSA id h6sm11774502pfk.110.2022.02.07.00.11.05
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 07 Feb 2022 00:11:07 -0800 (PST)
-From:   Edwin Chiu <edwinchiu0505tw@gmail.com>
-To:     robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rafael@kernel.org,
-        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
-        edwin.chiu@sunplus.com
-Cc:     Edwin Chiu <edwinchiu0505tw@gmail.com>
-Subject: [PATCH v4] cpuidle: sunplus: Create cpuidle driver for sunplus sp7021
-Date:   Mon,  7 Feb 2022 16:11:15 +0800
-Message-Id: <957d882222d218b62fe3fb7a069e2f7952afc5be.1644218105.git.edwinchiu0505tw@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1644218105.git.edwinchiu0505tw@gmail.com>
-References: <cover.1644218105.git.edwinchiu0505tw@gmail.com>
-In-Reply-To: <cover.1644218105.git.edwinchiu0505tw@gmail.com>
-References: <cover.1644218105.git.edwinchiu0505tw@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=iV9+wsyfUcoW/CmR74trefYkab9ZaA0MJl8TccvkpxA=;
+        b=eoXB4EJjdfpXQeQtwMwZ37a6FZRRRx8QoczSCQKey52UxIUNmvJz3FEqw8E+ToJ4OJ
+         pE+YKY0FQg7KBYofrzIahf9lbins7eTf8+VCnHpGzM65p2vkeym8732L3xKu9RmJJnHr
+         eaO3cUj/1+np0kGM5Sxhdi5ninvhIviW0clyv9DkdyvjNUu5MUAgLRU6U4aYj8OnfkeD
+         VJt1KIkWogAuX2mA1zPS2r6F7cxgVVOpsUup/XKHAedWtf9vshcn8dsUMFD6rw9M1Ywv
+         LhSTpQQUR72sZpvl7SU3XcbORUQojcYN5TkEJnKMjG+/msNeCws/pGnqmMnvFFMzVlmU
+         XYyw==
+X-Gm-Message-State: AOAM5337UTU2Rq2Cy7eRhskCySTvw2QqxC1hu0YRIeqHlIY3mjdKJs4R
+        4ehlDaRVzgvl/e6JUqYz7tTyEhDrfRaTt17+RdUuKA==
+X-Google-Smtp-Source: ABdhPJxijT6MHex4bqgY6LoldBW85wOtJU7/upx1oWMkfqzHyF0lKD8+g8zAWNzBSJRF+FvSmiCwkEC1iYh0SoLCoMQ=
+X-Received: by 2002:a05:651c:1787:: with SMTP id bn7mr8423349ljb.16.1644223449112;
+ Mon, 07 Feb 2022 00:44:09 -0800 (PST)
+MIME-Version: 1.0
+References: <20220131113743.52265-1-ulf.hansson@linaro.org>
+ <b33ceac4-506a-65c8-7c80-b1b0a67ce65e@gmail.com> <CAPDyKFqsvF=Pm-vMXSUwPMPnjCr7nSYuy5AH+8rwLYm_NUPKww@mail.gmail.com>
+ <400e45da-837a-c8ad-84b3-285e35f8462c@gmail.com>
+In-Reply-To: <400e45da-837a-c8ad-84b3-285e35f8462c@gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 7 Feb 2022 09:43:32 +0100
+Message-ID: <CAPDyKFpLX0Jpz-tzYx3-g0YBZZNh6Bw731gQEFQub1SviLGoYg@mail.gmail.com>
+Subject: Re: [PATCH] PM: domains: Prevent power off for parent unless child is
+ in deepest state
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Kevin Hilman <khilman@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Create cpuidle driver for sunplus sp7021 chip
+On Fri, 4 Feb 2022 at 20:10, Dmitry Osipenko <digetx@gmail.com> wrote:
+>
+> 04.02.2022 12:43, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> > On Mon, 31 Jan 2022 at 19:29, Dmitry Osipenko <digetx@gmail.com> wrote:
+> >>
+> >> 31.01.2022 14:37, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> >>> A PM domain managed by genpd may support multiple idlestates. During
+> >>> genpd_power_off() a genpd governor may be asked to select one of the
+> >>> idlestates based upon the dev PM QoS constraints, for example.
+> >>>
+> >>> However, there is a problem with the behaviour around this in genpd. =
+More
+> >>> precisely, a parent-domain is allowed to be powered off, no matter of=
+ what
+> >>> idlestate that has been selected for the child-domain.
+> >>>
+> >>> So far, we have not received any reports about errors, possibly becau=
+se
+> >>> there might not be platform with this hierarchical configuration, yet=
+.
+> >>> Nevertheless, it seems reasonable to change the behaviour into preven=
+ting
+> >>> the parent-domain from being powered off, unless the deepest idlestat=
+e has
+> >>> been selected for the child-domain, so let's do that.
+> >>>
+> >>> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> >>> ---
+> >>>  drivers/base/power/domain.c | 18 ++++++++++++++++++
+> >>>  1 file changed, 18 insertions(+)
+> >>>
+> >>> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.=
+c
+> >>> index 5db704f02e71..7f97c5cabdc2 100644
+> >>> --- a/drivers/base/power/domain.c
+> >>> +++ b/drivers/base/power/domain.c
+> >>> @@ -636,6 +636,17 @@ static int genpd_power_off(struct generic_pm_dom=
+ain *genpd, bool one_dev_on,
+> >>>                       atomic_read(&genpd->sd_count) > 0)
+> >>>               return -EBUSY;
+> >>>
+> >>> +     /*
+> >>> +      * The children must be in their deepest states to allow the pa=
+rent to
+> >>> +      * be powered off. Note that, there's no need for additional lo=
+cking, as
+> >>> +      * powering on a child, requires the parent's lock to be acquir=
+ed first.
+> >>> +      */
+> >>> +     list_for_each_entry(link, &genpd->parent_links, parent_node) {
+> >>> +             struct generic_pm_domain *child =3D link->child;
+> >>> +             if (child->state_idx < child->state_count - 1)
+> >>> +                     return -EBUSY;
+> >>> +     }
+> >>> +
+> >>>       list_for_each_entry(pdd, &genpd->dev_list, list_node) {
+> >>>               enum pm_qos_flags_status stat;
+> >>>
+> >>> @@ -1073,6 +1084,13 @@ static void genpd_sync_power_off(struct generi=
+c_pm_domain *genpd, bool use_lock,
+> >>>           || atomic_read(&genpd->sd_count) > 0)
+> >>>               return;
+> >>>
+> >>> +     /* Check that the children are in their deepest state. */
+> >>> +     list_for_each_entry(link, &genpd->parent_links, parent_node) {
+> >>> +             struct generic_pm_domain *child =3D link->child;
+> >>> +             if (child->state_idx < child->state_count - 1)
+> >>> +                     return;
+> >>> +     }
+> >>> +
+> >>>       /* Choose the deepest state when suspending */
+> >>>       genpd->state_idx =3D genpd->state_count - 1;
+> >>>       if (_genpd_power_off(genpd, false))
+> >>
+> >> Hello Ulf,
+> >
+> > Hi Dmitry,
+> >
+> >>
+> >> Is this needed by a concrete SoC? It needs to be clarified in the comm=
+it
+> >> message, otherwise looks like this patch wasn't tested and it's unclea=
+r
+> >> whether this change is really needed.
+> >
+> > It's needed on a STMicro SoC that I have been working on. However,
+> > it's difficult for me to test on that platform, as some SoC specific
+> > pieces are missing upstream (the power domain deployment in
+> > particular). Anyway, let me add some information about this in the
+> > commit log for the next version.
+> >
+> > When it comes to testing, I am using a couple of local test dummy
+> > drivers. One that manages devices that gets attached to a genpd,
+> > mostly to execute runtime PM and dev PM QoS calls - and another that
+> > manages the PM domains with genpd. I have been thinking of a way to
+> > share these "tools" to let other people use them for testing too, but
+> > I haven't just got to it yet.
+> >
+> > Besides the above, do you see any issues from Nvidia platforms point
+> > of view with $subject patch?
+>
+> I've two main concerns:
+>
+> 1. This is a patch for something (STMicro SoC) that isn't fully
+> supported by upstream kernel and it's not clear whether it will be ever
+> supported at all.
 
-Signed-off-by: Edwin Chiu <edwinchiu0505tw@gmail.com>
----
-Changes in v3
- - Rearrangement #include sequence
- - Change remark style to /*~*/
- - Align author email address to same as sob
- - Optimal code
-Changes in v4
- - According Rob Herringrobh's comment
-   There is no need for this binding.
-   Just wanting a different driver is not a reason for a duplicate schema.
-   So remove yaml file and submit driver again.
+The upstream work is ongoing, it's the stm32mp1 platform, which is
+already supported upstream.
 
- MAINTAINERS                                   |   8 ++
- drivers/cpuidle/Kconfig.arm                   |   7 ++
- drivers/cpuidle/Makefile                      |   1 +
- drivers/cpuidle/cpuidle-sunplus.c             | 167 ++++++++++++++++++++++++++
- include/linux/platform_data/cpuidle-sunplus.h |  19 +++
- 5 files changed, 202 insertions(+)
- create mode 100644 drivers/cpuidle/cpuidle-sunplus.c
- create mode 100644 include/linux/platform_data/cpuidle-sunplus.h
+>
+> 2. It's not clear why behaviour of a very specific SoC should be applied
+> to all SoCs, especially given that the specific SoC itself isn't going
+> to use to this feature right now. I guess it could be okay to put this
+> behaviour into the core code until any other SoC will require a
+> different behaviour, but the commit message doesn't clarify this.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e0dca8f..a938a58 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18252,6 +18252,14 @@ L:	netdev@vger.kernel.org
- S:	Maintained
- F:	drivers/net/ethernet/dlink/sundance.c
- 
-+SUNPLUS CPUIDLE DRIVER
-+M:	Edwin Chiu <edwinchiu0505tw@gmail.com>
-+S:	Maintained
-+F:	drivers/cpuidle/Kconfig.arm
-+F:	drivers/cpuidle/Makefile
-+F:	drivers/cpuidle/cpuidle-sunplus.c
-+F:	include/linux/platform_data/cpuidle-sunplus.h
-+
- SUPERH
- M:	Yoshinori Sato <ysato@users.sourceforge.jp>
- M:	Rich Felker <dalias@libc.org>
-diff --git a/drivers/cpuidle/Kconfig.arm b/drivers/cpuidle/Kconfig.arm
-index 15d6c46..fd921c5 100644
---- a/drivers/cpuidle/Kconfig.arm
-+++ b/drivers/cpuidle/Kconfig.arm
-@@ -118,3 +118,10 @@ config ARM_QCOM_SPM_CPUIDLE
- 	  The Subsystem Power Manager (SPM) controls low power modes for the
- 	  CPU and L2 cores. It interface with various system drivers to put
- 	  the cores in low power modes.
-+
-+config ARM_SUNPLUS_CPUIDLE
-+	bool "CPU Idle Driver For SUNPLUS SoCs"
-+	depends on !ARM64
-+	select DT_IDLE_STATES
-+	help
-+	  Select this to enable cpuidle on SP7021 processors.
-diff --git a/drivers/cpuidle/Makefile b/drivers/cpuidle/Makefile
-index 26bbc5e..0a020d1 100644
---- a/drivers/cpuidle/Makefile
-+++ b/drivers/cpuidle/Makefile
-@@ -25,6 +25,7 @@ obj-$(CONFIG_ARM_PSCI_CPUIDLE)		+= cpuidle-psci.o
- obj-$(CONFIG_ARM_PSCI_CPUIDLE_DOMAIN)	+= cpuidle-psci-domain.o
- obj-$(CONFIG_ARM_TEGRA_CPUIDLE)		+= cpuidle-tegra.o
- obj-$(CONFIG_ARM_QCOM_SPM_CPUIDLE)	+= cpuidle-qcom-spm.o
-+obj-$(CONFIG_ARM_SUNPLUS_CPUIDLE)		+= cpuidle-sunplus.o
- 
- ###############################################################################
- # MIPS drivers
-diff --git a/drivers/cpuidle/cpuidle-sunplus.c b/drivers/cpuidle/cpuidle-sunplus.c
-new file mode 100644
-index 0000000..0e7bf43
---- /dev/null
-+++ b/drivers/cpuidle/cpuidle-sunplus.c
-@@ -0,0 +1,167 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2011-2014, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2014,2015, Linaro Ltd.
-+ *
-+ * SAW power controller driver
-+ */
-+#define pr_fmt(fmt) "CPUidle arm: " fmt
-+
-+#include <asm/suspend.h>
-+#include <linux/cpu_cooling.h>
-+#include <linux/cpuidle.h>
-+#include <linux/cpumask.h>
-+#include <linux/cpu_pm.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/slab.h>
-+#include <linux/platform_data/cpuidle-sunplus.h>
-+
-+#include "dt_idle_states.h"
-+
-+static int sp7021_wfi_finisher(unsigned long flags)
-+{
-+	cpu_v7_do_idle();   /* idle to WFI */
-+
-+	return -1;
-+}
-+
-+static int sp7021_enter_idle_state(struct cpuidle_device *dev,
-+				struct cpuidle_driver *drv, int idx)
-+{
-+	int ret;
-+
-+  /* if idx=0, call cpu_do_idle() */
-+	if (!idx) {
-+		cpu_v7_do_idle();
-+		return idx;
-+	}
-+
-+	/* if idx>0, call cpu_suspend() */
-+	ret = cpu_pm_enter();
-+	if (!ret) {
-+	/*
-+	 * Pass idle state index to cpuidle_suspend which in turn
-+	 * will call the CPU ops suspend protocol with idle index as a
-+	 * parameter.
-+	 */
-+		ret = cpu_suspend(idx, sp7021_wfi_finisher);
-+	}
-+	cpu_pm_exit();
-+
-+	return ret ? -1:idx;
-+}
-+
-+static struct cpuidle_driver sp7021_idle_driver = {
-+	.name = "sp7021_idle",
-+	.owner = THIS_MODULE,
-+	/*
-+	 * State at index 0 is standby wfi and considered standard
-+	 * on all ARM platforms. If in some platforms simple wfi
-+	 * can't be used as "state 0", DT bindings must be implemented
-+	 * to work around this issue and allow installing a special
-+	 * handler for idle state index 0.
-+	 */
-+	.states[0] = {
-+		.enter                  = sp7021_enter_idle_state,
-+		.exit_latency           = 1,
-+		.target_residency       = 1,
-+		.power_usage		= UINT_MAX,
-+		.name                   = "WFI",
-+		.desc                   = "ARM WFI",
-+	}
-+};
-+
-+static const struct of_device_id sp7021_idle_state_match[] = {
-+	{ .compatible = "sunplus,sp7021-idle-state",
-+		.data = sp7021_enter_idle_state },
-+	{ },
-+};
-+
-+/*
-+ * sp7021_idle_init - Initializes sp7021 cpuidle driver
-+ *
-+ * Initializes sp7021 cpuidle driver for all CPUs, if any CPU fails
-+ * to register cpuidle driver then rollback to cancel all CPUs
-+ * registration.
-+ */
-+static int __init sp7021_idle_init(void)
-+{
-+	int cpu, ret;
-+	struct cpuidle_driver *drv;
-+	struct cpuidle_device *dev;
-+
-+	drv = kmemdup(&sp7021_idle_driver, sizeof(*drv), GFP_KERNEL);
-+	if (!drv)
-+		return -ENOMEM;
-+
-+	drv->cpumask = (struct cpumask *)cpumask_of(cpu);
-+	/*
-+	 * Initialize idle states data, starting at index 1.  This
-+	 * driver is DT only, if no DT idle states are detected (ret
-+	 * == 0) let the driver initialization fail accordingly since
-+	 * there is no reason to initialize the idle driver if only
-+	 * wfi is supported.
-+	 */
-+	ret = dt_init_idle_driver(drv, sp7021_idle_state_match, 1);
-+	if (ret <= 0)
-+		return ret ? : -ENODEV;
-+
-+	ret = cpuidle_register_driver(drv);
-+	if (ret) {
-+		pr_err("Failed to register cpuidle driver\n");
-+		return ret;
-+	}
-+
-+	for_each_possible_cpu(cpu) {
-+		dev = kzalloc(sizeof(*dev), GFP_KERNEL);
-+		if (!dev) {
-+			ret = -ENOMEM;
-+			goto out_fail;
-+		}
-+		dev->cpu = cpu;
-+
-+		ret = cpuidle_register_device(dev);
-+		if (ret) {
-+			pr_err("Failed to register cpuidle device for CPU %d\n", cpu);
-+			kfree(dev);
-+			goto out_fail;
-+		}
-+	}
-+
-+	return 0;
-+
-+out_fail:
-+	while (--cpu >= 0) {
-+		dev = per_cpu(cpuidle_devices, cpu);
-+		cpuidle_unregister_device(dev);
-+		kfree(dev);
-+	}
-+	cpuidle_unregister_driver(drv);
-+
-+	return ret;
-+}
-+
-+static int __init idle_init(void)
-+{
-+	int ret;
-+
-+	if (of_machine_is_compatible("sunplus,sp7021-achip")) {
-+		sp7021_idle_init();
-+		ret = 0;
-+	}	else
-+		ret = -1;
-+
-+	if (ret) {
-+		pr_err("failed to cpuidle init\n");
-+		return ret;
-+	}
-+
-+	return ret;
-+}
-+device_initcall(idle_init);
-+
-+MODULE_AUTHOR("Edwin Chiu <edwinchiu0505tw@gmail.com>");
-+MODULE_DESCRIPTION("Sunplus sp7021 cpuidle driver");
-+MODULE_LICENSE("GPL");
-diff --git a/include/linux/platform_data/cpuidle-sunplus.h b/include/linux/platform_data/cpuidle-sunplus.h
-new file mode 100644
-index 0000000..bf87682
---- /dev/null
-+++ b/include/linux/platform_data/cpuidle-sunplus.h
-@@ -0,0 +1,19 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License version 2 as
-+ * published by the Free Software Foundation.
-+ */
-+
-+#ifndef __CPUIDLE_SP7021_H
-+#define __CPUIDLE_SP7021_H
-+
-+struct cpuidle_sp7021_data {
-+	int (*cpu23_powerdown)(void);
-+	void (*pre_enter_aftr)(void);
-+	void (*post_enter_aftr)(void);
-+};
-+
-+extern int cpu_v7_do_idle(void);
-+
-+#endif
--- 
-2.7.4
+The point with the commit message is to question the current default
+behaviour. If we have a QoS constraint that causes the genpd governor
+to select a shallow state for a child, it seems wrong to allow the
+parent to be turned off, in my opinion.
 
+If a platform with a PM domain hierarchy would need a different
+behaviour from genpd, then we need to look into that, of course.
+However, the current *uncontrolled* behaviour is most likely not going
+to be suitable for any platform anyway.
+
+>
+> To my knowledge all NVIDIA Tegra SoCs are indifferent to this patch
+> because they don't have such kind of dependency between power domains.
+
+Great, thanks for confirming!
+
+>
+> In general, such changes usually are deferred from being upstreamed
+> until there is a real user, otherwise there is a risk of cluttering the
+> code with unused features. Do you have a time estimation in regards to
+> when STMicro may start to benefit from this change?
+
+The STMicro folkz are working on it right now, but I can't give you
+any estimates for their work.
+
+Moreover, I think the important point in this regard, is that the
+$subject patch doesn't really hurt anything else, so then what's the
+point of holding this back?
+
+Kind regards
+Uffe
