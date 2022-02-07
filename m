@@ -2,107 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 148CC4AC124
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Feb 2022 15:31:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ADBB4AC5F7
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Feb 2022 17:39:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344859AbiBGOWG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Feb 2022 09:22:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44840 "EHLO
+        id S229956AbiBGQir (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Feb 2022 11:38:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241746AbiBGNws (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Feb 2022 08:52:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C26C043189
-        for <linux-pm@vger.kernel.org>; Mon,  7 Feb 2022 05:52:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E58EE61268
-        for <linux-pm@vger.kernel.org>; Mon,  7 Feb 2022 13:52:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 59A23C341E3
-        for <linux-pm@vger.kernel.org>; Mon,  7 Feb 2022 13:52:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644241966;
-        bh=1vxx1eF35JrEWw0/wu/kw/+5FRH7T9jk/Ofu0LYJhSg=;
-        h=From:To:Subject:Date:From;
-        b=WMT27z6cYvAaCx6z/fCIgp0xKV0z1d/h7V3D/7fq1TSnUBncNhjRpUY8ZzkQZgob6
-         stwHuseDW7lSFPPVOIu4ga2AYz5riYnn7yPwq2uz2XHLIhRRjyNnmlW1HBENj9a6zT
-         P8CARIDkKzyZaLxJuCNPet+UIjm7+WuIhoKETwpDwrA8R855oDkwPRsMEOpOmGzGtH
-         UIsuMQ2kI4w2rJkWKCPjp2dV8zVrqhGBesTzpd+9F2u1iIW3ZoXavlrS+Zpbi8ZhDr
-         hIIUqeq4spzoz0MAx3JOqbsuaRgJxzcNk44uktmKPe54lDY4MpqSaeknNmi1gaT3xP
-         pXTNC5VMSSK8Q==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 4596DC05FE2; Mon,  7 Feb 2022 13:52:46 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [Bug 215574] New: Frequency boost disabled by default on Asus PN50
-Date:   Mon, 07 Feb 2022 13:52:46 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: parag.lkml@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version
- cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
- priority component assigned_to reporter cf_regression
-Message-ID: <bug-215574-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S1389775AbiBGQ1G (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Feb 2022 11:27:06 -0500
+X-Greylist: delayed 311 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 08:27:04 PST
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F28C0401CC;
+        Mon,  7 Feb 2022 08:27:04 -0800 (PST)
+Received: from evilbit.green-communications.fr ([92.154.77.116]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.119]) with ESMTPSA (Nemesis)
+ id 1MKbwg-1nbwVi0iyK-00L0Yj; Mon, 07 Feb 2022 17:21:38 +0100
+From:   Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] imx_thermal: Fix temperature retrieval after overheat
+Date:   Mon,  7 Feb 2022 17:18:30 +0100
+Message-Id: <20220207161829.4807-1-nicolas.cavallari@green-communications.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:nB1bTMwZBFWEuhylUis7rLw5EQ2337iNQATK8GFDRXIZ7yaAo/p
+ zViD23GEZDiLLLdymY7ZtS9rODuTGylsdyaKoZB79ML/Z2+8UizghvoK42a8KJ8Tn06M/4j
+ AFo4amFvwIIsyIsFNo+iZeTzpA5njJ5N0jNl6i2nFhqy92t9GRJNMK/KzQ+RUkbjxb5tjnD
+ OFMPHJEHWe8qhJRaOwAfQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:DrdQU+NYlxo=:ZI9BjRW9eZMtiZ1FpJjbHp
+ YZxmh/MqKo+wLu95PSRy/e7+58EAOV5H2v7N6n1YIJwMVO+Re1f0E2o4EEbpQoOdPirIJIrXh
+ rkUN4LQGj0pRbCiGo4O9cbGbr6t4GK1IjCfkgVJkpFtjGPojf7yolu202n+GJn3KRRZ15grHW
+ EvlOGKNGOmPXaH8U/iuy2Xh2decU44u4/VX+WxEiWyq7UgvNOTxKqmg2K2kPvgIijFScTJU+c
+ IkFolc9rXr4kePFy936LnSMonyF0XShig3loZAvWjVVZ389EE2u2TPcnmT9uhLKbSzoyoHrSY
+ EBHBBaU1t6Ksa27R2/TmTjyKicWbqBh+WWq0qMt1cy39cCCKwmsFVly1aZprxuvipPenNVXsL
+ 0gNykysooh377d4oVg5fHdjj77Ry+QkBQYAp1ldcCbGpY6Acl5bse1nLwr1NIvZ/nFCcGLIqH
+ mjj6q9HUyAZg2vDtB6dlwemQGkDCIq4J565fNoqF8xN2qO8oNktogCb4yC+kbQBUftsZFjIhr
+ qChuXN96Wfasnvcwr14wXQDLcdRjnBGBCnrVaz/7dxvrZQeQTZJ5RNhKIoz1W9x7XguUR8kJV
+ 9d6iTM9OvV752nu4PZdsDNBDfIIZ1l0JjNM3bPTEJjIrIHHznqLcDi8R3gzgYCk6JrZG9UnZv
+ yIrJkS5f3YZLR4I5LhQTSdCY72OuJGyClxZxJnG7armMo1zoIqvtauQS2v9oqXQpGf88S8Bvd
+ Yt9a9kpJumHqeo9s52H1Zi61KQSbtvOJsHvotA==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215574
+When the CPU temperature is above the passive trip point, reading the
+temperature would fail forever with EAGAIN.  Fortunately, the thermal
+core would continue to assume that the system is overheating, so would
+put all passive cooling devices to the max.  Unfortunately, it does
+this forever, even if the temperature returns to normal.
 
-            Bug ID: 215574
-           Summary: Frequency boost disabled by default on Asus PN50
-           Product: Power Management
-           Version: 2.5
-    Kernel Version: 5.17.0-rc2+
-          Hardware: x86-64
-                OS: Linux
-              Tree: Mainline
-            Status: NEW
-          Severity: normal
-          Priority: P1
-         Component: cpufreq
-          Assignee: linux-pm@vger.kernel.org
-          Reporter: parag.lkml@gmail.com
-        Regression: No
+This can be easily tested by setting a very low trip point and crossing
+it with while(1) loops.
 
-On Asus PN50 with the latest available BIOS 0623 - turbo boost is disabled =
-by
-default on boot and CPU only goes from 1.4Ghz to 1.8Gz non turbo frequencies
-resulting in noticeable sluggishness vs Windows which seems to be able to b=
-oost
-to 4.2Ghz.
+The cause is commit d92ed2c9d3ff ("thermal: imx: Use driver's local data
+to decide whether to run a measurement"), which replaced a check for
+thermal_zone_device_is_enabled() by a check for irq_enabled, which
+tests if the passive trip interrupt is enabled.
 
-If I manually echo 1 > /sys/devices/system/cpu/cpufreq/boost or put it in u=
-dev
-rules for that matter - things work as expected, processor boosts to 4.x Gh=
-z,
-fans kick in and system is snappier.
+Normally, when the thermal zone is enabled, the temperature sensors
+are always enabled and the interrupt is used to detect overheating.
+When the interrupt fires, it must be disabled.
+In that case, the commit causes the measurements to be done
+manually (enable sensor, do measurement, disable sensor).
+If the thermal core successfully cools down the system below the trip
+point (which it typically does quickly), the irq is enabled again but
+the sensor is not enabled.
 
---=20
-You may reply to this email to add a comment.
+To fix this without using thermal_zone_device_is_enabled(), use a
+separate variable to record if the thermal zone is enabled.
 
-You are receiving this mail because:
-You are the assignee for the bug.=
+Fixes: d92ed2c9d3ff ("thermal: imx: Use driver's local data to decide
+whether to run a measurement")
+
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+---
+ drivers/thermal/imx_thermal.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
+index 2c7473d86a59..5a6ad5bae238 100644
+--- a/drivers/thermal/imx_thermal.c
++++ b/drivers/thermal/imx_thermal.c
+@@ -205,6 +205,7 @@ struct imx_thermal_data {
+ 	int alarm_temp;
+ 	int last_temp;
+ 	bool irq_enabled;
++	bool tz_enabled;
+ 	int irq;
+ 	struct clk *thermal_clk;
+ 	const struct thermal_soc_data *socdata;
+@@ -252,11 +253,10 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
+ 	const struct thermal_soc_data *soc_data = data->socdata;
+ 	struct regmap *map = data->tempmon;
+ 	unsigned int n_meas;
+-	bool wait, run_measurement;
++	bool wait;
+ 	u32 val;
+ 
+-	run_measurement = !data->irq_enabled;
+-	if (!run_measurement) {
++	if (data->tz_enabled) {
+ 		/* Check if a measurement is currently in progress */
+ 		regmap_read(map, soc_data->temp_data, &val);
+ 		wait = !(val & soc_data->temp_valid_mask);
+@@ -283,7 +283,7 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
+ 
+ 	regmap_read(map, soc_data->temp_data, &val);
+ 
+-	if (run_measurement) {
++	if (!data->tz_enabled) {
+ 		regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
+ 			     soc_data->measure_temp_mask);
+ 		regmap_write(map, soc_data->sensor_ctrl + REG_SET,
+@@ -339,6 +339,7 @@ static int imx_change_mode(struct thermal_zone_device *tz,
+ 	const struct thermal_soc_data *soc_data = data->socdata;
+ 
+ 	if (mode == THERMAL_DEVICE_ENABLED) {
++		data->tz_enabled = true;
+ 		regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
+ 			     soc_data->power_down_mask);
+ 		regmap_write(map, soc_data->sensor_ctrl + REG_SET,
+@@ -349,6 +350,7 @@ static int imx_change_mode(struct thermal_zone_device *tz,
+ 			enable_irq(data->irq);
+ 		}
+ 	} else {
++		data->tz_enabled = false;
+ 		regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
+ 			     soc_data->measure_temp_mask);
+ 		regmap_write(map, soc_data->sensor_ctrl + REG_SET,
+-- 
+2.34.1
+
