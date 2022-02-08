@@ -2,66 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51BD54AD1FA
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Feb 2022 08:13:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF5444AD25B
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Feb 2022 08:39:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347926AbiBHHNN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Feb 2022 02:13:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51658 "EHLO
+        id S1347059AbiBHHjI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Feb 2022 02:39:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbiBHHNM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Feb 2022 02:13:12 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DCCC0401F1
-        for <linux-pm@vger.kernel.org>; Mon,  7 Feb 2022 23:13:10 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id u7so21561128lji.2
-        for <linux-pm@vger.kernel.org>; Mon, 07 Feb 2022 23:13:10 -0800 (PST)
+        with ESMTP id S1344482AbiBHHjI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Feb 2022 02:39:08 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB619C0401EF
+        for <linux-pm@vger.kernel.org>; Mon,  7 Feb 2022 23:39:06 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id s18so29052616wrv.7
+        for <linux-pm@vger.kernel.org>; Mon, 07 Feb 2022 23:39:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PQx9yycvGYpKyCgAvuWDdcBVWCJa3H3NyEWfCx/k5WA=;
-        b=Z1F1U/gLvw9+Pjeh8lx2oVNfB+J6yVYOIyCF5PrMw+5bbMyzJ+fN/M7DbYMn2ZppLm
-         FaqudwX4iNBFIUFSbqo2zJ73BLMnXOZjT2IxbkHMbtnaSmtkLVVuUnd5Ap8Y8O/NuOEZ
-         lvQJ5yBTrq/SpUFAxfkIrZMjq3ZTYXuh6nfmAh2oHh69BegqZZqvUZa5KrGrr9S3KcVZ
-         h0RyB1JD1IFXKLQvYKCzGRHKnR1cqVag+KCA0msIViVkrFjSHufPgJ+J00O3D+3betSe
-         zW83+LOF1S3CNznfPbLEBbgeKeT+LfKODvG4W7BASDOWcEkTpQB+oDYsQ+q0hCBdZMBk
-         XCvA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=A5bUbwGkKQlXLpWsy9TPFsLb6gmc2QPm26L3v501V4c=;
+        b=KqVk3xA4HYLHM8Tz5KHMWy7mSFcX7bdDpIZiAXIYWP0FsjWSnmB8SDTT0Yn93XvOyK
+         CHI32ncaqz1nL1zNVWlVFjpVaBaSVCLofSToIPOHkFyPHUNSFiQ/+RYhBWEKa0uj2rsh
+         D3hB6grlYH4m+fztaURW3XEWIkb8Vx1uW/AA5AHIJTQAIWluVdjn7CWNpSXk9R9sMIXg
+         CGKBtyzIpgY7P5zJpEeIvccG0TcUABMM+8Mb2GVqdYQlCi2RApLGOJrCxahbAliZuY7y
+         XIMGNs/f3J3YKSWXDGRWK6tfqnJekatIZFs2sug7mmkS2JEq2xUqIRXjz9mddluXDAqg
+         bwpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PQx9yycvGYpKyCgAvuWDdcBVWCJa3H3NyEWfCx/k5WA=;
-        b=PEnouf9CpBha6+ojFRxITI7BnMvG7E1o8Fdggbpk+ywfO7331HBQnlXfmVPOzvJ505
-         UqyHmHxLN+kK3N4dLGZ5z9CiWtRCRjufBzWBfdYZKddL+p8ZA0RSmhVGCtn+SAqu/dj7
-         QZa0oNHeZ8hQJEpYytLi4hlgBFq8wQ0nChi/BtMYXeFdd6n88kCfk9SGwGZMq6d7kJr9
-         9GBgOjB/n/wvXw/kOBKiPC1LRWnMLal4wv705qGbMzsJ/ajIcZEi6+DXUKiLvlrFuJ46
-         yoRiTnZ0O14DCYM+tEJKG9pzFA9c8GPEk3NmAc9ndl63W4KOw9r9+i3ZVA0GEl1Qkt+V
-         mcpA==
-X-Gm-Message-State: AOAM530o4mEtDMj3/0bksHOJcGwEUN5aOXOMKSa84GjL9YwarFPv3bIA
-        mMIylI6sL87t05qbMJE0Qz1TeDitwgRL9l3IW82uyA==
-X-Google-Smtp-Source: ABdhPJzZQfS4PljZUn4lT5y7d+EOf/OQIM/Gy2WW8iCoWGE07Fi7riic9d6TzE4atFMHt1kJWN1hoMNLNUQHntOAUHM=
-X-Received: by 2002:a2e:7319:: with SMTP id o25mr2078468ljc.34.1644304388966;
- Mon, 07 Feb 2022 23:13:08 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=A5bUbwGkKQlXLpWsy9TPFsLb6gmc2QPm26L3v501V4c=;
+        b=F5aiaCRejnAvtQ1VuHZSffRWwPBYX46qY1dy9deX77JxsPsvhsYOnIwMZRz34StTtz
+         RFJ8sdpnJl5tDNHEGgv6s0+mnZ3x9mtVxiLykSvoyoT3ZfK3wDtuHdXUNKwh5JPjaUha
+         G8nTngMnvRC6+oiX1gnCI6I0EdJkysqWAOmUf74UU3qDgCgPrjah0vZSpds2a4IX1S2K
+         actVPD4qbq4+DelkRKDV9FtYjKSj9difFuPjrxVfjSN/oX+QaH4LXZ0+o4PvzptZgon6
+         9pnm1gGhvKV6XI171cQJAQozlod3/KYHDd2qnF4Ix0aDrR0cjKSBMopIqOl29eTajQzz
+         kQSw==
+X-Gm-Message-State: AOAM533pn1KpLVoksT8GzyRY4XJZ5uIhmb6TXRwWYR6FqvVDWGJo+pRY
+        Va/Go4MdCpCKY6FRr6NaoOudng==
+X-Google-Smtp-Source: ABdhPJxLFibNiHiiDz4aXl7IafWaZMaTn6HCCI1pZykTEc4VmvrBZ1SnsvVXB7spUjrCjz1EMI9WNw==
+X-Received: by 2002:a5d:4687:: with SMTP id u7mr2364714wrq.534.1644305945291;
+        Mon, 07 Feb 2022 23:39:05 -0800 (PST)
+Received: from ?IPV6:2a01:e34:ed2f:f020:f084:7eaf:38c2:fbc5? ([2a01:e34:ed2f:f020:f084:7eaf:38c2:fbc5])
+        by smtp.googlemail.com with ESMTPSA id 2sm12965099wrz.59.2022.02.07.23.39.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Feb 2022 23:39:04 -0800 (PST)
+Message-ID: <f63be987-a1a5-cf7e-8302-4ae6e87b6699@linaro.org>
+Date:   Tue, 8 Feb 2022 08:39:03 +0100
 MIME-Version: 1.0
-References: <003f01d81c8c$d20ee3e0$762caba0$@telus.net> <20220208023940.GA5558@shbuild999.sh.intel.com>
-In-Reply-To: <20220208023940.GA5558@shbuild999.sh.intel.com>
-From:   Doug Smythies <dsmythies@telus.net>
-Date:   Mon, 7 Feb 2022 23:13:00 -0800
-Message-ID: <CAAYoRsXrwOQgzAcED+JfVG0=JQNEXuyGcSGghL4Z5xnFgkp+TQ@mail.gmail.com>
-Subject: Re: CPU excessively long times between frequency scaling driver calls
- - bisected
-To:     Feng Tang <feng.tang@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        dsmythies <dsmythies@telus.net>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 0/2] Ignore Energy Model with abstract scale in IPA and
+ DTPM
+Content-Language: en-US
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     amit.kachhap@gmail.com, viresh.kumar@linaro.org, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com, dietmar.eggemann@arm.com,
+        Pierre.Gondois@arm.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20220207073036.14901-1-lukasz.luba@arm.com>
+ <0d2217e0-44f7-8587-3e1f-a73d301ab166@linaro.org>
+ <616307f7-b419-8e36-6879-6cf6f4e02d5a@arm.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <616307f7-b419-8e36-6879-6cf6f4e02d5a@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,95 +78,54 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Feng,
+On 07/02/2022 12:44, Lukasz Luba wrote:
+> 
+> 
+> On 2/7/22 10:41 AM, Daniel Lezcano wrote:
+>> On 07/02/2022 08:30, Lukasz Luba wrote:
+>>> Hi all,
+>>>
+>>> The Energy Model supports abstract scale power values. This might cause
+>>> issues for some mechanisms like thermal governor IPA or DTPM, which
+>>> expect that all devices provide sane power values. This patch set 
+>>> prevents
+>>> from registering such devices for IPA and DTPM.
+>>
+>>
+>> Does it mean for example big and little have both 0-100 ?
+>>
+>>
+> 
+> Unfortunately, these can be any numbers. I hope at least the CPUs
+> Big and Little power have sense: Little power is not higher
+> than Big power. The purpose of EM is to enable EAS, so this power
+> relation between Big and Little should have sense. Someone
+> who is not willing to or cannot expose real power values, still
+> wants the EAS to operate (my assumption and hope). The SCMI FW can
+> provide abstract power values. It's in the SCMI spec. Thus,
+> creating these abstract scale power values for big.LITTLE the right
+> way should result in properly working EAS.
+> 
+> I can also have hope for GPU vs. Big power, but it is a weaker hope.
+> The second is more tricky to distinguish even if you have a domain
+> knowledge, but not the real measurements with you. The GPU power
+> values is also a 'sensitive' knowledge to share. Open source guys can do
+> that (after measurements), but some vendor's engineers probably can't.
 
-Thank you for your reply.
+So basically, we don't know, right ?
 
-On Mon, Feb 7, 2022 at 6:39 PM Feng Tang <feng.tang@intel.com> wrote:
->
-> Hi Doug,
->
-> Thanks for the report.
->
-> On Tue, Feb 08, 2022 at 09:40:14AM +0800, Doug Smythies wrote:
-> > Hi All,
-> >
-> > Note before: I do not know If I have the e-mail address list correct,
-> > nor am I actually a member of the x86 distribution list. I am on
-> > the linux-pm email list.
-> >
-> > When using the intel_pstate CPU frequency scaling driver with HWP disabled,
-> > active mode, powersave scaling governor, the times between calls to the driver
-> > have never exceeded 10 seconds.
-> >
-> > Since kernel 5.16-rc4 and commit: b50db7095fe002fa3e16605546cba66bf1b68a3e
-> > " x86/tsc: Disable clocksource watchdog for TSC on qualified platorms"
-> >
-> > There are now occasions where times between calls to the driver can be
-> > over 100's of seconds and can result in the CPU frequency being left
-> > unnecessarily high for extended periods.
-> >
-> > From the number of clock cycles executed between these long
-> > durations one can tell that the CPU has been running code, but
-> > the driver never got called.
-> >
-> > Attached are some graphs from some trace data acquired using
-> > intel_pstate_tracer.py where one can observe an idle system between
-> > about 42 and well over 200 seconds elapsed time, yet CPU10 never gets
-> > called, which would have resulted in reducing it's pstate request, until
-> > an elapsed time of 167.616 seconds, 126 seconds since the last call. The
-> > CPU frequency never does go to minimum.
-> >
-> > For reference, a similar CPU frequency graph is also attached, with
-> > the commit reverted. The CPU frequency drops to minimum,
-> > over about 10 or 15 seconds.,
->
-> commit b50db7095fe0 essentially disables the clocksource watchdog,
-> which literally doesn't have much to do with cpufreq code.
->
-> One thing I can think of is, without the patch, there is a periodic
-> clocksource timer running every 500 ms, and it loops to run on
-> all CPUs in turn. For your HW, it has 12 CPUs (from the graph),
-> so each CPU will get a timer (HW timer interrupt backed) every 6
-> seconds. Could this affect the cpufreq governor's work flow (I just
-> quickly read some cpufreq code, and seem there is irq_work/workqueue
-> involved).
+At this point the different subsystems (cpufreq cooling device and dtpm) 
+disabled by these patches can deal with abstract scale values, like they 
+do today with the very approximate power numbers we have defined in the DT.
 
-6 Seconds is the longest duration I have ever seen on this
-processor before commit b50db7095fe0.
+Let's wait and see how the different SoC vendors implement the SCMI spec.
 
-I said "the times between calls to the driver have never
-exceeded 10 seconds" originally, but that involved other processors.
 
-I also did longer, 9000 second tests:
 
-For a reverted kernel the driver was called 131,743,
-and 0 times the duration was longer than 6.1 seconds.
 
-For a non-reverted kernel the driver was called 110,241 times,
-and 1397 times the duration was longer than 6.1 seconds,
-and the maximum duration was 303.6 seconds
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-> Can you try one test that keep all the current setting and change
-> the irq affinity of disk/network-card to 0xfff to let interrupts
-> from them be distributed to all CPUs?
-
-I am willing to do the test, but I do not know how to change the
-irq affinity.
-
-> Thanks,
-> Feng
->
->
-> > Processor: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz
-> >
-> > Why this particular configuration, i.e. no-hwp, active, powersave?
-> > Because it is, by far, the easiest to observe what is going on.
-> >
-> > ... Doug
-> >
->
->
->
->
->
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
