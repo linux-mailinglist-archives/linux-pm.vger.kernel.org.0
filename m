@@ -2,466 +2,174 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4EAF4ADE19
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Feb 2022 17:17:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B43B34ADF79
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Feb 2022 18:25:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382916AbiBHQQ7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Feb 2022 11:16:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47830 "EHLO
+        id S1384231AbiBHRZ6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Feb 2022 12:25:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382933AbiBHQQ7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Feb 2022 11:16:59 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68846C0612C1
-        for <linux-pm@vger.kernel.org>; Tue,  8 Feb 2022 08:16:55 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id i14so2056779wrc.10
-        for <linux-pm@vger.kernel.org>; Tue, 08 Feb 2022 08:16:55 -0800 (PST)
+        with ESMTP id S1384243AbiBHRZw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Feb 2022 12:25:52 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B53C06174F
+        for <linux-pm@vger.kernel.org>; Tue,  8 Feb 2022 09:25:51 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id i30so20036103pfk.8
+        for <linux-pm@vger.kernel.org>; Tue, 08 Feb 2022 09:25:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aKXJwL4hvq55/LFdYG92ZXL3tNxjw52aAP4axBxnMOQ=;
-        b=jj8IPRcCM4Er1aZyxSbz/MktKNiNx4Ny95ct6Z3tzw/KbWyYm9ZT6Zh5krVFlJUEtI
-         NbWV6pKno0oTqEDgKAKVt+6zFPT2Gnahw3yTSYY5E1ajSkyC6B9il91yo15CRMnV/OhF
-         7lXiKHbkXnK1OiOs5BYMUJfpoxXLHH5ykYwut+UlABSMRghx1RNx4PZ362ab5srOIHkx
-         Y0DRDFr8IEzsfIgZE1ebyhdZGQe3fSWekS3qdunmI6unFlWZsYd1k3bicTp98Ft6VFWx
-         mTZVwvQm1ZCb6ksXAarSL1cXCsAREAGAVgXgujO5aIXd/46AQwWS41D/F3MjMz53Sqps
-         e+ow==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cib/chw0Mb1unxiFkWS5LEJe9zXPAE/9BcI3EX7Nnkc=;
+        b=FvN6s4uPYQxdJXKi2d2cz9Lqy70gKJqtodmmOFu08JZDwJTgLQIiEkwCPP2FYjCDgE
+         rRofzWcTrybALgUCJRX5dAnfZql3swZiLe63nOFDM4i8zZhaN+vyNhIL6VKpgXKhcQxk
+         5Z1xRFoGYYrLsViFP56wB3J7wttAMRWmaEfJw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aKXJwL4hvq55/LFdYG92ZXL3tNxjw52aAP4axBxnMOQ=;
-        b=shrhxgAVXoLQ4uV1WEKYlF9tFOVQY3PWOIM3pOfzeQI3+fuvUv7+y2JFN8BH9w+tiX
-         Xj3gQH9zfDxiLCiR6ojESPCOz8VgByhNvGPzKm00IQRRuBHMB5siMJW5qZzrnhNRNGMR
-         tbUt9IS2meXgBK3lCz9fv/trSvw7KBZyMYTcnWrUmbcpNSM686GYb2F0WfLLKSXH8juq
-         CeN4lpy+T8kwH2wYzLykcrA6b5XLkLuPdggEPYYiKNyGCrsTTtnJUGn4CA7GQR5t9JRg
-         iu2UkzAa4L3R8fBM2gJ4PVgpeRUZWXTTUPHNIZMqcr0p9RrwZJ+kFtu2YUaq/VGcPm1e
-         9t+w==
-X-Gm-Message-State: AOAM5324rThZ7eiWKqmUOeJnXNSnei/M5XWVSJiUMHkqsD8nSs5CrOiZ
-        legms1sqfoAeXBpBLMuF75FuVGQFYxHqpgOvHxfx6A==
-X-Google-Smtp-Source: ABdhPJxiIS9ZYI9gg0KVV2cfDvDLybSCPDmYGnzAe0Vc6ckA/KBv4MAS15wMskZNFjULgZghwbhmeosZthvL68ecAS8=
-X-Received: by 2002:a5d:588d:: with SMTP id n13mr4175738wrf.690.1644337013676;
- Tue, 08 Feb 2022 08:16:53 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cib/chw0Mb1unxiFkWS5LEJe9zXPAE/9BcI3EX7Nnkc=;
+        b=5NlLQS2wka1so4Iz8yZRCH/LQwb66MvhxlMbGQWdKbTwJk9Kro6UwFS6O8EIGTuV1Z
+         6MxKcDo1QFQV17oBt/6pHg6Ddkvoz9aeODHfa6NIvTvS0c6cLed8ISu2bRZiGeFIEvo/
+         li4fkDopmVBvX5f/iUo/y8H/vC2m1d+F5R4SA92y3lxG/7n/Y38YtsGpYDlo1FGpPF7r
+         v82Rr9QQMnqfOB6fXc/S5tygN+4DKmbsdOASOVEPk/pHU41Hbhw5HcLA9U0+Cpl08Hop
+         3sMcIohTnPCWyR3FABiM76yuT5Bz5eS4S37ICBCj8T8EL0AmvE7c3XwqE7LMJHh/uemo
+         HGiQ==
+X-Gm-Message-State: AOAM532BmL5j7Fmci/PKGhv0ghM4rzj070i7V3vEzemAB0qTBU6dPKLy
+        W5SpF7tpNDVrCigFmOwE43nMpQ==
+X-Google-Smtp-Source: ABdhPJx49KZto+T/+N8XoEoYFIWssK5O2duMSNGvlQOF2cX43dpBYyMits2jwmbP1frpGxlAwM11bw==
+X-Received: by 2002:a63:2a95:: with SMTP id q143mr4415837pgq.492.1644341150692;
+        Tue, 08 Feb 2022 09:25:50 -0800 (PST)
+Received: from localhost ([2620:15c:202:201:45cc:a522:8718:fc78])
+        by smtp.gmail.com with UTF8SMTPSA id z7sm16719798pfe.49.2022.02.08.09.25.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Feb 2022 09:25:50 -0800 (PST)
+Date:   Tue, 8 Feb 2022 09:25:48 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
+        viresh.kumar@linaro.org, rafael@kernel.org, amitk@kernel.org,
+        rui.zhang@intel.com, dietmar.eggemann@arm.com,
+        Pierre.Gondois@arm.com, Douglas Anderson <dianders@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
+ cpufreq_cooling and devfreq_cooling
+Message-ID: <YgKnnFl7Gp8AS30X@google.com>
+References: <20220207073036.14901-1-lukasz.luba@arm.com>
+ <20220207073036.14901-2-lukasz.luba@arm.com>
+ <YgG+TmLrCSXX4Bvt@google.com>
+ <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com>
 MIME-Version: 1.0
-References: <20220126114452.692512-1-apatel@ventanamicro.com>
- <20220126114452.692512-9-apatel@ventanamicro.com> <CAJF2gTQsSn1KBgX2bg2LiSUbCmbGD3oF5KcmK5gq2Dd49BWDBQ@mail.gmail.com>
- <CAAhSdy3Dkv6ga0ZMp5rMFa8nV9EDHgOMBwuJ4z4-w52T8EaUag@mail.gmail.com>
- <CAJF2gTSLmBcgUUE3VGsEq0JCWV74Yy-pkduS66rk=VPVwxk59g@mail.gmail.com>
- <CAK9=C2WqczG=tH1u9zcLt7Em+fPD1ZZwtDhf1yHJ70-o-HL8OQ@mail.gmail.com> <CAJF2gTSeH6w2Cfr5QEJTJ4ho_B4q3Eo2Xi+R_2yt+7CZCa+WBg@mail.gmail.com>
-In-Reply-To: <CAJF2gTSeH6w2Cfr5QEJTJ4ho_B4q3Eo2Xi+R_2yt+7CZCa+WBg@mail.gmail.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Tue, 8 Feb 2022 21:46:39 +0530
-Message-ID: <CAAhSdy3uaDz2tSgREqOX6s-e_Aqx5yJQRQ1-PCMxJ729V42kHg@mail.gmail.com>
-Subject: Re: [PATCH v10 8/8] RISC-V: Enable RISC-V SBI CPU Idle driver for
- QEMU virt machine
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Anup Patel <apatel@ventanamicro.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Sandeep Tripathy <milun.tripathy@gmail.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Liush <liush@allwinnertech.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        kvm-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Feb 8, 2022 at 8:22 PM Guo Ren <guoren@kernel.org> wrote:
->
-> On Tue, Feb 8, 2022 at 9:25 PM Anup Patel <apatel@ventanamicro.com> wrote:
-> >
-> > On Tue, Feb 8, 2022 at 3:47 PM Guo Ren <guoren@kernel.org> wrote:
-> > >
-> > > On Tue, Feb 8, 2022 at 4:54 PM Anup Patel <anup@brainfault.org> wrote:
-> > > >
-> > > > On Tue, Feb 8, 2022 at 12:16 PM Guo Ren <guoren@kernel.org> wrote:
-> > > > >
-> > > > > Another question:
-> > > > >
-> > > > > Have you put "idle-states {" in qemu's DTS? or how do you test your patches?
-> > > >
-> > > > I usually do the following:
-> > > > 1) Dump QEMU virt machine DTB
-> > > > 2) Convert QEMU virt machine DTB into DTS
-> > > > 3) Add "idle-states" in QEMU virt machine DTS
-> > > > 4) Create QEMU virt machine DTB with "idle-states"
-> > > > 5) Use the new QEMU virt machine DTB for testing this series.
-> > > >
-> > > > Here's one of the DTS files which I used for testing on QEMU virt machine:
-> > > >
-> > > > /dts-v1/;
-> > > >
-> > > > / {
-> > > >     #address-cells = <0x02>;
-> > > >     #size-cells = <0x02>;
-> > > >     compatible = "riscv-virtio";
-> > > >     model = "riscv-virtio,qemu";
-> > > >
-> > > >     chosen {
-> > > >         linux,initrd-end = <0x8855d200>;
-> > > >         linux,initrd-start = <0x88200000>;
-> > > >         bootargs = "root=/dev/ram rw console=ttyS0 earlycon";
-> > > >         stdout-path = "/soc/uart@10000000";
-> > > >     };
-> > > >
-> > > >     memory@80000000 {
-> > > >         device_type = "memory";
-> > > >         reg = <0x00 0x80000000 0x00 0x10000000>;
-> > > >     };
-> > > >
-> > > >     cpus {
-> > > >         #address-cells = <0x01>;
-> > > >         #size-cells = <0x00>;
-> > > >         timebase-frequency = <0x989680>;
-> > > >
-> > > >         cpu@0 {
-> > > >             phandle = <0x07>;
-> > > >             device_type = "cpu";
-> > > >             reg = <0x00>;
-> > > >             status = "okay";
-> > > >             compatible = "riscv";
-> > > >             riscv,isa = "rv64imafdcsu";
-> > > >             mmu-type = "riscv,sv48";
-> > > >             cpu-idle-states = <&CPU_NONRET_DEF>;
-> > > >
-> > > >             interrupt-controller {
-> > > >                 #interrupt-cells = <0x01>;
-> > > >                 interrupt-controller;
-> > > >                 compatible = "riscv,cpu-intc";
-> > > >                 phandle = <0x08>;
-> > > >             };
-> > > >         };
-> > > >
-> > > >         cpu@1 {
-> > > >             phandle = <0x05>;
-> > > >             device_type = "cpu";
-> > > >             reg = <0x01>;
-> > > >             status = "okay";
-> > > >             compatible = "riscv";
-> > > >             riscv,isa = "rv64imafdcsu";
-> > > >             mmu-type = "riscv,sv48";
-> > > >             cpu-idle-states = <&CPU_RET_DEF>;
-> > > >
-> > > >             interrupt-controller {
-> > > >                 #interrupt-cells = <0x01>;
-> > > >                 interrupt-controller;
-> > > >                 compatible = "riscv,cpu-intc";
-> > > >                 phandle = <0x06>;
-> > > >             };
-> > > >         };
-> > > >
-> > > >         cpu@2 {
-> > > >             phandle = <0x03>;
-> > > >             device_type = "cpu";
-> > > >             reg = <0x02>;
-> > > >             status = "okay";
-> > > >             compatible = "riscv";
-> > > >             riscv,isa = "rv64imafdcsu";
-> > > >             mmu-type = "riscv,sv48";
-> > > >             cpu-idle-states = <&CPU_NONRET_DEF>;
-> > > >
-> > > >             interrupt-controller {
-> > > >                 #interrupt-cells = <0x01>;
-> > > >                 interrupt-controller;
-> > > >                 compatible = "riscv,cpu-intc";
-> > > >                 phandle = <0x04>;
-> > > >             };
-> > > >         };
-> > > >
-> > > >         cpu@3 {
-> > > >             phandle = <0x01>;
-> > > >             device_type = "cpu";
-> > > >             reg = <0x03>;
-> > > >             status = "okay";
-> > > >             compatible = "riscv";
-> > > >             riscv,isa = "rv64imafdcsu";
-> > > >             mmu-type = "riscv,sv48";
-> > > >             cpu-idle-states = <&CPU_RET_DEF>;
-> > > >
-> > > >             interrupt-controller {
-> > > >                 #interrupt-cells = <0x01>;
-> > > >                 interrupt-controller;
-> > > >                 compatible = "riscv,cpu-intc";
-> > > >                 phandle = <0x02>;
-> > > >             };
-> > > >         };
-> > > >
-> > > >         cpu-map {
-> > > >
-> > > >             cluster0 {
-> > > >
-> > > >                 core0 {
-> > > >                     cpu = <0x07>;
-> > > >                 };
-> > > >
-> > > >                 core1 {
-> > > >                     cpu = <0x05>;
-> > > >                 };
-> > > >
-> > > >                 core2 {
-> > > >                     cpu = <0x03>;
-> > > >                 };
-> > > >
-> > > >                 core3 {
-> > > >                     cpu = <0x01>;
-> > > >                 };
-> > > >             };
-> > > >         };
-> > > >
-> > > >         idle-states {
-> > > >             CPU_RET_DEF: cpu-retentive-default {
-> > > >                 compatible = "riscv,idle-state";
-> > > >                 riscv,sbi-suspend-param = <0x00000000>;
-> > > >                 entry-latency-us = <10>;
-> > > >                 exit-latency-us = <10>;
-> > > >                 min-residency-us = <100>;
-> > > >             };
-> > > >
-> > > >             CPU_NONRET_DEF: cpu-nonretentive-default {
-> > > >                 compatible = "riscv,idle-state";
-> > > >                 riscv,sbi-suspend-param = <0x80000000>;
-> > > >                 entry-latency-us = <100>;
-> > > >                 exit-latency-us = <100>;
-> > > >                 min-residency-us = <1000>;
-> > > >             };
-> > > >         };
-> > > >     };
-> > > >
-> > > >     soc {
-> > > >         #address-cells = <0x02>;
-> > > >         #size-cells = <0x02>;
-> > > >         compatible = "simple-bus";
-> > > >         ranges;
-> > > >
-> > > >         flash@20000000 {
-> > > >             bank-width = <0x04>;
-> > > >             reg = <0x00 0x20000000 0x00 0x2000000 0x00 0x22000000 0x00
-> > > > 0x2000000>;
-> > > >             compatible = "cfi-flash";
-> > > >         };
-> > > >
-> > > >         rtc@101000 {
-> > > >             interrupts = <0x0b>;
-> > > >             interrupt-parent = <0x09>;
-> > > >             reg = <0x00 0x101000 0x00 0x1000>;
-> > > >             compatible = "google,goldfish-rtc";
-> > > >         };
-> > > >
-> > > >         uart@10000000 {
-> > > >             interrupts = <0x0a>;
-> > > >             interrupt-parent = <0x09>;
-> > > >             clock-frequency = <0x384000>;
-> > > >             reg = <0x00 0x10000000 0x00 0x100>;
-> > > >             compatible = "ns16550a";
-> > > >         };
-> > > >
-> > > >         poweroff {
-> > > >             value = <0x5555>;
-> > > >             offset = <0x00>;
-> > > >             regmap = <0x0a>;
-> > > >             compatible = "syscon-poweroff";
-> > > >         };
-> > > >
-> > > >         reboot {
-> > > >             value = <0x7777>;
-> > > >             offset = <0x00>;
-> > > >             regmap = <0x0a>;
-> > > >             compatible = "syscon-reboot";
-> > > >         };
-> > > >
-> > > >         test@100000 {
-> > > >             phandle = <0x0a>;
-> > > >             reg = <0x00 0x100000 0x00 0x1000>;
-> > > >             compatible = "sifive,test1\0sifive,test0\0syscon";
-> > > >         };
-> > > >
-> > > >         pci@30000000 {
-> > > >             interrupt-map-mask = <0x1800 0x00 0x00 0x07>;
-> > > >             interrupt-map = <0x00 0x00 0x00 0x01 0x09 0x20 0x00 0x00
-> > > > 0x00 0x02 0x09 0x21 0x00 0x00 0x00 0x03 0x09 0x22 0x00 0x00 0x00 0x04
-> > > > 0x09 0x23 0x800 0x00 0x00 0x01 0x09 0x21 0x800 0x00 0x00 0x02 0x09
-> > > > 0x22 0x800 0x00 0x00 0x03 0x09 0x23 0x800 0x00 0x00 0x04 0x09 0x20
-> > > > 0x1000 0x00 0x00 0x01 0x09 0x22 0x1000 0x00 0x00 0x02 0x09 0x23 0x1000
-> > > > 0x00 0x00 0x03 0x09 0x20 0x1000 0x00 0x00 0x04 0x09 0x21 0x1800 0x00
-> > > > 0x00 0x01 0x09 0x23 0x1800 0x00 0x00 0x02 0x09 0x20 0x1800 0x00 0x00
-> > > > 0x03 0x09 0x21 0x1800 0x00 0x00 0x04 0x09 0x22>;
-> > > >             ranges = <0x1000000 0x00 0x00 0x00 0x3000000 0x00 0x10000
-> > > > 0x2000000 0x00 0x40000000 0x00 0x40000000 0x00 0x40000000>;
-> > > >             reg = <0x00 0x30000000 0x00 0x10000000>;
-> > > >             dma-coherent;
-> > > >             bus-range = <0x00 0xff>;
-> > > >             linux,pci-domain = <0x00>;
-> > > >             device_type = "pci";
-> > > >             compatible = "pci-host-ecam-generic";
-> > > >             #size-cells = <0x02>;
-> > > >             #interrupt-cells = <0x01>;
-> > > >             #address-cells = <0x03>;
-> > > >         };
-> > > >
-> > > >         virtio_mmio@10008000 {
-> > > >             interrupts = <0x08>;
-> > > >             interrupt-parent = <0x09>;
-> > > >             reg = <0x00 0x10008000 0x00 0x1000>;
-> > > >             compatible = "virtio,mmio";
-> > > >         };
-> > > >
-> > > >         virtio_mmio@10007000 {
-> > > >             interrupts = <0x07>;
-> > > >             interrupt-parent = <0x09>;
-> > > >             reg = <0x00 0x10007000 0x00 0x1000>;
-> > > >             compatible = "virtio,mmio";
-> > > >         };
-> > > >
-> > > >         virtio_mmio@10006000 {
-> > > >             interrupts = <0x06>;
-> > > >             interrupt-parent = <0x09>;
-> > > >             reg = <0x00 0x10006000 0x00 0x1000>;
-> > > >             compatible = "virtio,mmio";
-> > > >         };
-> > > >
-> > > >         virtio_mmio@10005000 {
-> > > >             interrupts = <0x05>;
-> > > >             interrupt-parent = <0x09>;
-> > > >             reg = <0x00 0x10005000 0x00 0x1000>;
-> > > >             compatible = "virtio,mmio";
-> > > >         };
-> > > >
-> > > >         virtio_mmio@10004000 {
-> > > >             interrupts = <0x04>;
-> > > >             interrupt-parent = <0x09>;
-> > > >             reg = <0x00 0x10004000 0x00 0x1000>;
-> > > >             compatible = "virtio,mmio";
-> > > >         };
-> > > >
-> > > >         virtio_mmio@10003000 {
-> > > >             interrupts = <0x03>;
-> > > >             interrupt-parent = <0x09>;
-> > > >             reg = <0x00 0x10003000 0x00 0x1000>;
-> > > >             compatible = "virtio,mmio";
-> > > >         };
-> > > >
-> > > >         virtio_mmio@10002000 {
-> > > >             interrupts = <0x02>;
-> > > >             interrupt-parent = <0x09>;
-> > > >             reg = <0x00 0x10002000 0x00 0x1000>;
-> > > >             compatible = "virtio,mmio";
-> > > >         };
-> > > >
-> > > >         virtio_mmio@10001000 {
-> > > >             interrupts = <0x01>;
-> > > >             interrupt-parent = <0x09>;
-> > > >             reg = <0x00 0x10001000 0x00 0x1000>;
-> > > >             compatible = "virtio,mmio";
-> > > >         };
-> > > >
-> > > >         plic@c000000 {
-> > > >             phandle = <0x09>;
-> > > >             riscv,ndev = <0x35>;
-> > > >             reg = <0x00 0xc000000 0x00 0x210000>;
-> > > >             interrupts-extended = <0x08 0x0b 0x08 0x09 0x06 0x0b 0x06
-> > > > 0x09 0x04 0x0b 0x04 0x09 0x02 0x0b 0x02 0x09>;
-> > > >             interrupt-controller;
-> > > >             compatible = "riscv,plic0";
-> > > >             #interrupt-cells = <0x01>;
-> > > >             #address-cells = <0x00>;
-> > > >         };
-> > > >
-> > > >         clint@2000000 {
-> > > >             interrupts-extended = <0x08 0x03 0x08 0x07 0x06 0x03 0x06
-> > > > 0x07 0x04 0x03 0x04 0x07 0x02 0x03 0x02 0x07>;
-> > > >             reg = <0x00 0x2000000 0x00 0x10000>;
-> > > >             compatible = "riscv,clint0";
-> > > >         };
-> > > >     };
-> > > > };
-> > >
-> > > Thx Anup, but it still couldn't work for testing suspend.
-> > >
-> > > # echo mem > /sys/power/state
-> > > sh: write error: Function not implemented
-> > >
-> > > Why there is no ARCH_SUSPEND_POSSIBLE in the patch series?
-> >
-> > You are referring to system-level suspend to RAM support whereas
-> > this series adds CPU idle power management support.
-> Right.
->
-> >
-> > Adding system-level suspend to RAM will be a separate series
-> > and it will re-use the non-retentive suspend infrastructure added
-> > by this series.
-> Do you have the plan for the feature of SUSPEND? I think you've done
-> the core part by this series.
+On Tue, Feb 08, 2022 at 09:32:28AM +0000, Lukasz Luba wrote:
+> 
+> 
+> On 2/8/22 12:50 AM, Matthias Kaehlcke wrote:
+> > On Mon, Feb 07, 2022 at 07:30:35AM +0000, Lukasz Luba wrote:
+> > > The Energy Model supports power values either in Watts or in some abstract
+> > > scale. When the 2nd option is in use, the thermal governor IPA should not
+> > > be allowed to operate, since the relation between cooling devices is not
+> > > properly defined. Thus, it might be possible that big GPU has lower power
+> > > values in abstract scale than a Little CPU. To mitigate a misbehaviour
+> > > of the thermal control algorithm, simply not register a cooling device
+> > > capable of working with IPA.
+> > 
+> > Ugh, this would break thermal throttling for existing devices that are
+> > currently supported in the upstream kernel.
+> 
+> Could you point me to those devices? I cannot find them in the mainline
+> DT. There are no GPU devices which register Energy Model (EM) in
+> upstream, neither using DT (which would be power in mW) nor explicitly
+> providing EM get_power() callback. The EM is needed to have IPA.
+> 
+> Please clarify which existing devices are going to be broken with this
+> change.
 
-We need to first define System SUSPEND in the SBI specification and
-only after that we can plan support for OpenSBI and Linux.
+I was thinking about arch/arm64/boot/dts/qcom/sc7180-trogdor-*, and
+potentially other SC7180 boards that use IPA for the CPU thermal
+zones.
 
-Regards,
-Anup
+Initially SC7180 used an abstract scale for the CPU energy model,
+however I realized your change doesn't actually impact SC7180 CPUs
+for two reasons:
 
+1. The energy model of the CPUs is registered through
+
+  cpufreq_register_em_with_opp
+    dev_pm_opp_of_register_em
+      em_dev_register_perf_domain
+
+em_dev_register_perf_domain() is called with 'milliwatts = true',
+regardless of the potentially abstract scale, so IPA would not be
+disabled with your change.
+
+2. There is a patch from Doug that adjusted the dynamic power
+coefficients of the CPUs to be closer to reality:
+
+commit 82ea7d411d43f60dce878252558e926f957109f0
+Author: Douglas Anderson <dianders@chromium.org>
+Date:   Thu Sep 2 14:51:37 2021 -0700
+
+    arm64: dts: qcom: sc7180: Base dynamic CPU power coefficients in reality
+
+> > Wasn't the conclusion that it is the responsability of the device tree
+> > owners to ensure that cooling devices with different scales aren't used
+> > in the same thermal zone?
+> 
+> It's based on assumption that someone has DT and control. There was also
+> implicit assumption that IPA would work properly on such platform - but
+> it won't.
+> 
+> 1. You cannot have 2 thermal zones: one with CPUs and other with GPU
+> only and both working with two instances of IPA.
+
+It's not clear to me why such a configuration wouldn't work. Is it also a
+problem to have multiple CPU thermal zones (one for each core) that use
+multiple instances of IPA? SC7180 has separate thermal zones for each core
+(or thermal sensor), Chrome OS uses IPA for CPU thermal throttling.
+
+> 2. The abstract power scale doesn't guaranty anything about power values
+> and IPA was simply designed with milli-Watts in mind. So even working
+> on CPUs only using bogoWatts, is not what we could guaranty in IPA.
+
+That's bad news for SoCs that are configured with bogoWatt values, from
+past discussions I had the impression that this is unfortunately not
+uncommon.
+
+> It's ugly to have the abstract scales in the first place, but that's
+> unfortunately what we currently have for at least some cooling devices.
+
+> A few questions:
 >
-> In the end, thx for the work :)
->
-> >
-> > Regards,
-> > Anup
-> >
-> > >
-> > > ref arm64's:
-> > > commit 166936bace056dfc11452d794209f39a5e9b0fb4
-> > > Author: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> > > Date:   Thu Nov 7 18:37:14 2013 +0000
-> > >
-> > >     arm64: kernel: add PM build infrastructure
-> > >
-> > >     This patch adds the required makefile and kconfig entries to enable PM
-> > >     for arm64 systems.
-> > >
-> > >     The kernel relies on the cpu_{suspend}/{resume} infrastructure to
-> > >     properly save the context for a CPU and put it to sleep, hence this
-> > >     patch adds the config option required to enable cpu_{suspend}/{resume}
-> > >     API.
-> > >
-> > >     In order to rely on the CPU PM implementation for saving and restoring
-> > >     of CPU subsystems like GIC and PMU, the arch Kconfig must be also
-> > >     augmented to select the CONFIG_CPU_PM option when SUSPEND or CPU_IDLE
-> > >     kernel implementations are selected.
-> > >
-> > > >
-> > > > Regards,
-> > > > Anup
-> > >
-> > >
-> > >
-> > > --
-> > > Best Regards
-> > >  Guo Ren
-> > >
-> > > ML: https://lore.kernel.org/linux-csky/
->
->
->
-> --
-> Best Regards
->  Guo Ren
->
-> ML: https://lore.kernel.org/linux-csky/
+> Do you use 'we' as Chrome engineers?
+
+I was referring to the kernel, in particular QCOM SC7180.
+
+> Could you point me to those devices please?
+
+arch/arm64/boot/dts/qcom/sc7180-trogdor-*
+
+Though as per above they shouldn't be impacted by your change, since the
+CPUs always pretend to use milli-Watts.
+
+[skipped some questions/answers since sc7180 isn't actually impacted by
+ the change]
+
+Thanks
+
+Matthias
