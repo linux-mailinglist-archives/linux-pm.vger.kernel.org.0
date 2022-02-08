@@ -2,167 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71A8D4AD2A4
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Feb 2022 09:01:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D8444AD3D9
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Feb 2022 09:44:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348671AbiBHIA5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Feb 2022 03:00:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43722 "EHLO
+        id S1351953AbiBHIo2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Feb 2022 03:44:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348684AbiBHIA4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Feb 2022 03:00:56 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 94760C0401EF;
-        Tue,  8 Feb 2022 00:00:55 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5F50911D4;
-        Tue,  8 Feb 2022 00:00:55 -0800 (PST)
-Received: from e126645.home (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 72AE63F718;
-        Tue,  8 Feb 2022 00:00:53 -0800 (PST)
-From:   Pierre Gondois <Pierre.Gondois@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Ionela.Voinescu@arm.com, Lukasz.Luba@arm.com,
-        Morten.Rasmussen@arm.com, Pierre Gondois <Pierre.Gondois@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v3] cpufreq: CPPC: Fix performance/frequency conversion
-Date:   Tue,  8 Feb 2022 09:01:09 +0100
-Message-Id: <20220208080109.697904-1-Pierre.Gondois@arm.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S1351997AbiBHIoC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Feb 2022 03:44:02 -0500
+Received: from mail-ua1-x941.google.com (mail-ua1-x941.google.com [IPv6:2607:f8b0:4864:20::941])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F9DC03FEFD
+        for <linux-pm@vger.kernel.org>; Tue,  8 Feb 2022 00:44:01 -0800 (PST)
+Received: by mail-ua1-x941.google.com with SMTP id d22so6387713uaw.2
+        for <linux-pm@vger.kernel.org>; Tue, 08 Feb 2022 00:44:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=edeevZ54MxyNr2ONaDsC9jI+UtdZjrCL/LCuSFC70Ao=;
+        b=qzcA3K52de9EhxIhzDkkmYbbQbKaihztEhpxunYq2GbraMA2FahupsNjdrEQdl+2Xo
+         x8jS+FGEUTCMk4tDTYOrkEiAnHXAkXcvH7RvY2aCKbp+IjLQ3Bp7h8T/UGTTv6cbvQJx
+         UDaJ+EExkU2Hp+cSSYRA9eBK9kaPiYVEdlhpEIKA2WBzvL9GDh4CBhV+D7H2jS5hbt2m
+         8LtLW4gnxvDWL+oX1Mu+PuIaS25Xny7KZOl+qnwzrY5EU6w8EDQE49bsI3Zvp3xnEqz9
+         DCUxVi2bJ97Z5XO1ifHRoy2QV3wbBOmeBX5qA9XMxLaJLZCuYBlb/QVcJLQKQ1TiYL1W
+         HBgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=edeevZ54MxyNr2ONaDsC9jI+UtdZjrCL/LCuSFC70Ao=;
+        b=cKtyqgUtvzldM+bcEDpTlk+YcAtWMGsz9oKvYmt2DEGzF2fP+2tg+fOIunGoV3k9kl
+         MPw6uHiJvsn0p4NBrVkTuZzbPJXJm+qkqA+zS3/3aXOMrbm4gneLPvGOdSVjs7LwK3h5
+         KkksQq56+7A3YTJFeEHaUZSiDKfu2iNTxbU16YW0EYn/OmbrKh7zLLkQqkqWglJAHGYF
+         un+HjjN9NYCJTNw2z/6O+eb4AcWGi6u0aZ31nyg2Uqv4v5ptJeG0ymIl3NPHzsf5hWlO
+         I70ssL6D5SzXwBCsI9/g2WTZ0Aggjvvz5nK/YJ/rRYo4g3XyaNXpl8zv3Hf34g0R20xp
+         8EVw==
+X-Gm-Message-State: AOAM531LqIWms0aFCDsC+/U+FQKX339Dd38qPsdFMswz5OFULqdBYkcX
+        7eclwGPQP6+BHuANNeV8ZDOF1o8ha+aHT1yebQc=
+X-Google-Smtp-Source: ABdhPJwabOZCYr3WB5MAVlhPccZ8TF1Tp/Jgj7lvaHsfCshVug2Z/NGcswi/yGz08altCfIkGJhgE6VUV2eXkpdV8Qk=
+X-Received: by 2002:ab0:72c2:: with SMTP id g2mr1148800uap.15.1644309840067;
+ Tue, 08 Feb 2022 00:44:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:ab0:2bc5:0:0:0:0:0 with HTTP; Tue, 8 Feb 2022 00:43:59 -0800 (PST)
+Reply-To: saeedmohammedsaeed085@gmail.com
+From:   Mohammed Saeed <nzubewwwww@gmail.com>
+Date:   Tue, 8 Feb 2022 11:43:59 +0300
+Message-ID: <CAMj4HvQnWsfFGFOGV12hnhn1-7ggyDY5TkaLTvG3KD73KTrShQ@mail.gmail.com>
+Subject: Proposal
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:941 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  1.0 HK_RANDOM_ENVFROM Envelope sender username looks random
+        *  0.6 HK_RANDOM_FROM From username looks random
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [nzubewwwww[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [saeedmohammedsaeed085[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.4 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-CPUfreq governors request CPU frequencies using information
-on current CPU usage. The CPPC driver converts them to
-performance requests. Frequency targets are computed as:
-	target_freq = (util / cpu_capacity) * max_freq
-target_freq is then clamped between [policy->min, policy->max].
+Salam alaikum,
 
-The CPPC driver converts performance values to frequencies
-(and vice-versa) using cppc_cpufreq_perf_to_khz() and
-cppc_cpufreq_khz_to_perf(). These functions both use two different
-factors depending on the range of the input value. For
-cppc_cpufreq_khz_to_perf():
-- (NOMINAL_PERF / NOMINAL_FREQ) or
-- (LOWEST_PERF / LOWEST_FREQ)
-and for cppc_cpufreq_perf_to_khz():
-- (NOMINAL_FREQ / NOMINAL_PERF) or
-- ((NOMINAL_PERF - LOWEST_FREQ) / (NOMINAL_PERF - LOWEST_PERF))
+I am the investment officer of UAE based investment company who are
+ready to fund projects outside UAE, in the form of debt finance. We
+grant loan to both Corporate and private entities at a low interest
+rate of 2% ROI per annum. The terms are very flexible and
+interesting.Kindly revert back if you have projects that needs funding
+for further discussion and negotiation.
 
-This means:
-1- the functions are not inverse for some values:
-   (perf_to_khz(khz_to_perf(x)) != x)
-2- cppc_cpufreq_perf_to_khz(LOWEST_PERF) can sometimes give
-   a different value from LOWEST_FREQ due to integer approximation
-3- it is implied that performance and frequency are proportional
-   (NOMINAL_FREQ / NOMINAL_PERF) == (LOWEST_PERF / LOWEST_FREQ)
+Thanks
 
-This patch changes the conversion functions to an affine function.
-This fixes the 3 points above.
-
-Suggested-by: Lukasz Luba <lukasz.luba@arm.com>
-Suggested-by: Morten Rasmussen <morten.rasmussen@arm.com>
-Signed-off-by: Pierre Gondois <Pierre.Gondois@arm.com>
----
- drivers/cpufreq/cppc_cpufreq.c | 43 +++++++++++++++++-----------------
- 1 file changed, 21 insertions(+), 22 deletions(-)
-
-diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-index d4c27022b9c9..e0ff09d66c96 100644
---- a/drivers/cpufreq/cppc_cpufreq.c
-+++ b/drivers/cpufreq/cppc_cpufreq.c
-@@ -303,52 +303,48 @@ static u64 cppc_get_dmi_max_khz(void)
- 
- /*
-  * If CPPC lowest_freq and nominal_freq registers are exposed then we can
-- * use them to convert perf to freq and vice versa
-- *
-- * If the perf/freq point lies between Nominal and Lowest, we can treat
-- * (Low perf, Low freq) and (Nom Perf, Nom freq) as 2D co-ordinates of a line
-- * and extrapolate the rest
-- * For perf/freq > Nominal, we use the ratio perf:freq at Nominal for conversion
-+ * use them to convert perf to freq and vice versa. The conversion is
-+ * extrapolated as an affine function passing by the 2 points:
-+ *  - (Low perf, Low freq)
-+ *  - (Nominal perf, Nominal perf)
-  */
- static unsigned int cppc_cpufreq_perf_to_khz(struct cppc_cpudata *cpu_data,
- 					     unsigned int perf)
- {
- 	struct cppc_perf_caps *caps = &cpu_data->perf_caps;
-+	s64 retval, offset = 0;
- 	static u64 max_khz;
- 	u64 mul, div;
- 
- 	if (caps->lowest_freq && caps->nominal_freq) {
--		if (perf >= caps->nominal_perf) {
--			mul = caps->nominal_freq;
--			div = caps->nominal_perf;
--		} else {
--			mul = caps->nominal_freq - caps->lowest_freq;
--			div = caps->nominal_perf - caps->lowest_perf;
--		}
-+		mul = caps->nominal_freq - caps->lowest_freq;
-+		div = caps->nominal_perf - caps->lowest_perf;
-+		offset = caps->nominal_freq - div64_u64(caps->nominal_perf * mul, div);
- 	} else {
- 		if (!max_khz)
- 			max_khz = cppc_get_dmi_max_khz();
- 		mul = max_khz;
- 		div = caps->highest_perf;
- 	}
--	return (u64)perf * mul / div;
-+
-+	retval = offset + div64_u64(perf * mul, div);
-+	if (retval >= 0)
-+		return retval;
-+	return 0;
- }
- 
- static unsigned int cppc_cpufreq_khz_to_perf(struct cppc_cpudata *cpu_data,
- 					     unsigned int freq)
- {
- 	struct cppc_perf_caps *caps = &cpu_data->perf_caps;
-+	s64 retval, offset = 0;
- 	static u64 max_khz;
- 	u64  mul, div;
- 
- 	if (caps->lowest_freq && caps->nominal_freq) {
--		if (freq >= caps->nominal_freq) {
--			mul = caps->nominal_perf;
--			div = caps->nominal_freq;
--		} else {
--			mul = caps->lowest_perf;
--			div = caps->lowest_freq;
--		}
-+		mul = caps->nominal_perf - caps->lowest_perf;
-+		div = caps->nominal_freq - caps->lowest_freq;
-+		offset = caps->nominal_perf - div64_u64(caps->nominal_freq * mul, div);
- 	} else {
- 		if (!max_khz)
- 			max_khz = cppc_get_dmi_max_khz();
-@@ -356,7 +352,10 @@ static unsigned int cppc_cpufreq_khz_to_perf(struct cppc_cpudata *cpu_data,
- 		div = max_khz;
- 	}
- 
--	return (u64)freq * mul / div;
-+	retval = offset + div64_u64(freq * mul, div);
-+	if (retval >= 0)
-+		return retval;
-+	return 0;
- }
- 
- static int cppc_cpufreq_set_target(struct cpufreq_policy *policy,
--- 
-2.25.1
-
+investment officer
