@@ -2,73 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBE624AD1B8
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Feb 2022 07:46:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51BD54AD1FA
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Feb 2022 08:13:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243079AbiBHGqa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Feb 2022 01:46:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42560 "EHLO
+        id S1347926AbiBHHNN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Feb 2022 02:13:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233449AbiBHGq2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Feb 2022 01:46:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0D5C0401EF;
-        Mon,  7 Feb 2022 22:46:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E1E39B817D3;
-        Tue,  8 Feb 2022 06:46:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A111C340EF;
-        Tue,  8 Feb 2022 06:46:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644302785;
-        bh=2PAnZavsBCQOKNxqtrXZdWKUJUHNnqRJ7TmptXf/CRI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=aZguFV60JHW+Wl0UK/7jImD5iZ2QyXQpzBt2ompSVpfx2aQhZEjUM/zO+w4OCyYjO
-         Ui7QIfN2W+z7gDxc1JnzsBfKQGN5s/TidYc4jPISzyO16D28so+IP+DFawLRSyKpns
-         MtBJstEnQ5981dxzm3YL8z19G7ENfBkuRCNzxN2IvUMLjf9TzEJzYjKtXmqCKZaGoc
-         FfTw2C5fYhe90ThXnp9UV9mNdaSjUw/uHcSkovseC69NWwoCFUfXeZ5reXLThoqoGx
-         bANovyFliDK25n3uatfa3UAFy5sf13833yXs/7YUhwTgdzfWinwP5Tis+yV2BuNVZp
-         UTLCA4gjJG6bg==
-Received: by mail-vs1-f49.google.com with SMTP id x13so2326998vsl.10;
-        Mon, 07 Feb 2022 22:46:25 -0800 (PST)
-X-Gm-Message-State: AOAM5325NT05H0xuDU2VwAM17pxW8LB3PUiY81RyOjDLW8Lgi3r74U6b
-        02hZepEU5I/tEf7dpifyajl5LWNRCivBs/ybnAs=
-X-Google-Smtp-Source: ABdhPJwcITGI3/F3NjBB05kTSNDFumGOEbnmXBce8eySQQ05hqGWKQ34yPQabBtqVtUZuP1cB0KdFDlqpj6pHvBDoD4=
-X-Received: by 2002:a67:e0d9:: with SMTP id m25mr1147574vsl.51.1644302784590;
- Mon, 07 Feb 2022 22:46:24 -0800 (PST)
+        with ESMTP id S230211AbiBHHNM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Feb 2022 02:13:12 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DCCC0401F1
+        for <linux-pm@vger.kernel.org>; Mon,  7 Feb 2022 23:13:10 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id u7so21561128lji.2
+        for <linux-pm@vger.kernel.org>; Mon, 07 Feb 2022 23:13:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=telus.net; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PQx9yycvGYpKyCgAvuWDdcBVWCJa3H3NyEWfCx/k5WA=;
+        b=Z1F1U/gLvw9+Pjeh8lx2oVNfB+J6yVYOIyCF5PrMw+5bbMyzJ+fN/M7DbYMn2ZppLm
+         FaqudwX4iNBFIUFSbqo2zJ73BLMnXOZjT2IxbkHMbtnaSmtkLVVuUnd5Ap8Y8O/NuOEZ
+         lvQJ5yBTrq/SpUFAxfkIrZMjq3ZTYXuh6nfmAh2oHh69BegqZZqvUZa5KrGrr9S3KcVZ
+         h0RyB1JD1IFXKLQvYKCzGRHKnR1cqVag+KCA0msIViVkrFjSHufPgJ+J00O3D+3betSe
+         zW83+LOF1S3CNznfPbLEBbgeKeT+LfKODvG4W7BASDOWcEkTpQB+oDYsQ+q0hCBdZMBk
+         XCvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PQx9yycvGYpKyCgAvuWDdcBVWCJa3H3NyEWfCx/k5WA=;
+        b=PEnouf9CpBha6+ojFRxITI7BnMvG7E1o8Fdggbpk+ywfO7331HBQnlXfmVPOzvJ505
+         UqyHmHxLN+kK3N4dLGZ5z9CiWtRCRjufBzWBfdYZKddL+p8ZA0RSmhVGCtn+SAqu/dj7
+         QZa0oNHeZ8hQJEpYytLi4hlgBFq8wQ0nChi/BtMYXeFdd6n88kCfk9SGwGZMq6d7kJr9
+         9GBgOjB/n/wvXw/kOBKiPC1LRWnMLal4wv705qGbMzsJ/ajIcZEi6+DXUKiLvlrFuJ46
+         yoRiTnZ0O14DCYM+tEJKG9pzFA9c8GPEk3NmAc9ndl63W4KOw9r9+i3ZVA0GEl1Qkt+V
+         mcpA==
+X-Gm-Message-State: AOAM530o4mEtDMj3/0bksHOJcGwEUN5aOXOMKSa84GjL9YwarFPv3bIA
+        mMIylI6sL87t05qbMJE0Qz1TeDitwgRL9l3IW82uyA==
+X-Google-Smtp-Source: ABdhPJzZQfS4PljZUn4lT5y7d+EOf/OQIM/Gy2WW8iCoWGE07Fi7riic9d6TzE4atFMHt1kJWN1hoMNLNUQHntOAUHM=
+X-Received: by 2002:a2e:7319:: with SMTP id o25mr2078468ljc.34.1644304388966;
+ Mon, 07 Feb 2022 23:13:08 -0800 (PST)
 MIME-Version: 1.0
-References: <20220126114452.692512-1-apatel@ventanamicro.com> <20220126114452.692512-9-apatel@ventanamicro.com>
-In-Reply-To: <20220126114452.692512-9-apatel@ventanamicro.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 8 Feb 2022 14:46:13 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQsSn1KBgX2bg2LiSUbCmbGD3oF5KcmK5gq2Dd49BWDBQ@mail.gmail.com>
-Message-ID: <CAJF2gTQsSn1KBgX2bg2LiSUbCmbGD3oF5KcmK5gq2Dd49BWDBQ@mail.gmail.com>
-Subject: Re: [PATCH v10 8/8] RISC-V: Enable RISC-V SBI CPU Idle driver for
- QEMU virt machine
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Sandeep Tripathy <milun.tripathy@gmail.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Liush <liush@allwinnertech.com>,
-        Anup Patel <anup@brainfault.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pm@vger.kernel.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        kvm-riscv@lists.infradead.org
+References: <003f01d81c8c$d20ee3e0$762caba0$@telus.net> <20220208023940.GA5558@shbuild999.sh.intel.com>
+In-Reply-To: <20220208023940.GA5558@shbuild999.sh.intel.com>
+From:   Doug Smythies <dsmythies@telus.net>
+Date:   Mon, 7 Feb 2022 23:13:00 -0800
+Message-ID: <CAAYoRsXrwOQgzAcED+JfVG0=JQNEXuyGcSGghL4Z5xnFgkp+TQ@mail.gmail.com>
+Subject: Re: CPU excessively long times between frequency scaling driver calls
+ - bisected
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
+        dsmythies <dsmythies@telus.net>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,76 +70,95 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Another question:
+Hi Feng,
 
-Have you put "idle-states {" in qemu's DTS? or how do you test your patches?
+Thank you for your reply.
 
-On Wed, Jan 26, 2022 at 7:51 PM Anup Patel <apatel@ventanamicro.com> wrote:
+On Mon, Feb 7, 2022 at 6:39 PM Feng Tang <feng.tang@intel.com> wrote:
 >
-> From: Anup Patel <anup.patel@wdc.com>
+> Hi Doug,
 >
-> We enable RISC-V SBI CPU Idle driver for QEMU virt machine to test
-> SBI HSM Supend on QEMU.
+> Thanks for the report.
 >
-> Signed-off-by: Anup Patel <anup.patel@wdc.com>
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> ---
->  arch/riscv/Kconfig.socs           | 3 +++
->  arch/riscv/configs/defconfig      | 1 +
->  arch/riscv/configs/rv32_defconfig | 1 +
->  3 files changed, 5 insertions(+)
+> On Tue, Feb 08, 2022 at 09:40:14AM +0800, Doug Smythies wrote:
+> > Hi All,
+> >
+> > Note before: I do not know If I have the e-mail address list correct,
+> > nor am I actually a member of the x86 distribution list. I am on
+> > the linux-pm email list.
+> >
+> > When using the intel_pstate CPU frequency scaling driver with HWP disabled,
+> > active mode, powersave scaling governor, the times between calls to the driver
+> > have never exceeded 10 seconds.
+> >
+> > Since kernel 5.16-rc4 and commit: b50db7095fe002fa3e16605546cba66bf1b68a3e
+> > " x86/tsc: Disable clocksource watchdog for TSC on qualified platorms"
+> >
+> > There are now occasions where times between calls to the driver can be
+> > over 100's of seconds and can result in the CPU frequency being left
+> > unnecessarily high for extended periods.
+> >
+> > From the number of clock cycles executed between these long
+> > durations one can tell that the CPU has been running code, but
+> > the driver never got called.
+> >
+> > Attached are some graphs from some trace data acquired using
+> > intel_pstate_tracer.py where one can observe an idle system between
+> > about 42 and well over 200 seconds elapsed time, yet CPU10 never gets
+> > called, which would have resulted in reducing it's pstate request, until
+> > an elapsed time of 167.616 seconds, 126 seconds since the last call. The
+> > CPU frequency never does go to minimum.
+> >
+> > For reference, a similar CPU frequency graph is also attached, with
+> > the commit reverted. The CPU frequency drops to minimum,
+> > over about 10 or 15 seconds.,
 >
-> diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
-> index 6ec44a22278a..f4097a815201 100644
-> --- a/arch/riscv/Kconfig.socs
-> +++ b/arch/riscv/Kconfig.socs
-> @@ -36,6 +36,9 @@ config SOC_VIRT
->         select GOLDFISH
->         select RTC_DRV_GOLDFISH if RTC_CLASS
->         select SIFIVE_PLIC
-> +       select PM_GENERIC_DOMAINS if PM
-> +       select PM_GENERIC_DOMAINS_OF if PM && OF
-> +       select RISCV_SBI_CPUIDLE if CPU_IDLE
->         help
->           This enables support for QEMU Virt Machine.
+> commit b50db7095fe0 essentially disables the clocksource watchdog,
+> which literally doesn't have much to do with cpufreq code.
 >
-> diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
-> index a5e0482a4969..b8c882b70b02 100644
-> --- a/arch/riscv/configs/defconfig
-> +++ b/arch/riscv/configs/defconfig
-> @@ -20,6 +20,7 @@ CONFIG_SOC_SIFIVE=y
->  CONFIG_SOC_VIRT=y
->  CONFIG_SMP=y
->  CONFIG_HOTPLUG_CPU=y
-> +CONFIG_PM=y
->  CONFIG_CPU_IDLE=y
->  CONFIG_VIRTUALIZATION=y
->  CONFIG_KVM=m
-> diff --git a/arch/riscv/configs/rv32_defconfig b/arch/riscv/configs/rv32_defconfig
-> index d1b87db54d68..6f9a7c89bff9 100644
-> --- a/arch/riscv/configs/rv32_defconfig
-> +++ b/arch/riscv/configs/rv32_defconfig
-> @@ -20,6 +20,7 @@ CONFIG_SOC_VIRT=y
->  CONFIG_ARCH_RV32I=y
->  CONFIG_SMP=y
->  CONFIG_HOTPLUG_CPU=y
-> +CONFIG_PM=y
->  CONFIG_CPU_IDLE=y
->  CONFIG_VIRTUALIZATION=y
->  CONFIG_KVM=m
-> --
-> 2.25.1
->
->
-> --
-> kvm-riscv mailing list
-> kvm-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/kvm-riscv
+> One thing I can think of is, without the patch, there is a periodic
+> clocksource timer running every 500 ms, and it loops to run on
+> all CPUs in turn. For your HW, it has 12 CPUs (from the graph),
+> so each CPU will get a timer (HW timer interrupt backed) every 6
+> seconds. Could this affect the cpufreq governor's work flow (I just
+> quickly read some cpufreq code, and seem there is irq_work/workqueue
+> involved).
 
+6 Seconds is the longest duration I have ever seen on this
+processor before commit b50db7095fe0.
 
+I said "the times between calls to the driver have never
+exceeded 10 seconds" originally, but that involved other processors.
 
--- 
-Best Regards
- Guo Ren
+I also did longer, 9000 second tests:
 
-ML: https://lore.kernel.org/linux-csky/
+For a reverted kernel the driver was called 131,743,
+and 0 times the duration was longer than 6.1 seconds.
+
+For a non-reverted kernel the driver was called 110,241 times,
+and 1397 times the duration was longer than 6.1 seconds,
+and the maximum duration was 303.6 seconds
+
+> Can you try one test that keep all the current setting and change
+> the irq affinity of disk/network-card to 0xfff to let interrupts
+> from them be distributed to all CPUs?
+
+I am willing to do the test, but I do not know how to change the
+irq affinity.
+
+> Thanks,
+> Feng
+>
+>
+> > Processor: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz
+> >
+> > Why this particular configuration, i.e. no-hwp, active, powersave?
+> > Because it is, by far, the easiest to observe what is going on.
+> >
+> > ... Doug
+> >
+>
+>
+>
+>
+>
