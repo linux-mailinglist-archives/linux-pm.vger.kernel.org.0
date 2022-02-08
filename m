@@ -2,44 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B1F54AD4F6
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Feb 2022 10:32:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A7524AD6DB
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Feb 2022 12:30:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354971AbiBHJco (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Feb 2022 04:32:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40902 "EHLO
+        id S235548AbiBHLaG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Feb 2022 06:30:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354954AbiBHJcn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Feb 2022 04:32:43 -0500
+        with ESMTP id S1355593AbiBHJrk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Feb 2022 04:47:40 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 99706C03FECA;
-        Tue,  8 Feb 2022 01:32:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D56FAC03FEC1;
+        Tue,  8 Feb 2022 01:47:39 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3A37F11D4;
-        Tue,  8 Feb 2022 01:32:42 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9DBCC11D4;
+        Tue,  8 Feb 2022 01:47:39 -0800 (PST)
 Received: from [10.57.15.144] (unknown [10.57.15.144])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 443373F73B;
-        Tue,  8 Feb 2022 01:32:36 -0800 (PST)
-Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
- cpufreq_cooling and devfreq_cooling
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
-        viresh.kumar@linaro.org, rafael@kernel.org, amitk@kernel.org,
-        rui.zhang@intel.com, dietmar.eggemann@arm.com,
-        Pierre.Gondois@arm.com, Douglas Anderson <dianders@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1CB873F718;
+        Tue,  8 Feb 2022 01:47:35 -0800 (PST)
+Subject: Re: [PATCH 0/2] Ignore Energy Model with abstract scale in IPA and
+ DTPM
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     amit.kachhap@gmail.com, viresh.kumar@linaro.org, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com, dietmar.eggemann@arm.com,
+        Pierre.Gondois@arm.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
 References: <20220207073036.14901-1-lukasz.luba@arm.com>
- <20220207073036.14901-2-lukasz.luba@arm.com> <YgG+TmLrCSXX4Bvt@google.com>
+ <0d2217e0-44f7-8587-3e1f-a73d301ab166@linaro.org>
+ <616307f7-b419-8e36-6879-6cf6f4e02d5a@arm.com>
+ <f63be987-a1a5-cf7e-8302-4ae6e87b6699@linaro.org>
 From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com>
-Date:   Tue, 8 Feb 2022 09:32:28 +0000
+Message-ID: <eed90b35-4556-963d-f6c2-8c645896c158@arm.com>
+Date:   Tue, 8 Feb 2022 09:47:29 +0000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <YgG+TmLrCSXX4Bvt@google.com>
+In-Reply-To: <f63be987-a1a5-cf7e-8302-4ae6e87b6699@linaro.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -54,106 +52,56 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 
 
-On 2/8/22 12:50 AM, Matthias Kaehlcke wrote:
-> On Mon, Feb 07, 2022 at 07:30:35AM +0000, Lukasz Luba wrote:
->> The Energy Model supports power values either in Watts or in some abstract
->> scale. When the 2nd option is in use, the thermal governor IPA should not
->> be allowed to operate, since the relation between cooling devices is not
->> properly defined. Thus, it might be possible that big GPU has lower power
->> values in abstract scale than a Little CPU. To mitigate a misbehaviour
->> of the thermal control algorithm, simply not register a cooling device
->> capable of working with IPA.
+On 2/8/22 7:39 AM, Daniel Lezcano wrote:
+> On 07/02/2022 12:44, Lukasz Luba wrote:
+>>
+>>
+>> On 2/7/22 10:41 AM, Daniel Lezcano wrote:
+>>> On 07/02/2022 08:30, Lukasz Luba wrote:
+>>>> Hi all,
+>>>>
+>>>> The Energy Model supports abstract scale power values. This might cause
+>>>> issues for some mechanisms like thermal governor IPA or DTPM, which
+>>>> expect that all devices provide sane power values. This patch set 
+>>>> prevents
+>>>> from registering such devices for IPA and DTPM.
+>>>
+>>>
+>>> Does it mean for example big and little have both 0-100 ?
+>>>
+>>>
+>>
+>> Unfortunately, these can be any numbers. I hope at least the CPUs
+>> Big and Little power have sense: Little power is not higher
+>> than Big power. The purpose of EM is to enable EAS, so this power
+>> relation between Big and Little should have sense. Someone
+>> who is not willing to or cannot expose real power values, still
+>> wants the EAS to operate (my assumption and hope). The SCMI FW can
+>> provide abstract power values. It's in the SCMI spec. Thus,
+>> creating these abstract scale power values for big.LITTLE the right
+>> way should result in properly working EAS.
+>>
+>> I can also have hope for GPU vs. Big power, but it is a weaker hope.
+>> The second is more tricky to distinguish even if you have a domain
+>> knowledge, but not the real measurements with you. The GPU power
+>> values is also a 'sensitive' knowledge to share. Open source guys can do
+>> that (after measurements), but some vendor's engineers probably can't.
 > 
-> Ugh, this would break thermal throttling for existing devices that are
-> currently supported in the upstream kernel.
+> So basically, we don't know, right ?
 
-Could you point me to those devices? I cannot find them in the mainline
-DT. There are no GPU devices which register Energy Model (EM) in
-upstream, neither using DT (which would be power in mW) nor explicitly
-providing EM get_power() callback. The EM is needed to have IPA.
-
-Please clarify which existing devices are going to be broken with this
-change.
-
-> 
-> Wasn't the conclusion that it is the responsability of the device tree
-> owners to ensure that cooling devices with different scales aren't used
-> in the same thermal zone?
-
-It's based on assumption that someone has DT and control. There was also
-implicit assumption that IPA would work properly on such platform - but
-it won't.
-
-1. You cannot have 2 thermal zones: one with CPUs and other with GPU
-only and both working with two instances of IPA.
-
-2. The abstract power scale doesn't guaranty anything about power values
-and IPA was simply designed with milli-Watts in mind. So even working
-on CPUs only using bogoWatts, is not what we could guaranty in IPA.
-
-> 
-> That's also what's currently specified in the power allocator
-> documentation:
-> 
->    Another important thing is the consistent scale of the power values
->    provided by the cooling devices. All of the cooling devices in a single
->    thermal zone should have power values reported either in milli-Watts
->    or scaled to the same 'abstract scale'.
-
-This can change. We have removed the userspace governor from kernel
-recently. The trend is to implement thermal policy in FW. Dealing with
-some intermediate configurations are causing complicated design, support
-of the algorithm logic is also more complex.
+Well, we know - power is not in milli-Watts.
+The PowerCap and DTPM have this sysfs contract of providing micro-Watts.
+Don't we break this if we know for sure that the power values in EM
+are not in milli-Watts?
 
 > 
-> Which was actually added by yourself:
+> At this point the different subsystems (cpufreq cooling device and dtpm) 
+> disabled by these patches can deal with abstract scale values, like they 
+> do today with the very approximate power numbers we have defined in the DT.
 > 
-> commit 5a64f775691647c242aa40d34f3512e7b179a921
-> Author: Lukasz Luba <lukasz.luba@arm.com>
-> Date:   Tue Nov 3 09:05:58 2020 +0000
-> 
->      PM: EM: Clarify abstract scale usage for power values in Energy Model
-> 
->      The Energy Model (EM) can store power values in milli-Watts or in abstract
->      scale. This might cause issues in the subsystems which use the EM for
->          estimating the device power, such as:
-> 
->       - mixing of different scales in a subsystem which uses multiple
->              (cooling) devices (e.g. thermal Intelligent Power Allocation (IPA))
-> 
->       - assuming that energy [milli-Joules] can be derived from the EM power
->              values which might not be possible since the power scale doesn't have
-> 	           to be in milli-Watts
-> 
->      To avoid misconfiguration add the requisite documentation to the EM and
->          related subsystems: EAS and IPA.
-> 
->      Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->      Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> 
-> It's ugly to have the abstract scales in the first place, but that's
-> unfortunately what we currently have for at least some cooling devices.
-
-A few questions:
-Do you use 'we' as Chrome engineers?
-Could you point me to those devices please?
-Are they new or some old platforms which need just maintenance?
-How IPA works for you in such real platform configuration?
-If it would be possible could you share some plots of temperature,
-frequency and CPUs, GPU utilization?
-Do you maybe know how the real power was scaled for them?
-
-It would help me understand and judge.
-
-> 
-> IMO it would be preferable to stick to catching incompliant configurations
-> in reviews, rather than breaking thermal throttling for existing devices
-> with configurations that comply with the current documentation.
+> Let's wait and see how the different SoC vendors implement the SCMI spec.
 > 
 
-Without access to the source code of those devices, it's hard for me to
-see if they are broken.
-
-Regards,
-Lukasz
+I'm not sure if that would be visible to us. The current path to feed
+abstract power values from SCMI cpufreq already exists and is based
+on protocol response. The DT is not involved in this configuration.
