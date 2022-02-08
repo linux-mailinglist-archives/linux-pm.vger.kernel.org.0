@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A6954AD17C
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Feb 2022 07:26:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBE624AD1B8
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Feb 2022 07:46:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240841AbiBHG0c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Feb 2022 01:26:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34362 "EHLO
+        id S243079AbiBHGqa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Feb 2022 01:46:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230217AbiBHG0c (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Feb 2022 01:26:32 -0500
+        with ESMTP id S233449AbiBHGq2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Feb 2022 01:46:28 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7200C0401DC;
-        Mon,  7 Feb 2022 22:26:30 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0D5C0401EF;
+        Mon,  7 Feb 2022 22:46:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 811F8B81854;
-        Tue,  8 Feb 2022 06:26:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CC76C340F2;
-        Tue,  8 Feb 2022 06:26:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E1E39B817D3;
+        Tue,  8 Feb 2022 06:46:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A111C340EF;
+        Tue,  8 Feb 2022 06:46:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644301588;
-        bh=HIuCEKBnx2neFGe2TzYeuJVUlLTSD+WZPGwlgjCCuXU=;
+        s=k20201202; t=1644302785;
+        bh=2PAnZavsBCQOKNxqtrXZdWKUJUHNnqRJ7TmptXf/CRI=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=T9v/Dz0S1HpzoAwIBZvdu5DREqs+MdQzq9y55DHTQDwk2sn3pmvKSlv+GpfgCVTvV
-         WfRWeusIuQzCfT2yyD8t04yJ/s3vViOSbz0a9Z/f5ayoUux9/YwxA7AfmFvKsbIriM
-         CUvjWc1SmMF2pjmXGoFdMzwGfgyxP41s59LNfmalvMXvTGHrB8IjXJaPwKpz3rODn2
-         WzkmTp8eIJmPjzo4yqOJPBsA8fAyVcKPNXUBBre2JNUrieVwuelVz/VrsbrB7pXbas
-         HK9f03shLil5H84Uzil62wV17maN1jN99Fs7UheuvIyLIHRiwucQDztUqSCdWPvfBR
-         25twB4iSaCk5g==
-Received: by mail-vk1-f176.google.com with SMTP id k128so1531181vkk.10;
-        Mon, 07 Feb 2022 22:26:28 -0800 (PST)
-X-Gm-Message-State: AOAM530Knta6VyWwbmofObf6JII5qEZPlOVu21XOt7xbouuMqTelGPBz
-        6CbQk3g1Knv4jN0dbte8Ll/ztzcfqOPsJAeXaRc=
-X-Google-Smtp-Source: ABdhPJzacuJptpzsvQJRUnvzBbBzr1u57gJ0wQqQFKPI58LeRRTunUkd1GGEazbj4/xQPLofWtoVqwCs4xjOKh2E+nk=
-X-Received: by 2002:a05:6122:1c5:: with SMTP id h5mr1217423vko.2.1644301587245;
- Mon, 07 Feb 2022 22:26:27 -0800 (PST)
+        b=aZguFV60JHW+Wl0UK/7jImD5iZ2QyXQpzBt2ompSVpfx2aQhZEjUM/zO+w4OCyYjO
+         Ui7QIfN2W+z7gDxc1JnzsBfKQGN5s/TidYc4jPISzyO16D28so+IP+DFawLRSyKpns
+         MtBJstEnQ5981dxzm3YL8z19G7ENfBkuRCNzxN2IvUMLjf9TzEJzYjKtXmqCKZaGoc
+         FfTw2C5fYhe90ThXnp9UV9mNdaSjUw/uHcSkovseC69NWwoCFUfXeZ5reXLThoqoGx
+         bANovyFliDK25n3uatfa3UAFy5sf13833yXs/7YUhwTgdzfWinwP5Tis+yV2BuNVZp
+         UTLCA4gjJG6bg==
+Received: by mail-vs1-f49.google.com with SMTP id x13so2326998vsl.10;
+        Mon, 07 Feb 2022 22:46:25 -0800 (PST)
+X-Gm-Message-State: AOAM5325NT05H0xuDU2VwAM17pxW8LB3PUiY81RyOjDLW8Lgi3r74U6b
+        02hZepEU5I/tEf7dpifyajl5LWNRCivBs/ybnAs=
+X-Google-Smtp-Source: ABdhPJwcITGI3/F3NjBB05kTSNDFumGOEbnmXBce8eySQQ05hqGWKQ34yPQabBtqVtUZuP1cB0KdFDlqpj6pHvBDoD4=
+X-Received: by 2002:a67:e0d9:: with SMTP id m25mr1147574vsl.51.1644302784590;
+ Mon, 07 Feb 2022 22:46:24 -0800 (PST)
 MIME-Version: 1.0
 References: <20220126114452.692512-1-apatel@ventanamicro.com> <20220126114452.692512-9-apatel@ventanamicro.com>
 In-Reply-To: <20220126114452.692512-9-apatel@ventanamicro.com>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 8 Feb 2022 14:26:16 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRLcqQ8ZjKwWNmARtaraVW7dD5Hp5=iv+4kHYENvB2gWg@mail.gmail.com>
-Message-ID: <CAJF2gTRLcqQ8ZjKwWNmARtaraVW7dD5Hp5=iv+4kHYENvB2gWg@mail.gmail.com>
+Date:   Tue, 8 Feb 2022 14:46:13 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQsSn1KBgX2bg2LiSUbCmbGD3oF5KcmK5gq2Dd49BWDBQ@mail.gmail.com>
+Message-ID: <CAJF2gTQsSn1KBgX2bg2LiSUbCmbGD3oF5KcmK5gq2Dd49BWDBQ@mail.gmail.com>
 Subject: Re: [PATCH v10 8/8] RISC-V: Enable RISC-V SBI CPU Idle driver for
  QEMU virt machine
 To:     Anup Patel <apatel@ventanamicro.com>
@@ -76,6 +76,10 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
+
+Another question:
+
+Have you put "idle-states {" in qemu's DTS? or how do you test your patches?
 
 On Wed, Jan 26, 2022 at 7:51 PM Anup Patel <apatel@ventanamicro.com> wrote:
 >
@@ -119,11 +123,6 @@ On Wed, Jan 26, 2022 at 7:51 PM Anup Patel <apatel@ventanamicro.com> wrote:
 >  CONFIG_VIRTUALIZATION=y
 >  CONFIG_KVM=m
 > diff --git a/arch/riscv/configs/rv32_defconfig b/arch/riscv/configs/rv32_defconfig
-rv32_defconfig would be removed. I think you could delete this part.
-https://lore.kernel.org/linux-riscv/20220201150545.1512822-9-guoren@kernel.org/T/#u
-
-I would Cc you in the patch, and you could track the progress.
-
 > index d1b87db54d68..6f9a7c89bff9 100644
 > --- a/arch/riscv/configs/rv32_defconfig
 > +++ b/arch/riscv/configs/rv32_defconfig
