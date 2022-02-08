@@ -2,78 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B797E4AD419
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Feb 2022 09:54:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B13C4AD47E
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Feb 2022 10:16:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352222AbiBHIyT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Feb 2022 03:54:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47244 "EHLO
+        id S240554AbiBHJPa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Feb 2022 04:15:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352195AbiBHIyS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Feb 2022 03:54:18 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21AFC03FEC3
-        for <linux-pm@vger.kernel.org>; Tue,  8 Feb 2022 00:54:17 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id f17so29417515wrx.1
-        for <linux-pm@vger.kernel.org>; Tue, 08 Feb 2022 00:54:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ad/AIeKw/gggP6Br2uoykBbNKFVMSxSNAtQyiBt1RW0=;
-        b=5KxMGJIrZxz0UdJJ4KFG3h5rV0PZviBM1D2ZlImvgl2AYSR7uVDIp9FOmugYxXR0jd
-         /uG/+J603tKg3P37pGqHHlbr3fFTWLeZiT1w6+erAhedOqoJk8L3BOwALYuFUkgt9rFv
-         jQiGMsXhV5QujyODOTCAMmYW8e/ggOnHL5d6jTVn1If8szV5+b8LHzdFdowkrSUMEWah
-         jPTmEQXdKOuovazsDjAlCKdIyJVrK45UjaRmuw4mwTheKA34Yrm9QDVifKZ9hcVLF1Go
-         vZJYetHiq9fRPxQVsdpQnn9p5KE/Ol1buMRKZZWhAVmq4hbRovF1sdC/5fDZhn2tpOSm
-         5hLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ad/AIeKw/gggP6Br2uoykBbNKFVMSxSNAtQyiBt1RW0=;
-        b=wJU01PZPwu/aKdVI4svvPG17vr5Zvjdu9YUUHifXHqP7gVUCxZxoggj0MG4LoL7brM
-         n5OwywvvPxjC7ANk4EqjBO1so+0eNWLpAfUqLrDrMnZNNuhOiBoMU2A7w07LEwWBMjBm
-         dxy1BODR70xVp6YBG4yzN8RJk7l5A9xA3deINjF0elcyflrjBSBp4kXijHIflC2mfCVt
-         487ooy1hQZUG70RHuW53zNawi073N7N1rnTQAKL0UEBEr7RXe4ewkMRjpzUrQcW3wyWA
-         d62edOK/+JU0fA08xP00DG0S3NyM2Wvqv+gUC6q67oQJnaWBXb9YG/BB4nc3N2mVAeEu
-         6dfQ==
-X-Gm-Message-State: AOAM533OcMiTwXjsAJGyCgbPFEzlhpD4xuHN1MMogb7l0tN8YO7n73W7
-        WKw4sdJLoHswYAVbfH34jbcf3eFhZGWtXcH28ZgKJA==
-X-Google-Smtp-Source: ABdhPJzgSop4y+Hsg6mK+sVfvqbbliyC19eTL7sLF/m+UVhe/JN/7WOPjVFLYB6Xxfkqx+mpiM4ybuPoWNgcPTqKJbA=
-X-Received: by 2002:adf:bc44:: with SMTP id a4mr2655518wrh.346.1644310456139;
- Tue, 08 Feb 2022 00:54:16 -0800 (PST)
+        with ESMTP id S1353379AbiBHJP3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Feb 2022 04:15:29 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C55AC0401F0;
+        Tue,  8 Feb 2022 01:15:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644311729; x=1675847729;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+nQm3JqfyT6UX5XNN1I8alaxk1U2NNNQ9rmrYYPq2jQ=;
+  b=FyozD2ZbaS1c6CJR8alF2E/1eQDgR7oM7HG0rV1Eyz82sbnA/7XSFkKh
+   WjRSZRrfnoqGlm3B6T9ofCfDaA97CX+wyCsu/OavWLGHu09SjteU94XP9
+   dSd7Z4pOo0+Gqfe54Mn6Fot5F64DT4pwDL6lTYU/6yGGsy9Io4Kbrbs9o
+   uq2JXlGqgZC2UjDA1isJ3lZ/U58UBnuOY9/Gxi/KBQmFT/3HSDG8EdH1+
+   rzMqs2JhqKfZ7enTDlJKw7MsPE9+Ym0hDWShfEP8T9KcPUwbDdpEVYExD
+   y1oAVoKc4EtHbW+jpbieOecVLQuYYNjalqR/idMSmvfuL4mfOYDmAc3Wl
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="273436190"
+X-IronPort-AV: E=Sophos;i="5.88,352,1635231600"; 
+   d="scan'208";a="273436190"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 01:15:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,352,1635231600"; 
+   d="scan'208";a="700780123"
+Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.189])
+  by orsmga005.jf.intel.com with ESMTP; 08 Feb 2022 01:15:26 -0800
+Date:   Tue, 8 Feb 2022 17:15:25 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: Re: CPU excessively long times between frequency scaling driver
+ calls - bisected
+Message-ID: <20220208091525.GA7898@shbuild999.sh.intel.com>
+References: <003f01d81c8c$d20ee3e0$762caba0$@telus.net>
+ <20220208023940.GA5558@shbuild999.sh.intel.com>
+ <CAAYoRsXrwOQgzAcED+JfVG0=JQNEXuyGcSGghL4Z5xnFgkp+TQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220126114452.692512-1-apatel@ventanamicro.com>
- <20220126114452.692512-9-apatel@ventanamicro.com> <CAJF2gTQsSn1KBgX2bg2LiSUbCmbGD3oF5KcmK5gq2Dd49BWDBQ@mail.gmail.com>
-In-Reply-To: <CAJF2gTQsSn1KBgX2bg2LiSUbCmbGD3oF5KcmK5gq2Dd49BWDBQ@mail.gmail.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Tue, 8 Feb 2022 14:24:04 +0530
-Message-ID: <CAAhSdy3Dkv6ga0ZMp5rMFa8nV9EDHgOMBwuJ4z4-w52T8EaUag@mail.gmail.com>
-Subject: Re: [PATCH v10 8/8] RISC-V: Enable RISC-V SBI CPU Idle driver for
- QEMU virt machine
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Anup Patel <apatel@ventanamicro.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Sandeep Tripathy <milun.tripathy@gmail.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Liush <liush@allwinnertech.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        kvm-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAYoRsXrwOQgzAcED+JfVG0=JQNEXuyGcSGghL4Z5xnFgkp+TQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,306 +66,79 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Feb 8, 2022 at 12:16 PM Guo Ren <guoren@kernel.org> wrote:
->
-> Another question:
->
-> Have you put "idle-states {" in qemu's DTS? or how do you test your patches?
+On Mon, Feb 07, 2022 at 11:13:00PM -0800, Doug Smythies wrote:
+> > >
+> > > Since kernel 5.16-rc4 and commit: b50db7095fe002fa3e16605546cba66bf1b68a3e
+> > > " x86/tsc: Disable clocksource watchdog for TSC on qualified platorms"
+> > >
+> > > There are now occasions where times between calls to the driver can be
+> > > over 100's of seconds and can result in the CPU frequency being left
+> > > unnecessarily high for extended periods.
+> > >
+> > > From the number of clock cycles executed between these long
+> > > durations one can tell that the CPU has been running code, but
+> > > the driver never got called.
+> > >
+> > > Attached are some graphs from some trace data acquired using
+> > > intel_pstate_tracer.py where one can observe an idle system between
+> > > about 42 and well over 200 seconds elapsed time, yet CPU10 never gets
+> > > called, which would have resulted in reducing it's pstate request, until
+> > > an elapsed time of 167.616 seconds, 126 seconds since the last call. The
+> > > CPU frequency never does go to minimum.
+> > >
+> > > For reference, a similar CPU frequency graph is also attached, with
+> > > the commit reverted. The CPU frequency drops to minimum,
+> > > over about 10 or 15 seconds.,
+> >
+> > commit b50db7095fe0 essentially disables the clocksource watchdog,
+> > which literally doesn't have much to do with cpufreq code.
+> >
+> > One thing I can think of is, without the patch, there is a periodic
+> > clocksource timer running every 500 ms, and it loops to run on
+> > all CPUs in turn. For your HW, it has 12 CPUs (from the graph),
+> > so each CPU will get a timer (HW timer interrupt backed) every 6
+> > seconds. Could this affect the cpufreq governor's work flow (I just
+> > quickly read some cpufreq code, and seem there is irq_work/workqueue
+> > involved).
+> 
+> 6 Seconds is the longest duration I have ever seen on this
+> processor before commit b50db7095fe0.
+> 
+> I said "the times between calls to the driver have never
+> exceeded 10 seconds" originally, but that involved other processors.
+> 
+> I also did longer, 9000 second tests:
+> 
+> For a reverted kernel the driver was called 131,743,
+> and 0 times the duration was longer than 6.1 seconds.
+> 
+> For a non-reverted kernel the driver was called 110,241 times,
+> and 1397 times the duration was longer than 6.1 seconds,
+> and the maximum duration was 303.6 seconds
+ 
+Thanks for the data, which shows it is related to the removal of
+clocksource watchdog timers. And under this specific configurations,
+the cpufreq work flow has some dependence on that watchdog timers.  
 
-I usually do the following:
-1) Dump QEMU virt machine DTB
-2) Convert QEMU virt machine DTB into DTS
-3) Add "idle-states" in QEMU virt machine DTS
-4) Create QEMU virt machine DTB with "idle-states"
-5) Use the new QEMU virt machine DTB for testing this series.
+Also could you share you kernel config, boot message and some
+system settings like for tickless mode, so that other people can
+try to reproduce? thanks
 
-Here's one of the DTS files which I used for testing on QEMU virt machine:
+> > Can you try one test that keep all the current setting and change
+> > the irq affinity of disk/network-card to 0xfff to let interrupts
+> > from them be distributed to all CPUs?
+> 
+> I am willing to do the test, but I do not know how to change the
+> irq affinity.
 
-/dts-v1/;
+I might say that too soon. I used to "echo fff > /proc/irq/xxx/smp_affinity"
+(xx is the irq number of a device) to let interrupts be distributed
+to all CPUs long time ago, but it doesn't work on my 2 desktops at hand.
+Seems it only support one-cpu irq affinity in recent kernel.
 
-/ {
-    #address-cells = <0x02>;
-    #size-cells = <0x02>;
-    compatible = "riscv-virtio";
-    model = "riscv-virtio,qemu";
+You can still try that command, though it may not work.
 
-    chosen {
-        linux,initrd-end = <0x8855d200>;
-        linux,initrd-start = <0x88200000>;
-        bootargs = "root=/dev/ram rw console=ttyS0 earlycon";
-        stdout-path = "/soc/uart@10000000";
-    };
+Thanks,
+Feng
 
-    memory@80000000 {
-        device_type = "memory";
-        reg = <0x00 0x80000000 0x00 0x10000000>;
-    };
 
-    cpus {
-        #address-cells = <0x01>;
-        #size-cells = <0x00>;
-        timebase-frequency = <0x989680>;
-
-        cpu@0 {
-            phandle = <0x07>;
-            device_type = "cpu";
-            reg = <0x00>;
-            status = "okay";
-            compatible = "riscv";
-            riscv,isa = "rv64imafdcsu";
-            mmu-type = "riscv,sv48";
-            cpu-idle-states = <&CPU_NONRET_DEF>;
-
-            interrupt-controller {
-                #interrupt-cells = <0x01>;
-                interrupt-controller;
-                compatible = "riscv,cpu-intc";
-                phandle = <0x08>;
-            };
-        };
-
-        cpu@1 {
-            phandle = <0x05>;
-            device_type = "cpu";
-            reg = <0x01>;
-            status = "okay";
-            compatible = "riscv";
-            riscv,isa = "rv64imafdcsu";
-            mmu-type = "riscv,sv48";
-            cpu-idle-states = <&CPU_RET_DEF>;
-
-            interrupt-controller {
-                #interrupt-cells = <0x01>;
-                interrupt-controller;
-                compatible = "riscv,cpu-intc";
-                phandle = <0x06>;
-            };
-        };
-
-        cpu@2 {
-            phandle = <0x03>;
-            device_type = "cpu";
-            reg = <0x02>;
-            status = "okay";
-            compatible = "riscv";
-            riscv,isa = "rv64imafdcsu";
-            mmu-type = "riscv,sv48";
-            cpu-idle-states = <&CPU_NONRET_DEF>;
-
-            interrupt-controller {
-                #interrupt-cells = <0x01>;
-                interrupt-controller;
-                compatible = "riscv,cpu-intc";
-                phandle = <0x04>;
-            };
-        };
-
-        cpu@3 {
-            phandle = <0x01>;
-            device_type = "cpu";
-            reg = <0x03>;
-            status = "okay";
-            compatible = "riscv";
-            riscv,isa = "rv64imafdcsu";
-            mmu-type = "riscv,sv48";
-            cpu-idle-states = <&CPU_RET_DEF>;
-
-            interrupt-controller {
-                #interrupt-cells = <0x01>;
-                interrupt-controller;
-                compatible = "riscv,cpu-intc";
-                phandle = <0x02>;
-            };
-        };
-
-        cpu-map {
-
-            cluster0 {
-
-                core0 {
-                    cpu = <0x07>;
-                };
-
-                core1 {
-                    cpu = <0x05>;
-                };
-
-                core2 {
-                    cpu = <0x03>;
-                };
-
-                core3 {
-                    cpu = <0x01>;
-                };
-            };
-        };
-
-        idle-states {
-            CPU_RET_DEF: cpu-retentive-default {
-                compatible = "riscv,idle-state";
-                riscv,sbi-suspend-param = <0x00000000>;
-                entry-latency-us = <10>;
-                exit-latency-us = <10>;
-                min-residency-us = <100>;
-            };
-
-            CPU_NONRET_DEF: cpu-nonretentive-default {
-                compatible = "riscv,idle-state";
-                riscv,sbi-suspend-param = <0x80000000>;
-                entry-latency-us = <100>;
-                exit-latency-us = <100>;
-                min-residency-us = <1000>;
-            };
-        };
-    };
-
-    soc {
-        #address-cells = <0x02>;
-        #size-cells = <0x02>;
-        compatible = "simple-bus";
-        ranges;
-
-        flash@20000000 {
-            bank-width = <0x04>;
-            reg = <0x00 0x20000000 0x00 0x2000000 0x00 0x22000000 0x00
-0x2000000>;
-            compatible = "cfi-flash";
-        };
-
-        rtc@101000 {
-            interrupts = <0x0b>;
-            interrupt-parent = <0x09>;
-            reg = <0x00 0x101000 0x00 0x1000>;
-            compatible = "google,goldfish-rtc";
-        };
-
-        uart@10000000 {
-            interrupts = <0x0a>;
-            interrupt-parent = <0x09>;
-            clock-frequency = <0x384000>;
-            reg = <0x00 0x10000000 0x00 0x100>;
-            compatible = "ns16550a";
-        };
-
-        poweroff {
-            value = <0x5555>;
-            offset = <0x00>;
-            regmap = <0x0a>;
-            compatible = "syscon-poweroff";
-        };
-
-        reboot {
-            value = <0x7777>;
-            offset = <0x00>;
-            regmap = <0x0a>;
-            compatible = "syscon-reboot";
-        };
-
-        test@100000 {
-            phandle = <0x0a>;
-            reg = <0x00 0x100000 0x00 0x1000>;
-            compatible = "sifive,test1\0sifive,test0\0syscon";
-        };
-
-        pci@30000000 {
-            interrupt-map-mask = <0x1800 0x00 0x00 0x07>;
-            interrupt-map = <0x00 0x00 0x00 0x01 0x09 0x20 0x00 0x00
-0x00 0x02 0x09 0x21 0x00 0x00 0x00 0x03 0x09 0x22 0x00 0x00 0x00 0x04
-0x09 0x23 0x800 0x00 0x00 0x01 0x09 0x21 0x800 0x00 0x00 0x02 0x09
-0x22 0x800 0x00 0x00 0x03 0x09 0x23 0x800 0x00 0x00 0x04 0x09 0x20
-0x1000 0x00 0x00 0x01 0x09 0x22 0x1000 0x00 0x00 0x02 0x09 0x23 0x1000
-0x00 0x00 0x03 0x09 0x20 0x1000 0x00 0x00 0x04 0x09 0x21 0x1800 0x00
-0x00 0x01 0x09 0x23 0x1800 0x00 0x00 0x02 0x09 0x20 0x1800 0x00 0x00
-0x03 0x09 0x21 0x1800 0x00 0x00 0x04 0x09 0x22>;
-            ranges = <0x1000000 0x00 0x00 0x00 0x3000000 0x00 0x10000
-0x2000000 0x00 0x40000000 0x00 0x40000000 0x00 0x40000000>;
-            reg = <0x00 0x30000000 0x00 0x10000000>;
-            dma-coherent;
-            bus-range = <0x00 0xff>;
-            linux,pci-domain = <0x00>;
-            device_type = "pci";
-            compatible = "pci-host-ecam-generic";
-            #size-cells = <0x02>;
-            #interrupt-cells = <0x01>;
-            #address-cells = <0x03>;
-        };
-
-        virtio_mmio@10008000 {
-            interrupts = <0x08>;
-            interrupt-parent = <0x09>;
-            reg = <0x00 0x10008000 0x00 0x1000>;
-            compatible = "virtio,mmio";
-        };
-
-        virtio_mmio@10007000 {
-            interrupts = <0x07>;
-            interrupt-parent = <0x09>;
-            reg = <0x00 0x10007000 0x00 0x1000>;
-            compatible = "virtio,mmio";
-        };
-
-        virtio_mmio@10006000 {
-            interrupts = <0x06>;
-            interrupt-parent = <0x09>;
-            reg = <0x00 0x10006000 0x00 0x1000>;
-            compatible = "virtio,mmio";
-        };
-
-        virtio_mmio@10005000 {
-            interrupts = <0x05>;
-            interrupt-parent = <0x09>;
-            reg = <0x00 0x10005000 0x00 0x1000>;
-            compatible = "virtio,mmio";
-        };
-
-        virtio_mmio@10004000 {
-            interrupts = <0x04>;
-            interrupt-parent = <0x09>;
-            reg = <0x00 0x10004000 0x00 0x1000>;
-            compatible = "virtio,mmio";
-        };
-
-        virtio_mmio@10003000 {
-            interrupts = <0x03>;
-            interrupt-parent = <0x09>;
-            reg = <0x00 0x10003000 0x00 0x1000>;
-            compatible = "virtio,mmio";
-        };
-
-        virtio_mmio@10002000 {
-            interrupts = <0x02>;
-            interrupt-parent = <0x09>;
-            reg = <0x00 0x10002000 0x00 0x1000>;
-            compatible = "virtio,mmio";
-        };
-
-        virtio_mmio@10001000 {
-            interrupts = <0x01>;
-            interrupt-parent = <0x09>;
-            reg = <0x00 0x10001000 0x00 0x1000>;
-            compatible = "virtio,mmio";
-        };
-
-        plic@c000000 {
-            phandle = <0x09>;
-            riscv,ndev = <0x35>;
-            reg = <0x00 0xc000000 0x00 0x210000>;
-            interrupts-extended = <0x08 0x0b 0x08 0x09 0x06 0x0b 0x06
-0x09 0x04 0x0b 0x04 0x09 0x02 0x0b 0x02 0x09>;
-            interrupt-controller;
-            compatible = "riscv,plic0";
-            #interrupt-cells = <0x01>;
-            #address-cells = <0x00>;
-        };
-
-        clint@2000000 {
-            interrupts-extended = <0x08 0x03 0x08 0x07 0x06 0x03 0x06
-0x07 0x04 0x03 0x04 0x07 0x02 0x03 0x02 0x07>;
-            reg = <0x00 0x2000000 0x00 0x10000>;
-            compatible = "riscv,clint0";
-        };
-    };
-};
-
-Regards,
-Anup
