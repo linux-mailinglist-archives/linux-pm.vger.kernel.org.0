@@ -2,68 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CB5B4AEA4B
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Feb 2022 07:28:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C9B54AEA6A
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Feb 2022 07:34:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232834AbiBIG2S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Feb 2022 01:28:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54374 "EHLO
+        id S230363AbiBIGed (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Feb 2022 01:34:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235839AbiBIG1K (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Feb 2022 01:27:10 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F6AC0612C3
-        for <linux-pm@vger.kernel.org>; Tue,  8 Feb 2022 22:27:13 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id d9-20020a17090a498900b001b8bb1d00e7so1305315pjh.3
-        for <linux-pm@vger.kernel.org>; Tue, 08 Feb 2022 22:27:13 -0800 (PST)
+        with ESMTP id S229599AbiBIGec (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Feb 2022 01:34:32 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3859BE066E18
+        for <linux-pm@vger.kernel.org>; Tue,  8 Feb 2022 22:34:29 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id z13so2652238pfa.3
+        for <linux-pm@vger.kernel.org>; Tue, 08 Feb 2022 22:34:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=oZptq99McEmSTWKDkacQuJxWYVLFif45IaPqyzpBkjk=;
-        b=ZYxOJU1r53Sj8pg5AZsbPSGhkjg65dtEt1RJxdfnMMiKHKUSYkSld3E8PHY94rLMI0
-         fsv2eFO8TFjNH00vk1vlHcQIpT5R7n9+eWE2+KexOeiGjc3tLt/yYfxW+4l4gpm2jKIO
-         G7rHKbofp1DvplhR4iUO3ti5njWGnVzsDQ1Ziet+vixWy+lW7VKrR3LG2OcWNzSU4Z11
-         stynxqFXBQj8a+sC3/Fg5+lGdTYUj3FlWvqNAjIYRFksQUqJZ6IUrF0Vu+noMn6L5Ny9
-         3J369+2GtHNcseI4qk2HeWyGd07eHutnjoqLM1iENmOaBrJEQJr+l0YjG5cC+Y2wz+CS
-         WvGw==
+        bh=OwHnp+CBrpknipruebBheU1nuu6L2xS3iNwKkt5hzSc=;
+        b=fHiYoWvoB+Gab19/vejvHtO0ZlTBEXUK3diJ0NhY8IXdVk/N0v+UGR+BlOtuSa9LMH
+         fV8Q4OxIzP0WK57293UqNQiTScEFW4NU7YCmlHlVonAFBpC1IMUIq8FKpG+r/5uIKwP8
+         iH+KcXAO1PZ9fOAgd6HRYvN+KAbfzC7vMFtfY/HGQtiNGDo/QlDrdsbnRufYiS4EA+r1
+         D8t2lXa0zwhm5wi0J82hk0F5cWF2gsouXwoXDSo+HJTSTLfm9fM2t1BQYhtkvM1Oibs1
+         Y+8F3ZcX3v/exjMqf5iK0xa7M4tY+kvbGNUiAAMP5pOzFFfo5CxVKcjZ72+T1k7lOuze
+         jDEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=oZptq99McEmSTWKDkacQuJxWYVLFif45IaPqyzpBkjk=;
-        b=oUgGnkG9OtxH1Jg4PGFXLkxnAzKNAUVYTHrIVeinR26M6RASoJhkhOAUKvDyRgg8yn
-         pytznPqJ0POB3v7tKMZ4yqoBQHUzeu47k5TnaDF/CWRJiCiVziSdQhxCO1ndNiZ+WYaj
-         NHdh5Yf0EWYS/2XpsdcTtU3UGxizNzOXK0z5xxnUZ3WU1urvme+6ERxexTCMjbPARHNR
-         qneO0fBB/b89e1jDheuhAVKGX19qDC2pKdDc3gKOxhiWwmYt+jC+FNvncIdSpxvfPvuI
-         2Gryr9Vlc6jMTqIBcWaUT1OIgs7k61deL6h7tH/YRn7+yYFY2eb/ErePrmPK23g6I4Ie
-         GpDg==
-X-Gm-Message-State: AOAM533LhohcipheDqududgVAuhwNBeO5OScOwxMSc5HcWjTjq4TTToL
-        1Md00/qUN/VYVMsZboIGl3g9GYWwCTH//Q==
-X-Google-Smtp-Source: ABdhPJy8WOCryenGRsq0jVJwJojuWywhhTwy7/5rrmGD0U9AQtw2NK+Q2eas+0f64dbEjH9qRfCTkQ==
-X-Received: by 2002:a17:90b:1d88:: with SMTP id pf8mr899349pjb.162.1644388032609;
-        Tue, 08 Feb 2022 22:27:12 -0800 (PST)
+        bh=OwHnp+CBrpknipruebBheU1nuu6L2xS3iNwKkt5hzSc=;
+        b=cLK4W01D1TCyys+LBIuO2euxEyWcxJFAxD664bA3078f2oYelQYQmn7TPM5wJ/30RY
+         Z6nDrHEmZQqjUpPeylvkdexofjFOAfV/8L2YmVmlsLEKxhLIALMIwqigmNCDs1SJ6amw
+         ly/LF1xleL6Z1YNaKX13QtPqZmoRYjgT1LCcoHGCVg8W2pThWjtXrjcmuIHZJ8YaiwmU
+         9fbSljU6Ac12wmKqdHx343V9R3678Ajd2C6KOrKSwq4t2oWOaaMSHPkpws8rU8Hl4vju
+         8XH5BdLBBRzxgWGsyGHnFeQXUGmDn8EFtAup9zZhgjKoXh7GRNgsmFExS8NMHpmCLJi8
+         e0yQ==
+X-Gm-Message-State: AOAM531aWxzjSffSt/eAUrI2J0LEAGxrjVkpKs4zznqiTFYyOIf/rFb8
+        yLUMqQuBtZCfsCBsJahskZCLxg==
+X-Google-Smtp-Source: ABdhPJx52+9Dw5Vu5Ayd4PAzN+hfjEFuihoosOnlAsFNrrdNMnMsovfyUzU9vYmhNYbMXE+jGAZnmQ==
+X-Received: by 2002:a63:3d4f:: with SMTP id k76mr749057pga.389.1644388468680;
+        Tue, 08 Feb 2022 22:34:28 -0800 (PST)
 Received: from localhost ([136.185.132.167])
-        by smtp.gmail.com with ESMTPSA id g12sm1029213pfj.148.2022.02.08.22.27.11
+        by smtp.gmail.com with ESMTPSA id il18sm4889019pjb.27.2022.02.08.22.34.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 22:27:11 -0800 (PST)
-Date:   Wed, 9 Feb 2022 11:57:10 +0530
+        Tue, 08 Feb 2022 22:34:28 -0800 (PST)
+Date:   Wed, 9 Feb 2022 12:04:26 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>
-Subject: Re: [PATCH] cpufreq: longhaul: Replace acpi_bus_get_device()
-Message-ID: <20220209062710.5fwg52fjb2jkerzr@vireshk-i7>
-References: <4700827.GXAFRqVoOG@kreacher>
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ansuel Smith <ansuelsmth@gmail.com>,
+        Sricharan R <sricharan@codeaurora.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: qcom-cpufreq-nvmem: fix reading of PVS Valid
+ fuse
+Message-ID: <20220209063426.ckefdtpfroj5zsad@vireshk-i7>
+References: <20220130114535.1570634-1-luca@z3ntu.xyz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4700827.GXAFRqVoOG@kreacher>
+In-Reply-To: <20220130114535.1570634-1-luca@z3ntu.xyz>
 User-Agent: NeoMutt/20180716-391-311a52
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,37 +78,33 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26-01-22, 20:43, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 30-01-22, 12:45, Luca Weiss wrote:
+> The fuse consists of 64 bits, with this statement we're supposed to get
+> the upper 32 bits but it actually read out of bounds and got 0 instead
+> of the desired value which lead to the "PVS bin not set." codepath being
+> run resetting our pvs value.
 > 
-> Replace acpi_bus_get_device() that is going to be dropped with
-> acpi_fetch_acpi_dev().
-> 
-> No intentional functional impact.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Fixes: a8811ec764f9 ("cpufreq: qcom: Add support for krait based socs")
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 > ---
->  drivers/cpufreq/longhaul.c |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/cpufreq/qcom-cpufreq-nvmem.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Index: linux-pm/drivers/cpufreq/longhaul.c
-> ===================================================================
-> --- linux-pm.orig/drivers/cpufreq/longhaul.c
-> +++ linux-pm/drivers/cpufreq/longhaul.c
-> @@ -668,9 +668,9 @@ static acpi_status longhaul_walk_callbac
->  					  u32 nesting_level,
->  					  void *context, void **return_value)
->  {
-> -	struct acpi_device *d;
-> +	struct acpi_device *d = acpi_fetch_acpi_dev(obj_handle);
+> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> index d1744b5d9619..6dfa86971a75 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> @@ -130,7 +130,7 @@ static void get_krait_bin_format_b(struct device *cpu_dev,
+>  	}
 >  
-> -	if (acpi_bus_get_device(obj_handle, &d))
-> +	if (!d)
->  		return 0;
->  
->  	*return_value = acpi_driver_data(d);
+>  	/* Check PVS_BLOW_STATUS */
+> -	pte_efuse = *(((u32 *)buf) + 4);
+> +	pte_efuse = *(((u32 *)buf) + 1);
+>  	pte_efuse &= BIT(21);
+>  	if (pte_efuse) {
+>  		dev_dbg(cpu_dev, "PVS bin: %d\n", *pvs);
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Applied. Thanks.
 
 -- 
 viresh
