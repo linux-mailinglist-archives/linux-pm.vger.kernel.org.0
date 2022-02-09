@@ -2,68 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB09B4AEA3F
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Feb 2022 07:24:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB5B4AEA4B
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Feb 2022 07:28:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231765AbiBIGXv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Feb 2022 01:23:51 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:44960 "EHLO
+        id S232834AbiBIG2S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Feb 2022 01:28:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234006AbiBIGXX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Feb 2022 01:23:23 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF3E6E01CCA6
-        for <linux-pm@vger.kernel.org>; Tue,  8 Feb 2022 22:23:23 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id p21so1944650ljn.13
-        for <linux-pm@vger.kernel.org>; Tue, 08 Feb 2022 22:23:23 -0800 (PST)
+        with ESMTP id S235839AbiBIG1K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Feb 2022 01:27:10 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F6AC0612C3
+        for <linux-pm@vger.kernel.org>; Tue,  8 Feb 2022 22:27:13 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id d9-20020a17090a498900b001b8bb1d00e7so1305315pjh.3
+        for <linux-pm@vger.kernel.org>; Tue, 08 Feb 2022 22:27:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rNHVEGbI4VboLceypPZ+FijAwrzCqKw6joMYkR0IdCY=;
-        b=VJoHqBzGs98/ibJkvyb1l8KARFdrOYLZBOzljTQQwNoQCl/hrA4hAZOopSso9gmZrg
-         YlMnNakIPfbk7Kejx+BgGInST6sTBlrNc4x+kly5BTRH3BYfHgnLuj1S6le5jesxagPb
-         wZZbeIGH9TmlxSy4Ao2CqCKZZC8I51ZHtlUG9zFH5NPZ7+tckIBLOwy5ksSaWYeIC0Zb
-         eyUs+uczYI47vfo2qxv6Eb2ruwse7V1sio631FIIr4KBFHUlVgOQJxFD0qgJnB+g1Fqm
-         QWK7w+FUHACx3EOET53QILHlSBkheTyrbhJ/HLWp9+xNJvhI44JWe7JVXobPDlp3KxCt
-         M+gg==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=oZptq99McEmSTWKDkacQuJxWYVLFif45IaPqyzpBkjk=;
+        b=ZYxOJU1r53Sj8pg5AZsbPSGhkjg65dtEt1RJxdfnMMiKHKUSYkSld3E8PHY94rLMI0
+         fsv2eFO8TFjNH00vk1vlHcQIpT5R7n9+eWE2+KexOeiGjc3tLt/yYfxW+4l4gpm2jKIO
+         G7rHKbofp1DvplhR4iUO3ti5njWGnVzsDQ1Ziet+vixWy+lW7VKrR3LG2OcWNzSU4Z11
+         stynxqFXBQj8a+sC3/Fg5+lGdTYUj3FlWvqNAjIYRFksQUqJZ6IUrF0Vu+noMn6L5Ny9
+         3J369+2GtHNcseI4qk2HeWyGd07eHutnjoqLM1iENmOaBrJEQJr+l0YjG5cC+Y2wz+CS
+         WvGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rNHVEGbI4VboLceypPZ+FijAwrzCqKw6joMYkR0IdCY=;
-        b=Ndvyfwsb7WBv9L31lanpREgjMijCrDLXUzEDUpJZoK8Hd7/fqzPndu6E/dKEovt4Ku
-         gvwZ12IzwuCVyvL6XuSJcBva232xt8CkTzda97Z7T4AyIPra3EBq7PEWcqPJiooKMEvo
-         iwuOW+pqCMQ6gw5eBoU17Jqy2aLv5E9H7ydKJ3LVZbKEQOsSPlCvlsvVFRW5qAxbmRXO
-         TNyrAS7KFv6onuJhvBvY5HvOt9VE3zAAIMWOdUiwIKM/phnRPwR2WdQXBTZVMTi53qVb
-         swF1jha04Vnd11ddwIIgcCA2UZ6E8gIzhhEVWat19uxcVbGg508Ve/dflGMspPdm6HLH
-         noIA==
-X-Gm-Message-State: AOAM532HqHUdMhXDWOVIyRGbI973dPO1oB9i4t01azUuAlqp/TUCEYzF
-        8H+tAfzw+TMKo8fZf4tPdY+v7W0bc6SxansQ9lmDPw==
-X-Google-Smtp-Source: ABdhPJwr0uOCfhXxU+M57ngjhJRrmlo7Ph8RI48Kj0jQE4iiLMnXEoViFfqoetLp/+sCaKRCIZnl2+lDffrZ8JGahQk=
-X-Received: by 2002:a2e:a54a:: with SMTP id e10mr606431ljn.239.1644387802079;
- Tue, 08 Feb 2022 22:23:22 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=oZptq99McEmSTWKDkacQuJxWYVLFif45IaPqyzpBkjk=;
+        b=oUgGnkG9OtxH1Jg4PGFXLkxnAzKNAUVYTHrIVeinR26M6RASoJhkhOAUKvDyRgg8yn
+         pytznPqJ0POB3v7tKMZ4yqoBQHUzeu47k5TnaDF/CWRJiCiVziSdQhxCO1ndNiZ+WYaj
+         NHdh5Yf0EWYS/2XpsdcTtU3UGxizNzOXK0z5xxnUZ3WU1urvme+6ERxexTCMjbPARHNR
+         qneO0fBB/b89e1jDheuhAVKGX19qDC2pKdDc3gKOxhiWwmYt+jC+FNvncIdSpxvfPvuI
+         2Gryr9Vlc6jMTqIBcWaUT1OIgs7k61deL6h7tH/YRn7+yYFY2eb/ErePrmPK23g6I4Ie
+         GpDg==
+X-Gm-Message-State: AOAM533LhohcipheDqududgVAuhwNBeO5OScOwxMSc5HcWjTjq4TTToL
+        1Md00/qUN/VYVMsZboIGl3g9GYWwCTH//Q==
+X-Google-Smtp-Source: ABdhPJy8WOCryenGRsq0jVJwJojuWywhhTwy7/5rrmGD0U9AQtw2NK+Q2eas+0f64dbEjH9qRfCTkQ==
+X-Received: by 2002:a17:90b:1d88:: with SMTP id pf8mr899349pjb.162.1644388032609;
+        Tue, 08 Feb 2022 22:27:12 -0800 (PST)
+Received: from localhost ([136.185.132.167])
+        by smtp.gmail.com with ESMTPSA id g12sm1029213pfj.148.2022.02.08.22.27.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 22:27:11 -0800 (PST)
+Date:   Wed, 9 Feb 2022 11:57:10 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>
+Subject: Re: [PATCH] cpufreq: longhaul: Replace acpi_bus_get_device()
+Message-ID: <20220209062710.5fwg52fjb2jkerzr@vireshk-i7>
+References: <4700827.GXAFRqVoOG@kreacher>
 MIME-Version: 1.0
-References: <003f01d81c8c$d20ee3e0$762caba0$@telus.net> <20220208023940.GA5558@shbuild999.sh.intel.com>
- <CAAYoRsXrwOQgzAcED+JfVG0=JQNEXuyGcSGghL4Z5xnFgkp+TQ@mail.gmail.com> <20220208091525.GA7898@shbuild999.sh.intel.com>
-In-Reply-To: <20220208091525.GA7898@shbuild999.sh.intel.com>
-From:   Doug Smythies <dsmythies@telus.net>
-Date:   Tue, 8 Feb 2022 22:23:13 -0800
-Message-ID: <CAAYoRsXkyWf0vmEE2HvjF6pzCC4utxTF=7AFx1PJv4Evh=C+Ow@mail.gmail.com>
-Subject: Re: CPU excessively long times between frequency scaling driver calls
- - bisected
-To:     Feng Tang <feng.tang@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        dsmythies <dsmythies@telus.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4700827.GXAFRqVoOG@kreacher>
+User-Agent: NeoMutt/20180716-391-311a52
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,126 +71,37 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Feb 8, 2022 at 1:15 AM Feng Tang <feng.tang@intel.com> wrote:
-> On Mon, Feb 07, 2022 at 11:13:00PM -0800, Doug Smythies wrote:
-> > > >
-> > > > Since kernel 5.16-rc4 and commit: b50db7095fe002fa3e16605546cba66bf1b68a3e
-> > > > " x86/tsc: Disable clocksource watchdog for TSC on qualified platorms"
-> > > >
-> > > > There are now occasions where times between calls to the driver can be
-> > > > over 100's of seconds and can result in the CPU frequency being left
-> > > > unnecessarily high for extended periods.
-> > > >
-> > > > From the number of clock cycles executed between these long
-> > > > durations one can tell that the CPU has been running code, but
-> > > > the driver never got called.
-> > > >
-> > > > Attached are some graphs from some trace data acquired using
-> > > > intel_pstate_tracer.py where one can observe an idle system between
-> > > > about 42 and well over 200 seconds elapsed time, yet CPU10 never gets
-> > > > called, which would have resulted in reducing it's pstate request, until
-> > > > an elapsed time of 167.616 seconds, 126 seconds since the last call. The
-> > > > CPU frequency never does go to minimum.
-> > > >
-> > > > For reference, a similar CPU frequency graph is also attached, with
-> > > > the commit reverted. The CPU frequency drops to minimum,
-> > > > over about 10 or 15 seconds.,
-> > >
-> > > commit b50db7095fe0 essentially disables the clocksource watchdog,
-> > > which literally doesn't have much to do with cpufreq code.
-> > >
-> > > One thing I can think of is, without the patch, there is a periodic
-> > > clocksource timer running every 500 ms, and it loops to run on
-> > > all CPUs in turn. For your HW, it has 12 CPUs (from the graph),
-> > > so each CPU will get a timer (HW timer interrupt backed) every 6
-> > > seconds. Could this affect the cpufreq governor's work flow (I just
-> > > quickly read some cpufreq code, and seem there is irq_work/workqueue
-> > > involved).
-> >
-> > 6 Seconds is the longest duration I have ever seen on this
-> > processor before commit b50db7095fe0.
-> >
-> > I said "the times between calls to the driver have never
-> > exceeded 10 seconds" originally, but that involved other processors.
-> >
-> > I also did longer, 9000 second tests:
-> >
-> > For a reverted kernel the driver was called 131,743,
-> > and 0 times the duration was longer than 6.1 seconds.
-> >
-> > For a non-reverted kernel the driver was called 110,241 times,
-> > and 1397 times the duration was longer than 6.1 seconds,
-> > and the maximum duration was 303.6 seconds
->
-> Thanks for the data, which shows it is related to the removal of
-> clocksource watchdog timers. And under this specific configurations,
-> the cpufreq work flow has some dependence on that watchdog timers.
->
-> Also could you share you kernel config, boot message and some
-> system settings like for tickless mode, so that other people can
-> try to reproduce? thanks
+On 26-01-22, 20:43, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Replace acpi_bus_get_device() that is going to be dropped with
+> acpi_fetch_acpi_dev().
+> 
+> No intentional functional impact.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/cpufreq/longhaul.c |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> Index: linux-pm/drivers/cpufreq/longhaul.c
+> ===================================================================
+> --- linux-pm.orig/drivers/cpufreq/longhaul.c
+> +++ linux-pm/drivers/cpufreq/longhaul.c
+> @@ -668,9 +668,9 @@ static acpi_status longhaul_walk_callbac
+>  					  u32 nesting_level,
+>  					  void *context, void **return_value)
+>  {
+> -	struct acpi_device *d;
+> +	struct acpi_device *d = acpi_fetch_acpi_dev(obj_handle);
+>  
+> -	if (acpi_bus_get_device(obj_handle, &d))
+> +	if (!d)
+>  		return 0;
+>  
+>  	*return_value = acpi_driver_data(d);
 
-I steal the kernel configuration file from the Ubuntu mainline PPA
-[1], what they call "lowlatency", or 1000Hz tick. I make these
-changes before compile:
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-scripts/config --disable DEBUG_INFO
-scripts/config --disable SYSTEM_TRUSTED_KEYS
-scripts/config --disable SYSTEM_REVOCATION_KEYS
-
-I also send you the config and dmesg files in an off-list email.
-
-This is an idle, and very low periodic loads, system type test.
-My test computer has no GUI and very few services running.
-Notice that I have not used the word "regression" yet in this thread,
-because I don't know for certain that it is. In the end, we don't
-care about CPU frequency, we care about wasting energy.
-It is definitely a change, and I am able to measure small increases
-in energy use, but this is all at the low end of the power curve.
-So far I have not found a significant example of increased power
-use, but I also have not looked very hard.
-
-During any test, many monitoring tools might shorten durations.
-For example if I run turbostat, say:
-
-sudo turbostat --Summary --quiet --show
-Busy%,Bzy_MHz,IRQ,PkgWatt,PkgTmp,RAMWatt,GFXWatt,CorWatt --interval
-2.5
-
-Well, yes then the maximum duration would be 2.5 seconds,
-because turbostat wakes up each CPU to inquire about things
-causing a call to the CPU scaling driver. (I tested this, for about
-900 seconds.)
-
-For my power tests I use a sample interval of >= 300 seconds.
-For duration only tests, turbostat is not run at the same time.
-
-My grub line:
-
-GRUB_CMDLINE_LINUX_DEFAULT="ipv6.disable=1 consoleblank=314
-intel_pstate=active intel_pstate=no_hwp msr.allow_writes=on
-cpuidle.governor=teo"
-
-A typical pstate tracer command (with the script copied to the
-directory where I run this stuff:):
-
-sudo ./intel_pstate_tracer.py --interval 600 --name vnew02 --memory 800000
-
->
-> > > Can you try one test that keep all the current setting and change
-> > > the irq affinity of disk/network-card to 0xfff to let interrupts
-> > > from them be distributed to all CPUs?
-> >
-> > I am willing to do the test, but I do not know how to change the
-> > irq affinity.
->
-> I might say that too soon. I used to "echo fff > /proc/irq/xxx/smp_affinity"
-> (xx is the irq number of a device) to let interrupts be distributed
-> to all CPUs long time ago, but it doesn't work on my 2 desktops at hand.
-> Seems it only support one-cpu irq affinity in recent kernel.
->
-> You can still try that command, though it may not work.
-
-I did not try this yet.
-
-[1] https://kernel.ubuntu.com/~kernel-ppa/mainline/v5.17-rc3/
+-- 
+viresh
