@@ -2,85 +2,238 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB9814AE781
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Feb 2022 04:11:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3499A4AE957
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Feb 2022 06:34:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354939AbiBIDIW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Feb 2022 22:08:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59372 "EHLO
+        id S231614AbiBIFbk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Feb 2022 00:31:40 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:40886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235951AbiBIDFI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Feb 2022 22:05:08 -0500
-Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83F4C03E942;
-        Tue,  8 Feb 2022 19:04:02 -0800 (PST)
-Received: by mail-oo1-f49.google.com with SMTP id u47-20020a4a9732000000b00316d0257de0so979692ooi.7;
-        Tue, 08 Feb 2022 19:04:02 -0800 (PST)
+        with ESMTP id S240220AbiBIFPW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Feb 2022 00:15:22 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197A2C03CA4E
+        for <linux-pm@vger.kernel.org>; Tue,  8 Feb 2022 21:15:18 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id j5-20020a05600c1c0500b0034d2e956aadso723106wms.4
+        for <linux-pm@vger.kernel.org>; Tue, 08 Feb 2022 21:15:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=R83kg3J8lh5wnpwznu/c6c1j21tsi5+UW4ZNVbTpfkQ=;
+        b=cQLt8iTabwlg2Ev6+vNAfrfaVsetuJTsCIXfsbWxN2KJQ58d0KT0yZirQMTcbt0NXE
+         LOfXB+yowzcYh6fsRbs+oRvGDrIyudB2kSF8OJDHN3A6K3ERrtV52t9beearu5kOexbl
+         R/AilxUl1TEcYp7coPdkyR+2dFjXdBhU/4jKHmOAsBkBREdBpjS7BJ5H1/TM7y8VY1k+
+         geFLbW0Sot0MDg/GGIDq4Uc5Phh2KwSsIUry0D33+azOc/I+Dh+yY82X10zhxY91RO0J
+         QSagJNSO2WAfgnvRxfYUQ3nOofM6gq8dOXjEYfRV99IN5qHnqkdG+8+9UZC7Qp+gs90d
+         G67g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9WxSx+PhSoNOK7Va3SOOiKpYlGJipFHoYDAnRzf0rEU=;
-        b=yjPf7b7dMoATHvCrWRfCh26704ofnNBr0AtZM7MvdWX7LUFEeNk5rnn88EImE18SLq
-         7E3GiCBCujeaODwkF/tNMsh2KvEtGKvnKHUcR1Go+BHmA7r9YkJXwxsuUiUsnkG1jADI
-         oh6TOhokS9s/+i8zbu+qTt9wxDdDO8CU9X2IHVW1TarW1G3yPbsnqqZ78euLG5H2YgY/
-         N3Fk9UGTsniHnSxVL1nKWRhOWK9vQhkIhT05lxdZ9nWntA7UvhZhomK63zXdyt6TKxpZ
-         rMc+Fi5s8w/ADPqAJ3g0ZF/C7tMcifLU1LbxYP/vfWrIl8fTHB6EedCfnqjdu2dGsd7n
-         ZmWg==
-X-Gm-Message-State: AOAM533FmkjkyxUL11Xzk3FRe0lBBHhR3I2qCKPyZ6n3g0zirs2BySdS
-        yW23En5V3d8kPVWuvYjhTg==
-X-Google-Smtp-Source: ABdhPJxz2Kc/1R1MFOvpiJkeFhlo3yjJLGr1Vk/RpOOKjTnQ0snSdqTnlGoVchdxbZOKxx6quNK/dQ==
-X-Received: by 2002:a05:6870:1010:: with SMTP id 16mr103247oai.281.1644375842063;
-        Tue, 08 Feb 2022 19:04:02 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id a128sm6151603oob.17.2022.02.08.19.04.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 19:04:01 -0800 (PST)
-Received: (nullmailer pid 3542310 invoked by uid 1000);
-        Wed, 09 Feb 2022 03:04:00 -0000
-Date:   Tue, 8 Feb 2022 21:04:00 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        linux-pm@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 2/3] dt-bindings: thermal: samsung: convert to dtschema
-Message-ID: <YgMvIIKqXygIHK4k@robh.at.kernel.org>
-References: <20220122132554.65192-1-krzysztof.kozlowski@canonical.com>
- <20220122132554.65192-2-krzysztof.kozlowski@canonical.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=R83kg3J8lh5wnpwznu/c6c1j21tsi5+UW4ZNVbTpfkQ=;
+        b=fFKFo/oixafslSd9SLEQ+D22rcmg3hVOrhp5ChqfTeJJc1ercJZB9SEDmOozQ5lhSa
+         45exnryl2hKjSxNI39bAJ+x7m7krp8b7/NhUk9sKPQ53bBCFu57CJjR3IbjL4jNbrwH0
+         7nZ/MsWjz/Ur+Ab1/lSBOm11SLGsBRjwdXoirszHSF7nktBM5X8cvKuhrWd6JkT6wcOG
+         WBecM+7+cJqK0siugKmebIn+QOeuuXb+KyFS5bmRlwDi2iczGYwQwgI9YhuaNtg8wcCI
+         tT3WJkfppIQuhF4Yq9foZAG/U02XWAWNhuC/yjg0RI41L2N5XdRzCSFyHb+kE+B0YEma
+         t6fg==
+X-Gm-Message-State: AOAM530tdwpTOaoh7pvfpEQFoy0UZXTwUJrmnSGGH/FZfNvofYAqHgAF
+        SU+sH/ecA1Db2JitZUESCo04XbqoKWNmBaF3U+sI7yut/W4=
+X-Google-Smtp-Source: ABdhPJxxJAmtus+XKgjkisjrqjjLqRFgSAIDZ/p0j1uNWEJQORypvJKDSShWADJ4LEAWxrxvnzgCy6iYR0zK2J9eq8E=
+X-Received: by 2002:a05:600c:4185:: with SMTP id p5mr467679wmh.61.1644383716505;
+ Tue, 08 Feb 2022 21:15:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220122132554.65192-2-krzysztof.kozlowski@canonical.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220126114452.692512-1-apatel@ventanamicro.com>
+ <20220126114452.692512-2-apatel@ventanamicro.com> <CAJF2gTSwzx-yC=WvFixT96=q+M0KPzaZH5PpgGKVWg42M4GBNw@mail.gmail.com>
+In-Reply-To: <CAJF2gTSwzx-yC=WvFixT96=q+M0KPzaZH5PpgGKVWg42M4GBNw@mail.gmail.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Wed, 9 Feb 2022 10:45:05 +0530
+Message-ID: <CAAhSdy0DcB2+vJSEBd5apQhzjFBz9haNTVqqTeX92+hYVyhB2A@mail.gmail.com>
+Subject: Re: [PATCH v10 1/8] RISC-V: Enable CPU_IDLE drivers
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Anup Patel <apatel@ventanamicro.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Sandeep Tripathy <milun.tripathy@gmail.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Liush <liush@allwinnertech.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        kvm-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, 22 Jan 2022 14:25:53 +0100, Krzysztof Kozlowski wrote:
-> Convert the Samsung Exynos SoC Thermal Management Unit bindings to DT
-> schema format.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
->  .../bindings/thermal/exynos-thermal.txt       | 106 ----------
->  .../thermal/samsung,exynos-thermal.yaml       | 184 ++++++++++++++++++
->  2 files changed, 184 insertions(+), 106 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/thermal/exynos-thermal.txt
->  create mode 100644 Documentation/devicetree/bindings/thermal/samsung,exynos-thermal.yaml
-> 
+On Tue, Feb 8, 2022 at 11:46 AM Guo Ren <guoren@kernel.org> wrote:
+>
+> Reviewed-by: Guo Ren <guoren@kernel.org>
+>
+> small questions:
+>
+> On Wed, Jan 26, 2022 at 7:46 PM Anup Patel <apatel@ventanamicro.com> wrote:
+> >
+> > From: Anup Patel <anup.patel@wdc.com>
+> >
+> > We force select CPU_PM and provide asm/cpuidle.h so that we can
+> > use CPU IDLE drivers for Linux RISC-V kernel.
+> >
+> > Signed-off-by: Anup Patel <anup.patel@wdc.com>
+> > Signed-off-by: Anup Patel <apatel@vetanamicro.com>
+> > ---
+> >  arch/riscv/Kconfig                |  7 +++++++
+> >  arch/riscv/configs/defconfig      |  1 +
+> >  arch/riscv/configs/rv32_defconfig |  1 +
+> >  arch/riscv/include/asm/cpuidle.h  | 24 ++++++++++++++++++++++++
+> >  arch/riscv/kernel/process.c       |  3 ++-
+> >  5 files changed, 35 insertions(+), 1 deletion(-)
+> >  create mode 100644 arch/riscv/include/asm/cpuidle.h
+> >
+> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > index 5adcbd9b5e88..76976d12b463 100644
+> > --- a/arch/riscv/Kconfig
+> > +++ b/arch/riscv/Kconfig
+> > @@ -46,6 +46,7 @@ config RISCV
+> >         select CLONE_BACKWARDS
+> >         select CLINT_TIMER if !MMU
+> >         select COMMON_CLK
+> > +       select CPU_PM if CPU_IDLE
+> >         select EDAC_SUPPORT
+> >         select GENERIC_ARCH_TOPOLOGY if SMP
+> >         select GENERIC_ATOMIC64 if !64BIT
+> > @@ -547,4 +548,10 @@ source "kernel/power/Kconfig"
+> >
+> >  endmenu
+> >
+> > +menu "CPU Power Management"
+> > +
+> > +source "drivers/cpuidle/Kconfig"
+> > +
+> > +endmenu
+> > +
+> >  source "arch/riscv/kvm/Kconfig"
+> > diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
+> > index f120fcc43d0a..a5e0482a4969 100644
+> > --- a/arch/riscv/configs/defconfig
+> > +++ b/arch/riscv/configs/defconfig
+> > @@ -20,6 +20,7 @@ CONFIG_SOC_SIFIVE=y
+> >  CONFIG_SOC_VIRT=y
+> >  CONFIG_SMP=y
+> >  CONFIG_HOTPLUG_CPU=y
+> > +CONFIG_CPU_IDLE=y
+> >  CONFIG_VIRTUALIZATION=y
+> >  CONFIG_KVM=m
+> >  CONFIG_JUMP_LABEL=y
+> > diff --git a/arch/riscv/configs/rv32_defconfig b/arch/riscv/configs/rv32_defconfig
+> > index 8b56a7f1eb06..d1b87db54d68 100644
+> > --- a/arch/riscv/configs/rv32_defconfig
+> > +++ b/arch/riscv/configs/rv32_defconfig
+> > @@ -20,6 +20,7 @@ CONFIG_SOC_VIRT=y
+> >  CONFIG_ARCH_RV32I=y
+> >  CONFIG_SMP=y
+> >  CONFIG_HOTPLUG_CPU=y
+> > +CONFIG_CPU_IDLE=y
+> >  CONFIG_VIRTUALIZATION=y
+> >  CONFIG_KVM=m
+> >  CONFIG_JUMP_LABEL=y
+> > diff --git a/arch/riscv/include/asm/cpuidle.h b/arch/riscv/include/asm/cpuidle.h
+> > new file mode 100644
+> > index 000000000000..71fdc607d4bc
+> > --- /dev/null
+> > +++ b/arch/riscv/include/asm/cpuidle.h
+> > @@ -0,0 +1,24 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * Copyright (C) 2021 Allwinner Ltd
+> > + * Copyright (C) 2021 Western Digital Corporation or its affiliates.
+> > + */
+> > +
+> > +#ifndef _ASM_RISCV_CPUIDLE_H
+> > +#define _ASM_RISCV_CPUIDLE_H
+> > +
+> > +#include <asm/barrier.h>
+> > +#include <asm/processor.h>
+> > +
+> > +static inline void cpu_do_idle(void)
+> > +{
+> > +       /*
+> > +        * Add mb() here to ensure that all
+> > +        * IO/MEM accesses are completed prior
+> > +        * to entering WFI.
+> > +        */
+> > +       mb();
+> I think it's a separate fixup.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+This one is tricky to move as separate fixup because there
+is no cpu_do_idle() until this patch adds it.
+
+If we deliberately have a separate patch for "mb()" then it
+will be only fixing cpu_do_idle() function added by previous
+patch in the same series.
+
+Regards,
+Anup
+
+>
+> > +       wait_for_interrupt();
+> > +}
+> > +
+> > +#endif
+> > diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
+> > index 03ac3aa611f5..504b496787aa 100644
+> > --- a/arch/riscv/kernel/process.c
+> > +++ b/arch/riscv/kernel/process.c
+> > @@ -23,6 +23,7 @@
+> >  #include <asm/string.h>
+> >  #include <asm/switch_to.h>
+> >  #include <asm/thread_info.h>
+> > +#include <asm/cpuidle.h>
+> >
+> >  register unsigned long gp_in_global __asm__("gp");
+> >
+> > @@ -37,7 +38,7 @@ extern asmlinkage void ret_from_kernel_thread(void);
+> >
+> >  void arch_cpu_idle(void)
+> >  {
+> maybe below is enough.
+> + mb();
+>    wait_for_interrupt();
+>
+> > -       wait_for_interrupt();
+> > +       cpu_do_idle();
+>
+>
+> >         raw_local_irq_enable();
+> >  }
+> >
+> > --
+> > 2.25.1
+> >
+> >
+> > --
+> > kvm-riscv mailing list
+> > kvm-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/kvm-riscv
+>
+>
+>
+> --
+> Best Regards
+>  Guo Ren
+>
+> ML: https://lore.kernel.org/linux-csky/
