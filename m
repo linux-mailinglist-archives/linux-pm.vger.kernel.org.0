@@ -2,116 +2,392 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D1B4AF431
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Feb 2022 15:37:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4B674AF8AE
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Feb 2022 18:46:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235098AbiBIOh0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Feb 2022 09:37:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35162 "EHLO
+        id S238321AbiBIRqJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Feb 2022 12:46:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235099AbiBIOhY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Feb 2022 09:37:24 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF31BC0613CA
-        for <linux-pm@vger.kernel.org>; Wed,  9 Feb 2022 06:37:27 -0800 (PST)
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 8A28F3F1F0
-        for <linux-pm@vger.kernel.org>; Wed,  9 Feb 2022 14:37:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644417444;
-        bh=SlwgImOcNTsESNfIirUrDaCeHIHfLp+o6BSrCLR6Xb4=;
-        h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version:Content-Type;
-        b=SAFAUlSBUPhWTzILpRb4Dp1S7+on+6mklAGFRX08QXESci5j9uhWutKUHbajoXpd4
-         bEcbKpgKaJMuR4oKJwLly+i0wNlU297opk9SwX83DlHNdeyA3ZjktIkbxzsw6O17+w
-         5xPcHP4bg3CP7jZrZo8A2eF4o8t+vPw3T8U9EqIrSHw0zEGQChk3avgIlHtpNGGS3f
-         VyADZgy180qc0q0m5f/S24VoSfI4ameB41Xe06zwqbiYbb59XzVU5bhZ2B4qa8U6Xn
-         FBpNOqKqxs75ZOU1mFVl7WE/yG927TZUmRUU2uUXoZYXXhYIhdjkt8Gqdyb1ItTxyt
-         iW/6jIrmXPNSA==
-Received: by mail-ej1-f70.google.com with SMTP id o4-20020a170906768400b006a981625756so1307932ejm.0
-        for <linux-pm@vger.kernel.org>; Wed, 09 Feb 2022 06:37:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=SlwgImOcNTsESNfIirUrDaCeHIHfLp+o6BSrCLR6Xb4=;
-        b=i6KtZdvhpy7OvqLpJLICqe+20QUpDmI5mhMocNEaOUvrP2jv5M6ODA0QYY01fYmEyR
-         SgVUlMhx9pDcq2ENhKjJ6ERgsSRwvTjMHi3wiFQboSUbtbOpgWgdLtGuY+kQS6YPEzUU
-         b+NC7KvJ0Oy2HbAP6YIQDaQ1knegpQv3jchhhMRY0U/kRnSUvCSBq1wO6Cio+MEm2uuY
-         seNpdYVvAuv9oqKCUQCtC24TbaUOjlWR4EVuX7tQotFtnK9TqPTK1apu9YUOaGWQt/WN
-         NQjl6ypaJ8fXBhJ218Rw89Wmhy+jE6xpiFeJPabPkoYJF/U1ZipGkmLJfWqcPzjpphox
-         BBTA==
-X-Gm-Message-State: AOAM533VeRVQ8/NOfNBRF432C4QFtUV8HYMAZDw/a+oMURWW6HfHM26z
-        y4xZT12gzXAA2c1zhF5G2yuIw1tbdiNTHMFbBQIqad+C8+IEkpFlzt7TEDxJ/h/N3tomAr3F0zm
-        E6jVyfqRRTesBVHCkEmgBX0v92Yc9/hP6+rXv
-X-Received: by 2002:a17:906:240d:: with SMTP id z13mr2248958eja.210.1644417440962;
-        Wed, 09 Feb 2022 06:37:20 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw36sjymzMaJhJa6q6wUBDPfAQePXwC/8alKtggTfvJQrQ42VevrxvY9v64oZZdAuv2SAoLgQ==
-X-Received: by 2002:a17:906:240d:: with SMTP id z13mr2248941eja.210.1644417440823;
-        Wed, 09 Feb 2022 06:37:20 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id ss14sm3871136ejb.199.2022.02.09.06.37.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 06:37:20 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-pm@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
-        devicetree@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 0/8] dt-bindings: memory: convert to dtschema
-Date:   Wed,  9 Feb 2022 15:36:44 +0100
-Message-Id: <164441736490.181274.3751600144129167050.b4-ty@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220206135807.211767-1-krzysztof.kozlowski@canonical.com>
-References: <20220206135807.211767-1-krzysztof.kozlowski@canonical.com>
+        with ESMTP id S235315AbiBIRqI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Feb 2022 12:46:08 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51CEFC0613C9;
+        Wed,  9 Feb 2022 09:46:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644428771; x=1675964771;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=RB573mLF4TwBecPUuBH+gJ5hpoDLGZ3AL75rF6UQ/ok=;
+  b=uvgBTses4fAR5Kar7ArZZ+0EPrKXW1Mmm2TilvUj0vzEENiG15IVFLu0
+   9njiU1CMgCyR9xYGKrrA1lHvm0itLuxbH218PwdHJ0GxZ5xie7J5WHZRg
+   Ujof7btHGMTQTspf1031pbDsWSc9SMYiwGSDxOy6EHqO26vw0Whsuogk/
+   k=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 09 Feb 2022 09:46:11 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 09:46:10 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 9 Feb 2022 09:46:10 -0800
+Received: from blr-ubuntu-87.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 9 Feb 2022 09:46:06 -0800
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+To:     <bjorn.andersson@linaro.org>, <dianders@chromium.org>,
+        <mka@chromium.org>
+CC:     <viresh.kumar@linaro.org>, <sboyd@kernel.org>, <agross@kernel.org>,
+        <robh+dt@kernel.org>, <rjw@rjwysocki.net>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>
+Subject: [PATCH v4] arm64: dts: qcom: sc7280: Add cpu OPP tables
+Date:   Wed, 9 Feb 2022 23:15:57 +0530
+Message-ID: <1644428757-25575-1-git-send-email-quic_sibis@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 6 Feb 2022 14:57:59 +0100, Krzysztof Kozlowski wrote:
-> Changes since v2:
-> 1. Re-order patches so timings get converted earlier. This fixes dt-checker
-> robot report.
-> 2. Add Dmitry's review tag.
-> 3. Three new patches:
->    #6: dt-bindings: memory: lpddr3: deprecate passing timings frequency as unit address
->    #7: memory: of: parse max-freq property
->    #8: ARM: dts: exynos: remove deprecated unit address for LPDDR3 timings on Odroid
-> 
-> [...]
+Add OPP tables required to scale DDR/L3 per freq-domain on SC7280 SoCs.
 
-Applied, thanks!
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+---
 
-[1/8] dt-bindings: memory: lpddr2-timings: convert to dtschema
-      commit: 425fd283e4a2b929a88483525fda3f90dde8a2d0
-[2/8] dt-bindings: memory: lpddr3-timings: convert to dtschema
-      commit: 180a276c99bb861742c5c423d679b0277d4b1c26
-[3/8] dt-bindings: memory: lpddr3: convert to dtschema
-      commit: 28f818580e49a97876de5c33231fc0e4c3cde2d9
-[4/8] dt-bindings: memory: lpddr3: adjust IO width to spec
-      commit: d98e72b6f9b078c57f9d46dc64a669d02ff2ffcc
-[5/8] dt-bindings: memory: lpddr3: deprecate manufacturer ID
-      commit: e531932c7185b86eccb3688002730950d49eba1a
-[6/8] dt-bindings: memory: lpddr3: deprecate passing timings frequency as unit address
-      commit: 42f94bb962cd1b15dc57c90aca7e48848ca6c6c3
-[7/8] memory: of: parse max-freq property
-      commit: 4e890b2228fd14fa6269175e9816bf27ff989e84
+V4:
+ * Round up frequency labels [Matthias]
+ * Add DDR/L3 bandwidth votes for the pro variant of SC7280 SoC
 
-Best regards,
+V3:
+ * Rename cpu opp table nodes [Matthias]
+ * Rename opp phandles [Doug]
+
+Depends on the following patch:
+L3 Provider Node: https://patchwork.kernel.org/project/linux-arm-msm/patch/1634812857-10676-4-git-send-email-okukatla@codeaurora.org/
+
+ arch/arm64/boot/dts/qcom/sc7280.dtsi | 230 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 230 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+index c6d26ea805d8..f0b64be63c21 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+@@ -11,6 +11,7 @@
+ #include <dt-bindings/clock/qcom,rpmh.h>
+ #include <dt-bindings/clock/qcom,videocc-sc7280.h>
+ #include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/interconnect/qcom,osm-l3.h>
+ #include <dt-bindings/interconnect/qcom,sc7280.h>
+ #include <dt-bindings/interrupt-controller/arm-gic.h>
+ #include <dt-bindings/mailbox/qcom-ipcc.h>
+@@ -163,6 +164,9 @@
+ 					   &LITTLE_CPU_SLEEP_1
+ 					   &CLUSTER_SLEEP_0>;
+ 			next-level-cache = <&L2_0>;
++			operating-points-v2 = <&cpu0_opp_table>;
++			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
++					<&epss_l3 MASTER_EPSS_L3_APPS &epss_l3 SLAVE_EPSS_L3_SHARED>;
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			#cooling-cells = <2>;
+ 			L2_0: l2-cache {
+@@ -183,6 +187,9 @@
+ 					   &LITTLE_CPU_SLEEP_1
+ 					   &CLUSTER_SLEEP_0>;
+ 			next-level-cache = <&L2_100>;
++			operating-points-v2 = <&cpu0_opp_table>;
++			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
++					<&epss_l3 MASTER_EPSS_L3_APPS &epss_l3 SLAVE_EPSS_L3_SHARED>;
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			#cooling-cells = <2>;
+ 			L2_100: l2-cache {
+@@ -200,6 +207,9 @@
+ 					   &LITTLE_CPU_SLEEP_1
+ 					   &CLUSTER_SLEEP_0>;
+ 			next-level-cache = <&L2_200>;
++			operating-points-v2 = <&cpu0_opp_table>;
++			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
++					<&epss_l3 MASTER_EPSS_L3_APPS &epss_l3 SLAVE_EPSS_L3_SHARED>;
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			#cooling-cells = <2>;
+ 			L2_200: l2-cache {
+@@ -217,6 +227,9 @@
+ 					   &LITTLE_CPU_SLEEP_1
+ 					   &CLUSTER_SLEEP_0>;
+ 			next-level-cache = <&L2_300>;
++			operating-points-v2 = <&cpu0_opp_table>;
++			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
++					<&epss_l3 MASTER_EPSS_L3_APPS &epss_l3 SLAVE_EPSS_L3_SHARED>;
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			#cooling-cells = <2>;
+ 			L2_300: l2-cache {
+@@ -234,6 +247,9 @@
+ 					   &BIG_CPU_SLEEP_1
+ 					   &CLUSTER_SLEEP_0>;
+ 			next-level-cache = <&L2_400>;
++			operating-points-v2 = <&cpu4_opp_table>;
++			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
++					<&epss_l3 MASTER_EPSS_L3_APPS &epss_l3 SLAVE_EPSS_L3_SHARED>;
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			#cooling-cells = <2>;
+ 			L2_400: l2-cache {
+@@ -251,6 +267,9 @@
+ 					   &BIG_CPU_SLEEP_1
+ 					   &CLUSTER_SLEEP_0>;
+ 			next-level-cache = <&L2_500>;
++			operating-points-v2 = <&cpu4_opp_table>;
++			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
++					<&epss_l3 MASTER_EPSS_L3_APPS &epss_l3 SLAVE_EPSS_L3_SHARED>;
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			#cooling-cells = <2>;
+ 			L2_500: l2-cache {
+@@ -268,6 +287,9 @@
+ 					   &BIG_CPU_SLEEP_1
+ 					   &CLUSTER_SLEEP_0>;
+ 			next-level-cache = <&L2_600>;
++			operating-points-v2 = <&cpu4_opp_table>;
++			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
++					<&epss_l3 MASTER_EPSS_L3_APPS &epss_l3 SLAVE_EPSS_L3_SHARED>;
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			#cooling-cells = <2>;
+ 			L2_600: l2-cache {
+@@ -285,6 +307,9 @@
+ 					   &BIG_CPU_SLEEP_1
+ 					   &CLUSTER_SLEEP_0>;
+ 			next-level-cache = <&L2_700>;
++			operating-points-v2 = <&cpu7_opp_table>;
++			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
++					<&epss_l3 MASTER_EPSS_L3_APPS &epss_l3 SLAVE_EPSS_L3_SHARED>;
+ 			qcom,freq-domain = <&cpufreq_hw 2>;
+ 			#cooling-cells = <2>;
+ 			L2_700: l2-cache {
+@@ -384,6 +409,211 @@
+ 		};
+ 	};
+ 
++	cpu0_opp_table: cpu0-opp-table {
++		compatible = "operating-points-v2";
++		opp-shared;
++
++		cpu0_opp_300mhz: opp-300000000 {
++			opp-hz = /bits/ 64 <300000000>;
++			opp-peak-kBps = <800000 9600000>;
++		};
++
++		cpu0_opp_691mhz: opp-691200000 {
++			opp-hz = /bits/ 64 <691200000>;
++			opp-peak-kBps = <800000 17817600>;
++		};
++
++		cpu0_opp_806mhz: opp-806400000 {
++			opp-hz = /bits/ 64 <806400000>;
++			opp-peak-kBps = <800000 20889600>;
++		};
++
++		cpu0_opp_941mhz: opp-940800000 {
++			opp-hz = /bits/ 64 <940800000>;
++			opp-peak-kBps = <1804000 24576000>;
++		};
++
++		cpu0_opp_1152mhz: opp-1152000000 {
++			opp-hz = /bits/ 64 <1152000000>;
++			opp-peak-kBps = <2188000 27033600>;
++		};
++
++		cpu0_opp_1325mhz: opp-1324800000 {
++			opp-hz = /bits/ 64 <1324800000>;
++			opp-peak-kBps = <2188000 33792000>;
++		};
++
++		cpu0_opp_1517mhz: opp-1516800000 {
++			opp-hz = /bits/ 64 <1516800000>;
++			opp-peak-kBps = <3072000 38092800>;
++		};
++
++		cpu0_opp_1651mhz: opp-1651200000 {
++			opp-hz = /bits/ 64 <1651200000>;
++			opp-peak-kBps = <3072000 41779200>;
++		};
++
++		cpu0_opp_1805mhz: opp-1804800000 {
++			opp-hz = /bits/ 64 <1804800000>;
++			opp-peak-kBps = <4068000 48537600>;
++		};
++
++		cpu0_opp_1958mhz: opp-1958400000 {
++			opp-hz = /bits/ 64 <1958400000>;
++			opp-peak-kBps = <4068000 48537600>;
++		};
++
++		cpu0_opp_2016mhz: opp-2016000000 {
++			opp-hz = /bits/ 64 <2016000000>;
++			opp-peak-kBps = <6220000 48537600>;
++		};
++	};
++
++	cpu4_opp_table: cpu4-opp-table {
++		compatible = "operating-points-v2";
++		opp-shared;
++
++		cpu4_opp_691mhz: opp-691200000 {
++			opp-hz = /bits/ 64 <691200000>;
++			opp-peak-kBps = <1804000 9600000>;
++		};
++
++		cpu4_opp_941mhz: opp-940800000 {
++			opp-hz = /bits/ 64 <940800000>;
++			opp-peak-kBps = <2188000 17817600>;
++		};
++
++		cpu4_opp_1229mhz: opp-1228800000 {
++			opp-hz = /bits/ 64 <1228800000>;
++			opp-peak-kBps = <4068000 24576000>;
++		};
++
++		cpu4_opp_1344mhz: opp-1344000000 {
++			opp-hz = /bits/ 64 <1344000000>;
++			opp-peak-kBps = <4068000 24576000>;
++		};
++
++		cpu4_opp_1517mhz: opp-1516800000 {
++			opp-hz = /bits/ 64 <1516800000>;
++			opp-peak-kBps = <4068000 24576000>;
++		};
++
++		cpu4_opp_1651mhz: opp-1651200000 {
++			opp-hz = /bits/ 64 <1651200000>;
++			opp-peak-kBps = <6220000 38092800>;
++		};
++
++		cpu4_opp_1901mhz: opp-1900800000 {
++			opp-hz = /bits/ 64 <1900800000>;
++			opp-peak-kBps = <6220000 44851200>;
++		};
++
++		cpu4_opp_2054mhz: opp-2054400000 {
++			opp-hz = /bits/ 64 <2054400000>;
++			opp-peak-kBps = <6220000 44851200>;
++		};
++
++		cpu4_opp_2112mhz: opp-2112000000 {
++			opp-hz = /bits/ 64 <2112000000>;
++			opp-peak-kBps = <6220000 44851200>;
++		};
++
++		cpu4_opp_2131mhz: opp-2131200000 {
++			opp-hz = /bits/ 64 <2131200000>;
++			opp-peak-kBps = <6220000 44851200>;
++		};
++
++		cpu4_opp_2208mhz: opp-2208000000 {
++			opp-hz = /bits/ 64 <2208000000>;
++			opp-peak-kBps = <6220000 44851200>;
++		};
++
++		cpu4_opp_2400mhz: opp-2400000000 {
++			opp-hz = /bits/ 64 <2400000000>;
++			opp-peak-kBps = <8532000 48537600>;
++		};
++
++		cpu4_opp_2611mhz: opp-2611200000 {
++			opp-hz = /bits/ 64 <2611200000>;
++			opp-peak-kBps = <8532000 48537600>;
++		};
++	};
++
++	cpu7_opp_table: cpu7-opp-table {
++		compatible = "operating-points-v2";
++		opp-shared;
++
++		cpu7_opp_806mhz: opp-806400000 {
++			opp-hz = /bits/ 64 <806400000>;
++			opp-peak-kBps = <1804000 9600000>;
++		};
++
++		cpu7_opp_1056mhz: opp-1056000000 {
++			opp-hz = /bits/ 64 <1056000000>;
++			opp-peak-kBps = <2188000 17817600>;
++		};
++
++		cpu7_opp_1325mhz: opp-1324800000 {
++			opp-hz = /bits/ 64 <1324800000>;
++			opp-peak-kBps = <4068000 24576000>;
++		};
++
++		cpu7_opp_1517mhz: opp-1516800000 {
++			opp-hz = /bits/ 64 <1516800000>;
++			opp-peak-kBps = <4068000 24576000>;
++		};
++
++		cpu7_opp_1766mhz: opp-1766400000 {
++			opp-hz = /bits/ 64 <1766400000>;
++			opp-peak-kBps = <6220000 38092800>;
++		};
++
++		cpu7_opp_1862mhz: opp-1862400000 {
++			opp-hz = /bits/ 64 <1862400000>;
++			opp-peak-kBps = <6220000 38092800>;
++		};
++
++		cpu7_opp_2035mhz: opp-2035200000 {
++			opp-hz = /bits/ 64 <2035200000>;
++			opp-peak-kBps = <6220000 38092800>;
++		};
++
++		cpu7_opp_2112mhz: opp-2112000000 {
++			opp-hz = /bits/ 64 <2112000000>;
++			opp-peak-kBps = <6220000 44851200>;
++		};
++
++		cpu7_opp_2208mhz: opp-2208000000 {
++			opp-hz = /bits/ 64 <2208000000>;
++			opp-peak-kBps = <6220000 44851200>;
++		};
++
++		cpu7_opp_2381mhz: opp-2380800000 {
++			opp-hz = /bits/ 64 <2380800000>;
++			opp-peak-kBps = <6832000 44851200>;
++		};
++
++		cpu7_opp_2400mhz: opp-2400000000 {
++			opp-hz = /bits/ 64 <2400000000>;
++			opp-peak-kBps = <8532000 48537600>;
++		};
++
++		cpu7_opp_2515mhz: opp-2515200000 {
++			opp-hz = /bits/ 64 <2515200000>;
++			opp-peak-kBps = <8532000 48537600>;
++		};
++
++		cpu7_opp_2707mhz: opp-2707200000 {
++			opp-hz = /bits/ 64 <2707200000>;
++			opp-peak-kBps = <8532000 48537600>;
++		};
++
++		cpu7_opp_3014mhz: opp-3014400000 {
++			opp-hz = /bits/ 64 <3014400000>;
++			opp-peak-kBps = <8532000 48537600>;
++		};
++	};
++
+ 	memory@80000000 {
+ 		device_type = "memory";
+ 		/* We expect the bootloader to fill in the size */
 -- 
-Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+2.7.4
+
