@@ -2,133 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE5804B1363
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Feb 2022 17:48:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43F664B14CD
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Feb 2022 19:00:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233513AbiBJQs3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Feb 2022 11:48:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60952 "EHLO
+        id S245429AbiBJR7s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Feb 2022 12:59:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244788AbiBJQs1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Feb 2022 11:48:27 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE40122
-        for <linux-pm@vger.kernel.org>; Thu, 10 Feb 2022 08:48:28 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id q7so10567334wrc.13
-        for <linux-pm@vger.kernel.org>; Thu, 10 Feb 2022 08:48:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pLS576zRiyX8cEFCSbEsgtddD+sDLikqn6zU/1oJf8w=;
-        b=F+zihJjTwanF71H/D7ekBj3wU+Z2b52PbghTEMCSmcOrTiH4PgBQHiDD+hXz68ypHP
-         L7Qab60Rg495sc5am43DY+CBcqGfjj0CdVzZTiFbvxvhVKpjLmS8INCDGOTjthlD/1qw
-         u3sGYXfa8JajcntQa4ZCQAQ0i6YUqAHENq5WZ4v+e3ELGKtJPOvdFCha0x5l5V/5BD0w
-         UmInuD8BBguT1bWO2GLwYUjbvnm/X7wgxT3OmC9eBsXrHbqJe5Q7qRUO7Ze4PC9lwkwa
-         Pjp+3IWFRNqf0YPk8FBPwbC+24DYbudQQFgeqqeJzAZKvZIl161TOjly//C/jy7F2eU1
-         Khow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pLS576zRiyX8cEFCSbEsgtddD+sDLikqn6zU/1oJf8w=;
-        b=tN1ZAIkyM8szB2HK8/nH6rrpoRrSIJo87ZJt/U2nmlF8Z/LVeIzcNe5l45oflaJHLT
-         USaB5nJb63ox0n1CVRIDX0Ylh1+0QP9xM/crd3pnQQ6VlbrxjGnRSyUBmp4+nPzRr7dM
-         qJ0N9UpOeE01O5ZVIN1eP/o2FGwtRaC+u1J+4F6qyE962B6d4aWEBJTczqSEKwqXMqdg
-         b37YtVAwJwJIYntTpVWOXD54eGH3t5PWbvBXOLS/NCtDypE9DgaKTi/2+qPIof73mWG3
-         solcrFdE4PbjT2Pf0p90lYkbKIF1idYaa3r1flW/cbfRR7CIdz3iddKy+WBvpPyATFbp
-         Km/A==
-X-Gm-Message-State: AOAM5309IxUS/94PbBHpEPTJ1vhcjM/InzIPo2CWy2EFMqj0dQZ+LXDE
-        pKjUdhggvvgAs3Tol0kpjNcbRxuQJSwJ1w==
-X-Google-Smtp-Source: ABdhPJyFIO3FkvNhELbMWyISu/O1KiJzBnlOUFk+mthkcVHN3yHFF62iPajbwsCkPx8ilc0eXtRWCg==
-X-Received: by 2002:adf:dd41:: with SMTP id u1mr7343463wrm.253.1644511706802;
-        Thu, 10 Feb 2022 08:48:26 -0800 (PST)
-Received: from localhost.localdomain ([37.169.15.245])
-        by smtp.gmail.com with ESMTPSA id p3sm2047003wmq.40.2022.02.10.08.48.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 08:48:26 -0800 (PST)
-From:   Massimiliano Minella <massimiliano.minella@gmail.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Keerthy <j-keerthy@ti.com>,
-        Massimiliano Minella <massimiliano.minella@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org
-Subject: [PATCH] thermal: k3: Add hwmon support
-Date:   Thu, 10 Feb 2022 17:47:47 +0100
-Message-Id: <20220210164756.3489848-1-massimiliano.minella@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S245439AbiBJR7s (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Feb 2022 12:59:48 -0500
+X-Greylist: delayed 382 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Feb 2022 09:59:48 PST
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80EA7F2D;
+        Thu, 10 Feb 2022 09:59:48 -0800 (PST)
+Message-ID: <b6032dd3-eb49-50dc-5847-484d8cc35195@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1644515602;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7jGGXtZuM+egD69FXEvOYIvlU7UKlZOrjM0E5mMf6D8=;
+        b=WqmTzxxG9nAZftgELIJe0xs5GpfBkJeFazaVzCiTTY+BXZES5aog1sKX0YTch2Fu0bdDvM
+        6Dt6wOxvNsZMMQps89B6WK1/RQ3fZhSPqPJZfxdqhRk3oBTFmIOv5V54ofuBOa109mNonk
+        yixSs4rj9Cn7hrw9EkbRr1YHBqPHpag=
+Date:   Thu, 10 Feb 2022 10:52:59 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3] PCI: vmd: Honor ACPI _OSC on PCIe features
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Keith Busch <kbusch@kernel.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Nirmal Patel <nirmal.patel@linux.intel.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220209213638.GA587920@bhelgaas>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Jonathan Derrick <jonathan.derrick@linux.dev>
+In-Reply-To: <20220209213638.GA587920@bhelgaas>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Expose the thermal sensors on K3 AM654 as hwmon devices, so that
-temperatures could be read using lm-sensors.
-Use devm_add_action_or_reset() to unregister the hwmon interface
-automatically.
 
-Signed-off-by: Massimiliano Minella <massimiliano.minella@gmail.com>
----
- drivers/thermal/k3_bandgap.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
 
-diff --git a/drivers/thermal/k3_bandgap.c b/drivers/thermal/k3_bandgap.c
-index 35f41e8a0b75..94678085dd5c 100644
---- a/drivers/thermal/k3_bandgap.c
-+++ b/drivers/thermal/k3_bandgap.c
-@@ -16,6 +16,8 @@
- #include <linux/thermal.h>
- #include <linux/types.h>
- 
-+#include "thermal_hwmon.h"
-+
- #define K3_VTM_DEVINFO_PWR0_OFFSET		0x4
- #define K3_VTM_DEVINFO_PWR0_TEMPSENS_CT_MASK	0xf0
- #define K3_VTM_TMPSENS0_CTRL_OFFSET	0x80
-@@ -149,6 +151,13 @@ static int k3_thermal_get_temp(void *devdata, int *temp)
- 	return ret;
- }
- 
-+static void k3_hwmon_action(void *data)
-+{
-+	struct thermal_zone_device *zone = data;
-+
-+	thermal_remove_hwmon_sysfs(zone);
-+}
-+
- static const struct thermal_zone_of_device_ops k3_of_thermal_ops = {
- 	.get_temp = k3_thermal_get_temp,
- };
-@@ -219,6 +228,19 @@ static int k3_bandgap_probe(struct platform_device *pdev)
- 			ret = PTR_ERR(data[id].tzd);
- 			goto err_alloc;
- 		}
-+
-+		data[id].tzd->tzp->no_hwmon = false;
-+		ret = thermal_add_hwmon_sysfs(data[id].tzd);
-+		if (ret) {
-+			dev_err(dev, "thermal failed to add hwmon sysfs\n");
-+			goto err_alloc;
-+		}
-+
-+		ret = devm_add_action_or_reset(dev,
-+					       k3_hwmon_action,
-+					       data[id].tzd);
-+		if (ret)
-+			goto err_alloc;
- 	}
- 
- 	platform_set_drvdata(pdev, bgp);
+On 2/9/2022 2:36 PM, Bjorn Helgaas wrote:
+> On Tue, Dec 07, 2021 at 02:15:04PM +0100, Rafael J. Wysocki wrote:
+>> On Tue, Dec 7, 2021 at 12:12 AM Keith Busch <kbusch@kernel.org> wrote:
+>>> On Fri, Dec 03, 2021 at 11:15:41AM +0800, Kai-Heng Feng wrote:
+>>>> When Samsung PCIe Gen4 NVMe is connected to Intel ADL VMD, the
+>>>> combination causes AER message flood and drags the system performance
+>>>> down.
+>>>>
+>>>> The issue doesn't happen when VMD mode is disabled in BIOS, since AER
+>>>> isn't enabled by acpi_pci_root_create() . When VMD mode is enabled, AER
+>>>> is enabled regardless of _OSC:
+>>>> [    0.410076] acpi PNP0A08:00: _OSC: platform does not support [AER]
+>>>> ...
+>>>> [    1.486704] pcieport 10000:e0:06.0: AER: enabled with IRQ 146
+>>>>
+>>>> Since VMD is an aperture to regular PCIe root ports, honor ACPI _OSC to
+>>>> disable PCIe features accordingly to resolve the issue.
+>>>
+>>> At least for some versions of this hardare, I recall ACPI is unaware of
+>>> any devices in the VMD domain; the platform can not see past the VMD
+>>> endpoint, so I throught the driver was supposed to always let the VMD
+>>> domain use OS native support regardless of the parent's ACPI _OSC.
+>>
+>> This is orthogonal to whether or not ACPI is aware of the VMD domain
+>> or the devices in it.
+>>
+>> If the platform firmware does not allow the OS to control specific
+>> PCIe features at the physical host bridge level, that extends to the
+>> VMD "bus", because it is just a way to expose a hidden part of the
+>> PCIe hierarchy.
+> 
+> I don't understand what's going on here.  Do we understand the AER
+> message flood?  Are we just papering over it by disabling AER?
+> 
+> If an error occurs below a VMD, who notices and reports it?  If we
+> disable native AER below VMD because of _OSC, as this patch does, I
+> guess we're assuming the platform will handle AER events below VMD.
+> Is that really true?  Does the platform know how to find AER log
+> registers of devices below VMD?
+ACPI (and the specific UEFI implementation) might remain unaware of
+VMD domains. It's possible that the system management mode (SMM)
+controller which typically handles firmware-first errors would be
+capable of handling VMD errors in the vendor-specific manner.
+However if _OSC hadn't taken into account VMD ports, SMM wouldn't
+be capable of handling those errors and silently disabling AER on
+VMD domains is a bad idea.
 
-base-commit: e5b54867f47f765fcb439e09ed763b5de617af3e
--- 
-2.25.1
+The bugzilla made it sound like a specific platform/drive combination.
+What about a DMI match to mask the Corrected Physical Layer bits?
 
+> 
+>> The platform firmware does that through ACPI _OSC under the host
+>> bridge device (not under the VMD device) which it is very well aware
+>> of.
