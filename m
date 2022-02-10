@@ -2,63 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AE9D4B04AE
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Feb 2022 05:59:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A22544B0507
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Feb 2022 06:28:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231521AbiBJE67 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Feb 2022 23:58:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38914 "EHLO
+        id S233648AbiBJF1T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Feb 2022 00:27:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230314AbiBJE67 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Feb 2022 23:58:59 -0500
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A37D51F5
-        for <linux-pm@vger.kernel.org>; Wed,  9 Feb 2022 20:59:00 -0800 (PST)
-Received: by mail-ot1-x330.google.com with SMTP id n6-20020a9d6f06000000b005a0750019a7so3013445otq.5
-        for <linux-pm@vger.kernel.org>; Wed, 09 Feb 2022 20:59:00 -0800 (PST)
+        with ESMTP id S233621AbiBJF1Q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Feb 2022 00:27:16 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8D8DB7
+        for <linux-pm@vger.kernel.org>; Wed,  9 Feb 2022 21:27:17 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id u16so2577776pfg.3
+        for <linux-pm@vger.kernel.org>; Wed, 09 Feb 2022 21:27:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rEjmJFMNh9IQm8dtWbQTvDdM437tEa4s5NElVG565pw=;
-        b=OwrqedecyktT/3v6gq7Esl+6hdKaH7VQnsE4eqS1IFppKK9mFc0eFQVDgRMMGCVV4p
-         qrcQb8XJRo1NIwMtyyuzs2Rrg0K+wLd6z/rZahX/F2Pz/AaX58OFXz6vjQ+9/xwSub5W
-         qSINAbwFA1Jk1ww1d1QXZoeEyLCYYZVVuiRYleFb3n4kGVoFc83652O+aPz/GSRiCQKO
-         y4vERDNn7rRWn0fiMTRUNJvZv6k9wnD5sZETIz4O0wg0QbfLbDjtteT6DfexE+rAY2+y
-         G2oln+nAJ8qiOUEeRwrdeW7FI9cNSa9akwBSQ1b6EPC/v4p3R9My6xdQQ2dJbIAhIOR/
-         CfWQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=aNj5Xh0xA6luKin8itDN2Q7hu6ygPFEEo5apEpE+LlY=;
+        b=tBMJbISrQv+1mFot1P5qF4jD2V2MhoFY3dgpLTbOyXJf9HCdVKkRFzDYALxvCLpSU5
+         RDp6h19SWeKdPqNQGV61d1dGNX5gzx4+Q0HwUvCE4jaXwgRLR9jJNiJduW2o7Lvy5KgD
+         ne19u3f2NT7Q2nTDFtTCXx2qXdFj9DzBxiS/QB5gs+HDmz6jVe/kLNDzK9+2qXkAQ6mg
+         swz5K5IzKu/9777ETt+ZLfYKTo28cZfrKZlc6d3ZgKa1GUAiDf8e8OpSC/QmoBSDzM9O
+         U0JwdkDRq7lsaU+5lX2pdo9U0nJ+eX9TWgCm1/qFvkmjZiXrrHQ271s3eC5Rnrx1dn1r
+         /MOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rEjmJFMNh9IQm8dtWbQTvDdM437tEa4s5NElVG565pw=;
-        b=LP/FSebdPjh//yu5muuvLQ3iHfldAUCiAb596t7h5XtsrpW/c18EUIGNpmInqHOPry
-         njoapMNAKKBabAS6IlEmQXKoW+oX+L5AL0RYY39tp2+e20xt54wZoc1TAH8S98O/yu+Z
-         H3e4H7bIQc0aHh72JwGJBGTHGXREJSIb1+tCdu4doq+GvxFKLIKNsbcOtAZIHeiumoQ5
-         3TFi9mFWi9q5qpE0nXPlXe1OYoA1Nl7+3vys+a2zlinrl7e6ryncOD+9kYFMDKJTMFN/
-         gf/jgmBarbB/hYm5uib6wrrouMJRU/uZ5HARaXiT+O3FUAalDV247pcgpXcKEdHHuDE0
-         4yRg==
-X-Gm-Message-State: AOAM532/109+TToTzUvA4nnbjdVFHtIvSrA3CzabGVZG9hCrMzgrN2SA
-        EwhMaeOpV+bCpq+z0Miqn3i8zw==
-X-Google-Smtp-Source: ABdhPJxrwfdfPFCNzFRaI1TLvD5ToWqehkssypEQUuRp9LRC9ggZ8kzc5P2CeIZ7uOI/KmDXzscNtA==
-X-Received: by 2002:a05:6830:4c9:: with SMTP id s9mr2389657otd.12.1644469139953;
-        Wed, 09 Feb 2022 20:58:59 -0800 (PST)
-Received: from ripper.. ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id t13sm2453201oai.37.2022.02.09.20.58.58
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=aNj5Xh0xA6luKin8itDN2Q7hu6ygPFEEo5apEpE+LlY=;
+        b=Lypp3tnU+THMZzUMPsDUGsv32VF3x2T/DIW/PqY6x5Jaqdn4spL89vSx26Rwb0p5zf
+         5jkWhfjLNZmRYsinuzEena3gweDkOhf3RpOEwlrpWKupb5zS+dFPcbZSP7eobFjjH/Ev
+         Ay0P86diauaiLLfU+RhZlIbjKNpwLyISccOtgY9cfN6ZjM+O5vBUQ6fjXCP4JK8GrPIc
+         IG8PAUL7YVOZWhcgzavbHLQdx2z1oKBqSb1MD4/n77vl5LcY8efssBi9N7N13dlUQL5f
+         6v2BWu7dUEYJlu10NDMCFhWJvpVR2bNDUUJovtoWzQyEuFoQc9W1W0N822Krl2WZ4cDV
+         sc+Q==
+X-Gm-Message-State: AOAM530D7jMdz2HaGnrfyUN5zW9olYK+ZXlwn9gnElMgSoeeiUgk6r+D
+        EYqj7fP4rq5rQOPfTPZTgGQ4td3CN5yvhA==
+X-Google-Smtp-Source: ABdhPJySnVchiExhDDsVEiiW2jga5YDbIbQp0gXN4uCn5Wed/vB+Sf7H0H3dId3iJ/6+ssJ2b4IIxg==
+X-Received: by 2002:a63:4b17:: with SMTP id y23mr4781304pga.489.1644470836741;
+        Wed, 09 Feb 2022 21:27:16 -0800 (PST)
+Received: from localhost ([136.185.132.167])
+        by smtp.gmail.com with ESMTPSA id pc4sm691067pjb.3.2022.02.09.21.27.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 20:58:59 -0800 (PST)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] cpufreq: qcom-hw: Add support for per-core-dcvs
-Date:   Wed,  9 Feb 2022 21:01:17 -0800
-Message-Id: <20220210050117.747569-1-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.33.1
+        Wed, 09 Feb 2022 21:27:16 -0800 (PST)
+Date:   Thu, 10 Feb 2022 10:57:14 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Pierre Gondois <Pierre.Gondois@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Ionela.Voinescu@arm.com,
+        Lukasz.Luba@arm.com, Morten.Rasmussen@arm.com,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3] cpufreq: CPPC: Fix performance/frequency conversion
+Message-ID: <20220210052714.em6vt7j627wi5dns@vireshk-i7>
+References: <20220208080109.697904-1-Pierre.Gondois@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220208080109.697904-1-Pierre.Gondois@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -69,115 +71,43 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The OSM and EPSS hardware controls the frequency of each cluster in the
-system based on requests from the OS and various limiting factors, such
-as input from LMH.
+On 08-02-22, 09:01, Pierre Gondois wrote:
+> CPUfreq governors request CPU frequencies using information
+> on current CPU usage. The CPPC driver converts them to
+> performance requests. Frequency targets are computed as:
+> 	target_freq = (util / cpu_capacity) * max_freq
+> target_freq is then clamped between [policy->min, policy->max].
+> 
+> The CPPC driver converts performance values to frequencies
+> (and vice-versa) using cppc_cpufreq_perf_to_khz() and
+> cppc_cpufreq_khz_to_perf(). These functions both use two different
+> factors depending on the range of the input value. For
+> cppc_cpufreq_khz_to_perf():
+> - (NOMINAL_PERF / NOMINAL_FREQ) or
+> - (LOWEST_PERF / LOWEST_FREQ)
+> and for cppc_cpufreq_perf_to_khz():
+> - (NOMINAL_FREQ / NOMINAL_PERF) or
+> - ((NOMINAL_PERF - LOWEST_FREQ) / (NOMINAL_PERF - LOWEST_PERF))
+> 
+> This means:
+> 1- the functions are not inverse for some values:
+>    (perf_to_khz(khz_to_perf(x)) != x)
+> 2- cppc_cpufreq_perf_to_khz(LOWEST_PERF) can sometimes give
+>    a different value from LOWEST_FREQ due to integer approximation
+> 3- it is implied that performance and frequency are proportional
+>    (NOMINAL_FREQ / NOMINAL_PERF) == (LOWEST_PERF / LOWEST_FREQ)
+> 
+> This patch changes the conversion functions to an affine function.
+> This fixes the 3 points above.
+> 
+> Suggested-by: Lukasz Luba <lukasz.luba@arm.com>
+> Suggested-by: Morten Rasmussen <morten.rasmussen@arm.com>
+> Signed-off-by: Pierre Gondois <Pierre.Gondois@arm.com>
+> ---
+>  drivers/cpufreq/cppc_cpufreq.c | 43 +++++++++++++++++-----------------
+>  1 file changed, 21 insertions(+), 22 deletions(-)
 
-In most systems the vote from the OS is done using a single register per
-cluster, but some systems are configured to instead take one request per
-core.  In this configuration a set of consecutive registers are used for
-the OS to request the frequency of each of the cores within the cluster.
-The information is then aggregated in the hardware and the frequency for
-the cluster is determined.
+Applied. Thanks.
 
-As the current implementation ends up only requesting a frequency for
-the first core in each cluster and only the vote of non-idle cores are
-considered it's often the case that the cluster will be clocked (much)
-lower than expected.
-
-It's possible that there are benefits of performing the per-core
-requests from the OS, but more investigation of the outcome is needed
-before introducing such support. As such this patch extends the request
-for the cluster to be written to all the cores.
-
-The weight of the policy's related_cpus is used to determine how many
-cores, and hence consecutive registers, each cluster has.
-
-The OS is not permitted to disable the per-core dcvs feature.
-
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
- drivers/cpufreq/qcom-cpufreq-hw.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
-
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index 05f3d7876e44..8d2b65c782e6 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -28,6 +28,7 @@
- 
- struct qcom_cpufreq_soc_data {
- 	u32 reg_enable;
-+	u32 reg_dcvs_ctrl;
- 	u32 reg_freq_lut;
- 	u32 reg_volt_lut;
- 	u32 reg_current_vote;
-@@ -50,6 +51,8 @@ struct qcom_cpufreq_data {
- 	bool cancel_throttle;
- 	struct delayed_work throttle_work;
- 	struct cpufreq_policy *policy;
-+
-+	bool per_core_dcvs;
- };
- 
- static unsigned long cpu_hw_rate, xo_rate;
-@@ -102,9 +105,14 @@ static int qcom_cpufreq_hw_target_index(struct cpufreq_policy *policy,
- 	struct qcom_cpufreq_data *data = policy->driver_data;
- 	const struct qcom_cpufreq_soc_data *soc_data = data->soc_data;
- 	unsigned long freq = policy->freq_table[index].frequency;
-+	unsigned int i;
- 
- 	writel_relaxed(index, data->base + soc_data->reg_perf_state);
- 
-+	if (data->per_core_dcvs)
-+		for (i = 1; i < cpumask_weight(policy->related_cpus); i++)
-+			writel_relaxed(index, data->base + soc_data->reg_perf_state + i * 4);
-+
- 	if (icc_scaling_enabled)
- 		qcom_cpufreq_set_bw(policy, freq);
- 
-@@ -137,10 +145,15 @@ static unsigned int qcom_cpufreq_hw_fast_switch(struct cpufreq_policy *policy,
- 	struct qcom_cpufreq_data *data = policy->driver_data;
- 	const struct qcom_cpufreq_soc_data *soc_data = data->soc_data;
- 	unsigned int index;
-+	unsigned int i;
- 
- 	index = policy->cached_resolved_idx;
- 	writel_relaxed(index, data->base + soc_data->reg_perf_state);
- 
-+	if (data->per_core_dcvs)
-+		for (i = 1; i < cpumask_weight(policy->related_cpus); i++)
-+			writel_relaxed(index, data->base + soc_data->reg_perf_state + i * 4);
-+
- 	return policy->freq_table[index].frequency;
- }
- 
-@@ -342,6 +355,7 @@ static irqreturn_t qcom_lmh_dcvs_handle_irq(int irq, void *data)
- 
- static const struct qcom_cpufreq_soc_data qcom_soc_data = {
- 	.reg_enable = 0x0,
-+	.reg_dcvs_ctrl = 0xbc,
- 	.reg_freq_lut = 0x110,
- 	.reg_volt_lut = 0x114,
- 	.reg_current_vote = 0x704,
-@@ -351,6 +365,7 @@ static const struct qcom_cpufreq_soc_data qcom_soc_data = {
- 
- static const struct qcom_cpufreq_soc_data epss_soc_data = {
- 	.reg_enable = 0x0,
-+	.reg_dcvs_ctrl = 0xb0,
- 	.reg_freq_lut = 0x100,
- 	.reg_volt_lut = 0x200,
- 	.reg_perf_state = 0x320,
-@@ -481,6 +496,9 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
- 		goto error;
- 	}
- 
-+	if (readl_relaxed(base + data->soc_data->reg_dcvs_ctrl) & 0x1)
-+		data->per_core_dcvs = true;
-+
- 	qcom_get_related_cpus(index, policy->cpus);
- 	if (!cpumask_weight(policy->cpus)) {
- 		dev_err(dev, "Domain-%d failed to get related CPUs\n", index);
 -- 
-2.33.1
-
+viresh
