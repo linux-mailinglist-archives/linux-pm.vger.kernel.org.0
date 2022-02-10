@@ -2,127 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C4104B0A19
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Feb 2022 10:59:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B40B34B0C46
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Feb 2022 12:22:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239246AbiBJJ7a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Feb 2022 04:59:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45786 "EHLO
+        id S240825AbiBJLWF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Feb 2022 06:22:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239242AbiBJJ73 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Feb 2022 04:59:29 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023B2BD2
-        for <linux-pm@vger.kernel.org>; Thu, 10 Feb 2022 01:59:31 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id k17so1433621plk.0
-        for <linux-pm@vger.kernel.org>; Thu, 10 Feb 2022 01:59:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7gofrZqTIBkgz5SLWbhUQiAL3m8Y+/YRS4bR0i4YI5o=;
-        b=rvKrxFXYmksqKc5m2C4MPny/Hthz+x+tedeK9MaiScMAiFEuahGKKjFzrg0XcXpmDe
-         Ho4a5it3bAIDtgTPFr9nE3ARh09ALX9htRNRPfrSCObCNZM1QtklJH3HKmn7TV8iWJH7
-         I30ah9vvBGwX+EjuwODvIQl/gKfr09Mw8hAdiWc68H9Xh4e6U7YhjbMMgeMe6CArN9H9
-         i7BnDesJUg0TClTD4pA32GoL+xYdMMgNyL3wf7AphQ62LQiTgwZqYVuKVwKee8YqA226
-         8wgHBWvqRP1TY8lMFydkE4qQm0h64yvWhS+9Q2HOeSVifkn6aB2tk6NHQk3wRh0Wl5pj
-         cqmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7gofrZqTIBkgz5SLWbhUQiAL3m8Y+/YRS4bR0i4YI5o=;
-        b=CIHk8Ei/uZO0/mSKVio58UlIY2Uqj8rn1Cob4Djsb1o4BpWIP5yOCFfsRTPv3VsRYX
-         xriMcibzK1N5VcQv3tHCJMxxz3zJNX9FYMwyQCTv0Zs2/uW8ZN1gEfPl4qfiuuaDzVVJ
-         u6wjrCyW8UVyT6RRKcGoCoVOX7HLHkcDR3qX2XyKX4z4ZW2kSJCjTLubjQhuwRasEz4g
-         0BBP2iUnT6emCfhmKYa0zOe0D27YHeNegFpZNfmFy7hZfTNuo/lXV8Unb/Lh+bD8GyLB
-         yWwNAzCqcc19ndgtnyIp6Vbcu2EvPerF9ZwbAXRjfGv4trjd2K45dc6zOLHp0X+m/xy1
-         TSwg==
-X-Gm-Message-State: AOAM530PITZDEDJNXIqfqvIbDVChtoPKlCvwNP4097U1ONVEhsgKVQU1
-        nkoRMbCcC9AOMB7t//W2ivKseQ==
-X-Google-Smtp-Source: ABdhPJzhDO0SjwU5TgL6RSHNZhZeL+f2jB/4+cb53R9723EThEk1MscgPnApL1llkLz1kk3V85EkFA==
-X-Received: by 2002:a17:902:d4d2:: with SMTP id o18mr7051619plg.70.1644487170538;
-        Thu, 10 Feb 2022 01:59:30 -0800 (PST)
-Received: from localhost ([136.185.132.167])
-        by smtp.gmail.com with ESMTPSA id gk15sm2017082pjb.3.2022.02.10.01.59.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 01:59:30 -0800 (PST)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH] opp: Expose of-node's name in debugfs
-Date:   Thu, 10 Feb 2022 15:29:26 +0530
-Message-Id: <6d4ebbbe09f97c9f97834c293a70f6a8a4d36709.1644487134.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
+        with ESMTP id S240774AbiBJLWF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Feb 2022 06:22:05 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC263F46;
+        Thu, 10 Feb 2022 03:22:06 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 77D27ED1;
+        Thu, 10 Feb 2022 03:22:06 -0800 (PST)
+Received: from [10.57.17.101] (unknown [10.57.17.101])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ED6A03F73B;
+        Thu, 10 Feb 2022 03:22:03 -0800 (PST)
+Subject: Re: [PATCH v5 6/7] thermal: netlink: Add a new event to notify CPU
+ capabilities change
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+References: <20220127193454.12814-1-ricardo.neri-calderon@linux.intel.com>
+ <20220127193454.12814-7-ricardo.neri-calderon@linux.intel.com>
+ <CAJZ5v0hbtmP6LHngWg0J47G2PwTxNwmjb=KMyz1zi1FM09cF8g@mail.gmail.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <ede29257-d356-9fc6-5f1a-c42721c0d072@arm.com>
+Date:   Thu, 10 Feb 2022 11:22:02 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAJZ5v0hbtmP6LHngWg0J47G2PwTxNwmjb=KMyz1zi1FM09cF8g@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-It is difficult to find which OPPs are active at the moment, specially
-if there are multiple OPPs with same frequency available in the device
-tree (controlled by supported hardware feature).
 
-Expose name of the DT node to find out the exact OPP.
 
-While at it, also expose level field.
+On 1/30/22 3:20 PM, Rafael J. Wysocki wrote:
+> On Thu, Jan 27, 2022 at 8:33 PM Ricardo Neri
+> <ricardo.neri-calderon@linux.intel.com> wrote:
+>>
+>> From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+>>
+>> Add a new netlink event to notify change in CPU capabilities in terms of
+>> performance and efficiency.
+>>
+>> Firmware may change CPU capabilities as a result of thermal events in the
+>> system or to account for changes in the TDP (thermal design power) level.
+>>
+>> This notification type will allow user space to avoid running workloads
+>> on certain CPUs or proactively adjust power limits to avoid future events.
+>>
+>> The netlink message consists of a nested attribute
+>> (THERMAL_GENL_ATTR_CPU_CAPABILITY) with three attributes:
+>>
+>>   * THERMAL_GENL_ATTR_CPU_CAPABILITY_ID (type u32):
+>>     -- logical CPU number
+>>   * THERMAL_GENL_ATTR_CPU_CAPABILITY_PERFORMANCE (type u32):
+>>     -- Scaled performance from 0-1023
+>>   * THERMAL_GENL_ATTR_CPU_CAPABILITY_EFFICIENCY (type u32):
+>>     -- Scaled efficiency from 0-1023
+>>
+>> Cc: Andi Kleen <ak@linux.intel.com>
+>> Cc: Aubrey Li <aubrey.li@linux.intel.com>
+>> Cc: Lukasz Luba <lukasz.luba@arm.com>
+>> Cc: Tim Chen <tim.c.chen@linux.intel.com>
+>> Cc: "Ravi V. Shankar" <ravi.v.shankar@intel.com>
+>> Reviewed-by: Len Brown <len.brown@intel.com>
+>> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> 
+> Daniel, Lukasz, if you have any comments or concerns regarding this
+> patch, please let me know.
+> 
 
-Reported-by: Leo Yan <leo.yan@linaro.org>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/opp/debugfs.c | 5 +++++
- drivers/opp/opp.h     | 1 +
- 2 files changed, 6 insertions(+)
+My apologies Rafael, I missed that email.
 
-diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
-index 596c185b5dda..b5f2f9f39392 100644
---- a/drivers/opp/debugfs.c
-+++ b/drivers/opp/debugfs.c
-@@ -10,6 +10,7 @@
- #include <linux/debugfs.h>
- #include <linux/device.h>
- #include <linux/err.h>
-+#include <linux/of.h>
- #include <linux/init.h>
- #include <linux/limits.h>
- #include <linux/slab.h>
-@@ -131,9 +132,13 @@ void opp_debug_create_one(struct dev_pm_opp *opp, struct opp_table *opp_table)
- 	debugfs_create_bool("suspend", S_IRUGO, d, &opp->suspend);
- 	debugfs_create_u32("performance_state", S_IRUGO, d, &opp->pstate);
- 	debugfs_create_ulong("rate_hz", S_IRUGO, d, &opp->rate);
-+	debugfs_create_u32("level", S_IRUGO, d, &opp->level);
- 	debugfs_create_ulong("clock_latency_ns", S_IRUGO, d,
- 			     &opp->clock_latency_ns);
- 
-+	opp->of_name = of_node_full_name(opp->np);
-+	debugfs_create_str("of_name", S_IRUGO, d, (char **)&opp->of_name);
-+
- 	opp_debug_create_supplies(opp, opp_table, d);
- 	opp_debug_create_bw(opp, opp_table, d);
- 
-diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
-index 407c3bfe51d9..45e3a55239a1 100644
---- a/drivers/opp/opp.h
-+++ b/drivers/opp/opp.h
-@@ -96,6 +96,7 @@ struct dev_pm_opp {
- 
- #ifdef CONFIG_DEBUG_FS
- 	struct dentry *dentry;
-+	const char *of_name;
- #endif
- };
- 
--- 
-2.31.1.272.g89b43f80a514
-
+I've looked at the patches 6/7 and 7/7 and they look OK with the
+scaling.
