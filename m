@@ -2,90 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3B134B12AF
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Feb 2022 17:26:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE5804B1363
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Feb 2022 17:48:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244175AbiBJQ0M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Feb 2022 11:26:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41508 "EHLO
+        id S233513AbiBJQs3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Feb 2022 11:48:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244167AbiBJQ0L (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Feb 2022 11:26:11 -0500
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B2DC26;
-        Thu, 10 Feb 2022 08:26:11 -0800 (PST)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21AEBMiL025584;
-        Thu, 10 Feb 2022 09:41:22 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PODMain02222019;
- bh=iAIOic3fs3DHgtceBaD28ld8RhX+XmG05O99KFICyHU=;
- b=OPz9mg1lCGDZFcdrjNWJ1hjxWGEdoO1jB+ngD8AWBqiUWuBULOfNxyhbtIl1s1bRC+nE
- WUDLJ+HsoQkkmvaO36rYOsztpW7kGyiDfTMtD8INGF1z8RlZlffHA+jeLN6xLvbRKwFh
- n44n9bI/jQ0dNoYlV2Md7EJIaZ5TtHgctrcwYSf6ICy8tue/hZ7o67P11En6yDEvrbHf
- 4nYHzGr6NDRrfIRffHjJGE5Q646xsPaSr/Z099XvqFKynhUZvGSt1/Kqr1iDdAV4TZzT
- 7X0SotbkfJPF7NEaT0/Je3rlImax2cNFpOAN2rktjeVbfZF10boLWI/zwSrY/jPVvi+p wg== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3e4detskyx-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 10 Feb 2022 09:41:21 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 10 Feb
- 2022 15:41:20 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
- Transport; Thu, 10 Feb 2022 15:41:20 +0000
-Received: from ricardo-lws.crystal.cirrus.com (ricardo-lws.ad.cirrus.com [141.131.206.19])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 10A532A1;
-        Thu, 10 Feb 2022 15:41:19 +0000 (UTC)
-From:   Ricardo Rivera-Matos <rriveram@opensource.cirrus.com>
-To:     <sre@kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>
-CC:     Ricardo Rivera-Matos <rriveram@opensource.cirrus.com>
-Subject: [RESEND v2 2/2] power: supply: bq25980: Implements POWER_SUPPLY_CHARGE_TYPE_BYPASS
-Date:   Thu, 10 Feb 2022 09:41:08 -0600
-Message-ID: <20220210154108.641369-3-rriveram@opensource.cirrus.com>
+        with ESMTP id S244788AbiBJQs1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Feb 2022 11:48:27 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE40122
+        for <linux-pm@vger.kernel.org>; Thu, 10 Feb 2022 08:48:28 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id q7so10567334wrc.13
+        for <linux-pm@vger.kernel.org>; Thu, 10 Feb 2022 08:48:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pLS576zRiyX8cEFCSbEsgtddD+sDLikqn6zU/1oJf8w=;
+        b=F+zihJjTwanF71H/D7ekBj3wU+Z2b52PbghTEMCSmcOrTiH4PgBQHiDD+hXz68ypHP
+         L7Qab60Rg495sc5am43DY+CBcqGfjj0CdVzZTiFbvxvhVKpjLmS8INCDGOTjthlD/1qw
+         u3sGYXfa8JajcntQa4ZCQAQ0i6YUqAHENq5WZ4v+e3ELGKtJPOvdFCha0x5l5V/5BD0w
+         UmInuD8BBguT1bWO2GLwYUjbvnm/X7wgxT3OmC9eBsXrHbqJe5Q7qRUO7Ze4PC9lwkwa
+         Pjp+3IWFRNqf0YPk8FBPwbC+24DYbudQQFgeqqeJzAZKvZIl161TOjly//C/jy7F2eU1
+         Khow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pLS576zRiyX8cEFCSbEsgtddD+sDLikqn6zU/1oJf8w=;
+        b=tN1ZAIkyM8szB2HK8/nH6rrpoRrSIJo87ZJt/U2nmlF8Z/LVeIzcNe5l45oflaJHLT
+         USaB5nJb63ox0n1CVRIDX0Ylh1+0QP9xM/crd3pnQQ6VlbrxjGnRSyUBmp4+nPzRr7dM
+         qJ0N9UpOeE01O5ZVIN1eP/o2FGwtRaC+u1J+4F6qyE962B6d4aWEBJTczqSEKwqXMqdg
+         b37YtVAwJwJIYntTpVWOXD54eGH3t5PWbvBXOLS/NCtDypE9DgaKTi/2+qPIof73mWG3
+         solcrFdE4PbjT2Pf0p90lYkbKIF1idYaa3r1flW/cbfRR7CIdz3iddKy+WBvpPyATFbp
+         Km/A==
+X-Gm-Message-State: AOAM5309IxUS/94PbBHpEPTJ1vhcjM/InzIPo2CWy2EFMqj0dQZ+LXDE
+        pKjUdhggvvgAs3Tol0kpjNcbRxuQJSwJ1w==
+X-Google-Smtp-Source: ABdhPJyFIO3FkvNhELbMWyISu/O1KiJzBnlOUFk+mthkcVHN3yHFF62iPajbwsCkPx8ilc0eXtRWCg==
+X-Received: by 2002:adf:dd41:: with SMTP id u1mr7343463wrm.253.1644511706802;
+        Thu, 10 Feb 2022 08:48:26 -0800 (PST)
+Received: from localhost.localdomain ([37.169.15.245])
+        by smtp.gmail.com with ESMTPSA id p3sm2047003wmq.40.2022.02.10.08.48.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 08:48:26 -0800 (PST)
+From:   Massimiliano Minella <massimiliano.minella@gmail.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Keerthy <j-keerthy@ti.com>,
+        Massimiliano Minella <massimiliano.minella@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org
+Subject: [PATCH] thermal: k3: Add hwmon support
+Date:   Thu, 10 Feb 2022 17:47:47 +0100
+Message-Id: <20220210164756.3489848-1-massimiliano.minella@gmail.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220210154108.641369-1-rriveram@opensource.cirrus.com>
-References: <20220210154108.641369-1-rriveram@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: feDhXOyhHV27GLGeJJQd63wmvEu18Zvo
-X-Proofpoint-ORIG-GUID: feDhXOyhHV27GLGeJJQd63wmvEu18Zvo
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch remaps the bypass operation from POWER_SUPPLY_CHARGE_TYPE_FAST
-to POWER_SUPPLY_CHARGE_TYPE_BYPASS.
+Expose the thermal sensors on K3 AM654 as hwmon devices, so that
+temperatures could be read using lm-sensors.
+Use devm_add_action_or_reset() to unregister the hwmon interface
+automatically.
 
-Signed-off-by: Ricardo Rivera-Matos <rriveram@opensource.cirrus.com>
+Signed-off-by: Massimiliano Minella <massimiliano.minella@gmail.com>
 ---
- drivers/power/supply/bq25980_charger.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/thermal/k3_bandgap.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/drivers/power/supply/bq25980_charger.c b/drivers/power/supply/bq25980_charger.c
-index 9daa6d14db4d..9339f5649282 100644
---- a/drivers/power/supply/bq25980_charger.c
-+++ b/drivers/power/supply/bq25980_charger.c
-@@ -764,7 +764,7 @@ static int bq25980_get_charger_property(struct power_supply *psy,
- 		if (!state.ce)
- 			val->intval = POWER_SUPPLY_CHARGE_TYPE_NONE;
- 		else if (state.bypass)
--			val->intval = POWER_SUPPLY_CHARGE_TYPE_FAST;
-+			val->intval = POWER_SUPPLY_CHARGE_TYPE_BYPASS;
- 		else if (!state.bypass)
- 			val->intval = POWER_SUPPLY_CHARGE_TYPE_STANDARD;
- 		break;
+diff --git a/drivers/thermal/k3_bandgap.c b/drivers/thermal/k3_bandgap.c
+index 35f41e8a0b75..94678085dd5c 100644
+--- a/drivers/thermal/k3_bandgap.c
++++ b/drivers/thermal/k3_bandgap.c
+@@ -16,6 +16,8 @@
+ #include <linux/thermal.h>
+ #include <linux/types.h>
+ 
++#include "thermal_hwmon.h"
++
+ #define K3_VTM_DEVINFO_PWR0_OFFSET		0x4
+ #define K3_VTM_DEVINFO_PWR0_TEMPSENS_CT_MASK	0xf0
+ #define K3_VTM_TMPSENS0_CTRL_OFFSET	0x80
+@@ -149,6 +151,13 @@ static int k3_thermal_get_temp(void *devdata, int *temp)
+ 	return ret;
+ }
+ 
++static void k3_hwmon_action(void *data)
++{
++	struct thermal_zone_device *zone = data;
++
++	thermal_remove_hwmon_sysfs(zone);
++}
++
+ static const struct thermal_zone_of_device_ops k3_of_thermal_ops = {
+ 	.get_temp = k3_thermal_get_temp,
+ };
+@@ -219,6 +228,19 @@ static int k3_bandgap_probe(struct platform_device *pdev)
+ 			ret = PTR_ERR(data[id].tzd);
+ 			goto err_alloc;
+ 		}
++
++		data[id].tzd->tzp->no_hwmon = false;
++		ret = thermal_add_hwmon_sysfs(data[id].tzd);
++		if (ret) {
++			dev_err(dev, "thermal failed to add hwmon sysfs\n");
++			goto err_alloc;
++		}
++
++		ret = devm_add_action_or_reset(dev,
++					       k3_hwmon_action,
++					       data[id].tzd);
++		if (ret)
++			goto err_alloc;
+ 	}
+ 
+ 	platform_set_drvdata(pdev, bgp);
+
+base-commit: e5b54867f47f765fcb439e09ed763b5de617af3e
 -- 
 2.25.1
 
