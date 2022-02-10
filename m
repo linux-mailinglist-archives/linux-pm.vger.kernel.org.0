@@ -2,69 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B10DF4B0EF3
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Feb 2022 14:40:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C91214B110F
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Feb 2022 15:57:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242282AbiBJNiZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Feb 2022 08:38:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38388 "EHLO
+        id S235162AbiBJO4l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Feb 2022 09:56:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242291AbiBJNiY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Feb 2022 08:38:24 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B6EDDB
-        for <linux-pm@vger.kernel.org>; Thu, 10 Feb 2022 05:38:24 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id fy20so15370952ejc.0
-        for <linux-pm@vger.kernel.org>; Thu, 10 Feb 2022 05:38:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qo+3lof+9ZgEdoYqg9n+9HUoegVVcIVctooUaTdAV8c=;
-        b=NVoPBNyQ6KWqxaKVjXM4b3D5PmjRZ2EKtBhBE/1xuEN8THnLzCXtajgR1jRuUXBoax
-         R8jfdygcv2BcnomYL4eM/iJWuwCqybbcKXag1uglhn7an34HnZPUmEg0dibLMlYMWn26
-         C2jvsgoKeiNYXzdcX4VOvEjx4k6txPycV3kCk5JJH371STEljsaC1BJNdzvM9zTYLhRa
-         MwEpHpr+BZDAdYgo7HtLPFPV9xM85zitBJ4HAFhboMsEcXrfQn6doAoVUaW0ofoC4x+7
-         V8or2FLj3O25VnqImito3570G4GHNDwWsegZrP6sUkwIDCSHAe6+4u1A8lv45I2vO09h
-         YDrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qo+3lof+9ZgEdoYqg9n+9HUoegVVcIVctooUaTdAV8c=;
-        b=Sw3T1AHmmUSRjKs5OBl3FJ3ZhZQcQwCWmeNYhZB7QL2XVCXpN96SnWy1645UR0BTdA
-         BV/UeOM4bqIy8MQ0c3qivrPmDn1jNyF7QNyjWmWIPDCrx+Lti3pd6OZ8ai9fQDqqQZYL
-         kUtKU+ScPLRY+lBXrpFPjW3amacmcP/sl3H/lN4C76+QGsodguh3Wjqge2/RXw/qhu06
-         zIrz2ZPDzeFsgRd6yAv4qf1hoe70dO5W7pzMw0A2leShMcM3tmxjiS810hKDSI8HdhsD
-         qv7aui7q+gYV49vnk6mVITqSxTqR9SiFEdiITFPXjktxhKGmeRUaHqH/7aU61FnOz1jJ
-         FQIg==
-X-Gm-Message-State: AOAM530l/Ky7HWfmIWafOt9vKipVnjit2dqvQ/ME2TszBB5JFfk/OAdk
-        lYqMqFfQg2mHtozAUJSeu+GNKw==
-X-Google-Smtp-Source: ABdhPJwnxobrtjifEn1vNy1Nqb7eb4CtUkKNzY6ebDF6I3LTQB8ZCEmx6clKWAMMQxDY+jJ6D0O4Yg==
-X-Received: by 2002:a17:907:3e90:: with SMTP id hs16mr6579246ejc.731.1644500300437;
-        Thu, 10 Feb 2022 05:38:20 -0800 (PST)
-Received: from leoy-ThinkPad-X240s ([104.245.96.223])
-        by smtp.gmail.com with ESMTPSA id v26sm2493418ejk.125.2022.02.10.05.38.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 05:38:19 -0800 (PST)
-Date:   Thu, 10 Feb 2022 21:38:14 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] opp: Expose of-node's name in debugfs
-Message-ID: <20220210133814.GB334894@leoy-ThinkPad-X240s>
-References: <6d4ebbbe09f97c9f97834c293a70f6a8a4d36709.1644487134.git.viresh.kumar@linaro.org>
+        with ESMTP id S240998AbiBJO4k (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Feb 2022 09:56:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C411CC4C;
+        Thu, 10 Feb 2022 06:56:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6E71FB8255A;
+        Thu, 10 Feb 2022 14:56:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4478AC004E1;
+        Thu, 10 Feb 2022 14:56:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644504999;
+        bh=I+gIcY+KfvtSU0JaeIJ0CIXiLVlwL3aHah5tuIc7NZA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=q8QRs2XqQFepijiM7/NN1q2GqcdaCOx416RHZWlgBNP9kkNC9vEbHUUgI0LXcyLAT
+         ef8do+sIhS8il5uGw0UCTP43qbim0qRfur0OOVWovLXZXJ+JQUm93z1VjtGSrtIIIH
+         DGlA86q+MbRwXZPEM1d+BNVXsrdjgHa+fLhGo+fS68a7IyX3fw8MMFgDoV3nZV0hmN
+         pPPOtZPizgdOpaisXrnkgGYP3+OvxIeQpP63cSGP1rtDOZl5gYNyxW8PRc2lND7t6X
+         JRdMb/sjjfv4U01wYFtU8zxldgzAvvubYxI5PCi79ZHPvj6ttBHTQkCsshcO/Dh8Mh
+         9oeiw1mOjGAqg==
+Date:   Thu, 10 Feb 2022 06:56:35 -0800
+From:   Keith Busch <kbusch@kernel.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Sagi Grimberg <sagi@grimberg.me>, Christoph Hellwig <hch@lst.de>,
+        Len Brown <lenb@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        m.heingbecker@googlemail.com,
+        linux-nvme <linux-nvme@lists.infradead.org>
+Subject: Re: [Bug] nvme blocks PC10 since v5.15 - bisected
+Message-ID: <20220210145635.GA1617879@dhcp-10-100-145-180.wdc.com>
+References: <CAJZ5v0hvvYedSn5u-i7sjpoEHU4P65t7i1b2pVn=S1q0nHWgqQ@mail.gmail.com>
+ <20220121210905.GA1114868@dhcp-10-100-145-180.wdc.com>
+ <CAJZ5v0gybg+Wk+008UBFnm2WqrxowOarhst9Eh+91BN823mqNA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6d4ebbbe09f97c9f97834c293a70f6a8a4d36709.1644487134.git.viresh.kumar@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <CAJZ5v0gybg+Wk+008UBFnm2WqrxowOarhst9Eh+91BN823mqNA@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,67 +59,48 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Viresh,
+On Thu, Jan 27, 2022 at 08:02:07PM +0100, Rafael J. Wysocki wrote:
+> On Fri, Jan 21, 2022 at 10:09 PM Keith Busch <kbusch@kernel.org> wrote:
+> >
+> > On Fri, Jan 21, 2022 at 08:00:49PM +0100, Rafael J. Wysocki wrote:
+> > > Hi Keith,
+> > >
+> > > It is reported that the following commit
+> > >
+> > > commit e5ad96f388b765fe6b52f64f37e910c0ba4f3de7
+> > > Author: Keith Busch <kbusch@kernel.org>
+> > > Date:   Tue Jul 27 09:40:44 2021 -0700
+> > >
+> > >    nvme-pci: disable hmb on idle suspend
+> > >
+> > >    An idle suspend may or may not disable host memory access from devices
+> > >    placed in low power mode. Either way, it should always be safe to
+> > >    disable the host memory buffer prior to entering the low power mode, and
+> > >    this should also always be faster than a full device shutdown.
+> > >
+> > >    Signed-off-by: Keith Busch <kbusch@kernel.org>
+> > >    Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
+> > >    Signed-off-by: Christoph Hellwig <hch@lst.de>
+> > >
+> > > is the source of a serious power regression occurring since 5.15
+> > > (please see https://bugzilla.kernel.org/show_bug.cgi?id=215467).
+> > >
+> > > After this commit, the SoC on the affected system cannot enter
+> > > C-states deeper than PC2 while suspended to idle which basically
+> > > defeats the purpose of suspending.
+> > >
+> > > What may be happening is that nvme_disable_prepare_reset() that is not
+> > > called any more in the ndev->nr_host_mem_descs case somehow causes the
+> > > LTR of the device to change to "no requirement" which allows deeper
+> > > C-states to be entered.
+> > >
+> > > Can you have a look at this, please?
+> >
+> > I thought platforms that wanted full device shutdown  behaviour would
+> > always set acpi_storage_d3. Is that not happening here?
+> 
+> Evidently, it isn't.
 
-On Thu, Feb 10, 2022 at 03:29:26PM +0530, Viresh Kumar wrote:
-> It is difficult to find which OPPs are active at the moment, specially
-> if there are multiple OPPs with same frequency available in the device
-> tree (controlled by supported hardware feature).
-> 
-> Expose name of the DT node to find out the exact OPP.
-> 
-> While at it, also expose level field.
-> 
-> Reported-by: Leo Yan <leo.yan@linaro.org>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-
-Thanks a lot for patch.  I verified it:
-
-Tested-by: Leo Yan <leo.yan@linaro.org>
-
-> ---
->  drivers/opp/debugfs.c | 5 +++++
->  drivers/opp/opp.h     | 1 +
->  2 files changed, 6 insertions(+)
-> 
-> diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
-> index 596c185b5dda..b5f2f9f39392 100644
-> --- a/drivers/opp/debugfs.c
-> +++ b/drivers/opp/debugfs.c
-> @@ -10,6 +10,7 @@
->  #include <linux/debugfs.h>
->  #include <linux/device.h>
->  #include <linux/err.h>
-> +#include <linux/of.h>
->  #include <linux/init.h>
->  #include <linux/limits.h>
->  #include <linux/slab.h>
-> @@ -131,9 +132,13 @@ void opp_debug_create_one(struct dev_pm_opp *opp, struct opp_table *opp_table)
->  	debugfs_create_bool("suspend", S_IRUGO, d, &opp->suspend);
->  	debugfs_create_u32("performance_state", S_IRUGO, d, &opp->pstate);
->  	debugfs_create_ulong("rate_hz", S_IRUGO, d, &opp->rate);
-> +	debugfs_create_u32("level", S_IRUGO, d, &opp->level);
->  	debugfs_create_ulong("clock_latency_ns", S_IRUGO, d,
->  			     &opp->clock_latency_ns);
->  
-> +	opp->of_name = of_node_full_name(opp->np);
-> +	debugfs_create_str("of_name", S_IRUGO, d, (char **)&opp->of_name);
-> +
->  	opp_debug_create_supplies(opp, opp_table, d);
->  	opp_debug_create_bw(opp, opp_table, d);
->  
-> diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
-> index 407c3bfe51d9..45e3a55239a1 100644
-> --- a/drivers/opp/opp.h
-> +++ b/drivers/opp/opp.h
-> @@ -96,6 +96,7 @@ struct dev_pm_opp {
->  
->  #ifdef CONFIG_DEBUG_FS
->  	struct dentry *dentry;
-> +	const char *of_name;
->  #endif
->  };
->  
-> -- 
-> 2.31.1.272.g89b43f80a514
-> 
+Apparently it works fine when you disable VMD, so sounds like the
+acpi_storage_d3 is set, but we fail to find the correct acpi companion
+device when it's in a VMD domain.
