@@ -2,45 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA9F44B2EEE
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Feb 2022 21:55:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37B284B2F4E
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Feb 2022 22:23:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238627AbiBKUzh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Feb 2022 15:55:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49260 "EHLO
+        id S235153AbiBKVW3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Feb 2022 16:22:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232904AbiBKUzh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Feb 2022 15:55:37 -0500
+        with ESMTP id S234098AbiBKVW3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Feb 2022 16:22:29 -0500
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC729E
-        for <linux-pm@vger.kernel.org>; Fri, 11 Feb 2022 12:55:35 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A91C58;
+        Fri, 11 Feb 2022 13:22:27 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 196021F47058
+        with ESMTPSA id B2E641F47259
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644612934;
-        bh=1T88aKMftv+IcSARNW07epkwwwoboZk2xrCVKBO8+TA=;
+        s=mail; t=1644614545;
+        bh=zhg73elmp3Pg0ZGoz1DplMfXiUlKZD0Q3+Xrt5B4Q2c=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VqtWQF5YBGzr9gOJR0iOj1rdSqZ9mMYmCscS0vCmH6bhYSTTLphFyi6Vun6SqMMII
-         uXg1/JP8YseH9f0XB4lBRkj+OaI8Fix9NJS8Gwsgu+nN3eHs8YQTgCMno7pFZ64qFL
-         hDo1I96h6ThnGWxFmEQesqCF3gkct8l17p+55HIb5vBdyOiv9DqqN8KsIPw8GfItic
-         gcIGiqlH5AxXRl52RjzrniHENvy6j0/S267Y09yhO1qW+NgcW9Dz5ZB92maPKqcroc
-         LOLVxT2S3Rla+xsj825eyCZXeaecTme6/ejYF3xjp/MEhqbIgCIyVssHutr62eF1Y6
-         7k06FrQBbEbUw==
+        b=AeZw64PpaViLKnSKitd09j+YH41U5fmebt5bmeiFualIPAfsuiD6Y7yHnTVr9SrCN
+         687ios2fcmNMTLNWfCJZFHIKcYT4jzrfKHPJIh0y2ceopeenYpPzx5N00vmUfXB5uf
+         JkEd1NGHxAyLQ6oFHYonclWvOAOqZqvBVNK+bJTvO2pwqGqgfqW7+XFMJPMwxfVl7T
+         xLHBkhBo63CCHBQM3rb5/ENXPG/G3LNDq5kZkr392ucIn7XfdsQeIGFHcSCJG+q58Z
+         4mMPKO9knwDEP+qpXEvGaT8arB6hDdRl086Rtq+XFjxMrqKgAyfokNrSUhoWWIrkCD
+         B5GCPA70Os6/w==
 Received: by mercury (Postfix, from userid 1000)
-        id 29A6A1060908; Fri, 11 Feb 2022 21:55:32 +0100 (CET)
-Date:   Fri, 11 Feb 2022 21:55:32 +0100
+        id C25B31060908; Fri, 11 Feb 2022 22:22:18 +0100 (CET)
+Date:   Fri, 11 Feb 2022 22:22:18 +0100
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     linux-pm@vger.kernel.org
-Subject: Re: [PATCH] power: supply: axp288-charger: Set Vhold to 4.4V
-Message-ID: <20220211205532.fcckg65l25vdc3qm@mercury.elektranox.org>
-References: <20220208125147.512145-1-hdegoede@redhat.com>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ondrej Jirman <megous@megous.com>
+Subject: Re: [PATCH 3/3] power: supply: Add a driver for Injoinic power bank
+ ICs
+Message-ID: <20220211212218.j5r75tyvhirxis4z@mercury.elektranox.org>
+References: <20220129222424.45707-1-samuel@sholland.org>
+ <20220129222424.45707-3-samuel@sholland.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wmwew4sslyhtuqti"
+        protocol="application/pgp-signature"; boundary="w46czuuerlup3l7h"
 Content-Disposition: inline
-In-Reply-To: <20220208125147.512145-1-hdegoede@redhat.com>
+In-Reply-To: <20220129222424.45707-3-samuel@sholland.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
@@ -52,114 +56,118 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---wmwew4sslyhtuqti
+--w46czuuerlup3l7h
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Tue, Feb 08, 2022 at 01:51:47PM +0100, Hans de Goede wrote:
-> The AXP288's recommended and factory default Vhold value (minimum
-> input voltage below which the input current draw will be reduced)
-> is 4.4V. This lines up with other charger IC's such as the TI
-> bq2419x/bq2429x series which use 4.36V or 4.44V.
+On Sat, Jan 29, 2022 at 04:24:24PM -0600, Samuel Holland wrote:
+> This driver supports several chip variants which all share the same I2C
+> register interface. Since the chip will turn off and become inaccessible
+> under conditions outside of software control (e.g. upon button press or
+> input voltage removal), some special handling is needed to delay the
+> initialization of the IC until it is accessible.
 >=20
-> For some reason some BIOS-es initialize Vhold to 4.6V or even 4.7V
-> which combined with the typical voltage drop over typically low
-> wire gauge micro-USB cables leads to the input-current getting
-> capped below 1A (with a 2A capable dedicated charger) based on Vhold.
->=20
-> This leads to slow charging, or even to the device slowly discharging
-> if the device is in heavy use.
->=20
-> As the Linux AXP288 drivers use the builtin BC1.2 charger detection
-> and send the input-current-limit according to the detected charger
-> there really is no reason not to use the recommended 4.4V Vhold.
->=20
-> Set Vhold to 4.4V to fix the slow charging issue on various devices.
->=20
-> There is one exception, the special-case of the HP X2 2-in-1s which
-> combine this BC1.2 capable PMIC with a Type-C port and a 5V/3A factory
-> provided charger with a Type-C plug which does not do BC1.2. These
-> have their input-current-limit hardcoded to 3A (like under Windows)
-> and use a higher Vhold on purpose to limit the current when used
-> with other chargers. To avoid touching Vhold on these HP X2 laptops
-> the code setting Vhold is added to an else branch of the if checking
-> for these models.
->=20
-> Note this also fixes the sofar unused VBUS_ISPOUT_VHOLD_SET_MASK
-> define, which was wrong.
->=20
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
 > ---
 
-Thanks, queued.
+Thanks, driver looks mostly good to me. Just two things:
+
+> [...]
+> +static const struct power_supply_desc ip5xxx_charger_desc =3D {
+> +	.name			=3D "ip5xxx-charger",
+> +	.type			=3D POWER_SUPPLY_TYPE_BATTERY,
+
+POWER_SUPPLY_TYPE_BATTERY is the wrong type for a charger.
+Considering the chips want 5V on the input side as far as
+I could see, a sensible type is POWER_SUPPLY_TYPE_USB.
+
+> +	.properties		=3D ip5xxx_charger_properties,
+> +	.num_properties		=3D ARRAY_SIZE(ip5xxx_charger_properties),
+> +	.get_property		=3D ip5xxx_charger_get_property,
+> +	.set_property		=3D ip5xxx_charger_set_property,
+> +	.property_is_writeable	=3D ip5xxx_charger_property_is_writeable,
+> +};
+> +
+> +static const struct regmap_config ip5xxx_regmap_config =3D {
+> +	.reg_bits		=3D 8,
+> +	.val_bits		=3D 8,
+> +	.max_register		=3D IP5XXX_BATOCV_DAT1,
+> +};
+> +
+> +static int ip5xxx_power_probe(struct i2c_client *client)
+> +{
+> +	struct power_supply_config psy_cfg =3D {};
+> +	struct device *dev =3D &client->dev;
+> +	struct power_supply *psy;
+> +	struct ip5xxx *ip5xxx;
+> +
+> +	ip5xxx =3D devm_kzalloc(dev, sizeof(*ip5xxx), GFP_KERNEL);
+
+if (!ip5xxx)
+    return -ENOMEM;
 
 -- Sebastian
 
->  drivers/power/supply/axp288_charger.c | 14 ++++++++++++--
->  1 file changed, 12 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/power/supply/axp288_charger.c b/drivers/power/supply=
-/axp288_charger.c
-> index ec41f6cd3f93..c498e62ab4e2 100644
-> --- a/drivers/power/supply/axp288_charger.c
-> +++ b/drivers/power/supply/axp288_charger.c
-> @@ -42,11 +42,11 @@
->  #define VBUS_ISPOUT_CUR_LIM_1500MA	0x1	/* 1500mA */
->  #define VBUS_ISPOUT_CUR_LIM_2000MA	0x2	/* 2000mA */
->  #define VBUS_ISPOUT_CUR_NO_LIM		0x3	/* 2500mA */
-> -#define VBUS_ISPOUT_VHOLD_SET_MASK	0x31
-> +#define VBUS_ISPOUT_VHOLD_SET_MASK	0x38
->  #define VBUS_ISPOUT_VHOLD_SET_BIT_POS	0x3
->  #define VBUS_ISPOUT_VHOLD_SET_OFFSET	4000	/* 4000mV */
->  #define VBUS_ISPOUT_VHOLD_SET_LSB_RES	100	/* 100mV */
-> -#define VBUS_ISPOUT_VHOLD_SET_4300MV	0x3	/* 4300mV */
-> +#define VBUS_ISPOUT_VHOLD_SET_4400MV	0x4	/* 4400mV */
->  #define VBUS_ISPOUT_VBUS_PATH_DIS	BIT(7)
-> =20
->  #define CHRG_CCCV_CC_MASK		0xf		/* 4 bits */
-> @@ -769,6 +769,16 @@ static int charger_init_hw_regs(struct axp288_chrg_i=
-nfo *info)
->  		ret =3D axp288_charger_vbus_path_select(info, true);
->  		if (ret < 0)
->  			return ret;
-> +	} else {
-> +		/* Set Vhold to the factory default / recommended 4.4V */
-> +		val =3D VBUS_ISPOUT_VHOLD_SET_4400MV << VBUS_ISPOUT_VHOLD_SET_BIT_POS;
-> +		ret =3D regmap_update_bits(info->regmap, AXP20X_VBUS_IPSOUT_MGMT,
-> +					 VBUS_ISPOUT_VHOLD_SET_MASK, val);
-> +		if (ret < 0) {
-> +			dev_err(&info->pdev->dev, "register(%x) write error(%d)\n",
-> +				AXP20X_VBUS_IPSOUT_MGMT, ret);
-> +			return ret;
-> +		}
->  	}
-> =20
->  	/* Read current charge voltage and current limit */
+> +	ip5xxx->regmap =3D devm_regmap_init_i2c(client, &ip5xxx_regmap_config);
+> +	if (IS_ERR(ip5xxx->regmap))
+> +		return PTR_ERR(ip5xxx->regmap);
+> +
+> +	psy_cfg.of_node =3D dev->of_node;
+> +	psy_cfg.drv_data =3D ip5xxx;
+> +
+> +	psy =3D devm_power_supply_register(dev, &ip5xxx_charger_desc, &psy_cfg);
+> +	if (IS_ERR(psy))
+> +		return PTR_ERR(psy);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id ip5xxx_power_of_match[] =3D {
+> +	{ .compatible =3D "injoinic,ip5108" },
+> +	{ .compatible =3D "injoinic,ip5109" },
+> +	{ .compatible =3D "injoinic,ip5207" },
+> +	{ .compatible =3D "injoinic,ip5209" },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, ip5xxx_power_of_match);
+> +
+> +static struct i2c_driver ip5xxx_power_driver =3D {
+> +	.probe_new	=3D ip5xxx_power_probe,
+> +	.driver		=3D {
+> +		.name		=3D "ip5xxx-power",
+> +		.of_match_table	=3D ip5xxx_power_of_match,
+> +	}
+> +};
+> +module_i2c_driver(ip5xxx_power_driver);
+> +
+> +MODULE_AUTHOR("Samuel Holland <samuel@sholland.org>");
+> +MODULE_DESCRIPTION("Injoinic IP5xxx power bank IC driver");
+> +MODULE_LICENSE("GPL");
 > --=20
 > 2.33.1
 >=20
 
---wmwew4sslyhtuqti
+--w46czuuerlup3l7h
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmIGzUMACgkQ2O7X88g7
-+pr6+Q//c2ITP9JVen6HRIIxvXotgqCglJSv6gZHwado/CXnFOj9SSmE2FRoL4t+
-bUlOA+DLs69dMjPNwuFzHWWYKqiIip3CCqNY9zKGndwAkeohShs+XjdQiJfU+FXO
-5NzgBTKcKQfuG6cSUj2tiPp+fEZqarkyJeTgCeawNIiwUI1LQve7FqL9BC33ZID9
-MHNkUhvTVDKD3BVx4dGWTTXs/uWrLCaeraOSFyrhmIEzCT50OIdNqhWMENa2o8hP
-2tXePwhMH9nugtVR/sWpDLczoG0ZhNRZpy+3MPfv72Bo098bDmyT2xdpgXKYq9g1
-zPkGYzKAR9quIIboHJeRe1WAm2ZCZKdntLbUdtJvP1FgC2vh+cYOdZz0pqvN0WUN
-xT5EXn6Y1j0pOj1Vxgl1DIlVL2SRH/mqjGI5WNS6YRuADBnFxf06k4FSpqQJ6ZRD
-qF3nPFTkVUqvQTL93Xh9dbI3DQGoS5Hixnc2aR7W/g2bO0c1M0OOZuEKC282MsYv
-7h9PsKWUK0WUu/IhPJrHOHND+6O45n9Gdrdx0tLFqHWwKF103sG7kAxF8JnBegYI
-83qOYDfKvLJr1BNOjhNgdSFh2e0V89G4tKWaJUSZM4fyMaV0cJtSso/KRRTk/O/0
-aXwoE2qU0zxmYLjLLEfLFjR53l6hPQiqgIvOwqxXgH4mgifJ1CQ=
-=Efrt
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmIG04cACgkQ2O7X88g7
++pqADRAAmfJr6KcMlU8rm9eRkm1y4LoGuphofrElvMTTkElfRIHFHzXgOTqV6tlw
+KcHvGJhpPM7OoC9k5mq8o5DV6hFGxEuVGfE7AHVzT/gcW3rzLaCjpS30JvMw9tZC
+OuowvrxMfVU1qBXE4gHSUYopsj2E4nlTqAs503jRRbYIPyYPocroaTQ2nf9zK2X/
+RG1y1bRZT/rO0PmjkNXtLvwMgdUoT4Ay2N/DJwuHzd7AIElzTkKF2QGnrm/a3w+e
+G3yMLRI7pDSfXW+jdG5l53fgqwsRmMoSnRW0MRdSNgebm9jZoul7qxyoGg/ebBbw
+loz2iNS0lKr9sOxVf9Qh6xp7vyj9sC1af+4EcduO/6aThcIB3k+/YAiTwqeaSti2
+tjw5G23w8/OrTjNYG/XwE2hwNXbg4e5pLLGe0qvUsFQEpzfmJ7i5Of+0o5rcZUvH
+gI7zohIr3YB8ZmQtDeU8RVukCwzNqJs6S6x6PuEzvxdItg3jR9SD5ruRoDolydy+
+RVWV5BR8iKuP+r9iFV/lypy5NNt0wtL/tz83tPYPsNv30jHukQ4vI2k+eXnUzL4P
+xWRa5+y+mXMFGuGlLSURYEy5PJgba1lgXhGV/pPu1vkftGoxUkEGuEDyD1HgRkRR
+U5wk6VedSCBAsY/M174Kc1rHO81dgfhNv/BxAZWQLTfQFrm+Kf8=
+=Gyx3
 -----END PGP SIGNATURE-----
 
---wmwew4sslyhtuqti--
+--w46czuuerlup3l7h--
