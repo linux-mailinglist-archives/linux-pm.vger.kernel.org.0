@@ -2,116 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD51D4B2B1B
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Feb 2022 17:59:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB8D94B2B75
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Feb 2022 18:12:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351906AbiBKQ6F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Feb 2022 11:58:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55550 "EHLO
+        id S235493AbiBKRMi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Feb 2022 12:12:38 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345503AbiBKQ5x (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Feb 2022 11:57:53 -0500
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C3F1A1;
-        Fri, 11 Feb 2022 08:57:52 -0800 (PST)
-Received: by mail-yb1-f179.google.com with SMTP id p5so26544765ybd.13;
-        Fri, 11 Feb 2022 08:57:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=g51Fp1R3lRSibqJYvJdP7FqiSwiq70ebeFxSVUv1uco=;
-        b=q6uspWzv6EPpmaX4278d6mlsG0krRDSY3XJUqPTQbGpjv92n5mE1e9kZ58emFBffjo
-         3Yt4yJHzwwnjxBJZK9jbMZzqkf+oZYVWkKaZAxuJ+CfDsD9YjXf8ucEDQ7uRIczoevN9
-         QHpxrpQG6Ga58zW/jLUS/3NaPSOLDO3iGEG3Q8JWKI6/9wFMt08BD+OBLM/3pBG2ogDv
-         rtKbyf8kMDRAewwopwe8jGRld9zZvO9BUPESG2KdDswhAnL8gyWG0a5IdG+AbC1Buyea
-         /kmBzabcornejpPSjlmrFbv1xc2KzBedH4Q/vlKXoP1l5qbl1RUKzMnDFi9uJZzzeo70
-         +nfA==
-X-Gm-Message-State: AOAM531DTjvQuEpUhwa6hHndKJ9ne6MWaN9HxDsVEJu2d+6a4efVy3kW
-        QFwlVWh8HAT5Tg58/eRO4es7/bPliRLKezZZl/0=
-X-Google-Smtp-Source: ABdhPJycPb6bIjy4upo9Z/7f3JkChIuixCqNAyCDjPOHdQl4PLLD7bOGT3cWtGGJq82ABnpUxAr7xjC9AjJjsUSFKsg=
-X-Received: by 2002:a81:8b4e:: with SMTP id e14mr2741411ywk.301.1644598671674;
- Fri, 11 Feb 2022 08:57:51 -0800 (PST)
+        with ESMTP id S242158AbiBKRMh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Feb 2022 12:12:37 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B838DBD6;
+        Fri, 11 Feb 2022 09:12:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=IAJVndvC2D0wZes8TKvqkXkv156AHKT6iLNSSoGjHCM=; b=IBcTNrW3dnUQdfHlL1i4TFT2FK
+        ZzM4dp4CkSwhVVCIctn7UWQjm5pdv9cIfUSyg0EQvE7zsrj2NVImDvYrymK6ZBMhpzYLa5V+5A29Q
+        T+rjHzYt64BjaVY2UqPZLru6D06FMatJz0hVRUnd1M1EiHNKPk9u7+5wbt9tWRbcEHFBZHAFfLYn0
+        fg9XyyrDPOLDVNgRPk8afJnWNfgWS39QzcTD2X7nD4APdUJbqKNskDZVptut1a5NJhV8vhnooQsd9
+        UoLAFlG94O7uOi/9eKrciA2l4KkJzk/Frz1MkO5ojeamnBdAnVEtZqYStrop2H4HC1QF0A6l3VEoo
+        N3Fax3Qg==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nIZT4-00AaM7-GV; Fri, 11 Feb 2022 17:12:22 +0000
+Message-ID: <376dd5c9-199c-25af-d431-d1f0541f08c0@infradead.org>
+Date:   Fri, 11 Feb 2022 09:12:18 -0800
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 11 Feb 2022 17:57:41 +0100
-Message-ID: <CAJZ5v0i=QT9GjEgWcqT-+CUKL=aScS3S6NZLUDznN-fNBahVYw@mail.gmail.com>
-Subject: [GIT PULL] ACPI fixes for v5.17-rc4
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH] PM: cleanup comments
+Content-Language: en-US
+To:     trix@redhat.com, rafael@kernel.org, len.brown@intel.com,
+        pavel@ucw.cz, gregkh@linuxfoundation.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220211161027.2516447-1-trix@redhat.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220211161027.2516447-1-trix@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Linus,
-
-Please pull from the tag
-
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- acpi-5.17-rc4
-
-with top-most commit 27a98fe60b033dfce95361abe368750994b8a78e
-
- Merge branch 'acpi-x86'
-
-on top of commit dfd42facf1e4ada021b939b4e19c935dcdd55566
-
- Linux 5.17-rc3
-
-to receive ACPI fixes for 5.17-rc4.
-
-These revert two commits that turned out to be problematic and fix
-two issues related to wakeup from suspend-to-idle on x86.
-
-Specifics:
-
- - Revert a recent change that attempted to avoid issues with
-   conflicting address ranges during PCI initialization, because it
-   turned out to introduce a regression (Hans de Goede).
-
- - Revert a change that limited EC GPE wakeups from suspend-to-idle
-   to systems based on Intel hardware, because it turned out that
-   systems based on hardware from other vendors depended on that
-   functionality too (Mario Limonciello).
-
- - Fix two issues related to the handling of wakeup interrupts and
-   wakeup events signaled through the EC GPE during suspend-to-idle
-   on x86 (Rafael Wysocki).
-
-Thanks!
 
 
----------------
+On 2/11/22 08:10, trix@redhat.com wrote:
+> From: Tom Rix <trix@redhat.com>
+> 
+> Remove the second 'the'.
+> Replace the second 'of' with 'the'.
+> Replace 'couter' with 'counter'.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Hans de Goede (1):
-      x86/PCI: revert "Ignore E820 reservations for bridge windows on
-newer systems"
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
 
-Mario Limonciello (1):
-      ACPI: PM: Revert "Only mark EC GPE for wakeup on Intel systems"
+Thanks.
 
-Rafael J. Wysocki (2):
-      ACPI: PM: s2idle: Cancel wakeup before dispatching EC GPE
-      PM: s2idle: ACPI: Fix wakeup interrupts handling
+> ---
+>  drivers/base/power/wakeirq.c | 2 +-
+>  drivers/base/power/wakeup.c  | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/base/power/wakeirq.c b/drivers/base/power/wakeirq.c
+> index 0004db4a9d3b..d487a6bac630 100644
+> --- a/drivers/base/power/wakeirq.c
+> +++ b/drivers/base/power/wakeirq.c
+> @@ -289,7 +289,7 @@ EXPORT_SYMBOL_GPL(dev_pm_disable_wake_irq);
+>   *
+>   * Enables wakeirq conditionally. We need to enable wake-up interrupt
+>   * lazily on the first rpm_suspend(). This is needed as the consumer device
+> - * starts in RPM_SUSPENDED state, and the the first pm_runtime_get() would
+> + * starts in RPM_SUSPENDED state, and the first pm_runtime_get() would
+>   * otherwise try to disable already disabled wakeirq. The wake-up interrupt
+>   * starts disabled with IRQ_NOAUTOEN set.
+>   *
+> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+> index 8666590201c9..a57d469676ca 100644
+> --- a/drivers/base/power/wakeup.c
+> +++ b/drivers/base/power/wakeup.c
+> @@ -587,7 +587,7 @@ static bool wakeup_source_not_registered(struct wakeup_source *ws)
+>   * @ws: Wakeup source to handle.
+>   *
+>   * Update the @ws' statistics and, if @ws has just been activated, notify the PM
+> - * core of the event by incrementing the counter of of wakeup events being
+> + * core of the event by incrementing the counter of the wakeup events being
+>   * processed.
+>   */
+>  static void wakeup_source_activate(struct wakeup_source *ws)
+> @@ -733,7 +733,7 @@ static void wakeup_source_deactivate(struct wakeup_source *ws)
+>  
+>  	/*
+>  	 * Increment the counter of registered wakeup events and decrement the
+> -	 * couter of wakeup events in progress simultaneously.
+> +	 * counter of wakeup events in progress simultaneously.
+>  	 */
+>  	cec = atomic_add_return(MAX_IN_PROGRESS, &combined_event_count);
+>  	trace_wakeup_source_deactivate(ws->name, cec);
 
----------------
-
- arch/x86/kernel/resource.c  | 23 +----------------------
- drivers/acpi/ec.c           | 10 ++++++++++
- drivers/acpi/sleep.c        | 15 +++++----------
- drivers/acpi/x86/s2idle.c   | 12 ++++--------
- drivers/base/power/wakeup.c | 41 ++++++++++++++++++++++++++++++++++-------
- include/linux/suspend.h     |  4 ++--
- kernel/power/main.c         |  5 ++++-
- kernel/power/process.c      |  2 +-
- kernel/power/suspend.c      |  2 --
- 9 files changed, 61 insertions(+), 53 deletions(-)
+-- 
+~Randy
