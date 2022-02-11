@@ -2,50 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25F384B2E33
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Feb 2022 21:06:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C15944B2E2C
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Feb 2022 21:06:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233679AbiBKUEK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Feb 2022 15:04:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48758 "EHLO
+        id S1353170AbiBKUF1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Feb 2022 15:05:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbiBKUEK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Feb 2022 15:04:10 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDD2CE5;
-        Fri, 11 Feb 2022 12:04:08 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 22CF41F47303
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644609847;
-        bh=Lhlo5FXvEuuu9+EoZdyyuUPUSsCVcqSG3ADgLywoNP4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=k1+2lSQK+NA1OpHB//GQxUR/M8hwjby7c4CMsvK1Vr1jqe8uw5Ses8LLW0nwqfC1a
-         daOqTa+QQw2DpkkiYKTJaG7ykCCylSiYrrn218fszvKCFWCgVOAeQ+AKBUplnGaGaF
-         n8DJsIWBjSr3v32WTfnFNJLIcw4pIS0Ey/4ELVv6u27qa7Sg16VICk37bzReS+ZQXr
-         FtcrWp7Dp09NCi7R3wjMD9H59dG1y0CYlqwUDeEFVCJ60kQmcVJT8oxuFUKIYZCMxM
-         geWPX0EwlfgNunfpUfN+zigxy6V7JA92fnKjpLtLPYekDoMwUEV7tAw92sGc8ec6bO
-         fnQNbcWnmBkrA==
-Received: by mercury (Postfix, from userid 1000)
-        id 5AF351060908; Fri, 11 Feb 2022 21:04:04 +0100 (CET)
-Date:   Fri, 11 Feb 2022 21:04:04 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH] power: supply: ab8500: Fix memory leak in
- ab8500_fg_sysfs_init
-Message-ID: <20220211200404.ywlfdj2pybtnmezp@mercury.elektranox.org>
-References: <20220124131346.12571-1-linmq006@gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bqtyul25znt7zyce"
-Content-Disposition: inline
-In-Reply-To: <20220124131346.12571-1-linmq006@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        with ESMTP id S1353167AbiBKUFZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Feb 2022 15:05:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C49CE5;
+        Fri, 11 Feb 2022 12:05:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EA191B82C99;
+        Fri, 11 Feb 2022 20:05:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9D9DCC340E9;
+        Fri, 11 Feb 2022 20:05:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644609921;
+        bh=bKbqNxmW+7k+RCMvj4vtfijICXlc4s2mWU4IT47p5F8=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=BHZ3PUEeRAK4hXHk5CMe5sRV31Xf7FJxVLqwCjtOp5/rB2Ws9UeLTUVE7otm5MwAq
+         KPM0DCLw20iJjxWZhjXpT/EnPn9SOR+VerO9994TNi3EwmPf1WYl4tO+OecyHBnzCE
+         0XqzfbSdT3wtVOnKfvnm7asJVkFMXFs8TizFwmHS0rzJxwpe3io6+wE1gwx/ND6tnR
+         agCjNEKDrPWYNJ08PcmMv9prWEVdKonw2ZPUA6IJWNMjzObOytx+54gqBKci1t2J9g
+         bjE7kfKoscI43U1Epk4ukpYHBGyHKOwmEx295k6zDC3vLre9sEa/mji384HtthjyHf
+         68S9KK4r3jZ5Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8A9ECE5D09D;
+        Fri, 11 Feb 2022 20:05:21 +0000 (UTC)
+Subject: Re: [GIT PULL] ACPI fixes for v5.17-rc4
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0i=QT9GjEgWcqT-+CUKL=aScS3S6NZLUDznN-fNBahVYw@mail.gmail.com>
+References: <CAJZ5v0i=QT9GjEgWcqT-+CUKL=aScS3S6NZLUDznN-fNBahVYw@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0i=QT9GjEgWcqT-+CUKL=aScS3S6NZLUDznN-fNBahVYw@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-5.17-rc4
+X-PR-Tracked-Commit-Id: 27a98fe60b033dfce95361abe368750994b8a78e
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 883fd0aba1ae52b800081b9aa9ba9edfc88f36b0
+Message-Id: <164460992156.1412.11559056276253228923.pr-tracker-bot@kernel.org>
+Date:   Fri, 11 Feb 2022 20:05:21 +0000
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,81 +63,15 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+The pull request you sent on Fri, 11 Feb 2022 17:57:41 +0100:
 
---bqtyul25znt7zyce
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-5.17-rc4
 
-[+cc Linus Walleij]
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/883fd0aba1ae52b800081b9aa9ba9edfc88f36b0
 
-Hi,
+Thank you!
 
-On Mon, Jan 24, 2022 at 01:13:46PM +0000, Miaoqian Lin wrote:
-> kobject_init_and_add() takes reference even when it fails.
-> According to the doc of kobject_init_and_add()=EF=BC=9A
->=20
->    If this function returns an error, kobject_put() must be called to
->    properly clean up the memory associated with the object.
->=20
-> Fix memory leak by calling kobject_put().
->=20
-> Fixes: 8c0984e5a753 ("power: move power supply drivers to power/supply")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
-
-Thanks, queued power-supply's for-next branch.
-
-Linus, if I'm not mistaken the custom sysfs ABI (i.e. everything related
-to ab8500_fg_sysfs_init() can just be removed since the same thing is
-already exposed standardized via POWER_SUPPLY_PROP_CHARGE_FULL and
-POWER_SUPPLY_PROP_CHARGE_NOW?
-
--- Sebastian
-
->  drivers/power/supply/ab8500_fg.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab85=
-00_fg.c
-> index 05fe9724ba50..57799a8079d4 100644
-> --- a/drivers/power/supply/ab8500_fg.c
-> +++ b/drivers/power/supply/ab8500_fg.c
-> @@ -2545,8 +2545,10 @@ static int ab8500_fg_sysfs_init(struct ab8500_fg *=
-di)
->  	ret =3D kobject_init_and_add(&di->fg_kobject,
->  		&ab8500_fg_ktype,
->  		NULL, "battery");
-> -	if (ret < 0)
-> +	if (ret < 0) {
-> +		kobject_put(&di->fg_kobject);
->  		dev_err(di->dev, "failed to create sysfs entry\n");
-> +	}
-> =20
->  	return ret;
->  }
-> --=20
-> 2.17.1
->=20
-
---bqtyul25znt7zyce
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmIGwSkACgkQ2O7X88g7
-+ppLShAAgoQkT+RXXt/mq+KUBF+YKmT3HoOdXD09rPwj1OdjSALvDF4Lg1Gc2gDE
-GsbtG5U7TszoZ7IP9VKqFC57BO361Qm2RH/oQe9vKIUbpoIAUM9JuZKdSlKF2K21
-8N17zJ9kBGrafwdkNTEWOLymedBQswealg3l1epxxRUY2Q2qv9v820MkCtEUJVPB
-9eX4O237rz0/nGKp7VHo0dBWgEilt8NWq6KE8qqIdotW22srMnc+XNO3p/8nRggl
-KQ30ZJlEzHr0fLGuilBIlwea1NaBNydxOqoxtD7BIWyMFXICRlVHll+X4Qi/cJyZ
-FgW3qOmPMSNPvSBVgJHu920Q1xDEq3wHDcCIsnGae8v3sTWmZRrsPGVeExiGLaCR
-b9wE58gLR8FPoyQI8Gl67lMu1S2DhJnd27l2CeZCt5Mi9fokZ/9H0FCaMnqEQFLW
-Y/ED8rjVOw0At4vKwSmJKIw3K+xbM7HpYtaPvU7Bm3BzD8/Jb35Rh45FfUEkX0wU
-WyosCfbOtVB5gd0nyNB853chzWKN5epIdZaT19zDxE3DLid/S1qK7k8kVQKMoFg6
-lcg2Oep/wOvs14oXQ4vDKzN/F+qqA26uIRfA6zeNO/dOIwTvZO28JkwHFsj1vO9g
-6HxITI69P9yWJ65Ih2TcjnOazkb1lcgHL6v6rliPPxIpMARzn84=
-=z8nJ
------END PGP SIGNATURE-----
-
---bqtyul25znt7zyce--
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
