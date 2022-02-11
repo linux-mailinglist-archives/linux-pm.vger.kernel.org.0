@@ -2,52 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37B284B2F4E
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Feb 2022 22:23:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3702F4B2F67
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Feb 2022 22:32:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235153AbiBKVW3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Feb 2022 16:22:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45552 "EHLO
+        id S1353718AbiBKVct (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Feb 2022 16:32:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234098AbiBKVW3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Feb 2022 16:22:29 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A91C58;
-        Fri, 11 Feb 2022 13:22:27 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id B2E641F47259
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644614545;
-        bh=zhg73elmp3Pg0ZGoz1DplMfXiUlKZD0Q3+Xrt5B4Q2c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AeZw64PpaViLKnSKitd09j+YH41U5fmebt5bmeiFualIPAfsuiD6Y7yHnTVr9SrCN
-         687ios2fcmNMTLNWfCJZFHIKcYT4jzrfKHPJIh0y2ceopeenYpPzx5N00vmUfXB5uf
-         JkEd1NGHxAyLQ6oFHYonclWvOAOqZqvBVNK+bJTvO2pwqGqgfqW7+XFMJPMwxfVl7T
-         xLHBkhBo63CCHBQM3rb5/ENXPG/G3LNDq5kZkr392ucIn7XfdsQeIGFHcSCJG+q58Z
-         4mMPKO9knwDEP+qpXEvGaT8arB6hDdRl086Rtq+XFjxMrqKgAyfokNrSUhoWWIrkCD
-         B5GCPA70Os6/w==
-Received: by mercury (Postfix, from userid 1000)
-        id C25B31060908; Fri, 11 Feb 2022 22:22:18 +0100 (CET)
-Date:   Fri, 11 Feb 2022 22:22:18 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ondrej Jirman <megous@megous.com>
-Subject: Re: [PATCH 3/3] power: supply: Add a driver for Injoinic power bank
- ICs
-Message-ID: <20220211212218.j5r75tyvhirxis4z@mercury.elektranox.org>
-References: <20220129222424.45707-1-samuel@sholland.org>
- <20220129222424.45707-3-samuel@sholland.org>
+        with ESMTP id S1353697AbiBKVct (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Feb 2022 16:32:49 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC584C60
+        for <linux-pm@vger.kernel.org>; Fri, 11 Feb 2022 13:32:46 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id j2so28901412ybu.0
+        for <linux-pm@vger.kernel.org>; Fri, 11 Feb 2022 13:32:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nlMNdPedHPycBXQ85x4bFGxtLOLbRfBW7nz64ipbjBY=;
+        b=R7+8WmZ8z5W8QeBvnhcVZ9ocPoXPI4IfaWnDSFcyXbagwpzAg5QoJWGBcQQg4gg9fN
+         37CodB/qEUvKwV+uvKXESNth5g8mJ0DTtf5mxdzJeJcXuwJmbZ/axGotqDdWbrFB3UR+
+         S6nOx8DCf7bOcLL5M9iyQv/IqY0FCH3Ow15F0CVHiOvYKlSeAEXYYh1hvgGdmZsxdDK8
+         udCxlM79RY0G3/7HTCxNPYex8uJf18qSsKx+od7ygwGnPTymwfUW/1V7JM0R5u4FS3DV
+         c/XWdiOymV3d2+e7RWsbqDAm7omrwEeZo88/Nw/nRfTU0DO3vIBqwN0S282EFs5il9Ma
+         YFVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nlMNdPedHPycBXQ85x4bFGxtLOLbRfBW7nz64ipbjBY=;
+        b=49cJWLWHxxrQ8ALMQQ7kVpyGczFtOIYJdNaUrxhLoKV9hZClDj6CZ3Qdpa+zF5icap
+         lPIo4hQ608DpI9VB2Rl0K2sj48Q2G6hVJ+tYiIxIfPd56T9R427i3KEbJGNzievIJ1ei
+         k9vsaYalBuAoAolvn1/7cOAIHL9ogaBMWqTGR1zlZ8c4KgY6z9yqskRmuEdpCc6If9Zv
+         /12c7Zz3W97RQhUDVl2w4Zto9bnoWHnAwE5IB5PBgks5HEhaZ1Li1Gf04rlXl+dBSiTI
+         NvuFS/I1T46V9efeALTW6r66wKKqmuGwDigijvb0K42bgzOSSS9jXXQFuszmzgUilOXU
+         DegA==
+X-Gm-Message-State: AOAM532vQqrf2zYzLYpxXz74eqByXoiZmVjNYYxAmi+NxkB6/zJQGJZi
+        JkHy6HSODn4wHSj4+RqQKQtpv6Mvc41emhHaU799Hg==
+X-Google-Smtp-Source: ABdhPJwxt/ccwzQXgeYQSdW1n8H1uNZN4bQTPzzBDg4pfrNxnshkiT6JI3ZaakqbnLo8Pph2JwGiM91mGnY6+KkRScA=
+X-Received: by 2002:a25:684a:: with SMTP id d71mr3340888ybc.284.1644615166048;
+ Fri, 11 Feb 2022 13:32:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="w46czuuerlup3l7h"
-Content-Disposition: inline
-In-Reply-To: <20220129222424.45707-3-samuel@sholland.org>
+References: <20220124131346.12571-1-linmq006@gmail.com> <20220211200404.ywlfdj2pybtnmezp@mercury.elektranox.org>
+In-Reply-To: <20220211200404.ywlfdj2pybtnmezp@mercury.elektranox.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 11 Feb 2022 22:32:34 +0100
+Message-ID: <CACRpkdbOdVbsFPEJ3vScG83Uyd8cGYNcRU9o11WHbjkZ07neNg@mail.gmail.com>
+Subject: Re: [PATCH] power: supply: ab8500: Fix memory leak in ab8500_fg_sysfs_init
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Miaoqian Lin <linmq006@gmail.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,119 +64,22 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Fri, Feb 11, 2022 at 9:04 PM Sebastian Reichel
+<sebastian.reichel@collabora.com> wrote:
 
---w46czuuerlup3l7h
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> > Fixes: 8c0984e5a753 ("power: move power supply drivers to power/supply")
+> > Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> > ---
+>
+> Thanks, queued power-supply's for-next branch.
+>
+> Linus, if I'm not mistaken the custom sysfs ABI (i.e. everything related
+> to ab8500_fg_sysfs_init() can just be removed since the same thing is
+> already exposed standardized via POWER_SUPPLY_PROP_CHARGE_FULL and
+> POWER_SUPPLY_PROP_CHARGE_NOW?
 
-Hi,
+Yes, I delete other weird custom sysfs, so I'll cook a patch to
+get rid of this too.
 
-On Sat, Jan 29, 2022 at 04:24:24PM -0600, Samuel Holland wrote:
-> This driver supports several chip variants which all share the same I2C
-> register interface. Since the chip will turn off and become inaccessible
-> under conditions outside of software control (e.g. upon button press or
-> input voltage removal), some special handling is needed to delay the
-> initialization of the IC until it is accessible.
->=20
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
-
-Thanks, driver looks mostly good to me. Just two things:
-
-> [...]
-> +static const struct power_supply_desc ip5xxx_charger_desc =3D {
-> +	.name			=3D "ip5xxx-charger",
-> +	.type			=3D POWER_SUPPLY_TYPE_BATTERY,
-
-POWER_SUPPLY_TYPE_BATTERY is the wrong type for a charger.
-Considering the chips want 5V on the input side as far as
-I could see, a sensible type is POWER_SUPPLY_TYPE_USB.
-
-> +	.properties		=3D ip5xxx_charger_properties,
-> +	.num_properties		=3D ARRAY_SIZE(ip5xxx_charger_properties),
-> +	.get_property		=3D ip5xxx_charger_get_property,
-> +	.set_property		=3D ip5xxx_charger_set_property,
-> +	.property_is_writeable	=3D ip5xxx_charger_property_is_writeable,
-> +};
-> +
-> +static const struct regmap_config ip5xxx_regmap_config =3D {
-> +	.reg_bits		=3D 8,
-> +	.val_bits		=3D 8,
-> +	.max_register		=3D IP5XXX_BATOCV_DAT1,
-> +};
-> +
-> +static int ip5xxx_power_probe(struct i2c_client *client)
-> +{
-> +	struct power_supply_config psy_cfg =3D {};
-> +	struct device *dev =3D &client->dev;
-> +	struct power_supply *psy;
-> +	struct ip5xxx *ip5xxx;
-> +
-> +	ip5xxx =3D devm_kzalloc(dev, sizeof(*ip5xxx), GFP_KERNEL);
-
-if (!ip5xxx)
-    return -ENOMEM;
-
--- Sebastian
-
-> +	ip5xxx->regmap =3D devm_regmap_init_i2c(client, &ip5xxx_regmap_config);
-> +	if (IS_ERR(ip5xxx->regmap))
-> +		return PTR_ERR(ip5xxx->regmap);
-> +
-> +	psy_cfg.of_node =3D dev->of_node;
-> +	psy_cfg.drv_data =3D ip5xxx;
-> +
-> +	psy =3D devm_power_supply_register(dev, &ip5xxx_charger_desc, &psy_cfg);
-> +	if (IS_ERR(psy))
-> +		return PTR_ERR(psy);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id ip5xxx_power_of_match[] =3D {
-> +	{ .compatible =3D "injoinic,ip5108" },
-> +	{ .compatible =3D "injoinic,ip5109" },
-> +	{ .compatible =3D "injoinic,ip5207" },
-> +	{ .compatible =3D "injoinic,ip5209" },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, ip5xxx_power_of_match);
-> +
-> +static struct i2c_driver ip5xxx_power_driver =3D {
-> +	.probe_new	=3D ip5xxx_power_probe,
-> +	.driver		=3D {
-> +		.name		=3D "ip5xxx-power",
-> +		.of_match_table	=3D ip5xxx_power_of_match,
-> +	}
-> +};
-> +module_i2c_driver(ip5xxx_power_driver);
-> +
-> +MODULE_AUTHOR("Samuel Holland <samuel@sholland.org>");
-> +MODULE_DESCRIPTION("Injoinic IP5xxx power bank IC driver");
-> +MODULE_LICENSE("GPL");
-> --=20
-> 2.33.1
->=20
-
---w46czuuerlup3l7h
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmIG04cACgkQ2O7X88g7
-+pqADRAAmfJr6KcMlU8rm9eRkm1y4LoGuphofrElvMTTkElfRIHFHzXgOTqV6tlw
-KcHvGJhpPM7OoC9k5mq8o5DV6hFGxEuVGfE7AHVzT/gcW3rzLaCjpS30JvMw9tZC
-OuowvrxMfVU1qBXE4gHSUYopsj2E4nlTqAs503jRRbYIPyYPocroaTQ2nf9zK2X/
-RG1y1bRZT/rO0PmjkNXtLvwMgdUoT4Ay2N/DJwuHzd7AIElzTkKF2QGnrm/a3w+e
-G3yMLRI7pDSfXW+jdG5l53fgqwsRmMoSnRW0MRdSNgebm9jZoul7qxyoGg/ebBbw
-loz2iNS0lKr9sOxVf9Qh6xp7vyj9sC1af+4EcduO/6aThcIB3k+/YAiTwqeaSti2
-tjw5G23w8/OrTjNYG/XwE2hwNXbg4e5pLLGe0qvUsFQEpzfmJ7i5Of+0o5rcZUvH
-gI7zohIr3YB8ZmQtDeU8RVukCwzNqJs6S6x6PuEzvxdItg3jR9SD5ruRoDolydy+
-RVWV5BR8iKuP+r9iFV/lypy5NNt0wtL/tz83tPYPsNv30jHukQ4vI2k+eXnUzL4P
-xWRa5+y+mXMFGuGlLSURYEy5PJgba1lgXhGV/pPu1vkftGoxUkEGuEDyD1HgRkRR
-U5wk6VedSCBAsY/M174Kc1rHO81dgfhNv/BxAZWQLTfQFrm+Kf8=
-=Gyx3
------END PGP SIGNATURE-----
-
---w46czuuerlup3l7h--
+Yours,
+Linus Walleij
