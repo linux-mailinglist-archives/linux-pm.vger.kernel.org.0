@@ -2,49 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB8D94B2B75
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Feb 2022 18:12:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30A654B2D12
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Feb 2022 19:44:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235493AbiBKRMi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Feb 2022 12:12:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35816 "EHLO
+        id S235398AbiBKSn7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Feb 2022 13:43:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242158AbiBKRMh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Feb 2022 12:12:37 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B838DBD6;
-        Fri, 11 Feb 2022 09:12:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=IAJVndvC2D0wZes8TKvqkXkv156AHKT6iLNSSoGjHCM=; b=IBcTNrW3dnUQdfHlL1i4TFT2FK
-        ZzM4dp4CkSwhVVCIctn7UWQjm5pdv9cIfUSyg0EQvE7zsrj2NVImDvYrymK6ZBMhpzYLa5V+5A29Q
-        T+rjHzYt64BjaVY2UqPZLru6D06FMatJz0hVRUnd1M1EiHNKPk9u7+5wbt9tWRbcEHFBZHAFfLYn0
-        fg9XyyrDPOLDVNgRPk8afJnWNfgWS39QzcTD2X7nD4APdUJbqKNskDZVptut1a5NJhV8vhnooQsd9
-        UoLAFlG94O7uOi/9eKrciA2l4KkJzk/Frz1MkO5ojeamnBdAnVEtZqYStrop2H4HC1QF0A6l3VEoo
-        N3Fax3Qg==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nIZT4-00AaM7-GV; Fri, 11 Feb 2022 17:12:22 +0000
-Message-ID: <376dd5c9-199c-25af-d431-d1f0541f08c0@infradead.org>
-Date:   Fri, 11 Feb 2022 09:12:18 -0800
+        with ESMTP id S233923AbiBKSn7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Feb 2022 13:43:59 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC33D337
+        for <linux-pm@vger.kernel.org>; Fri, 11 Feb 2022 10:43:57 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id F21D11F472CB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644605036;
+        bh=HzE8XoWHXUugPq7RNO8OMt/s2YfLphh91Crggz3sR24=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OlXelJnnewM3yGoM0MdyWNME3xsmJn0AcS6HvUfLVzFCRnQiA+iHvzfYZX/yacmZC
+         Zmv2O6tPO/l0kqy3vGcO/q4uVvUl/7BUl0PApoNys3Hoqs2uhkZUQ5soRvJhgxz+Jn
+         GVMA+WngrhIAjYuIcIf0Ax05EtyvZ/sHiVg2Tgp68hFFH+hvnTDIYiNTHn69Hvawra
+         b7/KKhOP7EzMSBE710ksDVDN4Lgkslv6564Ji42CdsAh7GIRZYFjweiNi6s94lxrGM
+         cLQ5YDIpyN/05WWwEcb+9f8I1gn6mRozlPH1UblRE+2lLasUAzj27BMBErdvWMULDo
+         xfzs1E7npZvqg==
+Received: by mercury (Postfix, from userid 1000)
+        id C3C951060908; Fri, 11 Feb 2022 19:43:53 +0100 (CET)
+Date:   Fri, 11 Feb 2022 19:43:53 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Stephan Gerhold <stephan@gerhold.net>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 0/8] power: supply: bq24190 updates + new ug3105 driver
+Message-ID: <20220211184353.4x7th3lap3ik4uxf@mercury.elektranox.org>
+References: <20220206183543.51200-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH] PM: cleanup comments
-Content-Language: en-US
-To:     trix@redhat.com, rafael@kernel.org, len.brown@intel.com,
-        pavel@ucw.cz, gregkh@linuxfoundation.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220211161027.2516447-1-trix@redhat.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220211161027.2516447-1-trix@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="wfs6kuznyu4hiuvn"
+Content-Disposition: inline
+In-Reply-To: <20220206183543.51200-1-hdegoede@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,60 +52,89 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
+--wfs6kuznyu4hiuvn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 2/11/22 08:10, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
-> 
-> Remove the second 'the'.
-> Replace the second 'of' with 'the'.
-> Replace 'couter' with 'counter'.
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
+Hi,
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
+On Sun, Feb 06, 2022 at 07:35:35PM +0100, Hans de Goede wrote:
+> Hi Sebastian,
+>=20
+> Here is v2 of the series of patches which:
+>=20
+> 1. Modifies power_supply_get_battery_info() to also work with non
+>    of/dt device-properties
+>=20
+> 2. Modifies bq24190_charger to use and apply more settings returned
+>    by power_supply_get_battery_info()
+>=20
+> 3. Adds a new driver for the ug3105 battery monitoring chip, note
+>    this chip is not really a full/standalone fuel-gauge so
+>    the functionality of the is limited
+>=20
+> The only change in v2 is using the correct "upisemi" vendor prefix in
+> the new ug3105 driver.
 
-Thanks.
+Thanks, queued.
 
-> ---
->  drivers/base/power/wakeirq.c | 2 +-
->  drivers/base/power/wakeup.c  | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/base/power/wakeirq.c b/drivers/base/power/wakeirq.c
-> index 0004db4a9d3b..d487a6bac630 100644
-> --- a/drivers/base/power/wakeirq.c
-> +++ b/drivers/base/power/wakeirq.c
-> @@ -289,7 +289,7 @@ EXPORT_SYMBOL_GPL(dev_pm_disable_wake_irq);
->   *
->   * Enables wakeirq conditionally. We need to enable wake-up interrupt
->   * lazily on the first rpm_suspend(). This is needed as the consumer device
-> - * starts in RPM_SUSPENDED state, and the the first pm_runtime_get() would
-> + * starts in RPM_SUSPENDED state, and the first pm_runtime_get() would
->   * otherwise try to disable already disabled wakeirq. The wake-up interrupt
->   * starts disabled with IRQ_NOAUTOEN set.
->   *
-> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-> index 8666590201c9..a57d469676ca 100644
-> --- a/drivers/base/power/wakeup.c
-> +++ b/drivers/base/power/wakeup.c
-> @@ -587,7 +587,7 @@ static bool wakeup_source_not_registered(struct wakeup_source *ws)
->   * @ws: Wakeup source to handle.
->   *
->   * Update the @ws' statistics and, if @ws has just been activated, notify the PM
-> - * core of the event by incrementing the counter of of wakeup events being
-> + * core of the event by incrementing the counter of the wakeup events being
->   * processed.
->   */
->  static void wakeup_source_activate(struct wakeup_source *ws)
-> @@ -733,7 +733,7 @@ static void wakeup_source_deactivate(struct wakeup_source *ws)
->  
->  	/*
->  	 * Increment the counter of registered wakeup events and decrement the
-> -	 * couter of wakeup events in progress simultaneously.
-> +	 * counter of wakeup events in progress simultaneously.
->  	 */
->  	cec = atomic_add_return(MAX_IN_PROGRESS, &combined_event_count);
->  	trace_wakeup_source_deactivate(ws->name, cec);
+-- Sebastian
 
--- 
-~Randy
+>=20
+> Regards,
+>=20
+> Hans
+>=20
+>=20
+> Hans de Goede (8):
+>   power: supply: core: Use fwnode_property_*() in
+>     power_supply_get_battery_info()
+>   power: supply: core: Add support for generic fwnodes to
+>     power_supply_get_battery_info()
+>   power: supply: bq24190_charger: Turn off 5V boost regulator on
+>     shutdown
+>   power: supply: bq24190_charger: Always call
+>     power_supply_get_battery_info()
+>   power: supply: bq24190_charger: Store ichg-max and vreg-max in
+>     bq24190_dev_info
+>   power: supply: bq24190_charger: Program charger with fwnode supplied
+>     ccc_ireg and cvc_vreg
+>   power: supply: bq24190_charger: Disallow ccc_ireg and cvc_vreg to be
+>     higher then the fwnode values
+>   power: supply: ug3105_battery: Add driver for uPI uG3105 battery
+>     monitor
+>=20
+>  drivers/power/supply/Kconfig             |  15 +
+>  drivers/power/supply/Makefile            |   1 +
+>  drivers/power/supply/bq24190_charger.c   | 114 ++++--
+>  drivers/power/supply/power_supply_core.c |  93 +++--
+>  drivers/power/supply/ug3105_battery.c    | 486 +++++++++++++++++++++++
+>  5 files changed, 643 insertions(+), 66 deletions(-)
+>  create mode 100644 drivers/power/supply/ug3105_battery.c
+>=20
+> --=20
+> 2.33.1
+>=20
+
+--wfs6kuznyu4hiuvn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmIGrmYACgkQ2O7X88g7
++prJEA//W/4CaIM9V0uzed/ANKRyfSazZrktOT1+eGRqElNNFkHOXQEq7Ji4moFa
+GQ9fTlYVEtenEdd5A8Vw4NYHHUkS6s0wI++7dyFaP3g1CuFl6QpawaxRAKTRSNKA
+SdoQo0sBjN+jzrLSlI81KtbLLi47en/KqnDtwyqRnhwxgHb3e8J9+it98DHCtbCD
+Lmcs+Qh6ZAAHCrf08/G1dB9UdVjd8bHM0/E6Jy5Yo6hokezcJYWxOK3DKwT9YLGB
+zjbrmvlA6W+HXJpEisIdrjkneIQF/oZLtatDPPnVurCSDcUlnSyVDipPjwopMdIE
+3IwV93jlpMnrUVFITDxi9Ihsjl7TulO18ZJLKb+3DeV3fTbggob3+HhzIqBag5eW
+JXm354jaSPaYsA4U/GzWrM00Ub1fwMG779MNKXfKpfO+kFDv+lAieckloI8tjWdf
+ginSnyRk8f/UbLXOU28QeWJba2PsD/j7P3EsktbNfw6nnPPpJHVOwXbUq0Aub8Pw
+ZrHqbR/B9AcZa9CIQIP4oU8WLENEQmgWOWNMUmPIB5BgUq4izyD1shF2jhRFAZ4B
+kPFZjCw/1YJGaH3IxVstc7uy8MK1hUkwxe+YNVWT5HJ1wHp1QtFFGF3rF2Tuompq
+4jwXs9YDPEl9xldZP+Mq9WZVkQkqIdv4AJ90ZUKHJMsLdaloxX8=
+=nELZ
+-----END PGP SIGNATURE-----
+
+--wfs6kuznyu4hiuvn--
