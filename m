@@ -2,60 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C15944B2E2C
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Feb 2022 21:06:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4F954B2E40
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Feb 2022 21:09:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353170AbiBKUF1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Feb 2022 15:05:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49874 "EHLO
+        id S243478AbiBKUJH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Feb 2022 15:09:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353167AbiBKUFZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Feb 2022 15:05:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C49CE5;
-        Fri, 11 Feb 2022 12:05:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EA191B82C99;
-        Fri, 11 Feb 2022 20:05:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9D9DCC340E9;
-        Fri, 11 Feb 2022 20:05:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644609921;
-        bh=bKbqNxmW+7k+RCMvj4vtfijICXlc4s2mWU4IT47p5F8=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=BHZ3PUEeRAK4hXHk5CMe5sRV31Xf7FJxVLqwCjtOp5/rB2Ws9UeLTUVE7otm5MwAq
-         KPM0DCLw20iJjxWZhjXpT/EnPn9SOR+VerO9994TNi3EwmPf1WYl4tO+OecyHBnzCE
-         0XqzfbSdT3wtVOnKfvnm7asJVkFMXFs8TizFwmHS0rzJxwpe3io6+wE1gwx/ND6tnR
-         agCjNEKDrPWYNJ08PcmMv9prWEVdKonw2ZPUA6IJWNMjzObOytx+54gqBKci1t2J9g
-         bjE7kfKoscI43U1Epk4ukpYHBGyHKOwmEx295k6zDC3vLre9sEa/mji384HtthjyHf
-         68S9KK4r3jZ5Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8A9ECE5D09D;
-        Fri, 11 Feb 2022 20:05:21 +0000 (UTC)
-Subject: Re: [GIT PULL] ACPI fixes for v5.17-rc4
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0i=QT9GjEgWcqT-+CUKL=aScS3S6NZLUDznN-fNBahVYw@mail.gmail.com>
-References: <CAJZ5v0i=QT9GjEgWcqT-+CUKL=aScS3S6NZLUDznN-fNBahVYw@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0i=QT9GjEgWcqT-+CUKL=aScS3S6NZLUDznN-fNBahVYw@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-5.17-rc4
-X-PR-Tracked-Commit-Id: 27a98fe60b033dfce95361abe368750994b8a78e
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 883fd0aba1ae52b800081b9aa9ba9edfc88f36b0
-Message-Id: <164460992156.1412.11559056276253228923.pr-tracker-bot@kernel.org>
-Date:   Fri, 11 Feb 2022 20:05:21 +0000
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        with ESMTP id S229967AbiBKUJE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Feb 2022 15:09:04 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4FECC55;
+        Fri, 11 Feb 2022 12:09:02 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 8D63E1F47303
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644610141;
+        bh=eAvRqHo0RU9Lgp188B/WFV9rRy04nr9pCE2iLNixyFY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Im9yRkqXOA2OltaBx2puFM96HCyvq9T2KyD858+EML2gDrBCDmk6PQcKyiPy5LDMu
+         hpntVIUgMDB1NrN1z3rm7XT+iZF0+K/CBCeXLTZzsLQx36pFGtvJYoqn+l9LRKZUh1
+         e/IimYk9TT0zOjfuhGobPJLsO1u2bfKhfLLq8co+qjAACX1FVsEHMTujJHlTtSPs0R
+         ovgqGg5iK8Y/SSLH3Dx67CTEiAX0jQrfv4s4LGppmlBMoVRsydoRLpJhBxcHd1pKnr
+         sN1/XRW/zJuqMKskHRr982tnobVrKqPjXm06Ie0hGHCFozEA1OBXXWw94okKVM3vam
+         /ibnrEdAmyTrw==
+Received: by mercury (Postfix, from userid 1000)
+        id 6233E1060908; Fri, 11 Feb 2022 21:08:59 +0100 (CET)
+Date:   Fri, 11 Feb 2022 21:08:59 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     elicec@foxmail.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH] power: supply: ab8500_charger: fix spelling typo
+Message-ID: <20220211200859.zyzthhhitjmmhih7@mercury.elektranox.org>
+References: <tencent_5DA124DA30164B8C65F2406B34E193F70A09@qq.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7trnl2prv7cntliw"
+Content-Disposition: inline
+In-Reply-To: <tencent_5DA124DA30164B8C65F2406B34E193F70A09@qq.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,15 +52,75 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Fri, 11 Feb 2022 17:57:41 +0100:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-5.17-rc4
+--7trnl2prv7cntliw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/883fd0aba1ae52b800081b9aa9ba9edfc88f36b0
+Hi,
 
-Thank you!
+On Wed, Jan 19, 2022 at 11:53:01AM +0800, elicec@foxmail.com wrote:
+> From: Hong Peng <elicec@foxmail.com>
+>=20
+> fix the comment typo: "interrupts", "structcure"
+>=20
+> Signed-off-by: Hong Peng <elicec@foxmail.com>
+> ---
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Thanks, queued.
+
+-- Sebastian
+
+>  drivers/power/supply/ab8500_charger.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/ab8500_charger.c b/drivers/power/supply=
+/ab8500_charger.c
+> index ce074c018dcb..fcf4ed4e35aa 100644
+> --- a/drivers/power/supply/ab8500_charger.c
+> +++ b/drivers/power/supply/ab8500_charger.c
+> @@ -171,7 +171,7 @@ enum ab8500_usb_state {
+>  	struct ab8500_charger, ac_chg)
+> =20
+>  /**
+> - * struct ab8500_charger_interrupts - ab8500 interupts
+> + * struct ab8500_charger_interrupts - ab8500 interrupts
+>   * @name:	name of the interrupt
+>   * @isr		function pointer to the isr
+>   */
+> @@ -1083,7 +1083,7 @@ static int ab8500_vbus_in_curr_to_regval(struct ab8=
+500_charger *di, int curr_ua)
+> =20
+>  /**
+>   * ab8500_charger_get_usb_cur() - get usb current
+> - * @di:		pointer to the ab8500_charger structre
+> + * @di:		pointer to the ab8500_charger structure
+>   *
+>   * The usb stack provides the maximum current that can be drawn from
+>   * the standard usb host. This will be in uA.
+> --=20
+> 2.17.1
+>=20
+
+--7trnl2prv7cntliw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmIGwlsACgkQ2O7X88g7
++pr0Cg/+ICRenfUZuyz4BY0vq0kP+dLddVrxlhkPLNbvJWFpihi6aYRwQpjilCOP
+0IT2k6u5BW9PGOJURtr1LtXNWc8yNA2k/905JHxapj+z6792zWYpj/ctYKcusTrb
+bjDPzEr+IIySxNxThaJ5RtyO2znMIPzmGzpkM1yAJZKGg9ribb9AUesFhrC8vatq
+2Xil6k6RScOfbRxHFtMVwjgY9ooC2SYLFUT9uxTWXFE5D19dTKRZdQOT+Lg4SzQW
+vncz+7zwsIKYhJxwZKwP7snx7SCS+bY465XuQSL+OiJLZQLkicxeX5MUYW9BMa6E
+f3CRTpu7vscB4XmK08Wq+CB75cU0VI43Ts5QABnaNshYh/btAdQiSksZmCnQugt+
+j4GSB80aVuxT/5CDIeNHVNbbOjXPfHHNwmXM2m5Qpn2DLyZPuRq2PZaZ01MDamjW
+Q2laR5IubOKiMhatz+N7BWKyRAhgD7LjpcxqwlB0oJYWca0m0UY7MEhbQkdtWqwU
+5xvJZZ0vfvcCcyVQPQ/dn6NW/9iqaY4dHa6XFiJTozp+PlKdwnE2NxJK1l2fZalA
++byoG6iVy9SfSIl4JM8yUBR9MxPdk+qju2PTkq7mJhQA/MFQUXDeSJZsYaj9JYxB
+CGA2EXtSUbISp/f3xXBshtm0hq7QJ44mvasMP9cR7y7KUy2Ernk=
+=lZWd
+-----END PGP SIGNATURE-----
+
+--7trnl2prv7cntliw--
