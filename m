@@ -2,61 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3702F4B2F67
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Feb 2022 22:32:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7368D4B2F7A
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Feb 2022 22:40:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353718AbiBKVct (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Feb 2022 16:32:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49888 "EHLO
+        id S235711AbiBKVkg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Feb 2022 16:40:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353697AbiBKVct (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Feb 2022 16:32:49 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC584C60
-        for <linux-pm@vger.kernel.org>; Fri, 11 Feb 2022 13:32:46 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id j2so28901412ybu.0
-        for <linux-pm@vger.kernel.org>; Fri, 11 Feb 2022 13:32:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nlMNdPedHPycBXQ85x4bFGxtLOLbRfBW7nz64ipbjBY=;
-        b=R7+8WmZ8z5W8QeBvnhcVZ9ocPoXPI4IfaWnDSFcyXbagwpzAg5QoJWGBcQQg4gg9fN
-         37CodB/qEUvKwV+uvKXESNth5g8mJ0DTtf5mxdzJeJcXuwJmbZ/axGotqDdWbrFB3UR+
-         S6nOx8DCf7bOcLL5M9iyQv/IqY0FCH3Ow15F0CVHiOvYKlSeAEXYYh1hvgGdmZsxdDK8
-         udCxlM79RY0G3/7HTCxNPYex8uJf18qSsKx+od7ygwGnPTymwfUW/1V7JM0R5u4FS3DV
-         c/XWdiOymV3d2+e7RWsbqDAm7omrwEeZo88/Nw/nRfTU0DO3vIBqwN0S282EFs5il9Ma
-         YFVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nlMNdPedHPycBXQ85x4bFGxtLOLbRfBW7nz64ipbjBY=;
-        b=49cJWLWHxxrQ8ALMQQ7kVpyGczFtOIYJdNaUrxhLoKV9hZClDj6CZ3Qdpa+zF5icap
-         lPIo4hQ608DpI9VB2Rl0K2sj48Q2G6hVJ+tYiIxIfPd56T9R427i3KEbJGNzievIJ1ei
-         k9vsaYalBuAoAolvn1/7cOAIHL9ogaBMWqTGR1zlZ8c4KgY6z9yqskRmuEdpCc6If9Zv
-         /12c7Zz3W97RQhUDVl2w4Zto9bnoWHnAwE5IB5PBgks5HEhaZ1Li1Gf04rlXl+dBSiTI
-         NvuFS/I1T46V9efeALTW6r66wKKqmuGwDigijvb0K42bgzOSSS9jXXQFuszmzgUilOXU
-         DegA==
-X-Gm-Message-State: AOAM532vQqrf2zYzLYpxXz74eqByXoiZmVjNYYxAmi+NxkB6/zJQGJZi
-        JkHy6HSODn4wHSj4+RqQKQtpv6Mvc41emhHaU799Hg==
-X-Google-Smtp-Source: ABdhPJwxt/ccwzQXgeYQSdW1n8H1uNZN4bQTPzzBDg4pfrNxnshkiT6JI3ZaakqbnLo8Pph2JwGiM91mGnY6+KkRScA=
-X-Received: by 2002:a25:684a:: with SMTP id d71mr3340888ybc.284.1644615166048;
- Fri, 11 Feb 2022 13:32:46 -0800 (PST)
+        with ESMTP id S233490AbiBKVkg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Feb 2022 16:40:36 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6777C65;
+        Fri, 11 Feb 2022 13:40:33 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 0B53F1F47299
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644615632;
+        bh=x/eg+6w2Tr2joTOYtZyNlDgHawkmOfVfZKO5c0bZI88=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WJ48klO6UXAOJ763KOdmdua13QAzL7OYHlD+bxgtnQuoL7D3hgltRJ/oIs+Mnn4WY
+         2PIJyqYDBIUJYEWXiQe0d61dE5hevANlWLgtO5oVMFea0Uu5hpBh4tgBFLGWzI5tfs
+         b2trkrsThdubZoCiJ5rfhKq+SjdRU6ke9tzeuYWHvgqu2Kzq6R20dMgMOqYeMCWdl7
+         sOGHSW9p+RxQHD60ddYr9sJjM/2BOMeiW+YZ2ai9QgT98Fvt0SoW4W2PH8KGbL1Ysm
+         DOd8CsHsfNd0Lq0/j3b4auNnZk4YNzFT/bJZV9JNLZEyRV7aXVl/e7gH0KNLFT64yI
+         sw1loLoHBLVTg==
+Received: by mercury (Postfix, from userid 1000)
+        id 3BD2E1060908; Fri, 11 Feb 2022 22:40:29 +0100 (CET)
+Date:   Fri, 11 Feb 2022 22:40:29 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Qing Wang <wangqing@vivo.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] power: supply: da9150: use div64_u64() instead of
+ do_div()
+Message-ID: <20220211214029.syw76upbqthasgwb@mercury.elektranox.org>
+References: <1644395986-4349-1-git-send-email-wangqing@vivo.com>
+ <20220211205026.6jhtt66wco5ht6i6@mercury.elektranox.org>
+ <9b563415-f58a-15f1-b375-64ef4e98ca05@wanadoo.fr>
 MIME-Version: 1.0
-References: <20220124131346.12571-1-linmq006@gmail.com> <20220211200404.ywlfdj2pybtnmezp@mercury.elektranox.org>
-In-Reply-To: <20220211200404.ywlfdj2pybtnmezp@mercury.elektranox.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 11 Feb 2022 22:32:34 +0100
-Message-ID: <CACRpkdbOdVbsFPEJ3vScG83Uyd8cGYNcRU9o11WHbjkZ07neNg@mail.gmail.com>
-Subject: Re: [PATCH] power: supply: ab8500: Fix memory leak in ab8500_fg_sysfs_init
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Miaoqian Lin <linmq006@gmail.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="md3jjtjbp2ssjuiz"
+Content-Disposition: inline
+In-Reply-To: <9b563415-f58a-15f1-b375-64ef4e98ca05@wanadoo.fr>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,22 +56,94 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 9:04 PM Sebastian Reichel
-<sebastian.reichel@collabora.com> wrote:
 
-> > Fixes: 8c0984e5a753 ("power: move power supply drivers to power/supply")
-> > Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> > ---
->
-> Thanks, queued power-supply's for-next branch.
->
-> Linus, if I'm not mistaken the custom sysfs ABI (i.e. everything related
-> to ab8500_fg_sysfs_init() can just be removed since the same thing is
-> already exposed standardized via POWER_SUPPLY_PROP_CHARGE_FULL and
-> POWER_SUPPLY_PROP_CHARGE_NOW?
+--md3jjtjbp2ssjuiz
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Yes, I delete other weird custom sysfs, so I'll cook a patch to
-get rid of this too.
+Hi,
 
-Yours,
-Linus Walleij
+On Fri, Feb 11, 2022 at 09:53:08PM +0100, Christophe JAILLET wrote:
+> Le 11/02/2022 =E0 21:50, Sebastian Reichel a =E9crit=A0:
+> > Hi,
+> >=20
+> > On Wed, Feb 09, 2022 at 12:39:46AM -0800, Qing Wang wrote:
+> > > From: Wang Qing <wangqing@vivo.com>
+> > >=20
+> > > do_div() does a 64-by-32 division.
+> > > When the divisor is u64, do_div() truncates it to 32 bits, this means=
+ it
+> > > can test non-zero and be truncated to zero for division.
+> > >=20
+> > > fix do_div.cocci warning:
+> > > do_div() does a 64-by-32 division, please consider using div64_u64 in=
+stead.
+> > >=20
+> > > Signed-off-by: Wang Qing <wangqing@vivo.com>
+> > > ---
+> >=20
+> > Thanks, queued.
+>=20
+> All these patches are broken and should be NACKed, fixed or reverted if
+> applied.
+>=20
+> See [1].
+>=20
+> CJ
+>=20
+> [1]: https://lore.kernel.org/linux-kernel/19b96972-cee7-937f-21ce-c78982e=
+d2048@linaro.org/
+
+Oops, thanks for the hint. Patch dropped. I actually missed the
+do_div(div, 1000000) during my review (probably should go sleeping),
+so div should be within safe range in the second do_div() anyways.
+
+-- Sebastian
+
+>=20
+> >=20
+> > -- Sebastian
+> >=20
+> > >   drivers/power/supply/da9150-fg.c | 2 +-
+> > >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > >=20
+> > > diff --git a/drivers/power/supply/da9150-fg.c b/drivers/power/supply/=
+da9150-fg.c
+> > > index 6e36782..896491a
+> > > --- a/drivers/power/supply/da9150-fg.c
+> > > +++ b/drivers/power/supply/da9150-fg.c
+> > > @@ -250,7 +250,7 @@ static int da9150_fg_current_avg(struct da9150_fg=
+ *fg,
+> > >   	div =3D (u64) (sd_gain * shunt_val * 65536ULL);
+> > >   	do_div(div, 1000000);
+> > >   	res =3D (u64) (iavg * 1000000ULL);
+> > > -	do_div(res, div);
+> > > +	div64_u64(res, div);
+> > >   	val->intval =3D (int) res;
+> > > --=20
+> > > 2.7.4
+> > >=20
+>=20
+
+--md3jjtjbp2ssjuiz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmIG18EACgkQ2O7X88g7
++priAQ//bkVDODa2EvDnVHbSTMEiUYEmsB+fd1kCnq+4JxGyLR0Spa70VOO75FYz
+AI5N2/Q2wfWYhmUOyZTWr7GVx8fdT87vbusDtZWks5Ulk32WuNFTVWsEodxMIgTL
+dVR9FWrK8BMn1B1TB+GvGaY7SjX/9iwCeZLbUYLZ5d+fM+7JZIc2/wsZ/0PqN6tf
+kLUBmlaPYBrZr9pFKPBpd1TPLrQ5UfgA5ATzwIUHfDhK+41qE4OkkoAtbgQzt3SK
+2WgOAEkz4cIsPRQOQbp6YxuAkbuf/ojJwER71yViq23h+DsLLeJcLewg7OqJUckR
+Qfz1QW0ueDJ0cwPB1yfax0S85IdDCD7io12LHt+PwsZy7BzF4a4oTOaG1j9rrcWZ
+z6gVRXieckjMQrrlovDUyIC7B5/zY4P8i4Tt1hNYx34EfT/P25XAzcC6Ch1VJroR
+AsGU/B9TO/lU+aXWeZpFIGOrGcsLxTebO0dwOXEWj3LcbtRbilFjyfB6kTq0lw8v
+vypncxy8dZKnIiMcxsrU4VgSKuKs8mB2rE6tZO31AwD9RDWgp7lTG2DGBz4A+9Sy
+2BDb2ZFeJ67jdBMCZ36ldK+zdWbWdCHC4xQliSW9QccGu3ajRtWcVcHoAYQ4VRTH
+TQd5+R5cfbETdt0DhIFzeVictb1/YY/b7PgNP1yfKoMRanQI+sM=
+=Gyea
+-----END PGP SIGNATURE-----
+
+--md3jjtjbp2ssjuiz--
