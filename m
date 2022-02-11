@@ -2,46 +2,46 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B06FA4B2D22
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Feb 2022 19:51:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 254454B2D2A
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Feb 2022 19:54:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231488AbiBKSu3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Feb 2022 13:50:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56274 "EHLO
+        id S237315AbiBKSyA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Feb 2022 13:54:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230373AbiBKSu2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Feb 2022 13:50:28 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B9FC57;
-        Fri, 11 Feb 2022 10:50:26 -0800 (PST)
+        with ESMTP id S237105AbiBKSx7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Feb 2022 13:53:59 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15774CD8
+        for <linux-pm@vger.kernel.org>; Fri, 11 Feb 2022 10:53:58 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 817AB1F471E1
+        with ESMTPSA id D97F41F472A9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644605425;
-        bh=z5Y7H7AbhHGrr2+6Fd/VUKLNGY2yIpGwppm+Gh8m0BY=;
+        s=mail; t=1644605637;
+        bh=HwSL/b2IPew4etCOQjafc/Zilxrk5LosOwm4KEnV+1I=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DTLAmGBNezkyowIHaR9JgbiqZSun9A6ZGgrwcEVqzHUL8SOGdJFb0FcHq4qH8oPse
-         0B4buTpJFCSlI63wWoYLGe9DrDtvUTKwVhZtVYMx6v/8dTTVJ9hQZWlIBDDJCPr7wM
-         2O9ehu0ed8pXeF4VpuV/xQxfujgHo/atldc3PuHPsPrUc7j3QTYqesAeX6AkV4vt5A
-         eqSnObTxDAb0firFJJr/3BYx/qvM2Fvv/UHoI5Kp0C2/lDf0RWrQBBrs0fj8yap/D5
-         5doJOI6mjk5x5Kle17DPrMs5t0PMxiyu76Ph6jdsU4WN+M0ntWHnMFvIA8gavPafos
-         tZoo9yJB0Vrkg==
+        b=L10oq96j8owN7lEFQ3XmNQSzzJjE+thOaIof/1SZqiwUgN9sPEsyoS0hlaEOM8odP
+         6yFtvv0CS3my0t3v41piAPgld3hmAXCNfKRAXrvnhu1nvCymJwH/tHs+kUDWQriSuV
+         or32aO1TBYUUecQ8OF477qoV/GrJLFPRHyutPI0pBtnngYZg5xXhJfU2UZpeOCZmp+
+         qwR7qvCoMd/wf/MCzbV+emyk1GJIdXjW9ep+k64x1HFLD75Dzh3evX7J6ZGWgnTbwW
+         2VKe+0QGoTRQQPjgiQitfcy4GtTpz+QDL2TdzvzE7afkxYbZf+XZ07rNZGBCt9gYP7
+         BmNwlzEahn3Og==
 Received: by mercury (Postfix, from userid 1000)
-        id 4E7541060908; Fri, 11 Feb 2022 19:50:23 +0100 (CET)
-Date:   Fri, 11 Feb 2022 19:50:23 +0100
+        id 8F3571060908; Fri, 11 Feb 2022 19:53:53 +0100 (CET)
+Date:   Fri, 11 Feb 2022 19:53:53 +0100
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH] power: supply: Simplify memory allocation
-Message-ID: <20220211185023.rlfriafztikcqdmq@mercury.elektranox.org>
-References: <c09fc0b84cb046ad31bc1da67607bf0e9fa07085.1644079229.git.christophe.jaillet@wanadoo.fr>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     kernel@pengutronix.de, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] power: supply: rt9455: Don't pass an error code in
+ remove callback
+Message-ID: <20220211185353.lkoefqgnk7yzw5wy@mercury.elektranox.org>
+References: <20220205183512.11038-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gxjcjuzgqukouwgs"
+        protocol="application/pgp-signature"; boundary="4bwt3sb4vp7tieum"
 Content-Disposition: inline
-In-Reply-To: <c09fc0b84cb046ad31bc1da67607bf0e9fa07085.1644079229.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220205183512.11038-1-u.kleine-koenig@pengutronix.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
@@ -53,89 +53,67 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---gxjcjuzgqukouwgs
-Content-Type: text/plain; charset=us-ascii
+--4bwt3sb4vp7tieum
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Sat, Feb 05, 2022 at 05:40:57PM +0100, Christophe JAILLET wrote:
-> Use devm_bitmap_zalloc() instead of hand writing it.
+On Sat, Feb 05, 2022 at 07:35:12PM +0100, Uwe Kleine-K=F6nig wrote:
+> When ret is not zero there were already one or two error messages emitted
+> about a problem (because rt9455_register_reset() emits a message in most
+> cases then). Passing on that error code to the i2c core only results in
+> another error message. Suppress that by returning zero unconditionally.
 >=20
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 > ---
 
 Thanks, queued.
 
 -- Sebastian
 
->  drivers/power/supply/power_supply_hwmon.c | 15 +++------------
->  1 file changed, 3 insertions(+), 12 deletions(-)
+>  drivers/power/supply/rt9455_charger.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >=20
-> diff --git a/drivers/power/supply/power_supply_hwmon.c b/drivers/power/su=
-pply/power_supply_hwmon.c
-> index bffe6d84c429..a48aa4afb828 100644
-> --- a/drivers/power/supply/power_supply_hwmon.c
-> +++ b/drivers/power/supply/power_supply_hwmon.c
-> @@ -324,11 +324,6 @@ static const struct hwmon_chip_info power_supply_hwm=
-on_chip_info =3D {
->  	.info =3D power_supply_hwmon_info,
->  };
+> diff --git a/drivers/power/supply/rt9455_charger.c b/drivers/power/supply=
+/rt9455_charger.c
+> index 594bb3b8a4d1..74ee54320e6a 100644
+> --- a/drivers/power/supply/rt9455_charger.c
+> +++ b/drivers/power/supply/rt9455_charger.c
+> @@ -1716,7 +1716,7 @@ static int rt9455_remove(struct i2c_client *client)
+>  	cancel_delayed_work_sync(&info->max_charging_time_work);
+>  	cancel_delayed_work_sync(&info->batt_presence_work);
 > =20
-> -static void power_supply_hwmon_bitmap_free(void *data)
-> -{
-> -	bitmap_free(data);
-> -}
-> -
->  int power_supply_add_hwmon_sysfs(struct power_supply *psy)
->  {
->  	const struct power_supply_desc *desc =3D psy->desc;
-> @@ -349,18 +344,14 @@ int power_supply_add_hwmon_sysfs(struct power_suppl=
-y *psy)
->  	}
+> -	return ret;
+> +	return 0;
+>  }
 > =20
->  	psyhw->psy =3D psy;
-> -	psyhw->props =3D bitmap_zalloc(POWER_SUPPLY_PROP_TIME_TO_FULL_AVG + 1,
-> -				     GFP_KERNEL);
-> +	psyhw->props =3D devm_bitmap_zalloc(dev,
-> +					  POWER_SUPPLY_PROP_TIME_TO_FULL_AVG + 1,
-> +					  GFP_KERNEL);
->  	if (!psyhw->props) {
->  		ret =3D -ENOMEM;
->  		goto error;
->  	}
-> =20
-> -	ret =3D devm_add_action_or_reset(dev, power_supply_hwmon_bitmap_free,
-> -			      psyhw->props);
-> -	if (ret)
-> -		goto error;
-> -
->  	for (i =3D 0; i < desc->num_properties; i++) {
->  		const enum power_supply_property prop =3D desc->properties[i];
-> =20
+>  static const struct i2c_device_id rt9455_i2c_id_table[] =3D {
+>=20
+> base-commit: dcb85f85fa6f142aae1fe86f399d4503d49f2b60
 > --=20
-> 2.32.0
+> 2.34.1
 >=20
 
---gxjcjuzgqukouwgs
+--4bwt3sb4vp7tieum
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmIGr+4ACgkQ2O7X88g7
-+pqD/hAAlTOwH+tao52Dgjz43ftnSbyspe5+PUkdr/Ut4g0aHSozl/Ae7oZmTan8
-5374ui7A9HiRr1JLxME/4FPAi2zoXZTwZoUZcdOY3OgWnyOyNEwJ7QZsAv69Ga2D
-ejSEUyAYSvImrfBssXK/WX6mlBnUsS7UVe5SnQPQR/EPBaKqX7W8ojZD78JgmHuV
-ucAfIOzM2I9nM6rqcHAlHu17ZKp5EbAlE+xcOSwBHq/Kq25p1RX5Bu7XxBO0FFhw
-sbvInVBjMtdhV6L4+qASIp1ieE/GAsHS8WUFDX7dWKPMyuTW8zKVRg4p2Pt0XvYH
-ngRWxju2W35CX/PZeBPn0fbpjhErGPR3OjpwCYBrUi4QH2brwvoFl58J3G4VgFe8
-B7Br4kQ4SKc/k2S9vco9614pOxrjrebYiLAn9MZHjefaz/QyN2V343ACiJ/79mX+
-iJl1StiOfPWs6vt+DW69w8fxDgzddAx7dKsQDowVdILH6VL4pBzuHMqNojiY6q+9
-N2gp/TJ5NhYysLsQlKOsjR1p/O+LGLqiIZCTrbjM2Gv0xIEoAddtpZUbz1Eoru6y
-IM5HYEqE/wNs9om1UpdGwqCjmA963VQQjhoY5Ls0Jx/5sGVDT/bpPftW+fax/ADx
-9uNyp5KQBZo0zce0MSkFvBx0ME44BGb3ZVuTjIWkMo1QrDGLaNE=
-=wwTK
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmIGsMEACgkQ2O7X88g7
++ppoIg/+IGFHO2DZIn3kJ/yThP+/hsr8MoYX1eF6eLD+AISE0uJeidD6McYFr97B
+OAVbXxJuctQmtRPHSM2mYJMrr+UXM3Wz6gpvqA+/+XxmV//vXjyfqNwqTBZr39kj
+Bgb9jlWnTnjx1mbDEiQQgRWN5Qtmn0O0Z8nXnX6mb1TuY4X8WMQI+kXdxRfDzf8w
+O0vrBRJcYHRP2oXlvEbscBXBGy6OTdlJ1/ot1QrJJgz94ZVLJUlkhHEW2rJLSuYf
+wEFgIIZizVEv83l/+24WqI3yci4q2beHspaVzqSeeQK1XAL1l1fzM7N/bXapTzW1
+Pk8zEYAcCQhkqbEK3HisxZMaeOsjnnGeU+iHQTk7sXnyTFxPcetJveXSDPEU4PNR
+87Vn71GCjz7vSe4oyDyB+4+AvQcyepG+o9Kl5QN7uLN6MQU6WUz/DVKsk5cPnLlU
+nwgsgYy6DuUQ89L5VUdJId2ZoJcfCUGzyphmVFtGLxlWHlSSR/ujKd+RDhcgu14A
+g6jBrbTxUSiWl8cHOYal5ZkGxaqDE8dCvRSU/btGrS5KdibkakOTCIgZOSuf+UQp
+eemwMRSj8PoJPHD+GU9ljA9+tiZHAH/8JhY2rAPpLk+D9ceza6kS+oDemmb14BzJ
+SQWexcmIfENw5I3bTyQSl+rYQcV6TTU4NDa6jIawFRll4A3DeNg=
+=8dUD
 -----END PGP SIGNATURE-----
 
---gxjcjuzgqukouwgs--
+--4bwt3sb4vp7tieum--
