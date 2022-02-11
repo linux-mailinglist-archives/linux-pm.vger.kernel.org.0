@@ -2,191 +2,175 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 494144B24C5
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Feb 2022 12:50:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 051D54B2692
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Feb 2022 13:58:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234536AbiBKLuX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Feb 2022 06:50:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40568 "EHLO
+        id S1350373AbiBKM6B (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Feb 2022 07:58:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349605AbiBKLuW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Feb 2022 06:50:22 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BCF0F4F;
-        Fri, 11 Feb 2022 03:50:21 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id B04DC1F46D3E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644580219;
-        bh=YoiosXYfuzCdv75Q/QHeODvcQlcGqCPnisvrlLqIWlM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=GTLGC4aXdUu/HNLbQWFHvoE4iM7hofN1vXc9X7vuswhNjFoA+7s1JE0VPabZpHjKP
-         ur3PKD8vtNTjtm7+H3MVyS858xTgldAxBwrE+uHqul1zODaxn3Lkrw2CGShpwj4ryb
-         EH6J9xrmZtiwuTwsfrnnplzsFTcFjpZhwhi0dVd02QBipVGO34lu7IPM9ZlOy6HaX5
-         6eWapx+KB+Av1nl1wFLUB2NPltshUp2Bt+OgAMBY7OJKhxZueS+0DH7kF06nQTv4vf
-         tMFBi/tYTl302CE/ne7Nerj49cWLDBCnexztlPIHPbRx9q1ZTcSHlYNQwopgA9RyBa
-         m1zKHA0aUmgzg==
-Message-ID: <e7cbca18-a343-4058-6a1e-1e6bfb167bd9@collabora.com>
-Date:   Fri, 11 Feb 2022 12:50:09 +0100
+        with ESMTP id S1350348AbiBKM57 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Feb 2022 07:57:59 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21782F1;
+        Fri, 11 Feb 2022 04:57:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644584277; x=1676120277;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=H7hr8Tb0BcEtWSXOSLmmpsuGSrqeWSlH/gYsWFpNPdo=;
+  b=O35mGQxRCN7nIPVAjJ9YjZ42gFadBWTapZVsKJcxI4uFpqP/Wn4+t4nm
+   hapHHjlaDf6kKFVXz/c+lnihtH/nB/zaMtQWjtRXEQcMgZqlmUKxTtyVU
+   GdUxjzLZUfHLvoO+0dJF2oW6RvYiAS76i2scHEQ+LztqBncC23Vk2iAwk
+   cPc9oqI7wBnWu1WNxDVBNuvNKwDl1i+ypOAY2T3dqgSnycrk1xI488+i6
+   Ezid9AVnPwENh+pGBSe/3OASgXOyVzvctwK+7V5tCqm2bLppoMt4Wsz9n
+   +H/yaWrYAjAUkfpy/EeskGaM3y7kWKJGbcArKmKOLyECoELtp09a6VCqt
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="249476002"
+X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
+   d="scan'208";a="249476002"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 04:57:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
+   d="scan'208";a="772089668"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 11 Feb 2022 04:57:50 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nIVUk-0004bZ-0u; Fri, 11 Feb 2022 12:57:50 +0000
+Date:   Fri, 11 Feb 2022 20:57:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ a24b2df244afcb80fcb7c12537b3c86a5be3e1f9
+Message-ID: <62065d3d.Ya6trq6Nc15wfeQf%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [V11,PATCH 04/19] soc: mediatek: add driver for dvfsrc support
-Content-Language: en-US
-To:     Dawei Chien <dawei.chien@mediatek.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Ryan Case <ryandcase@chromium.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Nicolas Boichat <drinkcat@google.com>,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Fan Chen <fan.chen@mediatek.com>,
-        Arvin Wang <arvin.wang@mediatek.com>,
-        James Liao <jamesjj.liao@mediatek.com>,
-        Henry Chen <henryc.chen@mediatek.com>
-References: <20210812085846.2628-1-dawei.chien@mediatek.com>
- <20210812085846.2628-5-dawei.chien@mediatek.com>
- <3d1ba05d-0013-a9ac-1fe1-1d60e510c574@collabora.com>
- <3d30fe7f61b558d3c2c8214e0e936903657f8231.camel@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <3d30fe7f61b558d3c2c8214e0e936903657f8231.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Il 11/02/22 04:51, Dawei Chien ha scritto:
-> On Thu, 2022-02-03 at 16:04 +0100, AngeloGioacchino Del Regno wrote:
->> Il 12/08/21 10:58, Dawei Chien ha scritto:
->>> From: Henry Chen <henryc.chen@mediatek.com>
->>>
->>> Add dvfsrc driver for MT6873/MT8183/MT8192
->>>
->>> Signed-off-by: Henry Chen <henryc.chen@mediatek.com>
->>> Signed-off-by: Dawei Chien <dawei.chien@mediatek.com>
->>> ---
->>>    drivers/soc/mediatek/Kconfig            |  11 +
->>>    drivers/soc/mediatek/Makefile           |   1 +
->>>    drivers/soc/mediatek/mtk-dvfsrc.c       | 421
->>> ++++++++++++++++++++++++++++++++
->>>    include/linux/soc/mediatek/mtk_dvfsrc.h |  35 +++
->>>    4 files changed, 468 insertions(+)
->>>    create mode 100644 drivers/soc/mediatek/mtk-dvfsrc.c
->>>    create mode 100644 include/linux/soc/mediatek/mtk_dvfsrc.h
->>>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: a24b2df244afcb80fcb7c12537b3c86a5be3e1f9  Merge branch 'thermal-hfi' into bleeding-edge
 
-..snip..
+elapsed time: 769m
 
->>> diff --git a/drivers/soc/mediatek/mtk-dvfsrc.c
->>> b/drivers/soc/mediatek/mtk-dvfsrc.c
->>> new file mode 100644
->>> index 000000000000..6ef167cf55bd
->>> --- /dev/null
->>> +++ b/drivers/soc/mediatek/mtk-dvfsrc.c
+configs tested: 90
+configs skipped: 3
 
-..snip..
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
->>> +static int mtk_dvfsrc_probe(struct platform_device *pdev)
->>> +{
->>> +	struct arm_smccc_res ares;
->>> +	struct resource *res;
->>> +	struct mtk_dvfsrc *dvfsrc;
->>> +	int ret;
->>> +
->>> +	dvfsrc = devm_kzalloc(&pdev->dev, sizeof(*dvfsrc), GFP_KERNEL);
->>> +	if (!dvfsrc)
->>> +		return -ENOMEM;
->>> +
->>> +	dvfsrc->dvd = of_device_get_match_data(&pdev->dev);
->>> +	dvfsrc->dev = &pdev->dev;
->>> +
->>> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->>> +	dvfsrc->regs = devm_ioremap_resource(&pdev->dev, res);
->>> +	if (IS_ERR(dvfsrc->regs))
->>> +		return PTR_ERR(dvfsrc->regs);
->>> +
->>> +	spin_lock_init(&dvfsrc->req_lock);
->>> +	mutex_init(&dvfsrc->pstate_lock);
->>> +
->>> +	arm_smccc_smc(MTK_SIP_VCOREFS_CONTROL, MTK_SIP_DVFSRC_INIT, 0,
->>> 0, 0,
->>> +		0, 0, 0, &ares);
->>> +
->>> +	if (!ares.a0) {
->>> +		dvfsrc->dram_type = ares.a1;
->>> +		dev_info(dvfsrc->dev, "dram_type: %d\n", dvfsrc-
->>>> dram_type);
->>> +	} else {
->>> +		dev_err(dvfsrc->dev, "init fails: %lu\n", ares.a0);
->>> +		return ares.a0;
->>> +	}
->>> +
->>> +	dvfsrc->curr_opps = &dvfsrc->dvd->opps_desc[dvfsrc->dram_type];
->>> +	platform_set_drvdata(pdev, dvfsrc);
->>> +
->>> +	dvfsrc->regulator = platform_device_register_data(dvfsrc->dev,
->>> +			"mtk-dvfsrc-regulator", -1, NULL, 0);
->>
->> Why are you registering platform devices like this?
->>
->> Please use device-tree instead.
->>
-> 
-> Thank you for advisement. Let me just describe history.
-> 
-> Actually, we did use device-tree to probe interconnect/regulator driver
-> in v4, and reviewer had some advisement
-> 
-> 
-> https://patchwork.kernel.org/project/linux-mediatek/patch/1584092066-24425-12-git-send-email-henryc.chen@mediatek.com/#23243049
-> 
-> https://patchwork.kernel.org/project/linux-mediatek/patch/1584092066-24425-9-git-send-email-henryc.chen@mediatek.com/#23236945
-> 
-> so we refer to this driver to use platform_device_register_data after
-> v5.
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/soc/qcom/smd-rpm.c?h=next-20220209#n213
-> 
-> Would you kindly give your advisement, thank you.
-> 
+gcc tested configs:
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm64                               defconfig
+arm64                            allyesconfig
+i386                          randconfig-c001
+arm                           h3600_defconfig
+powerpc                       eiger_defconfig
+xtensa                          iss_defconfig
+openrisc                 simple_smp_defconfig
+arm                          simpad_defconfig
+mips                  maltasmvp_eva_defconfig
+m68k                          atari_defconfig
+xtensa                       common_defconfig
+sh                 kfr2r09-romimage_defconfig
+powerpc                 mpc8540_ads_defconfig
+arm                  randconfig-c002-20220209
+arm                  randconfig-c002-20220211
+arm                  randconfig-c002-20220210
+ia64                             allyesconfig
+ia64                             allmodconfig
+ia64                                defconfig
+m68k                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+csky                                defconfig
+alpha                               defconfig
+nds32                               defconfig
+alpha                            allyesconfig
+nios2                            allyesconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+nds32                             allnoconfig
+nios2                               defconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+arc                              allyesconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+powerpc                          allyesconfig
+i386                          randconfig-a003
+i386                          randconfig-a001
+i386                          randconfig-a005
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_virt_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                                  kexec
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+x86_64                          rhel-8.3-func
 
-Hello Dawei,
-I was under the impression that the regulator and EMI were different hardware,
-while effectively they are inside of the DVFS Resource Collector IP, and the
-registers look like being a bit mixed up, so it's impossible to actually
-specify a relative iospace for the regulator, or for the EMI.
+clang tested configs:
+x86_64                        randconfig-c007
+powerpc              randconfig-c003-20220211
+arm                  randconfig-c002-20220211
+i386                          randconfig-c001
+mips                 randconfig-c004-20220211
+s390                 randconfig-c005-20220211
+riscv                randconfig-c006-20220211
+arm                     am200epdkit_defconfig
+arm                         orion5x_defconfig
+powerpc                   lite5200b_defconfig
+powerpc                     ksi8560_defconfig
+mips                       lemote2f_defconfig
+arm                                 defconfig
+mips                           rs90_defconfig
+powerpc                  mpc885_ads_defconfig
+i386                          randconfig-a002
+x86_64                        randconfig-a012
+riscv                randconfig-r042-20220211
+s390                 randconfig-r044-20220211
 
-In this case, from what I understand right now, the emi and regulator are not
-different hardware, but "features of" the DVFS Resource Collector.
-
-I've done some research around the kernel and, effectively, the only way that
-makes sense, is to register the feature-drivers (emi/vreg) with
-platform_device_register_data(), as per your current approach, even though I
-have a hunch that it will look a bit confusing in device-tree, as you'd be using
-the same node for both regulator and interconnects...
-
-I would exclude doing it as a MFD driver, as I don't see any very clean way to
-actually implement that.
-
-At this point, let's just keep it as it is, or this would probably get a lot
-overcomplicated for no good reasons.
-So, please ignore the device-tree suggestion and go on with the other suggested
-fixes for this driver.
-
-Looking forward to see your v4!
-
-Kind regards,
-Angelo
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
