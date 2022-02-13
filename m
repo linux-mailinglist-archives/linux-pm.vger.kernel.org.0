@@ -2,124 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C72EE4B3C5C
-	for <lists+linux-pm@lfdr.de>; Sun, 13 Feb 2022 18:07:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42BEF4B3CAC
+	for <lists+linux-pm@lfdr.de>; Sun, 13 Feb 2022 18:55:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234318AbiBMRHU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 13 Feb 2022 12:07:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55602 "EHLO
+        id S237575AbiBMRzR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 13 Feb 2022 12:55:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237192AbiBMRHT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 13 Feb 2022 12:07:19 -0500
+        with ESMTP id S232978AbiBMRzR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 13 Feb 2022 12:55:17 -0500
 Received: from smtp.smtpout.orange.fr (smtp08.smtpout.orange.fr [80.12.242.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA19CDFEC
-        for <linux-pm@vger.kernel.org>; Sun, 13 Feb 2022 09:07:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217DA5A58A
+        for <linux-pm@vger.kernel.org>; Sun, 13 Feb 2022 09:55:10 -0800 (PST)
 Received: from pop-os.home ([90.126.236.122])
         by smtp.orange.fr with ESMTPA
-        id JIL8nd3atuvBOJIL8nOEXk; Sun, 13 Feb 2022 18:07:11 +0100
+        id JJ5WndLDvuvBOJJ5XnOK2P; Sun, 13 Feb 2022 18:55:09 +0100
 X-ME-Helo: pop-os.home
 X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 13 Feb 2022 18:07:11 +0100
+X-ME-Date: Sun, 13 Feb 2022 18:55:09 +0100
 X-ME-IP: 90.126.236.122
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Nicolas Saenz Julienne <nicolas.saenz@prodys.net>
+To:     Support Opensource <support.opensource@diasemi.com>,
+        Sebastian Reichel <sre@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         linux-pm@vger.kernel.org
-Subject: [PATCH] power: supply: sbs-charger: Don't cancel work that is not initialized
-Date:   Sun, 13 Feb 2022 18:07:03 +0100
-Message-Id: <6a6b4c9ce80b0edb4c4c6a52d8b9a618a4325d42.1644772001.git.christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] power: supply: da9150-fg: Use devm_delayed_work_autocancel()
+Date:   Sun, 13 Feb 2022 18:55:05 +0100
+Message-Id: <c4cf74b56258c679f69bbc6350179b8b500f5800.1644774892.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This driver can use an interrupt or polling in order get the charger's
-status.
+This driver only uses managed resources, except for the delayed work, if
+it is used.
 
-When using polling, a delayed work is used.
+Use devm_delayed_work_autocancel() to also manage the delayed work.
+The error handling path of the probe and the remove function can both be
+removed.
 
-However, the remove() function unconditionally call
-cancel_delayed_work_sync(), even if the delayed work is not used and is not
-initialized.
+This saves a few lines of code.
 
-In order to fix it, use devm_delayed_work_autocancel() and remove the now
-useless remove() function.
-
-Fixes: feb583e37f8a ("power: supply: add sbs-charger driver")
 Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
-2 more comments:
-   - i2c_set_clientdata() looks now useless and could be removed as well.
-     I've left it because removing such assigned already played me some
-     unexpected trick.
+ drivers/power/supply/da9150-fg.c | 31 ++++++++++---------------------
+ 1 file changed, 10 insertions(+), 21 deletions(-)
 
-   - Should this be backported, devm_delayed_work_autocancel() is not
-     really old and may not be available in older kernel.
-     In this case a "if (!client->irq)" in the remove function would also
-     fix the issue
----
- drivers/power/supply/sbs-charger.c | 18 +++++++-----------
- 1 file changed, 7 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/power/supply/sbs-charger.c b/drivers/power/supply/sbs-charger.c
-index 6fa65d118ec1..b08f7d0c4181 100644
---- a/drivers/power/supply/sbs-charger.c
-+++ b/drivers/power/supply/sbs-charger.c
-@@ -18,6 +18,7 @@
- #include <linux/interrupt.h>
- #include <linux/regmap.h>
- #include <linux/bitops.h>
+diff --git a/drivers/power/supply/da9150-fg.c b/drivers/power/supply/da9150-fg.c
+index 6e367826aae9..e63fa62d1943 100644
+--- a/drivers/power/supply/da9150-fg.c
++++ b/drivers/power/supply/da9150-fg.c
+@@ -20,6 +20,7 @@
+ #include <asm/div64.h>
+ #include <linux/mfd/da9150/core.h>
+ #include <linux/mfd/da9150/registers.h>
 +#include <linux/devm-helpers.h>
  
- #define SBS_CHARGER_REG_SPEC_INFO		0x11
- #define SBS_CHARGER_REG_STATUS			0x13
-@@ -209,7 +210,12 @@ static int sbs_probe(struct i2c_client *client,
- 		if (ret)
- 			return dev_err_probe(&client->dev, ret, "Failed to request irq\n");
- 	} else {
--		INIT_DELAYED_WORK(&chip->work, sbs_delayed_work);
-+		ret = devm_delayed_work_autocancel(&client->dev, &chip->work,
-+						   sbs_delayed_work);
-+		if (ret)
-+			return dev_err_probe(&client->dev, ret,
-+					     "Failed to init work for polling\n");
+ /* Core2Wire */
+ #define DA9150_QIF_READ		(0x0 << 7)
+@@ -506,7 +507,13 @@ static int da9150_fg_probe(struct platform_device *pdev)
+ 	 * work for reporting data updates.
+ 	 */
+ 	if (fg->interval) {
+-		INIT_DELAYED_WORK(&fg->work, da9150_fg_work);
++		ret = devm_delayed_work_autocancel(dev, &fg->work,
++						   da9150_fg_work);
++		if (ret) {
++			dev_err(dev, "Failed to init work\n");
++			return ret;
++		}
 +
- 		schedule_delayed_work(&chip->work,
- 				      msecs_to_jiffies(SBS_CHARGER_POLL_TIME));
+ 		schedule_delayed_work(&fg->work,
+ 				      msecs_to_jiffies(fg->interval));
  	}
-@@ -220,15 +226,6 @@ static int sbs_probe(struct i2c_client *client,
- 	return 0;
- }
+@@ -515,34 +522,17 @@ static int da9150_fg_probe(struct platform_device *pdev)
+ 	irq = platform_get_irq_byname(pdev, "FG");
+ 	if (irq < 0) {
+ 		dev_err(dev, "Failed to get IRQ FG: %d\n", irq);
+-		ret = irq;
+-		goto irq_fail;
++		return irq;
+ 	}
  
--static int sbs_remove(struct i2c_client *client)
--{
--	struct sbs_info *chip = i2c_get_clientdata(client);
+ 	ret = devm_request_threaded_irq(dev, irq, NULL, da9150_fg_irq,
+ 					IRQF_ONESHOT, "FG", fg);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to request IRQ %d: %d\n", irq, ret);
+-		goto irq_fail;
++		return ret;
+ 	}
+ 
+ 	return 0;
 -
--	cancel_delayed_work_sync(&chip->work);
+-irq_fail:
+-	if (fg->interval)
+-		cancel_delayed_work(&fg->work);
 -
--	return 0;
+-	return ret;
 -}
 -
- #ifdef CONFIG_OF
- static const struct of_device_id sbs_dt_ids[] = {
- 	{ .compatible = "sbs,sbs-charger" },
-@@ -245,7 +242,6 @@ MODULE_DEVICE_TABLE(i2c, sbs_id);
+-static int da9150_fg_remove(struct platform_device *pdev)
+-{
+-	struct da9150_fg *fg = platform_get_drvdata(pdev);
+-
+-	if (fg->interval)
+-		cancel_delayed_work(&fg->work);
+-
+-	return 0;
+ }
  
- static struct i2c_driver sbs_driver = {
- 	.probe		= sbs_probe,
--	.remove		= sbs_remove,
- 	.id_table	= sbs_id,
- 	.driver = {
- 		.name	= "sbs-charger",
+ static int da9150_fg_resume(struct platform_device *pdev)
+@@ -564,7 +554,6 @@ static struct platform_driver da9150_fg_driver = {
+ 		.name = "da9150-fuel-gauge",
+ 	},
+ 	.probe = da9150_fg_probe,
+-	.remove = da9150_fg_remove,
+ 	.resume = da9150_fg_resume,
+ };
+ 
 -- 
 2.32.0
 
