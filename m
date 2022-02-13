@@ -2,60 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6E244B38BF
-	for <lists+linux-pm@lfdr.de>; Sun, 13 Feb 2022 01:09:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 605194B38C0
+	for <lists+linux-pm@lfdr.de>; Sun, 13 Feb 2022 01:10:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232659AbiBMAKB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 12 Feb 2022 19:10:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38694 "EHLO
+        id S232662AbiBMAKC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 12 Feb 2022 19:10:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiBMAKA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 12 Feb 2022 19:10:00 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B80A860049
-        for <linux-pm@vger.kernel.org>; Sat, 12 Feb 2022 16:09:55 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id 13so23577499lfp.7
-        for <linux-pm@vger.kernel.org>; Sat, 12 Feb 2022 16:09:55 -0800 (PST)
+        with ESMTP id S229547AbiBMAKB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 12 Feb 2022 19:10:01 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA8215FF3E
+        for <linux-pm@vger.kernel.org>; Sat, 12 Feb 2022 16:09:56 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id c10so4725906ljr.9
+        for <linux-pm@vger.kernel.org>; Sat, 12 Feb 2022 16:09:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=n2AFnLzfCBVEgxe6wC4WVBXYA281SM/b+Qu5yv+nS9Y=;
-        b=oiAx+7cZYEfkPVmGWGpTrkGaKZmSPrl3PU4pW6zSHvm0Xx72HsCjFCAwwntQV7sJgD
-         D7Qg0NAURO4lDSMQqx5bCjGdDiKXmF3Ay9ku/3D01XJG5+l/cCcP7/InJUEHoKwNmol9
-         8ote5EjzZus9YyS+DRjpepN7rME2yc32YlNg/pRDSUQQnAUNx9cAsuZCzo9Dd/ih31sY
-         lcFuSp9JcJRifeL5ATlBLjSETzpxbR1yMvL6rSFISkiBBQDosPQqN9cnO5t4sNBdz1CM
-         NU6uj4KKa3CMh0obHDI7P8b6jLlxmN02uJzAOAMdFhsY6zZf97FQxCYA+1nlbTmqgoFU
-         TBeA==
+        bh=oH/tMq7L/OsvHDpbHNtmdlbPvHB35ZJUR6sy0ukQHZ8=;
+        b=Fg1H2j1Q1jH7doTae5TfBQIJWI8DdKSVPunynfcY+Uerp2+1xfA/vYDgqn1aN9eD68
+         6LR7aOWFX3tf/CT34a+7rS8w1mPyHGyUw7LldgxEtLVsvu4s2isUGDTd1jmkJPTS9iWG
+         bEqhf9p6TuzAKVos1+27DTbIJnuUxaqFf0IZsPdKYSBrmz6awY/rq2658dnpRRwFKvU2
+         sSx9nKo9R0/35yr247GHMVjXDjFihlNtSJi7ipDvBWKYnCdt1p6DEqAICeejPZ5dfrWn
+         rOFAm9YrdQBaN4L3U0c7ExKVHbx2IdWLoG3xMHAqx+F9FWDXH9bt+j3ADk0Zlu1fc9IK
+         YWZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=n2AFnLzfCBVEgxe6wC4WVBXYA281SM/b+Qu5yv+nS9Y=;
-        b=5kEmWLLxLH5AtYG0bITUROerTCyfKlnlyRpyIIPi9CrypX1w/aeyRHH8aOgygl8RTu
-         imnyA3aGJs3vvNYFa5En998xqWcKV8nKoVXm2gg0MSarv45MnrjH3VZG2TtOC1xSXxMF
-         gYCVxFc/Vwdh9RUMRqRJa9WPwqml16JQYXikXUcLc3Zo3tuIBaSRrhFsReMiUGJZUhSI
-         +MCdDD/L3NxABmbZFNTPrKdL51I2rSQ1ZDeJHpOIN8I+vz9FTRwNtL0qg61mDSNzMlKR
-         0EZZDCci5cI+GBt272fwADH8lDwOxdD3SyF/C09odGbfAlpzx+Y9vwJF++RFAvoOV/BF
-         cusw==
-X-Gm-Message-State: AOAM53176T8fsvBsng7McBq56rjqTqS8Nb1pHrNBcUTD8beVvJZt9rAq
-        NEsc6dze70ZYpjN7qNc+2+29wA==
-X-Google-Smtp-Source: ABdhPJyjfuxHrF+EEiwnAbpHmfYC5v6/p321MWL/IsJY7A7yctYmUYUO72t/CBZ3z5o+Q0TtSB6uXw==
-X-Received: by 2002:a05:6512:3b90:: with SMTP id g16mr5872128lfv.575.1644710994020;
-        Sat, 12 Feb 2022 16:09:54 -0800 (PST)
+        bh=oH/tMq7L/OsvHDpbHNtmdlbPvHB35ZJUR6sy0ukQHZ8=;
+        b=p3myRhnSg3J6Aanycz0/EHe0LxFfem4i6VmWEf0hPIkh3YUu7ZD4NWJFSKX6vsgVOJ
+         N13kQvMXY7TWS543eEwDjKKmJJw/s3qv3CMnz8Mv35cHIWQ7wPZvFxfbX/0FrQukBsKZ
+         1KPoWzcFSBZCy5C2XISa36EnObWqChCkgoxoV19OZyFTRcbAGWLLr21koDAcU7uu6t/g
+         qMQKM+LDZCNjHrZJCHFRJPxv+EMsUluA9hkXxA8xc5S84HsN9z1ti1jSBrfKViE+pMia
+         pOSPlfHDLeoCCDrmiw8b6ETs2mznaCA5LoHE/3SoBttqhfxBRMRtax3pN1VP35w+qRZm
+         5dnA==
+X-Gm-Message-State: AOAM530rkiWWtlsCiq44+ph840Bc68bHAEsLqxp5Mj8qfxCyHs41IicT
+        VwYJSKLLniHRlPy+EYrSr9OU6VnkgLfZNH93
+X-Google-Smtp-Source: ABdhPJyYp/pByhpzaoTjmo2gqW7kaCuxVOTDNb4M6P7ioC+VV6x4SE/OHdxq2vXlBAJItB7xfsUiFw==
+X-Received: by 2002:a2e:a546:: with SMTP id e6mr4704195ljn.98.1644710995258;
+        Sat, 12 Feb 2022 16:09:55 -0800 (PST)
 Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id g30sm382292lja.39.2022.02.12.16.09.53
+        by smtp.gmail.com with ESMTPSA id g30sm382292lja.39.2022.02.12.16.09.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Feb 2022 16:09:53 -0800 (PST)
+        Sat, 12 Feb 2022 16:09:54 -0800 (PST)
 From:   Linus Walleij <linus.walleij@linaro.org>
 To:     Sebastian Reichel <sre@kernel.org>,
         Marcus Cooper <codekipper@gmail.com>
 Cc:     linux-pm@vger.kernel.org,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 2/6 v2] power: supply: ab8500: Standardize alert mode charging
-Date:   Sun, 13 Feb 2022 01:06:59 +0100
-Message-Id: <20220213000703.772673-3-linus.walleij@linaro.org>
+Subject: [PATCH 3/6 v2] power: supply: ab8500: Standardize BTI resistance
+Date:   Sun, 13 Feb 2022 01:07:00 +0100
+Message-Id: <20220213000703.772673-4-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220213000703.772673-1-linus.walleij@linaro.org>
 References: <20220213000703.772673-1-linus.walleij@linaro.org>
@@ -71,231 +71,269 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The AB8500 code is using a special current and voltage setting
-when the battery is in "alert mode", i.e. when it is starting
-to go outside normal operating conditions so it is too
-cold or too hot. This makes sense as a way for the charging
-algorithm to deal with hostile environments.
+The Battery Type Indicator (BTI) resistor is a resistor mounted
+between a special terminal on the battery and ground. By sending
+a fixed current (such as 7mA) through this resistor and measuring
+the voltage over it, the resistance can be determined, and this
+verifies the battery type.
 
-Add the needed members to the struct power_supply_battery_info,
-and switch the AB8500 charging code over to using this.
+Typical side view of the battery:
+
+  o     o     o
+ GND   BTI   +3.8V
+
+Typical example of the electrical layout:
+
+  +3.8 V   BTI
+    |       |
+    | +     |
+ _______   [ ] 7kOhm
+   ___      |
+    |       |
+    |       |
+   GND     GND
+
+By verifying this resistance before attempting to charge the
+battery we add an additional level of security.
+
+In some systems this is used for plug-and-play of batteries with
+different capacity. In other cases, this is merely used to verify
+that the right type of battery is connected, if several batteries
+have the same physical shape and can be plugged into the same
+slot. Sometimes this is just a surplus security mechanism.
+
+Nokia and Samsung among many other vendors are known to use these
+BTI resistors.
+
+Add the BTI properties to struct power_supply_battery_info and
+switch the AB8500 charger code over to using it.
 
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
 ChangeLog v1->v2:
-- Split the combined alert temperature state current and
-  voltage into two: one for low temperature and one for high
-  temperature.
-- Augment the AB8500 charging algorithm to keep track of if
-  the battery got too cold or too warm
-- Utilize the different voltages in the AB8500 driver.
+- No changes
 ---
- drivers/power/supply/ab8500-bm.h         |  4 --
- drivers/power/supply/ab8500_bmdata.c     | 15 +++++++-
- drivers/power/supply/ab8500_chargalg.c   | 48 ++++++++++++++++--------
- drivers/power/supply/power_supply_core.c |  4 ++
- include/linux/power_supply.h             | 17 +++++++++
- 5 files changed, 66 insertions(+), 22 deletions(-)
+ drivers/power/supply/ab8500-bm.h         | 12 -----------
+ drivers/power/supply/ab8500_bmdata.c     | 14 ++++++-------
+ drivers/power/supply/ab8500_btemp.c      | 14 ++++++-------
+ drivers/power/supply/ab8500_fg.c         |  4 ----
+ drivers/power/supply/power_supply_core.c | 26 +++++++++++++++++++++++-
+ include/linux/power_supply.h             | 13 ++++++++++++
+ 6 files changed, 51 insertions(+), 32 deletions(-)
 
 diff --git a/drivers/power/supply/ab8500-bm.h b/drivers/power/supply/ab8500-bm.h
-index 4d74d21cf1eb..91ef9d4a5222 100644
+index 91ef9d4a5222..180a016b3662 100644
 --- a/drivers/power/supply/ab8500-bm.h
 +++ b/drivers/power/supply/ab8500-bm.h
-@@ -331,14 +331,10 @@ struct ab8500_maxim_parameters {
-  * struct ab8500_battery_type - different batteries supported
-  * @resis_high:			battery upper resistance limit
-  * @resis_low:			battery lower resistance limit
-- * @low_high_cur_lvl:		charger current in temp low/high state in mA
-- * @low_high_vol_lvl:		charger voltage in temp low/high state in mV'
-  */
- struct ab8500_battery_type {
- 	int resis_high;
- 	int resis_low;
--	int low_high_cur_lvl;
--	int low_high_vol_lvl;
+@@ -327,16 +327,6 @@ struct ab8500_maxim_parameters {
+ 	int charger_curr_step_ua;
  };
  
+-/**
+- * struct ab8500_battery_type - different batteries supported
+- * @resis_high:			battery upper resistance limit
+- * @resis_low:			battery lower resistance limit
+- */
+-struct ab8500_battery_type {
+-	int resis_high;
+-	int resis_low;
+-};
+-
  /**
+  * struct ab8500_bm_capacity_levels - ab8500 capacity level data
+  * @critical:		critical capacity level in percent
+@@ -387,7 +377,6 @@ struct ab8500_bm_charger_parameters {
+  * @temp_hysteresis	temperature hysteresis
+  * @maxi		maximization parameters
+  * @cap_levels		capacity in percent for the different capacity levels
+- * @bat_type		table of supported battery types
+  * @chg_params		charger parameters
+  * @fg_params		fuel gauge parameters
+  */
+@@ -410,7 +399,6 @@ struct ab8500_bm_data {
+ 	int temp_hysteresis;
+ 	const struct ab8500_maxim_parameters *maxi;
+ 	const struct ab8500_bm_capacity_levels *cap_levels;
+-	struct ab8500_battery_type *bat_type;
+ 	const struct ab8500_bm_charger_parameters *chg_params;
+ 	const struct ab8500_fg_parameters *fg_params;
+ };
 diff --git a/drivers/power/supply/ab8500_bmdata.c b/drivers/power/supply/ab8500_bmdata.c
-index 66a454942c7c..bf0b74773eee 100644
+index bf0b74773eee..3e6ea22372b2 100644
 --- a/drivers/power/supply/ab8500_bmdata.c
 +++ b/drivers/power/supply/ab8500_bmdata.c
-@@ -77,8 +77,6 @@ static struct power_supply_maintenance_charge_table ab8500_maint_charg_table[] =
- static struct ab8500_battery_type bat_type_thermistor_unknown = {
- 	.resis_high = 0,
- 	.resis_low = 0,
--	.low_high_cur_lvl = 300,
--	.low_high_vol_lvl = 4000,
+@@ -73,12 +73,6 @@ static struct power_supply_maintenance_charge_table ab8500_maint_charg_table[] =
+ 	}
  };
  
+-/* Default battery type for reference designs is the unknown type */
+-static struct ab8500_battery_type bat_type_thermistor_unknown = {
+-	.resis_high = 0,
+-	.resis_low = 0,
+-};
+-
  static const struct ab8500_bm_capacity_levels cap_levels = {
-@@ -192,6 +190,19 @@ int ab8500_bm_of_probe(struct power_supply *psy,
- 		bi->maintenance_charge_size = ARRAY_SIZE(ab8500_maint_charg_table);
+ 	.critical	= 2,
+ 	.low		= 10,
+@@ -136,7 +130,6 @@ struct ab8500_bm_data ab8500_bm_data = {
+ 	.enable_overshoot       = false,
+ 	.fg_res                 = 100,
+ 	.cap_levels             = &cap_levels,
+-	.bat_type               = &bat_type_thermistor_unknown,
+ 	.interval_charging      = 5,
+ 	.interval_not_charging  = 120,
+ 	.maxi                   = &ab8500_maxi_params,
+@@ -214,6 +207,13 @@ int ab8500_bm_of_probe(struct power_supply *psy,
+ 		bi->resist_table_size = ARRAY_SIZE(temp_to_batres_tbl_thermistor);
  	}
  
-+	if (bi->alert_low_temp_charge_current_ua < 0 ||
-+	    bi->alert_low_temp_charge_voltage_uv < 0)
-+	{
-+		bi->alert_low_temp_charge_current_ua = 300000;
-+		bi->alert_low_temp_charge_voltage_uv = 4000000;
-+	}
-+	if (bi->alert_high_temp_charge_current_ua < 0 ||
-+	    bi->alert_high_temp_charge_voltage_uv < 0)
-+	{
-+		bi->alert_high_temp_charge_current_ua = 300000;
-+		bi->alert_high_temp_charge_voltage_uv = 4000000;
++	/* The default battery is emulated by a resistor at 7K */
++	if (bi->bti_resistance_ohm < 0 ||
++	    bi->bti_resistance_tolerance < 0) {
++		bi->bti_resistance_ohm = 7000;
++		bi->bti_resistance_tolerance = 20;
 +	}
 +
- 	/*
- 	 * Internal resistance and factory resistance are tightly coupled
- 	 * so both MUST be defined or we fall back to defaults.
-diff --git a/drivers/power/supply/ab8500_chargalg.c b/drivers/power/supply/ab8500_chargalg.c
-index 6054996b6260..c9c7f7028af6 100644
---- a/drivers/power/supply/ab8500_chargalg.c
-+++ b/drivers/power/supply/ab8500_chargalg.c
-@@ -149,7 +149,8 @@ struct ab8500_chargalg_events {
- 	bool batt_ovv;
- 	bool batt_rem;
- 	bool btemp_underover;
--	bool btemp_lowhigh;
-+	bool btemp_low;
-+	bool btemp_high;
- 	bool main_thermal_prot;
- 	bool usb_thermal_prot;
- 	bool main_ovv;
-@@ -684,26 +685,31 @@ static void ab8500_chargalg_check_temp(struct ab8500_chargalg *di)
- 		di->batt_data.temp < (bi->temp_alert_max - di->t_hyst_norm)) {
- 		/* Temp OK! */
- 		di->events.btemp_underover = false;
--		di->events.btemp_lowhigh = false;
-+		di->events.btemp_low = false;
-+		di->events.btemp_high = false;
- 		di->t_hyst_norm = 0;
- 		di->t_hyst_lowhigh = 0;
+ 	if (!bi->ocv_table[0]) {
+ 		/* Default capacity table at say 25 degrees Celsius */
+ 		bi->ocv_temp[0] = 25;
+diff --git a/drivers/power/supply/ab8500_btemp.c b/drivers/power/supply/ab8500_btemp.c
+index 2a6fc151210c..b7e842dff567 100644
+--- a/drivers/power/supply/ab8500_btemp.c
++++ b/drivers/power/supply/ab8500_btemp.c
+@@ -237,8 +237,8 @@ static int ab8500_btemp_get_batctrl_res(struct ab8500_btemp *di)
+  */
+ static int ab8500_btemp_id(struct ab8500_btemp *di)
+ {
++	struct power_supply_battery_info *bi = di->bm->bi;
+ 	int res;
+-	u8 i;
+ 
+ 	di->curr_source = BTEMP_BATCTRL_CURR_SRC_7UA;
+ 
+@@ -248,13 +248,11 @@ static int ab8500_btemp_id(struct ab8500_btemp *di)
+ 		return -ENXIO;
+ 	}
+ 
+-	if ((res <= di->bm->bat_type->resis_high) &&
+-	    (res >= di->bm->bat_type->resis_low)) {
+-		dev_info(di->dev, "Battery detected on BATTEMP"
+-			 " low %d < res %d < high: %d"
+-			 " index: %d\n",
+-			 di->bm->bat_type->resis_low, res,
+-			 di->bm->bat_type->resis_high, i);
++	if (power_supply_battery_bti_in_range(bi, res)) {
++		dev_info(di->dev, "Battery detected on BATCTRL (pin C3)"
++			 " resistance %d Ohm = %d Ohm +/- %d%%\n",
++			 res, bi->bti_resistance_ohm,
++			 bi->bti_resistance_tolerance);
  	} else {
--		if (((di->batt_data.temp >= bi->temp_alert_max) &&
--			(di->batt_data.temp <
--				(bi->temp_max - di->t_hyst_lowhigh))) ||
--			((di->batt_data.temp >
--				(bi->temp_min + di->t_hyst_lowhigh)) &&
--			(di->batt_data.temp <= bi->temp_alert_min))) {
--			/* TEMP minor!!!!! */
-+		if ((di->batt_data.temp >= bi->temp_alert_max) &&
-+		    (di->batt_data.temp < (bi->temp_max - di->t_hyst_lowhigh))) {
-+			/* Alert zone for high temperature */
- 			di->events.btemp_underover = false;
--			di->events.btemp_lowhigh = true;
-+			di->events.btemp_high = true;
-+			di->t_hyst_norm = di->bm->temp_hysteresis;
-+			di->t_hyst_lowhigh = 0;
-+		} else if ((di->batt_data.temp > (bi->temp_min + di->t_hyst_lowhigh)) &&
-+			   (di->batt_data.temp <= bi->temp_alert_min)) {
-+			/* Alert zone for low temperature */
-+			di->events.btemp_underover = false;
-+			di->events.btemp_low = true;
- 			di->t_hyst_norm = di->bm->temp_hysteresis;
- 			di->t_hyst_lowhigh = 0;
- 		} else if (di->batt_data.temp <= bi->temp_min ||
- 			di->batt_data.temp >= bi->temp_max) {
- 			/* TEMP major!!!!! */
- 			di->events.btemp_underover = true;
--			di->events.btemp_lowhigh = false;
-+			di->events.btemp_low = false;
-+			di->events.btemp_high = false;
- 			di->t_hyst_norm = 0;
- 			di->t_hyst_lowhigh = di->bm->temp_hysteresis;
- 		} else {
-@@ -1313,7 +1319,7 @@ static void ab8500_chargalg_algorithm(struct ab8500_chargalg *di)
- 			ab8500_chargalg_state_to(di, STATE_WD_EXPIRED_INIT);
- 	}
- 	/* Battery temp high/low */
--	else if (di->events.btemp_lowhigh) {
-+	else if (di->events.btemp_low || di->events.btemp_high) {
- 		if (di->charge_state != STATE_TEMP_LOWHIGH)
- 			ab8500_chargalg_state_to(di, STATE_TEMP_LOWHIGH_INIT);
- 	}
-@@ -1510,9 +1516,19 @@ static void ab8500_chargalg_algorithm(struct ab8500_chargalg *di)
- 		break;
+ 		dev_warn(di->dev, "Battery identified as unknown"
+ 			 ", resistance %d Ohm\n", res);
+diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
+index 6436861db016..39c7e6b0be52 100644
+--- a/drivers/power/supply/ab8500_fg.c
++++ b/drivers/power/supply/ab8500_fg.c
+@@ -2241,10 +2241,6 @@ static int ab8500_fg_get_ext_psy_data(struct device *dev, void *data)
+ 				if (!di->flags.batt_id_received &&
+ 				    (bi && (bi->technology !=
+ 					    POWER_SUPPLY_TECHNOLOGY_UNKNOWN))) {
+-					const struct ab8500_battery_type *b;
+-
+-					b = di->bm->bat_type;
+-
+ 					di->flags.batt_id_received = true;
  
- 	case STATE_TEMP_LOWHIGH_INIT:
--		ab8500_chargalg_start_charging(di,
--			di->bm->bat_type->low_high_vol_lvl,
--			di->bm->bat_type->low_high_cur_lvl);
-+		if (di->events.btemp_low) {
-+			ab8500_chargalg_start_charging(di,
-+				       bi->alert_low_temp_charge_voltage_uv,
-+				       bi->alert_low_temp_charge_current_ua);
-+		} else if (di->events.btemp_high) {
-+			ab8500_chargalg_start_charging(di,
-+				       bi->alert_high_temp_charge_voltage_uv,
-+				       bi->alert_high_temp_charge_current_ua);
-+		} else {
-+			dev_err(di->dev, "neither low or high temp event occured\n");
-+			ab8500_chargalg_state_to(di, STATE_NORMAL_INIT);
-+			break;
-+		}
- 		ab8500_chargalg_stop_maintenance_timer(di);
- 		di->charge_status = POWER_SUPPLY_STATUS_CHARGING;
- 		ab8500_chargalg_state_to(di, STATE_TEMP_LOWHIGH);
-@@ -1520,7 +1536,7 @@ static void ab8500_chargalg_algorithm(struct ab8500_chargalg *di)
- 		fallthrough;
- 
- 	case STATE_TEMP_LOWHIGH:
--		if (!di->events.btemp_lowhigh)
-+		if (!di->events.btemp_low && !di->events.btemp_high)
- 			ab8500_chargalg_state_to(di, STATE_NORMAL_INIT);
- 		break;
- 
+ 					di->bat_cap.max_mah_design =
 diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
-index 6568939e4518..5d7d15860529 100644
+index 5d7d15860529..cbe957088c56 100644
 --- a/drivers/power/supply/power_supply_core.c
 +++ b/drivers/power/supply/power_supply_core.c
-@@ -591,6 +591,10 @@ int power_supply_get_battery_info(struct power_supply *psy,
- 	info->charge_restart_voltage_uv      = -EINVAL;
- 	info->overvoltage_limit_uv           = -EINVAL;
- 	info->maintenance_charge             = NULL;
-+	info->alert_low_temp_charge_current_ua = -EINVAL;
-+	info->alert_low_temp_charge_voltage_uv = -EINVAL;
-+	info->alert_high_temp_charge_current_ua = -EINVAL;
-+	info->alert_high_temp_charge_voltage_uv = -EINVAL;
- 	info->temp_ambient_alert_min         = INT_MIN;
- 	info->temp_ambient_alert_max         = INT_MAX;
- 	info->temp_alert_min                 = INT_MIN;
+@@ -602,7 +602,9 @@ int power_supply_get_battery_info(struct power_supply *psy,
+ 	info->temp_min                       = INT_MIN;
+ 	info->temp_max                       = INT_MAX;
+ 	info->factory_internal_resistance_uohm  = -EINVAL;
+-	info->resist_table = NULL;
++	info->resist_table                   = NULL;
++	info->bti_resistance_ohm             = -EINVAL;
++	info->bti_resistance_tolerance       = -EINVAL;
+ 
+ 	for (index = 0; index < POWER_SUPPLY_OCV_TEMP_MAX; index++) {
+ 		info->ocv_table[index]       = NULL;
+@@ -915,6 +917,28 @@ int power_supply_batinfo_ocv2cap(struct power_supply_battery_info *info,
+ }
+ EXPORT_SYMBOL_GPL(power_supply_batinfo_ocv2cap);
+ 
++bool power_supply_battery_bti_in_range(struct power_supply_battery_info *info,
++				       int resistance)
++{
++	int low, high;
++
++	/* Nothing like this can be checked */
++	if (info->bti_resistance_ohm <= 0)
++		return false;
++
++	/* This will be extremely strict and unlikely to work */
++	if (info->bti_resistance_tolerance <= 0)
++		return (info->bti_resistance_ohm == resistance);
++
++	low = info->bti_resistance_ohm -
++		(info->bti_resistance_ohm * info->bti_resistance_tolerance) / 100;
++	high = info->bti_resistance_ohm +
++		(info->bti_resistance_ohm * info->bti_resistance_tolerance) / 100;
++
++	return ((resistance >= low) && (resistance <= high));
++}
++EXPORT_SYMBOL_GPL(power_supply_battery_bti_in_range);
++
+ int power_supply_get_property(struct power_supply *psy,
+ 			    enum power_supply_property psp,
+ 			    union power_supply_propval *val)
 diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index b998fc4c87ae..42a47d7aa3fd 100644
+index 42a47d7aa3fd..ed206ac64122 100644
 --- a/include/linux/power_supply.h
 +++ b/include/linux/power_supply.h
-@@ -443,6 +443,19 @@ struct power_supply_maintenance_charge_table {
-  *   after the main CC/CV charging phase is complete.
-  * @maintenance_charge_size: the number of maintenance charging settings in
-  *   maintenance_charge.
-+ * @alert_low_temp_charge_current_ua: The charging current to use if the battery
-+ *   enters low alert temperature, i.e. if the internal temperature is between
-+ *   temp_alert_min and temp_min. No matter the charging phase, this
-+ *   and alert_high_temp_charge_voltage_uv will be applied.
-+ * @alert_low_temp_charge_voltage_uv: Same as alert_low_temp_charge_current_ua,
-+ *   but for the charging voltage.
-+ * @alert_high_temp_charge_current_ua: The charging current to use if the
-+ *   battery enters high alert temperature, i.e. if the internal temperature is
-+ *   between temp_alert_max and temp_max. No matter the charging phase, this
-+ *   and alert_high_temp_charge_voltage_uv will be applied, usually lowering
-+ *   the charging current as an evasive manouver.
-+ * @alert_high_temp_charge_voltage_uv: Same as
-+ *   alert_high_temp_charge_current_ua, but for the charging voltage.
-  * @factory_internal_resistance_uohm: the internal resistance of the battery
-  *   at fabrication time, expressed in microohms. This resistance will vary
-  *   depending on the lifetime and charge of the battery, so this is just a
-@@ -594,6 +607,10 @@ struct power_supply_battery_info {
- 	int constant_charge_voltage_max_uv;
- 	struct power_supply_maintenance_charge_table *maintenance_charge;
- 	int maintenance_charge_size;
-+	int alert_low_temp_charge_current_ua;
-+	int alert_low_temp_charge_voltage_uv;
-+	int alert_high_temp_charge_current_ua;
-+	int alert_high_temp_charge_voltage_uv;
- 	int factory_internal_resistance_uohm;
- 	int ocv_temp[POWER_SUPPLY_OCV_TEMP_MAX];
- 	int temp_ambient_alert_min;
+@@ -497,6 +497,14 @@ struct power_supply_maintenance_charge_table {
+  *   by temperature: highest temperature with lowest resistance first, lowest
+  *   temperature with highest resistance last.
+  * @resist_table_size: the number of items in the resist_table.
++ * @bti_resistance_ohm: The Battery Type Indicator (BIT) nominal resistance
++ *   in ohms for this battery, if an identification resistor is mounted
++ *   between a third battery terminal and ground. This scheme is used by a lot
++ *   of mobile device batteries.
++ * @bti_resistance_tolerance: The tolerance in percent of the BTI resistance,
++ *   for example 10 for +/- 10%, if the bti_resistance is set to 7000 and the
++ *   tolerance is 10% we will detect a proper battery if the BTI resistance
++ *   is between 6300 and 7700 Ohm.
+  *
+  * This is the recommended struct to manage static battery parameters,
+  * populated by power_supply_get_battery_info(). Most platform drivers should
+@@ -623,6 +631,8 @@ struct power_supply_battery_info {
+ 	int ocv_table_size[POWER_SUPPLY_OCV_TEMP_MAX];
+ 	struct power_supply_resistance_temp_table *resist_table;
+ 	int resist_table_size;
++	int bti_resistance_ohm;
++	int bti_resistance_tolerance;
+ };
+ 
+ extern struct atomic_notifier_head power_supply_notifier;
+@@ -666,6 +676,8 @@ power_supply_temp2resist_simple(struct power_supply_resistance_temp_table *table
+ 				int table_len, int temp);
+ extern struct power_supply_maintenance_charge_table *
+ power_supply_get_maintenance_charging_setting(struct power_supply_battery_info *info, int index);
++extern bool power_supply_battery_bti_in_range(struct power_supply_battery_info *info,
++					      int resistance);
+ extern void power_supply_changed(struct power_supply *psy);
+ extern int power_supply_am_i_supplied(struct power_supply *psy);
+ extern int power_supply_set_input_current_limit_from_supplier(
+@@ -682,6 +694,7 @@ power_supply_supports_maintenance_charging(struct power_supply_battery_info *inf
+ 	return (mt != NULL);
+ }
+ 
++
+ #ifdef CONFIG_POWER_SUPPLY
+ extern int power_supply_is_system_supplied(void);
+ #else
 -- 
 2.34.1
 
