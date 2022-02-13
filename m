@@ -2,118 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3CC74B3C3F
-	for <lists+linux-pm@lfdr.de>; Sun, 13 Feb 2022 17:16:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C72EE4B3C5C
+	for <lists+linux-pm@lfdr.de>; Sun, 13 Feb 2022 18:07:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237021AbiBMQQT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 13 Feb 2022 11:16:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38440 "EHLO
+        id S234318AbiBMRHU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 13 Feb 2022 12:07:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236992AbiBMQQT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 13 Feb 2022 11:16:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD4A5A0AF;
-        Sun, 13 Feb 2022 08:16:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2A01EB80B32;
-        Sun, 13 Feb 2022 16:16:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D6FDC004E1;
-        Sun, 13 Feb 2022 16:16:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644768969;
-        bh=SjGHF8jSyh7ZBRwmmpVF3guCVazx1Er4nKQs+Ocu9nQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NFivLYLbG1XLP3hYWVsOS3yZzA2+BHrUTF3K8OSieq6/bk2EyoubQ99pa9prLEjvw
-         i5EtCs80TK7R/qoZatNkr4OVwCt2QXmtgbcwBPBho7KBX6KXXlChp1kyeYF3h8IUgT
-         jJS8ZsGrkpxz3NhID8phWmvHEBE0/WYaQCcv8HClbH8AmVDhU6eB4zt4bzFXAjiNhf
-         trRgYlAHj0zfYvILzv1tyHwTjd/pDEyA/IvlVLkWHP0DmMFWjtG1xBUre5x0hkP5/R
-         wzHez7OETHF0fqBjAArQkv83SP8b7yG27J0LlLf+ZG7M16PXQXpM1RImwEoHrf+7Yj
-         ZFGZEKCHWDUEQ==
-Date:   Sun, 13 Feb 2022 16:22:45 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Jishnu Prakash <quic_jprakash@quicinc.com>
-Cc:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <devicetree@vger.kernel.org>, <mka@chromium.org>,
-        <dmitry.baryshkov@linaro.org>, <robh+dt@kernel.org>,
-        <knaack.h@gmx.de>, <lars@metafoo.de>, <pmeerw@pmeerw.net>,
-        <manivannan.sadhasivam@linaro.org>, <linus.walleij@linaro.org>,
-        <quic_kgunda@quicinc.com>, <quic_aghayal@quicinc.com>,
-        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
-        <quic_subbaram@quicinc.com>, <amitk@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm-owner@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH V5 0/4] thermal: qcom: Add support for PMIC5 Gen2 ADC_TM
-Message-ID: <20220213162245.009d4e41@jic23-huawei>
-In-Reply-To: <1644741191-12039-1-git-send-email-quic_jprakash@quicinc.com>
-References: <1644741191-12039-1-git-send-email-quic_jprakash@quicinc.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        with ESMTP id S237192AbiBMRHT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 13 Feb 2022 12:07:19 -0500
+Received: from smtp.smtpout.orange.fr (smtp08.smtpout.orange.fr [80.12.242.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA19CDFEC
+        for <linux-pm@vger.kernel.org>; Sun, 13 Feb 2022 09:07:12 -0800 (PST)
+Received: from pop-os.home ([90.126.236.122])
+        by smtp.orange.fr with ESMTPA
+        id JIL8nd3atuvBOJIL8nOEXk; Sun, 13 Feb 2022 18:07:11 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 13 Feb 2022 18:07:11 +0100
+X-ME-IP: 90.126.236.122
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Nicolas Saenz Julienne <nicolas.saenz@prodys.net>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-pm@vger.kernel.org
+Subject: [PATCH] power: supply: sbs-charger: Don't cancel work that is not initialized
+Date:   Sun, 13 Feb 2022 18:07:03 +0100
+Message-Id: <6a6b4c9ce80b0edb4c4c6a52d8b9a618a4325d42.1644772001.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 13 Feb 2022 14:03:07 +0530
-Jishnu Prakash <quic_jprakash@quicinc.com> wrote:
+This driver can use an interrupt or polling in order get the charger's
+status.
 
-Hi Jishnu,
+When using polling, a delayed work is used.
 
-My assumption is this will go through the thermal tree, but if
-that turns out not to be the case and we need to do something
-different then let me know.  From IIO side of things I'm marking
-it handled elsewhere in patchwork.
+However, the remove() function unconditionally call
+cancel_delayed_work_sync(), even if the delayed work is not used and is not
+initialized.
 
-Thanks,
+In order to fix it, use devm_delayed_work_autocancel() and remove the now
+useless remove() function.
 
-Jonathan
+Fixes: feb583e37f8a ("power: supply: add sbs-charger driver")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+2 more comments:
+   - i2c_set_clientdata() looks now useless and could be removed as well.
+     I've left it because removing such assigned already played me some
+     unexpected trick.
 
+   - Should this be backported, devm_delayed_work_autocancel() is not
+     really old and may not be available in older kernel.
+     In this case a "if (!client->irq)" in the remove function would also
+     fix the issue
+---
+ drivers/power/supply/sbs-charger.c | 18 +++++++-----------
+ 1 file changed, 7 insertions(+), 11 deletions(-)
 
-> Changes in v5:
-> Fixed some compilation errors in patch 4.
-> 
-> Changes in v4:
-> Addressed comments given by Jonathan (for using put_unaligned_le16)
-> and by Dmitry (for using separate init function and correcting args_count)
-> for qcom-spmi-adc-tm5.c in patch 4.
-> Added init function in patch 3.
-> 
-> Changes in v3:
-> Addressed comments given by Jonathan for qcom-spmi-adc-tm5.yaml.
-> Addressed comments given by Dmitry and Jonathan for qcom-spmi-adc-tm5.c.
-> Split patch for qcom-spmi-adc-tm5.c into two parts, one to refactor
-> code to support multiple device generations and the second to add
-> actual Gen2 ADC_TM changes.
-> 
-> Changes in v2:
-> Split IIO file changes into separate patch.
-> Addressed comments given by Dmitry for qcom-spmi-adc-tm5.c.
-> 
-> Changes in v1:
-> PMIC5 Gen2 ADC_TM is supported on PMIC7 chips and is a close
-> counterpart of PMIC7 ADC. It has the same functionality as
-> PMIC5 ADC_TM, to support generating interrupts on ADC value
-> crossing upper or lower thresholds for monitored channels.
-> 
-> Jishnu Prakash (4):
->   dt-bindings: thermal: qcom: add PMIC5 Gen2 ADC_TM bindings
->   iio: adc: qcom-vadc-common: add reverse scaling for PMIC5 Gen2 ADC_TM
->   thermal: qcom: Add support for multiple generations of devices
->   thermal: qcom: add support for PMIC5 Gen2 ADCTM
-> 
->  .../bindings/thermal/qcom-spmi-adc-tm5.yaml        | 110 ++++-
->  drivers/iio/adc/qcom-vadc-common.c                 |  11 +
->  drivers/thermal/qcom/qcom-spmi-adc-tm5.c           | 486 +++++++++++++++++++--
->  include/linux/iio/adc/qcom-vadc-common.h           |   2 +
->  4 files changed, 569 insertions(+), 40 deletions(-)
-> 
+diff --git a/drivers/power/supply/sbs-charger.c b/drivers/power/supply/sbs-charger.c
+index 6fa65d118ec1..b08f7d0c4181 100644
+--- a/drivers/power/supply/sbs-charger.c
++++ b/drivers/power/supply/sbs-charger.c
+@@ -18,6 +18,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/regmap.h>
+ #include <linux/bitops.h>
++#include <linux/devm-helpers.h>
+ 
+ #define SBS_CHARGER_REG_SPEC_INFO		0x11
+ #define SBS_CHARGER_REG_STATUS			0x13
+@@ -209,7 +210,12 @@ static int sbs_probe(struct i2c_client *client,
+ 		if (ret)
+ 			return dev_err_probe(&client->dev, ret, "Failed to request irq\n");
+ 	} else {
+-		INIT_DELAYED_WORK(&chip->work, sbs_delayed_work);
++		ret = devm_delayed_work_autocancel(&client->dev, &chip->work,
++						   sbs_delayed_work);
++		if (ret)
++			return dev_err_probe(&client->dev, ret,
++					     "Failed to init work for polling\n");
++
+ 		schedule_delayed_work(&chip->work,
+ 				      msecs_to_jiffies(SBS_CHARGER_POLL_TIME));
+ 	}
+@@ -220,15 +226,6 @@ static int sbs_probe(struct i2c_client *client,
+ 	return 0;
+ }
+ 
+-static int sbs_remove(struct i2c_client *client)
+-{
+-	struct sbs_info *chip = i2c_get_clientdata(client);
+-
+-	cancel_delayed_work_sync(&chip->work);
+-
+-	return 0;
+-}
+-
+ #ifdef CONFIG_OF
+ static const struct of_device_id sbs_dt_ids[] = {
+ 	{ .compatible = "sbs,sbs-charger" },
+@@ -245,7 +242,6 @@ MODULE_DEVICE_TABLE(i2c, sbs_id);
+ 
+ static struct i2c_driver sbs_driver = {
+ 	.probe		= sbs_probe,
+-	.remove		= sbs_remove,
+ 	.id_table	= sbs_id,
+ 	.driver = {
+ 		.name	= "sbs-charger",
+-- 
+2.32.0
 
