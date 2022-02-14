@@ -2,107 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE7E44B5296
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Feb 2022 15:02:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E940C4B52E9
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Feb 2022 15:14:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354848AbiBNOCG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Feb 2022 09:02:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41260 "EHLO
+        id S1354980AbiBNOOV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Feb 2022 09:14:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354823AbiBNOCA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Feb 2022 09:02:00 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49B5A187
-        for <linux-pm@vger.kernel.org>; Mon, 14 Feb 2022 06:01:52 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nJbu2-0007Aw-Jd; Mon, 14 Feb 2022 15:00:30 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nJbu1-00GYgZ-R1; Mon, 14 Feb 2022 15:00:29 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nJbu0-0038OM-4h; Mon, 14 Feb 2022 15:00:28 +0100
-Date:   Mon, 14 Feb 2022 15:00:27 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>, kvm@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, alsa-devel@alsa-project.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        with ESMTP id S1353670AbiBNOOU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Feb 2022 09:14:20 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38BE5278
+        for <linux-pm@vger.kernel.org>; Mon, 14 Feb 2022 06:14:13 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id l67-20020a1c2546000000b00353951c3f62so10936586wml.5
+        for <linux-pm@vger.kernel.org>; Mon, 14 Feb 2022 06:14:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Qlx3M3VCN3nCqu4bI8JyGJh06irEHdbGlG/oT1ZjMhU=;
+        b=gQFJOAp2Q+AzI8Su0EMz6HKbPu1N5NVGn97XCp3UKOjDpZmMPryQQYbsD0tHQ2i0Gz
+         yKx8+53C22mzIQd2DW5P+6OmayW62fV3/XtS23BjNjaLgsR7/JmvmMuzdKZFaPtbKE5a
+         mYxyvdZ568rpy1VfhVn+uHFY9M8YWLi63CsNCxdjfm8MOcUH2x3fBXZ3rQmbqyvbhwFs
+         WMY6rf1DJLuGeq0YVVW9gA95n6S57CJP2uMO9Vb8iwwD1MLHFMjy3r/BQPwF/aevblyN
+         u/ktz/bxe8OZkZJqoDtQ9AvE9DhHcoZGilhFpGBPGzIQBy5wozE41f+NyOANSvJcx9h2
+         skCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Qlx3M3VCN3nCqu4bI8JyGJh06irEHdbGlG/oT1ZjMhU=;
+        b=hsnSkQBPPIu/aKC4Fc3+vkNo9ERuxG8qvJOdKVP7tF07BZqnrSt4ayXfeXSDMDCSMv
+         aOqkvsCfX0bSmsgiKMHq1Mgz2deT7Px33ROKPyxwuNI+x6iceZzKQMUFj5ExzMYfFSyW
+         bBB/pjE2phTUAMHxjeGl85sI6cHnW0NRk70ZzMzM+QtRBvn1mKW08jn8V+W4hPC3jpie
+         CqmiM1Ri+MP0JTx8QbkFbeDGTWRWY5LdacMtRGGCVwc6EEqQi4YFntrvqCWFTSGjKcTn
+         cLkz8InERsHQl239dZ8x3jyow6ZF/A5OywJGEsZBdg8Jj7AKIe97jJDbAuS3ccygeNEN
+         fmYw==
+X-Gm-Message-State: AOAM532DiabrYvxlOGZATEv+ciy4zTOJFceTvMt5+GGwhZ2yEEAmPaFc
+        4WrVIeGh1UlTS4dUrrP6PKoWzA==
+X-Google-Smtp-Source: ABdhPJyzOLNlTml69X38/WjrjlwiHmHj2m7e1npBw/8IARt6cOUC8677/fPFoMZ1iVt902GZI9MeSw==
+X-Received: by 2002:a05:600c:4783:: with SMTP id k3mr11028626wmo.177.1644848051846;
+        Mon, 14 Feb 2022 06:14:11 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id az7sm14882560wmb.14.2022.02.14.06.14.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 06:14:11 -0800 (PST)
+Date:   Mon, 14 Feb 2022 14:14:09 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-mtd@lists.infradead.org, linux-i2c@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-phy@lists.infradead.org,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-serial@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        platform-driver-x86@vger.kernel.org, linux-pwm@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Corey Minyard <minyard@acm.org>, linux-pm@vger.kernel.org,
-        John Garry <john.garry@huawei.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>, linux-gpio@vger.kernel.org,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        Eric Auger <eric.auger@redhat.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        openipmi-developer@lists.sourceforge.net,
-        Jaroslav Kysela <perex@perex.cz>,
-        Benson Leung <bleung@chromium.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Cornelia Huck <cohuck@redhat.com>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Richard Weinberger <richard@nod.at>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Brian Norris <computersforpeace@gmail.com>,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] platform: make platform_get_irq_optional()
- optional
-Message-ID: <20220214140027.npw6ddrxklarb6wp@pengutronix.de>
-References: <20220212201631.12648-1-s.shtylyov@omp.ru>
- <20220212201631.12648-2-s.shtylyov@omp.ru>
- <20220214071351.pcvstrzkwqyrg536@pengutronix.de>
- <CAMuHMdWi8gno_FBbc=AwsdRtDJik8_bANjQrrRtUOOBRjFN=KA@mail.gmail.com>
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [GIT PULL] Immutable branch between MFD, LED, Power and Regulator
+ due for the v5.18 merge window 
+Message-ID: <YgpjsW5an5uLjzi+@google.com>
+References: <20220111175017.223966-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mxy3a336cmbyaspi"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAMuHMdWi8gno_FBbc=AwsdRtDJik8_bANjQrrRtUOOBRjFN=KA@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220111175017.223966-1-krzysztof.kozlowski@canonical.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -110,51 +77,45 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Enjoy!
 
---mxy3a336cmbyaspi
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
-Hello Geert,
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
 
-On Mon, Feb 14, 2022 at 10:01:14AM +0100, Geert Uytterhoeven wrote:
-> Also IMHO, the dummy value handling is a red herring.  Contrary to
-> optional clocks and resets, a missing optional interrupt does not
-> always mean there is nothing to do: in case of polling, something
-> else must definitely be done.=20
+are available in the Git repository at:
 
-Note this is exactly why I don't like this change. I'd even go so far
-and claim that "a missing optional interrupt hardly ever means there is
-nothing to do".
+  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git tags/ib-mfd-led-power-regulator-v5.18
 
-> So even if request_irq() would accept a dummy interrupt zero and just
-> do nothing, it would give the false impression that that is all there
-> is to do, while an actual check for zero with polling code handling
-> may still need to be present, thus leading to more not less bugs.
+for you to fetch changes up to b38213c6118b6b3fe163bd9acb7f723c379dd833:
 
-Yes, a dummy irq value will just not be possible.
+  dt-bindings: mfd: maxim,max77693: Convert to dtschema (2022-02-14 13:53:01 +0000)
 
-Best regards
-Uwe
+----------------------------------------------------------------
+Immutable branch between MFD, LED, Power and Regulator due for the v5.18 merge window
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+----------------------------------------------------------------
+Krzysztof Kozlowski (4):
+      dt-bindings: leds: maxim,max77693: Convert to dtschema
+      dt-bindings: power: supply: maxim,max77693: Convert to dtschema
+      regulator: dt-bindings: maxim,max77693: Convert to dtschema
+      dt-bindings: mfd: maxim,max77693: Convert to dtschema
 
---mxy3a336cmbyaspi
-Content-Type: application/pgp-signature; name="signature.asc"
+ .../devicetree/bindings/leds/maxim,max77693.yaml   | 105 +++++++++++
+ Documentation/devicetree/bindings/mfd/max77693.txt | 194 ---------------------
+ .../devicetree/bindings/mfd/maxim,max77693.yaml    | 143 +++++++++++++++
+ .../bindings/power/supply/maxim,max77693.yaml      |  70 ++++++++
+ .../bindings/regulator/maxim,max77693.yaml         |  60 +++++++
+ MAINTAINERS                                        |   3 +-
+ 6 files changed, 380 insertions(+), 195 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/leds/maxim,max77693.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mfd/max77693.txt
+ create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max77693.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/supply/maxim,max77693.yaml
+ create mode 100644 Documentation/devicetree/bindings/regulator/maxim,max77693.yaml
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmIKYHgACgkQwfwUeK3K
-7AkfUwf+PjHT71nPQKjE5hOrUJs08gV3dPyFE+Lky6h3jHjtzp+VwX3waHB3n4Iy
-r1fdR+06wiK9BWaTD2PdT8FdEYo9n0yQlTx+03PQXtLFnutK7QSb0fBMQs7sVAfa
-nxp4CK8a1wlf0mzj1zSaeiGm6BYTsoJxoblrZ8hWbpbiVfhF6Eo5zXr0toHMI0WF
-QOhqgWNpQjHlpU+2paIvbOnBpNxJaXj3cycd6036NHAFQvZN5xrDdqHa+By0jeU0
-bm8NmjRjwHCqvhBpRYUglt+KhyRYWWTC/83WFKviLwnPV7tnkh5ZhJE50aUUp1Lr
-hyNbZjQKG8NIOTLNKMgY4nM0uni8jg==
-=vr2/
------END PGP SIGNATURE-----
-
---mxy3a336cmbyaspi--
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
