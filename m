@@ -2,118 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A83F4B583F
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Feb 2022 18:14:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10FAB4B5883
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Feb 2022 18:29:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344369AbiBNRPD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Feb 2022 12:15:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46364 "EHLO
+        id S1357092AbiBNR2x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Feb 2022 12:28:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356955AbiBNRPC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Feb 2022 12:15:02 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E6A86517B;
-        Mon, 14 Feb 2022 09:14:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=hP69zmrWln9sFp7Qn5hjhCDPMAmpxl21/+2CAr0FVmk=; b=XKfMu41RkWGyY5mb/9G3tmIk47
-        8JTbiKP7RW4K4/rpJp1J/ILdUowIsBPs8Ik+styTlQXecQm9GnwayqvI0BOYZhE9MeOtVORpxgkHc
-        DIjgvxrqLvH48oGEIvZq/V8tjlFN99N2FL3riVobl4QtdRn+5t02PtaMGuoZAP6SEq5RvuzMAH8Bj
-        xSev9fNxt81gmt+bwMV46+PjodHxLUQyEbY6YBXI1wfmptWbGWAyzitndflH+G2I75A8joVrrQWe8
-        BL7wfrAHbmR9Yt+3Orvt9YNke7lJpZH3xweA4d13MPTmQT9Mh39fwbu2IKfUR9WOpe0Dct7ZjMPDC
-        15CAaiOQ==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nJew0-009xHr-2G; Mon, 14 Feb 2022 17:14:44 +0000
-Message-ID: <918fe170-51ef-e214-4620-3a82b425965c@infradead.org>
-Date:   Mon, 14 Feb 2022 09:14:38 -0800
+        with ESMTP id S1345445AbiBNR2v (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Feb 2022 12:28:51 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49618652FF
+        for <linux-pm@vger.kernel.org>; Mon, 14 Feb 2022 09:28:43 -0800 (PST)
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com [209.85.128.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id D9F903F1E3
+        for <linux-pm@vger.kernel.org>; Mon, 14 Feb 2022 17:28:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644859721;
+        bh=KsqdtAFgibXHueDPOB/KCI/9BNIh532HNP/vcYwtlGo=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=EaotnB1Q5yFIEvnLwgJI6YMC1Xh/XBf44S5x37IY1i39FrjwMI3ocKRYXgpsXzDPn
+         XQeG7yTkx9rNDjBpnMwvwIU6G2HrNi39XUycdjD/JSBFCTst5IPjeHY/Ry+gwBGBZc
+         RwWiQsNYFVkBrlQLXGclo5D5nCjOalXmlzU9Dfvxb2E/btBJHYZ04msn6Z4d5A9ODx
+         oR76eU683D4HmjxudjtgqoZASkGsNv6BVhtIEWEvANTBfHOSNERhHs6/xTY7v9wpdx
+         OxTVIkwxvEpikBroDqPUoIAUcU5uub6veWIqifw5oFFFt87bldKS+qOu0u7+ZZop2g
+         uvEPtRY0BayWQ==
+Received: by mail-wm1-f72.google.com with SMTP id i188-20020a1c3bc5000000b0037bb9f6feeeso3637710wma.5
+        for <linux-pm@vger.kernel.org>; Mon, 14 Feb 2022 09:28:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=KsqdtAFgibXHueDPOB/KCI/9BNIh532HNP/vcYwtlGo=;
+        b=02LX88XXyqo4fTfekMEjLUDt8y2SyQx+OmHNG+2Wa9tFnlFlCxDwg3uD9Nu/dzZzzo
+         PdHItEe7/1LbXBcs6S168ufkD/EdvPJbfzBcSLGXqvm5W637/zKO7Jx0cZWQGSsGHgGL
+         hEluEZGvNq65zoIpNjs2Yit8CdnMR9wvTFlvyjhxnTLpEeu/Us14+0ccwIYQ+OlD5TYr
+         vdkItuEALKq4nywGPo/eR2aF9z8eX9cl3IPRit5YQBoTFpKRm17GJPtF8w1vbOVbPvXy
+         ezUOt9ihA1LrbPZj7V0aVWmbHFFajv6N3C5YIA6BXobEl6gzTKNpm7E6/333+00JQ4oR
+         fzqA==
+X-Gm-Message-State: AOAM530lozocYZMTEtBnwCW/artImD3yXKTM4zUTX8HhsuloFDomQYTr
+        mWiyCITIcDqkzU9g2+b0V3MaWkJPIfh+Z4IlWXqts2SKquXTMVE/TCqvy9WYDy+Grwe084YVvnN
+        UiUPzcVDkoa817E8odlM7pMe3ehlB2X1TqXG+
+X-Received: by 2002:a05:6000:1888:: with SMTP id a8mr70865wri.258.1644859721542;
+        Mon, 14 Feb 2022 09:28:41 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw4VJ7GdAoNVKf4UbogMbxJVPbcvrv/rGMMFokvBRogG6Fr4FjAve/dO2zAbHh3hVqyQLkpPA==
+X-Received: by 2002:a05:6000:1888:: with SMTP id a8mr70852wri.258.1644859721314;
+        Mon, 14 Feb 2022 09:28:41 -0800 (PST)
+Received: from [192.168.0.106] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id p32sm12933096wms.1.2022.02.14.09.28.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Feb 2022 09:28:40 -0800 (PST)
+Message-ID: <8347bd3c-12d4-8479-153f-8a5beaec786c@canonical.com>
+Date:   Mon, 14 Feb 2022 18:28:39 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] block: Fix non-kernel-doc comment
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 3/4] regulator: dt-bindings: maxim,max77693: convert to
+ dtschema
 Content-Language: en-US
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, rafael@kernel.org
-Cc:     pavel@ucw.cz, len.brown@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-References: <20220214091522.100669-1-jiapeng.chong@linux.alibaba.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220214091522.100669-1-jiapeng.chong@linux.alibaba.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20220111175017.223966-1-krzysztof.kozlowski@canonical.com>
+ <20220111175017.223966-4-krzysztof.kozlowski@canonical.com>
+ <YgqGT999nsjUGp9Z@sirena.org.uk>
+ <12c66ced-c4a4-3a4e-f84b-83edb9e3fc58@canonical.com>
+ <YgqIiv8fZeqFFUHX@sirena.org.uk>
+ <b0aaf1e6-c626-e68c-a0d2-4a7ff372b395@canonical.com>
+ <YgqMZhNhMRgO0V8t@sirena.org.uk>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <YgqMZhNhMRgO0V8t@sirena.org.uk>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi--
-
-On 2/14/22 01:15, Jiapeng Chong wrote:
-> Fixes the following W=1 kernel build warning:
+On 14/02/2022 18:07, Mark Brown wrote:
+> On Mon, Feb 14, 2022 at 06:01:17PM +0100, Krzysztof Kozlowski wrote:
 > 
-> kernel/power/swap.c:120: warning: This comment starts with '/**', but
-> isn't a kernel-doc comment. Refer
-> Documentation/doc-guide/kernel-doc.rst.
+>> You mantioned new features - this approach does not change that. If you
+>> add new properties to common schema, you already alter bindings. Just
+>> because we use common part, it does not change the fact that it is a
+>> bindings change. Adding new features in common schema is the same
+>> binding change as adding new feature in the specific binding, except
+>> more work.
 > 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-
-The diff looks OK to me, but the Subject is quite misleading.
-There are no "block:" patch contents here, just "PM:" or
-"PM: hibernate:" according to
-$ git log --oneline kernel/power/swap.c
-
-> ---
->  kernel/power/swap.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>> I guess you though that work in scaling, so yes, this scales worse. The
+>> benefit is that this really restricts usage of regulator to what is
+>> supported, so allows to detect wrongly configured DTS.
 > 
-> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-> index 6c4f983cbacc..91fffdd2c7fb 100644
-> --- a/kernel/power/swap.c
-> +++ b/kernel/power/swap.c
-> @@ -88,7 +88,7 @@ struct swap_map_page_list {
->  	struct swap_map_page_list *next;
->  };
->  
-> -/**
-> +/*
->   *	The swap_map_handle structure is used for handling swap in
->   *	a file-alike way
->   */
-> @@ -116,7 +116,7 @@ struct swsusp_header {
->  
->  static struct swsusp_header *swsusp_header;
->  
-> -/**
-> +/*
->   *	The following functions are used for tracing the allocated
->   *	swap pages, so that they can be freed in case of an error.
->   */
-> @@ -170,7 +170,7 @@ static int swsusp_extents_insert(unsigned long swap_offset)
->  	return 0;
->  }
->  
-> -/**
-> +/*
->   *	alloc_swapdev_block - allocate a swap page and register that it has
->   *	been allocated, so that it can be freed in case of an error.
->   */
-> @@ -189,7 +189,7 @@ sector_t alloc_swapdev_block(int swap)
->  	return 0;
->  }
->  
-> -/**
-> +/*
->   *	free_all_swap_pages - free swap pages allocated for saving image data.
->   *	It also frees the extents used to register which swap entries had been
->   *	allocated.
+> We should have a way of specifying generic properties that doesn't
+> require us to go through every single user of a binding and updating
+> them all, then auditing by hand any new users to make sure they didn't
+> forget one of the generic properties.  This is just error prone and
+> miserable, especially when most of the checking is done by hand rather
+> than automated.
 
-thanks.
--- 
-~Randy
+I see. The hardware really does not support most of core regulator
+features, so if we switch to your proposal
+(unevaluatedProperties:false), the DTS could contain something which is
+good from the core regulator point of view, but does not fit at all this
+hardware.
+
+A disallow/deny-list could solve it... but it also does not scale.
+
+Best regards,
+Krzysztof
