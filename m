@@ -2,150 +2,174 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC2C4B4211
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Feb 2022 07:44:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CE124B42B3
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Feb 2022 08:19:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240860AbiBNGol (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Feb 2022 01:44:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46016 "EHLO
+        id S241311AbiBNHPy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Feb 2022 02:15:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240855AbiBNGol (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Feb 2022 01:44:41 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E021C56C32
-        for <linux-pm@vger.kernel.org>; Sun, 13 Feb 2022 22:44:33 -0800 (PST)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 3AE673F1CA
-        for <linux-pm@vger.kernel.org>; Mon, 14 Feb 2022 06:44:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644821072;
-        bh=szUlu+QoiSpTo5flvrlczEK9xVnb6wy7sDmM3cvCZ3g=;
-        h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-         In-Reply-To:Content-Type;
-        b=k/LaTa/waGbm/jHObtNdWEJfezjOQH0Bi/DGeJA0GW7QFntUPg6to3QGBCc3FsAHw
-         pMKxoX8xsJyeWnc9uDNAXeGybmxx49nU0o5zrKXt539BpGvncYy9VnFFVP3G6i/6YN
-         TICxW7uiLPLcqWzF3mOylAQ/RnXMBnzV9cgaCFlZiiApfeE49IMowP6B2z/0jTmm2d
-         ti3QjjO/JqVAR6HMX4zioIqXwCTuW074uYmbu4lC4i5H9BfeLaaI+BtdSHwwlv1RUI
-         62O3OIhgdXDLIaRKXrH7vIQ0wBzPbtoVm247yAH7sTP6/uwHNPRNM4zGbyYkUInDzI
-         E9BNmtKearBZg==
-Received: by mail-ed1-f71.google.com with SMTP id r11-20020a508d8b000000b00410a4fa4768so2360015edh.9
-        for <linux-pm@vger.kernel.org>; Sun, 13 Feb 2022 22:44:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=szUlu+QoiSpTo5flvrlczEK9xVnb6wy7sDmM3cvCZ3g=;
-        b=Jey6cvJ7vmSSI5wPa8bDlliEJ3yAWC1Kc1XNqzA7EiyBJsoPY61bWkBeBYn155itRK
-         35JiNUvW67/FzuQpfH5UO0nSWOOYQxx3O8rm/vZ0IIACh6NbU/TYkTUA1QgTBt2MNtLm
-         ZDcoQyKCaPoUM+ZRoNpdxVFbosBi+HzqFflCi76RrTMbDYevT6xiJuyonjpI5MdH2nIk
-         S6QS0JNz7KFQBoUmOhnigMUxg7jf/Yg4b+nIm1xMH+7Cf1LVoj3eaxp8irVUFXCpC8VG
-         RChWJ+XeLdZsDMKbGW+fYVyaVPgrJu11o5Mj4hFxjc8fTajRSwOY87PIrt6FyJdr88q5
-         +7rA==
-X-Gm-Message-State: AOAM5339lzJp5WOMDyB+Xlm1xbPJ46TDIn2gJ92pRJA7bQOiBskwShcy
-        647eP5MmE1uklH9JGugKfBLbC9YD3y9PqjGHPvRL9lnLBeQcTTP47Xr24PjKHFefPgmKrAVePql
-        RRtfETzE0XDJAUy6m5J0em7latjbJQV604JfR
-X-Received: by 2002:a17:906:4789:: with SMTP id cw9mr10461462ejc.97.1644821071935;
-        Sun, 13 Feb 2022 22:44:31 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxupdkKcE3OpLuicXYosj+2o84uiRyIMaqb7dvs2AANYuzjXzjRY3ZfyTbVdDs4t5g8sYrSKw==
-X-Received: by 2002:a17:906:4789:: with SMTP id cw9mr10461449ejc.97.1644821071725;
-        Sun, 13 Feb 2022 22:44:31 -0800 (PST)
-Received: from [192.168.0.103] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id g16sm800256ejf.218.2022.02.13.22.44.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 13 Feb 2022 22:44:31 -0800 (PST)
-Message-ID: <136f2087-10e7-c9e8-2292-3046711c8f68@canonical.com>
-Date:   Mon, 14 Feb 2022 07:44:30 +0100
+        with ESMTP id S241291AbiBNHPu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Feb 2022 02:15:50 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB6E58E4D
+        for <linux-pm@vger.kernel.org>; Sun, 13 Feb 2022 23:15:42 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nJVZ0-0006l6-Nq; Mon, 14 Feb 2022 08:14:22 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nJVYf-00GV12-4n; Mon, 14 Feb 2022 08:14:00 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nJVYd-002oWn-E1; Mon, 14 Feb 2022 08:13:59 +0100
+Date:   Mon, 14 Feb 2022 08:13:51 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>, alsa-devel@alsa-project.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-phy@lists.infradead.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-mtd@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Guenter Roeck <groeck@chromium.org>, linux-spi@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>,
+        openipmi-developer@lists.sourceforge.net,
+        Peter Korsgaard <peter@korsgaard.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        kvm@vger.kernel.org, Kamal Dasu <kdasu.kdev@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-serial@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        platform-driver-x86@vger.kernel.org, linux-pwm@vger.kernel.org,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Corey Minyard <minyard@acm.org>, linux-pm@vger.kernel.org,
+        John Garry <john.garry@huawei.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Eric Auger <eric.auger@redhat.com>, netdev@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>, linux-mmc@vger.kernel.org,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        linux-renesas-soc@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Brian Norris <computersforpeace@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v2 1/2] platform: make platform_get_irq_optional()
+ optional
+Message-ID: <20220214071351.pcvstrzkwqyrg536@pengutronix.de>
+References: <20220212201631.12648-1-s.shtylyov@omp.ru>
+ <20220212201631.12648-2-s.shtylyov@omp.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4] cpuidle: sunplus: Create cpuidle driver for sunplus
- sp7021
-Content-Language: en-US
-To:     =?UTF-8?B?RWR3aW4gQ2hpdSDpgrHlnoLls7A=?= <edwin.chiu@sunplus.com>,
-        Edwin Chiu <edwinchiu0505tw@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-References: <cover.1644218105.git.edwinchiu0505tw@gmail.com>
- <957d882222d218b62fe3fb7a069e2f7952afc5be.1644218105.git.edwinchiu0505tw@gmail.com>
- <64f91b1a-93b9-941d-fdfa-271e198e1ab5@canonical.com>
- <0edae7bea1ae47cd9044cd223a989b81@sphcmbx02.sunplus.com.tw>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <0edae7bea1ae47cd9044cd223a989b81@sphcmbx02.sunplus.com.tw>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="r3c6abkz2rpak4yl"
+Content-Disposition: inline
+In-Reply-To: <20220212201631.12648-2-s.shtylyov@omp.ru>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 14/02/2022 03:55, Edwin Chiu 邱垂峰 wrote:
-> Hi Krzysztof:
-> 
-> Please see below answer.
-> 
->>> +static struct cpuidle_driver sp7021_idle_driver = {
->>> +	.name = "sp7021_idle",
->>> +	.owner = THIS_MODULE,
->>> +	/*
->>> +	 * State at index 0 is standby wfi and considered standard
->>> +	 * on all ARM platforms. If in some platforms simple wfi
->>> +	 * can't be used as "state 0", DT bindings must be implemented
->>> +	 * to work around this issue and allow installing a special
->>> +	 * handler for idle state index 0.
->>> +	 */
->>> +	.states[0] = {
->>> +		.enter                  = sp7021_enter_idle_state,
->>> +		.exit_latency           = 1,
->>> +		.target_residency       = 1,
->>> +		.power_usage		= UINT_MAX,
->>> +		.name                   = "WFI",
->>> +		.desc                   = "ARM WFI",
->>
->> I have impression that there is no point in having custom driver with WFI...
->>
->> Still the main question from Daniel and Sudeep stays: why do you need this? You copied exactly
->> cpuildle-arm driver, there is nothing different here. At least I could not spot differences. Maybe except
->> that you use cpu_v7_do_idle explicitly.
->>
->> Unfortunately I cannot understand the explanation here:
->> https://lore.kernel.org/all/0812c44f777d4026b79df2e3698294be@sphcmbx02.sunplus.com.tw/
->> Why exactly cpuidle-arm does not work in your case?
->>
-> Edwin=> I mean cpuidle-arm driver can't directly use with no modified.
->        If someone want to use cpuidle-arm driver, below modification seems necessary.
->        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->        Static int sp7021_cpuidle_suspend_enter(unsigned long index) {~}
->        Static int __init sp7021_cpuidle_init(struct device_node *cpu_node, int cpu) {~}
->        Static const struct cpuidle_ops sc_smp_ops __initconst = {
->             .suspend = sp7021_cpuidle_suspend_enter,
->             .init = sp7021_cpuidle_init,
->        };
->        CPUIDLE_METHOD_OF_DECLARE(sc_smp, "sunplus,sc-smp", &sc_smp_ops); //declare enable method
->        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->        
->        But change cpuilde-arm.c for sunplus driver seems not reasonable.
->        That is why I want to submit cpuidle-sunplus.c
->        Althought sunplus cpuidle only come in WFI, but it can complete the cpuidle framework.
 
-I don't think it is correct. You can use cpuidle-arm, because it is
-being always initialized with device_initcall(). You either use
-appropriate compatible in DT or add your compatible to cpuidle-arm.
+--r3c6abkz2rpak4yl
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Even if this did not work, then the solution is to use common parts, not
-to duplicate entire driver. Duplicating is not acceptable.
+On Sat, Feb 12, 2022 at 11:16:30PM +0300, Sergey Shtylyov wrote:
+> This patch is based on the former Andy Shevchenko's patch:
+>=20
+> https://lore.kernel.org/lkml/20210331144526.19439-1-andriy.shevchenko@lin=
+ux.intel.com/
+>=20
+> Currently platform_get_irq_optional() returns an error code even if IRQ
+> resource simply has not been found.  It prevents the callers from being
+> error code agnostic in their error handling:
+>=20
+> 	ret =3D platform_get_irq_optional(...);
+> 	if (ret < 0 && ret !=3D -ENXIO)
+> 		return ret; // respect deferred probe
+> 	if (ret > 0)
+> 		...we get an IRQ...
+>=20
+> All other *_optional() APIs seem to return 0 or NULL in case an optional
+> resource is not available.  Let's follow this good example, so that the
+> callers would look like:
+>=20
+> 	ret =3D platform_get_irq_optional(...);
+> 	if (ret < 0)
+> 		return ret;
+> 	if (ret > 0)
+> 		...we get an IRQ...
+>=20
+> Reported-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 
-Best regards,
-Krzysztof
+While this patch is better than v1, I still don't like it for the
+reasons discussed for v1. (i.e. 0 isn't usable as a dummy value which I
+consider the real advantage for the other _get_optional() functions.)
+
+Apart from that, I think the subject is badly chosen. With "Make
+somefunc() optional" I would expect that you introduce a Kconfig symbol
+that results in the function not being available when disabled.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--r3c6abkz2rpak4yl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmIKASwACgkQwfwUeK3K
+7Ak1DAf/fgLBIz9p8Vx2hzG+I8aYoNMAmPLmUfMeIR1DWaBc26HTbyTBn6pFRiPZ
+rztM2uc+royoY44/mp4H89WkPzZ0/v3AlRkdqI8UBny0ZKRbNtMfzL6f7wyVik5C
+rxqc7EgXLRk2/0IxTohA6bwj7Vczei9NwYndm+QrxDHjmY5Dq95rdvxv9+8iaa9y
+gLQ2x91x4bybaKnKVe36f5JfLeMhS9kLuCx82Wi1yqPK4UQQ6R/+QEE0zGS8QNHP
+vMasmLHge9XqVx/c0SuPcLVZ/uRatkzzuqf1rY75peyQp4YpDDdkhkTws4kcVC22
+lVFz9FjvbtVS4nxvPxNwZAnvq9sPaQ==
+=UfDO
+-----END PGP SIGNATURE-----
+
+--r3c6abkz2rpak4yl--
