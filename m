@@ -2,70 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4443C4B458F
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Feb 2022 10:23:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A07C54B4ABE
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Feb 2022 11:39:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242815AbiBNJXT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Feb 2022 04:23:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37818 "EHLO
+        id S1348152AbiBNKel (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Feb 2022 05:34:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242758AbiBNJXT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Feb 2022 04:23:19 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C69060A85
-        for <linux-pm@vger.kernel.org>; Mon, 14 Feb 2022 01:23:11 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id b38so5556506ljr.12
-        for <linux-pm@vger.kernel.org>; Mon, 14 Feb 2022 01:23:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=356urLSOZJtLDmx8ZJRvuR2tZ/D2/VwMXst9vpTFk54=;
-        b=Z+xboBH9ewqYE4OA7YRMAkbROwS4qmUA/yfeiKUplCmWDXxs4Ixnd71YT1Z1FVHX1D
-         RkCKjqDifBlW1sghevfef0cvtx7R8YCnww/905OXD0bI3rBRFl3QG8H0AH3aOm6QPt9A
-         lKSOK/lO3yAF2vQW5lnupEPLN4WpAriBQgSNOIM7pnAhzkzXlsB6uz50JDkkZTP0o9vr
-         UXO1wgzj8oT0lw22CQsU4z6lTDyeeyinIDSh9gZBrYMoyXAU8y5Z+jvRZ8PvHEmmXmrT
-         Ehu1UxASAf54ZIAA+ahcc5fRCdZq70qHcIl5Hd3aorS7zPq3pbPXFmDtYKzDlPHYvs4S
-         d63g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=356urLSOZJtLDmx8ZJRvuR2tZ/D2/VwMXst9vpTFk54=;
-        b=pxO9FWji+cUnREeMfWHg8rHaI2SJs3Q7fk8JmRSdDJRW7jSRTqSv+EeWMvhfz5VSZc
-         3rDx41Z7HrE+Mdv8G7oJn14qnmfQl/pq/DwMwLzM0Z/MrxD7tKajCexjH6mxc+t43W2a
-         j3AjnjphRsOq4x3CFg73s/3ebPLHWkhdEs/ZsLT5po4gF05vuv85I3BYWpFnXr+N2ajh
-         HzOJFBFLi0ypJ9G3q9BRlLa64JgOJkhcS+KnfxVM/MzocYuWS4ihrlR0rwZ5+5VJbE9I
-         /3IpeuTdQaJSnqrqrK7/zlDGasCvZrIn4luPzapst+/Wubw6UrIhqndwZAjCSUT8hYep
-         u56Q==
-X-Gm-Message-State: AOAM5311ou2fJB2vAhF9noz53euH2UxXk6J56j5Tx9dK/5erAvM3h9z+
-        b2qdVcRNvQ0dABfY1NXqz2iVm139vyTb3PX8cfzKHA==
-X-Google-Smtp-Source: ABdhPJy3vcaD+3nckysYlkRQnrs/J9wyitdDSdd2mYpvMaa99GIJ/5A9elwqUUBT/4WzicPlZFl41eZtffOQOs7Mn7k=
-X-Received: by 2002:a2e:850e:: with SMTP id j14mr8440677lji.463.1644830589879;
- Mon, 14 Feb 2022 01:23:09 -0800 (PST)
+        with ESMTP id S1348065AbiBNKeA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Feb 2022 05:34:00 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 567B0A1BFD;
+        Mon, 14 Feb 2022 02:00:40 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2274B1396;
+        Mon, 14 Feb 2022 02:00:40 -0800 (PST)
+Received: from bogus (unknown [10.57.3.35])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7B6EC3F718;
+        Mon, 14 Feb 2022 02:00:38 -0800 (PST)
+Date:   Mon, 14 Feb 2022 09:59:50 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Edwin Chiu =?utf-8?B?6YKx5Z6C5bOw?= <edwin.chiu@sunplus.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Edwin Chiu <edwinchiu0505tw@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v4] cpuidle: sunplus: Create cpuidle driver for sunplus
+ sp7021
+Message-ID: <20220214095950.vt7fkvrkvio3gtkw@bogus>
+References: <cover.1644218105.git.edwinchiu0505tw@gmail.com>
+ <957d882222d218b62fe3fb7a069e2f7952afc5be.1644218105.git.edwinchiu0505tw@gmail.com>
+ <64f91b1a-93b9-941d-fdfa-271e198e1ab5@canonical.com>
+ <0edae7bea1ae47cd9044cd223a989b81@sphcmbx02.sunplus.com.tw>
+ <136f2087-10e7-c9e8-2292-3046711c8f68@canonical.com>
 MIME-Version: 1.0
-References: <20220131113743.52265-1-ulf.hansson@linaro.org>
- <b33ceac4-506a-65c8-7c80-b1b0a67ce65e@gmail.com> <CAPDyKFqsvF=Pm-vMXSUwPMPnjCr7nSYuy5AH+8rwLYm_NUPKww@mail.gmail.com>
- <400e45da-837a-c8ad-84b3-285e35f8462c@gmail.com> <CAPDyKFpLX0Jpz-tzYx3-g0YBZZNh6Bw731gQEFQub1SviLGoYg@mail.gmail.com>
- <2656099c-76bc-33a5-3b98-c46858025955@gmail.com>
-In-Reply-To: <2656099c-76bc-33a5-3b98-c46858025955@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 14 Feb 2022 10:22:32 +0100
-Message-ID: <CAPDyKFokevJSYoH009t3PA4h48tx-LK+DaWVpC_14L6xZF3iZA@mail.gmail.com>
-Subject: Re: [PATCH] PM: domains: Prevent power off for parent unless child is
- in deepest state
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        Kevin Hilman <khilman@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <136f2087-10e7-c9e8-2292-3046711c8f68@canonical.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,33 +53,72 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 13 Feb 2022 at 13:14, Dmitry Osipenko <digetx@gmail.com> wrote:
->
-> 07.02.2022 11:43, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> >> In general, such changes usually are deferred from being upstreamed
-> >> until there is a real user, otherwise there is a risk of cluttering th=
-e
-> >> code with unused features. Do you have a time estimation in regards to
-> >> when STMicro may start to benefit from this change?
-> > The STMicro folkz are working on it right now, but I can't give you
-> > any estimates for their work.
+On Mon, Feb 14, 2022 at 07:44:30AM +0100, Krzysztof Kozlowski wrote:
+> On 14/02/2022 03:55, Edwin Chiu 邱垂峰 wrote:
+> > Hi Krzysztof:
+> > 
+> > Please see below answer.
+> > 
+> >>> +static struct cpuidle_driver sp7021_idle_driver = {
+> >>> +	.name = "sp7021_idle",
+> >>> +	.owner = THIS_MODULE,
+> >>> +	/*
+> >>> +	 * State at index 0 is standby wfi and considered standard
+> >>> +	 * on all ARM platforms. If in some platforms simple wfi
+> >>> +	 * can't be used as "state 0", DT bindings must be implemented
+> >>> +	 * to work around this issue and allow installing a special
+> >>> +	 * handler for idle state index 0.
+> >>> +	 */
+> >>> +	.states[0] = {
+> >>> +		.enter                  = sp7021_enter_idle_state,
+> >>> +		.exit_latency           = 1,
+> >>> +		.target_residency       = 1,
+> >>> +		.power_usage		= UINT_MAX,
+> >>> +		.name                   = "WFI",
+> >>> +		.desc                   = "ARM WFI",
+> >>
+> >> I have impression that there is no point in having custom driver with WFI...
+> >>
+
++1
+
+> >> Still the main question from Daniel and Sudeep stays: why do you need
+> >> this? You copied exactly cpuildle-arm driver, there is nothing different
+> >> here. At least I could not spot differences. Maybe except that you use
+> >> cpu_v7_do_idle explicitly.
+> >>
+
+Please comment or answer why you can't use standard driver.
+
+> >> Unfortunately I cannot understand the explanation here:
+> >> https://lore.kernel.org/all/0812c44f777d4026b79df2e3698294be@sphcmbx02.sunplus.com.tw/
+> >> Why exactly cpuidle-arm does not work in your case?
+> >>
+> > Edwin=> I mean cpuidle-arm driver can't directly use with no modified.
+> >        If someone want to use cpuidle-arm driver, below modification seems necessary.
+> >        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >        Static int sp7021_cpuidle_suspend_enter(unsigned long index) {~}
+> >        Static int __init sp7021_cpuidle_init(struct device_node *cpu_node, int cpu) {~}
+> >        Static const struct cpuidle_ops sc_smp_ops __initconst = {
+> >             .suspend = sp7021_cpuidle_suspend_enter,
+> >             .init = sp7021_cpuidle_init,
+> >        };
+> >        CPUIDLE_METHOD_OF_DECLARE(sc_smp, "sunplus,sc-smp", &sc_smp_ops); //declare enable method
+> >        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 > >
-> > Moreover, I think the important point in this regard, is that the
-> > $subject patch doesn't really hurt anything else, so then what's the
-> > point of holding this back?
->
-> If that work will never pan out, will you remove the unused code?
 
-Sure, I will continue to monitor the situation, which is what I have
-been doing for many years by now.
+May be. It depends on what is your enable-method. I did a quick grep and could
+see any support for sunplus platform upstream. So I am not sure what is the
+cpu boot/enable method used. Is it PSCI or something custom. You should be
+using standard PSCI if it is relatively new platform or you have any other
+strong reasons to use custom method. If you are using custom method, then
+some changes like above is required but that will be in the platform port
+and not the core cpuidle driver/framework.
 
-In the past we have agreed to add new things to genpd, even if those
-didn't have in-tree users when the changes went in. The current
-dev_pm_genpd_set_next_wakeup() inteface, for example, is still lacking
-a user upstream. It's a balance, because I certainly agree with you,
-that we don't want to carry around dead code in the kernel - unless we
-have reasons to believe it's an intermediate step before there a user
-turning up.
+In short NACK for any dedicated driver for this platform, use the generic
+cpuidle-arm driver with appropriate platform hooks(like the above one only
+if you choose to use custom enable method and not standard PSCI)
 
-Kind regards
-Uffe
+-- 
+Regards,
+Sudeep
