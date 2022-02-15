@@ -2,140 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3C434B79CE
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Feb 2022 22:50:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E0644B79CF
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Feb 2022 22:50:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243639AbiBOVfk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Feb 2022 16:35:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56736 "EHLO
+        id S232789AbiBOVt2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Feb 2022 16:49:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243518AbiBOVfi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Feb 2022 16:35:38 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4A7A9AD87
-        for <linux-pm@vger.kernel.org>; Tue, 15 Feb 2022 13:35:27 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id o2so152532lfd.1
-        for <linux-pm@vger.kernel.org>; Tue, 15 Feb 2022 13:35:27 -0800 (PST)
+        with ESMTP id S237060AbiBOVtZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Feb 2022 16:49:25 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D5E0D0079;
+        Tue, 15 Feb 2022 13:49:15 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id p22so175869lfu.5;
+        Tue, 15 Feb 2022 13:49:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7ehaiWQc2/KmkZJmJvXnPNJ6ZOAY30nrwUVn52VaHtg=;
-        b=DQY326IHNvI7Mtfy1KvTw6bFdkNDr2WGo8mEEiTKzV3quR+Tyc20dAv2ufunP8N/1n
-         lJR9nTQPrM7qHEGA1HQwmFZBfxopdFQcvDpTOrB2yV3s5W3zJQF6MUKdMdWgIse7eJkF
-         wZy7CmChPjvHjS+7t5ErHhQs2QV1bXfSl4H4qFMdLDwXIzpYSqDGEtH4QS7z6KITlhnt
-         pnbQbHF6wH3VlRZPTUvRaZfuet/ieaAeSZOgrTaZFRQqY0PGtOxOHTQYmFE+qGqlh4P3
-         rGnuBRcavmz6iGGTYgqHhgoewu/jAwFr4VCK78pPaBcsdg7gDS5P3u7tPVZr4kE488wr
-         fNJw==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=v9C8Aj+XvUq6zf+q/jOW8sx/Y8EtmPnccvzaAF6cuDQ=;
+        b=ZGYj2+Ht8tCun2NoavyLy8LQF4DXKyv3S1kMTc9Zc0CIaHBDnW/7c2zMLo+LOr71iy
+         Lwz3YxBlmeD4L6TKlGlXtA1APyZUj9tsS02wK6jrSrMpTGpadbYwzUQYKovfeAdpUH5t
+         nH47g0Grr9QDDnraF2Hq45dO+jzV49/SEj74fTRcjgVz1Z9ouQdaARLGTgc8+42nPypD
+         w9ZS59NKSsvyCG2E8/nZVq7rX8236zDAlUkESMtE+46zswjYT2pCaJXCtu/Px3PXP7hk
+         EXai+gDDk2UxXupjH0+fg6yRDzysAGhs2rxHqDowqcHU3nPPvrgQSA9UNFb/E6jqMPsh
+         wgXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7ehaiWQc2/KmkZJmJvXnPNJ6ZOAY30nrwUVn52VaHtg=;
-        b=juqEVEgPOYAD9Z2E+ppMgRtGIZdHC/PyB1L87sMUGR48GelxMD4IznYIvOhHWXDGwD
-         p+AJL72pGr0HB2aUfAjL19jGVWu7Rz7rjOTloTaYTM1iWgVUKlQm1PxWGYKo3jejBins
-         BusuKe4zH+Yas9AWg1goHrPvbDQhKWt4vLOddRxh56tKNLQbIGatk9LIT2gymmJ9c+f0
-         G+ljDj1/x51UT+IcfUoDOAcJ+J6p+WZO4mEYZ03sL0ugsrVKcvhTGOdnMFVpzFaelmeu
-         xn2XVq5udmtc+8hwfs0/xsa194yTEeUYP5Ql8uNInDBD+aJTekxUojKz6JqbBFSs4SWL
-         uEgw==
-X-Gm-Message-State: AOAM532DVZiFkID3tSHy15m+zuuKuR5v77YiDmqgr2fL3/3vy34qpLfv
-        N20BH2C/hLHudVvd13OoAOGVqt5hvx9LayqblzKLNQ==
-X-Google-Smtp-Source: ABdhPJyBOxodZeG2mNX8T98KnNk+VhICzDG6JNMIJf0VapUko7Nap6krUPF4HAvMIHl6yOeh24xIOD1fz2RGgW1dUPA=
-X-Received: by 2002:a05:6512:a85:: with SMTP id m5mr773781lfu.465.1644960926228;
- Tue, 15 Feb 2022 13:35:26 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=v9C8Aj+XvUq6zf+q/jOW8sx/Y8EtmPnccvzaAF6cuDQ=;
+        b=zo8UTUl+g1S5vW0EtXXNjSOQJd7VH8atLulatBOjtLVCLS9FJv62xVcggF+4Y8siDS
+         p4QA+nopaekuhD1XMZskYqrfZMTDxBNoXAyLNI+yp5xLAj05L4S9UCLRn+gUW1UpoVIu
+         bstIC0LOGrbax5pQp/q+qRNJaKZ6/2rqtdH8UXvx4oq0KWuaHigfG1E0drrfEe+9u05f
+         TbX4e9b3wRtu8T7olZaCGxvK3dKrGGskrV9Tddm/i99CzES6LZjEfiV+Q4XcGMAN3efO
+         oa9+cf5HfM9w/MW763YzvZJQKcgN4YUiPsnpvRJd0ZFdOqFuJpga4xpPtCsNwGmS5ra8
+         J/LQ==
+X-Gm-Message-State: AOAM531oCZHn0MIy+wqDkBiDKrRA5aV6OJIrugVR8pf5zrhoQLx+HX5y
+        JIOt3Ieu3NCrpXoZInMFf+XaD6wSNSw=
+X-Google-Smtp-Source: ABdhPJxlrdHRhxdQMuNwOGSx0N6n2ndjVBmW7vR5UxYDc6hx3pGw345GBYW/4ArFNY7L1PmHZa6Uig==
+X-Received: by 2002:a05:6512:12c4:: with SMTP id p4mr832572lfg.39.1644961753465;
+        Tue, 15 Feb 2022 13:49:13 -0800 (PST)
+Received: from [192.168.2.145] (109-252-138-165.dynamic.spd-mgts.ru. [109.252.138.165])
+        by smtp.googlemail.com with ESMTPSA id k20sm725893ljk.62.2022.02.15.13.49.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 13:49:13 -0800 (PST)
+Message-ID: <5e27fc63-5dd7-8da6-01f5-d7c7660874e3@gmail.com>
+Date:   Wed, 16 Feb 2022 00:49:12 +0300
 MIME-Version: 1.0
-References: <003f01d81c8c$d20ee3e0$762caba0$@telus.net> <20220208023940.GA5558@shbuild999.sh.intel.com>
- <CAAYoRsXrwOQgzAcED+JfVG0=JQNEXuyGcSGghL4Z5xnFgkp+TQ@mail.gmail.com>
- <20220208091525.GA7898@shbuild999.sh.intel.com> <CAAYoRsXkyWf0vmEE2HvjF6pzCC4utxTF=7AFx1PJv4Evh=C+Ow@mail.gmail.com>
- <e185b89fb97f47758a5e10239fc3eed0@intel.com> <CAAYoRsXbBJtvJzh91nTXATLL1eb2EKbTVb8vEWa3Y6DfCWhZeg@mail.gmail.com>
- <aaace653f12b79336b6f986ef5c4f9471445372a.camel@linux.intel.com>
-In-Reply-To: <aaace653f12b79336b6f986ef5c4f9471445372a.camel@linux.intel.com>
-From:   Doug Smythies <dsmythies@telus.net>
-Date:   Tue, 15 Feb 2022 13:35:16 -0800
-Message-ID: <CAAYoRsXc_Wa9DgzjVdaXUdFwNN=LKnVU=CNtd+QYvpN6KjeM=g@mail.gmail.com>
-Subject: Re: CPU excessively long times between frequency scaling driver calls
- - bisected
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Zhang, Rui" <rui.zhang@intel.com>,
-        "Tang, Feng" <feng.tang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        dsmythies <dsmythies@telus.net>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] PM: domains: Prevent power off for parent unless child is
+ in deepest state
+Content-Language: en-US
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Kevin Hilman <khilman@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        linux-kernel@vger.kernel.org
+References: <20220131113743.52265-1-ulf.hansson@linaro.org>
+ <b33ceac4-506a-65c8-7c80-b1b0a67ce65e@gmail.com>
+ <CAPDyKFqsvF=Pm-vMXSUwPMPnjCr7nSYuy5AH+8rwLYm_NUPKww@mail.gmail.com>
+ <400e45da-837a-c8ad-84b3-285e35f8462c@gmail.com>
+ <CAPDyKFpLX0Jpz-tzYx3-g0YBZZNh6Bw731gQEFQub1SviLGoYg@mail.gmail.com>
+ <2656099c-76bc-33a5-3b98-c46858025955@gmail.com>
+ <CAPDyKFokevJSYoH009t3PA4h48tx-LK+DaWVpC_14L6xZF3iZA@mail.gmail.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <CAPDyKFokevJSYoH009t3PA4h48tx-LK+DaWVpC_14L6xZF3iZA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Srinivas,
+14.02.2022 12:22, Ulf Hansson пишет:
+> On Sun, 13 Feb 2022 at 13:14, Dmitry Osipenko <digetx@gmail.com> wrote:
+>>
+>> 07.02.2022 11:43, Ulf Hansson пишет:
+>>>> In general, such changes usually are deferred from being upstreamed
+>>>> until there is a real user, otherwise there is a risk of cluttering the
+>>>> code with unused features. Do you have a time estimation in regards to
+>>>> when STMicro may start to benefit from this change?
+>>> The STMicro folkz are working on it right now, but I can't give you
+>>> any estimates for their work.
+>>>
+>>> Moreover, I think the important point in this regard, is that the
+>>> $subject patch doesn't really hurt anything else, so then what's the
+>>> point of holding this back?
+>>
+>> If that work will never pan out, will you remove the unused code?
+> 
+> Sure, I will continue to monitor the situation, which is what I have
+> been doing for many years by now.
+> 
+> In the past we have agreed to add new things to genpd, even if those
+> didn't have in-tree users when the changes went in. The current
+> dev_pm_genpd_set_next_wakeup() inteface, for example, is still lacking
+> a user upstream. It's a balance, because I certainly agree with you,
+> that we don't want to carry around dead code in the kernel - unless we
+> have reasons to believe it's an intermediate step before there a user
+> turning up.
 
-On Mon, Feb 14, 2022 at 7:17 AM srinivas pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> Hi Doug,
->
-> I think you use CONFIG_NO_HZ_FULL.
+I've seen enough of dead code while was doing a tree-wide changes, we
+don't need more :)
 
-No. Here is the relevant excerpt from the kernel config file:
-
-#
-# Timers subsystem
-#
-CONFIG_TICK_ONESHOT=y
-CONFIG_NO_HZ_COMMON=y
-# CONFIG_HZ_PERIODIC is not set
-CONFIG_NO_HZ_IDLE=y
-# CONFIG_NO_HZ_FULL is not set
-CONFIG_NO_HZ=y
-CONFIG_HIGH_RES_TIMERS=y
-# end of Timers subsystem
-
-> Here we are getting callback from scheduler. Can we check that if
-> scheduler woke up on those CPUs?
-
-As far as I can determine, yes.
-But note that I am unfamiliar with this area.
-
-> We can run "trace-cmd -e sched" and check in kernel shark if there is
-> similar gaps in activity.
-
-I do not use trace-cmd and had never heard of kernel shark.
-Nor do I actually run any desktop GUI on linux, only servers.
-I attempted to acquire what you wanted with primitive trace
-commands.
-
-Workflow: All as before (the 347 Hertz work/sleep frequency
-test), with a 20 minute trace in the middle. Powers were
-monitored again to confirm differences, and just in case trace
-itself modified the system response (it didn't).
-
-Power averages (excluding the sample where the trace
-file was being written to disk):
-Stock: 4.1 +37%
-Revert:  3.0
-
-I only looked at a few of the CPUs data, the largest, smallest
-and a mid-range file sizes, excluding the main working CPU.
-Maximum times between "sched_wakeup", seconds:
-
-Stock:
-CPU 2: 4.0
-CPU 4: 4.0
-CPU 9: 1.0
-
-Revert:
-CPU 1: 2.0
-CPU 2: 4.0
-CPU 7: 1.54
-
-I do not know if other stuff in the files might be odd or not.
-
-... Doug
+Oh, well. Sounds like you're working closely with the STMicro people, so
+should be fine.
