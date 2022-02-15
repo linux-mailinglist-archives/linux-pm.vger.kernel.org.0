@@ -2,128 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8421F4B5E62
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Feb 2022 00:43:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 544704B5ECC
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Feb 2022 01:08:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232192AbiBNXne (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Feb 2022 18:43:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58356 "EHLO
+        id S232381AbiBOAId (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Feb 2022 19:08:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231168AbiBNXnd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Feb 2022 18:43:33 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C64C8E
-        for <linux-pm@vger.kernel.org>; Mon, 14 Feb 2022 15:43:25 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id q7so29204997wrc.13
-        for <linux-pm@vger.kernel.org>; Mon, 14 Feb 2022 15:43:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=J6UtsCOG/MOHUeoOG1yb2cxuVFsLjCztE8jNAjI7YmE=;
-        b=R9RitRklkNR91LTOMUmI6VdWT+ceCQ76Hbfh/914xLnzjqaCOAK5Mwd1gLlMA3UMyT
-         9UlCUUqJndIo/HBJujLAP8+b8Zkp2cNLQwAarfd558JsJjssTBYEMP6wSKmQP7Z5lvfd
-         PkZoy/A3E3HUY4bLNhPWGRsuwsFeVLTanRhZekWkReAb7hQS8J8I5lz3XEmVj6FVC5wh
-         XUFPx2xExCAcaReRbl/Lc6YETtJ3dtyLx59Hvj2RsdK0QGqcmFrH0PVVKdfU23XJcuw2
-         l7QJw0V3kLTtFh+6QF8so8yMB58v7zMp1df1qx8wkSHy4RRN3tcuUmYHGoRspXYvdgWS
-         aNDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=J6UtsCOG/MOHUeoOG1yb2cxuVFsLjCztE8jNAjI7YmE=;
-        b=s9m8390ahEj8cmp+72nXOD+SZ858t8OKHVRcIG9bxj8RausU3KrEoBwRX+bDGdx1z6
-         +nWuNU17pvZSidzTOeP8vSsD3DcsnICnSgEApWUKJjnBtHuzpjAeY9gA3oiSlrtdv5o0
-         uq0rdTirSc/i8HoS+t/Nf5NkKSDu/EfQfFh6M3eR+bWqVvt6evzzQDedhYhZkzuj8OjI
-         JoGXb5XVcaq0HvZ4agq4qS1doAHLPar+XFG7IAZ77Agn+3LTPv2HeCZm+FVSQuM8RGHs
-         vGISLmYi/KW7PoPuRLRflpjdg5DZ39jv8JTIw2gAOfdBEpIkzILLrz4nou590e+1FwiA
-         ojhw==
-X-Gm-Message-State: AOAM5314kXhr4WlJFXt9WbXpcg7RUyPcbTGBh0Sj7PIBjKf0j3lxlNah
-        mNsXe6iVR2ilF/TJpaGWgXOdmQ==
-X-Google-Smtp-Source: ABdhPJwC0lcPFtT2usy6dc08+jDdHyf10KCX/MdPeMXIriK2I+D1B5tk/4NjH3eUFD7TilvAYK0Kug==
-X-Received: by 2002:adf:e5c4:: with SMTP id a4mr934723wrn.441.1644882203509;
-        Mon, 14 Feb 2022 15:43:23 -0800 (PST)
-Received: from ?IPV6:2a01:e34:ed2f:f020:758e:84ee:c9c7:9bfb? ([2a01:e34:ed2f:f020:758e:84ee:c9c7:9bfb])
-        by smtp.googlemail.com with ESMTPSA id y6sm5470608wrd.30.2022.02.14.15.43.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Feb 2022 15:43:22 -0800 (PST)
-Message-ID: <f249be05-74ef-6aeb-a561-462c3a76a194@linaro.org>
-Date:   Tue, 15 Feb 2022 00:43:21 +0100
+        with ESMTP id S232045AbiBOAIc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Feb 2022 19:08:32 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E0B97BAD;
+        Mon, 14 Feb 2022 16:08:23 -0800 (PST)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21E8pDbh031979;
+        Mon, 14 Feb 2022 18:08:16 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=mtESrcOKgKXQmkilrqoNob9Tn40gKNW7FNM5KPZ6lbo=;
+ b=VeHDeNsNvFYJIxCyhnueLa68XkAkukEL3dTslLrhvuFfLghB1i3rxbl7jN4juk2bBXZb
+ jHjrQMJxTcepufI/ZtHBDexDOCj2mfHvZMGegYKya20l8/rs0QuqEXKKxkLpSeEGuptU
+ XcAwrK6DUFPdTeJfm+r5BXQk3YXI/nqbH51kr9g+1IhxaJHwcbeQP1wmqiu/dQ+1m2Tl
+ ELWZ6/l7r+0ToY+q8UvdOQ8M55mkqdhRwPxrSpbpUZpUS1kcsPgVs9ujO/WXZiojBgPQ
+ YJonY7tXGx2epR6MuBoRaN7sO5JJET1R2prGdksT+Kz41S71ED3/nVuF0CLR57d6+s69 0A== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3e7kx7rukt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Mon, 14 Feb 2022 18:08:16 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Tue, 15 Feb
+ 2022 00:08:14 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
+ Transport; Tue, 15 Feb 2022 00:08:14 +0000
+Received: from ricardo-lws.crystal.cirrus.com (ricardo-lws.ad.cirrus.com [141.131.206.19])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 4C443B16;
+        Tue, 15 Feb 2022 00:08:13 +0000 (UTC)
+From:   Ricardo Rivera-Matos <rriveram@opensource.cirrus.com>
+To:     <sre@kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>
+CC:     Ricardo Rivera-Matos <rriveram@opensource.cirrus.com>
+Subject: [PATCH v3 0/3] Introduces bypass charge type property
+Date:   Mon, 14 Feb 2022 18:07:55 -0600
+Message-ID: <20220215000758.803501-1-rriveram@opensource.cirrus.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC PATCH 4/4] tools/thermal: Add thermal daemon skeleton
-Content-Language: en-US
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        rafael@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>
-References: <20220214210446.255780-1-daniel.lezcano@linaro.org>
- <20220214210446.255780-4-daniel.lezcano@linaro.org>
- <50025eeb1826c929342e9f600b5c2d91eed6d2ed.camel@linux.intel.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <50025eeb1826c929342e9f600b5c2d91eed6d2ed.camel@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: N6q8uNKCTZuEWo0H3ePjHx_1vEof2trH
+X-Proofpoint-GUID: N6q8uNKCTZuEWo0H3ePjHx_1vEof2trH
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hello,
 
-Hi Srinivas,
+This patch series introduces a new POWER_SUPPLY_CHARGE_TYPE for bypass charging
+operation.
 
-On 14/02/2022 23:34, srinivas pandruvada wrote:
-> On Mon, 2022-02-14 at 22:04 +0100, Daniel Lezcano wrote:
->> This change provides a simple daemon skeleton. It provides an example
->> of how to use the thermal library.
->>
->> The goal of this skeleton is to give a base brick for anyone
->> interested in writing its own thermal engine.
->>
->> In the future, it will evolve with more features.
->>
->  From the code, doesn't seam to have a function to daemonize.
+In fast charging ICs, the bypass operation is used to bypass the charging path
+around the charging IC's integrated power converter to its load. This allows
+for "smart" wall adaptors (such as USB PPS standard power adaptors) to handle
+the power conversion and heat dissipation externally.
 
-Yes, it does, see below. If the stdout output is set, then it won't 
-daemonize.
+Best Regards,
+Ricardo
 
+Ricardo Rivera-Matos (2):
+  power: supply: Introduces bypass charging property
+  power: supply: bq25980: Implements POWER_SUPPLY_CHARGE_TYPE_BYPASS
 
-> So may be not call a daemon if that is true. mainloop() is just an
-> infinite loop polling netlink messages.
-> 
-> Also thermald will confuse with the standard thermald distributed with
-> every distro. May be thermal_control_sample as this a sample for future
-> development.
-
-Does thermal-engine fine ?
-
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-
-[ ... ]
-
->>   tools/thermal/thermald/thermald.c | 275
-
-[ ... ]
-
->> +       if (!(options.logopt & TO_STDOUT) && daemon(0, 0))
->> +               return 1;
-
-[ ... ]
+ drivers/power/supply/bq25980_charger.c    | 2 +-
+ drivers/power/supply/power_supply_sysfs.c | 1 +
+ include/linux/power_supply.h              | 1 +
+ 3 files changed, 3 insertions(+), 1 deletion(-)
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.25.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
