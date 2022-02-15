@@ -2,123 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E30074B6E6E
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Feb 2022 15:10:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 508CE4B708D
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Feb 2022 17:39:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232295AbiBOOLF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 15 Feb 2022 09:11:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46440 "EHLO
+        id S238105AbiBOPJy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Feb 2022 10:09:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229896AbiBOOLF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Feb 2022 09:11:05 -0500
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE047D2AB;
-        Tue, 15 Feb 2022 06:10:55 -0800 (PST)
-Received: by mail-yb1-f181.google.com with SMTP id v186so56458626ybg.1;
-        Tue, 15 Feb 2022 06:10:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=xHfL1XY2GV6QdZjIkT4vEos4l6sqpCi5W/kB5ImUf2I=;
-        b=wnzmPXUvPcJ3683Ztz3p4zLPfMTTG/bb8eWY++hxELKDoT6zzqN0s2jirNyjljnSH1
-         XKcpCqCdVbf4FVZ7JO7uzipctkQniwFpkd1vWA0kBt2CrddXBnp+CeEIy1hnEfWYBCVY
-         Zxp8DfoRdSxJRf+FsKjSsXEcIccEgLqFNW1jGxOg4sX/RW8V2yRhjckkjDJDSWUDzbBD
-         wMjxtDS6ftC9yn/DiX/XM80hP16OwZsR7MfDklm1fepwNt8VNuxM6OOIY/1vvvDXkq+U
-         58A7ytNAB7DIBjyiU4DdpIHOBaj18TmBjoMMoMa5cCqmITtDVg/K5yxUnqcOviBjR6JC
-         lY5w==
-X-Gm-Message-State: AOAM533j8oAm+Xvy6xGBCW+G8WP6hK53dsK+QxPOCoqD0d51Ii0XA/yf
-        zD9EEF5osp0ozaGKyaysEwyoUBk6nQlB88BO7lo=
-X-Google-Smtp-Source: ABdhPJyzKs4yuHR0FjNoP2vBK2JooJ+jaKb9zNbBcgSMbloPOXlk3Ph/57kK0MjTlHGlf9VIII46DM2AyYGoEq0H1eg=
-X-Received: by 2002:a81:1f0b:: with SMTP id f11mr3887472ywf.149.1644934254475;
- Tue, 15 Feb 2022 06:10:54 -0800 (PST)
+        with ESMTP id S232910AbiBOPJy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Feb 2022 10:09:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C7B24BCE;
+        Tue, 15 Feb 2022 07:09:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EB19361563;
+        Tue, 15 Feb 2022 15:09:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF293C340EB;
+        Tue, 15 Feb 2022 15:09:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644937782;
+        bh=rQRzKiWjUEky441SM9VPj2LOw9hR96TVsT711jhkyb0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=CXP0rEBrVkzFiRZeDgYjn/z85zqqkvPxVs1Zg02Ic84H/tmLzroXhvXVJipIGcgcn
+         Pe4nloYCPt+YsC2XrN5rhBXqzvsVSnpk3L+CbCHtaKBkExYFT3xfEJycVe7XsgW3A2
+         2Gx1pBjJxjjEV1MLyAHmIArBJ+wI01dWa+wKjHlSFCOcuy6P3wGWsemyhCSThNDC8c
+         7KC7s0k/P8lbTMwO4RW/DP8jBuYVoX/mC93BarWSlDdy1wDN2wZleW8DfGUWpAt4PT
+         hrIS/csTdZ0nbk+eU4QIOgsccjVTRuH9SMyT37PW1+STNiu/aMnREhQNWkEa2UYMjF
+         20XbDO+rzoxvg==
+Date:   Tue, 15 Feb 2022 09:09:39 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Keith Busch <kbusch@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Nirmal Patel <nirmal.patel@linux.intel.com>,
+        Jonathan Derrick <jonathan.derrick@linux.dev>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] PCI: vmd: Honor ACPI _OSC on PCIe features
+Message-ID: <20220215150939.GA106706@bhelgaas>
 MIME-Version: 1.0
-References: <20220121103938.2602637-1-amadeuszx.slawinski@linux.intel.com>
- <59ef4cd5-5703-2356-c893-9858985f91e0@intel.com> <f6e5f716-f191-c126-cc81-cf872ad4e750@linux.intel.com>
-In-Reply-To: <f6e5f716-f191-c126-cc81-cf872ad4e750@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 15 Feb 2022 15:10:43 +0100
-Message-ID: <CAJZ5v0jV5H9a66utA5Ch--X2iiV-MOSmX6CVL6s+veYpzOaezg@mail.gmail.com>
-Subject: Re: [PATCH] x86: Preserve ACPI memory area during hibernation
-To:     =?UTF-8?B?QW1hZGV1c3ogU8WCYXdpxYRza2k=?= 
-        <amadeuszx.slawinski@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAd53p6hATV8TOcJ9Qi2rMwVi=y_9+tQu6KhDkAm6Y8=cQ_xoA@mail.gmail.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 1:22 PM Amadeusz Sławiński
-<amadeuszx.slawinski@linux.intel.com> wrote:
->
-> On 2/14/2022 8:34 PM, Rafael J. Wysocki wrote:
-> > On 1/21/2022 11:39 AM, Amadeusz Sławiński wrote:
-> >> When overriding NHLT ACPI-table tests show that on some platforms
-> >> there is problem that NHLT contains garbage after hibernation/resume
-> >> cycle.
-> >>
-> >> Problem stems from the fact that ACPI override performs early memory
-> >> allocation using memblock_phys_alloc_range() in
-> >> memblock_phys_alloc_range(). This memory block is later being marked as
-> >> ACPI memory block in arch_reserve_mem_area(). Later when memory areas
-> >> are considered for hibernation it is being marked as nosave in
-> >> e820__register_nosave_regions().
-> >>
-> >> Fix this by skipping ACPI memory area altogether when considering areas
-> >> to mark as nosave.
+On Mon, Feb 14, 2022 at 08:23:05AM +0800, Kai-Heng Feng wrote:
+> On Thu, Feb 10, 2022 at 5:36 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > On Tue, Dec 07, 2021 at 02:15:04PM +0100, Rafael J. Wysocki wrote:
+> > > On Tue, Dec 7, 2021 at 12:12 AM Keith Busch <kbusch@kernel.org> wrote:
+> > > > On Fri, Dec 03, 2021 at 11:15:41AM +0800, Kai-Heng Feng wrote:
+> > > > > When Samsung PCIe Gen4 NVMe is connected to Intel ADL VMD, the
+> > > > > combination causes AER message flood and drags the system performance
+> > > > > down.
+> > > > >
+> > > > > The issue doesn't happen when VMD mode is disabled in BIOS, since AER
+> > > > > isn't enabled by acpi_pci_root_create() . When VMD mode is enabled, AER
+> > > > > is enabled regardless of _OSC:
+> > > > > [    0.410076] acpi PNP0A08:00: _OSC: platform does not support [AER]
+> > > > > ...
+> > > > > [    1.486704] pcieport 10000:e0:06.0: AER: enabled with IRQ 146
+> > > > >
+> > > > > Since VMD is an aperture to regular PCIe root ports, honor ACPI _OSC to
+> > > > > disable PCIe features accordingly to resolve the issue.
+> > > >
+> > > > At least for some versions of this hardare, I recall ACPI is unaware of
+> > > > any devices in the VMD domain; the platform can not see past the VMD
+> > > > endpoint, so I throught the driver was supposed to always let the VMD
+> > > > domain use OS native support regardless of the parent's ACPI _OSC.
+> > >
+> > > This is orthogonal to whether or not ACPI is aware of the VMD domain
+> > > or the devices in it.
+> > >
+> > > If the platform firmware does not allow the OS to control specific
+> > > PCIe features at the physical host bridge level, that extends to the
+> > > VMD "bus", because it is just a way to expose a hidden part of the
+> > > PCIe hierarchy.
 > >
-> > This patch looks correct to me and I'm going to apply it as 5.18
-> > material unless there are any objections or concerns (in which case
-> > please let me know).
-> >
-> >
->
-> Well, what do you know? I've checked with validation team to make sure
-> that it works as expected and while it causes no problem on almost all
-> platforms and fixes problem with NHLT ACPI-table override, there is this
-> one platform where it causes oops on hibernation which of course is gone
-> after reverting the patch.
->
->   ? set_direct_map_default_noflush+0x130/0x130
->   ? memory_bm_test_bit+0x29/0x60
->   saveable_page+0xce/0xf2
->   count_data_pages+0x50/0x76
->   hibernate_preallocate_memory+0x9c/0x377
->   ? __mutex_lock_slowpath+0x20/0x20
->   hibernation_snapshot+0x1cf/0x610
->   snapshot_ioctl+0x3d2/0x690
->   ? snapshot_release+0xd0/0xd0
->   ? new_sync_write+0x36b/0x390
->   __x64_sys_ioctl+0x6dc/0xe20
->   ? vfs_fileattr_set+0x520/0x520
->   ? _raw_read_unlock+0x2a/0x50
->   ? __kasan_check_read+0x11/0x20
->   ? vfs_write+0x131/0x3d0
->   ? ksys_write+0x13b/0x170
->   ? debug_smp_processor_id+0x17/0x20
->   ? fpregs_assert_state_consistent+0x5f/0x70
->   ? exit_to_user_mode_prepare+0x3e/0x170
->   do_syscall_64+0x43/0x90
->   entry_SYSCALL_64_after_hwframe+0x44/0xae
->
-> Above trace points at functions using pfn, so I suspect there may be
-> need for some additional checks, but I will need to investigate.
-> I guess you can skip this patch for now, until I figure what exactly is
-> going on.
+> > I don't understand what's going on here.  Do we understand the AER
+> > message flood?  Are we just papering over it by disabling AER?
+> 
+> To be more precise, AER is disabled by the platform vendor in BIOS to
+> paper over the issue.
+> The only viable solution for us is to follow their settings. We may
+> never know what really happens underneath.
+> 
+> Disabling ASPM/AER/PME etc is a normal practice for ODMs unfortunately.
 
-I'll do that, thanks!
+OK.  So this patch actually has nothing in particular to do with AER.
+It's about making _OSC apply to *all* devices below a host bridge,
+even those below a VMD.
+
+This is slightly ambiguous because while "_OSC applies to the entire
+hierarchy originated by a PCI Host Bridge" (PCI Firmware spec r3.3,
+sec 4.5.1), vmd.c creates a logical view where devices below the VMD
+are in a separate hierarchy with a separate domain.
+
+The interpretation that _OSC applies to devices below VMD should work,
+as long as it is possible for platform firmware to manage services
+(AER, pciehp, etc) for things below VMD without getting in the way of
+vmd.c.
+
+But I think one implication of this is that we cannot support
+hot-added VMDs.  For example, firmware that wants to manage AER will
+use _OSC to retain AER control.  But if the firmware doesn't know how
+VMDs work, it will not be able to handle AER for devices below the
+VMD.
+
+> > If an error occurs below a VMD, who notices and reports it?  If we
+> > disable native AER below VMD because of _OSC, as this patch does, I
+> > guess we're assuming the platform will handle AER events below VMD.
+> > Is that really true?  Does the platform know how to find AER log
+> > registers of devices below VMD?
+> >
+> > > The platform firmware does that through ACPI _OSC under the host
+> > > bridge device (not under the VMD device) which it is very well aware
+> > > of.
