@@ -2,39 +2,39 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 039404B6701
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Feb 2022 10:09:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91A7B4B6715
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Feb 2022 10:11:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235660AbiBOJJB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Feb 2022 04:09:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51108 "EHLO
+        id S233911AbiBOJLM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Feb 2022 04:11:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235641AbiBOJI7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Feb 2022 04:08:59 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E2313DDF;
-        Tue, 15 Feb 2022 01:08:49 -0800 (PST)
-X-UUID: a343c793e3574cacafd8132a8f336585-20220215
-X-UUID: a343c793e3574cacafd8132a8f336585-20220215
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <roger.lu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1841779167; Tue, 15 Feb 2022 17:08:47 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Tue, 15 Feb 2022 17:08:46 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 15 Feb
- 2022 17:08:45 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 15 Feb 2022 17:08:45 +0800
-Message-ID: <eb4a903b90020e8220768e9bb674b9de477006e3.camel@mediatek.com>
+        with ESMTP id S229667AbiBOJLL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Feb 2022 04:11:11 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 811ED13DDB;
+        Tue, 15 Feb 2022 01:11:02 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 079911F433FC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644916261;
+        bh=tYSh/6XrWTeegQd7V8dnLWsujFi8WEje0R7EZEvEbzE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=BVVMirL2QvYO1R0vzvudtTGRUSR8n9khoyveEfNxG9dxkA6wW5OQNaqozVMRtONjJ
+         QgrdK7YfsM5XvB8vsbAI9duQTqAdymREGBHABXI5zW7q2sKlVTn0CSuMAUaHlVpBtc
+         sWZXuiLOIUvDCVaqaBUqN+wD1dcSwUbzFJtzlz0WgueyZlul3UmF4077teU4z8B35t
+         Zsy11yX5V3J0dkXVhgNOpGrItX6cz1ooV6aTWQxwSzSQLtF+0rnxeSxUCoggZX25UH
+         Mi5gXodwpJAolDY/tvM8H7dcFq/kXuBFpRl86ghxFpmlSbexqHN0gSCji024KBgn1E
+         cOkjL4QuQJYNg==
+Message-ID: <9bbc6f3c-7fe6-0f1d-e946-b751668949fb@collabora.com>
+Date:   Tue, 15 Feb 2022 10:10:57 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
 Subject: Re: [PATCH v22 5/7] soc: mediatek: SVS: add debug commands
-From:   Roger Lu <roger.lu@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
+Content-Language: en-US
+To:     Roger Lu <roger.lu@mediatek.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         Enric Balletbo Serra <eballetbo@gmail.com>,
         Kevin Hilman <khilman@kernel.org>,
@@ -42,29 +42,29 @@ To:     AngeloGioacchino Del Regno
         Nicolas Boichat <drinkcat@google.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Philipp Zabel <p.zabel@pengutronix.de>
-CC:     Fan Chen <fan.chen@mediatek.com>,
+Cc:     Fan Chen <fan.chen@mediatek.com>,
         HenryC Chen <HenryC.Chen@mediatek.com>,
         Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
         Charles Yang <Charles.Yang@mediatek.com>,
         Angus Lin <Angus.Lin@mediatek.com>,
         Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
         Guenter Roeck <linux@roeck-us.net>
-Date:   Tue, 15 Feb 2022 17:08:45 +0800
-In-Reply-To: <0846872b-03da-ee5d-6a9d-e6c9fa754191@collabora.com>
 References: <20220127033956.24585-1-roger.lu@mediatek.com>
-         <20220127033956.24585-6-roger.lu@mediatek.com>
-         <0846872b-03da-ee5d-6a9d-e6c9fa754191@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-MIME-Version: 1.0
+ <20220127033956.24585-6-roger.lu@mediatek.com>
+ <0846872b-03da-ee5d-6a9d-e6c9fa754191@collabora.com>
+ <eb4a903b90020e8220768e9bb674b9de477006e3.camel@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <eb4a903b90020e8220768e9bb674b9de477006e3.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,65 +73,76 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi AngeloGioacchino,
+Il 15/02/22 10:08, Roger Lu ha scritto:
+> Hi AngeloGioacchino,
+> 
+> Excuse me for the late reply.
 
-Excuse me for the late reply.
-
-On Mon, 2022-01-31 at 12:11 +0100, AngeloGioacchino Del Regno wrote:
-> Il 27/01/22 04:39, Roger Lu ha scritto:
-> > The purpose of SVS is to help find the suitable voltages
-> > for DVFS. Therefore, if SVS bank voltages are concerned
-> > to be wrong, we can adjust SVS bank voltages by this patch.
-> > 
-> > Signed-off-by: Roger Lu <roger.lu@mediatek.com>
-> 
-> 
-> Hello Roger,
-> I was thinking about what this patch is adding... and I have a few
-> considerations.
-> 
-> It's nice to have a debugging mechanism to read the status and dump registers,
-> as
-> that's very helpful when doing heavy debugging of the IP... but adding the
-> possibility to write a voltage offset may be very dangerous: think about the
-> case
-> in which, either for misconfiguration, or for any other reason, the debugfs
-> entry
-> that allows writing voffset becomes user-writable, or a user writes an
-> impossibly
-> high voffset.
-> In case a very low (negative) voffset is entered, the platform would crash
-> (denial
-> of service); if a very high voffset is entered, hardware damage may occur.
-> 
-> For this reason, there are two proposals:
-> 1. If you want to keep the debugfs voffset write, please constrain the
-> permissible
->     voffset to an acceptable range that at least makes it unlikely to damage
-> the HW;
->     Moreover, since voffset write is a feature that would be used in very
-> limited
->     debugging cases, I think that this should be implemented over a build-time
->     configuration barrier... something like CONFIG_MTK_SVS_DEBUG_ALLOW_WRITE,
-> or
->     similar;
-> 2. Since it's very unlikely for someone to really play that much with a
-> voltage
->     offset during runtime, and since this looks like something very machine
-> specific
->     (perhaps addressing board-specific quirks?), I would suggest to add this
-> as a
->     device-tree parameter instead, such as "mediatek,svs-voffset", as it is
-> indeed
->     possible to specify both positive or negative values in DT.
-> 
-> I would prefer proposal 2, as it looks generally cleaner and way less risky.
-
-Thanks for raising the considerations and give these great suggestions for us to
-think about. Since these voffset read/write commands are used seldomly, we
-decide to remove them for better system security.
+Hi Roger,
+no worries about that.
 
 > 
-> Regards,
-> Angelo
+> On Mon, 2022-01-31 at 12:11 +0100, AngeloGioacchino Del Regno wrote:
+>> Il 27/01/22 04:39, Roger Lu ha scritto:
+>>> The purpose of SVS is to help find the suitable voltages
+>>> for DVFS. Therefore, if SVS bank voltages are concerned
+>>> to be wrong, we can adjust SVS bank voltages by this patch.
+>>>
+>>> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
+>>
+>>
+>> Hello Roger,
+>> I was thinking about what this patch is adding... and I have a few
+>> considerations.
+>>
+>> It's nice to have a debugging mechanism to read the status and dump registers,
+>> as
+>> that's very helpful when doing heavy debugging of the IP... but adding the
+>> possibility to write a voltage offset may be very dangerous: think about the
+>> case
+>> in which, either for misconfiguration, or for any other reason, the debugfs
+>> entry
+>> that allows writing voffset becomes user-writable, or a user writes an
+>> impossibly
+>> high voffset.
+>> In case a very low (negative) voffset is entered, the platform would crash
+>> (denial
+>> of service); if a very high voffset is entered, hardware damage may occur.
+>>
+>> For this reason, there are two proposals:
+>> 1. If you want to keep the debugfs voffset write, please constrain the
+>> permissible
+>>      voffset to an acceptable range that at least makes it unlikely to damage
+>> the HW;
+>>      Moreover, since voffset write is a feature that would be used in very
+>> limited
+>>      debugging cases, I think that this should be implemented over a build-time
+>>      configuration barrier... something like CONFIG_MTK_SVS_DEBUG_ALLOW_WRITE,
+>> or
+>>      similar;
+>> 2. Since it's very unlikely for someone to really play that much with a
+>> voltage
+>>      offset during runtime, and since this looks like something very machine
+>> specific
+>>      (perhaps addressing board-specific quirks?), I would suggest to add this
+>> as a
+>>      device-tree parameter instead, such as "mediatek,svs-voffset", as it is
+>> indeed
+>>      possible to specify both positive or negative values in DT.
+>>
+>> I would prefer proposal 2, as it looks generally cleaner and way less risky.
+> 
+> Thanks for raising the considerations and give these great suggestions for us to
+> think about. Since these voffset read/write commands are used seldomly, we
+> decide to remove them for better system security.
+> 
+
+Thank you for this ack, very much appreciated.
+Eager to see v23!
+
+
+>>
+>> Regards,
+>> Angelo
+> 
 
