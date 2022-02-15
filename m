@@ -2,37 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 425C14B61C5
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Feb 2022 04:38:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 079944B64B0
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Feb 2022 08:48:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbiBODiI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Feb 2022 22:38:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37266 "EHLO
+        id S234911AbiBOHrv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Feb 2022 02:47:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbiBODiH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Feb 2022 22:38:07 -0500
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EDEE90FEB;
-        Mon, 14 Feb 2022 19:37:58 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R861e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V4W9NEP_1644896271;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0V4W9NEP_1644896271)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 15 Feb 2022 11:37:56 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     rafael@kernel.org
-Cc:     pavel@ucw.cz, len.brown@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH v2] PM: hibernate: Fix non-kernel-doc comment
-Date:   Tue, 15 Feb 2022 11:37:50 +0800
-Message-Id: <20220215033750.104952-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        with ESMTP id S232017AbiBOHrv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Feb 2022 02:47:51 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA7718A302;
+        Mon, 14 Feb 2022 23:47:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644911261; x=1676447261;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=bKfn5cFC+4sCU4g1lSHUk5eDHm4O5lP5V0B5i3FL4vc=;
+  b=YohNaK6p54AJsbiecAEN4JTYyuCtZt/jgO7/bnBZGSjkGjThr77YV0Qf
+   zjsPeJV5uBYg+q+AMonHBAtwAuWQltPeXS/e/6mMkEu5Zdy0tUPa46oGx
+   I2rqbP/nT318rruGBfZl6k9uGLuBjtSx/Lmve8HNCD4LqLK+JU8hGo6No
+   KWPj3Mjxugx/QmNuqGw6w/rv28wVGJ4+sdoAwHgcM4VNurGBSavoUVRMK
+   C05SvqGkqdDlOCbcK3EgBc7UuRMFHM/3NH42JgLdHzHTFRnM+GkqFEpLn
+   eQadgTd3DRKT+KszE4SPRBoKSm5jhQ5VIozni2uta+Uex2NpVHEWTETws
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="247866988"
+X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
+   d="scan'208";a="247866988"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 23:47:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
+   d="scan'208";a="773394809"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 14 Feb 2022 23:47:39 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nJsYl-0009Qm-BC; Tue, 15 Feb 2022 07:47:39 +0000
+Date:   Tue, 15 Feb 2022 15:47:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Shuai Xue <xueshuai@linux.alibaba.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: [rafael-pm:bleeding-edge 41/47] ld.lld: error: undefined symbol:
+ ghes_disable
+Message-ID: <202202151504.jWpZGPaH-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -40,61 +62,45 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Fixes the following W=1 kernel build warning:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   9db71e8e3027d2026be1ea9b6cfce8fd7216fb01
+commit: f521a6e687d139e5d33a3d92f5ba4cd0a825cc66 [41/47] ACPI: APEI: explicit init HEST and GHES in apci_init()
+config: arm64-randconfig-r004-20220214 (https://download.01.org/0day-ci/archive/20220215/202202151504.jWpZGPaH-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 37f422f4ac31c8b8041c6b62065263314282dab6)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=f521a6e687d139e5d33a3d92f5ba4cd0a825cc66
+        git remote add rafael-pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+        git fetch --no-tags rafael-pm bleeding-edge
+        git checkout f521a6e687d139e5d33a3d92f5ba4cd0a825cc66
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-kernel/power/swap.c:120: warning: This comment starts with '/**', but
-isn't a kernel-doc comment. Refer
-Documentation/doc-guide/kernel-doc.rst.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: ghes_notify_sea
+   >>> referenced by acpi.c
+   >>> kernel/acpi.o:(apei_claim_sea) in archive arch/arm64/built-in.a
+--
+>> ld.lld: error: undefined symbol: ghes_disable
+   >>> referenced by bus.c
+   >>> acpi/bus.o:(acpi_bus_init) in archive drivers/built-in.a
+   >>> referenced by bus.c
+   >>> acpi/bus.o:(acpi_bus_init) in archive drivers/built-in.a
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for ACPI_APEI_GHES
+   Depends on ACPI && ACPI_APEI
+   Selected by
+   - ARM_SDE_INTERFACE && ARM64
+
 ---
-Changes in v2:
-  -Modify subject 'block' to 'PM: hibernate'.
-
- kernel/power/swap.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-index 6c4f983cbacc..91fffdd2c7fb 100644
---- a/kernel/power/swap.c
-+++ b/kernel/power/swap.c
-@@ -88,7 +88,7 @@ struct swap_map_page_list {
- 	struct swap_map_page_list *next;
- };
- 
--/**
-+/*
-  *	The swap_map_handle structure is used for handling swap in
-  *	a file-alike way
-  */
-@@ -116,7 +116,7 @@ struct swsusp_header {
- 
- static struct swsusp_header *swsusp_header;
- 
--/**
-+/*
-  *	The following functions are used for tracing the allocated
-  *	swap pages, so that they can be freed in case of an error.
-  */
-@@ -170,7 +170,7 @@ static int swsusp_extents_insert(unsigned long swap_offset)
- 	return 0;
- }
- 
--/**
-+/*
-  *	alloc_swapdev_block - allocate a swap page and register that it has
-  *	been allocated, so that it can be freed in case of an error.
-  */
-@@ -189,7 +189,7 @@ sector_t alloc_swapdev_block(int swap)
- 	return 0;
- }
- 
--/**
-+/*
-  *	free_all_swap_pages - free swap pages allocated for saving image data.
-  *	It also frees the extents used to register which swap entries had been
-  *	allocated.
--- 
-2.20.1.7.g153144c
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
