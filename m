@@ -2,141 +2,189 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7F724B6849
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Feb 2022 10:57:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0C814B69F3
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Feb 2022 11:57:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235677AbiBOJ5c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Feb 2022 04:57:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33844 "EHLO
+        id S234521AbiBOK5B (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Feb 2022 05:57:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbiBOJ5b (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Feb 2022 04:57:31 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3783810DA57;
-        Tue, 15 Feb 2022 01:57:22 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 04D111063;
-        Tue, 15 Feb 2022 01:57:22 -0800 (PST)
-Received: from [10.57.13.122] (unknown [10.57.13.122])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CFB6F3F66F;
-        Tue, 15 Feb 2022 01:57:20 -0800 (PST)
-Subject: Re: [PATCH v5] drivers: thermal: clear all mitigation when thermal
- zone is disabled
-To:     Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zhang Rui <rui.zhang@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-References: <1643307093-22501-1-git-send-email-quic_manafm@quicinc.com>
- <4024218b-7938-e181-f456-bff4b3fb157a@arm.com>
- <c02d28ce-bef4-0b71-e90a-991ef4fae9d3@quicinc.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <f936ee68-3e2c-273c-38fe-9b37277f54ba@arm.com>
-Date:   Tue, 15 Feb 2022 09:57:19 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        with ESMTP id S232569AbiBOK46 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Feb 2022 05:56:58 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B35D2B10A0;
+        Tue, 15 Feb 2022 02:56:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644922606; x=1676458606;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=dTrtqie4shxFDrwGEl538Whbee33Y8ND67NcnSwUL54=;
+  b=HQZnn+XSFDYve8mJVxnvpgnuSRIPuH8C/j/1jgPyBZPf/hsuiFo1mqTq
+   VxR1Hmdjydolkd+U+o1uOKs+Z/mpZ/+K9g8TWLwGE2PpY8DEjZO336+C5
+   TWyYT1+xL+VTSsgrN/3TCFIwtcgm8/+NWpbKllAHHHtvgVdlpBUHVR+kP
+   NL3nMJS1xgG+3RyGS0kTVMDkxT9vbIqw6uvUS7ttKuwNLJXulHMl8uN8f
+   kY1Kj7OHFcdn4lsgB3aj9vYIGnXg7UsBy+v+HKXlZ4qZKAZ14/zZgZcoB
+   Vljf7cqX+Wz5OQn3OoxZmGg3UTl5z1/VLLRqz3nTsma9A67lkMliPFbMK
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="250270689"
+X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
+   d="scan'208";a="250270689"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 02:56:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
+   d="scan'208";a="497016534"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 15 Feb 2022 02:56:43 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nJvVj-0009Yt-9w; Tue, 15 Feb 2022 10:56:43 +0000
+Date:   Tue, 15 Feb 2022 18:56:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 9db71e8e3027d2026be1ea9b6cfce8fd7216fb01
+Message-ID: <620b86c6.uRMwLUkkE1+grIue%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <c02d28ce-bef4-0b71-e90a-991ef4fae9d3@quicinc.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 9db71e8e3027d2026be1ea9b6cfce8fd7216fb01  Merge branch 'acpi-ec' into bleeding-edge
 
+elapsed time: 731m
 
-On 2/14/22 8:00 PM, Manaf Meethalavalappu Pallikunhi wrote:
-> 
-> On 1/31/2022 12:55 PM, Lukasz Luba wrote:
->> Hi Manaf,
->>
->> On 1/27/22 6:11 PM, Manaf Meethalavalappu Pallikunhi wrote:
->>> Whenever a thermal zone is in trip violated state, there is a chance
->>> that the same thermal zone mode can be disabled either via
->>> thermal core API or via thermal zone sysfs. Once it is disabled,
->>> the framework bails out any re-evaluation of thermal zone. It leads
->>> to a case where if it is already in mitigation state, it will stay
->>> the same state forever.
->>>
->>> To avoid above mentioned issue, add support to bind/unbind
->>> governor from thermal zone during thermal zone mode change request
->>> and clear all existing throttling in governor unbind_from_tz()
->>> callback.
->>
->> I have one use case:
->> This would be a bit dangerous, e.g. to switch governors while there is a
->> high temperature. Although, sounds reasonable to left a 'default' state
->> for a next governor.
->>
-> I believe only way to change the governror via userspace at runtime.
-> 
-> Just re-evaluate thermal zone  (thermal_zone_device_update) immediately 
-> after
-> 
-> thermal_zone_device_set_policy()  in same policy_store() context, isn't 
-> it good enough ?
+configs tested: 107
+configs skipped: 3
 
-It depends. The code would switch the governors very fast, in the
-meantime notifying about possible full speed of CPU (cooling state = 0).
-If the task scheduler goes via schedutil (cpufreq governor) at that
-moment and decides to set this max frequency, it will be set.
-This is situation with your patch, since you added in IPA unbind
-'allow_maximum_power()'.
-Then the new governor is bind, evaluates the max cooling state, the
-notification about reduced max freq is sent to schedutil (a workqueue
-will call .sugov_limits() callback) and lower freq would be set.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Now there are things which are not greatly covered by these 4
-involved sub-systems (thermal fwk, schedutil, scheduler, HW).
-It takes time. It also depends when the actual HW freq is possible to be
-set. It might take a few milli-seconds or even a dozes of milli-seconds
-(depends on HW).
+gcc tested configs:
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm64                               defconfig
+arm64                            allyesconfig
+i386                 randconfig-c001-20220214
+mips                 randconfig-c004-20220214
+mips                           jazz_defconfig
+sh                            titan_defconfig
+sh                          urquell_defconfig
+arm                            hisi_defconfig
+powerpc                   currituck_defconfig
+sh                        sh7785lcr_defconfig
+sh                   rts7751r2dplus_defconfig
+m68k                       m5475evb_defconfig
+sh                              ul2_defconfig
+arm                        trizeps4_defconfig
+arm                         lpc18xx_defconfig
+powerpc                      bamboo_defconfig
+arm                        mvebu_v7_defconfig
+arc                        nsimosci_defconfig
+arm                  randconfig-c002-20220214
+ia64                                defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+nds32                             allnoconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+alpha                               defconfig
+nds32                               defconfig
+nios2                            allyesconfig
+alpha                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+parisc                              defconfig
+s390                             allmodconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                                defconfig
+s390                             allyesconfig
+i386                             allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+sparc                            allyesconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+powerpc                          allyesconfig
+x86_64               randconfig-a013-20220214
+x86_64               randconfig-a014-20220214
+x86_64               randconfig-a012-20220214
+x86_64               randconfig-a015-20220214
+x86_64               randconfig-a011-20220214
+x86_64               randconfig-a016-20220214
+i386                 randconfig-a013-20220214
+i386                 randconfig-a016-20220214
+i386                 randconfig-a012-20220214
+i386                 randconfig-a015-20220214
+i386                 randconfig-a011-20220214
+i386                 randconfig-a014-20220214
+arc                  randconfig-r043-20220214
+s390                 randconfig-r044-20220214
+riscv                randconfig-r042-20220214
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+x86_64                           allyesconfig
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
 
-Without your change, we avoid such situation while switching the
-thermal governors.
+clang tested configs:
+arm                            dove_defconfig
+arm64                            allyesconfig
+mips                          ath25_defconfig
+mips                     loongson1c_defconfig
+arm                        magician_defconfig
+riscv                            alldefconfig
+powerpc                   lite5200b_defconfig
+i386                 randconfig-a004-20220214
+i386                 randconfig-a002-20220214
+i386                 randconfig-a003-20220214
+i386                 randconfig-a001-20220214
+i386                 randconfig-a006-20220214
+i386                 randconfig-a005-20220214
+x86_64               randconfig-a002-20220214
+x86_64               randconfig-a004-20220214
+x86_64               randconfig-a003-20220214
+x86_64               randconfig-a001-20220214
+x86_64               randconfig-a006-20220214
+x86_64               randconfig-a005-20220214
+hexagon              randconfig-r041-20220214
+hexagon              randconfig-r045-20220214
 
-For your requirement, which is 'mode' enable/disable it OK to
-un-throttle.
-
-It's probably something to Rafael and Daniel to judge if we want to
-pay that cost and introduce this racy time slot.
-
-Maybe there is a way to implement your needed feature differently.
-Unfortunately, I'm super busy with other stuff this month so I cannot
-spent much time investigating this.
-
-
-> 
-> Not sure how a "default" state  can be reverted once governor change is 
-> done.
-> 
-> Re-evaluating thermal zone doesn't guarantee that it will recover previous
-> 
-> set default state for all governors, right ?
-> 
->>>
->>> Suggested-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->>> Signed-off-by: Manaf Meethalavalappu Pallikunhi 
->>> <quic_manafm@quicinc.com>
->>> ---
->>>   drivers/thermal/gov_power_allocator.c |  3 +++
->>>   drivers/thermal/gov_step_wise.c       | 26 ++++++++++++++++++++++++++
->>>   drivers/thermal/thermal_core.c        | 31 
->>> +++++++++++++++++++++++++++----
->>>   3 files changed, 56 insertions(+), 4 deletions(-)
->>
->> Why only two governors need that change and not all?
->> Because they don't have 'bind/unbind' callbacks, then maybe we should
->> change that as well to make it consistent?
-> I will update other governors as well in v6
-
-Sounds reasonable based on your code (you've added the unbind_from_tz()
-callback to step_wise, but not for others).
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
