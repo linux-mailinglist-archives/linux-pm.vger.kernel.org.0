@@ -2,56 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 015EE4B8DE6
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Feb 2022 17:25:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C0C14B8E0D
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Feb 2022 17:32:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236159AbiBPQZ1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Feb 2022 11:25:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45074 "EHLO
+        id S233783AbiBPQcq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Feb 2022 11:32:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236382AbiBPQZ0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Feb 2022 11:25:26 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF86D243A1F
-        for <linux-pm@vger.kernel.org>; Wed, 16 Feb 2022 08:25:13 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id p29so3912272lfa.3
-        for <linux-pm@vger.kernel.org>; Wed, 16 Feb 2022 08:25:13 -0800 (PST)
+        with ESMTP id S230474AbiBPQco (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Feb 2022 11:32:44 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8D7ECB2B
+        for <linux-pm@vger.kernel.org>; Wed, 16 Feb 2022 08:32:30 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id j15so4814835lfe.11
+        for <linux-pm@vger.kernel.org>; Wed, 16 Feb 2022 08:32:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=UxkPkHWlDqesAD2skkgcNqIUaCQWaLWrTDan3sZiobs=;
-        b=yNB4Xrmwgq9AxWLhkABN6H/1ik8qhjNOm9qkClxG5ePbnYtwsSAD1ublNujSl3VsKB
-         QBD84lzjKkPCzmR4KrRzn3tkI+g91Ni5on0VXTFr+ZOypw5pd2UmIdDV/TOZLrw74tfN
-         xDWQ3/hcZozZ+eyRSUZEeUX9twMoLLJyZD9gBKKAX34JumD4dhbeaHcgF+YdGsOpxZ/P
-         AaDFRYXeNMcGI9FKGggPOcCR05Y2OBk9ibCY1PjBipl2vjz1hFJm187OlDcPAcnHKRL3
-         Qrr8XBra+cmhnIsydeJkRc3e1Ffd/KgtINWuOw3Q3ZfgxC98xfg5/LFoA0lRuoXKTpKT
-         qRDA==
+        bh=0SSR54dSAjWRErsJpI8MlfAvIJRbSM4iblniUJufvsg=;
+        b=L6VF2QHxQLg/7L4Dc9S/krbjtrMYpe7Pqr85w07568jTF69Hs7UFyDcdMGbTAb7f2y
+         tgqnEdbvGQrbzkxqREUT8tZoCpOgj4/OKyalWJIGT8havQQXSJM955rNZ9f8+jL7pFaK
+         OBgFktZ7S5OepaHypnh+X3tYd6ruIJIprThaAmdyfrz3iUC7UwEF6uB/RajrKEA63l8y
+         wZqfQkKwAyvPmbo942N8E1H5TXudX7eD4pqniGtVDz9HI/t4anZY2lSVCQde3mD0PCU8
+         JWdbsS6Qt1khHUO4ONHMRSES7wuBN2VdeDq10Tk1chW4BsppQLTxUyElVqHW8O9vBiSU
+         x1PA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=UxkPkHWlDqesAD2skkgcNqIUaCQWaLWrTDan3sZiobs=;
-        b=4IbgFPklhQjG17wT2xc5G2aOSuNply+qCZ5cN4Bks1rKbpPKPbTMlMNg1/RaLyg0CY
-         zIIwh3WXMnG3nXt9hASQVFAWj7mu7EH+QJLdf1fWjfdjiHrnmhhK2h1NvE89Y4YTMEX9
-         IT1GYx22p/9cr162pxCoBsxq+1x3ow7Z4O8BW5X9IvUEz4ECcjd03NR22j8M79/UAiQO
-         tuCFWkcA9BmcWDVzosYW+fMO9gP0ahjbBqToJzhDm/YWX3H7ShgQpR70ogX8inTnVYac
-         pn96Zn88JUHVFtvlOIzF4b3noQGhi+6mRpLpB6Xn/ZMMP5qv62oUImrEWzO33RopVbpD
-         iUqw==
-X-Gm-Message-State: AOAM5308whU+KHjoSgIjPJLRahUxft/R+9rbcyNH0++tz0QPCBP9pbra
-        66mRyYkxqrflZnCw6dKT43rU+zySOrnK6no0foUyrw==
-X-Google-Smtp-Source: ABdhPJyX0TdEvg9uB3pvpmmXC+0k7bSy8+mzCwb9mlFCwRXTD7K7MxLD7Sfsg6YDdboBiKTGf156srUKE+eeLt2Cqt8=
-X-Received: by 2002:a05:6512:3d2a:b0:443:3198:cb95 with SMTP id
- d42-20020a0565123d2a00b004433198cb95mr2617794lfv.233.1645028712002; Wed, 16
- Feb 2022 08:25:12 -0800 (PST)
+        bh=0SSR54dSAjWRErsJpI8MlfAvIJRbSM4iblniUJufvsg=;
+        b=eGmLNYNyphUEkdTyTiCWdfN2lkyieCImpcq4TsYt0mhr9IraQCiPc7KGJ3YB2wo9p4
+         5aQIqeNtjFmGPiczGCK0vC1L6Yfn2VL5uPkvPa2E/dE3nqTKOsxyzbnBeHHnGVR9IKDK
+         7oNZod+haRzB17afMFOb1iuNZoZpcTKWgiSzBZSZ2xKpH8R8pyPu5x3M8gkQlq2LwRNv
+         iypAC1OzrRvTc5A+Pw/kE5WOkps2xX2GFqefp/ebflKgGyCAL5uqkT1kNyq5FnFkcsPV
+         OAimrDSCbY45VN+JnmYBq9dpp1Hofbh0GAZbPJ+4683mvy8MHltbz3vvqIxhspy5no2M
+         VbWg==
+X-Gm-Message-State: AOAM533TX74KsRPxuYdwRh2IigGIeAHB2pYkJRq3EJ2D1/1R8RttbeW5
+        RFXp6BzYoXSm62zo0+zv6+hdzhNcEpnVbf0zxUHObw==
+X-Google-Smtp-Source: ABdhPJy4b5lagoYRgHmnVR/xqPRVmj9JtiRBC/rW4dv/LKg5sH5HlNTgBl1F4rfr49DbhE0saoL+zkPf00Z838qDynA=
+X-Received: by 2002:a05:6512:ea5:b0:43b:3603:69d9 with SMTP id
+ bi37-20020a0565120ea500b0043b360369d9mr2542630lfb.71.1645029148857; Wed, 16
+ Feb 2022 08:32:28 -0800 (PST)
 MIME-Version: 1.0
-References: <20220130210210.549877-1-daniel.lezcano@linaro.org> <20220130210210.549877-2-daniel.lezcano@linaro.org>
-In-Reply-To: <20220130210210.549877-2-daniel.lezcano@linaro.org>
+References: <20220130210210.549877-1-daniel.lezcano@linaro.org> <20220130210210.549877-4-daniel.lezcano@linaro.org>
+In-Reply-To: <20220130210210.549877-4-daniel.lezcano@linaro.org>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 16 Feb 2022 17:24:35 +0100
-Message-ID: <CAPDyKFpLDEzv7V-jJ-9xVZ=XqEHDdtLFYQQm=Ld7e1h=GJ8a8A@mail.gmail.com>
-Subject: Re: [PATCH v1 2/7] powercap/dtpm_cpu: Reset per_cpu variable in the
- release function
+Date:   Wed, 16 Feb 2022 17:31:52 +0100
+Message-ID: <CAPDyKFp5X7JuhXWSb--FUVwF=r-wtnPW0My9=oG14vHaPxSZFQ@mail.gmail.com>
+Subject: Re: [PATCH v1 4/7] powercap/dtpm: Destroy hierarchy function
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     rjw@rjwysocki.net, heiko@sntech.de, lukasz.luba@arm.com,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
@@ -70,46 +69,104 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 On Sun, 30 Jan 2022 at 22:02, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
 >
-> The release function does not reset the per cpu variable when it is
-> called. That will prevent creation again as the variable will be
-> already from the previous creation.
+> The hierarchy creation function exits but without a destroy hierarchy
+> function. Due to that, the modules creating the hierarchy can not be
+> unloaded properly because they don't have an exit callback.
 >
-> Fix it by resetting them.
+> Provide the dtpm_destroy_hierarchy() function to remove the previously
+> created hierarchy.
+>
+> The function relies on all the release mechanisms implemented by the
+> underlying powercap framework.
 >
 > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>  drivers/powercap/dtpm.c | 43 +++++++++++++++++++++++++++++++++++++++++
+>  include/linux/dtpm.h    |  3 +++
+>  2 files changed, 46 insertions(+)
+>
+> diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
+> index 7bddd25a6767..d9d74f981118 100644
+> --- a/drivers/powercap/dtpm.c
+> +++ b/drivers/powercap/dtpm.c
+> @@ -617,3 +617,46 @@ int dtpm_create_hierarchy(struct of_device_id *dtpm_match_table)
+>         return ret;
+>  }
+>  EXPORT_SYMBOL_GPL(dtpm_create_hierarchy);
+> +
+> +static void __dtpm_destroy_hierarchy(struct dtpm *dtpm)
+> +{
+> +       struct dtpm *child, *aux;
+> +
+> +       list_for_each_entry_safe(child, aux, &dtpm->children, sibling)
+> +               __dtpm_destroy_hierarchy(child);
+> +
+> +       /*
+> +        * At this point, we know all children were removed from the
+> +        * recursive call before
+> +        */
+> +       dtpm_unregister(dtpm);
+> +}
+> +
+> +void dtpm_destroy_hierarchy(void)
+> +{
+> +       int i;
+> +
+> +       mutex_lock(&dtpm_lock);
+> +
+> +       if (!pct)
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+As I kind of indicated in one of the earlier replies, it looks like
+dtpm_lock is being used to protect the global "pct". What else?
+
+Rather than doing it like this, couldn't you instead let
+dtpm_create_hiearchy() return a handle/cookie for a "dtpm hierarchy".
+This handle then needs to be passed to dtpm_destroy_hierarchy().
+
+In this way, the "pct" doesn't need to be protected and you wouldn't
+need the global "pct" at all. Although, maybe there would be other
+problems with this?
+
+> +               goto out_unlock;
+> +
+> +       __dtpm_destroy_hierarchy(root);
+> +
+> +
+> +       for (i = 0; i < ARRAY_SIZE(dtpm_subsys); i++) {
+> +
+> +               if (!dtpm_subsys[i]->exit)
+> +                       continue;
+> +
+> +               dtpm_subsys[i]->exit();
+> +       }
+> +
+> +       powercap_unregister_control_type(pct);
+> +
+> +       pct = NULL;
+> +
+> +out_unlock:
+> +       mutex_unlock(&dtpm_lock);
+> +}
+> +EXPORT_SYMBOL_GPL(dtpm_destroy_hierarchy);
+> diff --git a/include/linux/dtpm.h b/include/linux/dtpm.h
+> index f7a25c70dd4c..a4a13514b730 100644
+> --- a/include/linux/dtpm.h
+> +++ b/include/linux/dtpm.h
+> @@ -37,6 +37,7 @@ struct device_node;
+>  struct dtpm_subsys_ops {
+>         const char *name;
+>         int (*init)(void);
+> +       void (*exit)(void);
+>         int (*setup)(struct dtpm *, struct device_node *);
+>  };
+>
+> @@ -67,4 +68,6 @@ void dtpm_unregister(struct dtpm *dtpm);
+>  int dtpm_register(const char *name, struct dtpm *dtpm, struct dtpm *parent);
+>
+>  int dtpm_create_hierarchy(struct of_device_id *dtpm_match_table);
+> +
+> +void dtpm_destroy_hierarchy(void);
+>  #endif
 
 Kind regards
 Uffe
-
-
-> ---
->  drivers/powercap/dtpm_cpu.c | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
-> index eed5ad688d46..71f45d2f5a60 100644
-> --- a/drivers/powercap/dtpm_cpu.c
-> +++ b/drivers/powercap/dtpm_cpu.c
-> @@ -151,10 +151,17 @@ static int update_pd_power_uw(struct dtpm *dtpm)
->  static void pd_release(struct dtpm *dtpm)
->  {
->         struct dtpm_cpu *dtpm_cpu = to_dtpm_cpu(dtpm);
-> +       struct cpufreq_policy *policy;
->
->         if (freq_qos_request_active(&dtpm_cpu->qos_req))
->                 freq_qos_remove_request(&dtpm_cpu->qos_req);
->
-> +       policy = cpufreq_cpu_get(dtpm_cpu->cpu);
-> +       if (policy) {
-> +               for_each_cpu(dtpm_cpu->cpu, policy->related_cpus)
-> +                       per_cpu(dtpm_per_cpu, dtpm_cpu->cpu) = NULL;
-> +       }
-> +
->         kfree(dtpm_cpu);
->  }
->
-> --
-> 2.25.1
->
