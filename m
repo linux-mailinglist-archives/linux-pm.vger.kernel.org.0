@@ -2,69 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D49414B84B3
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Feb 2022 10:47:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AA234B85C5
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Feb 2022 11:31:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232396AbiBPJqy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Feb 2022 04:46:54 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:50620 "EHLO
+        id S229941AbiBPKXo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Feb 2022 05:23:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232395AbiBPJqx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Feb 2022 04:46:53 -0500
+        with ESMTP id S229782AbiBPKXn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Feb 2022 05:23:43 -0500
 Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ABA463AD
-        for <linux-pm@vger.kernel.org>; Wed, 16 Feb 2022 01:46:34 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id j15so2717501lfe.11
-        for <linux-pm@vger.kernel.org>; Wed, 16 Feb 2022 01:46:34 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 790EB206996
+        for <linux-pm@vger.kernel.org>; Wed, 16 Feb 2022 02:23:30 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id bu29so3029008lfb.0
+        for <linux-pm@vger.kernel.org>; Wed, 16 Feb 2022 02:23:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=YahjJ76dlvc0fVxCPDjqbZ1zbyUMaL1zYbVs3q3Ldno=;
-        b=CV40QRLasW6v5ghQgbIatjZKDlbh+mVaFRtvQbtVsjSZOp6fsQEsc4oklefz+mVzNf
-         d47Qsp6bo8q5yNu9jRbGmdB7/7yyzi9q5hvaXEnq2BiNJ3ciwSaswxYZN3ZYTt/5N3JW
-         QLy9voXY930FrYIosHMKN/9iespYO2xRde86MVMeU35Ua3fWfvliIfNCrfPCqYv2xWnp
-         VLu49nHi9QH95nPbILxXrnBF59c0ovEnA39qnmwc1KeyL3GZ1KVqJEdXa6JWzuhtJyzH
-         B74zZpWpX2wI722LhPIQ/nC3nwlR1NRM3SG+DXuNyDJe7VszmG8fI1z55RjlcQYnBFEB
-         dKpA==
+         :cc;
+        bh=BgTdt/5Tmin+RrpPEv4f+OmO2PXeyvBfP6PGIN1pw00=;
+        b=ZgyZzKrmMhsvCg4VMfuF0GDqGdzdbOAx4uk46L+7NyKSrkuFJ6DR2tWzprIB09t90F
+         pdEfMTaqxgUhrDo328Woxo49aijQt/PH+5GrkfdtSWRvyq4re5bzLedlwmNSTfT3+kn8
+         Fh2guaKG2mWyijqIWhMdIhxXS1MGbaVDkGR1LWbDV24YlHrSA0CsW/PNLugG+ufy821z
+         QnY+PS1GQuurqd7ygmJgwJZvUwPTLfp5gfntzw00S2My1DCDpGjeRNJeADYNm/a4KfcS
+         zikp3p85IJaJaTZz6K1bUbQMmH7pNCsZYSCy6VpzOAirR9tSzCC+0jVLrKm95rP1yGl4
+         VhOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=YahjJ76dlvc0fVxCPDjqbZ1zbyUMaL1zYbVs3q3Ldno=;
-        b=0x+tVoJRjsprkJuXN/MCTkhv0Bd+a9vcg6LopMMOvvAmrP8NtZ2pUXUONGd+5mQmK0
-         qf60AoLet9Wci46NPdAHOgasFU0zwVsrOrKXFKYW60egYQPCjeGwfvFq0HBzJtKGj3mH
-         tXuPmEB+jRSvOcKKpCCNI5JsyBVvP7dVz4wEsms7VqW4+6KA9jibSfRtL13x1qC2wCdS
-         TioYFQHbizRzfpKRMfcR8lGth+zyoEkmAfkLBKTHtzB8uk6DZEhtbjuJ0CLj9G8bQZJL
-         9bADCxisu1IWWOTCNVcuepoateuPDnN7afTdZfphMTHniDMrMx0a9Pa0/fX13zJjOdoB
-         uU3A==
-X-Gm-Message-State: AOAM531lgmcNPQ5zo1kXJSu+kOFxclUwr1cLOcQCHv4vxqY5U0fYNq5D
-        Sh5SvPhAt0865esrP8fzHGQ2QH2J8DnTLWwIcQGz9Q==
-X-Google-Smtp-Source: ABdhPJy/UUNWeVL5Vx4o7ih820QBL83abR2iCp0/U0sI910fEnhhCU1gbcQKTcrzA7b+pStqIJVCYdNxzNv/whVvgQw=
-X-Received: by 2002:a19:9144:0:b0:43b:86a4:1497 with SMTP id
- y4-20020a199144000000b0043b86a41497mr1462531lfj.254.1645004792858; Wed, 16
- Feb 2022 01:46:32 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=BgTdt/5Tmin+RrpPEv4f+OmO2PXeyvBfP6PGIN1pw00=;
+        b=M3BpSUJqgg9tpcgpdBcIvBVjpvi1WsYnnexdB6fycdbaCP4eUFNwbmbu9YkFuhya/T
+         M/e9YqxEyCGWtp1a85zY8inwUaFhmfEHDTDs2g3bR2704IBQj8Am2+xJrIPxJkMWFXNc
+         ut4pFVBCsaSzZ/DhDswRsOu/x9Vr91eBuX7tN9yMsuN39/DKlRLOk/qGkd2WZXkkGble
+         UoDEihTLl8KBTqyThs6Hon9dwJN1j3lK6/k3ZY6H0Jfg12B5RqCZr7XJx7kcKYPjgfBc
+         lx8R7Vpq/rdivXDRPmky8pjaSLrZg57uIpIx83Lm9hqLwDVeUQZ/z7qKp8qxgcR+z3jV
+         3R8g==
+X-Gm-Message-State: AOAM533eusZ5ScCtcQxJQ+EljFc9YFdceMyuALHmugsGuY7NJQkG4Gvp
+        K03rjq46dKwFMAhcslABUcw8+xsp1cD0kc+gA8k6Sg==
+X-Google-Smtp-Source: ABdhPJwgnpPtxD5K4HV7oO6sxOcMCiJwgU1TdTweqVp1m3xG6mpjoIJGR/sO87EROFqrpGyf758QznqJmtiqosajuuk=
+X-Received: by 2002:a05:6512:388d:b0:443:6066:2c8d with SMTP id
+ n13-20020a056512388d00b0044360662c8dmr1521088lft.184.1645007008626; Wed, 16
+ Feb 2022 02:23:28 -0800 (PST)
 MIME-Version: 1.0
-References: <20220204101657.233723-1-ulf.hansson@linaro.org> <dd7d0ebd-7bd8-9f2e-e212-5b597ec729d5@gmail.com>
-In-Reply-To: <dd7d0ebd-7bd8-9f2e-e212-5b597ec729d5@gmail.com>
+References: <20220121014039.1693208-1-kai.heng.feng@canonical.com>
+ <20220125055010.1866563-1-kai.heng.feng@canonical.com> <CAPDyKFrtD28NKTyUAR-6Rt4PwYvkOuWcRhxZZWVAq4KcTNG7QQ@mail.gmail.com>
+ <CAAd53p5LxZh6-jZj274g6+PeDpAPWSiwRWXL93dgOg3xpqvu8g@mail.gmail.com>
+In-Reply-To: <CAAd53p5LxZh6-jZj274g6+PeDpAPWSiwRWXL93dgOg3xpqvu8g@mail.gmail.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 16 Feb 2022 10:45:56 +0100
-Message-ID: <CAPDyKFoDP-LT9nKwa0oKF0jW9DD3tZh4+v9zE0uS_KpJeFC-MQ@mail.gmail.com>
-Subject: Re: [PATCH v2] PM: domains: Prevent power off for parent unless child
- is in deepest state
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        Kevin Hilman <khilman@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
+Date:   Wed, 16 Feb 2022 11:22:52 +0100
+Message-ID: <CAPDyKFpx_H8b1KJ_yZ_3My_nxcC2e9k+wROH7hgfK3LbchQ8iQ@mail.gmail.com>
+Subject: Re: [PATCH v6 1/4] mmc: rtsx: Use pm_runtime_{get,put}() to handle
+ runtime PM
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     arnd@arndb.de, gregkh@linuxfoundation.org,
+        linux-pm@vger.kernel.org, Ricky WU <ricky_wu@realtek.com>,
+        Thomas Hebb <tommyhebb@gmail.com>, linux-mmc@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,39 +70,41 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 15 Feb 2022 at 22:49, Dmitry Osipenko <digetx@gmail.com> wrote:
+On Wed, 16 Feb 2022 at 05:21, Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
 >
-> 04.02.2022 13:16, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > A PM domain managed by genpd may support multiple idlestates. During
-> > genpd_power_off() a genpd governor may be asked to select one of the
-> > idlestates based upon the dev PM QoS constraints, for example.
+> On Fri, Feb 4, 2022 at 8:28 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
 > >
-> > However, there is a problem with the behaviour around this in genpd. Mo=
-re
-> > precisely, a parent-domain is allowed to be powered off, no matter of w=
-hat
-> > idlestate that has been selected for the child-domain.
+> > On Tue, 25 Jan 2022 at 06:50, Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
+> > >
+> > > Commit 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM") doesn't
+> > > use pm_runtime_{get,put}() helpers when it should, so the RPM refcount
+> > > keeps at zero, hence its parent driver, rtsx_pci, has to do lots of
+> > > weird tricks to keep it from runtime suspending.
+> > >
+> > > So use those helpers at right places to properly manage runtime PM.
+> > >
+> > > Fixes: 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM")
+> > > Cc: Ricky WU <ricky_wu@realtek.com>
+> > > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 > >
-> > So far, we have not received any reports about errors from the current
-> > behaviour. However, there is an STMicro platform that is being worked o=
-n,
-> > which can't cope with this.
+> > The runtime PM reference counting for the mmc host device is managed
+> > by the mmc core. Have a look at __mmc_claim_host() and
+> > mmc_release_host().
+> >
+> > In other words, the runtime PM reference counting should not be needed
+> > in the mmc host driver, unless there are some specific cases, like for
+> > example during ->probe|remove().
+> >
+> > So perhaps it's only the changes in the ->probe|remove() functions
+> > that you need to fix the problems? No?
 >
-> Could you please provide some technical info about why STMicro platform
-> can't cope with that?
+> Yes you are right. Let me send a patch to remove redundant PM helpers
+> from this patch.
 
-There is a parent domain with one power-off state. The parent domain
-has a few devices attached to it, which means they need to be managed
-to together. The parent domain is controlling a shared power rail.
+Ohh, I didn't know that Greg already queued this up. Seems like I
+don't get more than one week to review. :-)
 
-The child domain, which has multiple idle states to choose from, also
-has some devices attached to it. The child domain is controlling a
-system clock, but also relies on the shared power rail that is managed
-by the parent domain.
-
-Obviously, these idle states are managed by firmware.
-
-I hope that made it a bit more clear?
+Alright, I will look at your new patch then.
 
 Kind regards
 Uffe
