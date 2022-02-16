@@ -2,119 +2,187 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DDE44B91CB
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Feb 2022 20:52:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFE004B925B
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Feb 2022 21:33:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238333AbiBPTwl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Feb 2022 14:52:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53022 "EHLO
+        id S231558AbiBPUdy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Feb 2022 15:33:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238301AbiBPTwl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Feb 2022 14:52:41 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8BBFABE9;
-        Wed, 16 Feb 2022 11:52:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645041148; x=1676577148;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=4Cr7vmjqZ19YsPqPC5f59BS6ggXP0WOv3DKiSQA5gj0=;
-  b=Wy7pKQKZlKPl5pTw0zWLHu68FeZhPaCEkuFsJb50bLwoDi0F3vPvc1wC
-   LzYhfnMxWW93z8dymlZ7d8tTLw5laH46PXNrBMB8VW5RXSLcgYMO7ar2A
-   81KG6K+wqaPDUZnV2WcIg2Of34d0CjdHGwy6o1lu42fXzrDpG8yLHbwfm
-   Xd6tP9Xq76mWt0+1IeoVIf1ENeSubcsF7BzbNDt/eLfFSi3g5+1DSh7/U
-   D4AAQaTTqK6MoKEvEoxAffqvyTFrOc3chBkAH21DOI443YpKuiXg3wZam
-   J7RfDWbIK+WTi7o1zccbuLG1JIsu6zv6FB/RkyrUqGO0oBuxE75hZAIOr
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="248310663"
-X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="248310663"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 11:52:28 -0800
-X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="529677653"
-Received: from ddahlenx-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.212.148.13])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 11:52:27 -0800
-Message-ID: <1525de98e422b2978f18378c752b92513c328ccd.camel@linux.intel.com>
-Subject: Re: [RFC PATCH 1/4] tools/lib/thermal: Add a thermal library
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Sasha Levin <sashal@kernel.org>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Date:   Wed, 16 Feb 2022 11:52:27 -0800
-In-Reply-To: <c5889d73-7acb-a564-b091-44e71ba5ddb3@linaro.org>
-References: <20220214210446.255780-1-daniel.lezcano@linaro.org>
-         <0be77e01c0dc91e227fcb7219cf89d9497b4be39.camel@linux.intel.com>
-         <c5889d73-7acb-a564-b091-44e71ba5ddb3@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
+        with ESMTP id S231478AbiBPUdw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Feb 2022 15:33:52 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8574227018A;
+        Wed, 16 Feb 2022 12:33:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1645043515;
+        bh=Ybn8l+gnMKMMXvs55hiDNOMPxOVIuTwQZmrqM3YEIT4=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=AntNcnKLyF3jvT6nrcYCG4qX//R6P/jg6GX9PAq9ahEaqC1d66RPjmbHb+W4q1nhN
+         pMU7WD5iY0FX3JDLRsLSlGXye9WL2FfhU+BQo9tN+35Wd+ULtBzJKhMvmm/TuqFOvm
+         IqYpmS3G8VF0HmaztNK8BDpk8AcbiuITor+K4TAE=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.128.232]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N4hvR-1oJIk801n5-011mvb; Wed, 16
+ Feb 2022 21:31:55 +0100
+Message-ID: <de2cbd2a-8d0d-8678-e514-b153d04546cc@gmx.de>
+Date:   Wed, 16 Feb 2022 21:30:26 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v6 00/21] Introduce power-off+restart call chain API
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        xen-devel@lists.xenproject.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
+        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+References: <20220130233718.21544-1-digetx@gmail.com>
+ <635e8121-fca4-580c-6af5-d9317a2eee1b@gmail.com>
+ <CAJZ5v0g0MrBm2+GwctkB7kUyBEt6HTAexRCFFRmTF1UKDrVQ-g@mail.gmail.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <CAJZ5v0g0MrBm2+GwctkB7kUyBEt6HTAexRCFFRmTF1UKDrVQ-g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:BtWBXH8Hx0gs6H70GSeWdQfjHJJkkJcL0sCha+IYkFzIkqPcTuW
+ qKy+2T0ZaFjOf0xL3yRiF1cUpCUYSVgqU7KzwzS+JfDwLwpezAw537tUvZg/2bOLghB+l87
+ w3cRaMw1LIHIT6wVzHTvekJyjtx+uVE2jwwagYFCMH9R/cOGUhFKVp6jWY02QQ7l0/6B1hQ
+ 6lKAfYfgEy3VsBR0gZMrQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:m5CRufpR4Nc=:3YY8ipwdQLVft0dePw9YSh
+ GUR0lnlWhCPH8e7cGyZuVRF4QTaiMpo/t4CaEOUGLIsLKu9l5M/J0O5M31HNvfJdp+wCixixW
+ ethNV9fQwcaghavvR5Ys8j3bZzVgSa7R1OyImZriy57lwfiqdjxLeLcFAKSN2rNhwXo+L/1W0
+ CQyzAyysct5pNIn6YhVq+UHJuMW9E5n4xaMMBrwmLs2OCCvppuqotMNUovPjEQwyXKEJ+eFhM
+ 9yjpXwZ8d3mtYgImVbnKr09+gh/F/wPYXq7eYIpe39d9AbGAEQBSqL/KVOnCktbbcz2QF5Qbk
+ 4e7AQF9zoGHa9dkqmKwp5ZIdSigW0kvkTZVGQrYpdQk+jIkqYRXSjx48uK1QfjU+0gP6+BazZ
+ vHIF29XOsraFmwyXxbJ9z62U6lScuvKK+hcIdwsTDX1ggSkvbxldkEoF5EU5WckNyKgp3gyzH
+ DfO65T9j2hzIuIY+WJVtkWoyJeNgSwsFOR7Izo94OQHlrcyx49oOnlwEdPO+nwrmIJBci5bOR
+ WOLNQgMmF6kCc29abhcYlGzqUMIWI+FO/fCqXzwMQQmpGHb0yApKLUA4nUq0AMOk6w+NN8w2X
+ /FbqL85ikgC66lPN0ooU1nS7KTmmY5exT9d7V9iWM6nLCea6Xm6zHRAIXEdyFZzA8VCkbFnzD
+ h2vE8D32H6zqsIt6XTnvWDjRnU13iMkEj3E7cMmMtSopa2Wp8u/DtvdAeO/wkDmneLWInPLs8
+ 6RgI97ngQ4wqgYy1sPu7EIk9kIRcFo4/RoCxjHgIBkJrc2sI1wfoeqEIWGAnQxL/RmH+OLvYO
+ 4yVmqq+p6FhQjuDDZ4yhghQDs+3QKjtVbK+8SqzHgH28Ka1VeSb/Sjw00g5YRoCxba1dPjJUz
+ 745leF9ctWiJ4d2dLvna8gH4qOiznTFUsQruaIlZTRQt2Q4WnGzd6w/B0Yn+xWmbkRgyZHOZI
+ uy8YKYBLf5449zcoQ3q6pmGV9kDPV93qDp6c5xvkslulnnJ92iiU/+AhdlS7dUnaoQWw0libs
+ PaL7jI3w3bUjzZ86ihC2Hg/wIiAwKaAAUMew3jB75LdA9Od0L63l2pMobL+2iUUq3y+BntMIe
+ DlxSKf+Q98mWIw=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+On 2/16/22 13:25, Rafael J. Wysocki wrote:
+> On Tue, Feb 15, 2022 at 11:00 PM Dmitry Osipenko <digetx@gmail.com> wrot=
+e:
+>>
+>> 31.01.2022 02:36, Dmitry Osipenko =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+>>> Problem
+>>> -------
+>>>
+>>> SoC devices require power-off call chaining functionality from kernel.
+>>> We have a widely used restart chaining provided by restart notifier AP=
+I,
+>>> but nothing for power-off.
+>>>
+>>> Solution
+>>> --------
+>>>
+>>> Introduce new API that provides both restart and power-off call chains=
+.
+>>>
+>>> Why combine restart with power-off? Because drivers often do both.
+>>> More practical to have API that provides both under the same roof.
+>>>
+>>> The new API is designed with simplicity and extensibility in mind.
+>>> It's built upon the existing restart and reboot APIs. The simplicity
+>>> is in new helper functions that are convenient for drivers. The
+>>> extensibility is in the design that doesn't hardcode callback
+>>> arguments, making easy to add new parameters and remove old.
+>>>
+>>> This is a third attempt to introduce the new API. First was made by
+>>> Guenter Roeck back in 2014, second was made by Thierry Reding in 2017.
+>>> In fact the work didn't stop and recently arm_pm_restart() was removed
+>>> from v5.14 kernel, which was a part of preparatory work started by
+>>> Guenter Roeck. I took into account experience and ideas from the
+>>> previous attempts, extended and polished them.
+>>
+>>
+>> Rafael and all, do you see anything critical that needs to be improved
+>> in this v6?
+>>
+>> Will be great if you could take this patchset via the power tree if it
+>> looks okay, or give an ack.
+>
+> I need some more time for this, sorry.
+>
+> I'm a bit concerned about seeing no response to this set from anyone.
+>
+> It looks like multiple platforms may be affected by it in principle,
+> so doesn't anyone care?
 
-On Wed, 2022-02-16 at 20:38 +0100, Daniel Lezcano wrote:
-> 
-> Hi Srinivas,
-> 
-> thanks for the review
-> 
-> On 16/02/2022 17:40, srinivas pandruvada wrote:
-> > On Mon, 2022-02-14 at 22:04 +0100, Daniel Lezcano wrote:
-> > > The thermal framework implements a netlink notification mechanism
-> > > to
-> > > be used by the userspace to have a thermal configuration
-> > > discovery,
-> > > trip point changes or violation, cooling device changes
-> > > notifications,
-> > > etc...
-> > > 
-> > > This library provides a level of abstraction for the thermal
-> > > netlink
-> > > notification allowing the userspace to connect to the
-> > > notification
-> > > mechanism more easily. The library is callback oriented.
-> > > 
-> > Some minor comments.
-> > May be better use some defines instead of returning "-1" for error
-> > conditions.
-> 
-> Do you suggest like an enum with different errors or just having -1 
-> replaced by eg. THERMAL_ERROR ?
-This will be fine.
+I did looked into the whole patch set after applying it locally.
 
-Thanks,
-Srinivas
+While I agree a new combined API is good, and the beginning looked promisi=
+ng,
+after some time I started to ask myself if the whole infrastructure might
+be a little overdesigned.
 
+Anyway, I tested it and it works for me on parisc.
+And it's probably better than what we have today.
 
-> 
-> 
-> [ ... ]
-> 
-> > > + * Low level netlink
-> > > + */
-> > > +extern int nl_subscribe_thermal(struct nl_sock *nl_sock, struct
-> > > nl_cb *nl_cb,
-> > > +                               const char *group);
-> > > +
-> > To complete API, don't we need nl_unsubscribe which calls
-> > nl_socket_drop_memberships()?
-> Ah, yes. I'll add it.
-> 
-> Thanks
-> 
-> 
-> 
-
+Helge
