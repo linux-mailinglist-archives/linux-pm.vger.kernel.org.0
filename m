@@ -2,213 +2,175 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39B1E4B81C1
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Feb 2022 08:42:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B7F64B826B
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Feb 2022 08:57:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbiBPHh5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Feb 2022 02:37:57 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:47404 "EHLO
+        id S230280AbiBPH5a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Feb 2022 02:57:30 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230288AbiBPHhu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Feb 2022 02:37:50 -0500
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam08on2053.outbound.protection.outlook.com [40.107.101.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C111B19E70D;
-        Tue, 15 Feb 2022 23:37:20 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CcdSdeE34mMyG0DDql+hMLnqrnTTJdNVr/WgjcYzMy8/OhYW9L54cceH92M6dQoUjgqoBHCFGYMia7clQ8IhuQFjjBNOeBfbQxAdyQgQCC2DtUxPfI9/01FFXKQmc1T40HMDKr+enIIizvYN1ktM/gQafTZrsHiK929bcAUK/O70zxTngwl9JhEOhcvlPGl8KhCoFyQasxphI0/gthWsr46l3F1y5Cb28DWI9IvGghTmYTTrEckiIGVcGGzPBqg8eOAtIki8+JZdB9OQq5FSVI+CbKMvvGr35hKZl+3tHNX9NpYDe2TYuR6NyancNOloFoppxV/rfkTbi5JniWtD0Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ntM2vAvRUEsIYU3tmYcaEbnt/SKffC1nD7ZJPLbXIKI=;
- b=UXZn7xrX7S18w5ZSVSVv06CwWso5s8213229akZo6bRugIy7mJJhFNisxxlPWFe4qpavPncpVZwrojy5Dz8gdKeX4mTTyaOKjbmDiL8ZmnLpt5BinX7hNLOfTY3dacJxuXfZ+7JullMTMQIuUtHxo7wa55hLsJrCsfDuffA5DKPdtbzRyiSLvkjp8kpvtgNO53Oc3DuoDcue2e/BbsVf4xD+sEPVTCLVVdG3goUHVvPhaUZYgqvrcGQfjtF47YSaJ5uVx64ggqkSqgB9CDBJv/VvVexwojmEkZPlEy7EY8TDhZBjo6xCVlSCdTVj7s/WmzVnhmHOxncROMZI5L3Z9g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ntM2vAvRUEsIYU3tmYcaEbnt/SKffC1nD7ZJPLbXIKI=;
- b=IOBvRBHZWWXG2rBRlpl/x8WkncajSbi90xvgUHmTCzBx4MCsS7+VgtVWa7gryl3k3L8UzoTEn1QIIOna48fYQOTLqXHdAtRLRpoFsChWdnJioOUTq78fLXM6UMAVqixaAuRq2JjlHGpfFZDGB5MaC/5NMVWazKItZEPgPvqat5w=
-Received: from BN9PR03CA0659.namprd03.prod.outlook.com (2603:10b6:408:13b::34)
- by CH2PR12MB4808.namprd12.prod.outlook.com (2603:10b6:610:e::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.15; Wed, 16 Feb
- 2022 07:37:13 +0000
-Received: from BN8NAM11FT046.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:13b:cafe::46) by BN9PR03CA0659.outlook.office365.com
- (2603:10b6:408:13b::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16 via Frontend
- Transport; Wed, 16 Feb 2022 07:37:12 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT046.mail.protection.outlook.com (10.13.177.127) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4975.11 via Frontend Transport; Wed, 16 Feb 2022 07:37:12 +0000
-Received: from hr-amd.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Wed, 16 Feb
- 2022 01:37:07 -0600
-From:   Huang Rui <ray.huang@amd.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        <linux-pm@vger.kernel.org>
-CC:     Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Steven Noonan <steven@valvesoftware.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Jassmine Meng <li.meng@amd.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Giovanni Gherdovich" <ggherdovich@suse.cz>,
-        <linux-kernel@vger.kernel.org>, Huang Rui <ray.huang@amd.com>
-Subject: [PATCH RESEND v6 9/9] cpupower: Print AMD P-State information on cpupower
-Date:   Wed, 16 Feb 2022 15:35:58 +0800
-Message-ID: <20220216073558.751071-10-ray.huang@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220216073558.751071-1-ray.huang@amd.com>
-References: <20220216073558.751071-1-ray.huang@amd.com>
+        with ESMTP id S229992AbiBPH53 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Feb 2022 02:57:29 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87BA92DCF
+        for <linux-pm@vger.kernel.org>; Tue, 15 Feb 2022 23:57:17 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id v63so3527507ybv.10
+        for <linux-pm@vger.kernel.org>; Tue, 15 Feb 2022 23:57:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=atishpatra.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oMtBLX0dxO/FEXDrSK4WwXrfvEvOmP/i+ozpjhDxh2o=;
+        b=EGr7uINoD4BR8i3qX/tomHNRruYcjc/QbsipOZJBMwQk2ZyhvOQqpMphIFGGGWNWd3
+         JuGaeHSzEymH3RXHvUYHLSTERTs3AOZYPXnaVJ7N/QHn/Lzy8Soxfsdbwy63HmyHvoGF
+         ibPohfBIFhqTBcVfC4PMPdPyf0zXr8PsqaP7A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oMtBLX0dxO/FEXDrSK4WwXrfvEvOmP/i+ozpjhDxh2o=;
+        b=rMWL4dqUBLdo3bCn0e3Jd50T7DWc+LLLUvtqhGMU8grg5Sq3v3lCbWKt7B/aYmrF0+
+         yMFmRYlAOh3ScoK3uAK1Vl1KQhm3B7D0IpbYm9dcRH1roK2LNUaTovw2C1AyUWcC4NOn
+         gwYp9aDSSgJ+ef0Zzg6sX81rWFDTm5m+JyIKBQXLwwX2Pr7FN+406NeBQJ3yRncVCyvq
+         JXgs9E5W/o564SRsQz+X8WBdVM3rTIqVBakHgZEM6HkgUf7NMjmQ5eBlx0LjjtGbfE5W
+         N588FSA3T1fAAGSy63evNV++sunTbnN5JnXP7mUaTNJZ/98Uo3QHfR5gXGZXUFUG7l3T
+         cZHQ==
+X-Gm-Message-State: AOAM533L1XB37ZrlnvUhPCRe3PGytvtV48xg/znu5y+DEAF53E+huDhz
+        M5DTmV2KRTdOb/cL3ypE/UEsjzQZQYjShbGefdA/
+X-Google-Smtp-Source: ABdhPJxexRI1WA8BLHddNiaTLw6WNqMOfbfVIS1bSiAe/Miw7A1PF3HzHsObN1ZBqCdCL+fBicqD5iLDeOuq1uHkDM4=
+X-Received: by 2002:a5b:ec5:0:b0:615:4edf:4641 with SMTP id
+ a5-20020a5b0ec5000000b006154edf4641mr1079024ybs.494.1644998236462; Tue, 15
+ Feb 2022 23:57:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 05e6cb64-6301-4147-5593-08d9f11f25c9
-X-MS-TrafficTypeDiagnostic: CH2PR12MB4808:EE_
-X-Microsoft-Antispam-PRVS: <CH2PR12MB4808FA72B5025C0E6051DC6BEC359@CH2PR12MB4808.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:655;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5xhJC08v6QirdcOxpjUi3Jhg7DXWZS1VbmRaP8cSz2hvDVIoNt5J8Vzp1jmSN5heM37ENvTM+CYM5AezugL5pFK6MynwnT7Q2L5ueiiXEogyAH9pAp+qaZLkSh7jkAZ5fkDKww77VP8f8fDkbqMDk2GUzKDbe84b4BISB0DtRtxwSPiK8+JvlsNSzhrtMstHFM9w27BcUgpuWmaQR+X3wxBcvYma6j2XDPj/xn+t9zs6iNfMVWJNQxg4SkwxTqTGh9m+Gf2V7eaFRq6RnKGACm9++GM+zYJWmOaz8IMGQfiWQX5cvfPjL7pKYYg2GGQF/z2I91Vkb6VOaYAFzZ5FlCbRl3nMKHEaIOZ4I6uBX7GkJpIFyKmgBaxENrQsqvSg531QIquXap8E5lxhEG+x/LkBb4DW4f+wCZRdvqir2gB4/XzQP2lp2cIwrQ17sJ0a1f7cU00s98WyCNhvrad2zfNTqgWYUHc8RnNhF68MoRnLJbGTsvELJOBHhdsdP2nb8KgufWByBPZQrrH2APfykmK5hRegjLj1fMQrCCRUE+khZRiN8Pw/r5jwdswjucA8uQjN2ROhOiJe6X2tR+sEmqJeMVLN/12NKj8SUFOYCLlj7CeNZMKCX+1RRUn05pzsbvbNW9WA3iXgq/bEVNuw7uJQ2BqSxIqbbvHcK5JQEu8DUaLFPKgbAEcndLdmqcS91E00z5enXNCINsnMHUWSUw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(1076003)(5660300002)(336012)(16526019)(6666004)(2906002)(26005)(86362001)(83380400001)(8936002)(186003)(426003)(7416002)(356005)(40460700003)(110136005)(508600001)(2616005)(82310400004)(7696005)(8676002)(47076005)(4326008)(36756003)(70206006)(70586007)(316002)(81166007)(54906003)(36860700001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2022 07:37:12.9242
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 05e6cb64-6301-4147-5593-08d9f11f25c9
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT046.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4808
+References: <20220210054947.170134-1-apatel@ventanamicro.com> <20220210054947.170134-5-apatel@ventanamicro.com>
+In-Reply-To: <20220210054947.170134-5-apatel@ventanamicro.com>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Tue, 15 Feb 2022 23:57:05 -0800
+Message-ID: <CAOnJCU+VpiMtkoKBTLn9kzNxdLaFmedhNX=K36O+42nTkfZ0-A@mail.gmail.com>
+Subject: Re: [PATCH v11 4/8] RISC-V: Add SBI HSM suspend related defines
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Sandeep Tripathy <milun.tripathy@gmail.com>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Liush <liush@allwinnertech.com>,
+        Anup Patel <anup@brainfault.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        kvm-riscv@lists.infradead.org, Guo Ren <guoren@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-AMD P-State kernel module is using the fine grain frequency instead of
-acpi hardware pstate. So the performance and frequency values should be
-printed in frequency-info.
+On Wed, Feb 9, 2022 at 9:50 PM Anup Patel <apatel@ventanamicro.com> wrote:
+>
+> From: Anup Patel <anup.patel@wdc.com>
+>
+> We add defines related to SBI HSM suspend call and also
+> update HSM states naming as-per latest SBI specification.
+>
+> Signed-off-by: Anup Patel <anup.patel@wdc.com>
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> Reviewed-by: Guo Ren <guoren@kernel.org>
+> ---
+>  arch/riscv/include/asm/sbi.h    | 27 ++++++++++++++++++++++-----
+>  arch/riscv/kernel/cpu_ops_sbi.c |  2 +-
+>  arch/riscv/kvm/vcpu_sbi_hsm.c   |  4 ++--
+>  3 files changed, 25 insertions(+), 8 deletions(-)
+>
+> diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
+> index d1c37479d828..06133b4f8e20 100644
+> --- a/arch/riscv/include/asm/sbi.h
+> +++ b/arch/riscv/include/asm/sbi.h
+> @@ -71,15 +71,32 @@ enum sbi_ext_hsm_fid {
+>         SBI_EXT_HSM_HART_START = 0,
+>         SBI_EXT_HSM_HART_STOP,
+>         SBI_EXT_HSM_HART_STATUS,
+> +       SBI_EXT_HSM_HART_SUSPEND,
+>  };
+>
+> -enum sbi_hsm_hart_status {
+> -       SBI_HSM_HART_STATUS_STARTED = 0,
+> -       SBI_HSM_HART_STATUS_STOPPED,
+> -       SBI_HSM_HART_STATUS_START_PENDING,
+> -       SBI_HSM_HART_STATUS_STOP_PENDING,
+> +enum sbi_hsm_hart_state {
+> +       SBI_HSM_STATE_STARTED = 0,
+> +       SBI_HSM_STATE_STOPPED,
+> +       SBI_HSM_STATE_START_PENDING,
+> +       SBI_HSM_STATE_STOP_PENDING,
+> +       SBI_HSM_STATE_SUSPENDED,
+> +       SBI_HSM_STATE_SUSPEND_PENDING,
+> +       SBI_HSM_STATE_RESUME_PENDING,
+>  };
+>
+> +#define SBI_HSM_SUSP_BASE_MASK                 0x7fffffff
+> +#define SBI_HSM_SUSP_NON_RET_BIT               0x80000000
+> +#define SBI_HSM_SUSP_PLAT_BASE                 0x10000000
+> +
+> +#define SBI_HSM_SUSPEND_RET_DEFAULT            0x00000000
+> +#define SBI_HSM_SUSPEND_RET_PLATFORM           SBI_HSM_SUSP_PLAT_BASE
+> +#define SBI_HSM_SUSPEND_RET_LAST               SBI_HSM_SUSP_BASE_MASK
+> +#define SBI_HSM_SUSPEND_NON_RET_DEFAULT                SBI_HSM_SUSP_NON_RET_BIT
+> +#define SBI_HSM_SUSPEND_NON_RET_PLATFORM       (SBI_HSM_SUSP_NON_RET_BIT | \
+> +                                                SBI_HSM_SUSP_PLAT_BASE)
+> +#define SBI_HSM_SUSPEND_NON_RET_LAST           (SBI_HSM_SUSP_NON_RET_BIT | \
+> +                                                SBI_HSM_SUSP_BASE_MASK)
+> +
+>  enum sbi_ext_srst_fid {
+>         SBI_EXT_SRST_RESET = 0,
+>  };
+> diff --git a/arch/riscv/kernel/cpu_ops_sbi.c b/arch/riscv/kernel/cpu_ops_sbi.c
+> index dae29cbfe550..2e16f6732cdf 100644
+> --- a/arch/riscv/kernel/cpu_ops_sbi.c
+> +++ b/arch/riscv/kernel/cpu_ops_sbi.c
+> @@ -111,7 +111,7 @@ static int sbi_cpu_is_stopped(unsigned int cpuid)
+>
+>         rc = sbi_hsm_hart_get_status(hartid);
+>
+> -       if (rc == SBI_HSM_HART_STATUS_STOPPED)
+> +       if (rc == SBI_HSM_STATE_STOPPED)
+>                 return 0;
+>         return rc;
+>  }
+> diff --git a/arch/riscv/kvm/vcpu_sbi_hsm.c b/arch/riscv/kvm/vcpu_sbi_hsm.c
+> index 2e383687fa48..1ac4b2e8e4ec 100644
+> --- a/arch/riscv/kvm/vcpu_sbi_hsm.c
+> +++ b/arch/riscv/kvm/vcpu_sbi_hsm.c
+> @@ -60,9 +60,9 @@ static int kvm_sbi_hsm_vcpu_get_status(struct kvm_vcpu *vcpu)
+>         if (!target_vcpu)
+>                 return -EINVAL;
+>         if (!target_vcpu->arch.power_off)
+> -               return SBI_HSM_HART_STATUS_STARTED;
+> +               return SBI_HSM_STATE_STARTED;
+>         else
+> -               return SBI_HSM_HART_STATUS_STOPPED;
+> +               return SBI_HSM_STATE_STOPPED;
+>  }
+>
+>  static int kvm_sbi_ext_hsm_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
+> --
+> 2.25.1
+>
 
-Signed-off-by: Huang Rui <ray.huang@amd.com>
----
- tools/power/cpupower/utils/cpufreq-info.c    |  9 ++++--
- tools/power/cpupower/utils/helpers/amd.c     | 29 ++++++++++++++++++++
- tools/power/cpupower/utils/helpers/helpers.h |  5 ++++
- 3 files changed, 40 insertions(+), 3 deletions(-)
+Reviewed-by: Atish Patra <atishp@rivosinc.com>
 
-diff --git a/tools/power/cpupower/utils/cpufreq-info.c b/tools/power/cpupower/utils/cpufreq-info.c
-index b429454bf3ae..f828f3c35a6f 100644
---- a/tools/power/cpupower/utils/cpufreq-info.c
-+++ b/tools/power/cpupower/utils/cpufreq-info.c
-@@ -146,9 +146,12 @@ static int get_boost_mode_x86(unsigned int cpu)
- 	printf(_("    Supported: %s\n"), support ? _("yes") : _("no"));
- 	printf(_("    Active: %s\n"), active ? _("yes") : _("no"));
- 
--	if ((cpupower_cpu_info.vendor == X86_VENDOR_AMD &&
--	     cpupower_cpu_info.family >= 0x10) ||
--	     cpupower_cpu_info.vendor == X86_VENDOR_HYGON) {
-+	if (cpupower_cpu_info.vendor == X86_VENDOR_AMD &&
-+	    cpupower_cpu_info.caps & CPUPOWER_CAP_AMD_PSTATE) {
-+		amd_pstate_show_perf_and_freq(cpu, no_rounding);
-+	} else if ((cpupower_cpu_info.vendor == X86_VENDOR_AMD &&
-+		    cpupower_cpu_info.family >= 0x10) ||
-+		   cpupower_cpu_info.vendor == X86_VENDOR_HYGON) {
- 		ret = decode_pstates(cpu, b_states, pstates, &pstate_no);
- 		if (ret)
- 			return ret;
-diff --git a/tools/power/cpupower/utils/helpers/amd.c b/tools/power/cpupower/utils/helpers/amd.c
-index f5ba528dc7db..c519cc89c97f 100644
---- a/tools/power/cpupower/utils/helpers/amd.c
-+++ b/tools/power/cpupower/utils/helpers/amd.c
-@@ -193,5 +193,34 @@ void amd_pstate_boost_init(unsigned int cpu, int *support, int *active)
- 	*active = cpuinfo_max == amd_pstate_max ? 1 : 0;
- }
- 
-+void amd_pstate_show_perf_and_freq(unsigned int cpu, int no_rounding)
-+{
-+	printf(_("    AMD PSTATE Highest Performance: %lu. Maximum Frequency: "),
-+	       amd_pstate_get_data(cpu, AMD_PSTATE_HIGHEST_PERF));
-+	/*
-+	 * If boost isn't active, the cpuinfo_max doesn't indicate real max
-+	 * frequency. So we read it back from amd-pstate sysfs entry.
-+	 */
-+	print_speed(amd_pstate_get_data(cpu, AMD_PSTATE_MAX_FREQ), no_rounding);
-+	printf(".\n");
-+
-+	printf(_("    AMD PSTATE Nominal Performance: %lu. Nominal Frequency: "),
-+	       acpi_cppc_get_data(cpu, NOMINAL_PERF));
-+	print_speed(acpi_cppc_get_data(cpu, NOMINAL_FREQ) * 1000,
-+		    no_rounding);
-+	printf(".\n");
-+
-+	printf(_("    AMD PSTATE Lowest Non-linear Performance: %lu. Lowest Non-linear Frequency: "),
-+	       acpi_cppc_get_data(cpu, LOWEST_NONLINEAR_PERF));
-+	print_speed(amd_pstate_get_data(cpu, AMD_PSTATE_LOWEST_NONLINEAR_FREQ),
-+		    no_rounding);
-+	printf(".\n");
-+
-+	printf(_("    AMD PSTATE Lowest Performance: %lu. Lowest Frequency: "),
-+	       acpi_cppc_get_data(cpu, LOWEST_PERF));
-+	print_speed(acpi_cppc_get_data(cpu, LOWEST_FREQ) * 1000, no_rounding);
-+	printf(".\n");
-+}
-+
- /* AMD P-State Helper Functions ************************************/
- #endif /* defined(__i386__) || defined(__x86_64__) */
-diff --git a/tools/power/cpupower/utils/helpers/helpers.h b/tools/power/cpupower/utils/helpers/helpers.h
-index 4c24c25a7b07..f913de87622a 100644
---- a/tools/power/cpupower/utils/helpers/helpers.h
-+++ b/tools/power/cpupower/utils/helpers/helpers.h
-@@ -142,6 +142,8 @@ extern int cpufreq_has_boost_support(unsigned int cpu, int *support,
- extern bool cpupower_amd_pstate_enabled(void);
- extern void amd_pstate_boost_init(unsigned int cpu,
- 				  int *support, int *active);
-+extern void amd_pstate_show_perf_and_freq(unsigned int cpu,
-+					  int no_rounding);
- 
- /* AMD P-State stuff **************************/
- 
-@@ -182,6 +184,9 @@ static inline bool cpupower_amd_pstate_enabled(void)
- static void amd_pstate_boost_init(unsigned int cpu,
- 				  int *support, int *active)
- { return; }
-+static inline void amd_pstate_show_perf_and_freq(unsigned int cpu,
-+						 int no_rounding)
-+{ return; }
- 
- /* cpuid and cpuinfo helpers  **************************/
- 
 -- 
-2.25.1
-
+Regards,
+Atish
