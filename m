@@ -2,840 +2,166 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E17F4B9314
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Feb 2022 22:21:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 852394B93B1
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Feb 2022 23:14:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234504AbiBPVVv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Feb 2022 16:21:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48812 "EHLO
+        id S232115AbiBPWOP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Feb 2022 17:14:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234499AbiBPVVu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Feb 2022 16:21:50 -0500
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8985EE71
-        for <linux-pm@vger.kernel.org>; Wed, 16 Feb 2022 13:21:35 -0800 (PST)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-2d641c31776so12702717b3.12
-        for <linux-pm@vger.kernel.org>; Wed, 16 Feb 2022 13:21:35 -0800 (PST)
+        with ESMTP id S236041AbiBPWOO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Feb 2022 17:14:14 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2FD32AED8B
+        for <linux-pm@vger.kernel.org>; Wed, 16 Feb 2022 14:14:01 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id qe15so3758315pjb.3
+        for <linux-pm@vger.kernel.org>; Wed, 16 Feb 2022 14:14:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Xs9NzrMccXp62ieVjKkCwKZkB0lWFTz29dBDSwS1NW8=;
-        b=bN5X3BHV1+zRjCmyD7SoUJzfshtx01tHwrQQn+G4WXE+fJ1EMUdm+QLE+ZHfWKJQpc
-         hZWLPNbOAdTLvjZKORnvtuxqlS/zl9IPzWFNSc5pGT+Bylw3b7wgWFRdmAxFMtVQw0zF
-         xk1KTiFP4mM5Q+sHs91HCExLIYyfyT7X7k7XM=
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4VcCHzkbx92lKzN5iSgXZZP1r2m6Tf5NY9ub+af1qNE=;
+        b=alnOtElqFTR7tub9zwA5y2rQNa2AuphIVynD+IFhZH5iTb2z4/Tz/fN30KE3MZ/Hs0
+         wPLl+MGfJqBc2Fp0hgok4YyGs29o6EMznRGh17e/uDhTHstLK+SUCtPhefSOr1rcfQHw
+         GzRNELKEkw8tlB/4BtEPzfOVB6f2wrBZyKp1o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Xs9NzrMccXp62ieVjKkCwKZkB0lWFTz29dBDSwS1NW8=;
-        b=GdIRM9zeGkwJnY8XN53VhJGdqW51L2HNpmpKCWiThkZxVQdfqXll/v9lpP+H/YIt6n
-         T8EH0mkOI8nYWm7t+myu0WgmOOiGOUTVT1qbksKi6a7EzWxaiAKe9WJnVHiW6FuEW9dP
-         S+Kg92zmU6DQU09I2YUsgIsZkS7ODn08PglAIQdQFvZU3Kxpfm3hmNwDyVyr/S2zNzHY
-         EU4lnlnwbvYEjyT+gY61d5fleNc//986qqUxYgDp8s9bo9aTkA2901vs90CZ2iEV3kqZ
-         3amWLTgar+7c/JzX82rtGGJE2+FxpQ4P/11nBrVdIk5cPiujUMYIlXtLrBHKy0GJpmdV
-         GNZA==
-X-Gm-Message-State: AOAM5306w+CPzFU/y1XDcd11pcz07ykSDQ+cLbnGNIgKLA/Orwaa6nuC
-        WOGuNzdXFIfQws4RqC+PuA+f5FyWDDfrwC/pJW53
-X-Google-Smtp-Source: ABdhPJx7iFoiKwRKwSgefboLYvYO1FypB5n4YF6i9qaZtV5ERYKl5kbwf70WBqNAnPsZPm5VIrdIIsoRFWLnuVpfNfU=
-X-Received: by 2002:a0d:d88b:0:b0:2d0:d935:672f with SMTP id
- a133-20020a0dd88b000000b002d0d935672fmr4321601ywe.402.1645046494414; Wed, 16
- Feb 2022 13:21:34 -0800 (PST)
-MIME-Version: 1.0
-References: <20220210054947.170134-1-apatel@ventanamicro.com>
- <20220210054947.170134-7-apatel@ventanamicro.com> <CAOnJCUKmwk=VbwCtkjS_rxArMWhVExeRp4QkkjDUmcvJ69Bqqg@mail.gmail.com>
- <E1C6F0F1-1FC2-43ED-AD26-6F2B8925BF04@jrtc27.com>
-In-Reply-To: <E1C6F0F1-1FC2-43ED-AD26-6F2B8925BF04@jrtc27.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Wed, 16 Feb 2022 13:21:23 -0800
-Message-ID: <CAOnJCULDh_eoY4i1rB9tLbaQQcY5tTYQqZOLj=kkpOSVCCNfpQ@mail.gmail.com>
-Subject: Re: [PATCH v11 6/8] cpuidle: Add RISC-V SBI CPU idle driver
-To:     Jessica Clarke <jrtc27@jrtc27.com>
-Cc:     Anup Patel <apatel@ventanamicro.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4VcCHzkbx92lKzN5iSgXZZP1r2m6Tf5NY9ub+af1qNE=;
+        b=3UeJOEMjZZhlxKRLP4gl8/Zah7ME7ZdEjuSU9Bmxg5BpEF2B4cVjUyrzsExyTw7NMm
+         zG7BFDJ4ltCPugJwfzek4dUbHWBQBFP0YV6meF4TIVLMw58Zd74wr5LWsijKjfyA/9/k
+         V10EXTP+s3YIY53px+tm9Puzb3meVZEuMrnCSlt4PgxILPqAKFquDMM9wrpUL2X2/bP4
+         MiMPuYH5yUNlpn2qseIlhimvlS+tUPA7Rm4f6S1cc0tRgonuMlsTXSqJo++u19Hl2Y8D
+         puTeV+tf285SYmVNt0UxMJFed1pxLiF6eMlpPSSXtRFQ/3396Ob6Jnlbm7F1S9IM3pjf
+         1a+w==
+X-Gm-Message-State: AOAM530jjdO3LxxfO3+dx7b2F1iOe7QevOnRp40EoGkFclwyNXIpwOHD
+        3SEgjAsuGff4u7AcBJgLINIAwQ==
+X-Google-Smtp-Source: ABdhPJwFkhpu+gfz4+Q3Zh6Blan0TvjKrac1gpFy9X+Ca8I2pJuSpvGTKbw6B6DwuXIf8uZU8jEMeg==
+X-Received: by 2002:a17:902:ab92:b0:14d:8c80:dbff with SMTP id f18-20020a170902ab9200b0014d8c80dbffmr20543plr.89.1645049641286;
+        Wed, 16 Feb 2022 14:14:01 -0800 (PST)
+Received: from localhost ([2620:15c:202:201:20:e0d2:8c14:1e68])
+        by smtp.gmail.com with UTF8SMTPSA id mz16sm55296pjb.53.2022.02.16.14.13.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Feb 2022 14:14:00 -0800 (PST)
+Date:   Wed, 16 Feb 2022 14:13:58 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Lukasz Luba <lukasz.luba@arm.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        amit daniel kachhap <amit.kachhap@gmail.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Sandeep Tripathy <milun.tripathy@gmail.com>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Liush <liush@allwinnertech.com>,
-        Anup Patel <anup@brainfault.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        kvm-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Pierre.Gondois@arm.com, Stephen Boyd <swboyd@chromium.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
+ cpufreq_cooling and devfreq_cooling
+Message-ID: <Yg13JoHLmeFGPOAW@google.com>
+References: <20220207073036.14901-1-lukasz.luba@arm.com>
+ <20220207073036.14901-2-lukasz.luba@arm.com>
+ <YgG+TmLrCSXX4Bvt@google.com>
+ <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com>
+ <YgKnnFl7Gp8AS30X@google.com>
+ <e4532f65-7f8a-7e89-97c1-85cc61462040@arm.com>
+ <YgQ9XLcto9v0fyTf@google.com>
+ <d120110a-7d01-0cfd-f7eb-d160e17ec2a8@arm.com>
+ <CAD=FV=VntGw1_AzJPpdOk0zSpOVZRH2X1JNg84JX+zCeU1jvXg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAD=FV=VntGw1_AzJPpdOk0zSpOVZRH2X1JNg84JX+zCeU1jvXg@mail.gmail.com>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 5:45 AM Jessica Clarke <jrtc27@jrtc27.com> wrote:
->
-> On 16 Feb 2022, at 08:09, Atish Patra <atishp@atishpatra.org> wrote:
+On Wed, Feb 16, 2022 at 09:33:50AM -0800, Doug Anderson wrote:
+> Hi,
+> 
+> On Wed, Feb 16, 2022 at 7:35 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
 > >
-> > On Wed, Feb 9, 2022 at 9:51 PM Anup Patel <apatel@ventanamicro.com> wrote:
-> >>
-> >> From: Anup Patel <anup.patel@wdc.com>
-> >>
-> >> The RISC-V SBI HSM extension provides HSM suspend call which can
-> >> be used by Linux RISC-V to enter platform specific low-power state.
-> >>
-> >> This patch adds a CPU idle driver based on RISC-V SBI calls which
-> >> will populate idle states from device tree and use SBI calls to
-> >> entry these idle states.
-> >>
-> >> Signed-off-by: Anup Patel <anup.patel@wdc.com>
-> >> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> >> ---
-> >> MAINTAINERS                         |   7 +
-> >> drivers/cpuidle/Kconfig             |   5 +
-> >> drivers/cpuidle/Kconfig.riscv       |  15 +
-> >> drivers/cpuidle/Makefile            |   4 +
-> >> drivers/cpuidle/cpuidle-riscv-sbi.c | 627 ++++++++++++++++++++++++++++
-> >> 5 files changed, 658 insertions(+)
-> >> create mode 100644 drivers/cpuidle/Kconfig.riscv
-> >> create mode 100644 drivers/cpuidle/cpuidle-riscv-sbi.c
-> >>
-> >> diff --git a/MAINTAINERS b/MAINTAINERS
-> >> index 39ece23e8d93..2ff0055a26a7 100644
-> >> --- a/MAINTAINERS
-> >> +++ b/MAINTAINERS
-> >> @@ -5058,6 +5058,13 @@ S:       Supported
-> >> F:     drivers/cpuidle/dt_idle_genpd.c
-> >> F:     drivers/cpuidle/dt_idle_genpd.h
-> >>
-> >> +CPUIDLE DRIVER - RISC-V SBI
-> >> +M:     Anup Patel <anup@brainfault.org>
-> >> +L:     linux-pm@vger.kernel.org
-> >> +L:     linux-riscv@lists.infradead.org
-> >> +S:     Maintained
-> >> +F:     drivers/cpuidle/cpuidle-riscv-sbi.c
-> >> +
-> >> CRAMFS FILESYSTEM
-> >> M:     Nicolas Pitre <nico@fluxnic.net>
-> >> S:     Maintained
-> >> diff --git a/drivers/cpuidle/Kconfig b/drivers/cpuidle/Kconfig
-> >> index f1afe7ab6b54..ff71dd662880 100644
-> >> --- a/drivers/cpuidle/Kconfig
-> >> +++ b/drivers/cpuidle/Kconfig
-> >> @@ -66,6 +66,11 @@ depends on PPC
-> >> source "drivers/cpuidle/Kconfig.powerpc"
-> >> endmenu
-> >>
-> >> +menu "RISC-V CPU Idle Drivers"
-> >> +depends on RISCV
-> >> +source "drivers/cpuidle/Kconfig.riscv"
-> >> +endmenu
-> >> +
-> >> config HALTPOLL_CPUIDLE
-> >>        tristate "Halt poll cpuidle driver"
-> >>        depends on X86 && KVM_GUEST
-> >> diff --git a/drivers/cpuidle/Kconfig.riscv b/drivers/cpuidle/Kconfig.riscv
-> >> new file mode 100644
-> >> index 000000000000..78518c26af74
-> >> --- /dev/null
-> >> +++ b/drivers/cpuidle/Kconfig.riscv
-> >> @@ -0,0 +1,15 @@
-> >> +# SPDX-License-Identifier: GPL-2.0-only
-> >> +#
-> >> +# RISC-V CPU Idle drivers
-> >> +#
-> >> +
-> >> +config RISCV_SBI_CPUIDLE
-> >> +       bool "RISC-V SBI CPU idle Driver"
-> >> +       depends on RISCV_SBI
-> >> +       select DT_IDLE_STATES
-> >> +       select CPU_IDLE_MULTIPLE_DRIVERS
-> >> +       select DT_IDLE_GENPD if PM_GENERIC_DOMAINS_OF
-> >> +       help
-> >> +         Select this option to enable RISC-V SBI firmware based CPU idle
-> >> +         driver for RISC-V systems. This drivers also supports hierarchical
-> >> +         DT based layout of the idle state.
-> >> diff --git a/drivers/cpuidle/Makefile b/drivers/cpuidle/Makefile
-> >> index 11a26cef279f..d103342b7cfc 100644
-> >> --- a/drivers/cpuidle/Makefile
-> >> +++ b/drivers/cpuidle/Makefile
-> >> @@ -35,3 +35,7 @@ obj-$(CONFIG_MIPS_CPS_CPUIDLE)                += cpuidle-cps.o
-> >> # POWERPC drivers
-> >> obj-$(CONFIG_PSERIES_CPUIDLE)          += cpuidle-pseries.o
-> >> obj-$(CONFIG_POWERNV_CPUIDLE)          += cpuidle-powernv.o
-> >> +
-> >> +###############################################################################
-> >> +# RISC-V drivers
-> >> +obj-$(CONFIG_RISCV_SBI_CPUIDLE)                += cpuidle-riscv-sbi.o
-> >> diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidle-riscv-sbi.c
-> >> new file mode 100644
-> >> index 000000000000..b459eda2cd37
-> >> --- /dev/null
-> >> +++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
-> >> @@ -0,0 +1,627 @@
-> >> +// SPDX-License-Identifier: GPL-2.0-only
-> >> +/*
-> >> + * RISC-V SBI CPU idle driver.
-> >> + *
-> >> + * Copyright (c) 2021 Western Digital Corporation or its affiliates.
-> >> + * Copyright (c) 2022 Ventana Micro Systems Inc.
-> >> + */
-> >> +
-> >> +#define pr_fmt(fmt) "cpuidle-riscv-sbi: " fmt
-> >> +
-> >> +#include <linux/cpuidle.h>
-> >> +#include <linux/cpumask.h>
-> >> +#include <linux/cpu_pm.h>
-> >> +#include <linux/cpu_cooling.h>
-> >> +#include <linux/kernel.h>
-> >> +#include <linux/module.h>
-> >> +#include <linux/of.h>
-> >> +#include <linux/of_device.h>
-> >> +#include <linux/slab.h>
-> >> +#include <linux/platform_device.h>
-> >> +#include <linux/pm_domain.h>
-> >> +#include <linux/pm_runtime.h>
-> >> +#include <asm/cpuidle.h>
-> >> +#include <asm/sbi.h>
-> >> +#include <asm/suspend.h>
-> >> +
-> >> +#include "dt_idle_states.h"
-> >> +#include "dt_idle_genpd.h"
-> >> +
-> >> +struct sbi_cpuidle_data {
-> >> +       u32 *states;
-> >> +       struct device *dev;
-> >> +};
-> >> +
-> >> +struct sbi_domain_state {
-> >> +       bool available;
-> >> +       u32 state;
-> >> +};
-> >> +
-> >> +static DEFINE_PER_CPU_READ_MOSTLY(struct sbi_cpuidle_data, sbi_cpuidle_data);
-> >> +static DEFINE_PER_CPU(struct sbi_domain_state, domain_state);
-> >> +static bool sbi_cpuidle_use_osi;
-> >> +static bool sbi_cpuidle_use_cpuhp;
-> >> +static bool sbi_cpuidle_pd_allow_domain_state;
-> >> +
-> >> +static inline void sbi_set_domain_state(u32 state)
-> >> +{
-> >> +       struct sbi_domain_state *data = this_cpu_ptr(&domain_state);
-> >> +
-> >> +       data->available = true;
-> >> +       data->state = state;
-> >> +}
-> >> +
-> >> +static inline u32 sbi_get_domain_state(void)
-> >> +{
-> >> +       struct sbi_domain_state *data = this_cpu_ptr(&domain_state);
-> >> +
-> >> +       return data->state;
-> >> +}
-> >> +
-> >> +static inline void sbi_clear_domain_state(void)
-> >> +{
-> >> +       struct sbi_domain_state *data = this_cpu_ptr(&domain_state);
-> >> +
-> >> +       data->available = false;
-> >> +}
-> >> +
-> >> +static inline bool sbi_is_domain_state_available(void)
-> >> +{
-> >> +       struct sbi_domain_state *data = this_cpu_ptr(&domain_state);
-> >> +
-> >> +       return data->available;
-> >> +}
-> >> +
-> >> +static int sbi_suspend_finisher(unsigned long suspend_type,
-> >> +                               unsigned long resume_addr,
-> >> +                               unsigned long opaque)
-> >> +{
-> >> +       struct sbiret ret;
-> >> +
-> >> +       ret = sbi_ecall(SBI_EXT_HSM, SBI_EXT_HSM_HART_SUSPEND,
-> >> +                       suspend_type, resume_addr, opaque, 0, 0, 0);
-> >> +
-> >> +       return (ret.error) ? sbi_err_map_linux_errno(ret.error) : 0;
-> >> +}
-> >> +
-> >> +static int sbi_suspend(u32 state)
-> >> +{
-> >> +       if (state & SBI_HSM_SUSP_NON_RET_BIT)
-> >> +               return cpu_suspend(state, sbi_suspend_finisher);
-> >> +       else
-> >> +               return sbi_suspend_finisher(state, 0, 0);
-> >> +}
-> >> +
-> >> +static int sbi_cpuidle_enter_state(struct cpuidle_device *dev,
-> >> +                                  struct cpuidle_driver *drv, int idx)
-> >> +{
-> >> +       u32 *states = __this_cpu_read(sbi_cpuidle_data.states);
-> >> +
-> >> +       return CPU_PM_CPU_IDLE_ENTER_PARAM(sbi_suspend, idx, states[idx]);
-> >> +}
-> >> +
-> >> +static int __sbi_enter_domain_idle_state(struct cpuidle_device *dev,
-> >> +                                         struct cpuidle_driver *drv, int idx,
-> >> +                                         bool s2idle)
-> >> +{
-> >> +       struct sbi_cpuidle_data *data = this_cpu_ptr(&sbi_cpuidle_data);
-> >> +       u32 *states = data->states;
-> >> +       struct device *pd_dev = data->dev;
-> >> +       u32 state;
-> >> +       int ret;
-> >> +
-> >> +       ret = cpu_pm_enter();
-> >> +       if (ret)
-> >> +               return -1;
-> >> +
-> >> +       /* Do runtime PM to manage a hierarchical CPU toplogy. */
-> >> +       rcu_irq_enter_irqson();
-> >> +       if (s2idle)
-> >> +               dev_pm_genpd_suspend(pd_dev);
-> >> +       else
-> >> +               pm_runtime_put_sync_suspend(pd_dev);
-> >> +       rcu_irq_exit_irqson();
-> >> +
-> >> +       if (sbi_is_domain_state_available())
-> >> +               state = sbi_get_domain_state();
-> >> +       else
-> >> +               state = states[idx];
-> >> +
-> >> +       ret = sbi_suspend(state) ? -1 : idx;
-> >> +
-> >> +       rcu_irq_enter_irqson();
-> >> +       if (s2idle)
-> >> +               dev_pm_genpd_resume(pd_dev);
-> >> +       else
-> >> +               pm_runtime_get_sync(pd_dev);
-> >> +       rcu_irq_exit_irqson();
-> >> +
-> >> +       cpu_pm_exit();
-> >> +
-> >> +       /* Clear the domain state to start fresh when back from idle. */
-> >> +       sbi_clear_domain_state();
-> >> +       return ret;
-> >> +}
-> >> +
-> >> +static int sbi_enter_domain_idle_state(struct cpuidle_device *dev,
-> >> +                                      struct cpuidle_driver *drv, int idx)
-> >> +{
-> >> +       return __sbi_enter_domain_idle_state(dev, drv, idx, false);
-> >> +}
-> >> +
-> >> +static int sbi_enter_s2idle_domain_idle_state(struct cpuidle_device *dev,
-> >> +                                             struct cpuidle_driver *drv,
-> >> +                                             int idx)
-> >> +{
-> >> +       return __sbi_enter_domain_idle_state(dev, drv, idx, true);
-> >> +}
-> >> +
-> >> +static int sbi_cpuidle_cpuhp_up(unsigned int cpu)
-> >> +{
-> >> +       struct device *pd_dev = __this_cpu_read(sbi_cpuidle_data.dev);
-> >> +
-> >> +       if (pd_dev)
-> >> +               pm_runtime_get_sync(pd_dev);
-> >> +
-> >> +       return 0;
-> >> +}
-> >> +
-> >> +static int sbi_cpuidle_cpuhp_down(unsigned int cpu)
-> >> +{
-> >> +       struct device *pd_dev = __this_cpu_read(sbi_cpuidle_data.dev);
-> >> +
-> >> +       if (pd_dev) {
-> >> +               pm_runtime_put_sync(pd_dev);
-> >> +               /* Clear domain state to start fresh at next online. */
-> >> +               sbi_clear_domain_state();
-> >> +       }
-> >> +
-> >> +       return 0;
-> >> +}
-> >> +
-> >> +static void sbi_idle_init_cpuhp(void)
-> >> +{
-> >> +       int err;
-> >> +
-> >> +       if (!sbi_cpuidle_use_cpuhp)
-> >> +               return;
-> >> +
-> >> +       err = cpuhp_setup_state_nocalls(CPUHP_AP_CPU_PM_STARTING,
-> >> +                                       "cpuidle/sbi:online",
-> >> +                                       sbi_cpuidle_cpuhp_up,
-> >> +                                       sbi_cpuidle_cpuhp_down);
-> >> +       if (err)
-> >> +               pr_warn("Failed %d while setup cpuhp state\n", err);
-> >> +}
-> >> +
-> >> +static const struct of_device_id sbi_cpuidle_state_match[] = {
-> >> +       { .compatible = "riscv,idle-state",
-> >> +         .data = sbi_cpuidle_enter_state },
-> >> +       { },
-> >> +};
-> >> +
-> >> +static bool sbi_suspend_state_is_valid(u32 state)
-> >> +{
-> >> +       if (state > SBI_HSM_SUSPEND_RET_DEFAULT &&
-> >> +           state < SBI_HSM_SUSPEND_RET_PLATFORM)
-> >> +               return false;
-> >> +       if (state > SBI_HSM_SUSPEND_NON_RET_DEFAULT &&
-> >> +           state < SBI_HSM_SUSPEND_NON_RET_PLATFORM)
-> >> +               return false;
-> >> +       return true;
-> >> +}
-> >> +
-> >> +static int sbi_dt_parse_state_node(struct device_node *np, u32 *state)
-> >> +{
-> >> +       int err = of_property_read_u32(np, "riscv,sbi-suspend-param", state);
-> >> +
-> >> +       if (err) {
-> >> +               pr_warn("%pOF missing riscv,sbi-suspend-param property\n", np);
-> >> +               return err;
-> >> +       }
-> >> +
-> >> +       if (!sbi_suspend_state_is_valid(*state)) {
-> >> +               pr_warn("Invalid SBI suspend state %#x\n", *state);
-> >> +               return -EINVAL;
-> >> +       }
-> >> +
-> >> +       return 0;
-> >> +}
-> >> +
-> >> +static int sbi_dt_cpu_init_topology(struct cpuidle_driver *drv,
-> >> +                                    struct sbi_cpuidle_data *data,
-> >> +                                    unsigned int state_count, int cpu)
-> >> +{
-> >> +       /* Currently limit the hierarchical topology to be used in OSI mode. */
-> >> +       if (!sbi_cpuidle_use_osi)
-> >> +               return 0;
-> >> +
-> >> +       data->dev = dt_idle_attach_cpu(cpu, "sbi");
-> >> +       if (IS_ERR_OR_NULL(data->dev))
-> >> +               return PTR_ERR_OR_ZERO(data->dev);
-> >> +
-> >> +       /*
-> >> +        * Using the deepest state for the CPU to trigger a potential selection
-> >> +        * of a shared state for the domain, assumes the domain states are all
-> >> +        * deeper states.
-> >> +        */
-> >> +       drv->states[state_count - 1].enter = sbi_enter_domain_idle_state;
-> >> +       drv->states[state_count - 1].enter_s2idle =
-> >> +                                       sbi_enter_s2idle_domain_idle_state;
-> >> +       sbi_cpuidle_use_cpuhp = true;
-> >> +
-> >> +       return 0;
-> >> +}
-> >> +
-> >> +static int sbi_cpuidle_dt_init_states(struct device *dev,
-> >> +                                       struct cpuidle_driver *drv,
-> >> +                                       unsigned int cpu,
-> >> +                                       unsigned int state_count)
-> >> +{
-> >> +       struct sbi_cpuidle_data *data = per_cpu_ptr(&sbi_cpuidle_data, cpu);
-> >> +       struct device_node *state_node;
-> >> +       struct device_node *cpu_node;
-> >> +       u32 *states;
-> >> +       int i, ret;
-> >> +
-> >> +       cpu_node = of_cpu_device_node_get(cpu);
-> >> +       if (!cpu_node)
-> >> +               return -ENODEV;
-> >> +
-> >> +       states = devm_kcalloc(dev, state_count, sizeof(*states), GFP_KERNEL);
-> >> +       if (!states) {
-> >> +               ret = -ENOMEM;
-> >> +               goto fail;
-> >> +       }
-> >> +
-> >> +       /* Parse SBI specific details from state DT nodes */
-> >> +       for (i = 1; i < state_count; i++) {
-> >> +               state_node = of_get_cpu_state_node(cpu_node, i - 1);
-> >> +               if (!state_node)
-> >> +                       break;
-> >> +
-> >> +               ret = sbi_dt_parse_state_node(state_node, &states[i]);
-> >> +               of_node_put(state_node);
-> >> +
-> >> +               if (ret)
-> >> +                       return ret;
-> >> +
-> >> +               pr_debug("sbi-state %#x index %d\n", states[i], i);
-> >> +       }
-> >> +       if (i != state_count) {
-> >> +               ret = -ENODEV;
-> >> +               goto fail;
-> >> +       }
-> >> +
-> >> +       /* Initialize optional data, used for the hierarchical topology. */
-> >> +       ret = sbi_dt_cpu_init_topology(drv, data, state_count, cpu);
-> >> +       if (ret < 0)
-> >> +               return ret;
-> >> +
-> >> +       /* Store states in the per-cpu struct. */
-> >> +       data->states = states;
-> >> +
-> >> +fail:
-> >> +       of_node_put(cpu_node);
-> >> +
-> >> +       return ret;
-> >> +}
-> >> +
-> >> +static void sbi_cpuidle_deinit_cpu(int cpu)
-> >> +{
-> >> +       struct sbi_cpuidle_data *data = per_cpu_ptr(&sbi_cpuidle_data, cpu);
-> >> +
-> >> +       dt_idle_detach_cpu(data->dev);
-> >> +       sbi_cpuidle_use_cpuhp = false;
-> >> +}
-> >> +
-> >> +static int sbi_cpuidle_init_cpu(struct device *dev, int cpu)
-> >> +{
-> >> +       struct cpuidle_driver *drv;
-> >> +       unsigned int state_count = 0;
-> >> +       int ret = 0;
-> >> +
-> >> +       drv = devm_kzalloc(dev, sizeof(*drv), GFP_KERNEL);
-> >> +       if (!drv)
-> >> +               return -ENOMEM;
-> >> +
-> >> +       drv->name = "sbi_cpuidle";
-> >> +       drv->owner = THIS_MODULE;
-> >> +       drv->cpumask = (struct cpumask *)cpumask_of(cpu);
-> >> +
-> >> +       /* RISC-V architectural WFI to be represented as state index 0. */
-> >> +       drv->states[0].enter = sbi_cpuidle_enter_state;
-> >> +       drv->states[0].exit_latency = 1;
-> >> +       drv->states[0].target_residency = 1;
-> >> +       drv->states[0].power_usage = UINT_MAX;
-> >> +       strcpy(drv->states[0].name, "WFI");
-> >> +       strcpy(drv->states[0].desc, "RISC-V WFI");
-> >> +
-> >> +       /*
-> >> +        * If no DT idle states are detected (ret == 0) let the driver
-> >> +        * initialization fail accordingly since there is no reason to
-> >> +        * initialize the idle driver if only wfi is supported, the
-> >> +        * default archictectural back-end already executes wfi
-> >> +        * on idle entry.
-> >> +        */
-> >> +       ret = dt_init_idle_driver(drv, sbi_cpuidle_state_match, 1);
-> >> +       if (ret <= 0) {
-> >> +               pr_debug("HART%ld: failed to parse DT idle states\n",
-> >> +                        cpuid_to_hartid_map(cpu));
-> >> +               return ret ? : -ENODEV;
-> >> +       }
-> >> +       state_count = ret + 1; /* Include WFI state as well */
-> >> +
-> >> +       /* Initialize idle states from DT. */
-> >> +       ret = sbi_cpuidle_dt_init_states(dev, drv, cpu, state_count);
-> >> +       if (ret) {
-> >> +               pr_err("HART%ld: failed to init idle states\n",
-> >> +                      cpuid_to_hartid_map(cpu));
-> >> +               return ret;
-> >> +       }
-> >> +
-> >> +       ret = cpuidle_register(drv, NULL);
-> >> +       if (ret)
-> >> +               goto deinit;
-> >> +
-> >> +       cpuidle_cooling_register(drv);
-> >> +
-> >> +       return 0;
-> >> +deinit:
-> >> +       sbi_cpuidle_deinit_cpu(cpu);
-> >> +       return ret;
-> >> +}
-> >> +
-> >> +static void sbi_cpuidle_domain_sync_state(struct device *dev)
-> >> +{
-> >> +       /*
-> >> +        * All devices have now been attached/probed to the PM domain
-> >> +        * topology, hence it's fine to allow domain states to be picked.
-> >> +        */
-> >> +       sbi_cpuidle_pd_allow_domain_state = true;
-> >> +}
-> >> +
-> >> +#ifdef CONFIG_DT_IDLE_GENPD
-> >> +
-> >> +static int sbi_cpuidle_pd_power_off(struct generic_pm_domain *pd)
-> >> +{
-> >> +       struct genpd_power_state *state = &pd->states[pd->state_idx];
-> >> +       u32 *pd_state;
-> >> +
-> >> +       if (!state->data)
-> >> +               return 0;
-> >> +
-> >> +       if (!sbi_cpuidle_pd_allow_domain_state)
-> >> +               return -EBUSY;
-> >> +
-> >> +       /* OSI mode is enabled, set the corresponding domain state. */
-> >> +       pd_state = state->data;
-> >> +       sbi_set_domain_state(*pd_state);
-> >> +
-> >> +       return 0;
-> >> +}
-> >> +
-> >> +struct sbi_pd_provider {
-> >> +       struct list_head link;
-> >> +       struct device_node *node;
-> >> +};
-> >> +
-> >> +static LIST_HEAD(sbi_pd_providers);
-> >> +
-> >> +static int sbi_pd_init(struct device_node *np)
-> >> +{
-> >> +       struct generic_pm_domain *pd;
-> >> +       struct sbi_pd_provider *pd_provider;
-> >> +       struct dev_power_governor *pd_gov;
-> >> +       int ret = -ENOMEM, state_count = 0;
-> >> +
-> >> +       pd = dt_idle_pd_alloc(np, sbi_dt_parse_state_node);
-> >> +       if (!pd)
-> >> +               goto out;
-> >> +
-> >> +       pd_provider = kzalloc(sizeof(*pd_provider), GFP_KERNEL);
-> >> +       if (!pd_provider)
-> >> +               goto free_pd;
-> >> +
-> >> +       pd->flags |= GENPD_FLAG_IRQ_SAFE | GENPD_FLAG_CPU_DOMAIN;
-> >> +
-> >> +       /* Allow power off when OSI is available. */
-> >> +       if (sbi_cpuidle_use_osi)
-> >> +               pd->power_off = sbi_cpuidle_pd_power_off;
-> >> +       else
-> >> +               pd->flags |= GENPD_FLAG_ALWAYS_ON;
-> >> +
-> >> +       /* Use governor for CPU PM domains if it has some states to manage. */
-> >> +       pd_gov = state_count > 0 ? &pm_domain_cpu_gov : NULL;
-> >> +
-> >> +       ret = pm_genpd_init(pd, pd_gov, false);
-> >> +       if (ret)
-> >> +               goto free_pd_prov;
-> >> +
-> >> +       ret = of_genpd_add_provider_simple(np, pd);
-> >> +       if (ret)
-> >> +               goto remove_pd;
-> >> +
-> >> +       pd_provider->node = of_node_get(np);
-> >> +       list_add(&pd_provider->link, &sbi_pd_providers);
-> >> +
-> >> +       pr_debug("init PM domain %s\n", pd->name);
-> >> +       return 0;
-> >> +
-> >> +remove_pd:
-> >> +       pm_genpd_remove(pd);
-> >> +free_pd_prov:
-> >> +       kfree(pd_provider);
-> >> +free_pd:
-> >> +       dt_idle_pd_free(pd);
-> >> +out:
-> >> +       pr_err("failed to init PM domain ret=%d %pOF\n", ret, np);
-> >> +       return ret;
-> >> +}
-> >> +
-> >> +static void sbi_pd_remove(void)
-> >> +{
-> >> +       struct sbi_pd_provider *pd_provider, *it;
-> >> +       struct generic_pm_domain *genpd;
-> >> +
-> >> +       list_for_each_entry_safe(pd_provider, it, &sbi_pd_providers, link) {
-> >> +               of_genpd_del_provider(pd_provider->node);
-> >> +
-> >> +               genpd = of_genpd_remove_last(pd_provider->node);
-> >> +               if (!IS_ERR(genpd))
-> >> +                       kfree(genpd);
-> >> +
-> >> +               of_node_put(pd_provider->node);
-> >> +               list_del(&pd_provider->link);
-> >> +               kfree(pd_provider);
-> >> +       }
-> >> +}
-> >> +
-> >> +static int sbi_genpd_probe(struct device_node *np)
-> >> +{
-> >> +       struct device_node *node;
-> >> +       int ret = 0, pd_count = 0;
-> >> +
-> >> +       if (!np)
-> >> +               return -ENODEV;
-> >> +
-> >> +       /*
-> >> +        * Parse child nodes for the "#power-domain-cells" property and
-> >> +        * initialize a genpd/genpd-of-provider pair when it's found.
-> >> +        */
-> >> +       for_each_child_of_node(np, node) {
-> >> +               if (!of_find_property(node, "#power-domain-cells", NULL))
-> >> +                       continue;
-> >> +
-> >> +               ret = sbi_pd_init(node);
-> >> +               if (ret)
-> >> +                       goto put_node;
-> >> +
-> >> +               pd_count++;
-> >> +       }
-> >> +
-> >> +       /* Bail out if not using the hierarchical CPU topology. */
-> >> +       if (!pd_count)
-> >> +               goto no_pd;
-> >> +
-> >> +       /* Link genpd masters/subdomains to model the CPU topology. */
-> >> +       ret = dt_idle_pd_init_topology(np);
-> >> +       if (ret)
-> >> +               goto remove_pd;
-> >> +
-> >> +       return 0;
-> >> +
-> >> +put_node:
-> >> +       of_node_put(node);
-> >> +remove_pd:
-> >> +       sbi_pd_remove();
-> >> +       pr_err("failed to create CPU PM domains ret=%d\n", ret);
-> >> +no_pd:
-> >> +       return ret;
-> >> +}
-> >> +
-> >> +#else
-> >> +
-> >> +static inline int sbi_genpd_probe(struct device_node *np)
-> >> +{
-> >> +       return 0;
-> >> +}
-> >> +
-> >> +#endif
-> >> +
-> >> +static int sbi_cpuidle_probe(struct platform_device *pdev)
-> >> +{
-> >> +       int cpu, ret;
-> >> +       struct cpuidle_driver *drv;
-> >> +       struct cpuidle_device *dev;
-> >> +       struct device_node *np, *pds_node;
-> >> +
-> >> +       /* Detect OSI support based on CPU DT nodes */
-> >> +       sbi_cpuidle_use_osi = true;
-> >> +       for_each_possible_cpu(cpu) {
-> >> +               np = of_cpu_device_node_get(cpu);
-> >> +               if (np &&
-> >> +                   of_find_property(np, "power-domains", NULL) &&
-> >> +                   of_find_property(np, "power-domain-names", NULL)) {
-> >> +                       continue;
-> >> +               } else {
-> >> +                       sbi_cpuidle_use_osi = false;
-> >> +                       break;
-> >> +               }
-> >> +       }
-> >> +
-> >> +       /* Populate generic power domains from DT nodes */
-> >> +       pds_node = of_find_node_by_path("/cpus/power-domains");
-> >> +       if (pds_node) {
-> >> +               ret = sbi_genpd_probe(pds_node);
-> >> +               of_node_put(pds_node);
-> >> +               if (ret)
-> >> +                       return ret;
-> >> +       }
-> >> +
-> >> +       /* Initialize CPU idle driver for each CPU */
-> >> +       for_each_possible_cpu(cpu) {
-> >> +               ret = sbi_cpuidle_init_cpu(&pdev->dev, cpu);
-> >> +               if (ret) {
-> >> +                       pr_debug("HART%ld: idle driver init failed\n",
-> >> +                                cpuid_to_hartid_map(cpu));
-> >> +                       goto out_fail;
-> >> +               }
-> >> +       }
-> >> +
-> >> +       /* Setup CPU hotplut notifiers */
-> >> +       sbi_idle_init_cpuhp();
-> >> +
-> >> +       pr_info("idle driver registered for all CPUs\n");
-> >> +
-> >> +       return 0;
-> >> +
-> >> +out_fail:
-> >> +       while (--cpu >= 0) {
-> >> +               dev = per_cpu(cpuidle_devices, cpu);
-> >> +               drv = cpuidle_get_cpu_driver(dev);
-> >> +               cpuidle_unregister(drv);
-> >> +               sbi_cpuidle_deinit_cpu(cpu);
-> >> +       }
-> >> +
-> >> +       return ret;
-> >> +}
-> >> +
-> >> +static struct platform_driver sbi_cpuidle_driver = {
-> >> +       .probe = sbi_cpuidle_probe,
-> >> +       .driver = {
-> >> +               .name = "sbi-cpuidle",
-> >> +               .sync_state = sbi_cpuidle_domain_sync_state,
-> >> +       },
-> >> +};
-> >> +
-> >> +static int __init sbi_cpuidle_init(void)
-> >> +{
-> >> +       int ret;
-> >> +       struct platform_device *pdev;
-> >> +
-> >> +       /*
-> >> +        * The SBI HSM suspend function is only available when:
-> >> +        * 1) SBI version is 0.3 or higher
-> >> +        * 2) SBI HSM extension is available
-> >> +        */
-> >> +       if ((sbi_spec_version < sbi_mk_version(0, 3)) ||
-> >> +           sbi_probe_extension(SBI_EXT_HSM) <= 0) {
-> >> +               pr_info("HSM suspend not available\n");
-> >> +               return 0;
-> >> +       }
-> >> +
-> >> +       ret = platform_driver_register(&sbi_cpuidle_driver);
-> >> +       if (ret)
-> >> +               return ret;
-> >> +
-> >> +       pdev = platform_device_register_simple("sbi-cpuidle",
-> >> +                                               -1, NULL, 0);
-> >> +       if (IS_ERR(pdev)) {
-> >> +               platform_driver_unregister(&sbi_cpuidle_driver);
-> >> +               return PTR_ERR(pdev);
-> >> +       }
-> >> +
-> >> +       return 0;
-> >> +}
-> >> +device_initcall(sbi_cpuidle_init);
-> >> --
-> >> 2.25.1
-> >>
+> > Hi Matthias,
 > >
-> > For the SBI part,
-> > Acked-by: Atish Patra <atishp@rivosinc.com>
+> > On 2/9/22 10:17 PM, Matthias Kaehlcke wrote:
+> > > On Wed, Feb 09, 2022 at 11:16:36AM +0000, Lukasz Luba wrote:
+> > >>
+> > >>
+> > >> On 2/8/22 5:25 PM, Matthias Kaehlcke wrote:
+> > >>> On Tue, Feb 08, 2022 at 09:32:28AM +0000, Lukasz Luba wrote:
+> > >>>>
+> > >>>>
 > >
-> > FYI..
-> > SBI HSM suspend was included in SBI v0.3. The current version of the
-> > SBI specification (v1.0-rc2)
-> > is already frozen as per the RVI guidelines. All the comments received
-> > during the public review period
-> > have been addressed as well.
->
-> Yet not all comments from *before* the public review period.
->
+> > [snip]
+> >
+> > >>>> Could you point me to those devices please?
+> > >>>
+> > >>> arch/arm64/boot/dts/qcom/sc7180-trogdor-*
+> > >>>
+> > >>> Though as per above they shouldn't be impacted by your change, since the
+> > >>> CPUs always pretend to use milli-Watts.
+> > >>>
+> > >>> [skipped some questions/answers since sc7180 isn't actually impacted by
+> > >>>    the change]
+> > >>
+> > >> Thank you Matthias. I will investigate your setup to get better
+> > >> understanding.
+> > >
+> > > Thanks!
+> > >
+> >
+> > I've checked those DT files and related code.
+> > As you already said, this patch is safe for them.
+> > So we can apply it IMO.
+> >
+> >
+> > -------------Off-topic------------------
+> > Not in $subject comments:
+> >
+> > AFAICS based on two files which define thermal zones:
+> > sc7180-trogdor-homestar.dtsi
+> > sc7180-trogdor-coachz.dtsi
+> >
+> > only the 'big' cores are used as cooling devices in the
+> > 'skin_temp_thermal' - the CPU6 and CPU7.
+> >
+> > I assume you don't want to model at all the power usage
+> > from the Little cluster (which is quite big: 6 CPUs), do you?
+> > I can see that the Little CPUs have small dyn-power-coeff
+> > ~30% of the big and lower max freq, but still might be worth
+> > to add them to IPA. You might give them more 'weight', to
+> > make sure they receive more power during power split.
 
-I guess you are talking about the following issue,
-https://github.com/riscv-non-isa/riscv-sbi-doc/issues/82
+In experiments we saw that including the little cores as cooling
+devices for 'skin_temp_thermal' didn't have a significant impact on
+thermals, so we left them out.
 
-The issues raised here concern only the legacy version(v0.1) which is
-disabled from the kernel in the latest release.
-I have left detailed comments on why no changes to the spec is necessary.
+> > You also don't have GPU cooling device in that thermal zone.
+> > Based on my experience if your GPU is a power hungry one,
+> > e.g. 2-4Watts, you might get better results when you model
+> > this 'hot' device (which impacts your temp sensor reported value).
+> 
+> I think the two boards you point at (homestar and coachz) are just the
+> two that override the default defined in the SoC dtsi file. If you
+> look in sc7180.dtsi you'll see 'gpuss1-thermal' which has a cooling
+> map. You can also see the cooling maps for the littles.
 
-> Jess
->
+Yep, plus thermal zones with cooling maps for the big cores.
 
+> I guess we don't have a `dynamic-power-coefficient` for the GPU,
+> though? Seems like we should, but I haven't dug through all the code
+> here...
 
--- 
-Regards,
-Atish
+To my knowledge the SC7x80 GPU doesn't register an energy model, which is
+one of the reasons the GPU wasn't included as cooling device for
+'skin_temp_thermal'.
