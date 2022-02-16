@@ -2,111 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90C9B4B8F09
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Feb 2022 18:20:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 128A14B8F0D
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Feb 2022 18:21:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235194AbiBPRUz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Feb 2022 12:20:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53306 "EHLO
+        id S233570AbiBPRVt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Feb 2022 12:21:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233570AbiBPRUz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Feb 2022 12:20:55 -0500
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 416EBC3368;
-        Wed, 16 Feb 2022 09:20:43 -0800 (PST)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-2d646fffcc2so6305427b3.4;
-        Wed, 16 Feb 2022 09:20:43 -0800 (PST)
+        with ESMTP id S237055AbiBPRVs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Feb 2022 12:21:48 -0500
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0547F22B05
+        for <linux-pm@vger.kernel.org>; Wed, 16 Feb 2022 09:21:35 -0800 (PST)
+Received: by mail-il1-x131.google.com with SMTP id d7so293966ilf.8
+        for <linux-pm@vger.kernel.org>; Wed, 16 Feb 2022 09:21:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jieIWT6FT4bLoUaa3Mb3Usj/bynv3zx0Z4wW8RvTfsk=;
+        b=O+gPJszUY4gMydUN6T17bxf9YrJsSN2JGPvPYspIkDcDT6xa/cBHSZoZM3DleEqYoO
+         SU5sA/uVXJze9UFXNyyOYK78aO8P5OzXOpxkQa8+jZXwy3JmFa9GytjwiKAIlnZ4dRBF
+         pwiPmlf/pazGRyp9nnaB7FUPUgMl97ZRLkyYw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=zm99wFyMLWOW6zNGSmJZfjDJGqoAK+iiiXMMA8S8X84=;
-        b=ZQVoltJtm6jzIvHWb8WeB6Lk4GINIqOW0QjoPkMXoRJ2lpeQsaSo6Ug08xKO/7/ij9
-         xiAfYC5/WKVi6gLrqDOTMwxLFV1rziAQ3864gFT0QtfW4F/CJSgxud5196JP0rnLwdcm
-         0eEoCNTGKSmlbs8IpvHUg3ZeRS8CCNPGuq5MrfjCoKuVmNWZHyk7WVPkHPVjpH1m5M98
-         0SY128hSNUtrnewLfNpCirJXeK8mpn2uATA4Hd9zZWyYSEa4jTy7HEYRKnEBzSqwm/Y/
-         NHRahkoAYNGSVmU94C2pvPyTidLqdkIEbUILrVbI7TPXHJxZ8XQtGGFdOaSYwFqqWCSf
-         zO7A==
-X-Gm-Message-State: AOAM532LuPd0DVk54JPa7Iu5kaJVdZVgLnbyr/U+dgjfgxCD0WByBLeb
-        JimQhHPtTJEmTMOHMyh1UrFV/ESTbwSwuZ0X8ms=
-X-Google-Smtp-Source: ABdhPJysdJFsx6Ce3YKaUcCNKNNGG72GDzTJ3a2hk+CKoZRkVucpPwTAJSyQjDLJQTbTeTkcy4RRh3GtrvWWWciC6ko=
-X-Received: by 2002:a81:f008:0:b0:2d0:cd72:74e5 with SMTP id
- p8-20020a81f008000000b002d0cd7274e5mr3420459ywm.301.1645032042553; Wed, 16
- Feb 2022 09:20:42 -0800 (PST)
+        bh=jieIWT6FT4bLoUaa3Mb3Usj/bynv3zx0Z4wW8RvTfsk=;
+        b=JyHU7IfDURyUkqdP5yety22CIcw/1YtuT9tu+XIsmZ4sRRn6BlpDgW5NXmW6InWMlM
+         iMwMN/laY0K7Txe7J4o8ZQ0Awiv4XGt7WSdRIpWiRHmkv41luC/bnVIJayxS7ywenyci
+         hzzrdWGwKlPG7+7yfwoN2WmM+DvTq/9YKJkHo4t+6+VG9ibS22LPx1e2pKSPDH9+3Mr6
+         prJJojRr/cT9OaQ7nD079THVundIhSkudZu7T08nxi8x2Fth1sjosnPlI9Vwq2aT48ib
+         rf0EyAyTsBgS/W1MjITxjtXMMG1n+wfqPLR8TVMuu0Iz5igR6AhG1O7bgUwyTDciS4TR
+         FTNQ==
+X-Gm-Message-State: AOAM531d2KBsYUgZGuDuiJp3oTOi4aClSwWH/F3ZZNW4fHrxGMbhKMfO
+        xRQtBAGDDvcrjVVYJOmytCwUt7K1gdJiSQ==
+X-Google-Smtp-Source: ABdhPJwXck97nVlwPUwJKwIlfzt67TDk/sB3x9nYPoSL8ruqo3+bdR8O5e4za8Y7pUunontHoZiWzg==
+X-Received: by 2002:a92:cdaf:0:b0:2bf:53d7:d37b with SMTP id g15-20020a92cdaf000000b002bf53d7d37bmr2388547ild.300.1645032094238;
+        Wed, 16 Feb 2022 09:21:34 -0800 (PST)
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com. [209.85.166.49])
+        by smtp.gmail.com with ESMTPSA id j14sm187386ilk.38.2022.02.16.09.21.32
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Feb 2022 09:21:32 -0800 (PST)
+Received: by mail-io1-f49.google.com with SMTP id y20so528867iod.1
+        for <linux-pm@vger.kernel.org>; Wed, 16 Feb 2022 09:21:32 -0800 (PST)
+X-Received: by 2002:a05:6638:25cf:b0:314:5652:b95d with SMTP id
+ u15-20020a05663825cf00b003145652b95dmr2344965jat.207.1645032091709; Wed, 16
+ Feb 2022 09:21:31 -0800 (PST)
 MIME-Version: 1.0
-References: <80742062-8629-3978-e78d-92ffc9bb2e0b@gmail.com> <ecd789b3-74df-f4fe-ae66-8728f9bf24ab@redhat.com>
-In-Reply-To: <ecd789b3-74df-f4fe-ae66-8728f9bf24ab@redhat.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 16 Feb 2022 18:20:31 +0100
-Message-ID: <CAJZ5v0g6DLfVYY+j5Zv-2N46st7E3uskRG1Kh6YLPsmKr9ULFQ@mail.gmail.com>
-Subject: Re: [PATCH] fix linux 5.16 freeze regression on 32-bit ThinkPad T40
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Woody Suwalski <wsuwalski@gmail.com>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
+References: <20220207073036.14901-1-lukasz.luba@arm.com> <20220207073036.14901-2-lukasz.luba@arm.com>
+ <YgG+TmLrCSXX4Bvt@google.com> <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com>
+In-Reply-To: <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 16 Feb 2022 09:21:19 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=UtQgrwPXg4zTZtBin3LWY1yTgCKQ05MmCNqK_6F5S8VA@mail.gmail.com>
+Message-ID: <CAD=FV=UtQgrwPXg4zTZtBin3LWY1yTgCKQ05MmCNqK_6F5S8VA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
+ cpufreq_cooling and devfreq_cooling
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+        Linux PM <linux-pm@vger.kernel.org>,
+        amit daniel kachhap <amit.kachhap@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Pierre.Gondois@arm.com, Stephen Boyd <swboyd@chromium.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 12:32 PM Hans de Goede <hdegoede@redhat.com> wrote:
->
-> Hi,
->
-> On 2/9/22 22:05, Woody Suwalski wrote:
-> > From: Woody Suwalski <wsuwalski@gmail.com>
-> >
-> > Add and ACPI idle power level limit for 32-bit ThinkPad T40.
-> >
-> > There is a regression on T40 introduced by commit d6b88ce2, starting with kernel 5.16:
-> >
-> > commit d6b88ce2eb9d2698eb24451eb92c0a1649b17bb1
-> > Author: Richard Gong <richard.gong@amd.com>
-> > Date:   Wed Sep 22 08:31:16 2021 -0500
-> >
-> >     ACPI: processor idle: Allow playing dead in C3 state
-> >
-> > The above patch is trying to enter C3 state during init, what is causing a T40 system freeze. I have not found a similar issue on any other of my 32-bit machines.
-> >
-> > The fix is to add another exception to the processor_power_dmi_table[] list.
-> > As a result the dmesg shows as expected:
-> >
-> >     2.155398] ACPI: IBM ThinkPad T40 detected - limiting to C2 max_cstate. Override with "processor.max_cstate=9"
-> > [    2.155404] ACPI: processor limited to max C-state 2
-> >
-> > The fix is trivial and affects only vintage T40 systems.
-> >
-> > Signed-off-by: Woody Suwalski <wsuwalski@gmail.com>
-> > ---
->
-> Thanks, patch looks good to me:
->
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
->
-> Regards,
->
-> Hans
->
->
-> > --- a/drivers/acpi/processor_idle.c    2022-02-04 09:09:54.515906362 -0500
-> > +++ b/drivers/acpi/processor_idle.c    2022-02-04 14:21:08.264911271 -0500
-> > @@ -96,6 +96,11 @@ static const struct dmi_system_id proces
-> >        DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK Computer Inc."),
-> >        DMI_MATCH(DMI_PRODUCT_NAME,"L8400B series Notebook PC")},
-> >       (void *)1},
-> > +    /* T40 can not handle C3 idle state */
-> > +    { set_max_cstate, "IBM ThinkPad T40", {
-> > +      DMI_MATCH(DMI_SYS_VENDOR, "IBM"),
-> > +      DMI_MATCH(DMI_PRODUCT_NAME, "23737CU")},
-> > +     (void *)2},
-> >      {},
-> >  };
+Hi,
 
-Applied as a fix for 5.17-rc5, thanks!
+On Tue, Feb 8, 2022 at 1:32 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>
+> >    Another important thing is the consistent scale of the power values
+> >    provided by the cooling devices. All of the cooling devices in a single
+> >    thermal zone should have power values reported either in milli-Watts
+> >    or scaled to the same 'abstract scale'.
+>
+> This can change. We have removed the userspace governor from kernel
+> recently. The trend is to implement thermal policy in FW. Dealing with
+> some intermediate configurations are causing complicated design, support
+> of the algorithm logic is also more complex.
+
+One thing that didn't get addressed is the whole "The trend is to
+implement thermal policy in FW". I'm not sure I can get on board with
+that trend. IMO "moving to FW" isn't a super great trend. FW is harder
+to update than kernel and trying to keep it in sync with the kernel
+isn't wonderful. Unless something _has_ to be in FW I personally
+prefer it to be in the kernel.
+
+...although now that I re-read this, I'm not sure which firmware you
+might be talking about. Is this the AP firmware, or some companion
+chip / coprocessor? Even so, I'd still rather see things done in the
+kernel when possible...
+
+-Doug
