@@ -2,62 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 128A14B8F0D
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Feb 2022 18:21:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A28614B8F2D
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Feb 2022 18:34:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233570AbiBPRVt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Feb 2022 12:21:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54586 "EHLO
+        id S237128AbiBPReR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Feb 2022 12:34:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237055AbiBPRVs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Feb 2022 12:21:48 -0500
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0547F22B05
-        for <linux-pm@vger.kernel.org>; Wed, 16 Feb 2022 09:21:35 -0800 (PST)
-Received: by mail-il1-x131.google.com with SMTP id d7so293966ilf.8
-        for <linux-pm@vger.kernel.org>; Wed, 16 Feb 2022 09:21:34 -0800 (PST)
+        with ESMTP id S237125AbiBPReR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Feb 2022 12:34:17 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EBD5222182
+        for <linux-pm@vger.kernel.org>; Wed, 16 Feb 2022 09:34:04 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id h16so520598iol.11
+        for <linux-pm@vger.kernel.org>; Wed, 16 Feb 2022 09:34:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=jieIWT6FT4bLoUaa3Mb3Usj/bynv3zx0Z4wW8RvTfsk=;
-        b=O+gPJszUY4gMydUN6T17bxf9YrJsSN2JGPvPYspIkDcDT6xa/cBHSZoZM3DleEqYoO
-         SU5sA/uVXJze9UFXNyyOYK78aO8P5OzXOpxkQa8+jZXwy3JmFa9GytjwiKAIlnZ4dRBF
-         pwiPmlf/pazGRyp9nnaB7FUPUgMl97ZRLkyYw=
+        bh=NabgQQsJH6X4TlMYnFn6QKKl4Vhu4efuUjjjXfJ7lgQ=;
+        b=dsj9GnWa++50RRrfwADJFF/o/2xUy5SXce8mZRDSEslyWwm7KHBXT56e43oz/709yQ
+         v6saAUnzbVJhjV866YrKpAvUNAqwFYjn+5AgFFwx9D58EMUeHX/g43j3II9/r5rQUbF6
+         V8RdxhwLOzhhmc3RRL6JvuABsDiRaVSPwjpYo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=jieIWT6FT4bLoUaa3Mb3Usj/bynv3zx0Z4wW8RvTfsk=;
-        b=JyHU7IfDURyUkqdP5yety22CIcw/1YtuT9tu+XIsmZ4sRRn6BlpDgW5NXmW6InWMlM
-         iMwMN/laY0K7Txe7J4o8ZQ0Awiv4XGt7WSdRIpWiRHmkv41luC/bnVIJayxS7ywenyci
-         hzzrdWGwKlPG7+7yfwoN2WmM+DvTq/9YKJkHo4t+6+VG9ibS22LPx1e2pKSPDH9+3Mr6
-         prJJojRr/cT9OaQ7nD079THVundIhSkudZu7T08nxi8x2Fth1sjosnPlI9Vwq2aT48ib
-         rf0EyAyTsBgS/W1MjITxjtXMMG1n+wfqPLR8TVMuu0Iz5igR6AhG1O7bgUwyTDciS4TR
-         FTNQ==
-X-Gm-Message-State: AOAM531d2KBsYUgZGuDuiJp3oTOi4aClSwWH/F3ZZNW4fHrxGMbhKMfO
-        xRQtBAGDDvcrjVVYJOmytCwUt7K1gdJiSQ==
-X-Google-Smtp-Source: ABdhPJwXck97nVlwPUwJKwIlfzt67TDk/sB3x9nYPoSL8ruqo3+bdR8O5e4za8Y7pUunontHoZiWzg==
-X-Received: by 2002:a92:cdaf:0:b0:2bf:53d7:d37b with SMTP id g15-20020a92cdaf000000b002bf53d7d37bmr2388547ild.300.1645032094238;
-        Wed, 16 Feb 2022 09:21:34 -0800 (PST)
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com. [209.85.166.49])
-        by smtp.gmail.com with ESMTPSA id j14sm187386ilk.38.2022.02.16.09.21.32
+        bh=NabgQQsJH6X4TlMYnFn6QKKl4Vhu4efuUjjjXfJ7lgQ=;
+        b=sk6wpu8A/Z3Ixzn+nTodcqPLQwaxScBQRtbgQuQOj5hS9WUdJVii59Dd1EFOR2EoYK
+         bAOOhGeuJeMLV852vvhyx7aKHlSzGhqTO4Qt1vxykr5mbl6eyeOEGBRM0t0h5Lxj0EWg
+         RLbL/m/u9I67bpT7R0a9WAP3Pgsuvbmpyp8jEViginTzEwGsiOhdy9mHl+NP4IRP0WiV
+         O7grcAnia6r5ghJQKbYS+3YHCwKI+pFXUOfWk9T8/Up3w7r4+4rbkUtaXjlg6SvxGtAI
+         80bwepr5ZDyAT8ih1K4uabPSfAbMIj8DfAiEpPbtCzlSRK9x9foGXwOde3bsGRBJwOK4
+         Mxzg==
+X-Gm-Message-State: AOAM533v0vk4qqxpi+nkhlL+CuSNWFHNH8SRh8HqjPACvGTxLidByPuh
+        aGGC50akVVg6aACn1e6TPz9EdQ+lJRP8zw==
+X-Google-Smtp-Source: ABdhPJzaH+Co8T/pVjiMsuMpHNrFocP9LK3clj40BB1+ECnKiT0SMs975siTgRS3PE0oXB/izfoLJA==
+X-Received: by 2002:a05:6638:2102:b0:313:e481:6fef with SMTP id n2-20020a056638210200b00313e4816fefmr2308601jaj.231.1645032843805;
+        Wed, 16 Feb 2022 09:34:03 -0800 (PST)
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com. [209.85.166.43])
+        by smtp.gmail.com with ESMTPSA id j15sm210578ile.6.2022.02.16.09.34.02
         for <linux-pm@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Feb 2022 09:21:32 -0800 (PST)
-Received: by mail-io1-f49.google.com with SMTP id y20so528867iod.1
-        for <linux-pm@vger.kernel.org>; Wed, 16 Feb 2022 09:21:32 -0800 (PST)
-X-Received: by 2002:a05:6638:25cf:b0:314:5652:b95d with SMTP id
- u15-20020a05663825cf00b003145652b95dmr2344965jat.207.1645032091709; Wed, 16
- Feb 2022 09:21:31 -0800 (PST)
+        Wed, 16 Feb 2022 09:34:03 -0800 (PST)
+Received: by mail-io1-f43.google.com with SMTP id c18so102230ioh.0
+        for <linux-pm@vger.kernel.org>; Wed, 16 Feb 2022 09:34:02 -0800 (PST)
+X-Received: by 2002:a6b:ed01:0:b0:635:2020:c11 with SMTP id
+ n1-20020a6bed01000000b0063520200c11mr2514847iog.136.1645032842511; Wed, 16
+ Feb 2022 09:34:02 -0800 (PST)
 MIME-Version: 1.0
 References: <20220207073036.14901-1-lukasz.luba@arm.com> <20220207073036.14901-2-lukasz.luba@arm.com>
  <YgG+TmLrCSXX4Bvt@google.com> <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com>
-In-Reply-To: <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com>
+ <YgKnnFl7Gp8AS30X@google.com> <e4532f65-7f8a-7e89-97c1-85cc61462040@arm.com>
+ <YgQ9XLcto9v0fyTf@google.com> <d120110a-7d01-0cfd-f7eb-d160e17ec2a8@arm.com>
+In-Reply-To: <d120110a-7d01-0cfd-f7eb-d160e17ec2a8@arm.com>
 From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 16 Feb 2022 09:21:19 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=UtQgrwPXg4zTZtBin3LWY1yTgCKQ05MmCNqK_6F5S8VA@mail.gmail.com>
-Message-ID: <CAD=FV=UtQgrwPXg4zTZtBin3LWY1yTgCKQ05MmCNqK_6F5S8VA@mail.gmail.com>
+Date:   Wed, 16 Feb 2022 09:33:50 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=VntGw1_AzJPpdOk0zSpOVZRH2X1JNg84JX+zCeU1jvXg@mail.gmail.com>
+Message-ID: <CAD=FV=VntGw1_AzJPpdOk0zSpOVZRH2X1JNg84JX+zCeU1jvXg@mail.gmail.com>
 Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
  cpufreq_cooling and devfreq_cooling
 To:     Lukasz Luba <lukasz.luba@arm.com>
@@ -87,28 +89,71 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi,
 
-On Tue, Feb 8, 2022 at 1:32 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+On Wed, Feb 16, 2022 at 7:35 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
 >
-> >    Another important thing is the consistent scale of the power values
-> >    provided by the cooling devices. All of the cooling devices in a single
-> >    thermal zone should have power values reported either in milli-Watts
-> >    or scaled to the same 'abstract scale'.
+> Hi Matthias,
 >
-> This can change. We have removed the userspace governor from kernel
-> recently. The trend is to implement thermal policy in FW. Dealing with
-> some intermediate configurations are causing complicated design, support
-> of the algorithm logic is also more complex.
+> On 2/9/22 10:17 PM, Matthias Kaehlcke wrote:
+> > On Wed, Feb 09, 2022 at 11:16:36AM +0000, Lukasz Luba wrote:
+> >>
+> >>
+> >> On 2/8/22 5:25 PM, Matthias Kaehlcke wrote:
+> >>> On Tue, Feb 08, 2022 at 09:32:28AM +0000, Lukasz Luba wrote:
+> >>>>
+> >>>>
+>
+> [snip]
+>
+> >>>> Could you point me to those devices please?
+> >>>
+> >>> arch/arm64/boot/dts/qcom/sc7180-trogdor-*
+> >>>
+> >>> Though as per above they shouldn't be impacted by your change, since the
+> >>> CPUs always pretend to use milli-Watts.
+> >>>
+> >>> [skipped some questions/answers since sc7180 isn't actually impacted by
+> >>>    the change]
+> >>
+> >> Thank you Matthias. I will investigate your setup to get better
+> >> understanding.
+> >
+> > Thanks!
+> >
+>
+> I've checked those DT files and related code.
+> As you already said, this patch is safe for them.
+> So we can apply it IMO.
+>
+>
+> -------------Off-topic------------------
+> Not in $subject comments:
+>
+> AFAICS based on two files which define thermal zones:
+> sc7180-trogdor-homestar.dtsi
+> sc7180-trogdor-coachz.dtsi
+>
+> only the 'big' cores are used as cooling devices in the
+> 'skin_temp_thermal' - the CPU6 and CPU7.
+>
+> I assume you don't want to model at all the power usage
+> from the Little cluster (which is quite big: 6 CPUs), do you?
+> I can see that the Little CPUs have small dyn-power-coeff
+> ~30% of the big and lower max freq, but still might be worth
+> to add them to IPA. You might give them more 'weight', to
+> make sure they receive more power during power split.
+>
+> You also don't have GPU cooling device in that thermal zone.
+> Based on my experience if your GPU is a power hungry one,
+> e.g. 2-4Watts, you might get better results when you model
+> this 'hot' device (which impacts your temp sensor reported value).
 
-One thing that didn't get addressed is the whole "The trend is to
-implement thermal policy in FW". I'm not sure I can get on board with
-that trend. IMO "moving to FW" isn't a super great trend. FW is harder
-to update than kernel and trying to keep it in sync with the kernel
-isn't wonderful. Unless something _has_ to be in FW I personally
-prefer it to be in the kernel.
+I think the two boards you point at (homestar and coachz) are just the
+two that override the default defined in the SoC dtsi file. If you
+look in sc7180.dtsi you'll see 'gpuss1-thermal' which has a cooling
+map. You can also see the cooling maps for the littles.
 
-...although now that I re-read this, I'm not sure which firmware you
-might be talking about. Is this the AP firmware, or some companion
-chip / coprocessor? Even so, I'd still rather see things done in the
-kernel when possible...
+I guess we don't have a `dynamic-power-coefficient` for the GPU,
+though? Seems like we should, but I haven't dug through all the code
+here...
 
 -Doug
