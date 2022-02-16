@@ -2,109 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA234B85C5
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Feb 2022 11:31:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2414A4B8790
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Feb 2022 13:25:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbiBPKXo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Feb 2022 05:23:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35204 "EHLO
+        id S233149AbiBPM0H convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 16 Feb 2022 07:26:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbiBPKXn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Feb 2022 05:23:43 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 790EB206996
-        for <linux-pm@vger.kernel.org>; Wed, 16 Feb 2022 02:23:30 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id bu29so3029008lfb.0
-        for <linux-pm@vger.kernel.org>; Wed, 16 Feb 2022 02:23:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BgTdt/5Tmin+RrpPEv4f+OmO2PXeyvBfP6PGIN1pw00=;
-        b=ZgyZzKrmMhsvCg4VMfuF0GDqGdzdbOAx4uk46L+7NyKSrkuFJ6DR2tWzprIB09t90F
-         pdEfMTaqxgUhrDo328Woxo49aijQt/PH+5GrkfdtSWRvyq4re5bzLedlwmNSTfT3+kn8
-         Fh2guaKG2mWyijqIWhMdIhxXS1MGbaVDkGR1LWbDV24YlHrSA0CsW/PNLugG+ufy821z
-         QnY+PS1GQuurqd7ygmJgwJZvUwPTLfp5gfntzw00S2My1DCDpGjeRNJeADYNm/a4KfcS
-         zikp3p85IJaJaTZz6K1bUbQMmH7pNCsZYSCy6VpzOAirR9tSzCC+0jVLrKm95rP1yGl4
-         VhOA==
+        with ESMTP id S229643AbiBPM0F (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Feb 2022 07:26:05 -0500
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0B027AA10;
+        Wed, 16 Feb 2022 04:25:53 -0800 (PST)
+Received: by mail-yb1-f173.google.com with SMTP id bt13so5538742ybb.2;
+        Wed, 16 Feb 2022 04:25:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BgTdt/5Tmin+RrpPEv4f+OmO2PXeyvBfP6PGIN1pw00=;
-        b=M3BpSUJqgg9tpcgpdBcIvBVjpvi1WsYnnexdB6fycdbaCP4eUFNwbmbu9YkFuhya/T
-         M/e9YqxEyCGWtp1a85zY8inwUaFhmfEHDTDs2g3bR2704IBQj8Am2+xJrIPxJkMWFXNc
-         ut4pFVBCsaSzZ/DhDswRsOu/x9Vr91eBuX7tN9yMsuN39/DKlRLOk/qGkd2WZXkkGble
-         UoDEihTLl8KBTqyThs6Hon9dwJN1j3lK6/k3ZY6H0Jfg12B5RqCZr7XJx7kcKYPjgfBc
-         lx8R7Vpq/rdivXDRPmky8pjaSLrZg57uIpIx83Lm9hqLwDVeUQZ/z7qKp8qxgcR+z3jV
-         3R8g==
-X-Gm-Message-State: AOAM533eusZ5ScCtcQxJQ+EljFc9YFdceMyuALHmugsGuY7NJQkG4Gvp
-        K03rjq46dKwFMAhcslABUcw8+xsp1cD0kc+gA8k6Sg==
-X-Google-Smtp-Source: ABdhPJwgnpPtxD5K4HV7oO6sxOcMCiJwgU1TdTweqVp1m3xG6mpjoIJGR/sO87EROFqrpGyf758QznqJmtiqosajuuk=
-X-Received: by 2002:a05:6512:388d:b0:443:6066:2c8d with SMTP id
- n13-20020a056512388d00b0044360662c8dmr1521088lft.184.1645007008626; Wed, 16
- Feb 2022 02:23:28 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ZzgKkF+Qi9uD0PohBja9X66WgBtIRyDp12JGMxNBcpY=;
+        b=SmFG6cMNn2WzcalJa27s9eH1YqlUBva1gEkgs99/RkIpoUz6kxJSHUIqIP7IRJx6zM
+         2cEsy4f2xS3oirL8EQeh/CI1NAiwXnbQvdfzVfu02n721tJsL2/AuNc1vM7QZ9KWhAMM
+         WVoauxya1DfWyx/5DmjnV0NDxwqzmH2YKw2Yf+t6ZUXasSFFCXZg/7BG+1ZKrGzN0umZ
+         uZiKTrlruhxGMLpVdVQZOkREYLBpFIp/tUz71rL7dD2XPupu+bXIk//dgX5JMg6Q5/VF
+         nRn8ocKmLjm8+2xI1oA4PniZi16eW6h9mhgr9cdwwmrT84vYCT32ceA88etkK8vxNX1n
+         zXpw==
+X-Gm-Message-State: AOAM531dUfwXvaobtSMX/InoOCL/yhv4RMB/74kpsaF6OhowM7VW9glf
+        GHM3ooZHTWYtAdEvXiLHWpd23aAcTie6I4M2hkA=
+X-Google-Smtp-Source: ABdhPJzgB2WXDlMNWyEW279no9A0knLc+PLldmsjtAqBW5sJWGuZ+ouM0fPGPUzKV7R9c8p8BV9gaIDPnZPFqeD/pjM=
+X-Received: by 2002:a81:f008:0:b0:2d0:cd72:74e5 with SMTP id
+ p8-20020a81f008000000b002d0cd7274e5mr2135032ywm.301.1645014353165; Wed, 16
+ Feb 2022 04:25:53 -0800 (PST)
 MIME-Version: 1.0
-References: <20220121014039.1693208-1-kai.heng.feng@canonical.com>
- <20220125055010.1866563-1-kai.heng.feng@canonical.com> <CAPDyKFrtD28NKTyUAR-6Rt4PwYvkOuWcRhxZZWVAq4KcTNG7QQ@mail.gmail.com>
- <CAAd53p5LxZh6-jZj274g6+PeDpAPWSiwRWXL93dgOg3xpqvu8g@mail.gmail.com>
-In-Reply-To: <CAAd53p5LxZh6-jZj274g6+PeDpAPWSiwRWXL93dgOg3xpqvu8g@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 16 Feb 2022 11:22:52 +0100
-Message-ID: <CAPDyKFpx_H8b1KJ_yZ_3My_nxcC2e9k+wROH7hgfK3LbchQ8iQ@mail.gmail.com>
-Subject: Re: [PATCH v6 1/4] mmc: rtsx: Use pm_runtime_{get,put}() to handle
- runtime PM
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     arnd@arndb.de, gregkh@linuxfoundation.org,
-        linux-pm@vger.kernel.org, Ricky WU <ricky_wu@realtek.com>,
-        Thomas Hebb <tommyhebb@gmail.com>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20220130233718.21544-1-digetx@gmail.com> <635e8121-fca4-580c-6af5-d9317a2eee1b@gmail.com>
+In-Reply-To: <635e8121-fca4-580c-6af5-d9317a2eee1b@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 16 Feb 2022 13:25:39 +0100
+Message-ID: <CAJZ5v0g0MrBm2+GwctkB7kUyBEt6HTAexRCFFRmTF1UKDrVQ-g@mail.gmail.com>
+Subject: Re: [PATCH v6 00/21] Introduce power-off+restart call chain API
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        xen-devel@lists.xenproject.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
+        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 16 Feb 2022 at 05:21, Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
+On Tue, Feb 15, 2022 at 11:00 PM Dmitry Osipenko <digetx@gmail.com> wrote:
 >
-> On Fri, Feb 4, 2022 at 8:28 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> 31.01.2022 02:36, Dmitry Osipenko пишет:
+> > Problem
+> > -------
 > >
-> > On Tue, 25 Jan 2022 at 06:50, Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
-> > >
-> > > Commit 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM") doesn't
-> > > use pm_runtime_{get,put}() helpers when it should, so the RPM refcount
-> > > keeps at zero, hence its parent driver, rtsx_pci, has to do lots of
-> > > weird tricks to keep it from runtime suspending.
-> > >
-> > > So use those helpers at right places to properly manage runtime PM.
-> > >
-> > > Fixes: 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM")
-> > > Cc: Ricky WU <ricky_wu@realtek.com>
-> > > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > SoC devices require power-off call chaining functionality from kernel.
+> > We have a widely used restart chaining provided by restart notifier API,
+> > but nothing for power-off.
 > >
-> > The runtime PM reference counting for the mmc host device is managed
-> > by the mmc core. Have a look at __mmc_claim_host() and
-> > mmc_release_host().
+> > Solution
+> > --------
 > >
-> > In other words, the runtime PM reference counting should not be needed
-> > in the mmc host driver, unless there are some specific cases, like for
-> > example during ->probe|remove().
+> > Introduce new API that provides both restart and power-off call chains.
 > >
-> > So perhaps it's only the changes in the ->probe|remove() functions
-> > that you need to fix the problems? No?
+> > Why combine restart with power-off? Because drivers often do both.
+> > More practical to have API that provides both under the same roof.
+> >
+> > The new API is designed with simplicity and extensibility in mind.
+> > It's built upon the existing restart and reboot APIs. The simplicity
+> > is in new helper functions that are convenient for drivers. The
+> > extensibility is in the design that doesn't hardcode callback
+> > arguments, making easy to add new parameters and remove old.
+> >
+> > This is a third attempt to introduce the new API. First was made by
+> > Guenter Roeck back in 2014, second was made by Thierry Reding in 2017.
+> > In fact the work didn't stop and recently arm_pm_restart() was removed
+> > from v5.14 kernel, which was a part of preparatory work started by
+> > Guenter Roeck. I took into account experience and ideas from the
+> > previous attempts, extended and polished them.
 >
-> Yes you are right. Let me send a patch to remove redundant PM helpers
-> from this patch.
+>
+> Rafael and all, do you see anything critical that needs to be improved
+> in this v6?
+>
+> Will be great if you could take this patchset via the power tree if it
+> looks okay, or give an ack.
 
-Ohh, I didn't know that Greg already queued this up. Seems like I
-don't get more than one week to review. :-)
+I need some more time for this, sorry.
 
-Alright, I will look at your new patch then.
+I'm a bit concerned about seeing no response to this set from anyone.
 
-Kind regards
-Uffe
+It looks like multiple platforms may be affected by it in principle,
+so doesn't anyone care?
