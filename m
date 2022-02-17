@@ -2,71 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 583964BA621
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Feb 2022 17:38:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EB3B4BA655
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Feb 2022 17:46:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241477AbiBQQiO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Feb 2022 11:38:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46588 "EHLO
+        id S243413AbiBQQqm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Feb 2022 11:46:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243039AbiBQQiO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Feb 2022 11:38:14 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D3C2A39C0
-        for <linux-pm@vger.kernel.org>; Thu, 17 Feb 2022 08:37:59 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id z22so10689812edd.1
-        for <linux-pm@vger.kernel.org>; Thu, 17 Feb 2022 08:37:59 -0800 (PST)
+        with ESMTP id S243415AbiBQQqk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Feb 2022 11:46:40 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5C12B356B
+        for <linux-pm@vger.kernel.org>; Thu, 17 Feb 2022 08:46:24 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id s16so5487720pgs.13
+        for <linux-pm@vger.kernel.org>; Thu, 17 Feb 2022 08:46:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UONcOwfoMw9pDe0rAm3joCYRBAlJSecwdegwEBnOH94=;
-        b=BtDO6RRgSUv6ucKn+TGhcqPblYqbEYF7TwKvQNAFwkl2M7GjGv8hef8O/yBTGEHQPq
-         P/sbxxp3UcCm26QbSnlduFWQh7o0rjHbP6Y3novYM+F8S6LDHRWACDrnYUcNJfsOAFQa
-         KqvWJsy8MTLOwCtpGXPEDjeAQUGhIaQqPHS2Y=
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=+KRTHDgfcLxZHAAxA8uhVwTK5EGnm5foo2A70RTf8f0=;
+        b=Q4ZIwZz2XqP1XIrvhBpsWXI8zUbtuenhNjB5NwVQ4vqH+KKhZfiBSSPpzDd0LlFsCk
+         X9mSzG7Sd+5uo1i9BKtndbDxr/dbHOzJLDrQELtOiaew3Os7sik4trOr9wVAHWqL6KkV
+         5ki99hZXCF/+hnYemy0jz568Q5s5Bupx16Zw4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UONcOwfoMw9pDe0rAm3joCYRBAlJSecwdegwEBnOH94=;
-        b=sd4ivrpuDrDhsuJ0+eknRL2ug4HkCPHI0EtXxaMCa5FnkjRsuF4iYnF8/B4eaDqev8
-         dwz14p5MgDFYZ93xXsXJoruWLFGJx05DXCOJaP6AKTnkcjRLPmt1auGbVCqP9r9TyaMK
-         jBTeHcRTQpSu8Mj4/29REGAGMRyZKj+IuLzJcx8ARMKcdt7OmPdkgARYQHOAKWWEW4FA
-         rfMr971qpwtYnojE+TMSZ5C0wwvITDJ3Xc1qrzxW1hTxF9S7bhDZWo/ABr+rpk9wkMIX
-         d3yUNos1dceSzCIJDAX+eE88+PIUv3NKnuMXVJXt8nyx3w/Do7aqfyUF3ByuiHAbbDjz
-         LHrA==
-X-Gm-Message-State: AOAM533VRnLM9heHRiVbX+kF5oAcNYp4Sa1XuNpp4yFsoUumncknYtUh
-        hrAj/Sj3ufumNYhhCKteKAOyX7gU5/UYiIMfadY=
-X-Google-Smtp-Source: ABdhPJw+0J1tcI3mdz3SnzFCktNGWajPSe6jTRksX1WPFQ3zVGx0p0IVx4Y2B7ZFpKv/tpxA5N3wAA==
-X-Received: by 2002:aa7:c0d0:0:b0:410:d576:8808 with SMTP id j16-20020aa7c0d0000000b00410d5768808mr3571006edp.340.1645115877311;
-        Thu, 17 Feb 2022 08:37:57 -0800 (PST)
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com. [209.85.221.42])
-        by smtp.gmail.com with ESMTPSA id b3sm1356804ejl.67.2022.02.17.08.37.55
-        for <linux-pm@vger.kernel.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=+KRTHDgfcLxZHAAxA8uhVwTK5EGnm5foo2A70RTf8f0=;
+        b=apmh2L+f/JdIDhBAgRppVYspdF/vsAwKhID6cTdlUQEo3FInCLYaYYPQiyGHxa40Sd
+         6NbAiMyEsOXoekJDxgKNNx4MWkaLO1i70rDulnBXADqaXaxjzys7PR0WA/SQ2kEKRRY9
+         7AStXWp77WE9igsLswmjTACcsMcgFrmwhSWb2GoHwhrgYb9R/PuUHBIDYjBS7NthvHvJ
+         UpfCZlQYKCjEjairDIe+8itEPBiCTmquEOEvcdbxoGghtqQtdKzspcx9wTuXI5kwHKcK
+         zDX5E7GwGNAubP3dZpKQAqR4xgiGcjYFk0TdnFzNQPms3pu1nDZojq7A3M/U1wPDIC1W
+         0n/w==
+X-Gm-Message-State: AOAM531BjunZ92927EUUp1nA3V7FL1VXtQzB/k1g8GXM33ChznPdfC7V
+        9Wt7gSoY52bgXd+QhC7pkWO0yw==
+X-Google-Smtp-Source: ABdhPJzKM5I+G+eJrzaM8QT4mQ8PlhLS03H5aIFFu7n+w5OtpD/9C4M8GKPR0lfhFy6bJi6zdXGP8w==
+X-Received: by 2002:a63:b:0:b0:372:a1d2:6516 with SMTP id 11-20020a63000b000000b00372a1d26516mr3008090pga.587.1645116384353;
+        Thu, 17 Feb 2022 08:46:24 -0800 (PST)
+Received: from localhost ([2620:15c:202:201:20:e0d2:8c14:1e68])
+        by smtp.gmail.com with UTF8SMTPSA id t14sm9004788pgo.19.2022.02.17.08.46.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Feb 2022 08:37:56 -0800 (PST)
-Received: by mail-wr1-f42.google.com with SMTP id h6so10018832wrb.9
-        for <linux-pm@vger.kernel.org>; Thu, 17 Feb 2022 08:37:55 -0800 (PST)
-X-Received: by 2002:a5d:4c48:0:b0:1e4:aeab:c77e with SMTP id
- n8-20020a5d4c48000000b001e4aeabc77emr2927222wrt.342.1645115875087; Thu, 17
- Feb 2022 08:37:55 -0800 (PST)
-MIME-Version: 1.0
-References: <20220207073036.14901-1-lukasz.luba@arm.com> <20220207073036.14901-2-lukasz.luba@arm.com>
- <YgG+TmLrCSXX4Bvt@google.com> <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com>
- <YgKnnFl7Gp8AS30X@google.com> <e4532f65-7f8a-7e89-97c1-85cc61462040@arm.com>
- <YgQ9XLcto9v0fyTf@google.com> <d120110a-7d01-0cfd-f7eb-d160e17ec2a8@arm.com>
- <CAD=FV=VntGw1_AzJPpdOk0zSpOVZRH2X1JNg84JX+zCeU1jvXg@mail.gmail.com>
- <7c059f4f-7439-0cad-c398-96dbde4e49c1@linaro.org> <5b8ca53e-3595-85fd-5ae9-a5e8285e8513@arm.com>
-In-Reply-To: <5b8ca53e-3595-85fd-5ae9-a5e8285e8513@arm.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 17 Feb 2022 08:37:39 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=WMaMP84YLZxBZbj4DJSgcDLVkSHf4QdDwtFfp8UbyE7A@mail.gmail.com>
-Message-ID: <CAD=FV=WMaMP84YLZxBZbj4DJSgcDLVkSHf4QdDwtFfp8UbyE7A@mail.gmail.com>
-Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
- cpufreq_cooling and devfreq_cooling
+        Thu, 17 Feb 2022 08:46:24 -0800 (PST)
+Date:   Thu, 17 Feb 2022 08:46:22 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
 To:     Lukasz Luba <lukasz.luba@arm.com>
 Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
         LKML <linux-kernel@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
         amit daniel kachhap <amit.kachhap@gmail.com>,
@@ -78,11 +60,28 @@ Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         Pierre.Gondois@arm.com, Stephen Boyd <swboyd@chromium.org>,
         Rajendra Nayak <rnayak@codeaurora.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        jorcrous@amazon.com, Rob Clark <robdclark@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+        Doug Anderson <dianders@chromium.org>
+Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
+ cpufreq_cooling and devfreq_cooling
+Message-ID: <Yg573lNdSHcKhLtP@google.com>
+References: <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com>
+ <YgKnnFl7Gp8AS30X@google.com>
+ <e4532f65-7f8a-7e89-97c1-85cc61462040@arm.com>
+ <YgQ9XLcto9v0fyTf@google.com>
+ <d120110a-7d01-0cfd-f7eb-d160e17ec2a8@arm.com>
+ <CAD=FV=VntGw1_AzJPpdOk0zSpOVZRH2X1JNg84JX+zCeU1jvXg@mail.gmail.com>
+ <7c059f4f-7439-0cad-c398-96dbde4e49c1@linaro.org>
+ <5b8ca53e-3595-85fd-5ae9-a5e8285e8513@arm.com>
+ <53bc13ca-998f-ff83-d9f7-9a83d35b24fd@linaro.org>
+ <97ecc29b-13a9-fa15-4e88-21c8612ebb7f@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <97ecc29b-13a9-fa15-4e88-21c8612ebb7f@arm.com>
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,152 +89,164 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On Thu, Feb 17, 2022 at 12:11:27PM +0000, Lukasz Luba wrote:
+> 
+> 
+> On 2/17/22 11:28 AM, Daniel Lezcano wrote:
+> > On 17/02/2022 11:47, Lukasz Luba wrote:
+> > > Hi Daniel,
+> > > 
+> > > On 2/17/22 10:10 AM, Daniel Lezcano wrote:
+> > > > On 16/02/2022 18:33, Doug Anderson wrote:
+> > > > > Hi,
+> > > > > 
+> > > > > On Wed, Feb 16, 2022 at 7:35 AM Lukasz Luba
+> > > > > <lukasz.luba@arm.com> wrote:
+> > > > > > 
+> > > > > > Hi Matthias,
+> > > > > > 
+> > > > > > On 2/9/22 10:17 PM, Matthias Kaehlcke wrote:
+> > > > > > > On Wed, Feb 09, 2022 at 11:16:36AM +0000, Lukasz Luba wrote:
+> > > > > > > > 
+> > > > > > > > 
+> > > > > > > > On 2/8/22 5:25 PM, Matthias Kaehlcke wrote:
+> > > > > > > > > On Tue, Feb 08, 2022 at 09:32:28AM +0000, Lukasz Luba wrote:
+> > > > > > > > > > 
+> > > > > > > > > > 
+> > > > > > 
+> > > > > > [snip]
+> > > > > > 
+> > > > > > > > > > Could you point me to those devices please?
+> > > > > > > > > 
+> > > > > > > > > arch/arm64/boot/dts/qcom/sc7180-trogdor-*
+> > > > > > > > > 
+> > > > > > > > > Though as per above they shouldn't be
+> > > > > > > > > impacted by your change, since the
+> > > > > > > > > CPUs always pretend to use milli-Watts.
+> > > > > > > > > 
+> > > > > > > > > [skipped some questions/answers since sc7180
+> > > > > > > > > isn't actually impacted by
+> > > > > > > > >     the change]
+> > > > > > > > 
+> > > > > > > > Thank you Matthias. I will investigate your setup to get better
+> > > > > > > > understanding.
+> > > > > > > 
+> > > > > > > Thanks!
+> > > > > > > 
+> > > > > > 
+> > > > > > I've checked those DT files and related code.
+> > > > > > As you already said, this patch is safe for them.
+> > > > > > So we can apply it IMO.
+> > > > > > 
+> > > > > > 
+> > > > > > -------------Off-topic------------------
+> > > > > > Not in $subject comments:
+> > > > > > 
+> > > > > > AFAICS based on two files which define thermal zones:
+> > > > > > sc7180-trogdor-homestar.dtsi
+> > > > > > sc7180-trogdor-coachz.dtsi
+> > > > > > 
+> > > > > > only the 'big' cores are used as cooling devices in the
+> > > > > > 'skin_temp_thermal' - the CPU6 and CPU7.
+> > > > > > 
+> > > > > > I assume you don't want to model at all the power usage
+> > > > > > from the Little cluster (which is quite big: 6 CPUs), do you?
+> > > > > > I can see that the Little CPUs have small dyn-power-coeff
+> > > > > > ~30% of the big and lower max freq, but still might be worth
+> > > > > > to add them to IPA. You might give them more 'weight', to
+> > > > > > make sure they receive more power during power split.
+> > > > > > 
+> > > > > > You also don't have GPU cooling device in that thermal zone.
+> > > > > > Based on my experience if your GPU is a power hungry one,
+> > > > > > e.g. 2-4Watts, you might get better results when you model
+> > > > > > this 'hot' device (which impacts your temp sensor reported value).
+> > > > > 
+> > > > > I think the two boards you point at (homestar and coachz) are just the
+> > > > > two that override the default defined in the SoC dtsi file. If you
+> > > > > look in sc7180.dtsi you'll see 'gpuss1-thermal' which has a cooling
+> > > > > map. You can also see the cooling maps for the littles.
+> > > > > 
+> > > > > I guess we don't have a `dynamic-power-coefficient` for the GPU,
+> > > > > though? Seems like we should, but I haven't dug through all the code
+> > > > > here...
+> > > > 
+> > > > The dynamic-power-coefficient is available for OPPs which
+> > > > includes CPUfreq and devfreq. As the GPU is managed by devfreq,
+> > > > setting the dynamic-power-coefficient makes the energy model
+> > > > available for it.
+> > > > 
+> > > > However, the OPPs must define the frequency and the voltage.
+> > > > That is the case for most platforms except on QCom platform.
+> > > > 
+> > > > That may not be specified as it uses a frequency index and the
+> > > > hardware does the voltage change in our back. The QCom cpufreq
+> > > > backend get the voltage table from a register (or whatever) and
+> > > > completes the voltage values for the OPPs, thus adding the
+> > > > information which is missing in the device tree. The energy
+> > > > model can then initializes itself and allows the usage of the
+> > > > Energy Aware Scheduler.
+> > > > 
+> > > > However this piece of code is missing for the GPU part.
+> > > > 
+> > > 
+> > > Thank you for joining the discussion. I don't know about that Qcom
+> > > GPU voltage information is missing.
+> > > 
+> > > If the voltage is not available (only the frequencies), there is
+> > > another way. There is an 'advanced' EM which uses registration function:
+> > > em_dev_register_perf_domain(). It uses a local driver callback to get
+> > > power for each found frequency. It has benefit because there is no
+> > > restriction to 'fit' into the math formula, instead just avg power
+> > > values can be feed into EM. It's called 'advanced' EM [1].
+> > > 
+> > > Now we hit (again) the DT & EM issue (it's an old one, IIRC Morten
+> > > was proposing from ~2014 this upstream, but EAS wasn't merged back
+> > > then):
+> > > where to store these power-freq values, which are then used by the
+> > > callback.
+> > 
+> > Why not make it more generic and replace the frequency by a performance
+> > index, so it can be used by any kind of perf limiter?
+> 
+> For that DT array, yes, it can be an index, so effectively it could be
+> a simple 1d array.
+> 
+> something like:
+> 
+> msm_gpu_energy_model: msm-gpu-energy-model {
+> 	compatible = "energy-model"
+> 	/* Values are sorted micro-Watts which correspond to each OPP
+> 	   or performance state. The total amount of them must match
+> 	   number of OPPs. */
+> 	power-microwatt = <100000>,
+> 			<230000>,
+> 			<380000>,
+> 			<600000>;
+> };
 
-On Thu, Feb 17, 2022 at 2:47 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->
-> Hi Daniel,
->
-> On 2/17/22 10:10 AM, Daniel Lezcano wrote:
-> > On 16/02/2022 18:33, Doug Anderson wrote:
-> >> Hi,
-> >>
-> >> On Wed, Feb 16, 2022 at 7:35 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
-> >>>
-> >>> Hi Matthias,
-> >>>
-> >>> On 2/9/22 10:17 PM, Matthias Kaehlcke wrote:
-> >>>> On Wed, Feb 09, 2022 at 11:16:36AM +0000, Lukasz Luba wrote:
-> >>>>>
-> >>>>>
-> >>>>> On 2/8/22 5:25 PM, Matthias Kaehlcke wrote:
-> >>>>>> On Tue, Feb 08, 2022 at 09:32:28AM +0000, Lukasz Luba wrote:
-> >>>>>>>
-> >>>>>>>
-> >>>
-> >>> [snip]
-> >>>
-> >>>>>>> Could you point me to those devices please?
-> >>>>>>
-> >>>>>> arch/arm64/boot/dts/qcom/sc7180-trogdor-*
-> >>>>>>
-> >>>>>> Though as per above they shouldn't be impacted by your change,
-> >>>>>> since the
-> >>>>>> CPUs always pretend to use milli-Watts.
-> >>>>>>
-> >>>>>> [skipped some questions/answers since sc7180 isn't actually
-> >>>>>> impacted by
-> >>>>>>     the change]
-> >>>>>
-> >>>>> Thank you Matthias. I will investigate your setup to get better
-> >>>>> understanding.
-> >>>>
-> >>>> Thanks!
-> >>>>
-> >>>
-> >>> I've checked those DT files and related code.
-> >>> As you already said, this patch is safe for them.
-> >>> So we can apply it IMO.
-> >>>
-> >>>
-> >>> -------------Off-topic------------------
-> >>> Not in $subject comments:
-> >>>
-> >>> AFAICS based on two files which define thermal zones:
-> >>> sc7180-trogdor-homestar.dtsi
-> >>> sc7180-trogdor-coachz.dtsi
-> >>>
-> >>> only the 'big' cores are used as cooling devices in the
-> >>> 'skin_temp_thermal' - the CPU6 and CPU7.
-> >>>
-> >>> I assume you don't want to model at all the power usage
-> >>> from the Little cluster (which is quite big: 6 CPUs), do you?
-> >>> I can see that the Little CPUs have small dyn-power-coeff
-> >>> ~30% of the big and lower max freq, but still might be worth
-> >>> to add them to IPA. You might give them more 'weight', to
-> >>> make sure they receive more power during power split.
-> >>>
-> >>> You also don't have GPU cooling device in that thermal zone.
-> >>> Based on my experience if your GPU is a power hungry one,
-> >>> e.g. 2-4Watts, you might get better results when you model
-> >>> this 'hot' device (which impacts your temp sensor reported value).
-> >>
-> >> I think the two boards you point at (homestar and coachz) are just the
-> >> two that override the default defined in the SoC dtsi file. If you
-> >> look in sc7180.dtsi you'll see 'gpuss1-thermal' which has a cooling
-> >> map. You can also see the cooling maps for the littles.
-> >>
-> >> I guess we don't have a `dynamic-power-coefficient` for the GPU,
-> >> though? Seems like we should, but I haven't dug through all the code
-> >> here...
-> >
-> > The dynamic-power-coefficient is available for OPPs which includes
-> > CPUfreq and devfreq. As the GPU is managed by devfreq, setting the
-> > dynamic-power-coefficient makes the energy model available for it.
-> >
-> > However, the OPPs must define the frequency and the voltage. That is the
-> > case for most platforms except on QCom platform.
-> >
-> > That may not be specified as it uses a frequency index and the hardware
-> > does the voltage change in our back. The QCom cpufreq backend get the
-> > voltage table from a register (or whatever) and completes the voltage
-> > values for the OPPs, thus adding the information which is missing in the
-> > device tree. The energy model can then initializes itself and allows the
-> > usage of the Energy Aware Scheduler.
-> >
-> > However this piece of code is missing for the GPU part.
-> >
->
-> Thank you for joining the discussion. I don't know about that Qcom
-> GPU voltage information is missing.
->
-> If the voltage is not available (only the frequencies), there is
-> another way. There is an 'advanced' EM which uses registration function:
-> em_dev_register_perf_domain(). It uses a local driver callback to get
-> power for each found frequency. It has benefit because there is no
-> restriction to 'fit' into the math formula, instead just avg power
-> values can be feed into EM. It's called 'advanced' EM [1].
+IIUC for the QCOM GPU the voltages/power consumption per OPP aren't fixed
+but can vary between different SoCs of the same model. If the ranges aren't
+too wide it might still be suitable to have a table with the average power
+consumption.
 
-It seems like there _should_ be a way to get the voltage out for GPU
-operating points, like is done with cpufreq in
-qcom_cpufreq_hw_read_lut(), but it might need someone with Qualcomm
-documentation to help with it. Maybe Rajendra would be able to help?
-Adding Jordon and Rob to this conversation in case they're aware of
-anything.
+Another question is whether QCOM would be willing to provide information
+about the GPU power consumption. For the SC7180 CPUs they only provided
+bogoWatt numbers. Once boards with a given SoC/GPU are available to the
+public someone could come up with such a table based on measurements,
+similar to what Doug did for the SC7180 CPUs (commit 82ea7d411d43f).
 
-As you said, we could just list a power for each frequency, though.
+> then in gpu node instead of having 'dynamic-power-coefficient',
+> which is useless because voltage is missing, we would have
+> 'energy-model', like:
+> 
+> 	energy-model = <&msm_gpu_energy_model>;
+> 
+> 
+> If you agree to continue this topic. I will send an RFC so we could
+> further discuss this idea. This $subject doesn't fit well.
+> 
+> Thank you again for your feedback Daniel!
 
-I'm actually not sure which one would be more accurate across a range
-of devices with different "corners": specifying a dynamic power
-coefficient used for all "corners" and then using the actual voltage
-and doing the math, or specifying a power number for each frequency
-and ignoring the actual voltage used. In any case we're trying to get
-ballpark numbers and not every device will be exactly the same, so
-probably it doesn't matter that much.
+Thanks Lukasz and Daniel for looking into this!
 
-
-> Now we hit (again) the DT & EM issue (it's an old one, IIRC Morten
-> was proposing from ~2014 this upstream, but EAS wasn't merged back
-> then):
-> where to store these power-freq values, which are then used by the
-> callback. We have the 'dynamic-power-coefficient' in DT, but
-> it has limitations. It would be good to have this simple array
-> attached to the GPU/CPU node. IMHO it meet the requirement of DT,
-> it describes the HW (it would have HZ and Watts values).
->
-> Doug, Matthias could you have a look at that function and its
-> usage, please [1]?
-> If you guys would support me in this, I would start, with an RFC
-> proposal, a discussion on LKML.
->
-> [1]
-> https://elixir.bootlin.com/linux/v5.17-rc4/source/Documentation/power/energy-model.rst#L87
-
-Matthias: I think you've spent more time on the thermal stuff than me
-so I'll assume you'll follow-up here. If not then please yell!
-
-Ideally, though, someone from Qualcomm would jump in an own this.
-Basically it allows more intelligently throttling the GPU and CPU
-together in tandem instead of treating them separately IIUC, right?
-
--Doug
+m.
