@@ -2,257 +2,460 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5397B4BA838
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Feb 2022 19:28:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FE364BA90D
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Feb 2022 20:00:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234853AbiBQS3A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Feb 2022 13:29:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43178 "EHLO
+        id S241367AbiBQTAM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Feb 2022 14:00:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244434AbiBQS2v (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Feb 2022 13:28:51 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6970B2AE1D
-        for <linux-pm@vger.kernel.org>; Thu, 17 Feb 2022 10:27:47 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id h6so10503110wrb.9
-        for <linux-pm@vger.kernel.org>; Thu, 17 Feb 2022 10:27:47 -0800 (PST)
+        with ESMTP id S230361AbiBQTAL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Feb 2022 14:00:11 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5096E571
+        for <linux-pm@vger.kernel.org>; Thu, 17 Feb 2022 10:59:56 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id x18so464764pfh.5
+        for <linux-pm@vger.kernel.org>; Thu, 17 Feb 2022 10:59:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=m7i8XTKn573xDW3h00Hw3tHZvPjE6WSVbAod5YiJM20=;
-        b=tp3XN+Vk26cTI4ZXkHGYWn7fHIOWb5xAQkYnV4HJ9Tu7w0WtdV5xcv59x6DDKBSHpX
-         y58Vxv2Jd2PBlnESSVYr6m5Xm4EBnD4psyOQr5vwN4RqpBWnSN+mTZYDJV79NrH/T2Yg
-         oJnR1e64m3wW2UWeGPHirsOhwj87apeyOvRn4BNngxRzORwqTD/f3mo6XnN+DWtfr0KO
-         3kS5C/JKtoH5sLB/Uy9t6nFKA5XVwvR3CvWwgKQb7cmDO/HBzdE+fyPY3M/0HF0DpHrG
-         zsN9jm1u8qiFNVbXY6/JHUEpjU3ll6JGZCV20+x0Qnu9sUx1A+tOZ1CcvZADrAHKHlcQ
-         5zfw==
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=8tdrCS/V5K1Cn/KcECrBN26rDWRuXebkIcTkPxfDWXQ=;
+        b=iyRm2Hb8G93nIYeQ2PeW+MszTmiVfd0JyJALMqB//oBN/KsISsombLu8ic/WK87YWj
+         qbq1ocRg11xCoivkqyGjaURVNZ9PAxj8hAcTfPIHSa7SZC2yvh/4i1XdYi6oLPBWPXTT
+         hyF12B+SCzuedSaIbfe0PyPwCVKoYWy0sOScA9+OWai2JW8+eqQqRrHYW9fK7uv7PWlM
+         NAxkb4MUoyfNwHn16X50o4YGohyqgmD+n3kXfoEuXnqOESgJHjzEQBDG/cjas0ZbhWOB
+         iSx7B6R/1uRnVfhsH862nZdJeY1SQHwXl0LIXwWhqcKiLaYaO9kOHjrCYZ/PG/NXRW4Y
+         cslg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=m7i8XTKn573xDW3h00Hw3tHZvPjE6WSVbAod5YiJM20=;
-        b=6am8lOTKcBkggg0ke7BdxE2sx1ep8tAw//13sXSpHf5pylBdx7AW8RBBMyUNoALMOm
-         /2Mz2c3mmQUET6DScpcjp2a0bWh3enYOhykPF/W4ZWwNsLgnO9ZyhGnFHdAgyoGGQ3es
-         smibiZz9CS551gTXo7ZGblDegUpfd8hHPPEXZAqbKVPE/64xaJjJqXib+gG9IVnWNTVw
-         CIKHcVPfkAOC1nZIt89yNwwJcAUPIaKMxQPmGOrvAWQ2902AT6/h7hjN4t3GLg6xi3a7
-         ANZoLH4PWcAyeu5GHijITYPFkiWqO8Dd1TS8BM4ACtL2KkK4+382tRxMALv8jkWeofzV
-         7/7w==
-X-Gm-Message-State: AOAM533Tm9A6Yia0sjoDH/XGbG4eexGaAKCZsx+Ey4xCVMcf6Vt8P71Z
-        xmcl5HeJ+lTF23Hg+oD3nQGkJg==
-X-Google-Smtp-Source: ABdhPJz6ZW2VMy9C5FA9BuqungODux4OLUkXbJvet9JtvZdITr5z+7gJAVJqV4jUUqdMjSY6sducoQ==
-X-Received: by 2002:a5d:4907:0:b0:1e3:b4c:4a66 with SMTP id x7-20020a5d4907000000b001e30b4c4a66mr3272609wrq.273.1645122465788;
-        Thu, 17 Feb 2022 10:27:45 -0800 (PST)
-Received: from ?IPV6:2a01:e34:ed2f:f020:5828:300b:5226:ef02? ([2a01:e34:ed2f:f020:5828:300b:5226:ef02])
-        by smtp.googlemail.com with ESMTPSA id c8sm2615013wmq.34.2022.02.17.10.27.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Feb 2022 10:27:45 -0800 (PST)
-Message-ID: <3651bf48-eb0f-1835-3c5e-1dbdc2730fb4@linaro.org>
-Date:   Thu, 17 Feb 2022 19:27:36 +0100
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=8tdrCS/V5K1Cn/KcECrBN26rDWRuXebkIcTkPxfDWXQ=;
+        b=IKmu+ha95nzVjKhKea5KQR94jD/e/Mt08+cRUfWFsN1z9Qz4bOHp6u8qU9P3lZigz9
+         oB0DSb8DzBLb60baNEw6QEKGfNHbXbCB8n01tyVjRcspYiw6dxSpSHbMVrvMRtgdvXu3
+         6Ck7yoeW5v53kbNbwGvbfGN9IAWb575pJEbaXxXDtwLNg3N56DKREPxE+kX3S8lF7VIt
+         AqknHFRV10Wx69QsqSRrJJT3+9qYsKlfz2BXjPKnaRWQ3f6keDg1zzVpGi0PM5E4++wV
+         iTb0kXcbIn096OaZ7P3mDjca3xnGMyM2u+/J9+TT6sxn7P2tb/ePBHlUupaTDLDMeU3b
+         3iNA==
+X-Gm-Message-State: AOAM5334+7/vKHsLu0St4hWCvjyIR3VUHp7AcrKtyC24LnZoKZUw/2ky
+        7VYK2E5gEYVBO0vpH3Hma+vOSA==
+X-Google-Smtp-Source: ABdhPJzDOle67bBfxldgs1C6rRoD0pu1/VFOyLSLQP2x9JDtr1OWQqNhg/xsP9PVHKnU1wM2ICoK+g==
+X-Received: by 2002:a05:6a00:244b:b0:4c9:319e:ecb7 with SMTP id d11-20020a056a00244b00b004c9319eecb7mr4396881pfj.58.1645124395721;
+        Thu, 17 Feb 2022 10:59:55 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id e8sm309809pfv.168.2022.02.17.10.59.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Feb 2022 10:59:55 -0800 (PST)
+Message-ID: <620e9b2b.1c69fb81.b75d0.15b5@mx.google.com>
+Date:   Thu, 17 Feb 2022 10:59:55 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
- cpufreq_cooling and devfreq_cooling
-Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>,
-        Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Matthias Kaehlcke <mka@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        amit daniel kachhap <amit.kachhap@gmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Pierre.Gondois@arm.com, Stephen Boyd <swboyd@chromium.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        jorcrous@amazon.com, Rob Clark <robdclark@chromium.org>,
-        Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-References: <20220207073036.14901-1-lukasz.luba@arm.com>
- <20220207073036.14901-2-lukasz.luba@arm.com> <YgG+TmLrCSXX4Bvt@google.com>
- <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com> <YgKnnFl7Gp8AS30X@google.com>
- <e4532f65-7f8a-7e89-97c1-85cc61462040@arm.com> <YgQ9XLcto9v0fyTf@google.com>
- <d120110a-7d01-0cfd-f7eb-d160e17ec2a8@arm.com>
- <CAD=FV=VntGw1_AzJPpdOk0zSpOVZRH2X1JNg84JX+zCeU1jvXg@mail.gmail.com>
- <7c059f4f-7439-0cad-c398-96dbde4e49c1@linaro.org>
- <5b8ca53e-3595-85fd-5ae9-a5e8285e8513@arm.com>
- <CAD=FV=WMaMP84YLZxBZbj4DJSgcDLVkSHf4QdDwtFfp8UbyE7A@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAD=FV=WMaMP84YLZxBZbj4DJSgcDLVkSHf4QdDwtFfp8UbyE7A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+X-Kernelci-Kernel: v5.17-rc4-51-ga6df857665e6
+Subject: pm/testing baseline: 58 runs,
+ 10 regressions (v5.17-rc4-51-ga6df857665e6)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+pm/testing baseline: 58 runs, 10 regressions (v5.17-rc4-51-ga6df857665e6)
 
-Adding Manaf (QCom) in the loop
+Regressions Summary
+-------------------
 
-On 17/02/2022 17:37, Doug Anderson wrote:
-> Hi,
-> 
-> On Thu, Feb 17, 2022 at 2:47 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->> Hi Daniel,
->>
->> On 2/17/22 10:10 AM, Daniel Lezcano wrote:
->>> On 16/02/2022 18:33, Doug Anderson wrote:
->>>> Hi,
->>>>
->>>> On Wed, Feb 16, 2022 at 7:35 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>>>>
->>>>> Hi Matthias,
->>>>>
->>>>> On 2/9/22 10:17 PM, Matthias Kaehlcke wrote:
->>>>>> On Wed, Feb 09, 2022 at 11:16:36AM +0000, Lukasz Luba wrote:
->>>>>>>
->>>>>>>
->>>>>>> On 2/8/22 5:25 PM, Matthias Kaehlcke wrote:
->>>>>>>> On Tue, Feb 08, 2022 at 09:32:28AM +0000, Lukasz Luba wrote:
->>>>>>>>>
->>>>>>>>>
->>>>>
->>>>> [snip]
->>>>>
->>>>>>>>> Could you point me to those devices please?
->>>>>>>>
->>>>>>>> arch/arm64/boot/dts/qcom/sc7180-trogdor-*
->>>>>>>>
->>>>>>>> Though as per above they shouldn't be impacted by your change,
->>>>>>>> since the
->>>>>>>> CPUs always pretend to use milli-Watts.
->>>>>>>>
->>>>>>>> [skipped some questions/answers since sc7180 isn't actually
->>>>>>>> impacted by
->>>>>>>>      the change]
->>>>>>>
->>>>>>> Thank you Matthias. I will investigate your setup to get better
->>>>>>> understanding.
->>>>>>
->>>>>> Thanks!
->>>>>>
->>>>>
->>>>> I've checked those DT files and related code.
->>>>> As you already said, this patch is safe for them.
->>>>> So we can apply it IMO.
->>>>>
->>>>>
->>>>> -------------Off-topic------------------
->>>>> Not in $subject comments:
->>>>>
->>>>> AFAICS based on two files which define thermal zones:
->>>>> sc7180-trogdor-homestar.dtsi
->>>>> sc7180-trogdor-coachz.dtsi
->>>>>
->>>>> only the 'big' cores are used as cooling devices in the
->>>>> 'skin_temp_thermal' - the CPU6 and CPU7.
->>>>>
->>>>> I assume you don't want to model at all the power usage
->>>>> from the Little cluster (which is quite big: 6 CPUs), do you?
->>>>> I can see that the Little CPUs have small dyn-power-coeff
->>>>> ~30% of the big and lower max freq, but still might be worth
->>>>> to add them to IPA. You might give them more 'weight', to
->>>>> make sure they receive more power during power split.
->>>>>
->>>>> You also don't have GPU cooling device in that thermal zone.
->>>>> Based on my experience if your GPU is a power hungry one,
->>>>> e.g. 2-4Watts, you might get better results when you model
->>>>> this 'hot' device (which impacts your temp sensor reported value).
->>>>
->>>> I think the two boards you point at (homestar and coachz) are just the
->>>> two that override the default defined in the SoC dtsi file. If you
->>>> look in sc7180.dtsi you'll see 'gpuss1-thermal' which has a cooling
->>>> map. You can also see the cooling maps for the littles.
->>>>
->>>> I guess we don't have a `dynamic-power-coefficient` for the GPU,
->>>> though? Seems like we should, but I haven't dug through all the code
->>>> here...
->>>
->>> The dynamic-power-coefficient is available for OPPs which includes
->>> CPUfreq and devfreq. As the GPU is managed by devfreq, setting the
->>> dynamic-power-coefficient makes the energy model available for it.
->>>
->>> However, the OPPs must define the frequency and the voltage. That is the
->>> case for most platforms except on QCom platform.
->>>
->>> That may not be specified as it uses a frequency index and the hardware
->>> does the voltage change in our back. The QCom cpufreq backend get the
->>> voltage table from a register (or whatever) and completes the voltage
->>> values for the OPPs, thus adding the information which is missing in the
->>> device tree. The energy model can then initializes itself and allows the
->>> usage of the Energy Aware Scheduler.
->>>
->>> However this piece of code is missing for the GPU part.
->>>
->>
->> Thank you for joining the discussion. I don't know about that Qcom
->> GPU voltage information is missing.
->>
->> If the voltage is not available (only the frequencies), there is
->> another way. There is an 'advanced' EM which uses registration function:
->> em_dev_register_perf_domain(). It uses a local driver callback to get
->> power for each found frequency. It has benefit because there is no
->> restriction to 'fit' into the math formula, instead just avg power
->> values can be feed into EM. It's called 'advanced' EM [1].
-> 
-> It seems like there _should_ be a way to get the voltage out for GPU
-> operating points, like is done with cpufreq in
-> qcom_cpufreq_hw_read_lut(), but it might need someone with Qualcomm
-> documentation to help with it. Maybe Rajendra would be able to help?
-> Adding Jordon and Rob to this conversation in case they're aware of
-> anything.
-> 
-> As you said, we could just list a power for each frequency, though.
-> 
-> I'm actually not sure which one would be more accurate across a range
-> of devices with different "corners": specifying a dynamic power
-> coefficient used for all "corners" and then using the actual voltage
-> and doing the math, or specifying a power number for each frequency
-> and ignoring the actual voltage used. In any case we're trying to get
-> ballpark numbers and not every device will be exactly the same, so
-> probably it doesn't matter that much.
-> 
-> 
->> Now we hit (again) the DT & EM issue (it's an old one, IIRC Morten
->> was proposing from ~2014 this upstream, but EAS wasn't merged back
->> then):
->> where to store these power-freq values, which are then used by the
->> callback. We have the 'dynamic-power-coefficient' in DT, but
->> it has limitations. It would be good to have this simple array
->> attached to the GPU/CPU node. IMHO it meet the requirement of DT,
->> it describes the HW (it would have HZ and Watts values).
->>
->> Doug, Matthias could you have a look at that function and its
->> usage, please [1]?
->> If you guys would support me in this, I would start, with an RFC
->> proposal, a discussion on LKML.
->>
->> [1]
->> https://elixir.bootlin.com/linux/v5.17-rc4/source/Documentation/power/energy-model.rst#L87
-> 
-> Matthias: I think you've spent more time on the thermal stuff than me
-> so I'll assume you'll follow-up here. If not then please yell!
-> 
-> Ideally, though, someone from Qualcomm would jump in an own this.
-> Basically it allows more intelligently throttling the GPU and CPU
-> together in tandem instead of treating them separately IIUC, right?
-> 
-> -Doug
+platform                   | arch  | lab           | compiler | defconfig |=
+ regressions
+---------------------------+-------+---------------+----------+-----------+=
+------------
+bcm2711-rpi-4-b            | arm64 | lab-collabora | gcc-10   | defconfig |=
+ 1          =
+
+kontron-pitx-imx8m         | arm64 | lab-kontron   | gcc-10   | defconfig |=
+ 1          =
+
+qemu_arm64-virt-gicv2      | arm64 | lab-baylibre  | gcc-10   | defconfig |=
+ 1          =
+
+qemu_arm64-virt-gicv2      | arm64 | lab-broonie   | gcc-10   | defconfig |=
+ 1          =
+
+qemu_arm64-virt-gicv2-uefi | arm64 | lab-baylibre  | gcc-10   | defconfig |=
+ 1          =
+
+qemu_arm64-virt-gicv2-uefi | arm64 | lab-broonie   | gcc-10   | defconfig |=
+ 1          =
+
+qemu_arm64-virt-gicv3      | arm64 | lab-baylibre  | gcc-10   | defconfig |=
+ 1          =
+
+qemu_arm64-virt-gicv3      | arm64 | lab-broonie   | gcc-10   | defconfig |=
+ 1          =
+
+qemu_arm64-virt-gicv3-uefi | arm64 | lab-baylibre  | gcc-10   | defconfig |=
+ 1          =
+
+qemu_arm64-virt-gicv3-uefi | arm64 | lab-broonie   | gcc-10   | defconfig |=
+ 1          =
 
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.17-rc=
+4-51-ga6df857665e6/plan/baseline/
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v5.17-rc4-51-ga6df857665e6
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      a6df857665e68dd113761a7f5d8935995d1be237 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                   | arch  | lab           | compiler | defconfig |=
+ regressions
+---------------------------+-------+---------------+----------+-----------+=
+------------
+bcm2711-rpi-4-b            | arm64 | lab-collabora | gcc-10   | defconfig |=
+ 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e91b275c99d366dc62991
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.17-rc4-51-ga6df8=
+57665e6/arm64/defconfig/gcc-10/lab-collabora/baseline-bcm2711-rpi-4-b.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.17-rc4-51-ga6df8=
+57665e6/arm64/defconfig/gcc-10/lab-collabora/baseline-bcm2711-rpi-4-b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e91b275c99d366dc62=
+992
+        new failure (last pass: v5.17-rc4-49-gbe8b582111d6) =
+
+ =
+
+
+
+platform                   | arch  | lab           | compiler | defconfig |=
+ regressions
+---------------------------+-------+---------------+----------+-----------+=
+------------
+kontron-pitx-imx8m         | arm64 | lab-kontron   | gcc-10   | defconfig |=
+ 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e925773e0d2d006c629f1
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.17-rc4-51-ga6df8=
+57665e6/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-pitx-imx8m.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.17-rc4-51-ga6df8=
+57665e6/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-pitx-imx8m.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e925773e0d2d006c62=
+9f2
+        new failure (last pass: v5.17-rc4-49-gbe8b582111d6) =
+
+ =
+
+
+
+platform                   | arch  | lab           | compiler | defconfig |=
+ regressions
+---------------------------+-------+---------------+----------+-----------+=
+------------
+qemu_arm64-virt-gicv2      | arm64 | lab-baylibre  | gcc-10   | defconfig |=
+ 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e917273187c5417c6296c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.17-rc4-51-ga6df8=
+57665e6/arm64/defconfig/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv2.=
+txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.17-rc4-51-ga6df8=
+57665e6/arm64/defconfig/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv2.=
+html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e917273187c5417c62=
+96d
+        failing since 8 days (last pass: v5.17-rc3-33-g4e3e936b36f6, first =
+fail: v5.17-rc3-35-g1e2d75f89fc7) =
+
+ =
+
+
+
+platform                   | arch  | lab           | compiler | defconfig |=
+ regressions
+---------------------------+-------+---------------+----------+-----------+=
+------------
+qemu_arm64-virt-gicv2      | arm64 | lab-broonie   | gcc-10   | defconfig |=
+ 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e913722bf832959c62968
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.17-rc4-51-ga6df8=
+57665e6/arm64/defconfig/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv2.t=
+xt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.17-rc4-51-ga6df8=
+57665e6/arm64/defconfig/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv2.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e913722bf832959c62=
+969
+        failing since 8 days (last pass: v5.17-rc3-33-g4e3e936b36f6, first =
+fail: v5.17-rc3-35-g1e2d75f89fc7) =
+
+ =
+
+
+
+platform                   | arch  | lab           | compiler | defconfig |=
+ regressions
+---------------------------+-------+---------------+----------+-----------+=
+------------
+qemu_arm64-virt-gicv2-uefi | arm64 | lab-baylibre  | gcc-10   | defconfig |=
+ 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e919a4f50240663c62976
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.17-rc4-51-ga6df8=
+57665e6/arm64/defconfig/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv2-=
+uefi.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.17-rc4-51-ga6df8=
+57665e6/arm64/defconfig/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv2-=
+uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e919a4f50240663c62=
+977
+        failing since 8 days (last pass: v5.17-rc3-33-g4e3e936b36f6, first =
+fail: v5.17-rc3-35-g1e2d75f89fc7) =
+
+ =
+
+
+
+platform                   | arch  | lab           | compiler | defconfig |=
+ regressions
+---------------------------+-------+---------------+----------+-----------+=
+------------
+qemu_arm64-virt-gicv2-uefi | arm64 | lab-broonie   | gcc-10   | defconfig |=
+ 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e918373187c5417c62989
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.17-rc4-51-ga6df8=
+57665e6/arm64/defconfig/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv2-u=
+efi.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.17-rc4-51-ga6df8=
+57665e6/arm64/defconfig/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv2-u=
+efi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e918373187c5417c62=
+98a
+        failing since 8 days (last pass: v5.17-rc3-33-g4e3e936b36f6, first =
+fail: v5.17-rc3-35-g1e2d75f89fc7) =
+
+ =
+
+
+
+platform                   | arch  | lab           | compiler | defconfig |=
+ regressions
+---------------------------+-------+---------------+----------+-----------+=
+------------
+qemu_arm64-virt-gicv3      | arm64 | lab-baylibre  | gcc-10   | defconfig |=
+ 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e91ad75c99d366dc62989
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.17-rc4-51-ga6df8=
+57665e6/arm64/defconfig/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv3.=
+txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.17-rc4-51-ga6df8=
+57665e6/arm64/defconfig/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv3.=
+html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e91ad75c99d366dc62=
+98a
+        failing since 8 days (last pass: v5.17-rc3-33-g4e3e936b36f6, first =
+fail: v5.17-rc3-35-g1e2d75f89fc7) =
+
+ =
+
+
+
+platform                   | arch  | lab           | compiler | defconfig |=
+ regressions
+---------------------------+-------+---------------+----------+-----------+=
+------------
+qemu_arm64-virt-gicv3      | arm64 | lab-broonie   | gcc-10   | defconfig |=
+ 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e916f73c03c7816c62992
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.17-rc4-51-ga6df8=
+57665e6/arm64/defconfig/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv3.t=
+xt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.17-rc4-51-ga6df8=
+57665e6/arm64/defconfig/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv3.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e916f73c03c7816c62=
+993
+        failing since 8 days (last pass: v5.17-rc3-33-g4e3e936b36f6, first =
+fail: v5.17-rc3-35-g1e2d75f89fc7) =
+
+ =
+
+
+
+platform                   | arch  | lab           | compiler | defconfig |=
+ regressions
+---------------------------+-------+---------------+----------+-----------+=
+------------
+qemu_arm64-virt-gicv3-uefi | arm64 | lab-baylibre  | gcc-10   | defconfig |=
+ 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e918673187c5417c62997
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.17-rc4-51-ga6df8=
+57665e6/arm64/defconfig/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv3-=
+uefi.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.17-rc4-51-ga6df8=
+57665e6/arm64/defconfig/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv3-=
+uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e918673187c5417c62=
+998
+        failing since 8 days (last pass: v5.17-rc3-33-g4e3e936b36f6, first =
+fail: v5.17-rc3-35-g1e2d75f89fc7) =
+
+ =
+
+
+
+platform                   | arch  | lab           | compiler | defconfig |=
+ regressions
+---------------------------+-------+---------------+----------+-----------+=
+------------
+qemu_arm64-virt-gicv3-uefi | arm64 | lab-broonie   | gcc-10   | defconfig |=
+ 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e91483c67a74e28c6296f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.17-rc4-51-ga6df8=
+57665e6/arm64/defconfig/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv3-u=
+efi.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.17-rc4-51-ga6df8=
+57665e6/arm64/defconfig/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv3-u=
+efi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e91483c67a74e28c62=
+970
+        failing since 8 days (last pass: v5.17-rc3-33-g4e3e936b36f6, first =
+fail: v5.17-rc3-35-g1e2d75f89fc7) =
+
+ =20
