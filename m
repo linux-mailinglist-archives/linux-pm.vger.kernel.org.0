@@ -2,157 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BE5E4BA7F4
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Feb 2022 19:16:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B97394BA7FD
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Feb 2022 19:18:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232007AbiBQSQx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Feb 2022 13:16:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59132 "EHLO
+        id S241953AbiBQSSs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Feb 2022 13:18:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243213AbiBQSQx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Feb 2022 13:16:53 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A122EC428A
-        for <linux-pm@vger.kernel.org>; Thu, 17 Feb 2022 10:16:37 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id u5so5228167ple.3
-        for <linux-pm@vger.kernel.org>; Thu, 17 Feb 2022 10:16:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=y+pLR3LyXdDu4SqOLrKBsMoUpASpAk656btEcmLOjd8=;
-        b=AsAVpQaaI7bTrS4nPB4YbueBJXfmEiee3UJULuyXn44HYkMLZccfEFgYl65Hoo4EXb
-         azjdvb8JrDtImSRs2iiYDV5b3cQY88itLcXhikSzObL/PletSU90mFNiE8PqxC7pgaHt
-         alX1e8XVhm3ir9BtTW3xRs+oNCDfJigCFvOxiFdDUgXqaQiH3JZRQb+pUzok5qlL0Okl
-         TGuRuRZvMQ+EnIeqr/9RA4RVkZYg5IYXiCQsOzVgs1OPJ8eWaswW7EdkH9uFMnsJzGR/
-         Achz6JTodV0SpTFGbN21eXoUlItUCuo/011zxrkJHBX9+DPyfhVjko7xPUkFJOgjqhyE
-         XoHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=y+pLR3LyXdDu4SqOLrKBsMoUpASpAk656btEcmLOjd8=;
-        b=cFC2RcEt1g8IUMOge43iKf5BDorMyTJt8NSAHIoITgWwhj/obILXXnej+oKd99wa4i
-         bIkBr/Bq4zoIIlwr6+zutoaxeCUoiDSs/Wzbmf2zFDaTkpHq6GbZPI8psBf4eSM57CYC
-         ZrH1s43Y3XPCzMU88nBM1FvibKiGg/z0fReqXykEknCZpTgnLMr3gAfB4aXnFOjY6HQo
-         bMcKZyZOIApjpCxA+31nsKKxW/ZH6ToaRDnFPKI95sfmHI7mArgzJLod7VAO2D3PwBVR
-         Ik7CRPHkbRE8rJm/Wlw/jEHw/ltAaEuZ3Pz+ylfa97Mj+ZIpc9WJAHctCWsxQ9Tb3Ua1
-         XCaw==
-X-Gm-Message-State: AOAM533B7w1QPflf9j9GRVPmVCv3fMNb+2LKFCYXD+WqQ8LuaMZiI2Tv
-        tPU2soXS7SNkBG6gNcMY9w9ync7c2dNEo7b6
-X-Google-Smtp-Source: ABdhPJwImJ1TSRhnSXpECF3mIFJZkjMe2vHOKBeeVz4GbMqbIB+HfjRnt9RkUcds9wlEa3qpJZcntA==
-X-Received: by 2002:a17:90a:2b0d:b0:1b5:8087:4b4e with SMTP id x13-20020a17090a2b0d00b001b580874b4emr4291100pjc.70.1645121797160;
-        Thu, 17 Feb 2022 10:16:37 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id g17sm250767pfc.193.2022.02.17.10.16.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 10:16:36 -0800 (PST)
-Message-ID: <620e9104.1c69fb81.1a095.14a9@mx.google.com>
-Date:   Thu, 17 Feb 2022 10:16:36 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S235092AbiBQSSs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Feb 2022 13:18:48 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5784817187A;
+        Thu, 17 Feb 2022 10:18:33 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2255D113E;
+        Thu, 17 Feb 2022 10:18:33 -0800 (PST)
+Received: from [10.57.17.240] (unknown [10.57.17.240])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 20E2F3F718;
+        Thu, 17 Feb 2022 10:18:30 -0800 (PST)
+Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
+ cpufreq_cooling and devfreq_cooling
+To:     daniel.lezcano@linaro.org
+Cc:     amit.kachhap@gmail.com, viresh.kumar@linaro.org, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com, dietmar.eggemann@arm.com,
+        Pierre.Gondois@arm.com, Matthias Kaehlcke <mka@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220207073036.14901-1-lukasz.luba@arm.com>
+ <20220207073036.14901-2-lukasz.luba@arm.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <4e090ffe-c19b-8e2c-0396-72dc33361f35@arm.com>
+Date:   Thu, 17 Feb 2022 18:18:29 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v5.17-rc4-51-ga6df857665e6
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 1 warning (v5.17-rc4-51-ga6df857665e6)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220207073036.14901-2-lukasz.luba@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.17-rc4-51-ga6=
-df857665e6)
-
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-17-rc4-51-ga6df857665e6/
-
-Tree: pm
-Branch: testing
-Git Describe: v5.17-rc4-51-ga6df857665e6
-Git Commit: a6df857665e68dd113761a7f5d8935995d1be237
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
-
-Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-
-riscv:
-
-x86_64:
+Hi Daniel,
 
 
-Warnings summary:
+On 2/7/22 7:30 AM, Lukasz Luba wrote:
+> The Energy Model supports power values either in Watts or in some abstract
+> scale. When the 2nd option is in use, the thermal governor IPA should not
+> be allowed to operate, since the relation between cooling devices is not
+> properly defined. Thus, it might be possible that big GPU has lower power
+> values in abstract scale than a Little CPU. To mitigate a misbehaviour
+> of the thermal control algorithm, simply not register a cooling device
+> capable of working with IPA.
+> 
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+>   drivers/thermal/cpufreq_cooling.c |  2 +-
+>   drivers/thermal/devfreq_cooling.c | 16 +++++++++++++---
+>   2 files changed, 14 insertions(+), 4 deletions(-)
 
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
+The discussion in below this patch went slightly off-topic but it was
+valuable. It clarified also there are no broken platforms with this
+change.
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
+Could you take the patch into the thermal tree, please?
 
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+Regards,
+Lukasz
