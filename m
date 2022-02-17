@@ -2,109 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E6274BA043
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Feb 2022 13:37:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7EBC4BA05D
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Feb 2022 13:50:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233233AbiBQMhd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Feb 2022 07:37:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41628 "EHLO
+        id S240549AbiBQMuY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Feb 2022 07:50:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231514AbiBQMhc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Feb 2022 07:37:32 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AEDFBA8EE0;
-        Thu, 17 Feb 2022 04:37:17 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6A4AF113E;
-        Thu, 17 Feb 2022 04:37:17 -0800 (PST)
-Received: from [10.57.17.240] (unknown [10.57.17.240])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6706D3F66F;
-        Thu, 17 Feb 2022 04:37:13 -0800 (PST)
-Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
- cpufreq_cooling and devfreq_cooling
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        amit daniel kachhap <amit.kachhap@gmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Pierre.Gondois@arm.com, Stephen Boyd <swboyd@chromium.org>,
+        with ESMTP id S240545AbiBQMuP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Feb 2022 07:50:15 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E275B2A8D38
+        for <linux-pm@vger.kernel.org>; Thu, 17 Feb 2022 04:50:00 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id b11so9718766lfb.12
+        for <linux-pm@vger.kernel.org>; Thu, 17 Feb 2022 04:50:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KlbNkhTQ+JSJKTYaDJQdA6zDHlk4vRYEdRPsoVx8JIQ=;
+        b=RJRTgcanFd+eYKC4PMy5E0XR6182Cq2/81omogO1Ye2RHCRnwZhXxRU7nmB+QcQ7Yo
+         KfDKHK0lAjHiQycNkeabsFl/Twov5I/ktbWPBDANLnS2zOStQaOpEbd1O1TU9COmbXP1
+         GreyjpJc0J56h41Ykhk0K17BOXfRUAFQT2eAA5KdBUfs05QT1B2HQ1ygKyVbJ9/9y/U7
+         cxl/5tVYCIv6XV3jAPHJAU/EW5dnON50ZLMM1c4uNehw71p7GbRh3jI1rEUUDoAYiH8Y
+         LXnMC9YzHrHSaC7la+CqDN020i78xjUsHBndmk9xfiU2TxHglUOliqwSoJsRlvD2gZF2
+         6ftw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KlbNkhTQ+JSJKTYaDJQdA6zDHlk4vRYEdRPsoVx8JIQ=;
+        b=3o+9zy9weisCvkl4AX0sxWWnV5zhMCaBiUDwGSxk6I8WBvPMR0j0pKdg6U+hln57Vo
+         H1rkyU3cTWcVr7yjvEf2FKcdoFadvN+Waa15LSV+fdpHjHNFVs03f6duMRPKJdu8VAtm
+         Gc7FeDHa6LAEbLodYt3s5UoQjRZwq3cCC1SKZTAqmRoz/cwWLSZDaNAMZxc5bOjFmvzQ
+         v+jpg3bJuthRKQHQKHp7um1Gt8uxwUxLTm2+Fsr+ZBqaTc7cnLWu8ztN9M+2x6mXWIal
+         0+IChFp/3ia+oFh4yIRK4nrtpm4pIQiLALBsL1N5OtD+ztx5zse6oLIuyDeJjY4XT0NZ
+         hpIQ==
+X-Gm-Message-State: AOAM5315nmFtsas99DV77PLDp2otmGrEASMBY8SMi1DCx0yaIAKaVnuU
+        qKH1bEN8aLvXRDpgpqmTeSRL/A==
+X-Google-Smtp-Source: ABdhPJzcmJ+l4mFBjZY1/rS9B+sgadxfC1rTyFWFVI0vf+IQ2g6MOXACNGdIQZNWEOgWTuA9h0OMPQ==
+X-Received: by 2002:a05:6512:400c:b0:442:c12d:7755 with SMTP id br12-20020a056512400c00b00442c12d7755mr1875995lfb.403.1645102199245;
+        Thu, 17 Feb 2022 04:49:59 -0800 (PST)
+Received: from localhost.localdomain (h-155-4-129-21.NA.cust.bahnhof.se. [155.4.129.21])
+        by smtp.gmail.com with ESMTPSA id p21sm5167094lja.32.2022.02.17.04.49.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Feb 2022 04:49:58 -0800 (PST)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
+Cc:     Kevin Hilman <khilman@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Dmitry Osipenko <digetx@gmail.com>,
         Rajendra Nayak <rnayak@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-References: <20220207073036.14901-1-lukasz.luba@arm.com>
- <20220207073036.14901-2-lukasz.luba@arm.com> <YgG+TmLrCSXX4Bvt@google.com>
- <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com> <YgKnnFl7Gp8AS30X@google.com>
- <e4532f65-7f8a-7e89-97c1-85cc61462040@arm.com> <YgQ9XLcto9v0fyTf@google.com>
- <d120110a-7d01-0cfd-f7eb-d160e17ec2a8@arm.com>
- <CAD=FV=VntGw1_AzJPpdOk0zSpOVZRH2X1JNg84JX+zCeU1jvXg@mail.gmail.com>
- <7c059f4f-7439-0cad-c398-96dbde4e49c1@linaro.org>
- <5b8ca53e-3595-85fd-5ae9-a5e8285e8513@arm.com>
- <53bc13ca-998f-ff83-d9f7-9a83d35b24fd@linaro.org>
- <97ecc29b-13a9-fa15-4e88-21c8612ebb7f@arm.com>
- <1812eadf-7924-5abd-857b-22b7dfdf8f7d@linaro.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <33bd6122-b4aa-1659-6063-95175a8748b3@arm.com>
-Date:   Thu, 17 Feb 2022 12:37:11 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] PM: domains: Prevent power off for parent unless child is in deepest state
+Date:   Thu, 17 Feb 2022 13:49:50 +0100
+Message-Id: <20220217124950.211354-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <1812eadf-7924-5abd-857b-22b7dfdf8f7d@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+A PM domain managed by genpd may support multiple idlestates (power-off
+states). During genpd_power_off() a genpd governor may be asked to select
+one of the idlestates based upon the dev PM QoS constraints, for example.
 
+However, there is a problem with the behaviour around this in genpd. More
+precisely, a parent-domain is allowed to be powered off, no matter of what
+idlestate that has been selected for the child-domain.
 
-On 2/17/22 12:33 PM, Daniel Lezcano wrote:
-> On 17/02/2022 13:11, Lukasz Luba wrote:
-> 
-> [ ... ]
-> 
->>> Why not make it more generic and replace the frequency by a 
->>> performance index, so it can be used by any kind of perf limiter?
->>
->> For that DT array, yes, it can be an index, so effectively it could be
->> a simple 1d array.
->>
->> something like:
->>
->> msm_gpu_energy_model: msm-gpu-energy-model {
->>      compatible = "energy-model"
->>      /* Values are sorted micro-Watts which correspond to each OPP
->>         or performance state. The total amount of them must match
->>         number of OPPs. */
->>      power-microwatt = <100000>,
->>              <230000>,
->>              <380000>,
->>              <600000>;
->> };
->>
->> then in gpu node instead of having 'dynamic-power-coefficient',
->> which is useless because voltage is missing, we would have
->> 'energy-model', like:
->>
->>      energy-model = <&msm_gpu_energy_model>;
->>
->>
->> If you agree to continue this topic. I will send an RFC so we could
->> further discuss this idea. This $subject doesn't fit well.
-> 
-> Yes, definitively I agree to continue on this topic.
-> 
-> 
+For the stm32mp1 platform from STMicro, this behaviour doesn't play well.
+Instead, the parent-domain must not be powered off, unless the deepest
+idlestate has been selected for the child-domain. As the current behaviour
+in genpd is quite questionable anyway, let's simply change it into what is
+needed by the stm32mp1 platform.
 
-Great! I'm going to craft something...
+If it surprisingly turns out that other platforms may need a different
+behaviour from genpd, then we will have to revisit this to find a way to
+make it configurable.
+
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
+
+Changes in v2:
+	- Clarified commit message - based upon discussions with Dmitry.
+	- Updated a comment in the code, suggested by Dmitry.
+
+---
+ drivers/base/power/domain.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index 5db704f02e71..c87588c21700 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -636,6 +636,18 @@ static int genpd_power_off(struct generic_pm_domain *genpd, bool one_dev_on,
+ 			atomic_read(&genpd->sd_count) > 0)
+ 		return -EBUSY;
+ 
++	/*
++	 * The children must be in their deepest (powered-off) states to allow
++	 * the parent to be powered off. Note that, there's no need for
++	 * additional locking, as powering on a child, requires the parent's
++	 * lock to be acquired first.
++	 */
++	list_for_each_entry(link, &genpd->parent_links, parent_node) {
++		struct generic_pm_domain *child = link->child;
++		if (child->state_idx < child->state_count - 1)
++			return -EBUSY;
++	}
++
+ 	list_for_each_entry(pdd, &genpd->dev_list, list_node) {
+ 		enum pm_qos_flags_status stat;
+ 
+@@ -1073,6 +1085,13 @@ static void genpd_sync_power_off(struct generic_pm_domain *genpd, bool use_lock,
+ 	    || atomic_read(&genpd->sd_count) > 0)
+ 		return;
+ 
++	/* Check that the children are in their deepest (powered-off) state. */
++	list_for_each_entry(link, &genpd->parent_links, parent_node) {
++		struct generic_pm_domain *child = link->child;
++		if (child->state_idx < child->state_count - 1)
++			return;
++	}
++
+ 	/* Choose the deepest state when suspending */
+ 	genpd->state_idx = genpd->state_count - 1;
+ 	if (_genpd_power_off(genpd, false))
+-- 
+2.25.1
+
