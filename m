@@ -2,66 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 331584BA4CC
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Feb 2022 16:46:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 583964BA621
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Feb 2022 17:38:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbiBQPqi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Feb 2022 10:46:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49556 "EHLO
+        id S241477AbiBQQiO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Feb 2022 11:38:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbiBQPqi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Feb 2022 10:46:38 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27052B2FCE
-        for <linux-pm@vger.kernel.org>; Thu, 17 Feb 2022 07:46:22 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id d23so10726759lfv.13
-        for <linux-pm@vger.kernel.org>; Thu, 17 Feb 2022 07:46:22 -0800 (PST)
+        with ESMTP id S243039AbiBQQiO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Feb 2022 11:38:14 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D3C2A39C0
+        for <linux-pm@vger.kernel.org>; Thu, 17 Feb 2022 08:37:59 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id z22so10689812edd.1
+        for <linux-pm@vger.kernel.org>; Thu, 17 Feb 2022 08:37:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=6eOVkV0FfYDX4jKgH8lSa5gK8o29oEdERE0Byp3iJzE=;
-        b=MgWQ3005tz6UruAbexiTAQmjyE4/vGJjJ40YgZkKt5wgINq/cJdQZVusIwFmFpcPq+
-         O9LqsfoMX6zjowwT75eyH08ab9QC33ZquLLmyPmCDIYJ+gpq1u+FdgzSNuxhqOOl1vD5
-         0e1PqeAEKPZWjfpxvg1shY8rTmUAzC383tFnOWjZYTAzzhte8qWfgMECgj+3siboyhYx
-         Y4LLCOzaZ7CfeN+2LxKGcxaJ5natn80ZMTOeS0IOsMvOI7QFiYjP32bw9gpgBkch8jYj
-         1kpFGnzduqrkbBO8z5W+/g8S19Kt08yp2z+ERAhsZnqxReCcb01N+EYfhKwwk0AxANrT
-         FFPA==
+        bh=UONcOwfoMw9pDe0rAm3joCYRBAlJSecwdegwEBnOH94=;
+        b=BtDO6RRgSUv6ucKn+TGhcqPblYqbEYF7TwKvQNAFwkl2M7GjGv8hef8O/yBTGEHQPq
+         P/sbxxp3UcCm26QbSnlduFWQh7o0rjHbP6Y3novYM+F8S6LDHRWACDrnYUcNJfsOAFQa
+         KqvWJsy8MTLOwCtpGXPEDjeAQUGhIaQqPHS2Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=6eOVkV0FfYDX4jKgH8lSa5gK8o29oEdERE0Byp3iJzE=;
-        b=rLtlWdBc6oM4GAWs1pw7h5k6Zwv29gOFsIf/W4yEj1XfcjgF5Kr7xUDwtGCGJV1o3V
-         QrGY90rZbLpK8SuuZqutxL+cTfw3+Mbio/T6W4dpaOU2l/WvICzIxpUvIOeo0076FjtV
-         Vw9ilhz2SOqo/zHMFsy3+MabBSKPJi9ojI/ruHEwOD6C6I16FtJggOhuGdWZVw6FeFqF
-         9vxFzBBPPuD2cSVnFUSMvmQh32kYN6ECGiMgoabyPyF0yT5wg7eLGxzfuZD9XkbKK2uR
-         HY5eR/GDsvsDbtalxi9SfObld/CQf++Swv7UBN5Zym+GhE+9+9fg7qAcGdfSJGZtZioa
-         qDVA==
-X-Gm-Message-State: AOAM531gW8CpIYyNYk4JhzdSLShh+1AO+DKLri+ZTQTvRKzkCOnylNtE
-        ZHEA5FeUHt89KivQaVC59ONGRblEMJfJiWynjwxJQa9eqeRzow==
-X-Google-Smtp-Source: ABdhPJyrAwM7dg/qVHJUCprw1s1xE0huQn0o9suPK834G4SXUVGmelYLIWAXSWs2GYH/bT5EyszGK9bTD+Sf0I1eSA0=
-X-Received: by 2002:a05:6512:2241:b0:441:ce2b:18ef with SMTP id
- i1-20020a056512224100b00441ce2b18efmr2443065lfu.167.1645112779464; Thu, 17
- Feb 2022 07:46:19 -0800 (PST)
+        bh=UONcOwfoMw9pDe0rAm3joCYRBAlJSecwdegwEBnOH94=;
+        b=sd4ivrpuDrDhsuJ0+eknRL2ug4HkCPHI0EtXxaMCa5FnkjRsuF4iYnF8/B4eaDqev8
+         dwz14p5MgDFYZ93xXsXJoruWLFGJx05DXCOJaP6AKTnkcjRLPmt1auGbVCqP9r9TyaMK
+         jBTeHcRTQpSu8Mj4/29REGAGMRyZKj+IuLzJcx8ARMKcdt7OmPdkgARYQHOAKWWEW4FA
+         rfMr971qpwtYnojE+TMSZ5C0wwvITDJ3Xc1qrzxW1hTxF9S7bhDZWo/ABr+rpk9wkMIX
+         d3yUNos1dceSzCIJDAX+eE88+PIUv3NKnuMXVJXt8nyx3w/Do7aqfyUF3ByuiHAbbDjz
+         LHrA==
+X-Gm-Message-State: AOAM533VRnLM9heHRiVbX+kF5oAcNYp4Sa1XuNpp4yFsoUumncknYtUh
+        hrAj/Sj3ufumNYhhCKteKAOyX7gU5/UYiIMfadY=
+X-Google-Smtp-Source: ABdhPJw+0J1tcI3mdz3SnzFCktNGWajPSe6jTRksX1WPFQ3zVGx0p0IVx4Y2B7ZFpKv/tpxA5N3wAA==
+X-Received: by 2002:aa7:c0d0:0:b0:410:d576:8808 with SMTP id j16-20020aa7c0d0000000b00410d5768808mr3571006edp.340.1645115877311;
+        Thu, 17 Feb 2022 08:37:57 -0800 (PST)
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com. [209.85.221.42])
+        by smtp.gmail.com with ESMTPSA id b3sm1356804ejl.67.2022.02.17.08.37.55
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Feb 2022 08:37:56 -0800 (PST)
+Received: by mail-wr1-f42.google.com with SMTP id h6so10018832wrb.9
+        for <linux-pm@vger.kernel.org>; Thu, 17 Feb 2022 08:37:55 -0800 (PST)
+X-Received: by 2002:a5d:4c48:0:b0:1e4:aeab:c77e with SMTP id
+ n8-20020a5d4c48000000b001e4aeabc77emr2927222wrt.342.1645115875087; Thu, 17
+ Feb 2022 08:37:55 -0800 (PST)
 MIME-Version: 1.0
-References: <20220130210210.549877-1-daniel.lezcano@linaro.org>
- <20220130210210.549877-3-daniel.lezcano@linaro.org> <CAPDyKFqV++g63Asax8TNSEgujxJ=uM9XG2_Advu34JidYBCGtg@mail.gmail.com>
- <e44b9c4b-2ac4-4ea4-c771-bde13943af5f@linaro.org> <CAPDyKFr8Ycr2cbiD5MM9FSPc1qea+Yp9=cottcGAo7HmFR9Eaw@mail.gmail.com>
- <cfbaefa5-fc7b-bd0f-e4ed-8f046de2a7cf@linaro.org>
-In-Reply-To: <cfbaefa5-fc7b-bd0f-e4ed-8f046de2a7cf@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 17 Feb 2022 16:45:43 +0100
-Message-ID: <CAPDyKFoWq+i09Ts_+SAz9ctC2a7-cqC71buDmvb-LZFTVSH+DQ@mail.gmail.com>
-Subject: Re: [PATCH v1 3/7] powercap/dtpm: Fixup kfree for virtual node
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rjw@rjwysocki.net, heiko@sntech.de, lukasz.luba@arm.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
+References: <20220207073036.14901-1-lukasz.luba@arm.com> <20220207073036.14901-2-lukasz.luba@arm.com>
+ <YgG+TmLrCSXX4Bvt@google.com> <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com>
+ <YgKnnFl7Gp8AS30X@google.com> <e4532f65-7f8a-7e89-97c1-85cc61462040@arm.com>
+ <YgQ9XLcto9v0fyTf@google.com> <d120110a-7d01-0cfd-f7eb-d160e17ec2a8@arm.com>
+ <CAD=FV=VntGw1_AzJPpdOk0zSpOVZRH2X1JNg84JX+zCeU1jvXg@mail.gmail.com>
+ <7c059f4f-7439-0cad-c398-96dbde4e49c1@linaro.org> <5b8ca53e-3595-85fd-5ae9-a5e8285e8513@arm.com>
+In-Reply-To: <5b8ca53e-3595-85fd-5ae9-a5e8285e8513@arm.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 17 Feb 2022 08:37:39 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=WMaMP84YLZxBZbj4DJSgcDLVkSHf4QdDwtFfp8UbyE7A@mail.gmail.com>
+Message-ID: <CAD=FV=WMaMP84YLZxBZbj4DJSgcDLVkSHf4QdDwtFfp8UbyE7A@mail.gmail.com>
+Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
+ cpufreq_cooling and devfreq_cooling
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        amit daniel kachhap <amit.kachhap@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Pierre.Gondois@arm.com, Stephen Boyd <swboyd@chromium.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        jorcrous@amazon.com, Rob Clark <robdclark@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,86 +90,152 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 17 Feb 2022 at 14:54, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+Hi,
+
+On Thu, Feb 17, 2022 at 2:47 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
 >
-> On 17/02/2022 14:17, Ulf Hansson wrote:
-> > On Wed, 16 Feb 2022 at 19:10, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+> Hi Daniel,
+>
+> On 2/17/22 10:10 AM, Daniel Lezcano wrote:
+> > On 16/02/2022 18:33, Doug Anderson wrote:
+> >> Hi,
 > >>
-> >> On 16/02/2022 17:22, Ulf Hansson wrote:
-> >>> On Sun, 30 Jan 2022 at 22:02, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+> >> On Wed, Feb 16, 2022 at 7:35 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+> >>>
+> >>> Hi Matthias,
+> >>>
+> >>> On 2/9/22 10:17 PM, Matthias Kaehlcke wrote:
+> >>>> On Wed, Feb 09, 2022 at 11:16:36AM +0000, Lukasz Luba wrote:
+> >>>>>
+> >>>>>
+> >>>>> On 2/8/22 5:25 PM, Matthias Kaehlcke wrote:
+> >>>>>> On Tue, Feb 08, 2022 at 09:32:28AM +0000, Lukasz Luba wrote:
+> >>>>>>>
+> >>>>>>>
+> >>>
+> >>> [snip]
+> >>>
+> >>>>>>> Could you point me to those devices please?
+> >>>>>>
+> >>>>>> arch/arm64/boot/dts/qcom/sc7180-trogdor-*
+> >>>>>>
+> >>>>>> Though as per above they shouldn't be impacted by your change,
+> >>>>>> since the
+> >>>>>> CPUs always pretend to use milli-Watts.
+> >>>>>>
+> >>>>>> [skipped some questions/answers since sc7180 isn't actually
+> >>>>>> impacted by
+> >>>>>>     the change]
+> >>>>>
+> >>>>> Thank you Matthias. I will investigate your setup to get better
+> >>>>> understanding.
 > >>>>
-> >>>> When the node is virtual there is no release function associated which
-> >>>> can free the memory.
-> >>>>
-> >>>> Free the memory when no 'ops' exists.
-> >>>>
-> >>>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> >>>> ---
-> >>>>    drivers/powercap/dtpm.c | 4 ++--
-> >>>>    1 file changed, 2 insertions(+), 2 deletions(-)
-> >>>>
-> >>>> diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
-> >>>> index 0b0121c37a1b..7bddd25a6767 100644
-> >>>> --- a/drivers/powercap/dtpm.c
-> >>>> +++ b/drivers/powercap/dtpm.c
-> >>>> @@ -181,12 +181,12 @@ int dtpm_release_zone(struct powercap_zone *pcz)
-> >>>>
-> >>>>           if (dtpm->ops)
-> >>>>                   dtpm->ops->release(dtpm);
-> >>>> +       else
-> >>>> +               kfree(dtpm);
+> >>>> Thanks!
 > >>>>
 > >>>
-> >>> This doesn't look correct. Below you check dtpm against "root", which
-> >>> may be after its memory has been freed.
+> >>> I've checked those DT files and related code.
+> >>> As you already said, this patch is safe for them.
+> >>> So we can apply it IMO.
 > >>>
-> >>> If the ->release() function should be responsible for freeing the
-> >>> dtpm, it needs to be called after the check below.
+> >>>
+> >>> -------------Off-topic------------------
+> >>> Not in $subject comments:
+> >>>
+> >>> AFAICS based on two files which define thermal zones:
+> >>> sc7180-trogdor-homestar.dtsi
+> >>> sc7180-trogdor-coachz.dtsi
+> >>>
+> >>> only the 'big' cores are used as cooling devices in the
+> >>> 'skin_temp_thermal' - the CPU6 and CPU7.
+> >>>
+> >>> I assume you don't want to model at all the power usage
+> >>> from the Little cluster (which is quite big: 6 CPUs), do you?
+> >>> I can see that the Little CPUs have small dyn-power-coeff
+> >>> ~30% of the big and lower max freq, but still might be worth
+> >>> to add them to IPA. You might give them more 'weight', to
+> >>> make sure they receive more power during power split.
+> >>>
+> >>> You also don't have GPU cooling device in that thermal zone.
+> >>> Based on my experience if your GPU is a power hungry one,
+> >>> e.g. 2-4Watts, you might get better results when you model
+> >>> this 'hot' device (which impacts your temp sensor reported value).
 > >>
-> >> It is harmless, 'root' is not dereferenced but used as an ID
+> >> I think the two boards you point at (homestar and coachz) are just the
+> >> two that override the default defined in the SoC dtsi file. If you
+> >> look in sc7180.dtsi you'll see 'gpuss1-thermal' which has a cooling
+> >> map. You can also see the cooling maps for the littles.
 > >>
-> >> Moreover, in the patch 5/7 it is moved out this function.
+> >> I guess we don't have a `dynamic-power-coefficient` for the GPU,
+> >> though? Seems like we should, but I haven't dug through all the code
+> >> here...
 > >
-> > Right. It just looks a bit odd here.
+> > The dynamic-power-coefficient is available for OPPs which includes
+> > CPUfreq and devfreq. As the GPU is managed by devfreq, setting the
+> > dynamic-power-coefficient makes the energy model available for it.
 > >
-> >>
-> >>
-> >>>>           if (root == dtpm)
-> >>>>                   root = NULL;
-> >>>>
-> >>>> -       kfree(dtpm);
+> > However, the OPPs must define the frequency and the voltage. That is the
+> > case for most platforms except on QCom platform.
 > >
-> > So then why doesn't this kfree do the job already?
+> > That may not be specified as it uses a frequency index and the hardware
+> > does the voltage change in our back. The QCom cpufreq backend get the
+> > voltage table from a register (or whatever) and completes the voltage
+> > values for the OPPs, thus adding the information which is missing in the
+> > device tree. The energy model can then initializes itself and allows the
+> > usage of the Energy Aware Scheduler.
 > >
-> > kfree(NULL) works fine, if dtpm->ops->release(dtpm) already freed the data.
+> > However this piece of code is missing for the GPU part.
+> >
 >
-> The description is confusing.
+> Thank you for joining the discussion. I don't know about that Qcom
+> GPU voltage information is missing.
 >
-> Actually, there is a double kfree. When there is a ops->release, the
-> kfree is done there and again a few lines after.
->
-> The issue was introduced with the change where dtpm had a private data
-> field to store the backend specific structure and was converted to a
-> backend specific structure containing a dtpm node [1].
->
-> So this function was calling release from the dtpm backend which was
-> freeing the specific data in the dtpm->private and then here was freeing
-> the dtpm. Now, the backend frees the structure which contains the dtpm
-> structure, so when returning from ops->release(), dtpm is already free.
->
-> I should change the description and add a Fixes tag to the change
-> described above.
+> If the voltage is not available (only the frequencies), there is
+> another way. There is an 'advanced' EM which uses registration function:
+> em_dev_register_perf_domain(). It uses a local driver callback to get
+> power for each found frequency. It has benefit because there is no
+> restriction to 'fit' into the math formula, instead just avg power
+> values can be feed into EM. It's called 'advanced' EM [1].
 
-Does ops->release() also resets the "dtpm" pointer to NULL? If not,
-it's good practice that it should, right?
+It seems like there _should_ be a way to get the voltage out for GPU
+operating points, like is done with cpufreq in
+qcom_cpufreq_hw_read_lut(), but it might need someone with Qualcomm
+documentation to help with it. Maybe Rajendra would be able to help?
+Adding Jordon and Rob to this conversation in case they're aware of
+anything.
 
-In that case, we would be calling "kfree(NULL);" the second time,
-which is perfectly fine.
+As you said, we could just list a power for each frequency, though.
 
+I'm actually not sure which one would be more accurate across a range
+of devices with different "corners": specifying a dynamic power
+coefficient used for all "corners" and then using the actual voltage
+and doing the math, or specifying a power number for each frequency
+and ignoring the actual voltage used. In any case we're trying to get
+ballpark numbers and not every device will be exactly the same, so
+probably it doesn't matter that much.
+
+
+> Now we hit (again) the DT & EM issue (it's an old one, IIRC Morten
+> was proposing from ~2014 this upstream, but EAS wasn't merged back
+> then):
+> where to store these power-freq values, which are then used by the
+> callback. We have the 'dynamic-power-coefficient' in DT, but
+> it has limitations. It would be good to have this simple array
+> attached to the GPU/CPU node. IMHO it meet the requirement of DT,
+> it describes the HW (it would have HZ and Watts values).
+>
+> Doug, Matthias could you have a look at that function and its
+> usage, please [1]?
+> If you guys would support me in this, I would start, with an RFC
+> proposal, a discussion on LKML.
 >
 > [1]
-> https://lore.kernel.org/r/20210312130411.29833-4-daniel.lezcano@linaro.org
->
+> https://elixir.bootlin.com/linux/v5.17-rc4/source/Documentation/power/energy-model.rst#L87
 
-Kind regards
-Uffe
+Matthias: I think you've spent more time on the thermal stuff than me
+so I'll assume you'll follow-up here. If not then please yell!
+
+Ideally, though, someone from Qualcomm would jump in an own this.
+Basically it allows more intelligently throttling the GPU and CPU
+together in tandem instead of treating them separately IIUC, right?
+
+-Doug
