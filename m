@@ -2,61 +2,27 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 482FD4BA033
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Feb 2022 13:33:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E6274BA043
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Feb 2022 13:37:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239347AbiBQMdU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Feb 2022 07:33:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48992 "EHLO
+        id S233233AbiBQMhd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Feb 2022 07:37:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240446AbiBQMdU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Feb 2022 07:33:20 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338FA2604DA
-        for <linux-pm@vger.kernel.org>; Thu, 17 Feb 2022 04:33:05 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id n8so3063539wms.3
-        for <linux-pm@vger.kernel.org>; Thu, 17 Feb 2022 04:33:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=A4ihWqAWL7//p3iQK7YSrjmSgIx/TozBvgFAto3VfAQ=;
-        b=GRRRiTCv8hnisiN6ONs5tg3v4oOGWeum3t6YczSfOgdpj32PYEEQ3pgnZHAzmHMl2j
-         9boNdFP3Ytw5MPqHAQR09XKakYJQlbNnAKRJXHXet7dN9YYx0WAMV91BinoBkraGbD4n
-         JulGmRM1LGwObP99Znw7L0m4svYFJIf3AjqenZVQF4k2st7439nWOsrBfvoB2CVu5Gh2
-         72BPoGHOEUmp1I6LCQ+kmR7C0M3B80ZM7Aa1ICxJ60F5JOYi6bI/hh4P8Gm3pl0o+uaw
-         aBYaxe5IJzzbzbuJvrhl4yHEAiziqsiIJSd8LMB+QJ0AWgr8yOmsS7HyB6abT2XMUebj
-         1TQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=A4ihWqAWL7//p3iQK7YSrjmSgIx/TozBvgFAto3VfAQ=;
-        b=D/anYz9ZRyOsxKRSJZH+Lv3po8ycz1MLAGfAupqoW0ZLWjKnRGdCMe07aI9/ypDUR5
-         KmKJv3xFTNwRPpuGpZCFSfjEKz15n6FSwIUuKLA/aIlwWaQ9ryKl35j6oqk+7QSAjYD9
-         qyaLucpGUh+yOJrNBVCgGoEMcqiQSv7VTQew8jVqInVPO0RIL+WlsbOThcj0AlucuQeV
-         VCzyrYcPbaPLTLIhzSJUGpoAPJ+cvV1B1vgoC+LG/BBwgRqqcWVyRGykdyZb5pbJ671Q
-         eeuBKpBRNZa2JCoh9oALrP95AT0LLBNu3O8Z9bocm032YY8ZuFCoRSom1DwSiGBWbdvc
-         fLYw==
-X-Gm-Message-State: AOAM532yzIKdn4cRSU7IKNFEBEZ1RJreZAovbyvGE/YLyne7fHFvDHoS
-        ppQAk5mt5SowOjvwf6KUViHDeg==
-X-Google-Smtp-Source: ABdhPJxvbN6HhDAxUcts16g8LubGTeE4b5UaecyshENrZUvfY7vE8uQXOBVGVSEd04+4ProFuDJACw==
-X-Received: by 2002:a05:600c:4e46:b0:37b:ea0d:35f0 with SMTP id e6-20020a05600c4e4600b0037bea0d35f0mr5804146wmq.181.1645101183622;
-        Thu, 17 Feb 2022 04:33:03 -0800 (PST)
-Received: from ?IPV6:2a01:e34:ed2f:f020:6165:d98a:b553:c3c1? ([2a01:e34:ed2f:f020:6165:d98a:b553:c3c1])
-        by smtp.googlemail.com with ESMTPSA id ay38sm1779946wmb.3.2022.02.17.04.33.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Feb 2022 04:33:03 -0800 (PST)
-Message-ID: <1812eadf-7924-5abd-857b-22b7dfdf8f7d@linaro.org>
-Date:   Thu, 17 Feb 2022 13:33:00 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
+        with ESMTP id S231514AbiBQMhc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Feb 2022 07:37:32 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AEDFBA8EE0;
+        Thu, 17 Feb 2022 04:37:17 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6A4AF113E;
+        Thu, 17 Feb 2022 04:37:17 -0800 (PST)
+Received: from [10.57.17.240] (unknown [10.57.17.240])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6706D3F66F;
+        Thu, 17 Feb 2022 04:37:13 -0800 (PST)
 Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
  cpufreq_cooling and devfreq_cooling
-Content-Language: en-US
-To:     Lukasz Luba <lukasz.luba@arm.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
         amit daniel kachhap <amit.kachhap@gmail.com>,
@@ -81,59 +47,64 @@ References: <20220207073036.14901-1-lukasz.luba@arm.com>
  <5b8ca53e-3595-85fd-5ae9-a5e8285e8513@arm.com>
  <53bc13ca-998f-ff83-d9f7-9a83d35b24fd@linaro.org>
  <97ecc29b-13a9-fa15-4e88-21c8612ebb7f@arm.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <97ecc29b-13a9-fa15-4e88-21c8612ebb7f@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <1812eadf-7924-5abd-857b-22b7dfdf8f7d@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <33bd6122-b4aa-1659-6063-95175a8748b3@arm.com>
+Date:   Thu, 17 Feb 2022 12:37:11 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <1812eadf-7924-5abd-857b-22b7dfdf8f7d@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17/02/2022 13:11, Lukasz Luba wrote:
-
-[ ... ]
-
->> Why not make it more generic and replace the frequency by a 
->> performance index, so it can be used by any kind of perf limiter?
-> 
-> For that DT array, yes, it can be an index, so effectively it could be
-> a simple 1d array.
-> 
-> something like:
-> 
-> msm_gpu_energy_model: msm-gpu-energy-model {
->      compatible = "energy-model"
->      /* Values are sorted micro-Watts which correspond to each OPP
->         or performance state. The total amount of them must match
->         number of OPPs. */
->      power-microwatt = <100000>,
->              <230000>,
->              <380000>,
->              <600000>;
-> };
-> 
-> then in gpu node instead of having 'dynamic-power-coefficient',
-> which is useless because voltage is missing, we would have
-> 'energy-model', like:
-> 
->      energy-model = <&msm_gpu_energy_model>;
-> 
-> 
-> If you agree to continue this topic. I will send an RFC so we could
-> further discuss this idea. This $subject doesn't fit well.
-
-Yes, definitively I agree to continue on this topic.
 
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+On 2/17/22 12:33 PM, Daniel Lezcano wrote:
+> On 17/02/2022 13:11, Lukasz Luba wrote:
+> 
+> [ ... ]
+> 
+>>> Why not make it more generic and replace the frequency by a 
+>>> performance index, so it can be used by any kind of perf limiter?
+>>
+>> For that DT array, yes, it can be an index, so effectively it could be
+>> a simple 1d array.
+>>
+>> something like:
+>>
+>> msm_gpu_energy_model: msm-gpu-energy-model {
+>>      compatible = "energy-model"
+>>      /* Values are sorted micro-Watts which correspond to each OPP
+>>         or performance state. The total amount of them must match
+>>         number of OPPs. */
+>>      power-microwatt = <100000>,
+>>              <230000>,
+>>              <380000>,
+>>              <600000>;
+>> };
+>>
+>> then in gpu node instead of having 'dynamic-power-coefficient',
+>> which is useless because voltage is missing, we would have
+>> 'energy-model', like:
+>>
+>>      energy-model = <&msm_gpu_energy_model>;
+>>
+>>
+>> If you agree to continue this topic. I will send an RFC so we could
+>> further discuss this idea. This $subject doesn't fit well.
+> 
+> Yes, definitively I agree to continue on this topic.
+> 
+> 
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Great! I'm going to craft something...
