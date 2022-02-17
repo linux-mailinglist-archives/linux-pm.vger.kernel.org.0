@@ -2,193 +2,219 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC2754B9CD9
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Feb 2022 11:14:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC8034B9CE4
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Feb 2022 11:15:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239051AbiBQKNQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Feb 2022 05:13:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55988 "EHLO
+        id S239086AbiBQKPf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Feb 2022 05:15:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236012AbiBQKNP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Feb 2022 05:13:15 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 140AB143469;
-        Thu, 17 Feb 2022 02:13:01 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id n24so7474925ljj.10;
-        Thu, 17 Feb 2022 02:13:00 -0800 (PST)
+        with ESMTP id S239084AbiBQKPf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Feb 2022 05:15:35 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 968802AAB3D
+        for <linux-pm@vger.kernel.org>; Thu, 17 Feb 2022 02:15:20 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id v12so8121985wrv.2
+        for <linux-pm@vger.kernel.org>; Thu, 17 Feb 2022 02:15:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=OO8O5AkWPhI/5yGYSTEQp+LjZetKZnyQ+pZ7++XrzEA=;
-        b=X8w7in6JtN9+vwIDY375tbKdJ6/kAXjQzoJEMNX/aRNZ/xldyGjWjXODYmSy5mi1RE
-         IVBvYSJ5Q0hWoh3euDgluS6hajxAwota0SjPBhdLfholDQzq33VHuJfcHHzCkXGyz8tb
-         MDBzs6ibY/EGdDqB/ff2GewtKr6TpYHNqvy5y4L9nhOeKSaVrEEfVSAdHs3oIc8/KGvy
-         BUoC/Ntz4HLIebyoKI3bup9qeurRZrprpsOzzaMBNquRHtxpasWvx6s1xD7yjJ47gW7a
-         aqMUkT2VhDOvjwLmzIlZFje3GuDLrgVXuDJcvjJJbqm/WRU77L4UMZYg+2nxY7fnS64M
-         8wzw==
+        bh=uXPjyUbnGf2R0Jh08e82SEM1cq95d9bSmagcbmHhOnY=;
+        b=qW6AhkZlb/X1OPSfZ3pGfuQv0mrJ+5yCGTceVZitvK5OLrIEKSPHuQYt3wGUtve4YL
+         j1weDXBuwUZ2JkUSMVaByXEqdt90ymNIJRBBOrLIVnEpSiUgjbXRuLTKSmSv4BYe6KX9
+         CH2byDORt4Iq02HJ8wzZm7glXwB0RIm8JnO2YuGi6serB5xznbMzSvSG/XbKFncAALgV
+         BDPGICLgH/qJ5RgmkTH2EgCP34FO7nKRi1U4F4f/3GHKE/J0ZuUp6evWYLd+C1CCnalm
+         SdoXrQ0jqnWRO8Y0GCUGADgcVOMvTP/SperH6/5SirO1QjuwYjuJfpzEoHaPTBm+W8PH
+         j8LA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=OO8O5AkWPhI/5yGYSTEQp+LjZetKZnyQ+pZ7++XrzEA=;
-        b=7pr47jE/gdAdaDrCCfyYmBUiEIX35Jia+LTn+J6qHiHUFJ3a6Bm/wYJfBtMgD80XM7
-         08+9aZXK57FDzfN0oNQNxysoi9K3/Z9SCmgPPmMAqi5DvgiNWbWGtT1Psubir4+SXU+o
-         gRV+UCMI/bHhNXyFqqq4EYldR+1mU0vky+FWzW805Nb6ZzUABhsqUHBgWy3W64kJuagb
-         xrQofwp652Cdq7wqG1Ppo7wdJLFt4fCdhv7dcE/6F5zEC0gt38PkKdGWMDRMUqoHH14A
-         Lbe+x56E4n+G+Qrx8fdAHjTSmjCd/nzEYPt6JB/gtxXm0ufp6JJ870vKPi7kBlYpJT/q
-         PKYw==
-X-Gm-Message-State: AOAM531lg7CNRkr5GP49SV/u3DBjyETkU9AirEe1YGwbGmOKQGR7AOrk
-        mSTXBVd88G2R12+sHTThCSLVPemO/hU=
-X-Google-Smtp-Source: ABdhPJzppLbwPh7ryO4JRMtpJc/4Lz2rbVquaymBUgCgBO2OneSkA3o02raf386TVCaqFDiGA98BPg==
-X-Received: by 2002:a05:651c:1544:b0:246:1887:cf4c with SMTP id y4-20020a05651c154400b002461887cf4cmr917179ljp.118.1645092779295;
-        Thu, 17 Feb 2022 02:12:59 -0800 (PST)
-Received: from [192.168.2.145] (109-252-138-165.dynamic.spd-mgts.ru. [109.252.138.165])
-        by smtp.googlemail.com with ESMTPSA id o10sm5079173lfl.116.2022.02.17.02.12.57
+        bh=uXPjyUbnGf2R0Jh08e82SEM1cq95d9bSmagcbmHhOnY=;
+        b=oiIGFfKT4tu+kFrE5g5yiC5zGp/4yqEW/FXk05oxL1fnklpeM6VtKbH6+yh+ce4tPr
+         DfnkUgMsmH6JQyaBekQ/N3l1nH6H/89mGeXtIsUg3fPm2zabrZR15Jm7GGRpMd2kelHq
+         WrihjPuPnKT8S00eFDtR5wR4qTpB1SLKIVFQTEbdRc759g98irTZI5yuWulUKAP9LZsS
+         OzbrgF4t+0xvq6gQcOtTNrVBgKJOgzaspuNoxRDAndZ5XU9RUnWTYej293JpAEULgQ4L
+         a+hK32qJ7gvqr4A8+O53E+X0vy/I9eOS6JkG+KNU29a8L6s7UhrH9EBVbQBOzlfto/n+
+         pNDw==
+X-Gm-Message-State: AOAM530JYTDXC48eVcYzPytrSRB+71Tc/74acPiG0lQCFOn4t3cBa+Lq
+        6ZM99E54BoVzZExsc+qY/r+vqg==
+X-Google-Smtp-Source: ABdhPJwBOyltaX/dWga3kBRek3+K4UILAJPJ3dnmFjP7T2OUEKlNyrSOkNTUDJHoXVWUINUmPqToWw==
+X-Received: by 2002:a5d:5405:0:b0:1e3:3724:e08a with SMTP id g5-20020a5d5405000000b001e33724e08amr1703124wrv.110.1645092919026;
+        Thu, 17 Feb 2022 02:15:19 -0800 (PST)
+Received: from ?IPV6:2a01:e34:ed2f:f020:6165:d98a:b553:c3c1? ([2a01:e34:ed2f:f020:6165:d98a:b553:c3c1])
+        by smtp.googlemail.com with ESMTPSA id t187sm764258wma.22.2022.02.17.02.15.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Feb 2022 02:12:58 -0800 (PST)
-Message-ID: <4f0d1b50-9f55-dd81-f0c7-f5e0dfd75c2a@gmail.com>
-Date:   Thu, 17 Feb 2022 13:12:57 +0300
+        Thu, 17 Feb 2022 02:15:18 -0800 (PST)
+Message-ID: <21a360ea-14a8-6aa3-6e2b-dfa406426654@linaro.org>
+Date:   Thu, 17 Feb 2022 11:15:16 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v6 00/21] Introduce power-off+restart call chain API
+Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
+ cpufreq_cooling and devfreq_cooling
 Content-Language: en-US
-To:     Helge Deller <deller@gmx.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        xen-devel@lists.xenproject.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+To:     Lukasz Luba <lukasz.luba@arm.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Doug Anderson <dianders@chromium.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee.jones@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
-        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-References: <20220130233718.21544-1-digetx@gmail.com>
- <635e8121-fca4-580c-6af5-d9317a2eee1b@gmail.com>
- <CAJZ5v0g0MrBm2+GwctkB7kUyBEt6HTAexRCFFRmTF1UKDrVQ-g@mail.gmail.com>
- <de2cbd2a-8d0d-8678-e514-b153d04546cc@gmx.de>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <de2cbd2a-8d0d-8678-e514-b153d04546cc@gmx.de>
-Content-Type: text/plain; charset=UTF-8
+        amit daniel kachhap <amit.kachhap@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Pierre.Gondois@arm.com, Stephen Boyd <swboyd@chromium.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+References: <20220207073036.14901-1-lukasz.luba@arm.com>
+ <20220207073036.14901-2-lukasz.luba@arm.com> <YgG+TmLrCSXX4Bvt@google.com>
+ <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com> <YgKnnFl7Gp8AS30X@google.com>
+ <e4532f65-7f8a-7e89-97c1-85cc61462040@arm.com> <YgQ9XLcto9v0fyTf@google.com>
+ <d120110a-7d01-0cfd-f7eb-d160e17ec2a8@arm.com>
+ <CAD=FV=VntGw1_AzJPpdOk0zSpOVZRH2X1JNg84JX+zCeU1jvXg@mail.gmail.com>
+ <Yg13JoHLmeFGPOAW@google.com> <e9ae0530-64bd-3684-1f7d-b496d65d9e70@arm.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <e9ae0530-64bd-3684-1f7d-b496d65d9e70@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-16.02.2022 23:30, Helge Deller пишет:
-> On 2/16/22 13:25, Rafael J. Wysocki wrote:
->> On Tue, Feb 15, 2022 at 11:00 PM Dmitry Osipenko <digetx@gmail.com> wrote:
->>>
->>> 31.01.2022 02:36, Dmitry Osipenko пишет:
->>>> Problem
->>>> -------
->>>>
->>>> SoC devices require power-off call chaining functionality from kernel.
->>>> We have a widely used restart chaining provided by restart notifier API,
->>>> but nothing for power-off.
->>>>
->>>> Solution
->>>> --------
->>>>
->>>> Introduce new API that provides both restart and power-off call chains.
->>>>
->>>> Why combine restart with power-off? Because drivers often do both.
->>>> More practical to have API that provides both under the same roof.
->>>>
->>>> The new API is designed with simplicity and extensibility in mind.
->>>> It's built upon the existing restart and reboot APIs. The simplicity
->>>> is in new helper functions that are convenient for drivers. The
->>>> extensibility is in the design that doesn't hardcode callback
->>>> arguments, making easy to add new parameters and remove old.
->>>>
->>>> This is a third attempt to introduce the new API. First was made by
->>>> Guenter Roeck back in 2014, second was made by Thierry Reding in 2017.
->>>> In fact the work didn't stop and recently arm_pm_restart() was removed
->>>> from v5.14 kernel, which was a part of preparatory work started by
->>>> Guenter Roeck. I took into account experience and ideas from the
->>>> previous attempts, extended and polished them.
->>>
->>>
->>> Rafael and all, do you see anything critical that needs to be improved
->>> in this v6?
->>>
->>> Will be great if you could take this patchset via the power tree if it
->>> looks okay, or give an ack.
->>
->> I need some more time for this, sorry.
-
-No worries, we're not in a rush.
-
->> I'm a bit concerned about seeing no response to this set from anyone.
->>
->> It looks like multiple platforms may be affected by it in principle,
->> so doesn't anyone care?
-
-The platforms that didn't provide ack so far are: SH, x86, IA64, MIPS
-and NDS32. At least x86 and MIPS are alive, not sure why maintainers
-didn't bother to answer yet.
-
-> I did looked into the whole patch set after applying it locally.
+On 16/02/2022 23:43, Lukasz Luba wrote:
 > 
-> While I agree a new combined API is good, and the beginning looked promising,
-> after some time I started to ask myself if the whole infrastructure might
-> be a little overdesigned.
 > 
-> Anyway, I tested it and it works for me on parisc.
-> And it's probably better than what we have today.
+> On 2/16/22 10:13 PM, Matthias Kaehlcke wrote:
+>> On Wed, Feb 16, 2022 at 09:33:50AM -0800, Doug Anderson wrote:
+>>> Hi,
+>>>
+>>> On Wed, Feb 16, 2022 at 7:35 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>>>
+>>>> Hi Matthias,
+>>>>
+>>>> On 2/9/22 10:17 PM, Matthias Kaehlcke wrote:
+>>>>> On Wed, Feb 09, 2022 at 11:16:36AM +0000, Lukasz Luba wrote:
+>>>>>>
+>>>>>>
+>>>>>> On 2/8/22 5:25 PM, Matthias Kaehlcke wrote:
+>>>>>>> On Tue, Feb 08, 2022 at 09:32:28AM +0000, Lukasz Luba wrote:
+>>>>>>>>
+>>>>>>>>
+>>>>
+>>>> [snip]
+>>>>
+>>>>>>>> Could you point me to those devices please?
+>>>>>>>
+>>>>>>> arch/arm64/boot/dts/qcom/sc7180-trogdor-*
+>>>>>>>
+>>>>>>> Though as per above they shouldn't be impacted by your change, 
+>>>>>>> since the
+>>>>>>> CPUs always pretend to use milli-Watts.
+>>>>>>>
+>>>>>>> [skipped some questions/answers since sc7180 isn't actually 
+>>>>>>> impacted by
+>>>>>>>     the change]
+>>>>>>
+>>>>>> Thank you Matthias. I will investigate your setup to get better
+>>>>>> understanding.
+>>>>>
+>>>>> Thanks!
+>>>>>
+>>>>
+>>>> I've checked those DT files and related code.
+>>>> As you already said, this patch is safe for them.
+>>>> So we can apply it IMO.
+>>>>
+>>>>
+>>>> -------------Off-topic------------------
+>>>> Not in $subject comments:
+>>>>
+>>>> AFAICS based on two files which define thermal zones:
+>>>> sc7180-trogdor-homestar.dtsi
+>>>> sc7180-trogdor-coachz.dtsi
+>>>>
+>>>> only the 'big' cores are used as cooling devices in the
+>>>> 'skin_temp_thermal' - the CPU6 and CPU7.
+>>>>
+>>>> I assume you don't want to model at all the power usage
+>>>> from the Little cluster (which is quite big: 6 CPUs), do you?
+>>>> I can see that the Little CPUs have small dyn-power-coeff
+>>>> ~30% of the big and lower max freq, but still might be worth
+>>>> to add them to IPA. You might give them more 'weight', to
+>>>> make sure they receive more power during power split.
+>>
+>> In experiments we saw that including the little cores as cooling
+>> devices for 'skin_temp_thermal' didn't have a significant impact on
+>> thermals, so we left them out.
+>>
+>>>> You also don't have GPU cooling device in that thermal zone.
+>>>> Based on my experience if your GPU is a power hungry one,
+>>>> e.g. 2-4Watts, you might get better results when you model
+>>>> this 'hot' device (which impacts your temp sensor reported value).
+>>>
+>>> I think the two boards you point at (homestar and coachz) are just the
+>>> two that override the default defined in the SoC dtsi file. If you
+>>> look in sc7180.dtsi you'll see 'gpuss1-thermal' which has a cooling
+>>> map. You can also see the cooling maps for the littles.
+>>
+>> Yep, plus thermal zones with cooling maps for the big cores.
+>>
+>>> I guess we don't have a `dynamic-power-coefficient` for the GPU,
+>>> though? Seems like we should, but I haven't dug through all the code
+>>> here...
+>>
+>> To my knowledge the SC7x80 GPU doesn't register an energy model, which is
+>> one of the reasons the GPU wasn't included as cooling device for
+>> 'skin_temp_thermal'.
+>>
+> 
+> You can give it a try by editing the DT and adding in the
+> GPU node the 'dynamic-power-coefficient' + probably
+> small modification in the driver code.
 
-Thank you!
+That should not work for sc7180 as the DT does not specify the voltage 
+values. The QCom backend should retrieve the voltage values for each 
+OPPs from a register or a hardcoded table coming from the SoC documentation.
+
+However, I can confirm dynamic-power-coefficient will add an energy 
+model on GPU (or any devfreq device) if the voltage is specified in the 
+OPP description. Checked with panfrost driver and memory controller on 
+rk3399.
+
+> If the GPU driver registers the cooling device in the new way, you
+> would also get EM registered thanks to the devfreq cooling new code
+> (commit: 84e0d87c9944eb36ae6037a).
+> 
+> You can check an example from Panfrost GPU driver [1].
+> 
+> I can see some upstream MSM GPU driver, but I don't know if that is
+> your GPU driver. It registers the 'old' way the devfreq cooling [2]
+> but it would be easy to change to use the new function.
+> The GPU driver would use the same dev_pm_opp_of_register_em() as
+> your CPUs do, so EM would be in 'milli-Watts' (so should be fine).
+> 
+> 
+> [1] 
+> https://elixir.bootlin.com/linux/v5.16/source/drivers/gpu/drm/panfrost/panfrost_devfreq.c#L153 
+> 
+> [2] 
+> https://elixir.bootlin.com/linux/v5.16/source/drivers/gpu/drm/msm/msm_gpu_devfreq.c#L129 
+> 
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
