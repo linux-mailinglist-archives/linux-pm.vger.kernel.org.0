@@ -2,85 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC5E24BC030
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Feb 2022 20:20:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A49DA4BC307
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Feb 2022 00:49:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236854AbiBRTVA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Feb 2022 14:21:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57774 "EHLO
+        id S240224AbiBRXrH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Feb 2022 18:47:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236783AbiBRTU7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Feb 2022 14:20:59 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1ACB2838D8
-        for <linux-pm@vger.kernel.org>; Fri, 18 Feb 2022 11:20:42 -0800 (PST)
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 7A20B3F1B7
-        for <linux-pm@vger.kernel.org>; Fri, 18 Feb 2022 19:20:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1645212041;
-        bh=H0Iwmd8wCuU9HHukGVMrKzFKF37GPFWQBtO1dM10cGA=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=fEQ2g1I76rQZAhJEcDW0E3te78PQNitWRg+FViMpTGa6aHQ8Yt9bMPAbjX5S876B9
-         Zq3NKbn5ikId+fmJ2eLSike46aA11c09Bnu4GSI+huCOEB69VvspZRQ6uOgR6Fwz9P
-         t1WiC4LNai0odYhI+GvhPQ5qrY85oQyVkaXMSeSX8UG1X0FLWFzmiA73dcvZmltQMq
-         44H5aDlfkPowcrKtJoZiBAyhrgTA8b6Acsbt0hA43BLCX2Js0IR7wdLs9DSQGwM+y+
-         OJ9mbbjy8iZTGRnSVEm4s1uT9KIMGkPWp4R8znapp/rPT0U+wJv4tmKeQ9EKfecraS
-         zq68leLgC5zlA==
-Received: by mail-ej1-f69.google.com with SMTP id qa30-20020a170907869e00b006cee5e080easo3472113ejc.3
-        for <linux-pm@vger.kernel.org>; Fri, 18 Feb 2022 11:20:41 -0800 (PST)
+        with ESMTP id S240221AbiBRXrH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Feb 2022 18:47:07 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A64517F2
+        for <linux-pm@vger.kernel.org>; Fri, 18 Feb 2022 15:46:49 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id w7so9461044ioj.5
+        for <linux-pm@vger.kernel.org>; Fri, 18 Feb 2022 15:46:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=8ApOdbLf2viFC8HOyVIL76M9o9gtvAN0a+oYBSzuctM=;
+        b=RcM5KBnGh0md1BmuL/NkOW3FBn7vrf1DLi5eD8iLAFpvoLxufqWXnNAL1eW4ImjZmj
+         lZIt5d9oC7CAvM09QsarVhPsvTQDJUcSgaCgJM7T8j1WkUu6p7qy4HpbdIvnOr6EwnUT
+         TT78lmKlb0uPeOS4KWzuId+rcI8SDXctopcM4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=H0Iwmd8wCuU9HHukGVMrKzFKF37GPFWQBtO1dM10cGA=;
-        b=vjuWp2+QzqIg/Q27oY1pXfxZyU22MrPAhkhqz4CHl6ZyOyNNs5QFpf3nMQCbS0pPqw
-         z9TKPyZlpX+IQOVt6kSXhXvQXcNZFhFEGvF6l1KPW7dkSYm+3QA5v0mIFSkYzXTDDSBO
-         6aHzj4rR87C/NjXAp/pv4i7qkUS1lR8dTZ680iJgq2a/p3o9sdWNDugY6QB2lRfC/ppE
-         f01YeBR+GyQRKhYfsHe+8kfpQjzdza3lVYCIU+zJs8r/k1cH8e9p9YlObxS3SGH/6Egv
-         nw5CUeLU0K0QsU8CORelrNIdMihEM0ni2pz6xR5bNUAV87pjTfl+Xgv6zv0Txtl36De5
-         Xv/Q==
-X-Gm-Message-State: AOAM533oDPr+02XRGikmvzm/mYHk1jzBgv7vG8bU3JVjEdUpO9RxjnEd
-        0sEyQzKmjn2L1AouiZSAukdsCOYhf1Ocni5B/hWsyiMd5PuPYLs33L4HU5/AsdmAuivG1BXktz7
-        KFiDI4NtooENA5zsZ+d0dM5G8l3OLycTGoSzg
-X-Received: by 2002:a17:906:b1d0:b0:6cd:fa02:b427 with SMTP id bv16-20020a170906b1d000b006cdfa02b427mr7463368ejb.99.1645212039291;
-        Fri, 18 Feb 2022 11:20:39 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz+3tAag5IIivzTuXFNNLBWIeNlv9ap8rmkimlg4Z9CIQb87t2RY7mnVEypnk+2Ca7rgN3Q6g==
-X-Received: by 2002:a17:906:b1d0:b0:6cd:fa02:b427 with SMTP id bv16-20020a170906b1d000b006cdfa02b427mr7463358ejb.99.1645212039146;
-        Fri, 18 Feb 2022 11:20:39 -0800 (PST)
-Received: from [192.168.0.116] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id l24sm5147643edv.88.2022.02.18.11.20.36
+        bh=8ApOdbLf2viFC8HOyVIL76M9o9gtvAN0a+oYBSzuctM=;
+        b=Qj29G3aK1krS0i3sfLNjIKavLkfn/6lMKjeP7i7oME+jZ98Rp4AIo/zQ/oE4F+mtE3
+         +zsmnQhdwPlLHV7tuKjbPeUskZBehQTZmlZJDLA6ZjQw668DuwEUI1VzgSdJpWt9mzPw
+         /loEwx1rbmM/e6Glt4SWKXuwv5b0f7hreS+PVBm4IJXW0cm0ekDB53qoKkIRX2ETNpSS
+         pFYrQj4SpE2RGHvnQAxQFciXyKG8PBLbu3MYzf0yPJd0aOvr4D5C1yc2pAijpDe1LN1u
+         3iEB8doAa+zxYH/l1XexAxIHBn1yCB/Xk0okkxuw86epQ2/Vc+tEVlsbJrzA2t87mnCd
+         OHeg==
+X-Gm-Message-State: AOAM530DX1mwJ2XFFeR03JtavDaPR/oNQZlFt/8za5UJDCx+PQvmulsq
+        SZacjHepgHdr3quUm5BV6LKmHg==
+X-Google-Smtp-Source: ABdhPJzG9Wf5D3tQinJhQj0RW7b2acZ6v/jfrdaRwlJbxWjpxlcyOpEftDqAh0A5tXrFDUnK+pL5vw==
+X-Received: by 2002:a05:6602:27c9:b0:5ed:1c27:2982 with SMTP id l9-20020a05660227c900b005ed1c272982mr6972651ios.163.1645228008561;
+        Fri, 18 Feb 2022 15:46:48 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id d18sm4272666iln.79.2022.02.18.15.46.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 11:20:37 -0800 (PST)
-Message-ID: <91a26d60-abeb-6188-2ed2-1145e52ca36e@canonical.com>
-Date:   Fri, 18 Feb 2022 20:20:35 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH V2] power: supply: max17042_battery: Use
- devm_work_autocancel()
-Content-Language: en-US
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
-        Purism Kernel Team <kernel@puri.sm>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Fri, 18 Feb 2022 15:46:47 -0800 (PST)
+Subject: Re: [PATCH RESEND v6 4/9] cpupower: Add the function to get the sysfs
+ value from specific table
+To:     Huang Rui <ray.huang@amd.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         linux-pm@vger.kernel.org
-References: <670ea51361f96035f49852c617325af10ffa07ea.1645205558.git.christophe.jaillet@wanadoo.fr>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <670ea51361f96035f49852c617325af10ffa07ea.1645205558.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8
+Cc:     Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Steven Noonan <steven@valvesoftware.com>,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Jassmine Meng <li.meng@amd.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220216073558.751071-1-ray.huang@amd.com>
+ <20220216073558.751071-5-ray.huang@amd.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <10708ac3-d33b-90b7-e096-14bccdfab942@linuxfoundation.org>
+Date:   Fri, 18 Feb 2022 16:46:46 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <20220216073558.751071-5-ray.huang@amd.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,21 +89,99 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18/02/2022 18:37, Christophe JAILLET wrote:
-> Use devm_work_autocancel() instead of hand-writing it.
-> This saves a few lines of code.
+On 2/16/22 12:35 AM, Huang Rui wrote:
+> Expose the helper into cpufreq header, then cpufreq driver can use this
+> function to get the sysfs value if it has any specific sysfs interfaces.
 > 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Signed-off-by: Huang Rui <ray.huang@amd.com>
 > ---
-> V2: s/devm_delayed_work_autocancel/devm_work_autocancel/
+>   tools/power/cpupower/lib/cpufreq.c | 21 +++++++++++++++------
+>   tools/power/cpupower/lib/cpufreq.h | 12 ++++++++++++
+>   2 files changed, 27 insertions(+), 6 deletions(-)
 > 
->  drivers/power/supply/max17042_battery.c | 12 +++---------
->  1 file changed, 3 insertions(+), 9 deletions(-)
+> diff --git a/tools/power/cpupower/lib/cpufreq.c b/tools/power/cpupower/lib/cpufreq.c
+> index c3b56db8b921..c011bca27041 100644
+> --- a/tools/power/cpupower/lib/cpufreq.c
+> +++ b/tools/power/cpupower/lib/cpufreq.c
+> @@ -83,20 +83,21 @@ static const char *cpufreq_value_files[MAX_CPUFREQ_VALUE_READ_FILES] = {
+>   	[STATS_NUM_TRANSITIONS] = "stats/total_trans"
+>   };
+>   
+> -
+> -static unsigned long sysfs_cpufreq_get_one_value(unsigned int cpu,
+> -						 enum cpufreq_value which)
+> +unsigned long cpufreq_get_sysfs_value_from_table(unsigned int cpu,
+> +						 const char **table,
+> +						 unsigned index,
+
+unsigned int
+
+> +						 unsigned size)
+
+unsigned int
+
+>   {
+>   	unsigned long value;
+>   	unsigned int len;
+>   	char linebuf[MAX_LINE_LEN];
+>   	char *endp;
+>   
+> -	if (which >= MAX_CPUFREQ_VALUE_READ_FILES)
+> +	if (!table || index >= size || !table[index])
+>   		return 0;
+>   
+> -	len = sysfs_cpufreq_read_file(cpu, cpufreq_value_files[which],
+> -				linebuf, sizeof(linebuf));
+> +	len = sysfs_cpufreq_read_file(cpu, table[index], linebuf,
+> +				      sizeof(linebuf));
+>   
+>   	if (len == 0)
+>   		return 0;
+> @@ -109,6 +110,14 @@ static unsigned long sysfs_cpufreq_get_one_value(unsigned int cpu,
+>   	return value;
+>   }
+>   
+> +static unsigned long sysfs_cpufreq_get_one_value(unsigned int cpu,
+> +						 enum cpufreq_value which)
+> +{
+> +	return cpufreq_get_sysfs_value_from_table(cpu, cpufreq_value_files,
+> +						  which,
+> +						  MAX_CPUFREQ_VALUE_READ_FILES);
+> +}
+> +
+>   /* read access to files which contain one string */
+>   
+>   enum cpufreq_string {
+> diff --git a/tools/power/cpupower/lib/cpufreq.h b/tools/power/cpupower/lib/cpufreq.h
+> index 95f4fd9e2656..107668c0c454 100644
+> --- a/tools/power/cpupower/lib/cpufreq.h
+> +++ b/tools/power/cpupower/lib/cpufreq.h
+> @@ -203,6 +203,18 @@ int cpufreq_modify_policy_governor(unsigned int cpu, char *governor);
+>   int cpufreq_set_frequency(unsigned int cpu,
+>   				unsigned long target_frequency);
+>   
+> +/*
+> + * get the sysfs value from specific table
+> + *
+> + * Read the value with the sysfs file name from specific table. Does
+> + * only work if the cpufreq driver has the specific sysfs interfaces.
+> + */
+> +
+> +unsigned long cpufreq_get_sysfs_value_from_table(unsigned int cpu,
+> +						 const char **table,
+> +						 unsigned index,
+
+unsigned int?
+
+> +						 unsigned size);
+
+unsigned int?
+
+> +
+>   #ifdef __cplusplus
+>   }
+>   #endif
 > 
 
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-
-
-Best regards,
-Krzysztof
+thanks,
+-- Shuah
