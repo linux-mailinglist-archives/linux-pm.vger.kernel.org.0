@@ -2,31 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04F574BB3E9
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Feb 2022 09:10:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BE9A4BB42E
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Feb 2022 09:31:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232364AbiBRIK0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Feb 2022 03:10:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42560 "EHLO
+        id S232574AbiBRIb2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Feb 2022 03:31:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbiBRIKZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Feb 2022 03:10:25 -0500
-Received: from mg.sunplus.com (mswedge1.sunplus.com [60.248.182.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1229A38182;
-        Fri, 18 Feb 2022 00:10:06 -0800 (PST)
-X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
-        ,3)
-Received: from 172.17.9.202
-        by mg01.sunplus.com with MailGates ESMTP Server V5.0(314:0:AUTH_RELAY)
-        (envelope-from <edwin.chiu@sunplus.com>); Fri, 18 Feb 2022 16:10:13 +0800 (CST)
-Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
- sphcmbx01.sunplus.com.tw (172.17.9.202) with Microsoft SMTP Server (TLS) id
- 15.0.1497.26; Fri, 18 Feb 2022 16:10:13 +0800
-Received: from sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd]) by
- sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd%14]) with mapi id
- 15.00.1497.026; Fri, 18 Feb 2022 16:10:13 +0800
-From:   =?utf-8?B?RWR3aW4gQ2hpdSDpgrHlnoLls7A=?= <edwin.chiu@sunplus.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        with ESMTP id S232585AbiBRIb1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Feb 2022 03:31:27 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301591FA41
+        for <linux-pm@vger.kernel.org>; Fri, 18 Feb 2022 00:31:10 -0800 (PST)
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 7B70C3F1B7
+        for <linux-pm@vger.kernel.org>; Fri, 18 Feb 2022 08:31:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1645173068;
+        bh=aC92jWRvHNaEtip7jAthsvaXw1jFODzyJaRgUH70hKg=;
+        h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+         In-Reply-To:Content-Type;
+        b=OzIt/+Z40N3kI9nyz1xXc5G8LYsqCjqYNSHbkUJ18Hkn1TEGtHNZ6/y6fskEGF1vR
+         tCbIrzLfzIAf5Wh2d1/xF6wDIkfJGZYsVA3lIDSxKqwxroMGjemfkHMSS4SM1kgrje
+         3TNaQGo4uyZbeztE2Yj5uUYa9RlIw7U5FKbxKalusbflOZh97zdXyx0DHIq0WbKkW7
+         jVz+aQKspIIUj/zpBuB5dkDK7zGdW3ESTdY5IeKiFMeA71yN3Z7utJGz1G7O+lybyC
+         zlRxANK/gPBKaJt5Q/yPorKVJZDMs+FH80jlXsK+G8N1R3g/PmC73BAvB8llHMiVyc
+         1tXCFTSiR8ZSQ==
+Received: by mail-ed1-f72.google.com with SMTP id j10-20020a05640211ca00b004090fd8a936so5088357edw.23
+        for <linux-pm@vger.kernel.org>; Fri, 18 Feb 2022 00:31:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=aC92jWRvHNaEtip7jAthsvaXw1jFODzyJaRgUH70hKg=;
+        b=WRirAjhGlMTpOnVrM1I5vv1iAi6m6v8M5n/Q5tG2szRsU5O9Cuhv+lULTKoEqGcZFd
+         X83iBZooLRpydjE3V9XN7pLyM2qHPA06MWT+niACDol+4oP1LJsi6XoILj5xL5HdIGnH
+         zXqxE+kHr5oiUaph2Hjqec8YJ1U+nCjCr7jGAosgoSOEz++ljYi9yM+Frsm0dGqxiqnC
+         Tb//RHT4cZJa8pVM6wuhPwALnnnCXz0olUmR7im+Yute4R/fe/deHKj4rMykA6R3Gpog
+         Kc60XL6PNhutoICZozrQZSZ1WFHdpEv0K9r6Y02oyLHPn5MNxU7S+b0AryguLTe9BD8w
+         jw/w==
+X-Gm-Message-State: AOAM533tziaKkTd1tKfe3wOykGDUBq8XkGkGQybvmYh0gG0GqGmmh1NS
+        01R9cuG0WPdZRz5LXVTwYecFsETuCpqgDsfBznZH7RGtFt/zHR2HdklfaHrmgvnlo3nMlZcWII8
+        qL4lj3fKfmBGZyG5cdVbL5R+scDt7MssNOTwX
+X-Received: by 2002:a17:906:3bc9:b0:6d0:8d78:e7e6 with SMTP id v9-20020a1709063bc900b006d08d78e7e6mr3179443ejf.222.1645173066557;
+        Fri, 18 Feb 2022 00:31:06 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy2u2VXIpAPEoBoY6BaKwMBiqPxrXKm9ExJSW+/bbvgrbKe9h0BxRUSt2c0Lndc6uf8qMfd2g==
+X-Received: by 2002:a17:906:3bc9:b0:6d0:8d78:e7e6 with SMTP id v9-20020a1709063bc900b006d08d78e7e6mr3179410ejf.222.1645173065998;
+        Fri, 18 Feb 2022 00:31:05 -0800 (PST)
+Received: from [192.168.0.114] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id v16sm1985190ejo.156.2022.02.18.00.31.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Feb 2022 00:31:05 -0800 (PST)
+Message-ID: <608800b4-2e56-d925-5db9-0ec40f98cbb5@canonical.com>
+Date:   Fri, 18 Feb 2022 09:31:04 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4] cpuidle: sunplus: Create cpuidle driver for sunplus
+ sp7021
+Content-Language: en-US
+To:     =?UTF-8?B?RWR3aW4gQ2hpdSDpgrHlnoLls7A=?= <edwin.chiu@sunplus.com>,
         Edwin Chiu <edwinchiu0505tw@gmail.com>,
         "robh+dt@kernel.org" <robh+dt@kernel.org>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
@@ -34,102 +73,113 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         "rafael@kernel.org" <rafael@kernel.org>,
         "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
         "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: RE: [PATCH v4] cpuidle: sunplus: Create cpuidle driver for sunplus
- sp7021
-Thread-Topic: [PATCH v4] cpuidle: sunplus: Create cpuidle driver for sunplus
- sp7021
-Thread-Index: AQHYG/cOqjt4Bbqwy06Z29eKCBs1J6yIApeAgApaEBD//8HxAIAG4ruw
-Date:   Fri, 18 Feb 2022 08:10:13 +0000
-Message-ID: <eca9b5a613c9417cacdcb90eef5b2235@sphcmbx02.sunplus.com.tw>
 References: <cover.1644218105.git.edwinchiu0505tw@gmail.com>
  <957d882222d218b62fe3fb7a069e2f7952afc5be.1644218105.git.edwinchiu0505tw@gmail.com>
  <64f91b1a-93b9-941d-fdfa-271e198e1ab5@canonical.com>
  <0edae7bea1ae47cd9044cd223a989b81@sphcmbx02.sunplus.com.tw>
  <136f2087-10e7-c9e8-2292-3046711c8f68@canonical.com>
-In-Reply-To: <136f2087-10e7-c9e8-2292-3046711c8f68@canonical.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [172.25.108.40]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+ <eca9b5a613c9417cacdcb90eef5b2235@sphcmbx02.sunplus.com.tw>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <eca9b5a613c9417cacdcb90eef5b2235@sphcmbx02.sunplus.com.tw>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-DQoNCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBLcnp5c3p0b2YgS296
-bG93c2tpIDxrcnp5c3p0b2Yua296bG93c2tpQGNhbm9uaWNhbC5jb20+DQo+IFNlbnQ6IE1vbmRh
-eSwgRmVicnVhcnkgMTQsIDIwMjIgMjo0NSBQTQ0KPiBUbzogRWR3aW4gQ2hpdSDpgrHlnoLls7Ag
-PGVkd2luLmNoaXVAc3VucGx1cy5jb20+OyBFZHdpbiBDaGl1IDxlZHdpbmNoaXUwNTA1dHdAZ21h
-aWwuY29tPjsNCj4gcm9iaCtkdEBrZXJuZWwub3JnOyBkZXZpY2V0cmVlQHZnZXIua2VybmVsLm9y
-ZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgcmFmYWVsQGtlcm5lbC5vcmc7DQo+IGRh
-bmllbC5sZXpjYW5vQGxpbmFyby5vcmc7IGxpbnV4LXBtQHZnZXIua2VybmVsLm9yZw0KPiBTdWJq
-ZWN0OiBSZTogW1BBVENIIHY0XSBjcHVpZGxlOiBzdW5wbHVzOiBDcmVhdGUgY3B1aWRsZSBkcml2
-ZXIgZm9yIHN1bnBsdXMgc3A3MDIxDQo+IA0KPiBPbiAxNC8wMi8yMDIyIDAzOjU1LCBFZHdpbiBD
-aGl1IOmCseWeguWzsCB3cm90ZToNCj4gPiBIaSBLcnp5c3p0b2Y6DQo+ID4NCj4gPiBQbGVhc2Ug
-c2VlIGJlbG93IGFuc3dlci4NCj4gPg0KPiA+Pj4gK3N0YXRpYyBzdHJ1Y3QgY3B1aWRsZV9kcml2
-ZXIgc3A3MDIxX2lkbGVfZHJpdmVyID0gew0KPiA+Pj4gKwkubmFtZSA9ICJzcDcwMjFfaWRsZSIs
-DQo+ID4+PiArCS5vd25lciA9IFRISVNfTU9EVUxFLA0KPiA+Pj4gKwkvKg0KPiA+Pj4gKwkgKiBT
-dGF0ZSBhdCBpbmRleCAwIGlzIHN0YW5kYnkgd2ZpIGFuZCBjb25zaWRlcmVkIHN0YW5kYXJkDQo+
-ID4+PiArCSAqIG9uIGFsbCBBUk0gcGxhdGZvcm1zLiBJZiBpbiBzb21lIHBsYXRmb3JtcyBzaW1w
-bGUgd2ZpDQo+ID4+PiArCSAqIGNhbid0IGJlIHVzZWQgYXMgInN0YXRlIDAiLCBEVCBiaW5kaW5n
-cyBtdXN0IGJlIGltcGxlbWVudGVkDQo+ID4+PiArCSAqIHRvIHdvcmsgYXJvdW5kIHRoaXMgaXNz
-dWUgYW5kIGFsbG93IGluc3RhbGxpbmcgYSBzcGVjaWFsDQo+ID4+PiArCSAqIGhhbmRsZXIgZm9y
-IGlkbGUgc3RhdGUgaW5kZXggMC4NCj4gPj4+ICsJICovDQo+ID4+PiArCS5zdGF0ZXNbMF0gPSB7
-DQo+ID4+PiArCQkuZW50ZXIgICAgICAgICAgICAgICAgICA9IHNwNzAyMV9lbnRlcl9pZGxlX3N0
-YXRlLA0KPiA+Pj4gKwkJLmV4aXRfbGF0ZW5jeSAgICAgICAgICAgPSAxLA0KPiA+Pj4gKwkJLnRh
-cmdldF9yZXNpZGVuY3kgICAgICAgPSAxLA0KPiA+Pj4gKwkJLnBvd2VyX3VzYWdlCQk9IFVJTlRf
-TUFYLA0KPiA+Pj4gKwkJLm5hbWUgICAgICAgICAgICAgICAgICAgPSAiV0ZJIiwNCj4gPj4+ICsJ
-CS5kZXNjICAgICAgICAgICAgICAgICAgID0gIkFSTSBXRkkiLA0KPiA+Pg0KPiA+PiBJIGhhdmUg
-aW1wcmVzc2lvbiB0aGF0IHRoZXJlIGlzIG5vIHBvaW50IGluIGhhdmluZyBjdXN0b20gZHJpdmVy
-IHdpdGggV0ZJLi4uDQo+ID4+DQo+ID4+IFN0aWxsIHRoZSBtYWluIHF1ZXN0aW9uIGZyb20gRGFu
-aWVsIGFuZCBTdWRlZXAgc3RheXM6IHdoeSBkbyB5b3UgbmVlZA0KPiA+PiB0aGlzPyBZb3UgY29w
-aWVkIGV4YWN0bHkgY3B1aWxkbGUtYXJtIGRyaXZlciwgdGhlcmUgaXMgbm90aGluZw0KPiA+PiBk
-aWZmZXJlbnQgaGVyZS4gQXQgbGVhc3QgSSBjb3VsZCBub3Qgc3BvdCBkaWZmZXJlbmNlcy4gTWF5
-YmUgZXhjZXB0IHRoYXQgeW91IHVzZSBjcHVfdjdfZG9faWRsZQ0KPiBleHBsaWNpdGx5Lg0KPiA+
-Pg0KPiA+PiBVbmZvcnR1bmF0ZWx5IEkgY2Fubm90IHVuZGVyc3RhbmQgdGhlIGV4cGxhbmF0aW9u
-IGhlcmU6DQo+ID4+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2FsbC8wODEyYzQ0Zjc3N2Q0MDI2
-Yjc5ZGYyZTM2OTgyOTRiZUBzcGhjbWJ4MA0KPiA+PiAyLnN1bnBsdXMuY29tLnR3LyBXaHkgZXhh
-Y3RseSBjcHVpZGxlLWFybSBkb2VzIG5vdCB3b3JrIGluIHlvdXIgY2FzZT8NCj4gPj4NCj4gPiBF
-ZHdpbj0+IEkgbWVhbiBjcHVpZGxlLWFybSBkcml2ZXIgY2FuJ3QgZGlyZWN0bHkgdXNlIHdpdGgg
-bm8gbW9kaWZpZWQuDQo+ID4gICAgICAgIElmIHNvbWVvbmUgd2FudCB0byB1c2UgY3B1aWRsZS1h
-cm0gZHJpdmVyLCBiZWxvdyBtb2RpZmljYXRpb24gc2VlbXMgbmVjZXNzYXJ5Lg0KPiA+DQo+IH5+
-fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+
-fn5+fn5+fn5+fn5+fn5+fn5+DQo+ID4gICAgICAgIFN0YXRpYyBpbnQgc3A3MDIxX2NwdWlkbGVf
-c3VzcGVuZF9lbnRlcih1bnNpZ25lZCBsb25nIGluZGV4KSB7fn0NCj4gPiAgICAgICAgU3RhdGlj
-IGludCBfX2luaXQgc3A3MDIxX2NwdWlkbGVfaW5pdChzdHJ1Y3QgZGV2aWNlX25vZGUgKmNwdV9u
-b2RlLCBpbnQgY3B1KSB7fn0NCj4gPiAgICAgICAgU3RhdGljIGNvbnN0IHN0cnVjdCBjcHVpZGxl
-X29wcyBzY19zbXBfb3BzIF9faW5pdGNvbnN0ID0gew0KPiA+ICAgICAgICAgICAgIC5zdXNwZW5k
-ID0gc3A3MDIxX2NwdWlkbGVfc3VzcGVuZF9lbnRlciwNCj4gPiAgICAgICAgICAgICAuaW5pdCA9
-IHNwNzAyMV9jcHVpZGxlX2luaXQsDQo+ID4gICAgICAgIH07DQo+ID4gICAgICAgIENQVUlETEVf
-TUVUSE9EX09GX0RFQ0xBUkUoc2Nfc21wLCAic3VucGx1cyxzYy1zbXAiLCAmc2Nfc21wX29wcyk7
-IC8vZGVjbGFyZQ0KPiBlbmFibGUgbWV0aG9kDQo+ID4NCj4gPiB+fn5+fn5+fn5+fn5+fn5+fn5+
-fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+DQo+ID4g
-fn5+fn5+fn5+fg0KPiA+DQo+ID4gICAgICAgIEJ1dCBjaGFuZ2UgY3B1aWxkZS1hcm0uYyBmb3Ig
-c3VucGx1cyBkcml2ZXIgc2VlbXMgbm90IHJlYXNvbmFibGUuDQo+ID4gICAgICAgIFRoYXQgaXMg
-d2h5IEkgd2FudCB0byBzdWJtaXQgY3B1aWRsZS1zdW5wbHVzLmMNCj4gPiAgICAgICAgQWx0aG91
-Z2h0IHN1bnBsdXMgY3B1aWRsZSBvbmx5IGNvbWUgaW4gV0ZJLCBidXQgaXQgY2FuIGNvbXBsZXRl
-IHRoZSBjcHVpZGxlIGZyYW1ld29yay4NCj4gDQo+IEkgZG9uJ3QgdGhpbmsgaXQgaXMgY29ycmVj
-dC4gWW91IGNhbiB1c2UgY3B1aWRsZS1hcm0sIGJlY2F1c2UgaXQgaXMgYmVpbmcgYWx3YXlzIGlu
-aXRpYWxpemVkIHdpdGgNCj4gZGV2aWNlX2luaXRjYWxsKCkuIFlvdSBlaXRoZXIgdXNlIGFwcHJv
-cHJpYXRlIGNvbXBhdGlibGUgaW4gRFQgb3IgYWRkIHlvdXIgY29tcGF0aWJsZSB0byBjcHVpZGxl
-LWFybS4NCj4gDQo+IEV2ZW4gaWYgdGhpcyBkaWQgbm90IHdvcmssIHRoZW4gdGhlIHNvbHV0aW9u
-IGlzIHRvIHVzZSBjb21tb24gcGFydHMsIG5vdCB0byBkdXBsaWNhdGUgZW50aXJlIGRyaXZlci4N
-Cj4gRHVwbGljYXRpbmcgaXMgbm90IGFjY2VwdGFibGUuDQo+IA0KPiBCZXN0IHJlZ2FyZHMsDQo+
-IEtyenlzenRvZg0KDQoNCkkgZG8gdXNlZCBjb21wYXRpYmxlID0gImFybSxpZGxlLXN0YXRlIiBp
-biBEVCBhbmQgZW5hYmxlIGdlbmVyaWMgYXJtIGNwdWlkbGUgZHJpdmVyIGluIG1lbnVjb25maWcu
-DQpCdXQgdGhlcmUgaGF2ZSBtb3VudCBkcml2ZXIgZmFpbCBtZXNzYWdlIGR1ZSB0byBubyBjcHVp
-ZGxlX29wcyBmdW5jdGlvbnMuDQpUaGF0IGlzIHdoeSBJIG5lZWQgYWRkZWQgcGF0Y2ggY29kZSB0
-byBjb21wbGV0ZSBjcHVpZGxlIGRyaXZlci4NCkFjY29yZGluZyB5b3VyIGNvbW1lbnQsIEkgd2ls
-bCB0cnkgdG8gdXNlIGNvbW1vbiBwYXJ0cyBhbmQgaG9vayBzb21lIGN1c3RvbSBjb2RlLCBsYXRl
-ci4gDQpUaGFua3MuDQoNCumCseWeguWzsCBFZHdpbkNoaXUNCuaZuuiDvemBi+eul+WwiOahiA0K
-VDogKzg4Ni0zLTU3ODYwMDUgZXh0LjI1OTANCmVkd2luLmNoaXVAc3VucGx1cy5jb20NCjMwMCDm
-lrDnq7nnp5HlrbjlnJLljYDlibXmlrDkuIDot68xOeiZnw0K
+On 18/02/2022 09:10, Edwin Chiu 邱垂峰 wrote:
+> 
+> 
+> 
+>> -----Original Message-----
+>> From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>> Sent: Monday, February 14, 2022 2:45 PM
+>> To: Edwin Chiu 邱垂峰 <edwin.chiu@sunplus.com>; Edwin Chiu <edwinchiu0505tw@gmail.com>;
+>> robh+dt@kernel.org; devicetree@vger.kernel.org; linux-kernel@vger.kernel.org; rafael@kernel.org;
+>> daniel.lezcano@linaro.org; linux-pm@vger.kernel.org
+>> Subject: Re: [PATCH v4] cpuidle: sunplus: Create cpuidle driver for sunplus sp7021
+>>
+>> On 14/02/2022 03:55, Edwin Chiu 邱垂峰 wrote:
+>>> Hi Krzysztof:
+>>>
+>>> Please see below answer.
+>>>
+>>>>> +static struct cpuidle_driver sp7021_idle_driver = {
+>>>>> +	.name = "sp7021_idle",
+>>>>> +	.owner = THIS_MODULE,
+>>>>> +	/*
+>>>>> +	 * State at index 0 is standby wfi and considered standard
+>>>>> +	 * on all ARM platforms. If in some platforms simple wfi
+>>>>> +	 * can't be used as "state 0", DT bindings must be implemented
+>>>>> +	 * to work around this issue and allow installing a special
+>>>>> +	 * handler for idle state index 0.
+>>>>> +	 */
+>>>>> +	.states[0] = {
+>>>>> +		.enter                  = sp7021_enter_idle_state,
+>>>>> +		.exit_latency           = 1,
+>>>>> +		.target_residency       = 1,
+>>>>> +		.power_usage		= UINT_MAX,
+>>>>> +		.name                   = "WFI",
+>>>>> +		.desc                   = "ARM WFI",
+>>>>
+>>>> I have impression that there is no point in having custom driver with WFI...
+>>>>
+>>>> Still the main question from Daniel and Sudeep stays: why do you need
+>>>> this? You copied exactly cpuildle-arm driver, there is nothing
+>>>> different here. At least I could not spot differences. Maybe except that you use cpu_v7_do_idle
+>> explicitly.
+>>>>
+>>>> Unfortunately I cannot understand the explanation here:
+>>>> https://lore.kernel.org/all/0812c44f777d4026b79df2e3698294be@sphcmbx0
+>>>> 2.sunplus.com.tw/ Why exactly cpuidle-arm does not work in your case?
+>>>>
+>>> Edwin=> I mean cpuidle-arm driver can't directly use with no modified.
+>>>        If someone want to use cpuidle-arm driver, below modification seems necessary.
+>>>
+>> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>>        Static int sp7021_cpuidle_suspend_enter(unsigned long index) {~}
+>>>        Static int __init sp7021_cpuidle_init(struct device_node *cpu_node, int cpu) {~}
+>>>        Static const struct cpuidle_ops sc_smp_ops __initconst = {
+>>>             .suspend = sp7021_cpuidle_suspend_enter,
+>>>             .init = sp7021_cpuidle_init,
+>>>        };
+>>>        CPUIDLE_METHOD_OF_DECLARE(sc_smp, "sunplus,sc-smp", &sc_smp_ops); //declare
+>> enable method
+>>>
+>>> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>> ~~~~~~~~~~
+>>>
+>>>        But change cpuilde-arm.c for sunplus driver seems not reasonable.
+>>>        That is why I want to submit cpuidle-sunplus.c
+>>>        Althought sunplus cpuidle only come in WFI, but it can complete the cpuidle framework.
+>>
+>> I don't think it is correct. You can use cpuidle-arm, because it is being always initialized with
+>> device_initcall(). You either use appropriate compatible in DT or add your compatible to cpuidle-arm.
+>>
+>> Even if this did not work, then the solution is to use common parts, not to duplicate entire driver.
+>> Duplicating is not acceptable.
+>>
+>> Best regards,
+>> Krzysztof
+> 
+> 
+> I do used compatible = "arm,idle-state" in DT and enable generic arm cpuidle driver in menuconfig.
+> But there have mount driver fail message due to no cpuidle_ops functions.
+> That is why I need added patch code to complete cpuidle driver.
+> According your comment, I will try to use common parts and hook some custom code, later. 
+
+I think I understood the motivation behind your driver. The cpuidle-arm
+requires enable-method property which usually uses for ARMv7
+CPU_METHOD_OF_DECLARE(). You don't have CPU_METHOD_OF_DECLARE().
+
+Now the question: why can't you define CPU_METHOD_OF_DECLARE() just like
+many other ARMv7 platforms do?
+
+Best regards,
+Krzysztof
