@@ -2,77 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4BA24BB9F6
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Feb 2022 14:18:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9584C4BB9F9
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Feb 2022 14:18:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235399AbiBRNSV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Feb 2022 08:18:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42418 "EHLO
+        id S235739AbiBRNS2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Feb 2022 08:18:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233554AbiBRNSU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Feb 2022 08:18:20 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9E447565
-        for <linux-pm@vger.kernel.org>; Fri, 18 Feb 2022 05:18:03 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id q198-20020a1ca7cf000000b0037bb52545c6so8620961wme.1
-        for <linux-pm@vger.kernel.org>; Fri, 18 Feb 2022 05:18:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=1tjby93Kc0Rn0tn7HQGSR30mDcuNIiCk/GNgyX9AHkw=;
-        b=bvMMy9//es+9+ewHV20w2BEQo+h4RaTbmkqBVO6dIowt5wZk9jNqLvH29R1QTcy26+
-         u0sGCtZDFWX0FVc9Yb0Gk2gOhMWe1Cg/mbRnrPqrocrplYKzeOCNhMK7qEuf9vBYdA+G
-         8XWElUDu6zeeiWRNbDFn/0tA2cvhS8gOmSKZHMGFn1Ne9A2UDvHudKH52Amin2ZMrXod
-         2TXd6RU6xvJ4AuVJp3xVN9MAjAfqx2auYaukjwol2ry1/pt/B2pztYdW88VaSAuTdt1s
-         pf62Ky1j0a0euiquOQX863Y25e7JFO5cPjFAsngoStB4W5XPzkSBrNBIR8DN9d+gZcW5
-         qdxQ==
+        with ESMTP id S235732AbiBRNSZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Feb 2022 08:18:25 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C0E4C7A6
+        for <linux-pm@vger.kernel.org>; Fri, 18 Feb 2022 05:18:08 -0800 (PST)
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 33C2E3F1A1
+        for <linux-pm@vger.kernel.org>; Fri, 18 Feb 2022 13:18:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1645190287;
+        bh=BpW5fQh3uUN/Pfl9NCOaES86qNesPQDykTGq/4H1dKc=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version:Content-Type;
+        b=FUwtRl33/B7hD6TEdCZly7bvg+EfubdbrGpZgd+JROVD9ClNjOQCA6OL/JYSDY11X
+         edlm6A3HT1NMJuhjUIDxUMaLFrYfyxjk8pB6IoXWwmX68Qef/+U6O01Vx5N1P5JMun
+         58noQTYu1+CA7RnYl7QVspGugPDZ2H8ACaft497ZTBnjfTXwL6zJ4y0eVlNwrRmAls
+         mAR3zD3llgJBtCiozcH82N46qovFbYQ0I7GkWqXYRw1T8jXsgU/6dj8D6s3Zf5l1d4
+         BqKTggyh731a1AdytY50R/P51IPPEmJiAFTlmMlu2FGSV1Kt3/gixCbdoA/bRO3MB0
+         BvfakG+F6bcLg==
+Received: by mail-ed1-f72.google.com with SMTP id eq13-20020a056402298d00b00412cfa4bb0eso687367edb.7
+        for <linux-pm@vger.kernel.org>; Fri, 18 Feb 2022 05:18:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1tjby93Kc0Rn0tn7HQGSR30mDcuNIiCk/GNgyX9AHkw=;
-        b=l/7ih2jYtlHz/SZ/jihN/N7ZwZKWqnlCPBNGLfwPDANiTQqpNjvIPT+dd/HE6OCn1G
-         wIAx+eeHWbr+MkVbggg0P46od1mNK35dV8aGKzZfgYoBc7DMtVjnzm8nKXyJ71Bg5vUn
-         +vLJQaWOX4Rac693vnSihNbDRbkfa7BtKXloFvn5onml1+acOeWa1Rx37j6GYeourwqw
-         Ya7bg2SvuF97uNCiQIycIQRUoxzZ9RPuYmF/aZPVqot3t52ysnU37xDuv5Sygin21n4a
-         P5ItlW9raIBZSKkMWXCpN1LqhmZliB5YKwHHENVK8nGFAJFvx4FeyewM/M8GfmntZ85i
-         B7yw==
-X-Gm-Message-State: AOAM531jX4F4my71sXD7yptI/8cpAVbCeklI4CKdhzGThLRx+27BSfBg
-        NrV1sqgKGGik2CGXG1XxaTISjg==
-X-Google-Smtp-Source: ABdhPJz0Xa/vx1HB7VdVRhG685lAUCyCyEt2mtKyi+OdqV6Fwc5a2yuxce1Zhb0sH1txCPdXVasgcQ==
-X-Received: by 2002:a05:600c:1c1a:b0:37b:ead2:8e6d with SMTP id j26-20020a05600c1c1a00b0037bead28e6dmr10938796wms.94.1645190281772;
-        Fri, 18 Feb 2022 05:18:01 -0800 (PST)
-Received: from ?IPV6:2a01:e34:ed2f:f020:5828:300b:5226:ef02? ([2a01:e34:ed2f:f020:5828:300b:5226:ef02])
-        by smtp.googlemail.com with ESMTPSA id m22sm4727187wmq.35.2022.02.18.05.17.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 05:18:01 -0800 (PST)
-Message-ID: <41214f23-ddb1-f60c-5e2a-96ba161cf727@linaro.org>
-Date:   Fri, 18 Feb 2022 14:17:57 +0100
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=BpW5fQh3uUN/Pfl9NCOaES86qNesPQDykTGq/4H1dKc=;
+        b=KJxXigx42PB8Ro0X7FYgnQgJ5kDwtnprFuokuZkaZLM1Z04AysIwKepZL95EU7FkHN
+         uu2txz9KBaG4dBrTBue0hcLBcZh9BVCbAW4ibVvoUWJknwd2b4QKQTWININEfa7hbxPD
+         CR/Xq8RYbfsUvqWCObsAy0dbebFYRa/GXH3Zz/71tqoSGeTc2whPDMhOjjEWwYMx5O6k
+         D99R6Jwx9t16pGaylDeuKVtRZ7QlArw0MGVDdr5dELG5E9BdtP1Fdbq4JfRMlgNWJO1Z
+         Ov3GqDdAXotr0l575XEUAfJIrDyERDy8kK+4SIygd1qvXxRzm4J3mLz7LI8OJSq9hZ0B
+         eiEg==
+X-Gm-Message-State: AOAM530ZN6ze2IXorz4MRsb0g9SJQyOskDkDa5nmaW3mkkhxRK0DwmsR
+        IeuDPE+0jGcK7Cnr/FEtHrgi44TJ/qWIVRVXi1dxRIak8W1iMN+sqKvfFTs5QHwyXxEjCi5fqw/
+        I6l8TCQLXDptFOVK4vmji3vG+ccWtWlbTu4kG
+X-Received: by 2002:a05:6402:4305:b0:410:d56e:efe3 with SMTP id m5-20020a056402430500b00410d56eefe3mr8202059edc.440.1645190286899;
+        Fri, 18 Feb 2022 05:18:06 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz8g7ylX5DfI5GDGYJJcRfIXiBC/rxttQWz/VkkQYf0o469gjXG/o2FNvU6gl8bykHatt6NgA==
+X-Received: by 2002:a05:6402:4305:b0:410:d56e:efe3 with SMTP id m5-20020a056402430500b00410d56eefe3mr8202031edc.440.1645190286702;
+        Fri, 18 Feb 2022 05:18:06 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id 12sm2281255ejh.30.2022.02.18.05.18.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 05:18:06 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     devicetree@vger.kernel.org,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        linux-pm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Sylwester Nawrocki <snawrocki@kernel.org>
+Subject: Re: (subset) [PATCH v2 3/3] ARM: dts: exynos: align PPMU event node names with dtschema
+Date:   Fri, 18 Feb 2022 14:18:04 +0100
+Message-Id: <164519028097.19535.13626825371267810296.b4-ty@canonical.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20210920071753.38560-3-krzysztof.kozlowski@canonical.com>
+References: <20210920071540.38337-1-krzysztof.kozlowski@canonical.com> <20210920071753.38560-3-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1 3/7] powercap/dtpm: Fixup kfree for virtual node
-Content-Language: en-US
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     rjw@rjwysocki.net, heiko@sntech.de, lukasz.luba@arm.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-References: <20220130210210.549877-1-daniel.lezcano@linaro.org>
- <20220130210210.549877-3-daniel.lezcano@linaro.org>
- <CAPDyKFqV++g63Asax8TNSEgujxJ=uM9XG2_Advu34JidYBCGtg@mail.gmail.com>
- <e44b9c4b-2ac4-4ea4-c771-bde13943af5f@linaro.org>
- <CAPDyKFr8Ycr2cbiD5MM9FSPc1qea+Yp9=cottcGAo7HmFR9Eaw@mail.gmail.com>
- <cfbaefa5-fc7b-bd0f-e4ed-8f046de2a7cf@linaro.org>
- <CAPDyKFoWq+i09Ts_+SAz9ctC2a7-cqC71buDmvb-LZFTVSH+DQ@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAPDyKFoWq+i09Ts_+SAz9ctC2a7-cqC71buDmvb-LZFTVSH+DQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,37 +88,18 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17/02/2022 16:45, Ulf Hansson wrote:
+On Mon, 20 Sep 2021 09:17:53 +0200, Krzysztof Kozlowski wrote:
+> Use hyphen instead of underscore and align the PPMU event node name with
+> dtschema.  The event-name property must match the node name, by the
+> design of devfreq events and PPMU driver.
+> 
+> 
 
-[ ... ]
+Applied, thanks!
 
-> Does ops->release() also resets the "dtpm" pointer to NULL? If not,
-> it's good practice that it should, right?
->
-> In that case, we would be calling "kfree(NULL);" the second time,
-> which is perfectly fine.
+[3/3] ARM: dts: exynos: align PPMU event node names with dtschema
+      commit: 7cdfe3b3b60c89f0e12e8ee194a7cfbfd46515dd
 
-So you suggest to replace:
-
-if (ops->release)
-	ops->release(dtpm);
-else
-	kfree(dtpm);
-
-By:
-
-if (ops->release) {
-	ops->release(dtpm);
-	dtpm = NULL;
-}
-
-kfree(dtpm);
-
-?
-
+Best regards,
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
