@@ -2,127 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F7E4BC355
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Feb 2022 01:27:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FDFF4BC371
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Feb 2022 01:31:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240356AbiBSA2C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Feb 2022 19:28:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57164 "EHLO
+        id S240371AbiBSA3K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Feb 2022 19:29:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237337AbiBSA2B (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Feb 2022 19:28:01 -0500
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C515B7C43
-        for <linux-pm@vger.kernel.org>; Fri, 18 Feb 2022 16:27:43 -0800 (PST)
-Received: by mail-il1-x134.google.com with SMTP id v3so635213ilc.7
-        for <linux-pm@vger.kernel.org>; Fri, 18 Feb 2022 16:27:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=JYKbon0sjmC8OdB1+pUCylkGlnV+3knb0QnDCySZnIw=;
-        b=UyDeiKgG7MnwJIirmRh8gakUGCKk++DgSMZTiEg1ZLGKiNBJO+MtrMz1tBlDXU//AF
-         cWHFPrIohCu/AOHoKZUR+Wm2PiTCit8e1W5/wmMe0Bvj3u7Wmpcu2NkGpMdqlEPLG/bu
-         XPJvxbgaIxjAT6SW7sZpv87qAv4gNN/gYZDMw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=JYKbon0sjmC8OdB1+pUCylkGlnV+3knb0QnDCySZnIw=;
-        b=t5KnCYaTycbRRnt5pfs6eXQOpbYRItn+urj6zHaenqecTCQmUM+aNLP45EMIqpvEAj
-         9z5iDS1aWX/52r9RXaPnblwmTtZgXdwPfA/RDGeea8pvfD0dx5K/n32W6+BoE2ZCYKi+
-         0RigLshCcVew+HnTy+8Fl+5BLpOnSSZIbfKA7PghnbqHNYY0RLB4ZzWRmTKQ5uZpzbXy
-         WV7lb59gCLzwiO8OHWhVu2BSVLdynN76yunuyRoVOpEV9vdAG+ps04d3rhWZx2OiKnGb
-         cgvh+dYo/6qzEfPhz2E+mLIMlnL2OIhTaxUxwfwtramCv+YxPnXWXmwcWvlBRJUHA66P
-         Io7g==
-X-Gm-Message-State: AOAM531PzecWZortpD/X7LPFJRXCvLKYL9mfstH5lcvgFpigEzWsdjIH
-        9mqWBaozPwMXXDVTwZ0FyKTuSA==
-X-Google-Smtp-Source: ABdhPJy6ZAFBwwp1IZSsSBg89VsTeKSYTj8aPKKyHGlR/AMvlPzX0pNDp8Mern6FI6wjY9MdXr1drA==
-X-Received: by 2002:a05:6e02:1be5:b0:2c1:efb6:9698 with SMTP id y5-20020a056e021be500b002c1efb69698mr393555ilv.131.1645230463021;
-        Fri, 18 Feb 2022 16:27:43 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id h6sm3516174ilj.58.2022.02.18.16.27.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 16:27:42 -0800 (PST)
-Subject: Re: [PATCH RESEND v6 0/9] cpupower: Add AMD P-State Support
-To:     Huang Rui <ray.huang@amd.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pm@vger.kernel.org
-Cc:     Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Steven Noonan <steven@valvesoftware.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Jassmine Meng <li.meng@amd.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220216073558.751071-1-ray.huang@amd.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <8aafb93a-772c-1806-e087-cd285694aa74@linuxfoundation.org>
-Date:   Fri, 18 Feb 2022 17:27:41 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <20220216073558.751071-1-ray.huang@amd.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S240382AbiBSA3K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Feb 2022 19:29:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD670B7C4E;
+        Fri, 18 Feb 2022 16:28:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8E691B82732;
+        Sat, 19 Feb 2022 00:28:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3C639C340EB;
+        Sat, 19 Feb 2022 00:28:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645230530;
+        bh=V51nKj5al366IWu0bB/o4b2q56GYa0ZwsLnnNkcI2/c=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=iQdvKMbWQGuGfum3Jnc9e65GOLMFw30CHQ4qDB7BGQZuWUqWaYJZj/mPT6u3+VWYW
+         +D7v4VHfUSfdmAyCDdWRd0fNqZuxCBuzHawwfuUAAfLFR4a0HIhOEkgbtx5RcZrFID
+         LFkqm2a1S1/9ggjy6qfvV3S2XQnWI1Q6X/2lTKQLAqquBW7uXl9zWDxHKAyNX8kgKe
+         lmkT/66Vx9LEiScCRVMDfarzfJV9F2ZJzqfu1Rzj2YeVPL7D1Le4FOaLdFL6mX/yfI
+         Ow2RIcUm6ntiF8XJiQGysMZ98ZNmqPEN2WiLCEk32EkEApGOS7kQbK9NIZeyaj+HOg
+         R6W4lk3Bog2MA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2868BE7BB08;
+        Sat, 19 Feb 2022 00:28:50 +0000 (UTC)
+Subject: Re: [GIT PULL] ACPI fixes for v5.17-rc5
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0hpQzGdX0HW94fgFG0LjTcKs0s9PgczzjVUcz8AaRPpqg@mail.gmail.com>
+References: <CAJZ5v0hpQzGdX0HW94fgFG0LjTcKs0s9PgczzjVUcz8AaRPpqg@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0hpQzGdX0HW94fgFG0LjTcKs0s9PgczzjVUcz8AaRPpqg@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-5.17-rc5
+X-PR-Tracked-Commit-Id: 8292656464e5f066d46cb73da957930613a2c597
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 1c2a33d0ac6961d36cd653638c7841b179969906
+Message-Id: <164523053016.25426.7046733863089488955.pr-tracker-bot@kernel.org>
+Date:   Sat, 19 Feb 2022 00:28:50 +0000
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2/16/22 12:35 AM, Huang Rui wrote:
-> Hi Shuah,
-> 
-> Since AMD P-State kernel is merged into 5.17-rc1, I would like to continue
-> revising the AMD P-State support for the CPUPower tool. These series are
-> rebased on latest bleeding-edge, any comments are warm for me.
-> 
-> See patch series of CPUPower in below git repo:
-> V1: https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git/log/?h=amd-pstate-dev-v1
-> V2: https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git/log/?h=amd-pstate-dev-v2
-> V3: https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git/log/?h=amd-pstate-dev-v3
-> V4: https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git/log/?h=amd-pstate-dev-v4
-> V5: https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git/log/?h=amd-pstate-dev-v5
-> V6: https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git/log/?h=cpupower-amd-pstate
-> 
+The pull request you sent on Fri, 18 Feb 2022 19:50:36 +0100:
 
-A few checkpatch warns to fix. I usually ignore CHECK from checkpatch,
-but a few of them found on this series could improve the code.
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-5.17-rc5
 
-Also is there a need to add/update manpages and documentation.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/1c2a33d0ac6961d36cd653638c7841b179969906
 
-I tested these my AMD Ryzen 7 4700G system. I didn't play with set commands
-and just the info ones.
+Thank you!
 
-cpupower info gave me this output. The first message is fine, but the
-second one is a bit odd. Should it just bail out right after the first
-message about "not support"
-
-cpupower info
-
-System does not support Intel's performance bias setting
-analyzing CPU 0:
-
-Go ahead send me v7 for these and add any mapages/doc if necessary.
-I will get them into Linux 5.18-rc1
-
-thanks,
--- Shuah
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
