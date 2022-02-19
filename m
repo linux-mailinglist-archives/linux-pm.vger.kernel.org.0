@@ -2,51 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB0B4BC323
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Feb 2022 01:02:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F7E4BC355
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Feb 2022 01:27:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240297AbiBSACV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Feb 2022 19:02:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47072 "EHLO
+        id S240356AbiBSA2C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Feb 2022 19:28:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237956AbiBSACU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Feb 2022 19:02:20 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D243E272DAE
-        for <linux-pm@vger.kernel.org>; Fri, 18 Feb 2022 16:02:01 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id r7so4062887iot.3
-        for <linux-pm@vger.kernel.org>; Fri, 18 Feb 2022 16:02:01 -0800 (PST)
+        with ESMTP id S237337AbiBSA2B (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Feb 2022 19:28:01 -0500
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C515B7C43
+        for <linux-pm@vger.kernel.org>; Fri, 18 Feb 2022 16:27:43 -0800 (PST)
+Received: by mail-il1-x134.google.com with SMTP id v3so635213ilc.7
+        for <linux-pm@vger.kernel.org>; Fri, 18 Feb 2022 16:27:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=7ZlmJufess7nBAm7hU3DguIKv9ZtiGi9JSmRwv2EeUQ=;
-        b=KZ27u7Fd31CMtI1sPqE6SRPOXDBWUdVlnIrhec7AUUtBN+/jw1SCmwMElAsG6PKIt6
-         ccwedC7cvou8ouMzBv5d6f/9x/wWPbtESvfRfdlfF1gEfpN1+ISiGJCkMUWK/h6HDMcH
-         dzT8ryzNEwtjObNWI1k5ZsbrusIbFAGRxZupY=
+        bh=JYKbon0sjmC8OdB1+pUCylkGlnV+3knb0QnDCySZnIw=;
+        b=UyDeiKgG7MnwJIirmRh8gakUGCKk++DgSMZTiEg1ZLGKiNBJO+MtrMz1tBlDXU//AF
+         cWHFPrIohCu/AOHoKZUR+Wm2PiTCit8e1W5/wmMe0Bvj3u7Wmpcu2NkGpMdqlEPLG/bu
+         XPJvxbgaIxjAT6SW7sZpv87qAv4gNN/gYZDMw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=7ZlmJufess7nBAm7hU3DguIKv9ZtiGi9JSmRwv2EeUQ=;
-        b=iWSelZ28SK5FnRnUcQ+re6aQZlS7MLaINODweoU3NyW5pUnZ1Qwc5GJmSP6NhZFxPw
-         ze8S3wuuDByzpavL28BwFllZ1xbdtO7vrbr3DV2oa/9wuGpONCP3Srk94ubPngfL62nB
-         cGe08E0K75pcIhBczqm5DrQvo+rrm0WiRFo1KzeJavKjdyBul2JvVj0yS+oWRA2UTmUu
-         E0wWu7Fq2Ud5/F2u4rnzt7xqk4ebhdWtCfYBqVEOL4dLNNqjvNw2Jsr6f6h5cGMZnhgw
-         U0fOWSNoY0BbP+JYEEsL+Z9wgsmcq4jRW6LjSvI33k7acu7CbXfhViAzDLaEtdgCigB7
-         Eaog==
-X-Gm-Message-State: AOAM531ItWcaaWiF8kdy14I2CscoiAYO2xJzaM96wC7a82ZbIhC7qzun
-        Xsf8IEWGn5XosMTrdPuFFW0CZJlpI00C9g==
-X-Google-Smtp-Source: ABdhPJyO5b8f1Ne5v1jyoyUS2rZcna35i96AFo8C0R6aK1q7Jp4K3tW2sdgMnr2BwcH7XAu0HIZ5Jg==
-X-Received: by 2002:a02:3403:0:b0:314:b71f:eae7 with SMTP id x3-20020a023403000000b00314b71feae7mr2701398jae.6.1645228921094;
-        Fri, 18 Feb 2022 16:02:01 -0800 (PST)
+        bh=JYKbon0sjmC8OdB1+pUCylkGlnV+3knb0QnDCySZnIw=;
+        b=t5KnCYaTycbRRnt5pfs6eXQOpbYRItn+urj6zHaenqecTCQmUM+aNLP45EMIqpvEAj
+         9z5iDS1aWX/52r9RXaPnblwmTtZgXdwPfA/RDGeea8pvfD0dx5K/n32W6+BoE2ZCYKi+
+         0RigLshCcVew+HnTy+8Fl+5BLpOnSSZIbfKA7PghnbqHNYY0RLB4ZzWRmTKQ5uZpzbXy
+         WV7lb59gCLzwiO8OHWhVu2BSVLdynN76yunuyRoVOpEV9vdAG+ps04d3rhWZx2OiKnGb
+         cgvh+dYo/6qzEfPhz2E+mLIMlnL2OIhTaxUxwfwtramCv+YxPnXWXmwcWvlBRJUHA66P
+         Io7g==
+X-Gm-Message-State: AOAM531PzecWZortpD/X7LPFJRXCvLKYL9mfstH5lcvgFpigEzWsdjIH
+        9mqWBaozPwMXXDVTwZ0FyKTuSA==
+X-Google-Smtp-Source: ABdhPJy6ZAFBwwp1IZSsSBg89VsTeKSYTj8aPKKyHGlR/AMvlPzX0pNDp8Mern6FI6wjY9MdXr1drA==
+X-Received: by 2002:a05:6e02:1be5:b0:2c1:efb6:9698 with SMTP id y5-20020a056e021be500b002c1efb69698mr393555ilv.131.1645230463021;
+        Fri, 18 Feb 2022 16:27:43 -0800 (PST)
 Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id p5sm4433871ilq.71.2022.02.18.16.02.00
+        by smtp.gmail.com with ESMTPSA id h6sm3516174ilj.58.2022.02.18.16.27.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 16:02:00 -0800 (PST)
-Subject: Re: [PATCH RESEND v6 7/9] cpupower: Enable boost state support for
- AMD P-State module
+        Fri, 18 Feb 2022 16:27:42 -0800 (PST)
+Subject: Re: [PATCH RESEND v6 0/9] cpupower: Add AMD P-State Support
 To:     Huang Rui <ray.huang@amd.com>,
         "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         linux-pm@vger.kernel.org
@@ -68,14 +67,13 @@ Cc:     Deepak Sharma <deepak.sharma@amd.com>,
         linux-kernel@vger.kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>
 References: <20220216073558.751071-1-ray.huang@amd.com>
- <20220216073558.751071-8-ray.huang@amd.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <f415df0b-9320-090c-7ca9-8597c0211e87@linuxfoundation.org>
-Date:   Fri, 18 Feb 2022 17:01:59 -0700
+Message-ID: <8aafb93a-772c-1806-e087-cd285694aa74@linuxfoundation.org>
+Date:   Fri, 18 Feb 2022 17:27:41 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20220216073558.751071-8-ray.huang@amd.com>
+In-Reply-To: <20220216073558.751071-1-ray.huang@amd.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -90,101 +88,41 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 2/16/22 12:35 AM, Huang Rui wrote:
-> The legacy ACPI hardware P-States function has 3 P-States on ACPI table,
-> the CPU frequency only can be switched between the 3 P-States. While the
-> processor supports the boost state, it will have another boost state
-> that the frequency can be higher than P0 state, and the state can be
-> decoded by the function of decode_pstates() and read by
-> amd_pci_get_num_boost_states().
+> Hi Shuah,
 > 
-> However, the new AMD P-State function is different than legacy ACPI
-> hardware P-State on AMD processors. That has a finer grain frequency
-> range between the highest and lowest frequency. And boost frequency is
-> actually the frequency which is mapped on highest performance ratio. The
-> similiar previous P0 frequency is mapped on nominal performance ratio.
-
-Nit - similar
-
-> If the highest performance on the processor is higher than nominal
-> performance, then we think the current processor supports the boost
-> state. And it uses amd_pstate_boost_init() to initialize boost for AMD
-> P-State function.
+> Since AMD P-State kernel is merged into 5.17-rc1, I would like to continue
+> revising the AMD P-State support for the CPUPower tool. These series are
+> rebased on latest bleeding-edge, any comments are warm for me.
 > 
-> Signed-off-by: Huang Rui <ray.huang@amd.com>
-> ---
->   tools/power/cpupower/utils/helpers/amd.c     | 18 ++++++++++++++++++
->   tools/power/cpupower/utils/helpers/helpers.h |  5 +++++
->   tools/power/cpupower/utils/helpers/misc.c    |  2 ++
->   3 files changed, 25 insertions(+)
+> See patch series of CPUPower in below git repo:
+> V1: https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git/log/?h=amd-pstate-dev-v1
+> V2: https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git/log/?h=amd-pstate-dev-v2
+> V3: https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git/log/?h=amd-pstate-dev-v3
+> V4: https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git/log/?h=amd-pstate-dev-v4
+> V5: https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git/log/?h=amd-pstate-dev-v5
+> V6: https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git/log/?h=cpupower-amd-pstate
 > 
-> diff --git a/tools/power/cpupower/utils/helpers/amd.c b/tools/power/cpupower/utils/helpers/amd.c
-> index 4d45d1b44164..f5ba528dc7db 100644
-> --- a/tools/power/cpupower/utils/helpers/amd.c
-> +++ b/tools/power/cpupower/utils/helpers/amd.c
-> @@ -175,5 +175,23 @@ static unsigned long amd_pstate_get_data(unsigned int cpu,
->   						  MAX_AMD_PSTATE_VALUE_READ_FILES);
->   }
->   
-> +void amd_pstate_boost_init(unsigned int cpu, int *support, int *active)
-> +{
-> +	unsigned long highest_perf, nominal_perf, cpuinfo_min,
-> +		      cpuinfo_max, amd_pstate_max;
-> +
-> +	highest_perf = amd_pstate_get_data(cpu, AMD_PSTATE_HIGHEST_PERF);
-> +	nominal_perf = acpi_cppc_get_data(cpu, NOMINAL_PERF);
-> +
-> +	*support = highest_perf > nominal_perf ? 1 : 0;
-> +	if (!(*support))
-> +		return;
-> +
-> +	cpufreq_get_hardware_limits(cpu, &cpuinfo_min, &cpuinfo_max);
-> +	amd_pstate_max = amd_pstate_get_data(cpu, AMD_PSTATE_MAX_FREQ);
-> +
-> +	*active = cpuinfo_max == amd_pstate_max ? 1 : 0;
-> +}
-> +
->   /* AMD P-State Helper Functions ************************************/
->   #endif /* defined(__i386__) || defined(__x86_64__) */
-> diff --git a/tools/power/cpupower/utils/helpers/helpers.h b/tools/power/cpupower/utils/helpers/helpers.h
-> index 557524078e94..f142fbfa4a77 100644
-> --- a/tools/power/cpupower/utils/helpers/helpers.h
-> +++ b/tools/power/cpupower/utils/helpers/helpers.h
-> @@ -140,6 +140,8 @@ extern int cpufreq_has_boost_support(unsigned int cpu, int *support,
->   
->   /* AMD P-State stuff **************************/
->   extern bool cpupower_amd_pstate_enabled(void);
-> +extern void amd_pstate_boost_init(unsigned int cpu,
-> +				  int *support, int *active);
->   
->   /* AMD P-State stuff **************************/
->   
-> @@ -177,6 +179,9 @@ static inline int cpufreq_has_boost_support(unsigned int cpu, int *support,
->   
->   static inline bool cpupower_amd_pstate_enabled(void)
->   { return false; }
-> +static void amd_pstate_boost_init(unsigned int cpu,
-> +				  int *support, int *active)
-> +{ return; }
 
-No need for a return here
+A few checkpatch warns to fix. I usually ignore CHECK from checkpatch,
+but a few of them found on this series could improve the code.
 
->   
->   /* cpuid and cpuinfo helpers  **************************/
->   
-> diff --git a/tools/power/cpupower/utils/helpers/misc.c b/tools/power/cpupower/utils/helpers/misc.c
-> index 0c483cdefcc2..e0d3145434d3 100644
-> --- a/tools/power/cpupower/utils/helpers/misc.c
-> +++ b/tools/power/cpupower/utils/helpers/misc.c
-> @@ -41,6 +41,8 @@ int cpufreq_has_boost_support(unsigned int cpu, int *support, int *active,
->   			if (ret)
->   				return ret;
->   		}
-> +	} else if (cpupower_cpu_info.caps & CPUPOWER_CAP_AMD_PSTATE) {
-> +		amd_pstate_boost_init(cpu, support, active);
->   	} else if (cpupower_cpu_info.caps & CPUPOWER_CAP_INTEL_IDA)
->   		*support = *active = 1;
->   	return 0;
-> 
+Also is there a need to add/update manpages and documentation.
+
+I tested these my AMD Ryzen 7 4700G system. I didn't play with set commands
+and just the info ones.
+
+cpupower info gave me this output. The first message is fine, but the
+second one is a bit odd. Should it just bail out right after the first
+message about "not support"
+
+cpupower info
+
+System does not support Intel's performance bias setting
+analyzing CPU 0:
+
+Go ahead send me v7 for these and add any mapages/doc if necessary.
+I will get them into Linux 5.18-rc1
 
 thanks,
 -- Shuah
+
