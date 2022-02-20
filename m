@@ -2,73 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65BD44BD116
-	for <lists+linux-pm@lfdr.de>; Sun, 20 Feb 2022 20:50:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26B404BD170
+	for <lists+linux-pm@lfdr.de>; Sun, 20 Feb 2022 21:27:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244714AbiBTTuZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 20 Feb 2022 14:50:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43096 "EHLO
+        id S231696AbiBTU12 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 20 Feb 2022 15:27:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244709AbiBTTuX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 20 Feb 2022 14:50:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C460CDEDA;
-        Sun, 20 Feb 2022 11:50:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7B459B80DC1;
-        Sun, 20 Feb 2022 19:50:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1FFADC340EB;
-        Sun, 20 Feb 2022 19:50:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645386600;
-        bh=RtkN4hEZYUr99jyhCOsuLVZBaK4ovMgpq9Ft7HlRggg=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=K+QEFY/OTlE3MOPieJxEDtYxaJ1XP1wP4zOca4DXZfLxfcHd3EnR1r6NkTGkEEiSa
-         PqJ5iEVn1oXqHL5llqVlhL4DZ5djpErhnjd05EsboVJxjUQSvzYGnOIXuygkZyQ5vV
-         oI/9SyvMm7TUnVCq0AqwS02K4tB6KXhrSz4+zFp7ciD4GseTfs3RWUQfcX8IlIWSFh
-         PT6Ua/o2jecIsrH4B9inr8Wk+kMHn7jYBj8LQ632yLUA2R7sO0vQACwWpSapa5Mitn
-         FMm5JfwwI/N4DtcMW46gQOH6UNusThpe4+1D3zIWau4Re3CkDdCbCuZn8jr4J7OAFD
-         wdzQuc9ZQydIA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0E784E6D447;
-        Sun, 20 Feb 2022 19:50:00 +0000 (UTC)
-Subject: Re: [GIT PULL] power-supply changes for 5.17-rc
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220219015926.nsaz76djtc3d7sfa@mercury.elektranox.org>
-References: <20220219015926.nsaz76djtc3d7sfa@mercury.elektranox.org>
-X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220219015926.nsaz76djtc3d7sfa@mercury.elektranox.org>
-X-PR-Tracked-Remote: ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v5.17-rc
-X-PR-Tracked-Commit-Id: f444578d727a0ca4a72b19cd4a1d7da9f1fb99fe
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 70d2bec7c545e06057c5d963b8623e6e234901e8
-Message-Id: <164538660005.12071.9606312258322883456.pr-tracker-bot@kernel.org>
-Date:   Sun, 20 Feb 2022 19:50:00 +0000
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S232742AbiBTU11 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 20 Feb 2022 15:27:27 -0500
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65D63F33A;
+        Sun, 20 Feb 2022 12:27:05 -0800 (PST)
+Received: from localhost.localdomain (ip-213-127-118-180.ip.prioritytelecom.net [213.127.118.180])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 0A706C6D5A;
+        Sun, 20 Feb 2022 20:19:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1645388380; bh=m6+0G7kMhIz7HsIPX/lDQc+bJdPk1YftvzsitotuDew=;
+        h=From:To:Cc:Subject:Date;
+        b=K+bXim3X2qVn78qrWNwVF9x83UOent1HzpLSuC/FDJoIX49K2/c5PhDo4MoB1TP8y
+         S7vJZBjFwYXS6DMDqnEX7HQJI6o5iBi+qD0z2XrABZ/6AH4dmnhDpZaNVs26MHuvod
+         CiZk15Ff0Lx4+HzTTqircIuMJ8xfHsdXtFRXRYZQ=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Luca Weiss <luca@z3ntu.xyz>, Amit Kucheria <amitk@kernel.org>,
+        Bartosz Dudziak <bartosz.dudziak@snejp.pl>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hector Martin <marcan@marcan.st>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Mark Brown <broonie@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Rob Herring <robh@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH v2 00/10] Initial MSM8953 & Fairphone 3 support
+Date:   Sun, 20 Feb 2022 21:18:53 +0100
+Message-Id: <20220220201909.445468-1-luca@z3ntu.xyz>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Sat, 19 Feb 2022 02:59:26 +0100:
+This series adds initial support for MSM8953 (and SDM632 which is based
+on MSM8953) and the Fairphone 3 smartphone.
 
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v5.17-rc
+Only relatively basic functionality is supported like storage, volume
+keys and USB.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/70d2bec7c545e06057c5d963b8623e6e234901e8
+There is currently close-to-mainline support for other components for
+this SoC including GPU, WiFi and audio, this series adds only basic
+support so that the other components can start getting upstreamed
+easier.
 
-Thank you!
+Changes in v2:
+- rebase on linux-next and drop already applied patches
+- drop msm8953-pm8953.dtsi patch: integrate changes into FP3 patch
+- for individual patches for other changes
+
+Luca Weiss (7):
+  dt-bindings: mfd: qcom,tcsr: Document msm8953 compatible
+  dt-bindings: thermal: tsens: Add msm8953 compatible
+  dt-bindings: usb: qcom,dwc3: Add msm8953 compatible
+  dt-bindings: arm: cpus: Add Kryo 250 CPUs
+  rpmsg: smd: allow opening rpm_requests even if already opened
+  dt-bindings: arm: qcom: Document sdm632 and fairphone,fp3 board
+  arm64: dts: qcom: sdm632: Add device tree for Fairphone 3
+
+Vladimir Lypak (3):
+  arm64: dts: qcom: Add MSM8953 device tree
+  arm64: dts: qcom: Add PM8953 PMIC
+  arm64: dts: qcom: Add SDM632 device tree
+
+ .../devicetree/bindings/arm/cpus.yaml         |    1 +
+ .../devicetree/bindings/arm/qcom.yaml         |    6 +
+ .../devicetree/bindings/mfd/qcom,tcsr.txt     |    1 +
+ .../bindings/thermal/qcom-tsens.yaml          |    1 +
+ .../devicetree/bindings/usb/qcom,dwc3.yaml    |    1 +
+ arch/arm64/boot/dts/qcom/Makefile             |    1 +
+ arch/arm64/boot/dts/qcom/msm8953.dtsi         | 1326 +++++++++++++++++
+ arch/arm64/boot/dts/qcom/pm8953.dtsi          |   90 ++
+ .../boot/dts/qcom/sdm632-fairphone-fp3.dts    |  183 +++
+ arch/arm64/boot/dts/qcom/sdm632.dtsi          |   81 +
+ drivers/rpmsg/qcom_smd.c                      |    5 +-
+ 11 files changed, 1695 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8953.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/pm8953.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sdm632.dtsi
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.35.1
+
