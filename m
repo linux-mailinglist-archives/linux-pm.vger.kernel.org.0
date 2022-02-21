@@ -2,121 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E5F4BE92D
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Feb 2022 19:06:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59B294BDC19
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Feb 2022 18:41:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358511AbiBUNDx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Feb 2022 08:03:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35660 "EHLO
+        id S1359151AbiBUNiK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Feb 2022 08:38:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358507AbiBUNDw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Feb 2022 08:03:52 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32C91EAEA
-        for <linux-pm@vger.kernel.org>; Mon, 21 Feb 2022 05:03:28 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id u16so8772206pfg.12
-        for <linux-pm@vger.kernel.org>; Mon, 21 Feb 2022 05:03:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=r1zJaBUPNQBJIkixJM/WVkMBxWgtgajvPcDkUoia8nw=;
-        b=QnZkls7K0VNfKFBglx6GNOStp6Yq+iqgHp41VtEBvqCXS6w/C9J9NJnnMlf2M6aogJ
-         WHdxc+hZD0FmS01Jv3fAwEU/Q9o74oK0Kn9OGGyrhSO5YxQlkE7nn5192T9lfi40MyU8
-         0EMBAOjyeLXN5D0gBPWl6xeh7Qn2LwiITJ/sJ2oSPRMaW8NMZbkDruWAs/n1iWQcWhPB
-         +SoYQlkKmi8+IO9Ee3clR9oX+NVf5O200F4KKH8WVrzNhlOIESFBTLVxbJSHjK4pmELS
-         QS9LlNAKWe1Z9FDd/sS4CdLo2qvkspIY/x+5PL8e8zZvd0lOvYuQuHpE/F4NLdelkAoy
-         qCYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=r1zJaBUPNQBJIkixJM/WVkMBxWgtgajvPcDkUoia8nw=;
-        b=xM7b9CHN6tiiB2aa6RjtE06m3RKnpqFhjCaw3W4xiAsPJE5XAL2DwVjqf7TYHj9Lcz
-         arbMRd60E7kcEQMTMFKJIPaDKWtz0fwajZSkgTWEAn5xR/3ey+4aSB9eTorNBBqGDYll
-         hJHYWutuXKNLq+Np5Zwuc4UV3XqLu2iNOwhvLiSLLLmk3F8DsLv8xBdCUn1O99j0EwHO
-         ibH6IvjuPUVY+1+rwcSjLckdj53MTRO7lwqH7k0WoB4s6fo/JSkS+Bdir/0XvEF37mHd
-         JcJ3y7lo3o6MJhsYTexgJO1Iu+OXpyv3K5x5X8E9F9yZQglqshiDxvAvP9mzPNCDhjdJ
-         tRLg==
-X-Gm-Message-State: AOAM530MSA9ixY3mr6wGpzh70iJhg0HFaKZsj1kRumDv0YUeWnv4KVKA
-        U3Sg5BFCUvDM8GDS7Iu7qW6v5puQoN9i1ZEffUY=
-X-Google-Smtp-Source: ABdhPJyxm9XQb8UAcmwMjaql0CRPtfGhVq4b3EHRsVqmXF9mIx6HevSbmlzdmUAYK7+fqQ020lp5bYjCVskHIysj7Hs=
-X-Received: by 2002:a05:6a00:2313:b0:4e0:ffa7:bbe0 with SMTP id
- h19-20020a056a00231300b004e0ffa7bbe0mr19856274pfh.53.1645448608066; Mon, 21
- Feb 2022 05:03:28 -0800 (PST)
+        with ESMTP id S1359143AbiBUNiH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Feb 2022 08:38:07 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BCE61D326
+        for <linux-pm@vger.kernel.org>; Mon, 21 Feb 2022 05:37:44 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nM8sa-0007tK-MQ; Mon, 21 Feb 2022 14:37:28 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nM8sY-000R0Q-Ao; Mon, 21 Feb 2022 14:37:25 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nM8sX-004bq8-12; Mon, 21 Feb 2022 14:37:25 +0100
+Date:   Mon, 21 Feb 2022 14:37:24 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Lee Jones <lee.jones@linaro.org>, Nishanth Menon <nm@ti.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-mmc@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-clk@vger.kernel.org, David Heidelberg <david@ixit.cz>
+Subject: Re: [PATCH v16 21/40] pwm: tegra: Add runtime PM and OPP support
+Message-ID: <20220221133724.iusksyn7n7hmxil2@pengutronix.de>
+References: <20211130232347.950-1-digetx@gmail.com>
+ <20211130232347.950-22-digetx@gmail.com>
+ <20220221081727.jeq2jff5ewjzubxv@pengutronix.de>
+ <677beebd-5a16-297f-c09a-fa4b72c001c9@gmail.com>
 MIME-Version: 1.0
-Reply-To: wallaceharrisonun1@gmail.com
-Sender: mj6455009@gmail.com
-Received: by 2002:a05:6a20:4a09:b0:76:527d:adaa with HTTP; Mon, 21 Feb 2022
- 05:03:27 -0800 (PST)
-From:   "Mr. wallace harrisonun" <wallaceharrisonun1@gmail.com>
-Date:   Mon, 21 Feb 2022 05:03:27 -0800
-X-Google-Sender-Auth: QWjfpu5pcsO8OfrPFyACyFs2bvM
-Message-ID: <CALQs60wTJYH76=OoaV-fUvQsULozm5ND8uYtOKDCRFJd-ZRn5w@mail.gmail.com>
-Subject: Palliative Empowerment
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,
-        MONEY_FORM_SHORT,MONEY_FRAUD_3,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,T_HK_NAME_FM_MR_MRS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:433 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mj6455009[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [wallaceharrisonun1[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [mj6455009[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  0.0 T_FILL_THIS_FORM_SHORT Fill in a short form with personal
-        *      information
-        *  1.0 MONEY_FORM_SHORT Lots of money if you fill out a short form
-        *  3.5 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.0 MONEY_FRAUD_3 Lots of money and several fraud phrases
-X-Spam-Level: *****
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="l5jzzhwrtignnt6r"
+Content-Disposition: inline
+In-Reply-To: <677beebd-5a16-297f-c09a-fa4b72c001c9@gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Greetings!
 
- We are writing this message to you from the United Nations Centre to
-inform you that you have been chosen as our Representative in your
-country, to distribute the total sum of $500,000 US Dollars, For
-Palliative Empowerment in order to help the poor people in your city.
-Such as the Disabled people, The homeless, Orphanages, schools, and
-Generals=E2=80=99 Hospitals ,if you receive the message reply to us with yo=
-ur
-details, Your Full Name Your Address: Your Occupation: Via this
-Email:<wallaceharrisonun1@gmail.com>  For more information about the
-payment.
+--l5jzzhwrtignnt6r
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Regards
-Dylan.
+Hello,
+
+On Mon, Feb 21, 2022 at 12:53:58PM +0300, Dmitry Osipenko wrote:
+> 21.02.2022 11:17, Uwe Kleine-K=C3=B6nig =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> >> @@ -344,7 +387,10 @@ static const struct of_device_id tegra_pwm_of_mat=
+ch[] =3D {
+> >>  MODULE_DEVICE_TABLE(of, tegra_pwm_of_match);
+> >> =20
+> >>  static const struct dev_pm_ops tegra_pwm_pm_ops =3D {
+> >> -	SET_SYSTEM_SLEEP_PM_OPS(tegra_pwm_suspend, tegra_pwm_resume)
+> >> +	SET_RUNTIME_PM_OPS(tegra_pwm_runtime_suspend, tegra_pwm_runtime_resu=
+me,
+> >> +			   NULL)
+> >> +	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
+> >> +				pm_runtime_force_resume)
+> >>  };
+> >> =20
+> >>  static struct platform_driver tegra_pwm_driver =3D {
+> > I admit to not completely understand the effects of this patch, but I
+> > don't see a problem either. So for me this patch is OK:
+> >=20
+> > Acked-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> >=20
+> > I spot a problem, it's not introduced by this patch however: If the
+> > consumer of the PWM didn't stop the hardware, the suspend should IMHO be
+> > prevented.
+>=20
+> Why? The PWM driver itself will stop the h/w on suspend.
+
+Stopping the PWM might be bad. Only the consumer can know if it's ok to
+stop the PWM on suspend. If so the consumer should stop the PWM in their
+suspend callback and the PWM should prevent suspend if it wasn't
+stopped.
+
+> > I wonder if the patches in this series go in in one go via an ARM or
+> > Tegra tree, or each patch via its respective maintainer tree.
+>=20
+> This series, including this patch, was already applied to 5.17 via the
+> tegra/soc tree. No action is needed anymore.
+
+Ah, I missed that, thanks.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
+   |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--l5jzzhwrtignnt6r
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmITlYwACgkQwfwUeK3K
+7Ak0Awf7Bng3Bp8dIdZWVJ0IKQy7Zh14yrunKW/TyOp4ENrNgLtH1N+DE2F332Mj
+dYGX26syp+azTB+kvoYCzH3Ro0Cisl+Ssvvm95pL0PiFStqoSwXJgti+dSqIWspK
+bwYm7tYUNcvJecG8YuuCZwSrUC6N15wccUN/VU2i8ZTOWfVAjmAKbxTNj6yLJNIU
+VvWsqthnEOGiHxH6KueZlwL3DRbTZ2QmykKmUaUFAnJwvjH24B6lAFHQnUDOFIQv
+vIbPMFpKTOvm8tOIFpqse8QJLzRAHbu5iuIiZkGnN5MVJg2C6fbo2fYVM1Ya/2c2
+YXsdY3K0KB4X8v/eFrEX5qZdljYVCA==
+=NwNV
+-----END PGP SIGNATURE-----
+
+--l5jzzhwrtignnt6r--
