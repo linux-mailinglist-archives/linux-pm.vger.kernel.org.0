@@ -2,119 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 788254BE13E
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Feb 2022 18:53:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72FD84BE383
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Feb 2022 18:57:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355050AbiBUKe3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Feb 2022 05:34:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53304 "EHLO
+        id S1356467AbiBULQ6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Feb 2022 06:16:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354936AbiBUKdj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Feb 2022 05:33:39 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF4637030;
-        Mon, 21 Feb 2022 01:54:02 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id i11so17571366lfu.3;
-        Mon, 21 Feb 2022 01:54:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=FBQCAwLGItt59fBHH1fMX/rXCxY4p1v9wuPJWfMr/EE=;
-        b=OMjFpUKSoI/8tDW559i/11H2ijvy+X7Cyy6+WRTh9BpYhAd0ESthUOs21QFcduRLUX
-         tGwZzFtj90IC1hBoKntcyQvsn11UKiofViSoSA/V7l/NNjHPUvvL4b9XTN6qSrbYDpLs
-         gbdjvTfYbe7a8VYjZFTFv0/F88nhCwe5RCFWeRMN79SOD+ga3jJgJPl85LdsYhffSx9O
-         f0KieNs5r3M64JzpMGPsA6JxAEaFgRZUxnb+MT8MmRvmkHQVofikUxrarsiCe+saU+TX
-         qmZ7towRvoIrZdYqqnFpWmWme6fYEZVk2g784cMY0LEkmtGG9Zj/XjfRtzaUPbkWq6VZ
-         9gtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=FBQCAwLGItt59fBHH1fMX/rXCxY4p1v9wuPJWfMr/EE=;
-        b=fzErLDosCq+yQQvdLCzy/3VRe9IRWl+osHQBZeYNE2mQxEv2mE3SyJF+A+oWnqzOPh
-         rM80g//N+ucPKltopcs9e4kc99D9wo4SNF7lJT/gA8TrjOEHr9Ui6G7btCgoXKXmDwcH
-         gYnU3cisUjj/vdlSGE3xN5uirrd+BHkFi8w5UHr0259ii+/u7MOc1FSj/TRcgYgLJikE
-         7haNkEd3+9iEPof8o0nkMECt/+0mfUltTwtJwUhP7kUB7VEq27cXKGpj8PSmVgGJUdRD
-         n2kI/eKV3AeylL/gs5O38eE9lYWtVaMSicpGYRbDWdDqiOPlm/3v+2QfISGd2dXxS6QV
-         or0Q==
-X-Gm-Message-State: AOAM530vmvEOfc/fUZYeXyNYEcIkPmF/AMvup+TQfyBIwa5QJaInCR6A
-        mD2KvR1cku940Ds7rkgbnto=
-X-Google-Smtp-Source: ABdhPJyjpoLC4dkht2ubnC2fLVCm11jEQES+SqN3/jJaPUC4j1RTjBwAfYihJh/DiezuaKLTQVLqDw==
-X-Received: by 2002:a19:4f02:0:b0:441:39df:161c with SMTP id d2-20020a194f02000000b0044139df161cmr13408076lfb.504.1645437240280;
-        Mon, 21 Feb 2022 01:54:00 -0800 (PST)
-Received: from [192.168.2.145] (109-252-138-165.dynamic.spd-mgts.ru. [109.252.138.165])
-        by smtp.googlemail.com with ESMTPSA id q12sm1066973lfr.157.2022.02.21.01.53.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Feb 2022 01:53:59 -0800 (PST)
-Message-ID: <677beebd-5a16-297f-c09a-fa4b72c001c9@gmail.com>
-Date:   Mon, 21 Feb 2022 12:53:58 +0300
+        with ESMTP id S1355585AbiBULPN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Feb 2022 06:15:13 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F27A42DD1;
+        Mon, 21 Feb 2022 02:52:42 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 88698150C;
+        Mon, 21 Feb 2022 02:52:42 -0800 (PST)
+Received: from bogus (unknown [10.57.3.200])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D52D83F66F;
+        Mon, 21 Feb 2022 02:52:40 -0800 (PST)
+Date:   Mon, 21 Feb 2022 10:51:51 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Edwin Chiu <edwinchiu0505tw@gmail.com>
+Cc:     edwin.chiu@sunplus.com, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rafael@kernel.org, Sudeep Holla <sudeep.holla@arm.com>,
+        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v5] cpuidle: sunplus: Create cpuidle driver for sunplus
+ sp7021
+Message-ID: <20220221105151.6rvyoqyvj6ehhtnj@bogus>
+References: <cover.1645427180.git.edwinchiu0505tw@gmail.com>
+ <1628e048220f066204b8ac27f3cedf7f3cc02963.1645427180.git.edwinchiu0505tw@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v16 21/40] pwm: tegra: Add runtime PM and OPP support
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>, Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-mmc@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-clk@vger.kernel.org, David Heidelberg <david@ixit.cz>
-References: <20211130232347.950-1-digetx@gmail.com>
- <20211130232347.950-22-digetx@gmail.com>
- <20220221081727.jeq2jff5ewjzubxv@pengutronix.de>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <20220221081727.jeq2jff5ewjzubxv@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1628e048220f066204b8ac27f3cedf7f3cc02963.1645427180.git.edwinchiu0505tw@gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Uwe,
-
-21.02.2022 11:17, Uwe Kleine-König пишет:
->> @@ -344,7 +387,10 @@ static const struct of_device_id tegra_pwm_of_match[] = {
->>  MODULE_DEVICE_TABLE(of, tegra_pwm_of_match);
->>  
->>  static const struct dev_pm_ops tegra_pwm_pm_ops = {
->> -	SET_SYSTEM_SLEEP_PM_OPS(tegra_pwm_suspend, tegra_pwm_resume)
->> +	SET_RUNTIME_PM_OPS(tegra_pwm_runtime_suspend, tegra_pwm_runtime_resume,
->> +			   NULL)
->> +	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
->> +				pm_runtime_force_resume)
->>  };
->>  
->>  static struct platform_driver tegra_pwm_driver = {
-> I admit to not completely understand the effects of this patch, but I
-> don't see a problem either. So for me this patch is OK:
+On Mon, Feb 21, 2022 at 03:26:18PM +0800, Edwin Chiu wrote:
+> Create cpuidle driver for sunplus sp7021 chip
 > 
-> Acked-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> Signed-off-by: Edwin Chiu <edwinchiu0505tw@gmail.com>
+> ---
+> Changes in v3
+>  - Rearrangement #include sequence
+>  - Change remark style to /*~*/
+>  - Align author email address to same as sob
+>  - Optimal code
+> Changes in v4
+>  - According Rob Herringrobh's comment
+>    There is no need for this binding.
+>    Just wanting a different driver is not a reason
+>    for a duplicate schema.
+>    So remove yaml file and submit driver again.
+> Changes in v5
+>  - According Krzysztof's comment
+>    You either use appropriate compatible in DT
+>    or add your compatible to cpuidle-arm.
+>    Even if this did not work, then the solution is to
+>    use common parts, not to duplicate entire driver.
+>    According Sudeep's comment
+>    In short NACK for any dedicated driver for this platform,
+>    use the generic cpuidle-arm driver with appropriate platform hooks
+>    Create cpuidle-sunplus.c in arch/arm/mach-sunplus/
+>    for hook generic cpuidle-arm driver
 > 
-> I spot a problem, it's not introduced by this patch however: If the
-> consumer of the PWM didn't stop the hardware, the suspend should IMHO be
-> prevented.
+>  MAINTAINERS                                   |  6 ++
+>  arch/arm/mach-sunplus/cpuidle-sunplus.c       | 88 +++++++++++++++++
+>  include/linux/platform_data/cpuidle-sunplus.h | 12 ++++
+>  3 files changed, 106 insertions(+)
+>  create mode 100644 arch/arm/mach-sunplus/cpuidle-sunplus.c
+>  create mode 100644 include/linux/platform_data/cpuidle-sunplus.h
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index e0dca8f..5c96428 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -18252,6 +18252,12 @@ L:	netdev@vger.kernel.org
+>  S:	Maintained
+>  F:	drivers/net/ethernet/dlink/sundance.c
+>  
+> +SUNPLUS CPUIDLE DRIVER
+> +M:	Edwin Chiu <edwinchiu0505tw@gmail.com>
+> +S:	Maintained
+> +F:	arch/arm/mach-sunplus/cpuidle-sunplus.c
+> +F:	include/linux/platform_data/cpuidle-sunplus.h
+> +
+>  SUPERH
+>  M:	Yoshinori Sato <ysato@users.sourceforge.jp>
+>  M:	Rich Felker <dalias@libc.org>
+> diff --git a/arch/arm/mach-sunplus/cpuidle-sunplus.c b/arch/arm/mach-sunplus/cpuidle-sunplus.c
+> new file mode 100644
+> index 0000000..e9d9738
+> --- /dev/null
+> +++ b/arch/arm/mach-sunplus/cpuidle-sunplus.c
+> @@ -0,0 +1,88 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * SP7021 cpu idle Driver.
+> + * Copyright (C) Sunplus Tech / Tibbo Tech.
+> + */
+> +#define pr_fmt(fmt) "CPUidle arm: " fmt
+> +
+> +#include <linux/cpuidle.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_data/cpuidle-sunplus.h>
+> +
+> +#include <asm/cpuidle.h>
+> +
+> +typedef int (*idle_fn)(void);
+> +
+> +static DEFINE_PER_CPU(idle_fn*, sp7021_idle_ops);
+> +
+> +static int sp7021_cpuidle_enter(unsigned long index)
+> +{
+> +	return __this_cpu_read(sp7021_idle_ops)[index]();
+> +}
+> +static int sp7021_cpu_spc(void)
+> +{
+> +	cpu_v7_do_idle();   /* idle to WFI */
+> +	return 0;
+> +}
 
-Why? The PWM driver itself will stop the h/w on suspend.
+You really don't need a cpuidle driver to just WFI for any states.
+Add the driver when you have something non WFI in the suspend function.
 
-> I wonder if the patches in this series go in in one go via an ARM or
-> Tegra tree, or each patch via its respective maintainer tree.
+> +static const struct of_device_id sp7021_idle_state_match[] = {
+> +	{ .compatible = "arm,idle-state", .data = sp7021_cpu_spc },
+> +	{ },
+> +};
 
-This series, including this patch, was already applied to 5.17 via the
-tegra/soc tree. No action is needed anymore.
+This is better than adding new driver like you did in previous version.
+
+I did a quick check but couldn't figure out. How do cpus get switched
+ON or OFF on this platform(for example during CPU hotplug) ?
+
+-- 
+Regards,
+Sudeep
