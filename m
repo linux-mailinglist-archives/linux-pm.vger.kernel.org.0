@@ -2,147 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72FD84BE383
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Feb 2022 18:57:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32E5F4BE92D
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Feb 2022 19:06:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356467AbiBULQ6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Feb 2022 06:16:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48076 "EHLO
+        id S1358511AbiBUNDx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Feb 2022 08:03:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355585AbiBULPN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Feb 2022 06:15:13 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F27A42DD1;
-        Mon, 21 Feb 2022 02:52:42 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 88698150C;
-        Mon, 21 Feb 2022 02:52:42 -0800 (PST)
-Received: from bogus (unknown [10.57.3.200])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D52D83F66F;
-        Mon, 21 Feb 2022 02:52:40 -0800 (PST)
-Date:   Mon, 21 Feb 2022 10:51:51 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Edwin Chiu <edwinchiu0505tw@gmail.com>
-Cc:     edwin.chiu@sunplus.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rafael@kernel.org, Sudeep Holla <sudeep.holla@arm.com>,
-        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v5] cpuidle: sunplus: Create cpuidle driver for sunplus
- sp7021
-Message-ID: <20220221105151.6rvyoqyvj6ehhtnj@bogus>
-References: <cover.1645427180.git.edwinchiu0505tw@gmail.com>
- <1628e048220f066204b8ac27f3cedf7f3cc02963.1645427180.git.edwinchiu0505tw@gmail.com>
+        with ESMTP id S1358507AbiBUNDw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Feb 2022 08:03:52 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32C91EAEA
+        for <linux-pm@vger.kernel.org>; Mon, 21 Feb 2022 05:03:28 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id u16so8772206pfg.12
+        for <linux-pm@vger.kernel.org>; Mon, 21 Feb 2022 05:03:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=r1zJaBUPNQBJIkixJM/WVkMBxWgtgajvPcDkUoia8nw=;
+        b=QnZkls7K0VNfKFBglx6GNOStp6Yq+iqgHp41VtEBvqCXS6w/C9J9NJnnMlf2M6aogJ
+         WHdxc+hZD0FmS01Jv3fAwEU/Q9o74oK0Kn9OGGyrhSO5YxQlkE7nn5192T9lfi40MyU8
+         0EMBAOjyeLXN5D0gBPWl6xeh7Qn2LwiITJ/sJ2oSPRMaW8NMZbkDruWAs/n1iWQcWhPB
+         +SoYQlkKmi8+IO9Ee3clR9oX+NVf5O200F4KKH8WVrzNhlOIESFBTLVxbJSHjK4pmELS
+         QS9LlNAKWe1Z9FDd/sS4CdLo2qvkspIY/x+5PL8e8zZvd0lOvYuQuHpE/F4NLdelkAoy
+         qCYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=r1zJaBUPNQBJIkixJM/WVkMBxWgtgajvPcDkUoia8nw=;
+        b=xM7b9CHN6tiiB2aa6RjtE06m3RKnpqFhjCaw3W4xiAsPJE5XAL2DwVjqf7TYHj9Lcz
+         arbMRd60E7kcEQMTMFKJIPaDKWtz0fwajZSkgTWEAn5xR/3ey+4aSB9eTorNBBqGDYll
+         hJHYWutuXKNLq+Np5Zwuc4UV3XqLu2iNOwhvLiSLLLmk3F8DsLv8xBdCUn1O99j0EwHO
+         ibH6IvjuPUVY+1+rwcSjLckdj53MTRO7lwqH7k0WoB4s6fo/JSkS+Bdir/0XvEF37mHd
+         JcJ3y7lo3o6MJhsYTexgJO1Iu+OXpyv3K5x5X8E9F9yZQglqshiDxvAvP9mzPNCDhjdJ
+         tRLg==
+X-Gm-Message-State: AOAM530MSA9ixY3mr6wGpzh70iJhg0HFaKZsj1kRumDv0YUeWnv4KVKA
+        U3Sg5BFCUvDM8GDS7Iu7qW6v5puQoN9i1ZEffUY=
+X-Google-Smtp-Source: ABdhPJyxm9XQb8UAcmwMjaql0CRPtfGhVq4b3EHRsVqmXF9mIx6HevSbmlzdmUAYK7+fqQ020lp5bYjCVskHIysj7Hs=
+X-Received: by 2002:a05:6a00:2313:b0:4e0:ffa7:bbe0 with SMTP id
+ h19-20020a056a00231300b004e0ffa7bbe0mr19856274pfh.53.1645448608066; Mon, 21
+ Feb 2022 05:03:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1628e048220f066204b8ac27f3cedf7f3cc02963.1645427180.git.edwinchiu0505tw@gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Reply-To: wallaceharrisonun1@gmail.com
+Sender: mj6455009@gmail.com
+Received: by 2002:a05:6a20:4a09:b0:76:527d:adaa with HTTP; Mon, 21 Feb 2022
+ 05:03:27 -0800 (PST)
+From:   "Mr. wallace harrisonun" <wallaceharrisonun1@gmail.com>
+Date:   Mon, 21 Feb 2022 05:03:27 -0800
+X-Google-Sender-Auth: QWjfpu5pcsO8OfrPFyACyFs2bvM
+Message-ID: <CALQs60wTJYH76=OoaV-fUvQsULozm5ND8uYtOKDCRFJd-ZRn5w@mail.gmail.com>
+Subject: Palliative Empowerment
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,
+        MONEY_FORM_SHORT,MONEY_FRAUD_3,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,T_HK_NAME_FM_MR_MRS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:433 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mj6455009[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [wallaceharrisonun1[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [mj6455009[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  0.0 T_FILL_THIS_FORM_SHORT Fill in a short form with personal
+        *      information
+        *  1.0 MONEY_FORM_SHORT Lots of money if you fill out a short form
+        *  3.5 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  0.0 MONEY_FRAUD_3 Lots of money and several fraud phrases
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 03:26:18PM +0800, Edwin Chiu wrote:
-> Create cpuidle driver for sunplus sp7021 chip
-> 
-> Signed-off-by: Edwin Chiu <edwinchiu0505tw@gmail.com>
-> ---
-> Changes in v3
->  - Rearrangement #include sequence
->  - Change remark style to /*~*/
->  - Align author email address to same as sob
->  - Optimal code
-> Changes in v4
->  - According Rob Herringrobh's comment
->    There is no need for this binding.
->    Just wanting a different driver is not a reason
->    for a duplicate schema.
->    So remove yaml file and submit driver again.
-> Changes in v5
->  - According Krzysztof's comment
->    You either use appropriate compatible in DT
->    or add your compatible to cpuidle-arm.
->    Even if this did not work, then the solution is to
->    use common parts, not to duplicate entire driver.
->    According Sudeep's comment
->    In short NACK for any dedicated driver for this platform,
->    use the generic cpuidle-arm driver with appropriate platform hooks
->    Create cpuidle-sunplus.c in arch/arm/mach-sunplus/
->    for hook generic cpuidle-arm driver
-> 
->  MAINTAINERS                                   |  6 ++
->  arch/arm/mach-sunplus/cpuidle-sunplus.c       | 88 +++++++++++++++++
->  include/linux/platform_data/cpuidle-sunplus.h | 12 ++++
->  3 files changed, 106 insertions(+)
->  create mode 100644 arch/arm/mach-sunplus/cpuidle-sunplus.c
->  create mode 100644 include/linux/platform_data/cpuidle-sunplus.h
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index e0dca8f..5c96428 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -18252,6 +18252,12 @@ L:	netdev@vger.kernel.org
->  S:	Maintained
->  F:	drivers/net/ethernet/dlink/sundance.c
->  
-> +SUNPLUS CPUIDLE DRIVER
-> +M:	Edwin Chiu <edwinchiu0505tw@gmail.com>
-> +S:	Maintained
-> +F:	arch/arm/mach-sunplus/cpuidle-sunplus.c
-> +F:	include/linux/platform_data/cpuidle-sunplus.h
-> +
->  SUPERH
->  M:	Yoshinori Sato <ysato@users.sourceforge.jp>
->  M:	Rich Felker <dalias@libc.org>
-> diff --git a/arch/arm/mach-sunplus/cpuidle-sunplus.c b/arch/arm/mach-sunplus/cpuidle-sunplus.c
-> new file mode 100644
-> index 0000000..e9d9738
-> --- /dev/null
-> +++ b/arch/arm/mach-sunplus/cpuidle-sunplus.c
-> @@ -0,0 +1,88 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * SP7021 cpu idle Driver.
-> + * Copyright (C) Sunplus Tech / Tibbo Tech.
-> + */
-> +#define pr_fmt(fmt) "CPUidle arm: " fmt
-> +
-> +#include <linux/cpuidle.h>
-> +#include <linux/of_device.h>
-> +#include <linux/platform_data/cpuidle-sunplus.h>
-> +
-> +#include <asm/cpuidle.h>
-> +
-> +typedef int (*idle_fn)(void);
-> +
-> +static DEFINE_PER_CPU(idle_fn*, sp7021_idle_ops);
-> +
-> +static int sp7021_cpuidle_enter(unsigned long index)
-> +{
-> +	return __this_cpu_read(sp7021_idle_ops)[index]();
-> +}
-> +static int sp7021_cpu_spc(void)
-> +{
-> +	cpu_v7_do_idle();   /* idle to WFI */
-> +	return 0;
-> +}
+Greetings!
 
-You really don't need a cpuidle driver to just WFI for any states.
-Add the driver when you have something non WFI in the suspend function.
+ We are writing this message to you from the United Nations Centre to
+inform you that you have been chosen as our Representative in your
+country, to distribute the total sum of $500,000 US Dollars, For
+Palliative Empowerment in order to help the poor people in your city.
+Such as the Disabled people, The homeless, Orphanages, schools, and
+Generals=E2=80=99 Hospitals ,if you receive the message reply to us with yo=
+ur
+details, Your Full Name Your Address: Your Occupation: Via this
+Email:<wallaceharrisonun1@gmail.com>  For more information about the
+payment.
 
-> +static const struct of_device_id sp7021_idle_state_match[] = {
-> +	{ .compatible = "arm,idle-state", .data = sp7021_cpu_spc },
-> +	{ },
-> +};
-
-This is better than adding new driver like you did in previous version.
-
-I did a quick check but couldn't figure out. How do cpus get switched
-ON or OFF on this platform(for example during CPU hotplug) ?
-
--- 
-Regards,
-Sudeep
+Regards
+Dylan.
