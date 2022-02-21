@@ -2,238 +2,317 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AE084BD71A
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Feb 2022 08:43:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A83314BD7FC
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Feb 2022 09:40:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346115AbiBUH0b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Feb 2022 02:26:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39378 "EHLO
+        id S233931AbiBUISW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Feb 2022 03:18:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346110AbiBUH0a (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Feb 2022 02:26:30 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 285F3B0;
-        Sun, 20 Feb 2022 23:26:08 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id y11so7999168pfi.11;
-        Sun, 20 Feb 2022 23:26:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :in-reply-to:references;
-        bh=bkCqs2b2H2dbk6pk5GKRvRdfG404QkRLu+NCe72oqto=;
-        b=SY+7fp8hEsisrEIiqYYZaPtgHO+RXhflWCe1xFUUGZPGBCJZ8EuC7vmo+Z1/QqCGtE
-         9wxelAn0herEfdMlcnyZ+L2MCkNX8PLUqQtdXtBHSYQ9/nvauRI59a6EYQRYYhVuavXO
-         EczBvHO5esMQKFRB0fB12UuvDgLzxTjCfIl6ZiR5f/o/5sH9/ZaPt7XBW2GldwiJEO/T
-         +tIUtegO5ttnc9hwTcqbeIjym3NF3rCeqMc+qXOfQie0IkzEHSAgf/mttYIx7DQn6mQU
-         kMLoL7e5CxkZgSxVGTaxWef9A6N/HdOWqUbTpOKnOCxLsFv/Ol5AjCXOHNwr4QKSDH/f
-         z8bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:in-reply-to:references;
-        bh=bkCqs2b2H2dbk6pk5GKRvRdfG404QkRLu+NCe72oqto=;
-        b=SFf5a1PdjYx9POvze4wXDbxEX/XqRqyMCoTxVwBLNLCkPSZ/dC6vTsyjNGARlH2P0E
-         J1gm9oz716WT7ZehrwZEQSb5IV3Fnz1jX/shYacoSc1SxAotpXH2r7AQUO4iBtt6rnry
-         5fpDNbpKbrRR8S+aqd1Gs0XXsjaRogO9URnvXr1EEVfQAhacf8SXylIG2lGe+7qTyoF4
-         LZbIpkYo3fn0mPf+G80I7XMXpLMEevmIn6/ApligPRgjo567ZRGl1+QqKjUltEnE3KXi
-         6BcV4gGbzh0KpZp7SnJ7CnxwIacX6jeFzEfefmDDlu4kTITDs38seDtgLnFSdfI7lmsU
-         FoFQ==
-X-Gm-Message-State: AOAM533YoZnbvGygFRgoiG1YkXz4dFrrv+30PC1AFmqT5z4Kq4+LM9/L
-        8RFPOf49CgCELeyHG+FHihE=
-X-Google-Smtp-Source: ABdhPJySlyMTa9Zk1mAKbfojoZ+BW0m8XOcGEpmRt1hCjSkYxsw9XmRQ0YUz+98cW41+dqFbGpZUfg==
-X-Received: by 2002:a63:fd48:0:b0:373:7925:b6e0 with SMTP id m8-20020a63fd48000000b003737925b6e0mr15322610pgj.314.1645428367655;
-        Sun, 20 Feb 2022 23:26:07 -0800 (PST)
-Received: from scdiu3.sunplus.com ([113.196.136.192])
-        by smtp.googlemail.com with ESMTPSA id q21sm11558094pfu.188.2022.02.20.23.26.05
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 20 Feb 2022 23:26:07 -0800 (PST)
-From:   Edwin Chiu <edwinchiu0505tw@gmail.com>
-To:     edwin.chiu@sunplus.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rafael@kernel.org, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org
-Cc:     Edwin Chiu <edwinchiu0505tw@gmail.com>
-Subject: [PATCH v5] cpuidle: sunplus: Create cpuidle driver for sunplus sp7021
-Date:   Mon, 21 Feb 2022 15:26:18 +0800
-Message-Id: <1628e048220f066204b8ac27f3cedf7f3cc02963.1645427180.git.edwinchiu0505tw@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1645427180.git.edwinchiu0505tw@gmail.com>
-References: <cover.1645427180.git.edwinchiu0505tw@gmail.com>
-In-Reply-To: <cover.1645427180.git.edwinchiu0505tw@gmail.com>
-References: <cover.1645427180.git.edwinchiu0505tw@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S233573AbiBUISU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Feb 2022 03:18:20 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2210913F15
+        for <linux-pm@vger.kernel.org>; Mon, 21 Feb 2022 00:17:58 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nM3sw-00047o-3Z; Mon, 21 Feb 2022 09:17:30 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nM3su-000Nwy-FU; Mon, 21 Feb 2022 09:17:27 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nM3st-004YuB-4s; Mon, 21 Feb 2022 09:17:27 +0100
+Date:   Mon, 21 Feb 2022 09:17:27 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Lee Jones <lee.jones@linaro.org>, Nishanth Menon <nm@ti.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-mmc@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-clk@vger.kernel.org, David Heidelberg <david@ixit.cz>
+Subject: Re: [PATCH v16 21/40] pwm: tegra: Add runtime PM and OPP support
+Message-ID: <20220221081727.jeq2jff5ewjzubxv@pengutronix.de>
+References: <20211130232347.950-1-digetx@gmail.com>
+ <20211130232347.950-22-digetx@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="cwoouscqlz5ttj4a"
+Content-Disposition: inline
+In-Reply-To: <20211130232347.950-22-digetx@gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Create cpuidle driver for sunplus sp7021 chip
 
-Signed-off-by: Edwin Chiu <edwinchiu0505tw@gmail.com>
----
-Changes in v3
- - Rearrangement #include sequence
- - Change remark style to /*~*/
- - Align author email address to same as sob
- - Optimal code
-Changes in v4
- - According Rob Herringrobh's comment
-   There is no need for this binding.
-   Just wanting a different driver is not a reason
-   for a duplicate schema.
-   So remove yaml file and submit driver again.
-Changes in v5
- - According Krzysztof's comment
-   You either use appropriate compatible in DT
-   or add your compatible to cpuidle-arm.
-   Even if this did not work, then the solution is to
-   use common parts, not to duplicate entire driver.
-   According Sudeep's comment
-   In short NACK for any dedicated driver for this platform,
-   use the generic cpuidle-arm driver with appropriate platform hooks
-   Create cpuidle-sunplus.c in arch/arm/mach-sunplus/
-   for hook generic cpuidle-arm driver
+--cwoouscqlz5ttj4a
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
- MAINTAINERS                                   |  6 ++
- arch/arm/mach-sunplus/cpuidle-sunplus.c       | 88 +++++++++++++++++
- include/linux/platform_data/cpuidle-sunplus.h | 12 ++++
- 3 files changed, 106 insertions(+)
- create mode 100644 arch/arm/mach-sunplus/cpuidle-sunplus.c
- create mode 100644 include/linux/platform_data/cpuidle-sunplus.h
+Hello,
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e0dca8f..5c96428 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18252,6 +18252,12 @@ L:	netdev@vger.kernel.org
- S:	Maintained
- F:	drivers/net/ethernet/dlink/sundance.c
- 
-+SUNPLUS CPUIDLE DRIVER
-+M:	Edwin Chiu <edwinchiu0505tw@gmail.com>
-+S:	Maintained
-+F:	arch/arm/mach-sunplus/cpuidle-sunplus.c
-+F:	include/linux/platform_data/cpuidle-sunplus.h
-+
- SUPERH
- M:	Yoshinori Sato <ysato@users.sourceforge.jp>
- M:	Rich Felker <dalias@libc.org>
-diff --git a/arch/arm/mach-sunplus/cpuidle-sunplus.c b/arch/arm/mach-sunplus/cpuidle-sunplus.c
-new file mode 100644
-index 0000000..e9d9738
---- /dev/null
-+++ b/arch/arm/mach-sunplus/cpuidle-sunplus.c
-@@ -0,0 +1,88 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * SP7021 cpu idle Driver.
-+ * Copyright (C) Sunplus Tech / Tibbo Tech.
-+ */
-+#define pr_fmt(fmt) "CPUidle arm: " fmt
-+
-+#include <linux/cpuidle.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_data/cpuidle-sunplus.h>
-+
-+#include <asm/cpuidle.h>
-+
-+typedef int (*idle_fn)(void);
-+
-+static DEFINE_PER_CPU(idle_fn*, sp7021_idle_ops);
-+
-+static int sp7021_cpuidle_enter(unsigned long index)
-+{
-+	return __this_cpu_read(sp7021_idle_ops)[index]();
-+}
-+static int sp7021_cpu_spc(void)
-+{
-+	cpu_v7_do_idle();   /* idle to WFI */
-+	return 0;
-+}
-+static const struct of_device_id sp7021_idle_state_match[] = {
-+	{ .compatible = "arm,idle-state", .data = sp7021_cpu_spc },
-+	{ },
-+};
-+static int sp7021_cpuidle_init(struct device_node *cpu_node, int cpu)
-+{
-+	const struct of_device_id *match_id;
-+	struct device_node *state_node;
-+	int i;
-+	int state_count = 1;
-+	idle_fn idle_fns[CPUIDLE_STATE_MAX];
-+	idle_fn *fns;
-+
-+	for (i = 0; ; i++) {
-+		state_node = of_parse_phandle(cpu_node, "cpu-idle-states", i);
-+		if (!state_node)
-+			break;
-+
-+		if (!of_device_is_available(state_node))
-+			continue;
-+
-+		if (i == CPUIDLE_STATE_MAX) {
-+			pr_warn("%s: cpuidle states reached max possible\n",
-+					__func__);
-+			break;
-+		}
-+
-+		match_id = of_match_node(sp7021_idle_state_match, state_node);
-+		if (!match_id)
-+			return -ENODEV;
-+
-+		idle_fns[state_count] = match_id->data;
-+
-+		state_count++;
-+	}
-+
-+	if (state_count == 1)
-+		goto check_sp;
-+
-+	fns = devm_kcalloc(get_cpu_device(cpu), state_count, sizeof(*fns),
-+			GFP_KERNEL);
-+	if (!fns)
-+		return -ENOMEM;
-+
-+	for (i = 1; i < state_count; i++)
-+		fns[i] = idle_fns[i];
-+
-+	per_cpu(sp7021_idle_ops, cpu) = fns;
-+
-+check_sp:
-+	return 0;
-+}
-+static const struct cpuidle_ops sp7021_cpuidle_ops __initconst = {
-+	.suspend = sp7021_cpuidle_enter,
-+	.init = sp7021_cpuidle_init,
-+};
-+CPUIDLE_METHOD_OF_DECLARE(sc_smp, "sunplus,sc-smp", &sp7021_cpuidle_ops);
-+
-+MODULE_AUTHOR("Edwin Chiu <edwinchiu0505tw@gmail.com>");
-+MODULE_DESCRIPTION("Sunplus sp7021 cpuidle driver");
-+MODULE_LICENSE("GPL");
-+
-diff --git a/include/linux/platform_data/cpuidle-sunplus.h b/include/linux/platform_data/cpuidle-sunplus.h
-new file mode 100644
-index 0000000..12e98e5
---- /dev/null
-+++ b/include/linux/platform_data/cpuidle-sunplus.h
-@@ -0,0 +1,12 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * SP7021 cpu idle Driver.
-+ * Copyright (C) Sunplus Tech / Tibbo Tech.
-+ */
-+
-+#ifndef __CPUIDLE_SP7021_H
-+#define __CPUIDLE_SP7021_H
-+
-+extern int cpu_v7_do_idle(void);
-+
-+#endif
--- 
-2.7.4
+On Wed, Dec 01, 2021 at 02:23:28AM +0300, Dmitry Osipenko wrote:
+> The PWM on Tegra belongs to the core power domain and we're going to
+> enable GENPD support for the core domain. Now PWM must be resumed using
+> runtime PM API in order to initialize the PWM power state. The PWM clock
+> rate must be changed using OPP API that will reconfigure the power domain
+> performance state in accordance to the rate. Add runtime PM and OPP
+> support to the PWM driver.
+>=20
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  drivers/pwm/pwm-tegra.c | 82 ++++++++++++++++++++++++++++++++---------
+>  1 file changed, 64 insertions(+), 18 deletions(-)
+>=20
+> diff --git a/drivers/pwm/pwm-tegra.c b/drivers/pwm/pwm-tegra.c
+> index 11a10b575ace..18cf974ac776 100644
+> --- a/drivers/pwm/pwm-tegra.c
+> +++ b/drivers/pwm/pwm-tegra.c
+> @@ -42,12 +42,16 @@
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/of_device.h>
+> +#include <linux/pm_opp.h>
+>  #include <linux/pwm.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/pinctrl/consumer.h>
+> +#include <linux/pm_runtime.h>
+>  #include <linux/slab.h>
+>  #include <linux/reset.h>
+> =20
+> +#include <soc/tegra/common.h>
+> +
+>  #define PWM_ENABLE	(1 << 31)
+>  #define PWM_DUTY_WIDTH	8
+>  #define PWM_DUTY_SHIFT	16
+> @@ -145,7 +149,7 @@ static int tegra_pwm_config(struct pwm_chip *chip, st=
+ruct pwm_device *pwm,
+>  		required_clk_rate =3D
+>  			(NSEC_PER_SEC / period_ns) << PWM_DUTY_WIDTH;
+> =20
+> -		err =3D clk_set_rate(pc->clk, required_clk_rate);
+> +		err =3D dev_pm_opp_set_rate(pc->dev, required_clk_rate);
+>  		if (err < 0)
+>  			return -EINVAL;
+> =20
+> @@ -181,8 +185,8 @@ static int tegra_pwm_config(struct pwm_chip *chip, st=
+ruct pwm_device *pwm,
+>  	 * before writing the register. Otherwise, keep it enabled.
+>  	 */
+>  	if (!pwm_is_enabled(pwm)) {
+> -		err =3D clk_prepare_enable(pc->clk);
+> -		if (err < 0)
+> +		err =3D pm_runtime_resume_and_get(pc->dev);
+> +		if (err)
+>  			return err;
+>  	} else
+>  		val |=3D PWM_ENABLE;
+> @@ -193,7 +197,7 @@ static int tegra_pwm_config(struct pwm_chip *chip, st=
+ruct pwm_device *pwm,
+>  	 * If the PWM is not enabled, turn the clock off again to save power.
+>  	 */
+>  	if (!pwm_is_enabled(pwm))
+> -		clk_disable_unprepare(pc->clk);
+> +		pm_runtime_put(pc->dev);
+> =20
+>  	return 0;
+>  }
+> @@ -204,8 +208,8 @@ static int tegra_pwm_enable(struct pwm_chip *chip, st=
+ruct pwm_device *pwm)
+>  	int rc =3D 0;
+>  	u32 val;
+> =20
+> -	rc =3D clk_prepare_enable(pc->clk);
+> -	if (rc < 0)
+> +	rc =3D pm_runtime_resume_and_get(pc->dev);
+> +	if (rc)
+>  		return rc;
+> =20
+>  	val =3D pwm_readl(pc, pwm->hwpwm);
+> @@ -224,7 +228,7 @@ static void tegra_pwm_disable(struct pwm_chip *chip, =
+struct pwm_device *pwm)
+>  	val &=3D ~PWM_ENABLE;
+>  	pwm_writel(pc, pwm->hwpwm, val);
+> =20
+> -	clk_disable_unprepare(pc->clk);
+> +	pm_runtime_put_sync(pc->dev);
+>  }
+> =20
+>  static const struct pwm_ops tegra_pwm_ops =3D {
+> @@ -256,11 +260,20 @@ static int tegra_pwm_probe(struct platform_device *=
+pdev)
+>  	if (IS_ERR(pwm->clk))
+>  		return PTR_ERR(pwm->clk);
+> =20
+> +	ret =3D devm_tegra_core_dev_init_opp_table_common(&pdev->dev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	pm_runtime_enable(&pdev->dev);
+> +	ret =3D pm_runtime_resume_and_get(&pdev->dev);
+> +	if (ret)
+> +		return ret;
+> +
+>  	/* Set maximum frequency of the IP */
+> -	ret =3D clk_set_rate(pwm->clk, pwm->soc->max_frequency);
+> +	ret =3D dev_pm_opp_set_rate(pwm->dev, pwm->soc->max_frequency);
+>  	if (ret < 0) {
+>  		dev_err(&pdev->dev, "Failed to set max frequency: %d\n", ret);
+> -		return ret;
+> +		goto put_pm;
+>  	}
+> =20
+>  	/*
+> @@ -278,7 +291,7 @@ static int tegra_pwm_probe(struct platform_device *pd=
+ev)
+>  	if (IS_ERR(pwm->rst)) {
+>  		ret =3D PTR_ERR(pwm->rst);
+>  		dev_err(&pdev->dev, "Reset control is not found: %d\n", ret);
+> -		return ret;
+> +		goto put_pm;
+>  	}
+> =20
+>  	reset_control_deassert(pwm->rst);
+> @@ -291,10 +304,16 @@ static int tegra_pwm_probe(struct platform_device *=
+pdev)
+>  	if (ret < 0) {
+>  		dev_err(&pdev->dev, "pwmchip_add() failed: %d\n", ret);
+>  		reset_control_assert(pwm->rst);
+> -		return ret;
+> +		goto put_pm;
+>  	}
+> =20
+> +	pm_runtime_put(&pdev->dev);
+> +
+>  	return 0;
+> +put_pm:
+> +	pm_runtime_put_sync_suspend(&pdev->dev);
+> +	pm_runtime_force_suspend(&pdev->dev);
+> +	return ret;
+>  }
+> =20
+>  static int tegra_pwm_remove(struct platform_device *pdev)
+> @@ -305,20 +324,44 @@ static int tegra_pwm_remove(struct platform_device =
+*pdev)
+> =20
+>  	reset_control_assert(pc->rst);
+> =20
+> +	pm_runtime_force_suspend(&pdev->dev);
+> +
+>  	return 0;
+>  }
+> =20
+> -#ifdef CONFIG_PM_SLEEP
+> -static int tegra_pwm_suspend(struct device *dev)
+> +static int __maybe_unused tegra_pwm_runtime_suspend(struct device *dev)
+>  {
+> -	return pinctrl_pm_select_sleep_state(dev);
+> +	struct tegra_pwm_chip *pc =3D dev_get_drvdata(dev);
+> +	int err;
+> +
+> +	clk_disable_unprepare(pc->clk);
+> +
+> +	err =3D pinctrl_pm_select_sleep_state(dev);
+> +	if (err) {
+> +		clk_prepare_enable(pc->clk);
+> +		return err;
+> +	}
+> +
+> +	return 0;
+>  }
+> =20
+> -static int tegra_pwm_resume(struct device *dev)
+> +static int __maybe_unused tegra_pwm_runtime_resume(struct device *dev)
+>  {
+> -	return pinctrl_pm_select_default_state(dev);
+> +	struct tegra_pwm_chip *pc =3D dev_get_drvdata(dev);
+> +	int err;
+> +
+> +	err =3D pinctrl_pm_select_default_state(dev);
+> +	if (err)
+> +		return err;
+> +
+> +	err =3D clk_prepare_enable(pc->clk);
+> +	if (err) {
+> +		pinctrl_pm_select_sleep_state(dev);
+> +		return err;
+> +	}
+> +
+> +	return 0;
+>  }
+> -#endif
+> =20
+>  static const struct tegra_pwm_soc tegra20_pwm_soc =3D {
+>  	.num_channels =3D 4,
+> @@ -344,7 +387,10 @@ static const struct of_device_id tegra_pwm_of_match[=
+] =3D {
+>  MODULE_DEVICE_TABLE(of, tegra_pwm_of_match);
+> =20
+>  static const struct dev_pm_ops tegra_pwm_pm_ops =3D {
+> -	SET_SYSTEM_SLEEP_PM_OPS(tegra_pwm_suspend, tegra_pwm_resume)
+> +	SET_RUNTIME_PM_OPS(tegra_pwm_runtime_suspend, tegra_pwm_runtime_resume,
+> +			   NULL)
+> +	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
+> +				pm_runtime_force_resume)
+>  };
+> =20
+>  static struct platform_driver tegra_pwm_driver =3D {
 
+I admit to not completely understand the effects of this patch, but I
+don't see a problem either. So for me this patch is OK:
+
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+
+I spot a problem, it's not introduced by this patch however: If the
+consumer of the PWM didn't stop the hardware, the suspend should IMHO be
+prevented.
+
+I wonder if the patches in this series go in in one go via an ARM or
+Tegra tree, or each patch via its respective maintainer tree.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--cwoouscqlz5ttj4a
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmITSpMACgkQwfwUeK3K
+7AmZaggAnjKWv6/JVY3Cp1bcb73ZjrS1hecjg6rS92mYnqvqYCbPCvW9u6Ku+IWI
+u/wIClnWJzYXF6ukB9OGBlJox1w6dS/j+LHiqAQw5h4DdWQv0cy27jDTF9lV4r1E
+DQWuKRNPSs/X7nMMIGkJ2UqgyeKw0sfX1cHpiJ8WatkPUwayInGaBfblE0seHIhw
+QUG2NbJtiROV3MgPRpoQWb0+7t9SSw9wxobBva3oaAIMNQLDmi/hcMzJXfXo3uH5
+Nu4PJjXQxnIxTap/ys4sqabTbmIopeHY2WDuuwIxgRqF9O4IRl+ygV05c79HE6mt
+tX1TItqO17EB1/sux6//dOpREBQgQA==
+=cZKl
+-----END PGP SIGNATURE-----
+
+--cwoouscqlz5ttj4a--
