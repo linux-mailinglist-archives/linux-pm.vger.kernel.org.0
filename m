@@ -2,251 +2,195 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBAAC4BF229
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Feb 2022 07:38:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 388504BF2DB
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Feb 2022 08:46:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbiBVGiY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Feb 2022 01:38:24 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:53502 "EHLO
+        id S230135AbiBVHmE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Feb 2022 02:42:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiBVGiX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Feb 2022 01:38:23 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B15DF3A;
-        Mon, 21 Feb 2022 22:37:57 -0800 (PST)
+        with ESMTP id S230126AbiBVHmC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Feb 2022 02:42:02 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1F7D5DF2;
+        Mon, 21 Feb 2022 23:34:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645511878; x=1677047878;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=O15gMyD3pZu1ehhynI27dsO78ZZEN4SItwaRKSaZ3QQ=;
-  b=GacVMTp7LrxIXJ0XZ8cGmEa7YL5wcryIktw6Yqf0b44w7VgW6GhlOl/S
-   h0N4SGclzJtYviXp/kWm06/lIAPdPCNIUuopOebMaD/dmPfvnI7WP8p07
-   GT4GVGFUS0YBlP0e4iY0jYdSXrXzQTTeBTWYb5ldrdgJakgBV9g+uErqk
-   TEqtbw/53qSKHLOoBSBDe1eSpocekyrWHoW1yLHrgT4wM3fXCjF54N/6K
-   LP81PHas/Y+tka3Z+Iq2egqxdQi+AGO1ows5S81ko0Xi05e8w/+BgXYdY
-   ivcXRPpr8W56iqwfe4WadEWMlSW7Tl1KiwzxmFmhW8pUalS1ch+1UB0Gq
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="250444084"
+  t=1645515279; x=1677051279;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=X1Tz+BAoBcxBBkGR1Lq3UkI+KuWFDfPTdFcRVZ6Nc9s=;
+  b=nxBHRnVtnwXwhzs0fOD5Sec1NiVa1ConBHWYGdzBfcDWMdZQq7SE3uzi
+   lBQCrAm/tQ98yTjOWSY6iWqQsjqTEQkqaXyqV/T7RU3dbjlr7YXYDtacg
+   u0rIoBp4bBRnSjQXrozg/yj7piaISpq0HtGSrBdISkO2pKhQXm1fWmphg
+   Pyb24lOW0KGRyPNxlfqdO5NUd/6G8iI22l6cs3Ytk1HIzoNrtAz9Rgiqx
+   TCGFZ0M887ztEID00HBRt/fpGHTnqxpl6KYbweAxL8+ki8KHwgdzs/GS8
+   jEhuOtZWnkphBi3XRYbGT26LLJsRrtyhuSoD6SKflBUxO318LSHl77sj8
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="251399474"
 X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="250444084"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 22:37:57 -0800
+   d="scan'208";a="251399474"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 23:34:39 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="507868464"
-Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 21 Feb 2022 22:37:55 -0800
-Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nMOo6-0002PW-IF; Tue, 22 Feb 2022 06:37:54 +0000
-Date:   Tue, 22 Feb 2022 14:37:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 2ecb866af0048e96c331a206a876a935d3649f78
-Message-ID: <621484ae.Ho4k1TNaYofLj/c9%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+   d="scan'208";a="591210229"
+Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.189])
+  by fmsmga008.fm.intel.com with ESMTP; 21 Feb 2022 23:34:36 -0800
+Date:   Tue, 22 Feb 2022 15:34:35 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     Doug Smythies <dsmythies@telus.net>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: Re: CPU excessively long times between frequency scaling driver
+ calls - bisected
+Message-ID: <20220222073435.GB78951@shbuild999.sh.intel.com>
+References: <003f01d81c8c$d20ee3e0$762caba0$@telus.net>
+ <20220208023940.GA5558@shbuild999.sh.intel.com>
+ <CAAYoRsXrwOQgzAcED+JfVG0=JQNEXuyGcSGghL4Z5xnFgkp+TQ@mail.gmail.com>
+ <20220208091525.GA7898@shbuild999.sh.intel.com>
+ <CAAYoRsXkyWf0vmEE2HvjF6pzCC4utxTF=7AFx1PJv4Evh=C+Ow@mail.gmail.com>
+ <e185b89fb97f47758a5e10239fc3eed0@intel.com>
+ <CAAYoRsXbBJtvJzh91nTXATLL1eb2EKbTVb8vEWa3Y6DfCWhZeg@mail.gmail.com>
+ <aaace653f12b79336b6f986ef5c4f9471445372a.camel@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <aaace653f12b79336b6f986ef5c4f9471445372a.camel@linux.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 2ecb866af0048e96c331a206a876a935d3649f78  Merge branch 'thermal-hfi' into linux-next
+On Mon, Feb 14, 2022 at 07:17:24AM -0800, srinivas pandruvada wrote:
+> Hi Doug,
+> 
+> I think you use CONFIG_NO_HZ_FULL.
+> Here we are getting callback from scheduler. Can we check that if
+> scheduler woke up on those CPUs?
+> We can run "trace-cmd -e sched" and check in kernel shark if there is
+> similar gaps in activity.
 
-elapsed time: 731m
+Srinivas analyzed the scheduler trace data from trace-cmd, and thought is
+related with the cpufreq callback is not called timeley from scheduling
+events:
 
-configs tested: 168
-configs skipped: 3
+" 
+I mean we ignore the callback when the target CPU is not a local CPU as
+we have to do IPI to adjust MSRs.
+This will happen many times when sched_wake will wake up a new CPU for
+the thread (we will get a callack for the target) but once the remote
+thread start executing "sched_switch", we will get a callback on local
+CPU, so we will adjust frequencies (provided 10ms interval from the
+last call).
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+>From the trace file I see the scenario where it took 72sec between two
+updates:
+CPU 2
+34412.597161    busy=78         freq=3232653
+34484.450725    busy=63         freq=2606793
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20220221
-sh                 kfr2r09-romimage_defconfig
-arm                           corgi_defconfig
-ia64                             alldefconfig
-sh                   secureedge5410_defconfig
-mips                         mpc30x_defconfig
-sh                          kfr2r09_defconfig
-powerpc                         wii_defconfig
-sh                   rts7751r2dplus_defconfig
-mips                           gcw0_defconfig
-mips                  decstation_64_defconfig
-sh                          lboxre2_defconfig
-xtensa                         virt_defconfig
-ia64                          tiger_defconfig
-arm                          iop32x_defconfig
-sh                             shx3_defconfig
-h8300                    h8300h-sim_defconfig
-arm                       aspeed_g5_defconfig
-m68k                          hp300_defconfig
-arm                            xcep_defconfig
-xtensa                       common_defconfig
-sh                           se7721_defconfig
-alpha                            alldefconfig
-sh                           se7724_defconfig
-mips                             allyesconfig
-arm                      jornada720_defconfig
-sh                               allmodconfig
-powerpc                  storcenter_defconfig
-mips                         tb0226_defconfig
-mips                           ip32_defconfig
-sh                            hp6xx_defconfig
-m68k                       m5208evb_defconfig
-s390                             allmodconfig
-mips                       bmips_be_defconfig
-m68k                        m5407c3_defconfig
-s390                             allyesconfig
-m68k                       m5475evb_defconfig
-arm                         nhk8815_defconfig
-arm                          pxa3xx_defconfig
-powerpc                        warp_defconfig
-sh                           sh2007_defconfig
-arm                          gemini_defconfig
-powerpc                      pasemi_defconfig
-m68k                          sun3x_defconfig
-mips                         cobalt_defconfig
-arm                        clps711x_defconfig
-arm                            pleb_defconfig
-powerpc                       holly_defconfig
-sh                   sh7770_generic_defconfig
-xtensa                  cadence_csp_defconfig
-powerpc                    amigaone_defconfig
-powerpc                     redwood_defconfig
-sh                ecovec24-romimage_defconfig
-powerpc                         ps3_defconfig
-mips                        jmr3927_defconfig
-microblaze                          defconfig
-mips                         db1xxx_defconfig
-arc                           tb10x_defconfig
-arm                        mvebu_v7_defconfig
-powerpc                        cell_defconfig
-powerpc                  iss476-smp_defconfig
-sh                          rsk7269_defconfig
-powerpc                     tqm8555_defconfig
-sh                        apsh4ad0a_defconfig
-arm                           sunxi_defconfig
-arm                  randconfig-c002-20220221
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                             allnoconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-parisc                              defconfig
-s390                                defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a003-20220221
-x86_64               randconfig-a002-20220221
-x86_64               randconfig-a005-20220221
-x86_64               randconfig-a006-20220221
-x86_64               randconfig-a001-20220221
-x86_64               randconfig-a004-20220221
-i386                 randconfig-a002-20220221
-i386                 randconfig-a001-20220221
-i386                 randconfig-a005-20220221
-i386                 randconfig-a003-20220221
-i386                 randconfig-a006-20220221
-i386                 randconfig-a004-20220221
-arc                  randconfig-r043-20220221
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
+There is periodic activity in between, related to active load balancing
+in scheduler (since last frequency was higher these small work will
+also run at higher frequency). But those threads are not CFS class, so
+scheduler callback will not be called for them.
 
-clang tested configs:
-powerpc              randconfig-c003-20220222
-x86_64                        randconfig-c007
-arm                  randconfig-c002-20220222
-mips                 randconfig-c004-20220222
-i386                          randconfig-c001
-riscv                randconfig-c006-20220222
-powerpc              randconfig-c003-20220221
-x86_64               randconfig-c007-20220221
-arm                  randconfig-c002-20220221
-mips                 randconfig-c004-20220221
-i386                 randconfig-c001-20220221
-riscv                randconfig-c006-20220221
-s390                 randconfig-c005-20220221
-arm                          moxart_defconfig
-arm                  colibri_pxa270_defconfig
-powerpc                      pmac32_defconfig
-powerpc                 mpc8272_ads_defconfig
-arm                        vexpress_defconfig
-arm                          collie_defconfig
-powerpc                  mpc866_ads_defconfig
-arm                  colibri_pxa300_defconfig
-powerpc                      ppc44x_defconfig
-x86_64               randconfig-a011-20220221
-x86_64               randconfig-a015-20220221
-x86_64               randconfig-a014-20220221
-x86_64               randconfig-a016-20220221
-x86_64               randconfig-a013-20220221
-x86_64               randconfig-a012-20220221
-i386                 randconfig-a016-20220221
-i386                 randconfig-a012-20220221
-i386                 randconfig-a015-20220221
-i386                 randconfig-a011-20220221
-i386                 randconfig-a014-20220221
-i386                 randconfig-a013-20220221
-hexagon              randconfig-r045-20220221
-hexagon              randconfig-r041-20220221
-riscv                randconfig-r042-20220221
-hexagon              randconfig-r045-20220222
-hexagon              randconfig-r041-20220222
-s390                 randconfig-r044-20220221
+So removing the patch removed a trigger which would have caused a
+sched_switch to a CFS task and call a cpufreq/intel_pstate callback.
+But calling for every class, will be too many callbacks and not sure we
+can even call for "stop" class, which these migration threads are
+using.
+"
+
+Following this direction, I made a hacky debug patch which should help
+to restore the previous behavior.
+
+Doug, could you help to try it? thanks
+
+It basically tries to make sure the cpufreq-update-util be called timely
+even for a silent system with very few interrupts (even from tick).
+
+Thanks,
+Feng
+
+From 6be5f5da66a847860b0b9924fbb09f93b2e2d6e6 Mon Sep 17 00:00:00 2001
+From: Feng Tang <feng.tang@intel.com>
+Date: Tue, 22 Feb 2022 22:59:00 +0800
+Subject: [PATCH] idle/intel-pstate: hacky debug patch to make sure the
+ cpufreq_update_util callback being called timely in silent system
 
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ kernel/sched/idle.c  | 10 ++++++++++
+ kernel/sched/sched.h | 13 +++++++++++++
+ 2 files changed, 23 insertions(+)
+
+diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
+index d17b0a5ce6ac..cc538acb3f1a 100644
+--- a/kernel/sched/idle.c
++++ b/kernel/sched/idle.c
+@@ -258,15 +258,25 @@ static void cpuidle_idle_call(void)
+  *
+  * Called with polling cleared.
+  */
++DEFINE_PER_CPU(u64, last_util_update_time);	/* in jiffies */
+ static void do_idle(void)
+ {
+ 	int cpu = smp_processor_id();
++	u64 expire;
+ 
+ 	/*
+ 	 * Check if we need to update blocked load
+ 	 */
+ 	nohz_run_idle_balance(cpu);
+ 
++#ifdef CONFIG_X86_INTEL_PSTATE
++	expire = __this_cpu_read(last_util_update_time) + HZ * 3;
++	if (unlikely(time_is_before_jiffies(expire))) {
++		idle_update_util();
++		__this_cpu_write(last_util_update_time, get_jiffies_64());
++	}
++#endif
++
+ 	/*
+ 	 * If the arch has a polling bit, we maintain an invariant:
+ 	 *
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 0e66749486e7..2a8d87988d1f 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -2809,6 +2809,19 @@ static inline void cpufreq_update_util(struct rq *rq, unsigned int flags)
+ 	if (data)
+ 		data->func(data, rq_clock(rq), flags);
+ }
++
++static inline void idle_update_util(void)
++{
++	struct update_util_data *data;
++	struct rq *rq = cpu_rq(raw_smp_processor_id());
++
++	data = rcu_dereference_sched(*per_cpu_ptr(&cpufreq_update_util_data,
++						  cpu_of(rq)));
++	if (data)
++		data->func(data, rq_clock(rq), 0);
++}
++
++
+ #else
+ static inline void cpufreq_update_util(struct rq *rq, unsigned int flags) {}
+ #endif /* CONFIG_CPU_FREQ */
+-- 
+2.25.1
+
+
+
+
