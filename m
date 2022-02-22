@@ -2,152 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA1684BF328
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Feb 2022 09:08:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A6094BF4AA
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Feb 2022 10:27:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229462AbiBVIHY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Feb 2022 03:07:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47988 "EHLO
+        id S230168AbiBVJ2B (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Feb 2022 04:28:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiBVIHX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Feb 2022 03:07:23 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5A50E149BAD;
-        Tue, 22 Feb 2022 00:06:58 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C5AB41063;
-        Tue, 22 Feb 2022 00:06:57 -0800 (PST)
-Received: from [10.57.9.152] (unknown [10.57.9.152])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D11473F5A1;
-        Tue, 22 Feb 2022 00:06:55 -0800 (PST)
-Message-ID: <147e48e5-e310-cd8f-ba8c-ff32e3094be3@arm.com>
-Date:   Tue, 22 Feb 2022 08:06:54 +0000
+        with ESMTP id S230169AbiBVJ17 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Feb 2022 04:27:59 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCECB150D;
+        Tue, 22 Feb 2022 01:27:34 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 505E91F43FA4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645522052;
+        bh=9uIWhkgh5zj+kS+T5nmX1TTemvU0JjPsg/tDayMXXIM=;
+        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+        b=WGzSpzkFjQqTS2z3k6akWiB7z9JcJe7NQtCE5iLTZ+xtjOkyjRk8g3pUm+HXEUEwS
+         wC1joSSu8ixjFIRti1u6wvw0Uokl5Y/0mQD68IITDkDTvxEK4kqEiKRyzT3ku36TfZ
+         Cn77ERP+0FfeK26yCuP5PWD/TeqRfSVNw+LlnJaSv8aEmoAA07rb081xrBMLAkrfw4
+         5T4GdVGvf2qkn049NMlMOGxY5PcICG/3N3NwQF1A4k4Fl7QNwpxA00mayoG0/Y81t/
+         9lJ/6LWYJhHMFTiOrRKAh+i8BQrULno5quArIiQ3+3lcCSsq/PnX5BBAPsH/6JQKvo
+         MaSFQE+q4Rkog==
+Message-ID: <88cf418d-69d2-2852-1ed6-d96143694dac@collabora.com>
+Date:   Tue, 22 Feb 2022 10:27:28 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC][PATCH 1/2] dt-bindings: power: add Energy Model bindings
+ Thunderbird/91.5.1
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: Re: [PATCH v23 1/7] dt-bindings: soc: mediatek: add mtk svs
+ dt-bindings
+To:     Roger Lu <roger.lu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jia-wei Chang <jia-wei.chang@mediatek.com>
+References: <20220221063939.14969-1-roger.lu@mediatek.com>
+ <20220221063939.14969-2-roger.lu@mediatek.com>
 Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        rafael@kernel.org, daniel.lezcano@linaro.org, nm@ti.com,
-        sboyd@kernel.org, mka@chromium.org, dianders@chromium.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20220221225131.15836-1-lukasz.luba@arm.com>
- <20220221225131.15836-2-lukasz.luba@arm.com>
- <20220222030337.ijnfrh367illmidr@vireshk-i7>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20220222030337.ijnfrh367illmidr@vireshk-i7>
+In-Reply-To: <20220221063939.14969-2-roger.lu@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Viresh,
-
-Thanks for having a look at it.
-
-On 2/22/22 03:03, Viresh Kumar wrote:
-> On 21-02-22, 22:51, Lukasz Luba wrote:
->> Add DT bindings for the Energy Model information.
->>
->> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->> ---
->>   .../bindings/power/energy-model.yaml          | 51 +++++++++++++++++++
->>   1 file changed, 51 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/power/energy-model.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/power/energy-model.yaml b/Documentation/devicetree/bindings/power/energy-model.yaml
->> new file mode 100644
->> index 000000000000..804a9b324925
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/power/energy-model.yaml
->> @@ -0,0 +1,51 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/power/energy-model.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Energy Model Bindings
->> +
->> +maintainers:
->> +  - Lukasz Luba <lukasz.luba@arm.com>
->> +
->> +description: |+
->> +  Devices work at specific performance states (frequencies). The power which
->> +  is used at a given performance state is an important information. A framework
->> +  which maintains this information is Energy Model. This document defines
->> +  bindings for these Energy Model performance states applicable across wide
->> +  range of devices. For illustration purpose, this document uses GPU as a device.
->> +
->> +  This binding only supports frequency-power pairs.
->> +
->> +select: true
->> +
->> +properties:
->> +  operating-points:
->> +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
->> +    items:
->> +      items:
->> +        - description: Frequency in kHz
->> +        - description: Power in uW
->> +
->> +
->> +additionalProperties: true
->> +examples:
->> +    {
->> +       gpu_energy_model: energy-model {
->> +               compatible = "energy-model";
->> +               energy-model-entries = <
->> +                               200000 300000
->> +                               297000 500000
->> +                               400000 800000
->> +                               500000 1400000
->> +                               600000 2000000
->> +                               800000 2800000
->> +                               >;
->> +       };
->> +    };
->> +
->> +    &gpu {
->> +       energy-model = <&gpu_energy_model>;
->> +    };
+Il 21/02/22 07:39, Roger Lu ha scritto:
+> Document the binding for enabling mtk svs on MediaTek SoC.
 > 
-> What about getting this from the OPP table instead? There is no point adding
-> similar tables for a device.
-> 
+> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-I'm not sure if that would be flexible enough to meet the requirement:
-power for each OPP might be different in one board vs. other board.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Power can be different because of static power, which might vary due to
-different temperature that the SoC operates at a particular OPP. It can
-be due to: better heat sink (or no at all like on dev board), bigger PCB
-with fat copper layers, different location of hot devices (like PMIC) on 
-the PCB, missing some hot devices on the PCB (fast charger), case, etc.
-
-The 'advanced' EM and this DT array allows to provide avg power from
-measurements for a particular board and for each OPP independently.
-
-AFAIK the OPP definition is more SoC specific. I'm particularly
-interested in this SC7180 SoC and it's GPU power [1]. There is
-also a nice OPP definition in that node.
-As you can see there is one SoC file and quite a few boards next to
-it. Some of them have a decent thermal design (inside Chromebook) but
-some are 'just' dev boards. The power would be different for those
-boards.
-
-Similar issue would be e.g. for Rk3399 SoC (Chromebook, Pine64, IoT and
-some dev boards).
-
-IMO the OPP table might be to much hassle and heavy for those boards.
-
-[1] 
-https://elixir.bootlin.com/linux/latest/source/arch/arm64/boot/dts/qcom/sc7180.dtsi#L1953
