@@ -2,68 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52DF74BFDD6
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Feb 2022 16:56:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 637A84BFDE9
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Feb 2022 16:59:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233550AbiBVP4L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Feb 2022 10:56:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50044 "EHLO
+        id S232586AbiBVP77 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Feb 2022 10:59:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233496AbiBVP4K (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Feb 2022 10:56:10 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9E45D65E
-        for <linux-pm@vger.kernel.org>; Tue, 22 Feb 2022 07:55:44 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id m14so25709747lfu.4
-        for <linux-pm@vger.kernel.org>; Tue, 22 Feb 2022 07:55:44 -0800 (PST)
+        with ESMTP id S231685AbiBVP77 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Feb 2022 10:59:59 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F4A5D7624
+        for <linux-pm@vger.kernel.org>; Tue, 22 Feb 2022 07:59:33 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id s13so5675857wrb.6
+        for <linux-pm@vger.kernel.org>; Tue, 22 Feb 2022 07:59:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oEpM0l8RPBE+aTAe3Uft8SyL6/gEsgm1pJ818FjUDds=;
-        b=dExvEXM8pER9YVnCtI5Lzn0OOPSgtm44ezIW80QG5zlCANJ/keZGvEKFlYtm+DAxA9
-         jwH3HtQpCQlNYFo1yWGKwR2lZjMIQmjpNwGQO6qOjeIvsCYgd4jtVWyGNl418vA2Ij5O
-         0NLA+dvX2SenBLgBFE16eti+PeQIIPwS3jzULs7IxP4o9hzxV/9aQtervAcCc31kJkz2
-         XQ5oGDLUk7h4IAotGVjkg9vc6XCL07KBmNqQM8ThWmoC2Ht3hdbpnN39+mLuVmwObXuA
-         gIQVCCD557qlWKn79t2yBuYNFiiOVjnOXGuRXg9MPOdFG/ALykbZNJMB9uDM3sQHCMTa
-         FrQA==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=U9Ou92nqYvdx+GxKcNtcQAp/eYvlk1EdyKPY3vKJyh4=;
+        b=OcgPCyS6DmUgHOQ6AClPXfqsnc+31xJBv9/PMuz8zNDY8bld+xDcMIhC9+VNa5lmw4
+         R+nmTxWsE0AKWYnPLWgk2ee6HUVytph6yydArbXgL6XkYIfrDoCosi9vn/h+pMFvIyRZ
+         dkHiKYz2qyzKFbYGdFF8KPFfSu8/vx85NQTlBUJgopaBzJc/Ba8pLxh/tFH7mUcg25Lt
+         gZUtAv0H9GFHL/VqM44/A0xtG4UCb8Z448RM+HIBHxasmkTCs5fjFl1t6rjqOD/PXoRL
+         6srx3jAhtEVEe1xOBTfTHmeMigFMfvwK8eMTcVNtCepYIBhzTovCoVNqGWp2nlbLiR6Q
+         ui2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oEpM0l8RPBE+aTAe3Uft8SyL6/gEsgm1pJ818FjUDds=;
-        b=OxoRFp9n7vpq7z+cnumg6M6onoR5Vy+lmUAK9F0vtHuNQZxw+0OGKqiJXzo69/kc7u
-         u4TWLK2lC1616CjYyPLRuJvPZ3cz6evH+cENf55tQLgkZDJ1vfti/yxdAhJlENY6YhvM
-         dqL8ne4WO8Fl+pbcBUpffxENRFUZEcHX3wIRO/fCJMu6PwBlNrfFccXFOaX3QnJ9djvm
-         SRBOHxNOT1sjgjd4qyRNYieSs3FU5rqTjxHb1iIoS3wFaGL6LkR1UjcAuZX02Fyx3PgP
-         86IKUcWnNOURxHV+PK+7s3LLpqrcjdON8GvvVVU3qUfw4fB7jeAx27TbgqzJtndtYKcN
-         aKHA==
-X-Gm-Message-State: AOAM533gDl4HPduXJbDwhTWUChLvX9AgGIA5cg4uVd1STDy9nXgNmopy
-        o0G+EQL1i/yf24reyKHZYqNigfLiXvRVeqwmLR5iuQ==
-X-Google-Smtp-Source: ABdhPJwPvMoG8GPN6SgbInhJ1ejmjActyS59kzL8HwsAPsdjpY6732byv4aBacE/Re92DjlW1tQcqUbybAP4xljBxTc=
-X-Received: by 2002:a05:6512:3604:b0:443:5d4b:3760 with SMTP id
- f4-20020a056512360400b004435d4b3760mr17164644lfs.358.1645545342953; Tue, 22
- Feb 2022 07:55:42 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=U9Ou92nqYvdx+GxKcNtcQAp/eYvlk1EdyKPY3vKJyh4=;
+        b=JywWtrg6Mzet+q0Qz5Nw6Kh/DmFjdgv/Qx1utnRnMVKqa0dfykuJg5bY8P8djakAAH
+         m1UgZNTVKBcLJxjcY9M4Ym+hBI7RLe5tbHHYtxQDcmUAyCmWXw0p9+DBjTFTNbU3opOQ
+         TBBlqLqMFeYz9KhiMQpls99LtusO8f/IJVL0kiWOd3ZxQ2oyPa7++rPfPxrcWy3C2Y7A
+         lLAYSYBDAnxfCyJt8nBpJZ13cjsY252IWNlQymbveN+KmcsjF1qpBYbegXnjDYowxWwx
+         Gw+NWFS22Wj48t7fY6lpawckv2P/2RbA9kL6kHAV9/PBtD+PSwQeGskS/8YtqhPTvAIh
+         FHtg==
+X-Gm-Message-State: AOAM531fMIubvc6YNPNLrDX0xpeP9IDAwS6UhCENQxnQzZjAKXxLH8EA
+        Ws9BoqnK2YVnDdTLHk9rX8xp0Q==
+X-Google-Smtp-Source: ABdhPJzgqGgohypuPzxtBqAj8srdmeqRgWf44uVAx2+2yUD0xAICR4RYD74O4lt9Ktey6Mh/Ky5Bog==
+X-Received: by 2002:a05:6000:1843:b0:1ea:3bdd:dae with SMTP id c3-20020a056000184300b001ea3bdd0daemr8685097wri.235.1645545572015;
+        Tue, 22 Feb 2022 07:59:32 -0800 (PST)
+Received: from ?IPV6:2a01:e34:ed2f:f020:7f69:edd5:61dd:b18a? ([2a01:e34:ed2f:f020:7f69:edd5:61dd:b18a])
+        by smtp.googlemail.com with ESMTPSA id j6-20020a05600c190600b0037c3659a12fsm3592866wmq.6.2022.02.22.07.59.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Feb 2022 07:59:31 -0800 (PST)
+Message-ID: <2d78266d-0b49-593e-79d8-00215c14fde5@linaro.org>
+Date:   Tue, 22 Feb 2022 16:59:29 +0100
 MIME-Version: 1.0
-References: <20220130210210.549877-1-daniel.lezcano@linaro.org>
- <20220130210210.549877-3-daniel.lezcano@linaro.org> <CAPDyKFqV++g63Asax8TNSEgujxJ=uM9XG2_Advu34JidYBCGtg@mail.gmail.com>
- <e44b9c4b-2ac4-4ea4-c771-bde13943af5f@linaro.org> <CAPDyKFr8Ycr2cbiD5MM9FSPc1qea+Yp9=cottcGAo7HmFR9Eaw@mail.gmail.com>
- <cfbaefa5-fc7b-bd0f-e4ed-8f046de2a7cf@linaro.org> <CAPDyKFoWq+i09Ts_+SAz9ctC2a7-cqC71buDmvb-LZFTVSH+DQ@mail.gmail.com>
- <41214f23-ddb1-f60c-5e2a-96ba161cf727@linaro.org>
-In-Reply-To: <41214f23-ddb1-f60c-5e2a-96ba161cf727@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 22 Feb 2022 16:55:06 +0100
-Message-ID: <CAPDyKFqo1vhhW994NsnWonTWW34qcSMU5xaBZyV76Njtr0ST4w@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
 Subject: Re: [PATCH v1 3/7] powercap/dtpm: Fixup kfree for virtual node
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Content-Language: en-US
+To:     Ulf Hansson <ulf.hansson@linaro.org>
 Cc:     rjw@rjwysocki.net, heiko@sntech.de, lukasz.luba@arm.com,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Daniel Lezcano <daniel.lezcano@kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+References: <20220130210210.549877-1-daniel.lezcano@linaro.org>
+ <20220130210210.549877-3-daniel.lezcano@linaro.org>
+ <CAPDyKFqV++g63Asax8TNSEgujxJ=uM9XG2_Advu34JidYBCGtg@mail.gmail.com>
+ <e44b9c4b-2ac4-4ea4-c771-bde13943af5f@linaro.org>
+ <CAPDyKFr8Ycr2cbiD5MM9FSPc1qea+Yp9=cottcGAo7HmFR9Eaw@mail.gmail.com>
+ <cfbaefa5-fc7b-bd0f-e4ed-8f046de2a7cf@linaro.org>
+ <CAPDyKFoWq+i09Ts_+SAz9ctC2a7-cqC71buDmvb-LZFTVSH+DQ@mail.gmail.com>
+ <41214f23-ddb1-f60c-5e2a-96ba161cf727@linaro.org>
+ <CAPDyKFqo1vhhW994NsnWonTWW34qcSMU5xaBZyV76Njtr0ST4w@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAPDyKFqo1vhhW994NsnWonTWW34qcSMU5xaBZyV76Njtr0ST4w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,44 +83,66 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 18 Feb 2022 at 14:18, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->
-> On 17/02/2022 16:45, Ulf Hansson wrote:
->
-> [ ... ]
->
-> > Does ops->release() also resets the "dtpm" pointer to NULL? If not,
-> > it's good practice that it should, right?
-> >
-> > In that case, we would be calling "kfree(NULL);" the second time,
-> > which is perfectly fine.
->
-> So you suggest to replace:
->
-> if (ops->release)
->         ops->release(dtpm);
-> else
->         kfree(dtpm);
->
-> By:
->
-> if (ops->release) {
->         ops->release(dtpm);
->         dtpm = NULL;
-> }
->
+On 22/02/2022 16:55, Ulf Hansson wrote:
+> On Fri, 18 Feb 2022 at 14:18, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>>
+>> On 17/02/2022 16:45, Ulf Hansson wrote:
+>>
+>> [ ... ]
+>>
+>>> Does ops->release() also resets the "dtpm" pointer to NULL? If not,
+>>> it's good practice that it should, right?
+>>>
+>>> In that case, we would be calling "kfree(NULL);" the second time,
+>>> which is perfectly fine.
+>>
+>> So you suggest to replace:
+>>
+>> if (ops->release)
+>>          ops->release(dtpm);
+>> else
+>>          kfree(dtpm);
+>>
+>> By:
+>>
+>> if (ops->release) {
+>>          ops->release(dtpm);
+>>          dtpm = NULL;
+>> }
+>>
+> 
+> I don't have a strong opinion how to code this.
+> 
+> What I was trying to point out was that if ->ops->release() frees the
+> memory it could/should also reset the pointer to NULL
 
-I don't have a strong opinion how to code this.
+No it can't because it is not a pointer, it is contained by the backend 
+specific structure.
 
-What I was trying to point out was that if ->ops->release() frees the
-memory it could/should also reset the pointer to NULL.
+eg.
 
-And if that is already done, the kfree below is harmless and there
-would be nothing to "fix".
+struct dtpm_cpu {
+	struct dtpm dtpm;
+};
 
-> kfree(dtpm);
->
-> ?
+the release frees a dtpm_cpu structure.
 
-Kind regards
-Uffe
+
+
+> And if that is already done, the kfree below is harmless and there
+> would be nothing to "fix".
+> 
+>> kfree(dtpm);
+>>
+>> ?
+> 
+> Kind regards
+> Uffe
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
