@@ -2,147 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 637A84BFDE9
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Feb 2022 16:59:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 372F54BFFA1
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Feb 2022 18:05:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232586AbiBVP77 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Feb 2022 10:59:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55650 "EHLO
+        id S233737AbiBVRFo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Feb 2022 12:05:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231685AbiBVP77 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Feb 2022 10:59:59 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F4A5D7624
-        for <linux-pm@vger.kernel.org>; Tue, 22 Feb 2022 07:59:33 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id s13so5675857wrb.6
-        for <linux-pm@vger.kernel.org>; Tue, 22 Feb 2022 07:59:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=U9Ou92nqYvdx+GxKcNtcQAp/eYvlk1EdyKPY3vKJyh4=;
-        b=OcgPCyS6DmUgHOQ6AClPXfqsnc+31xJBv9/PMuz8zNDY8bld+xDcMIhC9+VNa5lmw4
-         R+nmTxWsE0AKWYnPLWgk2ee6HUVytph6yydArbXgL6XkYIfrDoCosi9vn/h+pMFvIyRZ
-         dkHiKYz2qyzKFbYGdFF8KPFfSu8/vx85NQTlBUJgopaBzJc/Ba8pLxh/tFH7mUcg25Lt
-         gZUtAv0H9GFHL/VqM44/A0xtG4UCb8Z448RM+HIBHxasmkTCs5fjFl1t6rjqOD/PXoRL
-         6srx3jAhtEVEe1xOBTfTHmeMigFMfvwK8eMTcVNtCepYIBhzTovCoVNqGWp2nlbLiR6Q
-         ui2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=U9Ou92nqYvdx+GxKcNtcQAp/eYvlk1EdyKPY3vKJyh4=;
-        b=JywWtrg6Mzet+q0Qz5Nw6Kh/DmFjdgv/Qx1utnRnMVKqa0dfykuJg5bY8P8djakAAH
-         m1UgZNTVKBcLJxjcY9M4Ym+hBI7RLe5tbHHYtxQDcmUAyCmWXw0p9+DBjTFTNbU3opOQ
-         TBBlqLqMFeYz9KhiMQpls99LtusO8f/IJVL0kiWOd3ZxQ2oyPa7++rPfPxrcWy3C2Y7A
-         lLAYSYBDAnxfCyJt8nBpJZ13cjsY252IWNlQymbveN+KmcsjF1qpBYbegXnjDYowxWwx
-         Gw+NWFS22Wj48t7fY6lpawckv2P/2RbA9kL6kHAV9/PBtD+PSwQeGskS/8YtqhPTvAIh
-         FHtg==
-X-Gm-Message-State: AOAM531fMIubvc6YNPNLrDX0xpeP9IDAwS6UhCENQxnQzZjAKXxLH8EA
-        Ws9BoqnK2YVnDdTLHk9rX8xp0Q==
-X-Google-Smtp-Source: ABdhPJzgqGgohypuPzxtBqAj8srdmeqRgWf44uVAx2+2yUD0xAICR4RYD74O4lt9Ktey6Mh/Ky5Bog==
-X-Received: by 2002:a05:6000:1843:b0:1ea:3bdd:dae with SMTP id c3-20020a056000184300b001ea3bdd0daemr8685097wri.235.1645545572015;
-        Tue, 22 Feb 2022 07:59:32 -0800 (PST)
-Received: from ?IPV6:2a01:e34:ed2f:f020:7f69:edd5:61dd:b18a? ([2a01:e34:ed2f:f020:7f69:edd5:61dd:b18a])
-        by smtp.googlemail.com with ESMTPSA id j6-20020a05600c190600b0037c3659a12fsm3592866wmq.6.2022.02.22.07.59.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Feb 2022 07:59:31 -0800 (PST)
-Message-ID: <2d78266d-0b49-593e-79d8-00215c14fde5@linaro.org>
-Date:   Tue, 22 Feb 2022 16:59:29 +0100
+        with ESMTP id S232716AbiBVRFn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Feb 2022 12:05:43 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A55D53B47;
+        Tue, 22 Feb 2022 09:05:17 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2F9BB106F;
+        Tue, 22 Feb 2022 09:05:17 -0800 (PST)
+Received: from [10.57.9.152] (unknown [10.57.9.152])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 144A33F70D;
+        Tue, 22 Feb 2022 09:05:14 -0800 (PST)
+Message-ID: <211a3606-2f4c-227b-33aa-177ef68a49a3@arm.com>
+Date:   Tue, 22 Feb 2022 17:05:13 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v1 3/7] powercap/dtpm: Fixup kfree for virtual node
+Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
+ cpufreq_cooling and devfreq_cooling
 Content-Language: en-US
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     rjw@rjwysocki.net, heiko@sntech.de, lukasz.luba@arm.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-References: <20220130210210.549877-1-daniel.lezcano@linaro.org>
- <20220130210210.549877-3-daniel.lezcano@linaro.org>
- <CAPDyKFqV++g63Asax8TNSEgujxJ=uM9XG2_Advu34JidYBCGtg@mail.gmail.com>
- <e44b9c4b-2ac4-4ea4-c771-bde13943af5f@linaro.org>
- <CAPDyKFr8Ycr2cbiD5MM9FSPc1qea+Yp9=cottcGAo7HmFR9Eaw@mail.gmail.com>
- <cfbaefa5-fc7b-bd0f-e4ed-8f046de2a7cf@linaro.org>
- <CAPDyKFoWq+i09Ts_+SAz9ctC2a7-cqC71buDmvb-LZFTVSH+DQ@mail.gmail.com>
- <41214f23-ddb1-f60c-5e2a-96ba161cf727@linaro.org>
- <CAPDyKFqo1vhhW994NsnWonTWW34qcSMU5xaBZyV76Njtr0ST4w@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAPDyKFqo1vhhW994NsnWonTWW34qcSMU5xaBZyV76Njtr0ST4w@mail.gmail.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+To:     daniel.lezcano@linaro.org
+Cc:     amit.kachhap@gmail.com, viresh.kumar@linaro.org, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com, dietmar.eggemann@arm.com,
+        Pierre.Gondois@arm.com, Matthias Kaehlcke <mka@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220207073036.14901-1-lukasz.luba@arm.com>
+ <20220207073036.14901-2-lukasz.luba@arm.com>
+ <4e090ffe-c19b-8e2c-0396-72dc33361f35@arm.com>
+In-Reply-To: <4e090ffe-c19b-8e2c-0396-72dc33361f35@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22/02/2022 16:55, Ulf Hansson wrote:
-> On Fri, 18 Feb 2022 at 14:18, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->>
->> On 17/02/2022 16:45, Ulf Hansson wrote:
->>
->> [ ... ]
->>
->>> Does ops->release() also resets the "dtpm" pointer to NULL? If not,
->>> it's good practice that it should, right?
->>>
->>> In that case, we would be calling "kfree(NULL);" the second time,
->>> which is perfectly fine.
->>
->> So you suggest to replace:
->>
->> if (ops->release)
->>          ops->release(dtpm);
->> else
->>          kfree(dtpm);
->>
->> By:
->>
->> if (ops->release) {
->>          ops->release(dtpm);
->>          dtpm = NULL;
->> }
->>
+Hi Daniel,
+
+gentle ping
+
+On 2/17/22 18:18, Lukasz Luba wrote:
+> Hi Daniel,
 > 
-> I don't have a strong opinion how to code this.
 > 
-> What I was trying to point out was that if ->ops->release() frees the
-> memory it could/should also reset the pointer to NULL
-
-No it can't because it is not a pointer, it is contained by the backend 
-specific structure.
-
-eg.
-
-struct dtpm_cpu {
-	struct dtpm dtpm;
-};
-
-the release frees a dtpm_cpu structure.
-
-
-
-> And if that is already done, the kfree below is harmless and there
-> would be nothing to "fix".
-> 
->> kfree(dtpm);
+> On 2/7/22 7:30 AM, Lukasz Luba wrote:
+>> The Energy Model supports power values either in Watts or in some 
+>> abstract
+>> scale. When the 2nd option is in use, the thermal governor IPA should not
+>> be allowed to operate, since the relation between cooling devices is not
+>> properly defined. Thus, it might be possible that big GPU has lower power
+>> values in abstract scale than a Little CPU. To mitigate a misbehaviour
+>> of the thermal control algorithm, simply not register a cooling device
+>> capable of working with IPA.
 >>
->> ?
+>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>> ---
+>>   drivers/thermal/cpufreq_cooling.c |  2 +-
+>>   drivers/thermal/devfreq_cooling.c | 16 +++++++++++++---
+>>   2 files changed, 14 insertions(+), 4 deletions(-)
 > 
-> Kind regards
-> Uffe
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> The discussion in below this patch went slightly off-topic but it was
+> valuable. It clarified also there are no broken platforms with this
+> change.
+> 
+> Could you take the patch into the thermal tree, please?
+> 
+> Regards,
+> Lukasz
