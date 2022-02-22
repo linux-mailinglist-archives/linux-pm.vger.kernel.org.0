@@ -2,183 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A2C84BED72
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Feb 2022 23:52:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2290E4BEEBD
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Feb 2022 02:14:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235837AbiBUWwL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Feb 2022 17:52:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52630 "EHLO
+        id S231296AbiBVAuL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Feb 2022 19:50:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235816AbiBUWwK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Feb 2022 17:52:10 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D41092458C;
-        Mon, 21 Feb 2022 14:51:46 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A3CCC106F;
-        Mon, 21 Feb 2022 14:51:46 -0800 (PST)
-Received: from e123648.arm.com (unknown [10.57.9.194])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6E6623F66F;
-        Mon, 21 Feb 2022 14:51:44 -0800 (PST)
-From:   Lukasz Luba <lukasz.luba@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     lukasz.luba@arm.com, dietmar.eggemann@arm.com,
-        viresh.kumar@linaro.org, rafael@kernel.org,
-        daniel.lezcano@linaro.org, nm@ti.com, sboyd@kernel.org,
-        mka@chromium.org, dianders@chromium.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [RFC][PATCH 2/2] opp: Add support for 'advanced' Energy Model in DT
-Date:   Mon, 21 Feb 2022 22:51:31 +0000
-Message-Id: <20220221225131.15836-3-lukasz.luba@arm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220221225131.15836-1-lukasz.luba@arm.com>
-References: <20220221225131.15836-1-lukasz.luba@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229623AbiBVAuL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Feb 2022 19:50:11 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C7423BFF
+        for <linux-pm@vger.kernel.org>; Mon, 21 Feb 2022 16:49:46 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id iq13-20020a17090afb4d00b001bc4437df2cso829239pjb.2
+        for <linux-pm@vger.kernel.org>; Mon, 21 Feb 2022 16:49:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=epmHs12NXKTXHLUZ9nwDZ4br/8ppgIcKu9jlfDkKS8s=;
+        b=XnCBpjTBLNXQLAgRHriEXOrv3aQ9d9iRcKkOIrafB+aIhy1pLanBihHBhF39F72imy
+         AR3vt3PTWgmUbJomiP0I8+KF+BaZXs+1IJ1jFmfqPTFLB8NO+686gm6F8tIJsW784T3y
+         +g/sGIHfcrmS8l8KLpGWFYZUukkXB4uzOiA2o4UhrgDLIGyFns2L5YMHfsOh8yTthL1M
+         sP4NIAO2D8VzcRwao6hXNncogs3aKvA4mpL1dwLhqcJ+RmpGCGJjAljq93q+MO6/nMJ4
+         P4v1DHnESmz6VT8NmvdVpGj3cuu/s4LKAcWtTrG8QKhB6x2bm0oGegEq7qiKaeyP7/ZS
+         R0yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=epmHs12NXKTXHLUZ9nwDZ4br/8ppgIcKu9jlfDkKS8s=;
+        b=XoJMPUlE61soKkNODpN0WmMoFwOpWF2gxIvGy+JkZaCJzrB/igqA6My9PjV1n8s6R6
+         TKfQCHF+PZ1HD5ZP50aO64NSE59jfxZ6fj9rgzrFchMirMFmUdEWRo8/D++nje3w9I4J
+         aDGCxlKkFvdTSfLNCp4fBJqEAjSFpdilQLBYcIIiCTUd2rbfuiGy++1zZmFKDU1nYxih
+         kW1n6SB2QWjrFJo1/v2Xfzb1l33r/J4QuEy+0KQYavxVKbywid0n9yPCHgTm/71+gu7b
+         06z+pTAltTJEEVTwOil5Vwld0iDdnT4JfInIFcn3A4jihAxPI17/h7QJb6aPS+02hGHO
+         YZ8A==
+X-Gm-Message-State: AOAM531PZvoPeAU6AMc27C/c+bEocJ9niV15iC+HgAOaSn0GMpqX01G0
+        yGQy+YLGyaa2wvqU2qD1GNS8VA==
+X-Google-Smtp-Source: ABdhPJzzYiqsXGCJu8ldp8hYFabrq/F5SPGCjmmEXrYuC40eRKCJfjIPnf+IEJuF4spb5npzZTMHGg==
+X-Received: by 2002:a17:90a:5302:b0:1b9:ba0a:27e5 with SMTP id x2-20020a17090a530200b001b9ba0a27e5mr1449309pjh.91.1645490985871;
+        Mon, 21 Feb 2022 16:49:45 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id y27sm18727244pgc.92.2022.02.21.16.49.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Feb 2022 16:49:45 -0800 (PST)
+Message-ID: <62143329.1c69fb81.50ca0.2ba7@mx.google.com>
+Date:   Mon, 21 Feb 2022 16:49:45 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+X-Kernelci-Kernel: v5.17-rc5-50-g2ecb866af004
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 1 warning (v5.17-rc5-50-g2ecb866af004)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The Energy Model (EM) can be created based on DT entry:
-'dynamic-power-coefficient'. It's a 'simple' EM which is limited to the
-dynamic power. It has to fit into the math formula which requires also
-information about voltage. Some of the platforms don't expose voltage
-information, thus it's not possible to use EM registration using DT.
+pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.17-rc5-50-g2e=
+cb866af004)
 
-This patch aims to fix it. It introduces new implementation of the EM
-registration callback. The new mechanism parses EM array specified in DT
-which contains a set of tuples: frequency (in kHz) and power (uW).
-It also allows to register 'advanced' EM, which models total power
-(static + dynamic), so better reflects real HW.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+17-rc5-50-g2ecb866af004/
 
-Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+Tree: pm
+Branch: testing
+Git Describe: v5.17-rc5-50-g2ecb866af004
+Git Commit: 2ecb866af0048e96c331a206a876a935d3649f78
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+x86_64:
+
+
+Warnings summary:
+
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
 ---
- drivers/opp/of.c | 95 +++++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 94 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-index 2f40afa4e65c..af879c798934 100644
---- a/drivers/opp/of.c
-+++ b/drivers/opp/of.c
-@@ -1395,6 +1395,85 @@ struct device_node *dev_pm_opp_get_of_node(struct dev_pm_opp *opp)
- }
- EXPORT_SYMBOL_GPL(dev_pm_opp_get_of_node);
- 
-+/*
-+ * Callback function provided to the Energy Model framework upon registration.
-+ * It provides the power based on DT by @dev at @kHz if it is the frequency
-+ * of an existing OPP, or at the frequency of the first OPP above @kHz otherwise
-+ * (see dev_pm_opp_find_freq_ceil()). This function updates @kHz to the ceiled
-+ * frequency and @mW to the associated power. The power is a value specified
-+ * in DT for a given frequency. It's a total power (static + dynamic), so
-+ * better reflects the real HW characteristics.
-+ *
-+ * Returns 0 on success or a proper -E* value in case of error.
-+ */
-+static int __maybe_unused
-+_get_dt_power(unsigned long *mW, unsigned long *kHz, struct device *dev)
-+{
-+	struct device_node *np, *em_node;
-+	const struct property *prop;
-+	struct dev_pm_opp *opp;
-+	unsigned long opp_freq;
-+	const __be32 *val;
-+	int nr;
-+
-+	np = of_node_get(dev->of_node);
-+	if (!np)
-+		return -EINVAL;
-+
-+	/* Find the right frequency and convert it to kHz */
-+	opp_freq = *kHz * 1000;
-+	opp = dev_pm_opp_find_freq_ceil(dev, &opp_freq);
-+	if (IS_ERR(opp))
-+		return -EINVAL;
-+
-+	opp_freq /= 1000;
-+
-+	em_node = of_parse_phandle(np, "energy-model", 0);
-+	of_node_put(np);
-+	if (!em_node) {
-+		dev_warn(dev, "%s: No EM phandle found\n", __func__);
-+		return -EINVAL;
-+	}
-+
-+	prop = of_find_property(em_node, "energy-model-entries", NULL);
-+	of_node_put(em_node);
-+	if (!prop) {
-+		dev_warn(dev, "%s: No EM entries found\n", __func__);
-+		return -ENODEV;
-+	}
-+
-+	if (!prop->value) {
-+		dev_warn(dev, "%s: No EM entries value found\n", __func__);
-+		return -ENODATA;
-+	}
-+
-+	/*
-+	 * Each EM entry is a set of tuples consisting of Frequency and
-+	 * Power like <freq-kHz power-uW>.
-+	 */
-+	nr = prop->length / sizeof(u32);
-+	if (nr % 2) {
-+		dev_warn(dev, "%s: Invalid EM DT table\n", __func__);
-+		return -EINVAL;
-+	}
-+
-+	val = prop->value;
-+	while (nr) {
-+		unsigned long freq = be32_to_cpup(val++);
-+		unsigned long power = be32_to_cpup(val++);
-+
-+		if (opp_freq == freq) {
-+			*kHz = opp_freq;
-+			*mW = power / 1000;
-+			return 0;
-+		}
-+
-+		nr -= 2;
-+	}
-+
-+	return -EINVAL;
-+}
-+
- /*
-  * Callback function provided to the Energy Model framework upon registration.
-  * This computes the power estimated by @dev at @kHz if it is the frequency
-@@ -1459,7 +1538,7 @@ static int __maybe_unused _get_power(unsigned long *mW, unsigned long *kHz,
- int dev_pm_opp_of_register_em(struct device *dev, struct cpumask *cpus)
- {
- 	struct em_data_callback em_cb = EM_DATA_CB(_get_power);
--	struct device_node *np;
-+	struct device_node *np, *em_node;
- 	int ret, nr_opp;
- 	u32 cap;
- 
-@@ -1480,6 +1559,20 @@ int dev_pm_opp_of_register_em(struct device *dev, struct cpumask *cpus)
- 		goto failed;
- 	}
- 
-+	/* First, try to find more precised Energy Model array in DT */
-+	em_node = of_parse_phandle(np, "energy-model", 0);
-+	of_node_put(np);
-+	if (em_node) {
-+		struct em_data_callback em_dt_cb = EM_DATA_CB(_get_dt_power);
-+
-+		pr_info("EM: found energy-model phandle node\n");
-+		of_node_put(em_node);
-+		ret = em_dev_register_perf_domain(dev, nr_opp, &em_dt_cb, cpus, true);
-+		if (ret)
-+			goto failed;
-+		return 0;
-+	}
-+
- 	/*
- 	 * Register an EM only if the 'dynamic-power-coefficient' property is
- 	 * set in devicetree. It is assumed the voltage values are known if that
--- 
-2.17.1
-
+For more info write to <info@kernelci.org>
