@@ -2,146 +2,251 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9DAA4BEFD6
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Feb 2022 04:16:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBAAC4BF229
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Feb 2022 07:38:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233440AbiBVDEH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Feb 2022 22:04:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37454 "EHLO
+        id S229753AbiBVGiY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Feb 2022 01:38:24 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:53502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233293AbiBVDEG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Feb 2022 22:04:06 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF2625E89
-        for <linux-pm@vger.kernel.org>; Mon, 21 Feb 2022 19:03:41 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id m1-20020a17090a668100b001bc023c6f34so987848pjj.3
-        for <linux-pm@vger.kernel.org>; Mon, 21 Feb 2022 19:03:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=q1rax7G4k5CCLSu09IqEgCbCj8ZVR2NTHSH1BgrxHe0=;
-        b=PsL08C81Kelj7c9r8L29y7wGb0vEXUN5Yj445KMSVmi2wK6HbjzM/Tc27bBhLH3Puv
-         aeEYS0SCq8aZgZC2Ii+ivfgo88TwtACOBCdKHiDRdhjKtDXwSS2bGfdZi9V/VCrv5QNF
-         w3Tgdx1lOdq3kATph5xRTiwzd1Pw8aCsKJ+RYZ4ofn4Epzr8hk8IMlCtti6Bcc9Z6TmX
-         ys4rVayLhwcPhJVrAaQzCo6LfcN+tzi2yS0J3SA7TQaUydbWo/IiYo6BuMLfvEBqOu2E
-         pKSxWZSYJmn4iJmEUfBtEKzthDOgr1zjD21wHFoipzCE6lngjoRztn0keTGsr21Pn1Gw
-         zYrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=q1rax7G4k5CCLSu09IqEgCbCj8ZVR2NTHSH1BgrxHe0=;
-        b=N1P6CWPGH3LojGDPyzPaJOVuujmXvVepAujc1rWaMPkKOOOdAA9AvQcPA4mz+Ep2Yh
-         qvVZnpHpVJPhuekq9KTHPvgWCiP7yCMN7OqVu2/TVXL5qAVMGe3g+NkjNUsq84PvZj4x
-         Dnw2vToFj0qukWHF2fmaJ+jRC8LA5UJbyozQjJa3M+oYIJyDbdtoOjNqQAk3P2+IvGZm
-         fjCu8fe7l3KEWDxf0R3aWKYwl6QJwbvcaXjRBKn5Vu3ZBbIzZBMMt0R4JZJMZypGaCjU
-         3JCP7wb0Br5vocR9w10H7cRAIf0iUGKyixR80OqYlKd7jCkddZi5wwqedalSfvq3CJ7u
-         t/Mg==
-X-Gm-Message-State: AOAM533PamyyisCRATDkRf7c+8cPyxbL2doknHWfh/Y3sZiE0Z0nZcp6
-        DlZT3dkJFEswhpjdl6EEzfF6RA==
-X-Google-Smtp-Source: ABdhPJzAdoixanI42+eSMtqelZAuLWBoMV4auYmoFJWOKzOZ+LBVbKYHRC4IjUCViPcUfLAG7Mjdeg==
-X-Received: by 2002:a17:90a:67cd:b0:1bc:4437:df27 with SMTP id g13-20020a17090a67cd00b001bc4437df27mr1940741pjm.112.1645499021302;
-        Mon, 21 Feb 2022 19:03:41 -0800 (PST)
-Received: from localhost ([223.184.83.228])
-        by smtp.gmail.com with ESMTPSA id il4sm641203pjb.28.2022.02.21.19.03.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Feb 2022 19:03:40 -0800 (PST)
-Date:   Tue, 22 Feb 2022 08:33:37 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        rafael@kernel.org, daniel.lezcano@linaro.org, nm@ti.com,
-        sboyd@kernel.org, mka@chromium.org, dianders@chromium.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [RFC][PATCH 1/2] dt-bindings: power: add Energy Model bindings
-Message-ID: <20220222030337.ijnfrh367illmidr@vireshk-i7>
-References: <20220221225131.15836-1-lukasz.luba@arm.com>
- <20220221225131.15836-2-lukasz.luba@arm.com>
+        with ESMTP id S229475AbiBVGiX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Feb 2022 01:38:23 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B15DF3A;
+        Mon, 21 Feb 2022 22:37:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645511878; x=1677047878;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=O15gMyD3pZu1ehhynI27dsO78ZZEN4SItwaRKSaZ3QQ=;
+  b=GacVMTp7LrxIXJ0XZ8cGmEa7YL5wcryIktw6Yqf0b44w7VgW6GhlOl/S
+   h0N4SGclzJtYviXp/kWm06/lIAPdPCNIUuopOebMaD/dmPfvnI7WP8p07
+   GT4GVGFUS0YBlP0e4iY0jYdSXrXzQTTeBTWYb5ldrdgJakgBV9g+uErqk
+   TEqtbw/53qSKHLOoBSBDe1eSpocekyrWHoW1yLHrgT4wM3fXCjF54N/6K
+   LP81PHas/Y+tka3Z+Iq2egqxdQi+AGO1ows5S81ko0Xi05e8w/+BgXYdY
+   ivcXRPpr8W56iqwfe4WadEWMlSW7Tl1KiwzxmFmhW8pUalS1ch+1UB0Gq
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="250444084"
+X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
+   d="scan'208";a="250444084"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 22:37:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
+   d="scan'208";a="507868464"
+Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 21 Feb 2022 22:37:55 -0800
+Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nMOo6-0002PW-IF; Tue, 22 Feb 2022 06:37:54 +0000
+Date:   Tue, 22 Feb 2022 14:37:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 2ecb866af0048e96c331a206a876a935d3649f78
+Message-ID: <621484ae.Ho4k1TNaYofLj/c9%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220221225131.15836-2-lukasz.luba@arm.com>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21-02-22, 22:51, Lukasz Luba wrote:
-> Add DT bindings for the Energy Model information.
-> 
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
->  .../bindings/power/energy-model.yaml          | 51 +++++++++++++++++++
->  1 file changed, 51 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/energy-model.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/power/energy-model.yaml b/Documentation/devicetree/bindings/power/energy-model.yaml
-> new file mode 100644
-> index 000000000000..804a9b324925
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/energy-model.yaml
-> @@ -0,0 +1,51 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/energy-model.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Energy Model Bindings
-> +
-> +maintainers:
-> +  - Lukasz Luba <lukasz.luba@arm.com>
-> +
-> +description: |+
-> +  Devices work at specific performance states (frequencies). The power which
-> +  is used at a given performance state is an important information. A framework
-> +  which maintains this information is Energy Model. This document defines
-> +  bindings for these Energy Model performance states applicable across wide
-> +  range of devices. For illustration purpose, this document uses GPU as a device.
-> +
-> +  This binding only supports frequency-power pairs.
-> +
-> +select: true
-> +
-> +properties:
-> +  operating-points:
-> +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
-> +    items:
-> +      items:
-> +        - description: Frequency in kHz
-> +        - description: Power in uW
-> +
-> +
-> +additionalProperties: true
-> +examples:
-> +    {
-> +       gpu_energy_model: energy-model {
-> +               compatible = "energy-model";
-> +               energy-model-entries = <
-> +                               200000 300000
-> +                               297000 500000
-> +                               400000 800000
-> +                               500000 1400000
-> +                               600000 2000000
-> +                               800000 2800000
-> +                               >;
-> +       };
-> +    };
-> +
-> +    &gpu {
-> +       energy-model = <&gpu_energy_model>;
-> +    };
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 2ecb866af0048e96c331a206a876a935d3649f78  Merge branch 'thermal-hfi' into linux-next
 
-What about getting this from the OPP table instead? There is no point adding
-similar tables for a device.
+elapsed time: 731m
 
--- 
-viresh
+configs tested: 168
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20220221
+sh                 kfr2r09-romimage_defconfig
+arm                           corgi_defconfig
+ia64                             alldefconfig
+sh                   secureedge5410_defconfig
+mips                         mpc30x_defconfig
+sh                          kfr2r09_defconfig
+powerpc                         wii_defconfig
+sh                   rts7751r2dplus_defconfig
+mips                           gcw0_defconfig
+mips                  decstation_64_defconfig
+sh                          lboxre2_defconfig
+xtensa                         virt_defconfig
+ia64                          tiger_defconfig
+arm                          iop32x_defconfig
+sh                             shx3_defconfig
+h8300                    h8300h-sim_defconfig
+arm                       aspeed_g5_defconfig
+m68k                          hp300_defconfig
+arm                            xcep_defconfig
+xtensa                       common_defconfig
+sh                           se7721_defconfig
+alpha                            alldefconfig
+sh                           se7724_defconfig
+mips                             allyesconfig
+arm                      jornada720_defconfig
+sh                               allmodconfig
+powerpc                  storcenter_defconfig
+mips                         tb0226_defconfig
+mips                           ip32_defconfig
+sh                            hp6xx_defconfig
+m68k                       m5208evb_defconfig
+s390                             allmodconfig
+mips                       bmips_be_defconfig
+m68k                        m5407c3_defconfig
+s390                             allyesconfig
+m68k                       m5475evb_defconfig
+arm                         nhk8815_defconfig
+arm                          pxa3xx_defconfig
+powerpc                        warp_defconfig
+sh                           sh2007_defconfig
+arm                          gemini_defconfig
+powerpc                      pasemi_defconfig
+m68k                          sun3x_defconfig
+mips                         cobalt_defconfig
+arm                        clps711x_defconfig
+arm                            pleb_defconfig
+powerpc                       holly_defconfig
+sh                   sh7770_generic_defconfig
+xtensa                  cadence_csp_defconfig
+powerpc                    amigaone_defconfig
+powerpc                     redwood_defconfig
+sh                ecovec24-romimage_defconfig
+powerpc                         ps3_defconfig
+mips                        jmr3927_defconfig
+microblaze                          defconfig
+mips                         db1xxx_defconfig
+arc                           tb10x_defconfig
+arm                        mvebu_v7_defconfig
+powerpc                        cell_defconfig
+powerpc                  iss476-smp_defconfig
+sh                          rsk7269_defconfig
+powerpc                     tqm8555_defconfig
+sh                        apsh4ad0a_defconfig
+arm                           sunxi_defconfig
+arm                  randconfig-c002-20220221
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nds32                             allnoconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+parisc                              defconfig
+s390                                defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a003-20220221
+x86_64               randconfig-a002-20220221
+x86_64               randconfig-a005-20220221
+x86_64               randconfig-a006-20220221
+x86_64               randconfig-a001-20220221
+x86_64               randconfig-a004-20220221
+i386                 randconfig-a002-20220221
+i386                 randconfig-a001-20220221
+i386                 randconfig-a005-20220221
+i386                 randconfig-a003-20220221
+i386                 randconfig-a006-20220221
+i386                 randconfig-a004-20220221
+arc                  randconfig-r043-20220221
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+
+clang tested configs:
+powerpc              randconfig-c003-20220222
+x86_64                        randconfig-c007
+arm                  randconfig-c002-20220222
+mips                 randconfig-c004-20220222
+i386                          randconfig-c001
+riscv                randconfig-c006-20220222
+powerpc              randconfig-c003-20220221
+x86_64               randconfig-c007-20220221
+arm                  randconfig-c002-20220221
+mips                 randconfig-c004-20220221
+i386                 randconfig-c001-20220221
+riscv                randconfig-c006-20220221
+s390                 randconfig-c005-20220221
+arm                          moxart_defconfig
+arm                  colibri_pxa270_defconfig
+powerpc                      pmac32_defconfig
+powerpc                 mpc8272_ads_defconfig
+arm                        vexpress_defconfig
+arm                          collie_defconfig
+powerpc                  mpc866_ads_defconfig
+arm                  colibri_pxa300_defconfig
+powerpc                      ppc44x_defconfig
+x86_64               randconfig-a011-20220221
+x86_64               randconfig-a015-20220221
+x86_64               randconfig-a014-20220221
+x86_64               randconfig-a016-20220221
+x86_64               randconfig-a013-20220221
+x86_64               randconfig-a012-20220221
+i386                 randconfig-a016-20220221
+i386                 randconfig-a012-20220221
+i386                 randconfig-a015-20220221
+i386                 randconfig-a011-20220221
+i386                 randconfig-a014-20220221
+i386                 randconfig-a013-20220221
+hexagon              randconfig-r045-20220221
+hexagon              randconfig-r041-20220221
+riscv                randconfig-r042-20220221
+hexagon              randconfig-r045-20220222
+hexagon              randconfig-r041-20220222
+s390                 randconfig-r044-20220221
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
