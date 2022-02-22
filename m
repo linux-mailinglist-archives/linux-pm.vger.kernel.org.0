@@ -2,211 +2,178 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 579424BFB54
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Feb 2022 15:58:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C5F94BFC56
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Feb 2022 16:21:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232994AbiBVO6z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Feb 2022 09:58:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46900 "EHLO
+        id S233423AbiBVPWH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Feb 2022 10:22:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232992AbiBVO6y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Feb 2022 09:58:54 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFB4C10CF34
-        for <linux-pm@vger.kernel.org>; Tue, 22 Feb 2022 06:58:27 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id m11so12270599pls.5
-        for <linux-pm@vger.kernel.org>; Tue, 22 Feb 2022 06:58:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4CEE+0wKb8UfUqoMrShAMBWjFMiHTZ3cV+ajAGhF8ag=;
-        b=mQ78OQp7q1EpCQGFj8mbg/lCYMtasAf0LLvNfQ5Rvv4rjzY3hj+45RihibZGQeNuiB
-         CUeWl7w5ohrcgdij+wz4EVt+h5hVD9FIgCY+Z6cw7Ew5jXnnlVpKuTqRiNLAmcht1Ztp
-         +iZvCpkQgvIAvsBr0a3VNHzfJO+/cefrYTpvc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4CEE+0wKb8UfUqoMrShAMBWjFMiHTZ3cV+ajAGhF8ag=;
-        b=P1lPL7DutC3YE00Uvo9ylsK7wjj/oplay9eIrP1+7V7Q8LCb4kWZ94yXdbx/a0oUtY
-         idJCyjs56iSXSvVtzRSh7vjIuqvBymQ9i5EP9MG5HBIed65K1xD4//msCPVOZG6xB5UI
-         QdLSJatUa73Ch86ulJwFRKE7qrAamx3eXEi4709i7utvHJsevQSjDesjMWrW3ULVOC1P
-         87vlVXsJKKNqz69KfopT+4uO3vFHG3x5aPbabDJNjuT8sMxqPR1vzTBPfrDbYSrJRyiO
-         oE2mlZ7ufhIm9dnh9AGbc9iiLmy5AmjR7M310C60UjABYIuDNVjTXp+wvUZfD7/vWr8w
-         3Bmw==
-X-Gm-Message-State: AOAM531jtOZ3gpMGGi8IPyT2+2VAGIZZTdSFHOzAiWDooAz+0yHCZZks
-        f8rLIQPNWp1ZpV59XlR8Om5DFw==
-X-Google-Smtp-Source: ABdhPJxX/Jsf0NvECwznifqIjeh7gPk4Ia+g+5e+p+1HjYk9t74XaLOH+ylaKGBq1LSGtM24LwWcFg==
-X-Received: by 2002:a17:902:7205:b0:14c:9586:f9d5 with SMTP id ba5-20020a170902720500b0014c9586f9d5mr23494696plb.77.1645541907460;
-        Tue, 22 Feb 2022 06:58:27 -0800 (PST)
-Received: from localhost ([2620:15c:202:201:f3fd:51e4:a1f4:e1a6])
-        by smtp.gmail.com with UTF8SMTPSA id g11sm18022397pfj.83.2022.02.22.06.58.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Feb 2022 06:58:27 -0800 (PST)
-Date:   Tue, 22 Feb 2022 06:58:24 -0800
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
+        with ESMTP id S233420AbiBVPWC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Feb 2022 10:22:02 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8B7585AEF3;
+        Tue, 22 Feb 2022 07:21:36 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0E21CED1;
+        Tue, 22 Feb 2022 07:21:36 -0800 (PST)
+Received: from [10.57.9.152] (unknown [10.57.9.152])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9A6C23F5A1;
+        Tue, 22 Feb 2022 07:21:33 -0800 (PST)
+Message-ID: <9cfe84b0-01bf-6e20-9839-5f597e7fa588@arm.com>
+Date:   Tue, 22 Feb 2022 15:21:32 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [[PATCH v2 2/2] OPP: Add 'opp-microwatt' parsing for advanced EM
+ registration
+Content-Language: en-US
+To:     Matthias Kaehlcke <mka@chromium.org>
 Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
         viresh.kumar@linaro.org, rafael@kernel.org,
         daniel.lezcano@linaro.org, nm@ti.com, sboyd@kernel.org,
         dianders@chromium.org, robh+dt@kernel.org,
         devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [[PATCH v2 2/2] OPP: Add 'opp-microwatt' parsing for advanced EM
- registration
-Message-ID: <YhT6EBzSE/7S3QqT@google.com>
 References: <20220222140746.12293-1-lukasz.luba@arm.com>
- <20220222140746.12293-3-lukasz.luba@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220222140746.12293-3-lukasz.luba@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+ <20220222140746.12293-3-lukasz.luba@arm.com> <YhT6EBzSE/7S3QqT@google.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <YhT6EBzSE/7S3QqT@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 02:07:46PM +0000, Lukasz Luba wrote:
-> The Energy Model (EM) can be created based on DT entry:
-> 'dynamic-power-coefficient'. It's a 'simple' EM which is limited to the
-> dynamic power. It has to fit into the math formula which requires also
-> information about voltage. Some of the platforms don't expose voltage
-> information, thus it's not possible to use EM registration using DT.
+Hi Matthias,
+
+On 2/22/22 14:58, Matthias Kaehlcke wrote:
+> On Tue, Feb 22, 2022 at 02:07:46PM +0000, Lukasz Luba wrote:
+
+[snip]
+
+>> +static int __maybe_unused
+>> +_get_dt_power(unsigned long *mW, unsigned long *kHz, struct device *dev)
 > 
-> This patch aims to fix it. It introduces new implementation of the EM
-> registration callback. The new mechanism parses OPP node in DT which
-> contains the power expressed in micro-Watts. It also allows to register
-> 'advanced' EM, which models total power (static + dynamic), so better
-> reflects real HW.
+> nit: the device is usually the first parameter. It's also the only true input
+> parameter of this function, most code puts input parameters first.
+
+Good point. I have internal patch set under review changing this. It's
+going to be changed and the 'dev' would be the 1st arg. I'll send this
+patch set as soon as this one gets queued into pm tree.
+
 > 
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
->  drivers/opp/of.c | 70 ++++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 70 insertions(+)
+>> +{
+>> +	struct dev_pm_opp *opp;
+>> +	unsigned long opp_freq;
+>> +	u32 opp_power;
+>> +	int ret;
+>> +
+>> +	/* Find the right frequency and related OPP */
+>> +	opp_freq = *kHz * 1000;
+>> +	opp = dev_pm_opp_find_freq_ceil(dev, &opp_freq);
+>> +	if (IS_ERR(opp))
+>> +		return -EINVAL;
+>> +
+>> +	ret = of_property_read_u32(opp->np, "opp-microwatt", &opp_power);
+>> +	dev_pm_opp_put(opp);
+>> +	if (ret)
+>> +		return -EINVAL;
+>> +
+>> +	*kHz = opp_freq / 1000;
+>> +	*mW = opp_power / 1000;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>   /*
+>>    * Callback function provided to the Energy Model framework upon registration.
+>>    * This computes the power estimated by @dev at @kHz if it is the frequency
+>> @@ -1445,6 +1479,33 @@ static int __maybe_unused _get_power(unsigned long *mW, unsigned long *kHz,
+>>   	return 0;
+>>   }
+>>   
+>> +static int _of_find_opp_microwatt_property(struct device *dev)
 > 
-> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-> index 2f40afa4e65c..94059408fa39 100644
-> --- a/drivers/opp/of.c
-> +++ b/drivers/opp/of.c
-> @@ -1395,6 +1395,40 @@ struct device_node *dev_pm_opp_get_of_node(struct dev_pm_opp *opp)
->  }
->  EXPORT_SYMBOL_GPL(dev_pm_opp_get_of_node);
->  
-> +/*
-> + * Callback function provided to the Energy Model framework upon registration.
-> + * It provides the power based on DT by @dev at @kHz if it is the frequency
-> + * of an existing OPP, or at the frequency of the first OPP above @kHz otherwise
-> + * (see dev_pm_opp_find_freq_ceil()). This function updates @kHz to the ceiled
-> + * frequency and @mW to the associated power.
-> + *
-> + * Returns 0 on success or a proper -EINVAL value in case of error.
-> + */
-> +static int __maybe_unused
-> +_get_dt_power(unsigned long *mW, unsigned long *kHz, struct device *dev)
+> this function doesn't retrurn the property like of_find_property() does,
+> _of_has_opp_microwatt_property() would be a be a better name IMO. I'd
+> also suggest to change the return type to bool, since callers don't
+> really care about the specific error (which with the current code is
+> -EINVAL) in all cases.
 
-nit: the device is usually the first parameter. It's also the only true input
-parameter of this function, most code puts input parameters first.
+Agree, I'll change the name and return type.
 
-> +{
-> +	struct dev_pm_opp *opp;
-> +	unsigned long opp_freq;
-> +	u32 opp_power;
-> +	int ret;
-> +
-> +	/* Find the right frequency and related OPP */
-> +	opp_freq = *kHz * 1000;
-> +	opp = dev_pm_opp_find_freq_ceil(dev, &opp_freq);
-> +	if (IS_ERR(opp))
-> +		return -EINVAL;
-> +
-> +	ret = of_property_read_u32(opp->np, "opp-microwatt", &opp_power);
-> +	dev_pm_opp_put(opp);
-> +	if (ret)
-> +		return -EINVAL;
-> +
-> +	*kHz = opp_freq / 1000;
-> +	*mW = opp_power / 1000;
-> +
-> +	return 0;
-> +}
-> +
->  /*
->   * Callback function provided to the Energy Model framework upon registration.
->   * This computes the power estimated by @dev at @kHz if it is the frequency
-> @@ -1445,6 +1479,33 @@ static int __maybe_unused _get_power(unsigned long *mW, unsigned long *kHz,
->  	return 0;
->  }
->  
-> +static int _of_find_opp_microwatt_property(struct device *dev)
-
-this function doesn't retrurn the property like of_find_property() does,
-_of_has_opp_microwatt_property() would be a be a better name IMO. I'd
-also suggest to change the return type to bool, since callers don't
-really care about the specific error (which with the current code is
--EINVAL) in all cases.
-
-
-> +{
-> +	unsigned long freq = 0;
-
-Does the compiler complain when the initialization is skipped? The
-value of the variable is never read, only it's address is passed to
-dev_pm_opp_find_freq_ceil().
-
-> +	struct dev_pm_opp *opp;
-> +	struct device_node *np;
-> +	struct property *prop;
-> +
-> +	/* We only support "operating-points-v2" */
-> +	np = dev_pm_opp_of_get_opp_desc_node(dev);
-> +	if (!np)
-> +		return -EINVAL;
-> +
-> +	of_node_put(np);
-> +
-> +	/* Check if an OPP has needed property */
-
-The comment doesn't add much value IMO
-
-> +	opp = dev_pm_opp_find_freq_ceil(dev, &freq);
-> +	if (IS_ERR(opp))
-> +		return -EINVAL;
-> +
-> +	prop = of_find_property(opp->np, "opp-microwatt", NULL);
-> +	dev_pm_opp_put(opp);
-> +	if (!prop)
-> +		return -EINVAL;
-> +
-> +	return 0;
-> +}
-> +
->  /**
->   * dev_pm_opp_of_register_em() - Attempt to register an Energy Model
->   * @dev		: Device for which an Energy Model has to be registered
-> @@ -1474,6 +1535,15 @@ int dev_pm_opp_of_register_em(struct device *dev, struct cpumask *cpus)
->  		goto failed;
->  	}
->  
-> +	/* First, try to find more precised Energy Model in DT */
-> +	if (!_of_find_opp_microwatt_property(dev)) {
-> +		struct em_data_callback em_dt_cb = EM_DATA_CB(_get_dt_power);
-> +
-> +		ret = em_dev_register_perf_domain(dev, nr_opp, &em_dt_cb,
-> +						  cpus, true);
-> +		return ret;
-
-just 'return em_dev_register_perf_domain(...);'?
-
-> +	}
-> +
->  	np = of_node_get(dev->of_node);
->  	if (!np) {
->  		ret = -EINVAL;
-> -- 
-> 2.17.1
 > 
+> 
+>> +{
+>> +	unsigned long freq = 0;
+> 
+> Does the compiler complain when the initialization is skipped? The
+> value of the variable is never read, only it's address is passed to
+> dev_pm_opp_find_freq_ceil().
+
+It has to be 0, since under the hood the dev_pm_opp_find_freq_ceil()
+is going to find first freq which is equal or bigger than this one.
+We actually use that ptr value in the _find_freq_ceil().
+
+> 
+>> +	struct dev_pm_opp *opp;
+>> +	struct device_node *np;
+>> +	struct property *prop;
+>> +
+>> +	/* We only support "operating-points-v2" */
+>> +	np = dev_pm_opp_of_get_opp_desc_node(dev);
+>> +	if (!np)
+>> +		return -EINVAL;
+>> +
+>> +	of_node_put(np);
+>> +
+>> +	/* Check if an OPP has needed property */
+> 
+> The comment doesn't add much value IMO
+
+Well, it just stress the 'an' as in this case it's the 1st OPP,
+due to the fact freq = 0 and finding the 'ceiling' on it.
+I'll remove it.
+
+> 
+>> +	opp = dev_pm_opp_find_freq_ceil(dev, &freq);
+>> +	if (IS_ERR(opp))
+>> +		return -EINVAL;
+>> +
+>> +	prop = of_find_property(opp->np, "opp-microwatt", NULL);
+>> +	dev_pm_opp_put(opp);
+>> +	if (!prop)
+>> +		return -EINVAL;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>   /**
+>>    * dev_pm_opp_of_register_em() - Attempt to register an Energy Model
+>>    * @dev		: Device for which an Energy Model has to be registered
+>> @@ -1474,6 +1535,15 @@ int dev_pm_opp_of_register_em(struct device *dev, struct cpumask *cpus)
+>>   		goto failed;
+>>   	}
+>>   
+>> +	/* First, try to find more precised Energy Model in DT */
+>> +	if (!_of_find_opp_microwatt_property(dev)) {
+>> +		struct em_data_callback em_dt_cb = EM_DATA_CB(_get_dt_power);
+>> +
+>> +		ret = em_dev_register_perf_domain(dev, nr_opp, &em_dt_cb,
+>> +						  cpus, true);
+>> +		return ret;
+> 
+> just 'return em_dev_register_perf_domain(...);'?
+
+true
+
+Thanks for the review! I'll address these comments in v3 if Viresh
+agrees with this new approach.
+
+Regards,
+Lukasz
