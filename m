@@ -2,97 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F274C155A
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Feb 2022 15:24:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EA7C4C1665
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Feb 2022 16:19:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239615AbiBWOYf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Feb 2022 09:24:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41500 "EHLO
+        id S241689AbiBWPTt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Feb 2022 10:19:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236675AbiBWOYe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Feb 2022 09:24:34 -0500
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D94E6B1A80;
-        Wed, 23 Feb 2022 06:24:06 -0800 (PST)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-2d68d519a33so211447127b3.7;
-        Wed, 23 Feb 2022 06:24:06 -0800 (PST)
+        with ESMTP id S238535AbiBWPTs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Feb 2022 10:19:48 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7AF33A1A9
+        for <linux-pm@vger.kernel.org>; Wed, 23 Feb 2022 07:19:20 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id p20so16794621ljo.0
+        for <linux-pm@vger.kernel.org>; Wed, 23 Feb 2022 07:19:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=telus.net; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UoIc818TKFJQDB8ZDtpesqyQke/StDy/K3yrOaNnU+w=;
+        b=c39BmkeOcZ7y8HmBehuyQIvQIxPXEIf3kKx6dR1Z7oy22fLgH2APdrdoJfpMEn4SW2
+         Yb/dM/mAIdHr3Kuym/kzfcT2q3uxdKPf86plKwdgSenihYITSeu8QgWOnK26BhA8G0ZT
+         4Rc4Xck3/BeY8PF6sS1TKUCOVUjBU2lA2kbanV2GNe8EFbJD4MKqnd2MshXZEz4ozxC8
+         nTz24URG2M9XtwTxghgj7fgkeT/dZbNq9cbVwd5dkHISS8W8fijXI9ErzRH6cx/PTM+w
+         SPesD7czzCbEmj9+fWMuzi8UuMhYihe32tiF/d7lS72VUZctJk39YsMZy+ElpAq5PnBD
+         Yqfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=XDlv3ux3jKTWYHbjpT5ZPHS0c02nw63FWOML+f+Eem8=;
-        b=iGjNmyoZfiK24YfgxUxvSnDOtedRX/DDu5TFfBSl2U43CNRxedw89HA1lPsS9wDDS3
-         QwAuPvPhjsqjKC6mIP+1NN92zUPd/9daCPVvzmLpY9gwxmqmAcCXrj6iQGQNxWeU12xX
-         QfJBIT2wn3DEjduz8V2CFZR2wf0OTam9g+NstkHB808KVR4yIit2HHBYYa2Hf6yFLUll
-         10dDh+Cjk3X0Xr50AR29l35CGeF8ehMCr8UxpK23blufcE2S95juKLwFzFL8n071rMUM
-         FLBR2t5JfPxMxdXK1L6EFRJXsCal2kS38onulAJrJ57iV8BZ73Q3IHhQ2epo3mSwtVW6
-         dUsQ==
-X-Gm-Message-State: AOAM531K6eSbH8/lYXAbMJ/g3MsWGcsxVHS+7T72iQO7isEox0vPwEjZ
-        pCPIvELEPDz9sg1DcCaeG6XQt5CGnqhAyyfo63xIJdNw
-X-Google-Smtp-Source: ABdhPJzHN0zaDSgBcNUb+ezq5KWtwG3UQZkW34QvCwu4LUrwY1NT6tCgXFTO64odUNdVZggjE+6B0LJ9lfCaXMiamFI=
-X-Received: by 2002:a81:b65f:0:b0:2d6:d29c:63fd with SMTP id
- h31-20020a81b65f000000b002d6d29c63fdmr23032944ywk.196.1645626246157; Wed, 23
- Feb 2022 06:24:06 -0800 (PST)
+        bh=UoIc818TKFJQDB8ZDtpesqyQke/StDy/K3yrOaNnU+w=;
+        b=Js01QUBSUGeeawMkatI3zpZE4pCBBh8DM2UffhO6qqVE46+Fn8khHV3u+Ofntkbstr
+         h8Cq3y8z9IVFTKTP/2AzZQNfV/AcwOoeu0dYtQyK8TYMofI1cjjdpJqh6G38nkMIPdFy
+         XkgoTp5tiN9Xx4UrV5LHj8eFsorhXCIY1Y+uqSS43gLMMwsfuoYtGQWOYKEelrwxMa8+
+         B3PgNskaeEIBmHirFnG5R11Q7K7XweaJefJwH/Cn/0xggyOIRii+Tv7Uslw8VCMnR6Xs
+         A3ePgFoGgY6G0QTJvNYtwqK3KEir2txHeCHB+6KE5kYVJ5h5cdQXxHQVpL749nalYPkh
+         EWVg==
+X-Gm-Message-State: AOAM532wpzq/6zfHXUoaf7C+s6pHZjTFlXPoGsBCTOzs3iRUqUgVCDLM
+        r8XFE+k87ib6B2c1PyzNwwZQYaQeKxl7XMJ2qgAaPQ==
+X-Google-Smtp-Source: ABdhPJyG0ns8FoarM8C6bxPJMgUtvK27UsU9zqR5BTIhUBgDTVAEW/biii1mTDKGN5M2izXm15v9vYhmY+u0FsKaetc=
+X-Received: by 2002:a05:651c:1542:b0:233:8ff5:eb80 with SMTP id
+ y2-20020a05651c154200b002338ff5eb80mr21321595ljp.352.1645629559338; Wed, 23
+ Feb 2022 07:19:19 -0800 (PST)
 MIME-Version: 1.0
-References: <003f01d81c8c$d20ee3e0$762caba0$@telus.net> <20220208023940.GA5558@shbuild999.sh.intel.com>
- <CAAYoRsXrwOQgzAcED+JfVG0=JQNEXuyGcSGghL4Z5xnFgkp+TQ@mail.gmail.com>
- <20220208091525.GA7898@shbuild999.sh.intel.com> <CAAYoRsXkyWf0vmEE2HvjF6pzCC4utxTF=7AFx1PJv4Evh=C+Ow@mail.gmail.com>
- <e185b89fb97f47758a5e10239fc3eed0@intel.com> <CAAYoRsXbBJtvJzh91nTXATLL1eb2EKbTVb8vEWa3Y6DfCWhZeg@mail.gmail.com>
- <aaace653f12b79336b6f986ef5c4f9471445372a.camel@linux.intel.com>
- <20220222073435.GB78951@shbuild999.sh.intel.com> <CAJZ5v0iXQ=qXiZoF_qb1hdBh=yfZ13-of3y3LFu2m6gZh9peTw@mail.gmail.com>
- <87ley1j4yl.ffs@tglx>
-In-Reply-To: <87ley1j4yl.ffs@tglx>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 23 Feb 2022 15:23:54 +0100
-Message-ID: <CAJZ5v0js1tcxsO7Yk9YkJufFA2fnue9oqx=fmweYpqpFKbjbQA@mail.gmail.com>
-Subject: Re: CPU excessively long times between frequency scaling driver calls
- - bisected
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Feng Tang <feng.tang@intel.com>,
-        srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Doug Smythies <dsmythies@telus.net>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+References: <20220223100350.3523826-1-Jinzhou.Su@amd.com> <20220223100350.3523826-3-Jinzhou.Su@amd.com>
+In-Reply-To: <20220223100350.3523826-3-Jinzhou.Su@amd.com>
+From:   Doug Smythies <dsmythies@telus.net>
+Date:   Wed, 23 Feb 2022 07:19:08 -0800
+Message-ID: <CAAYoRsWn_gjuBdS3vbo6ZxAXKur6YhXKTkZKpQY+k6hogcibUA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] tools/power/x86/intel_pstate_tracer: make tracer as a module
+To:     Jinzhou Su <Jinzhou.Su@amd.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Huang, Ray" <ray.huang@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        todd.e.brandt@linux.intel.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        deepak.sharma@amd.com, alexander.deucher@amd.com,
+        xiaojian.du@amd.com, perry.yuan@amd.com, li.meng@amd.com,
+        dsmythies <dsmythies@telus.net>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 10:40 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+On Wed, Feb 23, 2022 at 2:04 AM Jinzhou Su <Jinzhou.Su@amd.com> wrote:
 >
-> Rafael,
+> Make intel_pstate_tracer as a module. Other trace event can import
+> this module to analyze their trace data.
 >
-> On Tue, Feb 22 2022 at 19:04, Rafael J. Wysocki wrote:
-> > On Tue, Feb 22, 2022 at 8:41 AM Feng Tang <feng.tang@intel.com> wrote:
-> >> There is periodic activity in between, related to active load balancing
-> >> in scheduler (since last frequency was higher these small work will
-> >> also run at higher frequency). But those threads are not CFS class, so
-> >> scheduler callback will not be called for them.
-> >>
-> >> So removing the patch removed a trigger which would have caused a
-> >> sched_switch to a CFS task and call a cpufreq/intel_pstate callback.
-> >
-> > And so this behavior needs to be restored for the time being which
-> > means reverting the problematic commit for 5.17 if possible.
->
-> No. This is just papering over the problem. Just because the clocksource
-> watchdog has the side effect of making cpufreq "work", does not make it
-> a prerequisite for cpufreq. The commit unearthed a problem in the
-> cpufreq code, so it needs to be fixed there.
->
-> Even if we'd revert it then, you can produce the same effect by adding
-> 'tsc=reliable' to the kernel command line which disables the clocksource
-> watchdog too. The commit is there to deal with modern hardware without
-> requiring people to add 'tsc=reliable' to the command line.
+> Signed-off-by: Jinzhou Su <Jinzhou.Su@amd.com>
 
-Allright (but I'll remember this exception).
+HI Joe,
+I have been using this version (well, with just 2 variable name changes,
+which I see you changed  back) since you sent it (off-list) on Feb 8th.
+
+Acked-by: Doug Smythies <dsmythies@telus.net>
