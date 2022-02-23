@@ -2,185 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA63A4C0CF0
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Feb 2022 08:02:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87A8A4C0DFB
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Feb 2022 09:03:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238527AbiBWHCz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Feb 2022 02:02:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34404 "EHLO
+        id S237658AbiBWIEO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Feb 2022 03:04:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238513AbiBWHCy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Feb 2022 02:02:54 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7F64888C
-        for <linux-pm@vger.kernel.org>; Tue, 22 Feb 2022 23:02:26 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id x15so3603429wrg.8
-        for <linux-pm@vger.kernel.org>; Tue, 22 Feb 2022 23:02:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oRZEca9XxWtSPuMYjIlFseYg4Esas5bKwsfEt1eCOA8=;
-        b=QIZAImlqRhQHCLYGSrjuJDOCauDvhW1Xw72lbZyNLZmlfJUmufZxFSBB8H2EoKBfKN
-         jxoSwFnND2lhvOlCrC0AidfwIohJ6YEjrVIrXGyyGzc+TWJgHAZww2WFDkbsbRxXjul8
-         qVPvMzBNI6gfzqTmYteg2xN1VqQ7fqk+Pc1po1AtwoR1q6n08ExvZHauK5YFE7VYcj0Z
-         P7U3rFT/AD4Nlw2WtttkORxq2jersjOa1mPgV6CpwJlXuQyh4yx6S86RN13NT2apUzMc
-         VKjIZnG57JmHU6woyskYANNc8Yk+LiEB0wEfmqBnv/2JpZcQP5nQaLkRkyXGn6EddG07
-         h/XQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oRZEca9XxWtSPuMYjIlFseYg4Esas5bKwsfEt1eCOA8=;
-        b=mraD3bwyYXIVdgPC4jZJy884nO8YQ9zOdDGKuSVR7b15Fu7mt6Y2URjmPErPnwlk18
-         ei3l7JD6SQnXAGb5TPraxaqmahXzVTV6kkJ0o6k9Ldf4jBtOoQIO4wKRH5zvNOhraGAg
-         uRqwa05JW8KdDGhOLkYKgtyhWyxaM2OV0uy2ZHp0WpYDN5Mbb4j1ZoXWAX/h9sgbb34V
-         G/CTkRlC7clSb2jR+hmuSM4lqDpE2O/tVxnAFdNzokTFnpwXuG9IZ1KCIU/EAWTHip3A
-         FbOou2jmSnlyaRwdBL+SgaKwh4U9xP0yKlaoSAf1TR5IUWdkpJj8gzqdNZvxBIvJtI4a
-         e8/w==
-X-Gm-Message-State: AOAM533zBEom12m3RBhAx/FkOKj4EqZNU+FR4yoM9wZ6a6Ds8570QTlN
-        nPud9gUUvsp4IeoGDYsVowqDBn2doaOn1su+DkYvVQ==
-X-Google-Smtp-Source: ABdhPJzIrMTIABtJTtVWuTHPjm8BpgI0RV6d0ZUOVxs96DHbAWugAxYt8PRNLPnq+EeeWflAFVTZPUTf3jvN2iH+k6Y=
-X-Received: by 2002:adf:ec47:0:b0:1e4:a380:bb73 with SMTP id
- w7-20020adfec47000000b001e4a380bb73mr22204190wrn.86.1645599744652; Tue, 22
- Feb 2022 23:02:24 -0800 (PST)
+        with ESMTP id S233569AbiBWIEN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Feb 2022 03:04:13 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 799747806F
+        for <linux-pm@vger.kernel.org>; Wed, 23 Feb 2022 00:03:46 -0800 (PST)
+Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1nMmci-0008Hg-S5; Wed, 23 Feb 2022 09:03:44 +0100
+Received: from sha by dude02.hi.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <sha@pengutronix.de>)
+        id 1nMmci-00Fbls-Ar; Wed, 23 Feb 2022 09:03:44 +0100
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     linux-pm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>, kernel@pengutronix.de,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>
+Subject: [PATCH] PM: domains: use dev_err_probe() to simplify error handling
+Date:   Wed, 23 Feb 2022 09:03:23 +0100
+Message-Id: <20220223080323.3717853-1-s.hauer@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220210054947.170134-1-apatel@ventanamicro.com> <20220210054947.170134-5-apatel@ventanamicro.com>
-In-Reply-To: <20220210054947.170134-5-apatel@ventanamicro.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Wed, 23 Feb 2022 12:32:11 +0530
-Message-ID: <CAAhSdy3jK26WFhG8Q=Up8hhHPpJCCkA09EKOi+B-Kp0U9Rwg7w@mail.gmail.com>
-Subject: Re: [PATCH v11 4/8] RISC-V: Add SBI HSM suspend related defines
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Anup Patel <apatel@ventanamicro.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Sandeep Tripathy <milun.tripathy@gmail.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Liush <liush@allwinnertech.com>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        kvm-riscv@lists.infradead.org, Guo Ren <guoren@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Palmer
+From: Ahmad Fatoum <a.fatoum@pengutronix.de>
 
-On Thu, Feb 10, 2022 at 11:20 AM Anup Patel <apatel@ventanamicro.com> wrote:
->
-> From: Anup Patel <anup.patel@wdc.com>
->
-> We add defines related to SBI HSM suspend call and also
-> update HSM states naming as-per latest SBI specification.
->
-> Signed-off-by: Anup Patel <anup.patel@wdc.com>
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> Reviewed-by: Guo Ren <guoren@kernel.org>
+dev_err_probe() can reduce code size, makes the code easier to read
+and has the added benefit of recording the defer reason for later
+read out. Use it where appropriate.
 
-This patch is shared with "KVM RISC-V SBI v0.3 support".
-(https://lore.kernel.org/all/20220201082227.361967-2-apatel@ventanamicro.com/T/)
+This also fixes an issue, where an error message in __genpd_dev_pm_attach
+was not terminated by a line break.
 
-How do you want to handle this ?
+Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+---
+ drivers/base/power/domain.c | 21 ++++++---------------
+ 1 file changed, 6 insertions(+), 15 deletions(-)
 
-One option is that I take this patch through the KVM RISC-V tree
-and you can send this series (minus this patch) for 5.18 after the
-KVM RISC-V changes have been merged.
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index 5db704f02e712..29428ae91349d 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -2248,12 +2248,8 @@ int of_genpd_add_provider_simple(struct device_node *np,
+ 	/* Parse genpd OPP table */
+ 	if (genpd->set_performance_state) {
+ 		ret = dev_pm_opp_of_add_table(&genpd->dev);
+-		if (ret) {
+-			if (ret != -EPROBE_DEFER)
+-				dev_err(&genpd->dev, "Failed to add OPP table: %d\n",
+-					ret);
+-			return ret;
+-		}
++		if (ret)
++			return dev_err_probe(&genpd->dev, ret, "Failed to add OPP table\n");
+ 
+ 		/*
+ 		 * Save table for faster processing while setting performance
+@@ -2312,9 +2308,8 @@ int of_genpd_add_provider_onecell(struct device_node *np,
+ 		if (genpd->set_performance_state) {
+ 			ret = dev_pm_opp_of_add_table_indexed(&genpd->dev, i);
+ 			if (ret) {
+-				if (ret != -EPROBE_DEFER)
+-					dev_err(&genpd->dev, "Failed to add OPP table for index %d: %d\n",
+-						i, ret);
++				dev_err_probe(&genpd->dev, ret,
++					      "Failed to add OPP table for index %d\n", i);
+ 				goto error;
+ 			}
+ 
+@@ -2672,12 +2667,8 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+ 	ret = genpd_add_device(pd, dev, base_dev);
+ 	mutex_unlock(&gpd_list_lock);
+ 
+-	if (ret < 0) {
+-		if (ret != -EPROBE_DEFER)
+-			dev_err(dev, "failed to add to PM domain %s: %d",
+-				pd->name, ret);
+-		return ret;
+-	}
++	if (ret < 0)
++		return dev_err_probe(dev, ret, "failed to add to PM domain %s\n", pd->name);
+ 
+ 	dev->pm_domain->detach = genpd_dev_pm_detach;
+ 	dev->pm_domain->sync = genpd_dev_pm_sync;
+-- 
+2.30.2
 
-Regards,
-Anup
-
-> ---
->  arch/riscv/include/asm/sbi.h    | 27 ++++++++++++++++++++++-----
->  arch/riscv/kernel/cpu_ops_sbi.c |  2 +-
->  arch/riscv/kvm/vcpu_sbi_hsm.c   |  4 ++--
->  3 files changed, 25 insertions(+), 8 deletions(-)
->
-> diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
-> index d1c37479d828..06133b4f8e20 100644
-> --- a/arch/riscv/include/asm/sbi.h
-> +++ b/arch/riscv/include/asm/sbi.h
-> @@ -71,15 +71,32 @@ enum sbi_ext_hsm_fid {
->         SBI_EXT_HSM_HART_START = 0,
->         SBI_EXT_HSM_HART_STOP,
->         SBI_EXT_HSM_HART_STATUS,
-> +       SBI_EXT_HSM_HART_SUSPEND,
->  };
->
-> -enum sbi_hsm_hart_status {
-> -       SBI_HSM_HART_STATUS_STARTED = 0,
-> -       SBI_HSM_HART_STATUS_STOPPED,
-> -       SBI_HSM_HART_STATUS_START_PENDING,
-> -       SBI_HSM_HART_STATUS_STOP_PENDING,
-> +enum sbi_hsm_hart_state {
-> +       SBI_HSM_STATE_STARTED = 0,
-> +       SBI_HSM_STATE_STOPPED,
-> +       SBI_HSM_STATE_START_PENDING,
-> +       SBI_HSM_STATE_STOP_PENDING,
-> +       SBI_HSM_STATE_SUSPENDED,
-> +       SBI_HSM_STATE_SUSPEND_PENDING,
-> +       SBI_HSM_STATE_RESUME_PENDING,
->  };
->
-> +#define SBI_HSM_SUSP_BASE_MASK                 0x7fffffff
-> +#define SBI_HSM_SUSP_NON_RET_BIT               0x80000000
-> +#define SBI_HSM_SUSP_PLAT_BASE                 0x10000000
-> +
-> +#define SBI_HSM_SUSPEND_RET_DEFAULT            0x00000000
-> +#define SBI_HSM_SUSPEND_RET_PLATFORM           SBI_HSM_SUSP_PLAT_BASE
-> +#define SBI_HSM_SUSPEND_RET_LAST               SBI_HSM_SUSP_BASE_MASK
-> +#define SBI_HSM_SUSPEND_NON_RET_DEFAULT                SBI_HSM_SUSP_NON_RET_BIT
-> +#define SBI_HSM_SUSPEND_NON_RET_PLATFORM       (SBI_HSM_SUSP_NON_RET_BIT | \
-> +                                                SBI_HSM_SUSP_PLAT_BASE)
-> +#define SBI_HSM_SUSPEND_NON_RET_LAST           (SBI_HSM_SUSP_NON_RET_BIT | \
-> +                                                SBI_HSM_SUSP_BASE_MASK)
-> +
->  enum sbi_ext_srst_fid {
->         SBI_EXT_SRST_RESET = 0,
->  };
-> diff --git a/arch/riscv/kernel/cpu_ops_sbi.c b/arch/riscv/kernel/cpu_ops_sbi.c
-> index dae29cbfe550..2e16f6732cdf 100644
-> --- a/arch/riscv/kernel/cpu_ops_sbi.c
-> +++ b/arch/riscv/kernel/cpu_ops_sbi.c
-> @@ -111,7 +111,7 @@ static int sbi_cpu_is_stopped(unsigned int cpuid)
->
->         rc = sbi_hsm_hart_get_status(hartid);
->
-> -       if (rc == SBI_HSM_HART_STATUS_STOPPED)
-> +       if (rc == SBI_HSM_STATE_STOPPED)
->                 return 0;
->         return rc;
->  }
-> diff --git a/arch/riscv/kvm/vcpu_sbi_hsm.c b/arch/riscv/kvm/vcpu_sbi_hsm.c
-> index 2e383687fa48..1ac4b2e8e4ec 100644
-> --- a/arch/riscv/kvm/vcpu_sbi_hsm.c
-> +++ b/arch/riscv/kvm/vcpu_sbi_hsm.c
-> @@ -60,9 +60,9 @@ static int kvm_sbi_hsm_vcpu_get_status(struct kvm_vcpu *vcpu)
->         if (!target_vcpu)
->                 return -EINVAL;
->         if (!target_vcpu->arch.power_off)
-> -               return SBI_HSM_HART_STATUS_STARTED;
-> +               return SBI_HSM_STATE_STARTED;
->         else
-> -               return SBI_HSM_HART_STATUS_STOPPED;
-> +               return SBI_HSM_STATE_STOPPED;
->  }
->
->  static int kvm_sbi_ext_hsm_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
-> --
-> 2.25.1
->
