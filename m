@@ -2,98 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A31ED4C0EB4
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Feb 2022 09:59:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DCC64C0EE2
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Feb 2022 10:10:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239124AbiBWJAT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Feb 2022 04:00:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41202 "EHLO
+        id S239141AbiBWJKm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Feb 2022 04:10:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232588AbiBWJAT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Feb 2022 04:00:19 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 612CA7CDE1;
-        Wed, 23 Feb 2022 00:59:52 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 29303D6E;
-        Wed, 23 Feb 2022 00:59:52 -0800 (PST)
-Received: from [10.57.9.184] (unknown [10.57.9.184])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 36B4C3F5A1;
-        Wed, 23 Feb 2022 00:59:50 -0800 (PST)
-Message-ID: <b6682d6f-a6ae-8a82-68c3-13840c02d178@arm.com>
-Date:   Wed, 23 Feb 2022 08:59:48 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [[PATCH v2 2/2] OPP: Add 'opp-microwatt' parsing for advanced EM
- registration
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
+        with ESMTP id S234770AbiBWJKm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Feb 2022 04:10:42 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A088580228
+        for <linux-pm@vger.kernel.org>; Wed, 23 Feb 2022 01:10:14 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id 75so19341797pgb.4
+        for <linux-pm@vger.kernel.org>; Wed, 23 Feb 2022 01:10:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=wwEeIbVKRAFJc1IUROvg7itOrJyqhQC3kCceTm88ch8=;
+        b=xoEiNPwmXke/nkZ+DHLML+rqVhZKfA5g2eNwCprpOPWpsB2mBdhm3r7fZWJm77ipkp
+         vrMwX13qNO4zEY1fMqN/y0g0HIfiRkJlRB+JF7WVnmRR07Y7S8dnSjlfx4W3T2FjGywb
+         lSvSAfrbHA3lDrBiL487sp/sc12pqGXt2qrhzgwQsl9UUaI0hLjJGLEGp75Xi4Y8Z5Za
+         kbShy8E4rW66PdUgdyQCUgnTxUo0QFQNSdlIwWLybJYpYwm9OLT69Mo6vZAvNMDID8Yb
+         sCwinct0dhRRhj+KkmJmQymMr3zrpInDNOgrkE7K8oakKrzmIMvORby4TNYYrmqM28u7
+         YhZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=wwEeIbVKRAFJc1IUROvg7itOrJyqhQC3kCceTm88ch8=;
+        b=xzae23z6zZwFdPO5J8JsJZUz2jZfHY3u/QHD8GHkeyNHV8GuIe/VIQcz5vbnjbZmCT
+         9ds7IG9JlsmN7xteO8MsF9ec9UtSkEt0rBtYYdxHBuAtE3KmqLQyQxGfAoKnKhJI2DEp
+         Y1YRv6EAugJt8iAnFyttyjZL83Zit6cVFh4LSphU8uzZ4CFKBvN5z7rYzazsyT89mFjX
+         cdNcGWIrIW4exc8OpLIn9Npa9f3gDJQ8vimhg54Et05FWs74vazWT51lhN+eYmSjl+Iq
+         PPlmbKZi0CK4IkKHI5GyLRT+KlDC2noYFhgQMzLGc+oxtR7SnhY/4fp+xjKcnInFhmZp
+         zHFw==
+X-Gm-Message-State: AOAM531CfSUZs7L2fNGlYt5DaVRP3tpZiPq22+1EuB++kzQerg3o5jMa
+        EFDZz5I610zjZEqIOXuUGxJWDg==
+X-Google-Smtp-Source: ABdhPJxY3zmpRDrdJPFVLfKKYjvYzCca+xNI3tbn213m0TTlPNQfpWhFGnb77TgCu1ptREKSDnDGVw==
+X-Received: by 2002:a63:9845:0:b0:375:5cc8:7d34 with SMTP id l5-20020a639845000000b003755cc87d34mr1002442pgo.124.1645607414211;
+        Wed, 23 Feb 2022 01:10:14 -0800 (PST)
+Received: from localhost ([223.184.83.228])
+        by smtp.gmail.com with ESMTPSA id h4sm6269241pfo.81.2022.02.23.01.10.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 01:10:13 -0800 (PST)
+Date:   Wed, 23 Feb 2022 14:40:12 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Lukasz Luba <lukasz.luba@arm.com>
 Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
         rafael@kernel.org, daniel.lezcano@linaro.org, nm@ti.com,
         sboyd@kernel.org, mka@chromium.org, dianders@chromium.org,
         robh+dt@kernel.org, devicetree@vger.kernel.org,
         linux-pm@vger.kernel.org
+Subject: Re: [[PATCH v2 2/2] OPP: Add 'opp-microwatt' parsing for advanced EM
+ registration
+Message-ID: <20220223091012.w3flzpye6z55jnwd@vireshk-i7>
 References: <20220222140746.12293-1-lukasz.luba@arm.com>
  <20220222140746.12293-3-lukasz.luba@arm.com>
  <20220223055357.t3wulpla64vt3xus@vireshk-i7>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20220223055357.t3wulpla64vt3xus@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+ <b6682d6f-a6ae-8a82-68c3-13840c02d178@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b6682d6f-a6ae-8a82-68c3-13840c02d178@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 23-02-22, 08:59, Lukasz Luba wrote:
+> OK, so you want to have this available for the whole system. I can do
+> that. I would go for one value of power 
 
+One value per supply, right ?
 
-On 2/23/22 05:53, Viresh Kumar wrote:
-> On 22-02-22, 14:07, Lukasz Luba wrote:
->> +static int _of_find_opp_microwatt_property(struct device *dev)
->> +{
->> +	unsigned long freq = 0;
->> +	struct dev_pm_opp *opp;
->> +	struct device_node *np;
->> +	struct property *prop;
->> +
->> +	/* We only support "operating-points-v2" */
->> +	np = dev_pm_opp_of_get_opp_desc_node(dev);
->> +	if (!np)
->> +		return -EINVAL;
->> +
->> +	of_node_put(np);
->> +
->> +	/* Check if an OPP has needed property */
->> +	opp = dev_pm_opp_find_freq_ceil(dev, &freq);
->> +	if (IS_ERR(opp))
->> +		return -EINVAL;
->> +
->> +	prop = of_find_property(opp->np, "opp-microwatt", NULL);
->> +	dev_pm_opp_put(opp);
->> +	if (!prop)
->> +		return -EINVAL;
->> +
->> +	return 0;
->> +}
-> 
-> Please follow everything just like opp-microvolt is defined. Create a new field
-> in the struct dev_pm_opp, initialize it only once when the OPP is created, that
-> field should be used here instead of parsing the DT here again. There also needs
-> to be a debug file in debugfs for this new field.
-> 
-> Search for "supply" and "microvolt" in the OPP core, you will see all the places
-> that need it.
-> 
+> and try to fit into the
+> opp_parse_supplies() code.
 
-OK, so you want to have this available for the whole system. I can do
-that. I would go for one value of power and try to fit into the
-opp_parse_supplies() code. As far as I can see in the
-dev_pm_opp_get_voltage() the simple solution: supplier[0] and u_volt
-is used. I would go for similar solution for u_watt.
-There is even a single u_amp and no _max, _min variants, so should be
-good..
+Correct.
+
+> As far as I can see in the
+> dev_pm_opp_get_voltage() the simple solution: supplier[0] and u_volt
+> is used. I would go for similar solution for u_watt.
+> There is even a single u_amp and no _max, _min variants, so should be
+> good..
+
+Yes, I don't think we need min/max/target kind of naming here. Just a single
+value per supply is enough.
+
+-- 
+viresh
