@@ -2,99 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9713B4C0F5B
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Feb 2022 10:40:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42C604C0F96
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Feb 2022 10:52:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239341AbiBWJlW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Feb 2022 04:41:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35366 "EHLO
+        id S239418AbiBWJwe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Feb 2022 04:52:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238560AbiBWJlV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Feb 2022 04:41:21 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3ED45BD0A;
-        Wed, 23 Feb 2022 01:40:53 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1645609251;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xNvnPnCpT9O1x7W+FCLzsXogbMkkom8B4NtjL9EQYWE=;
-        b=v3d7r6XaE8O02Vw0Fg1n+35vYWWt7Te13DPbCNXzgwLoeSuGpgLRPqmfXJyX9v0fVaOYO6
-        VNc+E6+oGyWiJPGUd938SmolIRGhXxPB3ngDgDjdqVzK/YYpLYcVrBNok6kO6NWhQvwciB
-        Qtd04rALEzN5fQAgdGHrAMgKlumak3PHZ3cowMVYwYoluzJgFXJ19dgYNvtoQZyd9qcZDs
-        Y5pW6nD2Y7DVEG69eK75R8D3xRuNbDh/U+2sXacFL5KEeDVQCAMGR+gj+38kevAXseMo3R
-        cTUKVKrwVQb+1azFjKRg3x90ptyRa9m5D1NhGfOR5vBggXId8+L/JYAM9Fthyg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1645609251;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xNvnPnCpT9O1x7W+FCLzsXogbMkkom8B4NtjL9EQYWE=;
-        b=b7cHkAXQKZ0D/4G0SSNUOBKHQeacxVvj2DHMU4Fao/VvmWRUqFewZi6d+LTwzs+9ohoE/r
-        5uk0F4DzpFurc/DA==
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Feng Tang <feng.tang@intel.com>
-Cc:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Doug Smythies <dsmythies@telus.net>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: Re: CPU excessively long times between frequency scaling driver
- calls - bisected
-In-Reply-To: <CAJZ5v0iXQ=qXiZoF_qb1hdBh=yfZ13-of3y3LFu2m6gZh9peTw@mail.gmail.com>
-References: <003f01d81c8c$d20ee3e0$762caba0$@telus.net>
- <20220208023940.GA5558@shbuild999.sh.intel.com>
- <CAAYoRsXrwOQgzAcED+JfVG0=JQNEXuyGcSGghL4Z5xnFgkp+TQ@mail.gmail.com>
- <20220208091525.GA7898@shbuild999.sh.intel.com>
- <CAAYoRsXkyWf0vmEE2HvjF6pzCC4utxTF=7AFx1PJv4Evh=C+Ow@mail.gmail.com>
- <e185b89fb97f47758a5e10239fc3eed0@intel.com>
- <CAAYoRsXbBJtvJzh91nTXATLL1eb2EKbTVb8vEWa3Y6DfCWhZeg@mail.gmail.com>
- <aaace653f12b79336b6f986ef5c4f9471445372a.camel@linux.intel.com>
- <20220222073435.GB78951@shbuild999.sh.intel.com>
- <CAJZ5v0iXQ=qXiZoF_qb1hdBh=yfZ13-of3y3LFu2m6gZh9peTw@mail.gmail.com>
-Date:   Wed, 23 Feb 2022 10:40:50 +0100
-Message-ID: <87ley1j4yl.ffs@tglx>
+        with ESMTP id S239415AbiBWJwe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Feb 2022 04:52:34 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 393F04DF74
+        for <linux-pm@vger.kernel.org>; Wed, 23 Feb 2022 01:52:06 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id p184-20020a1c29c1000000b0037f76d8b484so3904632wmp.5
+        for <linux-pm@vger.kernel.org>; Wed, 23 Feb 2022 01:52:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=YoIQETZNiNSTyr2BJ/2MHgHvWpDqddGsgRS7MhKf4to=;
+        b=E1M7o8rwgCxNFCW+d1Fjey13k8AXpaMRSRO2rr+CGOB4RDAiwg7OIGbLritYaQ1Jpr
+         jZp5dSg9SN5BlP97kcEodaI2O02XznEbtiwOfyP1Fko9gRz91yA57C9IkvkniH9nZXyx
+         Abfvy6Q+ML+wzxYdtjjxiPvCgrfMe+uHuKttW8Ga1MB46oj3JUnrdLxmEMBI7t4J0ERn
+         Ly0ShQUw/0NuBfKG6v7jGch49L2S4Vq4+hVNVHSN4tTClRzamqNfa4xPakiacFxeu1s7
+         nGRi8BRwwlVbXU08PJBURMBfG8lHQ/m3PzXHDT2Vl6CqOMOivRrRLHDUdHX9+ZoeTXLU
+         7SDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=YoIQETZNiNSTyr2BJ/2MHgHvWpDqddGsgRS7MhKf4to=;
+        b=cgBK9uBLDIoscJu+zv8k8KfUn2VWVyK086pbABvDaLWs8Z+CLWSt7H3PXWrQBlbvvo
+         eNY+BU7O7uh5xUXaeyMeR5GgZloe11cpi8iqfb/M0lvWh24VP1D+Qf7hhX/EX9m6Cp3p
+         sr77suslU6b2tpaQhDOG1VoRpUy+CR0rOdTr33X5WHBl30r7oSjjT8LkGJHRvHNPpIeX
+         0lXdtjXd4W6b+InQ2/SOYSIDgZSWAGJUV9SzALg4YCGoRxdRYgNXtucYYaAlok1dGWnE
+         k/BuOp21HdJubbgPQpqzGHA0PiOzfRrX4TTuI43L83T9aEpiwBlRdSsMr0Iw3dldGW9r
+         03sQ==
+X-Gm-Message-State: AOAM5311P7n7o2p51Q2baOpGC9o/vOrBofZKVIikco+ggQDuvglTKgGp
+        cnh0PyaXAJS1Daic7Kih+W+qYQ==
+X-Google-Smtp-Source: ABdhPJy0VwwoooQfHbLqKpCv7uw1B7GMQRDRAJ2YXzL1EGhdNZBt8xLaWqe3gjc5/40/LXVwaMifeQ==
+X-Received: by 2002:a05:600c:6c5:b0:380:dda2:d562 with SMTP id b5-20020a05600c06c500b00380dda2d562mr5293043wmn.138.1645609924666;
+        Wed, 23 Feb 2022 01:52:04 -0800 (PST)
+Received: from ?IPV6:2a01:e34:ed2f:f020:7f69:edd5:61dd:b18a? ([2a01:e34:ed2f:f020:7f69:edd5:61dd:b18a])
+        by smtp.googlemail.com with ESMTPSA id e3sm1510091wrw.41.2022.02.23.01.52.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Feb 2022 01:52:04 -0800 (PST)
+Message-ID: <467a7de4-df84-8e9e-a26a-80449ca55950@linaro.org>
+Date:   Wed, 23 Feb 2022 10:52:02 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 0/2] Introduce 'advanced' Energy Model in DT
+Content-Language: en-US
+To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org
+Cc:     dietmar.eggemann@arm.com, viresh.kumar@linaro.org,
+        rafael@kernel.org, nm@ti.com, sboyd@kernel.org, mka@chromium.org,
+        dianders@chromium.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20220222140746.12293-1-lukasz.luba@arm.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220222140746.12293-1-lukasz.luba@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Rafael,
 
-On Tue, Feb 22 2022 at 19:04, Rafael J. Wysocki wrote:
-> On Tue, Feb 22, 2022 at 8:41 AM Feng Tang <feng.tang@intel.com> wrote:
->> There is periodic activity in between, related to active load balancing
->> in scheduler (since last frequency was higher these small work will
->> also run at higher frequency). But those threads are not CFS class, so
->> scheduler callback will not be called for them.
->>
->> So removing the patch removed a trigger which would have caused a
->> sched_switch to a CFS task and call a cpufreq/intel_pstate callback.
->
-> And so this behavior needs to be restored for the time being which
-> means reverting the problematic commit for 5.17 if possible.
+Hi Lukasz,
 
-No. This is just papering over the problem. Just because the clocksource
-watchdog has the side effect of making cpufreq "work", does not make it
-a prerequisite for cpufreq. The commit unearthed a problem in the
-cpufreq code, so it needs to be fixed there.
+why not extend the energy model to any kind of devices?
 
-Even if we'd revert it then, you can produce the same effect by adding
-'tsc=reliable' to the kernel command line which disables the clocksource
-watchdog too. The commit is there to deal with modern hardware without
-requiring people to add 'tsc=reliable' to the command line.
+The changes are shyly proposing a new entry in the OPP table like that 
+is the only place where power management can happen.
 
-Thanks,
+Is the approach to describe by small pieces here and there, specific 
+attributes and let the kernel create an energy model from that soap?
 
-        tglx
+I prefer the RFC approach where the energy model is described clearly 
+but, IMHO, it should be more abstracted, without reference to frequency 
+or whatever but index <-> power (t-uple or equation)
+
+By this way, it could be possible to describe the battery with the 
+different charges, the LCD bright light, etc ...
+
+
+On 22/02/2022 15:07, Lukasz Luba wrote:
+> Hi all,
+> 
+> This patch set solves a few issues:
+> 1. It allows to register EM from DT, when the voltage information is not
+>     available. (Some background of the issues present on Chromebook devices
+>     can be checked at [1].)
+> 2. It allows to register 'advanced' EM from the DT, which is more accurate
+>     and reflects total power (dynamic + static).
+> 
+> Implementation details:
+> It adds a new callback in OPP framework to parse the OPP node entry and
+> read the "opp-microwatt". It's going to only work with OPP-v2, but it's
+> agreed to be OK.
+> 
+> Comments, suggestions are very welcome.
+> 
+> changelog:
+> v2:
+> - implemented Viresh idea to add "opp-microwatt" into the OPP node entry in DT
+> v1 [2]
+> 
+> Regards,
+> Lukasz Luba
+> 
+> [1] https://lore.kernel.org/linux-pm/20220207073036.14901-2-lukasz.luba@arm.com/
+> [2] https://lore.kernel.org/linux-pm/20220221225131.15836-1-lukasz.luba@arm.com/
+> 
+> Lukasz Luba (2):
+>    dt-bindings: opp: Add 'opp-microwatt' entry in the OPP
+>    OPP: Add 'opp-microwatt' parsing for advanced EM registration
+> 
+>   .../devicetree/bindings/opp/opp-v2-base.yaml  |  7 ++
+>   drivers/opp/of.c                              | 70 +++++++++++++++++++
+>   2 files changed, 77 insertions(+)
+> 
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
