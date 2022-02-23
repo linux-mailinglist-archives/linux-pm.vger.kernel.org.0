@@ -2,138 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E196E4C0E0A
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Feb 2022 09:09:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46E724C0E59
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Feb 2022 09:39:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238969AbiBWIJe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Feb 2022 03:09:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52026 "EHLO
+        id S238989AbiBWIji (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Feb 2022 03:39:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238951AbiBWIJ3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Feb 2022 03:09:29 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1FDC78048
-        for <linux-pm@vger.kernel.org>; Wed, 23 Feb 2022 00:09:01 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1nMmho-0000Jh-01; Wed, 23 Feb 2022 09:09:00 +0100
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1nMmhm-0003eW-SF; Wed, 23 Feb 2022 09:08:58 +0100
-Date:   Wed, 23 Feb 2022 09:08:58 +0100
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     linux-pm@vger.kernel.org
-Cc:     Kevin Hilman <khilman@kernel.org>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH] PM: domains: use dev_err_probe() to simplify error
- handling
-Message-ID: <20220223080858.GJ9136@pengutronix.de>
-References: <20220223080323.3717853-1-s.hauer@pengutronix.de>
+        with ESMTP id S233549AbiBWIjh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Feb 2022 03:39:37 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 425254CD4A;
+        Wed, 23 Feb 2022 00:39:10 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0CAF1ED1;
+        Wed, 23 Feb 2022 00:39:10 -0800 (PST)
+Received: from [10.57.9.184] (unknown [10.57.9.184])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 14F233F5A1;
+        Wed, 23 Feb 2022 00:39:07 -0800 (PST)
+Message-ID: <ae28b0be-5b71-d53e-31ee-49d4d01a0910@arm.com>
+Date:   Wed, 23 Feb 2022 08:39:06 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220223080323.3717853-1-s.hauer@pengutronix.de>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 09:07:26 up 74 days, 16:53, 83 users,  load average: 0.19, 0.27,
- 0.22
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [[PATCH v2 1/2] dt-bindings: opp: Add 'opp-microwatt' entry in
+ the OPP
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        rafael@kernel.org, daniel.lezcano@linaro.org, nm@ti.com,
+        sboyd@kernel.org, mka@chromium.org, dianders@chromium.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20220222140746.12293-1-lukasz.luba@arm.com>
+ <20220222140746.12293-2-lukasz.luba@arm.com>
+ <20220223055006.zlcwco7oducggxjw@vireshk-i7>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20220223055006.zlcwco7oducggxjw@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 09:03:23AM +0100, Sascha Hauer wrote:
-> From: Ahmad Fatoum <a.fatoum@pengutronix.de>
-> 
-> dev_err_probe() can reduce code size, makes the code easier to read
-> and has the added benefit of recording the defer reason for later
-> read out. Use it where appropriate.
-> 
-> This also fixes an issue, where an error message in __genpd_dev_pm_attach
-> was not terminated by a line break.
-> 
-> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
-> ---
->  drivers/base/power/domain.c | 21 ++++++---------------
->  1 file changed, 6 insertions(+), 15 deletions(-)
 
-And of course:
 
-Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-
-Sascha
-
+On 2/23/22 05:50, Viresh Kumar wrote:
+> On 22-02-22, 14:07, Lukasz Luba wrote:
+>> Add new entry for the OPP which provides information about power
+>> expressed in micro-Watts. It is useful for the Energy Model framework.
+>>
+>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>> ---
+>>   Documentation/devicetree/bindings/opp/opp-v2-base.yaml | 7 +++++++
+>>   1 file changed, 7 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+>> index 15a76bcd6d42..3f07a279ed2a 100644
+>> --- a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+>> +++ b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+>> @@ -93,6 +93,13 @@ patternProperties:
+>>           minItems: 1
+>>           maxItems: 8   # Should be enough regulators
+>>   
+>> +      opp-microwatt:
+>> +        description:
+>> +          Power for the OPP
+>> +
+>> +          A value representing power for the OPP in micro-Watts.
+>> +        $ref: /schemas/types.yaml#/definitions/uint32
+>> +
 > 
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index 5db704f02e712..29428ae91349d 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -2248,12 +2248,8 @@ int of_genpd_add_provider_simple(struct device_node *np,
->  	/* Parse genpd OPP table */
->  	if (genpd->set_performance_state) {
->  		ret = dev_pm_opp_of_add_table(&genpd->dev);
-> -		if (ret) {
-> -			if (ret != -EPROBE_DEFER)
-> -				dev_err(&genpd->dev, "Failed to add OPP table: %d\n",
-> -					ret);
-> -			return ret;
-> -		}
-> +		if (ret)
-> +			return dev_err_probe(&genpd->dev, ret, "Failed to add OPP table\n");
->  
->  		/*
->  		 * Save table for faster processing while setting performance
-> @@ -2312,9 +2308,8 @@ int of_genpd_add_provider_onecell(struct device_node *np,
->  		if (genpd->set_performance_state) {
->  			ret = dev_pm_opp_of_add_table_indexed(&genpd->dev, i);
->  			if (ret) {
-> -				if (ret != -EPROBE_DEFER)
-> -					dev_err(&genpd->dev, "Failed to add OPP table for index %d: %d\n",
-> -						i, ret);
-> +				dev_err_probe(&genpd->dev, ret,
-> +					      "Failed to add OPP table for index %d\n", i);
->  				goto error;
->  			}
->  
-> @@ -2672,12 +2667,8 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
->  	ret = genpd_add_device(pd, dev, base_dev);
->  	mutex_unlock(&gpd_list_lock);
->  
-> -	if (ret < 0) {
-> -		if (ret != -EPROBE_DEFER)
-> -			dev_err(dev, "failed to add to PM domain %s: %d",
-> -				pd->name, ret);
-> -		return ret;
-> -	}
-> +	if (ret < 0)
-> +		return dev_err_probe(dev, ret, "failed to add to PM domain %s\n", pd->name);
->  
->  	dev->pm_domain->detach = genpd_dev_pm_detach;
->  	dev->pm_domain->sync = genpd_dev_pm_sync;
-> -- 
-> 2.30.2
+> I was expecting a much larger change here. Look at how opp-microvolt and
+> opp-microamp is defined in this file.
 > 
-> 
+> Should this value be made per-supply/regulator, just like voltage/current ?
 > 
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+For the EM we need only one value. If there would be some other users
+of this field in future we might add the multiple power values support.
+Currently there is no need I would say, unless it's a hard requirement
+to be aligned with opp-microvolt.
