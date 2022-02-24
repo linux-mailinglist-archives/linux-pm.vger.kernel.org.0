@@ -2,67 +2,177 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAFB14C27E1
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Feb 2022 10:17:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 616984C27C6
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Feb 2022 10:15:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231526AbiBXJQA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Feb 2022 04:16:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46902 "EHLO
+        id S231846AbiBXJOS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Feb 2022 04:14:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232732AbiBXJP7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Feb 2022 04:15:59 -0500
-X-Greylist: delayed 473 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Feb 2022 01:15:25 PST
-Received: from mail.onlinesuccesses.pl (mail.onlinesuccesses.pl [198.244.150.235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A17F279917
-        for <linux-pm@vger.kernel.org>; Thu, 24 Feb 2022 01:15:24 -0800 (PST)
-Received: by mail.onlinesuccesses.pl (Postfix, from userid 1002)
-        id 7F7A8A4C3E; Thu, 24 Feb 2022 09:06:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=onlinesuccesses.pl;
-        s=mail; t=1645693607;
-        bh=nE8HqilgMh4dy7+Z8ksfg7Bc9rmPeQtYFq3/3YR2ODU=;
-        h=Date:From:To:Subject:From;
-        b=qhvG3Dx20kGEdggitAaZsSaxALYJTJGCV4pVMVHq8BQExfk6kNsjqxeoQ/PwM2QXg
-         GsIajBVOTkKIXzQ1XRuX64qM+On/nTIlcGL0P++4ZpPlCZWhZOeTnTP8c3Aiyjfyh/
-         Lxr4Hbe/fNS9mJ/GaIjYwuE0U9W2czskuFQwS8Z9oZyYaBsTwf5fuGJld/IXKiWglS
-         weruRixSLDEZJm/hkSCkw5dp35W6Sr7v5bpZdEwdCqJTtp9ad3C9xO0CopUqcx0jOQ
-         jHO5CrpqHBjtvrwqy3Duy8UOREorz8yVKB1l0fRDY5PHzVG/WqzmXRhD9E4UWlpN2p
-         o6F8PiNC6QoRA==
-Received: by mail.onlinesuccesses.pl for <linux-pm@vger.kernel.org>; Thu, 24 Feb 2022 09:05:53 GMT
-Message-ID: <20220224074501-0.1.2r.hob8.0.mmw2m4xceu@onlinesuccesses.pl>
-Date:   Thu, 24 Feb 2022 09:05:53 GMT
-From:   "Wiktor Zielonko" <wiktor.zielonko@onlinesuccesses.pl>
-To:     <linux-pm@vger.kernel.org>
-Subject: Ruch z pierwszej pozycji w Google
-X-Mailer: mail.onlinesuccesses.pl
+        with ESMTP id S229458AbiBXJOS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Feb 2022 04:14:18 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F8D1959D1
+        for <linux-pm@vger.kernel.org>; Thu, 24 Feb 2022 01:13:49 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id bx5so1450984pjb.3
+        for <linux-pm@vger.kernel.org>; Thu, 24 Feb 2022 01:13:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=SEB2HcIZlaGJONkY26HdM82R7VoeFOHxdC+7YcIMHpk=;
+        b=BozESD3z7jrdcobIG336ckDeZAT5h9x7FcX4J+gwosdJzTR8yZqS1S/PUUodNTnmxn
+         dyxz8PwnhXIC+ujervLPrq18f+p3TtMW8TTtbQOjJHKoOJuoQzkcflu7DNBZq5iFQzPK
+         21szHHPjvyarIuX6e6MuWTJ00EeARxT4k4tHBLoGVwGW556uS4lR8abVXCW0hfnwf4d8
+         mg2XW1gQst95Dh0Le4fb6ToJ24EQhK/nlPQ0wdSGMKk4SlQMcDWN4pb4Og5Rc1h/0mQ4
+         M53vftWWm0vTX2c7e7odMBjVUKc6mhkcTioASNMGsBCUtDADfM/p+PZfL6LwCGFIi3ci
+         97MA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=SEB2HcIZlaGJONkY26HdM82R7VoeFOHxdC+7YcIMHpk=;
+        b=qBVGwk4w94HZFuG/ZF/c3UajPWGnqUAOECaEiS6+DKttpvZBWp2zGzA7AsiPtMfqOr
+         WW/lr06n85CYWuiOCUMaHpqVaHuneZ+Tut23l3vF40g6B2CzAxEtuF8XE1JnwC/WTSU6
+         F5BCyAjktyFPFVaaQDFhUYOfK4H3hHCKFi4FthiVO+CnSd8oWl2pRwidxEUDjL1mfXpY
+         pFt0LhPcEXt+swbiIWlookqqQCF8YPzuDT8VXjnEVI1nDPpXTtOR8yewl3+Arae3o187
+         Zzh4yZYycTTLUYhzXBS7HnAchB8QNcgs8WnESFse2kM+L9MdH3+4+XXGjWiCzYLZvj24
+         4XFQ==
+X-Gm-Message-State: AOAM531Qoo18B6P/xmgv7lXPGdDlX9DjkqRZ3zs5oCprxWu+iD7lvemX
+        moPEpRmYmwf8/g1Pf3YClEDuRg3QCnTBcw==
+X-Google-Smtp-Source: ABdhPJzJ0XhbfmmZjCWBnzEZ/9O3RcQUX+ygX8jRUUsuH0fqSmXlcsrJDkdhqfym7YwV5f4zR6L2Ww==
+X-Received: by 2002:a17:903:1252:b0:14d:ca16:2b8 with SMTP id u18-20020a170903125200b0014dca1602b8mr1759819plh.142.1645694028619;
+        Thu, 24 Feb 2022 01:13:48 -0800 (PST)
+Received: from localhost ([223.184.83.228])
+        by smtp.gmail.com with ESMTPSA id s3-20020a17090a5d0300b001bc2b469051sm5406635pji.29.2022.02.24.01.13.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 01:13:47 -0800 (PST)
+Date:   Thu, 24 Feb 2022 14:43:46 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        rafael@kernel.org, daniel.lezcano@linaro.org, nm@ti.com,
+        sboyd@kernel.org, mka@chromium.org, dianders@chromium.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 3/4] OPP: Add support of "opp-microwatt" for advanced
+ EM registration
+Message-ID: <20220224091346.xmnpj27vllpa4cuy@vireshk-i7>
+References: <20220224081131.27282-1-lukasz.luba@arm.com>
+ <20220224081131.27282-4-lukasz.luba@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220224081131.27282-4-lukasz.luba@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dzie=C5=84 dobry,=20
+On 24-02-22, 08:11, Lukasz Luba wrote:
+> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+>  
+> +/*
+> + * Callback function provided to the Energy Model framework upon registration.
+> + * It provides the power used by @dev at @kHz if it is the frequency of an
+> + * existing OPP, or at the frequency of the first OPP above @kHz otherwise
+> + * (see dev_pm_opp_find_freq_ceil()). This function updates @kHz to the ceiled
+> + * frequency and @mW to the associated power.
+> + *
+> + * Returns 0 on success or a proper -EINVAL value in case of error.
+> + */
+> +static int __maybe_unused
+> +_get_opp_power(unsigned long *mW, unsigned long *kHz, struct device *dev)
 
-jaki=C5=9B czas temu zg=C5=82osi=C5=82a si=C4=99 do nas firma, kt=C3=B3re=
-j strona internetowa nie pozycjonowa=C5=82a si=C4=99 wysoko w wyszukiwarc=
-e Google.=20
+Lets call it _get_dt_opp_power() or _get_dt_power() ?
 
-Na podstawie wykonanego przez nas audytu SEO zoptymalizowali=C5=9Bmy tre=C5=
-=9Bci na stronie pod k=C4=85tem wcze=C5=9Bniej opracowanych s=C5=82=C3=B3=
-w kluczowych. Nasz wewn=C4=99trzny system codziennie analizuje prawid=C5=82=
-owe dzia=C5=82anie witryny.  Dzi=C4=99ki indywidualnej strategii, firma z=
-dobywa coraz wi=C4=99cej Klient=C3=B3w. =20
+> +{
+> +	struct dev_pm_opp *opp;
+> +	unsigned long opp_freq, opp_power;
+> +
+> +	/* Find the right frequency and related OPP */
+> +	opp_freq = *kHz * 1000;
+> +	opp = dev_pm_opp_find_freq_ceil(dev, &opp_freq);
+> +	if (IS_ERR(opp))
+> +		return -EINVAL;
+> +
+> +	opp_power = dev_pm_opp_get_power(opp);
 
-Czy chcieliby Pa=C5=84stwo zwi=C4=99kszy=C4=87 liczb=C4=99 os=C3=B3b odwi=
-edzaj=C4=85cych stron=C4=99 internetow=C4=85 firmy? M=C3=B3g=C5=82bym prz=
-edstawi=C4=87 ofert=C4=99?=20
+As I said in 2/4, this should really give the total instead.
 
+> +	dev_pm_opp_put(opp);
+> +	if (!opp_power)
+> +		return -EINVAL;
+> +
+> +	*kHz = opp_freq / 1000;
+> +	*mW = opp_power / 1000;
+> +
+> +	return 0;
+> +}
+> +
+>  /*
+>   * Callback function provided to the Energy Model framework upon registration.
+>   * This computes the power estimated by @dev at @kHz if it is the frequency
+> @@ -1488,6 +1520,24 @@ static int __maybe_unused _get_power(unsigned long *mW, unsigned long *kHz,
+>  	return 0;
+>  }
+>  
+> +static bool _of_has_opp_microwatt_property(struct device *dev)
+> +{
+> +	unsigned long power, freq = 0;
+> +	struct dev_pm_opp *opp;
+> +
+> +	/* Check if at least one OPP has needed property */
+> +	opp = dev_pm_opp_find_freq_ceil(dev, &freq);
+> +	if (IS_ERR(opp))
+> +		return false;
+> +
+> +	power = dev_pm_opp_get_power(opp);
+> +	dev_pm_opp_put(opp);
+> +	if (!power)
 
-Pozdrawiam serdecznie,
-Wiktor Zielonko
+What if this particular frequency has 0 power mentioned for some
+reason :)
+
+Instead of this heavy stuff, just pick the first OPP from the opp
+table and see its power-value.
+
+> +		return false;
+> +
+> +	return true;
+> +}
+> +
+>  /**
+>   * dev_pm_opp_of_register_em() - Attempt to register an Energy Model
+>   * @dev		: Device for which an Energy Model has to be registered
+> @@ -1517,6 +1567,14 @@ int dev_pm_opp_of_register_em(struct device *dev, struct cpumask *cpus)
+>  		goto failed;
+>  	}
+>  
+> +	/* First, try to find more precised Energy Model in DT */
+> +	if (_of_has_opp_microwatt_property(dev)) {
+> +		struct em_data_callback em_dt_cb = EM_DATA_CB(_get_opp_power);
+> +
+> +		return em_dev_register_perf_domain(dev, nr_opp, &em_dt_cb,
+> +						   cpus, true);
+> +	}
+> +
+
+We have another em_dev_register_perf_domain() down the line, lets keep
+only one such call and get it a callback that should be set in an
+if/else loop.
+
+>  	np = of_node_get(dev->of_node);
+>  	if (!np) {
+>  		ret = -EINVAL;
+> -- 
+> 2.17.1
+
+-- 
+viresh
