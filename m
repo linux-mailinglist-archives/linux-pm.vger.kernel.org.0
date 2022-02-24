@@ -2,117 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25CDB4C359E
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Feb 2022 20:17:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 645144C36A1
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Feb 2022 21:11:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233467AbiBXTRN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Feb 2022 14:17:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37270 "EHLO
+        id S232032AbiBXULP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Feb 2022 15:11:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233500AbiBXTRM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Feb 2022 14:17:12 -0500
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0569465A5;
-        Thu, 24 Feb 2022 11:16:41 -0800 (PST)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-2d646fffcc2so9150657b3.4;
-        Thu, 24 Feb 2022 11:16:41 -0800 (PST)
+        with ESMTP id S233628AbiBXULP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Feb 2022 15:11:15 -0500
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6823D2782AD
+        for <linux-pm@vger.kernel.org>; Thu, 24 Feb 2022 12:10:44 -0800 (PST)
+Received: by mail-oi1-x22d.google.com with SMTP id 12so4640111oix.12
+        for <linux-pm@vger.kernel.org>; Thu, 24 Feb 2022 12:10:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tp/pxUAsN1dsuv2WMgFOFlatJS81kJvAhFMGsLib+Ik=;
+        b=QD5DoxG2HFUYczwhvfPpKRZtnIME+v8s7w+BMnIyEY0/+LA6uzKnzx48TQFLyCi7F0
+         ZXnFA/+CXBjbSFYOtS/HtPQdxpoqKQCikgKMJ5nqywsutlOh215hj+5w2XnG7hcGhqfP
+         ettNPp5G8VpeUXSppkEJD7y/PNFkQQpjRzdLxM5Tk2YLpzBQRCJaMqG6jpW6LUISA0MG
+         v0BXQJ9gVeL2EVPR1q60Ac2A9Or1s6tbjQPqawwfA3VHvUv9z2gYfs1VgaS4+kIcdWyl
+         KckZ6LmxFupOpCf7p0rOAYnEGLcZDBB1clh3kSO+0qp2AO0mGbovLAP+k1RJ+ejdlYn7
+         YEKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IUBHyJhD/KgAkIiV2RaqQW67XtJAXXd9nyxXUgBYd+8=;
-        b=xmCxb8EJfK76+POmTfYM9mbNTC6pWjh/VVrtDD+BfLpp6NagHDrdRO6fYHSwOWtvO/
-         RQc+JXnIG/DvKyKu6xobmfyE90zRFaVTiMlQvh5YUiZ+Z9ywSkSYapY63Z7EQiHgh8LC
-         umUNRohsJLoIHpZqCYVPX1cf6tSCcfSojB5XY2ciWtEE7W9qaUBkOIbtE/u16WyAaMtc
-         aG2tPkeUmh4rWj8QEQvhytZSUg2b55zsL16sRrUwvWcHgZUFTEjUimlNZFUXRwUSlU74
-         +vs5lXxx5aRwF7IaINgTf2UJgVn91Fy8ovYMx/v3NwXAR4kFZXt6AnJqiPoNrhnzZkoF
-         ZaDw==
-X-Gm-Message-State: AOAM533uuuDCkYXCk4Vs5pBW5YXLtJZNkihEzH6liBKtanDZmujWYkTA
-        39puREbC93yuYXiAfbZWyB6KbqlEMcMhKsMM1bv2JnAD
-X-Google-Smtp-Source: ABdhPJwlZGubhCnX68XVrLcLN4c3fJbq3VhKaQJBE+UAKi1zMOMeO+k7nAQqhyZlc6X/07qpRK2LmjQnSSIWQ+Btda0=
-X-Received: by 2002:a81:b65f:0:b0:2d6:d29c:63fd with SMTP id
- h31-20020a81b65f000000b002d6d29c63fdmr4053544ywk.196.1645730201257; Thu, 24
- Feb 2022 11:16:41 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tp/pxUAsN1dsuv2WMgFOFlatJS81kJvAhFMGsLib+Ik=;
+        b=bghhGp+Jt+TLxGlF1xvHcoC/C6mimwbiMwrpQniYSUI+HWP97DnvZ05XEneVTKHn0I
+         unK1612sfSCuwEby6M8u7iIcZg9Bq80PvzNqAUWlnPF4F+sw73m/C27je4MBfJZ3oxM2
+         EPraybn1HZe0WLGNjD344vThnbJZ+DHmx62HcMDoau0xQh7pBOjRhA3shIPvD+Xladst
+         8848QW7gJLGHW9hiPU5nooSwLeXY9mto7oWgZKuoR0Sn7izkM2AnXMYbdsr1X3n2WVSk
+         9INI+BsqJqdYAMEItkoVrVwF4HAZ+hyFuu5V9wzuhdWw/gqJNcmrxvDDxH9yFxmnuEN/
+         oumg==
+X-Gm-Message-State: AOAM531QP98vzgy+D2UR9lx3Bhn1484OhHYsWZH2vTsmNv5TsgBzbbA7
+        D4Fpnge/58u8tenZjAnmFRGbng==
+X-Google-Smtp-Source: ABdhPJyN1tJXc2OmNxcbayjctonbYe7XOluBMlLa7fjoRQREv6clqrbNE7J3VS7gOJPpy7RKF/DD4A==
+X-Received: by 2002:a05:6870:6014:b0:d6:ca51:2108 with SMTP id t20-20020a056870601400b000d6ca512108mr2044865oaa.47.1645733443809;
+        Thu, 24 Feb 2022 12:10:43 -0800 (PST)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id p16-20020a05680811d000b002d72ec3a921sm249592oiv.21.2022.02.24.12.10.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 12:10:43 -0800 (PST)
+Date:   Thu, 24 Feb 2022 14:10:40 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Luca Weiss <luca@z3ntu.xyz>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 02/10] dt-bindings: thermal: tsens: Add msm8953
+ compatible
+Message-ID: <YhfmQFFCmb74dOvV@builder.lan>
+References: <20220220201909.445468-1-luca@z3ntu.xyz>
+ <20220220201909.445468-3-luca@z3ntu.xyz>
 MIME-Version: 1.0
-References: <20220223002024.55026-1-chuansheng.liu@intel.com>
-In-Reply-To: <20220223002024.55026-1-chuansheng.liu@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 24 Feb 2022 20:16:30 +0100
-Message-ID: <CAJZ5v0iAkRQuoA+TDU46fR+Xek5rB=tiMNTJ-M28RSyHz2RKiQ@mail.gmail.com>
-Subject: Re: [PATCH] thermal: int340x: fix memory leak in int3400_notify()
-To:     Chuansheng Liu <chuansheng.liu@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220220201909.445468-3-luca@z3ntu.xyz>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 1:33 AM Chuansheng Liu <chuansheng.liu@intel.com> wrote:
->
-> It is easy to hit the below memory leaks in my TigerLake platform:
->
-> --
-> unreferenced object 0xffff927c8b91dbc0 (size 32):
->   comm "kworker/0:2", pid 112, jiffies 4294893323 (age 83.604s)
->   hex dump (first 32 bytes):
->     4e 41 4d 45 3d 49 4e 54 33 34 30 30 20 54 68 65  NAME=INT3400 The
->     72 6d 61 6c 00 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b a5  rmal.kkkkkkkkkk.
->   backtrace:
->     [<ffffffff9c502c3e>] __kmalloc_track_caller+0x2fe/0x4a0
->     [<ffffffff9c7b7c15>] kvasprintf+0x65/0xd0
->     [<ffffffff9c7b7d6e>] kasprintf+0x4e/0x70
->     [<ffffffffc04cb662>] int3400_notify+0x82/0x120 [int3400_thermal]
->     [<ffffffff9c8b7358>] acpi_ev_notify_dispatch+0x54/0x71
->     [<ffffffff9c88f1a7>] acpi_os_execute_deferred+0x17/0x30
->     [<ffffffff9c2c2c0a>] process_one_work+0x21a/0x3f0
->     [<ffffffff9c2c2e2a>] worker_thread+0x4a/0x3b0
->     [<ffffffff9c2cb4dd>] kthread+0xfd/0x130
->     [<ffffffff9c201c1f>] ret_from_fork+0x1f/0x30
-> ---
->
-> Fix it by calling kfree() accordingly.
->
-> Fixes: 38e44da59130 ("thermal: int3400_thermal: process "thermal table
-> changed" event")
->
-> Cc: linux-pm@vger.kernel.org
-> Cc: stable@vger.kernel.org
-> Cc: rafael@kernel.org
-> Cc: srinivas.pandruvada@linux.intel.com
-> Signed-off-by: Chuansheng Liu <chuansheng.liu@intel.com>
+On Sun 20 Feb 14:18 CST 2022, Luca Weiss wrote:
 
-Applied as a fix for 5.17-rc, thanks!
+> Document the compatible string for tsens found in msm8953.
+> 
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> Acked-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> Acked-by: Amit Kucheria <amitk@kernel.org>
+> Acked-by: Rob Herring <robh@kernel.org>
 
-Srinivas, any concerns?
+Daniel, can you please pick this patch through your tree?
+
+Thanks,
+Bjorn
 
 > ---
->  drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> index 72acb1f61849..4f478812cb51 100644
-> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> @@ -404,6 +404,10 @@ static void int3400_notify(acpi_handle handle,
->         thermal_prop[3] = kasprintf(GFP_KERNEL, "EVENT=%d", therm_event);
->         thermal_prop[4] = NULL;
->         kobject_uevent_env(&priv->thermal->device.kobj, KOBJ_CHANGE, thermal_prop);
-> +       kfree(thermal_prop[0]);
-> +       kfree(thermal_prop[1]);
-> +       kfree(thermal_prop[2]);
-> +       kfree(thermal_prop[3]);
->  }
->
->  static int int3400_thermal_get_temp(struct thermal_zone_device *thermal,
-> --
-> 2.25.0.rc2
->
+> Changes in v2:
+> - no changes
+> 
+>  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> index d3b9e9b600a2..b6406bcc683f 100644
+> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> @@ -43,6 +43,7 @@ properties:
+>        - description: v2 of TSENS
+>          items:
+>            - enum:
+> +              - qcom,msm8953-tsens
+>                - qcom,msm8996-tsens
+>                - qcom,msm8998-tsens
+>                - qcom,sc7180-tsens
+> -- 
+> 2.35.1
+> 
