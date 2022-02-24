@@ -2,139 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 984254C36B7
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Feb 2022 21:16:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D9894C3726
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Feb 2022 21:54:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233786AbiBXUPr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Feb 2022 15:15:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41066 "EHLO
+        id S234500AbiBXUzD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Feb 2022 15:55:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbiBXUPq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Feb 2022 15:15:46 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE14278CA0;
-        Thu, 24 Feb 2022 12:15:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645733715; x=1677269715;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=6B/f+27LYRUPDQxWW8vRZGhcXmfz2Oq/sefZhYbxRaM=;
-  b=TWzMdUsXSnu9E2/SNzuThiiPF6sS3a23cVmL8KA/IjpgRmNYWIFoY0ls
-   5cr5vkXKQkSD9qq8sjy4mVAcYil4JqJVvQCNFCo2uc9VUbTB8bpq0lmYs
-   7ng792Z0WAyAhZ8PlWwBzsUxn3TUMjbIcEn612fhaPf9sjPo9jiRYjSfv
-   +SfwatcMWBjufucMornigNNYDO1KYac8glphhu9/u05jmDi7fO03JJDgX
-   Ut8q7VwDTMla9DV98Jdn5ikNltez05g9+ptCKmy2irxGoCNmmP9oGJOxj
-   AeBC2bxjzT2M2nw2Wj41HoTNDLPU21ilmTV7iMQSAfHyMIoCG5DF+drZb
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="252260480"
-X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
-   d="scan'208";a="252260480"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 12:15:15 -0800
-X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
-   d="scan'208";a="787984782"
-Received: from rjfenger-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.48.94])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 12:15:14 -0800
-Message-ID: <1fe034be43340d413f13adea219f25917dcebdf7.camel@linux.intel.com>
-Subject: Re: [PATCH] thermal: int340x: fix memory leak in int3400_notify()
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Chuansheng Liu <chuansheng.liu@intel.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Date:   Thu, 24 Feb 2022 12:15:14 -0800
-In-Reply-To: <CAJZ5v0iAkRQuoA+TDU46fR+Xek5rB=tiMNTJ-M28RSyHz2RKiQ@mail.gmail.com>
-References: <20220223002024.55026-1-chuansheng.liu@intel.com>
-         <CAJZ5v0iAkRQuoA+TDU46fR+Xek5rB=tiMNTJ-M28RSyHz2RKiQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
+        with ESMTP id S234473AbiBXUy4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Feb 2022 15:54:56 -0500
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECCAB1C945E
+        for <linux-pm@vger.kernel.org>; Thu, 24 Feb 2022 12:54:17 -0800 (PST)
+Received: by mail-oi1-x22a.google.com with SMTP id j2so4919336oie.7
+        for <linux-pm@vger.kernel.org>; Thu, 24 Feb 2022 12:54:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=5yuNRPfZ4wSXNWFo4eJjPd8/1lZiboAzYQHF2bGrwvk=;
+        b=v1lToXbj6oZ1yX9wpwPl5hYdstrCcyekZCPmIEOlGppkubYZ6pJNuzpaFkf7bGP4Se
+         BOJbrNy3BWI+s2+QR/gmTqGk+eDdELRHlq4z8WMk5EaVKMpNGONSux38H5N0dzs6z/2u
+         rxdQ5G5zH9RCdv4USnV5CdtUZjD/A2AKGK3yGpzXb0bNEaugvhgupX9mV6O8pCkxc2IV
+         YOarLdNp3J0mvPG+8K3uN7xNAH+/lFMH/CZMDBJaIvaiFExN0KH2Gf9dQfCLA8i1pP3E
+         BoLb6j5UA/QQea21t7zIeIXiYLYu6S3CLhgHqm+uobeQgHBsziL+Nhhy/bkTPqhF1zfz
+         KS6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=5yuNRPfZ4wSXNWFo4eJjPd8/1lZiboAzYQHF2bGrwvk=;
+        b=euLpv8Vu6MZLsVjoeyoPsROt6pGDkrhrwZxtuWMdr/690JZ2hQlyi1LsCLw1QcMHF0
+         E9I9qtDb6dWfWEJGx4bzxuxwECTwL98CWtZm01iErplDy4sQD48imhyESAValtfY96XV
+         6y76t/DgdqbQVQGCQdh/4l6KDdqnYW9AhW16vrFjJ4PHX3B9Ql5XkjuRM7KyHeg+TJYU
+         RbdeUtvtbKltxwbbxXqhiJx4W0KjZpC4ks76Uj0bHWlsxgi55+IwKLy+UsJq805OkafI
+         mFz9r9MKsAqU2gLSC3y1wY6CLsHhIoH06qctfT3mXEPNCHsWaBjUUT5BKGUQTY2VkjsQ
+         /bQw==
+X-Gm-Message-State: AOAM5310N53LNY8mGjLhXmwBX6s/blVrRdzJkfZeHOw3IWYHJzI4lG7p
+        jcSAVjuoBzYy+glWndC6iAatEQ==
+X-Google-Smtp-Source: ABdhPJxxjHsZdlkR1kwbPa4Qzyy0vNpFU3AB0yGjO2kGTUXG4HI3QT47u3CtJHIp3y7C0I3N9YK+gQ==
+X-Received: by 2002:a05:6808:1718:b0:2d7:416e:d9d9 with SMTP id bc24-20020a056808171800b002d7416ed9d9mr1652260oib.76.1645736057319;
+        Thu, 24 Feb 2022 12:54:17 -0800 (PST)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id c8-20020a4ad788000000b0031ce69b1640sm191259oou.10.2022.02.24.12.54.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 12:54:16 -0800 (PST)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
+Cc:     Stephan Gerhold <stephan@gerhold.net>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        linux-usb@vger.kernel.org,
+        Bartosz Dudziak <bartosz.dudziak@snejp.pl>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        linux-remoteproc@vger.kernel.org, phone-devel@vger.kernel.org,
+        Amit Kucheria <amitk@kernel.org>
+Subject: Re: (subset) [PATCH v2 00/10] Initial MSM8953 & Fairphone 3 support
+Date:   Thu, 24 Feb 2022 14:54:03 -0600
+Message-Id: <164573604162.1471031.13389413392112165052.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220220201909.445468-1-luca@z3ntu.xyz>
+References: <20220220201909.445468-1-luca@z3ntu.xyz>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 2022-02-24 at 20:16 +0100, Rafael J. Wysocki wrote:
-> On Wed, Feb 23, 2022 at 1:33 AM Chuansheng Liu
-> <chuansheng.liu@intel.com> wrote:
-> > 
-> > It is easy to hit the below memory leaks in my TigerLake platform:
-> > 
-> > --
-> > unreferenced object 0xffff927c8b91dbc0 (size 32):
-> >   comm "kworker/0:2", pid 112, jiffies 4294893323 (age 83.604s)
-> >   hex dump (first 32 bytes):
-> >     4e 41 4d 45 3d 49 4e 54 33 34 30 30 20 54 68 65  NAME=INT3400
-> > The
-> >     72 6d 61 6c 00 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b a5 
-> > rmal.kkkkkkkkkk.
-> >   backtrace:
-> >     [<ffffffff9c502c3e>] __kmalloc_track_caller+0x2fe/0x4a0
-> >     [<ffffffff9c7b7c15>] kvasprintf+0x65/0xd0
-> >     [<ffffffff9c7b7d6e>] kasprintf+0x4e/0x70
-> >     [<ffffffffc04cb662>] int3400_notify+0x82/0x120
-> > [int3400_thermal]
-> >     [<ffffffff9c8b7358>] acpi_ev_notify_dispatch+0x54/0x71
-> >     [<ffffffff9c88f1a7>] acpi_os_execute_deferred+0x17/0x30
-> >     [<ffffffff9c2c2c0a>] process_one_work+0x21a/0x3f0
-> >     [<ffffffff9c2c2e2a>] worker_thread+0x4a/0x3b0
-> >     [<ffffffff9c2cb4dd>] kthread+0xfd/0x130
-> >     [<ffffffff9c201c1f>] ret_from_fork+0x1f/0x30
-> > ---
-> > 
-> > Fix it by calling kfree() accordingly.
-> > 
-> > Fixes: 38e44da59130 ("thermal: int3400_thermal: process "thermal
-> > table
-> > changed" event")
-> > 
-> > Cc: linux-pm@vger.kernel.org
-> > Cc: stable@vger.kernel.org
-> > Cc: rafael@kernel.org
-> > Cc: srinivas.pandruvada@linux.intel.com
-> > Signed-off-by: Chuansheng Liu <chuansheng.liu@intel.com>
+On Sun, 20 Feb 2022 21:18:53 +0100, Luca Weiss wrote:
+> This series adds initial support for MSM8953 (and SDM632 which is based
+> on MSM8953) and the Fairphone 3 smartphone.
 > 
-> Applied as a fix for 5.17-rc, thanks!
+> Only relatively basic functionality is supported like storage, volume
+> keys and USB.
 > 
-> Srinivas, any concerns?
-None.
-
-Thanks,
-Srinivas
-
+> There is currently close-to-mainline support for other components for
+> this SoC including GPU, WiFi and audio, this series adds only basic
+> support so that the other components can start getting upstreamed
+> easier.
 > 
-> > ---
-> >  drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> > 
-> > diff --git
-> > a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> > b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> > index 72acb1f61849..4f478812cb51 100644
-> > --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> > +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> > @@ -404,6 +404,10 @@ static void int3400_notify(acpi_handle handle,
-> >         thermal_prop[3] = kasprintf(GFP_KERNEL, "EVENT=%d",
-> > therm_event);
-> >         thermal_prop[4] = NULL;
-> >         kobject_uevent_env(&priv->thermal->device.kobj,
-> > KOBJ_CHANGE, thermal_prop);
-> > +       kfree(thermal_prop[0]);
-> > +       kfree(thermal_prop[1]);
-> > +       kfree(thermal_prop[2]);
-> > +       kfree(thermal_prop[3]);
-> >  }
-> > 
-> >  static int int3400_thermal_get_temp(struct thermal_zone_device
-> > *thermal,
-> > --
-> > 2.25.0.rc2
-> > 
+> [...]
 
+Applied, thanks!
+
+[04/10] dt-bindings: arm: cpus: Add Kryo 250 CPUs
+        commit: 08b25f7d99e15f2aa5f4cce3f13ad0c67a4c1e34
+[06/10] arm64: dts: qcom: Add MSM8953 device tree
+        commit: 9fb08c8019234a0759aab66914f01bc0971e4eed
+[07/10] arm64: dts: qcom: Add PM8953 PMIC
+        commit: 06ea71e42975cdd43cc1e2dacd3e56c8693ac733
+[08/10] arm64: dts: qcom: Add SDM632 device tree
+        commit: 24af02271ca7cf095186963002d1d98349d9e5e5
+[09/10] dt-bindings: arm: qcom: Document sdm632 and fairphone,fp3 board
+        commit: cb898d5e59b41a268dcf4dbef31d651c393dfbae
+[10/10] arm64: dts: qcom: sdm632: Add device tree for Fairphone 3
+        commit: 308b26cddb04afc7776de1cbbe07172eeccc7c98
+
+Best regards,
+-- 
+Bjorn Andersson <bjorn.andersson@linaro.org>
