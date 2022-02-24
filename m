@@ -2,166 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B13E4C37F5
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Feb 2022 22:42:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 458EB4C38C7
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Feb 2022 23:29:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231322AbiBXVmf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Feb 2022 16:42:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35870 "EHLO
+        id S235488AbiBXW2v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Feb 2022 17:28:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbiBXVme (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Feb 2022 16:42:34 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F017592874
-        for <linux-pm@vger.kernel.org>; Thu, 24 Feb 2022 13:42:02 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id p184-20020a1c29c1000000b0037f76d8b484so569626wmp.5
-        for <linux-pm@vger.kernel.org>; Thu, 24 Feb 2022 13:42:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=95Kz0cwVSt+7Sf+leRu54DcFn27kGIFwxoRMYQn155s=;
-        b=TskHSrRSAClsNWy/osGrf9N8tZVPsIzNFG9FImu4CzS4z3KvxPS29pJPJLpn3U6DKR
-         0WenYNPjdQ10OhM7+V32+DzPQF0baUVU5I3KLmLHW4XQduOhPlUXNN5uUPm7Iw3NkwZa
-         rPRjXbAZLAKfeGSEN7JyE9WuuBFndwMTuGKMsYG3+SAXdIB2X7+KPvi3g4gfd/TOnWUp
-         tWFUg7NZxwDhLODrxmwJEU3yQAzEbAmt3u7SImKjOi7N2gQOrYkw/kycHthrFf3xvcZB
-         ca6p4icjbFsgaYp7HbIuecKR43Zk5CDKnIEvwMw6gc710P9i2/HrAEjfZ1wzy5K+9OcG
-         zlqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=95Kz0cwVSt+7Sf+leRu54DcFn27kGIFwxoRMYQn155s=;
-        b=Mmw3i8VpW/FTOJBp6cf/Fh4b6VaiJJyKrBS/t1XZTCOGa5q+X3VNyR6564yJstwKL7
-         nBiu3da5tikcXepEwNNBvDZWKlPjdYKBEaIBUWZWMUwEqyy6fatJxcxQjHTGG/eJ1NjR
-         PpkfM4YGhhYY48F1jAzBy5Sox2cnp3uNX/ogXcnXzc5x+G4BOP9DmiNS/vl9xFh5c6xb
-         VpEvVE90u209CGIUdpJ7j52CrgWLNeSIcgzh97bjom27Jez3S+7Kl3f5O50dqRszSMsY
-         h9J1AxKhrKHTTGBDlbw3nlbsO1fCjXazlfOwIa4VEE30R9qRHzkAl/d+zoFe/NHnRs8f
-         VT4Q==
-X-Gm-Message-State: AOAM530kBIcflfqlVSLZNLEY0Qd8DnSQsdsIBfghakBZosk+gczU+CVp
-        IUWPqB0wijXtyb7swIHVhxQzSw==
-X-Google-Smtp-Source: ABdhPJzsPdzdtG7H4jdgtnMyqQAl+jFoO1hKVjMQWOPd72cuoPkq+qQuiiZ2JyZtx/Fu0jNoO7q2sw==
-X-Received: by 2002:a7b:cc0d:0:b0:381:220e:a3a0 with SMTP id f13-20020a7bcc0d000000b00381220ea3a0mr54970wmh.59.1645738921363;
-        Thu, 24 Feb 2022 13:42:01 -0800 (PST)
-Received: from ?IPV6:2a01:e34:ed2f:f020:25a:d4d2:9383:c638? ([2a01:e34:ed2f:f020:25a:d4d2:9383:c638])
-        by smtp.googlemail.com with ESMTPSA id v20-20020a7bcb54000000b0037fa63db8aasm3786678wmj.5.2022.02.24.13.41.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Feb 2022 13:42:00 -0800 (PST)
-Message-ID: <3a3320d1-c4a8-d5e0-63ef-dd098711f38e@linaro.org>
-Date:   Thu, 24 Feb 2022 22:41:58 +0100
+        with ESMTP id S230023AbiBXW2u (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Feb 2022 17:28:50 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8773D18FACC
+        for <linux-pm@vger.kernel.org>; Thu, 24 Feb 2022 14:28:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645741698;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=qn/GMDFP7OA7p3nnvStuDZM5BMirPgGstGqTu4CGSmA=;
+        b=Q8qEAQ1Yc0eDV/pHRphxUDMAKaXcCbiA1qUuWpDQ1CRpEYqlxl+3bUUF2aMjdBVNizjrbx
+        kF64mRQvQ5b7P8O0qSzIM9EO/WOtcoQ67nZR/EeYqezTnJmCOGEr7O6irBxjDQPAYBYxZu
+        DcxG9w16CmkwcW3O1naJIJy5BGVjN1A=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-438-qRPtQ14nNJ2CHNAC6hXnGg-1; Thu, 24 Feb 2022 17:28:15 -0500
+X-MC-Unique: qRPtQ14nNJ2CHNAC6hXnGg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 46BDA501E0;
+        Thu, 24 Feb 2022 22:28:14 +0000 (UTC)
+Received: from localhost.localdomain (unknown [10.39.195.207])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6CAE14D716;
+        Thu, 24 Feb 2022 22:28:13 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-pm@vger.kernel.org
+Subject: [PATCH 0/2] power: supply: axp288_*: Use acpi_quirk_skip_acpi_ac_and_battery()
+Date:   Thu, 24 Feb 2022 23:28:03 +0100
+Message-Id: <20220224222805.1689234-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1 0/4] Thermal library and tools
-Content-Language: en-US
-To:     rafael@kernel.org
-Cc:     srinivas.pandruvada@linux.intel.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20220218125334.995447-1-daniel.lezcano@linaro.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220218125334.995447-1-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi All,
 
-Hi,
+Normally the native AXP288 fg/charger drivers are preferred but one some
+devices the ACPI drivers should be used instead.
 
-What shall I do with this series? Is everyone ok with it?
+The ACPI AC and battery drivers used to both have their own detection if
+a PMIC on which native drivers should be preffered was present as well as
+their own list of exceptions for devices like the ECS EF20EA, which has
+an AXP288 PMIC but uses a separate fuel-gauge.
+
+And the axp288_fuel_guage driver also has a dmi_system_id table entry
+for the ECS EF20EA to avoid loading on this board. Where as for
+the axp288_charger code it was decided that it was ok to have both
+a /sys/class/power_supply/ADP1 from ACPI as well as a /axp288_charger .
+
+So that is 3 separate "ECS EF20EA" dmi_system_id table entries in
+3 different drivers (which should really be 4). In 5.17-rc1 a patch
+adding a new acpi_quirk_skip_acpi_ac_and_battery() helper was merged
+to remove the code duplication for this from the ACPI AC and battery
+drivers:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=57a18322227134e37b693ef8ef216ed7ce7ba7d6
+
+This series makes the AXP288 charger and fuelgauge drivers also use
+this helper. This allows removing the "ECS EF20EA" dmi_system_id table
+entry from the fuel-gauge code and fixes the duplicate
+/sys/class/power_supply/axp288_charger power_supply device on these
+boards.
+
+This also gives us a single place to add further exceptions if
+necessary, rather then needing to do this in 4 different places.
+
+Regards,
+
+Hans
 
 
+Hans de Goede (2):
+  power: supply: axp288_charger: Use
+    acpi_quirk_skip_acpi_ac_and_battery()
+  power: supply: axp288_fuel_gauge: Use
+    acpi_quirk_skip_acpi_ac_and_battery()
 
-On 18/02/2022 13:53, Daniel Lezcano wrote:
-> This series provides a thermal library providing the basic callback oriented
-> netlink communication and events with the thermal framework, a temperature
-> capture tool and a thermal monitoring skeleton using the thermal library.
-> 
-> Changelog:
->   - V1:
->      - Took into account RFC comments (unsubscribe, error enum, thermal daemon
->        renamed to thermal-engine)
-> 
-> Daniel Lezcano (4):
->    tools/lib/thermal: Add a thermal library
->    tools/thermal: Add util library
->    tools/thermal: A temperature capture tool
->    tools/thermal: Add thermal daemon skeleton
-> 
->   tools/Makefile                                |  36 +-
->   tools/lib/thermal/.gitignore                  |   2 +
->   tools/lib/thermal/Build                       |   5 +
->   tools/lib/thermal/Makefile                    | 165 ++++++++
->   tools/lib/thermal/commands.c                  | 351 ++++++++++++++++
->   tools/lib/thermal/events.c                    | 164 ++++++++
->   tools/lib/thermal/include/thermal.h           | 141 +++++++
->   tools/lib/thermal/libthermal.map              |  25 ++
->   tools/lib/thermal/libthermal.pc.template      |  12 +
->   tools/lib/thermal/sampling.c                  |  75 ++++
->   tools/lib/thermal/thermal.c                   | 126 ++++++
->   tools/lib/thermal/thermal_nl.c                | 215 ++++++++++
->   tools/lib/thermal/thermal_nl.h                |  46 ++
->   tools/thermal/lib/Build                       |   3 +
->   tools/thermal/lib/Makefile                    | 158 +++++++
->   .../thermal/lib/libthermal_tools.pc.template  |  12 +
->   tools/thermal/lib/log.c                       |  77 ++++
->   tools/thermal/lib/log.h                       |  31 ++
->   tools/thermal/lib/mainloop.c                  | 135 ++++++
->   tools/thermal/lib/mainloop.h                  |  14 +
->   tools/thermal/lib/thermal-tools.h             |  10 +
->   tools/thermal/lib/uptimeofday.c               |  40 ++
->   tools/thermal/lib/uptimeofday.h               |  12 +
->   tools/thermal/thermal-engine/Build            |   2 +
->   tools/thermal/thermal-engine/Makefile         |  27 ++
->   tools/thermal/thermal-engine/thermal-engine.c | 287 +++++++++++++
->   tools/thermal/thermometer/Build               |   2 +
->   tools/thermal/thermometer/Makefile            |  23 +
->   tools/thermal/thermometer/thermometer.c       | 393 ++++++++++++++++++
->   tools/thermal/thermometer/thermometer.conf    |   5 +
->   30 files changed, 2591 insertions(+), 3 deletions(-)
->   create mode 100644 tools/lib/thermal/.gitignore
->   create mode 100644 tools/lib/thermal/Build
->   create mode 100644 tools/lib/thermal/Makefile
->   create mode 100644 tools/lib/thermal/commands.c
->   create mode 100644 tools/lib/thermal/events.c
->   create mode 100644 tools/lib/thermal/include/thermal.h
->   create mode 100644 tools/lib/thermal/libthermal.map
->   create mode 100644 tools/lib/thermal/libthermal.pc.template
->   create mode 100644 tools/lib/thermal/sampling.c
->   create mode 100644 tools/lib/thermal/thermal.c
->   create mode 100644 tools/lib/thermal/thermal_nl.c
->   create mode 100644 tools/lib/thermal/thermal_nl.h
->   create mode 100644 tools/thermal/lib/Build
->   create mode 100644 tools/thermal/lib/Makefile
->   create mode 100644 tools/thermal/lib/libthermal_tools.pc.template
->   create mode 100644 tools/thermal/lib/log.c
->   create mode 100644 tools/thermal/lib/log.h
->   create mode 100644 tools/thermal/lib/mainloop.c
->   create mode 100644 tools/thermal/lib/mainloop.h
->   create mode 100644 tools/thermal/lib/thermal-tools.h
->   create mode 100644 tools/thermal/lib/uptimeofday.c
->   create mode 100644 tools/thermal/lib/uptimeofday.h
->   create mode 100644 tools/thermal/thermal-engine/Build
->   create mode 100644 tools/thermal/thermal-engine/Makefile
->   create mode 100644 tools/thermal/thermal-engine/thermal-engine.c
->   create mode 100644 tools/thermal/thermometer/Build
->   create mode 100644 tools/thermal/thermometer/Makefile
->   create mode 100644 tools/thermal/thermometer/thermometer.c
->   create mode 100644 tools/thermal/thermometer/thermometer.conf
-> 
-
+ drivers/power/supply/Kconfig             |  4 ++--
+ drivers/power/supply/axp288_charger.c    |  7 +++++++
+ drivers/power/supply/axp288_fuel_gauge.c | 14 ++++++++------
+ 3 files changed, 17 insertions(+), 8 deletions(-)
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.35.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
