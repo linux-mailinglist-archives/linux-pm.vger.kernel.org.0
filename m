@@ -2,47 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45BC34C353A
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Feb 2022 19:59:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDBCF4C3543
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Feb 2022 20:03:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232356AbiBXTAM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Feb 2022 14:00:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45536 "EHLO
+        id S232428AbiBXTDg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Feb 2022 14:03:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231774AbiBXTAL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Feb 2022 14:00:11 -0500
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B422B18E42D
-        for <linux-pm@vger.kernel.org>; Thu, 24 Feb 2022 10:59:41 -0800 (PST)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2d62593ad9bso8443547b3.8
-        for <linux-pm@vger.kernel.org>; Thu, 24 Feb 2022 10:59:41 -0800 (PST)
+        with ESMTP id S231774AbiBXTDf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Feb 2022 14:03:35 -0500
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5BA12E150;
+        Thu, 24 Feb 2022 11:03:05 -0800 (PST)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-2d68d519a33so8620977b3.7;
+        Thu, 24 Feb 2022 11:03:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=biMjq7d7fdiFE8LWV/4+Oo9Lfb5iQsYoLNiRi7q+H+4=;
-        b=EFWB4rJwe49tAXxlokTGw7xWMupdgYQhLkofa7L0C7sXDGc3VzGBGaJRLt7d9BV54r
-         9KrJliSBT56iUXlDE3InIRfpJeFxps1GLMpU7HiYN/xwp4x2WVj58vJnvZGbGUKjEnfh
-         89/O4yNIIUihfMiqnh0hQbDgT1RRTuq88EKPpfIy07mRXlIWUs2dsNvpKd/xsNaVn00F
-         qvEHwYY0ro1IZ8nxnTUEo4aHJ0h7mGtgo5Ot7fEi0mExQhFhm12SgAh92/uZhY8huTdv
-         3LXXbnG0KCHPavtWGT8NVw5H50jOwE7rI7bkQGZtGvwJRFFMdMepQdxmdxUtXMOryJEg
-         ysnw==
-X-Gm-Message-State: AOAM530SPG0HN6clcOmF+moOBRbJxP/FNdKxdjyqQjtN5sHBSPISvDiR
-        lxBiPMQuozGX+g4mug0qG6PeJ4ldo6l6sgXCpZm9qMlu
-X-Google-Smtp-Source: ABdhPJxek5R8TMWzGWAOeOIDtsutjErAdvU0Cug1aNYH8QBH90kQqUGBiFO9uYqzr0D2Kev/AunbkOwRmHEkq+CA3D4=
-X-Received: by 2002:a81:8487:0:b0:2d6:9167:ecab with SMTP id
- u129-20020a818487000000b002d69167ecabmr3799156ywf.515.1645729180970; Thu, 24
- Feb 2022 10:59:40 -0800 (PST)
+        bh=KGEpS7Bhdowi8weL04m6jlf8GznLn7sIWocKtZXzh8Q=;
+        b=zkKdx9QWLqkcma1wwhVUH2fMvsX7jGTA1Uh3aCywrYcSWpzpm2tbA8vfJ4WSpl+IGw
+         l36sO9Vs0k6+zub+j69ijq5azK9jc5oUy+iL8+mwyWIR83YwCxm2RzSytRuQe6Pc2tjp
+         g6Iz3HPOrGwTRxU8RyREecUUlE7qrH8FDZio4+84hgf5tsmDmp0ZSkNhG/Nvs20rIHiI
+         WAfcjFVn3ZUDshCXrjJZu059s0ry0j6LlQuSB+tXio13slwm7P4XYWd1e8LDvkPQkLSW
+         7t/WQSwzu6ovBg7Hx9zJmu2xyMJwP0V6v5iURlULdbz8QLM3nOqSDAhIGHHcaSQJLz0w
+         vbsA==
+X-Gm-Message-State: AOAM530I0gYZZW/q4jJ1Tx4VaFonflIR6cuoIT5jYhF9I3qmZjKO6eRh
+        thP6UzPjAblj1muRjR+T28uJkEJUkCPRVxU/tfMTsXoL
+X-Google-Smtp-Source: ABdhPJyyPpGPB5Swv0lOQOMTpA2ZcbJZajb64+GsWwBlE5yTpEaPa4WjtBh7br1iE9ZkesquRPwe8mRR3znPPiwBHS0=
+X-Received: by 2002:a81:1683:0:b0:2d2:aa58:ef87 with SMTP id
+ 125-20020a811683000000b002d2aa58ef87mr3719714yww.326.1645729384914; Thu, 24
+ Feb 2022 11:03:04 -0800 (PST)
 MIME-Version: 1.0
-References: <20220224043147.psbkkusn4bdv2eni@vireshk-i7>
-In-Reply-To: <20220224043147.psbkkusn4bdv2eni@vireshk-i7>
+References: <9e3ba314-2030-8385-33ad-6b9a0291e5cd@linaro.org>
+In-Reply-To: <9e3ba314-2030-8385-33ad-6b9a0291e5cd@linaro.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 24 Feb 2022 19:59:30 +0100
-Message-ID: <CAJZ5v0jm4s0e0o0WgV9fcMzJ9FsqLKKAviHdW3Q7i6O5v=oaJQ@mail.gmail.com>
-Subject: Re: [GIT PULL] cpufreq/arm fixes for 5.17-rc6
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+Date:   Thu, 24 Feb 2022 20:02:54 +0100
+Message-ID: <CAJZ5v0iBaE-y_Q0Q4S4qUHd44r=C83JiLgxUzkhEHDLe7oZo=A@mail.gmail.com>
+Subject: Re: [GIT PULL] dtpm for v5.18-rc1
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -54,38 +56,65 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 5:31 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Thu, Feb 24, 2022 at 4:54 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
 >
-> Hi Rafael,
 >
-> This pull request fixes issues related to throttle irq for Qcom SoCs.
+> The following changes since commit 26291c54e111ff6ba87a164d85d4a4e134b7315c:
 >
-> -------------------------8<-------------------------
->
-> The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
->
->   Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+>    Linux 5.17-rc2 (2022-01-30 15:37:07 +0200)
 >
 > are available in the Git repository at:
 >
->   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/fixes
+>    https://git.linaro.org/people/daniel.lezcano/linux.git tags/dtpm-v5.18
 >
-> for you to fetch changes up to ef8ee1cb8fc8976a68f5e89cd5f7b6f7de80c66f:
+> for you to fetch changes up to f1ebef9e55f3c49063b575e97d2019832b8f8ef9:
 >
->   cpufreq: qcom-hw: Delay enabling throttle_irq (2022-02-09 13:18:49 +0530)
+>    dtpm/soc/rk3399: Add the ability to unload the module (2022-02-23
+> 19:46:29 +0100)
 >
 > ----------------------------------------------------------------
-> Bjorn Andersson (2):
->       cpufreq: Reintroduce ready() callback
->       cpufreq: qcom-hw: Delay enabling throttle_irq
+> - Added dtpm hierarchy description (Daniel Lezcano)
 >
->  Documentation/cpu-freq/cpu-drivers.rst                    |  3 +++
->  Documentation/translations/zh_CN/cpu-freq/cpu-drivers.rst |  2 ++
->  drivers/cpufreq/cpufreq.c                                 |  4 ++++
->  drivers/cpufreq/qcom-cpufreq-hw.c                         | 11 ++++++++++-
->  include/linux/cpufreq.h                                   |  3 +++
->  5 files changed, 22 insertions(+), 1 deletion(-)
+> - Changed the locking scheme (Daniel Lezcano)
 >
-> --
+> - Fixed dtpm_cpu cleanup at exit time and missing virtual dtpm pointer
+>    release (Daniel Lezcano)
+>
+> ----------------------------------------------------------------
+> Daniel Lezcano (12):
+>        powercap/drivers/dtpm: Convert the init table section to a simple
+> array
+>        powercap/drivers/dtpm: Add hierarchy creation
+>        powercap/drivers/dtpm: Add CPU DT initialization support
+>        powercap/drivers/dtpm: Add dtpm devfreq with energy model support
+>        rockchip/soc/drivers: Add DTPM description for rk3399
+>        powercap/dtpm: Change locking scheme
+>        powercap/dtpm_cpu: Reset per_cpu variable in the release function
+>        powercap/dtpm: Fixup kfree for virtual node
+>        powercap/dtpm: Destroy hierarchy function
+>        powercap/dtpm: Move the 'root' reset place
+>        powercap/dtpm_cpu: Add exit function
+>        dtpm/soc/rk3399: Add the ability to unload the module
+>
+>   drivers/powercap/Kconfig          |   8 ++++++
+>   drivers/powercap/Makefile         |   1 +
+>   drivers/powercap/dtpm.c           | 333
+> +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---------------------------------------------------
+>   drivers/powercap/dtpm_cpu.c       |  55
+> +++++++++++++++++++++++++++++++++-----
+>   drivers/powercap/dtpm_devfreq.c   | 203
+> ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+>   drivers/powercap/dtpm_subsys.h    |  22 ++++++++++++++++
+>   drivers/soc/rockchip/Kconfig      |   8 ++++++
+>   drivers/soc/rockchip/Makefile     |   1 +
+>   drivers/soc/rockchip/dtpm.c       |  65
+> +++++++++++++++++++++++++++++++++++++++++++++
+>   include/asm-generic/vmlinux.lds.h |  11 --------
+>   include/linux/dtpm.h              |  36 ++++++++++++-------------
+>   11 files changed, 634 insertions(+), 109 deletions(-)
+>   create mode 100644 drivers/powercap/dtpm_devfreq.c
+>   create mode 100644 drivers/powercap/dtpm_subsys.h
+>   create mode 100644 drivers/soc/rockchip/dtpm.c
 
-Pulled and pushed out, thanks!
+Pulled, thanks!
