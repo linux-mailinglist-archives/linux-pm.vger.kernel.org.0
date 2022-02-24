@@ -2,73 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F8984C28BC
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Feb 2022 11:00:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8B924C29EA
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Feb 2022 11:54:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232237AbiBXKAr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Feb 2022 05:00:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33178 "EHLO
+        id S232920AbiBXKy6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Feb 2022 05:54:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232223AbiBXKAq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Feb 2022 05:00:46 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0591C14A209
-        for <linux-pm@vger.kernel.org>; Thu, 24 Feb 2022 02:00:17 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id c18-20020a7bc852000000b003806ce86c6dso3113896wml.5
-        for <linux-pm@vger.kernel.org>; Thu, 24 Feb 2022 02:00:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=cvKgWT75YNWCz545dId4xR2Ur4aFE/XebHBrnqe+U5o=;
-        b=QS46/JJpgvK0E9Hksyx9FuwMUJYpWc0wFaEzvUDevpX6J5/9e3jyF+Kc876uNdhQHr
-         Wqmret9M+dr7YxkPMZy+eAYFPgczqqm98JU7kYv5gLwiyeJxj6YgXoaiWHunDJu+pMHc
-         aIDn+T0cTm3Ks/tuRRIikq4ZzBHdVO0/l9Cv2czGpWun8b/7dBqlEAzqYrD24wVjEtG0
-         AGfm5Xrt3cxYO3u1vFvKyJI8cRHgR0clKJ/b0Anc0Wk6TIAY8jdutUsGH4C4QofALEqY
-         cJy6ReFUBlU0JpEAwEHxxCLZ/SwjXwX9CHM1n3qGpQIyEnPSCBKxgfsFPb8gGxpOJA30
-         b4eQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=cvKgWT75YNWCz545dId4xR2Ur4aFE/XebHBrnqe+U5o=;
-        b=lxPkuuGg7PD+3jXp1ZKStsSM1J0ys4x1MXWqNfivPwyITt2BPG+CFcCtjnBtczRnMw
-         ljAQl7ySq3ZFb/PruGlajAB+D9dBNr97u2aNL0xUG16ei7c2UOVqz3xDUrO6/6bNYfNK
-         /9bhx2DRa270IgHIvMd3LOeJJNKAD+I+EXUI0IxN7iMShhpY7eaJuP4L+3ytRjMArZQf
-         9XlwJuW5V+Gv+oONq9sAsRy9el9gQ1vI1c/3SunXNB36ORVMV5TuFEt6m75GumFf5rQG
-         OAXkistLAX2tKT6y3wDrHiyl9JXJbwcgjNsE43XRl0jeL5h1L/fc0JIQg06kWbgjfsTk
-         JnIQ==
-X-Gm-Message-State: AOAM532ecl8xGn5ugIRnCuUSXSyz2IK1NLRphoh+fx8sZbTtCfoA0lpc
-        F5xXUo5eZEhfREZuNS8oDRF56DfekEw6FQ==
-X-Google-Smtp-Source: ABdhPJyyzWs5ThgKjqAtBKK/Mgfo/z0KtDelHMqf0aOGE01yWxHeXoVGgtnx6lgokse5biOs1cuOAA==
-X-Received: by 2002:a05:600c:692:b0:37b:c64f:a66d with SMTP id a18-20020a05600c069200b0037bc64fa66dmr11054638wmn.165.1645696815426;
-        Thu, 24 Feb 2022 02:00:15 -0800 (PST)
-Received: from ?IPV6:2a01:e34:ed2f:f020:aa9c:55a2:dfa7:adcf? ([2a01:e34:ed2f:f020:aa9c:55a2:dfa7:adcf])
-        by smtp.googlemail.com with ESMTPSA id 7sm2776349wrb.43.2022.02.24.02.00.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Feb 2022 02:00:14 -0800 (PST)
-Message-ID: <e6d9f7ec-50db-75a4-03df-0d624d184ca3@linaro.org>
-Date:   Thu, 24 Feb 2022 11:00:13 +0100
+        with ESMTP id S229737AbiBXKy5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Feb 2022 05:54:57 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 925D727992D
+        for <linux-pm@vger.kernel.org>; Thu, 24 Feb 2022 02:54:28 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 20F561F44F1C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645700067;
+        bh=jyakSzlPUZInKe2LRE4gPhKLDpLB/xdekgws3nOL2o4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SkdqkGEF8W/Y0DtCI8pYREiSkwlaqYMfuohvhwKWVSLNlmHfItENRmYtLktUC+hNT
+         DCsWlF9P8yb545xVUq3cKBp3+l8xqFHSCEyo79DHaN1q3KJkoc/klJmVvLzpXHE/w9
+         X9R7EIOYE3TwZr9TNBepuL9WTQOy/gqj4FGZ+x7IE6Ggz5rmGYu0jROjsB7JsR2SjX
+         qzZhMJlNXf68BUHsJHz18D8U7rVqodvxF+gKbVUnGDDcEscXnyVs2KCJndnrW0mBq5
+         kY061bMBlskUCwS+KrbNYWdOlavlpN1DlUNIUxgEwKD6jUykV+PMVXB3epXuYInHoc
+         YwJbvBcvLvhBg==
+Received: by mercury (Postfix, from userid 1000)
+        id C9CD4106049B; Thu, 24 Feb 2022 11:54:08 +0100 (CET)
+Date:   Thu, 24 Feb 2022 11:54:08 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Dmitry Osipenko <digetx@gmail.com>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] power: supply: Use an rbtree rather than flat register
+ cache
+Message-ID: <20220224105408.hx5xbg4xizr6punl@mercury.elektranox.org>
+References: <20220222214331.1557723-1-broonie@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/2] dt-bindings: thermal: Update the bindings to support
- multiple sensors
-Content-Language: en-US
-To:     Alexandre Bailon <abailon@baylibre.com>, rafael@kernel.org,
-        rui.zhang@intel.com, amitk@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ben.tseng@mediatek.com, khilman@baylibre.com, mka@chromium.org
-References: <20220218084604.1669091-1-abailon@baylibre.com>
- <20220218084604.1669091-2-abailon@baylibre.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220218084604.1669091-2-abailon@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="x3kqi7mdyf2vuevp"
+Content-Disposition: inline
+In-Reply-To: <20220222214331.1557723-1-broonie@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,94 +53,76 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-Hi Alexandre,
+--x3kqi7mdyf2vuevp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-thanks for your series
+Hi,
 
-On 18/02/2022 09:46, Alexandre Bailon wrote:
-> This adds two optionals properties and update the thermal-sensors
-> property description to support multiple sensors with a thermal zone.
-
-
-I think it would make sense to first send a patch fixing the missing 
-attribute from txt -> yaml translation with the Fixes tag which was:
-
-"A list of thermal sensor phandles and sensor specifier
-   Type: list of		used while monitoring the thermal zone"
-
-And add in the description if there are more than one sensor, then the 
-max value will be returned. Then provide the code to get the max value.
-
-The second series of changes would be the other aggregations and the 
-implementation.
-
-
+On Tue, Feb 22, 2022 at 09:43:31PM +0000, Mark Brown wrote:
+> The smb347 has a very sparse register map (the maximum register is 0x3f b=
+ut
+> less than 10% of the possible registers appear to be defined) and doesn't
+> have any hardware defaults specified so the sparser data structure of an
+> rbtree is a better fit for it's needs than a flat cache. Since it uses I2C
+> for the control interface there is no performance concern with the slight=
+ly
+> more involved code so let's convert it.
+>=20
+> This will mean we avoid any issues created by assuming that any previously
+> unaccessed registers hold a value that doesn't match what's in the hardwa=
+re
+> (eg, an _update_bits() suppressing a write).
+>=20
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
->   .../bindings/thermal/thermal-zones.yaml       | 30 +++++++++++++++++--
->   1 file changed, 27 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-> index 2d34f3ccb2572..9f944c2364589 100644
-> --- a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-> @@ -77,10 +77,24 @@ patternProperties:
->   
->         thermal-sensors:
->           $ref: /schemas/types.yaml#/definitions/phandle-array
-> -        maxItems: 1
->           description:
-> -          The thermal sensor phandle and sensor specifier used to monitor this
-> -          thermal zone.
-> +          An array of thermal sensor phandle and sensor specifier used to
-> +          monitor this thermal zone.
-> +          If the array contains more than one sensor then the returned value
-> +          is the maximum unless aggregation-min or aggregation-avg properties
-> +          are set.
-> +
-> +      aggregation-min:
-> +        type: boolean
-> +        description:
-> +          Return the minimum temperature when the thermal monitor multiple
-> +          sensors.
-> +
-> +      aggregation-avg:
-> +        type: boolean
-> +        description:
-> +          Return the average temperature when the thermal monitor multiple
-> +          sensors.
 
-Maybe 'aggregation' could be a string?
+Thanks, queued.
 
-	aggregation = "max";
-	aggregation = "min";
-	aggregation = "avg";
+-- Sebastian
 
-It should be in the optional section and probably a conditional if 
-thermal-sensors has more than one item
+>  drivers/power/supply/smb347-charger.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/smb347-charger.c b/drivers/power/supply=
+/smb347-charger.c
+> index d56e469043bb..1511f71f937c 100644
+> --- a/drivers/power/supply/smb347-charger.c
+> +++ b/drivers/power/supply/smb347-charger.c
+> @@ -1488,8 +1488,7 @@ static const struct regmap_config smb347_regmap =3D=
+ {
+>  	.max_register	=3D SMB347_MAX_REGISTER,
+>  	.volatile_reg	=3D smb347_volatile_reg,
+>  	.readable_reg	=3D smb347_readable_reg,
+> -	.cache_type	=3D REGCACHE_FLAT,
+> -	.num_reg_defaults_raw =3D SMB347_MAX_REGISTER,
+> +	.cache_type	=3D REGCACHE_RBTREE,
+>  };
+> =20
+>  static const struct regulator_ops smb347_usb_vbus_regulator_ops =3D {
+> --=20
+> 2.30.2
+>=20
 
->         coefficients:
->           $ref: /schemas/types.yaml#/definitions/uint32-array
-> @@ -338,5 +352,15 @@ examples:
->                               };
->                       };
->               };
-> +
-> +            /* ... */
-> +
-> +            soc-max-thermal {
-> +                    polling-delay-passive = <250>;
-> +                    polling-delay = <1000>;
-> +                    thermal-sensors = <&tsens0 5>, <&tsens0 11>;
-> +                    trips {};
-> +                    cooling-maps {};
-> +            };
->       };
->   ...
+--x3kqi7mdyf2vuevp
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmIXY7wACgkQ2O7X88g7
++pobYRAAjWsJTBbi5o4VfvG4tfeR6CRqSC+uCe44vpROnQrvO1IaAo9MNLcDlJWY
+AzaDv6fByTK0eReewjzPuXimdzLT6rZyNerNaBN/GX5B0LQeDUoOx1Gbp1Lj/wjS
+GxAM5sCRuHQoY9NQ6SbmqACSLwIHmDeSn68PSjzsbiYM/2E4MOC3wjyhD8gcn657
+2z8CGLihJ0DxoBanCkk2sFSgaiQR4Eee+hfYrfLwnz2ZqUPl24G/0kY1xrdcXDt3
+4pzET+Lh1M911PuoDozl4LUjkdiaGxIqVA452FiMJaIhpcsWJJi3J0PYoackJmBc
+uLes721sKuMmCAXDo65XYyYDNxDFmpevzbrSZewQXD1MQUkiYzkKOSFnXbH5aq+q
+WXQ1r8QBDgE5nJT4Ev8Wvxtp8Vdq+K1ICmz0VivN+FzDPWfKqzAXZg7VOl3EP6mm
+Kk5/iuyTHnX3OpsrXXSv61Lpm+VOzmMedfzCLaCcPhwbPCePZsfMUgwBz1cw7rDi
+Xb8VFE91KGlsVDP9P+cZb6OFcoDEZ7gETiuMy9PD5LDQIvE2icM078aZa0wm8Ecn
+p15Q4A0pYJlpx/vAA46NM6vnF42fccfm2e/mLWBJRhFCmkySaH7OHv8Klt96WEZw
+WTHZAvM5srGPKfRaZQSTAQGeB8lobKvbeE9torLqw5tvepJmhgg=
+=3Pd+
+-----END PGP SIGNATURE-----
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+--x3kqi7mdyf2vuevp--
