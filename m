@@ -2,64 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59E5B4C230B
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Feb 2022 05:31:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65A2C4C24E3
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Feb 2022 09:10:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbiBXEcT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Feb 2022 23:32:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46070 "EHLO
+        id S229737AbiBXIJE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Feb 2022 03:09:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiBXEcS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Feb 2022 23:32:18 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7F9DFD7
-        for <linux-pm@vger.kernel.org>; Wed, 23 Feb 2022 20:31:49 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id bx9-20020a17090af48900b001bc64ee7d3cso978579pjb.4
-        for <linux-pm@vger.kernel.org>; Wed, 23 Feb 2022 20:31:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=Cf/aNkQNvLJr8xlIe0s05IdXjDi/9gEiKuTdWaGZylc=;
-        b=Ah/ffugNso4n/gFeX6ahSYiSoV4dsj7kXR4JU4ayXd5mgnMCYUx+5sxe9kB4vB1Ovo
-         hj2/9xp8Wzoz/FORZ/3lrQ9IHt490hgaD1LFs+0wbayM52pLEJRbjmVEgyPuqWY8Mx1j
-         dQR9s8xoZzasRtKvdxt/LpP8q/PmCNqeqYae3g4ysDJhxVwF2J7+p/JD/whGIDIcUuG6
-         fuGMtUG196wXNvaDi/HyWgrCD6uIpf2SEWmd5Vip6N9njQIykq8nSoD8i56bg4X8LsSe
-         AuhInTHRWIexIRHqd1zDCQbgVKFlbEG0ZS3UyKnPGp4qCd41P9TYSUw7umqDhqQWsi9F
-         6nlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=Cf/aNkQNvLJr8xlIe0s05IdXjDi/9gEiKuTdWaGZylc=;
-        b=dMa5vV+sEN0BOC1fkiELtOaoLE1nob/4i5RTBoQdyjFY7DqmqGcW/4WmypSqtOEty5
-         eRVlr/B1CdzhHozVQr/GiXAyNgto+LMWAksUO2oGvNihdgHc6i8JgZXEpT/AJeSc1Aq5
-         fPHAGqg6LPKGbJEeyuQchpRv/FKB9pCa7yoPtt+SPks4bCH2rDx9VjI4XfX2s5uptvAu
-         RelWpYPftFF/wlMjgY7AhRCVCJNXHsRBlbMpN1b5/mV5L4F2gpGHnu6E9sUwhaJyHPJS
-         Tc/aegvGTH+U2P26s174DXf/tj5W0PyWU/Rb9dNK8+TY7ZE/FnElQF1xKhSVkR35MmiS
-         dGkQ==
-X-Gm-Message-State: AOAM531f7FvoEm3WjglRVChB6fAXwuBVkFkRhxHyQJ2xz4L4gDUPb8HG
-        twHdF8bfdpU/yM/VfN+yS1wHnQ==
-X-Google-Smtp-Source: ABdhPJyhtDSURlvpCGmoCgkycZxtnxuoxFK+yb0hORhTVvhhZcAkp4aIoEMh7ayMLLeBxOG1ucGaQw==
-X-Received: by 2002:a17:902:8210:b0:14d:6607:bdc4 with SMTP id x16-20020a170902821000b0014d6607bdc4mr811152pln.165.1645677109474;
-        Wed, 23 Feb 2022 20:31:49 -0800 (PST)
-Received: from localhost ([223.184.83.228])
-        by smtp.gmail.com with ESMTPSA id x3sm1221412pfj.25.2022.02.23.20.31.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 20:31:49 -0800 (PST)
-Date:   Thu, 24 Feb 2022 10:01:47 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
+        with ESMTP id S229485AbiBXIJD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Feb 2022 03:09:03 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0191B9889;
+        Thu, 24 Feb 2022 00:08:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645690114; x=1677226114;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VQd1i1VNUB19znV8syUg6eStX4xjFGP3TPP+ybONL38=;
+  b=C36T9OEshs0mVWP27ESrJhCMrC8Fv7pQOaZkd1hQv+XJ9sTOOhV1yxhh
+   /DUQZOdpjGI9Pvvxztip89rdobJfMzKbdfJzuBuNPCRcBshWbwhBfYtFa
+   1QA/y8XT/kyZKPY1KSBAlwPaq1730Mwbs2KkKNQQrzpxrqg/NZzdByHa+
+   n4QYSDfxy7mJMna/U4L84z3k5G0weku4k4CFjJ0EFm/9436p+13lrbd6e
+   SeQRHq83O3g/pFNgpW5d8B7KJ/LuNZbqqcnoG9IPqvpXraBRRwNopyl5Z
+   xfnQ7hUDbZYecjd6JH25a5gaQB3bFplN29iyU2RAuCpLt7UzKDwF/223w
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="232797490"
+X-IronPort-AV: E=Sophos;i="5.88,393,1635231600"; 
+   d="scan'208";a="232797490"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 00:08:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,393,1635231600"; 
+   d="scan'208";a="607339317"
+Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.189])
+  by fmsmga004.fm.intel.com with ESMTP; 24 Feb 2022 00:08:31 -0800
+Date:   Thu, 24 Feb 2022 16:08:30 +0800
+From:   Feng Tang <feng.tang@intel.com>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>
-Subject: [GIT PULL] cpufreq/arm fixes for 5.17-rc6
-Message-ID: <20220224043147.psbkkusn4bdv2eni@vireshk-i7>
+Cc:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Doug Smythies <dsmythies@telus.net>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: Re: CPU excessively long times between frequency scaling driver
+ calls - bisected
+Message-ID: <20220224080830.GD4548@shbuild999.sh.intel.com>
+References: <CAAYoRsXkyWf0vmEE2HvjF6pzCC4utxTF=7AFx1PJv4Evh=C+Ow@mail.gmail.com>
+ <e185b89fb97f47758a5e10239fc3eed0@intel.com>
+ <CAAYoRsXbBJtvJzh91nTXATLL1eb2EKbTVb8vEWa3Y6DfCWhZeg@mail.gmail.com>
+ <aaace653f12b79336b6f986ef5c4f9471445372a.camel@linux.intel.com>
+ <20220222073435.GB78951@shbuild999.sh.intel.com>
+ <CAJZ5v0iXQ=qXiZoF_qb1hdBh=yfZ13-of3y3LFu2m6gZh9peTw@mail.gmail.com>
+ <CAAYoRsX-iw+88R9ZizMwJw2qc99XJZ8Fe0M5ETOy4=RUNsxWhQ@mail.gmail.com>
+ <24f7d485dc60ba3ed5938230f477bf22a220d596.camel@linux.intel.com>
+ <20220223004041.GA4548@shbuild999.sh.intel.com>
+ <CAJZ5v0jsy0q3-ZqYvDrswY1F+tJsG6oNjNJPzz9zzkgdnoMwkw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CAJZ5v0jsy0q3-ZqYvDrswY1F+tJsG6oNjNJPzz9zzkgdnoMwkw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,35 +75,63 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+On Wed, Feb 23, 2022 at 03:23:20PM +0100, Rafael J. Wysocki wrote:
+> On Wed, Feb 23, 2022 at 1:40 AM Feng Tang <feng.tang@intel.com> wrote:
+> >
+> > On Tue, Feb 22, 2022 at 04:32:29PM -0800, srinivas pandruvada wrote:
+> > > Hi Doug,
+> > >
+> > > On Tue, 2022-02-22 at 16:07 -0800, Doug Smythies wrote:
+> > > > Hi All,
+> > > >
+> > > > I am about 1/2 way through testing Feng's "hacky debug patch",
+> > > > let me know if I am wasting my time, and I'll abort. So far, it
+> > > > works fine.
+> > > This just proves that if you add some callback during long idle,  you
+> > > will reach a less aggressive p-state. I think you already proved that
+> > > with your results below showing 1W less average power ("Kernel 5.17-rc3
+> > > + Feng patch (6 samples at 300 sec per").
+> > >
+> > > Rafael replied with one possible option. Alternatively when planing to
+> > > enter deep idle, set P-state to min with a callback like we do in
+> > > offline callback.
+> >
+> > Yes, if the system is going to idle, it makes sense to goto a lower
+> > cpufreq first (also what my debug patch will essentially lead to).
+> >
+> > Given cprfreq-util's normal running frequency is every 10ms, doing
+> > this before entering idle is not a big extra burden.
+> 
+> But this is not related to idle as such, but to the fact that idle
+> sometimes stops the scheduler tick which otherwise would run the
+> cpufreq governor callback on a regular basis.
+> 
+> It is stopping the tick that gets us into trouble, so I would avoid
+> doing it if the current performance state is too aggressive.
 
-This pull request fixes issues related to throttle irq for Qcom SoCs.
+I've tried to simulate Doug's environment by using his kconfig, and
+offline my 36 CPUs Desktop to leave 12 CPUs online, and on it I can
+still see Local timer interrupts when there is no active load, with
+the longest interval between 2 timer interrupts is 4 seconds, while
+idle class's task_tick_idle() will do nothing, and CFS'
+task_tick_fair() will in turn call cfs_rq_util_change()
 
--------------------------8<-------------------------
+I searched the cfs/deadline/rt code, these three classes  all have
+places to call cpufreq_update_util(), either in enqueue/dequeue or
+changing running bandwidth. So I think entering idle also means the
+system load is under a big change, and worth calling the cpufreq
+callback.
 
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+> In principle, PM QoS can be used for that from intel_pstate, but there
+> is a problem with that approach, because it is not obvious what value
+> to give to it and it is not always guaranteed to work (say when all of
+> the C-states except for C1 are disabled).
+> 
+> So it looks like a new mechanism is needed for that.
 
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+If you think idle class is not the right place to solve it, I can
+also help testing new patches.
 
-are available in the Git repository at:
+Thanks,
+Feng
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/fixes
-
-for you to fetch changes up to ef8ee1cb8fc8976a68f5e89cd5f7b6f7de80c66f:
-
-  cpufreq: qcom-hw: Delay enabling throttle_irq (2022-02-09 13:18:49 +0530)
-
-----------------------------------------------------------------
-Bjorn Andersson (2):
-      cpufreq: Reintroduce ready() callback
-      cpufreq: qcom-hw: Delay enabling throttle_irq
-
- Documentation/cpu-freq/cpu-drivers.rst                    |  3 +++
- Documentation/translations/zh_CN/cpu-freq/cpu-drivers.rst |  2 ++
- drivers/cpufreq/cpufreq.c                                 |  4 ++++
- drivers/cpufreq/qcom-cpufreq-hw.c                         | 11 ++++++++++-
- include/linux/cpufreq.h                                   |  3 +++
- 5 files changed, 22 insertions(+), 1 deletion(-)
-
--- 
-viresh
