@@ -2,206 +2,166 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED4B84C37DF
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Feb 2022 22:33:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B13E4C37F5
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Feb 2022 22:42:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231493AbiBXVeJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Feb 2022 16:34:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42158 "EHLO
+        id S231322AbiBXVmf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Feb 2022 16:42:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234641AbiBXVeI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Feb 2022 16:34:08 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D60B1B1DE3;
-        Thu, 24 Feb 2022 13:33:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645738417; x=1677274417;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wS6f9QL9K9zzrsjMtdj+3Akg42ceTvzowR30yf8RUX4=;
-  b=KLqzoaVeglzX5KM2cRR+UdUBBSHPOwGarHa5HIP2CuY/+YycRK76D5CT
-   //lLIHAErnGaKO4cvXbOFOMZA9dCHcOdZwA4kp2GP0/vHC43bT3sbbc04
-   qQxWq5cqfAHe4N56ETyn5IKcdehdYy4kVBKVlXavItMyAq4imH7B32der
-   rafyjlGCRWloNSyfb7yFZi688dSrhuW5JNGMvBImnQRnVptl81V9cFxwv
-   gWX6qmnEl/+yz2iitG77OqlgNiHjyyK7K317oCAAoX96lmogw1D8+Ys7B
-   Aff8XDkqso+88s32rJYyPwQAxX0B/C9Iiql6Jh7I9CDdvJo3qzN0OtafP
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="239757770"
-X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
-   d="scan'208";a="239757770"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 13:33:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
-   d="scan'208";a="788282915"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 24 Feb 2022 13:33:34 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nNLjx-0003U1-ID; Thu, 24 Feb 2022 21:33:33 +0000
-Date:   Fri, 25 Feb 2022 05:32:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     kbuild-all@lists.01.org, linux-acpi@vger.kernel.org,
-        devel@acpica.org, linux-pm@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [rafael-pm:testing 54/57] arch/x86/include/asm/pci_x86.h:97:8:
- error: unknown type name 'raw_spinlock_t'
-Message-ID: <202202250514.JzetOofA-lkp@intel.com>
+        with ESMTP id S229821AbiBXVme (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Feb 2022 16:42:34 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F017592874
+        for <linux-pm@vger.kernel.org>; Thu, 24 Feb 2022 13:42:02 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id p184-20020a1c29c1000000b0037f76d8b484so569626wmp.5
+        for <linux-pm@vger.kernel.org>; Thu, 24 Feb 2022 13:42:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=95Kz0cwVSt+7Sf+leRu54DcFn27kGIFwxoRMYQn155s=;
+        b=TskHSrRSAClsNWy/osGrf9N8tZVPsIzNFG9FImu4CzS4z3KvxPS29pJPJLpn3U6DKR
+         0WenYNPjdQ10OhM7+V32+DzPQF0baUVU5I3KLmLHW4XQduOhPlUXNN5uUPm7Iw3NkwZa
+         rPRjXbAZLAKfeGSEN7JyE9WuuBFndwMTuGKMsYG3+SAXdIB2X7+KPvi3g4gfd/TOnWUp
+         tWFUg7NZxwDhLODrxmwJEU3yQAzEbAmt3u7SImKjOi7N2gQOrYkw/kycHthrFf3xvcZB
+         ca6p4icjbFsgaYp7HbIuecKR43Zk5CDKnIEvwMw6gc710P9i2/HrAEjfZ1wzy5K+9OcG
+         zlqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=95Kz0cwVSt+7Sf+leRu54DcFn27kGIFwxoRMYQn155s=;
+        b=Mmw3i8VpW/FTOJBp6cf/Fh4b6VaiJJyKrBS/t1XZTCOGa5q+X3VNyR6564yJstwKL7
+         nBiu3da5tikcXepEwNNBvDZWKlPjdYKBEaIBUWZWMUwEqyy6fatJxcxQjHTGG/eJ1NjR
+         PpkfM4YGhhYY48F1jAzBy5Sox2cnp3uNX/ogXcnXzc5x+G4BOP9DmiNS/vl9xFh5c6xb
+         VpEvVE90u209CGIUdpJ7j52CrgWLNeSIcgzh97bjom27Jez3S+7Kl3f5O50dqRszSMsY
+         h9J1AxKhrKHTTGBDlbw3nlbsO1fCjXazlfOwIa4VEE30R9qRHzkAl/d+zoFe/NHnRs8f
+         VT4Q==
+X-Gm-Message-State: AOAM530kBIcflfqlVSLZNLEY0Qd8DnSQsdsIBfghakBZosk+gczU+CVp
+        IUWPqB0wijXtyb7swIHVhxQzSw==
+X-Google-Smtp-Source: ABdhPJzsPdzdtG7H4jdgtnMyqQAl+jFoO1hKVjMQWOPd72cuoPkq+qQuiiZ2JyZtx/Fu0jNoO7q2sw==
+X-Received: by 2002:a7b:cc0d:0:b0:381:220e:a3a0 with SMTP id f13-20020a7bcc0d000000b00381220ea3a0mr54970wmh.59.1645738921363;
+        Thu, 24 Feb 2022 13:42:01 -0800 (PST)
+Received: from ?IPV6:2a01:e34:ed2f:f020:25a:d4d2:9383:c638? ([2a01:e34:ed2f:f020:25a:d4d2:9383:c638])
+        by smtp.googlemail.com with ESMTPSA id v20-20020a7bcb54000000b0037fa63db8aasm3786678wmj.5.2022.02.24.13.41.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Feb 2022 13:42:00 -0800 (PST)
+Message-ID: <3a3320d1-c4a8-d5e0-63ef-dd098711f38e@linaro.org>
+Date:   Thu, 24 Feb 2022 22:41:58 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1 0/4] Thermal library and tools
+Content-Language: en-US
+To:     rafael@kernel.org
+Cc:     srinivas.pandruvada@linux.intel.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20220218125334.995447-1-daniel.lezcano@linaro.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220218125334.995447-1-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git testing
-head:   fc4232749306d2fb9341c4c6d17c489ab657a67e
-commit: 62fabd56faafe033eb0be3ba24000b8db13d4c17 [54/57] x86/PCI: Disable exclusion of E820 reserved addresses in some cases
-config: i386-tinyconfig (https://download.01.org/0day-ci/archive/20220225/202202250514.JzetOofA-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=62fabd56faafe033eb0be3ba24000b8db13d4c17
-        git remote add rafael-pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-        git fetch --no-tags rafael-pm testing
-        git checkout 62fabd56faafe033eb0be3ba24000b8db13d4c17
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Hi,
 
-All errors (new ones prefixed by >>):
-
-   In file included from arch/x86/kernel/resource.c:4:
->> arch/x86/include/asm/pci_x86.h:97:8: error: unknown type name 'raw_spinlock_t'
-      97 | extern raw_spinlock_t pci_config_lock;
-         |        ^~~~~~~~~~~~~~
->> arch/x86/include/asm/pci_x86.h:133:20: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'dmi_check_pciprobe'
-     133 | extern void __init dmi_check_pciprobe(void);
-         |                    ^~~~~~~~~~~~~~~~~~
->> arch/x86/include/asm/pci_x86.h:134:20: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'dmi_check_skip_isa_align'
-     134 | extern void __init dmi_check_skip_isa_align(void);
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~
->> arch/x86/include/asm/pci_x86.h:140:27: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'pci_acpi_init'
-     140 | static inline int  __init pci_acpi_init(void)
-         |                           ^~~~~~~~~~~~~
->> arch/x86/include/asm/pci_x86.h:145:20: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'pcibios_irq_init'
-     145 | extern void __init pcibios_irq_init(void);
-         |                    ^~~~~~~~~~~~~~~~
->> arch/x86/include/asm/pci_x86.h:146:19: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'pcibios_init'
-     146 | extern int __init pcibios_init(void);
-         |                   ^~~~~~~~~~~~
->> arch/x86/include/asm/pci_x86.h:166:19: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'pci_mmcfg_arch_init'
-     166 | extern int __init pci_mmcfg_arch_init(void);
-         |                   ^~~~~~~~~~~~~~~~~~~
->> arch/x86/include/asm/pci_x86.h:167:20: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'pci_mmcfg_arch_free'
-     167 | extern void __init pci_mmcfg_arch_free(void);
-         |                    ^~~~~~~~~~~~~~~~~~~
->> arch/x86/include/asm/pci_x86.h:174:40: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'pci_mmconfig_add'
-     174 | extern struct pci_mmcfg_region *__init pci_mmconfig_add(int segment, int start,
-         |                                        ^~~~~~~~~~~~~~~~
+What shall I do with this series? Is everyone ok with it?
 
 
-vim +/raw_spinlock_t +97 arch/x86/include/asm/pci_x86.h
 
-^1da177e4c3f41 arch/i386/pci/pci.h            Linus Torvalds     2005-04-16   96  
-d19f61f098ae93 arch/x86/include/asm/pci_x86.h Thomas Gleixner    2010-02-17  @97  extern raw_spinlock_t pci_config_lock;
-^1da177e4c3f41 arch/i386/pci/pci.h            Linus Torvalds     2005-04-16   98  
-^1da177e4c3f41 arch/i386/pci/pci.h            Linus Torvalds     2005-04-16   99  extern int (*pcibios_enable_irq)(struct pci_dev *dev);
-87bec66b969152 arch/i386/pci/pci.h            David Shaohua Li   2005-07-27  100  extern void (*pcibios_disable_irq)(struct pci_dev *dev);
-928cf8c6276334 arch/i386/pci/pci.h            Andi Kleen         2005-12-12  101  
-6c777e8799a93e arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2016-02-17  102  extern bool mp_should_keep_irq(struct device *dev);
-6c777e8799a93e arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2016-02-17  103  
-b6ce068a1285a2 arch/x86/pci/pci.h             Matthew Wilcox     2008-02-10  104  struct pci_raw_ops {
-b6ce068a1285a2 arch/x86/pci/pci.h             Matthew Wilcox     2008-02-10  105  	int (*read)(unsigned int domain, unsigned int bus, unsigned int devfn,
-b6ce068a1285a2 arch/x86/pci/pci.h             Matthew Wilcox     2008-02-10  106  						int reg, int len, u32 *val);
-b6ce068a1285a2 arch/x86/pci/pci.h             Matthew Wilcox     2008-02-10  107  	int (*write)(unsigned int domain, unsigned int bus, unsigned int devfn,
-b6ce068a1285a2 arch/x86/pci/pci.h             Matthew Wilcox     2008-02-10  108  						int reg, int len, u32 val);
-b6ce068a1285a2 arch/x86/pci/pci.h             Matthew Wilcox     2008-02-10  109  };
-b6ce068a1285a2 arch/x86/pci/pci.h             Matthew Wilcox     2008-02-10  110  
-72da0b07b1b497 arch/x86/include/asm/pci_x86.h Jan Beulich        2011-09-15  111  extern const struct pci_raw_ops *raw_pci_ops;
-72da0b07b1b497 arch/x86/include/asm/pci_x86.h Jan Beulich        2011-09-15  112  extern const struct pci_raw_ops *raw_pci_ext_ops;
-b6ce068a1285a2 arch/x86/pci/pci.h             Matthew Wilcox     2008-02-10  113  
-c0fa40784cce9c arch/x86/include/asm/pci_x86.h Jiang Liu          2012-06-22  114  extern const struct pci_raw_ops pci_mmcfg;
-72da0b07b1b497 arch/x86/include/asm/pci_x86.h Jan Beulich        2011-09-15  115  extern const struct pci_raw_ops pci_direct_conf1;
-14d7ca5c575853 arch/x86/pci/pci.h             H. Peter Anvin     2008-11-11  116  extern bool port_cf9_safe;
-928cf8c6276334 arch/i386/pci/pci.h            Andi Kleen         2005-12-12  117  
-8dd779b19ce597 arch/x86/pci/pci.h             Robert Richter     2008-07-02  118  /* arch_initcall level */
-445d3595ab290b arch/x86/include/asm/pci_x86.h Thomas Gleixner    2020-08-26  119  #ifdef CONFIG_PCI_DIRECT
-5e544d618f0fb2 arch/i386/pci/pci.h            Andi Kleen         2006-09-26  120  extern int pci_direct_probe(void);
-5e544d618f0fb2 arch/i386/pci/pci.h            Andi Kleen         2006-09-26  121  extern void pci_direct_init(int type);
-445d3595ab290b arch/x86/include/asm/pci_x86.h Thomas Gleixner    2020-08-26  122  #else
-445d3595ab290b arch/x86/include/asm/pci_x86.h Thomas Gleixner    2020-08-26  123  static inline int pci_direct_probe(void) { return -1; }
-445d3595ab290b arch/x86/include/asm/pci_x86.h Thomas Gleixner    2020-08-26  124  static inline  void pci_direct_init(int type) { }
-445d3595ab290b arch/x86/include/asm/pci_x86.h Thomas Gleixner    2020-08-26  125  #endif
-445d3595ab290b arch/x86/include/asm/pci_x86.h Thomas Gleixner    2020-08-26  126  
-445d3595ab290b arch/x86/include/asm/pci_x86.h Thomas Gleixner    2020-08-26  127  #ifdef CONFIG_PCI_BIOS
-92c05fc1a32e5c arch/i386/pci/pci.h            Andi Kleen         2006-03-23  128  extern void pci_pcbios_init(void);
-445d3595ab290b arch/x86/include/asm/pci_x86.h Thomas Gleixner    2020-08-26  129  #else
-445d3595ab290b arch/x86/include/asm/pci_x86.h Thomas Gleixner    2020-08-26  130  static inline void pci_pcbios_init(void) { }
-445d3595ab290b arch/x86/include/asm/pci_x86.h Thomas Gleixner    2020-08-26  131  #endif
-445d3595ab290b arch/x86/include/asm/pci_x86.h Thomas Gleixner    2020-08-26  132  
-8dd779b19ce597 arch/x86/pci/pci.h             Robert Richter     2008-07-02 @133  extern void __init dmi_check_pciprobe(void);
-8dd779b19ce597 arch/x86/pci/pci.h             Robert Richter     2008-07-02 @134  extern void __init dmi_check_skip_isa_align(void);
-8dd779b19ce597 arch/x86/pci/pci.h             Robert Richter     2008-07-02  135  
-8dd779b19ce597 arch/x86/pci/pci.h             Robert Richter     2008-07-02  136  /* some common used subsys_initcalls */
-5d32a66541c468 arch/x86/include/asm/pci_x86.h Sinan Kaya         2018-12-19  137  #ifdef CONFIG_PCI
-8dd779b19ce597 arch/x86/pci/pci.h             Robert Richter     2008-07-02  138  extern int __init pci_acpi_init(void);
-5d32a66541c468 arch/x86/include/asm/pci_x86.h Sinan Kaya         2018-12-19  139  #else
-5d32a66541c468 arch/x86/include/asm/pci_x86.h Sinan Kaya         2018-12-19 @140  static inline int  __init pci_acpi_init(void)
-5d32a66541c468 arch/x86/include/asm/pci_x86.h Sinan Kaya         2018-12-19  141  {
-5d32a66541c468 arch/x86/include/asm/pci_x86.h Sinan Kaya         2018-12-19  142  	return -EINVAL;
-5d32a66541c468 arch/x86/include/asm/pci_x86.h Sinan Kaya         2018-12-19  143  }
-5d32a66541c468 arch/x86/include/asm/pci_x86.h Sinan Kaya         2018-12-19  144  #endif
-ab3b37937e8f4f arch/x86/include/asm/pci_x86.h Thomas Gleixner    2009-08-29 @145  extern void __init pcibios_irq_init(void);
-8dd779b19ce597 arch/x86/pci/pci.h             Robert Richter     2008-07-02 @146  extern int __init pcibios_init(void);
-b72d0db9dd41da arch/x86/include/asm/pci_x86.h Thomas Gleixner    2009-08-29  147  extern int pci_legacy_init(void);
-9325a28ce2fa7c arch/x86/include/asm/pci_x86.h Thomas Gleixner    2009-08-29  148  extern void pcibios_fixup_irqs(void);
-5e544d618f0fb2 arch/i386/pci/pci.h            Andi Kleen         2006-09-26  149  
-b78673944b22b6 arch/i386/pci/pci.h            Olivier Galibert   2007-02-13  150  /* pci-mmconfig.c */
-b78673944b22b6 arch/i386/pci/pci.h            Olivier Galibert   2007-02-13  151  
-56ddf4d3cf04e8 arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2009-11-13  152  /* "PCI MMCONFIG %04x [bus %02x-%02x]" */
-56ddf4d3cf04e8 arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2009-11-13  153  #define PCI_MMCFG_RESOURCE_NAME_LEN (22 + 4 + 2 + 2)
-56ddf4d3cf04e8 arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2009-11-13  154  
-d215a9c8b46e55 arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2009-11-13  155  struct pci_mmcfg_region {
-ff097ddd4aeac7 arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2009-11-13  156  	struct list_head list;
-56ddf4d3cf04e8 arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2009-11-13  157  	struct resource res;
-d215a9c8b46e55 arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2009-11-13  158  	u64 address;
-3f0f5503926f74 arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2009-11-13  159  	char __iomem *virt;
-d7e6b66fe87c9f arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2009-11-13  160  	u16 segment;
-d7e6b66fe87c9f arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2009-11-13  161  	u8 start_bus;
-d7e6b66fe87c9f arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2009-11-13  162  	u8 end_bus;
-56ddf4d3cf04e8 arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2009-11-13  163  	char name[PCI_MMCFG_RESOURCE_NAME_LEN];
-d215a9c8b46e55 arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2009-11-13  164  };
-d215a9c8b46e55 arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2009-11-13  165  
-429d512e532ec9 arch/i386/pci/pci.h            OGAWA Hirofumi     2007-02-13 @166  extern int __init pci_mmcfg_arch_init(void);
-0b64ad7123eb01 arch/x86/pci/pci.h             Yinghai Lu         2008-02-15 @167  extern void __init pci_mmcfg_arch_free(void);
-a18e3690a52790 arch/x86/include/asm/pci_x86.h Greg Kroah-Hartman 2012-12-21  168  extern int pci_mmcfg_arch_map(struct pci_mmcfg_region *cfg);
-9cf0105da5a315 arch/x86/include/asm/pci_x86.h Jiang Liu          2012-06-22  169  extern void pci_mmcfg_arch_unmap(struct pci_mmcfg_region *cfg);
-a18e3690a52790 arch/x86/include/asm/pci_x86.h Greg Kroah-Hartman 2012-12-21  170  extern int pci_mmconfig_insert(struct device *dev, u16 seg, u8 start, u8 end,
-a18e3690a52790 arch/x86/include/asm/pci_x86.h Greg Kroah-Hartman 2012-12-21  171  			       phys_addr_t addr);
-9c95111b330d2d arch/x86/include/asm/pci_x86.h Jiang Liu          2012-06-22  172  extern int pci_mmconfig_delete(u16 seg, u8 start, u8 end);
-f6e1d8cc38b377 arch/x86/include/asm/pci_x86.h Bjorn Helgaas      2009-11-13  173  extern struct pci_mmcfg_region *pci_mmconfig_lookup(int segment, int bus);
-6fa4a94e150be2 arch/x86/include/asm/pci_x86.h Otavio Pontes      2018-03-07 @174  extern struct pci_mmcfg_region *__init pci_mmconfig_add(int segment, int start,
-6fa4a94e150be2 arch/x86/include/asm/pci_x86.h Otavio Pontes      2018-03-07  175  							int end, u64 addr);
-3320ad994afb2c arch/i386/pci/pci.h            dean gaudet        2007-08-10  176  
+On 18/02/2022 13:53, Daniel Lezcano wrote:
+> This series provides a thermal library providing the basic callback oriented
+> netlink communication and events with the thermal framework, a temperature
+> capture tool and a thermal monitoring skeleton using the thermal library.
+> 
+> Changelog:
+>   - V1:
+>      - Took into account RFC comments (unsubscribe, error enum, thermal daemon
+>        renamed to thermal-engine)
+> 
+> Daniel Lezcano (4):
+>    tools/lib/thermal: Add a thermal library
+>    tools/thermal: Add util library
+>    tools/thermal: A temperature capture tool
+>    tools/thermal: Add thermal daemon skeleton
+> 
+>   tools/Makefile                                |  36 +-
+>   tools/lib/thermal/.gitignore                  |   2 +
+>   tools/lib/thermal/Build                       |   5 +
+>   tools/lib/thermal/Makefile                    | 165 ++++++++
+>   tools/lib/thermal/commands.c                  | 351 ++++++++++++++++
+>   tools/lib/thermal/events.c                    | 164 ++++++++
+>   tools/lib/thermal/include/thermal.h           | 141 +++++++
+>   tools/lib/thermal/libthermal.map              |  25 ++
+>   tools/lib/thermal/libthermal.pc.template      |  12 +
+>   tools/lib/thermal/sampling.c                  |  75 ++++
+>   tools/lib/thermal/thermal.c                   | 126 ++++++
+>   tools/lib/thermal/thermal_nl.c                | 215 ++++++++++
+>   tools/lib/thermal/thermal_nl.h                |  46 ++
+>   tools/thermal/lib/Build                       |   3 +
+>   tools/thermal/lib/Makefile                    | 158 +++++++
+>   .../thermal/lib/libthermal_tools.pc.template  |  12 +
+>   tools/thermal/lib/log.c                       |  77 ++++
+>   tools/thermal/lib/log.h                       |  31 ++
+>   tools/thermal/lib/mainloop.c                  | 135 ++++++
+>   tools/thermal/lib/mainloop.h                  |  14 +
+>   tools/thermal/lib/thermal-tools.h             |  10 +
+>   tools/thermal/lib/uptimeofday.c               |  40 ++
+>   tools/thermal/lib/uptimeofday.h               |  12 +
+>   tools/thermal/thermal-engine/Build            |   2 +
+>   tools/thermal/thermal-engine/Makefile         |  27 ++
+>   tools/thermal/thermal-engine/thermal-engine.c | 287 +++++++++++++
+>   tools/thermal/thermometer/Build               |   2 +
+>   tools/thermal/thermometer/Makefile            |  23 +
+>   tools/thermal/thermometer/thermometer.c       | 393 ++++++++++++++++++
+>   tools/thermal/thermometer/thermometer.conf    |   5 +
+>   30 files changed, 2591 insertions(+), 3 deletions(-)
+>   create mode 100644 tools/lib/thermal/.gitignore
+>   create mode 100644 tools/lib/thermal/Build
+>   create mode 100644 tools/lib/thermal/Makefile
+>   create mode 100644 tools/lib/thermal/commands.c
+>   create mode 100644 tools/lib/thermal/events.c
+>   create mode 100644 tools/lib/thermal/include/thermal.h
+>   create mode 100644 tools/lib/thermal/libthermal.map
+>   create mode 100644 tools/lib/thermal/libthermal.pc.template
+>   create mode 100644 tools/lib/thermal/sampling.c
+>   create mode 100644 tools/lib/thermal/thermal.c
+>   create mode 100644 tools/lib/thermal/thermal_nl.c
+>   create mode 100644 tools/lib/thermal/thermal_nl.h
+>   create mode 100644 tools/thermal/lib/Build
+>   create mode 100644 tools/thermal/lib/Makefile
+>   create mode 100644 tools/thermal/lib/libthermal_tools.pc.template
+>   create mode 100644 tools/thermal/lib/log.c
+>   create mode 100644 tools/thermal/lib/log.h
+>   create mode 100644 tools/thermal/lib/mainloop.c
+>   create mode 100644 tools/thermal/lib/mainloop.h
+>   create mode 100644 tools/thermal/lib/thermal-tools.h
+>   create mode 100644 tools/thermal/lib/uptimeofday.c
+>   create mode 100644 tools/thermal/lib/uptimeofday.h
+>   create mode 100644 tools/thermal/thermal-engine/Build
+>   create mode 100644 tools/thermal/thermal-engine/Makefile
+>   create mode 100644 tools/thermal/thermal-engine/thermal-engine.c
+>   create mode 100644 tools/thermal/thermometer/Build
+>   create mode 100644 tools/thermal/thermometer/Makefile
+>   create mode 100644 tools/thermal/thermometer/thermometer.c
+>   create mode 100644 tools/thermal/thermometer/thermometer.conf
+> 
 
-:::::: The code at line 97 was first introduced by commit
-:::::: d19f61f098ae9315b76a97962007f687683916d4 x86/PCI: Convert pci_config_lock to raw_spinlock
 
-:::::: TO: Thomas Gleixner <tglx@linutronix.de>
-:::::: CC: Jesse Barnes <jbarnes@virtuousgeek.org>
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
