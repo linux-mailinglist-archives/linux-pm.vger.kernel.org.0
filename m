@@ -2,77 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D9894C3726
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Feb 2022 21:54:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AEF24C3739
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Feb 2022 21:54:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234500AbiBXUzD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Feb 2022 15:55:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36170 "EHLO
+        id S234504AbiBXUzR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Feb 2022 15:55:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234473AbiBXUy4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Feb 2022 15:54:56 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECCAB1C945E
-        for <linux-pm@vger.kernel.org>; Thu, 24 Feb 2022 12:54:17 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id j2so4919336oie.7
-        for <linux-pm@vger.kernel.org>; Thu, 24 Feb 2022 12:54:17 -0800 (PST)
+        with ESMTP id S234465AbiBXUzC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Feb 2022 15:55:02 -0500
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793F91D3074
+        for <linux-pm@vger.kernel.org>; Thu, 24 Feb 2022 12:54:20 -0800 (PST)
+Received: by mail-oi1-x22f.google.com with SMTP id z7so4935383oid.4
+        for <linux-pm@vger.kernel.org>; Thu, 24 Feb 2022 12:54:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=5yuNRPfZ4wSXNWFo4eJjPd8/1lZiboAzYQHF2bGrwvk=;
-        b=v1lToXbj6oZ1yX9wpwPl5hYdstrCcyekZCPmIEOlGppkubYZ6pJNuzpaFkf7bGP4Se
-         BOJbrNy3BWI+s2+QR/gmTqGk+eDdELRHlq4z8WMk5EaVKMpNGONSux38H5N0dzs6z/2u
-         rxdQ5G5zH9RCdv4USnV5CdtUZjD/A2AKGK3yGpzXb0bNEaugvhgupX9mV6O8pCkxc2IV
-         YOarLdNp3J0mvPG+8K3uN7xNAH+/lFMH/CZMDBJaIvaiFExN0KH2Gf9dQfCLA8i1pP3E
-         BoLb6j5UA/QQea21t7zIeIXiYLYu6S3CLhgHqm+uobeQgHBsziL+Nhhy/bkTPqhF1zfz
-         KS6w==
+        bh=H0KXK0xF1IgcUQaOSKfdu0f84Q+tWkS8umD1NOtlRp4=;
+        b=ddXzKuAoSo7hYp6PbMu80shGfrrtJyY6W07ehq42p+jMRWupqRcwRHnC5V9du1kW+D
+         k3XhW2ZP0661BNEcJdk5GjCqk2w+PFqOdOaJBgEH6L4U9vXuUTi9l7Shq5bbHimxeNZG
+         +fNFGCV1E9zErDNPypTj0FVfJTRUACpyYMf0lttPX4oGIG/KS4PpuYSZ/0tsIaRd07+k
+         dup5ojfrT7wNpDGq6lD/XbKFVVD5QDbpzyepYcscK//l+386ivho0t/x9Qncgqh1Zc2W
+         zba9ly54kiDj4FvJ3c0E+uMbem16AtQ+NaOPMZuHTUUgkLhWxebVK4BSHdCiuIKLCxxi
+         Karg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=5yuNRPfZ4wSXNWFo4eJjPd8/1lZiboAzYQHF2bGrwvk=;
-        b=euLpv8Vu6MZLsVjoeyoPsROt6pGDkrhrwZxtuWMdr/690JZ2hQlyi1LsCLw1QcMHF0
-         E9I9qtDb6dWfWEJGx4bzxuxwECTwL98CWtZm01iErplDy4sQD48imhyESAValtfY96XV
-         6y76t/DgdqbQVQGCQdh/4l6KDdqnYW9AhW16vrFjJ4PHX3B9Ql5XkjuRM7KyHeg+TJYU
-         RbdeUtvtbKltxwbbxXqhiJx4W0KjZpC4ks76Uj0bHWlsxgi55+IwKLy+UsJq805OkafI
-         mFz9r9MKsAqU2gLSC3y1wY6CLsHhIoH06qctfT3mXEPNCHsWaBjUUT5BKGUQTY2VkjsQ
-         /bQw==
-X-Gm-Message-State: AOAM5310N53LNY8mGjLhXmwBX6s/blVrRdzJkfZeHOw3IWYHJzI4lG7p
-        jcSAVjuoBzYy+glWndC6iAatEQ==
-X-Google-Smtp-Source: ABdhPJxxjHsZdlkR1kwbPa4Qzyy0vNpFU3AB0yGjO2kGTUXG4HI3QT47u3CtJHIp3y7C0I3N9YK+gQ==
-X-Received: by 2002:a05:6808:1718:b0:2d7:416e:d9d9 with SMTP id bc24-20020a056808171800b002d7416ed9d9mr1652260oib.76.1645736057319;
-        Thu, 24 Feb 2022 12:54:17 -0800 (PST)
+        bh=H0KXK0xF1IgcUQaOSKfdu0f84Q+tWkS8umD1NOtlRp4=;
+        b=hF79r406XGCfMe/WSpawDaVMcSnNwBPvjFsZSNjB+MUoA1nbARWR+AeiRulQRD2AVs
+         w9VLYK3BhlZsPUIbDVNpxnxiDLk1prZ4GBerfPvXrbd6sHjpIfDU9z6F20DbYHjGXAJI
+         PTHnD2pl+k0Uhf4b5/ye+oM1Auxe0/IegEvEymuboAYoOojOO1s/yZ3SfgfZ5/DJRPSE
+         ZjbwlIeGgB6tHDz+yzV+QR5Gn8wtxXUEjbaU/oOVh0v0e5ZDb6ioWhT0Ao4tDgmMpEeN
+         jCbEAERzH1uM94sG+QZsvIWWiJG0XnQRaPbC+/n2JSm9mcJAqzrManpupXNPBz35kTyI
+         1rHA==
+X-Gm-Message-State: AOAM531+V/6qV6ZwCO0oT3xAqUei00meuuAzewlUS10iuSoRzDeIqyF3
+        4kem/E+9BheaVPZkDwFDISwieQ==
+X-Google-Smtp-Source: ABdhPJy1P3XRtwni+V/oOQ7cmDC7Gf0wptkZqIGd/Y7bzGfkWgQbUgVxIwf54i4GELuF7xMQy5m4yA==
+X-Received: by 2002:a05:6870:ab86:b0:d6:e2a7:ce6b with SMTP id gs6-20020a056870ab8600b000d6e2a7ce6bmr189895oab.135.1645736059904;
+        Thu, 24 Feb 2022 12:54:19 -0800 (PST)
 Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id c8-20020a4ad788000000b0031ce69b1640sm191259oou.10.2022.02.24.12.54.16
+        by smtp.gmail.com with ESMTPSA id c8-20020a4ad788000000b0031ce69b1640sm191259oou.10.2022.02.24.12.54.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 12:54:16 -0800 (PST)
+        Thu, 24 Feb 2022 12:54:19 -0800 (PST)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
-Cc:     Stephan Gerhold <stephan@gerhold.net>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        linux-usb@vger.kernel.org,
-        Bartosz Dudziak <bartosz.dudziak@snejp.pl>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Stephen Boyd <sboyd@codeaurora.org>,
-        linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        linux-remoteproc@vger.kernel.org, phone-devel@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>
-Subject: Re: (subset) [PATCH v2 00/10] Initial MSM8953 & Fairphone 3 support
-Date:   Thu, 24 Feb 2022 14:54:03 -0600
-Message-Id: <164573604162.1471031.13389413392112165052.b4-ty@linaro.org>
+To:     evgreen@google.com, Odelu Kukatla <okukatla@codeaurora.org>,
+        linux-kernel@vger.kernel.org, georgi.djakov@linaro.org,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org
+Cc:     linux-arm-msm-owner@vger.kernel.org, elder@linaro.org,
+        seansw@qti.qualcomm.com, sibis@codeaurora.org,
+        linux-pm@vger.kernel.org, saravanak@google.com, sboyd@kernel.org,
+        mdtipton@codeaurora.org
+Subject: Re: (subset) [v8 3/3] arm64: dts: qcom: sc7280: Add EPSS L3 interconnect provider
+Date:   Thu, 24 Feb 2022 14:54:05 -0600
+Message-Id: <164573604161.1471031.13646279401339635883.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220220201909.445468-1-luca@z3ntu.xyz>
-References: <20220220201909.445468-1-luca@z3ntu.xyz>
+In-Reply-To: <1634812857-10676-4-git-send-email-okukatla@codeaurora.org>
+References: <1634812857-10676-1-git-send-email-okukatla@codeaurora.org> <1634812857-10676-4-git-send-email-okukatla@codeaurora.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -86,34 +75,16 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 20 Feb 2022 21:18:53 +0100, Luca Weiss wrote:
-> This series adds initial support for MSM8953 (and SDM632 which is based
-> on MSM8953) and the Fairphone 3 smartphone.
+On Thu, 21 Oct 2021 16:10:57 +0530, Odelu Kukatla wrote:
+> Add Epoch Subsystem (EPSS) L3 interconnect provider node on SC7280
+> SoCs.
 > 
-> Only relatively basic functionality is supported like storage, volume
-> keys and USB.
 > 
-> There is currently close-to-mainline support for other components for
-> this SoC including GPU, WiFi and audio, this series adds only basic
-> support so that the other components can start getting upstreamed
-> easier.
-> 
-> [...]
 
 Applied, thanks!
 
-[04/10] dt-bindings: arm: cpus: Add Kryo 250 CPUs
-        commit: 08b25f7d99e15f2aa5f4cce3f13ad0c67a4c1e34
-[06/10] arm64: dts: qcom: Add MSM8953 device tree
-        commit: 9fb08c8019234a0759aab66914f01bc0971e4eed
-[07/10] arm64: dts: qcom: Add PM8953 PMIC
-        commit: 06ea71e42975cdd43cc1e2dacd3e56c8693ac733
-[08/10] arm64: dts: qcom: Add SDM632 device tree
-        commit: 24af02271ca7cf095186963002d1d98349d9e5e5
-[09/10] dt-bindings: arm: qcom: Document sdm632 and fairphone,fp3 board
-        commit: cb898d5e59b41a268dcf4dbef31d651c393dfbae
-[10/10] arm64: dts: qcom: sdm632: Add device tree for Fairphone 3
-        commit: 308b26cddb04afc7776de1cbbe07172eeccc7c98
+[3/3] arm64: dts: qcom: sc7280: Add EPSS L3 interconnect provider
+      commit: 8b93fbd95ed46bb0d57e63c65cef155a09a75bb9
 
 Best regards,
 -- 
