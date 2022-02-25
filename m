@@ -2,51 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 236AF4C4E48
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Feb 2022 20:05:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 855CC4C4E56
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Feb 2022 20:10:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234126AbiBYTGF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Feb 2022 14:06:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51280 "EHLO
+        id S234229AbiBYTLM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Feb 2022 14:11:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233574AbiBYTGA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Feb 2022 14:06:00 -0500
+        with ESMTP id S234172AbiBYTLM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Feb 2022 14:11:12 -0500
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991C81BAF23;
-        Fri, 25 Feb 2022 11:05:27 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5423920B150
+        for <linux-pm@vger.kernel.org>; Fri, 25 Feb 2022 11:10:39 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 5AC901F46678
+        with ESMTPSA id 19AE21F45AAC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1645815926;
-        bh=j7Rs/2nX9khQjgsPMQj22DMvM8jq4/YkmhOJrRks6X8=;
+        s=mail; t=1645816238;
+        bh=SM4p5TyrTcZUqLLFDjVg8qMd1P0AviM10LGb3OQXdRE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dn6fmsTljjuk1WXUGzVYnT7CkOMRl2hSZQrzzQTUfnNPGHA/iy3CZuO70o4E5vk8i
-         exoic4KSIxTQYFAShvuFpYJW6/3zELrjV4x+gJ0Y29SeZ9ya4yix2OjtGO3wFOjMhS
-         +ysVh0BKspJeNB5TbWhrcJERPFk4sbq9vlbo8Kc5OultRq+7evKGT9jKiD9QDkG8HA
-         RtbiAQtp1xsllk6HZd2+3BZnjWn/7DOAvxE/wuBLFQlKO2hytTvLzV179/J529fuR6
-         I6tFl9kt4OjHuNIIkf+BC+FWxDQDYD44xbHPjRWaoI9fuMfegB+CaNrgWkXK0FewYY
-         SpgfhCCaraBpQ==
+        b=nBxyxNQTelNKKt/vOG8iKwWTSGMjou9ldQGBJ0cz4+OTOA72VuTrVhs+hf25BEBrv
+         LV73R/w322QjxuKawjX8BDeaIDyFxmZjy8NEKbMPKWDfyewjIbuRhnTGudoTbtKxGv
+         Zghvz8MY89PeMiBIpsBaEOZQz2GWT7DZM6qaB3Ub7zdY2GhfnvXODTxYKEs9Hhtd+V
+         cmMjDEncAHO/ntrkFpz2yapVzbrVJCOx0JmNM0n42ZMHeiyKMQ8srkOTZuIlAX9N0V
+         LQxcVXA7oTauIpvJFRz66hTbkU+ab4qjklsaqiCf799Z7ZGxwegrwbhaw1qqTG4Wq8
+         9JHtGyL07h1hA==
 Received: by mercury (Postfix, from userid 1000)
-        id 1B36E106049B; Fri, 25 Feb 2022 20:05:22 +0100 (CET)
-Date:   Fri, 25 Feb 2022 20:05:22 +0100
+        id C81D0106049B; Fri, 25 Feb 2022 20:10:35 +0100 (CET)
+Date:   Fri, 25 Feb 2022 20:10:35 +0100
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Carl Edquist <edquist@cs.wisc.edu>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thomas Renninger <trenn@suse.de>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: /proc/acpi/battery gone again, breaks wmpower
-Message-ID: <20220225190522.cbqoxpsucvniep55@mercury.elektranox.org>
-References: <0718fe87-230f-b293-b998-b83f3c133367@cs.wisc.edu>
- <CAJZ5v0j=c-ctwqmRfvVtep4DtOf=6Gf=zs+B19aPDpQ0447oRw@mail.gmail.com>
- <CAJZ5v0h5D=1UWqmC=foAK3-p1LLV=KG8dRM-kPYxJc7GEKdZbQ@mail.gmail.com>
- <448277be-d848-d4dd-2d92-1b4e6ea69243@cs.wisc.edu>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-pm@vger.kernel.org,
+        Bastien Nocera <hadess@hadess.net>
+Subject: Re: [PATCH 2/2] power: supply: bq24190_charger: Delay applying
+ charge_type changes when OTG 5V Vbus boost is on
+Message-ID: <20220225191035.awm56brexuyaacwk@mercury.elektranox.org>
+References: <20220212164817.204323-1-hdegoede@redhat.com>
+ <20220212164817.204323-2-hdegoede@redhat.com>
+ <YhkIF7vrwk3sVm5y@smile.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kfzai5ypy2tmllxf"
+        protocol="application/pgp-signature"; boundary="xttxxag3aqamgpj6"
 Content-Disposition: inline
-In-Reply-To: <448277be-d848-d4dd-2d92-1b4e6ea69243@cs.wisc.edu>
+In-Reply-To: <YhkIF7vrwk3sVm5y@smile.fi.intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
@@ -58,185 +56,198 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---kfzai5ypy2tmllxf
-Content-Type: text/plain; charset=iso-8859-1
+--xttxxag3aqamgpj6
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-(I will leave the ACPI related questions for Rafael, but
-can try to help with some of the questions)
-
-On Thu, Feb 24, 2022 at 10:53:32AM -0600, Carl Edquist wrote:
-> My thoughts about this though -
+On Fri, Feb 25, 2022 at 06:47:19PM +0200, Andy Shevchenko wrote:
+> On Sat, Feb 12, 2022 at 05:48:17PM +0100, Hans de Goede wrote:
+> > Recently userspace has started switching power_supply class devices with
+> > a charge_type psy-property between fast and trickle charge mode, see:
+> > https://gitlab.freedesktop.org/hadess/power-profiles-daemon/-/issues/85
+> >=20
+> > Before this patch bq24190_charger_set_charge_type() would unconditional=
+ly
+> > write charging or none to the BQ24190_REG_POC_CHG_CONFIG bits, replacing
+> > the otg setting of those bits when the OTG 5V Vbus boost converter was =
+on,
+> > turning the 5V Vbus off, removing the power from any attached periphera=
+ls.
+> >=20
+> > This fixes this by keeping track of otg_vbus_enabled and the requested
+> > charger_type settings and when otg_vbus_enabled is true, delay applying
+> > the charger_type until the 5V boost converter is turned off.
 >=20
-> I did not really expect to get this interface back after I read the commit
-> message for its removal. I admire your fidelity to the linux user promise,
-> but I don't want to create trouble for you guys either.
->=20
-> I am happy to put in the legwork to get wmpower working using whatever the
-> blessed replacement is for the acpi procfs power stuff.  Maybe you can he=
-lp
-> shed some light on the sysfs interface for me.
+> Both of them looks good to me, FWIW,
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-FWIW the power-supply sysfs API exists since quite some time now
-(4a11b59d8283 from 2007), so it's not particularly new ;)
-
-> I started exploring a bit under /sys/class/power_supply, looking for
-> replacements for the "present rate" and "last full/remaining capacity" it=
-ems
-> under /proc/acpi/battery.  Curiously I have two lenovo ThinkPads, a T510 =
-and
-> a T540p, and one of them has current_now & charge_full/_now, and the other
-> has power_now & energy_full/_now.  Are these the only two possibilities f=
-or
-> rate & capacity?  Or are there other potentially others?
-
-That is because the power-supply subsystem passes through
-the data provided by the hardware without unit conversion.
-So one of the battery fuel gauges in your laptops provides
-its numbers in Wh and one provides it in Ah. In (non ACPI)
-embedded systems you might also get neither of them.
-
-The units for the sysfs files are fixed, so a system reporting
-Ah provides current_now/charge_now files and Wh based systems
-provide power_now/energy_now files.
-
-> I guess the convenient thing about the /proc/acpi/battery interfaces is t=
-hat
-> it automatically presents the right info for rate & capacity.
->=20
-> (I felt like I was losing my mind for a bit when I saw the units presented
-> as "mAh" in one after I was sure I had read "mWh" before... But reading y=
-our
-> patch helped give me a better clue about what was going on there.)
-
-The files in /sys/class/power_supply always report almost all values
-in =B5 units (i.e. =B5A, =B5V, =B5Ah, =B5W, ...), one value per file and wi=
-th
-fixed units. Documentation can be found here:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Doc=
-umentation/ABI/testing/sysfs-class-power
-
-> I'm also curious, is the "BAT[0-*]" pattern for battery names consistent,=
- or
-> are there other possibilities?  I had suspected "AC" was the standard
-> power_supply name for the main AC power, but that turned out not to be the
-> case on another (HP) laptop that I took a look at.  Which leads me to
-> suspect that "BATX" is not necessarily standard either.
-
-The subsystem does not have any name constraints. But you can find
-the device type via the 'type' file and non-system level devices
-(e.g. battery of a game controller) set the 'scope' property to
-"Device".
-
-> I'm also thinking to enumerate batteries & AC power supplies via
-> /sys/bus/acpi/drivers/{ac,battery} rather than /sys/class/power_supply, as
-> surprisingly even a USB-C stick can show up under power_supply, and it's =
-not
-> obvious if there's a clean way to sort out what's what then.
-
-USB-C is kind of tricky with the option to reverse power-flow in
-many cases (e.g. laptop can charge a power bank or power bank can
-charge a laptop using the same connector). In general you definetly
-can get non-ACPI power-supply devices, e.g. batteries from wireless
-keyboards.
-
-Also some devices have broken ACPI battery handling, so the ACPI
-driver is blacklisted and native hardware drivers are used
-instead. In that case you will not find anything power related
-in /sys/bus/acpi.
+Thanks, queued.
 
 -- Sebastian
 
-> I say all this of course as a laptop end-user, and even with the kernel
-> source docs in front of me I seem to be feeling my way around in the dark=
-=2E I
-> don't know much about the linux acpi internals, and I did not learn about
-> the acpi procfs power interface being deprecated until after wmpower stop=
-ped
-> working for me this month :)
+> > Cc: Bastien Nocera <hadess@hadess.net>
+> > Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> > ---
+> >  drivers/power/supply/bq24190_charger.c | 41 +++++++++++++++++++-------
+> >  1 file changed, 30 insertions(+), 11 deletions(-)
+> >=20
+> > diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/sup=
+ply/bq24190_charger.c
+> > index dcbfd97a55be..aa1a589eb9f2 100644
+> > --- a/drivers/power/supply/bq24190_charger.c
+> > +++ b/drivers/power/supply/bq24190_charger.c
+> > @@ -163,6 +163,8 @@ struct bq24190_dev_info {
+> >  	char				model_name[I2C_NAME_SIZE];
+> >  	bool				initialized;
+> >  	bool				irq_event;
+> > +	bool				otg_vbus_enabled;
+> > +	int				charge_type;
+> >  	u16				sys_min;
+> >  	u16				iprechg;
+> >  	u16				iterm;
+> > @@ -176,6 +178,9 @@ struct bq24190_dev_info {
+> >  	u8				watchdog;
+> >  };
+> > =20
+> > +static int bq24190_charger_set_charge_type(struct bq24190_dev_info *bd=
+i,
+> > +					   const union power_supply_propval *val);
+> > +
+> >  static const unsigned int bq24190_usb_extcon_cable[] =3D {
+> >  	EXTCON_USB,
+> >  	EXTCON_NONE,
+> > @@ -502,8 +507,9 @@ static ssize_t bq24190_sysfs_store(struct device *d=
+ev,
+> >  }
+> >  #endif
+> > =20
+> > -static int bq24190_set_charge_mode(struct bq24190_dev_info *bdi, u8 va=
+l)
+> > +static int bq24190_set_otg_vbus(struct bq24190_dev_info *bdi, bool ena=
+ble)
+> >  {
+> > +	union power_supply_propval val =3D { .intval =3D bdi->charge_type };
+> >  	int ret;
+> > =20
+> >  	ret =3D pm_runtime_get_sync(bdi->dev);
+> > @@ -513,9 +519,14 @@ static int bq24190_set_charge_mode(struct bq24190_=
+dev_info *bdi, u8 val)
+> >  		return ret;
+> >  	}
+> > =20
+> > -	ret =3D bq24190_write_mask(bdi, BQ24190_REG_POC,
+> > -				 BQ24190_REG_POC_CHG_CONFIG_MASK,
+> > -				 BQ24190_REG_POC_CHG_CONFIG_SHIFT, val);
+> > +	bdi->otg_vbus_enabled =3D enable;
+> > +	if (enable)
+> > +		ret =3D bq24190_write_mask(bdi, BQ24190_REG_POC,
+> > +					 BQ24190_REG_POC_CHG_CONFIG_MASK,
+> > +					 BQ24190_REG_POC_CHG_CONFIG_SHIFT,
+> > +					 BQ24190_REG_POC_CHG_CONFIG_OTG);
+> > +	else
+> > +		ret =3D bq24190_charger_set_charge_type(bdi, &val);
+> > =20
+> >  	pm_runtime_mark_last_busy(bdi->dev);
+> >  	pm_runtime_put_autosuspend(bdi->dev);
+> > @@ -526,14 +537,12 @@ static int bq24190_set_charge_mode(struct bq24190=
+_dev_info *bdi, u8 val)
+> >  #ifdef CONFIG_REGULATOR
+> >  static int bq24190_vbus_enable(struct regulator_dev *dev)
+> >  {
+> > -	return bq24190_set_charge_mode(rdev_get_drvdata(dev),
+> > -				       BQ24190_REG_POC_CHG_CONFIG_OTG);
+> > +	return bq24190_set_otg_vbus(rdev_get_drvdata(dev), true);
+> >  }
+> > =20
+> >  static int bq24190_vbus_disable(struct regulator_dev *dev)
+> >  {
+> > -	return bq24190_set_charge_mode(rdev_get_drvdata(dev),
+> > -				       BQ24190_REG_POC_CHG_CONFIG_CHARGE);
+> > +	return bq24190_set_otg_vbus(rdev_get_drvdata(dev), false);
+> >  }
+> > =20
+> >  static int bq24190_vbus_is_enabled(struct regulator_dev *dev)
+> > @@ -559,8 +568,9 @@ static int bq24190_vbus_is_enabled(struct regulator=
+_dev *dev)
+> >  	if (ret)
+> >  		return ret;
+> > =20
+> > -	return (val =3D=3D BQ24190_REG_POC_CHG_CONFIG_OTG ||
+> > -		val =3D=3D BQ24190_REG_POC_CHG_CONFIG_OTG_ALT);
+> > +	bdi->otg_vbus_enabled =3D (val =3D=3D BQ24190_REG_POC_CHG_CONFIG_OTG =
+||
+> > +				 val =3D=3D BQ24190_REG_POC_CHG_CONFIG_OTG_ALT);
+> > +	return bdi->otg_vbus_enabled;
+> >  }
+> > =20
+> >  static const struct regulator_ops bq24190_vbus_ops =3D {
+> > @@ -807,6 +817,14 @@ static int bq24190_charger_set_charge_type(struct =
+bq24190_dev_info *bdi,
+> >  		return -EINVAL;
+> >  	}
+> > =20
+> > +	bdi->charge_type =3D val->intval;
+> > +	/*
+> > +	 * If the 5V Vbus boost regulator is enabled delay setting
+> > +	 * the charge-type until its gets disabled.
+> > +	 */
+> > +	if (bdi->otg_vbus_enabled)
+> > +		return 0;
+> > +
+> >  	if (chg_config) { /* Enabling the charger */
+> >  		ret =3D bq24190_write_mask(bdi, BQ24190_REG_CCC,
+> >  				BQ24190_REG_CCC_FORCE_20PCT_MASK,
+> > @@ -1788,6 +1806,7 @@ static int bq24190_probe(struct i2c_client *clien=
+t,
+> >  	bdi->dev =3D dev;
+> >  	strncpy(bdi->model_name, id->name, I2C_NAME_SIZE);
+> >  	mutex_init(&bdi->f_reg_lock);
+> > +	bdi->charge_type =3D POWER_SUPPLY_CHARGE_TYPE_FAST;
+> >  	bdi->f_reg =3D 0;
+> >  	bdi->ss_reg =3D BQ24190_REG_SS_VBUS_STAT_MASK; /* impossible state */
+> >  	INIT_DELAYED_WORK(&bdi->input_current_limit_work,
+> > @@ -1925,7 +1944,7 @@ static void bq24190_shutdown(struct i2c_client *c=
+lient)
+> >  	struct bq24190_dev_info *bdi =3D i2c_get_clientdata(client);
+> > =20
+> >  	/* Turn off 5V boost regulator on shutdown */
+> > -	bq24190_set_charge_mode(bdi, BQ24190_REG_POC_CHG_CONFIG_CHARGE);
+> > +	bq24190_set_otg_vbus(bdi, false);
+> >  }
+> > =20
+> >  static __maybe_unused int bq24190_runtime_suspend(struct device *dev)
+> > --=20
+> > 2.33.1
+> >=20
+> >=20
 >=20
-> It seems like part of the difficulty is that there is not much of a feedb=
-ack
-> loop for end users to realize that they are using deprecated procfs
-> interfaces, whether directly in custom battery scripts that scrape
-> /proc/acpi/battery, or unwittingly through other programs they happen to =
-use
-> (in this case wmpower).  There are no warnings until it's too late.
->=20
-> And even taking a look at what happened the first time it was removed [1],
-> it seems the conclusion was "some people are still using programs that re=
-ly
-> on the interface, so we'll add it back" ... But it's not obvious if any
-> effort was made to contact maintainers with a little nudge, to let them k=
-now
-> that it's (still) deprecated and what the replacement interface is.
->=20
-> Not sure what the general solution is there, but in any case I'll cheerfu=
-lly
-> fix up wmpower.
+> --=20
+> With Best Regards,
+> Andy Shevchenko
 >=20
 >=20
-> Thanks again and sorry for the long mail :)
->=20
-> Carl
->=20
->=20
-> [1] https://lkml.org/lkml/2014/4/21/152
 
->   CC [M]  drivers/acpi/ac.o
-> In file included from ./include/linux/kernel.h:29,
->                  from drivers/acpi/ac.c:11:
-> drivers/acpi/ac.c: In function 'acpi_ac_add_fs':
-> drivers/acpi/ac.c:182:29: error: expected ')' before 'PREFIX'
->   182 |         printk(KERN_WARNING PREFIX "Deprecated procfs I/F for AC =
-is loaded,"
->       |                             ^~~~~~
-> ./include/linux/printk.h:418:25: note: in definition of macro 'printk_ind=
-ex_wra'
->   418 |                 _p_func(_fmt, ##__VA_ARGS__);                    =
-       \
->       |                         ^~~~
-> drivers/acpi/ac.c:182:9: note: in expansion of macro 'printk'
->   182 |         printk(KERN_WARNING PREFIX "Deprecated procfs I/F for AC =
-is loaded,"
->       |         ^~~~~~
-> ./include/linux/printk.h:418:24: note: to match this '('
->   418 |                 _p_func(_fmt, ##__VA_ARGS__);                    =
-       \
->       |                        ^
-> ./include/linux/printk.h:446:26: note: in expansion of macro 'printk_inde=
-x_wrap'
->   446 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_A=
-RGS__)
->       |                          ^~~~~~~~~~~~~~~~~
-> drivers/acpi/ac.c:182:9: note: in expansion of macro 'printk'
->   182 |         printk(KERN_WARNING PREFIX "Deprecated procfs I/F for AC =
-is loaded,"
->       |         ^~~~~~
-
-
---kfzai5ypy2tmllxf
+--xttxxag3aqamgpj6
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmIZKGsACgkQ2O7X88g7
-+po3HhAAmVBYC/youNeitvXCCP8tqCGqGCIdEPd8C9aKazidv2xPqr9zNxysNhcP
-lfUJxZZ1RXmOYUNSFiCAzcZj6V0m4qa5uRg0p/kRPbOSTQezocyfWlSlWbSLjjpM
-311bOT+/NDjRemNKu1vQZoVoS1Rr+pgjIgy5JLkXxMifAtqbR9iC/edRSVc68GST
-cyPAecTrfqe3TildG198jxUczVuPxGux23wi8huM2cqVRYbn70QoeFBfW30r8tcA
-5y+I6BPlc4N40rwykllzO3XiVDkf46r3U/Ct7qSCzw8fAJqOBMGdjqtPml9+ZHkI
-VU+kfRzCxzKj84JqFXFdDtxw2f9xkZMlb9D8u44YKQFSBpnTPn6VKyAhRmFOzTLF
-YADhWg3M4qOn00gwzas7+kKk8JZBVGyCw1ESsQRaPQiVO2L6qG2IBCx/KcMmsqGJ
-XDO6l58orxY+llKaovS2uQEEr99mvM44EZu3EyoHahoPUDG8e5zj2OxNApA9ULdF
-aBLqQubp/FpNgzePX7OJ/rk3xeO1qigvUJNwoKbchHCIKomGS2wEnyPmvMKS+ERm
-qPpW4ZDp3qdok/Zd61kjXqWKJz6EoD0KILSE8hXqzRo8ZyyqRO7gg0EiTvup/VXG
-f8FS3k1lxl6D10qO6TMLAJv320+Rvb9P/44Fp2n8wNT4BKV+luk=
-=+ddv
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmIZKasACgkQ2O7X88g7
++prHMQ/+Jy+6OBjTt3VGAFN2AuekkFYfthwJBTBJG0H0N09wm7er+0zMt0+vgBJY
+SIk2y5fruwsy/eEOa/9vJC/7m5b1zQ2RERf5x7APQVA0219AFVY+RdAjapa3i6+p
+2Mnte/YNS86YUFIaktGuicC0pUIqQWO8+fVOQ/M9A7Ovadvugro1Nwn4pqGq4MWe
+HSzot2EFnpbyg4Ni4pTwD/mnj3pVn9IAxH21yBvd8vYMY2IPKisGuWXNu3i9cvN8
+zF2pP0bA8qskJoBFNJV9w2g8wJW7EtAc55lg4eXBtJ5tHWcEl1ix84sL9DU3Z44o
+QJeKO2cqFgLgrwDxIuJOm7k02cMpHwjmu6wZ2DnMZTTKFc6rePnSuzNjld16XP2f
+BqNnU9qc3dwdCSxMTpvvORNtgn9WV6PqPTXz+2uKDPyW5ye7z7KELSzWHPfOmBD4
+e7rjfPh7RZL7k3B/aO3l3RPDA2fs7Ujj5F9ArctOWmZaMzeyJp+T2TiTX7fL+P+Q
+eUCcqyM5BIvi4rFPe1X+fubab7IozXghKHCVvegDz73gcPBAJhNCtmyjex/vzRk5
+y8dswkuZnHTavWAIP2mYZ6Th8rHKHjuYBO21l1V5yFhx3RcOM0XdMcBZMJyu3Ulw
+AL2r9uAk+yC8b3rv8jNHF/guNUyS9rhTxRBMQUPcvTgEbGeBr0A=
+=w/zj
 -----END PGP SIGNATURE-----
 
---kfzai5ypy2tmllxf--
+--xttxxag3aqamgpj6--
