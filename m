@@ -2,153 +2,163 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D86F4C3ABA
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Feb 2022 02:07:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A95C4C3ADB
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Feb 2022 02:26:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233784AbiBYBHh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Feb 2022 20:07:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54396 "EHLO
+        id S233971AbiBYB0T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Feb 2022 20:26:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230283AbiBYBHg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Feb 2022 20:07:36 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B4A12A738;
-        Thu, 24 Feb 2022 17:07:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 25BA8CE1FBF;
-        Fri, 25 Feb 2022 01:06:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66BCFC340E9;
-        Fri, 25 Feb 2022 01:06:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645751217;
-        bh=GOh4v1us5hGPHjwFIKfSUpKAr4SsRrg4RnNK+eIyPds=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=kWTO7fPCqr8WbvHPd8I8T/AQaJygovFVc3tPasa3ixbHdd/xad/3z4xiznl5p+Lk/
-         SKO7VARF/3IpkTx4528H/hag7vD/jHz6IWFGlD4vDWcaOKjXxidik9YfTaYEbAA/4M
-         U6MlbwisQ7F0gxOUR4teX9k99nrnfIHbepI3/ziYcefPpamxU9VWiTIkamqtQkFBOr
-         PtWXwL9Br5j4/o9MrxJok5a5LXaE+pelsgOPnbBkFHJ1G8bFpYjNzZdPoTjnzKRL6R
-         t87Nq+AfMlQln2T67yQu1aMbX2kY/g6dI6s81yBMJlKLIk3LoY3GS2lBr3yjTQGnwS
-         Kyo/nzyYm0lpg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 133245C017D; Thu, 24 Feb 2022 17:06:57 -0800 (PST)
-Date:   Thu, 24 Feb 2022 17:06:57 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Feng Tang <feng.tang@intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Doug Smythies <dsmythies@telus.net>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: Re: CPU excessively long times between frequency scaling driver
- calls - bisected
-Message-ID: <20220225010657.GB4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <aaace653f12b79336b6f986ef5c4f9471445372a.camel@linux.intel.com>
- <20220222073435.GB78951@shbuild999.sh.intel.com>
- <CAJZ5v0iXQ=qXiZoF_qb1hdBh=yfZ13-of3y3LFu2m6gZh9peTw@mail.gmail.com>
- <CAAYoRsX-iw+88R9ZizMwJw2qc99XJZ8Fe0M5ETOy4=RUNsxWhQ@mail.gmail.com>
- <24f7d485dc60ba3ed5938230f477bf22a220d596.camel@linux.intel.com>
- <20220223004041.GA4548@shbuild999.sh.intel.com>
- <CAJZ5v0jsy0q3-ZqYvDrswY1F+tJsG6oNjNJPzz9zzkgdnoMwkw@mail.gmail.com>
- <20220224080830.GD4548@shbuild999.sh.intel.com>
- <20220224144423.GV4285@paulmck-ThinkPad-P17-Gen-1>
- <20220225002951.GE4548@shbuild999.sh.intel.com>
+        with ESMTP id S229658AbiBYB0T (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Feb 2022 20:26:19 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7377A223127;
+        Thu, 24 Feb 2022 17:25:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645752348; x=1677288348;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=AHywceCH61a0uC6jFQg+vmedTy7sSvp1pQ8B9HZ+b3E=;
+  b=M7SoZXqKtwIe+e0yYRNL56zq2g2X0VQl5QSU430UA1aiASQMnBJXL4NV
+   rc2iSMPeP76YvRbTaj1weZgf4HsUWjMJYxOLHv6hoF8t6EkTJrpehb4RR
+   7nZwgRBh116VW8X1xDuyQ/VRRxL5TqJnm87fJnxsCYvyr8KsgmnhIInC0
+   mn4lDcChJBCEb4wIpRbLpAarPb1KvjVK+NPaGl0WibUlece3mDIBBQqIr
+   Z0WLKdHdrGYxeM6HLqFCpCYdUtsVY4me0fSxw3gZBGKLUh4m6GbOHJWNJ
+   OsKkuoRBXDbPcgx2tfafQjYmlu0Pyf/fbdDj/SF35N4qYigT0Fu6lwelu
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="233016891"
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="233016891"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 17:25:48 -0800
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="549026403"
+Received: from rjfenger-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.48.94])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 17:25:47 -0800
+Message-ID: <111b378d22a7c5353bbd4537e0219a4d07d015ff.camel@linux.intel.com>
+Subject: Re: [PATCH v1 0/4] Thermal library and tools
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Date:   Thu, 24 Feb 2022 17:25:47 -0800
+In-Reply-To: <3a3320d1-c4a8-d5e0-63ef-dd098711f38e@linaro.org>
+References: <20220218125334.995447-1-daniel.lezcano@linaro.org>
+         <3a3320d1-c4a8-d5e0-63ef-dd098711f38e@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220225002951.GE4548@shbuild999.sh.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 08:29:51AM +0800, Feng Tang wrote:
-> Hi Paul,
+Hi Daniel,
+
+On Thu, 2022-02-24 at 22:41 +0100, Daniel Lezcano wrote:
 > 
-> On Thu, Feb 24, 2022 at 06:44:23AM -0800, Paul E. McKenney wrote:
-> [...]
-> > > > > > Rafael replied with one possible option. Alternatively when planing to
-> > > > > > enter deep idle, set P-state to min with a callback like we do in
-> > > > > > offline callback.
-> > > > >
-> > > > > Yes, if the system is going to idle, it makes sense to goto a lower
-> > > > > cpufreq first (also what my debug patch will essentially lead to).
-> > > > >
-> > > > > Given cprfreq-util's normal running frequency is every 10ms, doing
-> > > > > this before entering idle is not a big extra burden.
-> > > > 
-> > > > But this is not related to idle as such, but to the fact that idle
-> > > > sometimes stops the scheduler tick which otherwise would run the
-> > > > cpufreq governor callback on a regular basis.
-> > > > 
-> > > > It is stopping the tick that gets us into trouble, so I would avoid
-> > > > doing it if the current performance state is too aggressive.
-> > > 
-> > > I've tried to simulate Doug's environment by using his kconfig, and
-> > > offline my 36 CPUs Desktop to leave 12 CPUs online, and on it I can
-> > > still see Local timer interrupts when there is no active load, with
-> > > the longest interval between 2 timer interrupts is 4 seconds, while
-> > > idle class's task_tick_idle() will do nothing, and CFS'
-> > > task_tick_fair() will in turn call cfs_rq_util_change()
+> Hi,
+> 
+> What shall I do with this series? Is everyone ok with it?
+> 
+Want to try out on a system and check. But unfortunately couldn't get
+to it yet. Hope to get to it next week. Is that OK?
+
+Thanks,
+Srinivas
+
+
+> 
+> 
+> On 18/02/2022 13:53, Daniel Lezcano wrote:
+> > This series provides a thermal library providing the basic callback
+> > oriented
+> > netlink communication and events with the thermal framework, a
+> > temperature
+> > capture tool and a thermal monitoring skeleton using the thermal
+> > library.
 > > 
-> > Every four seconds?  Could you please post your .config?
->  
-> Aha, I didn't make it clear, that the timer interrupt was not always
-> coming every 4 seconds, but when system is silent, the maxim interval
-> between 2 timer interrupts was 4 seconds.
+> > Changelog:
+> >   - V1:
+> >      - Took into account RFC comments (unsubscribe, error enum,
+> > thermal daemon
+> >        renamed to thermal-engine)
+> > 
+> > Daniel Lezcano (4):
+> >    tools/lib/thermal: Add a thermal library
+> >    tools/thermal: Add util library
+> >    tools/thermal: A temperature capture tool
+> >    tools/thermal: Add thermal daemon skeleton
+> > 
+> >   tools/Makefile                                |  36 +-
+> >   tools/lib/thermal/.gitignore                  |   2 +
+> >   tools/lib/thermal/Build                       |   5 +
+> >   tools/lib/thermal/Makefile                    | 165 ++++++++
+> >   tools/lib/thermal/commands.c                  | 351
+> > ++++++++++++++++
+> >   tools/lib/thermal/events.c                    | 164 ++++++++
+> >   tools/lib/thermal/include/thermal.h           | 141 +++++++
+> >   tools/lib/thermal/libthermal.map              |  25 ++
+> >   tools/lib/thermal/libthermal.pc.template      |  12 +
+> >   tools/lib/thermal/sampling.c                  |  75 ++++
+> >   tools/lib/thermal/thermal.c                   | 126 ++++++
+> >   tools/lib/thermal/thermal_nl.c                | 215 ++++++++++
+> >   tools/lib/thermal/thermal_nl.h                |  46 ++
+> >   tools/thermal/lib/Build                       |   3 +
+> >   tools/thermal/lib/Makefile                    | 158 +++++++
+> >   .../thermal/lib/libthermal_tools.pc.template  |  12 +
+> >   tools/thermal/lib/log.c                       |  77 ++++
+> >   tools/thermal/lib/log.h                       |  31 ++
+> >   tools/thermal/lib/mainloop.c                  | 135 ++++++
+> >   tools/thermal/lib/mainloop.h                  |  14 +
+> >   tools/thermal/lib/thermal-tools.h             |  10 +
+> >   tools/thermal/lib/uptimeofday.c               |  40 ++
+> >   tools/thermal/lib/uptimeofday.h               |  12 +
+> >   tools/thermal/thermal-engine/Build            |   2 +
+> >   tools/thermal/thermal-engine/Makefile         |  27 ++
+> >   tools/thermal/thermal-engine/thermal-engine.c | 287 +++++++++++++
+> >   tools/thermal/thermometer/Build               |   2 +
+> >   tools/thermal/thermometer/Makefile            |  23 +
+> >   tools/thermal/thermometer/thermometer.c       | 393
+> > ++++++++++++++++++
+> >   tools/thermal/thermometer/thermometer.conf    |   5 +
+> >   30 files changed, 2591 insertions(+), 3 deletions(-)
+> >   create mode 100644 tools/lib/thermal/.gitignore
+> >   create mode 100644 tools/lib/thermal/Build
+> >   create mode 100644 tools/lib/thermal/Makefile
+> >   create mode 100644 tools/lib/thermal/commands.c
+> >   create mode 100644 tools/lib/thermal/events.c
+> >   create mode 100644 tools/lib/thermal/include/thermal.h
+> >   create mode 100644 tools/lib/thermal/libthermal.map
+> >   create mode 100644 tools/lib/thermal/libthermal.pc.template
+> >   create mode 100644 tools/lib/thermal/sampling.c
+> >   create mode 100644 tools/lib/thermal/thermal.c
+> >   create mode 100644 tools/lib/thermal/thermal_nl.c
+> >   create mode 100644 tools/lib/thermal/thermal_nl.h
+> >   create mode 100644 tools/thermal/lib/Build
+> >   create mode 100644 tools/thermal/lib/Makefile
+> >   create mode 100644 tools/thermal/lib/libthermal_tools.pc.template
+> >   create mode 100644 tools/thermal/lib/log.c
+> >   create mode 100644 tools/thermal/lib/log.h
+> >   create mode 100644 tools/thermal/lib/mainloop.c
+> >   create mode 100644 tools/thermal/lib/mainloop.h
+> >   create mode 100644 tools/thermal/lib/thermal-tools.h
+> >   create mode 100644 tools/thermal/lib/uptimeofday.c
+> >   create mode 100644 tools/thermal/lib/uptimeofday.h
+> >   create mode 100644 tools/thermal/thermal-engine/Build
+> >   create mode 100644 tools/thermal/thermal-engine/Makefile
+> >   create mode 100644 tools/thermal/thermal-engine/thermal-engine.c
+> >   create mode 100644 tools/thermal/thermometer/Build
+> >   create mode 100644 tools/thermal/thermometer/Makefile
+> >   create mode 100644 tools/thermal/thermometer/thermometer.c
+> >   create mode 100644 tools/thermal/thermometer/thermometer.conf
+> > 
 > 
-> When initially I checked this, I doubted if the timer interrupt are
-> too few on the system, so I used Doug's config and tried to make my
-> desktop silent (like disabling GUI), following is some trace_printk
-> log, though I figured out later when idle thread is running, the
-> idle class' scheduler tick will not help as it doesn't call cpufreq
-> callback.
 > 
->           <idle>-0       [009] d.h1.   235.980053: hrtimer_interrupt: enter
->           <idle>-0       [009] d.h1.   235.981054: hrtimer_interrupt: enter
->           <idle>-0       [009] d.h1.   235.982053: hrtimer_interrupt: enter
->           <idle>-0       [009] d.h1.   235.983053: hrtimer_interrupt: enter
->           <idle>-0       [009] d.h1.   235.984053: hrtimer_interrupt: enter
->           <idle>-0       [009] d.h1.   235.985053: hrtimer_interrupt: enter
->           <idle>-0       [009] d.h1.   235.986054: hrtimer_interrupt: enter
->           <idle>-0       [009] d.h1.   235.987054: hrtimer_interrupt: enter
->           <idle>-0       [009] d.h1.   235.988054: hrtimer_interrupt: enter
->           <idle>-0       [009] d.h1.   235.989054: hrtimer_interrupt: enter
->           <idle>-0       [009] d.h1.   235.990054: hrtimer_interrupt: enter
->           <idle>-0       [009] d.h1.   235.991053: hrtimer_interrupt: enter
->           <idle>-0       [009] d.h1.   235.992054: hrtimer_interrupt: enter
->           <idle>-0       [009] d.h1.   235.993054: hrtimer_interrupt: enter
->           <idle>-0       [009] d.h1.   235.994054: hrtimer_interrupt: enter
->           <idle>-0       [009] d.h1.   236.331126: hrtimer_interrupt: enter
->           <idle>-0       [009] d.h1.   236.460130: hrtimer_interrupt: enter
->           <idle>-0       [009] d.s5.   236.460147: intel_pstate_update_util: old_state=48 new=27
->           <idle>-0       [009] d.h1.   238.380130: hrtimer_interrupt: enter
->           <idle>-0       [009] d.s5.   238.380147: intel_pstate_update_util: old_state=27 new=12
->           <idle>-0       [009] d.h1.   240.331133: hrtimer_interrupt: enter
->           <idle>-0       [009] d.h1.   240.364133: hrtimer_interrupt: enter
->           <idle>-0       [009] d.h1.   244.331135: hrtimer_interrupt: enter
->           <idle>-0       [009] d.h1.   248.331139: hrtimer_interrupt: enter
->           <idle>-0       [009] d.h1.   252.331138: hrtimer_interrupt: enter
->            <...>-1167    [009] d.h..   254.860056: hrtimer_interrupt: enter
->            snapd-1128    [009] d.h..   254.861054: hrtimer_interrupt: enter
->            snapd-1128    [009] d.h..   254.862055: hrtimer_interrupt: enter
->           <idle>-0       [009] d.h1.   254.863056: hrtimer_interrupt: enter
->           <idle>-0       [009] d.h1.   254.864056: hrtimer_interrupt: enter
->           <idle>-0       [009] d.h1.   254.865055: hrtimer_interrupt: enter
->           <idle>-0       [009] d.h1.   256.331133: hrtimer_interrupt: enter
->           <idle>-0       [009] d.h1.   260.331127: hrtimer_interrupt: enter
->           <idle>-0       [009] d.h1.   264.331135: hrtimer_interrupt: enter
 
-Thank you for the clarification!
-
-							Thanx, Paul
