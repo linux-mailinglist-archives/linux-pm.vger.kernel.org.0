@@ -2,105 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEB914C49BF
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Feb 2022 16:55:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 775CD4C4B43
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Feb 2022 17:48:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241785AbiBYPzL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Feb 2022 10:55:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39574 "EHLO
+        id S243407AbiBYQrl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Feb 2022 11:47:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242461AbiBYPzG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Feb 2022 10:55:06 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F8B91D8A87
-        for <linux-pm@vger.kernel.org>; Fri, 25 Feb 2022 07:54:33 -0800 (PST)
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com [209.85.221.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 433C63F1C6
-        for <linux-pm@vger.kernel.org>; Fri, 25 Feb 2022 15:54:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1645804472;
-        bh=ouYw861PBb4TrQfZvscDmF7VmBdgdNmfagROVWpjg6Q=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=eb10NVJYId60LXHeXZ029yamG5C+m+e6HR8DDfm8IAZnkWW5F46b+I899ggt8kUFK
-         jAwAsTR+6pOCDObrXdpTflIcHemnOs6OC+XQfhK9edKLdCcurk2ocS/ybqEtCkpawV
-         Q182Z7jPMLW9565CjdLBK0D9JNgzdJU16GkP3OefSzw8a9+U0QORDJEUjlhI4ozXZ5
-         BSXei2lBfc7ra7hfia3xmmvWk8pIc8PbWeQlvh+Z+g0pX9GaJUy6GNgS4iN9bgLSyd
-         movZCR1+JI/5sM30Gpm252tUOgbNT+ZOFjRF1rXNbCNUUignXxOZJas/ssMpzSQ5Wu
-         gGZZxO7taa/5g==
-Received: by mail-wr1-f72.google.com with SMTP id m2-20020adff382000000b001edbdae0527so1046132wro.2
-        for <linux-pm@vger.kernel.org>; Fri, 25 Feb 2022 07:54:32 -0800 (PST)
+        with ESMTP id S236795AbiBYQrU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Feb 2022 11:47:20 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 068CD2510CC
+        for <linux-pm@vger.kernel.org>; Fri, 25 Feb 2022 08:46:37 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id j7so10402276lfu.6
+        for <linux-pm@vger.kernel.org>; Fri, 25 Feb 2022 08:46:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=squareup.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=h+/c/SRTSFW4bUr7uZwCZvPDV13JvSZpjRW/Ah6HmPo=;
+        b=N4LP5Oh9x++Pocr8eHXKA2242EquvbDfLIw5chVlFT67q3k/SHnTT8xSaf51V0TpWM
+         gbAzCWRp9vhBWkZ+eBJH7Bi92oFuDR7P0A4KuRoAHY5MdTlylTX7oSWabG6DM1/Zvusu
+         0KboIZS+04K1i4d8b/9DqYFPzt+FBktUNpbCg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ouYw861PBb4TrQfZvscDmF7VmBdgdNmfagROVWpjg6Q=;
-        b=M+84ho1BmeN0JRf49uZuQWvdqUPo0VPzSpTN1qHZm+mGwb4ZTSjANbZMZ9SgcqpSOJ
-         fvJPlY7AY9xjBqZCe8H9rUnTQMiZ4FHk+EnQtGQ2she1nna/ptzPKsxhS/YuMEhPrrXv
-         cTBdhxGKEl+FEJhLHPrVmbXo/Al0oB3xAN4m5ltGamtSy3rlgfSyPUpYYYMObsV+Q4pO
-         EmiU37+KnlpaDb3SJ+l0TP2MCbrwKRGvQ8XEC8ErOoYQR1yZ1kDWU8tDJmf9eqCkgtr2
-         3NiGUPfhukIDVaYRST4KZUN7srJlSlNmuWs5pEcKC053ret3anAQzgm6f/TzAzcdVTBD
-         7n+w==
-X-Gm-Message-State: AOAM533cv8dvbur7gg4yiLx0zvPscZBDMeYtNFIqwiL8xifNm4IPz3B3
-        n1QUY3omNQVk1Jed4mV5i/10DrJIC3mBetfLrTfGu5h6c/B8ltBwkQKFpEBKvcw8imieX7MMKNx
-        OHNhmF/7MDBX3B8QvLPVLl53fCUr8KoaRCOBz
-X-Received: by 2002:a5d:584c:0:b0:1e8:88b8:419c with SMTP id i12-20020a5d584c000000b001e888b8419cmr6975726wrf.96.1645804472041;
-        Fri, 25 Feb 2022 07:54:32 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwSy6zmHkvN0jOvBdaFqnPofjL1tVeT2Ad/dBAi2F04eFTRfUM9AEDrUny0g3KKLPCrwn+JVg==
-X-Received: by 2002:a5d:584c:0:b0:1e8:88b8:419c with SMTP id i12-20020a5d584c000000b001e888b8419cmr6975716wrf.96.1645804471886;
-        Fri, 25 Feb 2022 07:54:31 -0800 (PST)
-Received: from [192.168.0.133] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id q7-20020adfc507000000b001ed9f31afdcsm2593072wrf.3.2022.02.25.07.54.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Feb 2022 07:54:31 -0800 (PST)
-Message-ID: <ec083f3c-b4b8-c3d0-fab3-2af5c4195d90@canonical.com>
-Date:   Fri, 25 Feb 2022 16:54:30 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=h+/c/SRTSFW4bUr7uZwCZvPDV13JvSZpjRW/Ah6HmPo=;
+        b=BLZnM+6XXbxSwxzEnGX7pSP/11OrQaH/qVLb/0riBCMvGylo8OrRWh/WL128mZ+7hR
+         rOiWNSg+yrBODA9mS6scoHlu07JTK8yOV10b12B8bkHwf/bE+MS7I69LYPs6Hgj+nu5J
+         t+dJF8FmB+YREnWfgmaoz+9tGQIGGjvO30zdsZ9HfPHyjYGzAOCGirDkbChItiDOlA2E
+         srFVxHQ3u8OjuLyEtTZzN3HfC5Kj+YZFuuebE598hCmNgTispF08KuE+gq3hqwMeykwo
+         h8emimU/IR36wFw+JnYTWCymcf2CPILpn4qKD1OgTpePXMwG2xp2LhKgZ5gXjvkExCI4
+         gjXQ==
+X-Gm-Message-State: AOAM530+TMfZi/N6mfChXlxXVi93zOPCnGs2wzAA4TvbTDzKEj5PCuuh
+        UQ9LM1KKeRaoTZvsk69zR7eRsZzRmaWt20qvzlR7kQ==
+X-Google-Smtp-Source: ABdhPJzZSaGfd/xFfmtsAFmny7WwR+Mh9Q+xBU6CnvOdzp20DNpqm62ynakHcmApJg4ZguxiE764J/Vueg5/qFsdL3w=
+X-Received: by 2002:ac2:4474:0:b0:43a:7681:8fac with SMTP id
+ y20-20020ac24474000000b0043a76818facmr5538482lfl.316.1645807595152; Fri, 25
+ Feb 2022 08:46:35 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/2] dt-bindings: interconnect: qcom: Add sc8280xp binding
-Content-Language: en-US
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Odelu Kukatla <okukatla@codeaurora.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220225042710.2317732-1-bjorn.andersson@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220225042710.2317732-1-bjorn.andersson@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220120200153.1214-1-benl@squareup.com> <422bd780-354d-d4ac-7b7a-8060325fc13e@linaro.org>
+In-Reply-To: <422bd780-354d-d4ac-7b7a-8060325fc13e@linaro.org>
+From:   Benjamin Li <benl@squareup.com>
+Date:   Fri, 25 Feb 2022 08:46:23 -0800
+Message-ID: <CACOsgWZ7KFSqC21sSq7hGYk_g2RoKTPPfoYQwcWmwCNSx5c-YQ@mail.gmail.com>
+Subject: Re: [PATCH v3] drivers: thermal: tsens: respect thermal_device_mode
+ in threshold irq reporting
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Zac Crosby <zac@squareup.com>, Andy Gross <agross@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25/02/2022 05:27, Bjorn Andersson wrote:
-> The Qualcomm SC8280XP platform has the usual set of busses, add a
-> binding for these interconnect providers and port definitions to allow
-> interconnect paths to be expressed in the sc8280xp DeviceTree.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
->  .../bindings/interconnect/qcom,rpmh.yaml      |  12 +
->  .../dt-bindings/interconnect/qcom,sc8280xp.h  | 232 ++++++++++++++++++
->  2 files changed, 244 insertions(+)
->  create mode 100644 include/dt-bindings/interconnect/qcom,sc8280xp.h
-> 
+On Fri, Feb 25, 2022 at 6:02 AM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+> > Some drivers that support thermal zone disabling implement a set_mode
+> > operation and simply disable the sensor or the relevant IRQ(s), so they
+> > actually don't log anything when zones are disabled. These drivers are
+> > imx_thermal.c, intel_quark_dts_thermal.c, and int3400_thermal.c.
+> >
+> > For tsens.c, implementing a change_mode would require migrating the dri=
+ver
+> > from devm_thermal_zone_of_sensor_register to thermal_zone_device_regist=
+er
+> > (or updating thermal_of.c to add a change_mode operation in thermal_zon=
+e_
+> > of_device_ops).
+> >
+> > stm_thermal.c seems to use this patch's model of not disabling IRQs whe=
+n
+> > the zone is disabled (they still perform the thermal_zone_device_update
+> > upon IRQ, but return -EAGAIN from their get_temp).
+>
+> What is the concern by changing the core code to have a correct handling
+> of the disabled / enabled state in this driver ? (and by this way give
+> the opportunity to other drivers to fix their code)'
 
+It seems fine, is that the preference? Updating thermal_of.c to add a
+change_mode
+operation in thermal_zone_of_device_ops?
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Ben
 
-
-Best regards,
-Krzysztof
+>
+>
+> --
+> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
+M SoCs
+>
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
