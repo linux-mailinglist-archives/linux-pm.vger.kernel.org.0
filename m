@@ -2,49 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DFA94C4BB5
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Feb 2022 18:12:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7AE84C4CBD
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Feb 2022 18:41:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243509AbiBYRNH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Feb 2022 12:13:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50484 "EHLO
+        id S243935AbiBYRmV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Feb 2022 12:42:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243516AbiBYRNE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Feb 2022 12:13:04 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B5739BAD
-        for <linux-pm@vger.kernel.org>; Fri, 25 Feb 2022 09:12:31 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id AA9FF1F464DE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1645809150;
-        bh=7oSi5ixpTTdfbwJkiXTsGeE1a5aBRIE6jzy4sxLVzm8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Qbmb8xTn3fpnnj09OPE6fj1dC09DICEEr11eCe+MGWgxymW1I1RBkXVsjZo9LFGXG
-         2SZX/gclf7eE+jJfWF9sCDrL9C1XJDWNRRTJ2mirWtFJRhW3PtEpaaJ3Ut6MgcX2zr
-         uHeCDfmqYKImpwcltBJ+klgGeCseIDngLsE4fD+aw1XqT12siV4FIn+eEwChP6YWKJ
-         JceSNSoZNXnwDtpm5nnLlfcI7baQD/PTWqvFSNlc3RJ7PpH4s71S7D0W0SQBBE2vnc
-         EmLgAIpuCyntFx4YAAO5SQdgju1caSjucKKFi/5mjvY9Echsb7gBsZ2KQpyMSVehRw
-         F+RxRNV28g0UA==
-Received: by mercury (Postfix, from userid 1000)
-        id 58B44106049B; Fri, 25 Feb 2022 18:12:28 +0100 (CET)
-Date:   Fri, 25 Feb 2022 18:12:28 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     linux-pm@vger.kernel.org
-Subject: Re: [PATCH 0/2] power: supply: axp288_*: Use
- acpi_quirk_skip_acpi_ac_and_battery()
-Message-ID: <20220225171228.4xn7ek2bwju6fyfo@mercury.elektranox.org>
-References: <20220224222805.1689234-1-hdegoede@redhat.com>
+        with ESMTP id S229674AbiBYRmS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Feb 2022 12:42:18 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA5E1DF853
+        for <linux-pm@vger.kernel.org>; Fri, 25 Feb 2022 09:41:46 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id b5so5648225wrr.2
+        for <linux-pm@vger.kernel.org>; Fri, 25 Feb 2022 09:41:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=hK70hB1bYpjbVyMofhuVieiReBXP1Q8ylw0iiDbK2jc=;
+        b=pYT807/Ddu+PJ4DbYHixEmSpN6a5NdIAWnVilVXYLIw2wDgEczBiK+koTqrBFwnDnt
+         dBT+ZnL3Nd2Dio5qWZbHsNXD+P3Swo88zMHWww/1CdBAOr922HWY4EurVXkQ4KiJwshn
+         hfE09/D0MjzsrKFdYMIZDwvu5Kc0uslxs+k3/eHM0ulyZJG1+TYrWbSpP+kleu+/fjBU
+         8vRKc28RTptiuoehyUSq+WJ2kcobxNR25JW8eRW7FJzwOwpKbUwpsWgfKOvXASRsWCEq
+         hvj3SJc3RC/jRQxaeTOuDsj75bkqR96qNa0xvN61upLYTmE/8aHsg4JVTNIUAJK3OwVN
+         Gskg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=hK70hB1bYpjbVyMofhuVieiReBXP1Q8ylw0iiDbK2jc=;
+        b=55XVZIKUZ7LtlpnoIQPUsIu3s74XJk3izHBy9iN9gTChE8h2tq80zeEgQHX9eYn6IH
+         PHqEpAKLRZ09r4QUidniRixJn925/R4lQvwfOGNYHWlK7Q1DSSaPtJTpLGFgbXYNdC8V
+         jtFgjFfDXES239hcbqIugVv/CeIWat6IRK25wcGSkxhRwvioGipT2K91oaJx09qJyli1
+         lrDqy4LLyPaiNhf7gaY403RHWq9XXtPmTAiBNKbuUiT9ClswcCBTykXEUtVB6XijWADQ
+         smC037JL7WNmSTgFH6RoCHaJ3YazDm86LDFkZ6K1C5xfHH4TpqQ+/GAvCyW5RCtkPqPx
+         uyag==
+X-Gm-Message-State: AOAM532NUX7WjSeSDJki0XceYmQCKbVc5paxlZT6TQ634AhFbyRWFNms
+        RLrqJXd9IVyawU/4r6WSZQKDIw==
+X-Google-Smtp-Source: ABdhPJyqECsYMSy9W//bYsi3ZSr60A6g/+WllmvOLJTwk4EhLJjt7hkciZ9zBGH3oFXlXWDiHg4/KQ==
+X-Received: by 2002:a5d:514b:0:b0:1ee:aed1:d48f with SMTP id u11-20020a5d514b000000b001eeaed1d48fmr5708767wrt.662.1645810904477;
+        Fri, 25 Feb 2022 09:41:44 -0800 (PST)
+Received: from ?IPV6:2a01:e34:ed2f:f020:e11c:33b1:8704:339f? ([2a01:e34:ed2f:f020:e11c:33b1:8704:339f])
+        by smtp.googlemail.com with ESMTPSA id z5-20020adfdf85000000b001e713f774d3sm2850442wrl.61.2022.02.25.09.41.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Feb 2022 09:41:43 -0800 (PST)
+Message-ID: <3abfc379-d353-6caf-0cf0-83559a460be6@linaro.org>
+Date:   Fri, 25 Feb 2022 18:41:42 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qzjoa3rewwzecdtl"
-Content-Disposition: inline
-In-Reply-To: <20220224222805.1689234-1-hdegoede@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3] drivers: thermal: tsens: respect thermal_device_mode
+ in threshold irq reporting
+Content-Language: en-US
+To:     Benjamin Li <benl@squareup.com>
+Cc:     Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Zac Crosby <zac@squareup.com>, Andy Gross <agross@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220120200153.1214-1-benl@squareup.com>
+ <422bd780-354d-d4ac-7b7a-8060325fc13e@linaro.org>
+ <CACOsgWZ7KFSqC21sSq7hGYk_g2RoKTPPfoYQwcWmwCNSx5c-YQ@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CACOsgWZ7KFSqC21sSq7hGYk_g2RoKTPPfoYQwcWmwCNSx5c-YQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,68 +81,39 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 25/02/2022 17:46, Benjamin Li wrote:
+> On Fri, Feb 25, 2022 at 6:02 AM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+>>> Some drivers that support thermal zone disabling implement a set_mode
+>>> operation and simply disable the sensor or the relevant IRQ(s), so they
+>>> actually don't log anything when zones are disabled. These drivers are
+>>> imx_thermal.c, intel_quark_dts_thermal.c, and int3400_thermal.c.
+>>>
+>>> For tsens.c, implementing a change_mode would require migrating the driver
+>>> from devm_thermal_zone_of_sensor_register to thermal_zone_device_register
+>>> (or updating thermal_of.c to add a change_mode operation in thermal_zone_
+>>> of_device_ops).
+>>>
+>>> stm_thermal.c seems to use this patch's model of not disabling IRQs when
+>>> the zone is disabled (they still perform the thermal_zone_device_update
+>>> upon IRQ, but return -EAGAIN from their get_temp).
+>>
+>> What is the concern by changing the core code to have a correct handling
+>> of the disabled / enabled state in this driver ? (and by this way give
+>> the opportunity to other drivers to fix their code)'
+> 
+> It seems fine, is that the preference? Updating thermal_of.c to add a
+> change_mode
+> operation in thermal_zone_of_device_ops?
 
---qzjoa3rewwzecdtl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I'm not a big fan of this duplicated ops structure but preferably it 
+would be better to put it there (except if you see a better way to do it)
 
-Hi Hans,
 
-On Thu, Feb 24, 2022 at 11:28:03PM +0100, Hans de Goede wrote:
-> Normally the native AXP288 fg/charger drivers are preferred but one some
-> devices the ACPI drivers should be used instead.
->=20
-> The ACPI AC and battery drivers used to both have their own detection if
-> a PMIC on which native drivers should be preffered was present as well as
-> their own list of exceptions for devices like the ECS EF20EA, which has
-> an AXP288 PMIC but uses a separate fuel-gauge.
->=20
-> And the axp288_fuel_guage driver also has a dmi_system_id table entry
-> for the ECS EF20EA to avoid loading on this board. Where as for
-> the axp288_charger code it was decided that it was ok to have both
-> a /sys/class/power_supply/ADP1 from ACPI as well as a /axp288_charger .
->=20
-> So that is 3 separate "ECS EF20EA" dmi_system_id table entries in
-> 3 different drivers (which should really be 4). In 5.17-rc1 a patch
-> adding a new acpi_quirk_skip_acpi_ac_and_battery() helper was merged
-> to remove the code duplication for this from the ACPI AC and battery
-> drivers:
->=20
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit=
-/?id=3D57a18322227134e37b693ef8ef216ed7ce7ba7d6
->=20
-> This series makes the AXP288 charger and fuelgauge drivers also use
-> this helper. This allows removing the "ECS EF20EA" dmi_system_id table
-> entry from the fuel-gauge code and fixes the duplicate
-> /sys/class/power_supply/axp288_charger power_supply device on these
-> boards.
->=20
-> This also gives us a single place to add further exceptions if
-> necessary, rather then needing to do this in 4 different places.
 
-Thanks, queued.
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
--- Sebastian
-
---qzjoa3rewwzecdtl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmIZDfIACgkQ2O7X88g7
-+ppqTA/+PhAYVJcBKcAuNM3ACOpHXWm+UiPARyblkhMqg/5jkrCWXJLDI/KfXSeX
-tCx07pPc92I4P+khjoDSEhNjv+uO4epBjxsXdRZ26EdR0uMDWeZSy2n2P+/k7JAk
-1vNoOUFZOCpGceQFrP0OgT5ry4qFn0ibd4BIbjK4hZKhfQ7sVypy0edQMx50Wi+d
-qXiRMRL4f4yTEyJEuvTaLL+DdabRRfcJZBXI5iSZxoOAdX54S28KR3H2m0S6ERaJ
-6HtL/RRDoNBRC/4o6UwdIWCL0BUgXH6CSgkfHtyh3Z19BiW5qAgx8ZfQ/Er4JEtl
-LparVGxhNGSI01wPyujoVnL1HuCOy6Frw9VuLcv+0bWO6aisFp0FgRzUYaq/Clx/
-KrnYE4eJuCAl7Dq6ouYkYaJMWfIwkMnWTinKoJCrlUPUReYsZaMoIF7vp9ZsxtAj
-FqKO+0O1lSO2i+yhDZuuUdjEsGMdy3uRvUQmP02IqQxhk0CBuVtf3EYOE19Ko/4a
-g5FTo0uio0qI+RaRoEkwrqxyn+oazIa+ldXHEyyzvea3RUsqFAZPCsQkqXc/hwZ0
-aSD4oFHwQcyXqOSshBZ2Amukx2cGTGE35TmxN3a+SAQQhpcpKRgbAurtr3ZUgNbI
-5kuKgIYMY13kb73JtxDOVuSxf9Ng20KaTDtNB+clQnmDLeSo6Ic=
-=yZdi
------END PGP SIGNATURE-----
-
---qzjoa3rewwzecdtl--
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
