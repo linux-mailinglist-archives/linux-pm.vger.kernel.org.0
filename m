@@ -2,53 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E2464C4855
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Feb 2022 16:10:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD9D4C4905
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Feb 2022 16:32:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235522AbiBYPLB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Feb 2022 10:11:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59664 "EHLO
+        id S233758AbiBYPcq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Feb 2022 10:32:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233681AbiBYPLB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Feb 2022 10:11:01 -0500
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC03125EB2;
-        Fri, 25 Feb 2022 07:10:28 -0800 (PST)
-Received: by mail-yb1-f172.google.com with SMTP id d21so6436569yba.11;
-        Fri, 25 Feb 2022 07:10:28 -0800 (PST)
+        with ESMTP id S240060AbiBYPco (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Feb 2022 10:32:44 -0500
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCBC921BC56;
+        Fri, 25 Feb 2022 07:32:11 -0800 (PST)
+Received: by mail-yb1-f175.google.com with SMTP id y189so6599505ybe.4;
+        Fri, 25 Feb 2022 07:32:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6PHDsJtTHgIe1SVb8arRLmZRA4JR4a9wVJvHcDvAPGo=;
-        b=C5P9W9mmY+3mQkXUuaZubjWPB1PzuHc2eCDWPxXBm9AROpq/mFILzIQFupIByoNSCa
-         +pEPNiBTc1OJ0xjMtir9U+KC2gCJsQv0/x3E1Q7NomHU7BNsupJpv1ksjbv2UZfhrres
-         HCjlkWOEx9ecjLr9IQ9fczR3arjBKa0utD8kNnV9fRo1z9EBFWTihT74ZRcotHI+RYjn
-         PVjYwvke9wtR6fsTAGL4p7rMDy0Xr66uTSyfWV8mHM/ya2nR1qnFuAd+efHK587TaPpP
-         oY3+m8272qudM3/ebISf0VKia7BWBh7qgf41AJUP8Jl4I2ZkKU5qDoQVCYxKigkUkQaB
-         9KlQ==
-X-Gm-Message-State: AOAM530H0YuVWV9SnfBQVyNmkK/GH9ZPEVLnnrZ2YHwYIAmYCNH72+9K
-        aXtft9cIqpTjNRXXuc5eU2TYu8LVfLMK4V8O2bo=
-X-Google-Smtp-Source: ABdhPJzbCNciT/Vw4E176zijmDZb74ihGVfvi1mr48gxWn7RqdXe+0jEB+k+fPXqbvyly3jKI0SkyKS4ktc28TS8YP0=
-X-Received: by 2002:a25:7785:0:b0:614:c283:2a3d with SMTP id
- s127-20020a257785000000b00614c2832a3dmr7796480ybc.137.1645801828185; Fri, 25
- Feb 2022 07:10:28 -0800 (PST)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=XIo95I5CSuDu07kV8bCF7A7OdJcPDQG/mfn+QtIzwws=;
+        b=A9M5wD951NfXbYNzb49x3RGiheguUGPUIzm9bUhvmUSRmZsMJEWfX4FhgBcyo2OzXi
+         Ed+24uYaZTwwMEZTjpZ9W6wL7t+bL0ZF7gzYF+JCopzuGF37iN8qNlhzj5RwJ4x9VLKL
+         gHPdXWph0BRFGmFJgRnUqHdcgJI77UPGGhNiiL6+1OOY5HL3G9xpL2ooAoZKMETX3FOd
+         OxfonnTA4PQzUydWafG2qdfZBmaa9V/BPpp/bIJX/Twb7qUmrmYVpdk6nOeFXbN+fGgO
+         ALTuottRT4EAtrKsFPnPCMOnFVDp0Aez5lmPE5YIGXEKPdREMtL1SBIa72cUcmRnL2xA
+         pkvg==
+X-Gm-Message-State: AOAM533BvUvhZoecHZCxWyAdgfiN9ULmLloPUyWHrqjKt+aQivMyIRU+
+        Ji5TC6mUI6u0CtJDX9O2smPjN1MRtj3/feArsV0Un5KS27E=
+X-Google-Smtp-Source: ABdhPJz06MkArKMDiWXp9ew08baAlYqqGdxwREv8k4v/aL1+G7trQrEVut30eFI/sMoXOezJNX7TkPmMY6CEkoUASdI=
+X-Received: by 2002:a25:378f:0:b0:61d:8e8b:6cf5 with SMTP id
+ e137-20020a25378f000000b0061d8e8b6cf5mr7385521yba.622.1645803131002; Fri, 25
+ Feb 2022 07:32:11 -0800 (PST)
 MIME-Version: 1.0
-References: <202202250758.oDiHyXAy-lkp@intel.com> <0d4d70ca-a17f-b8de-53f7-a85a59304d36@redhat.com>
-In-Reply-To: <0d4d70ca-a17f-b8de-53f7-a85a59304d36@redhat.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 25 Feb 2022 16:10:17 +0100
-Message-ID: <CAJZ5v0jmFJMrKT5RsR+JEfJHaYFxHTi2xjS0UnkNUhSn7-r==A@mail.gmail.com>
-Subject: Re: [rafael-pm:bleeding-edge 59/73] arch/x86/include/asm/pci_x86.h:133:19:
- error: expected ';' after top level declarator
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        kernel test robot <lkp@intel.com>
+Date:   Fri, 25 Feb 2022 16:32:00 +0100
+Message-ID: <CAJZ5v0jOz82pc7KvQrmBojyOAdL6tGnNtfqspROFf3j0+5enGA@mail.gmail.com>
+Subject: [GIT PULL] Power management fixes for v5.17-rc6
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -60,67 +51,41 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 12:49 PM Hans de Goede <hdegoede@redhat.com> wrote:
->
-> Hi Rafael,
->
-> On 2/25/22 00:24, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-> > head:   8276cbee5a52543c614a1e1bc2624188d5970848
-> > commit: 62fabd56faafe033eb0be3ba24000b8db13d4c17 [59/73] x86/PCI: Disable exclusion of E820 reserved addresses in some cases
-> > config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220225/202202250758.oDiHyXAy-lkp@intel.com/config)
-> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=62fabd56faafe033eb0be3ba24000b8db13d4c17
-> >         git remote add rafael-pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-> >         git fetch --no-tags rafael-pm bleeding-edge
-> >         git checkout 62fabd56faafe033eb0be3ba24000b8db13d4c17
-> >         # save the config file to linux build tree
-> >         mkdir build_dir
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-> >
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> >    In file included from arch/x86/kernel/resource.c:4:
-> >    arch/x86/include/asm/pci_x86.h:97:8: error: unknown type name 'raw_spinlock_t'
-> >    extern raw_spinlock_t pci_config_lock;
-> >           ^
-> >>> arch/x86/include/asm/pci_x86.h:133:19: error: expected ';' after top level declarator
-> >    extern void __init dmi_check_pciprobe(void);
-> >                      ^
-> >                      ;
-> >    arch/x86/include/asm/pci_x86.h:134:19: error: expected ';' after top level declarator
-> >    extern void __init dmi_check_skip_isa_align(void);
-> >                      ^
-> >                      ;
->
-> So the problem here seems to be that arch/x86/include/asm/pci_x86.h does not include
-> all the headers which it relies on. Instead it release on the files which include it
-> to include those headers before hand.
->
-> This should fix the errors reported here:
->
-> --- a/arch/x86/include/asm/pci_x86.h
-> +++ b/arch/x86/include/asm/pci_x86.h
-> @@ -5,7 +5,9 @@
->   *     (c) 1999 Martin Mares <mj@ucw.cz>
->   */
->
-> +#include <linux/init.h>
->  #include <linux/ioport.h>
-> +#include <linux/spinlock.h>
->
->  #undef DEBUG
->
-> I believe this is best squashed into the original commit,
+Hi Linus,
 
-Done, thanks!
+Please pull from the tag
 
-> but let me know if
-> you want me to send this out as a proper follow up patch; or if you want a
-> new version of the troublesome commit to replace the original one.
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-5.17-rc6
+
+with top-most commit c5eb92f57de2446e0071c3af70ea54f237eb05d5
+
+ Merge branch 'cpufreq/arm/fixes' of
+git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm
+
+on top of commit cfb92440ee71adcc2105b0890bb01ac3cddb8507
+
+ Linux 5.17-rc5
+
+to receive power management fixes for 5.17-rc6.
+
+These fix the throttle IRQ handling during cpufreq initialization on
+Qualcomm platforms (Bjorn Andersson).
+
+Thanks!
+
+
+---------------
+
+Bjorn Andersson (2):
+      cpufreq: Reintroduce ready() callback
+      cpufreq: qcom-hw: Delay enabling throttle_irq
+
+---------------
+
+ Documentation/cpu-freq/cpu-drivers.rst                    |  3 +++
+ Documentation/translations/zh_CN/cpu-freq/cpu-drivers.rst |  2 ++
+ drivers/cpufreq/cpufreq.c                                 |  4 ++++
+ drivers/cpufreq/qcom-cpufreq-hw.c                         | 11 ++++++++++-
+ include/linux/cpufreq.h                                   |  3 +++
+ 5 files changed, 22 insertions(+), 1 deletion(-)
