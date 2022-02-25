@@ -2,332 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2304C40E3
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Feb 2022 10:04:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F20D4C43C4
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Feb 2022 12:39:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238857AbiBYJEd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Feb 2022 04:04:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51038 "EHLO
+        id S240171AbiBYLjq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Feb 2022 06:39:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238796AbiBYJEd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Feb 2022 04:04:33 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 140B7AF1FC;
-        Fri, 25 Feb 2022 01:04:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645779841; x=1677315841;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=UAdv8sGQlefjIXGs5osDQgt20WFAvQ4dLxD1UwEgTJs=;
-  b=EMGR9DFju6eQNGV34ry1fuxXRtW7mqDE6/qixQZNO8ANACcqm6YPsgPA
-   VQnE8YcSpedxs14Q5nnfnVY02OT1rlHcYTL3/we1JMIbgYcGdlefo9mYN
-   SPCO8aLoBaTdAPXj419BJU7It7pYXich8ijAhJhtT9LOWBTuwRQSwXjRj
-   YahuI/ZuoutuTapthnRr9OfVIo10wfVECZUzxz3Gi4qzYjQgH2RRzFd9V
-   PhuXqI9qoRrn6+GYOjpoKqsKci7IjXEYD9hzQ1RNi10c0Fl7OZP+AQGqc
-   uhfL3FIElt8+KZ+M58MlecJVusFNsg3wBPwxXI4u8+y+/Et4CVomR4YZ7
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="338895441"
-X-IronPort-AV: E=Sophos;i="5.90,136,1643702400"; 
-   d="scan'208";a="338895441"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 01:04:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,136,1643702400"; 
-   d="scan'208";a="628788472"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 25 Feb 2022 01:03:58 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nNWW6-00047k-4N; Fri, 25 Feb 2022 09:03:58 +0000
-Date:   Fri, 25 Feb 2022 17:03:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD REGRESSION
- 8276cbee5a52543c614a1e1bc2624188d5970848
-Message-ID: <62189b44.QBrVbFGRLXJ9SScw%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S240162AbiBYLjp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Feb 2022 06:39:45 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA0A71C230B
+        for <linux-pm@vger.kernel.org>; Fri, 25 Feb 2022 03:39:12 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id n14so4029607wrq.7
+        for <linux-pm@vger.kernel.org>; Fri, 25 Feb 2022 03:39:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=cJpjB2Imjue5MPptrTSlFySfZuGIV+MLwnJNG0x4xvk=;
+        b=Z/g5gebrnBL0zB3qUQxBoIDeTt3F4vtwqF9rDI2nw3EtZkKT76If1gWmUgufJ+TLxY
+         6nTbIZ5+Z6EJ23+v+OaZF/xpJaY55g20UDoawIZrJoPGFbyoHjLEvYeapMmNZJBpveek
+         PPY5VkkfZ2ubNqIbgxyIR9y8VRwVRM/VsejJ3NUYqeOzQLickh1WLs5mrJVE///Nqq1M
+         xMJ1anI3wy9iQVFvee9ByunDawc/akfjPqmxYNnZoUTEW4HNsfNX0Okf8qIkcAWEe+sL
+         oLhO+JbwaxV1HZ6qWgSOJH98lIp2moHlLGvi2bFis2JD+L6Shj+BPgsGSXB/6W0glas4
+         xEtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=cJpjB2Imjue5MPptrTSlFySfZuGIV+MLwnJNG0x4xvk=;
+        b=PqcTnLe7rd+9q/KR5VQ58SakTnZAg78wdLurSBcl1NYeLGmNf9McquijasI0LSwwDo
+         l2bT0duT7kHoslDDdS3Jfk5GktsJInPrN3BolF17Tr2pibQMdbqHIyC+TbI3sfVPHFSJ
+         6bBOnFD5Vbd/Fu/AjRxAzlPKtyqSH3PNVJFKtl2VX8UTInCkSGVNUp9kLhbCufIF1QX7
+         ndXxMkoCZdo3mZVq+qrugZoMIV9hHUjD0JwgqImjj64Gtpl2FdZw5SDtpb3G74/t5hE7
+         7TnywJ2ySEQ71AUPabQGFT3IWbkQrMhlJ0pIZxpCCXhgf9zXg0XVMdyxUZD2FMf0da4G
+         NCYA==
+X-Gm-Message-State: AOAM532qokmXBZOA399AMTeMCT32BcsbL809ZEpmoVIlUovXatALJqnZ
+        ddyJqymqQ1AaFGK0DNbypogbtg==
+X-Google-Smtp-Source: ABdhPJwCoD9+ESaqpN1tOSsKHyjc28t7oN0/oVgThSxndsT7mPr0tLHxqG+bnGT+WRRmi7xjDZtBtw==
+X-Received: by 2002:a5d:40cd:0:b0:1ee:a044:361f with SMTP id b13-20020a5d40cd000000b001eea044361fmr4479895wrq.235.1645789151291;
+        Fri, 25 Feb 2022 03:39:11 -0800 (PST)
+Received: from ?IPV6:2a01:e34:ed2f:f020:25a:d4d2:9383:c638? ([2a01:e34:ed2f:f020:25a:d4d2:9383:c638])
+        by smtp.googlemail.com with ESMTPSA id c4-20020adfed84000000b001e5b8d5b8dasm3046083wro.36.2022.02.25.03.39.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Feb 2022 03:39:10 -0800 (PST)
+Message-ID: <1aaf4f8f-d777-633a-a469-ebeee4f9704e@linaro.org>
+Date:   Fri, 25 Feb 2022 12:39:07 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 02/10] dt-bindings: thermal: tsens: Add msm8953
+ compatible
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Luca Weiss <luca@z3ntu.xyz>
+Cc:     linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220220201909.445468-1-luca@z3ntu.xyz>
+ <20220220201909.445468-3-luca@z3ntu.xyz> <YhfmQFFCmb74dOvV@builder.lan>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <YhfmQFFCmb74dOvV@builder.lan>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 8276cbee5a52543c614a1e1bc2624188d5970848  Merge branch 'thermal-int340x-fixes' into bleeding-edge
+On 24/02/2022 21:10, Bjorn Andersson wrote:
+> On Sun 20 Feb 14:18 CST 2022, Luca Weiss wrote:
+> 
+>> Document the compatible string for tsens found in msm8953.
+>>
+>> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+>> Acked-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+>> Acked-by: Amit Kucheria <amitk@kernel.org>
+>> Acked-by: Rob Herring <robh@kernel.org>
+> 
+> Daniel, can you please pick this patch through your tree?
 
-Error/Warning reports:
+Applied, thanks
 
-https://lore.kernel.org/llvm/202202250758.oDiHyXAy-lkp@intel.com
 
-Error/Warning in current branch:
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-arch/x86/include/asm/pci_x86.h:133:19: error: expected ';' after top level declarator
-arch/x86/include/asm/pci_x86.h:138:12: error: redeclaration of '__init' with a different type: 'int' vs 'void'
-arch/x86/include/asm/pci_x86.h:174:33: error: redeclaration of '__init' with a different type: 'struct pci_mmcfg_region *' vs 'void'
-
-possible Error/Warning in current branch (please contact us if interested):
-
-arch/x86/include/asm/pci_x86.h:133:20: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'dmi_check_pciprobe'
-arch/x86/include/asm/pci_x86.h:134:20: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'dmi_check_skip_isa_align'
-arch/x86/include/asm/pci_x86.h:138:19: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'pci_acpi_init'
-arch/x86/include/asm/pci_x86.h:145:20: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'pcibios_irq_init'
-arch/x86/include/asm/pci_x86.h:146:19: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'pcibios_init'
-arch/x86/include/asm/pci_x86.h:166:19: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'pci_mmcfg_arch_init'
-arch/x86/include/asm/pci_x86.h:167:20: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'pci_mmcfg_arch_free'
-arch/x86/include/asm/pci_x86.h:174:40: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'pci_mmconfig_add'
-arch/x86/include/asm/pci_x86.h:97:8: error: unknown type name 'raw_spinlock_t'
-
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- i386-randconfig-a003
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-dmi_check_pciprobe
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-dmi_check_skip_isa_align
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pci_acpi_init
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pci_mmcfg_arch_free
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pci_mmcfg_arch_init
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pci_mmconfig_add
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pcibios_init
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pcibios_irq_init
-|   `-- arch-x86-include-asm-pci_x86.h:error:unknown-type-name-raw_spinlock_t
-|-- i386-randconfig-c001
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-dmi_check_pciprobe
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-dmi_check_skip_isa_align
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pci_acpi_init
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pci_mmcfg_arch_free
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pci_mmcfg_arch_init
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pci_mmconfig_add
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pcibios_init
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pcibios_irq_init
-|   `-- arch-x86-include-asm-pci_x86.h:error:unknown-type-name-raw_spinlock_t
-|-- i386-randconfig-s001
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-dmi_check_pciprobe
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-dmi_check_skip_isa_align
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pci_acpi_init
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pci_mmcfg_arch_free
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pci_mmcfg_arch_init
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pci_mmconfig_add
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pcibios_init
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pcibios_irq_init
-|   `-- arch-x86-include-asm-pci_x86.h:error:unknown-type-name-raw_spinlock_t
-|-- i386-randconfig-s002
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-dmi_check_pciprobe
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-dmi_check_skip_isa_align
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pci_acpi_init
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pci_mmcfg_arch_free
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pci_mmcfg_arch_init
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pci_mmconfig_add
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pcibios_init
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pcibios_irq_init
-|   `-- arch-x86-include-asm-pci_x86.h:error:unknown-type-name-raw_spinlock_t
-|-- x86_64-alldefconfig
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-dmi_check_pciprobe
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-dmi_check_skip_isa_align
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pci_acpi_init
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pci_mmcfg_arch_free
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pci_mmcfg_arch_init
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pci_mmconfig_add
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pcibios_init
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pcibios_irq_init
-|   `-- arch-x86-include-asm-pci_x86.h:error:unknown-type-name-raw_spinlock_t
-|-- x86_64-randconfig-c002
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-dmi_check_pciprobe
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-dmi_check_skip_isa_align
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pci_acpi_init
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pci_mmcfg_arch_free
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pci_mmcfg_arch_init
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pci_mmconfig_add
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pcibios_init
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pcibios_irq_init
-|   `-- arch-x86-include-asm-pci_x86.h:error:unknown-type-name-raw_spinlock_t
-|-- x86_64-randconfig-s021
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-dmi_check_pciprobe
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-dmi_check_skip_isa_align
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pci_acpi_init
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pci_mmcfg_arch_free
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pci_mmcfg_arch_init
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pci_mmconfig_add
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pcibios_init
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pcibios_irq_init
-|   `-- arch-x86-include-asm-pci_x86.h:error:unknown-type-name-raw_spinlock_t
-`-- x86_64-randconfig-s022
-    |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-dmi_check_pciprobe
-    |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-dmi_check_skip_isa_align
-    |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pci_acpi_init
-    |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pci_mmcfg_arch_free
-    |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pci_mmcfg_arch_init
-    |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pci_mmconfig_add
-    |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pcibios_init
-    |-- arch-x86-include-asm-pci_x86.h:error:expected-asm-or-__attribute__-before-pcibios_irq_init
-    `-- arch-x86-include-asm-pci_x86.h:error:unknown-type-name-raw_spinlock_t
-
-clang_recent_errors
-|-- i386-randconfig-a002
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-after-top-level-declarator
-|   |-- arch-x86-include-asm-pci_x86.h:error:redeclaration-of-__init-with-a-different-type:int-vs-void
-|   `-- arch-x86-include-asm-pci_x86.h:error:redeclaration-of-__init-with-a-different-type:struct-pci_mmcfg_region-vs-void
-|-- i386-randconfig-a004
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-after-top-level-declarator
-|   |-- arch-x86-include-asm-pci_x86.h:error:redeclaration-of-__init-with-a-different-type:int-vs-void
-|   `-- arch-x86-include-asm-pci_x86.h:error:redeclaration-of-__init-with-a-different-type:struct-pci_mmcfg_region-vs-void
-|-- i386-randconfig-a006
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-after-top-level-declarator
-|   |-- arch-x86-include-asm-pci_x86.h:error:redeclaration-of-__init-with-a-different-type:int-vs-void
-|   `-- arch-x86-include-asm-pci_x86.h:error:redeclaration-of-__init-with-a-different-type:struct-pci_mmcfg_region-vs-void
-|-- i386-randconfig-a011
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-after-top-level-declarator
-|   |-- arch-x86-include-asm-pci_x86.h:error:redeclaration-of-__init-with-a-different-type:int-vs-void
-|   `-- arch-x86-include-asm-pci_x86.h:error:redeclaration-of-__init-with-a-different-type:struct-pci_mmcfg_region-vs-void
-|-- i386-randconfig-a013
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-after-top-level-declarator
-|   |-- arch-x86-include-asm-pci_x86.h:error:redeclaration-of-__init-with-a-different-type:int-vs-void
-|   `-- arch-x86-include-asm-pci_x86.h:error:redeclaration-of-__init-with-a-different-type:struct-pci_mmcfg_region-vs-void
-|-- i386-randconfig-a015
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-after-top-level-declarator
-|   |-- arch-x86-include-asm-pci_x86.h:error:redeclaration-of-__init-with-a-different-type:int-vs-void
-|   `-- arch-x86-include-asm-pci_x86.h:error:redeclaration-of-__init-with-a-different-type:struct-pci_mmcfg_region-vs-void
-|-- x86_64-randconfig-a001
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-after-top-level-declarator
-|   |-- arch-x86-include-asm-pci_x86.h:error:redeclaration-of-__init-with-a-different-type:int-vs-void
-|   `-- arch-x86-include-asm-pci_x86.h:error:redeclaration-of-__init-with-a-different-type:struct-pci_mmcfg_region-vs-void
-|-- x86_64-randconfig-a005
-|   |-- arch-x86-include-asm-pci_x86.h:error:expected-after-top-level-declarator
-|   |-- arch-x86-include-asm-pci_x86.h:error:redeclaration-of-__init-with-a-different-type:int-vs-void
-|   `-- arch-x86-include-asm-pci_x86.h:error:redeclaration-of-__init-with-a-different-type:struct-pci_mmcfg_region-vs-void
-`-- x86_64-randconfig-a012
-    |-- arch-x86-include-asm-pci_x86.h:error:expected-after-top-level-declarator
-    |-- arch-x86-include-asm-pci_x86.h:error:redeclaration-of-__init-with-a-different-type:int-vs-void
-    `-- arch-x86-include-asm-pci_x86.h:error:redeclaration-of-__init-with-a-different-type:struct-pci_mmcfg_region-vs-void
-
-elapsed time: 731m
-
-configs tested: 110
-configs skipped: 3
-
-gcc tested configs:
-arm                                 defconfig
-arm64                               defconfig
-arm                              allmodconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-i386                          randconfig-c001
-microblaze                      mmu_defconfig
-powerpc                     sequoia_defconfig
-arm                        spear6xx_defconfig
-powerpc                  iss476-smp_defconfig
-x86_64                           alldefconfig
-arc                      axs103_smp_defconfig
-m68k                          atari_defconfig
-arm                          iop32x_defconfig
-powerpc                       eiger_defconfig
-sh                   sh7724_generic_defconfig
-mips                       bmips_be_defconfig
-xtensa                       common_defconfig
-sh                          sdk7780_defconfig
-arm                  randconfig-c002-20220224
-ia64                                defconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-csky                                defconfig
-alpha                               defconfig
-nds32                               defconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-parisc                              defconfig
-parisc64                            defconfig
-s390                             allmodconfig
-s390                                defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-i386                             allyesconfig
-i386                              debian-10.3
-i386                   debian-10.3-kselftests
-i386                                defconfig
-sparc                            allyesconfig
-sparc                               defconfig
-nds32                             allnoconfig
-nios2                               defconfig
-arc                              allyesconfig
-mips                             allmodconfig
-mips                             allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-powerpc                          allyesconfig
-i386                          randconfig-a003
-i386                          randconfig-a001
-i386                          randconfig-a005
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-x86_64                        randconfig-a002
-x86_64                        randconfig-a004
-x86_64                        randconfig-a006
-arc                  randconfig-r043-20220223
-s390                 randconfig-r044-20220224
-arc                  randconfig-r043-20220224
-riscv                randconfig-r042-20220224
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                                  kexec
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-
-clang tested configs:
-powerpc              randconfig-c003-20220225
-mips                 randconfig-c004-20220225
-arm                  randconfig-c002-20220225
-s390                 randconfig-c005-20220225
-riscv                randconfig-c006-20220225
-mips                        omega2p_defconfig
-mips                   sb1250_swarm_defconfig
-mips                           ip28_defconfig
-arm                          ixp4xx_defconfig
-powerpc                          g5_defconfig
-mips                          rm200_defconfig
-mips                          malta_defconfig
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-hexagon              randconfig-r045-20220223
-hexagon              randconfig-r045-20220224
-s390                 randconfig-r044-20220223
-riscv                randconfig-r042-20220223
-hexagon              randconfig-r041-20220224
-hexagon              randconfig-r041-20220223
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
