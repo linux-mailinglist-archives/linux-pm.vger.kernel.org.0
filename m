@@ -2,52 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E9F54C4CD6
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Feb 2022 18:46:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7904F4C4CF1
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Feb 2022 18:53:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236298AbiBYRqj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Feb 2022 12:46:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43640 "EHLO
+        id S230029AbiBYRyI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Feb 2022 12:54:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232969AbiBYRqj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Feb 2022 12:46:39 -0500
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC6A1EBAA9
-        for <linux-pm@vger.kernel.org>; Fri, 25 Feb 2022 09:46:02 -0800 (PST)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 4.0.0)
- id cca335e773f992d4; Fri, 25 Feb 2022 18:46:00 +0100
-Received: from kreacher.localnet (unknown [213.134.175.246])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 5DF3B66B838;
-        Fri, 25 Feb 2022 18:45:59 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Feng Tang <feng.tang@intel.com>,
-        Doug Smythies <dsmythies@telus.net>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: Re: CPU excessively long times between frequency scaling driver calls - bisected
-Date:   Fri, 25 Feb 2022 18:45:58 +0100
-Message-ID: <5562542.DvuYhMxLoT@kreacher>
-In-Reply-To: <20220224080830.GD4548@shbuild999.sh.intel.com>
-References: <CAAYoRsXkyWf0vmEE2HvjF6pzCC4utxTF=7AFx1PJv4Evh=C+Ow@mail.gmail.com> <CAJZ5v0jsy0q3-ZqYvDrswY1F+tJsG6oNjNJPzz9zzkgdnoMwkw@mail.gmail.com> <20220224080830.GD4548@shbuild999.sh.intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.175.246
-X-CLIENT-HOSTNAME: 213.134.175.246
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrleeggddutdehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvjeelgffhiedukedtleekkedvudfggefhgfegjefgueekjeelvefggfdvledutdenucfkphepvddufedrudefgedrudejhedrvdegieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddujeehrddvgeeipdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopedutddprhgtphhtthhopehfvghnghdrthgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtohepughsmhihthhhihgvshesthgvlhhushdrnhgvthdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehruhhirdii
- hhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtohepthhglhigsehlihhnuhhtrhhonhhigidruggvpdhrtghpthhtohepphgruhhlmhgtkheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhtrggslhgvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepgiekieeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=10 Fuz1=10 Fuz2=10
+        with ESMTP id S230004AbiBYRyI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Feb 2022 12:54:08 -0500
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 53159187BA7;
+        Fri, 25 Feb 2022 09:53:35 -0800 (PST)
+X-IronPort-AV: E=Sophos;i="5.90,136,1643641200"; 
+   d="scan'208";a="111603447"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 26 Feb 2022 02:53:35 +0900
+Received: from localhost.localdomain (unknown [10.226.92.192])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 6DB834006DFB;
+        Sat, 26 Feb 2022 02:53:32 +0900 (JST)
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        linux-watchdog@vger.kernel.org,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v5 3/7] watchdog: rzg2l_wdt: Fix 'BUG: Invalid wait context'
+Date:   Fri, 25 Feb 2022 17:53:16 +0000
+Message-Id: <20220225175320.11041-4-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220225175320.11041-1-biju.das.jz@bp.renesas.com>
+References: <20220225175320.11041-1-biju.das.jz@bp.renesas.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
@@ -57,254 +47,129 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thursday, February 24, 2022 9:08:30 AM CET Feng Tang wrote:
-> On Wed, Feb 23, 2022 at 03:23:20PM +0100, Rafael J. Wysocki wrote:
-> > On Wed, Feb 23, 2022 at 1:40 AM Feng Tang <feng.tang@intel.com> wrote:
-> > >
-> > > On Tue, Feb 22, 2022 at 04:32:29PM -0800, srinivas pandruvada wrote:
-> > > > Hi Doug,
-> > > >
-> > > > On Tue, 2022-02-22 at 16:07 -0800, Doug Smythies wrote:
-> > > > > Hi All,
-> > > > >
-> > > > > I am about 1/2 way through testing Feng's "hacky debug patch",
-> > > > > let me know if I am wasting my time, and I'll abort. So far, it
-> > > > > works fine.
-> > > > This just proves that if you add some callback during long idle,  you
-> > > > will reach a less aggressive p-state. I think you already proved that
-> > > > with your results below showing 1W less average power ("Kernel 5.17-rc3
-> > > > + Feng patch (6 samples at 300 sec per").
-> > > >
-> > > > Rafael replied with one possible option. Alternatively when planing to
-> > > > enter deep idle, set P-state to min with a callback like we do in
-> > > > offline callback.
-> > >
-> > > Yes, if the system is going to idle, it makes sense to goto a lower
-> > > cpufreq first (also what my debug patch will essentially lead to).
-> > >
-> > > Given cprfreq-util's normal running frequency is every 10ms, doing
-> > > this before entering idle is not a big extra burden.
-> > 
-> > But this is not related to idle as such, but to the fact that idle
-> > sometimes stops the scheduler tick which otherwise would run the
-> > cpufreq governor callback on a regular basis.
-> > 
-> > It is stopping the tick that gets us into trouble, so I would avoid
-> > doing it if the current performance state is too aggressive.
-> 
-> I've tried to simulate Doug's environment by using his kconfig, and
-> offline my 36 CPUs Desktop to leave 12 CPUs online, and on it I can
-> still see Local timer interrupts when there is no active load, with
-> the longest interval between 2 timer interrupts is 4 seconds, while
-> idle class's task_tick_idle() will do nothing, and CFS'
-> task_tick_fair() will in turn call cfs_rq_util_change()
-> 
-> I searched the cfs/deadline/rt code, these three classes  all have
-> places to call cpufreq_update_util(), either in enqueue/dequeue or
-> changing running bandwidth. So I think entering idle also means the
-> system load is under a big change, and worth calling the cpufreq
-> callback.
-> 
-> > In principle, PM QoS can be used for that from intel_pstate, but there
-> > is a problem with that approach, because it is not obvious what value
-> > to give to it and it is not always guaranteed to work (say when all of
-> > the C-states except for C1 are disabled).
-> > 
-> > So it looks like a new mechanism is needed for that.
-> 
-> If you think idle class is not the right place to solve it, I can
-> also help testing new patches.
+This patch fixes the issue 'BUG: Invalid wait context' during restart()
+callback by using clk_prepare_enable() instead of pm_runtime_get_sync()
+for turning on the clocks during restart.
 
-So I have the appended experimental patch to address this issue that's not
-been tested at all.  Caveat emptor.
+This issue is noticed when testing with renesas_defconfig.
 
-I've been looking for something relatively low-overhead and taking all of the
-dependencies into account.
+[   42.213802] reboot: Restarting system
+[   42.217860]
+[   42.219364] =============================
+[   42.223368] [ BUG: Invalid wait context ]
+[   42.227372] 5.17.0-rc5-arm64-renesas-00002-g10393723e35e #522 Not tainted
+[   42.234153] -----------------------------
+[   42.238155] systemd-shutdow/1 is trying to lock:
+[   42.242766] ffff00000a650828 (&genpd->mlock){+.+.}-{3:3}, at: genpd_lock_mtx+0x14/0x20
+[   42.250709] other info that might help us debug this:
+[   42.255753] context-{4:4}
+[   42.258368] 2 locks held by systemd-shutdow/1:
+[   42.262806]  #0: ffff80000944e1c8 (system_transition_mutex#2){+.+.}-{3:3}, at: __do_sys_reboot+0xd0/0x250
+[   42.272388]  #1: ffff8000094c4e40 (rcu_read_lock){....}-{1:2}, at: atomic_notifier_call_chain+0x0/0x150
+[   42.281795] stack backtrace:
+[   42.284672] CPU: 0 PID: 1 Comm: systemd-shutdow Not tainted 5.17.0-rc5-arm64-renesas-00002-g10393723e35e #522
+[   42.294577] Hardware name: Renesas SMARC EVK based on r9a07g044c2 (DT)
+[   42.301096] Call trace:
+[   42.303538]  dump_backtrace+0xcc/0xd8
+[   42.307203]  show_stack+0x14/0x30
+[   42.310517]  dump_stack_lvl+0x88/0xb0
+[   42.314180]  dump_stack+0x14/0x2c
+[   42.317492]  __lock_acquire+0x1b24/0x1b50
+[   42.321502]  lock_acquire+0x120/0x3a8
+[   42.325162]  __mutex_lock+0x84/0x8f8
+[   42.328737]  mutex_lock_nested+0x30/0x58
+[   42.332658]  genpd_lock_mtx+0x14/0x20
+[   42.336319]  genpd_runtime_resume+0xc4/0x228
+[   42.340587]  __rpm_callback+0x44/0x170
+[   42.344337]  rpm_callback+0x64/0x70
+[   42.347824]  rpm_resume+0x4e0/0x6b8
+[   42.351310]  __pm_runtime_resume+0x50/0x78
+[   42.355404]  rzg2l_wdt_restart+0x28/0x68
+[   42.359329]  watchdog_restart_notifier+0x1c/0x30
+[   42.363943]  atomic_notifier_call_chain+0x94/0x150
+[   42.368732]  do_kernel_restart+0x24/0x30
+[   42.372652]  machine_restart+0x44/0x70
+[   42.376399]  kernel_restart+0x3c/0x60
+[   42.380058]  __do_sys_reboot+0x228/0x250
+[   42.383977]  __arm64_sys_reboot+0x20/0x28
+[   42.387983]  invoke_syscall+0x40/0xf8
 
+Fixes: 2cbc5cd0b55fa2 ("watchdog: Add Watchdog Timer driver for RZ/G2L")
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
- drivers/cpufreq/intel_pstate.c     |   40 ++++++++++++++++++++++++++++---------
- drivers/cpuidle/governors/ladder.c |    6 +++--
- drivers/cpuidle/governors/menu.c   |    2 +
- drivers/cpuidle/governors/teo.c    |    3 ++
- include/linux/cpuidle.h            |    4 +++
- 5 files changed, 44 insertions(+), 11 deletions(-)
+V4->V5:
+ * Added Rb tag from Geert.
+ * CC'ed Linux PM.
+V4:
+ * New patch
+---
+ drivers/watchdog/rzg2l_wdt.c | 25 +++++++++++++------------
+ 1 file changed, 13 insertions(+), 12 deletions(-)
 
-Index: linux-pm/drivers/cpuidle/governors/menu.c
-===================================================================
---- linux-pm.orig/drivers/cpuidle/governors/menu.c
-+++ linux-pm/drivers/cpuidle/governors/menu.c
-@@ -284,6 +284,8 @@ static int menu_select(struct cpuidle_dr
- 	if (unlikely(delta < 0)) {
- 		delta = 0;
- 		delta_tick = 0;
-+	} else if (dev->retain_tick) {
-+		delta = delta_tick;
- 	}
- 	data->next_timer_ns = delta;
+diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
+index 0fc73b8a9567..48dfe6e5e64f 100644
+--- a/drivers/watchdog/rzg2l_wdt.c
++++ b/drivers/watchdog/rzg2l_wdt.c
+@@ -43,6 +43,8 @@ struct rzg2l_wdt_priv {
+ 	struct reset_control *rstc;
+ 	unsigned long osc_clk_rate;
+ 	unsigned long delay;
++	struct clk *pclk;
++	struct clk *osc_clk;
+ };
  
-Index: linux-pm/drivers/cpuidle/governors/teo.c
-===================================================================
---- linux-pm.orig/drivers/cpuidle/governors/teo.c
-+++ linux-pm/drivers/cpuidle/governors/teo.c
-@@ -308,6 +308,9 @@ static int teo_select(struct cpuidle_dri
- 	cpu_data->time_span_ns = local_clock();
+ static void rzg2l_wdt_wait_delay(struct rzg2l_wdt_priv *priv)
+@@ -118,7 +120,9 @@ static int rzg2l_wdt_restart(struct watchdog_device *wdev,
  
- 	duration_ns = tick_nohz_get_sleep_length(&delta_tick);
-+	if (dev->retain_tick)
-+		duration_ns = delta_tick;
+ 	/* Reset the module before we modify any register */
+ 	reset_control_reset(priv->rstc);
+-	pm_runtime_get_sync(wdev->parent);
 +
- 	cpu_data->sleep_length_ns = duration_ns;
++	clk_prepare_enable(priv->pclk);
++	clk_prepare_enable(priv->osc_clk);
  
- 	/* Check if there is any choice in the first place. */
-Index: linux-pm/include/linux/cpuidle.h
-===================================================================
---- linux-pm.orig/include/linux/cpuidle.h
-+++ linux-pm/include/linux/cpuidle.h
-@@ -93,6 +93,7 @@ struct cpuidle_device {
- 	unsigned int		registered:1;
- 	unsigned int		enabled:1;
- 	unsigned int		poll_time_limit:1;
-+	unsigned int		retain_tick:1;
- 	unsigned int		cpu;
- 	ktime_t			next_hrtimer;
+ 	/* smallest counter value to reboot soon */
+ 	rzg2l_wdt_write(priv, WDTSET_COUNTER_VAL(1), WDTSET);
+@@ -165,7 +169,6 @@ static int rzg2l_wdt_probe(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	struct rzg2l_wdt_priv *priv;
+ 	unsigned long pclk_rate;
+-	struct clk *wdt_clk;
+ 	int ret;
  
-@@ -172,6 +173,8 @@ extern int cpuidle_play_dead(void);
- extern struct cpuidle_driver *cpuidle_get_cpu_driver(struct cpuidle_device *dev);
- static inline struct cpuidle_device *cpuidle_get_device(void)
- {return __this_cpu_read(cpuidle_devices); }
-+
-+extern void cpuidle_update_retain_tick(bool val);
- #else
- static inline void disable_cpuidle(void) { }
- static inline bool cpuidle_not_available(struct cpuidle_driver *drv,
-@@ -211,6 +214,7 @@ static inline int cpuidle_play_dead(void
- static inline struct cpuidle_driver *cpuidle_get_cpu_driver(
- 	struct cpuidle_device *dev) {return NULL; }
- static inline struct cpuidle_device *cpuidle_get_device(void) {return NULL; }
-+static inline void cpuidle_update_retain_tick(bool val) { }
- #endif
+ 	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+@@ -177,22 +180,20 @@ static int rzg2l_wdt_probe(struct platform_device *pdev)
+ 		return PTR_ERR(priv->base);
  
- #ifdef CONFIG_CPU_IDLE
-Index: linux-pm/drivers/cpufreq/intel_pstate.c
-===================================================================
---- linux-pm.orig/drivers/cpufreq/intel_pstate.c
-+++ linux-pm/drivers/cpufreq/intel_pstate.c
-@@ -19,6 +19,7 @@
- #include <linux/list.h>
- #include <linux/cpu.h>
- #include <linux/cpufreq.h>
-+#include <linux/cpuidle.h>
- #include <linux/sysfs.h>
- #include <linux/types.h>
- #include <linux/fs.h>
-@@ -1970,6 +1971,30 @@ static inline void intel_pstate_cppc_set
- }
- #endif /* CONFIG_ACPI_CPPC_LIB */
+ 	/* Get watchdog main clock */
+-	wdt_clk = clk_get(&pdev->dev, "oscclk");
+-	if (IS_ERR(wdt_clk))
+-		return dev_err_probe(&pdev->dev, PTR_ERR(wdt_clk), "no oscclk");
++	priv->osc_clk = devm_clk_get(&pdev->dev, "oscclk");
++	if (IS_ERR(priv->osc_clk))
++		return dev_err_probe(&pdev->dev, PTR_ERR(priv->osc_clk), "no oscclk");
  
-+static void intel_pstate_update_perf_ctl(struct cpudata *cpu)
-+{
-+	int pstate = cpu->pstate.current_pstate;
-+
-+	/*
-+	 * Avoid stopping the scheduler tick from cpuidle on CPUs in turbo
-+	 * P-states to prevent them from getting back to the high frequency
-+	 * right away after getting out of deep idle.
-+	 */
-+	cpuidle_update_retain_tick(pstate > cpu->pstate.max_pstate);
-+	wrmsrl(MSR_IA32_PERF_CTL, pstate_funcs.get_val(cpu, pstate));
-+}
-+
-+static void intel_pstate_update_perf_ctl_wrapper(void *cpu_data)
-+{
-+	intel_pstate_update_perf_ctl(cpu_data);
-+}
-+
-+static void intel_pstate_update_perf_ctl_on_cpu(struct cpudata *cpu)
-+{
-+	smp_call_function_single(cpu->cpu, intel_pstate_update_perf_ctl_wrapper,
-+				 cpu, 1);
-+}
-+
- static void intel_pstate_set_pstate(struct cpudata *cpu, int pstate)
- {
- 	trace_cpu_frequency(pstate * cpu->pstate.scaling, cpu->cpu);
-@@ -1979,8 +2004,7 @@ static void intel_pstate_set_pstate(stru
- 	 * the CPU being updated, so force the register update to run on the
- 	 * right CPU.
- 	 */
--	wrmsrl_on_cpu(cpu->cpu, MSR_IA32_PERF_CTL,
--		      pstate_funcs.get_val(cpu, pstate));
-+	intel_pstate_update_perf_ctl_on_cpu(cpu);
- }
+-	priv->osc_clk_rate = clk_get_rate(wdt_clk);
+-	clk_put(wdt_clk);
++	priv->osc_clk_rate = clk_get_rate(priv->osc_clk);
+ 	if (!priv->osc_clk_rate)
+ 		return dev_err_probe(&pdev->dev, -EINVAL, "oscclk rate is 0");
  
- static void intel_pstate_set_min_pstate(struct cpudata *cpu)
-@@ -2256,7 +2280,7 @@ static void intel_pstate_update_pstate(s
- 		return;
+ 	/* Get Peripheral clock */
+-	wdt_clk = clk_get(&pdev->dev, "pclk");
+-	if (IS_ERR(wdt_clk))
+-		return dev_err_probe(&pdev->dev, PTR_ERR(wdt_clk), "no pclk");
++	priv->pclk = devm_clk_get(&pdev->dev, "pclk");
++	if (IS_ERR(priv->pclk))
++		return dev_err_probe(&pdev->dev, PTR_ERR(priv->pclk), "no pclk");
  
- 	cpu->pstate.current_pstate = pstate;
--	wrmsrl(MSR_IA32_PERF_CTL, pstate_funcs.get_val(cpu, pstate));
-+	intel_pstate_update_perf_ctl(cpu);
- }
+-	pclk_rate = clk_get_rate(wdt_clk);
+-	clk_put(wdt_clk);
++	pclk_rate = clk_get_rate(priv->pclk);
+ 	if (!pclk_rate)
+ 		return dev_err_probe(&pdev->dev, -EINVAL, "pclk rate is 0");
  
- static void intel_pstate_adjust_pstate(struct cpudata *cpu)
-@@ -2843,11 +2867,9 @@ static void intel_cpufreq_perf_ctl_updat
- 					  u32 target_pstate, bool fast_switch)
- {
- 	if (fast_switch)
--		wrmsrl(MSR_IA32_PERF_CTL,
--		       pstate_funcs.get_val(cpu, target_pstate));
-+		intel_pstate_update_perf_ctl(cpu);
- 	else
--		wrmsrl_on_cpu(cpu->cpu, MSR_IA32_PERF_CTL,
--			      pstate_funcs.get_val(cpu, target_pstate));
-+		intel_pstate_update_perf_ctl_on_cpu(cpu);
- }
- 
- static int intel_cpufreq_update_pstate(struct cpufreq_policy *policy,
-@@ -2857,6 +2879,8 @@ static int intel_cpufreq_update_pstate(s
- 	int old_pstate = cpu->pstate.current_pstate;
- 
- 	target_pstate = intel_pstate_prepare_request(cpu, target_pstate);
-+	cpu->pstate.current_pstate = target_pstate;
-+
- 	if (hwp_active) {
- 		int max_pstate = policy->strict_target ?
- 					target_pstate : cpu->max_perf_ratio;
-@@ -2867,8 +2891,6 @@ static int intel_cpufreq_update_pstate(s
- 		intel_cpufreq_perf_ctl_update(cpu, target_pstate, fast_switch);
- 	}
- 
--	cpu->pstate.current_pstate = target_pstate;
--
- 	intel_cpufreq_trace(cpu, fast_switch ? INTEL_PSTATE_TRACE_FAST_SWITCH :
- 			    INTEL_PSTATE_TRACE_TARGET, old_pstate);
- 
-Index: linux-pm/drivers/cpuidle/governors/ladder.c
-===================================================================
---- linux-pm.orig/drivers/cpuidle/governors/ladder.c
-+++ linux-pm/drivers/cpuidle/governors/ladder.c
-@@ -61,10 +61,10 @@ static inline void ladder_do_selection(s
-  * ladder_select_state - selects the next state to enter
-  * @drv: cpuidle driver
-  * @dev: the CPU
-- * @dummy: not used
-+ * @stop_tick: Whether or not to stop the scheduler tick
-  */
- static int ladder_select_state(struct cpuidle_driver *drv,
--			       struct cpuidle_device *dev, bool *dummy)
-+			       struct cpuidle_device *dev, bool *stop_tick)
- {
- 	struct ladder_device *ldev = this_cpu_ptr(&ladder_devices);
- 	struct ladder_device_state *last_state;
-@@ -73,6 +73,8 @@ static int ladder_select_state(struct cp
- 	s64 latency_req = cpuidle_governor_latency_req(dev->cpu);
- 	s64 last_residency;
- 
-+	*stop_tick = !dev->retain_tick;
-+
- 	/* Special case when user has set very strict latency requirement */
- 	if (unlikely(latency_req == 0)) {
- 		ladder_do_selection(dev, ldev, last_idx, 0);
-
-
+-- 
+2.17.1
 
