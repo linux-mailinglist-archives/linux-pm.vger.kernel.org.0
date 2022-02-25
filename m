@@ -2,68 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8031D4C469A
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Feb 2022 14:36:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA6AE4C470A
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Feb 2022 15:02:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241490AbiBYNgi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Feb 2022 08:36:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36708 "EHLO
+        id S241258AbiBYODI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Feb 2022 09:03:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239392AbiBYNgh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Feb 2022 08:36:37 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EDEE1DB3D3
-        for <linux-pm@vger.kernel.org>; Fri, 25 Feb 2022 05:36:05 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id j17so4649682wrc.0
-        for <linux-pm@vger.kernel.org>; Fri, 25 Feb 2022 05:36:05 -0800 (PST)
+        with ESMTP id S241232AbiBYODE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Feb 2022 09:03:04 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB8DFBE1E2
+        for <linux-pm@vger.kernel.org>; Fri, 25 Feb 2022 06:02:31 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id i19so1702580wmq.5
+        for <linux-pm@vger.kernel.org>; Fri, 25 Feb 2022 06:02:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ZatkCkH0tiJuMD2zO/1+/ITUO0H0CuZ8bVACIi8yJfU=;
-        b=KU3qOow9ALEILnaJcAHCAV2hs8j29RJhbpsuqTe6/TM3JDkvknNRTZICSH1ZVKohi5
-         cq2V2dtIrA7uvHvbkEndpj257TnwW9hsX+CSGUzKg5iXFDpjd12S8v5Cn2fItflPFL0k
-         RKJV1xlOyilxleTSJYSK4QMsx0kC9DqaCFdpWKfwddoHuUpK4wMpMJenuMlPRat+wdvV
-         cSXTpcSfmB5Ynqfjto+RRs9vK0ziuPdK5/MczK1Px8uI7Dsxs2rjYrqNE7QtHS1p6d/k
-         XxsvTl4Ak7Yy+8CCB1FMBYm0e2jxSIK77hsMdLU9IGTJHx2uQZlFvxXi+APClId41PPW
-         z/mA==
+        bh=Qk5zAx/v4pV2NZHwekGx/zCPF5BYYqJTYfuyv4JLKnY=;
+        b=qSqHaAhVw1FQbAxP/QAKts4bG5uOwjXiLlvlpqNoykQNaeeBXx32Edu43dPFStbZCG
+         cnQTUAezVOLG2KcozYpdObnmmiXEODrRfjE3sgIO4puFvZRT7+VS21wqJ0ZA2wY+Gmie
+         q4OMiLbz4SyMAB+tqwh9ilNBqpa8fyiAkMWeuXzAlAdESXgegz2460ZT7qY9jn215v+v
+         fFkTJxtJT5oB6R3OaoW7TwhajdFxuXkE77nR3r5OB7lbU1dHY2s/K9xrZjilvGNH8x5m
+         7MSD0/mhJ8tj8BYvyIVdzEon2/I5Hjt4/zFb6EWNseBMC8roVJ3usS25uz22iiIOt6BF
+         fLlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=ZatkCkH0tiJuMD2zO/1+/ITUO0H0CuZ8bVACIi8yJfU=;
-        b=zzJI2zk92aibj8qYy5hXZ9b8T9GyS26dLx3r7MA+dAYjikKum2gzIXudWw0g9aU41c
-         W101fBeYDIWMzMOfGM2vv9ZfmY9nYyxrFl/c4znigpHuIJzBUu9AEEZAOzxJXRmW+kfc
-         1I34+FQCOEzw0Nu8JKFHuJCBQVgi94pJTj7hNK0+3lsZhJ8yftKFDahF6yAujy6iqrrG
-         GzClUlGD9M4oE7rXM+SAimSDFnimRlgfPYghUMaYBbO7nIKBn7AmVO72iTEzTQhLYnzW
-         xJxUSJWelAFCUI0TymfnEtF2T4SmA/yHikCGybWhPIkHwYLYVMe9jizwx18Pb4DiscA2
-         yV/g==
-X-Gm-Message-State: AOAM532KPDnSGwgbMJkP/T2/2/Yvi/BHpNnT3ABffZo0qSkhHrSzDuFJ
-        VaOBh/EOHYpBK1618VIm8ly4qA==
-X-Google-Smtp-Source: ABdhPJzbz7fAy9NilvFpC5CCxvjjUiKAaI6E1HnpMUUEKICWrBb7YnVFFjgbrN4X1GhxtSvqW7DhSQ==
-X-Received: by 2002:a05:6000:184d:b0:1ea:78a5:f9c8 with SMTP id c13-20020a056000184d00b001ea78a5f9c8mr6261272wri.439.1645796163603;
-        Fri, 25 Feb 2022 05:36:03 -0800 (PST)
+        bh=Qk5zAx/v4pV2NZHwekGx/zCPF5BYYqJTYfuyv4JLKnY=;
+        b=706FT/x61s38vcTfm9dhFHVKrCADomp8/AhiCjEWsnIuJ31zU/RcmYfBQGBKkH7Z3I
+         TZ+Ds0q4UDBKPe2VDzWMoxqzjd+8O76EL3DX3NgjHberuEUD0TY7uu9RrSMBJWjz5fuf
+         WGg5CbBlDjKs6E6a+p4ffEOGosglRy4z77Mu4eUlQS4MZ8LOoDqZt5A2Qc5WbTxPcvHp
+         WimR6kFJnNw/K9wkbgs+TCM3Gp8d5lfhdiuDPjlJk3wKEXwQOSnQShMqVi5/tiBw1Bu2
+         46L7aHo2ghQYEQ0dqwln/D4YHGODJfVMMULerGmakB4XcArujtvLCZHxpObVbBPqyghc
+         X+LQ==
+X-Gm-Message-State: AOAM531ZL2k1oETsgOi8e3iOV7E38N77Zq0A4KmdGjeerwoJaVF/+VNr
+        7s+wYWKoVTFPq+b80VeyWFx/jQ==
+X-Google-Smtp-Source: ABdhPJzNfT6n5Kc9L2VQ5D1j+nBD0b/pLVfgouVRVGcRtPNPueTZJNk9DqZCS70uXP1DUkfwvKJuoQ==
+X-Received: by 2002:a05:600c:508:b0:380:fd39:2c42 with SMTP id i8-20020a05600c050800b00380fd392c42mr2814366wmc.178.1645797750075;
+        Fri, 25 Feb 2022 06:02:30 -0800 (PST)
 Received: from ?IPV6:2a01:e34:ed2f:f020:25a:d4d2:9383:c638? ([2a01:e34:ed2f:f020:25a:d4d2:9383:c638])
-        by smtp.googlemail.com with ESMTPSA id b10-20020a5d550a000000b001e30e81afd1sm2379527wrv.2.2022.02.25.05.36.01
+        by smtp.googlemail.com with ESMTPSA id f21-20020a7bcd15000000b0034efd01ee16sm2462450wmj.42.2022.02.25.06.02.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Feb 2022 05:36:02 -0800 (PST)
-Message-ID: <48c9fecc-67eb-891c-fb07-30ae4691031c@linaro.org>
-Date:   Fri, 25 Feb 2022 14:36:00 +0100
+        Fri, 25 Feb 2022 06:02:29 -0800 (PST)
+Message-ID: <422bd780-354d-d4ac-7b7a-8060325fc13e@linaro.org>
+Date:   Fri, 25 Feb 2022 15:02:27 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v4 1/2] thermal: Add thermal driver for Sunplus SP7021
+Subject: Re: [PATCH v3] drivers: thermal: tsens: respect thermal_device_mode
+ in threshold irq reporting
 Content-Language: en-US
-To:     Li-hao Kuo <lhjeff911@gmail.com>, rafael@kernel.org,
-        amitk@kernel.org, rui.zhang@intel.com, robh+dt@kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     wells.lu@sunplus.com, lh.kuo@sunplus.com
-References: <cover.1642127137.git.lhjeff911@gmail.com>
- <2847f96335da1c74dfbee7ba67939bdc474ba2a4.1642127137.git.lhjeff911@gmail.com>
+To:     Benjamin Li <benl@squareup.com>, Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Zac Crosby <zac@squareup.com>, Andy Gross <agross@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220120200153.1214-1-benl@squareup.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <2847f96335da1c74dfbee7ba67939bdc474ba2a4.1642127137.git.lhjeff911@gmail.com>
+In-Reply-To: <20220120200153.1214-1-benl@squareup.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -76,281 +78,115 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 14/01/2022 03:46, Li-hao Kuo wrote:
-> Add thermal driver for Sunplus SP7021.
-
-Please give a detailed description of the sensor so we can refer to the 
-changelog to understand the code below.
-
-
-> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
+On 20/01/2022 21:01, Benjamin Li wrote:
+> 'echo disabled > .../thermal_zoneX/mode' will disable the thermal core's
+> polling mechanism to check for threshold trips. This is used sometimes to
+> run performance test cases.
+> 
+> However, tsens supports an interrupt mechanism to receive notification of
+> trips, implemented in commit 634e11d5b450 ("drivers: thermal: tsens: Add
+> interrupt support").
+> 
+> Currently the thermal zone mode that's set by userspace is not checked
+> before propagating threshold trip events from IRQs. Let's fix this to
+> restore the abilty to disable thermal throttling at runtime.
+> 
+> ====================
+> 
+> Tested on MSM8939 running 5.16.0. This platform has 8 cores; the first
+> four thermal zones control cpu0-3 and the last zone is for the other four
+> CPUs together.
+> 
+>    for f in /sys/class/thermal/thermal_zone*; do
+>      echo "disabled" > $f/mode
+>      echo $f | paste - $f/type $f/mode
+>    done
+> 
+> /sys/class/thermal/thermal_zone0	cpu0-thermal	disabled
+> /sys/class/thermal/thermal_zone1	cpu1-thermal	disabled
+> /sys/class/thermal/thermal_zone2	cpu2-thermal	disabled
+> /sys/class/thermal/thermal_zone3	cpu3-thermal	disabled
+> /sys/class/thermal/thermal_zone4	cpu4567-thermal	disabled
+> 
+> With mitigation thresholds at 75 degC and load running, we can now cruise
+> past temp=75000 without CPU throttling kicking in.
+> 
+>    watch -n 1 "grep '' /sys/class/thermal/*/temp
+>        /sys/class/thermal/*/cur_state
+>        /sys/bus/cpu/devices/cpu*/cpufreq/cpuinfo_cur_freq"
+> 
+> /sys/class/thermal/thermal_zone0/temp:82000
+> /sys/class/thermal/thermal_zone1/temp:84000
+> /sys/class/thermal/thermal_zone2/temp:87000
+> /sys/class/thermal/thermal_zone3/temp:84000
+> /sys/class/thermal/thermal_zone4/temp:84000
+> /sys/class/thermal/cooling_device0/cur_state:0
+> /sys/class/thermal/cooling_device1/cur_state:0
+> /sys/bus/cpu/devices/cpu0/cpufreq/cpuinfo_cur_freq:1113600
+> /sys/bus/cpu/devices/cpu1/cpufreq/cpuinfo_cur_freq:1113600
+> /sys/bus/cpu/devices/cpu2/cpufreq/cpuinfo_cur_freq:1113600
+> /sys/bus/cpu/devices/cpu3/cpufreq/cpuinfo_cur_freq:1113600
+> /sys/bus/cpu/devices/cpu4/cpufreq/cpuinfo_cur_freq:800000
+> /sys/bus/cpu/devices/cpu5/cpufreq/cpuinfo_cur_freq:800000
+> /sys/bus/cpu/devices/cpu6/cpufreq/cpuinfo_cur_freq:800000
+> /sys/bus/cpu/devices/cpu7/cpufreq/cpuinfo_cur_freq:800000
+> 
+> Reported-by: Zac Crosby <zac@squareup.com>
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Benjamin Li <benl@squareup.com>
 > ---
-> Changes in v4:
->   - Modify yaml file remove reg name and change nvmem name
+> Changes in v3:
+> - Upgraded logging to dev_info_ratelimited and revised log message.
+> - Remove unrelated hunk.
 > 
->   MAINTAINERS                       |   6 ++
->   drivers/thermal/Kconfig           |  10 +++
->   drivers/thermal/Makefile          |   1 +
->   drivers/thermal/sunplus_thermal.c | 157 ++++++++++++++++++++++++++++++++++++++
->   4 files changed, 174 insertions(+)
->   create mode 100644 drivers/thermal/sunplus_thermal.c
+> Some drivers that support thermal zone disabling implement a set_mode
+> operation and simply disable the sensor or the relevant IRQ(s), so they
+> actually don't log anything when zones are disabled. These drivers are
+> imx_thermal.c, intel_quark_dts_thermal.c, and int3400_thermal.c.
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index dc4a137..e41b265 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -18423,6 +18423,12 @@ L:	netdev@vger.kernel.org
->   S:	Maintained
->   F:	drivers/net/ethernet/dlink/sundance.c
+> For tsens.c, implementing a change_mode would require migrating the driver
+> from devm_thermal_zone_of_sensor_register to thermal_zone_device_register
+> (or updating thermal_of.c to add a change_mode operation in thermal_zone_
+> of_device_ops).
+> 
+> stm_thermal.c seems to use this patch's model of not disabling IRQs when
+> the zone is disabled (they still perform the thermal_zone_device_update
+> upon IRQ, but return -EAGAIN from their get_temp).
+
+What is the concern by changing the core code to have a correct handling 
+of the disabled / enabled state in this driver ? (and by this way give 
+the opportunity to other drivers to fix their code)
+
+
+> Changes in v2:
+> - Reordered sentences in first part of commit message to make sense.
+> 
+>   drivers/thermal/qcom/tsens.c | 12 ++++++++----
+>   1 file changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+> index 99a8d9f3e03c..dd0002829536 100644
+> --- a/drivers/thermal/qcom/tsens.c
+> +++ b/drivers/thermal/qcom/tsens.c
+> @@ -509,10 +509,14 @@ static irqreturn_t tsens_irq_thread(int irq, void *data)
+>   		spin_unlock_irqrestore(&priv->ul_lock, flags);
 >   
-> +SUNPLUS THERMAL DRIVER
-> +M:	Li-hao Kuo <lhjeff911@gmail.com>
-> +L:	linux-pm@vger.kernel.org
-> +S:	Maintained
-> +F:	drivers/thermal/sunplus_thermal.c
-> +
->   SUPERH
->   M:	Yoshinori Sato <ysato@users.sourceforge.jp>
->   M:	Rich Felker <dalias@libc.org>
-> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> index e37691e..98647c7 100644
-> --- a/drivers/thermal/Kconfig
-> +++ b/drivers/thermal/Kconfig
-> @@ -502,4 +502,14 @@ config KHADAS_MCU_FAN_THERMAL
->   	  If you say yes here you get support for the FAN controlled
->   	  by the Microcontroller found on the Khadas VIM boards.
->   
-> +config SUNPLUS_THERMAL
-> +	tristate "Sunplus thermal drivers"
-> +	depends on SOC_SP7021
-> +	help
-> +	  This the Sunplus SP7021 thermal driver, which supports the primitive
-> +	  temperature sensor embedded in Sunplus SP7021 SoC.
-> +
-> +	  If you have a Sunplus SP7021 platform say Y here and enable this option
-> +	  to have support for thermal management
-> +
->   endif
-> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-> index f0c36a1..2f7417a 100644
-> --- a/drivers/thermal/Makefile
-> +++ b/drivers/thermal/Makefile
-> @@ -61,3 +61,4 @@ obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
->   obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
->   obj-$(CONFIG_SPRD_THERMAL)	+= sprd_thermal.o
->   obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)	+= khadas_mcu_fan.o
-> +obj-$(CONFIG_SUNPLUS_THERMAL)	+= sunplus_thermal.o
-> \ No newline at end of file
-> diff --git a/drivers/thermal/sunplus_thermal.c b/drivers/thermal/sunplus_thermal.c
-> new file mode 100644
-> index 0000000..460c41d
-> --- /dev/null
-> +++ b/drivers/thermal/sunplus_thermal.c
-> @@ -0,0 +1,157 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) Sunplus Inc.
-> + * Author: Li-hao Kuo <lhjeff911@gmail.com>
-> + */
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/clk.h>
-> +#include <linux/cpufreq.h>
-> +#include <linux/delay.h>
-> +#include <linux/err.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/io.h>
-> +#include <linux/module.h>
-> +#include <linux/nvmem-consumer.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/reset.h>
-> +#include <linux/rtc.h>
-> +#include <linux/thermal.h>
-
-
-Please check the headers above. Some are not necessary (eg cpufreq, 
-delay, rtc ...) AFAICT
-
-> +#define DISABLE_THREMAL		(BIT(31) | BIT(15))
-> +#define ENABLE_THREMAL		BIT(31)
-> +#define SP_THREMAL_MASK		GENMASK(10, 0)
-
-THREMAL ?
-
-s/THREMAL/THERMAL/ ?
-
-> +#define TEMP_RATE		608
-> +#define TEMP_BASE		3500
-> +#define TEMP_OTP_BASE		1518
-> +
-> +#define SP_THERMAL_CTL0_REG	0x0000
-> +#define SP_THERMAL_STS0_REG	0x0030
-> +
-> +/* common data structures */
-> +struct sp_thermal_data {
-> +	struct thermal_zone_device *pcb_tz;
-> +	struct platform_device *pdev;
-> +	enum thermal_device_mode mode;
-> +	long sensor_temp;
-> +	void __iomem *regs;
-> +	int otp_temp0;
-> +	int otp_temp1;
-> +	u32 id;
-> +};
-> +
-> +static char *sp7021_otp_coef_read(struct device *dev, ssize_t *len)
-> +{
-> +	char *ret = NULL;
-> +	struct nvmem_cell *c = nvmem_cell_get(dev, "calib");
-> +
-> +	if (IS_ERR_OR_NULL(c))
-> +		return NULL;
-> +
-> +	ret = nvmem_cell_read(c, len);
-> +	nvmem_cell_put(c);
-
-That is wrong. Please refer to the documentation driver-api/nvmem.rst
-
-nvmem_cell_put() must be called when the pointer returned by 
-nvmem_cell_read() is no longer used.
-
-
-> +	return ret;
-> +}
-> +
-> +static void sp7021_get_otp_temp_coef(struct sp_thermal_data *sp_data, struct device *_d)
-> +{
-> +	ssize_t otp_l = 0;
-> +	char *otp_v;
-> +
-> +	otp_v = sp7021_otp_coef_read(_d, &otp_l);
-> +	if (otp_l < 3)
-> +		return;
-> +	if (IS_ERR_OR_NULL(otp_v))
-> +		return;
-> +	sp_data->otp_temp0 = otp_v[0] | (otp_v[1] << 8);
-
-What do you expect by 8bits shifting a char here ?
-
-> +	sp_data->otp_temp0 = otp_v[0] | (otp_v[1] << 8);
-
-duplicate line
-
-> +	sp_data->otp_temp0 = FIELD_GET(SP_THREMAL_MASK, sp_data->otp_temp0);
-> +	sp_data->otp_temp1 = (otp_v[1] >> 3) | (otp_v[2] << 5);
-> +	sp_data->otp_temp1 = FIELD_GET(SP_THREMAL_MASK, sp_data->otp_temp1);
-> +	if (sp_data->otp_temp0 == 0)
-> +		sp_data->otp_temp0 = TEMP_OTP_BASE;
-
-Can you add a comment explaining how is stored the coef in the nvcell, 
-so we can understand the above actions ?
-
-
-> +}
-> +
-> +static int sp_thermal_get_sensor_temp(void *data, int *temp)
-> +{
-> +	struct sp_thermal_data *sp_data = data;
-> +	int t_code;
-> +
-> +	t_code = readl(sp_data->regs + SP_THERMAL_STS0_REG);
-> +	t_code = FIELD_GET(SP_THREMAL_MASK, t_code);
-> +	*temp = ((sp_data->otp_temp0 - t_code) * 10000 / TEMP_RATE) + TEMP_BASE;
-> +	*temp *= 10;
-
-A comment would be welcome here also
-
-> +	return 0;
-> +}
-> +
-> +static struct thermal_zone_of_device_ops sp_of_thermal_ops = {
-> +	.get_temp = sp_thermal_get_sensor_temp,
-> +};
-> +
-> +static int sp_thermal_register_sensor(struct platform_device *pdev, struct sp_thermal_data *data,
-> +				       int index)
-> +{
-> +	int ret;
-> +
-> +	data->id = index;
-> +	data->pcb_tz = devm_thermal_zone_of_sensor_register(&pdev->dev,
-> +					data->id, data, &sp_of_thermal_ops);
-> +	if (!IS_ERR_OR_NULL(data->pcb_tz))
-> +		return 0;
-> +	ret = PTR_ERR(data->pcb_tz);
-> +	data->pcb_tz = NULL;
-> +	return ret;
-
-Usually the logic is inverted
-
-	data->pcb_tz = devm_thermal_zone_of_sensor_register();
-	if (IS_ERR_OR_NULL(data->pcb_tz))
-		return PTR_ERR(data->pcb_tz);
-
-	return 0;
-
-No need to set pcb_tz to NULL
-
-> +}
-> +
-> +static int sp7021_thermal_probe(struct platform_device *pdev)
-> +{
-> +	struct sp_thermal_data *sp_data;
-> +	struct resource *res;
-> +	int ret;
-> +
-> +	sp_data = devm_kzalloc(&(pdev->dev), sizeof(*sp_data), GFP_KERNEL);
-> +	if (!sp_data)
-> +		return -ENOMEM;
-> +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	if (IS_ERR(res))
-> +		return dev_err_probe(&(pdev->dev), PTR_ERR(res), "resource get fail\n");
-
-Use an intermediate 'dev' variable to shorten the line
-
-> +	sp_data->regs = devm_ioremap(&(pdev->dev), res->start, resource_size(res));
-> +	if (IS_ERR(sp_data->regs))
-> +		return dev_err_probe(&(pdev->dev), PTR_ERR(sp_data->regs), "mas_base get fail\n");
-
-typo: mas_base -> ioremap
-
-> +	writel(ENABLE_THREMAL, sp_data->regs + SP_THERMAL_CTL0_REG);
-> +
-> +	platform_set_drvdata(pdev, sp_data);
-> +	sp7021_get_otp_temp_coef(sp_data, &pdev->dev);
-> +	ret = sp_thermal_register_sensor(pdev, sp_data, 0);
-
-	return sp_thermal_register_sensor(...);
-> +
-
-> +	return ret;
-> +}
-> +
-> +static int sp7021_thermal_remove(struct platform_device *_pd)
-> +{
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id of_sp7021_thermal_ids[] = {
-> +	{ .compatible = "sunplus,sp7021-thermal" },
-> +	{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, of_sp7021_thermal_ids);
-> +
-> +static struct platform_driver sp7021_thermal_driver = {
-> +	.probe	= sp7021_thermal_probe,
-> +	.remove	= sp7021_thermal_remove,
-> +	.driver	= {
-> +		.name	= "sp7021-thermal",
-> +		.of_match_table = of_match_ptr(of_sp7021_thermal_ids),
-> +		},
-> +};
-> +module_platform_driver(sp7021_thermal_driver);
-> +
-> +MODULE_AUTHOR("Li-hao Kuo <lhjeff911@gmail.com>");
-> +MODULE_DESCRIPTION("Thermal driver for SP7021 SoC");
-> +MODULE_LICENSE("GPL");
+>   		if (trigger) {
+> -			dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC)\n",
+> -				hw_id, __func__, temp);
+> -			thermal_zone_device_update(s->tzd,
+> -						   THERMAL_EVENT_UNSPECIFIED);
+> +			if (s->tzd->mode == THERMAL_DEVICE_ENABLED) {
+> +				dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC)\n",
+> +					hw_id, __func__, temp);
+> +				thermal_zone_device_update(s->tzd, THERMAL_EVENT_UNSPECIFIED);
+> +			} else {
+> +				dev_info_ratelimited(priv->dev, "[%u] %s: TZ update trigger (%d mC) skipped - zone disabled, operating outside of safety limits!\n",
+> +					hw_id, __func__, temp);
+> +			}
+>   		} else {
+>   			dev_dbg(priv->dev, "[%u] %s: no violation:  %d\n",
+>   				hw_id, __func__, temp);
 
 
 -- 
