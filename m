@@ -2,84 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F20D4C43C4
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Feb 2022 12:39:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9034D4C43DB
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Feb 2022 12:46:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240171AbiBYLjq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Feb 2022 06:39:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32978 "EHLO
+        id S233835AbiBYLrP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Feb 2022 06:47:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240162AbiBYLjp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Feb 2022 06:39:45 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA0A71C230B
-        for <linux-pm@vger.kernel.org>; Fri, 25 Feb 2022 03:39:12 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id n14so4029607wrq.7
-        for <linux-pm@vger.kernel.org>; Fri, 25 Feb 2022 03:39:12 -0800 (PST)
+        with ESMTP id S240253AbiBYLrO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Feb 2022 06:47:14 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B241CB855
+        for <linux-pm@vger.kernel.org>; Fri, 25 Feb 2022 03:46:35 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id c18-20020a7bc852000000b003806ce86c6dso1506333wml.5
+        for <linux-pm@vger.kernel.org>; Fri, 25 Feb 2022 03:46:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=cJpjB2Imjue5MPptrTSlFySfZuGIV+MLwnJNG0x4xvk=;
-        b=Z/g5gebrnBL0zB3qUQxBoIDeTt3F4vtwqF9rDI2nw3EtZkKT76If1gWmUgufJ+TLxY
-         6nTbIZ5+Z6EJ23+v+OaZF/xpJaY55g20UDoawIZrJoPGFbyoHjLEvYeapMmNZJBpveek
-         PPY5VkkfZ2ubNqIbgxyIR9y8VRwVRM/VsejJ3NUYqeOzQLickh1WLs5mrJVE///Nqq1M
-         xMJ1anI3wy9iQVFvee9ByunDawc/akfjPqmxYNnZoUTEW4HNsfNX0Okf8qIkcAWEe+sL
-         oLhO+JbwaxV1HZ6qWgSOJH98lIp2moHlLGvi2bFis2JD+L6Shj+BPgsGSXB/6W0glas4
-         xEtg==
+        bh=NK/LzwUva0Lkr32qtgOj2yS2vQ6HzLDYt6awzfuVPIw=;
+        b=ptQ69NYEkWgoJSQxryIG7Mez4hxuXVxNWO6LIDIXpbsP9lxpyFCQp6nFEMpzZ8Ne7P
+         5CE7UQYO9TtATFK4sNokxCArE3tPx02ZckvHJekle7QWJxYK+9iVKyT5xnHCMfOOMQFZ
+         3vN/SgNtzaDhAu96lJJvcyOmwANR92iNMpq4vk7mmk2c86sys5QBXaACP8EwZlGEnoMG
+         BelatBwgucNdC0sZESxOZ2cPZ5ulj3rxHv9ohxdmuOHccdS8hqt0+EEYkGIx467vgXAx
+         3B/RYVpiFnVOCn/FIxxHavgN0l345TlnDlkjS/JSl2xlHrBiiiEYL5bxhVhyTS9gI1rE
+         0BJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=cJpjB2Imjue5MPptrTSlFySfZuGIV+MLwnJNG0x4xvk=;
-        b=PqcTnLe7rd+9q/KR5VQ58SakTnZAg78wdLurSBcl1NYeLGmNf9McquijasI0LSwwDo
-         l2bT0duT7kHoslDDdS3Jfk5GktsJInPrN3BolF17Tr2pibQMdbqHIyC+TbI3sfVPHFSJ
-         6bBOnFD5Vbd/Fu/AjRxAzlPKtyqSH3PNVJFKtl2VX8UTInCkSGVNUp9kLhbCufIF1QX7
-         ndXxMkoCZdo3mZVq+qrugZoMIV9hHUjD0JwgqImjj64Gtpl2FdZw5SDtpb3G74/t5hE7
-         7TnywJ2ySEQ71AUPabQGFT3IWbkQrMhlJ0pIZxpCCXhgf9zXg0XVMdyxUZD2FMf0da4G
-         NCYA==
-X-Gm-Message-State: AOAM532qokmXBZOA399AMTeMCT32BcsbL809ZEpmoVIlUovXatALJqnZ
-        ddyJqymqQ1AaFGK0DNbypogbtg==
-X-Google-Smtp-Source: ABdhPJwCoD9+ESaqpN1tOSsKHyjc28t7oN0/oVgThSxndsT7mPr0tLHxqG+bnGT+WRRmi7xjDZtBtw==
-X-Received: by 2002:a5d:40cd:0:b0:1ee:a044:361f with SMTP id b13-20020a5d40cd000000b001eea044361fmr4479895wrq.235.1645789151291;
-        Fri, 25 Feb 2022 03:39:11 -0800 (PST)
+        bh=NK/LzwUva0Lkr32qtgOj2yS2vQ6HzLDYt6awzfuVPIw=;
+        b=uDugQ+Ad1wRQ053kweFrCYnmJEErok5G4P+e2FfW1+TIvZjekgYDlY/ZIZqZo3wcAZ
+         ITjS8kcGHIs6GVVl7y42Pbqy6i5N+Zfr2I+XDjg0sxg4ZO00K8LlBYX8q+Rd8svNUpSe
+         TEXYpDIOB3HOQoJ4ivrgFRWwDLJd9pzz1LjjNYvFoy2TFvBdjRQ2vlXNYrYvsfAWXwtD
+         sc+5Z3JZWCXI4e1E3zwXcPHxk8bdMoByr8BrTAbiqa65DdeLLwwazzoEZF61plvCjzYg
+         8NxWsVBP8objKbhBSbkqNWz8o/iq0jz/UuBY+1TCy4xFR0ZmGDUcdmOSHqL8c4iCFx1s
+         3t8Q==
+X-Gm-Message-State: AOAM532iMUAVMRrXQEmPi1UWHi8GkL9Tso6te/XAHgKgQKyF3D0vs7Zz
+        /QkQhQHlsnjtGS8zBs29n3X/qw==
+X-Google-Smtp-Source: ABdhPJz3TyYDkpSSB0/EXBpY4m7TRQh0Wp8kjUatWyQZJ+KB1tyNYztQ1QI7/GvQgleuwoBy9PhpYA==
+X-Received: by 2002:a05:600c:4e89:b0:37b:bc9a:4618 with SMTP id f9-20020a05600c4e8900b0037bbc9a4618mr2290607wmq.160.1645789593745;
+        Fri, 25 Feb 2022 03:46:33 -0800 (PST)
 Received: from ?IPV6:2a01:e34:ed2f:f020:25a:d4d2:9383:c638? ([2a01:e34:ed2f:f020:25a:d4d2:9383:c638])
-        by smtp.googlemail.com with ESMTPSA id c4-20020adfed84000000b001e5b8d5b8dasm3046083wro.36.2022.02.25.03.39.09
+        by smtp.googlemail.com with ESMTPSA id p11-20020adfce0b000000b001e7026150besm2030922wrn.31.2022.02.25.03.46.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Feb 2022 03:39:10 -0800 (PST)
-Message-ID: <1aaf4f8f-d777-633a-a469-ebeee4f9704e@linaro.org>
-Date:   Fri, 25 Feb 2022 12:39:07 +0100
+        Fri, 25 Feb 2022 03:46:33 -0800 (PST)
+Message-ID: <c6b8e5fd-4315-859f-b4a2-a3a055143ddf@linaro.org>
+Date:   Fri, 25 Feb 2022 12:46:31 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v2 02/10] dt-bindings: thermal: tsens: Add msm8953
- compatible
+Subject: Re: [PATCH] drivers/thermal/ti-soc-thermal: Add hwmon support
 Content-Language: en-US
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Luca Weiss <luca@z3ntu.xyz>
-Cc:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220220201909.445468-1-luca@z3ntu.xyz>
- <20220220201909.445468-3-luca@z3ntu.xyz> <YhfmQFFCmb74dOvV@builder.lan>
+To:     Romain Naour <romain.naour@smile.fr>, linux-pm@vger.kernel.org,
+        linux-omap@vger.kernel.org
+Cc:     j-keerthy@ti.com, edubezval@gmail.com
+References: <20220218104725.2718904-1-romain.naour@smile.fr>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <YhfmQFFCmb74dOvV@builder.lan>
+In-Reply-To: <20220218104725.2718904-1-romain.naour@smile.fr>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,19 +73,75 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 24/02/2022 21:10, Bjorn Andersson wrote:
-> On Sun 20 Feb 14:18 CST 2022, Luca Weiss wrote:
-> 
->> Document the compatible string for tsens found in msm8953.
->>
->> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
->> Acked-by: Konrad Dybcio <konrad.dybcio@somainline.org>
->> Acked-by: Amit Kucheria <amitk@kernel.org>
->> Acked-by: Rob Herring <robh@kernel.org>
-> 
-> Daniel, can you please pick this patch through your tree?
 
-Applied, thanks
+Hi Romain,
+
+I'll apply the patch.
+
+In the future, use the scripts/get_maintainer.pl -f <file> to get the 
+recipients of your patch if you have a doubt about who to send it to.
+
+Thanks
+
+   -- Daniel
+
+On 18/02/2022 11:47, Romain Naour wrote:
+> Expose ti-soc-thermal thermal sensors as HWMON devices.
+> 
+>    # sensors
+>    cpu_thermal-virtual-0
+>    Adapter: Virtual device
+>    temp1:        +54.2 C  (crit = +105.0 C)
+> 
+>    dspeve_thermal-virtual-0
+>    Adapter: Virtual device
+>    temp1:        +51.4 C  (crit = +105.0 C)
+> 
+>    gpu_thermal-virtual-0
+>    Adapter: Virtual device
+>    temp1:        +54.2 C  (crit = +105.0 C)
+> 
+>    iva_thermal-virtual-0
+>    Adapter: Virtual device
+>    temp1:        +54.6 C  (crit = +105.0 C)
+> 
+>    core_thermal-virtual-0
+>    Adapter: Virtual device
+>    temp1:        +52.6 C  (crit = +105.0 C)
+> 
+> Similar to imx_sc_thermal d2bc4dd91da6095a769fdc9bc519d3be7ad5f97a.
+> 
+> No need to take care of thermal_remove_hwmon_sysfs() since
+> devm_thermal_add_hwmon_sysfs() (a wrapper around devres) is
+> used. See c7fc403e40b0ea18976a59e968c23439a80809e8.
+> 
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> ---
+>   drivers/thermal/ti-soc-thermal/ti-thermal-common.c | 4 ++++
+>   1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+> index f84375865c97..0959632b2170 100644
+> --- a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+> +++ b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+> @@ -21,6 +21,7 @@
+>   
+>   #include "ti-thermal.h"
+>   #include "ti-bandgap.h"
+> +#include "../thermal_hwmon.h"
+>   
+>   /* common data structures */
+>   struct ti_thermal_data {
+> @@ -189,6 +190,9 @@ int ti_thermal_expose_sensor(struct ti_bandgap *bgp, int id,
+>   	ti_bandgap_set_sensor_data(bgp, id, data);
+>   	ti_bandgap_write_update_interval(bgp, data->sensor_id, interval);
+>   
+> +	if (devm_thermal_add_hwmon_sysfs(data->ti_thermal))
+> +		dev_warn(bgp->dev, "failed to add hwmon sysfs attributes\n");
+> +
+>   	return 0;
+>   }
+>   
 
 
 -- 
