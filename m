@@ -2,43 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFD9D4C4905
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Feb 2022 16:32:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC6D24C4909
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Feb 2022 16:33:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233758AbiBYPcq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Feb 2022 10:32:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37880 "EHLO
+        id S242133AbiBYPdx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Feb 2022 10:33:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240060AbiBYPco (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Feb 2022 10:32:44 -0500
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCBC921BC56;
-        Fri, 25 Feb 2022 07:32:11 -0800 (PST)
-Received: by mail-yb1-f175.google.com with SMTP id y189so6599505ybe.4;
-        Fri, 25 Feb 2022 07:32:11 -0800 (PST)
+        with ESMTP id S242145AbiBYPdw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Feb 2022 10:33:52 -0500
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE194181E77;
+        Fri, 25 Feb 2022 07:33:19 -0800 (PST)
+Received: by mail-yb1-f182.google.com with SMTP id u3so6590446ybh.5;
+        Fri, 25 Feb 2022 07:33:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=XIo95I5CSuDu07kV8bCF7A7OdJcPDQG/mfn+QtIzwws=;
-        b=A9M5wD951NfXbYNzb49x3RGiheguUGPUIzm9bUhvmUSRmZsMJEWfX4FhgBcyo2OzXi
-         Ed+24uYaZTwwMEZTjpZ9W6wL7t+bL0ZF7gzYF+JCopzuGF37iN8qNlhzj5RwJ4x9VLKL
-         gHPdXWph0BRFGmFJgRnUqHdcgJI77UPGGhNiiL6+1OOY5HL3G9xpL2ooAoZKMETX3FOd
-         OxfonnTA4PQzUydWafG2qdfZBmaa9V/BPpp/bIJX/Twb7qUmrmYVpdk6nOeFXbN+fGgO
-         ALTuottRT4EAtrKsFPnPCMOnFVDp0Aez5lmPE5YIGXEKPdREMtL1SBIa72cUcmRnL2xA
-         pkvg==
-X-Gm-Message-State: AOAM533BvUvhZoecHZCxWyAdgfiN9ULmLloPUyWHrqjKt+aQivMyIRU+
-        Ji5TC6mUI6u0CtJDX9O2smPjN1MRtj3/feArsV0Un5KS27E=
-X-Google-Smtp-Source: ABdhPJz06MkArKMDiWXp9ew08baAlYqqGdxwREv8k4v/aL1+G7trQrEVut30eFI/sMoXOezJNX7TkPmMY6CEkoUASdI=
-X-Received: by 2002:a25:378f:0:b0:61d:8e8b:6cf5 with SMTP id
- e137-20020a25378f000000b0061d8e8b6cf5mr7385521yba.622.1645803131002; Fri, 25
- Feb 2022 07:32:11 -0800 (PST)
+        bh=eABu8QHBsdfkHA3w12JWmBEc2OZCUV76ZExfQivismc=;
+        b=ouie04PEWm6L1v9RlxcJAHW2NzEliePn7ocN1YUHFrRzlyNdcJpmX0BD/yOn8y3Mbh
+         sk8XVGjlAP5+TrK88b2K8zMt0+bTOW0jP5g0AZGwkl7WpjY1kQ5mGdeEStHGYR71MFqY
+         puWslGh60nf5r+rMUfmFF4V1HRhiAdmkb+5nZV/1bwc+WNI0fE7nhKJldcmBEOFgL6Jw
+         W/F86lrKbzNeUTMNKVR7zzzKXTgYPgy6VXAEXURGN8JRmpcUvQ+psk8Tv37sOzoIJLsx
+         qYRkHj7gWW0luaisppWwo1nkPranaisZSmZ4uo1FNE0gNoyYalHqYpublUqApoxBhdMN
+         1A2Q==
+X-Gm-Message-State: AOAM532yQ/dhkUf1NMMkcuNB/kSsM8w+NYcEgFCmWDrMm7Zms9VvW/0R
+        7J/wY4Rud1lQjRInoFC9p9HPfALc4wCcnorsW3SAWXmb/b4=
+X-Google-Smtp-Source: ABdhPJxsDqyFM8lHB1ww0LkZcf1spz1fbcJhFO7+5DEGzYZRLP8MjQ2NSomKv4l9/DlSpZ0uBgm2k0FloTFi7cxK+xM=
+X-Received: by 2002:a25:7785:0:b0:614:c283:2a3d with SMTP id
+ s127-20020a257785000000b00614c2832a3dmr7913179ybc.137.1645803199100; Fri, 25
+ Feb 2022 07:33:19 -0800 (PST)
 MIME-Version: 1.0
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 25 Feb 2022 16:32:00 +0100
-Message-ID: <CAJZ5v0jOz82pc7KvQrmBojyOAdL6tGnNtfqspROFf3j0+5enGA@mail.gmail.com>
-Subject: [GIT PULL] Power management fixes for v5.17-rc6
+Date:   Fri, 25 Feb 2022 16:33:08 +0100
+Message-ID: <CAJZ5v0hhiuXu=rKp8=gfMh6Xm5cT4-EK2QduofM2bUgY7jMqCw@mail.gmail.com>
+Subject: [GIT PULL] Thermal control fix for v5.17-rc6
 To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -56,36 +57,30 @@ Hi Linus,
 Please pull from the tag
 
  git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-5.17-rc6
+ thermal-5.17-rc6
 
-with top-most commit c5eb92f57de2446e0071c3af70ea54f237eb05d5
+with top-most commit 3abea10e6a8f0e7804ed4c124bea2d15aca977c8
 
- Merge branch 'cpufreq/arm/fixes' of
-git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm
+ thermal: int340x: fix memory leak in int3400_notify()
 
 on top of commit cfb92440ee71adcc2105b0890bb01ac3cddb8507
 
  Linux 5.17-rc5
 
-to receive power management fixes for 5.17-rc6.
+to receive a thermal control fix for 5.17-rc6.
 
-These fix the throttle IRQ handling during cpufreq initialization on
-Qualcomm platforms (Bjorn Andersson).
+This fixes a memory leak in the int340x thermal driver's ACPI notify
+handler (Chuansheng Liu).
 
 Thanks!
 
 
 ---------------
 
-Bjorn Andersson (2):
-      cpufreq: Reintroduce ready() callback
-      cpufreq: qcom-hw: Delay enabling throttle_irq
+Chuansheng Liu (1):
+      thermal: int340x: fix memory leak in int3400_notify()
 
 ---------------
 
- Documentation/cpu-freq/cpu-drivers.rst                    |  3 +++
- Documentation/translations/zh_CN/cpu-freq/cpu-drivers.rst |  2 ++
- drivers/cpufreq/cpufreq.c                                 |  4 ++++
- drivers/cpufreq/qcom-cpufreq-hw.c                         | 11 ++++++++++-
- include/linux/cpufreq.h                                   |  3 +++
- 5 files changed, 22 insertions(+), 1 deletion(-)
+ drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 4 ++++
+ 1 file changed, 4 insertions(+)
