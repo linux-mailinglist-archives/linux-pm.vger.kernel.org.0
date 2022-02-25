@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A87954C51FC
-	for <lists+linux-pm@lfdr.de>; Sat, 26 Feb 2022 00:21:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75D254C5213
+	for <lists+linux-pm@lfdr.de>; Sat, 26 Feb 2022 00:30:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235992AbiBYXVy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Feb 2022 18:21:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38590 "EHLO
+        id S238191AbiBYXak (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Feb 2022 18:30:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbiBYXVx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Feb 2022 18:21:53 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A486751E59
-        for <linux-pm@vger.kernel.org>; Fri, 25 Feb 2022 15:21:20 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id u7so9359150ljk.13
-        for <linux-pm@vger.kernel.org>; Fri, 25 Feb 2022 15:21:20 -0800 (PST)
+        with ESMTP id S234931AbiBYXak (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Feb 2022 18:30:40 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB79D19E73E
+        for <linux-pm@vger.kernel.org>; Fri, 25 Feb 2022 15:30:06 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id e5so11827400lfr.9
+        for <linux-pm@vger.kernel.org>; Fri, 25 Feb 2022 15:30:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=0Ohe6RRx0KJn2KCA5MuO/0KAGsWiC4x8YVPtZs88R4M=;
-        b=vWARONwH4L+DcP9QRKSkhIHiLx8X3dcRCJ+ypp9eDWUmwOK/ypeKYPrIsQTfWUdjD5
-         nXXfX2YEC8i1XjA4ZRhHZOut8Wj6ccjPECeAr+ixVIXa19lr0CWkLVRuVb1+0O9semni
-         Z4qFTpxcPWouqahiRJyqe3kALhKBk0KLtVbIhCfQ2Dowd85eTKTNYaZgO9807w/+nchd
-         mBsgyPgN1SMdbkgofUgPUAwvB0++Ro4C4ixgfdXTVfCe2I7iJwAC01ayhHrJuVyid1c9
-         bdx/+oOUMG9rIU0ltFPLqzQlKJ5D5XF8veeAbjPbfY/tpb278bL626p4qKhUx/7NQNq9
-         90cg==
+        bh=8UJOzgUJW4LngXLFrBHAT46k/XaNa4vcSKPQr1mpqMM=;
+        b=Umo8CxibsQBFUXs03kEQ9ybhHUzV/TN4ebo8SSHyzGbfEjEjfCIs6Fseoui37fT9jU
+         +TGkpfA6/J9M/x1re63IE/KrrbZwfzbBq7+ljgydK13B/8Dz6HhEjvg/p997Vpei1hj7
+         obrIR5Uq1R1Jjn6BXkL/bVhebDsWeqSSsAZvqik67VFZsnu2OPWuiizLgCx39abE9U91
+         YWROiFIOeC8BeQgVC4OF2cfenJixouDzfCxKubd6UhF12+j0cs7hXR8GxO+Tejofhoe6
+         hVGOvL9SAf3CtbP8vYmxp2VKQGsJsCRvtX7Wwh7+D0CrjztLEGUrFAEn/joogd50bDFf
+         SKJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=0Ohe6RRx0KJn2KCA5MuO/0KAGsWiC4x8YVPtZs88R4M=;
-        b=WGFyfw1uw2w0K9rZblToa0GDd5eUtbL8jHTSR/zuP3rSD8vHppZ/1OzXSFK6eqkkE9
-         7wGaiqpwK7cErNrA8f7zOY64Ns8ExXv4EZ2GxhEEHLlBTWBCXuysTV1obnkALCx0GqIr
-         BqTn5I00c8OIGOtAep6W99NOBRKzyyn5o3/9zIouhP6V2tJPWTLJHW5YjCPJnMbSThxB
-         pTJk0/AVgMNUZoj/pWYo290nlSgfIad+Y7VvUK/cIzFXb/gAseptvO4JMxNmkVwYr6FI
-         3Y/qUHcjSSBWeb6uNb1eb8vXDFPypybsxwSvi+IOZDQ6JhvyEofrzXSBQIiqRAtmgdSP
-         WCWA==
-X-Gm-Message-State: AOAM532P8dNuc2NzGORiAfW5nmDiK/wXwGHQU4F+Eo3AYwV8/CsG13Sm
-        IsJsY9GBpMyFOPWZJ8vYJyUhUQ==
-X-Google-Smtp-Source: ABdhPJxH/BM5/SnBCtKQ9zVW8M/IwPlE6zopVZkrvuf6RZgtVTFEKCNZVySbibs+q5KN3TZE9sSlsQ==
-X-Received: by 2002:a2e:808d:0:b0:23e:f35:506b with SMTP id i13-20020a2e808d000000b0023e0f35506bmr6805691ljg.285.1645831279005;
-        Fri, 25 Feb 2022 15:21:19 -0800 (PST)
+        bh=8UJOzgUJW4LngXLFrBHAT46k/XaNa4vcSKPQr1mpqMM=;
+        b=NyHqZkA6Ip88w+tC/S8IhyA0BghLgzb4lpyTMdqQ8jquXRpnVdYh5ZnoNGCMjL29Yb
+         aHti/uATZ1CqAVKY+WWi0hORUCAH5uHKh9MY/x2ckZH2Bz6sq8p64MbYjqVPz1onLJ3U
+         iI633eUUHCFJvC0P7V/2vHa5dg2OOuuRcS1USSUvSVVj/67m3LJ7/AHchAXcPTFEkRri
+         x83E7R3IBZ8A/THk1ExMrSfoLviyZhQh/Az52Pc+bYNgpY9rC7bMmf4WbTpe1rO1BLZl
+         AkLo4RVBbn2vELG6cMa82IRSrmAIWexrDJ57BdmRyWyVffSoNGC+3yFA2MnjN1byMWvK
+         tpWA==
+X-Gm-Message-State: AOAM5332KiMn8ydncoLfpPf3RhxsBTgfuDAzmyRe1FNZEjDPq+Zx85k3
+        yaR5TbzLiIIgHsFY4aAJjhXwRA==
+X-Google-Smtp-Source: ABdhPJx3NQTOSBYOKwUJkYLiFDWYeqQV4mxi7KCbY5a1TNytqYK70CouvyEjP7trLiduw9qodTf3UA==
+X-Received: by 2002:ac2:4a90:0:b0:444:a22:cbdb with SMTP id l16-20020ac24a90000000b004440a22cbdbmr6379660lfp.217.1645831805236;
+        Fri, 25 Feb 2022 15:30:05 -0800 (PST)
 Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id s4-20020a2eb8c4000000b002465e87fc81sm385378ljp.43.2022.02.25.15.21.18
+        by smtp.gmail.com with ESMTPSA id u9-20020ac251c9000000b00443dc755dfdsm313524lfm.215.2022.02.25.15.30.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 15:21:18 -0800 (PST)
+        Fri, 25 Feb 2022 15:30:04 -0800 (PST)
 From:   Linus Walleij <linus.walleij@linaro.org>
 To:     Sebastian Reichel <sre@kernel.org>,
         Marcus Cooper <codekipper@gmail.com>
@@ -54,8 +54,8 @@ Cc:     linux-pm@vger.kernel.org,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Linus Walleij <linus.walleij@linaro.org>
 Subject: [PATCH 0/6 v4] AB8500 charging, the final steps
-Date:   Sat, 26 Feb 2022 00:19:10 +0100
-Message-Id: <20220225231916.2012222-1-linus.walleij@linaro.org>
+Date:   Sat, 26 Feb 2022 00:27:54 +0100
+Message-Id: <20220225232800.2021909-1-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -68,9 +68,6 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
-
-This makes AB8500 charge the Samsung batteries on the following
-mobile phones:
 
 Samsung Galaxy Ace 2
 Samsung Galaxy S Advance
