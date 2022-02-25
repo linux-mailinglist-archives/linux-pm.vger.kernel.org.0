@@ -2,76 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F684C4488
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Feb 2022 13:23:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8031D4C469A
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Feb 2022 14:36:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240546AbiBYMXP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Feb 2022 07:23:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36184 "EHLO
+        id S241490AbiBYNgi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Feb 2022 08:36:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240599AbiBYMXO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Feb 2022 07:23:14 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6D41DCCDA
-        for <linux-pm@vger.kernel.org>; Fri, 25 Feb 2022 04:22:41 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id p4so1562617wmg.1
-        for <linux-pm@vger.kernel.org>; Fri, 25 Feb 2022 04:22:41 -0800 (PST)
+        with ESMTP id S239392AbiBYNgh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Feb 2022 08:36:37 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EDEE1DB3D3
+        for <linux-pm@vger.kernel.org>; Fri, 25 Feb 2022 05:36:05 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id j17so4649682wrc.0
+        for <linux-pm@vger.kernel.org>; Fri, 25 Feb 2022 05:36:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=OETEWwvv9RFP7XYmInP3bfKnzep+PqGUkb76y2TbWCE=;
-        b=aePHe9Yy5kBZxHKom2jnALVrMKuGLj0XXCWvo4FXTH2h3JJQQuN9qZhTYdXHho9GiZ
-         KMcbzp3MQAKRs0JPS29Ohg9hCjPIz6E4/sY+5toS6HKaQeC7WlGpHXgnfnO4I2lIDL85
-         QiU3ENEhKGSRZZc5V77zpdFtFKNnwY+MT7If429y/Y34008hw0sSP9LxBK9UqSidWnAH
-         nD8uwrGy5Hnc1R1bu4SvTljkCWj2ejYPO1tUExSc4Kur0tm1Gjaq/nvgc5cNdS6LtUil
-         Z2tkMsvA/ynFVcBYnQIlfTpJbut2W/SibqFNyENpwIX4YmV//Ij4bSmTCVBZ4hSLimPn
-         gv0w==
+        bh=ZatkCkH0tiJuMD2zO/1+/ITUO0H0CuZ8bVACIi8yJfU=;
+        b=KU3qOow9ALEILnaJcAHCAV2hs8j29RJhbpsuqTe6/TM3JDkvknNRTZICSH1ZVKohi5
+         cq2V2dtIrA7uvHvbkEndpj257TnwW9hsX+CSGUzKg5iXFDpjd12S8v5Cn2fItflPFL0k
+         RKJV1xlOyilxleTSJYSK4QMsx0kC9DqaCFdpWKfwddoHuUpK4wMpMJenuMlPRat+wdvV
+         cSXTpcSfmB5Ynqfjto+RRs9vK0ziuPdK5/MczK1Px8uI7Dsxs2rjYrqNE7QtHS1p6d/k
+         XxsvTl4Ak7Yy+8CCB1FMBYm0e2jxSIK77hsMdLU9IGTJHx2uQZlFvxXi+APClId41PPW
+         z/mA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=OETEWwvv9RFP7XYmInP3bfKnzep+PqGUkb76y2TbWCE=;
-        b=jPGed2RMF0qhvCOJLVpafHSoIUA210my0I1EgAGJTme3hGgAqQ0JcPtglILTpP7wc8
-         r8ZEzz+qYfcdnCYv7tKEuJy8yRAb8hcAtYYEKXCACMRengmU17hyz2aoWRyB5/apYtZC
-         Fi6iOTWnc9PPozTA5a2a8bGEVrPF5WQGKifu1G9O+bM9P5qXMb4keW1cCR+dMteEeRih
-         7Evfr23wkW2hoRhZyDYq6wCLcUevjfiewQVCqdbOl9RmxPM0DSD2pop+hrpyoXcdZxwB
-         kpZ+9gUCD7ExTTR0O9RB7qHVFV5WPNQbpzJ+FdjVQUNvI79g25L0pGIKW+aHURjcybKF
-         +EjA==
-X-Gm-Message-State: AOAM5302SQ3m/2dxVk3vOZI4mOicvDJE7s560S2AIJbCLpB8OYGnJ7G/
-        8pA2pp8mnQZ92Ng34sAMIYu1SA==
-X-Google-Smtp-Source: ABdhPJz8fEwup5DY7Gel/4fG39qakCdzfviq7s+zlcO2JVDKuhr/zY47COWQpiNf7MwJAwFLO9rkGA==
-X-Received: by 2002:a05:600c:798:b0:381:3b9a:6ba3 with SMTP id z24-20020a05600c079800b003813b9a6ba3mr1487826wmo.153.1645791760081;
-        Fri, 25 Feb 2022 04:22:40 -0800 (PST)
+        bh=ZatkCkH0tiJuMD2zO/1+/ITUO0H0CuZ8bVACIi8yJfU=;
+        b=zzJI2zk92aibj8qYy5hXZ9b8T9GyS26dLx3r7MA+dAYjikKum2gzIXudWw0g9aU41c
+         W101fBeYDIWMzMOfGM2vv9ZfmY9nYyxrFl/c4znigpHuIJzBUu9AEEZAOzxJXRmW+kfc
+         1I34+FQCOEzw0Nu8JKFHuJCBQVgi94pJTj7hNK0+3lsZhJ8yftKFDahF6yAujy6iqrrG
+         GzClUlGD9M4oE7rXM+SAimSDFnimRlgfPYghUMaYBbO7nIKBn7AmVO72iTEzTQhLYnzW
+         xJxUSJWelAFCUI0TymfnEtF2T4SmA/yHikCGybWhPIkHwYLYVMe9jizwx18Pb4DiscA2
+         yV/g==
+X-Gm-Message-State: AOAM532KPDnSGwgbMJkP/T2/2/Yvi/BHpNnT3ABffZo0qSkhHrSzDuFJ
+        VaOBh/EOHYpBK1618VIm8ly4qA==
+X-Google-Smtp-Source: ABdhPJzbz7fAy9NilvFpC5CCxvjjUiKAaI6E1HnpMUUEKICWrBb7YnVFFjgbrN4X1GhxtSvqW7DhSQ==
+X-Received: by 2002:a05:6000:184d:b0:1ea:78a5:f9c8 with SMTP id c13-20020a056000184d00b001ea78a5f9c8mr6261272wri.439.1645796163603;
+        Fri, 25 Feb 2022 05:36:03 -0800 (PST)
 Received: from ?IPV6:2a01:e34:ed2f:f020:25a:d4d2:9383:c638? ([2a01:e34:ed2f:f020:25a:d4d2:9383:c638])
-        by smtp.googlemail.com with ESMTPSA id s12-20020a5d6a8c000000b001e32cc8adb7sm2056155wru.107.2022.02.25.04.22.38
+        by smtp.googlemail.com with ESMTPSA id b10-20020a5d550a000000b001e30e81afd1sm2379527wrv.2.2022.02.25.05.36.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Feb 2022 04:22:39 -0800 (PST)
-Message-ID: <3a1bd8c0-2522-2f4a-2505-e3a3edfb290c@linaro.org>
-Date:   Fri, 25 Feb 2022 13:22:37 +0100
+        Fri, 25 Feb 2022 05:36:02 -0800 (PST)
+Message-ID: <48c9fecc-67eb-891c-fb07-30ae4691031c@linaro.org>
+Date:   Fri, 25 Feb 2022 14:36:00 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH 1/5] thermal: tegra-bpmp: Handle errors in BPMP response
+Subject: Re: [PATCH v4 1/2] thermal: Add thermal driver for Sunplus SP7021
 Content-Language: en-US
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>
-Cc:     rafael@kernel.org, viresh.kumar@linaro.org, jonathanh@nvidia.com,
-        krzysztof.kozlowski@canonical.com, lorenzo.pieralisi@arm.com,
-        robh@kernel.org, kw@linux.com, p.zabel@pengutronix.de,
-        rui.zhang@intel.com, amitk@kernel.org, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org
-References: <20210915085517.1669675-1-mperttunen@nvidia.com>
- <YV86cX/omlQa3kpq@orome.fritz.box>
+To:     Li-hao Kuo <lhjeff911@gmail.com>, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com, robh+dt@kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     wells.lu@sunplus.com, lh.kuo@sunplus.com
+References: <cover.1642127137.git.lhjeff911@gmail.com>
+ <2847f96335da1c74dfbee7ba67939bdc474ba2a4.1642127137.git.lhjeff911@gmail.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <YV86cX/omlQa3kpq@orome.fritz.box>
+In-Reply-To: <2847f96335da1c74dfbee7ba67939bdc474ba2a4.1642127137.git.lhjeff911@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,28 +76,282 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07/10/2021 20:20, Thierry Reding wrote:
-> On Wed, Sep 15, 2021 at 11:55:13AM +0300, Mikko Perttunen wrote:
->> The return value from tegra_bpmp_transfer indicates the success or
->> failure of the IPC transaction with BPMP. If the transaction
->> succeeded, we also need to check the actual command's result code.
->> Add code to do this.
->>
->> Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
->> ---
->>   drivers/thermal/tegra/tegra-bpmp-thermal.c | 13 ++++++++++++-
->>   1 file changed, 12 insertions(+), 1 deletion(-)
-> 
-> Perhaps this should be moved into tegra_bpmp_transfer() or some new
-> helper to make sure we can keep this consistent across all callers.
-> 
-> For instance, I'm not sure -EINVAL is the right (or best) error code in
-> all the cases. Either way, seems fine in this case and this is certainly
-> an improvement, so:
-> 
-> Acked-by: Thierry Reding <treding@nvidia.com>
+On 14/01/2022 03:46, Li-hao Kuo wrote:
+> Add thermal driver for Sunplus SP7021.
 
-Applied, thanks
+Please give a detailed description of the sensor so we can refer to the 
+changelog to understand the code below.
+
+
+> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
+> ---
+> Changes in v4:
+>   - Modify yaml file remove reg name and change nvmem name
+> 
+>   MAINTAINERS                       |   6 ++
+>   drivers/thermal/Kconfig           |  10 +++
+>   drivers/thermal/Makefile          |   1 +
+>   drivers/thermal/sunplus_thermal.c | 157 ++++++++++++++++++++++++++++++++++++++
+>   4 files changed, 174 insertions(+)
+>   create mode 100644 drivers/thermal/sunplus_thermal.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index dc4a137..e41b265 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -18423,6 +18423,12 @@ L:	netdev@vger.kernel.org
+>   S:	Maintained
+>   F:	drivers/net/ethernet/dlink/sundance.c
+>   
+> +SUNPLUS THERMAL DRIVER
+> +M:	Li-hao Kuo <lhjeff911@gmail.com>
+> +L:	linux-pm@vger.kernel.org
+> +S:	Maintained
+> +F:	drivers/thermal/sunplus_thermal.c
+> +
+>   SUPERH
+>   M:	Yoshinori Sato <ysato@users.sourceforge.jp>
+>   M:	Rich Felker <dalias@libc.org>
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index e37691e..98647c7 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -502,4 +502,14 @@ config KHADAS_MCU_FAN_THERMAL
+>   	  If you say yes here you get support for the FAN controlled
+>   	  by the Microcontroller found on the Khadas VIM boards.
+>   
+> +config SUNPLUS_THERMAL
+> +	tristate "Sunplus thermal drivers"
+> +	depends on SOC_SP7021
+> +	help
+> +	  This the Sunplus SP7021 thermal driver, which supports the primitive
+> +	  temperature sensor embedded in Sunplus SP7021 SoC.
+> +
+> +	  If you have a Sunplus SP7021 platform say Y here and enable this option
+> +	  to have support for thermal management
+> +
+>   endif
+> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> index f0c36a1..2f7417a 100644
+> --- a/drivers/thermal/Makefile
+> +++ b/drivers/thermal/Makefile
+> @@ -61,3 +61,4 @@ obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
+>   obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
+>   obj-$(CONFIG_SPRD_THERMAL)	+= sprd_thermal.o
+>   obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)	+= khadas_mcu_fan.o
+> +obj-$(CONFIG_SUNPLUS_THERMAL)	+= sunplus_thermal.o
+> \ No newline at end of file
+> diff --git a/drivers/thermal/sunplus_thermal.c b/drivers/thermal/sunplus_thermal.c
+> new file mode 100644
+> index 0000000..460c41d
+> --- /dev/null
+> +++ b/drivers/thermal/sunplus_thermal.c
+> @@ -0,0 +1,157 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) Sunplus Inc.
+> + * Author: Li-hao Kuo <lhjeff911@gmail.com>
+> + */
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/clk.h>
+> +#include <linux/cpufreq.h>
+> +#include <linux/delay.h>
+> +#include <linux/err.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/io.h>
+> +#include <linux/module.h>
+> +#include <linux/nvmem-consumer.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/reset.h>
+> +#include <linux/rtc.h>
+> +#include <linux/thermal.h>
+
+
+Please check the headers above. Some are not necessary (eg cpufreq, 
+delay, rtc ...) AFAICT
+
+> +#define DISABLE_THREMAL		(BIT(31) | BIT(15))
+> +#define ENABLE_THREMAL		BIT(31)
+> +#define SP_THREMAL_MASK		GENMASK(10, 0)
+
+THREMAL ?
+
+s/THREMAL/THERMAL/ ?
+
+> +#define TEMP_RATE		608
+> +#define TEMP_BASE		3500
+> +#define TEMP_OTP_BASE		1518
+> +
+> +#define SP_THERMAL_CTL0_REG	0x0000
+> +#define SP_THERMAL_STS0_REG	0x0030
+> +
+> +/* common data structures */
+> +struct sp_thermal_data {
+> +	struct thermal_zone_device *pcb_tz;
+> +	struct platform_device *pdev;
+> +	enum thermal_device_mode mode;
+> +	long sensor_temp;
+> +	void __iomem *regs;
+> +	int otp_temp0;
+> +	int otp_temp1;
+> +	u32 id;
+> +};
+> +
+> +static char *sp7021_otp_coef_read(struct device *dev, ssize_t *len)
+> +{
+> +	char *ret = NULL;
+> +	struct nvmem_cell *c = nvmem_cell_get(dev, "calib");
+> +
+> +	if (IS_ERR_OR_NULL(c))
+> +		return NULL;
+> +
+> +	ret = nvmem_cell_read(c, len);
+> +	nvmem_cell_put(c);
+
+That is wrong. Please refer to the documentation driver-api/nvmem.rst
+
+nvmem_cell_put() must be called when the pointer returned by 
+nvmem_cell_read() is no longer used.
+
+
+> +	return ret;
+> +}
+> +
+> +static void sp7021_get_otp_temp_coef(struct sp_thermal_data *sp_data, struct device *_d)
+> +{
+> +	ssize_t otp_l = 0;
+> +	char *otp_v;
+> +
+> +	otp_v = sp7021_otp_coef_read(_d, &otp_l);
+> +	if (otp_l < 3)
+> +		return;
+> +	if (IS_ERR_OR_NULL(otp_v))
+> +		return;
+> +	sp_data->otp_temp0 = otp_v[0] | (otp_v[1] << 8);
+
+What do you expect by 8bits shifting a char here ?
+
+> +	sp_data->otp_temp0 = otp_v[0] | (otp_v[1] << 8);
+
+duplicate line
+
+> +	sp_data->otp_temp0 = FIELD_GET(SP_THREMAL_MASK, sp_data->otp_temp0);
+> +	sp_data->otp_temp1 = (otp_v[1] >> 3) | (otp_v[2] << 5);
+> +	sp_data->otp_temp1 = FIELD_GET(SP_THREMAL_MASK, sp_data->otp_temp1);
+> +	if (sp_data->otp_temp0 == 0)
+> +		sp_data->otp_temp0 = TEMP_OTP_BASE;
+
+Can you add a comment explaining how is stored the coef in the nvcell, 
+so we can understand the above actions ?
+
+
+> +}
+> +
+> +static int sp_thermal_get_sensor_temp(void *data, int *temp)
+> +{
+> +	struct sp_thermal_data *sp_data = data;
+> +	int t_code;
+> +
+> +	t_code = readl(sp_data->regs + SP_THERMAL_STS0_REG);
+> +	t_code = FIELD_GET(SP_THREMAL_MASK, t_code);
+> +	*temp = ((sp_data->otp_temp0 - t_code) * 10000 / TEMP_RATE) + TEMP_BASE;
+> +	*temp *= 10;
+
+A comment would be welcome here also
+
+> +	return 0;
+> +}
+> +
+> +static struct thermal_zone_of_device_ops sp_of_thermal_ops = {
+> +	.get_temp = sp_thermal_get_sensor_temp,
+> +};
+> +
+> +static int sp_thermal_register_sensor(struct platform_device *pdev, struct sp_thermal_data *data,
+> +				       int index)
+> +{
+> +	int ret;
+> +
+> +	data->id = index;
+> +	data->pcb_tz = devm_thermal_zone_of_sensor_register(&pdev->dev,
+> +					data->id, data, &sp_of_thermal_ops);
+> +	if (!IS_ERR_OR_NULL(data->pcb_tz))
+> +		return 0;
+> +	ret = PTR_ERR(data->pcb_tz);
+> +	data->pcb_tz = NULL;
+> +	return ret;
+
+Usually the logic is inverted
+
+	data->pcb_tz = devm_thermal_zone_of_sensor_register();
+	if (IS_ERR_OR_NULL(data->pcb_tz))
+		return PTR_ERR(data->pcb_tz);
+
+	return 0;
+
+No need to set pcb_tz to NULL
+
+> +}
+> +
+> +static int sp7021_thermal_probe(struct platform_device *pdev)
+> +{
+> +	struct sp_thermal_data *sp_data;
+> +	struct resource *res;
+> +	int ret;
+> +
+> +	sp_data = devm_kzalloc(&(pdev->dev), sizeof(*sp_data), GFP_KERNEL);
+> +	if (!sp_data)
+> +		return -ENOMEM;
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	if (IS_ERR(res))
+> +		return dev_err_probe(&(pdev->dev), PTR_ERR(res), "resource get fail\n");
+
+Use an intermediate 'dev' variable to shorten the line
+
+> +	sp_data->regs = devm_ioremap(&(pdev->dev), res->start, resource_size(res));
+> +	if (IS_ERR(sp_data->regs))
+> +		return dev_err_probe(&(pdev->dev), PTR_ERR(sp_data->regs), "mas_base get fail\n");
+
+typo: mas_base -> ioremap
+
+> +	writel(ENABLE_THREMAL, sp_data->regs + SP_THERMAL_CTL0_REG);
+> +
+> +	platform_set_drvdata(pdev, sp_data);
+> +	sp7021_get_otp_temp_coef(sp_data, &pdev->dev);
+> +	ret = sp_thermal_register_sensor(pdev, sp_data, 0);
+
+	return sp_thermal_register_sensor(...);
+> +
+
+> +	return ret;
+> +}
+> +
+> +static int sp7021_thermal_remove(struct platform_device *_pd)
+> +{
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id of_sp7021_thermal_ids[] = {
+> +	{ .compatible = "sunplus,sp7021-thermal" },
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, of_sp7021_thermal_ids);
+> +
+> +static struct platform_driver sp7021_thermal_driver = {
+> +	.probe	= sp7021_thermal_probe,
+> +	.remove	= sp7021_thermal_remove,
+> +	.driver	= {
+> +		.name	= "sp7021-thermal",
+> +		.of_match_table = of_match_ptr(of_sp7021_thermal_ids),
+> +		},
+> +};
+> +module_platform_driver(sp7021_thermal_driver);
+> +
+> +MODULE_AUTHOR("Li-hao Kuo <lhjeff911@gmail.com>");
+> +MODULE_DESCRIPTION("Thermal driver for SP7021 SoC");
+> +MODULE_LICENSE("GPL");
+
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
