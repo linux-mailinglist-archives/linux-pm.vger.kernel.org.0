@@ -2,60 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEA574C3A32
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Feb 2022 01:15:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 227114C3A33
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Feb 2022 01:15:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231247AbiBYAQA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Feb 2022 19:16:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56898 "EHLO
+        id S233276AbiBYAQC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Feb 2022 19:16:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233276AbiBYAQA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Feb 2022 19:16:00 -0500
+        with ESMTP id S232174AbiBYAQB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Feb 2022 19:16:01 -0500
 Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F462692FC
-        for <linux-pm@vger.kernel.org>; Thu, 24 Feb 2022 16:15:28 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id f37so6622121lfv.8
-        for <linux-pm@vger.kernel.org>; Thu, 24 Feb 2022 16:15:28 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1112692FD
+        for <linux-pm@vger.kernel.org>; Thu, 24 Feb 2022 16:15:30 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id w27so6677197lfa.5
+        for <linux-pm@vger.kernel.org>; Thu, 24 Feb 2022 16:15:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=iV/EJYlCNMZZ5eyaaS7hYTgLYIqKGViA2YLNeTINVQw=;
-        b=C0P48msRw2pf3ZWr9bdWDpy7JjKO90I/ML39PTzmHYdncL80ySlsUFWSv5fuQ54aDZ
-         sc7PN1E1WkluSH85AyyzOAK7dtlzFO/Y4uoXxCY8V+b/7PPsvuxqjzOZhlz4WSdCyE2y
-         q7UyPn14Jtgxl96qBle44aT1hO+/ZXf+UoO8SdEXHRoAeE4ErX91TEE0TpKHtgB8Jik4
-         hnbXApeTEsrXCcKR6CvJFL9iOv37jqpVpzIUN4KdINL5TA2fYHMsFw5ibGBUDbEz879l
-         w+kyA6xh0DcGZAqaBEr66QbDx0Zjae55PkLSwMcD4QmOTqYwPKgoXJz/uDc7sB5n8lcV
-         xw2w==
+        bh=tlggcYrqwEd83iy37IBfsdLOac89UGRNeeb9nNDv2l4=;
+        b=ARXvRevJPGJ3F2NQsOoJ16uyDIfRa/KcbknTbeVFJfj1HHVEei1E/w6EET5AYnTC+Y
+         3LeK1DiN+CbkPG2cPRsrL9IPHrqG5uLdHOxA3r81/DNjtn7imVyLLQsA+gqxSwQUtx7O
+         47VQzvxE85Y5JAxLsKXaCpI7dy+gnGTuNOBGiQJcQbd2JWcjgFcfhMrseZXf5qAa3HEO
+         WvJrSFjZRc9BxSIpLWO7VVQ/pkJjVg6VrbaDyU4thmGHkBV+tWXXVCw3rLkrcDdKjW0K
+         0CAAdink/HNpkCWlPSovIv0oYXZKpdceEGEeZPCe+GYt7mzv5yODAOZB9tCP7LYU52Ev
+         iXeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=iV/EJYlCNMZZ5eyaaS7hYTgLYIqKGViA2YLNeTINVQw=;
-        b=eJrhq3o8pw3yRFW6JfPWhmHVyCO/UcrLzxJWu7Be82LH5cHe0LiImGb3sq/b811KJ0
-         yJjVGs8cjzhvdwceVic8/vq/D14POzYQcDYILIRnmV2m540fTNxY9HOj52e59jT++xM8
-         1+x0TaOtWLHqawLjkySMTOhbp/QLEvUqzkbWKM51JL8/8I1uRsS9VSYFop8mPiSAXOiH
-         pGNjF8yhb7iX66vUkTet0GgL8SOwZmkmrvBdGqt4rEB9ylUSMG2xPjbr0KvjXnzq8E4S
-         XSNrrx7b1n7lkbNcGM4Cyjb0NOUD4RBg871g5A2+s2KZUgHYCYH28X4ZsKVRcmUAO014
-         LDbg==
-X-Gm-Message-State: AOAM532sxCGwF6dOB3AxuL3QGm3M3QQHrmqFiVkkxRS3SBQAyMavG/tx
-        SIVqbbI3SG+ya8foTZ1/sb+DPg==
-X-Google-Smtp-Source: ABdhPJwA+HD4Jopu9/oN56SpX3vRa/AsZwQhhtdc1IAiLfr4590zwhDQF5zEn6oFUqk57HQaWM1JOg==
-X-Received: by 2002:ac2:4da1:0:b0:438:74be:5a88 with SMTP id h1-20020ac24da1000000b0043874be5a88mr3077681lfe.210.1645748127111;
-        Thu, 24 Feb 2022 16:15:27 -0800 (PST)
+        bh=tlggcYrqwEd83iy37IBfsdLOac89UGRNeeb9nNDv2l4=;
+        b=KGIWSjPR+0qgb2wybRsPHwgyzbsJPebmslxXT+TB1+W+TR1AJyTj/DdKtGUCJRus6Y
+         JczxcwbiqkLN9uMP14oPND7DMNQ+aFWM0WVe72PWlc2EZUSMeWrPQaUnwSL3j+qhLWyh
+         cLNOSZ4RQ1mCbwVmuTMYjZpAV5+ldDZMmayihy1GD4AF3E6tna/JWo9L+yhcykwcNGRP
+         LvsxiNDBxdDh9j5y4k6sSZ07DOfuRVokOdmJfKjCB1AuJluqVZq7H/4orpzuVCTWM9mm
+         d3qWM+gTan7QzwP14Is9CrcY+3GJX8fO5RQ2M8BWNcWZdod28o6QH8/2pZouuk3VllVh
+         oSDA==
+X-Gm-Message-State: AOAM531j11XbNNGLndq0FEX+li+BmlwoCeQzALaowjrEDrHYm7FwCn/L
+        jKq8U+SIiEp2ds/SR514cH0s5A==
+X-Google-Smtp-Source: ABdhPJy3XScPgdusHpeyWv4jQjic38Ejtj8p4r0lEQm9peV3Wc45F7gJP9aVdm9bZpo6zHDHZm+x0Q==
+X-Received: by 2002:ac2:5fd0:0:b0:42e:6a36:c02c with SMTP id q16-20020ac25fd0000000b0042e6a36c02cmr3155756lfg.108.1645748128555;
+        Thu, 24 Feb 2022 16:15:28 -0800 (PST)
 Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id 16-20020ac25f10000000b00443890bd84asm55859lfq.114.2022.02.24.16.15.26
+        by smtp.gmail.com with ESMTPSA id 16-20020ac25f10000000b00443890bd84asm55859lfq.114.2022.02.24.16.15.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 16:15:26 -0800 (PST)
+        Thu, 24 Feb 2022 16:15:28 -0800 (PST)
 From:   Linus Walleij <linus.walleij@linaro.org>
 To:     Sebastian Reichel <sre@kernel.org>,
         Marcus Cooper <codekipper@gmail.com>
 Cc:     linux-pm@vger.kernel.org,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 3/6 v3] power: supply: ab8500: Standardize BTI resistance
-Date:   Fri, 25 Feb 2022 01:13:11 +0100
-Message-Id: <20220225001314.1881549-4-linus.walleij@linaro.org>
+Subject: [PATCH 4/6 v3] power: supply: Support VBAT-to-Ri lookup tables
+Date:   Fri, 25 Feb 2022 01:13:12 +0100
+Message-Id: <20220225001314.1881549-5-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220225001314.1881549-1-linus.walleij@linaro.org>
 References: <20220225001314.1881549-1-linus.walleij@linaro.org>
@@ -71,42 +71,26 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The Battery Type Indicator (BTI) resistor is a resistor mounted
-between a special terminal on the battery and ground. By sending
-a fixed current (such as 7mA) through this resistor and measuring
-the voltage over it, the resistance can be determined, and this
-verifies the battery type.
+In Samsung devices, the method used to compensate for temperature,
+age, load etc is by way of VBAT to Ri tables, which correlates the
+battery voltage under load (VBAT) to an internal resistance (Ri).
 
-Typical side view of the battery:
+Using this Ri and a measurement of the current out of the battery
+(IBAT) the open circuit voltage (OCV) can be calculated as:
 
-  o     o     o
- GND   BTI   +3.8V
+  OCV = VBAT - (Ri * IBAT)
 
-Typical example of the electrical layout:
+The details are described in comments to struct
+power_supply_battery_info in the commit.
 
-  +3.8 V   BTI
-    |       |
-    | +     |
- _______   [ ] 7kOhm
-   ___      |
-    |       |
-    |       |
-   GND     GND
+Since not all batteries supply this VBAT-to-Ri data, the fallback
+method to use the temperature-to-Ri lookup table can also be used
+as a fallback.
 
-By verifying this resistance before attempting to charge the
-battery we add an additional level of security.
-
-In some systems this is used for plug-and-play of batteries with
-different capacity. In other cases, this is merely used to verify
-that the right type of battery is connected, if several batteries
-have the same physical shape and can be plugged into the same
-slot. Sometimes this is just a surplus security mechanism.
-
-Nokia and Samsung among many other vendors are known to use these
-BTI resistors.
-
-Add the BTI properties to struct power_supply_battery_info and
-switch the AB8500 charger code over to using it.
+Add two helper functions to check if we have the tables needed for
+using power_supply_vbat2ri() or power_supply_temp2resist_simple()
+respectively, so capacity estimation code can choose which one
+to employ.
 
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
@@ -115,227 +99,275 @@ ChangeLog v2->v3:
 ChangeLog v1->v2:
 - No changes
 ---
- drivers/power/supply/ab8500-bm.h         | 12 -----------
- drivers/power/supply/ab8500_bmdata.c     | 14 ++++++-------
- drivers/power/supply/ab8500_btemp.c      | 14 ++++++-------
- drivers/power/supply/ab8500_fg.c         |  4 ----
- drivers/power/supply/power_supply_core.c | 26 +++++++++++++++++++++++-
- include/linux/power_supply.h             | 13 ++++++++++++
- 6 files changed, 51 insertions(+), 32 deletions(-)
+ drivers/power/supply/power_supply_core.c |  67 +++++++++++++-
+ include/linux/power_supply.h             | 113 ++++++++++++++++++++++-
+ 2 files changed, 177 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/power/supply/ab8500-bm.h b/drivers/power/supply/ab8500-bm.h
-index 91ef9d4a5222..180a016b3662 100644
---- a/drivers/power/supply/ab8500-bm.h
-+++ b/drivers/power/supply/ab8500-bm.h
-@@ -327,16 +327,6 @@ struct ab8500_maxim_parameters {
- 	int charger_curr_step_ua;
- };
- 
--/**
-- * struct ab8500_battery_type - different batteries supported
-- * @resis_high:			battery upper resistance limit
-- * @resis_low:			battery lower resistance limit
-- */
--struct ab8500_battery_type {
--	int resis_high;
--	int resis_low;
--};
--
- /**
-  * struct ab8500_bm_capacity_levels - ab8500 capacity level data
-  * @critical:		critical capacity level in percent
-@@ -387,7 +377,6 @@ struct ab8500_bm_charger_parameters {
-  * @temp_hysteresis	temperature hysteresis
-  * @maxi		maximization parameters
-  * @cap_levels		capacity in percent for the different capacity levels
-- * @bat_type		table of supported battery types
-  * @chg_params		charger parameters
-  * @fg_params		fuel gauge parameters
-  */
-@@ -410,7 +399,6 @@ struct ab8500_bm_data {
- 	int temp_hysteresis;
- 	const struct ab8500_maxim_parameters *maxi;
- 	const struct ab8500_bm_capacity_levels *cap_levels;
--	struct ab8500_battery_type *bat_type;
- 	const struct ab8500_bm_charger_parameters *chg_params;
- 	const struct ab8500_fg_parameters *fg_params;
- };
-diff --git a/drivers/power/supply/ab8500_bmdata.c b/drivers/power/supply/ab8500_bmdata.c
-index bf0b74773eee..3e6ea22372b2 100644
---- a/drivers/power/supply/ab8500_bmdata.c
-+++ b/drivers/power/supply/ab8500_bmdata.c
-@@ -73,12 +73,6 @@ static struct power_supply_maintenance_charge_table ab8500_maint_charg_table[] =
- 	}
- };
- 
--/* Default battery type for reference designs is the unknown type */
--static struct ab8500_battery_type bat_type_thermistor_unknown = {
--	.resis_high = 0,
--	.resis_low = 0,
--};
--
- static const struct ab8500_bm_capacity_levels cap_levels = {
- 	.critical	= 2,
- 	.low		= 10,
-@@ -136,7 +130,6 @@ struct ab8500_bm_data ab8500_bm_data = {
- 	.enable_overshoot       = false,
- 	.fg_res                 = 100,
- 	.cap_levels             = &cap_levels,
--	.bat_type               = &bat_type_thermistor_unknown,
- 	.interval_charging      = 5,
- 	.interval_not_charging  = 120,
- 	.maxi                   = &ab8500_maxi_params,
-@@ -214,6 +207,13 @@ int ab8500_bm_of_probe(struct power_supply *psy,
- 		bi->resist_table_size = ARRAY_SIZE(temp_to_batres_tbl_thermistor);
- 	}
- 
-+	/* The default battery is emulated by a resistor at 7K */
-+	if (bi->bti_resistance_ohm < 0 ||
-+	    bi->bti_resistance_tolerance < 0) {
-+		bi->bti_resistance_ohm = 7000;
-+		bi->bti_resistance_tolerance = 20;
-+	}
-+
- 	if (!bi->ocv_table[0]) {
- 		/* Default capacity table at say 25 degrees Celsius */
- 		bi->ocv_temp[0] = 25;
-diff --git a/drivers/power/supply/ab8500_btemp.c b/drivers/power/supply/ab8500_btemp.c
-index 2a6fc151210c..b7e842dff567 100644
---- a/drivers/power/supply/ab8500_btemp.c
-+++ b/drivers/power/supply/ab8500_btemp.c
-@@ -237,8 +237,8 @@ static int ab8500_btemp_get_batctrl_res(struct ab8500_btemp *di)
-  */
- static int ab8500_btemp_id(struct ab8500_btemp *di)
- {
-+	struct power_supply_battery_info *bi = di->bm->bi;
- 	int res;
--	u8 i;
- 
- 	di->curr_source = BTEMP_BATCTRL_CURR_SRC_7UA;
- 
-@@ -248,13 +248,11 @@ static int ab8500_btemp_id(struct ab8500_btemp *di)
- 		return -ENXIO;
- 	}
- 
--	if ((res <= di->bm->bat_type->resis_high) &&
--	    (res >= di->bm->bat_type->resis_low)) {
--		dev_info(di->dev, "Battery detected on BATTEMP"
--			 " low %d < res %d < high: %d"
--			 " index: %d\n",
--			 di->bm->bat_type->resis_low, res,
--			 di->bm->bat_type->resis_high, i);
-+	if (power_supply_battery_bti_in_range(bi, res)) {
-+		dev_info(di->dev, "Battery detected on BATCTRL (pin C3)"
-+			 " resistance %d Ohm = %d Ohm +/- %d%%\n",
-+			 res, bi->bti_resistance_ohm,
-+			 bi->bti_resistance_tolerance);
- 	} else {
- 		dev_warn(di->dev, "Battery identified as unknown"
- 			 ", resistance %d Ohm\n", res);
-diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
-index 6436861db016..39c7e6b0be52 100644
---- a/drivers/power/supply/ab8500_fg.c
-+++ b/drivers/power/supply/ab8500_fg.c
-@@ -2241,10 +2241,6 @@ static int ab8500_fg_get_ext_psy_data(struct device *dev, void *data)
- 				if (!di->flags.batt_id_received &&
- 				    (bi && (bi->technology !=
- 					    POWER_SUPPLY_TECHNOLOGY_UNKNOWN))) {
--					const struct ab8500_battery_type *b;
--
--					b = di->bm->bat_type;
--
- 					di->flags.batt_id_received = true;
- 
- 					di->bat_cap.max_mah_design =
 diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
-index 5d7d15860529..cbe957088c56 100644
+index cbe957088c56..1c0b1be22067 100644
 --- a/drivers/power/supply/power_supply_core.c
 +++ b/drivers/power/supply/power_supply_core.c
-@@ -602,7 +602,9 @@ int power_supply_get_battery_info(struct power_supply *psy,
- 	info->temp_min                       = INT_MIN;
- 	info->temp_max                       = INT_MAX;
- 	info->factory_internal_resistance_uohm  = -EINVAL;
--	info->resist_table = NULL;
-+	info->resist_table                   = NULL;
-+	info->bti_resistance_ohm             = -EINVAL;
-+	info->bti_resistance_tolerance       = -EINVAL;
+@@ -791,7 +791,7 @@ EXPORT_SYMBOL_GPL(power_supply_put_battery_info);
  
- 	for (index = 0; index < POWER_SUPPLY_OCV_TEMP_MAX; index++) {
- 		info->ocv_table[index]       = NULL;
-@@ -915,6 +917,28 @@ int power_supply_batinfo_ocv2cap(struct power_supply_battery_info *info,
+ /**
+  * power_supply_temp2resist_simple() - find the battery internal resistance
+- * percent
++ * percent from temperature
+  * @table: Pointer to battery resistance temperature table
+  * @table_len: The table length
+  * @temp: Current temperature
+@@ -828,6 +828,71 @@ int power_supply_temp2resist_simple(struct power_supply_resistance_temp_table *t
  }
- EXPORT_SYMBOL_GPL(power_supply_batinfo_ocv2cap);
+ EXPORT_SYMBOL_GPL(power_supply_temp2resist_simple);
  
-+bool power_supply_battery_bti_in_range(struct power_supply_battery_info *info,
-+				       int resistance)
++/**
++ * power_supply_vbat2ri() - find the battery internal resistance
++ * from the battery voltage
++ * @info: The battery information container
++ * @table: Pointer to battery resistance temperature table
++ * @vbat_uv: The battery voltage in microvolt
++ * @charging: If we are charging (true) or not (false)
++ *
++ * This helper function is used to look up battery internal resistance
++ * according to current battery voltage. Depending on whether the battery
++ * is currently charging or not, different resistance will be returned.
++ *
++ * Returns the internal resistance in microohm or negative error code.
++ */
++int power_supply_vbat2ri(struct power_supply_battery_info *info,
++			 int vbat_uv, bool charging)
 +{
-+	int low, high;
++	struct power_supply_vbat_ri_table *vbat2ri;
++	int table_len;
++	int i, high, low;
 +
-+	/* Nothing like this can be checked */
-+	if (info->bti_resistance_ohm <= 0)
-+		return false;
++	/*
++	 * If we are charging, and the battery supplies a separate table
++	 * for this state, we use that in order to compensate for the
++	 * charging voltage. Otherwise we use the main table.
++	 */
++	if (charging && info->vbat2ri_charging) {
++		vbat2ri = info->vbat2ri_charging;
++		table_len = info->vbat2ri_charging_size;
++	} else {
++		vbat2ri = info->vbat2ri_discharging;
++		table_len = info->vbat2ri_discharging_size;
++	}
 +
-+	/* This will be extremely strict and unlikely to work */
-+	if (info->bti_resistance_tolerance <= 0)
-+		return (info->bti_resistance_ohm == resistance);
++	/*
++	 * If no tables are specified, or if we are above the highest voltage in
++	 * the voltage table, just return the factory specified internal resistance.
++	 */
++	if (!vbat2ri || (table_len <= 0) || (vbat_uv > vbat2ri[0].vbat_uv)) {
++		if (charging && (info->factory_internal_resistance_charging_uohm > 0))
++			return info->factory_internal_resistance_charging_uohm;
++		else
++			return info->factory_internal_resistance_uohm;
++	}
 +
-+	low = info->bti_resistance_ohm -
-+		(info->bti_resistance_ohm * info->bti_resistance_tolerance) / 100;
-+	high = info->bti_resistance_ohm +
-+		(info->bti_resistance_ohm * info->bti_resistance_tolerance) / 100;
++	/* Break loop at table_len - 1 because that is the highest index */
++	for (i = 0; i < table_len - 1; i++)
++		if (vbat_uv > vbat2ri[i].vbat_uv)
++			break;
 +
-+	return ((resistance >= low) && (resistance <= high));
++	/* The library function will deal with high == low */
++	if ((i == 0) || (i == (table_len - 1)))
++		high = i;
++	else
++		high = i - 1;
++	low = i;
++
++	return fixp_linear_interpolate(vbat2ri[low].vbat_uv,
++				       vbat2ri[low].ri_uohm,
++				       vbat2ri[high].vbat_uv,
++				       vbat2ri[high].ri_uohm,
++				       vbat_uv);
 +}
-+EXPORT_SYMBOL_GPL(power_supply_battery_bti_in_range);
++EXPORT_SYMBOL_GPL(power_supply_vbat2ri);
 +
- int power_supply_get_property(struct power_supply *psy,
- 			    enum power_supply_property psp,
- 			    union power_supply_propval *val)
+ struct power_supply_maintenance_charge_table *
+ power_supply_get_maintenance_charging_setting(struct power_supply_battery_info *info,
+ 					      int index)
 diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index 42a47d7aa3fd..ed206ac64122 100644
+index ed206ac64122..ffbf69c00003 100644
 --- a/include/linux/power_supply.h
 +++ b/include/linux/power_supply.h
-@@ -497,6 +497,14 @@ struct power_supply_maintenance_charge_table {
+@@ -348,6 +348,11 @@ struct power_supply_resistance_temp_table {
+ 	int resistance;	/* internal resistance percent */
+ };
+ 
++struct power_supply_vbat_ri_table {
++	int vbat_uv;	/* Battery voltage in microvolt */
++	int ri_uohm;	/* Internal resistance in microohm */
++};
++
+ /**
+  * struct power_supply_maintenance_charge_table - setting for maintenace charging
+  * @charge_current_max_ua: maintenance charging current that is used to keep
+@@ -459,7 +464,14 @@ struct power_supply_maintenance_charge_table {
+  * @factory_internal_resistance_uohm: the internal resistance of the battery
+  *   at fabrication time, expressed in microohms. This resistance will vary
+  *   depending on the lifetime and charge of the battery, so this is just a
+- *   nominal ballpark figure.
++ *   nominal ballpark figure. This internal resistance is given for the state
++ *   when the battery is discharging.
++ * @factory_internal_resistance_charging_uohm: the internal resistance of the
++ *   battery at fabrication time while charging, expressed in microohms.
++ *   The charging process will affect the internal resistance of the battery
++ *   so this value provides a better resistance under these circumstances.
++ *   This resistance will vary depending on the lifetime and charge of the
++ *   battery, so this is just a nominal ballpark figure.
+  * @ocv_temp: array indicating the open circuit voltage (OCV) capacity
+  *   temperature indices. This is an array of temperatures in degrees Celsius
+  *   indicating which capacity table to use for a certain temperature, since
+@@ -497,6 +509,21 @@ struct power_supply_maintenance_charge_table {
   *   by temperature: highest temperature with lowest resistance first, lowest
   *   temperature with highest resistance last.
   * @resist_table_size: the number of items in the resist_table.
-+ * @bti_resistance_ohm: The Battery Type Indicator (BIT) nominal resistance
-+ *   in ohms for this battery, if an identification resistor is mounted
-+ *   between a third battery terminal and ground. This scheme is used by a lot
-+ *   of mobile device batteries.
-+ * @bti_resistance_tolerance: The tolerance in percent of the BTI resistance,
-+ *   for example 10 for +/- 10%, if the bti_resistance is set to 7000 and the
-+ *   tolerance is 10% we will detect a proper battery if the BTI resistance
-+ *   is between 6300 and 7700 Ohm.
++ * @vbat2ri_discharging: this is a table that correlates Battery voltage (VBAT)
++ *   to internal resistance (Ri). The resistance is given in microohm for the
++ *   corresponding voltage in microvolts. The internal resistance is used to
++ *   determine the open circuit voltage so that we can determine the capacity
++ *   of the battery. These voltages to resistance tables apply when the battery
++ *   is discharging. The table must be ordered descending by voltage: highest
++ *   voltage first.
++ * @vbat2ri_discharging_size: the number of items in the vbat2ri_discharging
++ *   table.
++ * @vbat2ri_charging: same function as vbat2ri_discharging but for the state
++ *   when the battery is charging. Being under charge changes the battery's
++ *   internal resistance characteristics so a separate table is needed.*
++ *   The table must be ordered descending by voltage: highest voltage first.
++ * @vbat2ri_charging_size: the number of items in the vbat2ri_charging
++ *   table.
+  * @bti_resistance_ohm: The Battery Type Indicator (BIT) nominal resistance
+  *   in ohms for this battery, if an identification resistor is mounted
+  *   between a third battery terminal and ground. This scheme is used by a lot
+@@ -511,7 +538,9 @@ struct power_supply_maintenance_charge_table {
+  * use these for consistency.
   *
-  * This is the recommended struct to manage static battery parameters,
-  * populated by power_supply_get_battery_info(). Most platform drivers should
-@@ -623,6 +631,8 @@ struct power_supply_battery_info {
+  * Its field names must correspond to elements in enum power_supply_property.
+- * The default field value is -EINVAL.
++ * The default field value is -EINVAL or NULL for pointers.
++ *
++ * CC/CV CHARGING:
+  *
+  * The charging parameters here assume a CC/CV charging scheme. This method
+  * is most common with Lithium Ion batteries (other methods are possible) and
+@@ -596,6 +625,66 @@ struct power_supply_maintenance_charge_table {
+  * Overcharging Lithium Ion cells can be DANGEROUS and lead to fire or
+  * explosions.
+  *
++ * DETERMINING BATTERY CAPACITY:
++ *
++ * Several members of the struct deal with trying to determine the remaining
++ * capacity in the battery, usually as a percentage of charge. In practice
++ * many chargers uses a so-called fuel gauge or coloumb counter that measure
++ * how much charge goes into the battery and how much goes out (+/- leak
++ * consumption). This does not help if we do not know how much capacity the
++ * battery has to begin with, such as when it is first used or was taken out
++ * and charged in a separate charger. Therefore many capacity algorithms use
++ * the open circuit voltage with a look-up table to determine the rough
++ * capacity of the battery. The open circuit voltage can be conceptualized
++ * with an ideal voltage source (V) in series with an internal resistance (Ri)
++ * like this:
++ *
++ *      +-------> IBAT >----------------+
++ *      |                    ^          |
++ *     [ ] Ri                |          |
++ *      |                    | VBAT     |
++ *      o <----------        |          |
++ *     +|           ^        |         [ ] Rload
++ *    .---.         |        |          |
++ *    | V |         | OCV    |          |
++ *    '---'         |        |          |
++ *      |           |        |          |
++ *  GND +-------------------------------+
++ *
++ * If we disconnect the load (here simplified as a fixed resistance Rload)
++ * and measure VBAT with a infinite impedance voltage meter we will get
++ * VBAT = OCV and this assumption is sometimes made even under load, assuming
++ * Rload is insignificant. However this will be of dubious quality because the
++ * load is rarely that small and Ri is strongly nonlinear depending on
++ * temperature and how much capacity is left in the battery due to the
++ * chemistry involved.
++ *
++ * In many practical applications we cannot just disconnect the battery from
++ * the load, so instead we often try to measure the instantaneous IBAT (the
++ * current out from the battery), estimate the Ri and thus calculate the
++ * voltage drop over Ri and compensate like this:
++ *
++ *   OCV = VBAT - (IBAT * Ri)
++ *
++ * The tables vbat2ri_discharging and vbat2ri_charging are used to determine
++ * (by interpolation) the Ri from the VBAT under load. These curves are highly
++ * nonlinear and may need many datapoints but can be found in datasheets for
++ * some batteries. This gives the compensated open circuit voltage (OCV) for
++ * the battery even under load. Using this method will also compensate for
++ * temperature changes in the environment: this will also make the internal
++ * resistance change, and it will affect the VBAT under load, so correlating
++ * VBAT to Ri takes both remaining capacity and temperature into consideration.
++ *
++ * Alternatively a manufacturer can specify how the capacity of the battery
++ * is dependent on the battery temperature which is the main factor affecting
++ * Ri. As we know all checmical reactions are faster when it is warm and slower
++ * when it is cold. You can put in 1500mAh and only get 800mAh out before the
++ * voltage drops too low for example. This effect is also highly nonlinear and
++ * the purpose of the table resist_table: this will take a temperature and
++ * tell us how big percentage of Ri the specified temperature correlates to.
++ * Usually we have 100% of the factory_internal_resistance_uohm at 25 degrees
++ * Celsius.
++ *
+  * The power supply class itself doesn't use this struct as of now.
+  */
+ 
+@@ -620,6 +709,7 @@ struct power_supply_battery_info {
+ 	int alert_high_temp_charge_current_ua;
+ 	int alert_high_temp_charge_voltage_uv;
+ 	int factory_internal_resistance_uohm;
++	int factory_internal_resistance_charging_uohm;
+ 	int ocv_temp[POWER_SUPPLY_OCV_TEMP_MAX];
+ 	int temp_ambient_alert_min;
+ 	int temp_ambient_alert_max;
+@@ -631,6 +721,10 @@ struct power_supply_battery_info {
  	int ocv_table_size[POWER_SUPPLY_OCV_TEMP_MAX];
  	struct power_supply_resistance_temp_table *resist_table;
  	int resist_table_size;
-+	int bti_resistance_ohm;
-+	int bti_resistance_tolerance;
++	struct power_supply_vbat_ri_table *vbat2ri_discharging;
++	int vbat2ri_discharging_size;
++	struct power_supply_vbat_ri_table *vbat2ri_charging;
++	int vbat2ri_charging_size;
+ 	int bti_resistance_ohm;
+ 	int bti_resistance_tolerance;
  };
- 
- extern struct atomic_notifier_head power_supply_notifier;
-@@ -666,6 +676,8 @@ power_supply_temp2resist_simple(struct power_supply_resistance_temp_table *table
+@@ -674,6 +768,8 @@ extern int power_supply_batinfo_ocv2cap(struct power_supply_battery_info *info,
+ extern int
+ power_supply_temp2resist_simple(struct power_supply_resistance_temp_table *table,
  				int table_len, int temp);
++extern int power_supply_vbat2ri(struct power_supply_battery_info *info,
++				int vbat_uv, bool charging);
  extern struct power_supply_maintenance_charge_table *
  power_supply_get_maintenance_charging_setting(struct power_supply_battery_info *info, int index);
-+extern bool power_supply_battery_bti_in_range(struct power_supply_battery_info *info,
-+					      int resistance);
- extern void power_supply_changed(struct power_supply *psy);
- extern int power_supply_am_i_supplied(struct power_supply *psy);
- extern int power_supply_set_input_current_limit_from_supplier(
-@@ -682,6 +694,7 @@ power_supply_supports_maintenance_charging(struct power_supply_battery_info *inf
+ extern bool power_supply_battery_bti_in_range(struct power_supply_battery_info *info,
+@@ -694,6 +790,19 @@ power_supply_supports_maintenance_charging(struct power_supply_battery_info *inf
  	return (mt != NULL);
  }
  
++static inline bool
++power_supply_supports_vbat2ri(struct power_supply_battery_info *info)
++{
++	return ((info->vbat2ri_discharging != NULL) &&
++		info->vbat2ri_discharging_size > 0);
++}
 +
++static inline bool
++power_supply_supports_temp2ri(struct power_supply_battery_info *info)
++{
++	return ((info->resist_table != NULL) &&
++		info->resist_table_size > 0);
++}
+ 
  #ifdef CONFIG_POWER_SUPPLY
  extern int power_supply_is_system_supplied(void);
- #else
 -- 
 2.34.1
 
