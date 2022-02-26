@@ -2,64 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E83C74C5249
-	for <lists+linux-pm@lfdr.de>; Sat, 26 Feb 2022 00:52:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FF134C52B9
+	for <lists+linux-pm@lfdr.de>; Sat, 26 Feb 2022 01:37:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239600AbiBYXwp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Feb 2022 18:52:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33886 "EHLO
+        id S234801AbiBZAhj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Feb 2022 19:37:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbiBYXwo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Feb 2022 18:52:44 -0500
-Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2659B203BF7;
-        Fri, 25 Feb 2022 15:52:12 -0800 (PST)
+        with ESMTP id S234434AbiBZAhi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Feb 2022 19:37:38 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4489C186228
+        for <linux-pm@vger.kernel.org>; Fri, 25 Feb 2022 16:37:05 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id y24so12054903lfg.1
+        for <linux-pm@vger.kernel.org>; Fri, 25 Feb 2022 16:37:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1645833132; x=1677369132;
-  h=date:from:to:cc:message-id:references:mime-version:
-   in-reply-to:subject;
-  bh=tREsWWUsgvz3MJoHVqVuhwiHg2kTAvs9FHOz7isRogc=;
-  b=hy6NexQEngZgQcR9xAA4ck97ZJbxwM92Z1edL24crlp6XrSVqkhmI4Iw
-   NEl8YXK8A3Uehw4C+lejxw3WTK2LMYgbGcUXQfMR7AA5j8l1uM43ffS/d
-   BGVO5OXF1aT0j+8oPkXDqfI+tac/RSj4m0cNTzMptJr5GwMdpPuru4fzr
-   8=;
-X-IronPort-AV: E=Sophos;i="5.90,137,1643673600"; 
-   d="scan'208";a="197865946"
-Subject: Re: [PATCH 0/2] thermal: Add support of multiple sensors
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-5feb294a.us-west-2.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-9102.sea19.amazon.com with ESMTP; 25 Feb 2022 23:52:11 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2a-5feb294a.us-west-2.amazon.com (Postfix) with ESMTPS id 1AD1B930B3;
-        Fri, 25 Feb 2022 23:52:11 +0000 (UTC)
-Received: from EX13D22UEA001.ant.amazon.com (10.43.61.60) by
- EX13MTAUEA001.ant.amazon.com (10.43.61.243) with Microsoft SMTP Server (TLS)
- id 15.0.1497.28; Fri, 25 Feb 2022 23:52:04 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
- EX13D22UEA001.ant.amazon.com (10.43.61.60) with Microsoft SMTP Server (TLS)
- id 15.0.1497.28; Fri, 25 Feb 2022 23:52:03 +0000
-Received: from localhost (10.106.100.12) by mail-relay.amazon.com
- (10.43.61.243) with Microsoft SMTP Server id 15.0.1497.28 via Frontend
- Transport; Fri, 25 Feb 2022 23:52:03 +0000
-Date:   Fri, 25 Feb 2022 15:52:03 -0800
-From:   Eduardo Valentin <eduval@amazon.com>
-To:     Alexandre Bailon <abailon@baylibre.com>
-CC:     <rafael@kernel.org>, <rui.zhang@intel.com>,
-        <daniel.lezcano@linaro.org>, <amitk@kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <ben.tseng@mediatek.com>, <khilman@baylibre.com>,
-        <mka@chromium.org>
-Message-ID: <20220225235203.GH10536@uf8f119305bce5e.ant.amazon.com>
-References: <20220218084604.1669091-1-abailon@baylibre.com>
+        d=telus.net; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=61Og9Yekp5IRFCsiJKakDtTPAFN3mj4BaM4Rb6o1lXk=;
+        b=KzJabQUxmwVb5LeknTRMEx6TiZIhMXWUKtTVAaqZ8tEkQy8gPi72GgKo6KJyubSHnO
+         KPSaWLSOhZlGbh1PQkSHBobZS23/56j/yLXbyaIH41EK3uPm1zWBterVhKnxxSKHmg1I
+         QLH27J64qyNWWwSLhvxJsEHRxRQhelzkU/d2BcmA5hwJq3/Bjfo0UXeBAYXmJkiBpKSQ
+         Wesz6TGXin45FijgqQpEkwOVAs82lAq8SIoLshM6VqgoBeGqpbBAhu3StfDsswkicY6s
+         GIl0KthgMmdevTfLmc7qZlzEItFmMxIjjFnOXrv2k7XG01ijq05YvqzFa7fpDc1lz1cH
+         M5/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=61Og9Yekp5IRFCsiJKakDtTPAFN3mj4BaM4Rb6o1lXk=;
+        b=cQA3OxrQZ6CbcYvMArWxXhNgRnirryz+OxJYiaVW3InEFMLb3h3yHR8oK7e9fYAXlh
+         7ngH7cPqIg7PaF7sXP9xiet2KrrJzlW3boPZYndsWFOVCjjVXhP4HTpWnbQYJsr1uZWG
+         KA7G23PLDlaxNTGSs+ImyWSS/FrUPwKoobT/JnlDLIvxUbs25WItvOHAr90HCZLXe5jl
+         7MWYc/w4tmBhs0dgU7VEqSSD8FbdaPBwelCd677WilA3pbZ8YRm72O40YaU2LYJtdl5e
+         qe/wYigm4PVmdOnITSb3ds63eF6x0yGVVBJx9/uvPbwGWCXfGeqTNqE/oVMYs9UBmNJo
+         eRyQ==
+X-Gm-Message-State: AOAM530wiHzRq0MSKUyN/FpQyrKEBsM6zDsYT3ZKBlb5Hwx3GqOUVIXA
+        VMbuDBbITnh2uqWIFfOWlmLwG9iT4uhaN8vKwe0K9A==
+X-Google-Smtp-Source: ABdhPJyiU1PsNLMMlY/NOeiguOiai+BrMnQm5Mjpn43memHEapvTbzCUey8NIEKIi2eY+y+cjJ7npkoet/4nQZPgX+k=
+X-Received: by 2002:a05:6512:3408:b0:443:c898:520b with SMTP id
+ i8-20020a056512340800b00443c898520bmr6123315lfr.465.1645835823405; Fri, 25
+ Feb 2022 16:37:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220218084604.1669091-1-abailon@baylibre.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-14.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
+References: <CAAYoRsXkyWf0vmEE2HvjF6pzCC4utxTF=7AFx1PJv4Evh=C+Ow@mail.gmail.com>
+ <CAJZ5v0jsy0q3-ZqYvDrswY1F+tJsG6oNjNJPzz9zzkgdnoMwkw@mail.gmail.com>
+ <20220224080830.GD4548@shbuild999.sh.intel.com> <5562542.DvuYhMxLoT@kreacher>
+In-Reply-To: <5562542.DvuYhMxLoT@kreacher>
+From:   Doug Smythies <dsmythies@telus.net>
+Date:   Fri, 25 Feb 2022 16:36:53 -0800
+Message-ID: <CAAYoRsW4LqNvSZ3Et5fqeFcHQ9j9-0u9Y-LN9DmpCS3wG3+NWg@mail.gmail.com>
+Subject: Re: CPU excessively long times between frequency scaling driver calls
+ - bisected
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Feng Tang <feng.tang@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        dsmythies <dsmythies@telus.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,66 +76,227 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Alexandre,
+On Fri, Feb 25, 2022 at 9:46 AM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+>
+> On Thursday, February 24, 2022 9:08:30 AM CET Feng Tang wrote:
+...
+> > > So it looks like a new mechanism is needed for that.
+> >
+> > If you think idle class is not the right place to solve it, I can
+> > also help testing new patches.
+>
+> So I have the appended experimental patch to address this issue that's not
+> been tested at all.  Caveat emptor.
 
-On Fri, Feb 18, 2022 at 09:46:02AM +0100, Alexandre Bailon wrote:
-> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
-> 
-> 
-> 
-> Following this comment [1], this updates thermal_of to support multiple
-> sensors.
-> 
-> This has some limitations:
-> - A sensor must have its own termal zone, even if it is also registered
->   inside a thermal zone supporting multiple sensors.
-> - Some callbacks (such as of_thermal_set_trips) have been updated to support
->   multiple sensors but I don't know if this really make sense.
-> - of_thermal_get_trend have not been updated to support multiple sensors.
->   This would probably make sense to support it but I am not sure how to do it,
->   especially for the average.
+Hi Rafael,
 
-Great to see this having somewhat a form now!
+O.K., you gave fair warning.
 
-Overall the idea is sane and aligned to what I had in mind back during the 2019 Linux plumbers: one thermal zone should have multiple sensor inputs.
-https://lpc.events/event/4/page/34-accepted-microconferences#PMSummary
+The patch applied fine.
+It does not compile for me.
+The function cpuidle_update_retain_tick does not exist.
+Shouldn't it be somewhere in cpuidle.c?
+I used the function cpuidle_disable_device as a template
+for searching and comparing.
 
-In fact, that is aligned to what I originally wrote in the thermal device tree bindings:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/thermal/thermal-zones.yaml#n79
+Because all of my baseline results are with kernel 5.17-rc3,
+that is what I am still using.
 
-The only major concern with your series is the usage of of-thermal to achieve the multiple sensors per thermal zone.
-While that solves the problem, it has the following limitations:
-(1) limited to devices described in device tree. everybody else is left out.
-(2) it keeps extending the code duplication in of-thermal. 
+Error:
+ld: drivers/cpufreq/intel_pstate.o: in function `intel_pstate_update_perf_ctl':
+intel_pstate.c:(.text+0x2520): undefined reference to
+`cpuidle_update_retain_tick'
 
-My suggestion here is have the thermal core aware of the multiple sensors per thermal zone.
+... Doug
 
-That has the advantage of:
-(a) cleanup the sensor handling within of-thermal
-(b) expand the multi sensor per zone to all types of thermal drivers
-(c) standardize the way to handle the multi sensor.
-
-In my original thoughts of achieving this would have include:
-(i) move the sensor handling part to a specific c file within the thermal core. That would include helper functions to execute the aggregations, max, min, avg, geo avg, etc etc
-(ii) a way to tell what sensors are being aggregated via sysfs, probably a simple syslink to the original device would suffice
-(iii) a way to change the aggregation via sysfs. just like you proposed a way to specify the aggregation via device tree, we should have a way to specify the aggregation at runtime.
-(iv) once (i)-(iii) is done, you basically cleanup of-thermal to use the new C api written, and of-thermal simply use the API created to register the sensors. I d expect that all the callbacks related sensor ops would disappear from of-thermal.
-
-> 
-> [1]: https://patchwork.kernel.org/comment/24723927/
-> 
-> Alexandre Bailon (2):
->   dt-bindings: thermal: Update the bindings to support multiple sensor
->   Thermal: Add support of multi sensor
-> 
->  .../bindings/thermal/thermal-zones.yaml       |  20 +-
->  drivers/thermal/thermal_of.c                  | 491 +++++++++++++++---
->  2 files changed, 449 insertions(+), 62 deletions(-)
-> 
-> --
-> 2.34.1
-> 
-
--- 
-All the best,
-Eduardo Valentin
+>
+> I've been looking for something relatively low-overhead and taking all of the
+> dependencies into account.
+>
+> ---
+>  drivers/cpufreq/intel_pstate.c     |   40 ++++++++++++++++++++++++++++---------
+>  drivers/cpuidle/governors/ladder.c |    6 +++--
+>  drivers/cpuidle/governors/menu.c   |    2 +
+>  drivers/cpuidle/governors/teo.c    |    3 ++
+>  include/linux/cpuidle.h            |    4 +++
+>  5 files changed, 44 insertions(+), 11 deletions(-)
+>
+> Index: linux-pm/drivers/cpuidle/governors/menu.c
+> ===================================================================
+> --- linux-pm.orig/drivers/cpuidle/governors/menu.c
+> +++ linux-pm/drivers/cpuidle/governors/menu.c
+> @@ -284,6 +284,8 @@ static int menu_select(struct cpuidle_dr
+>         if (unlikely(delta < 0)) {
+>                 delta = 0;
+>                 delta_tick = 0;
+> +       } else if (dev->retain_tick) {
+> +               delta = delta_tick;
+>         }
+>         data->next_timer_ns = delta;
+>
+> Index: linux-pm/drivers/cpuidle/governors/teo.c
+> ===================================================================
+> --- linux-pm.orig/drivers/cpuidle/governors/teo.c
+> +++ linux-pm/drivers/cpuidle/governors/teo.c
+> @@ -308,6 +308,9 @@ static int teo_select(struct cpuidle_dri
+>         cpu_data->time_span_ns = local_clock();
+>
+>         duration_ns = tick_nohz_get_sleep_length(&delta_tick);
+> +       if (dev->retain_tick)
+> +               duration_ns = delta_tick;
+> +
+>         cpu_data->sleep_length_ns = duration_ns;
+>
+>         /* Check if there is any choice in the first place. */
+> Index: linux-pm/include/linux/cpuidle.h
+> ===================================================================
+> --- linux-pm.orig/include/linux/cpuidle.h
+> +++ linux-pm/include/linux/cpuidle.h
+> @@ -93,6 +93,7 @@ struct cpuidle_device {
+>         unsigned int            registered:1;
+>         unsigned int            enabled:1;
+>         unsigned int            poll_time_limit:1;
+> +       unsigned int            retain_tick:1;
+>         unsigned int            cpu;
+>         ktime_t                 next_hrtimer;
+>
+> @@ -172,6 +173,8 @@ extern int cpuidle_play_dead(void);
+>  extern struct cpuidle_driver *cpuidle_get_cpu_driver(struct cpuidle_device *dev);
+>  static inline struct cpuidle_device *cpuidle_get_device(void)
+>  {return __this_cpu_read(cpuidle_devices); }
+> +
+> +extern void cpuidle_update_retain_tick(bool val);
+>  #else
+>  static inline void disable_cpuidle(void) { }
+>  static inline bool cpuidle_not_available(struct cpuidle_driver *drv,
+> @@ -211,6 +214,7 @@ static inline int cpuidle_play_dead(void
+>  static inline struct cpuidle_driver *cpuidle_get_cpu_driver(
+>         struct cpuidle_device *dev) {return NULL; }
+>  static inline struct cpuidle_device *cpuidle_get_device(void) {return NULL; }
+> +static inline void cpuidle_update_retain_tick(bool val) { }
+>  #endif
+>
+>  #ifdef CONFIG_CPU_IDLE
+> Index: linux-pm/drivers/cpufreq/intel_pstate.c
+> ===================================================================
+> --- linux-pm.orig/drivers/cpufreq/intel_pstate.c
+> +++ linux-pm/drivers/cpufreq/intel_pstate.c
+> @@ -19,6 +19,7 @@
+>  #include <linux/list.h>
+>  #include <linux/cpu.h>
+>  #include <linux/cpufreq.h>
+> +#include <linux/cpuidle.h>
+>  #include <linux/sysfs.h>
+>  #include <linux/types.h>
+>  #include <linux/fs.h>
+> @@ -1970,6 +1971,30 @@ static inline void intel_pstate_cppc_set
+>  }
+>  #endif /* CONFIG_ACPI_CPPC_LIB */
+>
+> +static void intel_pstate_update_perf_ctl(struct cpudata *cpu)
+> +{
+> +       int pstate = cpu->pstate.current_pstate;
+> +
+> +       /*
+> +        * Avoid stopping the scheduler tick from cpuidle on CPUs in turbo
+> +        * P-states to prevent them from getting back to the high frequency
+> +        * right away after getting out of deep idle.
+> +        */
+> +       cpuidle_update_retain_tick(pstate > cpu->pstate.max_pstate);
+> +       wrmsrl(MSR_IA32_PERF_CTL, pstate_funcs.get_val(cpu, pstate));
+> +}
+> +
+> +static void intel_pstate_update_perf_ctl_wrapper(void *cpu_data)
+> +{
+> +       intel_pstate_update_perf_ctl(cpu_data);
+> +}
+> +
+> +static void intel_pstate_update_perf_ctl_on_cpu(struct cpudata *cpu)
+> +{
+> +       smp_call_function_single(cpu->cpu, intel_pstate_update_perf_ctl_wrapper,
+> +                                cpu, 1);
+> +}
+> +
+>  static void intel_pstate_set_pstate(struct cpudata *cpu, int pstate)
+>  {
+>         trace_cpu_frequency(pstate * cpu->pstate.scaling, cpu->cpu);
+> @@ -1979,8 +2004,7 @@ static void intel_pstate_set_pstate(stru
+>          * the CPU being updated, so force the register update to run on the
+>          * right CPU.
+>          */
+> -       wrmsrl_on_cpu(cpu->cpu, MSR_IA32_PERF_CTL,
+> -                     pstate_funcs.get_val(cpu, pstate));
+> +       intel_pstate_update_perf_ctl_on_cpu(cpu);
+>  }
+>
+>  static void intel_pstate_set_min_pstate(struct cpudata *cpu)
+> @@ -2256,7 +2280,7 @@ static void intel_pstate_update_pstate(s
+>                 return;
+>
+>         cpu->pstate.current_pstate = pstate;
+> -       wrmsrl(MSR_IA32_PERF_CTL, pstate_funcs.get_val(cpu, pstate));
+> +       intel_pstate_update_perf_ctl(cpu);
+>  }
+>
+>  static void intel_pstate_adjust_pstate(struct cpudata *cpu)
+> @@ -2843,11 +2867,9 @@ static void intel_cpufreq_perf_ctl_updat
+>                                           u32 target_pstate, bool fast_switch)
+>  {
+>         if (fast_switch)
+> -               wrmsrl(MSR_IA32_PERF_CTL,
+> -                      pstate_funcs.get_val(cpu, target_pstate));
+> +               intel_pstate_update_perf_ctl(cpu);
+>         else
+> -               wrmsrl_on_cpu(cpu->cpu, MSR_IA32_PERF_CTL,
+> -                             pstate_funcs.get_val(cpu, target_pstate));
+> +               intel_pstate_update_perf_ctl_on_cpu(cpu);
+>  }
+>
+>  static int intel_cpufreq_update_pstate(struct cpufreq_policy *policy,
+> @@ -2857,6 +2879,8 @@ static int intel_cpufreq_update_pstate(s
+>         int old_pstate = cpu->pstate.current_pstate;
+>
+>         target_pstate = intel_pstate_prepare_request(cpu, target_pstate);
+> +       cpu->pstate.current_pstate = target_pstate;
+> +
+>         if (hwp_active) {
+>                 int max_pstate = policy->strict_target ?
+>                                         target_pstate : cpu->max_perf_ratio;
+> @@ -2867,8 +2891,6 @@ static int intel_cpufreq_update_pstate(s
+>                 intel_cpufreq_perf_ctl_update(cpu, target_pstate, fast_switch);
+>         }
+>
+> -       cpu->pstate.current_pstate = target_pstate;
+> -
+>         intel_cpufreq_trace(cpu, fast_switch ? INTEL_PSTATE_TRACE_FAST_SWITCH :
+>                             INTEL_PSTATE_TRACE_TARGET, old_pstate);
+>
+> Index: linux-pm/drivers/cpuidle/governors/ladder.c
+> ===================================================================
+> --- linux-pm.orig/drivers/cpuidle/governors/ladder.c
+> +++ linux-pm/drivers/cpuidle/governors/ladder.c
+> @@ -61,10 +61,10 @@ static inline void ladder_do_selection(s
+>   * ladder_select_state - selects the next state to enter
+>   * @drv: cpuidle driver
+>   * @dev: the CPU
+> - * @dummy: not used
+> + * @stop_tick: Whether or not to stop the scheduler tick
+>   */
+>  static int ladder_select_state(struct cpuidle_driver *drv,
+> -                              struct cpuidle_device *dev, bool *dummy)
+> +                              struct cpuidle_device *dev, bool *stop_tick)
+>  {
+>         struct ladder_device *ldev = this_cpu_ptr(&ladder_devices);
+>         struct ladder_device_state *last_state;
+> @@ -73,6 +73,8 @@ static int ladder_select_state(struct cp
+>         s64 latency_req = cpuidle_governor_latency_req(dev->cpu);
+>         s64 last_residency;
+>
+> +       *stop_tick = !dev->retain_tick;
+> +
+>         /* Special case when user has set very strict latency requirement */
+>         if (unlikely(latency_req == 0)) {
+>                 ladder_do_selection(dev, ldev, last_idx, 0);
+>
+>
+>
