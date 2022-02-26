@@ -2,301 +2,193 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FF134C52B9
-	for <lists+linux-pm@lfdr.de>; Sat, 26 Feb 2022 01:37:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DF304C55F4
+	for <lists+linux-pm@lfdr.de>; Sat, 26 Feb 2022 13:55:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234801AbiBZAhj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Feb 2022 19:37:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52316 "EHLO
+        id S231707AbiBZMz2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 26 Feb 2022 07:55:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234434AbiBZAhi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Feb 2022 19:37:38 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4489C186228
-        for <linux-pm@vger.kernel.org>; Fri, 25 Feb 2022 16:37:05 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id y24so12054903lfg.1
-        for <linux-pm@vger.kernel.org>; Fri, 25 Feb 2022 16:37:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=61Og9Yekp5IRFCsiJKakDtTPAFN3mj4BaM4Rb6o1lXk=;
-        b=KzJabQUxmwVb5LeknTRMEx6TiZIhMXWUKtTVAaqZ8tEkQy8gPi72GgKo6KJyubSHnO
-         KPSaWLSOhZlGbh1PQkSHBobZS23/56j/yLXbyaIH41EK3uPm1zWBterVhKnxxSKHmg1I
-         QLH27J64qyNWWwSLhvxJsEHRxRQhelzkU/d2BcmA5hwJq3/Bjfo0UXeBAYXmJkiBpKSQ
-         Wesz6TGXin45FijgqQpEkwOVAs82lAq8SIoLshM6VqgoBeGqpbBAhu3StfDsswkicY6s
-         GIl0KthgMmdevTfLmc7qZlzEItFmMxIjjFnOXrv2k7XG01ijq05YvqzFa7fpDc1lz1cH
-         M5/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=61Og9Yekp5IRFCsiJKakDtTPAFN3mj4BaM4Rb6o1lXk=;
-        b=cQA3OxrQZ6CbcYvMArWxXhNgRnirryz+OxJYiaVW3InEFMLb3h3yHR8oK7e9fYAXlh
-         7ngH7cPqIg7PaF7sXP9xiet2KrrJzlW3boPZYndsWFOVCjjVXhP4HTpWnbQYJsr1uZWG
-         KA7G23PLDlaxNTGSs+ImyWSS/FrUPwKoobT/JnlDLIvxUbs25WItvOHAr90HCZLXe5jl
-         7MWYc/w4tmBhs0dgU7VEqSSD8FbdaPBwelCd677WilA3pbZ8YRm72O40YaU2LYJtdl5e
-         qe/wYigm4PVmdOnITSb3ds63eF6x0yGVVBJx9/uvPbwGWCXfGeqTNqE/oVMYs9UBmNJo
-         eRyQ==
-X-Gm-Message-State: AOAM530wiHzRq0MSKUyN/FpQyrKEBsM6zDsYT3ZKBlb5Hwx3GqOUVIXA
-        VMbuDBbITnh2uqWIFfOWlmLwG9iT4uhaN8vKwe0K9A==
-X-Google-Smtp-Source: ABdhPJyiU1PsNLMMlY/NOeiguOiai+BrMnQm5Mjpn43memHEapvTbzCUey8NIEKIi2eY+y+cjJ7npkoet/4nQZPgX+k=
-X-Received: by 2002:a05:6512:3408:b0:443:c898:520b with SMTP id
- i8-20020a056512340800b00443c898520bmr6123315lfr.465.1645835823405; Fri, 25
- Feb 2022 16:37:03 -0800 (PST)
-MIME-Version: 1.0
-References: <CAAYoRsXkyWf0vmEE2HvjF6pzCC4utxTF=7AFx1PJv4Evh=C+Ow@mail.gmail.com>
- <CAJZ5v0jsy0q3-ZqYvDrswY1F+tJsG6oNjNJPzz9zzkgdnoMwkw@mail.gmail.com>
- <20220224080830.GD4548@shbuild999.sh.intel.com> <5562542.DvuYhMxLoT@kreacher>
-In-Reply-To: <5562542.DvuYhMxLoT@kreacher>
-From:   Doug Smythies <dsmythies@telus.net>
-Date:   Fri, 25 Feb 2022 16:36:53 -0800
-Message-ID: <CAAYoRsW4LqNvSZ3Et5fqeFcHQ9j9-0u9Y-LN9DmpCS3wG3+NWg@mail.gmail.com>
-Subject: Re: CPU excessively long times between frequency scaling driver calls
- - bisected
+        with ESMTP id S231684AbiBZMz2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 26 Feb 2022 07:55:28 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D28F624913B;
+        Sat, 26 Feb 2022 04:54:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645880093; x=1677416093;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=S+EXp80RPbZsZvoDlUMfsZhHkuO+dmZhNNQYuzSkbx0=;
+  b=UGLJT/qtqwkdlFrhu+5XY1hAhHvrkIqIi26JGGPvDvdX4pO9UDzLOXsF
+   VALmUkUwbHrol1s4MXPyLAmFXOyE29IegMEQzo5+FdGi4UeZtjdKRwTUm
+   5bKSIil+lpTLOWY3J8gd4k/2aboom6qG+2FwsrLHaky0k5xKTNKvHCeah
+   3l8pBPkip4UKWsY+NMzSwFPlgQ+c9gmzg9KPXTp2rJ43YM2hQ7MFuITef
+   oCfqCzZsUV5U8orZwZmv2RoqxI0ezqGl0s2BKPkvkivtXTbhTn11JZATW
+   ELCFusMtxEscScpUkhmGyEg2Ce52I7kF/mEy0vnO3diUa+c87F0Up19xx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10269"; a="339092513"
+X-IronPort-AV: E=Sophos;i="5.90,139,1643702400"; 
+   d="scan'208";a="339092513"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2022 04:54:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,139,1643702400"; 
+   d="scan'208";a="708152006"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 26 Feb 2022 04:54:51 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nNwb5-0005U1-06; Sat, 26 Feb 2022 12:54:51 +0000
+Date:   Sat, 26 Feb 2022 20:54:35 +0800
+From:   kernel test robot <lkp@intel.com>
 To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Feng Tang <feng.tang@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        dsmythies <dsmythies@telus.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 203eb3b975f961128ac00226afd60fbf7ceb2dfb
+Message-ID: <621a230b.BgEEdIca0UOh8Jck%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 9:46 AM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
->
-> On Thursday, February 24, 2022 9:08:30 AM CET Feng Tang wrote:
-...
-> > > So it looks like a new mechanism is needed for that.
-> >
-> > If you think idle class is not the right place to solve it, I can
-> > also help testing new patches.
->
-> So I have the appended experimental patch to address this issue that's not
-> been tested at all.  Caveat emptor.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 203eb3b975f961128ac00226afd60fbf7ceb2dfb  Merge branch 'acpi-fan' into bleeding-edge
 
-Hi Rafael,
+elapsed time: 721m
 
-O.K., you gave fair warning.
+configs tested: 111
+configs skipped: 3
 
-The patch applied fine.
-It does not compile for me.
-The function cpuidle_update_retain_tick does not exist.
-Shouldn't it be somewhere in cpuidle.c?
-I used the function cpuidle_disable_device as a template
-for searching and comparing.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Because all of my baseline results are with kernel 5.17-rc3,
-that is what I am still using.
+gcc tested configs:
+arm64                               defconfig
+arm                              allmodconfig
+arm                              allyesconfig
+arm                                 defconfig
+arm64                            allyesconfig
+i386                          randconfig-c001
+mips                 randconfig-c004-20220225
+mips                         tb0226_defconfig
+sh                          kfr2r09_defconfig
+arc                      axs103_smp_defconfig
+powerpc                     pq2fads_defconfig
+arm                           sama5_defconfig
+parisc                generic-64bit_defconfig
+microblaze                      mmu_defconfig
+arm                           h5000_defconfig
+sh                           se7750_defconfig
+h8300                       h8s-sim_defconfig
+mips                          rb532_defconfig
+sh                        sh7757lcr_defconfig
+arm                  randconfig-c002-20220225
+arm                  randconfig-c002-20220226
+ia64                                defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nds32                             allnoconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+alpha                               defconfig
+nds32                               defconfig
+nios2                            allyesconfig
+alpha                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+parisc                              defconfig
+parisc64                            defconfig
+s390                             allmodconfig
+s390                                defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+i386                             allyesconfig
+i386                              debian-10.3
+i386                   debian-10.3-kselftests
+i386                                defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+powerpc                          allyesconfig
+x86_64                        randconfig-a002
+x86_64                        randconfig-a004
+x86_64                        randconfig-a006
+i386                          randconfig-a003
+i386                          randconfig-a001
+i386                          randconfig-a005
+x86_64                        randconfig-a015
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+arc                  randconfig-r043-20220225
+s390                 randconfig-r044-20220226
+riscv                randconfig-r042-20220226
+arc                  randconfig-r043-20220226
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+riscv                    nommu_virt_defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                                  kexec
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
 
-Error:
-ld: drivers/cpufreq/intel_pstate.o: in function `intel_pstate_update_perf_ctl':
-intel_pstate.c:(.text+0x2520): undefined reference to
-`cpuidle_update_retain_tick'
+clang tested configs:
+powerpc                 mpc8315_rdb_defconfig
+mips                     loongson2k_defconfig
+riscv                    nommu_virt_defconfig
+mips                           ip28_defconfig
+powerpc                     ppa8548_defconfig
+arm                           sama7_defconfig
+mips                      malta_kvm_defconfig
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a016
+x86_64                        randconfig-a014
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+hexagon              randconfig-r045-20220225
+hexagon              randconfig-r041-20220226
+hexagon              randconfig-r045-20220226
+s390                 randconfig-r044-20220225
+hexagon              randconfig-r041-20220225
+riscv                randconfig-r042-20220225
 
-... Doug
-
->
-> I've been looking for something relatively low-overhead and taking all of the
-> dependencies into account.
->
-> ---
->  drivers/cpufreq/intel_pstate.c     |   40 ++++++++++++++++++++++++++++---------
->  drivers/cpuidle/governors/ladder.c |    6 +++--
->  drivers/cpuidle/governors/menu.c   |    2 +
->  drivers/cpuidle/governors/teo.c    |    3 ++
->  include/linux/cpuidle.h            |    4 +++
->  5 files changed, 44 insertions(+), 11 deletions(-)
->
-> Index: linux-pm/drivers/cpuidle/governors/menu.c
-> ===================================================================
-> --- linux-pm.orig/drivers/cpuidle/governors/menu.c
-> +++ linux-pm/drivers/cpuidle/governors/menu.c
-> @@ -284,6 +284,8 @@ static int menu_select(struct cpuidle_dr
->         if (unlikely(delta < 0)) {
->                 delta = 0;
->                 delta_tick = 0;
-> +       } else if (dev->retain_tick) {
-> +               delta = delta_tick;
->         }
->         data->next_timer_ns = delta;
->
-> Index: linux-pm/drivers/cpuidle/governors/teo.c
-> ===================================================================
-> --- linux-pm.orig/drivers/cpuidle/governors/teo.c
-> +++ linux-pm/drivers/cpuidle/governors/teo.c
-> @@ -308,6 +308,9 @@ static int teo_select(struct cpuidle_dri
->         cpu_data->time_span_ns = local_clock();
->
->         duration_ns = tick_nohz_get_sleep_length(&delta_tick);
-> +       if (dev->retain_tick)
-> +               duration_ns = delta_tick;
-> +
->         cpu_data->sleep_length_ns = duration_ns;
->
->         /* Check if there is any choice in the first place. */
-> Index: linux-pm/include/linux/cpuidle.h
-> ===================================================================
-> --- linux-pm.orig/include/linux/cpuidle.h
-> +++ linux-pm/include/linux/cpuidle.h
-> @@ -93,6 +93,7 @@ struct cpuidle_device {
->         unsigned int            registered:1;
->         unsigned int            enabled:1;
->         unsigned int            poll_time_limit:1;
-> +       unsigned int            retain_tick:1;
->         unsigned int            cpu;
->         ktime_t                 next_hrtimer;
->
-> @@ -172,6 +173,8 @@ extern int cpuidle_play_dead(void);
->  extern struct cpuidle_driver *cpuidle_get_cpu_driver(struct cpuidle_device *dev);
->  static inline struct cpuidle_device *cpuidle_get_device(void)
->  {return __this_cpu_read(cpuidle_devices); }
-> +
-> +extern void cpuidle_update_retain_tick(bool val);
->  #else
->  static inline void disable_cpuidle(void) { }
->  static inline bool cpuidle_not_available(struct cpuidle_driver *drv,
-> @@ -211,6 +214,7 @@ static inline int cpuidle_play_dead(void
->  static inline struct cpuidle_driver *cpuidle_get_cpu_driver(
->         struct cpuidle_device *dev) {return NULL; }
->  static inline struct cpuidle_device *cpuidle_get_device(void) {return NULL; }
-> +static inline void cpuidle_update_retain_tick(bool val) { }
->  #endif
->
->  #ifdef CONFIG_CPU_IDLE
-> Index: linux-pm/drivers/cpufreq/intel_pstate.c
-> ===================================================================
-> --- linux-pm.orig/drivers/cpufreq/intel_pstate.c
-> +++ linux-pm/drivers/cpufreq/intel_pstate.c
-> @@ -19,6 +19,7 @@
->  #include <linux/list.h>
->  #include <linux/cpu.h>
->  #include <linux/cpufreq.h>
-> +#include <linux/cpuidle.h>
->  #include <linux/sysfs.h>
->  #include <linux/types.h>
->  #include <linux/fs.h>
-> @@ -1970,6 +1971,30 @@ static inline void intel_pstate_cppc_set
->  }
->  #endif /* CONFIG_ACPI_CPPC_LIB */
->
-> +static void intel_pstate_update_perf_ctl(struct cpudata *cpu)
-> +{
-> +       int pstate = cpu->pstate.current_pstate;
-> +
-> +       /*
-> +        * Avoid stopping the scheduler tick from cpuidle on CPUs in turbo
-> +        * P-states to prevent them from getting back to the high frequency
-> +        * right away after getting out of deep idle.
-> +        */
-> +       cpuidle_update_retain_tick(pstate > cpu->pstate.max_pstate);
-> +       wrmsrl(MSR_IA32_PERF_CTL, pstate_funcs.get_val(cpu, pstate));
-> +}
-> +
-> +static void intel_pstate_update_perf_ctl_wrapper(void *cpu_data)
-> +{
-> +       intel_pstate_update_perf_ctl(cpu_data);
-> +}
-> +
-> +static void intel_pstate_update_perf_ctl_on_cpu(struct cpudata *cpu)
-> +{
-> +       smp_call_function_single(cpu->cpu, intel_pstate_update_perf_ctl_wrapper,
-> +                                cpu, 1);
-> +}
-> +
->  static void intel_pstate_set_pstate(struct cpudata *cpu, int pstate)
->  {
->         trace_cpu_frequency(pstate * cpu->pstate.scaling, cpu->cpu);
-> @@ -1979,8 +2004,7 @@ static void intel_pstate_set_pstate(stru
->          * the CPU being updated, so force the register update to run on the
->          * right CPU.
->          */
-> -       wrmsrl_on_cpu(cpu->cpu, MSR_IA32_PERF_CTL,
-> -                     pstate_funcs.get_val(cpu, pstate));
-> +       intel_pstate_update_perf_ctl_on_cpu(cpu);
->  }
->
->  static void intel_pstate_set_min_pstate(struct cpudata *cpu)
-> @@ -2256,7 +2280,7 @@ static void intel_pstate_update_pstate(s
->                 return;
->
->         cpu->pstate.current_pstate = pstate;
-> -       wrmsrl(MSR_IA32_PERF_CTL, pstate_funcs.get_val(cpu, pstate));
-> +       intel_pstate_update_perf_ctl(cpu);
->  }
->
->  static void intel_pstate_adjust_pstate(struct cpudata *cpu)
-> @@ -2843,11 +2867,9 @@ static void intel_cpufreq_perf_ctl_updat
->                                           u32 target_pstate, bool fast_switch)
->  {
->         if (fast_switch)
-> -               wrmsrl(MSR_IA32_PERF_CTL,
-> -                      pstate_funcs.get_val(cpu, target_pstate));
-> +               intel_pstate_update_perf_ctl(cpu);
->         else
-> -               wrmsrl_on_cpu(cpu->cpu, MSR_IA32_PERF_CTL,
-> -                             pstate_funcs.get_val(cpu, target_pstate));
-> +               intel_pstate_update_perf_ctl_on_cpu(cpu);
->  }
->
->  static int intel_cpufreq_update_pstate(struct cpufreq_policy *policy,
-> @@ -2857,6 +2879,8 @@ static int intel_cpufreq_update_pstate(s
->         int old_pstate = cpu->pstate.current_pstate;
->
->         target_pstate = intel_pstate_prepare_request(cpu, target_pstate);
-> +       cpu->pstate.current_pstate = target_pstate;
-> +
->         if (hwp_active) {
->                 int max_pstate = policy->strict_target ?
->                                         target_pstate : cpu->max_perf_ratio;
-> @@ -2867,8 +2891,6 @@ static int intel_cpufreq_update_pstate(s
->                 intel_cpufreq_perf_ctl_update(cpu, target_pstate, fast_switch);
->         }
->
-> -       cpu->pstate.current_pstate = target_pstate;
-> -
->         intel_cpufreq_trace(cpu, fast_switch ? INTEL_PSTATE_TRACE_FAST_SWITCH :
->                             INTEL_PSTATE_TRACE_TARGET, old_pstate);
->
-> Index: linux-pm/drivers/cpuidle/governors/ladder.c
-> ===================================================================
-> --- linux-pm.orig/drivers/cpuidle/governors/ladder.c
-> +++ linux-pm/drivers/cpuidle/governors/ladder.c
-> @@ -61,10 +61,10 @@ static inline void ladder_do_selection(s
->   * ladder_select_state - selects the next state to enter
->   * @drv: cpuidle driver
->   * @dev: the CPU
-> - * @dummy: not used
-> + * @stop_tick: Whether or not to stop the scheduler tick
->   */
->  static int ladder_select_state(struct cpuidle_driver *drv,
-> -                              struct cpuidle_device *dev, bool *dummy)
-> +                              struct cpuidle_device *dev, bool *stop_tick)
->  {
->         struct ladder_device *ldev = this_cpu_ptr(&ladder_devices);
->         struct ladder_device_state *last_state;
-> @@ -73,6 +73,8 @@ static int ladder_select_state(struct cp
->         s64 latency_req = cpuidle_governor_latency_req(dev->cpu);
->         s64 last_residency;
->
-> +       *stop_tick = !dev->retain_tick;
-> +
->         /* Special case when user has set very strict latency requirement */
->         if (unlikely(latency_req == 0)) {
->                 ladder_do_selection(dev, ldev, last_idx, 0);
->
->
->
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
