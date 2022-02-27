@@ -2,177 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CE0B4C5AAB
-	for <lists+linux-pm@lfdr.de>; Sun, 27 Feb 2022 12:39:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E7FA4C5B28
+	for <lists+linux-pm@lfdr.de>; Sun, 27 Feb 2022 13:44:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbiB0LkE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 27 Feb 2022 06:40:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51074 "EHLO
+        id S230515AbiB0MpJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 27 Feb 2022 07:45:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbiB0LkD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 27 Feb 2022 06:40:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21BA24F31;
-        Sun, 27 Feb 2022 03:39:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D65760E76;
-        Sun, 27 Feb 2022 11:39:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3270FC340E9;
-        Sun, 27 Feb 2022 11:39:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645961966;
-        bh=RaHv/tbCTPFcJkyrq9jbKLwZnrSbRDyLy/HShbnR3DY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=EYMnLfkXjHVZi5w3T/eLc6H8OVn1YpHTfaFqv15stJj/fUgmIV7E+p7YDvvQm+v/m
-         s7oG0sWjHuvJDruH9lifdU2bxg1ZjEeeXvOk/ZwLvATrridL/1/AubXp8nOgWbKWpj
-         PyA6eh6xT7ildmcrdErmv+ifCEeTcjsB57oHyUARBB/K8GelAlMkUDqT5INSxfTk0n
-         JMTrVwXGo9Snrih5T2tTGFxVh/Ydaq6ZMcQRVb9hCGpYJG7pOMaJTRknxlVb7++sUt
-         eAovG0fvdIEgoam70BM/Q1MJ2EbUOzBAb4//GMPc0Q6A1raMJSM+GmP1Ka9YRG5ujk
-         r5Lfm2Q+9KHSg==
-Date:   Sun, 27 Feb 2022 11:46:28 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Cc:     <linux-iio@vger.kernel.org>, Paul Cercueil <paul@crapouillou.net>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Tomasz Duszynski <tomasz.duszynski@octakon.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH 2/8] PM: core: Add NS varients of
- EXPORT[_GPL]_SIMPLE_DEV_PM_OPS and runtime pm equiv
-Message-ID: <20220227114628.219c7055@jic23-huawei>
-In-Reply-To: <6cd17744-d060-1094-098d-e30a10f96600@intel.com>
-References: <20220220181522.541718-1-jic23@kernel.org>
-        <20220220181522.541718-3-jic23@kernel.org>
-        <6cd17744-d060-1094-098d-e30a10f96600@intel.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        with ESMTP id S229643AbiB0MpI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 27 Feb 2022 07:45:08 -0500
+Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C618C1DA61;
+        Sun, 27 Feb 2022 04:44:32 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 2F05558021E;
+        Sun, 27 Feb 2022 07:44:32 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Sun, 27 Feb 2022 07:44:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
+         h=cc:cc:content-transfer-encoding:content-type:date:date:from
+        :from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to; s=fm3; bh=Zpwy63EZq/PZqrmOJiv+M1KlZ/diaH
+        9UUk5HgEqIYiA=; b=o3diIFAMznst0P83jqbDaWFMah59ZgUujhYW4OaUJgoX9s
+        Cjub5uj4au5prvBDxL8JjmcBCXaEuDUH4ZPvcs653SDKSdyABidJbFnGpQFBBTs2
+        yjoervg75LpjYHPtQ5Zc3lZcE40/PQx0j6QrX9znu7rFRvy1Nj4epY+OYmJvMCSD
+        lnf4kCpgFkkAtiaNSD+UuABdhx5pUvXphp84RipCua36aYh/rtu/EkMP0xDGpicQ
+        lbqSatNiGG7EbUf6IwhuBqBpeKpWKoXgJ/BK2xWME822wnvyCseRtNMVfFyC0Zwa
+        gU0bNxcPnkn/1WqU3CupvJnjtpBXpE2vHqrjvvzw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=Zpwy63
+        EZq/PZqrmOJiv+M1KlZ/diaH9UUk5HgEqIYiA=; b=Fp423x9nLQo/35FuWftj+c
+        IsLzGDb0HepOLsp5ANDOF31oXu5/hMYz6t1+NhkIMIZDo2mZsgkEEUCO3JKClrX7
+        vxoZ1FqXxYYwm0jvNAAxBN0bx8tp7SUfv9SByFpq4DsyUxDDVKka3y8r2Jlgww4o
+        2su/I7F2BMlMlcWt812OfnzTtgXTZbpbYrM4bjEfiQFBy3kVXUtK754E0kvETAkj
+        7+qE74lHTAdRzf4mPXQS8Am6BwaWbvK6XsSLOi7Wr0a3u5xloOJD13pXal2w6gpq
+        eyT1ncdFZtwluToaf3rCfPVrSTTrsoZP+23VWSSoKVLE3uI+NcjrlmHm08lU4GlA
+        ==
+X-ME-Sender: <xms:L3IbYjQtZ2ONji1pcNppBNiuqEV13XhpYUMCwwK5inFjEXpZsCldNQ>
+    <xme:L3IbYkwTcRFNkqaPyo8CwnTG_t8jd3vk3Fs4N9c5UneVI340_1VqVpfhJjghjQiBu
+    bZONxUDKXLuH0DNOnY>
+X-ME-Received: <xmr:L3IbYo3X660dZwBea5UZRQAGx4CGk2APvFV63Kyi1-fDFRUYfaJ0UMVJOASRix71_fNJ3m_0F6RSDA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrleekgdegvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffotggggfesthhqredtre
+    dtjeenucfhrhhomheptehlihhsthgrihhrucfhrhgrnhgtihhsuceorghlihhsthgrihhr
+    segrlhhishhtrghirhdvfedrmhgvqeenucggtffrrghtthgvrhhnpeehteefgfejueejtd
+    egvdfggefhiefgheffvdffudevveetjeduhfdukeduteevjeenucevlhhushhtvghrufhi
+    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhishhtrghirhesrghlihhsth
+    grihhrvdefrdhmvg
+X-ME-Proxy: <xmx:L3IbYjDh8jFJIPRMQZvb3EyfSgQTMmmLr3zzWmuPkphTDVFB3PWv_A>
+    <xmx:L3IbYsjFPu9shGvNJ1uAheyWQ4UifBtAzUdgXhUIfZsREFTeuLS28g>
+    <xmx:L3IbYnqCsoiK_8njxF3L7af_QXUTFWPWE5TBaI5FHlbEceZZczbKJg>
+    <xmx:MHIbYvOtQru4RgMvD_L9RJ_LydxXLqCadERmgNRurScTDf_utYgWpA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 27 Feb 2022 07:44:27 -0500 (EST)
+From:   Alistair Francis <alistair@alistair23.me>
+To:     kernel@pengutronix.de, s.hauer@pengutronix.de, linux-imx@nxp.com,
+        shawnguo@kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, alistair23@gmail.com,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-pm@vger.kernel.org, andreas@kemnade.info,
+        Alistair Francis <alistair@alistair23.me>
+Subject: [PATCH v19 0/3] Add support for the silergy,sy7636a
+Date:   Sun, 27 Feb 2022 22:44:22 +1000
+Message-Id: <20220227124425.331030-1-alistair@alistair23.me>
+X-Mailer: git-send-email 2.34.1
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 21 Feb 2022 20:37:57 +0100
-"Rafael J. Wysocki" <rafael.j.wysocki@intel.com> wrote:
-
-Hi Rafael,
-> CC: linux-pm
-
-Oops. Stupid omission on my part, sorry about that!
-
-> 
-> On 2/20/2022 7:15 PM, Jonathan Cameron wrote:
-> > From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> >
-> > As more drivers start to use namespaces, we need to have varients of these
-> > useful macros that allow the export to be in a particular namespace.
-> >
-> > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > Cc: Paul Cercueil <paul@crapouillou.net>
-> > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>  
-> 
-> I'd rather route this through linux-pm unless you have dependent changes.
-
-Ok. 
-
-The kxsd9 patch (4) is dependent on other changes queued for
-the merge window in IIO. If we want to do it through linux-pm I'd
-love it if we can manage to get the ground work in for the coming merge window.
-
-So options are:
-
-1) This patch alone via linux-pm and I queue the users up for next cycle
-   Fine by me but always awkward to have infrastructure with no users.
-2) First 3 patches via linux-pm so we have a user (scd30) in a low churn
-   driver and I'll queue the rest for 5.19.  Fine by me as well.
-   That goes on cleanly on 5.17-rc1 and there is nothing else in my review
-   queue touching that driver.
-
-I'm also interested to hear your view on the discussion going on in reply
-to the cover letter. Specifically Paul suggested we 'only' have the
-namespaced versions of these macros.
-
-Thanks,
-
-Jonathan
-
-
-> 
-> 
-> > ---
-> >   include/linux/pm.h         | 14 +++++++++-----
-> >   include/linux/pm_runtime.h | 10 ++++++++--
-> >   2 files changed, 17 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/include/linux/pm.h b/include/linux/pm.h
-> > index f7d2be686359..112b8125d4be 100644
-> > --- a/include/linux/pm.h
-> > +++ b/include/linux/pm.h
-> > @@ -368,13 +368,13 @@ const struct dev_pm_ops name = { \
-> >   
-> >   #ifdef CONFIG_PM
-> >   #define _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
-> > -			   runtime_resume_fn, idle_fn, sec) \
-> > +			   runtime_resume_fn, idle_fn, sec, ns)		\
-> >   	_DEFINE_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
-> >   			   runtime_resume_fn, idle_fn); \
-> > -	_EXPORT_SYMBOL(name, sec)
-> > +	__EXPORT_SYMBOL(name, sec, ns)
-> >   #else
-> >   #define _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
-> > -			   runtime_resume_fn, idle_fn, sec) \
-> > +			   runtime_resume_fn, idle_fn, sec, ns) \
-> >   static __maybe_unused _DEFINE_DEV_PM_OPS(__static_##name, suspend_fn, \
-> >   					 resume_fn, runtime_suspend_fn, \
-> >   					 runtime_resume_fn, idle_fn)
-> > @@ -391,9 +391,13 @@ static __maybe_unused _DEFINE_DEV_PM_OPS(__static_##name, suspend_fn, \
-> >   	_DEFINE_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL)
-> >   
-> >   #define EXPORT_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
-> > -	_EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL, "")
-> > +	_EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL, "", "")
-> >   #define EXPORT_GPL_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
-> > -	_EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL, "_gpl")
-> > +	_EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL, "_gpl", "")
-> > +#define EXPORT_NS_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn, ns)	\
-> > +	_EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL, "", #ns)
-> > +#define EXPORT_NS_GPL_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn, ns)	\
-> > +	_EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL, "_gpl", #ns)
-> >   
-> >   /* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
-> >   #define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
-> > diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
-> > index 9f09601c465a..6a8b9551ecad 100644
-> > --- a/include/linux/pm_runtime.h
-> > +++ b/include/linux/pm_runtime.h
-> > @@ -41,10 +41,16 @@
-> >   
-> >   #define EXPORT_RUNTIME_DEV_PM_OPS(name, suspend_fn, resume_fn, idle_fn) \
-> >   	_EXPORT_DEV_PM_OPS(name, pm_runtime_force_suspend, pm_runtime_force_resume, \
-> > -			   suspend_fn, resume_fn, idle_fn, "")
-> > +			   suspend_fn, resume_fn, idle_fn, "", "")
-> >   #define EXPORT_GPL_RUNTIME_DEV_PM_OPS(name, suspend_fn, resume_fn, idle_fn) \
-> >   	_EXPORT_DEV_PM_OPS(name, pm_runtime_force_suspend, pm_runtime_force_resume, \
-> > -			   suspend_fn, resume_fn, idle_fn, "_gpl")
-> > +			   suspend_fn, resume_fn, idle_fn, "_gpl", "")
-> > +#define EXPORT_NS_RUNTIME_DEV_PM_OPS(name, suspend_fn, resume_fn, idle_fn, ns) \
-> > +	_EXPORT_DEV_PM_OPS(name, pm_runtime_force_suspend, pm_runtime_force_resume, \
-> > +			   suspend_fn, resume_fn, idle_fn, "", #ns)
-> > +#define EXPORT_NS_GPL_RUNTIME_DEV_PM_OPS(name, suspend_fn, resume_fn, idle_fn, ns) \
-> > +	_EXPORT_DEV_PM_OPS(name, pm_runtime_force_suspend, pm_runtime_force_resume, \
-> > +			   suspend_fn, resume_fn, idle_fn, "_gpl", #ns)
-> >   
-> >   #ifdef CONFIG_PM
-> >   extern struct workqueue_struct *pm_wq;  
-> 
-> 
-
+v19:=0D
+ - Rebase on linux-next=0D
+v18:=0D
+ - Rebase=0D
+v17:=0D
+ - Rebase and fix build issues=0D
+v16:=0D
+ - Improve vdd regulator comments=0D
+v15:=0D
+ - Address comments on the patches=0D
+v14:=0D
+ - Merge the thermal driver and hwmon=0D
+v13:=0D
+ - Address comments on thermal driver=0D
+ - Rebase on master (without other patches)=0D
+v12:=0D
+ - Rebase=0D
+v11:=0D
+ - Address comments on hwmon=0D
+ - Improve "mfd: simple-mfd-i2c: Add a Kconfig name" commit message=0D
+v10:=0D
+ - Use dev_get_regmap() instead of dev_get_drvdata()=0D
+v9:=0D
+ - Convert to use the simple-mfd-i2c instead=0D
+=0D
+Alistair Francis (3):=0D
+  ARM: imx_v6_v7_defconfig: Enable silergy,sy7636a=0D
+  ARM: dts: imx7d-remarkable2: Enable silergy,sy7636a=0D
+  ARM: dts: imx7d-remarkable2: Enable lcdif=0D
+=0D
+ arch/arm/boot/dts/imx7d-remarkable2.dts | 136 ++++++++++++++++++++++++=0D
+ arch/arm/configs/imx_v6_v7_defconfig    |   3 +=0D
+ 2 files changed, 139 insertions(+)=0D
+=0D
+-- =0D
+2.34.1=0D
+=0D
