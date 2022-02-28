@@ -2,81 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A2F4C5B2F
-	for <lists+linux-pm@lfdr.de>; Sun, 27 Feb 2022 13:44:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CF424C6212
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Feb 2022 05:12:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231129AbiB0MpY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 27 Feb 2022 07:45:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59556 "EHLO
+        id S231300AbiB1ENL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 27 Feb 2022 23:13:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231154AbiB0MpW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 27 Feb 2022 07:45:22 -0500
-Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB2E6E28D;
-        Sun, 27 Feb 2022 04:44:45 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 4F57958021E;
-        Sun, 27 Feb 2022 07:44:45 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Sun, 27 Feb 2022 07:44:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
-         h=cc:cc:content-transfer-encoding:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; bh=KIEoATxbMV81kK
-        7/dQqdRokzAvfbjIR76Q+BP8xavdo=; b=H8o0maa3XW7eLDbng5NZuWaEMAg9Hc
-        iRfZVWJiySjT1XNrfN96UkOHnnJcl8VEfQ21lUTsOWiCQnibuZk7J7xFpte9YX0f
-        v1ROUSmiZ++zMfc7T4wSN5Th3+IEoAfTDzJYCXWnbDDi6gbm0OHOdMqU9E03bXLG
-        bMrf+YBv2gsGdiUtOWwESnqrIhpyAfEiVltj+l5s766T9+LqlYS2BOlp+GiZY0zW
-        VKUFnj0EcrLih+ZGgmXvOurV+juCjJYVgmvc4dPhgnsihbzzu4NSWgvMIDT6FlUj
-        N7QKzn1oOXST7u0Jp86i2srwfgdVxNX5/MZ4IQL38X1++TMWsxvH31qQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=KIEoAT
-        xbMV81kK7/dQqdRokzAvfbjIR76Q+BP8xavdo=; b=Hj2BIsy/lJw/HbBv+jc/H3
-        eEAjPw3JUI2KGEDnPn8Q7sYWjIERu4rRBQYPWljsHfaoSI63iZAK0nRniVVqHBWY
-        gUt8Tk/eBcoqS36DezmHYGUPwgizKSibMZ6Pb1rqD28N0oWF2BbqsA08kOL9HknF
-        h/2U0e78tJSrHMLYd8dsQM6dJCA4wNvv2QpC2LI8TDecLK2jyqgz1JUvnh/0WBxb
-        UzpyBAhZRGm0/6VzGWKAG0vpYI1d+pUKwGmXoC8xFTQqSBA9vXtway/+/CnHjx8h
-        rA+1xiUUTnZk2M9pQLw0x5uFVoqFDPYdmlNEQhah0ZLlDJO6zRPVEIEwqjCEyaow
-        ==
-X-ME-Sender: <xms:PXIbYhWKAy9Nkr_AD8ko_NozmLZZZYiAm-vvKRDxZ5mTbn531yUd9w>
-    <xme:PXIbYhnF4vsNHmGA9dGz3jSYym7z2jaDTzlZq47u3638vQeECFHbHbinQnECqDsG0
-    8rKn4O8jcVuFQ-qUxQ>
-X-ME-Received: <xmr:PXIbYta5DlXRHm6ZjgSx1nEwWYyG7z_PTrJkOex175a8pIA57kA_bRfAm_J9PmRv49rjS3WsPEwXxQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrleekgdegfecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffojghfggfgsedtkeertd
-    ertddtnecuhfhrohhmpeetlhhishhtrghirhcuhfhrrghntghishcuoegrlhhishhtrghi
-    rhesrghlihhsthgrihhrvdefrdhmvgeqnecuggftrfgrthhtvghrnhepgeegtdetjeekge
-    eguefgheeuvedugedvteejveeiudegvddtkeffkeehtdetudfhnecuvehluhhsthgvrhfu
-    ihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghlihhsthgrihhrsegrlhhish
-    htrghirhdvfedrmhgv
-X-ME-Proxy: <xmx:PXIbYkXQZpxP9QQ32sAEomrOla_rqfaBR63eZNGvVyyk104D2O9BPA>
-    <xmx:PXIbYrlvxAi2WJuJ2I9x2OsrI02mnj7av4Hn5QPHrZm6rEve5GvftA>
-    <xmx:PXIbYhdkdiX-DtQzQ2jzvdgKsh0ArOVoCaTGM9FXbTUYMIpM5-W1Qw>
-    <xmx:PXIbYkiMFOBTK28VHQJMnF_YWczeLMy59zLAv40M9Ni9NVHK3OKf8w>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 27 Feb 2022 07:44:41 -0500 (EST)
-From:   Alistair Francis <alistair@alistair23.me>
-To:     kernel@pengutronix.de, s.hauer@pengutronix.de, linux-imx@nxp.com,
-        shawnguo@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, alistair23@gmail.com,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-pm@vger.kernel.org, andreas@kemnade.info,
-        Alistair Francis <alistair@alistair23.me>
-Subject: [PATCH v19 3/3] ARM: dts: imx7d-remarkable2: Enable lcdif
-Date:   Sun, 27 Feb 2022 22:44:25 +1000
-Message-Id: <20220227124425.331030-4-alistair@alistair23.me>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220227124425.331030-1-alistair@alistair23.me>
-References: <20220227124425.331030-1-alistair@alistair23.me>
+        with ESMTP id S229671AbiB1ENK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 27 Feb 2022 23:13:10 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70AE2140CE;
+        Sun, 27 Feb 2022 20:12:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646021552; x=1677557552;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ocK6ZP2mK1wKemwv/elqPI/0sCyXe1h1t41j25nr/28=;
+  b=bkn0oFg9CUDCSqM2KQYfTyLyUB6sLizm7UvXQrxncVuU9GSDeeS3d0GH
+   kITaEk6gllinPZITwDyByXLFdhzgPs9qfh5JNhjpQFbNch0IJcoMwSVtw
+   Pu0oFbVoOwjYzY8C59zVhAEvHgT9XyQNsLYRsoLpYdkKWJIMlheZEUOzE
+   hMOyjKcdidyq1SMt2Ilhjce1hShwK2wkqLj7uAaCaG+QUHhkGD1KqGoGk
+   ftPYrzNtR4qQfsssC2so8TPpFHVsbhQq7nWbSAX2mqenpwnnmHWBTyyBz
+   Yi5wp+TiemtSIu3FGAMVitQLRvoosiYJZCoBti1qDzZfGWlnEV3Fctm10
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10271"; a="240212221"
+X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
+   d="scan'208";a="240212221"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2022 20:12:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
+   d="scan'208";a="801398953"
+Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.189])
+  by fmsmga005.fm.intel.com with ESMTP; 27 Feb 2022 20:12:29 -0800
+Date:   Mon, 28 Feb 2022 12:12:28 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: Re: CPU excessively long times between frequency scaling driver
+ calls - bisected
+Message-ID: <20220228041228.GH4548@shbuild999.sh.intel.com>
+References: <CAAYoRsXkyWf0vmEE2HvjF6pzCC4utxTF=7AFx1PJv4Evh=C+Ow@mail.gmail.com>
+ <CAJZ5v0jsy0q3-ZqYvDrswY1F+tJsG6oNjNJPzz9zzkgdnoMwkw@mail.gmail.com>
+ <20220224080830.GD4548@shbuild999.sh.intel.com>
+ <5562542.DvuYhMxLoT@kreacher>
+ <CAAYoRsW4LqNvSZ3Et5fqeFcHQ9j9-0u9Y-LN9DmpCS3wG3+NWg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAYoRsW4LqNvSZ3Et5fqeFcHQ9j9-0u9Y-LN9DmpCS3wG3+NWg@mail.gmail.com>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,119 +71,54 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Connect the dispaly on the reMarkable2.
+On Fri, Feb 25, 2022 at 04:36:53PM -0800, Doug Smythies wrote:
+> On Fri, Feb 25, 2022 at 9:46 AM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+> >
+> > On Thursday, February 24, 2022 9:08:30 AM CET Feng Tang wrote:
+> ...
+> > > > So it looks like a new mechanism is needed for that.
+> > >
+> > > If you think idle class is not the right place to solve it, I can
+> > > also help testing new patches.
+> >
+> > So I have the appended experimental patch to address this issue that's not
+> > been tested at all.  Caveat emptor.
+> 
+> Hi Rafael,
+> 
+> O.K., you gave fair warning.
+> 
+> The patch applied fine.
+> It does not compile for me.
+> The function cpuidle_update_retain_tick does not exist.
+> Shouldn't it be somewhere in cpuidle.c?
+> I used the function cpuidle_disable_device as a template
+> for searching and comparing.
+> 
+> Because all of my baseline results are with kernel 5.17-rc3,
+> that is what I am still using.
+> 
+> Error:
+> ld: drivers/cpufreq/intel_pstate.o: in function `intel_pstate_update_perf_ctl':
+> intel_pstate.c:(.text+0x2520): undefined reference to
+> `cpuidle_update_retain_tick'
+ 
+Same here, seems the cpuidle_update_retain_tick()'s implementation
+is missing.
 
-Signed-off-by: Alistair Francis <alistair@alistair23.me>
----
- arch/arm/boot/dts/imx7d-remarkable2.dts | 74 +++++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
+Thanks,
+Feng
 
-diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
-index 99ac0d242936..03a4029e1e57 100644
---- a/arch/arm/boot/dts/imx7d-remarkable2.dts
-+++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
-@@ -68,6 +68,16 @@ reg_digitizer: regulator-digitizer {
- 		startup-delay-us = <100000>; /* 100 ms */
- 	};
- 
-+	reg_sdoe: regulator-sdoe {
-+		compatible = "regulator-fixed";
-+		regulator-name = "SDOE";
-+		pinctrl-names = "default", "sleep";
-+		pinctrl-0 = <&pinctrl_sdoe_reg>;
-+		pinctrl-1 = <&pinctrl_sdoe_reg>;
-+		gpio = <&gpio3 27 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+	};
-+
- 	wifi_pwrseq: wifi_pwrseq {
- 		compatible = "mmc-pwrseq-simple";
- 		pinctrl-names = "default";
-@@ -76,6 +86,16 @@ wifi_pwrseq: wifi_pwrseq {
- 		clocks = <&clks IMX7D_CLKO2_ROOT_DIV>;
- 		clock-names = "ext_clock";
- 	};
-+
-+	panel {
-+		compatible = "eink,vb3300-kca";
-+
-+		port {
-+			panel_in: endpoint {
-+				remote-endpoint = <&display_out>;
-+			};
-+		};
-+	};
- };
- 
- &clks {
-@@ -132,6 +152,20 @@ reg_epdpmic: vcom {
- 	};
- };
- 
-+&lcdif {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_lcdif>;
-+	lcd-supply = <&reg_epdpmic>;
-+	lcd2-supply = <&reg_sdoe>;
-+	status = "okay";
-+
-+	port {
-+		display_out: endpoint {
-+			remote-endpoint = <&panel_in>;
-+		};
-+	};
-+};
-+
- &snvs_pwrkey {
- 	status = "okay";
- };
-@@ -246,6 +280,46 @@ MX7D_PAD_I2C4_SCL__I2C4_SCL		0x4000007f
- 		>;
- 	};
- 
-+	pinctrl_lcdif: lcdifgrp {
-+		fsl,pins = <
-+			MX7D_PAD_LCD_DATA00__LCD_DATA0		0x79
-+			MX7D_PAD_LCD_DATA01__LCD_DATA1		0x79
-+			MX7D_PAD_LCD_DATA02__LCD_DATA2		0x79
-+			MX7D_PAD_LCD_DATA03__LCD_DATA3		0x79
-+			MX7D_PAD_LCD_DATA04__LCD_DATA4		0x79
-+			MX7D_PAD_LCD_DATA05__LCD_DATA5		0x79
-+			MX7D_PAD_LCD_DATA06__LCD_DATA6		0x79
-+			MX7D_PAD_LCD_DATA07__LCD_DATA7		0x79
-+			MX7D_PAD_LCD_DATA08__LCD_DATA8		0x79
-+			MX7D_PAD_LCD_DATA09__LCD_DATA9		0x79
-+			MX7D_PAD_LCD_DATA10__LCD_DATA10		0x79
-+			MX7D_PAD_LCD_DATA11__LCD_DATA11		0x79
-+			MX7D_PAD_LCD_DATA12__LCD_DATA12		0x79
-+			MX7D_PAD_LCD_DATA13__LCD_DATA13		0x79
-+			MX7D_PAD_LCD_DATA14__LCD_DATA14		0x79
-+			MX7D_PAD_LCD_DATA15__LCD_DATA15		0x79
-+
-+			MX7D_PAD_LCD_DATA17__LCD_DATA17		0x79
-+			MX7D_PAD_LCD_DATA18__LCD_DATA18		0x79
-+			MX7D_PAD_LCD_DATA19__LCD_DATA19		0x79
-+			MX7D_PAD_LCD_DATA20__LCD_DATA20		0x79
-+			MX7D_PAD_LCD_DATA21__LCD_DATA21		0x79
-+
-+			MX7D_PAD_LCD_DATA23__LCD_DATA23		0x79
-+			MX7D_PAD_LCD_CLK__LCD_CLK		0x79
-+			MX7D_PAD_LCD_ENABLE__LCD_ENABLE		0x79
-+			MX7D_PAD_LCD_VSYNC__LCD_VSYNC		0x79
-+			MX7D_PAD_LCD_HSYNC__LCD_HSYNC		0x79
-+			MX7D_PAD_LCD_RESET__LCD_RESET		0x79
-+		>;
-+	};
-+
-+	pinctrl_sdoe_reg: sdoereggrp {
-+		fsl,pins = <
-+			MX7D_PAD_LCD_DATA22__GPIO3_IO27		0x74
-+		>;
-+	};
-+
- 	pinctrl_uart1: uart1grp {
- 		fsl,pins = <
- 			MX7D_PAD_UART1_TX_DATA__UART1_DCE_TX	0x79
--- 
-2.34.1
-
+> ... Doug
+> 
+> >
+> > I've been looking for something relatively low-overhead and taking all of the
+> > dependencies into account.
+> >
+> > ---
+> >  drivers/cpufreq/intel_pstate.c     |   40 ++++++++++++++++++++++++++++---------
+> >  drivers/cpuidle/governors/ladder.c |    6 +++--
+> >  drivers/cpuidle/governors/menu.c   |    2 +
+> >  drivers/cpuidle/governors/teo.c    |    3 ++
+> >  include/linux/cpuidle.h            |    4 +++
+> >  5 files changed, 44 insertions(+), 11 deletions(-)
