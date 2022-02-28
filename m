@@ -2,167 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F58C4C6519
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Feb 2022 09:56:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FDF04C658D
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Feb 2022 10:18:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233382AbiB1I5S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Feb 2022 03:57:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53506 "EHLO
+        id S233528AbiB1JTP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Feb 2022 04:19:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbiB1I5R (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Feb 2022 03:57:17 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BAAF1D311
-        for <linux-pm@vger.kernel.org>; Mon, 28 Feb 2022 00:56:38 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id bu29so20232104lfb.0
-        for <linux-pm@vger.kernel.org>; Mon, 28 Feb 2022 00:56:38 -0800 (PST)
+        with ESMTP id S231463AbiB1JTO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Feb 2022 04:19:14 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70352517FC
+        for <linux-pm@vger.kernel.org>; Mon, 28 Feb 2022 01:18:35 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id s13so14321739wrb.6
+        for <linux-pm@vger.kernel.org>; Mon, 28 Feb 2022 01:18:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ygePuoaxgbXs17RogC07Ldx/FV9O8bjI15InNB3Uy0w=;
-        b=FKx+xo+W4hgDW4JOxePGfZb+77BSDBB8oU26O9gssc8ENvmCepVde7ZHaG+MxPKPWA
-         Y4Qf2Q94CjOul9fmid6o47nKb7UWMDdoJnAjY1er+GejO1kKF1efEgshnhm15x1NzT9g
-         ILn3oQQIk1oqAVBCHmiOC0khKWkNfd1esQvwFi2zL6zPTUrl4CYPxrMlatGYw9w7DD2F
-         wg8oWJFzmYuq1tVWIVN37lKxfIklD6OhEV0kUJyhoB0SXoljNxYFc9ruIGvADnc97iS8
-         ZAI7dO6gs78IRfd++kuMxVQ33jr618V/tKSX7TOrLKpLgUfvwtliWp+Ym1iyliQUgxVK
-         WusA==
+        d=smile-fr.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=xBnaBUHZiPf/i/GVor2BUnhBpMNuYKQlp76LBNPvktw=;
+        b=tAUuZnh7Q/7PVBNFl5bqBPz8uipl74wfKp++VpfCBb6I3TcOWUm+RWRdMw/+NSsDpR
+         iO0CwKBTEwGQkGVFAEHOe7CW92jl/yOOY/1RiZfNCyGElC+NuQu7FMFNkrloj5jSxaIb
+         xQLs5uEFi+kVehbQ309LGTs1EnkdgYCM7n9Qq4uwEESFSH6ZaiY9JzxWL3viCb5cJR6F
+         6HE2dgN4cekvkZQhLH9SzK+GZQzxy8agwQM29L31hQ35G7x49Hr8n+ZAJB596uqRHscS
+         /CLlQg7aDn4Rs/ttlMw8xwCR2dl4t8KTOx1jNCkkEIqY4WMUx1+AdGZu/uM4y+irwSxr
+         iQ2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ygePuoaxgbXs17RogC07Ldx/FV9O8bjI15InNB3Uy0w=;
-        b=NycUFgptxS00KmnApu1LA4Zh95u3a9XQ+VfaXd31fIKg6yxx81OJE8e9WCveCB6MTv
-         63P3FqNN/dHbg/2PcoOtJalcTGpFV1eKjj/XhY3OxgSucd42S6jdF8OQBmXIoBCShfyU
-         hxxOII8FLKKEJcDINjOQ/gFw2OJLfvub8WOyKX+v9kC3pJbQESxFIdW7wmQiiFNWujn/
-         yOdlsvohJ7sXUlVO77+4+6BQCmEt+wRfCMRTol5DPB8ORYpnTlSPC9fscEl08m+ZEyIp
-         LsXZ105/0TT168URKeFVaNjCVHr69hyHXlWWG/s/z5BYCbAthx7A9EJmUucuW+Flg5HC
-         JMMg==
-X-Gm-Message-State: AOAM53094RdIdka8a5G0J/6ecGGQVQ6khoqoVNF08buHva1gpoaOS4Vi
-        FAR/TIODw87YeND5Dj4gKJaI1VNbjaIQnrUSNKjCGQ==
-X-Google-Smtp-Source: ABdhPJwEobWvxClZPpRMDvsq0YO/mcA9o3/C+24TofHIZT/U+C1c0yeX9koMa55gQZs732m+azQKvb3kAxzJom3CBv4=
-X-Received: by 2002:a19:2d11:0:b0:445:65c7:5f1e with SMTP id
- k17-20020a192d11000000b0044565c75f1emr12057243lfj.184.1646038596839; Mon, 28
- Feb 2022 00:56:36 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xBnaBUHZiPf/i/GVor2BUnhBpMNuYKQlp76LBNPvktw=;
+        b=IpaeoXnGYvFKlbbJuU5Pjk5OJ0xvEmLFPjLqbJnFPl8e9J8RGawj8O4SYSbZIWbEoS
+         jq0KLU+FINgoYgB4zKHjDWh5V+Cr+TGH11TF5w1RX2xqQv8q1TtSM55lbc7Wn8wsKjgN
+         ysqL8D0XvTJE+2SJJPxKiyx2prYcpc8Ift6CceRE8n7NN668eJ66u5t2CLmiC8BLh2i6
+         gz8HEQpSz9e40I1NmbNXE/+UmuOS89qHf5FuzPFohBGnXwN19GZssJl4qc9KgYUx0MJj
+         oNSbhpoqBgzZ7ujMF1oDEeWMns4j0XnG85FJiqngmP1EjqQXhAwDwYG4+jFM86JJBqjv
+         s6Mg==
+X-Gm-Message-State: AOAM53280tPCGlra6zBZ2+pvC6/nrL4yasyZYYzZcwgApLlBFVLpu0Vs
+        fWD/x3ALBvPsbXlEpoJA1mjqHg==
+X-Google-Smtp-Source: ABdhPJyhIOuDwrLOhXqZCbd1kJmuFIcDWggB3nehLm9VOcXw1SVXcysCsHDjHdKed4MmZLMKAJAI3A==
+X-Received: by 2002:adf:ec08:0:b0:1ef:d7e1:c70 with SMTP id x8-20020adfec08000000b001efd7e10c70mr2070406wrn.257.1646039914037;
+        Mon, 28 Feb 2022 01:18:34 -0800 (PST)
+Received: from ?IPV6:2a01:cb05:8f8a:1800:1c97:b8d1:b477:d53f? (2a01cb058f8a18001c97b8d1b477d53f.ipv6.abo.wanadoo.fr. [2a01:cb05:8f8a:1800:1c97:b8d1:b477:d53f])
+        by smtp.gmail.com with ESMTPSA id j27-20020adfd21b000000b001e519f3e0d0sm9900265wrh.7.2022.02.28.01.18.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Feb 2022 01:18:33 -0800 (PST)
+Message-ID: <03877d75-0a4a-3365-7005-9f493d8810cf@smile.fr>
+Date:   Mon, 28 Feb 2022 10:18:32 +0100
 MIME-Version: 1.0
-References: <20220217124950.211354-1-ulf.hansson@linaro.org> <a869b705-c10e-ed0b-4119-35ef0a028311@gmail.com>
-In-Reply-To: <a869b705-c10e-ed0b-4119-35ef0a028311@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 28 Feb 2022 09:56:00 +0100
-Message-ID: <CAPDyKFrBxVry=yh8m+OSaq+xnzDmVqhFXQ0QN1F9WR3KB=2MGg@mail.gmail.com>
-Subject: Re: [PATCH v2] PM: domains: Prevent power off for parent unless child
- is in deepest state
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     linux-pm@vger.kernel.org, Kevin Hilman <khilman@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] drivers/thermal/ti-soc-thermal: Add hwmon support
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org, linux-omap@vger.kernel.org
+Cc:     j-keerthy@ti.com, edubezval@gmail.com
+References: <20220218104725.2718904-1-romain.naour@smile.fr>
+ <c6b8e5fd-4315-859f-b4a2-a3a055143ddf@linaro.org>
+From:   Romain Naour <romain.naour@smile.fr>
+In-Reply-To: <c6b8e5fd-4315-859f-b4a2-a3a055143ddf@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 18 Feb 2022 at 00:11, Dmitry Osipenko <digetx@gmail.com> wrote:
->
-> 17.02.2022 15:49, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > A PM domain managed by genpd may support multiple idlestates (power-off
-> > states). During genpd_power_off() a genpd governor may be asked to sele=
-ct
-> > one of the idlestates based upon the dev PM QoS constraints, for exampl=
-e.
-> >
-> > However, there is a problem with the behaviour around this in genpd. Mo=
-re
-> > precisely, a parent-domain is allowed to be powered off, no matter of w=
-hat
-> > idlestate that has been selected for the child-domain.
-> >
-> > For the stm32mp1 platform from STMicro, this behaviour doesn't play wel=
-l.
-> > Instead, the parent-domain must not be powered off, unless the deepest
-> > idlestate has been selected for the child-domain. As the current behavi=
-our
-> > in genpd is quite questionable anyway, let's simply change it into what=
- is
-> > needed by the stm32mp1 platform.
-> >
-> > If it surprisingly turns out that other platforms may need a different
-> > behaviour from genpd, then we will have to revisit this to find a way t=
-o
-> > make it configurable.
-> >
-> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > ---
-> >
-> > Changes in v2:
-> >       - Clarified commit message - based upon discussions with Dmitry.
-> >       - Updated a comment in the code, suggested by Dmitry.
-> >
-> > ---
-> >  drivers/base/power/domain.c | 19 +++++++++++++++++++
-> >  1 file changed, 19 insertions(+)
-> >
-> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> > index 5db704f02e71..c87588c21700 100644
-> > --- a/drivers/base/power/domain.c
-> > +++ b/drivers/base/power/domain.c
-> > @@ -636,6 +636,18 @@ static int genpd_power_off(struct generic_pm_domai=
-n *genpd, bool one_dev_on,
-> >                       atomic_read(&genpd->sd_count) > 0)
-> >               return -EBUSY;
-> >
-> > +     /*
-> > +      * The children must be in their deepest (powered-off) states to =
-allow
-> > +      * the parent to be powered off. Note that, there's no need for
-> > +      * additional locking, as powering on a child, requires the paren=
-t's
-> > +      * lock to be acquired first.
-> > +      */
-> > +     list_for_each_entry(link, &genpd->parent_links, parent_node) {
-> > +             struct generic_pm_domain *child =3D link->child;
-> > +             if (child->state_idx < child->state_count - 1)
-> > +                     return -EBUSY;
-> > +     }
-> > +
-> >       list_for_each_entry(pdd, &genpd->dev_list, list_node) {
-> >               enum pm_qos_flags_status stat;
-> >
-> > @@ -1073,6 +1085,13 @@ static void genpd_sync_power_off(struct generic_=
-pm_domain *genpd, bool use_lock,
-> >           || atomic_read(&genpd->sd_count) > 0)
-> >               return;
-> >
-> > +     /* Check that the children are in their deepest (powered-off) sta=
-te. */
-> > +     list_for_each_entry(link, &genpd->parent_links, parent_node) {
-> > +             struct generic_pm_domain *child =3D link->child;
-> > +             if (child->state_idx < child->state_count - 1)
-> > +                     return;
-> > +     }
-> > +
-> >       /* Choose the deepest state when suspending */
-> >       genpd->state_idx =3D genpd->state_count - 1;
-> >       if (_genpd_power_off(genpd, false))
->
-> Thank you, looks good. Although, this should be v3.
->
-> Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+Hi Daniel,
 
-Thanks Dmitry! I think v2 should be correct. At least I haven't sent a
-v2 before. :-)
+Le 25/02/2022 à 12:46, Daniel Lezcano a écrit :
+> 
+> Hi Romain,
+> 
+> I'll apply the patch.
 
-Rafael, I think this is ready to go, can please pick it up?
+You're welcome!
 
-Kind regards
-Uffe
+> 
+> In the future, use the scripts/get_maintainer.pl -f <file> to get the recipients
+> of your patch if you have a doubt about who to send it to.
+
+I wasn't sure if it was needed to send the patch to both mailing list.
+I was only subscribed to linux-omap until now.
+
+Best regards,
+Romain
+
+
+> 
+> Thanks
+> 
+>   -- Daniel
+> 
+> On 18/02/2022 11:47, Romain Naour wrote:
+>> Expose ti-soc-thermal thermal sensors as HWMON devices.
+>>
+>>    # sensors
+>>    cpu_thermal-virtual-0
+>>    Adapter: Virtual device
+>>    temp1:        +54.2 C  (crit = +105.0 C)
+>>
+>>    dspeve_thermal-virtual-0
+>>    Adapter: Virtual device
+>>    temp1:        +51.4 C  (crit = +105.0 C)
+>>
+>>    gpu_thermal-virtual-0
+>>    Adapter: Virtual device
+>>    temp1:        +54.2 C  (crit = +105.0 C)
+>>
+>>    iva_thermal-virtual-0
+>>    Adapter: Virtual device
+>>    temp1:        +54.6 C  (crit = +105.0 C)
+>>
+>>    core_thermal-virtual-0
+>>    Adapter: Virtual device
+>>    temp1:        +52.6 C  (crit = +105.0 C)
+>>
+>> Similar to imx_sc_thermal d2bc4dd91da6095a769fdc9bc519d3be7ad5f97a.
+>>
+>> No need to take care of thermal_remove_hwmon_sysfs() since
+>> devm_thermal_add_hwmon_sysfs() (a wrapper around devres) is
+>> used. See c7fc403e40b0ea18976a59e968c23439a80809e8.
+>>
+>> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+>> ---
+>>   drivers/thermal/ti-soc-thermal/ti-thermal-common.c | 4 ++++
+>>   1 file changed, 4 insertions(+)
+>>
+>> diff --git a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+>> b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+>> index f84375865c97..0959632b2170 100644
+>> --- a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+>> +++ b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+>> @@ -21,6 +21,7 @@
+>>     #include "ti-thermal.h"
+>>   #include "ti-bandgap.h"
+>> +#include "../thermal_hwmon.h"
+>>     /* common data structures */
+>>   struct ti_thermal_data {
+>> @@ -189,6 +190,9 @@ int ti_thermal_expose_sensor(struct ti_bandgap *bgp, int id,
+>>       ti_bandgap_set_sensor_data(bgp, id, data);
+>>       ti_bandgap_write_update_interval(bgp, data->sensor_id, interval);
+>>   +    if (devm_thermal_add_hwmon_sysfs(data->ti_thermal))
+>> +        dev_warn(bgp->dev, "failed to add hwmon sysfs attributes\n");
+>> +
+>>       return 0;
+>>   }
+>>   
+> 
+> 
+
