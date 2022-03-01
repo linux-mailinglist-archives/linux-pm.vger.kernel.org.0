@@ -2,49 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB2314C8EAC
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 16:14:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E4234C8EC6
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 16:18:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232159AbiCAPPA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Mar 2022 10:15:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50164 "EHLO
+        id S231482AbiCAPTa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Mar 2022 10:19:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232130AbiCAPO7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 10:14:59 -0500
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F523B57E;
-        Tue,  1 Mar 2022 07:14:15 -0800 (PST)
-Received: by mail-io1-f51.google.com with SMTP id d62so18725747iog.13;
-        Tue, 01 Mar 2022 07:14:15 -0800 (PST)
+        with ESMTP id S235280AbiCAPT3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 10:19:29 -0500
+Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F42838183;
+        Tue,  1 Mar 2022 07:18:48 -0800 (PST)
+Received: by mail-il1-f178.google.com with SMTP id d3so12776416ilr.10;
+        Tue, 01 Mar 2022 07:18:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=aOOBOVCokHHeUPL/R+u3XXyAdjLnib+28aXKeKhvB+c=;
-        b=jWae6WLtJH8uwwBVD/nsBpkEoBFozaklJp8j4kt4fM016PmfF0IErfWIivVmqzuLcl
-         Y8zudLauNjDBWVn5gTw7fEEmq9V8H1RY+fNA4pIp/ux8Wss5Dub6RsUzpyySv9/9n9z7
-         ZLubGVwSHySPGQX1aXEm/IiL6Xsg0SCcZHunbAZ5k62dikXAuniDjmatChiIRtJlq2hX
-         uferdofPQeeD2bKqL2N8S5BHb2qdzHXDQx3R0XO1O2QYJpKnAEb461WXbK30lSSXvkGR
-         DTqtV+HJdtI1Na198KO0djwQZSRChr7Bs71p75HlV3t6yq8i517wNW1lJD4SCbKiJK94
-         1xVA==
-X-Gm-Message-State: AOAM531xJ2xFCgBOWFY7HJxCd5ngUd/l/tNhBKOGtTWJq2bwlUkV32rn
-        Q5uGnuqAChibrUS+cXt/FVnd0Jbb+GyrAjJLTCQ=
-X-Google-Smtp-Source: ABdhPJyxNVqd85ScQLI9HnmuucOsf7El8O4BB94OOAU6wRQpS9FTlCYTFaWVad42kLXH/UkBnK/YAwu2/5N7WzlQvHc=
-X-Received: by 2002:a02:9f86:0:b0:311:b694:ef5c with SMTP id
- a6-20020a029f86000000b00311b694ef5cmr21613194jam.96.1646147655299; Tue, 01
- Mar 2022 07:14:15 -0800 (PST)
+        bh=f8Q8DNujLBZv64RDwzXzGiRXS0TzCjj2UcIbSHjjXMo=;
+        b=C7oWe4IdymAuUGYWkPdsMxnFP5/RPxf89JrNWL1+xlu7ieQ91pe48GFnRvo6oDMHgC
+         JEGHMDIQ+UjasqmvzWM3Ae9xuj2VnD7aHFZx0TL+tE5/F/d7Y1dn6hdHwdlpTe9KdWWr
+         PYRSGODJjZp07jZK+g0s5MMESiyjb8AxVbUuBY5djop0LiuDtqvq6rW51F9baEBbklFf
+         fdw9xJTEFdKSjTNGEWieCLRZsIOZH/C5J0pxFJ81wd/mF44c10RT7ZZJcStAwzajoSHb
+         fEowOjODXWgIWHvYkVaF6upKaX81pszY6A1bodQA9Auqag+eAH0h7Wk4iGLpC0wR1ius
+         X7OQ==
+X-Gm-Message-State: AOAM533S9DDMzCk5omOcULdRCyn0LndWiex0feXZvq4y2hH2HOX70qxn
+        mOKL/szW3znQw5Sapa07JgWye1KOIQ6+DS15+nY=
+X-Google-Smtp-Source: ABdhPJwKOQDb8cUUzdreSOSWTHAxkgWETxwmBuUwQu9AHALRfk64I7ndDtJslJ5fcr+7CGLLusKgvaJYaaKTHDkYxI0=
+X-Received: by 2002:a92:cdac:0:b0:2c2:ac36:7a5b with SMTP id
+ g12-20020a92cdac000000b002c2ac367a5bmr19855724ild.181.1646147927609; Tue, 01
+ Mar 2022 07:18:47 -0800 (PST)
 MIME-Version: 1.0
-References: <20220228110351.20518-1-nicolas.cavallari@green-communications.fr> <20220228110351.20518-2-nicolas.cavallari@green-communications.fr>
-In-Reply-To: <20220228110351.20518-2-nicolas.cavallari@green-communications.fr>
+References: <20220211161027.2516447-1-trix@redhat.com> <20220212112917.GD20866@duo.ucw.cz>
+In-Reply-To: <20220212112917.GD20866@duo.ucw.cz>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 1 Mar 2022 16:14:04 +0100
-Message-ID: <CAJZ5v0iW0KvBsJZbjBoMU6RukH0AmppxpFO9RrfD+K3OcaxOUQ@mail.gmail.com>
-Subject: Re: [PATCH] thermal: genetlink: Fix TZ_GET_TRIP NULL pointer dereference
-To:     Nicolas Cavallari <nicolas.cavallari@green-communications.fr>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
+Date:   Tue, 1 Mar 2022 16:18:36 +0100
+Message-ID: <CAJZ5v0i1DuS6xsKAPoD5yHvYH-dPFFCNp4k71km=RiafqkK9nw@mail.gmail.com>
+Subject: Re: [PATCH] PM: cleanup comments
+To:     Pavel Machek <pavel@ucw.cz>, Tom Rix <trix@redhat.com>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
@@ -58,37 +57,17 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 12:04 PM Nicolas Cavallari
-<nicolas.cavallari@green-communications.fr> wrote:
+On Sat, Feb 12, 2022 at 12:29 PM Pavel Machek <pavel@ucw.cz> wrote:
 >
-> Do not call get_trip_hyst() if the thermal zone does not define one.
+> On Fri 2022-02-11 08:10:27, trix@redhat.com wrote:
+> > From: Tom Rix <trix@redhat.com>
+> >
+> > Remove the second 'the'.
+> > Replace the second 'of' with 'the'.
+> > Replace 'couter' with 'counter'.
+> >
+> > Signed-off-by: Tom Rix <trix@redhat.com>
 >
-> Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-> ---
->  drivers/thermal/thermal_netlink.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/thermal/thermal_netlink.c b/drivers/thermal/thermal_netlink.c
-> index a16dd4d5d710..73e68cce292e 100644
-> --- a/drivers/thermal/thermal_netlink.c
-> +++ b/drivers/thermal/thermal_netlink.c
-> @@ -419,11 +419,12 @@ static int thermal_genl_cmd_tz_get_trip(struct param *p)
->         for (i = 0; i < tz->trips; i++) {
->
->                 enum thermal_trip_type type;
-> -               int temp, hyst;
-> +               int temp, hyst = 0;
->
->                 tz->ops->get_trip_type(tz, i, &type);
->                 tz->ops->get_trip_temp(tz, i, &temp);
-> -               tz->ops->get_trip_hyst(tz, i, &hyst);
-> +               if (tz->ops->get_trip_hyst)
-> +                       tz->ops->get_trip_hyst(tz, i, &hyst);
->
->                 if (nla_put_u32(msg, THERMAL_GENL_ATTR_TZ_TRIP_ID, i) ||
->                     nla_put_u32(msg, THERMAL_GENL_ATTR_TZ_TRIP_TYPE, type) ||
-> --
+> Acked-by: Pavel Machek <pavel@ucw.cz>
 
-Applied, but I think this needs to go into 5.17-rc, doesn't it?
-
-Daniel?
+Applied as 5.18 material, thanks!
