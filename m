@@ -2,239 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FC354C8861
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 10:44:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7B114C8869
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 10:44:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234019AbiCAJpI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Mar 2022 04:45:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56894 "EHLO
+        id S234000AbiCAJp3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Mar 2022 04:45:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233989AbiCAJpF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 04:45:05 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0CE5749B;
-        Tue,  1 Mar 2022 01:44:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646127858; x=1677663858;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=kXru06/IOIGyvmWQpJlCO6LXdwoif1r6qFgNVJS0Gu4=;
-  b=BVXMgiDom6D7i4rdRdO+zkes3yoLQjB0Ljq46ulxYZZSjUR8TrMe4IPV
-   u8uUHxTqCYMxmaUwrwUxvg5pmbz3QnBBsyAc/sWspHAYOZ8tIWswG24s6
-   QaBJBwi05kb+fuzkiBJUb0umLXpOQZBQrrpztyLuIR7uQLVUtN3T5/luL
-   Ee8Yxe9Ctgq4WoafhzN9LgPNuuefw18eCSjCu63L7WB1OAQGeHo/iCY88
-   fmoGvCNSGoduarcTMqFOuKeAXNBhLji536efqy2lD9kPI/2k2NuZ7kAaC
-   c8D+d4Fh72Sas0AISNbhSgrEaWjei0pLJjBPXKNXNkyxcMxYrsbO4g1vT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="250681266"
-X-IronPort-AV: E=Sophos;i="5.90,145,1643702400"; 
-   d="scan'208";a="250681266"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 01:44:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,145,1643702400"; 
-   d="scan'208";a="507743365"
-Received: from lkp-server01.sh.intel.com (HELO 2146afe809fb) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 01 Mar 2022 01:44:14 -0800
-Received: from kbuild by 2146afe809fb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nOz3F-0000Fk-EQ; Tue, 01 Mar 2022 09:44:13 +0000
-Date:   Tue, 01 Mar 2022 17:43:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- ac62facbd440da5ba31f5b4b137c234815b6c2d2
-Message-ID: <621deac6.naqZhUKaeXm2KwZO%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S234011AbiCAJpM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 04:45:12 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5FFF652C4
+        for <linux-pm@vger.kernel.org>; Tue,  1 Mar 2022 01:44:29 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id 29so21036102ljv.10
+        for <linux-pm@vger.kernel.org>; Tue, 01 Mar 2022 01:44:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tjQCk98JCF7B3SGsqfK7HCesLKkHD86YZukO/DPNtQ0=;
+        b=a8275fH6+9IRL38qqLDpyS1w3TvaCjlAatrh/47PQJbn4W9iIUucAQap9bigDyxECn
+         TXaLOGyZ8vmF2KfxrLtFGMbL5xvYfDic9jf5mRMMfkkRR7Aybbrgh+tf+R6j/jj/lp4L
+         uCUr0PvhEU0tGNaiPU9hT+w4+Op4ut5G5kMZnISMemoP4168OXOfw3jvBdq8JP1eoWq5
+         proOhu5a2wmS5TdyBmY1plpSlnDUBG4ZO3Y+ZVYUWCg2oPG82YYwJxJ0G0ZJvfphr2ZA
+         lNZQx/+ln4Ri5Yx37fm7l3jukl/i/7u/bCVcl0JY5Gv7mEpBKJJeu4xt2bHWs2p8eoHC
+         +00Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tjQCk98JCF7B3SGsqfK7HCesLKkHD86YZukO/DPNtQ0=;
+        b=BER99swdjB6KiPD6CQNCPM1qOafIpyR+00HPyMC3SJMwrdh8taN3A7GrAyeepXDLYv
+         NgGSFkSGArjCoCDG5hUrD6IrR0AF1cYMpmY011G+4GvsupD+rA66F/xwO3Q+WdsHUALv
+         lAUS0ouUNi/lXEbUdnLF0qGTeNGhvfWBaMRw//h0aOs/A5exwd8Czgs88yP+hJEVb9mE
+         0K3dgS8ZAoIQo7tBXO5GIEe+JzSbLGSBZC9z3MXeG2asT39RJZyFKUNXxS17cUaoAeQ9
+         GA9DoGrsqunu+KIWQG91p5C50aNH05VWe0Nd2kIb0se854bR8AzxhT7MA2wqPuTknRza
+         0nEA==
+X-Gm-Message-State: AOAM533+jt9dvwqKcoY6wsMEJaXISDXAlBsRWsMTmXltYN9dBQqCihpq
+        KX26TriI+vjUblMhuvA0SvYYwGHa6WcBopDjTfFj9w==
+X-Google-Smtp-Source: ABdhPJyupqbG0bQBQuInFjyG0YrLQq20BUN2lbd8XOqgYzbsx/NwNLqnc9QaRAEmfHcJbhpij1nqLzfCko4SgKUaGbQ=
+X-Received: by 2002:a2e:86d4:0:b0:246:40eb:2c18 with SMTP id
+ n20-20020a2e86d4000000b0024640eb2c18mr17093954ljj.16.1646127867471; Tue, 01
+ Mar 2022 01:44:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220223080323.3717853-1-s.hauer@pengutronix.de> <20220223080858.GJ9136@pengutronix.de>
+In-Reply-To: <20220223080858.GJ9136@pengutronix.de>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 1 Mar 2022 10:43:50 +0100
+Message-ID: <CAPDyKFpyCepZ_J4LNZzz-g90RLT1mVDMbQ-gNKweM8YnEWXqdg@mail.gmail.com>
+Subject: Re: [PATCH] PM: domains: use dev_err_probe() to simplify error handling
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     linux-pm@vger.kernel.org, Kevin Hilman <khilman@kernel.org>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        linux-kernel@vger.kernel.org, Kernel@pengutronix.de,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: ac62facbd440da5ba31f5b4b137c234815b6c2d2  Merge branch 'acpi-fan' into linux-next
+On Wed, 23 Feb 2022 at 09:09, Sascha Hauer <s.hauer@pengutronix.de> wrote:
+>
+> On Wed, Feb 23, 2022 at 09:03:23AM +0100, Sascha Hauer wrote:
+> > From: Ahmad Fatoum <a.fatoum@pengutronix.de>
+> >
+> > dev_err_probe() can reduce code size, makes the code easier to read
+> > and has the added benefit of recording the defer reason for later
+> > read out. Use it where appropriate.
+> >
+> > This also fixes an issue, where an error message in __genpd_dev_pm_attach
+> > was not terminated by a line break.
+> >
+> > Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+> > ---
+> >  drivers/base/power/domain.c | 21 ++++++---------------
+> >  1 file changed, 6 insertions(+), 15 deletions(-)
+>
+> And of course:
+>
+> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
 
-elapsed time: 739m
+Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-configs tested: 157
-configs skipped: 3
+Next time, please add me on the to-list, otherwise it's likely that I
+will fail to review your patch.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Kind regards
+Uffe
 
-gcc tested configs:
-arm                                 defconfig
-arm                              allmodconfig
-arm                              allyesconfig
-arm64                               defconfig
-arm64                            allyesconfig
-i386                          randconfig-c001
-arc                        vdk_hs38_defconfig
-powerpc                      pasemi_defconfig
-m68k                       m5249evb_defconfig
-parisc                              defconfig
-arc                 nsimosci_hs_smp_defconfig
-mips                             allyesconfig
-h8300                       h8s-sim_defconfig
-nios2                         10m50_defconfig
-mips                           jazz_defconfig
-sh                ecovec24-romimage_defconfig
-m68k                            mac_defconfig
-mips                         db1xxx_defconfig
-sh                     sh7710voipgw_defconfig
-powerpc                      bamboo_defconfig
-arc                        nsim_700_defconfig
-arm                        keystone_defconfig
-mips                            gpr_defconfig
-arm                       omap2plus_defconfig
-arm                        cerfcube_defconfig
-powerpc                     tqm8555_defconfig
-mips                         mpc30x_defconfig
-mips                       bmips_be_defconfig
-sh                          landisk_defconfig
-sh                          r7785rp_defconfig
-arc                            hsdk_defconfig
-sh                               alldefconfig
-powerpc                   motionpro_defconfig
-powerpc                      ppc6xx_defconfig
-arc                          axs103_defconfig
-arm                        realview_defconfig
-arm                          iop32x_defconfig
-powerpc                         ps3_defconfig
-arm                  randconfig-c002-20220228
-arm                  randconfig-c002-20220227
-arm                  randconfig-c002-20220301
-ia64                                defconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-i386                              debian-10.3
-i386                   debian-10.3-kselftests
-i386                                defconfig
-sparc                            allyesconfig
-sparc                               defconfig
-mips                             allmodconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-powerpc                          allyesconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a015
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64               randconfig-a011-20220228
-x86_64               randconfig-a015-20220228
-x86_64               randconfig-a014-20220228
-x86_64               randconfig-a013-20220228
-x86_64               randconfig-a016-20220228
-x86_64               randconfig-a012-20220228
-i386                 randconfig-a016-20220228
-i386                 randconfig-a012-20220228
-i386                 randconfig-a015-20220228
-i386                 randconfig-a011-20220228
-i386                 randconfig-a013-20220228
-i386                 randconfig-a014-20220228
-arc                  randconfig-r043-20220228
-riscv                randconfig-r042-20220228
-s390                 randconfig-r044-20220228
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                                  kexec
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-x86_64                         rhel-8.3-kunit
-
-clang tested configs:
-mips                 randconfig-c004-20220301
-powerpc              randconfig-c003-20220301
-arm                  randconfig-c002-20220301
-s390                 randconfig-c005-20220301
-riscv                randconfig-c006-20220301
-arm                  colibri_pxa300_defconfig
-powerpc                     powernv_defconfig
-mips                           rs90_defconfig
-arm                         orion5x_defconfig
-mips                           mtx1_defconfig
-powerpc                     pseries_defconfig
-powerpc                     tqm8560_defconfig
-mips                           ip28_defconfig
-arm                        mvebu_v5_defconfig
-arm                          imote2_defconfig
-powerpc                   lite5200b_defconfig
-mips                           ip22_defconfig
-arm                       versatile_defconfig
-arm                        vexpress_defconfig
-mips                          malta_defconfig
-arm                         hackkit_defconfig
-x86_64               randconfig-a001-20220228
-x86_64               randconfig-a004-20220228
-x86_64               randconfig-a003-20220228
-x86_64               randconfig-a005-20220228
-x86_64               randconfig-a002-20220228
-x86_64               randconfig-a006-20220228
-i386                 randconfig-a002-20220228
-i386                 randconfig-a001-20220228
-i386                 randconfig-a005-20220228
-i386                 randconfig-a003-20220228
-i386                 randconfig-a006-20220228
-i386                 randconfig-a004-20220228
-x86_64                        randconfig-a012
-x86_64                        randconfig-a016
-x86_64                        randconfig-a014
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-hexagon              randconfig-r045-20220301
-hexagon              randconfig-r041-20220301
-riscv                randconfig-r042-20220301
-hexagon              randconfig-r041-20220228
-hexagon              randconfig-r045-20220228
-hexagon              randconfig-r045-20220227
-hexagon              randconfig-r041-20220227
-riscv                randconfig-r042-20220227
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>
+> Sascha
+>
+> >
+> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> > index 5db704f02e712..29428ae91349d 100644
+> > --- a/drivers/base/power/domain.c
+> > +++ b/drivers/base/power/domain.c
+> > @@ -2248,12 +2248,8 @@ int of_genpd_add_provider_simple(struct device_node *np,
+> >       /* Parse genpd OPP table */
+> >       if (genpd->set_performance_state) {
+> >               ret = dev_pm_opp_of_add_table(&genpd->dev);
+> > -             if (ret) {
+> > -                     if (ret != -EPROBE_DEFER)
+> > -                             dev_err(&genpd->dev, "Failed to add OPP table: %d\n",
+> > -                                     ret);
+> > -                     return ret;
+> > -             }
+> > +             if (ret)
+> > +                     return dev_err_probe(&genpd->dev, ret, "Failed to add OPP table\n");
+> >
+> >               /*
+> >                * Save table for faster processing while setting performance
+> > @@ -2312,9 +2308,8 @@ int of_genpd_add_provider_onecell(struct device_node *np,
+> >               if (genpd->set_performance_state) {
+> >                       ret = dev_pm_opp_of_add_table_indexed(&genpd->dev, i);
+> >                       if (ret) {
+> > -                             if (ret != -EPROBE_DEFER)
+> > -                                     dev_err(&genpd->dev, "Failed to add OPP table for index %d: %d\n",
+> > -                                             i, ret);
+> > +                             dev_err_probe(&genpd->dev, ret,
+> > +                                           "Failed to add OPP table for index %d\n", i);
+> >                               goto error;
+> >                       }
+> >
+> > @@ -2672,12 +2667,8 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+> >       ret = genpd_add_device(pd, dev, base_dev);
+> >       mutex_unlock(&gpd_list_lock);
+> >
+> > -     if (ret < 0) {
+> > -             if (ret != -EPROBE_DEFER)
+> > -                     dev_err(dev, "failed to add to PM domain %s: %d",
+> > -                             pd->name, ret);
+> > -             return ret;
+> > -     }
+> > +     if (ret < 0)
+> > +             return dev_err_probe(dev, ret, "failed to add to PM domain %s\n", pd->name);
+> >
+> >       dev->pm_domain->detach = genpd_dev_pm_detach;
+> >       dev->pm_domain->sync = genpd_dev_pm_sync;
+> > --
+> > 2.30.2
+> >
+> >
+> >
+>
+> --
+> Pengutronix e.K.                           |                             |
+> Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
