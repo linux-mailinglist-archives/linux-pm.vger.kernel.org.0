@@ -2,73 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DC554C8FFA
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 17:15:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 138984C9035
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 17:21:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbiCAQQZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Mar 2022 11:16:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42246 "EHLO
+        id S235260AbiCAQW3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Mar 2022 11:22:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236094AbiCAQQV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 11:16:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 49B998EB69
-        for <linux-pm@vger.kernel.org>; Tue,  1 Mar 2022 08:15:39 -0800 (PST)
+        with ESMTP id S231261AbiCAQW2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 11:22:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 33C9F2B26E
+        for <linux-pm@vger.kernel.org>; Tue,  1 Mar 2022 08:21:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646151338;
+        s=mimecast20190719; t=1646151706;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=3grHwAXXbGYwyAryp9bJyqsNbw74zcSGCcHBAqcfYSk=;
-        b=J6n+xbzpucA0Amyp3lrgoSg6kFrRTckb1CmlDgVjrkQx5yvaN3bUfDe8R7rxks/ChSWYg+
-        Z4snv+a2Y2Z01z6n7mSZ3Zfb/jA+NC4agLTVsTkRk/vNdSyZoOQ6qj9u4f9EwW1aTWY5uy
-        eNBw/pZNZUWGDo2/1rYG/hRA7YxsOIc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=Ac9WfGbistjFm7LiKvOxeSDYCD8Gg7LmnqbwLdMfizE=;
+        b=YciBP/kMmqJs//YjcgPVvWP1V3yfCDXlvxxJoY/jDI74Zu03GwE61qJiPnxWufrfygRIUG
+        sCMC/iW7t0Qw110FZ1X3QTTyG/k6U5I6G92s3s/OrkXkJEiksXJR6HZnS8dptYm/h5N2b6
+        jYDp0WQmHRhisIc1XFIBEhm9gn/DyeI=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-599-6HVYFuQtMwm2zVtRCXzZeQ-1; Tue, 01 Mar 2022 11:15:35 -0500
-X-MC-Unique: 6HVYFuQtMwm2zVtRCXzZeQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 315BE180FD76;
-        Tue,  1 Mar 2022 16:15:31 +0000 (UTC)
-Received: from lacos-laptop-7.usersys.redhat.com (unknown [10.39.194.186])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 33EF52ED97;
-        Tue,  1 Mar 2022 16:15:22 +0000 (UTC)
-Subject: Re: propagating vmgenid outward and upward
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+ us-mta-630-vV_OF8CcOfWlMUNetBKvGw-1; Tue, 01 Mar 2022 11:21:45 -0500
+X-MC-Unique: vV_OF8CcOfWlMUNetBKvGw-1
+Received: by mail-wr1-f72.google.com with SMTP id p9-20020adf9589000000b001e333885ac1so3488441wrp.10
+        for <linux-pm@vger.kernel.org>; Tue, 01 Mar 2022 08:21:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Ac9WfGbistjFm7LiKvOxeSDYCD8Gg7LmnqbwLdMfizE=;
+        b=VhFhPACdlwLWHvjli39LC7II4sZoqIv56LbKRTkjU+RVF0Rda9yz1lAPaiLZz4sTy6
+         aysC/Bf9gMfzdIC5R3dxrj3uAZIoZnCJLZxv9sm0zsz93Q53lZmP4ZS1Hj9pEcqzHQCi
+         hxUItBdPd1JdEluQpeUNo8VFAvHU5W+mHkokhAp5GMTYgVAliG7Fp86UMXixSecRKXS/
+         wLhdPjLv8Joc8OaUPn772UNuNu8pX/9sGESGCLbln6I+284rgcmqMGamik3gS2IDGVEI
+         4O6ZMgqhDEXvpueHblnDsx8WUaI3pLH5te7IrhpX9Kjh5X60FndY+pdG8TpOSH0jiM3m
+         kgmw==
+X-Gm-Message-State: AOAM531r/QL3FTC7BzF/SIJDef6eZfpzDvu38V//RpR6E4Bz64QXEgVz
+        bRP/V4qSsaPTcXdPpfcvqtNS6xnGYRQkJJd1prSLPn1qZ9gtrQEC3GpH29PRG0CrrAP4TI2Eqho
+        9ZyN6Vfqec7iMZo1Bx6g=
+X-Received: by 2002:a05:6000:cd:b0:1ed:bd9f:69d2 with SMTP id q13-20020a05600000cd00b001edbd9f69d2mr20113282wrx.288.1646151703916;
+        Tue, 01 Mar 2022 08:21:43 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJycgS5isqXU9GIuQLrDF3y/TWM3GmZs396UxSScNJGQw1IAMBBON7t0NccxM4wyd8pXTsUTlw==
+X-Received: by 2002:a05:6000:cd:b0:1ed:bd9f:69d2 with SMTP id q13-20020a05600000cd00b001edbd9f69d2mr20113254wrx.288.1646151703601;
+        Tue, 01 Mar 2022 08:21:43 -0800 (PST)
+Received: from redhat.com ([2.53.2.184])
+        by smtp.gmail.com with ESMTPSA id m34-20020a05600c3b2200b00380e3225af9sm3294866wms.0.2022.03.01.08.21.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Mar 2022 08:21:42 -0800 (PST)
+Date:   Tue, 1 Mar 2022 11:21:38 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
         qemu-devel@nongnu.org, linux-hyperv@vger.kernel.org,
         linux-crypto@vger.kernel.org, graf@amazon.com,
         mikelley@microsoft.com, gregkh@linuxfoundation.org,
-        adrian@parity.io, berrange@redhat.com, linux@dominikbrodowski.net,
-        jannh@google.com, mst@redhat.com, rafael@kernel.org,
+        adrian@parity.io, lersek@redhat.com, berrange@redhat.com,
+        linux@dominikbrodowski.net, jannh@google.com, rafael@kernel.org,
         len.brown@intel.com, pavel@ucw.cz, linux-pm@vger.kernel.org,
         colmmacc@amazon.com, tytso@mit.edu, arnd@arndb.de
+Subject: Re: propagating vmgenid outward and upward
+Message-ID: <20220301111459-mutt-send-email-mst@kernel.org>
 References: <Yh4+9+UpanJWAIyZ@zx2c4.com>
-From:   Laszlo Ersek <lersek@redhat.com>
-Message-ID: <223f858c-34c5-3ccd-b9e8-7585a976364d@redhat.com>
-Date:   Tue, 1 Mar 2022 17:15:21 +0100
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <Yh4+9+UpanJWAIyZ@zx2c4.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03/01/22 16:42, Jason A. Donenfeld wrote:
+On Tue, Mar 01, 2022 at 04:42:47PM +0100, Jason A. Donenfeld wrote:
 > Hey folks,
 > 
 > Having finally wrapped up development of the initial vmgenid driver, I
@@ -97,34 +110,22 @@ On 03/01/22 16:42, Jason A. Donenfeld wrote:
 > word-sized generation counter, which would be incremented every time the
 > unique ID changed. Then, every time we would touch the RNG, we'd simply
 > do an inexpensive check of this memremap()'d integer, and reinitialize
-> with the unique ID if the integer changed.
-
-Does the vmgenid spec (as-is) preclude the use of the 16-byte identifier
-like this?
-
-After all, once you locate the identifier via the ADDR object, you could
-perhaps consult it every time you were about to touch the RNG. Perhaps
-with the help of 16-byte atomic (?) operations, you could maintain a
-copy of the identifier elsewhere, and detect (atomically, upon each RNG
-access) whether the identifier has changed, without waiting for the Notify.
-
-We'd require (or assume) the hypervisors to modify the identifier in
-guest RAM before resuming execution of the guest. And we'd have to delay
-RNG accesses in the guest kernel until after the vmgenid device -- or
-its absence -- were discovered.
-
-Just a random guesss.
-
-Thanks
-Laszlo
-
-> In this way, the race would
+> with the unique ID if the integer changed. In this way, the race would
 > be entirely eliminated. We would then be able to propagate this outwards
 > to other drivers, by just exporting an extern symbol, in the manner of
 > `jiffies`, and propagate it upwards to userspace, by putting it in the
 > vDSO, in the manner of gettimeofday. And like that, there'd be no
 > terrible async thing and things would work pretty easily.
-> 
+
+I am not sure what the difference is though. So we have a 16 byte unique
+value and you would prefer a dword counter. How is the former not a
+superset of the later?  I'm not sure how safe it is to expose it to
+userspace specifically, but rest of text talks about exposing it to a
+kernel driver so maybe not an issue? So what makes interrupt driven
+required, and why not just remap and read existing vmgenid in the pull
+manner?  What did I miss?
+
+
 > But that's not what we have, because Microsoft didn't collaborate with
 > anybody on this, and now it's implemented in several hypervisors. Given
 > that I'm already spending considerable time working on the RNG, entirely
@@ -215,5 +216,4 @@ Laszlo
 > 
 > Regards,
 > Jason
-> 
 
