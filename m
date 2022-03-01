@@ -2,103 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46C6A4C92CB
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 19:19:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 405C84C92E6
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 19:21:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234235AbiCASTw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Mar 2022 13:19:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54036 "EHLO
+        id S236912AbiCASWL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Mar 2022 13:22:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231707AbiCASTw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 13:19:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA0C4340EA;
-        Tue,  1 Mar 2022 10:19:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A94C6B8185A;
-        Tue,  1 Mar 2022 18:19:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E482AC340F1;
-        Tue,  1 Mar 2022 18:19:07 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="RxrJYkzC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1646158745;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NT0zvjVYVbO2mmt1snDCsKM12Dh5I5u9ARx8MJFSbgw=;
-        b=RxrJYkzC58vOnIf22+KTBCJ0W9YMXSbVySWx0+vrs+4V/93AaDYn2uaBiKbLIzdFhW3/cb
-        3cvoQJ20x3vrMq3Gn9OSrWZ1aCirIzSSNQbC4B8Q6zhA4cSeXS6bt+rc5nhY/gCmO3F7g7
-        WYNKbdq3+xq3opzgmQ6jTxpxmcIj7wQ=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 853ec57c (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 1 Mar 2022 18:19:05 +0000 (UTC)
-Received: by mail-yb1-f179.google.com with SMTP id e186so4778429ybc.7;
-        Tue, 01 Mar 2022 10:19:04 -0800 (PST)
-X-Gm-Message-State: AOAM532/XIkLP9hVxxtVzNTS2kD3ChVWD1v0m9DTFYLjOcYRgIcMAUl8
-        EgjlXYXSuZoDacJZFSxXsyVp/3INsNrWcSPRIZQ=
-X-Google-Smtp-Source: ABdhPJwYdUV4NCDTB/e0oT9pWULPHNndr/bgMc1TjkQ7h+EjJjb86Whp55kIXzEasNGMIDRTjZH3hbuTQK5CdIjg69o=
-X-Received: by 2002:a5b:d11:0:b0:623:fbda:40f4 with SMTP id
- y17-20020a5b0d11000000b00623fbda40f4mr25652445ybp.398.1646158744264; Tue, 01
- Mar 2022 10:19:04 -0800 (PST)
-MIME-Version: 1.0
-References: <20220301173120.297105-1-Jason@zx2c4.com> <CAJZ5v0g+GihH_b9YvwuHzdrUVNGXOeabOznDC1vK6qLi8gtSTQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0g+GihH_b9YvwuHzdrUVNGXOeabOznDC1vK6qLi8gtSTQ@mail.gmail.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Tue, 1 Mar 2022 19:18:53 +0100
-X-Gmail-Original-Message-ID: <CAHmME9o4Vu_rPqWkPYgD79perwqgL-f8hh1j7dWZQczBZD1dww@mail.gmail.com>
-Message-ID: <CAHmME9o4Vu_rPqWkPYgD79perwqgL-f8hh1j7dWZQczBZD1dww@mail.gmail.com>
-Subject: Re: [PATCH] PM: notify of PM_POST_VMFORK events from vmgenid
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        with ESMTP id S236853AbiCASWI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 13:22:08 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9458652E9
+        for <linux-pm@vger.kernel.org>; Tue,  1 Mar 2022 10:21:25 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id q8-20020a17090a178800b001bc299b8de1so2960251pja.1
+        for <linux-pm@vger.kernel.org>; Tue, 01 Mar 2022 10:21:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=fds8Vu27HO3VizdZYZX37G2L0kdPjlGJwjydpAC62lk=;
+        b=kbDptrdu0f26KgjbD0o2z38w3lkKGDPgX1iTHeFHCTnyp8GdCq5qMftyKUSBh6duUj
+         WfNj/A6u5i3SYTvNHtilrjGbJ7XPB9BN5cThiWBPQtUhCrDH1721OqL04qTC03fUauzy
+         3YHA9gzqSMuaks5H7GdDPribo7C8kJL0W2A2s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fds8Vu27HO3VizdZYZX37G2L0kdPjlGJwjydpAC62lk=;
+        b=d9HIF+PaL5irMTIcye567Cg4/HCl/q0JKqvsTFfHnjviySf2CQDEMKb0N5uzDI3yaJ
+         26jwGMAt9psclJjEYUTl44eQ+HQXA+Ev4f52XARmqtrLVpTkpyntgHh8BwDSwgix8blE
+         sAciIBdjNRFhhA+zk9hUlX8RjalH7Qr4rGHFbR2AWN7M7Ue3c1o6mkvKNTGFzRjd9PVA
+         QpXud2YtEp8NK9nIDcpuYPzCOWnTDPXtw633ziN2JtInEmbmyw7LiX5b/Q7v0Jy04E2f
+         BqiEayQOBJixH2iy/0GlYPkNt0Mtyg1kpita+bfUBQOYB11UvKpVj93NW+IPlB1ljfod
+         L/OQ==
+X-Gm-Message-State: AOAM533JbKJ3wR+AKjysBMM1uJjdz9Qqifz5qt0d/ijbkbMvOhZY9+hd
+        kdw54SDKLPolhx+GqgxHuaJ8BQ==
+X-Google-Smtp-Source: ABdhPJxFvMPIFzTXAIIVPlg/eGuYakalp78L+LNg6VrEL06CzJLvdAz6UlqMRKRHGibjFN8E9JB6yg==
+X-Received: by 2002:a17:90b:4d86:b0:1bd:223f:6cb5 with SMTP id oj6-20020a17090b4d8600b001bd223f6cb5mr16669777pjb.151.1646158885116;
+        Tue, 01 Mar 2022 10:21:25 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id oa2-20020a17090b1bc200b001bcff056f09sm2678996pjb.13.2022.03.01.10.21.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Mar 2022 10:21:24 -0800 (PST)
+Date:   Tue, 1 Mar 2022 10:21:24 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Jakob Koschel <jakobkoschel@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        alsa-devel@alsa-project.org, linux-aspeed@lists.ozlabs.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-iio@vger.kernel.org, nouveau@lists.freedesktop.org,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        samba-technical@lists.samba.org,
+        linux1394-devel@lists.sourceforge.net, drbd-dev@lists.linbit.com,
+        linux-arch <linux-arch@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        linux-staging@lists.linux.dev, "Bos, H.J." <h.j.bos@vu.nl>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        intel-wired-lan@lists.osuosl.org,
+        kgdb-bugreport@lists.sourceforge.net,
+        bcm-kernel-feedback-list@broadcom.com,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Arnd Bergman <arnd@arndb.de>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        v9fs-developer@lists.sourceforge.net,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-sgx@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
+        linux-wireless <linux-wireless@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Linux F2FS Dev Mailing List 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        tipc-discussion@lists.sourceforge.net,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        dma <dmaengine@vger.kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Mike Rapoport <rppt@kernel.org>
+Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body
+ as a ptr
+Message-ID: <202203011016.48A181EE50@keescook>
+References: <20220228110822.491923-1-jakobkoschel@gmail.com>
+ <20220228110822.491923-3-jakobkoschel@gmail.com>
+ <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com>
+ <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com>
+ <CAHk-=wj8fkosQ7=bps5K+DDazBXk=ypfn49A0sEq+7-nZnyfXA@mail.gmail.com>
+ <CAHk-=wiTCvLQkHcJ3y0hpqH7FEk9D28LDvZZogC6OVLk7naBww@mail.gmail.com>
+ <FC710A1A-524E-481B-A668-FC258F529A2E@gmail.com>
+ <CAHk-=whLK11HyvpUtEftOjc3Gup2V77KpAQ2fycj3uai=qceHw@mail.gmail.com>
+ <CEDAD0D9-56EE-4105-9107-72C2EAD940B0@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CEDAD0D9-56EE-4105-9107-72C2EAD940B0@gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+On Tue, Mar 01, 2022 at 12:28:15PM +0100, Jakob Koschel wrote:
+> Based on the coccinelle script there are ~480 cases that need fixing
+> in total. I'll now finish all of them and then split them by
+> submodules as Greg suggested and repost a patch set per submodule.
+> Sounds good?
 
-On Tue, Mar 1, 2022 at 6:36 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Tue, Mar 1, 2022 at 6:31 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> >
-> > There's an additional virtual power state that various crypto-oriented
-> > drivers may benefit from being notified of, such as WireGuard: right
-> > after a virtual machine has forked. In WireGuard's case, the PM notifier
-> > there that clears keys pre-suspend will be adjusted to also clear them
-> > post-vmfork. This trivial commit wires up the machinery for that change,
-> > which builds on the recently added vmgenid driver in the random.git
-> > tree.
->
-> Well, what does power management have to do with WireGuard'?
+To help with this splitting, see:
+https://github.com/kees/kernel-tools/blob/trunk/split-on-maintainer
 
-I guess a bit more background would be in order. If I post a v2 of
-this, I'll include that there. But for now:
+It's not perfect, but it'll get you really close. For example, if you
+had a single big tree-wide patch applied to your tree:
 
-WireGuard has ephemeral session keys. They're not supposed to exist
-for longer than a few minutes for a crypto property called "forward
-secrecy". In order to ensure this, WireGuard currently registers a PM
-notifier that fires before suspend/hibernate, which memzeros the
-various keys. That's all well and fine and works.
+$ rm 0*.patch
+$ git format-patch -1 HEAD
+$ mv 0*.patch treewide.patch
+$ split-on-maintainer treewide.patch
+$ ls 0*.patch
 
-There's now another power-ish event that WireGuard also cares about:
-when a virtual machine has been forked. In this case, too, the
-reaction is the same - memzero the various keys, only for a different
-reason: rather than forward secrecy, the property we want here is that
-a key+nonce tuple is never used on more than one plaintext.
+If you have a build log before the patch that spits out warnings, the
+--build-log argument can extract those warnings on a per-file basis, too
+(though this can be fragile).
 
-The argument of this patchset is that VM forking is kind of like a
-power event, so why not re-use the same notifier for that. However, if
-you disagree, I could move ahead with a separate notification
-mechanism not involving the PM notifier.
-
-Jason
+-- 
+Kees Cook
