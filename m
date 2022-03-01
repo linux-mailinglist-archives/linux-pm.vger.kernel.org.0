@@ -2,92 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B69A74C8B84
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 13:25:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C6A24C8BEB
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 13:45:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234403AbiCAMZt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Mar 2022 07:25:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35022 "EHLO
+        id S234433AbiCAMpk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Mar 2022 07:45:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbiCAMZt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 07:25:49 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 067F84BB9B;
-        Tue,  1 Mar 2022 04:25:07 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B48BCED1;
-        Tue,  1 Mar 2022 04:25:06 -0800 (PST)
-Received: from [10.57.5.157] (unknown [10.57.5.157])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C8D213F70D;
-        Tue,  1 Mar 2022 04:25:04 -0800 (PST)
-Message-ID: <a2871e71-02af-198f-3944-d6565f3cd5f9@arm.com>
-Date:   Tue, 1 Mar 2022 12:23:54 +0000
+        with ESMTP id S232420AbiCAMpk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 07:45:40 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086919858D
+        for <linux-pm@vger.kernel.org>; Tue,  1 Mar 2022 04:44:59 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id j15so26603416lfe.11
+        for <linux-pm@vger.kernel.org>; Tue, 01 Mar 2022 04:44:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0tcocVIkOCPzGpdROFxsT753ixUhU49aJwL/lTfVMnE=;
+        b=w91vKAjBFIRcEvV6z4viPzJGw/HeDfSabkwGFg+aYoqHuXu+1EvckKwJJjX+csDTw0
+         yMg8Y9kvQ9RnAmLGH0hbmR7iLG6Qj1Xv7tG3mDrfT0mJT7QoCGlgpQ0H1cLL54tWTOOl
+         erJPikXXEXWEDk5XQGX8tonfaz3XOm4ZS+ZOijXQdO5QfghbnWyyR7AzCZ6uwBSltnor
+         wdGC26klIYokwRFcVrROlxBFQK+rlriQDjk4QzkgoTHccqVvPEitYH8qV/VgJG20YrD5
+         +CJpgK/hAR10EgRG3fJPDXODqgxPH9fOI27FhkJY5gomuz3sszVWKhnkzJMe1W7rqE+N
+         zQHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0tcocVIkOCPzGpdROFxsT753ixUhU49aJwL/lTfVMnE=;
+        b=cIAF4e1TixF0HXHaB5eEp/LAtUKFeYHKgeqmeLM+YLj1ZixyEuGrgzKSMfsBecZhXa
+         iUgI7U28DIW+a8C2ES3UDCPYbim9Bga5+vPrURF9B6a0kRviawSTveKuwvA/m68GOD0Z
+         lYgoaMc4jo0n3ZykWMQh0ZjYW29cW+aVAq/W+1eNM1WjbIdZTbZJWX/bDYPHdSFTaou1
+         0oULoXJb6p1S0F2jA97og/NG2/SU2k4Cn3d9dfJLabTbZyIseEs4YrmKmw4vkkRGgJlp
+         kx9W984fG6yYA/Atd9LsUuGVBUvYWkC2DkWOn+fKLCkO201UGbSPcHau9v5/PiSQspfU
+         gcmw==
+X-Gm-Message-State: AOAM530Zib1GV//hoMxQ10K8tes3adt55MO7JPs0oH55bVz6UeeQZY0a
+        Ssv97zKHOhrB/No9Fla0MP9CGUX0B5DPQRPj
+X-Google-Smtp-Source: ABdhPJxuR8BW7zJzU3NkoFvhDb41wtZFnU6P8ZHcbvkhrBRzoeuktbhrDPZs4FOuYq8nwc0PAT3JXQ==
+X-Received: by 2002:ac2:5492:0:b0:43f:1c2e:b04c with SMTP id t18-20020ac25492000000b0043f1c2eb04cmr16373479lfk.502.1646138697407;
+        Tue, 01 Mar 2022 04:44:57 -0800 (PST)
+Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
+        by smtp.gmail.com with ESMTPSA id g18-20020a19ee12000000b00443af3721f2sm1467944lfb.237.2022.03.01.04.44.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Mar 2022 04:44:57 -0800 (PST)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Marcus Cooper <codekipper@gmail.com>
+Cc:     linux-pm@vger.kernel.org,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        devicetree@vger.kernel.org
+Subject: [PATCH 1/2] dt-bindings: power: supply: ab8500_fg: Add line impedance
+Date:   Tue,  1 Mar 2022 13:42:53 +0100
+Message-Id: <20220301124254.2338270-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From:   Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [PATCH v5] cpuidle: sunplus: Create cpuidle driver for sunplus
- sp7021
-To:     =?UTF-8?B?RWR3aW4gQ2hpdSDpgrHlnoLls7A=?= <edwin.chiu@sunplus.com>
-Cc:     Edwin Chiu <edwinchiu0505tw@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-References: <cover.1645427180.git.edwinchiu0505tw@gmail.com>
- <1628e048220f066204b8ac27f3cedf7f3cc02963.1645427180.git.edwinchiu0505tw@gmail.com>
- <20220221105151.6rvyoqyvj6ehhtnj@bogus>
- <7b09a22cc178439aa41a752af936313d@sphcmbx02.sunplus.com.tw>
-Content-Language: en-US
-Organization: ARM
-In-Reply-To: <7b09a22cc178439aa41a752af936313d@sphcmbx02.sunplus.com.tw>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 09:18:31AM +0000, Edwin Chiu 邱垂峰 wrote:
-> > 
-> > You really don't need a cpuidle driver to just WFI for any states.
-> > Add the driver when you have something non WFI in the suspend function.
-> >
+To improve the inner resistance measurement of the battery we need
+to account for the line impedance of the connector to the battery.
 
-This is still valid and you haven't responded to this.
+Cc: devicetree@vger.kernel.org
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ .../bindings/power/supply/stericsson,ab8500-fg.yaml          | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-> > > +static const struct of_device_id sp7021_idle_state_match[] = {
-> > > +	{ .compatible = "arm,idle-state", .data = sp7021_cpu_spc },
-> > > +	{ },
-> > > +};
-> > 
-> > This is better than adding new driver like you did in previous version.
-> > 
-> > I did a quick check but couldn't figure out. How do cpus get switched ON
-> > or OFF on this platform(for example during CPU hotplug) ?.
-> > 
-> 
-> In this patch, I just want to submit cpuidle function.
-> So there have no cpu hotplug function now.
-
-
-You need to document the binding now for both idle and hotplug. You
-can't mix and match. You can either use PSCI or custom "sunplus,sc-smp"
-for both cpu on/off and suspend. So you must document it now even if you
-don't plan to support hotplug now. And when you add later, you must use
-the same method.
-
-However, you still don't need this driver for just WFI, so please
-explain why you think otherwise. Until then, you still won't get ACK
-from my side.
-
+diff --git a/Documentation/devicetree/bindings/power/supply/stericsson,ab8500-fg.yaml b/Documentation/devicetree/bindings/power/supply/stericsson,ab8500-fg.yaml
+index 54ac42a9d354..2ce408a7c0ae 100644
+--- a/Documentation/devicetree/bindings/power/supply/stericsson,ab8500-fg.yaml
++++ b/Documentation/devicetree/bindings/power/supply/stericsson,ab8500-fg.yaml
+@@ -25,6 +25,11 @@ properties:
+     $ref: /schemas/types.yaml#/definitions/phandle
+     deprecated: true
+ 
++  line-impedance-micro-ohms:
++    description: The line impedance between the battery and the
++      AB8500 inputs, to compensate for this when determining internal
++      resistance.
++
+   interrupts:
+     maxItems: 5
+ 
 -- 
-Regards,
-Sudeep
+2.34.1
+
