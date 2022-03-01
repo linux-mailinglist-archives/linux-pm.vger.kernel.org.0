@@ -2,254 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F343B4C9050
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 17:29:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC6874C907B
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 17:35:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbiCAQa3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Mar 2022 11:30:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60132 "EHLO
+        id S236246AbiCAQgS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Mar 2022 11:36:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232401AbiCAQa2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 11:30:28 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6006D275DC;
-        Tue,  1 Mar 2022 08:29:44 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B0924A67;
-        Tue,  1 Mar 2022 17:29:42 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1646152182;
-        bh=ZTptEoLAl3UyfzBHD6+Fgbbupt9ZGagky9FrUGnPFA4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d47FOsnrBS3NN+ygT7InhuPgv5PKnjjLOeU7IxJvgHY2GVI+Z9TrcGGiXFGrJUUmN
-         I+jrnfmW4uemRv/nMuD6QTIV5duQDU9NkfmOm1mORiBkkEMYqEYXhg/LLsOgIzMcQv
-         XlGLTj5UJ7y12iJN+Pf4XaziGdYn3EoLULHYpI4Y=
-Date:   Tue, 1 Mar 2022 18:29:31 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] PM: runtime: Have devm_pm_runtime_enable() handle
- pm_runtime_dont_use_autosuspend()
-Message-ID: <Yh5J6yYyTaKldlO+@pendragon.ideasonboard.com>
-References: <20220223083441.1.I925ce9fa12992a58caed6b297e0171d214866fe7@changeid>
- <CAPDyKFrDncw0D2ccw9GJS+oRdm2kROJh25OV9pMs+992vQV-cQ@mail.gmail.com>
- <Yh36R817IjCw2dMb@pendragon.ideasonboard.com>
- <CAPDyKFrchzHnph9zg55yCbpQ5hu9P=ZOdcuigyqC_4yYjFs10Q@mail.gmail.com>
+        with ESMTP id S236162AbiCAQgR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 11:36:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6E463E3;
+        Tue,  1 Mar 2022 08:35:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D2D57608D5;
+        Tue,  1 Mar 2022 16:35:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B2D8C340EE;
+        Tue,  1 Mar 2022 16:35:33 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="POdsqroe"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1646152531;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1nOiauBbKjq2GBtfhMLzeD+6fw81ge7D0lpL4B2vR4M=;
+        b=POdsqroeNiU2Fam7MP0fPCEPjinxMcgSl7jitNKrqAecVHoDyy1kYm1TiHzZXEPsUs5Cph
+        mWVOl7LIgk0IKZAtatreikQb+OGH0M1JQK9Ms7mSYH4GpAU1+mLQmh+BNRKOvuRObCUGRr
+        qvoLzNedtT0xoLOy9KSmqi6ARfFcgzg=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 1e38f283 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 1 Mar 2022 16:35:31 +0000 (UTC)
+Date:   Tue, 1 Mar 2022 17:35:25 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        qemu-devel@nongnu.org, linux-hyperv@vger.kernel.org,
+        linux-crypto@vger.kernel.org, graf@amazon.com,
+        mikelley@microsoft.com, gregkh@linuxfoundation.org,
+        adrian@parity.io, lersek@redhat.com, berrange@redhat.com,
+        linux@dominikbrodowski.net, jannh@google.com, rafael@kernel.org,
+        len.brown@intel.com, pavel@ucw.cz, linux-pm@vger.kernel.org,
+        colmmacc@amazon.com, tytso@mit.edu, arnd@arndb.de
+Subject: Re: propagating vmgenid outward and upward
+Message-ID: <Yh5LTd1k1uB1eGFF@zx2c4.com>
+References: <Yh4+9+UpanJWAIyZ@zx2c4.com>
+ <20220301111459-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAPDyKFrchzHnph9zg55yCbpQ5hu9P=ZOdcuigyqC_4yYjFs10Q@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220301111459-mutt-send-email-mst@kernel.org>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Ulf,
+Hi Michael,
 
-On Tue, Mar 01, 2022 at 12:18:02PM +0100, Ulf Hansson wrote:
-> On Tue, 1 Mar 2022 at 11:49, Laurent Pinchart wrote:
-> > On Tue, Mar 01, 2022 at 11:26:46AM +0100, Ulf Hansson wrote:
-> > > On Wed, 23 Feb 2022 at 17:35, Douglas Anderson wrote:
-> > > >
-> > > > The PM Runtime docs say:
-> > > >   Drivers in ->remove() callback should undo the runtime PM changes done
-> > > >   in ->probe(). Usually this means calling pm_runtime_disable(),
-> > > >   pm_runtime_dont_use_autosuspend() etc.
-> > > >
-> > > > From grepping code, it's clear that many people aren't aware of the
-> > > > need to call pm_runtime_dont_use_autosuspend().
-> > >
-> > > Well, I admit it's good practice that they should take care of this.
-> > >
-> > > However, it doesn't really matter to keep the autosuspend turned on
-> > > when runtime PM becomes disabled, I think. When the driver gets probed
-> > > again, it will most likely call pm_runtime_use_autosuspend() again,
-> > > which should work fine, right?
-> >
-> > For the probe path I agree, but are there valid use cases where, at
-> > runtime, a driver would disable runtime PM and re-enable it a bit later
-> > ? If so, we need to ensure this won't disable auto-suspend.
+On Tue, Mar 01, 2022 at 11:21:38AM -0500, Michael S. Tsirkin wrote:
+> > If we had a "pull" model, rather than just expose a 16-byte unique
+> > identifier, the vmgenid virtual hardware would _also_ expose a
+> > word-sized generation counter, which would be incremented every time the
+> > unique ID changed. Then, every time we would touch the RNG, we'd simply
+> > do an inexpensive check of this memremap()'d integer, and reinitialize
+> > with the unique ID if the integer changed. In this way, the race would
+> > be entirely eliminated. We would then be able to propagate this outwards
+> > to other drivers, by just exporting an extern symbol, in the manner of
+> > `jiffies`, and propagate it upwards to userspace, by putting it in the
+> > vDSO, in the manner of gettimeofday. And like that, there'd be no
+> > terrible async thing and things would work pretty easily.
 > 
-> I am not sure I fully understand whether there is a problem.
-> 
-> Can you perhaps write the sequence of the runtime PM calls that may
-> cause an issue?
+> I am not sure what the difference is though. So we have a 16 byte unique
+> value and you would prefer a dword counter. How is the former not a
+> superset of the later?  
 
-Simply
+Laszlo just asked the same question, which I answered here:
+<https://lore.kernel.org/lkml/Yh5JwK6toc%2FzBNL7@zx2c4.com/>. You have
+to read the full 16 bytes. You can't safely just read the first 4 or 8
+or something, because it's a "unique ID" rather than a counter. That
+seems like a needlessly expensive thing to do on each-and-every packet.
 
-	pm_runtime_disable();
-	/* Do something that requires runtime PM to be disabled */
-	pm_runtime_enable();
+> I'm not sure how safe it is to expose it to
+> userspace specifically, but rest of text talks about exposing it to a
+> kernel driver so maybe not an issue? So what makes interrupt driven
+> required, and why not just remap and read existing vmgenid in the pull
+> manner?  What did I miss?
 
-at runtime (not at probe or remove time). If probe() has enabled
-auto-suspend, we don't want the above sequence to disable it. What I'm
-not sure is if there are any valid use cases for the above sequence.
+I don't really understand your question, but guessing your meaning: I'm
+not talking about exposing the actual 16-byte value to any other
+drivers, but just notifying them that their sessions should be dropped.
+If it's easier to think about this in code, grep for wg_pm_notification(),
+and consider that it'd be changing this code:
 
-> > > > When brainstorming solutions, one idea that came up was to leverage
-> > > > the new-ish devm_pm_runtime_enable() function. The idea here is that:
-> > > > * When the devm action is called we know that the driver is being
-> > > >   removed. It's the perfect time to undo the use_autosuspend.
-> > > > * The code of pm_runtime_dont_use_autosuspend() already handles the
-> > > >   case of being called when autosuspend wasn't enabled.
-> > >
-> > > Hmm, I am hesitating to extend devm_pm_runtime_enable(), as it
-> > > currently makes it look too simple to turn off things at ->remove()
-> > > for runtime PM. While in fact it's more complicated.
-> > >
-> > > A bigger problem, for example, is that a driver calls
-> > > pm_runtime_put_sync() during ->remove(), relying on that it actually
-> > > ends up calling its ->runtime_suspend() callback to turn off various
-> > > specific resources for the device. And in fact there are no guarantees
-> > > that will happen - and when it doesn't, the next time the driver's
-> > > ->probe() runs, things are likely to be really screwed up.
-> > >
-> > > To cover this case, one could use the below code in the ->remove() callback:
-> > >
-> > > ...
-> > > pm_runtime_get_sync();
-> > >
-> > > "turn off resources for the devices - like calling
-> > > clk_disable_unprepare(), for example"
-> > >
-> > > pm_runtime_disable();
-> > > pm_runtime_put_noidle();
-> > > ...
-> > >
-> > > In this example, it would be too late to call pm_runtime_disable()
-> > > through the pm_runtime_disable_action().
-> >
-> > My experience with runtime PM is that it's hard to use, at least if you
-> > want to get it right :-) That's especially the case if a driver wants to
-> > support both CONFIG_PM and !CONFIG_PM. Here's an example at probe time:
-> >
-> >         /*
-> >          * We need the driver to work in the event that CONFIG_PM is disabled in
-> >          * the kernel, so power up and verify the chip now. In the event that
-> >          * CONFIG_PM is disabled this will leave the chip on, so that streaming
-> >          * will work.
-> >          */
-> >         ret = ov5693_sensor_powerup(ov5693);
-> >         if (ret)
-> >                 goto err_media_entity_cleanup;
-> >
-> >         ret = ov5693_detect(ov5693);
-> >         if (ret)
-> >                 goto err_powerdown;
-> >
-> >         pm_runtime_set_active(&client->dev);
-> >         pm_runtime_get_noresume(&client->dev);
-> >         pm_runtime_enable(&client->dev);
-> >
-> >         ret = v4l2_async_register_subdev_sensor(&ov5693->sd);
-> >         if (ret) {
-> >                 dev_err(&client->dev, "failed to register V4L2 subdev: %d",
-> >                         ret);
-> >                 goto err_pm_runtime;
-> >         }
-> >
-> >         pm_runtime_set_autosuspend_delay(&client->dev, 1000);
-> >         pm_runtime_use_autosuspend(&client->dev);
-> >         pm_runtime_put_autosuspend(&client->dev);
-> >
-> > And the corresponding code at remove time:
-> >
-> >         /*
-> >          * Disable runtime PM. In case CONFIG_PM is disabled in the kernel,
-> >          * make sure to turn power off manually.
-> >          */
-> >         pm_runtime_disable(&client->dev);
-> >         if (!pm_runtime_status_suspended(&client->dev))
-> >                 ov5693_sensor_powerdown(ov5693);
-> >         pm_runtime_set_suspended(&client->dev);
-> >
-> > And of course there's no documentation that explains all this, so there
-> > are endless variations of patterns originating from cargo-cult
-> > programming.
-> >
-> > I don't know what the right solution is, but we need to move towards an
-> > easier to use API if we want drivers to get it right. Any step in that
-> > direction would be welcome.
-> 
-> Yep, I fully agree with you, while it's not an easy task. At least the
-> example above looks fine to me. :-)
+        if (action != PM_HIBERNATION_PREPARE && action != PM_SUSPEND_PREPARE)
+                return 0;
 
-It took me several days to figure out how to get it right. Most
-developers don't bother, so we end up with drivers broken in different
-ways :-S
+into:
 
-> Recently I noticed that some drivers are calling
-> pm_runtime_force_suspend() at ->remove(). This works fine in quite
-> many cases, but it wouldn't solve the case when CONFIG_PM is unset.
-> 
-> Perhaps we should explore adding a new API, along the lines of
-> pm_runtime_force_suspend(), but make it specific for the ->remove()
-> path, and in some way make it work for when CONFIG_PM is unset too.
+        if (action != PM_HIBERNATION_PREPARE && action != PM_SUSPEND_PREPARE &&
+	    action != PM_VMFORK_POST)
+                return 0;
 
-I'm all for an improved API for drivers that would make the above
-simpler. And documentation too, Documentation/power/runtime_pm.rst is
-more of a documentation of the runtime PM core than the driver API.
-There are some useful tips for drivers, but they're lost in a sea of
-difficult to understand and/or irrelevant information (and there's also
-a tiny bit of information in Documentation/driver-api/pm/devices.rst).
-We're missing a document targetted at driver authors.
+But perhaps I misunderstood this part of your question?
 
-> > > > Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > > > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> > > > ---
-> > > >
-> > > >  drivers/base/power/runtime.c | 5 +++++
-> > > >  include/linux/pm_runtime.h   | 4 ++++
-> > > >  2 files changed, 9 insertions(+)
-> > > >
-> > > > diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-> > > > index 2f3cce17219b..d4059e6ffeae 100644
-> > > > --- a/drivers/base/power/runtime.c
-> > > > +++ b/drivers/base/power/runtime.c
-> > > > @@ -1476,11 +1476,16 @@ EXPORT_SYMBOL_GPL(pm_runtime_enable);
-> > > >
-> > > >  static void pm_runtime_disable_action(void *data)
-> > > >  {
-> > > > +       pm_runtime_dont_use_autosuspend(data);
-> > > >         pm_runtime_disable(data);
-> > > >  }
-> > > >
-> > > >  /**
-> > > >   * devm_pm_runtime_enable - devres-enabled version of pm_runtime_enable.
-> > > > + *
-> > > > + * NOTE: this will also handle calling pm_runtime_dont_use_autosuspend() for
-> > > > + * you at driver exit time if needed.
-> > > > + *
-> > > >   * @dev: Device to handle.
-> > > >   */
-> > > >  int devm_pm_runtime_enable(struct device *dev)
-> > > > diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
-> > > > index 9f09601c465a..2bff6a10095d 100644
-> > > > --- a/include/linux/pm_runtime.h
-> > > > +++ b/include/linux/pm_runtime.h
-> > > > @@ -567,6 +567,10 @@ static inline void pm_runtime_disable(struct device *dev)
-> > > >   * Allow the runtime PM autosuspend mechanism to be used for @dev whenever
-> > > >   * requested (or "autosuspend" will be handled as direct runtime-suspend for
-> > > >   * it).
-> > > > + *
-> > > > + * NOTE: It's important to undo this with pm_runtime_dont_use_autosuspend()
-> > > > + * at driver exit time unless your driver initially enabled pm_runtime
-> > > > + * with devm_pm_runtime_enable() (which handles it for you).
-> > > >   */
-> > > >  static inline void pm_runtime_use_autosuspend(struct device *dev)
-> > > >  {
-
--- 
-Regards,
-
-Laurent Pinchart
+Jason
