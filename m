@@ -2,252 +2,185 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 260BE4C8F0F
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 16:26:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35BA14C8F51
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 16:43:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234274AbiCAP1U (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Mar 2022 10:27:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59046 "EHLO
+        id S235834AbiCAPnl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Mar 2022 10:43:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235799AbiCAP1L (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 10:27:11 -0500
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3D5A9A45;
-        Tue,  1 Mar 2022 07:26:28 -0800 (PST)
-Received: by mail-yb1-f173.google.com with SMTP id f5so4077568ybg.9;
-        Tue, 01 Mar 2022 07:26:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6Wey3VSiTvyRuXo9mjhrzq8FpZ0njIfhcGgB6MBC7jA=;
-        b=w41X/EriwiL5TMGEXM1JL+VRAb4iiKUj2iqAkgCr20ZQzDtxhlEewHGaPPEbncvwS5
-         XePd5EctIuKFvIZJD0Cl+sOg/CYTW427LEJ/DoaBohPkg+vRldfHLDddn8Oj2f4gWAE5
-         aMGPA+vqfI0skGV+Qhq+oVHKetKO7U3+Rmp/aq7k75e0How7tRPYPz8oB5EZJuV+GHHh
-         dgo/v9UqrzC96TaT14ABr3fDbiapaJJKbIjXpUZKTIYybMHnaFtERNvsybYpsBNfpdl7
-         vf9KiQmzNi92XhLGnN8wmRPX9k1u8CpS8KCXKPN2fgt9RVgMzbry2R05rvghr6rYlefL
-         h2Zw==
-X-Gm-Message-State: AOAM530sAVBDOkoh7keWj+k/UWwCSTkcteK+c8h8OsT6d8tAtdqSoAHn
-        3SRaQvztyqg+OPvXpzUzfHCx9B3OF5+E3yhkz5A6z8XR
-X-Google-Smtp-Source: ABdhPJx9yCCmcPK0M0eehbTXM8Bf1am0xs+djt55GEVxAmM2RiMZUPbcfsKuNpItrF/m+EtSG87Fjst3qSyAEu/C+e8=
-X-Received: by 2002:a25:3f47:0:b0:628:7571:b07d with SMTP id
- m68-20020a253f47000000b006287571b07dmr4035239yba.622.1646148387217; Tue, 01
- Mar 2022 07:26:27 -0800 (PST)
+        with ESMTP id S233234AbiCAPnk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 10:43:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DCF34BFF6;
+        Tue,  1 Mar 2022 07:42:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 039F46166E;
+        Tue,  1 Mar 2022 15:42:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29085C340EE;
+        Tue,  1 Mar 2022 15:42:55 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Kac+Ghbs"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1646149373;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=JLiE20ERfAkQFV80+EpmUJ32l4pWt7u7GFd3/Smjljc=;
+        b=Kac+Ghbs0J+S7FgJnGjfLHTzX3vnHgJEAB0OxfoQbxx04yySDohXAMM2HRfEeyUEK2OqK/
+        pmZCqrjaD2690aWP1GxnDzgjg7GPEdvD3QdFZ3AFITYG1z3LFxNjADK6jlyoY+y3i54pu0
+        CjjzcBGVb2Fze1SPHfZMLuDTnBcZhtc=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id bf755614 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 1 Mar 2022 15:42:53 +0000 (UTC)
+Date:   Tue, 1 Mar 2022 16:42:47 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        qemu-devel@nongnu.org, linux-hyperv@vger.kernel.org,
+        linux-crypto@vger.kernel.org, graf@amazon.com,
+        mikelley@microsoft.com, gregkh@linuxfoundation.org,
+        adrian@parity.io, lersek@redhat.com, berrange@redhat.com,
+        linux@dominikbrodowski.net, jannh@google.com, mst@redhat.com,
+        rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
+        linux-pm@vger.kernel.org, colmmacc@amazon.com, tytso@mit.edu,
+        arnd@arndb.de
+Subject: propagating vmgenid outward and upward
+Message-ID: <Yh4+9+UpanJWAIyZ@zx2c4.com>
 MIME-Version: 1.0
-References: <20220223100350.3523826-1-Jinzhou.Su@amd.com> <20220223100350.3523826-2-Jinzhou.Su@amd.com>
-In-Reply-To: <20220223100350.3523826-2-Jinzhou.Su@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 1 Mar 2022 16:26:16 +0100
-Message-ID: <CAJZ5v0iaY3tsNKFXv09Z4wg_2R3+9UsSnqfPBbOYFaqoVS1qCg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] cpufreq: amd-pstate: Add more tracepoint for AMD
- P-State module
-To:     Jinzhou Su <Jinzhou.Su@amd.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Doug Smythies <dsmythies@telus.net>,
-        Huang Rui <ray.huang@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Todd Brandt <todd.e.brandt@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        "Du, Xiaojian" <xiaojian.du@amd.com>,
-        "Yuan, Perry" <perry.yuan@amd.com>, li.meng@amd.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 11:04 AM Jinzhou Su <Jinzhou.Su@amd.com> wrote:
->
-> Add frequency, mperf, aperf and tsc in the trace. This can be used
-> to debug and tune the performance of AMD P-state driver.
->
-> Use the time difference between amd_pstate_update to calculate CPU
-> frequency. There could be sleep in arch_freq_get_on_cpu, so do not
-> use it here.
->
-> Signed-off-by: Jinzhou Su <Jinzhou.Su@amd.com>
-> Signed-off-by: Huang Rui <ray.huang@amd.com>
+Hey folks,
 
-I'm not sure what the second sign-off is for.
+Having finally wrapped up development of the initial vmgenid driver, I
+thought I'd pull together some thoughts on vmgenid, notification, and
+propagating, from disjointed conversations I've had with a few of you
+over the last several weeks.
 
-If this is a maintainer's sign-off, it should be added by the
-maintainer himself  and you should not add it when submitting the
-patch.
+The basic problem is: VMs can be cloned, forked, rewound, or
+snapshotted, and when this happens, a) the RNG needs to reseed itself,
+and b) cryptographic algorithms that are not reuse resistant need to
+reinitialize in one way or another. For 5.18, we're handling (a) via the
+new vmgenid driver, which implements a spec from Microsoft, whereby the
+driver receives ACPI notifications when a 16 byte unique value changes.
 
-> ---
->  drivers/cpufreq/amd-pstate-trace.h | 22 ++++++++++-
->  drivers/cpufreq/amd-pstate.c       | 59 +++++++++++++++++++++++++++++-
->  2 files changed, 78 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/cpufreq/amd-pstate-trace.h b/drivers/cpufreq/amd-pstate-trace.h
-> index 647505957d4f..35f38ae67fb1 100644
-> --- a/drivers/cpufreq/amd-pstate-trace.h
-> +++ b/drivers/cpufreq/amd-pstate-trace.h
-> @@ -27,6 +27,10 @@ TRACE_EVENT(amd_pstate_perf,
->         TP_PROTO(unsigned long min_perf,
->                  unsigned long target_perf,
->                  unsigned long capacity,
-> +                u64 freq,
-> +                u64 mperf,
-> +                u64 aperf,
-> +                u64 tsc,
->                  unsigned int cpu_id,
->                  bool changed,
->                  bool fast_switch
-> @@ -35,6 +39,10 @@ TRACE_EVENT(amd_pstate_perf,
->         TP_ARGS(min_perf,
->                 target_perf,
->                 capacity,
-> +               freq,
-> +               mperf,
-> +               aperf,
-> +               tsc,
->                 cpu_id,
->                 changed,
->                 fast_switch
-> @@ -44,6 +52,10 @@ TRACE_EVENT(amd_pstate_perf,
->                 __field(unsigned long, min_perf)
->                 __field(unsigned long, target_perf)
->                 __field(unsigned long, capacity)
-> +               __field(unsigned long long, freq)
-> +               __field(unsigned long long, mperf)
-> +               __field(unsigned long long, aperf)
-> +               __field(unsigned long long, tsc)
->                 __field(unsigned int, cpu_id)
->                 __field(bool, changed)
->                 __field(bool, fast_switch)
-> @@ -53,15 +65,23 @@ TRACE_EVENT(amd_pstate_perf,
->                 __entry->min_perf = min_perf;
->                 __entry->target_perf = target_perf;
->                 __entry->capacity = capacity;
-> +               __entry->freq = freq;
-> +               __entry->mperf = mperf;
-> +               __entry->aperf = aperf;
-> +               __entry->tsc = tsc;
->                 __entry->cpu_id = cpu_id;
->                 __entry->changed = changed;
->                 __entry->fast_switch = fast_switch;
->                 ),
->
-> -       TP_printk("amd_min_perf=%lu amd_des_perf=%lu amd_max_perf=%lu cpu_id=%u changed=%s fast_switch=%s",
-> +       TP_printk("amd_min_perf=%lu amd_des_perf=%lu amd_max_perf=%lu freq=%llu mperf=%llu aperf=%llu tsc=%llu cpu_id=%u changed=%s fast_switch=%s",
->                   (unsigned long)__entry->min_perf,
->                   (unsigned long)__entry->target_perf,
->                   (unsigned long)__entry->capacity,
-> +                 (unsigned long long)__entry->freq,
-> +                 (unsigned long long)__entry->mperf,
-> +                 (unsigned long long)__entry->aperf,
-> +                 (unsigned long long)__entry->tsc,
->                   (unsigned int)__entry->cpu_id,
->                   (__entry->changed) ? "true" : "false",
->                   (__entry->fast_switch) ? "true" : "false"
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 9ce75ed11f8e..7be38bc6a673 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -65,6 +65,18 @@ MODULE_PARM_DESC(shared_mem,
->
->  static struct cpufreq_driver amd_pstate_driver;
->
-> +/**
-> + * struct  amd_aperf_mperf
-> + * @aperf: actual performance frequency clock count
-> + * @mperf: maximum performance frequency clock count
-> + * @tsc:   time stamp counter
-> + */
-> +struct amd_aperf_mperf {
-> +       u64 aperf;
-> +       u64 mperf;
-> +       u64 tsc;
-> +};
-> +
->  /**
->   * struct amd_cpudata - private CPU data for AMD P-State
->   * @cpu: CPU number
-> @@ -81,6 +93,9 @@ static struct cpufreq_driver amd_pstate_driver;
->   * @min_freq: the frequency that mapped to lowest_perf
->   * @nominal_freq: the frequency that mapped to nominal_perf
->   * @lowest_nonlinear_freq: the frequency that mapped to lowest_nonlinear_perf
-> + * @cur: Difference of Aperf/Mperf/tsc count between last and current sample
-> + * @prev: Last Aperf/Mperf/tsc count value read from register
-> + * @freq: current cpu frequency value
->   * @boost_supported: check whether the Processor or SBIOS supports boost mode
->   *
->   * The amd_cpudata is key private data for each CPU thread in AMD P-State, and
-> @@ -102,6 +117,10 @@ struct amd_cpudata {
->         u32     nominal_freq;
->         u32     lowest_nonlinear_freq;
->
-> +       struct amd_aperf_mperf cur;
-> +       struct amd_aperf_mperf prev;
-> +
-> +       u64 freq;
->         bool    boost_supported;
->  };
->
-> @@ -211,6 +230,39 @@ static inline void amd_pstate_update_perf(struct amd_cpudata *cpudata,
->                                             max_perf, fast_switch);
->  }
->
-> +static inline bool amd_pstate_sample(struct amd_cpudata *cpudata)
-> +{
-> +       u64 aperf, mperf, tsc;
-> +       unsigned long flags;
-> +
-> +       local_irq_save(flags);
-> +       rdmsrl(MSR_IA32_APERF, aperf);
-> +       rdmsrl(MSR_IA32_MPERF, mperf);
-> +       tsc = rdtsc();
-> +
-> +       if (cpudata->prev.mperf == mperf || cpudata->prev.tsc == tsc) {
-> +               local_irq_restore(flags);
-> +               return false;
-> +       }
-> +
-> +       local_irq_restore(flags);
-> +
-> +       cpudata->cur.aperf = aperf;
-> +       cpudata->cur.mperf = mperf;
-> +       cpudata->cur.tsc =  tsc;
-> +       cpudata->cur.aperf -= cpudata->prev.aperf;
-> +       cpudata->cur.mperf -= cpudata->prev.mperf;
-> +       cpudata->cur.tsc -= cpudata->prev.tsc;
-> +
-> +       cpudata->prev.aperf = aperf;
-> +       cpudata->prev.mperf = mperf;
-> +       cpudata->prev.tsc = tsc;
-> +
-> +       cpudata->freq = div64_u64((cpudata->cur.aperf * cpu_khz), cpudata->cur.mperf);
-> +
-> +       return true;
-> +}
-> +
->  static void amd_pstate_update(struct amd_cpudata *cpudata, u32 min_perf,
->                               u32 des_perf, u32 max_perf, bool fast_switch)
->  {
-> @@ -226,8 +278,11 @@ static void amd_pstate_update(struct amd_cpudata *cpudata, u32 min_perf,
->         value &= ~AMD_CPPC_MAX_PERF(~0L);
->         value |= AMD_CPPC_MAX_PERF(max_perf);
->
-> -       trace_amd_pstate_perf(min_perf, des_perf, max_perf,
-> -                             cpudata->cpu, (value != prev), fast_switch);
-> +       if (trace_amd_pstate_perf_enabled() && amd_pstate_sample(cpudata)) {
-> +               trace_amd_pstate_perf(min_perf, des_perf, max_perf, cpudata->freq,
-> +                       cpudata->cur.mperf, cpudata->cur.aperf, cpudata->cur.tsc,
-> +                               cpudata->cpu, (value != prev), fast_switch);
-> +       }
->
->         if (value == prev)
->                 return;
-> --
-> 2.27.0
->
+The vmgenid driver basically works, though it is racy, because that ACPI
+notification can arrive after the system is already running again. This
+race is even worse on Windows, where they kick the notification into a
+worker thread, which then publishes it upward elsewhere to another async
+mechanism, and eventually it hits the RNG and various userspace apps.
+On Linux it's not that bad -- we reseed immediately upon receiving the
+notification -- but it still inherits this same "push"-model deficiency,
+which a "pull"-model would not have.
+
+If we had a "pull" model, rather than just expose a 16-byte unique
+identifier, the vmgenid virtual hardware would _also_ expose a
+word-sized generation counter, which would be incremented every time the
+unique ID changed. Then, every time we would touch the RNG, we'd simply
+do an inexpensive check of this memremap()'d integer, and reinitialize
+with the unique ID if the integer changed. In this way, the race would
+be entirely eliminated. We would then be able to propagate this outwards
+to other drivers, by just exporting an extern symbol, in the manner of
+`jiffies`, and propagate it upwards to userspace, by putting it in the
+vDSO, in the manner of gettimeofday. And like that, there'd be no
+terrible async thing and things would work pretty easily.
+
+But that's not what we have, because Microsoft didn't collaborate with
+anybody on this, and now it's implemented in several hypervisors. Given
+that I'm already spending considerable time working on the RNG, entirely
+without funding, somehow I'm not super motivated to lead a
+cross-industry political effort to change Microsoft's vmgenid spec.
+Maybe somebody else has an appetite for this, but either way, those
+changes would be several years off at best.
+
+So given we have a "push"-model mechanism, there are two problems to
+tackle, perhaps in the same way, perhaps in a different way:
+
+A) Outwards propagation toward other kernel drivers: in this case, I
+   have in mind WireGuard, naturally, which very much needs to clear its
+   existing sessions when VMs are forked.
+
+B) Upwards propagation to userspace: in this case, we handle the
+   concerns of the Amazon engineers on this thread who broached this
+   topic a few years ago, in which s2n, their TLS library, wants to
+   reinitialize its userspace RNG (a silly thing, but I digress) and
+   probably clear session keys too, for the same good reason as
+   WireGuard.
+
+For (A), at least wearing my WireGuard-maintainer hat, there is an easy
+way and there is a "race-free" way. I use scare quotes there because
+we're still in a "push"-model, which means it's still racy no matter
+what.
+
+The faux "race-free" way involves having `extern u32 rng_vm_generation;`
+or similar in random.h, and then everything that generates a session key
+would snapshot this value, and every time a session key is used, a
+comparison would be made. This works, but given that we're going to be
+racy no matter what, I think I'd prefer avoiding the extra code in the
+hot path and extra per-session storage. It seems like that'd involve a
+lot of fiddly engineering for no real world benefit.
+
+The easy way, and the way that I think I prefer, would be to just have a
+sync notifier_block for this, just like we have with
+register_pm_notifier(). From my perspective, it'd be simplest to just
+piggy back on the already existing PM notifier with an extra event,
+PM_POST_VMFORK, which would join the existing set of 7, following
+PM_POST_RESTORE. I think that'd be coherent. However, if the PM people
+don't want to play ball, we could always come up with our own
+notifier_block. But I don't see the need. Plus, WireGuard *already*
+uses the PM notifier for clearing keys, so code-wise for my use case,
+that'd amount adding another case for PM_POST_VMFORK, in addition to the
+currently existing PM_HIBERNATION_PREPARE and PM_SUSPEND_PREPARE cases,
+which all would be treated the same way. Ezpz. So if that sounds like an
+interesting thing to the PM people, I think I'd like to propose a patch
+for that, possibly even for 5.18, given that it'd be very straight-
+forward.
+
+For (B), it's a little bit trickier. But I think our options follow the
+same rubric. We can expose a generation counter in the vDSO, with
+semantics akin to the extern integer I described above. Or we could
+expose that counter in a file that userspace could poll() on and receive
+notifications that way. Or perhaps a third way. I'm all ears here.
+Alex's team from Amazon last year proposed something similar to the vDSO
+idea, except using mmap on a sysfs file, though from what I can tell,
+that wound up being kind of complicated. Due to the fact that we're
+_already_ racy, I think I'm most inclined at this point toward the
+poll() approach for the same reasons as I prefer a notifier_block. But
+on userspace I could be convinced otherwise, and I'd be interested in
+totally different ideas here too.
+
+Another thing I should note is that, while I'm not currently leaning
+toward it, the vDSO approach also ties into interesting discussions
+about userspace RNGs (generally a silly idea), and their need for things
+like fork detection and also learning when the kernel RNG was last
+reseeded. So cracking open the vDSO book might invite all sorts of other
+interesting questions and discussions, which may be productive or may be
+a humongous distraction. (Also, again, I'm not super enthusiastic about
+userspace RNGs.)
+
+Also, there is an interesting question to decide with regards to
+userspace, which is whether the vmgenid driver should expose its unique
+ID to userspace, as Alex requested on an earlier thread. I am actually
+sort of opposed to this. That unique ID may or may not be secret and
+entropic; if it isn't, the crypto is designed to not be impacted
+negatively, but if it is, we should keep it secret. So, rather, I think
+the correct flow is that userspace simply calls getrandom() upon
+learning that the VM forked, which is guaranteed to have been
+reinitialized already by add_vmfork_randomness(), and that will
+guarantee a value that is unique to the VM, without having to actually
+expose that value.
+
+So, anyway, this is more or less where my thinking on this matter is.
+Would be happy to hear some fresh ideas here too.
+
+Regards,
+Jason
