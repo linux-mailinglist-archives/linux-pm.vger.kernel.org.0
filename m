@@ -2,177 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 479654C940F
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 20:14:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DB0B4C9429
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 20:21:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232533AbiCATPN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Mar 2022 14:15:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41690 "EHLO
+        id S234658AbiCATVk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Mar 2022 14:21:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232601AbiCATPM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 14:15:12 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19454B859
-        for <linux-pm@vger.kernel.org>; Tue,  1 Mar 2022 11:14:29 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id l12so11309532ljh.12
-        for <linux-pm@vger.kernel.org>; Tue, 01 Mar 2022 11:14:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+FYbGAw6yxU17iUDUp61Ry7f+ZSO9wN0ehJ+hGfk2DQ=;
-        b=NEmpYuhxkY3jphhiKwB9rL7CFHETV0OarciDwH/Y25b8gogpFDGLbcsm2Hp5JlhbRM
-         fgLdNaX0z1k1bpDTdAa2T+xhPoQGBlkWInAyVtxomjmoWydKKz6S1Vw5P8QyPxUNcXPG
-         O8s4ZVUjpR1ZVkG2oqZOMI9ApgRXI/RsyC5iE=
+        with ESMTP id S234254AbiCATVj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 14:21:39 -0500
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A19F52E20;
+        Tue,  1 Mar 2022 11:20:57 -0800 (PST)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2d07ae0b1c4so155875677b3.11;
+        Tue, 01 Mar 2022 11:20:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=+FYbGAw6yxU17iUDUp61Ry7f+ZSO9wN0ehJ+hGfk2DQ=;
-        b=naYKBGfCsCIAo6P0PhwIEDL9EtXT5OXROaVZ8UN8xfPr0/foxX2M/Cd9o+S83fG21s
-         86vsV+jr0wASQaMF7s3YTtwyQuwF6HEV0p2XXzojGolaiwaW8ioIL7pqpAr7Bt+Frxyl
-         eK76jUmhalctE4BhgJq36C+jMrkFGywWYVInztiO37siY/AqiOdpis2FIh7Od3wsjFIw
-         GQCU93diH9e831zifT+RESHYaU4pkKaJOS2B9Tn3OCO72cF81RTsmVaA5CidfnaCRpLr
-         DsQO0HPUGe2gBLO71Bzr4jWFKQmohDXuVgbK0u6xUfMErXUDLUNmnj9SmL6LRdGKVibQ
-         KP4A==
-X-Gm-Message-State: AOAM531tcAoCIa15rYEIm/qe4Ds27tGoMK15Qw2pAQzHcvSFVg29A3pL
-        kmrWpn6uaCwxbgS9yvNv3fUZWtU2NpSAAc9d8gA=
-X-Google-Smtp-Source: ABdhPJz41rd/0i09bORXwnvfpaiilovGLOYydMZkVb0J6bcXo3oVcC85KulVA0SrOcjyuTc5InpEfg==
-X-Received: by 2002:a2e:8449:0:b0:246:440d:b2aa with SMTP id u9-20020a2e8449000000b00246440db2aamr17719282ljh.107.1646162067495;
-        Tue, 01 Mar 2022 11:14:27 -0800 (PST)
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com. [209.85.167.43])
-        by smtp.gmail.com with ESMTPSA id f7-20020ac24e47000000b00443591e0d63sm1628340lfr.189.2022.03.01.11.14.27
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 11:14:27 -0800 (PST)
-Received: by mail-lf1-f43.google.com with SMTP id d23so28488042lfv.13
-        for <linux-pm@vger.kernel.org>; Tue, 01 Mar 2022 11:14:27 -0800 (PST)
-X-Received: by 2002:a2e:3013:0:b0:246:2ca9:365e with SMTP id
- w19-20020a2e3013000000b002462ca9365emr17902580ljw.291.1646161622598; Tue, 01
- Mar 2022 11:07:02 -0800 (PST)
+        bh=uSEjLnvfrlzDKBKyYr5gFF+7i9AJoEANYsRlQjCZNV4=;
+        b=Mj/yyNh84U/+3GOCDp9QMKiGkajAiSWKCFQzRPa+0vS6FA9hlBxt7bgv2ofa4rsiRK
+         Yyju1CAE96lpqzYnkUTdeoH98TVBttxxcUh7sOK2uLcZmY+pniP+gz2EcDDmNXqQE+/u
+         D4OmxJF/cEqzp5PbSFZdjFOI3y9odWR0G0j1hmba767oC0Ous+jSOIsPLyFg6q32CzZ6
+         5VseR2CCc4fMfo1ph3Mio7397BmLdIHEBX4vnhL8jgcHhTp7OrXVRXrVq45t3972s9Ok
+         xEKb49mHndpn2JLuIaMHbKUFcHXXICr5pRezx13PZFocMHyJfdK5IqnLvlo5gI5/Tt7o
+         qf6Q==
+X-Gm-Message-State: AOAM531BpHRkOIH1IAKHY1mk3kMqdvFpwJLbwhn/H+WlliyhpwqCeixy
+        zXT2oojRyid5gRNShcQrqY8XmVwpCY7dNT342kU=
+X-Google-Smtp-Source: ABdhPJyLmWbtSKgcXsl7hWwlL/svnCzsLyibcCbPx1KfUAIfiII01B0kuaTaybiNrmiNE6X9odkY/nOYCEA2lgVnEWk=
+X-Received: by 2002:a0d:e8d2:0:b0:2d6:1743:4023 with SMTP id
+ r201-20020a0de8d2000000b002d617434023mr26860712ywe.7.1646162456365; Tue, 01
+ Mar 2022 11:20:56 -0800 (PST)
 MIME-Version: 1.0
-References: <20220228110822.491923-1-jakobkoschel@gmail.com>
- <20220228110822.491923-3-jakobkoschel@gmail.com> <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com>
- <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com>
- <282f0f8d-f491-26fc-6ae0-604b367a5a1a@amd.com> <b2d20961dbb7533f380827a7fcc313ff849875c1.camel@HansenPartnership.com>
- <7D0C2A5D-500E-4F38-AD0C-A76E132A390E@kernel.org> <73fa82a20910c06784be2352a655acc59e9942ea.camel@HansenPartnership.com>
-In-Reply-To: <73fa82a20910c06784be2352a655acc59e9942ea.camel@HansenPartnership.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 1 Mar 2022 11:06:45 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiT5HX6Kp0Qv4ZYK_rkq9t5fZ5zZ7vzvi6pub9kgp=72g@mail.gmail.com>
-Message-ID: <CAHk-=wiT5HX6Kp0Qv4ZYK_rkq9t5fZ5zZ7vzvi6pub9kgp=72g@mail.gmail.com>
-Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body
- as a ptr
-To:     James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc:     Mike Rapoport <rppt@kernel.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        alsa-devel@alsa-project.org, linux-aspeed@lists.ozlabs.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-iio@vger.kernel.org, nouveau@lists.freedesktop.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        samba-technical@lists.samba.org,
-        linux1394-devel@lists.sourceforge.net, drbd-dev@lists.linbit.com,
-        linux-arch <linux-arch@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        linux-staging@lists.linux.dev, "Bos, H.J." <h.j.bos@vu.nl>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        intel-wired-lan@lists.osuosl.org,
-        kgdb-bugreport@lists.sourceforge.net,
-        bcm-kernel-feedback-list@broadcom.com,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergman <arnd@arndb.de>,
+References: <20220214101450.356047-1-ray.huang@amd.com>
+In-Reply-To: <20220214101450.356047-1-ray.huang@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 1 Mar 2022 20:20:45 +0100
+Message-ID: <CAJZ5v0jgqzzog_F+DtgKk544FDQ=iQ_rDfwKeHnEiLLrCyi9Hw@mail.gmail.com>
+Subject: Re: [PATCH 0/4] x86/acpi/cppc: Minor clean up for x86 CPPC implementation
+To:     Huang Rui <ray.huang@amd.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Linux PM <linux-pm@vger.kernel.org>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        v9fs-developer@lists.sourceforge.net,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-sgx@vger.kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux F2FS Dev Mailing List 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        tipc-discussion@lists.sourceforge.net,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        dma <dmaengine@vger.kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+        Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Jassmine Meng <li.meng@amd.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 2:29 PM James Bottomley
-<James.Bottomley@hansenpartnership.com> wrote:
+On Mon, Feb 14, 2022 at 11:51 AM Huang Rui <ray.huang@amd.com> wrote:
 >
-> However, if the desire is really to poison the loop variable then we
-> can do
+> Hi all,
 >
-> #define list_for_each_entry(pos, head, member)                          \
->         for (pos = list_first_entry(head, typeof(*pos), member);        \
->              !list_entry_is_head(pos, head, member) && ((pos = NULL) == NULL;                   \
->              pos = list_next_entry(pos, member))
+> While we were fixing the legacy issue below, we found the dependencies
+> between smpboot and CPPC were not very good. But due to urgent fix for
+> 5.17-rc1, I didn't have much time to provide a complete solution.
 >
-> Which would at least set pos to NULL when the loop completes.
+> https://lore.kernel.org/lkml/YdeWDDCwBQAYnlKb@amd.com/
+>
+> In these series, I expand the scope of acpi/cppc_msr to acpi/cppc to cover
+> the all the CPPC helper functions for x86 ACPI. And then clean up the
+> smpboot and move CPPC related functions into the acpi/cppc.c. This design
+> is more straightforward and more clear to handle the CPPC in x86 and
+> resolve dependency issues between CPPC and smpboot.c.
+>
+> Thanks,
+> Ray
+>
+> Huang Rui (4):
+>   x86/acpi: Expand the CPPC MSR file to cover the whole CPPC
+>     implementation
+>   x86, sched: Move AMD maximum frequency ratio setting function into x86
+>     CPPC
+>   x86, sched: Expose init_freq_invariance to topology header
+>   x86/acpi: Move init_freq_invariance_cppc into x86 CPPC
+>
+>  arch/x86/include/asm/topology.h |  13 +++-
+>  arch/x86/kernel/acpi/Makefile   |   2 +-
+>  arch/x86/kernel/acpi/cppc.c     | 103 ++++++++++++++++++++++++++++++++
+>  arch/x86/kernel/acpi/cppc_msr.c |  49 ---------------
+>  arch/x86/kernel/smpboot.c       |  72 +---------------------
+>  5 files changed, 118 insertions(+), 121 deletions(-)
+>  create mode 100644 arch/x86/kernel/acpi/cppc.c
+>  delete mode 100644 arch/x86/kernel/acpi/cppc_msr.c
+>
+> --
 
-That would actually have been excellent if we had done that
-originally. It would not only avoid the stale and incorrectly typed
-head entry left-over turd, it would also have made it very easy to
-test for "did I find an entry in the loop".
-
-But I don't much like it in the situation we are now.
-
-Why? Mainly because it basically changes the semantics of the loop
-_without_ any warnings about it.  And we don't actually get the
-advantage of the nicer semantics, because we can't actually make code
-do
-
-        list_for_each_entry(entry, ....) {
-                ..
-        }
-        if (!entry)
-                return -ESRCH;
-        .. use the entry we found ..
-
-because that would be a disaster for back-porting, plus it would be a
-flag-day issue (ie we'd have to change the semantics of the loop at
-the same time we change every single user).
-
-So instead of that simple "if (!entry)", we'd effectively have to
-continue to use something that still works with the old world order
-(ie that "if (list_entry_is_head())" model).
-
-So we couldn't really take _advantage_ of the nicer semantics, and
-we'd not even get a warning if somebody does it wrong - the code would
-just silently do the wrong thing.
-
-IOW: I don't think you are wrong about that patch: it would solve the
-problem that Jakob wants to solve, and it would have absolutely been
-much better if we had done this from the beginning. But I think that
-in our current situation, it's actually a really fragile solution to
-the "don't do that then" problem we have.
-
-              Linus
+This series makes sense to me and I'm inclined to take it if there are
+no objections, so if there are any, please let me know.
